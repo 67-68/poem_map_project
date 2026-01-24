@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://digoh2dpxyn08"]
+
+[ext_resource type="Texture2D" uid="uid://cafk0ewommxp3" path="res://assets/唐朝疆域（繁）.png" id="1_c7s6e"]
+[ext_resource type="Script" uid="uid://df0kq35asbi0h" path="res://world/load_character.gd" id="1_uvqf1"]
+
+[sub_resource type="Curve2D" id="Curve2D_bxc27"]
+
+[node name="Map" type="Node2D"]
+script = ExtResource("1_uvqf1")
+
+[node name="background" type="Sprite2D" parent="."]
+position = Vector2(570, 314.00003)
+scale = Vector2(0.677013, 0.53150195)
+texture = ExtResource("1_c7s6e")
+
+[node name="path" type="Path2D" parent="."]
+curve = SubResource("Curve2D_bxc27")

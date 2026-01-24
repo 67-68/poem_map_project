@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dmtkyycnngtok"]
+
+[ext_resource type="Texture2D" uid="uid://cafk0ewommxp3" path="res://assets/唐朝疆域（繁）.png" id="1_ddn0q"]
+
+[node name="background" type="Sprite2D"]
+scale = Vector2(0.6501142, 0.50803214)
+texture = ExtResource("1_ddn0q")
