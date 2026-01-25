@@ -2,6 +2,7 @@ extends Node2D
 
 var datamodel: PoetData
 var path: Curve2D
+var previous_color: Color
 
 func _ready() -> void:
 	if datamodel:
@@ -29,4 +30,6 @@ func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) 
 		get_viewport().set_input_as_handled()
 
 func handle_selection(viewport,event,shape_idx):
+	previous_color = modulate
 	modulate = Color.RED
+	Global.poet_clicked.emit(datamodel)

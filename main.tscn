@@ -2,15 +2,16 @@
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://df0kq35asbi0h" path="res://world/load_character.gd" id="2_lquwl"]
 [ext_resource type="PackedScene" uid="uid://c1yjebq75g71y" path="res://world/camera.tscn" id="3_7mycd"]
+
+[sub_resource type="Theme" id="Theme_h2yge"]
+default_base_scale = 1.0
 
 [node name="Main" type="Node"]
 
 [node name="Worldroot" type="Node2D" parent="."]
 
 [node name="map" parent="Worldroot" instance=ExtResource("1_1bvp3")]
-script = ExtResource("2_lquwl")
 
 [node name="camera" parent="Worldroot" instance=ExtResource("3_7mycd")]
 position = Vector2(569, 326)
@@ -25,6 +26,7 @@ anchor_bottom = 1.0
 offset_top = -16.0
 grow_horizontal = 2
 grow_vertical = 0
+theme = SubResource("Theme_h2yge")
 max_value = 1.0
 step = 0.001
 value = 1.0

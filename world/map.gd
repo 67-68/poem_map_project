@@ -1,5 +1,7 @@
 extends Node2D
 
+var datamodel: PoetData
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var character_point = load("res://world/character_point.tscn")
@@ -11,8 +13,6 @@ func _ready() -> void:
 		node.modulate = color
 		node.position = vec
 		node.get_node('Label').text = item.name
-		
-		var datamodel: PoetData
 		node.datamodel = item
 
 		add_child(node)

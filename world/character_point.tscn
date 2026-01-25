@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bbp8gxdxjt0lu"]
 
-[ext_resource type="Script" uid="uid://dpyt8767qamkk" path="res://world/on_poet_clicked.gd" id="1_oc0g1"]
+[ext_resource type="Script" uid="uid://n3m07jt8e0hj" path="res://world/character_point.gd" id="1_oc0g1"]
 [ext_resource type="Texture2D" uid="uid://bdfiaxv7neckc" path="res://assets/white_dot.png" id="1_vgsyc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_betud"]

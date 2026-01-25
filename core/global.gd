@@ -3,6 +3,7 @@ extends Node
 var year: float = 618.0
 var mood: float = 0.5
 var ratio_time: float = 0
+signal poet_clicked(PoetData)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
