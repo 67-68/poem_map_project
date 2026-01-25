@@ -22,4 +22,6 @@ offset_bottom = 23.0
 position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_betud")
 
+[node name="Footstep" type="Line2D" parent="."]
+
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

@@ -9,10 +9,17 @@ func _ready() -> void:
 		$Label.text = datamodel.name
 		_create_path()
 
+func on_move():
+	if $Footstep.get_point_count() > 50:
+		$Footstep.remove_point(0)
+	$Footstep.add_point(position)
+
+
 func _process(delta: float) -> void:
 	var total_length = path.get_baked_length()
 	var current_offset = total_length * Global.ratio_time
 	position = path.sample_baked(current_offset)
+	on_move()
 	
 
 func _create_path() -> void:
@@ -29,7 +36,13 @@ func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) 
 		handle_selection(viewport,event,shape_idx)
 		get_viewport().set_input_as_handled()
 
+func return_preivous_color():
+	var tween = create_tween()
+	tween.tween_property(self,'modulate',previous_color,3).set_ease(Tween.EASE_OUT)
+
 func handle_selection(viewport,event,shape_idx):
 	previous_color = modulate
-	modulate = Color.RED
+	var tween = create_tween()
+	tween.tween_property(self,'modulate',Color.RED,3).set_ease(Tween.EASE_OUT)
+	get_tree().create_timer(3).timeout.connect(return_preivous_color)
 	Global.user_clicked.emit(datamodel)
