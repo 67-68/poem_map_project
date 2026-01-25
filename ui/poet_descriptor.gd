@@ -1,0 +1,24 @@
+extends NinePatchRect
+
+func on_user_clicked(data: PoetData):
+	if not data == null:
+		var profile_path: String = ("res://assets/profile/%s.png" % data.id)
+		if not FileAccess.file_exists(profile_path):
+			print('do not found file %s' % profile_path)
+			return
+		$DescriptorContainer/PoetProfile.texture = load(profile_path)
+		$DescriptorContainer/PoetNameLabel.text = data.name
+		$DescriptorContainer/PoetDescription.text = data.description
+		position = get_global_mouse_position()
+		show()
+	else:
+		hide()
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	Global.user_clicked.connect(on_user_clicked)
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass

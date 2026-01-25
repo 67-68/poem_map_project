@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://8gipdq3nfr2d"]
+
+[ext_resource type="Script" uid="uid://dygx4erhu4jf5" path="res://ui/poet_descriptor.gd" id="1_knbip"]
+
+[node name="PoetDescriptor" type="NinePatchRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_knbip")
+
+[node name="DescriptorContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PoetProfile" type="TextureRect" parent="DescriptorContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PoetNameLabel" type="Label" parent="DescriptorContainer"]
+layout_mode = 2
+
+[node name="PoetDescription" type="RichTextLabel" parent="DescriptorContainer"]
+layout_mode = 2

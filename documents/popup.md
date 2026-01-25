@@ -1,0 +1,1 @@
+1. 使用assets/profile/{poet_id}.png获取头像展示

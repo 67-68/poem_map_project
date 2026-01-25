@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://5shth4lj0a8t"]
+
+[ext_resource type="Script" uid="uid://cr4lvstsirtp8" path="res://ui/pop_up.gd" id="1_12uv1"]
+
+[node name="PopUp" type="NinePatchRect"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_12uv1")
+
+[node name="TextLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

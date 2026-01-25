@@ -32,4 +32,4 @@ func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) 
 func handle_selection(viewport,event,shape_idx):
 	previous_color = modulate
 	modulate = Color.RED
-	Global.poet_clicked.emit(datamodel)
+	Global.user_clicked.emit(datamodel)

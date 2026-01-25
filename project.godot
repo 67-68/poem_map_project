@@ -22,3 +22,7 @@ Global="*res://core/global.gd"
 [debug]
 
 gdscript/autoload_on_startup=true
+
+[display]
+
+window/stretch/mode="canvas_items"
