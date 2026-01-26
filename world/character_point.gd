@@ -3,6 +3,36 @@ extends Node2D
 var datamodel: PoetData
 var path: Curve2D
 var previous_color: Color
+var emotion_curve: Curve # length_2_float_emotion
+var emotion_gradient: Gradient # float_emotion_2_color
+
+func setup_emotion():
+	emotion_curve = Curve.new()
+	var total_len = path.get_baked_length()
+	var current_dist = 0.0
+
+	# 遍历每个点
+	for i in range(datamodel.path_points.size()):
+		var point = datamodel.path_points[i]
+		
+		# 计算这个点在路径上的累计距离
+		# (Curve2D 有一个好用的函数可以直接算这个)
+		current_dist = path.get_closest_offset(point.position)
+		
+		var ratio = current_dist / total_len
+		
+		# 防止浮点数误差导致超过 1.0
+		ratio = clamp(ratio, 0.0, 1.0)
+		
+		emotion_curve.add_point(Vector2(ratio, point.emotion))
+
+	emotion_gradient = Gradient.new()
+	emotion_gradient.remove_point(0)
+	emotion_gradient.remove_point(0)
+
+	emotion_gradient.add_point(0,Global.sad_color)
+	emotion_gradient.add_point(1,Global.happy_color)
+	
 
 func _ready() -> void:
 	$Footstep.top_level = true
@@ -10,16 +40,39 @@ func _ready() -> void:
 		$Label.text = datamodel.title
 		_create_path()
 
+	setup_emotion()
+
 func on_move():
 	if $Footstep.get_point_count() > 50:
 		$Footstep.remove_point(0)
 	$Footstep.add_point(position)
 
+func on_change_emotion_color(current_offset: int):
+	var ratio_distance = current_offset / path.get_baked_length()
+	var emotion_float = emotion_curve.sample(ratio_distance)
+	var emotion_color = emotion_gradient.sample(emotion_float)
+
+	var is_extreme = emotion_float < 0.1 or emotion_float > 0.9
+	Logging.debug('emotion for %s: %s' % [datamodel.title,round(emotion_float * 10)/10])
+	if is_extreme:
+		Global.change_background_color.emit(emotion_color)
+		$EmotionColor.visible = false
+		$EmotionColor.enabled = false
+	else:
+		$EmotionColor.color = emotion_color
+		$EmotionColor.visible = true
+		$EmotionColor.enabled = true
+
+
 func _process(delta: float) -> void:
 	on_move()
+
 	var total_length = path.get_baked_length()
-	var current_offset = total_length * Global.ratio_time
+	var current_offset = total_length * Global.ratio_time # 当前出发了多远，比如1000,total 5000
 	position = path.sample_baked(current_offset)
+
+	on_change_emotion_color(current_offset)
+	
 
 func _create_path() -> void:
 	"""

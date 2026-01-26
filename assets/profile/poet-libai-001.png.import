@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3q4ccpxs4p2g"
-path="res://.godot/imported/libai.png-fc5a05427947ad64d9e316b8e350585c.ctex"
+uid="uid://csf0pdqpuijew"
+path="res://.godot/imported/poet-libai-001.png-bc773c5a43df64bad929fa818ee346b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/profile/libai.png"
-dest_files=["res://.godot/imported/libai.png-fc5a05427947ad64d9e316b8e350585c.ctex"]
+source_file="res://assets/profile/poet-libai-001.png"
+dest_files=["res://.godot/imported/poet-libai-001.png-bc773c5a43df64bad929fa818ee346b9.ctex"]
 
 [params]
 

@@ -12,9 +12,11 @@ signal user_clicked(PoetData) # 值可以为空，express 点到空处，面板h
 # 展示popup信息
 signal request_text_popup(text: String)
 
+signal change_background_color(color: Color) # 如果为空，disable color
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	Logging.current_level = Logging.Level.DEBUG
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

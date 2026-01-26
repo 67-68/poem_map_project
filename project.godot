@@ -18,6 +18,7 @@ config/icon="uid://ku7ifltn2syw"
 [autoload]
 
 Global="*res://core/global.gd"
+Logging="*res://core/logger.gd"
 
 [debug]
 

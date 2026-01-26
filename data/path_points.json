@@ -15,7 +15,7 @@
         "text": "天子呼来不上船，自称臣是酒中仙。",
         "properties": {
             "position": [600.0, 400.0],
-            "emotion": 0.9,
+            "emotion": 1.0,
             "owner_uuid": "poet-libai-001"
         }
     },

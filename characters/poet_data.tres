@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="PoetData" load_steps=2 format=3 uid="uid://bgovs05w6x8ig"]
+[gd_resource type="Resource" script_class="PoetData" load_steps=3 format=3 uid="uid://bgovs05w6x8ig"]
 
+[ext_resource type="Script" uid="uid://gwbarl8jflq8" path="res://characters/poet_life_point.gd" id="1_smfky"]
 [ext_resource type="Script" uid="uid://casmlpuvefna4" path="res://characters/poet_data.gd" id="1_x82yj"]
 
 [resource]

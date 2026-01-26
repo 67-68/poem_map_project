@@ -1,3 +1,10 @@
+# [0.2.0]
+# Added
+- dataclass change to godot resource
+- seperate pathpoint dataclass from poetdata
+- change poet emotion into a area light
+- adding universal light, activate when poet sad/happy extreme
+
 # [0.1.0]
 ## Added
 - 解析数据化作character point
