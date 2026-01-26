@@ -5,6 +5,7 @@ var path: Curve2D
 var previous_color: Color
 
 func _ready() -> void:
+	$Footstep.top_level = true
 	if datamodel:
 		$Label.text = datamodel.name
 		_create_path()
@@ -14,13 +15,11 @@ func on_move():
 		$Footstep.remove_point(0)
 	$Footstep.add_point(position)
 
-
 func _process(delta: float) -> void:
+	on_move()
 	var total_length = path.get_baked_length()
 	var current_offset = total_length * Global.ratio_time
 	position = path.sample_baked(current_offset)
-	on_move()
-	
 
 func _create_path() -> void:
 	"""

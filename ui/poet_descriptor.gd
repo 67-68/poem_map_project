@@ -14,11 +14,8 @@ func on_user_clicked(data: PoetData):
 	else:
 		hide()
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Global.user_clicked.connect(on_user_clicked)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
