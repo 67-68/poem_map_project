@@ -7,7 +7,7 @@ var previous_color: Color
 func _ready() -> void:
 	$Footstep.top_level = true
 	if datamodel:
-		$Label.text = datamodel.name
+		$Label.text = datamodel.title
 		_create_path()
 
 func on_move():
@@ -27,7 +27,7 @@ func _create_path() -> void:
 	"""
 	path = Curve2D.new()
 	for point in datamodel.path_points:
-		path.add_point(point)
+		path.add_point(point.position)
 
 func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

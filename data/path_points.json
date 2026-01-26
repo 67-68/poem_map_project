@@ -1,0 +1,32 @@
+[
+    {
+        "uuid": "point-libai-birth",
+        "title": "出生碎叶",
+        "text": "李白出生于安西都护府碎叶城。",
+        "properties": {
+            "position": [100.0, 150.0],
+            "emotion": 0.5,
+            "owner_uuid": "poet-libai-001"
+        }
+    },
+    {
+        "uuid": "point-libai-changan",
+        "title": "赐金放还",
+        "text": "天子呼来不上船，自称臣是酒中仙。",
+        "properties": {
+            "position": [600.0, 400.0],
+            "emotion": 0.9,
+            "owner_uuid": "poet-libai-001"
+        }
+    },
+    {
+        "uuid": "point-dufu-birth",
+        "title": "生于巩义",
+        "text": "杜甫出生于河南巩县。",
+        "properties": {
+            "position": [650.0, 450.0],
+            "emotion": 0.5,
+            "owner_uuid": "poet-dufu-002"
+        }
+    }
+]

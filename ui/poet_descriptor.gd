@@ -7,7 +7,7 @@ func on_user_clicked(data: PoetData):
 			print('do not found file %s' % profile_path)
 			return
 		$DescriptorContainer/PoetProfile.texture = load(profile_path)
-		$DescriptorContainer/PoetNameLabel.text = data.name
+		$DescriptorContainer/PoetNameLabel.text = data.title
 		$DescriptorContainer/PoetDescription.text = data.description
 		position = get_global_mouse_position()
 		show()
