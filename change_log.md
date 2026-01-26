@@ -1,5 +1,12 @@
+# [0.3.0]
+## Added
+- daylight
+- rain
+- controller ingame
+- camera move
+
 # [0.2.0]
-# Added
+## Added
 - dataclass change to godot resource
 - seperate pathpoint dataclass from poetdata
 - change poet emotion into a area light

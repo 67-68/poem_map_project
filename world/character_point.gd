@@ -53,7 +53,7 @@ func on_change_emotion_color(current_offset: int):
 	var emotion_color = emotion_gradient.sample(emotion_float)
 
 	var is_extreme = emotion_float < 0.1 or emotion_float > 0.9
-	Logging.debug('emotion for %s: %s' % [datamodel.title,round(emotion_float * 10)/10])
+	# Logging.debug('emotion for %s: %s' % [datamodel.title,round(emotion_float * 10)/10])
 	if is_extreme:
 		Global.change_background_color.emit(emotion_color)
 		$EmotionColor.visible = false
