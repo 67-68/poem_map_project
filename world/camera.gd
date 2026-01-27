@@ -19,7 +19,7 @@ func _process(delta: float) -> void:
 	
 	# 2. 计算目标速度
 	var target_velocity = input_dir.normalized() * speed
-	a
+	
 	# 3. 使用 lerp 平滑速度（产生惯性效果）
 	# 这样松开按键后，相机会滑行一小段，手感极佳
 	velocity = velocity.lerp(target_velocity, friction)

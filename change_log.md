@@ -1,3 +1,8 @@
+# [0.4.0]
+## Added
+- start page
+
+
 # [0.3.0]
 ## Added
 - daylight

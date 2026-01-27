@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://cvv8lap5eqnr1"]
+
+[ext_resource type="Script" uid="uid://es2en46qtscf" path="res://app/start.gd" id="1_06t4h"]
+[ext_resource type="Texture2D" uid="uid://cafk0ewommxp3" path="res://assets/唐朝疆域（繁）.png" id="1_7vrkn"]
+[ext_resource type="Script" uid="uid://bm2pt10fn111x" path="res://app/start_page_background.gd" id="2_glbon"]
+[ext_resource type="Script" uid="uid://ugu818rrdil4" path="res://app/quit.gd" id="3_fu7sn"]
+[ext_resource type="Texture2D" uid="uid://dagub1i8rk8w4" path="res://assets/6768.png" id="4_jix8l"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(28.890184, 16.294317)
+texture = ExtResource("1_7vrkn")
+expand_mode = 1
+script = ExtResource("2_glbon")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+offset_left = 2.0
+offset_top = 2.0000002
+offset_right = 69.0
+offset_bottom = 172.0
+scale = Vector2(4.0709267, 3.7914264)
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="start" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "start"
+script = ExtResource("1_06t4h")
+
+[node name="quit" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "quit"
+script = ExtResource("3_fu7sn")
+
+[node name="setting" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "setting"
+
+[node name="logo" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_jix8l")
+expand_mode = 4
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/start" to="MarginContainer/VBoxContainer/start" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/quit" to="MarginContainer/VBoxContainer/quit" method="_on_pressed"]

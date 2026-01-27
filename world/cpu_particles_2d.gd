@@ -8,6 +8,7 @@ func on_request_rain(enable: bool):
 		emitting = false
 
 func _ready() -> void:
+	emitting = false
 	Global.request_rain.connect(on_request_rain)
 
 func _process(delta: float) -> void:

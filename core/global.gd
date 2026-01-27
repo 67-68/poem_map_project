@@ -9,6 +9,8 @@ var happy_color: Color = Color.LIGHT_YELLOW
 # 用来展示poet
 signal user_clicked(PoetData) # 值可以为空，express 点到空处，面板hide
 
+signal request_start_black(enable: bool)
+
 # 展示popup信息
 signal request_text_popup(text: String)
 
