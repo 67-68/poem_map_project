@@ -1,13 +1,17 @@
-[gd_scene load_steps=9 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=10 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://c1yjebq75g71y" path="res://world/camera.tscn" id="3_7mycd"]
+[ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/slider_shader.gdshader" id="3_272bh"]
 [ext_resource type="PackedScene" uid="uid://5shth4lj0a8t" path="res://ui/pop_up.tscn" id="4_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://8gipdq3nfr2d" path="res://ui/poet_descriptor.tscn" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="6_7mycd"]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7mycd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
+shader = ExtResource("3_272bh")
+shader_parameter/speed = 1.0
+shader_parameter/width = 0.1
 
 [sub_resource type="Theme" id="Theme_h2yge"]
 default_base_scale = 1.0
@@ -24,7 +28,7 @@ position = Vector2(569, 326)
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="HSlider" type="HSlider" parent="UI"]
-material = SubResource("CanvasItemMaterial_7mycd")
+material = SubResource("ShaderMaterial_7mycd")
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
