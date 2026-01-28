@@ -1,10 +1,18 @@
 extends Node
 
-var year: float = 618.0
-var mood: float = 0.5
+var start_year := 618.0
+var end_year := 907.0
+
+var time_span := end_year - start_year
+var year: float
 var ratio_time: float = 0
+
+var mood: float = 0.5
+
 var sad_color: Color = Color.DARK_BLUE
 var happy_color: Color = Color.LIGHT_YELLOW
+
+var current_selected_poet: PoetData
 
 # view
 var slider_light_speed: int = 1
@@ -21,14 +29,15 @@ signal change_background_color(color: Color) # 如果为空，disable color
 signal request_rain(enable: bool)
 signal request_daylight(enable: bool)
 
+signal year_changed(year: float) #虽然可能用不到，直接使用Global year就行了，但还是发一下
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Logging.current_level = Logging.Level.DEBUG
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	ratio_time = remap(year,618,907,0,1)
-	ratio_time = clampf(ratio_time, 0.0, 1.0)
+func _process(_delta: float) -> void:
+	pass
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

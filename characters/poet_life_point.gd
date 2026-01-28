@@ -10,6 +10,7 @@ class_name PoetLifePoint
 @export var position: Vector2
 @export var emotion: float
 @export var owner_uuid: String
+@export var point_year: float
 
 func _init(life_point_note) -> void:
     id = life_point_note.get('uuid')
@@ -20,3 +21,4 @@ func _init(life_point_note) -> void:
     position = Vector2(properties.get('position')[0],properties.get('position')[1])
     emotion = properties.get('emotion')
     owner_uuid = properties.get('owner_uuid')
+    point_year = float(properties.get('time'))

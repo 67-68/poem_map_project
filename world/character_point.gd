@@ -2,6 +2,8 @@ extends Node2D
 
 var datamodel: PoetData
 var path: Curve2D
+var time_position_curve: Curve
+
 var previous_color: Color
 var emotion_curve: Curve # length_2_float_emotion
 var emotion_gradient: Gradient # float_emotion_2_color
@@ -67,10 +69,11 @@ func on_change_emotion_color(current_offset: int):
 func _process(delta: float) -> void:
 	on_move()
 
-	var total_length = path.get_baked_length()
-	var current_offset = total_length * Global.ratio_time # 当前出发了多远，比如1000,total 5000
-	position = path.sample_baked(current_offset)
+	var target_path_ratio: float = time_position_curve.sample(Global.ratio_time) # 当前路径的比例
 
+	var total_length = path.get_baked_length()
+	var current_offset = total_length * target_path_ratio # 当前出发了多远，比如1000,total 5000
+	position = path.sample_baked(current_offset)
 	on_change_emotion_color(current_offset)
 	
 
@@ -79,13 +82,23 @@ func _create_path() -> void:
 	在创建之后被调用的类似init的回调函数
 	"""
 	path = Curve2D.new()
+	time_position_curve = Curve.new()
 	for point in datamodel.path_points:
 		path.add_point(point.position)
+
+	var path_ratio: float
+	var total_path = path.get_baked_length()
+	var time_ratio: float
+	for point in datamodel.path_points:
+		time_ratio = (point.point_year - Global.start_year) / Global.time_span
+		path_ratio = path.get_closest_offset(point.position) / total_path
+		time_position_curve.add_point(Vector2(time_ratio,path_ratio))
 
 func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		print("点到我了！我是：", $Label.text)
 		handle_selection(viewport,event,shape_idx)
+		Global.current_selected_poet = datamodel
 		get_viewport().set_input_as_handled()
 
 func return_preivous_color():

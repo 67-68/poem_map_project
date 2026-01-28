@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://5q6bljtvpw4y"]
+
+[ext_resource type="Script" uid="uid://07lt7oj77qkf" path="res://core/time_service.gd" id="1_8nsvc"]
+
+[node name="TimeService" type="Node"]
+script = ExtResource("1_8nsvc")

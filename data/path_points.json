@@ -6,7 +6,8 @@
         "properties": {
             "position": [100.0, 150.0],
             "emotion": 0.5,
-            "owner_uuid": "poet-libai-001"
+            "owner_uuid": "poet-libai-001",
+            "time": 650
         }
     },
     {
@@ -16,7 +17,8 @@
         "properties": {
             "position": [600.0, 400.0],
             "emotion": 1.0,
-            "owner_uuid": "poet-libai-001"
+            "owner_uuid": "poet-libai-001",
+            "time": 700
         }
     },
     {
@@ -26,7 +28,19 @@
         "properties": {
             "position": [650.0, 450.0],
             "emotion": 0.5,
-            "owner_uuid": "poet-dufu-002"
+            "owner_uuid": "poet-dufu-002",
+            "time": 750
+        }
+    },
+    {
+        "uuid": "point-dufu-2",
+        "title": "杜甫2",
+        "text": "杜甫test",
+        "properties": {
+            "position": [400.0, 600.0],
+            "emotion": 0.5,
+            "owner_uuid": "poet-dufu-002",
+            "time": 800
         }
     }
 ]

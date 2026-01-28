@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=12 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://5shth4lj0a8t" path="res://ui/pop_up.tscn" id="4_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://8gipdq3nfr2d" path="res://ui/poet_descriptor.tscn" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="6_7mycd"]
+[ext_resource type="Script" uid="uid://cumbr3p6omik2" path="res://ui/time_operation_container.gd" id="8_kek77"]
+[ext_resource type="PackedScene" uid="uid://5q6bljtvpw4y" path="res://core/time_service.tscn" id="9_kek77"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -39,7 +41,6 @@ grow_vertical = 0
 theme = SubResource("Theme_h2yge")
 max_value = 1.0
 step = 0.001
-value = 1.0
 script = ExtResource("1_ig7tw")
 
 [node name="PopUp" parent="UI" instance=ExtResource("4_1bvp3")]
@@ -53,5 +54,37 @@ offset_right = 342.0
 offset_bottom = 231.0
 script = ExtResource("6_7mycd")
 
+[node name="TimeOperationContainer" type="HBoxContainer" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -161.0
+offset_bottom = 46.0
+grow_horizontal = 0
+size_flags_vertical = 8
+script = ExtResource("8_kek77")
+
+[node name="HaltButton" type="Button" parent="UI/TimeOperationContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "halt"
+
+[node name="TimeStartButton" type="Button" parent="UI/TimeOperationContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "start"
+
+[node name="NextPoetButton" type="Button" parent="UI/TimeOperationContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "skip"
+
+[node name="CoreSystems" type="Node" parent="."]
+
+[node name="TimeService" parent="CoreSystems" instance=ExtResource("9_kek77")]
+
 [connection signal="value_changed" from="UI/HSlider" to="UI/HSlider" method="_on_value_changed"]
 [connection signal="text_submitted" from="UI/Controller" to="UI/Controller" method="_on_text_submitted"]
+[connection signal="pressed" from="UI/TimeOperationContainer/HaltButton" to="UI/TimeOperationContainer" method="_on_halt_button_pressed"]
+[connection signal="pressed" from="UI/TimeOperationContainer/TimeStartButton" to="UI/TimeOperationContainer" method="_on_time_start_button_pressed"]
+[connection signal="pressed" from="UI/TimeOperationContainer/NextPoetButton" to="UI/TimeOperationContainer" method="_on_next_poet_button_pressed"]

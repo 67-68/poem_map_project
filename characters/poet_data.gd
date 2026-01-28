@@ -27,3 +27,9 @@ func _init(concept_core_note: Dictionary, life_point_notes: Array):
 	
 	for path in life_point_notes:
 		path_points.append(PoetLifePoint.new(path))
+	
+func get_next_path_point(year: float) -> PoetLifePoint:
+	for path_point in path_points:
+		if path_point.point_year > year:
+			return path_point
+	return
