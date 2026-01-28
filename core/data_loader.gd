@@ -20,20 +20,6 @@ static func _load_file(file_path: String):
 	
 	return json.data
 
-# 这是一个静态函数，意味着你不需要实例化节点就能直接用 DataLoader.load_json(...)
-static func load_json_file(core_note_file_path: String, path_point_file_path: String):
-	# core 可以装着很多owner, path point也可以装着很多path_point, 只要有owner_id就行
-	var core_notes = _load_file(core_note_file_path)
-	var path_point_notes:Array = _load_file(path_point_file_path)
-
-	var result = []
-	for note in core_notes:
-		var correlated_notes = []
-		for note_ in path_point_notes:
-			if note_.get('properties',{}).get('owner_uuid','') == note.get('uuid'):
-				correlated_notes.append(note_)
-
-		result.append(PoetData.new(note,correlated_notes))
-		
-	# 4. 返回解析好的数据（通常是 Array 或 Dictionary）
-	return result
+static func load_data_model(model_class: GDScript ,file_path: String) -> Object:
+	var json_content = _load_file(file_path)
+	return model_class.new(json_content)

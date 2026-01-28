@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=13 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://8gipdq3nfr2d" path="res://ui/poet_descriptor.tscn" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="6_7mycd"]
 [ext_resource type="Script" uid="uid://cumbr3p6omik2" path="res://ui/time_operation_container.gd" id="8_kek77"]
+[ext_resource type="PackedScene" uid="uid://cnkr0y7c3yen2" path="res://features/poem_popup.tscn" id="9_4c57u"]
 [ext_resource type="PackedScene" uid="uid://5q6bljtvpw4y" path="res://core/time_service.tscn" id="9_kek77"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
@@ -78,6 +79,8 @@ text = "start"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "skip"
+
+[node name="PoemPopup" parent="UI" instance=ExtResource("9_4c57u")]
 
 [node name="CoreSystems" type="Node" parent="."]
 

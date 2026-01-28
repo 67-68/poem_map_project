@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PoemData" load_steps=2 format=3 uid="uid://46oj1yppflbx"]
+
+[ext_resource type="Script" uid="uid://biu0k7s8ogh6b" path="res://characters/poem_data.gd" id="1_qpx1d"]
+
+[resource]
+script = ExtResource("1_qpx1d")
+metadata/_custom_type_script = "uid://biu0k7s8ogh6b"

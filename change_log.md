@@ -1,3 +1,8 @@
+## Added
+- time service
+- path finding algorithm(use path point time)
+- add time on lifePathPoint data stucture
+
 # [0.4.0]
 ## Added
 - start page

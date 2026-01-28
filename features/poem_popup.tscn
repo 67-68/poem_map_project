@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnkr0y7c3yen2"]
+
+[ext_resource type="Script" uid="uid://bnftliiem28o5" path="res://features/poem_animation.gd" id="1_uow2x"]
+
+[node name="PoemPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ContentLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RarityStamp" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PoemAnimation" type="AnimationPlayer" parent="."]
+script = ExtResource("1_uow2x")

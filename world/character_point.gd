@@ -39,7 +39,7 @@ func setup_emotion():
 func _ready() -> void:
 	$Footstep.top_level = true
 	if datamodel:
-		$Label.text = datamodel.title
+		$Label.text = datamodel.name
 		_create_path()
 
 	setup_emotion()
