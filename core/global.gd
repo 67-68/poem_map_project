@@ -2,6 +2,7 @@ extends Node
 
 const DEFAULT_ICON = "res://assets/icons/default.png"
 const ICON_PATH = "res://assets/icons/"
+const DATA_PATH = 'res://assets/data/'
 
 var start_year := 618.0
 var end_year := 907.0

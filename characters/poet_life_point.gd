@@ -5,6 +5,5 @@ class_name PoetLifePoint extends WorldEvent
 
 func _init(notes) -> void:
     super._init(notes)
-    var properties = notes.get('properties')
-    emotion = properties.get('emotion')
-    owner_uuid = properties.get('owner_uuid')
+    emotion = notes.get('properties').get('emotion')
+    

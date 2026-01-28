@@ -20,6 +20,8 @@ static func _load_file(file_path: String):
 	
 	return json.data
 
-static func load_data_model(model_class: GDScript ,file_path: String) -> Object:
+static func load_data_model(model_class: Variant ,file_path: String) -> Array[GameEntity]:
+	if not file_path.ends_with('json') and not file_path.begins_with('res://'):
+		file_path = Global.DATA_PATH + file_path
 	var json_content = _load_file(file_path)
 	return model_class.new(json_content)

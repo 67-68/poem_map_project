@@ -111,3 +111,11 @@ func handle_selection(viewport,event,shape_idx):
 	tween.tween_property(self,'modulate',Color.RED,3).set_ease(Tween.EASE_OUT)
 	get_tree().create_timer(3).timeout.connect(return_preivous_color)
 	Global.user_clicked.emit(datamodel)
+
+func initiate(data: PoetData,path_point_repo: PathPointRepository):
+	modulate = data.color
+	position = path_point_repo.get_by_id(data.path_point_keys[0]).position
+	get_node('Label').text = data.title
+	datamodel = data
+
+	return self

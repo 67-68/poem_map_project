@@ -3,6 +3,7 @@ class_name PoetData extends WorldEvent
 @export var color: Color
 @export var birth_year: float
 @export var death_year: float
+@export var path_point_keys: Array = []
 
 # 这里解析的东西是一个诗人的Note
 # 要求Property内存在birth, death, optional[color]
