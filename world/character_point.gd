@@ -113,7 +113,7 @@ func handle_selection(viewport,event,shape_idx):
 func initiate(data: PoetData):
 	modulate = data.color
 	datamodel = data
-	var repo = DataService_.get_repository(PoetData)
+	var repo = DataService_.get_repository(DataService_.Repositories.POET_REPO)
 	var life_point_uuid = repo.get_item_cache(PoetLifePoint,datamodel.uuid)
 
 	position = Vector2(DataService_.resolve_uuid(PoetLifePoint,life_point_uuid[0]).position)

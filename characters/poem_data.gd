@@ -5,13 +5,14 @@ enum Poem_BG {
     NIGHT
 }
 
-var repo_id = "POEM_REPO"
+
 @export var popularity: float
 @export var background: Poem_BG
 @export var emotion: float
 
 # 这些数据会被作为一个独立的路径点加入path，如果当前没有路径点包含这个诗词title的tag
 # 创建的路径点tag存储诗词
+static var repo_id = "POEM_REPO"
 
 func _init(note_data: Dictionary):
     super._init(note_data)

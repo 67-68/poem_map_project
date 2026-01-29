@@ -2,6 +2,7 @@ class_name BaseRepository extends RefCounted
 
 var _data: Dictionary
 var caches: Dictionary 
+
 # dict[BaseModel,dict[uuid(本地repo的): list[uuid(other repo)]]]
 
 func _init(data: Array[GameEntity]):
@@ -32,7 +33,7 @@ func build_up_cache(data_service, dataclass_to_build):
     比如可以知道这个诗人对应着的诗词
     """
     for base_model in dataclass_to_build:
-        var repo = data_service.get_repository(base_model)
+        var repo = data_service.get_repository(base_model.repo_id)
         if not 'owner_uuids' in repo.get_first(): continue
         create_cache_for_model(base_model)
         for model_data in repo.get_all().values():

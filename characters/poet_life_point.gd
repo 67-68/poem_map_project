@@ -1,8 +1,8 @@
 class_name PoetLifePoint extends WorldEvent
 
 @export var emotion: float
-
-func _init(notes) -> void:
+static var repo_id = "PATH_POINT_REPO"
+func _init(notes):
     super._init(notes)
-    emotion = notes.get('properties').get('emotion')
+    emotion = notes.get('properties',{}).get('emotion',0)
     

@@ -2,8 +2,8 @@ class_name PathPointRepository extends BaseRepository
 
 var model_class = PoetLifePoint
 
-func get_by_id(uuid: String) -> Resource:
+func get_by_id(uuid: String) -> PoetLifePoint:
     return super.get_by_id(uuid)
 
-func get_all_as_array() -> Array[Resource]:
-    return _data.values()
+func _init(data):
+    super._init(data)

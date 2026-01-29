@@ -11,7 +11,7 @@ func get_all_as_array() -> Array[PoetData]:
 
 func setup_path_point_keys(data: PoetData,data_service):
     var uuid_list = caches[PoetLifePoint][data.uuid]
-    data.path_point_keys = Util.get_sorted_keys_by_num_property(data_service.get_repository(PoetLifePoint).get_all(),'year',uuid_list)
+    data.path_point_keys = Util.get_sorted_keys_by_num_property(data_service.get_repository(DataService_.Repositories.PATH_POINT_REPO).get_all(),'year',uuid_list)
 
 func build_up_cache(data_service, dataclass_to_build):
     super.build_up_cache(data_service,dataclass_to_build)

@@ -11,8 +11,8 @@ func get_all_as_array() -> Array[PoemData]:
 func build_up_cache(data_service, dataclass_to_build):
     var test_uuid = 0
     super.build_up_cache(data_service, dataclass_to_build)
-    var poet_repo = data_service.get_repository(PoetData)
-    var point_repo = data_service.get_repository(PoetLifePoint)
+    var poet_repo = data_service.get_repository("POET_REPO")
+    var point_repo = data_service.get_repository("PATH_POINT_REPO")
     # 判断是否已经存在
 
     # 创建路径点
