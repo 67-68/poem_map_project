@@ -26,14 +26,21 @@ func get_first() -> GameEntity:
         return _data[i]
     return
 
-func build_up_cache(data_service, dataclass_to_build):
+func build_up_cache(repositories, dataclass_to_build): # repositories: 0,1,2 poem poet path point
     """
     dataclass to build: 各种resource, 按理来说会有一个owner_uuid
     创建一个数据模型到另一个数据模型的uuid
     比如可以知道这个诗人对应着的诗词
     """
     for base_model in dataclass_to_build:
-        var repo = data_service.get_repository(base_model.repo_id)
+        var repo = repositories.get(0)
+        if base_model is PoemData:
+            repo = repositories[0]
+        if base_model is PoetData:
+            repo = repositories[1]
+        if base_model is PoetLifePoint:
+            repo = repositories[2]
+
         if not 'owner_uuids' in repo.get_first(): continue
         create_cache_for_model(base_model)
         for model_data in repo.get_all().values():
