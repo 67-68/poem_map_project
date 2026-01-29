@@ -1,5 +1,9 @@
 extends Node
 
+const DATA_PATH = "res://data/"
+const DEFAULT_ICON = "res://assets/6768.png"
+const ICON_PATH = "res://assets/profile/"
+
 var start_year := 618.0
 var end_year := 907.0
 
@@ -31,11 +35,33 @@ signal request_daylight(enable: bool)
 
 signal year_changed(year: float) #虽然可能用不到，直接使用Global year就行了，但还是发一下
 
+var life_path_points: Dictionary
+var poet_data: Dictionary
+var poem_data: Dictionary
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Logging.current_level = Logging.Level.DEBUG
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	# 加载数据
+	life_path_points = create_dict(DataLoader.load_data_model(PoetLifePoint,'path_points'))
+	poet_data = create_dict(DataLoader.load_data_model(PoetData,'poet_data'))
+	poem_data = create_dict(DataLoader.load_data_model(PoemData,'poem_data'))
+
+	for d in poem_data:
+		var poem_point = poem_data[d].to_life_path_point()
+		poem_point.uuid = 'poem_%s' % d
+		life_path_points[poem_point.uuid] = (poem_point)
+
+	for d in poet_data:
+		poet_data[d].path_point_keys = DataHelper.find_all_values_by_membership(life_path_points,'owner_uuids',d,'uuid')
+
+func create_dict(data: Array):
+	var dict = {}
+	for d in data:
+		dict[d.uuid] = d
+	return dict
+
 func _process(_delta: float) -> void:
 	pass
 

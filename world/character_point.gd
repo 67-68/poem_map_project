@@ -14,8 +14,8 @@ func setup_emotion():
 	var current_dist = 0.0
 
 	# 遍历每个点
-	for i in range(datamodel.path_points.size()):
-		var point = datamodel.path_points[i]
+	for i in range(datamodel.path_point_keys.size()):
+		var point = Global.life_path_points[datamodel.path_point_keys[i]]
 		
 		# 计算这个点在路径上的累计距离
 		# (Curve2D 有一个好用的函数可以直接算这个)
@@ -39,7 +39,7 @@ func setup_emotion():
 func _ready() -> void:
 	$Footstep.top_level = true
 	if datamodel:
-		$Label.text = datamodel.title
+		$Label.text = datamodel.name
 		_create_path()
 
 	setup_emotion()
@@ -55,7 +55,7 @@ func on_change_emotion_color(current_offset: int):
 	var emotion_color = emotion_gradient.sample(emotion_float)
 
 	var is_extreme = emotion_float < 0.1 or emotion_float > 0.9
-	# Logging.debug('emotion for %s: %s' % [datamodel.title,round(emotion_float * 10)/10])
+	# Logging.debug('emotion for %s: %s' % [datamodel.name,round(emotion_float * 10)/10])
 	if is_extreme:
 		Global.change_background_color.emit(emotion_color)
 		$EmotionColor.visible = false
@@ -83,14 +83,15 @@ func _create_path() -> void:
 	"""
 	path = Curve2D.new()
 	time_position_curve = Curve.new()
-	for point in datamodel.path_points:
-		path.add_point(point.position)
-
+	for point in datamodel.path_point_keys:
+		print(datamodel.path_point_keys)
+		path.add_point(Global.life_path_points[point].position)
 	var path_ratio: float
 	var total_path = path.get_baked_length()
 	var time_ratio: float
-	for point in datamodel.path_points:
-		time_ratio = (point.point_year - Global.start_year) / Global.time_span
+	for point in datamodel.path_point_keys:
+		point = Global.life_path_points[point]
+		time_ratio = (point.year - Global.start_year) / Global.time_span
 		path_ratio = path.get_closest_offset(point.position) / total_path
 		time_position_curve.add_point(Vector2(time_ratio,path_ratio))
 
