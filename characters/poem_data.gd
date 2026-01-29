@@ -22,38 +22,32 @@ func _init(note_data: Dictionary):
 
 # 在 PoemData.gd 内部添加
 
-## 将诗词数据转化为一个用于在地图上行走的路径点
-func to_life_path_point() -> PoetLifePoint:
-    # 1. 实例化目标对象
-    # 传入空字典 {} 是为了触发父类 _init 的默认逻辑，防止报错
-    var point = PoetLifePoint.new({})
+## 将诗词数据转化为一个用于初始化 PoetLifePoint 的原始字典
+## 这种做法完美避开了编译期的循环引用问题
+func to_life_path_point_data() -> Dictionary:
+    # 1. 组装符合 GameEntity 结构的字典
+    var data = {
+        "uuid": self.uuid + "_point", # 必须有独立 ID
+        "name": "创作：《" + self.name + "》",
+        "description": self.description,
+        "owner_uuids": self.owner_uuids.duplicate(),
+        "tags": self.tags.duplicate(),
+        
+        # 2. 组装内部属性，对应我们之前修复的 props 解析逻辑
+        "properties": {
+            "position": self.position, # 这里传 Vector2 没问题，GDScript 字典支持
+            "year": self.year,
+            "time": self.year, # 双保险
+            "location_uuid": self.location_uuid,
+            "emotion": self.emotion,
+            # 注入元数据，方便以后反查
+            "poem_ref": self.uuid,
+            "event_type": "poem_creation"
+        }
+    }
     
-    # 2. 核心标识符处理
-    # ⚠️注意：一定要生成新的 UUID，不能和诗词本身的 UUID 冲突
-    # 建议后缀法，方便 Debug
-    point.uuid = self.uuid + "_creation_point"
-    
-    # 3. 继承基础信息 (GameEntity)
-    point.name = "创作：《" + self.name + "》" # 让名字在 UI 上直观一点
-    point.description = self.description
-    point.icon = self.icon
-    
-    # 数组必须使用 duplicate()，否则是引用传递，修改一个会影响另一个
-    point.owner_uuids = self.owner_uuids.duplicate()
-    
-    # 4. 处理 Tags (完成你的需求：路径点塞诗词 tag)
-    point.tags = self.tags.duplicate()
-    # 打上特殊标签，方便 UI 层识别这是一个“写诗事件”而不是“普通路过”
-    point.tags.append("event_type:poem_creation")
-    point.tags.append("poem_ref:" + self.uuid) # 存诗词原本的 ID，方便反查
-    
-    # 5. 继承时空信息 (WorldEvent)
-    # 因为 PoemData 也是 WorldEvent，直接拿过来
-    point.position = self.position
-    point.year = self.year
-    point.location_uuid = self.location_uuid
-    
-    # 6. 继承情绪 (PoetLifePoint 特有)
-    point.emotion = self.emotion
-    
-    return point
+    # 3. 可以在这里打上额外的 Tag，方便 UI 识别
+    if not "poem_event" in data.tags:
+        data.tags.append("poem_event")
+        
+    return data

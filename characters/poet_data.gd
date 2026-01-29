@@ -16,3 +16,4 @@ func _init(notes: Dictionary):
 	birth_year = properties.get("birth", 0.0)
 	death_year = properties.get('death',1.0)
 	color = Color.from_string(properties.get('color', "#ffffff"), Color.WHITE)
+

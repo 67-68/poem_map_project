@@ -49,7 +49,7 @@ func _ready() -> void:
 	poem_data = create_dict(DataLoader.load_data_model(PoemData,'poem_data'))
 
 	for d in poem_data:
-		var poem_point = poem_data[d].to_life_path_point()
+		var poem_point = PoetLifePoint.new(poem_data[d].to_life_path_point_data())
 		poem_point.uuid = 'poem_%s' % d
 		life_path_points[poem_point.uuid] = (poem_point)
 
