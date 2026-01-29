@@ -1,6 +1,6 @@
 extends Node
 
-const DEFAULT_ICON = "res://assets/icons/default.png"
+const DEFAULT_ICON = "assets/data/default.png"
 const ICON_PATH = "res://assets/icons/"
 const DATA_PATH = 'res://assets/data/'
 
@@ -32,6 +32,8 @@ signal request_text_popup(text: String)
 signal change_background_color(color: Color) # 如果为空，disable color
 signal request_rain(enable: bool)
 signal request_daylight(enable: bool)
+
+signal request_add_poem(data: PoemData)
 
 signal year_changed(year: float) #虽然可能用不到，直接使用Global year就行了，但还是发一下
 

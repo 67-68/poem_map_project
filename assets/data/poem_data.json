@@ -1,0 +1,74 @@
+[
+    {
+        "uuid": "poem-libai-001",
+        "name": "静夜思",
+        "text": "床前明月光，疑是地上霜。举头望明月，低头思故乡。",
+        "owner_uuids": ["poet-libai-001"],
+        "tags": [],
+        "properties": {
+            "popularity": 0.9,
+            "poem_background": "NIGHT",
+            "emotion": 0.3
+        }
+    },
+    {
+        "uuid": "poem-libai-002",
+        "name": "将进酒",
+        "text": "君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜悲白发，朝如青丝暮成雪。",
+        "owner_uuids": ["poet-libai-001"],
+        "tags": [],
+        "properties": {
+            "popularity": 0.95,
+            "poem_background": "BOOK",
+            "emotion": 0.8
+        }
+    },
+    {
+        "uuid": "poem-libai-003",
+        "name": "早发白帝城",
+        "text": "朝辞白帝彩云间，千里江陵一日还。两岸猿声啼不住，轻舟已过万重山。",
+        "owner_uuids": ["poet-libai-001"],
+        "tags": [],
+        "properties": {
+            "popularity": 0.85,
+            "poem_background": "BOOK",
+            "emotion": 0.7
+        }
+    },
+    {
+        "uuid": "poem-dufu-001",
+        "name": "春望",
+        "text": "国破山河在，城春草木深。感时花溅泪，恨别鸟惊心。",
+        "owner_uuids": ["poet-dufu-002"],
+        "tags": [],
+        "properties": {
+            "popularity": 0.88,
+            "poem_background": "BOOK",
+            "emotion": 0.2
+        }
+    },
+    {
+        "uuid": "poem-dufu-002",
+        "name": "登高",
+        "text": "风急天高猿啸哀，渚清沙白鸟飞回。无边落木萧萧下，不尽长江滚滚来。",
+        "owner_uuids": ["poet-dufu-002"],
+        "tags": [],
+        "properties": {
+            "popularity": 0.9,
+            "poem_background": "NIGHT",
+            "emotion": 0.4
+        }
+    },
+    {
+        "uuid": "poem-dufu-003",
+        "name": "茅屋为秋风所破歌",
+        "text": "八月秋高风怒号，卷我屋上三重茅。茅飞渡江洒江郊，高者挂罥长林梢，下者飘转沉塘坳。",
+        "owner_uuids": ["poet-dufu-002"],
+        "tags": [],
+        "properties": {
+            "popularity": 0.82,
+            "poem_background": "BOOK",
+            "emotion": 0.25
+        }
+    }
+]

@@ -5,6 +5,7 @@ enum Poem_BG {
     NIGHT
 }
 
+var repo_id = "POEM_REPO"
 @export var popularity: float
 @export var background: Poem_BG
 @export var emotion: float

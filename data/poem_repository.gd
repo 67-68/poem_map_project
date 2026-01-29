@@ -1,6 +1,6 @@
 class_name PoemRepository extends BaseRepository
 
-var type: PoemData
+var model_class = PoemData
 
 func get_by_id(uuid: String) -> PoemData:
     return _data.get(uuid,null)
@@ -21,9 +21,11 @@ func build_up_cache(data_service, dataclass_to_build):
         var already_have := false
         for point in life_points:
             if d.uuid in point.tags:
-                already_have = false
+                already_have = true
         
         if not already_have:
             var life_point = PoetLifePoint.new(d)
             life_point.uuid = 'poem-%s' % test_uuid
+            life_point.tags.append(d.uuid)
             point_repo.add_record(life_point)
+            test_uuid += 1

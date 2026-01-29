@@ -3,6 +3,7 @@ extends Node2D
 var datamodel: PoetData
 var path: Curve2D
 var time_position_curve: Curve
+var path_points: Array[PoetLifePoint] = []
 
 var previous_color: Color
 var emotion_curve: Curve # length_2_float_emotion
@@ -14,8 +15,8 @@ func setup_emotion():
 	var current_dist = 0.0
 
 	# 遍历每个点
-	for i in range(datamodel.path_points.size()):
-		var point = datamodel.path_points[i]
+	for i in range(path_points.size()):
+		var point = path_points[i]
 		
 		# 计算这个点在路径上的累计距离
 		# (Curve2D 有一个好用的函数可以直接算这个)
@@ -29,11 +30,8 @@ func setup_emotion():
 		emotion_curve.add_point(Vector2(ratio, point.emotion))
 
 	emotion_gradient = Gradient.new()
-	emotion_gradient.remove_point(0)
-	emotion_gradient.remove_point(0)
-
-	emotion_gradient.add_point(0,Global.sad_color)
-	emotion_gradient.add_point(1,Global.happy_color)
+	emotion_gradient.set_color(0, Global.sad_color)
+	emotion_gradient.set_color(1, Global.happy_color)
 	
 
 func _ready() -> void:
@@ -83,14 +81,14 @@ func _create_path() -> void:
 	"""
 	path = Curve2D.new()
 	time_position_curve = Curve.new()
-	for point in datamodel.path_points:
+	for point in path_points:
 		path.add_point(point.position)
 
 	var path_ratio: float
 	var total_path = path.get_baked_length()
 	var time_ratio: float
-	for point in datamodel.path_points:
-		time_ratio = (point.point_year - Global.start_year) / Global.time_span
+	for point in path_points:
+		time_ratio = (point.year - Global.start_year) / Global.time_span
 		path_ratio = path.get_closest_offset(point.position) / total_path
 		time_position_curve.add_point(Vector2(time_ratio,path_ratio))
 
@@ -112,10 +110,14 @@ func handle_selection(viewport,event,shape_idx):
 	get_tree().create_timer(3).timeout.connect(return_preivous_color)
 	Global.user_clicked.emit(datamodel)
 
-func initiate(data: PoetData,path_point_repo: PathPointRepository):
+func initiate(data: PoetData):
 	modulate = data.color
-	position = path_point_repo.get_by_id(data.path_point_keys[0]).position
-	get_node('Label').text = data.title
 	datamodel = data
+	var repo = DataService_.get_repository(PoetData)
+	var life_point_uuid = repo.get_item_cache(PoetLifePoint,datamodel.uuid)
+
+	position = Vector2(DataService_.resolve_uuid(PoetLifePoint,life_point_uuid[0]).position)
+	get_node('Label').text = data.name
+	
 
 	return self

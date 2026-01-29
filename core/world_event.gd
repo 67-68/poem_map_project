@@ -13,6 +13,9 @@ func _init(data: Dictionary):
     if not position:
         position = property.get('position',Vector2(0,0))
     if not year:
-        year = property.get('year',Global.start_year)
+        # 也检查 "time" 属性，因为 path_points.json 使用 "time"
+        year = property.get('time', Global.start_year)
+        if year == Global.start_year:
+            year = property.get('year', Global.start_year)
     if not location_uuid:
         location_uuid = property.get('location_uuid','')

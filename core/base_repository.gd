@@ -9,7 +9,10 @@ func _init(data: Array[GameEntity]):
         _data[d.uuid] = d
 
 func get_by_id(uuid: String):
-    return _data.get(uuid,null)
+    var data_ = _data
+    print(data_)
+    print(_data)
+    return data_.get(uuid,null)
 
 func get_all():
     return _data
@@ -32,14 +35,19 @@ func build_up_cache(data_service, dataclass_to_build):
         var repo = data_service.get_repository(base_model)
         if not 'owner_uuids' in repo.get_first(): continue
         create_cache_for_model(base_model)
-        for model_data in repo.get_all():
+        for model_data in repo.get_all().values():
             for uuid in model_data.owner_uuids:
-                if uuid in _data: caches[base_model][uuid].append(model_data.uuid)
+                if uuid in _data:
+                    caches[base_model][uuid].append(model_data.uuid)
+                    print("Cache append: ", base_model, " uuid: ", uuid, " model_data.uuid: ", model_data.uuid)
 
 func create_cache_for_model(data_model):
     caches[data_model] = {}
-    for d in _data:
+    for d in _data.values():
         caches[data_model][d.uuid] = []
 
 func add_record(data):
     _data[data.uuid] = data
+
+func get_item_cache(base_model,uuid):
+    return caches[base_model][uuid]

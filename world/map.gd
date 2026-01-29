@@ -8,10 +8,14 @@ func _ready() -> void:
 	var poet_repo = DataService_.get_repository(PoetData)
 	var path_repo = DataService_.get_repository(PoetLifePoint)
 
-	for item in poet_repo.get_all():
-		add_child(character_point.instantiate().initiate(item,path_repo))
-		var vec = Vector2(item.path_points[0].position[0], item.path_points[0].position[1])		
-		
+	for item in poet_repo.get_all().values():
+		# 初始化点和他们的位置
+		var point = character_point.instantiate()
+		point.initiate(item)
+		var point_repo = DataService_.get_repository(PoetLifePoint)
+		for key in item.path_point_keys:
+			point.path_points.append(point_repo.get_by_id(key))
+		add_child(point)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

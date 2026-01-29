@@ -5,11 +5,12 @@ var poems: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Global.request_add_poem.connect(add_poem)
 	animation_finished.connect(_on_animation_finished)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func add_poem(poem: PoetData):
@@ -18,8 +19,8 @@ func add_poem(poem: PoetData):
 		play_poem_animation()
 
 
-func add_poems(poems: Array[PoemData]):
-	poems.append_array(poems)
+func add_poems(poems_: Array[PoemData]):
+	poems.append_array(poems_)
 	if not is_playing:
 		play_poem_animation()
 
@@ -30,14 +31,14 @@ func play_poem_animation():
 	play('poem_created')
 	
 
-func _apply_poem_data(poem_data: PoemData):
+func _apply_poem_data(_poem_data: PoemData):
 	"""
 	把poem data设置到view中
 	"""
 	Logging.err('apply poem data 这里还没做!')
 	
 
-func _on_animation_finished(args):
+func _on_animation_finished(_args):
 	poems.pop_at(0)
 	if poems.is_empty():
 		is_playing = false

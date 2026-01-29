@@ -22,6 +22,10 @@ static func _load_file(file_path: String):
 
 static func load_data_model(model_class: Variant ,file_path: String) -> Array[GameEntity]:
 	if not file_path.ends_with('json') and not file_path.begins_with('res://'):
-		file_path = Global.DATA_PATH + file_path
+		file_path = Global.DATA_PATH + file_path + '.json'
 	var json_content = _load_file(file_path)
-	return model_class.new(json_content)
+	if not json_content: return []
+	var result: Array[GameEntity] = []
+	for content in json_content:
+		result.append(model_class.new(content))
+	return result
