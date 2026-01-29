@@ -8,6 +8,8 @@ var previous_color: Color
 var emotion_curve: Curve # length_2_float_emotion
 var emotion_gradient: Gradient # float_emotion_2_color
 
+var next_point_year: float
+
 func setup_emotion():
 	emotion_curve = Curve.new()
 	var total_len = path.get_baked_length()
@@ -41,6 +43,7 @@ func _ready() -> void:
 	if datamodel:
 		$Label.text = datamodel.name
 		_create_path()
+		next_point_year = Global.life_path_points[datamodel.path_point_keys[0]].year
 
 	setup_emotion()
 
@@ -65,6 +68,12 @@ func on_change_emotion_color(current_offset: int):
 		$EmotionColor.visible = true
 		$EmotionColor.enabled = true
 
+func on_send_poems():
+	for p in datamodel.path_point_keys:
+		if Global.life_path_points[p].year == next_point_year:
+			Global.request Global.life_path_points[p]
+		if Global.life_path_points[p].year > next_point_year:
+			next_point_year = Global.life_path_points[p].year
 
 func _process(delta: float) -> void:
 	on_move()
@@ -75,6 +84,9 @@ func _process(delta: float) -> void:
 	var current_offset = total_length * target_path_ratio # 当前出发了多远，比如1000,total 5000
 	position = path.sample_baked(current_offset)
 	on_change_emotion_color(current_offset)
+
+	if Global.year > self.next_point_year:
+		on_send_poems()
 	
 
 func _create_path() -> void:
