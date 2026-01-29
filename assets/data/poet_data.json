@@ -1,7 +1,7 @@
 [
     {
         "uuid": "poet-libai-001",
-        "title": "李白",
+        "name": "李白",
         "text": "大唐诗仙，字太白，号青莲居士。",
         "properties": {
             "birth": 701.0,
@@ -11,7 +11,7 @@
     },
     {
         "uuid": "poet-dufu-002",
-        "title": "杜甫",
+        "name": "杜甫",
         "text": "大唐诗圣，字子美，号少陵野老。",
         "properties": {
             "birth": 712.0,
