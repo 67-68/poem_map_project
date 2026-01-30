@@ -48,6 +48,7 @@ func to_life_path_point_data() -> Dictionary:
     
     # 3. 可以在这里打上额外的 Tag，方便 UI 识别
     if not "poem_event" in data.tags:
-        data.tags.append("poem_%s" % uuid)
+        data['tags'].append('poem %s' % uuid)
+        data['tags'].append('poem_creation')
         
     return data

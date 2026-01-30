@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://cnkr0y7c3yen2"]
+
+[ext_resource type="Script" uid="uid://cn0nq4obf1au7" path="res://features/poem_animation.gd" id="1_uow2x"]
+[ext_resource type="AudioStream" uid="uid://cvsak26dy2b3g" path="res://assets/stamp_sound.wav" id="2_s55vr"]
+
+[sub_resource type="Animation" id="Animation_s55vr"]
+resource_name = "poem_created"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wh0bq"]
+_data = {
+&"poem_created": SubResource("Animation_s55vr")
+}
+
+[node name="PoemPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ContentLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RarityStamp" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PoemAnimation" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_wh0bq")
+}
+script = ExtResource("1_uow2x")
+
+[node name="StampPlayer" type="AudioStreamPlayer2D" parent="PoemAnimation"]
+stream = ExtResource("2_s55vr")

@@ -20,6 +20,7 @@ config/icon="uid://ku7ifltn2syw"
 Global="*res://core/global.gd"
 Logging="*res://core/logger.gd"
 TimeService="*res://core/time_service.tscn"
+DataService_="*res://core/data_service.gd"
 
 [debug]
 
@@ -28,6 +29,10 @@ gdscript/autoload_on_startup=true
 [display]
 
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
 [input]
 

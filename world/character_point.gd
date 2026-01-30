@@ -69,11 +69,24 @@ func on_change_emotion_color(current_offset: int):
 		$EmotionColor.enabled = true
 
 func on_send_poems():
+	var found = false
 	for p in datamodel.path_point_keys:
-		if Global.life_path_points[p].year == next_point_year:
-			Global.request Global.life_path_points[p]
-		if Global.life_path_points[p].year > next_point_year:
-			next_point_year = Global.life_path_points[p].year
+		if not found and Global.life_path_points[p].year == next_point_year:
+			var tags = Global.life_path_points[p].tags
+			var poems = []
+			print(Global.life_path_points[p].tags)
+			for t in tags:
+				print(t)
+				if t.begins_with("poem") and not t.ends_with('creation'):  # 修复：begins_with + 双引号
+					poems.append(t.substr(5))  # 从位置 5 取到末尾（poem_ 后）
+			if tags:
+				Global.poems_created.emit(poems)
+				found = true  # 只处理第一个匹配点
+		var year_ = Global.life_path_points[p].year
+		if year_ > next_point_year:
+			next_point_year = Global.life_path_points[p].year  # 更新为下一个年份
+			break  # 提前退出，避免多余循环
+
 
 func _process(delta: float) -> void:
 	on_move()

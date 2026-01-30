@@ -8,7 +8,8 @@
         "properties": {
             "popularity": 0.9,
             "poem_background": "NIGHT",
-            "emotion": 0.3
+            "emotion": 0.3,
+            "time": 725.0
         }
     },
     {
@@ -20,7 +21,8 @@
         "properties": {
             "popularity": 0.95,
             "poem_background": "BOOK",
-            "emotion": 0.8
+            "emotion": 0.8,
+            "time": 752.0
         }
     },
     {
@@ -32,7 +34,8 @@
         "properties": {
             "popularity": 0.85,
             "poem_background": "BOOK",
-            "emotion": 0.7
+            "emotion": 0.7,
+            "time": 759.0
         }
     },
     {
@@ -44,7 +47,8 @@
         "properties": {
             "popularity": 0.88,
             "poem_background": "BOOK",
-            "emotion": 0.2
+            "emotion": 0.2,
+            "time": 757.0
         }
     },
     {
@@ -56,7 +60,8 @@
         "properties": {
             "popularity": 0.9,
             "poem_background": "NIGHT",
-            "emotion": 0.4
+            "emotion": 0.4,
+            "time": 767.0
         }
     },
     {
@@ -68,7 +73,8 @@
         "properties": {
             "popularity": 0.82,
             "poem_background": "BOOK",
-            "emotion": 0.25
+            "emotion": 0.25,
+            "time": 760.0
         }
     }
 ]
