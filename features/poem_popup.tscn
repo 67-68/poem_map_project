@@ -1,13 +1,89 @@
-[gd_scene load_steps=5 format=3 uid="uid://cnkr0y7c3yen2"]
+[gd_scene load_steps=10 format=3 uid="uid://cnkr0y7c3yen2"]
 
+[ext_resource type="Script" uid="uid://dvm6jj0xbsm0l" path="res://features/poem_popup.gd" id="1_hqy85"]
+[ext_resource type="Texture2D" uid="uid://bj283nwhun67i" path="res://assets/poem_bgs/juanzhou.jpeg" id="1_lxoe1"]
 [ext_resource type="Script" uid="uid://cn0nq4obf1au7" path="res://features/poem_animation.gd" id="1_uow2x"]
+[ext_resource type="Texture2D" uid="uid://dioswtd3xqyj2" path="res://assets/images.png" id="2_hqy85"]
 [ext_resource type="AudioStream" uid="uid://cvsak26dy2b3g" path="res://assets/stamp_sound.wav" id="2_s55vr"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fw123"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+texture = ExtResource("1_lxoe1")
+texture_margin_left = 15.0
+texture_margin_right = 19.0
+
+[sub_resource type="Animation" id="Animation_f2n1e"]
 
 [sub_resource type="Animation" id="Animation_s55vr"]
 resource_name = "poem_created"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BookPanel/MarginContainer/VBoxContainer/ContentLabel:visible_characters")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.6, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.6, 1.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(3, 3), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.6, 1.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BookPanel:custom_minimum_size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(40, 0), Vector2(260, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BookPanel/MarginContainer/VBoxContainer/ContentLabel:fit_content")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.6, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wh0bq"]
 _data = {
+&"RESET": SubResource("Animation_f2n1e"),
 &"poem_created": SubResource("Animation_s55vr")
 }
 
@@ -16,26 +92,57 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("1_hqy85")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="BookPanel" type="PanelContainer" parent="."]
+clip_contents = true
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 41.0
+offset_bottom = 71.0
+pivot_offset = Vector2(20, 40)
+theme_override_styles/panel = SubResource("StyleBoxTexture_fw123")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BookPanel"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BookPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="BookPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "test_name"
+clip_text = true
+text_overrun_behavior = 1
+
+[node name="ContentLabel" type="RichTextLabel" parent="BookPanel/MarginContainer/VBoxContainer"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+text = "test_description"
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="StampAnchor" type="Control" parent="BookPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="ContentLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="RarityStamp" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
+[node name="RarityStamp" type="TextureRect" parent="BookPanel/MarginContainer/VBoxContainer/StampAnchor"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 127.0
+offset_top = -5.999999
+offset_right = 137.0
+offset_bottom = 4.000001
+scale = Vector2(3, 3)
+pivot_offset = Vector2(5, 5)
+texture = ExtResource("2_hqy85")
+expand_mode = 1
 
 [node name="PoemAnimation" type="AnimationPlayer" parent="."]
 libraries = {
