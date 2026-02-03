@@ -5,13 +5,13 @@ var scene: Label
 func before_each():
 	scene = Label.new()
 	add_child_autofree(scene)
-	scene.text = "test_description"
+	scene.text = "test_description_lonf"
 
 func test_label_size():
 	var size = await SizeService_.get_size(scene)
 	assert_not_null(size, "应该返回一个 Dictionary")
 	assert_true(size.has(scene), "结果应包含被测量的节点")
-	assert_gt(size[scene].y, 20, "Label 测量出的高度应大于 20")
+	assert_gt(size[scene].y, 20, "Label 测量出的高度应大于 20")	
 	
 func test_label_size_precision():
 	# 1. 准备数据
@@ -31,6 +31,7 @@ func test_label_size_precision():
 	var expected_min = single_line_height * 1.8
 	var expected_max = single_line_height * 2.5 # 算上行间距
 	
+	breakpoint
 	assert_between(measured_height, expected_min, expected_max, 
 		"多行文本高度应当在预期行数倍数范围内")
 
@@ -41,7 +42,7 @@ func test_relative_precision():
 	
 	# 2. 测长的
 	scene.text = "这是一段非常非常非常非常非常非常非常非常非常长的文本..."
-	var size_long = await SizeService_.get_size([scene])
+	var size_long = await SizeService_.get_size(scene)
 	
 	assert_gt(size_long[scene].y, size_short[scene].y, 
 		"内容变多后，测量出的高度必须增加！")
