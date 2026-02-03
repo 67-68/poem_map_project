@@ -36,6 +36,9 @@ func create_animation():
 	var target_width = Util.get_highest_val_from_dict_vec2(sizes, 0)
 
 	# 3. 初始状态重置 (此时是在测量之后)
+	$BookPanel/MarginContainer/VBoxContainer/ContentLabel.custom_minimum_size = sizes[
+		$BookPanel/MarginContainer/VBoxContainer/ContentLabel
+	]
 	$BookPanel/MarginContainer/VBoxContainer/TitleLabel.modulate.a = 0
 	$BookPanel/MarginContainer/VBoxContainer/ContentLabel.visible_ratio = 0
 	$BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp.modulate.a = 0
@@ -58,6 +61,9 @@ func create_animation():
 	
 	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp,'modulate:a',1,0.3)
 	tw.parallel().tween_property($BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp,'scale',Vector2(1,1),0.3)
+
+func end_animation():
+	$BookPanel/MarginContainer/VBoxContainer/ContentLabel.fit_content = true
 
 
 # Called when the node enters the scene tree for the first time.
