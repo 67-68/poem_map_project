@@ -37,7 +37,6 @@ func _ready():
     minimize_widgets['Label'] = minimize_label
     enlarge_widgets['RichTextLabel'] = enlarge_rich_text
     minimize_widgets['RichTextLabel'] = minimize_rich_text
-
 func get_size(...widgets):
     """
     only support orginal class for now
