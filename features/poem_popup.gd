@@ -4,7 +4,6 @@ extends Control
 # --- debug ---
 @export var debug_animation_start := false:
 	set(value):
-		print('waht')
 		if is_node_ready():		
 			var poem = PoemData.new({})
 			debug_animation_start = false
@@ -13,27 +12,42 @@ extends Control
 			poem.popularity = 50
 			on_apply_poem(poem)
 
-
+var tw: Tween
 
 func on_apply_poem(data: PoemData):
-	print('here')
 	$BookPanel/MarginContainer/VBoxContainer/ContentLabel.text = data.description
 	$BookPanel/MarginContainer/VBoxContainer/TitleLabel.text = data.name
 	# 设置texture
 	# 设置rarity stamp等级
+	create_animation()
 
-	$BookPanel.custom_minimum_size = Vector2.ZERO
-	$BookPanel.size = Vector2.ZERO
-	
-	await get_tree().process_frame
-	
-	var target_size = $BookPanel.size
-	$BookPanel.size = Vector2.ZERO
-	$BookPanel.custom_minimum_size = Vector2.ZERO
+func create_animation():
+	if tw: tw.kill()
 
-	var tw = create_tween()
+	var target_width = Util.get_highest_val_from_dict_vec2(await SizeService.get_size($BookPanel/MarginContainer/VBoxContainer/TitleLabel,$BookPanel/MarginContainer/VBoxContainer/ContentLabel),0)
+	
+	$BookPanel/MarginContainer/VBoxContainer/TitleLabel.modulate.a = 0
+	$BookPanel/MarginContainer/VBoxContainer/ContentLabel.visible_ratio = 0
+	$BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp.modulate.a = 0
+	$BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp.scale = Vector2(3,3)
+
+	# --- 卷轴，背景 ---
+	tw = create_tween()
 	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tw.tween_property($BookPanel,'size',target_size,0.5)
+	tw.tween_property($BookPanel,'custom_minimum_size:x',target_width,0.7)
+
+	# --- title ---
+	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/TitleLabel,'modulate:a',1.0,0.5)
+	#tw.parallel().tween_property( # 似乎layout下position没法随便动，所以先不管这个
+	
+	# --- content ---
+	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/ContentLabel,'visible_ratio',1.0,0.7)
+
+	# --- stamp ---
+	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp,'modulate:a',1,0.3)
+	tw.parallel().tween_property($BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp,'scale',Vector2(1,1),0.3)
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

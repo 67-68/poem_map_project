@@ -8,7 +8,7 @@ func before_each():
 	scene.text = "test_description_lonf"
 
 func test_label_size():
-	var size = await SizeService_.get_size(scene)
+	var size = await SizeService.get_size(scene)
 	assert_not_null(size, "应该返回一个 Dictionary")
 	assert_true(size.has(scene), "结果应包含被测量的节点")
 	assert_gt(size[scene].y, 20, "Label 测量出的高度应大于 20")	
@@ -22,7 +22,7 @@ func test_label_size_precision():
 	var single_line_height = font.get_height(font_size)
 	
 	# 2. 运行 Service
-	var size_map = await SizeService_.get_size(scene)
+	var size_map = await SizeService.get_size(scene)
 	var measured_height = size_map[scene].y
 	
 	# 3. 精度断言
@@ -31,18 +31,18 @@ func test_label_size_precision():
 	var expected_min = single_line_height * 1.8
 	var expected_max = single_line_height * 2.5 # 算上行间距
 	
-	breakpoint
 	assert_between(measured_height, expected_min, expected_max, 
 		"多行文本高度应当在预期行数倍数范围内")
+	# 不行，这里似乎文本太短了
 
 func test_relative_precision():
 	# 1. 测短的
 	scene.text = "Hello"
-	var size_short = await SizeService_.get_size(scene)
+	var size_short = await SizeService.get_size(scene)
 	
 	# 2. 测长的
 	scene.text = "这是一段非常非常非常非常非常非常非常非常非常长的文本..."
-	var size_long = await SizeService_.get_size(scene)
+	var size_long = await SizeService.get_size(scene)
 	
 	assert_gt(size_long[scene].y, size_short[scene].y, 
 		"内容变多后，测量出的高度必须增加！")

@@ -1,4 +1,4 @@
-class_name SizeService extends Node
+extends Node
 
 enum LabelSizeFlag{
 	SINGLE_LINE, MULTI_LINE # 开启/不开启line wrap
@@ -15,7 +15,6 @@ func enlarge_label(label: Label):
 	
 	label.autowrap_trim_flags = 0 # trim nothing
 	label.clip_text = false
-	
 
 func minimize_label(label: Label):
 	if label_size_flag == LabelSizeFlag.MULTI_LINE:
@@ -37,6 +36,7 @@ func _ready():
 	minimize_widgets['Label'] = minimize_label
 	enlarge_widgets['RichTextLabel'] = enlarge_rich_text
 	minimize_widgets['RichTextLabel'] = minimize_rich_text
+	
 func get_size(...widgets):
 	"""
 	only support orginal class for now

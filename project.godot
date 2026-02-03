@@ -20,7 +20,7 @@ config/icon="uid://ku7ifltn2syw"
 Global="*res://core/global.gd"
 Logging="*res://core/logger.gd"
 TimeService="*res://core/time_service.tscn"
-SizeService_="*res://core/size_service.gd"
+SizeService="*res://core/size_service.tscn"
 
 [debug]
 
