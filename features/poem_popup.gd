@@ -23,30 +23,41 @@ func on_apply_poem(data: PoemData):
 
 func create_animation():
 	if tw: tw.kill()
-
-	var target_width = Util.get_highest_val_from_dict_vec2(await SizeService.get_size($BookPanel/MarginContainer/VBoxContainer/TitleLabel,$BookPanel/MarginContainer/VBoxContainer/ContentLabel),0)
 	
+	# 1. 动画前置：先全部隐藏，防止测量时的闪烁 🤓☝️
+	$BookPanel.modulate.a = 0
+	
+	# 2. 测量阶段
+	var sizes = await SizeService.get_size(
+		[$BookPanel],
+		$BookPanel/MarginContainer/VBoxContainer/TitleLabel,
+		$BookPanel/MarginContainer/VBoxContainer/ContentLabel
+	)
+	var target_width = Util.get_highest_val_from_dict_vec2(sizes, 0)
+
+	# 3. 初始状态重置 (此时是在测量之后)
 	$BookPanel/MarginContainer/VBoxContainer/TitleLabel.modulate.a = 0
 	$BookPanel/MarginContainer/VBoxContainer/ContentLabel.visible_ratio = 0
 	$BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp.modulate.a = 0
 	$BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp.scale = Vector2(3,3)
-
-	# --- 卷轴，背景 ---
+	
+	# 重要：把宽度压扁，并让面板显现（虽然现在宽度是0）
+	$BookPanel.custom_minimum_size.x = 0
+	$BookPanel.modulate.a = 1.0 
+	
+	# 4. 动画启动
 	tw = create_tween()
 	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tw.tween_property($BookPanel,'custom_minimum_size:x',target_width,0.7)
-
-	# --- title ---
-	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/TitleLabel,'modulate:a',1.0,0.5)
-	#tw.parallel().tween_property( # 似乎layout下position没法随便动，所以先不管这个
 	
-	# --- content ---
-	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/ContentLabel,'visible_ratio',1.0,0.7)
+	# 驱动最小宽度！不要动 size！
+	tw.tween_property($BookPanel, 'custom_minimum_size:x', target_width, 0.7)
 
-	# --- stamp ---
+	# --- 后续动画 ---
+	tw.parallel().tween_property($BookPanel/MarginContainer/VBoxContainer/TitleLabel,'modulate:a',1.0,0.5)
+	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/ContentLabel,'visible_ratio',1.0,0.7)
+	
 	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp,'modulate:a',1,0.3)
 	tw.parallel().tween_property($BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp,'scale',Vector2(1,1),0.3)
-
 
 
 # Called when the node enters the scene tree for the first time.

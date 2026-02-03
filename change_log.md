@@ -1,6 +1,8 @@
 ## Added
 - after failed large batch refactor, I choose to refactor step by step
 - poem data -> position point
+- SizeService
+- poem creation animation
 
 # [0.4.0]
 ## Added
