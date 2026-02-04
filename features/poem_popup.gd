@@ -2,15 +2,6 @@
 extends Control
 
 # --- debug ---
-@export var debug_animation_start := false:
-	set(value):
-		if is_node_ready():		
-			var poem = PoemData.new({})
-			debug_animation_start = false
-			poem.name = 'test_name'
-			poem.description = 'test_description'
-			poem.popularity = 50
-			on_apply_poem(poem)
 
 var tw: Tween
 
