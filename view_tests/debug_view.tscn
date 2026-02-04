@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3qk57rwm7q84"]
+
+[ext_resource type="Script" uid="uid://3c0hw3bupjy7" path="res://view_tests/debug_view.gd" id="1_eakbg"]
+
+[node name="DebugView" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_eakbg")
+
+[node name="HFlowContainer" type="HFlowContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

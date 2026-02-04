@@ -1,0 +1,1 @@
+- 如果需要创建一个debug view test, 类需要有方法 create_debug_view(debug_index: int) -> ViewClass

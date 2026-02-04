@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cnkr0y7c3yen2"]
+[gd_scene load_steps=12 format=3 uid="uid://cnkr0y7c3yen2"]
 
 [ext_resource type="Script" uid="uid://dvm6jj0xbsm0l" path="res://features/poem_popup.gd" id="1_hqy85"]
 [ext_resource type="Texture2D" uid="uid://bj283nwhun67i" path="res://assets/poem_bgs/juanzhou.jpeg" id="1_lxoe1"]
 [ext_resource type="Script" uid="uid://cn0nq4obf1au7" path="res://features/poem_animation.gd" id="1_uow2x"]
 [ext_resource type="Texture2D" uid="uid://dioswtd3xqyj2" path="res://assets/images.png" id="2_hqy85"]
 [ext_resource type="AudioStream" uid="uid://cvsak26dy2b3g" path="res://assets/stamp_sound.wav" id="2_s55vr"]
+[ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_fw123"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fw123"]
 content_margin_left = 20.0
@@ -14,6 +15,13 @@ content_margin_bottom = 20.0
 texture = ExtResource("1_lxoe1")
 texture_margin_left = 15.0
 texture_margin_right = 19.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fw123"]
+resource_local_to_scene = true
+shader = ExtResource("3_fw123")
+shader_parameter/speed = 0.5
+shader_parameter/width = 0.1
+shader_parameter/shine_color = Color(1, 0.8, 0, 1)
 
 [sub_resource type="Animation" id="Animation_f2n1e"]
 
@@ -109,6 +117,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="BookPanel/MarginContainer/VBoxContainer"]
+material = SubResource("ShaderMaterial_fw123")
 layout_mode = 2
 size_flags_vertical = 6
 text = "test_name"

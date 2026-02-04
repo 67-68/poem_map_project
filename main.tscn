@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://c1yjebq75g71y" path="res://world/camera.tscn" id="3_7mycd"]
-[ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/slider_shader.gdshader" id="3_272bh"]
+[ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_272bh"]
 [ext_resource type="PackedScene" uid="uid://5shth4lj0a8t" path="res://ui/pop_up.tscn" id="4_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://8gipdq3nfr2d" path="res://ui/poet_descriptor.tscn" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="6_7mycd"]
