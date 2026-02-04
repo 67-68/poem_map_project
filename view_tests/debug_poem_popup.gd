@@ -1,6 +1,6 @@
 class_name DebugPoemPopup extends RefCounted
 
-var view: Node2D
+var view: Control
 
 func create_debug_view(idx: int):
 	"""
@@ -10,9 +10,7 @@ func create_debug_view(idx: int):
 	view = view_scene.instantiate()
 	match idx:
 		0:
-			view
-		1:
-			view.set_another
+			pass
 		_:
 			return null
 		
