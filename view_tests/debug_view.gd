@@ -15,7 +15,6 @@ func create_btns(instance):
 	for action in actions:
 		btn = Button.new()
 		btn.text = action.description
-		breakpoint
 		btn.pressed.connect(action.callback.bind(debug_view_map))
 		$HBoxContainer/ViewTestBtnContainer.add_child(btn)
 
