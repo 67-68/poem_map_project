@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cnkr0y7c3yen2"]
+[gd_scene load_steps=13 format=3 uid="uid://cnkr0y7c3yen2"]
 
 [ext_resource type="Script" uid="uid://dvm6jj0xbsm0l" path="res://features/poem_popup.gd" id="1_hqy85"]
 [ext_resource type="Texture2D" uid="uid://bj283nwhun67i" path="res://assets/poem_bgs/juanzhou.jpeg" id="1_lxoe1"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dioswtd3xqyj2" path="res://assets/images.png" id="2_hqy85"]
 [ext_resource type="AudioStream" uid="uid://cvsak26dy2b3g" path="res://assets/stamp_sound.wav" id="2_s55vr"]
 [ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_fw123"]
+[ext_resource type="Script" uid="uid://cq2jrbdx37jhe" path="res://features/rarity_stamp.gd" id="5_f2n1e"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fw123"]
 content_margin_left = 20.0
@@ -157,6 +158,7 @@ scale = Vector2(3, 3)
 pivot_offset = Vector2(5, 5)
 texture = ExtResource("2_hqy85")
 expand_mode = 1
+script = ExtResource("5_f2n1e")
 
 [node name="PoemAnimation" type="AnimationPlayer" parent="."]
 libraries = {

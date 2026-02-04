@@ -5,6 +5,13 @@ enum Poem_BG {
     NIGHT
 }
 
+enum Poem_Grade { # 拾遗，雅颂，瑰意，绝唱
+    SHIYI,
+    YASONG,
+    GUIYI,
+    JUECHANG
+}
+
 @export var popularity: float
 @export var background: Poem_BG
 @export var emotion: float

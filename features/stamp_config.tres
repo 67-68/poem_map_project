@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="StampConfig" load_steps=11 format=3 uid="uid://w7qfra8f60it"]
+
+[ext_resource type="Script" uid="uid://upr00g57m7vy" path="res://features/stamp_config.gd" id="1_p32fo"]
+[ext_resource type="Script" uid="uid://cidui57yfkngf" path="res://features/stamp_data.gd" id="2_r63fu"]
+[ext_resource type="Texture2D" uid="uid://c58wkj05kihas" path="res://assets/stamps/拾遗.png" id="3_270bt"]
+[ext_resource type="Texture2D" uid="uid://coqsdr6sp8fhu" path="res://assets/stamps/雅颂.png" id="4_euui4"]
+[ext_resource type="Texture2D" uid="uid://nvt4fp8ir8ow" path="res://assets/stamps/绝唱.png" id="5_657to"]
+[ext_resource type="Texture2D" uid="uid://ctefoc68eq5y3" path="res://assets/stamps/瑰意.png" id="6_g1glw"]
+
+[sub_resource type="Resource" id="Resource_1my5e"]
+script = ExtResource("2_r63fu")
+texture = ExtResource("3_270bt")
+color = Color(0.5686275, 0.17254902, 0.13333334, 1)
+metadata/_custom_type_script = "uid://cidui57yfkngf"
+
+[sub_resource type="Resource" id="Resource_o7r0f"]
+script = ExtResource("2_r63fu")
+texture = ExtResource("4_euui4")
+color = Color(0.2901961, 0.3882353, 0.3019608, 1)
+metadata/_custom_type_script = "uid://cidui57yfkngf"
+
+[sub_resource type="Resource" id="Resource_yu5tc"]
+script = ExtResource("2_r63fu")
+texture = ExtResource("5_657to")
+color = Color(0.24313726, 0.30588236, 0.47843137, 1)
+metadata/_custom_type_script = "uid://cidui57yfkngf"
+
+[sub_resource type="Resource" id="Resource_t528k"]
+script = ExtResource("2_r63fu")
+texture = ExtResource("6_g1glw")
+color = Color(0.7607843, 0.4862745, 0.17254902, 1)
+metadata/_custom_type_script = "uid://cidui57yfkngf"
+
+[resource]
+script = ExtResource("1_p32fo")
+stamp_config = Dictionary[int, ExtResource("2_r63fu")]({
+0: SubResource("Resource_1my5e"),
+1: SubResource("Resource_o7r0f"),
+2: SubResource("Resource_t528k"),
+3: SubResource("Resource_yu5tc")
+})
+metadata/_custom_type_script = "uid://upr00g57m7vy"
