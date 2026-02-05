@@ -9,7 +9,7 @@ var tw: Tween
 @onready var rarity_stamp = $BookPanel/MarginContainer/HBox/RarityStamp
 @onready var stamp_player = $PoemAnimation/StampPlayer
 
-func on_apply_poem(data: PoemData):
+func on_apply_poem(data: PoemData,poet_data):
 	content_label.text = data.example
 	title_label.text = data.name
 	# 设置texture
@@ -24,7 +24,7 @@ func on_apply_poem(data: PoemData):
 	book_panel.add_theme_stylebox_override('panel',juanzhou_bg)
 
 	create_animation()
-	create_notification(data)
+	create_notification(data,poet_data)
 
 func create_animation():
 	if tw: tw.kill()
@@ -76,11 +76,12 @@ func create_animation():
 	await get_tree().create_timer(10).timeout
 	rarity_stamp.custom_minimum_size = Vector2.ZERO
 
-func create_notification(poem_data: PoemData):
-	var poet = Global.poet_data[poem_data.owner_uuids[0]].get_rich_poet()
+func create_notification(poem_data: PoemData, poet_data: PoetData):
+	var poet = poet_data.get_rich_poet()
 	var poem = poem_data.get_rich_poem()
-	var popularity_str = poem_data.get_scarcity()
-	var popularity = Util.colorize_underlined_link(popularity_str,stamp_config.get_config(popularity_str).color,popularity_str)
+	var pop = poem_data.get_scarcity()
+	var popularity_str = poem_data.get_scarcity_str(pop)
+	var popularity = Util.colorize_underlined_link(popularity_str,stamp_config.get_config(pop).color,popularity_str)
 	Global.request_text_popup.emit('%s 在 %d 年创作了 %s, 稀有度为 %s' % [poet,Global.year,poem,popularity])
 
 func end_animation():

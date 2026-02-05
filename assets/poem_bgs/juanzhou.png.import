@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bj283nwhun67i"
-path="res://.godot/imported/juanzhou.jpeg-938717de82cf990b3f91b647be98831b.ctex"
+uid="uid://dafe3626abotl"
+path="res://.godot/imported/juanzhou.png-0b94a0d6273eb921e7da184409375e24.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/poem_bgs/juanzhou.jpeg"
-dest_files=["res://.godot/imported/juanzhou.jpeg-938717de82cf990b3f91b647be98831b.ctex"]
+source_file="res://assets/poem_bgs/juanzhou.png"
+dest_files=["res://.godot/imported/juanzhou.png-0b94a0d6273eb921e7da184409375e24.ctex"]
 
 [params]
 

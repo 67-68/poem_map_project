@@ -72,6 +72,16 @@ func get_scarcity():
         return Poem_Grade.YASONG
     else:
         return Poem_Grade.SHIYI
+    
+func get_scarcity_str(data: Poem_Grade) -> String:
+    if data == Poem_Grade.JUECHANG:
+        return "绝唱"
+    elif data == Poem_Grade.GUIYI:
+        return '瑰意'
+    elif data == Poem_Grade.YASONG:
+        return "雅颂"
+    else:
+        return "拾遗"
 
 func get_rich_poem():
     return Util.colorize_underlined_link(name,Color.DIM_GRAY,uuid)

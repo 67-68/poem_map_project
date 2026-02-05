@@ -31,7 +31,11 @@ func create_4level_poem_popup(map):
 		poem.name = 'test_拾遗'
 		poem.example = '\"北风卷地白草折，胡天八月即飞雪\"'
 		poem.popularity = 50
-		cur_view.on_apply_poem(poem)
+		
+		var poet = PoetData.new({})
+		poet.name = 'test_shiyi'
+
+		cur_view.on_apply_poem(poem,poet)
 
 	cur_view = map['1']
 	if cur_view.is_node_ready():
@@ -39,7 +43,11 @@ func create_4level_poem_popup(map):
 		poem.name = 'test_雅颂'
 		poem.example = '\"忽如一夜春风来，千树万树梨花开\"'
 		poem.popularity = 60
-		cur_view.on_apply_poem(poem)
+
+		var poet = PoetData.new({})
+		poet.name = 'test_yasong'
+
+		cur_view.on_apply_poem(poem,poet)	
 
 	cur_view = map['2']
 	if cur_view.is_node_ready():
@@ -47,7 +55,10 @@ func create_4level_poem_popup(map):
 		poem.name = 'test_瑰意'
 		poem.example = '\"海日生残夜，江春入旧年\"'
 		poem.popularity = 80
-		cur_view.on_apply_poem(poem)
+		var poet = PoetData.new({})
+		poet.name = 'test_guiyi'
+
+		cur_view.on_apply_poem(poem,poet)
 	
 	cur_view = map['3']
 	if cur_view.is_node_ready():
@@ -55,7 +66,10 @@ func create_4level_poem_popup(map):
 		poem.name = 'test_绝唱'
 		poem.example = '\"前不见古人，后不见来者\"'
 		poem.popularity = 90
-		cur_view.on_apply_poem(poem)
+		var poet = PoetData.new({})
+		poet.name = 'test_juechang'
+
+		cur_view.on_apply_poem(poem,poet)
 
 
 func get_actions() -> Array[ViewTestAction]:
