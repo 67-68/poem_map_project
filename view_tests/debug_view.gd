@@ -38,6 +38,7 @@ func _ready() -> void:
 		view = _active_script_instance.create_debug_view(debug_index)
 		if not view:
 			break
+
 		debug_view_map[str(debug_index)] = view
 		$HBoxContainer/ViewGallery.add_child(view)
 		debug_index += 1

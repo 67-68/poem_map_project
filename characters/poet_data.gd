@@ -17,3 +17,5 @@ func _init(notes: Dictionary):
 	death_year = properties.get('death',1.0)
 	color = Color.from_string(properties.get('color', "#ffffff"), Color.WHITE)
 
+func get_rich_poet():
+	return Util.colorize_underlined_link(name,Color.GRAY,uuid)

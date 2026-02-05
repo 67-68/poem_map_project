@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="StampConfig" load_steps=11 format=3 uid="uid://w7qfra8f60it"]
 
 [ext_resource type="Script" uid="uid://upr00g57m7vy" path="res://features/stamp_config.gd" id="1_p32fo"]
-[ext_resource type="Texture2D" uid="uid://c58wkj05kihas" path="res://assets/stamps/拾遗.png" id="2_p32fo"]
+[ext_resource type="Texture2D" uid="uid://ckaluqkwusady" path="res://assets/stamps/拾遗.png" id="2_p32fo"]
 [ext_resource type="Script" uid="uid://cidui57yfkngf" path="res://features/stamp_data.gd" id="2_r63fu"]
-[ext_resource type="Texture2D" uid="uid://coqsdr6sp8fhu" path="res://assets/stamps/雅颂.png" id="4_euui4"]
-[ext_resource type="Texture2D" uid="uid://nvt4fp8ir8ow" path="res://assets/stamps/绝唱.png" id="5_657to"]
-[ext_resource type="Texture2D" uid="uid://ctefoc68eq5y3" path="res://assets/stamps/瑰意.png" id="6_g1glw"]
+[ext_resource type="Texture2D" uid="uid://dboqossik34lv" path="res://assets/stamps/雅颂.png" id="4_euui4"]
+[ext_resource type="Texture2D" uid="uid://kumwc7v752h3" path="res://assets/stamps/绝唱.png" id="5_657to"]
+[ext_resource type="Texture2D" uid="uid://c627xw31ba34p" path="res://assets/stamps/瑰意.png" id="6_g1glw"]
 
 [sub_resource type="Resource" id="Resource_e80so"]
 script = ExtResource("2_r63fu")

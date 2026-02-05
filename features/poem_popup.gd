@@ -4,13 +4,13 @@ extends Control
 @export var stamp_config := preload('res://features/stamp_config.tres')
 var tw: Tween
 @onready var book_panel = $BookPanel
-@onready var title_label = $BookPanel/MarginContainer/VBoxContainer/TitleLabel
-@onready var content_label = $BookPanel/MarginContainer/VBoxContainer/ContentLabel
-@onready var rarity_stamp = $BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp
+@onready var title_label = $BookPanel/MarginContainer/HBox/VBox/TitleLabel
+@onready var content_label = $BookPanel/MarginContainer/HBox/VBox/ContentLabel
+@onready var rarity_stamp = $BookPanel/MarginContainer/HBox/RarityStamp
 @onready var stamp_player = $PoemAnimation/StampPlayer
 
 func on_apply_poem(data: PoemData):
-	content_label.text = data.description
+	content_label.text = data.example
 	title_label.text = data.name
 	# 设置texture
 
@@ -20,11 +20,11 @@ func on_apply_poem(data: PoemData):
 	if data.background == PoemData.Poem_BG.BOOK:
 		pass
 
-
 	var juanzhou_bg = preload('res://features/poem_background_juanzhou.tres')
 	book_panel.add_theme_stylebox_override('panel',juanzhou_bg)
 
 	create_animation()
+	create_notification(data)
 
 func create_animation():
 	if tw: tw.kill()
@@ -48,6 +48,9 @@ func create_animation():
 	content_label.visible_ratio = 0
 	rarity_stamp.modulate.a = 0
 	rarity_stamp.scale = Vector2(3,3)
+	rarity_stamp.custom_minimum_size = Vector2(sizes[book_panel][1],sizes[book_panel][1])
+
+	book_panel.custom_minimum_size[0] = 200
 	
 	# 重要：把宽度压扁，并让面板显现（虽然现在宽度是0）
 	book_panel.custom_minimum_size.x = 0
@@ -69,6 +72,16 @@ func create_animation():
 	
 	await tw.finished
 	stamp_player.play()
+
+	await get_tree().create_timer(10).timeout
+	rarity_stamp.custom_minimum_size = Vector2.ZERO
+
+func create_notification(poem_data: PoemData):
+	var poet = Global.poet_data[poem_data.owner_uuids[0]].get_rich_poet()
+	var poem = poem_data.get_rich_poem()
+	var popularity_str = poem_data.get_scarcity()
+	var popularity = Util.colorize_underlined_link(popularity_str,stamp_config.get_config(popularity_str).color,popularity_str)
+	Global.request_text_popup.emit('%s 在 %d 年创作了 %s, 稀有度为 %s' % [poet,Global.year,poem,popularity])
 
 func end_animation():
 	content_label.fit_content = true

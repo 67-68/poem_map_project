@@ -15,6 +15,7 @@ enum Poem_Grade { # 拾遗，雅颂，瑰意，绝唱
 @export var popularity: float
 @export var background: Poem_BG
 @export var emotion: float
+@export var example: String
 
 # 这些数据会被作为一个独立的路径点加入path，如果当前没有路径点包含这个诗词title的tag
 # 创建的路径点tag存储诗词
@@ -26,6 +27,7 @@ func _init(note_data: Dictionary):
     popularity = properties.get('popularity',0)
     background = Poem_BG.get(properties.get('poem_background'),Poem_BG.BOOK)
     emotion = properties.get('emotion',0)
+    example = properties.get('example',"")
 
 # 在 PoemData.gd 内部添加
 
@@ -47,6 +49,7 @@ func to_life_path_point_data() -> Dictionary:
             "time": self.year, # 双保险
             "location_uuid": self.location_uuid,
             "emotion": self.emotion,
+            'example': self.example,
             # 注入元数据，方便以后反查
             "poem_ref": self.uuid,
             "event_type": "poem_creation"
@@ -61,11 +64,14 @@ func to_life_path_point_data() -> Dictionary:
     return data
 
 func get_scarcity():
-    if popularity > 90:
+    if popularity >= 90:
         return Poem_Grade.JUECHANG
-    elif  popularity > 80:
+    elif  popularity >= 80:
         return Poem_Grade.GUIYI
-    elif  popularity > 60:
+    elif  popularity >= 60:
         return Poem_Grade.YASONG
     else:
         return Poem_Grade.SHIYI
+
+func get_rich_poem():
+    return Util.colorize_underlined_link(name,Color.DIM_GRAY,uuid)

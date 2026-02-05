@@ -10,3 +10,15 @@ static func get_highest_val_from_dict_vec2(dict: Dictionary, axis: int) -> float
 
 static func get_margin_left_right(obj):
 	return obj.get_theme_constant('margin_left') + obj.get_theme_constant('margin_right')
+
+static func colorize(text: String, color: Color) -> String:
+	return "[color=#%s]%s[/color]" % [color.to_html(), text]
+
+static func underline(text: String) -> String:
+	return "[u]%s[/u]" % text
+
+static func link(text: String, key: String) -> String:
+	return "[url=%s]%s[/url]" % [key, text]
+
+static func colorize_underlined_link(text: String,color: Color,key: String):
+	return colorize(underline(link(text,key)),color)

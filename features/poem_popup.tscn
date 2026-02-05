@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cnkr0y7c3yen2"]
+[gd_scene load_steps=11 format=3 uid="uid://cnkr0y7c3yen2"]
 
 [ext_resource type="Script" uid="uid://dvm6jj0xbsm0l" path="res://features/poem_popup.gd" id="1_hqy85"]
 [ext_resource type="Script" uid="uid://cn0nq4obf1au7" path="res://features/poem_animation.gd" id="1_uow2x"]
 [ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://features/poem_background_juanzhou.tres" id="2_f2n1e"]
-[ext_resource type="Texture2D" uid="uid://dioswtd3xqyj2" path="res://assets/images.png" id="2_hqy85"]
 [ext_resource type="AudioStream" uid="uid://cvsak26dy2b3g" path="res://assets/stamp_sound.wav" id="2_s55vr"]
 [ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_fw123"]
 [ext_resource type="Script" uid="uid://cq2jrbdx37jhe" path="res://features/rarity_stamp.gd" id="5_f2n1e"]
@@ -23,7 +22,7 @@ length = 2.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BookPanel/MarginContainer/VBoxContainer/ContentLabel:visible_characters")
+tracks/0/path = NodePath("BookPanel/MarginContainer/HBox/VBox/ContentLabel:visible_characters")
 tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -35,7 +34,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp:scale")
+tracks/1/path = NodePath("BookPanel/MarginContainer/HBox/RarityStamp:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -47,7 +46,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp:modulate")
+tracks/2/path = NodePath("BookPanel/MarginContainer/HBox/RarityStamp:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -71,7 +70,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("BookPanel/MarginContainer/VBoxContainer/ContentLabel:fit_content")
+tracks/4/path = NodePath("BookPanel/MarginContainer/HBox/VBox/ContentLabel:fit_content")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -92,6 +91,8 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
 script = ExtResource("1_hqy85")
 
 [node name="BookPanel" type="PanelContainer" parent="."]
@@ -105,10 +106,13 @@ theme_override_styles/panel = ExtResource("2_f2n1e")
 [node name="MarginContainer" type="MarginContainer" parent="BookPanel"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BookPanel/MarginContainer"]
+[node name="HBox" type="HBoxContainer" parent="BookPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="BookPanel/MarginContainer/VBoxContainer"]
+[node name="VBox" type="VBoxContainer" parent="BookPanel/MarginContainer/HBox"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="BookPanel/MarginContainer/HBox/VBox"]
 material = SubResource("ShaderMaterial_fw123")
 layout_mode = 2
 size_flags_vertical = 6
@@ -116,7 +120,7 @@ text = "test_name"
 clip_text = true
 text_overrun_behavior = 1
 
-[node name="ContentLabel" type="RichTextLabel" parent="BookPanel/MarginContainer/VBoxContainer"]
+[node name="ContentLabel" type="RichTextLabel" parent="BookPanel/MarginContainer/HBox/VBox"]
 clip_contents = false
 layout_mode = 2
 size_flags_vertical = 3
@@ -130,24 +134,9 @@ scroll_active = false
 autowrap_mode = 0
 shortcut_keys_enabled = false
 
-[node name="StampAnchor" type="Control" parent="BookPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="RarityStamp" type="TextureRect" parent="BookPanel/MarginContainer/VBoxContainer/StampAnchor"]
+[node name="RarityStamp" type="TextureRect" parent="BookPanel/MarginContainer/HBox"]
 modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -10.0
-offset_top = -10.0
-grow_horizontal = 0
-grow_vertical = 0
-scale = Vector2(3, 3)
-pivot_offset = Vector2(5, 5)
-texture = ExtResource("2_hqy85")
+layout_mode = 2
 expand_mode = 1
 script = ExtResource("5_f2n1e")
 

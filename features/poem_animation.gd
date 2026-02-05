@@ -40,7 +40,6 @@ func _apply_poem_data(_poem_data: PoemData):
 	"""
 	Logging.err('apply poem data 这里还没做!')
 	
-	
 
 func _on_animation_finished(_args):
 	poems.pop_at(0)
