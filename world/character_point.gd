@@ -22,12 +22,10 @@ func setup_emotion():
 		# 计算这个点在路径上的累计距离
 		# (Curve2D 有一个好用的函数可以直接算这个)
 		current_dist = path.get_closest_offset(point.position)
-		
 		var ratio = current_dist / total_len
 		
 		# 防止浮点数误差导致超过 1.0
 		ratio = clamp(ratio, 0.0, 1.0)
-		
 		emotion_curve.add_point(Vector2(ratio, point.emotion))
 
 	emotion_gradient = Gradient.new()
@@ -81,12 +79,10 @@ func on_send_poems():
 	# 发射信号
 	if result.found_poems:
 		Global.poems_created.emit(result.poems_to_emit)
-		print("DEBUG: 发射诗词 ", result.poems_to_emit)
 	
 	# 3. 核心修复：更新状态防止死循环 💀
 	if result.new_target_year > self.next_point_year:
 		self.next_point_year = result.new_target_year
-		print("DEBUG: 年份推进到 ", self.next_point_year)
 	else:
 		next_point_year = -1
 

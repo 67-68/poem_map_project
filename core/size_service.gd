@@ -9,6 +9,10 @@ var enlarge_widgets: Dictionary = {}
 var minimize_widgets := {}
 var label_size_flag := LabelSizeFlag.SINGLE_LINE
 
+func minimize_texture_rect(rect):
+	rect.custom_minimum_size = Vector2.ZERO
+	rect.size = Vector2.ZERO
+
 func enlarge_label(label: Label):
 	if label_size_flag == LabelSizeFlag.MULTI_LINE:
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -39,6 +43,7 @@ func _ready():
 	minimize_widgets['Label'] = minimize_label
 	enlarge_widgets['RichTextLabel'] = enlarge_rich_text
 	minimize_widgets['RichTextLabel'] = minimize_rich_text
+	minimize_widgets['TextureRect'] = minimize_texture_rect
 	
 func get_size(observers: Array = [], ...widgets):
 	"""
@@ -71,3 +76,23 @@ func get_size(observers: Array = [], ...widgets):
 		minimize.call(widget)
 	return size_map
 	
+func minimize(widget):
+	var cls_str = widget.get_class()
+	var _minimize = minimize_widgets.get(cls_str)
+	if not _minimize:
+		Logging.warn('do not found minimize size function for %s' % cls_str)
+		return
+	_minimize.call(widget)
+
+func enlarge(widget):
+	var cls_str = widget.get_class()
+	Logging.info('try to get proper size for %s' % cls_str)
+	var _enlarge = enlarge_widgets.get(cls_str)
+	if not _enlarge:
+		Logging.warn('do not found enlarge size function for %s' % cls_str)
+		return
+	_enlarge.call(widget)
+
+func minimize_all(widgets: Array):
+	for widget in widgets:
+		minimize(widget)

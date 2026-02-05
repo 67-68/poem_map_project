@@ -28,9 +28,6 @@ func on_apply_poem(data: PoemData,poet_data):
 	create_animation()
 	create_notification(data,poet_data)
 
-	await create_animation()
-	hide()
-
 func create_animation():
 	if tw: tw.kill()
 	
@@ -81,7 +78,8 @@ func create_animation():
 	await tw.finished
 	stamp_player.play()
 
-	Global.poem_animation_finished.emit()
+	end_animation()
+	
 
 func create_notification(poem_data: PoemData, poet_data: PoetData):
 	var poet = poet_data.get_rich_poet()
@@ -92,7 +90,9 @@ func create_notification(poem_data: PoemData, poet_data: PoetData):
 	Global.request_text_popup.emit('%s 在 %d 年创作了 %s, 稀有度为 %s' % [poet,Global.year,poem,popularity])
 
 func end_animation():
-	content_label.fit_content = true
+	SizeService.minimize_all([rarity_stamp,content_label,title_label])
+	hide()
+	Global.poem_animation_finished.emit()
 
 
 # Called when the node enters the scene tree for the first time.

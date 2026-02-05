@@ -15,7 +15,9 @@ func _init(data: Dictionary = {}):
     # 2. 解析坐标 (处理 Array -> Vector2 的转换)
     # JSON: "position": [100.0, 200.0]
     var raw_pos = props.get("position", data.get("position", null))
-    if raw_pos is Array and raw_pos.size() >= 2:
+    if raw_pos is Vector2:
+        position = raw_pos
+    elif raw_pos is Array and raw_pos.size() >= 2: # 需要考虑到这里可能会使用poem data
         position = Vector2(raw_pos[0], raw_pos[1])
     else:
         position = Vector2.ZERO
