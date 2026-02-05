@@ -22,3 +22,43 @@ static func link(text: String, key: String) -> String:
 
 static func colorize_underlined_link(text: String,color: Color,key: String):
 	return colorize(underline(link(text,key)),color)
+
+static func process_poem_events(
+	points_data: Dictionary,   # 对应 Global.life_path_points
+	path_keys: Array,          # 对应 datamodel.path_point_keys (必须是有序的！)
+	current_target_year: int   # 对应 self.next_point_year
+) -> PoemProcessResult:
+	
+	var result = PoemProcessResult.new()
+	result.new_target_year = current_target_year # 默认保持不变
+	
+	var found_current = false
+	
+	for p in path_keys:
+		var point_data = points_data.get(p)
+		if not point_data: continue
+		
+		var year = point_data.year
+		
+		# 1. 寻找当前年份的诗词
+		if not found_current and year == current_target_year:
+			var tags = point_data.tags
+			for t in tags:
+				if t.begins_with("poem") and not t.ends_with("creation"):
+					result.poems_to_emit.append(t.substr(5))
+			
+			if not result.poems_to_emit.is_empty():
+				result.found_poems = true
+				found_current = true # 标记已处理，防止重复
+		
+		# 2. 寻找下一年的路标 (这是修复死循环的关键 🤓☝️)
+		# 只有当这一年的年份确实大于当前目标年份时，我们才更新目标
+		if year > current_target_year:
+			# 如果我们还没找到下一个目标，或者这个年份比我们暂存的下一个目标更近
+			if result.new_target_year == current_target_year or year < result.new_target_year:
+				result.new_target_year = year
+				# 找到了最近的下一年，不需要 break，继续找可能还有同年的点？
+				# 通常如果 keys 是按时间排序的，这里可以直接 break。
+				# 假设 keys 顺序不可靠，我们得遍历完以找到最小的大于 current 的值
+	
+	return result

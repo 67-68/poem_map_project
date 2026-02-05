@@ -36,7 +36,9 @@ signal request_daylight(enable: bool)
 signal year_changed(year: float) #虽然可能用不到，直接使用Global year就行了，但还是发一下
 
 signal poems_created(data: Array)
-signal request_apply_poem(data: PoemData)
+signal request_apply_poem(data: PoemData, poet: PoetData)
+signal poem_animation_finished()
+
 
 var life_path_points: Dictionary
 var poet_data: Dictionary

@@ -69,23 +69,26 @@ func on_change_emotion_color(current_offset: int):
 		$EmotionColor.enabled = true
 
 func on_send_poems():
-	var found = false
-	for p in datamodel.path_point_keys:
-		if not found and Global.life_path_points[p].year == next_point_year:
-			var tags = Global.life_path_points[p].tags
-			var poems = []
-			print(Global.life_path_points[p].tags)
-			for t in tags:
-				print(t)
-				if t.begins_with("poem") and not t.ends_with('creation'):  # 修复：begins_with + 双引号
-					poems.append(t.substr(5))  # 从位置 5 取到末尾（poem_ 后）
-			if tags:
-				Global.poems_created.emit(poems)
-				found = true  # 只处理第一个匹配点
-		var year_ = Global.life_path_points[p].year
-		if year_ > next_point_year:
-			next_point_year = Global.life_path_points[p].year  # 更新为下一个年份
-			break  # 提前退出，避免多余循环
+	# 1. 调用纯逻辑函数计算
+	var result = Util.process_poem_events(
+		Global.life_path_points, 
+		datamodel.path_point_keys, 
+		self.next_point_year
+	)
+	
+	# 2. 处理副作用 (Side Effects)
+	
+	# 发射信号
+	if result.found_poems:
+		Global.poems_created.emit(result.poems_to_emit)
+		print("DEBUG: 发射诗词 ", result.poems_to_emit)
+	
+	# 3. 核心修复：更新状态防止死循环 💀
+	if result.new_target_year > self.next_point_year:
+		self.next_point_year = result.new_target_year
+		print("DEBUG: 年份推进到 ", self.next_point_year)
+	else:
+		next_point_year = -1
 
 
 func _process(delta: float) -> void:
@@ -98,7 +101,7 @@ func _process(delta: float) -> void:
 	position = path.sample_baked(current_offset)
 	on_change_emotion_color(current_offset)
 
-	if Global.year > self.next_point_year:
+	if not next_point_year == -1 and Global.year >= self.next_point_year:
 		on_send_poems()
 	
 

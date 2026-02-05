@@ -9,7 +9,9 @@
             "popularity": 0.9,
             "poem_background": "NIGHT",
             "emotion": 0.3,
-            "time": 725.0
+            "time": 725.0,
+            "position": [100,100],
+            "example": "床前明月光，疑是地上霜"
         }
     },
     {
@@ -22,7 +24,9 @@
             "popularity": 0.95,
             "poem_background": "BOOK",
             "emotion": 0.8,
-            "time": 752.0
+            "time": 752.0,
+            "position": [100,100],
+            "example":"君不见黄河之水天上来，奔流到海不复回。"
         }
     },
     {
@@ -35,7 +39,9 @@
             "popularity": 0.85,
             "poem_background": "BOOK",
             "emotion": 0.7,
-            "time": 759.0
+            "time": 759.0,
+            "position": [100,100],
+            "example":"朝辞白帝彩云间，千里江陵一日还。"
         }
     },
     {
@@ -48,7 +54,9 @@
             "popularity": 0.88,
             "poem_background": "BOOK",
             "emotion": 0.2,
-            "time": 757.0
+            "time": 757.0,
+            "position": [100,100],
+            "example":"国破山河在，城春草木深"
         }
     },
     {
@@ -61,7 +69,9 @@
             "popularity": 0.9,
             "poem_background": "NIGHT",
             "emotion": 0.4,
-            "time": 767.0
+            "time": 767.0,
+            "position": [100,100],
+            "example":"风急天高猿啸哀，渚清沙白鸟飞回。"
         }
     },
     {
@@ -74,7 +84,9 @@
             "popularity": 0.82,
             "poem_background": "BOOK",
             "emotion": 0.25,
-            "time": 760.0
+            "time": 760.0,
+            "position": [100,100],
+            "example":"高者挂罥长林梢，下者飘转沉塘坳。"
         }
     }
 ]

@@ -24,7 +24,7 @@ func before_each():
 func test_mixed_widgets_get_reasonable_size():
     # 1. 执行批处理测量
     # 假设你的 get_size 接受一个 Array
-    var size_map = await SizeService.get_size(lbl, rtl)
+    var size_map = await SizeService.get_size([],lbl, rtl)
     
     # 2. 基本断言：结构是否正确？
     assert_not_null(size_map, "Service 应当返回一个结果字典")

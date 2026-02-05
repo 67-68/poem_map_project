@@ -64,6 +64,17 @@ func to_life_path_point_data() -> Dictionary:
     return data
 
 func get_scarcity():
+    if popularity <=1:
+        Logging.warn('popularity最大为100！')
+        if popularity >= 0.9:
+            return Poem_Grade.JUECHANG
+        elif  popularity >= 0.8:
+            return Poem_Grade.GUIYI
+        elif  popularity >= 0.6:
+            return Poem_Grade.YASONG
+        else:
+            return Poem_Grade.SHIYI
+
     if popularity >= 90:
         return Poem_Grade.JUECHANG
     elif  popularity >= 80:

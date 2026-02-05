@@ -1,8 +1,9 @@
 @tool
 extends Control
 
-@export var stamp_config := preload('res://features/stamp_config.tres')
 var tw: Tween
+
+@export var stamp_config := preload('res://features/stamp_config.tres')
 @onready var book_panel = $BookPanel
 @onready var title_label = $BookPanel/MarginContainer/HBox/VBox/TitleLabel
 @onready var content_label = $BookPanel/MarginContainer/HBox/VBox/ContentLabel
@@ -10,21 +11,25 @@ var tw: Tween
 @onready var stamp_player = $PoemAnimation/StampPlayer
 
 func on_apply_poem(data: PoemData,poet_data):
+	position = data.position
+	show()
+
 	content_label.text = data.example
 	title_label.text = data.name
-	# 设置texture
 
 	rarity_stamp.texture = stamp_config.get_config(data.get_scarcity()).texture
 	rarity_stamp.modulate = stamp_config.get_config(data.get_scarcity()).color
-
+	
 	if data.background == PoemData.Poem_BG.BOOK:
 		pass
 
 	var juanzhou_bg = preload('res://features/poem_background_juanzhou.tres')
 	book_panel.add_theme_stylebox_override('panel',juanzhou_bg)
-
 	create_animation()
 	create_notification(data,poet_data)
+
+	await create_animation()
+	hide()
 
 func create_animation():
 	if tw: tw.kill()
@@ -41,16 +46,11 @@ func create_animation():
 	var target_width = Util.get_highest_val_from_dict_vec2(sizes, 0)
 
 	# 3. 初始状态重置 (此时是在测量之后)
-	content_label.custom_minimum_size = sizes[
-		content_label
-	]
-	title_label.modulate.a = 0
 	content_label.visible_ratio = 0
+	title_label.modulate.a = 0
 	rarity_stamp.modulate.a = 0
 	rarity_stamp.scale = Vector2(3,3)
-	rarity_stamp.custom_minimum_size = Vector2(sizes[book_panel][1],sizes[book_panel][1])
 
-	book_panel.custom_minimum_size[0] = 200
 	
 	# 重要：把宽度压扁，并让面板显现（虽然现在宽度是0）
 	book_panel.custom_minimum_size.x = 0
@@ -61,20 +61,27 @@ func create_animation():
 	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	
 	# 驱动最小宽度！不要动 size！
-	tw.tween_property(book_panel, 'custom_minimum_size:x', target_width, 0.7)
+	tw.tween_property(book_panel, 'custom_minimum_size:x', target_width, 2.0)
+
+	await tw.finished
+	content_label.custom_minimum_size = sizes[
+		content_label
+	]
+	rarity_stamp.custom_minimum_size = Vector2(sizes[book_panel][1],sizes[book_panel][1])
 
 	# --- 后续动画 ---
-	tw.parallel().tween_property(title_label,'modulate:a',1.0,0.5)
-	tw.tween_property(content_label,'visible_ratio',1.0,0.7)
+	tw = create_tween()
+	await get_tree().process_frame
+	tw.tween_property(title_label,'modulate:a',1.0,0.9)
+	tw.tween_property(content_label,'visible_ratio',1.0,1.5)
 	
-	tw.tween_property(rarity_stamp,'modulate:a',1,0.3)
-	tw.parallel().tween_property(rarity_stamp,'scale',Vector2(1,1),0.3)
+	tw.tween_property(rarity_stamp,'modulate:a',1,0.5)
+	tw.tween_property(rarity_stamp,'scale',Vector2(1,1),0.7)
 	
 	await tw.finished
 	stamp_player.play()
 
-	await get_tree().create_timer(10).timeout
-	rarity_stamp.custom_minimum_size = Vector2.ZERO
+	Global.poem_animation_finished.emit()
 
 func create_notification(poem_data: PoemData, poet_data: PoetData):
 	var poet = poet_data.get_rich_poet()
