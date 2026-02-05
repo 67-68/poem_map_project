@@ -1,21 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://cnkr0y7c3yen2"]
+[gd_scene load_steps=12 format=3 uid="uid://cnkr0y7c3yen2"]
 
 [ext_resource type="Script" uid="uid://dvm6jj0xbsm0l" path="res://features/poem_popup.gd" id="1_hqy85"]
-[ext_resource type="Texture2D" uid="uid://bj283nwhun67i" path="res://assets/poem_bgs/juanzhou.jpeg" id="1_lxoe1"]
 [ext_resource type="Script" uid="uid://cn0nq4obf1au7" path="res://features/poem_animation.gd" id="1_uow2x"]
+[ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://features/poem_background_juanzhou.tres" id="2_f2n1e"]
 [ext_resource type="Texture2D" uid="uid://dioswtd3xqyj2" path="res://assets/images.png" id="2_hqy85"]
 [ext_resource type="AudioStream" uid="uid://cvsak26dy2b3g" path="res://assets/stamp_sound.wav" id="2_s55vr"]
 [ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_fw123"]
 [ext_resource type="Script" uid="uid://cq2jrbdx37jhe" path="res://features/rarity_stamp.gd" id="5_f2n1e"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fw123"]
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-texture = ExtResource("1_lxoe1")
-texture_margin_left = 15.0
-texture_margin_right = 19.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fw123"]
 resource_local_to_scene = true
@@ -109,7 +100,7 @@ layout_mode = 0
 offset_right = 41.0
 offset_bottom = 71.0
 pivot_offset = Vector2(20, 40)
-theme_override_styles/panel = SubResource("StyleBoxTexture_fw123")
+theme_override_styles/panel = ExtResource("2_f2n1e")
 
 [node name="MarginContainer" type="MarginContainer" parent="BookPanel"]
 layout_mode = 2

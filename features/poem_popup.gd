@@ -1,15 +1,24 @@
 @tool
 extends Control
 
-# --- debug ---
-
+@export var stamp_config := preload('res://features/stamp_config.tres')
 var tw: Tween
 
 func on_apply_poem(data: PoemData):
 	$BookPanel/MarginContainer/VBoxContainer/ContentLabel.text = data.description
 	$BookPanel/MarginContainer/VBoxContainer/TitleLabel.text = data.name
 	# 设置texture
-	# 设置rarity stamp等级
+
+	$BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp.texture = stamp_config.get_config(data.get_scarcity()).texture
+	$BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp.modulate = stamp_config.get_config(data.get_scarcity()).color
+
+	if data.background == PoemData.Poem_BG.BOOK:
+		pass
+
+
+	var juanzhou_bg = preload('res://features/poem_background_juanzhou.tres')
+	$BookPanel.add_theme_stylebox_override('panel',juanzhou_bg)
+
 	create_animation()
 
 func create_animation():
@@ -52,6 +61,9 @@ func create_animation():
 	
 	tw.tween_property($BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp,'modulate:a',1,0.3)
 	tw.parallel().tween_property($BookPanel/MarginContainer/VBoxContainer/StampAnchor/RarityStamp,'scale',Vector2(1,1),0.3)
+	
+	await tw.finished
+	$PoemAnimation/StampPlayer.play()
 
 func end_animation():
 	$BookPanel/MarginContainer/VBoxContainer/ContentLabel.fit_content = true

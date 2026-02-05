@@ -59,3 +59,13 @@ func to_life_path_point_data() -> Dictionary:
         data['tags'].append('poem_creation')
         
     return data
+
+func get_scarcity():
+    if popularity > 90:
+        return Poem_Grade.JUECHANG
+    elif  popularity > 80:
+        return Poem_Grade.GUIYI
+    elif  popularity > 60:
+        return Poem_Grade.YASONG
+    else:
+        return Poem_Grade.SHIYI

@@ -4,6 +4,10 @@
 - SizeService
 - poem creation animation
 
+## Fixed
+- can not load stamp config
+- stamp level shiyi do not have texture
+
 # [0.4.0]
 ## Added
 - start page
