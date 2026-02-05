@@ -1,15 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://c3qk57rwm7q84"]
 
-[ext_resource type="Script" uid="uid://3c0hw3bupjy7" path="res://view_tests/debug_view.gd" id="1_eakbg"]
-[ext_resource type="Script" uid="uid://ip3weq0su3sj" path="res://view_tests/debug_poem_popup.gd" id="2_bu00w"]
+[ext_resource type="Script" uid="uid://3c0hw3bupjy7" path="res://view_tests/view_test.gd" id="1_pfr0j"]
+[ext_resource type="Script" uid="uid://4qy6utkmg8ag" path="res://view_tests/vtest_popup_notification.gd" id="2_pfr0j"]
 
 [node name="DebugView" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_eakbg")
-debug_script = ExtResource("2_bu00w")
+script = ExtResource("1_pfr0j")
+debug_script = ExtResource("2_pfr0j")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0

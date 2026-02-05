@@ -1,0 +1,34 @@
+{
+	"Godot Test Cartridge": {
+		"prefix": "viewtest",
+		"body": [
+			"class_name ${1:ClassName} extends RefCounted",
+			"",
+			"func create_debug_view(idx: int):",
+			"\tvar view_scene := preload('${2:res://features/view.tscn}')",
+			"\tvar view = view_scene.instantiate()",
+			"\t",
+			"\tmatch idx:",
+			"\t\t0:",
+			"\t\t\t${3:pass}",
+			"\t\t_:",
+			"\t\t\treturn null",
+			"\t",
+			"\t# 务实建议：显式指定大小，防止 HFlowContainer 排版塌陷 💀",
+			"\tview.custom_minimum_size = Vector2(${4:400}, ${5:200})",
+			"\treturn view",
+			"",
+			"func ${6:test_action_func}(map: Dictionary):",
+			"\tvar cur_view = map.get('0')",
+			"\tif cur_view and cur_view.is_node_ready():",
+			"\t\t${7:# 执行注入逻辑}",
+			"\t\tpass",
+			"",
+			"func get_actions() -> Array[ViewTestAction]:",
+			"\treturn [",
+			"\t\tViewTestAction.new('${8:动作描述}', ${6:test_action_func})",
+			"\t]"
+		],
+		"description": "快速生成 Godot 宿主/卡带模式的测试脚本"
+	}
+}
