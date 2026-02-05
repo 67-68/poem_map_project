@@ -1,13 +1,28 @@
-[gd_scene load_steps=2 format=3 uid="uid://5shth4lj0a8t"]
+[gd_scene load_steps=3 format=3 uid="uid://5shth4lj0a8t"]
 
-[ext_resource type="Script" uid="uid://cr4lvstsirtp8" path="res://ui/pop_up.gd" id="1_12uv1"]
+[ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://features/poem_background_juanzhou.tres" id="1_12uv1"]
+[ext_resource type="Script" uid="uid://cr4lvstsirtp8" path="res://ui/pop_up.gd" id="2_tpqih"]
 
-[node name="PopUp" type="NinePatchRect"]
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("1_12uv1")
+[node name="Popup" type="PanelContainer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -103.0
+offset_top = -83.0
+offset_right = 92.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = ExtResource("1_12uv1")
+script = ExtResource("2_tpqih")
 
-[node name="TextLabel" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="TextLabel" type="Label" parent="MarginContainer"]
+layout_mode = 2
