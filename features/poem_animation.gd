@@ -8,8 +8,7 @@ func _ready() -> void:
 	Global.poems_created.connect(add_poems)
 	Global.poem_animation_finished.connect(self._on_animation_finished)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# Called every frame. 'delta' is the elapse time since the previous frame.
 func _process(_delta: float) -> void:
 	pass
 

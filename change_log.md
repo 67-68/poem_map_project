@@ -3,6 +3,7 @@
 - poem data -> position point
 - SizeService
 - poem creation animation
+- update popup appearance
 
 ## Fixed
 - can not load stamp config

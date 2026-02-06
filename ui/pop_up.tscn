@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://cr4lvstsirtp8" path="res://ui/pop_up.gd" id="2_tpqih"]
 
 [node name="Popup" type="PanelContainer"]
-anchors_preset = 7
+anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.9
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.9
 offset_left = -103.0
 offset_top = -83.0
 offset_right = 92.0

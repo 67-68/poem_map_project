@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dafe3626abotl" path="res://assets/poem_bgs/juanzhou.png" id="1_57ll3"]
 
 [resource]
+resource_local_to_scene = true
 content_margin_left = 20.0
 content_margin_top = 20.0
 content_margin_right = 20.0

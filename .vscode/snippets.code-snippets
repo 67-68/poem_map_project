@@ -30,5 +30,64 @@
 			"\t]"
 		],
 		"description": "快速生成 Godot 宿主/卡带模式的测试脚本"
+	},
+	"Tween Smooth (Cubic)": {
+		"prefix": "twc",
+		"body": [
+			"var tw = create_tween()",
+			"tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)",
+			"tw.tween_property(${1:node}, \"${2:property}\", ${3:target_value}, ${4:0.6})$0"
+		],
+		"description": "【丝滑展开】适用于卷轴、面板打开，稳重且优雅"
+	},
+
+	"Tween Pop (Back)": {
+		"prefix": "twb",
+		"body": [
+			"var tw = create_tween()",
+			"tw.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)",
+			"tw.tween_property(${1:node}, \"${2:scale}\", ${3:Vector2.ONE}, ${4:0.4}).from(${5:Vector2.ZERO})$0"
+		],
+		"description": "【灵动弹跳】适用于印章、按钮、图标跳出，有生命力"
+	},
+
+	"Tween Flash (Expo)": {
+		"prefix": "twe",
+		"body": [
+			"var tw = create_tween()",
+			"tw.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)",
+			"tw.tween_property(${1:node}, \"${2:modulate:a}\", ${3:1.0}, ${4:0.3})$0"
+		],
+		"description": "【极速闪现】适用于光效、转场、打击反馈，干净利落"
+	},
+	"Tween Property": {
+		"prefix": "twp",
+		"body": [
+			"tw.tween_property(${1:node}, \"${2:property}\", ${3:value}, ${4:0.5})$0"
+		],
+		"description": "【顺序轨道】在队列后面追加一个动画"
+	},
+
+	"Tween Parallel": {
+		"prefix": "twpa",
+		"body": [
+			"tw.parallel().tween_property(${1:node}, \"${2:property}\", ${3:value}, ${4:0.5})$0"
+		],
+		"description": "【并行轨道】与上一个动画同时发生"
+	},
+	"Tween Callback": {
+		"prefix": "twcb",
+		"body": [
+			"tw.tween_callback(${1:func_name})$0"
+		],
+		"description": "【动画回调】动画流到达此处时触发函数（如播放音效）"
+	},
+
+	"Tween Interval": {
+		"prefix": "twi",
+		"body": [
+			"tw.tween_interval(${1:0.2})$0"
+		],
+		"description": "【插入间歇】在两个动画之间留白/停顿"
 	}
 }
