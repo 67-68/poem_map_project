@@ -1,16 +1,25 @@
-[gd_scene load_steps=14 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=18 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
-[ext_resource type="PackedScene" uid="uid://c1yjebq75g71y" path="res://world/camera.tscn" id="3_7mycd"]
 [ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_272bh"]
 [ext_resource type="PackedScene" uid="uid://5shth4lj0a8t" path="res://ui/pop_up.tscn" id="4_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://8gipdq3nfr2d" path="res://ui/poet_descriptor.tscn" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="6_7mycd"]
+[ext_resource type="Texture2D" uid="uid://dafe3626abotl" path="res://assets/poem_bgs/juanzhou.png" id="6_dg77c"]
 [ext_resource type="Script" uid="uid://cumbr3p6omik2" path="res://ui/time_operation_container.gd" id="8_kek77"]
 [ext_resource type="PackedScene" uid="uid://cnkr0y7c3yen2" path="res://features/poem_popup.tscn" id="9_4c57u"]
 [ext_resource type="PackedScene" uid="uid://5q6bljtvpw4y" path="res://core/time_service.tscn" id="9_kek77"]
 [ext_resource type="PackedScene" uid="uid://q2vqxhwq5yvp" path="res://core/size_service.tscn" id="11_efxa6"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_dg77c"]
+viewport_path = NodePath("2DWorld")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ycdy4"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_dg77c")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_efxa6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -21,16 +30,41 @@ shader_parameter/shine_color = Color(1, 0.8, 0, 1)
 [sub_resource type="Theme" id="Theme_h2yge"]
 default_base_scale = 1.0
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ycdy4"]
+resource_local_to_scene = true
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+texture = ExtResource("6_dg77c")
+texture_margin_left = 15.0
+texture_margin_right = 19.0
+
 [node name="Main" type="Node"]
 
-[node name="Worldroot" type="Node2D" parent="."]
+[node name="WorldRoot" type="Node3D" parent="."]
 
-[node name="Map" parent="Worldroot" instance=ExtResource("1_1bvp3")]
+[node name="Camera3D" type="Camera3D" parent="WorldRoot"]
+transform = Transform3D(1, 0, 0, 0, 0.49999997, 0.86602545, 0, -0.86602545, 0.49999997, 5, 5, 9)
+current = true
+fov = 60.0
 
-[node name="Camera" parent="Worldroot" instance=ExtResource("3_7mycd")]
-position = Vector2(569, 326)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldRoot"]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 5, 5, 9)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldRoot"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 5.306653, -1, 7.500149)
+material_override = SubResource("StandardMaterial3D_ycdy4")
+mesh = SubResource("PlaneMesh_efxa6")
+skeleton = NodePath("../..")
+
+[node name="2DWorld" type="SubViewport" parent="."]
+size = Vector2i(1000, 1000)
+
+[node name="Map" parent="2DWorld" instance=ExtResource("1_1bvp3")]
 
 [node name="UI" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="HSlider" type="HSlider" parent="UI"]
 material = SubResource("ShaderMaterial_7mycd")
@@ -50,6 +84,7 @@ script = ExtResource("1_ig7tw")
 offset_left = -97.5
 offset_right = 97.5
 size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_ycdy4")
 
 [node name="PoetDescriptor" parent="UI" instance=ExtResource("5_lquwl")]
 

@@ -62,3 +62,9 @@ static func process_poem_events(
 				# 假设 keys 顺序不可靠，我们得遍历完以找到最小的大于 current 的值
 	
 	return result
+
+# 这是你唯一需要增加的“翻译官”逻辑
+func logic_to_3d(logic_vec2):
+	# 逻辑上的 (x, y) 对应 3D 里的 (x, 0, z)
+	# 别忘了乘一个缩放系数，3D 的 1 单位通常很大
+	return Vector3(logic_vec2.x * 0.01, 0, logic_vec2.y * 0.01)
