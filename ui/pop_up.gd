@@ -6,25 +6,25 @@ var original_position: Vector2
 func on_text_popup(text: String):
 	reset()
 	$Con/TextLabel.text = text
-	var sizes = await SizeService.get_size([self],$Con/TextLabel)
-	custom_minimum_size[1] = sizes[self][1]
+	$Con/TextLabel.fit_content = true
+	$Con.clip_contents = true
+	var combined_size = self.get_combined_minimum_size()
+	custom_minimum_size[1] = combined_size[1]
 
 	SizeService.enlarge($Con/TextLabel)
 	show()
 	tw = create_tween()
 	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tw.tween_property(self,'custom_minimum_size:x',sizes[self][0],0.5)
+	tw.tween_property(self,'custom_minimum_size:x',combined_size[0],0.5).from(0)
 	tw.parallel().tween_property(self,'position',position,0.5).from(position + Vector2(0,10))
 	
 	tw.tween_interval(3)
 	tw.tween_callback(hide)
 
 func reset():
-	$Con/TextLabel.fit_content = false
 	custom_minimum_size = Vector2.ZERO
 	if tw: tw.kill()
 	position = original_position
-	#size = Vector2.ZERO
 
 
 func _ready() -> void:
