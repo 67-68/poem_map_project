@@ -15,7 +15,7 @@ func on_text_popup(text: String):
 	show()
 	tw = create_tween()
 	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	tw.tween_property(self,'custom_minimum_size:x',combined_size[0],0.5).from(0)
+	tw.tween_property(self,'custom_minimum_size:x',combined_size[0],0.5)
 	tw.parallel().tween_property(self,'position',position,0.5).from(position + Vector2(0,10))
 	
 	tw.tween_interval(3)
