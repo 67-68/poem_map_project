@@ -4,6 +4,13 @@ const DATA_PATH = "res://data/"
 const DEFAULT_ICON = "res://assets/6768.png"
 const ICON_PATH = "res://assets/profile/"
 
+const LON_MIN := 47.92
+const LON_MAX := 137.80
+const LAT_MAX := 52.59
+const LAT_MIN := 17.17
+const MAP_WIDTH := 1196
+const MAP_HEIGHT := 668
+
 var start_year := 618.0
 var end_year := 907.0
 

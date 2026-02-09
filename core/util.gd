@@ -62,3 +62,14 @@ static func process_poem_events(
 				# 假设 keys 顺序不可靠，我们得遍历完以找到最小的大于 current 的值
 	
 	return result
+
+static func geo_to_pixel(lon: float, lat: float) -> Vector2:
+	var x = (lon - Global.LON_MIN) / (Global.LON_MAX - Global.LON_MIN) * Global.MAP_WIDTH
+	# 别忘了 Y 轴是反的，除非你想让李白飞到天上去 💀
+	var y = (1.0 - (lat - Global.LAT_MIN) / (Global.LAT_MAX - Global.LAT_MIN)) * Global.MAP_HEIGHT
+	return Vector2(x, y)
+
+static func pixel_to_geo(pos: Vector2) -> Array:
+	var lon = (pos.x / Global.MAP_WIDTH) * (Global.LON_MAX - Global.LON_MIN) + Global.LON_MIN
+	var lat = (1.0 - (pos.y / Global.MAP_HEIGHT)) * (Global.LAT_MAX - Global.LAT_MIN) + Global.LAT_MIN
+	return [lon, lat]

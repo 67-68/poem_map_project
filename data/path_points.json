@@ -4,7 +4,7 @@
         "title": "出生碎叶",
         "text": "李白出生于安西都护府碎叶城。",
         "properties": {
-            "position": [100.0, 150.0],
+            "position": [100.0, 30.0],
             "emotion": 0.5,
             "owner_uuids": ["poet-libai-001"],
             "time": 650
@@ -15,7 +15,7 @@
         "title": "赐金放还",
         "text": "天子呼来不上船，自称臣是酒中仙。",
         "properties": {
-            "position": [600.0, 400.0],
+            "position": [50.0, 100.0],
             "emotion": 1.0,
             "owner_uuids": ["poet-libai-001"],
             "time": 700
@@ -26,7 +26,7 @@
         "title": "生于巩义",
         "text": "杜甫出生于河南巩县。",
         "properties": {
-            "position": [650.0, 450.0],
+            "position": [48, 30],
             "emotion": 0.5,
             "owner_uuids": ["poet-dufu-002"],
             "time": 750
@@ -37,7 +37,7 @@
         "title": "杜甫2",
         "text": "杜甫test",
         "properties": {
-            "position": [400.0, 600.0],
+            "position": [60.0, 52.0],
             "emotion": 0.5,
             "owner_uuids": ["poet-dufu-002"],
             "time": 800

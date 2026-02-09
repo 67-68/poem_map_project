@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=16 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://5shth4lj0a8t" path="res://ui/pop_up.tscn" id="4_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://8gipdq3nfr2d" path="res://ui/poet_descriptor.tscn" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="6_7mycd"]
+[ext_resource type="Texture2D" uid="uid://dafe3626abotl" path="res://assets/poem_bgs/juanzhou.png" id="7_w48qg"]
 [ext_resource type="Script" uid="uid://cumbr3p6omik2" path="res://ui/time_operation_container.gd" id="8_kek77"]
 [ext_resource type="PackedScene" uid="uid://cnkr0y7c3yen2" path="res://features/poem_popup.tscn" id="9_4c57u"]
 [ext_resource type="PackedScene" uid="uid://5q6bljtvpw4y" path="res://core/time_service.tscn" id="9_kek77"]
@@ -20,6 +21,16 @@ shader_parameter/shine_color = Color(1, 0.8, 0, 1)
 
 [sub_resource type="Theme" id="Theme_h2yge"]
 default_base_scale = 1.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2cqfq"]
+resource_local_to_scene = true
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+texture = ExtResource("7_w48qg")
+texture_margin_left = 15.0
+texture_margin_right = 19.0
 
 [node name="Main" type="Node"]
 
@@ -50,6 +61,7 @@ script = ExtResource("1_ig7tw")
 offset_left = -97.5
 offset_right = 97.5
 size_flags_horizontal = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
 
 [node name="PoetDescriptor" parent="UI" instance=ExtResource("5_lquwl")]
 
