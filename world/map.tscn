@@ -31,10 +31,11 @@ shader = ExtResource("7_aoj3l")
 shader_parameter/index_map = ExtResource("2_qyd10")
 shader_parameter/height_map = ExtResource("3_4t333")
 shader_parameter/height_scale = 0.0
-shader_parameter/line_width = 1.0
-shader_parameter/ink_roughness = 0.5
-shader_parameter/line_lower_limit = 0.8
+shader_parameter/line_width = 3.0000001425
+shader_parameter/ink_roughness = 1.0
+shader_parameter/dry_brush = 0.5
 shader_parameter/noise_tex = SubResource("NoiseTexture2D_teowk")
+shader_parameter/noise_freq = 100.0
 
 [sub_resource type="Curve2D" id="Curve2D_bxc27"]
 
