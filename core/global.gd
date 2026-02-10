@@ -3,6 +3,8 @@ extends Node
 const DATA_PATH = "res://data/"
 const DEFAULT_ICON = "res://assets/6768.png"
 const ICON_PATH = "res://assets/profile/"
+const PROVINCE_MAP_PATH := "res://assets/maps/provinces.png"
+const PROVINCE_INDEX_PATH := 'res://assets/maps/province_map.csv'
 
 const LON_MIN := 47.92
 const LON_MAX := 137.80

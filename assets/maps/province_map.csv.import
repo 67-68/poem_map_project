@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dwhk3bh1gxsn3"
+
+[deps]
+
+files=["res://assets/maps/province_map.id.translation", "res://assets/maps/province_map.name.translation", "res://assets/maps/province_map.capital.translation", "res://assets/maps/province_map.stability.translation"]
+
+source_file="res://assets/maps/province_map.csv"
+dest_files=["res://assets/maps/province_map.id.translation", "res://assets/maps/province_map.name.translation", "res://assets/maps/province_map.capital.translation", "res://assets/maps/province_map.stability.translation"]
+
+[params]
+
+compress=true
+delimiter=0

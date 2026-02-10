@@ -16,7 +16,7 @@ func _init(data: Dictionary = {}):
     var props = data.get("properties", data.get("property", {}))
     
     # 2. 解析 UUID (优先看外层，没有再看内层)
-    uuid = data.get("uuid", props.get("uuid", ""))
+    uuid = data.get('id',data.get("uuid", props.get("uuid", "")))
     
     # 3. 解析名字 (支持 name 或 title)
     name = data.get("name", data.get("title", props.get("title", "")))
