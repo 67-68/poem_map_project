@@ -18,10 +18,27 @@ func _ready() -> void:
 		add_child(node)
 	
 	create_provinces()
+	render_factions()
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func render_factions():
+	var prov_2_fac:= {}
+	for fac_id in Global.factions:
+		var fac: Faction = Global.factions[fac_id]
+		var provs = Util.resolve_to_provinces(fac.provinces)
+		for prov in provs:
+			prov_2_fac[prov] = fac
+
+	var lut = $FactionMapRenderer.refresh_lut_image(prov_2_fac)
+	var mat = $background/TerrainMesh.material as ShaderMaterial
+	var color_2_idx = Util.bake_index_map(lut,$FactionMapRenderer._color_to_idx_map)
+	mat.set_shader_parameter('faction_lut', lut)
+	mat.set_shader_parameter('color_to_idx_map', color_2_idx)
+		
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

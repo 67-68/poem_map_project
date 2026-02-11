@@ -72,6 +72,10 @@ static func load_csv_model(model_class: Variant, file_path: String) -> Array[Gam
 			var key = headers[i].strip_edges()
 			var val = line[i].strip_edges()
 			
+			# 使用 substr(起始索引, 长度) 来去掉首尾的 [ 和 ]
+			if val.begins_with("[") and val.ends_with("]"):
+				val = val.substr(1, val.length() - 2).split(";")
+
 			# 逻辑分流：如果列名带 '/' 或者属于 properties，自动归类
 			if key.begins_with("prop/"):
 				properties_dict[key.replace("prop/", "")] = val

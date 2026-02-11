@@ -124,3 +124,41 @@ static func _explode_recursive(current_id: String, result_set: Dictionary, visit
 # --- 架构师的性能优化建议 ---
 # 如果你的行政树很深，建议在 Global 中对常用的“道/节度使”结果进行缓存 (Memoization)。
 # 否则每次点击“大唐中央”都要递归几百次，你的 CPU 会像在三伏天赶路的差役一样中暑。🤣
+
+
+# 核心函数：将原始乱序颜色图转换为“纯索引 ID 图”
+static func bake_index_map(original_img: ImageTexture, color_to_idx_dict: Dictionary) -> ImageTexture:
+	var width = original_img.get_width()
+	var height = original_img.get_height()
+	
+	# 1. 创建一张同样大小的 Data 图 (使用 L8 或 RGBA8)
+	var processed_img = Image.create(width, height, false, Image.FORMAT_RGBA8)
+	
+	# 2. 遍历像素（这是整场戏的精髓）
+	# 警告：对于超大图片（如 4K），这一步可能会让主线程卡顿几百毫秒
+	for y in range(height):
+		for x in range(width):
+			var original_pixel = original_img.get_image().get_pixel(x, y)
+			
+			# 背景过滤 (Alpha 为 0 的直接跳过)
+			if original_pixel.a < 0.01:
+				processed_img.set_pixel(x, y, Color(0, 0, 0, 0))
+				continue
+			
+			# 将颜色转为十六进制，去字典里查它的 ID
+			var hex = original_pixel.to_html(false)
+			if color_to_idx_dict.has(hex):
+				var idx = color_to_idx_dict[hex]
+				# 关键：将索引值（1-360）映射到 0.0-1.0 的范围
+				# 我们把它存在 R 通道里
+				var normalized_idx = float(idx) / 255.0
+				processed_img.set_pixel(x, y, Color(normalized_idx, 0, 0, 1.0))
+			else:
+				# 发现了没在 CSV 里的颜色？这通常意味着你的数据和图对不上 💀
+				# 我们把它涂成纯白，作为“数据污染”的警告
+				processed_img.set_pixel(x, y, Color(1, 1, 1, 1))
+
+	# 3. 生成纹理供 Shader 使用
+	var tex = ImageTexture.create_from_image(processed_img)
+	Logging.info("✅ 地图重焙完成！所有州已按序列号重新编入 R 通道。")
+	return tex

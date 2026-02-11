@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://digoh2dpxyn08"]
+[gd_scene load_steps=19 format=3 uid="uid://digoh2dpxyn08"]
 
 [ext_resource type="Script" uid="uid://df0kq35asbi0h" path="res://world/map.gd" id="1_uvqf1"]
 [ext_resource type="Shader" uid="uid://b5keoqhrofhr4" path="res://shaders/click_province_shader.gdshader" id="2_aoj3l"]
@@ -11,6 +11,7 @@
 [ext_resource type="ArrayMesh" uid="uid://bromnk1irnxyw" path="res://world/map_array_axis.tres" id="4_swwi1"]
 [ext_resource type="Script" uid="uid://dhn8ossl3eaws" path="res://world/grid_generator.gd" id="5_k782d"]
 [ext_resource type="Shader" uid="uid://msorjnyjin8g" path="res://shaders/map_shaders/province_border.gdshader" id="7_aoj3l"]
+[ext_resource type="Script" uid="uid://cbadnqxjlp57p" path="res://core/faction_map_renderer.gd" id="12_teowk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epef7"]
 shader = ExtResource("2_aoj3l")
@@ -23,8 +24,6 @@ shader_parameter/height_scale = 0.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_swwi1"]
 shader = ExtResource("2_gfy5m")
-shader_parameter/height_map = ExtResource("3_aoj3l")
-shader_parameter/height_scale = 0.5
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_aoj3l"]
 noise_type = 3
@@ -60,6 +59,13 @@ scale = Vector2(1.156, 0.659)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")
 
+[node name="FactionMesh" type="MeshInstance2D" parent="background"]
+material = SubResource("ShaderMaterial_swwi1")
+scale = Vector2(1.3410432, 0.37367588)
+mesh = ExtResource("4_swwi1")
+texture = ExtResource("4_gfy5m")
+script = ExtResource("5_k782d")
+
 [node name="TerrainMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_swwi1")
 position = Vector2(-0.99999994, 48)
@@ -86,3 +92,6 @@ rotation = 0.30543262
 color = Color(1, 0.940699, 0.5838663, 1)
 height = 1.0
 script = ExtResource("4_lc8ft")
+
+[node name="FactionMapRenderer" type="Node" parent="."]
+script = ExtResource("12_teowk")
