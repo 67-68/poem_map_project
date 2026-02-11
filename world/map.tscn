@@ -47,7 +47,7 @@ script = ExtResource("1_uvqf1")
 [node name="TerrainMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_swwi1")
 position = Vector2(-0.99999994, 48)
-scale = Vector2(1.1580342, 0.6079999)
+scale = Vector2(1.1580342, 0.61129034)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")
 script = ExtResource("5_k782d")
