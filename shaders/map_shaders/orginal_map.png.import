@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ddt656w5pjwe8"
-path="res://.godot/imported/遗.png-1824d3b1a7b562e27eae89b63ada0112.ctex"
+uid="uid://bbwfqy2bgm6ys"
+path="res://.godot/imported/orginal_map.png-0f4ea6ab00c4e4ecd3270ba1a93c9713.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/character/遗.png"
-dest_files=["res://.godot/imported/遗.png-1824d3b1a7b562e27eae89b63ada0112.ctex"]
+source_file="res://shaders/map_shaders/orginal_map.png"
+dest_files=["res://.godot/imported/orginal_map.png-0f4ea6ab00c4e4ecd3270ba1a93c9713.ctex"]
 
 [params]
 

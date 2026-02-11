@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://df0kq35asbi0h" path="res://world/map.gd" id="1_uvqf1"]
 [ext_resource type="Shader" uid="uid://doc7a7gwcdaif" path="res://shaders/map_shaders/height_shader.gdshader" id="2_gfy5m"]
-[ext_resource type="Texture2D" uid="uid://d2hc5tcj2laf4" path="res://assets/maps/provinces.png" id="2_qyd10"]
+[ext_resource type="Texture2D" uid="uid://12x7hf7mti31" path="res://assets/maps/provinces.png" id="2_qyd10"]
 [ext_resource type="Texture2D" uid="uid://c8awelverawfo" path="res://assets/maps/heightmapper-1770693604549.png" id="3_4t333"]
 [ext_resource type="Script" uid="uid://ch1gjxrlno5at" path="res://world/background_color.gd" id="3_bxc27"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="4_gfy5m"]
@@ -30,10 +30,10 @@ seamless = true
 shader = ExtResource("7_aoj3l")
 shader_parameter/index_map = ExtResource("2_qyd10")
 shader_parameter/height_map = ExtResource("3_4t333")
-shader_parameter/height_scale = 0.0
-shader_parameter/line_width = 3.0000001425
-shader_parameter/ink_roughness = 1.0
-shader_parameter/dry_brush = 0.5
+shader_parameter/height_scale = 1.0
+shader_parameter/line_width = 2.1030000998925
+shader_parameter/ink_roughness = 0.94000004465
+shader_parameter/dry_brush = 0.16400000779
 shader_parameter/noise_tex = SubResource("NoiseTexture2D_teowk")
 shader_parameter/noise_freq = 100.0
 

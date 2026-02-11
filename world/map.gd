@@ -60,6 +60,7 @@ func load_indexs():
 	file.get_line()
 	while !file.eof_reached():
 		var data = file.get_csv_line()
+		if not data[0]: continue
 		var color = data[0].to_lower().strip_edges()
 		var province = ProvinceResource.new({
 			'color': data[0],
