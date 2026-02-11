@@ -6,10 +6,10 @@ const ICON_PATH = "res://assets/profile/"
 const PROVINCE_MAP_PATH := "res://assets/maps/provinces.png"
 const PROVINCE_INDEX_PATH := 'res://assets/maps/province_map.csv'
 
-const LON_MIN := 47.92
-const LON_MAX := 137.80
-const LAT_MAX := 52.59
-const LAT_MIN := 17.17
+const LON_MIN := 21.35
+const LON_MAX := 122.28
+const LAT_MAX := 45.09
+const LAT_MIN := 88.31
 const MAP_WIDTH := 1196
 const MAP_HEIGHT := 668
 

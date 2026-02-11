@@ -1,20 +1,19 @@
-[gd_scene load_steps=17 format=3 uid="uid://digoh2dpxyn08"]
+[gd_scene load_steps=16 format=3 uid="uid://digoh2dpxyn08"]
 
 [ext_resource type="Script" uid="uid://df0kq35asbi0h" path="res://world/map.gd" id="1_uvqf1"]
 [ext_resource type="Shader" uid="uid://doc7a7gwcdaif" path="res://shaders/map_shaders/height_shader.gdshader" id="2_gfy5m"]
 [ext_resource type="Texture2D" uid="uid://12x7hf7mti31" path="res://assets/maps/provinces.png" id="2_qyd10"]
-[ext_resource type="Texture2D" uid="uid://c8awelverawfo" path="res://assets/maps/heightmapper-1770693604549.png" id="3_4t333"]
+[ext_resource type="Texture2D" uid="uid://bygrut6e1yja" path="res://assets/maps/height.png" id="3_aoj3l"]
 [ext_resource type="Script" uid="uid://ch1gjxrlno5at" path="res://world/background_color.gd" id="3_bxc27"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="4_gfy5m"]
 [ext_resource type="Script" uid="uid://dmcuraic8ua58" path="res://world/day_light.gd" id="4_lc8ft"]
 [ext_resource type="ArrayMesh" uid="uid://bromnk1irnxyw" path="res://world/map_array_axis.tres" id="4_swwi1"]
 [ext_resource type="Script" uid="uid://dhn8ossl3eaws" path="res://world/grid_generator.gd" id="5_k782d"]
 [ext_resource type="Shader" uid="uid://msorjnyjin8g" path="res://shaders/map_shaders/province_border.gdshader" id="7_aoj3l"]
-[ext_resource type="Texture2D" uid="uid://cafk0ewommxp3" path="res://assets/唐朝疆域（繁）.png" id="9_aoj3l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_swwi1"]
 shader = ExtResource("2_gfy5m")
-shader_parameter/height_map = ExtResource("3_4t333")
+shader_parameter/height_map = ExtResource("3_aoj3l")
 shader_parameter/height_scale = 0.0
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_aoj3l"]
@@ -29,7 +28,7 @@ seamless = true
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_teowk"]
 shader = ExtResource("7_aoj3l")
 shader_parameter/index_map = ExtResource("2_qyd10")
-shader_parameter/height_map = ExtResource("3_4t333")
+shader_parameter/height_map = ExtResource("3_aoj3l")
 shader_parameter/height_scale = 1.0
 shader_parameter/line_width = 2.1030000998925
 shader_parameter/ink_roughness = 0.94000004465
@@ -40,22 +39,25 @@ shader_parameter/noise_freq = 100.0
 [sub_resource type="Curve2D" id="Curve2D_bxc27"]
 
 [node name="Map" type="Node2D"]
+position = Vector2(0, -46)
 script = ExtResource("1_uvqf1")
 
 [node name="background" type="Node2D" parent="."]
 
 [node name="TerrainMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_swwi1")
-scale = Vector2(1.1279999, 0.65699995)
+position = Vector2(-0.99999994, 48)
+scale = Vector2(1.1580342, 0.6079999)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")
 script = ExtResource("5_k782d")
 
 [node name="BorderMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_teowk")
-scale = Vector2(1.128, 0.657)
+position = Vector2(154, 0)
+scale = Vector2(1.0015097, 0.7713606)
 mesh = ExtResource("4_swwi1")
-texture = ExtResource("9_aoj3l")
+texture = ExtResource("3_aoj3l")
 
 [node name="path" type="Path2D" parent="."]
 curve = SubResource("Curve2D_bxc27")
