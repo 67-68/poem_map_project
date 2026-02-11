@@ -1,10 +1,10 @@
 shader_type canvas_item;
-uniform sampler2D height_map;
-uniform float height_scale; // 山峰高度，乘以多少的参数
+#include "res://shaders/map_shaders/height_logic.gdshaderinc"
 
 void vertex() {
-	float h = texture(height_map,UV).r; // 读取高度图数据，使用UV直接从height_map获取像素点的颜色
-	VERTEX.y -= h * height_scale; // 提升
+	vec3 v3 = vec3(VERTEX.x, VERTEX.y, 0.0);
+	calculate_vertex_height(v3, UV);
+	VERTEX = v3.xy;
 }
 
 void fragment() {
