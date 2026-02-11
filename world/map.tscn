@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://digoh2dpxyn08"]
+[gd_scene load_steps=21 format=3 uid="uid://digoh2dpxyn08"]
 
 [ext_resource type="Script" uid="uid://df0kq35asbi0h" path="res://world/map.gd" id="1_uvqf1"]
 [ext_resource type="Shader" uid="uid://b5keoqhrofhr4" path="res://shaders/map_shaders/click_province_shader.gdshader" id="2_aoj3l"]
+[ext_resource type="Shader" uid="uid://bduf1uhn5abik" path="res://shaders/map_shaders/faction_shader.gdshader" id="2_epef7"]
 [ext_resource type="Shader" uid="uid://doc7a7gwcdaif" path="res://shaders/map_shaders/height_shader.gdshader" id="2_gfy5m"]
 [ext_resource type="Texture2D" uid="uid://12x7hf7mti31" path="res://assets/maps/provinces.png" id="2_qyd10"]
 [ext_resource type="Texture2D" uid="uid://bygrut6e1yja" path="res://assets/maps/height.png" id="3_aoj3l"]
@@ -27,6 +28,15 @@ shader_parameter/selected_id_color = Vector4(0, 0, 0, 0)
 shader_parameter/highligh_strength = 0.3
 shader_parameter/height_map = ExtResource("3_aoj3l")
 shader_parameter/height_scale = 0.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4wr1n"]
+resource_local_to_scene = true
+shader = ExtResource("2_epef7")
+shader_parameter/faction_intensity = 1.0
+shader_parameter/height_map = ExtResource("3_aoj3l")
+shader_parameter/height_scale = 0.5
+shader_parameter/vertical_offset = 0.001
+shader_parameter/index_map = ExtResource("2_qyd10")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_aoj3l"]
 noise_type = 3
@@ -56,25 +66,26 @@ script = ExtResource("1_uvqf1")
 
 [node name="background" type="Node2D" parent="."]
 
-[node name="FactionMesh" type="MeshInstance2D" parent="background"]
+[node name="TerrainMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_swwi1")
-scale = Vector2(1.1543357, 0.6626657)
+position = Vector2(-1, 48)
+scale = Vector2(1.1580342, 0.61129034)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")
+script = ExtResource("5_k782d")
 
 [node name="ClickMesh" type="MeshInstance2D" parent="background"]
+modulate = Color(1, 1, 1, 0)
 material = SubResource("ShaderMaterial_epef7")
 scale = Vector2(1.156, 0.659)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")
 
-[node name="TerrainMesh" type="MeshInstance2D" parent="background"]
-material = SubResource("ShaderMaterial_swwi1")
-position = Vector2(-0.99999994, 48)
-scale = Vector2(1.1580342, 0.61129034)
+[node name="FactionMesh" type="MeshInstance2D" parent="background"]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_4wr1n")
+scale = Vector2(1.1534992, 0.6630194)
 mesh = ExtResource("4_swwi1")
-texture = ExtResource("4_gfy5m")
-script = ExtResource("5_k782d")
 
 [node name="BorderMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_teowk")

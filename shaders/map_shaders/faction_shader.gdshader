@@ -34,4 +34,3 @@ void fragment() {
     // 加上你的强度控制参数
     COLOR = vec4(faction_color.rgb, mask * faction_intensity);
 }
-	
