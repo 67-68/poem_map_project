@@ -73,3 +73,54 @@ static func pixel_to_geo(pos: Vector2) -> Array:
 	var lon = (pos.x / Global.MAP_WIDTH) * (Global.LON_MAX - Global.LON_MIN) + Global.LON_MIN
 	var lat = (1.0 - (pos.y / Global.MAP_HEIGHT)) * (Global.LAT_MAX - Global.LAT_MIN) + Global.LAT_MIN
 	return [lon, lat]
+
+
+
+# 核心算法：获取所有相关的原子州 ID
+# @param input_ids: 用户提供的 ID 列表（可以是州、道、势力等）
+# @return: 一个去重后的原子州 ID 数组
+static func resolve_to_provinces(input_ids: Array) -> Array[String]:
+	var result_set = {} # 使用 Dictionary 模拟 Set，实现 O(1) 去重
+	var visited = {}    # 防止循环引用导致的栈溢出 💀
+	
+	for id in input_ids:
+		_explode_recursive(id, result_set, visited)
+	
+	# 最后一步：白名单过滤
+	# 只有在 Global.base_provinces 中存在的才保留
+	var final_list: Array[String] = []
+	for id in result_set.keys():
+		if Global.base_provinces.has(id):
+			final_list.append(id)
+		else:
+			# 这种通常是因为你传入了一个逻辑单位（如“范阳”），它本身不是地块
+			# 我们只需要它的子集，不需要它自己，所以这里直接略过
+			pass
+			
+	return final_list
+
+# 内部递归函数
+static func _explode_recursive(current_id: String, result_set: Dictionary, visited: Dictionary):
+	# 1. 基础防御：如果已经处理过，直接跳过
+	if visited.has(current_id): return
+	visited[current_id] = true
+	
+	# 2. 从注册表获取实体数据
+	var entity = Global.territory_registry.get(current_id)
+	if not entity:
+		# 如果注册表里没有，它可能就是一个原始州 ID，先放进结果集待查
+		result_set[current_id] = true
+		return
+	
+	# 3. 检查是否有子单位 (sub_territory_ids)
+	if entity.sub_territory_ids.size() > 0:
+		# 它是一个容器（道/节度使），递归处理其子项
+		for sub_id in entity.sub_territory_ids:
+			_explode_recursive(sub_id, result_set, visited)
+	else:
+		# 它是一个原子单位，记录下来
+		result_set[current_id] = true
+
+# --- 架构师的性能优化建议 ---
+# 如果你的行政树很深，建议在 Global 中对常用的“道/节度使”结果进行缓存 (Memoization)。
+# 否则每次点击“大唐中央”都要递归几百次，你的 CPU 会像在三伏天赶路的差役一样中暑。🤣

@@ -31,7 +31,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		on_prov_clicked(prov)
 
-func on_prov_clicked(prov: ProvinceResource):
+func on_prov_clicked(prov: Territory):
 	Logging.info('user click %s prov with a capital of %s' % [prov.name,prov.capital])
 	EventBus.user_click_map.emit(prov)
 	var mat = $background/ClickMesh.material as ShaderMaterial
@@ -67,9 +67,9 @@ func load_indexs():
 	file.get_line()
 	while !file.eof_reached():
 		var data = file.get_csv_line()
-		if not data[0]: continue
+		if not data[0]:Territory
 		var color = data[0].to_lower().strip_edges()
-		var province = ProvinceResource.new({
+		var province = Territory.new({
 			'color': data[0],
 			'uuid': data[1],
 			'capital': (data[2]),

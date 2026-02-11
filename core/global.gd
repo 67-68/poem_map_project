@@ -4,7 +4,8 @@ const DATA_PATH = "res://data/"
 const DEFAULT_ICON = "res://assets/6768.png"
 const ICON_PATH = "res://assets/profile/"
 const PROVINCE_MAP_PATH := "res://assets/maps/provinces.png"
-const PROVINCE_INDEX_PATH := 'res://assets/maps/province_map.csv'
+const PROVINCE_INDEX_PATH := 'res://assets/maps/base_province.csv'
+const PERMANENT_DATA_PATH := 'res://assets/maps/'
 
 const LON_MIN := 21.35
 const LON_MAX := 122.28
@@ -53,17 +54,21 @@ signal poem_animation_finished()
 var life_path_points: Dictionary
 var poet_data: Dictionary
 var poem_data: Dictionary
-var factions: Dictionary[Variant, Faction]
+var factions: Dictionary
+var base_province: Dictionary
+var territories: Dictionary
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Logging.current_level = Logging.Level.DEBUG
 
 	# 加载数据
-	life_path_points = create_dict(DataLoader.load_data_model(PoetLifePoint,'path_points'))
-	poet_data = create_dict(DataLoader.load_data_model(PoetData,'poet_data'))
-	poem_data = create_dict(DataLoader.load_data_model(PoemData,'poem_data'))
-	factions = create_dict(DataLoader.load_data_model(Faction,'factions'))
+	life_path_points = create_dict(DataLoader.load_json_model(PoetLifePoint,'path_points'))
+	poet_data = create_dict(DataLoader.load_json_model(PoetData,'poet_data'))
+	poem_data = create_dict(DataLoader.load_json_model(PoemData,'poem_data'))
+	factions = create_dict(DataLoader.load_json_model(Faction,'factions'))
+	base_province = create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
+	territories = create_dict(DataLoader.load_csv_model(Territory,'territories'))
 
 	for d in poem_data:
 		var poem_point = PoetLifePoint.new(poem_data[d].to_life_path_point_data())
