@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://digoh2dpxyn08"]
+[gd_scene load_steps=18 format=3 uid="uid://digoh2dpxyn08"]
 
 [ext_resource type="Script" uid="uid://df0kq35asbi0h" path="res://world/map.gd" id="1_uvqf1"]
+[ext_resource type="Shader" uid="uid://b5keoqhrofhr4" path="res://shaders/click_province_shader.gdshader" id="2_aoj3l"]
 [ext_resource type="Shader" uid="uid://doc7a7gwcdaif" path="res://shaders/map_shaders/height_shader.gdshader" id="2_gfy5m"]
 [ext_resource type="Texture2D" uid="uid://12x7hf7mti31" path="res://assets/maps/provinces.png" id="2_qyd10"]
 [ext_resource type="Texture2D" uid="uid://bygrut6e1yja" path="res://assets/maps/height.png" id="3_aoj3l"]
@@ -11,10 +12,19 @@
 [ext_resource type="Script" uid="uid://dhn8ossl3eaws" path="res://world/grid_generator.gd" id="5_k782d"]
 [ext_resource type="Shader" uid="uid://msorjnyjin8g" path="res://shaders/map_shaders/province_border.gdshader" id="7_aoj3l"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epef7"]
+shader = ExtResource("2_aoj3l")
+shader_parameter/index_map = ExtResource("2_qyd10")
+shader_parameter/paper_index = ExtResource("4_gfy5m")
+shader_parameter/selected_id_color = Vector4(0, 0, 0, 0)
+shader_parameter/highligh_strength = 0.3
+shader_parameter/height_map = ExtResource("3_aoj3l")
+shader_parameter/height_scale = 0.5
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_swwi1"]
 shader = ExtResource("2_gfy5m")
 shader_parameter/height_map = ExtResource("3_aoj3l")
-shader_parameter/height_scale = 0.0
+shader_parameter/height_scale = 0.5
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_aoj3l"]
 noise_type = 3
@@ -29,7 +39,7 @@ seamless = true
 shader = ExtResource("7_aoj3l")
 shader_parameter/index_map = ExtResource("2_qyd10")
 shader_parameter/height_map = ExtResource("3_aoj3l")
-shader_parameter/height_scale = 1.0
+shader_parameter/height_scale = 0.5
 shader_parameter/line_width = 2.1030000998925
 shader_parameter/ink_roughness = 0.94000004465
 shader_parameter/dry_brush = 0.16400000779
@@ -43,6 +53,12 @@ position = Vector2(0, -46)
 script = ExtResource("1_uvqf1")
 
 [node name="background" type="Node2D" parent="."]
+
+[node name="ClickMesh" type="MeshInstance2D" parent="background"]
+material = SubResource("ShaderMaterial_epef7")
+scale = Vector2(1.156, 0.659)
+mesh = ExtResource("4_swwi1")
+texture = ExtResource("4_gfy5m")
 
 [node name="TerrainMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_swwi1")

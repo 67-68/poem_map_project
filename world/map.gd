@@ -33,11 +33,18 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func on_prov_clicked(prov: ProvinceResource):
 	Logging.info('user click %s prov with a capital of %s' % [prov.name,prov.capital])
-		
+	EventBus.user_click_map.emit(prov)
+	var mat = $background/ClickMesh.material as ShaderMaterial
+	mat.set_shader_parameter('selected_id_color',prov.color)
+	print("验证注入:", mat.get_shader_parameter('selected_id_color'))
+	print(prov.color)
+
 func get_province():
 	if not index_image: return null
 	var local_pos = $background.to_local(get_global_mouse_position())
-	local_pos += $background.texture.get_size() / 2
+	var aabb_size = $background/TerrainMesh.mesh.get_aabb().size / 2
+	var vec2_aabb = Vector2(aabb_size.x, aabb_size.y)
+	local_pos += vec2_aabb * $background/TerrainMesh.scale
 	var s = index_image.get_size()
 	if local_pos.x < 0 or local_pos.y < 0 or local_pos.x > s.x or local_pos.y > s.y:
 		Logging.err('点偏了')

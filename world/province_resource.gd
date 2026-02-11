@@ -1,4 +1,4 @@
-class_name ProvinceResource extends GameEntity
+class_name ProvinceResource extends WorldEvent
 
 var color: Color
 var stability: float

@@ -2,14 +2,14 @@
 
 importer="csv_translation"
 type="Translation"
-uid="uid://c14ymkav0jh1n"
+uid="uid://ci3e4o0ctpsax"
 
 [deps]
 
-files=["res://assets/maps/province_map.id.translation", "res://assets/maps/province_map.center.translation", "res://assets/maps/province_map.center.translation"]
+files=["res://assets/maps/province_map.id.translation", "res://assets/maps/province_map.x.translation", "res://assets/maps/province_map.y.translation", "res://assets/maps/province_map.name.translation"]
 
 source_file="res://assets/maps/province_map.csv"
-dest_files=["res://assets/maps/province_map.id.translation", "res://assets/maps/province_map.center.translation", "res://assets/maps/province_map.center.translation"]
+dest_files=["res://assets/maps/province_map.id.translation", "res://assets/maps/province_map.x.translation", "res://assets/maps/province_map.y.translation", "res://assets/maps/province_map.name.translation"]
 
 [params]
 

@@ -12,6 +12,7 @@ const LAT_MAX := 45.09
 const LAT_MIN := 88.31
 const MAP_WIDTH := 1196
 const MAP_HEIGHT := 668
+# 统一的像素？你在想什么呢？这是一个独立游戏！
 
 var start_year := 618.0
 var end_year := 907.0
@@ -52,6 +53,7 @@ signal poem_animation_finished()
 var life_path_points: Dictionary
 var poet_data: Dictionary
 var poem_data: Dictionary
+var factions: Dictionary[Variant, Faction]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -61,6 +63,7 @@ func _ready() -> void:
 	life_path_points = create_dict(DataLoader.load_data_model(PoetLifePoint,'path_points'))
 	poet_data = create_dict(DataLoader.load_data_model(PoetData,'poet_data'))
 	poem_data = create_dict(DataLoader.load_data_model(PoemData,'poem_data'))
+	factions = create_dict(DataLoader.load_data_model(Faction,'factions'))
 
 	for d in poem_data:
 		var poem_point = PoetLifePoint.new(poem_data[d].to_life_path_point_data())

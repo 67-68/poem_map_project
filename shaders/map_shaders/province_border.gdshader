@@ -11,7 +11,7 @@ uniform float dry_brush : hint_range(0.0, 1.0) = 0.5;      // 枯笔程度 (越�
 
 // --- 噪声控制 ---
 uniform sampler2D noise_tex : hint_default_white;
-uniform float noise_freq = 100.0;                          // 频率！必须高，建议 50-150
+uniform float noise_freq = 100.0;                     // 频率！必须高，建议 50-150
 
 void vertex() {
     float h = texture(height_map, UV).r;
