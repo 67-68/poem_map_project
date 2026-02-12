@@ -51,7 +51,8 @@ func render_factions():
 	# 注意：你之前说要用新的 Mesh，请确保路径是对的。
 	# 如果是叠层，应该是 $background/FactionOverlayMesh
 	var mat = $background/FactionMesh.material as ShaderMaterial
-	DebugUtils.save_texture_to_disk(lut_tex)
+	DebugUtils.save_texture_to_disk(lut_tex, 'lut')
+	DebugUtils.save_texture_to_disk(color_2_idx_tex, 'color to idx map')
 	if mat:
 		mat.set_shader_parameter('faction_lut', lut_tex)
 		mat.set_shader_parameter('color_to_idx_map', color_2_idx_tex)

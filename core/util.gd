@@ -138,25 +138,44 @@ static func bake_index_map(original_img: Image, color_to_idx_dict: Dictionary) -
 
 	var lookup = []
 	for hex in color_to_idx_dict.keys():
-		lookup.append({"c": Color.from_string(hex, Color.BLACK), "id": color_to_idx_dict[hex], "hex": hex})
+		lookup.append({
+			"c": Color.from_string(hex, Color.BLACK), 
+			"id": color_to_idx_dict[hex], 
+			"hex": hex
+		})
 
 	for y in range(height):
 		for x in range(width):
 			var p = original_img.get_pixel(x, y)
-			if p.a < 0.05: continue 
+			
+			# 背景过滤：透明度太低或者几乎纯黑且透明的像素直接过
+			if p.a < 0.05:
+				processed_img.set_pixel(x, y, Color(0, 0, 0, 0))
+				continue 
 			
 			var best_id = -1
+			# 容差阈值 (0.15 左右通常能过滤掉 JPG 明显的压缩噪声)
+			var threshold = 0.15 
+			
 			for entry in lookup:
-				# 尝试增加到 0.15 的容差，JPG 压缩非常狂野 💀
-				if p.distance_to(entry.c) < 0.15:
+				# 手动计算 RGB 空间的距离 (Euclidean Distance)
+				var r_diff = p.r - entry.c.r
+				var g_diff = p.g - entry.c.g
+				var b_diff = p.b - entry.c.b
+				var dist = sqrt(r_diff*r_diff + g_diff*g_diff + b_diff*b_diff)
+				
+				if dist < threshold:
 					best_id = entry.id
 					break
 			
 			if best_id != -1:
+				# 写入索引：ID / 512.0 (确保 360 个州都在 0-1 范围内)
+				# Alpha 设为 1.0 是为了让 Shader 的 mask 能够识别出这是有效像素
 				processed_img.set_pixel(x, y, Color(float(best_id)/512.0, 0, 0, 1.0))
 				match_count += 1
 			else:
-				# 匹配失败：涂成纯白
+				# 匹配失败：涂成纯白 (1, 1, 1, 1)
+				# 这样你在调试 Shader 的 mode 1 时，看到的白色斑块就是“没对上号”的州
 				processed_img.set_pixel(x, y, Color(1, 1, 1, 1))
 				fail_count += 1
 				if sample_fails.size() < 5:
@@ -169,5 +188,5 @@ static func bake_index_map(original_img: Image, color_to_idx_dict: Dictionary) -
 	if fail_count > 0:
 		print("典型失败颜色样例: ", sample_fails)
 	print("----------------------")
-	breakpoint
+	
 	return ImageTexture.create_from_image(processed_img)

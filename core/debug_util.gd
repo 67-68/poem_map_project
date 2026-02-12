@@ -18,7 +18,7 @@ static func save_texture_to_disk(tex: Texture2D, file_name: String = "debug_bake
 	var err = img.save_png(path)
 	if err == OK:
 		# 这里会打印出真实物理路径，直接去资源管理器打开它
-		print("✅ 审计成功！重焙图已保存至: ", ProjectSettings.globalize_path(path))
+		print("✅ 审计成功！图片已保存至: ", ProjectSettings.globalize_path(path))
 	else:
 		printerr("❌ 导出失败，错误代码: ", err)
 
