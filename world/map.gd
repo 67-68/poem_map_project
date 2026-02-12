@@ -45,7 +45,9 @@ func render_factions():
 	var original_map_img = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
 	
 	# 将“原始地理图”重焙为“机器索引图”
+	breakpoint
 	var color_2_idx_tex = Util.bake_index_map(original_map_img, $FactionMapRenderer._color_to_idx_map)
+	breakpoint
 	
 	# 4. 获取目标材质
 	# 注意：你之前说要用新的 Mesh，请确保路径是对的。
@@ -121,6 +123,7 @@ func load_indexs():
 	file.get_line()
 	while !file.eof_reached():
 		var data = file.get_csv_line()
+		if not data[0]: continue
 		var color = data[0].to_lower().strip_edges()
 		var province = Territory.new({
 			'color': data[0],
