@@ -113,21 +113,6 @@ func create_provinces():
 	load_indexs()
 
 func load_indexs():
-	if not FileAccess.file_exists(Global.PROVINCE_INDEX_CSV_PATH):
-		Logging.err('can not found province index csv in %s' % Global.PROVINCE_INDEX_CSV_PATH)
-		return
-	
-	var file = FileAccess.open(Global.PROVINCE_INDEX_CSV_PATH,FileAccess.READ)
-	file.get_line()
-	while !file.eof_reached():
-		var data = file.get_csv_line()
-		if not data[0]: continue
-		var color = data[0].to_lower().strip_edges()
-		var province = Territory.new({
-			'color': data[0],
-			'uuid': data[1],
-			'position': Vector2(float(data[2]),float(data[3])),
-			'name': data[4]
-		})
-		province.color = Color.from_string(color,Color.WHEAT)
-		color_2_province[province.color.to_html(false)] = province
+	for prov in Global.base_province
+		prov.color = Color.from_string(color,Color.WHEAT)
+		color_2_province[prov.color.to_html(false)] = prov

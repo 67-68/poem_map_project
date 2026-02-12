@@ -4,7 +4,6 @@ const DATA_PATH = "res://data/"
 const DEFAULT_ICON = "res://assets/6768.png"
 const ICON_PATH = "res://assets/profile/"
 const PROVINCE_INDEX_MAP_PATH := "res://assets/maps/provinces.png"
-const PROVINCE_INDEX_CSV_PATH := 'res://assets/maps/base_province.csv'
 const PERMANENT_DATA_PATH := 'res://assets/maps/'
 
 const LON_MIN := 21.35
