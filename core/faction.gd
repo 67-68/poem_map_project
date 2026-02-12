@@ -10,7 +10,7 @@ class_name Faction extends GameEntity
 
 func _init(data: Dictionary = {}):
 	# 首先调用基类的反序列化逻辑
-	super(data)
+	super._init(data)
 	if data.is_empty(): return
 
 	var props = data.get("properties", data.get("property", {}))

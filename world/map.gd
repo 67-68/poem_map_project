@@ -26,18 +26,38 @@ func _process(delta: float) -> void:
 	pass
 
 func render_factions():
-	var prov_2_fac:= {}
+	# 1. 建立 [州ID -> 势力对象] 的映射
+	var prov_2_fac := {}
 	for fac_id in Global.factions:
 		var fac: Faction = Global.factions[fac_id]
-		var provs = Util.resolve_to_provinces(fac.provinces)
-		for prov in provs:
-			prov_2_fac[prov] = fac
+		# 解析该势力下属的所有原子州 ID
+		var prov_ids = Util.resolve_to_provinces(fac.provinces)
+		for p_id in prov_ids:
+			prov_2_fac[p_id] = fac
 
-	var lut = $FactionMapRenderer.refresh_lut_image(prov_2_fac)
-	var mat = $background/TerrainMesh.material as ShaderMaterial
-	var color_2_idx = Util.bake_index_map(lut,$FactionMapRenderer._color_to_idx_map)
-	mat.set_shader_parameter('faction_lut', lut)
-	mat.set_shader_parameter('color_to_idx_map', color_2_idx)
+	# 2. 更新势力颜色查找表 (LUT)
+	# 这个函数应该返回那张 512x1 的贴图
+	var lut_tex = $FactionMapRenderer.refresh_lut_image(prov_2_fac)
+	
+	# 3. 【核心修正】重焙地理索引图
+	# 你需要拿到那张原始的、带颜色的 index_map 图片资源
+	# 假设你已经把它加载到了某个变量里，比如 Global.original_index_image
+	var original_map_img = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
+	
+	# 将“原始地理图”重焙为“机器索引图”
+	var color_2_idx_tex = Util.bake_index_map(original_map_img, $FactionMapRenderer._color_to_idx_map)
+	
+	# 4. 获取目标材质
+	# 注意：你之前说要用新的 Mesh，请确保路径是对的。
+	# 如果是叠层，应该是 $background/FactionOverlayMesh
+	var mat = $background/FactionMesh.material as ShaderMaterial
+	DebugUtils.save_texture_to_disk(lut_tex)
+	if mat:
+		mat.set_shader_parameter('faction_lut', lut_tex)
+		mat.set_shader_parameter('color_to_idx_map', color_2_idx_tex)
+		Logging.info("大唐版图渲染成功：数据已注入 Shader。🤓☝️")
+	else:
+		Logging.error("材质获取失败！你是想把画涂在空气里吗？😡")
 		
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -71,16 +91,16 @@ func get_province():
 	return color_2_province.get(c.to_html(false).to_lower())
 
 func create_provinces():
-	var map_tex = load(Global.PROVINCE_MAP_PATH)
+	var map_tex = load(Global.PROVINCE_INDEX_MAP_PATH)
 	index_image = map_tex.get_image()
 	load_indexs()
 
 func load_indexs():
-	if not FileAccess.file_exists(Global.PROVINCE_INDEX_PATH):
-		Logging.err('can not found province index csv in %s' % Global.PROVINCE_INDEX_PATH)
+	if not FileAccess.file_exists(Global.PROVINCE_INDEX_CSV_PATH):
+		Logging.err('can not found province index csv in %s' % Global.PROVINCE_INDEX_CSV_PATH)
 		return
 	
-	var file = FileAccess.open(Global.PROVINCE_INDEX_PATH,FileAccess.READ)
+	var file = FileAccess.open(Global.PROVINCE_INDEX_CSV_PATH,FileAccess.READ)
 	file.get_line()
 	while !file.eof_reached():
 		var data = file.get_csv_line()

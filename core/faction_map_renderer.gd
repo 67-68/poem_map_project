@@ -41,7 +41,7 @@ func _build_color_index():
 			_color_to_idx_map[color_hex] = _next_available_index
 			_next_available_index += 1
 		
-		Logging.info("✅ 自动索引构建完成：已映射 %d 个地理颜色到 LUT。" % _color_to_idx_map.size())
+	Logging.info("✅ 自动索引构建完成：已映射 %d 个地理颜色到 LUT。" % _color_to_idx_map.size())
 
 func _init_lut_texture():
 	lut_image = Image.create(LUT_SIZE,1,false,Image.FORMAT_RGBA8)

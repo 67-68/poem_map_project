@@ -90,7 +90,7 @@ static func resolve_to_provinces(input_ids: Array) -> Array[String]:
 	# 只有在 Global.base_provinces 中存在的才保留
 	var final_list: Array[String] = []
 	for id in result_set.keys():
-		if Global.base_provinces.has(id):
+		if Global.base_province.has(id):
 			final_list.append(id)
 		else:
 			# 这种通常是因为你传入了一个逻辑单位（如“范阳”），它本身不是地块
@@ -106,16 +106,16 @@ static func _explode_recursive(current_id: String, result_set: Dictionary, visit
 	visited[current_id] = true
 	
 	# 2. 从注册表获取实体数据
-	var entity = Global.territory_registry.get(current_id)
+	var entity = Global.base_province.get(current_id)
 	if not entity:
 		# 如果注册表里没有，它可能就是一个原始州 ID，先放进结果集待查
 		result_set[current_id] = true
 		return
 	
 	# 3. 检查是否有子单位 (sub_territory_ids)
-	if entity.sub_territory_ids.size() > 0:
+	if entity.sub_ids.size() > 0:
 		# 它是一个容器（道/节度使），递归处理其子项
-		for sub_id in entity.sub_territory_ids:
+		for sub_id in entity.sub_ids:
 			_explode_recursive(sub_id, result_set, visited)
 	else:
 		# 它是一个原子单位，记录下来
@@ -127,38 +127,47 @@ static func _explode_recursive(current_id: String, result_set: Dictionary, visit
 
 
 # 核心函数：将原始乱序颜色图转换为“纯索引 ID 图”
-static func bake_index_map(original_img: ImageTexture, color_to_idx_dict: Dictionary) -> ImageTexture:
+static func bake_index_map(original_img: Image, color_to_idx_dict: Dictionary) -> ImageTexture:
 	var width = original_img.get_width()
 	var height = original_img.get_height()
-	
-	# 1. 创建一张同样大小的 Data 图 (使用 L8 或 RGBA8)
 	var processed_img = Image.create(width, height, false, Image.FORMAT_RGBA8)
 	
-	# 2. 遍历像素（这是整场戏的精髓）
-	# 警告：对于超大图片（如 4K），这一步可能会让主线程卡顿几百毫秒
+	var match_count = 0
+	var fail_count = 0
+	var sample_fails = [] # 记录前几个失败的颜色
+
+	var lookup = []
+	for hex in color_to_idx_dict.keys():
+		lookup.append({"c": Color.from_string(hex, Color.BLACK), "id": color_to_idx_dict[hex], "hex": hex})
+
 	for y in range(height):
 		for x in range(width):
-			var original_pixel = original_img.get_image().get_pixel(x, y)
+			var p = original_img.get_pixel(x, y)
+			if p.a < 0.05: continue 
 			
-			# 背景过滤 (Alpha 为 0 的直接跳过)
-			if original_pixel.a < 0.01:
-				processed_img.set_pixel(x, y, Color(0, 0, 0, 0))
-				continue
+			var best_id = -1
+			for entry in lookup:
+				# 尝试增加到 0.15 的容差，JPG 压缩非常狂野 💀
+				if p.distance_to(entry.c) < 0.15:
+					best_id = entry.id
+					break
 			
-			# 将颜色转为十六进制，去字典里查它的 ID
-			var hex = original_pixel.to_html(false)
-			if color_to_idx_dict.has(hex):
-				var idx = color_to_idx_dict[hex]
-				# 关键：将索引值（1-360）映射到 0.0-1.0 的范围
-				# 我们把它存在 R 通道里
-				var normalized_idx = float(idx) / 255.0
-				processed_img.set_pixel(x, y, Color(normalized_idx, 0, 0, 1.0))
+			if best_id != -1:
+				processed_img.set_pixel(x, y, Color(float(best_id)/512.0, 0, 0, 1.0))
+				match_count += 1
 			else:
-				# 发现了没在 CSV 里的颜色？这通常意味着你的数据和图对不上 💀
-				# 我们把它涂成纯白，作为“数据污染”的警告
+				# 匹配失败：涂成纯白
 				processed_img.set_pixel(x, y, Color(1, 1, 1, 1))
+				fail_count += 1
+				if sample_fails.size() < 5:
+					sample_fails.append(p.to_html(false))
 
-	# 3. 生成纹理供 Shader 使用
-	var tex = ImageTexture.create_from_image(processed_img)
-	Logging.info("✅ 地图重焙完成！所有州已按序列号重新编入 R 通道。")
-	return tex
+	print("--- [重焙审计报告] ---")
+	print("字典大小: ", color_to_idx_dict.size())
+	print("匹配成功像素: ", match_count)
+	print("匹配失败像素: ", fail_count)
+	if fail_count > 0:
+		print("典型失败颜色样例: ", sample_fails)
+	print("----------------------")
+	breakpoint
+	return ImageTexture.create_from_image(processed_img)

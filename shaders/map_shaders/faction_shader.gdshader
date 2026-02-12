@@ -1,11 +1,19 @@
+/*
+ * ----------------------------------------------------------------
+ * 大唐地理系统 - 诊断用 Shader (The Diagnostic)
+ * ----------------------------------------------------------------
+ * 模式 0: 显示原始 Index Map 的 Alpha (检查 Mask)
+ * 模式 1: 显示重焙后的 ID 值 (检查 Bake 结果)
+ * 模式 2: 显示 LUT 的第一行颜色 (检查 Faction 数据)
+ * ----------------------------------------------------------------
+ */
 shader_type canvas_item;
-// 势力染色的东西
-uniform sampler2D color_to_idx_map: hint_default_black, filter_nearest, repeat_disable;
-uniform sampler2D faction_lut: filter_nearest, repeat_disable;
-uniform float faction_intensity: hint_range(0.0, 1.0) = 1.0;
+
+uniform sampler2D color_to_idx_map : filter_nearest;
+uniform sampler2D faction_lut : filter_nearest;
+uniform int debug_mode : hint_range(0, 2) = 0;
 
 #include "res://shaders/map_shaders/height_logic.gdshaderinc"
-#include "res://shaders/map_shaders/index_map.gdshaderinc"
 
 void vertex() {
 	vec3 v3 = vec3(VERTEX.x, VERTEX.y, 0.0);
@@ -14,23 +22,20 @@ void vertex() {
 }
 
 void fragment() {
-    // 1. 获取重焙后的索引值 (0.0 - 1.0)
-    // 注意：一定要用 filter_nearest，否则州边界会糊掉！😡
-    vec4 index_sample = texture(color_to_idx_map, UV);
-    float province_index = index_sample.r; 
-    
-    // 2. 检查这块地方是不是有效的州
-    // 如果 index_map 的 Alpha 是 0，说明是背景
-    float mask = step(0.001, index_sample.a);
-    
-    // 3. 直接拿这个 index 去 LUT 里查颜色 (LUT 是 1D 查找表)
-    // 为什么可以直接用 province_index？
-    // 因为你在 CPU 里存的是 idx/255.0，而 Shader 采样出来也是 0.0-1.0
-    // 它们的比例是完美的 1:1 映射。🤓☝️
-    vec2 lut_uv = vec2(province_index, 0.5);
-    vec4 faction_color = texture(faction_lut, lut_uv);
-    
-    // 4. 输出颜色
-    // 加上你的强度控制参数
-    COLOR = vec4(faction_color.rgb, mask * faction_intensity);
+	vec4 index_sample = texture(color_to_idx_map, UV);
+	
+	if (debug_mode == 0) {
+		// 诊断 Mask：如果有颜色显示白色，背景黑色
+		float m = step(0.001, index_sample.a);
+		COLOR = vec4(vec3(m), 1.0);
+	} 
+	else if (debug_mode == 1) {
+		// 诊断 ID：如果看到红色渐变，说明 ID 注入成功；如果看到纯白，说明 Bake 匹配失败
+		COLOR = vec4(index_sample.rgb, 1.0);
+	}
+	else if (debug_mode == 2) {
+		// 诊断 LUT：直接把 LUT 铺满全图，看看是不是传了一张空贴图进来
+		vec4 lut_sample = texture(faction_lut, vec2(UV.x, 0.5));
+		COLOR = lut_sample;
+	}
 }

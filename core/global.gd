@@ -3,8 +3,8 @@ extends Node
 const DATA_PATH = "res://data/"
 const DEFAULT_ICON = "res://assets/6768.png"
 const ICON_PATH = "res://assets/profile/"
-const PROVINCE_MAP_PATH := "res://assets/maps/provinces.png"
-const PROVINCE_INDEX_PATH := 'res://assets/maps/base_province.csv'
+const PROVINCE_INDEX_MAP_PATH := "res://assets/maps/provinces.png"
+const PROVINCE_INDEX_CSV_PATH := 'res://assets/maps/base_province.csv'
 const PERMANENT_DATA_PATH := 'res://assets/maps/'
 
 const LON_MIN := 21.35
@@ -69,6 +69,7 @@ func _ready() -> void:
 	factions = create_dict(DataLoader.load_json_model(Faction,'factions'))
 	base_province = create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
 	territories = create_dict(DataLoader.load_csv_model(Territory,'territories'))
+	# 数据文件不允许使用字典！！使用list
 
 	for d in poem_data:
 		var poem_point = PoetLifePoint.new(poem_data[d].to_life_path_point_data())

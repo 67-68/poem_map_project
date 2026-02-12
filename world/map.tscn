@@ -32,11 +32,10 @@ shader_parameter/height_scale = 0.5
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4wr1n"]
 resource_local_to_scene = true
 shader = ExtResource("2_epef7")
-shader_parameter/faction_intensity = 1.0
+shader_parameter/debug_mode = 0
 shader_parameter/height_map = ExtResource("3_aoj3l")
 shader_parameter/height_scale = 0.5
 shader_parameter/vertical_offset = 0.001
-shader_parameter/index_map = ExtResource("2_qyd10")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_aoj3l"]
 noise_type = 3

@@ -1,5 +1,5 @@
-{
-  "TANG_CENTRAL": {
+[
+  {
     "id": "TANG_CENTRAL",
     "name": "大唐中央",
     "description": "虽然开元盛世的余晖尚在，但繁荣之下危机四伏。玄宗晚年倦勤，朝政渐堕。",
@@ -15,7 +15,7 @@
       "provinces": ["chang_an", "luo_yang", "yang_zhou", "su_zhou"]
     }
   },
-  "YAN_REBELS": {
+  {
     "uuid": "YAN_REBELS",
     "title": "大燕 (安禄山部)",
     "text": "三镇节度使安禄山于范阳起兵，势如破竹，直指中原。",
@@ -31,7 +31,7 @@
       "provinces": ["fan_yang", "ping_lu", "he_dong"]
     }
   },
-  "TUBO_KHANATE": {
+  {
     "id": "TUBO_KHANATE",
     "name": "吐蕃",
     "description": "高原上的雄狮，时刻觊觎着河西走廊与安西四镇。",
@@ -47,4 +47,4 @@
       "provinces": ["sha_zhou", "liang_zhou"]
     }
   }
-}
+]
