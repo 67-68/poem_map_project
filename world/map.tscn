@@ -23,7 +23,7 @@ shader = ExtResource("2_aoj3l")
 shader_parameter/index_map = ExtResource("2_qyd10")
 shader_parameter/paper_index = ExtResource("4_gfy5m")
 shader_parameter/selected_id_color = Vector4(0, 0, 0, 0)
-shader_parameter/highligh_strength = 0.3
+shader_parameter/highligh_strength = 1.0
 shader_parameter/height_map = ExtResource("3_aoj3l")
 shader_parameter/height_scale = 0.5
 
@@ -67,16 +67,15 @@ position = Vector2(-156, 0)
 
 [node name="TerrainMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_swwi1")
-position = Vector2(-1, 48)
+position = Vector2(-1, 49.000004)
 scale = Vector2(1.1580342, 0.61129034)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")
 script = ExtResource("5_k782d")
 
 [node name="ClickMesh" type="MeshInstance2D" parent="background"]
-modulate = Color(1, 1, 1, 0)
 material = SubResource("ShaderMaterial_epef7")
-position = Vector2(157.00002, 5)
+position = Vector2(153, 4)
 scale = Vector2(0.9979168, 0.7655035)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")

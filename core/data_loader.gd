@@ -38,58 +38,51 @@ static func load_json_model(model_class: Variant, file_path: String) -> Array[Ga
 	for item in items:
 		result.append(model_class.new(item))
 	return result
-
-# 【新增】CSV 加载逻辑：将每一行转化为 Dictionary 喂给模型
 static func load_csv_model(model_class: Variant, file_path: String) -> Array[GameEntity]:
 	file_path = _fix_path(file_path, "csv", Global.PERMANENT_DATA_PATH)
-	
 	if not FileAccess.file_exists(file_path):
-		printerr("😨 CSV 档案人间蒸发！路径：", file_path)
+		printerr("😨 CSV 档案被次元放逐了！路径：", file_path)
 		return []
 		
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	var result: Array[GameEntity] = []
-	
-	# 1. 读取表头 (Headers)
-	# 假设第一行是 key 名，比如: id, name, properties/map_index_color
 	var headers = file.get_csv_line()
-	if headers.size() == 0:
-		printerr("💀 你的 CSV 怎么是空的？哪怕只有一行表头呢？")
-		return []
-
-	# 2. 逐行扫描
-	var line_idx = 1
+	
 	while !file.eof_reached():
 		var line = file.get_csv_line()
-		if line.size() < headers.size(): continue # 跳过空行或残缺行
-		line_idx += 1
+		# 架构师提醒：即使 line.size == 1 但 line[0] 为空，也说明这行是废纸
+		if line[0].strip_edges() == "" or line[0].begins_with("#") and line.size() == 1:
+			continue
 		
-		# 3. 核心：将行数组拼装成构造函数需要的 Dictionary
-		var data_dict = {}
-		var properties_dict = {}
-		
+		var raw_data = {}
 		for i in range(headers.size()):
 			var key = headers[i].strip_edges()
 			var val = line[i].strip_edges()
 			
-			# 使用 substr(起始索引, 长度) 来去掉首尾的 [ 和 ]
+			# 处理数组逻辑: [a;b;c] -> Array
 			if val.begins_with("[") and val.ends_with("]"):
-				val = val.substr(1, val.length() - 2).split(";")
+				var content = val.substr(1, val.length() - 2)
+				val = Array(content.split(";", false)) # false 表示剔除空元素
+			
+			raw_data[key] = val
 
-			# 逻辑分流：如果列名带 '/' 或者属于 properties，自动归类
-			if key.begins_with("prop/"):
-				properties_dict[key.replace("prop/", "")] = val
-			elif key == "id" or key == "uuid" or key == "name" or key == "description":
-				data_dict[key] = val
+		# --- 数据归一化逻辑 (Normalization) ---
+		var entity_data = {"properties": {}}
+		
+		# 1. 坐标聚合：把分家的 x, y 合并成 Vector2
+		if raw_data.has("x") and raw_data.has("y"):
+			entity_data["position"] = Vector2(float(raw_data.x), float(raw_data.y))
+		
+		# 2. 分类归档：哪些进核心字段，哪些进属性字典
+		for key in raw_data.keys():
+			var clean_key = key.replace("prop/", "")
+			if key in ["id", "uuid", "name", "description", "position", "year", "year_num"]:
+				entity_data[key] = raw_data[key]
 			else:
-				# 默认放进 properties，符合你 GameEntity 的反序列化逻辑
-				properties_dict[key] = val
+				entity_data["properties"][clean_key] = raw_data[key]
 		
-		data_dict["properties"] = properties_dict
-		
-		# 4. 实例化
-		var entity = model_class.new(data_dict)
-		result.append(entity)
-		
-	Logging.info("✅ 已从 CSV 征调 %d 个领土实体进入内存。" % result.size())
+		# 3. 实例化：让构造函数直接吃这份精美的菜单
+		result.append(model_class.new(entity_data))
+	
+	Logging.info("✅ 成功部署 %d 个模型实体。" % result.size())
 	return result

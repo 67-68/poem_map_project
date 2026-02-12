@@ -33,4 +33,5 @@ void fragment() {
 	vec4 highlight_tint = vec4(0.8,0.6,0.2,1.0);
 	final_output = mix(final_output, highlight_tint, is_selected * highligh_strength);
 	COLOR = final_output;
+	COLOR.a = is_selected;
 }

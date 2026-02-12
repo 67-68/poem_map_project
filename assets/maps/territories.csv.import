@@ -3,13 +3,11 @@
 importer="csv_translation"
 type="Translation"
 uid="uid://bltwusdtqy2ig"
+valid=false
 
 [deps]
 
-files=["res://assets/maps/territories.name.translation", "res://assets/maps/territories.color.translation", "res://assets/maps/territories.stability.translation", "res://assets/maps/territories.capital.translation", "res://assets/maps/territories.sub.translation", "res://assets/maps/territories.x.translation", "res://assets/maps/territories.y.translation"]
-
 source_file="res://assets/maps/territories.csv"
-dest_files=["res://assets/maps/territories.name.translation", "res://assets/maps/territories.color.translation", "res://assets/maps/territories.stability.translation", "res://assets/maps/territories.capital.translation", "res://assets/maps/territories.sub.translation", "res://assets/maps/territories.x.translation", "res://assets/maps/territories.y.translation"]
 
 [params]
 

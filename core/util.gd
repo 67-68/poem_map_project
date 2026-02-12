@@ -105,8 +105,8 @@ static func _explode_recursive(current_id: String, result_set: Dictionary, visit
 	if visited.has(current_id): return
 	visited[current_id] = true
 	
-	# 2. 从注册表获取实体数据
-	var entity = Global.base_province.get(current_id)
+	# 2. 从注册表获取实体数据. 这里的注册表指的是Territory而不是BaseProvince
+	var entity = Global.territories.get(current_id)
 	if not entity:
 		# 如果注册表里没有，它可能就是一个原始州 ID，先放进结果集待查
 		result_set[current_id] = true
@@ -120,11 +120,6 @@ static func _explode_recursive(current_id: String, result_set: Dictionary, visit
 	else:
 		# 它是一个原子单位，记录下来
 		result_set[current_id] = true
-
-# --- 架构师的性能优化建议 ---
-# 如果你的行政树很深，建议在 Global 中对常用的“道/节度使”结果进行缓存 (Memoization)。
-# 否则每次点击“大唐中央”都要递归几百次，你的 CPU 会像在三伏天赶路的差役一样中暑。🤣
-
 
 # 核心函数：将原始乱序颜色图转换为“纯索引 ID 图”
 static func bake_index_map(original_img: Image, color_to_idx_dict: Dictionary) -> ImageTexture:
