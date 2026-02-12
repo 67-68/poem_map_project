@@ -53,6 +53,8 @@ shader = ExtResource("2_epef7")
 shader_parameter/height_map = ExtResource("3_aoj3l")
 shader_parameter/height_scale = 0.5
 shader_parameter/vertical_offset = 0.001
+shader_parameter/faction_alpha = 0.6
+shader_parameter/faction_intensity = 1.0
 
 [sub_resource type="Curve2D" id="Curve2D_bxc27"]
 
@@ -86,8 +88,8 @@ texture = ExtResource("3_aoj3l")
 
 [node name="FactionMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_4wr1n")
-position = Vector2(1.9999999, 0)
-scale = Vector2(1.1534992, 0.6630194)
+position = Vector2(159, 4)
+scale = Vector2(0.9954608, 0.7696759)
 mesh = ExtResource("4_swwi1")
 
 [node name="path" type="Path2D" parent="."]
