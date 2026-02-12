@@ -70,26 +70,42 @@ func _unhandled_input(event: InputEvent) -> void:
 		on_prov_clicked(prov)
 
 func on_prov_clicked(prov: Territory):
-	Logging.info('user click %s prov with a capital of %s' % [prov.name,prov.capital])
+	Logging.info('user click %s prov with a position of %s' % [prov.name,prov.position])
+	Logging.info('uuid: ' + prov.uuid)
+	Logging.info('color: ' + prov.color.to_html(false))
 	EventBus.user_click_map.emit(prov)
 	var mat = $background/ClickMesh.material as ShaderMaterial
 	mat.set_shader_parameter('selected_id_color',prov.color)
-	print("验证注入:", mat.get_shader_parameter('selected_id_color'))
-	print(prov.color)
+	#print("验证注入:", mat.get_shader_parameter('selected_id_color'))
+	#print(prov.color)
 
 func get_province():
-	if not index_image: return null
-	var local_pos = $background.to_local(get_global_mouse_position())
-	var aabb_size = $background/TerrainMesh.mesh.get_aabb().size / 2
-	var vec2_aabb = Vector2(aabb_size.x, aabb_size.y)
-	local_pos += vec2_aabb * $background/TerrainMesh.scale
-	var s = index_image.get_size()
-	if local_pos.x < 0 or local_pos.y < 0 or local_pos.x > s.x or local_pos.y > s.y:
-		Logging.err('点偏了')
-		return
-
-	var c = index_image.get_pixelv(Vector2i(local_pos))
-	return color_2_province.get(c.to_html(false).to_lower())
+	var mesh_node = $background/ClickMesh
+	# 1. 拿到相对于 Mesh 节点的局部位置
+	var local_pos = mesh_node.to_local(get_global_mouse_position())
+	
+	# 2. 获取 Mesh 的实际显示尺寸（考虑缩放）
+	var rect_size = mesh_node.mesh.get_aabb().size
+	rect_size[0] *= mesh_node.scale[0]
+	rect_size[1] *= mesh_node.scale[1]
+	
+	# 3. 计算归一化坐标 (假设 Mesh 原点在中心)
+	# 如果原点在左上角，则不需要加 0.5
+	var uv = (Vector2(local_pos.x, local_pos.y) / Vector2(rect_size.x, rect_size.y))
+	
+	# 边界检查
+	if uv.x < 0 or uv.x > 1 or uv.y < 0 or uv.y > 1:
+		return null
+		
+	# 4. 映射到图片像素坐标
+	var img_size = index_image.get_size()
+	var pixel_pos = Vector2i(uv.x * float(img_size.x), uv.y * float(img_size.y))
+	
+	# 5. 直接采样（注意防止越界）
+	var c = index_image.get_pixelv(pixel_pos.clamp(Vector2i.ZERO, img_size - Vector2i.ONE))
+	
+	# 6. 使用整数或原始颜色对象查表
+	return color_2_province.get(c.to_html(false))
 
 func create_provinces():
 	var map_tex = load(Global.PROVINCE_INDEX_MAP_PATH)
@@ -105,13 +121,12 @@ func load_indexs():
 	file.get_line()
 	while !file.eof_reached():
 		var data = file.get_csv_line()
-		if not data[0]:Territory
 		var color = data[0].to_lower().strip_edges()
 		var province = Territory.new({
 			'color': data[0],
 			'uuid': data[1],
-			'capital': (data[2]),
-			'stability': float(data[3])
+			'position': Vector2(float(data[2]),float(data[3])),
+			'name': data[4]
 		})
 		province.color = Color.from_string(color,Color.WHEAT)
 		color_2_province[province.color.to_html(false)] = province

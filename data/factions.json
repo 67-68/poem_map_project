@@ -16,22 +16,6 @@
     }
   },
   {
-    "uuid": "YAN_REBELS",
-    "title": "大燕 (安禄山部)",
-    "text": "三镇节度使安禄山于范阳起兵，势如破竹，直指中原。",
-    "tags": ["Rebel", "Military", "Rising"],
-    "properties": {
-      "nominal_ruler": "USER_AN_LU_SHAN",
-      "actual_ruler": "USER_AN_LU_SHAN",
-      "prestige": 40.0,
-      "finance": 450000.0,
-      "primary_ethnicity": "粟特/汉",
-      "map_color": "#8b0000",
-      "capital": "FAN_YANG",
-      "provinces": ["fan_yang", "ping_lu", "he_dong"]
-    }
-  },
-  {
     "id": "TUBO_KHANATE",
     "name": "吐蕃",
     "description": "高原上的雄狮，时刻觊觎着河西走廊与安西四镇。",

@@ -59,10 +59,11 @@ shader_parameter/faction_intensity = 1.0
 [sub_resource type="Curve2D" id="Curve2D_bxc27"]
 
 [node name="Map" type="Node2D"]
-position = Vector2(-1, -46)
+position = Vector2(-1, -1)
 script = ExtResource("1_uvqf1")
 
 [node name="background" type="Node2D" parent="."]
+position = Vector2(-156, 0)
 
 [node name="TerrainMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_swwi1")
@@ -75,7 +76,8 @@ script = ExtResource("5_k782d")
 [node name="ClickMesh" type="MeshInstance2D" parent="background"]
 modulate = Color(1, 1, 1, 0)
 material = SubResource("ShaderMaterial_epef7")
-scale = Vector2(1.156, 0.659)
+position = Vector2(157.00002, 5)
+scale = Vector2(0.9979168, 0.7655035)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")
 
@@ -88,7 +90,7 @@ texture = ExtResource("3_aoj3l")
 
 [node name="FactionMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_4wr1n")
-position = Vector2(159, 4)
+position = Vector2(160, 4)
 scale = Vector2(0.9954608, 0.7696759)
 mesh = ExtResource("4_swwi1")
 

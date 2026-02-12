@@ -155,7 +155,7 @@ static func bake_index_map(original_img: Image, color_to_idx_dict: Dictionary) -
 			
 			var best_id = -1
 			# 容差阈值 (0.15 左右通常能过滤掉 JPG 明显的压缩噪声)
-			var threshold = 0.15 
+			var threshold = 0.005
 			
 			for entry in lookup:
 				# 手动计算 RGB 空间的距离 (Euclidean Distance)
