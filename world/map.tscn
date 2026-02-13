@@ -75,7 +75,7 @@ script = ExtResource("5_k782d")
 
 [node name="ClickMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_epef7")
-position = Vector2(153, 4)
+position = Vector2(158, 5)
 scale = Vector2(0.9979168, 0.7655035)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("4_gfy5m")
