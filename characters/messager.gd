@@ -2,6 +2,7 @@ class_name Messager extends Path2D
 
 var path_points: Array
 var speed_px_per_sec: int
+var mesh: MeshInstance2D
 
 func _ready() -> void:
 	pass # Replace with function body.
@@ -10,9 +11,11 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
-func initialization(curve_: Curve2D, path_points_: Array):
+func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D):
 	curve = curve_
 	path_points = path_points_
+	$MsgPathFollow/TextEmitter.mesh = mesh_
+	mesh = mesh
 	
 func start_travel():
 	# 1. 核心 API：获取路径的像素总长度

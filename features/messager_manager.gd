@@ -1,5 +1,6 @@
 @tool
 extends Node
+var mesh: MeshInstance2D
 
 @export var start = false:
 	set(val):
@@ -18,7 +19,10 @@ func send_message(from_id, to_id, type: int): # int: MSG_TYPE
 	var ids = NavigationService.get_uuid_id_path(from_id,to_id)
 	
 	var messager = preload("res://characters/messager.tscn").instantiate()
-	messager.initialization(path,ids)
+	if not mesh:
+		Logging.err('do not found mesh')
+		return
+	messager.initialization(path,ids,mesh)
 
 	apply_msg_type(messager,type)
 	messager.start_travel()

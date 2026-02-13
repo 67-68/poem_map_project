@@ -6,9 +6,11 @@ extends Node
 var astar: AStar2D
 var prov_2_idx: Dictionary = {} # { "su_zhou": 1 }
 var idx_2_prov: Dictionary = {}
+var dirty = true
 
 func init():
-	breakpoint
+	if not dirty: return
+	dirty = false
 	astar = AStar2D.new()
 	var color_2_prov := {}
 	
@@ -41,6 +43,8 @@ func init():
 		
 # 根据省份 ID 获取路径点 ID 序列
 func get_index_id_path(start_id: String, end_id: String) -> Array:
+	if dirty: init()
+	
 	var s = prov_2_idx.get(start_id, -1)
 	var e = prov_2_idx.get(end_id, -1)
 	if s == -1 or e == -1: return []
@@ -49,9 +53,11 @@ func get_index_id_path(start_id: String, end_id: String) -> Array:
 
 # 辅助：根据索引反查省份 ID
 func get_province_id_from_idx(target_idx: int) -> String:
+	if dirty: init()
 	return idx_2_prov.get(target_idx)
 
 func get_uuid_id_path(start_id: String, end_id: String) -> Array:
+	if dirty: init()
 	var path = get_index_id_path(start_id,end_id)
 	var uuids = []
 	for p in path:
@@ -59,6 +65,7 @@ func get_uuid_id_path(start_id: String, end_id: String) -> Array:
 	return uuids
 
 func get_prov_id_path(start_id: String, end_id: String) -> Array:
+	if dirty: init()
 	var path = get_index_id_path(start_id,end_id)
 	var provs = []
 	for p in path:

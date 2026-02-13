@@ -1,6 +1,5 @@
 class_name PathVisualizer extends Node
 
-
 static func get_bezier_path(p1_id: String, p2_id: String) -> Curve2D:
 	# 从单例获取路径 ID 序列
 	var node_indices = NavigationService.get_index_id_path(p1_id, p2_id)
@@ -28,7 +27,6 @@ static func get_bezier_path(p1_id: String, p2_id: String) -> Curve2D:
 		# 添加该段的终点
 		curve.add_point(end_pos)
 	
-	breakpoint
 	return curve
 
 static func _create_noise_point(p1: Vector2, p2: Vector2) -> Vector2:

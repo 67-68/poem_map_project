@@ -17,6 +17,8 @@ const MAP_WIDTH := 1196
 const MAP_HEIGHT := 668
 # 统一的像素？你在想什么呢？这是一个独立游戏！
 
+var index_image: Image
+
 var start_year := 618.0
 var end_year := 907.0
 
@@ -62,6 +64,7 @@ var territories: Dictionary
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	index_image = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
 	Logging.current_level = Logging.Level.DEBUG
 
 	# 加载数据

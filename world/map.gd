@@ -6,6 +6,7 @@ var color_2_province: Dictionary
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$MessagerManager.mesh = $background/PathMesh
 	var character_point = load("res://world/character_point.tscn")
 	for item in Global.poet_data.values():
 		var node = character_point.instantiate()
