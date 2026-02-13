@@ -93,6 +93,9 @@ position = Vector2(160, 4)
 scale = Vector2(0.9954608, 0.7696759)
 mesh = ExtResource("4_swwi1")
 
+[node name="PathMesh" type="MeshInstance2D" parent="background"]
+mesh = ExtResource("4_swwi1")
+
 [node name="path" type="Path2D" parent="."]
 curve = SubResource("Curve2D_bxc27")
 

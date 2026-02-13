@@ -22,6 +22,7 @@ Logging="*res://core/logger.gd"
 TimeService="*res://core/time_service.tscn"
 SizeService="*res://core/size_service.tscn"
 EventBus="*res://core/eventbus.gd"
+NavigationService="*res://core/navigation_service.gd"
 
 [debug]
 
