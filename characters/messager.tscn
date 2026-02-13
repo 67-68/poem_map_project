@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://7oukwpirj516"]
+[gd_scene load_steps=5 format=3 uid="uid://7oukwpirj516"]
 
 [ext_resource type="Script" uid="uid://drqj2eq4lfi84" path="res://characters/messager.gd" id="1_lq27n"]
 [ext_resource type="Script" uid="uid://bjq45t2wxwdok" path="res://features/text_emitter.gd" id="2_5bb38"]
+[ext_resource type="Texture2D" uid="uid://csf0pdqpuijew" path="res://assets/profile/poet-libai-001.png" id="2_a1w0b"]
 
 [sub_resource type="Curve2D" id="Curve2D_gi4pm"]
 
@@ -12,6 +13,7 @@ script = ExtResource("1_lq27n")
 [node name="MsgPathFollow" type="PathFollow2D" parent="."]
 
 [node name="MsgSprite" type="Sprite2D" parent="MsgPathFollow"]
+texture = ExtResource("2_a1w0b")
 
 [node name="TextEmitter" type="Node2D" parent="MsgPathFollow"]
 script = ExtResource("2_5bb38")

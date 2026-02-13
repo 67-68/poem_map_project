@@ -10,6 +10,10 @@ func _process(_delta):
 	_detect_and_emit()
 
 func _detect_and_emit():
+	if not mesh:
+		breakpoint
+		Logging.err('passenger: can not find mesh')
+		return
 	var local_pos = mesh.to_local(global_position) # 获取text emiiter的本地坐标，相对于mesh来说
 
 	var mesh_size = mesh.get_rect().size # 获取mesh的大小

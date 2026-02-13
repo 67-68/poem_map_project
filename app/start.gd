@@ -16,4 +16,3 @@ func _on_pressed() -> void:
 	Global.request_start_black.emit(false)
 	await get_tree().create_timer(1.0).timeout
 	get_tree().change_scene_to_file("res://main.tscn")
-

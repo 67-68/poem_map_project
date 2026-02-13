@@ -17,7 +17,9 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D)
 	curve = curve_
 	path_points = path_points_
 	$MsgPathFollow/TextEmitter.mesh = mesh_
-	mesh = mesh
+	mesh = mesh_
+	breakpoint
+	Logging.info('passanger: mesh设置完成 %s' % mesh)
 	
 func start_travel():
 	# 1. 核心 API：获取路径的像素总长度

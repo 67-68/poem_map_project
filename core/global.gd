@@ -56,6 +56,7 @@ signal poems_created(data: Array)
 signal request_apply_poem(data: PoemData, poet: PoetData)
 signal poem_animation_finished()
 
+signal request_add_messager(msg: Messager)
 
 var life_path_points: Dictionary
 var poet_data: Dictionary

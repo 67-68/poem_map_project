@@ -8,4 +8,5 @@ script = ExtResource("1_cmcny")
 [node name="Label" type="RichTextLabel" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
+bbcode_enabled = true
 fit_content = true
