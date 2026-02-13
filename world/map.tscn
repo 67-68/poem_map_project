@@ -95,7 +95,7 @@ scale = Vector2(0.9954608, 0.7696759)
 mesh = ExtResource("4_swwi1")
 
 [node name="PathMesh" type="MeshInstance2D" parent="background"]
-visible = false
+self_modulate = Color(1, 1, 1, 0)
 position = Vector2(162, 4)
 scale = Vector2(0.994548, 0.76939785)
 mesh = ExtResource("4_swwi1")

@@ -1,28 +1,75 @@
 extends Camera2D
 
+# ---------------------------------------------------------
+# 🛠️ 架构师的 Debug 工具箱：全知之眼 (Omniscient Eye)
+# ---------------------------------------------------------
+# 这是一个极其务实的 Debug 摄像机。
+# 它不追求平滑的插值（Lerp），只追求像手术刀一样精准的控制。
+# 
+# 使用方法：
+# 1. 将此脚本挂载到你的 Camera2D 节点上。
+# 2. 运行游戏。
+# 3. 滚轮缩放，右键/中键拖拽。
+# 4. 按 Q 键复位。
+# ---------------------------------------------------------
 
-# Called when the node enters the scene tree for the first time.
+@export_group("Debug Zoom")
+@export var min_zoom: float = 0.1 # 拉得极远，看清全局 (0.1 = 10倍视野)
+@export var max_zoom: float = 5.0 # 拉得极近，看清像素
+@export var zoom_speed: float = 0.1
+
+var _dragging: bool = false
+var _last_mouse_pos: Vector2 = Vector2.ZERO
+
 func _ready() -> void:
-	pass # Replace with function body.
+	print("🎥 [DebugCamera] Online. Use Wheel to Zoom, Right/Middle Click to Drag, Q to Reset.")
+	# 确保摄像机是启用的
+	enabled = true
+	# 某些情况下，我们需要忽略父节点的变换，但这取决于你的场景结构
+	# top_level = true 
 
-# 建议的参数
-@export var speed: float = 500.0
-@export var friction: float = 0.1 # 摩擦力/平滑度
+func _unhandled_input(event: InputEvent) -> void:
+	# 1. 缩放控制 (滚轮)
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			# 向上滚，放大 (Zoom 值变大，视野变小？Godot 的 Zoom 是放大倍数)
+			# Godot 4: Zoom (2,2) = 2x Magnification (Objects look bigger)
+			_change_zoom(1 + zoom_speed)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			# 向下滚，缩小
+			_change_zoom(1 - zoom_speed)
+		
+		# 2. 拖拽控制 (右键 或 中键)
+		elif event.button_index in [MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_MIDDLE]:
+			if event.pressed:
+				_dragging = true
+				_last_mouse_pos = event.position
+			else:
+				_dragging = false
 
-var velocity: Vector2 = Vector2.ZERO
+	# 3. 拖拽移动逻辑
+	if event is InputEventMouseMotion and _dragging:
+		# 屏幕上的移动增量
+		var delta = event.position - _last_mouse_pos
+		
+		# 摄像机移动方向与鼠标相反（拖拽地图的感觉）
+		# 并且移动速度需要除以当前的缩放倍率，否则放大时移动太快
+		position -= delta / zoom.x 
+		
+		_last_mouse_pos = event.position
 
-func _process(delta: float) -> void:
-	# 1. 这种写法允许斜向移动，且逻辑清晰
-	var input_dir = Vector2.ZERO
-	input_dir.x = Input.get_axis("left_move", "right_move")
-	input_dir.y = Input.get_axis("up_move", "down_move")
+	# 4. 快捷键复位 (Q)
+	if event is InputEventKey and event.pressed and event.keycode == KEY_Q:
+		print("🎥 [DebugCamera] Resetting Position")
+		position = Vector2.ZERO # 或者你的地图中心
+		zoom = Vector2(1, 1)
+
+func _change_zoom(factor: float) -> void:
+	var new_zoom = zoom * factor
+	# 限制缩放范围，防止视界坍缩 💀
+	new_zoom.x = clamp(new_zoom.x, min_zoom, max_zoom)
+	new_zoom.y = clamp(new_zoom.y, min_zoom, max_zoom)
+	zoom = new_zoom
 	
-	# 2. 计算目标速度
-	var target_velocity = input_dir.normalized() * speed
-	
-	# 3. 使用 lerp 平滑速度（产生惯性效果）
-	# 这样松开按键后，相机会滑行一小段，手感极佳
-	velocity = velocity.lerp(target_velocity, friction)
-	
-	# 4. 最终应用位置
-	position += velocity * delta
+	# 可选：打印当前缩放，让你心里有数
+	# print("🔍 Zoom Level: ", snapped(zoom.x, 0.01))
