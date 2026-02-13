@@ -1,13 +1,12 @@
 @tool
-extends Node
-var mesh: MeshInstance2D
-
+class_name MessagerManager extends Node
 @export var start = false:
 	set(val):
 		if is_node_ready() and val:
 			start = false
 			send_message('luo_zhou','shan_zhou_shan_xi',MSG_TYPE.CRITICAL)
 
+var mesh: MeshInstance2D
 var path_cache: Dictionary[Array,Curve2D] = {}
 
 func send_message(from_id, to_id, type: int): # int: MSG_TYPE
@@ -21,11 +20,17 @@ func send_message(from_id, to_id, type: int): # int: MSG_TYPE
 	var messager = preload("res://characters/messager.tscn").instantiate()
 	if not mesh:
 		Logging.err('do not found mesh')
+
 		return
 	messager.initialization(path,ids,mesh)
 
 	apply_msg_type(messager,type)
 	messager.start_travel()
+
+func get_mesh():
+	breakpoint
+	return $'../background/PathMesh'
+	
 
 static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
 	"""

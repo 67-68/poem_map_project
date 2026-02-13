@@ -7,4 +7,3 @@ singleton第一项
 
 func _ready():
 	NavigationService.init()
-	MessagerManager.init()

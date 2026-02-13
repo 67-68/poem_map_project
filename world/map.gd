@@ -119,3 +119,4 @@ func load_indexs():
 	for prov_uid in Global.base_province:
 		var prov = Global.base_province[prov_uid]
 		color_2_province[prov.color.to_html(false)] = prov
+	Global.color_2_province = color_2_province

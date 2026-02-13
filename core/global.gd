@@ -17,6 +17,8 @@ const MAP_WIDTH := 1196
 const MAP_HEIGHT := 668
 # 统一的像素？你在想什么呢？这是一个独立游戏！
 
+const FLOAT_TEXT_SCENE = 'res://world/float_text.tscn'
+
 var index_image: Image
 
 var start_year := 618.0
@@ -35,7 +37,7 @@ var current_selected_poet: PoetData
 
 # view
 var slider_light_speed: int = 1
-
+var color_2_province: Dictionary
 # 用来展示poet
 signal user_clicked(PoetData) # 值可以为空，express 点到空处，面板hide
 

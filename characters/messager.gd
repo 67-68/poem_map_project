@@ -28,4 +28,4 @@ func start_travel():
 	# 3. 扔给 Tween 自动执行
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property($MsgPathFollow, "progress_ratio", 1.0, travel_duration)
+	tween.tween_property($MsgPathFollow, "progress_ratio", 10.0, travel_duration)

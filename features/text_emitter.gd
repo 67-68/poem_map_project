@@ -29,8 +29,13 @@ func _detect_and_emit():
 	if color.a < 0.1: return # 在水里或荒野
 
 	var hex = color.to_html(false)
-	var current_province_id = Global.color_to_province_id.get(hex, "")
+	var current_province_id = Global.color_2_province.get(hex, "")
+	if current_province_id != _last_prov_id and current_province_id != "":
+		_emit_text(current_province_id)
+		_last_prov_id = current_province_id
 
-	
-	
+func _emit_text(prov_id):
+	var prov_name = Global.base_province[prov_id].name
+	print("进入了：", prov_name)
+
 # ankize: 获取mesh大小的方法
