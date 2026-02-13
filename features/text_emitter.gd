@@ -10,22 +10,30 @@ func _process(_delta):
 	_detect_and_emit()
 
 func _detect_and_emit():
-	if not mesh:
-		breakpoint
-		Logging.err('passenger: can not find mesh')
+	if not mesh or not Global.index_image:
 		return
-	var local_pos = mesh.to_local(global_position) # 获取text emiiter的本地坐标，相对于mesh来说
 
-	var mesh_size = mesh.mesh.get_aabb().size # 获取mesh的大小
-	mesh_size.x *= mesh.scale.x
-	mesh_size.y *= mesh.scale.y
-
-	var uv = local_pos/mesh_size # 归一化
+	# 1. 获取相对于 Mesh 节点的局部坐标
+	var local_pos = mesh.to_local(global_position)
+	
+	# 2. 获取 Mesh 的 AABB (轴对齐包围盒)
+	# 注意：对于 ArrayMesh，get_aabb() 通常是准确的
+	var aabb = mesh.mesh.get_aabb()
+	var mesh_size = Vector2(aabb.size.x, aabb.size.y)
+	
+	# 4. 关键修正：处理原点偏移 (UV 映射)
+	# 假设 Mesh 的原点在中心 (0,0)，那么左上角就是 -mesh_size / 2
+	# 我们需要把 local_pos 转换到 [0, mesh_size] 的范围内
+	var offset_pos = local_pos + (mesh_size / 2.0)
+	
+	# 5. 计算 UV
+	var uv = offset_pos / mesh_size
+	
+	# --- 调试日志 (可选) ---
+	# print("Local: ", local_pos, " Offset: ", offset_pos, " Size: ", mesh_size, " UV: ", uv)
 
 	if uv.x < 0 or uv.x > 1 or uv.y < 0 or uv.y > 1: 
-		Logging.err('text emitter position is out of the mesh %s' % uv)
-		Logging.err('mesh_size '+mesh_size)
-		Logging.err('local_pos '+local_pos)
+		# 超出边界，不报错，直接返回（信使可能跑到了地图外的虚空）
 		return
 	
 	var px = int(uv.x * Global.index_image.get_width())

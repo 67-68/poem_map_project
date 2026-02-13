@@ -61,7 +61,6 @@ shader_parameter/faction_intensity = 1.0
 [sub_resource type="Curve2D" id="Curve2D_bxc27"]
 
 [node name="Map" type="Node2D"]
-position = Vector2(-2, -2)
 script = ExtResource("1_uvqf1")
 
 [node name="background" type="Node2D" parent="."]

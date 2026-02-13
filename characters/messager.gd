@@ -4,16 +4,16 @@ var path_points: Array
 var speed_px_per_sec: int
 var txt: String
 var mesh: MeshInstance2D
-var timer: SceneTreeTimer
+var allow_timer := false
 
 func _ready() -> void:
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if $MsgPathFollow/TrailLine.get_point_count() > 50:
-		$MsgPathFollow/TrailLine.remove_point(0)
-	$MsgPathFollow/TrailLine.add_point(position)
+	if $TrailLine.get_point_count() > 50:
+		$TrailLine.remove_point(0)
+	$TrailLine.add_point(position)
 
 func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D):
 	curve = curve_
@@ -42,15 +42,17 @@ func start_travel():
 	# 3. 扔给 Tween 自动执行
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property($MsgPathFollow, "progress_ratio", 10.0, travel_duration)
+	tween.tween_property($MsgPathFollow, "progress_ratio", 1.0, travel_duration)
 	tween.tween_callback(end_timer)
+	allow_timer = true
 	start_timer()
 	
 
 func start_timer():
-	TextPoolManager.spawn(txt,global_position)
-	timer = get_tree().create_timer(randi() % 5)
-	timer.timeout.connect(start_timer)
+	if allow_timer:
+		TextPoolManager.spawn(txt,global_position)
+		var timer = get_tree().create_timer(randi() % 5)
+		timer.timeout.connect(start_timer)
 
 func end_timer():
-	timer.free()
+	allow_timer = false

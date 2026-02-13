@@ -1,21 +1,43 @@
-[gd_scene load_steps=5 format=3 uid="uid://7oukwpirj516"]
+[gd_scene load_steps=10 format=3 uid="uid://7oukwpirj516"]
 
 [ext_resource type="Script" uid="uid://drqj2eq4lfi84" path="res://characters/messager.gd" id="1_lq27n"]
 [ext_resource type="Script" uid="uid://bjq45t2wxwdok" path="res://features/text_emitter.gd" id="2_5bb38"]
 [ext_resource type="Texture2D" uid="uid://csf0pdqpuijew" path="res://assets/profile/poet-libai-001.png" id="2_a1w0b"]
+[ext_resource type="Shader" uid="uid://2j8pc85i3h0" path="res://shaders/trail_shader.gdshader" id="2_pygyx"]
+[ext_resource type="Script" uid="uid://blslya0uscec0" path="res://characters/msg_sprite.gd" id="4_xtdfu"]
 
 [sub_resource type="Curve2D" id="Curve2D_gi4pm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xtdfu"]
+shader = ExtResource("2_pygyx")
+shader_parameter/ink_roughness = 1.0
+shader_parameter/dry_brush = 0.5
+shader_parameter/noise_freq = 50.0
+
+[sub_resource type="Curve" id="Curve_a1w0b"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_pygyx"]
+colors = PackedColorArray(0, 0, 0, 0.27450982, 0, 0, 0, 1)
 
 [node name="Messager" type="Path2D"]
 curve = SubResource("Curve2D_gi4pm")
 script = ExtResource("1_lq27n")
 
+[node name="TrailLine" type="Line2D" parent="."]
+material = SubResource("ShaderMaterial_xtdfu")
+width_curve = SubResource("Curve_a1w0b")
+gradient = SubResource("Gradient_pygyx")
+
 [node name="MsgPathFollow" type="PathFollow2D" parent="."]
 
 [node name="MsgSprite" type="Sprite2D" parent="MsgPathFollow"]
 texture = ExtResource("2_a1w0b")
+script = ExtResource("4_xtdfu")
 
 [node name="TextEmitter" type="Node2D" parent="MsgPathFollow"]
 script = ExtResource("2_5bb38")
 
-[node name="TrailLine" type="Line2D" parent="MsgPathFollow"]
+[node name="FutureLine" type="Line2D" parent="."]
+texture_mode = 2
