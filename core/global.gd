@@ -5,7 +5,7 @@ const DEFAULT_ICON = "res://assets/6768.png"
 const ICON_PATH = "res://assets/profile/"
 const PROVINCE_INDEX_MAP_PATH := "res://assets/maps/provinces.png"
 const PERMANENT_DATA_PATH := 'res://assets/maps/'
-const ADJACENCY_CACHE_PATH := 'res//assets/map/map_connections_cache.json'
+const ADJACENCY_CACHE_PATH := 'res://assets/maps/map_connections_cache.json'
 
 const PATH_NOISE = 10 # 最高可能偏移10px
 

@@ -187,6 +187,9 @@ static func bake_index_map(original_img: Image, color_to_idx_dict: Dictionary) -
 	return ImageTexture.create_from_image(processed_img)
 
 static func save_to(data,path):
+	"""
+	父路径需要首先存在
+	"""
 	var file = FileAccess.open(path,FileAccess.WRITE)
-	file.store_string(data)
+	file.store_var(data)
 	Logging.info('存储 %s 到了 %s' % [data,path])

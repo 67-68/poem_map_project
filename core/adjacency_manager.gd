@@ -11,6 +11,7 @@ static func get_adjacency_map(idx_img: Image, color_to_id: Dictionary, force_bab
 	Logging.info('正在扫描像素')
 	var connections = _scan_pixels(idx_img,color_to_id)
 	Util.save_to(connections,Global.ADJACENCY_CACHE_PATH)
+	return connections
 
 static func _scan_pixels(index_img: Image,color_2_id: Dictionary):
 	var connections = {}
@@ -18,7 +19,7 @@ static func _scan_pixels(index_img: Image,color_2_id: Dictionary):
 	var h = index_img.get_height()
 	
 	var step = 3 # 每3像素看一眼
-
+	
 	for y in range(0, h - step, step):
 		for x in range(0, w - step, step):
 			var pix = index_img.get_pixel(x,y)
@@ -33,12 +34,13 @@ static func _scan_pixels(index_img: Image,color_2_id: Dictionary):
 				if p_next.a < 0.1: continue
 
 				var id_next = color_2_id.get(p_next.to_html(false))
-				if id_next != '' and id_next != id:
+				if id_next and id_next != id:
 					_add_connection(connections, id,id_next)
+	return connections
 
 static func _add_connection(dict: Dictionary, a: String, b: String):
 	if not dict.has(a): dict[a] = []
 	if not dict.has(b): dict[b] = []
 	
 	if not b in dict[a]: dict[a].append(b)
-	if not a in dict[b]: dict[a].append(a)
+	if not a in dict[b]: dict[b].append(a)
