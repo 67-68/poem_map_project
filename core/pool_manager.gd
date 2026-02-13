@@ -10,7 +10,7 @@ func _ready():
 	_container.z_index = 100
 	add_child(_container)
 
-func spawn(content: String, color: Color, glob_pos: Vector2):
+func spawn(content: String, glob_pos: Vector2):
 	var instance: FloatingText
 
 	if _pool.is_empty():
@@ -19,7 +19,7 @@ func spawn(content: String, color: Color, glob_pos: Vector2):
 		instance = _pool.pop_back()
 	
 	instance.move_to_front()
-	instance.play(content,color,glob_pos)
+	instance.play(content,glob_pos)
 
 func create_new_instance():
 	var inst = Global.FLOAT_TEXT_SCENE.instanciate()

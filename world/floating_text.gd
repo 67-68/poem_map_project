@@ -12,11 +12,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func play(content, color, pos):
+func play(content, pos):
 	position = pos
 	scale = Vector2.ONE
 	modulate.a = 1
-	modulate = color
 	show()
 
 	label.text = content

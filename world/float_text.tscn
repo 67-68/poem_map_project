@@ -1,3 +1,11 @@
-[gd_scene format=3 uid="uid://bjovu0oau7pv2"]
+[gd_scene load_steps=2 format=3 uid="uid://bjovu0oau7pv2"]
 
-[node name="FloatText" type="Node2D"]
+[ext_resource type="Script" uid="uid://csf8s1p01advm" path="res://world/floating_text.gd" id="1_cmcny"]
+
+[node name="FloatingText" type="Node2D"]
+script = ExtResource("1_cmcny")
+
+[node name="Label" type="RichTextLabel" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+fit_content = true
