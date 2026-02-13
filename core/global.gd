@@ -17,7 +17,7 @@ const MAP_WIDTH := 1196
 const MAP_HEIGHT := 668
 # 统一的像素？你在想什么呢？这是一个独立游戏！
 
-const FLOAT_TEXT_SCENE = 'res://world/float_text.tscn'
+const FLOAT_TEXT_SCENE := preload('res://world/float_text.tscn')
 
 var index_image: Image
 
