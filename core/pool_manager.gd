@@ -25,6 +25,7 @@ func create_new_instance():
 	var inst = Global.FLOAT_TEXT_SCENE.instantiate()
 	_container.add_child(inst)
 	inst.recycle_requested.connect(_on_recycle_request)
+	return inst
 
 func _on_recycle_request(inst: FloatingText):
 	inst.hide()

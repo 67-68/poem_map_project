@@ -2,7 +2,7 @@ class_name FloatingText extends Node2D
 
 signal recycle_requested(text_instance)
 
-@onready var label: Label = $Label
+@onready var label: RichTextLabel = $Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

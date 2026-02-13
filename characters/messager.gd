@@ -7,18 +7,19 @@ var mesh: MeshInstance2D
 var timer: SceneTreeTimer
 
 func _ready() -> void:
-	pass # Replace with function body.
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	pass
+	if $MsgPathFollow/TrailLine.get_point_count() > 50:
+		$MsgPathFollow/TrailLine.remove_point(0)
+	$MsgPathFollow/TrailLine.add_point(position)
 
 func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D):
 	curve = curve_
 	path_points = path_points_
 	$MsgPathFollow/TextEmitter.mesh = mesh_
 	mesh = mesh_
-	breakpoint
 	Logging.info('passanger: mesh设置完成 %s' % mesh)
 	
 func start_travel():

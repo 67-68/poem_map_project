@@ -17,3 +17,5 @@ texture = ExtResource("2_a1w0b")
 
 [node name="TextEmitter" type="Node2D" parent="MsgPathFollow"]
 script = ExtResource("2_5bb38")
+
+[node name="TrailLine" type="Line2D" parent="MsgPathFollow"]

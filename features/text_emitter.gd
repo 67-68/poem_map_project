@@ -16,7 +16,9 @@ func _detect_and_emit():
 		return
 	var local_pos = mesh.to_local(global_position) # 获取text emiiter的本地坐标，相对于mesh来说
 
-	var mesh_size = mesh.get_rect().size # 获取mesh的大小
+	var mesh_size = mesh.mesh.get_aabb().size # 获取mesh的大小
+	mesh_size.x *= mesh.scale.x
+	mesh_size.y *= mesh.scale.y
 
 	var uv = local_pos/mesh_size # 归一化
 
