@@ -3,14 +3,11 @@ extends Node
 
 @export var start = false:
 	set(val):
-		if val:
+		if is_node_ready() and val:
 			start = false
 			send_message('luo_zhou','shan_zhou_shan_xi',MSG_TYPE.CRITICAL)
 
 var path_cache: Dictionary[Array,Curve2D] = {}
-
-func _ready():
-	pass
 
 func send_message(from_id, to_id, type: int): # int: MSG_TYPE
 	var path: Curve2D
@@ -26,7 +23,7 @@ func send_message(from_id, to_id, type: int): # int: MSG_TYPE
 	apply_msg_type(messager,type)
 	messager.start_travel()
 
-static func apply_msg_type(msger: Messager, type: MSG_TYPE):
+static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
 	"""
 	给msger加上它对应的文字，图片，速度之类的效果
 	"""

@@ -7,8 +7,8 @@ var astar: AStar2D
 var prov_2_idx: Dictionary = {} # { "su_zhou": 1 }
 var idx_2_prov: Dictionary = {}
 
-func _ready():
-	# 1. 初始化 AStar
+func init():
+	breakpoint
 	astar = AStar2D.new()
 	var color_2_prov := {}
 	

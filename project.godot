@@ -17,6 +17,7 @@ config/icon="uid://ku7ifltn2syw"
 
 [autoload]
 
+Gameboot="*res://core/gameboot.gd"
 Global="*res://core/global.gd"
 Logging="*res://core/logger.gd"
 TimeService="*res://core/time_service.tscn"

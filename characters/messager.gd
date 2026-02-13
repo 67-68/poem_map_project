@@ -1,6 +1,6 @@
 class_name Messager extends Path2D
 
-var path_points: Array[String]
+var path_points: Array
 var speed_px_per_sec: int
 
 func _ready() -> void:
@@ -10,7 +10,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
-func initialization(curve_: Curve2D, path_points_: Array[String]):
+func initialization(curve_: Curve2D, path_points_: Array):
 	curve = curve_
 	path_points = path_points_
 	
