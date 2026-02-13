@@ -6,7 +6,10 @@ var color_2_province: Dictionary
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# 2. 加载并赋值
 	$MessagerManager.mesh = $background/PathMesh
+	Logging.info("✅ 赋值成功，当前 Mesh 资源: %s" % $MessagerManager.mesh)
+	
 	var character_point = load("res://world/character_point.tscn")
 	for item in Global.poet_data.values():
 		var node = character_point.instantiate()
@@ -20,7 +23,6 @@ func _ready() -> void:
 	
 	create_provinces()
 	render_factions()
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
