@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://7oukwpirj516"]
+
+[ext_resource type="Script" uid="uid://drqj2eq4lfi84" path="res://characters/messager.gd" id="1_lq27n"]
+
+[sub_resource type="Curve2D" id="Curve2D_gi4pm"]
+
+[node name="Messager" type="Path2D"]
+curve = SubResource("Curve2D_gi4pm")
+script = ExtResource("1_lq27n")
+
+[node name="MsgPathFollow" type="PathFollow2D" parent="."]
+
+[node name="MsgSprite" type="Sprite2D" parent="MsgPathFollow"]

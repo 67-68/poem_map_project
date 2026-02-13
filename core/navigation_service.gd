@@ -5,6 +5,7 @@ extends Node
 
 var astar: AStar2D
 var prov_2_idx: Dictionary = {} # { "su_zhou": 1 }
+var idx_2_prov: Dictionary = {}
 
 func _ready():
 	# 1. 初始化 AStar
@@ -27,6 +28,7 @@ func _ready():
 		# 警告修复：add_point 的参数顺序是 (id, position)
 		astar.add_point(idx, prov.position) 
 		prov_2_idx[uid] = idx
+		idx_2_prov[idx] = uid
 		idx += 1
 	
 	# 4. 【关键缺失修复】：必须建立连接，AStar 才能工作
@@ -36,9 +38,9 @@ func _ready():
 			var to_idx = prov_2_idx.get(neighbor_id, -1)
 			if from_idx != -1 and to_idx != -1:
 				astar.connect_points(from_idx, to_idx)
-
+		
 # 根据省份 ID 获取路径点 ID 序列
-func get_id_path(start_id: String, end_id: String) -> Array:
+func get_index_id_path(start_id: String, end_id: String) -> Array:
 	var s = prov_2_idx.get(start_id, -1)
 	var e = prov_2_idx.get(end_id, -1)
 	if s == -1 or e == -1: return []
@@ -47,6 +49,18 @@ func get_id_path(start_id: String, end_id: String) -> Array:
 
 # 辅助：根据索引反查省份 ID
 func get_province_id_from_idx(target_idx: int) -> String:
-	for p_id in prov_2_idx:
-		if prov_2_idx[p_id] == target_idx: return p_id
-	return ""
+	return idx_2_prov.get(target_idx)
+
+func get_uuid_id_path(start_id: String, end_id: String) -> Array:
+	var path = get_index_id_path(start_id,end_id)
+	var uuids = []
+	for p in path:
+		uuids.append(get_province_id_from_idx(p))
+	return uuids
+
+func get_prov_id_path(start_id: String, end_id: String) -> Array:
+	var path = get_index_id_path(start_id,end_id)
+	var provs = []
+	for p in path:
+		provs.append(Global.base_province[get_province_id_from_idx(p)])
+	return provs

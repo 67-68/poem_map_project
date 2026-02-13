@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://digoh2dpxyn08"]
+[gd_scene load_steps=21 format=3 uid="uid://digoh2dpxyn08"]
 
 [ext_resource type="Script" uid="uid://df0kq35asbi0h" path="res://world/map.gd" id="1_uvqf1"]
 [ext_resource type="Shader" uid="uid://b5keoqhrofhr4" path="res://shaders/map_shaders/click_province_shader.gdshader" id="2_aoj3l"]
@@ -12,6 +12,7 @@
 [ext_resource type="Shader" uid="uid://msorjnyjin8g" path="res://shaders/map_shaders/province_border.gdshader" id="7_aoj3l"]
 [ext_resource type="Script" uid="uid://d1uxwbwq04djs" path="res://features/path_visualizer.gd" id="12_epef7"]
 [ext_resource type="Script" uid="uid://cbadnqxjlp57p" path="res://core/faction_map_renderer.gd" id="12_teowk"]
+[ext_resource type="Script" uid="uid://bnfc6lv07330w" path="res://features/messager_manager.gd" id="13_epef7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_swwi1"]
 shader = ExtResource("2_gfy5m")
@@ -105,3 +106,6 @@ script = ExtResource("12_teowk")
 
 [node name="PathVisualizer" type="Node" parent="."]
 script = ExtResource("12_epef7")
+
+[node name="MessagerManager" type="Node" parent="."]
+script = ExtResource("13_epef7")

@@ -1,14 +1,9 @@
-@tool 
 class_name PathVisualizer extends Node
-@export var start = false:
-	set(val):
-		if val:
-			start = false
-			print(get_bezier_path('luo_zhou','shan_zhou_shan_xi'))
+
 
 static func get_bezier_path(p1_id: String, p2_id: String) -> Curve2D:
 	# 从单例获取路径 ID 序列
-	var node_indices = NavigationService.get_id_path(p1_id, p2_id)
+	var node_indices = NavigationService.get_index_id_path(p1_id, p2_id)
 	if node_indices.size() < 2: return null
 	
 	var curve := Curve2D.new()
