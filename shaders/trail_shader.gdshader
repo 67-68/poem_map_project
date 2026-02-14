@@ -19,7 +19,9 @@ void fragment() {
 	
 	// 用噪声扰动边缘判定
 	float edge_noise = (n - 0.5) * 0.2 * ink_roughness;
-	float ink_mask = smoothstep(0.9 + edge_noise, 0.7 + edge_noise, edge_dist);
+	// 顺着写 smoothstep (从小到大)，然后用 1.0 去减它来实现反转！
+	// 这样你的代码才可以在任何破烂显卡上稳定运行 🤓☝️
+	float ink_mask = 1.0 - smoothstep(0.7 + edge_noise, 0.9 + edge_noise, edge_dist);
 	
 	// 3. 枯笔效果：根据噪声切开内部像素
 	float dry_mask = smoothstep(dry_brush, dry_brush + 0.3, n);

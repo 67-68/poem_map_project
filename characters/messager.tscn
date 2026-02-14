@@ -1,18 +1,23 @@
-[gd_scene load_steps=12 format=3 uid="uid://7oukwpirj516"]
+[gd_scene load_steps=14 format=3 uid="uid://7oukwpirj516"]
 
 [ext_resource type="Script" uid="uid://drqj2eq4lfi84" path="res://characters/messager.gd" id="1_lq27n"]
 [ext_resource type="Script" uid="uid://bjq45t2wxwdok" path="res://features/text_emitter.gd" id="2_5bb38"]
 [ext_resource type="Texture2D" uid="uid://csf0pdqpuijew" path="res://assets/profile/poet-libai-001.png" id="2_a1w0b"]
 [ext_resource type="Shader" uid="uid://2j8pc85i3h0" path="res://shaders/trail_shader.gdshader" id="2_pygyx"]
+[ext_resource type="FastNoiseLite" uid="uid://dkdvopuww2mvf" path="res://features/pen_noise.tres" id="3_1616p"]
 [ext_resource type="Script" uid="uid://blslya0uscec0" path="res://characters/msg_sprite.gd" id="4_xtdfu"]
 [ext_resource type="Shader" uid="uid://wttq45m7cg4k" path="res://shaders/msg_future_line.gdshader" id="6_wiuub"]
 
 [sub_resource type="Curve2D" id="Curve2D_gi4pm"]
 
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vnrsg"]
+noise = ExtResource("3_1616p")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xtdfu"]
 shader = ExtResource("2_pygyx")
 shader_parameter/ink_roughness = 1.0
 shader_parameter/dry_brush = 0.5
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_vnrsg")
 shader_parameter/noise_freq = 50.0
 
 [sub_resource type="Curve" id="Curve_a1w0b"]
@@ -25,15 +30,22 @@ colors = PackedColorArray(0, 0, 0, 0.27450982, 0, 0, 0, 1)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1616p"]
 shader = ExtResource("6_wiuub")
 shader_parameter/progress_ratio = 0.0
+shader_parameter/glow_color = Color(0, 0.8, 1, 0.8)
+shader_parameter/speed = 1.5
+shader_parameter/frequency = 3.0
+shader_parameter/tail_length = 0.5
+shader_parameter/edge_softness = 0.1
 
 [node name="Messager" type="Path2D"]
 curve = SubResource("Curve2D_gi4pm")
 script = ExtResource("1_lq27n")
 
 [node name="TrailLine" type="Line2D" parent="."]
+z_index = 5
 material = SubResource("ShaderMaterial_xtdfu")
 width_curve = SubResource("Curve_a1w0b")
 gradient = SubResource("Gradient_pygyx")
+texture_mode = 2
 
 [node name="MsgPathFollow" type="PathFollow2D" parent="."]
 
@@ -47,5 +59,6 @@ script = ExtResource("4_xtdfu")
 script = ExtResource("2_5bb38")
 
 [node name="FutureLine" type="Line2D" parent="."]
+z_index = 5
 material = SubResource("ShaderMaterial_1616p")
 texture_mode = 2

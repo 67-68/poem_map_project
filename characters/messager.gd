@@ -13,9 +13,11 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if $TrailLine.get_point_count() > 50:
+	#breakpoint
+	if $TrailLine.get_point_count() > 150:
 		$TrailLine.remove_point(0)
 	$TrailLine.add_point($MsgPathFollow.position)
+	#print($MsgPathFollow.position)
 
 func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D):
 	Logging.exists('init of messager',curve_,path_points_,mesh_)
@@ -24,6 +26,10 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D)
 	$MsgPathFollow/TextEmitter.mesh = mesh_
 	mesh = mesh_
 	Logging.info('passanger: mesh设置完成 %s' % mesh)
+
+	# 初始化future line
+	var future_path = $FutureLine as Line2D
+
 	
 func start_travel():
 	# 1. 核心 API：获取路径的像素总长度
