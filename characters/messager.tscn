@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://7oukwpirj516"]
+[gd_scene load_steps=15 format=3 uid="uid://7oukwpirj516"]
 
 [ext_resource type="Script" uid="uid://drqj2eq4lfi84" path="res://characters/messager.gd" id="1_lq27n"]
 [ext_resource type="Script" uid="uid://bjq45t2wxwdok" path="res://features/text_emitter.gd" id="2_5bb38"]
@@ -7,6 +7,7 @@
 [ext_resource type="FastNoiseLite" uid="uid://dkdvopuww2mvf" path="res://features/pen_noise.tres" id="3_1616p"]
 [ext_resource type="Script" uid="uid://blslya0uscec0" path="res://characters/msg_sprite.gd" id="4_xtdfu"]
 [ext_resource type="Shader" uid="uid://wttq45m7cg4k" path="res://shaders/msg_future_line.gdshader" id="6_wiuub"]
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="8_vnrsg"]
 
 [sub_resource type="Curve2D" id="Curve2D_gi4pm"]
 
@@ -30,7 +31,7 @@ colors = PackedColorArray(0, 0, 0, 0.27450982, 0, 0, 0, 1)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1616p"]
 shader = ExtResource("6_wiuub")
 shader_parameter/progress_ratio = 0.0
-shader_parameter/glow_color = Color(0, 0.8, 1, 0.8)
+shader_parameter/glow_color = Color(0.8543699, 0.7918695, 1, 0.8)
 shader_parameter/speed = 1.5
 shader_parameter/frequency = 3.0
 shader_parameter/tail_length = 0.5
@@ -61,4 +62,5 @@ script = ExtResource("2_5bb38")
 [node name="FutureLine" type="Line2D" parent="."]
 z_index = 5
 material = SubResource("ShaderMaterial_1616p")
+texture = ExtResource("8_vnrsg")
 texture_mode = 2
