@@ -193,3 +193,9 @@ static func save_to(data,path):
 	var file = FileAccess.open(path,FileAccess.WRITE)
 	file.store_var(data)
 	Logging.info('存储 %s 到了 %s' % [data,path])
+
+static func get_mesh_instance_size(mesh_inst: MeshInstance2D) -> Vector3:
+	var siz = mesh_inst.mesh.get_aabb().size
+	siz.x *= mesh_inst.scale.x
+	siz.y *= mesh_inst.scale.y
+	return siz

@@ -1,6 +1,6 @@
 class_name PathVisualizer extends Node
 
-static func get_bezier_path(p1_id: String, p2_id: String) -> Curve2D:
+static func get_bezier_path(p1_id: String, p2_id: String, x, y) -> Curve2D:
 	# 从单例获取路径 ID 序列
 	var node_indices = NavigationService.get_index_id_path(p1_id, p2_id)
 	if node_indices.size() < 2: return null
@@ -12,8 +12,8 @@ static func get_bezier_path(p1_id: String, p2_id: String) -> Curve2D:
 		var curr_id = NavigationService.get_province_id_from_idx(node_indices[i])
 		var next_id = NavigationService.get_province_id_from_idx(node_indices[i+1])
 		
-		var start_pos = Global.base_province[curr_id].position
-		var end_pos = Global.base_province[next_id].position
+		var start_pos = Global.base_province[curr_id].uv_position * x
+		var end_pos = Global.base_province[next_id].uv_position * y
 		
 		# 每一段路径：起点 -> 扰动点 -> 终点
 		# 注意：Curve2D 会自动处理连接，不需要重复添加起点

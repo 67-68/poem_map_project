@@ -70,8 +70,11 @@ static func load_csv_model(model_class: Variant, file_path: String) -> Array[Gam
 		var entity_data = {"properties": {}}
 		
 		# 1. 坐标聚合：把分家的 x, y 合并成 Vector2
-		if raw_data.has("x") and raw_data.has("y"):
+		if raw_data.has("uv_x") and raw_data.has("uv_x"):
+			entity_data["uv_position"] = Vector2(float(raw_data.uv_x), float(raw_data.uv_y))
+		elif raw_data.has("x") and raw_data.has("y"):
 			entity_data["position"] = Vector2(float(raw_data.x), float(raw_data.y))
+			Logging.warn('使用正常position加载了数据，请确认数据中的position是符合游戏的')
 		
 		# 2. 分类归档：哪些进核心字段，哪些进属性字典
 		for key in raw_data.keys():

@@ -33,7 +33,9 @@ gradient = SubResource("Gradient_pygyx")
 [node name="MsgPathFollow" type="PathFollow2D" parent="."]
 
 [node name="MsgSprite" type="Sprite2D" parent="MsgPathFollow"]
+z_index = 5
 texture = ExtResource("2_a1w0b")
+centered = false
 script = ExtResource("4_xtdfu")
 
 [node name="TextEmitter" type="Node2D" parent="MsgPathFollow"]

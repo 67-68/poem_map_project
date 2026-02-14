@@ -14,7 +14,8 @@ func send_message(from_id, to_id, type: int): # int: MSG_TYPE
 	if path_cache.get([from_id,to_id]):
 		path = path_cache.get([from_id,to_id])
 	else:
-		path = PathVisualizer.get_bezier_path(from_id,to_id)
+		var mesh_size = Util.get_mesh_instance_size(mesh)
+		path = PathVisualizer.get_bezier_path(from_id,to_id,mesh_size.x,mesh_size.y)
 	var ids = NavigationService.get_uuid_id_path(from_id,to_id)
 	
 	var messager = preload("res://characters/messager.tscn").instantiate()

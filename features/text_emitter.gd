@@ -33,7 +33,7 @@ func _detect_and_emit():
 	# print("Local: ", local_pos, " Offset: ", offset_pos, " Size: ", mesh_size, " UV: ", uv)
 
 	if uv.x < 0 or uv.x > 1 or uv.y < 0 or uv.y > 1: 
-		# 超出边界，不报错，直接返回（信使可能跑到了地图外的虚空）
+		Logging.err('text emitter is outside of the map!!!')
 		return
 	
 	var px = int(uv.x * Global.index_image.get_width())

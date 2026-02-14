@@ -13,7 +13,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if $TrailLine.get_point_count() > 50:
 		$TrailLine.remove_point(0)
-	$TrailLine.add_point(position)
+	$TrailLine.add_point($MsgPathFollow.position)
 
 func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D):
 	curve = curve_

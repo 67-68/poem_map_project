@@ -1,8 +1,24 @@
 class_name WorldEvent extends GameEntity
 
-@export var position: Vector2
+var position: Vector2:
+    get:
+        return _get_deprecated_position()
+    set(val):
+        _set_deprecated_position(val)
+
+var _position: Vector2
+
+func _get_deprecated_position():
+    return _position
+
+func _set_deprecated_position(val):
+    _position = val
+
 @export var year: int
 @export var location_uuid: String
+@export var uv_position: float #0-1
+
+
 
 func _init(data: Dictionary = {}):
     # 1. 先让父类干活 (解析 uuid, name 等)
