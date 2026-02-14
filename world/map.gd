@@ -84,9 +84,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		on_prov_clicked(prov)
 
 func on_prov_clicked(prov: Territory):
-	Logging.info('user click %s prov with a position of %s' % [prov.name,prov.position])
+	Logging.info('user click %s prov with a uv_position of %s' % [prov.name,prov.uv_position])
 	Logging.info('uuid: ' + prov.uuid)
 	Logging.info('color: ' + prov.color.to_html(false))
+	Logging.info('position: %s' % prov.get_local_pos($background/ClickMesh))
 	EventBus.user_click_map.emit(prov)
 	var mat = $background/ClickMesh.material as ShaderMaterial
 	mat.set_shader_parameter('selected_id_color',prov.color)

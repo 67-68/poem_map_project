@@ -53,3 +53,10 @@ func _init(data: Dictionary = {}):
     
     # 4. 解析地点 ID
     location_uuid = props.get("location_uuid", data.get("location_uuid", ""))
+
+func get_local_pos(mesh: MeshInstance2D):
+    var mesh_size = Util.get_mesh_instance_size(mesh)
+    var pos = Vector2.ZERO
+    pos.x = mesh_size.x * uv_position.x
+    pos.y = mesh_size.y * uv_position.y
+    return pos
