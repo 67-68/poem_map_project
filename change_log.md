@@ -1,3 +1,13 @@
+## Added
+- debug tool in navigation service
+- debug overlay
+- debug util
+
+## Fixed
+- messager manager @tool error
+- 
+
+
 # [0.7.0]
 ## Added
 - after failed large batch refactor, I choose to refactor step by step

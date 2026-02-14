@@ -19,6 +19,9 @@ func _ready():
 	_next_msger_time = Global.msger_data.values()[0].year
 
 func _process(_delta):
+	if Engine.is_editor_hint():
+		return
+	#breakpoint
 	if Global.year > _next_msger_time:
 		Logging.info('messager triggered')
 		breakpoint

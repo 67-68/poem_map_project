@@ -100,3 +100,41 @@ static func draw_debug_connections(canvas_item: CanvasItem, connections: Diction
 			canvas_item.draw_line(start_pos, end_pos, Color.GREEN, 2.0)
 			# 画个圈表示节点
 			canvas_item.draw_circle(start_pos, 4.0, Color.RED)
+
+# 在 NavigationService 或 DebugUtils 中
+static func analyze_graph_connectivity(all_ids: Array, connections: Dictionary) -> void:
+	var visited = {}
+	var islands = []
+	
+	for id in all_ids:
+		if visited.has(id): continue
+		
+		# 发现新大陆！开始洪水填充
+		var island_nodes = []
+		var stack = [id]
+		visited[id] = true
+		
+		while stack.size() > 0:
+			var current = stack.pop_back()
+			island_nodes.append(current)
+			
+			# 遍历邻居
+			if connections.has(current):
+				for neighbor in connections[current]:
+					if not visited.has(neighbor):
+						visited[neighbor] = true
+						stack.append(neighbor)
+		
+		islands.append(island_nodes)
+	
+	# 💀 审判时刻
+	Logging.info("---------------- 地图连通性审计 ----------------")
+	Logging.info("总共有 %d 个互不连通的岛屿群组。" % islands.size())
+	
+	if islands.size() > 1:
+		push_error("❌ 严重警告：地图是分裂的！信使无法跨越岛屿。")
+		for i in range(islands.size()):
+			var sample = islands[i].slice(0, min(5, islands[i].size())) # 只打印前5个看看
+			Logging.info("  - 岛屿 %d (包含 %d 个州): 例如 %s" % [i, islands[i].size(), sample])
+	else:
+		Logging.info("✅ 完美。全图连通，天下一统。")
