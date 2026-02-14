@@ -8,3 +8,4 @@ singleton第一项
 func _ready():
 	Global.init()
 	NavigationService.init()
+	Logging.done('gameboot')

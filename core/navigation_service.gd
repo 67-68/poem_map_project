@@ -41,6 +41,8 @@ func init():
 			var to_idx = prov_2_idx.get(neighbor_id, -1)
 			if from_idx != -1 and to_idx != -1:
 				astar.connect_points(from_idx, to_idx)
+				
+	Logging.info('a star done build cache')
 		
 # 根据省份 ID 获取路径点 ID 序列
 func get_index_id_path(start_id: String, end_id: String) -> Array:

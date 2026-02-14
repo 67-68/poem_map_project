@@ -20,3 +20,9 @@ func exists(source: String,...obj):
     for o in obj:
         if not o:
             err('the %s object from %s not found' % [i,source])
+
+func done(name: String,domain = ''):
+    if domain:
+        Logging.info('[%s] %s done loading' % [domain,name])    
+        return
+    Logging.info('%s done loading' % name)

@@ -9,7 +9,16 @@ func _ready() -> void:
 	# 2. 加载并赋值
 	$MessagerManager.mesh = $background/BorderMesh
 	Logging.info("✅ 赋值成功，当前 Mesh 资源: %s" % $MessagerManager.mesh)
-	
+
+	create_provinces()
+	Logging.done('create province')
+	render_factions()
+	Logging.done('render faction')
+
+func _on_add_messager(msg: Messager):
+	$background/PathMesh.add_child(msg)
+
+func load_character_point():
 	var character_point = load("res://world/character_point.tscn")
 	for item in Global.poet_data.values():
 		var node = character_point.instantiate()
@@ -20,12 +29,7 @@ func _ready() -> void:
 		node.get_node('Label').text = item.name
 		node.datamodel = item
 		add_child(node)
-	
-	create_provinces()
-	render_factions()
-
-func _on_add_messager(msg: Messager):
-	$background/PathMesh.add_child(msg)
+		Logging.done('character point')
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -40,7 +44,10 @@ func render_factions():
 		var prov_ids = Util.resolve_to_provinces(fac.provinces)
 		for p_id in prov_ids:
 			prov_2_fac[p_id] = fac
-
+	
+	Logging.done('create prov to faction dict','render factions')
+	
+	
 	# 2. 更新势力颜色查找表 (LUT)
 	# 这个函数应该返回那张 512x1 的贴图
 	var lut_tex = $FactionMapRenderer.refresh_lut_image(prov_2_fac)
@@ -49,9 +56,10 @@ func render_factions():
 	# 你需要拿到那张原始的、带颜色的 index_map 图片资源
 	# 假设你已经把它加载到了某个变量里，比如 Global.original_index_image
 	var original_map_img = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
-	
 	# 将“原始地理图”重焙为“机器索引图”
 	var color_2_idx_tex = Util.bake_index_map(original_map_img, $FactionMapRenderer._color_to_idx_map)
+	# 是重焙的问题！
+	Logging.done('rebake index map to machine index map','render faction')
 	
 	# 4. 获取目标材质
 	# 注意：你之前说要用新的 Mesh，请确保路径是对的。

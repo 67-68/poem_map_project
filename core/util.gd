@@ -121,67 +121,84 @@ static func _explode_recursive(current_id: String, result_set: Dictionary, visit
 		# 它是一个原子单位，记录下来
 		result_set[current_id] = true
 
-# 核心函数：将原始乱序颜色图转换为“纯索引 ID 图”
+# 核心函数：将原始无损颜色图转换为“纯索引 ID 图”
 static func bake_index_map(original_img: Image, color_to_idx_dict: Dictionary) -> ImageTexture:
+	Logging.info('start rebaking index map to machine index map')
+	
+	# 【防御性编程】强制统一内存格式，防止美术给你混入 RGB8 或带调色板的图 😡
+	if original_img.get_format() != Image.FORMAT_RGBA8:
+		original_img.convert(Image.FORMAT_RGBA8)
+		
 	var width = original_img.get_width()
 	var height = original_img.get_height()
-	var processed_img = Image.create(width, height, false, Image.FORMAT_RGBA8)
 	
+	# 直接提取连续内存块，放弃低效的像素级操作
+	var src_data: PackedByteArray = original_img.get_data()
+	var dst_data: PackedByteArray = PackedByteArray()
+	dst_data.resize(src_data.size()) # 预分配同等大小的内存
+	
+	# ---------------------------------------------------------
+	# 预处理：构建 O(1) 的整形哈希字典
+	# 把 Hex 字符串翻译成 Int32 键值，拒绝在遍历中做任何对象分配！
+	# ---------------------------------------------------------
+	var int_lookup = {}
+	for hex in color_to_idx_dict.keys():
+		var c = Color.from_string(hex, Color.BLACK)
+		var r8 = int(c.r * 255.0)
+		var g8 = int(c.g * 255.0)
+		var b8 = int(c.b * 255.0)
+		# 用位移操作生成唯一 ID (r拼接到第16位，g拼接到第8位)
+		var color_int = (r8 << 16) | (g8 << 8) | b8
+		int_lookup[color_int] = color_to_idx_dict[hex]
+
 	var match_count = 0
 	var fail_count = 0
-	var sample_fails = [] # 记录前几个失败的颜色
+	var sample_fails = {} # 用字典去重记录失败颜色
 
-	var lookup = []
-	for hex in color_to_idx_dict.keys():
-		lookup.append({
-			"c": Color.from_string(hex, Color.BLACK), 
-			"id": color_to_idx_dict[hex], 
-			"hex": hex
-		})
+	# ---------------------------------------------------------
+	# 主循环：以 4 字节 (R, G, B, A) 为步长狂飙
+	# ---------------------------------------------------------
+	for i in range(0, src_data.size(), 4):
+		var r = src_data[i]
+		var g = src_data[i+1]
+		var b = src_data[i+2]
+		var a = src_data[i+3]
+		
+		# 背景过滤：Alpha < 13 约等于之前的 0.05
+		if a < 13:
+			# dst_data 默认是 0，可以不写，但显式写入防患于未然
+			dst_data[i] = 0; dst_data[i+1] = 0; dst_data[i+2] = 0; dst_data[i+3] = 0
+			continue
+			
+		# 计算当前像素的整数哈希
+		var color_int = (r << 16) | (g << 8) | b
+		
+		if int_lookup.has(color_int):
+			var best_id = int_lookup[color_int]
+			# 写入索引：还原回 0-255 的字节写入
+			dst_data[i] = int((float(best_id) / 512.0) * 255.0)
+			dst_data[i+1] = 0
+			dst_data[i+2] = 0
+			dst_data[i+3] = 255 # Alpha 1.0 标识有效
+			match_count += 1
+		else:
+			# 匹配失败：涂成纯白
+			dst_data[i] = 255; dst_data[i+1] = 255; dst_data[i+2] = 255; dst_data[i+3] = 255
+			fail_count += 1
+			if sample_fails.size() < 5:
+				# 记录真实的错误色值，方便你去痛骂上游 🤓☝️
+				sample_fails["%02x%02x%02x" % [r, g, b]] = true
 
-	for y in range(height):
-		for x in range(width):
-			var p = original_img.get_pixel(x, y)
-			
-			# 背景过滤：透明度太低或者几乎纯黑且透明的像素直接过
-			if p.a < 0.05:
-				processed_img.set_pixel(x, y, Color(0, 0, 0, 0))
-				continue 
-			
-			var best_id = -1
-			# 容差阈值 (0.15 左右通常能过滤掉 JPG 明显的压缩噪声)
-			var threshold = 0.005
-			
-			for entry in lookup:
-				# 手动计算 RGB 空间的距离 (Euclidean Distance)
-				var r_diff = p.r - entry.c.r
-				var g_diff = p.g - entry.c.g
-				var b_diff = p.b - entry.c.b
-				var dist = sqrt(r_diff*r_diff + g_diff*g_diff + b_diff*b_diff)
-				
-				if dist < threshold:
-					best_id = entry.id
-					break
-			
-			if best_id != -1:
-				# 写入索引：ID / 512.0 (确保 360 个州都在 0-1 范围内)
-				# Alpha 设为 1.0 是为了让 Shader 的 mask 能够识别出这是有效像素
-				processed_img.set_pixel(x, y, Color(float(best_id)/512.0, 0, 0, 1.0))
-				match_count += 1
-			else:
-				# 匹配失败：涂成纯白 (1, 1, 1, 1)
-				# 这样你在调试 Shader 的 mode 1 时，看到的白色斑块就是“没对上号”的州
-				processed_img.set_pixel(x, y, Color(1, 1, 1, 1))
-				fail_count += 1
-				if sample_fails.size() < 5:
-					sample_fails.append(p.to_html(false))
+	# 一次性从内存块重建图像，优雅，高效 😭
+	var processed_img = Image.create_from_data(width, height, false, Image.FORMAT_RGBA8, dst_data)
 
-	print("--- [重焙审计报告] ---")
+	# 纠错反馈循环
+	print("--- [重焙审计报告 (内存狂飙版)] ---")
 	print("字典大小: ", color_to_idx_dict.size())
 	print("匹配成功像素: ", match_count)
 	print("匹配失败像素: ", fail_count)
 	if fail_count > 0:
-		print("典型失败颜色样例: ", sample_fails)
+		print("典型失败颜色样例 (Hex): ", sample_fails.keys())
 	print("----------------------")
 	
 	return ImageTexture.create_from_image(processed_img)
