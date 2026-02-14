@@ -7,28 +7,41 @@ var mesh: MeshInstance2D
 var allow_timer := false
 
 signal travel_end()
-
-func _ready() -> void:
-	pass
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	#breakpoint
+	# --- 过去的拖尾 (CPU 维护) ---
 	if $TrailLine.get_point_count() > 150:
 		$TrailLine.remove_point(0)
 	$TrailLine.add_point($MsgPathFollow.position)
-	#print($MsgPathFollow.position)
+	
+	# --- 未来的路径 (GPU 同步) ---
+	# 核心：利用 PathFollow2D 自带的 progress_ratio (0.0 到 1.0)
+	# 将其作为一个匀速递增的浮点数，直接塞进 Shader 的嘴里
+	var future_mat = $FutureLine.material as ShaderMaterial
+	if future_mat:
+		future_mat.set_shader_parameter("current_progress", $MsgPathFollow.progress_ratio)
 
 func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D):
-	Logging.exists('init of messager',curve_,path_points_,mesh_)
+	Logging.exists('init of messager', curve_, path_points_, mesh_)
 	curve = curve_
-	path_points = path_points_
+	
+	# 😡 那个传进来的 path_points_ 已经是历史的垃圾了，以后可以把它从接口里删掉
+	# path_points = path_points_ 
+	
 	$MsgPathFollow/TextEmitter.mesh = mesh_
 	mesh = mesh_
 	Logging.info('passanger: mesh设置完成 %s' % mesh)
 
-	# 初始化future line
-	var future_path = $FutureLine as Line2D
+	# -----------------------------------------------------
+	# 核心基建：初始化 Future Line
+	# -----------------------------------------------------
+	var future_line = $FutureLine as Line2D
+	
+	# 防御性编程 1：强制接管 UV 展开，防止你在编辑器里忘记设为 Stretch 💀
+	future_line.texture_mode = Line2D.LINE_TEXTURE_STRETCH
+	
+	# 防御性编程 2：拿来主义，直接把引擎在 C++ 层算好的平滑曲线点塞进去
+	# get_baked_points() 会返回一条密度极高、绝对贴合的完美曲线
+	future_line.points = curve.get_baked_points()
 
 	
 func start_travel():
