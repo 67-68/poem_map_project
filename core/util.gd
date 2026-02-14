@@ -217,7 +217,6 @@ static func get_mesh_instance_size(mesh_inst: MeshInstance2D) -> Vector3:
 	siz.y *= mesh_inst.scale.y
 	return siz
 
-
 static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
 	"""
 	给msger加上它对应的文字，图片，速度之类的效果

@@ -3,7 +3,7 @@ extends Control
 
 var tw: Tween
 
-@export var stamp_config := preload('res://features/stamp_config.tres')
+@export var stamp_config := preload('res://assets/stamp_config.tres')
 @onready var book_panel = $BookPanel
 @onready var title_label = $BookPanel/MarginContainer/HBox/VBox/TitleLabel
 @onready var content_label = $BookPanel/MarginContainer/HBox/VBox/ContentLabel
@@ -23,7 +23,7 @@ func on_apply_poem(data: PoemData,poet_data):
 	if data.background == PoemData.Poem_BG.BOOK:
 		pass
 
-	var juanzhou_bg = preload('res://features/poem_background_juanzhou.tres')
+	var juanzhou_bg = preload('res://assets/poem_background_juanzhou.tres')
 	book_panel.add_theme_stylebox_override('panel',juanzhou_bg)
 	create_animation()
 	create_notification(data,poet_data)

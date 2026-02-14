@@ -4,7 +4,11 @@ class_name MessagerManager extends Node
 	set(val):
 		if is_node_ready() and val:
 			start = false
-			send_message('luo_zhou','shan_zhou_shan_xi',MSG_TYPE.CRITICAL)
+			var d := MessagerData.new({})
+			d.source_id = 'luo_zhou'
+			d.target_id = 'you_zhou'
+			d.msger_type = MSG_TYPE.CRITICAL
+			send_message(d)
 
 var mesh: MeshInstance2D
 var path_cache: Dictionary[Array,Curve2D] = {}
@@ -15,8 +19,9 @@ func _ready():
 	_next_msger_time = Global.msger_data.values()[0].year
 
 func _process(_delta):
-	
 	if Global.year > _next_msger_time:
+		Logging.info('messager triggered')
+		breakpoint
 		send_message(DataHelper.find_item_by_filter(Global.msger_data,'year',_next_msger_time))
 		_next_msger_time = update_msger_time(_next_msger_time,Global.msger_data.values())
 

@@ -54,3 +54,49 @@ static func show_runtime_preview(parent: Node, tex: Texture2D):
 # 1. 如果导出的 PNG 是全黑的，说明你的 bake_index_map 循环里逻辑全灭了。
 # 2. 如果导出的 PNG 是全红的（R=1.0），说明你的颜色匹配容差 (Tolerance) 设置得太极端了。
 # 3. 重点看 Alpha 通道：如果 Alpha 是 0，Shader 里的 mask 就会把你的大唐直接抹除。💀
+
+# 1. 孤岛检测：找出所有登记在册但没有连接的朋友
+# 返回：一个孤儿数组 [id1, id2, ...]
+static func find_orphans(all_province_ids: Array, connections: Dictionary) -> Array:
+	var orphans = []
+	for pid in all_province_ids:
+		# 如果字典里根本没有这个 Key，或者这个 Key 对应的数组为空
+		if not connections.has(pid) or connections[pid].is_empty():
+			orphans.append(pid)
+	
+	if orphans.size() > 0:
+		push_warning("⚠️ [地图审计] 发现 %d 个孤岛州（无连接）！列表如下：" % orphans.size())
+		print(orphans)
+	else:
+		print("✅ [地图审计] 完美。所有州都至少有一个邻居。")
+		
+	return orphans
+
+# 2. 视觉调试：直接在画面上画出连接线
+# 用法：在你的 Map View 的 _draw() 方法里调用这个
+# 需要传入：连接数据，以及每个州的一个中心点坐标字典 {id: Vector2}
+static func draw_debug_connections(canvas_item: CanvasItem, connections: Dictionary, centers: Dictionary):
+	var drawn_pairs = {} # 防止重复画线 A-B 和 B-A
+	
+	for source_id in connections:
+		if not centers.has(source_id): continue
+		
+		var start_pos = centers[source_id]
+		var neighbors = connections[source_id]
+		
+		for target_id in neighbors:
+			if not centers.has(target_id): continue
+			
+			# 生成唯一键，避免重复绘制
+			var pair_key = [source_id, target_id]
+			pair_key.sort() # 保证 A-B 和 B-A 是一样的 Key
+			if drawn_pairs.has(pair_key): continue
+			
+			drawn_pairs[pair_key] = true
+			
+			var end_pos = centers[target_id]
+			
+			# 绘制连线：绿色代表连通
+			canvas_item.draw_line(start_pos, end_pos, Color.GREEN, 2.0)
+			# 画个圈表示节点
+			canvas_item.draw_circle(start_pos, 4.0, Color.RED)

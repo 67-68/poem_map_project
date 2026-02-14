@@ -1,28 +1,52 @@
+@tool
 # ----------------------------------------------------------------
 # NavigationService - 逻辑层
 # ----------------------------------------------------------------
 extends Node
 
+
+@export var debug_find_orphan_id: bool = false:
+	set(val):
+		if val:
+			debug_find_orphan_id = false
+			var ids := []
+			for item in Global.base_province:
+				ids.append(item)
+			var orphans = DebugUtils.find_orphans(ids,adjacency_map)
+			Logging.info('debug orphan done: %s' % orphans)
+
+@export var debug_draw_connections: bool = false:
+	set(val):
+		if val:
+			debug_draw_connections = false
+			var centers := {}
+			for item in Global.base_province.values():
+				centers[item.uuid] = (item.get_local_pos(Global.map.get_node("background/BorderMesh")))
+			DebugUtils.draw_debug_connections(get_node('/root/Main/UI'),adjacency_map,centers)
+			Logging.info('show the border')
+			
+	
+
 var astar: AStar2D
 var prov_2_idx: Dictionary = {} # { "su_zhou": 1 }
 var idx_2_prov: Dictionary = {}
 var dirty = true
+var adjacency_map: Dictionary
 
 func init():
 	if not dirty: return
 	dirty = false
 	astar = AStar2D.new()
 	var color_2_prov := {}
-	
+
 	# 预处理颜色字典
 	for p_id in Global.base_province:
-		#breakpoint # 值得怀疑，是不是这里出问题了，穿进去了prov resource?或者没有加载; i fix the gameboot, lead to loading priority issue
 		var prov = Global.base_province[p_id]
 		color_2_prov[prov.color.to_html(false)] = p_id
 	
 	# 2. 获取邻接数据 (注意：load 需要加上 .get_image())
 	var img = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
-	var adjacency_map = AdjacencyManager.get_adjacency_map(img, color_2_prov)
+	adjacency_map = AdjacencyManager.robust_scan(img, color_2_prov)
 	
 	# 3. 注册节点
 	var idx = 0
@@ -52,7 +76,8 @@ func get_index_id_path(start_id: String, end_id: String) -> Array:
 	var e = prov_2_idx.get(end_id, -1)
 	if s == -1 or e == -1: return []
 	# AStar2D 返回的是 PackedInt32Array
-	return Array(astar.get_id_path(s, e))
+	var path = astar.get_id_path(s, e)
+	return Array(path)
 
 # 辅助：根据索引反查省份 ID
 func get_province_id_from_idx(target_idx: int) -> String:

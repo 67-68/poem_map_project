@@ -5,6 +5,7 @@ var index_image: Image
 var color_2_province: Dictionary
 
 func _ready() -> void:
+	Global.map = self
 	Global.request_add_messager.connect(_on_add_messager)
 	# 2. 加载并赋值
 	$MessagerManager.mesh = $background/BorderMesh

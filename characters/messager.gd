@@ -26,8 +26,8 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D,
 	逻辑:
 	messager manager 在外部根据msg type 赋值
 	它自己寻找msger_data内的属性赋值，如果存在
-
 	"""
+	msger_data = msger_data_
 	Util.apply_msg_type(self,msger_data.msger_type)
 
 	Logging.exists('init of messager', curve_, path_points_, mesh_)
@@ -57,7 +57,6 @@ static func apply_msger_data(msger: Messager,data: MessagerData):
 	"""
 	赋予msger它的data中那些可以直接影响到它行动的属性
 	"""
-	msger.msger_data = data
 	if data.popup_text:
 		msger.txt = data.popup_text
 	if data.color and data.color != Color.WHITE:

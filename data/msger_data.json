@@ -1,0 +1,41 @@
+[
+  {
+    "year": 755,
+    "source_id": "you_zhou",
+    "target_id": "luo_zhou",
+    "popup_text": "叛乱",
+    "color": "red",
+    "msger_type": 1,
+    "speed": 200,
+    "properties": {
+      "msger_uuid": "an_lushan_rebel_01",
+      "historical_note": "安史之乱爆发，八百里加急军情或叛军推进"
+    }
+  },
+  {
+    "year": 756,
+    "source_id": "yong_zhou",
+    "target_id": "yi_zhou_shu_di",
+    "popup_text": "避乱",
+    "color": "gold",
+    "msger_type": 0,
+    "speed": 80,
+    "properties": {
+      "msger_uuid": "emperor_xuanzong_flee",
+      "historical_note": "唐玄宗幸蜀，速度极慢，皇室狼狈出逃"
+    }
+  },
+  {
+    "year": 758,
+    "source_id": "luo_zhou",
+    "target_id": "shan_zhou",
+    "popup_text": "抓丁",
+    "color": "gray",
+    "msger_type": 2,
+    "speed": 120,
+    "properties": {
+      "msger_uuid": "tax_collector_shihao",
+      "historical_note": "石壕吏背景，郭子仪邺城兵败，中央在洛阳-陕州一线疯狂拉壮丁"
+    }
+  }
+]

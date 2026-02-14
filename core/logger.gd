@@ -20,6 +20,7 @@ func exists(source: String,...obj):
     for o in obj:
         if not o:
             err('the %s object from %s not found' % [i,source])
+            breakpoint
 
 func done(name: String,domain = ''):
     if domain:

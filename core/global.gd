@@ -38,6 +38,11 @@ var current_selected_poet: PoetData
 # view
 var slider_light_speed: int = 1
 var color_2_province: Dictionary
+
+
+var map: Node2D
+
+
 # 用来展示poet
 signal user_clicked(PoetData) # 值可以为空，express 点到空处，面板hide
 
