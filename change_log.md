@@ -1,13 +1,21 @@
+# [0.7.0]
 ## Added
 - after failed large batch refactor, I choose to refactor step by step
 - poem data -> position point
 - SizeService
 - poem creation animation
 - update popup appearance
+- map
+- text emitter
+- click map can highlight
+- faction render
+- height map
+- messanger
 
 ## Fixed
 - can not load stamp config
 - stamp level shiyi do not have texture
+- low startup speed
 
 # [0.4.0]
 ## Added
