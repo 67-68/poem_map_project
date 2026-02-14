@@ -16,6 +16,7 @@ func init():
 	
 	# 预处理颜色字典
 	for p_id in Global.base_province:
+		#breakpoint # 值得怀疑，是不是这里出问题了，穿进去了prov resource?或者没有加载; i fix the gameboot, lead to loading priority issue
 		var prov = Global.base_province[p_id]
 		color_2_prov[prov.color.to_html(false)] = p_id
 	

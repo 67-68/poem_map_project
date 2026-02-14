@@ -6,6 +6,8 @@ var txt: String
 var mesh: MeshInstance2D
 var allow_timer := false
 
+signal travel_end()
+
 func _ready() -> void:
 	pass
 
@@ -16,6 +18,7 @@ func _process(_delta: float) -> void:
 	$TrailLine.add_point($MsgPathFollow.position)
 
 func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D):
+	Logging.exists('init of messager',curve_,path_points_,mesh_)
 	curve = curve_
 	path_points = path_points_
 	$MsgPathFollow/TextEmitter.mesh = mesh_
@@ -26,14 +29,6 @@ func start_travel():
 	# 1. 核心 API：获取路径的像素总长度
 	# get_baked_length() 是 Godot 预计算好的，性能极高
 	var total_distance = curve.get_baked_length()
-
-	# 【调试代码】画一条显眼的红线，确信路径存在
-	var debug_line = Line2D.new()
-	debug_line.points = curve.get_baked_points()
-	debug_line.width = 5.0
-	debug_line.default_color = Color.RED
-	add_child(debug_line)
-	
 	print("🐎 信使出发！位置: ", global_position, " 路径长度: ", curve.get_baked_length())
 	
 	# 2. 计算出这趟旅程实际需要的秒数
@@ -56,3 +51,4 @@ func start_timer():
 
 func end_timer():
 	allow_timer = false
+	travel_end.emit()

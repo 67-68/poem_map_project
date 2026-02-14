@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 """
 总初始化
 singleton第一项
@@ -6,4 +6,5 @@ singleton第一项
 """
 
 func _ready():
+	Global.init()
 	NavigationService.init()

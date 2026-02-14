@@ -15,3 +15,8 @@ func debug(msg): _log(Level.DEBUG, msg, "gray")
 func info(msg):  _log(Level.INFO,  msg, "white")
 func warn(msg):  _log(Level.WARN,  msg, "yellow")
 func err(msg):   _log(Level.ERROR, msg, "red")
+func exists(source: String,...obj):
+    var i := 0
+    for o in obj:
+        if not o:
+            err('the %s object from %s not found' % [i,source])

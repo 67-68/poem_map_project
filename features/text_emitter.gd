@@ -14,6 +14,7 @@ func _detect_and_emit():
 		return
 
 	# 1. 获取相对于 Mesh 节点的局部坐标
+	breakpoint # 看看position什么情况
 	var local_pos = mesh.to_local(global_position)
 	
 	# 2. 获取 Mesh 的 AABB (轴对齐包围盒)
@@ -43,8 +44,8 @@ func _detect_and_emit():
 	if color.a < 0.1: return # 在水里或荒野
 
 	var hex = color.to_html(false)
-	var current_province_id = Global.color_2_province.get(hex, "")
-	if current_province_id != _last_prov_id and current_province_id != "":
+	var current_province_id = Global.color_2_province.get(hex, "").uuid
+	if not current_province_id != _last_prov_id and current_province_id != "":
 		_emit_text(current_province_id)
 		_last_prov_id = current_province_id
 

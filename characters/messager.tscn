@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://7oukwpirj516"]
+[gd_scene load_steps=12 format=3 uid="uid://7oukwpirj516"]
 
 [ext_resource type="Script" uid="uid://drqj2eq4lfi84" path="res://characters/messager.gd" id="1_lq27n"]
 [ext_resource type="Script" uid="uid://bjq45t2wxwdok" path="res://features/text_emitter.gd" id="2_5bb38"]
 [ext_resource type="Texture2D" uid="uid://csf0pdqpuijew" path="res://assets/profile/poet-libai-001.png" id="2_a1w0b"]
 [ext_resource type="Shader" uid="uid://2j8pc85i3h0" path="res://shaders/trail_shader.gdshader" id="2_pygyx"]
 [ext_resource type="Script" uid="uid://blslya0uscec0" path="res://characters/msg_sprite.gd" id="4_xtdfu"]
+[ext_resource type="Shader" uid="uid://wttq45m7cg4k" path="res://shaders/msg_future_line.gdshader" id="6_wiuub"]
 
 [sub_resource type="Curve2D" id="Curve2D_gi4pm"]
 
@@ -21,6 +22,10 @@ point_count = 2
 [sub_resource type="Gradient" id="Gradient_pygyx"]
 colors = PackedColorArray(0, 0, 0, 0.27450982, 0, 0, 0, 1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1616p"]
+shader = ExtResource("6_wiuub")
+shader_parameter/progress_ratio = 0.0
+
 [node name="Messager" type="Path2D"]
 curve = SubResource("Curve2D_gi4pm")
 script = ExtResource("1_lq27n")
@@ -34,12 +39,13 @@ gradient = SubResource("Gradient_pygyx")
 
 [node name="MsgSprite" type="Sprite2D" parent="MsgPathFollow"]
 z_index = 5
+scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_a1w0b")
-centered = false
 script = ExtResource("4_xtdfu")
 
 [node name="TextEmitter" type="Node2D" parent="MsgPathFollow"]
 script = ExtResource("2_5bb38")
 
 [node name="FutureLine" type="Line2D" parent="."]
+material = SubResource("ShaderMaterial_1616p")
 texture_mode = 2

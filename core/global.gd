@@ -7,7 +7,7 @@ const PROVINCE_INDEX_MAP_PATH := "res://assets/maps/provinces.png"
 const PERMANENT_DATA_PATH := 'res://assets/maps/'
 const ADJACENCY_CACHE_PATH := 'res://assets/maps/map_connections_cache.json'
 
-const PATH_NOISE = 10 # 最高可能偏移10px
+const PATH_NOISE = 0 # 最高可能偏移10px
 
 const LON_MIN := 21.35
 const LON_MAX := 122.28
@@ -65,8 +65,7 @@ var factions: Dictionary
 var base_province: Dictionary
 var territories: Dictionary
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func init():
 	index_image = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
 	Logging.current_level = Logging.Level.DEBUG
 

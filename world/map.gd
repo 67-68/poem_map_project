@@ -4,7 +4,6 @@ var datamodel: PoetData
 var index_image: Image
 var color_2_province: Dictionary
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Global.request_add_messager.connect(_on_add_messager)
 	# 2. 加载并赋值

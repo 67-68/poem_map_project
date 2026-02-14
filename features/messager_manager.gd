@@ -23,10 +23,15 @@ func send_message(from_id, to_id, type: int): # int: MSG_TYPE
 		Logging.err('do not found mesh')
 		return
 	messager.initialization(path,ids,mesh)
+	messager.travel_end.connect(end_msger.bind(messager))
 
 	Global.request_add_messager.emit(messager)
 	apply_msg_type(messager,type)
 	messager.start_travel()
+	
+func end_msger(msger):
+	Logging.debug('free a mesger')
+	msger.queue_free()
 
 static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
 	"""

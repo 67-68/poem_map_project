@@ -9,7 +9,9 @@ static func get_adjacency_map(idx_img: Image, color_to_id: Dictionary, force_bab
 			return json_data
 		
 	Logging.info('正在扫描像素')
+	#breakpoint # 是不是这里没有数据导致的，没错
 	var connections = _scan_pixels(idx_img,color_to_id)
+
 	Util.save_to(connections,Global.ADJACENCY_CACHE_PATH)
 	return connections
 
