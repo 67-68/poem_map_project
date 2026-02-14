@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dvm6jj0xbsm0l" path="res://features/poem_popup.gd" id="1_hqy85"]
 [ext_resource type="Script" uid="uid://cn0nq4obf1au7" path="res://features/poem_animation.gd" id="1_uow2x"]
-[ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://features/poem_background_juanzhou.tres" id="2_f2n1e"]
+[ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://assets/poem_background_juanzhou.tres" id="2_f2n1e"]
 [ext_resource type="AudioStream" uid="uid://cvsak26dy2b3g" path="res://assets/stamp_sound.wav" id="2_s55vr"]
 [ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_fw123"]
-[ext_resource type="Script" uid="uid://cq2jrbdx37jhe" path="res://features/rarity_stamp.gd" id="5_f2n1e"]
+[ext_resource type="Script" uid="uid://cq2jrbdx37jhe" path="res://rarity_stamp.gd" id="5_f2n1e"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fw123"]
 resource_local_to_scene = true

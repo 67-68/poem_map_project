@@ -216,3 +216,31 @@ static func get_mesh_instance_size(mesh_inst: MeshInstance2D) -> Vector3:
 	siz.x *= mesh_inst.scale.x
 	siz.y *= mesh_inst.scale.y
 	return siz
+
+
+static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
+	"""
+	给msger加上它对应的文字，图片，速度之类的效果
+	"""
+	var icon_path = ''
+	var speed = 10
+	var txt := ''
+
+	match type:
+		MSG_TYPE.CRITICAL:
+			icon_path = 'msg_critical'
+			speed = 30
+			txt = Util.colorize('圣旨',Color.GOLD)
+		MSG_TYPE.NORMAL:
+			icon_path = 'msg_normal'
+			txt = '消息'
+		MSG_TYPE.TAX_WHEAT:
+			icon_path = 'msg_tax_wheat'
+			speed = 5
+			txt = Util.colorize('粮税', Color.WHEAT)
+	
+	var sprite = msger.get_node('MsgPathFollow/MsgSprite') as Sprite2D
+	sprite.texture = IconLoader.get_icon(icon_path)
+	msger.speed_px_per_sec = speed
+	msger.txt = txt
+			

@@ -5,6 +5,7 @@ var speed_px_per_sec: int
 var txt: String
 var mesh: MeshInstance2D
 var allow_timer := false
+var msger_data: MessagerData
 
 signal travel_end()
 func _process(_delta: float) -> void:
@@ -20,12 +21,18 @@ func _process(_delta: float) -> void:
 	if future_mat:
 		future_mat.set_shader_parameter("current_progress", $MsgPathFollow.progress_ratio)
 
-func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D):
+func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D,msger_data_: MessagerData):
+	"""
+	逻辑:
+	messager manager 在外部根据msg type 赋值
+	它自己寻找msger_data内的属性赋值，如果存在
+
+	"""
+	Util.apply_msg_type(self,msger_data.msger_type)
+
 	Logging.exists('init of messager', curve_, path_points_, mesh_)
 	curve = curve_
-	
-	# 😡 那个传进来的 path_points_ 已经是历史的垃圾了，以后可以把它从接口里删掉
-	# path_points = path_points_ 
+	path_points = path_points_ 
 	
 	$MsgPathFollow/TextEmitter.mesh = mesh_
 	mesh = mesh_
@@ -43,6 +50,19 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D)
 	# get_baked_points() 会返回一条密度极高、绝对贴合的完美曲线
 	future_line.points = curve.get_baked_points()
 
+	# 如果有就给自己赋值
+	apply_msger_data(self,msger_data_)
+
+static func apply_msger_data(msger: Messager,data: MessagerData):
+	"""
+	赋予msger它的data中那些可以直接影响到它行动的属性
+	"""
+	msger.msger_data = data
+	if data.popup_text:
+		msger.txt = data.popup_text
+	if data.color and data.color != Color.WHITE:
+		msger.txt = Util.colorize(msger.txt,data.color)
+	if data.speed: msger.speed = data.speed
 	
 func start_travel():
 	# 1. 核心 API：获取路径的像素总长度

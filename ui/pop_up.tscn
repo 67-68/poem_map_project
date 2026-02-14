@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://5shth4lj0a8t"]
 
-[ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://features/poem_background_juanzhou.tres" id="1_12uv1"]
+[ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://assets/poem_background_juanzhou.tres" id="1_12uv1"]
 [ext_resource type="Script" uid="uid://cr4lvstsirtp8" path="res://ui/pop_up.gd" id="2_tpqih"]
 
 [node name="Popup" type="PanelContainer"]

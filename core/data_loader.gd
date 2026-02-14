@@ -37,6 +37,8 @@ static func load_json_model(model_class: Variant, file_path: String) -> Array[Ga
 	var items = content if content is Array else [content]
 	for item in items:
 		result.append(model_class.new(item))
+	
+	Logging.info('load %s model %s from %s' % [result.size(),model_class,file_path])
 	return result
 static func load_csv_model(model_class: Variant, file_path: String) -> Array[GameEntity]:
 	file_path = _fix_path(file_path, "csv", Global.PERMANENT_DATA_PATH)
@@ -87,5 +89,5 @@ static func load_csv_model(model_class: Variant, file_path: String) -> Array[Gam
 		# 3. 实例化：让构造函数直接吃这份精美的菜单
 		result.append(model_class.new(entity_data))
 	
-	Logging.info("✅ 成功部署 %d 个模型实体。" % result.size())
+	Logging.info('load %s model %s from %s' % [result.size(),model_class,file_path])
 	return result

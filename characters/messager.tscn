@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bjq45t2wxwdok" path="res://features/text_emitter.gd" id="2_5bb38"]
 [ext_resource type="Texture2D" uid="uid://csf0pdqpuijew" path="res://assets/profile/poet-libai-001.png" id="2_a1w0b"]
 [ext_resource type="Shader" uid="uid://2j8pc85i3h0" path="res://shaders/trail_shader.gdshader" id="2_pygyx"]
-[ext_resource type="FastNoiseLite" uid="uid://dkdvopuww2mvf" path="res://features/pen_noise.tres" id="3_1616p"]
+[ext_resource type="FastNoiseLite" uid="uid://dkdvopuww2mvf" path="res://assets/pen_noise.tres" id="3_1616p"]
 [ext_resource type="Script" uid="uid://blslya0uscec0" path="res://characters/msg_sprite.gd" id="4_xtdfu"]
 [ext_resource type="Shader" uid="uid://wttq45m7cg4k" path="res://shaders/msg_future_line.gdshader" id="6_wiuub"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="8_vnrsg"]

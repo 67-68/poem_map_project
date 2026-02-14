@@ -9,8 +9,32 @@ class_name MessagerManager extends Node
 var mesh: MeshInstance2D
 var path_cache: Dictionary[Array,Curve2D] = {}
 
-func send_message(from_id, to_id, type: int): # int: MSG_TYPE
+var _next_msger_time: float
+
+func _ready():
+	_next_msger_time = Global.msger_data.values()[0].year
+
+func _process(_delta):
+	
+	if Global.year > _next_msger_time:
+		send_message(DataHelper.find_item_by_filter(Global.msger_data,'year',_next_msger_time))
+		_next_msger_time = update_msger_time(_next_msger_time,Global.msger_data.values())
+
+
+static func update_msger_time(_next_msger_time, data):
+	var current_msger_time = _next_msger_time
+	for item in data:
+		if item.year > _next_msger_time:
+			_next_msger_time = item.year
+	if _next_msger_time  == current_msger_time:
+		return 1000000 # 说明到游戏尽头了；找个永远不会被触发的时间
+
+func send_message(msger_data: MessagerData): # int: MSG_TYPE
+	var from_id = msger_data.source_id
+	var to_id = msger_data.target_id
+	var type = msger_data.msger_type
 	var path: Curve2D
+	
 	if path_cache.get([from_id,to_id]):
 		path = path_cache.get([from_id,to_id])
 	else:
@@ -22,40 +46,13 @@ func send_message(from_id, to_id, type: int): # int: MSG_TYPE
 	if not mesh:
 		Logging.err('do not found mesh')
 		return
-	messager.initialization(path,ids,mesh)
+	messager.initialization(path,ids,mesh,msger_data)
 	messager.travel_end.connect(end_msger.bind(messager))
 
 	Global.request_add_messager.emit(messager)
-	apply_msg_type(messager,type)
+	# apply msger type 改为msger自己内部执行，在执行完成它之后使用msger data 填充自己
 	messager.start_travel()
 	
 func end_msger(msger):
 	Logging.debug('free a mesger')
 	msger.queue_free()
-
-static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
-	"""
-	给msger加上它对应的文字，图片，速度之类的效果
-	"""
-	var icon_path = ''
-	var speed = 10
-	var txt := ''
-
-	match type:
-		MSG_TYPE.CRITICAL:
-			icon_path = 'msg_critical'
-			speed = 30
-			txt = Util.colorize('圣旨',Color.GOLD)
-		MSG_TYPE.NORMAL:
-			icon_path = 'msg_normal'
-			txt = '消息'
-		MSG_TYPE.TAX_WHEAT:
-			icon_path = 'msg_tax_wheat'
-			speed = 5
-			txt = Util.colorize('粮税', Color.WHEAT)
-	
-	var sprite = msger.get_node('MsgPathFollow/MsgSprite') as Sprite2D
-	sprite.texture = IconLoader.get_icon(icon_path)
-	msger.speed_px_per_sec = speed
-	msger.txt = txt
-			

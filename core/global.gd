@@ -64,6 +64,7 @@ var poem_data: Dictionary
 var factions: Dictionary
 var base_province: Dictionary
 var territories: Dictionary
+var msger_data: Dictionary
 
 func init():
 	index_image = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
@@ -76,6 +77,7 @@ func init():
 	factions = create_dict(DataLoader.load_json_model(Faction,'factions'))
 	base_province = create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
 	territories = create_dict(DataLoader.load_csv_model(Territory,'territories'))
+	msger_data = create_dict(DataLoader.load_json_model(MessagerData,'msger_data'))
 	# 数据文件不允许使用字典！！使用list
 
 	for d in poem_data:

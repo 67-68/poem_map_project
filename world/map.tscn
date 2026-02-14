@@ -10,7 +10,7 @@
 [ext_resource type="ArrayMesh" uid="uid://bromnk1irnxyw" path="res://world/map_array_axis.tres" id="4_swwi1"]
 [ext_resource type="Script" uid="uid://dhn8ossl3eaws" path="res://world/grid_generator.gd" id="5_k782d"]
 [ext_resource type="Shader" uid="uid://msorjnyjin8g" path="res://shaders/map_shaders/province_border.gdshader" id="7_aoj3l"]
-[ext_resource type="FastNoiseLite" uid="uid://dkdvopuww2mvf" path="res://features/pen_noise.tres" id="10_4wr1n"]
+[ext_resource type="FastNoiseLite" uid="uid://dkdvopuww2mvf" path="res://assets/pen_noise.tres" id="10_4wr1n"]
 [ext_resource type="Script" uid="uid://d1uxwbwq04djs" path="res://features/path_visualizer.gd" id="12_epef7"]
 [ext_resource type="Script" uid="uid://cbadnqxjlp57p" path="res://core/faction_map_renderer.gd" id="12_teowk"]
 [ext_resource type="Script" uid="uid://bnfc6lv07330w" path="res://features/messager_manager.gd" id="13_epef7"]

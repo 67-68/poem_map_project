@@ -34,6 +34,19 @@ static func find_value_by_filter(
 			
 	return default
 
+static func find_item_by_filter(
+    data: Dictionary,
+	match_key: String, 
+	match_value: Variant, 
+) -> Variant:
+	# 为了性能，这里我们拒绝一切华而不实的函数式包装 😡
+	# 手动循环是实现“惰性查找（找到就跑）”在 GDScript 里的唯一真理
+	for p in data.values():
+		# get() 相当于 Python 的 getattr()，既支持 Dictionary 也支持 Object/Resource
+		if p.get(match_key) == match_value:
+			return p
+	return
+
 ## 查找所有项，判断 match_value 是否在对象的 match_key 数组中
 static func find_all_values_by_membership(
 	data,
