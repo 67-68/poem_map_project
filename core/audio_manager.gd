@@ -89,11 +89,15 @@ func _get_available_sfx_player() -> AudioStreamPlayer:
 	return null
 
 # 预加载常用音效，方便全局调用
-const SFX_CLICK = preload("res://audio/sfx/wood_click.wav") # 假设你有这个
-const SFX_SCROLL = preload("res://audio/sfx/paper_rustle.wav")
+const SONG_SAD = preload("res://assets/sounds/sad_song.mp3") # 假设你有这个
+const SONG_TENSE = preload("res://assets/sounds/tense_song.mp3")
+const SFX_EXPAND = preload("res://assets/sounds/rustling_paper.wav")
 
-func play_click():
-	play_sfx(SFX_CLICK, 0.2) # 点击声给大一点的随机
+func play_expand():
+	play_sfx(SFX_EXPAND, 1) # 点击声给大一点的随机
 
-func play_scroll():
-	play_sfx(SFX_SCROLL, 0.1)
+func play_sad():
+	play_music(SONG_SAD)
+
+func play_tense():
+	play_music(SONG_TENSE)
