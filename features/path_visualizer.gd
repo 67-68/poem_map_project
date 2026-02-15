@@ -6,14 +6,19 @@ static func get_bezier_path(p1_id: String, p2_id: String, x, y) -> Curve2D:
 	if node_indices.size() < 2: return null
 	
 	var curve := Curve2D.new()
+	var map_size = Vector2(x, y)
 	
 	for i in range(node_indices.size() - 1):
 		# 获取当前节点和下一个节点的省份 ID
 		var curr_id = NavigationService.get_province_id_from_idx(node_indices[i])
 		var next_id = NavigationService.get_province_id_from_idx(node_indices[i+1])
 		
-		var start_pos = Global.base_province[curr_id].uv_position * x
-		var end_pos = Global.base_province[next_id].uv_position * y
+		var start_pos = Global.base_province[curr_id].uv_position * map_size
+		var end_pos = Global.base_province[next_id].uv_position * map_size
+
+		# 手动使用魔法数据处理一下
+		start_pos.y += 40
+		end_pos.y += 40
 		
 		# 每一段路径：起点 -> 扰动点 -> 终点
 		# 注意：Curve2D 会自动处理连接，不需要重复添加起点

@@ -237,6 +237,8 @@ static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
 			icon_path = 'msg_tax_wheat'
 			speed = 5
 			txt = Util.colorize('粮税', Color.WHEAT)
+		0:
+			icon_path = 'msg_normal'
 	
 	var sprite = msger.get_node('MsgPathFollow/MsgSprite') as Sprite2D
 	sprite.texture = IconLoader.get_icon(icon_path)

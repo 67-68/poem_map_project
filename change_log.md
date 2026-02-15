@@ -6,6 +6,7 @@
 ## Fixed
 - messager manager @tool error
 - manually add connection to base province
+- 触发逻辑
 
 
 # [0.7.0]

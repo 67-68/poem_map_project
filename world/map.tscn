@@ -80,21 +80,21 @@ texture = ExtResource("4_gfy5m")
 
 [node name="BorderMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_teowk")
-position = Vector2(152.99998, 0)
-scale = Vector2(1.0015097, 0.7713606)
+position = Vector2(158, 5)
+scale = Vector2(0.998, 0.766)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("2_qyd10")
 
 [node name="FactionMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_4wr1n")
-position = Vector2(160, 4)
-scale = Vector2(0.9954608, 0.7696759)
+position = Vector2(158, 5)
+scale = Vector2(0.998, 0.766)
 mesh = ExtResource("4_swwi1")
 
 [node name="PathMesh" type="MeshInstance2D" parent="background"]
 self_modulate = Color(1, 1, 1, 0)
-position = Vector2(162, 4)
-scale = Vector2(0.994548, 0.76939785)
+position = Vector2(158, 5)
+scale = Vector2(0.998, 0.766)
 mesh = ExtResource("4_swwi1")
 texture = ExtResource("2_qyd10")
 
