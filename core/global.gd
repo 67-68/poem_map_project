@@ -55,7 +55,6 @@ signal request_text_popup(text: String)
 signal request_warning_toast(data: String)
 signal request_narrative(data: HistoryEventData)
 
-signal change_background_color(color: Color) # 如果为空，disable color
 signal request_rain(enable: bool)
 signal request_daylight(enable: bool)
 

@@ -75,6 +75,8 @@ func _play_open_animation():
 
 func apply_narrative(data: HistoryEventData):
 	# 1. 彻底暂停世界 (包括 BGM 变奏等逻辑可以在这里触发)
+	# 在暂停之前切换
+	Global.request_change_bg_modulate.emit(data.color)
 	TimeService.pause_world(true) # 假设你有这个接口
 	current_event_data = data
 	
@@ -96,7 +98,6 @@ func apply_narrative(data: HistoryEventData):
 		btn.option_made.connect(_on_option_selected)
 	
 	AudioManager.play_sad()
-	Global.change_background_color.emit(data.color)
 
 	# 5. 🎬 进场动画 (The Entrance)
 	_play_open_animation()
@@ -108,6 +109,7 @@ func _on_option_selected():
 
 func _end_narrative():
 	# 1. 🎬 退场动画 (The Exit)
+	Global.request_restore_bg_modulate.emit(-1)
 	if _tween: _tween.kill()
 	_tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	
