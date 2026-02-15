@@ -246,4 +246,4 @@ static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
 	msger.txt = txt
 			
 static func add_colored_bg(color: Color, text: String):
-	return '[bgcolor %s]%s[/bgcolor]' % [color.to_html(false),text]
+	return '[bgcolor=%s]%s[/bgcolor]' % [color.to_html(),text]

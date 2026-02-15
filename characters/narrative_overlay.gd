@@ -28,7 +28,9 @@ class_name NarrativeOverlay extends Control
 					{ 
 						"description": "在墙角默默记录",
 						"is_disabled": false, 
-						"effect": "record_poem"
+						"effect": "record_poem",
+						'double_check': true,
+						'double_check_reason': '真的要这么做吗？以她的年龄，去了就是必死的结局'
 					}
 				],
 				"provs_state_after": {"shan_zhou": "scorched"},
