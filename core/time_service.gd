@@ -1,61 +1,74 @@
 extends Node
 
 @export var speed: float = 5.0 
-@export var trigger_time_list := []
-@export var time_2_func := {}
-@export var current_time_idx: int # 记录当前走到了哪个time in time list
+
+# 1. 史书全卷 (Master Database)：只读，永远不删元素
+# 结构: [{"time": 758.1, "callback": func1, "is_dynamic": false}]
+var master_timeline: Array[Dictionary] = []
+
+# 2. 待办清单 (Active Queue)：动态消耗，会被清空和重建
+var event_queue: Array[Dictionary] = []
 
 func _ready() -> void:
 	Global.year = Global.start_year
 	set_process(false)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
+	
 	Global.year += speed * delta
 	Global.year_changed.emit(Global.year)
 	
-	Global.ratio_time = remap(Global.year,Global.start_year,Global.end_year,0,1)
-	Global.ratio_time = clampf(Global.ratio_time, 0.0, 1.0)
+	# 你文档里写的进度驱动 
+	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
 
-	if Global.year > trigger_time_list[current_time_idx] and current_time_idx != -1:
-		var previous_time: float
-		while true:
-			previous_time = trigger_time_list[current_time_idx]
-			if not current_time_idx >= trigger_time_list.size() and not previous_time == trigger_time_list[current_time_idx]:
-				for function in time_2_func[trigger_time_list[current_time_idx]]:
-					function.call()
-			else:
-				Logging.info('未来没有更多事件了')
-				current_time_idx = -1
-			current_time_idx += 1
+	# 正常的时间流逝消耗
+	while not event_queue.is_empty() and Global.year >= event_queue[0].time:
+		var event = event_queue.pop_front()
+		if event.callback.is_valid():
+			event.callback.call()
 
-func register(time: float, function: Callable):
-	for i in range(trigger_time_list):
-		if trigger_time_list[i] > time:
-			trigger_time_list.insert(i,time) # 这里可能会有一些性能问题
-	if not time in time_2_func: time_2_func[time] = []
-	time_2_func[time].append(function)
+# --- 注册接口 ---
+func register(trigger_time: float, function: Callable, save_to_history: bool = true):
+	var event_data = {"time": trigger_time, "callback": function}
+	
+	# 动态事件（比如信使移动）只需进当前队列；剧本事件需要进史书
+	if save_to_history:
+		master_timeline.append(event_data)
+		# 史书不需要每时每刻排序，只在重建时排序即可，但保险起见：
+		master_timeline.sort_custom(func(a, b): return a.time < b.time)
+	
+	# 如果事件发生在未来，塞进当前待办
+	if trigger_time >= Global.year:
+		event_queue.append(event_data)
+		event_queue.sort_custom(func(a, b): return a.time < b.time)
 
-	# 在未来没有事件的情况下添加
-	current_time_idx = trigger_time_list.size() - 2
+# --- 时空穿梭核心接口 (对应你文档的 jump_to)  ---
+func jump_to(new_year: float):
+	Logging.info("Time jumped to: %s" % new_year)
+	Global.year = new_year
+	Global.year_changed.emit(Global.year)
+	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
+	
+	_rebuild_queue_from_master()
 
-	if time < trigger_time_list[current_time_idx]:
-		Logging.warn('一个过去的触发事件被添加到了 %s' % time)
-		current_time_idx += 1
+func _rebuild_queue_from_master():
+	event_queue.clear() # 1. 撕毁当前待办清单
+	
+	# 2. 从史书中抄录未来
+	for event in master_timeline:
+		if event.time >= Global.year:
+			event_queue.append(event)
+			
+	# 3. 重新排序 (其实如果 master 是有序的，这一步甚至可以省掉，但为了防御性编程，排一下不亏)
+	event_queue.sort_custom(func(a, b): return a.time < b.time)
+	Logging.info("Queue rebuilt. Pending events: %d" % event_queue.size())
 	
 func play():
 	set_process(true) # 开启 _process
 
 func pause():
 	set_process(false)
-
-func jump_to(year: float):
-	if not year: return
-	if Global.start_year < year and year < Global.end_year:
-		Global.year = year
-		Global.year_changed.emit(Global.year)
-		Global.ratio_time = remap(Global.year, Global.start_year, Global.end_year, 0.0, 1.0)
-		Global.ratio_time = clampf(Global.ratio_time, 0.0, 1.0)
 
 # 增加一个控制 Engine 的开关
 func pause_world(completely: bool = true):
