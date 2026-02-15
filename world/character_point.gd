@@ -9,6 +9,14 @@ var emotion_curve: Curve # length_2_float_emotion
 var emotion_gradient: Gradient # float_emotion_2_color
 
 var next_point_year: float
+var stack_manager: StackManager
+
+func _apply_poem_data(_poem_data: PoemData):
+	"""
+	把poem data设置到view中
+	"""
+	var poet_data = Global.poet_data[_poem_data.owner_uuids[0]]
+	Global.request_apply_poem.emit(_poem_data, poet_data)
 
 func setup_emotion():
 	emotion_curve = Curve.new()
@@ -37,6 +45,7 @@ func setup_emotion():
 	
 
 func _ready() -> void:
+	stack_manager = StackManager.new(_apply_poem_data,Global.poem_animation_finished)
 	$Footstep.top_level = true
 	if datamodel:
 		$Label.text = datamodel.name
@@ -78,7 +87,10 @@ func on_send_poems():
 	
 	# 发射信号
 	if result.found_poems:
-		Global.poems_created.emit(result.poems_to_emit)
+		var poem_instances = []
+		for p in result.poems_to_emit:
+			poem_instances.append(Global.poem_data[p])
+		Global.poems_created.emit(poem_instances)
 	
 	# 3. 核心修复：更新状态防止死循环 💀
 	if result.new_target_year > self.next_point_year:
