@@ -1,37 +1,39 @@
 class_name PathVisualizer extends Node
 
-static func get_bezier_path(p1_id: String, p2_id: String, x, y) -> Curve2D:
-	# 从单例获取路径 ID 序列
+static func get_bezier_path(p1_id: String, p2_id: String, x: float, y: float) -> Curve2D:
 	var node_indices = NavigationService.get_index_id_path(p1_id, p2_id)
 	if node_indices.size() < 2: return null
 	
 	var curve := Curve2D.new()
 	var map_size = Vector2(x, y)
 	
-	for i in range(node_indices.size() - 1):
-		# 获取当前节点和下一个节点的省份 ID
+	# 只需要添加所有的路点，利用控制点来做平滑和扰动
+	for i in range(node_indices.size()):
 		var curr_id = NavigationService.get_province_id_from_idx(node_indices[i])
-		var next_id = NavigationService.get_province_id_from_idx(node_indices[i+1])
+		var pos = Global.base_province[curr_id].uv_position * map_size
+		pos.y += 40
 		
-		var start_pos = Global.base_province[curr_id].uv_position * map_size
-		var end_pos = Global.base_province[next_id].uv_position * map_size
-
-		# 手动使用魔法数据处理一下
-		start_pos.y += 40
-		end_pos.y += 40
+		# 计算控制点 (Handle)
+		# 我们不加中间点，而是给当前点加一个“出射向量”和一个“入射向量”
+		var control_in = Vector2.ZERO
+		var control_out = Vector2.ZERO
 		
-		# 每一段路径：起点 -> 扰动点 -> 终点
-		# 注意：Curve2D 会自动处理连接，不需要重复添加起点
-		if i == 0:
-			curve.add_point(start_pos)
+		# 如果你想要扰动，不是去改变点的位置，而是去扭曲控制杆
+		if Global.PATH_NOISE > 0:
+			# 生成一个垂直于路径方向的随机向量会更自然，但这比较复杂
+			# 简单做法：给控制点加随机偏移
+			var noise = Vector2(
+				randf_range(-Global.PATH_NOISE, Global.PATH_NOISE),
+				randf_range(-Global.PATH_NOISE, Global.PATH_NOISE)
+			)
+			# 让控制点稍微偏离中心
+			control_in = -noise * 50.0 # 入射杆
+			control_out = noise * 50.0 # 出射杆
 		
-		# 插入带有“扰动”的中间点
-		var noise_pos = _create_noise_point(start_pos, end_pos)
-		curve.add_point(noise_pos)
+		# 如果想要更圆润，应该根据前后点计算切线，这里先用简单噪点演示
 		
-		# 添加该段的终点
-		curve.add_point(end_pos)
-	
+		curve.add_point(pos, control_in, control_out)
+		
 	return curve
 
 static func _create_noise_point(p1: Vector2, p2: Vector2) -> Vector2:
