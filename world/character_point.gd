@@ -89,9 +89,7 @@ func on_send_poems():
 
 func _process(delta: float) -> void:
 	on_move()
-
 	var target_path_ratio: float = time_position_curve.sample(Global.ratio_time) # 当前路径的比例
-
 	var total_length = path.get_baked_length()
 	var current_offset = total_length * target_path_ratio # 当前出发了多远，比如1000,total 5000
 	position = path.sample_baked(current_offset)
