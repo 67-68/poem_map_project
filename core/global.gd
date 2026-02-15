@@ -42,6 +42,7 @@ var color_2_province: Dictionary
 
 
 var map: Node2D
+var faction_renderer: FactionMapRenderer
 
 
 # 用来展示poet
@@ -51,6 +52,8 @@ signal request_start_black(enable: bool)
 
 # 展示popup信息
 signal request_text_popup(text: String)
+signal request_warning_toast(data: String)
+signal request_apply_galgame_event(data: HistoryEventData)
 
 signal change_background_color(color: Color) # 如果为空，disable color
 signal request_rain(enable: bool)

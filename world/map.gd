@@ -3,6 +3,7 @@ extends Node2D
 var datamodel: PoetData
 var index_image: Image
 var color_2_province: Dictionary
+var prov_2_fac: Dictionary = {}
 
 func _ready() -> void:
 	Global.map = self
@@ -36,9 +37,8 @@ func load_character_point():
 func _process(delta: float) -> void:
 	pass
 
-func render_factions():
+func refresh_prov_2_fac():
 	# 1. 建立 [州ID -> 势力对象] 的映射
-	var prov_2_fac := {}
 	for fac_id in Global.factions:
 		var fac: Faction = Global.factions[fac_id]
 		# 解析该势力下属的所有原子州 ID
@@ -47,8 +47,9 @@ func render_factions():
 			prov_2_fac[p_id] = fac
 	
 	Logging.done('create prov to faction dict','render factions')
-	
-	
+
+func render_factions():
+	refresh_prov_2_fac()
 	# 2. 更新势力颜色查找表 (LUT)
 	# 这个函数应该返回那张 512x1 的贴图
 	var lut_tex = $FactionMapRenderer.refresh_lut_image(prov_2_fac)
