@@ -1,90 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://cnkr0y7c3yen2"]
+[gd_scene load_steps=6 format=3 uid="uid://cnkr0y7c3yen2"]
 
 [ext_resource type="Script" uid="uid://dvm6jj0xbsm0l" path="res://features/poem_popup.gd" id="1_hqy85"]
-[ext_resource type="Script" uid="uid://cn0nq4obf1au7" path="res://core/stack_manager.gd" id="1_uow2x"]
 [ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://assets/poem_background_juanzhou.tres" id="2_f2n1e"]
-[ext_resource type="AudioStream" uid="uid://cvsak26dy2b3g" path="res://assets/stamp_sound.wav" id="2_s55vr"]
 [ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_fw123"]
 [ext_resource type="Script" uid="uid://cq2jrbdx37jhe" path="res://rarity_stamp.gd" id="5_f2n1e"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fw123"]
 resource_local_to_scene = true
 shader = ExtResource("3_fw123")
-shader_parameter/speed = 0.5
-shader_parameter/width = 0.1
-shader_parameter/shine_color = Color(1, 0.8, 0, 1)
-
-[sub_resource type="Animation" id="Animation_f2n1e"]
-
-[sub_resource type="Animation" id="Animation_s55vr"]
-resource_name = "poem_created"
-length = 2.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BookPanel/MarginContainer/HBox/VBox/ContentLabel:visible_characters")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.6, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [0, 1]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("BookPanel/MarginContainer/HBox/RarityStamp:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(1.6, 1.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(3, 3), Vector2(1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("BookPanel/MarginContainer/HBox/RarityStamp:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(1.6, 1.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("BookPanel:custom_minimum_size")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(40, 0), Vector2(260, 0)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("BookPanel/MarginContainer/HBox/VBox/ContentLabel:fit_content")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.6, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_wh0bq"]
-_data = {
-&"RESET": SubResource("Animation_f2n1e"),
-&"poem_created": SubResource("Animation_s55vr")
-}
+shader_parameter/current_progress = 0.0
+shader_parameter/future_color = Color(0, 0.8, 1, 0.3)
+shader_parameter/edge_softness = 0.01
 
 [node name="PoemPopup" type="Control"]
 layout_mode = 3
@@ -141,14 +67,3 @@ modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 expand_mode = 1
 script = ExtResource("5_f2n1e")
-
-[node name="PoemAnimation" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_wh0bq")
-}
-script = ExtResource("1_uow2x")
-
-[node name="StampPlayer" type="AudioStreamPlayer2D" parent="PoemAnimation"]
-stream = ExtResource("2_s55vr")
-
-[connection signal="animation_finished" from="PoemAnimation" to="PoemAnimation" method="_on_animation_finished"]

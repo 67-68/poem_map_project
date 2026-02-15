@@ -1,15 +1,14 @@
-class_name StackManager extends AnimationPlayer
+class_name StackManager extends RefCounted
 
 var is_playing: bool = false
 var items: Array = []
 var resolve_item: Callable
 var stop_time := false
 
-func add_item(item: PoetData):
+func add_item(item):
 	items.append(item)
 	if not is_playing:
 		play_animation()
-
 
 func add_items(items_: Array):
 	"""
@@ -26,7 +25,7 @@ func play_animation():
 	resolve_item.call(items[0])
 	
 func _on_animation_finished():
-	items.pop_at(0)
+	items.pop_front()
 	if items.is_empty():
 		start_time()
 		is_playing = false
