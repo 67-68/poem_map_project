@@ -133,3 +133,18 @@ func load_indexs():
 		var prov = Global.base_province[prov_uid]
 		color_2_province[prov.color.to_html(false)] = prov
 	Global.color_2_province = color_2_province
+
+
+func fade_world_to_dark(duration: float):
+	Logging.change('world_color','dark')
+	change_world_color(Color.GRAY)
+	get_tree().create_timer(duration).timeout.connect(restore_world_color)
+
+func restore_world_color(duration: float):
+	Logging.change('world_color','normal')
+	change_world_color(Color.WHITE)
+	get_tree().create_timer(duration).timeout.connect(fade_world_to_dark)
+
+func change_world_color(color: Color):
+	Logging.change('world_color',color.to_html(false))
+	$CanvasModulate.color = color

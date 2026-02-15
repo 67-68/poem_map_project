@@ -27,3 +27,7 @@ func done(name: String,domain = ''):
         Logging.info('[%s] %s done loading' % [domain,name])    
         return
     Logging.info('%s done loading' % name)
+
+
+func change(source,target):
+    Logging.info('change %s to %s' % [source,target])

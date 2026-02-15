@@ -25,6 +25,7 @@ SizeService="*res://core/size_service.tscn"
 EventBus="*res://core/eventbus.gd"
 NavigationService="*res://core/navigation_service.gd"
 TextPoolManager="*res://core/pool_manager.gd"
+AudioManager="*res://core/audio_manager.gd"
 
 [debug]
 

@@ -19,6 +19,7 @@ func _set_deprecated_position(val):
 @export var year: int
 @export var location_uuid: String
 @export var uv_position: Vector2 #0-1
+@export var audio: AudioEffect
 
 
 
@@ -53,6 +54,7 @@ func _init(data: Dictionary = {}):
     
     # 4. 解析地点 ID
     location_uuid = props.get("location_uuid", data.get("location_uuid", ""))
+    audio = load(props.get("audio", data.get("audio", "")))
 
 func get_local_pos(mesh: MeshInstance2D):
     var mesh_size = Util.get_mesh_instance_size(mesh)

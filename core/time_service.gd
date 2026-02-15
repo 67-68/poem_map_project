@@ -27,8 +27,23 @@ func jump_to(year: float):
 		Global.year_changed.emit(Global.year)
 		Global.ratio_time = remap(Global.year, Global.start_year, Global.end_year, 0.0, 1.0)
 		Global.ratio_time = clampf(Global.ratio_time, 0.0, 1.0)
+
+# 增加一个控制 Engine 的开关
+func pause_world(completely: bool = true):
+	# 1. 停掉日历
+	set_process(false) 
 	
-		
+	if completely:
+		# 方案 A: 彻底冻结 (适合弹窗)
+		get_tree().paused = true
+	else:
+		# 方案 B: 慢动作 (适合过渡)
+		Engine.time_scale = 0.1
 
-
-
+func resume_world():
+	# 1. 恢复日历
+	set_process(true)
+	
+	# 2. 恢复世界
+	get_tree().paused = false
+	Engine.time_scale = 1.0

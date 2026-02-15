@@ -109,3 +109,5 @@ script = ExtResource("12_epef7")
 
 [node name="MessagerManager" type="Node" parent="."]
 script = ExtResource("13_epef7")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
