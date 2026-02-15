@@ -61,7 +61,7 @@ shader_parameter/faction_intensity = 1.0
 script = ExtResource("1_uvqf1")
 
 [node name="background" type="Node2D" parent="."]
-position = Vector2(-156, 0)
+position = Vector2(-82, 0)
 
 [node name="TerrainMesh" type="MeshInstance2D" parent="background"]
 material = SubResource("ShaderMaterial_swwi1")
@@ -99,6 +99,7 @@ mesh = ExtResource("4_swwi1")
 texture = ExtResource("2_qyd10")
 
 [node name="path" type="Path2D" parent="."]
+position = Vector2(74, 0)
 curve = SubResource("Curve2D_bxc27")
 
 [node name="FactionMapRenderer" type="Node" parent="."]
@@ -111,3 +112,4 @@ script = ExtResource("12_epef7")
 script = ExtResource("13_epef7")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
+position = Vector2(74, 0)

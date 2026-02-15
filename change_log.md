@@ -1,6 +1,7 @@
 ## Added
-- debug tool in navigation service
-- debug overlay
+- galgame-like popup event system
+- debug tool in navigation service for province connection
+- debug overlay for province connection
 - debug util
 
 ## Fixed

@@ -17,17 +17,17 @@ class_name NarrativeOverlay extends Control
 				"options": [
 					{ 
 						"description": "冲出去与官吏拼命", 
-						"disabled": true, 
-						"reason": "你手无缚鸡之力，冲出去只会死在乱军之中，无人记录这段历史。" 
+						"is_disabled": true, 
+						"disabled_reason": "你手无缚鸡之力，冲出去只会死在乱军之中，无人记录这段历史。" 
 					},
 					{ 
 						"description": "代替老妇去服役", 
-						"disabled": true, 
-						"reason": "你的身体虚弱，恐怕连长安都走不到。"
+						"is_disabled": true, 
+						"disabled_reason": "你的身体虚弱，恐怕连长安都走不到。"
 					},
 					{ 
 						"description": "在墙角默默记录",
-						"disabled": false, 
+						"is_disabled": false, 
 						"effect": "record_poem"
 					}
 				],

@@ -21,6 +21,7 @@ func _ready() -> void:
 	Global.request_warning_toast.connect(show_warning)
 
 func show_warning(text: String):
+	#breakpoint
 	# 1. 重置状态
 	if _tween: _tween.kill()
 	show()
@@ -28,6 +29,7 @@ func show_warning(text: String):
 	# 2. 设置文本 (支持 BBCode，自动居中)
 	# 强制加上 [center] 标签确保文字在框内居中
 	label.text = "[center]%s[/center]" % text
+	label.text = Util.add_colored_bg(Color.BLACK,label.text)
 	
 	# 3. 视觉重置
 	# 设为红色

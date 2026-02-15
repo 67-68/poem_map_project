@@ -4,10 +4,13 @@
 [ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="2_id4jo"]
 
 [node name="NarrativeOverlay" type="Control"]
+custom_minimum_size = Vector2(900, 600)
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_htcev")
@@ -36,21 +39,19 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 61.0
-offset_bottom = 95.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_bottom = 20
 
 [node name="VBox" type="VBoxContainer" parent="Background/Margin"]
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="Background/Margin/VBox"]
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 1
 text = "test"
 script = ExtResource("2_id4jo")
 debug = true
@@ -58,17 +59,19 @@ debug = true
 [node name="ExampleLabel" type="RichTextLabel" parent="Background/Margin/VBox"]
 clip_contents = false
 layout_mode = 2
-size_flags_vertical = 3
 bbcode_enabled = true
 fit_content = true
 
 [node name="ContentLabel" type="RichTextLabel" parent="Background/Margin/VBox"]
 clip_contents = false
 layout_mode = 2
-size_flags_vertical = 3
 bbcode_enabled = true
 fit_content = true
 
-[node name="BtnContainer" type="VBoxContainer" parent="Background/Margin/VBox"]
+[node name="Control" type="Control" parent="Background/Margin/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="BtnContainer" type="VBoxContainer" parent="Background/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 8
