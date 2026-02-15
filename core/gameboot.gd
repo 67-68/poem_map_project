@@ -7,5 +7,6 @@ singleton第一项
 
 func _ready():
 	Global.init()
-	NavigationService.init()
+	# 删除了navigation service init, 因为需要懒加载，否则没有地图可用
+	"不要在开场阶段调用它"
 	Logging.done('gameboot')

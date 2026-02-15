@@ -1,6 +1,7 @@
 [
   {
     "year": 755,
+    "uuid":"安史之乱",
     "source_id": "you_zhou",
     "target_id": "luo_zhou",
     "popup_text": "叛乱",
@@ -14,6 +15,7 @@
   },
   {
     "year": 756,
+    "uuid":"唐玄宗出逃",
     "source_id": "yong_zhou",
     "target_id": "yi_zhou_shu_di",
     "popup_text": "避乱",
@@ -27,8 +29,9 @@
   },
   {
     "year": 758,
+    "uuid":"征兵",
     "source_id": "luo_zhou",
-    "target_id": "shan_zhou",
+    "target_id": "shan_zhou_shan_xi",
     "popup_text": "抓丁",
     "color": "gray",
     "msger_type": 2,

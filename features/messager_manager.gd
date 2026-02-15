@@ -12,11 +12,15 @@ class_name MessagerManager extends Node
 
 var mesh: MeshInstance2D
 var path_cache: Dictionary[Array,Curve2D] = {}
+var times := []
+var sorted_msger_list: Array
 
 var _next_msger_time: float
 
 func _ready():
-	_next_msger_time = Global.msger_data.values()[0].year
+	sorted_msger_list = Global.msger_data.values()
+	sorted_msger_list.sort_custom(func(a, b): return a.year < b.year)
+	_next_msger_time = sorted_msger_list[0].year
 
 func _process(_delta):
 	if Engine.is_editor_hint():
@@ -24,8 +28,7 @@ func _process(_delta):
 	#breakpoint
 	if Global.year > _next_msger_time:
 		Logging.info('messager triggered')
-		breakpoint
-		send_message(DataHelper.find_item_by_filter(Global.msger_data,'year',_next_msger_time))
+		send_message(DataHelper.find_item_by_filter_list(sorted_msger_list,'year',_next_msger_time))
 		_next_msger_time = update_msger_time(_next_msger_time,Global.msger_data.values())
 
 
@@ -33,7 +36,7 @@ static func update_msger_time(_next_msger_time, data):
 	var current_msger_time = _next_msger_time
 	for item in data:
 		if item.year > _next_msger_time:
-			_next_msger_time = item.year
+			return item.year
 	if _next_msger_time  == current_msger_time:
 		return 1000000 # 说明到游戏尽头了；找个永远不会被触发的时间
 

@@ -8,6 +8,7 @@ extends Node
 @export var debug_find_orphan_id: bool = false:
 	set(val):
 		if val:
+			init()
 			debug_find_orphan_id = false
 			var ids := []
 			for item in Global.base_province:
@@ -18,6 +19,7 @@ extends Node
 @export var graph_connectivity: bool = false:
 	set(val):
 		if val:
+			init()
 			graph_connectivity = false
 			var ids := []
 			for item in Global.base_province:
@@ -30,6 +32,7 @@ var _debug_overlay: Control
 @export var debug_draw_connections: bool = false:
 	set(val):
 		if val:
+			init()
 			# 这里的 val 不设为 false，让开关保持开启状态可能更好，看你习惯
 			# debug_draw_connections = false 
 			_toggle_debug_view()
@@ -110,7 +113,8 @@ func init():
 	for uid in Global.base_province:
 		var prov = Global.base_province[uid]
 		# 警告修复：add_point 的参数顺序是 (id, position)
-		astar.add_point(idx, prov.position) 
+		var pos = prov.get_local_pos(Global.map.get_node('background/BorderMesh'))
+		astar.add_point(idx,pos)  # 这里的position的问题！！！
 		prov_2_idx[uid] = idx
 		idx_2_prov[idx] = uid
 		idx += 1

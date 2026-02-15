@@ -5,7 +5,7 @@
 
 ## Fixed
 - messager manager @tool error
-- 
+- manually add connection to base province
 
 
 # [0.7.0]

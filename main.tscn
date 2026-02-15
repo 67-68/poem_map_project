@@ -16,9 +16,9 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
-shader_parameter/speed = 1.0
-shader_parameter/width = 0.1
-shader_parameter/shine_color = Color(1, 0.8, 0, 1)
+shader_parameter/current_progress = 0.0
+shader_parameter/future_color = Color(0, 0.8, 1, 0.3)
+shader_parameter/edge_softness = 0.01
 
 [sub_resource type="Theme" id="Theme_h2yge"]
 default_base_scale = 1.0

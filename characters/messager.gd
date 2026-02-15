@@ -53,6 +53,11 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D,
 	# 如果有就给自己赋值
 	apply_msger_data(self,msger_data_)
 
+	var names = []
+	for p in path_points:
+		names.append(Global.base_province.get(p).name)
+	print('path points', names)
+
 static func apply_msger_data(msger: Messager,data: MessagerData):
 	"""
 	赋予msger它的data中那些可以直接影响到它行动的属性
@@ -61,7 +66,7 @@ static func apply_msger_data(msger: Messager,data: MessagerData):
 		msger.txt = data.popup_text
 	if data.color and data.color != Color.WHITE:
 		msger.txt = Util.colorize(msger.txt,data.color)
-	if data.speed: msger.speed = data.speed
+	if data.speed: msger.speed_px_per_sec = data.speed
 	
 func start_travel():
 	# 1. 核心 API：获取路径的像素总长度

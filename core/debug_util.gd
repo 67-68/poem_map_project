@@ -126,7 +126,7 @@ static func analyze_graph_connectivity(all_ids: Array, connections: Dictionary) 
 						stack.append(neighbor)
 		
 		islands.append(island_nodes)
-	
+
 	# 💀 审判时刻
 	Logging.info("---------------- 地图连通性审计 ----------------")
 	Logging.info("总共有 %d 个互不连通的岛屿群组。" % islands.size())
