@@ -7,7 +7,7 @@ var lut_texture: ImageTexture
 var _color_to_idx_map: Dictionary = {}
 var _next_available_index := 1
 
-var state_2_color = {
+var prov_state_2_color = {
 	PROV_STATE.NORMAL: Color.TRANSPARENT,
 	PROV_STATE.REBEL: Color(0.7, 0.1, 0.1),   # 叛乱红：血腥的暗红
 	PROV_STATE.RUINED: Color(0.15, 0.15, 0.15) # 焦土黑：比纯黑稍微亮一点，保留质感
@@ -32,10 +32,18 @@ func refresh_lut_image(ownership: Dictionary) -> ImageTexture:
 func _update_special_state(states: Dictionary):
 	for prov_uuid in states:
 		var province_color = Global.base_province[prov_uuid].color.to_html(false)
+		var col = prov_state_2_color.get(int(states[prov_uuid]))
+		
+		# 这里prov state to color 为什么不能使用get? because int as key?
+		# 因为该死的Float和Int
+		if not col: col = prov_state_2_color.get(PROV_STATE[states[prov_uuid]])
+		if not col: col = Color.from_string(states[prov_uuid],Color.WHITE)
+		# 支持该死的三种写法
+		
 		lut_image.set_pixel(
 			_color_to_idx_map[province_color],
 			0,
-			state_2_color.get(states[prov_uuid],Color.from_string(states[prov_uuid],Color.WHITE)) 
+			col
 			# 也就是说可以使用prov-state内的东西也可以使用string color
 			# 但上游应该做了数据校验
 		)

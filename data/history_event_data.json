@@ -22,6 +22,13 @@
 			"double_check_reason":"真的要这么做吗？以她的年龄，去了就是必死的结局"
 		}
 	],
-	"provs_state_after":{"shan_zhou":"scorched"},
-	"icon":"ruined_village"
+	"icon":"ruined_village",
+	"year": 758.0,
+	"location_uuid":"shan_zhou_shan_xi",
+	"provs_state_after": {
+		"shan_zhou_shan_xi":1,
+		"fu_zhou":2
+	},
+	"audio":"sad_song.mp3",
+	"color":"#808080"
 }

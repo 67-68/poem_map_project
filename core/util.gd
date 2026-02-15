@@ -26,7 +26,7 @@ static func colorize_underlined_link(text: String,color: Color,key: String):
 static func process_poem_events(
 	points_data: Dictionary,   # 对应 Global.life_path_points
 	path_keys: Array,          # 对应 datamodel.path_point_keys (必须是有序的！)
-	current_target_year: int   # 对应 self.next_point_year
+	current_target_year: float   # 对应 self.next_point_year
 ) -> PoemProcessResult:
 	
 	var result = PoemProcessResult.new()
@@ -247,3 +247,10 @@ static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
 			
 static func add_colored_bg(color: Color, text: String):
 	return '[bgcolor=%s]%s[/bgcolor]' % [color.to_html(),text]
+
+
+static func create_dict(data: Array):
+	var dict = {}
+	for d in data:
+		dict[d.uuid] = d
+	return dict

@@ -7,6 +7,7 @@ var provs_state_after: Dictionary
 var example: String
 # 对于问题介绍，使用Description
 # 问题本身使用name
+# bg_color 使用父类的color
 
 func _init(data: Dictionary):
 	super._init(data)

@@ -31,3 +31,8 @@ func done(name: String,domain = ''):
 
 func change(source,target):
     Logging.info('change %s to %s' % [source,target])
+
+#func check_type(domain_name: String,type_,...obj):
+#    for o in obj:
+#        if obj is not type_:
+#            Logging.err(% domain_name)

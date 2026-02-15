@@ -3,7 +3,6 @@ class_name MessagerData extends WorldEvent
 var source_id: String
 var target_id: String
 var popup_text: String
-var color: Color
 var msger_uuid: String # msg本人的uuid, 留坑
 # 可以和name不一样
 
@@ -28,7 +27,6 @@ func _init(data: Dictionary):
 	popup_text = data.get('popup_text', props.get('popup_text', ''))
 	speed = data.get('speed', props.get('speed', 100)) # 默认给个基础速度
 	
-	color = Color.from_string(data.get('color', props.get('color', 'white')), Color.WHITE)
 	msger_uuid = data.get('msger_uuid', props.get('msger_uuid', ''))
 	msger_type = data.get('msger_type', props.get('msger_type', 0))
 

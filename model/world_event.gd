@@ -19,7 +19,9 @@ func _set_deprecated_position(val):
 @export var year: int
 @export var location_uuid: String
 @export var uv_position: Vector2 #0-1
-@export var audio: AudioEffect
+@export var audio: AudioStream = null
+@export var color: Color
+
 
 
 
@@ -51,10 +53,13 @@ func _init(data: Dictionary = {}):
     # 3. 解析年份 (兼容 time 和 year 两个字段)
     # 优先读 props 里的 time，其次是 year
     year = props.get("time", props.get("year", data.get("year", Global.start_year)))
+    color = Color.from_string(data.get('color', props.get('color', 'white')), Color.WHITE)
     
     # 4. 解析地点 ID
     location_uuid = props.get("location_uuid", data.get("location_uuid", ""))
-    audio = load(props.get("audio", data.get("audio", "")))
+    var audio_path = props.get("audio", data.get("audio", null))
+    if audio_path and FileAccess.file_exists(audio_path):
+        audio = load(audio_path)
 
 func get_local_pos(mesh: MeshInstance2D):
     var mesh_size = Util.get_mesh_instance_size(mesh)

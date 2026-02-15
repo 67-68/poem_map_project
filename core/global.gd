@@ -53,7 +53,7 @@ signal request_start_black(enable: bool)
 # 展示popup信息
 signal request_text_popup(text: String)
 signal request_warning_toast(data: String)
-signal request_apply_galgame_event(data: HistoryEventData)
+signal request_narrative(data: HistoryEventData)
 
 signal change_background_color(color: Color) # 如果为空，disable color
 signal request_rain(enable: bool)
@@ -66,6 +66,9 @@ signal request_apply_poem(data: PoemData, poet: PoetData)
 signal poem_animation_finished()
 
 signal request_add_messager(msg: Messager)
+signal request_change_bg_modulate(color: Color)
+signal request_restore_bg_modulate(duration: float) # -1 = forever
+signal history_event_confirmed()
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -76,21 +79,32 @@ var territories: Dictionary
 var msger_data: Dictionary
 var event_data: Dictionary
 
+var history_event_stack_manager: StackManager
+var history_event_buffer: ManualBuffer
+
+var resolve_history_event = func(x: HistoryEventData):
+	request_narrative.emit(x)
+
 func init():
 	index_image = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
 	Logging.current_level = Logging.Level.DEBUG
 
 	# 加载数据
-	life_path_points = create_dict(DataLoader.load_json_model(PoetLifePoint,'path_points'))
-	poet_data = create_dict(DataLoader.load_json_model(PoetData,'poet_data'))
-	poem_data = create_dict(DataLoader.load_json_model(PoemData,'poem_data'))
-	factions = create_dict(DataLoader.load_json_model(Faction,'factions'))
-	base_province = create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
-	territories = create_dict(DataLoader.load_csv_model(Territory,'territories'))
-	msger_data = create_dict(DataLoader.load_json_model(MessagerData,'msger_data'))
-	event_data = create_dict(DataLoader.load_json_model(HistoryEventData,'history_event_data'))
-	# 数据文件不允许使用字典！！使用list
+	life_path_points = Util.create_dict(DataLoader.load_json_model(PoetLifePoint,'path_points'))
+	poet_data = Util.create_dict(DataLoader.load_json_model(PoetData,'poet_data'))
+	poem_data = Util.create_dict(DataLoader.load_json_model(PoemData,'poem_data'))
+	factions = Util.create_dict(DataLoader.load_json_model(Faction,'factions'))
+	base_province = Util.create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
+	territories = Util.create_dict(DataLoader.load_csv_model(Territory,'territories'))
+	msger_data = Util.create_dict(DataLoader.load_json_model(MessagerData,'msger_data'))
+	event_data = Util.create_dict(DataLoader.load_json_model(HistoryEventData,'history_event_data'))
+	
+	load_manager_and_buffers()
+	
+	# 添加到事件触发
+	for d in event_data.values(): TimeService.register(d.year,history_event_buffer.pop_item)
 
+	# 数据文件不允许使用字典！！使用list
 	for d in poem_data:
 		var poem_point = PoetLifePoint.new(poem_data[d].to_life_path_point_data())
 		poem_point.uuid = 'poem_%s' % d
@@ -99,14 +113,11 @@ func init():
 	for d in poet_data:
 		poet_data[d].path_point_keys = DataHelper.find_all_values_by_membership(life_path_points,'owner_uuids',d,'uuid')
 
-func create_dict(data: Array):
-	var dict = {}
-	for d in data:
-		dict[d.uuid] = d
-	return dict
 
-func _process(_delta: float) -> void:
-	pass
+func load_manager_and_buffers():
+	history_event_stack_manager = StackManager.new(resolve_history_event,history_event_confirmed) # 这里暂且使用一个signal, 如果后面想做多个事件页面一样叠在一起需要改一下manager内部设定不依赖complete signal
+	history_event_buffer = ManualBuffer.new(history_event_stack_manager.add_item,event_data.values())
+	# 可以给manager 加一个新的选项询问是不是暂停engine, 现在还需要自己手动处理太麻烦了
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

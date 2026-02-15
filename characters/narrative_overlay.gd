@@ -46,11 +46,10 @@ var _tween: Tween
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	Global.request_apply_galgame_event.connect(apply_narrative)
+	Global.request_narrative.connect(apply_narrative)
 	
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	
 	hide() 
 
 func _play_open_animation():
@@ -96,6 +95,9 @@ func apply_narrative(data: HistoryEventData):
 		# 只有点击有效选项才触发结束
 		btn.option_made.connect(_on_option_selected)
 	
+	AudioManager.play_sad()
+	Global.change_background_color.emit(data.color)
+
 	# 5. 🎬 进场动画 (The Entrance)
 	_play_open_animation()
 
@@ -127,3 +129,5 @@ func _end_narrative():
 	# 3. 恢复世界
 	TimeService.resume_world()
 	Logging.done('narrative finished')
+
+	Global.history_event_confirmed.emit()

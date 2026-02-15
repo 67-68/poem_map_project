@@ -1,6 +1,5 @@
 class_name PoetData extends WorldEvent
 
-@export var color: Color
 @export var birth_year: float
 @export var death_year: float
 @export var path_point_keys: Array = []
@@ -15,7 +14,6 @@ func _init(notes: Dictionary):
 	var properties = notes.get('properties',{})
 	birth_year = properties.get("birth", 0.0)
 	death_year = properties.get('death',1.0)
-	color = Color.from_string(properties.get('color', "#ffffff"), Color.WHITE)
 
 func get_rich_poet():
 	return Util.colorize_underlined_link(name,Color.GRAY,uuid)

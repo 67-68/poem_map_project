@@ -7,7 +7,6 @@ var tw: Tween
 @onready var title_label = $BookPanel/MarginContainer/HBox/VBox/TitleLabel
 @onready var content_label = $BookPanel/MarginContainer/HBox/VBox/ContentLabel
 @onready var rarity_stamp = $BookPanel/MarginContainer/HBox/RarityStamp
-@onready var stamp_player = $PoemAnimation/StampPlayer
 
 func on_apply_poem(data: PoemData,poet_data):
 	position = data.position
@@ -75,7 +74,7 @@ func create_animation():
 	tw.tween_property(rarity_stamp,'scale',Vector2(1,1),0.7)
 	
 	await tw.finished
-	stamp_player.play()
+	AudioManager.play_sfx(preload("res://assets/sounds/stamp_sound.wav"))
 
 	end_animation()
 	
@@ -97,7 +96,3 @@ func end_animation():
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Global.request_apply_poem.connect(self.on_apply_poem)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

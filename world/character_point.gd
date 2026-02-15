@@ -99,7 +99,7 @@ func on_send_poems():
 		next_point_year = -1
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	on_move()
 	var target_path_ratio: float = time_position_curve.sample(Global.ratio_time) # 当前路径的比例
 	var total_length = path.get_baked_length()

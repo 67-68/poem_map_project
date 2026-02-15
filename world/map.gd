@@ -8,6 +8,8 @@ var prov_2_fac: Dictionary = {}
 func _ready() -> void:
 	Global.map = self
 	Global.request_add_messager.connect(_on_add_messager)
+	Global.request_change_bg_modulate.connect(change_world_color)
+	Global.request_restore_bg_modulate.connect(restore_world_color)
 	# 2. 加载并赋值
 	$MessagerManager.mesh = $background/BorderMesh
 	Logging.info("✅ 赋值成功，当前 Mesh 资源: %s" % $MessagerManager.mesh)
@@ -139,12 +141,14 @@ func load_indexs():
 func fade_world_to_dark(duration: float):
 	Logging.change('world_color','dark')
 	change_world_color(Color.GRAY)
-	get_tree().create_timer(duration).timeout.connect(restore_world_color)
+	if not duration == -1:
+		get_tree().create_timer(duration).timeout.connect(restore_world_color)
 
 func restore_world_color(duration: float):
 	Logging.change('world_color','normal')
 	change_world_color(Color.WHITE)
-	get_tree().create_timer(duration).timeout.connect(fade_world_to_dark)
+	if not duration == -1:
+		get_tree().create_timer(duration).timeout.connect(fade_world_to_dark)
 
 func change_world_color(color: Color):
 	Logging.change('world_color',color.to_html(false))
