@@ -12,8 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://cnkr0y7c3yen2" path="res://features/poem_popup.tscn" id="9_4c57u"]
 [ext_resource type="PackedScene" uid="uid://5q6bljtvpw4y" path="res://core/time_service.tscn" id="9_kek77"]
 [ext_resource type="PackedScene" uid="uid://q2vqxhwq5yvp" path="res://core/size_service.tscn" id="11_efxa6"]
-[ext_resource type="Script" uid="uid://cu331j03s8eok" path="res://world/simple_toast.gd" id="11_vivmo"]
-[ext_resource type="Script" uid="uid://dk5iruu4bknq6" path="res://characters/narrative_overlay.gd" id="12_2cqfq"]
+[ext_resource type="PackedScene" uid="uid://u88ye4xgrk8h" path="res://characters/narrative_overlay.tscn" id="11_vivmo"]
+[ext_resource type="PackedScene" uid="uid://ctja8gxdepflp" path="res://ui/simple_toast.tscn" id="12_2cqfq"]
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
@@ -109,28 +109,9 @@ offset_top = 185.14502
 offset_right = -262.15143
 offset_bottom = 225.14502
 
-[node name="SimpleToast" type="Control" parent="UI"]
-layout_mode = 3
-anchor_left = 0.5
-anchor_top = 0.8
-anchor_right = 0.5
-anchor_bottom = 0.9
-offset_left = -20.0
-offset_top = -40.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-script = ExtResource("11_vivmo")
-metadata/_custom_type_script = "uid://cu331j03s8eok"
+[node name="NarrativeOverlay" parent="UI" instance=ExtResource("11_vivmo")]
 
-[node name="NarrativeOverlay" type="Control" parent="UI"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("12_2cqfq")
-metadata/_custom_type_script = "uid://dk5iruu4bknq6"
+[node name="SimpleToast" parent="UI" instance=ExtResource("12_2cqfq")]
 
 [node name="CoreSystems" type="Node" parent="."]
 

@@ -5,7 +5,8 @@ var option: EventOption
 
 func _init(data: EventOption):
 	option = data
-	if data.disabled:
+	text = data.description
+	if data.is_disabled:
 		tooltip_text = data.disabled_reason
 		pressed.connect(disable_btn)
 	else:

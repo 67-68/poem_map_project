@@ -10,7 +10,6 @@ const WARNING_COLOR = Color(1.0, 0.4, 0.4, 1.0)
 func _ready() -> void:
 	# 确保不挡鼠标
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# 初始化状态
 	hide()

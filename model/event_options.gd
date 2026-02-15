@@ -4,6 +4,8 @@ var is_disabled := true
 var disabled_reason := ""
 var effect
 
+# 使用description作为button text
+
 func _init(data: Dictionary):
 	super._init(data)
 	var props = data.get("properties", data.get("property", {}))
