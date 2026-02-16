@@ -1,11 +1,12 @@
 ## Added
-- galgame-like popup event system
+- eu4-like popup event system
 - debug tool in navigation service for province connection
 - debug overlay for province connection
 - debug util
 - character model instead of point
 - time control GUI
 - 年号
+- chat bubble
 
 ## Fixed
 - messager manager @tool error

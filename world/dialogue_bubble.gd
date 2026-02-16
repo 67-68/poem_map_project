@@ -23,9 +23,9 @@ func _process(_delta):
     position = screen_pos + base_offset
 
 # 供外部 (缓冲池) 调用的初始化接口
-func setup(target: Node2D, text: String):
-    target_node = target
-    label.text = text
+func setup(data: ChatBubble):
+    target_node = data.attached_node
+    label.text = data.description
 
 # 3. 接管全局点击：Galgame 祖传手艺
 func _input(event):
