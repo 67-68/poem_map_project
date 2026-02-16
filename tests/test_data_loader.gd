@@ -74,6 +74,7 @@ func test_csv_coordinate_aggregation_and_routing():
 	file.close()
 	
 	# 2. 跑毒
+	breakpoint
 	var results = DataLoader.load_csv_model(MockEntity, TEST_CSV)
 	
 	# 3. 验尸

@@ -18,7 +18,7 @@ static func _fix_path(file_path: String, extension: String, global_path: String)
 	return file_path
 
 # 原有的 JSON 加载逻辑 (稍作封装)
-static func load_json_model(model_class: Variant, file_path: String) -> Array[GameEntity]:
+static func load_json_model(model_class: Variant, file_path: String) -> Array:
 	file_path = _fix_path(file_path, "json",Global.DATA_PATH)
 	
 	if not FileAccess.file_exists(file_path):
@@ -32,7 +32,7 @@ static func load_json_model(model_class: Variant, file_path: String) -> Array[Ga
 		printerr("😡 JSON 格式错误，请检查语法：", file_path)
 		return []
 		
-	var result: Array[GameEntity] = []
+	var result: Array = []
 	# 容错处理：如果 JSON 只有单个对象而不是数组，包装成数组
 	var items = content if content is Array else [content]
 
@@ -48,7 +48,7 @@ static func load_json_model(model_class: Variant, file_path: String) -> Array[Ga
 		# --- [插入点 2] ---
 		# 架构师留言：让脏数据无处遁形 😡
 		for key in item.keys():
-			if not valid_keys.has(key):
+			if not valid_keys.has(key) and key != 'properties':
 				Logging.warn("😨 幽灵字段出没！JSON 键 '%s' 在数据模型 %s 中不存在。请检查拼写或更新你的 Resource 结构。(文件: %s)" % [key, model_class, file_path])
 		# -----------------
 		
@@ -58,14 +58,14 @@ static func load_json_model(model_class: Variant, file_path: String) -> Array[Ga
 	Logging.info('load %s model %s from %s' % [result.size(),model_class,file_path])
 	return result
 
-static func load_csv_model(model_class: Variant, file_path: String) -> Array[GameEntity]:
+static func load_csv_model(model_class: Variant, file_path: String) -> Array:
 	file_path = _fix_path(file_path, "csv", Global.PERMANENT_DATA_PATH)
 	if not FileAccess.file_exists(file_path):
 		printerr("😨 CSV 档案被次元放逐了！路径：", file_path)
 		return []
 		
 	var file = FileAccess.open(file_path, FileAccess.READ)
-	var result: Array[GameEntity] = []
+	var result: Array = []
 	var headers = file.get_csv_line()
 	
 	# --- [拦截网预热] ---

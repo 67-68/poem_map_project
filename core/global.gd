@@ -141,7 +141,8 @@ func wash_positions(items: Dictionary, mesh_size, use_position_uuid: bool = fals
 			Logging.warn('an item do not have uv position!')
 			breakpoint
 		item.position_dirty = false
-		item.position = item.get_local_pos_use_vec3(mesh_size)
+		var pos = item.get_local_pos_use_vec3(mesh_size)
+		item.position = pos
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
