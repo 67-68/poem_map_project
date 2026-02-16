@@ -66,14 +66,14 @@ func on_change_emotion_color(current_offset: int):
 
 	var is_extreme = emotion_float < 0.1 or emotion_float > 0.9
 	# Logging.debug('emotion for %s: %s' % [datamodel.name,round(emotion_float * 10)/10])
-	if is_extreme:
-		Global.change_background_color.emit(emotion_color)
-		$EmotionColor.visible = false
-		$EmotionColor.enabled = false
-	else:
-		$EmotionColor.color = emotion_color
-		$EmotionColor.visible = true
-		$EmotionColor.enabled = true
+	#if is_extreme:
+		#Global.change_background_color.emit(emotion_color)
+		#$EmotionColor.visible = false
+		#$EmotionColor.enabled = false
+	#else:
+		#$EmotionColor.color = emotion_color
+		#$EmotionColor.visible = true
+		#$EmotionColor.enabled = true
 
 func on_send_poems():
 	# 1. 调用纯逻辑函数计算

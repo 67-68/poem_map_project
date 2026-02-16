@@ -6,10 +6,10 @@ uid="uid://dhvka6ckhhvn6"
 
 [deps]
 
-files=["res://assets/maps/base_province.id.translation", "res://assets/maps/base_province.x.translation", "res://assets/maps/base_province.y.translation", "res://assets/maps/base_province.name.translation", "res://assets/maps/base_province.uv.translation", "res://assets/maps/base_province.uv.translation"]
+files=["res://assets/maps/base_province.uuid.translation", "res://assets/maps/base_province.name.translation", "res://assets/maps/base_province.position.translation", "res://assets/maps/base_province.uv.translation"]
 
 source_file="res://assets/maps/base_province.csv"
-dest_files=["res://assets/maps/base_province.id.translation", "res://assets/maps/base_province.x.translation", "res://assets/maps/base_province.y.translation", "res://assets/maps/base_province.name.translation", "res://assets/maps/base_province.uv.translation", "res://assets/maps/base_province.uv.translation"]
+dest_files=["res://assets/maps/base_province.uuid.translation", "res://assets/maps/base_province.name.translation", "res://assets/maps/base_province.position.translation", "res://assets/maps/base_province.uv.translation"]
 
 [params]
 

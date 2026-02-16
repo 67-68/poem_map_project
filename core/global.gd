@@ -88,13 +88,14 @@ func init():
 	index_image = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
 	Logging.current_level = Logging.Level.DEBUG
 
+	base_province = Util.create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
+	territories = Util.create_dict(DataLoader.load_csv_model(Territory,'territories'))
+	factions = Util.create_dict(DataLoader.load_json_model(Faction,'factions'))
+
 	# 加载数据
 	life_path_points = Util.create_dict(DataLoader.load_json_model(PoetLifePoint,'path_points'))
 	poet_data = Util.create_dict(DataLoader.load_json_model(PoetData,'poet_data'))
 	poem_data = Util.create_dict(DataLoader.load_json_model(PoemData,'poem_data'))
-	factions = Util.create_dict(DataLoader.load_json_model(Faction,'factions'))
-	base_province = Util.create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
-	territories = Util.create_dict(DataLoader.load_csv_model(Territory,'territories'))
 	msger_data = Util.create_dict(DataLoader.load_json_model(MessagerData,'msger_data'))
 	event_data = Util.create_dict(DataLoader.load_json_model(HistoryEventData,'history_event_data'))
 	
@@ -112,11 +113,35 @@ func init():
 	for d in poet_data:
 		poet_data[d].path_point_keys = DataHelper.find_all_values_by_membership(life_path_points,'owner_uuids',d,'uuid')
 
+func load_actual_positions(mesh_size):
+	"""
+	由map触发
+	"""
+	wash_positions(base_province,mesh_size)
+	wash_positions(poem_data,mesh_size,true)
+	wash_positions(life_path_points,mesh_size,true)
 
 func load_manager_and_buffers():
 	history_event_stack_manager = StackManager.new(resolve_history_event,history_event_confirmed) # 这里暂且使用一个signal, 如果后面想做多个事件页面一样叠在一起需要改一下manager内部设定不依赖complete signal
 	history_event_buffer = ManualBuffer.new(history_event_stack_manager.add_item,event_data.values())
 	# 可以给manager 加一个新的选项询问是不是暂停engine, 现在还需要自己手动处理太麻烦了
+
+func wash_positions(items: Dictionary, mesh_size, use_position_uuid: bool = false):
+	for item in items.values():
+		# 尝试使用州名
+		if use_position_uuid and item.location_uuid:
+			var prov = base_province.get(item.location_uuid)
+			if prov:
+				item.position = prov.position
+				item.uv_position = prov.uv_position
+				item.position_dirty = false
+				continue
+		# 不行才使用uv
+		if not item.uv_position:
+			Logging.warn('an item do not have uv position!')
+			breakpoint
+		item.position_dirty = false
+		item.position = item.get_local_pos_use_vec3(mesh_size)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

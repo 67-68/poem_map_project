@@ -1,5 +1,6 @@
 class_name WorldEvent extends GameEntity
 
+var position_dirty := true
 var position: Vector2:
     get:
         var res = _get_deprecated_position() 
@@ -11,6 +12,7 @@ var position: Vector2:
 var _position := Vector2(0,0)
 
 func _get_deprecated_position():
+    if position_dirty: Logging.warn('正在使用可能没有经过转换的脏数据position!')
     return _position
 
 func _set_deprecated_position(val):
@@ -21,9 +23,6 @@ func _set_deprecated_position(val):
 @export var uv_position: Vector2 #0-1
 @export var audio: AudioStream = null
 @export var color: Color
-
-
-
 
 func _init(data: Dictionary = {}):
     # 1. 先让父类干活 (解析 uuid, name 等)
@@ -39,13 +38,15 @@ func _init(data: Dictionary = {}):
     if uv_pos is Vector2:
         uv_position = uv_pos
     elif uv_pos is Array:
-        uv_position = Vector2(uv_pos[0],uv_pos[1])
+        var new_pos = Util.strip_csv_array(uv_pos)
+        uv_position = Vector2(new_pos[0],new_pos[1])
     else:
         Logging.debug('使用了position')
         var raw_pos = props.get("position", data.get("position", null))
         if raw_pos is Vector2:
             position = raw_pos
         elif raw_pos is Array and raw_pos.size() >= 2: # 需要考虑到这里可能会使用poem data
+            raw_pos = Util.strip_csv_array(raw_pos)
             position = Util.geo_to_pixel(raw_pos[0], raw_pos[1])
         else:
             position = Vector2.ZERO
@@ -66,4 +67,13 @@ func get_local_pos(mesh: MeshInstance2D):
     var pos = Vector2.ZERO
     pos.x = mesh_size.x * uv_position.x
     pos.y = mesh_size.y * uv_position.y
+    return pos
+
+func get_local_pos_use_vec3(size: Vector3):
+    """
+    上面那个函数直接传size的版本
+    """
+    var pos = Vector2.ZERO
+    pos.x = size.x * uv_position.x
+    pos.y = size.y * uv_position.y
     return pos

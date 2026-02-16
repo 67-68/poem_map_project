@@ -254,3 +254,19 @@ static func create_dict(data: Array):
 	for d in data:
 		dict[d.uuid] = d
 	return dict
+
+static func strip_csv_array(data: Array):
+	"""
+	data: like "[a,b]"
+	"""
+	if data[0] is String:
+		var d = data[0] as String
+		d = d.lstrip("\"").rstrip("\"")
+		d = d.lstrip("[").rstrip("]")
+		var result = d.split(',')
+		var float_res = []
+		float_res.append(float(result[0]))
+		float_res.append(float(result[1]))
+		return float_res
+	return data
+		

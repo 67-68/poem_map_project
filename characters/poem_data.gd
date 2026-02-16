@@ -52,7 +52,8 @@ func to_life_path_point_data() -> Dictionary:
             'example': self.example,
             # 注入元数据，方便以后反查
             "poem_ref": self.uuid,
-            "event_type": "poem_creation"
+            "event_type": "poem_creation",
+            "uv_position": uv_position
         }
     }
     

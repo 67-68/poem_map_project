@@ -10,8 +10,8 @@
             "poem_background": "NIGHT",
             "emotion": 0.3,
             "time": 725.0,
-            "position": [100,100],
-            "example": "床前明月光，疑是地上霜"
+            "example": "床前明月光，疑是地上霜",
+            "uv_position": [0.5, 0.5]
         }
     },
     {
@@ -25,7 +25,7 @@
             "poem_background": "BOOK",
             "emotion": 0.8,
             "time": 752.0,
-            "position": [100,100],
+            "uv_position": [0.1,0.2],
             "example":"君不见黄河之水天上来，奔流到海不复回。"
         }
     },
@@ -40,8 +40,8 @@
             "poem_background": "BOOK",
             "emotion": 0.7,
             "time": 759.0,
-            "position": [100,100],
-            "example":"朝辞白帝彩云间，千里江陵一日还。"
+            "example":"朝辞白帝彩云间，千里江陵一日还。",
+            "uv_position": [0.5, 0.2]
         }
     },
     {
@@ -55,8 +55,8 @@
             "poem_background": "BOOK",
             "emotion": 0.2,
             "time": 757.0,
-            "position": [100,100],
-            "example":"国破山河在，城春草木深"
+            "example":"国破山河在，城春草木深",
+            "uv_position": [0.3, 0.5]
         }
     },
     {
@@ -70,8 +70,8 @@
             "poem_background": "NIGHT",
             "emotion": 0.4,
             "time": 767.0,
-            "position": [100,100],
-            "example":"风急天高猿啸哀，渚清沙白鸟飞回。"
+            "example":"风急天高猿啸哀，渚清沙白鸟飞回。",
+            "uv_position": [0.5, 0.1]
         }
     },
     {
@@ -85,8 +85,8 @@
             "poem_background": "BOOK",
             "emotion": 0.25,
             "time": 760.0,
-            "position": [100,100],
-            "example":"高者挂罥长林梢，下者飘转沉塘坳。"
+            "example":"高者挂罥长林梢，下者飘转沉塘坳。",
+            "uv_position": [0.7, 0.2]
         }
     }
 ]

@@ -6,6 +6,8 @@ var color_2_province: Dictionary
 var prov_2_fac: Dictionary = {}
 
 func _ready() -> void:
+	Global.load_actual_positions(Util.get_mesh_instance_size($background/BorderMesh))
+	
 	Global.map = self
 	Global.request_add_messager.connect(_on_add_messager)
 	Global.request_change_bg_modulate.connect(change_world_color)
@@ -18,6 +20,8 @@ func _ready() -> void:
 	Logging.done('create province')
 	render_factions()
 	Logging.done('render faction')
+
+	load_character_point()
 
 func _on_add_messager(msg: Messager):
 	$background/PathMesh.add_child(msg)

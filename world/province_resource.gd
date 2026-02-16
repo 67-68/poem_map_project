@@ -19,6 +19,6 @@ func _set_deprecated_position(_val):
 func _init(data):
 	super._init(data)
 	var props = data.get("properties", data.get("property", {}))
-	stability = data.get('stability',float(props.get('stability',1.0)))
+	stability = float(data.get('stability',props.get('stability',1.0)))
 	capital = data.get('capital',props.get('capital','important_city'))
 	sub_ids = data.get('sub_ids',props.get('sub_ids',[]))

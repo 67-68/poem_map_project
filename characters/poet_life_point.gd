@@ -10,9 +10,7 @@ func _init(data: Dictionary = {}):
     super._init(data)
     
     if data.is_empty(): return
-    
     var props = data.get("properties", data.get("property", {}))
-    
     # 2. 自己只处理情绪
     # 假设 emotion 是 0.0 - 1.0
     emotion = props.get("emotion", data.get("emotion", 0.5))
