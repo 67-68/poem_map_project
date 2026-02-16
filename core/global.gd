@@ -44,6 +44,8 @@ var color_2_province: Dictionary
 var map: Node2D
 var faction_renderer: FactionMapRenderer
 
+var poem_stack_manager: StackManager
+var poem_buffer: ManualBuffer
 
 # 用来展示poet
 signal user_clicked(PoetData) # 值可以为空，express 点到空处，面板hide
@@ -103,6 +105,7 @@ func init():
 	
 	# 添加到事件触发
 	for d in event_data.values(): TimeService.register(d.year,history_event_buffer.pop_item)
+	for d in poem_data.values(): TimeService.register(d.year,poem_buffer.pop_item)
 
 	# 数据文件不允许使用字典！！使用list
 	for d in poem_data:
@@ -125,6 +128,15 @@ func load_manager_and_buffers():
 	history_event_stack_manager = StackManager.new(resolve_history_event,history_event_confirmed) # 这里暂且使用一个signal, 如果后面想做多个事件页面一样叠在一起需要改一下manager内部设定不依赖complete signal
 	history_event_buffer = ManualBuffer.new(history_event_stack_manager.add_item,event_data.values())
 	# 可以给manager 加一个新的选项询问是不是暂停engine, 现在还需要自己手动处理太麻烦了
+	poem_stack_manager = StackManager.new(_apply_poem_data,Global.poem_animation_finished)
+	poem_buffer = ManualBuffer.new(poem_stack_manager.add_item,poem_data.values())
+
+static func _apply_poem_data(_poem_data: PoemData):
+	"""
+	把poem data设置到view中
+	"""
+	var poet_data_ = Global.poet_data[_poem_data.owner_uuids[0]]
+	Global.request_apply_poem.emit(_poem_data, poet_data_)
 
 func wash_positions(items: Dictionary, mesh_size, use_position_uuid: bool = false):
 	for item in items.values():

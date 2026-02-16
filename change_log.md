@@ -3,6 +3,7 @@
 - debug tool in navigation service for province connection
 - debug overlay for province connection
 - debug util
+- character model instead of point
 
 ## Fixed
 - messager manager @tool error

@@ -7,16 +7,10 @@ var time_position_curve: Curve
 var previous_color: Color
 var emotion_curve: Curve # length_2_float_emotion
 var emotion_gradient: Gradient # float_emotion_2_color
-
 var next_point_year: float
-var stack_manager: StackManager
 
-func _apply_poem_data(_poem_data: PoemData):
-	"""
-	把poem data设置到view中
-	"""
-	var poet_data = Global.poet_data[_poem_data.owner_uuids[0]]
-	Global.request_apply_poem.emit(_poem_data, poet_data)
+var _last_position: Vector2 = Vector2.ZERO
+@onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func setup_emotion():
 	emotion_curve = Curve.new()
@@ -45,7 +39,9 @@ func setup_emotion():
 	
 
 func _ready() -> void:
-	stack_manager = StackManager.new(_apply_poem_data,Global.poem_animation_finished)
+	_last_position = global_position
+	anim_sprite.play("idle")
+
 	$Footstep.top_level = true
 	if datamodel:
 		$Label.text = datamodel.name
@@ -75,30 +71,6 @@ func on_change_emotion_color(current_offset: int):
 		#$EmotionColor.visible = true
 		#$EmotionColor.enabled = true
 
-func on_send_poems():
-	# 1. 调用纯逻辑函数计算
-	var result = Util.process_poem_events(
-		Global.life_path_points, 
-		datamodel.path_point_keys, 
-		self.next_point_year
-	)
-	
-	# 2. 处理副作用 (Side Effects)
-	
-	# 发射信号
-	if result.found_poems:
-		var poem_instances = []
-		for p in result.poems_to_emit:
-			poem_instances.append(Global.poem_data[p])
-		Global.poems_created.emit(poem_instances)
-	
-	# 3. 核心修复：更新状态防止死循环 💀
-	if result.new_target_year > self.next_point_year:
-		self.next_point_year = result.new_target_year
-	else:
-		next_point_year = -1
-
-
 func _process(_delta: float) -> void:
 	on_move()
 	var target_path_ratio: float = time_position_curve.sample(Global.ratio_time) # 当前路径的比例
@@ -106,10 +78,30 @@ func _process(_delta: float) -> void:
 	var current_offset = total_length * target_path_ratio # 当前出发了多远，比如1000,total 5000
 	position = path.sample_baked(current_offset)
 	on_change_emotion_color(current_offset)
+	update_anim()
 
-	if not next_point_year == -1 and Global.year >= self.next_point_year:
-		on_send_poems()
+func update_anim():
+	# 1. 计算这一帧的瞬时位移向量
+	var movement = global_position - _last_position
 	
+	# 2. 如果位移长度大于一个极小值（防止浮点数抖动导致原地抽搐）
+	if movement.length_squared() > 0.01:
+		# 播放走路动画
+		if anim_sprite.animation != "walk_normal":
+			anim_sprite.play("walk_normal")
+			
+		# 3. 核心：根据 X 轴的位移正负，直接翻转图片！
+		if movement.x > 0.1:
+			anim_sprite.flip_h = false # 往右走，不翻转
+		elif movement.x < -0.1:
+			anim_sprite.flip_h = true  # 往左走，水平翻转
+	else:
+		# 停下来了，恢复站立
+		if anim_sprite.animation != "idle":
+			anim_sprite.play("idle")
+			
+	# 4. 更新坐标记忆，供下一帧使用
+	_last_position = global_position
 
 func _create_path() -> void:
 	"""
