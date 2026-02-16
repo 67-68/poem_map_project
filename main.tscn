@@ -8,12 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://8gipdq3nfr2d" path="res://ui/poet_descriptor.tscn" id="5_lquwl"]
 [ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="6_7mycd"]
 [ext_resource type="Texture2D" uid="uid://dafe3626abotl" path="res://assets/poem_bgs/juanzhou.png" id="7_w48qg"]
-[ext_resource type="Script" uid="uid://cumbr3p6omik2" path="res://ui/time_operation_container.gd" id="8_kek77"]
 [ext_resource type="PackedScene" uid="uid://cnkr0y7c3yen2" path="res://features/poem_popup.tscn" id="9_4c57u"]
 [ext_resource type="PackedScene" uid="uid://5q6bljtvpw4y" path="res://core/time_service.tscn" id="9_kek77"]
 [ext_resource type="PackedScene" uid="uid://q2vqxhwq5yvp" path="res://core/size_service.tscn" id="11_efxa6"]
 [ext_resource type="PackedScene" uid="uid://u88ye4xgrk8h" path="res://characters/narrative_overlay.tscn" id="11_vivmo"]
 [ext_resource type="PackedScene" uid="uid://ctja8gxdepflp" path="res://ui/simple_toast.tscn" id="12_2cqfq"]
+[ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="12_vivmo"]
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
@@ -78,31 +78,6 @@ offset_right = 342.0
 offset_bottom = 231.0
 script = ExtResource("6_7mycd")
 
-[node name="TimeOperationContainer" type="HBoxContainer" parent="UI"]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -161.0
-offset_bottom = 46.0
-grow_horizontal = 0
-size_flags_vertical = 8
-script = ExtResource("8_kek77")
-
-[node name="HaltButton" type="Button" parent="UI/TimeOperationContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "halt"
-
-[node name="TimeStartButton" type="Button" parent="UI/TimeOperationContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "start"
-
-[node name="NextPoetButton" type="Button" parent="UI/TimeOperationContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "skip"
-
 [node name="PoemPopup" parent="UI" instance=ExtResource("9_4c57u")]
 offset_left = -302.15143
 offset_top = 185.14502
@@ -112,6 +87,8 @@ offset_bottom = 225.14502
 [node name="NarrativeOverlay" parent="UI" instance=ExtResource("11_vivmo")]
 
 [node name="SimpleToast" parent="UI" instance=ExtResource("12_2cqfq")]
+
+[node name="TimeControlPanel" parent="UI" instance=ExtResource("12_vivmo")]
 
 [node name="CoreSystems" type="Node" parent="."]
 
@@ -124,6 +101,3 @@ script = ExtResource("13_ycdy4")
 
 [connection signal="value_changed" from="UI/HSlider" to="UI/HSlider" method="_on_value_changed"]
 [connection signal="text_submitted" from="UI/Controller" to="UI/Controller" method="_on_text_submitted"]
-[connection signal="pressed" from="UI/TimeOperationContainer/HaltButton" to="UI/TimeOperationContainer" method="_on_halt_button_pressed"]
-[connection signal="pressed" from="UI/TimeOperationContainer/TimeStartButton" to="UI/TimeOperationContainer" method="_on_time_start_button_pressed"]
-[connection signal="pressed" from="UI/TimeOperationContainer/NextPoetButton" to="UI/TimeOperationContainer" method="_on_next_poet_button_pressed"]

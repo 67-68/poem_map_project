@@ -39,6 +39,10 @@ window/stretch/mode="canvas_items"
 
 enabled=PackedStringArray("res://addons/gut/plugin.cfg")
 
+[gui]
+
+theme/custom="uid://6q62uqbnal4p"
+
 [input]
 
 call_controller={

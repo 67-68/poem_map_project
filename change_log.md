@@ -4,6 +4,8 @@
 - debug overlay for province connection
 - debug util
 - character model instead of point
+- time control GUI
+- 年号
 
 ## Fixed
 - messager manager @tool error

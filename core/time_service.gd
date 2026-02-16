@@ -1,6 +1,7 @@
 extends Node
 
 @export var speed: float = 5.0 
+var time_start := false
 
 # 1. 史书全卷 (Master Database)：只读，永远不删元素
 # 结构: [{"time": 758.1, "callback": func1, "is_dynamic": false}]
@@ -11,12 +12,12 @@ var event_queue: Array[Dictionary] = []
 
 func _ready() -> void:
 	Global.year = Global.start_year
-	set_process(false)
+	pause()
 	
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 
-	Global.year += speed * delta
+	Global.year += speed * delta * 0.1
 	Global.year_changed.emit(Global.year)
 	
 	# 你文档里写的进度驱动 
@@ -27,6 +28,19 @@ func _process(delta: float) -> void:
 		var event = event_queue.pop_front()
 		if event.callback.is_valid():
 			event.callback.call()
+	
+func speed_up():
+	if not speed + 2 > 30:
+		speed += 2 # about 2 month
+	else:
+		Logging.warn('speed can not be higher than 30')
+
+func slow_down():
+	if not (speed - 2) < 5:
+		speed -= 2
+	else:
+		Logging.warn('speed can not be lower than 5')
+
 
 # --- 注册接口 ---
 func register(trigger_time: float, function: Callable, save_to_history: bool = true):
@@ -66,9 +80,11 @@ func _rebuild_queue_from_master():
 	
 func play():
 	set_process(true) # 开启 _process
+	time_start = true
 
 func pause():
 	set_process(false)
+	time_start = false
 
 # 增加一个控制 Engine 的开关
 func pause_world(completely: bool = true):

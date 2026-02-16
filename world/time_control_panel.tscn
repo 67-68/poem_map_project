@@ -1,0 +1,96 @@
+[gd_scene load_steps=8 format=3 uid="uid://bcqlc8yx4uo44"]
+
+[ext_resource type="Script" uid="uid://cy2dg1dthfmt5" path="res://world/time_control_panel.gd" id="1_25hr5"]
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_eoern"]
+[ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_v2d34"]
+[ext_resource type="FontFile" path="res://assets/fonts/ma_shan_zheng/ma_shan_zheng.ttf" id="3_v2d34"]
+[ext_resource type="Texture2D" uid="uid://st52l6u6hob6" path="res://assets/profile/little_paper.png" id="5_wxhbx"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_25hr5"]
+texture = ExtResource("1_eoern")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_wxhbx"]
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="TimeControlPanel" type="CanvasLayer"]
+script = ExtResource("1_25hr5")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -130.0
+offset_bottom = 89.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+
+[node name="Panel" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_25hr5")
+
+[node name="Margin" type="MarginContainer" parent="Margin/Panel"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Margin/Panel/Margin"]
+layout_mode = 2
+
+[node name="Label_Era" type="Label" parent="Margin/Panel/Margin/VBox"]
+layout_mode = 2
+theme = ExtResource("2_v2d34")
+theme_type_variation = &"CnStyledFont"
+theme_override_fonts/font = ExtResource("3_v2d34")
+text = "天宝十四载"
+label_settings = SubResource("LabelSettings_wxhbx")
+
+[node name="Label_Gregorian" type="Label" parent="Margin/Panel/Margin/VBox"]
+modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
+layout_mode = 2
+theme = ExtResource("2_v2d34")
+theme_override_font_sizes/font_size = 10
+text = "test"
+
+[node name="HBox" type="HBoxContainer" parent="Margin/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="SpeedDown" type="TextureButton" parent="Margin/Panel/Margin/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "减速"
+texture_normal = ExtResource("5_wxhbx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="FlowPause" type="TextureButton" parent="Margin/Panel/Margin/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "停止/开始"
+texture_normal = ExtResource("5_wxhbx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Skip" type="TextureButton" parent="Margin/Panel/Margin/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "跳过"
+texture_normal = ExtResource("5_wxhbx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="SpeedUp" type="TextureButton" parent="Margin/Panel/Margin/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "加速"
+texture_normal = ExtResource("5_wxhbx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/SpeedDown" to="." method="slow_down"]
+[connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/FlowPause" to="." method="on_start_end_btn_pressed"]
+[connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/Skip" to="." method="_on_next_poet_button_pressed"]
+[connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/SpeedUp" to="." method="speed_up"]

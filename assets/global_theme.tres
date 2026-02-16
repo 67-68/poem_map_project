@@ -1,0 +1,10 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://6q62uqbnal4p"]
+
+[ext_resource type="FontFile" path="res://assets/fonts/ma_shan_zheng/ma_shan_zheng.ttf" id="1_plf80"]
+
+[sub_resource type="FontVariation" id="FontVariation_g5th0"]
+base_font = ExtResource("1_plf80")
+
+[resource]
+resource_local_to_scene = true
+CnStyledFont/fonts/font = SubResource("FontVariation_g5th0")
