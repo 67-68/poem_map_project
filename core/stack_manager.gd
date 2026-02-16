@@ -1,4 +1,4 @@
-class_name StackManager extends RefCounted
+class_name PopupQueue extends RefCounted
 
 var is_playing: bool = false
 var items: Array = []
@@ -40,9 +40,16 @@ func _init(resolve_item_: Callable, animation_finished_signal: Signal, stop_time
 	Logging.exists('stack manager',resolve_item_)
 	resolve_item = resolve_item_
 	stop_time = stop_time_
-	animation_finished_signal.connect(_on_animation_finished)
+
+	if animation_finished_signal:
+		animation_finished_signal.connect(_on_animation_finished)
+	else:
+		Logging.warn('没发现signal, 需要手动调用mark_as_finish')
 
 func start_time():
 	if stop_time: TimeService.play()
 func pause_time():
 	if stop_time: TimeService.pause()
+
+func mark_as_finish():
+	_on_animation_finished()
