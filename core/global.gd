@@ -61,6 +61,7 @@ signal request_rain(enable: bool)
 signal request_daylight(enable: bool)
 
 signal year_changed(year: float) #虽然可能用不到，直接使用Global year就行了，但还是发一下
+signal speed_changed(speed: float) # -1 = stop
 
 signal poems_created(data: Array)
 signal request_apply_poem(data: PoemData, poet: PoetData)

@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcqlc8yx4uo44"]
+[gd_scene load_steps=7 format=3 uid="uid://bcqlc8yx4uo44"]
 
 [ext_resource type="Script" uid="uid://cy2dg1dthfmt5" path="res://world/time_control_panel.gd" id="1_25hr5"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_eoern"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_v2d34"]
 [ext_resource type="FontFile" path="res://assets/fonts/ma_shan_zheng/ma_shan_zheng.ttf" id="3_v2d34"]
-[ext_resource type="Texture2D" uid="uid://st52l6u6hob6" path="res://assets/profile/little_paper.png" id="5_wxhbx"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_25hr5"]
 texture = ExtResource("1_eoern")
@@ -58,37 +57,36 @@ text = "test"
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="SpeedDown" type="TextureButton" parent="Margin/Panel/Margin/VBox/HBox"]
+[node name="SpeedDown" type="Button" parent="Margin/Panel/Margin/VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "减速"
-texture_normal = ExtResource("5_wxhbx")
-ignore_texture_size = true
-stretch_mode = 0
+text = "-"
 
-[node name="FlowPause" type="TextureButton" parent="Margin/Panel/Margin/VBox/HBox"]
+[node name="FlowPause" type="Button" parent="Margin/Panel/Margin/VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "停止/开始"
-texture_normal = ExtResource("5_wxhbx")
-ignore_texture_size = true
-stretch_mode = 0
+text = "⏸/▶"
 
-[node name="Skip" type="TextureButton" parent="Margin/Panel/Margin/VBox/HBox"]
+[node name="Skip" type="Button" parent="Margin/Panel/Margin/VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "跳过"
-texture_normal = ExtResource("5_wxhbx")
-ignore_texture_size = true
-stretch_mode = 0
+text = "skip"
 
-[node name="SpeedUp" type="TextureButton" parent="Margin/Panel/Margin/VBox/HBox"]
+[node name="SpeedUp" type="Button" parent="Margin/Panel/Margin/VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "加速"
-texture_normal = ExtResource("5_wxhbx")
-ignore_texture_size = true
-stretch_mode = 0
+text = "+"
+
+[node name="VSeparator" type="VSeparator" parent="Margin/Panel/Margin/VBox/HBox"]
+layout_mode = 2
+
+[node name="SpeedIndicator" type="Label" parent="Margin/Panel/Margin/VBox/HBox"]
+layout_mode = 2
+text = "⏸"
 
 [connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/SpeedDown" to="." method="slow_down"]
 [connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/FlowPause" to="." method="on_start_end_btn_pressed"]

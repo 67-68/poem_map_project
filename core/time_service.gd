@@ -1,6 +1,14 @@
 extends Node
 
-@export var speed: float = 5.0 
+@export var _speed: float = 3
+
+@export var speed: float:
+	set(val):
+		_speed = val
+		Global.speed_changed.emit(val)
+	get():
+		return _speed
+
 var time_start := false
 
 # 1. 史书全卷 (Master Database)：只读，永远不删元素
@@ -30,14 +38,14 @@ func _process(delta: float) -> void:
 			event.callback.call()
 	
 func speed_up():
-	if not speed + 2 > 30:
-		speed += 2 # about 2 month
+	if not speed + 9 > 30:
+		speed += 9
 	else:
 		Logging.warn('speed can not be higher than 30')
 
 func slow_down():
-	if not (speed - 2) < 5:
-		speed -= 2
+	if not (speed - 9) < 3:
+		speed -= 9
 	else:
 		Logging.warn('speed can not be lower than 5')
 
@@ -81,10 +89,12 @@ func _rebuild_queue_from_master():
 func play():
 	set_process(true) # 开启 _process
 	time_start = true
+	Global.speed_changed.emit(speed)
 
 func pause():
 	set_process(false)
 	time_start = false
+	Global.speed_changed.emit(-1)
 
 # 增加一个控制 Engine 的开关
 func pause_world(completely: bool = true):
