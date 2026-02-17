@@ -33,6 +33,5 @@ func _init(data: Dictionary = {}):
     tags.assign(raw_tags)
 
     # 6. 加载图标 (IconLoader 最好是静态工具类)
-    if not name.is_empty():
-        # 这里假设你有这个工具类，如果没有，请删掉这行
-        icon = IconLoader.get_icon(name)
+    var icon_path = data.get('icon',props.get(icon))
+    icon = IconLoader.get_icon(icon_path,uuid,name)

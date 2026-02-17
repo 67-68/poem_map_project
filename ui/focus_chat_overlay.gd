@@ -1,17 +1,18 @@
 # GalgameOverlay.gd
 extends Control
 
-@onready var left_portrait = $LeftCharacter
-@onready var right_portrait = $RightCharacter
-@onready var text_label = $Panel/Vbox/ChatLabel
-@onready var name_label = $Panel/Vbox/NameLabel
+@onready var left_portrait = $MarginContainer/LeftCharacter
+@onready var right_portrait = $MarginContainer/RightCharacter
+@onready var text_label = $MarginContainer/Panel/VBox/ChatLabel
+@onready var name_label = $MarginContainer/Panel/VBox/NameLabel
 
 var _dialogue_sequence: Array = []
 var _current_index: int = 0
 
-func play_dialogue_sequence(dialogues): # array of focusChat
+func play_dialogue_sequence(dialogues: FocusedChat): # array of focusChat
     # 这里没有第一时间加载，是缓冲的问题？
     _dialogue_sequence = dialogues.chats as Array
+    $Background.texture = dialogues.icon
     _current_index = 0
     _show_current_line()
 
@@ -25,8 +26,8 @@ func _show_current_line():
         
     var line = _dialogue_sequence[_current_index]
     
-    $Panel/VBox/NameLabel.text = line.name
-    $Panel/VBox/ChatLabel.text = line.description
+    $MarginContainer/Panel/VBox/NameLabel.text = line.name
+    $MarginContainer/Panel/VBox/ChatLabel.text = line.description
     
     # 动态加载并替换立绘 (利用 Godot 的缓存，这里极快)
     var tex = line.texture if line.texture else null # 我的数据渲染管线在之前load好了

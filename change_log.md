@@ -7,6 +7,7 @@
 - time control GUI
 - 年号
 - chat bubble
+- icon get logic: now can get use path but not only name
 
 ## Fixed
 - messager manager @tool error

@@ -26,5 +26,6 @@ extends Node2D
 						'description':'找我有什么事？忙着尾随杜甫呢',
 						'texture':'火柴人.png'
 					}
-				]
+				],
+				'icon':'石壕吏.png'
 			}))
