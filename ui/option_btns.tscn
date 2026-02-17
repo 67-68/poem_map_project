@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://du2vjj46i871e"]
+[gd_scene load_steps=2 format=3 uid="uid://du2vjj46i871e"]
+
+[ext_resource type="Script" uid="uid://vcuxmb0q1ghd" path="res://ui/option_btns.gd" id="1_e6bxb"]
 
 [node name="OptionBtns" type="VBoxContainer"]
 size_flags_vertical = 8
+script = ExtResource("1_e6bxb")

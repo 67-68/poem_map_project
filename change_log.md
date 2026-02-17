@@ -8,6 +8,7 @@
 - 年号
 - chat bubble
 - icon get logic: now can get use path but not only name
+- can trigger plot as chain
 
 ## Fixed
 - messager manager @tool error

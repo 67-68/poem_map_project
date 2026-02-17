@@ -1,6 +1,6 @@
 class_name EventBtn extends Button
 
-signal option_made() # 外部连接这个; 不要连接pressed
+signal option_made(data: ChoiceResult) # 外部连接这个; 不要连接pressed
 var option: EventOption
 var click_count := 0
 
@@ -16,7 +16,7 @@ func _init(data: EventOption):
 func confirmed():
 	if not double_check():
 		return
-	option_made.emit()
+	option_made.emit(option.choice_result)
 
 func disable_btn():
 	if not double_check():
