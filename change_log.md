@@ -1,3 +1,5 @@
+
+# [0.8.0]
 ## Added
 - eu4-like popup event system
 - debug tool in navigation service for province connection
@@ -14,6 +16,8 @@
 - messager manager @tool error
 - manually add connection to base province
 - 触发逻辑
+- icon can not parse
+- focused chat can not trigger later event
 
 
 # [0.7.0]
