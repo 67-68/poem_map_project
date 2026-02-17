@@ -12,7 +12,7 @@ extends Node2D
 	set(val):
 		if val:
 			test_focus_chat = false
-			Global.request_full_chat.emit(FocusedChat.new({
+			Global.request_add_chat.emit(FocusedChat.new({
 				'chats':[
 					{
 						'chat_position':"RIGHT",
@@ -52,7 +52,7 @@ extends Node2D
 						'double_check': true,
 						'double_check_reason': '真的要这么做吗？以她的年龄，去了就是必死的结局',
 						"choice_result":{
-							"target_uuid":"test3"
+							"target_uuid":"dufu_fail_to_become_official"
 						}
 					}
 				],

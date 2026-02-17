@@ -42,12 +42,11 @@ func finish_chat(result: ChoiceResult = null):
 	if result:
 		var next_item = Global.find_triggerable_item(result.target_uuid)
 		if next_item:
-			match next_item:
-				FocusedChat:
+			if next_item is FocusedChat:
+				chat_queue.add_item(next_item)
+			elif next_item is ChatBubble:
 					chat_queue.add_item(next_item)
-				ChatBubble:
-					chat_queue.add_item(next_item)
-				_:
+			else:
 					Logging.warn('what is this item? Check if the uuid mess up. Same uuid for different field data')
 					Logging.warn('target: %s next: %s' % [result.target_uuid,next_item.uuid])
 		else:
