@@ -1,43 +1,9 @@
-@tool
 class_name NarrativeOverlay extends Control
 
 # 引用子节点 (根据上面的新结构调整路径)
 @onready var main_card: TextureRect = $Background
 @onready var dimmer: ColorRect = $Dimmer
 @onready var btn_container: VBoxContainer = $Background/Margin/VBox/BtnContainer
-
-@export var test := false:
-	set(val):
-		if val:
-			test = false
-			var data = HistoryEventData.new(({
-				"name": "石壕吏",
-				"description": "暮投石壕村，有吏夜捉人。老翁逾墙走，老妇出门看。",
-				"example": "758年 陕州",
-				"options": [
-					{ 
-						"description": "冲出去与官吏拼命", 
-						"is_disabled": true, 
-						"disabled_reason": "你手无缚鸡之力，冲出去只会死在乱军之中，无人记录这段历史。" 
-					},
-					{ 
-						"description": "代替老妇去服役", 
-						"is_disabled": true, 
-						"disabled_reason": "你的身体虚弱，恐怕连长安都走不到。"
-					},
-					{ 
-						"description": "在墙角默默记录",
-						"is_disabled": false, 
-						"effect": "record_poem",
-						'double_check': true,
-						'double_check_reason': '真的要这么做吗？以她的年龄，去了就是必死的结局'
-					}
-				],
-				"provs_state_after": {"shan_zhou": "scorched"},
-				# 这里的 icon 需要你项目中真实的图片路径，没有则传 null 或默认图标
-				"icon": 'ruined_village' 
-			}))
-			apply_narrative(data)
 
 # 状态
 var current_event_data: HistoryEventData
@@ -80,17 +46,13 @@ func apply_narrative(data: HistoryEventData):
 	TimeService.pause_world(true) # 假设你有这个接口
 	current_event_data = data
 	
-	# 2. 🧹 清理旧垃圾 (必须做！)
-	for child in $Background/Margin/VBox/BtnContainer.get_children():
-		child.queue_free()
-	
 	# 3. 填充内容
 	$Background.texture = data.icon # 假设这是插画
 	$Background/Margin/VBox/TitleLabel.text = data.name
 	$Background/Margin/VBox/ContentLabel.text = data.description
 	$Background/Margin/VBox/ExampleLabel.text = data.example # 比如诗词原文
 	
-	$Background/Margin/VBox/OptionBtns.apply_btns(data.options)
+	$Background/Margin/VBox/OptionBtns.apply_btns(data.options,_on_option_selected)
 	
 	AudioManager.play_sad()
 
