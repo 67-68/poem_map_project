@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://u88ye4xgrk8h"]
+[gd_scene load_steps=5 format=3 uid="uid://u88ye4xgrk8h"]
 
 [ext_resource type="Script" uid="uid://dk5iruu4bknq6" path="res://characters/narrative_overlay.gd" id="1_htcev"]
 [ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="2_id4jo"]
+[ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="3_qlww5"]
+[ext_resource type="Script" uid="uid://vcuxmb0q1ghd" path="res://ui/option_btns.gd" id="4_bsbx7"]
 
 [node name="NarrativeOverlay" type="Control"]
 custom_minimum_size = Vector2(900, 600)
@@ -54,7 +56,6 @@ layout_mode = 2
 size_flags_vertical = 1
 text = "test"
 script = ExtResource("2_id4jo")
-debug = true
 
 [node name="ExampleLabel" type="RichTextLabel" parent="Background/Margin/VBox"]
 clip_contents = false
@@ -72,6 +73,6 @@ fit_content = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BtnContainer" type="VBoxContainer" parent="Background/Margin/VBox"]
+[node name="OptionBtns" parent="Background/Margin/VBox" instance=ExtResource("3_qlww5")]
 layout_mode = 2
-size_flags_vertical = 8
+script = ExtResource("4_bsbx7")

@@ -27,5 +27,10 @@ extends Node2D
 						'texture':'火柴人.png'
 					}
 				],
-				'icon':'石壕吏.png'
+				'icon':'石壕吏.png',
+				'options': [
+					{
+
+					}
+				]
 			}))

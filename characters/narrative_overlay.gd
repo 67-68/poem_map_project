@@ -90,12 +90,7 @@ func apply_narrative(data: HistoryEventData):
 	$Background/Margin/VBox/ContentLabel.text = data.description
 	$Background/Margin/VBox/ExampleLabel.text = data.example # 比如诗词原文
 	
-	# 4. 生成新按钮
-	for option in data.options:
-		var btn = EventBtn.new(option) # 假设你封装好了这个
-		btn_container.add_child(btn)
-		# 只有点击有效选项才触发结束
-		btn.option_made.connect(_on_option_selected)
+	$Background/Margin/VBox/OptionBtns.apply_btns(data.options)
 	
 	AudioManager.play_sad()
 

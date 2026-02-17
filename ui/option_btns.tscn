@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://du2vjj46i871e"]
+
+[node name="OptionBtns" type="VBoxContainer"]
+size_flags_vertical = 8
