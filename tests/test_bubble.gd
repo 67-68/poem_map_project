@@ -4,9 +4,9 @@ extends Node2D
 	set(val):
 		if val:
 			test_bubble = false
-			Global.request_create_bubble.emit(self,'test')
+			Global.request_add_chat.emit(self,'test')
 			position.x -= 100
-			Global.request_create_bubble.emit(self,'test2')
+			Global.request_add_chat.emit(self,'test2')
 
 @export var test_focus_chat := false:
 	set(val):

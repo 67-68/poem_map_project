@@ -4,6 +4,12 @@ var target_node: Node2D
 var base_offset: Vector2 = Vector2(0, -60) # 悬浮在头顶的像素偏移量
 
 @onready var label = $Panel/Marg/Label
+var mode: POS_MODE
+
+enum POS_MODE {
+    NODE_ATTATCHMENT,
+    POSITION
+}
 
 func _ready():
     # 动画演出：从小到大弹出来，增加灵动感
@@ -16,16 +22,27 @@ func _process(_delta):
     if not is_instance_valid(target_node):
         queue_free()
         return
-        
-    # 2. 坐标降维打击：世界坐标 -> 屏幕 UI 坐标 (Godot 神级 API)
-    # 无论你的 Camera2D 怎么平移、缩放，气泡永远死死钉在诗人头顶的屏幕位置！
-    var screen_pos = target_node.get_global_transform_with_canvas().origin
-    position = screen_pos + base_offset
+    on_change_pos()
+
+func on_change_pos():    
+    match mode:
+        POS_MODE.NODE_ATTATCHMENT:
+            # 2. 坐标降维打击：世界坐标 -> 屏幕 UI 坐标 (Godot 神级 API)
+            # 无论你的 Camera2D 怎么平移、缩放，气泡永远死死钉在诗人头顶的屏幕位置！
+            var screen_pos = target_node.get_global_transform_with_canvas().origin
+            position = screen_pos + base_offset
+        POS_MODE.POSITION:
+            pass
 
 # 供外部 (缓冲池) 调用的初始化接口
 func setup(data: ChatBubble):
-    target_node = data.attached_node
     label.text = data.description
+    if data.attached_node:
+        target_node = data.attached_node
+        mode = POS_MODE.NODE_ATTATCHMENT
+    elif data.position:
+        mode = POS_MODE.POSITION
+        position = data.position
 
 # 3. 接管全局点击：Galgame 祖传手艺
 func _input(event):

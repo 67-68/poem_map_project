@@ -5,17 +5,9 @@ var chat_queue: PopupQueue
 
 func _ready():
 	chat_queue = PopupQueue.new(_draw_chat,Global.bubble_complete)
-	Global.request_create_bubble.connect(
-		func(node: Node2D, text: String):
-			chat_queue.add_item(ChatBubble.new({
-				"attached_node": node,
-				"description": text
-	})))
-
-	Global.request_full_chat.connect(
-		func(chat: FocusedChat): 
-			chat_queue.add_item(chat)
-			)
+	Global.request_add_chat.connect(
+		func(item):
+			chat_queue.add_item(item))
 
 func _draw_chat(data):
 	if data is ChatBubble:

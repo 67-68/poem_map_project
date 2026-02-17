@@ -75,8 +75,7 @@ signal request_restore_bg_modulate(duration: float) # -1 = forever
 signal history_event_confirmed()
 
 signal bubble_complete()
-signal request_create_bubble(node: Node2D, text: String)
-signal request_full_chat(chat: FocusedChat)
+signal request_add_chat(chat: ChatBubble)
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -91,6 +90,8 @@ var focused_chat_data: Dictionary
 
 var history_event_stack_manager: PopupQueue
 var history_event_buffer: ManualBuffer
+
+var chat_buffer: ManualBuffer
 
 var resolve_history_event = func(x: HistoryEventData):
 	request_narrative.emit(x)
@@ -141,6 +142,8 @@ func init():
 
 	for d in poet_data:
 		poet_data[d].path_point_keys = DataHelper.find_all_values_by_membership(life_path_points,'owner_uuids',d,'uuid')
+	
+	for d in chat_bubble_data.values() + focused_chat_data.values(): TimeService.register(d.year,chat_buffer.pop_item)
 
 func load_actual_positions(mesh_size):
 	"""
@@ -155,7 +158,9 @@ func load_manager_and_buffers():
 	history_event_buffer = ManualBuffer.new(history_event_stack_manager.add_item,event_data.values())
 	# 可以给manager 加一个新的选项询问是不是暂停engine, 现在还需要自己手动处理太麻烦了
 	poem_stack_manager = PopupQueue.new(_apply_poem_data,Global.poem_animation_finished)
-	poem_buffer = ManualBuffer.new(poem_stack_manager.add_item,poem_data.values())	
+	poem_buffer = ManualBuffer.new(poem_stack_manager.add_item,poem_data.values())
+
+	chat_buffer = ManualBuffer.new(func(item): Global.request_add_chat.emit(item),chat_bubble_data.values() + focused_chat_data.values())
 
 static func _apply_poem_data(_poem_data: PoemData):
 	"""
