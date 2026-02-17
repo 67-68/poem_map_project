@@ -1,9 +1,9 @@
 @tool
 class_name MessagerManager extends Node
-@export var start = false:
+@export var send_messager = false:
 	set(val):
 		if is_node_ready() and val:
-			start = false
+			send_messager = false
 			var d := MessagerData.new({})
 			d.source_id = 'luo_zhou'
 			d.target_id = 'you_zhou'
