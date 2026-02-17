@@ -1,12 +1,13 @@
 extends Node
 
 const DATA_PATH = "res://data/"
-const DEFAULT_ICON = "res://assets/6768.png"
+const DEFAULT_ICON_PATH = "res://assets/6768.png"
 const ICON_PATH = "res://assets/profile/"
 const PROVINCE_INDEX_MAP_PATH := "res://assets/maps/provinces.png"
 const PERMANENT_DATA_PATH := 'res://assets/maps/'
 const ADJACENCY_CACHE_PATH := 'res://assets/maps/map_connections_cache.json'
 const SOUND_PATH := 'res://assets/sounds/'
+const CHARACTER_PATH := 'res://assets/character/'
 
 const PATH_NOISE = 0 # 最高可能偏移10px
 
@@ -75,6 +76,7 @@ signal history_event_confirmed()
 
 signal bubble_complete()
 signal request_create_bubble(node: Node2D, text: String)
+signal request_full_chat(chat: FocusedChat)
 
 var life_path_points: Dictionary
 var poet_data: Dictionary

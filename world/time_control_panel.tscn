@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cy2dg1dthfmt5" path="res://world/time_control_panel.gd" id="1_25hr5"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_eoern"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_v2d34"]
-[ext_resource type="FontFile" path="res://assets/fonts/ma_shan_zheng/ma_shan_zheng.ttf" id="3_v2d34"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/ma_shan_zheng/MaShanZheng-Regular.ttf" id="3_v2d34"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_25hr5"]
 texture = ExtResource("1_eoern")
