@@ -27,6 +27,19 @@ func play_dialogue_sequence(dialogues: FocusedChat): # array of focusChat
         use_choice = true
 
     _show_current_line()
+    find_texture()
+
+func find_texture():
+    if not $MarginContainer/LeftCharacter.texture:
+        for dia in _dialogue_sequence:
+            if dia.texture and dia.chat_position == FocusedChatLine.ChatPosition.LEFT:
+                $MarginContainer/LeftCharacter.texture = dia.texture
+                break
+    if not $MarginContainer/RightCharacter.texture:
+        for dia in _dialogue_sequence:
+            if dia.texture and dia.chat_position == FocusedChatLine.ChatPosition.RIGHT:
+                $MarginContainer/RightCharacter.texture = dia.texture
+                break
 
 # 在切换说话人时，加一个微微向上弹跳的动画
 func _bounce_portrait(portrait_node: TextureRect):

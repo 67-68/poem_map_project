@@ -49,7 +49,7 @@
 				"double_check":true,
 				"double_check_reason":"上帝视角的警告：你真的要相信这个成语叫“口蜜腹剑”的当朝宰相吗？这一转身，恐怕就是一生的蹉跎……",
 				"choice_result":{
-					"target_uuid":"event_747_exam_failed"
+					"target_uuid":"dufu_fail_to_become_official"
 				}
 			}
 		],
