@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://huud2d1k4lna"]
+[gd_scene load_steps=6 format=3 uid="uid://huud2d1k4lna"]
 
 [ext_resource type="Script" uid="uid://dgdy512m8uqxl" path="res://ui/focus_chat_overlay.gd" id="1_uni3w"]
 [ext_resource type="Texture2D" uid="uid://b17ro24t8kfnc" path="res://assets/character/火柴人.png" id="3_606dk"]
 [ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="3_uni3w"]
+[ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="4_606dk"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="5_ghao6"]
 
 [node name="FocusChatOverlay" type="Control"]
 layout_mode = 3
@@ -34,17 +36,21 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="LeftCharacter" type="TextureRect" parent="MarginContainer"]
+custom_minimum_size = Vector2(200, 350)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 texture = ExtResource("3_606dk")
+expand_mode = 1
 stretch_mode = 4
 
 [node name="RightCharacter" type="TextureRect" parent="MarginContainer"]
+custom_minimum_size = Vector2(200, 350)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
 texture = ExtResource("3_606dk")
+expand_mode = 1
 stretch_mode = 4
 
 [node name="Panel" type="PanelContainer" parent="MarginContainer"]
@@ -72,3 +78,24 @@ fit_content = true
 custom_minimum_size = Vector2(100, 150)
 layout_mode = 2
 size_flags_horizontal = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+self_modulate = Color(0.7086064, 0.8004154, 1, 1)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("4_606dk")
+theme_type_variation = &"CnStyledFont"
+theme_override_fonts/font = ExtResource("5_ghao6")
+theme_override_font_sizes/font_size = 60
+text = "test"
+
+[node name="Description" type="Label" parent="MarginContainer/VBoxContainer"]
+modulate = Color(0.61542195, 0.61542195, 0.61542195, 1)
+layout_mode = 2
+text = "test2"

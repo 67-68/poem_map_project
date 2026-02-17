@@ -10,7 +10,8 @@ static func get_icon(...names) -> Texture2D:
         # 支持直接写路径，也支持写名字
         var final_path = name
         if not name.begins_with("res://"):
-            final_path = Global.ICON_PATH + name
+            if FileAccess.file_exists(Global.ICON_PATH + name):
+                final_path = Global.ICON_PATH + name
         
         if not final_path.ends_with(".png"):
             final_path = final_path + ".png"

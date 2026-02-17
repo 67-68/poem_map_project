@@ -1,0 +1,61 @@
+[
+	{
+		"chats":[
+			{
+				"chat_position":"RIGHT",
+				"name":"李林甫",
+				"description":"子美啊，老夫看了你的《三大礼赋》，辞藻华丽，格局宏大，实乃我大唐不可多得的栋梁之才！",
+				"texture":"li_linfu.png"
+			},
+			{
+				"chat_position":"LEFT",
+				"name":"你 (杜甫)",
+				"description":"（受宠若惊）相爷谬赞！下官只求能致君尧舜上，再使风俗淳，为大唐尽绵薄之力。",
+				"texture":"dufu_young.png"
+			},
+			{
+				"chat_position":"RIGHT",
+				"name":"李林甫",
+				"description":"有这份心就好！这次圣上特设科举招揽天下奇才，你且回去安心等候。老夫定会在圣上面前如实禀报，如今我大唐四海升平，朝野清明……",
+				"texture":"li_linfu.png"
+			},
+			{
+				"chat_position":"RIGHT",
+				"name":"李林甫",
+				"description":"（捋了捋胡须，冷笑转瞬即逝）……这民间啊，早就已经是“野无遗贤”了！你们这些贤才，自然都在老夫的安排之中了，哈哈哈！",
+				"texture":"li_linfu_smirk.png"
+			},
+			{
+				"chat_position":"LEFT",
+				"name":"你 (杜甫)",
+				"description":"（深深作揖）相爷恩同再造！下官这就回去静候佳音！",
+				"texture":"dufu_young.png"
+			}
+		],
+		"icon":"daming_palace.png",
+		"options":[
+			{ 
+				"description":"察觉端倪，追问何为“野无遗贤”", 
+				"is_disabled":true, 
+				"disabled_reason":"[需要:政治嗅觉 > 80] 你虽有绝世诗才，但涉世未深，满心都被“升官”的欢喜填满，根本没听出相爷那句“野无遗贤”的冰冷杀机。",
+				"choice_result":{
+					"target_uuid":"impossible_revolt"
+				}
+			},
+			{ 
+				"description":"千恩万谢，回家傻等金榜题名",
+				"is_disabled":false, 
+				"effect":"wait_for_exam",
+				"double_check":true,
+				"double_check_reason":"上帝视角的警告：你真的要相信这个成语叫“口蜜腹剑”的当朝宰相吗？这一转身，恐怕就是一生的蹉跎……",
+				"choice_result":{
+					"target_uuid":"event_747_exam_failed"
+				}
+			}
+		],
+		"year":745,
+		"name":"一失足成千古恨",
+		"uuid":"dufu_fail_to_become_official",
+		"description":"你被李林甫邀请到宫中，似乎有什么话要说... \n难道你的运势真的要到来了，可以实现自己的人生理想：治国了？"
+	}
+]

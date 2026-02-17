@@ -15,12 +15,15 @@ script = ExtResource("1_hlmsb")
 
 [node name="Label" type="RichTextLabel" parent="."]
 z_index = 5
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+pivot_offset = Vector2(100, 25)
 mouse_filter = 2
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 bbcode_enabled = true
 text = "test"
 fit_content = true
-autowrap_mode = 0
+scroll_active = false
+horizontal_alignment = 1

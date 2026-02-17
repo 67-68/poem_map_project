@@ -127,7 +127,7 @@ func init():
 	event_data = Util.create_dict(DataLoader.load_json_model(HistoryEventData,'history_event_data'))
 	chat_bubble_data = Util.create_dict(DataLoader.load_json_model(ChatBubble,'chat_bubbles'))
 	focused_chat_data = Util.create_dict(DataLoader.load_json_model(FocusedChat,'focused_chats'))
-	
+
 	load_manager_and_buffers()
 	
 	# 添加到事件触发

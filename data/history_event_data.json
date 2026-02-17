@@ -1,4 +1,4 @@
-{
+[{
 	"uuid":"shi_hao_li",
 	"name":"石壕吏",
 	"description":"暮投石壕村，有吏夜捉人。老翁逾墙走，老妇出门看。",
@@ -31,4 +31,4 @@
 	},
 	"audio":"sad_song.mp3",
 	"color":"#808080"
-}
+}]

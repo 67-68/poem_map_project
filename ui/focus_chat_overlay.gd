@@ -20,6 +20,8 @@ func play_dialogue_sequence(dialogues: FocusedChat): # array of focusChat
     _dialogue_sequence = dialogues.chats as Array
     $Background.texture = dialogues.icon
     _current_index = 0
+    $MarginContainer/VBoxContainer/Title.text = dialogues.name
+    $MarginContainer/VBoxContainer/Description.text = dialogues.description
 
     if data.get("options"):
         use_choice = true
