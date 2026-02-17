@@ -12,12 +12,19 @@ extends Node2D
 	set(val):
 		if val:
 			test_focus_chat = false
-			breakpoint
 			Global.request_full_chat.emit(FocusedChat.new({
-				'chats':[{
-					'chat_position':"RIGHT",
-					'name':"长🪞",
-					'description':'你好~',
-					'texture':'chang_jing.jpeg'
-				}]
+				'chats':[
+					{
+						'chat_position':"RIGHT",
+						'name':"长🪞",
+						'description':'你好~',
+						'texture':'火柴人.png'
+					},
+					{
+						'chat_position':"LEFT",
+						'name':"你",
+						'description':'找我有什么事？忙着尾随杜甫呢',
+						'texture':'火柴人.png'
+					}
+				]
 			}))

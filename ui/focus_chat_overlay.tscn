@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dgdy512m8uqxl" path="res://ui/focus_chat_overlay.gd" id="1_uni3w"]
 [ext_resource type="Texture2D" uid="uid://b17ro24t8kfnc" path="res://assets/character/火柴人.png" id="2_dbeha"]
-[ext_resource type="Texture2D" uid="uid://b8didsnuitwqv" path="res://assets/character/chang_jing.jpeg" id="3_606dk"]
+[ext_resource type="Texture2D" uid="uid://b17ro24t8kfnc" path="res://assets/character/火柴人.png" id="3_606dk"]
 
 [node name="FocusChatOverlay" type="Control"]
 layout_mode = 3

@@ -13,7 +13,9 @@ func _ready():
 	})))
 
 	Global.request_full_chat.connect(
-		func(chat: FocusedChat): chat_queue.add_item(chat))
+		func(chat: FocusedChat): 
+			chat_queue.add_item(chat)
+			)
 
 func _draw_chat(data):
 	if data is ChatBubble:
