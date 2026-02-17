@@ -28,9 +28,32 @@ extends Node2D
 					}
 				],
 				'icon':'石壕吏.png',
-				'options': [
-					{
-
+				'options':[
+					{ 
+						"description": "冲出去与官吏拼命", 
+						"is_disabled": true, 
+						"disabled_reason": "你手无缚鸡之力，冲出去只会死在乱军之中，无人记录这段历史。",
+						"choice_result":{
+							"target_uuid":"test1"
+						}
+					},
+					{ 
+						"description": "代替老妇去服役", 
+						"is_disabled": true, 
+						"disabled_reason": "你的身体虚弱，恐怕连长安都走不到。",
+						"choice_result":{
+							"target_uuid":"test2"
+						}
+					},
+					{ 
+						"description": "在墙角默默记录",
+						"is_disabled": false, 
+						"effect": "record_poem",
+						'double_check': true,
+						'double_check_reason': '真的要这么做吗？以她的年龄，去了就是必死的结局',
+						"choice_result":{
+							"target_uuid":"test3"
+						}
 					}
-				]
+				],
 			}))

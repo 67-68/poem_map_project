@@ -30,7 +30,7 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D,
 	msger_data = msger_data_
 	Util.apply_msg_type(self,msger_data.msger_type)
 
-	Logging.exists('init of messager', curve_, path_points_, mesh_)
+	Logging.not_exists('init of messager', curve_, path_points_, mesh_)
 	curve = curve_
 	path_points = path_points_ 
 	

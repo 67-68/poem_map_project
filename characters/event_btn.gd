@@ -31,5 +31,5 @@ func double_check() -> bool:
 	if not click_count >= 2:
 		Global.request_warning_toast.emit(option.double_check_reason)
 		return false
-	else: return true
+	else: return true 
 	

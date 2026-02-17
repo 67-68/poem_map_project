@@ -9,13 +9,20 @@ extends Control
 var _dialogue_sequence: Array = []
 var _current_index: int = 0
 var choice_created := false
+var use_choice := false
 var data: FocusedChat
+
+signal chat_finished(result: ChoiceResult)
 
 func play_dialogue_sequence(dialogues: FocusedChat): # array of focusChat
     # 这里没有第一时间加载，是缓冲的问题？
     _dialogue_sequence = dialogues.chats as Array
     $Background.texture = dialogues.icon
     _current_index = 0
+
+    if data.get(options):
+        use_choice = true
+
     _show_current_line()
 
 # 在切换说话人时，加一个微微向上弹跳的动画
@@ -48,21 +55,23 @@ func _show_current_line():
         right_portrait.modulate = Color(1, 1, 1, 1)
         left_portrait.modulate = Color(0.5, 0.5, 0.5, 1)
 
-func try_end_dialogue():
+func try_end_dialogue(choice_result = null):
     if _current_index >= _dialogue_sequence.size():
         # 播完了！销毁自己，触发 UIManager 里的 tree_exited 信号，队列继续！
 
-        if not choice_created:
+        if use_choice and not choice_created:
             $MarginContainer/OptionBtns.apply_btns(data.options,try_end_dialogue)
             choice_created = true # 这里其实可以把这个状态封装到option btns(is_created)
 
         Global.bubble_complete.emit()
+        chat_finished.emit(choice_result)
+        
         queue_free()
         return 
 
 # 接管点击事件，用来翻页
 func _input(event):
-    if $MarginContainer/OptionBtns.visible and choice_created: return
+    if use_choice and $MarginContainer/OptionBtns.visible and choice_created: return
     if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
         get_viewport().set_input_as_handled()
         _current_index += 1

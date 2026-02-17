@@ -39,5 +39,24 @@ func _draw_chat(data):
 		overlay.play_dialogue_sequence(data)
 		
 		# 同样监听它的销毁信号，用来推进队列
-		overlay.tree_exited.connect(func(): chat_queue.mark_as_finish())
-		
+		if overlay.has_signal('chat_finished'):
+			overlay.tree_exited.connect(finish_chat)	
+		else:
+			Logging.warn('some overlay do not have chat finished signal. connect to normal tree exit may cause logic chaos')
+			overlay.tree_exited.connect(finish_chat)
+
+func finish_chat(result: ChoiceResult = null):
+	chat_queue.mark_as_finish()
+	if result:
+		var next_item = Global.find_triggerable_item(result.target_uuid)
+		breakpoint
+		if next_item:
+			match next_item:
+				FocusedChat:
+					chat_queue.add_item(next_item)
+				ChatBubble:
+					chat_queue.add_item(next_item)
+				_:
+					Logging.warn('what is this item? Check if the uuid mess up. Same uuid for different field data')
+					Logging.warn('target: %s next: %s' % [result.target_uuid,next_item.uuid])
+			

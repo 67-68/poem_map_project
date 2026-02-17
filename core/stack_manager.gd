@@ -37,7 +37,7 @@ func _init(resolve_item_: Callable, animation_finished_signal: Signal, stop_time
 	这里的item就是传入的item
 	这个函数允许自己处理item, 例如发信号
 	"""
-	Logging.exists('stack manager',resolve_item_)
+	Logging.not_exists('stack manager',resolve_item_)
 	resolve_item = resolve_item_
 	stop_time = stop_time_
 

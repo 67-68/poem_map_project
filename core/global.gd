@@ -86,6 +86,8 @@ var base_province: Dictionary
 var territories: Dictionary
 var msger_data: Dictionary
 var event_data: Dictionary
+var chat_bubble_data: Dictionary
+var focused_chat_data: Dictionary
 
 var history_event_stack_manager: PopupQueue
 var history_event_buffer: ManualBuffer
@@ -93,6 +95,21 @@ var history_event_buffer: ManualBuffer
 var resolve_history_event = func(x: HistoryEventData):
 	request_narrative.emit(x)
 
+func find_triggerable_item(uuid: String):
+	"""
+	如果uuid和另一个数据模型的uuid重复可能导致问题
+	"""
+	if poem_data.get(uuid):
+		return poem_data[uuid]
+	if msger_data.get(uuid):
+		return msger_data[uuid]
+	if event_data.get(uuid):
+		return event_data[uuid]
+	if chat_bubble_data.get(uuid):
+		return chat_bubble_data[uuid]
+	if focused_chat_data.get(uuid):
+		return focused_chat_data[uuid]
+	
 func init():
 	index_image = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
 	Logging.current_level = Logging.Level.DEBUG
@@ -107,6 +124,8 @@ func init():
 	poem_data = Util.create_dict(DataLoader.load_json_model(PoemData,'poem_data'))
 	msger_data = Util.create_dict(DataLoader.load_json_model(MessagerData,'msger_data'))
 	event_data = Util.create_dict(DataLoader.load_json_model(HistoryEventData,'history_event_data'))
+	chat_bubble_data = Util.create_dict(DataLoader.load_json_model(ChatBubble,'chat_bubbles'))
+	focused_chat_data = Util.create_dict(DataLoader.load_json_model(FocusedChat,'focused_chats'))
 	
 	load_manager_and_buffers()
 	
