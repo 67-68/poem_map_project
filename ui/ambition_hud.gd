@@ -1,4 +1,5 @@
 class_name AmbitionHUD extends Control
+# g说这里要分离判断逻辑，但我是一个独立游戏设计师🤓
 
 @export var ambition: AmbitionData
 @onready var vague_label: Label = $VagueText
@@ -31,5 +32,3 @@ func _on_model_stat_changed():
 		var ddl_warning = ambition.deadline_warning
 
 		vague_label.text = vague_text + "\n" + buff_description + "\n" + ddl_warning
-		
-

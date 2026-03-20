@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=22 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://ctja8gxdepflp" path="res://ui/simple_toast.tscn" id="12_2cqfq"]
 [ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="12_vivmo"]
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
+[ext_resource type="Script" uid="uid://dqj61x3f61w8q" path="res://ui/ambition_hud.gd" id="15_074og"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -96,6 +97,28 @@ offset_bottom = 225.14502
 [node name="SimpleToast" parent="UI" instance=ExtResource("12_2cqfq")]
 
 [node name="TimeControlPanel" parent="UI" instance=ExtResource("12_vivmo")]
+
+[node name="AmbitionHUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("15_074og")
+
+[node name="StageName" type="Label" parent="UI/AmbitionHUD"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="VagueText" type="Label" parent="UI/AmbitionHUD"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="IncenseTimer" type="TextureRect" parent="UI/AmbitionHUD"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="CoreSystems" type="Node" parent="."]
 
