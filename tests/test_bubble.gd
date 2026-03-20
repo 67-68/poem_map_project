@@ -45,6 +45,13 @@ extends Node2D
 							"target_uuid":"test2"
 						}
 					},
+					{ 
+						"description": "亮出官身，让官兵退下", 
+						"property_requirement": {
+							'requirement': PROPERTIES.to_str(PROPERTIES.OFFICIAL_PRESTIGE) + ">50",
+							"failed_hint": "你名气不够大，官兵认不得你"
+						}
+					},
 					{
 						"description": "在墙角默默记录",
 						"is_disabled": false, 
@@ -77,6 +84,13 @@ extends Node2D
 						"description": "代替老妇去服役", 
 						"is_disabled": true, 
 						"disabled_reason": "你的身体虚弱，恐怕连长安都走不到。"
+					},
+					{ 
+						"description": "亮出官身，让官兵退下", 
+						"property_requirement": {
+							'requirement': PROPERTIES.to_str(PROPERTIES.OFFICIAL_PRESTIGE) + ">50",
+							"failed_hint": "你名气不够大，官兵认不得你"
+						}
 					},
 					{ 
 						"description": "在墙角默默记录",

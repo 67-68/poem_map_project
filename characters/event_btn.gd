@@ -15,11 +15,14 @@ func _init(data: EventOption):
 
 	if data.property_requirement:
 		var pass_prop = data.property_requirement.compare(PlayerState)
+		if pass_prop == null:
+			Logging.err('some property can not be found in state')
+			return
 		if not pass_prop:
 			disabled = true
-			text = data.property_requirement.failed_hint + text
+			text = "[%s-%s]%s" % [data.property_requirement.get_fail_prop_msg(), data.property_requirement.failed_hint, text]
 			if data.property_requirement.failed_hint.length() > 10:
-				Logging.warn('property requirement of %s length > 10 char, can be ugly' % data.property_requirement.failed_hint)
+				Logging.warn('property requirement of %s length > 15 char, can be ugly' % data.property_requirement.failed_hint)
 
 func confirmed():
 	if not double_check():
