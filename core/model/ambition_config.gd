@@ -16,13 +16,14 @@ var staged_perceptions := {}
 # 类似 {stage1: aaa, stage2: bbb, stage3:ccc}
 
 # buff
-var buff_to_prop_gain := {}
+var buffer_to_prop: DictMultiplyOperator
 # buffer to property; 会在属性增加的时候被查找来计算增益
-var buff_to_region := {}
+var buffer_to_region: DictMultiplyOperator
 # 在某个地区干某件事的时候属性增加
 # {"area": {"type_of_point": 1.5} } 在某个area，获取type_of_point类型点数，增强0.5倍
 var buff_description := ""
 # 未来可能需要做多个阶段的buff，不然玩家会在一个地方一直逗留
+var ambition_traits = [] # 这里存储字符串，实际上从总trait数据库查找内容
 
 # deadline
 var start_year: float = Global.start_year
@@ -39,8 +40,9 @@ func _init(data):
     staged_perceptions = PropParser.parse_any(data,true,'perceptions')
 
     buff_description = PropParser.parse_any(data,true,'prop_description')
-    buff_to_prop_gain = PropParser.parse_any(data,true,'buff_to_prop_gain')
-    buff_to_region = PropParser.parse_any(data,true,'buff_to_region')
+    buffer_to_prop = PropParser.parse_and_create_cls(DictMultiplyOperator,data,true,'buffer_to_prop')
+    buffer_to_region = PropParser.parse_and_create_cls(DictMultiplyOperator,data,true,'buffer_to_region')
+    ambition_traits = PropParser.parse_any(data,true,'ambition_traits')
 
     start_year = PropParser.parse_any(data,true,'start_year')
     deadline = PropParser.parse_any(data,true,'deadline')

@@ -1,13 +1,15 @@
 extends Node
 
 var stats := {}
-var traits := []
-var current_ambition := {}
+var traits: Array[Trait] = []
+var current_location := "" # 省份uuid
+@export var ambition: AmbitionData
 
 signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
 
 func _ready():
+	set_ambition(Global.ambitions.get('first_ambition'))
 	change_stat('official_prestige', 50)
 	change_stat('literary_fame',50)
 	change_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
@@ -23,10 +25,17 @@ func change_stat(stat_name, data):
 
 	if not stats.has(stat_name):
 		stats[stat_name] = 0 # 初始化为 0
-	stats[stat_name] += data # 永远执行加法
-	player_stat_changed.emit(stat_name)
 
-	# some kinda result
+	var amount_to_change = data
+
+	amount_to_change = ambition.buffer_to_prop.match_and_multiply(stat_name,amount_to_change)
+	amount_to_change = ambition.buffer_to_region.match_and_multiply(current_location,amount_to_change)
+	for t in traits:
+		amount_to_change = t.buffer_to_prop.match_and_multiply(stat_name,amount_to_change)
+		amount_to_change = t.buffer_to_region.match_and_multiply(current_location,amount_to_change)
+
+	stats[stat_name] += amount_to_change # 永远执行加法
+	player_stat_changed.emit(stat_name)
 
 func get_stat(stat_name):
 	if stat_name is int:
@@ -70,8 +79,13 @@ func remove_trait(trait_name):
 
 
 func set_ambition(ambition_):
-	current_ambition = ambition_
-	ambition_changed.emit(current_ambition)
+	if ambition:
+		for t in ambition.ambition_traits:
+			remove_trait(t)
+	ambition = ambition_
+	for t in ambition.ambition_traits:
+		add_trait(t)
+	ambition_changed.emit(ambition)
 
 static func translate_from_enum(stat):
 	Logging.debug('try to translate a enum property')

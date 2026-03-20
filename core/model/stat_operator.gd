@@ -7,7 +7,7 @@ var operator := '+'
 func _init(data):
     super._init(data)
     key = PropParser.parse_any(data,true,"key")
-    value = PropParser.parse_any(data,true,'key')
+    value = PropParser.parse_any(data,true,'value')
     operator = PropParser.parse_any(data,true,'operator')
 
 func operate():

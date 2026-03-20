@@ -1,7 +1,7 @@
 class_name AmbitionHUD extends Control
 # g说这里要分离判断逻辑，但我是一个独立游戏设计师🤓
 
-@export var ambition: AmbitionData
+var ambition
 @onready var vague_label: Label = $Mar/HBox/VBox/HBox/VagueText
 @onready var timer_rect: TextureRect = $Mar/HBox/VBox/HBox/IncenseTimer
 @onready var time_label: Label = $ Mar/HBox/VBox/HBox/TimeLabel
@@ -11,7 +11,7 @@ class_name AmbitionHUD extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	ambition = Global.ambitions.get('first_ambition')
+	ambition = PlayerState.ambition
 	if not ambition:
 		Logging.err("草... AmbitionHUD 没有配置 config，你是打算让 UI 凭空捏造文案吗？😭")
 		return
