@@ -20,10 +20,9 @@ func add_stat(stat_name, data):
 			return
 		stat_name = int_stat
 
-	if not stats.get(stat_name):
-		stats[stat_name] = data
-	else:
-		stats[stat_name] += data
+	if not stats.has(stat_name):
+		stats[stat_name] = 0 # 初始化为 0
+	stats[stat_name] += data # 永远执行加法
 
 func get_stat(stat_name):
 	if stat_name is int:
@@ -43,7 +42,7 @@ func add_trait(trait_name):
 			return
 		trait_name = int_trait
 
-	traits.append(trait_name)
+	if not traits.has(trait_name): traits.append(trait_name)
 
 func has_trait(trait_name):
 	if trait_name is int:
