@@ -21,6 +21,17 @@
     },
     "peacock.color": "#ff3d00",
     "files.exclude": {
-        ".godot": true
+        ".godot": true,
+        "*.uid": true,
+        "**/*.uid": true,
+        "*.import": true,
+        "**/*.import": true
     },
+    "search.exclude": {
+        ".godot": true,
+        "*.uid": true,
+        "**/*.uid": true,
+        "*.import": true,
+        "**/*.import": true
+    }
 }

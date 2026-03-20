@@ -5,6 +5,7 @@ var traits := []
 var current_ambition := {}
 
 signal ambition_changed(ambition)
+signal player_stat_changed(prop_name)
 
 func _ready():
 	add_stat('official_prestige', 50)
@@ -23,6 +24,7 @@ func add_stat(stat_name, data):
 	if not stats.has(stat_name):
 		stats[stat_name] = 0 # 初始化为 0
 	stats[stat_name] += data # 永远执行加法
+	player_stat_changed.emit(stat_name)
 
 func get_stat(stat_name):
 	if stat_name is int:
@@ -55,6 +57,7 @@ func has_trait(trait_name):
 
 func set_ambition(ambition_):
 	current_ambition = ambition_
+	ambition_changed.emit(current_ambition)
 
 static func translate_from_enum(stat):
 	Logging.debug('try to translate a enum property')

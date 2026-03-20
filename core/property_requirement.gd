@@ -1,4 +1,4 @@
-class_name PropertyRequirement extends RefCounted
+class_name PropertyRequirement extends GameEntity
 # 在选项中使用，用来判断某个player state的property是否达标
 
 # 单个property requirement
