@@ -13,6 +13,7 @@ func get_property_from_str(prop_str: String):
 	return splited
 
 func _init(data: Dictionary): # 类似 A>123
+	super._init(data)
 	var text = PropParser.parse_any(data,true,'requirement')
 	oringinal_str = text
 	var failed_hint_ = PropParser.parse_any(data,true,'failed_hint')
