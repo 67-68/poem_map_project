@@ -13,6 +13,14 @@ func _init(data: EventOption):
 	else:
 		pressed.connect(confirmed)
 
+	if data.property_requirement:
+		var pass_prop = data.property_requirement.compare(PlayerState)
+		if not pass_prop:
+			disabled = true
+			text = data.property_requirement.failed_hint + text
+			if data.property_requirement.failed_hint.length() > 10:
+				Logging.warn('property requirement of %s length > 10 char, can be ugly' % data.property_requirement.failed_hint)
+
 func confirmed():
 	if not double_check():
 		return

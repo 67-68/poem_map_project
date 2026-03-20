@@ -8,7 +8,7 @@ var double_check := false
 var double_check_reason := ''
 
 var choice_result: ChoiceResult
-
+var property_requirement: PropertyRequirement
 # 使用description作为button text
 
 func _init(data: Dictionary):
@@ -22,4 +22,5 @@ func _init(data: Dictionary):
 	double_check_reason = data.get('double_check_reason',props.get('double_check_reason',''))
 
 	choice_result = PropParser.parse_and_create_cls(ChoiceResult,data,true,'choice_result')
+	property_requirement = PropParser.parse_any(data,true,'property_requirement')
 	
