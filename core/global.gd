@@ -87,7 +87,8 @@ var msger_data: Dictionary
 var event_data: Dictionary
 var chat_bubble_data: Dictionary
 var focused_chat_data: Dictionary
-var 
+var ambitions: Dictionary
+# 使用{name: ambition} 但只是一个数据库，不负责切换
 
 var history_event_stack_manager: PopupQueue
 var history_event_buffer: ManualBuffer
@@ -128,7 +129,7 @@ func init():
 	event_data = Util.create_dict(DataLoader.load_json_model(HistoryEventData,'history_event_data'))
 	chat_bubble_data = Util.create_dict(DataLoader.load_json_model(ChatBubble,'chat_bubbles'))
 	focused_chat_data = Util.create_dict(DataLoader.load_json_model(FocusedChat,'focused_chats'))
-	
+	ambitions = Util.create_dict(DataLoader.load_json_model(AmbitionData,'ambitions'))
 
 	load_manager_and_buffers()
 	
