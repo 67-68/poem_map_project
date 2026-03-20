@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://ctja8gxdepflp" path="res://ui/simple_toast.tscn" id="12_2cqfq"]
 [ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="12_vivmo"]
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
-[ext_resource type="Script" uid="uid://dqj61x3f61w8q" path="res://ui/ambition_hud.gd" id="15_074og"]
+[ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="15_074og"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -98,27 +98,17 @@ offset_bottom = 225.14502
 
 [node name="TimeControlPanel" parent="UI" instance=ExtResource("12_vivmo")]
 
-[node name="AmbitionHUD" type="Control" parent="UI"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("15_074og")
-
-[node name="StageName" type="Label" parent="UI/AmbitionHUD"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="VagueText" type="Label" parent="UI/AmbitionHUD"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="IncenseTimer" type="TextureRect" parent="UI/AmbitionHUD"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="AmbitionHUD" parent="UI" instance=ExtResource("15_074og")]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -100.0
+offset_right = 60.0
+offset_bottom = 100.0
+grow_horizontal = 0
+grow_vertical = 2
 
 [node name="CoreSystems" type="Node" parent="."]
 

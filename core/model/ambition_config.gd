@@ -25,6 +25,7 @@ var buff_description := ""
 # 未来可能需要做多个阶段的buff，不然玩家会在一个地方一直逗留
 
 # deadline
+var start_year: float = Global.start_year
 var deadline: float = Global.end_year
 var deadline_fail_result: Array[PropModifierPlaceHolder] = []
 var deadline_warning := ''
@@ -41,6 +42,7 @@ func _init(data):
     buff_to_prop_gain = PropParser.parse_any(data,true,'buff_to_prop_gain')
     buff_to_region = PropParser.parse_any(data,true,'buff_to_region')
 
+    start_year = PropParser.parse_any(data,true,'start_year')
     deadline = PropParser.parse_any(data,true,'deadline')
     deadline_warning = PropParser.parse_any(data,true,'deadline_warning')
     deadline_fail_result = PropParser.parse_any(data,true,'deadline_fail_result')

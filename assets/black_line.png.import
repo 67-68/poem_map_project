@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d16or077ggq1i"
-path="res://.godot/imported/ripped_paper.jpg-01a5300bd8d833ec89bbef1ac9d75e88.ctex"
+uid="uid://b2yq3w4rx1nu6"
+path="res://.godot/imported/black_line.png-a049b43296df51ecd53b680cb39f71a9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ripped_paper.jpg"
-dest_files=["res://.godot/imported/ripped_paper.jpg-01a5300bd8d833ec89bbef1ac9d75e88.ctex"]
+source_file="res://assets/black_line.png"
+dest_files=["res://.godot/imported/black_line.png-a049b43296df51ecd53b680cb39f71a9.ctex"]
 
 [params]
 
