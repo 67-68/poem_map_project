@@ -75,7 +75,7 @@ signal request_restore_bg_modulate(duration: float) # -1 = forever
 signal history_event_confirmed()
 
 signal bubble_complete()
-signal request_add_chat(chat: ChatBubble)
+signal request_add_event()
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -163,7 +163,7 @@ func load_manager_and_buffers():
 	poem_stack_manager = PopupQueue.new(_apply_poem_data,Global.poem_animation_finished)
 	poem_buffer = ManualBuffer.new(poem_stack_manager.add_item,poem_data.values())
 
-	chat_buffer = ManualBuffer.new(func(item): Global.request_add_chat.emit(item),chat_bubble_data.values() + focused_chat_data.values())
+	chat_buffer = ManualBuffer.new(func(item): Global.request_add_event.emit(item),chat_bubble_data.values() + focused_chat_data.values())
 
 static func _apply_poem_data(_poem_data: PoemData):
 	"""

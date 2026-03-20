@@ -8,12 +8,12 @@ signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
 
 func _ready():
-	add_stat('official_prestige', 50)
-	add_stat('literary_fame',50)
-	add_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
+	change_stat('official_prestige', 50)
+	change_stat('literary_fame',50)
+	change_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
 	add_trait('offspring_of_du_shen_yan')
 
-func add_stat(stat_name, data):
+func change_stat(stat_name, data):
 	if stat_name is int:
 		var int_stat = translate_from_enum(stat_name)
 		if not int_stat:
@@ -25,6 +25,8 @@ func add_stat(stat_name, data):
 		stats[stat_name] = 0 # 初始化为 0
 	stats[stat_name] += data # 永远执行加法
 	player_stat_changed.emit(stat_name)
+
+	# some kinda result
 
 func get_stat(stat_name):
 	if stat_name is int:
@@ -54,6 +56,18 @@ func has_trait(trait_name):
 			return
 		trait_name = int_trait
 	return traits.has(trait_name)
+
+func remove_trait(trait_name):
+	if trait_name is int:
+		var int_trait = translate_from_enum(trait_name)
+		if not int_trait:
+			Logging.err('do not find trait %s' % trait_name)
+			return
+		trait_name = int_trait
+	
+	if traits.has(trait_name):
+		traits.erase(trait_name)
+
 
 func set_ambition(ambition_):
 	current_ambition = ambition_

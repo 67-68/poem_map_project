@@ -27,6 +27,7 @@ NavigationService="*res://core/navigation_service.gd"
 TextPoolManager="*res://core/pool_manager.gd"
 AudioManager="*res://core/audio_manager.gd"
 PlayerState="*res://core/player_state.gd"
+ConsequenceExecuter="*res://core/consequence_executer.gd"
 
 [debug]
 
