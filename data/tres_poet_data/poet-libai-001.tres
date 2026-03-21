@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PoetData" load_steps=2 format=3 uid="uid://b1cf8oerycgtr"]
+[gd_resource type="Resource" script_class="PoetData" load_steps=2 format=3 uid="uid://fktx8qk5i4ai"]
 
 [ext_resource type="Script" uid="uid://d3tjgxlq7lau8" path="res://characters/poet_data.gd" id="1_ltaih"]
 

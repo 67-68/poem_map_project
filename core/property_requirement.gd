@@ -2,14 +2,14 @@ class_name PropertyRequirement extends GameEntity
 # 在选项中使用，用来判断某个player state的property是否达标
 
 # 单个property requirement
-var front_property_name: String
-var front_property_data: int
-var operator: String
-var failed_hint: String
+@export var front_property_name: String
+@export var front_property_data: int
+@export var operator: String
+@export var failed_hint: String
 
 
 # 原始字符串，用于显示错误信息
-var oringinal_str: String
+@export var oringinal_str: String
 
 func get_property_from_str(prop_str: String):
 	var splited = prop_str.split(":")

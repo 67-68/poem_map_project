@@ -7,9 +7,9 @@ enum MUL_OPERATOR{
     BOTH
 }
 
-var key := 'default-multiplication-operator-name'
-var value := 1.0
-var operator := MUL_OPERATOR.POSITIVE_ONLY
+@export var key := 'default-multiplication-operator-name'
+@export var value := 1.0
+@export var operator := MUL_OPERATOR.POSITIVE_ONLY
 
 func _init(data):
     super._init(data)

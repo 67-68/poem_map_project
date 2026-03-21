@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="MessagerData" load_steps=2 format=3 uid="uid://cf80262wv0vny"]
+[gd_resource type="Resource" script_class="MessagerData" load_steps=2 format=3 uid="uid://b7a24wp5ufw7m"]
 
 [ext_resource type="Script" uid="uid://whvmlrf5hkjl" path="res://model/message_data.gd" id="1_opoxy"]
 

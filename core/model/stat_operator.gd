@@ -1,8 +1,8 @@
 class_name StatOperator extends GameEntity
 
-var key := 'default-stat-name'
-var value
-var operator := '+'
+@export var key := 'default-stat-name'
+@export var value: Variant
+@export var operator := '+'
 
 func _init(data):
     super._init(data)

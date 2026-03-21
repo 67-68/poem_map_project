@@ -1,7 +1,7 @@
 class_name Trait extends GameEntity
 
-var buffer_to_prop: DictMultiplyOperator
-var buffer_to_region: DictMultiplyOperator
+@export var buffer_to_prop: DictMultiplyOperator
+@export var buffer_to_region: DictMultiplyOperator
 
 func _init(data):
     super._init(data)

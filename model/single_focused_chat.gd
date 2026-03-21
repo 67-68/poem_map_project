@@ -6,8 +6,8 @@ enum ChatPosition {
 
 # name 作为speaker_name
 # description: text
-var chat_position: int
-var texture: Texture2D # 不用管上级的icon图标丢失
+@export var chat_position: int
+@export var texture: Texture2D # 不用管上级的icon图标丢失
 
 func _init(data: Dictionary):
 	super._init(data)

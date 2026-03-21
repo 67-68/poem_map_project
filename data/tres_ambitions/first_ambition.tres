@@ -1,8 +1,13 @@
-[gd_resource type="Resource" script_class="AmbitionData" load_steps=2 format=3 uid="uid://c67b63fp745ew"]
+[gd_resource type="Resource" script_class="AmbitionData" load_steps=3 format=3 uid="uid://64cs8vcd5ime"]
 
 [ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="1_4mbke"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="1_ipf5d"]
 
 [resource]
 script = ExtResource("1_4mbke")
+buff_description = "心系庙堂：获取官场声望时有极强动力，额外获得 50% 收益。"
+start_year = 742.0
+deadline = 745.0
+deadline_warning = "天宝四载秋，若仍无建树，你的仕途幻想将彻底破灭，并付出惨痛代价。"
 uuid = "first_ambition"
 name = "致君尧舜上"

@@ -10,10 +10,10 @@ extends GutTest
 # --- [测试用数据模型模拟] ---
 # 别污染真实的业务类，我们用 Mock 来测试反射拦截
 class MockEntity extends Resource:
-	var id: String
-	var name: String
-	var uv_position: Vector2
-	var properties: Dictionary = {}
+	@export var id: String
+	@export var name: String
+	@export var uv_position: Vector2
+	@export var properties: Dictionary = {}
 	
 	# 模拟你的 GameEntity 构造函数，吃进字典并赋值
 	func _init(data: Dictionary = {}):

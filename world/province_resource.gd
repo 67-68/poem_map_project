@@ -1,9 +1,9 @@
 class_name Territory extends WorldEvent
 
-var stability: float
-var capital: String
-var sub_ids: Array
-var dirty := true
+@export var stability: float
+@export var capital: String
+@export var sub_ids: Array[String]
+@export var dirty: bool = true
 
 func _get_deprecated_position():
 	# 🔴 Fail Loudly: 在编辑器和运行时直接喷红字

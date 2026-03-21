@@ -1,6 +1,6 @@
 extends Node
 
-@export var stats := {}
+@export var stats: Dictionary = {}
 @export var traits: Array[Trait] = []
 @export var current_location := "" # 省份uuid
 @export var ambition: AmbitionData

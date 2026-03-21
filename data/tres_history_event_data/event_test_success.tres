@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=3 format=3 uid="uid://c7wuasufa6dln"]
+[gd_resource type="Resource" script_class="HistoryEventData" load_steps=4 format=3 uid="uid://yy7k2pm7qtqs"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_klxx1"]
+[ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_6wy14"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/history_event_data.gd" id="2_csoj0"]
 
 [resource]

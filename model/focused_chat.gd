@@ -1,9 +1,9 @@
 # 那种有立绘的Chat
 class_name FocusedChat extends WorldEvent
 
-var chats: Array # list[list[str, int]] # int -> Chatposition
+var chats: Array[FocusedChatLine] # list[list[str, int]] # int -> Chatposition
 # 使用父类的icon作为背景图
-var options: Array = [] # list[EventOptions]; 在对话结束之后被展示
+var options: Array[EventOption] = [] # list[EventOptions]; 在对话结束之后被展示
 
 func _init(data: Dictionary):
 	super._init(data)
