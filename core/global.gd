@@ -77,18 +77,18 @@ signal history_event_confirmed()
 signal bubble_complete()
 signal request_add_event()
 
-var life_path_points: ResourceRegistry
-var poet_data: ResourceRegistry
-var poem_data: ResourceRegistry
-var factions: ResourceRegistry
+var life_path_points: Dictionary
+var poet_data: Dictionary
+var poem_data: Dictionary
+var factions: Dictionary
 var base_province: Dictionary
 var territories: Dictionary
-var msger_data: ResourceRegistry
-var event_data: ResourceRegistry
-var chat_bubble_data: ResourceRegistry
-var focused_chat_data: ResourceRegistry
-var ambitions: ResourceRegistry
-var traits: ResourceRegistry
+var msger_data: Dictionary
+var event_data: Dictionary
+var chat_bubble_data: Dictionary
+var focused_chat_data: Dictionary
+var ambitions: Dictionary
+var traits: Dictionary
 
 var history_event_stack_manager: PopupQueue
 var history_event_buffer: ManualBuffer
@@ -122,15 +122,15 @@ func init():
 	factions = Util.create_dict(DataLoader.load_json_model(Faction,'factions'))
 
 	# 加载数据 - 使用tres registry
-	life_path_points = preload("res://data/tres_path_points_registry.tres").items
-	poet_data = preload("res://data/tres_poet_data_registry.tres")
-	poem_data = preload("res://data/tres_poem_data_registry.tres")
-	msger_data = preload("res://data/tres_msger_data_registry.tres")
-	event_data = preload("res://data/tres_history_event_data_registry.tres")
+	life_path_points = Util.create_dict_from_registry(preload("res://data/tres_path_points_registry.tres"))
+	poet_data = Util.create_dict_from_registry(preload("res://data/tres_poet_data_registry.tres"))
+	poem_data = Util.create_dict_from_registry(preload("res://data/tres_poem_data_registry.tres"))
+	msger_data = Util.create_dict_from_registry(preload("res://data/tres_msger_data_registry.tres"))
+	event_data = Util.create_dict_from_registry(preload("res://data/tres_history_event_data_registry.tres"))
 	# 似乎原本就没有chat bubble 文件
-	focused_chat_data = preload("res://data/tres_focused_chats_registry.tres")
-	ambitions = preload("res://data/tres_ambitions_registry.tres")
-	traits = preload("res://data/tres_traits_registry.tres")
+	focused_chat_data = Util.create_dict_from_registry(preload("res://data/tres_focused_chats_registry.tres"))
+	ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
+	traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
 
 	load_manager_and_buffers()
 	
@@ -147,7 +147,8 @@ func init():
 	for d in poet_data:
 		poet_data[d].path_point_keys = DataHelper.find_all_values_by_membership(life_path_points,'owner_uuids',d,'uuid')
 	
-	for d in chat_bubble_data.values() + focused_chat_data.values(): TimeService.register(d.year,chat_buffer.pop_item)
+	if chat_bubble_data:
+		for d in chat_bubble_data.values() + focused_chat_data.values(): TimeService.register(d.year,chat_buffer.pop_item)
 
 func load_actual_positions(mesh_size):
 	"""
@@ -186,7 +187,6 @@ func wash_positions(items: Dictionary, mesh_size, use_position_uuid: bool = fals
 		# 不行才使用uv
 		if not item.uv_position:
 			Logging.warn('an item do not have uv position!')
-			breakpoint
 		item.position_dirty = false
 		var pos = item.get_local_pos_use_vec3(mesh_size)
 		item.position = pos

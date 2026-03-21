@@ -44,7 +44,6 @@ func change_stat(stat_name, data):
 	Logging.info('change stat %s by %d' % [stat_name, amount_to_change])
 	stats[stat_name] += amount_to_change # 永远执行加法
 	player_stat_changed.emit(stat_name)
-	breakpoint
 
 func get_stat(stat_name):
 	if stat_name is int:

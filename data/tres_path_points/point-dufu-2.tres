@@ -1,3 +1,10 @@
-[gd_resource type="Resource" format=3 uid="uid://cuhipj6ln2ll5"]
+[gd_resource type="Resource" script_class="PoetLifePoint" load_steps=2 format=3 uid="uid://cuhipj6ln2ll5"]
+
+[ext_resource type="Script" uid="uid://c7vdthm7oibpc" path="res://characters/poet_life_point.gd" id="1_42h43"]
 
 [resource]
+script = ExtResource("1_42h43")
+uv_position = Vector2(0.5, 0.5)
+uuid = "point-dufu-2"
+name = "point-dufu-2"
+metadata/_custom_type_script = "uid://c7vdthm7oibpc"

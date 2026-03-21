@@ -82,7 +82,11 @@ func _end_narrative():
 	
 	# 2. 应用后果 (地图变色)
 	if current_event_data.provs_state_after:
-		Global.faction_renderer.special_state.merge(current_event_data.provs_state_after, true)
+		# 手动merge Array[ProvStateOwnerData] 到 Dictionary
+		for new_state in current_event_data.provs_state_after:
+			# 直接更新字典，格式：{province_uuid: state_value}
+			Global.faction_renderer.special_state[new_state.province_uuid] = new_state.state_value
+		
 		Global.faction_renderer.refresh_lut_image(Global.map.prov_2_fac)
 	
 	# 3. 恢复世界

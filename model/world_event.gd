@@ -9,7 +9,7 @@ class_name WorldEvent extends GameEntity
     set(val):
         _set_deprecated_position(val)
 
-@export var _position := Vector2(0,0)
+var _position := Vector2(0,0)
 
 func _get_deprecated_position():
     if position_dirty: Logging.warn('正在使用可能没有经过转换的脏数据position!')

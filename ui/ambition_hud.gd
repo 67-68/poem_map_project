@@ -43,7 +43,7 @@ func _on_model_stat_changed():
 		if perception:
 			dynamic_state_label.text = perception.perception_text
 
-func _find_requirement_by_stage_id(stage_id: String) -> ComplexRequirements:
+func _find_requirement_by_stage_id(stage_id: String) -> BaseRequirements:
 	for requirement in ambition.staged_requirements:
 		if requirement.stage_id == stage_id:
 			return requirement.requirement

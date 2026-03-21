@@ -1,3 +1,10 @@
-[gd_resource type="Resource" format=3 uid="uid://pirrqs40jwka"]
+[gd_resource type="Resource" script_class="PoetLifePoint" load_steps=2 format=3 uid="uid://pirrqs40jwka"]
+
+[ext_resource type="Script" uid="uid://c7vdthm7oibpc" path="res://characters/poet_life_point.gd" id="1_50ht2"]
 
 [resource]
+script = ExtResource("1_50ht2")
+uv_position = Vector2(0.1, 0.9)
+uuid = "point-libai-changan"
+name = "point-libai-changan"
+metadata/_custom_type_script = "uid://c7vdthm7oibpc"
