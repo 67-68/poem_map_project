@@ -1,0 +1,13 @@
+[
+    {
+        "uuid": "trait_obsessive_scholar",
+        "name": "痴迷学者",
+        "description": "对学问极度痴迷，专注于学术研究",
+        "buffer_to_prop": {
+            "operators": {}
+        },
+        "buffer_to_region": {
+            "operators": {}
+        }
+    }
+]

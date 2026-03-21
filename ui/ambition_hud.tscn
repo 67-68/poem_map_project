@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="3_hj3uc"]
 [ext_resource type="Texture2D" uid="uid://b2yq3w4rx1nu6" path="res://assets/black_line.png" id="4_u8j85"]
 [ext_resource type="Shader" uid="uid://bljxotoiibak3" path="res://shaders/candle_shader.gdshader" id="4_xikl0"]
-[ext_resource type="Texture2D" uid="uid://bdh23rtqbbstc" path="res://assets/processed_candle.PNG" id="6_u8j85"]
+[ext_resource type="Texture2D" uid="uid://db6knepxierlx" path="res://assets/candle_main_副本.PNG" id="6_u8j85"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lswn8"]
 shader = ExtResource("4_xikl0")

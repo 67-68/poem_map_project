@@ -28,23 +28,30 @@ var ambition_traits = [] # 这里存储字符串，实际上从总trait数据库
 # deadline
 var start_year: float = Global.start_year
 var deadline: float = Global.end_year
-var deadline_fail_result: Array[PropModifierPlaceHolder] = []
+var deadline_fail_result: Array = []
 var deadline_warning := ''
 
 func _init(data):
     super._init(data)
-    leveled_stages = PropParser.parse_any(data,true,'stages')
-    var staged_requirements_ = PropParser.parse_any(data,true,'requirements')
+    leveled_stages = PropParser.parse_any(data,true,'leveled_stages')
+    var staged_requirements_ = PropParser.parse_any(data,true,'staged_requirements')
+    if not staged_requirements_:
+        staged_requirements_ = {}
+        Logging.warn('no staged_requirements for ambition %s' % name)
     for stage_name in staged_requirements_:
         staged_requirements[stage_name] = PropParser.parse_and_create_cls(ComplexRequirements,staged_requirements_,true,stage_name)
-    staged_perceptions = PropParser.parse_any(data,true,'perceptions')
+    
+    var staged_perceptions_ = PropParser.parse_any(data,true,'staged_perceptions')
+    if not staged_perceptions_:
+        staged_perceptions_ = {}
+    staged_perceptions = staged_perceptions_
 
-    buff_description = PropParser.parse_any(data,true,'prop_description')
-    buffer_to_prop = PropParser.parse_and_create_cls(DictMultiplyOperator,data,true,'buffer_to_prop')
-    buffer_to_region = PropParser.parse_and_create_cls(DictMultiplyOperator,data,true,'buffer_to_region')
-    ambition_traits = PropParser.parse_any(data,true,'ambition_traits')
+    buff_description = PropParser.parse_any(data,true,'buff_description') if PropParser.parse_any(data,true,'buff_description') else ''
+    buffer_to_prop = PropParser.parse_and_create_cls(DictMultiplyOperator,data,true,'buffer_to_prop') if PropParser.parse_any(data,true,'buffer_to_prop') else null
+    buffer_to_region = PropParser.parse_and_create_cls(DictMultiplyOperator,data,true,'buffer_to_region') if PropParser.parse_any(data,true,'buffer_to_region') else null
+    ambition_traits = PropParser.parse_any(data,true,'ambition_traits') if PropParser.parse_any(data,true,'ambition_traits') else []
 
-    start_year = PropParser.parse_any(data,true,'start_year')
-    deadline = PropParser.parse_any(data,true,'deadline')
-    deadline_warning = PropParser.parse_any(data,true,'deadline_warning')
-    deadline_fail_result = PropParser.parse_any(data,true,'deadline_fail_result')
+    start_year = PropParser.parse_any(data,true,'start_year') if PropParser.parse_any(data,true,'start_year') else Global.start_year
+    deadline = PropParser.parse_any(data,true,'deadline') if PropParser.parse_any(data,true,'deadline') else Global.end_year
+    deadline_warning = PropParser.parse_any(data,true,'deadline_warning') if PropParser.parse_any(data,true,'deadline_warning') else ''
+    deadline_fail_result = PropParser.parse_any(data,true,'deadline_fail_result') if PropParser.parse_any(data,true,'deadline_fail_result') else []

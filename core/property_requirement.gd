@@ -5,7 +5,10 @@ class_name PropertyRequirement extends GameEntity
 var front_property_name: String
 var front_property_data: int
 var operator: String
-var failed_hint: String # 在
+var failed_hint: String
+
+
+# 原始字符串，用于显示错误信息
 var oringinal_str: String
 
 func get_property_from_str(prop_str: String):
