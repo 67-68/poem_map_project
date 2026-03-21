@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" load_steps=2 format=3 uid="uid://b1iao032qgbvm"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_c7hqg"]
+
+[resource]
+script = ExtResource("1_c7hqg")
+resources = {
+"poet-dufu-002": "res://data/tres_poet_data/poet-dufu-002.tres",
+"poet-libai-001": "res://data/tres_poet_data/poet-libai-001.tres"
+}

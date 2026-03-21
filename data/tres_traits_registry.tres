@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" load_steps=2 format=3 uid="uid://8qleakcd6npo"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_slend"]
+
+[resource]
+script = ExtResource("1_slend")
+resources = {
+"trait_obsessive_scholar": "res://data/tres_traits/trait_obsessive_scholar.tres"
+}

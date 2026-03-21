@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" load_steps=2 format=3 uid="uid://87ai8w836gxx"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_8b3js"]
+
+[resource]
+script = ExtResource("1_8b3js")
+resources = {
+"first_ambition": "res://data/tres_ambitions/first_ambition.tres"
+}
