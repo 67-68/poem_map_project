@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HistoryEventData" load_steps=3 format=3 uid="uid://37hscecwmbn"]
+
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_l3g1l"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/history_event_data.gd" id="2_5oxna"]
+
+[resource]
+script = ExtResource("2_5oxna")
+year = 742
+uuid = "event_test_hub"
+name = "长安街头 (测试驻留菜单)"
+description = "繁华迷人眼。你的香火正在燃烧，请疯狂点击测试你的算子！"

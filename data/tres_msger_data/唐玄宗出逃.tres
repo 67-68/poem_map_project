@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="MessagerData" load_steps=2 format=3 uid="uid://bdw5v4tnxt7o3"]
+
+[ext_resource type="Script" uid="uid://whvmlrf5hkjl" path="res://model/message_data.gd" id="1_7yoju"]
+
+[resource]
+script = ExtResource("1_7yoju")
+year = 756
+color = Color(1, 0.84313726, 0, 1)
+uuid = "唐玄宗出逃"

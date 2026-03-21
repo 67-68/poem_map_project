@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="HistoryEventData" load_steps=3 format=3 uid="uid://d1joyxvgt5ak5"]
+
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_3myk4"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/history_event_data.gd" id="2_kbfvo"]
+
+[resource]
+script = ExtResource("2_kbfvo")
+provs_state_after = {
+"fu_zhou": 2.0,
+"shan_zhou_shan_xi": 1.0
+}
+example = "758年 陕州"
+year = 758
+location_uuid = "shan_zhou_shan_xi"
+color = Color(0.5019608, 0.5019608, 0.5019608, 1)
+uuid = "shi_hao_li"
+name = "石壕吏"
+description = "暮投石壕村，有吏夜捉人。老翁逾墙走，老妇出门看。"

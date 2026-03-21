@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="AmbitionData" load_steps=2 format=3 uid="uid://c67b63fp745ew"]
+
+[ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="1_4mbke"]
+
+[resource]
+script = ExtResource("1_4mbke")
+uuid = "first_ambition"
+name = "致君尧舜上"

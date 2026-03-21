@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="HistoryEventData" load_steps=3 format=3 uid="uid://b6f8vwuayk0u3"]
+
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_hejai"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/history_event_data.gd" id="2_6iyjn"]
+
+[resource]
+script = ExtResource("2_6iyjn")
+year = 742
+uuid = "event_test_start"
+name = "立志入仕"
+description = "三十而立，你站在长安朱雀大街上，立下了宏愿。这是测试的开端。"

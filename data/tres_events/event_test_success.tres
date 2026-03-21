@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="AmbitionData" load_steps=2 format=3 uid="uid://ua6dnwnit5v8"]
-
-[ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="1_4g52c"]
-
-[resource]
-script = ExtResource("1_4g52c")
-uuid = "event_test_success"
-name = "金榜题名"
-description = "系统测试通过！你顶着 1.5 倍的乘区刷满了声望，并成功触发了高门槛事件！"

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PoemData" load_steps=2 format=3 uid="uid://8tli3bf00h14"]
+
+[ext_resource type="Script" uid="uid://55v6166yiuqq" path="res://characters/poem_data.gd" id="1_1cdtj"]
+
+[resource]
+script = ExtResource("1_1cdtj")
+uuid = "poem-libai-001"
+name = "静夜思"
+owner_uuids = ["poet-libai-001"]

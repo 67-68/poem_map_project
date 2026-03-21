@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="AmbitionData" load_steps=2 format=3 uid="uid://bs5o2f17h0msv"]
-
-[ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="1_7f1yc"]
-
-[resource]
-script = ExtResource("1_7f1yc")
-uuid = "shi_hao_li"
-name = "石壕吏"
-description = "暮投石壕村，有吏夜捉人。老翁逾墙走，老妇出门看。"

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PoemData" load_steps=2 format=3 uid="uid://2jju0rinac0c"]
+
+[ext_resource type="Script" uid="uid://55v6166yiuqq" path="res://characters/poem_data.gd" id="1_oqp7i"]
+
+[resource]
+script = ExtResource("1_oqp7i")
+uuid = "poem-libai-002"
+name = "将进酒"
+owner_uuids = ["poet-libai-001"]

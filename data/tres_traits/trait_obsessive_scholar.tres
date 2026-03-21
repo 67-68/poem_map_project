@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Trait" load_steps=2 format=3 uid="uid://wa5opni72thx"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_n24fw"]
+
+[resource]
+script = ExtResource("1_n24fw")
+uuid = "trait_obsessive_scholar"
+name = "痴迷学者"
+description = "对学问极度痴迷，专注于学术研究"

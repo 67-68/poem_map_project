@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PoemData" load_steps=2 format=3 uid="uid://bdv8cgujmfh21"]
+
+[ext_resource type="Script" uid="uid://55v6166yiuqq" path="res://characters/poem_data.gd" id="1_bp3xf"]
+
+[resource]
+script = ExtResource("1_bp3xf")
+uuid = "poem-dufu-003"
+name = "茅屋为秋风所破歌"
+owner_uuids = ["poet-dufu-002"]
