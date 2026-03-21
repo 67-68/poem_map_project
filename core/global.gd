@@ -72,7 +72,7 @@ signal poem_animation_finished()
 signal request_add_messager(msg: Messager)
 signal request_change_bg_modulate(color: Color)
 signal request_restore_bg_modulate(duration: float) # -1 = forever
-signal history_event_confirmed()
+signal event_confirmed()
 
 signal bubble_complete()
 signal request_add_event()
@@ -90,8 +90,8 @@ var focused_chat_data: Dictionary
 var ambitions: Dictionary
 var traits: Dictionary
 
-var history_event_stack_manager: PopupQueue
-var history_event_buffer: ManualBuffer
+var event_popup_queue: PopupQueue
+var event_buffer: ManualBuffer
 
 var chat_buffer: ManualBuffer
 
@@ -135,7 +135,7 @@ func init():
 	load_manager_and_buffers()
 	
 	# 添加到事件触发
-	for d in event_data.values(): TimeService.register(d.year,history_event_buffer.pop_item,true,d)
+	for d in event_data.values(): TimeService.register(d.year,event_buffer.pop_item,true,d)
 	for d in poem_data.values(): TimeService.register(d.year,poem_buffer.pop_item,true,d)
 
 	# 数据文件不允许使用字典！！使用list
@@ -159,8 +159,8 @@ func load_actual_positions(mesh_size):
 	wash_positions(life_path_points,mesh_size,true)
 
 func load_manager_and_buffers():
-	history_event_stack_manager = PopupQueue.new(resolve_history_event,history_event_confirmed) # 这里暂且使用一个signal, 如果后面想做多个事件页面一样叠在一起需要改一下manager内部设定不依赖complete signal
-	history_event_buffer = ManualBuffer.new(history_event_stack_manager.add_item,event_data.values())
+	event_popup_queue = PopupQueue.new(resolve_history_event,event_confirmed) # 这里暂且使用一个signal, 如果后面想做多个事件页面一样叠在一起需要改一下manager内部设定不依赖complete signal
+	event_buffer = ManualBuffer.new(event_popup_queue.add_item,event_data.values())
 	# 可以给manager 加一个新的选项询问是不是暂停engine, 现在还需要自己手动处理太麻烦了
 	poem_stack_manager = PopupQueue.new(_apply_poem_data,Global.poem_animation_finished)
 	poem_buffer = ManualBuffer.new(poem_stack_manager.add_item,poem_data.values())

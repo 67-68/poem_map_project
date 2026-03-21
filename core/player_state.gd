@@ -9,11 +9,9 @@ signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
 
 func _ready():
-	set_ambition(Global.ambitions.get('first_ambition'))
-	change_stat('official_prestige', 50)
+	change_stat('official_prestige', 14)
 	change_stat('literary_fame',50)
 	change_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
-	add_trait('offspring_of_du_shen_yan')
 
 func change_stat(stat_name, data):
 	if stat_name is int:
@@ -90,7 +88,11 @@ func remove_trait(trait_name):
 		traits.erase(trait_name)
 
 
-func set_ambition(ambition_):
+func set_ambition(ambition_key):
+	var ambition_ = Global.ambitions.get(ambition_key)
+	if not ambition_: 
+		Logging.err('this ambition %s is non-exist' % ambition_key)
+		return
 	if ambition:
 		for t in ambition.ambition_traits:
 			remove_trait(t)

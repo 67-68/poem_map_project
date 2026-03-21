@@ -270,7 +270,7 @@ static func create_dict_from_registry(registry: ResourceRegistry):
 		if resource:
 			dict[uuid] = resource
 		else:
-			Logging.warning("无法加载资源: " + resource_path)
+			Logging.warn("无法加载资源: " + resource_path)
 	
 	return dict
 

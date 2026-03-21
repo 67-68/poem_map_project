@@ -92,5 +92,6 @@ func _end_narrative(choice):
 	# 3. 恢复世界
 	TimeService.resume_world()
 	Logging.done('narrative finished')
+	Global.event_confirmed.emit() # 绑定事件系统信号
 
 	ConsequenceExecuter.execute_result(choice)

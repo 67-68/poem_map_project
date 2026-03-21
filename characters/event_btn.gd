@@ -20,7 +20,7 @@ func _init(data: EventOption):
 			return
 		if not pass_prop:
 			disabled = true
-			text = "[%s-%s]%s" % [data.property_requirement.failed_hint, text] # failed hint 包括描写和属性要求
+			text = "[%s]%s" % [data.property_requirement.failed_hint, text] # failed hint 包括描写和属性要求
 			if data.property_requirement.failed_hint.length() > 10:
 				Logging.warn('property requirement of %s length > 15 char, can be ugly' % data.property_requirement.failed_hint)
 

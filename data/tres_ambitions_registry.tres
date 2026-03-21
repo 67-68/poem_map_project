@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_8b3js")
 resources = {
-"first_ambition": "res://data/tres_ambitions/first_ambition.tres"
+"dufu_ambition": "res://data/tres_ambitions/dufu_ambition.tres"
 }

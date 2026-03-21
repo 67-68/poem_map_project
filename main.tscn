@@ -113,7 +113,7 @@ offset_bottom = 100.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="UI"]
+[node name="DebugInfo" type="ColorRect" parent="UI"]
 custom_minimum_size = Vector2(200, 200)
 offset_left = 242.0
 offset_top = 251.0
@@ -121,12 +121,12 @@ offset_right = 282.0
 offset_bottom = 291.0
 scale = Vector2(0.98352087, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/ColorRect"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/DebugInfo"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="StatLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
+[node name="StatLabel" type="Label" parent="UI/DebugInfo/VBoxContainer"]
 z_index = 999
 layout_mode = 2
 size_flags_vertical = 3
@@ -134,7 +134,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "current property: "
 script = ExtResource("16_cegan")
 
-[node name="EventsLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
+[node name="EventsLabel" type="Label" parent="UI/DebugInfo/VBoxContainer"]
 z_index = 999
 layout_mode = 2
 size_flags_vertical = 3

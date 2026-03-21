@@ -11,7 +11,9 @@ func add_item(item):
 	if not is_playing:
 		Logging.info("Queue was idle, starting animation for first item")
 		play_animation()
-	else: Logging.warn('current is playing, if not play can be a state error')
+	else: 
+		Logging.warn('current is playing, if not play can be a state errorl; Check if SIGNAL is connected or MARK_AS_FINISHED is called')
+		Logging.warn('you can emit signal: Global.event_confirmed[ONLY FOR EVENT SYSTEM] to continue')
 
 func add_items(items_: Array):
 	"""

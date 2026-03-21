@@ -13,7 +13,7 @@
 [sub_resource type="Resource" id="Resource_xo6ue"]
 script = ExtResource("3_p71cl")
 property = "official_prestige"
-value = 10
+value = 30
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_6a0dw"]
