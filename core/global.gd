@@ -135,8 +135,8 @@ func init():
 	load_manager_and_buffers()
 	
 	# 添加到事件触发
-	for d in event_data.values(): TimeService.register(d.year,history_event_buffer.pop_item)
-	for d in poem_data.values(): TimeService.register(d.year,poem_buffer.pop_item)
+	for d in event_data.values(): TimeService.register(d.year,history_event_buffer.pop_item,true,d)
+	for d in poem_data.values(): TimeService.register(d.year,poem_buffer.pop_item,true,d)
 
 	# 数据文件不允许使用字典！！使用list
 	for d in poem_data:
@@ -148,7 +148,7 @@ func init():
 		poet_data[d].path_point_keys = DataHelper.find_all_values_by_membership(life_path_points,'owner_uuids',d,'uuid')
 	
 	if chat_bubble_data:
-		for d in chat_bubble_data.values() + focused_chat_data.values(): TimeService.register(d.year,chat_buffer.pop_item)
+		for d in chat_bubble_data.values() + focused_chat_data.values(): TimeService.register(d.year,chat_buffer.pop_item,true,d)
 
 func load_actual_positions(mesh_size):
 	"""

@@ -22,7 +22,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("2_csoj0")
 options = Array[ExtResource("1_klxx1")]([SubResource("Resource_imymp")])
-year = 742
+year = 744
 uuid = "event_test_success"
 name = "金榜题名"
 description = "系统测试通过！你顶着 1.5 倍的乘区刷满了声望，并成功触发了高门槛事件！"

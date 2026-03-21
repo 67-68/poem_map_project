@@ -6,30 +6,41 @@ var resolve_item: Callable
 var stop_time := false
 
 func add_item(item):
+	Logging.info("Adding item to queue: %s" % str(item))
 	items.append(item)
 	if not is_playing:
+		Logging.info("Queue was idle, starting animation for first item")
 		play_animation()
+	else: Logging.warn('current is playing, if not play can be a state error')
 
 func add_items(items_: Array):
 	"""
 	单个item不能是uuid, 需要是对象
 	"""
+	Logging.info("Adding multiple items to queue: %d items" % items_.size())
 	items.append_array(items_)
 	if not is_playing:
+		Logging.info("Queue was idle, starting animation for first batch")
 		play_animation()
+	else:
+		Logging.warn("Queue is playing, %d items queued for later processing" % items_.size())
 
 func play_animation():
+	Logging.info("Starting animation for queue item: %s" % str(items[0]))
 	pause_time()
 	# 默认play [0]
 	is_playing = true
 	resolve_item.call(items[0])
 	
 func _on_animation_finished():
+	Logging.info("Animation finished, removing item from queue")
 	items.pop_front()
 	if items.is_empty():
+		Logging.info("Queue is now empty, stopping animation and resuming time")
 		start_time()
 		is_playing = false
 	else:
+		Logging.info("Queue has %d remaining items, continuing with next" % items.size())
 		play_animation()
 
 func _init(resolve_item_: Callable, animation_finished_signal: Signal, stop_time_: bool = true):
@@ -47,9 +58,19 @@ func _init(resolve_item_: Callable, animation_finished_signal: Signal, stop_time
 		Logging.warn('没发现signal, 需要手动调用mark_as_finish')
 
 func start_time():
-	if stop_time: TimeService.play()
+	if stop_time: 
+		Logging.info("Resuming time service")
+		TimeService.play()
+	else:
+		Logging.debug("Time service not controlled by this queue")
+
 func pause_time():
-	if stop_time: TimeService.pause()
+	if stop_time: 
+		Logging.info("Pausing time service")
+		TimeService.pause()
+	else:
+		Logging.debug("Time service not controlled by this queue")
 
 func mark_as_finish():
+	Logging.info("Manual finish called for current queue item")
 	_on_animation_finished()

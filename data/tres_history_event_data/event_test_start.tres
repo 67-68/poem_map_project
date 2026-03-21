@@ -29,7 +29,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("2_6iyjn")
 options = Array[ExtResource("1_hejai")]([SubResource("Resource_qiifw")])
-year = 742
+year = 743
 uuid = "event_test_start"
 name = "立志入仕"
 description = "三十而立，你站在长安朱雀大街上，立下了宏愿。这是测试的开端。"

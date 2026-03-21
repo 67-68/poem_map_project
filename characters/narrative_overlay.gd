@@ -3,7 +3,7 @@ class_name NarrativeOverlay extends Control
 # 引用子节点 (根据上面的新结构调整路径)
 @onready var main_card: TextureRect = $Background
 @onready var dimmer: ColorRect = $Dimmer
-@onready var btn_container: VBoxContainer = $Background/Margin/VBox/BtnContainer
+@onready var btn_container: VBoxContainer = $Background/Margin/VBox/OptionBtns
 
 # 状态
 var current_event_data: HistoryEventData

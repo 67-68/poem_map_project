@@ -32,9 +32,9 @@ func _ready() -> void:
 	PlayerState.player_stat_changed.connect(_on_model_stat_changed)
 	
 	# 3. 初始化时，主动拉取一次 Model 兜底
-	_on_model_stat_changed()
+	_on_model_stat_changed("")
 
-func _on_model_stat_changed():
+func _on_model_stat_changed(prop_name):
 	var current_stage_name = ambition.leveled_stages[ambition.current_stage]
 	var operators = _find_requirement_by_stage_id(current_stage_name)
 	if operators and operators.compare(PlayerState):

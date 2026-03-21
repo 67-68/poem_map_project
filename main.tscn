@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=24 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -18,6 +18,8 @@
 [ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="12_vivmo"]
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
 [ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="15_074og"]
+[ext_resource type="Script" uid="uid://dumrsjmb5wfw2" path="res://tests/label.gd" id="16_cegan"]
+[ext_resource type="Script" uid="uid://dwt47t3hxkbjx" path="res://tests/events_label.gd" id="17_82xsv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -110,6 +112,35 @@ offset_right = 60.0
 offset_bottom = 100.0
 grow_horizontal = 0
 grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+custom_minimum_size = Vector2(200, 200)
+offset_left = 242.0
+offset_top = 251.0
+offset_right = 282.0
+offset_bottom = 291.0
+scale = Vector2(0.98352087, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ColorRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StatLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
+z_index = 999
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "current property: "
+script = ExtResource("16_cegan")
+
+[node name="EventsLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
+z_index = 999
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "future events: "
+script = ExtResource("17_82xsv")
 
 [node name="CoreSystems" type="Node" parent="."]
 

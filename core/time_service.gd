@@ -1,5 +1,7 @@
 extends Node
 
+signal future_event_registered(event_data: Dictionary)
+
 @export var _speed: float = 3
 
 @export var speed: float:
@@ -126,8 +128,8 @@ func slow_down():
 
 
 # --- 注册接口 ---
-func register(trigger_time: float, function: Callable, save_to_history: bool = true):
-	var event_data = {"time": trigger_time, "callback": function}
+func register(trigger_time: float, function: Callable, save_to_history: bool = true, entity: GameEntity = null):
+	var event_data = {"time": trigger_time, "callback": function, "entity": entity}
 	
 	# 动态事件（比如信使移动）只需进当前队列；剧本事件需要进史书
 	if save_to_history:
@@ -139,6 +141,8 @@ func register(trigger_time: float, function: Callable, save_to_history: bool = t
 	if trigger_time >= Global.year:
 		event_queue.append(event_data)
 		event_queue.sort_custom(func(a, b): return a.time < b.time)
+		future_event_registered.emit(event_data)
+
 
 # --- 时空穿梭核心接口 (对应你文档的 jump_to)  ---
 func jump_to(new_year: float):

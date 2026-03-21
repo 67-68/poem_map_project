@@ -1,7 +1,7 @@
 extends Node
 
 @export var stats: Dictionary = {}
-@export var traits: Array[Trait] = []
+@export var traits: Array[String] = [] # trait key string
 @export var current_location := "" # 省份uuid
 @export var ambition: AmbitionData
 
@@ -35,7 +35,11 @@ func change_stat(stat_name, data):
 	if ambition and ambition.buffer_to_region and ambition.buffer_to_region.has_operator(current_location):
 		amount_to_change = ambition.buffer_to_region.match_and_multiply(current_location, amount_to_change)
 	
-	for t in traits:
+	for t_name in traits:
+		var t = Global.traits.get(t_name)
+		if not t:
+			Logging.err('do not find trait %s' % t_name)
+			continue
 		if t.buffer_to_prop and t.buffer_to_prop.has_operator(stat_name):
 			amount_to_change = t.buffer_to_prop.match_and_multiply(stat_name, amount_to_change)
 		if t.buffer_to_region and t.buffer_to_region.has_operator(current_location):
