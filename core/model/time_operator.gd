@@ -1,19 +1,15 @@
 class_name TimeOperator extends StatOperator
 
-func _init(data):
-	super._init(data)
+@export var day: float
+@export var operator := '+'
 
 func operate():
 	"""
 	执行时间推进操作
 	"""
-	if not value is float and not value is int:
-		Logging.warn('TimeOperator: value %s is not a number' % value)
+	if day <= 0:
+		Logging.warn('TimeOperator: day %s is not positive' % day)
 		return
 	
-	if value <= 0:
-		Logging.warn('TimeOperator: value %s is not positive' % value)
-		return
-	
-	Global.year += float(value) / 365.0
-	Logging.info('Time advanced by %s days, new year: %s' % [value, Global.year])
+	Global.year += float(day) / 365.0
+	Logging.info('Time advanced by %s days, new year: %s' % [day, Global.year])

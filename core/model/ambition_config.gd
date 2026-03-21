@@ -8,11 +8,11 @@ class_name AmbitionData extends GameEntity
 # 抛弃纯粹的属性计算，通过属性来推断阶段
 # 因为这样在同时追踪多个属性的时候就不行了
 @export var leveled_stages: Array[String] = []
-@export var staged_requirements: StagedRequirementData
+@export var staged_requirements: Array[StagedRequirementData]
 # key = each stage, value = complex requirements to next stage
 # once complete, find current stage and goto next stage. Update 
 # 这里是硬性的属性变化 -> 进度文本变化触发器
-@export var staged_perceptions: StagedPerceptionData
+@export var staged_perceptions: Array[StagedPerceptionData]
 # 类似 {stage1: aaa, stage2: bbb, stage3:ccc}
 
 # buff
@@ -30,3 +30,38 @@ class_name AmbitionData extends GameEntity
 @export var deadline: float = Global.end_year
 @export var deadline_fail_result: Array[StatOperator] = []
 @export var deadline_warning: String = ''
+
+func _init(data: Dictionary = {}):
+	super._init(data)
+	if data.is_empty(): return
+	
+	var props = data.get("properties", data.get("property", {}))
+	
+	# 解析 staged_requirements (从字典数组转换为对象数组)
+	var raw_requirements = data.get("staged_requirements", props.get("staged_requirements", []))
+	if raw_requirements is Array:
+		staged_requirements.clear()
+		for req_data in raw_requirements:
+			if req_data is Dictionary:
+				var requirement = StagedRequirementData.new()
+				requirement.stage_id = req_data.get("stage_id", "")
+				# 需要解析 ComplexRequirements
+				var req_complex = req_data.get("requirement", {})
+				if req_complex is Dictionary:
+					requirement.requirement = ComplexRequirements.new(req_complex)
+				staged_requirements.append(requirement)
+			elif req_data is StagedRequirementData:
+				staged_requirements.append(req_data)
+	
+	# 解析 staged_perceptions (从字典数组转换为对象数组)
+	var raw_perceptions = data.get("staged_perceptions", props.get("staged_perceptions", []))
+	if raw_perceptions is Array:
+		staged_perceptions.clear()
+		for perc_data in raw_perceptions:
+			if perc_data is Dictionary:
+				var perception = StagedPerceptionData.new()
+				perception.stage_id = perc_data.get("stage_id", "")
+				perception.perception_text = perc_data.get("perception_text", "")
+				staged_perceptions.append(perception)
+			elif perc_data is StagedPerceptionData:
+				staged_perceptions.append(perc_data)

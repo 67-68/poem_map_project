@@ -36,8 +36,21 @@ func _ready() -> void:
 
 func _on_model_stat_changed():
 	var current_stage_name = ambition.leveled_stages[ambition.current_stage]
-	var operators = ambition.staged_requirements.get(current_stage_name) as ComplexRequirements
-	if operators.compare(PlayerState):
+	var operators = _find_requirement_by_stage_id(current_stage_name)
+	if operators and operators.compare(PlayerState):
 		ambition.current_stage += 1
-		var vague_text = ambition.staged_perceptions[ambition.leveled_stages[ambition.current_stage]]
-		dynamic_state_label.text = vague_text
+		var perception = _find_perception_by_stage_id(ambition.leveled_stages[ambition.current_stage])
+		if perception:
+			dynamic_state_label.text = perception.perception_text
+
+func _find_requirement_by_stage_id(stage_id: String) -> ComplexRequirements:
+	for requirement in ambition.staged_requirements:
+		if requirement.stage_id == stage_id:
+			return requirement.requirement
+	return null
+
+func _find_perception_by_stage_id(stage_id: String) -> StagedPerceptionData:
+	for perception in ambition.staged_perceptions:
+		if perception.stage_id == stage_id:
+			return perception
+	return null

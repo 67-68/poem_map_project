@@ -1,16 +1,12 @@
 class_name TraitOperator extends StatOperator
 
-func _init(data):
-    super._init(data)
+@export var trait_key: String # refers to the trait in trait base
+@export var operator := '+'
 
 func operate():
-    if not value is String:
-        Logging.err('TraitOperator: value %s of key %s is not a String' % [value, key])
-        return
-    
     if operator == '+':
-        PlayerState.add_trait(value)
+        PlayerState.add_trait(trait_key)
     elif operator == '-':
-        PlayerState.remove_trait(value)
+        PlayerState.remove_trait(trait_key)
     else:
         Logging.err('TraitOperator: unsupported operator %s for trait operations' % operator)

@@ -1,5 +1,5 @@
 class_name REQ_OPERATOR
-enum {
+enum ENUM {
     AND,
     OR
 }

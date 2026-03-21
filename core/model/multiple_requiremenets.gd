@@ -1,7 +1,7 @@
 class_name ComplexRequirements extends BasePropertyOperator
 
-var operators: Array[BasePropertyOperator] = []
-var current_operator: int
+@export var operators: Array[BasePropertyOperator] = []
+@export var current_operator: REQ_OPERATOR.ENUM
 
 func compare(data):
     # 分别调用下级的operator, 根据and 或者or分别判断

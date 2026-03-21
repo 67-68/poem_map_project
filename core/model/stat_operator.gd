@@ -1,14 +1,10 @@
-class_name StatOperator extends GameEntity
+class_name StatOperator extends BasePropertyOperator
 
-@export var key := 'default-stat-name'
-@export var value: Variant
-@export var operator := '+'
-
-func _init(data):
-    super._init(data)
-    key = PropParser.parse_any(data,true,"key")
-    value = PropParser.parse_any(data,true,'value')
-    operator = PropParser.parse_any(data,true,'operator')
+# @export var key := 'default-stat-name'
+# @export var value: Variant
+# @export var operator := '+'
+# 让子类自己定义，自己决定叫什么
+# 只要方法没问题就行
 
 func operate():
     """

@@ -1,7 +1,4 @@
-class_name BasePropertyOperator extends GameEntity
-
-func _init(data: Dictionary = {}):
-	super._init(data)
+class_name BasePropertyOperator extends Resource
 
 func compare(data) -> bool:
 	if data:
