@@ -1,13 +1,12 @@
 class_name ChoiceResult extends GameEntity
 
-var target_uuid: String = ''
-var action_type: String = ''
-var operators: Array[StatOperator] = []
+@export var target_uuid: String = ''
+@export var action_type: String = ''
+@export var operators: Array[StatOperator] = []
 
 func _init(data = {}):
-	if Logging.not_exists('choice_result',data):
-		return
 	super._init(data)
+	
 	var t = PropParser.parse_any(data,true,'target_uuid')
 	target_uuid = t if t else ''
 	var action_type_ = PropParser.parse_any(data,true,'action_type')
@@ -18,11 +17,13 @@ func _init(data = {}):
 		if trait_operator:
 			operators.append(trait_operator)
 	elif action_type == 'property':
+		breakpoint
 		var property_operator = PropParser.parse_and_create_cls(PropertyOperator,data,true,'operator')
 		if property_operator:
 			operators.append(property_operator)
 	elif action_type == 'multi_property':
-		var operators_data = PropParser.parse_any(data,true,'operators')
+
+		var operators_data = PropParser.parse_any(data,true,'operator')
 		if operators_data:
 			for op_data in operators_data:
 				var op = PropertyOperator.new(op_data)

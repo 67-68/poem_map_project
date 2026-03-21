@@ -59,7 +59,7 @@ func apply_narrative(data: HistoryEventData):
 	# 5. 🎬 进场动画 (The Entrance)
 	_play_open_animation()
 
-func _on_option_selected():
+func _on_option_selected(_choice_result):
 	# 这里可以加个逻辑：记录玩家的选择，或者处理 disabled 选项的拒绝音效
 	# 如果是有效选择，关闭界面
 	_end_narrative()

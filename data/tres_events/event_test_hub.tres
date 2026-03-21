@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AmbitionData" load_steps=2 format=3 uid="uid://dsecjuudd266o"]
+
+[ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="1_mg5g3"]
+
+[resource]
+script = ExtResource("1_mg5g3")
+uuid = "event_test_hub"
+name = "长安街头 (测试驻留菜单)"
+description = "繁华迷人眼。你的香火正在燃烧，请疯狂点击测试你的算子！"

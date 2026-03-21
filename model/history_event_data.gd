@@ -1,10 +1,10 @@
 class_name HistoryEventData extends WorldEvent
-var options: Array[EventOption] = []
+@export var options: Array[EventOption] = []
 # target prov-uuid: parent - location_uuid
-var provs_state_after: Dictionary
+@export var provs_state_after: Dictionary
 # audio 也用父类的
 # 需要texture; 使用父类的icon
-var example: String
+@export var example: String
 # 对于问题介绍，使用Description
 # 问题本身使用name
 # bg_color 使用父类的color

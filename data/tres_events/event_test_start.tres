@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AmbitionData" load_steps=2 format=3 uid="uid://b5y4bermjlfr3"]
+
+[ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="1_2847t"]
+
+[resource]
+script = ExtResource("1_2847t")
+uuid = "event_test_start"
+name = "立志入仕"
+description = "三十而立，你站在长安朱雀大街上，立下了宏愿。这是测试的开端。"

@@ -128,6 +128,15 @@ func init():
 	poem_data = Util.create_dict(DataLoader.load_json_model(PoemData,'poem_data'))
 	msger_data = Util.create_dict(DataLoader.load_json_model(MessagerData,'msger_data'))
 	event_data = Util.create_dict(DataLoader.load_json_model(HistoryEventData,'history_event_data'))
+	var event = event_data["event_test_start"]
+	breakpoint
+	print(event is HistoryEventData)
+	print(event.name)
+	print(event.options[0].get("choice_result"))
+	print(event.options[0].choice_result.get("operator"))
+	print(event.options[0].choice_result.operator.value)
+	print(event.options[0].choice_result.operator.operator)
+	print(event.options[0].choice_result.target_uuid)
 	chat_bubble_data = Util.create_dict(DataLoader.load_json_model(ChatBubble,'chat_bubbles'))
 	focused_chat_data = Util.create_dict(DataLoader.load_json_model(FocusedChat,'focused_chats'))
 	ambitions = Util.create_dict(DataLoader.load_json_model(AmbitionData,'ambitions'))

@@ -20,8 +20,6 @@ static func parse_any(data, get_properties = true, ...target_names):
 	for name in target_names:
 		for source in sources:
 			if source.get(name):
-				print(source[name])
-				print(source[name])
 				return source[name]
 
 static func parse_and_create_cls(cls, data, get_properties = true, ...target_names):

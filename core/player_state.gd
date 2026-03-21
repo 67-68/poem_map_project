@@ -1,8 +1,8 @@
 extends Node
 
-var stats := {}
-var traits: Array[Trait] = []
-var current_location := "" # 省份uuid
+@export var stats := {}
+@export var traits: Array[Trait] = []
+@export var current_location := "" # 省份uuid
 @export var ambition: AmbitionData
 
 signal ambition_changed(ambition)
@@ -41,8 +41,10 @@ func change_stat(stat_name, data):
 		if t.buffer_to_region and t.buffer_to_region.has_operator(current_location):
 			amount_to_change = t.buffer_to_region.match_and_multiply(current_location, amount_to_change)
 
+	Logging.info('change stat %s by %d' % [stat_name, amount_to_change])
 	stats[stat_name] += amount_to_change # 永远执行加法
 	player_stat_changed.emit(stat_name)
+	breakpoint
 
 func get_stat(stat_name):
 	if stat_name is int:
