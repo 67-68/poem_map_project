@@ -1,7 +1,7 @@
-class_name ComplexRequirements extends BasePropertyOperator
+class_name ComplexRequirements extends BaseRequirements
 
 @export var operators: Array[BasePropertyOperator] = []
-@export var current_operator: REQ_OPERATOR.ENUM
+@export var current_operator: REQ_OPERATOR.LOGIC
 
 func compare(data):
     # 分别调用下级的operator, 根据and 或者or分别判断
@@ -18,19 +18,18 @@ func compare(data):
         var result = operator.compare(data)
         results.append(result)
     
-    if current_operator == 0:  # REQ_OPERATOR.AND
+    if current_operator == REQ_OPERATOR.LOGIC.AND:
         # AND逻辑：所有条件都必须满足
         for i in range(results.size()):
             if not results[i]:
                 Logging.err('ComplexRequirements: AND operation failed at operator index %d' % i)
                 return false
         return true
-    elif current_operator == 1:  # REQ_OPERATOR.OR
+    elif current_operator == REQ_OPERATOR.LOGIC.OR:
         # OR逻辑：至少一个条件满足
         for i in range(results.size()):
             if results[i]:
                 return true
-        Logging.err('ComplexRequirements: OR operation failed, none of %d operators satisfied' % results.size())
         return false
     else:
         Logging.err('ComplexRequirements: Unknown current_operator value: %d' % current_operator)

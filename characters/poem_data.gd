@@ -21,16 +21,6 @@ enum Poem_Grade { # 拾遗，雅颂，瑰意，绝唱
 # 创建的路径点tag存储诗词
 static var repo_id = "POEM_REPO"
 
-func _init(note_data: Dictionary):
-    super._init(note_data)
-    var properties = note_data.get('properties',{})
-    popularity = properties.get('popularity',0)
-    background = Poem_BG.get(properties.get('poem_background'),Poem_BG.BOOK)
-    emotion = properties.get('emotion',0)
-    example = properties.get('example',"")
-
-# 在 PoemData.gd 内部添加
-
 ## 将诗词数据转化为一个用于初始化 PoetLifePoint 的原始字典
 ## 这种做法完美避开了编译期的循环引用问题
 func to_life_path_point_data() -> Dictionary:

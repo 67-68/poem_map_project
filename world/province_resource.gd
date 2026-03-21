@@ -2,7 +2,7 @@ class_name Territory extends WorldEvent
 
 @export var stability: float
 @export var capital: String
-@export var sub_ids: Array[String]
+@export var sub_ids: Array
 @export var dirty: bool = true
 
 func _get_deprecated_position():

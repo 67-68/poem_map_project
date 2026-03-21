@@ -1,4 +1,4 @@
 class_name StagedRequirementData extends Resource
 
 @export var stage_id: String = ""
-@export var requirement: ComplexRequirements
+@export var requirement: BaseRequirements

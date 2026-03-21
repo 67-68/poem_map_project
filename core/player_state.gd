@@ -99,3 +99,10 @@ func set_ambition(ambition_):
 static func translate_from_enum(stat):
 	Logging.debug('try to translate a enum property')
 	return PROPERTIES.to_str(stat)
+
+enum Traits {
+	TRAIT_OBSSESIVE_SCHOLAR
+}
+
+func get_trait_from_enum(trait_name: Traits):
+	return Traits.keys()[trait_name]

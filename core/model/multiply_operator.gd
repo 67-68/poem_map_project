@@ -1,4 +1,4 @@
-class_name MultiplyOperator extends GameEntity
+class_name MultiplyOperator extends Resource
 # 给出一个值，通过本地的multiplication 返回一个计算factor之后的值
 
 enum MUL_OPERATOR{
@@ -10,12 +10,6 @@ enum MUL_OPERATOR{
 @export var key := 'default-multiplication-operator-name'
 @export var value := 1.0
 @export var operator := MUL_OPERATOR.POSITIVE_ONLY
-
-func _init(data):
-    super._init(data)
-    key = PropParser.parse_any(data,true,"key")
-    value = PropParser.parse_any(data,true,'value')
-    operator = MUL_OPERATOR.get(PropParser.parse_any(data,true,'operator'))
 
 func multiply(data):
     if data == 0: 

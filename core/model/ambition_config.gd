@@ -23,45 +23,10 @@ class_name AmbitionData extends GameEntity
 # {"area": {"type_of_point": 1.5} } 在某个area，获取type_of_point类型点数，增强0.5倍
 @export var buff_description: String = ""
 # 未来可能需要做多个阶段的buff，不然玩家会在一个地方一直逗留
-@export var ambition_traits: Array[String] = [] # 这里存储字符串，实际上从总trait数据库查找内容
+@export var ambition_traits: Array[PlayerState.Traits] = [] # 这里存储字符串，实际上从总trait数据库查找内容
 
 # deadline
 @export var start_year: float = Global.start_year
 @export var deadline: float = Global.end_year
 @export var deadline_fail_result: Array[StatOperator] = []
 @export var deadline_warning: String = ''
-
-func _init(data: Dictionary = {}):
-	super._init(data)
-	if data.is_empty(): return
-	
-	var props = data.get("properties", data.get("property", {}))
-	
-	# 解析 staged_requirements (从字典数组转换为对象数组)
-	var raw_requirements = data.get("staged_requirements", props.get("staged_requirements", []))
-	if raw_requirements is Array:
-		staged_requirements.clear()
-		for req_data in raw_requirements:
-			if req_data is Dictionary:
-				var requirement = StagedRequirementData.new()
-				requirement.stage_id = req_data.get("stage_id", "")
-				# 需要解析 ComplexRequirements
-				var req_complex = req_data.get("requirement", {})
-				if req_complex is Dictionary:
-					requirement.requirement = ComplexRequirements.new(req_complex)
-				staged_requirements.append(requirement)
-			elif req_data is StagedRequirementData:
-				staged_requirements.append(req_data)
-	
-	# 解析 staged_perceptions (从字典数组转换为对象数组)
-	var raw_perceptions = data.get("staged_perceptions", props.get("staged_perceptions", []))
-	if raw_perceptions is Array:
-		staged_perceptions.clear()
-		for perc_data in raw_perceptions:
-			if perc_data is Dictionary:
-				var perception = StagedPerceptionData.new()
-				perception.stage_id = perc_data.get("stage_id", "")
-				perception.perception_text = perc_data.get("perception_text", "")
-				staged_perceptions.append(perception)
-			elif perc_data is StagedPerceptionData:
-				staged_perceptions.append(perc_data)

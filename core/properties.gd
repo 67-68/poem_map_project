@@ -5,7 +5,11 @@ enum {
 	TALENT
 }
 
-
+const exported_props = [
+	"official_prestige",
+	"literary_fame",
+	"talent"
+]
 
 static func to_str(name: int):
 	"""

@@ -1,5 +1,17 @@
 class_name REQ_OPERATOR
-enum ENUM {
+enum LOGIC {
     AND,
-    OR
+    OR,
+    
 }
+
+enum COMPARE {
+    LESS_THAN,
+    GREATER_THAN
+}
+
+enum CRUD {
+    ADD,
+    REMOVE
+}
+

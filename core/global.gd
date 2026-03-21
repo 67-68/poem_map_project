@@ -131,7 +131,7 @@ func init():
 	chat_bubble_data = Util.create_dict(DataLoader.load_json_model(ChatBubble,'chat_bubbles'))
 	focused_chat_data = Util.create_dict(DataLoader.load_json_model(FocusedChat,'focused_chats'))
 	ambitions = Util.create_dict(DataLoader.load_json_model(AmbitionData,'ambitions'))
-	traits = Util.create_dict(DataLoader.load_json_model(Trait,'traits'))
+	traits = Util.create_dict([preload("res://data/tres_traits/trait_obsessive_scholar.tres")])
 
 	load_manager_and_buffers()
 	
