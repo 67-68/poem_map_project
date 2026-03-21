@@ -45,6 +45,7 @@ func _process(delta: float) -> void:
 
 func refresh_prov_2_fac():
 	# 1. 建立 [州ID -> 势力对象] 的映射
+	breakpoint
 	for fac_id in Global.factions:
 		var fac: Faction = Global.factions[fac_id]
 		# 解析该势力下属的所有原子州 ID

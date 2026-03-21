@@ -119,9 +119,9 @@ func init():
 
 	base_province = Util.create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
 	territories = Util.create_dict(DataLoader.load_csv_model(Territory,'territories'))
-	factions = Util.create_dict(DataLoader.load_json_model(Faction,'factions'))
-
+	
 	# 加载数据 - 使用tres registry
+	factions = Util.create_dict_from_registry(preload("res://data/tres_factions_registry.tres"))
 	life_path_points = Util.create_dict_from_registry(preload("res://data/tres_path_points_registry.tres"))
 	poet_data = Util.create_dict_from_registry(preload("res://data/tres_poet_data_registry.tres"))
 	poem_data = Util.create_dict_from_registry(preload("res://data/tres_poem_data_registry.tres"))
