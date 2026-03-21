@@ -62,9 +62,9 @@ func apply_narrative(data: HistoryEventData):
 func _on_option_selected(_choice_result):
 	# 这里可以加个逻辑：记录玩家的选择，或者处理 disabled 选项的拒绝音效
 	# 如果是有效选择，关闭界面
-	_end_narrative()
+	_end_narrative(_choice_result)
 
-func _end_narrative():
+func _end_narrative(choice):
 	# 1. 🎬 退场动画 (The Exit)
 	Global.request_restore_bg_modulate.emit(-1)
 	if _tween: _tween.kill()
@@ -93,4 +93,4 @@ func _end_narrative():
 	TimeService.resume_world()
 	Logging.done('narrative finished')
 
-	Global.history_event_confirmed.emit()
+	ConsequenceExecuter.execute_result(choice)

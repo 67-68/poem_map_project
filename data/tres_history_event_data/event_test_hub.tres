@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=20 format=3 uid="uid://8f6b03yk4xmt"]
+[gd_resource type="Resource" script_class="HistoryEventData" load_steps=21 format=3 uid="uid://8f6b03yk4xmt"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_l3g1l"]
+[ext_resource type="Texture2D" uid="uid://dafe3626abotl" path="res://assets/poem_bgs/juanzhou.png" id="1_p71cl"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/history_event_data.gd" id="2_5oxna"]
 [ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_ibxef"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_l3746"]
@@ -87,3 +88,4 @@ year = 742
 uuid = "event_test_hub"
 name = "长安街头 (测试驻留菜单)"
 description = "繁华迷人眼。你的香火正在燃烧，请疯狂点击测试你的算子！"
+icon = ExtResource("1_p71cl")
