@@ -17,7 +17,6 @@ func _ready() -> void:
 	# 修正你的幽灵 Lambda：必须更新自身的 ambition 引用！
 	PlayerState.ambition_changed.connect(func(new_ambition): 
 		Logging.info("AmbitionHUD: Received ambition_changed signal with new ambition: %s" % str(new_ambition))
-		breakpoint
 		ambition = new_ambition # <--- 救命的赋值
 		_load_static()
 		_on_model_stat_changed('')
@@ -42,6 +41,7 @@ func _ready() -> void:
 	Logging.info("AmbitionHUD: Initialization complete")
 
 func _load_static():
+	show()
 	Logging.info("AmbitionHUD: Loading static content for ambition: %s" % str(ambition))
 
 	# 1. 挂载阶段名称 (静态)
@@ -66,6 +66,7 @@ func _on_model_stat_changed(_prop_name):
 	if not ambition:
 		Logging.warn('AmbitionHUD: No ambition available for display')
 		return
+	show()
 	Logging.info("ambition hud received stat changed signal")
 	var current_stage_name = ambition.leveled_stages[ambition.current_stage]
 	Logging.info("AmbitionHUD: Checking stage progression for current stage: %s" % current_stage_name)

@@ -12,7 +12,14 @@ var _tween: Tween
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	Global.request_narrative.connect(apply_narrative)
+	Global.request_event.connect(apply_narrative)
+	Global.request_event_key.connect(func(key): 
+		var ev = Global.event_data.get(key)
+		if not ev:
+			Logging.error("Event not found: " + key)
+			return
+		apply_narrative(ev)
+	)
 	
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS

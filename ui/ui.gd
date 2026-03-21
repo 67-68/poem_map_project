@@ -5,7 +5,7 @@ var queue: PopupQueue
 
 func _ready():
 	queue = PopupQueue.new(_draw_chat,Global.bubble_complete)
-	Global.request_add_event.connect(
+	Global.request_add_chat.connect(
 		func(item): queue.add_item(item))
 
 func _draw_chat(data):

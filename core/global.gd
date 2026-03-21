@@ -57,7 +57,6 @@ signal request_start_black(enable: bool)
 # 展示popup信息
 signal request_text_popup(text: String)
 signal request_warning_toast(data: String)
-signal request_narrative(data: HistoryEventData)
 
 signal request_rain(enable: bool)
 signal request_daylight(enable: bool)
@@ -74,8 +73,11 @@ signal request_change_bg_modulate(color: Color)
 signal request_restore_bg_modulate(duration: float) # -1 = forever
 signal event_confirmed()
 
+signal request_event(data: HistoryEventData)
+signal request_event_key(key: String)
 signal bubble_complete()
-signal request_add_event()
+signal request_add_chat()
+# event 和 chat 不同，后者是即时的，前者是可能需要等待的
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -96,7 +98,7 @@ var event_buffer: ManualBuffer
 var chat_buffer: ManualBuffer
 
 var resolve_history_event = func(x: HistoryEventData):
-	request_narrative.emit(x)
+	request_event.emit(x)
 
 func find_triggerable_item(uuid: String):
 	"""
@@ -165,7 +167,7 @@ func load_manager_and_buffers():
 	poem_stack_manager = PopupQueue.new(_apply_poem_data,Global.poem_animation_finished)
 	poem_buffer = ManualBuffer.new(poem_stack_manager.add_item,poem_data.values())
 
-	chat_buffer = ManualBuffer.new(func(item): Global.request_add_event.emit(item),chat_bubble_data.values() + focused_chat_data.values())
+	chat_buffer = ManualBuffer.new(func(item): Global.request_add_chat.emit(item),chat_bubble_data.values() + focused_chat_data.values())
 
 static func _apply_poem_data(_poem_data: PoemData):
 	"""

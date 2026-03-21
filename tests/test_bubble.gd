@@ -4,15 +4,15 @@ extends Node2D
 	set(val):
 		if val:
 			test_bubble = false
-			Global.request_add_event.emit(self,'test')
+			Global.request_add_chat.emit(self,'test')
 			position.x -= 100
-			Global.request_add_event.emit(self,'test2')
+			Global.request_add_chat.emit(self,'test2')
 
 @export var test_focus_chat := false:
 	set(val):
 		if val:
 			test_focus_chat = false
-			Global.request_add_event.emit(FocusedChat.new({
+			Global.request_add_chat.emit(FocusedChat.new({
 				'chats':[
 					{
 						'chat_position':"RIGHT",
@@ -71,4 +71,4 @@ extends Node2D
 		if val:
 			test = false
 			var data = Global.event_data['event_test_hub']
-			Global.request_narrative.emit(data)
+			Global.request_event.emit(data)

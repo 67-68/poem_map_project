@@ -1,0 +1,7 @@
+class_name EventOperator extends StatOperator
+
+@export var event_key: String
+
+func operate():
+    Logging.info("EventOperator: Triggering event with key: %s" % event_key)
+    Global.request_event_key.emit(event_key)
