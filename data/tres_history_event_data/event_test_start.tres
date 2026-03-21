@@ -1,11 +1,34 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=4 format=3 uid="uid://dnshhas8guay5"]
+[gd_resource type="Resource" script_class="HistoryEventData" load_steps=10 format=3 uid="uid://dnshhas8guay5"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_hejai"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/history_event_data.gd" id="2_6iyjn"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_7q4jx"]
 [ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_oku5p"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_gp0el"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_l5rtc"]
+
+[sub_resource type="Resource" id="Resource_i3hgs"]
+script = ExtResource("3_gp0el")
+property = "money"
+value = 100
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_uofy6"]
+script = ExtResource("4_l5rtc")
+target_event_uuid = "event_test_hub"
+operators = Array[ExtResource("2_7q4jx")]([SubResource("Resource_i3hgs")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_qiifw"]
+script = ExtResource("1_hejai")
+description = "【测试起手】获得 100 钱，装载野望"
+effect = null
+choice_result = SubResource("Resource_uofy6")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_6iyjn")
+options = Array[ExtResource("1_hejai")]([SubResource("Resource_qiifw")])
 year = 742
 uuid = "event_test_start"
 name = "立志入仕"

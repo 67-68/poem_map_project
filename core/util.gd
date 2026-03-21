@@ -255,6 +255,25 @@ static func create_dict(data: Array):
 		dict[d.uuid] = d
 	return dict
 
+static func create_dict_from_registry(registry: ResourceRegistry):
+	"""
+	从ResourceRegistry创建字典，使用registry中的resources字典
+	registry: ResourceRegistry实例，包含resources字典
+	"""
+	var dict = {}
+	if not registry or not registry.resources:
+		return dict
+	
+	for uuid in registry.resources:
+		var resource_path = registry.resources[uuid]
+		var resource = load(resource_path)
+		if resource:
+			dict[uuid] = resource
+		else:
+			Logging.warning("无法加载资源: " + resource_path)
+	
+	return dict
+
 static func strip_csv_array(data: Array):
 	"""
 	data: like "[a,b]"

@@ -1,7 +1,6 @@
-class_name ChoiceResult extends GameEntity
+class_name ChoiceResult extends Resource
 
-@export var target_uuid: String = ''
-@export var action_type: String = ''
+@export var target_event_uuid: String = ''
 @export var operators: Array[StatOperator] = []
 
 func operate():

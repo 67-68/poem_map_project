@@ -77,19 +77,18 @@ signal history_event_confirmed()
 signal bubble_complete()
 signal request_add_event()
 
-var life_path_points: Dictionary
-var poet_data: Dictionary
-var poem_data: Dictionary
-var factions: Dictionary
+var life_path_points: ResourceRegistry
+var poet_data: ResourceRegistry
+var poem_data: ResourceRegistry
+var factions: ResourceRegistry
 var base_province: Dictionary
 var territories: Dictionary
-var msger_data: Dictionary
-var event_data: Dictionary
-var chat_bubble_data: Dictionary
-var focused_chat_data: Dictionary
-var ambitions: Dictionary
-# 使用{name: ambition} 但只是一个数据库，不负责切换
-var traits: Dictionary
+var msger_data: ResourceRegistry
+var event_data: ResourceRegistry
+var chat_bubble_data: ResourceRegistry
+var focused_chat_data: ResourceRegistry
+var ambitions: ResourceRegistry
+var traits: ResourceRegistry
 
 var history_event_stack_manager: PopupQueue
 var history_event_buffer: ManualBuffer
@@ -122,16 +121,16 @@ func init():
 	territories = Util.create_dict(DataLoader.load_csv_model(Territory,'territories'))
 	factions = Util.create_dict(DataLoader.load_json_model(Faction,'factions'))
 
-	# 加载数据
-	life_path_points = Util.create_dict(DataLoader.load_json_model(PoetLifePoint,'path_points'))
-	poet_data = Util.create_dict(DataLoader.load_json_model(PoetData,'poet_data'))
-	poem_data = Util.create_dict(DataLoader.load_json_model(PoemData,'poem_data'))
-	msger_data = Util.create_dict(DataLoader.load_json_model(MessagerData,'msger_data'))
-	event_data = Util.create_dict(DataLoader.load_json_model(HistoryEventData,'history_event_data'))
-	chat_bubble_data = Util.create_dict(DataLoader.load_json_model(ChatBubble,'chat_bubbles'))
-	focused_chat_data = Util.create_dict(DataLoader.load_json_model(FocusedChat,'focused_chats'))
-	ambitions = Util.create_dict(DataLoader.load_json_model(AmbitionData,'ambitions'))
-	traits = Util.create_dict([preload("res://data/tres_traits/trait_obsessive_scholar.tres")])
+	# 加载数据 - 使用tres registry
+	life_path_points = preload("res://data/tres_path_points_registry.tres").items
+	poet_data = preload("res://data/tres_poet_data_registry.tres")
+	poem_data = preload("res://data/tres_poem_data_registry.tres")
+	msger_data = preload("res://data/tres_msger_data_registry.tres")
+	event_data = preload("res://data/tres_history_event_data_registry.tres")
+	# 似乎原本就没有chat bubble 文件
+	focused_chat_data = preload("res://data/tres_focused_chats_registry.tres")
+	ambitions = preload("res://data/tres_ambitions_registry.tres")
+	traits = preload("res://data/tres_traits_registry.tres")
 
 	load_manager_and_buffers()
 	

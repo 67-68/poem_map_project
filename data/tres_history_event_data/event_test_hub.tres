@@ -1,11 +1,88 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=4 format=3 uid="uid://8f6b03yk4xmt"]
+[gd_resource type="Resource" script_class="HistoryEventData" load_steps=20 format=3 uid="uid://8f6b03yk4xmt"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_l3g1l"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/history_event_data.gd" id="2_5oxna"]
 [ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_ibxef"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_l3746"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_p71cl"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_j54fk"]
+[ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="5_p23wr"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_dq1ej"]
+
+[sub_resource type="Resource" id="Resource_xo6ue"]
+script = ExtResource("3_p71cl")
+property = "official_prestige"
+value = 10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_6a0dw"]
+script = ExtResource("3_p71cl")
+property = "money"
+value = -20
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_tshng"]
+script = ExtResource("4_j54fk")
+target_event_uuid = "event_test_hub"
+operators = Array[ExtResource("2_l3746")]([SubResource("Resource_xo6ue"), SubResource("Resource_6a0dw")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_f73fd"]
+script = ExtResource("1_l3g1l")
+description = "去相府送礼 (基础声望+10, 钱-20)"
+effect = null
+choice_result = SubResource("Resource_tshng")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_4hmco"]
+script = ExtResource("5_p23wr")
+day = 180.0
+metadata/_custom_type_script = "uid://khw2s6fgrkem"
+
+[sub_resource type="Resource" id="Resource_lw0j7"]
+script = ExtResource("4_j54fk")
+target_event_uuid = "event_test_hub"
+operators = Array[ExtResource("2_l3746")]([SubResource("Resource_4hmco")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_rdn1t"]
+script = ExtResource("1_l3g1l")
+description = "闭门读书 (强制消耗半年时间)"
+effect = null
+choice_result = SubResource("Resource_lw0j7")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_wifxu"]
+script = ExtResource("3_p71cl")
+property = "official_prestige"
+value = 20
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_6jsc3"]
+script = ExtResource("4_j54fk")
+target_event_uuid = "event_test_success"
+operators = Array[ExtResource("2_l3746")]([SubResource("Resource_wifxu")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_xp4mi"]
+script = ExtResource("6_dq1ej")
+property = "official_prestige"
+value = 50
+operator = 1
+failed_hint = "你的声望不足以让相府开门"
+metadata/_custom_type_script = "uid://pyecoqx4dr1i"
+
+[sub_resource type="Resource" id="Resource_lafvx"]
+script = ExtResource("1_l3g1l")
+description = "拜见李林甫 (需要声望>50)"
+effect = null
+choice_result = SubResource("Resource_6jsc3")
+property_requirement = SubResource("Resource_xp4mi")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_5oxna")
+options = Array[ExtResource("1_l3g1l")]([SubResource("Resource_f73fd"), SubResource("Resource_rdn1t"), SubResource("Resource_lafvx")])
 year = 742
 uuid = "event_test_hub"
 name = "长安街头 (测试驻留菜单)"

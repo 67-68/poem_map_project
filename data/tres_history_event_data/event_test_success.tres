@@ -1,11 +1,26 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=4 format=3 uid="uid://yy7k2pm7qtqs"]
+[gd_resource type="Resource" script_class="HistoryEventData" load_steps=8 format=3 uid="uid://yy7k2pm7qtqs"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_klxx1"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_6jtxa"]
 [ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_6wy14"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/history_event_data.gd" id="2_csoj0"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_lc3ks"]
+
+[sub_resource type="Resource" id="Resource_jps8c"]
+script = ExtResource("3_lc3ks")
+target_event_uuid = "game_end"
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_imymp"]
+script = ExtResource("1_klxx1")
+description = "游戏结束"
+effect = null
+choice_result = SubResource("Resource_jps8c")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_csoj0")
+options = Array[ExtResource("1_klxx1")]([SubResource("Resource_imymp")])
 year = 742
 uuid = "event_test_success"
 name = "金榜题名"
