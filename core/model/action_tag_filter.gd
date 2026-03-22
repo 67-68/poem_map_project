@@ -1,0 +1,19 @@
+class_name ActionTagFilter extends BaseEventPoolFilter
+
+static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
+    var new_events = {}
+    if not PlayerState.current_action_tags: return tickets
+    for ticket in tickets:
+        # 判断是否事件tag和当前活动tag有交集
+        var e = Global.random_events.get(ticket.event_name)
+        if not e: 
+            Logging.error("[ActionTagFilter] Event not found: " + ticket.event_name)
+            continue
+
+        for tag in PlayerState.current_action_tags:
+            if e.target_tags.has(tag):
+                if new_events.has(ticket):
+                    new_events[ticket.event_name].weight *= 2
+                else:
+                    new_events[ticket.event_name] = e
+    return new_events.values()

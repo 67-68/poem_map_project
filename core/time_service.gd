@@ -99,12 +99,15 @@ var event_queue: Array[Dictionary] = []
 
 # 在 TimeService 顶部记录上一次运算时的总天数
 var _last_total_days: int = 0
+var current_xun := "上旬"
 const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
 
 func _ready() -> void:
 	Global.request_advance_time.connect(func(days):
 		advance_time(days)
 	)
+	on_xun_tick.connect(func():
+		Logging.info("Xun tick: %s" % current_xun))
 	Global.year = Global.start_year
 	_last_total_days = int(Global.year * DAYS_PER_YEAR)
 	Engine.time_scale = 1
@@ -114,7 +117,7 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 
 	# 1. 浮点时间匀速流逝 (保留你原有的半即时逻辑)
-	Global.year += speed * delta * 0.1
+	Global.year += speed * delta * 0.01 # 之前太太太快了
 	Global.year_changed.emit(Global.year)
 	
 	# 2. 检查浮点数队列 (你原有的逻辑)
@@ -124,27 +127,7 @@ func _process(delta: float) -> void:
 			pause_world(true) # 关键！触发事件时必须强制暂停游戏，防止弹窗地狱！
 			event.callback.call()
 
-	# 3. 核心黑魔法：离散钩子提取！
-	var current_total_days = int(Global.year * DAYS_PER_YEAR)
-	
-	# 如果整数天数发生了跨越（说明物理时间刚好走过了一天或几天）
-	if current_total_days > _last_total_days:
-		var days_passed = current_total_days - _last_total_days
-		
-		# 把错过的每一天都补算一遍
-		for i in range(days_passed):
-			var simulation_day = _last_total_days + i + 1
-			var day_of_month = (simulation_day % 30) # 算出这是本月的第几天 (0-29)
-			
-			# 逢 10、20、30 触发旬结算 (这里的 9, 19, 29 是因为取模从 0 开始)
-			if day_of_month == 9 or day_of_month == 19 or day_of_month == 29:
-				on_xun_tick.emit()
-			
-			# 逢 30 触发月度大结算
-			if day_of_month == 29:
-				on_month_tick.emit()
-				
-		_last_total_days = current_total_days
+	_emit_time_events()
 	
 func speed_up():
 	if not speed + 9 > 30:
@@ -199,6 +182,9 @@ func advance_time(days_to_add: int):
 	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
 	
 	# 2. 模拟 _process 里的天数跨越来发信号 (复用代码，拒绝复制粘贴！)
+	_emit_time_events()
+
+func _emit_time_events():
 	var current_total_days = int(Global.year * DAYS_PER_YEAR)
 	if current_total_days > _last_total_days:
 		var days_passed = current_total_days - _last_total_days
@@ -208,6 +194,7 @@ func advance_time(days_to_add: int):
 			
 			if day_of_month == 9 or day_of_month == 19 or day_of_month == 29:
 				on_xun_tick.emit()
+				current_xun = get_xun_text(day_of_month)
 			if day_of_month == 29:
 				on_month_tick.emit()
 				
@@ -296,3 +283,15 @@ func _check_event_queue():
 		if event.callback.is_valid():
 			Logging.info("触发历史待办事件！设定时间: %f" % event.time)
 			event.callback.call()
+
+func get_xun_text(day: int) -> String:
+	"""
+	注意！不使用一般的计数方法
+	直接根据9，19，29判定！！！
+	"""
+	if day == 9:
+		return "中旬"
+	elif day == 19:
+		return "下旬"
+	else:
+		return "上旬"

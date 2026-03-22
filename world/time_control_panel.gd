@@ -1,7 +1,7 @@
 extends CanvasLayer # 或者你的根节点类型
 
 @onready var label_era: Label = $Margin/Panel/Margin/VBox/Label_Era
-@onready var label_greg: Label = $Margin/Panel/Margin/VBox/Label_Gregorian
+@onready var label_greg: Label = $Margin/Panel/Margin/VBox/HBox2/Label_Gregorian
 
 func on_start_end_btn_pressed():
 	if TimeService.time_start:
@@ -27,6 +27,9 @@ func _ready():
 	# 监听时间流动
 	Global.year_changed.connect(_on_year_changed)
 	Global.speed_changed.connect(on_speed_changed)
+	TimeService.on_xun_tick.connect(func(): 
+		$Margin/Panel/Margin/VBox/HBox2/Label_Xun.text = TimeService.current_xun
+	)
 	
 func on_speed_changed(spd: float):
 	if spd == -1:

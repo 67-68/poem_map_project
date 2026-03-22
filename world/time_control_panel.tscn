@@ -52,13 +52,24 @@ theme_override_fonts/font = ExtResource("3_v2d34")
 text = "天宝十四载"
 label_settings = SubResource("LabelSettings_wxhbx")
 
-[node name="Label_Gregorian" type="Label" parent="Margin/Panel/Margin/VBox"]
+[node name="HBox2" type="HBoxContainer" parent="Margin/Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Label_Gregorian" type="Label" parent="Margin/Panel/Margin/VBox/HBox2"]
 process_mode = 3
 modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
 layout_mode = 2
 theme = ExtResource("2_v2d34")
 theme_override_font_sizes/font_size = 10
 text = "test"
+
+[node name="Label_Xun" type="Label" parent="Margin/Panel/Margin/VBox/HBox2"]
+process_mode = 3
+modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
+layout_mode = 2
+theme = ExtResource("2_v2d34")
+theme_override_font_sizes/font_size = 10
+text = "上旬"
 
 [node name="HBox" type="HBoxContainer" parent="Margin/Panel/Margin/VBox"]
 custom_minimum_size = Vector2(0, 20)
