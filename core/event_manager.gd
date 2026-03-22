@@ -1,7 +1,7 @@
 extends Node
 
 @export var current_event_pool: Array[EventTicket] = []
-@export var filters: Array[BaseEventPoolFilter] = [RequirementFilter,ActionTagFilter]
+var filters: Array[Callable] = [RequirementFilter.filter,ActionTagFilter.filter]
 
 func _ready():
     Logging.info("[EventManager] EventManager initialized")
@@ -11,7 +11,8 @@ func _ready():
 func create_ticket(event: BaseEvent) -> EventTicket:
     var ticket = EventTicket.new()
     ticket.event_name = event.name
-    ticket.possibility = event.weight
+    ticket.weight = event.weight
+    ticket.original_weight = event.weight
     return ticket
 
 func scan_events():
@@ -21,10 +22,11 @@ func scan_events():
     Logging.info("[EventManager] Cleared previous event pool")
 
 
-    current_event_pool = Global.random_events.values().map(func(e): return create_ticket(e))
+    var initial_tickets = Global.random_events.values().map(func(e): return create_ticket(e))
+    current_event_pool.assign(initial_tickets)
 
     for f in filters:
-        current_event_pool = f.filter(current_event_pool)
+        current_event_pool = f.call(current_event_pool) as Array[EventTicket]
         
     Logging.info("[EventManager] Event pool populated with " + str(current_event_pool.size()) + " eligible events")
     

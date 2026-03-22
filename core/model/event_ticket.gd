@@ -1,3 +1,4 @@
 class_name EventTicket extends Resource
 @export var event_name := ""
-@export var possibility := 0.0
+@export var weight := 0.0
+@export var original_weight := 0.0

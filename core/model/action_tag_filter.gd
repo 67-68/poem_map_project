@@ -10,10 +10,14 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
             Logging.error("[ActionTagFilter] Event not found: " + ticket.event_name)
             continue
 
+        if not e.target_tags:
+            new_events[ticket.event_name] = ticket
+            continue
+
         for tag in PlayerState.current_action_tags:
             if e.target_tags.has(tag):
-                if new_events.has(ticket):
-                    new_events[ticket.event_name].weight *= 2
+                if new_events.has(ticket.event_name):
+                    new_events[ticket.event_name].weight += new_events[ticket.event_name].original_weight
                 else:
-                    new_events[ticket.event_name] = e
+                    new_events[ticket.event_name] = ticket
     return new_events.values()
