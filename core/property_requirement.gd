@@ -6,7 +6,9 @@ class_name PropertyRequirement extends BaseRequirements
     'literary_fame',
     'official_prestige',
     'talent',
-    'money'
+    'money',
+	'health',
+	'emotion',
 ) var property := ''
 
 @export var value: int
@@ -14,7 +16,7 @@ class_name PropertyRequirement extends BaseRequirements
 @export var failed_hint: String
 
 func compare(player_state: PlayerState):
-	var stat_front = player_state.get_stat(property)
+	var stat_front = player_state.get_stat_val(property)
 	if not (stat_front):
 		Logging.err('do not found stat %s in player stat, check pronounciation' % property)
 		return 

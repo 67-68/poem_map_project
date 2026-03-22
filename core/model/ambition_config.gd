@@ -2,6 +2,7 @@ class_name AmbitionData extends GameEntity
 
 # name use parent
 # Description also use parent
+@export var underscored_prop: String = '' # 最多三个会被展示
 
 # stage and text; core part
 @export var current_stage := 0

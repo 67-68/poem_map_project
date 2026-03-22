@@ -1,6 +1,6 @@
 class_name ComplexRequirements extends BaseRequirements
 
-@export var operators: Array[BasePropertyOperator] = []
+@export var operators: Array[BaseRequirements] = []
 @export var current_operator: REQ_OPERATOR.LOGIC
 
 func compare(data):
@@ -35,7 +35,7 @@ func compare(data):
         Logging.err('ComplexRequirements: Unknown current_operator value: %d' % current_operator)
         return false
 
-func _init(data):
+func _init(data = {}):
     if not data:
         Logging.err('ComplexRequirements: Initialization data is null or empty')
         return

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" load_steps=2 format=3 uid="uid://drxoifj6m88sq"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_duogs"]
+
+[resource]
+script = ExtResource("1_duogs")
+resources = {
+"emotion": "res://data/tres_properties/emotion.tres",
+"health": "res://data/tres_properties/health.tres",
+"literary_fame": "res://data/tres_properties/literary_fame.tres",
+"money": "res://data/tres_properties/money.tres",
+"official_prestige": "res://data/tres_properties/official_prestige.tres",
+"talent": "res://data/tres_properties/talent.tres"
+}

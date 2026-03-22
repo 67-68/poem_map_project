@@ -73,12 +73,15 @@ signal request_change_bg_modulate(color: Color)
 signal request_restore_bg_modulate(duration: float) # -1 = forever
 signal event_confirmed()
 
+signal request_change_left_panel_visibility(enable)
 signal request_event(data: BaseEvent)
 signal request_event_key(key: String)
 signal bubble_complete()
 signal request_add_chat()
 signal request_advance_time(days: int)
 # event 和 chat 不同，后者是即时的，前者是可能需要等待的
+
+signal focus_city_map(enable: bool)
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -93,6 +96,7 @@ var chat_bubble_data: Dictionary
 var focused_chat_data: Dictionary
 var ambitions: Dictionary
 var traits: Dictionary
+var properties: Dictionary
 
 var event_popup_queue: PopupQueue
 var event_buffer: ManualBuffer
@@ -136,6 +140,7 @@ func init():
 	focused_chat_data = Util.create_dict_from_registry(preload("res://data/tres_focused_chats_registry.tres"))
 	ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
 	traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
+	properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
 
 	load_manager_and_buffers()
 	

@@ -16,11 +16,34 @@ static func get_icon(...names) -> Texture2D:
                 
         if ResourceLoader.exists(name):
             return load(name) # Godot 的 load 自带缓存，不用担心性能
+        
+        if not ResourceLoader.exists(name):
+            name = name.replace(".png", ".jpg")
+            if ResourceLoader.exists(name):
+                return load(name) # Godot 的 load 自带缓存，不用担心性能
     
     var name_str = ""
     for name in names:
         if name:
             name_str += name + ","
     Logging.warn("图标丢失: %s" % name_str)
+    
+    return load(Global.DEFAULT_ICON_PATH)
+
+static func get_icon_simpler(name: String) -> Texture2D:
+    #breakpoint
+    if not name: 
+        Logging.warn("图标名称为空")
+        return load(Global.DEFAULT_ICON_PATH)
+        
+    name = name + ".png"
+    name = Global.ICON_PATH + name
+            
+    if ResourceLoader.exists(name): return load(name) # Godot 的 load 自带缓存，不用担心性能
+    
+    if not ResourceLoader.exists(name):
+        name = name.replace(".png", ".jpg")
+        if ResourceLoader.exists(name):
+            return load(name) # Godot 的 load 自带缓存，不用担心性能
     
     return load(Global.DEFAULT_ICON_PATH)

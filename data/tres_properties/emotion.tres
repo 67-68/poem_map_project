@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Property" load_steps=2 format=3 uid="uid://d1saxq2hm00uh"]
+
+[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_4fa68"]
+
+[resource]
+script = ExtResource("1_4fa68")
+uuid = "emotion"
+name = "emotion"
+metadata/_custom_type_script = "uid://b3m5anke7kjyi"

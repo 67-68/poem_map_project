@@ -1,0 +1,107 @@
+[gd_scene load_steps=6 format=3 uid="uid://bgv42km6rey70"]
+
+[ext_resource type="Texture2D" uid="uid://st52l6u6hob6" path="res://assets/profile/little_paper.png" id="1_qvv8g"]
+[ext_resource type="Texture2D" uid="uid://6h08klf8hnfl" path="res://assets/profile/daming_palace.png" id="2_j2cme"]
+[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="3_3crwo"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lnxk4"]
+texture = ExtResource("1_qvv8g")
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n54d2"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+texture = ExtResource("3_3crwo")
+
+[node name="RightInfoPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(250, 450)
+anchors_preset = -1
+anchor_left = 0.95
+anchor_top = 0.5
+anchor_right = 0.97
+anchor_bottom = 0.6
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_lnxk4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "洛阳"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 210)
+layout_mode = 2
+tooltip_text = "城市风景"
+texture = ExtResource("2_j2cme")
+expand_mode = 1
+
+[node name="InfoLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "城市数据：
+人口50W
+税收100W"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ActionPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_n54d2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "闲逛"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42365062, 0.42365065, 0.42365062, 1)
+theme_override_font_sizes/font_size = 8
+text = "确认(消耗3-5天时间. 大概中量财富)"
+horizontal_alignment = 1
+
+[node name="ActionPanel2" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_n54d2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel2"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel2/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "去找流莺"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel2/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42365062, 0.42365065, 0.42365062, 1)
+theme_override_font_sizes/font_size = 8
+text = "确认(消耗5-8天时间. 大概大量财富)"
+horizontal_alignment = 1

@@ -1,6 +1,5 @@
 extends Node
 
-@export var stats: Dictionary = {}
 @export var traits: Array[String] = [] # trait key string
 @export var current_location: String:
 	set(val):
@@ -18,6 +17,7 @@ func _ready():
 	change_stat('official_prestige', 14)
 	change_stat('literary_fame',50)
 	change_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
+	current_location = 'yong_zhou'
 
 func change_stat(stat_name, data):
 	if stat_name is int:
@@ -27,8 +27,11 @@ func change_stat(stat_name, data):
 			return
 		stat_name = int_stat
 
-	if not stats.has(stat_name):
-		stats[stat_name] = 0 # 初始化为 0
+	var stat = Global.properties.get(stat_name)
+	# 需要提前登记stat
+	if not stat:
+		Logging.err('do not find stat %s' % stat_name)
+		return
 
 	var amount_to_change = data
 
@@ -50,18 +53,22 @@ func change_stat(stat_name, data):
 			amount_to_change = t.buffer_to_region.match_and_multiply(current_location, amount_to_change)
 
 	Logging.info('change stat %s by %d' % [stat_name, amount_to_change])
-	stats[stat_name] += amount_to_change # 永远执行加法
+	stat.val += amount_to_change # 永远执行加法
 	player_stat_changed.emit(stat_name)
 
-func get_stat(stat_name):
+func get_stat_val(stat_name):
 	if stat_name is int:
 		var int_stat = translate_from_enum(stat_name)
 		if not int_stat:
 			Logging.err('do not find stat %s' % stat_name)
 			return
 		stat_name = int_stat
-
-	return stats.get(stat_name)
+	
+	var stat = Global.properties.get(stat_name)
+	if not stat:
+		Logging.err('do not find stat %s' % stat_name)
+		return 0
+	return stat.val
 
 func add_trait(trait_name):
 	if trait_name is int:

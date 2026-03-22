@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://6ilphg3nn6wx"]
+
+[ext_resource type="Script" uid="uid://dumrsjmb5wfw2" path="res://tests/label.gd" id="1_fscx0"]
+[ext_resource type="Script" uid="uid://dwt47t3hxkbjx" path="res://tests/events_label.gd" id="2_bhh81"]
+[ext_resource type="Script" uid="uid://sk3tq3p8t74d" path="res://tests/time_label.gd" id="3_by2l1"]
+[ext_resource type="Script" uid="uid://db7vr3lg6gs00" path="res://tests/event_pool_label.gd" id="4_irtbx"]
+
+[node name="DebugInfo" type="ColorRect"]
+custom_minimum_size = Vector2(200, 200)
+offset_left = 473.0
+offset_top = 2.0
+offset_right = 816.66327
+offset_bottom = 280.0
+scale = Vector2(0.98352087, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_right = 345.69678
+offset_bottom = 278.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="StatLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+z_index = 999
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "current property: "
+script = ExtResource("1_fscx0")
+
+[node name="EventsLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+z_index = 999
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "future events: "
+script = ExtResource("2_bhh81")
+
+[node name="TimeLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "timescale: "
+script = ExtResource("3_by2l1")
+
+[node name="EventPoolLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "event pool content"
+script = ExtResource("4_irtbx")
