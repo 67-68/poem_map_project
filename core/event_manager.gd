@@ -10,7 +10,7 @@ func _ready():
 
 func create_ticket(event: BaseEvent) -> EventTicket:
     var ticket = EventTicket.new()
-    ticket.event_name = event.name
+    ticket.event_uuid = event.uuid
     ticket.weight = event.weight
     ticket.original_weight = event.weight
     return ticket
@@ -47,7 +47,7 @@ func roll_events():
     var total_weight := 0.0
     for ticket in current_event_pool:
         total_weight += ticket.weight
-        Logging.info("[EventManager] Event '" + ticket.event_name + "' weight: " + str(ticket.weight))
+        Logging.info("[EventManager] Event '" + ticket.event_uuid + "' weight: " + str(ticket.weight))
     
     Logging.info("[EventManager] Total event weight: " + str(total_weight))
         
@@ -64,10 +64,10 @@ func roll_events():
     
     for ticket in current_event_pool:
         current_accumulated += ticket.weight
-        Logging.info("[EventManager] Checking event '" + ticket.event_name + "', accumulated weight: " + str(current_accumulated))
+        Logging.info("[EventManager] Checking event '" + ticket.event_uuid + "', accumulated weight: " + str(current_accumulated))
         if roll <= current_accumulated:
-            Logging.info("[EventManager] Event selected: " + ticket.event_name)
-            return ticket.event_name
+            Logging.info("[EventManager] Event selected: " + ticket.event_uuid)
+            return ticket.event_uuid
             
     # 如果 roll 出来的数字落在了 null_weight 的区间里，说明抽中了“无事发生”
     Logging.info("[EventManager] Roll fell in null weight range, no event triggered")

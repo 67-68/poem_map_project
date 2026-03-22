@@ -14,7 +14,7 @@ func _update_display():
 	
 	for event in event_manager.current_event_pool:
 		total_weight += event.weight
-		event_names.append(event.name)
+		event_names.append(event.event_uuid)
 	
 	var display_text = "Event Pool Debug Info:\n"
 	display_text += "Pool Size: " + str(pool_size) + "\n"

@@ -107,7 +107,6 @@ func _create_path() -> void:
 	"""
 	在创建之后被调用的类似init的回调函数
 	"""
-	breakpoint
 	path = Curve2D.new()
 	time_position_curve = Curve.new()
 	for point in datamodel.path_point_keys:

@@ -16,7 +16,10 @@ func _ready() -> void:
 	Global.request_event_key.connect(func(key): 
 		var ev = Global.history_events.get(key)
 		if not ev:
-			Logging.error("Event not found: " + key)
+			ev = Global.random_events.get(key)
+		if not ev:
+			breakpoint
+			Logging.err("Event not found: " + key)
 			return
 		apply_narrative(ev)
 	)
