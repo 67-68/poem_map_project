@@ -117,18 +117,21 @@ grow_vertical = 2
 
 [node name="DebugInfo" type="ColorRect" parent="UI"]
 custom_minimum_size = Vector2(200, 200)
-offset_left = 91.999985
-offset_top = 20.0
-offset_right = 435.66327
-offset_bottom = 298.0
+offset_left = 473.0
+offset_top = 2.0
+offset_right = 816.66327
+offset_bottom = 280.0
 scale = Vector2(0.98352087, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/DebugInfo"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/DebugInfo"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 345.69678
+offset_bottom = 278.0
 
-[node name="StatLabel" type="Label" parent="UI/DebugInfo/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/DebugInfo/ScrollContainer"]
+layout_mode = 2
+
+[node name="StatLabel" type="Label" parent="UI/DebugInfo/ScrollContainer/VBoxContainer"]
 z_index = 999
 layout_mode = 2
 size_flags_vertical = 3
@@ -136,7 +139,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "current property: "
 script = ExtResource("16_cegan")
 
-[node name="EventsLabel" type="Label" parent="UI/DebugInfo/VBoxContainer"]
+[node name="EventsLabel" type="Label" parent="UI/DebugInfo/ScrollContainer/VBoxContainer"]
 z_index = 999
 layout_mode = 2
 size_flags_vertical = 3
@@ -144,13 +147,13 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "future events: "
 script = ExtResource("17_82xsv")
 
-[node name="TimeLabel" type="Label" parent="UI/DebugInfo/VBoxContainer"]
+[node name="TimeLabel" type="Label" parent="UI/DebugInfo/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "timescale: "
 script = ExtResource("18_getpj")
 
-[node name="EventPoolLabel" type="Label" parent="UI/DebugInfo/VBoxContainer"]
+[node name="EventPoolLabel" type="Label" parent="UI/DebugInfo/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "event pool content"

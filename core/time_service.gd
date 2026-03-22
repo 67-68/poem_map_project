@@ -102,6 +102,9 @@ var _last_total_days: int = 0
 const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
 
 func _ready() -> void:
+	Global.request_advance_time.connect(func(days):
+		advance_time(days)
+	)
 	Global.year = Global.start_year
 	_last_total_days = int(Global.year * DAYS_PER_YEAR)
 	Engine.time_scale = 1

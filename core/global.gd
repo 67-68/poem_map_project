@@ -77,6 +77,7 @@ signal request_event(data: BaseEvent)
 signal request_event_key(key: String)
 signal bubble_complete()
 signal request_add_chat()
+signal request_advance_time(days: int)
 # event 和 chat 不同，后者是即时的，前者是可能需要等待的
 
 var life_path_points: Dictionary
@@ -86,7 +87,8 @@ var factions: Dictionary
 var base_province: Dictionary
 var territories: Dictionary
 var msger_data: Dictionary
-var event_data: Dictionary
+var history_events: Dictionary
+var random_events: Dictionary
 var chat_bubble_data: Dictionary
 var focused_chat_data: Dictionary
 var ambitions: Dictionary
@@ -108,8 +110,8 @@ func find_triggerable_item(uuid: String):
 		return poem_data[uuid]
 	if msger_data.get(uuid):
 		return msger_data[uuid]
-	if event_data.get(uuid):
-		return event_data[uuid]
+	if history_events.get(uuid):
+		return history_events[uuid]
 	if chat_bubble_data.get(uuid):
 		return chat_bubble_data[uuid]
 	if focused_chat_data.get(uuid):
@@ -128,7 +130,8 @@ func init():
 	poet_data = Util.create_dict_from_registry(preload("res://data/tres_poet_data_registry.tres"))
 	poem_data = Util.create_dict_from_registry(preload("res://data/tres_poem_data_registry.tres"))
 	msger_data = Util.create_dict_from_registry(preload("res://data/tres_msger_data_registry.tres"))
-	event_data = Util.create_dict_from_registry(preload("res://data/tres_history_event_data_registry.tres"))
+	history_events = Util.create_dict_from_registry(preload("res://data/tres_history_event_registry.tres"))
+	random_events = Util.create_dict_from_registry(preload("res://data/tres_random_event_registry.tres"))
 	# 似乎原本就没有chat bubble 文件
 	focused_chat_data = Util.create_dict_from_registry(preload("res://data/tres_focused_chats_registry.tres"))
 	ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
@@ -137,7 +140,7 @@ func init():
 	load_manager_and_buffers()
 	
 	# 添加到事件触发
-	for d in event_data.values(): TimeService.register(d.year,event_buffer.pop_item,true,d)
+	for d in history_events.values(): TimeService.register(d.target_year,event_buffer.pop_item,true,d)
 	for d in poem_data.values(): TimeService.register(d.year,poem_buffer.pop_item,true,d)
 
 	# 数据文件不允许使用字典！！使用list
@@ -162,7 +165,7 @@ func load_actual_positions(mesh_size):
 
 func load_manager_and_buffers():
 	event_popup_queue = PopupQueue.new(resolve_history_event,event_confirmed) # 这里暂且使用一个signal, 如果后面想做多个事件页面一样叠在一起需要改一下manager内部设定不依赖complete signal
-	event_buffer = ManualBuffer.new(event_popup_queue.add_item,event_data.values())
+	event_buffer = ManualBuffer.new(event_popup_queue.add_item,history_events.values())
 	# 可以给manager 加一个新的选项询问是不是暂停engine, 现在还需要自己手动处理太麻烦了
 	poem_stack_manager = PopupQueue.new(_apply_poem_data,Global.poem_animation_finished)
 	poem_buffer = ManualBuffer.new(poem_stack_manager.add_item,poem_data.values())

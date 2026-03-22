@@ -14,7 +14,7 @@ func _ready() -> void:
 		return
 	Global.request_event.connect(apply_narrative)
 	Global.request_event_key.connect(func(key): 
-		var ev = Global.event_data.get(key)
+		var ev = Global.history_events.get(key)
 		if not ev:
 			Logging.error("Event not found: " + key)
 			return
@@ -49,7 +49,7 @@ func _play_open_animation():
 func apply_narrative(data: BaseEvent):
 	# 1. 彻底暂停世界 (包括 BGM 变奏等逻辑可以在这里触发)
 	# 在暂停之前切换
-	Global.request_change_bg_modulate.emit(data.color)
+	#Global.request_change_bg_modulate.emit(data.color)
 	TimeService.pause_world(true) # 假设你有这个接口
 	current_event_data = data
 	
@@ -86,16 +86,7 @@ func _end_narrative(choice):
 	await _tween.finished
 	
 	hide()
-	
-	# 2. 应用后果 (地图变色)
-	if current_event_data.provs_state_after:
-		# 手动merge Array[ProvStateOwnerData] 到 Dictionary
-		for new_state in current_event_data.provs_state_after:
-			# 直接更新字典，格式：{province_uuid: state_value}
-			Global.faction_renderer.special_state[new_state.province_uuid] = new_state.state_value
-		
-		Global.faction_renderer.refresh_lut_image(Global.map.prov_2_fac)
-	
+
 	# 3. 恢复世界
 	TimeService.resume_world()
 	Logging.done('narrative finished')

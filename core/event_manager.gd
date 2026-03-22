@@ -14,14 +14,15 @@ func scan_events():
     Logging.info("[EventManager] Cleared previous event pool")
     
     # 扫描全局大池子
-    Logging.info("[EventManager] Scanning global event pool, total events: " + str(Global.event_data.size()))
-    for e in Global.event_data:
+    Logging.info("[EventManager] Scanning global event pool, total events: " + str(Global.random_events.size()))
+    for e_name in Global.random_events:
+        var e = Global.random_events[e_name]
         # 如果你未来在事件最外层加了 valid_locations，可以在这里做第一层极简拦截
         # if e.valid_locations.size() > 0 and PlayerState.current_location not in e.valid_locations:
         #     continue
 
         # 🚨 致命修复 2：允许没有 requirement 的“无条件事件”进入池子
-        if not e.requirement or e.requirement.compare():
+        if not e.requirement or e.requirement.compare(PlayerState):
             current_event_pool.append(e)
             Logging.info("[EventManager] Event added to pool: " + e.name)
         else:
@@ -53,7 +54,7 @@ func roll_events():
     # 🎲 工业级无事发生算法：
     # 设定一个空转权重。比如定死为 200，或者设为总权重的 50%。
     # 如果总权重是 100，空转是 50，那么触发真实事件的概率就是 66%
-    var null_weight = 200.0 # 策划可以在这里调控游戏节奏的快慢
+    var null_weight = total_weight * 3
     var final_total = total_weight + null_weight
     Logging.info("[EventManager] Null weight: " + str(null_weight) + ", final total weight: " + str(final_total))
 

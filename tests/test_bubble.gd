@@ -70,5 +70,5 @@ extends Node2D
 	set(val):
 		if val:
 			test = false
-			var data = Global.event_data['event_test_hub']
+			var data = Global.history_events['event_test_hub']
 			Global.request_event.emit(data)

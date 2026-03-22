@@ -22,5 +22,5 @@ func _on_text_submitted(new_text: String) -> void:
 		Global.emit_signal(parts[1],str_to_var(parts[2]))
 	elif parts.size() == 2:
 		if Global.has_method(parts[0]):
-			Global.callv(parts[0],parts[1])
+			Global.callv(parts[0],[parts[1]])
 	
