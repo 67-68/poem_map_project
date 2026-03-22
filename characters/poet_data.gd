@@ -1,4 +1,4 @@
-class_name PoetData extends WorldEvent
+class_name PoetData extends MapMarker
 
 @export var birth_year: float
 @export var death_year: float

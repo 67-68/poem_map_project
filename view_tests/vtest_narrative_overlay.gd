@@ -69,7 +69,7 @@ func test_narrative_scenarios(map):
 			# 这里的 icon 需要你项目中真实的图片路径，没有则传 null 或默认图标
 			"icon": null 
 		}
-		var history_data = HistoryEventData.new(data_dict)
+		var history_data = BaseEvent.new(data_dict)
 		# 手动补上 GameEntity 可能需要的 name 属性，如果 _init 没处理的话
 		history_data.name = data_dict["name"] 
 		history_data.description = data_dict["description"]
@@ -92,7 +92,7 @@ func test_narrative_scenarios(map):
 			"provs_state_after": {"fan_yang": "rebellion", "luo_yang": "rebellion"},
 			"icon": null
 		}
-		var history_data = HistoryEventData.new(data_dict)
+		var history_data = BaseEvent.new(data_dict)
 		history_data.name = data_dict["name"]
 		history_data.description = data_dict["description"]
 		
@@ -115,7 +115,7 @@ func test_narrative_scenarios(map):
 			"provs_state_after": {},
 			"icon": null
 		}
-		var history_data = HistoryEventData.new(data_dict)
+		var history_data = BaseEvent.new(data_dict)
 		history_data.name = data_dict["name"]
 		history_data.description = data_dict["description"]
 		
@@ -137,7 +137,7 @@ func test_narrative_scenarios(map):
 			"provs_state_after": {"chang_an": "normal"},
 			"icon": null
 		}
-		var history_data = HistoryEventData.new(data_dict)
+		var history_data = BaseEvent.new(data_dict)
 		history_data.name = data_dict["name"]
 		history_data.description = data_dict["description"]
 		

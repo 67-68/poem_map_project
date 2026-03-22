@@ -6,7 +6,7 @@ class_name NarrativeOverlay extends Control
 @onready var btn_container: VBoxContainer = $Background/Margin/VBox/OptionBtns
 
 # 状态
-var current_event_data: HistoryEventData
+var current_event_data: BaseEvent
 var _tween: Tween
 
 func _ready() -> void:
@@ -46,7 +46,7 @@ func _play_open_animation():
 	_tween.tween_property(main_card, "scale", Vector2(1.0, 1.0), 0.5)
 	_tween.tween_property(main_card, "modulate:a", 1.0, 0.3)
 
-func apply_narrative(data: HistoryEventData):
+func apply_narrative(data: BaseEvent):
 	# 1. 彻底暂停世界 (包括 BGM 变奏等逻辑可以在这里触发)
 	# 在暂停之前切换
 	Global.request_change_bg_modulate.emit(data.color)

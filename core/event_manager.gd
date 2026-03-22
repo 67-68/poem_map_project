@@ -1,6 +1,6 @@
 extends Node
 
-@export var current_event_pool: Array[HistoryEventData] = []
+@export var current_event_pool: Array[BaseEvent] = []
 
 func _ready():
     Logging.info("[EventManager] EventManager initialized")

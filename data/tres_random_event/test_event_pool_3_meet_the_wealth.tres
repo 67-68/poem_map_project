@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=17 format=3 uid="uid://dknnmqlumtjy"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=17 format=3 uid="uid://dknnmqlumtjy"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_5gkiy"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_pdgys"]

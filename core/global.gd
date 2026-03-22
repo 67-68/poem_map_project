@@ -73,7 +73,7 @@ signal request_change_bg_modulate(color: Color)
 signal request_restore_bg_modulate(duration: float) # -1 = forever
 signal event_confirmed()
 
-signal request_event(data: HistoryEventData)
+signal request_event(data: BaseEvent)
 signal request_event_key(key: String)
 signal bubble_complete()
 signal request_add_chat()
@@ -97,7 +97,7 @@ var event_buffer: ManualBuffer
 
 var chat_buffer: ManualBuffer
 
-var resolve_history_event = func(x: HistoryEventData):
+var resolve_history_event = func(x: BaseEvent):
 	request_event.emit(x)
 
 func find_triggerable_item(uuid: String):

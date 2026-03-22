@@ -1,4 +1,4 @@
-class_name MessagerData extends WorldEvent
+class_name MessagerData extends MapMarker
 
 var source_id: String
 var target_id: String

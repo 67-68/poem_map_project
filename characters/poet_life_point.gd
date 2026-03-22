@@ -1,4 +1,4 @@
-class_name PoetLifePoint extends WorldEvent
+class_name PoetLifePoint extends MapMarker
 @export var emotion: float = 0.5 # 给个默认值，防止心情崩溃
 
 func _init(data: Dictionary = {}):

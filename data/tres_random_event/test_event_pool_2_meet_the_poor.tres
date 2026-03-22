@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=14 format=3 uid="uid://bo172xtmiixa3"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=14 format=3 uid="uid://bo172xtmiixa3"]
 
 [ext_resource type="Texture2D" uid="uid://bkggqxw8e3vjh" path="res://assets/character/li_linfu_smirk.png" id="1_2w6q0"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_xfuee"]

@@ -109,7 +109,7 @@ func create_resource_for_file(json_path: String, _item: Dictionary) -> Resource:
             # 使用通用 Resource，如果需要可以创建 FocusedChatData 类
             return Resource.new()
         "history_event_data":
-            return HistoryEventData.new({})
+            return BaseEvent.new({})
         "msger_data":
             return MessagerData.new({})
         "path_points":

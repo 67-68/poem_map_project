@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=9 format=3 uid="uid://yy7k2pm7qtqs"]
+[gd_resource type="Resource" script_class="HistoryEvent" load_steps=9 format=3 uid="uid://yy7k2pm7qtqs"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_klxx1"]
 [ext_resource type="Texture2D" uid="uid://5jroespsqtlr" path="res://assets/character/dufu_young.png" id="1_lc3ks"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_6jtxa"]
 [ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_6wy14"]
-[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_csoj0"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://core/model/history_event.gd" id="2_csoj0"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_lc3ks"]
 
 [sub_resource type="Resource" id="Resource_jps8c"]
@@ -20,7 +20,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("2_csoj0")
 options = Array[ExtResource("1_klxx1")]([SubResource("Resource_imymp")])
-year = 744
+target_year = 744
 uuid = "event_test_success"
 name = "金榜题名"
 description = "系统测试通过！你顶着 1.5 倍的乘区刷满了声望，并成功触发了高门槛事件！"

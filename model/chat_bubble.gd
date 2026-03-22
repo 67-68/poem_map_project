@@ -1,4 +1,4 @@
-class_name ChatBubble extends WorldEvent
+class_name ChatBubble extends MapMarker
 
 var attached_node: Node2D
 

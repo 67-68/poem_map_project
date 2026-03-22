@@ -1,4 +1,4 @@
-class_name WorldEvent extends GameEntity
+class_name MapMarker extends GameEntity
 
 @export var position_dirty := true
 @export var position: Vector2:

@@ -1,4 +1,4 @@
-class_name Territory extends WorldEvent
+class_name Territory extends MapMarker
 
 @export var stability: float
 @export var capital: String

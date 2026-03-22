@@ -1,5 +1,5 @@
 # 那种有立绘的Chat
-class_name FocusedChat extends WorldEvent
+class_name FocusedChat extends MapMarker
 
 var chats: Array[FocusedChatLine] # list[list[str, int]] # int -> Chatposition
 # 使用父类的icon作为背景图

@@ -1,4 +1,4 @@
-class_name PoemData extends WorldEvent # 从Note获取
+class_name PoemData extends MapMarker # 从Note获取
 
 enum Poem_BG {
     BOOK,

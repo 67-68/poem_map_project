@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_3myk4"]
 [ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_k2ftw"]
-[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_kbfvo"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://core/model/history_event.gd" id="2_kbfvo"]
 
 [resource]
 script = ExtResource("2_kbfvo")

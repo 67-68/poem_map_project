@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="HistoryEventData" load_steps=11 format=3 uid="uid://bbkyfve6qvutf"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=11 format=3 uid="uid://bbkyfve6qvutf"]
 
 [ext_resource type="Texture2D" uid="uid://cpm17405c1cap" path="res://assets/profile/msg_critical.png" id="1_rrqc3"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_s3w4v"]
