@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=25 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="15_074og"]
 [ext_resource type="Script" uid="uid://dumrsjmb5wfw2" path="res://tests/label.gd" id="16_cegan"]
 [ext_resource type="Script" uid="uid://dwt47t3hxkbjx" path="res://tests/events_label.gd" id="17_82xsv"]
+[ext_resource type="Script" uid="uid://sk3tq3p8t74d" path="res://tests/time_label.gd" id="18_getpj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -99,7 +100,6 @@ offset_bottom = 225.14502
 [node name="SimpleToast" parent="UI" instance=ExtResource("12_2cqfq")]
 
 [node name="TimeControlPanel" parent="UI" instance=ExtResource("12_vivmo")]
-process_mode = 3
 
 [node name="AmbitionHUD" parent="UI" instance=ExtResource("15_074og")]
 anchors_preset = 6
@@ -116,10 +116,10 @@ grow_vertical = 2
 
 [node name="DebugInfo" type="ColorRect" parent="UI"]
 custom_minimum_size = Vector2(200, 200)
-offset_left = 242.0
-offset_top = 251.0
-offset_right = 282.0
-offset_bottom = 291.0
+offset_left = 204.99998
+offset_top = 86.0
+offset_right = 548.66327
+offset_bottom = 364.0
 scale = Vector2(0.98352087, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/DebugInfo"]
@@ -142,6 +142,12 @@ size_flags_vertical = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "future events: "
 script = ExtResource("17_82xsv")
+
+[node name="TimeLabel" type="Label" parent="UI/DebugInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "timescale: "
+script = ExtResource("18_getpj")
 
 [node name="CoreSystems" type="Node" parent="."]
 

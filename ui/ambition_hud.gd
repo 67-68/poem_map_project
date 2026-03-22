@@ -13,6 +13,7 @@ func _ready() -> void:
 	Logging.info("AmbitionHUD: Starting initialization")
 	PlayerState.player_stat_changed.connect(_on_model_stat_changed)
 	Logging.info("AmbitionHUD: Connected to player_stat_changed signal")
+	TimeService.on_xun_tick.connect(update_time_limit)
 	
 	# 修正你的幽灵 Lambda：必须更新自身的 ambition 引用！
 	PlayerState.ambition_changed.connect(func(new_ambition): 
@@ -39,6 +40,18 @@ func _ready() -> void:
 	_load_static()
 	_on_model_stat_changed("")
 	Logging.info("AmbitionHUD: Initialization complete")
+
+func update_time_limit():
+	if not ambition: return
+	var time_difference = ambition.deadline * 360 - Global.year * 360 - TimeService._last_total_days
+	var total_time = (ambition.deadline - ambition.start_year) * 360
+	var time_ratio = time_difference / total_time
+	timer_rect.set_instance_shader_parameter("raw_burn_progress", time_ratio)
+	if time_difference > total_time:
+		breakpoint
+		for r in ambition.deadline_fail_result:
+			r.operate()
+			Logging.info("AmbitionHUD: Deadline failed, applying result")
 
 func _load_static():
 	show()

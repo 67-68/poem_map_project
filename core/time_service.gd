@@ -104,6 +104,7 @@ const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 �
 func _ready() -> void:
 	Global.year = Global.start_year
 	_last_total_days = int(Global.year * DAYS_PER_YEAR)
+	Engine.time_scale = 1
 	pause()
 
 func _process(delta: float) -> void:
@@ -226,16 +227,14 @@ func _rebuild_queue_from_master():
 	Logging.info("Queue rebuilt. Pending events: %d" % event_queue.size())
 	
 func play():
+	set_process(true) # 开启 _process
 	time_start = true
 	Global.speed_changed.emit(speed)
-	# 🤓☝️ 架构核心：Play 必须等同于彻底唤醒世界，防止植物人状态！
-	resume_world() 
 
 func pause():
+	set_process(false)
 	time_start = false
 	Global.speed_changed.emit(-1)
-	# 玩家主动点暂停，通常只停日历（慢动作/正常静止），不冻结 Tree
-	pause_world(false)
 
 # 增加一个控制 Engine 的开关
 func pause_world(completely: bool = true):
