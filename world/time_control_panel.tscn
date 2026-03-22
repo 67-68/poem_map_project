@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cy2dg1dthfmt5" path="res://world/time_control_panel.gd" id="1_25hr5"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_eoern"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_v2d34"]
-[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/ma_shan_zheng/MaShanZheng-Regular.ttf" id="3_v2d34"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="3_v2d34"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_25hr5"]
 texture = ExtResource("1_eoern")
@@ -16,9 +16,11 @@ texture_margin_bottom = 15.0
 shadow_color = Color(0, 0, 0, 1)
 
 [node name="TimeControlPanel" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_25hr5")
 
 [node name="Margin" type="MarginContainer" parent="."]
+process_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -29,16 +31,20 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 
 [node name="Panel" type="PanelContainer" parent="Margin"]
+process_mode = 3
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_25hr5")
 
 [node name="Margin" type="MarginContainer" parent="Margin/Panel"]
+process_mode = 3
 layout_mode = 2
 
 [node name="VBox" type="VBoxContainer" parent="Margin/Panel/Margin"]
+process_mode = 3
 layout_mode = 2
 
 [node name="Label_Era" type="Label" parent="Margin/Panel/Margin/VBox"]
+process_mode = 3
 layout_mode = 2
 theme = ExtResource("2_v2d34")
 theme_type_variation = &"CnStyledFont"
@@ -47,6 +53,7 @@ text = "天宝十四载"
 label_settings = SubResource("LabelSettings_wxhbx")
 
 [node name="Label_Gregorian" type="Label" parent="Margin/Panel/Margin/VBox"]
+process_mode = 3
 modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
 layout_mode = 2
 theme = ExtResource("2_v2d34")

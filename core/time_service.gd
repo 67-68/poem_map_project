@@ -4,11 +4,6 @@ signal future_event_registered(event_data: Dictionary)
 signal on_xun_tick()
 signal on_month_tick()
 
-# --- 新增：离散时间追踪器（用于精确触发旬/月钩子） ---
-var current_year_int: int = 742
-var current_month_int: int = 1
-var current_day_int: int = 1 # 范围 1-30
-
 @export var _speed: float = 3
 
 @export var speed: float:
@@ -177,14 +172,46 @@ func register(trigger_time: float, function: Callable, save_to_history: bool = t
 		future_event_registered.emit(event_data)
 
 
-# --- 时空穿梭核心接口 (对应你文档的 jump_to)  ---
+# --- 修改 1：修正 jump_to ---
 func jump_to(new_year: float):
 	Logging.info("Time jumped to: %s" % new_year)
 	Global.year = new_year
+	# 💀 极度重要：同步底层天数缓存，防止 _process 醒来后疯狂补帧！
+	_last_total_days = int(Global.year * DAYS_PER_YEAR) 
+	
 	Global.year_changed.emit(Global.year)
 	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
 	
 	_rebuild_queue_from_master()
+
+
+# --- 修改 2：重写 advance_time，复用 _process 的发报逻辑！ ---
+func advance_time(days_to_add: int):
+	Logging.info("时间开始跃迁，推进 %d 天..." % days_to_add)
+	
+	# 1. 极其务实：直接改浮点年份
+	Global.year += days_to_add / float(DAYS_PER_YEAR)
+	Global.year_changed.emit(Global.year)
+	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
+	
+	# 2. 模拟 _process 里的天数跨越来发信号 (复用代码，拒绝复制粘贴！)
+	var current_total_days = int(Global.year * DAYS_PER_YEAR)
+	if current_total_days > _last_total_days:
+		var days_passed = current_total_days - _last_total_days
+		for i in range(days_passed):
+			var simulation_day = _last_total_days + i + 1
+			var day_of_month = (simulation_day % 30)
+			
+			if day_of_month == 9 or day_of_month == 19 or day_of_month == 29:
+				on_xun_tick.emit()
+			if day_of_month == 29:
+				on_month_tick.emit()
+				
+		# 💀 极度重要：完事后必须对齐标记！
+		_last_total_days = current_total_days 
+	
+	# 3. 检查是否有队列事件被越过！
+	_check_event_queue()
 
 func _rebuild_queue_from_master():
 	event_queue.clear() # 1. 撕毁当前待办清单
@@ -199,14 +226,16 @@ func _rebuild_queue_from_master():
 	Logging.info("Queue rebuilt. Pending events: %d" % event_queue.size())
 	
 func play():
-	set_process(true) # 开启 _process
 	time_start = true
 	Global.speed_changed.emit(speed)
+	# 🤓☝️ 架构核心：Play 必须等同于彻底唤醒世界，防止植物人状态！
+	resume_world() 
 
 func pause():
-	set_process(false)
 	time_start = false
 	Global.speed_changed.emit(-1)
+	# 玩家主动点暂停，通常只停日历（慢动作/正常静止），不冻结 Tree
+	pause_world(false)
 
 # 增加一个控制 Engine 的开关
 func pause_world(completely: bool = true):
@@ -256,40 +285,6 @@ func _get_chinese_number(num: int) -> String:
 	if ones > 0: res += digits[ones]
 	return res
 
-# --- 离散时间跃迁器（事件驱动） ---
-func advance_time(days_to_add: int):
-	Logging.info("时间开始跃迁，推进 %d 天..." % days_to_add)
-	
-	for i in range(days_to_add):
-		current_day_int += 1
-		
-		# 1. 旬结算：每月 11日、21日、以及月末跨月时触发
-		if current_day_int == 11 or current_day_int == 21:
-			on_xun_tick.emit()
-			
-		# 2. 月结算：满 30 天跨月
-		if current_day_int > 30:
-			current_day_int = 1
-			current_month_int += 1
-			
-			# 月末也算作一旬的结束
-			on_xun_tick.emit() 
-			on_month_tick.emit() # 触发月度结算（扣生活费，查悬顶之剑）
-			
-			# 3. 年跃迁
-			if current_month_int > 12:
-				current_month_int = 1
-				current_year_int += 1
-				
-	# 4. 同步回你的浮点数体系（为了兼容你的 event_queue 和 UI）
-	# 公式：年份 + (经过的月份天数 + 当月经过的天数) / 360.0
-	var float_year = current_year_int + ((current_month_int - 1) * 30 + (current_day_int - 1)) / 360.0
-	Global.year = float_year
-	Global.year_changed.emit(Global.year)
-	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
-	
-	# 5. 时间跃迁完毕，检查是否有队列事件被越过！
-	_check_event_queue()
 
 # 抽离出来的队列检查方法（复用你原本 _process 里的逻辑）
 func _check_event_queue():

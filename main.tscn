@@ -99,6 +99,7 @@ offset_bottom = 225.14502
 [node name="SimpleToast" parent="UI" instance=ExtResource("12_2cqfq")]
 
 [node name="TimeControlPanel" parent="UI" instance=ExtResource("12_vivmo")]
+process_mode = 3
 
 [node name="AmbitionHUD" parent="UI" instance=ExtResource("15_074og")]
 anchors_preset = 6
