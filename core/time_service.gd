@@ -228,6 +228,7 @@ func _rebuild_queue_from_master():
 	
 func play():
 	set_process(true) # 开启 _process
+	resume_world()
 	time_start = true
 	Global.speed_changed.emit(speed)
 

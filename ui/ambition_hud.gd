@@ -13,7 +13,7 @@ func _ready() -> void:
 	Logging.info("AmbitionHUD: Starting initialization")
 	PlayerState.player_stat_changed.connect(_on_model_stat_changed)
 	Logging.info("AmbitionHUD: Connected to player_stat_changed signal")
-	TimeService.on_xun_tick.connect(update_time_limit)
+	TimeService.on_month_tick.connect(_check_ambition_deadline)
 	
 	# 修正你的幽灵 Lambda：必须更新自身的 ambition 引用！
 	PlayerState.ambition_changed.connect(func(new_ambition): 
@@ -40,20 +40,24 @@ func _ready() -> void:
 	_load_static()
 	_on_model_stat_changed("")
 	Logging.info("AmbitionHUD: Initialization complete")
-
-func update_time_limit():
+	
+func _check_ambition_deadline():
 	if not ambition: return
-	var time_difference = ambition.deadline * 360 - Global.year * 360 - TimeService._last_total_days
-	var total_time = (ambition.deadline - ambition.start_year) * 360
-	var time_ratio = time_difference / total_time
-	timer_rect.set_instance_shader_parameter("raw_burn_progress", time_ratio)
-	if time_difference > total_time:
+	
+	# 用绝对真理进行判断
+	var current_days = TimeService._last_total_days
+	var deadline_days = ambition.deadline * 360
+	
+	if current_days >= deadline_days:
 		breakpoint
+		Logging.warn("大唐生死簿结算：抱负 [%s] 已逾期！执行惩罚！" % ambition.name)
 		for r in ambition.deadline_fail_result:
 			r.operate()
-			Logging.info("AmbitionHUD: Deadline failed, applying result")
-
+		
+		# 惩罚完最好把抱负清空或标记失败，否则下个月还会再惩罚一次！
+		PlayerState.clear_ambition()
 func _load_static():
+	if not ambition: return
 	show()
 	Logging.info("AmbitionHUD: Loading static content for ambition: %s" % str(ambition))
 

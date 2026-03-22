@@ -2,11 +2,16 @@ extends Node
 
 @export var stats: Dictionary = {}
 @export var traits: Array[String] = [] # trait key string
-@export var current_location := "" # 省份uuid
+@export var current_location: String:
+	set(val):
+		current_location = val
+		location_changed.emit(val)
+	 	# 省份uuid
 @export var ambition: AmbitionData
 
 signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
+signal location_changed(location)
 
 func _ready():
 	change_stat('official_prestige', 14)
@@ -100,6 +105,13 @@ func set_ambition(ambition_key):
 	for t in ambition.ambition_traits:
 		add_trait(t)
 	ambition_changed.emit(ambition)
+
+func clear_ambition():
+	if ambition:
+		for t in ambition.ambition_traits:
+			remove_trait(t)
+	ambition = null
+	ambition_changed.emit(null)
 
 static func translate_from_enum(stat):
 	Logging.debug('try to translate a enum property')
