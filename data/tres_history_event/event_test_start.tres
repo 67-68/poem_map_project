@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="HistoryEvent" load_steps=13 format=3 uid="uid://dnshhas8guay5"]
+[gd_resource type="Resource" script_class="HistoryEvent" load_steps=12 format=3 uid="uid://dnshhas8guay5"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_hejai"]
-[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://core/model/history_event.gd" id="2_6iyjn"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_7q4jx"]
-[ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_oku5p"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_gp0el"]
 [ext_resource type="Script" uid="uid://dn32iqeg6626h" path="res://core/model/ambition_operator.gd" id="4_gp0el"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_l5rtc"]
+[ext_resource type="Script" uid="uid://cb7y7amwmeuo4" path="res://core/model/history_event.gd" id="6_7moyl"]
 
 [sub_resource type="Resource" id="Resource_i3hgs"]
 script = ExtResource("3_gp0el")
@@ -37,9 +36,9 @@ choice_result = SubResource("Resource_uofy6")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
-script = ExtResource("2_6iyjn")
+script = ExtResource("6_7moyl")
+target_year = 720.0
 options = Array[ExtResource("1_hejai")]([SubResource("Resource_qiifw")])
-target_year = 720
 uuid = "event_test_start"
 name = "立志入仕"
 description = "三十而立，你站在长安朱雀大街上，立下了宏愿。这是测试的开端。"

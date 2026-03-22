@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=17 format=3 uid="uid://dknnmqlumtjy"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=16 format=3 uid="uid://dknnmqlumtjy"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_5gkiy"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_pdgys"]
-[ext_resource type="Script" uid="uid://b2kneipuxuksf" path="res://model/prov_state_owner_data.gd" id="2_qqrlq"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_4rna0"]
-[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="3_71a6k"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_8qvds"]
 [ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="5_i43hg"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_clq8d"]
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_u10y8"]
 
 [sub_resource type="Resource" id="Resource_6xqpf"]
@@ -59,9 +58,9 @@ operator = 1
 metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 
 [resource]
-script = ExtResource("3_71a6k")
-options = Array[ExtResource("1_5gkiy")]([SubResource("Resource_6xqpf"), SubResource("Resource_r6gxe"), SubResource("Resource_la22m")])
+script = ExtResource("7_clq8d")
 weight = 500.0
+options = Array[ExtResource("1_5gkiy")]([SubResource("Resource_6xqpf"), SubResource("Resource_r6gxe"), SubResource("Resource_la22m")])
 requirement = SubResource("Resource_7tw52")
 uuid = "test_event_pool_3_meet_the_wealth"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"
