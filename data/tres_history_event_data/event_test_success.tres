@@ -14,7 +14,6 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_imymp"]
 script = ExtResource("1_klxx1")
 description = "游戏结束"
-effect = null
 choice_result = SubResource("Resource_jps8c")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
