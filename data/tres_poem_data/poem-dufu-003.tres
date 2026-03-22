@@ -4,6 +4,8 @@
 
 [resource]
 script = ExtResource("1_bp3xf")
+position = Vector2(0.9, 0.8)
+uv_position = Vector2(0.9, 0.8)
 uuid = "poem-dufu-003"
 name = "茅屋为秋风所破歌"
 owner_uuids = ["poet-dufu-002"]

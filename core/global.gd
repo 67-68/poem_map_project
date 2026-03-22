@@ -150,7 +150,9 @@ func init():
 
 	# 数据文件不允许使用字典！！使用list
 	for d in poem_data:
-		var poem_point = PoetLifePoint.new(poem_data[d].to_life_path_point_data())
+		var data = poem_data[d].to_life_path_point_data()
+		var poem_point = PoetLifePoint.new(data)
+		# 这里的uv是没有问题的
 		poem_point.uuid = 'poem_%s' % d
 		life_path_points[poem_point.uuid] = (poem_point)
 
@@ -167,6 +169,7 @@ func load_actual_positions(mesh_size):
 	wash_positions(base_province,mesh_size)
 	wash_positions(poem_data,mesh_size,true)
 	wash_positions(life_path_points,mesh_size,true)
+	# 这里的position没有问题，要是出问题只能是后面的问题
 
 func load_manager_and_buffers():
 	event_popup_queue = PopupQueue.new(resolve_history_event,event_confirmed) # 这里暂且使用一个signal, 如果后面想做多个事件页面一样叠在一起需要改一下manager内部设定不依赖complete signal
