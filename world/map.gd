@@ -5,9 +5,31 @@ var index_image: Image
 var color_2_province: Dictionary
 var prov_2_fac: Dictionary = {}
 
+func on_focus_city_map(enable: bool):
+	if enable:
+		Logging.info('change bg into city')
+		var map = IconLoader.get_icon_simpler(PlayerState.current_location)
+		$background/TextureRect.texture = map
+		$background/TextureRect.visible = true
+		$background/PathMesh.visible = false
+		$background/FactionMesh.visible = false
+		$background/BorderMesh.visible = false
+		$background/TerrainMesh.visible = false
+		$background/ClickMesh.visible = false
+	else:
+		Logging.info('change bg into world')
+		$background/TextureRect.visible = false
+		$background/PathMesh.visible = true
+		$background/FactionMesh.visible = true
+		$background/BorderMesh.visible = true
+		$background/TerrainMesh.visible = true
+		$background/ClickMesh.visible = true
+
+
 func _ready() -> void:
 	Global.load_actual_positions(Util.get_mesh_instance_size($background/BorderMesh))
-	
+	Global.focus_city_map.connect(on_focus_city_map)
+
 	Global.map = self
 	Global.request_add_messager.connect(_on_add_messager)
 	Global.request_change_bg_modulate.connect(change_world_color)

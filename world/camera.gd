@@ -28,6 +28,34 @@ func _ready() -> void:
 	# 某些情况下，我们需要忽略父节点的变换，但这取决于你的场景结构
 	# top_level = true 
 
+var zoom_level := 1.0
+const ZOOM_MAX = 2.0  # 拉到最近，看长安的街道
+const ZOOM_MIN = 0.3  # 拉到最远，退回大唐地图的阈值
+const ZOOM_SPEED = 0.1
+var current_state = 'city' # 'city' or 'world'
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP: # 拉近
+			zoom_level += ZOOM_SPEED
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN: # 拉远
+			zoom_level -= ZOOM_SPEED
+			
+		# 限制缩放范围
+		zoom_level = clamp(zoom_level, ZOOM_MIN - 0.1, ZOOM_MAX)
+		
+		# 使用 Tween 让缩放极其丝滑 (强烈建议！)
+		var tween = create_tween()
+		tween.tween_property(self, "zoom", Vector2(zoom_level, zoom_level), 0.2)
+		
+		# 🌟 核心魔法：跨越阈值的维度打击！
+		if zoom_level >= ZOOM_MIN and current_state != 'city':
+			Global.focus_city_map.emit(true)
+			current_state = 'city'
+		elif zoom_level <= ZOOM_MAX and current_state != 'world':
+			Global.focus_city_map.emit(false)
+			current_state = 'world'
+
 func _unhandled_input(event: InputEvent) -> void:
 	# 1. 缩放控制 (滚轮)
 	if event is InputEventMouseButton:
