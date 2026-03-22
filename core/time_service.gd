@@ -1,6 +1,13 @@
 extends Node
 
 signal future_event_registered(event_data: Dictionary)
+signal on_xun_tick()
+signal on_month_tick()
+
+# --- 新增：离散时间追踪器（用于精确触发旬/月钩子） ---
+var current_year_int: int = 742
+var current_month_int: int = 1
+var current_day_int: int = 1 # 范围 1-30
 
 @export var _speed: float = 3
 
@@ -95,24 +102,50 @@ var master_timeline: Array[Dictionary] = []
 # 2. 待办清单 (Active Queue)：动态消耗，会被清空和重建
 var event_queue: Array[Dictionary] = []
 
+# 在 TimeService 顶部记录上一次运算时的总天数
+var _last_total_days: int = 0
+const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
+
 func _ready() -> void:
 	Global.year = Global.start_year
+	_last_total_days = int(Global.year * DAYS_PER_YEAR)
 	pause()
-	
+
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 
+	# 1. 浮点时间匀速流逝 (保留你原有的半即时逻辑)
 	Global.year += speed * delta * 0.1
 	Global.year_changed.emit(Global.year)
 	
-	# 你文档里写的进度驱动 
-	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
-
-	# 正常的时间流逝消耗
+	# 2. 检查浮点数队列 (你原有的逻辑)
 	while not event_queue.is_empty() and Global.year >= event_queue[0].time:
 		var event = event_queue.pop_front()
 		if event.callback.is_valid():
+			pause_world(true) # 关键！触发事件时必须强制暂停游戏，防止弹窗地狱！
 			event.callback.call()
+
+	# 3. 核心黑魔法：离散钩子提取！
+	var current_total_days = int(Global.year * DAYS_PER_YEAR)
+	
+	# 如果整数天数发生了跨越（说明物理时间刚好走过了一天或几天）
+	if current_total_days > _last_total_days:
+		var days_passed = current_total_days - _last_total_days
+		
+		# 把错过的每一天都补算一遍
+		for i in range(days_passed):
+			var simulation_day = _last_total_days + i + 1
+			var day_of_month = (simulation_day % 30) # 算出这是本月的第几天 (0-29)
+			
+			# 逢 10、20、30 触发旬结算 (这里的 9, 19, 29 是因为取模从 0 开始)
+			if day_of_month == 9 or day_of_month == 19 or day_of_month == 29:
+				on_xun_tick.emit()
+			
+			# 逢 30 触发月度大结算
+			if day_of_month == 29:
+				on_month_tick.emit()
+				
+		_last_total_days = current_total_days
 	
 func speed_up():
 	if not speed + 9 > 30:
@@ -222,3 +255,46 @@ func _get_chinese_number(num: int) -> String:
 	var res = digits[int(tens)] + "十"
 	if ones > 0: res += digits[ones]
 	return res
+
+# --- 离散时间跃迁器（事件驱动） ---
+func advance_time(days_to_add: int):
+	Logging.info("时间开始跃迁，推进 %d 天..." % days_to_add)
+	
+	for i in range(days_to_add):
+		current_day_int += 1
+		
+		# 1. 旬结算：每月 11日、21日、以及月末跨月时触发
+		if current_day_int == 11 or current_day_int == 21:
+			on_xun_tick.emit()
+			
+		# 2. 月结算：满 30 天跨月
+		if current_day_int > 30:
+			current_day_int = 1
+			current_month_int += 1
+			
+			# 月末也算作一旬的结束
+			on_xun_tick.emit() 
+			on_month_tick.emit() # 触发月度结算（扣生活费，查悬顶之剑）
+			
+			# 3. 年跃迁
+			if current_month_int > 12:
+				current_month_int = 1
+				current_year_int += 1
+				
+	# 4. 同步回你的浮点数体系（为了兼容你的 event_queue 和 UI）
+	# 公式：年份 + (经过的月份天数 + 当月经过的天数) / 360.0
+	var float_year = current_year_int + ((current_month_int - 1) * 30 + (current_day_int - 1)) / 360.0
+	Global.year = float_year
+	Global.year_changed.emit(Global.year)
+	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
+	
+	# 5. 时间跃迁完毕，检查是否有队列事件被越过！
+	_check_event_queue()
+
+# 抽离出来的队列检查方法（复用你原本 _process 里的逻辑）
+func _check_event_queue():
+	while not event_queue.is_empty() and Global.year >= event_queue[0].time:
+		var event = event_queue.pop_front()
+		if event.callback.is_valid():
+			Logging.info("触发历史待办事件！设定时间: %f" % event.time)
+			event.callback.call()
