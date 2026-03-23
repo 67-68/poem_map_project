@@ -1,4 +1,4 @@
-class_name TraitOperator extends StatOperator
+class_name TraitOperator extends BaseOperator
 
 @export var trait_key: PlayerState.Traits # refers to the trait in trait base
 @export var operator := REQ_OPERATOR.CRUD.ADD

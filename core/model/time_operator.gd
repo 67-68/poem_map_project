@@ -1,4 +1,4 @@
-class_name TimeOperator extends StatOperator
+class_name TimeOperator extends BaseOperator
 
 @export var day: float
 @export var source_tags: Array[String] = []

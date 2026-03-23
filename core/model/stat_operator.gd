@@ -1,4 +1,4 @@
-class_name StatOperator extends BasePropertyOperator
+class_name BaseOperator extends Resource
 
 # @export var key := 'default-stat-name'
 # @export var value: Variant

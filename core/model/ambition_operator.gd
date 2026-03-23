@@ -1,4 +1,4 @@
-class_name AmbitionOperator extends StatOperator
+class_name AmbitionOperator extends BaseOperator
 
 @export var ambition_name: String
 

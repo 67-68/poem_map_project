@@ -1,4 +1,4 @@
-class_name PropertyOperator extends StatOperator
+class_name PropertyOperator extends BaseOperator
 
 @export_enum(
     'literary_fame',

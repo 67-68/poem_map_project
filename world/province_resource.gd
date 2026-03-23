@@ -6,7 +6,7 @@ class_name Territory extends MapMarker
 @export var dirty: bool = true
 # 1. 影子变量 (仅供编辑器和策划填表用)
 # 用下划线开头，表示它是私有的底层数据，业务代码绝对不要碰它！
-@export var _editor_area_tags: Array[StorableItem.AREA_TAGS] = []
+@export var _editor_area_tags: Array[StorableItem.TAGS] = []
 
 # 2. 真实属性 (供你的所有业务逻辑和老虎机调用)
 # 不加 @export，它是纯粹的代码接口。声明为 Array[String]！

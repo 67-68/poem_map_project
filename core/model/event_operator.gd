@@ -1,4 +1,4 @@
-class_name EventOperator extends StatOperator
+class_name EventOperator extends BaseOperator
 
 @export var event_key: String
 
