@@ -32,3 +32,6 @@ class_name AmbitionData extends GameEntity
 @export var deadline: float = Global.end_year
 @export var deadline_fail_result: Array[StatOperator] = []
 @export var deadline_warning: String = ''
+
+func get_stage_perception() -> String:
+    return staged_perceptions[current_stage].perception

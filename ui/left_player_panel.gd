@@ -10,17 +10,36 @@ const SLIDE_OFFSET: float = 50.0
 const ANIM_DURATION: float = 0.3
 
 func _ready() -> void:
-    # 💀 核心防呆：如果这个 Panel 放在 VBox/HBox 这种容器里，
-    # 它的 position 会在第一帧被引擎排版强行接管！
-    # 所以我们用 call_deferred 确保在排版完成后再记录它的真实坐标。
-    call_deferred("_record_original_position")
-    
+    $Name.text = Global.player_state.player_name
+    $V/PlayerRect.texture = IconLoader.get_icon_simpler(PlayerState.player_name)
+    TimeService.on_month_tick.connect(func():
+        update_dynamic_data()
+    )
     Global.request_change_left_panel_visibility.connect(func():
         if _is_visible_state:
             hide_panel()
         else:
             show_panel()
     )
+
+    _record_original_position() # 没有container, 不需要call_deferred
+
+func update_dynamic_data():
+    # 更新玩家名称
+    $V/AmbitionLabel.text = '野心' + Global.player_state.ambition.name + '\n' 
+    $V/AmbitionLabel.text += Global.player_state.ambition.get_stage_perception()
+    
+    var text = 'props: \n'
+    for s in Global.properties:
+        text += "%s: %s\n" % [s, Global.properties[s].val]
+        text += 'stage-percep: %s\n' % Global.properties[s].get_staged_perception_text()
+    $V/Scroll/V/PropLabel.text = text
+
+    # 展示所有trait
+    var trait_text = 'traits: \n'
+    for t in Global.player_state.traits:
+        trait_text += "- %s\n" % t.name
+    $V/Scroll/V/TraitLabel.text = trait_text
 
 func _record_original_position():
     _original_pos_x = position.x

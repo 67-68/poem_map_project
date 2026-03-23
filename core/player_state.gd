@@ -1,5 +1,6 @@
 extends Node
 
+@export var player_name: String = "杜甫"
 @export var traits: Array[String] = [] # trait key string
 @export var current_location: String:
 	set(val):

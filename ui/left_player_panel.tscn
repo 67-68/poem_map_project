@@ -49,13 +49,22 @@ text = "野望：致君尧舜上
 进度：门卫逐渐熟络你的面孔"
 fit_content = true
 
-[node name="PropLabel" type="RichTextLabel" parent="V"]
+[node name="Scroll" type="ScrollContainer" parent="V"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="V" type="VBoxContainer" parent="V/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PropLabel" type="RichTextLabel" parent="V/Scroll/V"]
 layout_mode = 2
 theme_override_colors/default_color = Color(0.2854644, 0.1797638, 0.036245197, 1)
 text = "Money: 50"
 fit_content = true
 
-[node name="TraitLabel" type="RichTextLabel" parent="V"]
+[node name="TraitLabel" type="RichTextLabel" parent="V/Scroll/V"]
 layout_mode = 2
 theme_override_colors/default_color = Color(0.2854644, 0.1797638, 0.036245197, 1)
 text = "Trait
