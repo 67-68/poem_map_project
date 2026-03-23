@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_a8pnf")
 resources = {
-"uid://b6p41oq4qrol3": "res://data/tres_path_points/point-libai-birth.tres",
-"uid://ct2ewo7ddajog": "res://data/tres_path_points/point-dufu-birth.tres",
-"uid://cuhipj6ln2ll5": "res://data/tres_path_points/point-dufu-2.tres",
-"uid://pirrqs40jwka": "res://data/tres_path_points/point-libai-changan.tres"
+"point-dufu-2": "res://data/tres_path_points/point-dufu-2.tres",
+"point-dufu-birth": "res://data/tres_path_points/point-dufu-birth.tres",
+"point-libai-birth": "res://data/tres_path_points/point-libai-birth.tres",
+"point-libai-changan": "res://data/tres_path_points/point-libai-changan.tres"
 }

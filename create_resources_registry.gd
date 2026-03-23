@@ -8,7 +8,7 @@ const RESOURCE_REGISTRY_PATH = "res://core/model/resources.gd"
 const DATA_FOLDER = "res://data/"
 
 # 配置选项
-var overwrite_existing = false  # 是否覆盖已存在的registry文件
+var overwrite_existing = true  # 是否覆盖已存在的registry文件
 var skip_files_without_uuid = true  # 是否跳过没有uuid或id字段的文件
 
 func _run():

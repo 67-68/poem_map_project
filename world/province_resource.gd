@@ -4,6 +4,16 @@ class_name Territory extends MapMarker
 @export var capital: String
 @export var sub_ids: Array
 @export var dirty: bool = true
+# 1. 影子变量 (仅供编辑器和策划填表用)
+# 用下划线开头，表示它是私有的底层数据，业务代码绝对不要碰它！
+@export var _editor_area_tags: Array[StorableItem.AREA_TAGS] = []
+
+# 2. 真实属性 (供你的所有业务逻辑和老虎机调用)
+# 不加 @export，它是纯粹的代码接口。声明为 Array[String]！
+var area_tags: Array[String]:
+	get:
+		# 完美继承你的优美 map 语法，且绝对不会死循环！
+		return _editor_area_tags.map(func(tag): return StorableItem.to_str(tag))
 
 func _get_deprecated_position():
 	# 🔴 Fail Loudly: 在编辑器和运行时直接喷红字
@@ -24,3 +34,6 @@ func _init(data):
 	stability = float(data.get('stability',props.get('stability',1.0)))
 	capital = data.get('capital',props.get('capital','important_city'))
 	sub_ids = data.get('sub_ids',props.get('sub_ids',[]))
+
+func merge(other: Territory) -> void:
+	tags = other.tags	

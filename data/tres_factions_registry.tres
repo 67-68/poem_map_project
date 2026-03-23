@@ -5,6 +5,6 @@
 [resource]
 script = ExtResource("1_fvhrg")
 resources = {
-"uid://d2y005pyhykuq": "res://data/tres_factions/TANG_CENTRAL.tres",
-"uid://jwefbqtus0fd": "res://data/tres_factions/TUBO_KHANATE.tres"
+"TANG_CENTRAL": "res://data/tres_factions/TANG_CENTRAL.tres",
+"TUBO_KHANATE": "res://data/tres_factions/TUBO_KHANATE.tres"
 }

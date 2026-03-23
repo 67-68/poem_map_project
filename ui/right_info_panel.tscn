@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgv42km6rey70"]
+[gd_scene load_steps=7 format=3 uid="uid://bgv42km6rey70"]
 
 [ext_resource type="Texture2D" uid="uid://st52l6u6hob6" path="res://assets/profile/little_paper.png" id="1_qvv8g"]
+[ext_resource type="Script" uid="uid://ojn7m81iv33i" path="res://ui/right_info_panel.gd" id="2_3crwo"]
 [ext_resource type="Texture2D" uid="uid://6h08klf8hnfl" path="res://assets/profile/daming_palace.png" id="2_j2cme"]
 [ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="3_3crwo"]
 
@@ -19,7 +20,7 @@ content_margin_bottom = 5.0
 texture = ExtResource("3_3crwo")
 
 [node name="RightInfoPanel" type="PanelContainer"]
-custom_minimum_size = Vector2(250, 450)
+custom_minimum_size = Vector2(300, 450)
 anchors_preset = -1
 anchor_left = 0.95
 anchor_top = 0.5
@@ -31,75 +32,88 @@ offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_lnxk4")
+script = ExtResource("2_3crwo")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="V" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="V"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "洛阳"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="V"]
 custom_minimum_size = Vector2(0, 210)
 layout_mode = 2
 tooltip_text = "城市风景"
 texture = ExtResource("2_j2cme")
 expand_mode = 1
 
-[node name="InfoLabel" type="Label" parent="VBoxContainer"]
+[node name="CityLabel" type="Label" parent="V"]
 layout_mode = 2
-text = "城市数据：
-人口50W
-税收100W"
+theme_override_font_sizes/font_size = 14
+text = "城市切片：虽然你在门口没有看到什么东西，但远方的城市金碧辉煌。"
+autowrap_mode = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="PriceLabel" type="Label" parent="V"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "物价：一斗米需要5元，但没什么人买"
+autowrap_mode = 1
+
+[node name="CityTags" type="Label" parent="V"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "标签：「繁华」，「Dynamic」"
+autowrap_mode = 1
+
+[node name="Scr" type="ScrollContainer" parent="V"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="V" type="VBoxContainer" parent="V/Scr"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ActionPanel" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ActionPanel" type="PanelContainer" parent="V/Scr/V"]
 z_index = 1
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_n54d2")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel"]
+[node name="V" type="VBoxContainer" parent="V/Scr/V/ActionPanel"]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="V/Scr/V/ActionPanel/V"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "闲逛"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel/VBoxContainer"]
+[node name="Label" type="Label" parent="V/Scr/V/ActionPanel/V"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.42365062, 0.42365065, 0.42365062, 1)
 theme_override_font_sizes/font_size = 8
 text = "确认(消耗3-5天时间. 大概中量财富)"
 horizontal_alignment = 1
 
-[node name="ActionPanel2" type="PanelContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+[node name="ActionPanel2" type="PanelContainer" parent="V/Scr/V"]
 z_index = 1
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_n54d2")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="V/Scr/V/ActionPanel2"]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel2/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="V/Scr/V/ActionPanel2/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "去找流莺"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/ActionPanel2/VBoxContainer"]
+[node name="Label" type="Label" parent="V/Scr/V/ActionPanel2/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.42365062, 0.42365065, 0.42365062, 1)
 theme_override_font_sizes/font_size = 8

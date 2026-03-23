@@ -141,6 +141,11 @@ func init():
 	ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
 	traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
 	properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
+	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
+	if cities: for c in cities:
+		var territory = territories.get(c.uuid)
+		if territory: territory.merge(c)
+		else: Logging.error("City %s has uuid %s that does not exist in territories" % [c.name, c.uuid])
 
 	load_manager_and_buffers()
 	
