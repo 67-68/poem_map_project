@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" load_steps=2 format=3 uid="uid://1uw16u37bghj"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_bjmtf"]
+
+[resource]
+script = ExtResource("1_bjmtf")
+resources = {
+"action_exercise": "res://data/tres_actions/action_exercise.tres",
+"action_exploration": "res://data/tres_actions/action_exploration.tres",
+"action_rest": "res://data/tres_actions/action_rest.tres",
+"action_study": "res://data/tres_actions/action_study.tres",
+"action_work": "res://data/tres_actions/action_work.tres",
+"uid://bwopsrnyq5n6": "res://data/tres_actions/action_social.tres"
+}

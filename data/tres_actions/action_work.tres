@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://b1oeofujohvmm"]
+
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="1_0iv24"]
+
+[resource]
+script = ExtResource("1_0iv24")
+_action_tags = Array[int]([4])
+uuid = "action_work"
+name = "工作"
+description = "去写预制诗"
+metadata/_custom_type_script = "uid://ccs67ljham38a"

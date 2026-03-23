@@ -124,7 +124,7 @@ func clear_ambition():
 
 static func translate_from_enum(stat):
 	Logging.debug('try to translate a enum property')
-	return PROPERTIES.to_str(stat)
+	return ENUMS.to_str(stat)
 
 enum Traits {
 	TRAIT_OBSSESIVE_SCHOLAR

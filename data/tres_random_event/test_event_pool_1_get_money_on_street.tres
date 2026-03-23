@@ -9,7 +9,6 @@
 
 [sub_resource type="Resource" id="Resource_3mwui"]
 script = ExtResource("3_jk2br")
-property = "money"
 value = 10
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 

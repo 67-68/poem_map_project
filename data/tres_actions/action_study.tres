@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://fok8eg2tds2a"]
+
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="1_0fpht"]
+
+[resource]
+script = ExtResource("1_0fpht")
+_action_tags = Array[int]([5])
+uuid = "action_study"
+name = "学习"
+description = "科举还有一百天..."
+metadata/_custom_type_script = "uid://ccs67ljham38a"

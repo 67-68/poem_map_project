@@ -1,12 +1,9 @@
 class_name PropertyOperator extends BaseOperator
 
-@export_enum(
-    'literary_fame',
-    'official_prestige',
-    'talent',
-    'money'
-) var property := ''
-
+@export var _property: ENUMS.PROPS = ENUMS.PROPS.OFFICIAL_PRESTIGE
+var property := '':
+    get():
+        return ENUMS.to_str(_property)
 
 @export var value: int = 0
 

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Action" load_steps=4 format=3 uid="uid://ctjc5x25tgaoa"]
+
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="1_8akd4"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_hov6f"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_agy1v"]
+
+[resource]
+script = ExtResource("1_8akd4")
+_action_tags = Array[int]([0])
+uuid = "action_exercise"
+name = "锻炼"
+description = "想念两米多山东大汉吗"
+metadata/_custom_type_script = "uid://ccs67ljham38a"

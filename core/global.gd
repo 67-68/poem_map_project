@@ -97,6 +97,7 @@ var focused_chat_data: Dictionary
 var ambitions: Dictionary
 var traits: Dictionary
 var properties: Dictionary
+var actions: Dictionary
 
 var event_popup_queue: PopupQueue
 var event_buffer: ManualBuffer
@@ -141,6 +142,8 @@ func init():
 	ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
 	traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
 	properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
+	actions = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres")) # 场景化行动库，包含可以用来筛选事件的标签
+
 	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
 	if cities: for c in cities:
 		var territory = territories.get(c.uuid)

@@ -1,4 +1,4 @@
-
+ 
 # [0.8.0]
 ## Added
 - eu4-like popup event system

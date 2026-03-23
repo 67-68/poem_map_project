@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=10 format=3 uid="uid://dn140cjjyi7df"]
+
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_xsul5"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_7vxrh"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_hxtg7"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_m4fbd"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_o3pvx"]
+
+[sub_resource type="Resource" id="Resource_ktlsc"]
+script = ExtResource("3_m4fbd")
+_property = 4
+value = -5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_h4j71"]
+script = ExtResource("3_m4fbd")
+_property = 5
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_pubv5"]
+script = ExtResource("4_o3pvx")
+operators = Array[ExtResource("2_hxtg7")]([SubResource("Resource_ktlsc"), SubResource("Resource_h4j71")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_t1txc"]
+script = ExtResource("1_xsul5")
+description = "喝酒"
+choice_result = SubResource("Resource_pubv5")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_7vxrh")
+weight = 10.0
+options = Array[ExtResource("1_xsul5")]([SubResource("Resource_t1txc")])
+_action_tags = Array[int]([1])
+uuid = "normal_rest"
+name = "如何休息？"
+description = "你看着远处的xx沉思"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

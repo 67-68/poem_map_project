@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_umhvf")
 resources = {
-"uid://bd3romwkfssvp": "res://data/tres_cities/yong_zhou.tres"
+"yong_zhou": "res://data/tres_cities/yong_zhou.tres"
 }
