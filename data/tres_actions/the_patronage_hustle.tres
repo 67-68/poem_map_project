@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Action" load_steps=8 format=3 uid="uid://b8varwbhtrxs7"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_06cub"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_4506n"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_imi37"]
+[ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="4_yjv05"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_buywf"]
+
+[sub_resource type="Resource" id="Resource_svuts"]
+script = ExtResource("3_imi37")
+_property = 3
+value = -5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_d77yl"]
+script = ExtResource("4_yjv05")
+day = 10.0
+metadata/_custom_type_script = "uid://khw2s6fgrkem"
+
+[resource]
+script = ExtResource("5_buywf")
+_action_tags = Array[int]([9, 10, 11])
+action_results = Array[ExtResource("2_4506n")]([SubResource("Resource_svuts"), SubResource("Resource_d77yl")])
+uuid = "the_patronage_hustle"
+name = "朱门干谒"
+description = "揣着苦心孤诣的诗卷，徘徊在达官贵人的朱门外。天寒地冻，你不仅要忍受门房的白眼，还要祈祷今天出门接待的，是一位真正懂诗的伯乐，而不是个草包"
+metadata/_custom_type_script = "uid://ccs67ljham38a"

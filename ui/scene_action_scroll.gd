@@ -12,8 +12,9 @@ func refresh():
 	var available_actions = ActionManager.get_available_scene_actions()
 	var selected_actions = ActionManager.pick_top_actions(available_actions)
 	Logging.info("SceneActionScroll" + "Selected actions: " + str(selected_actions))
-	for a in selected_actions as Action:
+	for a in selected_actions:
 		# 添加到VBoxContainer的子类
+		a as Action
 		var card = SceneActionPanel.new(a)
 		$V.add_child(card)
 

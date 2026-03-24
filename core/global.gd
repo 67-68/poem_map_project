@@ -143,6 +143,7 @@ func init():
 	traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
 	properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
 	actions = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres")) # 场景化行动库，包含可以用来筛选事件的标签
+	# TODO: 在这里加一个判定检测是否有action的uuid = none
 
 	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
 	if cities: for c_name in cities:

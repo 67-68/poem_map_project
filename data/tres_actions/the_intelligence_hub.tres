@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Action" load_steps=8 format=3 uid="uid://io134ws0q4aw"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_37bqy"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_lthqr"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_ag8ve"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="3_brgy1"]
+[ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="4_kmt1f"]
+
+[sub_resource type="Resource" id="Resource_bplde"]
+script = ExtResource("3_ag8ve")
+_property = 3
+value = 10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_gnof3"]
+script = ExtResource("4_kmt1f")
+day = 10.0
+metadata/_custom_type_script = "uid://khw2s6fgrkem"
+
+[resource]
+script = ExtResource("3_brgy1")
+_action_tags = Array[int]([12, 13, 14])
+action_results = Array[ExtResource("2_lthqr")]([SubResource("Resource_bplde"), SubResource("Resource_gnof3")])
+uuid = "the_intelligence_hub"
+name = "西市胡肆听风"
+description = "鱼龙混杂的西市，空气中弥漫着香料与劣酒的味道。在这儿点上一杯三勒浆，只要你耳朵够尖，无论是范阳节度使的异动，还是明天的米价，都能略知一二。"
+metadata/_custom_type_script = "uid://ccs67ljham38a"

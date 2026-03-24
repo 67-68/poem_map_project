@@ -12,11 +12,11 @@ func get_available_scene_actions() -> Dictionary:
 
         if a.aciton_requirements:
             for req in a.aciton_requirements:
-                if not req.compare():
+                if not req.compare(PlayerState):
                     continue
 
         if a.action_tags:
-            var loc = Global.provinces.get(PlayerState.current_location)
+            var loc = Global.base_province.get(PlayerState.current_location)
             if loc.area_tags:
                 for tag in loc.area_tags:
                     if tag in a.action_tags:
@@ -31,30 +31,30 @@ func append_counter(counter: Dictionary, item_name: String, _item) -> Dictionary
         counter[item_name] = 1
     return counter
 
-func get_total_weight_power2(actions: Array) -> float:
+func get_total_weight_power2(actions: Dictionary) -> float:
     var total_weight = 0.0
-    for action in actions:
-        total_weight += pow(action.match_count, 2)
+    for action_id in actions:
+        total_weight += pow(actions[action_id], 2)
     return total_weight
 
 # 伪代码演示，这就是你要的终极算法
-func pick_top_actions(action_pool: Array, pick_count: int = 6) -> Array:
+func pick_top_actions(action_pool: Dictionary, pick_count: int = 6) -> Array:
     var selected_actions = []
     var available_pool = action_pool.duplicate() # 复制一份，避免污染原池
     
     while selected_actions.size() < pick_count and available_pool.size() > 0:
-        var total_weight = get_total_weight_power2(action_pool)
+        var total_weight = get_total_weight_power2(available_pool)
         
         # 2. 转动命运的轮盘
         var roll = randf_range(0.0, total_weight)
         var cursor = 0.0
         
         # 3. 寻找中奖者
-        for i in range(available_pool.size()):
-            cursor += pow(available_pool[i].match_count, 2)
+        for action_id in available_pool:
+            cursor += pow(available_pool[action_id], 2)
             if roll <= cursor:
-                selected_actions.append(available_pool[i])
-                available_pool.remove_at(i) # 拿走，不放回！
+                selected_actions.append(Global.actions[action_id])
+                available_pool.erase(action_id) # 拿走，不放回！
                 break # 必须 break，进入下一轮抽取
                 
     return selected_actions

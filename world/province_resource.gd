@@ -14,7 +14,8 @@ class_name Territory extends MapMarker
 var area_tags: Array[String]:
 	get:
 		# 完美继承你的优美 map 语法，且绝对不会死循环！
-		var result_tags = _editor_area_tags.map(func(tag): return ENUMS.to_str(tag))
+		var result_tags: Array[String] = []
+		result_tags.append_array(_editor_area_tags.map(func(tag): return ENUMS.to_str(tag)))
 		result_tags.append_array(_province_tags.map(func(tag): return ENUMS.to_str(tag)))
 		return result_tags
 
