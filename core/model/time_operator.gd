@@ -5,7 +5,7 @@ class_name TimeOperator extends BaseOperator
 var source_tags: Array[String] = []:
 	get():
 		return _source_tags.map(func(tag: ENUMS.ACTION_TAGS) -> String:
-			return ENUMS.to_str(tag))
+			return ENUMS.to_action_str(tag))
 
 func operate():
 	PlayerState.current_action_tags = source_tags

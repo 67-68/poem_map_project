@@ -12,6 +12,7 @@ func refresh():
 	var available_actions = ActionManager.get_available_scene_actions()
 	var selected_actions = ActionManager.pick_top_actions(available_actions)
 	Logging.info("SceneActionScroll" + "Selected actions: " + str(selected_actions))
+	Global.selected_actions_change.emit(selected_actions)
 	for a in selected_actions:
 		# 添加到VBoxContainer的子类
 		a as Action
@@ -21,4 +22,5 @@ func refresh():
 
 # 刷新场景化行动
 func _ready():
+	#breakpoint
 	TimeService.on_month_tick.connect(refresh)

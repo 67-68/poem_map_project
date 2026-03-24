@@ -3,7 +3,7 @@ class_name PropertyOperator extends BaseOperator
 @export var _property: ENUMS.PROPS = ENUMS.PROPS.OFFICIAL_PRESTIGE
 var property := '':
     get():
-        return ENUMS.to_str(_property)
+        return ENUMS.to_prop_str(_property)
 
 @export var value: int = 0
 

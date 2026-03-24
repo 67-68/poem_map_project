@@ -10,7 +10,7 @@ var action_tags: Array[String]:
 	get: 
 		var result: Array[String] = []
 		for tag in _action_tags:
-			result.append(ENUMS.to_str(tag))
+			result.append(ENUMS.to_action_str(tag))
 		return result
 
 @export var action_results: Array[BaseOperator]

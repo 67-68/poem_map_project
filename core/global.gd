@@ -82,6 +82,7 @@ signal request_advance_time(days: int)
 # event 和 chat 不同，后者是即时的，前者是可能需要等待的
 
 signal focus_city_map(enable: bool)
+signal selected_actions_change(actions: Array[Action])
 
 var life_path_points: Dictionary
 var poet_data: Dictionary

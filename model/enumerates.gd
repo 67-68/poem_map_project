@@ -47,15 +47,30 @@ enum PROVINCES {
     CHANG_AN
 }
 
-static func to_str(item) -> String:
+static func to_action_str(item) -> String:
     var name = ACTION_TAGS.keys().get(item)
-    if not name: name = AREA_TAGS.keys().get(item)
-    if not name: name = PROPS.keys().get(item)
-    if not name: name = PROVINCES.keys().get(item)
-    else:
-        Logging.err("Invalid area tag: " + str(item))
-        return "default_storable_item"
+    if name:
+        return name.to_lower()
+    Logging.err("Invalid action tag: " + str(item))
+    return "default_storable_item"
+
+static func to_area_str(item) -> String:
+    var name = AREA_TAGS.keys().get(item)
     if name:
         return name.to_lower()
     Logging.err("Invalid area tag: " + str(item))
+    return "default_storable_item"
+
+static func to_prop_str(item) -> String:
+    var name = PROPS.keys().get(item)
+    if name:
+        return name.to_lower()
+    Logging.err("Invalid prop tag: " + str(item))
+    return "default_storable_item"
+
+static func to_province_str(item) -> String:
+    var name = PROVINCES.keys().get(item)
+    if name:
+        return name.to_lower()
+    Logging.err("Invalid province tag: " + str(item))
     return "default_storable_item"
