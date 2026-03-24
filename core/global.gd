@@ -149,8 +149,8 @@ func init():
 	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
 	if cities: for c_name in cities:
 		var c = cities[c_name]
-		var territory = territories.get(c.uuid)
-		if territory: territory.merge(c)
+		var province = base_province.get(c.uuid)
+		if province: province.merge(c)
 		else: Logging.err("City %s has uuid %s that does not exist in territories" % [c.name, c.uuid])
 
 	load_manager_and_buffers()

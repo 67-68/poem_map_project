@@ -1,27 +1,48 @@
 extends Node
 
 func get_available_scene_actions() -> Dictionary:
-    """
-    返回一个名称: 权重的字典
-    如果需要额外计算叠加权重，自己根据出现了多少次算！可以整一个x^3的
-    如果权重 = -1: 一般意味着必然出现
-    """
+    #breakpoint
+    print("[ActionManager] 开始获取可用场景动作")
     var actions := {}
+    
+    # 统一去 base_prov 里拿位置数据
+    var loc = Global.base_province.get(PlayerState.current_location)
+    if not loc:
+        Logging.err("当前位置幽灵化: %s" % PlayerState.current_location)
+        return actions
+
     for a_id in Global.actions:
         var a = Global.actions[a_id]
-
+        var is_valid = true # 🤓☝️ 设立拦截签证！
+        
+        # 1. 检查硬性需求 (Requirements)
         if a.aciton_requirements:
             for req in a.aciton_requirements:
                 if not req.compare(PlayerState):
-                    continue
-
-        if a.action_tags:
-            var loc = Global.base_province.get(PlayerState.current_location)
+                    is_valid = false # 签证拒签！
+                    break # 💀 打断内层循环，直接判死刑
+                    
+        if not is_valid:
+            print("[ActionManager] 动作 %s 不满足需求条件，被拦截" % a_id)
+            continue # 这个 continue 才会跳过外层的 a_id！
+            
+        # 2. 检查标签匹配 (Tags)
+        if a.area_tags and not a.area_tags.is_empty():
+            var tag_matched = false
             if loc.area_tags:
                 for tag in loc.area_tags:
-                    if tag in a.action_tags:
-                        append_counter(actions, a_id, a)
-        else: append_counter(actions, a_id, a)
+                    if tag in a.area_tags:
+                        tag_matched = true
+                        break
+                        
+            if not tag_matched:
+                print("[ActionManager] 动作 %s 标签不匹配当前位置" % a_id)
+                continue # 没有交集，直接滚蛋
+                
+        # 3. 活到最后的才是合法动作
+        print("[ActionManager] 动作 %s 完全合法，允许装载" % a_id)
+        append_counter(actions, a_id, a)
+        
     return actions
 
 func append_counter(counter: Dictionary, item_name: String, _item) -> Dictionary:
@@ -38,8 +59,8 @@ func get_total_weight_power2(actions: Dictionary) -> float:
     return total_weight
 
 # 伪代码演示，这就是你要的终极算法
-func pick_top_actions(action_pool: Dictionary, pick_count: int = 6) -> Array:
-    var selected_actions = []
+func pick_top_actions(action_pool: Dictionary, pick_count: int = 6) -> Array[Action]:
+    var selected_actions: Array[Action] = []
     var available_pool = action_pool.duplicate() # 复制一份，避免污染原池
     
     while selected_actions.size() < pick_count and available_pool.size() > 0:

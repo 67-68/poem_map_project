@@ -1,5 +1,5 @@
 class_name ENUMS
-enum AREA_TAGS {
+enum AREA_TAGS { # 包括地区特性和地区本身?
     AREA_HORSE_WEALTH,
     AREA_EXCESSIVE_OFFICIAL,
 }

@@ -196,7 +196,7 @@ func _emit_time_events():
 				on_xun_tick.emit()
 				current_xun = get_xun_text(day_of_month)
 			if day_of_month == 29:
-				breakpoint
+				#breakpoint
 				on_month_tick.emit()
 				
 		# 💀 极度重要：完事后必须对齐标记！

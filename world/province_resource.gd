@@ -15,8 +15,10 @@ var area_tags: Array[String]:
 	get:
 		# 完美继承你的优美 map 语法，且绝对不会死循环！
 		var result_tags: Array[String] = []
-		result_tags.append_array(_editor_area_tags.map(func(tag): return ENUMS.to_area_str(tag)))
-		result_tags.append_array(_province_tags.map(func(tag): return ENUMS.to_province_str(tag)))
+		for tag in _editor_area_tags:
+			result_tags.append(ENUMS.to_area_str(tag))
+		for tag in _province_tags:
+			result_tags.append(ENUMS.to_province_str(tag))
 		return result_tags
 
 func _get_deprecated_position():
@@ -43,4 +45,10 @@ func _init(data = {}):
 	sub_ids = data.get('sub_ids',props.get('sub_ids',[]))
 
 func merge(other: Territory) -> void:
-	tags = other.tags	
+	stability = other.stability
+	capital = other.capital
+	sub_ids = other.sub_ids
+	_editor_area_tags = other._editor_area_tags
+	_province_tags = other._province_tags
+	dirty = other.dirty
+	Logging.warn('完成一次数据merge!如果数据出问题了记得检查这里')
