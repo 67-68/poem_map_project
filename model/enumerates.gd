@@ -23,10 +23,17 @@ enum PROPS {
     EMOTION
 }
 
+enum PROVINCES { 
+    # 注意！！这里的地区不可以直接对应province.id 这只是用来对应事件和地区的。 
+    # eg. 地区YONG_ZHOU雍州实际上对应长安CHANG_AN
+    CHANG_AN
+}
+
 static func to_str(item) -> String:
     var name = ACTION_TAGS.keys().get(item)
     if not name: name = AREA_TAGS.keys().get(item)
     if not name: name = PROPS.keys().get(item)
+    if not name: name = PROVINCES.keys().get(item)
     else:
         Logging.err("Invalid area tag: " + str(item))
         return "default_storable_item"

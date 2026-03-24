@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2m0tcydkhvro"]
+
+[ext_resource type="Texture2D" uid="uid://bcuicm5oeumvp" path="res://assets/candle.jpg" id="1_4mrtc"]
+
+[node name="SceneActionPanel" type="VBoxContainer"]
+size_flags_vertical = 3
+
+[node name="ActionTitleLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "点燃蜡烛"
+
+[node name="ActionOutcomeLabel" type="Label" parent="."]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "变得明亮，消耗钱财。"
+autowrap_mode = 3
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_4mrtc")
+expand_mode = 1

@@ -145,7 +145,8 @@ func init():
 	actions = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres")) # 场景化行动库，包含可以用来筛选事件的标签
 
 	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
-	if cities: for c in cities:
+	if cities: for c_name in cities:
+		var c = cities[c_name]
 		var territory = territories.get(c.uuid)
 		if territory: territory.merge(c)
 		else: Logging.error("City %s has uuid %s that does not exist in territories" % [c.name, c.uuid])

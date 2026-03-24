@@ -4,5 +4,7 @@
 
 [resource]
 script = ExtResource("1_kjdpd")
+_editor_area_tags = Array[int]([1, 0])
+_province_tags = Array[int]([0])
 uuid = "yong_zhou"
 metadata/_custom_type_script = "uid://crqciwl3r6jih"
