@@ -7,7 +7,11 @@ class_name Action extends GameEntity
 
 @export var _action_tags: Array[ENUMS.ACTION_TAGS] = []
 var action_tags: Array[String]:
-	get: return _action_tags.map(func(tag): return ENUMS.to_str(tag))
+	get: 
+		var result: Array[String] = []
+		for tag in _action_tags:
+			result.append(ENUMS.to_str(tag))
+		return result
 
 @export var action_results: Array[BaseOperator]
 @export var aciton_requirements: Array[BaseRequirements]

@@ -1,4 +1,4 @@
-extends ScrollContainer
+class_name SceneActionScroll extends ScrollContainer
 
 func refresh():
 	"""
@@ -6,11 +6,17 @@ func refresh():
 	提供最多六个
 	算法：权重加和，
 	"""
+	# 删除所有VBoxContainer的子类
+	for child in $V.get_children():
+		child.queue_free()
 	var available_actions = ActionManager.get_available_scene_actions()
 	var selected_actions = ActionManager.pick_top_actions(available_actions)
 	Logging.info("SceneActionScroll" + "Selected actions: " + str(selected_actions))
 	for a in selected_actions as Action:
-		SceneActionPanel.new(a)
+		# 添加到VBoxContainer的子类
+		var card = SceneActionPanel.new(a)
+		$V.add_child(card)
+
 
 # 刷新场景化行动
 func _ready():

@@ -26,8 +26,9 @@ func _ready() -> void:
 
 func update_dynamic_data():
     # 更新玩家名称
-    $V/AmbitionLabel.text = '野心' + Global.player_state.ambition.name + '\n' 
-    $V/AmbitionLabel.text += Global.player_state.ambition.get_stage_perception()
+    if PlayerState.ambition:
+        $V/AmbitionLabel.text = '野心' + PlayerState.ambition.name + '\n' 
+        $V/AmbitionLabel.text += PlayerState.ambition.get_stage_perception()
     
     var text = 'props: \n'
     for s in Global.properties:
@@ -37,8 +38,8 @@ func update_dynamic_data():
 
     # 展示所有trait
     var trait_text = 'traits: \n'
-    for t in Global.player_state.traits:
-        trait_text += "- %s\n" % t.name
+    for t in PlayerState.traits:
+        trait_text += "- %s\n" % t
     $V/Scroll/V/TraitLabel.text = trait_text
 
 func _record_original_position():
