@@ -72,33 +72,3 @@ func roll_events():
     # 如果 roll 出来的数字落在了 null_weight 的区间里，说明抽中了“无事发生”
     Logging.info("[EventManager] Roll fell in null weight range, no event triggered")
     return null
-
-func get_available_scene_actions() -> Dictionary:
-    """
-    返回一个名称: 权重的字典
-    如果需要额外计算叠加权重，自己根据出现了多少次算！可以整一个x^3的
-    """
-    var actions := {}
-    for a_id in Global.actions:
-        var a = Global.actions[a_id]
-
-        if a.aciton_requirements:
-            for req in a.aciton_requirements:
-                if not req.compare():
-                    continue
-
-        if a.action_tags:
-            var loc = Global.provinces.get(PlayerState.current_location)
-            if loc.area_tags:
-                for tag in loc.area_tags:
-                    if tag in a.action_tags:
-                        append_counter(actions, a_id, a)
-        else: append_counter(actions, a_id, a)
-    return actions
-
-func append_counter(counter: Dictionary, item_name: String, item) -> Dictionary:
-    if counter.has(item_name):
-        counter[item_name] += 1
-    else:
-        counter[item_name] = 1
-    return counter
