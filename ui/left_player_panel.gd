@@ -10,7 +10,7 @@ const SLIDE_OFFSET: float = 50.0
 const ANIM_DURATION: float = 0.3
 
 func _ready() -> void:
-    $Name.text = Global.player_state.player_name
+    $V/NameLabel.text = PlayerState.player_name
     $V/PlayerRect.texture = IconLoader.get_icon_simpler(PlayerState.player_name)
     TimeService.on_month_tick.connect(func():
         update_dynamic_data()

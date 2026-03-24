@@ -13,8 +13,4 @@ var target_tags: Array[String] = []:
         return tags
 
 @export var _action_tags: Array[ENUMS.ACTION_TAGS] = []
-@export var _area_tags: Array[ENUMS.AREA_TAGS] = []:
-    get:
-        if _action_tags:
-            return _action_tags.map(func(tag): return ENUMS.to_str(tag))
-        else: return []
+@export var _area_tags: Array[ENUMS.AREA_TAGS] = []

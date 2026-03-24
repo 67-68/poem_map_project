@@ -149,7 +149,7 @@ func init():
 		var c = cities[c_name]
 		var territory = territories.get(c.uuid)
 		if territory: territory.merge(c)
-		else: Logging.error("City %s has uuid %s that does not exist in territories" % [c.name, c.uuid])
+		else: Logging.err("City %s has uuid %s that does not exist in territories" % [c.name, c.uuid])
 
 	load_manager_and_buffers()
 	

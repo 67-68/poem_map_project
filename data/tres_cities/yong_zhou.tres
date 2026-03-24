@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Territory" load_steps=2 format=3 uid="uid://bd3romwkfssvp"]
+[gd_resource type="Resource" script_class="Territory" load_steps=2 format=3 uid="uid://cqgucgu5huhyh"]
 
 [ext_resource type="Script" uid="uid://crqciwl3r6jih" path="res://world/province_resource.gd" id="1_kjdpd"]
 

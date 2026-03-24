@@ -29,7 +29,6 @@ func _init(data: Dictionary = {}):
     owner_uuids.assign(raw_owners)
     
     var raw_tags = data.get("tags", props.get("tags", []))
-    print(data)
     tags.assign(raw_tags)
 
     # 6. 加载图标 (IconLoader 最好是静态工具类)

@@ -19,19 +19,22 @@ var area_tags: Array[String]:
 		return result_tags
 
 func _get_deprecated_position():
-	# 🔴 Fail Loudly: 在编辑器和运行时直接喷红字
 	if position_dirty:
-		push_error("🚨 [DEPRECATED] 试图访问 Territory.position！像素坐标已作废。
-		请改用 uv_position 并结合地图尺寸计算。
-		错误源自: ", get_stack()[1].source, " 第 ", get_stack()[1].line, " 行")
-	else:
-		return _position
+		var stack = get_stack()
+		# 必须检查堆栈深度，防止 C++ 调用时越界崩溃！
+		if stack.size() > 1:
+			push_error("🚨 [DEPRECATED] 试图访问 Territory.position！坐标已作废。源自: %s 第 %d 行" % [stack[1].source, stack[1].line])
+		elif not Engine.is_editor_hint(): 
+			# 只有在非编辑器环境下才报警告，防止 Inspector 抽风
+			push_error("🚨 [DEPRECATED] 试图访问 Territory.position！")
+			
+	return _position
 
 func _set_deprecated_position(_val):
 	if position_dirty:
 		self._position = _val
 
-func _init(data):
+func _init(data = {}):
 	super._init(data)
 	var props = data.get("properties", data.get("property", {}))
 	stability = float(data.get('stability',props.get('stability',1.0)))
