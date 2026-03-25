@@ -1,14 +1,25 @@
 @tool
-extends EditorScript
+class_name EventActionTagLinter extends Node
 
-func _run() -> void:
+@export var start := false:
+	set(value):
+		start = false
+		if Engine.is_editor_hint():
+			printerr("在游戏打开后使用！")
+		start_linter()
+
+func start_linter() -> void:
 	"""
+	在游戏打开后使用！进入游戏内部，不是主界面
+	
 	检测
 	- 是否有地区的tag没有被任何action使用
 	- 是否有action不满足任何地区tag
 	
 	- 是否有action的action_tag没有被任何事件使用
 	- 是否有事件使用了不属于任何action的tag
+	
+	注意：random_event使用target_tags（合并了area_tags和action_tags），所以统一检查所有标签
 	"""
 	print("开始检查event和action的tag...")
 	# 仿造Global, 加载所有action和event
@@ -20,8 +31,7 @@ func _run() -> void:
 	# 创建action, area和event使用的标签的set
 	var all_action_tags = {}
 	var all_action_area_tags = {}
-	var all_event_action_tags = {}
-	var all_event_area_tags = {}
+	var all_event_tags = {}  # 合并了area_tags和action_tags
 
 	for a in actions.values():
 		for t in a.action_tags:
@@ -29,10 +39,8 @@ func _run() -> void:
 		for t in a.area_tags: 
 			assign_or_add(all_action_area_tags,t)
 	for e in random_events.values():
-		for t in e.area_tags:
-			assign_or_add(all_event_area_tags,t)
-		for t in e.action_tags:
-			assign_or_add(all_event_action_tags,t)
+		for t in e.target_tags:
+			assign_or_add(all_event_tags,t)
 	
 	# 检查地区tag使用情况
 	print("\n=== 地区tag检查 ===")
@@ -76,7 +84,7 @@ func _run() -> void:
 	# 检查是否有action的action_tag没有被任何事件使用
 	var unused_action_tags = []
 	for tag in all_action_tags.keys():
-		if tag not in all_event_action_tags:
+		if tag not in all_event_tags:
 			unused_action_tags.append(tag)
 	
 	if unused_action_tags.size() > 0:
@@ -88,7 +96,7 @@ func _run() -> void:
 	
 	# 检查是否有事件使用了不属于任何action的tag
 	var invalid_event_action_tags = []
-	for tag in all_event_action_tags.keys():
+	for tag in all_event_tags.keys():
 		if tag not in all_action_tags:
 			invalid_event_action_tags.append(tag)
 	
