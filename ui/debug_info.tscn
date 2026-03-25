@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://6ilphg3nn6wx"]
 
-[ext_resource type="Script" uid="uid://dumrsjmb5wfw2" path="res://tests/label.gd" id="1_fscx0"]
-[ext_resource type="Script" uid="uid://dwt47t3hxkbjx" path="res://tests/events_label.gd" id="2_bhh81"]
-[ext_resource type="Script" uid="uid://sk3tq3p8t74d" path="res://tests/time_label.gd" id="3_by2l1"]
-[ext_resource type="Script" uid="uid://db7vr3lg6gs00" path="res://tests/event_pool_label.gd" id="4_irtbx"]
-[ext_resource type="Script" uid="uid://bg7wrcx4s26so" path="res://tests/current_action_label.gd" id="5_bhh81"]
-[ext_resource type="Script" uid="uid://c2t6abq8tsd80" path="res://tests/decision_label.gd" id="6_by2l1"]
+[ext_resource type="Script" uid="uid://dumrsjmb5wfw2" path="res://debuggers_and_linters/property_label.gd" id="1_fscx0"]
+[ext_resource type="Script" uid="uid://dwt47t3hxkbjx" path="res://debuggers_and_linters/events_label.gd" id="2_bhh81"]
+[ext_resource type="Script" uid="uid://sk3tq3p8t74d" path="res://debuggers_and_linters/time_label.gd" id="3_by2l1"]
+[ext_resource type="Script" uid="uid://db7vr3lg6gs00" path="res://debuggers_and_linters/event_pool_label.gd" id="4_irtbx"]
+[ext_resource type="Script" uid="uid://bg7wrcx4s26so" path="res://debuggers_and_linters/current_action_label.gd" id="5_bhh81"]
+[ext_resource type="Script" uid="uid://c2t6abq8tsd80" path="res://debuggers_and_linters/decision_label.gd" id="6_by2l1"]
 
 [node name="DebugInfo" type="ColorRect"]
 custom_minimum_size = Vector2(200, 200)
