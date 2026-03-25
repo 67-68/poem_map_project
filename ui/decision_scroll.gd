@@ -19,12 +19,14 @@ func refresh_current_decisions():
 	var decisions = []
 	for d_uuid in Global.decisions:
 		var d = Global.decisions[d_uuid]
+		if d.disabled:
+			continue
 		if not d.area_tags:
 			var panel = preload("res://ui/decision_panel.tscn").instantiate()
 			panel.inititalization(d)
 			$V.add_child(panel)
 			decisions.append(d)
-			break
+			continue
 		for t in d.area_tags:
 			if t in location.area_tags:
 				var panel = preload("res://ui/decision_panel.tscn").instantiate()

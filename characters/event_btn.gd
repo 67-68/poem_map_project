@@ -1,4 +1,4 @@
-class_name EventBtn extends Button
+class_name  EventBtn extends Button
 
 signal option_made(data: ChoiceResult) # 外部连接这个; 不要连接pressed
 var option: EventOption
@@ -7,6 +7,8 @@ var click_count := 0
 func _init(data: EventOption):
 	option = data
 	text = data.description
+	autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # Enable text wrapping
+	custom_minimum_size = Vector2(800, 0)  # Set minimum width to match scene
 	if data.is_disabled:
 		tooltip_text = data.disabled_reason
 		pressed.connect(disable_btn)

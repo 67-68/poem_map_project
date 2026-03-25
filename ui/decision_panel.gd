@@ -17,3 +17,9 @@ func inititalization(decision_: Decision):
 	$ActionPanel/V/TitleLabel.text = decision_.name
 	$ActionPanel/V/DescriptionLabel.text = decision_.description
 	
+
+
+func _on_button_pressed() -> void:
+	for r in decision.action_results:
+		r.operate()
+	decision.disabled = true

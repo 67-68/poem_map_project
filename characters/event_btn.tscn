@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://di0bxxgcy4ye" path="res://characters/event_btn.gd" id="1_7id7k"]
 
 [node name="EventBtn" type="Button"]
+custom_minimum_size = Vector2(800, 0)
 offset_right = 8.0
 offset_bottom = 8.0
+autowrap_mode = 1
 script = ExtResource("1_7id7k")

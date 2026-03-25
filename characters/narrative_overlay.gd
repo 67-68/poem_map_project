@@ -18,6 +18,8 @@ func _ready() -> void:
 		if not ev:
 			ev = Global.random_events.get(key)
 		if not ev:
+			ev = Global.find_triggerable_item(key)
+		if not ev:
 			breakpoint
 			Logging.err("Event not found: " + key)
 			return

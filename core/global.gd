@@ -101,6 +101,7 @@ var traits: Dictionary
 var properties: Dictionary
 var actions: Dictionary
 var decisions: Dictionary
+var decided_events: Dictionary
 
 var event_popup_queue: PopupQueue
 var event_buffer: ManualBuffer
@@ -124,6 +125,20 @@ func find_triggerable_item(uuid: String):
 		return chat_bubble_data[uuid]
 	if focused_chat_data.get(uuid):
 		return focused_chat_data[uuid]
+	if decided_events.get(uuid):
+		return decided_events[uuid]
+	if random_events.get(uuid):
+		return random_events[uuid]
+	if actions.get(uuid):
+		return actions[uuid]
+	if ambitions.get(uuid):
+		return ambitions[uuid]
+	if traits.get(uuid):
+		return traits[uuid]
+	if properties.get(uuid):
+		return properties[uuid]
+	if decisions.get(uuid):
+		return decisions[uuid]
 	
 func init():
 	index_image = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
@@ -148,6 +163,8 @@ func init():
 	actions = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres")) # 场景化行动库，包含可以用来筛选事件的标签
 	# TODO: 在这里加一个判定检测是否有action的uuid = none
 	decisions = Util.create_dict_from_registry(preload("res://data/tres_decisions_registry.tres"))
+	decided_events = Util.create_dict_from_registry(preload("res://data/tres_decided_events_registry.tres"))
+	# decision导致的evemt, 不会计入random event 和 history event 池
 
 	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
 	if cities: for c_name in cities:

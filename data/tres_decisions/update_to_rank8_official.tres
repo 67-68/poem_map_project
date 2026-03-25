@@ -15,7 +15,7 @@ metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 
 [sub_resource type="Resource" id="Resource_3mgou"]
 script = ExtResource("4_ri2ju")
-event_key = "update_to_rank8_official_event"
+event_key = "update_to_rank9_official_event"
 metadata/_custom_type_script = "uid://dh6tkcf3cubge"
 
 [resource]

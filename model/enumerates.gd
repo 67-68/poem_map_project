@@ -47,6 +47,17 @@ enum PROVINCES {
     CHANG_AN
 }
 
+enum TRAITS {
+    ORDINARY_PEOPLE,
+    LV_NINE_OFFICIAL
+}
+
+static func to_traits_str(item) -> String:
+    var name = TRAITS.keys().get(item)
+    if name: return name.to_lower()
+    Logging.err("Invalid trait: " + str(item))
+    return "default_storable_item"
+
 static func to_action_str(item) -> String:
     var name = ACTION_TAGS.keys().get(item)
     if name:

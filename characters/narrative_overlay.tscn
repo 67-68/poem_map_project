@@ -52,19 +52,23 @@ theme_override_constants/margin_bottom = 20
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="Background/Margin/VBox"]
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_vertical = 1
 text = "test"
+autowrap_mode = 3
 script = ExtResource("2_id4jo")
 
 [node name="ExampleLabel" type="RichTextLabel" parent="Background/Margin/VBox"]
 clip_contents = false
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 bbcode_enabled = true
 fit_content = true
 
 [node name="ContentLabel" type="RichTextLabel" parent="Background/Margin/VBox"]
 clip_contents = false
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 bbcode_enabled = true
 fit_content = true
