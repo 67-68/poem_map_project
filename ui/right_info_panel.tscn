@@ -67,6 +67,7 @@ layout_mode = 2
 
 [node name="SceneActionScr" parent="V/HBoxContainer" instance=ExtResource("4_3crwo")]
 layout_mode = 2
+horizontal_scroll_mode = 0
 
 [node name="DecisionScr" type="ScrollContainer" parent="V/HBoxContainer"]
 custom_minimum_size = Vector2(0, 120)

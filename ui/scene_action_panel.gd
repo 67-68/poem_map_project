@@ -7,8 +7,8 @@ func initialize(action_: Action = null): # 这里的info未来会用来做非对
 	#breakpoint
 	if action_:
 		action = action_
-		$ActionOutcomeLabel.text = action.name
-		$ActionTitleLabel.text = action.description
+		$ActionTitleLabel.text = action.name
+		$ActionOutcomeLabel.text = action.description
 		$TextureRect.texture = action.icon
 	else: 
 		Logging.err('there\'s no action input in the init of scene action panel!!!')
