@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://ojn7m81iv33i" path="res://ui/right_info_panel.gd" id="2_3crwo"]
 [ext_resource type="Texture2D" uid="uid://6h08klf8hnfl" path="res://assets/profile/daming_palace.png" id="2_j2cme"]
 [ext_resource type="PackedScene" uid="uid://d4k6orjo2c3h1" path="res://ui/scene_action_scroll.tscn" id="4_3crwo"]
-[ext_resource type="PackedScene" uid="uid://bkgnvye0ifc60" path="res://ui/decision_panel.tscn" id="5_lnxk4"]
+[ext_resource type="PackedScene" uid="uid://cu1a2mhu4xv3n" path="res://ui/decision_scroll.tscn" id="5_3crwo"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lnxk4"]
 texture = ExtResource("1_qvv8g")
@@ -69,19 +69,5 @@ layout_mode = 2
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="DecisionScr" type="ScrollContainer" parent="V/HBoxContainer"]
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="V" type="VBoxContainer" parent="V/HBoxContainer/DecisionScr"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="DecisionPanel" parent="V/HBoxContainer/DecisionScr/V" instance=ExtResource("5_lnxk4")]
-layout_mode = 2
-
-[node name="DecisionPanel2" parent="V/HBoxContainer/DecisionScr/V" instance=ExtResource("5_lnxk4")]
+[node name="DecisionScr" parent="V/HBoxContainer" instance=ExtResource("5_3crwo")]
 layout_mode = 2

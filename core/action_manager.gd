@@ -74,7 +74,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = 6) -> Array[Sce
         for action_id in available_pool:
             cursor += pow(available_pool[action_id], 2)
             if roll <= cursor:
-                selected_actions.append(Global.actions[action_id])
+                selected_actions.append(Global.actions[action_id] as SceneAction)
                 available_pool.erase(action_id) # 拿走，不放回！
                 break # 必须 break，进入下一轮抽取
                 

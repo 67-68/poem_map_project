@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="Action" load_steps=10 format=3 uid="uid://bb758j37h8cf2"]
+[gd_resource type="Resource" script_class="SceneAction" load_steps=10 format=3 uid="uid://bb758j37h8cf2"]
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_vll7a"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_42h8y"]
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="2_wgip5"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_wgip5"]
 [ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="4_x7t8c"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/scene_action.gd" id="5_wfc0r"]
+[ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="6_42h8y"]
 
 [sub_resource type="Resource" id="Resource_x7t8c"]
 script = ExtResource("2_wgip5")
@@ -22,12 +22,11 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_n0scf"]
 script = ExtResource("4_x7t8c")
-day = 10.0
 _source_tags = Array[int]([0])
 metadata/_custom_type_script = "uid://khw2s6fgrkem"
 
 [resource]
-script = ExtResource("5_wfc0r")
+script = ExtResource("6_42h8y")
 _action_tags = Array[int]([6, 7, 8])
 action_results = Array[ExtResource("2_42h8y")]([SubResource("Resource_sqfef"), SubResource("Resource_n0scf")])
 aciton_requirements = Array[ExtResource("1_vll7a")]([SubResource("Resource_x7t8c")])

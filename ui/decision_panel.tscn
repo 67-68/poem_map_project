@@ -10,7 +10,7 @@ content_margin_right = 20.0
 content_margin_bottom = 5.0
 texture = ExtResource("1_4uqyj")
 
-[node name="DecisionVBox" type="VBoxContainer"]
+[node name="DecisionPanel" type="VBoxContainer"]
 size_flags_horizontal = 3
 script = ExtResource("1_qcnrq")
 

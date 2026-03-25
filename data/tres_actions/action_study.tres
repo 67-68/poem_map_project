@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://fok8eg2tds2a"]
+[gd_resource type="Resource" script_class="SceneAction" load_steps=4 format=3 uid="uid://fok8eg2tds2a"]
 
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/scene_action.gd" id="1_0fpht"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_sq1ak"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_ly3y5"]
+[ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_hqk0h"]
 
 [resource]
-script = ExtResource("1_0fpht")
+script = ExtResource("3_hqk0h")
 _action_tags = Array[int]([5])
 uuid = "action_study"
 name = "学习"

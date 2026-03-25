@@ -2,7 +2,7 @@ extends Node
 
 @export var player_name: String = "杜甫"
 @export var traits: Array[String] = [] # trait key string
-@export var current_location: String:
+@export var current_location: String = 'yong_zhou':
 	set(val):
 		current_location = val
 		location_changed.emit(val)
@@ -134,8 +134,10 @@ func get_trait_from_enum(trait_name: Traits):
 	return Traits.keys()[trait_name]
 
 func get_location():
+#	breakpoint
 	var loc = Global.territories.get(current_location)
-	if not loc: Global.base_province.get(current_location)
+	if loc == null: 
+		loc = Global.base_province.get(current_location)
 	if not loc:
 		Logging.err('do not find location %s' % current_location)
 		return null

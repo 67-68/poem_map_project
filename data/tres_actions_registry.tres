@@ -5,9 +5,6 @@
 [resource]
 script = ExtResource("1_bjmtf")
 resources = {
-"action_exercise": "res://data/tres_actions/action_exercise.tres",
-"action_exploration": "res://data/tres_actions/action_exploration.tres",
-"action_rest": "res://data/tres_actions/action_rest.tres",
 "action_social": "res://data/tres_actions/action_social.tres",
 "action_study": "res://data/tres_actions/action_study.tres",
 "action_work": "res://data/tres_actions/action_work.tres",
@@ -16,5 +13,5 @@ resources = {
 "the_grind_studying": "res://data/tres_actions/the_grind_studying.tres",
 "the_intelligence_hub": "res://data/tres_actions/the_intelligence_hub.tres",
 "the_muse_and_the_crown": "res://data/tres_actions/the_muse_and_the_crown.tres",
-"the_patronage_hustle": "res://data/tres_actions/the_patronage_hustle.tres"
+"uid://b8varwbhtrxs7": "res://data/tres_actions/the_patronage_hustle.tres"
 }

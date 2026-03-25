@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="Decision" load_steps=8 format=3 uid="uid://3f8h3xqcdg3k"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_lsx8t"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="2_ri2ju"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="3_3mgou"]
+[ext_resource type="Script" uid="uid://gq6m2qeuguk2" path="res://core/model/decision.gd" id="4_7t8qu"]
+[ext_resource type="Script" uid="uid://dh6tkcf3cubge" path="res://core/model/event_operator.gd" id="4_ri2ju"]
+
+[sub_resource type="Resource" id="Resource_tcnbo"]
+script = ExtResource("2_ri2ju")
+property = "official_prestige"
+value = 50
+operator = 1
+metadata/_custom_type_script = "uid://pyecoqx4dr1i"
+
+[sub_resource type="Resource" id="Resource_3mgou"]
+script = ExtResource("4_ri2ju")
+event_key = "update_to_rank8_official_event"
+metadata/_custom_type_script = "uid://dh6tkcf3cubge"
+
+[resource]
+script = ExtResource("4_7t8qu")
+action_results = Array[ExtResource("3_3mgou")]([SubResource("Resource_3mgou")])
+aciton_requirements = Array[ExtResource("1_lsx8t")]([SubResource("Resource_tcnbo")])
+uuid = "update_to_rank8_official"
+name = "升八品官"
+description = "你去找了几个朋友运作了一下"
+metadata/_custom_type_script = "uid://gq6m2qeuguk2"
