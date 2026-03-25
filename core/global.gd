@@ -82,7 +82,7 @@ signal request_advance_time(days: int)
 # event 和 chat 不同，后者是即时的，前者是可能需要等待的
 
 signal focus_city_map(enable: bool)
-signal selected_actions_change(actions: Array[Action])
+signal selected_actions_change(actions: Array[SceneAction])
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -99,6 +99,7 @@ var ambitions: Dictionary
 var traits: Dictionary
 var properties: Dictionary
 var actions: Dictionary
+var decisions: Dictionary
 
 var event_popup_queue: PopupQueue
 var event_buffer: ManualBuffer
@@ -145,6 +146,7 @@ func init():
 	properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
 	actions = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres")) # 场景化行动库，包含可以用来筛选事件的标签
 	# TODO: 在这里加一个判定检测是否有action的uuid = none
+	decisions = Util.create_dict_from_registry(preload("res://data/tres_decisions_registry.tres"))
 
 	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
 	if cities: for c_name in cities:

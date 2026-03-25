@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_w1sul"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_5dldl"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_0gkp8"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="3_vofjl"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/scene_action.gd" id="3_vofjl"]
 
 [sub_resource type="Resource" id="Resource_xlgp1"]
 script = ExtResource("3_0gkp8")

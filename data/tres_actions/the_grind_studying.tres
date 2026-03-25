@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_an38p"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_gd5rl"]
 [ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="4_5m115"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_jpksd"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/scene_action.gd" id="5_jpksd"]
 
 [sub_resource type="Resource" id="Resource_3b0vw"]
 script = ExtResource("3_gd5rl")

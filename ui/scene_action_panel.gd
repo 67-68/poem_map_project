@@ -1,9 +1,9 @@
 class_name SceneActionPanel extends VBoxContainer
 # 这是更加小的那个直接的button，不是上层承载他们的scroll
 
-@export var action: Action
+@export var action: SceneAction
 
-func initialize(action_: Action = null): # 这里的info未来会用来做非对称信息
+func initialize(action_: SceneAction = null): # 这里的info未来会用来做非对称信息
 	#breakpoint
 	if action_:
 		action = action_

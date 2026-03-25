@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="3_qlww5"]
 
 [node name="NarrativeOverlay" type="Control"]
+z_index = 5
 custom_minimum_size = Vector2(900, 600)
 layout_mode = 3
 anchors_preset = 8

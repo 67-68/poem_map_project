@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://dsxwxclg3qui"]
 
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="1_k0ntv"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/scene_action.gd" id="1_k0ntv"]
 
 [resource]
 script = ExtResource("1_k0ntv")

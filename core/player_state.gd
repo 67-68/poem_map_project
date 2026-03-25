@@ -132,3 +132,11 @@ enum Traits {
 
 func get_trait_from_enum(trait_name: Traits):
 	return Traits.keys()[trait_name]
+
+func get_location():
+	var loc = Global.territories.get(current_location)
+	if not loc: Global.base_province.get(current_location)
+	if not loc:
+		Logging.err('do not find location %s' % current_location)
+		return null
+	return loc

@@ -24,6 +24,5 @@ var area_tags:
 			result.append(ENUMS.to_province_str(tag))
 		return result
 
-
 @export var action_results: Array[BaseOperator]
 @export var aciton_requirements: Array[BaseRequirements]

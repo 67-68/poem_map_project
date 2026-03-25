@@ -59,8 +59,8 @@ func get_total_weight_power2(actions: Dictionary) -> float:
     return total_weight
 
 # 伪代码演示，这就是你要的终极算法
-func pick_top_actions(action_pool: Dictionary, pick_count: int = 6) -> Array[Action]:
-    var selected_actions: Array[Action] = []
+func pick_top_actions(action_pool: Dictionary, pick_count: int = 6) -> Array[SceneAction]:
+    var selected_actions: Array[SceneAction] = []
     var available_pool = action_pool.duplicate() # 复制一份，避免污染原池
     
     while selected_actions.size() < pick_count and available_pool.size() > 0:

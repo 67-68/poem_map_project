@@ -2,7 +2,7 @@ extends Label
 
 var base_text = '当前可用行动:'
 
-func on_selected_actions_change(actions: Array[Action]):
+func on_selected_actions_change(actions: Array[SceneAction]):
 	text = base_text
 	for a in actions:
 		text += "\n- " + a.name
