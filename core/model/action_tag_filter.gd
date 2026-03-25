@@ -33,4 +33,5 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
     # 将字典的值强转回 Array[EventTicket]
     var result: Array[EventTicket] = []
     result.assign(new_events.values())
+    PlayerState.current_action_tags.clear()
     return result

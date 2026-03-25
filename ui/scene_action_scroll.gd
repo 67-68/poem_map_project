@@ -15,8 +15,9 @@ func refresh():
 	Global.selected_actions_change.emit(selected_actions)
 	for a in selected_actions:
 		# 添加到VBoxContainer的子类
-		a as Action
-		var card = SceneActionPanel.new(a)
+		#breakpoint
+		var card = preload("res://ui/scene_action_panel.tscn").instantiate()
+		card.initialize(a)
 		$V.add_child(card)
 
 

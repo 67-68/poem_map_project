@@ -8,21 +8,26 @@ func _ready():
     TimeService.on_xun_tick.connect(scan_events)
     Logging.info("[EventManager] Connected to TimeService.on_xun_tick")
 
-func create_ticket(event: BaseEvent) -> EventTicket:
+func _create_ticket(event: BaseEvent) -> EventTicket:
     var ticket = EventTicket.new()
     ticket.event_uuid = event.uuid
     ticket.weight = event.weight
     ticket.original_weight = event.weight
     return ticket
 
-func scan_events():
+func scan_events(nothing_multiplication_weight = 10.0):
+    """
+    扫描事件池，根据权重进行事件抽取
+    
+    参数:
+        nothing_multiplication_weight: 无事发生的权重倍数，默认为10
+    """
     Logging.info("[EventManager] Starting event scan")
     # 致命修复 1：每次重新算命前，必须清空上一次的签筒！
     current_event_pool.clear()
     Logging.info("[EventManager] Cleared previous event pool")
 
-
-    var initial_tickets = Global.random_events.values().map(func(e): return create_ticket(e))
+    var initial_tickets = Global.random_events.values().map(func(e): return _create_ticket(e))
     current_event_pool.assign(initial_tickets)
 
     for f in filters:
@@ -31,14 +36,15 @@ func scan_events():
     Logging.info("[EventManager] Event pool populated with " + str(current_event_pool.size()) + " eligible events")
     
     # 开始命运抽奖
-    var ev_name = roll_events()
+    var ev_name = roll_events(nothing_multiplication_weight)
     if ev_name: 
         Global.request_event_key.emit(ev_name)
         Logging.info("[EventManager] 命运降临: " + ev_name)
     else: 
-        Logging.info("[EventManager] 本旬无事发生，岁月静好")
+        Logging.info("[EventManager] 这次抽取事件，岁月静好")
+    
 
-func roll_events():
+func roll_events(nothing_multiplication_weight = 10.0):
     Logging.info("[EventManager] Starting event roll")
     if current_event_pool.is_empty():
         Logging.info("[EventManager] Event pool is empty, returning null")
@@ -54,7 +60,7 @@ func roll_events():
     # 🎲 工业级无事发生算法：
     # 设定一个空转权重。比如定死为 200，或者设为总权重的 50%。
     # 如果总权重是 100，空转是 50，那么触发真实事件的概率就是 66%
-    var null_weight = total_weight * 10
+    var null_weight = total_weight * nothing_multiplication_weight
     var final_total = total_weight + null_weight
     Logging.info("[EventManager] Null weight: " + str(null_weight) + ", final total weight: " + str(final_total))
 
