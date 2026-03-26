@@ -8,7 +8,7 @@ var prov_2_fac: Dictionary = {}
 func on_focus_city_map(enable: bool):
 	if enable:
 		Logging.info('change bg into city')
-		var map = IconLoader.get_icon_simpler(PlayerState.current_location)
+		var map = TextureResLoader.get_icon_simpler(PlayerState.current_location)
 		$background/TextureRect.texture = map
 		$background/TextureRect.visible = true
 		$background/PathMesh.visible = false

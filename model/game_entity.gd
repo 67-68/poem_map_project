@@ -31,6 +31,6 @@ func _init(data: Dictionary = {}):
     var raw_tags = data.get("tags", props.get("tags", []))
     tags.assign(raw_tags)
 
-    # 6. 加载图标 (IconLoader 最好是静态工具类)
+    # 6. 加载图标 (TextureResLoader 最好是静态工具类)
     var icon_path = data.get('icon',props.get(icon))
-    icon = IconLoader.get_icon(icon_path,uuid,name)
+    icon = TextureResLoader.get_icon(icon_path,uuid,name)

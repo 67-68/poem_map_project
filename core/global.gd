@@ -1,13 +1,20 @@
 extends Node
 
 const DATA_PATH = "res://data/"
+const SOUND_PATH := 'res://assets/sounds/'
+
 const DEFAULT_ICON_PATH = "res://assets/6768.png"
 const ICON_PATH = "res://assets/profile/"
+
+const CHARACTER_PATH := 'res://assets/character/'
+const DEFAULT_CHARACTER_PATH := 'res://assets/character/npc_scholar_poor.png'
+
+const BG_PATH := 'res://assets/backgrounds/'
+const DEFAULT_BG_PATH = "res://assets/backgrounds/bg_study_quiet.png"
+
 const PROVINCE_INDEX_MAP_PATH := "res://assets/maps/provinces.png"
 const PERMANENT_DATA_PATH := 'res://assets/maps/'
 const ADJACENCY_CACHE_PATH := 'res://assets/maps/map_connections_cache.json'
-const SOUND_PATH := 'res://assets/sounds/'
-const CHARACTER_PATH := 'res://assets/character/'
 
 const PATH_NOISE = 0 # 最高可能偏移10px
 

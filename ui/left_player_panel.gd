@@ -11,7 +11,7 @@ const ANIM_DURATION: float = 0.3
 
 func _ready() -> void:
     $V/NameLabel.text = PlayerState.player_name
-    $V/PlayerRect.texture = IconLoader.get_icon_simpler(PlayerState.player_name)
+    $V/PlayerRect.texture = TextureResLoader.get_icon_simpler(PlayerState.player_name)
     TimeService.on_month_tick.connect(func():
         update_dynamic_data()
     )

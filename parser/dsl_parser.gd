@@ -29,7 +29,7 @@ static func parse(row: Dictionary) -> RandomEvent:
     # 解析选项
     event.options = parse_options(row)
 
-    event
+    event.icon = parse_background(row.get('background', ""))
     
     # 解析权重（可选）
     var weight_str = row.get('weight')
@@ -37,6 +37,11 @@ static func parse(row: Dictionary) -> RandomEvent:
         event.weight = weight_str.to_float()
     
     return event
+
+static func parse_background(bg: String) -> Texture2D:
+    if bg.is_empty():
+        return null
+    return TextureResLoader.get_background(bg)
 
 # 解析触发条件，支持多个条件的AND组合
 static func parse_requirements(requirements_str: String) -> BaseRequirements:

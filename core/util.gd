@@ -241,7 +241,7 @@ static func apply_msg_type(msger: Messager, type: int): # int: MSG_TYPE
 			icon_path = 'msg_normal'
 	
 	var sprite = msger.get_node('MsgPathFollow/MsgSprite') as Sprite2D
-	sprite.texture = IconLoader.get_icon(icon_path)
+	sprite.texture = TextureResLoader.get_icon(icon_path)
 	msger.speed_px_per_sec = speed
 	msger.txt = txt
 			
