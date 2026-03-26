@@ -23,7 +23,8 @@ const FLOAT_TEXT_SCENE := preload('res://world/float_text.tscn')
 
 var index_image: Image
 
-var start_year := 618.0
+# var start_year := 618.0
+var start_year := 720.0
 var end_year := 907.0
 
 var time_span := end_year - start_year

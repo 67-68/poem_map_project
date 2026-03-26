@@ -9,13 +9,11 @@
 
 [sub_resource type="Resource" id="Resource_i3hgs"]
 script = ExtResource("3_gp0el")
-property = "money"
 value = 100
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_7q4jx"]
 script = ExtResource("3_gp0el")
-property = "official_prestige"
 value = 15
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
@@ -37,7 +35,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_7moyl")
-target_year = 720.0
+target_year = 720.1
 options = Array[ExtResource("1_hejai")]([SubResource("Resource_qiifw")])
 uuid = "event_test_start"
 name = "立志入仕"
