@@ -15,3 +15,7 @@ enum CRUD {
     REMOVE
 }
 
+enum EXIST {
+    HAS,
+    NOT_HAS
+}

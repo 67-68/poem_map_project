@@ -8,5 +8,7 @@ class_name EventOption extends Resource
 @export var double_check_reason := ''
 
 @export var choice_result: ChoiceResult
-@export var property_requirement: PropertyRequirement = null
+@export var property_requirement: BaseRequirements = null
+# 即使说着Prop requirement,但支持所有类型的requirement
+
 # 使用description作为button text
