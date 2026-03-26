@@ -1,8 +1,5 @@
 class_name BaseOperator extends Resource
 
-# @export var key := 'default-stat-name'
-# @export var value: Variant
-# @export var operator := '+'
 # 让子类自己定义，自己决定叫什么
 # 只要方法没问题就行
 
