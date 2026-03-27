@@ -79,8 +79,8 @@ static func parse_single_requirement(req_str: String) -> BaseRequirements:
         return null
 
 # 解析选项（A, B, C等）
-static func parse_options(row: Dictionary) -> Array[EventOption]:
-    var options: Array[EventOption] = []
+static func parse_options(row: Dictionary) -> Array[BaseOption]:
+    var options: Array[BaseOption] = []
     
     # 支持多个选项：A, B, C, D等
     var option_letters = ['A', 'B', 'C', 'D', 'E', 'F']
@@ -93,7 +93,7 @@ static func parse_options(row: Dictionary) -> Array[EventOption]:
     return options
 
 # 解析单个选项
-static func parse_option(row: Dictionary, letter: String) -> EventOption:
+static func parse_option(row: Dictionary, letter: String) -> BaseOption:
     var text_key = "Opt_%s_Text" % letter
     var req_key = "Opt_%s_Req" % letter
     var result_key = "Opt_%s_Result" % letter
@@ -108,7 +108,7 @@ static func parse_option(row: Dictionary, letter: String) -> EventOption:
     # 解析选项门槛
     var requirement_str = row.get(req_key)
     if requirement_str and not requirement_str.is_empty():
-        option.property_requirement = parse_option_requirement(requirement_str)
+        option.requirements = parse_option_requirement(requirement_str)
     
     # 解析选项结果
     var result_str = row.get(result_key)
@@ -144,6 +144,9 @@ static func validate_event(event: RandomEvent) -> bool:
     
     if event.options.is_empty():
         Logging.warn("Event validation warning: no options for event %s" % event.uuid)
+    
+    if event.icon == null:
+        Logging.warn("Event validation warning: no icon for event %s" % event.uuid)
     
     return true
 

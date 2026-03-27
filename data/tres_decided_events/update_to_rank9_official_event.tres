@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BaseEvent" load_steps=14 format=3 uid="uid://8f3fcqgy1url"]
 
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_vofcq"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_vofcq"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_di7ev"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_tte3h"]
 [ext_resource type="Script" uid="uid://dp5gqdkppjq17" path="res://core/model/trait_operator.gd" id="4_di7ev"]
@@ -36,16 +36,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_diwd6"]
 script = ExtResource("1_vofcq")
 description = "(内心：九品虽卑，但这可是右相亲自提拔！只要我能理清这长安的钱粮，肃清纲纪，这正是实现我致君尧舜之道的绝佳起点！)“固所愿也！杜某定当鞠躬尽瘁，不负右相大人恩典！”"
-double_check = true
-double_check_reason = "真的要这样吗？你可是拉帮结派了，"
 choice_result = SubResource("Resource_twd1q")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_vgn00"]
 script = ExtResource("1_vofcq")
 description = "(内心：这钱粮核算的差事看似位卑权重，实则错综复杂。我一介布衣毫无根基，只怕这账本里藏着轻易就能让人粉身碎骨的深渊。)“某才疏学浅，恐理不清这太府寺的千头万绪，若误了国家大事，万死难辞其咎……”"
-is_disabled = true
-disabled_reason = "拒绝右相大人的下场一般都不好，你已经走投无路了"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]

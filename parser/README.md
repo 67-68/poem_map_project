@@ -13,7 +13,7 @@
 | 触发条件 | requirements | 属性和特性条件 | ComplexRequirements |
 | 表现层 | Title | 事件标题 | UI显示 |
 | 表现层 | Desc | 事件描述 | UI显示 |
-| 选项A | Opt_A_Text | 选项文本 | EventOption.description |
+| 选项A | Opt_A_Text | 选项文本 | BaseOption.description |
 | 选项A门槛 | Opt_A_Req | 条件检查 | PropertyRequirement |
 | 选项A结果 | Opt_A_Result | 结果操作 | ChoiceResult.operators |
 | ... | ... | ... | ... |

@@ -15,7 +15,8 @@ static func test_parsing():
         "Opt_B_Text": "拂袖而去",
         "Opt_B_Req": "trait:has:proud",
         "Opt_B_Result": "prop:prestige:+50",
-        "weight": "15.5"
+        "weight": "15.5",
+        "background": "bg_rural_poor"
     }
     
     # 解析事件
@@ -27,6 +28,7 @@ static func test_parsing():
         print("描述: ", event.description)
         print("触发标签: ", event._target_tags)
         print("选项数量: ", event.options.size())
+        print("图片存在: ", event.icon != null)
         
         # 验证解析结果
         if DSLParser.validate_event(event):

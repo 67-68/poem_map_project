@@ -1,6 +1,6 @@
 class_name OptionBtns extends VBoxContainer
 
-func apply_btns(options: Array, callback: Callable): # list[EventOption]
+func apply_btns(options: Array, callback: Callable): # list[BaseOption]
 	for c in get_children():
 		c.queue_free()
 

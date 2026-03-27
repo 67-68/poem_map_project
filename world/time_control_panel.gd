@@ -34,13 +34,13 @@ func _ready():
 func on_speed_changed(spd: float):
 	if spd == -1:
 		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "烂柯(⏸)"
-	elif spd >= 30:
+	elif spd == 4:
 		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "驷马难追(4)"
-	elif spd >= 21:
+	elif spd == 3:
 		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "光阴似箭(3)"
-	elif spd >= 12:
+	elif spd == 2:
 		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "时不我待(2)"
-	elif spd >= 3:
+	elif spd == 1:
 		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "度日如年(1)"
 
 	
@@ -54,3 +54,6 @@ func _on_year_changed(current_float_year: float):
 	
 	# 2. 查表计算大唐年号 (氛围，沉浸感)
 	label_era.text = TimeService.get_era_text(current_year)
+
+func _process(_delta):
+	$Margin/Panel/Margin/VBox/RiMianXunDayCounter.modulate = Color.WHITE.lerp(Color.DARK_RED, float(TimeService.current_day) / 10.0)

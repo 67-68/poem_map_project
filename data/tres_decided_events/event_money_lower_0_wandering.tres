@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="BaseEvent" load_steps=16 format=3 uid="uid://dnkm0oghd0xha"]
+
+[ext_resource type="Texture2D" uid="uid://dfe7xt8882qa5" path="res://assets/character/npc_scholar_poor.png" id="1_bhmo8"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="2_bhmo8"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_s3utn"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="3_uxe4k"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_h6kcb"]
+[ext_resource type="Script" uid="uid://stqrpfx5803j" path="res://core/operators/random_operator.gd" id="5_ibi4k"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_ricyn"]
+
+[sub_resource type="Resource" id="Resource_njon5"]
+script = ExtResource("4_h6kcb")
+_property = 4
+value = -5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_v2tt6"]
+script = ExtResource("4_h6kcb")
+_property = 4
+value = 2
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_d438w"]
+script = ExtResource("5_ibi4k")
+random_value = 50
+success_operator = SubResource("Resource_v2tt6")
+fail_operator = SubResource("Resource_njon5")
+success_hint = "你找到了一户人家，你沉默的睡了一晚"
+failed_hint = "很不幸，你不得不风餐露宿。寻找人家的住处实际上让你更加疲劳了。"
+metadata/_custom_type_script = "uid://stqrpfx5803j"
+
+[sub_resource type="Resource" id="Resource_h2qi0"]
+script = ExtResource("6_ricyn")
+operators = Array[ExtResource("3_uxe4k")]([SubResource("Resource_d438w")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_pogwl"]
+script = ExtResource("2_bhmo8")
+description = "敲一户人家的门，或许可以睡一晚。之后？谁在乎呢"
+choice_result = SubResource("Resource_h2qi0")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_uuiah"]
+script = ExtResource("4_h6kcb")
+_property = 4
+value = -3
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_4r5fs"]
+script = ExtResource("6_ricyn")
+operators = Array[ExtResource("3_uxe4k")]([SubResource("Resource_uuiah")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_dqs6p"]
+script = ExtResource("2_bhmo8")
+description = "睡外面吧"
+choice_result = SubResource("Resource_4r5fs")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_s3utn")
+options = Array[ExtResource("2_bhmo8")]([SubResource("Resource_pogwl"), SubResource("Resource_dqs6p")])
+uuid = "event_money_lower_0_wandering"
+name = "退无可退"
+description = "实在没有地方住了..."
+icon = ExtResource("1_bhmo8")
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

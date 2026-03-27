@@ -23,11 +23,31 @@ func scan_events(nothing_multiplication_weight = 10.0):
         nothing_multiplication_weight: 无事发生的权重倍数，默认为10
     """
     Logging.info("[EventManager] Starting event scan")
+    
+    var initial_tickets = Global.random_events.values().map(func(e): return _create_ticket(e))
+    scan_events_from_tickets(initial_tickets, nothing_multiplication_weight)
+
+func scan_death_events():
+    """
+    在结局之后使用，扫描死亡/失败/结束事件
+    """
+    Logging.info("[EventManager] Starting death event scan")
+    var initial_tickets = Global.death_random_events.values().map(func(e): return _create_ticket(e))
+    scan_events_from_tickets(initial_tickets, 0.0)
+
+func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0):
+    """
+    从给定的事件票据池中扫描事件的核心逻辑
+    
+    参数:
+        initial_tickets: 初始事件票据数组
+        nothing_multiplication_weight: 无事发生的权重倍数，默认为10
+    """
+    Logging.info("[EventManager] Starting event scan from " + str(initial_tickets.size()) + " initial tickets")
     # 致命修复 1：每次重新算命前，必须清空上一次的签筒！
     current_event_pool.clear()
     Logging.info("[EventManager] Cleared previous event pool")
 
-    var initial_tickets = Global.random_events.values().map(func(e): return _create_ticket(e))
     current_event_pool.assign(initial_tickets)
 
     for f in filters:

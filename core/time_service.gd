@@ -4,7 +4,7 @@ signal future_event_registered(event_data: Dictionary)
 signal on_xun_tick()
 signal on_month_tick()
 
-@export var _speed: float = 3
+@export var _speed: float = 1
 
 @export var speed: float:
 	set(val):
@@ -100,6 +100,7 @@ var event_queue: Array[Dictionary] = []
 # 在 TimeService 顶部记录上一次运算时的总天数
 var _last_total_days: int = 0
 var current_xun := "上旬"
+var current_day := 1
 const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
 
 func _ready() -> void:
@@ -117,8 +118,9 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 
 	# 1. 浮点时间匀速流逝 (保留你原有的半即时逻辑)
-	Global.year += speed * delta * 0.01 # 之前太太太快了
+	Global.year += speed * delta / DAYS_PER_YEAR
 	Global.year_changed.emit(Global.year)
+	current_day = TimeService._last_total_days % 10
 	
 	# 2. 检查浮点数队列 (你原有的逻辑)
 	while not event_queue.is_empty() and Global.year >= event_queue[0].time:
@@ -130,16 +132,16 @@ func _process(delta: float) -> void:
 	_emit_time_events()
 	
 func speed_up():
-	if not speed + 9 > 30:
-		speed += 9
+	if speed != 4:
+		speed += 1
 	else:
-		Logging.warn('speed can not be higher than 30')
+		Logging.warn('speed can not be higher than 4')
 
 func slow_down():
-	if not (speed - 9) < 3:
-		speed -= 9
+	if not speed == 1:
+		speed -= 1
 	else:
-		Logging.warn('speed can not be lower than 5')
+		Logging.warn('speed can not be lower than 1')
 
 
 # --- 注册接口 ---
@@ -196,7 +198,6 @@ func _emit_time_events():
 				on_xun_tick.emit()
 				current_xun = get_xun_text(day_of_month)
 			if day_of_month == 29:
-				#breakpoint
 				on_month_tick.emit()
 				
 		# 💀 极度重要：完事后必须对齐标记！

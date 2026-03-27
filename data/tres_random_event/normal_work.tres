@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="RandomEvent" load_steps=18 format=3 uid="uid://dhffkhyfoboxc"]
 
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event_options.gd" id="1_ik7ss"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_ik7ss"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_qnyww"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_wv47f"]
 [ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="4_qv40g"]

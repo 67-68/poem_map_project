@@ -29,7 +29,8 @@ enum ACTION_TAGS {
     HEALTH_RISK,
     DESPIRATION,
     DRUNK,
-    SCANDAL
+    SCANDAL,
+    DEATH # 普通筛选的时候排除，专门用来做死亡事件
 }
 
 enum PROPS {
@@ -49,7 +50,8 @@ enum PROVINCES {
 
 enum TRAITS {
     ORDINARY_PEOPLE,
-    LV_NINE_OFFICIAL
+    LV_NINE_OFFICIAL,
+    WANDERING_WITHOUT_LIVING_PLACE
 }
 
 static func to_traits_str(item) -> String:

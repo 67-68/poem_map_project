@@ -25,7 +25,7 @@ class_name AmbitionData extends GameEntity
 @export var buff_description: String = ""
 # 未来可能需要做多个阶段的buff，不然玩家会在一个地方一直逗留
 @export var ambition_traits: Array[String] = [] # 这里存储字符串，实际上从总trait数据库查找内容
-@export var ambition_trais_comes_from := PlayerState.Traits
+@export var ambition_trais_comes_from := ENUMS.TRAITS
 
 # deadline
 @export var start_year: float = Global.start_year

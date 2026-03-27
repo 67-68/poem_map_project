@@ -23,7 +23,7 @@ func _ready():
 
 func change_stat(stat_name, data):
 	if stat_name is int:
-		var int_stat = translate_from_enum(stat_name)
+		var int_stat = ENUMS.to_prop_str(stat_name)
 		if not int_stat:
 			Logging.err('do not find stat %s' % stat_name)
 			return
@@ -60,7 +60,7 @@ func change_stat(stat_name, data):
 
 func get_stat_val(stat_name):
 	if stat_name is int:
-		var int_stat = translate_from_enum(stat_name)
+		var int_stat = ENUMS.to_prop_str(stat_name)
 		if not int_stat:
 			Logging.err('do not find stat %s' % stat_name)
 			return
@@ -74,7 +74,7 @@ func get_stat_val(stat_name):
 
 func add_trait(trait_name):
 	if trait_name is int:
-		var int_trait = translate_from_enum(trait_name)
+		var int_trait = ENUMS.to_traits_str(trait_name)
 		if not int_trait:
 			Logging.err('do not find trait %s' % trait_name)
 			return
@@ -84,7 +84,7 @@ func add_trait(trait_name):
 
 func has_trait(trait_name):
 	if trait_name is int:
-		var int_trait = translate_from_enum(trait_name)
+		var int_trait = ENUMS.to_traits_str(trait_name)
 		if not int_trait:
 			Logging.err('do not find trait %s' % trait_name)
 			return
@@ -93,7 +93,7 @@ func has_trait(trait_name):
 
 func remove_trait(trait_name):
 	if trait_name is int:
-		var int_trait = translate_from_enum(trait_name)
+		var int_trait = ENUMS.to_traits_str(trait_name)
 		if not int_trait:
 			Logging.err('do not find trait %s' % trait_name)
 			return
@@ -123,19 +123,7 @@ func clear_ambition():
 	ambition = null
 	ambition_changed.emit(null)
 
-static func translate_from_enum(stat):
-	Logging.debug('try to translate a enum property')
-	return ENUMS.to_prop_str(stat)
-
-enum Traits {
-	TRAIT_OBSSESIVE_SCHOLAR
-}
-
-func get_trait_from_enum(trait_name: Traits):
-	return Traits.keys()[trait_name]
-
 func get_location():
-#	breakpoint
 	var loc = Global.territories.get(current_location)
 	if loc == null: 
 		loc = Global.base_province.get(current_location)

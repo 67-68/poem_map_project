@@ -100,8 +100,11 @@ var factions: Dictionary
 var base_province: Dictionary
 var territories: Dictionary
 var msger_data: Dictionary
+
 var history_events: Dictionary
 var random_events: Dictionary
+var end_random_events: Dictionary
+
 var chat_bubble_data: Dictionary
 var focused_chat_data: Dictionary
 var ambitions: Dictionary
@@ -161,8 +164,11 @@ func init():
 	poet_data = Util.create_dict_from_registry(preload("res://data/tres_poet_data_registry.tres"))
 	poem_data = Util.create_dict_from_registry(preload("res://data/tres_poem_data_registry.tres"))
 	msger_data = Util.create_dict_from_registry(preload("res://data/tres_msger_data_registry.tres"))
+	
 	history_events = Util.create_dict_from_registry(preload("res://data/tres_history_event_registry.tres"))
 	random_events = Util.create_dict_from_registry(preload("res://data/tres_random_event_registry.tres"))
+	end_random_events = Util.create_dict_from_registry(preload("res://data/tres_end_random_events_registry.tres"))
+
 	# 似乎原本就没有chat bubble 文件
 	focused_chat_data = Util.create_dict_from_registry(preload("res://data/tres_focused_chats_registry.tres"))
 	ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
