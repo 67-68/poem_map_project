@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=11 format=3 uid="uid://bkwbwwig34idg"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_a3stu"]
+[ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="1_c161s"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_5ukkl"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="3_7y4kg"]
+[ext_resource type="Script" uid="uid://c4swvur288j0n" path="res://core/operators/system_operator.gd" id="4_41dhj"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_majbg"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_jywns"]
+
+[sub_resource type="Resource" id="Resource_5757m"]
+script = ExtResource("4_41dhj")
+command = "game over"
+metadata/_custom_type_script = "uid://c4swvur288j0n"
+
+[sub_resource type="Resource" id="Resource_e21j6"]
+script = ExtResource("5_majbg")
+operators = Array[ExtResource("3_7y4kg")]([SubResource("Resource_5757m")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_hdv0o"]
+script = ExtResource("6_jywns")
+description = "结束观测"
+choice_result = SubResource("Resource_e21j6")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_5ukkl")
+_action_tags = Array[int]([24, 21])
+options = Array[ExtResource("1_a3stu")]([SubResource("Resource_hdv0o")])
+uuid = "event_death_health_luanshi"
+name = "次好结局"
+description = "你死了，但你的痛苦也结束了。你不再需要为家人而担忧，你不再需要为百姓而痛苦：你死了，它带走了你的痛苦，忧患，才气和人格。"
+icon = ExtResource("1_c161s")
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

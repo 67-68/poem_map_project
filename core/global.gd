@@ -93,6 +93,8 @@ signal focus_city_map(enable: bool)
 signal selected_actions_change(actions: Array[SceneAction])
 signal avaialble_decision_change(decision)
 
+signal show_tombstone_screen()
+
 var life_path_points: Dictionary
 var poet_data: Dictionary
 var poem_data: Dictionary
@@ -150,6 +152,8 @@ func find_triggerable_item(uuid: String):
 		return properties[uuid]
 	if decisions.get(uuid):
 		return decisions[uuid]
+	if end_random_events.get(uuid):
+		return end_random_events[uuid]
 	
 func init():
 	index_image = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()

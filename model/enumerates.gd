@@ -30,7 +30,8 @@ enum ACTION_TAGS {
     DESPIRATION,
     DRUNK,
     SCANDAL,
-    DEATH # 普通筛选的时候排除，专门用来做死亡事件
+    DEATH, # 普通筛选的时候排除，专门用来做死亡事件
+    CHAOTIC_WORLD
 }
 
 enum PROPS {

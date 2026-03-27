@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="BaseEvent" load_steps=24 format=3 uid="uid://u8i1d00fkmyj"]
+[gd_resource type="Resource" script_class="BaseEvent" load_steps=26 format=3 uid="uid://u8i1d00fkmyj"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_dqmix"]
 [ext_resource type="Texture2D" uid="uid://q8jpjdabrdv5" path="res://assets/character/npc_merchant_hu.png" id="1_oh7o3"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_uuhpr"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_xxw6d"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="3_e6j6s"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_xxw6d"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_05e10"]
@@ -20,10 +21,18 @@ script = ExtResource("5_05e10")
 operators = Array[ExtResource("3_e6j6s")]([SubResource("Resource_talds")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
+[sub_resource type="Resource" id="Resource_05e10"]
+script = ExtResource("6_wpkuq")
+property = "talent"
+value = 10
+operator = 1
+metadata/_custom_type_script = "uid://pyecoqx4dr1i"
+
 [sub_resource type="Resource" id="Resource_6hj5e"]
 script = ExtResource("1_dqmix")
 description = "我还能作诗换取生存！"
 choice_result = SubResource("Resource_v8dfx")
+requirements = SubResource("Resource_05e10")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_mcu1v"]
@@ -37,10 +46,10 @@ script = ExtResource("5_05e10")
 operators = Array[ExtResource("3_e6j6s")]([SubResource("Resource_mcu1v")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
-[sub_resource type="Resource" id="Resource_qe0rw"]
+[sub_resource type="Resource" id="Resource_wpkuq"]
 script = ExtResource("6_wpkuq")
 property = "money"
-value = -10
+value = 5
 operator = 1
 metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 
@@ -48,7 +57,7 @@ metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 script = ExtResource("1_dqmix")
 description = "我还能借贷换取生存！"
 choice_result = SubResource("Resource_ja3he")
-property_requirement = SubResource("Resource_qe0rw")
+requirements = SubResource("Resource_wpkuq")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_rl708"]
@@ -98,7 +107,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_uuhpr")
-options = Array[ExtResource("1_dqmix")]([SubResource("Resource_6hj5e"), SubResource("Resource_5nl8i"), SubResource("Resource_rdfir")])
+options = Array[ExtResource("2_xxw6d")]([SubResource("Resource_6hj5e"), SubResource("Resource_5nl8i"), SubResource("Resource_rdfir")])
 uuid = "event_money_lower_0"
 name = "无钱生存"
 description = "老板上门收房租"

@@ -13,6 +13,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	Global.request_event.connect(apply_narrative)
+	Global.show_tombstone_screen.connect(show_tomb_stone)
 	Global.request_event_key.connect(func(key): 
 		var ev = Global.history_events.get(key)
 		if not ev:
@@ -22,6 +23,7 @@ func _ready() -> void:
 		if not ev:
 			breakpoint
 			Logging.err("Event not found: " + key)
+			Logging.err("检查你是不是又加了某个事件文件夹没写判断")
 			return
 		apply_narrative(ev)
 	)
@@ -29,6 +31,9 @@ func _ready() -> void:
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	hide() 
+
+func show_tomb_stone():
+	Logging.err('dont implement tombstone system yet!')
 
 func _play_open_animation():
 	if _tween: _tween.kill()

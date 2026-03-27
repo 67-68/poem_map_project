@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=10 format=3 uid="uid://dn140cjjyi7df"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=11 format=3 uid="uid://dn140cjjyi7df"]
 
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_m4fbd"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_xsul5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_7vxrh"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_hxtg7"]
@@ -31,9 +32,8 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_7vxrh")
-weight = 10.0
-options = Array[ExtResource("1_xsul5")]([SubResource("Resource_t1txc")])
 _action_tags = Array[int]([1])
+options = Array[ExtResource("1_m4fbd")]([SubResource("Resource_t1txc")])
 uuid = "normal_rest"
 name = "如何休息？"
 description = "你看着远处的xx沉思"

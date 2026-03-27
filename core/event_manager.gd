@@ -24,7 +24,9 @@ func scan_events(nothing_multiplication_weight = 10.0):
     """
     Logging.info("[EventManager] Starting event scan")
     
-    var initial_tickets = Global.random_events.values().map(func(e): return _create_ticket(e))
+    var initial_tickets: Array[EventTicket] = []
+    for e in Global.random_events.values():
+        initial_tickets.append(_create_ticket(e))
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight)
 
 func scan_death_events():
@@ -32,7 +34,10 @@ func scan_death_events():
     在结局之后使用，扫描死亡/失败/结束事件
     """
     Logging.info("[EventManager] Starting death event scan")
-    var initial_tickets = Global.death_random_events.values().map(func(e): return _create_ticket(e))
+    var initial_tickets: Array[EventTicket] = []
+    for e in Global.end_random_events.values():
+        initial_tickets.append(_create_ticket(e))
+    breakpoint
     scan_events_from_tickets(initial_tickets, 0.0)
 
 func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0):

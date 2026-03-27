@@ -6,8 +6,10 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
     
     for ticket in tickets:
         var e = Global.random_events.get(ticket.event_uuid)
+        if not e:
+            e = Global.end_random_events.get(ticket.event_uuid)
         if not e: 
-            Logging.error("[ActionTagFilter] Event not found: " + ticket.event_uuid)
+            Logging.err("[ActionTagFilter] Event not found: " + ticket.event_uuid)
             continue
 
         # 1. 天地法则：没有标签的全局事件，永远放行！

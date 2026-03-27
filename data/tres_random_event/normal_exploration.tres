@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=11 format=3 uid="uid://crim80yl53irc"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=12 format=3 uid="uid://crim80yl53irc"]
 
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_3wuvd"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_v72ye"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_3wuvd"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_vkcrm"]
@@ -32,8 +33,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_2shsd")
-weight = 10.0
-options = Array[ExtResource("1_v72ye")]([SubResource("Resource_1dxmg")])
+options = Array[ExtResource("1_3wuvd")]([SubResource("Resource_1dxmg")])
 uuid = "normal_exploration"
 name = "到处看看"
 description = "去哪里呢？"

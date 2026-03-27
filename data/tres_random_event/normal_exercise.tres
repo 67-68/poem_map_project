@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=9 format=3 uid="uid://voccevqmbsxs"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=10 format=3 uid="uid://voccevqmbsxs"]
 
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_6vh20"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_uaxax"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_6vh20"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_051ec"]
@@ -25,9 +26,8 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_vmfn4")
-weight = 10.0
-options = Array[ExtResource("1_uaxax")]([SubResource("Resource_v5iqc")])
 _action_tags = Array[int]([0])
+options = Array[ExtResource("1_6vh20")]([SubResource("Resource_v5iqc")])
 uuid = "normal_exercise"
 name = "普通锻炼"
 description = "你完成了一次健康的锻炼"

@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=18 format=3 uid="uid://dhffkhyfoboxc"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=17 format=3 uid="uid://dhffkhyfoboxc"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_ik7ss"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_qnyww"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_qnyww"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_wv47f"]
 [ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="4_qv40g"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_xjmfd"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_iunbo"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_apccs"]
 
 [sub_resource type="Resource" id="Resource_ds28b"]
@@ -52,26 +52,16 @@ script = ExtResource("5_xjmfd")
 operators = Array[ExtResource("2_qnyww")]([SubResource("Resource_4fu1b"), SubResource("Resource_sxn5o")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
-[sub_resource type="Resource" id="Resource_lcfh7"]
-script = ExtResource("6_iunbo")
-property = "talent"
-value = 35
-operator = 1
-failed_hint = "这里不应该使用硬性的talent阻拦用户，但是我目前还没做概率系统"
-metadata/_custom_type_script = "uid://pyecoqx4dr1i"
-
 [sub_resource type="Resource" id="Resource_o328g"]
 script = ExtResource("1_ik7ss")
 description = "指出一个人的提交可以如何修改"
 choice_result = SubResource("Resource_huf7o")
-property_requirement = SubResource("Resource_lcfh7")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("7_apccs")
-weight = 10.0
-options = Array[ExtResource("1_ik7ss")]([SubResource("Resource_ibe1d"), SubResource("Resource_o328g")])
 _action_tags = Array[int]([2])
+options = Array[ExtResource("1_qnyww")]([SubResource("Resource_ibe1d"), SubResource("Resource_o328g")])
 uuid = "normal_work"
 name = "抄写员工作"
 description = "你见到主人家似乎在举办什么宴会，你来抄写的就是各方豪杰的commit"
