@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="LegendaryPoem" load_steps=3 format=3 uid="uid://cqypm1di65juq"]
+
+[ext_resource type="Script" uid="uid://beufybmps3b02" path="res://core/model/imaginary_demand.gd" id="1_texto"]
+[ext_resource type="Script" uid="uid://do0ejr8cfmg" path="res://core/model/legendary_poem.gd" id="2_tx6h4"]
+
+[resource]
+script = ExtResource("2_tx6h4")
+metadata/_custom_type_script = "uid://do0ejr8cfmg"

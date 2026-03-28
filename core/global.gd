@@ -95,6 +95,7 @@ signal avaialble_decision_change(decision)
 
 signal show_tombstone_screen(death_reason: String)
 signal event_shown(event: BaseEvent)
+signal poem_start_clicked()
 
 var life_path_points: Dictionary
 var poet_data: Dictionary

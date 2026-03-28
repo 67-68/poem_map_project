@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2faq3olq16yp"]
+
+[ext_resource type="StyleBox" uid="uid://pl6r0k0twwmy" path="res://assets/poem_background_juanzhou.tres" id="1_12uv1"]
+[ext_resource type="Script" uid="uid://wxdbg3wr2lie" path="res://ui/poem_start.gd" id="2_iwoyj"]
+
+[node name="PoemStart" type="PanelContainer"]
+z_index = 10
+clip_contents = true
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.9
+anchor_right = 0.5
+anchor_bottom = 0.9
+offset_left = -103.0
+offset_top = -83.0
+offset_right = 92.0
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = ExtResource("1_12uv1")
+script = ExtResource("2_iwoyj")
+
+[node name="Button" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Button"]
+layout_mode = 0
+offset_top = 18.0
+offset_right = 161.0
+offset_bottom = 42.0
+mouse_filter = 1
+text = "开始创作"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

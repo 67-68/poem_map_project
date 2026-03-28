@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Tag" load_steps=2 format=3 uid="uid://d4h8wcny16efb"]
+
+[ext_resource type="Script" uid="uid://cscf1nt66xxmp" path="res://core/model/tags.gd" id="1_yxm7d"]
+
+[resource]
+script = ExtResource("1_yxm7d")
+uuid = "tag"
+name = "tag"
+description = "tag"
+metadata/_custom_type_script = "uid://cscf1nt66xxmp"
