@@ -94,6 +94,7 @@ signal selected_actions_change(actions: Array[SceneAction])
 signal avaialble_decision_change(decision)
 
 signal show_tombstone_screen(death_reason: String)
+signal event_shown(event: BaseEvent)
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -115,6 +116,11 @@ var properties: Dictionary
 var actions: Dictionary
 var decisions: Dictionary
 var decided_events: Dictionary
+var imaginaries: Dictionary = {}
+var tags: Dictionary
+
+var legendary_poems: Dictionary # 千古绝唱
+var normal_poem_events: Dictionary # 普通诗词事件
 
 var event_popup_queue: PopupQueue
 var event_buffer: ManualBuffer
@@ -183,6 +189,10 @@ func init():
 	decisions = Util.create_dict_from_registry(preload("res://data/tres_decisions_registry.tres"))
 	decided_events = Util.create_dict_from_registry(preload("res://data/tres_decided_events_registry.tres"))
 	# decision导致的evemt, 不会计入random event 和 history event 池
+	tags = Util.create_dict_from_registry(preload("res://data/tres_tags_registry.tres"))
+
+	legendary_poems = Util.create_dict_from_registry(preload("res://data/tres_legendary_poems_registry.tres"))
+	normal_poem_events = Util.create_dict_from_registry(preload("res://data/tres_normal_poem_events_registry.tres"))
 
 	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
 	if cities: for c_name in cities:

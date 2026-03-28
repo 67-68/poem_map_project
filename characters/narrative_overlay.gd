@@ -53,6 +53,7 @@ func _play_open_animation():
 	_tween.tween_property(main_card, "modulate:a", 1.0, 0.3)
 
 func apply_narrative(data: BaseEvent):
+	Global.event_shown.emit(data)
 	if data.epitaph_text:
 		TimeService.register_to_master_timeline(data.time, data.name, data.epitaph_text)
 	

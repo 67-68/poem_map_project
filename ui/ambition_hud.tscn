@@ -90,6 +90,7 @@ theme_override_colors/font_color = Color(0.34664103, 0.016675765, 3.6098065e-08,
 theme_override_fonts/font = ExtResource("3_hj3uc")
 theme_override_font_sizes/font_size = 10
 text = "如果完不成，你的一身才华将无用武之处"
+autowrap_mode = 3
 
 [node name="TextureRect" type="TextureRect" parent="Mar/HBox/VBox"]
 modulate = Color(1, 1, 1, 0.42745098)
@@ -105,4 +106,4 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_hj3uc")
 theme_override_font_sizes/font_size = 16
 text = "「状态」没有人认得你，你是彻底的无名之辈"
-autowrap_mode = 2
+autowrap_mode = 3

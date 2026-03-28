@@ -29,6 +29,34 @@ func scan_events(nothing_multiplication_weight = 10.0):
         initial_tickets.append(_create_ticket(e))
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight)
 
+func scan_poem_events(imaginaries: Array[ImaginaryTag]):
+    var imas = {}
+    for i in imaginaries:
+        imas[i.uuid] = i
+
+    for p in Global.legendary_poems.values():
+        var created = true
+        for d in p.imagenary_demand:
+            if not (d.imagenary_name in imas and imas[d.imagenary_name].current_level >= d.level):
+                created = false
+                break
+        if created:
+            return p
+        
+    var tags = []
+    for i in imaginaries:
+        for ima in i.basic_imaginaries:
+            tags.append(ima)
+    
+    # create tickets
+    var tickets: Array[EventTicket] = []
+    for t in tags:
+        for e in Global.random_events.values():
+            if e.uuid == t:
+                tickets.append(_create_ticket(e))
+    scan_events_from_tickets(tickets, 0.0,'da_you_shi')
+
+
 func scan_death_events():
     """
     在结局之后使用，扫描死亡/失败/结束事件
@@ -40,13 +68,14 @@ func scan_death_events():
     #breakpoint
     scan_events_from_tickets(initial_tickets, 0.0)
 
-func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0):
+func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0, fallback_event_uuid: String = ""):
     """
     从给定的事件票据池中扫描事件的核心逻辑
     
     参数:
         initial_tickets: 初始事件票据数组
         nothing_multiplication_weight: 无事发生的权重倍数，默认为10
+        fallback_event_uuid: 当无事发生时使用的事件UUID，可选
     """
     Logging.info("[EventManager] Starting event scan from " + str(initial_tickets.size()) + " initial tickets")
     # 致命修复 1：每次重新算命前，必须清空上一次的签筒！
@@ -61,7 +90,7 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
     Logging.info("[EventManager] Event pool populated with " + str(current_event_pool.size()) + " eligible events")
     
     # 开始命运抽奖
-    var ev_name = roll_events(nothing_multiplication_weight)
+    var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid)
     if ev_name: 
         Global.request_event_key.emit(ev_name)
         Logging.info("[EventManager] 命运降临: " + ev_name)
@@ -69,7 +98,7 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
         Logging.info("[EventManager] 这次抽取事件，岁月静好")
     
 
-func roll_events(nothing_multiplication_weight = 10.0):
+func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: String = ""):
     Logging.info("[EventManager] Starting event roll")
     if current_event_pool.is_empty():
         Logging.info("[EventManager] Event pool is empty, returning null")
@@ -101,5 +130,9 @@ func roll_events(nothing_multiplication_weight = 10.0):
             return ticket.event_uuid
             
     # 如果 roll 出来的数字落在了 null_weight 的区间里，说明抽中了“无事发生”
-    Logging.info("[EventManager] Roll fell in null weight range, no event triggered")
-    return null
+    if fallback_event_uuid != "":
+        Logging.info("[EventManager] Roll fell in null weight range, using fallback event: " + fallback_event_uuid)
+        return fallback_event_uuid
+    else:
+        Logging.info("[EventManager] Roll fell in null weight range, no event triggered")
+        return null

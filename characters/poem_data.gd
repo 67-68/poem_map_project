@@ -16,6 +16,8 @@ enum Poem_Grade { # 拾遗，雅颂，瑰意，绝唱
 @export var background: Poem_BG
 @export var emotion: float
 @export var example: String
+@export var owner_uuids: Array = [] # 默认值很重要
+@export var tags: Array = []
 
 # 这些数据会被作为一个独立的路径点加入path，如果当前没有路径点包含这个诗词title的tag
 # 创建的路径点tag存储诗词

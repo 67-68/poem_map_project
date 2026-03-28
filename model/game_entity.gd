@@ -4,8 +4,6 @@ class_name GameEntity extends Resource
 @export var name: String
 @export var description: String
 @export var icon: Texture2D
-@export var owner_uuids: Array = [] # 默认值很重要
-@export var tags: Array = []
 
 # 默认参数 = {} 防止无参实例化时崩溃
 func _init(data: Dictionary = {}):
@@ -23,13 +21,6 @@ func _init(data: Dictionary = {}):
     
     # 4. 解析描述 (支持 description 或 text)
     description = data.get("description", data.get("text", props.get("text", "")))
-    
-    # 5. 解析数组 (使用 assign 确保类型安全，且处理 null)
-    var raw_owners = data.get("owner_uuids", props.get("owner_uuids", []))
-    owner_uuids.assign(raw_owners)
-    
-    var raw_tags = data.get("tags", props.get("tags", []))
-    tags.assign(raw_tags)
 
     # 6. 加载图标 (TextureResLoader 最好是静态工具类)
     var icon_path = data.get('icon',props.get(icon))
