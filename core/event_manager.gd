@@ -37,7 +37,7 @@ func scan_death_events():
     var initial_tickets: Array[EventTicket] = []
     for e in Global.end_random_events.values():
         initial_tickets.append(_create_ticket(e))
-    breakpoint
+    #breakpoint
     scan_events_from_tickets(initial_tickets, 0.0)
 
 func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0):

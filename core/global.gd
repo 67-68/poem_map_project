@@ -93,7 +93,7 @@ signal focus_city_map(enable: bool)
 signal selected_actions_change(actions: Array[SceneAction])
 signal avaialble_decision_change(decision)
 
-signal show_tombstone_screen()
+signal show_tombstone_screen(death_reason: String)
 
 var life_path_points: Dictionary
 var poet_data: Dictionary

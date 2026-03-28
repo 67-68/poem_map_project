@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=36 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -26,6 +26,7 @@
 [ext_resource type="Script" uid="uid://cga3u2teu5n7e" path="res://ui/player_button.gd" id="21_xuqvo"]
 [ext_resource type="PackedScene" uid="uid://bagmf63e3hmbi" path="res://ui/left_player_panel.tscn" id="22_0odxb"]
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
+[ext_resource type="PackedScene" uid="uid://ci5u7rtqn6kan" path="res://ui/tomb_stone_screen.tscn" id="24_seu75"]
 [ext_resource type="Script" uid="uid://cgm5optu1xcgx" path="res://debuggers_and_linters/linter_debugger_container.gd" id="27_xuqvo"]
 [ext_resource type="Script" uid="uid://dgg4voth1dy5y" path="res://debuggers_and_linters/event_action_tag_linter.gd" id="28_qsp4k"]
 [ext_resource type="Script" uid="uid://dwkrc1dytscs2" path="res://core/csv_cloud_loader.gd" id="29_qsp4k"]
@@ -179,6 +180,8 @@ script = ExtResource("21_xuqvo")
 [node name="LeftPlayerPanel" parent="UI" instance=ExtResource("22_0odxb")]
 
 [node name="RightInfoPanel" parent="UI" instance=ExtResource("23_lswn8")]
+
+[node name="TombStoneScreen" parent="UI" instance=ExtResource("24_seu75")]
 
 [node name="CoreSystems" type="Node" parent="."]
 

@@ -9,6 +9,7 @@ extends Node
 	 	# 省份uuid
 @export var ambition: AmbitionData
 @export var current_action_tags: Array[String] = []
+@export var created_poems: Array[String]
 
 signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)

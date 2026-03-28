@@ -10,6 +10,7 @@
 [sub_resource type="Resource" id="Resource_v8cu4"]
 script = ExtResource("3_6ob4f")
 command = "game_over"
+death_hint = "在乱世不知道被谁所杀。这个世道？你自己？"
 metadata/_custom_type_script = "uid://c4swvur288j0n"
 
 [sub_resource type="Resource" id="Resource_y4b73"]

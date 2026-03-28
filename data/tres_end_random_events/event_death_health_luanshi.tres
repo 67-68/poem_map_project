@@ -11,6 +11,7 @@
 [sub_resource type="Resource" id="Resource_5757m"]
 script = ExtResource("4_41dhj")
 command = "game over"
+death_hint = "死于身体支撑不住"
 metadata/_custom_type_script = "uid://c4swvur288j0n"
 
 [sub_resource type="Resource" id="Resource_e21j6"]

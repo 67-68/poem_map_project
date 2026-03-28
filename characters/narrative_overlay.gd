@@ -13,7 +13,6 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	Global.request_event.connect(apply_narrative)
-	Global.show_tombstone_screen.connect(show_tomb_stone)
 	Global.request_event_key.connect(func(key): 
 		var ev = Global.history_events.get(key)
 		if not ev:

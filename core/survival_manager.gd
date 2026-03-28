@@ -21,7 +21,7 @@ func death_judgement():
     """
     这里放死亡/结束游戏的条件
     """
-    breakpoint
+    #breakpoint
     if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) < 0:
         PlayerState.current_action_tags.append('death')
         EventManager.scan_death_events()
