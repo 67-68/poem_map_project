@@ -3,6 +3,8 @@ extends Node
 signal future_event_registered(event_data: Dictionary)
 signal on_xun_tick()
 signal on_month_tick()
+signal on_season_tick()
+signal on_year_tick()
 
 @export var _speed: float = 1
 
@@ -99,6 +101,9 @@ var event_queue: Array[Dictionary] = []
 
 # 在 TimeService 顶部记录上一次运算时的总天数
 var _last_total_days: int = 0
+# 不是今年的所有天！！！是过去时间的所有天
+
+var current_day_of_year :int = 0 
 var current_xun := "上旬"
 var current_day := 1
 const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
@@ -121,7 +126,8 @@ func _process(delta: float) -> void:
 	Global.year += speed * delta / DAYS_PER_YEAR
 	Global.year_changed.emit(Global.year)
 	current_day = TimeService._last_total_days % 10
-	
+	current_day_of_year = TimeService._last_total_days % DAYS_PER_YEAR
+
 	# 2. 检查浮点数队列 (你原有的逻辑)
 	while not event_queue.is_empty() and Global.year >= event_queue[0].time:
 		var event = event_queue.pop_front()
@@ -208,6 +214,14 @@ func _emit_time_events():
 				current_xun = get_xun_text(day_of_month)
 			if day_of_month == 29:
 				on_month_tick.emit()
+				
+			# 季节 tick：每90天（3个月）触发一次
+			if simulation_day % 89 == 0:
+				on_season_tick.emit()
+				
+			# 年份 tick：每360天触发一次
+			if simulation_day % 359 == 0:
+				on_year_tick.emit()
 				
 		# 💀 极度重要：完事后必须对齐标记！
 		_last_total_days = current_total_days 
