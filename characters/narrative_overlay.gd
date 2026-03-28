@@ -31,9 +31,6 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	hide() 
 
-func show_tomb_stone():
-	Logging.err('dont implement tombstone system yet!')
-
 func _play_open_animation():
 	if _tween: _tween.kill()
 	# 必须显式声明 Tween 的 Pause 模式，以防被 TimeService 杀掉
@@ -56,6 +53,9 @@ func _play_open_animation():
 	_tween.tween_property(main_card, "modulate:a", 1.0, 0.3)
 
 func apply_narrative(data: BaseEvent):
+	if data.epitaph_text:
+		TimeService.register_to_master_timeline(data.time, data.name, data.epitaph_text)
+	
 	# 1. 彻底暂停世界 (包括 BGM 变奏等逻辑可以在这里触发)
 	# 在暂停之前切换
 	#Global.request_change_bg_modulate.emit(data.color)

@@ -145,8 +145,8 @@ func slow_down():
 
 
 # --- 注册接口 ---
-func register(trigger_time: float, function: Callable, save_to_history: bool = true, entity: GameEntity = null):
-	var event_data = {"time": trigger_time, "callback": function, "entity": entity}
+func register(trigger_time: float, function: Callable, name: String, epitaph_text: String = '', save_to_history: bool = true, entity: GameEntity = null):
+	var event_data = {"time": trigger_time, "callback": function, "entity": entity, "name": name, "epitaph_text": epitaph_text}
 	
 	# 动态事件（比如信使移动）只需进当前队列；剧本事件需要进史书
 	if save_to_history:
@@ -160,6 +160,15 @@ func register(trigger_time: float, function: Callable, save_to_history: bool = t
 		event_queue.sort_custom(func(a, b): return a.time < b.time)
 		future_event_registered.emit(event_data)
 
+func register_to_master_timeline(time: float, name: String, epitaph_text: String = ''):
+	"""
+	注册一个仅保存事件和名称的历史事件
+	"""
+	Logging.info("Registering event to master timeline: %s at year %s" % [name, time])
+	var placeholder = func(): Logging.err("function for registed event data only for master timeline is not done yet!")
+	var event_data = {"time": time, "name": name, "epitaph_text": epitaph_text, "function": placeholder, "entity": null}
+	master_timeline.append(event_data)
+	master_timeline.sort_custom(func(a, b): return a.time < b.time)
 
 # --- 修改 1：修正 jump_to ---
 func jump_to(new_year: float):
@@ -297,3 +306,14 @@ func get_xun_text(day: int) -> String:
 		return "下旬"
 	else:
 		return "上旬"
+
+func get_master_timeline() -> Array:
+	"""
+	排除时间 < 开始时间
+	时间 > 当前时间的事件
+	"""
+	var result = []
+	for event in master_timeline:
+		if event.time >= Global.start_year and event.time <= Global.year:
+			result.append(event)
+	return result

@@ -1,4 +1,5 @@
- 
+- 为死亡事件添加了两个测试事件，确保带tag的死亡事件可以正确被选择
+
 # [0.8.0]
 ## Added
 - eu4-like popup event system

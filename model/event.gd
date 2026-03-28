@@ -3,3 +3,4 @@ class_name BaseEvent extends GameEntity
 @export var example: String
 @export var requirement: BaseRequirements
 @export var audio: AudioStream = null
+@export var epitaph_text: String = ''

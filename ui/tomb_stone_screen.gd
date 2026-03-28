@@ -27,11 +27,15 @@ func render_entropy_death(cause_text: String) -> void:
 	]
 	
 	# 【中部：平庸的历史长河】
-	bbcode += "[color=#cccccc]观测记录：[/color]\n"
-	for evt in TimeService.master_timeline:
-		bbcode += "[color=#999999] - %s 你干了 xxx [/color]\n" % evt.time
-		
-	bbcode += "\n[center][color=#555555]...然而这些世俗的挣扎，终将被时间彻底风化...[/color][/center]\n\n"
+	#breakpoint
+	if not TimeService.get_master_timeline():
+		bbcode += "\n[center][color=#911414]可怜的人类，如虫子一般被风吹散，不曾留下任何挣扎的痕迹[/color][/center]\n\n"
+	else:
+		bbcode += "[color=#cccccc]观测记录：[/color]\n"
+		for evt in TimeService.get_master_timeline():
+			bbcode += "[color=#999999] - %s 你干了 %s: %s [/color]\n" % [evt.time, evt.name,evt.epitaph_text]
+			
+		bbcode += "\n[center][color=#555555]...然而这些世俗的挣扎，终将被时间彻底风化...[/color][/center]\n\n"
 	
 	# 【尾部：唯一抵抗热寂的锚点——诗词】 暗金色，超大字号，占据绝对视觉中心！
 	if PlayerState.created_poems.is_empty():
