@@ -72,6 +72,7 @@ theme_override_font_sizes/font_size = 10
 text = "天宝六年秋止"
 
 [node name="VagueText" type="Label" parent="Mar/HBox/VBox"]
+custom_minimum_size = Vector2(238, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.17254902, 0.15686275, 0.14509805, 1)
@@ -82,6 +83,7 @@ text = "你想齐家治国平天下，而这需要以做官为前提。
 autowrap_mode = 3
 
 [node name="DeadlineResult" type="Label" parent="Mar/HBox/VBox"]
+custom_minimum_size = Vector2(238, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.34664103, 0.016675765, 3.6098065e-08, 1)
@@ -97,6 +99,7 @@ texture = ExtResource("4_u8j85")
 expand_mode = 1
 
 [node name="DynamicStateLabel" type="Label" parent="Mar/HBox/VBox"]
+custom_minimum_size = Vector2(238, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_hj3uc")

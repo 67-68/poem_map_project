@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=39 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -28,6 +28,8 @@
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
 [ext_resource type="Script" uid="uid://dv28khs0ehggj" path="res://ui/time_breath_ui.gd" id="24_htxhm"]
 [ext_resource type="PackedScene" uid="uid://ci5u7rtqn6kan" path="res://ui/tomb_stone_screen.tscn" id="24_seu75"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="25_4k2k6"]
+[ext_resource type="Script" uid="uid://bucayho8g0lwb" path="res://ui/ambition_widget.gd" id="26_0rl1p"]
 [ext_resource type="Script" uid="uid://cgm5optu1xcgx" path="res://debuggers_and_linters/linter_debugger_container.gd" id="27_xuqvo"]
 [ext_resource type="Script" uid="uid://dgg4voth1dy5y" path="res://debuggers_and_linters/event_action_tag_linter.gd" id="28_qsp4k"]
 [ext_resource type="Script" uid="uid://dwkrc1dytscs2" path="res://core/csv_cloud_loader.gd" id="29_qsp4k"]
@@ -187,14 +189,23 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0.7766542, 0.60110056, 1)
+theme_override_fonts/font = ExtResource("25_4k2k6")
 text = "test time change"
 
 [node name="AmbitionWidget" type="VBoxContainer" parent="UI"]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = -1
+anchor_left = 0.64
+anchor_right = 0.64
+offset_left = -160.0
+offset_right = 160.0
+offset_bottom = 212.0
+grow_horizontal = 2
+script = ExtResource("26_0rl1p")
 
 [node name="ToggleBtn" type="Button" parent="UI/AmbitionWidget"]
 layout_mode = 2
+text = "当前没有野心"
 
 [node name="AmbitionHUD" parent="UI/AmbitionWidget" instance=ExtResource("15_074og")]
 layout_mode = 2
