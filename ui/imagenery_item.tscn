@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://co4eess1lguhe"]
+
+[ext_resource type="Script" uid="uid://ceg626ii2cuc3" path="res://ui/imagenery_item.gd" id="1_3hkci"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3hkci"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="ImageneryItem" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 50)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3hkci")
+script = ExtResource("1_3hkci")
+
+[node name="M" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Rich" type="RichTextLabel" parent="M"]
+layout_mode = 2
+bbcode_enabled = true
+text = "test imaginary"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
