@@ -18,6 +18,6 @@ static func get_imaginary_from_tag(tag: String) -> ImaginaryTag:
     return ima
 
 static func normalize_3part_depreciated_tag(tag: String):
-    if tag.split(':').size() == 3:
+    if tag.split(':').size() <= 3:
         tag += ":general"
     return tag

@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 		await get_tree().create_timer(0.5).timeout
 
 func _on_text_submitted(new_text: String) -> void:
-	breakpoint
+	#breakpoint
 	if new_text.split('\n').size() > 1:
 		var texts = new_text.split('\n')
 		for t in texts:
@@ -25,7 +25,7 @@ func _on_text_submitted(new_text: String) -> void:
 func parse(new_text):
 	var parts = new_text.split(' ')
 	Logging.info('try to execute %s' % new_text)
-	if not parts: return
+	if not parts[1]: return
 	match parts[1]:
 		'send_signal':
 			var sig = Global.has_signal(parts[2])

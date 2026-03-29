@@ -119,8 +119,13 @@ func _on_button_pressed() -> void:
 		Logging.info('PoemCrafter: executing operation')
 		op.operate()
 	
-	breakpoint
+	#breakpoint
 	Logging.info('PoemCrafter: scanning for poem events')
+
+	for i in imas:
+		for tag in i.basic_imaginaries:
+			PlayerState.current_action_tags.append(tag)
+
 	EventManager.scan_poem_events(imas)
 	Logging.info('PoemCrafter: updating l3_thresholds for %d imaginaries' % imas.size())
 	for i in imas:

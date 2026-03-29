@@ -25,6 +25,7 @@ func start_linter() -> void:
 	# 仿造Global, 加载所有action和event
 	var actions: Dictionary = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres"))
 	var random_events: Dictionary = Util.create_dict_from_registry(preload("res://data/tres_random_event_registry.tres"))
+	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_normal_poem_events_registry.tres")))
 	var base_province = Util.create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
 	base_province.merge(Util.create_dict(DataLoader.load_csv_model(Territory,'territories')))
 	

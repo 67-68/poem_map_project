@@ -9,6 +9,8 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
         if not e:
             e = Global.end_random_events.get(ticket.event_uuid)
         if not e: 
+            e = Global.find_triggerable_item(ticket.event_uuid)
+        if not e:             
             Logging.err("[ActionTagFilter] Event not found: " + ticket.event_uuid)
             continue
 
@@ -19,6 +21,7 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
 
         # 2. 专属拦截：玩家现在闲着（无tag），那带有专属标签的事件直接略过！
         if not current_tags or current_tags.is_empty():
+            Logging.warn("检查自己是不是又忘记给玩家加current tags了！！！又筛选掉了")
             continue
 
         # 3. 对暗号与权重狂欢

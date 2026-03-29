@@ -16,7 +16,7 @@ var target_tags: Array[String] = []:
         var final_res: Array[String] = []
         for tag in result_tags:
             final_res.append(TagManager.normalize_3part_depreciated_tag(tag))
-        return result_tags
+        return final_res
     set(tags):
         _target_tags = tags
 

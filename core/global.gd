@@ -140,6 +140,8 @@ func find_triggerable_item(uuid: String):
 	"""
 	如果uuid和另一个数据模型的uuid重复可能导致问题
 	"""
+	if normal_poem_events.get(uuid):
+		return normal_poem_events[uuid]
 	if poem_data.get(uuid):
 		return poem_data[uuid]
 	if msger_data.get(uuid):

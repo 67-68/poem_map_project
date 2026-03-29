@@ -30,12 +30,14 @@ func scan_events(nothing_multiplication_weight = 10.0):
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight)
 
 func scan_poem_events(imaginaries: Array[ImaginaryTag]):
-	breakpoint
+    #breakpoint
     var imas = {}
     for i in imaginaries:
         imas[i.uuid] = i
 
     for p in Global.legendary_poems.values():
+        if not Global.legendary_poems: 
+            Logging.err('the legendary poems is somehow contain nothing! this will cause error!!')
         var created = true
         for d in p.imagenary_demand:
             if not (d.imagenary_name in imas and imas[d.imagenary_name].current_level >= d.level):
@@ -52,9 +54,11 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
     # create tickets
     var tickets: Array[EventTicket] = []
     for t in tags:
-        for e in Global.random_events.values():
-            if e.uuid == t:
-                tickets.append(_create_ticket(e))
+        for e in Global.normal_poem_events.values():
+            for target_tag in e.target_tags:
+                if target_tag == t:
+                    tickets.append(_create_ticket(e))
+    #breakpoint
     scan_events_from_tickets(tickets, 0.0,'da_you_shi')
 
 
