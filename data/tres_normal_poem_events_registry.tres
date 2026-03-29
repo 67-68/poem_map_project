@@ -5,5 +5,10 @@
 [resource]
 script = ExtResource("1_2mbo7")
 resources = {
-"tag": "res://data/tres_normal_poem_events/new_resource.tres"
+"normal_gan_ye": "res://data/tres_normal_poem_events/normal_gan_ye.tres",
+"normal_huai_gu": "res://data/tres_normal_poem_events/normal_huai_gu.tres",
+"normal_ji_lv": "res://data/tres_normal_poem_events/normal_ji_lv.tres",
+"normal_shan_shui": "res://data/tres_normal_poem_events/normal_shan_shui.tres",
+"normal_ying_zhi": "res://data/tres_normal_poem_events/normal_ying_zhi.tres",
+"normal_zeng_da": "res://data/tres_normal_poem_events/normal_zeng_da.tres"
 }

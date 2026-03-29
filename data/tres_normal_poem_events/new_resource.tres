@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=3 format=3 uid="uid://dvr6wrbtgnwtw"]
-
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_x62cd"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_jck5x"]
-
-[resource]
-script = ExtResource("2_jck5x")
-uuid = "tag"
-metadata/_custom_type_script = "uid://qhuu117ngmbk"

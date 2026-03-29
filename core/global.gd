@@ -96,6 +96,8 @@ signal avaialble_decision_change(decision)
 signal show_tombstone_screen(death_reason: String)
 signal event_shown(event: BaseEvent)
 signal poem_start_clicked()
+signal start_picker(data: Array, ui_constructor)
+signal end_picking(entity: GameEntity)
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -183,7 +185,7 @@ func init():
 	# 似乎原本就没有chat bubble 文件
 	focused_chat_data = Util.create_dict_from_registry(preload("res://data/tres_focused_chats_registry.tres"))
 	ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
-	traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
+	var temp_traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
 	properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
 	actions = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres")) # 场景化行动库，包含可以用来筛选事件的标签
 	# TODO: 在这里加一个判定检测是否有action的uuid = none
@@ -204,6 +206,10 @@ func init():
 
 	load_manager_and_buffers()
 	
+	for t in temp_traits.values():
+		t.uuid = t.uuid.replace('__',':')
+		traits[t.uuid] = t
+
 	# 添加到事件触发
 	for d in history_events.values(): TimeService.register(d.target_year,event_buffer.pop_item,d.name,d.epitaph_text,true,d)
 	for d in poem_data.values(): TimeService.register(d.year,poem_buffer.pop_item,d.name,'',true,d)

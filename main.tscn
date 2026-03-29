@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=44 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -35,6 +35,7 @@
 [ext_resource type="Script" uid="uid://dgg4voth1dy5y" path="res://debuggers_and_linters/event_action_tag_linter.gd" id="28_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://dmsdo48sr46y6" path="res://ui/poem_creation_page.tscn" id="29_facbu"]
 [ext_resource type="Script" uid="uid://dwkrc1dytscs2" path="res://core/csv_cloud_loader.gd" id="29_qsp4k"]
+[ext_resource type="PackedScene" uid="uid://c4cm25a8sdyj" path="res://ui/picker.tscn" id="30_b1qrp"]
 [ext_resource type="Script" uid="uid://dinmvxb5j0il4" path="res://core/survival_manager.gd" id="30_kq58d"]
 [ext_resource type="Script" uid="uid://7b8yb1lxhk3s" path="res://core/imagenary_manager.gd" id="35_0rl1p"]
 
@@ -231,6 +232,9 @@ offset_bottom = 36.799988
 theme_override_styles/panel = SubResource("StyleBoxTexture_facbu")
 
 [node name="PoemCreation" parent="UI" instance=ExtResource("29_facbu")]
+visible = false
+
+[node name="Picker" parent="UI" instance=ExtResource("30_b1qrp")]
 visible = false
 
 [node name="CoreSystems" type="Node" parent="."]

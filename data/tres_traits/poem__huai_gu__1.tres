@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Trait" load_steps=2 format=3 uid="uid://qb14bsu7phu6"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_x7fih"]
+
+[resource]
+script = ExtResource("1_x7fih")
+uuid = "poem__ying_zhi__1"
+name = "普通应制诗"
+description = "普通应制诗"
+metadata/_custom_type_script = "uid://pom0464obfp2"

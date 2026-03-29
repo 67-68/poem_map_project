@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=16 format=3 uid="uid://dknnmqlumtjy"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=17 format=3 uid="uid://dknnmqlumtjy"]
 
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/complex_event_option.gd" id="1_5gkiy"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_5gkiy"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_k3mjo"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_pdgys"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_4rna0"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_8qvds"]
@@ -11,13 +12,10 @@
 [sub_resource type="Resource" id="Resource_6xqpf"]
 script = ExtResource("1_5gkiy")
 description = "磕头跪拜"
-is_disabled = true
-disabled_reason = "你是杜甫！"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_v5fcg"]
 script = ExtResource("3_4rna0")
-property = "money"
 value = -50
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
@@ -29,8 +27,6 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_r6gxe"]
 script = ExtResource("1_5gkiy")
 description = "大骂离开"
-double_check = true
-double_check_reason = "他可不是M...准备好承受报复了吗？"
 choice_result = SubResource("Resource_i561v")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
@@ -60,7 +56,7 @@ metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 [resource]
 script = ExtResource("7_clq8d")
 weight = 500.0
-options = Array[ExtResource("1_5gkiy")]([SubResource("Resource_6xqpf"), SubResource("Resource_r6gxe"), SubResource("Resource_la22m")])
+options = Array[ExtResource("1_k3mjo")]([SubResource("Resource_6xqpf"), SubResource("Resource_r6gxe"), SubResource("Resource_la22m")])
 requirement = SubResource("Resource_7tw52")
 uuid = "test_event_pool_3_meet_the_wealth"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

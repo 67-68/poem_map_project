@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4cm25a8sdyj"]
+
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_xs0ad"]
+[ext_resource type="Script" uid="uid://ougnbudsh1g7" path="res://ui/picker.gd" id="2_du7tm"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_du7tm"]
+texture = ExtResource("1_xs0ad")
+
+[node name="Picker" type="PanelContainer"]
+z_index = 7
+custom_minimum_size = Vector2(500, 400)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_du7tm")
+script = ExtResource("2_du7tm")
+
+[node name="HFlow" type="HFlowContainer" parent="."]
+layout_mode = 2

@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=14 format=3 uid="uid://ccj47txkjjj48"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_4s8a1"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_0uwyk"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_ney1l"]
+[ext_resource type="Script" uid="uid://dp5gqdkppjq17" path="res://core/model/trait_operator.gd" id="3_ngl5f"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_3dhhn"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_nv5hy"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="6_7svjx"]
+
+[sub_resource type="Resource" id="Resource_6u34a"]
+script = ExtResource("3_ngl5f")
+_trait_key = 7
+metadata/_custom_type_script = "uid://dp5gqdkppjq17"
+
+[sub_resource type="Resource" id="Resource_5uvjw"]
+script = ExtResource("4_3dhhn")
+operators = Array[ExtResource("2_ney1l")]([SubResource("Resource_6u34a")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_rwcts"]
+script = ExtResource("5_nv5hy")
+description = "欣然收下"
+choice_result = SubResource("Resource_5uvjw")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_n2ibq"]
+script = ExtResource("6_7svjx")
+_property = 2
+value = 1
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_fiyha"]
+script = ExtResource("4_3dhhn")
+operators = Array[ExtResource("2_ney1l")]([SubResource("Resource_n2ibq")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_ri125"]
+script = ExtResource("5_nv5hy")
+description = "老夫是一个正直的人"
+choice_result = SubResource("Resource_fiyha")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_0uwyk")
+_action_tags = Array[int]([29, 38, 27])
+options = Array[ExtResource("1_4s8a1")]([SubResource("Resource_rwcts"), SubResource("Resource_ri125")])
+uuid = "normal_ji_lv"
+name = "创作出了一首羁旅诗"
+description = "床前明月光，疑是地上霜"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

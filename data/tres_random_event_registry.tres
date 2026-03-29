@@ -5,13 +5,13 @@
 [resource]
 script = ExtResource("1_ms5j0")
 resources = {
-"normal_exercise": "res://data/tres_random_event/normal_exercise.tres",
-"normal_exploration": "res://data/tres_random_event/normal_exploration.tres",
-"normal_rest": "res://data/tres_random_event/normal_rest.tres",
-"normal_social": "res://data/tres_random_event/normal_social.tres",
-"normal_study": "res://data/tres_random_event/normal_study.tres",
-"normal_work": "res://data/tres_random_event/normal_work.tres",
+"normal_deng_gao": "res://data/tres_random_event/normal_deng_gao.tres",
+"normal_du_zhuo": "res://data/tres_random_event/normal_du_zhuo.tres",
 "test_event_pool_1_get_money_on_street": "res://data/tres_random_event/test_event_pool_1_get_money_on_street.tres",
 "test_event_pool_2_meet_the_poor": "res://data/tres_random_event/test_event_pool_2_meet_the_poor.tres",
-"test_event_pool_3_meet_the_wealth": "res://data/tres_random_event/test_event_pool_3_meet_the_wealth.tres"
+"test_event_pool_3_meet_the_wealth": "res://data/tres_random_event/test_event_pool_3_meet_the_wealth.tres",
+"uid://b7vj1i68spvtf": "res://data/tres_random_event/normal_fang_shi.tres",
+"uid://ccwblvh0y0u6s": "res://data/tres_random_event/normal_song_bie.tres",
+"uid://cpds1csa421ap": "res://data/tres_random_event/normal_feng_zhao.tres",
+"uid://qgvoi65yg4dn": "res://data/tres_random_event/normal_bai_ye.tres"
 }

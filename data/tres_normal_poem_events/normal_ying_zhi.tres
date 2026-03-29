@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=14 format=3 uid="uid://br8v80yowwfqt"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_4vdp6"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_ee5vi"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_ufgmp"]
+[ext_resource type="Script" uid="uid://dp5gqdkppjq17" path="res://core/model/trait_operator.gd" id="3_lads4"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_u1cx7"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_bygl7"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="6_ui3k8"]
+
+[sub_resource type="Resource" id="Resource_6u34a"]
+script = ExtResource("3_lads4")
+_trait_key = 4
+metadata/_custom_type_script = "uid://dp5gqdkppjq17"
+
+[sub_resource type="Resource" id="Resource_5uvjw"]
+script = ExtResource("4_u1cx7")
+operators = Array[ExtResource("2_ee5vi")]([SubResource("Resource_6u34a")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_rwcts"]
+script = ExtResource("5_bygl7")
+description = "欣然收下"
+choice_result = SubResource("Resource_5uvjw")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_n2ibq"]
+script = ExtResource("6_ui3k8")
+_property = 2
+value = 1
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_fiyha"]
+script = ExtResource("4_u1cx7")
+operators = Array[ExtResource("2_ee5vi")]([SubResource("Resource_n2ibq")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_ri125"]
+script = ExtResource("5_bygl7")
+description = "老夫是一个正直的人"
+choice_result = SubResource("Resource_fiyha")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_ufgmp")
+_action_tags = Array[int]([32, 35, 37])
+options = Array[ExtResource("1_4vdp6")]([SubResource("Resource_rwcts"), SubResource("Resource_ri125")])
+uuid = "normal_ying_zhi"
+name = "一首应制诗"
+description = "反正就是夸皇帝多好多好，你都不想看这种文学性上的垃圾"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

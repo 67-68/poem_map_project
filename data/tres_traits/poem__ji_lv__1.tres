@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Trait" load_steps=2 format=3 uid="uid://bg5wjkv2idf45"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_nw7t5"]
+
+[resource]
+script = ExtResource("1_nw7t5")
+uuid = "poem__ji_lv__1"
+name = "普通羁旅诗词"
+description = "普通羁旅诗词"
+metadata/_custom_type_script = "uid://pom0464obfp2"

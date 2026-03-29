@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="SceneAction" load_steps=7 format=3 uid="uid://bce4c5u531ej5"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_g2qb6"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_h4afu"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_2ibpm"]
+[ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_e57c2"]
+[ext_resource type="Texture2D" uid="uid://cylr2i541fi7f" path="res://assets/character/npc_official_high.png" id="4_rbxy6"]
+
+[sub_resource type="Resource" id="Resource_6ult8"]
+script = ExtResource("3_2ibpm")
+_property = 3
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[resource]
+script = ExtResource("3_e57c2")
+_action_tags = Array[int]([32, 35, 41, 42, 40, 48])
+action_results = Array[ExtResource("2_h4afu")]([SubResource("Resource_6ult8")])
+uuid = "feng_zhao"
+name = "奉召"
+description = "写诗"
+icon = ExtResource("4_rbxy6")
+metadata/_custom_type_script = "uid://crewiibqgbs2f"

@@ -103,6 +103,8 @@ func remove_trait(trait_name):
 	if traits.has(trait_name):
 		traits.erase(trait_name)
 
+func get_traits():
+	return traits
 
 func set_ambition(ambition_key):
 	var ambition_ = Global.ambitions.get(ambition_key)
