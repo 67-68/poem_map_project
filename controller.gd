@@ -1,4 +1,4 @@
-extends LineEdit
+extends TextEdit
 
 
 # Called when the node enters the scene tree for the first time.
@@ -14,10 +14,18 @@ func _process(delta: float) -> void:
 		await get_tree().create_timer(0.5).timeout
 
 func _on_text_submitted(new_text: String) -> void:
-	#breakpoint
+	breakpoint
+	if new_text.split('\n').size() > 1:
+		var texts = new_text.split('\n')
+		for t in texts:
+			parse(t.strip_edges())
+		return
+	parse(new_text)
+
+func parse(new_text):
 	var parts = new_text.split(' ')
 	Logging.info('try to execute %s' % new_text)
-	
+	if not parts: return
 	match parts[1]:
 		'send_signal':
 			var sig = Global.has_signal(parts[2])
@@ -45,4 +53,10 @@ func _on_text_submitted(new_text: String) -> void:
 	elif parts.size() == 2:
 		if Global.has_method(parts[0]):
 			Global.callv(parts[0],[parts[1]])
-	
+
+func _on_button_pressed() -> void:
+	#breakpoint
+	var current_text = text
+	if not current_text.is_empty():
+		_on_text_submitted(current_text)
+		text = ""

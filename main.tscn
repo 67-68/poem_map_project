@@ -113,14 +113,6 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
 
 [node name="PoetDescriptor" parent="UI" instance=ExtResource("5_lquwl")]
 
-[node name="Controller" type="LineEdit" parent="UI"]
-z_index = 100
-offset_left = -2.0
-offset_top = -1.0
-offset_right = 342.0
-offset_bottom = 231.0
-script = ExtResource("6_7mycd")
-
 [node name="PoemPopup" parent="UI" instance=ExtResource("9_4c57u")]
 offset_left = -302.15143
 offset_top = 185.14502
@@ -239,6 +231,36 @@ visible = false
 [node name="Picker" parent="UI" instance=ExtResource("30_b1qrp")]
 visible = false
 
+[node name="Control" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Controller" type="TextEdit" parent="UI/Control"]
+z_index = 100
+layout_mode = 0
+offset_left = -2.0
+offset_top = -1.0
+offset_right = 342.0
+offset_bottom = 231.0
+script = ExtResource("6_7mycd")
+
+[node name="Button" type="Button" parent="UI/Control"]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 323.0
+offset_top = 141.0
+offset_right = 403.0
+offset_bottom = 191.0
+grow_horizontal = 2
+grow_vertical = 0
+
 [node name="CoreSystems" type="Node" parent="."]
 
 [node name="TimeService" parent="CoreSystems" instance=ExtResource("9_kek77")]
@@ -268,6 +290,7 @@ metadata/_custom_type_script = "uid://dinmvxb5j0il4"
 script = ExtResource("35_0rl1p")
 
 [connection signal="value_changed" from="UI/HSlider" to="UI/HSlider" method="_on_value_changed"]
-[connection signal="text_submitted" from="UI/Controller" to="UI/Controller" method="_on_text_submitted"]
 [connection signal="pressed" from="UI/LeftButtonContainer/V/PlayerButton" to="UI/LeftButtonContainer/V/PlayerButton" method="_on_pressed"]
+[connection signal="gui_input" from="UI/Control/Controller" to="UI/Control/Controller" method="_on_gui_input"]
+[connection signal="pressed" from="UI/Control/Button" to="UI/Control/Controller" method="_on_button_pressed"]
 [connection signal="request_completed" from="CoreSystems/GoogleSheetFetcher/HTTPRequest" to="CoreSystems/GoogleSheetFetcher" method="_on_http_request_request_completed"]

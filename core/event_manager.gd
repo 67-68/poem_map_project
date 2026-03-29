@@ -30,6 +30,7 @@ func scan_events(nothing_multiplication_weight = 10.0):
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight)
 
 func scan_poem_events(imaginaries: Array[ImaginaryTag]):
+	breakpoint
     var imas = {}
     for i in imaginaries:
         imas[i.uuid] = i
