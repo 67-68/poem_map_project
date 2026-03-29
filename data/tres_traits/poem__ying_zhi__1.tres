@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_wtxuj")
-uuid = "poem__huai_gu__1"
+uuid = "poem:ying_zhi:1"
 name = "普通怀古诗词"
 description = "普通怀古诗词"
 metadata/_custom_type_script = "uid://pom0464obfp2"

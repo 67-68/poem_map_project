@@ -1,8 +1,61 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=3 format=3 uid="uid://ccwblvh0y0u6s"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=15 format=3 uid="uid://ccwblvh0y0u6s"]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_yahdo"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="1_ykdg5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_aiieo"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_w68kt"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_fttgn"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_ev3d3"]
+[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="5_5c1cx"]
+
+[sub_resource type="Resource" id="Resource_fcovv"]
+script = ExtResource("2_w68kt")
+_property = 1
+value = 3
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_2hvti"]
+script = ExtResource("3_fttgn")
+operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_fcovv")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_u65qp"]
+script = ExtResource("4_ev3d3")
+description = "挥手道别"
+choice_result = SubResource("Resource_2hvti")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_70mlv"]
+script = ExtResource("2_w68kt")
+_property = 1
+value = 10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_1vr1y"]
+script = ExtResource("3_fttgn")
+operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_70mlv")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_r8ihn"]
+script = ExtResource("5_5c1cx")
+_accepted_poem_types = Array[int]([2])
+accpeted_result = SubResource("Resource_1vr1y")
+metadata/_custom_type_script = "uid://w6wvp8tdisfu"
+
+[sub_resource type="Resource" id="Resource_8a8ig"]
+script = ExtResource("3_fttgn")
+operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_r8ihn")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_3qgs1"]
+script = ExtResource("4_ev3d3")
+description = "给出一首诗"
+choice_result = SubResource("Resource_8a8ig")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_aiieo")
+_action_tags = Array[int]([29, 30, 31, 38, 39, 45])
+options = Array[Object]([SubResource("Resource_u65qp"), SubResource("Resource_3qgs1")])
+uuid = "normal_song_bie"
+name = "送别友人"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

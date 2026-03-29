@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=27 format=3 uid="uid://dfg5cgkldh7jy"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=30 format=3 uid="uid://dfg5cgkldh7jy"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_x85t5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_2bf1o"]
@@ -82,8 +82,27 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 script = ExtResource("4_k3lgy")
 metadata/_custom_type_script = "uid://khw2s6fgrkem"
 
+[sub_resource type="Resource" id="Resource_v7lsg"]
+script = ExtResource("3_xle86")
+_property = 2
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_k3lgy"]
+script = ExtResource("3_xle86")
+_property = 5
+value = 15
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_va02j"]
+script = ExtResource("5_va02j")
+operators = Array[ExtResource("2_v7lsg")]([SubResource("Resource_v7lsg"), SubResource("Resource_k3lgy")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
 [sub_resource type="Resource" id="Resource_xle86"]
 script = ExtResource("9_v7lsg")
+_accepted_poem_types = Array[int]([4, 5, 3])
+accpeted_result = SubResource("Resource_va02j")
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
 [sub_resource type="Resource" id="Resource_no8rx"]
