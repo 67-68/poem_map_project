@@ -67,6 +67,10 @@ enum ACTION_TAGS {
     ACTION_FANG_SHI,
     ACTION_FENG_ZHAO,
     ACTION_DU_ZHUO
+
+    # ABOVE ARE DEPRECIATED
+    # NOW use 4-part tag format: {category}_{subcategory}_{type}_{specific}
+    # Example: "action_travel_parting_withLiBai"
 }
 
 enum PROPS {

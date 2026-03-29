@@ -5,7 +5,7 @@ class_name ConditionalOperator extends BaseOperator
 @export var condition_fail_result: Array[BaseOperator]
 
 func operate():
-    if condition.is_met():
+    if condition.compare(PlayerState):
         for c in condition_success_result:
             c.operate()
     else:

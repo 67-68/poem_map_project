@@ -5,11 +5,10 @@
 [resource]
 script = ExtResource("1_slend")
 resources = {
-"poem__deng_gao__1": "res://data/tres_traits/poem__deng_gao__1.tres",
-"poem__gan_ye__1": "res://data/tres_traits/poem__gan_ye__1.tres",
-"poem__huai_gu__1": "res://data/tres_traits/poem__ying_zhi__1.tres",
-"poem__ji_lv__1": "res://data/tres_traits/poem__ji_lv__1.tres",
-"poem__shan_shui__1": "res://data/tres_traits/poem__shan_shui__1.tres",
-"poem__ying_zhi__1": "res://data/tres_traits/poem__huai_gu__1.tres",
+"poem:deng_gao:1": "res://data/tres_traits/poem__deng_gao__1.tres",
+"poem:gan_ye:1": "res://data/tres_traits/poem__gan_ye__1.tres",
+"poem:ji_lv:1": "res://data/tres_traits/poem__ji_lv__1.tres",
+"poem:shan_shui:1": "res://data/tres_traits/poem__shan_shui__1.tres",
+"poem:ying_zhi:1": "res://data/tres_traits/poem__huai_gu__1.tres",
 "trait_obsessive_scholar": "res://data/tres_traits/trait_obsessive_scholar.tres"
 }

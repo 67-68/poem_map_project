@@ -37,7 +37,7 @@
 [ext_resource type="Script" uid="uid://dwkrc1dytscs2" path="res://core/csv_cloud_loader.gd" id="29_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://c4cm25a8sdyj" path="res://ui/picker.tscn" id="30_b1qrp"]
 [ext_resource type="Script" uid="uid://dinmvxb5j0il4" path="res://core/survival_manager.gd" id="30_kq58d"]
-[ext_resource type="Script" uid="uid://7b8yb1lxhk3s" path="res://core/imagenary_manager.gd" id="35_0rl1p"]
+[ext_resource type="Script" uid="uid://7b8yb1lxhk3s" path="res://core/imaginary_manager.gd" id="35_0rl1p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -114,6 +114,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
 [node name="PoetDescriptor" parent="UI" instance=ExtResource("5_lquwl")]
 
 [node name="Controller" type="LineEdit" parent="UI"]
+z_index = 100
 offset_left = -2.0
 offset_top = -1.0
 offset_right = 342.0
@@ -225,6 +226,7 @@ text = "当前没有野心"
 layout_mode = 2
 
 [node name="PoemStart" parent="UI" instance=ExtResource("28_ok6jj")]
+z_index = 4
 offset_left = -72.0
 offset_top = -23.200012
 offset_right = 67.0

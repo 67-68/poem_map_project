@@ -29,7 +29,7 @@ func operate():
         data.append(trait_)
 
     Logging.debug('PoemTypeChooseOperator: Emitting start_picker with %d traits' % data.size())
-    Global.start_picker.emit(data)
+    Global.start_picker.emit(data,null)
     var trait_picked = await Global.end_picking
     Logging.debug('PoemTypeChooseOperator: Trait picked - %s' % trait_picked.uuid)
     

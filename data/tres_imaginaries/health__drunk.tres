@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ImaginaryTag" load_steps=2 format=3 uid="uid://bpyl30di32gfa"]
+
+[ext_resource type="Script" uid="uid://dk86isxs4lamx" path="res://core/model/imaginary.gd" id="1_sfnyb"]
+
+[resource]
+script = ExtResource("1_sfnyb")
+uuid = "health:drunk"
+name = "喝酒意象"
+metadata/_custom_type_script = "uid://dk86isxs4lamx"

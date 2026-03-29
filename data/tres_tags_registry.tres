@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_31lwu")
 resources = {
-"tag": "res://data/tres_tags/new_resource.tres"
+"court:prosper": "res://data/tres_tags/court__prosper.tres"
 }

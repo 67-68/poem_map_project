@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ImaginaryTag" load_steps=2 format=3 uid="uid://5vhkt3kpls8d"]
+
+[ext_resource type="Script" uid="uid://dk86isxs4lamx" path="res://core/model/imaginary.gd" id="1_aajh0"]
+
+[resource]
+script = ExtResource("1_aajh0")
+uuid = "court:prosper"
+name = "市场繁荣意象"
+description = "繁荣"
+metadata/_custom_type_script = "uid://dk86isxs4lamx"

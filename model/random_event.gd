@@ -12,6 +12,10 @@ var target_tags: Array[String] = []:
             result_tags.append(ENUMS.to_area_str(tag))
         for tag in _target_tags:
             result_tags.append(tag)
+        
+        var final_res: Array[String] = []
+        for tag in result_tags:
+            final_res.append(TagManager.normalize_3part_depreciated_tag(tag))
         return result_tags
     set(tags):
         _target_tags = tags

@@ -98,6 +98,8 @@ signal event_shown(event: BaseEvent)
 signal poem_start_clicked()
 signal start_picker(data: Array, ui_constructor)
 signal end_picking(entity: GameEntity)
+signal imaginary_changed()
+signal request_add_imaginary(tag: String)
 
 var life_path_points: Dictionary
 var poet_data: Dictionary
@@ -119,7 +121,8 @@ var properties: Dictionary
 var actions: Dictionary
 var decisions: Dictionary
 var decided_events: Dictionary
-var imaginaries: Dictionary = {}
+var imaginaries: Dictionary # 实际上就是tag的次领域
+# 没有专门的player state存imas, 直接检索和修改全局imagenaries数据库
 var tags: Dictionary
 
 var legendary_poems: Dictionary # 千古绝唱
@@ -194,6 +197,7 @@ func init():
 	# decision导致的evemt, 不会计入random event 和 history event 池
 	tags = Util.create_dict_from_registry(preload("res://data/tres_tags_registry.tres"))
 
+	imaginaries = Util.create_dict_from_registry(preload("res://data/tres_imaginaries_registry.tres"))
 	legendary_poems = Util.create_dict_from_registry(preload("res://data/tres_legendary_poems_registry.tres"))
 	normal_poem_events = Util.create_dict_from_registry(preload("res://data/tres_normal_poem_events_registry.tres"))
 

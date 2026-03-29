@@ -1,6 +1,6 @@
 class_name PoemSlot extends PanelContainer
 
-@export var item_occupying: ImagenaryItem = null
+@export var item_occupying = null
 signal slot_clicked(slot: PoemSlot)
 
 func apply_style(style: StyleBoxFlat):
@@ -14,5 +14,7 @@ func _ready():
     gui_input.connect(_on_gui_input)
 
 func _on_gui_input(event: InputEvent):
+    #breakpoint
     if event is InputEventMouseButton and event.pressed:
+        breakpoint
         slot_clicked.emit(self)
