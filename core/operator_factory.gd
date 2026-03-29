@@ -7,6 +7,6 @@ static func create_event_operator(event_key) -> EventOperator:
 
 static func create_property_operator(property_name: String, value: float) -> PropertyOperator:
     var operator := PropertyOperator.new()
-    operator.property_name = property_name
+    operator.property = property_name
     operator.value = value
     return operator

@@ -3,6 +3,7 @@ class_name ImagenaryItem extends PanelContainer
 
 @onready var rich: RichTextLabel = $M/Rich
 var current_style: StyleBoxFlat
+@export var imaginary_tag: ImaginaryTag
 
 signal imagenery_item_clicked(item: ImagenaryItem)
 
@@ -20,6 +21,7 @@ func _init():
 
 func init(ima: ImaginaryTag):
 	setup_visuals(ima.current_level, ima.name)
+	imaginary_tag = ima
 
 # 极其务实的动态样式生成器
 func setup_visuals(level: int, text_content: String):

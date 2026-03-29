@@ -10,7 +10,7 @@ static func calculate(imas: Array[ImaginaryTag]) -> Array[BaseOperator]:
     """
     calculate poem cost
     """
-    var operators := []
+    var operators:Array[BaseOperator] = []
     # 最简单的形态：仅扣除健康
     var level_factor = 0.5 if PoemCraftingCalculator.cost_is_high(imas) else 0.2
     var base_health = 0

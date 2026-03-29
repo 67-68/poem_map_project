@@ -7,6 +7,8 @@ var property := '':
             return str_props
         Logging.warn("PropertyOperator: string property not set, use enum property")
         return ENUMS.to_prop_str(_property)
+    set(value):
+        str_props = value
 
 var str_props: String = ""
 @export var value: int = 0

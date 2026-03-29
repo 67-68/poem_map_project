@@ -1,6 +1,10 @@
 extends HBoxContainer
 
-@export var current_level = 0 # 0-2
+@export var current_level := -1: # -1 -> 2
+	set(value):
+		#breakpoint
+		Logging.debug('current level is ' + str(value))
+		current_level = value
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -26,6 +30,7 @@ func setup_imagenaries():
 			var item = preload("res://ui/imaginery_item.tscn").instantiate()
 			item.init(ima)
 			item.imagenery_item_clicked.connect(on_item_clicked)
+
 			$ImagenaryScroll/HFlowContainer.add_child(item)
 	Logging.info('PoemCrafter: setup complete, created %d items' % active_imaginaries)
 
@@ -33,50 +38,56 @@ func refresh_image():
 	Logging.info('PoemCrafter: refreshing image for current_level %d' % current_level)
 	var tex: Texture2D = null
 	match current_level:
-		0:
+		-1:
 			tex = TextureResLoader.get_background("bg_poem_creation_1")
-			Logging.info('PoemCrafter: loading background 1 for level 0')
-		1:
+			Logging.info('PoemCrafter: loading background 1 for level -1, 0 complete')
+		0:
 			tex = TextureResLoader.get_background("bg_poem_creation_2")
-			Logging.info('PoemCrafter: loading background 2 for level 1')
-		2:
+			Logging.info('PoemCrafter: loading background 2 for level 0, 1 complete')
+		1:
 			tex = TextureResLoader.get_background("bg_poem_creation_3")
-			Logging.info('PoemCrafter: loading background 3 for level 2')
+			Logging.info('PoemCrafter: loading background 3 for level 1, 2 complete')
+		2:
+			tex = TextureResLoader.get_background("bg_study_quiet")
+			Logging.info('PoemCrafter: loading background 3 for level 2, 3 complete')
 		_:
 			Logging.warn('PoemCrafter: unknown current_level %d' % current_level)
 	
 	$InputImagPanel/MarginContainer/TextureRect.texture = tex
 
-func on_item_clicked(item: ImagenaryItem):
+func on_item_clicked(imaginary_item: ImagenaryItem):
 	Logging.info('PoemCrafter: item clicked at current_level %d' % current_level)
 	if current_level == 2:
 		Logging.info('stop user from adding the fourth imagenary tag') 
 		return
 	
-	Logging.info('PoemCrafter: adding item to slot, hiding item and incrementing level')
-	item.hide()
+	Logging.info('PoemCrafter: adding imaginary_item to slot, hiding imaginary_item and incrementing level')
+	imaginary_item.hide()
 	current_level += 1
-	var items = $InputImagPanel/H.get_children()
-	Logging.info('PoemCrafter: checking %d available slots' % items.size())
-	for i in items:
+	var slots = $InputImagPanel/H.get_children()
+	Logging.info('PoemCrafter: checking %d available slots' % slots.size())
+	for i in slots:
 		var slot = i as PoemSlot
 		if not slot.item_occupying:
-			Logging.info('PoemCrafter: found empty slot, applying item')
-			slot.apply_style(item.current_style)
-			slot.apply_text(item.get_text())
-			slot.item_occupying = i
+			Logging.info('PoemCrafter: found empty slot, applying imaginary_item')
+			slot.apply_style(imaginary_item.current_style)
+			slot.apply_text(imaginary_item.get_text())
+			slot.item_occupying = imaginary_item
 			break
 	
 	if current_level == 2:
 		Logging.info('PoemCrafter: reached max level, calculating poem')
-		var imas = []
-		for c in $ImagenaryScroll/HFlowContainer.get_children():
-			imas.append(c.item_occupying)
+		var imas: Array[ImaginaryTag] = []
+		for c in $InputImagPanel/H.get_children():
+			imas.append(c.item_occupying.imaginary_tag)
 		Logging.info('PoemCrafter: calculating poem from %d imaginaries' % imas.size())
-		var text = PoemCraftingCalculator.translate(PoemCraftingCalculator.calculate(imas))
+		var cost = PoemCraftingCalculator.calculate(imas)
+		var text = PoemCraftingCalculator.translate(cost)
 		$InputImagPanel/Button.tooltip_text = text
 		$InputImagPanel/RichTextLabel.text = text
 		Logging.info('PoemCrafter: poem text set: %s' % text)
+	
+	refresh_image()
 
 func on_slot_clicked(slot: PoemSlot):
 	Logging.info('PoemCrafter: slot clicked, current_level: %d' % current_level)
@@ -85,7 +96,7 @@ func on_slot_clicked(slot: PoemSlot):
 		Logging.warn('PoemCrafter: slot clicked but no item occupying')
 		return
 	Logging.info('PoemCrafter: removing item from slot and decrementing level')
-	breakpoint
+	#breakpoint
 	item.show()
 	slot.item_occupying = null
 	current_level -= 1
@@ -94,11 +105,13 @@ func on_slot_clicked(slot: PoemSlot):
 	slot.apply_text('没有灵感...')
 	Logging.info('PoemCrafter: slot cleared, new current_level: %d' % current_level)
 
+	refresh_image()
+
 func _on_button_pressed() -> void:
 	Logging.info('PoemCrafter: button pressed, crafting poem')
-	var imas = []
-	for c in $ImagenaryScroll/HFlowContainer.get_children():
-		imas.append(c.item_occupying)
+	var imas: Array[ImaginaryTag] = []
+	for c in $InputImagPanel/H.get_children():
+		imas.append(c.item_occupying.imaginary_tag)
 	Logging.info('PoemCrafter: collecting %d imaginaries for crafting' % imas.size())
 	var ops = PoemCraftingCalculator.calculate(imas)
 	Logging.info('PoemCrafter: calculated %d operations' % ops.size())

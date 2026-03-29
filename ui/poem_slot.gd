@@ -16,5 +16,5 @@ func _ready():
 func _on_gui_input(event: InputEvent):
     #breakpoint
     if event is InputEventMouseButton and event.pressed:
-        breakpoint
+        #breakpoint
         slot_clicked.emit(self)
