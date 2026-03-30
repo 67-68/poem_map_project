@@ -5,6 +5,7 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
     var current_tags = PlayerState.current_action_tags
     
     for ticket in tickets:
+        #breakpoint
         var e = Global.random_events.get(ticket.event_uuid)
         if not e:
             e = Global.end_random_events.get(ticket.event_uuid)
@@ -17,6 +18,7 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
         # 1. 天地法则：没有标签的全局事件，永远放行！
         if not e.target_tags or e.target_tags.is_empty():
             new_events[ticket.event_uuid] = ticket
+            Logging.warn('放行没有标签的全局事件')
             continue
 
         # 2. 专属拦截：玩家现在闲着（无tag），那带有专属标签的事件直接略过！
@@ -39,4 +41,7 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
     var result: Array[EventTicket] = []
     result.assign(new_events.values())
     PlayerState.current_action_tags.clear()
+    if not result:
+        Logging.warn('filter 把所有事件都干掉了，很可能出问题了')
+        breakpoint
     return result

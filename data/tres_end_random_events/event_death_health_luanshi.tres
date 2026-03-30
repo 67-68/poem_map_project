@@ -27,7 +27,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_5ukkl")
-_action_tags = Array[int]([24, 21])
+_action_tags = Array[int]([50, 21])
 options = Array[ExtResource("1_a3stu")]([SubResource("Resource_hdv0o")])
 uuid = "event_death_health_luanshi"
 name = "次好结局"

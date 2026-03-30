@@ -218,6 +218,7 @@ text = "当前没有野心"
 layout_mode = 2
 
 [node name="PoemStart" parent="UI" instance=ExtResource("28_ok6jj")]
+process_mode = 3
 z_index = 4
 offset_left = -72.0
 offset_top = -23.200012
@@ -226,6 +227,7 @@ offset_bottom = 36.799988
 theme_override_styles/panel = SubResource("StyleBoxTexture_facbu")
 
 [node name="PoemCreation" parent="UI" instance=ExtResource("29_facbu")]
+process_mode = 3
 visible = false
 
 [node name="Picker" parent="UI" instance=ExtResource("30_b1qrp")]
