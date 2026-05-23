@@ -78,7 +78,7 @@ layout_mode = 2
 [node name="Button" type="Button" parent="InputImagPanel"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "开始创作（消耗生命：50）"
+text = "开始创作"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="InputImagPanel"]
 layout_mode = 2

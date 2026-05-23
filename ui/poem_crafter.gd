@@ -6,14 +6,37 @@ var selected_imaginaries: Array[ImagenaryItem] = []
 func _ready() -> void:
 	Logging.info('PoemCrafter: initializing poem crafter')
 	setup_imagenaries()
-	EventBus.imaginary_changed.connect(setup_imagenaries)
+	# 监听 imaginary_changed，但只在意象数量变化时才重建
+	EventBus.imaginary_changed.connect(on_imaginary_changed)
 	var children = $InputImagPanel/H.get_children()
 	Logging.info('PoemCrafter: connecting slot_clicked signals for %d children' % children.size())
 	for c in children:
 		c.slot_clicked.connect(on_slot_clicked)
 
+func on_imaginary_changed():
+	# 检查意象数量是否变化，只有数量变化才重建
+	var current_count = $ImagenaryScroll/HFlowContainer.get_children().size()
+	var new_count = 0
+	for ima in Database.imaginaries.values():
+		if ima.basic_imaginaries.size() > 0:
+			new_count += 1
+
+	if current_count != new_count:
+		Logging.info('PoemCrafter: imaginary count changed from %d to %d, rebuilding' % [current_count, new_count])
+		setup_imagenaries()
+	else:
+		Logging.info('PoemCrafter: imaginary count unchanged, skipping rebuild (let items update themselves)')
+
 func setup_imagenaries():
 	Logging.info('PoemCrafter: setting up imaginaries')
+
+	# 清空选中的意象（因为 UI 即将被销毁）
+	for item in selected_imaginaries:
+		if is_instance_valid(item):
+			item.show()
+	selected_imaginaries.clear()
+	render_slots()
+
 	var existing_children = $ImagenaryScroll/HFlowContainer.get_children()
 	Logging.info('PoemCrafter: clearing %d existing children' % existing_children.size())
 	for c in existing_children:
@@ -143,6 +166,7 @@ func _on_button_pressed() -> void:
 		if i:
 			var old_threshold = i.l3_threshold
 			i.l3_threshold += 3
+			i.current_level = 1
 			Logging.info('PoemCrafter: updated l3_threshold from %d to %d' % [old_threshold, i.l3_threshold])
 	Logging.info('PoemCrafter: poem crafting complete')
 

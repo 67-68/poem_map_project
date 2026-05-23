@@ -11,6 +11,10 @@ func _ready():
 	# 检测点击
 	gui_input.connect(_on_gui_input)
 
+func _exit_tree():
+	if imaginary_tag:
+		imaginary_tag.level_changed.disconnect(_on_level_changed)
+
 func _on_gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.pressed:
 		#breakpoint
@@ -22,6 +26,10 @@ func _init():
 func init(ima: ImaginaryTag):
 	setup_visuals(ima.current_level, ima.name)
 	imaginary_tag = ima
+	imaginary_tag.level_changed.connect(_on_level_changed)
+
+func _on_level_changed(new_level: int):
+	setup_visuals(new_level, imaginary_tag.name)
 
 # 极其务实的动态样式生成器
 func setup_visuals(level: int, text_content: String):
