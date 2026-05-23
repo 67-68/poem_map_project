@@ -32,10 +32,11 @@ func operate():
     Logging.debug('PoemTypeChooseOperator: Emitting start_picker with %d traits' % data.size())
     EventBus.start_picker.emit(data,null)
     var trait_picked = await EventBus.end_picking
-    Logging.debug('PoemTypeChooseOperator: Trait picked - %s' % trait_picked.uuid)
     if not trait_picked:
         not_entered_result.operate()
+        Logging.warn('trait not picked, left blank')
         return
+    Logging.debug('PoemTypeChooseOperator: Trait picked - %s' % trait_picked.uuid)
 
     var type = trait_picked.uuid.split(':')[1] # poem:gan_ye:defaultName:1
     var level = trait_picked.uuid.split(':')[3]

@@ -21,3 +21,12 @@ script = ExtResource("2_du7tm")
 
 [node name="HFlow" type="HFlowContainer" parent="."]
 layout_mode = 2
+
+[node name="Button" type="Button" parent="."]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
