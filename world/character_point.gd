@@ -19,7 +19,7 @@ func setup_emotion():
 
 	# 遍历每个点
 	for i in range(datamodel.path_point_keys.size()):
-		var point = Global.life_path_points[datamodel.path_point_keys[i]]
+		var point = Database.life_path_points[datamodel.path_point_keys[i]]
 		
 		# 计算这个点在路径上的累计距离
 		# (Curve2D 有一个好用的函数可以直接算这个)
@@ -34,8 +34,8 @@ func setup_emotion():
 	emotion_gradient.remove_point(0)
 	emotion_gradient.remove_point(0)
 
-	emotion_gradient.add_point(0,Global.sad_color)
-	emotion_gradient.add_point(1,Global.happy_color)
+	emotion_gradient.add_point(0,GameState.sad_color)
+	emotion_gradient.add_point(1,GameState.happy_color)
 	
 
 func _ready() -> void:
@@ -46,7 +46,7 @@ func _ready() -> void:
 	if datamodel:
 		$Label.text = datamodel.name
 		_create_path()
-		next_point_year = Global.life_path_points[datamodel.path_point_keys[0]].year
+		next_point_year = Database.life_path_points[datamodel.path_point_keys[0]].year
 
 	setup_emotion()
 
@@ -73,7 +73,7 @@ func on_change_emotion_color(current_offset: int):
 
 func _process(_delta: float) -> void:
 	on_move()
-	var target_path_ratio: float = time_position_curve.sample(Global.ratio_time) # 当前路径的比例
+	var target_path_ratio: float = time_position_curve.sample(GameState.ratio_time) # 当前路径的比例
 	var total_length = path.get_baked_length()
 	var current_offset = total_length * target_path_ratio # 当前出发了多远，比如1000,total 5000
 	position = path.sample_baked(current_offset)
@@ -111,13 +111,13 @@ func _create_path() -> void:
 	time_position_curve = Curve.new()
 	for point in datamodel.path_point_keys:
 		print(datamodel.path_point_keys)
-		path.add_point(Global.life_path_points[point].position)
+		path.add_point(Database.life_path_points[point].position)
 	var path_ratio: float
 	var total_path = path.get_baked_length()
 	var time_ratio: float
 	for point in datamodel.path_point_keys:
-		point = Global.life_path_points[point]
-		time_ratio = (point.year - Global.start_year) / Global.time_span
+		point = Database.life_path_points[point]
+		time_ratio = (point.year - GameState.start_year) / GameState.time_span
 		path_ratio = path.get_closest_offset(point.position) / total_path
 		time_position_curve.add_point(Vector2(time_ratio,path_ratio))
 
@@ -125,7 +125,7 @@ func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		print("点到我了！我是：", $Label.text)
 		handle_selection(viewport,event,shape_idx)
-		Global.current_selected_poet = datamodel
+		GameState.current_selected_poet = datamodel
 		get_viewport().set_input_as_handled()
 
 func return_preivous_color():
@@ -137,4 +137,4 @@ func handle_selection(viewport,event,shape_idx):
 	var tween = create_tween()
 	tween.tween_property(self,'modulate',Color.RED,3).set_ease(Tween.EASE_OUT)
 	get_tree().create_timer(3).timeout.connect(return_preivous_color)
-	Global.user_clicked.emit(datamodel)
+	EventBus.user_clicked.emit(datamodel)

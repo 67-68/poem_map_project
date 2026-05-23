@@ -12,7 +12,7 @@ func operate() -> void:
             if not death_hint:
                 Logging.err('can not find death hint')
                 return
-            Global.show_tombstone_screen.emit(death_hint)
+            EventBus.show_tombstone_screen.emit(death_hint)
         "return_main":
             # 卸载当前场景，回到主菜单
             Logging.err('dont implement return to main yet')

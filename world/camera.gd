@@ -66,5 +66,5 @@ func _apply_zoom(amount: float) -> void:
     if new_state != _current_state:
         _current_state = new_state
         # 发射信号给 UI 和 渲染层
-        Global.focus_city_map.emit(_current_state == 'city')
+        EventBus.focus_city_map.emit(_current_state == 'city')
         print("🎥 视界已切换至: ", _current_state)

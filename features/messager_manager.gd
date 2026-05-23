@@ -18,7 +18,7 @@ var sorted_msger_list: Array
 var _next_msger_time: float
 
 func _ready():
-	sorted_msger_list = Global.msger_data.values()
+	sorted_msger_list = Database.msger_data.values()
 	sorted_msger_list.sort_custom(func(a, b): return a.year < b.year)
 	_next_msger_time = sorted_msger_list[0].year
 
@@ -26,10 +26,10 @@ func _process(_delta):
 	if Engine.is_editor_hint():
 		return
 	#breakpoint
-	if Global.year > _next_msger_time:
+	if GameState.year > _next_msger_time:
 		Logging.info('messager triggered')
 		send_message(DataHelper.find_item_by_filter_list(sorted_msger_list,'year',_next_msger_time))
-		_next_msger_time = update_msger_time(_next_msger_time,Global.msger_data.values())
+		_next_msger_time = update_msger_time(_next_msger_time,Database.msger_data.values())
 
 
 static func update_msger_time(_next_msger_time, data):
@@ -60,7 +60,7 @@ func send_message(msger_data: MessagerData): # int: MSG_TYPE
 	messager.initialization(path,ids,mesh,msger_data)
 	messager.travel_end.connect(end_msger.bind(messager))
 
-	Global.request_add_messager.emit(messager)
+	EventBus.request_add_messager.emit(messager)
 	# apply msger type 改为msger自己内部执行，在执行完成它之后使用msger data 填充自己
 	messager.start_travel()
 	

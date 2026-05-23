@@ -68,7 +68,7 @@ func _load_static():
 	Logging.info("AmbitionHUD: Setting deadline warning: %s" % ambition.deadline_warning)
 	deadline_label.text = ambition.deadline_warning
 
-	var deadline_text = TimeService.get_era_text(int(Global.year))
+	var deadline_text = TimeService.get_era_text(int(GameState.year))
 	Logging.info("AmbitionHUD: Setting time text: %s" % deadline_text)
 	time_label.text = deadline_text
 

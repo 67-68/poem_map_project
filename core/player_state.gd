@@ -30,7 +30,7 @@ func change_stat(stat_name, data):
 			return
 		stat_name = int_stat
 
-	var stat = Global.properties.get(stat_name)
+	var stat = Database.properties.get(stat_name)
 	# 需要提前登记stat
 	if not stat:
 		Logging.err('do not find stat %s' % stat_name)
@@ -46,7 +46,7 @@ func change_stat(stat_name, data):
 		amount_to_change = ambition.buffer_to_region.match_and_multiply(current_location, amount_to_change)
 	
 	for t_name in traits:
-		var t = Global.traits.get(t_name)
+		var t = Database.traits.get(t_name)
 		if not t:
 			Logging.err('do not find trait %s' % t_name)
 			continue
@@ -67,7 +67,7 @@ func get_stat_val(stat_name):
 			return
 		stat_name = int_stat
 	
-	var stat = Global.properties.get(stat_name)
+	var stat = Database.properties.get(stat_name)
 	if not stat:
 		Logging.err('do not find stat %s' % stat_name)
 		return 0
@@ -107,7 +107,7 @@ func get_traits():
 	return traits
 
 func set_ambition(ambition_key):
-	var ambition_ = Global.ambitions.get(ambition_key)
+	var ambition_ = Database.ambitions.get(ambition_key)
 	if not ambition_: 
 		Logging.err('this ambition %s is non-exist' % ambition_key)
 		return
@@ -127,9 +127,9 @@ func clear_ambition():
 	ambition_changed.emit(null)
 
 func get_location():
-	var loc = Global.territories.get(current_location)
+	var loc = Database.territories.get(current_location)
 	if loc == null: 
-		loc = Global.base_province.get(current_location)
+		loc = Database.base_province.get(current_location)
 	if not loc:
 		Logging.err('do not find location %s' % current_location)
 		return null

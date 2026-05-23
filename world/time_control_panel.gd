@@ -9,13 +9,13 @@ func on_start_end_btn_pressed():
 	else: TimeService.play()
 
 func _on_next_poet_button_pressed() -> void:
-	if Global.current_selected_poet:
+	if GameState.current_selected_poet:
 		TimeService.jump_to(
-			Global.current_selected_poet.get_next_path_point(
-			Global.year).
+			GameState.current_selected_poet.get_next_path_point(
+			GameState.year).
 		point_year)
 	else:
-		Global.request_text_popup.emit('choose a poet')
+		EventBus.request_text_popup.emit('choose a poet')
 
 func speed_up():
 	TimeService.speed_up()
@@ -25,8 +25,8 @@ func slow_down():
 
 func _ready():
 	# 监听时间流动
-	Global.year_changed.connect(_on_year_changed)
-	Global.speed_changed.connect(on_speed_changed)
+	EventBus.year_changed.connect(_on_year_changed)
+	EventBus.speed_changed.connect(on_speed_changed)
 	TimeService.on_xun_tick.connect(func(): 
 		$Margin/Panel/Margin/VBox/HBox2/Label_Xun.text = TimeService.current_xun
 	)

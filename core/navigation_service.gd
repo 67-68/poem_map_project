@@ -11,7 +11,7 @@ extends Node
 			init()
 			debug_find_orphan_id = false
 			var ids := []
-			for item in Global.base_province:
+			for item in Database.base_province:
 				ids.append(item)
 			var orphans = DebugUtils.find_orphans(ids,adjacency_map)
 			Logging.info('debug orphan done: %s' % orphans)
@@ -22,7 +22,7 @@ extends Node
 			init()
 			graph_connectivity = false
 			var ids := []
-			for item in Global.base_province:
+			for item in Database.base_province:
 				ids.append(item)
 			DebugUtils.analyze_graph_connectivity(ids,adjacency_map)
 
@@ -40,20 +40,20 @@ var _debug_overlay: Control
 
 func _toggle_debug_view():
 	# 1. 确保数据存在
-	if Global.base_province.is_empty():
+	if Database.base_province.is_empty():
 		Logging.warn("没有省份数据，无法绘制！")
 		return
 
 	# 2. 准备数据
 	var centers := {}
 	# 注意：在 @tool 模式下获取 BorderMesh 可能需要更稳健的路径查找
-	var border_mesh = Global.map.get_node_or_null("background/BorderMesh") 
+	var border_mesh = GameState.map.get_node_or_null("background/BorderMesh") 
 	
 	if not border_mesh:
 		push_error("找不到 BorderMesh，无法计算坐标！")
 		return
 
-	for item in Global.base_province.values():
+	for item in Database.base_province.values():
 		# 确保 get_local_pos 能在工具模式下工作
 		centers[item.uuid] = item.get_local_pos(border_mesh)
 
@@ -100,20 +100,20 @@ func init():
 	var color_2_prov := {}
 
 	# 预处理颜色字典
-	for p_id in Global.base_province:
-		var prov = Global.base_province[p_id]
+	for p_id in Database.base_province:
+		var prov = Database.base_province[p_id]
 		color_2_prov[prov.color.to_html(false)] = p_id
 	
 	# 2. 获取邻接数据 (注意：load 需要加上 .get_image())
-	var img = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
+	var img = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
 	adjacency_map = AdjacencyManager.robust_scan(img, color_2_prov)
 	
 	# 3. 注册节点
 	var idx = 0
-	for uid in Global.base_province:
-		var prov = Global.base_province[uid]
+	for uid in Database.base_province:
+		var prov = Database.base_province[uid]
 		# 警告修复：add_point 的参数顺序是 (id, position)
-		var pos = prov.get_local_pos(Global.map.get_node('background/BorderMesh'))
+		var pos = prov.get_local_pos(GameState.map.get_node('background/BorderMesh'))
 		astar.add_point(idx,pos)  # 这里的position的问题！！！
 		prov_2_idx[uid] = idx
 		idx_2_prov[idx] = uid
@@ -204,5 +204,5 @@ func get_prov_id_path(start_id: String, end_id: String) -> Array:
 	var path = get_index_id_path(start_id,end_id)
 	var provs = []
 	for p in path:
-		provs.append(Global.base_province[get_province_id_from_idx(p)])
+		provs.append(Database.base_province[get_province_id_from_idx(p)])
 	return provs

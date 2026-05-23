@@ -15,7 +15,7 @@ func _ready() -> void:
     TimeService.on_month_tick.connect(func():
         update_dynamic_data()
     )
-    Global.request_change_left_panel_visibility.connect(func():
+    EventBus.request_change_left_panel_visibility.connect(func():
         if _is_visible_state:
             hide_panel()
         else:
@@ -31,9 +31,9 @@ func update_dynamic_data():
         $V/AmbitionLabel.text += PlayerState.ambition.get_stage_perception()
     
     var text = 'props: \n'
-    for s in Global.properties:
-        text += "%s: %s\n" % [s, Global.properties[s].val]
-        text += 'stage-percep: %s\n' % Global.properties[s].get_staged_perception_text()
+    for s in Database.properties:
+        text += "%s: %s\n" % [s, Database.properties[s].val]
+        text += 'stage-percep: %s\n' % Database.properties[s].get_staged_perception_text()
     $V/Scroll/V/PropLabel.text = text
 
     # 展示所有trait

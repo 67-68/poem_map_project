@@ -27,13 +27,13 @@ func on_focus_city_map(enable: bool):
 
 
 func _ready() -> void:
-	Global.load_actual_positions(Util.get_mesh_instance_size($background/BorderMesh))
-	Global.focus_city_map.connect(on_focus_city_map)
+	Database.load_actual_positions(Util.get_mesh_instance_size($background/BorderMesh))
+	EventBus.focus_city_map.connect(on_focus_city_map)
 
-	Global.map = self
-	Global.request_add_messager.connect(_on_add_messager)
-	Global.request_change_bg_modulate.connect(change_world_color)
-	Global.request_restore_bg_modulate.connect(restore_world_color)
+	GameState.map = self
+	EventBus.request_add_messager.connect(_on_add_messager)
+	EventBus.request_change_bg_modulate.connect(change_world_color)
+	EventBus.request_restore_bg_modulate.connect(restore_world_color)
 	# 2. 加载并赋值
 	$MessagerManager.mesh = $background/BorderMesh
 	Logging.info("✅ 赋值成功，当前 Mesh 资源: %s" % $MessagerManager.mesh)
@@ -50,9 +50,9 @@ func _on_add_messager(msg: Messager):
 
 func load_character_point():
 	var character_point = load("res://world/character_point.tscn")
-	for item in Global.poet_data.values():
+	for item in Database.poet_data.values():
 		var node = character_point.instantiate()
-		var vec = Vector2(Global.life_path_points[item.path_point_keys[0]].position)
+		var vec = Vector2(Database.life_path_points[item.path_point_keys[0]].position)
 		var color = item.color
 		node.modulate = color
 		node.position = vec
@@ -67,8 +67,8 @@ func _process(delta: float) -> void:
 
 func refresh_prov_2_fac():
 	# 1. 建立 [州ID -> 势力对象] 的映射
-	for fac_id in Global.factions:
-		var fac: Faction = Global.factions[fac_id]
+	for fac_id in Database.factions:
+		var fac: Faction = Database.factions[fac_id]
 		# 解析该势力下属的所有原子州 ID
 		var prov_ids = Util.resolve_to_provinces(fac.provinces)
 		for p_id in prov_ids:
@@ -85,7 +85,7 @@ func render_factions():
 	# 3. 【核心修正】重焙地理索引图
 	# 你需要拿到那张原始的、带颜色的 index_map 图片资源
 	# 假设你已经把它加载到了某个变量里，比如 Global.original_index_image
-	var original_map_img = load(Global.PROVINCE_INDEX_MAP_PATH).get_image()
+	var original_map_img = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
 	# 将“原始地理图”重焙为“机器索引图”
 	var color_2_idx_tex = Util.bake_index_map(original_map_img, $FactionMapRenderer._color_to_idx_map)
 	# 是重焙的问题！
@@ -153,15 +153,15 @@ func get_province():
 	return color_2_province.get(c.to_html(false))
 
 func create_provinces():
-	var map_tex = load(Global.PROVINCE_INDEX_MAP_PATH)
+	var map_tex = load(GameConfig.PROVINCE_INDEX_MAP_PATH)
 	index_image = map_tex.get_image()
 	load_indexs()
 
 func load_indexs():
-	for prov_uid in Global.base_province:
-		var prov = Global.base_province[prov_uid]
+	for prov_uid in Database.base_province:
+		var prov = Database.base_province[prov_uid]
 		color_2_province[prov.color.to_html(false)] = prov
-	Global.color_2_province = color_2_province
+	GameState.color_2_province = color_2_province
 
 
 func fade_world_to_dark(duration: float):

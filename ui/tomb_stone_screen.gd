@@ -4,7 +4,7 @@ class_name TombstoneScreen extends CanvasLayer
 @onready var monolith_text: RichTextLabel = $ColorRect/M/H/S/MonolithText
 func _ready():
 	hide()
-	Global.show_tombstone_screen.connect(render_entropy_death)
+	EventBus.show_tombstone_screen.connect(render_entropy_death)
 
 
 ## 核心接口：接收系统级死因，拼装历史巨石碑
@@ -42,7 +42,7 @@ func render_entropy_death(cause_text: String) -> void:
 		bbcode += "[center][font_size=40][color=#555555]（绝笔无言，泯然众人）[/color][/font_size][/center]\n"
 	else:
 		for poem_key in PlayerState.created_poems:
-			var poem = Global.poem_data.get(poem_key)
+			var poem = Database.poem_data.get(poem_key)
 			if poem:
 				bbcode += "[center][font_size=42][color=#e2c08d]《%s》[/color][/font_size][/center]\n" % poem.title
 				bbcode += "[center][font_size=28][color=#d4b581]%s[/color][/font_size][/center]\n\n" % poem.content

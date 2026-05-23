@@ -10,7 +10,7 @@ func _process(_delta):
 	_detect_and_emit()
 
 func _detect_and_emit():
-	if not mesh or not Global.index_image:
+	if not mesh or not Database.index_image:
 		return
 
 	# 1. 获取相对于 Mesh 节点的局部坐标
@@ -32,17 +32,17 @@ func _detect_and_emit():
 		Logging.err('text emitter is outside of the map!!!')
 		return
 	
-	var px = int(uv.x * Global.index_image.get_width())
-	var py = int(uv.y * Global.index_image.get_height())
+	var px = int(uv.x * Database.index_image.get_width())
+	var py = int(uv.y * Database.index_image.get_height())
 
-	var color = Global.index_image.get_pixel(px, py)
+	var color = Database.index_image.get_pixel(px, py)
 	if color.a < 0.1: return # 在水里或荒野
 
 	var hex = color.to_html(false)
 	if hex == '000000': 
 		#Logging.debug('text emitter 找到了000000')
 		return
-	var current_province_id = Global.color_2_province.get(hex, "").uuid
+	var current_province_id = GameState.color_2_province.get(hex, "").uuid
 	#if not current_province_id is String:
 		#current_province_id = current_province_id.uuid
 		#Logging.warn('我们抓到了一个对象currnet prov id')
@@ -51,7 +51,7 @@ func _detect_and_emit():
 		_last_prov_id = current_province_id
 
 func _emit_text(prov_id):
-	var prov_name = Global.base_province[prov_id].name
+	var prov_name = Database.base_province[prov_id].name
 	Logging.info("进入了：" + prov_name)
 	TextPoolManager.spawn('test',global_position)
 

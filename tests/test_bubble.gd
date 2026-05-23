@@ -4,13 +4,13 @@ extends Node2D
 	set(val):
 		if val:
 			test_bubble = false
-			Global.request_add_chat.emit(self,'test')
+			EventBus.request_add_chat.emit(self,'test')
 			position.x -= 100
-			Global.request_add_chat.emit(self,'test2')
+			EventBus.request_add_chat.emit(self,'test2')
 
 @export var test := false:
 	set(val):
 		if val:
 			test = false
-			var data = Global.history_events['event_test_hub']
-			Global.request_event.emit(data)
+			var data = Database.history_events['event_test_hub']
+			EventBus.request_event.emit(data)

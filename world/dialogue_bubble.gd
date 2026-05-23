@@ -52,7 +52,7 @@ func _input(event):
         
         # 告诉我们之前写的 UI 缓冲池：玩家看完了，进行下一个！
         # 假设你的 UIManager 单例里持有 bubble_buffer
-        Global.bubble_complete.emit()
+        EventBus.bubble_complete.emit()
         
         # 销毁自己
         queue_free()

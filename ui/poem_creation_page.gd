@@ -20,7 +20,7 @@ var expand := false
 
 func _ready() -> void:
 	hide()
-	Global.poem_start_clicked.connect(func(): 
+	EventBus.poem_start_clicked.connect(func(): 
 		if not expand:
 			show_page()
 		else: hide_page()

@@ -11,7 +11,7 @@ class_name DataLoader
 # 内部路径修正工具
 static func _fix_path(file_path: String, extension: String, global_path: String) -> String:
 	if not file_path.begins_with("res://") and not file_path.begins_with("user://"):
-		# 假设 Global.DATA_PATH 已经定义好，且以 / 结尾
+		# 假设 GameConfig.DATA_PATH 已经定义好，且以 / 结尾
 		file_path = global_path + file_path
 	if not file_path.ends_with(extension):
 		file_path += "." + extension
@@ -19,7 +19,7 @@ static func _fix_path(file_path: String, extension: String, global_path: String)
 
 # 原有的 JSON 加载逻辑 (稍作封装)
 static func load_json_model(model_class: Variant, file_path: String) -> Array:
-	file_path = _fix_path(file_path, "json",Global.DATA_PATH)
+	file_path = _fix_path(file_path, "json",GameConfig.DATA_PATH)
 	
 	if not FileAccess.file_exists(file_path):
 		printerr("💀 JSON 丢失！文件路径：", file_path)
@@ -59,7 +59,7 @@ static func load_json_model(model_class: Variant, file_path: String) -> Array:
 	return result
 
 static func load_csv_model(model_class: Variant, file_path: String) -> Array:
-	file_path = _fix_path(file_path, "csv", Global.PERMANENT_DATA_PATH)
+	file_path = _fix_path(file_path, "csv", GameConfig.PERMANENT_DATA_PATH)
 	if not FileAccess.file_exists(file_path):
 		printerr("😨 CSV 档案被次元放逐了！路径：", file_path)
 		return []

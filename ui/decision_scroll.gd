@@ -17,8 +17,8 @@ func refresh_current_decisions():
 		child.queue_free()	
 	
 	var decisions = []
-	for d_uuid in Global.decisions:
-		var d = Global.decisions[d_uuid]
+	for d_uuid in Database.decisions:
+		var d = Database.decisions[d_uuid]
 		if d.disabled:
 			continue
 		if not d.area_tags:
@@ -34,4 +34,4 @@ func refresh_current_decisions():
 				$V.add_child(panel)
 				decisions.append(d)
 				break
-	Global.avaialble_decision_change.emit(decisions)
+	EventBus.avaialble_decision_change.emit(decisions)

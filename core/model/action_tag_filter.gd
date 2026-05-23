@@ -6,11 +6,11 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
     
     for ticket in tickets:
         #breakpoint
-        var e = Global.random_events.get(ticket.event_uuid)
+        var e = Database.random_events.get(ticket.event_uuid)
         if not e:
-            e = Global.end_random_events.get(ticket.event_uuid)
+            e = Database.end_random_events.get(ticket.event_uuid)
         if not e: 
-            e = Global.find_triggerable_item(ticket.event_uuid)
+            e = Database.find_triggerable_item(ticket.event_uuid)
         if not e:             
             Logging.err("[ActionTagFilter] Event not found: " + ticket.event_uuid)
             continue

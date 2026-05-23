@@ -120,9 +120,9 @@ func _on_http_request_request_completed(_result: int, response_code: int, _heade
     # 使用 DSL 解析器解析事件数据
     var events = DSLParser.parse_csv_data(csv_data)
     
-    # 将解析成功的事件注入到 Global.random_events 中
+    # 将解析成功的事件注入到 Database.random_events 中
     for event in events:
-        Global.random_events[event.uuid] = event
+        Database.random_events[event.uuid] = event
         Logging.info("云端事件注入成功: %s" % event.uuid)
     
     Logging.info("云端数据注入完成！共注入 %d 个事件 🤓☝️" % events.size())

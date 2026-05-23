@@ -17,12 +17,13 @@ config/icon="uid://ku7ifltn2syw"
 
 [autoload]
 
-Gameboot="*res://core/gameboot.gd"
-Global="*res://core/global.gd"
+GameConfig="*res://core/game_config.gd"
 Logging="*res://core/logger.gd"
+EventBus="*res://core/eventbus.gd"
+GameState="*res://core/game_state.gd"
+Database="*res://core/database.gd"
 TimeService="*res://core/time_service.tscn"
 SizeService="*res://core/size_service.tscn"
-EventBus="*res://core/eventbus.gd"
 NavigationService="*res://core/navigation_service.gd"
 TextPoolManager="*res://core/pool_manager.gd"
 AudioManager="*res://core/audio_manager.gd"

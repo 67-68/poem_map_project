@@ -28,31 +28,33 @@ func parse(new_text):
 	if not parts[1]: return
 	match parts[1]:
 		'send_signal':
-			var sig = Global.has_signal(parts[2])
-			if not sig: 
+			var sig = EventBus.has_signal(parts[2])
+			if not sig:
 				Logging.err('do not found signal %s' % parts[2])
 				return
-			Global.emit_signal(parts[1],str_to_var(parts[3]))
+			EventBus.emit_signal(parts[2],str_to_var(parts[3]))
 		'give_trait':
-			var trait_ = Global.traits.get(parts[3])
+			var trait_ = Database.traits.get(parts[3])
 			if not trait_:
 				Logging.err('can not found trait %s ' % parts[3])
 				return
 			PlayerState.traits.append(trait_.uuid)
 		'event_result':
-			var ev = Global.find_triggerable_item(parts[2])
+			var ev = Database.find_triggerable_item(parts[2])
 			if not ev or ev is not BaseEvent:
 				Logging.err('can not found event for %s' % parts[2])
 				return
-			Global.event_shown.emit(ev)
+			EventBus.event_shown.emit(ev)
 		'add_imaginary':
-			Global.request_add_imaginary.emit(parts[2])
+			EventBus.request_add_imaginary.emit(parts[2])
 
 	if parts.size() == 2 and parts[0] == '$':
-		Global.request_event_key.emit(parts[1])
+		EventBus.request_event_key.emit(parts[1])
 	elif parts.size() == 2:
-		if Global.has_method(parts[0]):
-			Global.callv(parts[0],[parts[1]])
+		if GameState.has_method(parts[0]):
+			GameState.callv(parts[0],[parts[1]])
+		elif Database.has_method(parts[0]):
+			Database.callv(parts[0],[parts[1]])
 
 func _on_button_pressed() -> void:
 	#breakpoint

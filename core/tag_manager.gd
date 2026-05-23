@@ -3,7 +3,7 @@ class_name TagManager extends GDScript
 static func get_tag(tag_id: String) -> Tag: # 解析tag_id获取tag对象，如果是旧时代的三段式就加个:general变成新时代的四段式
     if ":" not in tag_id:
         tag_id += ":general"
-    return Global.tags.get(tag_id)
+    return Database.tags.get(tag_id)
 
 static func get_imaginary_from_tag(tag: String) -> ImaginaryTag:
     var parts = tag.split(":")
@@ -11,7 +11,7 @@ static func get_imaginary_from_tag(tag: String) -> ImaginaryTag:
         Logging.err('tag have less than 4 parts: %s' % tag)
         return null
     var ima_uuid = parts[1] + ':' + parts[2]
-    var ima = Global.imaginaries.get(ima_uuid)
+    var ima = Database.imaginaries.get(ima_uuid)
     if not ima:
         Logging.err('can not find imaginary %s for tag %s' % [ima_uuid, tag])
         return

@@ -10,7 +10,7 @@ extends HBoxContainer
 func _ready() -> void:
 	Logging.info('PoemCrafter: initializing poem crafter')
 	setup_imagenaries()
-	Global.imaginary_changed.connect(setup_imagenaries)
+	EventBus.imaginary_changed.connect(setup_imagenaries)
 	var children = $InputImagPanel/H.get_children()
 	Logging.info('PoemCrafter: connecting slot_clicked signals for %d children' % children.size())
 	for c in children:
@@ -23,7 +23,7 @@ func setup_imagenaries():
 	for c in existing_children:
 		c.queue_free()
 	var active_imaginaries = 0
-	for ima in Global.imaginaries.values():
+	for ima in Database.imaginaries.values():
 		if ima.basic_imaginaries.size() > 0:
 			active_imaginaries += 1
 			Logging.info('PoemCrafter: creating item for imaginary with %d basic imaginaries' % ima.basic_imaginaries.size())

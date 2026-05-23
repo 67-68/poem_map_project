@@ -11,7 +11,7 @@ signal on_year_tick()
 @export var speed: float:
 	set(val):
 		_speed = val
-		Global.speed_changed.emit(val)
+		EventBus.speed_changed.emit(val)
 	get():
 		return _speed
 
@@ -109,13 +109,13 @@ var current_day := 1
 const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
 
 func _ready() -> void:
-	Global.request_advance_time.connect(func(days):
+	EventBus.request_advance_time.connect(func(days):
 		advance_time(days)
 	)
 	on_xun_tick.connect(func():
 		Logging.info("Xun tick: %s" % current_xun))
-	Global.year = Global.start_year
-	_last_total_days = int(Global.year * DAYS_PER_YEAR)
+	GameState.year = GameState.start_year
+	_last_total_days = int(GameState.year * DAYS_PER_YEAR)
 	Engine.time_scale = 1
 	pause()
 
@@ -123,13 +123,13 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 
 	# 1. 浮点时间匀速流逝 (保留你原有的半即时逻辑)
-	Global.year += speed * delta / DAYS_PER_YEAR
-	Global.year_changed.emit(Global.year)
+	GameState.year += speed * delta / DAYS_PER_YEAR
+	EventBus.year_changed.emit(GameState.year)
 	current_day = TimeService._last_total_days % 10
 	current_day_of_year = TimeService._last_total_days % DAYS_PER_YEAR
 
 	# 2. 检查浮点数队列 (你原有的逻辑)
-	while not event_queue.is_empty() and Global.year >= event_queue[0].time:
+	while not event_queue.is_empty() and GameState.year >= event_queue[0].time:
 		var event = event_queue.pop_front()
 		if event.callback.is_valid():
 			pause_world(true) # 关键！触发事件时必须强制暂停游戏，防止弹窗地狱！
@@ -161,7 +161,7 @@ func register(trigger_time: float, function: Callable, name: String, epitaph_tex
 		master_timeline.sort_custom(func(a, b): return a.time < b.time)
 	
 	# 如果事件发生在未来，塞进当前待办
-	if trigger_time >= Global.year:
+	if trigger_time >= GameState.year:
 		event_queue.append(event_data)
 		event_queue.sort_custom(func(a, b): return a.time < b.time)
 		future_event_registered.emit(event_data)
@@ -179,12 +179,12 @@ func register_to_master_timeline(time: float, name: String, epitaph_text: String
 # --- 修改 1：修正 jump_to ---
 func jump_to(new_year: float):
 	Logging.info("Time jumped to: %s" % new_year)
-	Global.year = new_year
+	GameState.year = new_year
 	# 💀 极度重要：同步底层天数缓存，防止 _process 醒来后疯狂补帧！
-	_last_total_days = int(Global.year * DAYS_PER_YEAR) 
+	_last_total_days = int(GameState.year * DAYS_PER_YEAR) 
 	
-	Global.year_changed.emit(Global.year)
-	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
+	EventBus.year_changed.emit(GameState.year)
+	GameState.ratio_time = clampf(remap(GameState.year, GameState.start_year, GameState.end_year, 0, 1), 0.0, 1.0)
 	
 	_rebuild_queue_from_master()
 
@@ -194,15 +194,15 @@ func advance_time(days_to_add: int):
 	Logging.info("时间开始跃迁，推进 %d 天..." % days_to_add)
 	
 	# 1. 极其务实：直接改浮点年份
-	Global.year += days_to_add / float(DAYS_PER_YEAR)
-	Global.year_changed.emit(Global.year)
-	Global.ratio_time = clampf(remap(Global.year, Global.start_year, Global.end_year, 0, 1), 0.0, 1.0)
+	GameState.year += days_to_add / float(DAYS_PER_YEAR)
+	EventBus.year_changed.emit(GameState.year)
+	GameState.ratio_time = clampf(remap(GameState.year, GameState.start_year, GameState.end_year, 0, 1), 0.0, 1.0)
 	
 	# 2. 模拟 _process 里的天数跨越来发信号 (复用代码，拒绝复制粘贴！)
 	_emit_time_events()
 
 func _emit_time_events():
-	var current_total_days = int(Global.year * DAYS_PER_YEAR)
+	var current_total_days = int(GameState.year * DAYS_PER_YEAR)
 	if current_total_days > _last_total_days:
 		var days_passed = current_total_days - _last_total_days
 		for i in range(days_passed):
@@ -234,7 +234,7 @@ func _rebuild_queue_from_master():
 	
 	# 2. 从史书中抄录未来
 	for event in master_timeline:
-		if event.time >= Global.year:
+		if event.time >= GameState.year:
 			event_queue.append(event)
 			
 	# 3. 重新排序 (其实如果 master 是有序的，这一步甚至可以省掉，但为了防御性编程，排一下不亏)
@@ -245,12 +245,12 @@ func play():
 	set_process(true) # 开启 _process
 	resume_world()
 	time_start = true
-	Global.speed_changed.emit(speed)
+	EventBus.speed_changed.emit(speed)
 
 func pause():
 	set_process(false)
 	time_start = false
-	Global.speed_changed.emit(-1)
+	EventBus.speed_changed.emit(-1)
 
 # 增加一个控制 Engine 的开关
 func pause_world(completely: bool = true):
@@ -303,7 +303,7 @@ func _get_chinese_number(num: int) -> String:
 
 # 抽离出来的队列检查方法（复用你原本 _process 里的逻辑）
 func _check_event_queue():
-	while not event_queue.is_empty() and Global.year >= event_queue[0].time:
+	while not event_queue.is_empty() and GameState.year >= event_queue[0].time:
 		var event = event_queue.pop_front()
 		if event.callback.is_valid():
 			Logging.info("触发历史待办事件！设定时间: %f" % event.time)
@@ -328,6 +328,6 @@ func get_master_timeline() -> Array:
 	"""
 	var result = []
 	for event in master_timeline:
-		if event.time >= Global.start_year and event.time <= Global.year:
+		if event.time >= GameState.start_year and event.time <= GameState.year:
 			result.append(event)
 	return result

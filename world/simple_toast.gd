@@ -18,7 +18,7 @@ func _ready() -> void:
 	# 连接信号 (假设你有一个专门的信号，或者复用旧的)
 	# 如果你想区分“正式诗词”和“警告”，建议在 Global 加一个新信号：
 	# signal request_warning_toast(text)
-	Global.request_warning_toast.connect(show_warning)
+	EventBus.request_warning_toast.connect(show_warning)
 
 func show_warning(text: String):
 	#breakpoint

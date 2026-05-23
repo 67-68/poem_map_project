@@ -13,6 +13,6 @@ func operate():
 
 func show_hint(hint_: String = ''):
     if not hint:
-        Global.request_warning_toast.emit(hint)
+        EventBus.request_warning_toast.emit(hint)
     else:
-        Global.request_warning_toast.emit(hint_)
+        EventBus.request_warning_toast.emit(hint_)

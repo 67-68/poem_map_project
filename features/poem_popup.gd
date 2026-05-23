@@ -85,14 +85,14 @@ func create_notification(poem_data: PoemData, poet_data: PoetData):
 	var pop = poem_data.get_scarcity()
 	var popularity_str = poem_data.get_scarcity_str(pop)
 	var popularity = Util.colorize_underlined_link(popularity_str,stamp_config.get_config(pop).color,popularity_str)
-	Global.request_text_popup.emit('%s 在 %d 年创作了 %s, 稀有度为 %s' % [poet,Global.year,poem,popularity])
+	EventBus.request_text_popup.emit('%s 在 %d 年创作了 %s, 稀有度为 %s' % [poet,GameState.year,poem,popularity])
 
 func end_animation():
 	SizeService.minimize_all([rarity_stamp,content_label,title_label])
 	hide()
-	Global.poem_animation_finished.emit()
+	EventBus.poem_animation_finished.emit()
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	Global.request_apply_poem.connect(self.on_apply_poem)
+	EventBus.request_apply_poem.connect(self.on_apply_poem)

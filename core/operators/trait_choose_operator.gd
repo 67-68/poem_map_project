@@ -21,7 +21,7 @@ func operate():
     Logging.debug('PoemTypeChooseOperator: Starting operate()')
     var data = [] 
     for t in PlayerState.get_traits():
-        var trait_ = Global.traits.get(t)
+        var trait_ = Database.traits.get(t)
         if not trait_:
             Logging.err('PoemTypeChooseOperator: can not found trait %s' % t)
             continue
@@ -29,8 +29,8 @@ func operate():
         data.append(trait_)
 
     Logging.debug('PoemTypeChooseOperator: Emitting start_picker with %d traits' % data.size())
-    Global.start_picker.emit(data,null)
-    var trait_picked = await Global.end_picking
+    EventBus.start_picker.emit(data,null)
+    var trait_picked = await EventBus.end_picking
     Logging.debug('PoemTypeChooseOperator: Trait picked - %s' % trait_picked.uuid)
     
     var type = trait_picked.uuid.split(':')[1] # poem:gan_ye:defaultName:1

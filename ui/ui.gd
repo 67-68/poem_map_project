@@ -4,8 +4,8 @@ var bubble_scene = preload("res://world/dialogue_bubble.tscn")
 var queue: PopupQueue
 
 func _ready():
-	queue = PopupQueue.new(_draw_chat,Global.bubble_complete)
-	Global.request_add_chat.connect(
+	queue = PopupQueue.new(_draw_chat,EventBus.bubble_complete)
+	EventBus.request_add_chat.connect(
 		func(item): queue.add_item(item))
 
 func _draw_chat(data):

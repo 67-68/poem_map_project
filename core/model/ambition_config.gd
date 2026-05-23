@@ -28,8 +28,8 @@ class_name AmbitionData extends GameEntity
 @export var ambition_trais_comes_from := ENUMS.TRAITS
 
 # deadline
-@export var start_year: float = Global.start_year
-@export var deadline: float = Global.end_year
+@export var start_year: float = GameState.start_year
+@export var deadline: float = GameState.end_year
 @export var deadline_fail_result: Array[BaseOperator] = []
 @export var deadline_warning: String = ''
 

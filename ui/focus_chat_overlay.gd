@@ -99,6 +99,6 @@ func _show_current_line():
 
 # 专属善后部 (只由按钮点击，或无选项结束时调用)
 func try_end_dialogue(choice_result = null):
-    Global.bubble_complete.emit()
+    EventBus.bubble_complete.emit()
     chat_finished.emit(choice_result) # 把结果传回给 UIManager
     queue_free()

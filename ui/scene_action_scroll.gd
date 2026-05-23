@@ -12,7 +12,7 @@ func refresh():
 	var available_actions = ActionManager.get_available_scene_actions()
 	var selected_actions = ActionManager.pick_top_actions(available_actions)
 	Logging.info("SceneActionScroll" + "Selected actions: " + str(selected_actions))
-	Global.selected_actions_change.emit(selected_actions)
+	EventBus.selected_actions_change.emit(selected_actions)
 	for a in selected_actions:
 		# 添加到VBoxContainer的子类
 		#breakpoint

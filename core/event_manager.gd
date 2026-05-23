@@ -25,7 +25,7 @@ func scan_events(nothing_multiplication_weight = 10.0):
     Logging.info("[EventManager] Starting event scan")
     
     var initial_tickets: Array[EventTicket] = []
-    for e in Global.random_events.values():
+    for e in Database.random_events.values():
         initial_tickets.append(_create_ticket(e))
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight)
 
@@ -35,8 +35,8 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
     for i in imaginaries:
         imas[i.uuid] = i
 
-    for p in Global.legendary_poems.values():
-        if not Global.legendary_poems: 
+    for p in Database.legendary_poems.values():
+        if not Database.legendary_poems: 
             Logging.err('the legendary poems is somehow contain nothing! this will cause error!!')
         var created = true
         for d in p.imagenary_demand:
@@ -54,7 +54,7 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
     # create tickets
     var tickets: Array[EventTicket] = []
     for t in tags:
-        for e in Global.normal_poem_events.values():
+        for e in Database.normal_poem_events.values():
             for target_tag in e.target_tags:
                 if target_tag == t:
                     tickets.append(_create_ticket(e))
@@ -68,7 +68,7 @@ func scan_death_events():
     """
     Logging.info("[EventManager] Starting death event scan")
     var initial_tickets: Array[EventTicket] = []
-    for e in Global.end_random_events.values():
+    for e in Database.end_random_events.values():
         initial_tickets.append(_create_ticket(e))
     #breakpoint
     scan_events_from_tickets(initial_tickets, 0.0)
@@ -97,7 +97,7 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
     # 开始命运抽奖
     var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid)
     if ev_name: 
-        Global.request_event_key.emit(ev_name)
+        EventBus.request_event_key.emit(ev_name)
         Logging.info("[EventManager] 命运降临: " + ev_name)
     else: 
         Logging.info("[EventManager] 这次抽取事件，岁月静好")

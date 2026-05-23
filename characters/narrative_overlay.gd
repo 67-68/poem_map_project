@@ -12,12 +12,12 @@ var _tween: Tween
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	Global.request_event.connect(apply_narrative)
-	Global.request_event_key.connect(func(key): 
-		var ev = Global.history_events.get(key)
-		if not ev: ev = Global.random_events.get(key)
-		if not ev: ev = Global.normal_poem_events.get(key)
-		if not ev: ev = Global.find_triggerable_item(key)
+	EventBus.request_event.connect(apply_narrative)
+	EventBus.request_event_key.connect(func(key): 
+		var ev = Database.history_events.get(key)
+		if not ev: ev = Database.random_events.get(key)
+		if not ev: ev = Database.normal_poem_events.get(key)
+		if not ev: ev = Database.find_triggerable_item(key)
 		if not ev:
 			breakpoint
 			Logging.err("Event not found: " + key)
@@ -52,13 +52,13 @@ func _play_open_animation():
 	_tween.tween_property(main_card, "modulate:a", 1.0, 0.3)
 
 func apply_narrative(data: BaseEvent):
-	Global.event_shown.emit(data)
+	EventBus.event_shown.emit(data)
 	if data.epitaph_text:
 		TimeService.register_to_master_timeline(data.time, data.name, data.epitaph_text)
 	
 	# 1. 彻底暂停世界 (包括 BGM 变奏等逻辑可以在这里触发)
 	# 在暂停之前切换
-	#Global.request_change_bg_modulate.emit(data.color)
+	#EventBus.request_change_bg_modulate.emit(data.color)
 	TimeService.pause_world(true) # 假设你有这个接口
 	current_event_data = data
 	
@@ -82,7 +82,7 @@ func _on_option_selected(_choice_result):
 
 func _end_narrative(choice):
 	# 1. 🎬 退场动画 (The Exit)
-	Global.request_restore_bg_modulate.emit(-1)
+	EventBus.request_restore_bg_modulate.emit(-1)
 	if _tween: _tween.kill()
 	_tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	
@@ -99,6 +99,6 @@ func _end_narrative(choice):
 	# 3. 恢复世界
 	TimeService.resume_world()
 	Logging.done('narrative finished')
-	Global.event_confirmed.emit() # 绑定事件系统信号
+	EventBus.event_confirmed.emit() # 绑定事件系统信号
 
 	ConsequenceExecuter.execute_result(choice)

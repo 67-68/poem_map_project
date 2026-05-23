@@ -18,7 +18,7 @@ func add_imagenary(ev: BaseEvent):
 		_append_tag(ima,tag)
 		
 	Logging.info('finished processing all tags for event %s, emitting imaginary_changed signal' % ev.uuid)
-	Global.imaginary_changed.emit()
+	EventBus.imaginary_changed.emit()
 
 func add_tag_to_imaginary(tag: String):
 	
@@ -41,9 +41,9 @@ func _append_tag(ima: ImaginaryTag, tag: String):
 	else:
 		ima.current_level = 1
 		Logging.info('imaginary level set to 1 (size %d < l2_threshold %d)' % [ima.basic_imaginaries.size(), ima.l2_threshold])
-	Global.imaginary_changed.emit()
+	EventBus.imaginary_changed.emit()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	Global.event_shown.connect(add_imagenary)
-	Global.request_add_imaginary.connect(add_tag_to_imaginary)
+	EventBus.event_shown.connect(add_imagenary)
+	EventBus.request_add_imaginary.connect(add_tag_to_imaginary)

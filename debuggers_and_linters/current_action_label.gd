@@ -10,4 +10,4 @@ func on_selected_actions_change(actions: Array[SceneAction]):
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	text = base_text
-	Global.selected_actions_change.connect(on_selected_actions_change)
+	EventBus.selected_actions_change.connect(on_selected_actions_change)

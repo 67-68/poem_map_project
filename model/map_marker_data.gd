@@ -53,7 +53,7 @@ func _init(data: Dictionary = {}):
             
     # 3. 解析年份 (兼容 time 和 year 两个字段)
     # 优先读 props 里的 time，其次是 year
-    year = props.get("time", props.get("year", data.get("year", Global.start_year)))
+    year = props.get("time", props.get("year", data.get("year", GameState.start_year)))
     color = Color.from_string(data.get('color', props.get('color', 'white')), Color.WHITE)
     
     # 4. 解析地点 ID

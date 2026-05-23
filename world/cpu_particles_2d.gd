@@ -9,7 +9,7 @@ func on_request_rain(enable: bool):
 
 func _ready() -> void:
 	emitting = false
-	Global.request_rain.connect(on_request_rain)
+	EventBus.request_rain.connect(on_request_rain)
 
 func _process(delta: float) -> void:
 	pass

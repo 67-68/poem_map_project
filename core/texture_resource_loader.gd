@@ -1,7 +1,7 @@
 class_name TextureResLoader extends RefCounted
 
 static func get_icon_simpler(name: String) -> Texture2D:
-    return _load_texture_with_fallback(name, Global.ICON_PATH, Global.DEFAULT_ICON_PATH)
+    return _load_texture_with_fallback(name, GameConfig.ICON_PATH, GameConfig.DEFAULT_ICON_PATH)
 
 static func _load_texture_with_fallback(name: String, folder_path: String, fallback_path: String) -> Texture2D:
     if not name: 
@@ -23,10 +23,10 @@ static func _load_texture_with_fallback(name: String, folder_path: String, fallb
     return load(fallback_path)
 
 static func get_background(background_name: String) -> Texture2D:
-    return _load_texture_with_fallback(background_name, Global.BG_PATH, Global.DEFAULT_BG_PATH)
+    return _load_texture_with_fallback(background_name, GameConfig.BG_PATH, GameConfig.DEFAULT_BG_PATH)
 
 static func get_character(character_name: String) -> Texture2D:
-    return _load_texture_with_fallback(character_name, Global.CHARACTER_PATH, Global.DEFAULT_BG_PATH)
+    return _load_texture_with_fallback(character_name, GameConfig.CHARACTER_PATH, GameConfig.DEFAULT_BG_PATH)
 
 static func get_icon(...names) -> Texture2D:
     """
@@ -43,8 +43,8 @@ static func get_icon(...names) -> Texture2D:
             name = name + ".png"
             
         if not name.begins_with("res://"):
-            if FileAccess.file_exists(Global.ICON_PATH + name):
-                name = Global.ICON_PATH + name
+            if FileAccess.file_exists(GameConfig.ICON_PATH + name):
+                name = GameConfig.ICON_PATH + name
                 
         if ResourceLoader.exists(name):
             return load(name) # Godot 的 load 自带缓存，不用担心性能
@@ -60,4 +60,4 @@ static func get_icon(...names) -> Texture2D:
             name_str += name + ","
     Logging.warn("图标丢失: %s" % name_str)
     
-    return load(Global.DEFAULT_ICON_PATH)
+    return load(GameConfig.DEFAULT_ICON_PATH)

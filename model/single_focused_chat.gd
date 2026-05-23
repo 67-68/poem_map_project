@@ -12,18 +12,18 @@ enum ChatPosition {
 func _init(data: Dictionary):
 	super._init(data)
 	var props = data.get("properties", data.get("property", {}))
-	var raw_tex = data.get('texture',props.get('texture',Global.DEFAULT_ICON_PATH))
+	var raw_tex = data.get('texture',props.get('texture',GameConfig.DEFAULT_ICON_PATH))
 	if raw_tex is Texture:
 		texture = raw_tex
 	elif raw_tex is String:
-		if FileAccess.file_exists(Global.CHARACTER_PATH + raw_tex):
-			raw_tex = Global.CHARACTER_PATH + raw_tex
-		elif FileAccess.file_exists(Global.ICON_PATH + raw_tex):
-			raw_tex = Global.ICON_PATH + raw_tex
+		if FileAccess.file_exists(GameConfig.CHARACTER_PATH + raw_tex):
+			raw_tex = GameConfig.CHARACTER_PATH + raw_tex
+		elif FileAccess.file_exists(GameConfig.ICON_PATH + raw_tex):
+			raw_tex = GameConfig.ICON_PATH + raw_tex
 		elif FileAccess.file_exists(raw_tex):
 			pass
 		else:
-			raw_tex = Global.DEFAULT_ICON_PATH
+			raw_tex = GameConfig.DEFAULT_ICON_PATH
 		
 		texture = load(raw_tex)
 	

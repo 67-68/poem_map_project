@@ -10,6 +10,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	text = base_text
-	for s in Global.properties:
-		text += "%s: %s\n" % [s, Global.properties[s].val]
-		text += 'stage-percep: %s\n' % Global.properties[s].get_staged_perception_text()
+	for s in Database.properties:
+		text += "%s: %s\n" % [s, Database.properties[s].val]
+		text += 'stage-percep: %s\n' % Database.properties[s].get_staged_perception_text()

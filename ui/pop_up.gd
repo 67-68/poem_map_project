@@ -28,7 +28,7 @@ func reset():
 
 
 func _ready() -> void:
-	Global.request_text_popup.connect(on_text_popup)
+	EventBus.request_text_popup.connect(on_text_popup)
 	grow_horizontal = Control.GROW_DIRECTION_BOTH
 	grow_vertical = Control.GROW_DIRECTION_BEGIN
 	original_position = position

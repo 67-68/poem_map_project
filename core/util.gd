@@ -24,7 +24,7 @@ static func colorize_underlined_link(text: String,color: Color,key: String):
 	return colorize(underline(link(text,key)),color)
 
 static func process_poem_events(
-	points_data: Dictionary,   # 对应 Global.life_path_points
+	points_data: Dictionary,   # 对应 Database.life_path_points
 	path_keys: Array,          # 对应 datamodel.path_point_keys (必须是有序的！)
 	current_target_year: float   # 对应 self.next_point_year
 ) -> PoemProcessResult:
@@ -64,14 +64,14 @@ static func process_poem_events(
 	return result
 
 static func geo_to_pixel(lon: float, lat: float) -> Vector2:
-	var x = (lon - Global.LON_MIN) / (Global.LON_MAX - Global.LON_MIN) * Global.MAP_WIDTH
+	var x = (lon - GameConfig.LON_MIN) / (GameConfig.LON_MAX - GameConfig.LON_MIN) * GameConfig.MAP_WIDTH
 	# 别忘了 Y 轴是反的，除非你想让李白飞到天上去 💀
-	var y = (1.0 - (lat - Global.LAT_MIN) / (Global.LAT_MAX - Global.LAT_MIN)) * Global.MAP_HEIGHT
+	var y = (1.0 - (lat - GameConfig.LAT_MIN) / (GameConfig.LAT_MAX - GameConfig.LAT_MIN)) * GameConfig.MAP_HEIGHT
 	return Vector2(x, y)
 
 static func pixel_to_geo(pos: Vector2) -> Array:
-	var lon = (pos.x / Global.MAP_WIDTH) * (Global.LON_MAX - Global.LON_MIN) + Global.LON_MIN
-	var lat = (1.0 - (pos.y / Global.MAP_HEIGHT)) * (Global.LAT_MAX - Global.LAT_MIN) + Global.LAT_MIN
+	var lon = (pos.x / GameConfig.MAP_WIDTH) * (GameConfig.LON_MAX - GameConfig.LON_MIN) + GameConfig.LON_MIN
+	var lat = (1.0 - (pos.y / GameConfig.MAP_HEIGHT)) * (GameConfig.LAT_MAX - GameConfig.LAT_MIN) + GameConfig.LAT_MIN
 	return [lon, lat]
 
 
@@ -90,7 +90,7 @@ static func resolve_to_provinces(input_ids: Array) -> Array[String]:
 	# 只有在 Global.base_provinces 中存在的才保留
 	var final_list: Array[String] = []
 	for id in result_set.keys():
-		if Global.base_province.has(id):
+		if Database.base_province.has(id):
 			final_list.append(id)
 		else:
 			# 这种通常是因为你传入了一个逻辑单位（如“范阳”），它本身不是地块
@@ -106,7 +106,7 @@ static func _explode_recursive(current_id: String, result_set: Dictionary, visit
 	visited[current_id] = true
 	
 	# 2. 从注册表获取实体数据. 这里的注册表指的是Territory而不是BaseProvince
-	var entity = Global.territories.get(current_id)
+	var entity = Database.territories.get(current_id)
 	if not entity:
 		# 如果注册表里没有，它可能就是一个原始州 ID，先放进结果集待查
 		result_set[current_id] = true
@@ -255,7 +255,7 @@ static func create_dict(data: Array):
 		dict[d.uuid] = d
 	return dict
 
-static func create_dict_from_registry(registry: ResourceRegistry):
+static func create_dict_from_registry(registry):
 	"""
 	从ResourceRegistry创建字典，使用registry中的resources字典
 	registry: ResourceRegistry实例，包含resources字典
