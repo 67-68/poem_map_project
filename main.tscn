@@ -121,6 +121,7 @@ offset_bottom = 225.14502
 
 [node name="NarrativeOverlay" parent="UI" instance=ExtResource("11_vivmo")]
 z_index = 8
+scale = Vector2(1, 0.96530986)
 
 [node name="SimpleToast" parent="UI" instance=ExtResource("12_2cqfq")]
 
@@ -228,7 +229,6 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_facbu")
 
 [node name="PoemCreation" parent="UI" instance=ExtResource("29_facbu")]
 process_mode = 3
-visible = false
 
 [node name="Picker" parent="UI" instance=ExtResource("30_b1qrp")]
 visible = false
@@ -238,6 +238,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("6_7mycd")
 
 [node name="Controller" type="TextEdit" parent="UI/Control"]
 z_index = 100
@@ -246,7 +247,6 @@ offset_left = -2.0
 offset_top = -1.0
 offset_right = 342.0
 offset_bottom = 231.0
-script = ExtResource("6_7mycd")
 
 [node name="Button" type="Button" parent="UI/Control"]
 custom_minimum_size = Vector2(80, 50)

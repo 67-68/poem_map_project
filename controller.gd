@@ -1,17 +1,15 @@
-extends TextEdit
+extends Control
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	visible = false
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	if Input.is_action_pressed("call_controller"):
-		visible = !visible
-		# 等待0.5s
-		await get_tree().create_timer(0.5).timeout
+func _input(event: InputEvent):
+	if event is InputEventKey and event.pressed:
+		# Cmd+D (Mac) or Ctrl+D (Windows/Linux)
+		if event.keycode == KEY_F2 and (event.meta_pressed or event.ctrl_pressed):
+			visible = not visible
 
 func _on_text_submitted(new_text: String) -> void:
 	#breakpoint
@@ -58,7 +56,7 @@ func parse(new_text):
 
 func _on_button_pressed() -> void:
 	#breakpoint
-	var current_text = text
+	var current_text = $Controller.text
 	if not current_text.is_empty():
 		_on_text_submitted(current_text)
-		text = ""
+		$Controller.text = ""

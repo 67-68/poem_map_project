@@ -32,3 +32,7 @@
 ## 📝 维护日志
 
 - 2026-05-23: 整理文档结构，统一文件命名规范，建立architecture_moc.md作为总览入口
+
+## 键位
+cmd + f1 -> 展示debug info
+cmd + f2 -> show terminal

@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://6ilphg3nn6wx"]
+[gd_scene load_steps=9 format=3 uid="uid://6ilphg3nn6wx"]
 
 [ext_resource type="Script" uid="uid://dumrsjmb5wfw2" path="res://debuggers_and_linters/property_label.gd" id="1_fscx0"]
+[ext_resource type="Script" uid="uid://cn8x8tjea0sha" path="res://debuggers_and_linters/debug_info.gd" id="1_i515d"]
 [ext_resource type="Script" uid="uid://dwt47t3hxkbjx" path="res://debuggers_and_linters/events_label.gd" id="2_bhh81"]
 [ext_resource type="Script" uid="uid://sk3tq3p8t74d" path="res://debuggers_and_linters/time_label.gd" id="3_by2l1"]
 [ext_resource type="Script" uid="uid://db7vr3lg6gs00" path="res://debuggers_and_linters/event_pool_label.gd" id="4_irtbx"]
@@ -15,6 +16,7 @@ offset_top = 2.0
 offset_right = 816.66327
 offset_bottom = 280.0
 scale = Vector2(0.98352087, 1)
+script = ExtResource("1_i515d")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
