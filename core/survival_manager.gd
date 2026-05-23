@@ -23,6 +23,7 @@ func death_judgement():
     """
     #breakpoint
     if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) < 0:
+        # ✅ 这里已经是四段式标签，无需标准化
         PlayerState.current_action_tags.append('actor:health:death:general')
         EventManager.scan_death_events()
 

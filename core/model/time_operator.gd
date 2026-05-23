@@ -6,7 +6,9 @@ var source_tags: Array[String] = []:
 	get():
 		var result: Array[String] = []
 		for tag in _source_tags:
-			result.append(ENUMS.to_action_str(tag))
+			var tag_str = ENUMS.to_action_str(tag)
+			var normalized_tag = TagManager.normalize_3part_depreciated_tag(tag_str)
+			result.append(normalized_tag)
 		return result
 
 func operate():

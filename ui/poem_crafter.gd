@@ -124,7 +124,9 @@ func _on_button_pressed() -> void:
 
 	for i in imas:
 		for tag in i.basic_imaginaries:
-			PlayerState.current_action_tags.append(tag)
+			# 🔧 标准化标签：确保三段式标签转换为四段式
+			var normalized_tag = TagManager.normalize_3part_depreciated_tag(tag)
+			PlayerState.current_action_tags.append(normalized_tag)
 
 	EventManager.scan_poem_events(imas)
 	Logging.info('PoemCrafter: updating l3_thresholds for %d imaginaries' % imas.size())

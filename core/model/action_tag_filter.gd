@@ -3,9 +3,14 @@ class_name ActionTagFilter extends BaseEventPoolFilter
 static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
     var new_events = {}
     var current_tags = PlayerState.current_action_tags
+
+    # 🔍 检查输入标签是否为三段式（向后兼容检查）
+    for tag in current_tags:
+        if tag.split(':').size() <= 3:
+            push_error("🚨 [ActionTagFilter] 发现三段式标签注入: %s，应该在注入时通过 TagManager.normalize_3part_depreciated_tag() 标准化为四段式" % tag)
     
     for ticket in tickets:
-        #breakpoint
+        breakpoint
         var e = Database.random_events.get(ticket.event_uuid)
         if not e:
             e = Database.end_random_events.get(ticket.event_uuid)

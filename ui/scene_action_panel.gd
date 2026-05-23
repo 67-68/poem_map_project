@@ -18,7 +18,10 @@ func _on_button_pressed() -> void:
 	if action.action_results:
 		for r in action.action_results: r.operate()
 	
-	PlayerState.current_action_tags.append_array(action.action_tags)# 暂时和current action 使用同一个池子
+	# 🔧 标准化标签：确保三段式标签转换为四段式
+	for tag in action.action_tags:
+		var normalized_tag = TagManager.normalize_3part_depreciated_tag(tag)
+		PlayerState.current_action_tags.append(normalized_tag)
 	EventManager.scan_events(0)
 
 	
