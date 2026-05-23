@@ -1,20 +1,11 @@
 class_name PoemTypeChooseOperator extends BaseOperator
 
 @export var _accepted_poem_types: Array[ENUMS.POEM_TYPE] # e.g. ["yan_ye", "ying_zhi"]
-@export var _neutral_poem_types: Array[ENUMS.POEM_TYPE]
-@export var _rejected_poem_type: Array[ENUMS.POEM_TYPE]
 var accepted_poem_types: Array[String]:
     get():
         return _accepted_poem_types.map(func(t: ENUMS.POEM_TYPE) -> String: return ENUMS.POEM_TYPE.keys()[t])
-var neutral_poem_types: Array[String]:
-    get():
-        return _neutral_poem_types.map(func(t: ENUMS.POEM_TYPE) -> String: return ENUMS.POEM_TYPE.keys()[t])
-var rejected_poem_type: Array[String]:
-    get():
-        return _rejected_poem_type.map(func(t: ENUMS.POEM_TYPE) -> String: return ENUMS.POEM_TYPE.keys()[t])
 @export var lowest_poem_level := 0
 @export var accpeted_result: ChoiceResult = ChoiceResult.new()
-@export var neutral_result: ChoiceResult = ChoiceResult.new()
 @export var rejected_result: ChoiceResult = ChoiceResult.new()
 @export var not_entered_result: ChoiceResult = ChoiceResult.new()
 
@@ -50,11 +41,6 @@ func operate():
     if type in accepted_poem_types:
         Logging.debug('PoemTypeChooseOperator: Type %s in accepted_poem_types, executing accpeted_result' % type)
         accpeted_result.operate()
-    elif type in neutral_poem_types:
-        Logging.debug('PoemTypeChooseOperator: Type %s in neutral_poem_types, executing neutral_result' % type)
-        neutral_result.operate()
-    elif type in rejected_poem_type:
+    else:
         Logging.debug('PoemTypeChooseOperator: Type %s in rejected_poem_type, executing rejected_result' % type)
         rejected_result.operate()
-    else:
-        Logging.debug('PoemTypeChooseOperator: Type %s not found in any category, no result executed' % type)

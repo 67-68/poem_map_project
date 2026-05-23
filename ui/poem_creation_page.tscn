@@ -12,6 +12,7 @@ content_margin_bottom = 20.0
 texture = ExtResource("2_xp646")
 
 [node name="PoemCreationPage" type="Control"]
+visible = false
 z_index = 6
 clip_contents = true
 layout_mode = 3

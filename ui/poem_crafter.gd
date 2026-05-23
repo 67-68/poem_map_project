@@ -1,10 +1,6 @@
 extends HBoxContainer
 
-@export var current_level := -1: # -1 -> 2
-	set(value):
-		#breakpoint
-		Logging.debug('current level is ' + str(value))
-		current_level = value
+var selected_imaginaries: Array[ImagenaryItem] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -34,91 +30,104 @@ func setup_imagenaries():
 			$ImagenaryScroll/HFlowContainer.add_child(item)
 	Logging.info('PoemCrafter: setup complete, created %d items' % active_imaginaries)
 
+func render_slots():
+	Logging.info('PoemCrafter: rendering slots, selected count: %d' % selected_imaginaries.size())
+	var slots = $InputImagPanel/H.get_children()
+
+	# 渲染所有槽位
+	for i in range(slots.size()):
+		var slot = slots[i] as PoemSlot
+		slot.remove_theme_stylebox_override("panel")
+		if i < selected_imaginaries.size():
+			# 有意象的槽位
+			var item = selected_imaginaries[i]
+			slot.apply_style(item.current_style)
+			slot.apply_text(item.get_text())
+		else:
+			# 空槽位
+			slot.apply_text('没有灵感...')
+
 func refresh_image():
-	Logging.info('PoemCrafter: refreshing image for current_level %d' % current_level)
+	var level = selected_imaginaries.size()
+	Logging.info('PoemCrafter: refreshing image for level %d' % level)
 	var tex: Texture2D = null
-	match current_level:
-		-1:
-			tex = TextureResLoader.get_background("bg_poem_creation_1")
-			Logging.info('PoemCrafter: loading background 1 for level -1, 0 complete')
+	match level:
 		0:
-			tex = TextureResLoader.get_background("bg_poem_creation_2")
-			Logging.info('PoemCrafter: loading background 2 for level 0, 1 complete')
+			tex = TextureResLoader.get_background("bg_poem_creation_1")
+			Logging.info('PoemCrafter: loading background 1 for level 0')
 		1:
-			tex = TextureResLoader.get_background("bg_poem_creation_3")
-			Logging.info('PoemCrafter: loading background 3 for level 1, 2 complete')
+			tex = TextureResLoader.get_background("bg_poem_creation_2")
+			Logging.info('PoemCrafter: loading background 2 for level 1')
 		2:
+			tex = TextureResLoader.get_background("bg_poem_creation_3")
+			Logging.info('PoemCrafter: loading background 3 for level 2')
+		3:
 			tex = TextureResLoader.get_background("bg_study_quiet")
-			Logging.info('PoemCrafter: loading background 3 for level 2, 3 complete')
+			Logging.info('PoemCrafter: loading background for level 3')
 		_:
-			Logging.warn('PoemCrafter: unknown current_level %d' % current_level)
-	
+			Logging.warn('PoemCrafter: unknown level %d' % level)
+
 	$InputImagPanel/MarginContainer/TextureRect.texture = tex
 
 func on_item_clicked(imaginary_item: ImagenaryItem):
-	Logging.info('PoemCrafter: item clicked at current_level %d' % current_level)
-	if current_level == 2:
-		Logging.info('stop user from adding the fourth imagenary tag') 
+	Logging.info('PoemCrafter: item clicked, selected count: %d' % selected_imaginaries.size())
+	if selected_imaginaries.size() >= 3:
+		Logging.info('stop user from adding the fourth imagenary tag')
 		return
-	
-	Logging.info('PoemCrafter: adding imaginary_item to slot, hiding imaginary_item and incrementing level')
+
+	Logging.info('PoemCrafter: adding imaginary_item to array and hiding it')
 	imaginary_item.hide()
-	current_level += 1
-	var slots = $InputImagPanel/H.get_children()
-	Logging.info('PoemCrafter: checking %d available slots' % slots.size())
-	for i in slots:
-		var slot = i as PoemSlot
-		if not slot.item_occupying:
-			Logging.info('PoemCrafter: found empty slot, applying imaginary_item')
-			slot.apply_style(imaginary_item.current_style)
-			slot.apply_text(imaginary_item.get_text())
-			slot.item_occupying = imaginary_item
-			break
-	
-	if current_level == 2:
+	selected_imaginaries.append(imaginary_item)
+	render_slots()
+
+	if selected_imaginaries.size() == 3:
 		Logging.info('PoemCrafter: reached max level, calculating poem')
 		var imas: Array[ImaginaryTag] = []
-		for c in $InputImagPanel/H.get_children():
-			imas.append(c.item_occupying.imaginary_tag)
+		for item in selected_imaginaries:
+			imas.append(item.imaginary_tag)
 		Logging.info('PoemCrafter: calculating poem from %d imaginaries' % imas.size())
 		var cost = PoemCraftingCalculator.calculate(imas)
 		var text = PoemCraftingCalculator.translate(cost)
 		$InputImagPanel/Button.tooltip_text = text
 		$InputImagPanel/RichTextLabel.text = text
 		Logging.info('PoemCrafter: poem text set: %s' % text)
-	
+
 	refresh_image()
 
 func on_slot_clicked(slot: PoemSlot):
-	Logging.info('PoemCrafter: slot clicked, current_level: %d' % current_level)
-	var item = slot.item_occupying
-	if not item:
-		Logging.warn('PoemCrafter: slot clicked but no item occupying')
+	Logging.info('PoemCrafter: slot clicked, selected count: %d' % selected_imaginaries.size())
+	var slots = $InputImagPanel/H.get_children()
+	var slot_index = slots.find(slot)
+
+	if slot_index == -1 or slot_index >= selected_imaginaries.size():
+		Logging.warn('PoemCrafter: slot clicked but no item occupying at index %d' % slot_index)
 		return
-	Logging.info('PoemCrafter: removing item from slot and decrementing level')
-	#breakpoint
+
+	Logging.info('PoemCrafter: removing item at index %d from array' % slot_index)
+	var item = selected_imaginaries[slot_index]
+	selected_imaginaries.remove_at(slot_index)
 	item.show()
-	slot.item_occupying = null
-	current_level -= 1
-	# 返回原本的style
-	slot.remove_theme_stylebox_override("panel")
-	slot.apply_text('没有灵感...')
-	Logging.info('PoemCrafter: slot cleared, new current_level: %d' % current_level)
+	render_slots()
+	Logging.info('PoemCrafter: slot cleared, new selected count: %d' % selected_imaginaries.size())
 
 	refresh_image()
 
 func _on_button_pressed() -> void:
+	breakpoint
+	if selected_imaginaries.size() != 3:
+		Logging.warn('selected count not 3, cannot craft poem')
+		return
 	Logging.info('PoemCrafter: button pressed, crafting poem')
 	var imas: Array[ImaginaryTag] = []
-	for c in $InputImagPanel/H.get_children():
-		imas.append(c.item_occupying.imaginary_tag)
+	for item in selected_imaginaries:
+		imas.append(item.imaginary_tag)
 	Logging.info('PoemCrafter: collecting %d imaginaries for crafting' % imas.size())
 	var ops = PoemCraftingCalculator.calculate(imas)
 	Logging.info('PoemCrafter: calculated %d operations' % ops.size())
 	for op in ops:
 		Logging.info('PoemCrafter: executing operation')
 		op.operate()
-	
+
 	#breakpoint
 	Logging.info('PoemCrafter: scanning for poem events')
 
@@ -137,4 +146,9 @@ func _on_button_pressed() -> void:
 			Logging.info('PoemCrafter: updated l3_threshold from %d to %d' % [old_threshold, i.l3_threshold])
 	Logging.info('PoemCrafter: poem crafting complete')
 
-	
+	# 清空状态
+	Logging.info('PoemCrafter: clearing selected imaginaries')
+	for item in selected_imaginaries:
+		item.show()
+	selected_imaginaries.clear()
+	render_slots()
