@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="RandomEvent" load_steps=13 format=3 uid="uid://bo172xtmiixa3"]
 
 [ext_resource type="Texture2D" uid="uid://bkggqxw8e3vjh" path="res://assets/character/li_linfu_smirk.png" id="1_2w6q0"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/complex_event_option.gd" id="1_xfuee"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_xfuee"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="3_vrlhj"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_8v247"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_kok5i"]
@@ -9,7 +9,6 @@
 
 [sub_resource type="Resource" id="Resource_rb207"]
 script = ExtResource("4_8v247")
-property = "literary_fame"
 value = 10
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
@@ -26,7 +25,6 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_3i3ob"]
 script = ExtResource("4_8v247")
-property = "official_prestige"
 value = -5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
@@ -38,14 +36,11 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fyilk"]
 script = ExtResource("1_xfuee")
 description = "离开"
-double_check = true
-double_check_reason = "真的吗？你会被视为诺夫哥罗德"
 choice_result = SubResource("Resource_p41yo")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_t6y1c")
-weight = 10.0
 options = Array[ExtResource("1_xfuee")]([SubResource("Resource_xfuee"), SubResource("Resource_fyilk")])
 uuid = "test_event_pool_2_meet_the_poor"
 name = "遇见乞丐"

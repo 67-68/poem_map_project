@@ -23,5 +23,5 @@ func refresh():
 
 # 刷新场景化行动
 func _ready():
-	#breakpoint
+	refresh()
 	TimeService.on_month_tick.connect(refresh)

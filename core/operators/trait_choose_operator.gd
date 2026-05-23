@@ -16,6 +16,7 @@ var rejected_poem_type: Array[String]:
 @export var accpeted_result: ChoiceResult = ChoiceResult.new()
 @export var neutral_result: ChoiceResult = ChoiceResult.new()
 @export var rejected_result: ChoiceResult = ChoiceResult.new()
+@export var not_entered_result: ChoiceResult = ChoiceResult.new()
 
 func operate():
     Logging.debug('PoemTypeChooseOperator: Starting operate()')
@@ -32,7 +33,10 @@ func operate():
     EventBus.start_picker.emit(data,null)
     var trait_picked = await EventBus.end_picking
     Logging.debug('PoemTypeChooseOperator: Trait picked - %s' % trait_picked.uuid)
-    
+    if not trait_picked:
+        not_entered_result.operate()
+        return
+
     var type = trait_picked.uuid.split(':')[1] # poem:gan_ye:defaultName:1
     var level = trait_picked.uuid.split(':')[3]
     Logging.debug('PoemTypeChooseOperator: Extracted type=%s, level=%s' % [type, level])

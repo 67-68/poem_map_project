@@ -9,7 +9,7 @@ func default_constructor(data: GameEntity):
 	var entity = preload("res://ui/entity_descriptor.tscn").instantiate()
 	entity.initialization(data)
 	entity.clicked.connect(func(selected_entity): 
-		EventBus.end_picking.emit(selected_entity)
+		EventBus.end_picking.emit(selected_entity) # 如果emit空那么就是没选出来
 		hide()
 	)
 	return entity
@@ -23,3 +23,8 @@ func start_picker(data: Array, ui_constructor = default_constructor):
 		var component = ui_constructor.callv([d])
 		$HFlow.add_child(component)
 	show()
+
+
+func _on_button_pressed() -> void:
+	Logging.warn('玩家没有选择内容')
+	EventBus.end_picking.emit()

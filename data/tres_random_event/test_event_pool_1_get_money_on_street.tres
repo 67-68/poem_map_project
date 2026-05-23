@@ -26,7 +26,6 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_ldf8o")
-weight = 100.0
 options = Array[ExtResource("2_e7ekq")]([SubResource("Resource_0yhlr")])
 example = "”天上不会掉馅饼“"
 uuid = "test_event_pool_1_get_money_on_street"

@@ -10,7 +10,7 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
             push_error("🚨 [ActionTagFilter] 发现三段式标签注入: %s，应该在注入时通过 TagManager.normalize_3part_depreciated_tag() 标准化为四段式" % tag)
     
     for ticket in tickets:
-        breakpoint
+        #breakpoint
         var e = Database.random_events.get(ticket.event_uuid)
         if not e:
             e = Database.end_random_events.get(ticket.event_uuid)

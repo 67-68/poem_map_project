@@ -1,4 +1,3 @@
-class_name PropRangeOperator extends BaseOperator
 
 # 根据property的值在min_value和max_value之间来判断是否满足条件，执行operator
 

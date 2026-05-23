@@ -55,7 +55,6 @@ metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 
 [resource]
 script = ExtResource("7_clq8d")
-weight = 500.0
 options = Array[ExtResource("1_k3mjo")]([SubResource("Resource_6xqpf"), SubResource("Resource_r6gxe"), SubResource("Resource_la22m")])
 requirement = SubResource("Resource_7tw52")
 uuid = "test_event_pool_3_meet_the_wealth"

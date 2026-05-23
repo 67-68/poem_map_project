@@ -91,7 +91,7 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
 
     for f in filters:
         current_event_pool = f.call(current_event_pool) as Array[EventTicket]
-        
+
     Logging.info("[EventManager] Event pool populated with " + str(current_event_pool.size()) + " eligible events")
     
     # 开始命运抽奖
