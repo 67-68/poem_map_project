@@ -18,14 +18,19 @@ signal location_changed(location)
 signal emotion_changed(stat_name)
 
 func _ready():
-	change_stat('official_prestige', 14)
-	change_stat('literary_fame',50)
-	change_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
+	append_stat('official_prestige', 14)
+	append_stat('literary_fame',50)
+	append_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
+	append_stat(ENUMS.PROPS.BURNOUT,0)
+	append_stat(ENUMS.PROPS.DRUNK,0)
+	append_stat(ENUMS.PROPS.FATIGUE,0)
+	append_stat(ENUMS.PROPS.SICK,0)
+	append_stat(ENUMS.PROPS.INSPIRATION,0)
 	
 	add_trait(ENUMS.to_traits_str(ENUMS.TRAITS.ORDINARY_PEOPLE))
 	current_location = 'yong_zhou'
 
-func change_stat(stat_name, data):
+func append_stat(stat_name, data):
 	if stat_name is int:
 		var int_stat = ENUMS.to_prop_str(stat_name)
 		if not int_stat:
@@ -76,6 +81,23 @@ func get_stat_val(stat_name):
 		return 0
 	return stat.val
 
+func set_stat_val(stat_name, data):
+	if stat_name is int:
+		var int_stat = ENUMS.to_prop_str(stat_name)
+		if not int_stat:
+			Logging.err('do not find stat %s' % stat_name)
+			return
+		stat_name = int_stat
+	
+	var stat = Database.properties.get(stat_name)
+	if not stat:
+		Logging.err('do not find stat %s' % stat_name)
+		return
+	
+	stat.val = data
+	Logging.info('set stat %s to %d' % [stat_name, data])
+	player_stat_changed.emit(stat_name)
+
 func get_emotion(stat_name):
 	if stat_name is int:
 		var int_stat = ENUMS.to_prop_str(stat_name)
@@ -88,7 +110,7 @@ func get_emotion(stat_name):
 		return 0
 	return emotions[stat_name]
 
-func change_emotion(stat_name, data):
+func append_emotion(stat_name, data):
 	if stat_name is int:
 		var int_stat = ENUMS.to_prop_str(stat_name)
 		if not int_stat:
@@ -102,6 +124,19 @@ func change_emotion(stat_name, data):
 	emotions[stat_name] += data
 	Logging.info('change volatile stat %s by %d, new value: %d' % [stat_name, data, emotions[stat_name]])
 	emotion_changed.emit(stat_name)
+
+func set_emotion(emo_name, data):
+	if emo_name is int:
+		var int_stat = ENUMS.to_prop_str(emo_name)
+		if not int_stat:
+			Logging.err('do not find stat %s' % emo_name)
+			return
+		emo_name = int_stat
+	
+	emotions[emo_name] = data
+	Logging.info('set volatile stat %s to %d' % [emo_name, data])
+	emotion_changed.emit(emo_name)
+	
 
 func flush_emotion():
 	# 清空volatile_stats

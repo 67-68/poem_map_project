@@ -65,4 +65,4 @@ static func _apply_poem_data(_poem_data: PoemData) -> void:
 	EventBus.request_apply_poem.emit(_poem_data, poet_data_)
 
 func test_change_literary_fame(num: int) -> void:
-	PlayerState.change_stat("literary_fame", num)
+	PlayerState.append_stat("literary_fame", num)

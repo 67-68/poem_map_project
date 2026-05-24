@@ -16,28 +16,7 @@ enum ACTION_TAGS {
     ACTION_STUDY,
     ACTION_SOCIAL,
     ACTION_EXPLORATION,
-    CHANGAN_ELITE,
-    POLITICAL_FACTION,
-    HIGH_CONSUMPTION,
-    SEEK_PATRONAGE,
-    HUMILIATION,
-    LITERARY_DISPLAY,
-    MARKET,
-    INTELLIGENCE,
-    LOWER_CLASS,
-    INSPIRATION,
-    ROYAL_PROXIMITY,
-    NATURE,
-    STUDY,
-    SOLITUDE,
-    HEALTH_RISK,
-    DESPIRATION,
-    DRUNK,
-    SCANDAL,
-    DEATH, # 普通筛选的时候排除，专门用来做死亡事件
-    CHAOTIC_WORLD,
-    # above: depreciated
-    
+
     #使用_来代替标签的:符号
     ACTOR_HEALTH_SICK, # 病痛/衰老# 
     ACTOR_HEALTH_DRUNK, # 宿醉/狂歌
@@ -80,7 +59,10 @@ enum PROPS {
 	TALENT,
     MONEY,
     HEALTH,
-    FATIGUE, # 影响才华产出效率
+
+    # 注意，以下这几个和上面的不是一个类型的，他们是 0 -> 100(最大)的
+    FATIGUE, # 短期的疲惫，行动点 影响才华产出效率
+    BURNOUT, # 长期的精神疲惫，精神疾病
     DRUNK, # 双刃剑：降低理性，但可能提供某些意象的获取折扣
     SICK, # 疲劳，到达阈值直接强制睡觉。把那个该死的 STRESS 删了！
     INSPIRATION  # 灵感（这玩意其实更像一种代币或 Buffer，用来兑换意象）

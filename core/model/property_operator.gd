@@ -14,4 +14,4 @@ var str_props: String = ""
 @export var value: int = 0
 
 func operate():
-    PlayerState.change_stat(property,value)
+    PlayerState.append_stat(property,value)

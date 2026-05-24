@@ -20,4 +20,4 @@ func operate():
 		Archetypes.translate_archetype(archetype, PlayerState)
 	
 	# 再处理 emotion 效果
-	PlayerState.change_emotion(emotion, value)
+	PlayerState.append_emotion(emotion, value)
