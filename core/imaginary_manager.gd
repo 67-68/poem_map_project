@@ -19,7 +19,7 @@ func add_imagenary(ev: BaseEvent):
 	EventBus.imaginary_changed.emit()
 
 func _process_emotion_configs(ev: BaseEvent):
-	breakpoint
+	#breakpoint
 	var evaluated_results = ImagenaryEvaluator.evaluate_local_configs(ev.emotion_configs, PlayerState)
 	Logging.info('event %s evaluation result: %d configs passed validation' % [ev.uuid, evaluated_results.size()])
 	

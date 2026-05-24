@@ -4,11 +4,13 @@ skinparam sequenceMessageAlign center
 skinparam monochrome true
 skinparam shadowing false
 
-title Imaginary System Sequence Diagram - Strong Type Reference Architecture
+title Imaginary System Sequence Diagram - Strong Type Reference Architecture (Updated Timing)
 
 actor Player as player
 participant EventManager as event_manager
 participant EventBus as event_bus
+participant NarrativeOverlay as narrative_overlay
+participant ConsequenceExecuter as consequence_executer
 participant ImaginaryManager as imaginary_manager
 participant ImagenaryEvaluator as evaluator
 participant PlayerState as player_state
@@ -20,21 +22,43 @@ participant PoemCraftingCalculator as calculator
 player -> event_manager: Game time advances
 event_manager -> event_manager: scan_events()
 event_manager -> event_bus: request_event_key.emit(event_uuid)
-event_bus -> player: Show event UI
-player -> player: Make choice in event
+event_bus -> narrative_overlay: Show event UI
 event_bus -> event_bus: event_shown.emit(event)
 
-event_bus -> imaginary_manager: add_imagenary(event)
+player -> narrative_overlay: Make choice in event
+narrative_overlay -> narrative_overlay: _on_option_selected(choice_result)
+narrative_overlay -> narrative_overlay: _end_narrative(choice_result)
+narrative_overlay -> event_bus: event_confirmed.emit()
+
+narrative_overlay -> consequence_executer: execute_result(choice_result)
+consequence_executer -> consequence_executer: result.operate()
+consequence_executer -> consequence_executer: Execute operators (EmotionOperator, etc.)
+consequence_executer -> player_state: change_emotion(emotion, value)
+note right of player_state
+    Emotion is modified HERE
+    BEFORE imaginary evaluation
+end note
+
+narrative_overlay -> imaginary_manager: add_imagenary(event)
+note right of imaginary_manager
+    Called AFTER emotion modification
+    ensuring correct state evaluation
+end note
+
 imaginary_manager -> imaginary_manager: Check if event has emotion_configs
 
 alt Event has emotion_configs
     imaginary_manager -> evaluator: evaluate_local_configs(emotion_configs, player_state)
     evaluator -> player_state: get_stat_val() for requirements
+    note right of player_state
+    Now uses UPDATED emotion values
+    from player's choice consequences
+    end note
     player_state --> evaluator: stat values
     evaluator -> evaluator: Apply talent discounts if applicable
     evaluator --> imaginary_manager: Array of validated {blueprint, context_tags}
     imaginary_manager -> imaginary_manager: _process_emotion_configs()
-    
+
     loop For each validated result
         imaginary_manager -> imaginary_manager: Extract blueprint and context_tags
         imaginary_manager -> imaginary_manager: Check if blueprint is null
@@ -112,11 +136,14 @@ poem_crafter -> poem_crafter: render_slots()
 
 note right of player
     Imaginary consumption cycle complete:
-    1. Imaginaries acquired through strong type references
-    2. Structured data preserved with contexts
-    3. Used in poem crafting with blueprint_id extraction
-    4. Thresholds increased, levels reset
-    5. Ready for next cycle with rich narrative context
+    1. Event shown, player makes choice
+    2. ConsequenceExecuter modifies emotion state
+    3. Imaginary evaluation uses UPDATED emotion values
+    4. Imaginaries acquired through strong type references
+    5. Structured data preserved with contexts
+    6. Used in poem crafting with blueprint_id extraction
+    7. Thresholds increased, levels reset
+    8. Ready for next cycle with rich narrative context
 end note
 
 @enduml

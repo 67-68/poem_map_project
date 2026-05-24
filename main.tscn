@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://cj83wfrijuncn"]
+[gd_scene load_steps=46 format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
@@ -37,6 +37,8 @@
 [ext_resource type="Script" uid="uid://dwkrc1dytscs2" path="res://core/csv_cloud_loader.gd" id="29_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://c4cm25a8sdyj" path="res://ui/picker.tscn" id="30_b1qrp"]
 [ext_resource type="Script" uid="uid://dinmvxb5j0il4" path="res://core/survival_manager.gd" id="30_kq58d"]
+[ext_resource type="Script" uid="uid://ck2mtudsybglf" path="res://ui/emotion_radar.gd" id="31_come4"]
+[ext_resource type="Script" uid="uid://dw61ft7sugtq3" path="res://ui/radar_painting.gd" id="32_radar"]
 [ext_resource type="Script" uid="uid://7b8yb1lxhk3s" path="res://core/imaginary_manager.gd" id="35_0rl1p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
@@ -262,6 +264,42 @@ offset_right = 403.0
 offset_bottom = 191.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="EmotionRadar" type="ColorRect" parent="UI"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -131.5
+offset_top = -131.5
+offset_right = 131.5
+offset_bottom = 131.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("31_come4")
+
+[node name="RadarPainting" type="Control" parent="UI/EmotionRadar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -131.5
+offset_top = -131.5
+offset_right = 131.5
+offset_bottom = 131.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("32_radar")
+
+[node name="Label" type="Label" parent="UI/EmotionRadar"]
+layout_mode = 0
+offset_left = -444.5
+offset_top = -192.5
+offset_right = -404.5
+offset_bottom = -169.5
 
 [node name="CoreSystems" type="Node" parent="."]
 

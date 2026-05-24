@@ -36,3 +36,4 @@
 ## 键位
 cmd + f1 -> 展示debug info
 cmd + f2 -> show terminal
+R -> emotional radar
