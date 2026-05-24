@@ -64,7 +64,8 @@ func _load_static():
 	# 1. 挂载阶段名称 (静态)
 	Logging.info("AmbitionHUD: Setting ambition name: %s" % ambition.name)
 	ambition_label.text = ambition.name
-	var stage_name_placeholer = ambition.leveled_stages[ambition.current_stage] # placeholder
+	if ambition.current_stage < 0 or ambition.current_stage >= ambition.leveled_stages.size():
+		Logging.error("AmbitionHUD: current_stage %d out of bounds [0, %d] for ambition %s" % [ambition.current_stage, ambition.leveled_stages.size() - 1, ambition.name])
 	Logging.info("AmbitionHUD: Setting deadline warning: %s" % ambition.deadline_warning)
 	deadline_label.text = ambition.deadline_warning
 
@@ -85,12 +86,18 @@ func _on_model_stat_changed(_prop_name):
 		return
 	show()
 	Logging.info("ambition hud received stat changed signal")
+	if ambition.current_stage < 0 or ambition.current_stage >= ambition.leveled_stages.size():
+		Logging.error("AmbitionHUD: current_stage %d out of bounds [0, %d] for ambition %s" % [ambition.current_stage, ambition.leveled_stages.size() - 1, ambition.name])
+		return
 	var current_stage_name = ambition.leveled_stages[ambition.current_stage]
 	Logging.info("AmbitionHUD: Checking stage progression for current stage: %s" % current_stage_name)
 	var operators = _find_requirement_by_stage_id(current_stage_name)
 	if operators and operators.compare(PlayerState):
 		Logging.info("AmbitionHUD: Stage requirements met, advancing to next stage")
 		ambition.current_stage += 1
+		if ambition.current_stage >= ambition.leveled_stages.size():
+			Logging.error("AmbitionHUD: current_stage %d out of bounds [0, %d] after increment for ambition %s" % [ambition.current_stage, ambition.leveled_stages.size() - 1, ambition.name])
+			return
 		var perception = _find_perception_by_stage_id(ambition.leveled_stages[ambition.current_stage])
 		if perception:
 			Logging.info("AmbitionHUD: Setting perception text: %s" % perception.perception_text)

@@ -34,4 +34,7 @@ class_name AmbitionData extends GameEntity
 @export var deadline_warning: String = ''
 
 func get_stage_perception() -> String:
-    return staged_perceptions[current_stage].perception
+	if current_stage < 0 or current_stage >= staged_perceptions.size():
+		Logging.error("AmbitionConfig: current_stage %d out of bounds [0, %d] for ambition %s" % [current_stage, staged_perceptions.size() - 1, name])
+		return "阶段状态未知"
+	return staged_perceptions[current_stage].perception
