@@ -1,6 +1,6 @@
 class_name ActionTagFilter extends BaseEventPoolFilter
 
-static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
+static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[EventTicket]:
     var new_events = {}
     var current_tags = PlayerState.current_action_tags
 
@@ -9,6 +9,10 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
         if tag.split(':').size() <= 3:
             push_error("🚨 [ActionTagFilter] 发现三段式标签注入: %s，应该在注入时通过 TagManager.normalize_3part_depreciated_tag() 标准化为四段式" % tag)
     
+    var maintag = _context.get('main_tag')
+    if not maintag: 
+        Logging.info('action tag filter: does not found main tag')
+
     for ticket in tickets:
         #breakpoint
         var e = Database.random_events.get(ticket.event_uuid)
@@ -30,6 +34,17 @@ static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
         if not current_tags or current_tags.is_empty():
             Logging.warn("检查自己是不是又忘记给玩家加current tags了！！！又筛选掉了")
             continue
+
+        # 2.5 拦截没有main tag的事件
+        if maintag:
+            var found = false
+            for tag in e.target_tags:
+                if tag == maintag:
+                    found = true
+                    break
+            if not found:
+                Logging.info("拦截没有main tag的事件: " + ticket.event_uuid)
+                continue
 
         # 3. 对暗号与权重狂欢
         for tag in current_tags:

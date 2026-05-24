@@ -15,7 +15,7 @@ func _create_ticket(event: BaseEvent) -> EventTicket:
     ticket.original_weight = event.weight
     return ticket
 
-func scan_events(nothing_multiplication_weight = 10.0):
+func scan_events(nothing_multiplication_weight = 10.0, main_tag: String = ''):
     """
     扫描事件池，根据权重进行事件抽取
     
@@ -28,7 +28,7 @@ func scan_events(nothing_multiplication_weight = 10.0):
     var initial_tickets: Array[EventTicket] = []
     for e in Database.random_events.values():
         initial_tickets.append(_create_ticket(e))
-    scan_events_from_tickets(initial_tickets, nothing_multiplication_weight)
+    scan_events_from_tickets(initial_tickets, nothing_multiplication_weight, '',main_tag)
 
 func scan_poem_events(imaginaries: Array[ImaginaryTag]):
     #breakpoint
@@ -62,7 +62,7 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
                 if target_tag == t:
                     tickets.append(_create_ticket(e))
     #breakpoint
-    scan_events_from_tickets(tickets, 0.0,'da_you_shi')
+    scan_events_from_tickets(tickets, 0.0,'da_you_shi','')
 
 
 func scan_death_events():
@@ -74,9 +74,9 @@ func scan_death_events():
     for e in Database.end_random_events.values():
         initial_tickets.append(_create_ticket(e))
     #breakpoint
-    scan_events_from_tickets(initial_tickets, 0.0)
+    scan_events_from_tickets(initial_tickets, 0.0,'')
 
-func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0, fallback_event_uuid: String = ""):
+func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", main_tag: String = ''):
     """
     从给定的事件票据池中扫描事件的核心逻辑
     
@@ -92,8 +92,11 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
 
     current_event_pool.assign(initial_tickets)
 
+    #breakpoint
+    var context := {}
+    context['main_tag'] = main_tag
     for f in filters:
-        current_event_pool = f.call(current_event_pool) as Array[EventTicket]
+        current_event_pool = f.call(current_event_pool,context) as Array[EventTicket]
 
     Logging.info("[EventManager] Event pool populated with " + str(current_event_pool.size()) + " eligible events")
     

@@ -14,6 +14,7 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [resource]
 script = ExtResource("3_e57c2")
+_main_tag = 22
 _action_tags = Array[int]([4, 6, 9, 14, 22])
 action_results = Array[ExtResource("2_h4afu")]([SubResource("Resource_6ult8")])
 uuid = "feng_zhao"

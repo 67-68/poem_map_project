@@ -19,6 +19,7 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [resource]
 script = ExtResource("3_yiapa")
+_main_tag = 18
 _action_tags = Array[int]([4, 9, 10, 14, 18])
 action_results = Array[ExtResource("2_f652d")]([SubResource("Resource_yiapa"), SubResource("Resource_wlhiu")])
 uuid = "bai_ye"

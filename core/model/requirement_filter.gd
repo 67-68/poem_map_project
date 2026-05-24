@@ -1,6 +1,6 @@
 class_name RequirementFilter extends BaseEventPoolFilter
 
-static func filter(tickets: Array[EventTicket]) -> Array[EventTicket]:
+static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[EventTicket]:
     var new_events: Array[EventTicket] = []
     for ticket in tickets:
         var e = Database.random_events.get(ticket.event_uuid)
