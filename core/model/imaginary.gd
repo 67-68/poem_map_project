@@ -11,7 +11,7 @@ signal level_changed(new_level: int)
 		if current_level != value:
 			current_level = value
 			level_changed.emit(value)
-@export var basic_imaginaries: Array[String] = [] # tag uuid
+@export var basic_imaginaries: Array[Dictionary] = [] # 存储结构化数据: [{ "blueprint_id": String, "contexts": Array[String] }]
 @export var l3_threshold := 4 # 需要四个意象来达到l3
 
 const l2_threshold := 2
