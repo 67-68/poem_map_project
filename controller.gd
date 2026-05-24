@@ -53,6 +53,8 @@ func parse(new_text):
 			GameState.callv(parts[0],[parts[1]])
 		elif Database.has_method(parts[0]):
 			Database.callv(parts[0],[parts[1]])
+		elif PlayerState.has_method(parts[0]):
+			PlayerState.callv(parts[0],[parts[1]])
 
 func _on_button_pressed() -> void:
 	#breakpoint
