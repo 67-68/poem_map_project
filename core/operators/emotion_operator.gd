@@ -12,7 +12,6 @@ var emotion := '':
 
 var str_emotion: String = ""
 @export var value: int = 0
-
 @export var archetype: Archetypes.ARCHETYPE = -1 # -1 表示未设置，对应 archetypes.gd 中的 ARCHETYPE 枚举
 
 func operate():

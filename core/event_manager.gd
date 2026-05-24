@@ -22,6 +22,7 @@ func scan_events(nothing_multiplication_weight = 10.0):
     参数:
         nothing_multiplication_weight: 无事发生的权重倍数，默认为10
     """
+    #breakpoint
     Logging.info("[EventManager] Starting event scan")
     
     var initial_tickets: Array[EventTicket] = []

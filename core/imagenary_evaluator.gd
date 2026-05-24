@@ -25,7 +25,7 @@ static func evaluate_single_config(local_config: EmotionConfigs, player_state: P
                 return {}
     # 校验通过，返回结构化数据
     return {
-        "blueprint": local_config.blueprint,
+        "blueprint": local_config.target_imagenary_blueprint,
         "context_tags": local_config.context_tags
     }
 

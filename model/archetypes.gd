@@ -1,3 +1,4 @@
+class_name Archetypes extends RefCounted
 enum ARCHETYPE {
 	RECKLESS,       # 狂放 / 纵酒 / 藐视权威
 	ZEN,            # 隐逸 / 旷达 / 释怀
