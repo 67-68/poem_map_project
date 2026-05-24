@@ -27,9 +27,7 @@
 
 - 旧：`actor:health:drunk`（太粗）
 - 新（你想要的细化方向）：
-    - `actor:health:drunk:sad`
-    - `actor:health:drunk:with_li_bai`
-    - 或者没有上下文时显式写 `actor:health:drunk:general`
+    - 
 
 **为什么要四段式：**  
 
