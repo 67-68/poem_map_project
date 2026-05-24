@@ -54,7 +54,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_hdm8n")
-_action_tags = Array[int]([44, 30, 36, 35, 37, 39])
+_action_tags = Array[int]([4, 9, 10, 14, 18])
 options = Array[ExtResource("1_id36a")]([SubResource("Resource_7bpet"), SubResource("Resource_ydmfd")])
 uuid = "normal_bai_ye"
 name = "拜谒"

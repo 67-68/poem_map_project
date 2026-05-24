@@ -46,7 +46,7 @@ func _process_fatigue_accumulation():
 
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）
 func _process_single_xun_settlement():
-    breakpoint
+    #breakpoint
     # 第一阶段：跨状态感染 (Cross-Pollination)
     # 在任何增减发生之前，先让状态之间互相发生化学反应。
     # 状态自身存在的持续负面衍生

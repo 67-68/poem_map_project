@@ -14,7 +14,7 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [resource]
 script = ExtResource("5_2gju4")
-_action_tags = Array[int]([27, 35, 40, 36, 39, 47])
+_action_tags = Array[int]([1, 10, 13, 21])
 action_results = Array[ExtResource("2_i5atp")]([SubResource("Resource_nrg8x")])
 uuid = "fang_shi"
 name = "坊市游宴"

@@ -9,47 +9,39 @@ DEPRECIATED!!!
 DEPRECIATED!!!
 "
 enum ACTION_TAGS { 
-    # 标准行动action. 可以在任何城市触发相应的事件
-    ACTION_EXERCISE,
-    ACTION_REST,
-    ACTION_WORK,
-    ACTION_STUDY,
-    ACTION_SOCIAL,
-    ACTION_EXPLORATION,
-
-    #使用_来代替标签的:符号
-    ACTOR_HEALTH_SICK, # 病痛/衰老# 
-    ACTOR_HEALTH_DRUNK, # 宿醉/狂歌
-    ACTOR_WEALTH_BROKE, # 穷困潦倒
-    ACTOR_EMOTION_DESPAIR, # 极度郁结
-    ACTOR_EMOTION_AMBITION, # 功名壮志
-    
-    SOCIAL_NATURE_AUTUMN, # 秋风/落叶/肃杀
-    SOCIAL_NATURE_SPRING, # 春江/花月/复苏
-    SOCIAL_FAMINE_STARVING, # 饿殍/流民
-    SOCIAL_WAR_RUIN, # 废墟/烽火/白骨
-    SOCIAL_COURT_PROSPER, # 极乐/奢靡/胡旋
-    SOCIAL_COURT_CORRUPT, # 倾轧/权臣/谗言
-    
-    ACTION_TRAVEL_PARTING, # 霸桥送别/孤帆
-    ACTION_TRAVEL_EXILE, # 贬谪/蜀道/风雪
-    ACTION_RELATION_FRIEND, # 知音/夜雨对床
-    ACTION_RELATION_PATRON, # 权贵/朱门
-    
-    INTEL_VIBE_ZEN, # 空山/古刹/禅意
-    INTEL_VIBE_TAO, # 求仙/丹药/狂傲
-    INTEL_VIBE_HISTORY, # 废垒/夕阳/沧桑
-
-    ACTION_BAI_YE, # 基本的六种标签。每个行动都需要有对应的标签，每个对应的“主线任务事件”也需要有
-    ACTION_SONG_BIE,
-    ACTION_DENG_GAO,
-    ACTION_FANG_SHI,
-    ACTION_FENG_ZHAO,
-    ACTION_DU_ZHUO,
-
-    # ABOVE ARE DEPRECIATED
     # NOW use 4-part tag format: {category}_{subcategory}_{type}_{specific}
     # Example: "action_travel_parting_withLiBai"
+    #使用_来代替标签的:符号
+    ACTOR_HEALTH_SICK_GENERAL, # 病痛/衰老# 
+    ACTOR_HEALTH_DRUNK_GENERAL, # 宿醉/狂歌
+    ACTOR_WEALTH_BROKE_GENERAL, # 穷困潦倒
+    ACTOR_EMOTION_DESPAIR_GENERAL, # 极度郁结
+    ACTOR_EMOTION_AMBITION_GENERAL, # 功名壮志
+    
+    SOCIAL_NATURE_AUTUMN_GENERAL, # 秋风/落叶/肃杀
+    SOCIAL_NATURE_SPRING_GENERAL, # 春江/花月/复苏
+    SOCIAL_FAMINE_STARVING_GENERAL, # 饿殍/流民
+    SOCIAL_WAR_RUIN_GENERAL, # 废墟/烽火/白骨
+    SOCIAL_COURT_PROSPER_GENERAL, # 极乐/奢靡/胡旋
+    SOCIAL_COURT_CORRUPT_GENERAL, # 倾轧/权臣/谗言
+    
+    ACTION_TRAVEL_PARTING_GENERAL, # 霸桥送别/孤帆
+    ACTION_TRAVEL_EXILE_GENERAL, # 贬谪/蜀道/风雪
+    ACTION_RELATION_FRIEND_GENERAL, # 知音/夜雨对床
+    ACTION_RELATION_PATRON_GENERAL, # 权贵/朱门
+    
+    INTEL_VIBE_ZEN_GENERAL, # 空山/古刹/禅意
+    INTEL_VIBE_TAO_GENERAL, # 求仙/丹药/狂傲
+    INTEL_VIBE_HISTORY_GENERAL, # 废垒/夕阳/沧桑
+
+    ACTION_BAI_YE_GENERAL, # 基本的六种标签。每个行动都需要有对应的标签，每个对应的“主线任务事件”也需要有
+    ACTION_SONG_BIE_GENERAL,
+    ACTION_DENG_GAO_GENERAL,
+    ACTION_FANG_SHI_GENERAL,
+    ACTION_FENG_ZHAO_GENERAL,
+    ACTION_DU_ZHUO_GENERAL,
+
+    # 死亡
     ACTOR_HEALTH_DEATH_GENERAL
 }
 
@@ -131,6 +123,7 @@ static func to_action_str(item) -> String:
     if name:
         name = name.replace("_", ":")
         return name.to_lower()
+    #breakpoint
     Logging.err("Invalid action tag: " + str(item))
     return "default_storable_item"
 

@@ -10,5 +10,6 @@ resources = {
 "du_zhuo": "res://data/tres_actions/du_zhuo.tres",
 "fang_shi": "res://data/tres_actions/fang_shi.tres",
 "feng_zhao": "res://data/tres_actions/feng_zhao.tres",
-"song_bie": "res://data/tres_actions/song_bie.tres"
+"song_bie": "res://data/tres_actions/song_bie.tres",
+"uid://yj2rcpgsdrr0": "res://data/tres_actions/organize_thoughts.tres"
 }

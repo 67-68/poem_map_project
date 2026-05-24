@@ -59,7 +59,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_qdhrc")
-_action_tags = Array[int]([30, 32, 35, 40, 41, 42, 48])
+_action_tags = Array[int]([4, 6, 9, 14, 22])
 options = Array[Object]([SubResource("Resource_y5rbw"), SubResource("Resource_kp7q4")])
 uuid = "normal_feng_zhao"
 name = "奉召写诗"
