@@ -9,6 +9,9 @@ class_name NarrativeOverlay extends Control
 var current_event_data: BaseEvent
 var _tween: Tween
 
+# 引用 imaginary_manager
+@onready var imaginary_manager = get_node("/root/Main/CoreSystems/ImagenaryManager")
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
@@ -102,3 +105,6 @@ func _end_narrative(choice):
 	EventBus.event_confirmed.emit() # 绑定事件系统信号
 
 	ConsequenceExecuter.execute_result(choice)
+	
+	# 在执行后果后进行 imaginary 判定，确保 emotion 已被修改
+	imaginary_manager.add_imagenary(current_event_data)

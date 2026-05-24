@@ -19,11 +19,15 @@ func add_imagenary(ev: BaseEvent):
 	EventBus.imaginary_changed.emit()
 
 func _process_emotion_configs(ev: BaseEvent):
+	breakpoint
 	var evaluated_results = ImagenaryEvaluator.evaluate_local_configs(ev.emotion_configs, PlayerState)
 	Logging.info('event %s evaluation result: %d configs passed validation' % [ev.uuid, evaluated_results.size()])
 	
 	for result in evaluated_results:
 		var ima_blueprint = result.blueprint
+		if not ima_blueprint:
+			Logging.err('[ima_manager] blue print contain nothing')
+			breakpoint
 		var contexts = result.context_tags
 		Logging.info('processing validated blueprint: %s with contexts: %s' % [ima_blueprint.uuid, str(contexts)])
 		
@@ -56,4 +60,6 @@ func _append_tag(ima: ImaginaryTag, entry: Dictionary):
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	EventBus.event_shown.connect(add_imagenary)
+	# 移除 event_shown 监听，改为在 narrative_overlay 中直接调用
+	# EventBus.event_shown.connect(add_imagenary)
+	pass

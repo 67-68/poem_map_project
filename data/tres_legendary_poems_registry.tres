@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_b17yq")
 resources = {
-"uid://cqypm1di65juq": "res://data/tres_legendary_poems/new_resource.tres"
+"rteates": "res://data/tres_legendary_poems/new_resource.tres"
 }
