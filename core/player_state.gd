@@ -21,6 +21,7 @@ func _ready():
 	change_stat('official_prestige', 14)
 	change_stat('literary_fame',50)
 	change_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
+	
 	add_trait(ENUMS.to_traits_str(ENUMS.TRAITS.ORDINARY_PEOPLE))
 	current_location = 'yong_zhou'
 
