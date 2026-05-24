@@ -155,10 +155,11 @@ func _on_button_pressed() -> void:
 	Logging.info('PoemCrafter: scanning for poem events')
 
 	for i in imas:
-		for tag in i.basic_imaginaries:
+		for entry in i.basic_imaginaries:
 			# 🔧 标准化标签：确保三段式标签转换为四段式
-			var normalized_tag = TagManager.normalize_3part_depreciated_tag(tag)
-			PlayerState.current_action_tags.append(normalized_tag)
+			var blueprint_id = entry.get("blueprint_id", "")
+			if not blueprint_id.is_empty():
+				PlayerState.current_action_tags.append(blueprint_id)
 
 	EventManager.scan_poem_events(imas)
 	Logging.info('PoemCrafter: updating l3_thresholds for %d imaginaries' % imas.size())

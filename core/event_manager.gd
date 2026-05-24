@@ -48,8 +48,10 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
         
     var tags = []
     for i in imaginaries:
-        for ima in i.basic_imaginaries:
-            tags.append(ima)
+        for entry in i.basic_imaginaries:
+            var blueprint_id = entry.get("blueprint_id", "")
+            if not blueprint_id.is_empty():
+                tags.append(blueprint_id)
     
     # create tickets
     var tickets: Array[EventTicket] = []

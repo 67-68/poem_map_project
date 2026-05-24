@@ -11,5 +11,7 @@ func update_label():
 		var i = Database.imaginaries.get(i_name)
 		if i.basic_imaginaries:
 			text += '- %s: %s imas, level %s' % [i.name, i.basic_imaginaries.size(), i.current_level]
-			for bi in i.basic_imaginaries:
-				text += '\n- ' + bi
+			for entry in i.basic_imaginaries:
+				var blueprint_id = entry.get("blueprint_id", "")
+				var contexts = entry.get("contexts", [])
+				text += '\n- blueprint: %s, contexts: %s' % [blueprint_id, str(contexts)]
