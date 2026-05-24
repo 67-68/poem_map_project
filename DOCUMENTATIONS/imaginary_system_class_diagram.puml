@@ -13,7 +13,7 @@ class ImaginaryTag {
     + name: String
     + description: String
     + current_level: int
-    + basic_imaginaries: Array[String]
+    + basic_imaginaries: Array[Dictionary]
     + l3_threshold: int
     + level_changed(new_level: int)
     {static} l2_threshold: int = 2
@@ -26,7 +26,8 @@ class Tag {
 }
 
 class EmotionConfigs {
-    + imagenary_uid: String
+    + blueprint: ImaginaryTag
+    + context_tags: Array[String]
     + requirements: BaseRequirements
 }
 
@@ -48,21 +49,20 @@ class BaseRequirements {
 ' 管理器类
 class ImaginaryManager {
     + add_imagenary(ev: BaseEvent)
-    + add_tag_to_imaginary(tag: String)
-    - _process_target_tags(ev: BaseEvent)
+    + add_tag_to_imaginary(tag: String) <<deprecated>>
+    - _process_target_tags(ev: BaseEvent) <<deprecated>>
     - _process_emotion_configs(ev: BaseEvent)
-    - _append_tag(ima: ImaginaryTag, tag: String)
+    - _append_tag(ima: ImaginaryTag, entry: Dictionary)
 }
 
 class ImagenaryEvaluator {
-    {static} + evaluate_single_config(local_config: EmotionConfigs, player_state: PlayerState): String
-    {static} + evaluate_local_configs(local_configs: Array[EmotionConfigs], player_state: PlayerState): Array[String]
+    {static} + evaluate_single_config(local_config: EmotionConfigs, player_state: PlayerState): Dictionary
+    {static} + evaluate_local_configs(local_configs: Array[EmotionConfigs], player_state: PlayerState): Array[Dictionary]
     {static} - _get_discounted_threshold(base_threshold, talent_val)
 }
 
 class TagManager {
     {static} + get_tag(tag_id: String): Tag
-    {static} + get_imaginary_from_tag(tag: String): ImaginaryTag
     {static} + normalize_3part_depreciated_tag(tag: String): String
 }
 
@@ -116,17 +116,15 @@ class EventManager {
 BaseEvent <|-- RandomEvent
 ImaginaryManager --> EventBus: <<subscribe>>
 ImaginaryManager --> ImagenaryEvaluator: <<use>>
-ImaginaryManager --> TagManager: <<use>>
 ImaginaryManager --> ImaginaryTag: <<modify>>
-ImaginaryTag "1" *-- "many" Tag: contains
 BaseEvent "1" *-- "many" EmotionConfigs: contains
+EmotionConfigs --> ImaginaryTag: <<reference>>
 EmotionConfigs "1" *-- "many" BaseRequirements: contains
 
 Database "1" *-- "many" ImaginaryTag: stores
 Database "1" *-- "many" Tag: stores
 Database "1" *-- "many" BaseEvent: stores
 
-TagManager --> Database: <<access>>
 ImagenaryEvaluator --> PlayerState: <<use>>
 
 PoemCrafter --> Database: <<access>>
