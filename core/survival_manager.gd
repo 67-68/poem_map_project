@@ -4,7 +4,7 @@ class_name SurvivalManager extends Node
 # 计划有一个月和一个旬的扣除费用
 # 但太复杂了先不做，目前只有旬的扣除费用，trait 扫描扣除也没做
 
-func get_prop(data):PlayerState.get_stat_val(data)
+func get_prop(data): return PlayerState.get_stat_val(data)
 func append_prop(data,val):PlayerState.append_stat(data,val)
 func set_prop(data,val):PlayerState.set_stat_val(data,val)
 
@@ -46,6 +46,7 @@ func _process_fatigue_accumulation():
 
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）
 func _process_single_xun_settlement():
+    breakpoint
     # 第一阶段：跨状态感染 (Cross-Pollination)
     # 在任何增减发生之前，先让状态之间互相发生化学反应。
     # 状态自身存在的持续负面衍生
@@ -84,7 +85,7 @@ func death_judgement():
     这里放死亡/结束游戏的条件
     """
     #breakpoint
-    if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) < 0:
+    if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) <= 0:
         # ✅ 这里已经是四段式标签，无需标准化
         PlayerState.current_action_tags.append('actor:health:death:general')
         EventManager.scan_death_events()

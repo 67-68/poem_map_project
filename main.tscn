@@ -130,30 +130,64 @@ scale = Vector2(1, 0.96530986)
 [node name="TimeControlPanel" parent="UI" instance=ExtResource("12_vivmo")]
 
 [node name="DebugInfo" parent="UI" instance=ExtResource("16_cegan")]
+visible = false
 offset_left = 281.0
 offset_top = 72.0
 offset_right = 615.51245
 offset_bottom = 272.0
 
-[node name="StatsItems" type="HBoxContainer" parent="UI"]
-anchors_preset = -1
+[node name="StatsItems" type="Control" parent="UI"]
+layout_mode = 3
 anchor_left = 0.1
 anchor_right = 0.1
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -116.0
+offset_right = 516.8
+offset_bottom = 208.0
 script = ExtResource("17_getpj")
 
 [node name="MoneyItem" parent="UI/StatsItems" instance=ExtResource("17_82xsv")]
-layout_mode = 2
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 55.0
+scale = Vector2(1, 1)
 
 [node name="HealthItem" parent="UI/StatsItems" instance=ExtResource("17_82xsv")]
-layout_mode = 2
+layout_mode = 0
+offset_left = 124.0
+offset_right = 244.0
+offset_bottom = 55.0
+scale = Vector2(1, 1)
 
-[node name="EmotionItem" parent="UI/StatsItems" instance=ExtResource("17_82xsv")]
-layout_mode = 2
+[node name="Drunk" parent="UI/StatsItems" instance=ExtResource("17_82xsv")]
+layout_mode = 0
+offset_left = 377.0
+offset_top = 5.0
+offset_right = 497.0
+offset_bottom = 60.0
+scale = Vector2(1, 1)
 
-[node name="UnderscoredItem" parent="UI/StatsItems" instance=ExtResource("17_82xsv")]
-layout_mode = 2
+[node name="Fatigue" parent="UI/StatsItems" instance=ExtResource("17_82xsv")]
+layout_mode = 0
+offset_left = 248.0
+offset_right = 368.0
+offset_bottom = 55.0
+scale = Vector2(1, 1)
+
+[node name="Burnout" parent="UI/StatsItems" instance=ExtResource("17_82xsv")]
+layout_mode = 0
+offset_left = 387.8
+offset_top = 73.0
+offset_right = 507.8
+offset_bottom = 128.0
+scale = Vector2(1, 1)
+
+[node name="Sick" parent="UI/StatsItems" instance=ExtResource("17_82xsv")]
+layout_mode = 0
+offset_left = 397.8
+offset_top = 138.0
+offset_right = 517.8
+offset_bottom = 193.0
+scale = Vector2(1, 1)
 
 [node name="LeftButtonContainer" type="PanelContainer" parent="UI"]
 anchors_preset = 4
@@ -266,6 +300,7 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="EmotionRadar" type="ColorRect" parent="UI"]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

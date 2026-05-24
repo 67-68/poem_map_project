@@ -35,6 +35,9 @@ class_name AmbitionData extends GameEntity
 
 func get_stage_perception() -> String:
 	if current_stage < 0 or current_stage >= staged_perceptions.size():
-		Logging.error("AmbitionConfig: current_stage %d out of bounds [0, %d] for ambition %s" % [current_stage, staged_perceptions.size() - 1, name])
+		Logging.err("AmbitionConfig: current_stage %d out of bounds [0, %d] for ambition %s" % [current_stage, staged_perceptions.size() - 1, name])
+		return "阶段状态未知"
+	if not staged_perceptions[current_stage].get('perception'): 
+		Logging.err('阶段状态未知: %s' % staged_perceptions[current_stage])
 		return "阶段状态未知"
 	return staged_perceptions[current_stage].perception

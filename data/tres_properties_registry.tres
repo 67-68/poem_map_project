@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_duogs")
 resources = {
+"burnout": "res://data/tres_properties/burnout.tres",
 "drunk": "res://data/tres_properties/drunk.tres",
-"emotion": "res://data/tres_properties/emotion.tres",
 "fatigue": "res://data/tres_properties/fatigue.tres",
 "health": "res://data/tres_properties/health.tres",
 "inspiration": "res://data/tres_properties/inspiration.tres",
