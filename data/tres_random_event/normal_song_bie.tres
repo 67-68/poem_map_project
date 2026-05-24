@@ -1,11 +1,19 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=15 format=3 uid="uid://ccwblvh0y0u6s"]
+[gd_resource type="Resource" script_class="RandomEvent" load_steps=24 format=3 uid="uid://ccwblvh0y0u6s"]
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="1_ykdg5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_aiieo"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_w68kt"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_fttgn"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_ev3d3"]
-[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="5_5c1cx"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_ev3d3"
+[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="5_5c1cx"
+[ext_resource type="Script" uid="uid://cki4yoh8sonh8" path="res://core/operators/emotion_operator.gd" id="6_emotion_op"
+[ext_resource type="Script" uid="uid://cki4yoh8sonh8" path="res://core/model/emotion_configs.gd" id="7_emotion_cfg"
+[ext_resource type="Script" uid="uid://cki4yoh8sonh8" path="res://core/requirements/emotion_requirement.gd" id="8_emotion_req"
+[ext_resource type="Resource" uid="uid://8d0hpswstqvc" path="res://data/tres_imaginaries/emotion__despair.tres" id="9_imaginary_despair"]
+[ext_resource type="Resource" uid="uid://dli4hqyqh7lxa" path="res://data/tres_imaginaries/emotion__ambition.tres" id="10_imaginary_ambition"]
+[ext_resource type="Resource" uid="uid://dwce0wgqdl0k2" path="res://data/tres_imaginaries/travel__exile.tres" id="11_imaginary_exile"]
+[ext_resource type="Resource" uid="uid://cqp7ym8sp8khc" path="res://data/tres_imaginaries/relation__friend.tres" id="12_imaginary_friend"]
+[ext_resource type="Resource" uid="uid://cxj4p0g6n8jjd" path="res://data/tres_imaginaries/travel__parting.tres" id="13_imaginary_parting"]
 
 [sub_resource type="Resource" id="Resource_fcovv"]
 script = ExtResource("2_w68kt")
@@ -13,9 +21,15 @@ _property = 1
 value = 3
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
+[sub_resource type="Resource" id="Resource_emotion_sorrow"]
+script = ExtResource("6_emotion_op")
+_emotion = 0 # ENUMS.EMOTION.SORROW
+str_emotion = "sorrow"
+value = 15
+
 [sub_resource type="Resource" id="Resource_2hvti"]
 script = ExtResource("3_fttgn")
-operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_fcovv")])
+operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_fcovv"), SubResource("Resource_emotion_sorrow")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_u65qp"]
@@ -30,9 +44,15 @@ _property = 1
 value = 10
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
+[sub_resource type="Resource" id="Resource_emotion_ambition"]
+script = ExtResource("6_emotion_op")
+_emotion = 4 # ENUMS.EMOTION.AMBITION
+str_emotion = "ambition"
+value = 10
+
 [sub_resource type="Resource" id="Resource_1vr1y"]
 script = ExtResource("3_fttgn")
-operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_70mlv")])
+operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_70mlv"), SubResource("Resource_emotion_ambition")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_r8ihn"]
@@ -52,10 +72,74 @@ description = "给出一首诗"
 choice_result = SubResource("Resource_8a8ig")
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
+# 情绪校验：只有 sorrow > 10 才能获得 despair 意象
+[sub_resource type="Resource" id="Resource_emotion_req_sorrow"]
+script = ExtResource("8_emotion_req")
+volatile_stat = "sorrow"
+value = 10
+operator = 0 # REQ_OPERATOR.COMPARE.GREATER_THAN
+
+# 情绪校验：只有 ambition > 10 才能获得 ambition 意象
+[sub_resource type="Resource" id="Resource_emotion_req_ambition"]
+script = ExtResource("8_emotion_req")
+volatile_stat = "ambition"
+value = 10
+operator = 0
+
+# 情绪校验：只有 sorrow > 5 才能获得 exile 意象
+[sub_resource type="Resource" id="Resource_emotion_req_sorrow_low"]
+script = ExtResource("8_emotion_req")
+volatile_stat = "sorrow"
+value = 5
+operator = 0
+
+# 情绪校验：无特殊要求
+[sub_resource type="Resource" id="Resource_emotion_req_none"]
+script = ExtResource("8_emotion_req")
+volatile_stat = "sorrow"
+value = 0
+operator = 0
+
+# EmotionConfigs: despair 意象配置
+[sub_resource type="Resource" id="Resource_emotion_cfg_despair"]
+script = ExtResource("7_emotion_cfg")
+blueprint = ExtResource("9_imaginary_despair")
+context_tags = Array[String](["farewell"])
+requirements = SubResource("Resource_emotion_req_sorrow")
+
+# EmotionConfigs: ambition 意象配置
+[sub_resource type="Resource" id="Resource_emotion_cfg_ambition"]
+script = ExtResource("7_emotion_cfg")
+blueprint = ExtResource("10_imaginary_ambition")
+context_tags = Array[String](["farewell"])
+requirements = SubResource("Resource_emotion_req_ambition")
+
+# EmotionConfigs: exile 意象配置
+[sub_resource type="Resource" id="Resource_emotion_cfg_exile"]
+script = ExtResource("7_emotion_cfg")
+blueprint = ExtResource("11_imaginary_exile")
+context_tags = Array[String](["farewell"])
+requirements = SubResource("Resource_emotion_req_sorrow_low)
+
+# EmotionConfigs: friend 意象配置
+[sub_resource type="Resource" id="Resource_emotion_cfg_friend"]
+script = ExtResource("7_emotion_cfg")
+blueprint = ExtResource("12_imaginary_friend")
+context_tags = Array[String](["farewell"])
+requirements = SubResource("Resource_emotion_req_none")
+
+# EmotionConfigs: parting 意象配置
+[sub_resource type="Resource" id="Resource_emotion_cfg_parting"]
+script = ExtResource("7_emotion_cfg")
+blueprint = ExtResource("13_imaginary_parting")
+context_tags = Array[String](["farewell"])
+requirements = SubResource("Resource_emotion_req_none)
+
 [resource]
 script = ExtResource("2_aiieo")
 _action_tags = Array[int]([29, 30, 31, 38, 39, 45])
 options = Array[Object]([SubResource("Resource_u65qp"), SubResource("Resource_3qgs1")])
+emotion_configs = Array[ExtResource("7_emotion_cfg")]([SubResource("Resource_emotion_cfg_despair"), SubResource("Resource_emotion_cfg_ambition"), SubResource("Resource_emotion_cfg_exile"), SubResource("Resource_emotion_cfg_friend"), SubResource("Resource_emotion_cfg_parting")])
 uuid = "normal_song_bie"
 name = "送别友人"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

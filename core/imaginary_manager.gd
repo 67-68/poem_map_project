@@ -6,28 +6,17 @@ func add_imagenary(ev: BaseEvent):
 	if not ev is RandomEvent:
 		Logging.warn('this event is not a base event, dont process it and add to imaginary basement')
 		return
-	
+
 	# 使用emotion_configs进行校验
 	if ev.emotion_configs.is_empty():
-		Logging.warn('event %s has no emotion_configs, falling back to target_tags' % ev.uuid)
-		_process_target_tags(ev)
-	else:
-		Logging.info('event %s has %d emotion_configs, evaluating with player state' % [ev.uuid, ev.emotion_configs.size()])
-		_process_emotion_configs(ev)
-	
+		Logging.warn('event %s has no emotion_configs, skipping imaginary processing (event will run normally without imaginary effects)' % ev.uuid)
+		return
+
+	Logging.info('event %s has %d emotion_configs, evaluating with player state' % [ev.uuid, ev.emotion_configs.size()])
+	_process_emotion_configs(ev)
+
 	Logging.info('finished processing event %s, emitting imaginary_changed signal' % ev.uuid)
 	EventBus.imaginary_changed.emit()
-
-func _process_target_tags(ev: BaseEvent):
-	# 已废弃：废除字符串冒号分割协议，建议使用 emotion_configs
-	Logging.warn('_process_target_tags is deprecated, use emotion_configs instead')
-	Logging.info('event %s processing %d target tags (fallback mode)' % [ev.uuid, ev.target_tags.size()])
-	for tag in ev.target_tags:
-		Logging.info('processing tag: %s' % tag)
-		# 由于废除了 TagManager.get_imaginary_from_tag，暂时跳过这个处理
-		# 需要重构 target_tags 为直接引用 ImaginaryTag 的方式
-		Logging.err('target_tags processing is deprecated due to string split protocol abolition')
-		continue
 
 func _process_emotion_configs(ev: BaseEvent):
 	var evaluated_results = ImagenaryEvaluator.evaluate_local_configs(ev.emotion_configs, PlayerState)
@@ -49,13 +38,6 @@ func _process_emotion_configs(ev: BaseEvent):
 		}
 		_append_tag(ima_blueprint, entry)
 
-func add_tag_to_imaginary(tag: String):
-	
-	# 已废弃：废除字符串冒号分割协议
-	Logging.warn('add_tag_to_imaginary is deprecated due to string split protocol abolition')
-	Logging.err('add_tag_to_imaginary no longer supports string tags, use emotion_configs instead')
-	return
-
 func _append_tag(ima: ImaginaryTag, entry: Dictionary):
 	# entry 格式: { "blueprint_id": String, "contexts": Array[String] }
 	ima.basic_imaginaries.append(entry)
@@ -75,4 +57,3 @@ func _append_tag(ima: ImaginaryTag, entry: Dictionary):
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	EventBus.event_shown.connect(add_imagenary)
-	EventBus.request_add_imaginary.connect(add_tag_to_imaginary)
