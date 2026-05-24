@@ -83,6 +83,16 @@ enum PROPS {
     EMOTION
 }
 
+enum VOLATILE {
+	TEMP_HEALTH_SICK,
+	TEMP_HEALTH_DRUNK,
+	TEMP_EMOTION_DESPAIR,
+	TEMP_EMOTION_AMBITION,
+	TEMP_FATIGUE,
+	TEMP_STRESS,
+	TEMP_INSPIRATION,
+}
+
 enum PROVINCES { 
     # 注意！！这里的地区不可以直接对应province.id 这只是用来对应事件和地区的。 
     # eg. 地区YONG_ZHOU雍州实际上对应长安CHANG_AN
@@ -155,4 +165,12 @@ static func to_province_str(item) -> String:
     if name:
         return name.to_lower()
     Logging.err("Invalid province tag: " + str(item))
+    return "default_storable_item"
+
+static func to_volatile_str(item) -> String:
+    var name = VOLATILE.keys().get(item)
+    if name:
+        name = name.replace("_", ":")
+        return name.to_lower()
+    Logging.err("Invalid volatile stat: " + str(item))
     return "default_storable_item"
