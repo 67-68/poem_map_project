@@ -19,43 +19,47 @@ func add_imagenary(ev: BaseEvent):
 	EventBus.imaginary_changed.emit()
 
 func _process_target_tags(ev: BaseEvent):
+	# 已废弃：废除字符串冒号分割协议，建议使用 emotion_configs
+	Logging.warn('_process_target_tags is deprecated, use emotion_configs instead')
 	Logging.info('event %s processing %d target tags (fallback mode)' % [ev.uuid, ev.target_tags.size()])
 	for tag in ev.target_tags:
 		Logging.info('processing tag: %s' % tag)
-		var ima = TagManager.get_imaginary_from_tag(tag)
-		if not ima:
-			Logging.err('can not found imanaginary for tag %s' % tag) 
-			Logging.info('skipping tag %s due to missing imaginary' % tag)
-			continue
-		Logging.info('found imaginary for tag %s, appending tag' % tag)
-		_append_tag(ima,tag)
+		# 由于废除了 TagManager.get_imaginary_from_tag，暂时跳过这个处理
+		# 需要重构 target_tags 为直接引用 ImaginaryTag 的方式
+		Logging.err('target_tags processing is deprecated due to string split protocol abolition')
+		continue
 
 func _process_emotion_configs(ev: BaseEvent):
-	var evaluated_uids = ImagenaryEvaluator.evaluate_local_configs(ev.emotion_configs, PlayerState)
-	Logging.info('event %s evaluation result: %d uids passed validation' % [ev.uuid, evaluated_uids.size()])
+	var evaluated_results = ImagenaryEvaluator.evaluate_local_configs(ev.emotion_configs, PlayerState)
+	Logging.info('event %s evaluation result: %d configs passed validation' % [ev.uuid, evaluated_results.size()])
 	
-	for uid in evaluated_uids:
-		Logging.info('processing validated uid: %s' % uid)
-		var ima = TagManager.get_imaginary_from_tag(uid)
-		if not ima:
-			Logging.err('can not find imaginary for uid %s' % uid)
-			Logging.info('skipping uid %s due to missing imaginary' % uid)
+	for result in evaluated_results:
+		var ima_blueprint = result.blueprint
+		var contexts = result.context_tags
+		Logging.info('processing validated blueprint: %s with contexts: %s' % [ima_blueprint.uuid, str(contexts)])
+		
+		if not ima_blueprint:
+			Logging.err('blueprint is null in evaluated result')
 			continue
 		
-		Logging.info('found imaginary for uid %s, appending tag' % uid)
-		_append_tag(ima, uid)
+		# 直接使用 blueprint 对象，无需 TagManager.get_imaginary_from_tag()
+		var entry = {
+			"blueprint_id": ima_blueprint.uuid,
+			"contexts": contexts
+		}
+		_append_tag(ima_blueprint, entry)
 
 func add_tag_to_imaginary(tag: String):
 	
-	var ima = TagManager.get_imaginary_from_tag(tag)
-	if not ima:
-		Logging.err('can not found imaginary for tag' + tag)
-		return
-	_append_tag(ima,tag)
+	# 已废弃：废除字符串冒号分割协议
+	Logging.warn('add_tag_to_imaginary is deprecated due to string split protocol abolition')
+	Logging.err('add_tag_to_imaginary no longer supports string tags, use emotion_configs instead')
+	return
 
-func _append_tag(ima: ImaginaryTag, tag: String):
-	ima.basic_imaginaries.append(tag)
-	Logging.info('appended tag %s to imaginary, new size: %d' % [tag, ima.basic_imaginaries.size()])
+func _append_tag(ima: ImaginaryTag, entry: Dictionary):
+	# entry 格式: { "blueprint_id": String, "contexts": Array[String] }
+	ima.basic_imaginaries.append(entry)
+	Logging.info('appended entry to imaginary %s, new size: %d' % [ima.uuid, ima.basic_imaginaries.size()])
 		
 	if ima.basic_imaginaries.size() > ima.l3_threshold:
 		ima.current_level = 3
