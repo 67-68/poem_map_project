@@ -136,7 +136,7 @@ func on_slot_clicked(slot: PoemSlot):
 	refresh_image()
 
 func _on_button_pressed() -> void:
-	breakpoint
+	#breakpoint
 	if selected_imaginaries.size() != 3:
 		Logging.warn('selected count not 3, cannot craft poem')
 		return
