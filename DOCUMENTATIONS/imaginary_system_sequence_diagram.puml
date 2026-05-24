@@ -1,0 +1,120 @@
+@startuml ImaginarySystemSequenceDiagram
+
+skinparam sequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+title Imaginary System Sequence Diagram - Complete Flow
+
+actor Player as player
+participant EventManager as event_manager
+participant EventBus as event_bus
+participant ImaginaryManager as imaginary_manager
+participant ImagenaryEvaluator as evaluator
+participant PlayerState as player_state
+participant Database as database
+participant PoemCrafter as poem_crafter
+participant PoemCraftingCalculator as calculator
+
+== Phase 1: Imaginary Acquisition ==
+
+player -> event_manager: Game time advances
+event_manager -> event_manager: scan_events()
+event_manager -> event_bus: request_event_key.emit(event_uuid)
+event_bus -> player: Show event UI
+player -> player: Make choice in event
+event_bus -> event_bus: event_shown.emit(event)
+
+event_bus -> imaginary_manager: add_imagenary(event)
+imaginary_manager -> imaginary_manager: Check if event has emotion_configs
+
+alt Event has emotion_configs
+    imaginary_manager -> evaluator: evaluate_local_configs(emotion_configs, player_state)
+    evaluator -> player_state: get_stat_val() for requirements
+    player_state --> evaluator: stat values
+    evaluator -> evaluator: Apply talent discounts if applicable
+    evaluator --> imaginary_manager: Array of validated imagenary_uids
+    imaginary_manager -> imaginary_manager: _process_emotion_configs()
+else Event has no emotion_configs (fallback)
+    imaginary_manager -> imaginary_manager: _process_target_tags()
+    imaginary_manager -> database: Access target_tags
+    imaginary_manager -> imaginary_manager: Use original logic
+end
+
+imaginary_manager -> tag_manager: get_imaginary_from_tag(tag/uid)
+tag_manager -> database: Look up ImaginaryTag
+database --> tag_manager: ImaginaryTag object
+tag_manager --> imaginary_manager: ImaginaryTag
+
+imaginary_manager -> imaginary_manager: _append_tag(ima, tag)
+imaginary_manager -> imaginary_tag: ima.basic_imaginaries.append(tag)
+imaginary_manager -> imaginary_tag: Update current_level based on thresholds
+imaginary_manager -> imaginary_tag: Check if size > l3_threshold (level 3)
+imaginary_manager -> imaginary_tag: Check if size >= l2_threshold (level 2)
+imaginary_manager -> imaginary_tag: Otherwise set level 1
+imaginary_manager -> event_bus: imaginary_changed.emit()
+
+event_bus -> poem_crafter: on_imaginary_changed()
+poem_crafter -> poem_crafter: Check if imaginary count changed
+alt Count changed
+    poem_crafter -> database: Get all imaginaries
+    database --> poem_crafter: Dictionary of imaginaries
+    poem_crafter -> poem_crafter: setup_imagenaries()
+    poem_crafter -> poem_crafter: Create ImagenaryItem for each active imaginary
+end
+
+== Phase 2: Poem Crafting ==
+
+player -> poem_crafter: Click on imaginary item
+poem_crafter -> poem_crafter: on_item_clicked(item)
+poem_crafter -> poem_crafter: Add to selected_imaginaries (max 3)
+poem_crafter -> poem_crafter: render_slots()
+
+alt 3 imaginaries selected
+    poem_crafter -> calculator: calculate(imas)
+    calculator -> calculator: cost_is_high(imas)
+    calculator -> calculator: Calculate health cost based on levels
+    calculator -> calculator: Calculate talent cost if level 2 present
+    calculator --> poem_crafter: Array of BaseOperator
+    poem_crafter -> calculator: translate(operators)
+    calculator --> poem_crafter: Cost text for UI
+end
+
+player -> poem_crafter: Click craft button
+poem_crafter -> poem_crafter: _on_button_pressed()
+poem_crafter -> calculator: calculate(imas)
+calculator --> poem_crafter: Array of BaseOperator
+poem_crafter -> operators: operate() (execute cost)
+poem_crafter -> poem_crafter: Collect tags from imaginaries
+
+loop For each imaginary
+    poem_crafter -> imaginary_tag: Get basic_imaginaries
+    imaginary_tag --> poem_crafter: Array of tag strings
+    poem_crafter -> tag_manager: normalize_3part_depreciated_tag(tag)
+    tag_manager --> poem_crafter: Normalized tag
+    poem_crafter -> player_state: current_action_tags.append(normalized_tag)
+end
+
+poem_crafter -> event_manager: scan_poem_events(imas)
+event_manager -> event_manager: Create tickets from imaginary tags
+event_manager -> event_manager: Apply filters
+event_manager -> event_manager: Roll for event
+event_manager -> event_bus: request_event_key.emit(poem_event_uuid)
+
+loop For each imaginary used
+    poem_crafter -> imaginary_tag: Increase l3_threshold by 3
+    poem_crafter -> imaginary_tag: Reset current_level to 1
+end
+
+poem_crafter -> poem_crafter: Clear selected_imaginaries
+poem_crafter -> poem_crafter: render_slots()
+
+note right of player
+    Imaginary consumption cycle complete:
+    1. Imaginaries acquired through events
+    2. Used in poem crafting
+    3. Thresholds increased, levels reset
+    4. Ready for next cycle
+end note
+
+@enduml

@@ -1,4 +1,4 @@
-class_name VolatileRequirement extends BaseRequirements
+class_name EmotionRequirement extends BaseRequirements
 # 在选项中使用，用来判断某个player state的volatile stat是否达标
 
 # 单个volatile stat requirement
@@ -17,7 +17,7 @@ class_name VolatileRequirement extends BaseRequirements
 @export var failed_hint: String
 
 func compare(player_state: PlayerState):
-	var stat_front = player_state.get_volatile_stat(volatile_stat)
+	var stat_front = player_state.get_emotion(volatile_stat)
 	if not (stat_front):
 		Logging.err('do not found volatile stat %s in player volatile stats, check pronounciation' % volatile_stat)
 		return 

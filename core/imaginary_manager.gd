@@ -6,7 +6,20 @@ func add_imagenary(ev: BaseEvent):
 	if not ev is RandomEvent:
 		Logging.warn('this event is not a base event, dont process it and add to imaginary basement')
 		return
-	Logging.info('event %s is a RandomEvent, processing %d target tags' % [ev.uuid, ev.target_tags.size()])
+	
+	# 使用emotion_configs进行校验
+	if ev.emotion_configs.is_empty():
+		Logging.warn('event %s has no emotion_configs, falling back to target_tags' % ev.uuid)
+		_process_target_tags(ev)
+	else:
+		Logging.info('event %s has %d emotion_configs, evaluating with player state' % [ev.uuid, ev.emotion_configs.size()])
+		_process_emotion_configs(ev)
+	
+	Logging.info('finished processing event %s, emitting imaginary_changed signal' % ev.uuid)
+	EventBus.imaginary_changed.emit()
+
+func _process_target_tags(ev: BaseEvent):
+	Logging.info('event %s processing %d target tags (fallback mode)' % [ev.uuid, ev.target_tags.size()])
 	for tag in ev.target_tags:
 		Logging.info('processing tag: %s' % tag)
 		var ima = TagManager.get_imaginary_from_tag(tag)
@@ -16,9 +29,21 @@ func add_imagenary(ev: BaseEvent):
 			continue
 		Logging.info('found imaginary for tag %s, appending tag' % tag)
 		_append_tag(ima,tag)
+
+func _process_emotion_configs(ev: BaseEvent):
+	var evaluated_uids = ImagenaryEvaluator.evaluate_local_configs(ev.emotion_configs, PlayerState)
+	Logging.info('event %s evaluation result: %d uids passed validation' % [ev.uuid, evaluated_uids.size()])
+	
+	for uid in evaluated_uids:
+		Logging.info('processing validated uid: %s' % uid)
+		var ima = TagManager.get_imaginary_from_tag(uid)
+		if not ima:
+			Logging.err('can not find imaginary for uid %s' % uid)
+			Logging.info('skipping uid %s due to missing imaginary' % uid)
+			continue
 		
-	Logging.info('finished processing all tags for event %s, emitting imaginary_changed signal' % ev.uuid)
-	EventBus.imaginary_changed.emit()
+		Logging.info('found imaginary for uid %s, appending tag' % uid)
+		_append_tag(ima, uid)
 
 func add_tag_to_imaginary(tag: String):
 	

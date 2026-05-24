@@ -80,18 +80,24 @@ enum PROPS {
 	TALENT,
     MONEY,
     HEALTH,
-    EMOTION
+    FATIGUE, # 影响才华产出效率
+    DRUNK, # 双刃剑：降低理性，但可能提供某些意象的获取折扣
+    SICK, # 疲劳，到达阈值直接强制睡觉。把那个该死的 STRESS 删了！
+    INSPIRATION  # 灵感（这玩意其实更像一种代币或 Buffer，用来兑换意象）
 }
 
-enum VOLATILE {
-	TEMP_HEALTH_SICK,
-	TEMP_HEALTH_DRUNK,
-	TEMP_EMOTION_DESPAIR,
-	TEMP_EMOTION_AMBITION,
-	TEMP_FATIGUE,
-	TEMP_STRESS,
-	TEMP_INSPIRATION,
+# 2. 核心情绪层 (The Soul - 意象生成的真正温床，建议采用双向坐标系)
+# 不要用非黑即白的单向词汇，情绪是有正负极的！
+enum EMOTION {
+    SORROW,     # 愁苦/悲凉 (替代 DESPAIR，更具诗意，涵盖送别与怀古)
+    ARROGANCE,  # 狂傲/得意 (涵盖饮酒作乐、金榜题名、无视权贵)
+    ANGER,      # 愤懑 (涵盖被贬、目睹不公)
+    TRANQUILITY, # 旷达/空灵 (涵盖山水田园、修道、释怀)
+    # 3. 结果/特殊驱动力 (The Catalysts)
+    AMBITION,    # 世俗的野心（想做官、想入世），用于区分李白和杜甫的路线
 }
+
+
 
 enum PROVINCES { 
     # 注意！！这里的地区不可以直接对应province.id 这只是用来对应事件和地区的。 
@@ -167,8 +173,8 @@ static func to_province_str(item) -> String:
     Logging.err("Invalid province tag: " + str(item))
     return "default_storable_item"
 
-static func to_volatile_str(item) -> String:
-    var name = VOLATILE.keys().get(item)
+static func to_emotion_str(item) -> String:
+    var name = EMOTION.keys().get(item)
     if name:
         name = name.replace("_", ":")
         return name.to_lower()

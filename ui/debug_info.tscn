@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://6ilphg3nn6wx"]
+[gd_scene load_steps=10 format=3 uid="uid://6ilphg3nn6wx"]
 
 [ext_resource type="Script" uid="uid://dumrsjmb5wfw2" path="res://debuggers_and_linters/property_label.gd" id="1_fscx0"]
 [ext_resource type="Script" uid="uid://cn8x8tjea0sha" path="res://debuggers_and_linters/debug_info.gd" id="1_i515d"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bg7wrcx4s26so" path="res://debuggers_and_linters/current_action_label.gd" id="5_bhh81"]
 [ext_resource type="Script" uid="uid://c2t6abq8tsd80" path="res://debuggers_and_linters/decision_label.gd" id="6_by2l1"]
 [ext_resource type="Script" uid="uid://c6n3tkxdr807d" path="res://tests/imaginary_label.gd" id="7_irtbx"]
+[ext_resource type="Script" uid="uid://dx8f4k2m7n5p3" path="res://debuggers_and_linters/emotion_label.gd" id="8_jklm9"]
 
 [node name="DebugInfo" type="ColorRect"]
 custom_minimum_size = Vector2(200, 200)
@@ -79,3 +80,10 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 10
 text = "imaginary label"
 script = ExtResource("7_irtbx")
+
+[node name="EmotionLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "emotions: "
+script = ExtResource("8_jklm9")

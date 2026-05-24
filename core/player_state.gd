@@ -10,12 +10,12 @@ extends Node
 @export var ambition: AmbitionData
 @export var current_action_tags: Array[String] = []
 @export var created_poems: Array[String]
-var volatile_stats: Dictionary = {}
+var emotions: Dictionary = {}
 
 signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
 signal location_changed(location)
-signal volatile_stat_changed(stat_name)
+signal emotion_changed(stat_name)
 
 func _ready():
 	change_stat('official_prestige', 14)
@@ -75,7 +75,7 @@ func get_stat_val(stat_name):
 		return 0
 	return stat.val
 
-func get_volatile_stat(stat_name):
+func get_emotion(stat_name):
 	if stat_name is int:
 		var int_stat = ENUMS.to_prop_str(stat_name)
 		if not int_stat:
@@ -83,11 +83,11 @@ func get_volatile_stat(stat_name):
 			return
 		stat_name = int_stat
 	
-	if not volatile_stats.has(stat_name):
+	if not emotions.has(stat_name):
 		return 0
-	return volatile_stats[stat_name]
+	return emotions[stat_name]
 
-func change_volatile_stat(stat_name, data):
+func change_emotion(stat_name, data):
 	if stat_name is int:
 		var int_stat = ENUMS.to_prop_str(stat_name)
 		if not int_stat:
@@ -95,16 +95,16 @@ func change_volatile_stat(stat_name, data):
 			return
 		stat_name = int_stat
 	
-	if not volatile_stats.has(stat_name):
-		volatile_stats[stat_name] = 0
+	if not emotions.has(stat_name):
+		emotions[stat_name] = 0
 	
-	volatile_stats[stat_name] += data
-	Logging.info('change volatile stat %s by %d, new value: %d' % [stat_name, data, volatile_stats[stat_name]])
-	volatile_stat_changed.emit(stat_name)
+	emotions[stat_name] += data
+	Logging.info('change volatile stat %s by %d, new value: %d' % [stat_name, data, emotions[stat_name]])
+	emotion_changed.emit(stat_name)
 
-func flush_volatile_stats():
+func flush_emotion():
 	# 清空volatile_stats
-	volatile_stats.clear()
+	emotions.clear()
 
 func add_trait(trait_name):
 	if trait_name is int:

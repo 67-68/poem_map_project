@@ -4,3 +4,4 @@ class_name BaseEvent extends GameEntity
 @export var requirement: BaseRequirements
 @export var audio: AudioStream = null
 @export var epitaph_text: String = ''
+@export var emotion_configs: Array[EmotionConfigs] = []
