@@ -25,6 +25,6 @@ static func parse_any(data, get_properties = true, ...target_names):
 static func parse_and_create_cls(cls, data, get_properties = true, ...target_names):
 	var result = parse_any(data,get_properties,target_names)
 	if not result: 
-		Logging.warn('no data found for %s' % target_names)
+		print('Warning: no data found for %s' % target_names)
 		result = {}
 	return cls.new(result)

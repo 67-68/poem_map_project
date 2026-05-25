@@ -67,3 +67,6 @@ Scene Action的`action_tags`和Random Event的`target_tags`之间存在标签格
 ### 2025.05.25
 没有！清空！缓存！
 使用！create_resources_registry!
+
+### 2025.05.25
+如果在@tool有问题，那么重启编辑器

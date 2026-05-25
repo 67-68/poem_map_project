@@ -2,29 +2,44 @@ class_name DSLParser extends GDScript
 
 # 主要的CSV解析方法，接受一行CSV数据并返回RandomEvent
 static func parse(row: Dictionary) -> RandomEvent:
-    var event = RandomEvent.new()
+    # 检测空行
+    if row.is_empty():
+        return null
     
+    # 检测所有值都为空的行
+    var has_content = false
+    for key in row:
+        var value = row[key]
+        if value != null and not str(value).is_empty():
+            has_content = true
+            break
+    
+    if not has_content:
+        return null
+    
+    var event = RandomEvent.new()
+
     # 解析必需字段
-    var event_id = row.get('Event_ID')
+    var event_id = row.get('event_id')
     if not event_id or event_id.is_empty():
-        Logging.err("Event_ID is required")
+        push_error("Event_ID is required")
         return null
     event.uuid = event_id
-    
+
     # 解析触发标签
-    var trigger_tags = row.get('Trigger_Tags')
+    var trigger_tags = row.get('trigger_tags')
     if not trigger_tags or trigger_tags.is_empty():
-        Logging.warn("Trigger_Tags is empty for event: %s" % event_id)
+        print("Warning: trigger_tags is empty for event: %s" % event_id)
     event._target_tags = MicroDSLParser.parse_tags(trigger_tags)
-    
+
     # 解析触发条件
     var requirements_str = row.get('requirements')
     if requirements_str and not requirements_str.is_empty():
         event.requirement = parse_requirements(requirements_str)
-    
+
     # 解析表现层
-    event.name = row.get('Title',"")
-    event.description = row.get('Desc',"")
+    event.name = row.get('title',"")
+    event.description = row.get('description',"")
     
     # 解析选项
     event.options = parse_options(row)
@@ -75,29 +90,29 @@ static func parse_single_requirement(req_str: String) -> BaseRequirements:
     elif req_str.begins_with('trait:'):
         return MicroDSLParser.parse_trait_requirement(req_str)
     else:
-        Logging.warn("Unknown requirement type: %s" % req_str)
+        print("Warning: Unknown requirement type: %s" % req_str)
         return null
 
-# 解析选项（A, B, C等）
+# 解析选项（1, 2, 3等）
 static func parse_options(row: Dictionary) -> Array[BaseOption]:
     var options: Array[BaseOption] = []
-    
-    # 支持多个选项：A, B, C, D等
-    var option_letters = ['A', 'B', 'C', 'D', 'E', 'F']
-    
-    for letter in option_letters:
-        var option = parse_option(row, letter)
+
+    # 支持多个选项：1, 2, 3, 4等
+    var option_numbers = ['1', '2', '3', '4', '5', '6']
+
+    for number in option_numbers:
+        var option = parse_option(row, number)
         if option:
             options.append(option)
-    
+
     return options
 
 # 解析单个选项
 static func parse_option(row: Dictionary, letter: String) -> BaseOption:
-    var text_key = "Opt_%s_Text" % letter
-    var req_key = "Opt_%s_Req" % letter
-    var result_key = "Opt_%s_Result" % letter
-    
+    var text_key = "opt_%s_text" % letter
+    var req_key = "opt_%s_requirement" % letter
+    var result_key = "opt_%s_result" % letter
+
     var option_text = row.get(text_key)
     if not option_text or option_text.is_empty():
         return null
@@ -124,7 +139,7 @@ static func parse_option_requirement(req_str: String) -> PropertyRequirement:
     elif req_str.begins_with('trait:'):
         return MicroDSLParser.parse_trait_requirement(req_str)
     else:
-        Logging.warn("Unknown option requirement type: %s" % req_str)
+        print("Warning: Unknown option requirement type: %s" % req_str)
         return null
 
 # 解析选择结果
@@ -139,14 +154,14 @@ static func validate_event(event: RandomEvent) -> bool:
         return false
     
     if not event.uuid or event.uuid.is_empty():
-        Logging.err("Event validation failed: missing ID")
+        push_error("Event validation failed: missing ID")
         return false
     
     if event.options.is_empty():
-        Logging.warn("Event validation warning: no options for event %s" % event.uuid)
+        print("Warning: Event validation warning: no options for event %s" % event.uuid)
     
     if event.icon == null:
-        Logging.warn("Event validation warning: no icon for event %s" % event.uuid)
+        print("Warning: Event validation warning: no icon for event %s" % event.uuid)
     
     return true
 
@@ -160,6 +175,6 @@ static func parse_csv_data(csv_data: Array[Dictionary]) -> Array[RandomEvent]:
         if event and validate_event(event):
             events.append(event)
         else:
-            Logging.warn("Failed to parse event at row %d" % (i + 1))
+            print("Warning: Failed to parse event at row %d" % (i + 1))
     
     return events

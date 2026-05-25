@@ -13,7 +13,7 @@ static func parse_tags(data: String) -> Array[String]:
         # 验证标签格式 (domain:subcategory:specific_attribute)
         var parts = clean_tag.split(':')
         if parts.size() != 3:
-            Logging.warn("Invalid tag format: %s, expected format: domain:subcategory:specific_attribute" % clean_tag)
+            print("Warning: Invalid tag format: %s, expected format: domain:subcategory:specific_attribute" % clean_tag)
             continue
             
         parsed_tags.append(clean_tag)
@@ -24,11 +24,11 @@ static func parse_tags(data: String) -> Array[String]:
 static func parse_property_requirement(data: String) -> PropertyRequirement:
     var parts = data.split(':')
     if parts.size() != 3:
-        Logging.err("Invalid property requirement format: %s, expected: prop:property_name:>value" % data)
+        push_error("Invalid property requirement format: %s, expected: prop:property_name:>value" % data)
         return null
     
     if parts[0] != "prop":
-        Logging.err("Property requirement must start with 'prop:', got: %s" % data)
+        push_error("Property requirement must start with 'prop:', got: %s" % data)
         return null
     
     var property_name = parts[1]
@@ -42,18 +42,18 @@ static func parse_property_requirement(data: String) -> PropertyRequirement:
         var value = operator_str.substr(1).to_int()
         return create_property_requirement(property_name, value, REQ_OPERATOR.COMPARE.LESS_THAN)
     else:
-        Logging.err("Invalid operator in property requirement: %s, expected > or <" % operator_str)
+        push_error("Invalid operator in property requirement: %s, expected > or <" % operator_str)
         return null
 
 # 解析特性触发条件，如：trait:has:official 或 trait:not_has:official
 static func parse_trait_requirement(data: String) -> BaseRequirements:
     var parts = data.split(':')
     if parts.size() != 3:
-        Logging.err("Invalid trait requirement format: %s, expected: trait:has/not_has:trait_name" % data)
+        push_error("Invalid trait requirement format: %s, expected: trait:has/not_has:trait_name" % data)
         return null
     
     if parts[0] != "trait":
-        Logging.err("Trait requirement must start with 'trait:', got: %s" % data)
+        push_error("Trait requirement must start with 'trait:', got: %s" % data)
         return null
     
     var operator = parts[1]
@@ -66,7 +66,7 @@ static func parse_trait_requirement(data: String) -> BaseRequirements:
     elif operator == "not_has":
         return create_trait_has_requirement(trait_name, false)
     else:
-        Logging.err("Invalid trait operator: %s, expected 'has' or 'not_has'" % operator)
+        push_error("Invalid trait operator: %s, expected 'has' or 'not_has'" % operator)
         return null
 
 # 解析结果操作符，如：prop:money:-100, trait:add:corrupt
@@ -81,7 +81,7 @@ static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
             
         var op_parts = clean_part.split(':')
         if op_parts.size() != 3:
-            Logging.warn("Invalid consequence operator format: %s, expected: type:action:value" % clean_part)
+            print("Warning: Invalid consequence operator format: %s, expected: type:action:value" % clean_part)
             continue
         
         var type = op_parts[0]
@@ -97,7 +97,7 @@ static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
             if operator:
                 operators.append(operator)
         else:
-            Logging.warn("Unknown consequence operator type: %s" % type)
+            print("Warning: Unknown consequence operator type: %s" % type)
     
     return operators
 
@@ -143,7 +143,7 @@ static func parse_trait_operator(action: String, trait_name: String) -> BaseOper
     elif action == "remove":
         operator.operator = REQ_OPERATOR.CRUD.REMOVE
     else:
-        Logging.warn("Unknown trait action: %s, expected 'add' or 'remove'" % action)
+        print("Warning: Unknown trait action: %s, expected 'add' or 'remove'" % action)
         return null
     
     # 设置特性键（需要根据实际系统映射）
