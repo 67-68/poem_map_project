@@ -1,9 +1,4 @@
-class_name ComplexEventOption extends BaseOption
-
-# 使用description作为button text
-@export var description := '' 
-@export var choice_result: ChoiceResult
-
+class_name ComplexEventOption extends EventOption
 @export var is_disabled := false
 @export var disabled_reason := ""
 

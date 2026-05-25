@@ -74,7 +74,20 @@ enum EMOTION {
     AMBITION,    # 世俗的野心（想做官、想入世），用于区分李白和杜甫的路线
 }
 
-
+enum RELATION_TARGET {
+    LIBAI,
+    HUSHANG, # 商人
+    LILINFU,
+    JIWEN,
+    YOUXIANGFU, # 右相府
+    QINGLIU,
+    GAOSHI,
+    WANGWEI,
+    ZHENGQIAN, # 郑虔
+    WAIQI, # 外戚
+    YANGGUOZHONG,
+    GUOGUOFUREN, # 虢国夫人
+}
 
 enum PROVINCES { 
     # 注意！！这里的地区不可以直接对应province.id 这只是用来对应事件和地区的。 
@@ -83,17 +96,42 @@ enum PROVINCES {
 }
 
 enum TRAITS {
-    ORDINARY_PEOPLE,
-    LV_NINE_OFFICIAL,
     WANDERING_WITHOUT_LIVING_PLACE,
     
     # 第一等级诗词
-    POEM__GAN_YE__1, # _ + _ -> :
+    POEM__GAN_YE__1, # _ + _ -> : # 这里的两个下划线的设计应该是为了兼容四段式的A:B:C:D设计，如果我本来就不是这样的，我直接使用一个就行了（比如下面的主线行动等级)
     POEM__YING_ZHI__1, # 这里的1是最低级，不是0!
     POEM__ZENG_DA__1,
     POEM__HUAI_GU__1,
     POEM__JI_LV__1,
-    POEM__SHAN_SHUI_1
+    POEM__SHAN_SHUI_1,
+
+    # 主线行动等级标签
+    MAIN_BAIYE_1,
+    MAIN_BAIYE_2,
+    MAIN_BAIYE_3,
+    MAIN_BAIYE_4,
+    
+    MAIN_JIAOYOU_1,
+    MAIN_JIAOYOU_2,
+    MAIN_JIAOYOU_3,
+    
+    MAIN_DENGGAO_1,
+    MAIN_DENGGAO_2,
+    MAIN_DENGGAO_3,
+    
+    MAIN_FANGSHI_1,
+    MAIN_FANGSHI_2,
+    MAIN_FANGSHI_3,
+    
+    MAIN_FENGZHAO_1,
+    MAIN_FENGZHAO_2,
+    MAIN_FENGZHAO_3,
+    MAIN_FENGZHAO_4,
+    
+    MAIN_DUZHUO_1,
+    MAIN_DUZHUO_2,
+    MAIN_DUZHUO_3,
 }
 
 enum POEM_TYPE {
@@ -157,4 +195,11 @@ static func to_emotion_str(item) -> String:
         name = name.replace("_", ":")
         return name.to_lower()
     Logging.err("Invalid volatile stat: " + str(item))
+    return "default_storable_item"
+
+static func to_relation_str(item) -> String:
+    var name = RELATION_TARGET.keys().get(item)
+    if name:
+        return name.to_lower()
+    Logging.err("Invalid province tag: " + str(item))
     return "default_storable_item"

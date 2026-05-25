@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://bjwk8vy6hgayr"]
 
+[ext_resource type="Script" uid="uid://cki4yoh8sonh8" path="res://core/model/conditional_operator.gd" id="1_r2wo8"]
 [ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_xytye"]
 
 [resource]

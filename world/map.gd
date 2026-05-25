@@ -61,10 +61,6 @@ func load_character_point():
 		add_child(node)
 		Logging.done('character point')
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 func refresh_prov_2_fac():
 	# 1. 建立 [州ID -> 势力对象] 的映射
 	for fac_id in Database.factions:

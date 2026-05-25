@@ -11,5 +11,5 @@ resources = {
 "du_zhuo": "res://data/tres_actions/du_zhuo.tres",
 "fang_shi": "res://data/tres_actions/fang_shi.tres",
 "feng_zhao": "res://data/tres_actions/feng_zhao.tres",
-"song_bie": "res://data/tres_actions/song_bie.tres"
+"jiao_you": "res://data/tres_actions/jiao_you.tres"
 }

@@ -1,6 +1,7 @@
 class_name RandomEvent extends BaseEvent
 # 那种在事件池随机抽取的
 @export var weight: float = 10.0
+@export var requirement: BaseRequirements
 
 # 会被使用time operator中的source tag匹配. 由于无法集合两个enum那就单独写再集合
 var target_tags: Array[String] = []:

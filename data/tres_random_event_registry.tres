@@ -11,6 +11,6 @@ resources = {
 "normal_du_zhuo": "res://data/tres_random_event/normal_du_zhuo.tres",
 "normal_fang_shi": "res://data/tres_random_event/normal_fang_shi.tres",
 "normal_feng_zhao": "res://data/tres_random_event/normal_feng_zhao.tres",
-"normal_song_bie": "res://data/tres_random_event/normal_song_bie.tres",
+"normal_jiao_you": "res://data/tres_random_event/normal_jiao_you.tres",
 "test_event_pool_2_meet_the_poor": "res://data/tres_random_event/test_event_pool_2_meet_the_poor.tres"
 }

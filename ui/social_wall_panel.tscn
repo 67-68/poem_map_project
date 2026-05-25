@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://fnnxu25q66uu"]
+
+[ext_resource type="PackedScene" uid="uid://cx57ph8pl3dvb" path="res://ui/bamboo_slip.tscn" id="1_a38fk"]
+
+[node name="SocialWallPanel" type="PanelContainer" unique_id=1780260616]
+custom_minimum_size = Vector2(800, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=578604009]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=125118550]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "红黑榜"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1094901436]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/ScrollContainer" unique_id=1020391611]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=1834478498]
+layout_mode = 2
+
+[node name="TestBambooSlip" parent="VBoxContainer/ScrollContainer/MarginContainer/HFlowContainer" unique_id=518738549 instance=ExtResource("1_a38fk")]
+layout_mode = 2

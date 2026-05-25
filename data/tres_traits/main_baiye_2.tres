@@ -1,9 +1,33 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://c4m6j5go7ohi7"]
 
 [ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_a2t5m"]
+[ext_resource type="Script" uid="uid://cki4yoh8sonh8" path="res://core/model/conditional_operator.gd" id="1_ujkd8"]
+[ext_resource type="Script" uid="uid://brd0htr8a2wb8" path="res://core/requirements/range_requirement.gd" id="2_au2rj"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_th1pp"]
+[ext_resource type="Script" uid="uid://dh6tkcf3cubge" path="res://core/model/event_operator.gd" id="4_1bqpq"]
+
+[sub_resource type="Resource" id="Resource_yxyr2"]
+script = ExtResource("2_au2rj")
+min_value = 50.0
+max_value = 9999.0
+_property = 0
+metadata/_custom_type_script = "uid://brd0htr8a2wb8"
+
+[sub_resource type="Resource" id="Resource_b6rtr"]
+script = ExtResource("4_1bqpq")
+event_key = "baiye_2to3"
+metadata/_custom_type_script = "uid://dh6tkcf3cubge"
+
+[sub_resource type="Resource" id="Resource_0gw8s"]
+script = ExtResource("1_ujkd8")
+condition = SubResource("Resource_yxyr2")
+condition_success_result = Array[ExtResource("3_th1pp")]([SubResource("Resource_b6rtr")])
+metadata/_custom_type_script = "uid://cki4yoh8sonh8"
 
 [resource]
 script = ExtResource("1_a2t5m")
+operators = Array[ExtResource("1_ujkd8")]([SubResource("Resource_0gw8s")])
 uuid = "main_baiye_2"
 name = "第二级拜谒"
+description = "你成功进入了党派"
 metadata/_custom_type_script = "uid://pom0464obfp2"

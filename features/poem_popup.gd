@@ -15,8 +15,8 @@ func on_apply_poem(data: PoemData,poet_data):
 	content_label.text = data.example
 	title_label.text = data.name
 
-	rarity_stamp.texture = stamp_config.get_config(data.get_scarcity()).texture
-	rarity_stamp.modulate = stamp_config.get_config(data.get_scarcity()).color
+	#rarity_stamp.texture = stamp_config.get_config(data.get_scarcity()).texture
+	#rarity_stamp.modulate = stamp_config.get_config(data.get_scarcity()).color
 	
 	if data.background == PoemData.Poem_BG.BOOK:
 		pass
@@ -80,12 +80,13 @@ func create_animation():
 	
 
 func create_notification(poem_data: PoemData, poet_data: PoetData):
-	var poet = poet_data.get_rich_poet()
-	var poem = poem_data.get_rich_poem()
-	var pop = poem_data.get_scarcity()
-	var popularity_str = poem_data.get_scarcity_str(pop)
-	var popularity = Util.colorize_underlined_link(popularity_str,stamp_config.get_config(pop).color,popularity_str)
-	EventBus.request_text_popup.emit('%s 在 %d 年创作了 %s, 稀有度为 %s' % [poet,GameState.year,poem,popularity])
+	#var poet = poet_data.get_rich_poet()
+	#var poem = poem_data.get_rich_poem()
+	#var pop = poem_data.get_scarcity()
+	#var popularity_str = poem_data.get_scarcity_str(pop)
+	#var popularity = Util.colorize_underlined_link(popularity_str,stamp_config.get_config(pop).color,popularity_str)
+	#EventBus.request_text_popup.emit('%s 在 %d 年创作了 %s, 稀有度为 %s' % [poet,GameState.year,poem,popularity])
+	pass
 
 func end_animation():
 	SizeService.minimize_all([rarity_stamp,content_label,title_label])

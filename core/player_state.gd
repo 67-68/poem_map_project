@@ -33,10 +33,7 @@ func init_traits():
 	var action_tracks = SourceOfTruth.debug_dashboard_state.action_tracks
 	for track_name in action_tracks:
 		var trait_uuid = action_tracks[track_name]
-		add_trait(trait_uuid)
-	
-	add_trait(ENUMS.to_traits_str(ENUMS.TRAITS.ORDINARY_PEOPLE))
-	
+		add_trait(trait_uuid)	
 
 func _ready():
 	init_props()
@@ -165,26 +162,32 @@ func add_trait(trait_name):
 		trait_name = int_trait
 
 	if not traits.has(trait_name): traits.append(trait_name)
+	EventBus.on_trait_change.emit()
+
 
 func has_trait(trait_name):
 	if trait_name is int:
 		var int_trait = ENUMS.to_traits_str(trait_name)
 		if not int_trait:
+			# breakpoint
 			Logging.err('do not find trait %s' % trait_name)
 			return
 		trait_name = int_trait
+	EventBus.on_trait_change.emit()
 	return traits.has(trait_name)
 
 func remove_trait(trait_name):
 	if trait_name is int:
 		var int_trait = ENUMS.to_traits_str(trait_name)
 		if not int_trait:
+			# breakpoint
 			Logging.err('do not find trait %s' % trait_name)
 			return
 		trait_name = int_trait
 	
 	if traits.has(trait_name):
 		traits.erase(trait_name)
+	EventBus.on_trait_change.emit()
 
 func get_traits():
 	return traits

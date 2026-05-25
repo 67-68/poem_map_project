@@ -63,3 +63,7 @@ Scene Action的`action_tags`和Random Event的`target_tags`之间存在标签格
 ### 2025.05.25
 @enumerates 中action tag非真正四段式 + 中间有个_ + 新的deepseek action是三段式，在 @action tag filter导致问题，因为它会自动补全3段 -> 4, 导致deepseek action 和 target tag无法匹配
 准确来说不是这里，前面的某个环节导致了问题
+
+### 2025.05.25
+没有！清空！缓存！
+使用！create_resources_registry!

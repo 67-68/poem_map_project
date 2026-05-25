@@ -8,4 +8,4 @@ var property: String:
 		return ENUMS.to_prop_str(_property)
 
 func compare(player_state) -> bool:
-	return player_state.get(property) >= min_value and player_state.get(property) <= max_value
+	return player_state.get_stat_val(property) >= min_value and player_state.get_stat_val(property) <= max_value

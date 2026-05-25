@@ -2,7 +2,6 @@ class_name CustomEventOption extends BaseOption
 # 专门用来硬编码处理那些特殊的事件
 
 # 使用description作为button text
-@export var description := '' 
 @export var choice_result: ChoiceResult
 @export var requirements: BaseRequirements = null # 不知道为什么inherit event option editor不让选，只能自己搞le
 
