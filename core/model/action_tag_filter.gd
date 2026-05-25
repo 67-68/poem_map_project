@@ -54,11 +54,11 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
             if e.target_tags.has(tag):
                 if new_events.has(ticket.event_uuid):
                     # 多个 tag 命中，继续追加原始权重
-                    new_events[ticket.event_uuid].weight += ticket.original_weight
+                    new_events[ticket.event_uuid].weight += ticket.original_weight * 3 # 这里可能出问题，导致一个事件反复出现
                 else:
                     new_events[ticket.event_uuid] = ticket
-                    # 首次命中，权重起飞！(你的乘3倍逻辑非常好)
-                    new_events[ticket.event_uuid].weight *= 3
+                    # 首次命中，权重起飞！
+                    new_events[ticket.event_uuid].weight *= 9
                     
     # 将字典的值强转回 Array[EventTicket]
     var result: Array[EventTicket] = []

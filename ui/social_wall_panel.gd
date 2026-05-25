@@ -22,7 +22,7 @@ func on_trait_chnage():
 				var bamboo_slip = preload("res://ui/bamboo_slip.tscn").instantiate()
 				current_bamboo_slips[relation] = bamboo_slip
 				$VBoxContainer/ScrollContainer/MarginContainer/HFlowContainer.add_child(bamboo_slip)
-				bamboo_slip.apply_relation(relation)
+				bamboo_slip.apply_relation(relation,t)
 				bamboo_slip.apply_state(traits_inst.specific_topic)
 			else:
 				Logging.info('[social wall panel] relation exists in current_status: %s' % relation)

@@ -15,7 +15,7 @@ func _create_ticket(event: BaseEvent) -> EventTicket:
     ticket.original_weight = event.weight
     return ticket
 
-func scan_events(nothing_multiplication_weight = 10.0, main_tag: String = ''):
+func scan_events(nothing_multiplication_weight = 10.0, main_tag: String = '' ): # 我的过滤其实是靠current tag 实现的
     """
     扫描事件池，根据权重进行事件抽取
     
