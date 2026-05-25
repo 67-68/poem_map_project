@@ -44,6 +44,15 @@ func _process_fatigue_accumulation():
         append_prop(ENUMS.PROPS.HEALTH,-20)
         set_prop(ENUMS.PROPS.BURNOUT,99)
 
+func process_trait_check():
+    for t in PlayerState.get_traits():
+        var trait_ = Database.traits.get(t)
+        if not trait_: 
+            Logging.warn('为什么player state中存在的triat在database没有？？')
+            continue
+        trait_.lasting_xun += 1
+        trait_.operate()
+
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）
 func _process_single_xun_settlement():
     #breakpoint
@@ -52,6 +61,7 @@ func _process_single_xun_settlement():
     # 状态自身存在的持续负面衍生
     # 让属性自己不变，影响其他属性和operator之类的
     _process_health_checks()
+    
     
     # 第二阶段：生存基础扣除 (Upkeep & Economy)
     # 外部环境对玩家的无情压迫。
@@ -67,6 +77,7 @@ func _process_single_xun_settlement():
     # 打完巴掌给个甜枣，系统内存回收。
     # 属性 90 -> 50
     _decay_volatile_emotions()
+    process_trait_check() # 不知道放哪，先放这里好了
     
     
     # 5. 通知 UI 刷新

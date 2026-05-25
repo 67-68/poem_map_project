@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="AmbitionData" load_steps=20 format=3 uid="uid://64cs8vcd5ime"]
+[gd_resource type="Resource" script_class="AmbitionData" format=3 uid="uid://64cs8vcd5ime"]
 
 [ext_resource type="Script" uid="uid://cwotf742e2n0f" path="res://core/model/multiply_operator.gd" id="1_ko76q"]
 [ext_resource type="Script" uid="uid://potskta4ums3" path="res://core/model/dict_multiply_operator.gd" id="2_x6q7h"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="3_0es00"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_0es00"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_8hisv"]
 [ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="5_s8pw1"]
 [ext_resource type="Script" uid="uid://bte53fleub1ki" path="res://model/staged_perception_data.gd" id="6_ivce5"]

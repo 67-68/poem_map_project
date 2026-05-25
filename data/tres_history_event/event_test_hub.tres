@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="HistoryEvent" load_steps=19 format=3 uid="uid://8f6b03yk4xmt"]
+[gd_resource type="Resource" script_class="HistoryEvent" format=3 uid="uid://8f6b03yk4xmt"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_l3g1l"]
 [ext_resource type="Texture2D" uid="uid://dafe3626abotl" path="res://assets/poem_bgs/juanzhou.png" id="1_p71cl"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_l3746"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_l3746"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_r8wj7"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_p71cl"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_j54fk"]

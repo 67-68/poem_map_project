@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="SceneAction" load_steps=9 format=3 uid="uid://b8varwbhtrxs7"]
+[gd_resource type="Resource" script_class="SceneAction" format=3 uid="uid://b8varwbhtrxs7"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_1yide"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_1nf2l"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_1yide"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_1nf2l"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_5044y"]
 [ext_resource type="Texture2D" uid="uid://bygrut6e1yja" path="res://assets/maps/height.png" id="4_b6lfb"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="5_ebpm8"]

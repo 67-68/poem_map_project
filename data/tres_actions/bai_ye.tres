@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="SceneAction" load_steps=8 format=3 uid="uid://cjvxbacp4pdo2"]
+[gd_resource type="Resource" script_class="SceneAction" format=3 uid="uid://cjvxbacp4pdo2"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_hkffg"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_f652d"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_hkffg"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_f652d"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f652d"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_yiapa"]
 [ext_resource type="Texture2D" uid="uid://cylr2i541fi7f" path="res://assets/character/npc_official_high.png" id="4_yiapa"]

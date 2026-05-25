@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="Decision" load_steps=8 format=3 uid="uid://3f8h3xqcdg3k"]
+[gd_resource type="Resource" script_class="Decision" format=3 uid="uid://3f8h3xqcdg3k"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_lsx8t"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_lsx8t"]
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="2_ri2ju"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="3_3mgou"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_3mgou"]
 [ext_resource type="Script" uid="uid://gq6m2qeuguk2" path="res://core/model/decision.gd" id="4_7t8qu"]
 [ext_resource type="Script" uid="uid://dh6tkcf3cubge" path="res://core/model/event_operator.gd" id="4_ri2ju"]
 

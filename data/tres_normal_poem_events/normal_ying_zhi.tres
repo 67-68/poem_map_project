@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="RandomEvent" load_steps=14 format=3 uid="uid://br8v80yowwfqt"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://br8v80yowwfqt"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_4vdp6"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_ee5vi"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ee5vi"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_ufgmp"]
 [ext_resource type="Script" uid="uid://dp5gqdkppjq17" path="res://core/model/trait_operator.gd" id="3_lads4"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_u1cx7"]

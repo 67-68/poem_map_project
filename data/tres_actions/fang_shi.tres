@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="SceneAction" load_steps=7 format=3 uid="uid://vi7erumsc25y"]
+[gd_resource type="Resource" script_class="SceneAction" format=3 uid="uid://vi7erumsc25y"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_w3kcq"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_i5atp"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_w3kcq"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_i5atp"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_ojs7x"]
 [ext_resource type="Texture2D" uid="uid://de31mnu2ky82d" path="res://assets/backgrounds/bg_changan_street.png" id="4_qsksc"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="5_2gju4"]

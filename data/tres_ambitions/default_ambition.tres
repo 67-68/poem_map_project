@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="AmbitionData" load_steps=19 format=3 uid="uid://dk74dd2j11x7b"]
+[gd_resource type="Resource" script_class="AmbitionData" format=3 uid="uid://dk74dd2j11x7b"]
 
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="1_okmwi"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_okmwi"]
 [ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="2_ymrok"]
 [ext_resource type="Script" uid="uid://bte53fleub1ki" path="res://model/staged_perception_data.gd" id="3_rb2rj"]
 [ext_resource type="Script" uid="uid://cg2ww0cyd8b07" path="res://model/staged_requirement_data.gd" id="4_vh5lv"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="5_ymrok"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="5_ymrok"]
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_jcgty"]
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="7_5trac"]
 

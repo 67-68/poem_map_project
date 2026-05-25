@@ -9,5 +9,6 @@ func operate():
         for c in condition_success_result:
             c.operate()
     else:
+        if not condition_fail_result: return
         for c in condition_fail_result:
             c.operate()
