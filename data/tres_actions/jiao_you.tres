@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SceneAction" load_steps=8 format=3 uid="uid://bmpvm1j6bq27w"]
+[gd_resource type="Resource" script_class="SceneAction" format=3 uid="uid://bmpvm1j6bq27w"]
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/requirements.gd" id="1_1ni8c"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/stat_operator.gd" id="2_slsqb"]
@@ -23,8 +23,8 @@ script = ExtResource("3_28qx7")
 _main_tag = 19
 _action_tags = Array[int]([2, 0, 1, 3, 5, 7, 8, 19, 11])
 action_results = Array[ExtResource("2_slsqb")]([SubResource("Resource_4fss1"), SubResource("Resource_m1nii")])
-uuid = "song_bie"
-name = "送别朋友"
-description = "送别"
+uuid = "jiao_you"
+name = "交游朋友"
+description = "交游"
 icon = ExtResource("4_ob7iq")
 metadata/_custom_type_script = "uid://crewiibqgbs2f"
