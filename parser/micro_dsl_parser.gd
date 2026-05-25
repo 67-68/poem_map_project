@@ -1,6 +1,6 @@
 class_name MicroDSLParser extends GDScript
 
-# 解析触发标签格式：domain:subcategory:specific_attribute
+# 解析触发标签格式：domain:subcategory:category:specific_attribute (4段)
 static func parse_tags(data: String) -> Array[String]:
     var tags = data.split(',')
     var parsed_tags: Array[String] = []
@@ -10,10 +10,10 @@ static func parse_tags(data: String) -> Array[String]:
         if clean_tag.is_empty():
             continue
             
-        # 验证标签格式 (domain:subcategory:specific_attribute)
+        # 验证标签格式 (domain:subcategory:category:specific_attribute)
         var parts = clean_tag.split(':')
-        if parts.size() != 3:
-            print("Warning: Invalid tag format: %s, expected format: domain:subcategory:specific_attribute" % clean_tag)
+        if parts.size() != 4:
+            print("Warning: Invalid tag format: %s, expected format: domain:subcategory:category:specific_attribute" % clean_tag)
             continue
             
         parsed_tags.append(clean_tag)

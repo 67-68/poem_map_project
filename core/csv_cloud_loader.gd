@@ -1,23 +1,110 @@
 @tool
 extends Node
 
-@export var download: bool = false:
+@export_group("Continuous Integration Pipeline")
+@export var sync_all_data: bool = false:
     set(val):
+        sync_all_data = false 
         if val == true:
-            download = false
             notify_property_list_changed()
-            fetch_events_from_cloud(SHEET_CSV_URL)
+            start_sync_queue() # 🚨 启动队列机制！
 
-# 填入你刚刚发布的纯 CSV 直链
-const SHEET_CSV_URL: String = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?output=csv"
+# 🤓☝️ 核心契约 1：资产同步清单 (The Manifest)
+# 把 URL 和它对应的本地保存路径死死绑定在一起！这就是你说的"携带信息"！
+const DATA_MANIFEST: Array[Dictionary] = [
+    {
+        "name": "test_随机事件池",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?output=csv",
+        "save_path": "res://data/csv_random_events/test_random_events.csv"
+    }
+    # TODO: 在这里添加更多数据源配置
+    # {
+    #     "name": "朝堂事件池",
+    #     "url": "https://docs.google.com/spreadsheets/d/.../pub?output=csv&gid=123",
+    #     "save_path": "res://data/source/csv/events_court.csv"
+    # },
+    # {
+    #     "name": "NPC 初始配置表",
+    #     "url": "https://docs.google.com/spreadsheets/d/.../pub?output=csv&gid=456",
+    #     "save_path": "res://data/source/csv/npc_init.csv"
+    # }
+]
+
+# 任务指针：当前正在下载第几个文件？
+var _current_job_index: int = -1
 
 # 简化的重试逻辑 - 最多重试3次原始URL
 const MAX_RETRIES = 3
 
 func _ready():
-    fetch_events_from_cloud()
+    # 自动启动同步队列（可选，根据需要开启）
+    # start_sync_queue()
+    pass
+
+# 🚨 启动队列机制
+func start_sync_queue() -> void:
+    if DATA_MANIFEST.is_empty():
+        push_error("DATA_MANIFEST 为空，没有配置任何数据源！💀")
+        return
+    
+    print("===== 开始云端数据同步队列 =====")
+    print("共需同步 %d 个数据源" % DATA_MANIFEST.size())
+    
+    _current_job_index = 0
+    process_next_job()
+
+# 处理下一个任务
+func process_next_job() -> void:
+    if _current_job_index >= DATA_MANIFEST.size():
+        print("===== 所有数据源同步完成！🤓☝️ =====")
+        _current_job_index = -1
+        return
+    
+    var current_job = DATA_MANIFEST[_current_job_index]
+    var job_name = current_job.get("name", "Unknown")
+    var job_url = current_job.get("url", "")
+    var job_save_path = current_job.get("save_path", "")
+    
+    if job_url.is_empty():
+        push_error("任务 %s 的 URL 为空，跳过 💀" % job_name)
+        _current_job_index += 1
+        process_next_job()
+        return
+    
+    print("\n===== 开始处理任务 [%d/%d]: %s =====" % [_current_job_index + 1, DATA_MANIFEST.size(), job_name])
+    fetch_events_from_cloud(job_url, job_save_path)
 
 var retry_count = 0
+
+# 保存原始CSV文件到指定路径
+func save_raw_csv(csv_content: String, save_path: String) -> void:
+    # 确保目录存在
+    var dir_path = save_path.get_base_dir()
+    if not DirAccess.dir_exists_absolute(dir_path):
+        DirAccess.make_dir_absolute(dir_path)
+        print("创建目录: %s" % dir_path)
+    
+    # 保存CSV文件
+    var file = FileAccess.open(save_path, FileAccess.WRITE)
+    if file:
+        file.store_string(csv_content)
+        file.close()
+        print("原始CSV文件已保存到: %s" % save_path)
+    else:
+        push_error("无法保存CSV文件到: %s 💀" % save_path)
+        push_error('是不是文件路径写错了?')
+
+# 验证资源是否可以保存
+func is_resource_savable(resource: Resource) -> bool:
+
+    if resource == null:
+        return false
+    
+    # 检查是否是有效的 Resource 类型
+    if not resource is Resource:
+        return false
+    
+    return true
 
 # 简单的CSV行解析，处理引号
 func parse_csv_line(line: String) -> Array[String]:
@@ -38,7 +125,7 @@ func parse_csv_line(line: String) -> Array[String]:
     result.append(current)
     return result
 
-func fetch_events_from_cloud(url: String = SHEET_CSV_URL) -> void:
+func fetch_events_from_cloud(url: String, save_path: String = "res://tests/") -> void:
     print("开始请求云端数据: %s (尝试 %d/%d)" % [url, retry_count + 1, MAX_RETRIES + 1])
     
     # 使用 curl 进行同步网络请求，避免 @tool 脚本中的异步问题 💀
@@ -50,7 +137,12 @@ func fetch_events_from_cloud(url: String = SHEET_CSV_URL) -> void:
         if retry_count < MAX_RETRIES:
             retry_count += 1
             print("Warning: 第 %d 次重试原始URL..." % retry_count)
-            fetch_events_from_cloud(SHEET_CSV_URL)
+            fetch_events_from_cloud(url, save_path)
+        else:
+            # 重试次数耗尽，跳过当前任务继续下一个
+            print("Error: 重试次数耗尽，跳过当前任务 😭")
+            _current_job_index += 1
+            process_next_job()
         return
     
     var raw_csv_string: String = output[0] if output.size() > 0 else ""
@@ -60,7 +152,12 @@ func fetch_events_from_cloud(url: String = SHEET_CSV_URL) -> void:
         if retry_count < MAX_RETRIES:
             retry_count += 1
             print("Warning: 第 %d 次重试原始URL..." % retry_count)
-            fetch_events_from_cloud(SHEET_CSV_URL)
+            fetch_events_from_cloud(url, save_path)
+        else:
+            # 重试次数耗尽，跳过当前任务继续下一个
+            print("Error: 重试次数耗尽，跳过当前任务 😭")
+            _current_job_index += 1
+            process_next_job()
         return
     
     print("成功获取数据，大小: %d 字节" % raw_csv_string.length())
@@ -71,10 +168,17 @@ func fetch_events_from_cloud(url: String = SHEET_CSV_URL) -> void:
     # 重置重试计数器
     retry_count = 0
     
+    # 保存原始CSV文件到指定路径
+    if not save_path.is_empty():
+        save_raw_csv(raw_csv_string, save_path)
+    
     # 将包含几百行文本的 raw_csv_string 交给你之前写好的微语法解析器
     var csv_lines = raw_csv_string.split("\n")
     if csv_lines.size() < 2:
         push_error("CSV 数据不足，至少需要表头和一行数据")
+        # 数据格式错误，跳过当前任务继续下一个
+        _current_job_index += 1
+        process_next_job()
         return
     
     # 解析表头
@@ -112,14 +216,34 @@ func fetch_events_from_cloud(url: String = SHEET_CSV_URL) -> void:
         print("云端事件注入成功: %s" % event.uuid)
 
     print("云端数据注入完成！共注入 %d 个事件 🤓☝️" % events.size())
+    
+    # 调试：检查资源有效性
+    if events.is_empty():
+        print("Warning: DSLParser 返回空事件数组，跳过保存")
+        _current_job_index += 1
+        process_next_job()
+        return
 
-    # 保存为.tres文件到tests/文件夹
+    # 保存为.tres文件到指定文件夹
     # 类型转换：Array[RandomEvent] -> Array[Resource]，因为 RandomEvent 继承自 Resource
     var resources: Array[Resource] = []
     resources.assign(events)
-    save_resources_to_tres(resources, "res://tests/")
+    
+    # 调试：检查转换后的资源数组
+    print("资源数组转换完成，大小: %d" % resources.size())
+    for i in range(min(resources.size(), 3)):  # 只打印前3个
+        var res = resources[i]
+        print("资源[%d]: 类名=%s, resource_path=%s" % [i, res.get_class(), res.resource_path])
+    
+    # 从CSV路径推断.tres保存路径（同目录下）
+    var tres_save_path = save_path.get_base_dir() + "/"
+    save_resources_to_tres(resources, tres_save_path)
 
     print("云端数据注入成功！系统活过来了 🤓☝️")
+    
+    # 🚨 当前任务完成，推进到下一个任务
+    _current_job_index += 1
+    process_next_job()
 
 # 保存resources为.tres文件到指定文件夹
 func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> void:
@@ -132,14 +256,33 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
         print("创建文件夹: %s" % folder_path)
 
     var saved_count = 0
+    var skipped_count = 0
+    
     for resource in resources:
         # 检查resource是否为有效的Resource
         if resource == null:
+            print("Warning: 跳过 null 资源")
+            skipped_count += 1
+            continue
+        
+        # 验证资源是否可以保存
+        if not is_resource_savable(resource):
+            print("Warning: 跳过无效资源 (类名: %s)" % resource.get_class())
+            skipped_count += 1
             continue
 
-        # 构造文件名，优先使用resource_name，如果没有则使用resource_path的文件名
+        # 构造文件名，优先使用uuid，其次使用resource_name，最后使用resource_path的文件名
         var base_filename = ""
-        if resource.has_method("get_resource_name"):
+        
+        # 🎯 优先尝试获取 uuid 属性
+        if resource.has_method("get") and resource.get("uuid") != null:
+            var uuid = resource.get("uuid")
+            if uuid is String and not uuid.is_empty():
+                base_filename = uuid
+                print("使用 uuid 作为文件名: %s" % base_filename)
+        
+        # 如果没有 uuid，尝试获取 resource_name
+        if base_filename.is_empty() and resource.has_method("get_resource_name"):
             var res_name = resource.get_resource_name()
             if not res_name.is_empty():
                 base_filename = res_name
@@ -153,9 +296,14 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
         # 如果还是没有名字，使用资源的类名
         if base_filename.is_empty():
             base_filename = resource.get_class()
+            # 如果类名是通用的 Resource，跳过这个资源
+            if base_filename == "Resource":
+                print("Warning: 资源没有有效名称，跳过保存 (类名: %s)" % base_filename)
+                skipped_count += 1
+                continue
 
-        # 将冒号转化为双下划线
-        var safe_filename = base_filename.replace(":", "__")
+        # 将冒号转化为双下划线，连字符也转化为下划线（为了兼容文件系统）
+        var safe_filename = base_filename.replace(":", "__").replace("-", "_")
 
         # 检查是否有其他特殊字符（只允许字母、数字、下划线）
         var invalid_chars_regex = RegEx.new()
@@ -167,6 +315,7 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
             for result in invalid_chars:
                 invalid_chars_str += result.get_string()
             push_error("资源名称包含非法字符: %s, 非法字符: %s, 拒绝保存" % [base_filename, invalid_chars_str])
+            skipped_count += 1
             continue
 
         # 确保文件名唯一（添加索引）
@@ -185,5 +334,6 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
             saved_count += 1
         else:
             push_error("保存资源失败: %s, 错误代码: %d" % [file_path, save_result])
+            skipped_count += 1
 
-    print("成功保存 %d/%d 个资源到 %s 文件夹" % [saved_count, resources.size(), folder_path])
+    print("成功保存 %d/%d 个资源到 %s 文件夹 (跳过 %d 个)" % [saved_count, resources.size(), folder_path, skipped_count])
