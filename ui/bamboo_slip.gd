@@ -16,6 +16,7 @@ func apply_relation(name: String):
 	$VBoxContainer/Label.text = name
 
 func apply_state(state: String):
+	#breakpoint
 	match state:
 		"HATE": 
 			chain.visible = true

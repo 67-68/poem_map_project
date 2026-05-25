@@ -25,7 +25,7 @@ static var debug_dashboard_state = {
         "JIAOYOU": "main_jiaoyou_1",  # 这些key其实没用，因为不需要分辨，全部塞进去trait就行了
         
         # 社交
-        "LIBAI": 'relation_libai_1'
+        "LIBAI": 'relation_libai_4'
     },
     
     # 维度 4：资源池 (The Expendables) - 最不重要的底层数值

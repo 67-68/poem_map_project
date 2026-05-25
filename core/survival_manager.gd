@@ -50,7 +50,7 @@ func aggregate_trait_effect():
         if not trait_: 
             Logging.warn('为什么player state中存在的triat在database没有？？')
             continue
-        t.operate_continuous_effect()
+        trait_.operate_continuous_effect()
 
 func operate_endogeneous_operations():
     for t in PlayerState.get_traits():

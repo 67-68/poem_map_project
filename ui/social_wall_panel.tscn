@@ -1,7 +1,5 @@
 [gd_scene format=3 uid="uid://fnnxu25q66uu"]
 
-[ext_resource type="PackedScene" uid="uid://cx57ph8pl3dvb" path="res://ui/bamboo_slip.tscn" id="1_a38fk"]
-
 [node name="SocialWallPanel" type="PanelContainer" unique_id=1780260616]
 custom_minimum_size = Vector2(800, 500)
 anchors_preset = 8
@@ -40,7 +38,4 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="HFlowContainer" type="HFlowContainer" parent="VBoxContainer/ScrollContainer/MarginContainer" unique_id=1834478498]
-layout_mode = 2
-
-[node name="TestBambooSlip" parent="VBoxContainer/ScrollContainer/MarginContainer/HFlowContainer" unique_id=518738549 instance=ExtResource("1_a38fk")]
 layout_mode = 2
