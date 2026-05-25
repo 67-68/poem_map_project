@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dvlhdfce4jjli"]
+
+[ext_resource type="Script" uid="uid://dwkrc1dytscs2" path="res://core/csv_cloud_loader.gd" id="1_taktn"]
+
+[node name="GoogleSheetFetcher" type="Node" unique_id=635922665]
+script = ExtResource("1_taktn")
+download = true
+
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=660539800]
+
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

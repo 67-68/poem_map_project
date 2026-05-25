@@ -31,3 +31,5 @@ expand_mode = 4
 [node name="Label" type="Label" parent="VBoxContainer" unique_id=1423146884]
 layout_mode = 2
 text = "贺知章"
+
+[connection signal="pressed" from="VBoxContainer/TextureButton" to="." method="_on_texture_button_pressed"]
