@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://dnaervudyk3yh"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_govja"]
+
+[resource]
+script = ExtResource("1_govja")
+uuid = "main_duzhuo_1"
+name = "第一级独酌"
+metadata/_custom_type_script = "uid://pom0464obfp2"

@@ -17,18 +17,31 @@ signal player_stat_changed(prop_name)
 signal location_changed(location)
 signal emotion_changed(stat_name)
 
-func _ready():
-	append_stat('official_prestige', 14)
-	append_stat('literary_fame',50)
-	append_stat('talent',50) # 如果才气不够就写不出春望，需要点各种事件来加才气
-	append_stat(ENUMS.PROPS.BURNOUT,0)
-	append_stat(ENUMS.PROPS.DRUNK,0)
-	append_stat(ENUMS.PROPS.FATIGUE,0)
-	append_stat(ENUMS.PROPS.SICK,0)
-	append_stat(ENUMS.PROPS.INSPIRATION,0)
-	append_stat(ENUMS.PROPS.HEALTH,100)
+func init_props():
+	var resources = SourceOfTruth.debug_dashboard_state.resources
+	append_stat(ENUMS.PROPS.OFFICIAL_PRESTIGE, resources.official_prestige)
+	append_stat(ENUMS.PROPS.LITERARY_FAME, resources.literary_fame)
+	append_stat(ENUMS.PROPS.TALENT, resources.talent)
+	append_stat(ENUMS.PROPS.BURNOUT, resources.burnout)
+	append_stat(ENUMS.PROPS.DRUNK, resources.drunk)
+	append_stat(ENUMS.PROPS.FATIGUE, resources.fatigue)
+	append_stat(ENUMS.PROPS.SICK, resources.sick)
+	append_stat(ENUMS.PROPS.INSPIRATION, resources.inspiration)
+	append_stat(ENUMS.PROPS.HEALTH, resources.health)
+
+func init_traits():
+	var action_tracks = SourceOfTruth.debug_dashboard_state.action_tracks
+	for track_name in action_tracks:
+		var trait_uuid = action_tracks[track_name]
+		add_trait(trait_uuid)
 	
 	add_trait(ENUMS.to_traits_str(ENUMS.TRAITS.ORDINARY_PEOPLE))
+	
+
+func _ready():
+	init_props()
+	init_traits()
+	
 	current_location = 'yong_zhou'
 
 func append_stat(stat_name, data):

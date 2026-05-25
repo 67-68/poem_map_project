@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://c5m7sat2v4x60"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_xytye"]
+
+[resource]
+script = ExtResource("1_xytye")
+uuid = "main_jiaoyou_3"
+name = "第三级交游"
+metadata/_custom_type_script = "uid://pom0464obfp2"
