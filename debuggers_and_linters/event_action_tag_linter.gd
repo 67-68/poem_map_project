@@ -24,8 +24,20 @@ func start_linter() -> void:
 	print("开始检查event和action的tag...")
 	# 仿造Global, 加载所有action和event
 	var actions: Dictionary = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres"))
-	var random_events: Dictionary = Util.create_dict_from_registry(preload("res://data/tres_random_event_registry.tres"))
+
+	# 合并所有 random events 分桶
+	var random_events: Dictionary = {}
+	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_random_event_bai_ye_registry.tres")))
+	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_random_event_jiao_you_registry.tres")))
+	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_random_event_deng_gao_registry.tres")))
+	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_random_event_fang_shi_registry.tres")))
+	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_random_event_feng_zhao_registry.tres")))
+	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_random_event_du_zhuo_registry.tres")))
+	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_random_event_special_registry.tres")))
+
+	# 合并 poem events
 	random_events.merge(Util.create_dict_from_registry(preload("res://data/tres_normal_poem_events_registry.tres")))
+
 	var base_province = Util.create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
 	base_province.merge(Util.create_dict(DataLoader.load_csv_model(Territory,'territories')))
 	

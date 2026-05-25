@@ -18,7 +18,6 @@ func _ready() -> void:
 	EventBus.request_event.connect(apply_narrative)
 	EventBus.request_event_key.connect(func(key): 
 		var ev = Database.history_events.get(key)
-		if not ev: ev = Database.random_events.get(key)
 		if not ev: ev = Database.normal_poem_events.get(key)
 		if not ev: ev = Database.find_triggerable_item(key)
 		if not ev:

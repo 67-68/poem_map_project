@@ -36,4 +36,5 @@ func apply_state(state: String):
 
 
 func _on_texture_button_pressed() -> void:
-	EventManager.scan_events(0.0,trait_uuid)
+	var context = {'main_tag': trait_uuid}
+	EventManager.scan_events(0.0, context)

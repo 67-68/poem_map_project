@@ -30,8 +30,8 @@ resources = {
 "poem:ji_lv:1": "res://data/tres_traits/poem__ji_lv__1.tres",
 "poem:shan_shui:1": "res://data/tres_traits/poem__shan_shui__1.tres",
 "poem:ying_zhi:1": "res://data/tres_traits/poem__huai_gu__1.tres",
-"relation_libai_1": "res://data/tres_traits/relation_libai_1.tres",
-"relation_libai_2": "res://data/tres_traits/relation_libai_2.tres",
-"relation_libai_3": "res://data/tres_traits/relation_libai_3.tres",
-"relation_libai_4": "res://data/tres_traits/relation_libai_4.tres"
+"relation_libai_1": "res://data/tres_traits/relation_libai_rumor.tres",
+"relation_libai_2": "res://data/tres_traits/relation_libai_close.tres",
+"relation_libai_3": "res://data/tres_traits/relation_libai_core.tres",
+"relation_libai_4": "res://data/tres_traits/relation_libai_enemy.tres"
 }

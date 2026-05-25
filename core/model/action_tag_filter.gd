@@ -12,18 +12,19 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
                 Logging.err('标签 %s 有三段式标签但带着general' % tag)
             push_error("🚨 [ActionTagFilter] 发现三段式标签注入: %s，应该在注入时通过 TagManager.normalize_3part_depreciated_tag() 标准化为四段式" % tag)
     
-    var maintag = _context.get('main_tag')
-    if not maintag: 
-        Logging.info('action tag filter: does not found main tag')
-
     for ticket in tickets:
-        #breakpoint
-        var e = Database.random_events.get(ticket.event_uuid)
+        var e: BaseEvent
+        var main_tag = _context.get('main_tag', '')
+
+        # 优先使用 context 中的 main_tag 路由到对应桶
+        if main_tag and Database.random_events.has(main_tag):
+            e = Database.random_events[main_tag].get(ticket.event_uuid)
+
+        # 如果没有 main_tag 或对应桶中没有，尝试从所有事件中查找
         if not e:
-            e = Database.end_random_events.get(ticket.event_uuid)
-        if not e: 
             e = Database.find_triggerable_item(ticket.event_uuid)
-        if not e:             
+
+        if not e:
             Logging.err("[ActionTagFilter] Event not found: " + ticket.event_uuid)
             continue
 
@@ -37,17 +38,6 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
         if not current_tags or current_tags.is_empty():
             Logging.warn("检查自己是不是又忘记给玩家加current tags了！！！又筛选掉了")
             continue
-
-        # 2.5 拦截没有main tag的事件
-        if maintag:
-            var found = false
-            for tag in e.target_tags:
-                if tag == maintag:
-                    found = true
-                    break
-            if not found:
-                Logging.info("拦截没有main tag的事件: " + ticket.event_uuid)
-                continue
 
         # 3. 对暗号与权重狂欢
         for tag in current_tags:

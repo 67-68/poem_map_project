@@ -34,7 +34,6 @@
 [ext_resource type="PackedScene" uid="uid://c2faq3olq16yp" path="res://ui/poem_start.tscn" id="28_ok6jj"]
 [ext_resource type="Script" uid="uid://dgg4voth1dy5y" path="res://debuggers_and_linters/event_action_tag_linter.gd" id="28_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://dmsdo48sr46y6" path="res://ui/poem_creation_page.tscn" id="29_facbu"]
-[ext_resource type="Script" uid="uid://dwkrc1dytscs2" path="res://core/csv_cloud_loader.gd" id="29_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://c4cm25a8sdyj" path="res://ui/picker.tscn" id="30_b1qrp"]
 [ext_resource type="Script" uid="uid://dinmvxb5j0il4" path="res://core/survival_manager.gd" id="30_kq58d"]
 [ext_resource type="Script" uid="uid://ck2mtudsybglf" path="res://ui/emotion_radar.gd" id="31_come4"]
@@ -52,7 +51,7 @@ shader_parameter/edge_softness = 0.01
 [sub_resource type="Theme" id="Theme_h2yge"]
 default_base_scale = 1.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0cp0l"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4lmeg"]
 resource_local_to_scene = true
 content_margin_left = 20.0
 content_margin_top = 20.0
@@ -66,7 +65,7 @@ texture_margin_right = 19.0
 content_margin_top = 20.0
 texture = ExtResource("19_lswn8")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d2t1y"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0cp0l"]
 resource_local_to_scene = true
 content_margin_left = 20.0
 content_margin_top = 20.0
@@ -113,7 +112,7 @@ script = ExtResource("1_ig7tw")
 offset_left = -97.5
 offset_right = 97.5
 size_flags_horizontal = 8
-theme_override_styles/panel = SubResource("StyleBoxTexture_0cp0l")
+theme_override_styles/panel = SubResource("StyleBoxTexture_4lmeg")
 
 [node name="PoetDescriptor" parent="UI" unique_id=285994705 instance=ExtResource("5_lquwl")]
 
@@ -263,7 +262,7 @@ offset_left = -72.0
 offset_top = -23.200012
 offset_right = 67.0
 offset_bottom = 36.799988
-theme_override_styles/panel = SubResource("StyleBoxTexture_d2t1y")
+theme_override_styles/panel = SubResource("StyleBoxTexture_0cp0l")
 
 [node name="PoemCreation" parent="UI" unique_id=1490017236 instance=ExtResource("29_facbu")]
 process_mode = 3
@@ -365,11 +364,6 @@ script = ExtResource("27_xuqvo")
 script = ExtResource("28_qsp4k")
 metadata/_custom_type_script = "uid://dgg4voth1dy5y"
 
-[node name="GoogleSheetFetcher" type="Node" parent="CoreSystems" unique_id=2113246467]
-script = ExtResource("29_qsp4k")
-
-[node name="HTTPRequest" type="HTTPRequest" parent="CoreSystems/GoogleSheetFetcher" unique_id=1561727176]
-
 [node name="SurvivalManager" type="Node" parent="CoreSystems" unique_id=2016997853]
 script = ExtResource("30_kq58d")
 metadata/_custom_type_script = "uid://dinmvxb5j0il4"
@@ -381,4 +375,3 @@ script = ExtResource("35_0rl1p")
 [connection signal="pressed" from="UI/LeftButtonContainer/V/PlayerButton" to="UI/LeftButtonContainer/V/PlayerButton" method="_on_pressed"]
 [connection signal="gui_input" from="UI/Control/Controller" to="UI/Control/Controller" method="_on_gui_input"]
 [connection signal="pressed" from="UI/Control/Button" to="UI/Control/Controller" method="_on_button_pressed"]
-[connection signal="request_completed" from="CoreSystems/GoogleSheetFetcher/HTTPRequest" to="CoreSystems/GoogleSheetFetcher" method="_on_http_request_request_completed"]

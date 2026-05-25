@@ -114,7 +114,10 @@ func fetch_events_from_cloud(url: String = SHEET_CSV_URL) -> void:
     print("云端数据注入完成！共注入 %d 个事件 🤓☝️" % events.size())
 
     # 保存为.tres文件到tests/文件夹
-    save_resources_to_tres(events, "res://tests/")
+    # 类型转换：Array[RandomEvent] -> Array[Resource]，因为 RandomEvent 继承自 Resource
+    var resources: Array[Resource] = []
+    resources.assign(events)
+    save_resources_to_tres(resources, "res://tests/")
 
     print("云端数据注入成功！系统活过来了 🤓☝️")
 

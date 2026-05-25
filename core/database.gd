@@ -44,7 +44,15 @@ func _init() -> void:
 	msger_data = Util.create_dict_from_registry(preload("res://data/tres_msger_data_registry.tres"))
 
 	history_events = Util.create_dict_from_registry(preload("res://data/tres_history_event_registry.tres"))
-	random_events = Util.create_dict_from_registry(preload("res://data/tres_random_event_registry.tres"))
+	random_events = {
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_BAIYE_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_bai_ye_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_JIAOYOU_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_jiao_you_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DENGGAO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_deng_gao_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FANGSHI_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_fang_shi_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FENGZHAO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_feng_zhao_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DUZHUO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_du_zhuo_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_SPECIAL_DEEPSEEK_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_special_registry.tres"))
+	}
 	end_random_events = Util.create_dict_from_registry(preload("res://data/tres_end_random_events_registry.tres"))
 
 	focused_chat_data = Util.create_dict_from_registry(preload("res://data/tres_focused_chats_registry.tres"))
@@ -129,8 +137,9 @@ func find_triggerable_item(uuid: String):
 		return focused_chat_data[uuid]
 	if decided_events.get(uuid):
 		return decided_events[uuid]
-	if random_events.get(uuid):
-		return random_events[uuid]
+	for main_tag in random_events:
+		if random_events[main_tag].get(uuid):
+			return random_events[main_tag][uuid]
 	if actions.get(uuid):
 		return actions[uuid]
 	if ambitions.get(uuid):
@@ -174,3 +183,19 @@ func get_active_imaginaries() -> Dictionary:
 		if imaginary.basic_imaginaries.size() > 0:
 			active_imaginaries[imaginary_uuid] = imaginary
 	return active_imaginaries
+
+
+func get_random_events(main_tag: String = '') -> Dictionary:
+	if main_tag.is_empty():
+		Logging.info('get_random_events: no main tag provided, returning all events')
+		var all_events = {}
+		for tag_bucket in random_events:
+			all_events.merge(random_events[tag_bucket])
+		return all_events
+	else:
+		if random_events.has(main_tag):
+			Logging.info('get_random_events: returning events for main tag: ' + main_tag)
+			return random_events[main_tag]
+		else:
+			Logging.err('get_random_events: main tag not found: ' + main_tag)
+			return {}

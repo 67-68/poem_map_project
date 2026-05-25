@@ -22,6 +22,7 @@ func _on_button_pressed() -> void:
 	for tag in action.action_tags:
 		var normalized_tag = TagManager.normalize_3part_depreciated_tag(tag)
 		PlayerState.current_action_tags.append(normalized_tag)
-	EventManager.scan_events(0, action.main_tag,[])
+	var context = {'main_tag': action.main_tag}
+	EventManager.scan_events(0, context)
 
 	
