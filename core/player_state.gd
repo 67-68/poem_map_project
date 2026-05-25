@@ -26,6 +26,7 @@ func _ready():
 	append_stat(ENUMS.PROPS.FATIGUE,0)
 	append_stat(ENUMS.PROPS.SICK,0)
 	append_stat(ENUMS.PROPS.INSPIRATION,0)
+	append_stat(ENUMS.PROPS.HEALTH,100)
 	
 	add_trait(ENUMS.to_traits_str(ENUMS.TRAITS.ORDINARY_PEOPLE))
 	current_location = 'yong_zhou'
@@ -138,7 +139,7 @@ func set_emotion(emo_name, data):
 	emotion_changed.emit(emo_name)
 	
 
-func flush_emotion():
+func clear_emotion():
 	# 清空volatile_stats
 	emotions.clear()
 

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ResourceRegistry" load_steps=2 format=3 uid="uid://1e8871rxk44x"]
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://1e8871rxk44x"]
 
 [ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_ms5j0"]
 
@@ -6,6 +6,7 @@
 script = ExtResource("1_ms5j0")
 resources = {
 "normal_bai_ye": "res://data/tres_random_event/normal_bai_ye.tres",
+"normal_deepseek": "res://data/tres_random_event/normal_deepseek.tres",
 "normal_deng_gao": "res://data/tres_random_event/normal_deng_gao.tres",
 "normal_du_zhuo": "res://data/tres_random_event/normal_du_zhuo.tres",
 "normal_fang_shi": "res://data/tres_random_event/normal_fang_shi.tres",

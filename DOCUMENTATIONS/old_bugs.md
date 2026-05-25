@@ -58,3 +58,8 @@ Scene Action的`action_tags`和Random Event的`target_tags`之间存在标签格
 - <ref_file file="/Users/lennon/Projects/poem_map_project/data/tres_random_event/normal_bai_ye.tres" />
 - <ref_file file="/Users/lennon/Projects/poem_map_project/model/enumerates.gd" />
 - <ref_file file="/Users/lennon/Projects/poem_map_project/model/random_event.gd" />
+
+
+### 2025.05.25
+@enumerates 中action tag非真正四段式 + 中间有个_ + 新的deepseek action是三段式，在 @action tag filter导致问题，因为它会自动补全3段 -> 4, 导致deepseek action 和 target tag无法匹配
+准确来说不是这里，前面的某个环节导致了问题

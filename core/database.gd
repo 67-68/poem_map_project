@@ -165,3 +165,12 @@ func wash_positions(items: Dictionary, mesh_size, use_position_uuid: bool = fals
 		item.position_dirty = false
 		var pos = item.get_local_pos_use_vec3(mesh_size)
 		item.position = pos
+
+
+func get_active_imaginaries() -> Dictionary:
+	var active_imaginaries = {}
+	for imaginary_uuid in imaginaries:
+		var imaginary = imaginaries[imaginary_uuid]
+		if imaginary.basic_imaginaries.size() > 0:
+			active_imaginaries[imaginary_uuid] = imaginary
+	return active_imaginaries

@@ -42,7 +42,10 @@ enum ACTION_TAGS {
     ACTION_DU_ZHUO_GENERAL,
 
     # 死亡
-    ACTOR_HEALTH_DEATH_GENERAL
+    ACTOR_HEALTH_DEATH_GENERAL,
+
+    # 灵感特殊行动
+    ACTION_DAILY_DEEPSEEK_GENERAL # organize thuought
 }
 
 enum PROPS {

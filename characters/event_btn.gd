@@ -5,6 +5,7 @@ var option: BaseOption
 var click_count := 0
 
 func _init(data: BaseOption):
+	data.init()
 	option = data
 	text = data.description if 'description' in data else "选项"
 	autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # Enable text wrapping

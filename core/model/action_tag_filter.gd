@@ -7,6 +7,9 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
     # 🔍 检查输入标签是否为三段式（向后兼容检查）
     for tag in current_tags:
         if tag.split(':').size() <= 3:
+            breakpoint
+            if tag.ends_with('general'):
+                Logging.err('标签 %s 有三段式标签但带着general' % tag)
             push_error("🚨 [ActionTagFilter] 发现三段式标签注入: %s，应该在注入时通过 TagManager.normalize_3part_depreciated_tag() 标准化为四段式" % tag)
     
     var maintag = _context.get('main_tag')

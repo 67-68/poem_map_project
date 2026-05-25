@@ -57,9 +57,3 @@ func _append_tag(ima: ImaginaryTag, entry: Dictionary):
 		ima.current_level = 1
 		Logging.info('imaginary level set to 1 (size %d < l2_threshold %d)' % [ima.basic_imaginaries.size(), ima.l2_threshold])
 	EventBus.imaginary_changed.emit()
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	# 移除 event_shown 监听，改为在 narrative_overlay 中直接调用
-	# EventBus.event_shown.connect(add_imagenary)
-	pass

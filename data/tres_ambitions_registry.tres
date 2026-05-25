@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ResourceRegistry" load_steps=2 format=3 uid="uid://ctcgwu5di4vt7"]
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://ctcgwu5di4vt7"]
 
 [ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_8b3js"]
 
