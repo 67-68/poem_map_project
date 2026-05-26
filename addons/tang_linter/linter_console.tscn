@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dht4g8p58a30r"]
+
+[ext_resource type="Script" uid="uid://bgcebbdxo4je6" path="res://debuggers/linter_console.gd" id="1_f4onf"]
+
+[node name="LinterConsole" type="VBoxContainer" unique_id=1917269315]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_f4onf")
+
+[node name="OutputLog" type="RichTextLabel" parent="." unique_id=1826762457]
+layout_mode = 2
+bbcode_enabled = true
+vertical_alignment = 3
+
+[node name="CommandInput" type="LineEdit" parent="." unique_id=327661515]
+layout_mode = 2
+placeholder_text = "输入大唐指令 (e.g. help, lint, bake)..."
