@@ -1,11 +1,11 @@
 class_name DSLParser extends GDScript
 
-# 主要的CSV解析方法，接受一行CSV数据并返回RandomEvent
-static func parse(row: Dictionary) -> RandomEvent:
+# 解析随机事件
+static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 检测空行
     if row.is_empty():
         return null
-    
+
     # 检测所有值都为空的行
     var has_content = false
     for key in row:
@@ -13,10 +13,10 @@ static func parse(row: Dictionary) -> RandomEvent:
         if value != null and not str(value).is_empty():
             has_content = true
             break
-    
+
     if not has_content:
         return null
-    
+
     var event = RandomEvent.new()
 
     # 解析必需字段
@@ -40,18 +40,73 @@ static func parse(row: Dictionary) -> RandomEvent:
     # 解析表现层
     event.name = row.get('title',"")
     event.description = row.get('description',"")
-    
+
     # 解析选项
     event.options = parse_options(row)
 
     event.icon = parse_background(row.get('background', ""))
-    
+
     # 解析权重（可选）
     var weight_str = row.get('weight')
     if weight_str and not weight_str.is_empty():
         event.weight = weight_str.to_float()
-    
+
     return event
+
+# 解析标志位数据
+static func parse_flag(row: Dictionary) -> Flag:
+    # 检测空行
+    if row.is_empty():
+        return null
+
+    # 检测所有值都为空的行
+    var has_content = false
+    for key in row:
+        var value = row[key]
+        if value != null and not str(value).is_empty():
+            has_content = true
+            break
+
+    if not has_content:
+        return null
+
+    var flag = Flag.new()
+
+    # 解析必需字段 flag_id
+    var flag_id = row.get('flag_id')
+    if not flag_id or flag_id.is_empty():
+        push_error("flag_id is required")
+        return null
+    flag.uuid = flag_id
+
+    # 解析 type 字段
+    var flag_type = row.get('type', 'str')
+    if flag_type not in ['str', 'int', 'bool']:
+        print("Warning: Invalid flag type '%s' for flag %s, defaulting to 'str'" % [flag_type, flag_id])
+        flag_type = 'str'
+    flag.type = flag_type
+
+    # 解析 default_value 字段
+    var default_value = row.get('default_value', '')
+    match flag_type:
+        'str':
+            flag.val_str = str(default_value)
+        'int':
+            var int_val = str(default_value).to_int()
+            flag.val_int = int_val
+        'bool':
+            var bool_str = str(default_value).to_lower()
+            flag.val_bool = bool_str == 'true' or bool_str == '1' or bool_str == 'yes'
+        _:
+            print("Warning: Unknown flag type '%s', defaulting to str" % flag_type)
+            flag.val_str = str(default_value)
+
+    print("Flag解析成功: %s (type=%s, default=%s)" % [flag_id, flag_type, default_value])
+    return flag
+
+# 主要的CSV解析方法（保持向后兼容）
+static func parse(row: Dictionary) -> RandomEvent:
+    return parse_random_event(row)
 
 static func parse_background(bg: String) -> Texture2D:
     if bg.is_empty():
@@ -89,6 +144,8 @@ static func parse_single_requirement(req_str: String) -> BaseRequirements:
         return MicroDSLParser.parse_property_requirement(req_str)
     elif req_str.begins_with('trait:'):
         return MicroDSLParser.parse_trait_requirement(req_str)
+    elif req_str.begins_with('flag:'):
+        return MicroDSLParser.parse_flag_requirement(req_str)
     else:
         print("Warning: Unknown requirement type: %s" % req_str)
         return null
@@ -139,11 +196,13 @@ static func parse_option(row: Dictionary, letter: String) -> BaseOption:
     return option
 
 # 解析选项门槛（简化版，只支持属性检查）
-static func parse_option_requirement(req_str: String) -> PropertyRequirement:
+static func parse_option_requirement(req_str: String) -> BaseRequirements:
     if req_str.begins_with('prop:'):
         return MicroDSLParser.parse_property_requirement(req_str)
     elif req_str.begins_with('trait:'):
         return MicroDSLParser.parse_trait_requirement(req_str)
+    elif req_str.begins_with('flag:'):
+        return MicroDSLParser.parse_flag_requirement(req_str)
     else:
         print("Warning: Unknown option requirement type: %s" % req_str)
         return null
@@ -267,10 +326,10 @@ static func parse_single_emotion_condition(condition: String) -> BaseRequirement
         if parts.size() == 2:
             var emotion_name = parts[0]
             var operator_str = parts[1]
-            
+
             var emotion_req = EmotionRequirement.new()
             emotion_req.volatile_stat = emotion_name
-            
+
             if operator_str.begins_with('>'):
                 emotion_req.value = operator_str.substr(1).to_int()
                 emotion_req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
@@ -281,17 +340,21 @@ static func parse_single_emotion_condition(condition: String) -> BaseRequirement
                 # 默认为大于
                 emotion_req.value = operator_str.to_int()
                 emotion_req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
-            
+
             return emotion_req
-    
+
     # 支持属性条件：prop:money:>50
     elif condition.begins_with('prop:'):
         return MicroDSLParser.parse_property_requirement(condition)
-    
+
     # 支持特性条件：trait:has:official
     elif condition.begins_with('trait:'):
         return MicroDSLParser.parse_trait_requirement(condition)
-    
+
+    # 支持标志位条件：flag:bool:has:xxx
+    elif condition.begins_with('flag:'):
+        return MicroDSLParser.parse_flag_requirement(condition)
+
     print("Warning: Unknown condition type: %s" % condition)
     return null
 
@@ -299,29 +362,63 @@ static func parse_single_emotion_condition(condition: String) -> BaseRequirement
 static func validate_event(event: RandomEvent) -> bool:
     if not event:
         return false
-    
+
     if not event.uuid or event.uuid.is_empty():
         push_error("Event validation failed: missing ID")
         return false
-    
+
     if event.options.is_empty():
         print("Warning: Event validation warning: no options for event %s" % event.uuid)
-    
+
     if event.icon == null:
         print("Warning: Event validation warning: no icon for event %s" % event.uuid)
-    
+
+    return true
+
+# 验证 Flag 解析结果
+static func validate_flag(flag: Flag) -> bool:
+    if not flag:
+        return false
+
+    if not flag.uuid or flag.uuid.is_empty():
+        push_error("Flag validation failed: missing ID")
+        return false
+
+    if flag.type.is_empty():
+        print("Warning: Flag validation warning: no type for flag %s" % flag.uuid)
+        return false
+
+    if flag.type not in ['str', 'int', 'bool']:
+        print("Warning: Flag validation warning: invalid type '%s' for flag %s" % [flag.type, flag.uuid])
+        return false
+
     return true
 
 # 批量解析CSV数据
-static func parse_csv_data(csv_data: Array[Dictionary]) -> Array[RandomEvent]:
-    var events: Array[RandomEvent] = []
-    
+static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "random_event") -> Array[Resource]:
+    var resources: Array[Resource] = []
+
     for i in range(csv_data.size()):
         var row = csv_data[i]
-        var event = parse(row)
-        if event and validate_event(event):
-            events.append(event)
+        var resource: Resource = null
+
+        if data_type == "random_event":
+            var event = parse_random_event(row)
+            if event and validate_event(event):
+                resource = event
+            else:
+                print("Warning: Failed to parse event at row %d" % (i + 1))
+        elif data_type == "flags":
+            var flag = parse_flag(row)
+            if flag and validate_flag(flag):
+                resource = flag
+            else:
+                print("Warning: Failed to parse flag at row %d" % (i + 1))
         else:
-            print("Warning: Failed to parse event at row %d" % (i + 1))
-    
-    return events
+            push_error("未知的 data_type: %s 💀" % data_type)
+            continue
+
+        if resource:
+            resources.append(resource)
+
+    return resources

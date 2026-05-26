@@ -51,14 +51,14 @@ static func parse_trait_requirement(data: String) -> BaseRequirements:
     if parts.size() != 3:
         push_error("Invalid trait requirement format: %s, expected: trait:has/not_has:trait_name" % data)
         return null
-    
+
     if parts[0] != "trait":
         push_error("Trait requirement must start with 'trait:', got: %s" % data)
         return null
-    
+
     var operator = parts[1]
     var trait_name = parts[2]
-    
+
     # 创建一个简单的特性检查需求（这里需要根据实际系统调整）
     # 由于现有系统没有直接的TraitRequirement，我们可能需要扩展或创建新的需求类
     if operator == "has":
@@ -68,6 +68,61 @@ static func parse_trait_requirement(data: String) -> BaseRequirements:
     else:
         push_error("Invalid trait operator: %s, expected 'has' or 'not_has'" % operator)
         return null
+
+# 解析标志位触发条件，如：flag:bool:has:xxx, flag:str:is:xxx, flag:int:>xxx
+static func parse_flag_requirement(data: String) -> FlagRequirement:
+    var parts = data.split(':')
+    if parts.size() != 4:
+        push_error("Invalid flag requirement format: %s, expected: flag:type:operator:value" % data)
+        return null
+
+    if parts[0] != "flag":
+        push_error("Flag requirement must start with 'flag:', got: %s" % data)
+        return null
+
+    var flag_type = parts[1]
+    var operator_str = parts[2]
+    var value = parts[3]
+
+    var req = FlagRequirement.new()
+    req.type = flag_type
+
+    match flag_type:
+        "bool":
+            if operator_str == "has":
+                req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
+                req.value = true
+            elif operator_str == "not_has":
+                req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
+                req.value = true
+            else:
+                push_error("Invalid bool flag operator: %s, expected 'has' or 'not_has'" % operator_str)
+                return null
+        "str":
+            if operator_str == "is":
+                req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
+                req.value = value
+            elif operator_str == "is_not":
+                req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
+                req.value = value
+            else:
+                push_error("Invalid str flag operator: %s, expected 'is' or 'is_not'" % operator_str)
+                return null
+        "int":
+            if operator_str == ">":
+                req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
+                req.value = value.to_int()
+            elif operator_str == "<":
+                req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
+                req.value = value.to_int()
+            else:
+                push_error("Invalid int flag operator: %s, expected '>' or '<'" % operator_str)
+                return null
+        _:
+            push_error("Invalid flag type: %s, expected 'bool', 'str', or 'int'" % flag_type)
+            return null
+
+    return req
 
 # 解析结果操作符，如：prop:money:-100, trait:add:corrupt
 static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
@@ -98,6 +153,10 @@ static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
                 operators.append(operator)
         elif type == "emo":
             var operator = parse_emotion_operator(action, value)
+            if operator:
+                operators.append(operator)
+        elif type == "flag":
+            var operator = parse_flag_operator(clean_part)
             if operator:
                 operators.append(operator)
         else:
@@ -159,12 +218,77 @@ static func parse_trait_operator(action: String, trait_name: String) -> BaseOper
 static func parse_emotion_operator(action: String, value_str: String) -> BaseOperator:
     var value = value_str.to_int()
     var operator = EmotionOperator.new()
-    
+
     # 设置情绪名称
     operator.str_emotion = action
-    
+
     # 设置数值（支持 +10 或 -10 格式）
     if value_str.begins_with('+') or value_str.begins_with('-'):
         operator.value = value
-    
+
+    return operator
+
+# 辅助方法：解析标志位操作符
+# 语法：flag:bool:add:xxx, flag:bool:remove:xxx, flag:str:set:{name_of_flag}:{content}, flag:int:add:{value}, flag:int:set:{value}
+# 注意：bool 类型的 xxx 是 flag_id，int 类型的格式可能需要 flag_id，这里假设简化处理
+static func parse_flag_operator(data: String) -> BaseOperator:
+    var parts = data.split(':')
+    if parts.size() < 4:
+        push_error("Invalid flag operator format: %s" % data)
+        return null
+
+    if parts[0] != "flag":
+        push_error("Flag operator must start with 'flag:', got: %s" % data)
+        return null
+
+    var flag_type = parts[1]
+    var action = parts[2]
+
+    var operator = FlagOperator.new()
+    operator.type = flag_type
+
+    match flag_type:
+        "bool":
+            # flag:bool:add:xxx - xxx 是 flag_id
+            # flag:bool:remove:xxx - xxx 是 flag_id
+            if action == "add":
+                operator.operation = "set"
+                operator.value = true
+                operator.flag_id = parts[3]
+            elif action == "remove":
+                operator.operation = "set"
+                operator.value = false
+                operator.flag_id = parts[3]
+            else:
+                push_error("Invalid bool flag action: %s, expected 'add' or 'remove'" % action)
+                return null
+        "int":
+            # flag:int:add:{flag_id}:{value} - 假设需要 flag_id
+            # flag:int:set:{flag_id}:{value} - 假设需要 flag_id
+            if parts.size() < 5:
+                push_error("Invalid int flag operator: expected 'flag:int:add:set:flag_id:value'" % data)
+                return null
+            operator.flag_id = parts[3]
+            if action == "add":
+                operator.operation = "append"
+                operator.value = parts[4].to_int()
+            elif action == "set":
+                operator.operation = "set"
+                operator.value = parts[4].to_int()
+            else:
+                push_error("Invalid int flag action: %s, expected 'add' or 'set'" % action)
+                return null
+        "str":
+            # flag:str:set:{name_of_flag}:{content}
+            if action == "set" and parts.size() == 5:
+                operator.flag_id = parts[3]
+                operator.operation = "set"
+                operator.value = parts[4]
+            else:
+                push_error("Invalid str flag operator: expected 'flag:str:set:name:value'" % data)
+                return null
+        _:
+            push_error("Invalid flag type: %s, expected 'bool', 'str', or 'int'" % flag_type)
+            return null
+
     return operator

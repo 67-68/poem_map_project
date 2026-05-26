@@ -15,19 +15,15 @@ const DATA_MANIFEST: Array[Dictionary] = [
     {
         "name": "test_随机事件池",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?output=csv",
-        "save_path": "res://data/csv_random_events/test_random_events.csv"
+        "save_path": "res://data/csv_random_events/test_random_events.csv",
+        "data_type": "random_event"
+},
+    {
+        "name": "flags_data",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2EfTq6BZ59bQ7lIRBd2q-hoJb1RAJHc2vOwlp5wJ03R7fG23SuvoWOKRcbSsPuPwbp_rs7m1Tk081/pub?output=csv",
+        "save_path": "res://data/flags/flags.csv",
+        "data_type": "flags"
     }
-    # TODO: 在这里添加更多数据源配置
-    # {
-    #     "name": "朝堂事件池",
-    #     "url": "https://docs.google.com/spreadsheets/d/.../pub?output=csv&gid=123",
-    #     "save_path": "res://data/source/csv/events_court.csv"
-    # },
-    # {
-    #     "name": "NPC 初始配置表",
-    #     "url": "https://docs.google.com/spreadsheets/d/.../pub?output=csv&gid=456",
-    #     "save_path": "res://data/source/csv/npc_init.csv"
-    # }
 ]
 
 # 任务指针：当前正在下载第几个文件？
@@ -89,15 +85,16 @@ func process_next_job() -> void:
     var job_name = current_job.get("name", "Unknown")
     var job_url = current_job.get("url", "")
     var job_save_path = current_job.get("save_path", "")
-    
+    var job_data_type = current_job.get("data_type", "random_event")
+
     if job_url.is_empty():
         push_error("任务 %s 的 URL 为空，跳过 💀" % job_name)
         _current_job_index += 1
         process_next_job()
         return
-    
-    print("\n===== 开始处理任务 [%d/%d]: %s =====" % [_current_job_index + 1, DATA_MANIFEST.size(), job_name])
-    fetch_events_from_cloud(job_url, job_save_path)
+
+    print("\n===== 开始处理任务 [%d/%d]: %s (数据类型: %s) =====" % [_current_job_index + 1, DATA_MANIFEST.size(), job_name, job_data_type])
+    fetch_events_from_cloud(job_url, job_save_path, job_data_type)
 
 var retry_count = 0
 
@@ -150,7 +147,7 @@ func parse_csv_line(line: String) -> Array[String]:
     result.append(current)
     return result
 
-func fetch_events_from_cloud(url: String, save_path: String = "res://tests/") -> void:
+func fetch_events_from_cloud(url: String, save_path: String = "res://tests/", data_type: String = "random_event") -> void:
     print("开始请求云端数据: %s (尝试 %d/%d)" % [url, retry_count + 1, MAX_RETRIES + 1])
     
     # 使用 curl 进行同步网络请求，避免 @tool 脚本中的异步问题 💀
@@ -162,7 +159,7 @@ func fetch_events_from_cloud(url: String, save_path: String = "res://tests/") ->
         if retry_count < MAX_RETRIES:
             retry_count += 1
             print("Warning: 第 %d 次重试原始URL..." % retry_count)
-            fetch_events_from_cloud(url, save_path)
+            fetch_events_from_cloud(url, save_path, data_type)
         else:
             # 重试次数耗尽，跳过当前任务继续下一个
             print("Error: 重试次数耗尽，跳过当前任务 😭")
@@ -177,7 +174,7 @@ func fetch_events_from_cloud(url: String, save_path: String = "res://tests/") ->
         if retry_count < MAX_RETRIES:
             retry_count += 1
             print("Warning: 第 %d 次重试原始URL..." % retry_count)
-            fetch_events_from_cloud(url, save_path)
+            fetch_events_from_cloud(url, save_path, data_type)
         else:
             # 重试次数耗尽，跳过当前任务继续下一个
             print("Error: 重试次数耗尽，跳过当前任务 😭")
@@ -232,40 +229,39 @@ func fetch_events_from_cloud(url: String, save_path: String = "res://tests/") ->
         if not row_data.is_empty():
             csv_data.append(row_data)
     
-    # 使用 DSL 解析器解析事件数据
-    var events = DSLParser.parse_csv_data(csv_data)
+    # 使用 DSL 解析器解析数据（根据 data_type 选择不同的解析逻辑）
+    var resources = DSLParser.parse_csv_data(csv_data, data_type)
 
-    # 将解析成功的事件注入到 Database.random_events 中
-    for event in events:
-        # Database.random_events[event.uuid] = event
-        print("云端事件注入成功: %s" % event.uuid)
+    # 将解析成功的资源注入到数据库（根据类型）
+    for resource in resources:
+        if resource is RandomEvent:
+            print("云端事件注入成功: %s" % resource.uuid)
+        elif resource is Flag:
+            print("云端标志位注入成功: %s" % resource.uuid)
+        else:
+            print("云端资源注入成功: %s" % resource.resource_path)
 
-    print("云端数据注入完成！共注入 %d 个事件 🤓☝️" % events.size())
-    
+    print("云端数据注入完成！共注入 %d 个资源 🤓☝️" % resources.size())
+
     # 调试：检查资源有效性
-    if events.is_empty():
-        print("Warning: DSLParser 返回空事件数组，跳过保存")
+    if resources.is_empty():
+        print("Warning: DSLParser 返回空资源数组，跳过保存")
         _current_job_index += 1
         process_next_job()
         return
 
-    # 保存为.tres文件到指定文件夹
-    # 类型转换：Array[RandomEvent] -> Array[Resource]，因为 RandomEvent 继承自 Resource
-    var resources: Array[Resource] = []
-    resources.assign(events)
-    
     # 调试：检查转换后的资源数组
     print("资源数组转换完成，大小: %d" % resources.size())
     for i in range(min(resources.size(), 3)):  # 只打印前3个
         var res = resources[i]
         print("资源[%d]: 类名=%s, resource_path=%s" % [i, res.get_class(), res.resource_path])
-    
+
     # 从CSV路径推断.tres保存路径（同目录下）
     var tres_save_path = save_path.get_base_dir() + "/"
     save_resources_to_tres(resources, tres_save_path)
 
     print("云端数据注入成功！系统活过来了 🤓☝️")
-    
+
     # 🚨 当前任务完成，推进到下一个任务
     _current_job_index += 1
     process_next_job()

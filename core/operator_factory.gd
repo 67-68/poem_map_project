@@ -10,3 +10,11 @@ static func create_property_operator(property_name: String, value: float) -> Pro
     operator.property = property_name
     operator.value = value
     return operator
+
+static func create_flag_operator(flag_id: String, type: String, value: Variant, operation: String = 'set') -> FlagOperator:
+    var operator := FlagOperator.new()
+    operator.flag_id = flag_id
+    operator.type = type
+    operator.value = value
+    operator.operation = operation
+    return operator

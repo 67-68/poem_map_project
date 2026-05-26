@@ -84,3 +84,9 @@ for event in events:
 ## 扩展
 
 如需添加新的CSV文件，请参考 `dsl_events_example.csv` 的格式，并确保遵循DSL语法规范。
+线上parsing: 如果无法访问，你需要：
+
+打开该 Google Sheet
+点击 "文件" → "共享" → "发布到网络"
+选择发布整个文档或特定工作表
+获取正确的发布链接（格式会变为 https://docs.google.com/spreadsheets/d/e/[PUBLISH_KEY]/pub?output=csv）
