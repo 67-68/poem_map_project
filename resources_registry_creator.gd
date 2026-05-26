@@ -23,17 +23,17 @@ func create_all_registries() -> void:
 		print("错误：无法加载ResourceRegistry类")
 		return
 	
-	# 获取所有tres文件夹
-	var tres_folders = get_tres_folders()
-	print("找到 ", tres_folders.size(), " 个tres文件夹")
+	# 获取所有data文件夹
+	var data_folders = get_data_folders()
+	print("找到 ", data_folders.size(), " 个data文件夹")
 	
-	for folder_name in tres_folders:
+	for folder_name in data_folders:
 		create_registry_for_folder(folder_name, resource_registry_script)
 	
 	print("\n所有resources registry文件创建完成！")
 
-# 获取所有tres文件夹
-func get_tres_folders() -> Array:
+# 获取所有data文件夹
+func get_data_folders() -> Array:
 	var folders = []
 	var dir = DirAccess.open(DATA_FOLDER)
 	if not dir:
@@ -44,7 +44,7 @@ func get_tres_folders() -> Array:
 	var file_name = dir.get_next()
 	
 	while file_name != "":
-		if dir.current_is_dir() and file_name.begins_with("tres_"):
+		if dir.current_is_dir():
 			folders.append(file_name)
 		file_name = dir.get_next()
 	

@@ -1,4 +1,4 @@
-extends Node
+class_name EventDataLinter extends Node
 
 # 事件数据Linter (重构版)
 # 使用Rule流水线架构，拒绝反射，建立契约 🤓☝️

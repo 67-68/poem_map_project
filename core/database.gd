@@ -40,7 +40,7 @@ func _init() -> void:
 	territories = Util.create_dict(DataLoader.load_csv_model(Territory, 'territories'))
 
 	factions = Util.create_dict_from_registry(preload("res://data/tres_factions_registry.tres"))
-	flags = Util.create_dict_from_registry(preload("res://data/tres_flags_registry.tres"))
+	flags = Util.create_dict_from_registry(preload("res://data/flags_registry.tres"))
 	life_path_points = Util.create_dict_from_registry(preload("res://data/tres_path_points_registry.tres"))
 	poet_data = Util.create_dict_from_registry(preload("res://data/tres_poet_data_registry.tres"))
 	poem_data = Util.create_dict_from_registry(preload("res://data/tres_poem_data_registry.tres"))

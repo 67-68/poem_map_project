@@ -100,11 +100,11 @@ static func load_event_data() -> EventData:
 
 	# 🚨 flags registry 可能尚未生成，先设为空字典
 	var flags = {}
-	var flags_registry = load("res://data/tres_flags_registry.tres")
+	var flags_registry = load("res://data/flags_registry.tres")
 	if flags_registry:
 		flags = Util.create_dict_from_registry(flags_registry)
 	else:
-		Logging.warn("tres_flags_registry.tres not found, flags will be empty")
+		Logging.warn("flags_registry.tres not found, flags will be empty")
 
 	return EventData.new(
 		history_events,

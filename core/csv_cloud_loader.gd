@@ -70,12 +70,7 @@ func process_next_job() -> void:
         
         # 🚨 Registry创建完成后，执行事件数据Linter
         print("\n===== 开始执行事件数据Linter =====")
-        var linter_script = load("res://core/event_data_linter.gd")
-        if not linter_script:
-            push_error("无法加载event_data_linter.gd，跳过Linter执行 💀")
-            return
-        
-        var linter = linter_script.new()
+        var linter = EventDataLinter.new()
         linter.execute_linter()
         print("===== 事件数据Linter执行完成 =====\n")
         

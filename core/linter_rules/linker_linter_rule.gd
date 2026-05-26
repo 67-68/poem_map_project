@@ -109,8 +109,8 @@ func _collect_trait_requirements_from_object_recursive(obj: Variant, trait_reqs:
 	# 检查是否是Requirement且有契约方法
 	if obj is BaseRequirements and obj.has_method('get_referenced_traits'):
 		var traits = obj.get_referenced_traits()
-		for trait in traits:
-			trait_reqs[trait] = true
+		for trait_ in traits:
+			trait_reqs[trait_] = true
 		return
 	
 	# 递归检查字典
@@ -144,10 +144,10 @@ func _collect_trait_provisions_from_object_recursive(obj: Variant, event_uuid: S
 	# 检查是否是Operator且有契约方法
 	if obj is BaseOperator and obj.has_method('get_provided_traits'):
 		var traits = obj.get_provided_traits()
-		for trait in traits:
-			if not trait in trait_providers:
-				trait_providers[trait] = []
-			trait_providers[trait].append(event_uuid)
+		for trait_ in traits:
+			if not trait_ in trait_providers:
+				trait_providers[trait_] = []
+			trait_providers[trait_].append(event_uuid)
 		return
 	
 	# 递归检查字典

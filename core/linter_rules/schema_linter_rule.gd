@@ -94,9 +94,9 @@ func execute(event_data: DataHelper.EventData) -> void:
 	
 	# 验证flags
 	if not event_data.flags:
-		add_warning("flags 为 null (tres_flags_registry.tres 可能尚未生成)")
+		add_warning("flags 为 null (flags_registry.tres 可能尚未生成)")
 	elif event_data.flags.is_empty():
-		add_warning("flags 为空 (tres_flags_registry.tres 可能尚未生成)")
+		add_warning("flags 为空 (flags_registry.tres 可能尚未生成)")
 	else:
 		print("✓ flags 加载成功 (包含 %d 个标志位)" % event_data.flags.size())
 	
