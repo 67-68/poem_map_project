@@ -58,6 +58,20 @@ func process_next_job() -> void:
     if _current_job_index >= DATA_MANIFEST.size():
         print("===== 所有数据源同步完成！🤓☝️ =====")
         _current_job_index = -1
+        
+        # 🚨 同步完成后，自动创建resources registry文件
+        print("\n===== 开始创建resources registry文件 =====")
+        var registry_creator_script = load("res://resources_registry_creator.gd")
+        if not registry_creator_script:
+            push_error("无法加载resources_registry_creator.gd，跳过registry创建 💀")
+            return
+        
+        var registry_creator = registry_creator_script.new()
+        registry_creator.overwrite_existing = true  # 总是覆盖，确保registry是最新的
+        registry_creator.skip_files_without_uuid = true
+        registry_creator.create_all_registries()
+        print("===== Resources registry创建完成 =====\n")
+        
         return
     
     var current_job = DATA_MANIFEST[_current_job_index]

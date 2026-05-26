@@ -3,134 +3,25 @@ extends EditorScript
 
 # 脚本：为每个数据类型创建单独的resources registry
 # 使用core/model/resources.gd作为资源模板，UUID作为key
+# 这个脚本现在作为EditorScript的入口，调用独立的registry创建逻辑
 
-const RESOURCE_REGISTRY_PATH = "res://core/model/resources.gd"
-const DATA_FOLDER = "res://data/"
+const REGISTRY_CREATOR_PATH = "res://resources_registry_creator.gd"
 
 # 配置选项
 var overwrite_existing = true  # 是否覆盖已存在的registry文件
 var skip_files_without_uuid = true  # 是否跳过没有uuid或id字段的文件
 
 func _run():
-	print("开始创建resources registry文件...")
-	print("跳过无UUID文件: ", skip_files_without_uuid)
-	print("覆盖已存在文件: ", overwrite_existing)
-	print("")
-	
-	# 加载ResourceRegistry类
-	var resource_registry_script = load(RESOURCE_REGISTRY_PATH)
-	if not resource_registry_script:
-		print("错误：无法加载ResourceRegistry类")
+	# 加载独立的registry创建逻辑
+	var registry_creator_script = load(REGISTRY_CREATOR_PATH)
+	if not registry_creator_script:
+		print("错误：无法加载resources_registry_creator.gd")
 		return
 	
-	# 获取所有tres文件夹
-	var tres_folders = get_tres_folders()
-	print("找到 ", tres_folders.size(), " 个tres文件夹")
+	# 创建实例并配置
+	var registry_creator = registry_creator_script.new()
+	registry_creator.overwrite_existing = overwrite_existing
+	registry_creator.skip_files_without_uuid = skip_files_without_uuid
 	
-	for folder_name in tres_folders:
-		create_registry_for_folder(folder_name, resource_registry_script)
-	
-	print("\n所有resources registry文件创建完成！")
-
-func get_tres_folders() -> Array:
-	var folders = []
-	var dir = DirAccess.open(DATA_FOLDER)
-	if not dir:
-		print("错误：无法打开data文件夹")
-		return folders
-	
-	dir.list_dir_begin()
-	var file_name = dir.get_next()
-	
-	while file_name != "":
-		if dir.current_is_dir() and file_name.begins_with("tres_"):
-			folders.append(file_name)
-		file_name = dir.get_next()
-	
-	dir.list_dir_end()
-	return folders
-
-func create_registry_for_folder(folder_name: String, resource_registry_script):
-	print("处理文件夹: ", folder_name)
-	
-	# 检查registry文件是否已存在
-	var registry_path = DATA_FOLDER + folder_name + "_registry.tres"
-	if FileAccess.file_exists(registry_path) and not overwrite_existing:
-		print("  跳过：registry文件已存在 (设置overwrite_existing=true来覆盖)")
-		return
-	
-	# 创建ResourceRegistry实例
-	var registry = resource_registry_script.new()
-	registry.registry_version = "1.0.0"
-	registry.resources.clear()
-	
-	# 扫描文件夹中的所有tres文件
-	var folder_path = DATA_FOLDER + folder_name + "/"
-	var dir = DirAccess.open(folder_path)
-	if not dir:
-		print("  错误：无法打开文件夹 ", folder_path)
-		return
-	
-	dir.list_dir_begin()
-	var file_name = dir.get_next()
-	var resource_count = 0
-	
-	while file_name != "":
-		if file_name.ends_with(".tres"):
-			var file_path = folder_path + file_name
-			var key = extract_key_from_tres(file_path)
-			if key:
-				# 使用key作为key，文件路径作为value
-				registry.resources[key] = file_path
-				resource_count += 1
-				print("    添加资源: ", key, " -> ", file_path)
-			else:
-				print("    警告：无法从 ", file_name, " 提取key")
-		file_name = dir.get_next()
-	
-	dir.list_dir_end()
-	
-	if resource_count == 0:
-		print("  警告：没有找到任何资源文件")
-		return
-	
-	# 保存registry文件
-	var result = ResourceSaver.save(registry, registry_path)
-	if result == OK:
-		print("  ✓ 创建registry文件: ", registry_path, " (包含 ", resource_count, " 个资源)")
-	else:
-		print("  ✗ 错误：无法保存registry文件 ", registry_path)
-
-func extract_key_from_tres(file_path: String) -> String:
-	var file = FileAccess.open(file_path, FileAccess.READ)
-	if not file:
-		print("错误：无法打开文件 ", file_path)
-		return ""
-	
-	var content = file.get_as_text()
-	file.close()
-	
-	# 首先查找自定义uuid字段
-	var uuid_regex = RegEx.new()
-	uuid_regex.compile(r"uuid\s*=\s*\"([^\"]+)\"")
-	var uuid_result = uuid_regex.search(content)
-	if uuid_result:
-		return uuid_result.get_string(1)
-	
-	# 如果没有uuid字段，尝试查找id字段
-	var id_regex = RegEx.new()
-	id_regex.compile(r"id\s*=\s*\"([^\"]+)\"")
-	var id_result = id_regex.search(content)
-	if id_result:
-		print("    使用id字段作为key: ", id_result.get_string(1))
-		return id_result.get_string(1)
-	
-	# 如果都没有找到
-	if skip_files_without_uuid:
-		print("    跳过：没有找到uuid或id字段")
-		return ""
-	else:
-		# 使用文件名作为key
-		var file_name = file_path.get_file().get_basename()
-		print("    使用文件名作为key: ", file_name)
-		return file_name
+	# 执行registry创建
+	registry_creator.create_all_registries()
