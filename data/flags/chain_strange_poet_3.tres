@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Flag" format=3 uid="uid://yxwxt1y43p11"]
+
+[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_5r2h2"]
+
+[resource]
+script = ExtResource("1_5r2h2")
+type = "bool"
+uuid = "chain_strange_poet_3"

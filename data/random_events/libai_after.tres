@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://n8vi77hf5jo2"]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_um4q5"]
+[ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="2_yctuc"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="3_bnl0p"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="4_dmfue"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_p3g8r"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_v127v"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="7_sksol"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_20sti"]
+
+[sub_resource type="Resource" id="Resource_05sfx"]
+script = ExtResource("5_p3g8r")
+
+[sub_resource type="Resource" id="Resource_qn5so"]
+script = ExtResource("6_v127v")
+choice_result = SubResource("Resource_05sfx")
+description = "义薄云天！"
+
+[sub_resource type="Resource" id="Resource_6my0c"]
+script = ExtResource("7_sksol")
+type = "bool"
+value = true
+
+[resource]
+script = ExtResource("8_20sti")
+weight = 20.0
+requirement = SubResource("Resource_6my0c")
+options = Array[ExtResource("3_bnl0p")]([SubResource("Resource_qn5so")])
+uuid = "libai_after"
+name = "奇怪的诗人4"
+description = "他专门来感谢我"
+icon = ExtResource("2_yctuc")

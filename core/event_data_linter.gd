@@ -67,4 +67,7 @@ func _initialize_rule_pipeline() -> void:
 	# Level 3: 业务规则检查官 - 策划业务逻辑验证
 	linter_rules.append(BusinessLinterRule.new())
 	
+	# Level 4: 事件链检查官 - 事件依赖关系验证
+	linter_rules.append(EventChainLinter.new())
+	
 	print("✓ Rule流水线初始化完成，共 %d 个检查官" % linter_rules.size())

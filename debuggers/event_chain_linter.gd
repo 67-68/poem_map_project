@@ -24,9 +24,101 @@ func execute(event_data: DataHelper.EventData) -> void:
             _dfs(node_uuid, path_stack, adjacency_list, visited, death_cycles, current_group)
             all_groups.append(current_group)
             
-    # Linter 阶段结束，你可以打印死亡循环或者生成 Mermaid 图了
-    if not death_cycles.is_empty():
-        push_error("💀 发现 %d 个死循环！" % death_cycles.size())
+    _output_results(all_groups, adjacency_list, death_cycles)
+        
+
+func _output_results(all_groups: Array[Array], adjacency_list: Dictionary, death_cycles: Array[Array]) -> void:
+    print("============================================================")
+    print("📊 事件链分析报告")
+    print("============================================================")
+
+    # 1. 事件链统计
+    print("\n📈 统计概览")
+    print("  - 独立事件链数量: %d" % all_groups.size())
+    print("  - 死循环数量: %d" % death_cycles.size())
+
+    # 2. 事件链详情
+    print("\n🔗 事件链详情")
+    for i in range(all_groups.size()):
+        var chain = all_groups[i]
+        print("  链 %d: %d 个事件" % [i, chain.size()])
+        print("    %s" % ", ".join(chain))
+
+    # 3. Mermaid 图
+    var mermaid_content = _generate_mermaid_diagram(all_groups, adjacency_list)
+    _save_mermaid_to_file(mermaid_content)
+
+    # 4. 死循环报告
+    print("\n🌀 死循环报告")
+    if death_cycles.is_empty():
+        print("  ✅ 未发现死循环，事件依赖关系健康")
+    else:
+        print("  💀 发现 %d 个死循环" % death_cycles.size())
+        for i in range(death_cycles.size()):
+            var cycle = death_cycles[i]
+            var chain_idx = _find_chain_for_cycle(cycle, all_groups)
+            print("\n  循环 %d:" % i)
+            print("    路径: %s" % " -> ".join(cycle))
+            print("    所属链: %d" % chain_idx)
+            print("    链完整内容:")
+            print("      %s" % ", ".join(all_groups[chain_idx]))
+
+    print("")
+    print("============================================================")
+
+func _sanitize_mermaid_id(uuid: String) -> String:
+    # 替换 Mermaid 不支持的特殊字符
+    var safe_id = uuid.replace("://", "_").replace("/", "_").replace("-", "_")
+    # 如果太长，只取前20个字符
+    if safe_id.length() > 20:
+        safe_id = safe_id.substr(0, 20)
+    return safe_id
+
+func _save_mermaid_to_file(mermaid_content: String) -> void:
+    var file = FileAccess.open("res://debuggers/event_chain_diagram.mmd", FileAccess.WRITE)
+    if file:
+        file.store_string(mermaid_content)
+        file.close()
+        print("  📁 Mermaid 图已保存到: res://debuggers/event_chain_diagram.mmd")
+    else:
+        printerr("  ❌ 无法保存 Mermaid 图文件")
+
+func _generate_mermaid_diagram(all_groups: Array[Array], adjacency_list: Dictionary) -> String:
+    var lines = ["flowchart TD"]
+    lines.append("    %% 事件链依赖关系图")
+    lines.append("")
+
+    # 事件链分组
+    for i in range(all_groups.size()):
+        var chain = all_groups[i]
+        lines.append("    subgraph Chain%d[链 %d: %d个事件]" % [i, i, chain.size()])
+        for uuid in chain:
+            var safe_id = _sanitize_mermaid_id(uuid)
+            var display_name = uuid.substr(0, 8)
+            lines.append("        %s[%s]" % [safe_id, display_name])
+        lines.append("    end")
+        lines.append("")
+
+    # 依赖边
+    for source_uuid in adjacency_list:
+        for target_uuid in adjacency_list[source_uuid]:
+            var safe_source = _sanitize_mermaid_id(source_uuid)
+            var safe_target = _sanitize_mermaid_id(target_uuid)
+            lines.append("    %s --> %s" % [safe_source, safe_target])
+
+    return "\n".join(lines)
+
+func _find_chain_for_cycle(cycle: Array, all_groups: Array[Array]) -> int:
+    for chain_idx in range(all_groups.size()):
+        var chain = all_groups[chain_idx]
+        var cycle_in_chain = true
+        for cycle_uuid in cycle:
+            if not cycle_uuid in chain:
+                cycle_in_chain = false
+                break
+        if cycle_in_chain:
+            return chain_idx
+    return -1
 
 # 🤓☝️ 核心修正 3：严谨的三色标记状态机，不返回任何多余垃圾
 func _dfs(current_uuid: String, stack: Array, adjacency_list: Dictionary, visited: Dictionary, death_cycles: Array, group: Array) -> void:
@@ -58,7 +150,7 @@ func _dfs(current_uuid: String, stack: Array, adjacency_list: Dictionary, visite
     visited[current_uuid] = 2
     stack.pop_back()
 
-func creates_adjacency_list(events: Array[BaseEvent]) -> Dictionary:
+func creates_adjacency_list(events: Array) -> Dictionary:
     # 创建邻接表，说明谁依赖了什么 trait 和 flag，进而找出事件的依赖情况
     var ev_reliance = {} # uuid -> Array[String] (依赖的资源集合)
     var resource_providers = {} # 🤓☝️ 核心契约：倒排索引！资源名 -> Array[uuid] (谁产出了它)
@@ -68,14 +160,30 @@ func creates_adjacency_list(events: Array[BaseEvent]) -> Dictionary:
         var provides_set = {} # Dictionary 模拟 Set 进行去重
 
         var options = e.options
+        if options == null:
+            printerr("⚠️ Event has null options: event_uuid=%s" % e.uuid)
+            continue
         for o in options:
+            if o == null:
+                printerr("⚠️ Event has null option: event_uuid=%s" % e.uuid)
+                continue
             var req = o.requirements
+            if req == null:
+                printerr("⚠️ Option has null requirements: event_uuid=%s" % e.uuid)
+                continue
             for flag_name in req.get_reference_flags():
                 relies_set[flag_name] = true
             for trait_name in req.get_reference_traits():
                 relies_set[trait_name] = true
 
-            for op in o.choice_result:
+            var choice_result = o.choice_result
+            if choice_result == null:
+                printerr("⚠️ Option has null choice_result: event_uuid=%s" % e.uuid)
+                continue
+            for op in choice_result:
+                if op == null:
+                    printerr("⚠️ Choice_result has null operation: event_uuid=%s" % e.uuid)
+                    continue
                 for flag_name in op.get_referenced_flags():
                     relies_set[flag_name] = true
                 for trait_name in op.get_referenced_traits():
