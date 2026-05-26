@@ -4,8 +4,3 @@
 
 [resource]
 script = ExtResource("1_uorex")
-resources = {
-"chain_strange_poet_1": "res://data/flags/chain_strange_poet_1.tres",
-"chain_strange_poet_2": "res://data/flags/chain_strange_poet_2.tres",
-"flag_player_health": "res://data/flags/flag_player_health.tres"
-}
