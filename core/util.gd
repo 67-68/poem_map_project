@@ -270,7 +270,11 @@ static func create_dict_from_registry(registry):
 		if resource:
 			dict[uuid] = resource
 		else:
-			Logging.warn("无法加载资源: " + resource_path)
+			# 在tool模式下Logging可能不可用，直接使用print
+			if Engine.is_editor_hint():
+				print_rich("[color=yellow][WARN] 无法加载资源: " + resource_path + "[/color]")
+			else:
+				Logging.warn("无法加载资源: " + resource_path)
 	
 	return dict
 

@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="HistoryEvent" format=3 uid="uid://dnshhas8guay5"]
 
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_fxcqu"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_hejai"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rc7ql"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_7q4jx"]
@@ -30,8 +31,8 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_qiifw"]
 script = ExtResource("1_hejai")
-description = "【测试起手】获得 100 钱，装载野望"
 choice_result = SubResource("Resource_uofy6")
+description = "【测试起手】获得 100 钱，装载野望"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]

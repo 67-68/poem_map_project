@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://8f3fcqgy1url"]
 
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_tte3h"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_vofcq"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_di7ev"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_tte3h"]
@@ -35,8 +36,8 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_diwd6"]
 script = ExtResource("1_vofcq")
-description = "(内心：九品虽卑，但这可是右相亲自提拔！只要我能理清这长安的钱粮，肃清纲纪，这正是实现我致君尧舜之道的绝佳起点！)“固所愿也！杜某定当鞠躬尽瘁，不负右相大人恩典！”"
 choice_result = SubResource("Resource_twd1q")
+description = "(内心：九品虽卑，但这可是右相亲自提拔！只要我能理清这长安的钱粮，肃清纲纪，这正是实现我致君尧舜之道的绝佳起点！)“固所愿也！杜某定当鞠躬尽瘁，不负右相大人恩典！”"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_vgn00"]

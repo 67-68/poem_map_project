@@ -22,13 +22,11 @@ metadata/_custom_type_script = "uid://potskta4ums3"
 
 [sub_resource type="Resource" id="Resource_gedux"]
 script = ExtResource("4_8hisv")
-property = "official_prestige"
 value = -50
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_0uysx"]
 script = ExtResource("4_8hisv")
-property = "money"
 value = -30
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 

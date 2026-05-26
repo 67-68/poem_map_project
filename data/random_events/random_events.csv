@@ -1,0 +1,5 @@
+event_id,trigger_tags,requirements,title,description,weight,background,opt_1_text,opt_1_requirement ,opt_1_result,opt_2_text,opt_2_requirement ,opt_2_result,opt_3_text,opt_3_requirement ,opt_3_result,opt_4_text,opt_4_requirement ,opt_4_result,emotion_config
+test1,"actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:study:poetry","prop:money:>50,trait:has:official",",长安酒馆奇遇",你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,15.5,bg_rural_poor,塞钱贿赂,prop:money:>100,"prop:money:-100,trait:add:corrupt",,,,,,,,,,
+strange_poet,test1:test1:test1:test1,trait:has:main_jiaoyou_1,奇怪的诗人,你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,20,bg_rural_poor,上前跟他说话,,chain_strange_poet_1,,,,,,,,,,
+the_man_got_power,test1:test1:test1:test1,flag:bool:has:chain_strange_poet_1,奇怪的诗人2,他看起来很醉,20,bg_rural_poor,担忧的打量着他,,flag:bool:chain_strange_poet_1->chain_strange_poet_2,,,,,,,,,,
+libai_unveilation,test1:test1:test1:test1,flag:bool:has:chain_strange_poet_2,奇怪的诗人3,他要掉到河里了,20,bg_rural_poor,拉住他,,trait:add:relation_libai_close,,,,,,,,,,

@@ -1,0 +1,4 @@
+flag_id,type,default_value,Column 4,Column 5,Column 6
+flag_player_health,str,test,,,
+chain_strange_poet_1,bool,FALSE,,,
+chain_strange_poet_2,bool,FALSE,,,

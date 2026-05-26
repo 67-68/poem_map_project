@@ -104,7 +104,11 @@ static func load_event_data() -> EventData:
 	if flags_registry:
 		flags = Util.create_dict_from_registry(flags_registry)
 	else:
-		Logging.warn("flags_registry.tres not found, flags will be empty")
+		# 在tool模式下Logging可能不可用，直接使用print
+		if Engine.is_editor_hint():
+			print_rich("[color=yellow][WARN] flags_registry.tres not found, flags will be empty[/color]")
+		else:
+			Logging.warn("flags_registry.tres not found, flags will be empty")
 
 	return EventData.new(
 		history_events,
