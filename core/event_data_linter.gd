@@ -21,10 +21,13 @@ func execute_linter() -> void:
 	
 	# 构建trait到事件的映射
 	_build_trait_to_events_mapping(event_data)
-	
+
+	# 构建flag到事件的映射
+	_build_flag_to_events_mapping(event_data)
+
 	# 检查选项的时间推动和结果
 	_check_option_time_and_result(event_data)
-	
+
 	print("===== 事件数据Linter执行完成 🤓☝️ =====")
 
 ## 验证事件数据的完整性
@@ -113,6 +116,12 @@ func _validate_event_data(event_data: DataHelper.EventData) -> void:
 		validation_results.append("❌ normal_poem_events 为空")
 	else:
 		validation_results.append("✓ normal_poem_events 加载成功 (包含 %d 个普通诗词事件)" % event_data.normal_poem_events.size())
+
+	# 验证flags
+	if Database.flags.is_empty():
+		validation_results.append("❌ flags 为空")
+	else:
+		validation_results.append("✓ flags 加载成功 (包含 %d 个标志位)" % Database.flags.size())
 	
 	# 打印验证结果
 	for result in validation_results:
@@ -153,6 +162,42 @@ func _build_trait_to_events_mapping(event_data: DataHelper.EventData) -> void:
 		var events = trait_to_events[trait_uuid]
 		if events.size() > 0:
 			print("Trait %s: 由 %d 个事件提供 -> %s" % [trait_uuid, events.size(), str(events)])
+
+## 构建flag到事件的映射
+func _build_flag_to_events_mapping(event_data: DataHelper.EventData) -> void:
+	print("\n--- 构建Flag到事件映射 ---")
+
+	var all_events = {}
+	var all_flag_reqs = {}
+
+	# 合并所有事件到一个桶中
+	_merge_all_events(event_data, all_events)
+	print("✓ 合并完成，共 %d 个事件" % all_events.size())
+
+	# 第一次扫描：收集所有requirement中的flag
+	for event_uuid in all_events:
+		var event = all_events[event_uuid]
+		_collect_flag_requirements(event, event_uuid, all_flag_reqs)
+
+	print("✓ 收集到 %d 个不同的flag requirement" % all_flag_reqs.size())
+
+	# 第二次扫描：查找提供这些flag的operator
+	var flag_to_events = {}
+	for flag_uuid in all_flag_reqs:
+		flag_to_events[flag_uuid] = []
+
+	for event_uuid in all_events:
+		var event = all_events[event_uuid]
+		_collect_flag_providers(event, event_uuid, flag_to_events)
+
+	# 输出结果
+	print("\n--- Flag到事件映射结果 ---")
+	for flag_uuid in flag_to_events:
+		var events = flag_to_events[flag_uuid]
+		if events.size() > 0:
+			print("Flag %s: 由 %d 个事件提供 -> %s" % [flag_uuid, events.size(), str(events)])
+		else:
+			print("❌ Flag %s: 没有事件提供此标志位！" % flag_uuid)
 
 ## 合并所有事件到一个字典
 func _merge_all_events(event_data: DataHelper.EventData, target_dict: Dictionary) -> void:
@@ -228,6 +273,84 @@ func _collect_trait_providers(obj: Variant, event_uuid: String, trait_to_events:
 			var value = obj.get(prop_name)
 			if value != null:
 				_collect_trait_providers(value, event_uuid, trait_to_events)
+
+## 递归收集对象中的所有flag requirement
+func _collect_flag_requirements(obj: Variant, event_uuid: String, flag_reqs: Dictionary) -> void:
+	if obj == null: return
+
+	# 检查是否是FlagRequirement
+	if obj is FlagRequirement and obj.flag_id:
+		flag_reqs[obj.flag_id] = true
+		return
+
+	# 递归检查字典
+	if obj is Dictionary:
+		for value in obj.values():
+			_collect_flag_requirements(value, event_uuid, flag_reqs)
+	# 递归检查数组
+	elif obj is Array:
+		for item in obj:
+			_collect_flag_requirements(item, event_uuid, flag_reqs)
+	# 检查对象的导出属性
+	elif obj is Object:
+		for prop in obj.get_property_list():
+			var prop_name = prop.name
+			if prop_name.begins_with("_") or prop_name == "metadata":
+				continue
+			var value = obj.get(prop_name)
+			if value != null:
+				_collect_flag_requirements(value, event_uuid, flag_reqs)
+
+## 递归收集对象中提供flag的operator
+func _collect_flag_providers(obj: Variant, event_uuid: String, flag_to_events: Dictionary) -> void:
+	if obj == null: return
+
+	# 检查是否是FlagOperator且是set操作
+	if obj is FlagOperator:
+		var flag_id = obj.flag_id
+		# 检查这个flag是否在被需求中
+		if flag_id in flag_to_events:
+			# 对于bool类型的flag，只有设置为true时才算提供
+			var flag = Database.flags.get(flag_id)
+			if flag and flag.type == 'bool':
+				if obj.operation == 'set' and (obj.value == true or str(obj.value).to_lower() in ['true', 't', '1', 'yes']):
+					flag_to_events[flag_id].append(event_uuid)
+			# 对于str类型的flag，只有设置为非空值时才算提供
+			elif flag and flag.type == 'str':
+				if obj.operation == 'set' and str(obj.value) != '':
+					flag_to_events[flag_id].append(event_uuid)
+			# 对于int类型的flag，只有设置为非0值时才算提供
+			elif flag and flag.type == 'int':
+				var int_val = int(obj.value) if obj.value is int else str(obj.value).to_int()
+				if obj.operation in ['set', 'append']:
+					if int_val != 0 or obj.operation == 'set':
+						flag_to_events[flag_id].append(event_uuid)
+		return
+
+	# 检查是否是FlagReplaceOperator
+	if obj is FlagReplaceOperator:
+		var flag_id = obj.replace_with_flag_id
+		if flag_id in flag_to_events:
+			flag_to_events[flag_id].append(event_uuid)
+		return
+
+	# 递归检查字典
+	if obj is Dictionary:
+		for value in obj.values():
+			_collect_flag_providers(value, event_uuid, flag_to_events)
+	# 递归检查数组
+	elif obj is Array:
+		for item in obj:
+			_collect_flag_providers(item, event_uuid, flag_to_events)
+	# 检查对象的导出属性
+	elif obj is Object:
+		for prop in obj.get_property_list():
+			var prop_name = prop.name
+			if prop_name.begins_with("_") or prop_name == "metadata":
+				continue
+			var value = obj.get(prop_name)
+			if value != null:
+				_collect_flag_providers(value, event_uuid, flag_to_events)
 
 ## 检查选项的时间推动和结果
 func _check_option_time_and_result(event_data: DataHelper.EventData) -> void:
