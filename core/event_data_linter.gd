@@ -28,20 +28,23 @@ func execute_linter() -> void:
 	# 检查选项的时间推动和结果
 	_check_option_time_and_result(event_data)
 
+	# 检查Operator完整性
+	_check_operator_completeness(event_data)
+
 	print("===== 事件数据Linter执行完成 🤓☝️ =====")
 
 ## 验证事件数据的完整性
 func _validate_event_data(event_data: DataHelper.EventData) -> void:
 	print("\n--- 验证事件数据完整性 ---")
-	
+
 	var validation_results = []
-	
+
 	# 验证history_events
 	if event_data.history_events.is_empty():
 		validation_results.append("❌ history_events 为空")
 	else:
 		validation_results.append("✓ history_events 加载成功 (包含 %d 个事件)" % event_data.history_events.size())
-	
+
 	# 验证random_events
 	if event_data.random_events.is_empty():
 		validation_results.append("❌ random_events 为空")
@@ -50,67 +53,67 @@ func _validate_event_data(event_data: DataHelper.EventData) -> void:
 		for tag_bucket in event_data.random_events:
 			total_random_events += event_data.random_events[tag_bucket].size()
 		validation_results.append("✓ random_events 加载成功 (包含 %d 个事件，分 %d 个标签桶)" % [total_random_events, event_data.random_events.size()])
-	
+
 	# 验证end_random_events
 	if event_data.end_random_events.is_empty():
 		validation_results.append("❌ end_random_events 为空")
 	else:
 		validation_results.append("✓ end_random_events 加载成功 (包含 %d 个事件)" % event_data.end_random_events.size())
-	
+
 	# 验证focused_chat_data
 	if event_data.focused_chat_data.is_empty():
 		validation_results.append("❌ focused_chat_data 为空")
 	else:
 		validation_results.append("✓ focused_chat_data 加载成功 (包含 %d 个聊天)" % event_data.focused_chat_data.size())
-	
+
 	# 验证ambitions
 	if event_data.ambitions.is_empty():
 		validation_results.append("❌ ambitions 为空")
 	else:
 		validation_results.append("✓ ambitions 加载成功 (包含 %d 个野心)" % event_data.ambitions.size())
-	
+
 	# 验证traits
 	if event_data.traits.is_empty():
 		validation_results.append("❌ traits 为空")
 	else:
 		validation_results.append("✓ traits 加载成功 (包含 %d 个特质)" % event_data.traits.size())
-	
+
 	# 验证properties
 	if event_data.properties.is_empty():
 		validation_results.append("❌ properties 为空")
 	else:
 		validation_results.append("✓ properties 加载成功 (包含 %d 个属性)" % event_data.properties.size())
-	
+
 	# 验证actions
 	if event_data.actions.is_empty():
 		validation_results.append("❌ actions 为空")
 	else:
 		validation_results.append("✓ actions 加载成功 (包含 %d 个动作)" % event_data.actions.size())
-	
+
 	# 验证decisions
 	if event_data.decisions.is_empty():
 		validation_results.append("❌ decisions 为空")
 	else:
 		validation_results.append("✓ decisions 加载成功 (包含 %d 个决策)" % event_data.decisions.size())
-	
+
 	# 验证decided_events
 	if event_data.decided_events.is_empty():
 		validation_results.append("❌ decided_events 为空")
 	else:
 		validation_results.append("✓ decided_events 加载成功 (包含 %d 个已决定事件)" % event_data.decided_events.size())
-	
+
 	# 验证imaginaries
 	if event_data.imaginaries.is_empty():
 		validation_results.append("❌ imaginaries 为空")
 	else:
 		validation_results.append("✓ imaginaries 加载成功 (包含 %d 个想象)" % event_data.imaginaries.size())
-	
+
 	# 验证legendary_poems
 	if event_data.legendary_poems.is_empty():
 		validation_results.append("❌ legendary_poems 为空")
 	else:
 		validation_results.append("✓ legendary_poems 加载成功 (包含 %d 个传奇诗词)" % event_data.legendary_poems.size())
-	
+
 	# 验证normal_poem_events
 	if event_data.normal_poem_events.is_empty():
 		validation_results.append("❌ normal_poem_events 为空")
@@ -118,15 +121,17 @@ func _validate_event_data(event_data: DataHelper.EventData) -> void:
 		validation_results.append("✓ normal_poem_events 加载成功 (包含 %d 个普通诗词事件)" % event_data.normal_poem_events.size())
 
 	# 验证flags
-	if Database.flags.is_empty():
-		validation_results.append("❌ flags 为空")
+	if not event_data.flags:
+		validation_results.append("⚠️  flags 为 null (tres_flags_registry.tres 可能尚未生成)")
+	elif event_data.flags.is_empty():
+		validation_results.append("⚠️  flags 为空 (tres_flags_registry.tres 可能尚未生成)")
 	else:
-		validation_results.append("✓ flags 加载成功 (包含 %d 个标志位)" % Database.flags.size())
-	
+		validation_results.append("✓ flags 加载成功 (包含 %d 个标志位)" % event_data.flags.size())
+
 	# 打印验证结果
 	for result in validation_results:
 		print(result)
-	
+
 	print("--- 验证完成 ---\n")
 
 ## 构建trait到事件的映射
@@ -188,7 +193,7 @@ func _build_flag_to_events_mapping(event_data: DataHelper.EventData) -> void:
 
 	for event_uuid in all_events:
 		var event = all_events[event_uuid]
-		_collect_flag_providers(event, event_uuid, flag_to_events)
+		_collect_flag_providers(event, event_uuid, flag_to_events, event_data.flags)
 
 	# 输出结果
 	print("\n--- Flag到事件映射结果 ---")
@@ -245,14 +250,14 @@ func _collect_trait_providers(obj: Variant, event_uuid: String, trait_to_events:
 	# 检查是否是TraitOperator且是ADD操作
 	if obj is TraitOperator and obj.operator == REQ_OPERATOR.CRUD.ADD:
 		var trait_key = obj.trait_key
-		if trait_key in trait_to_events:
+		if trait_key and trait_key in trait_to_events:
 			trait_to_events[trait_key].append(event_uuid)
 		return
-	
+
 	# 检查是否是TraitReplaceOperator
 	if obj is TraitReplaceOperator:
 		var trait_key = obj.replace_other_trait
-		if trait_key in trait_to_events:
+		if trait_key and trait_key in trait_to_events:
 			trait_to_events[trait_key].append(event_uuid)
 		return
 	
@@ -302,7 +307,7 @@ func _collect_flag_requirements(obj: Variant, event_uuid: String, flag_reqs: Dic
 				_collect_flag_requirements(value, event_uuid, flag_reqs)
 
 ## 递归收集对象中提供flag的operator
-func _collect_flag_providers(obj: Variant, event_uuid: String, flag_to_events: Dictionary) -> void:
+func _collect_flag_providers(obj: Variant, event_uuid: String, flag_to_events: Dictionary, flags_dict: Dictionary) -> void:
 	if obj == null: return
 
 	# 检查是否是FlagOperator且是set操作
@@ -311,7 +316,7 @@ func _collect_flag_providers(obj: Variant, event_uuid: String, flag_to_events: D
 		# 检查这个flag是否在被需求中
 		if flag_id in flag_to_events:
 			# 对于bool类型的flag，只有设置为true时才算提供
-			var flag = Database.flags.get(flag_id)
+			var flag = flags_dict.get(flag_id)
 			if flag and flag.type == 'bool':
 				if obj.operation == 'set' and (obj.value == true or str(obj.value).to_lower() in ['true', 't', '1', 'yes']):
 					flag_to_events[flag_id].append(event_uuid)
@@ -337,11 +342,11 @@ func _collect_flag_providers(obj: Variant, event_uuid: String, flag_to_events: D
 	# 递归检查字典
 	if obj is Dictionary:
 		for value in obj.values():
-			_collect_flag_providers(value, event_uuid, flag_to_events)
+			_collect_flag_providers(value, event_uuid, flag_to_events, flags_dict)
 	# 递归检查数组
 	elif obj is Array:
 		for item in obj:
-			_collect_flag_providers(item, event_uuid, flag_to_events)
+			_collect_flag_providers(item, event_uuid, flag_to_events, flags_dict)
 	# 检查对象的导出属性
 	elif obj is Object:
 		for prop in obj.get_property_list():
@@ -350,7 +355,7 @@ func _collect_flag_providers(obj: Variant, event_uuid: String, flag_to_events: D
 				continue
 			var value = obj.get(prop_name)
 			if value != null:
-				_collect_flag_providers(value, event_uuid, flag_to_events)
+				_collect_flag_providers(value, event_uuid, flag_to_events, flags_dict)
 
 ## 检查选项的时间推动和结果
 func _check_option_time_and_result(event_data: DataHelper.EventData) -> void:
@@ -378,10 +383,13 @@ func _check_event_options(event: Variant, event_uuid: String, violations: Array)
 	
 	# 获取事件的选项
 	var options = []
-	if event.has_method("get") and event.get("options"):
-		options = event.get("options")
-	elif event.options:
-		options = event.options
+	# 跳过没有options属性的事件类型（如AmbitionData, ImaginaryTag等）
+	if event.has_method("get"):
+		if event.get("options"):
+			options = event.get("options")
+	elif event.get_property_list().any(func(prop): return prop.name == "options"):
+		if event.options:
+			options = event.options
 	
 	for option in options:
 		if option == null: continue
@@ -463,5 +471,76 @@ func _has_positive_result(obj: Variant) -> bool:
 			var value = obj.get(prop_name)
 			if _has_positive_result(value):
 				return true
-	
+
 	return false
+
+## 检查Operator完整性
+func _check_operator_completeness(event_data: DataHelper.EventData) -> void:
+	print("\n--- 检查Operator完整性 ---")
+
+	var all_events = {}
+	var operator_errors = []
+
+	# 合并所有事件到一个桶中
+	_merge_all_events(event_data, all_events)
+
+	for event_uuid in all_events:
+		var event = all_events[event_uuid]
+		_validate_event_operators(event, event_uuid, operator_errors)
+
+	if operator_errors.is_empty():
+		print("✓ 所有Operator都是完整的")
+	else:
+		print("❌ 发现 %d 个Operator完整性问题：" % operator_errors.size())
+		for error in operator_errors:
+			print("  - %s" % error)
+
+## 递归验证事件中的Operator完整性
+func _validate_event_operators(obj: Variant, event_uuid: String, errors: Array) -> void:
+	if obj == null: return
+
+	# 检查TraitOperator
+	if obj is TraitOperator:
+		if not obj.str_traits.is_empty():
+			return  # str_traits设置正确，无需检查枚举
+		if obj._trait_key == null:
+			errors.append("事件 %s 的TraitOperator缺少str_traits和_trait_key设置" % event_uuid)
+		return
+
+	# 检查TraitReplaceOperator
+	if obj is TraitReplaceOperator:
+		if obj._replace_other_trait == null:
+			errors.append("事件 %s 的TraitReplaceOperator缺少_replace_other_trait设置" % event_uuid)
+		if obj._to_be_replaced_trait == null:
+			errors.append("事件 %s 的TraitReplaceOperator缺少_to_be_replaced_trait设置" % event_uuid)
+		return
+
+	# 检查FlagOperator
+	if obj is FlagOperator:
+		if obj.flag_id.is_empty():
+			errors.append("事件 %s 的FlagOperator缺少flag_id设置" % event_uuid)
+		return
+
+	# 检查PropertyOperator
+	if obj is PropertyOperator:
+		if obj.property.is_empty():
+			errors.append("事件 %s 的PropertyOperator缺少property设置" % event_uuid)
+		return
+
+	# 递归检查字典
+	if obj is Dictionary:
+		for value in obj.values():
+			_validate_event_operators(value, event_uuid, errors)
+	# 递归检查数组
+	elif obj is Array:
+		for item in obj:
+			_validate_event_operators(item, event_uuid, errors)
+	# 检查对象的导出属性
+	elif obj is Object:
+		for prop in obj.get_property_list():
+			var prop_name = prop.name
+			if prop_name.begins_with("_") or prop_name == "metadata":
+				continue
+			var value = obj.get(prop_name)
+			if value != null:
+				_validate_event_operators(value, event_uuid, errors)

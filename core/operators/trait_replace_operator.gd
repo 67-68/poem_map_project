@@ -4,10 +4,16 @@ class_name TraitReplaceOperator extends BaseOperator
 @export var _to_be_replaced_trait: ENUMS.TRAITS
 var replace_other_trait: String:
     get():
-        return ENUMS.to_traits_str(_replace_other_trait)
+        if _replace_other_trait != null:
+            return ENUMS.to_traits_str(_replace_other_trait)
+        Logging.err("TraitReplaceOperator: _replace_other_trait is null!")
+        return ""
 var to_be_replaced_trait: String:
     get():
-        return ENUMS.to_traits_str(_to_be_replaced_trait)
+        if _to_be_replaced_trait != null:
+            return ENUMS.to_traits_str(_to_be_replaced_trait)
+        Logging.err("TraitReplaceOperator: _to_be_replaced_trait is null!")
+        return ""
     
 func operate():
     Logging.debug('TraitReplaceOperator: Starting operate()')

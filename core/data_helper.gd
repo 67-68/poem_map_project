@@ -15,7 +15,8 @@ class EventData:
 	var imaginaries: Dictionary
 	var legendary_poems: Dictionary
 	var normal_poem_events: Dictionary
-	
+	var flags: Dictionary
+
 	func _init(
 		h_history_events: Dictionary,
 		h_random_events: Dictionary,
@@ -29,7 +30,8 @@ class EventData:
 		h_decided_events: Dictionary,
 		h_imaginaries: Dictionary,
 		h_legendary_poems: Dictionary,
-		h_normal_poem_events: Dictionary
+		h_normal_poem_events: Dictionary,
+		h_flags: Dictionary
 	):
 		history_events = h_history_events
 		random_events = h_random_events
@@ -44,6 +46,7 @@ class EventData:
 		imaginaries = h_imaginaries
 		legendary_poems = h_legendary_poems
 		normal_poem_events = h_normal_poem_events
+		flags = h_flags
 
 ## 加载所有事件相关的数据
 ## 返回 EventData 对象，包含所有事件相关的字典
@@ -78,7 +81,15 @@ static func load_event_data() -> EventData:
 	var imaginaries = Util.create_dict_from_registry(preload("res://data/tres_imaginaries_registry.tres"))
 	var legendary_poems = Util.create_dict_from_registry(preload("res://data/tres_legendary_poems_registry.tres"))
 	var normal_poem_events = Util.create_dict_from_registry(preload("res://data/tres_normal_poem_events_registry.tres"))
-	
+
+	# 🚨 flags registry 可能尚未生成，先设为空字典
+	var flags = {}
+	var flags_registry = load("res://data/tres_flags_registry.tres")
+	if flags_registry:
+		flags = Util.create_dict_from_registry(flags_registry)
+	else:
+		Logging.warn("tres_flags_registry.tres not found, flags will be empty")
+
 	return EventData.new(
 		history_events,
 		random_events,
@@ -92,7 +103,8 @@ static func load_event_data() -> EventData:
 		decided_events,
 		imaginaries,
 		legendary_poems,
-		normal_poem_events
+		normal_poem_events,
+		flags
 	)
 
 ## 查找所有匹配条件的项，并返回指定属性的列表

@@ -3,10 +3,14 @@ class_name TraitOperator extends BaseOperator
 @export var _trait_key: ENUMS.TRAITS # refers to the trait in trait base
 var trait_key: String:
     get():
-        if str_traits:
+        if str_traits and not str_traits.is_empty():
             return str_traits
+        # 防御性检查：如果枚举值无效，返回空字符串而不是崩溃
         Logging.warn("TraitOperator: string trait not set, use enum trait")
-        return ENUMS.to_traits_str(_trait_key)
+        if _trait_key != null:
+            return ENUMS.to_traits_str(_trait_key)
+        Logging.err("TraitOperator: both str_traits and _trait_key are null!")
+        return ""
 
 var str_traits: String = ""
 @export var operator := REQ_OPERATOR.CRUD.ADD
