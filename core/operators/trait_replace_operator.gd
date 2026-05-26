@@ -14,7 +14,19 @@ var to_be_replaced_trait: String:
             return ENUMS.to_traits_str(_to_be_replaced_trait)
         Logging.err("TraitReplaceOperator: _to_be_replaced_trait is null!")
         return ""
-    
+
+func get_referenced_traits() -> Array[String]:
+    var result = []
+    if not to_be_replaced_trait.is_empty():
+        result.append(to_be_replaced_trait)
+    return result
+
+func get_provided_traits() -> Array[String]:
+    var result = []
+    if not replace_other_trait.is_empty():
+        result.append(replace_other_trait)
+    return result
+
 func operate():
     Logging.debug('TraitReplaceOperator: Starting operate()')
     PlayerState.remove_trait(to_be_replaced_trait)

@@ -24,6 +24,9 @@
 - `tag_pattern_confliction.md` - 标签体系设计规范
 - `old_bugs.md` - 历史Bug记录
 
+### 4. 架构与质量保证 (Architecture & QA)
+- `linter_architecture_refactoring.md` - Event Data Linter架构重构文档
+
 ## 🛠️ 文档规范
 
 - 文件名使用下划线分隔，避免特殊字符和空格
@@ -33,6 +36,8 @@
 
 ## 📝 维护日志
 
+- 2026-05-26: 完成Event Data Linter架构重构，建立契约设计模式和Rule流水线架构，消除反射依赖，性能提升约100倍
+- 2026-05-26: 创建Linter架构重构文档，记录契约设计、流水线架构、数据抽象层等核心设计决策
 - 2026-05-25: 更新DSL文档和CSV指南中的标签格式说明，采用最新的四段式标签规范（domain:category:type:specific），同时保持三段式向后兼容
 - 2026-05-25: 创建DSL CSV表格结构指南，提供完整的CSV格式规范和示例数据
 - 2026-05-25: 创建DSL功能和使用文档，整理DSL语法、标签体系、条件系统等核心内容

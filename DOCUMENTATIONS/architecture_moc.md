@@ -18,9 +18,16 @@
 - **历史Bug记录** [old_bugs.md](old_bugs.md)
   > 已修复问题的归档记录，包括根本原因分析和修复方案
 
+## 4. 质量保证 (Quality Assurance)
+- **Event Data Linter架构重构** [linter_architecture_refactoring.md](linter_architecture_refactoring.md)
+  > 契约设计模式、Rule流水线架构、数据抽象层，消除反射依赖，性能提升100倍
+
 ---
 
 ## 📝 文档维护说明
 - 所有文件名使用下划线分隔，避免特殊字符
 - 新增文档时请在此处添加对应的链接
 - 保持文档分类与实际架构层级一致
+
+## 📝 维护日志
+- 2026-05-26: 新增质量保证分类，添加Event Data Linter架构重构文档

@@ -15,6 +15,22 @@ var trait_key: String:
 var str_traits: String = ""
 @export var operator := REQ_OPERATOR.CRUD.ADD
 
+func get_referenced_traits() -> Array[String]:
+    if trait_key.is_empty():
+        return []
+    # REMOVE操作需要先检查trait是否存在
+    if operator == REQ_OPERATOR.CRUD.REMOVE:
+        return [trait_key]
+    return []
+
+func get_provided_traits() -> Array[String]:
+    if trait_key.is_empty():
+        return []
+    # ADD操作提供trait
+    if operator == REQ_OPERATOR.CRUD.ADD:
+        return [trait_key]
+    return []
+
 func operate():
     if operator == REQ_OPERATOR.CRUD.ADD:
         PlayerState.add_trait(trait_key)

@@ -48,6 +48,22 @@ class EventData:
 		normal_poem_events = h_normal_poem_events
 		flags = h_flags
 
+	## 获取所有事件的统一迭代器
+	## 返回一个包含所有事件的字典，key为事件UUID，value为事件对象
+	## 这样Linter就不需要知道具体有哪些事件类型 🤓☝️
+	func get_all_events_iterator() -> Dictionary:
+		var all_events = {}
+		all_events.merge(history_events)
+		for bucket in random_events.values():
+			all_events.merge(bucket)
+		all_events.merge(end_random_events)
+		all_events.merge(ambitions)
+		all_events.merge(decided_events)
+		all_events.merge(imaginaries)
+		all_events.merge(legendary_poems)
+		all_events.merge(normal_poem_events)
+		return all_events
+
 ## 加载所有事件相关的数据
 ## 返回 EventData 对象，包含所有事件相关的字典
 static func load_event_data() -> EventData:

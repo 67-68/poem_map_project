@@ -16,3 +16,23 @@ func show_hint(hint_: String = ''):
         EventBus.request_warning_toast.emit(hint)
     else:
         EventBus.request_warning_toast.emit(hint_)
+
+## 契约方法：返回该Operator引用的flag ID数组
+## 子类应该重写此方法以声明它依赖哪些flag
+func get_referenced_flags() -> Array[String]:
+    return []
+
+## 契约方法：返回该Operator提供的flag ID数组
+## 子类应该重写此方法以声明它设置/修改哪些flag
+func get_provided_flags() -> Array[String]:
+    return []
+
+## 契约方法：返回该Operator引用的trait UUID数组
+## 子类应该重写此方法以声明它依赖哪些trait
+func get_referenced_traits() -> Array[String]:
+    return []
+
+## 契约方法：返回该Operator提供的trait UUID数组
+## 子类应该重写此方法以声明它添加/修改哪些trait
+func get_provided_traits() -> Array[String]:
+    return []

@@ -11,6 +11,11 @@ class_name FlagRequirement extends BaseRequirements
 @export var operator: REQ_OPERATOR.COMPARE = REQ_OPERATOR.COMPARE.GREATER_THAN
 @export var failed_hint: String
 
+func get_referenced_flags() -> Array[String]:
+	if flag_id.is_empty():
+		return []
+	return [flag_id]
+
 func compare(_player_state: PlayerState) -> bool:
 	var flag = Database.flags.get(flag_id)
 	if not flag:

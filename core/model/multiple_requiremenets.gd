@@ -3,6 +3,20 @@ class_name ComplexRequirements extends BaseRequirements
 @export var operators: Array[BaseRequirements] = []
 @export var current_operator: REQ_OPERATOR.LOGIC
 
+func get_referenced_flags() -> Array[String]:
+    var result = []
+    for req in operators:
+        if req and req.has_method('get_referenced_flags'):
+            result.append_array(req.get_referenced_flags())
+    return result
+
+func get_referenced_traits() -> Array[String]:
+    var result = []
+    for req in operators:
+        if req and req.has_method('get_referenced_traits'):
+            result.append_array(req.get_referenced_traits())
+    return result
+
 func compare(data):
     # 分别调用下级的operator, 根据and 或者or分别判断
     if operators.is_empty():

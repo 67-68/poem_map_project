@@ -12,6 +12,16 @@ class_name FlagOperator extends BaseOperator
 	'append'
 ) var operation := 'set'
 
+func get_referenced_flags() -> Array[String]:
+	if flag_id.is_empty():
+		return []
+	return [flag_id]
+
+func get_provided_flags() -> Array[String]:
+	if flag_id.is_empty():
+		return []
+	return [flag_id]
+
 func operate():
 	var flag = Database.flags.get(flag_id)
 	if not flag:
