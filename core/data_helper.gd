@@ -77,8 +77,8 @@ static func load_event_data() -> EventData:
 		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FANGSHI_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_fang_shi_registry.tres")),
 		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FENGZHAO_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_feng_zhao_registry.tres")),
 		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DUZHUO_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_du_zhuo_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_SPECIAL_DEEPSEEK_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_special_registry.tres"))
-		'random_events': Util.create_dict_from_registry(load("res://data/random_event_registry.tres"))
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_SPECIAL_DEEPSEEK_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_special_registry.tres")),
+		'random_events': Util.create_dict_from_registry(load("res://data/random_events_registry.tres"))
 	}
 	
 	var end_random_events = Util.create_dict_from_registry(load("res://data/tres_end_random_events_registry.tres"))

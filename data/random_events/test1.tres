@@ -14,50 +14,50 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="12_e6ghn"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="13_msvl0"]
 
-[sub_resource type="Resource" id="Resource_afdbk"]
+[sub_resource type="Resource" id="Resource_op7kp"]
 script = ExtResource("5_w01gt")
 value = -100
 
-[sub_resource type="Resource" id="Resource_i6ut7"]
+[sub_resource type="Resource" id="Resource_r15v7"]
 script = ExtResource("6_fjpuy")
 _trait_key = 28
 str_traits = "corrupt"
 
-[sub_resource type="Resource" id="Resource_stg1l"]
+[sub_resource type="Resource" id="Resource_vf104"]
 script = ExtResource("7_uvdsy")
-operators = Array[ExtResource("4_1csbv")]([SubResource("Resource_afdbk"), SubResource("Resource_i6ut7")])
+operators = Array[ExtResource("4_1csbv")]([SubResource("Resource_op7kp"), SubResource("Resource_r15v7")])
 
-[sub_resource type="Resource" id="Resource_qqxlw"]
+[sub_resource type="Resource" id="Resource_1csbv"]
 script = ExtResource("8_8ainc")
 property = "money"
 value = 100
 operator = 1
 
-[sub_resource type="Resource" id="Resource_qmtuf"]
+[sub_resource type="Resource" id="Resource_w01gt"]
 script = ExtResource("9_5r38m")
-choice_result = SubResource("Resource_stg1l")
-requirements = SubResource("Resource_qqxlw")
+choice_result = SubResource("Resource_vf104")
+requirements = SubResource("Resource_1csbv")
 description = "塞钱贿赂"
 
-[sub_resource type="Resource" id="Resource_wpjib"]
+[sub_resource type="Resource" id="Resource_fjpuy"]
 script = ExtResource("8_8ainc")
 property = "money"
 value = 50
 operator = 1
 
-[sub_resource type="Resource" id="Resource_ugc76"]
+[sub_resource type="Resource" id="Resource_uvdsy"]
 script = ExtResource("11_7sibx")
 trait_name = "official"
 
-[sub_resource type="Resource" id="Resource_e6qai"]
+[sub_resource type="Resource" id="Resource_8ainc"]
 script = ExtResource("12_e6ghn")
-operators = Array[ExtResource("10_4dhaj")]([SubResource("Resource_wpjib"), SubResource("Resource_ugc76")])
+operators = Array[ExtResource("10_4dhaj")]([SubResource("Resource_fjpuy"), SubResource("Resource_uvdsy")])
 
 [resource]
 script = ExtResource("13_msvl0")
 weight = 15.5
-requirement = SubResource("Resource_e6qai")
-options = Array[ExtResource("3_vf104")]([SubResource("Resource_qmtuf")])
+requirement = SubResource("Resource_8ainc")
+options = Array[ExtResource("3_vf104")]([SubResource("Resource_w01gt")])
 uuid = "test1"
 name = ",长安酒馆奇遇"
 description = "你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。"

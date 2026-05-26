@@ -10,21 +10,21 @@
 [ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="8_3rt6k"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_6hn0f"]
 
-[sub_resource type="Resource" id="Resource_in81v"]
+[sub_resource type="Resource" id="Resource_wsboa"]
 script = ExtResource("5_v8tq0")
 to_be_replaced_flag_id = "chain_strange_poet_2"
 replace_with_flag_id = "chain_strange_poet_3"
 
-[sub_resource type="Resource" id="Resource_hwk21"]
+[sub_resource type="Resource" id="Resource_a1cu4"]
 script = ExtResource("6_8xpcb")
-operators = Array[ExtResource("4_q8v36")]([SubResource("Resource_in81v")])
+operators = Array[ExtResource("4_q8v36")]([SubResource("Resource_wsboa")])
 
-[sub_resource type="Resource" id="Resource_aghi5"]
+[sub_resource type="Resource" id="Resource_fryo3"]
 script = ExtResource("7_x1rxw")
-choice_result = SubResource("Resource_hwk21")
+choice_result = SubResource("Resource_a1cu4")
 description = "拉住他"
 
-[sub_resource type="Resource" id="Resource_33afb"]
+[sub_resource type="Resource" id="Resource_q8v36"]
 script = ExtResource("8_3rt6k")
 type = "bool"
 value = true
@@ -32,8 +32,8 @@ value = true
 [resource]
 script = ExtResource("9_6hn0f")
 weight = 20.0
-requirement = SubResource("Resource_33afb")
-options = Array[ExtResource("3_fryo3")]([SubResource("Resource_aghi5")])
+requirement = SubResource("Resource_q8v36")
+options = Array[ExtResource("3_fryo3")]([SubResource("Resource_fryo3")])
 uuid = "libai_unveilation"
 name = "奇怪的诗人3"
 description = "他要掉到河里了"

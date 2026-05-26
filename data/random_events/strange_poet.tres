@@ -9,23 +9,23 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_032xs"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_g0ewv"]
 
-[sub_resource type="Resource" id="Resource_mto6b"]
+[sub_resource type="Resource" id="Resource_33iox"]
 script = ExtResource("5_tkog7")
 
-[sub_resource type="Resource" id="Resource_hnd72"]
+[sub_resource type="Resource" id="Resource_1mi3i"]
 script = ExtResource("6_mdgfc")
-choice_result = SubResource("Resource_mto6b")
+choice_result = SubResource("Resource_33iox")
 description = "上前跟他说话"
 
-[sub_resource type="Resource" id="Resource_xpnnb"]
+[sub_resource type="Resource" id="Resource_ok3pw"]
 script = ExtResource("7_032xs")
 trait_name = "main_jiaoyou_1"
 
 [resource]
 script = ExtResource("8_g0ewv")
 weight = 20.0
-requirement = SubResource("Resource_xpnnb")
-options = Array[ExtResource("3_ok3pw")]([SubResource("Resource_hnd72")])
+requirement = SubResource("Resource_ok3pw")
+options = Array[ExtResource("3_ok3pw")]([SubResource("Resource_1mi3i")])
 uuid = "strange_poet"
 name = "奇怪的诗人"
 description = "你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。"
