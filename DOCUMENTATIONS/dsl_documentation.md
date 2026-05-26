@@ -40,13 +40,9 @@
 
 **格式**: 
 - **四段式（新版/目标）**: `domain:category:type:specific`
-- **三段式（旧版/仍兼容）**: `domain:category:value`
 
 **说明**: 
-- 系统同时支持三段式和四段式标签格式
 - **四段式是当前规范目标**，建议新数据使用四段式
-- 三段式仍被引擎兼容，旧数据可以继续使用
-- 引擎侧通过 `TagManager.normalize_3part_depreciated_tag()` 自动处理兼容
 - 标签用于事件匹配和权重计算
 
 **四段式示例**:
@@ -55,14 +51,6 @@ actor:status:temporary:drunk           # 人物状态-临时状态-醉酒
 city:econ:level:prosperous            # 城市经济-繁荣程度-繁华
 action:intent:study:poetry             # 行动意图-学习类型-诗歌
 intel:story_lock:event:anlushan_rebel  # 情报-剧情锁-事件类型-安禄山谋反
-```
-
-**三段式示例（向后兼容）**:
-```
-actor:status:drunk           # 人物状态-醉酒
-city:econ:prosperous         # 城市经济-繁华
-action:study:poetry          # 行动意图-学习-诗歌
-intel:event:anlushan_rebel  # 情报/剧情锁-事件-安禄山谋反
 ```
 
 **多标签格式**: 用逗号分隔
@@ -137,7 +125,7 @@ prop:literary_fame:>30,prop:money:>100
 prop:money:-100            # 金钱减少100
 prop:prestige:+50          # 声望增加50
 prop:literary_fame:+10     # 文学名声增加10
-prop:money:-20,prop:literary_fame:+5  # 多个属性修改
+prop:money:-20,prop:literary_fame:+5  # 多个属性修改 # 这里的基本格式没有做特殊处理，单纯是使用逗号连了一下
 ```
 
 #### 3.2 特性操作符

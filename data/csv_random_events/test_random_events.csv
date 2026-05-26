@@ -1,2 +1,0 @@
-event_id,trigger_tags,requirements,title,description,weight,background,opt_1_text,opt_1_requirement ,opt_1_result,opt_2_text,opt_2_requirement ,opt_2_result,opt_3_text,opt_3_requirement ,opt_3_result,opt_4_text,opt_4_requirement ,opt_4_result
-test1,"actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:study:poetry","prop:money:>50,trait:has:official",",长安酒馆奇遇",你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,15.5,bg_rural_poor,塞钱贿赂,prop:money:>100,"prop:money:-100,trait:add:corrupt",,,,,,,,,

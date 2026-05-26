@@ -44,5 +44,5 @@ cmd + f2 -> show terminal
 R -> emotional radar
 S -> Social wall panel
 
-## 工具
+## CI/CD工具
 使用@googlesheet fetcher.tscn来获取线上修改

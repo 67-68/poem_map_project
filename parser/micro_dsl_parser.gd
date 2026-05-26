@@ -96,6 +96,10 @@ static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
             var operator = parse_trait_operator(action, value)
             if operator:
                 operators.append(operator)
+        elif type == "emo":
+            var operator = parse_emotion_operator(action, value)
+            if operator:
+                operators.append(operator)
         else:
             print("Warning: Unknown consequence operator type: %s" % type)
     
@@ -148,5 +152,19 @@ static func parse_trait_operator(action: String, trait_name: String) -> BaseOper
     
     # 设置特性键（需要根据实际系统映射）
     operator.str_traits = trait_name
+    
+    return operator
+
+# 辅助方法：解析情绪操作符
+static func parse_emotion_operator(action: String, value_str: String) -> BaseOperator:
+    var value = value_str.to_int()
+    var operator = EmotionOperator.new()
+    
+    # 设置情绪名称
+    operator.str_emotion = action
+    
+    # 设置数值（支持 +10 或 -10 格式）
+    if value_str.begins_with('+') or value_str.begins_with('-'):
+        operator.value = value
     
     return operator
