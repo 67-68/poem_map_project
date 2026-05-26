@@ -133,6 +133,31 @@ enum TRAITS {
     MAIN_DUZHUO_1,
     MAIN_DUZHUO_2,
     MAIN_DUZHUO_3,
+    
+    # 角色状态特性
+    OFFICIAL,
+    CORRUPT,
+    PROUD,
+    BRAVE,
+    COWARDLY,
+    CAUTIOUS,
+    BUDDHIST,
+    CONFIDENT,
+    MERCHANT,
+    DILIGENT,
+    FEARFUL,
+    WEAK,
+    CRIMINAL,
+    
+    # 事件链特性
+    CHAIN_STRANGE_POET_1,
+    CHAIN_STRANGE_POET_2,
+    CHAIN_STRANGE_POET_3,
+    
+    # 社会关系特性
+    CONNECTED,
+    JOYFUL,
+    RESPECTED,
 }
 
 enum POEM_TYPE {
@@ -159,6 +184,15 @@ static func to_traits_str(item) -> String:
     if name: return name.to_lower()
     Logging.err("Invalid trait: " + str(item))
     return "default_storable_item"
+
+static func from_traits_str(str_name: String) -> int:
+    var normalized = str_name.to_lower().replace(':', '__')
+    for i in range(TRAITS.size()):
+        var key = TRAITS.keys()[i]
+        if key.to_lower() == normalized:
+            return i
+    Logging.err("Invalid trait string: " + str_name)
+    return -1
 
 static func to_action_str(item) -> String:
     var name = ACTION_TAGS.keys().get(item)

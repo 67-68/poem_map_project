@@ -12,6 +12,7 @@
 
 [sub_resource type="Resource" id="Resource_xpnnb"]
 script = ExtResource("5_mdgfc")
+str_traits = "chain_strange_poet_1"
 
 [sub_resource type="Resource" id="Resource_nta7g"]
 script = ExtResource("6_032xs")

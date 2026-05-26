@@ -70,3 +70,41 @@ Scene Action的`action_tags`和Random Event的`target_tags`之间存在标签格
 
 ### 2025.05.25
 如果在@tool有问题，那么重启编辑器
+
+## 2026-05-26: TraitOperator缺少str_traits字段导致Linter警告
+
+### 问题描述
+在运行csv_cloud_loader和EventDataLinter时，出现大量"TraitOperator: string trait not set, use enum trait"警告信息。
+
+### 根本原因
+状态不同步！！！该死的godot enum
+- **ENUMS.TRAITS枚举不完整**：原有的ENUMS.TRAITS只包含POEM_xxx和MAIN_xxx等固定trait，缺少实际使用的动态trait（如corrupt, official, chain_strange_poet_1等）
+- **parse_trait_operator逻辑问题**：在micro_dsl_parser.gd中，当trait名称不在枚举中时，from_traits_str()返回-1，导致_trait_key未被设置
+- **str_traits字段未被标记@export**：最初的trait_operator.gd中str_traits字段没有@export标记，导致保存到.tres文件时丢失
+- **旧.tres文件不兼容**：已存在的.tres文件（如normal_gan_ye.tres）只有_trait_key字段，缺少str_traits字段
+
+### 影响范围
+- 所有使用动态trait的RandomEvent资源文件
+- TraitOperator在Linter验证时产生大量警告信息
+- 影响事件系统的trait供需验证功能
+
+### 修复方案
+1. **完善ENUMS.TRAITS枚举**：添加常用的动态trait到枚举中
+   - 角色状态特性：OFFICIAL, CORRUPT, PROUD, BRAVE, COWARDLY, CAUTIOUS, BUDDHIST, CONFIDENT, MERCHANT, DILIGENT, FEARFUL, WEAK, CRIMINAL
+   - 事件链特性：CHAIN_STRANGE_POET_1, CHAIN_STRANGE_POET_2, CHAIN_STRANGE_POET_3
+   - 社会关系特性：CONNECTED, JOYFUL, RESPECTED
+
+2. **修改trait_operator.gd**：
+   - 将str_traits字段标记为@export，确保保存到.tres文件
+   - 添加setter，当设置str_traits时自动尝试更新_trait_key
+   - 修改trait_key getter，移除不必要的警告，优先使用字符串形式
+
+3. **修改parse_trait_operator**：
+   - 总是设置str_traits字段
+   - 只有当trait存在于枚举中时才设置_trait_key
+   - 移除转换失败时的警告，因为动态trait只使用字符串是正常情况
+
+### 修复文件
+- <ref_file file="/Users/lennon/Projects/poem_map_project/model/enumerates.gd" />
+- <ref_file file="/Users/lennon/Projects/poem_map_project/core/model/trait_operator.gd" />
+- <ref_file file="/Users/lennon/Projects/poem_map_project/parser/micro_dsl_parser.gd" />

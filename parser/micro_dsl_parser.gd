@@ -210,8 +210,14 @@ static func parse_trait_operator(action: String, trait_name: String) -> BaseOper
         print("Warning: Unknown trait action: %s, expected 'add' or 'remove'" % action)
         return null
     
-    # 设置特性键（需要根据实际系统映射）
+    # 设置特性键（字符串形式，总是设置）
     operator.str_traits = trait_name
+    
+    # 尝试设置 enum trait（如果存在于枚举中）
+    var enum_trait = ENUMS.from_traits_str(trait_name)
+    if enum_trait >= 0:
+        operator._trait_key = enum_trait
+    # 注意：如果 trait 不在枚举中，只使用字符串形式，这是正常情况
     
     return operator
 

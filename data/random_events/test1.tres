@@ -20,6 +20,7 @@ value = -100
 
 [sub_resource type="Resource" id="Resource_i6ut7"]
 script = ExtResource("6_fjpuy")
+str_traits = "corrupt"
 
 [sub_resource type="Resource" id="Resource_stg1l"]
 script = ExtResource("7_uvdsy")
