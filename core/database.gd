@@ -39,13 +39,13 @@ func _init() -> void:
 	base_province = Util.create_dict(DataLoader.load_csv_model(Territory, 'base_province'))
 	territories = Util.create_dict(DataLoader.load_csv_model(Territory, 'territories'))
 
-	factions = Util.create_dict_from_registry(preload("res://data/tres_factions_registry.tres"))
-	flags = Util.create_dict_from_registry(preload("res://data/flags_registry.tres"))
-	life_path_points = Util.create_dict_from_registry(preload("res://data/tres_path_points_registry.tres"))
-	poet_data = Util.create_dict_from_registry(preload("res://data/tres_poet_data_registry.tres"))
-	poem_data = Util.create_dict_from_registry(preload("res://data/tres_poem_data_registry.tres"))
-	msger_data = Util.create_dict_from_registry(preload("res://data/tres_msger_data_registry.tres"))
-	tags = Util.create_dict_from_registry(preload("res://data/tres_tags_registry.tres"))
+	factions = Util.create_dict_from_registry(load("res://data/tres_factions_registry.tres"))
+	flags = Util.create_dict_from_registry(load("res://data/flags_registry.tres"))
+	life_path_points = Util.create_dict_from_registry(load("res://data/tres_path_points_registry.tres"))
+	poet_data = Util.create_dict_from_registry(load("res://data/tres_poet_data_registry.tres"))
+	poem_data = Util.create_dict_from_registry(load("res://data/tres_poem_data_registry.tres"))
+	msger_data = Util.create_dict_from_registry(load("res://data/tres_msger_data_registry.tres"))
+	tags = Util.create_dict_from_registry(load("res://data/tres_tags_registry.tres"))
 
 	# 🚨 使用DataHelper的static函数统一加载所有事件相关数据
 	var event_data = DataHelper.load_event_data()

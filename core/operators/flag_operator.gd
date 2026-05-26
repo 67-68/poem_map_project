@@ -1,23 +1,24 @@
+@tool
 class_name FlagOperator extends BaseOperator
 
 @export var flag_id: String = ""
 @export_enum(
-	'str',
-	'int',
-	'bool'
+		'str',
+		'int',
+		'bool'
 ) var type := ''
 @export var value: Variant
 @export_enum(
-	'set',
-	'append'
+		'set',
+		'append'
 ) var operation := 'set'
 
-func get_referenced_flags() -> Array[String]:
+func get_referenced_flags() -> Array:
 	if flag_id.is_empty():
 		return []
 	return [flag_id]
 
-func get_provided_flags() -> Array[String]:
+func get_provided_flags() -> Array:
 	if flag_id.is_empty():
 		return []
 	return [flag_id]
@@ -27,7 +28,7 @@ func operate():
 	if not flag:
 		Logging.err('Flag %s not found in Database.flags' % flag_id)
 		return
-	
+
 	match type:
 		'str':
 			if operation == 'set':

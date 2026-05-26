@@ -1,9 +1,10 @@
+@tool
 class_name TraitRequirement extends BaseRequirements
 
 @export var trait_name: String
 @export var operator: REQ_OPERATOR.EXIST = REQ_OPERATOR.EXIST.HAS
 
-func get_referenced_traits() -> Array[String]:
+func get_referenced_traits() -> Array:
     if trait_name.is_empty():
         return []
     return [trait_name]

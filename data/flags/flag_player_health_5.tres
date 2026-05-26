@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="Flag" format=3 uid="uid://k6ufvkis78dd"]
-
-[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_onf8k"]
-
-[resource]
-script = ExtResource("1_onf8k")
-val_str = "test"
-type = "str"
-uuid = "flag_player_health"

@@ -1,3 +1,4 @@
+@tool
 class_name SystemOperator extends BaseOperator
 
 @export var command: String # 例如 "game_over", "return_main"

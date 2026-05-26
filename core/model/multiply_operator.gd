@@ -1,3 +1,4 @@
+@tool
 class_name MultiplyOperator extends Resource
 
 enum MUL_OPERATOR{

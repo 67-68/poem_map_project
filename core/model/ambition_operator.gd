@@ -1,3 +1,4 @@
+@tool
 class_name AmbitionOperator extends BaseOperator
 
 @export var ambition_name: String

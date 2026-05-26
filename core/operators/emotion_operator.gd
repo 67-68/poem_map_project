@@ -1,3 +1,4 @@
+@tool
 class_name EmotionOperator extends BaseOperator
 
 @export var _emotion: ENUMS.EMOTION = ENUMS.EMOTION.SORROW

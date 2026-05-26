@@ -1,3 +1,4 @@
+@tool
 class_name EventOperator extends BaseOperator
 
 @export var event_key: String

@@ -1,3 +1,4 @@
+@tool
 class_name TraitReplaceOperator extends BaseOperator
 
 @export var _replace_other_trait: ENUMS.TRAITS
@@ -15,13 +16,13 @@ var to_be_replaced_trait: String:
         Logging.err("TraitReplaceOperator: _to_be_replaced_trait is null!")
         return ""
 
-func get_referenced_traits() -> Array[String]:
+func get_referenced_traits() -> Array:
     var result = []
     if not to_be_replaced_trait.is_empty():
         result.append(to_be_replaced_trait)
     return result
 
-func get_provided_traits() -> Array[String]:
+func get_provided_traits() -> Array:
     var result = []
     if not replace_other_trait.is_empty():
         result.append(replace_other_trait)

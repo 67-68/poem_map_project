@@ -318,7 +318,7 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
                 skipped_count += 1
                 continue
 
-        # 将冒号转化为双下划线，连字符也转化为下划线（为了兼容文件系统）
+        # 统一转换：冒号转化为双下划线，连字符也转化为下划线（为了兼容文件系统）
         var safe_filename = base_filename.replace(":", "__").replace("-", "_")
 
         # 检查是否有其他特殊字符（只允许字母、数字、下划线）
@@ -334,12 +334,8 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
             skipped_count += 1
             continue
 
-        # 确保文件名唯一（添加索引）
+        # 直接使用转换后的文件名，不添加索引，直接覆盖已存在的文件
         var final_filename = safe_filename
-        var index = 0
-        while FileAccess.file_exists(folder_path + final_filename + ".tres"):
-            index += 1
-            final_filename = safe_filename + "_%d" % index
 
         var file_path = "%s%s.tres" % [folder_path, final_filename]
 

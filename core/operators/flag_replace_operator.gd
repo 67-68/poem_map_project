@@ -1,9 +1,10 @@
+@tool
 class_name FlagReplaceOperator extends BaseOperator
 
 @export var to_be_replaced_flag_id: String = ""
 @export var replace_with_flag_id: String = ""
 
-func get_referenced_flags() -> Array[String]:
+func get_referenced_flags() -> Array:
 	var result = []
 	if not to_be_replaced_flag_id.is_empty():
 		result.append(to_be_replaced_flag_id)
@@ -11,7 +12,7 @@ func get_referenced_flags() -> Array[String]:
 		result.append(replace_with_flag_id)
 	return result
 
-func get_provided_flags() -> Array[String]:
+func get_provided_flags() -> Array:
 	var result = []
 	if not replace_with_flag_id.is_empty():
 		result.append(replace_with_flag_id)

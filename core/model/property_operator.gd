@@ -1,3 +1,4 @@
+@tool
 class_name PropertyOperator extends BaseOperator
 
 @export var _property: ENUMS.PROPS = ENUMS.PROPS.OFFICIAL_PRESTIGE
@@ -15,3 +16,9 @@ var str_props: String = ""
 
 func operate():
     PlayerState.append_stat(property,value)
+
+func get_referenced_flags() -> Array:
+    return []
+
+func get_referenced_traits() -> Array:
+    return []

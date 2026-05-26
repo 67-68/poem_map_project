@@ -1,3 +1,4 @@
+@tool
 class_name PropRangeRequirement extends BaseRequirements
 
 @export var min_value: float

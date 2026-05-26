@@ -5,9 +5,9 @@
 [resource]
 script = ExtResource("1_44wta")
 resources = {
-"libai_after": "res://data/random_events/libai_after_1.tres",
-"libai_unveilation": "res://data/random_events/libai_unveilation_6.tres",
-"strange_poet": "res://data/random_events/strange_poet_1.tres",
-"test1": "res://data/random_events/test1_6.tres",
+"libai_after": "res://data/random_events/libai_after.tres",
+"libai_unveilation": "res://data/random_events/libai_unveilation.tres",
+"strange_poet": "res://data/random_events/strange_poet.tres",
+"test1": "res://data/random_events/test1.tres",
 "the_man_got_power": "res://data/random_events/the_man_got_power.tres"
 }

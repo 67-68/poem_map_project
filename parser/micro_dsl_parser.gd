@@ -125,24 +125,25 @@ static func parse_flag_requirement(data: String) -> FlagRequirement:
     return req
 
 # 解析结果操作符，如：prop:money:-100, trait:add:corrupt
+# 也支持简写格式：单独的trait名称默认为trait:add操作
 static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
     var operators: Array[BaseOperator] = []
     var parts = data.split(',')
-    
+
     for part in parts:
         var clean_part = part.strip_edges()
         if clean_part.is_empty():
             continue
-            
+
         var op_parts = clean_part.split(':')
         if op_parts.size() != 3:
             print("Warning: Invalid consequence operator format: %s, expected: type:action:value" % clean_part)
             continue
-        
+
         var type = op_parts[0]
         var action = op_parts[1]
         var value = op_parts[2]
-        
+
         if type == "prop":
             var operator = parse_property_operator(action, value)
             if operator:
@@ -161,7 +162,7 @@ static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
                 operators.append(operator)
         else:
             print("Warning: Unknown consequence operator type: %s" % type)
-    
+
     return operators
 
 # 辅助方法：创建属性需求
@@ -233,6 +234,11 @@ static func parse_emotion_operator(action: String, value_str: String) -> BaseOpe
 # 语法：flag:bool:{flag-a-uuid}->{flag_b_uuid} - 替换操作
 # 注意：bool 类型的 xxx 是 flag_id，int 类型的格式可能需要 flag_id，这里假设简化处理
 static func parse_flag_operator(data: String) -> BaseOperator:
+    # 先检查是否是替换操作 flag:bool:{flag-a-uuid}->{flag_b_uuid}
+    # 必须在 : 分割之前检查，否则 -> 会被破坏
+    if data.contains('->') and data.begins_with("flag:bool:"):
+        return parse_flag_replace_operator(data)
+
     var parts = data.split(':')
     if parts.size() < 4:
         push_error("Invalid flag operator format: %s" % data)
@@ -244,10 +250,6 @@ static func parse_flag_operator(data: String) -> BaseOperator:
 
     var flag_type = parts[1]
     var action = parts[2]
-
-    # 检查是否是替换操作 flag:bool:{flag-a-uuid}->{flag_b_uuid}
-    if flag_type == "bool" and action.contains('->'):
-        return parse_flag_replace_operator(data)
 
     var operator = FlagOperator.new()
     operator.type = flag_type

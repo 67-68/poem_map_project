@@ -1,3 +1,4 @@
+@tool
 class_name InfoDemoOperator extends BaseOperator
 
 @export var info: String = ''

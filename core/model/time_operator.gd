@@ -1,3 +1,4 @@
+@tool
 class_name TimeOperator extends BaseOperator
 
 @export var day: float = 10.0

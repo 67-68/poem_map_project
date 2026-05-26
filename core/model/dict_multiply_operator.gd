@@ -1,3 +1,4 @@
+@tool
 class_name DictMultiplyOperator extends Resource
 
 @export var operators: Array[MultiplyOperator] = []

@@ -156,6 +156,11 @@ func creates_adjacency_list(events: Array) -> Dictionary:
     var resource_providers = {} # 🤓☝️ 核心契约：倒排索引！资源名 -> Array[uuid] (谁产出了它)
 
     for e in events:
+        # 类型检查：只处理 BaseEvent 类型
+        if not e is BaseEvent:
+            printerr("⚠️ 跳过非事件对象: type=%s" % e.get_class())
+            continue
+
         var relies_set = {} # Dictionary 模拟 Set 进行去重
         var provides_set = {} # Dictionary 模拟 Set 进行去重
 
@@ -168,31 +173,25 @@ func creates_adjacency_list(events: Array) -> Dictionary:
                 printerr("⚠️ Event has null option: event_uuid=%s" % e.uuid)
                 continue
             var req = o.requirements
-            if req == null:
-                printerr("⚠️ Option has null requirements: event_uuid=%s" % e.uuid)
-                continue
-            for flag_name in req.get_reference_flags():
-                relies_set[flag_name] = true
-            for trait_name in req.get_reference_traits():
-                relies_set[trait_name] = true
-
-            var choice_result = o.choice_result
-            if choice_result == null:
-                printerr("⚠️ Option has null choice_result: event_uuid=%s" % e.uuid)
-                continue
-            for op in choice_result:
-                if op == null:
-                    printerr("⚠️ Choice_result has null operation: event_uuid=%s" % e.uuid)
-                    continue
-                for flag_name in op.get_referenced_flags():
+            if req:
+                for flag_name in req.get_referenced_flags():
                     relies_set[flag_name] = true
-                for trait_name in op.get_referenced_traits():
+                for trait_name in req.get_referenced_traits():
                     relies_set[trait_name] = true
 
-                for flag_name in op.get_provided_flags():
-                    provides_set[flag_name] = true
-                for trait_name in op.get_provided_traits():
-                    provides_set[trait_name] = true
+            var choice_result = o.choice_result
+            if choice_result and choice_result.operators:
+                for op in choice_result.operators:
+                    if op:
+                        for flag_name in op.get_referenced_flags():
+                            relies_set[flag_name] = true
+                        for trait_name in op.get_referenced_traits():
+                            relies_set[trait_name] = true
+
+                        for flag_name in op.get_provided_flags():
+                            provides_set[flag_name] = true
+                        for trait_name in op.get_provided_traits():
+                            provides_set[trait_name] = true
 
         ev_reliance[e.uuid] = relies_set.keys()
 
@@ -220,4 +219,7 @@ func creates_adjacency_list(events: Array) -> Dictionary:
                         if not adjacency_list[provider_uuid].has(consumer_uuid):
                             adjacency_list[provider_uuid].append(consumer_uuid)
 
+    print('+==================================+')
+    print(adjacency_list)
+    print('+==================================+')
     return adjacency_list

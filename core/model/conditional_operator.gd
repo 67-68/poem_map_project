@@ -1,10 +1,11 @@
+@tool
 class_name ConditionalOperator extends BaseOperator
 
 @export var condition: BaseRequirements
 @export var condition_success_result: Array[BaseOperator]
 @export var condition_fail_result: Array[BaseOperator]
 
-func get_referenced_flags() -> Array[String]:
+func get_referenced_flags() -> Array:
     var result = []
     # 从 condition 收集引用的 flag
     if condition and condition.has_method('get_referenced_flags'):
@@ -19,7 +20,7 @@ func get_referenced_flags() -> Array[String]:
             result.append_array(op.get_referenced_flags())
     return result
 
-func get_provided_flags() -> Array[String]:
+func get_provided_flags() -> Array:
     var result = []
     # 从 condition_success_result 收集提供的 flag
     for op in condition_success_result:
@@ -31,7 +32,7 @@ func get_provided_flags() -> Array[String]:
             result.append_array(op.get_provided_flags())
     return result
 
-func get_referenced_traits() -> Array[String]:
+func get_referenced_traits() -> Array:
     var result = []
     # 从 condition 收集引用的 trait
     if condition and condition.has_method('get_referenced_traits'):
@@ -46,7 +47,7 @@ func get_referenced_traits() -> Array[String]:
             result.append_array(op.get_referenced_traits())
     return result
 
-func get_provided_traits() -> Array[String]:
+func get_provided_traits() -> Array:
     var result = []
     # 从 condition_success_result 收集提供的 trait
     for op in condition_success_result:

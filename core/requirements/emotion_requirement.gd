@@ -1,3 +1,4 @@
+@tool
 class_name EmotionRequirement extends BaseRequirements
 # 在意象校验中使用，用来判断某个player state的情绪是否达标
 

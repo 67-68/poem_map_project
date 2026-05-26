@@ -1,3 +1,4 @@
+@tool
 class_name RandomOperator extends BaseOperator
 
 @export var random_value: int # 如果是86, 那么就有86的概率触发

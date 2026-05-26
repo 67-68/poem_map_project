@@ -1,3 +1,4 @@
+@tool
 class_name PoemTypeChooseOperator extends BaseOperator
 
 @export var _accepted_poem_types: Array[ENUMS.POEM_TYPE] # e.g. ["yan_ye", "ying_zhi"]

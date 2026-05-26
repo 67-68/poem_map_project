@@ -1,3 +1,4 @@
+@tool
 class_name ImaginaryOperator extends BaseOperator
 
 @export var imaginary_name: String # 两段

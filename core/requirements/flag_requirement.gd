@@ -1,17 +1,18 @@
+@tool
 class_name FlagRequirement extends BaseRequirements
 # 用来判断某个 flag 是否达到要求
 
 @export var flag_id: String = ""
 @export_enum(
-	'str',
-	'int',
-	'bool'
+		'str',
+		'int',
+		'bool'
 ) var type := ''
 @export var value: Variant
 @export var operator: REQ_OPERATOR.COMPARE = REQ_OPERATOR.COMPARE.GREATER_THAN
 @export var failed_hint: String
 
-func get_referenced_flags() -> Array[String]:
+func get_referenced_flags() -> Array:
 	if flag_id.is_empty():
 		return []
 	return [flag_id]
@@ -21,7 +22,7 @@ func compare(_player_state: PlayerState) -> bool:
 	if not flag:
 		Logging.err('Flag %s not found in Database.flags' % flag_id)
 		return false
-	
+
 	match type:
 		'str':
 			var current_val = flag.val_str
