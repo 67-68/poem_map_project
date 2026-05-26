@@ -106,8 +106,8 @@ func _collect_flag_provisions_from_event(event: Variant, event_uuid: String, fla
 func _collect_trait_requirements_from_object_recursive(obj: Variant, trait_reqs: Dictionary) -> void:
 	if obj == null: return
 	
-	# 检查是否是Requirement且有契约方法
-	if obj is BaseRequirements and obj.has_method('get_referenced_traits'):
+	# 🤓☝️ 鸭子类型：检查对象是否有契约方法
+	if obj.has_method('get_referenced_traits'):
 		var traits = obj.get_referenced_traits()
 		for trait_ in traits:
 			trait_reqs[trait_] = true
@@ -141,8 +141,8 @@ func _collect_trait_requirements_from_object_recursive(obj: Variant, trait_reqs:
 func _collect_trait_provisions_from_object_recursive(obj: Variant, event_uuid: String, trait_providers: Dictionary) -> void:
 	if obj == null: return
 	
-	# 检查是否是Operator且有契约方法
-	if obj is BaseOperator and obj.has_method('get_provided_traits'):
+	# 🤓☝️ 鸭子类型：检查对象是否有契约方法
+	if obj.has_method('get_provided_traits'):
 		var traits = obj.get_provided_traits()
 		for trait_ in traits:
 			if not trait_ in trait_providers:
@@ -171,8 +171,8 @@ func _collect_trait_provisions_from_object_recursive(obj: Variant, event_uuid: S
 func _collect_flag_requirements_from_object_recursive(obj: Variant, flag_reqs: Dictionary) -> void:
 	if obj == null: return
 	
-	# 检查是否是Requirement且有契约方法
-	if obj is BaseRequirements and obj.has_method('get_referenced_flags'):
+	# 🤓☝️ 鸭子类型：检查对象是否有契约方法
+	if obj.has_method('get_referenced_flags'):
 		var flags = obj.get_referenced_flags()
 		for flag in flags:
 			flag_reqs[flag] = true
@@ -199,8 +199,8 @@ func _collect_flag_requirements_from_object_recursive(obj: Variant, flag_reqs: D
 func _collect_flag_provisions_from_object_recursive(obj: Variant, event_uuid: String, flag_providers: Dictionary, flags_dict: Dictionary) -> void:
 	if obj == null: return
 	
-	# 检查是否是Operator且有契约方法
-	if obj is BaseOperator and obj.has_method('get_provided_flags'):
+	# 🤓☝️ 鸭子类型：检查对象是否有契约方法
+	if obj.has_method('get_provided_flags'):
 		var flags = obj.get_provided_flags()
 		for flag in flags:
 			if not flag in flag_providers:

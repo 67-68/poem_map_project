@@ -48,7 +48,7 @@ class_name Property extends GameEntity
 1. Database._init() 执行
    ↓
 2. 加载 tres_properties_registry.tres
-   properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
+   properties = Util.create_dict_from_registry(load("res://data/tres_properties_registry.tres"))
    ↓
 3. 注册表加载各个 .tres 文件
    - drunk.tres

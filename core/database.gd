@@ -73,7 +73,7 @@ func _ready() -> void:
 
 
 func _merge_cities() -> void:
-	var cities = Util.create_dict_from_registry(preload("res://data/tres_cities_registry.tres"))
+	var cities = Util.create_dict_from_registry(load("res://data/tres_cities_registry.tres"))
 	if cities:
 		for c_name in cities:
 			var c = cities[c_name]

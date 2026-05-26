@@ -3,8 +3,9 @@ extends Node
 func add_imagenary(ev: BaseEvent):
 	#breakpoint
 	Logging.info('adding imagenary for event %s' % ev.uuid)
-	if not ev is RandomEvent:
-		Logging.warn('this event is not a base event, dont process it and add to imaginary basement')
+	# 🤓☝️ 鸭子类型：检查对象是否具有 RandomEvent 所需的属性
+	if not ev.has_method("get") or ev.get("emotion_configs") == null:
+		Logging.warn('this event does not have emotion_configs, dont process it and add to imaginary basement')
 		return
 
 	# 使用emotion_configs进行校验

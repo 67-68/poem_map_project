@@ -156,8 +156,8 @@ func creates_adjacency_list(events: Array) -> Dictionary:
     var resource_providers = {} # 🤓☝️ 核心契约：倒排索引！资源名 -> Array[uuid] (谁产出了它)
 
     for e in events:
-        # 类型检查：只处理 BaseEvent 类型
-        if not e is BaseEvent:
+        # 🤓☝️ 鸭子类型：检查对象是否具有事件所需的属性
+        if not e.has_method("get") or e.get("uuid") == null or e.get("options") == null:
             printerr("⚠️ 跳过非事件对象: type=%s" % e.get_class())
             continue
 
@@ -174,24 +174,36 @@ func creates_adjacency_list(events: Array) -> Dictionary:
                 continue
             var req = o.requirements
             if req:
-                for flag_name in req.get_referenced_flags():
-                    relies_set[flag_name] = true
-                for trait_name in req.get_referenced_traits():
-                    relies_set[trait_name] = true
+                var flags = req.get_referenced_flags()
+                if flags:
+                    for flag_name in flags:
+                        relies_set[flag_name] = true
+                var traits = req.get_referenced_traits()
+                if traits:
+                    for trait_name in traits:
+                        relies_set[trait_name] = true
 
             var choice_result = o.choice_result
             if choice_result and choice_result.operators:
                 for op in choice_result.operators:
                     if op:
-                        for flag_name in op.get_referenced_flags():
-                            relies_set[flag_name] = true
-                        for trait_name in op.get_referenced_traits():
-                            relies_set[trait_name] = true
+                        var ref_flags = op.get_referenced_flags()
+                        if ref_flags:
+                            for flag_name in ref_flags:
+                                relies_set[flag_name] = true
+                        var ref_traits = op.get_referenced_traits()
+                        if ref_traits:
+                            for trait_name in ref_traits:
+                                relies_set[trait_name] = true
 
-                        for flag_name in op.get_provided_flags():
-                            provides_set[flag_name] = true
-                        for trait_name in op.get_provided_traits():
-                            provides_set[trait_name] = true
+                        var prov_flags = op.get_provided_flags()
+                        if prov_flags:
+                            for flag_name in prov_flags:
+                                provides_set[flag_name] = true
+                        var prov_traits = op.get_provided_traits()
+                        if prov_traits:
+                            for trait_name in prov_traits:
+                                provides_set[trait_name] = true
 
         ev_reliance[e.uuid] = relies_set.keys()
 
@@ -206,6 +218,10 @@ func creates_adjacency_list(events: Array) -> Dictionary:
     # =========================================================
     var adjacency_list = {}
     for e in events:
+        # 🤓☝️ 鸭子类型：检查对象是否具有事件所需的属性（与第一次遍历保持一致）
+        if not e.has_method("get") or e.get("uuid") == null or e.get("options") == null:
+            printerr("⚠️ 跳过非事件对象（第二次遍历）: type=%s" % e.get_class())
+            continue
         adjacency_list[e.uuid] = [] # 初始化所有节点的边
 
     for consumer_uuid in ev_reliance:

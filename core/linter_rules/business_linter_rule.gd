@@ -84,7 +84,8 @@ func _check_single_option(option: Variant, event_uuid: String, violations: Array
 func _has_time_operator(obj: Variant) -> bool:
 	if obj == null: return false
 	
-	if obj is TimeOperator:
+	# 🤓☝️ 鸭子类型：检查对象是否具有 TimeOperator 的特征（仅对Object类型）
+	if obj is Object and obj.has_method("get") and obj.get("day") != null:
 		return true
 	
 	if obj is Dictionary:
@@ -110,13 +111,17 @@ func _has_time_operator(obj: Variant) -> bool:
 func _has_positive_result(obj: Variant) -> bool:
 	if obj == null: return false
 	
-	# 检查正面的emotion获取（value > 0）
-	if obj is EmotionOperator and obj.value > 0:
-		return true
+	# 🤓☝️ 鸭子类型：检查正面的emotion获取（value > 0，仅对Object类型）
+	if obj is Object and obj.has_method("get") and obj.get("value") != null:
+		var value = obj.get("value")
+		if value is float and value > 0:
+			return true
 	
-	# 检查正面的property获取（value > 0）
-	if obj is PropertyOperator and obj.value > 0:
-		return true
+	# 🤓☝️ 鸭子类型：检查正面的property获取（value > 0，仅对Object类型）
+	if obj is Object and obj.has_method("get") and obj.get("value") != null:
+		var value = obj.get("value")
+		if value is float and value > 0:
+			return true
 	
 	if obj is Dictionary:
 		for value in obj.values():
@@ -159,31 +164,37 @@ func _check_operator_completeness(all_events: Dictionary) -> void:
 func _validate_event_operators_recursive(obj: Variant, event_uuid: String, errors: Array) -> void:
 	if obj == null: return
 	
-	# 检查TraitOperator
-	if obj is TraitOperator:
-		if not obj.str_traits.is_empty():
+	# 🤓☝️ 鸭子类型：检查TraitOperator（具有str_traits和_trait_key属性，仅对Object类型）
+	if obj is Object and obj.has_method("get") and obj.get("str_traits") != null:
+		var str_traits = obj.get("str_traits")
+		if str_traits is Array and not str_traits.is_empty():
 			return  # str_traits设置正确，无需检查枚举
-		if obj._trait_key == null:
+		var trait_key = obj.get("_trait_key")
+		if trait_key == null:
 			errors.append("事件 %s 的TraitOperator缺少str_traits和_trait_key设置" % event_uuid)
 		return
 	
-	# 检查TraitReplaceOperator
-	if obj is TraitReplaceOperator:
-		if obj._replace_other_trait == null:
+	# 🤓☝️ 鸭子类型：检查TraitReplaceOperator（具有_replace_other_trait和_to_be_replaced_trait属性，仅对Object类型）
+	if obj is Object and obj.has_method("get") and obj.get("_replace_other_trait") != null:
+		var replace_other = obj.get("_replace_other_trait")
+		if replace_other == null:
 			errors.append("事件 %s 的TraitReplaceOperator缺少_replace_other_trait设置" % event_uuid)
-		if obj._to_be_replaced_trait == null:
+		var to_be_replaced = obj.get("_to_be_replaced_trait")
+		if to_be_replaced == null:
 			errors.append("事件 %s 的TraitReplaceOperator缺少_to_be_replaced_trait设置" % event_uuid)
 		return
 	
-	# 检查FlagOperator
-	if obj is FlagOperator:
-		if obj.flag_id.is_empty():
+	# 🤓☝️ 鸭子类型：检查FlagOperator（具有flag_id属性，仅对Object类型）
+	if obj is Object and obj.has_method("get") and obj.get("flag_id") != null:
+		var flag_id = obj.get("flag_id")
+		if flag_id is String and flag_id.is_empty():
 			errors.append("事件 %s 的FlagOperator缺少flag_id设置" % event_uuid)
 		return
 	
-	# 检查PropertyOperator
-	if obj is PropertyOperator:
-		if obj.property.is_empty():
+	# 🤓☝️ 鸭子类型：检查PropertyOperator（具有property属性，仅对Object类型）
+	if obj is Object and obj.has_method("get") and obj.get("property") != null:
+		var property = obj.get("property")
+		if property is String and property.is_empty():
 			errors.append("事件 %s 的PropertyOperator缺少property设置" % event_uuid)
 		return
 	

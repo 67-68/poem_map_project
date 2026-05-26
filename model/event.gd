@@ -1,3 +1,4 @@
+@tool
 class_name BaseEvent extends GameEntity
 @export var options: Array[BaseOption] = [EventOption.new(),EventOption.new()]
 @export var example: String

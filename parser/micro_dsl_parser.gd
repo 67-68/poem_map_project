@@ -72,9 +72,9 @@ static func parse_trait_requirement(data: String) -> BaseRequirements:
 # 解析标志位触发条件，如：flag:bool:has:xxx, flag:str:is:xxx, flag:int:>xxx
 static func parse_flag_requirement(data: String) -> FlagRequirement:
     var parts = data.split(':')
-    if parts.size() != 4:
-        push_error("Invalid flag requirement format: %s, expected: flag:type:operator:value" % data)
-        return null
+    # if parts.size() != 4:
+    #     push_error("Invalid flag requirement format: %s, expected: flag:type:operator:value" % data)
+    #     return null
 
     if parts[0] != "flag":
         push_error("Flag requirement must start with 'flag:', got: %s" % data)
@@ -246,9 +246,9 @@ static func parse_flag_operator(data: String) -> BaseOperator:
         return parse_flag_replace_operator(data)
 
     var parts = data.split(':')
-    if parts.size() < 4:
-        push_error("Invalid flag operator format: %s" % data)
-        return null
+    # if parts.size() < 4:
+    #     push_error("Invalid flag operator format: %s" % data)
+    #     return null
 
     if parts[0] != "flag":
         push_error("Flag operator must start with 'flag:', got: %s" % data)

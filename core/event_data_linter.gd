@@ -1,5 +1,8 @@
 class_name EventDataLinter extends Node
 
+# 预加载DataHelper以避免类加载顺序问题 🤓☝️
+const DataHelper = preload("res://core/data_helper.gd")
+
 # 事件数据Linter (重构版)
 # 使用Rule流水线架构，拒绝反射，建立契约 🤓☝️
 # 

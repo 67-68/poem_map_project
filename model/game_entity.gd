@@ -1,3 +1,4 @@
+@tool
 class_name GameEntity extends Resource
 
 @export var uuid: String
