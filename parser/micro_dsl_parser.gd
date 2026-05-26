@@ -230,6 +230,7 @@ static func parse_emotion_operator(action: String, value_str: String) -> BaseOpe
 
 # 辅助方法：解析标志位操作符
 # 语法：flag:bool:add:xxx, flag:bool:remove:xxx, flag:str:set:{name_of_flag}:{content}, flag:int:add:{value}, flag:int:set:{value}
+# 语法：flag:bool:{flag-a-uuid}->{flag_b_uuid} - 替换操作
 # 注意：bool 类型的 xxx 是 flag_id，int 类型的格式可能需要 flag_id，这里假设简化处理
 static func parse_flag_operator(data: String) -> BaseOperator:
     var parts = data.split(':')
@@ -243,6 +244,10 @@ static func parse_flag_operator(data: String) -> BaseOperator:
 
     var flag_type = parts[1]
     var action = parts[2]
+
+    # 检查是否是替换操作 flag:bool:{flag-a-uuid}->{flag_b_uuid}
+    if flag_type == "bool" and action.contains('->'):
+        return parse_flag_replace_operator(data)
 
     var operator = FlagOperator.new()
     operator.type = flag_type
@@ -292,3 +297,23 @@ static func parse_flag_operator(data: String) -> BaseOperator:
             return null
 
     return operator
+
+# 辅助方法：解析 flag 替换操作符
+# 语法：flag:bool:{flag-a-uuid}->{flag_b_uuid}
+static func parse_flag_replace_operator(data: String) -> BaseOperator:
+    # 移除 "flag:bool:" 前缀
+    if not data.begins_with("flag:bool:"):
+        push_error("Invalid flag replace operator format: %s, expected 'flag:bool:{flag-a-uuid}->{flag_b_uuid}'" % data)
+        return null
+
+    var replace_part = data.substr(10)  # 去掉 "flag:bool:"
+    var replace_parts = replace_part.split('->')
+
+    if replace_parts.size() != 2:
+        push_error("Invalid flag replace operator format: %s, expected 'flag:bool:{flag-a-uuid}->{flag_b_uuid}'" % data)
+        return null
+
+    var to_be_replaced_flag_id = replace_parts[0].strip_edges()
+    var replace_with_flag_id = replace_parts[1].strip_edges()
+
+    return OperatorFactory.create_flag_replace_operator(to_be_replaced_flag_id, replace_with_flag_id)

@@ -96,7 +96,8 @@ static func parse_flag(row: Dictionary) -> Flag:
             flag.val_int = int_val
         'bool':
             var bool_str = str(default_value).to_lower()
-            flag.val_bool = bool_str == 'true' or bool_str == '1' or bool_str == 'yes'
+            # 支持多种布尔值表示：true/false, t/f, 1/0, yes/no, TRUE/FALSE
+            flag.val_bool = bool_str == 'true' or bool_str == 't' or bool_str == '1' or bool_str == 'yes'
         _:
             print("Warning: Unknown flag type '%s', defaulting to str" % flag_type)
             flag.val_str = str(default_value)

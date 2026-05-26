@@ -15,7 +15,7 @@ const DATA_MANIFEST: Array[Dictionary] = [
     {
         "name": "test_随机事件池",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?output=csv",
-        "save_path": "res://data/csv_random_events/test_random_events.csv",
+        "save_path": "res://data/random_events/random_events.csv",
         "data_type": "random_event"
 },
     {

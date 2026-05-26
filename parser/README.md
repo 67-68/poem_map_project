@@ -64,6 +64,24 @@ trait:has:official          # 拥有官员特性
 trait:not_has:criminal      # 不拥有罪犯特性
 ```
 
+#### 标志位触发
+```
+flag:bool:has:flag_id              # 标志位为真
+flag:bool:not_has:flag_id          # 标志位为假
+flag:str:is:flag_id:value          # 字符串等于指定值
+flag:str:is_not:flag_id:value      # 字符串不等于指定值
+flag:int:>flag_id:value            # 整数大于指定值
+flag:int:<flag_id:value            # 整数小于指定值
+```
+
+示例：
+```
+flag:bool:has:flag_player_has_key              # 玩家有钥匙
+flag:bool:not_has:flag_game_completed          # 游戏未完成
+flag:str:is:flag_player_name:张三              # 玩家姓名是张三
+flag:int:>flag_score:100                      # 分数大于100
+```
+
 #### 多个条件
 用逗号分隔，自动使用AND逻辑：
 ```
@@ -94,6 +112,26 @@ trait:remove:trait_name     # 移除特性
 ```
 trait:add:corrupt           # 添加腐败特性
 trait:remove:sick           # 移除疾病特性
+```
+
+#### 标志位操作
+```
+flag:bool:add:flag_id                      # 设置布尔标志为true
+flag:bool:remove:flag_id                   # 设置布尔标志为false
+flag:bool:old_flag->new_flag              # 替换布尔标志
+flag:str:set:flag_id:content              # 设置字符串标志
+flag:int:add:flag_id:value                # 增加整数标志
+flag:int:set:flag_id:value                # 设置整数标志
+```
+
+示例：
+```
+flag:bool:add:flag_player_has_key          # 获得钥匙
+flag:bool:remove:flag_game_over           # 移除游戏结束标志
+flag:bool:flag_old_status->flag_new_status  # 替换状态
+flag:str:set:flag_player_name:李四         # 设置姓名
+flag:int:add:flag_score:50                # 增加分数
+flag:int:set:flag_health:100              # 设置健康值
 ```
 
 #### 多个操作

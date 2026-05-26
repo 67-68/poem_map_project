@@ -31,7 +31,10 @@ func operate():
 				flag.append(int(value))
 		'bool':
 			if operation == 'set':
-				flag.set_to(bool(value))
+				var bool_str = str(value).to_lower()
+				# 支持多种布尔值表示：true/false, t/f, 1/0, yes/no, TRUE/FALSE
+				var bool_val = bool_str == 'true' or bool_str == 't' or bool_str == '1' or bool_str == 'yes'
+				flag.set_to(bool_val)
 			elif operation == 'append':
 				Logging.warn('Append operation not supported for bool flags')
 		_:

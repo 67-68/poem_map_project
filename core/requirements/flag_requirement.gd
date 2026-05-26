@@ -34,7 +34,8 @@ func compare(_player_state: PlayerState) -> bool:
 				return current_val > target_val
 		'bool':
 			var current_val = flag.val_bool
-			var target_val = bool(value)
+			var bool_str = str(value).to_lower()
+			var target_val = bool_str == 'true' or bool_str == 't' or bool_str == '1' or bool_str == 'yes'
 			if operator == REQ_OPERATOR.COMPARE.LESS_THAN:
 				return current_val < target_val
 			else:

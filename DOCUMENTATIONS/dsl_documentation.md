@@ -102,7 +102,40 @@ trait:not_has:corrupt   # 不拥有腐败特性
 trait:has:proud         # 拥有骄傲特性
 ```
 
-#### 2.3 复合条件
+#### 2.3 标志位条件
+
+**格式**: `flag:type:operator:value`
+
+**支持的类型**:
+- `bool` - 布尔标志位
+- `str` - 字符串标志位
+- `int` - 整数标志位
+
+**布尔标志位操作符**:
+- `has` - 标志位为真
+- `not_has` - 标志位为假
+
+**字符串标志位操作符**:
+- `is` - 等于指定值
+- `is_not` - 不等于指定值
+
+**整数标志位操作符**:
+- `>` - 大于指定值
+- `<` - 小于指定值
+
+**示例**:
+```
+flag:bool:has:flag_player_visited_palace      # 玩家已访问皇宫
+flag:bool:not_has:flag_game_completed         # 游戏未完成
+flag:str:is:flag_player_name:张三              # 玩家姓名是张三
+flag:str:is_not:flag_player_status            # 玩家状态不是指定值
+flag:int:>flag_score:100                      # 分数大于100
+flag:int:<flag_health:10                      # 健康值小于10
+```
+
+**注意**: 标志位的 `flag_id` 需要在 CSV 数据中预先定义和加载。
+
+#### 2.4 复合条件
 
 **格式**: 用逗号分隔多个条件，系统使用AND逻辑组合
 
@@ -110,6 +143,8 @@ trait:has:proud         # 拥有骄傲特性
 ```
 prop:money:>50,trait:has:official
 prop:literary_fame:>30,prop:money:>100
+flag:bool:has:flag_player_visited_palace,prop:money:>100
+flag:str:is:flag_player_name:张三,trait:has:official
 ```
 
 ### 3. 结果操作符语法
@@ -143,6 +178,41 @@ trait:remove:brave         # 移除勇敢特性
 trait:add:official         # 添加官员特性
 ```
 
+#### 3.3 标志位操作符
+
+**格式**: `flag:type:action:value`
+
+**支持的类型**:
+- `bool` - 布尔标志位
+- `str` - 字符串标志位
+- `int` - 整数标志位
+
+**布尔标志位操作**:
+- `add` - 设置为 true
+- `remove` - 设置为 false
+- `replace` - 替换（格式特殊：`flag:bool:{old_flag}->{new_flag}`）
+
+**字符串标志位操作**:
+- `set` - 设置字符串值（格式：`flag:str:set:flag_id:content`）
+
+**整数标志位操作**:
+- `add` - 增加数值（格式：`flag:int:add:flag_id:value`）
+- `set` - 设置数值（格式：`flag:int:set:flag_id:value`）
+
+**示例**:
+```
+flag:bool:add:flag_player_has_key              # 获得钥匙标志
+flag:bool:remove:flag_game_over                # 移除游戏结束标志
+flag:bool:flag_has_old_status->flag_has_new_status  # 替换状态标志
+flag:str:set:flag_player_name:李四             # 设置玩家姓名为李四
+flag:int:add:flag_score:50                     # 分数增加50
+flag:int:set:flag_health:100                   # 设置健康值为100
+```
+
+**标志位替换操作说明**:
+- `flag:bool:flag_a->flag_b` 会将 `flag_a` 设为 false，`flag_b` 设为 true
+- 系统会校验两个标志位都是 bool 类型，否则操作失败
+
 ## CSV数据结构
 
 ### 必需字段
@@ -158,6 +228,33 @@ trait:add:official         # 添加官员特性
 - `weight` - 事件权重（浮点数）
 - `background` - 背景图片资源名
 
+## 标志位数据结构
+
+### 标志位CSV数据
+
+标志位数据使用单独的CSV文件进行管理，通过 `csv_cloud_loader.gd` 加载。
+
+**必需字段**:
+- `flag_id` - 标志位唯一标识符
+- `type` - 标志位类型（`str`, `int`, `bool`）
+- `default_value` - 默认值
+
+**示例**:
+```csv
+flag_id, type, default_value
+flag_player_name, str, 张三
+flag_score, int, 0
+flag_has_key, bool, false
+flag_game_completed, bool, FALSE
+```
+
+**布尔值支持格式**:
+- `true` / `false`
+- `t` / `f` (简写)
+- `1` / `0`
+- `yes` / `no`
+- `TRUE` / `FALSE` (不区分大小写)
+
 ### 选项字段
 
 支持多个选项（A-F），每个选项包含：
@@ -170,11 +267,11 @@ trait:add:official         # 添加官员特性
 ```
 Opt_A_Text: 塞钱贿赂
 Opt_A_Req: prop:money:>100
-Opt_A_Result: prop:money:-100,trait:add:corrupt
+Opt_A_Result: prop:money:-100,trait:add:corrupt,flag:bool:add:flag_bribed
 
 Opt_B_Text: 拂袖而去
 Opt_B_Req: trait:has:proud
-Opt_B_Result: prop:prestige:+50
+Opt_B_Result: prop:prestige:+50,flag:bool:flag_has_low_reputation->flag_has_high_reputation
 ```
 
 ## 完整示例

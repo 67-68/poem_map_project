@@ -18,3 +18,9 @@ static func create_flag_operator(flag_id: String, type: String, value: Variant, 
     operator.value = value
     operator.operation = operation
     return operator
+
+static func create_flag_replace_operator(to_be_replaced_flag_id: String, replace_with_flag_id: String) -> FlagReplaceOperator:
+    var operator := FlagReplaceOperator.new()
+    operator.to_be_replaced_flag_id = to_be_replaced_flag_id
+    operator.replace_with_flag_id = replace_with_flag_id
+    return operator

@@ -49,11 +49,13 @@ Opt_F_Text,Opt_F_Req,Opt_F_Result
 #### requirements (可选)
 - **类型**: String
 - **描述**: 事件触发的额外条件，多个条件用逗号分隔（AND逻辑）
-- **格式**: 
+- **格式**:
   - 属性条件: `prop:property_name:>value` 或 `prop:property_name:<value`
   - 特性条件: `trait:has:trait_name` 或 `trait:not_has:trait_name`
-- **示例**: `prop:money:>50,trait:has:official`
+  - 标志位条件: `flag:type:operator:value`
+- **示例**: `prop:money:>50,trait:has:official,flag:bool:has:flag_player_has_key`
 - **支持的属性**: money, literary_fame, official_prestige, health, etc.
+- **支持的标志位类型**: bool, str, int
 
 #### Title (可选)
 - **类型**: String
@@ -103,11 +105,47 @@ Opt_F_Text,Opt_F_Req,Opt_F_Result
 - **格式**: 多个操作符用逗号分隔
   - 属性操作: `prop:property_name:value` (支持+/-符号)
   - 特性操作: `trait:add:trait_name` 或 `trait:remove:trait_name`
-- **示例**: `prop:money:-100,trait:add:corrupt`
+  - 标志位操作: `flag:type:action:value`
+- **示例**: `prop:money:-100,trait:add:corrupt,flag:bool:add:flag_bribed`
 - **支持的操作**:
   - 属性修改: `prop:money:+50`, `prop:health:-20`
   - 特性添加: `trait:add:brave`, `trait:add:corrupt`
   - 特性移除: `trait:remove:weak`, `trait:remove:fearful`
+  - 标志位布尔: `flag:bool:add:flag_id`, `flag:bool:remove:flag_id`, `flag:bool:old->new`
+  - 标志位字符串: `flag:str:set:flag_id:content`
+  - 标志位整数: `flag:int:add:flag_id:value`, `flag:int:set:flag_id:value`
+
+## 标志位数据结构
+
+### 标志位CSV文件
+
+标志位数据使用单独的CSV文件管理，通过 `csv_cloud_loader.gd` 加载。
+
+**必需字段**:
+- `flag_id` - 标志位唯一标识符
+- `type` - 标志位类型（`str`, `int`, `bool`）
+- `default_value` - 默认值
+
+**示例**:
+```csv
+flag_id, type, default_value
+flag_player_name, str, 张三
+flag_score, int, 0
+flag_has_key, bool, false
+flag_game_completed, bool, FALSE
+```
+
+**布尔值支持格式**:
+- `true` / `false`
+- `t` / `f` (简写)
+- `1` / `0`
+- `yes` / `no`
+- `TRUE` / `FALSE` (不区分大小写)
+
+**标志位类型说明**:
+- `bool`: 布尔标志，用于表示开关状态
+- `str`: 字符串标志，用于存储文本信息
+- `int`: 整数标志，用于存储数值信息
 
 ## 完整示例解析
 
@@ -155,6 +193,7 @@ evt_multi_01,action:travel:mode:road,city:safety:level:dangerous,prop:health:>30
 - 选项B: 交钱保命（需要金钱>50）→ 金钱-50，健康-5
 - 选项C: 智取脱身（需要智力>35）→ 智力+10，声望+15
 - 选项D: 呼救求助（需要人脉特性）→ 金钱-20，安全+25
+- 可以在选项结果中混合使用属性、特性、标志位操作
 
 ### 示例4: 向后兼容示例（三段式）
 
@@ -167,6 +206,21 @@ evt_legacy_01,action:study:poetry,,传统诗会,参加一个传统的诗会活�
 - 使用三段式标签格式（向后兼容）
 - 引擎会自动通过 `TagManager.normalize_3part_depreciated_tag()` 处理
 - 新数据建议使用四段式格式
+
+### 示例5: 包含标志位的事件
+
+```csv
+Event_ID,Trigger_Tags,requirements,Title,Desc,background,weight,Opt_A_Text,Opt_A_Req,Opt_A_Result,Opt_B_Text,Opt_B_Req,Opt_B_Result
+evt_flag_01,action:enter:location:palace,flag:bool:has:flag_player_visited_palace,再次进宫,你再次来到皇宫，这次似乎有不同的机会。,bg_palace,12.5,贿赂守卫,prop:money:>50,prop:money:-50,flag:bool:flag_has_low_reputation->flag_has_high_reputation,直接拜访,flag:str:is:flag_player_title:官员,prop:prestige:+20
+```
+
+**解析**:
+- 事件ID: evt_flag_01
+- 触发标签: 进入皇宫位置（四段式: action:enter:location:palace）
+- 触发条件: 玩家已访问皇宫标志位（flag:bool:has:flag_player_visited_palace）
+- 选项A: 贿赂守卫（需要金钱>50）→ 金钱-50，将低声誉标志替换为高声誉标志
+- 选项B: 直接拜访（需要玩家标题是官员）→ 声望+20
+- 演示了标志位替换操作的使用
 
 ## CSV格式规范
 
