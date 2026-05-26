@@ -27,6 +27,8 @@ var tags: Dictionary
 var legendary_poems: Dictionary
 var normal_poem_events: Dictionary
 
+var flags: Dictionary
+
 var life_path_points: Dictionary
 
 
@@ -38,38 +40,30 @@ func _init() -> void:
 	territories = Util.create_dict(DataLoader.load_csv_model(Territory, 'territories'))
 
 	factions = Util.create_dict_from_registry(preload("res://data/tres_factions_registry.tres"))
+	flags = Util.create_dict_from_registry(preload("res://data/tres_flags_registry.tres"))
 	life_path_points = Util.create_dict_from_registry(preload("res://data/tres_path_points_registry.tres"))
 	poet_data = Util.create_dict_from_registry(preload("res://data/tres_poet_data_registry.tres"))
 	poem_data = Util.create_dict_from_registry(preload("res://data/tres_poem_data_registry.tres"))
 	msger_data = Util.create_dict_from_registry(preload("res://data/tres_msger_data_registry.tres"))
-
-	history_events = Util.create_dict_from_registry(preload("res://data/tres_history_event_registry.tres"))
-	random_events = {
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_BAIYE_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_bai_ye_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_JIAOYOU_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_jiao_you_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DENGGAO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_deng_gao_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FANGSHI_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_fang_shi_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FENGZHAO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_feng_zhao_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DUZHUO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_du_zhuo_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_SPECIAL_DEEPSEEK_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_special_registry.tres"))
-	}
-	end_random_events = Util.create_dict_from_registry(preload("res://data/tres_end_random_events_registry.tres"))
-
-	focused_chat_data = Util.create_dict_from_registry(preload("res://data/tres_focused_chats_registry.tres"))
-	ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
-	var temp_traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
-	properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
-	actions = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres"))
-	decisions = Util.create_dict_from_registry(preload("res://data/tres_decisions_registry.tres"))
-	decided_events = Util.create_dict_from_registry(preload("res://data/tres_decided_events_registry.tres"))
 	tags = Util.create_dict_from_registry(preload("res://data/tres_tags_registry.tres"))
 
-	imaginaries = Util.create_dict_from_registry(preload("res://data/tres_imaginaries_registry.tres"))
-	legendary_poems = Util.create_dict_from_registry(preload("res://data/tres_legendary_poems_registry.tres"))
-	normal_poem_events = Util.create_dict_from_registry(preload("res://data/tres_normal_poem_events_registry.tres"))
+	# 🚨 使用DataHelper的static函数统一加载所有事件相关数据
+	var event_data = DataHelper.load_event_data()
+	history_events = event_data.history_events
+	random_events = event_data.random_events
+	end_random_events = event_data.end_random_events
+	focused_chat_data = event_data.focused_chat_data
+	ambitions = event_data.ambitions
+	traits = event_data.traits
+	properties = event_data.properties
+	actions = event_data.actions
+	decisions = event_data.decisions
+	decided_events = event_data.decided_events
+	imaginaries = event_data.imaginaries
+	legendary_poems = event_data.legendary_poems
+	normal_poem_events = event_data.normal_poem_events
 
 	_merge_cities()
-	_process_traits(temp_traits)
 	_build_life_path_points_from_poems()
 
 
@@ -88,12 +82,6 @@ func _merge_cities() -> void:
 				province.merge(c)
 			else:
 				Logging.err("City %s has uuid %s that does not exist in territories" % [c.name, c.uuid])
-
-
-func _process_traits(temp_traits: Dictionary) -> void:
-	for t in temp_traits.values():
-		t.uuid = t.uuid.replace('__', ':')
-		traits[t.uuid] = t
 
 
 func _build_life_path_points_from_poems() -> void:

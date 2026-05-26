@@ -1,4 +1,100 @@
 class_name DataHelper extends RefCounted
+
+## 事件数据容器，用于统一返回所有事件相关的数据
+class EventData:
+	var history_events: Dictionary
+	var random_events: Dictionary
+	var end_random_events: Dictionary
+	var focused_chat_data: Dictionary
+	var ambitions: Dictionary
+	var traits: Dictionary
+	var properties: Dictionary
+	var actions: Dictionary
+	var decisions: Dictionary
+	var decided_events: Dictionary
+	var imaginaries: Dictionary
+	var legendary_poems: Dictionary
+	var normal_poem_events: Dictionary
+	
+	func _init(
+		h_history_events: Dictionary,
+		h_random_events: Dictionary,
+		h_end_random_events: Dictionary,
+		h_focused_chat_data: Dictionary,
+		h_ambitions: Dictionary,
+		h_traits: Dictionary,
+		h_properties: Dictionary,
+		h_actions: Dictionary,
+		h_decisions: Dictionary,
+		h_decided_events: Dictionary,
+		h_imaginaries: Dictionary,
+		h_legendary_poems: Dictionary,
+		h_normal_poem_events: Dictionary
+	):
+		history_events = h_history_events
+		random_events = h_random_events
+		end_random_events = h_end_random_events
+		focused_chat_data = h_focused_chat_data
+		ambitions = h_ambitions
+		traits = h_traits
+		properties = h_properties
+		actions = h_actions
+		decisions = h_decisions
+		decided_events = h_decided_events
+		imaginaries = h_imaginaries
+		legendary_poems = h_legendary_poems
+		normal_poem_events = h_normal_poem_events
+
+## 加载所有事件相关的数据
+## 返回 EventData 对象，包含所有事件相关的字典
+static func load_event_data() -> EventData:
+	var history_events = Util.create_dict_from_registry(preload("res://data/tres_history_event_registry.tres"))
+	
+	var random_events = {
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_BAIYE_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_bai_ye_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_JIAOYOU_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_jiao_you_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DENGGAO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_deng_gao_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FANGSHI_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_fang_shi_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FENGZHAO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_feng_zhao_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DUZHUO_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_du_zhuo_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_SPECIAL_DEEPSEEK_GENERAL): Util.create_dict_from_registry(preload("res://data/tres_random_event_special_registry.tres"))
+	}
+	
+	var end_random_events = Util.create_dict_from_registry(preload("res://data/tres_end_random_events_registry.tres"))
+	var focused_chat_data = Util.create_dict_from_registry(preload("res://data/tres_focused_chats_registry.tres"))
+	var ambitions = Util.create_dict_from_registry(preload("res://data/tres_ambitions_registry.tres"))
+	
+	var temp_traits = Util.create_dict_from_registry(preload("res://data/tres_traits_registry.tres"))
+	var traits = {}
+	# 处理traits的UUID转换
+	for t in temp_traits.values():
+		t.uuid = t.uuid.replace('__', ':')
+		traits[t.uuid] = t
+	
+	var properties = Util.create_dict_from_registry(preload("res://data/tres_properties_registry.tres"))
+	var actions = Util.create_dict_from_registry(preload("res://data/tres_actions_registry.tres"))
+	var decisions = Util.create_dict_from_registry(preload("res://data/tres_decisions_registry.tres"))
+	var decided_events = Util.create_dict_from_registry(preload("res://data/tres_decided_events_registry.tres"))
+	var imaginaries = Util.create_dict_from_registry(preload("res://data/tres_imaginaries_registry.tres"))
+	var legendary_poems = Util.create_dict_from_registry(preload("res://data/tres_legendary_poems_registry.tres"))
+	var normal_poem_events = Util.create_dict_from_registry(preload("res://data/tres_normal_poem_events_registry.tres"))
+	
+	return EventData.new(
+		history_events,
+		random_events,
+		end_random_events,
+		focused_chat_data,
+		ambitions,
+		traits,
+		properties,
+		actions,
+		decisions,
+		decided_events,
+		imaginaries,
+		legendary_poems,
+		normal_poem_events
+	)
+
 ## 查找所有匹配条件的项，并返回指定属性的列表
 ## 对应 Python 的 list(generator)
 static func find_all_values_by_filter(
