@@ -10,7 +10,8 @@ var current_event_data: BaseEvent
 var _tween: Tween
 
 # 事件队列 (FIFO)，防止多个事件相互覆盖
-var _event_queue: Array[BaseEvent] = []
+# 每个元素为 { "data": BaseEvent, "context": Dictionary }
+var _event_queue: Array[Dictionary] = []
 var _is_active: bool = false
 var _saved_time_scale: float = 1.0
 
@@ -61,7 +62,7 @@ func _play_open_animation():
 func apply_narrative(data: BaseEvent, context: Dictionary):
 	# 如果已有事件在播放，入队等待
 	if _is_active:
-		_event_queue.append(data)
+		_event_queue.append({ "data": data, "context": context })
 		Logging.info("事件已入队等待: " + data.name)
 		return
 
@@ -127,6 +128,8 @@ func _end_narrative(choice):
 
 	# 处理队列中的下一个事件
 	if _event_queue.size() > 0:
-		var next_event = _event_queue.pop_front()
+		var entry: Dictionary = _event_queue.pop_front()
+		var next_event: BaseEvent = entry.get("data")
+		var next_context: Dictionary = entry.get("context", {})
 		Logging.info("弹出队列中的下一个事件: " + next_event.name)
-		apply_narrative(next_event, {})
+		apply_narrative(next_event, next_context)

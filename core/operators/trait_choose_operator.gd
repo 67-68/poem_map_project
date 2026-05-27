@@ -2,6 +2,30 @@
 class_name PoemTypeChooseOperator extends BaseOperator
 
 @export var poem_taste: PoemTaste = PoemTaste.new()
+@export var key_to_get_poem_taste: String = ''
+@export var property_multiplication: float = 1.0
+
+func init(_context: Dictionary) -> Dictionary:
+    if key_to_get_poem_taste and _context.get(key_to_get_poem_taste):
+        var taste = _context.get(key_to_get_poem_taste)
+        if taste is PoemTaste:
+            poem_taste = taste
+        else: Logging.err('poem type choose operator: the type of the data in the context is not the type of taste')
+    
+    # Apply property_multiplication to the context
+    if _context.has("property_multiplication"):
+        var ctx_val = _context["property_multiplication"]
+        if typeof(ctx_val) in [TYPE_FLOAT, TYPE_INT]:
+            var new_val = float(ctx_val) * property_multiplication
+            Logging.debug("PoemTypeChooseOperator: Multiplying context property_multiplication %.2f by operator's %.2f → %.2f" % [float(ctx_val), property_multiplication, new_val])
+            _context["property_multiplication"] = new_val
+        else:
+            Logging.warn("PoemTypeChooseOperator: context property_multiplication has unexpected type %s, skipping multiplication" % typeof(ctx_val))
+    else:
+        Logging.debug("PoemTypeChooseOperator: Setting context property_multiplication to operator's value %.2f" % property_multiplication)
+        _context["property_multiplication"] = property_multiplication
+    
+    return _context
 
 func operate():
     Logging.debug('PoemTypeChooseOperator: Starting operate()')
