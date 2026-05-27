@@ -22,6 +22,12 @@ func get_referenced_traits() -> Array:
         result.append(to_be_replaced_trait)
     return result
 
+func get_demanded_traits() -> Array:
+    var result = []
+    if not to_be_replaced_trait.is_empty():
+        result.append(to_be_replaced_trait)
+    return result
+
 func get_provided_traits() -> Array:
     var result = []
     if not replace_other_trait.is_empty():

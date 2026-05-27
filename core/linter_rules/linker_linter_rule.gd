@@ -107,12 +107,12 @@ func _collect_trait_requirements_from_object_recursive(obj: Variant, trait_reqs:
 	if obj == null: return
 	
 	# 🤓☝️ 鸭子类型：检查对象是否有契约方法
-	if obj.has_method('get_referenced_traits'):
-		var traits = obj.get_referenced_traits()
+	if obj.has_method('get_demanded_traits'):
+		var traits = obj.get_demanded_traits()
 		for trait_ in traits:
 			trait_reqs[trait_] = true
 		return
-	
+
 	# 递归检查字典
 	if obj is Dictionary:
 		for value in obj.values():
@@ -172,12 +172,12 @@ func _collect_flag_requirements_from_object_recursive(obj: Variant, flag_reqs: D
 	if obj == null: return
 	
 	# 🤓☝️ 鸭子类型：检查对象是否有契约方法
-	if obj.has_method('get_referenced_flags'):
-		var flags = obj.get_referenced_flags()
+	if obj.has_method('get_demanded_flags'):
+		var flags = obj.get_demanded_flags()
 		for flag in flags:
 			flag_reqs[flag] = true
 		return
-	
+
 	# 递归检查字典
 	if obj is Dictionary:
 		for value in obj.values():

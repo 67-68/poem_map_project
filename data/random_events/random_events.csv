@@ -3,4 +3,4 @@ test1,"actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:stu
 strange_poet,test1:test1:test1:test1,trait:has:main_jiaoyou_1,奇怪的诗人,你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,20,bg_rural_poor,上前跟他说话,,flag:bool:add:chain_strange_poet_1,,,,,,,,,,
 the_man_got_power,test1:test1:test1:test1,flag:bool:has:chain_strange_poet_1,奇怪的诗人2,他看起来很醉,20,bg_rural_poor,担忧的打量着他,,flag:bool:chain_strange_poet_1->chain_strange_poet_2,,,,,,,,,,
 libai_unveilation,test1:test1:test1:test1,flag:bool:has:chain_strange_poet_2,奇怪的诗人3,他要掉到河里了,20,bg_rural_poor,拉住他,,flag:bool:chain_strange_poet_2->chain_strange_poet_3,,,,,,,,,,
-libai_after,test1:test1:test1:test1,flag:bool:has:chain_strange_poet_3,奇怪的诗人4,他专门来感谢我,20,bg_rural_poor,义薄云天！,,flag:bool:chain_strange_poet_2->chain_strange_poet_3,,,,,,,,,,
+libai_after,test1:test1:test1:test1,flag:bool:has:chain_strange_poet_3,奇怪的诗人4,他专门来感谢我,20,bg_rural_poor,义薄云天！,,flag:bool:chain_strange_poet_3->chain_strange_poet_1,,,,,,,,,,

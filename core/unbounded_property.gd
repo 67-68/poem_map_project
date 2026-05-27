@@ -1,0 +1,1 @@
+class_name UnboundedProperty extends Property

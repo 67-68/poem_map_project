@@ -30,7 +30,13 @@ var trait_key: String:
 func get_referenced_traits() -> Array:
     if trait_key.is_empty():
         return []
-    # REMOVE操作需要先检查trait是否存在
+    if operator == REQ_OPERATOR.CRUD.REMOVE:
+        return [trait_key]
+    return []
+
+func get_demanded_traits() -> Array:
+    if trait_key.is_empty():
+        return []
     if operator == REQ_OPERATOR.CRUD.REMOVE:
         return [trait_key]
     return []

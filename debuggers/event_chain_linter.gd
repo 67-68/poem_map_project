@@ -187,11 +187,11 @@ func creates_adjacency_list(events: Array) -> Dictionary:
             if choice_result and choice_result.operators:
                 for op in choice_result.operators:
                     if op:
-                        var ref_flags = op.get_referenced_flags()
+                        var ref_flags = op.get_demanded_flags()
                         if ref_flags:
                             for flag_name in ref_flags:
                                 relies_set[flag_name] = true
-                        var ref_traits = op.get_referenced_traits()
+                        var ref_traits = op.get_demanded_traits()
                         if ref_traits:
                             for trait_name in ref_traits:
                                 relies_set[trait_name] = true

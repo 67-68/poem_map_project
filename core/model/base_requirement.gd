@@ -7,7 +7,7 @@ func compare(data) -> bool:
 
 ## 契约方法：返回该Requirement引用的flag ID数组
 ## 子类应该重写此方法以声明它依赖哪些flag
-func get_referenced_flags() -> Array:
+func get_referenced_flags() -> Array: # 实际上就是get_required_flags
     return []
 
 ## 契约方法：返回该Requirement引用的trait UUID数组

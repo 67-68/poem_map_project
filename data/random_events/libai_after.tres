@@ -12,8 +12,8 @@
 
 [sub_resource type="Resource" id="Resource_yctuc"]
 script = ExtResource("5_v127v")
-to_be_replaced_flag_id = "chain_strange_poet_2"
-replace_with_flag_id = "chain_strange_poet_3"
+to_be_replaced_flag_id = "chain_strange_poet_3"
+replace_with_flag_id = "chain_strange_poet_1"
 
 [sub_resource type="Resource" id="Resource_bnl0p"]
 script = ExtResource("6_sksol")

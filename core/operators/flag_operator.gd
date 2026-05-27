@@ -18,6 +18,11 @@ func get_referenced_flags() -> Array:
 		return []
 	return [flag_id]
 
+func get_demanded_flags() -> Array:
+	if flag_id.is_empty():
+		return []
+	return [flag_id]
+
 func get_provided_flags() -> Array:
 	if flag_id.is_empty():
 		return []

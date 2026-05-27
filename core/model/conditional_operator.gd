@@ -47,6 +47,36 @@ func get_referenced_traits() -> Array:
             result.append_array(op.get_referenced_traits())
     return result
 
+func get_demanded_flags() -> Array:
+    var result = []
+    if condition:
+        if condition.has_method('get_demanded_flags'):
+            result.append_array(condition.get_demanded_flags())
+        elif condition.has_method('get_referenced_flags'):
+            result.append_array(condition.get_referenced_flags())
+    for op in condition_success_result:
+        if op and op.has_method('get_demanded_flags'):
+            result.append_array(op.get_demanded_flags())
+    for op in condition_fail_result:
+        if op and op.has_method('get_demanded_flags'):
+            result.append_array(op.get_demanded_flags())
+    return result
+
+func get_demanded_traits() -> Array:
+    var result = []
+    if condition:
+        if condition.has_method('get_demanded_traits'):
+            result.append_array(condition.get_demanded_traits())
+        elif condition.has_method('get_referenced_traits'):
+            result.append_array(condition.get_referenced_traits())
+    for op in condition_success_result:
+        if op and op.has_method('get_demanded_traits'):
+            result.append_array(op.get_demanded_traits())
+    for op in condition_fail_result:
+        if op and op.has_method('get_demanded_traits'):
+            result.append_array(op.get_demanded_traits())
+    return result
+
 func get_provided_traits() -> Array:
     var result = []
     # 从 condition_success_result 收集提供的 trait

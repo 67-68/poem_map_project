@@ -22,3 +22,9 @@ func get_referenced_flags() -> Array:
 
 func get_referenced_traits() -> Array:
     return []
+
+func get_demanded_flags() -> Array:
+    return []
+
+func get_demanded_traits() -> Array:
+    return []

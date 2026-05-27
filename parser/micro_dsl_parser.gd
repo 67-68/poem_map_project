@@ -136,7 +136,7 @@ static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
             continue
 
         var op_parts = clean_part.split(':')
-        if op_parts.size() != 3:
+        if op_parts.size() < 3:
             print("Warning: Invalid consequence operator format: %s, expected: type:action:value" % clean_part)
             continue
 

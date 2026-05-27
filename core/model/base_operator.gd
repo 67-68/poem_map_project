@@ -28,6 +28,9 @@ func get_referenced_flags() -> Array:
 func get_provided_flags() -> Array:
     return []
 
+func get_demanded_flags() -> Array:
+    return []
+
 ## 契约方法：返回该Operator引用的trait UUID数组
 ## 子类应该重写此方法以声明它依赖哪些trait
 func get_referenced_traits() -> Array:
@@ -36,4 +39,7 @@ func get_referenced_traits() -> Array:
 ## 契约方法：返回该Operator提供的trait UUID数组
 ## 子类应该重写此方法以声明它添加/修改哪些trait
 func get_provided_traits() -> Array:
+    return []
+
+func get_demanded_traits() -> Array:
     return []
