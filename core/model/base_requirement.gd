@@ -14,3 +14,6 @@ func get_referenced_flags() -> Array: # 实际上就是get_required_flags
 ## 子类应该重写此方法以声明它依赖哪些trait
 func get_referenced_traits() -> Array:
     return []
+
+func init(context: Dictionary) -> Dictionary: # load and store context
+    return context

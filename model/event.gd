@@ -5,3 +5,7 @@ class_name BaseEvent extends GameEntity
 @export var audio: AudioStream = null
 @export var epitaph_text: String = ''
 @export var emotion_configs: Array[EmotionConfigs] = []
+
+func init(context: Dictionary) -> void:
+    for o in options:
+        o.init(context)

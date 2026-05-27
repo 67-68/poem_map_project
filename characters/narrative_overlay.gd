@@ -65,7 +65,9 @@ func apply_narrative(data: BaseEvent):
 		Logging.info("事件已入队等待: " + data.name)
 		return
 
+	var context = {} # 暂时没有东西
 	_is_active = true
+	data.init(context)
 	EventBus.event_shown.emit(data)
 	if data.epitaph_text:
 		TimeService.register_to_master_timeline(data.time, data.name, data.epitaph_text)

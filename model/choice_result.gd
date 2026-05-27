@@ -14,3 +14,9 @@ func operate():
 			op.operate()
 		else:
 			Logging.warn('Found null operator in ChoiceResult')
+
+func init(context: Dictionary) -> Dictionary:
+	if operators:
+		for op in operators:
+			op.init(context)
+	return context

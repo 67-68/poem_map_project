@@ -43,3 +43,6 @@ func get_provided_traits() -> Array:
 
 func get_demanded_traits() -> Array:
     return []
+
+func init(_context: Dictionary) -> Dictionary:
+    return _context

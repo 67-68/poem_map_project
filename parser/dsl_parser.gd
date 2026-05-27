@@ -181,7 +181,7 @@ static func parse_option(row: Dictionary, letter: String) -> BaseOption:
     # 解析选项门槛
     var requirement_str = row.get(req_key)
     if requirement_str and not requirement_str.is_empty():
-        option.requirements = parse_option_requirement(requirement_str)
+        option.requirement = parse_option_requirement(requirement_str)
     
     # 解析选项结果
     var result_str = row.get(result_key)

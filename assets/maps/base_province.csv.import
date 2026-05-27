@@ -15,3 +15,5 @@ dest_files=["res://assets/maps/base_province.uuid.translation", "res://assets/ma
 
 compress=true
 delimiter=0
+unescape_keys=false
+unescape_translations=true

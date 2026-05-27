@@ -4,7 +4,7 @@ signal option_made(data: ChoiceResult) # 外部连接这个; 不要连接pressed
 var option: BaseOption
 var click_count := 0
 
-static func create(data: BaseOption) -> EventBtn:
+static func create(data: BaseOption, _context: Dictionary) -> EventBtn:
 	"""工厂方法：创建并初始化按钮"""
 	var scene = load("res://characters/event_btn.tscn")
 	var btn = scene.instantiate()
@@ -13,7 +13,6 @@ static func create(data: BaseOption) -> EventBtn:
 
 func _init_option(data: BaseOption):
 	"""初始化选项数据"""
-	data.init()
 	option = data
 	text = data.description if 'description' in data else "选项"
 	autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # Enable text wrapping
