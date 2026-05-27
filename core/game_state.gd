@@ -61,8 +61,9 @@ func init_buffers() -> void:
 
 
 static func _apply_poem_data(_poem_data: PoemData) -> void:
-	var poet_data_ = Database.poet_data[_poem_data.owner_uuids[0]]
-	EventBus.request_apply_poem.emit(_poem_data, poet_data_)
+	#var poet_data_ = Database.poet_data[_poem_data.owner_uuids[0]]
+	#EventBus.request_apply_poem.emit(_poem_data, poet_data_)
+	pass
 
 func test_change_literary_fame(num: int) -> void:
 	PlayerState.append_stat("literary_fame", num)

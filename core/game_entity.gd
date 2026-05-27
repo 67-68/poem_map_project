@@ -1,4 +1,4 @@
-class_name  GameEntity extends Resource
+class_name GameEntity extends Resource
 
 @export var uuid: String
 @export var name: String

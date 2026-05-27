@@ -17,7 +17,8 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     if not has_content:
         return null
 
-    var event = RandomEvent.new()
+    var event = RandomEvent.new({}) # TODO: 这里可能出问题，我使用了一个普通的context代替本应有的context
+	
 
     # 解析必需字段
     var event_id = row.get('event_id')
