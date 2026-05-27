@@ -5,4 +5,4 @@ class_name EventOperator extends BaseOperator
 
 func operate():
     Logging.info("EventOperator: Triggering event with key: %s" % event_key)
-    EventBus.request_event_key.emit(event_key)
+    EventBus.request_event_key.emit(event_key, {})

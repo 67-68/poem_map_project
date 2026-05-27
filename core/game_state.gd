@@ -33,7 +33,7 @@ func _ready() -> void:
 
 func init_buffers() -> void:
 	event_popup_queue = PopupQueue.new(
-		func(x): EventBus.request_event.emit(x),
+		func(x): EventBus.request_event.emit(x, {}),
 		EventBus.event_confirmed
 	)
 	event_buffer = ManualBuffer.new(

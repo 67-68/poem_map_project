@@ -20,8 +20,8 @@ var _saved_time_scale: float = 1.0
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	EventBus.request_event.connect(apply_narrative)
-	EventBus.request_event_key.connect(func(key):
+	EventBus.request_event.connect(func(data, _context): apply_narrative(data, _context))
+	EventBus.request_event_key.connect(func(key, _context):
 		var ev = Database.history_events.get(key)
 		if not ev: ev = Database.normal_poem_events.get(key)
 		if not ev: ev = Database.find_triggerable_item(key)
@@ -30,7 +30,7 @@ func _ready() -> void:
 			Logging.err("Event not found: " + key)
 			Logging.err("检查你是不是又加了某个事件文件夹没写判断")
 			return
-		apply_narrative(ev)
+		apply_narrative(ev, _context)
 	)
 
 	# 确保这玩意在暂停时也能点
@@ -58,14 +58,13 @@ func _play_open_animation():
 	_tween.tween_property(main_card, "scale", Vector2(1.0, 1.0), 0.5)
 	_tween.tween_property(main_card, "modulate:a", 1.0, 0.3)
 
-func apply_narrative(data: BaseEvent):
+func apply_narrative(data: BaseEvent, context: Dictionary):
 	# 如果已有事件在播放，入队等待
 	if _is_active:
 		_event_queue.append(data)
 		Logging.info("事件已入队等待: " + data.name)
 		return
 
-	var context = {} # 暂时没有东西
 	_is_active = true
 	data.init(context)
 	EventBus.event_shown.emit(data)
@@ -130,4 +129,4 @@ func _end_narrative(choice):
 	if _event_queue.size() > 0:
 		var next_event = _event_queue.pop_front()
 		Logging.info("弹出队列中的下一个事件: " + next_event.name)
-		apply_narrative(next_event)
+		apply_narrative(next_event, {})

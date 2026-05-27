@@ -13,4 +13,4 @@ extends Node2D
 		if val:
 			test = false
 			var data = Database.history_events['event_test_hub']
-			EventBus.request_event.emit(data)
+			EventBus.request_event.emit(data, {})

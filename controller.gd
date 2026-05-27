@@ -48,7 +48,7 @@ func parse(new_text):
 			EventBus.request_add_imaginary.emit(parts[2])
 
 	if parts.size() == 2 and parts[0] == '$':
-		EventBus.request_event_key.emit(parts[1])
+		EventBus.request_event_key.emit(parts[1], {})
 	elif parts.size() == 2:
 		if GameState.has_method(parts[0]):
 			GameState.callv(parts[0],[parts[1]])

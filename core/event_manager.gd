@@ -105,8 +105,8 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
     
     # 开始命运抽奖
     var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid)
-    if ev_name: 
-        EventBus.request_event_key.emit(ev_name)
+    if ev_name:
+        EventBus.request_event_key.emit(ev_name, context)
         Logging.info("[EventManager] 命运降临: " + ev_name)
     else: 
         Logging.info("[EventManager] 这次抽取事件，岁月静好")
