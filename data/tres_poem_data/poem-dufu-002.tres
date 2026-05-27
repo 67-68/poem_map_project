@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PoemData" load_steps=2 format=3 uid="uid://dlhvosu8tnwob"]
+
+[ext_resource type="Script" uid="uid://55v6166yiuqq" path="res://characters/poem_data.gd" id="1_lsubr"]
+
+[resource]
+script = ExtResource("1_lsubr")
+position = Vector2(0.3, 0.4)
+uv_position = Vector2(0.3, 0.4)
+uuid = "poem-dufu-002"
+name = "登高"
+owner_uuids = ["poet-dufu-002"]

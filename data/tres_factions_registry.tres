@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://cg7rdmegpl14b"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_fvhrg"]
+
+[resource]
+script = ExtResource("1_fvhrg")
+resources = {
+"TANG_CENTRAL": "res://data/tres_factions/TANG_CENTRAL.tres",
+"TUBO_KHANATE": "res://data/tres_factions/TUBO_KHANATE.tres"
+}

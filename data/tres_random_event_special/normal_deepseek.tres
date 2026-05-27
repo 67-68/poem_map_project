@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://fehywsxat6t5"]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_mnqja"]
+[ext_resource type="Script" uid="uid://vktcbkdq2pva" path="res://model/event/custom_event_option.gd" id="2_ypmmf"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="3_87spk"]
+
+[sub_resource type="Resource" id="Resource_j077k"]
+script = ExtResource("2_ypmmf")
+custom_type = "upgrade_random_imagery"
+metadata/_custom_type_script = "uid://vktcbkdq2pva"
+
+[sub_resource type="Resource" id="Resource_5jbby"]
+script = ExtResource("2_ypmmf")
+custom_type = "upgrade_random_imagery"
+metadata/_custom_type_script = "uid://vktcbkdq2pva"
+
+[sub_resource type="Resource" id="Resource_l78tw"]
+script = ExtResource("2_ypmmf")
+custom_type = "upgrade_random_imagery"
+metadata/_custom_type_script = "uid://vktcbkdq2pva"
+
+[sub_resource type="Resource" id="Resource_ysbb1"]
+script = ExtResource("2_ypmmf")
+custom_type = "upgrade_random_imagery"
+metadata/_custom_type_script = "uid://vktcbkdq2pva"
+
+[resource]
+script = ExtResource("3_87spk")
+_action_tags = Array[int]([25, 12, 16, 15, 4])
+options = Array[Object]([SubResource("Resource_j077k"), SubResource("Resource_5jbby"), SubResource("Resource_l78tw"), SubResource("Resource_ysbb1")])
+uuid = "normal_deepseek"
+name = "一般探索思绪"
+description = "你舒展身体，回忆自己都做了什么..."
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

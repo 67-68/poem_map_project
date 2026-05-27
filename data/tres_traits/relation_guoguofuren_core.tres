@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://0257uepltv4r"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_mskqn"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_hkgya"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_6l8c8"]
+
+[resource]
+script = ExtResource("1_mskqn")
+topic = "RELATION"
+specific_topic = "CORE"
+_relate_to = 11
+uuid = "relation_guoguofuren_core"
+name = "核心虢国夫人"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://de7n75hdkvwln"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_87tbc"]
+
+[resource]
+script = ExtResource("1_87tbc")
+resources = {
+"event_death_health_luanshi": "res://data/tres_end_random_events/event_death_health_luanshi.tres",
+"event_death_health_normal": "res://data/tres_end_random_events/event_death_health_normal.tres"
+}

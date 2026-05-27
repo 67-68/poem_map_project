@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://bnplkxbsxce0o"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_2y5hy"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_qs64j"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_rw313"]
+
+[resource]
+script = ExtResource("1_2y5hy")
+topic = "RELATION"
+specific_topic = "GOOD"
+_relate_to = 7
+uuid = "relation_wangwei_close"
+name = "关系好王维"

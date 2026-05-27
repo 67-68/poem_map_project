@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://vo3u1ekjtcja"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_s12qf"]
+
+[resource]
+script = ExtResource("1_s12qf")
+resources = {
+"update_to_rank8_official": "res://data/tres_decisions/update_to_rank8_official.tres"
+}

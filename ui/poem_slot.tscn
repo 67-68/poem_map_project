@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhm3awu3pacwl"]
+
+[ext_resource type="Script" uid="uid://ch41nm04yop2p" path="res://ui/poem_slot.gd" id="1_854lj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sdswg"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_bottom = 2
+
+[node name="PoemSlot" type="PanelContainer"]
+custom_minimum_size = Vector2(50, 50)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_sdswg")
+script = ExtResource("1_854lj")
+
+[node name="C" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="C"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "这是一段测试文字(8)"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+visible_characters = 8
+visible_ratio = 0.72727275

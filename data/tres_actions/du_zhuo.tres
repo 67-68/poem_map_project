@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="SceneAction" format=3 uid="uid://dhgbs8qv14ja"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_gt11a"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3angc"]
+[ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_hnu0c"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_x07my"]
+[ext_resource type="Texture2D" uid="uid://d3oqxrnpyc7ol" path="res://assets/backgrounds/bg_study_quiet.png" id="4_uxtbm"]
+
+[sub_resource type="Resource" id="Resource_lpic5"]
+script = ExtResource("3_x07my")
+_property = 4
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_rs55l"]
+script = ExtResource("3_x07my")
+_property = 3
+value = 3
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[resource]
+script = ExtResource("3_hnu0c")
+_main_tag = 23
+_action_tags = Array[int]([1, 0, 2, 3, 5, 8, 10, 12, 17, 23])
+action_results = Array[ExtResource("2_3angc")]([SubResource("Resource_lpic5"), SubResource("Resource_rs55l")])
+uuid = "du_zhuo"
+name = "宅在家里"
+description = "独酌"
+icon = ExtResource("4_uxtbm")
+metadata/_custom_type_script = "uid://crewiibqgbs2f"

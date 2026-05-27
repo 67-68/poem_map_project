@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3 uid="uid://bkgnvye0ifc60"]
+
+[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="1_4uqyj"]
+[ext_resource type="Script" uid="uid://q7dhqdalm6jd" path="res://ui/decision_panel.gd" id="1_qcnrq"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n54d2"]
+content_margin_left = 20.0
+content_margin_top = 5.0
+content_margin_right = 20.0
+content_margin_bottom = 5.0
+texture = ExtResource("1_4uqyj")
+
+[node name="DecisionPanel" type="VBoxContainer"]
+size_flags_horizontal = 3
+script = ExtResource("1_qcnrq")
+
+[node name="ActionPanel" type="PanelContainer" parent="."]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_n54d2")
+
+[node name="V" type="VBoxContainer" parent="ActionPanel"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="ActionPanel/V"]
+custom_minimum_size = Vector2(125, 25)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "闲逛"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="DescriptionLabel" type="Label" parent="ActionPanel/V"]
+custom_minimum_size = Vector2(125, 12)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42365062, 0.42365065, 0.42365062, 1)
+theme_override_font_sizes/font_size = 8
+text = "确认(消耗3-5天时间. 大概中量财富)"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="ActionPanel/V"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="Button" type="Button" parent="ActionPanel/V/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "确认"
+
+[connection signal="pressed" from="ActionPanel/V/MarginContainer/Button" to="." method="_on_button_pressed"]

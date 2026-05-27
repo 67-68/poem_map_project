@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://r7luxjs2v3xm"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_44wta"]
+
+[resource]
+script = ExtResource("1_44wta")
+resources = {
+"libai_after": "res://data/random_events/libai_after.tres",
+"libai_unveilation": "res://data/random_events/libai_unveilation.tres",
+"strange_poet": "res://data/random_events/strange_poet.tres",
+"test1": "res://data/random_events/test1.tres",
+"the_man_got_power": "res://data/random_events/the_man_got_power.tres"
+}

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Faction" load_steps=2 format=3 uid="uid://d2y005pyhykuq"]
+
+[ext_resource type="Script" uid="uid://wueb4pjxgw4e" path="res://model/faction.gd" id="1_0iynn"]
+
+[resource]
+script = ExtResource("1_0iynn")
+nominal_ruler = "USER_CHIDE_ZUZAN"
+actual_ruler = "USER_CHIDE_ZUZAN"
+prestige = 75.0
+finance = 300000.0
+primary_ethnicity = "吐蕃"
+map_color = Color(0.7019608, 0.4, 0.2, 1)
+provinces = Array[String](["tu_bo", "india"])
+capital = "LHA_SA"
+uuid = "TUBO_KHANATE"
+name = "吐蕃"
+description = "高原上的雄狮，时刻觊觎着河西走廊与安西四镇。"
+metadata/_custom_type_script = "uid://wueb4pjxgw4e"

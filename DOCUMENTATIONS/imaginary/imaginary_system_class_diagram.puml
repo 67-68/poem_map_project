@@ -1,0 +1,144 @@
+@startuml ImaginarySystemClassDiagram
+
+' 样式设置
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+
+title Imaginary System Class Diagram
+
+' 核心数据模型
+class ImaginaryTag {
+    + uuid: String
+    + name: String
+    + description: String
+    + current_level: int
+    + basic_imaginaries: Array[Dictionary]
+    + l3_threshold: int
+    + level_changed(new_level: int)
+    {static} l2_threshold: int = 2
+}
+
+class Tag {
+    + uuid: String
+    + name: String
+    + description: String
+}
+
+class EmotionConfigs {
+    + blueprint: ImaginaryTag
+    + context_tags: Array[String]
+    + requirements: BaseRequirements
+}
+
+class BaseEvent {
+    + uuid: String
+    + target_tags: Array[String]
+    + emotion_configs: Array[EmotionConfigs]
+    + options: Array[BaseOption]
+}
+
+class RandomEvent {
+    + weight: float
+}
+
+class BaseRequirements {
+    + compare(player_state: PlayerState): bool
+}
+
+' 管理器类
+class ImaginaryManager {
+    + add_imagenary(ev: BaseEvent)
+    + add_tag_to_imaginary(tag: String) <<deprecated>>
+    - _process_target_tags(ev: BaseEvent) <<deprecated>>
+    - _process_emotion_configs(ev: BaseEvent)
+    - _append_tag(ima: ImaginaryTag, entry: Dictionary)
+}
+
+class ImagenaryEvaluator {
+    {static} + evaluate_single_config(local_config: EmotionConfigs, player_state: PlayerState): Dictionary
+    {static} + evaluate_local_configs(local_configs: Array[EmotionConfigs], player_state: PlayerState): Array[Dictionary]
+    {static} - _get_discounted_threshold(base_threshold, talent_val)
+}
+
+class TagManager {
+    {static} + get_tag(tag_id: String): Tag
+    {static} + normalize_3part_depreciated_tag(tag: String): String
+}
+
+class Database {
+    + imaginaries: Dictionary
+    + tags: Dictionary
+    + random_events: Dictionary
+}
+
+' UI和使用类
+class PoemCrafter {
+    + selected_imaginaries: Array[ImagenaryItem]
+    + setup_imagenaries()
+    + on_imaginary_changed()
+    + on_item_clicked(imaginary_item: ImagenaryItem)
+    + _on_button_pressed()
+}
+
+class PoemCraftingCalculator {
+    {static} + calculate(imas: Array[ImaginaryTag]): Array[BaseOperator]
+    {static} + translate(ops: Array[BaseOperator]): String
+    {static} + cost_is_high(imas: Array[ImaginaryTag]): bool
+}
+
+class ImagenaryItem {
+    + imaginary_tag: ImaginaryTag
+    + init(ima: ImaginaryTag)
+    + get_text(): String
+    + current_style: String
+}
+
+' 全局单例
+class EventBus {
+    + event_shown(event: Variant)
+    + imaginary_changed()
+    + request_add_imaginary(tag: String)
+}
+
+class PlayerState {
+    + current_action_tags: Array[String]
+    + get_stat_val(stat: String): float
+    + change_stat(stat: String, value: float)
+}
+
+class EventManager {
+    + scan_events(nothing_multiplication_weight: float)
+    + scan_poem_events(imaginaries: Array[ImaginaryTag])
+}
+
+' 关系定义
+BaseEvent <|-- RandomEvent
+ImaginaryManager --> EventBus: <<subscribe>>
+ImaginaryManager --> ImagenaryEvaluator: <<use>>
+ImaginaryManager --> ImaginaryTag: <<modify>>
+BaseEvent "1" *-- "many" EmotionConfigs: contains
+EmotionConfigs --> ImaginaryTag: <<reference>>
+EmotionConfigs "1" *-- "many" BaseRequirements: contains
+
+Database "1" *-- "many" ImaginaryTag: stores
+Database "1" *-- "many" Tag: stores
+Database "1" *-- "many" BaseEvent: stores
+
+ImagenaryEvaluator --> PlayerState: <<use>>
+
+PoemCrafter --> Database: <<access>>
+PoemCrafter --> EventBus: <<subscribe>>
+PoemCrafter --> ImaginaryTag: <<use>>
+PoemCrafter --> PoemCraftingCalculator: <<use>>
+PoemCrafter --> ImagenaryItem: <<create>>
+PoemCrafter --> EventManager: <<use>>
+PoemCrafter --> PlayerState: <<modify>>
+
+ImagenaryItem --> ImaginaryTag: <<reference>>
+PoemCraftingCalculator --> ImaginaryTag: <<analyze>>
+
+EventManager --> Database: <<access>>
+EventManager --> EventBus: <<emit>>
+
+@enduml

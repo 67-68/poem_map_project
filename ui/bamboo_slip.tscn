@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://cx57ph8pl3dvb"]
+
+[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="1_1hadd"]
+[ext_resource type="Script" uid="uid://cr2wv5nf47qbx" path="res://ui/bamboo_slip.gd" id="1_7368h"]
+[ext_resource type="Texture2D" uid="uid://b63ucyjoe7xeh" path="res://assets/red_chain.png" id="2_7368h"]
+
+[node name="BambooSlip" type="MarginContainer" unique_id=518738549]
+custom_minimum_size = Vector2(50, 120)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_7368h")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=232776776]
+layout_mode = 2
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer" unique_id=546896273]
+layout_mode = 2
+size_flags_vertical = 3
+texture_normal = ExtResource("1_1hadd")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/TextureButton" unique_id=767029544]
+visible = false
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 98.0
+texture = ExtResource("2_7368h")
+expand_mode = 4
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1423146884]
+layout_mode = 2
+text = "贺知章"
+
+[connection signal="pressed" from="VBoxContainer/TextureButton" to="." method="_on_texture_button_pressed"]

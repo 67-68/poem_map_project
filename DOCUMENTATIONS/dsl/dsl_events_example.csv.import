@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://gyp1pokexi7x"
+
+[deps]
+
+files=["res://DOCUMENTATIONS/dsl/dsl_events_example.Trigger.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.requirements.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Title.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Desc.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.background.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.weight.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation"]
+
+source_file="res://DOCUMENTATIONS/dsl/dsl_events_example.csv"
+dest_files=["res://DOCUMENTATIONS/dsl/dsl_events_example.Trigger.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.requirements.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Title.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Desc.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.background.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.weight.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation", "res://DOCUMENTATIONS/dsl/dsl_events_example.Opt.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

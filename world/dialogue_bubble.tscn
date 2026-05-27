@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://brkmsb050ox8e"]
+
+[ext_resource type="Script" uid="uid://cxibjwb78dtjl" path="res://world/dialogue_bubble.gd" id="1_nv04q"]
+
+[node name="DialogueBubble" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("1_nv04q")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Marg" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="Panel/Marg"]
+layout_mode = 2

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2vqxhwq5yvp"]
+
+[ext_resource type="Script" uid="uid://bxqaa0xgxfgxv" path="res://core/size_service.gd" id="1_vysmi"]
+
+[node name="SizeService" type="Node"]
+script = ExtResource("1_vysmi")

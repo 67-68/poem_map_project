@@ -1,0 +1,89 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://ccwblvh0y0u6s"]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_ykdg5"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_aiieo"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="2_fcovv"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_w68kt"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_fttgn"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_ev3d3"]
+[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="5_5c1cx"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="6_emotion_op"]
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="7_emotion_cfg"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="8_emotion_req"]
+[ext_resource type="Resource" uid="uid://c5naghprqjnxr" path="res://data/tres_imaginaries/relation__friend.tres" id="12_imaginary_friend"]
+
+[sub_resource type="Resource" id="Resource_iht3e"]
+script = ExtResource("8_emotion_req")
+volatile_stat = "sorrow"
+value = 10
+operator = 1
+metadata/_custom_type_script = "uid://dufh33kfw1bwl"
+
+[sub_resource type="Resource" id="Resource_emotion_cfg_despair"]
+script = ExtResource("7_emotion_cfg")
+target_imagenary_blueprint = ExtResource("12_imaginary_friend")
+context_tags = Array[String](["farewell"])
+requirements = Array[ExtResource("2_fcovv")]([SubResource("Resource_iht3e")])
+
+[sub_resource type="Resource" id="Resource_fcovv"]
+script = ExtResource("2_w68kt")
+_property = 1
+value = 3
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_emotion_sorrow"]
+script = ExtResource("6_emotion_op")
+value = 15
+
+[sub_resource type="Resource" id="Resource_2hvti"]
+script = ExtResource("3_fttgn")
+operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_fcovv"), SubResource("Resource_emotion_sorrow")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_u65qp"]
+script = ExtResource("4_ev3d3")
+choice_result = SubResource("Resource_2hvti")
+description = "挥手道别"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_70mlv"]
+script = ExtResource("2_w68kt")
+_property = 1
+value = 10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_emotion_ambition"]
+script = ExtResource("6_emotion_op")
+_emotion = 4
+value = 10
+
+[sub_resource type="Resource" id="Resource_1vr1y"]
+script = ExtResource("3_fttgn")
+operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_70mlv"), SubResource("Resource_emotion_ambition")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_r8ihn"]
+script = ExtResource("5_5c1cx")
+_accepted_poem_types = Array[int]([2])
+accpeted_result = SubResource("Resource_1vr1y")
+metadata/_custom_type_script = "uid://w6wvp8tdisfu"
+
+[sub_resource type="Resource" id="Resource_8a8ig"]
+script = ExtResource("3_fttgn")
+operators = Array[ExtResource("1_ykdg5")]([SubResource("Resource_r8ihn")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_3qgs1"]
+script = ExtResource("4_ev3d3")
+choice_result = SubResource("Resource_8a8ig")
+description = "给出一首诗"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_aiieo")
+_action_tags = Array[int]([2, 0, 1, 3, 5, 7, 8, 19, 11])
+options = Array[Object]([SubResource("Resource_u65qp"), SubResource("Resource_3qgs1")])
+emotion_configs = Array[ExtResource("7_emotion_cfg")]([SubResource("Resource_emotion_cfg_despair")])
+uuid = "normal_jiao_you"
+name = "和别人出去玩"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

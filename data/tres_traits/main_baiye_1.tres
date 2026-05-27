@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://b1mur55xrkqew"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_govja"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_d2yke"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_f7b60"]
+
+[resource]
+script = ExtResource("1_govja")
+uuid = "main_baiye_1"
+name = "第一级拜谒"
+metadata/_custom_type_script = "uid://pom0464obfp2"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://d4eqa38v7udan"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_2crsy"]
+
+[resource]
+script = ExtResource("1_2crsy")
+resources = {
+"normal_deepseek": "res://data/tres_random_event_special/normal_deepseek.tres",
+"test_event_pool_2_meet_the_poor": "res://data/tres_random_event_special/test_event_pool_2_meet_the_poor.tres"
+}

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://bc7d42jqblpjx"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_a2t5m"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_qw6bk"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_ur4so"]
+
+[resource]
+script = ExtResource("1_a2t5m")
+uuid = "main_fangshi_2"
+name = "第二级坊市"
+metadata/_custom_type_script = "uid://pom0464obfp2"

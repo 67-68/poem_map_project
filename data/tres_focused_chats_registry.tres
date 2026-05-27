@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://bhrb117lbog2c"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_lqex8"]
+
+[resource]
+script = ExtResource("1_lqex8")
+resources = {
+"uid://dcp7jgbogh7o6": "res://data/tres_focused_chats/dufu_fail_to_become_official.tres"
+}

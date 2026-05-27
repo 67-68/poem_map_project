@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://dd7rwuas6jyjf"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_a8pnf"]
+
+[resource]
+script = ExtResource("1_a8pnf")
+resources = {
+"point-dufu-2": "res://data/tres_path_points/point-dufu-2.tres",
+"point-dufu-birth": "res://data/tres_path_points/point-dufu-birth.tres",
+"point-libai-birth": "res://data/tres_path_points/point-libai-birth.tres",
+"point-libai-changan": "res://data/tres_path_points/point-libai-changan.tres"
+}

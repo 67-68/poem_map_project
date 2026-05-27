@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Territory" load_steps=2 format=3 uid="uid://cqgucgu5huhyh"]
+
+[ext_resource type="Script" uid="uid://crqciwl3r6jih" path="res://world/province_resource.gd" id="1_kjdpd"]
+
+[resource]
+script = ExtResource("1_kjdpd")
+_editor_area_tags = Array[int]([1, 0])
+_province_tags = Array[int]([0])
+uuid = "yong_zhou"
+metadata/_custom_type_script = "uid://crqciwl3r6jih"

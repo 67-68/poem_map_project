@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://dmsdo48sr46y6"]
+
+[ext_resource type="Script" uid="uid://c2hoilts1xk4a" path="res://ui/poem_creation_page.gd" id="1_u5hue"]
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_xp646"]
+[ext_resource type="PackedScene" uid="uid://cbc1m6wmmi5os" path="res://ui/poem_crafter.tscn" id="3_ws801"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ws801"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+texture = ExtResource("2_xp646")
+
+[node name="PoemCreationPage" type="Control"]
+visible = false
+z_index = 6
+clip_contents = true
+layout_mode = 3
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
+offset_left = -51.800003
+offset_top = -47.200005
+offset_right = 50.799988
+offset_bottom = -0.7999878
+grow_horizontal = 2
+script = ExtResource("1_u5hue")
+
+[node name="P" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.30000305
+offset_top = -0.20000458
+offset_right = 0.30004883
+offset_bottom = 0.2000122
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ws801")
+
+[node name="PoemCrafter" parent="P" instance=ExtResource("3_ws801")]
+layout_mode = 2

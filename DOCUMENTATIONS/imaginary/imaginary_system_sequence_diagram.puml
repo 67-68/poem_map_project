@@ -1,0 +1,149 @@
+@startuml ImaginarySystemSequenceDiagram
+
+skinparam sequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+title Imaginary System Sequence Diagram - Strong Type Reference Architecture (Updated Timing)
+
+actor Player as player
+participant EventManager as event_manager
+participant EventBus as event_bus
+participant NarrativeOverlay as narrative_overlay
+participant ConsequenceExecuter as consequence_executer
+participant ImaginaryManager as imaginary_manager
+participant ImagenaryEvaluator as evaluator
+participant PlayerState as player_state
+participant PoemCrafter as poem_crafter
+participant PoemCraftingCalculator as calculator
+
+== Phase 1: Imaginary Acquisition (Strong Type Reference) ==
+
+player -> event_manager: Game time advances
+event_manager -> event_manager: scan_events()
+event_manager -> event_bus: request_event_key.emit(event_uuid)
+event_bus -> narrative_overlay: Show event UI
+event_bus -> event_bus: event_shown.emit(event)
+
+player -> narrative_overlay: Make choice in event
+narrative_overlay -> narrative_overlay: _on_option_selected(choice_result)
+narrative_overlay -> narrative_overlay: _end_narrative(choice_result)
+narrative_overlay -> event_bus: event_confirmed.emit()
+
+narrative_overlay -> consequence_executer: execute_result(choice_result)
+consequence_executer -> consequence_executer: result.operate()
+consequence_executer -> consequence_executer: Execute operators (EmotionOperator, etc.)
+consequence_executer -> player_state: change_emotion(emotion, value)
+note right of player_state
+    Emotion is modified HERE
+    BEFORE imaginary evaluation
+end note
+
+narrative_overlay -> imaginary_manager: add_imagenary(event)
+note right of imaginary_manager
+    Called AFTER emotion modification
+    ensuring correct state evaluation
+end note
+
+imaginary_manager -> imaginary_manager: Check if event has emotion_configs
+
+alt Event has emotion_configs
+    imaginary_manager -> evaluator: evaluate_local_configs(emotion_configs, player_state)
+    evaluator -> player_state: get_stat_val() for requirements
+    note right of player_state
+    Now uses UPDATED emotion values
+    from player's choice consequences
+    end note
+    player_state --> evaluator: stat values
+    evaluator -> evaluator: Apply talent discounts if applicable
+    evaluator --> imaginary_manager: Array of validated {blueprint, context_tags}
+    imaginary_manager -> imaginary_manager: _process_emotion_configs()
+
+    loop For each validated result
+        imaginary_manager -> imaginary_manager: Extract blueprint and context_tags
+        imaginary_manager -> imaginary_manager: Check if blueprint is null
+        imaginary_manager -> imaginary_manager: Construct structured entry {blueprint_id, contexts}
+        imaginary_manager -> imaginary_manager: _append_tag(blueprint, entry)
+        imaginary_manager -> imaginary_tag: ima.basic_imaginaries.append(entry)
+        imaginary_manager -> imaginary_tag: Update current_level based on thresholds
+        imaginary_manager -> imaginary_tag: Check if size > l3_threshold (level 3)
+        imaginary_manager -> imaginary_tag: Check if size >= l2_threshold (level 2)
+        imaginary_manager -> imaginary_tag: Otherwise set level 1
+    end
+else Event has no emotion_configs (deprecated fallback)
+    imaginary_manager -> imaginary_manager: _process_target_tags() <<deprecated>>
+    imaginary_manager -> imaginary_manager: Skip processing, output warning
+    imaginary_manager -> imaginary_manager: String split protocol abolished
+end
+
+imaginary_manager -> event_bus: imaginary_changed.emit()
+
+event_bus -> poem_crafter: on_imaginary_changed()
+poem_crafter -> poem_crafter: Check if imaginary count changed
+alt Count changed
+    poem_crafter -> poem_crafter: setup_imagenaries()
+    poem_crafter -> poem_crafter: Create ImagenaryItem for each active imaginary
+end
+
+== Phase 2: Poem Crafting (Structured Data) ==
+
+player -> poem_crafter: Click on imaginary item
+poem_crafter -> poem_crafter: on_item_clicked(item)
+poem_crafter -> poem_crafter: Add to selected_imaginaries (max 3)
+poem_crafter -> poem_crafter: render_slots()
+
+alt 3 imaginaries selected
+    poem_crafter -> calculator: calculate(imas)
+    calculator -> calculator: cost_is_high(imas)
+    calculator -> calculator: Calculate health cost based on levels
+    calculator -> calculator: Calculate talent cost if level 2 present
+    calculator --> poem_crafter: Array of BaseOperator
+    poem_crafter -> calculator: translate(operators)
+    calculator --> poem_crafter: Cost text for UI
+end
+
+player -> poem_crafter: Click craft button
+poem_crafter -> poem_crafter: _on_button_pressed()
+poem_crafter -> calculator: calculate(imas)
+calculator --> poem_crafter: Array of BaseOperator
+poem_crafter -> operators: operate() (execute cost)
+poem_crafter -> poem_crafter: Extract blueprint_id from structured data
+
+loop For each imaginary
+    poem_crafter -> imaginary_tag: Get basic_imaginaries (Array[Dictionary])
+    imaginary_tag --> poem_crafter: Array of {blueprint_id, contexts}
+    
+    loop For each entry
+        poem_crafter -> poem_crafter: Extract blueprint_id from entry
+        poem_crafter -> poem_crafter: Check if blueprint_id is not empty
+        poem_crafter -> player_state: current_action_tags.append(blueprint_id)
+    end
+end
+
+poem_crafter -> event_manager: scan_poem_events(imas)
+event_manager -> event_manager: Create tickets from blueprint_ids
+event_manager -> event_manager: Apply filters
+event_manager -> event_manager: Roll for event
+event_manager -> event_bus: request_event_key.emit(poem_event_uuid)
+
+loop For each imaginary used
+    poem_crafter -> imaginary_tag: Increase l3_threshold by 3
+    poem_crafter -> imaginary_tag: Reset current_level to 1
+end
+
+poem_crafter -> poem_crafter: Clear selected_imaginaries
+poem_crafter -> poem_crafter: render_slots()
+
+note right of player
+    Imaginary consumption cycle complete:
+    1. Event shown, player makes choice
+    2. ConsequenceExecuter modifies emotion state
+    3. Imaginary evaluation uses UPDATED emotion values
+    4. Imaginaries acquired through strong type references
+    5. Structured data preserved with contexts
+    6. Used in poem crafting with blueprint_id extraction
+    7. Thresholds increased, levels reset
+    8. Ready for next cycle with rich narrative context
+end note
+
+@enduml

@@ -8,19 +8,33 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="poem_map"
 run/main_scene="uid://cvv8lap5eqnr1"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="uid://ku7ifltn2syw"
 
 [autoload]
 
-Global="*res://core/global.gd"
+GameConfig="*res://core/game_config.gd"
 Logging="*res://core/logger.gd"
+EventBus="*res://core/eventbus.gd"
+GameState="*res://core/game_state.gd"
+Database="*res://core/database.gd"
 TimeService="*res://core/time_service.tscn"
-DataService_="*res://core/data_service.gd"
+SizeService="*res://core/size_service.tscn"
+NavigationService="*res://core/navigation_service.gd"
+TextPoolManager="*res://core/pool_manager.gd"
+AudioManager="*res://core/audio_manager.gd"
+PlayerState="*res://core/player_state.gd"
+ConsequenceExecuter="*res://core/consequence_executer.gd"
+EventManager="*res://core/event_manager.gd"
+ActionManager="*res://core/action_manager.gd"
 
 [debug]
 
@@ -29,6 +43,14 @@ gdscript/autoload_on_startup=true
 [display]
 
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/tang_linter/plugin.cfg")
+
+[gui]
+
+theme/custom="uid://6q62uqbnal4p"
 
 [input]
 

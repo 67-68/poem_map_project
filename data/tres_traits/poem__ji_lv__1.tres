@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://bg5wjkv2idf45"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_nw7t5"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_r10el"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_u80no"]
+
+[resource]
+script = ExtResource("1_nw7t5")
+uuid = "poem:ji_lv:1"
+name = "普通羁旅诗词"
+description = "普通羁旅诗词"
+metadata/_custom_type_script = "uid://pom0464obfp2"

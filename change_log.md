@@ -1,7 +1,44 @@
+- 为死亡事件添加了两个测试事件，确保带tag的死亡事件可以正确被选择
+
+# [0.8.0]
 ## Added
-- time service
-- path finding algorithm(use path point time)
-- add time on lifePathPoint data stucture
+- eu4-like popup event system
+- debug tool in navigation service for province connection
+- debug overlay for province connection
+- debug util
+- character model instead of point
+- time control GUI
+- 年号
+- chat bubble
+- icon get logic: now can get use path but not only name
+- can trigger plot as chain
+
+## Fixed
+- messager manager @tool error
+- manually add connection to base province
+- 触发逻辑
+- icon can not parse
+- focused chat can not trigger later event
+
+
+# [0.7.0]
+## Added
+- after failed large batch refactor, I choose to refactor step by step
+- poem data -> position point
+- SizeService
+- poem creation animation
+- update popup appearance
+- map
+- text emitter
+- click map can highlight
+- faction render
+- height map
+- messanger
+
+## Fixed
+- can not load stamp config
+- stamp level shiyi do not have texture
+- low startup speed
 
 # [0.4.0]
 ## Added

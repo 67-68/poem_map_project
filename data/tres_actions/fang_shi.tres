@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="SceneAction" format=3 uid="uid://vi7erumsc25y"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_w3kcq"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_i5atp"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_ojs7x"]
+[ext_resource type="Texture2D" uid="uid://de31mnu2ky82d" path="res://assets/backgrounds/bg_changan_street.png" id="4_qsksc"]
+[ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="5_2gju4"]
+
+[sub_resource type="Resource" id="Resource_nrg8x"]
+script = ExtResource("3_ojs7x")
+_property = 3
+value = -5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[resource]
+script = ExtResource("5_2gju4")
+_main_tag = 21
+_action_tags = Array[int]([1, 10, 13, 21])
+action_results = Array[ExtResource("2_i5atp")]([SubResource("Resource_nrg8x")])
+uuid = "fang_shi"
+name = "坊市游宴"
+description = "吃饭了"
+icon = ExtResource("4_qsksc")
+metadata/_custom_type_script = "uid://crewiibqgbs2f"

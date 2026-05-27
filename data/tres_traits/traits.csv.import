@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cjuy74a5047vp"
+
+[deps]
+
+files=["res://data/tres_traits/traits.trait.translation", "res://data/tres_traits/traits.topic.translation", "res://data/tres_traits/traits.specific.translation", "res://data/tres_traits/traits.relate.translation", "res://data/tres_traits/traits.en.translation", "res://data/tres_traits/traits.en.translation", "res://data/tres_traits/traits.en.translation"]
+
+source_file="res://data/tres_traits/traits.csv"
+dest_files=["res://data/tres_traits/traits.trait.translation", "res://data/tres_traits/traits.topic.translation", "res://data/tres_traits/traits.specific.translation", "res://data/tres_traits/traits.relate.translation", "res://data/tres_traits/traits.en.translation", "res://data/tres_traits/traits.en.translation", "res://data/tres_traits/traits.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

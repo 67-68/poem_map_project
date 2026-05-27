@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Property" load_steps=3 format=3 uid="uid://c7ewhfri4hmy8"]
+
+[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_chrk0"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="2_img18"]
+
+[resource]
+script = ExtResource("1_chrk0")
+uuid = "burnout"
+name = "burnout"
+metadata/_custom_type_script = "uid://d3ded43r40m3s"

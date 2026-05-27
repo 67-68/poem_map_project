@@ -7,7 +7,7 @@ func request_daylight(enable: bool):
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	visible = false
-	Global.request_daylight.connect(request_daylight)
+	EventBus.request_daylight.connect(request_daylight)
 	
 
 

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://bkw7w02nhlv06"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_kxy0l"]
+
+[resource]
+script = ExtResource("1_kxy0l")
+resources = {
+"normal_feng_zhao": "res://data/tres_random_event_feng_zhao/normal_feng_zhao.tres"
+}

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cu1a2mhu4xv3n"]
+
+[ext_resource type="Script" uid="uid://bi12253b2ypca" path="res://ui/decision_scroll.gd" id="1_liqfw"]
+[ext_resource type="PackedScene" uid="uid://bkgnvye0ifc60" path="res://ui/decision_panel.tscn" id="1_qqpwb"]
+
+[node name="DecisionScr" type="ScrollContainer"]
+custom_minimum_size = Vector2(0, 120)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("1_liqfw")
+
+[node name="V" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DecisionPanel" parent="V" instance=ExtResource("1_qqpwb")]
+layout_mode = 2
+
+[node name="DecisionPanel2" parent="V" instance=ExtResource("1_qqpwb")]
+layout_mode = 2

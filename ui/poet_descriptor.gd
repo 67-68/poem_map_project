@@ -15,7 +15,7 @@ func on_user_clicked(data: PoetData):
 		hide()
 
 func _ready() -> void:
-	Global.user_clicked.connect(on_user_clicked)
+	EventBus.user_clicked.connect(on_user_clicked)
 
 func _process(delta: float) -> void:
 	pass

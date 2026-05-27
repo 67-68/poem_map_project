@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="Faction" load_steps=2 format=3 uid="uid://jwefbqtus0fd"]
+
+[ext_resource type="Script" uid="uid://wueb4pjxgw4e" path="res://model/faction.gd" id="1_kx05w"]
+
+[resource]
+script = ExtResource("1_kx05w")
+nominal_ruler = "TANG_CENTRAL"
+actual_ruler = "USER_YANG_GUOZHONG"
+prestige = 85.5
+finance = 1250000.0
+primary_ethnicity = "汉"
+map_color = Color(0.2, 0.6, 0.4, 1)
+provinces = Array[String](["tang_chao"])
+capital = "CHANG_AN"
+uuid = "TANG_CENTRAL"
+name = "大唐中央"
+description = "虽然开元盛世的余晖尚在，但繁荣之下危机四伏。玄宗晚年倦勤，朝政渐堕。"
+tags = [null]
+metadata/_custom_type_script = "uid://wueb4pjxgw4e"

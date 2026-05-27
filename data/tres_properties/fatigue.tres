@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Property" load_steps=3 format=3 uid="uid://b3m5anke7kjyk"]
+
+[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_l3cyt"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="2_dfis1"]
+
+[resource]
+script = ExtResource("1_l3cyt")
+uuid = "fatigue"
+name = "fatigue"
+metadata/_custom_type_script = "uid://b3m5anke7kjyi"

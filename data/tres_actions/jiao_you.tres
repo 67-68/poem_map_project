@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="SceneAction" format=3 uid="uid://bmpvm1j6bq27w"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_1ni8c"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_slsqb"]
+[ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_28qx7"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f06is"]
+[ext_resource type="Texture2D" uid="uid://dfe7xt8882qa5" path="res://assets/character/npc_scholar_poor.png" id="4_ob7iq"]
+
+[sub_resource type="Resource" id="Resource_4fss1"]
+script = ExtResource("3_f06is")
+_property = 1
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_m1nii"]
+script = ExtResource("3_f06is")
+_property = 5
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[resource]
+script = ExtResource("3_28qx7")
+_main_tag = 19
+_action_tags = Array[int]([2, 0, 1, 3, 5, 7, 8, 19, 11])
+action_results = Array[ExtResource("2_slsqb")]([SubResource("Resource_4fss1"), SubResource("Resource_m1nii")])
+uuid = "jiao_you"
+name = "交游朋友"
+description = "交游"
+icon = ExtResource("4_ob7iq")
+metadata/_custom_type_script = "uid://crewiibqgbs2f"

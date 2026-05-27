@@ -1,0 +1,89 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbc1m6wmmi5os"]
+
+[ext_resource type="Script" uid="uid://d28jgf66xnd51" path="res://ui/poem_crafter.gd" id="1_otk17"]
+[ext_resource type="PackedScene" uid="uid://co4eess1lguhe" path="res://ui/imaginery_item.tscn" id="1_ps720"]
+[ext_resource type="Texture2D" uid="uid://bkggqxw8e3vjh" path="res://assets/character/li_linfu_smirk.png" id="2_otk17"]
+[ext_resource type="PackedScene" uid="uid://dhm3awu3pacwl" path="res://ui/poem_slot.tscn" id="3_o11fd"]
+
+[node name="H" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 1.0082988)
+theme_override_constants/separation = 10
+script = ExtResource("1_otk17")
+
+[node name="ImagenaryScroll" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HFlowContainer" type="HFlowContainer" parent="ImagenaryScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ImageneryItem" parent="ImagenaryScroll/HFlowContainer" instance=ExtResource("1_ps720")]
+layout_mode = 2
+script = null
+
+[node name="ImageneryItem2" parent="ImagenaryScroll/HFlowContainer" instance=ExtResource("1_ps720")]
+layout_mode = 2
+script = null
+
+[node name="ImageneryItem3" parent="ImagenaryScroll/HFlowContainer" instance=ExtResource("1_ps720")]
+layout_mode = 2
+script = null
+
+[node name="ImageneryItem4" parent="ImagenaryScroll/HFlowContainer" instance=ExtResource("1_ps720")]
+layout_mode = 2
+script = null
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="InputImagPanel" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="InputImagPanel"]
+custom_minimum_size = Vector2(350, 350)
+layout_mode = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="TextureRect" type="TextureRect" parent="InputImagPanel/MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_otk17")
+expand_mode = 1
+
+[node name="H" type="HBoxContainer" parent="InputImagPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PoemSlot" parent="InputImagPanel/H" instance=ExtResource("3_o11fd")]
+layout_mode = 2
+
+[node name="PoemSlot2" parent="InputImagPanel/H" instance=ExtResource("3_o11fd")]
+layout_mode = 2
+
+[node name="PoemSlot3" parent="InputImagPanel/H" instance=ExtResource("3_o11fd")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="InputImagPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "开始创作"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="InputImagPanel"]
+layout_mode = 2
+text = "代价是..."
+fit_content = true
+scroll_active = false
+
+[connection signal="pressed" from="InputImagPanel/Button" to="." method="_on_button_pressed"]

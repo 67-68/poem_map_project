@@ -8,7 +8,7 @@ func on_request_black(enable: bool):
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	Global.request_start_black.connect(on_request_black)
+	EventBus.request_start_black.connect(on_request_black)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://b8utnjnfi58jk"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_jjrtn"]
+
+[resource]
+script = ExtResource("1_jjrtn")
+resources = {
+"court:corrupt": "res://data/tres_imaginaries/court__corrupt.tres",
+"court:prosper": "res://data/tres_imaginaries/court__prosper.tres",
+"emotion:ambition": "res://data/tres_imaginaries/emotion__ambition.tres",
+"emotion:despair": "res://data/tres_imaginaries/emotion__despair.tres",
+"health:drunk": "res://data/tres_imaginaries/health__drunk.tres",
+"relation:friend": "res://data/tres_imaginaries/relation__friend.tres",
+"relation:patron": "res://data/tres_imaginaries/relation__patron.tres",
+"travel:exile": "res://data/tres_imaginaries/travel__exile.tres",
+"travel:parting": "res://data/tres_imaginaries/travel__parting.tres"
+}

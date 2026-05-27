@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://bhs3rbijanf88"]
+
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_yqk6y"]
+
+[resource]
+script = ExtResource("1_yqk6y")
+resources = {
+"poem-dufu-001": "res://data/tres_poem_data/poem-dufu-001.tres",
+"poem-dufu-002": "res://data/tres_poem_data/poem-dufu-002.tres",
+"poem-dufu-003": "res://data/tres_poem_data/poem-dufu-003.tres",
+"poem-libai-001": "res://data/tres_poem_data/poem-libai-001.tres",
+"poem-libai-002": "res://data/tres_poem_data/poem-libai-002.tres",
+"poem-libai-003": "res://data/tres_poem_data/poem-libai-003.tres"
+}

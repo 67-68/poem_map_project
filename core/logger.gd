@@ -1,3 +1,4 @@
+@tool
 extends Node
 
 enum Level { DEBUG, INFO, WARN, ERROR }
@@ -15,3 +16,25 @@ func debug(msg): _log(Level.DEBUG, msg, "gray")
 func info(msg):  _log(Level.INFO,  msg, "white")
 func warn(msg):  _log(Level.WARN,  msg, "yellow")
 func err(msg):   _log(Level.ERROR, msg, "red")
+func not_exists(source: String,...obj):
+    var i := 0
+    for o in obj:
+        if not o:
+            err('the %s object from %s not found' % [i,source])
+            return true
+    return false
+
+func done(name: String,domain = ''):
+    if domain:
+        Logging.info('[%s] %s done loading' % [domain,name])    
+        return
+    Logging.info('%s done loading' % name)
+
+
+func change(source,target):
+    Logging.info('change %s to %s' % [source,target])
+
+#func check_type(domain_name: String,type_,...obj):
+#    for o in obj:
+#        if obj is not type_:
+#            Logging.err(% domain_name)
