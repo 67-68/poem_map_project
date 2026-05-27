@@ -1,11 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://u88ye4xgrk8h"]
+[gd_scene format=3 uid="uid://u88ye4xgrk8h"]
 
 [ext_resource type="Script" uid="uid://dk5iruu4bknq6" path="res://characters/narrative_overlay.gd" id="1_htcev"]
 [ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="2_id4jo"]
 [ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="3_qlww5"]
 
-[node name="NarrativeOverlay" type="Control"]
-z_index = 5
+[node name="NarrativeOverlay" type="Control" unique_id=756398830]
+z_index = 100
 custom_minimum_size = Vector2(900, 600)
 layout_mode = 3
 anchors_preset = 8
@@ -17,16 +17,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_htcev")
 
-[node name="Dimmer" type="ColorRect" parent="."]
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1209770294]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 0.6)
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1937522382]
 self_modulate = Color(1, 1, 1, 0.19607843)
 layout_mode = 1
 anchors_preset = 15
@@ -36,7 +37,7 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 2
 
-[node name="Margin" type="MarginContainer" parent="Background"]
+[node name="Margin" type="MarginContainer" parent="Background" unique_id=328263658]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,10 +49,10 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 20
 
-[node name="VBox" type="VBoxContainer" parent="Background/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Background/Margin" unique_id=104575616]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="Background/Margin/VBox"]
+[node name="TitleLabel" type="Label" parent="Background/Margin/VBox" unique_id=1228479842]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_vertical = 1
@@ -59,23 +60,23 @@ text = "test"
 autowrap_mode = 3
 script = ExtResource("2_id4jo")
 
-[node name="ExampleLabel" type="RichTextLabel" parent="Background/Margin/VBox"]
+[node name="ExampleLabel" type="RichTextLabel" parent="Background/Margin/VBox" unique_id=562525502]
 clip_contents = false
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 bbcode_enabled = true
 fit_content = true
 
-[node name="ContentLabel" type="RichTextLabel" parent="Background/Margin/VBox"]
+[node name="ContentLabel" type="RichTextLabel" parent="Background/Margin/VBox" unique_id=2138047978]
 clip_contents = false
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 bbcode_enabled = true
 fit_content = true
 
-[node name="Control" type="Control" parent="Background/Margin/VBox"]
+[node name="Control" type="Control" parent="Background/Margin/VBox" unique_id=497428212]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="OptionBtns" parent="Background/Margin/VBox" instance=ExtResource("3_qlww5")]
+[node name="OptionBtns" parent="Background/Margin/VBox" unique_id=603856624 instance=ExtResource("3_qlww5")]
 layout_mode = 2

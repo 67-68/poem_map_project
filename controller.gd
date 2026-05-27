@@ -40,7 +40,7 @@ func parse(new_text):
 		'event_result':
 			var ev = Database.find_triggerable_item(parts[2])
 			# 🤓☝️ 鸭子类型：检查对象是否具有事件的必要属性
-		if not ev or not ev.has_method("get") or ev.get("uuid") == null or ev.get("options") == null:
+			if not ev or not ev.has_method("get") or ev.get("uuid") == null or ev.get("options") == null:
 				Logging.err('can not found event for %s' % parts[2])
 				return
 			EventBus.event_shown.emit(ev)
