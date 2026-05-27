@@ -13,16 +13,22 @@ extends Node
 # 把 URL 和它对应的本地保存路径死死绑定在一起！这就是你说的"携带信息"！
 const DATA_MANIFEST: Array[Dictionary] = [
     {
-        "name": "test_随机事件池",
-        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?output=csv",
+        "name": "随机事件池",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=0&single=true&output=csv",
         "save_path": "res://data/random_events/random_events.csv",
         "data_type": "random_event"
 },
     {
         "name": "flags_data",
-        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2EfTq6BZ59bQ7lIRBd2q-hoJb1RAJHc2vOwlp5wJ03R7fG23SuvoWOKRcbSsPuPwbp_rs7m1Tk081/pub?output=csv",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=2126665400&single=true&output=csv",
         "save_path": "res://data/flags/flags.csv",
         "data_type": "flags"
+    },
+    {
+        "name": "trait_data",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=309055591&single=true&output=csv",
+        "save_path": "res://data/tres_traits/traits.csv",
+        "data_type": "trait"
     }
 ]
 
@@ -233,6 +239,8 @@ func fetch_events_from_cloud(url: String, save_path: String = "res://tests/", da
             print("云端事件注入成功: %s" % resource.uuid)
         elif resource is Flag:
             print("云端标志位注入成功: %s" % resource.uuid)
+        elif resource is Trait:
+            print("云端特性注入成功: %s" % resource.uuid)
         else:
             print("云端资源注入成功: %s" % resource.resource_path)
 

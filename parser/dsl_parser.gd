@@ -395,6 +395,75 @@ static func validate_flag(flag: Flag) -> bool:
 
     return true
 
+# 解析特性数据
+static func parse_trait(row: Dictionary) -> Trait:
+    if row.is_empty():
+        return null
+
+    var has_content = false
+    for key in row:
+        var value = row[key]
+        if value != null and not str(value).is_empty():
+            has_content = true
+            break
+
+    if not has_content:
+        return null
+
+    var trait_ = Trait.new()
+
+    var trait_id = row.get('trait_id')
+    if not trait_id or trait_id.is_empty():
+        push_error("trait_id is required")
+        return null
+    trait_.uuid = trait_id
+
+    trait_.name = row.get('trait_name', '')
+    trait_.topic = row.get('topic', '')
+    trait_.specific_topic = row.get('specific_topic', '')
+
+    var relate_to_str = row.get('relate_to', '')
+    if not relate_to_str.is_empty():
+        var enum_index = ENUMS.RELATION_TARGET.keys().find(relate_to_str.to_upper())
+        if enum_index >= 0:
+            trait_._relate_to = enum_index
+        else:
+            print("Warning: Unknown relate_to '%s' for trait %s" % [relate_to_str, trait_id])
+
+    var lasting_xun_str = row.get('lasting_xun', '')
+    if not lasting_xun_str.is_empty():
+        trait_.lasting_xun = lasting_xun_str.to_int()
+
+    # 解析 trait_effect_operations — DSL 格式: prop:property:±value,prop:property:±value
+    var effect_ops_str = row.get('trait_effect_operations', '')
+    if not effect_ops_str.is_empty():
+        var all_ops = MicroDSLParser.parse_consequence_operators(effect_ops_str)
+        var property_ops: Array[PropertyOperator] = []
+        for op in all_ops:
+            if op is PropertyOperator:
+                property_ops.append(op as PropertyOperator)
+        trait_.trait_effect_operations = property_ops
+        if property_ops.size() != all_ops.size():
+            print("Warning: trait %s: %d non-PropertyOperator entries in trait_effect_operations were filtered out" % [trait_id, all_ops.size() - property_ops.size()])
+
+    # 解析 trait_endogenous_operations — DSL 格式: type:action:value,type:action:value
+    var endogenous_ops_str = row.get('trait_endogenous_operations', '')
+    if not endogenous_ops_str.is_empty():
+        trait_.trait_endogenous_operations = MicroDSLParser.parse_consequence_operators(endogenous_ops_str)
+
+    print("Trait解析成功: %s (topic=%s)" % [trait_id, trait_.topic])
+    return trait_
+
+static func validate_trait(trait_: Trait) -> bool:
+    if not trait_:
+        return false
+
+    if not trait_.uuid or trait_.uuid.is_empty():
+        push_error("Trait validation failed: missing trait_id")
+        return false
+
+    return true
+
 # 批量解析CSV数据
 static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "random_event") -> Array[Resource]:
     var resources: Array[Resource] = []
@@ -415,6 +484,12 @@ static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "ran
                 resource = flag
             else:
                 print("Warning: Failed to parse flag at row %d" % (i + 1))
+        elif data_type == "trait":
+            var trait_ = parse_trait(row)
+            if trait_ and validate_trait(trait_):
+                resource = trait_
+            else:
+                print("Warning: Failed to parse trait at row %d" % (i + 1))
         else:
             push_error("未知的 data_type: %s 💀" % data_type)
             continue

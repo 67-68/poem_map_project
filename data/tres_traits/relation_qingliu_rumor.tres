@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://bkwo3duji855a"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_atmh6"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_y1873"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_lv6h4"]
+
+[resource]
+script = ExtResource("1_atmh6")
+topic = "RELATION"
+specific_topic = "HEARD"
+_relate_to = 5
+uuid = "relation_qingliu_rumor"
+name = "听闻清流"

@@ -87,7 +87,7 @@ enum RELATION_TARGET {
     ZHENGQIAN, # 郑虔
     WAIQI, # 外戚
     YANGGUOZHONG,
-    GUOGUOFUREN, # 虢国夫人
+    GUOGUOFUREN, # 虢国夫人 
 }
 
 enum PROVINCES { 

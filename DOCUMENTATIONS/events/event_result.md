@@ -20,7 +20,7 @@ script = ExtResource("4_ri2ju")  # EventOperator
 event_key = "target_event_uuid"
 ```
 
-或者在代码中：
+或者e在代码中：
 ```gdscript
 var event_op = EventOperator.new()
 event_op.event_key = "target_event_uuid"

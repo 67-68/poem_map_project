@@ -14,7 +14,7 @@ class_name Trait extends GameEntity
 @export var _relate_to: ENUMS.RELATION_TARGET = -1
 var relate_to: String:
     get: return ENUMS.to_relation_str(_relate_to)
-@export var lasting_xun: int
+@export var lasting_xun: int # 这个不是说可以last多少，而是当前last了多少
 
 # 内生的效果：自己进化和持续的影响
 @export var trait_effect_operations: Array[PropertyOperator] = []

@@ -6,10 +6,10 @@ uid="uid://ba1434rq2exfa"
 
 [deps]
 
-files=["res://data/flags/flags.type.translation", "res://data/flags/flags.default.translation", "res://data/flags/flags.en.translation", "res://data/flags/flags.en.translation", "res://data/flags/flags.en.translation"]
+files=["res://data/flags/flags.type.translation", "res://data/flags/flags.default.translation"]
 
 source_file="res://data/flags/flags.csv"
-dest_files=["res://data/flags/flags.type.translation", "res://data/flags/flags.default.translation", "res://data/flags/flags.en.translation", "res://data/flags/flags.en.translation", "res://data/flags/flags.en.translation"]
+dest_files=["res://data/flags/flags.type.translation", "res://data/flags/flags.default.translation"]
 
 [params]
 
