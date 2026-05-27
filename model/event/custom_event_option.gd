@@ -9,9 +9,10 @@ class_name CustomEventOption extends BaseOption
     'upgrade_random_imagery'
 ) var custom_type: String
 
-func init():
+func init(context: Dictionary):
     match custom_type:
         'upgrade_random_imagery': upgrade_random_imagery()
+    return context
 
 func upgrade_random_imagery():
     #breakpoint
