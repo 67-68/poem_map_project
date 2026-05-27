@@ -26,7 +26,7 @@ func _set_deprecated_position(val):
 
 func _init(data: Dictionary = {}):
     # 1. 先让父类干活 (解析 uuid, name 等)
-    #super._init(data)
+    super._init(data)
     
     if data.is_empty(): return
     
