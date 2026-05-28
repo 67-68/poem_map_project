@@ -1,3 +1,4 @@
+@tool
 class_name SourceOfTruth extends RefCounted
 # also: console
 
@@ -53,84 +54,90 @@ static var debug_dashboard_state = {
 # 用于 get_resource_through_urn 在编辑器模式下直接加载 .tres 资源
 # 在非编辑器模式下，通过 db_field 在 database.gd 的字典中查找
 # ============================================================
+# 🚨 使用字符串 key 而不是 URN.URN_TYPE.XXX 枚举值。
+# @tool 模式下跨脚本 enum 常量解析异常，会导致字典 get() 查找失败 💀
 static var urn_resource_config: Dictionary = {
-    URN.URN_TYPE.POET: {
+    "poet": {
         "registry": "res://data/tres_poet_data_registry.tres",
         "db_field": "poet_data",
     },
-    URN.URN_TYPE.POEM: {
-        "registry": "res://data/tres_poem_data_registry.tres",
-        "db_field": "poem_data",
+    "poem": {
+    	"registry": "res://data/tres_poem_data_registry.tres",
+    	"db_field": "poem_data",
     },
-    URN.URN_TYPE.FACTION: {
+    "poem_taste": {
+    	"registry": "res://data/poem_taste_registry.tres",
+    	"db_field": "poem_taste",
+    },
+    "faction": {
         "registry": "res://data/tres_factions_registry.tres",
         "db_field": "factions",
     },
-    URN.URN_TYPE.MSGER: {
+    "msger": {
         "registry": "res://data/tres_msger_data_registry.tres",
         "db_field": "msger_data",
     },
-    URN.URN_TYPE.HISTORY_EVENT: {
+    "history_event": {
         "registry": "res://data/tres_history_event_registry.tres",
         "db_field": "history_events",
     },
-    URN.URN_TYPE.END_RANDOM_EVENT: {
+    "end_random_event": {
         "registry": "res://data/tres_end_random_events_registry.tres",
         "db_field": "end_random_events",
     },
-    URN.URN_TYPE.FOCUSED_CHAT: {
+    "focused_chat": {
         "registry": "res://data/tres_focused_chats_registry.tres",
         "db_field": "focused_chat_data",
     },
-    URN.URN_TYPE.AMBITION: {
+    "ambition": {
         "registry": "res://data/tres_ambitions_registry.tres",
         "db_field": "ambitions",
     },
-    URN.URN_TYPE.TRAIT: {
+    "trait": {
         "registry": "res://data/tres_traits_registry.tres",
         "db_field": "traits",
     },
-    URN.URN_TYPE.PROPERTY: {
+    "property": {
         "registry": "res://data/tres_properties_registry.tres",
         "db_field": "properties",
     },
-    URN.URN_TYPE.ACTION: {
+    "action": {
         "registry": "res://data/tres_actions_registry.tres",
         "db_field": "actions",
     },
-    URN.URN_TYPE.DECISION: {
+    "decision": {
         "registry": "res://data/tres_decisions_registry.tres",
         "db_field": "decisions",
     },
-    URN.URN_TYPE.DECIDED_EVENT: {
+    "decided_event": {
         "registry": "res://data/tres_decided_events_registry.tres",
         "db_field": "decided_events",
     },
-    URN.URN_TYPE.IMAGINARY: {
+    "imaginary": {
         "registry": "res://data/tres_imaginaries_registry.tres",
         "db_field": "imaginaries",
     },
-    URN.URN_TYPE.TAG: {
+    "tag": {
         "registry": "res://data/tres_tags_registry.tres",
         "db_field": "tags",
     },
-    URN.URN_TYPE.FLAG: {
+    "flag": {
         "registry": "res://data/flags_registry.tres",
         "db_field": "flags",
     },
-    URN.URN_TYPE.LIFE_PATH_POINT: {
+    "life_path_point": {
         "registry": "res://data/tres_path_points_registry.tres",
         "db_field": "life_path_points",
     },
-    URN.URN_TYPE.LEGENDARY_POEM: {
+    "legendary_poem": {
         "registry": "res://data/tres_legendary_poems_registry.tres",
         "db_field": "legendary_poems",
     },
-    URN.URN_TYPE.NORMAL_POEM_EVENT: {
+    "normal_poem_event": {
         "registry": "res://data/tres_normal_poem_events_registry.tres",
         "db_field": "normal_poem_events",
     },
-    URN.URN_TYPE.EVENT_OPTION: {
+    "event_option": {
         "registry": "res://data/event_options_registry.tres",
         "db_field": "event_options",
     },

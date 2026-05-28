@@ -2,7 +2,7 @@
 class_name PoemTaste extends Resource
 
 # 诗歌品味配置：定义了诗歌类型偏好和对应的结果处理
-
+@export var uuid: String
 @export var _accepted_poem_types: Array[ENUMS.POEM_TYPE] = [] # e.g. ["yan_ye", "ying_zhi"]
 var accepted_poem_types: Array[String]:
     get():

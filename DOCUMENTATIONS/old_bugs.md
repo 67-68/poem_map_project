@@ -133,3 +133,57 @@ Scene Action的`action_tags`和Random Event的`target_tags`之间存在标签格
 ### 修复文件
 - `core/game_entity.gd`
 - `model/map_marker_data.gd`
+
+## 2026-05-28: @tool 模式下 enum 跨脚本 match 异常 — 所有 data_type 解析失败
+
+### 问题描述
+`csv_cloud_loader.gd` 同步 CSV 数据时，三个数据源（trait、flag、random_event）全部解析失败，输出 `DSLParser 返回空资源数组`。特定报错：
+```
+ERROR: core/variant/variant_utility.cpp:1024 - 未知的 data_type enum: 8 💀
+云端数据注入完成！共注入 0 个资源
+```
+
+### 根本原因
+`dsl_parser.gd` 和 `_parse_flat_data()` 中使用 `match data_type:` 与 `URN.URN_TYPE.FLAG` / `URN.URN_TYPE.TRAIT` 等跨脚本枚举常量做匹配。
+
+在 **`@tool` 模式**下，Godot 4 的枚举常量跨脚本引用在 `match` 语句中无法正确解析为整数值。尽管 `find_urn_type("trait")` 返回了正确的 `13`，但 `match 13: URN.URN_TYPE.TRAIT:` 不命中，所有 data_type 都落入 `_` 兜底分支。
+
+### 影响范围
+- 所有通过 `DSLParser.parse_csv_data()` 进行的数据同步
+- 包括 `csv_cloud_loader.gd` 和 `addons/data_syncer.gd`
+- 影响 trait、flag、random_event 三种数据类型的注入
+
+### 修复方案
+1. **`parse_csv_data()`**：移除 `URN.find_urn_type()` 和 enum 比较逻辑，改用**原始字符串 `match`**
+2. **`_parse_flat_data()`**：签名从 `data_type: int` 改为 `data_type: String`，内部 `match` 也改用字符串
+3. 全部调用方原本就传字符串（`"random_event"`、`"trait"`、`"flag"`），无需修改
+
+### 后续补刀 1：同样问题在 `urn_resource_config` 字典 key 上又爆了一次
+修复完 `_parse_flat_data` 后，新的报错：
+```
+get_resource_through_urn: URN type event_option (25) 未在配置表中找到
+```
+`SourceOfTruth.urn_resource_config` 的 key 也是 `URN.URN_TYPE.EVENT_OPTION` 等枚举常量，`get(25)` 在 `@tool` 模式下同样查不到。**不是 `match` 独有的问题——字典 key 用枚举常量也一样炸。**
+
+### 修复 2a
+1. **`source_of_truth.gd`**：`urn_resource_config` 的 key 全部从 `URN.URN_TYPE.XXX` 改为字符串 `"xxx"`（小写下划线格式）
+2. **`urn.gd` `get_resource_through_urn()`**：不再经过 `find_urn_type()` 转 int，直接用 `type_str.to_lower().replace("-", "_")` 归一化后做字符串 key 查找
+
+### 后续补刀 2：SourceOfTruth 本身不是 @tool，静态变量根本没初始化
+即使 key 改成了字符串，`SourceOfTruth.urn_resource_config` 仍然返回空字典 💀
+
+**根因**：`source_of_truth.gd` 没有 `@tool` 标记。在 `@tool` 模式下，非 `@tool` 类的静态变量不会在引用时被初始化——`urn_resource_config` 是空的！
+`urn.gd`（`@tool`）调用 `SourceOfTruth.urn_resource_config.get("event_option")` 时，字典里什么都没有。
+
+### 修复 2b
+3. **`source_of_truth.gd`**：加上 `@tool` 标记。该类只有纯静态数据（配置字典），无副作用，加 `@tool` 安全。
+
+### 最终教训
+**在 `@tool` 模式下：**
+1. **所有涉及跨脚本枚举常量的运行时引用（`match`、字典 key）都可能出问题** — 始终用字符串做 dispatch
+2. **被 `@tool` 脚本引用的数据类也必须加 `@tool`** — 否则静态变量不会被初始化，字典是空的，`get()` 永远返回 `null`
+
+### 修复文件
+- `parser/dsl_parser.gd`
+- `core/source_of_truth.gd`
+- `model/urn.gd`

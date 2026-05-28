@@ -11,6 +11,7 @@ class_name URN
 enum URN_TYPE {
 	POET,               # poet_data — 诗人数据
 	POEM,               # poem_data — 诗词数据
+	POEM_TASTE,         # poem_taste — 诗歌品味配置
 	FACTION,            # factions — 势力
 	PROVINCE,           # base_province — 基础省份（CSV）
 	TERRITORY,          # territories — 领土（CSV）
@@ -99,14 +100,13 @@ static func get_resource_through_urn(urn_string: String):
 	var type_str = parsed["type"]
 	var resource_id = parsed["resource_id"]
 	
-	var urn_type = find_urn_type(type_str)
-	if urn_type < 0:
-		Logging.err("get_resource_through_urn: 未知的 URN type: " + type_str)
-		return null
+	# 🚨 不经过 find_urn_type() 转 int，直接用 normalized 字符串 key 查配置表。
+	# @tool 模式下 enum 跨脚本解析异常，int key 查找可能失败 💀
+	var normalized_type = type_str.to_lower().replace("-", "_")
 	
-	var config = SourceOfTruth.urn_resource_config.get(urn_type)
+	var config = SourceOfTruth.urn_resource_config.get(normalized_type)
 	if config == null:
-		Logging.err("get_resource_through_urn: URN type %s (%d) 未在配置表中找到" % [type_str, urn_type])
+		Logging.err("get_resource_through_urn: URN type '%s' (normalized: '%s') 未在配置表中找到" % [type_str, normalized_type])
 		return null
 	
 	if not Engine.is_editor_hint():

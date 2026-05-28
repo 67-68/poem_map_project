@@ -2,14 +2,16 @@
 class_name PoemTypeChooseOperator extends BaseOperator
 
 @export var poem_taste: PoemTaste = PoemTaste.new()
-@export var key_to_get_poem_taste: String = ''
+@export var key_to_get_poem_taste: String = 'poem_taste'
 @export var property_multiplication: float = 1.0
 
 func init(_context: Dictionary) -> Dictionary:
     if key_to_get_poem_taste and _context.get(key_to_get_poem_taste):
         var taste = _context.get(key_to_get_poem_taste)
-        if taste is PoemTaste:
-            poem_taste = taste
+        var taste_instance = URN.get_resource_through_urn(taste)
+        if taste_instance is PoemTaste:
+            poem_taste = taste_instance
+            print('poem type choose operator: successfully get the taste')
         else: Logging.err('poem type choose operator: the type of the data in the context is not the type of taste')
     
     # Apply property_multiplication to the context

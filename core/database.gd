@@ -31,6 +31,8 @@ var flags: Dictionary
 
 var life_path_points: Dictionary
 
+var poem_taste: Dictionary
+
 var event_options: Dictionary
 
 
@@ -49,6 +51,7 @@ func _init() -> void:
 	msger_data = Util.create_dict_from_registry(load("res://data/tres_msger_data_registry.tres"))
 	tags = Util.create_dict_from_registry(load("res://data/tres_tags_registry.tres"))
 	event_options = Util.create_dict_from_registry(load("res://data/event_options_registry.tres"))
+	poem_taste = Util.create_dict_from_registry(load("res://data/poem_taste_registry.tres"))
 
 	# 🚨 使用DataHelper的static函数统一加载所有事件相关数据
 	var event_data = DataHelper.load_event_data()

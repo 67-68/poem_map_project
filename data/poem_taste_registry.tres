@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_c6kci")
 resources = {
-"uid://j2f2kdnnmpsf": "res://data/poem_taste/zhuoliu_basic_taste.tres"
+"zhuoliu_basic_taste": "res://data/poem_taste/zhuoliu_basic_taste.tres"
 }
