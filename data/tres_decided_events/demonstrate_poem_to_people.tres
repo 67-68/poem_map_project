@@ -1,4 +1,80 @@
-[gd_resource type="Resource" format=3 uid="uid://cfn6ui17cgjvi"]
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://cfn6ui17cgjvi"]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_vqqcp"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_1jb8q"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_23y6x"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_4hk4b"]
+[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="5_c52kh"]
+[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="6_hwjpt"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_a3yff"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="8_fv4wl"]
+
+[sub_resource type="Resource" id="Resource_p0xgq"]
+script = ExtResource("4_4hk4b")
+
+[sub_resource type="Resource" id="Resource_6omx0"]
+script = ExtResource("4_4hk4b")
+
+[sub_resource type="Resource" id="Resource_onmxa"]
+script = ExtResource("4_4hk4b")
+
+[sub_resource type="Resource" id="Resource_8y54r"]
+script = ExtResource("5_c52kh")
+accepted_result = SubResource("Resource_p0xgq")
+rejected_result = SubResource("Resource_onmxa")
+not_entered_result = SubResource("Resource_6omx0")
+
+[sub_resource type="Resource" id="Resource_j8aim"]
+script = ExtResource("6_hwjpt")
+poem_taste = SubResource("Resource_8y54r")
+key_to_get_poem_taste = "poem_taste"
+property_multiplication = 2.0
+metadata/_custom_type_script = "uid://w6wvp8tdisfu"
+
+[sub_resource type="Resource" id="Resource_po52o"]
+script = ExtResource("4_4hk4b")
+operators = Array[ExtResource("3_23y6x")]([SubResource("Resource_j8aim")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_i2cdq"]
+script = ExtResource("7_a3yff")
+choice_result = SubResource("Resource_po52o")
+description = "公开展示你的诗词"
+
+[sub_resource type="Resource" id="Resource_vqqcp"]
+script = ExtResource("4_4hk4b")
+
+[sub_resource type="Resource" id="Resource_1jb8q"]
+script = ExtResource("4_4hk4b")
+
+[sub_resource type="Resource" id="Resource_23y6x"]
+script = ExtResource("4_4hk4b")
+
+[sub_resource type="Resource" id="Resource_4hk4b"]
+script = ExtResource("5_c52kh")
+accepted_result = SubResource("Resource_vqqcp")
+rejected_result = SubResource("Resource_23y6x")
+not_entered_result = SubResource("Resource_1jb8q")
+
+[sub_resource type="Resource" id="Resource_c52kh"]
+script = ExtResource("6_hwjpt")
+poem_taste = SubResource("Resource_4hk4b")
+key_to_get_poem_taste = "poem_taste"
+metadata/_custom_type_script = "uid://w6wvp8tdisfu"
+
+[sub_resource type="Resource" id="Resource_hwjpt"]
+script = ExtResource("4_4hk4b")
+operators = Array[ExtResource("3_23y6x")]([SubResource("Resource_c52kh")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_2eq84"]
+script = ExtResource("7_a3yff")
+choice_result = SubResource("Resource_hwjpt")
+description = "私下展示你的诗词"
 
 [resource]
+script = ExtResource("8_fv4wl")
+options = Array[ExtResource("2_1jb8q")]([SubResource("Resource_i2cdq"), SubResource("Resource_2eq84")])
+uuid = "demonstrate_poem_to_people"
+name = "如何展示你的诗词？"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

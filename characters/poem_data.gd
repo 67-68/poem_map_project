@@ -31,8 +31,8 @@ func to_life_path_point_data() -> Dictionary:
         "uuid": self.uuid + "_point", # 必须有独立 ID
         "name": "创作：《" + self.name + "》",
         "description": self.description,
-        "owner_uuids": self.owner_uuids.duplicate(),
-        "tags": self.tags.duplicate(),
+        #"owner_uuids": self.owner_uuids.duplicate(),
+        #"tags": self.tags.duplicate(),
         
         # 2. 组装内部属性，对应我们之前修复的 props 解析逻辑
         "properties": {
@@ -50,9 +50,9 @@ func to_life_path_point_data() -> Dictionary:
     }
     
     # 3. 可以在这里打上额外的 Tag，方便 UI 识别
-    if not "poem_event" in data.tags:
-        data['tags'].append('poem %s' % uuid)
-        data['tags'].append('poem_creation')
+    #if not "poem_event" in data.tags:
+        #data['tags'].append('poem %s' % uuid)
+        #data['tags'].append('poem_creation')
         
     return data
 

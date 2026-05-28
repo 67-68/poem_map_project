@@ -1,4 +1,99 @@
-[gd_resource type="Resource" format=3 uid="uid://u8i1d00fkmyj"]
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://u8i1d00fkmyj"]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_05e10"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_dqmix"]
+[ext_resource type="Texture2D" uid="uid://q8jpjdabrdv5" path="res://assets/character/npc_merchant_hu.png" id="1_oh7o3"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_uuhpr"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_xxw6d"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_e6j6s"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_xxw6d"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_05e10"]
+[ext_resource type="Script" uid="uid://dp5gqdkppjq17" path="res://core/model/trait_operator.gd" id="7_e6j6s"]
+
+[sub_resource type="Resource" id="Resource_talds"]
+script = ExtResource("4_xxw6d")
+_property = 2
+value = -10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_v8dfx"]
+script = ExtResource("5_05e10")
+operators = Array[ExtResource("3_e6j6s")]([SubResource("Resource_talds")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_6hj5e"]
+script = ExtResource("1_dqmix")
+choice_result = SubResource("Resource_v8dfx")
+description = "我还能作诗换取生存！"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_mcu1v"]
+script = ExtResource("4_xxw6d")
+_property = 3
+value = -20
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_ja3he"]
+script = ExtResource("5_05e10")
+operators = Array[ExtResource("3_e6j6s")]([SubResource("Resource_mcu1v")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_5nl8i"]
+script = ExtResource("1_dqmix")
+choice_result = SubResource("Resource_ja3he")
+description = "我还能借贷换取生存！"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_rl708"]
+script = ExtResource("4_xxw6d")
+value = -50
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_w1rid"]
+script = ExtResource("4_xxw6d")
+_property = 1
+value = 10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_i2fgy"]
+script = ExtResource("4_xxw6d")
+_property = 4
+value = -20
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_5snkr"]
+script = ExtResource("4_xxw6d")
+_property = 2
+value = 15
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_ympse"]
+script = ExtResource("4_xxw6d")
+_property = 5
+value = -20
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_xxw6d"]
+script = ExtResource("7_e6j6s")
+_trait_key = 2
+metadata/_custom_type_script = "uid://dp5gqdkppjq17"
+
+[sub_resource type="Resource" id="Resource_jrqrb"]
+script = ExtResource("5_05e10")
+operators = Array[ExtResource("3_e6j6s")]([SubResource("Resource_rl708"), SubResource("Resource_w1rid"), SubResource("Resource_i2fgy"), SubResource("Resource_5snkr"), SubResource("Resource_ympse"), SubResource("Resource_xxw6d")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_rdfir"]
+script = ExtResource("1_dqmix")
+choice_result = SubResource("Resource_jrqrb")
+description = "我无路可退，被赶了出去"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
+script = ExtResource("2_uuhpr")
+options = Array[ExtResource("2_xxw6d")]([SubResource("Resource_6hj5e"), SubResource("Resource_5nl8i"), SubResource("Resource_rdfir")])
+uuid = "event_money_lower_0"
+name = "无钱生存"
+description = "老板上门收房租"
+icon = ExtResource("1_oh7o3")
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

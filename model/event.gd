@@ -8,4 +8,5 @@ class_name BaseEvent extends GameEntity
 
 func init(context: Dictionary) -> void:
     for o in options:
-        o.init(context)
+        if o:
+            o.init(context)

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_uxe4k"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="2_bhmo8"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_s3utn"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="3_h6kcb"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_uxe4k"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_h6kcb"]
 [ext_resource type="Script" uid="uid://stqrpfx5803j" path="res://core/operators/random_operator.gd" id="5_ibi4k"]
@@ -60,7 +61,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_s3utn")
-options = Array[ExtResource("2_bhmo8")]([SubResource("Resource_pogwl"), SubResource("Resource_dqs6p")])
+options = Array[ExtResource("3_h6kcb")]([SubResource("Resource_pogwl"), SubResource("Resource_dqs6p")])
 uuid = "event_money_lower_0_wandering"
 name = "退无可退"
 description = "实在没有地方住了..."

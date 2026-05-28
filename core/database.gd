@@ -113,6 +113,9 @@ func _register_chat_with_time_service() -> void:
 func find_triggerable_item(uuid: String):
 	if normal_poem_events.get(uuid):
 		return normal_poem_events[uuid]
+	for r in random_events:
+		if random_events.get(r).get(uuid):
+			return random_events.get(r).get(uuid)
 	if poem_data.get(uuid):
 		return poem_data[uuid]
 	if msger_data.get(uuid):
