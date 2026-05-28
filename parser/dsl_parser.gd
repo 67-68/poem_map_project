@@ -28,7 +28,7 @@ static func _get_row_depth(row: Dictionary) -> int:
 #   其他 key:value     -> 自定义模板参数
 static func parse_context(context_str: String) -> Dictionary:
     var result = {
-        "trigger_tags": [],
+        "trigger_tags": [] as Array[String],  # 🚨 必须用类型化 Array，否则 Godot 4 拒绝赋值给 Array[String] 变量
         "weight": 10.0,
         "background": "",
         "custom_params": {}

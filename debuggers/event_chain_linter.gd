@@ -172,7 +172,8 @@ func creates_adjacency_list(events: Array) -> Dictionary:
             if o == null:
                 printerr("⚠️ Event has null option: event_uuid=%s" % e.uuid)
                 continue
-            var req = o.requirements
+            # 🚨 兼容两种命名：EventOption 用 requirement，PropertyOption/CustomEventOption 用 requirements
+            var req = o.get("requirement") if "requirement" in o else (o.get("requirements") if "requirements" in o else null)
             if req:
                 var flags = req.get_referenced_flags()
                 if flags:

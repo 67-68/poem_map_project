@@ -67,8 +67,9 @@ func start_sync_queue() -> void:
 # 性能过剩到可以忽略不计 🤓☝️。主要是为了保证下一个表的 template URN
 # 能通过 registry 找到当前表刚保存的 .tres 文件。
 # 如果哪天你觉得同步太慢，99.99% 是网络问题，不是这里的问题 💀
-func _regenerate_registries() -> void:
-    print("\n===== 刷新resources registry文件 =====")
+func _regenerate_registries(silent: bool = false) -> void:
+    if not silent:
+        print("\n===== 刷新resources registry文件 =====")
     var registry_creator_script = load("res://resources_registry_creator.gd")
     if not registry_creator_script:
         push_error("无法加载resources_registry_creator.gd，跳过registry刷新 💀")
@@ -77,8 +78,10 @@ func _regenerate_registries() -> void:
     var registry_creator = registry_creator_script.new()
     registry_creator.overwrite_existing = true
     registry_creator.skip_files_without_uuid = true
+    registry_creator.verbose = not silent  # 🚨 静默模式下关闭registry创建器的详细输出
     registry_creator.create_all_registries()
-    print("===== Resources registry刷新完成 =====\n")
+    if not silent:
+        print("===== Resources registry刷新完成 =====\n")
 
 # 处理下一个任务
 func process_next_job() -> void:
@@ -278,8 +281,9 @@ func fetch_events_from_cloud(url: String, save_path: String = "res://tests/", da
     var tres_save_path = save_path.get_base_dir() + "/"
     save_resources_to_tres(resources, tres_save_path)
 
-    # 🚨 立即刷新registry，确保下一个表的 template URN 能找到本表刚保存的 .tres
-    _regenerate_registries()
+    # 🚨 立即静默刷新registry，确保下一个表的 template URN 能找到本表刚保存的 .tres
+    # 只有最后一次全量同步完成后才输出日志，中间刷新静默执行
+    _regenerate_registries(true)
 
     print("云端数据注入成功！系统活过来了 🤓☝️")
 

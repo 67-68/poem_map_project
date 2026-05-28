@@ -70,11 +70,16 @@ static func parse_trait_requirement(data: String) -> BaseRequirements:
         return null
 
 # 解析标志位触发条件，如：flag:bool:has:xxx, flag:str:is:xxx, flag:int:>xxx
+# 格式：flag:TYPE:OPERATOR:FLAG_ID
+#   bool: flag:bool:has:chain_strange_poet_1  → 检查该 flag 是否 true
+#   bool: flag:bool:not_has:chain_strange_poet_1 → 检查该 flag 是否 false/不存在
+#   str:  flag:str:is:some_flag_id             → 比较该 flag 的 str 值
+#   int:  flag:int:>:some_flag_id              → 该 flag 的 int 值 > 0（注意：int 类型的 flag_id 在 :>: 之后）
 static func parse_flag_requirement(data: String) -> FlagRequirement:
     var parts = data.split(':')
-    # if parts.size() != 4:
-    #     push_error("Invalid flag requirement format: %s, expected: flag:type:operator:value" % data)
-    #     return null
+    if parts.size() < 4:
+        push_error("Invalid flag requirement format: %s, expected: flag:type:operator:flag_id" % data)
+        return null
 
     if parts[0] != "flag":
         push_error("Flag requirement must start with 'flag:', got: %s" % data)
@@ -82,10 +87,11 @@ static func parse_flag_requirement(data: String) -> FlagRequirement:
 
     var flag_type = parts[1]
     var operator_str = parts[2]
-    var value = parts[3]
+    var flag_id = parts[3]
 
     var req = FlagRequirement.new()
     req.type = flag_type
+    req.flag_id = flag_id  # 🚨 之前缺了这一行！flag_id 从未被赋值 → compare() 永远找不到 flag 💀
 
     match flag_type:
         "bool":
@@ -101,23 +107,19 @@ static func parse_flag_requirement(data: String) -> FlagRequirement:
         "str":
             if operator_str == "is":
                 req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
-                req.value = value
+                req.value = flag_id
             elif operator_str == "is_not":
                 req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
-                req.value = value
+                req.value = flag_id
             else:
                 push_error("Invalid str flag operator: %s, expected 'is' or 'is_not'" % operator_str)
                 return null
         "int":
-            if operator_str == ">":
-                req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
-                req.value = value.to_int()
-            elif operator_str == "<":
-                req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
-                req.value = value.to_int()
-            else:
-                push_error("Invalid int flag operator: %s, expected '>' or '<'" % operator_str)
-                return null
+            # TODO: int flag requirement 的 DSL 格式目前有歧义
+            # 当前格式 flag:int:>:VALUE 中 parts[3] 是数值而非 flag_id
+            # 未来需要改为 flag:int:>:FLAG_ID:VALUE（5段）或重新设计
+            push_error("int flag requirement format is not fully supported yet, flag_id would be ambiguous: %s" % data)
+            return null
         _:
             push_error("Invalid flag type: %s, expected 'bool', 'str', or 'int'" % flag_type)
             return null
