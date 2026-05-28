@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://wg0ntxkxj6bb"]
 
 [ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_yctuc"]
-[ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="2_bnl0p"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="3_dmfue"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="4_p3g8r"]
 [ext_resource type="Script" uid="uid://c1xtlrwjbpgns" path="res://core/operators/flag_replace_operator.gd" id="5_v127v"]
@@ -10,31 +9,29 @@
 [ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="8_05sfx"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_qn5so"]
 
-[sub_resource type="Resource" id="Resource_yctuc"]
+[sub_resource type="Resource" id="Resource_um4q5"]
 script = ExtResource("5_v127v")
 to_be_replaced_flag_id = "chain_strange_poet_3"
 replace_with_flag_id = "chain_strange_poet_1"
 
-[sub_resource type="Resource" id="Resource_bnl0p"]
+[sub_resource type="Resource" id="Resource_yctuc"]
 script = ExtResource("6_sksol")
-operators = Array[ExtResource("4_p3g8r")]([SubResource("Resource_yctuc")])
+operators = Array[ExtResource("4_p3g8r")]([SubResource("Resource_um4q5")])
+
+[sub_resource type="Resource" id="Resource_bnl0p"]
+script = ExtResource("7_20sti")
+choice_result = SubResource("Resource_yctuc")
+uuid = null
 
 [sub_resource type="Resource" id="Resource_dmfue"]
-script = ExtResource("7_20sti")
-choice_result = SubResource("Resource_bnl0p")
-description = "义薄云天！"
-
-[sub_resource type="Resource" id="Resource_p3g8r"]
 script = ExtResource("8_05sfx")
 type = "bool"
 value = true
 
 [resource]
 script = ExtResource("9_qn5so")
-weight = 20.0
-requirement = SubResource("Resource_p3g8r")
-options = Array[ExtResource("3_dmfue")]([SubResource("Resource_dmfue")])
+requirement = SubResource("Resource_dmfue")
+options = Array[ExtResource("3_dmfue")]([SubResource("Resource_bnl0p")])
 uuid = "libai_after"
 name = "奇怪的诗人4"
 description = "他专门来感谢我"
-icon = ExtResource("2_bnl0p")

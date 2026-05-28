@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://6ugcgc78tady"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_b1r5t"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_csf03"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_1i42k"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_nytqg"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_3d6t2"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_5klea"]
 
 [resource]
-script = ExtResource("1_b1r5t")
+script = ExtResource("1_nytqg")
 topic = "RELATION"
 specific_topic = "CORE"
 _relate_to = 7

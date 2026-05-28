@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dol7rwike8l5q"]
 
 [ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_5s44e"]
-[ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="2_2pit8"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="3_mphfj"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="4_ikgwt"]
 [ext_resource type="Script" uid="uid://c1xtlrwjbpgns" path="res://core/operators/flag_replace_operator.gd" id="5_upoqr"]
@@ -10,31 +9,29 @@
 [ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="8_r2ldn"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_tksti"]
 
-[sub_resource type="Resource" id="Resource_5s44e"]
+[sub_resource type="Resource" id="Resource_4dtpe"]
 script = ExtResource("5_upoqr")
 to_be_replaced_flag_id = "chain_strange_poet_1"
 replace_with_flag_id = "chain_strange_poet_2"
 
-[sub_resource type="Resource" id="Resource_2pit8"]
+[sub_resource type="Resource" id="Resource_5s44e"]
 script = ExtResource("6_1cobc")
-operators = Array[ExtResource("4_ikgwt")]([SubResource("Resource_5s44e")])
+operators = Array[ExtResource("4_ikgwt")]([SubResource("Resource_4dtpe")])
+
+[sub_resource type="Resource" id="Resource_2pit8"]
+script = ExtResource("7_1ylg4")
+choice_result = SubResource("Resource_5s44e")
+uuid = null
 
 [sub_resource type="Resource" id="Resource_mphfj"]
-script = ExtResource("7_1ylg4")
-choice_result = SubResource("Resource_2pit8")
-description = "担忧的打量着他"
-
-[sub_resource type="Resource" id="Resource_ikgwt"]
 script = ExtResource("8_r2ldn")
 type = "bool"
 value = true
 
 [resource]
 script = ExtResource("9_tksti")
-weight = 20.0
-requirement = SubResource("Resource_ikgwt")
-options = Array[ExtResource("3_mphfj")]([SubResource("Resource_mphfj")])
+requirement = SubResource("Resource_mphfj")
+options = Array[ExtResource("3_mphfj")]([SubResource("Resource_2pit8")])
 uuid = "the_man_got_power"
 name = "奇怪的诗人2"
 description = "他看起来很醉"
-icon = ExtResource("2_2pit8")

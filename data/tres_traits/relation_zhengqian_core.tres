@@ -6,8 +6,8 @@
 
 [resource]
 script = ExtResource("1_3q2fi")
-topic = "relation"
-specific_topic = "core"
+topic = "RELATION"
+specific_topic = "CORE"
 _relate_to = 8
 uuid = "relation_zhengqian_core"
 name = "核心郑虔"
