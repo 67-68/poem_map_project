@@ -27,6 +27,10 @@
 ### 4. 架构与质量保证 (Architecture & QA)
 - `linter_architecture_refactoring.md` - Event Data Linter架构重构文档
 
+### 5. 资源标识层 (URN System)
+- `urn_system.md` - 统一资源名称标识符系统，定义所有数据类型的 URN 协议
+- `how_to_add_data_type.md` - 新增数据类型操作手册，列出需要改哪些文件
+
 ## 🛠️ 文档规范
 
 - 文件名使用下划线分隔，避免特殊字符和空格

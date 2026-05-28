@@ -23,6 +23,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [resource]
 resource_local_to_scene = true
 script = ExtResource("2_65t44")
+uuid = "poem_giving_option"
 choice_result = SubResource("Resource_w78wo")
 description = "献上诗词"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"

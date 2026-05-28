@@ -31,6 +31,8 @@ var flags: Dictionary
 
 var life_path_points: Dictionary
 
+var event_options: Dictionary
+
 
 func _init() -> void:
 	index_image = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
@@ -46,6 +48,7 @@ func _init() -> void:
 	poem_data = Util.create_dict_from_registry(load("res://data/tres_poem_data_registry.tres"))
 	msger_data = Util.create_dict_from_registry(load("res://data/tres_msger_data_registry.tres"))
 	tags = Util.create_dict_from_registry(load("res://data/tres_tags_registry.tres"))
+	event_options = Util.create_dict_from_registry(load("res://data/event_options_registry.tres"))
 
 	# 🚨 使用DataHelper的static函数统一加载所有事件相关数据
 	var event_data = DataHelper.load_event_data()
@@ -143,6 +146,8 @@ func find_triggerable_item(uuid: String):
 		return decisions[uuid]
 	if end_random_events.get(uuid):
 		return end_random_events[uuid]
+	if event_options.get(uuid):
+		return event_options[uuid]
 
 
 func load_actual_positions(mesh_size) -> void:

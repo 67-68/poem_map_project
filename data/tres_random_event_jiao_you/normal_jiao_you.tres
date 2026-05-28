@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="6_emotion_op"]
 [ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="7_emotion_cfg"]
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="8_emotion_req"]
-[ext_resource type="Resource" uid="uid://dxiut3f1uy6jb" path="res://resource_templates/poem_giving_option.tres" id="11_pd5yq"]
+[ext_resource type="Resource" uid="uid://dxiut3f1uy6jb" path="res://data/event_options/poem_giving_option.tres" id="11_pd5yq"]
 [ext_resource type="Resource" uid="uid://c5naghprqjnxr" path="res://data/tres_imaginaries/relation__friend.tres" id="12_imaginary_friend"]
 
 [sub_resource type="Resource" id="Resource_iht3e"]
