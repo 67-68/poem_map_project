@@ -1,12 +1,98 @@
 class_name DSLParser extends GDScript
 
-# 解析随机事件
+# ---------- 下推自动机辅助 ----------
+# 从 row 中提取深度标记（第一列的值，全为 > 字符）
+# 返回深度值：> → 1, >> → 2, >>> → 3
+static func _get_row_depth(row: Dictionary) -> int:
+    for key in row:
+        var val = row[key]
+        if val is String and not val.is_empty():
+            var all_gt = true
+            for c in val:
+                if c != '>':
+                    all_gt = false
+                    break
+            if all_gt:
+                return val.length()
+    return 0
+
+# 解析 context DSL 字段
+# 语法格式（用 | 分隔字段，避免与 tag 内部的逗号冲突）：
+#   tag:tagA:sub:cat:attr,tagB:sub:cat:attr|weight:15.5|background:(bg_rural_poor)|customKey:customValue
+# 已知字段:
+#   tag      -> 触发标签列表（逗号分隔多个 4 段式 tag）
+#   weight   -> 权重（float）
+#   background -> 背景图 URN（括号包裹）
+#   其他 key:value -> 自定义模板参数
+static func parse_context(context_str: String) -> Dictionary:
+    var result = {
+        "trigger_tags": [],
+        "weight": 10.0,
+        "background": "",
+        "custom_params": {}
+    }
+    
+    if context_str.is_empty():
+        return result
+    
+    # 用 | 作为字段分隔符，避免与 tag 内部的逗号冲突
+    var fields = context_str.split("|")
+    for field in fields:
+        field = field.strip_edges()
+        if field.is_empty():
+            continue
+        
+        # 找到第一个 : 作为 key/value 分界
+        var colon_idx = field.find(":")
+        if colon_idx == -1:
+            Logging.warn("Context 字段缺少 ':' 分隔符: %s" % field)
+            continue
+        
+        var key = field.substr(0, colon_idx).strip_edges().to_lower()
+        var value = field.substr(colon_idx + 1).strip_edges()
+        
+        match key:
+            "tag":
+                # 逗号分隔的多个 4 段式 tag
+                var tags = value.split(",")
+                for tag_str in tags:
+                    var clean_tag = tag_str.strip_edges()
+                    if not clean_tag.is_empty():
+                        # 用现有的 MicroDSLParser 验证标签格式
+                        var parsed = MicroDSLParser.parse_tags(clean_tag)
+                        if not parsed.is_empty():
+                            result.trigger_tags.append_array(parsed)
+                        else:
+                            # 即使是无效格式也直接存（保持宽容）
+                            result.trigger_tags.append(clean_tag)
+            
+            "weight":
+                var weight_val = value.to_float()
+                if weight_val == 0.0 and value != "0" and value != "0.0":
+                    Logging.warn("Context weight 解析失败: %s" % value)
+                else:
+                    result.weight = weight_val
+            
+            "background":
+                # 去掉括号包裹
+                if value.begins_with("(") and value.ends_with(")"):
+                    value = value.substr(1, value.length() - 2)
+                result.background = value
+            
+            _:
+                # 自定义模板参数
+                result.custom_params[key] = value
+    
+    return result
+
+# ---------- 事件/选项解析 ----------
+
+# 解析随机事件（row_type = 'random_event'）
 static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 检测空行
     if row.is_empty():
         return null
 
-    # 检测所有值都为空的行
     var has_content = false
     for key in row:
         var value = row[key]
@@ -17,21 +103,32 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     if not has_content:
         return null
 
-    var event = RandomEvent.new({}) # TODO: 这里可能出问题，我使用了一个普通的context代替本应有的context
-	
+    var event = RandomEvent.new({})
 
-    # 解析必需字段
-    var event_id = row.get('event_id')
-    if not event_id or event_id.is_empty():
-        push_error("Event_ID is required")
+    # 解析 uuid
+    var uuid = row.get('uuid')
+    if not uuid or uuid.is_empty():
+        push_error("UUID is required")
         return null
-    event.uuid = event_id
+    event.uuid = uuid
 
-    # 解析触发标签
-    var trigger_tags = row.get('trigger_tags')
-    if not trigger_tags or trigger_tags.is_empty():
-        print("Warning: trigger_tags is empty for event: %s" % event_id)
-    event._target_tags = MicroDSLParser.parse_tags(trigger_tags)
+    # 解析 context DSL
+    var context_str = row.get('context', '')
+    var context_data = parse_context(context_str)
+    
+    # 从 context 中提取触发标签
+    event._target_tags = context_data.trigger_tags
+    
+    # 从 context 中提取权重
+    event.weight = context_data.weight
+    
+    # TODO: 背景需要走 URN 解析系统，目前先用 TextureResLoader 兜底
+    var bg = context_data.background
+    if not bg.is_empty():
+        event.icon = TextureResLoader.get_background(bg)
+
+    # 从 context 中提取自定义参数，init 时 merge 进 context
+    event.custom_context_params = context_data.custom_params
 
     # 解析触发条件
     var requirements_str = row.get('requirements')
@@ -39,18 +136,57 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
         event.requirement = parse_requirements(requirements_str)
 
     # 解析表现层
-    event.name = row.get('title',"")
-    event.description = row.get('description',"")
+    event.name = row.get('title', "")
+    event.description = row.get('description', "")
 
-    # 解析选项
-    event.options = parse_options(row)
+    # 解析事件级别结果（即使不选选项也会执行）
+    var results_str = row.get('results')
+    if results_str and not results_str.is_empty():
+        event.event_result = parse_choice_result(results_str)
 
-    event.icon = parse_background(row.get('background', ""))
+    return event
 
-    # 解析权重（可选）
-    var weight_str = row.get('weight')
-    if weight_str and not weight_str.is_empty():
-        event.weight = weight_str.to_float()
+# 解析选项子行（row_type = 'option'，深度+1 的子行）
+# 选项行可以有自己的 context、requirements、results，
+# 解析结果作为一个独立的 RandomEvent 返回，由调用方决定如何挂载到父事件
+static func parse_option_row(row: Dictionary) -> RandomEvent:
+    if row.is_empty():
+        return null
+
+    var has_content = false
+    for key in row:
+        var value = row[key]
+        if value != null and not str(value).is_empty():
+            has_content = true
+            break
+
+    if not has_content:
+        return null
+
+    var event = RandomEvent.new({})
+
+    # 选项行也可能有 uuid（用于引用）
+    var uuid = row.get('uuid', '')
+    event.uuid = uuid
+
+    # 选项的 context
+    var context_str = row.get('context', '')
+    var context_data = parse_context(context_str)
+    event.custom_context_params = context_data.custom_params
+
+    # 选项的触发条件（通常是选择条件）
+    var requirements_str = row.get('requirements')
+    if requirements_str and not requirements_str.is_empty():
+        event.requirement = parse_requirements(requirements_str)
+
+    # 选项的标题/描述
+    event.name = row.get('title', "")
+    event.description = row.get('description', "")
+
+    # 选项的结果（选择后执行）
+    var results_str = row.get('results')
+    if results_str and not results_str.is_empty():
+        event.event_result = parse_choice_result(results_str)
 
     return event
 
@@ -465,37 +601,108 @@ static func validate_trait(trait_: Trait) -> bool:
 
     return true
 
+# ---------- 下推自动机：CSV行列解析 ----------
+
 # 批量解析CSV数据
+# random_event 类型使用下推自动机（Pushdown Automaton）解析层级结构
+# flags / trait 等扁平数据使用传统逐行解析
 static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "random_event") -> Array[Resource]:
     var resources: Array[Resource] = []
+    
+    # 非 random_event 类型走扁平解析
+    if data_type != "random_event":
+        return _parse_flat_data(csv_data, data_type)
+    
+    # ── random_event: 下推自动机 ──
+    var stack: Array[RandomEvent] = []  # 事件栈，维护当前解析层级
+    
+    for i in range(csv_data.size()):
+        var row = csv_data[i]
+        var depth = _get_row_depth(row)
+        var row_type = str(row.get("row_type", "")).strip_edges()
+        
+        if row_type.is_empty():
+            continue
+        
+        _pda_transition(stack, resources, depth, row_type, row, i)
+    
+    # 处理栈中剩余事件
+    _pda_flush_stack(stack, resources)
+    
+    return resources
 
+# 下推自动机状态转移函数
+# 维护一个事件栈，栈深度对应 CSV 的 > 层级：
+#   depth=0 → 顶层事件（random_event）
+#   depth=1 → 选项子行（option，挂载到栈顶事件）
+#   depth=N → 第N层嵌套
+# 弹出栈顶时，若栈变空则说明该顶层事件已完成，加入 resources
+static func _pda_transition(stack: Array[RandomEvent], resources: Array[Resource],
+                            depth: int, row_type: String, row: Dictionary, row_index: int) -> void:
+    # ── 第一步：根据深度调整栈 ──
+    # 如果栈深度 > 当前行深度，弹出栈顶事件
+    # 弹出后若栈为空，说明这是个顶层事件完成了
+    while stack.size() > depth:
+        var popped = stack.pop_back()
+        if stack.is_empty() and validate_event(popped):
+            resources.append(popped)
+    
+    # ── 第二步：根据 row_type 解析当前行并压栈/挂载 ──
+    match row_type:
+        "random_event":
+            var event = parse_random_event(row)
+            if event:
+                stack.push_back(event)
+        
+        "option":
+            if stack.is_empty():
+                push_error("下推自动机错误：option 行没有父事件 (row %d) 💀" % (row_index + 1))
+                return
+            
+            var opt_event = parse_option_row(row)
+            if opt_event:
+                var parent = stack.back()
+                var opt = EventOption.new()
+                opt.description = opt_event.name
+                opt.requirement = opt_event.requirement
+                opt.choice_result = opt_event.event_result
+                parent.options.append(opt)
+        
+        _:
+            Logging.warn("未知 row_type '%s' (row %d)" % [row_type, row_index + 1])
+
+# 清空栈，将尚未弹出的顶层事件加入 resources
+static func _pda_flush_stack(stack: Array[RandomEvent], resources: Array[Resource]) -> void:
+    while not stack.is_empty():
+        var event = stack.pop_back()
+        if stack.is_empty() and validate_event(event):
+            resources.append(event)
+
+# 扁平数据解析（flags / trait），逐行独立解析
+static func _parse_flat_data(csv_data: Array[Dictionary], data_type: String) -> Array[Resource]:
+    var resources: Array[Resource] = []
     for i in range(csv_data.size()):
         var row = csv_data[i]
         var resource: Resource = null
-
-        if data_type == "random_event":
-            var event = parse_random_event(row)
-            if event and validate_event(event):
-                resource = event
-            else:
-                print("Warning: Failed to parse event at row %d" % (i + 1))
-        elif data_type == "flags":
-            var flag = parse_flag(row)
-            if flag and validate_flag(flag):
-                resource = flag
-            else:
-                print("Warning: Failed to parse flag at row %d" % (i + 1))
-        elif data_type == "trait":
-            var trait_ = parse_trait(row)
-            if trait_ and validate_trait(trait_):
-                resource = trait_
-            else:
-                print("Warning: Failed to parse trait at row %d" % (i + 1))
-        else:
-            push_error("未知的 data_type: %s 💀" % data_type)
-            continue
-
+        
+        match data_type:
+            "flags":
+                var flag = parse_flag(row)
+                if flag and validate_flag(flag):
+                    resource = flag
+                else:
+                    print("Warning: Failed to parse flag at row %d" % (i + 1))
+            "trait":
+                var trait_ = parse_trait(row)
+                if trait_ and validate_trait(trait_):
+                    resource = trait_
+                else:
+                    print("Warning: Failed to parse trait at row %d" % (i + 1))
+            _:
+                push_error("未知的 data_type: %s 💀" % data_type)
+                continue
+        
         if resource:
             resources.append(resource)
-
+    
     return resources

@@ -291,5 +291,28 @@ static func strip_csv_array(data: Array):
 		float_res.append(float(result[0]))
 		float_res.append(float(result[1]))
 		return float_res
-	return data
+# 合并 context 字典：将 overlay 中的自定义参数合并到 base 中
+# 规则：
+#   - int/float 类型：base[key] *= overlay[key]（相乘）
+#   - 其他类型：breakpoint + push_error "not implemented"
+static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
+	if overlay.is_empty():
+		return base
+	
+	for key in overlay:
+		var overlay_val = overlay[key]
+		var base_val = base.get(key)
 		
+		if overlay_val is int or overlay_val is float:
+			# int/float → 相乘
+			if base_val is int or base_val is float:
+				base[key] = base_val * overlay_val
+			else:
+				# base 中没有/非数值 → 直接覆盖
+				base[key] = overlay_val
+		else:
+			# 非数值类型 → 还没实现，断点报错
+			breakpoint
+			push_error("merge_context: 未实现的 overlay 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
+	
+	return base

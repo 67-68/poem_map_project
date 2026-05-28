@@ -3,6 +3,20 @@ class_name RandomEvent extends BaseEvent
 # 那种在事件池随机抽取的
 @export var weight: float = 10.0
 @export var requirement: BaseRequirements
+# 事件级别的结果（即使不选任何选项也会执行）
+@export var event_result: ChoiceResult
+
+# 从 context DSL 解析出的自定义参数，init 时通过 merge_context 合并入 context
+var custom_context_params: Dictionary = {}
+
+func init(context: Dictionary) -> void:
+    # 将 CSV context 中的自定义参数合并进 init context
+    if not custom_context_params.is_empty():
+        Util.merge_context(context, custom_context_params)
+    
+    super.init(context)
+    if event_result:
+        event_result.init(context)
 
 # 会被使用time operator中的source tag匹配. 由于无法集合两个enum那就单独写再集合
 var target_tags: Array[String] = []:
