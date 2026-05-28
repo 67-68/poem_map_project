@@ -25,6 +25,7 @@ uuid = null
 
 [sub_resource type="Resource" id="Resource_dmfue"]
 script = ExtResource("8_05sfx")
+flag_id = "chain_strange_poet_3"
 type = "bool"
 value = true
 
