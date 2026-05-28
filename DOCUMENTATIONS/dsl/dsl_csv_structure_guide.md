@@ -159,13 +159,43 @@ row_type | template | uuid | context | requirements | title | description | resu
     - 示例: `deepseek:生成一段关于科举落榜的诗句`
 - **示例**: `prop:money:-100,trait:add:corrupt,flag:bool:add:flag_bribed`
 
+#### emotion_config (可选，仅 event 级别)
+- **类型**: `String`（DSL 情绪配置格式）
+- **描述**: 情绪的配置系统，用于配置条件→意象的映射关系。**目前仅 `random_event` 行解析此字段**，`option` 行会忽略并发出警告（虽然未来 option 可能也有自己的 config）。
+- **格式**: 多个配置用分号 `;` 分隔
+  ```
+  <imaginary_name> <- <conditions>
+  ```
+  - `<imaginary_name>` — 目标意象名称
+  - `<conditions>` — 触发条件，支持 `|`（OR）和 `&`（AND）组合
+  - 条件格式: `emotion:<emotion_name>:<operator><value>`
+- **示例**:
+  - `sorrow <- emotion:sorrow:>10`
+  - `joy <- emotion:joy:>20 | emotion:surprise:>5`
+  - `anger <- emotion:anger:>15&emotion:frustration:>8`
+- **注意**: 旧版 CSV 使用 `opt_X_emotion_config` 列（旧式 fallback 路径），新 PDA 行直接用 `emotion_config` 列
+
 ---
 
 ## 行层级系统（PDA 核心）
 
 ### 深度值推导规则
 
-解析器不直接读取 CSV 中的深度值（虽然支持），而是通过**缩进空格数**自动推导行深度：
+解析器通过以下两种方式推导行深度（优先级：`>` 前缀 > 缩进空格）：
+
+#### 方式一：`row_type` 列中的 `>` 前缀（推荐）
+在 `row_type` 值前加 `>` 字符表示深度层级，解析器会自动提取 `>` 数量作为 depth 值：
+
+| `row_type` 值 | 推导深度 | 角色 |
+|---------------|---------|------|
+| `random_event` | depth 0 | 事件根节点 |
+| `option` | depth 0 | 顶层选项（一般不这样用） |
+| `>option` | depth 1 | 一级选项 |
+| `>>option` | depth 2 | 二级选项（子选项） |
+| `>>>option` | depth 3 | 三级选项 |
+
+#### 方式二：缩进空格（传统方式）
+通过行首缩进空格数推导深度，适用于没有 `>` 前缀的传统格式：
 
 | 缩进前导空格 | 推导深度 | 角色 |
 |-------------|---------|------|
@@ -181,6 +211,7 @@ row_type | template | uuid | context | requirements | title | description | resu
 - depth > 0 的行，`row_type` 通常是 `option`
 - 每个事件可以有任意数量的选项（不再限于 6 个）
 - 选项可以嵌套（子选项）
+- 连续多个同 depth 的 option 行，通过 PDA 的 `while stack.size() > depth` 自然归为同一父事件的多个独立选项
 
 ### 表头行特殊处理
 
@@ -268,6 +299,36 @@ random_event,,d4e5f6a7-b8c9-0123-defa-456789012345,trigger_tags=action:enter:loc
 - 事件要求玩家已访问过皇宫（标志位条件）
 - 选项 A: 贿赂守卫，将低声誉标志替换为高声誉标志
 - 选项 B: 直接拜访，要求玩家称号为"官员"
+
+### 示例 5: 使用 emotion_config 的事件
+
+```csv
+row_type,template,uuid,context,requirements,title,description,results,emotion_config
+random_event,,e5f6a7b8-c9d0-1234-efab-567890123456,trigger_tags=actor:status:sad,weight=12.0,,雨夜思乡,窗外下着雨，你独坐房中，心中涌起思乡之情。,,sorrow <- emotion:sorrow:>10;homesick <- emotion:sorrow:>20&emotion:loneliness:>5
+  option,,,,,,借酒浇愁,,prop:health:-10,prop:money:-20
+  option,,,,,,写诗抒怀,,prop:literary_fame:+15
+```
+
+**解析**:
+- `emotion_config` 定义了两个情绪-意象映射：
+  - `sorrow <- emotion:sorrow:>10` — 当 sorrow > 10 时触发 sorrow 意象
+  - `homesick <- emotion:sorrow:>20&emotion:loneliness:>5` — 当 sorrow > 20 且 loneliness > 5 时触发 homesick 意象
+- 选项行没有 `emotion_config`（写了也会被忽略并 warn）
+
+### 示例 6: 使用 `>` 深度前缀（简写格式）
+
+```csv
+row_type,template,uuid,context,requirements,title,description,results
+random_event,,f6a7b8c9-d0e1-2345-fabc-678901234567,trigger_tags=action:travel:mode:road,weight=10.0,,山间偶遇,你在山间小路上遇到了一个采药的老者。,
+>option,,,,,,虚心请教,,prop:wisdom:+10
+>option,,,,,,购买草药,prop:money:>30,prop:money:-30,prop:health:+15
+>option,,,,,,匆匆赶路,,,
+```
+
+**解析**:
+- `>option` 中的 `>` 表示 depth 1（等同于前面加两个空格缩进）
+- 连续三个 `>option` 行都是同一事件的独立选项
+- 比起缩进空格，`>` 前缀在视觉上更清晰，尤其适合短行
 
 ---
 
