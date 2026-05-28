@@ -81,19 +81,21 @@ row_type | template | uuid | context | requirements | title | description | resu
 #### context (可选)
 - **类型**: `String`（DSL 上下文语法）
 - **描述**: 包含事件/选项的上下文信息，如触发标签、权重、背景、自定义参数等
-- **格式**: 逗号分隔的键值对
+- **格式**: 用 `|`（管道符）分隔的键值对（避免与标签内部的冒号 `:` 冲突）
   ```
-  trigger_tags=<tag_syntax>,weight=<float>,background=<string>,custom_params=<json>
+  trigger_tags=<tag_syntax>|weight=<float>|background=<string>|custom_params=<json>
   ```
+  > 也兼容旧的 `tag:` 格式（冒号 `:` 作为 kv 分隔符）
 - **字段说明**:
-  - `trigger_tags` — 触发标签，格式见下文
+  - `trigger_tags` / `tag` — 触发标签，格式见下文
   - `weight` — 事件权重，影响随机池中的出现概率
   - `background` — 背景图片资源名
   - `custom_params` — JSON 格式的自定义参数（可选）
-- **示例**: 
-  - `trigger_tags=actor:status:temporary:drunk,weight=15.5,background=bg_rural_poor`
+- **示例**:
+  - `trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor`
   - `trigger_tags=action:intent:study:poetry`
-- **注意**: 字段内不要有多余空格
+  - （旧格式）`tag:actor:status:temporary:drunk|weight:15.5|background:(bg_rural_poor)`
+- **注意**: 字段内不要有多余空格；推荐使用 `|` 作为字段分隔符和 `=` 作为 kv 分隔符的新格式
 
 ##### 触发标签格式 (trigger_tags)
 
@@ -103,8 +105,13 @@ row_type | template | uuid | context | requirements | title | description | resu
   - 示例: `actor:status:temporary:drunk`, `city:econ:level:prosperous`
 - **三段式（兼容）**: `domain:category:value`
   - 示例: `actor:status:drunk`, `city:econ:prosperous`
-- **多个标签**: 用逗号分隔
-  - 示例: `actor:status:temporary:drunk,city:econ:level:prosperous`
+- **多个标签（推荐）**: 使用方括号包裹的逗号分隔列表
+  - 格式: `trigger_tags=[tag1,tag2,tag3]`
+  - 示例: `trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]`
+  - 方括号语法在 `context` 字段中能避免歧义，是推荐用法
+- **多个标签（旧格式）**: 直接在值中用逗号分隔
+  - 示例: `trigger_tags=actor:status:temporary:drunk,city:econ:level:prosperous`
+  - 注意：旧格式在 context 字段中可能与字段分隔符混淆，建议迁移到方括号语法
 
 **支持的 Domain**:
 | Domain | 描述 |
@@ -240,11 +247,14 @@ row_type | template | uuid | context | requirements | title | description | resu
 
 ## 完整示例解析
 
+> **注意**：context 字段内部使用 `|` 作为字段分隔符（避免与标签内的 `,` 冲突）。
+> 所有示例中的 context 值在写入真实 CSV 时，如果包含逗号需要用双引号包裹。
+
 ### 示例 1: 简单事件（新式表头）
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,a1b2c3d4-e5f6-7890-abcd-ef1234567890,trigger_tags=action:intent:study:poetry,,简单诗会,参加一个简单的诗会活动,,
+random_event,,a1b2c3d4-e5f6-7890-abcd-ef1234567890,trigger_tags=[action:intent:study:poetry],,简单诗会,参加一个简单的诗会活动,,
   option,,,,,参与,,prop:literary_fame:+10
 ```
 
@@ -252,12 +262,13 @@ random_event,,a1b2c3d4-e5f6-7890-abcd-ef1234567890,trigger_tags=action:intent:st
 - depth 0: 事件 `简单诗会`，触发标签 `action:intent:study:poetry`
 - depth 1: 选项 `参与`，无门槛，文学名声 +10
 - 注意选项行前面的**两个空格**表示 depth 1
+- context 中 `trigger_tags=[...]` 的方括号语法清晰指明了标签列表的边界
 
 ### 示例 2: 使用模板的事件
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901-bcde-f23456789012,trigger_tags=actor:status:temporary:drunk,prop:money:>50,,长安酒馆奇遇,你在长安的酒馆中遇到了一个神秘人。,
+random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901-bcde-f23456789012,trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor,prop:money:>50,,长安酒馆奇遇,你在长安的酒馆中遇到了一个神秘人。,
   option,,,,,塞钱贿赂,prop:money:>100,prop:money:-100,trait:add:corrupt
   option,,,,,与之对诗,prop:literary_fame:>20,prop:literary_fame:+15
 ```
@@ -269,12 +280,13 @@ random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901
   - 这里 `context`、`title`、`description` 覆盖了模板的对应字段
   - UUID 被替换为 `b2c3d4e5-...`
 - 两个选项是在 CSV 行中**新增**的，不会替换模板的选项（它们会被合并）
+- context 使用 `|` 分隔多个字段，通过 `[...]` 包裹多个标签
 
 ### 示例 3: 多选项事件 + 复杂 context
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,c3d4e5f6-a7b8-9012-cdef-345678901234,trigger_tags=action:travel:mode:road,weight=8.0,background=bg_mountain,prop:health:>30,山贼拦路,在山路上遇到了山贼。,
+random_event,,c3d4e5f6-a7b8-9012-cdef-345678901234,trigger_tags=[action:travel:mode:road]|weight=8.0|background=bg_mountain,prop:health:>30,山贼拦路,在山路上遇到了山贼。,
   option,,,,,武力反抗,prop:strength:>40,prop:health:-20,prop:prestige:+10,trait:add:brave
   option,,,,,交钱保命,prop:money:>50,prop:money:-50
   option,,,,,智取脱身,prop:intel:>35,prop:intel:+10,prop:prestige:+15
@@ -282,7 +294,7 @@ random_event,,c3d4e5f6-a7b8-9012-cdef-345678901234,trigger_tags=action:travel:mo
 ```
 
 **解析**:
-- context 中包含多个字段：`trigger_tags`、`weight`、`background`，用逗号分隔
+- context 中包含多个字段：`trigger_tags`、`weight`、`background`，用 `|` 分隔
 - 4 个选项，每个有不同的条件和结果
 - 每个选项行前有 2 个空格缩进
 
@@ -290,7 +302,7 @@ random_event,,c3d4e5f6-a7b8-9012-cdef-345678901234,trigger_tags=action:travel:mo
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,d4e5f6a7-b8c9-0123-defa-456789012345,trigger_tags=action:enter:location:palace,flag:bool:has:flag_player_visited_palace,再次进宫,你再次来到皇宫。,
+random_event,,d4e5f6a7-b8c9-0123-defa-456789012345,trigger_tags=[action:enter:location:palace],flag:bool:has:flag_player_visited_palace,再次进宫,你再次来到皇宫。,
   option,,,,,贿赂守卫,prop:money:>50,prop:money:-50,flag:bool:flag_has_low_reputation->flag_has_high_reputation
   option,,,,,直接拜访,flag:str:is:flag_player_title:官员,prop:prestige:+20
 ```
@@ -304,7 +316,7 @@ random_event,,d4e5f6a7-b8c9-0123-defa-456789012345,trigger_tags=action:enter:loc
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results,emotion_config
-random_event,,e5f6a7b8-c9d0-1234-efab-567890123456,trigger_tags=actor:status:sad,weight=12.0,,雨夜思乡,窗外下着雨，你独坐房中，心中涌起思乡之情。,,sorrow <- emotion:sorrow:>10;homesick <- emotion:sorrow:>20&emotion:loneliness:>5
+random_event,,e5f6a7b8-c9d0-1234-efab-567890123456,trigger_tags=[actor:status:sad]|weight=12.0,,雨夜思乡,窗外下着雨，你独坐房中，心中涌起思乡之情。,,sorrow <- emotion:sorrow:>10;homesick <- emotion:sorrow:>20&emotion:loneliness:>5
   option,,,,,,借酒浇愁,,prop:health:-10,prop:money:-20
   option,,,,,,写诗抒怀,,prop:literary_fame:+15
 ```
@@ -319,7 +331,7 @@ random_event,,e5f6a7b8-c9d0-1234-efab-567890123456,trigger_tags=actor:status:sad
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,f6a7b8c9-d0e1-2345-fabc-678901234567,trigger_tags=action:travel:mode:road,weight=10.0,,山间偶遇,你在山间小路上遇到了一个采药的老者。,
+random_event,,f6a7b8c9-d0e1-2345-fabc-678901234567,trigger_tags=[action:travel:mode:road]|weight=10.0,,山间偶遇,你在山间小路上遇到了一个采药的老者。,
 >option,,,,,,虚心请教,,prop:wisdom:+10
 >option,,,,,,购买草药,prop:money:>30,prop:money:-30,prop:health:+15
 >option,,,,,,匆匆赶路,,,
@@ -329,6 +341,22 @@ random_event,,f6a7b8c9-d0e1-2345-fabc-678901234567,trigger_tags=action:travel:mo
 - `>option` 中的 `>` 表示 depth 1（等同于前面加两个空格缩进）
 - 连续三个 `>option` 行都是同一事件的独立选项
 - 比起缩进空格，`>` 前缀在视觉上更清晰，尤其适合短行
+
+### 示例 7: 多标签事件（使用方括号语法）
+
+```csv
+row_type,template,uuid,context,requirements,title,description,results
+random_event,,g7a8b9c0-d1e2-3456-fbcd-789012345678,trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:study:poetry]|weight=20.0|background=bg_rural_poor,prop:money:>30,,长安诗会,长安城正在举办一年一度的诗会，各地文人雅士齐聚一堂。,
+>option,,,,,,即兴赋诗,prop:literary_fame:>15,prop:literary_fame:+25,prop:prestige:+10
+>option,,,,,,以酒会友,prop:money:>50,prop:money:-30,trait:add:sociable
+>option,,,,,,旁听学习,,prop:wisdom:+5
+```
+
+**解析**:
+- 三个触发标签用方括号 `[...]` 包裹，逗号分隔，边界清晰无歧义
+- 方括号语法在 context 字段中尤为重要：因为 context 本身也用 `|` 分隔字段，
+  标签列表用 `[...]` 包裹后，解析器能准确识别标签的起止位置
+- 解析器会剥离方括号，将内部逗号分隔的标签逐一解析，通过 `MicroDSLParser.parse_tags()` 验证格式
 
 ---
 

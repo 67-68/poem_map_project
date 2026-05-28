@@ -19,11 +19,13 @@ static func _get_row_depth(row: Dictionary) -> int:
 # 解析 context DSL 字段
 # 语法格式（用 | 分隔字段，避免与 tag 内部的逗号冲突）：
 #   tag:tagA:sub:cat:attr,tagB:sub:cat:attr|weight:15.5|background:(bg_rural_poor)|customKey:customValue
+# 也支持 = 作为 kv 分隔符（文档推荐格式）：
+#   trigger_tags=[tagA:sub:cat:attr,tagB:sub:cat:attr]|weight=15.5|background=bg_rural_poor
 # 已知字段:
-#   tag      -> 触发标签列表（逗号分隔多个 4 段式 tag）
-#   weight   -> 权重（float）
-#   background -> 背景图 URN（括号包裹）
-#   其他 key:value -> 自定义模板参数
+#   tag / trigger_tags -> 触发标签列表（支持 [tag1,tag2] 方括号语法）
+#   weight             -> 权重（float）
+#   background         -> 背景图 URN
+#   其他 key:value     -> 自定义模板参数
 static func parse_context(context_str: String) -> Dictionary:
     var result = {
         "trigger_tags": [],
@@ -42,17 +44,26 @@ static func parse_context(context_str: String) -> Dictionary:
         if field.is_empty():
             continue
         
-        # 找到第一个 : 作为 key/value 分界
+        # 优先用 = 作为 kv 分隔符（文档推荐格式），fallback 到 :（旧格式兼容）
+        var eq_idx = field.find("=")
         var colon_idx = field.find(":")
-        if colon_idx == -1:
-            Logging.warn("Context 字段缺少 ':' 分隔符: %s" % field)
+        var kv_split = -1
+        if eq_idx != -1:
+            kv_split = eq_idx
+        elif colon_idx != -1:
+            kv_split = colon_idx
+        else:
+            print("Warning: Context 字段缺少分隔符 (= 或 :): %s" % field)
             continue
         
-        var key = field.substr(0, colon_idx).strip_edges().to_lower()
-        var value = field.substr(colon_idx + 1).strip_edges()
+        var key = field.substr(0, kv_split).strip_edges().to_lower()
+        var value = field.substr(kv_split + 1).strip_edges()
         
         match key:
-            "tag":
+            "tag", "trigger_tags":
+                # 支持方括号语法: [tag1,tag2] — 剥离括号再按逗号拆分
+                if value.begins_with("[") and value.ends_with("]"):
+                    value = value.substr(1, value.length() - 2)
                 # 逗号分隔的多个 4 段式 tag
                 var tags = value.split(",")
                 for tag_str in tags:
@@ -69,12 +80,12 @@ static func parse_context(context_str: String) -> Dictionary:
             "weight":
                 var weight_val = value.to_float()
                 if weight_val == 0.0 and value != "0" and value != "0.0":
-                    Logging.warn("Context weight 解析失败: %s" % value)
+                    print("Warning: Context weight 解析失败: %s" % value)
                 else:
                     result.weight = weight_val
             
             "background":
-                # 去掉括号包裹
+                # 去掉括号包裹（兼容旧格式 (bg_name)）
                 if value.begins_with("(") and value.ends_with(")"):
                     value = value.substr(1, value.length() - 2)
                 result.background = value
