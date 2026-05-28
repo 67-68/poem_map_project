@@ -294,7 +294,8 @@ static func strip_csv_array(data: Array):
 # 合并 context 字典：将 overlay 中的自定义参数合并到 base 中
 # 规则：
 #   - int/float 类型：base[key] *= overlay[key]（相乘）
-#   - String 类型：尝试 to_float() 转换，成功则按乘法叠加，失败则报错
+#   - String 类型：尝试 to_float() 转换，成功则按乘法叠加（数值 context 相乘），失败则直接存为字符串值
+#     （因为 DSL 解析出的 custom_params 中可能存在非数值描述字段，必须携带过去，不能 drop）
 #   - 其他类型：breakpoint + push_error "not implemented"
 static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 	if overlay.is_empty():
@@ -304,29 +305,37 @@ static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 		var overlay_val = overlay[key]
 		var base_val = base.get(key)
 		
-		# String → 尝试转 float（DSL 解析出的 custom_params 是字符串）
+		# --- String 类型处理 ---
+		# DSL 解析出的 custom_params 全是字符串，需要区分"数字字符串"和"文本字符串"
 		if overlay_val is String:
+			breakpoint
 			var float_val = overlay_val.to_float()
-			if float_val == 0.0 and overlay_val != "0" and overlay_val != "0.0":
-				# 转不出来，报错
-				#breakpoint
-				Logging.warn("merge_context: 无法将 overlay 值转为数值. key=%s, value=%s" % [key, overlay_val])
-				continue
+			var is_numeric = float_val != 0.0 or overlay_val == "0" or overlay_val == "0.0"
+			
+			if is_numeric:
+				# 能转数字 → 按数值乘法叠加（或覆盖）
+				Logging.info("merge_context: 数值字符串合并. key=%s, value=%s" % [key, overlay_val])
+				if base_val is int or base_val is float:
+					base[key] = base_val * float_val
+				else:
+					# base 中没有/非数值 → 直接存浮点数
+					base[key] = float_val
 			else:
-				Logging.info("merge_context: 添加了一个string 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
+				# 不能转数字 → 直接存字符串（携带文本描述字段，不能 drop）
+				Logging.info("merge_context: 文本字符串合并. key=%s, value=%s" % [key, overlay_val])
 				base[key] = overlay_val
-			overlay_val = float_val
+			
+			continue  # String 处理完毕，跳到下一个 key
 		
+		# --- int/float 类型处理 ---
 		if overlay_val is int or overlay_val is float:
-			# int/float → 相乘
 			if base_val is int or base_val is float:
 				base[key] = base_val * overlay_val
 			else:
-				# base 中没有/非数值 → 直接覆盖
 				base[key] = overlay_val
-		else:
-			# 非数值类型 → 还没实现，断点报错
-			#breakpoint
-			push_error("merge_context: 未实现的 overlay 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
+			continue
+		
+		# --- 其他类型 → 报错（未实现） ---
+		push_error("merge_context: 未实现的 overlay 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
 	
 	return base

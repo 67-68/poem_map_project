@@ -267,3 +267,49 @@ CSV 中 `>option` 行指定 `template=urn:event_option:poem_giving_option` 时�
 
 ### 修复文件
 - <ref_file file="/Users/lennon/Projects/poem_map_project/resources_registry_creator.gd" />
+
+## 2026-05-28: MenuStartOperator 参数遮蔽成员变量导致 context 丢失
+
+### 问题描述
+事件链中积累的 context 数据在 `MenuStartOperator.operate()` 发射下一个事件时全部丢失，下游事件收到的 `context` 始终是 `{}`（空字典）。
+
+具体表现为：前一个 event/operator 在 context 中设置的键值对（如 `stamina`、`power` 等修改后的数值），到了下一个事件 init 时全部消失。
+
+### 根本原因
+GDScript 中，函数参数与成员变量同名时，参数优先（shadowing）。
+
+```gdscript
+var context: Dictionary          # 成员变量，默认 {}
+
+func init(context: Dictionary):  # ← 参数 context 遮蔽了 self.context
+    context[key] = resource      # 修改的是参数（按引用传，原调用方 dict 确实被改了）
+    return context               # 返回的也是参数
+                                  # self.context 从未被赋值！
+
+func operate():
+    emit(next_event_key, context) # 引用的始终是成员变量，一直为 {}
+```
+
+- `init(context: Dictionary)` 的**参数** `context` 遮蔽了**成员变量** `context`
+- `context[key] = resource` 修改的是参数 dict（按引用传递），不是成员变量
+- `self.context` 从未被赋值，始终是 `{}`
+- `operate()` 发射下一个事件时用的成员变量 → 传出去的是空字典
+
+### 第二层问题：无条件覆盖
+`init` 中 `context[key_of_resource_in_context] = resource_to_put_in_context` 没有做任何保护性检查：
+- 如果 `resource_to_put_in_context` 为 null → 在 context 中设了一个 null 值
+- 没有检查传入 context 是否已有数据，也不做 logging
+
+### 影响范围
+- 所有通过 `MenuStartOperator` 跳转的事件链
+- `ChoiceResult.init()` → `MenuStartOperator.init()` 链路积累的所有 context 数据（resource、modifier 等）
+- 下游 RandomEvent 的 `merge_context()` 永远基于空字典叠加，效果归零
+
+### 修复方案
+1. **参数遮蔽修复**：所有路径上添加 `self.context = context`，确保成员变量始终持有正确的引用
+2. **保护逻辑**（你要求）：if 传入 context 非空 && 自身无 resource → `self.context = context` 直接保留，不覆盖
+3. **日志**：添加 resource 时记录旧值/新值；跳过时记录原因
+4. **移除断点**：去掉 `breakpoint`
+
+### 修复文件
+- <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/menu_start_operator.gd" />

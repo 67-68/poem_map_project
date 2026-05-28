@@ -6,7 +6,7 @@ class_name PoemTypeChooseOperator extends BaseOperator
 @export var property_multiplication: float = 1.0
 
 func init(_context: Dictionary) -> Dictionary:
-    breakpoint
+    #breakpoint
     if key_to_get_poem_taste and _context.get(key_to_get_poem_taste):
         var taste = _context.get(key_to_get_poem_taste)
         var taste_instance = URN.get_resource_through_urn(taste)
