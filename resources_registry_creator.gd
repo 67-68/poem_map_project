@@ -111,8 +111,29 @@ func create_registry_for_folder(folder_name: String, resource_registry_script) -
 	else:
 		print("  ✗ 错误：无法保存registry文件 ", registry_path)
 
-# 从tres文件中提取key（uuid或id）
+# 从资源文件中提取 key（uuid 或 id）
+# 优先级：
+#   1. ✅ 直接 load() 资源，访问 uuid 属性（精确可靠，不会被 SubResource 截胡）
+#   2. ⬇️ 加载失败 → 退回到文本解析（仅搜索 [resource] 段落）
+#   3. ⬇️ 文本也找不到 → 文件名兜底
 func extract_key_from_tres(file_path: String) -> String:
+	# ── 方案一：直接加载 Resource，访问 uuid/id 属性 ──
+	# 🚨 这是唯一不会被 SubResource 中 option uuid 干扰的方式
+	var resource = load(file_path)
+	if resource:
+		if "uuid" in resource:
+			var uuid_val = resource.get("uuid")
+			if uuid_val is String and not uuid_val.is_empty():
+				return uuid_val
+		if "id" in resource:
+			var id_val = resource.get("id")
+			if id_val is String and not id_val.is_empty():
+				if verbose:
+					print("    使用id字段作为key: ", id_val)
+				return id_val
+	
+	# ── 方案二：资源加载失败 / 无 uuid 属性 → 文本解析兜底 ──
+	# 只搜索 [resource] 段落，跳过 [sub_resource] 避免被 option uuid 截胡
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if not file:
 		print("错误：无法打开文件 ", file_path)
@@ -121,29 +142,33 @@ func extract_key_from_tres(file_path: String) -> String:
 	var content = file.get_as_text()
 	file.close()
 	
-	# 首先查找自定义uuid字段
+	# 定位到 [resource] 段落
+	var resource_marker = "\n[resource]\n"
+	var resource_section_start = content.find(resource_marker)
+	var search_target = content
+	if resource_section_start != -1:
+		search_target = content.substr(resource_section_start)
+	
 	var uuid_regex = RegEx.new()
 	uuid_regex.compile(r"uuid\s*=\s*\"([^\"]+)\"")
-	var uuid_result = uuid_regex.search(content)
+	var uuid_result = uuid_regex.search(search_target)
 	if uuid_result:
 		return uuid_result.get_string(1)
 	
-	# 如果没有uuid字段，尝试查找id字段
 	var id_regex = RegEx.new()
 	id_regex.compile(r"id\s*=\s*\"([^\"]+)\"")
-	var id_result = id_regex.search(content)
+	var id_result = id_regex.search(search_target)
 	if id_result:
 		if verbose:
 			print("    使用id字段作为key: ", id_result.get_string(1))
 		return id_result.get_string(1)
 	
-	# 如果都没有找到
+	# ── 方案三：纯兜底 ──
 	if skip_files_without_uuid:
 		if verbose:
 			print("    跳过：没有找到uuid或id字段")
 		return ""
 	else:
-		# 使用文件名作为key
 		var file_name = file_path.get_file().get_basename()
 		if verbose:
 			print("    使用文件名作为key: ", file_name)

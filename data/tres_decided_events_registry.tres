@@ -7,6 +7,5 @@ script = ExtResource("1_00h2s")
 resources = {
 "demonstrate_poem_to_people": "res://data/tres_decided_events/demonstrate_poem_to_people.tres",
 "event_money_lower_0": "res://data/tres_decided_events/event_money_lower_0.tres",
-"event_money_lower_0_wandering": "res://data/tres_decided_events/event_money_lower_0_wandering.tres",
-"uid://by8um3y06ob8w": "res://data/tres_decided_events/baiye_2to3.tres"
+"event_money_lower_0_wandering": "res://data/tres_decided_events/event_money_lower_0_wandering.tres"
 }
