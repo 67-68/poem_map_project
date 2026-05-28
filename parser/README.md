@@ -6,17 +6,52 @@
 
 ## 支持的CSV字段
 
-| 字段类别 | 列名 | 格式说明 | 映射到 |
-|---------|------|----------|--------|
-| 元数据 | Event_ID | 事件唯一标识符 | BaseEvent.id |
-| 关联标签 | Trigger_Tags | `domain:subcategory:specific_attribute` | RandomEvent._target_tags |
-| 触发条件 | requirements | 属性和特性条件 | ComplexRequirements |
-| 表现层 | Title | 事件标题 | UI显示 |
-| 表现层 | Desc | 事件描述 | UI显示 |
-| 选项A | Opt_A_Text | 选项文本 | BaseOption.description |
-| 选项A门槛 | Opt_A_Req | 条件检查 | PropertyRequirement |
-| 选项A结果 | Opt_A_Result | 结果操作 | ChoiceResult.operators |
-| ... | ... | ... | ... |
+### 事件/选项行字段
+
+| 字段 | 必填 | 格式说明 | 映射到 |
+|------|------|----------|--------|
+| row_type | 是 | 行类型：`random_event` / `option` | PDA 状态转移 |
+| template | 否 | URN 模板，见下方说明 | 从已有资源 duplicate |
+| uuid | 是 | 事件唯一标识符 | GameEntity.uuid |
+| context | 否 | 触发标签/权重/背景 DSL | RandomEvent._target_tags / weight |
+| requirements | 否 | 触发/选择条件 | BaseRequirements |
+| title | 否 | 事件标题 | GameEntity.name |
+| description | 否 | 事件描述 | GameEntity.description |
+| results | 否 | 事件/选项结果操作符 | ChoiceResult |
+
+### 旧式选项列（opt_X 系列）
+
+| 列名 | 格式说明 | 映射到 |
+|------|----------|--------|
+| Opt_A_Text | 选项文本 | BaseOption.description |
+| Opt_A_Req | 条件检查 | PropertyRequirement |
+| Opt_A_Result | 结果操作 | ChoiceResult.operators |
+| ... | ... | ... |
+
+### Template URN 机制
+
+`template` 字段允许一个 event 或 option 行**基于已有资源创建**，避免重复定义。
+
+**格式**：标准的 URN 字符串，如 `urn:random-event:some_existing_event`
+
+**流程**：
+1. 通过 `URN.get_resource_through_urn()` 获取模板资源
+2. `.duplicate()` 深拷贝
+3. 将拷贝的 uuid 替换为当前行的 uuid
+4. CSV 行中的其他字段**覆盖**模板中的对应值
+
+**使用场景**：
+- 多个事件共享相同的 context/requirements/results 结构，只改个别字段
+- Option 行复用已有事件的配置作为基底
+
+**示例**：
+```csv
+random_event,urn:random-event:base_banquet_event,evt_farewell_01,"tag:action:social:banquet","prop:money:>30","践行宴","好友即将远行，你设宴践行...","prop:money:-30,prop:friendship:+10"
+```
+
+这个事件会从 `base_banquet_event` 模板中 clone 所有字段，然后用 CSV 行中的值覆盖。
+
+**失败回退**：如果 template URN 解析失败（资源不存在、类型不匹配等），自动回退到创建全新的 RandomEvent 对象，不影响整体解析。
 
 ## Micro-DSL 语法
 

@@ -87,6 +87,28 @@ static func parse_context(context_str: String) -> Dictionary:
 
 # ---------- 事件/选项解析 ----------
 
+# 解析 template URN，从已有资源 duplicate 并替换 uuid
+# 返回 null 表示 template 不可用（空、解析失败、类型不匹配），由调用方兜底创建新对象
+static func _resolve_template(template_urn: String, new_uuid: String) -> RandomEvent:
+    if template_urn.is_empty():
+        return null
+    
+    var template_resource = URN.get_resource_through_urn(template_urn)
+    if template_resource == null:
+        Logging.warn("Template URN 解析失败，资源不存在: %s" % template_urn)
+        return null
+    
+    if not (template_resource is RandomEvent):
+        Logging.warn("Template URN 返回的类型不是 RandomEvent (urn: %s, type: %s)" % [template_urn, typeof(template_resource)])
+        return null
+    
+    var event = template_resource.duplicate() as RandomEvent
+    if not new_uuid.is_empty():
+        event.uuid = new_uuid
+    
+    Logging.info("Template 应用成功: %s -> uuid=%s" % [template_urn, event.uuid])
+    return event
+
 # 解析随机事件（row_type = 'random_event'）
 static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 检测空行
@@ -103,14 +125,23 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     if not has_content:
         return null
 
-    var event = RandomEvent.new({})
-
-    # 解析 uuid
+    # 解析 uuid（必需）
     var uuid = row.get('uuid')
     if not uuid or uuid.is_empty():
         push_error("UUID is required")
         return null
-    event.uuid = uuid
+
+    # 解析 template URN（可选），优先从已有资源 duplicate
+    var template_urn = row.get('template', '')
+    var event: RandomEvent = _resolve_template(template_urn, uuid)
+
+    # Fallback: template 不可用时创建新对象
+    if not event:
+        event = RandomEvent.new({})
+        event.uuid = uuid
+    else:
+        # 确保 uuid 被正确覆盖（_resolve_template 内部已处理，双重保障）
+        event.uuid = uuid
 
     # 解析 context DSL
     var context_str = row.get('context', '')
@@ -144,6 +175,12 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     if results_str and not results_str.is_empty():
         event.event_result = parse_choice_result(results_str)
 
+    # 解析情绪配置（目前仅 event 级别支持，未来 option 可能也有自己的 emotion_config）
+    var emotion_config_str = row.get('emotion_config', '')
+    if emotion_config_str and not emotion_config_str.is_empty():
+        event.emotion_configs = parse_emotion_configs(emotion_config_str)
+        Logging.info("Event 级 emotion_config 解析成功: uuid=%s" % uuid)
+
     return event
 
 # 解析选项子行（row_type = 'option'，深度+1 的子行）
@@ -163,11 +200,17 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
     if not has_content:
         return null
 
-    var event = RandomEvent.new({})
-
     # 选项行也可能有 uuid（用于引用）
     var uuid = row.get('uuid', '')
-    event.uuid = uuid
+
+    # 解析 template URN（可选），优先从已有资源 duplicate
+    var template_urn = row.get('template', '')
+    var event: RandomEvent = _resolve_template(template_urn, uuid)
+
+    # Fallback: template 不可用时创建新对象
+    if not event:
+        event = RandomEvent.new({})
+        event.uuid = uuid
 
     # 选项的 context
     var context_str = row.get('context', '')
@@ -187,6 +230,12 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
     var results_str = row.get('results')
     if results_str and not results_str.is_empty():
         event.event_result = parse_choice_result(results_str)
+
+    # 选项的 emotion_config：虽然未来 option 可能也有自己的 config
+    # 但目前只有 event 有，option 忽略并 warn（如果写了的话）
+    var emotion_config_str = row.get('emotion_config', '')
+    if emotion_config_str and not emotion_config_str.is_empty():
+        Logging.warn("Option 行暂不支持 emotion_config，已忽略: uuid=%s" % uuid)
 
     return event
 
@@ -621,6 +670,16 @@ static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "ran
         var row = csv_data[i]
         var depth = _get_row_depth(row)
         var row_type = str(row.get("row_type", "")).strip_edges()
+        
+        # 从 row_type 中提取前置 > 作为深度标记（如 >option → depth=1, type=option）
+        # 用户可以在 row_type 列直接用 > 前缀表示层级，避免写缩进
+        if row_type.length() > 0:
+            var gt_count = 0
+            while gt_count < row_type.length() and row_type[gt_count] == '>':
+                gt_count += 1
+            if gt_count > 0:
+                depth = gt_count
+                row_type = row_type.substr(gt_count).strip_edges()
         
         if row_type.is_empty():
             continue

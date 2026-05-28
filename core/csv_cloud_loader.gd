@@ -11,13 +11,20 @@ extends Node
 
 # 🤓☝️ 核心契约 1：资产同步清单 (The Manifest)
 # 把 URL 和它对应的本地保存路径死死绑定在一起！这就是你说的"携带信息"！
+#
+# ⚠️ 排序警告 ⚠️
+# 解析顺序至关重要！trait 和 flag 必须排在 random_event 之前，因为：
+#   - random_event 的 template 字段可能引用 urn:trait:xxx / urn:flag:xxx
+#   - 如果 trait/flag 尚未加载到 Database，URN 解析会失败，template 回退为空事件
+#   - 届时错误将难以追踪 💀
+# 如果你觉得"我换个顺序也没事吧"然后乱改 → 时序bug自求多福。
 const DATA_MANIFEST: Array[Dictionary] = [
     {
-        "name": "随机事件池",
-        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=0&single=true&output=csv",
-        "save_path": "res://data/random_events/random_events.csv",
-        "data_type": "random_event"
-},
+        "name": "trait_data",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=309055591&single=true&output=csv",
+        "save_path": "res://data/tres_traits/traits.csv",
+        "data_type": "trait"
+    },
     {
         "name": "flags_data",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=2126665400&single=true&output=csv",
@@ -25,10 +32,10 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "flag"
     },
     {
-        "name": "trait_data",
-        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=309055591&single=true&output=csv",
-        "save_path": "res://data/tres_traits/traits.csv",
-        "data_type": "trait"
+        "name": "随机事件池",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=0&single=true&output=csv",
+        "save_path": "res://data/random_events/random_events.csv",
+        "data_type": "random_event"
     }
 ]
 
@@ -55,24 +62,32 @@ func start_sync_queue() -> void:
     _current_job_index = 0
     process_next_job()
 
+# 刷新所有 registry 文件（每次保存 .tres 后调用）
+# 虽然全量扫描所有文件夹是 O(n) 重复劳动，但 CSV 同步本身就是低频操作，
+# 性能过剩到可以忽略不计 🤓☝️。主要是为了保证下一个表的 template URN
+# 能通过 registry 找到当前表刚保存的 .tres 文件。
+# 如果哪天你觉得同步太慢，99.99% 是网络问题，不是这里的问题 💀
+func _regenerate_registries() -> void:
+    print("\n===== 刷新resources registry文件 =====")
+    var registry_creator_script = load("res://resources_registry_creator.gd")
+    if not registry_creator_script:
+        push_error("无法加载resources_registry_creator.gd，跳过registry刷新 💀")
+        return
+    
+    var registry_creator = registry_creator_script.new()
+    registry_creator.overwrite_existing = true
+    registry_creator.skip_files_without_uuid = true
+    registry_creator.create_all_registries()
+    print("===== Resources registry刷新完成 =====\n")
+
 # 处理下一个任务
 func process_next_job() -> void:
     if _current_job_index >= DATA_MANIFEST.size():
         print("===== 所有数据源同步完成！🤓☝️ =====")
         _current_job_index = -1
         
-        # 🚨 同步完成后，自动创建resources registry文件
-        print("\n===== 开始创建resources registry文件 =====")
-        var registry_creator_script = load("res://resources_registry_creator.gd")
-        if not registry_creator_script:
-            push_error("无法加载resources_registry_creator.gd，跳过registry创建 💀")
-            return
-        
-        var registry_creator = registry_creator_script.new()
-        registry_creator.overwrite_existing = true  # 总是覆盖，确保registry是最新的
-        registry_creator.skip_files_without_uuid = true
-        registry_creator.create_all_registries()
-        print("===== Resources registry创建完成 =====\n")
+        # 🚨 同步完成后，再刷新一次registry（冗余但无害）
+        _regenerate_registries()
         
         # 🚨 Registry创建完成后，执行事件数据Linter
         print("\n===== 开始执行事件数据Linter =====")
@@ -262,6 +277,9 @@ func fetch_events_from_cloud(url: String, save_path: String = "res://tests/", da
     # 从CSV路径推断.tres保存路径（同目录下）
     var tres_save_path = save_path.get_base_dir() + "/"
     save_resources_to_tres(resources, tres_save_path)
+
+    # 🚨 立即刷新registry，确保下一个表的 template URN 能找到本表刚保存的 .tres
+    _regenerate_registries()
 
     print("云端数据注入成功！系统活过来了 🤓☝️")
 
