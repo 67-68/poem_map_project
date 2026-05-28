@@ -37,7 +37,6 @@ operator = 1
 script = ExtResource("9_5r38m")
 choice_result = SubResource("Resource_vf104")
 requirement = SubResource("Resource_1csbv")
-uuid = null
 
 [sub_resource type="Resource" id="Resource_fjpuy"]
 script = ExtResource("8_8ainc")

@@ -187,3 +187,39 @@ get_resource_through_urn: URN type event_option (25) 未在配置表中找到
 - `parser/dsl_parser.gd`
 - `core/source_of_truth.gd`
 - `model/urn.gd`
+
+## 2026-05-28: EventOption template 的 operators 通过 PDA 链路丢失
+
+### 问题描述
+CSV 中 `>option` 行指定 `template=urn:event_option:poem_giving_option` 时，生成的 `.tres` 文件中 EventOption 的 `choice_result.operators` 为空。但 `poem_giving_option.tres` template 文件本身是有 operator 的。
+
+### 根本原因
+两层问题叠加：
+
+**第一层（代码逻辑）**：`_pda_transition` 处理 option 行时，调用 `parse_option_row()` 返回 `RandomEvent`，再从中拆包赋值给新 `EventOption`。此链路中 template 的 `choice_result` 经过 `duplicate()` + RandomEvent 包装后丢失了 operator。
+
+**第二层（Godot 4 坑）**：`poem_giving_option.tres` 全量开启了 `resource_local_to_scene = true`（根资源、ChoiceResult、MenuStartOperator 三级全部为 true）。对该资源调用 `duplicate()` 后，返回的对象中非 `@export` 的 `var` 属性变为只读（如 `custom_context_params`），赋值即抛 `Invalid assignment` 错误。但该错误未阻断执行，只是导致 `opt.append` 被跳过（`options.size()=0`）。
+
+### 影响范围
+- 所有在 CSV 中通过 template 引用 EventOption 的 option 行
+- 表现为 event 生成了但选项丢失（或选项无 operator）
+
+### 修复方案
+1. **不在 `_pda_transition` 中用 `template.duplicate()`** — 改用 `EventOption.new()` 手动构造
+2. **从 template 原始资源直接拷贝字段**：`choice_result.duplicate()`（只对 ChoiceResult 层调用 duplicate，避免根资源的 `resource_local_to_scene` 副作用）
+3. `uuid`、`description`、`requirement` 等从 template 或 CSV 行字段拷贝
+
+### Godot Editor 显示 Bug（额外记录）
+修复后文件内容是正确的（operator 存在），但 **Godot Editor 的 Inspector 中可能不显示 operator 内容**。这是 editor 的显示问题，不是数据丢失。以 `.tres` 文件内容为准。
+
+如果遇到 `@tool` 脚本执行后数据看起来不对，但 `.tres` 文件内容正确的情况：
+1. **右键 `.tres` 文件 → 重新导入**，或**重启编辑器**
+2. 不要仅依赖 Inspector 的显示来判断数据完整性
+
+### 修复文件
+- <ref_file file="/Users/lennon/Projects/poem_map_project/parser/dsl_parser.gd" />
+
+### 关键教训
+1. **`resource_local_to_scene = true` 的 Resource 慎用 `duplicate()`** — 返回的对象属性访问行为异常
+2. **手动 `new()` + 逐字段拷贝** 比 `duplicate()` 稳定得多，尤其是涉及子资源时
+3. **Godot Editor Inspector 可能欺骗你** — 文件内容正确但界面不刷新时，以文件内容为准

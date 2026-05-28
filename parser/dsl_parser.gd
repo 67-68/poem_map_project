@@ -771,15 +771,73 @@ static func _pda_transition(stack: Array[RandomEvent], resources: Array[Resource
                 push_error("下推自动机错误：option 行没有父事件 (row %d) 💀" % (row_index + 1))
                 return
             
-            var opt_event = parse_option_row(row)
-            if opt_event:
+            # 🚨 优先检测是否有 EventOption template
+            # ❌ 不直接 duplicate() template，因为 resource_local_to_scene = true 的
+            #    EventOption 在 duplicate 后非 @export 的 var 属性变为只读，赋值会崩溃 💀
+            # ✅ 改为手动创建新 EventOption，只拷贝需要的 @export 字段
+            var template_urn = row.get('template', '')
+            var template_source: EventOption = null
+            if not template_urn.is_empty():
+                var template_resource = URN.get_resource_through_urn(template_urn)
+                if template_resource is EventOption:
+                    template_source = template_resource as EventOption
+                    Logging.info("Template 应用成功 (option, direct): %s" % template_urn)
+                    
+            
+            if template_source:
+                # ── 手动创建新 EventOption，从 template 拷贝字段 ──
                 var parent = stack.back()
                 var opt = EventOption.new()
-                opt.description = opt_event.name
-                opt.requirement = opt_event.requirement
-                opt.choice_result = opt_event.event_result
-                opt.custom_context_params = opt_event.custom_context_params.duplicate()
+                
+                # 拷贝 @export 字段
+                var uuid = row.get('uuid', '')
+                opt.uuid = uuid if not uuid.is_empty() else template_source.uuid
+                opt.description = template_source.description
+                opt.requirement = template_source.requirement
+                
+                # 🚨 关键：拷贝 choice_result（含 operators）
+                # 不能直接引用，必须深拷贝，否则会对同一个 template 实例产生副作用
+                if template_source.choice_result:
+                    opt.choice_result = template_source.choice_result.duplicate()
+                
+                # 解析 context 自定义参数
+                var context_str = row.get('context', '')
+                if not context_str.is_empty():
+                    var context_data = parse_context(context_str)
+                    if not context_data.custom_params.is_empty():
+                        opt.custom_context_params = context_data.custom_params
+                
+                # 如果 CSV 行有显式的 title/description，覆盖 template 的
+                var title = row.get('title', '')
+                var description = row.get('description', '')
+                if not title.is_empty():
+                    opt.description = title
+                if not description.is_empty():
+                    opt.description = description
+                
+                # 如果 CSV 行有显式的 requirements，覆盖 template 的
+                var requirements_str = row.get('requirements', '')
+                if not requirements_str.is_empty():
+                    opt.requirement = parse_requirements(requirements_str)
+                
+                # 如果 CSV 行有显式的 results，覆盖 template 的 choice_result
+                var results_str = row.get('results', '')
+                if not results_str.is_empty():
+                    opt.choice_result = parse_choice_result(results_str)
+                
                 parent.options.append(opt)
+            else:
+                # ── 走原有的 RandomEvent 包装路径（无 template 或 template 是 RandomEvent） ──
+                var opt_event = parse_option_row(row)
+                if opt_event:
+                    var parent = stack.back()
+                    var opt = EventOption.new()
+                    opt.description = opt_event.name
+                    opt.requirement = opt_event.requirement
+                    opt.choice_result = opt_event.event_result
+                    opt.custom_context_params = opt_event.custom_context_params.duplicate()
+                    
+                    parent.options.append(opt)
         
         _:
             Logging.warn("未知 row_type '%s' (row %d)" % [row_type, row_index + 1])
