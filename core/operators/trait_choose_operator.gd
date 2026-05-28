@@ -37,11 +37,15 @@ func operate():
         if not trait_:
             Logging.err('PoemTypeChooseOperator: can not found trait %s' % t)
             continue
-        Logging.debug('PoemTypeChooseOperator: Found trait %s' % t)
+        # 🤓☝️ 只展示诗词类 trait（topic == "POEM"），排除社交/主线路线等
+        if trait_.topic != "POEM":
+            Logging.debug('PoemTypeChooseOperator: Skipping non-POEM trait %s (topic=%s)' % [t, trait_.topic])
+            continue
+        Logging.debug('PoemTypeChooseOperator: Found POEM trait %s' % t)
         data.append(trait_)
 
-    Logging.debug('PoemTypeChooseOperator: Emitting start_picker with %d traits' % data.size())
-    EventBus.start_picker.emit(data,null)
+    Logging.debug('PoemTypeChooseOperator: Emitting start_picker with %d poem traits' % data.size())
+    EventBus.start_picker.emit(data)
     var trait_picked = await EventBus.end_picking
     if not trait_picked:
         poem_taste.not_entered_result.operate()

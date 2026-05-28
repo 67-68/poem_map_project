@@ -10,11 +10,9 @@ func _input(event: InputEvent):
 		# Cmd+D (Mac) or Ctrl+D (Windows/Linux)
 		if event.keycode == KEY_F2 and (event.meta_pressed or event.ctrl_pressed):
 			visible = not visible
-		if event.keycode == KEY_F3 and (event.meta_pressed or event.ctrl_pressed):
-			_on_button_pressed()
 
 func _on_text_submitted(new_text: String) -> void:
-	breakpoint
+	#breakpoint
 	if new_text.split('\n').size() > 1:
 		var texts = new_text.split('\n')
 		for t in texts:
@@ -50,7 +48,7 @@ func parse(new_text):
 			EventBus.request_add_imaginary.emit(parts[2])
 
 	if parts.size() == 2 and parts[0] == '$':
-		breakpoint
+		#breakpoint
 		EventBus.request_event_key.emit(parts[1], {})
 	elif parts.size() == 2:
 		if GameState.has_method(parts[0]):
@@ -61,7 +59,7 @@ func parse(new_text):
 			PlayerState.callv(parts[0],[parts[1]])
 
 func _on_button_pressed() -> void:
-	breakpoint
+	#breakpoint
 	var current_text = $Controller.text
 	if not current_text.is_empty():
 		_on_text_submitted(current_text)

@@ -5,8 +5,8 @@ signal clicked(entity_: GameEntity)
 @export var entity: GameEntity
 
 func initialization(entity_: GameEntity):
-	$V/Name.text = entity.name
-	$V/Description.text = entity.description
+	$V/Name.text = entity_.name
+	$V/Description.text = entity_.description
 	entity = entity_
 
 func _ready():

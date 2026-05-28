@@ -1,5 +1,17 @@
 # Old Bugs
 
+## 核心教训速览 — 场景 → 诱因
+
+- **标签三段式 vs 四段式不匹配** → `ENUMS.to_action_str()` 生成三段式（`actor:health:sick`），`TagManager.normalize_3part_depreciated_tag()` 补成四段式（`actor:health:sick:general`），精确字符串匹配直接爆炸 💀
+- **枚举重构后数据残留旧索引** → 删了部分 `ACTION_TAGS` 枚举值（0-24），但 RandomEvent 的 `.tres` 文件里还躺着 `[44, 30, 36, ...]` 这种阴间索引，`to_action_str(44)` 直接触发断点 💀
+- **三段式 tag + 自动补全成死循环** → action_tag_filter 自动补全 3→4 段，但新的 deepseek action 本身是 3 段，补完反而和目标不匹配，滤镜修出反效果 😭
+- **只改代码不改缓存** → 改了资源创建/注册逻辑，但没清 `create_resources_registry` 缓存，永远在拿过期数据 🤡
+- **`super._init(data)` 被注释掉，父类初始化被拦腰截断** → `MapMarker._init` 注释了 `#super._init(data)`，`GameEntity._init` 压根没跑，CSV 加载的 295 个 Territory 全部 `uuid=""` 🤣
+- **`_init(data: Dictionary)` 参数没有默认值** → 三个数据加载路径（CSV→`new(data)`、tres→反序列化、手动→`new()`）走三种方式调构造器，不给 `= {}` 默认值就是定时炸弹 💀
+- **`@tool` 模式下枚举常量跨脚本引用失效** → `match 13: URN.URN_TYPE.TRAIT:` 命中不了，字典 `get(25)` 查不到——Godot 4 `@tool` 下枚举常量就是摆设，不用字符串 dispatch 必死 🤡
+- **`duplicate()` 遇到 `resource_local_to_scene=true` 产生幽灵属性** → 根资源全量开启 `resource_local_to_scene=true`，`duplicate()` 后的对象非 `@export` 属性变成只读，operator 悄无声息丢失，赋值没报错但数据没了 🤡
+- **非 `@tool` 类的静态变量被 `@tool` 脚本引用时空** → `SourceOfTruth` 没加 `@tool`，静态字典根本没初始化，`@tool` 脚本查 `get("event_option")` 永远返回 `null` 💀
+
 ## 2026-05-23: 标签格式不一致导致事件匹配失败
 
 ### 问题描述

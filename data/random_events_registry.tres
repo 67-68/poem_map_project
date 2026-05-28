@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_44wta")
 resources = {
-"jiaoyou_poem_public": "res://data/random_events/jiaoyou_poem.tres",
+"jiaoyou_poem_public": "res://data/random_events/jiaoyou_poem_public.tres",
 "libai_after": "res://data/random_events/libai_after.tres",
 "libai_unveilation": "res://data/random_events/libai_unveilation.tres",
 "strange_poet": "res://data/random_events/strange_poet.tres",

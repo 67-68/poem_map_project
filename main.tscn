@@ -378,4 +378,4 @@ script = ExtResource("35_0rl1p")
 [connection signal="value_changed" from="UI/HSlider" to="UI/HSlider" method="_on_value_changed"]
 [connection signal="pressed" from="UI/LeftButtonContainer/V/PlayerButton" to="UI/LeftButtonContainer/V/PlayerButton" method="_on_pressed"]
 [connection signal="gui_input" from="UI/Control/Controller" to="UI/Control/Controller" method="_on_gui_input"]
-[connection signal="pressed" from="UI/Control/Button" to="UI/Control/Controller" method="_on_button_pressed"]
+[connection signal="pressed" from="UI/Control/Button" to="UI/Control" method="_on_button_pressed"]
