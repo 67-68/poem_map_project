@@ -294,6 +294,7 @@ static func strip_csv_array(data: Array):
 # 合并 context 字典：将 overlay 中的自定义参数合并到 base 中
 # 规则：
 #   - int/float 类型：base[key] *= overlay[key]（相乘）
+#   - String 类型：尝试 to_float() 转换，成功则按乘法叠加，失败则报错
 #   - 其他类型：breakpoint + push_error "not implemented"
 static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 	if overlay.is_empty():
@@ -302,6 +303,16 @@ static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 	for key in overlay:
 		var overlay_val = overlay[key]
 		var base_val = base.get(key)
+		
+		# String → 尝试转 float（DSL 解析出的 custom_params 是字符串）
+		if overlay_val is String:
+			var float_val = overlay_val.to_float()
+			if float_val == 0.0 and overlay_val != "0" and overlay_val != "0.0":
+				# 转不出来，报错
+				breakpoint
+				push_error("merge_context: 无法将 overlay 值转为数值. key=%s, value=%s" % [key, overlay_val])
+				continue
+			overlay_val = float_val
 		
 		if overlay_val is int or overlay_val is float:
 			# int/float → 相乘
