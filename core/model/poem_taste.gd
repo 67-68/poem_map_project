@@ -6,7 +6,7 @@ class_name PoemTaste extends Resource
 @export var _accepted_poem_types: Array[ENUMS.POEM_TYPE] = [] # e.g. ["yan_ye", "ying_zhi"]
 var accepted_poem_types: Array:
     get():
-        return _accepted_poem_types.map(func(t: ENUMS.POEM_TYPE) -> Array: return ENUMS.POEM_TYPE.keys()[t])
+        return _accepted_poem_types.map(func(t: ENUMS.POEM_TYPE): return ENUMS.POEM_TYPE.keys()[t])
 
 @export var lowest_poem_level := 0
 @export var accepted_result: ChoiceResult = ChoiceResult.new()

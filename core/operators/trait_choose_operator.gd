@@ -31,6 +31,7 @@ func init(_context: Dictionary) -> Dictionary:
     return _context
 
 func operate():
+    #breakpoint
     Logging.debug('PoemTypeChooseOperator: Starting operate()')
     var data = []
     for t in PlayerState.get_traits():
@@ -48,6 +49,8 @@ func operate():
     Logging.debug('PoemTypeChooseOperator: Emitting start_picker with %d poem traits' % data.size())
     EventBus.start_picker.emit(data)
     var trait_picked = await EventBus.end_picking
+    
+    breakpoint
     if not trait_picked:
         poem_taste.not_entered_result.operate()
         Logging.warn('trait not picked, left blank')
@@ -71,6 +74,5 @@ func operate():
         Logging.debug('PoemTypeChooseOperator: Type %s in accepted_poem_types, executing accepted_result' % poem_type)
         poem_taste.accepted_result.operate()
     else:
-        breakpoint
         Logging.debug('PoemTypeChooseOperator: Type %s in rejected_poem_type, executing rejected_result' % poem_type)
         poem_taste.rejected_result.operate()

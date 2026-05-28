@@ -308,7 +308,7 @@ static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 		# --- String 类型处理 ---
 		# DSL 解析出的 custom_params 全是字符串，需要区分"数字字符串"和"文本字符串"
 		if overlay_val is String:
-			breakpoint
+ 			#breakpoint
 			var float_val = overlay_val.to_float()
 			var is_numeric = float_val != 0.0 or overlay_val == "0" or overlay_val == "0.0"
 			
