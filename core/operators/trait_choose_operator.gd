@@ -47,18 +47,22 @@ func operate():
         return
     Logging.debug('PoemTypeChooseOperator: Trait picked - %s' % trait_picked.uuid)
 
-    var type = trait_picked.uuid.split(':')[1] # poem:gan_ye:defaultName:1
-    var level = trait_picked.uuid.split(':')[3]
-    Logging.debug('PoemTypeChooseOperator: Extracted type=%s, level=%s' % [type, level])
+    # 使用 trait 的 topic/specific_topic 字段，不再解析 UUID
+    var trait_topic = trait_picked.topic
+    var poem_type = trait_picked.specific_topic
+    # 从 UUID 末尾提取等级（命名约定：poem_gan_ye_1 → 1）
+    var level_str = trait_picked.uuid.split('_')[-1]
+    var level = level_str.to_int()
+    Logging.debug('PoemTypeChooseOperator: topic=%s, poem_type=%s, level=%d' % [trait_topic, poem_type, level])
 
     if level < poem_taste.lowest_poem_level:
         Logging.debug('PoemTypeChooseOperator: Level %s below threshold %s, executing rejected_result' % [level, poem_taste.lowest_poem_level])
         poem_taste.rejected_result.operate()
         return
 
-    if type in poem_taste.accepted_poem_types:
-        Logging.debug('PoemTypeChooseOperator: Type %s in accepted_poem_types, executing accepted_result' % type)
+    if poem_type in poem_taste.accepted_poem_types:
+        Logging.debug('PoemTypeChooseOperator: Type %s in accepted_poem_types, executing accepted_result' % poem_type)
         poem_taste.accepted_result.operate()
     else:
-        Logging.debug('PoemTypeChooseOperator: Type %s in rejected_poem_type, executing rejected_result' % type)
+        Logging.debug('PoemTypeChooseOperator: Type %s in rejected_poem_type, executing rejected_result' % poem_type)
         poem_taste.rejected_result.operate()

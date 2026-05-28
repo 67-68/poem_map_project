@@ -22,7 +22,7 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "name": "flags_data",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=2126665400&single=true&output=csv",
         "save_path": "res://data/flags/flags.csv",
-        "data_type": "flags"
+        "data_type": "flag"
     },
     {
         "name": "trait_data",
@@ -326,8 +326,8 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
                 skipped_count += 1
                 continue
 
-        # 统一转换：冒号转化为双下划线，连字符也转化为下划线（为了兼容文件系统）
-        var safe_filename = base_filename.replace(":", "__").replace("-", "_")
+        # 统一转换：冒号转化为单下划线，连字符也转化为下划线（为了兼容文件系统）
+        var safe_filename = base_filename.replace(":", "_").replace("-", "_")
 
         # 检查是否有其他特殊字符（只允许字母、数字、下划线）
         var invalid_chars_regex = RegEx.new()

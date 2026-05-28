@@ -99,13 +99,13 @@ enum PROVINCES {
 enum TRAITS {
     WANDERING_WITHOUT_LIVING_PLACE,
     
-    # 第一等级诗词
-    POEM__GAN_YE__1, # _ + _ -> : # 这里的两个下划线的设计应该是为了兼容四段式的A:B:C:D设计，如果我本来就不是这样的，我直接使用一个就行了（比如下面的主线行动等级)
-    POEM__YING_ZHI__1, # 这里的1是最低级，不是0!
-    POEM__ZENG_DA__1,
-    POEM__HUAI_GU__1,
-    POEM__JI_LV__1,
-    POEM__SHAN_SHUI_1,
+    # 第一等级诗词 — 单下划线分隔，topic/type/level 三层语义
+    POEM_GAN_YE_1,
+    POEM_YING_ZHI_1,
+    POEM_DENG_GAO_1,
+    POEM_HUAI_GU_1,
+    POEM_JI_LV_1,
+    POEM_SHAN_SHUI_1,
 
     # 主线行动等级标签
     MAIN_BAIYE_1,
@@ -161,9 +161,9 @@ enum TRAITS {
 }
 
 enum POEM_TYPE {
-    GAN_YE, 
+    GAN_YE,
     YING_ZHI,
-    ZENG_DA,
+    DENG_GAO,
     HUAI_GU,
     JI_LV,
     SHAN_SHUI
@@ -180,13 +180,12 @@ enum ACTION_TYPE {
 
 static func to_traits_str(item) -> String:
     var name = TRAITS.keys().get(item)
-    name = name.replace('__',':')
     if name: return name.to_lower()
     Logging.err("Invalid trait: " + str(item))
     return "default_storable_item"
 
 static func from_traits_str(str_name: String) -> int:
-    var normalized = str_name.to_lower().replace(':', '__')
+    var normalized = str_name.to_lower()
     for i in range(TRAITS.size()):
         var key = TRAITS.keys()[i]
         if key.to_lower() == normalized:
@@ -239,82 +238,3 @@ static func to_relation_str(item) -> String:
     Logging.err("Invalid province tag: " + str(item))
     return "default_storable_item"
 
-
-# ============================================================
-# URN System - 统一资源名称标识符
-# ============================================================
-# URN 格式: urn:poem_map:<resource-type>:<resource-id>
-# 示例:     urn:poem_map:poet:libai_001
-#           urn:poem_map:poem:jiang_jin_jiu
-#           urn:poem_map:action:travel_parting_withLiBai
-# ============================================================
-
-enum URN_TYPE {
-    POET,               # poet_data — 诗人数据
-    POEM,               # poem_data — 诗词数据
-    FACTION,            # factions — 势力
-    PROVINCE,           # base_province — 基础省份（CSV）
-    TERRITORY,          # territories — 领土（CSV）
-    MSGER,              # msger_data — 消息者数据
-    HISTORY_EVENT,      # history_events — 历史事件
-    RANDOM_EVENT,       # random_events — 随机事件
-    END_RANDOM_EVENT,   # end_random_events — 结局随机事件
-    CHAT_BUBBLE,        # chat_bubble_data — 聊天气泡
-    FOCUSED_CHAT,       # focused_chat_data — 聚焦对话
-    AMBITION,           # ambitions — 抱负/雄心
-    TRAIT,              # traits — 特性
-    PROPERTY,           # properties — 属性
-    ACTION,             # actions — 行动
-    DECISION,           # decisions — 决策
-    DECIDED_EVENT,      # decided_events — 已决定事件
-    IMAGINARY,          # imaginaries — 想象物
-    TAG,                # tags — 标签
-    FLAG,               # flags — 标记
-    LIFE_PATH_POINT,    # life_path_points — 人生轨迹点
-    LEGENDARY_POEM,     # legendary_poems — 传奇诗词
-    NORMAL_POEM_EVENT,  # normal_poem_events — 普通诗词事件
-    CITY,               # cities（内部合并用）
-    EVENT_OPTION,       # event_options — 事件选项（.tres 资源）
-}
-
-static func urn_type_to_str(type: int) -> String:
-    """将 URN_TYPE enum 值转换为 URN 资源类型字符串（小写+连字符）"""
-    var names = URN_TYPE.keys()
-    if type >= 0 and type < names.size():
-        return names[type].to_lower().replace("_", "-")
-    Logging.err("Invalid URN type enum value: " + str(type))
-    return "unknown"
-
-static func make_urn(type: int, resource_id: String) -> String:
-    """生成完整的 URN 字符串: urn:poem_map:<type>:<id>"""
-    var type_str = urn_type_to_str(type)
-    if type_str == "unknown":
-        Logging.err("Failed to create URN for type " + str(type) + " with id " + resource_id)
-    return "urn:poem_map:%s:%s" % [type_str, resource_id]
-
-static func parse_urn(urn: String) -> Dictionary:
-    """解析 URN 字符串，返回 { namespace, type, resource_id }
-    若解析失败返回空字典并打错误日志
-    """
-    var parts = urn.split(":")
-    if parts.size() != 4:
-        Logging.err("Invalid URN format: " + urn + " — expected 'urn:poem_map:<type>:<id>'")
-        return {}
-    if parts[0] != "urn" or parts[1] != "poem_map":
-        Logging.err("Invalid URN namespace: " + urn + " — expected 'urn:poem_map:...'")
-        return {}
-    return {
-        "namespace": parts[1],
-        "type": parts[2],
-        "resource_id": parts[3]
-    }
-
-static func find_urn_type(type_str: String) -> int:
-    """通过字符串查找对应的 URN_TYPE enum 值，未找到返回 -1"""
-    var normalized = type_str.to_lower().replace("-", "_")
-    var names = URN_TYPE.keys()
-    for i in range(names.size()):
-        if names[i].to_lower() == normalized:
-            return i
-    Logging.err("Unknown URN type string: " + type_str)
-    return -1

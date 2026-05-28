@@ -122,6 +122,6 @@ static func _extract_resource_filename(resource: Resource) -> String:
 
 # 清理文件名中的特殊字符
 static func _sanitize_filename(filename: String) -> String:
-	# 将冒号转化为双下划线，连字符也转化为下划线
-	var safe_filename = filename.replace(":", "__").replace("-", "_")
+	# 将冒号转化为单下划线，连字符也转化为下划线
+	var safe_filename = filename.replace(":", "_").replace("-", "_")
 	return safe_filename

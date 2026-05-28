@@ -8,8 +8,9 @@ class_name Trait extends GameEntity
 ) var topic: String
 
 @export_enum(
-    'HATE', 'HEARD', "GOOD", "CORE"
-) var specific_topic: String # 为了社交系统准备
+    'HATE', 'HEARD', 'GOOD', 'CORE',
+    'GAN_YE', 'YING_ZHI', 'DENG_GAO', 'HUAI_GU', 'JI_LV', 'SHAN_SHUI'
+) var specific_topic: String # 为了社交系统准备；诗词类型也复用此字段
 
 @export var _relate_to: ENUMS.RELATION_TARGET = -1
 var relate_to: String:

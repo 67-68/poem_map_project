@@ -4,9 +4,8 @@
 # 架构师留言：
 # 这个测试专门验证DSL parser对trait数据的处理是否正确。
 # 重点关注：
-# 1. trait UUID格式转换（__ vs :）
-# 2. CSV中trait名称与实际trait UUID的映射
-# 3. Trait requirement和operator的解析逻辑
+# 1. CSV中trait名称与实际trait UUID的映射
+# 2. Trait requirement和operator的解析逻辑
 # ----------------------------------------------------------------
 extends GutTest
 
@@ -62,14 +61,6 @@ func test_trait_operator_remove_parsing():
 	assert_eq(parsed_ops[0].str_traits, "cowardly", "trait名称应该被正确解析")
 	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.REMOVE, "操作符应该是REMOVE")
 
-func test_trait_uuid_format_conversion():
-	# 测试trait UUID的格式转换
-	# 模拟data_helper中的UUID转换逻辑
-	var mock_trait = MockTrait.new("poem__deng_gao__1", "登高")
-	var converted_uuid = mock_trait.uuid.replace('__', ':')
-	
-	assert_eq(converted_uuid, "poem:deng_gao:1", "UUID中的双下划线应该被转换为冒号")
-
 func test_dsl_csv_trait_integration():
 	# 测试完整的DSL CSV trait处理流程
 	var csv_row = {
@@ -124,8 +115,8 @@ func test_trait_name_mapping_issue():
 	# 模拟实际的trait UUID（从registry中看到的格式）
 	var actual_trait_uuids = [
 		"main_baiye_1",
-		"main_duzhuo_1", 
-		"poem:deng_gao:1",
+		"main_duzhuo_1",
+		"poem_deng_gao_1",
 		"relation_libai_1"
 	]
 	

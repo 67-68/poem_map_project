@@ -6,7 +6,9 @@
 
 [resource]
 script = ExtResource("1_nw7t5")
-uuid = "poem:ji_lv:1"
+uuid = "poem_ji_lv_1"
 name = "普通羁旅诗词"
 description = "普通羁旅诗词"
+topic = "POEM"
+specific_topic = "JI_LV"
 metadata/_custom_type_script = "uid://pom0464obfp2"

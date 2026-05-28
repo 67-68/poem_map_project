@@ -15,7 +15,7 @@ static var debug_dashboard_state = {
     },
     
     # 维度 3：六大 Action 的反噬状态机 (The 6-Track Corruption State)
-    # 这是你真正需要密切关注的“癌症分期”
+    # 这是你真正需要密切关注的"癌症分期"
     "action_tracks": {
         "BAIYE": "main_baiye_2",    # 当前处于：阶段2（幕僚）
         "FENGZHAO": "main_fengzhao_1",
@@ -28,7 +28,7 @@ static var debug_dashboard_state = {
         "LIBAI": 'relation_libai_4',
 
         # 诗词
-        "POEM_BAIYE": 'POEM__YING_ZHI__1'
+        "POEM_BAIYE": 'POEM_YING_ZHI_1'
     },
     
     # 维度 4：资源池 (The Expendables) - 最不重要的底层数值
@@ -44,4 +44,94 @@ static var debug_dashboard_state = {
         "sick": 0,
         "inspiration": 0,
     }
+}
+
+
+# ============================================================
+# URN Resource Config — URN_TYPE 到文件路径/数据库字段的映射
+# ============================================================
+# 用于 get_resource_through_urn 在编辑器模式下直接加载 .tres 资源
+# 在非编辑器模式下，通过 db_field 在 database.gd 的字典中查找
+# ============================================================
+static var urn_resource_config: Dictionary = {
+    URN.URN_TYPE.POET: {
+        "registry": "res://data/tres_poet_data_registry.tres",
+        "db_field": "poet_data",
+    },
+    URN.URN_TYPE.POEM: {
+        "registry": "res://data/tres_poem_data_registry.tres",
+        "db_field": "poem_data",
+    },
+    URN.URN_TYPE.FACTION: {
+        "registry": "res://data/tres_factions_registry.tres",
+        "db_field": "factions",
+    },
+    URN.URN_TYPE.MSGER: {
+        "registry": "res://data/tres_msger_data_registry.tres",
+        "db_field": "msger_data",
+    },
+    URN.URN_TYPE.HISTORY_EVENT: {
+        "registry": "res://data/tres_history_event_registry.tres",
+        "db_field": "history_events",
+    },
+    URN.URN_TYPE.END_RANDOM_EVENT: {
+        "registry": "res://data/tres_end_random_events_registry.tres",
+        "db_field": "end_random_events",
+    },
+    URN.URN_TYPE.FOCUSED_CHAT: {
+        "registry": "res://data/tres_focused_chats_registry.tres",
+        "db_field": "focused_chat_data",
+    },
+    URN.URN_TYPE.AMBITION: {
+        "registry": "res://data/tres_ambitions_registry.tres",
+        "db_field": "ambitions",
+    },
+    URN.URN_TYPE.TRAIT: {
+        "registry": "res://data/tres_traits_registry.tres",
+        "db_field": "traits",
+    },
+    URN.URN_TYPE.PROPERTY: {
+        "registry": "res://data/tres_properties_registry.tres",
+        "db_field": "properties",
+    },
+    URN.URN_TYPE.ACTION: {
+        "registry": "res://data/tres_actions_registry.tres",
+        "db_field": "actions",
+    },
+    URN.URN_TYPE.DECISION: {
+        "registry": "res://data/tres_decisions_registry.tres",
+        "db_field": "decisions",
+    },
+    URN.URN_TYPE.DECIDED_EVENT: {
+        "registry": "res://data/tres_decided_events_registry.tres",
+        "db_field": "decided_events",
+    },
+    URN.URN_TYPE.IMAGINARY: {
+        "registry": "res://data/tres_imaginaries_registry.tres",
+        "db_field": "imaginaries",
+    },
+    URN.URN_TYPE.TAG: {
+        "registry": "res://data/tres_tags_registry.tres",
+        "db_field": "tags",
+    },
+    URN.URN_TYPE.FLAG: {
+        "registry": "res://data/flags_registry.tres",
+        "db_field": "flags",
+    },
+    URN.URN_TYPE.LIFE_PATH_POINT: {
+        "registry": "res://data/tres_path_points_registry.tres",
+        "db_field": "life_path_points",
+    },
+    URN.URN_TYPE.LEGENDARY_POEM: {
+        "registry": "res://data/tres_legendary_poems_registry.tres",
+        "db_field": "legendary_poems",
+    },
+    URN.URN_TYPE.NORMAL_POEM_EVENT: {
+        "registry": "res://data/tres_normal_poem_events_registry.tres",
+        "db_field": "normal_poem_events",
+    },
+    URN.URN_TYPE.EVENT_OPTION: {
+        "registry": "res://data/event_options_registry.tres",
+        "db_field": "event_options",
+    },
 }

@@ -87,9 +87,7 @@ static func load_event_data() -> EventData:
 	
 	var temp_traits = Util.create_dict_from_registry(load("res://data/tres_traits_registry.tres"))
 	var traits = {}
-	# 处理traits的UUID转换
 	for t in temp_traits.values():
-		t.uuid = t.uuid.replace('__', ':')
 		traits[t.uuid] = t
 	
 	var properties = Util.create_dict_from_registry(load("res://data/tres_properties_registry.tres"))
