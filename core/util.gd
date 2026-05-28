@@ -309,9 +309,12 @@ static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 			var float_val = overlay_val.to_float()
 			if float_val == 0.0 and overlay_val != "0" and overlay_val != "0.0":
 				# 转不出来，报错
-				breakpoint
-				push_error("merge_context: 无法将 overlay 值转为数值. key=%s, value=%s" % [key, overlay_val])
+				#breakpoint
+				Logging.warn("merge_context: 无法将 overlay 值转为数值. key=%s, value=%s" % [key, overlay_val])
 				continue
+			else:
+				Logging.info("merge_context: 添加了一个string 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
+				base[key] = overlay_val
 			overlay_val = float_val
 		
 		if overlay_val is int or overlay_val is float:
@@ -323,7 +326,7 @@ static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 				base[key] = overlay_val
 		else:
 			# 非数值类型 → 还没实现，断点报错
-			breakpoint
+			#breakpoint
 			push_error("merge_context: 未实现的 overlay 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
 	
 	return base

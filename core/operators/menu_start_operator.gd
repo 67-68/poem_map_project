@@ -8,6 +8,7 @@ class_name MenuStartOperator extends BaseOperator
 var context: Dictionary
 
 func init(context: Dictionary):
+	breakpoint
 	context[key_of_resource_in_context] = resource_to_put_in_context
 	return context
 

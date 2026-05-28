@@ -325,8 +325,8 @@ scale = Vector2(1, 0.96530986)
 [node name="Control" type="Control" parent="UI" unique_id=1108839830]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 365.0
-offset_bottom = 253.0
+offset_right = 67.0
+offset_bottom = 66.0
 script = ExtResource("6_7mycd")
 
 [node name="Controller" type="TextEdit" parent="UI/Control" unique_id=1744803703]
@@ -345,10 +345,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 116.5
-offset_top = -17.0
-offset_right = 196.5
-offset_bottom = 33.0
+offset_left = -35.5
+offset_top = 167.0
+offset_right = 44.5
+offset_bottom = 217.0
 grow_horizontal = 2
 grow_vertical = 0
 

@@ -235,3 +235,35 @@ CSV 中 `>option` 行指定 `template=urn:event_option:poem_giving_option` 时�
 1. **`resource_local_to_scene = true` 的 Resource 慎用 `duplicate()`** — 返回的对象属性访问行为异常
 2. **手动 `new()` + 逐字段拷贝** 比 `duplicate()` 稳定得多，尤其是涉及子资源时
 3. **Godot Editor Inspector 可能欺骗你** — 文件内容正确但界面不刷新时，以文件内容为准
+
+## 2026-05-28: `extract_key_from_tres` regex 被 SubResource 的 option UUID 截胡
+
+### 问题描述
+`resources_registry_creator.gd` 创建 registry 时，包含嵌套 EventOption 的 RandomEvent 文件被注册成了 option 的 UUID 而非 event 自身的 UUID。例如 `jiaoyou_poem_public.tres` 在 registry 中的 key 被错误记录为 `jiaoyou_poem_public_opt`（option 的 UUID）而不是 `jiaoyou_poem_public`（event 的 UUID）。
+
+### 根本原因
+`extract_key_from_tres()` 使用 `RegEx.search(content)` 在全文件范围查找第一个 `uuid = "..."`。Godot 的 `.tres` 序列化顺序是：
+1. `[sub_resource]` 块（内含 EventOption 等嵌套资源）
+2. `[resource]` 块（主资源）
+
+当 EventOption 有非空 UUID（如 CSV 中 option 行带了 uuid 列）时，序列化结果中 SubResource 的 `uuid = "option_uuid"` 出现在 `[resource]` 段的 `uuid = "event_uuid"` 之前。regex 命中第一个匹配，返回了 option 的 UUID。
+
+### 影响范围
+- 所有包含带 UUID 的 EventOption 的 RandomEvent `.tres` 文件
+- registry 中 event 的真实 UUID 查不到，但 option UUID 指向了 event 的文件路径
+- 当前 CSV 中第 3 行（`test1_give_money`）和第 13 行（`jiaoyou_poem_public_opt`）的 option 有 UUID，这两个事件的 registry key 均受影响
+
+### 修复方案
+三层降级策略，按优先级：
+
+1. **方案一（主方案）**：直接 `load()` 资源文件，访问 `resource.uuid` 属性。这是运行时精确值，不受序列化顺序影响。
+2. **方案二（兜底）**：文本解析但**仅搜索 `[resource]` 段落**，跳过 `[sub_resource]` 区域。
+3. **方案三（最终兜底）**：uuid/id 都找不到时用文件名。
+
+### 核心教训
+1. **永远不要依赖 `RegEx.search(content)` 在 `.tres`/`.tscn` 文件中找第一个匹配的属性** — SubResource 先于 Resource 序列化，嵌套资源的同名字段会"截胡"。
+2. **能用 `load()` 拿 Resource 对象直接访问属性就别搞文本解析** — 精确、类型安全、不受序列化格式影响。
+3. **CSV option 行的 uuid 列**是有副作用的 — 虽然 option UUID 有业务含义（引用），但它会污染基于文本解析的 registry 生成逻辑。
+
+### 修复文件
+- <ref_file file="/Users/lennon/Projects/poem_map_project/resources_registry_creator.gd" />
