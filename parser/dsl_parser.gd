@@ -609,9 +609,10 @@ static func validate_trait(trait_: Trait) -> bool:
 static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "random_event") -> Array[Resource]:
     var resources: Array[Resource] = []
     
-    # 非 random_event 类型走扁平解析
-    if data_type != "random_event":
-        return _parse_flat_data(csv_data, data_type)
+    # 使用 URN enum 对照判断数据类型
+    var urn_type = URN.find_urn_type(data_type)
+    if urn_type != URN.URN_TYPE.RANDOM_EVENT:
+        return _parse_flat_data(csv_data, urn_type)
     
     # ── random_event: 下推自动机 ──
     var stack: Array[RandomEvent] = []  # 事件栈，维护当前解析层级
@@ -679,27 +680,27 @@ static func _pda_flush_stack(stack: Array[RandomEvent], resources: Array[Resourc
             resources.append(event)
 
 # 扁平数据解析（flags / trait），逐行独立解析
-static func _parse_flat_data(csv_data: Array[Dictionary], data_type: String) -> Array[Resource]:
+static func _parse_flat_data(csv_data: Array[Dictionary], data_type: int) -> Array[Resource]:
     var resources: Array[Resource] = []
     for i in range(csv_data.size()):
         var row = csv_data[i]
         var resource: Resource = null
         
         match data_type:
-            "flags":
+            URN.URN_TYPE.FLAG:
                 var flag = parse_flag(row)
                 if flag and validate_flag(flag):
                     resource = flag
                 else:
                     print("Warning: Failed to parse flag at row %d" % (i + 1))
-            "trait":
+            URN.URN_TYPE.TRAIT:
                 var trait_ = parse_trait(row)
                 if trait_ and validate_trait(trait_):
                     resource = trait_
                 else:
                     print("Warning: Failed to parse trait at row %d" % (i + 1))
             _:
-                push_error("未知的 data_type: %s 💀" % data_type)
+                push_error("未知的 data_type enum: %d 💀" % data_type)
                 continue
         
         if resource:

@@ -20,10 +20,10 @@ const DATA_MANIFEST: Array[Dictionary] = [
 		"data_type": "random_event"
 	},
 	{
-		"name": "flags_data",
-		"url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2EfTq6BZ59bQ7lIRBd2q-hoJb1RAJHc2vOwlp5wJ03R7fG23SuvoWOKRcbSsPuPwbp_rs7m1Tk081/pub?output=csv",
-		"save_path": "res://data/flags/flags.csv",
-		"data_type": "flags"
+	    "name": "flags_data",
+	    "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2EfTq6BZ59bQ7lIRBd2q-hoJb1RAJHc2vOwlp5wJ03R7fG23SuvoWOKRcbSsPuPwbp_rs7m1Tk081/pub?output=csv",
+	    "save_path": "res://data/flags/flags.csv",
+	    "data_type": "flag"
 	}
 ]
 
