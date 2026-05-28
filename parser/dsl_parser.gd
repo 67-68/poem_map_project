@@ -98,27 +98,42 @@ static func parse_context(context_str: String) -> Dictionary:
 
 # ---------- 事件/选项解析 ----------
 
-# 解析 template URN，从已有资源 duplicate 并替换 uuid
-# 返回 null 表示 template 不可用（空、解析失败、类型不匹配），由调用方兜底创建新对象
-static func _resolve_template(template_urn: String, new_uuid: String) -> RandomEvent:
+# 工厂函数：根据行类型解析并校验 template URN
+# 在行解析的最开始时调用，提前发现类型不匹配问题
+# 校验通过后直接 duplicate 返回实例
+#   "random_event" → 校验 is RandomEvent，返回 RandomEvent
+#   "option"       → 校验 is RandomEvent / is EventOption，返回对应类型
+static func _resolve_template_for_type(template_urn: String, row_type: String, new_uuid: String):
     if template_urn.is_empty():
         return null
     
     var template_resource = URN.get_resource_through_urn(template_urn)
     if template_resource == null:
-        Logging.warn("Template URN 解析失败，资源不存在: %s" % template_urn)
+        Logging.warn("Template URN 解析失败，资源不存在 (urn: %s, row_type: %s)" % [template_urn, row_type])
         return null
     
-    if not (template_resource is RandomEvent):
-        Logging.warn("Template URN 返回的类型不是 RandomEvent (urn: %s, type: %s)" % [template_urn, typeof(template_resource)])
+    # 校验类型
+    var type_ok = false
+    match row_type:
+        "random_event":
+            type_ok = template_resource is RandomEvent
+        "option":
+            type_ok = template_resource is RandomEvent or template_resource is EventOption
+        _:
+            Logging.warn("未知的行类型 '%s'，跳过 template 类型检查 (urn: %s)" % [row_type, template_urn])
+            return null
+    
+    if not type_ok:
+        Logging.warn("Template 类型不匹配: %s 行不兼容 URN '%s' 返回的 %s (type: %d)" % [
+            row_type, template_urn, template_resource.get_class(), typeof(template_resource)])
         return null
     
-    var event = template_resource.duplicate() as RandomEvent
-    if not new_uuid.is_empty():
-        event.uuid = new_uuid
-    
-    Logging.info("Template 应用成功: %s -> uuid=%s" % [template_urn, event.uuid])
-    return event
+    # 校验通过，直接 duplicate 返回
+    var instance = template_resource.duplicate()
+    if instance is RandomEvent and not new_uuid.is_empty():
+        instance.uuid = new_uuid
+    Logging.info("Template 应用成功 (%s): %s" % [row_type, template_urn])
+    return instance
 
 # 解析随机事件（row_type = 'random_event'）
 static func parse_random_event(row: Dictionary) -> RandomEvent:
@@ -143,15 +158,17 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
         return null
 
     # 解析 template URN（可选），优先从已有资源 duplicate
+    # ⚡ 在行解析的最开始检查 template 类型，避免后续数据覆盖
     var template_urn = row.get('template', '')
-    var event: RandomEvent = _resolve_template(template_urn, uuid)
+    var template_result = _resolve_template_for_type(template_urn, "random_event", uuid)
 
-    # Fallback: template 不可用时创建新对象
-    if not event:
-        event = RandomEvent.new({})
+    var event: RandomEvent
+    if template_result is RandomEvent:
+        event = template_result as RandomEvent
+        # 确保 uuid 被正确覆盖（工厂函数内部已处理，双重保障）
         event.uuid = uuid
     else:
-        # 确保 uuid 被正确覆盖（_resolve_template 内部已处理，双重保障）
+        event = RandomEvent.new({})
         event.uuid = uuid
 
     # 解析 context DSL
@@ -215,11 +232,25 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
     var uuid = row.get('uuid', '')
 
     # 解析 template URN（可选），优先从已有资源 duplicate
+    # ⚡ 在行解析的最开始检查 template 类型，避免后续数据覆盖
     var template_urn = row.get('template', '')
-    var event: RandomEvent = _resolve_template(template_urn, uuid)
+    var template_result = _resolve_template_for_type(template_urn, "option", uuid)
 
-    # Fallback: template 不可用时创建新对象
-    if not event:
+    var event: RandomEvent
+    if template_result is RandomEvent:
+        # RandomEvent template → 直接使用
+        event = template_result as RandomEvent
+        event.uuid = uuid
+    elif template_result is EventOption:
+        # EventOption template → 转换为 RandomEvent
+        event = RandomEvent.new({})
+        event.uuid = uuid
+        event.name = template_result.description
+        event.description = template_result.description
+        event.requirement = template_result.requirement
+        event.event_result = template_result.choice_result
+    else:
+        # 无 template / 类型不匹配 → 创建新对象
         event = RandomEvent.new({})
         event.uuid = uuid
 
@@ -669,10 +700,19 @@ static func validate_trait(trait_: Trait) -> bool:
 static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "random_event") -> Array[Resource]:
     var resources: Array[Resource] = []
     
-    # 使用 URN enum 对照判断数据类型
-    var urn_type = URN.find_urn_type(data_type)
-    if urn_type != URN.URN_TYPE.RANDOM_EVENT:
-        return _parse_flat_data(csv_data, urn_type)
+    # 🚨 避开 @tool 模式下 enum 跨脚本 match 解析异常的问题。
+    # `URN.URN_TYPE.FLAG` 等枚举常量在 match 语句中可能无法正确解析为整数值，
+    # 导致所有 data_type 都落入 _ 兜底分支。
+    # 直接用原始字符串 match，简单粗暴有效 🤓☝️
+    match data_type:
+        "random_event":
+            # ── 进入下推自动机逻辑 ──
+            pass
+        "trait", "flag":
+            return _parse_flat_data(csv_data, data_type)
+        _:
+            push_error("parse_csv_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
+            return []
     
     # ── random_event: 下推自动机 ──
     var stack: Array[RandomEvent] = []  # 事件栈，维护当前解析层级
@@ -708,6 +748,7 @@ static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "ran
 #   depth=1 → 选项子行（option，挂载到栈顶事件）
 #   depth=N → 第N层嵌套
 # 弹出栈顶时，若栈变空则说明该顶层事件已完成，加入 resources
+# 根据当前的深度和row_type共同判断如何解析: 我应该把这个抽象为一个类，让每个类自己负责对于其他类的状态转移，就像是工具模式
 static func _pda_transition(stack: Array[RandomEvent], resources: Array[Resource],
                             depth: int, row_type: String, row: Dictionary, row_index: int) -> void:
     # ── 第一步：根据深度调整栈 ──
@@ -750,27 +791,28 @@ static func _pda_flush_stack(stack: Array[RandomEvent], resources: Array[Resourc
             resources.append(event)
 
 # 扁平数据解析（flags / trait），逐行独立解析
-static func _parse_flat_data(csv_data: Array[Dictionary], data_type: int) -> Array[Resource]:
+# 🚨 接收 String 类型 data_type，用字符串 match 避免 @tool 模式下 enum 跨脚本解析异常
+static func _parse_flat_data(csv_data: Array[Dictionary], data_type: String) -> Array[Resource]:
     var resources: Array[Resource] = []
     for i in range(csv_data.size()):
         var row = csv_data[i]
         var resource: Resource = null
         
         match data_type:
-            URN.URN_TYPE.FLAG:
+            "flag":
                 var flag = parse_flag(row)
                 if flag and validate_flag(flag):
                     resource = flag
                 else:
                     print("Warning: Failed to parse flag at row %d" % (i + 1))
-            URN.URN_TYPE.TRAIT:
+            "trait":
                 var trait_ = parse_trait(row)
                 if trait_ and validate_trait(trait_):
                     resource = trait_
                 else:
                     print("Warning: Failed to parse trait at row %d" % (i + 1))
             _:
-                push_error("未知的 data_type enum: %d 💀" % data_type)
+                push_error("_parse_flat_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
                 continue
         
         if resource:
