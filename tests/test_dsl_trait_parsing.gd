@@ -157,18 +157,28 @@ func test_new_complex_requirements():
 	assert_not_null(parsed_req, "新语法: 复合条件不应为null")
 
 func test_new_dsl_csv_integration():
-	var csv_row = {
-		"event_id": "test_event_01",
-		"trigger_tags": "action:intent:study:poetry",
-		"requirements": "trait_has(name=official), prop_gt(name=money, val=50)",
-		"title": "测试事件",
-		"description": "这是一个测试",
-		"opt_1_text": "选择A",
-		"opt_1_result": "trait_add(name=corrupt), prop_sub(name=money, val=100)"
-	}
+	# 使用 parse_csv_data 走完整的 PDA 下推自动机流程
+	# 🚨 必须显式声明 Array[Dictionary] 类型，避免 Godot 4 类型数组入参不匹配
+	var csv_data: Array[Dictionary] = [
+		{
+			"row_type": "random_event",
+			"uuid": "test_event_01",
+			"trigger_tags": "action:intent:study:poetry",
+			"requirements": "trait_has(name=official), prop_gt(name=money, val=50)",
+			"title": "测试事件",
+			"description": "这是一个测试",
+		},
+		{
+			"row_type": ">option",
+			"title": "选择A",
+			"results": "trait_add(name=corrupt), prop_sub(name=money, val=100)"
+		}
+	]
 	
-	var event = DSLParser.parse_random_event(csv_row)
+	var events = DSLParser.parse_csv_data(csv_data, "random_event")
 	
+	assert_eq(events.size(), 1, "新语法: 应该解析出1个事件")
+	var event = events[0] as RandomEvent
 	assert_not_null(event, "新语法: 事件应该被成功解析")
 	assert_not_null(event.requirement, "新语法: 事件应该有requirements")
 	
@@ -182,83 +192,92 @@ func test_new_dsl_csv_integration():
 
 
 # ════════════════════════════════════════════════════════════
-# 旧语法向后兼容测试
+# 新语法全覆盖测试（旧语法已移除，所有用例迁移至新语法）
 # ════════════════════════════════════════════════════════════
 
 func test_old_trait_requirement_parsing():
-	var req_str = "trait:has:official"
+	var req_str = "trait_has(name=official)"
 	var parsed_req = MicroDSLParser.parse_trait_requirement(req_str)
 	
-	assert_not_null(parsed_req, "旧语法兼容: trait requirement解析结果不应为null")
-	assert_true(parsed_req is TraitRequirement, "旧语法兼容: 解析结果应该是TraitRequirement类型")
-	assert_eq(parsed_req.trait_name, "official", "旧语法兼容: trait名称应该被正确解析")
-	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.HAS, "旧语法兼容: 操作符应该是HAS")
+	assert_not_null(parsed_req, "trait requirement解析结果不应为null")
+	assert_true(parsed_req is TraitRequirement, "解析结果应该是TraitRequirement类型")
+	assert_eq(parsed_req.trait_name, "official", "trait名称应该被正确解析")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.HAS, "操作符应该是HAS")
 
 func test_old_trait_requirement_not_has():
-	var req_str = "trait:not_has:corrupt"
+	var req_str = "trait_not_has(name=corrupt)"
 	var parsed_req = MicroDSLParser.parse_trait_requirement(req_str)
 	
-	assert_not_null(parsed_req, "旧语法兼容: trait requirement解析结果不应为null")
-	assert_eq(parsed_req.trait_name, "corrupt", "旧语法兼容: trait名称应该被正确解析")
-	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.NOT_HAS, "旧语法兼容: 操作符应该是NOT_HAS")
+	assert_not_null(parsed_req, "trait_not_has解析结果不应为null")
+	assert_eq(parsed_req.trait_name, "corrupt", "trait_not_has名称正确")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.NOT_HAS, "操作符应该是NOT_HAS")
 
 func test_old_trait_operator_add():
-	var op_str = "trait:add:brave"
+	var op_str = "trait_add(name=brave)"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
 	
-	assert_eq(parsed_ops.size(), 1, "旧语法兼容: 应该解析出一个操作符")
-	assert_not_null(parsed_ops[0], "旧语法兼容: 操作符不应为null")
-	assert_true(parsed_ops[0] is TraitOperator, "旧语法兼容: 解析结果应该是TraitOperator类型")
-	assert_eq(parsed_ops[0].str_traits, "brave", "旧语法兼容: trait名称应该被正确解析")
-	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.ADD, "旧语法兼容: 操作符应该是ADD")
+	assert_eq(parsed_ops.size(), 1, "应该解析出一个操作符")
+	assert_not_null(parsed_ops[0], "操作符不应为null")
+	assert_true(parsed_ops[0] is TraitOperator, "解析结果应该是TraitOperator类型")
+	assert_eq(parsed_ops[0].str_traits, "brave", "trait名称应该被正确解析")
+	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.ADD, "操作符应该是ADD")
 
 func test_old_trait_operator_remove():
-	var op_str = "trait:remove:cowardly"
+	var op_str = "trait_remove(name=cowardly)"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
 	
-	assert_eq(parsed_ops.size(), 1, "旧语法兼容: 应该解析出一个操作符")
-	assert_eq(parsed_ops[0].str_traits, "cowardly", "旧语法兼容: trait名称应该被正确解析")
-	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.REMOVE, "旧语法兼容: 操作符应该是REMOVE")
+	assert_eq(parsed_ops.size(), 1, "应该解析出一个操作符")
+	assert_eq(parsed_ops[0].str_traits, "cowardly", "trait名称应该被正确解析")
+	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.REMOVE, "操作符应该是REMOVE")
 
 func test_old_dsl_csv_integration():
-	var csv_row = {
-		"event_id": "test_event_01",
-		"trigger_tags": "action:intent:study:poetry",
-		"requirements": "trait:has:official,prop:money:>50",
-		"title": "测试事件",
-		"description": "这是一个测试",
-		"opt_1_text": "选择A",
-		"opt_1_result": "trait:add:corrupt,prop:money:-100"
-	}
+	# 使用 parse_csv_data 走完整的 PDA 下推自动机流程
+	# 🚨 必须显式声明 Array[Dictionary] 类型，避免 Godot 4 类型数组入参不匹配
+	var csv_data: Array[Dictionary] = [
+		{
+			"row_type": "random_event",
+			"uuid": "test_event_02",
+			"trigger_tags": "action:intent:study:poetry",
+			"requirements": "trait_has(name=official), prop_gt(name=money, val=50)",
+			"title": "测试事件",
+			"description": "这是一个测试",
+		},
+		{
+			"row_type": ">option",
+			"title": "选择A",
+			"results": "trait_add(name=corrupt), prop_sub(name=money, val=100)"
+		}
+	]
 	
-	var event = DSLParser.parse_random_event(csv_row)
+	var events = DSLParser.parse_csv_data(csv_data, "random_event")
 	
-	assert_not_null(event, "旧语法兼容: 事件应该被成功解析")
-	assert_not_null(event.requirement, "旧语法兼容: 事件应该有requirements")
+	assert_eq(events.size(), 1, "应该解析出1个事件")
+	var event = events[0] as RandomEvent
+	assert_not_null(event, "事件应该被成功解析")
+	assert_not_null(event.requirement, "事件应该有requirements")
 	
-	assert_gt(event.options.size(), 0, "旧语法兼容: 事件应该至少有一个选项")
+	assert_gt(event.options.size(), 0, "事件应该至少有一个选项")
 	var first_option = event.options[0]
-	assert_not_null(first_option.choice_result, "旧语法兼容: 选项应该有结果")
+	assert_not_null(first_option.choice_result, "选项应该有结果")
 	
 	var trait_ops = first_option.choice_result.operators.filter(func(op): return op is TraitOperator)
-	assert_gt(trait_ops.size(), 0, "旧语法兼容: 结果中应该包含trait操作符")
-	assert_eq(trait_ops[0].str_traits, "corrupt", "旧语法兼容: trait操作符应该指定正确的trait名称")
+	assert_gt(trait_ops.size(), 0, "结果中应该包含trait操作符")
+	assert_eq(trait_ops[0].str_traits, "corrupt", "trait操作符应该指定正确的trait名称")
 
 func test_old_multiple_trait_requirements():
-	var req_str = "trait:has:official,trait:not_has:corrupt"
+	var req_str = "trait_has(name=official), trait_not_has(name=corrupt)"
 	var parsed_req = DSLParser.parse_requirements(req_str)
 	
-	assert_not_null(parsed_req, "旧语法兼容: 复合requirement不应为null")
+	assert_not_null(parsed_req, "复合requirement不应为null")
 	if parsed_req is ComplexRequirements:
-		assert_gt(parsed_req.operators.size(), 0, "旧语法兼容: 复合requirement应该包含子requirements")
+		assert_gt(parsed_req.operators.size(), 0, "复合requirement应该包含子requirements")
 
 func test_old_invalid_trait_format():
-	var invalid_req_str = "trait:has"
+	var invalid_req_str = "trait_has()"
 	var parsed_req = MicroDSLParser.parse_trait_requirement(invalid_req_str)
-	assert_null(parsed_req, "旧语法兼容: 格式错误的trait应该返回null")
+	assert_null(parsed_req, "缺少name参数的trait应该返回null")
 
 func test_old_empty_trait_handling():
-	var empty_req_str = "trait:has:"
+	var empty_req_str = "trait_has(name=)"
 	var parsed_req = MicroDSLParser.parse_trait_requirement(empty_req_str)
-	if parsed_req:
-		assert_true(parsed_req.trait_name.is_empty(), "旧语法兼容: 空的trait名称应该被保留为空字符串")
+	assert_null(parsed_req, "name为空的trait应该返回null")

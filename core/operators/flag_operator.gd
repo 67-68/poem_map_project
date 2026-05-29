@@ -13,6 +13,12 @@ class_name FlagOperator extends BaseOperator
 		'set',
 		'append'
 ) var operation := 'set'
+@export var target_flag_id_from_context: String = ''
+
+func init(_context: Dictionary) -> Dictionary:
+	var flag_uid = _context.get(target_flag_id_from_context)
+	if flag_uid: flag_id = flag_uid
+	return _context
 
 func get_referenced_flags() -> Array:
 	if flag_id.is_empty():

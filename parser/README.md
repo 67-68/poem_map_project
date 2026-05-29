@@ -2,9 +2,20 @@
 
 ## 概述
 
-这个DSL解析器用于解析CSV格式的事件数据，支持复杂的微语法(Micro-DSL)格式来定义游戏的随机事件系统。
+这个 DSL 解析器用于解析 CSV 格式的事件数据，支持命名参数微语法 (Micro-DSL) 格式来定义游戏的随机事件系统。
 
-## 支持的CSV字段
+### 语法版本
+
+| 版本 | 状态 | 说明 |
+|------|------|------|
+| **新语法** (v2) | ✅ **当前唯一支持的语法** | 函数调用格式：`func_name(param=val, ...)` |
+| 旧语法 (v1) | ❌ 已移除 | 冒号分割格式：`prop:money:>50` |
+
+> **旧语法（冒号分割格式）已于 2025.10 完全移除**，不再向后兼容。所有 DSL 数据必须使用新语法。
+
+---
+
+## 支持的 CSV 字段
 
 ### 事件/选项行字段
 
@@ -18,15 +29,6 @@
 | title | 否 | 事件标题 | GameEntity.name |
 | description | 否 | 事件描述 | GameEntity.description |
 | results | 否 | 事件/选项结果操作符 | ChoiceResult |
-
-### 旧式选项列（opt_X 系列）
-
-| 列名 | 格式说明 | 映射到 |
-|------|----------|--------|
-| Opt_A_Text | 选项文本 | BaseOption.description |
-| Opt_A_Req | 条件检查 | PropertyRequirement |
-| Opt_A_Result | 结果操作 | ChoiceResult.operators |
-| ... | ... | ... |
 
 ### Template URN 机制
 
@@ -46,16 +48,24 @@
 
 **示例**：
 ```csv
-random_event,urn:random-event:base_banquet_event,evt_farewell_01,"tag:action:social:banquet","prop:money:>30","践行宴","好友即将远行，你设宴践行...","prop:money:-30,prop:friendship:+10"
+random_event,urn:random-event:base_banquet_event,evt_farewell_01,"tag:action:social:banquet","prop_gt(name=money, val=30)","践行宴","好友即将远行，你设宴践行...","prop_sub(name=money, val=30), prop_add(name=friendship, val=10)"
 ```
-
-这个事件会从 `base_banquet_event` 模板中 clone 所有字段，然后用 CSV 行中的值覆盖。
 
 **失败回退**：如果 template URN 解析失败（资源不存在、类型不匹配等），自动回退到创建全新的 RandomEvent 对象，不影响整体解析。
 
-## Micro-DSL 语法
+---
+
+## Micro-DSL 语法（新语法 v2）
+
+新语法采用**函数调用格式**：`func_name(param1=val1, param2=val2, ...)`
+
+- 函数名编码了 **type** + **action**（如 `prop_gt`、`trait_has`、`flag_bool_set`）
+- 参数使用**命名参数**，位置无关
+- 字符串值用双引号包裹（可选），数字/布尔值裸写
+- 多个表达式用逗号分隔（逗号**不在括号内**的才是分隔符）
 
 ### 1. 触发标签格式
+
 ```
 domain:subcategory:specific_attribute
 ```
@@ -76,183 +86,247 @@ actor:status:drunk,city:econ:prosperous,action:study:poetry
 ### 2. 触发条件格式
 
 #### 属性触发
-```
-prop:property_name:>value   # 大于
-prop:property_name:<value   # 小于
-```
+
+| 函数 | 说明 | 参数 |
+|------|------|------|
+| `prop_gt(name=, val=)` | 属性值大于 | name: 属性名, val: 数值 |
+| `prop_lt(name=, val=)` | 属性值小于 | name: 属性名, val: 数值 |
 
 示例：
 ```
-prop:money:>50              # 金钱大于50
-prop:literary_fame:<30      # 文学名声小于30
+prop_gt(name=money, val=50)          # 金钱大于50
+prop_lt(name=literary_fame, val=30)  # 文学名声小于30
 ```
 
 #### 特性触发
-```
-trait:has:trait_name        # 拥有特性
-trait:not_has:trait_name    # 不拥有特性
-```
+
+| 函数 | 说明 | 参数 |
+|------|------|------|
+| `trait_has(name=)` | 拥有特性 | name: 特性名 |
+| `trait_not_has(name=)` | 不拥有特性 | name: 特性名 |
 
 示例：
 ```
-trait:has:official          # 拥有官员特性
-trait:not_has:criminal      # 不拥有罪犯特性
+trait_has(name=official)       # 拥有官员特性
+trait_not_has(name=criminal)   # 不拥有罪犯特性
 ```
 
-#### 标志位触发（int 类型，5 段式）
-```
-flag:int:>:FLAG_ID:VALUE    # int flag 值大于 VALUE
-flag:int:<:FLAG_ID:VALUE    # int flag 值小于 VALUE
-```
+#### 标志位触发
+
+| 函数 | 说明 | 参数 |
+|------|------|------|
+| `flag_bool_has(name=)` | bool flag 存在且为 true | name: flag_id |
+| `flag_bool_not_has(name=)` | bool flag 不存在或为 false | name: flag_id |
+| `flag_int_gt(name=, val=)` | int flag 值大于 | name: flag_id, val: 数值 |
+| `flag_int_lt(name=, val=)` | int flag 值小于 | name: flag_id, val: 数值 |
+| `flag_str_is(name=)` | str flag 值非空 | name: flag_id |
+| `flag_str_is_not(name=)` | str flag 值为空 | name: flag_id |
 
 示例：
 ```
-flag:int:>:flag_relation_with_libai:10   # 与李白的关系值 > 10
-flag:int:<:flag_relation_with_libai:5    # 与李白的关系值 < 5
-```
-
-> **注意**：int 类型的 flag requirement 使用 5 段式语法消除歧义，必须严格按照 `flag:int:OPERATOR:FLAG_ID:VALUE` 格式，不要写成 `flag:int:>:10`（缺少 flag_id 会报错）。
-
-#### 标志位触发（bool 类型）
-```
-flag:bool:has:FLAG_ID       # flag 存在且为 true
-flag:bool:not_has:FLAG_ID   # flag 不存在或为 false
-```
-
-#### 标志位触发（str 类型）
-```
-flag:str:is:FLAG_ID         # flag 的 str 值非空
-flag:str:is_not:FLAG_ID     # flag 的 str 值为空
+flag_bool_has(name=flag_visited_changan)    # 已访问长安
+flag_int_gt(name=flag_relation_with_libai, val=10)  # 与李白的关系值 > 10
+flag_str_is(name=flag_player_title)          # 有称号
 ```
 
 #### 多个条件
-用逗号分隔，自动使用AND逻辑：
+
+用逗号分隔，自动使用 AND 逻辑：
 ```
-prop:money:>50,prop:literary_fame:>30,trait:has:official
+prop_gt(name=money, val=50), prop_gt(name=literary_fame, val=30), trait_has(name=official)
 ```
 
 ### 3. 结果操作符格式
 
 #### 属性修改
-```
-prop:property_name:+value   # 增加
-prop:property_name:-value   # 减少
-```
+
+| 函数 | 说明 | 参数 |
+|------|------|------|
+| `prop_add(name=, val=)` | 属性增加 | name: 属性名, val: 数值 |
+| `prop_sub(name=, val=)` | 属性减少 | name: 属性名, val: 数值 |
 
 示例：
 ```
-prop:money:+100             # 增加100金钱
-prop:health:-20             # 减少20健康
+prop_add(name=money, val=100)       # 增加100金钱
+prop_sub(name=health, val=20)       # 减少20健康
 ```
 
 #### 特性操作
-```
-trait:add:trait_name        # 添加特性
-trait:remove:trait_name     # 移除特性
-```
+
+| 函数 | 说明 | 参数 |
+|------|------|------|
+| `trait_add(name=)` | 添加特性 | name: 特性名 |
+| `trait_remove(name=)` | 移除特性 | name: 特性名 |
 
 示例：
 ```
-trait:add:corrupt           # 添加腐败特性
-trait:remove:sick           # 移除疾病特性
+trait_add(name=corrupt)      # 添加腐败特性
+trait_remove(name=sick)      # 移除疾病特性
 ```
 
 #### 标志位操作
-```
-flag:bool:add:flag_id                      # 设置布尔标志为true
-flag:bool:remove:flag_id                   # 设置布尔标志为false
-flag:bool:old_flag->new_flag              # 替换布尔标志
-flag:str:set:flag_id:content              # 设置字符串标志
-flag:int:add:flag_id:value                # 增加整数标志
-flag:int:set:flag_id:value                # 设置整数标志
-```
+
+| 函数 | 说明 | 参数 |
+|------|------|------|
+| `flag_bool_set(name=, val=)` | 设置 bool flag | name: flag_id, val: true/false |
+| `flag_bool_replace(from=, to=)` | 替换 bool flag 名称 | from: 旧 flag_id, to: 新 flag_id |
+| `flag_str_set(name=, val=)` | 设置 str flag | name: flag_id, val: 字符串值 |
+| `flag_int_set(name=, val=)` | 设置 int flag | name: flag_id, val: 数值 |
+| `flag_int_append(name=, val=)` | int flag 增加 | name: flag_id, val: 数值 |
 
 示例：
 ```
-flag:bool:add:flag_player_has_key          # 获得钥匙
-flag:bool:remove:flag_game_over           # 移除游戏结束标志
-flag:bool:flag_old_status->flag_new_status  # 替换状态
-flag:str:set:flag_player_name:李四         # 设置姓名
-flag:int:add:flag_score:50                # 增加分数
-flag:int:set:flag_health:100              # 设置健康值
+flag_bool_set(name=flag_has_key, val=true)           # 获得钥匙
+flag_bool_set(name=flag_game_over, val=false)        # 移除游戏结束标志
+flag_bool_replace(from=flag_old_status, to=flag_new_status)  # 替换状态
+flag_str_set(name=flag_player_name, val="李四")       # 设置姓名
+flag_int_append(name=flag_score, val=50)             # 增加分数
+flag_int_set(name=flag_health, val=100)              # 设置健康值
 ```
 
 #### 多个操作
+
 用逗号分隔：
 ```
-prop:money:-100,trait:add:corrupt,prop:prestige:+50
+prop_sub(name=money, val=100), trait_add(name=corrupt), prop_add(name=prestige, val=50)
 ```
+
+---
 
 ## 使用方法
 
 ### 基本解析
 ```gdscript
 var csv_row = {
-    "Event_ID": "evt_changan_01",
-    "Trigger_Tags": "actor:status:drunk,city:econ:prosperous",
-    "requirements": "prop:money:>50",
-    "Title": "长安酒馆奇遇",
-    "Desc": "你在酒馆遇到了神秘诗人...",
-    "Opt_A_Text": "塞钱贿赂",
-    "Opt_A_Req": "prop:money:>100",
-    "Opt_A_Result": "prop:money:-100,trait:add:corrupt"
+    "uuid": "evt_changan_01",
+    "trigger_tags": "actor:status:drunk,city:econ:prosperous",
+    "requirements": "prop_gt(name=money, val=50)",
+    "title": "长安酒馆奇遇",
+    "description": "你在酒馆遇到了神秘诗人..."
 }
+```
 
-var event = DSLParser.parse(csv_row)
+### 通过 PDA 下推自动机解析（带选项）
+```gdscript
+var csv_data: Array[Dictionary] = [
+    {
+        "row_type": "random_event",
+        "uuid": "evt_changan_01",
+        "requirements": "prop_gt(name=money, val=50), trait_has(name=official)",
+        "title": "长安酒馆奇遇",
+        "description": "你在长安的一家酒馆中遇到了一位神秘的诗人..."
+    },
+    {
+        "row_type": ">option",
+        "title": "塞钱贿赂",
+        "results": "prop_sub(name=money, val=100), trait_add(name=corrupt)"
+    },
+    {
+        "row_type": ">option",
+        "title": "拂袖而去",
+        "results": "prop_add(name=prestige, val=50)"
+    }
+]
+
+var events = DSLParser.parse_csv_data(csv_data, "random_event")
 ```
 
 ### 批量解析
 ```gdscript
-var csv_data = [row1, row2, row3, ...]
-var events = DSLParser.parse_csv_data(csv_data)
+var events = DSLParser.parse_csv_data(csv_data, "random_event")
+for event in events:
+    print("- 事件: %s, 选项数: %d" % [event.uuid, event.options.size()])
 ```
 
-### 验证事件
-```gdscript
-if DSLParser.validate_event(event):
-    print("事件有效")
-```
+---
 
 ## 错误处理
 
 解析器包含完善的错误处理机制：
 
-- **必需字段缺失**：Event_ID字段缺失时会返回null并记录错误
-- **格式错误**：无效的DSL格式会记录警告并跳过相关部分
+- **必需字段缺失**：uuid 字段缺失时会返回 null 并记录错误
+- **格式错误**：无效的 DSL 格式会记录警告并跳过相关部分
 - **类型错误**：无法转换的数值会使用默认值
+
+---
 
 ## 扩展性
 
 ### 添加新的操作符类型
-在`MicroDSLParser.parse_consequence_operators()`中添加新的类型处理：
+
+在 `[]MicroDSLParser.parse_consequence_operators()` 中添加新的类型处理：
 
 ```gdscript
-elif type == "new_type":
-    var operator = parse_new_type_operator(action, value)
-    if operator:
-        operators.append(operator)
+# 新操作符无需特殊处理，NamedDSLParser 自动解析 func_name + params
+# 在 parse_consequence_operators 中根据 func_name 分发即可
 ```
 
 ### 添加新的需求类型
-在`DSLParser.parse_single_requirement()`中添加新的需求处理：
+
+在 `[]DSLParser.parse_single_requirement()` 中添加新的需求处理：
 
 ```gdscript
-elif req_str.begins_with('new_req:'):
+elif req_str.begins_with('new_type_'):
     return parse_new_requirement(req_str)
 ```
+
+---
+
+## 架构说明
+
+### 解析器分层
+
+```
+┌─────────────────────────────────────────────────┐
+│                  DSLParser                       │
+│  ├─ parse_csv_data() — PDA 下推自动机           │
+│  ├─ parse_random_event() — 事件行解析           │
+│  ├─ parse_requirements() — 复合条件解析         │
+│  └─ parse_choice_result() — 结果操作符解析      │
+├─────────────────────────────────────────────────┤
+│              MicroDSLParser                     │
+│  ├─ parse_property_requirement()                │
+│  ├─ parse_trait_requirement()                   │
+│  ├─ parse_flag_requirement()                    │
+│  └─ parse_consequence_operators()               │
+├─────────────────────────────────────────────────┤
+│              NamedDSLParser                     │
+│  ├─ split_expressions() — 括号感知逗号分割      │
+│  └─ parse_single() — 命名参数解析              │
+└─────────────────────────────────────────────────┘
+```
+
+### 下推自动机 (PDA)
+
+DSL Parser 使用下推自动机解析层级 CSV 数据：
+
+- `depth=0` → 顶层事件 (`random_event`)
+- `depth=1` → 选项子行 (`option`)，挂载到栈顶事件
+- `row_type` 前置 `>` 表示层级（如 `>option` 等价于 depth=1）
+
+---
 
 ## 注意事项
 
 1. **特性系统**：当前特性需求的实现是简化的，可能需要根据实际游戏系统进行扩展
 2. **属性映射**：属性名称需要与游戏中的属性系统保持一致
 3. **枚举值**：某些操作符使用枚举值，确保与游戏系统中的枚举定义匹配
-4. **性能**：批量解析大量数据时注意性能，建议分批处理
+4. **类型数组**：`parse_csv_data()` 的第一个参数要求 `Array[Dictionary]`，调用时必须显式声明类型，避免 Godot 4 类型数组入参不匹配
+5. **性能**：批量解析大量数据时注意性能，建议分批处理
 
-## 示例完整事件
+---
+
+## 完整示例
 
 ```csv
-Event_ID,Trigger_Tags,requirements,Title,Desc,Opt_A_Text,Opt_A_Req,Opt_A_Result,Opt_B_Text,Opt_B_Req,Opt_B_Result
-evt_changan_01,"actor:status:drunk,city:econ:prosperous,action:study:poetry","prop:money:>50,trait:has:official","长安酒馆奇遇","你在长安的一家酒馆中遇到了一位神秘的诗人...","塞钱贿赂","prop:money:>100","prop:money:-100,trait:add:corrupt","拂袖而去","trait:has:proud","prop:prestige:+50"
+uuid,trigger_tags,requirements,title,description,results
+evt_changan_01,"actor:status:drunk,city:econ:prosperous","prop_gt(name=money, val=50), trait_has(name=official)","长安酒馆奇遇","你在长安的酒馆中遇到了一位神秘的诗人...",""
 ```
 
-这个CSV行会被解析为一个完整的RandomEvent对象，包含所有必要的触发条件、选项和结果。
+对应的选项子行（PDA 解析）：
+```csv
+row_type,uuid,trigger_tags,requirements,title,description,results
+random_event,evt_changan_01,"actor:status:drunk,city:econ:prosperous","prop_gt(name=money, val=50), trait_has(name=official)","长安酒馆奇遇","你在长安的酒馆中遇到了一位神秘的诗人...",""
+>option,,,,"塞钱贿赂","","prop_sub(name=money, val=100), trait_add(name=corrupt)"
+>option,,,,"拂袖而去","","prop_add(name=prestige, val=50)"
+```

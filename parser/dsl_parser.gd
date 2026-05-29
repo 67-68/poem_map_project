@@ -343,12 +343,15 @@ static func parse_background(bg: String) -> Texture2D:
     return TextureResLoader.get_background(bg)
 
 # 解析触发条件，支持多个条件的AND组合
+# 使用 NamedDSLParser.split_expressions() 处理顶级逗号分割，
+# 防止括号内的参数逗号被误分割（如 prop_gt(name=money, val=50)）
 static func parse_requirements(requirements_str: String) -> BaseRequirements:
-    var requirements = requirements_str.split(',')
     var parsed_requirements: Array[BaseRequirements] = []
     
-    for req_str in requirements:
-        var clean_req = req_str.strip_edges()
+    # 统一使用 split_expressions 处理逗号分割，兼容有括号和无括号的新语法表达式
+    var expressions = NamedDSLParser.split_expressions(requirements_str)
+    
+    for clean_req in expressions:
         if clean_req.is_empty():
             continue
             
@@ -367,13 +370,14 @@ static func parse_requirements(requirements_str: String) -> BaseRequirements:
         complex_req.current_operator = REQ_OPERATOR.LOGIC.AND
         return complex_req
 
-# 解析单个触发条件
+# 解析单个触发条件（仅支持新语法：prop_、trait_、flag_ 前缀）
+# 旧语法（prop:/trait:/flag:）已完全移除
 static func parse_single_requirement(req_str: String) -> BaseRequirements:
-    if req_str.begins_with('prop:'):
+    if req_str.begins_with('prop_'):
         return MicroDSLParser.parse_property_requirement(req_str)
-    elif req_str.begins_with('trait:'):
+    elif req_str.begins_with('trait_'):
         return MicroDSLParser.parse_trait_requirement(req_str)
-    elif req_str.begins_with('flag:'):
+    elif req_str.begins_with('flag_'):
         return MicroDSLParser.parse_flag_requirement(req_str)
     else:
         print("Warning: Unknown requirement type: %s" % req_str)
@@ -425,12 +429,13 @@ static func parse_option(row: Dictionary, letter: String) -> BaseOption:
     return option
 
 # 解析选项门槛（简化版，只支持属性检查）
+# 仅支持新语法（prop_/trait_/flag_），旧语法已完全移除
 static func parse_option_requirement(req_str: String) -> BaseRequirements:
-    if req_str.begins_with('prop:'):
+    if req_str.begins_with('prop_'):
         return MicroDSLParser.parse_property_requirement(req_str)
-    elif req_str.begins_with('trait:'):
+    elif req_str.begins_with('trait_'):
         return MicroDSLParser.parse_trait_requirement(req_str)
-    elif req_str.begins_with('flag:'):
+    elif req_str.begins_with('flag_'):
         return MicroDSLParser.parse_flag_requirement(req_str)
     else:
         print("Warning: Unknown option requirement type: %s" % req_str)

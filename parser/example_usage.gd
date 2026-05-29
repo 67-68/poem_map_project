@@ -99,12 +99,3 @@ func test_dsl_formats():
     var complex_req_str = "prop_gt(name=money, val=50), prop_gt(name=literary_fame, val=30)"
     var complex_req = DSLParser.parse_requirements(complex_req_str)
     print("复合需求解析: ", complex_req != null)
-    
-    # 测试旧语法（验证向后兼容）
-    print("\n--- 旧语法向后兼容测试 ---")
-    var old_prop = MicroDSLParser.parse_property_requirement("prop:money:>50")
-    print("旧语法属性需求解析: ", old_prop != null)
-    var old_trait = MicroDSLParser.parse_trait_requirement("trait:has:official")
-    print("旧语法特性需求解析: ", old_trait != null)
-    var old_ops = MicroDSLParser.parse_consequence_operators("prop:money:-100,trait:add:corrupt")
-    print("旧语法结果操作符解析: ", old_ops.size(), " 个操作符")
