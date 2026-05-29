@@ -7,7 +7,9 @@ enum LOGIC {
 
 enum COMPARE {
     LESS_THAN,
-    GREATER_THAN
+    GREATER_THAN,
+    EQUAL,
+    NOT_EQUAL
 }
 
 enum CRUD {

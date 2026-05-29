@@ -37,15 +37,15 @@ depth,row_type,uuid,context,requirements,title,description,results
 | `description` | 否 | 详细描述 |
 | `results` | 否 | 事件/选项级结果 DSL |
 
-## 示例
+## 示例（新语法）
 
 ```csv
 depth,row_type,uuid,context,requirements,title,description,results
-,random_event,evt_changan_01,"tag:actor:status:temporary:drunk,city:econ:level:prosperous|weight:15.5|background:(bg_tavern_night)",prop:money:>50,长安酒馆奇遇,你在酒馆遇到一位神秘诗人,prop:literary_fame:+5
->,option,opt_bribe,"weight:0.8",prop:money:>100,塞钱贿赂,,prop:money:-100,trait:add:corrupt
->,option,opt_poetry,"weight:1.2",prop:literary_fame:>20,与之对诗,,prop:literary_fame:+15,prop:money:-30
+,random_event,evt_changan_01,"tag:actor:status:temporary:drunk,city:econ:level:prosperous|weight:15.5|background:(bg_tavern_night)",prop_gt(name=money, val=50),长安酒馆奇遇,你在酒馆遇到一位神秘诗人,prop_add(name=literary_fame, val=5)
+>,option,opt_bribe,"weight:0.8",prop_gt(name=money, val=100),塞钱贿赂,,prop_sub(name=money, val=100), trait_add(name=corrupt)
+>,option,opt_poetry,"weight:1.2",prop_gt(name=literary_fame, val=20),与之对诗,,prop_add(name=literary_fame, val=15), prop_sub(name=money, val=30)
 ,random_event,evt_market_02,"tag:city:econ:level:prosperous|weight:10.0",,市场见闻,集市上人来人往,,
->,option,opt_buy,"weight:0.5",prop:money:>30,买些小玩意,,prop:money:-30
+>,option,opt_buy,"weight:0.5",prop_gt(name=money, val=30),买些小玩意,,prop_sub(name=money, val=30)
 ```
 
 ## 解析规则

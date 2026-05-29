@@ -27,10 +27,18 @@ func compare(_player_state: PlayerState) -> bool:
 			if current_val == null:
 				current_val = ''
 			var target_val = str(value)
-			if operator == REQ_OPERATOR.COMPARE.LESS_THAN:
-				return str(current_val) < target_val
-			else:
-				return str(current_val) > target_val
+			match operator:
+				REQ_OPERATOR.COMPARE.LESS_THAN:
+					return str(current_val) < target_val
+				REQ_OPERATOR.COMPARE.GREATER_THAN:
+					return str(current_val) > target_val
+				REQ_OPERATOR.COMPARE.EQUAL:
+					return str(current_val) == target_val
+				REQ_OPERATOR.COMPARE.NOT_EQUAL:
+					return str(current_val) != target_val
+				_:
+					Logging.err("FlagRequirement: 未知的比较操作符 str: %s" % operator)
+					return false
 		'int':
 			var current_val = PlayerState.get_flag(flag_id)
 			if current_val == null:

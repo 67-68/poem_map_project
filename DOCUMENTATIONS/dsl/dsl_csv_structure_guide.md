@@ -126,16 +126,30 @@ row_type | template | uuid | context | requirements | title | description | resu
 #### requirements (可选)
 - **类型**: `String`（DSL 条件格式）
 - **描述**: 事件触发的额外条件，多个条件用逗号分隔（AND 逻辑）
-- **格式**:
-  - 属性条件: `prop:<property_name>:<operator><value>`
-    - 示例: `prop:money:>50`, `prop:health:<30`
-  - 特性条件: `trait:has:<trait_name>` 或 `trait:not_has:<trait_name>`
-    - 示例: `trait:has:official`, `trait:not_has:corrupt`
-  - 标志位条件: `flag:<type>:<operator>:<value>`
-    - 示例: `flag:bool:has:flag_player_has_key`, `flag:str:is:flag_player_title:官员`
-  - DeepSeek 条件（特殊）: `deepseek:<prompt>`
-    - 示例: `deepseek:判断玩家是否在京兆府任职`
-- **多条件组合**: `prop:money:>50,trait:has:official,flag:bool:has:flag_has_key`
+- **格式**（两种语法均支持，**推荐使用新语法**）:
+  - **旧语法**（冒号分隔，向后兼容）:
+    - 属性条件: `prop:<property_name>:<operator><value>`
+      - 示例: `prop:money:>50`, `prop:health:<30`
+    - 特性条件: `trait:has:<trait_name>` 或 `trait:not_has:<trait_name>`
+      - 示例: `trait:has:official`, `trait:not_has:corrupt`
+    - 标志位条件: `flag:<type>:<operator>:<value>`
+      - 示例: `flag:bool:has:flag_player_has_key`, `flag:str:is:flag_player_title:官员`
+    - DeepSeek 条件（特殊）: `deepseek:<prompt>`
+      - 示例: `deepseek:判断玩家是否在京兆府任职`
+  - **新语法**（命名参数函数调用，推荐）:
+    - 属性条件: `prop_gt(name=<属性名>, val=<数值>)` 或 `prop_lt(name=<属性名>, val=<数值>)`
+      - 示例: `prop_gt(name=money, val=50)`, `prop_lt(name=health, val=30)`
+    - 特性条件: `trait_has(name=<特性名>)` 或 `trait_not_has(name=<特性名>)`
+      - 示例: `trait_has(name=official)`, `trait_not_has(name=corrupt)`
+    - 标志位条件:
+      - 布尔: `flag_bool_has(name=<标志ID>)` / `flag_bool_not_has(name=<标志ID>)`
+      - 字符串: `flag_str_is(name=<标志ID>, val=<值>)` / `flag_str_not(name=<标志ID>, val=<值>)`
+      - 整数: `flag_int_gt(name=<标志ID>, val=<数值>)` / `flag_int_lt(name=<标志ID>, val=<数值>)`
+      - 示例: `flag_bool_has(name=flag_player_has_key)`, `flag_str_is(name=flag_player_title, val=官员)`
+    - DeepSeek 条件（特殊）: `deepseek:<prompt>`
+      - 示例: `deepseek:判断玩家是否在京兆府任职`
+- **多条件组合**: `prop_gt(name=money, val=50),trait_has(name=official),flag_bool_has(name=flag_has_key)`
+  - 旧语法组合仍然向后兼容: `prop:money:>50,trait:has:official,flag:bool:has:flag_has_key`
 - **注意**: options 行的 requirements 控制选项的**可用性**（不可用则禁用/隐藏）
 
 #### title (可选)
@@ -153,18 +167,32 @@ row_type | template | uuid | context | requirements | title | description | resu
 #### results (可选，主要用在选项行)
 - **类型**: `String`（DSL 结果格式）
 - **描述**: 选择该选项后执行的结果操作符。对于 `random_event` 行，该字段通常为空。
-- **格式**: 多个操作符用逗号分隔
-  - 属性操作: `prop:<property_name>:<value>`（支持 +/- 符号）
-    - 示例: `prop:money:-100`, `prop:literary_fame:+15`
-  - 特性操作: `trait:add:<trait_name>` 或 `trait:remove:<trait_name>`
-    - 示例: `trait:add:corrupt`, `trait:remove:weak`
-  - 标志位操作:
-    - 布尔: `flag:bool:add:<flag_id>`, `flag:bool:remove:<flag_id>`, `flag:bool:<old>-><new>`
-    - 字符串: `flag:str:set:<flag_id>:<content>`
-    - 整数: `flag:int:add:<flag_id>:<value>`, `flag:int:set:<flag_id>:<value>`
-  - DeepSeek 生成: `deepseek:<prompt>`
-    - 示例: `deepseek:生成一段关于科举落榜的诗句`
-- **示例**: `prop:money:-100,trait:add:corrupt,flag:bool:add:flag_bribed`
+- **格式**（两种语法均支持，**推荐使用新语法**）: 多个操作符用逗号分隔
+  - **旧语法**（冒号分隔，向后兼容）:
+    - 属性操作: `prop:<property_name>:<value>`（支持 +/- 符号）
+      - 示例: `prop:money:-100`, `prop:literary_fame:+15`
+    - 特性操作: `trait:add:<trait_name>` 或 `trait:remove:<trait_name>`
+      - 示例: `trait:add:corrupt`, `trait:remove:weak`
+    - 标志位操作:
+      - 布尔: `flag:bool:add:<flag_id>`, `flag:bool:remove:<flag_id>`, `flag:bool:<old>-><new>`
+      - 字符串: `flag:str:set:<flag_id>:<content>`
+      - 整数: `flag:int:add:<flag_id>:<value>`, `flag:int:set:<flag_id>:<value>`
+    - DeepSeek 生成: `deepseek:<prompt>`
+      - 示例: `deepseek:生成一段关于科举落榜的诗句`
+  - **新语法**（命名参数函数调用，推荐）:
+    - 属性操作: `prop_add(name=<属性名>, val=<数值>)` / `prop_sub(name=<属性名>, val=<数值>)` / `prop_set(name=<属性名>, val=<数值>)`
+      - 示例: `prop_sub(name=money, val=100)`, `prop_add(name=literary_fame, val=15)`
+    - 特性操作: `trait_add(name=<特性名>)` 或 `trait_remove(name=<特性名>)`
+      - 示例: `trait_add(name=corrupt)`, `trait_remove(name=weak)`
+    - 标志位操作:
+      - 布尔: `flag_bool_set(name=<标志ID>, val=true/false)` / `flag_bool_replace(name=<标志ID>, old=<旧值>, new=<新值>)`
+      - 字符串: `flag_str_set(name=<标志ID>, val=<内容>)` / `flag_str_append(name=<标志ID>, val=<内容>)`
+      - 整数: `flag_int_set(name=<标志ID>, val=<数值>)` / `flag_int_append(name=<标志ID>, val=<数值>)`
+      - 示例: `flag_bool_set(name=flag_bribed, val=true)`, `flag_str_set(name=flag_player_title, val=官员)`
+    - DeepSeek 生成: `deepseek:<prompt>`
+      - 示例: `deepseek:生成一段关于科举落榜的诗句`
+- **旧语法示例**: `prop:money:-100,trait:add:corrupt,flag:bool:add:flag_bribed`
+- **新语法示例**: `prop_sub(name=money, val=100),trait_add(name=corrupt),flag_bool_set(name=flag_bribed, val=true)`
 
 #### emotion_config (可选，仅 event 级别)
 - **类型**: `String`（DSL 情绪配置格式）
@@ -255,7 +283,7 @@ row_type | template | uuid | context | requirements | title | description | resu
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
 random_event,,a1b2c3d4-e5f6-7890-abcd-ef1234567890,trigger_tags=[action:intent:study:poetry],,简单诗会,参加一个简单的诗会活动,,
-  option,,,,,参与,,prop:literary_fame:+10
+  option,,,,,参与,,prop_add(name=literary_fame, val=10)
 ```
 
 **解析**:
@@ -263,14 +291,15 @@ random_event,,a1b2c3d4-e5f6-7890-abcd-ef1234567890,trigger_tags=[action:intent:s
 - depth 1: 选项 `参与`，无门槛，文学名声 +10
 - 注意选项行前面的**两个空格**表示 depth 1
 - context 中 `trigger_tags=[...]` 的方括号语法清晰指明了标签列表的边界
+- results 使用新语法 `prop_add(name=literary_fame, val=10)`，旧语法 `prop:literary_fame:+10` 仍向后兼容
 
 ### 示例 2: 使用模板的事件
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901-bcde-f23456789012,trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor,prop:money:>50,,长安酒馆奇遇,你在长安的酒馆中遇到了一个神秘人。,
-  option,,,,,塞钱贿赂,prop:money:>100,prop:money:-100,trait:add:corrupt
-  option,,,,,与之对诗,prop:literary_fame:>20,prop:literary_fame:+15
+random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901-bcde-f23456789012,trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor,prop_gt(name=money, val=50),,长安酒馆奇遇,你在长安的酒馆中遇到了一个神秘人。,
+  option,,,,,塞钱贿赂,prop_gt(name=money, val=100),prop_sub(name=money, val=100),trait_add(name=corrupt)
+  option,,,,,与之对诗,prop_gt(name=literary_fame, val=20),prop_add(name=literary_fame, val=15)
 ```
 
 **解析**:
@@ -281,44 +310,46 @@ random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901
   - UUID 被替换为 `b2c3d4e5-...`
 - 两个选项是在 CSV 行中**新增**的，不会替换模板的选项（它们会被合并）
 - context 使用 `|` 分隔多个字段，通过 `[...]` 包裹多个标签
+- requirements/results 使用新语法，如 `prop_gt(name=money, val=50)`、`prop_sub(name=money, val=100)`
 
 ### 示例 3: 多选项事件 + 复杂 context
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,c3d4e5f6-a7b8-9012-cdef-345678901234,trigger_tags=[action:travel:mode:road]|weight=8.0|background=bg_mountain,prop:health:>30,山贼拦路,在山路上遇到了山贼。,
-  option,,,,,武力反抗,prop:strength:>40,prop:health:-20,prop:prestige:+10,trait:add:brave
-  option,,,,,交钱保命,prop:money:>50,prop:money:-50
-  option,,,,,智取脱身,prop:intel:>35,prop:intel:+10,prop:prestige:+15
-  option,,,,,呼救求助,trait:has:connected,prop:money:-20
+random_event,,c3d4e5f6-a7b8-9012-cdef-345678901234,trigger_tags=[action:travel:mode:road]|weight=8.0|background=bg_mountain,prop_gt(name=health, val=30),山贼拦路,在山路上遇到了山贼。,
+  option,,,,,武力反抗,prop_gt(name=strength, val=40),prop_sub(name=health, val=20),prop_add(name=prestige, val=10),trait_add(name=brave)
+  option,,,,,交钱保命,prop_gt(name=money, val=50),prop_sub(name=money, val=50)
+  option,,,,,智取脱身,prop_gt(name=intel, val=35),prop_add(name=intel, val=10),prop_add(name=prestige, val=15)
+  option,,,,,呼救求助,trait_has(name=connected),prop_sub(name=money, val=20)
 ```
 
 **解析**:
 - context 中包含多个字段：`trigger_tags`、`weight`、`background`，用 `|` 分隔
 - 4 个选项，每个有不同的条件和结果
 - 每个选项行前有 2 个空格缩进
+- 所有 DSL 表达式使用新语法，如 `prop_gt(name=strength, val=40)`、`trait_has(name=connected)`
 
 ### 示例 4: 包含标志位的事件
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,d4e5f6a7-b8c9-0123-defa-456789012345,trigger_tags=[action:enter:location:palace],flag:bool:has:flag_player_visited_palace,再次进宫,你再次来到皇宫。,
-  option,,,,,贿赂守卫,prop:money:>50,prop:money:-50,flag:bool:flag_has_low_reputation->flag_has_high_reputation
-  option,,,,,直接拜访,flag:str:is:flag_player_title:官员,prop:prestige:+20
+random_event,,d4e5f6a7-b8c9-0123-defa-456789012345,trigger_tags=[action:enter:location:palace],flag_bool_has(name=flag_player_visited_palace),再次进宫,你再次来到皇宫。,
+  option,,,,,贿赂守卫,prop_gt(name=money, val=50),prop_sub(name=money, val=50),flag_bool_replace(name=flag_reputation, old=low, new=high)
+  option,,,,,直接拜访,flag_str_is(name=flag_player_title, val=官员),prop_add(name=prestige, val=20)
 ```
 
 **解析**:
-- 事件要求玩家已访问过皇宫（标志位条件）
-- 选项 A: 贿赂守卫，将低声誉标志替换为高声誉标志
-- 选项 B: 直接拜访，要求玩家称号为"官员"
+- 事件要求玩家已访问过皇宫（`flag_bool_has(name=flag_player_visited_palace)`）
+- 选项 A: 贿赂守卫，将低声誉标志替换为高声誉（`flag_bool_replace`）
+- 选项 B: 直接拜访，要求玩家称号为"官员"（`flag_str_is`）
 
 ### 示例 5: 使用 emotion_config 的事件
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results,emotion_config
 random_event,,e5f6a7b8-c9d0-1234-efab-567890123456,trigger_tags=[actor:status:sad]|weight=12.0,,雨夜思乡,窗外下着雨，你独坐房中，心中涌起思乡之情。,,sorrow <- emotion:sorrow:>10;homesick <- emotion:sorrow:>20&emotion:loneliness:>5
-  option,,,,,,借酒浇愁,,prop:health:-10,prop:money:-20
-  option,,,,,,写诗抒怀,,prop:literary_fame:+15
+  option,,,,,,借酒浇愁,,prop_sub(name=health, val=10),prop_sub(name=money, val=20)
+  option,,,,,,写诗抒怀,,prop_add(name=literary_fame, val=15)
 ```
 
 **解析**:
@@ -326,14 +357,15 @@ random_event,,e5f6a7b8-c9d0-1234-efab-567890123456,trigger_tags=[actor:status:sa
   - `sorrow <- emotion:sorrow:>10` — 当 sorrow > 10 时触发 sorrow 意象
   - `homesick <- emotion:sorrow:>20&emotion:loneliness:>5` — 当 sorrow > 20 且 loneliness > 5 时触发 homesick 意象
 - 选项行没有 `emotion_config`（写了也会被忽略并 warn）
+- 注意 `emotion_config` 内的条件格式暂时保持旧语法（`emotion:sorrow:>10`），因其属于情绪系统的独立领域，暂不纳入本次 DSL 升级范围
 
 ### 示例 6: 使用 `>` 深度前缀（简写格式）
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
 random_event,,f6a7b8c9-d0e1-2345-fabc-678901234567,trigger_tags=[action:travel:mode:road]|weight=10.0,,山间偶遇,你在山间小路上遇到了一个采药的老者。,
->option,,,,,,虚心请教,,prop:wisdom:+10
->option,,,,,,购买草药,prop:money:>30,prop:money:-30,prop:health:+15
+>option,,,,,,虚心请教,,prop_add(name=wisdom, val=10)
+>option,,,,,,购买草药,prop_gt(name=money, val=30),prop_sub(name=money, val=30),prop_add(name=health, val=15)
 >option,,,,,,匆匆赶路,,,
 ```
 
@@ -346,10 +378,10 @@ random_event,,f6a7b8c9-d0e1-2345-fabc-678901234567,trigger_tags=[action:travel:m
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,g7a8b9c0-d1e2-3456-fbcd-789012345678,trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:study:poetry]|weight=20.0|background=bg_rural_poor,prop:money:>30,,长安诗会,长安城正在举办一年一度的诗会，各地文人雅士齐聚一堂。,
->option,,,,,,即兴赋诗,prop:literary_fame:>15,prop:literary_fame:+25,prop:prestige:+10
->option,,,,,,以酒会友,prop:money:>50,prop:money:-30,trait:add:sociable
->option,,,,,,旁听学习,,prop:wisdom:+5
+random_event,,g7a8b9c0-d1e2-3456-fbcd-789012345678,trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:study:poetry]|weight=20.0|background=bg_rural_poor,prop_gt(name=money, val=30),,长安诗会,长安城正在举办一年一度的诗会，各地文人雅士齐聚一堂。,
+>option,,,,,,即兴赋诗,prop_gt(name=literary_fame, val=15),prop_add(name=literary_fame, val=25),prop_add(name=prestige, val=10)
+>option,,,,,,以酒会友,prop_gt(name=money, val=50),prop_sub(name=money, val=30),trait_add(name=sociable)
+>option,,,,,,旁听学习,,prop_add(name=wisdom, val=5)
 ```
 
 **解析**:

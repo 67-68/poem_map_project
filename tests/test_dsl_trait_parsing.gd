@@ -3,9 +3,7 @@
 # ----------------------------------------------------------------
 # 架构师留言：
 # 这个测试专门验证DSL parser对trait数据的处理是否正确。
-# 重点关注：
-# 1. CSV中trait名称与实际trait UUID的映射
-# 2. Trait requirement和operator的解析逻辑
+# 重点测试新语法（命名参数函数调用）和旧语法（冒号分割）的解析。
 # ----------------------------------------------------------------
 extends GutTest
 
@@ -20,49 +18,209 @@ class MockTrait extends Resource:
 		uuid = p_uuid
 		name = p_name
 
-# --- [核心测试用例] ---
+# ════════════════════════════════════════════════════════════
+# 新语法测试（命名参数函数调用）
+# ════════════════════════════════════════════════════════════
 
-func test_trait_requirement_parsing():
-	# 测试基本的trait requirement解析
+# --- 新语法: Trait Requirement ---
+
+func test_new_trait_requirement_parsing():
+	var req_str = "trait_has(name=official)"
+	var parsed_req = MicroDSLParser.parse_trait_requirement(req_str)
+	
+	assert_not_null(parsed_req, "新语法: trait requirement解析结果不应为null")
+	assert_true(parsed_req is TraitRequirement, "新语法: 解析结果应该是TraitRequirement类型")
+	assert_eq(parsed_req.trait_name, "official", "新语法: trait名称应该被正确解析")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.HAS, "新语法: 操作符应该是HAS")
+
+func test_new_trait_requirement_not_has():
+	var req_str = "trait_not_has(name=corrupt)"
+	var parsed_req = MicroDSLParser.parse_trait_requirement(req_str)
+	
+	assert_not_null(parsed_req, "新语法: trait_not_has解析结果不应为null")
+	assert_eq(parsed_req.trait_name, "corrupt", "新语法: trait_not_has名称正确")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.NOT_HAS, "新语法: 操作符应该是NOT_HAS")
+
+# --- 新语法: Property Requirement ---
+
+func test_new_property_requirement_gt():
+	var req_str = "prop_gt(name=money, val=50)"
+	var parsed_req = MicroDSLParser.parse_property_requirement(req_str)
+	
+	assert_not_null(parsed_req, "新语法: prop_gt解析结果不应为null")
+	assert_eq(parsed_req.property, "money", "新语法: 属性名应为money")
+	assert_eq(parsed_req.value, 50, "新语法: 值应为50")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.COMPARE.GREATER_THAN, "新语法: 操作符应为GREATER_THAN")
+
+func test_new_property_requirement_lt():
+	var req_str = "prop_lt(name=health, val=30)"
+	var parsed_req = MicroDSLParser.parse_property_requirement(req_str)
+	
+	assert_not_null(parsed_req, "新语法: prop_lt解析结果不应为null")
+	assert_eq(parsed_req.property, "health", "新语法: 属性名应为health")
+	assert_eq(parsed_req.value, 30, "新语法: 值应为30")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.COMPARE.LESS_THAN, "新语法: 操作符应为LESS_THAN")
+
+func test_new_property_requirement_param_order():
+	# 测试参数顺序无关
+	var req_str = "prop_gt(val=50, name=money)"
+	var parsed_req = MicroDSLParser.parse_property_requirement(req_str)
+	
+	assert_not_null(parsed_req, "新语法: 参数顺序无关")
+	assert_eq(parsed_req.property, "money", "新语法: 属性名应为money")
+	assert_eq(parsed_req.value, 50, "新语法: 值应为50")
+
+# --- 新语法: Flag Requirement ---
+
+func test_new_flag_bool_has():
+	var req_str = "flag_bool_has(name=visited_palace)"
+	var parsed_req = MicroDSLParser.parse_flag_requirement(req_str)
+	
+	assert_not_null(parsed_req, "新语法: flag_bool_has解析结果不应为null")
+	assert_eq(parsed_req.flag_id, "visited_palace", "新语法: flag_id正确")
+	assert_eq(parsed_req.type, "bool", "新语法: 类型应为bool")
+	assert_eq(parsed_req.value, true, "新语法: 期望值为true")
+
+func test_new_flag_int_gt():
+	var req_str = "flag_int_gt(name=flag_score, val=100)"
+	var parsed_req = MicroDSLParser.parse_flag_requirement(req_str)
+	
+	assert_not_null(parsed_req, "新语法: flag_int_gt解析结果不应为null")
+	assert_eq(parsed_req.flag_id, "flag_score", "新语法: flag_id正确")
+	assert_eq(parsed_req.type, "int", "新语法: 类型应为int")
+	assert_eq(parsed_req.value, 100, "新语法: 值应为100")
+
+func test_new_flag_str_is():
+	var req_str = 'flag_str_is(name=player_name, val=张三)'
+	var parsed_req = MicroDSLParser.parse_flag_requirement(req_str)
+	
+	assert_not_null(parsed_req, "新语法: flag_str_is解析结果不应为null")
+	assert_eq(parsed_req.flag_id, "player_name", "新语法: flag_id正确")
+	assert_eq(parsed_req.type, "str", "新语法: 类型应为str")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.COMPARE.EQUAL, "新语法: 操作符应为EQUAL")
+
+# --- 新语法: Consequence Operators ---
+
+func test_new_trait_operator_add():
+	var op_str = "trait_add(name=brave)"
+	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
+	
+	assert_eq(parsed_ops.size(), 1, "新语法: 应该解析出一个操作符")
+	assert_true(parsed_ops[0] is TraitOperator, "新语法: 应为TraitOperator")
+	assert_eq(parsed_ops[0].str_traits, "brave", "新语法: trait名称正确")
+	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.ADD, "新语法: 操作符应为ADD")
+
+func test_new_trait_operator_remove():
+	var op_str = "trait_remove(name=cowardly)"
+	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
+	
+	assert_eq(parsed_ops.size(), 1, "新语法: 应该解析出一个操作符")
+	assert_eq(parsed_ops[0].str_traits, "cowardly", "新语法: trait名称正确")
+	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.REMOVE, "新语法: 操作符应为REMOVE")
+
+func test_new_property_operators():
+	var op_str = "prop_add(name=prestige, val=50), prop_sub(name=money, val=100)"
+	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
+	
+	assert_eq(parsed_ops.size(), 2, "新语法: 应该解析出两个操作符")
+	assert_true(parsed_ops[0] is PropertyOperator, "新语法: 第一个应为PropertyOperator")
+	assert_eq(parsed_ops[0].str_props, "prestige", "新语法: 第一个操作符属性名正确")
+	assert_eq(parsed_ops[0].value, 50, "新语法: 第一个操作符值应为50")
+	assert_true(parsed_ops[1] is PropertyOperator, "新语法: 第二个应为PropertyOperator")
+	assert_eq(parsed_ops[1].str_props, "money", "新语法: 第二个操作符属性名正确")
+	assert_eq(parsed_ops[1].value, -100, "新语法: 第二个操作符值应为-100（prop_sub取负）")
+
+func test_new_flag_operators():
+	var op_str = "flag_bool_set(name=has_key, val=true), flag_int_append(name=score, val=50)"
+	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
+	
+	assert_eq(parsed_ops.size(), 2, "新语法: 应该解析出两个操作符")
+	assert_true(parsed_ops[0] is FlagOperator, "新语法: 第一个应为FlagOperator")
+	assert_eq(parsed_ops[0].flag_id, "has_key", "新语法: 第一个flag_id正确")
+	assert_eq(parsed_ops[0].value, true, "新语法: 第一个值应为true")
+	assert_true(parsed_ops[1] is FlagOperator, "新语法: 第二个应为FlagOperator")
+	assert_eq(parsed_ops[1].flag_id, "score", "新语法: 第二个flag_id正确")
+	assert_eq(parsed_ops[1].value, 50, "新语法: 第二个值应为50")
+
+func test_new_flag_replace():
+	var op_str = "flag_bool_replace(from=old_status, to=new_status)"
+	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
+	
+	assert_eq(parsed_ops.size(), 1, "新语法: 应该解析出一个替换操作符")
+
+# --- 新语法: 复合条件 ---
+
+func test_new_complex_requirements():
+	var req_str = "prop_gt(name=money, val=50), trait_has(name=official), flag_bool_has(name=flag_visited)"
+	var parsed_req = DSLParser.parse_requirements(req_str)
+	
+	assert_not_null(parsed_req, "新语法: 复合条件不应为null")
+
+func test_new_dsl_csv_integration():
+	var csv_row = {
+		"event_id": "test_event_01",
+		"trigger_tags": "action:intent:study:poetry",
+		"requirements": "trait_has(name=official), prop_gt(name=money, val=50)",
+		"title": "测试事件",
+		"description": "这是一个测试",
+		"opt_1_text": "选择A",
+		"opt_1_result": "trait_add(name=corrupt), prop_sub(name=money, val=100)"
+	}
+	
+	var event = DSLParser.parse_random_event(csv_row)
+	
+	assert_not_null(event, "新语法: 事件应该被成功解析")
+	assert_not_null(event.requirement, "新语法: 事件应该有requirements")
+	
+	assert_gt(event.options.size(), 0, "新语法: 事件应该至少有一个选项")
+	var first_option = event.options[0]
+	assert_not_null(first_option.choice_result, "新语法: 选项应该有结果")
+	
+	var trait_ops = first_option.choice_result.operators.filter(func(op): return op is TraitOperator)
+	assert_gt(trait_ops.size(), 0, "新语法: 结果中应该包含trait操作符")
+	assert_eq(trait_ops[0].str_traits, "corrupt", "新语法: trait操作符名称正确")
+
+
+# ════════════════════════════════════════════════════════════
+# 旧语法向后兼容测试
+# ════════════════════════════════════════════════════════════
+
+func test_old_trait_requirement_parsing():
 	var req_str = "trait:has:official"
 	var parsed_req = MicroDSLParser.parse_trait_requirement(req_str)
 	
-	assert_not_null(parsed_req, "trait requirement解析结果不应为null")
-	assert_true(parsed_req is TraitRequirement, "解析结果应该是TraitRequirement类型")
-	assert_eq(parsed_req.trait_name, "official", "trait名称应该被正确解析")
-	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.HAS, "操作符应该是HAS")
+	assert_not_null(parsed_req, "旧语法兼容: trait requirement解析结果不应为null")
+	assert_true(parsed_req is TraitRequirement, "旧语法兼容: 解析结果应该是TraitRequirement类型")
+	assert_eq(parsed_req.trait_name, "official", "旧语法兼容: trait名称应该被正确解析")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.HAS, "旧语法兼容: 操作符应该是HAS")
 
-func test_trait_requirement_not_has_parsing():
-	# 测试not_has操作符
+func test_old_trait_requirement_not_has():
 	var req_str = "trait:not_has:corrupt"
 	var parsed_req = MicroDSLParser.parse_trait_requirement(req_str)
 	
-	assert_not_null(parsed_req, "trait requirement解析结果不应为null")
-	assert_eq(parsed_req.trait_name, "corrupt", "trait名称应该被正确解析")
-	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.NOT_HAS, "操作符应该是NOT_HAS")
+	assert_not_null(parsed_req, "旧语法兼容: trait requirement解析结果不应为null")
+	assert_eq(parsed_req.trait_name, "corrupt", "旧语法兼容: trait名称应该被正确解析")
+	assert_eq(parsed_req.operator, REQ_OPERATOR.EXIST.NOT_HAS, "旧语法兼容: 操作符应该是NOT_HAS")
 
-func test_trait_operator_add_parsing():
-	# 测试trait add操作符
+func test_old_trait_operator_add():
 	var op_str = "trait:add:brave"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
 	
-	assert_eq(parsed_ops.size(), 1, "应该解析出一个操作符")
-	assert_not_null(parsed_ops[0], "操作符不应为null")
-	assert_true(parsed_ops[0] is TraitOperator, "解析结果应该是TraitOperator类型")
-	assert_eq(parsed_ops[0].str_traits, "brave", "trait名称应该被正确解析")
-	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.ADD, "操作符应该是ADD")
+	assert_eq(parsed_ops.size(), 1, "旧语法兼容: 应该解析出一个操作符")
+	assert_not_null(parsed_ops[0], "旧语法兼容: 操作符不应为null")
+	assert_true(parsed_ops[0] is TraitOperator, "旧语法兼容: 解析结果应该是TraitOperator类型")
+	assert_eq(parsed_ops[0].str_traits, "brave", "旧语法兼容: trait名称应该被正确解析")
+	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.ADD, "旧语法兼容: 操作符应该是ADD")
 
-func test_trait_operator_remove_parsing():
-	# 测试trait remove操作符
+func test_old_trait_operator_remove():
 	var op_str = "trait:remove:cowardly"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
 	
-	assert_eq(parsed_ops.size(), 1, "应该解析出一个操作符")
-	assert_eq(parsed_ops[0].str_traits, "cowardly", "trait名称应该被正确解析")
-	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.REMOVE, "操作符应该是REMOVE")
+	assert_eq(parsed_ops.size(), 1, "旧语法兼容: 应该解析出一个操作符")
+	assert_eq(parsed_ops[0].str_traits, "cowardly", "旧语法兼容: trait名称应该被正确解析")
+	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.REMOVE, "旧语法兼容: 操作符应该是REMOVE")
 
-func test_dsl_csv_trait_integration():
-	# 测试完整的DSL CSV trait处理流程
+func test_old_dsl_csv_integration():
 	var csv_row = {
 		"event_id": "test_event_01",
 		"trigger_tags": "action:intent:study:poetry",
@@ -75,76 +233,32 @@ func test_dsl_csv_trait_integration():
 	
 	var event = DSLParser.parse_random_event(csv_row)
 	
-	assert_not_null(event, "事件应该被成功解析")
-	assert_not_null(event.requirement, "事件应该有requirements")
+	assert_not_null(event, "旧语法兼容: 事件应该被成功解析")
+	assert_not_null(event.requirement, "旧语法兼容: 事件应该有requirements")
 	
-	# 检查trait requirement是否被正确解析
-	# 注意：这里需要根据实际的requirement结构来验证
-	print("Event requirement type: ", event.requirement.get_class())
-	
-	# 检查选项结果中的trait操作符
-	assert_not_null(event.options, "事件应该有选项")
-	assert_gt(event.options.size(), 0, "事件应该至少有一个选项")
-	
+	assert_gt(event.options.size(), 0, "旧语法兼容: 事件应该至少有一个选项")
 	var first_option = event.options[0]
-	assert_not_null(first_option.choice_result, "选项应该有结果")
-	assert_not_null(first_option.choice_result.operators, "结果应该有操作符")
+	assert_not_null(first_option.choice_result, "旧语法兼容: 选项应该有结果")
 	
-	# 查找trait操作符
 	var trait_ops = first_option.choice_result.operators.filter(func(op): return op is TraitOperator)
-	assert_gt(trait_ops.size(), 0, "结果中应该包含trait操作符")
-	assert_eq(trait_ops[0].str_traits, "corrupt", "trait操作符应该指定正确的trait名称")
+	assert_gt(trait_ops.size(), 0, "旧语法兼容: 结果中应该包含trait操作符")
+	assert_eq(trait_ops[0].str_traits, "corrupt", "旧语法兼容: trait操作符应该指定正确的trait名称")
 
-func test_multiple_trait_requirements():
-	# 测试多个trait requirements的组合
+func test_old_multiple_trait_requirements():
 	var req_str = "trait:has:official,trait:not_has:corrupt"
 	var parsed_req = DSLParser.parse_requirements(req_str)
 	
-	assert_not_null(parsed_req, "复合requirement不应为null")
-	# 如果是ComplexRequirements，检查其子requirements
+	assert_not_null(parsed_req, "旧语法兼容: 复合requirement不应为null")
 	if parsed_req is ComplexRequirements:
-		assert_gt(parsed_req.operators.size(), 0, "复合requirement应该包含子requirements")
+		assert_gt(parsed_req.operators.size(), 0, "旧语法兼容: 复合requirement应该包含子requirements")
 
-func test_trait_name_mapping_issue():
-	# 这个测试专门暴露trait名称映射的问题
-	# CSV中使用简单的trait名称，但实际的trait UUID可能是不同的格式
-	
-	# 模拟CSV中的trait名称
-	var csv_trait_name = "official"
-	
-	# 模拟实际的trait UUID（从registry中看到的格式）
-	var actual_trait_uuids = [
-		"main_baiye_1",
-		"main_duzhuo_1",
-		"poem_deng_gao_1",
-		"relation_libai_1"
-	]
-	
-	# 检查CSV中的trait名称是否与实际UUID匹配
-	var found_match = false
-	for uuid in actual_trait_uuids:
-		if uuid == csv_trait_name:
-			found_match = true
-			break
-	
-	# 这个测试预期会失败，因为CSV中的"official"与实际UUID不匹配
-	# 这就是问题所在！
-	assert_false(found_match, "CSV中的trait名称与实际trait UUID不匹配，这是预期的失败")
-
-func test_invalid_trait_format():
-	# 测试格式错误的trait（段数不对）
-	# 这种情况不会触发push_error，而是返回null
-	var invalid_req_str = "trait:has"  # 缺少trait名称段
+func test_old_invalid_trait_format():
+	var invalid_req_str = "trait:has"
 	var parsed_req = MicroDSLParser.parse_trait_requirement(invalid_req_str)
-	
-	assert_null(parsed_req, "格式错误的trait应该返回null")
+	assert_null(parsed_req, "旧语法兼容: 格式错误的trait应该返回null")
 
-func test_empty_trait_handling():
-	# 测试空trait的处理
+func test_old_empty_trait_handling():
 	var empty_req_str = "trait:has:"
 	var parsed_req = MicroDSLParser.parse_trait_requirement(empty_req_str)
-	
-	# 根据实际实现，空trait名可能被接受或拒绝
-	# 这里只是测试解析行为
 	if parsed_req:
-		assert_true(parsed_req.trait_name.is_empty(), "空的trait名称应该被保留为空字符串")
+		assert_true(parsed_req.trait_name.is_empty(), "旧语法兼容: 空的trait名称应该被保留为空字符串")
