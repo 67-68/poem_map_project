@@ -1,3 +1,4 @@
+@tool
 extends Node
 
 # 独立的Resources Registry创建逻辑
@@ -28,7 +29,7 @@ func create_all_registries() -> void:
 	# 获取所有data文件夹
 	var data_folders = get_data_folders()
 	if verbose:
-		print("找到 ", data_folders.size(), " 个data文件夹")
+		print("找到 ", data_folders.size(), " 个data文件夹: ", data_folders)
 	
 	for folder_name in data_folders:
 		create_registry_for_folder(folder_name, resource_registry_script)
@@ -49,7 +50,9 @@ func get_data_folders() -> Array:
 	
 	while file_name != "":
 		if dir.current_is_dir():
-			folders.append(file_name)
+			# 🚨 macOS 上 .DS_Store 可能被当成目录，过滤掉
+			if file_name not in [".", "..", ".DS_Store"]:
+				folders.append(file_name)
 		file_name = dir.get_next()
 	
 	dir.list_dir_end()
@@ -82,13 +85,20 @@ func create_registry_for_folder(folder_name: String, resource_registry_script) -
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	var resource_count = 0
+	var all_files := []  # 🚨 记录文件夹内所有文件用于诊断
 	
 	while file_name != "":
+		all_files.append(file_name)
 		if file_name.ends_with(".tres"):
 			var file_path = folder_path + file_name
+			# 🚨 验证文件确实存在再处理
+			if not FileAccess.file_exists(file_path):
+				print("    警告：DirAccess 列出了文件但 FileAccess.file_exists 返回 false: ", file_path)
+				file_name = dir.get_next()
+				continue
+			
 			var key = extract_key_from_tres(file_path)
 			if key:
-				# 使用key作为key，文件路径作为value
 				registry.resources[key] = file_path
 				resource_count += 1
 				if verbose:
@@ -99,8 +109,13 @@ func create_registry_for_folder(folder_name: String, resource_registry_script) -
 	
 	dir.list_dir_end()
 	
+	if verbose:
+		print("  文件夹内容 (", all_files.size(), " 项): ", all_files)
+	
 	if resource_count == 0:
-		print("  警告：没有找到任何资源文件")
+		print("  警告：没有找到任何资源文件 (folder=", folder_name, ")")
+		# 🚨 诊断：尝试直接 load 确认文件是否可达
+		_diagnose_folder(folder_path)
 		return
 	
 	# 保存registry文件
@@ -110,6 +125,32 @@ func create_registry_for_folder(folder_name: String, resource_registry_script) -
 			print("  ✓ 创建registry文件: ", registry_path, " (包含 ", resource_count, " 个资源)")
 	else:
 		print("  ✗ 错误：无法保存registry文件 ", registry_path)
+
+# 🚨 诊断辅助：当 DirAccess 找不到文件时，尝试直接 load 已知路径
+func _diagnose_folder(folder_path: String) -> void:
+	print("  诊断：尝试直接探测文件夹 ", folder_path)
+	var dir = DirAccess.open(folder_path)
+	if not dir:
+		print("  诊断：DirAccess.open 失败")
+		return
+	
+	dir.list_dir_begin()
+	var count = 0
+	var fname = dir.get_next()
+	while fname != "":
+		count += 1
+		if fname.ends_with(".tres"):
+			var fp = folder_path + fname
+			if ResourceLoader.exists(fp):
+				print("    诊断: 文件存在且 ResourceLoader.exists=true: ", fname)
+				var res = load(fp)
+				if res and "uuid" in res:
+					print("    诊断: load() 成功, uuid=", res.get("uuid"))
+			else:
+				print("    诊断: ResourceLoader.exists=false: ", fname)
+		fname = dir.get_next()
+	dir.list_dir_end()
+	print("  诊断: 共列出 ", count, " 项")
 
 # 从资源文件中提取 key（uuid 或 id）
 # 优先级：
@@ -142,9 +183,15 @@ func extract_key_from_tres(file_path: String) -> String:
 	var content = file.get_as_text()
 	file.close()
 	
-	# 定位到 [resource] 段落
+	# 定位到 [resource] 段落 - 使用更灵活的匹配方式
 	var resource_marker = "\n[resource]\n"
 	var resource_section_start = content.find(resource_marker)
+	
+	# 🚨 保险：如果 \n[resource]\n 没找到，试试行首的 [resource]
+	if resource_section_start == -1:
+		resource_marker = "[resource]\n"
+		resource_section_start = content.find(resource_marker)
+	
 	var search_target = content
 	if resource_section_start != -1:
 		search_target = content.substr(resource_section_start)

@@ -9,8 +9,9 @@
 [ext_resource type="Script" uid="uid://c2t6abq8tsd80" path="res://debuggers/decision_label.gd" id="6_by2l1"]
 [ext_resource type="Script" uid="uid://c6n3tkxdr807d" path="res://tests/imaginary_label.gd" id="7_irtbx"]
 [ext_resource type="Script" uid="uid://bgsta0fpn35g8" path="res://debuggers/emotion_label.gd" id="8_jklm9"]
+[ext_resource type="Script" uid="uid://c7wpo3q8tik6t" path="res://debuggers/flag_label.gd" id="9_flag"]
 
-[node name="DebugInfo" type="ColorRect"]
+[node name="DebugInfo" type="ColorRect" unique_id=1082349687]
 custom_minimum_size = Vector2(200, 200)
 offset_left = 473.0
 offset_top = 2.0
@@ -19,15 +20,15 @@ offset_bottom = 280.0
 scale = Vector2(0.98352087, 1)
 script = ExtResource("1_i515d")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=98850902]
 layout_mode = 0
 offset_right = 345.69678
 offset_bottom = 278.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1181156914]
 layout_mode = 2
 
-[node name="StatLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="StatLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1505945283]
 z_index = 5
 layout_mode = 2
 size_flags_vertical = 3
@@ -36,7 +37,7 @@ theme_override_font_sizes/font_size = 10
 text = "current property: "
 script = ExtResource("1_fscx0")
 
-[node name="EventsLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="EventsLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=512077360]
 z_index = 5
 layout_mode = 2
 size_flags_vertical = 3
@@ -45,7 +46,7 @@ theme_override_font_sizes/font_size = 10
 text = "future events: "
 script = ExtResource("2_bhh81")
 
-[node name="TimeLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="TimeLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1517325860]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 10
@@ -53,37 +54,44 @@ text = "timescale: "
 justification_flags = 10
 script = ExtResource("3_by2l1")
 
-[node name="EventPoolLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="EventPoolLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=48036637]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 10
 text = "event pool content"
 script = ExtResource("4_irtbx")
 
-[node name="CurrentActionLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="CurrentActionLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=398678227]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 10
 text = "current action label"
 script = ExtResource("5_bhh81")
 
-[node name="DecisionLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="DecisionLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1256967455]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 10
 text = "current_decision"
 script = ExtResource("6_by2l1")
 
-[node name="ImaginaryLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="ImaginaryLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1330411368]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 10
 text = "imaginary label"
 script = ExtResource("7_irtbx")
 
-[node name="EmotionLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+[node name="EmotionLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1734161730]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 10
 text = "emotions: "
 script = ExtResource("8_jklm9")
+
+[node name="FlagLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=537574214]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "flags: "
+script = ExtResource("9_flag")

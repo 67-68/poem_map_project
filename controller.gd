@@ -47,9 +47,17 @@ func parse(new_text):
 		'add_imaginary':
 			EventBus.request_add_imaginary.emit(parts[2])
 
-	if parts.size() == 2 and parts[0] == '$':
-		#breakpoint
-		EventBus.request_event_key.emit(parts[1], {})
+	if parts[0] == '$':
+		if parts.size() >= 3 and parts[1] == 'dsl':
+			# $ dsl {consequence_operators} — 直接解析并执行 DSL 操作符
+			var dsl_content = new_text.substr(new_text.find('dsl') + 4).strip_edges()
+			var operators = MicroDSLParser.parse_consequence_operators(dsl_content)
+			Logging.info('Executing DSL: %s, got %d operators' % [dsl_content, operators.size()])
+			for op in operators:
+				op.operate()
+		elif parts.size() == 2:
+			# $ event_key — 触发事件（原有逻辑）
+			EventBus.request_event_key.emit(parts[1], {})
 	elif parts.size() == 2:
 		if GameState.has_method(parts[0]):
 			GameState.callv(parts[0],[parts[1]])

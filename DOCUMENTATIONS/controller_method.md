@@ -44,6 +44,21 @@ $<<event_key>
 ```
 示例：`$battle_start`
 
+### 7. DSL 操作符直接执行
+```
+$ dsl <consequence_operators>
+```
+直接解析并执行 Micro-DSL 操作符链，支持 `prop:`、`trait:`、`emo:`、`flag:` 等操作符，**逗号分隔**。
+
+示例：
+```
+$ dsl prop:money:-100
+$ dsl trait:add:corrupt
+$ dsl flag:bool:add:chain_strange_poet_1
+$ dsl flag:int:set:flag_relation_with_libai:10
+$ dsl prop:money:-100,trait:add:corrupt,emo:grief:20,flag:bool:add:met_libai
+```
+
 ## 批量命令
 可以在输入框中输入多行命令（用换行符分隔），会按顺序执行所有命令。
 
