@@ -313,3 +313,61 @@ func operate():
 
 ### 修复文件
 - <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/menu_start_operator.gd" />
+
+## 2026-05-29: Godot 4 导入缓存导致脚本修改不生效
+
+### 问题描述
+在 VS Code 中修改 `.gd` 脚本（如 `dsl_parser.gd`）后，Godot 编辑器仍然执行旧版本的代码。修改明明已经保存到文件系统了，但运行时行为完全没变。不是，是资源没有变化
+
+具体表现为：
+- `parse_context()` 中逗号分割逻辑代码正确，但合并 context 时 `poem_taste` 的值仍然是脏的完整字符串 `"urn:poem_taste:libai_taste, taste_owner_relation_flag:flag_relation_with_libai"`
+- `PoemTypeChooseOperator` 从 context 读不到 `poem_taste` 的正确 URN
+- `FlagOperator` 的 `taste_owner_relation_flag` 从未出现在 context 中，`flag_id` 始终为空字符串
+- 停掉游戏→改代码→启动游戏，反复循环问题依旧
+
+### 根本原因
+**Godot 4 的导入缓存机制**。Godot 4 在 `.godot/` 文件夹中缓存了编译后的脚本字节码（`.gdc` 文件）。当你从外部编辑器（VS Code）修改 `.gd` 源文件时：
+
+1. Godot 的**文件系统监视器**会检测到文件变化
+2. 但**不一定会重新编译**脚本字节码，特别是当文件系统监视器出问题时
+3. Godot 运行时加载的是缓存的 `.gdc` 字节码，不是修改后的 `.gd` 源码
+4. 导致「明明改了代码但完全不生效」的幽灵行为 💀
+
+**关键发现**：Godot 编辑器内打开脚本查看，内容看起来是对的（因为它读取的是 `.gd` 源码），但运行用的却是 `.godot/` 里的旧字节码。这根本不是代码 bug，是构建缓存不一致。
+
+### 影响范围
+- 所有在 Godot 编辑器外部修改的 `.gd` 脚本
+- 特别是 `@tool` 模式下运行的脚本（因为 `@tool` 脚本在编辑器进程内执行，缓存更顽固）
+- 症状：改代码 → 运行 → 没变化 → 再改 → 还是没变化 → 以为是自己逻辑错了 → 开始怀疑人生 🤡
+
+### 修复方案
+**方案一（根治）**：删除 `.godot/` 导入缓存文件夹
+```bash
+# 关闭 Godot 编辑器后执行
+rm -rf <project_root>/.godot/
+更安全的方式是os.remove
+# 重新打开 Godot，它会全量重新导入所有资源
+```
+
+**方案二（快速验证）**：在 Godot 编辑器中重新触发生效
+1. 在 Godot 编辑器中打开对应的 `.gd` 文件
+2. 做任意微小修改（加个空格就行）→ 保存
+3. Godot 的文件系统监视器会检测到内部修改并重新编译
+
+**方案三（预防）**：在 `csv_cloud_loader.gd` 中添加了「清空 Godot 缓存」按钮
+- 在 Godot 编辑器中选中 `CsvCloudLoader` 节点
+- Inspector 面板中找到 `Godot Cache Management > Clear Godot Cache`
+- 点击即可执行 `rm -rf res://.godot/`
+- ⚠️ 执行后需要重启 Godot 编辑器
+
+### 最终教训
+1. **改完代码不生效，先怀疑 Godot 缓存，再怀疑自己的逻辑** — 绝大多数「改代码没反应」都是缓存问题
+2. **`.godot/` 删了不可怕** — Godot 启动时会全量重新生成，相当于清理编译器缓存
+3. **`@tool` 脚本的缓存更顽固** — 因为编辑器进程内运行的脚本可能被 JIT 编译并缓存
+4. **对比「编辑器内显示的代码」和「实际运行的代码」** — 如果编辑器显示正确但行为不对，大概率是缓存问题
+
+### 相关文件
+- <ref_file file="/Users/lennon/Projects/poem_map_project/parser/dsl_parser.gd" /> （代码正确，被缓存的旧版本坑了）
+- <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/trait_choose_operator.gd" /> （受影响的 operator）
+- <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/flag_operator.gd" /> （`taste_owner_relation_flag` 没传过来导致 flag_id 为空）
+- <ref_file file="/Users/lennon/Projects/poem_map_project/core/csv_cloud_loader.gd" /> （新增的清缓存按钮）

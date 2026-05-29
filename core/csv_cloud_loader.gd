@@ -4,10 +4,22 @@ extends Node
 @export_group("Continuous Integration Pipeline")
 @export var sync_all_data: bool = false:
     set(val):
-        sync_all_data = false 
+        sync_all_data = false
         if val == true:
             notify_property_list_changed()
             start_sync_queue() # 🚨 启动队列机制！
+
+@export_group("Godot Cache Management")
+## 💀 删掉 .godot 导入缓存文件夹，强制 Godot 全量重新导入所有资源
+## Godot 4 的导入缓存机制会导致修改代码后不生效（因为缓存的字节码没更新）
+## 点击后执行: rm -rf res://.godot/
+## ⚠️ 执行后需要重启 Godot 编辑器才能生效
+@export var clear_godot_cache: bool = false:
+    set(val):
+        clear_godot_cache = false
+        if val == true:
+            notify_property_list_changed()
+            _clear_godot_import_cache()
 
 # 🤓☝️ 核心契约 1：资产同步清单 (The Manifest)
 # 把 URL 和它对应的本地保存路径死死绑定在一起！这就是你说的"携带信息"！
@@ -385,3 +397,63 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
             skipped_count += 1
 
     print("成功保存 %d/%d 个资源到 %s 文件夹 (跳过 %d 个)" % [saved_count, resources.size(), folder_path, skipped_count])
+
+# 💀 清空 .godot 导入缓存文件夹（带三重安全保险 + 废纸篓回收）
+# Godot 4 会把编译后的脚本字节码缓存到 .godot/ 下，
+# 如果你在外面（VS Code）改了脚本，Godot 可能还拿着旧的字节码不撒手。
+# 删了这个文件夹，重启 Godot 后它会老老实实地全量重新导入 🤓☝️
+#
+# 🛡️ 安全校验（防止删错祖宗文件夹）：
+#   1. 路径必须以 .godot 结尾
+#   2. 父目录必须是项目根目录（res:// 全局化后的路径）
+#   3. 目标必须真实存在于文件系统
+#   全部通过才执行，任何一个不满足直接拒绝 💀
+#
+# ♻️ 使用 OS.move_to_trash() 代替 rm -rf：
+#   - 不直接删除，而是移到系统废纸篓，可恢复
+#   - 不执行 shell 命令，没有命令注入风险
+#   - macOS/Linux/Windows 全平台兼容
+func _clear_godot_import_cache() -> void:
+    var project_root = ProjectSettings.globalize_path("res://")
+    var godot_dir_path = project_root.path_join(".godot")
+    
+    print("\n===== 💀 准备清除 Godot 导入缓存 =====")
+    print("项目根目录: %s" % project_root)
+    print("目标路径:   %s" % godot_dir_path)
+    
+    # 🛡️ 保险 1：校验路径是否以 .godot 结尾
+    if not godot_dir_path.ends_with(".godot"):
+        push_error("❌ 安全校验失败：目标路径不以 .godot 结尾！路径=%s" % godot_dir_path)
+        push_error("   拒绝执行，这可能是个错误的目标路径 💀")
+        return
+    
+    # 🛡️ 保险 2：校验父目录是否为项目根目录
+    var parent_dir = godot_dir_path.get_base_dir()
+    if parent_dir != project_root.trim_suffix("/"):
+        push_error("❌ 安全校验失败：父目录不是项目根目录！")
+        push_error("   期望父目录: %s" % project_root)
+        push_error("   实际父目录: %s" % parent_dir)
+        push_error("   拒绝执行，路径异常 💀")
+        return
+    
+    # 🛡️ 保险 3：校验目标是否存在
+    if not DirAccess.dir_exists_absolute(godot_dir_path):
+        print("⚠️ .godot 文件夹不存在，无需清理")
+        return
+    
+    # 🔥 三重保险全部通过，用 OS.move_to_trash() 安全删除
+    print("🛡️ 安全校验全部通过，开始移动至废纸篓...")
+    print("目标: %s" % godot_dir_path)
+    print("♻️ 使用 OS.move_to_trash() — 文件将被移到系统废纸篓，可随时恢复")
+    
+    var success = OS.move_to_trash(godot_dir_path)
+    
+    if success:
+        print("✅ .godot 导入缓存已成功移入废纸篓！")
+        print("⚠️ 重要：请重启 Godot 编辑器让导入机制重新生效")
+        print("   Godot 会在启动时重新生成 .godot/ 目录并全量导入所有资源")
+        print("💡 如需恢复，请前往系统废纸篓找回 .godot 文件夹")
+    else:
+        push_error("❌ 移动至废纸篓失败！可能原因：")
+        push_error("   - 权限不足（尝试用 rm -rf 手动删除）")
+        push_error("   - 文件系统错误")
