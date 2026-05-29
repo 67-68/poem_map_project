@@ -115,11 +115,23 @@ static func parse_flag_requirement(data: String) -> FlagRequirement:
                 push_error("Invalid str flag operator: %s, expected 'is' or 'is_not'" % operator_str)
                 return null
         "int":
-            # TODO: int flag requirement 的 DSL 格式目前有歧义
-            # 当前格式 flag:int:>:VALUE 中 parts[3] 是数值而非 flag_id
-            # 未来需要改为 flag:int:>:FLAG_ID:VALUE（5段）或重新设计
-            push_error("int flag requirement format is not fully supported yet, flag_id would be ambiguous: %s" % data)
-            return null
+            # 5段式语法消除歧义: flag:int:>:FLAG_ID:VALUE
+            # 示例: flag:int:>:flag_relation_with_libai:10
+            if parts.size() < 5:
+                push_error("Invalid int flag requirement: expected 'flag:int:operator:flag_id:value' (5 parts), got: %s" % data)
+                return null
+            var int_flag_id = parts[3]
+            var int_value = parts[4].to_int()
+            req.flag_id = int_flag_id
+            req.value = int_value
+            # FlagRequirement.compare() 只支持 > 和 <（枚举值 GREATER_THAN / LESS_THAN）
+            if operator_str == ">":
+                req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
+            elif operator_str == "<":
+                req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
+            else:
+                push_error("Invalid int flag operator: %s, expected '>' or '<'" % operator_str)
+                return null
         _:
             push_error("Invalid flag type: %s, expected 'bool', 'str', or 'int'" % flag_type)
             return null

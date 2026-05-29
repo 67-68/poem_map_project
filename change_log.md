@@ -1,3 +1,16 @@
+# [unreleased]
+## Added
+- controller 支持 `$ dsl {consequence_operators}` 语法，可直接执行 DSL 操作符链
+- `parse_flag_requirement` 的 int 分支实现（5 段式 `flag:int:OPERATOR:FLAG_ID:VALUE`）
+
+## Fixed
+- `DSLParser.parse_state_transistor()` CSV 列名对不上的 Bug：`target_resource_urn` → `target_resource`，`current_resource_urn` → `current_resource`，`triggered_event_key` → `triggered_event`
+
+## Docs
+- `controller_method.md` 添加 `$ dsl` 命令文档
+- `parser/README.md` 补充 int flag requirement 5 段式语法，移除旧的歧义 4 段式文档
+- `state_transistor.md` 修正 CSV 列名文档（去掉错误的 `_urn`/`_key` 后缀）
+
 - 为死亡事件添加了两个测试事件，确保带tag的死亡事件可以正确被选择
 
 # [0.8.0]

@@ -8,5 +8,6 @@ resources = {
 "chain_strange_poet_1": "res://data/flags/chain_strange_poet_1.tres",
 "chain_strange_poet_2": "res://data/flags/chain_strange_poet_2.tres",
 "chain_strange_poet_3": "res://data/flags/chain_strange_poet_3.tres",
-"flag_player_health": "res://data/flags/flag_player_health.tres"
+"flag_player_health": "res://data/flags/flag_player_health.tres",
+"flag_relation_with_libai": "res://data/flags/flag_relation_with_libai.tres"
 }

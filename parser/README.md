@@ -99,22 +99,30 @@ trait:has:official          # 拥有官员特性
 trait:not_has:criminal      # 不拥有罪犯特性
 ```
 
-#### 标志位触发
+#### 标志位触发（int 类型，5 段式）
 ```
-flag:bool:has:flag_id              # 标志位为真
-flag:bool:not_has:flag_id          # 标志位为假
-flag:str:is:flag_id:value          # 字符串等于指定值
-flag:str:is_not:flag_id:value      # 字符串不等于指定值
-flag:int:>flag_id:value            # 整数大于指定值
-flag:int:<flag_id:value            # 整数小于指定值
+flag:int:>:FLAG_ID:VALUE    # int flag 值大于 VALUE
+flag:int:<:FLAG_ID:VALUE    # int flag 值小于 VALUE
 ```
 
 示例：
 ```
-flag:bool:has:flag_player_has_key              # 玩家有钥匙
-flag:bool:not_has:flag_game_completed          # 游戏未完成
-flag:str:is:flag_player_name:张三              # 玩家姓名是张三
-flag:int:>flag_score:100                      # 分数大于100
+flag:int:>:flag_relation_with_libai:10   # 与李白的关系值 > 10
+flag:int:<:flag_relation_with_libai:5    # 与李白的关系值 < 5
+```
+
+> **注意**：int 类型的 flag requirement 使用 5 段式语法消除歧义，必须严格按照 `flag:int:OPERATOR:FLAG_ID:VALUE` 格式，不要写成 `flag:int:>:10`（缺少 flag_id 会报错）。
+
+#### 标志位触发（bool 类型）
+```
+flag:bool:has:FLAG_ID       # flag 存在且为 true
+flag:bool:not_has:FLAG_ID   # flag 不存在或为 false
+```
+
+#### 标志位触发（str 类型）
+```
+flag:str:is:FLAG_ID         # flag 的 str 值非空
+flag:str:is_not:FLAG_ID     # flag 的 str 值为空
 ```
 
 #### 多个条件
