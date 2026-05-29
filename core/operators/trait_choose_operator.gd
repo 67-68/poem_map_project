@@ -9,6 +9,13 @@ func init(_context: Dictionary) -> Dictionary:
     #breakpoint
     if key_to_get_poem_taste and _context.get(key_to_get_poem_taste):
         var taste = _context.get(key_to_get_poem_taste)
+        
+        # 🛡️ 防御：如果 URN 里混入了逗号分隔的额外 kv（DSL 解析 bug 导致的脏数据），只取第一段
+        if taste is String and taste.contains(","):
+            var parts = taste.split(",")
+            taste = parts[0].strip_edges()
+            Logging.warn('PoemTypeChooseOperator.init: context["%s"] contains extra params after comma, extracting only the URN part: "%s"' % [key_to_get_poem_taste, taste])
+        
         var taste_instance = URN.get_resource_through_urn(taste)
         if taste_instance is PoemTaste:
             poem_taste = taste_instance
@@ -27,6 +34,12 @@ func init(_context: Dictionary) -> Dictionary:
     else:
         Logging.debug("PoemTypeChooseOperator: Setting context property_multiplication to operator's value %.2f" % property_multiplication)
         _context["property_multiplication"] = property_multiplication
+    
+    # ✅ 级联初始化三个 ChoiceResult，让内部的 FlagOperator 等能从 context 解析动态引用
+    #breakpoint
+    poem_taste.accepted_result.init(_context)
+    poem_taste.rejected_result.init(_context)
+    poem_taste.not_entered_result.init(_context)
     
     return _context
 
@@ -50,7 +63,7 @@ func operate():
     EventBus.start_picker.emit(data)
     var trait_picked = await EventBus.end_picking
     
-    breakpoint
+    #breakpoint
     if not trait_picked:
         poem_taste.not_entered_result.operate()
         Logging.warn('trait not picked, left blank')

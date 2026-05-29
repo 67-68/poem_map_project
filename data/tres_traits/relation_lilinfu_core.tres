@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://rttsdg0amjk"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_nlfhd"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_3bnl7"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_cx8jb"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_nlfhd"]
 
 [resource]
-script = ExtResource("1_nlfhd")
+script = ExtResource("1_cx8jb")
 topic = "RELATION"
 specific_topic = "CORE"
 _relate_to = 2

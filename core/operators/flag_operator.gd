@@ -16,8 +16,17 @@ class_name FlagOperator extends BaseOperator
 @export var target_flag_id_from_context: String = ''
 
 func init(_context: Dictionary) -> Dictionary:
+	#breakpoint
+	if target_flag_id_from_context.is_empty():
+		Logging.warn('FlagOperator.init: target_flag_id_from_context is empty, flag_id remains "%s"' % flag_id)
+		return _context
+
 	var flag_uid = _context.get(target_flag_id_from_context)
-	if flag_uid: flag_id = flag_uid
+	if flag_uid:
+		flag_id = flag_uid
+		Logging.debug('FlagOperator.init: resolved flag_id from context key "%s" -> "%s"' % [target_flag_id_from_context, flag_id])
+	else:
+		Logging.warn('FlagOperator.init: context key "%s" not found in context, flag_id remains "%s"' % [target_flag_id_from_context, flag_id])
 	return _context
 
 func get_referenced_flags() -> Array:
@@ -36,6 +45,7 @@ func get_provided_flags() -> Array:
 	return [flag_id]
 
 func operate():
+	#breakpoint
 	match type:
 		'str':
 			if operation == 'set':

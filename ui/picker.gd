@@ -12,7 +12,7 @@ func default_constructor(data: GameEntity):
 	return entity
 
 func on_selected(selected_entity): 
-	breakpoint
+	#breakpoint
 	EventBus.end_picking.emit(selected_entity) # 如果emit空那么就是没选出来
 	hide()
 	

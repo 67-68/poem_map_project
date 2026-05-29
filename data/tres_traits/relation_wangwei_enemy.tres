@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://c0wyayu8tk4y0"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_pd1uv"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_s6iyy"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_7mu5d"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_pd1uv"]
 
 [resource]
-script = ExtResource("1_pd1uv")
+script = ExtResource("1_7mu5d")
 topic = "RELATION"
 specific_topic = "HATE"
 _relate_to = 7

@@ -1,0 +1,77 @@
+[gd_resource type="Resource" script_class="PoemTaste" format=3 uid="uid://uidwwtkgxl8"]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_ry2h2"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_0oq1t"]
+[ext_resource type="Script" uid="uid://clkjr0fnn00vd" path="res://core/operators/flag_operator.gd" id="3_0oq1t"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_6k4wn"]
+[ext_resource type="Script" uid="uid://bxdw08m7bfi13" path="res://core/operators/info_demo_operator.gd" id="4_ec34u"]
+[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="5_g14i1"]
+
+[sub_resource type="Resource" id="Resource_1ogms"]
+script = ExtResource("2_0oq1t")
+_property = 1
+value = 10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_6k4wn"]
+script = ExtResource("3_0oq1t")
+type = "int"
+value = 11
+operation = "append"
+target_flag_id_from_context = "taste_owner_relation_flag"
+metadata/_custom_type_script = "uid://clkjr0fnn00vd"
+
+[sub_resource type="Resource" id="Resource_mslcc"]
+script = ExtResource("3_6k4wn")
+operators = Array[ExtResource("1_ry2h2")]([SubResource("Resource_1ogms"), SubResource("Resource_6k4wn")])
+
+[sub_resource type="Resource" id="Resource_pd5uj"]
+script = ExtResource("2_0oq1t")
+_property = 1
+value = -20
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_1r1sn"]
+script = ExtResource("4_ec34u")
+info = "“尚才相戏尔！”"
+metadata/_custom_type_script = "uid://bxdw08m7bfi13"
+
+[sub_resource type="Resource" id="Resource_0oq1t"]
+script = ExtResource("3_0oq1t")
+type = "int"
+value = -20
+operation = "append"
+target_flag_id_from_context = "taste_owner_relation_flag"
+metadata/_custom_type_script = "uid://clkjr0fnn00vd"
+
+[sub_resource type="Resource" id="Resource_5ahdn"]
+script = ExtResource("3_6k4wn")
+operators = Array[ExtResource("1_ry2h2")]([SubResource("Resource_pd5uj"), SubResource("Resource_1r1sn"), SubResource("Resource_0oq1t")])
+
+[sub_resource type="Resource" id="Resource_mss5m"]
+script = ExtResource("2_0oq1t")
+_property = 1
+value = -10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_ec34u"]
+script = ExtResource("3_0oq1t")
+type = "int"
+value = -11
+operation = "append"
+target_flag_id_from_context = "taste_owner_relation_flag"
+metadata/_custom_type_script = "uid://clkjr0fnn00vd"
+
+[sub_resource type="Resource" id="Resource_8yl31"]
+script = ExtResource("3_6k4wn")
+operators = Array[ExtResource("1_ry2h2")]([SubResource("Resource_mss5m"), SubResource("Resource_ec34u")])
+
+[resource]
+script = ExtResource("5_g14i1")
+uuid = "libai_taste"
+_accepted_poem_types = Array[int]([2, 3, 4, 5])
+lowest_poem_level = 1
+accepted_result = SubResource("Resource_mslcc")
+rejected_result = SubResource("Resource_8yl31")
+not_entered_result = SubResource("Resource_5ahdn")
+metadata/_custom_type_script = "uid://4seqlwtem2i3"

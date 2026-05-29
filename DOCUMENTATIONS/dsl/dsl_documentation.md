@@ -66,9 +66,12 @@
 | `val=3.14` | float | 带小数点 |
 | `name=money` | String | 非数字/布尔 → 自动字符串 |
 | `val=true`, `val=false` | bool | 布尔关键字 |
+| `name=@initiator_flag` | DynamicRef | **@ 前缀：动态上下文引用**，运行时从 context 解析 |
 | `name="张三"` | String | 双引号强制字符串（可选，边缘情况用） |
 
 > 💡 **推荐写法**: 字符串值不要加引号，如 `name=money` 而非 `name="money"`
+>
+> 💡 **动态引用**: 使用 `@` 前缀表示该值是一个 **context 变量指针**，在 `init()` 阶段从当前 context 字典中查找对应 key。当前仅 flag 系操作符的 `name` 参数支持此语法。
 
 ### 多表达式组合
 
@@ -175,6 +178,20 @@ flag_bool_has(name=flag_visited_palace), prop_gt(name=money, val=100)
 | `flag_str_append` | name, val | 追加字符串标志 | `flag_str_append(name=log, val=新事件)` |
 | `flag_int_set` | name, val | 设置整数标志 | `flag_int_set(name=score, val=100)` |
 | `flag_int_append` | name, val | 追加整数标志 | `flag_int_append(name=score, val=50)` |
+
+> ⚡ **动态标志位名称**: flag 系操作符的 `name` 参数支持 `@` 前缀语法，表示从当前 context 动态解析标志位名称：
+> ```
+> flag_str_set(name=@initiator_flag, val=TR_Drunk)
+> flag_int_set(name=@target_actor_id, val=10)
+> flag_bool_set(name=@event_completed_flag, val=true)
+> ```
+> 当 parser 遇到 `@xxx`，会将 `target_flag_id_from_context = "xxx"` 赋值到 FlagOperator，运行时 `init(context)` 阶段执行 `flag_id = context.get("xxx")`。
+>
+> 对比字面量写法：
+> ```
+> flag_str_set(name=TR_Drunk, val=10)           # 字面量：直接操作 TR_Drunk 标志位
+> flag_str_set(name=@initiator_flag, val=10)     # 动态：从 context["initiator_flag"] 获取要操作的标志位名称
+> ```
 
 ---
 

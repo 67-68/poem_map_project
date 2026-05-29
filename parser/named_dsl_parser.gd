@@ -2,19 +2,21 @@ class_name NamedDSLParser extends GDScript
 
 # ──────────────────────────────────────────────
 # 命名参数 DSL 核心解析器
-# 
+#
 # 解析格式：func_name(param1=val1, param2=val2, ...)
-# 
+#
 # 设计原则：
 # 1. 函数名编码了 type + action（如 prop_gt, flag_bool_set）
 # 2. 参数必须命名，位置无关
 # 3. 字符串值用双引号包裹，数字/布尔值裸写
 # 4. 顶级逗号分隔多个表达式（逗号不在括号内）
-# 
+# 5. @ 前缀表示动态上下文引用（运行时从 context 解析）
+#
 # 示例：
 #   prop_gt(name="money", val=50)
 #   trait_has(name="official")
 #   flag_bool_set(name="xxx", val=true)
+#   flag_str_set(name=@initiator_flag, val="TR_Drunk")  # name 动态解析
 #   prop_add(name="money", val=100), trait_add(name="corrupt")
 #
 # Debug 要求：
@@ -26,6 +28,33 @@ class_name NamedDSLParser extends GDScript
 class ParseResult:
 	var func_name: String = ""
 	var params: Dictionary = {}
+
+# ──────────────────────────────────────────────
+# DynamicRef — 动态上下文引用包装器
+#
+# 当 DSL 参数值以 @ 开头时（如 @initiator_flag），
+# _parse_value() 返回 DynamicRef 实例而非原始字符串。
+#
+# 调用方（MicroDSLParser 工厂方法）检查值类型：
+#   if val is NamedDSLParser.DynamicRef:
+#       # 运行时从 context 解析
+#       op.target_flag_id_from_context = val.context_key
+#   else:
+#       # 字面量
+#       op.flag_id = val
+#
+# 设计意图：
+#   @ 前缀 = "这不是一个值，这是一个指向 context 的指针，
+#            具体值在运行时由 init() 解析"
+# ──────────────────────────────────────────────
+class DynamicRef:
+	var context_key: String
+	
+	func _init(key: String):
+		context_key = key
+	
+	func _to_string() -> String:
+		return "DynamicRef(%s)" % context_key
 
 # 解析单个表达式，如 prop_gt(name="money", val=50)
 # 返回 ParseResult 或 null
@@ -151,8 +180,8 @@ static func _parse_single_param(param_str: String, params: Dictionary) -> void:
 	# 解析值
 	params[key] = _parse_value(val_str)
 
-# 解析值为正确的类型（字符串/整数/浮点数/布尔值）
-# 类型推断优先级：双引号字符串 > 布尔值 > 整数 > 浮点数 > 裸字符串
+# 解析值为正确的类型（字符串/整数/浮点数/布尔值/动态引用）
+# 类型推断优先级：@动态引用 > 双引号字符串 > 布尔值 > 整数 > 浮点数 > 裸字符串
 # 裸字符串（无引号）是标准用法，不产生任何 WARN
 static func _parse_value(val_str: String) -> Variant:
 	val_str = val_str.strip_edges()
@@ -160,6 +189,17 @@ static func _parse_value(val_str: String) -> Variant:
 	if val_str.is_empty():
 		Logging.err("NamedDSLParser: 值为空")
 		return ""
+	
+	# 🚨 动态上下文引用（@ 前缀）
+	# 优先级最高：@xxx 不是字面量字符串，而是"运行时从 context 解析的指针"
+	# 调用方通过 is DynamicRef 判断，决定塞 flag_id 还是 target_flag_id_from_context
+	if val_str.begins_with("@"):
+		var key = val_str.substr(1)
+		if key.is_empty():
+			Logging.err("NamedDSLParser: @ 后面不能为空: %s" % val_str)
+			return ""
+		Logging.info("NamedDSLParser: 解析为动态引用 @%s" % key)
+		return DynamicRef.new(key)
 	
 	# 显式字符串（双引号包裹）
 	if val_str.begins_with("\"") and val_str.ends_with("\""):

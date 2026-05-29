@@ -303,19 +303,37 @@ static func _exec_emo_op_set(parsed: NamedDSLParser.ParseResult, raw: String) ->
 	op.value = val
 	return op
 
-# ── Flag operator 辅助创建方法 ──
+# ──────────────────────────────────────────────
+# Flag operator 辅助创建方法
+# ──────────────────────────────────────────────
+
+# 🚨 辅助方法：从 parsed.params["name"] 中提取 flag_id 或 target_flag_id_from_context
+# 如果值是 DynamicRef，设置 target_flag_id_from_context；否则设置 flag_id
+# 返回 false 表示缺少 name 参数
+static func _resolve_flag_name(parsed: NamedDSLParser.ParseResult, op: FlagOperator, data: String) -> bool:
+	var name_val = parsed.params.get("name")
+	if name_val is NamedDSLParser.DynamicRef:
+		op.target_flag_id_from_context = name_val.context_key
+		Logging.info("MicroDSLParser: flag name 解析为动态引用 @%s" % name_val.context_key)
+		return true
+	else:
+		var name = NamedDSLParser.get_str_param(parsed, "name")
+		if name.is_empty():
+			Logging.err("flag_* 缺少 name 参数: %s" % data)
+			return false
+		op.flag_id = name
+		return true
+
 
 static func _create_flag_operator_bool_set(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	var val = NamedDSLParser.get_bool_param(parsed, "val", true)
-	if name.is_empty():
-		Logging.err("flag_bool_set 缺少 name 参数: %s" % data)
-		return null
 	var op = FlagOperator.new()
 	op.type = "bool"
 	op.operation = "set"
-	op.flag_id = name
-	op.value = val
+	op.value = NamedDSLParser.get_bool_param(parsed, "val", true)
+	
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+	
 	return op
 
 static func _create_flag_operator_replace(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
@@ -327,55 +345,47 @@ static func _create_flag_operator_replace(parsed: NamedDSLParser.ParseResult, da
 	return OperatorFactory.create_flag_replace_operator(from, to)
 
 static func _create_flag_operator_str_set(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	var val = NamedDSLParser.get_str_param(parsed, "val")
-	if name.is_empty():
-		Logging.err("flag_str_set 缺少 name 参数: %s" % data)
-		return null
 	var op = FlagOperator.new()
 	op.type = "str"
 	op.operation = "set"
-	op.flag_id = name
-	op.value = val
+	op.value = NamedDSLParser.get_str_param(parsed, "val")
+	
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+	
 	return op
 
 static func _create_flag_operator_str_append(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	var val = NamedDSLParser.get_str_param(parsed, "val")
-	if name.is_empty():
-		Logging.err("flag_str_append 缺少 name 参数: %s" % data)
-		return null
 	var op = FlagOperator.new()
 	op.type = "str"
 	op.operation = "append"
-	op.flag_id = name
-	op.value = val
+	op.value = NamedDSLParser.get_str_param(parsed, "val")
+	
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+	
 	return op
 
 static func _create_flag_operator_int_set(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	var val = NamedDSLParser.get_int_param(parsed, "val")
-	if name.is_empty():
-		Logging.err("flag_int_set 缺少 name 参数: %s" % data)
-		return null
 	var op = FlagOperator.new()
 	op.type = "int"
 	op.operation = "set"
-	op.flag_id = name
-	op.value = val
+	op.value = NamedDSLParser.get_int_param(parsed, "val")
+	
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+	
 	return op
 
 static func _create_flag_operator_int_append(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	var val = NamedDSLParser.get_int_param(parsed, "val")
-	if name.is_empty():
-		Logging.err("flag_int_append 缺少 name 参数: %s" % data)
-		return null
 	var op = FlagOperator.new()
 	op.type = "int"
 	op.operation = "append"
-	op.flag_id = name
-	op.value = val
+	op.value = NamedDSLParser.get_int_param(parsed, "val")
+	
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+	
 	return op
 
 # ──────────────────────────────────────────────

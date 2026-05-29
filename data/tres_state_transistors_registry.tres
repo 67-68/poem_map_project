@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://cpg56qolpbj21"]
 
-[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_hvaev"]
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_tkhod"]
 
 [resource]
-script = ExtResource("1_hvaev")
+script = ExtResource("1_tkhod")
 resources = {
 "relation_libai_rumor_transist_close": "res://data/tres_state_transistors/relation_libai_rumor_transist_close.tres"
 }

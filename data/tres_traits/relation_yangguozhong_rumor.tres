@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://i316rpx41wnt"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_rcxp3"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_w3fx6"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_vgy1e"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_rcxp3"]
 
 [resource]
-script = ExtResource("1_rcxp3")
+script = ExtResource("1_vgy1e")
 topic = "RELATION"
 specific_topic = "HEARD"
 _relate_to = 10
