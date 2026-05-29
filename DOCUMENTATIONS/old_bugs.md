@@ -345,7 +345,7 @@ func operate():
 ```bash
 # 关闭 Godot 编辑器后执行
 rm -rf <project_root>/.godot/
-更安全的方式是os.remove
+更安全的方式是os
 # 重新打开 Godot，它会全量重新导入所有资源
 ```
 

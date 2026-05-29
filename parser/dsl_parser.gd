@@ -94,15 +94,12 @@ static func parse_context(context_str: String) -> Dictionary:
                 # 自定义模板参数
                 # 支持逗号分隔多个 key:value 对（如: poem_taste: urn:poem_taste:libai_taste, taste_owner_relation_flag:flag_relation_with_libai）
                 # 方案：先存第一个 key:value，再检测 value 中的逗号并尝试拆分附加键值对
-                # 🚨 使用显式字典索引 result["custom_params"] 而非 result.custom_params 的点语法，
-                #    因为 Godot 4 中字典点语法在嵌套写入时可能存在不可预期的行为💀
-                var cp: Dictionary = result["custom_params"]
-                cp[key] = value
+                result.custom_params[key] = value
                 
                 if value.contains(","):
                     var sub_parts = value.split(",")
                     # 第一个子段作为当前 key 的精确值（去掉 strip）
-                    cp[key] = sub_parts[0].strip_edges()
+                    result.custom_params[key] = sub_parts[0].strip_edges()
                     # 剩余子段尝试解析为额外的 key:value
                     for i in range(1, sub_parts.size()):
                         var part = sub_parts[i].strip_edges()
@@ -120,13 +117,10 @@ static func parse_context(context_str: String) -> Dictionary:
                         if kv_div != -1:
                             var ek = part.substr(0, kv_div).strip_edges()
                             var ev = part.substr(kv_div + 1).strip_edges()
-                            cp[ek] = ev
+                            result.custom_params[ek] = ev
                         else:
                             # 没有分隔符，说明是前一个值的延续（值中含逗号），拼回去
-                            cp[key] += "," + part
-                else:
-                    # 纯值无逗号，不需要特殊处理
-                    pass
+                            result.custom_params[key] += "," + part
     
     return result
 
