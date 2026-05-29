@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cax7kvmji81d7"]
+
+[ext_resource type="Texture2D" uid="uid://f67dfti2j267" path="res://assets/backgrounds/bg_court_dark.png" id="1_6b7y2"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_innj3"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_bdme3"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_7uaht"]
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="3_71me5"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_blif7"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_gjvy3"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_iitol"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="8_blif7"]
+
+[sub_resource type="Resource" id="Resource_gnpvd"]
+script = ExtResource("4_blif7")
+event_key = "event_chat_guest"
+
+[sub_resource type="Resource" id="Resource_u8cot"]
+script = ExtResource("5_iitol")
+operators = Array[ExtResource("3_7uaht")]([SubResource("Resource_gnpvd")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_7uaht"]
+script = ExtResource("4_gjvy3")
+choice_result = SubResource("Resource_u8cot")
+description = "你好，{@target_npc}"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_iitol"]
+script = ExtResource("8_blif7")
+
+[sub_resource type="Resource" id="Resource_2du5y"]
+script = ExtResource("5_iitol")
+operators = Array[ExtResource("3_7uaht")]([SubResource("Resource_iitol")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_ihd3p"]
+script = ExtResource("4_gjvy3")
+choice_result = SubResource("Resource_2du5y")
+description = "去看看其他活动"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_bdme3")
+weight = 0.0
+options = Array[ExtResource("1_innj3")]([SubResource("Resource_7uaht"), SubResource("Resource_ihd3p")])
+example = null
+epitaph_text = null
+emotion_configs = ""
+uuid = "event_talk_guest"
+name = "和宾客说话"
+description = "要干什么呢？"
+icon = ExtResource("1_6b7y2")
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

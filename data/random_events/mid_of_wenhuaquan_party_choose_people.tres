@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dabwctvyya7o6"]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_pmq1t"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_kfyn1"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="3_hvmw1"]
+[ext_resource type="Script" uid="uid://lnvpvefpsar1" path="res://core/model/item_provider.gd" id="3_kfyn1"]
+
+[sub_resource type="Resource" id="Resource_hvmw1"]
+script = ExtResource("3_kfyn1")
+list_key = "guests"
+text_template = "走向 {item}"
+target_event_key = "event_talk_guest"
+payload_key = "target_npc"
+use_push_event = true
+
+[resource]
+script = ExtResource("3_hvmw1")
+provider = SubResource("Resource_hvmw1")
+uuid = "mid_of_wenhuaquan_party_choose_people"
+name = "要选谁呢？"
+description = "商务还是运动？"

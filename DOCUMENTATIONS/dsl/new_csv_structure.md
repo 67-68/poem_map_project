@@ -23,7 +23,7 @@
 ### 完整表头
 
 ```csv
-depth,row_type,uuid,context,requirements,title,description,results
+depth,row_type,uuid,context,requirements,title,description,results,provider,emotion_config
 ```
 
 | 列名 | 必需 | 说明 |
@@ -31,22 +31,27 @@ depth,row_type,uuid,context,requirements,title,description,results
 | `depth` | 是 | `>` 深度标记，空值=顶层 |
 | `row_type` | 是 | 行类型：`random_event` 或 `option` |
 | `uuid` | 是 | 唯一标识符 |
-| `context` | 否 | Context DSL 字符串（见 context 设计文档） |
+| `context` | 否 | Context DSL 字符串（见 [context 设计文档](../events/context_design.md)） |
 | `requirements` | 否 | 触发条件 DSL |
 | `title` | 否 | 显示标题 |
 | `description` | 否 | 详细描述 |
 | `results` | 否 | 事件/选项级结果 DSL |
+| `provider` | 否 | Provider DSL 字符串（见 [provider 设计文档](../events/provider_design.md)）。仅 `random_event` 行有效，动态生成选项列表 |
+| `emotion_config` | 否 | 情绪配置 DSL |
 
 ## 示例（新语法）
 
 ```csv
-depth,row_type,uuid,context,requirements,title,description,results
-,random_event,evt_changan_01,"tag:actor:status:temporary:drunk,city:econ:level:prosperous|weight:15.5|background:(bg_tavern_night)",prop_gt(name=money, val=50),长安酒馆奇遇,你在酒馆遇到一位神秘诗人,prop_add(name=literary_fame, val=5)
->,option,opt_bribe,"weight:0.8",prop_gt(name=money, val=100),塞钱贿赂,,prop_sub(name=money, val=100), trait_add(name=corrupt)
->,option,opt_poetry,"weight:1.2",prop_gt(name=literary_fame, val=20),与之对诗,,prop_add(name=literary_fame, val=15), prop_sub(name=money, val=30)
-,random_event,evt_market_02,"tag:city:econ:level:prosperous|weight:10.0",,市场见闻,集市上人来人往,,
->,option,opt_buy,"weight:0.5",prop_gt(name=money, val=30),买些小玩意,,prop_sub(name=money, val=30)
+depth,row_type,uuid,context,requirements,title,description,results,provider,emotion_config
+,random_event,evt_changan_01,"tag:actor:status:temporary:drunk,city:econ:level:prosperous|weight:15.5|background:(bg_tavern_night)",prop_gt(name=money, val=50),长安酒馆奇遇,你在酒馆遇到一位神秘诗人,prop_add(name=literary_fame, val=5),,
+>,option,opt_bribe,"weight:0.8",prop_gt(name=money, val=100),塞钱贿赂,,prop_sub(name=money, val=100), trait_add(name=corrupt),,
+>,option,opt_poetry,"weight:1.2",prop_gt(name=literary_fame, val=20),与之对诗,,prop_add(name=literary_fame, val=15), prop_sub(name=money, val=30),,
+,random_event,evt_market_02,"tag:city:econ:level:prosperous|weight:10.0",,市场见闻,集市上人来人往,,,,
+>,option,opt_buy,"weight:0.5",prop_gt(name=money, val=30),买些小玩意,,prop_sub(name=money, val=30),,
+,random_event,evt_tavern_talk,,,酒馆闲谈,,,item_provider(list_key="guests", text_template="走向 {item}", target_event_key="event_talk", payload_key="target_npc"),
 ```
+
+> 最后一行展示了 provider 列的用法：`item_provider` 从 context 中的 `guests` 列表动态生成选项，每个选项触发 `event_talk` 事件，并携带 `target_npc` 作为上下文 payload。
 
 ## 解析规则
 
@@ -83,3 +88,4 @@ IN_EVENT + (2+, option)      → IN_EVENT   + 挂载到栈顶（更深层）
 - 深度提取：[`DSLParser._get_row_depth()`](../../parser/dsl_parser.gd:6)
 - 事件行解析：[`DSLParser.parse_random_event()`](../../parser/dsl_parser.gd:91)
 - 选项行解析：[`DSLParser.parse_option_row()`](../../parser/dsl_parser.gd:152)
+- Provider 解析：[`DSLParser.parse_provider_field()`](../../parser/dsl_parser.gd:234)

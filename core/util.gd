@@ -296,6 +296,7 @@ static func strip_csv_array(data: Array):
 #   - int/float 类型：base[key] *= overlay[key]（相乘）
 #   - String 类型：尝试 to_float() 转换，成功则按乘法叠加（数值 context 相乘），失败则直接存为字符串值
 #     （因为 DSL 解析出的 custom_params 中可能存在非数值描述字段，必须携带过去，不能 drop）
+#   - Array / PackedStringArray 类型：直接覆盖（数组作为 opaque 值传递，不尝试数学运算）
 #   - 其他类型：breakpoint + push_error "not implemented"
 static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 	if overlay.is_empty():
@@ -335,7 +336,70 @@ static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 				base[key] = overlay_val
 			continue
 		
+		# --- Array / PackedStringArray 类型处理 ---
+		# DSL 解析出的 [a;b;c] 数组，直接覆盖（opaque 值，不尝试数学运算）
+		if overlay_val is Array or overlay_val is PackedStringArray:
+			Logging.info("merge_context: 数组合并. key=%s, value=%s" % [key, str(overlay_val)])
+			base[key] = overlay_val
+			continue
+		
 		# --- 其他类型 → 报错（未实现） ---
 		push_error("merge_context: 未实现的 overlay 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
 	
 	return base
+
+
+# ──────────────────────────────────────────────
+# 动态差值系统：将文本中的占位符替换为实际值
+# ──────────────────────────────────────────────
+# {some_prop}   → 从 instance 对象上获取属性（如 self.some_prop）
+# {@some_prop}  → 从 context 字典中获取值
+#
+# 找不到时保留原占位符（debug 透明，不会静默吞错误 💀）
+#
+# 使用场景：
+#   EventOption.description 中写入 "{@target_npc}"，init() 时自动替换为 context 中的实际值
+#
+# @param text:     包含占位符的原始文本
+# @param context:  运行时字典（通常由 DSL 解析 + merge_context 产生）
+# @param instance: 调用方对象（例如 self），用于 {prop} 类占位符查找
+# @return:         替换后的文本
+# ──────────────────────────────────────────────
+static func resolve_template(text: String, context: Dictionary, instance: Object) -> String:
+	if text.is_empty():
+		return text
+	
+	var regex = RegEx.new()
+	regex.compile("\\{(@?)(\\w+)\\}")
+	
+	var result = text
+	var matches = regex.search_all(text)
+	
+	# 反向遍历，避免替换位置偏移
+	for i in range(matches.size() - 1, -1, -1):
+		var match = matches[i]
+		var has_at = match.get_string(1) == "@"
+		var prop_name = match.get_string(2)
+		var start = match.get_start()
+		var end = match.get_end()
+		var replacement = ""
+		
+		if has_at:
+			# {@some_prop} → 从 context 字典查找
+			if context.has(prop_name):
+				replacement = str(context[prop_name])
+			else:
+				Logging.warn("[resolve_template] context 中找不到键 '%s'，保留占位符" % prop_name)
+				replacement = match.get_string()  # 保留原样，方便 debug
+		else:
+			# {some_prop} → 从 instance 对象查找
+			if instance and prop_name in instance:
+				replacement = str(instance[prop_name])
+			else:
+				Logging.warn("[resolve_template] instance 上找不到属性 '%s'，保留占位符" % prop_name)
+				replacement = match.get_string()  # 保留原样，方便 debug
+		
+		# 通过拼接替换（避免 replace() 全部替换的副作用）
+		result = result.left(start) + replacement + result.substr(end)
+	
+	return result

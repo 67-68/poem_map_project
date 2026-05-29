@@ -179,6 +179,31 @@ flag_bool_has(name=flag_visited_palace), prop_gt(name=money, val=100)
 | `flag_int_set` | name, val | 设置整数标志 | `flag_int_set(name=score, val=100)` |
 | `flag_int_append` | name, val | 追加整数标志 | `flag_int_append(name=score, val=50)` |
 
+#### 3.5 栈事件操作符
+
+| 函数 | 参数 | 说明 | 示例 |
+|------|------|------|------|
+| `push_event` | event_key | 将事件推入栈顶（LIFO 优先级处理，栈为空后才处理普通队列） | `push_event(event_key=evt_aftermath)` |
+| `pop_event` | 无参数 | 弹出当前栈顶事件，播放下一个栈中事件 | `pop_event()` |
+
+> 💡 **使用场景**: 适用于"必须在当前事件链结束后才能处理其他事件"的场景。例如事件 A 的结果中 `push_event(event_key=evt_aftermath)` 将 aftermath 推入栈 → 当前事件结束后栈不为空 → 自动播放 aftermath → aftermath 中 `pop_event()` 弹出自身 → 栈空 → 回到普通队列。
+>
+> 💡 **context 自动传递**: `push_event` 和 `queue_event` 在 DSL 中调用时，当前事件的 `context` 会被自动捕获并传递给被触发的事件，无需手动传递参数。
+
+#### 3.6 队列事件操作符
+
+| 函数 | 参数 | 说明 | 示例 |
+|------|------|------|------|
+| `queue_event` | event_key | 将事件排入普通事件队列（FIFO，按序处理，无栈优先级） | `queue_event(event_key=evt_aftermath)` |
+
+> 💡 **与 `push_event` 的区别**:
+> - `push_event` → 栈（LIFO），中断当前事件链，优先处理，处理完再回来
+> - `queue_event` → 队列（FIFO），排到队尾，等前面所有事件处理完再处理
+>
+> 💡 **使用场景**: 适用于"不紧急但需要排队处理"的事件。例如触发了一个不影响当前流程的支线事件，排到队列里等当前主线走完再播。
+>
+> 💡 **context 自动传递**: 同 `push_event`，当前事件的 `context` 会被自动捕获并传递给排队的事件。
+
 > ⚡ **动态标志位名称**: flag 系操作符的 `name` 参数支持 `@` 前缀语法，表示从当前 context 动态解析标志位名称：
 > ```
 > flag_str_set(name=@initiator_flag, val=TR_Drunk)
@@ -200,7 +225,7 @@ flag_bool_has(name=flag_visited_palace), prop_gt(name=money, val=100)
 ### 新格式表头（下推自动机）
 
 ```
-depth,row_type,uuid,context,requirements,title,description,results
+depth,row_type,uuid,context,requirements,title,description,results,provider,emotion_config
 ```
 
 详见 [`new_csv_structure.md`](new_csv_structure.md)
@@ -243,6 +268,9 @@ Event_ID,Trigger_Tags,requirements,Title,Desc,background,weight,Opt_A_Text,Opt_A
 | `flag:str:set:name:李四` | `flag_str_set(name=name, val=李四)` |
 | `flag:int:add:score:50` | `flag_int_append(name=score, val=50)` |
 | `flag:int:set:health:100` | `flag_int_set(name=health, val=100)` |
+| `push_event` | `push_event(event_key=evt_aftermath)`（新语法） |
+| `pop_event` | `pop_event()`（新语法） |
+| `queue_event`（新增） | `queue_event(event_key=evt_aftermath)`（新语法） |
 
 ---
 

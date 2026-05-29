@@ -15,6 +15,13 @@ func init(context: Dictionary) -> Dictionary:
     if not custom_context_params.is_empty():
         Util.merge_context(context_, custom_context_params)
     
+    # 解析 description 中的动态差值占位符
+    # {some_prop}  → 从当前选项对象上取属性
+    # {@some_prop} → 从 context 字典中取属性
+    if not description.is_empty() and "{" in description:
+        description = Util.resolve_template(description, context_, self)
+        Logging.info("[EventOption] 解析后 description: %s" % description)
+    
     if requirement:
         requirement.init(context_)
     if choice_result:

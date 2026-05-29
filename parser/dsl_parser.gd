@@ -94,6 +94,25 @@ static func parse_context(context_str: String) -> Dictionary:
                 # 自定义模板参数
                 # 支持逗号分隔多个 key:value 对（如: poem_taste: urn:poem_taste:libai_taste, taste_owner_relation_flag:flag_relation_with_libai）
                 # 方案：先存第一个 key:value，再检测 value 中的逗号并尝试拆分附加键值对
+                
+                # 🚨 方括号数组语法必须在逗号处理逻辑之前检测
+                # 语法：some_name=[val1;val2;val3] — 用分号避免与逗号 key:value 扩展冲突
+                if value.begins_with("[") and value.ends_with("]"):
+                    var inner = value.substr(1, value.length() - 2)
+                    if inner.contains(";"):
+                        # 分号分隔的数组
+                        var arr = PackedStringArray()
+                        for part in inner.split(";"):
+                            part = part.strip_edges()
+                            if not part.is_empty():
+                                arr.append(part)
+                        result.custom_params[key] = arr
+                    else:
+                        # 无分号 → 单元素数组（保持类型一致）
+                        var clean_val = inner.strip_edges()
+                        result.custom_params[key] = PackedStringArray([clean_val]) if not clean_val.is_empty() else PackedStringArray()
+                    continue  # 🚨 跳过后续逗号处理逻辑
+                
                 result.custom_params[key] = value
                 
                 if value.contains(","):
@@ -163,6 +182,71 @@ static func _resolve_template_for_type(template_urn: String, row_type: String, n
     Logging.info("Template 应用成功 (%s): %s" % [row_type, template_urn])
     return instance
 
+# ═══════════════════════════════════════════════════════════
+# Provider 解析
+#
+# CSV provider 列语法（类似 operator）：
+#   item_provider(list_key="guests", text_template="走向 {item}", ...)
+#
+# 规则：
+#   1. 使用 NamedDSLParser.parse_single() 解析（和 operator 一样）
+#   2. 函数名映射到 Provider 类（目前仅 item_provider → ItemProvider）
+#   3. 参数 key=value 直接 set 到 provider 实例的对应 @export 字段
+#   4. 不支持多个 provider，只取一个
+# ═══════════════════════════════════════════════════════════
+
+# 函数名 → Provider 脚本路径映射
+# 🚨 不用 class_name 直接引用，避免 @tool 模式下跨脚本解析异常 💀
+# 改用 load() 延迟加载，新增 provider 类型时在此注册
+static func _load_provider_script(func_name: String) -> GDScript:
+    match func_name:
+        "item_provider":
+            return load("res://core/model/item_provider.gd")
+        _:
+            return null
+
+static func _create_provider_instance(func_name: String, params: Dictionary) -> BaseProvider:
+    var script: GDScript = _load_provider_script(func_name)
+    if script == null:
+        Logging.err("Provider 解析失败: 未知的 provider 函数 '%s'" % func_name)
+        return null
+    
+    var provider = script.new() as BaseProvider
+    if provider == null:
+        Logging.err("Provider 实例化失败: func_name=%s, script=%s" % [func_name, script.resource_path])
+        return null
+    
+    # 将 params 中的 key=value 映射到 provider 的属性
+    for key in params:
+        if key in provider:
+            var value = params[key]
+            provider.set(key, value)
+            Logging.info("Provider 属性设置: %s.%s = %s (type: %s)" % [func_name, key, str(value), typeof(value)])
+        else:
+            Logging.warn("Provider '%s' 没有属性 '%s'，已忽略" % [func_name, key])
+    
+    Logging.info("Provider 创建成功: %s (params: %s)" % [func_name, str(params)])
+    return provider
+
+# 解析 provider 字段
+# 输入: "item_provider(list_key="guests", text_template="走向 {item}", target_event_key="event_talk", payload_key="target_npc")"
+# 返回: BaseProvider 实例，或 null（空字符串 / 解析失败）
+static func parse_provider_field(provider_str: String) -> BaseProvider:
+    if provider_str.is_empty():
+        return null
+    
+    var parsed = NamedDSLParser.parse_single(provider_str)
+    if parsed == null:
+        Logging.err("Provider DSL 解析失败: %s" % provider_str)
+        return null
+    
+    var provider = _create_provider_instance(parsed.func_name, parsed.params)
+    if provider == null:
+        Logging.err("Provider 实例创建失败: func_name=%s, str=%s" % [parsed.func_name, provider_str])
+        return null
+    
+    return provider
+
 # 解析随机事件（row_type = 'random_event'）
 static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 检测空行
@@ -198,6 +282,18 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     else:
         event = RandomEvent.new({})
         event.uuid = uuid
+
+    # 解析 provider 字段（新列，独立于 template）
+    # 语法: item_provider(list_key="guests", text_template="走向 {item}", ...)
+    # 使用 NamedDSLParser 解析（和 operator 一样的语法）
+    var provider_str = row.get('provider', '')
+    if not provider_str.is_empty():
+        var provider = parse_provider_field(provider_str)
+        if provider:
+            event.provider = provider
+            Logging.info("Provider 绑定成功: uuid=%s, provider=%s" % [uuid, provider_str])
+        else:
+            Logging.warn("Provider 解析失败，已跳过: uuid=%s, provider=%s" % [uuid, provider_str])
 
     # 解析 context DSL
     var context_str = row.get('context', '')

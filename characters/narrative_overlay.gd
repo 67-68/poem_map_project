@@ -12,7 +12,13 @@ var _tween: Tween
 # 事件队列 (FIFO)，防止多个事件相互覆盖
 # 每个元素为 { "data": BaseEvent, "context": Dictionary }
 var _event_queue: Array[Dictionary] = []
+
+# 事件栈 (LIFO)，优先级高于普通队列
+# 栈中的事件会先于队列处理；栈空时才处理队列
+var _event_stack: Array[Dictionary] = []
+
 var _is_active: bool = false
+var _current_from_stack: bool = false
 var _saved_time_scale: float = 1.0
 
 # 引用 imaginary_manager
@@ -33,6 +39,8 @@ func _ready() -> void:
 			return
 		apply_narrative(ev, _context)
 	)
+	EventBus.push_event.connect(_on_push_event)
+	EventBus.pop_event.connect(_on_pop_event)
 
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -58,6 +66,85 @@ func _play_open_animation():
 	main_card.modulate.a = 0.0
 	_tween.tween_property(main_card, "scale", Vector2(1.0, 1.0), 0.5)
 	_tween.tween_property(main_card, "modulate:a", 1.0, 0.3)
+
+# ─── 事件栈处理 ───────────────────────────────────────
+
+func _on_push_event(data: Variant, context: Dictionary):
+	var ev = _resolve_event_for_stack(data)
+	if not ev:
+		return
+
+	# 🔒 防御性深拷贝：栈中的 context 必须是完全隔离的快照
+	# 契约：调用方（PushEventOperator等）负责提供独立 context，
+	# 但这里做二次防御，防止其他 emit push_event 的路径忘记 duplicate
+	_event_stack.push_front({ "data": ev, "context": context.duplicate(true) })
+	Logging.info("事件已推入栈: " + ev.name)
+
+	if not _is_active:
+		_process_stack()
+
+
+func _on_pop_event():
+	if _event_stack.size() > 0:
+		var entry = _event_stack.pop_front()
+		var ev: BaseEvent = entry.get("data")
+		Logging.info("pop_event: 弹出栈事件 - " + ev.name)
+	else:
+		Logging.warn("pop_event: 栈为空，忽略")
+		return
+
+	if not _is_active:
+		_process_next()
+
+
+# 将 data（BaseEvent 或 String key）解析为 BaseEvent
+func _resolve_event_for_stack(data: Variant) -> BaseEvent:
+	if data is BaseEvent:
+		return data
+	if data is String:
+		var ev = Database.history_events.get(data)
+		if not ev: ev = Database.normal_poem_events.get(data)
+		if not ev: ev = Database.find_triggerable_item(data)
+		if not ev:
+			breakpoint
+			Logging.err("push_event: Event not found: " + data)
+			Logging.err("检查你是不是又加了某个事件文件夹没写判断")
+			return null
+		return ev
+	Logging.err("push_event: 不支持的数据类型: " + str(typeof(data)))
+	return null
+
+
+func _process_stack():
+	if _event_stack.size() > 0:
+		var entry = _event_stack[0]
+		_current_from_stack = true
+		apply_narrative(entry.data, entry.context)
+	else:
+		Logging.warn("_process_stack: 栈为空")
+
+
+# 按优先级处理下一个事件：栈 (LIFO) > 队列 (FIFO)
+func _process_next():
+	# 栈优先 (LIFO) — peek 不移除，留待 PopEventOperator 显式 pop
+	if _event_stack.size() > 0:
+		var entry = _event_stack[0]
+		_current_from_stack = true
+		var ev: BaseEvent = entry.get("data")
+		var ctx: Dictionary = entry.get("context", {})
+		Logging.info("弹出栈中的下一个事件: " + ev.name)
+		apply_narrative(ev, ctx)
+		return
+
+	# 队列其次 (FIFO)
+	if _event_queue.size() > 0:
+		var entry = _event_queue.pop_front()
+		_current_from_stack = false
+		var next_event: BaseEvent = entry.get("data")
+		var next_context: Dictionary = entry.get("context", {})
+		Logging.info("弹出队列中的下一个事件: " + next_event.name)
+		apply_narrative(next_event, next_context)
+
 
 func apply_narrative(data: BaseEvent, context: Dictionary):
 	# 如果已有事件在播放，入队等待
@@ -120,16 +207,13 @@ func _end_narrative(choice):
 	Logging.done('narrative finished')
 	EventBus.event_confirmed.emit() # 绑定事件系统信号
 
+	# 快照当前事件数据，防止 execute_result 期间 pop_event 触发新事件覆盖 current_event_data
+	var _completed_data: BaseEvent = current_event_data
 	ConsequenceExecuter.execute_result(choice)
 
 	# 在执行后果后进行 imaginary 判定，确保 emotion 已被修改
-	imaginary_manager.add_imagenary(current_event_data)
+	imaginary_manager.add_imagenary(_completed_data)
 	current_event_data = null
 
-	# 处理队列中的下一个事件
-	if _event_queue.size() > 0:
-		var entry: Dictionary = _event_queue.pop_front()
-		var next_event: BaseEvent = entry.get("data")
-		var next_context: Dictionary = entry.get("context", {})
-		Logging.info("弹出队列中的下一个事件: " + next_event.name)
-		apply_narrative(next_event, next_context)
+	# 处理后续事件：栈 (LIFO) 优先，队列 (FIFO) 次之
+	_process_next()

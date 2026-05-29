@@ -2,6 +2,9 @@ extends Node
 
 func add_imagenary(ev: BaseEvent):
 	#breakpoint
+	if not ev:
+		Logging.err('imaginary manager: event input is null')
+		return
 	Logging.info('adding imagenary for event %s' % ev.uuid)
 	# 🤓☝️ 鸭子类型：检查对象是否具有 RandomEvent 所需的属性
 	if not ev.has_method("get") or ev.get("emotion_configs") == null:

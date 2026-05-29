@@ -94,7 +94,6 @@ row_type | template | uuid | context | requirements | title | description | resu
 - **示例**:
   - `trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor`
   - `trigger_tags=action:intent:study:poetry`
-  - （旧格式）`tag:actor:status:temporary:drunk|weight:15.5|background:(bg_rural_poor)`
 - **注意**: 字段内不要有多余空格；推荐使用 `|` 作为字段分隔符和 `=` 作为 kv 分隔符的新格式
 
 ##### 触发标签格式 (trigger_tags)
@@ -109,9 +108,6 @@ row_type | template | uuid | context | requirements | title | description | resu
   - 格式: `trigger_tags=[tag1,tag2,tag3]`
   - 示例: `trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]`
   - 方括号语法在 `context` 字段中能避免歧义，是推荐用法
-- **多个标签（旧格式）**: 直接在值中用逗号分隔
-  - 示例: `trigger_tags=actor:status:temporary:drunk,city:econ:level:prosperous`
-  - 注意：旧格式在 context 字段中可能与字段分隔符混淆，建议迁移到方括号语法
 
 **支持的 Domain**:
 | Domain | 描述 |
@@ -126,16 +122,6 @@ row_type | template | uuid | context | requirements | title | description | resu
 #### requirements (可选)
 - **类型**: `String`（DSL 条件格式）
 - **描述**: 事件触发的额外条件，多个条件用逗号分隔（AND 逻辑）
-- **格式**（两种语法均支持，**推荐使用新语法**）:
-  - **旧语法**（冒号分隔，向后兼容）:
-    - 属性条件: `prop:<property_name>:<operator><value>`
-      - 示例: `prop:money:>50`, `prop:health:<30`
-    - 特性条件: `trait:has:<trait_name>` 或 `trait:not_has:<trait_name>`
-      - 示例: `trait:has:official`, `trait:not_has:corrupt`
-    - 标志位条件: `flag:<type>:<operator>:<value>`
-      - 示例: `flag:bool:has:flag_player_has_key`, `flag:str:is:flag_player_title:官员`
-    - DeepSeek 条件（特殊）: `deepseek:<prompt>`
-      - 示例: `deepseek:判断玩家是否在京兆府任职`
   - **新语法**（命名参数函数调用，推荐）:
     - 属性条件: `prop_gt(name=<属性名>, val=<数值>)` 或 `prop_lt(name=<属性名>, val=<数值>)`
       - 示例: `prop_gt(name=money, val=50)`, `prop_lt(name=health, val=30)`
@@ -146,10 +132,7 @@ row_type | template | uuid | context | requirements | title | description | resu
       - 字符串: `flag_str_is(name=<标志ID>, val=<值>)` / `flag_str_not(name=<标志ID>, val=<值>)`
       - 整数: `flag_int_gt(name=<标志ID>, val=<数值>)` / `flag_int_lt(name=<标志ID>, val=<数值>)`
       - 示例: `flag_bool_has(name=flag_player_has_key)`, `flag_str_is(name=flag_player_title, val=官员)`
-    - DeepSeek 条件（特殊）: `deepseek:<prompt>`
-      - 示例: `deepseek:判断玩家是否在京兆府任职`
 - **多条件组合**: `prop_gt(name=money, val=50),trait_has(name=official),flag_bool_has(name=flag_has_key)`
-  - 旧语法组合仍然向后兼容: `prop:money:>50,trait:has:official,flag:bool:has:flag_has_key`
 - **注意**: options 行的 requirements 控制选项的**可用性**（不可用则禁用/隐藏）
 
 #### title (可选)
@@ -167,19 +150,6 @@ row_type | template | uuid | context | requirements | title | description | resu
 #### results (可选，主要用在选项行)
 - **类型**: `String`（DSL 结果格式）
 - **描述**: 选择该选项后执行的结果操作符。对于 `random_event` 行，该字段通常为空。
-- **格式**（两种语法均支持，**推荐使用新语法**）: 多个操作符用逗号分隔
-  - **旧语法**（冒号分隔，向后兼容）:
-    - 属性操作: `prop:<property_name>:<value>`（支持 +/- 符号）
-      - 示例: `prop:money:-100`, `prop:literary_fame:+15`
-    - 特性操作: `trait:add:<trait_name>` 或 `trait:remove:<trait_name>`
-      - 示例: `trait:add:corrupt`, `trait:remove:weak`
-    - 标志位操作:
-      - 布尔: `flag:bool:add:<flag_id>`, `flag:bool:remove:<flag_id>`, `flag:bool:<old>-><new>`
-      - 字符串: `flag:str:set:<flag_id>:<content>`
-      - 整数: `flag:int:add:<flag_id>:<value>`, `flag:int:set:<flag_id>:<value>`
-    - DeepSeek 生成: `deepseek:<prompt>`
-      - 示例: `deepseek:生成一段关于科举落榜的诗句`
-  - **新语法**（命名参数函数调用，推荐）:
     - 属性操作: `prop_add(name=<属性名>, val=<数值>)` / `prop_sub(name=<属性名>, val=<数值>)` / `prop_set(name=<属性名>, val=<数值>)`
       - 示例: `prop_sub(name=money, val=100)`, `prop_add(name=literary_fame, val=15)`
     - 特性操作: `trait_add(name=<特性名>)` 或 `trait_remove(name=<特性名>)`
@@ -189,9 +159,13 @@ row_type | template | uuid | context | requirements | title | description | resu
       - 字符串: `flag_str_set(name=<标志ID>, val=<内容>)` / `flag_str_append(name=<标志ID>, val=<内容>)`
       - 整数: `flag_int_set(name=<标志ID>, val=<数值>)` / `flag_int_append(name=<标志ID>, val=<数值>)`
       - 示例: `flag_bool_set(name=flag_bribed, val=true)`, `flag_str_set(name=flag_player_title, val=官员)`
-    - DeepSeek 生成: `deepseek:<prompt>`
-      - 示例: `deepseek:生成一段关于科举落榜的诗句`
-- **旧语法示例**: `prop:money:-100,trait:add:corrupt,flag:bool:add:flag_bribed`
+    - 栈事件操作:
+      - `push_event(event_key=<事件KEY>)` — 将事件推入栈顶（LIFO），当前事件结束后优先播放
+      - `pop_event()` — 弹出当前栈顶事件，播放下一个栈中事件
+      - 示例: `push_event(event_key=evt_aftermath)`, `pop_event()`
+    - 队列事件操作（新）:
+      - `queue_event(event_key=<事件KEY>)` — 将事件排入普通事件队列（FIFO），排队等候处理
+      - 示例: `queue_event(event_key=evt_aftermath)`
 - **新语法示例**: `prop_sub(name=money, val=100),trait_add(name=corrupt),flag_bool_set(name=flag_bribed, val=true)`
 
 #### emotion_config (可选，仅 event 级别)
@@ -255,24 +229,6 @@ row_type | template | uuid | context | requirements | title | description | resu
 - 否则视为旧式表头，触发向后兼容解析
 
 ---
-
-## 向后兼容（旧式表头）
-
-旧式 `Event_ID,Trigger_Tags,requirements,Title,Desc,background,weight,Opt_X_*` 表头仍然被支持。
-
-**检测逻辑**：如果第一行的 `row_type` 字段不是已知的 `row_type` 关键词，则进入兼容模式。
-
-**兼容模式行为**：
-1. 为每行自动生成 UUID
-2. 将 `Event_ID` 映射到 `context` 中的标识
-3. 将 `Trigger_Tags` 映射到 `context` 的 `trigger_tags=`
-4. 从平面的 `Opt_X_Text/Opt_X_Req/Opt_X_Result` 列中提取选项数据
-5. 选项数量受限于 CSV 中定义的列数
-
-> **建议**：新文件使用新式 PDA 表头。旧文件在修改时迁移到新格式。
-
----
-
 ## 完整示例解析
 
 > **注意**：context 字段内部使用 `|` 作为字段分隔符（避免与标签内的 `,` 冲突）。
@@ -598,20 +554,6 @@ random_event,,uuid-001,"trigger_tags = action:study , weight = 10.0"
 ```csv
 # 正确
 random_event,,uuid-001,trigger_tags=action:study,weight=10.0
-```
-
-### 错误 5: 旧式表头与新式解析器混用
-
-```csv
-# 旧式表头（OK 的，会被兼容）
-Event_ID,Trigger_Tags,requirements,Title,Desc,background,weight,Opt_A_Text,Opt_A_Req,Opt_A_Result
-evt_01,action:study,,简单事件,,,10.0,参与,,prop:literary_fame:+10
-```
-
-```csv
-# 新式表头（推荐）
-row_type,template,uuid,context,requirements,title,description,results
-random_event,,uuid-001,trigger_tags=action:study,weight=10.0,,简单事件,,prop:literary_fame:+10
 ```
 
 ---

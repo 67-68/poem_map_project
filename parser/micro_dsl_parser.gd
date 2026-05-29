@@ -47,6 +47,9 @@ const FUNC_FLAG_STR_SET := "flag_str_set"
 const FUNC_FLAG_STR_APPEND := "flag_str_append"
 const FUNC_FLAG_INT_SET := "flag_int_set"
 const FUNC_FLAG_INT_APPEND := "flag_int_append"
+const FUNC_PUSH_EVENT := "push_event"
+const FUNC_POP_EVENT := "pop_event"
+const FUNC_QUEUE_EVENT := "queue_event"
 
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
@@ -89,6 +92,9 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_FLAG_STR_APPEND] = func(p, r): return _create_flag_operator_str_append(p, r)
 	cd[FUNC_FLAG_INT_SET] = func(p, r): return _create_flag_operator_int_set(p, r)
 	cd[FUNC_FLAG_INT_APPEND] = func(p, r): return _create_flag_operator_int_append(p, r)
+	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
+	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
+	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
 
 # ──────────────────────────────────────────────
 # Tags
@@ -428,3 +434,31 @@ static func _create_emotion_operator(emotion_name: String, value: int) -> BaseOp
 	operator.str_emotion = emotion_name
 	operator.value = value
 	return operator
+
+
+# ─── push_event / pop_event ─────────────────────────────────
+
+static func _exec_push_event_op(parsed: NamedDSLParser.ParseResult, raw: String) -> PushEventOperator:
+	var key = NamedDSLParser.get_str_param(parsed, "event_key")
+	if key.is_empty():
+		Logging.err("push_event 缺少 event_key 参数: %s" % raw)
+		return null
+	var op = PushEventOperator.new()
+	op.event_key = key
+	return op
+
+
+static func _exec_pop_event_op(_parsed: NamedDSLParser.ParseResult, raw: String) -> PopEventOperator:
+	return PopEventOperator.new()
+
+
+# ─── queue_event ──────────────────────────────────────────────
+
+static func _exec_queue_event_op(parsed: NamedDSLParser.ParseResult, raw: String) -> QueueEventOperator:
+	var key = NamedDSLParser.get_str_param(parsed, "event_key")
+	if key.is_empty():
+		Logging.err("queue_event 缺少 event_key 参数: %s" % raw)
+		return null
+	var op = QueueEventOperator.new()
+	op.event_key = key
+	return op
