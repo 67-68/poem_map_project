@@ -26,7 +26,8 @@ static var debug_dashboard_state = {
         "JIAOYOU": "main_jiaoyou_1",  # 这些key其实没用，因为不需要分辨，全部塞进去trait就行了
         
         # 社交
-        "LIBAI": 'relation_libai_4',
+        # _rumor/_close/_core/_enemy
+        "LIBAI": 'relation_libai_rumor',
 
         # 诗词
         "POEM_BAIYE": 'poem_ying_zhi_1' # 不要大写, 会出问题

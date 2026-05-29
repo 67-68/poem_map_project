@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://51mcsf3p30lo"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_y1tht"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_pmubm"]
+
+[resource]
+script = ExtResource("1_y1tht")
+topic = "RELATION"
+specific_topic = "HEARD"
+_relate_to = 0
+uuid = "relation_libai_rumor"
+name = "听闻李白"

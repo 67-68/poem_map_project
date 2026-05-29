@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://ddbdtd4xyebul"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_ep4py"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_6j3pc"]
+
+[resource]
+script = ExtResource("1_ep4py")
+topic = "RELATION"
+specific_topic = "GOOD"
+_relate_to = 0
+uuid = "relation_libai_close"
+name = "关系好李白"
