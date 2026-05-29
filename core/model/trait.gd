@@ -20,14 +20,6 @@ var relate_to: String:
 # 内生的效果：自己进化和持续的影响
 @export var trait_effect_operations: Array[PropertyOperator] = []
 
-# 内生进化的效果：可能静默进化或者出事件
-# 比如醉酒 -> 大醉，但和外部相关的（比如社交）不能这么搞
-@export var trait_endogenous_operations: Array[BaseOperator] = []
-
 func operate_continuous_effect():
     for op in trait_effect_operations:
-        op.operate()
-
-func operate_endogenous():
-    for op in trait_endogenous_operations:
         op.operate()

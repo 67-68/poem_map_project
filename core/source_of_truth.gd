@@ -141,4 +141,8 @@ static var urn_resource_config: Dictionary = {
         "registry": "res://data/event_options_registry.tres",
         "db_field": "event_options",
     },
+    "state_transistor": {
+        "registry": "res://data/tres_state_transistors_registry.tres",
+        "db_field": "state_transistors",
+    },
 }

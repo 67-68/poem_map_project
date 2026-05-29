@@ -22,6 +22,10 @@
 - **Event Data Linter架构重构** [linter_architecture_refactoring.md](linter_architecture_refactoring.md)
   > 契约设计模式、Rule流水线架构、数据抽象层，消除反射依赖，性能提升100倍
 
+## 5. 状态转移层 (State Transition)
+- **StateTransistor 状态转移器** [state_transistor.md](state_transistor.md)
+  > 声明式状态转移单元：条件守卫→资源转移→后效操作→链式事件，数据驱动的状态变更模式
+
 ---
 
 ## 📝 文档维护说明

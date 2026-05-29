@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_c6s3u"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_d0n7c"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_f71l5"]
 
 [resource]
 script = ExtResource("1_c6s3u")

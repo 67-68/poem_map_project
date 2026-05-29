@@ -8,12 +8,14 @@ func _ready() -> void:
 func default_constructor(data: GameEntity):
 	var entity = preload("res://ui/entity_descriptor.tscn").instantiate()
 	entity.initialization(data)
-	entity.clicked.connect(func(selected_entity): 
-		EventBus.end_picking.emit(selected_entity) # 如果emit空那么就是没选出来
-		hide()
-	)
+	entity.clicked.connect(on_selected)
 	return entity
 
+func on_selected(selected_entity): 
+	breakpoint
+	EventBus.end_picking.emit(selected_entity) # 如果emit空那么就是没选出来
+	hide()
+	
 func start_picker(data: Array, ui_constructor = default_constructor):
 	if not ui_constructor:
 		ui_constructor = default_constructor

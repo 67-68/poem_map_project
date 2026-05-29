@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://vx4kfn72inh0"
+
+[deps]
+
+files=["res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation"]
+
+source_file="res://data/tres_state_transistors/state_transistor.csv"
+dest_files=["res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

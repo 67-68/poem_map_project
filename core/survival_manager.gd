@@ -50,16 +50,13 @@ func aggregate_trait_effect():
         if not trait_: 
             Logging.warn('为什么player state中存在的triat在database没有？？')
             continue
+        trait_.lasting_xun += 1
         trait_.operate_continuous_effect()
 
 func operate_endogeneous_operations():
-    for t in PlayerState.get_traits():
-        var trait_ = Database.traits.get(t)
-        if not trait_: 
-            Logging.warn('为什么player state中存在的triat在database没有？？')
-            continue
-        trait_.lasting_xun += 1
-        trait_.operate_endogenous()
+    for s in Database.state_transistors:
+        var trans = Database.state_transistors[s]
+        trans.transition()
 
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）
 func _process_single_xun_settlement():

@@ -35,6 +35,7 @@ enum URN_TYPE {
 	NORMAL_POEM_EVENT,  # normal_poem_events — 普通诗词事件
 	CITY,               # cities（内部合并用）
 	EVENT_OPTION,       # event_options — 事件选项（.tres 资源）
+	STATE_TRANSISTOR,   # state_transistors — 状态转移器（.tres 资源）
 }
 
 static func urn_type_to_str(type: int) -> String:

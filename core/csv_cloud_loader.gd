@@ -32,6 +32,12 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "flag"
     },
     {
+        "name": "state_transistors",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=1696402287&single=true&output=csv",
+        "save_path": "res://data/tres_state_transistors/state_transistor.csv",
+        "data_type": "state_transistor"
+    },
+    {
         "name": "随机事件池",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=0&single=true&output=csv",
         "save_path": "res://data/random_events/random_events.csv",
