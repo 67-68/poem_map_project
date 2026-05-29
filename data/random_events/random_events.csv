@@ -11,3 +11,6 @@ random_event,,libai_after,trigger_tags=[test1:test1:test1:test1],flag:bool:has:c
 >option,,libai_after_opt,,,,义薄云天！,flag:bool:chain_strange_poet_3->chain_strange_poet_1,
 random_event,,jiaoyou_poem_public,,,交游呈现诗词公开,,,
 >option,urn:event_option:poem_giving_option,jiaoyou_poem_public_opt,poem_taste: urn:poem_taste:zhuoliu_basic_taste,,,,,
+random_event,,libai_welcome_hejiu,weight=0,,李白邀请喝酒,,,
+>option,,libai_hejiu_1,,flag:int:>:flag_relation_with_libai:10,,libai_hejiu_1(5好感以上),,
+>option,,libai_hejiu_2,,flag:int:>:flag_relation_with_libai:15,,libai_hejiu_2(15好感以上),,

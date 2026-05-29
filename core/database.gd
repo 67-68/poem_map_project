@@ -54,6 +54,7 @@ func _init() -> void:
 	tags = Util.create_dict_from_registry(load("res://data/tres_tags_registry.tres"))
 	event_options = Util.create_dict_from_registry(load("res://data/event_options_registry.tres"))
 	poem_taste = Util.create_dict_from_registry(load("res://data/poem_taste_registry.tres"))
+	#breakpoint
 	state_transistors = Util.create_dict_from_registry(load("res://data/tres_state_transistors_registry.tres"))
 
 	# 🚨 使用DataHelper的static函数统一加载所有事件相关数据

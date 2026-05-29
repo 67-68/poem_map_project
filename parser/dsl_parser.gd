@@ -712,10 +712,11 @@ static func parse_state_transistor(row: Dictionary) -> StateTransistor:
 
     # ── 直接照抄的字段 ──
     transistor.uuid = row.get('uuid', '')
-    transistor.target_resource_urn = row.get('target_resource_urn', '')
+    # 🚨 CSV 列名是 target_resource / current_resource / triggered_event，没有 _urn 和 _key 后缀
+    transistor.target_resource_urn = row.get('target_resource', '')
     transistor.transist_value = row.get('transist_value', '')
-    transistor.current_resource_urn = row.get('current_resource_urn', '')
-    transistor.triggered_event_key = row.get('triggered_event_key', '')
+    transistor.current_resource_urn = row.get('current_resource', '')
+    transistor.triggered_event_key = row.get('triggered_event', '')
 
     # ── DSL 解析字段 ──
     # requirement: 使用 parse_requirements() 解析 (复用 random_event 的解析逻辑)

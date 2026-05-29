@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cdsy17j37xymx"]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_p8egq"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_1byd7"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="3_1byd7"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_tlaoo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="4_r81hc"]
+
+[sub_resource type="Resource" id="Resource_1byd7"]
+script = ExtResource("3_1byd7")
+flag_id = "flag_relation_with_libai"
+type = "int"
+value = 10
+
+[sub_resource type="Resource" id="Resource_tlaoo"]
+script = ExtResource("3_tlaoo")
+requirement = SubResource("Resource_1byd7")
+
+[sub_resource type="Resource" id="Resource_r81hc"]
+script = ExtResource("3_1byd7")
+flag_id = "flag_relation_with_libai"
+type = "int"
+value = 15
+
+[sub_resource type="Resource" id="Resource_ofawl"]
+script = ExtResource("3_tlaoo")
+requirement = SubResource("Resource_r81hc")
+
+[resource]
+script = ExtResource("4_r81hc")
+weight = 0.0
+options = Array[ExtResource("2_1byd7")]([SubResource("Resource_tlaoo"), SubResource("Resource_ofawl")])
+uuid = "libai_welcome_hejiu"
+name = "李白邀请喝酒"

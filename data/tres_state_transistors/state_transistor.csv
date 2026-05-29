@@ -1,1 +1,2 @@
-row_type,uuid,target_resource,transist_value,current_resource,triggered_event,requirement,operators
+uuid,target_resource,transist_value,current_resource,triggered_event,requirement,operators
+relation_libai_rumor_transist_close,urn:trait:relation_libai_close,TRUE,urn:trait:relation_libai_rumor,libai_welcome_hejiu,flag:int:>:flag_relation_with_libai:10,flag:int:set:flag_relation_with_libai:20

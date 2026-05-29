@@ -53,7 +53,7 @@ func aggregate_trait_effect():
         trait_.lasting_xun += 1
         trait_.operate_continuous_effect()
 
-func operate_endogeneous_operations():
+func operate_state_transistors():
     for s in Database.state_transistors:
         var trans = Database.state_transistors[s]
         trans.transition()
@@ -82,7 +82,8 @@ func _process_single_xun_settlement():
     # 打完巴掌给个甜枣，系统内存回收。
     # 属性 90 -> 50
     _decay_volatile_emotions()
-    operate_endogeneous_operations()
+    breakpoint
+    operate_state_transistors()
     
     # 5. 通知 UI 刷新
     EventBus.emit_signal("xun_settlement_completed")

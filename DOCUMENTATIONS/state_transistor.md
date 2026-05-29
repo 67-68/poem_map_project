@@ -177,15 +177,15 @@ StateTransistor（独立资源，通过 URN 或直接引用使用）
 
 ### 表头约定
 
-CSV 表头直接映射到 [`StateTransistor`](../core/model/state_transistor.gd) 的属性名，大小写敏感：
+CSV 表头映射到 [`StateTransistor`](../core/model/state_transistor.gd) 的属性：
 
 | CSV 列名 | 映射属性 | 处理方式 |
 |----------|----------|----------|
 | `uuid` | `uuid` | 直接赋值 |
-| `target_resource_urn` | `target_resource_urn` | 直接赋值 |
+| `target_resource` | `target_resource_urn` | 直接赋值（解析器追加 `_urn`） |
 | `transist_value` | `transist_value` | 直接赋值 |
-| `current_resource_urn` | `current_resource_urn` | 直接赋值 |
-| `triggered_event_key` | `triggered_event_key` | 直接赋值 |
+| `current_resource` | `current_resource_urn` | 直接赋值（解析器追加 `_urn`） |
+| `triggered_event` | `triggered_event_key` | 直接赋值（解析器追加 `_key`） |
 | `requirement` | `requirements` | **DSL 解析** → `BaseRequirements` |
 | `operators` | `operators` | **DSL 解析** → `Array[BaseOperator]` |
 
@@ -227,8 +227,8 @@ prop:location:=长安,flag:bool:is:met_libai
 
 **CSV 行（在 Google Sheets 中）：**
 
-| uuid | target_resource_urn | transist_value | current_resource_urn | triggered_event_key | requirement | operators |
-|------|--------------------|---------------|---------------------|-------------------|-------------|-----------|
+| uuid | target_resource | transist_value | current_resource | triggered_event | requirement | operators |
+|------|----------------|---------------|-----------------|----------------|-------------|-----------|
 | | `urn:flag:met_du_fu` | `=true` | | `event_du_fu_intro` | `prop:location:=长安` | `prop:money:+50` |
 | | `urn:flag:wine_count` | `^1` | `urn:flag:current_tavern` | | | |
 | `transistor_quest_reward` | `urn:flag:finished_quest_01` | `=true` | | `event_quest_reward` | `prop:quest_progress:>=100,flag:bool:is:accepted_quest_01` | `prop:money:+200,trait:add:reputation_rising` |

@@ -8,6 +8,7 @@ resources = {
 "jiaoyou_poem_public": "res://data/random_events/jiaoyou_poem_public.tres",
 "libai_after": "res://data/random_events/libai_after.tres",
 "libai_unveilation": "res://data/random_events/libai_unveilation.tres",
+"libai_welcome_hejiu": "res://data/random_events/libai_welcome_hejiu.tres",
 "strange_poet": "res://data/random_events/strange_poet.tres",
 "test1": "res://data/random_events/test1.tres",
 "the_man_got_power": "res://data/random_events/the_man_got_power.tres"

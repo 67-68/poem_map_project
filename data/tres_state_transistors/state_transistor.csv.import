@@ -6,10 +6,10 @@ uid="uid://vx4kfn72inh0"
 
 [deps]
 
-files=["res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation"]
+files=["res://data/tres_state_transistors/state_transistor.target.translation", "res://data/tres_state_transistors/state_transistor.transist.translation", "res://data/tres_state_transistors/state_transistor.current.translation", "res://data/tres_state_transistors/state_transistor.triggered.translation", "res://data/tres_state_transistors/state_transistor.requirement.translation", "res://data/tres_state_transistors/state_transistor.operators.translation"]
 
 source_file="res://data/tres_state_transistors/state_transistor.csv"
-dest_files=["res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation", "res://data/tres_state_transistors/state_transistor.en.translation"]
+dest_files=["res://data/tres_state_transistors/state_transistor.target.translation", "res://data/tres_state_transistors/state_transistor.transist.translation", "res://data/tres_state_transistors/state_transistor.current.translation", "res://data/tres_state_transistors/state_transistor.triggered.translation", "res://data/tres_state_transistors/state_transistor.requirement.translation", "res://data/tres_state_transistors/state_transistor.operators.translation"]
 
 [params]
 
