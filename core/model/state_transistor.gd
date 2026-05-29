@@ -47,6 +47,8 @@ func transition():
 	match target_resource_type:
 		'flag':
 			_apply_flag_transition(target_resource_key)
+		'trait':
+			_apply_trait_transition(target_resource_key)
 		_:
 			Logging.warn('state_transistor: unhandled resource type "%s" for %s, falling back to generic URN lookup' % [target_resource_type, target_resource_urn])
 			var resource = URN.get_resource_through_urn(target_resource_urn)
@@ -94,6 +96,33 @@ func _apply_flag_transition(flag_key: String) -> void:
 			return
 		PlayerState.append_flag(flag_key, append_val)
 		Logging.info('state_transistor: flag %s APPEND by "%s"' % [flag_key, append_val])
+
+
+func _apply_trait_transition(trait_key: String) -> void:
+	"""
+	对 trait 类型的资源执行状态转移。
+	
+	语义:
+	  - transist_value 非空 → ADD trait（激活）
+	  - transist_value 为空 → REMOVE trait（清除）
+	  - current_resource_urn 已设置且可解析 → 自动移除旧 trait（替换语义）
+	"""
+	# 如果有旧 trait（current_resource_urn），先移除它（替换语义）
+	if not current_resource_urn.is_empty():
+		var current_parsed = URN.parse_urn(current_resource_urn)
+		if not current_parsed.is_empty():
+			var current_key: String = current_parsed.get('resource_id', '')
+			if not current_key.is_empty():
+				PlayerState.remove_trait(current_key)
+				Logging.info('state_transistor: old trait %s REMOVED (replaced by %s)' % [current_key, trait_key])
+	
+	# 根据 transist_value 决定 add 还是 remove
+	if transist_value and not transist_value.is_empty():
+		PlayerState.add_trait(trait_key)
+		Logging.info('state_transistor: trait %s ADDED' % trait_key)
+	else:
+		PlayerState.remove_trait(trait_key)
+		Logging.info('state_transistor: trait %s REMOVED' % trait_key)
 
 
 func _execute_operators() -> void:
