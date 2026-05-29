@@ -674,11 +674,6 @@ static func parse_trait(row: Dictionary) -> Trait:
         if property_ops.size() != all_ops.size():
             print("Warning: trait %s: %d non-PropertyOperator entries in trait_effect_operations were filtered out" % [trait_id, all_ops.size() - property_ops.size()])
 
-    # 解析 trait_endogenous_operations — DSL 格式: type:action:value,type:action:value
-    var endogenous_ops_str = row.get('trait_endogenous_operations', '')
-    if not endogenous_ops_str.is_empty():
-        trait_.trait_endogenous_operations = MicroDSLParser.parse_consequence_operators(endogenous_ops_str)
-
     print("Trait解析成功: %s (topic=%s)" % [trait_id, trait_.topic])
     return trait_
 
@@ -688,6 +683,62 @@ static func validate_trait(trait_: Trait) -> bool:
 
     if not trait_.uuid or trait_.uuid.is_empty():
         push_error("Trait validation failed: missing trait_id")
+        return false
+
+    return true
+
+# ---------- StateTransistor 解析 ----------
+
+# 解析状态转移器数据
+# 表头直接照抄 StateTransistor 的属性名：
+#   uuid, target_resource_urn, transist_value, current_resource_urn,
+#   triggered_event_key, requirement, operators
+# requirement 和 operators 两列走 DSL 解析，其余字段直接赋值
+static func parse_state_transistor(row: Dictionary) -> StateTransistor:
+    if row.is_empty():
+        return null
+
+    var has_content = false
+    for key in row:
+        var value = row[key]
+        if value != null and not str(value).is_empty():
+            has_content = true
+            break
+
+    if not has_content:
+        return null
+
+    var transistor = StateTransistor.new()
+
+    # ── 直接照抄的字段 ──
+    transistor.uuid = row.get('uuid', '')
+    transistor.target_resource_urn = row.get('target_resource_urn', '')
+    transistor.transist_value = row.get('transist_value', '')
+    transistor.current_resource_urn = row.get('current_resource_urn', '')
+    transistor.triggered_event_key = row.get('triggered_event_key', '')
+
+    # ── DSL 解析字段 ──
+    # requirement: 使用 parse_requirements() 解析 (复用 random_event 的解析逻辑)
+    var requirements_str = row.get('requirement', '')
+    if not requirements_str.is_empty():
+        transistor.requirements = parse_requirements(requirements_str)
+
+    # operators: 使用 MicroDSLParser.parse_consequence_operators() 解析
+    # (复用 choice_result / trait_effect_operations 的解析逻辑)
+    var operators_str = row.get('operators', '')
+    if not operators_str.is_empty():
+        transistor.operators = MicroDSLParser.parse_consequence_operators(operators_str)
+
+    Logging.info("StateTransistor 解析成功: uuid=%s, target=%s" % [transistor.uuid, transistor.target_resource_urn])
+    return transistor
+
+
+static func validate_state_transistor(transistor: StateTransistor) -> bool:
+    if not transistor:
+        return false
+
+    if transistor.target_resource_urn.is_empty():
+        push_error("StateTransistor validation failed: target_resource_urn is required")
         return false
 
     return true
@@ -708,7 +759,7 @@ static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "ran
         "random_event":
             # ── 进入下推自动机逻辑 ──
             pass
-        "trait", "flag":
+        "trait", "flag", "state_transistor":
             return _parse_flat_data(csv_data, data_type)
         _:
             push_error("parse_csv_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
@@ -849,7 +900,7 @@ static func _pda_flush_stack(stack: Array[RandomEvent], resources: Array[Resourc
         if stack.is_empty() and validate_event(event):
             resources.append(event)
 
-# 扁平数据解析（flags / trait），逐行独立解析
+# 扁平数据解析（flags / trait / state_transistor），逐行独立解析
 # 🚨 接收 String 类型 data_type，用字符串 match 避免 @tool 模式下 enum 跨脚本解析异常
 static func _parse_flat_data(csv_data: Array[Dictionary], data_type: String) -> Array[Resource]:
     var resources: Array[Resource] = []
@@ -870,6 +921,12 @@ static func _parse_flat_data(csv_data: Array[Dictionary], data_type: String) -> 
                     resource = trait_
                 else:
                     print("Warning: Failed to parse trait at row %d" % (i + 1))
+            "state_transistor":
+                var transistor = parse_state_transistor(row)
+                if transistor and validate_state_transistor(transistor):
+                    resource = transistor
+                else:
+                    print("Warning: Failed to parse state_transistor at row %d" % (i + 1))
             _:
                 push_error("_parse_flat_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
                 continue
