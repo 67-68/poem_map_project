@@ -18,34 +18,38 @@ func get_referenced_flags() -> Array:
 	return [flag_id]
 
 func compare(_player_state: PlayerState) -> bool:
-	var flag = Database.flags.get(flag_id)
-	if not flag:
-		Logging.err('Flag %s not found in Database.flags' % flag_id)
-		return false
+	if not PlayerState.has_flag(flag_id):
+		Logging.debug('Flag %s not set in PlayerState, treating as zero/empty' % flag_id)
 
 	match type:
 		'str':
-			var current_val = flag.val_str
+			var current_val = PlayerState.get_flag(flag_id)
+			if current_val == null:
+				current_val = ''
 			var target_val = str(value)
 			if operator == REQ_OPERATOR.COMPARE.LESS_THAN:
-				return current_val < target_val
+				return str(current_val) < target_val
 			else:
-				return current_val > target_val
+				return str(current_val) > target_val
 		'int':
-			var current_val = flag.val_int
+			var current_val = PlayerState.get_flag(flag_id)
+			if current_val == null:
+				current_val = 0
 			var target_val = int(value)
 			if operator == REQ_OPERATOR.COMPARE.LESS_THAN:
-				return current_val < target_val
+				return int(current_val) < target_val
 			else:
-				return current_val > target_val
+				return int(current_val) > target_val
 		'bool':
-			var current_val = flag.val_bool
+			var current_val = PlayerState.get_flag(flag_id)
+			if current_val == null:
+				current_val = false
 			var bool_str = str(value).to_lower()
 			var target_val = bool_str == 'true' or bool_str == 't' or bool_str == '1' or bool_str == 'yes'
 			if operator == REQ_OPERATOR.COMPARE.LESS_THAN:
-				return current_val < target_val
+				return bool(current_val) < target_val
 			else:
-				return current_val > target_val
+				return bool(current_val) > target_val
 		_:
 			Logging.err('Unknown flag type: %s for flag %s' % [type, flag_id])
 			return false

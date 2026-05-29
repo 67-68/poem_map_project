@@ -1,3 +1,4 @@
+
 @tool
 class_name FlagOperator extends BaseOperator
 
@@ -29,28 +30,26 @@ func get_provided_flags() -> Array:
 	return [flag_id]
 
 func operate():
-	var flag = Database.flags.get(flag_id)
-	if not flag:
-		Logging.err('Flag %s not found in Database.flags' % flag_id)
-		return
-
 	match type:
 		'str':
 			if operation == 'set':
-				flag.set_to(str(value))
+				PlayerState.set_flag(flag_id, str(value), 'str')
 			elif operation == 'append':
-				flag.val_str += str(value)
+				var current_val = PlayerState.get_flag(flag_id)
+				if current_val == null:
+					current_val = ''
+				PlayerState.set_flag(flag_id, str(current_val) + str(value), 'str')
 		'int':
 			if operation == 'set':
-				flag.set_to(int(value))
+				PlayerState.set_flag(flag_id, int(value), 'int')
 			elif operation == 'append':
-				flag.append(int(value))
+				PlayerState.append_flag(flag_id, int(value))
 		'bool':
 			if operation == 'set':
 				var bool_str = str(value).to_lower()
 				# 支持多种布尔值表示：true/false, t/f, 1/0, yes/no, TRUE/FALSE
 				var bool_val = bool_str == 'true' or bool_str == 't' or bool_str == '1' or bool_str == 'yes'
-				flag.set_to(bool_val)
+				PlayerState.set_flag(flag_id, bool_val, 'bool')
 			elif operation == 'append':
 				Logging.warn('Append operation not supported for bool flags')
 		_:

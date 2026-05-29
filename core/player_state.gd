@@ -11,6 +11,7 @@ extends Node
 @export var current_action_tags: Array[String] = []
 @export var created_poems: Array[String]
 var emotions: Dictionary = {}
+var flags: Dictionary = {}  # flag_id -> value (str/int/bool)
 
 signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
@@ -191,6 +192,89 @@ func remove_trait(trait_name):
 
 func get_traits():
 	return traits
+
+# ─── Flag ────────────────────────────────────────────────────────────
+func _validate_flag_type(flag_id: String) -> String:
+	"""根据 Database.flags 定义校验 flag 的类型，返回 'str'/'int'/'bool' 或空字符串"""
+	var flag_def = Database.flags.get(flag_id)
+	if not flag_def:
+		Logging.err('flag %s not found in Database.flags' % flag_id)
+		return ''
+	if flag_def.type.is_empty():
+		Logging.err('flag %s has no type defined' % flag_id)
+		return ''
+	return flag_def.type
+
+func set_flag(flag_id: String, value, type: String = ''):
+	if type.is_empty():
+		type = _validate_flag_type(flag_id)
+		if type.is_empty():
+			return
+	elif type not in ['str', 'int', 'bool']:
+		Logging.err('set_flag: unknown type %s for flag %s' % [type, flag_id])
+		return
+
+	match type:
+		'str':
+			var str_val = str(value)
+			if str_val == '':
+				flags.erase(flag_id)
+				Logging.info('flag %s removed (empty string)' % flag_id)
+			else:
+				flags[flag_id] = str_val
+				Logging.info('flag %s set to str: %s' % [flag_id, str_val])
+		'int':
+			var int_val = int(value)
+			if int_val == 0:
+				flags.erase(flag_id)
+				Logging.info('flag %s removed (zero int)' % flag_id)
+			else:
+				flags[flag_id] = int_val
+				Logging.info('flag %s set to int: %d' % [flag_id, int_val])
+		'bool':
+			var bool_str = str(value).to_lower()
+			var bool_val = bool_str == 'true' or bool_str == 't' or bool_str == '1' or bool_str == 'yes'
+			if not bool_val:
+				flags.erase(flag_id)
+				Logging.info('flag %s removed (false bool)' % flag_id)
+			else:
+				flags[flag_id] = bool_val
+				Logging.info('flag %s set to bool: %s' % [flag_id, bool_val])
+	EventBus.on_flag_change.emit()
+
+func append_flag(flag_id: String, value):
+	if not flags.has(flag_id):
+		var flag_type = _validate_flag_type(flag_id)
+		if flag_type.is_empty():
+			return
+		if flag_type != 'int':
+			Logging.err('append_flag: flag %s is not int type, cannot append' % flag_id)
+			return
+		flags[flag_id] = 0
+	elif typeof(flags[flag_id]) != TYPE_INT:
+		Logging.err('append_flag: flag %s stored value is not int' % flag_id)
+		return
+
+	flags[flag_id] += int(value)
+	var new_val = flags[flag_id]
+	Logging.info('flag %s appended by %d, new value: %d' % [flag_id, int(value), new_val])
+	if new_val == 0:
+		flags.erase(flag_id)
+		Logging.info('flag %s removed (zero int after append)' % flag_id)
+	EventBus.on_flag_change.emit()
+
+func get_flag(flag_id: String):
+	if flags.has(flag_id):
+		return flags[flag_id]
+	return null
+
+func has_flag(flag_id: String) -> bool:
+	return flags.has(flag_id)
+
+func remove_flag(flag_id: String):
+	if flags.erase(flag_id):
+		Logging.info('flag %s removed' % flag_id)
+	EventBus.on_flag_change.emit()
 
 func set_ambition(ambition_key):
 	var ambition_ = Database.ambitions.get(ambition_key)
