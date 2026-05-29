@@ -152,6 +152,8 @@ static func _parse_single_param(param_str: String, params: Dictionary) -> void:
 	params[key] = _parse_value(val_str)
 
 # 解析值为正确的类型（字符串/整数/浮点数/布尔值）
+# 类型推断优先级：双引号字符串 > 布尔值 > 整数 > 浮点数 > 裸字符串
+# 裸字符串（无引号）是标准用法，不产生任何 WARN
 static func _parse_value(val_str: String) -> Variant:
 	val_str = val_str.strip_edges()
 	
@@ -159,7 +161,7 @@ static func _parse_value(val_str: String) -> Variant:
 		Logging.err("NamedDSLParser: 值为空")
 		return ""
 	
-	# 字符串（双引号包裹）
+	# 显式字符串（双引号包裹）
 	if val_str.begins_with("\"") and val_str.ends_with("\""):
 		return val_str.substr(1, val_str.length() - 2)
 	
@@ -178,8 +180,7 @@ static func _parse_value(val_str: String) -> Variant:
 	if val_str.is_valid_float():
 		return val_str.to_float()
 	
-	# fallback: 当作字符串
-	Logging.warn("NamedDSLParser: 值无法识别类型，当作字符串处理: %s" % val_str)
+	# fallback: 裸字符串（无引号）— 正确的 DSL 语法，直接返回
 	return val_str
 
 # ─── 便捷查询方法 ───

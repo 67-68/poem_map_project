@@ -12,6 +12,11 @@ class_name MicroDSLParser extends GDScript
 #
 # 新语法使用 NamedDSLParser 核心解析器
 # 旧语法（冒号分割格式）已完全移除，不再兼容
+#
+# 调度架构：
+#   所有函数名→处理器的映射集中在 _requirement_dispatch 和
+#   _consequence_dispatch 两个字典中。不再有散落的 match 块。
+#   加新函数只需在字典中加一行。
 # ═══════════════════════════════════════════════════════
 
 # ─── 函数名常量 ───
@@ -43,6 +48,48 @@ const FUNC_FLAG_STR_APPEND := "flag_str_append"
 const FUNC_FLAG_INT_SET := "flag_int_set"
 const FUNC_FLAG_INT_APPEND := "flag_int_append"
 
+# ─────────────────────────────────────────────────────────────
+# 中央调度注册表
+# func_name → handler(parsed: ParseResult, raw: String) -> Variant
+# ─────────────────────────────────────────────────────────────
+
+static var _requirement_dispatch: Dictionary = {}
+static var _consequence_dispatch: Dictionary = {}
+
+static func _ensure_dispatch() -> void:
+	if not _requirement_dispatch.is_empty():
+		return
+	
+	# ── Requirements ──
+	var rd = _requirement_dispatch
+	rd[FUNC_PROP_GT] = func(p, r): return _exec_prop_req(p, r, REQ_OPERATOR.COMPARE.GREATER_THAN)
+	rd[FUNC_PROP_LT] = func(p, r): return _exec_prop_req(p, r, REQ_OPERATOR.COMPARE.LESS_THAN)
+	rd[FUNC_TRAIT_HAS] = func(p, r): return _exec_trait_req(p, r, true)
+	rd[FUNC_TRAIT_NOT_HAS] = func(p, r): return _exec_trait_req(p, r, false)
+	rd[FUNC_FLAG_BOOL_HAS] = func(p, r): return _exec_flag_req_bool(p, r, true)
+	rd[FUNC_FLAG_BOOL_NOT_HAS] = func(p, r): return _exec_flag_req_bool(p, r, false)
+	rd[FUNC_FLAG_STR_IS] = func(p, r): return _exec_flag_req_str(p, r, REQ_OPERATOR.COMPARE.EQUAL)
+	rd[FUNC_FLAG_STR_NOT] = func(p, r): return _exec_flag_req_str(p, r, REQ_OPERATOR.COMPARE.NOT_EQUAL)
+	rd[FUNC_FLAG_INT_GT] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.GREATER_THAN)
+	rd[FUNC_FLAG_INT_LT] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.LESS_THAN)
+	
+	# ── Consequence Operators ──
+	var cd = _consequence_dispatch
+	cd[FUNC_PROP_ADD] = func(p, r): return _exec_prop_op(p, r, 1)
+	cd[FUNC_PROP_SUB] = func(p, r): return _exec_prop_op(p, r, -1)
+	cd[FUNC_PROP_SET] = func(p, r): return _exec_prop_op_set(p, r)
+	cd[FUNC_TRAIT_ADD] = func(p, r): return _exec_trait_op(p, r, REQ_OPERATOR.CRUD.ADD)
+	cd[FUNC_TRAIT_REMOVE] = func(p, r): return _exec_trait_op(p, r, REQ_OPERATOR.CRUD.REMOVE)
+	cd[FUNC_EMO_ADD] = func(p, r): return _exec_emo_op(p, r, 1)
+	cd[FUNC_EMO_SUB] = func(p, r): return _exec_emo_op(p, r, -1)
+	cd[FUNC_EMO_SET] = func(p, r): return _exec_emo_op_set(p, r)
+	cd[FUNC_FLAG_BOOL_SET] = func(p, r): return _create_flag_operator_bool_set(p, r)
+	cd[FUNC_FLAG_BOOL_REPLACE] = func(p, r): return _create_flag_operator_replace(p, r)
+	cd[FUNC_FLAG_STR_SET] = func(p, r): return _create_flag_operator_str_set(p, r)
+	cd[FUNC_FLAG_STR_APPEND] = func(p, r): return _create_flag_operator_str_append(p, r)
+	cd[FUNC_FLAG_INT_SET] = func(p, r): return _create_flag_operator_int_set(p, r)
+	cd[FUNC_FLAG_INT_APPEND] = func(p, r): return _create_flag_operator_int_append(p, r)
+
 # ──────────────────────────────────────────────
 # Tags
 # ──────────────────────────────────────────────
@@ -67,128 +114,54 @@ static func parse_tags(data: String) -> Array[String]:
 	
 	return parsed_tags
 
-# ──────────────────────────────────────────────
-# Property Requirement
-# ──────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════════
+# 统一入口（对外公开）
+# ═══════════════════════════════════════════════════════════
 
-# 新语法: prop_gt(name="money", val=50)
-#         prop_lt(name="literary_fame", val=30)
+# 解析单个需求表达式（统一入口）
+# 输入: "prop_gt(name=money, val=50)" 或 "trait_has(name=official)"
+# 返回: PropertyRequirement / TraitRequirement / FlagRequirement / null
+static func parse_requirement(data: String) -> BaseRequirements:
+	_ensure_dispatch()
+	var parsed = NamedDSLParser.parse_single(data)
+	if parsed == null:
+		Logging.err("需求解析失败: %s" % data)
+		return null
+	
+	if _requirement_dispatch.has(parsed.func_name):
+		return _requirement_dispatch[parsed.func_name].call(parsed, data)
+	
+	Logging.err("未知需求函数: %s" % data)
+	return null
+
+# 解析单个后果操作符表达式（统一入口）
+# 输入: "prop_add(name=money, val=100)" 或 "trait_add(name=corrupt)"
+# 返回: PropertyOperator / TraitOperator / EmotionOperator / FlagOperator / null
+static func parse_operator(data: String) -> BaseOperator:
+	_ensure_dispatch()
+	var parsed = NamedDSLParser.parse_single(data)
+	if parsed == null:
+		Logging.err("操作符解析失败: %s" % data)
+		return null
+	
+	if _consequence_dispatch.has(parsed.func_name):
+		return _consequence_dispatch[parsed.func_name].call(parsed, data)
+	
+	Logging.err("未知操作符函数: %s" % data)
+	return null
+
+# ═══════════════════════════════════════════════════════════
+# 旧公开接口（向后兼容，委托给统一入口）
+# ═══════════════════════════════════════════════════════════
+
 static func parse_property_requirement(data: String) -> PropertyRequirement:
-	return _parse_property_requirement_new(data)
+	return parse_requirement(data) as PropertyRequirement
 
-static func _parse_property_requirement_new(data: String) -> PropertyRequirement:
-	var parsed = NamedDSLParser.parse_single(data)
-	if parsed == null:
-		Logging.err("属性需求解析失败（新语法）: %s" % data)
-		return null
-	
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	var val = NamedDSLParser.get_int_param(parsed, "val")
-	
-	if name.is_empty():
-		Logging.err("属性需求缺少 name 参数: %s" % data)
-		return null
-	
-	match parsed.func_name:
-		FUNC_PROP_GT:
-			return _create_property_requirement(name, val, REQ_OPERATOR.COMPARE.GREATER_THAN)
-		FUNC_PROP_LT:
-			return _create_property_requirement(name, val, REQ_OPERATOR.COMPARE.LESS_THAN)
-		_:
-			Logging.err("未知的属性需求函数: %s，期望 prop_gt 或 prop_lt" % parsed.func_name)
-			return null
-
-# ──────────────────────────────────────────────
-# Trait Requirement
-# ──────────────────────────────────────────────
-
-# 新语法: trait_has(name="official")
-#         trait_not_has(name="corrupt")
 static func parse_trait_requirement(data: String) -> BaseRequirements:
-	return _parse_trait_requirement_new(data)
+	return parse_requirement(data)
 
-static func _parse_trait_requirement_new(data: String) -> BaseRequirements:
-	var parsed = NamedDSLParser.parse_single(data)
-	if parsed == null:
-		Logging.err("特性需求解析失败（新语法）: %s" % data)
-		return null
-	
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	if name.is_empty():
-		Logging.err("特性需求缺少 name 参数: %s" % data)
-		return null
-	
-	match parsed.func_name:
-		FUNC_TRAIT_HAS:
-			return _create_trait_has_requirement(name, true)
-		FUNC_TRAIT_NOT_HAS:
-			return _create_trait_has_requirement(name, false)
-		_:
-			Logging.err("未知的特性需求函数: %s，期望 trait_has 或 trait_not_has" % parsed.func_name)
-			return null
-
-# ──────────────────────────────────────────────
-# Flag Requirement
-# ──────────────────────────────────────────────
-
-# 新语法:
-#   flag_bool_has(name="xxx")
-#   flag_bool_not_has(name="xxx")
-#   flag_str_is(name="xxx", val="张三")
-#   flag_str_not(name="xxx", val="张三")
-#   flag_int_gt(name="xxx", val=100)
-#   flag_int_lt(name="xxx", val=50)
 static func parse_flag_requirement(data: String) -> FlagRequirement:
-	return _parse_flag_requirement_new(data)
-
-static func _parse_flag_requirement_new(data: String) -> FlagRequirement:
-	var parsed = NamedDSLParser.parse_single(data)
-	if parsed == null:
-		Logging.err("标志位需求解析失败（新语法）: %s" % data)
-		return null
-	
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	if name.is_empty():
-		Logging.err("标志位需求缺少 name 参数: %s" % data)
-		return null
-	
-	var req = FlagRequirement.new()
-	req.flag_id = name
-	
-	match parsed.func_name:
-		FUNC_FLAG_BOOL_HAS:
-			req.type = "bool"
-			req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
-			req.value = true
-		FUNC_FLAG_BOOL_NOT_HAS:
-			req.type = "bool"
-			req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
-			req.value = true
-		FUNC_FLAG_STR_IS:
-			req.type = "str"
-			req.operator = REQ_OPERATOR.COMPARE.EQUAL
-			req.value = NamedDSLParser.get_str_param(parsed, "val")
-		FUNC_FLAG_STR_NOT:
-			req.type = "str"
-			req.operator = REQ_OPERATOR.COMPARE.NOT_EQUAL
-			req.value = NamedDSLParser.get_str_param(parsed, "val")
-		FUNC_FLAG_INT_GT:
-			req.type = "int"
-			req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
-			req.value = NamedDSLParser.get_int_param(parsed, "val")
-		FUNC_FLAG_INT_LT:
-			req.type = "int"
-			req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
-			req.value = NamedDSLParser.get_int_param(parsed, "val")
-		_:
-			Logging.err("未知的标志位需求函数: %s" % parsed.func_name)
-			return null
-	
-	return req
-
-# ──────────────────────────────────────────────
-# Consequence Operators
-# ──────────────────────────────────────────────
+	return parse_requirement(data) as FlagRequirement
 
 # 解析结果操作符列表
 # 新语法: prop_add(name="money", val=100), trait_add(name="corrupt")
@@ -198,107 +171,137 @@ static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
 	if data.is_empty():
 		return operators
 	
-	# 新语法：按顶级逗号分割
 	var expressions = NamedDSLParser.split_expressions(data)
 	for expr in expressions:
-		var op = _parse_single_consequence_new(expr)
+		var op = parse_operator(expr)
 		if op:
 			operators.append(op)
 	
 	return operators
 
-static func _parse_single_consequence_new(data: String) -> BaseOperator:
-	var parsed = NamedDSLParser.parse_single(data)
-	if parsed == null:
-		Logging.err("结果操作符解析失败（新语法）: %s" % data)
+# ═══════════════════════════════════════════════════════════
+# 内部处理器（需求）
+# ═══════════════════════════════════════════════════════════
+
+# Property Requirement（共享 prop_gt / prop_lt）
+static func _exec_prop_req(parsed: NamedDSLParser.ParseResult, raw: String, compare_op: REQ_OPERATOR.COMPARE) -> PropertyRequirement:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	
+	if name.is_empty():
+		Logging.err("属性需求缺少 name 参数: %s" % raw)
 		return null
 	
-	match parsed.func_name:
-		# ── Property operators ──
-		FUNC_PROP_ADD:
-			var name = NamedDSLParser.get_str_param(parsed, "name")
-			var val = NamedDSLParser.get_int_param(parsed, "val")
-			if name.is_empty():
-				Logging.err("prop_add 缺少 name 参数: %s" % data)
-				return null
-			return _create_property_operator(name, val)
-		FUNC_PROP_SUB:
-			var name = NamedDSLParser.get_str_param(parsed, "name")
-			var val = NamedDSLParser.get_int_param(parsed, "val")
-			if name.is_empty():
-				Logging.err("prop_sub 缺少 name 参数: %s" % data)
-				return null
-			return _create_property_operator(name, -val)
-		FUNC_PROP_SET:
-			var name = NamedDSLParser.get_str_param(parsed, "name")
-			var val = NamedDSLParser.get_int_param(parsed, "val")
-			if name.is_empty():
-				Logging.err("prop_set 缺少 name 参数: %s" % data)
-				return null
-			# set 需要特殊处理：直接设置属性值
-			var op = PropertyOperator.new()
-			op.str_props = name
-			op.value = val
-			return op
-		
-		# ── Trait operators ──
-		FUNC_TRAIT_ADD:
-			var name = NamedDSLParser.get_str_param(parsed, "name")
-			if name.is_empty():
-				Logging.err("trait_add 缺少 name 参数: %s" % data)
-				return null
-			return _create_trait_operator(name, REQ_OPERATOR.CRUD.ADD)
-		FUNC_TRAIT_REMOVE:
-			var name = NamedDSLParser.get_str_param(parsed, "name")
-			if name.is_empty():
-				Logging.err("trait_remove 缺少 name 参数: %s" % data)
-				return null
-			return _create_trait_operator(name, REQ_OPERATOR.CRUD.REMOVE)
-		
-		# ── Emotion operators ──
-		FUNC_EMO_ADD:
-			var name = NamedDSLParser.get_str_param(parsed, "name")
-			var val = NamedDSLParser.get_int_param(parsed, "val")
-			if name.is_empty():
-				Logging.err("emo_add 缺少 name 参数: %s" % data)
-				return null
-			return _create_emotion_operator(name, abs(val))
-		FUNC_EMO_SUB:
-			var name = NamedDSLParser.get_str_param(parsed, "name")
-			var val = NamedDSLParser.get_int_param(parsed, "val")
-			if name.is_empty():
-				Logging.err("emo_sub 缺少 name 参数: %s" % data)
-				return null
-			return _create_emotion_operator(name, -abs(val))
-		FUNC_EMO_SET:
-			var name = NamedDSLParser.get_str_param(parsed, "name")
-			var val = NamedDSLParser.get_int_param(parsed, "val")
-			if name.is_empty():
-				Logging.err("emo_set 缺少 name 参数: %s" % data)
-				return null
-			# set 直接赋值
-			var op = EmotionOperator.new()
-			op.str_emotion = name
-			op.value = val
-			return op
-		
-		# ── Flag operators ──
-		FUNC_FLAG_BOOL_SET:
-			return _create_flag_operator_bool_set(parsed, data)
-		FUNC_FLAG_BOOL_REPLACE:
-			return _create_flag_operator_replace(parsed, data)
-		FUNC_FLAG_STR_SET:
-			return _create_flag_operator_str_set(parsed, data)
-		FUNC_FLAG_STR_APPEND:
-			return _create_flag_operator_str_append(parsed, data)
-		FUNC_FLAG_INT_SET:
-			return _create_flag_operator_int_set(parsed, data)
-		FUNC_FLAG_INT_APPEND:
-			return _create_flag_operator_int_append(parsed, data)
-		
-		_:
-			Logging.err("未知的结果操作符函数: %s" % parsed.func_name)
-			return null
+	return _create_property_requirement(name, val, compare_op)
+
+# Trait Requirement（共享 trait_has / trait_not_has）
+static func _exec_trait_req(parsed: NamedDSLParser.ParseResult, raw: String, should_have: bool) -> BaseRequirements:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	if name.is_empty():
+		Logging.err("特性需求缺少 name 参数: %s" % raw)
+		return null
+	
+	return _create_trait_has_requirement(name, should_have)
+
+# Flag Requirement: bool
+static func _exec_flag_req_bool(parsed: NamedDSLParser.ParseResult, raw: String, is_has: bool) -> FlagRequirement:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	if name.is_empty():
+		Logging.err("标志位需求缺少 name 参数: %s" % raw)
+		return null
+	
+	var req = FlagRequirement.new()
+	req.flag_id = name
+	req.type = "bool"
+	if is_has:
+		req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
+		req.value = true
+	else:
+		req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
+		req.value = true
+	return req
+
+# Flag Requirement: str
+static func _exec_flag_req_str(parsed: NamedDSLParser.ParseResult, raw: String, compare_op: REQ_OPERATOR.COMPARE) -> FlagRequirement:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	if name.is_empty():
+		Logging.err("标志位需求缺少 name 参数: %s" % raw)
+		return null
+	
+	var req = FlagRequirement.new()
+	req.flag_id = name
+	req.type = "str"
+	req.operator = compare_op
+	req.value = NamedDSLParser.get_str_param(parsed, "val")
+	return req
+
+# Flag Requirement: int
+static func _exec_flag_req_int(parsed: NamedDSLParser.ParseResult, raw: String, compare_op: REQ_OPERATOR.COMPARE) -> FlagRequirement:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	if name.is_empty():
+		Logging.err("标志位需求缺少 name 参数: %s" % raw)
+		return null
+	
+	var req = FlagRequirement.new()
+	req.flag_id = name
+	req.type = "int"
+	req.operator = compare_op
+	req.value = NamedDSLParser.get_int_param(parsed, "val")
+	return req
+
+# ═══════════════════════════════════════════════════════════
+# 内部处理器（后果操作符）
+# ═══════════════════════════════════════════════════════════
+
+# Property Operator: add / sub
+static func _exec_prop_op(parsed: NamedDSLParser.ParseResult, raw: String, sign: int) -> PropertyOperator:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	if name.is_empty():
+		Logging.err("prop_add/sub 缺少 name 参数: %s" % raw)
+		return null
+	return _create_property_operator(name, val * sign)
+
+# Property Operator: set
+static func _exec_prop_op_set(parsed: NamedDSLParser.ParseResult, raw: String) -> PropertyOperator:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	if name.is_empty():
+		Logging.err("prop_set 缺少 name 参数: %s" % raw)
+		return null
+	var op = PropertyOperator.new()
+	op.str_props = name
+	op.value = val
+	return op
+
+# Trait Operator: add / remove
+static func _exec_trait_op(parsed: NamedDSLParser.ParseResult, raw: String, operation: REQ_OPERATOR.CRUD) -> TraitOperator:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	if name.is_empty():
+		Logging.err("trait_add/remove 缺少 name 参数: %s" % raw)
+		return null
+	return _create_trait_operator(name, operation)
+
+# Emotion Operator: add / sub（带 abs 保护）
+static func _exec_emo_op(parsed: NamedDSLParser.ParseResult, raw: String, sign: int) -> EmotionOperator:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	if name.is_empty():
+		Logging.err("emo_add/sub 缺少 name 参数: %s" % raw)
+		return null
+	return _create_emotion_operator(name, abs(val) * sign)
+
+# Emotion Operator: set
+static func _exec_emo_op_set(parsed: NamedDSLParser.ParseResult, raw: String) -> EmotionOperator:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	if name.is_empty():
+		Logging.err("emo_set 缺少 name 参数: %s" % raw)
+		return null
+	var op = EmotionOperator.new()
+	op.str_emotion = name
+	op.value = val
+	return op
 
 # ── Flag operator 辅助创建方法 ──
 

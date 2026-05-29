@@ -50,8 +50,11 @@ func compare(data):
         return false
 
 func _init(data = {}):
-    if not data:
-        Logging.err('ComplexRequirements: Initialization data is null or empty')
+    if data == null:
+        Logging.err('ComplexRequirements: Initialization data is null')
+        return
+    if data.is_empty():
+        # 无序列化数据，走手动赋值路径
         return
     
     var operators_ = PropParser.parse_any(data,true,'operators')

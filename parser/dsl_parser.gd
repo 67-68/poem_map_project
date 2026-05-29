@@ -370,18 +370,14 @@ static func parse_requirements(requirements_str: String) -> BaseRequirements:
         complex_req.current_operator = REQ_OPERATOR.LOGIC.AND
         return complex_req
 
-# 解析单个触发条件（仅支持新语法：prop_、trait_、flag_ 前缀）
-# 旧语法（prop:/trait:/flag:）已完全移除
+# 解析单个触发条件
+# 委托给 MicroDSLParser.parse_requirement() 统一入口，
+# 通过中央调度字典匹配 func_name，不再用 begins_with() 前缀匹配。
 static func parse_single_requirement(req_str: String) -> BaseRequirements:
-    if req_str.begins_with('prop_'):
-        return MicroDSLParser.parse_property_requirement(req_str)
-    elif req_str.begins_with('trait_'):
-        return MicroDSLParser.parse_trait_requirement(req_str)
-    elif req_str.begins_with('flag_'):
-        return MicroDSLParser.parse_flag_requirement(req_str)
-    else:
+    var req = MicroDSLParser.parse_requirement(req_str)
+    if req == null:
         print("Warning: Unknown requirement type: %s" % req_str)
-        return null
+    return req
 
 # 解析选项（1, 2, 3等）
 static func parse_options(row: Dictionary) -> Array[BaseOption]:
@@ -428,18 +424,13 @@ static func parse_option(row: Dictionary, letter: String) -> BaseOption:
     
     return option
 
-# 解析选项门槛（简化版，只支持属性检查）
-# 仅支持新语法（prop_/trait_/flag_），旧语法已完全移除
+# 解析选项门槛
+# 委托给 MicroDSLParser.parse_requirement() 统一入口
 static func parse_option_requirement(req_str: String) -> BaseRequirements:
-    if req_str.begins_with('prop_'):
-        return MicroDSLParser.parse_property_requirement(req_str)
-    elif req_str.begins_with('trait_'):
-        return MicroDSLParser.parse_trait_requirement(req_str)
-    elif req_str.begins_with('flag_'):
-        return MicroDSLParser.parse_flag_requirement(req_str)
-    else:
+    var req = MicroDSLParser.parse_requirement(req_str)
+    if req == null:
         print("Warning: Unknown option requirement type: %s" % req_str)
-        return null
+    return req
 
 # 解析选择结果
 static func parse_choice_result(result_str: String) -> ChoiceResult:
