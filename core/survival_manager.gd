@@ -82,7 +82,7 @@ func _process_single_xun_settlement():
     # 打完巴掌给个甜枣，系统内存回收。
     # 属性 90 -> 50
     _decay_volatile_emotions()
-    breakpoint
+    #breakpoint
     operate_state_transistors()
     
     # 5. 通知 UI 刷新
