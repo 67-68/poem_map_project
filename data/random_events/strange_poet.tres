@@ -10,27 +10,31 @@
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_g0ewv"]
 
 [sub_resource type="Resource" id="Resource_33iox"]
+script = ExtResource("5_tkog7")
+
+[sub_resource type="Resource" id="Resource_1mi3i"]
 script = ExtResource("4_1lxqv")
 flag_id = "chain_strange_poet_1"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_1mi3i"]
-script = ExtResource("5_tkog7")
-operators = Array[ExtResource("3_ok3pw")]([SubResource("Resource_33iox")])
-
 [sub_resource type="Resource" id="Resource_ok3pw"]
-script = ExtResource("6_mdgfc")
-choice_result = SubResource("Resource_1mi3i")
+script = ExtResource("5_tkog7")
+operators = Array[ExtResource("3_ok3pw")]([SubResource("Resource_1mi3i")])
 
 [sub_resource type="Resource" id="Resource_1lxqv"]
+script = ExtResource("6_mdgfc")
+choice_result = SubResource("Resource_ok3pw")
+
+[sub_resource type="Resource" id="Resource_tkog7"]
 script = ExtResource("7_032xs")
 trait_name = "main_jiaoyou_1"
 
 [resource]
 script = ExtResource("8_g0ewv")
-requirement = SubResource("Resource_1lxqv")
-options = Array[ExtResource("2_1mi3i")]([SubResource("Resource_ok3pw")])
+requirement = SubResource("Resource_tkog7")
+event_result = SubResource("Resource_33iox")
+options = Array[ExtResource("2_1mi3i")]([SubResource("Resource_1lxqv")])
 uuid = "strange_poet"
 name = "奇怪的诗人"
-description = "你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。"
+description = "你在长安的一家酒馆中遇到了一位神秘的诗人"
