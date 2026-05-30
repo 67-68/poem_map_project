@@ -192,6 +192,22 @@ interrupt_event(requirement_syntax, operator_syntax)
 | `requirement_syntax` | String | 守卫条件（复用 requirement DSL 语法） | `prop_gt(name=money, val=50)` |
 | `operator_syntax` | String | 条件通过后执行的操作符（复用 operator DSL 语法） | `push_event(event_key=evt_poverty)` |
 
+#### 多条件守卫：` and ` 语法
+
+`requirement_syntax` 支持用 ` and `（带空格）连接多个条件，组合为 AND 逻辑：
+
+```
+interrupt_event(cond1 and cond2, operator_syntax)
+```
+
+**示例：** 好感 > 20 **且** 尚未触发过唱和事件时才触发中断
+
+```csv
+interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20) and flag_int_lt(name=flag_libai_changhe_request,val=1), random(val=99, success=push_event(event_key=request_libai_changhe)))
+```
+
+> ⚠️ ` and ` 前后必须带空格，避免误匹配变量名中可能含有的 `and` 子串（如 `expand`、`command`）。
+
 ### 行为
 
 按优先级（CSV 中出现顺序）依次检查每个 `interrupt_event` 的条件（first-match-wins）：

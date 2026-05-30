@@ -389,11 +389,39 @@ static func parse_interruption_field(interruption_str: String) -> ConditionalOpe
         operator_syntax += args[i].strip_edges()
     
     # 解析 requirement
+    # 支持 " and " 语法（带空格，避免误匹配含 and 的关键词）
+    # 示例: interrupt_event(cond1 and cond2, op)
+    #       → 分割为 cond1, cond2，合并为 ComplexRequirements（AND 逻辑）
+    # 如果无 " and "，回退到现有逗号分隔的 AND 语法
     var requirement: BaseRequirements = null
     if not requirement_syntax.is_empty():
-        requirement = parse_requirements(requirement_syntax)
-        if requirement == null:
-            Logging.warn("parse_interruption_field: requirement 解析失败: '%s'" % requirement_syntax)
+        var and_parts = requirement_syntax.split(" and ")
+        if and_parts.size() > 1:
+            # " and " 语法：分别解析每个条件，合并为 ComplexRequirements
+            var parsed_reqs: Array[BaseRequirements] = []
+            for part in and_parts:
+                var clean_part = part.strip_edges()
+                if clean_part.is_empty():
+                    continue
+                var single_req = parse_single_requirement(clean_part)
+                if single_req:
+                    parsed_reqs.append(single_req)
+                else:
+                    Logging.warn("parse_interruption_field: ' and ' 条件解析失败: '%s'" % clean_part)
+            
+            if parsed_reqs.size() > 1:
+                var complex_req = ComplexRequirements.new()
+                complex_req.operators = parsed_reqs
+                complex_req.current_operator = REQ_OPERATOR.LOGIC.AND
+                requirement = complex_req
+            elif parsed_reqs.size() == 1:
+                requirement = parsed_reqs[0]
+            # parsed_reqs 为空 → requirement 保持 null
+        else:
+            # 无 " and " 语法，回退到原有逗号分隔语法
+            requirement = parse_requirements(requirement_syntax)
+            if requirement == null:
+                Logging.warn("parse_interruption_field: requirement 解析失败: '%s'" % requirement_syntax)
     
     # 解析 operators（支持多个 operator，逗号分隔）
     var operators: Array[BaseOperator] = []

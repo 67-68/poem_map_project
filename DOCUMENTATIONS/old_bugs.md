@@ -371,3 +371,106 @@ rm -rf <project_root>/.godot/
 - <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/trait_choose_operator.gd" /> （受影响的 operator）
 - <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/flag_operator.gd" /> （`taste_owner_relation_flag` 没传过来导致 flag_id 为空）
 - <ref_file file="/Users/lennon/Projects/poem_map_project/core/csv_cloud_loader.gd" /> （新增的清缓存按钮）
+
+## 2026-05-30: ItemProvider 依赖上游 context 传递，事件链从中道切入导致列表为空
+
+### 问题描述
+在文化圈派对事件链中，`start_of_wenhuaquan_party` → option → `mid_of_wenhuaquan_party` → option → `mid_of_wenhuaquan_party_choose_people` 的链路上，`ItemProvider.provide()` 返回空列表：
+
+```
+[ItemProvider.provide()] 列表 'guests' 为空，没有生成任何选项
+```
+
+但 CSV 中 `welcome_to_wenhuaquan_party` 的 option 行明确定义了 `guests=[libai;wangwei;dengqian]`。数据存在，但下游拿不到。
+
+### 根本原因
+**事件链从中道切入，上游 context 从未被填充。**
+
+1. `guests` 数据定义在 `welcome_to_wenhuaquan_party` 事件的 option 行 [`custom_context_params`](data/random_events/random_events.csv:20) 中（CSV 第 20 行：`>option,,guests=[libai;wangwei;dengqian],,去,,queue_event(event_key=start_of_wenhuaquan_party)`）
+2. 但从调试控制台执行 `$ start_of_wenhuaquan_party` 触发事件链时，[`controller.gd`](controller.gd:60) 传入的是 `{}` 空 context
+3. 后续所有 operator（`QueueEventOperator` / `PushEventOperator`）的 `init()` 都只收到了 `{}`，`_captured_context` 始终为空
+4. 事件链一路传导下去，[`mid_of_wenhuaquan_party_choose_people`](data/random_events/mid_of_wenhuaquan_party_choose_people.tres) 的 `ItemProvider.provide()` 调用 `context.get("guests", [])` 时，context 里根本没有 `guests` 键
+
+**这不是代码 bug，是设计契约问题**：`ItemProvider` 依赖上游事件通过 `custom_context_params` 在 context 中填充数据。如果事件链不是从定义 context 的入口事件开始执行，整个下游都拿不到数据。Context 传递是"谁放进去谁负责"的模式，没有隐式的默认值或自动补全。
+
+### 影响范围
+- 所有通过 `ItemProvider` 动态生成选项的事件，如果数据来源于上游事件的 `custom_context_params`
+- 特别是通过调试控制台 `$ event_key` 直接跳转时，context 始终是 `{}`，所有 `context.get(key, [])` 都会返回空数组
+- 事件链越长，中间环节越多，context 丢失的风险越高——因为每个环节的 operator 都必须正确传递 context，任何一个环节出错都会导致下游断粮
+
+### 防御措施
+1. **调试时始终从事件链的入口事件触发**（`welcome_to_wenhuaquan_party`），不要直接从 `$ start_of_wenhuaquan_party` 切入
+2. **`ItemProvider` 可以考虑加 `fallback_list` 兜底字段**：当 `list_key` 在 context 中不存在或为空时，使用硬编码的 `fallback_list` 作为备选。但这会引入数据冗余，需要权衡。
+3. **`event_chain_linter.gd` 已新增检查提醒**：在 linter 执行时输出警告，提示 `ItemProvider` 的 context 依赖风险。
+
+### 关键教训
+1. **Context 是事件链的「隐式契约」** — `ItemProvider` 读取的 `list_key` 依赖上游某个事件通过 `custom_context_params` 注入。谁也没保证这个数据一定存在。这不是运行时错误，是契约违约 💀
+2. **调试控制台 `$ event_key` 是「逃逸入口」** — 它直接跳过所有前置事件，context 永远是 `{}`。用它测试需要 context 数据的事件链，相当于在没装轮子的车上测试引擎 🤡
+3. **`ItemProvider` 的设计本身是合理的**（动态生成，降低数据冗余），但它把数据源的契约责任推给了调用方。如果数据不在 context 里，它无能为力——`provide()` 不是算命先生，没法从虚空里变出列表。
+4. **解决方向二选一**：
+   - **方案 A（简单粗暴）**：`ItemProvider` 加 `fallback_list: PackedStringArray`，context 找不到时用硬编码兜底。反悔成本低，但数据分散在多个地方。
+   - **方案 B（体系化）**：在 DSL 层强制要求 `ItemProvider` 的 `list_key` 来源必须在同一事件链的入口事件中有定义，linter 静态检查。反悔成本高，但根治。
+   - 当前倾向于方案 A，因为项目已进入内容填充阶段，快速兜底比重构 DSL 划算。
+
+### 相关文件
+- [`core/model/item_provider.gd`](core/model/item_provider.gd) — 核心问题点，`context.get(list_key, [])` 无兜底
+- [`core/operators/push_event_operator.gd`](core/operators/push_event_operator.gd) — context 传递链路
+- [`core/operators/queue_event_operator.gd`](core/operators/queue_event_operator.gd) — context 传递链路
+- [`data/random_events/random_events.csv`](data/random_events/random_events.csv) — 第 20-27 行：wenhuaquan party 事件链定义
+- [`data/random_events/welcome_to_wenhuaquan_party.tres`](data/random_events/welcome_to_wenhuaquan_party.tres) — `guests` 定义的源头
+- [`data/random_events/mid_of_wenhuaquan_party_choose_people.tres`](data/random_events/mid_of_wenhuaquan_party_choose_people.tres) — `ItemProvider` 使用 `list_key="guests"`
+- [`controller.gd`](controller.gd) — 第 60 行：调试控制台传入 `{}` context
+## 2026-05-30：Interruption 无限循环（push_event 不检查 target entry requirement）+ ` and ` 语法
+
+### 问题描述
+
+`mid_of_wenhuaquan_party` 的 interruption 条件为 `flag_int_gt(name=flag_relation_with_libai,val=20)`，当李白好感 > 20 时触发 `push_event(event_key=request_libai_changhe)`。但 `request_libai_changhe` 的 entry requirement 是 `flag_int_lt(name=flag_libai_changhe_request,val=1)`。
+
+当 `flag_libai_changhe_request >= 1` 时：
+1. interruption 条件（好感 > 20）仍然通过
+2. `push_event(request_libai_changhe)` 执行
+3. `request_libai_changhe` 显示后用户选择选项
+4. `pop_event()` 回到 `mid_of_wenhuaquan_party`
+5. interruption 再次检查 → 条件再次通过 → 无限循环
+
+### 根本原因
+
+`push_event` 在推入目标事件时，**不检查目标事件的 entry requirement**。interruption 条件和 entry requirement 是两个独立的检查点，前者在源事件的 `check_interruption()` 中执行，后者在目标事件从 pool 筛选时执行。`push_event` 绕过了 pool 筛选，直接插入栈。
+
+### 影响范围
+
+- 任何通过 `push_event` 触发且目标事件有 entry requirement 的场景都可能触发无限循环
+- 根因在 interruption 条件和 entry requirement 之间的语义鸿沟
+
+### 修复方案（双层防御）
+
+**第一层（数据层）**：将目标事件的 entry requirement 合并到 interruption 的条件中，使用 ` and ` 语法
+
+```csv
+# 改前
+interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20), random(...))
+
+# 改后
+interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20) and flag_int_lt(name=flag_libai_changhe_request,val=1), random(...))
+```
+
+**第二层（代码层）**：在 `narrative_overlay.gd` 的 `_on_push_event()` 中增加防御检查
+
+```gdscript
+if ev is RandomEvent and ev.requirement:
+    ev.requirement.init(context)
+    if not ev.requirement.compare(PlayerState):
+        Logging.warn("push_event: 事件 '%s' 的 entry requirement 未通过，忽略 push" % ev.name)
+        return
+```
+
+### 修复文件
+- [`data/random_events/random_events.csv`](data/random_events/random_events.csv) — 第 24 行：`mid_of_wenhuaquan_party` interruption 条件加 ` and flag_int_lt(name=flag_libai_changhe_request,val=1)`
+- [`parser/dsl_parser.gd`](parser/dsl_parser.gd) — `parse_interruption_field()` 新增 ` and ` 语法支持
+- [`characters/narrative_overlay.gd`](characters/narrative_overlay.gd) — `_on_push_event()` 增加 entry requirement 防御检查
+
+### 关键教训
+
+1. **Interruption 条件和 Entry Requirement 是正交的** — 前者在源事件的 `check_interruption()` 中检查，后者在目标事件 pool 筛选时检查。`push_event` 绕过 pool 筛选，两者之间没有自动的守护关系。
+2. **` and ` 语法**填补了 interruption 条件无法表达多条件 AND 守卫的空白。相比用逗号（会被 `split_expressions` 误拆成第 3 个参数），` and ` 作为关键词分隔符是侵入性最小的方案。
+3. **防御深度**：数据层（CSV 条件）→ 代码层（`_on_push_event` 检查）→ 提醒层（linter），三层防御确保这个问题不会再次出现。

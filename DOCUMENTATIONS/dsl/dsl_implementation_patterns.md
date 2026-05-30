@@ -41,9 +41,18 @@ if args.size() < 2:
 
 这意味着 `requirement_syntax` 只能是一个**单一的条件表达式**，不能放入 `条件A, 条件B` 这样的复合条件（因为额外的逗号会被当成第 3 个参数）。
 
-**如果需要多条件守卫**，需要在 `requirement_syntax` 中使用带括号的复合条件。但当前 `interrupt_event` 的参数分割使用顶级逗号，因此**复合条件的条件之间不能出现顶级逗号**。
+**如果需要多条件守卫**，使用 ` and ` 语法（带空格）在 `requirement_syntax` 中组合多个条件：
 
-当前限制：`interrupt_event` 不支持多条件 AND 守卫。
+```
+interrupt_event(cond1 and cond2, operator_syntax)
+```
+
+示例：
+```csv
+interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20) and flag_int_lt(name=flag_libai_changhe_request,val=1), random(val=99, success=push_event(event_key=request_libai_changhe)))
+```
+
+解析器会将 ` and ` 前后的表达式分别解析为独立的 `BaseRequirements`，然后合并为 `ComplexRequirements`（AND 逻辑）。详见 [`parser/dsl_parser.gd`](parser/dsl_parser.gd):383。
 
 #### 2. `interrupt_event` 不阻断原事件
 
@@ -189,7 +198,11 @@ row_type | template | provider | uuid | context | requirements | title | descrip
    interrupt_event(cond1, op1), interrupt_event(cond2, op2)
    ```
 
-3. **语法**：`interrupt_event(requirement_func(args...), operator_func(args...))`
+3. **` and ` 语法**（2026-05-30 新增）：`requirement_syntax` 支持用 ` and `（带空格）连接多个条件，自动组合为 AND 逻辑：
+   ```
+   interrupt_event(cond1 and cond2, operator_syntax)
+   ```
+   解析器内部将 ` and ` 分割的每个条件独立解析，合并为 `ComplexRequirements`。详见 [`parser/dsl_parser.gd`](parser/dsl_parser.gd):383。
 
 4. **注意**：`interrupt_event` 本身**不阻断**原事件触发，只是向事件栈 push 事件。替换行为是因为 operator（`push_event`）触发了嵌套的 `apply_narrative` 导致 `_is_active = true`，然后短路逻辑放弃原事件。
 

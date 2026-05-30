@@ -80,6 +80,15 @@ func _on_push_event(data: Variant, context: Dictionary):
 	if not ev:
 		return
 
+	# 🚨 检查目标事件的 entry requirement
+	# 防止 interruption 无条件 push 一个 entry condition 不满足的事件
+	# （例如 flag_libai_changhe_request >= 1 时仍 push request_libai_changhe）
+	if ev is RandomEvent and ev.requirement:
+		ev.requirement.init(context)
+		if not ev.requirement.compare(PlayerState):
+			Logging.warn("push_event: 事件 '%s' 的 entry requirement 未通过，忽略 push" % ev.name)
+			return
+
 	# 防御性深拷贝：栈中的 context 必须是完全隔离的快照
 	# 契约：调用方（PushEventOperator等）负责提供独立 context，
 	# 但这里做二次防御，防止其他 emit push_event 的路径忘记 duplicate
