@@ -1,6 +1,45 @@
 @tool
 class_name RandomEvent extends BaseEvent
 # 那种在事件池随机抽取的
+
+# 🚨 @tool 模式下类继承链可能未完全加载，BaseEvent 上定义的
+# `pre_event_interrupter_sequence` 属性可能不可达。
+# 直接赋值会触发 Godot ERR_FAIL → abort 调用方函数 💀
+#
+# 通过 _set()/_get()/_get_property_list() 兜底：
+# - 常规属性查找失败时，_set() 将值存入 _interruption_seq_fallback
+# - _get() 返回 fallback 值（供 @tool 模式下读取）
+# - _get_property_list() 在 fallback 被激活时注册该属性到 property list，
+#   确保 .tres 序列化能正确保存 💾
+#
+# 非 @tool 模式下继承链正常，_set() 不会被触发，无副作用。
+var _interruption_seq_fallback: Array = []
+var _interruption_seq_fallback_used: bool = false
+
+func _set(property: StringName, value: Variant) -> bool:
+    if property == &"pre_event_interrupter_sequence":
+        _interruption_seq_fallback = value
+        _interruption_seq_fallback_used = true
+        return true
+    return false
+
+func _get(property: StringName) -> Variant:
+    if property == &"pre_event_interrupter_sequence" and _interruption_seq_fallback_used:
+        return _interruption_seq_fallback
+    return null
+
+func _get_property_list() -> Array:
+    # 只在 fallback 被激活时（即 @tool 模式下属性不可达）才注册，
+    # 避免与正常继承链注册的 @export 属性冲突
+    if _interruption_seq_fallback_used:
+        return [{
+            "name": &"pre_event_interrupter_sequence",
+            "type": TYPE_ARRAY,
+            "usage": PROPERTY_USAGE_DEFAULT
+        }]
+    return []
+
+
 @export var weight: float = 10.0
 @export var requirement: BaseRequirements
 # 事件级别的结果（即使不选任何选项也会执行）

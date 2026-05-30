@@ -37,6 +37,9 @@ func check_interruption(context: Dictionary) -> void:
     首个通过的 step 胜出并结束检查。全部失败则无操作。
     该方法不阻断事件本身触发。
     """
+    if not pre_event_interrupter_sequence:
+        Logging.debug('do not found pre_event_interrupter_sequence')
+        return
     Logging.debug('check_interruption: %d steps in sequence' % pre_event_interrupter_sequence.size())
 
     for i in range(pre_event_interrupter_sequence.size()):
