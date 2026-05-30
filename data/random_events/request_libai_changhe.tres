@@ -51,8 +51,7 @@ description = "婉言谢绝"
 script = ExtResource("8_s8i8r")
 flag_id = "flag_libai_changhe_request"
 type = "int"
-value = 1
-operator = 0
+value = 0
 
 [resource]
 script = ExtResource("8_mtht7")
