@@ -7,7 +7,7 @@ class_name BaseEvent extends GameEntity
 @export var epitaph_text: String = ''
 @export var emotion_configs: Array[EmotionConfigs] = []
 
-func init(context: Dictionary) -> void:
+func init(context: Dictionary) -> Array:
     # Phase 1: provider.init 先执行，修改 context
     if provider:
         context = provider.init(context)
@@ -24,3 +24,6 @@ func init(context: Dictionary) -> void:
     for o in all_options:
         if o:
             o.init(context)
+    
+    # 返回合并后的全量选项数组，供调用方（NarrativeOverlay）渲染按钮
+    return all_options

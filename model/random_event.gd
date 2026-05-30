@@ -9,14 +9,16 @@ class_name RandomEvent extends BaseEvent
 # 从 context DSL 解析出的自定义参数，init 时通过 merge_context 合并入 context
 var custom_context_params: Dictionary = {}
 
-func init(context: Dictionary) -> void:
+func init(context: Dictionary) -> Array:
     # 将 CSV context 中的自定义参数合并进 init context
     if not custom_context_params.is_empty():
         Util.merge_context(context, custom_context_params)
     
-    super.init(context)
+    var all_options = super.init(context)
     if event_result:
         event_result.init(context)
+    
+    return all_options
 
 # 会被使用time operator中的source tag匹配. 由于无法集合两个enum那就单独写再集合
 var target_tags: Array[String] = []:

@@ -14,7 +14,12 @@ static func create(data: BaseOption) -> EventBtn:
 func _init_option(data: BaseOption):
 	"""初始化选项数据"""
 	option = data
-	text = data.description if 'description' in data else "选项"
+	# 🔒 优先读取 _resolved_description（动态模板解析后的值，不污染原始 description）
+	#     fallback 到 description（静态文本）
+	if '_resolved_description' in data and data._resolved_description:
+		text = data._resolved_description
+	else:
+		text = data.description if 'description' in data else "选项"
 	autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # Enable text wrapping
 	# custom_minimum_size 已经在场景中设置了，不需要重复设置
 	if 'is_disabled' in data and data.is_disabled:

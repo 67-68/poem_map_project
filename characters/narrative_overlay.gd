@@ -117,6 +117,7 @@ func _resolve_event_for_stack(data: Variant) -> BaseEvent:
 
 func _process_stack():
 	if _event_stack.size() > 0:
+		# peek 不移除，留待 PopEventOperator 显式 pop
 		var entry = _event_stack[0]
 		_current_from_stack = true
 		apply_narrative(entry.data, entry.context)
@@ -154,7 +155,8 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 		return
 
 	_is_active = true
-	data.init(context)
+	# data.init() 返回合并了 provider 动态生成的选项的全量数组
+	var all_options: Array = data.init(context)
 	EventBus.event_shown.emit(data)
 	if data.epitaph_text:
 		TimeService.register_to_master_timeline(data.time, data.name, data.epitaph_text)
@@ -172,7 +174,8 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	$Background/Margin/VBox/ContentLabel.text = data.description
 	$Background/Margin/VBox/ExampleLabel.text = data.example # 比如诗词原文
 
-	$Background/Margin/VBox/OptionBtns.apply_btns(data.options,_on_option_selected)
+	# 使用 init() 返回的全量选项（含 provider 动态生成的），而非 data.options（仅静态选项）
+	$Background/Margin/VBox/OptionBtns.apply_btns(all_options, _on_option_selected)
 
 	AudioManager.play_sad()
 
@@ -207,13 +210,17 @@ func _end_narrative(choice):
 	Logging.done('narrative finished')
 	EventBus.event_confirmed.emit() # 绑定事件系统信号
 
-	# 快照当前事件数据，防止 execute_result 期间 pop_event 触发新事件覆盖 current_event_data
+	# 🔒 快照当前事件数据，防止 execute_result 期间触发新事件覆盖 current_event_data
+	# 注意：ConsequenceExecuter.execute_result 可能同步触发 apply_narrative 设置新的
+	# current_event_data，所以必须在 execute_result 之前快照。
+	# 同时，不能在这里设置 current_event_data = null，因为 execute_result 触发的
+	# 新事件正在显示中，其 _end_narrative 需要读取 current_event_data。
+	# current_event_data 会在下一次 apply_narrative 时被自然覆盖。
 	var _completed_data: BaseEvent = current_event_data
 	ConsequenceExecuter.execute_result(choice)
 
 	# 在执行后果后进行 imaginary 判定，确保 emotion 已被修改
 	imaginary_manager.add_imagenary(_completed_data)
-	current_event_data = null
 
 	# 处理后续事件：栈 (LIFO) 优先，队列 (FIFO) 次之
 	_process_next()
