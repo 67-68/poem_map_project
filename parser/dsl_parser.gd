@@ -32,6 +32,58 @@ const _REQUIREMENT_ONLY_FUNCS: Array[String] = [
     "flag_int_gt", "flag_int_lt", "flag_int_eq", "flag_int_ne",
 ]
 
+# 必须使用全角标点的 ASCII 等价物集合（用于纯文本字段校验）
+# 纯文本（title/description）中出现这些 ASCII 标点意味着 Google Sheets 里填错了格式
+const _ASCII_PUNCTUATION_CHARS: Array[String] = [
+    "(", ")",  # 应使用（）
+    ",",       # 应使用，
+    ":",       # 应使用：
+    ";",       # 应使用；
+    "!",       # 应使用！
+    "?",       # 应使用？
+]
+
+# 禁止在 DSL 代码字段中出现的全角标点集合
+# DSL 代码字段（requirements/results/context 等）只能使用 ASCII 标点
+const _FULLWIDTH_PUNCTUATION_CHARS: Array[String] = [
+    "\uff08", "\uff09",  # （） 应使用 ()
+    "\uff0c",            # ， 应使用 ,
+    "\uff1a",            # ： 应使用 :
+    "\uff1b",            # ； 应使用 ;
+    "\uff01",            # ！ 应使用 !
+    "\uff1f",            # ？ 应使用 ?
+]
+
+# Linter 验证：检测纯文本字段中的英文标点
+# 纯文本字段（title/description）只能使用全角中文标点
+# 如果出现英文标点，说明数据源（Google Sheets）填写错误
+static func _lint_text_field(text: String, field_name: String, uuid: String) -> void:
+    if text.is_empty():
+        return
+    
+    for punct in _ASCII_PUNCTUATION_CHARS:
+        var idx = text.find(punct)
+        if idx != -1:
+            var context_start = max(0, idx - 4)
+            var context_end = min(text.length(), idx + 5)
+            var context_snippet = text.substr(context_start, context_end - context_start)
+            Logging.warn("[Linter] 事件 '%s' 的 '%s' 字段包含英文标点 '%s' (位置 %d, 附近: '...%s...')，请替换为全角标点 💀" % [uuid, field_name, punct, idx, context_snippet])
+
+# Linter 验证：检测 DSL 代码字段中的全角标点
+# DSL 代码字段（requirements/results/context/interruptions/provider/template/emotion_config）
+# 只能使用 ASCII 标点。出现全角标点会破坏 DSL 解析器。
+static func _lint_dsl_field(text: String, field_name: String, uuid: String) -> void:
+    if text.is_empty():
+        return
+    
+    for punct in _FULLWIDTH_PUNCTUATION_CHARS:
+        var idx = text.find(punct)
+        if idx != -1:
+            var context_start = max(0, idx - 4)
+            var context_end = min(text.length(), idx + 5)
+            var context_snippet = text.substr(context_start, context_end - context_start)
+            Logging.warn("[Linter] 事件 '%s' 的 '%s' 字段包含全角标点 '%s' (位置 %d, 附近: '...%s...')，请替换为 ASCII 标点 💀" % [uuid, field_name, punct, idx, context_snippet])
+
 # Linter 验证：检测 results 列中是否有 requirement-only 函数并报错
 # 🚨 不修改数据，只报错。数据问题需在 Google Sheets 源头修复。
 static func _lint_results_column(results_str: String, uuid: String) -> void:
@@ -460,27 +512,52 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 解析表现层
     event.name = row.get('title', "")
     event.description = row.get('description', "")
+    
+    # 🚨 纯文本标点校验：title/description 中不应出现英文标点
+    _lint_text_field(event.name, "title", uuid)
+    _lint_text_field(event.description, "description", uuid)
+    
+    # 🚨 DSL 代码字段标点校验：不应出现全角标点
+    var _dsl_context_str = row.get('context', '')
+    _lint_dsl_field(_dsl_context_str, "context", uuid)
+    var _dsl_req_str = row.get('requirements', '')
+    _lint_dsl_field(_dsl_req_str, "requirements", uuid)
+    var _dsl_provider_str = row.get('provider', '')
+    _lint_dsl_field(_dsl_provider_str, "provider", uuid)
+    var _dsl_template_str = row.get('template', '')
+    _lint_dsl_field(_dsl_template_str, "template", uuid)
 
     # 解析事件级别结果（即使不选选项也会执行）
     var results_str = row.get('results')
     if results_str and not results_str.is_empty():
         # 🚨 Linter 检查：results 列中不应包含 requirement 函数
         _lint_results_column(results_str, uuid)
+        _lint_dsl_field(results_str, "results", uuid)
         event.event_result = parse_choice_result(results_str)
 
     # 解析情绪配置（目前仅 event 级别支持，未来 option 可能也有自己的 emotion_config）
     var emotion_config_str = row.get('emotion_config', '')
     if emotion_config_str and not emotion_config_str.is_empty():
+        _lint_dsl_field(emotion_config_str, "emotion_config", uuid)
         event.emotion_configs = parse_emotion_configs(emotion_config_str)
         Logging.info("Event 级 emotion_config 解析成功: uuid=%s" % uuid)
 
     # 解析前置中断序列（interruptions 列）
     # 语法: interrupt_event(req_syntax, op_syntax), interrupt_event(req_syntax2, op_syntax2)
     var interruptions_str = row.get('interruptions', '')
+    if not interruptions_str.is_empty():
+        _lint_dsl_field(interruptions_str, "interruptions", uuid)
     if interruptions_str and not interruptions_str.is_empty():
         var interruptions = parse_interruptions_field(interruptions_str)
         if not interruptions.is_empty():
-            event.pre_event_interrupter_sequence = interruptions
+            # 🚨 @tool 模式下，直接 `event.pre_event_interrupter_sequence = interruptions`
+            # 可能触发 Godot 引擎 ERR_FAIL（类继承链未完全加载时属性不可达），
+            # 导致整个 parse_random_event 被 abort 并返回 null 💀
+            #
+            # 改用 event.set() 绕过：
+            #   set() 内部虽然也用 ERR_FAIL，但 GDScript 绑定将其视为 void 返回，
+            #   不会 abort 调用方函数。即使 set() 内部 push_error，代码仍能继续执行。
+            event.set(&"pre_event_interrupter_sequence", interruptions)
             Logging.info("Event interruptions 解析成功: uuid=%s, count=%d" % [uuid, interruptions.size()])
 
     return event
@@ -530,20 +607,27 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
 
     # 选项的 context
     var context_str = row.get('context', '')
+    _lint_dsl_field(context_str, "context", uuid)
     var context_data = parse_context(context_str)
     event.custom_context_params = context_data.custom_params
 
     # 选项的触发条件（通常是选择条件）
     var requirements_str = row.get('requirements')
+    _lint_dsl_field(requirements_str if requirements_str != null else "", "requirements", uuid)
     if requirements_str and not requirements_str.is_empty():
         event.requirement = parse_requirements(requirements_str)
 
     # 选项的标题/描述
     event.name = row.get('title', "")
     event.description = row.get('description', "")
+    
+    # 🚨 纯文本标点校验：title/description 中不应出现英文标点
+    _lint_text_field(event.name, "title", uuid)
+    _lint_text_field(event.description, "description", uuid)
 
     # 选项的结果（选择后执行）
     var results_str = row.get('results')
+    _lint_dsl_field(results_str if results_str != null else "", "results", uuid)
     if results_str and not results_str.is_empty():
         _lint_results_column(results_str, uuid)
         event.event_result = parse_choice_result(results_str)
