@@ -10,5 +10,8 @@ resources = {
 "chain_strange_poet_3": "res://data/flags/chain_strange_poet_3.tres",
 "flag_libai_changhe_shown": "res://data/flags/flag_libai_changhe_shown.tres",
 "flag_player_health": "res://data/flags/flag_player_health.tres",
-"flag_relation_with_libai": "res://data/flags/flag_relation_with_libai.tres"
+"flag_relation_with_libai": "res://data/flags/flag_relation_with_libai.tres",
+"talked_to_dengqian": "res://data/flags/talked_to_dengqian.tres",
+"talked_to_libai": "res://data/flags/talked_to_libai.tres",
+"talked_to_wangwei": "res://data/flags/talked_to_wangwei.tres"
 }
