@@ -18,9 +18,9 @@
 ### 2. 基础设施 (Infrastructure)
 - `info_demonstration.md` - UI消息流转契约
 
-### 3. 数据层 (Data Persistence)
-- `dsl_documentation.md` - DSL功能和使用文档
-- `dsl_csv_structure_guide.md` - DSL CSV表格结构指南
+### 3. DSL 与数据层 (DSL & Data Persistence)
+- [`dsl/dsl_syntax_reference.md`](dsl/dsl_syntax_reference.md) - DSL 语法参考手册（条件/结果操作符大全）
+- [`dsl/dsl_csv_structure_guide.md`](dsl/dsl_csv_structure_guide.md) - CSV 数据结构指南（表头/PDA/字段格式）
 - `tag_pattern_confliction.md` - 标签体系设计规范
 - `old_bugs.md` - 历史Bug记录
 

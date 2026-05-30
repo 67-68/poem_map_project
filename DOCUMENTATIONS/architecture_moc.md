@@ -13,6 +13,10 @@
   > 包括：错误信息弹窗 (NotificationUI) 的层级和调用方式，以及三种UI消息类型的规范使用
 
 ## 3. 数据层 (Data Persistence)
+- **DSL 语法参考手册** [`dsl/dsl_syntax_reference.md`](dsl/dsl_syntax_reference.md)
+  > DSL 命名参数函数调用的语法规则、条件/结果/中断操作符大全、值类型系统
+- **CSV 数据结构指南** [`dsl/dsl_csv_structure_guide.md`](dsl/dsl_csv_structure_guide.md)
+  > 游戏事件 CSV 的表头结构、PDA 层级规则、字段格式规范、Template URN 机制
 - **标签体系设计规范** [tag_pattern_confliction.md](tag_pattern_confliction.md)
   > 三段式到四段式的演进，TagManager标准化机制，向后兼容策略
 - **历史Bug记录** [old_bugs.md](old_bugs.md)

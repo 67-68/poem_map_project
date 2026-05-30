@@ -258,13 +258,7 @@ interrupt_event(prop_gt(name=money, val=50), push_event(event_key=evt_poverty)),
 
 ## CSV 数据结构
 
-### 新格式表头（下推自动机）
-
-```
-depth,row_type,uuid,context,requirements,title,description,results,provider,emotion_config
-```
-
-详见 [`new_csv_structure.md`](new_csv_structure.md)
+> ⚠️ **注意**：CSV 数据结构的完整文档已迁移到 [`dsl_csv_structure_guide.md`](dsl_csv_structure_guide.md)，包含 PDA 层级系统、字段详细说明和完整示例。
 
 ### 旧格式表头（扁平结构）
 
