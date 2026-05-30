@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://stqrpfx5803j" path="res://core/operators/random_operator.gd" id="9_lswy1"]
 [ext_resource type="Script" uid="uid://cki4yoh8sonh8" path="res://core/model/conditional_operator.gd" id="10_etiw7"]
 
-[sub_resource type="Resource" id="Resource_gdny2"]
+[sub_resource type="Resource" id="Resource_hgl8j"]
 script = ExtResource("3_hgl8j")
 flag_id = "flag_libai_changhe_request"
 type = "int"
@@ -20,48 +20,48 @@ value = null
 operation = "reduce_if_above"
 amount = 1
 
-[sub_resource type="Resource" id="Resource_808qg"]
+[sub_resource type="Resource" id="Resource_0tt3c"]
 script = ExtResource("5_hgl8j")
-operators = Array[ExtResource("3_f46my")]([SubResource("Resource_gdny2")])
+operators = Array[ExtResource("3_f46my")]([SubResource("Resource_hgl8j")])
 
-[sub_resource type="Resource" id="Resource_2litf"]
+[sub_resource type="Resource" id="Resource_lswy1"]
 script = ExtResource("4_cbnop")
 event_key = "mid_of_wenhuaquan_party_choose_people"
 
-[sub_resource type="Resource" id="Resource_8xbx2"]
+[sub_resource type="Resource" id="Resource_etiw7"]
 script = ExtResource("5_hgl8j")
-operators = Array[ExtResource("3_f46my")]([SubResource("Resource_2litf")])
+operators = Array[ExtResource("3_f46my")]([SubResource("Resource_lswy1")])
 
-[sub_resource type="Resource" id="Resource_tebpn"]
+[sub_resource type="Resource" id="Resource_gdny2"]
 script = ExtResource("6_0tt3c")
-choice_result = SubResource("Resource_8xbx2")
+choice_result = SubResource("Resource_etiw7")
 description = "走向熙熙攘攘的人群"
 
-[sub_resource type="Resource" id="Resource_qqgwl"]
+[sub_resource type="Resource" id="Resource_808qg"]
 script = ExtResource("8_0tt3c")
 flag_id = "flag_relation_with_libai"
 type = "int"
 value = 20
 
-[sub_resource type="Resource" id="Resource_h3jgw"]
+[sub_resource type="Resource" id="Resource_2litf"]
 script = ExtResource("4_cbnop")
 event_key = "request_libai_changhe"
 
-[sub_resource type="Resource" id="Resource_jyhsk"]
+[sub_resource type="Resource" id="Resource_8xbx2"]
 script = ExtResource("9_lswy1")
-random_value = 5
-success_operator = SubResource("Resource_h3jgw")
+random_value = 99
+success_operator = SubResource("Resource_2litf")
 
-[sub_resource type="Resource" id="Resource_tub3m"]
+[sub_resource type="Resource" id="Resource_tebpn"]
 script = ExtResource("10_etiw7")
-condition = SubResource("Resource_qqgwl")
-condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_jyhsk")])
+condition = SubResource("Resource_808qg")
+condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_8xbx2")])
 
 [resource]
 script = ExtResource("7_lswy1")
-event_result = SubResource("Resource_808qg")
-options = Array[ExtResource("2_lnht4")]([SubResource("Resource_tebpn")])
-pre_event_interrupter_sequence = [SubResource("Resource_tub3m")]
+event_result = SubResource("Resource_0tt3c")
+options = Array[ExtResource("2_lnht4")]([SubResource("Resource_gdny2")])
+pre_event_interrupter_sequence = [SubResource("Resource_tebpn")]
 uuid = "mid_of_wenhuaquan_party"
 name = "在盛大讲话完毕之后，正式开场！"
 description = "你看见有人斗诗，有人讲话，还有人在扫荡小食"

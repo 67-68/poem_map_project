@@ -2,16 +2,28 @@
 
 [ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_djxbv"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_7j63j"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_djxbv"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_7j63j"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_3dqip"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_uf0ko"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_yqxd8"]
 
-[sub_resource type="Resource" id="Resource_w2tn0"]
+[sub_resource type="Resource" id="Resource_djxbv"]
+script = ExtResource("4_7j63j")
+event_key = "mid_of_wenhuaquan_party"
+
+[sub_resource type="Resource" id="Resource_7j63j"]
+script = ExtResource("5_3dqip")
+operators = Array[ExtResource("3_djxbv")]([SubResource("Resource_djxbv")])
+
+[sub_resource type="Resource" id="Resource_3dqip"]
 script = ExtResource("6_uf0ko")
-description = "(鼓掌）,,push_event(event_key=mid_of_wenhuaquan_party),,,,,"
+choice_result = SubResource("Resource_7j63j")
+description = "（鼓掌）"
 
 [resource]
 script = ExtResource("7_yqxd8")
-options = Array[ExtResource("2_7j63j")]([SubResource("Resource_w2tn0")])
+options = Array[ExtResource("2_7j63j")]([SubResource("Resource_3dqip")])
 uuid = "start_of_wenhuaquan_party"
 name = "文化圈盛大筵席!"
 description = "你们假装这是一段很长的很棒的写景抒情文字"
