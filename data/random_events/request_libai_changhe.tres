@@ -58,7 +58,6 @@ operator = 0
 script = ExtResource("8_mtht7")
 requirement = SubResource("Resource_pieqf")
 options = Array[ExtResource("4_6r8k7")]([SubResource("Resource_m2qa1"), SubResource("Resource_4y77p")])
-pre_event_interrupter_sequence = null
 uuid = "request_libai_changhe"
 name = "李白唱和"
 description = "李白醉眼朦胧地举杯向你走来：好酒好诗，来，与我唱和一首！"

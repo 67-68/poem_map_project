@@ -12,7 +12,6 @@ description = "(鼓掌）,,push_event(event_key=mid_of_wenhuaquan_party),,,,,"
 [resource]
 script = ExtResource("7_yqxd8")
 options = Array[ExtResource("2_7j63j")]([SubResource("Resource_w2tn0")])
-pre_event_interrupter_sequence = null
 uuid = "start_of_wenhuaquan_party"
 name = "文化圈盛大筵席!"
 description = "你们假装这是一段很长的很棒的写景抒情文字"

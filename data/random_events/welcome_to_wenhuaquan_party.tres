@@ -31,6 +31,5 @@ description = "不去"
 [resource]
 script = ExtResource("7_6rh1c")
 options = Array[ExtResource("2_3vy8a")]([SubResource("Resource_k2gmq"), SubResource("Resource_wvqrs")])
-pre_event_interrupter_sequence = null
 uuid = "welcome_to_wenhuaquan_party"
 name = "被文化圈邀请到宴席"

@@ -32,7 +32,6 @@ value = true
 script = ExtResource("8_x1rxw")
 requirement = SubResource("Resource_fryo3")
 options = Array[ExtResource("2_wsboa")]([SubResource("Resource_a1cu4")])
-pre_event_interrupter_sequence = null
 uuid = "libai_unveilation"
 name = "奇怪的诗人3"
 description = "他要掉到河里了"

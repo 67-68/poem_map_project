@@ -59,7 +59,6 @@ description = "拂袖而去"
 script = ExtResource("8_yntpj")
 event_result = SubResource("Resource_thu6i")
 options = Array[ExtResource("5_lg01x")]([SubResource("Resource_lg01x"), SubResource("Resource_6dw27")])
-pre_event_interrupter_sequence = null
 uuid = "libai_force_changhe"
 name = "李白强迫唱和"
 description = "李白醉醺醺地盯着你：来都来了，必须与我一和！"

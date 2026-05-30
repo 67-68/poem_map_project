@@ -57,7 +57,6 @@ script = ExtResource("13_msvl0")
 weight = 15.5
 requirement = SubResource("Resource_8ainc")
 options = Array[ExtResource("3_vf104")]([SubResource("Resource_w01gt")])
-pre_event_interrupter_sequence = null
 uuid = "test1"
 name = "长安酒馆奇遇"
 description = "你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。"

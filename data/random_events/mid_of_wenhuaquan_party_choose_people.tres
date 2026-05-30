@@ -16,7 +16,6 @@ use_push_event = true
 [resource]
 script = ExtResource("3_hvmw1")
 provider = SubResource("Resource_kfyn1")
-pre_event_interrupter_sequence = null
 uuid = "mid_of_wenhuaquan_party_choose_people"
 name = "要选谁呢？"
 description = "商务还是运动？"

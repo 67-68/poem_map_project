@@ -31,7 +31,6 @@ description = "赠诗一首"
 [resource]
 script = ExtResource("7_w5f71")
 options = Array[ExtResource("2_837ev")]([SubResource("Resource_837ev")])
-pre_event_interrupter_sequence = null
 uuid = "drink_with_libai"
 name = "和李白喝酒"
 description = "他看着你：“喝！”"

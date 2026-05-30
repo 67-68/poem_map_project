@@ -32,7 +32,6 @@ value = true
 script = ExtResource("8_1ylg4")
 requirement = SubResource("Resource_mphfj")
 options = Array[ExtResource("2_5s44e")]([SubResource("Resource_2pit8")])
-pre_event_interrupter_sequence = null
 uuid = "the_man_got_power"
 name = "奇怪的诗人2"
 description = "他看起来很醉"
