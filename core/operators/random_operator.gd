@@ -11,9 +11,14 @@ class_name RandomOperator extends BaseOperator
 func operate():
     var rand = randi() % 100
     if rand < random_value:
+        if not success_operator:
+            Logging.err("RandomOperator: success_operator 为 null (val=%d)" % random_value)
+            return
         success_operator.operate()
         if success_hint: show_hint(success_hint)
     else:
+        if not fail_operator:
+            return  # fail 分支可选，没有则跳过
         fail_operator.operate()
         if failed_hint: show_hint(failed_hint)
 

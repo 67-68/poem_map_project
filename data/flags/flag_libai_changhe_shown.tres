@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Flag" format=3 uid="uid://jf72qd1h3gni"]
+
+[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_10dnm"]
+
+[resource]
+script = ExtResource("1_10dnm")
+type = "bool"
+uuid = "flag_libai_changhe_shown"

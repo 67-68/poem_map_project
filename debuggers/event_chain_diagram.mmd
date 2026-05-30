@@ -68,8 +68,10 @@ flowchart TD
         libai_unveilation[libai_un]
     end
 
-    subgraph Chain16[链 16: 1个事件]
+    subgraph Chain16[链 16: 3个事件]
+        libai_force_changhe[libai_fo]
         libai_welcome_hejiu[libai_we]
+        request_libai_changh[request_]
     end
 
     subgraph Chain17[链 17: 1个事件]
@@ -186,7 +188,11 @@ flowchart TD
 
     libai_after --> strange_poet
     libai_after --> the_man_got_power
+    libai_force_changhe --> libai_welcome_hejiu
+    libai_force_changhe --> request_libai_changh
     libai_unveilation --> libai_after
+    request_libai_changh --> libai_force_changhe
+    request_libai_changh --> libai_welcome_hejiu
     strange_poet --> libai_after
     strange_poet --> the_man_got_power
     the_man_got_power --> libai_unveilation

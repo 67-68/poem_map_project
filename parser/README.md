@@ -136,7 +136,25 @@ flag_str_is(name=flag_player_title)          # 有称号
 prop_gt(name=money, val=50), prop_gt(name=literary_fame, val=30), trait_has(name=official)
 ```
 
-### 3. 结果操作符格式
+### 3. 概率分支操作符
+
+#### 随机分支
+
+| 函数 | 说明 | 参数 |
+|------|------|------|
+| `random(val=, success=, fail=, success_hint=, failed_hint=)` | 概率分支，按 `val%` 概率执行 success，否则执行 fail | val: 触发概率 (0-99), success: 成功时执行的 operator, fail: 失败时执行的 operator, success_hint: 成功提示, failed_hint: 失败提示 |
+
+`random()` 是一个**容器操作符**，它根据概率值决定执行哪个子操作符。`success` 和 `fail` 参数的值本身是操作符表达式，解析器会递归解析。
+
+示例：
+```
+random(val=80, success=prop_add(name="money", val=100), fail=prop_sub(name=reputation, val=5))
+random(val=30, success=trait_add(name=promoted), fail=trait_add(name=demoted), success_hint="恭喜高升！", failed_hint="仕途不顺...")
+```
+
+注意：`success` 和 `fail` 参数**只能接受单个操作符**，不支持逗号分隔的多个操作符。如果需要多个操作，可以考虑用 `ConditionalOperator` 组合或分层设计。
+
+### 4. 结果操作符格式
 
 #### 属性修改
 

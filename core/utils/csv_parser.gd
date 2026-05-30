@@ -38,21 +38,28 @@ static func parse_string_to_matrix(raw_text: String) -> Array[Dictionary]:
 	return result
 
 
-# 解析 CSV 行，处理引号和逗号
+# 解析 CSV 行，处理引号、逗号和括号
+# 括号内的逗号不被视为分隔符（支持 DSL 函数调用如 interrupt_event(req, op)）
 static func _parse_csv_line(line: String) -> Array[String]:
 	var result: Array[String] = []
 	var current = ""
 	var in_quotes = false
+	var paren_depth = 0
 	
 	for i in range(line.length()):
 		var ch = line[i]
 		if ch == '"':
 			in_quotes = not in_quotes
-		elif ch == ',' and not in_quotes:
+		elif ch == ',' and not in_quotes and paren_depth == 0:
 			result.append(current)
 			current = ""
 		else:
 			current += ch
+			if not in_quotes:
+				if ch == '(':
+					paren_depth += 1
+				elif ch == ')':
+					paren_depth -= 1
 	
 	result.append(current)
 	return result

@@ -44,10 +44,18 @@ func compare(_player_state: PlayerState) -> bool:
 			if current_val == null:
 				current_val = 0
 			var target_val = int(value)
-			if operator == REQ_OPERATOR.COMPARE.LESS_THAN:
-				return int(current_val) < target_val
-			else:
-				return int(current_val) > target_val
+			match operator:
+				REQ_OPERATOR.COMPARE.LESS_THAN:
+					return int(current_val) < target_val
+				REQ_OPERATOR.COMPARE.GREATER_THAN:
+					return int(current_val) > target_val
+				REQ_OPERATOR.COMPARE.EQUAL:
+					return int(current_val) == target_val
+				REQ_OPERATOR.COMPARE.NOT_EQUAL:
+					return int(current_val) != target_val
+				_:
+					Logging.err("FlagRequirement: 未知的比较操作符 int: %s" % operator)
+					return false
 		'bool':
 			var current_val = PlayerState.get_flag(flag_id)
 			if current_val == null:

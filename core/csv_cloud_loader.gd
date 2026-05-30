@@ -165,21 +165,28 @@ func is_resource_savable(resource: Resource) -> bool:
     
     return true
 
-# 简单的CSV行解析，处理引号
+# 简单的CSV行解析，处理引号、逗号和括号深度
+# 括号内的逗号不被视为分隔符（支持 DSL 函数调用）
 func parse_csv_line(line: String) -> Array[String]:
     var result: Array[String] = []
     var current = ""
     var in_quotes = false
+    var paren_depth = 0
 
     for i in range(line.length()):
         var ch = line[i]
         if ch == '"':
             in_quotes = not in_quotes
-        elif ch == ',' and not in_quotes:
+        elif ch == ',' and not in_quotes and paren_depth == 0:
             result.append(current)
             current = ""
         else:
             current += ch
+            if not in_quotes:
+                if ch == '(':
+                    paren_depth += 1
+                elif ch == ')':
+                    paren_depth -= 1
 
     result.append(current)
     return result

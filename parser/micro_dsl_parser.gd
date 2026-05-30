@@ -31,6 +31,8 @@ const FUNC_FLAG_STR_IS := "flag_str_is"
 const FUNC_FLAG_STR_NOT := "flag_str_not"
 const FUNC_FLAG_INT_GT := "flag_int_gt"
 const FUNC_FLAG_INT_LT := "flag_int_lt"
+const FUNC_FLAG_INT_EQ := "flag_int_eq"
+const FUNC_FLAG_INT_NE := "flag_int_ne"
 
 # Consequence operators
 const FUNC_PROP_ADD := "prop_add"
@@ -51,6 +53,7 @@ const FUNC_FLAG_INT_REDUCE_IF_ABOVE := "flag_int_reduce_if_above"
 const FUNC_PUSH_EVENT := "push_event"
 const FUNC_POP_EVENT := "pop_event"
 const FUNC_QUEUE_EVENT := "queue_event"
+const FUNC_RANDOM := "random"
 
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
@@ -76,6 +79,8 @@ static func _ensure_dispatch() -> void:
 	rd[FUNC_FLAG_STR_NOT] = func(p, r): return _exec_flag_req_str(p, r, REQ_OPERATOR.COMPARE.NOT_EQUAL)
 	rd[FUNC_FLAG_INT_GT] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.GREATER_THAN)
 	rd[FUNC_FLAG_INT_LT] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.LESS_THAN)
+	rd[FUNC_FLAG_INT_EQ] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.EQUAL)
+	rd[FUNC_FLAG_INT_NE] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.NOT_EQUAL)
 	
 	# ── Consequence Operators ──
 	var cd = _consequence_dispatch
@@ -97,6 +102,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
 	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
 	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
+	cd[FUNC_RANDOM] = func(p, r): return _exec_random_op(p, r)
 
 # ──────────────────────────────────────────────
 # Tags
@@ -475,4 +481,44 @@ static func _exec_queue_event_op(parsed: NamedDSLParser.ParseResult, raw: String
 		return null
 	var op = QueueEventOperator.new()
 	op.event_key = key
+	return op
+
+
+# ─── random ──────────────────────────────────────────────────────
+
+# DSL 语法: random(val=80, success=prop_add(name="money", val=100), fail=prop_add(name="reputation", val=-5), success_hint="成功", failed_hint="失败")
+# 解析为 RandomOperator，success/fail 参数是子 operator 表达式，需要递归解析
+static func _exec_random_op(parsed: NamedDSLParser.ParseResult, raw: String) -> RandomOperator:
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	if val < 0 or val > 100:
+		Logging.warn("random: val 参数建议在 0-100 范围内，当前值: %d (raw: %s)" % [val, raw])
+	
+	var op = RandomOperator.new()
+	op.random_value = clampi(val, 0, 100)
+	
+	# 解析 success 子 operator
+	var success_str = NamedDSLParser.get_str_param(parsed, "success")
+	if success_str.is_empty():
+		Logging.warn("random: 缺少 success 参数，概率分支将无操作 (raw: %s)" % raw)
+	else:
+		var success_op = parse_operator(success_str)
+		if success_op:
+			op.success_operator = success_op
+		else:
+			Logging.warn("random: success 子 operator 解析失败: '%s'" % success_str)
+	
+	# 解析 fail 子 operator（可选）
+	var fail_str = NamedDSLParser.get_str_param(parsed, "fail")
+	if not fail_str.is_empty():
+		var fail_op = parse_operator(fail_str)
+		if fail_op:
+			op.fail_operator = fail_op
+		else:
+			Logging.warn("random: fail 子 operator 解析失败: '%s'" % fail_str)
+	
+	# 可选的 hint 参数
+	op.success_hint = NamedDSLParser.get_str_param(parsed, "success_hint")
+	op.failed_hint = NamedDSLParser.get_str_param(parsed, "failed_hint")
+	
+	Logging.info("random operator 解析成功: val=%d, success=%s, fail=%s" % [val, success_str, fail_str])
 	return op
