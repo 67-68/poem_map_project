@@ -14,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+process_mode = 3
 script = ExtResource("2_du7tm")
 
 [node name="Dimmer" type="ColorRect" parent="." unique_id=999999999]

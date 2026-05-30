@@ -47,6 +47,7 @@ func _ready() -> void:
 	EventBus.push_event.connect(_on_push_event)
 	EventBus.pop_event.connect(_on_pop_event)
 	EventBus.push_picker.connect(_on_push_picker)
+	EventBus.end_picking.connect(_on_end_picking)
 
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -117,7 +118,7 @@ func _on_pop_event():
 
 # --- Picker 栈条目 -------------------------------------
 
-func _on_push_picker(data: Array, on_selected: Callable, ui_constructor):
+func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null):
 	var entry := {
 		"type": "picker",
 		"data": data.duplicate(),
@@ -199,27 +200,39 @@ func _process_next():
 func _show_picker_from_stack(entry: Dictionary):
 	_is_active = true
 	_saved_time_scale = Engine.time_scale
-	# Picker 不暂停世界，但需要阻止新事件覆盖
-	# _is_active = true 足以让 apply_narrative 把新事件入队
+	# 像事件一样暂停世界——picker 本质上就是换了壳的事件
+	TimeService.pause_world(true)
 
 	var data: Array = entry.get("data", [])
 	var ui_constructor = entry.get("ui_constructor", null)
 
 	Logging.info("Picker 显示中，%d 个选项" % data.size())
 	EventBus.start_picker.emit(data, ui_constructor)
+	# 不再 await end_picking —— picker 完成由 _on_end_picking 信号处理器接管
 
-	var picked = await EventBus.end_picking
 
-	# 执行回调前先弹出 picker 条目
-	if _event_stack.size() > 0 and _event_stack[0] == entry:
-		_event_stack.pop_front()
-		Logging.info("Picker 已从栈中弹出")
+func _on_end_picking(entity: Variant):
+	# 从栈顶找到 picker 条目
+	if _event_stack.size() == 0:
+		Logging.warn("_on_end_picking: 栈为空，没有 picker 条目")
+		return
+	var entry = _event_stack[0]
+	if not (entry is Dictionary and entry.get("type") == "picker"):
+		Logging.warn("_on_end_picking: 栈顶不是 picker 条目，忽略")
+		return
+
+	# 弹出 picker 条目
+	_event_stack.pop_front()
+	Logging.info("Picker 已从栈中弹出")
 
 	# 执行选择后的逻辑（accepted / rejected / not_entered 等）
 	var callback: Callable = entry.get("on_selected", Callable())
 	if callback.is_valid():
-		callback.call(picked)
+		callback.call(entity)
 
+	# 像事件一样恢复世界
+	TimeService.resume_world()
+	Engine.time_scale = _saved_time_scale
 	_is_active = false
 	# 处理下一个栈/队列事件
 	_process_next()
@@ -310,7 +323,7 @@ func _end_narrative(choice):
 	# 新事件正在显示中，其 _end_narrative 需要读取 current_event_data。
 	# current_event_data 会在下一次 apply_narrative 时被自然覆盖。
 	var _completed_data: BaseEvent = current_event_data
-	ConsequenceExecuter.execute_result(choice)
+	await ConsequenceExecuter.execute_result(choice)
 
 	# 在执行后果后进行 imaginary 判定，确保 emotion 已被修改
 	imaginary_manager.add_imagenary(_completed_data)

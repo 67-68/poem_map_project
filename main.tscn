@@ -263,9 +263,6 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_0cp0l")
 [node name="PoemCreation" parent="UI" unique_id=1490017236 instance=ExtResource("29_facbu")]
 process_mode = 3
 
-[node name="Picker" parent="UI" unique_id=213326312 instance=ExtResource("30_b1qrp")]
-visible = false
-
 [node name="EmotionRadar" type="ColorRect" parent="UI" unique_id=1495917120]
 visible = false
 anchors_preset = 8
@@ -351,6 +348,9 @@ offset_right = 44.5
 offset_bottom = 217.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="Picker" parent="UI" unique_id=213326312 instance=ExtResource("30_b1qrp")]
+visible = false
 
 [node name="CoreSystems" type="Node" parent="." unique_id=1519963821]
 

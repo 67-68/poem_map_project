@@ -10,6 +10,7 @@ random_event,libai_unveilation,trigger_tags=[test1:test1:test1:test1],flag_bool_
 random_event,libai_after,trigger_tags=[test1:test1:test1:test1],flag_bool_has(name=chain_strange_poet_3),奇怪的诗人4,他专门来感谢我,,,,,,,,
 >option,libai_after_opt,,,,义薄云天！,"flag_bool_replace(from=chain_strange_poet_3,to=chain_strange_poet_1)",,,,,,,
 random_event,jiaoyou_poem_public,,,交游呈现诗词公开,,,,,,,,,
+>option,jiaoyou_poem_public_opt,poem_taste: urn:poem_taste:zhuoliu_basic_taste,,,,,,,urn:event_option:poem_giving_option,,,,
 random_event,libai_welcome_hejiu,weight=0,,李白邀请喝酒,,,,,,,,,
 >option,libai_hejiu_1,,"flag_int_gt(name=flag_relation_with_libai,val=10)",libai_hejiu_1（5好感以上）,libai_hejiu_1（5好感以上）,,,,,,,,
 >option,libai_hejiu_2,,"flag_int_gt(name=flag_relation_with_libai,val=15)",libai_hejiu_2（15好感以上）,libai_hejiu_2(15好感以上）,,,,,,,,
