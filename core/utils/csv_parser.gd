@@ -40,6 +40,7 @@ static func parse_string_to_matrix(raw_text: String) -> Array[Dictionary]:
 
 # 解析 CSV 行，处理引号、逗号和括号
 # 括号内的逗号不被视为分隔符（支持 DSL 函数调用如 interrupt_event(req, op)）
+# 🚨 同时匹配 ASCII 和全角括号（纯文本中全角括号是正常的，但也需要跟踪深度）
 static func _parse_csv_line(line: String) -> Array[String]:
 	var result: Array[String] = []
 	var current = ""
@@ -56,9 +57,9 @@ static func _parse_csv_line(line: String) -> Array[String]:
 		else:
 			current += ch
 			if not in_quotes:
-				if ch == '(':
+				if ch == '(' or ch == '\uff08':
 					paren_depth += 1
-				elif ch == ')':
+				elif ch == ')' or ch == '\uff09':
 					paren_depth -= 1
 	
 	result.append(current)
