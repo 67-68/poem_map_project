@@ -36,7 +36,7 @@ func compare(data):
         # AND逻辑：所有条件都必须满足
         for i in range(results.size()):
             if not results[i]:
-                Logging.err('ComplexRequirements: AND operation failed at operator index %d' % i)
+                Logging.debug('ComplexRequirements: AND operation failed at operator index %d' % i)
                 return false
         return true
     elif current_operator == REQ_OPERATOR.LOGIC.OR:

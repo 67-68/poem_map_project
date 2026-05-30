@@ -224,16 +224,180 @@ row_type | template | provider | uuid | context | requirements | title | descrip
 
 ---
 
-## 7. 已完成的实现（本次任务）
+## 7. 中断多步优先级模式（Interruption Priority Chain）
 
-### 修改内容
+### 场景
 
-1. [`data/random_events/random_events.csv`](data/random_events/random_events.csv)
-   - 表头添加 `interruptions` 列
-   - `mid_of_wenhuaquan_party` 行添加：
-     ```
-     interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20), random(val=5, success=push_event(event_key=request_libai_changhe)))
-     ```
+同一个事件前需要检查多个独立的中断条件，且**优先级不同**（先检查特例，再检查通用条件）。
 
-2. [`data/flags/flags.csv`](data/flags/flags.csv)
-   - 新增 `flag_libai_changhe_shown`（bool, 默认 FALSE）用于防循环
+### 实现方案
+
+多个 `interrupt_event()` 用逗号分隔，按优先级从高到低排列。`check_interruption` 是 **first-match-wins**，第一个条件通过就执行对应操作并结束，后面的不检查。
+
+```csv
+interrupt_event(<高优先级条件>, <操作>), interrupt_event(<低优先级条件>, <操作>)
+```
+
+### 实战案例：李白唱和两步序列
+
+```csv
+interrupt_event(flag_int_eq(name=flag_libai_changhe_request,val=1),push_event(event_key=libai_force_changhe)), interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20) and flag_int_eq(name=flag_libai_changhe_request,val=0),random(val=99,success=push_event(event_key=request_libai_changhe)))
+```
+
+| Step | 优先级 | 条件 | 触发时 flag | 操作 |
+|------|--------|------|------------|------|
+| **0** | 🔴 高（先检查） | `flag == 1` | 递减到 1 | 强制唱和 `libai_force_changhe` |
+| **1** | 🟢 低（后检查） | `relation > 20 AND flag == 0` | 无进行中 | 常规唱和 `request_libai_changhe` |
+
+### 核心经验
+
+**1. 用 flag 的值语义来表达"状态阶段"，而不是用独立 bool 标志**
+
+这条规则是本次 debug 最重要的教训。用一个 int flag 的不同值域表达完整生命周期：
+
+| flag 值 | 语义 | 触发的中断 |
+|---------|------|-----------|
+| `0` | 无进行中的唱和请求 | Step 1：可开启新唱和 |
+| `> 0`（1-5） | 有进行中的唱和请求（递减中） | 无（等待递减到 1） |
+| `== 1` | 即将强制唱和 | Step 0：优先拦截，强制唱和 |
+
+不需要额外 bool 标志来跟踪"是否已触发"。**flag 的值本身就是状态机** 🤓☝️。减少一个 flag 就减少一个可能泄露/忘记重置的状态。
+
+对应的 DSL 条件：
+- `flag_int_eq(name=xxx, val=0)` — flag 不存在或为 0（空闲状态）
+- `flag_int_gt(name=xxx, val=0)` — flag 存在且 > 0（活跃状态）
+- `flag_int_eq(name=xxx, val=1)` — flag 精确等于 1（临界状态）
+
+**2. `flag_int_eq(val=0)` 不会"永远不可能实现"**
+
+👉 参考 [`flag_requirement.gd:60-63`](core/requirements/flag_requirement.gd:60)：
+
+```gdscript
+var current_val = PlayerState.get_flag(flag_id)
+if current_val == null:
+    current_val = 0
+```
+
+| flag 状态 | `get_flag()` | `has_flag()` | `val=0` 比较结果 |
+|-----------|-------------|-------------|-----------------|
+| 从未设置 | null → 0 | false | `0 == 0` = **true** ✅ |
+| 设值为 0 | 0 | true | `0 == 0` = **true** ✅ |
+| 设值为 5 | 5 | true | `5 == 0` = **false** ❌ |
+
+`flag_int_eq(val=0)` 在 flag 未设置或被设为 0 时返回 true——这正是"空闲状态"的检测逻辑。不会"永远不可能"。
+
+**3. `check_interruption` 在 `event_result` 之前执行**
+
+这是 [`apply_narrative`](characters/narrative_overlay.gd:228) 的执行顺序：
+
+```gdscript
+# Phase 1: check_interruption（先！）
+data.check_interruption(context)
+if _is_active: return  # 中断触发 → 跳过 init
+
+# Phase 2: data.init() → 这里才执行 event_result
+var all_options = data.init(context)
+```
+
+所以 `reduce_if_above` 这类 `event_result` 中的操作在中断**之后**才执行。如果中断触发了（step 1 条件通过），`reduce_if_above` 根本不会跑。
+
+**这对设计的直接影响**：不能依赖 `event_result` 修改 flag 来"改变中断的检查结果"——因为中断先跑，跑完才执行 `event_result`。如果 step 1 条件 `flag > 0 AND relation > 20` 在 flag=5 时通过了，它**每次都通过**，`reduce_if_above` 永远没机会执行，flag 永远减不下去，形成无限循环 💀。
+
+**修复方案**：step 1 条件改为 `flag == 0`（空闲状态才触发），这样当 flag 为 5 时已经活跃了，step 1 不触发 → `event_result` 执行 → `reduce_if_above` 递减 → 最终减到 1 触发 step 0。
+
+**4. 中断条件和 Entry Requirement 是正交的**
+
+`push_event` 绕过 pool 筛选，**不检查目标事件的 entry requirement**。中断条件必须自行涵盖目标事件的所有守卫逻辑。
+
+原始 bug 的根因就在这：中断条件只检查了 `relation > 20`，但目标事件 `request_libai_changhe` 的 entry requirement 是 `flag > 0`。中断 push 了一个"目标事件进场条件不满足"的事件——虽然本例中 `push_event` 无视了 entry requirement，但这个语义鸿沟是设计陷阱。
+
+**经验**：写中断的 condition 时，默认目标事件的 entry requirement 不存在。必须把你的意图显式写到 condition 里。
+
+---
+
+## 8. CSV 语法雷区
+
+### 雷区 1：参数分隔符是逗号，不是句点
+
+```csv
+# 💀 错误：flag_int_set(name=flag_libai_changhe_request.val=0)
+#                           ^ 这里用了句点，解析器认为参数名是 "flag_libai_changhe_request.val"
+
+# ✅ 正确：flag_int_set(name=flag_libai_changhe_request, val=0)
+```
+
+所有 DSL 参数分隔符必须是英文逗号 `,`。句点 `.` 不会被识别为分隔符，整个字符串会被当成一个参数名。
+
+### 雷区 2：`Logging.err` 有门槛
+
+```gdscript
+# 💀 错误：条件检查失败用 err 级别
+Logging.err('ComplexRequirements: AND operation failed at operator index %d' % i)
+
+# ✅ 正确：条件检查失败是正常代码路径，用 debug 级别
+Logging.debug('ComplexRequirements: AND operation failed at operator index %d' % i)
+```
+
+`Logging.err` 是为**系统级异常**保留的——数据损坏、空指针、契约违约。**条件评估自然返回 false 不是异常**，是 `if` 语句的日常工作 💀。用 `err` 级别记录条件 false 会导致日志里到处是假阳性噪音，真正的错误被淹没。
+
+`Logging.err` 的使用门槛：这个状况是否**不应该出现**？如果是"某些数据下会自然发生"的情况，用 `debug` 或 `warn`。
+
+---
+
+## 9. 完整数据流验证：李白唱和生命周期
+
+这是一个"中断两步序列 + int flag 状态机"的完整实战验证，覆盖所有分支。
+
+### 初始条件
+- `flag_libai_changhe_request = 0`（无进行中的唱和）
+- `flag_relation_with_libai > 20`
+
+### 分支追踪
+
+```
+第 1 次进入 mid_of_wenhuaquan_party
+├─ check_interruption
+│  ├─ Step 0: flag == 1? → 0 == 1 → ❌
+│  └─ Step 1: relation > 20 AND flag == 0? → ✅ → random(99) → push request_libai_changhe
+│     └─ 用户"欣然应和" → flag_int_set(5), pop_event()
+│
+第 2 次进入 mid_of_wenhuaquan_party（flag=5）
+├─ check_interruption
+│  ├─ Step 0: 5 == 1? → ❌
+│  └─ Step 1: 5 == 0? → ❌（flag 活跃，不重复触发）
+├─ init → event_result: reduce_if_above(5→4)
+└─ 事件正常显示
+│
+第 3-5 次进入：reduce 4→3→2→1（每次-1）
+├─ check_interruption 都不通过（flag==1和flag==0都不匹配）
+├─ init → reduce_if_above
+└─ 事件正常显示
+│
+第 6 次进入（reduce 2→1 之后）
+├─ check_interruption
+│  ├─ Step 0: 1 == 1? → ✅ → push libai_force_changhe 🎯
+│  └─ （Step 1 不执行，first-match-wins）
+├─ 强制唱和 → flag_int_set(0), pop_event()
+│
+第 7 次进入（flag=0）
+├─ Step 0: 0 == 1? → ❌
+├─ Step 1: 0 == 0? → ✅ → 重新开启新唱和周期
+└─ （回到第 1 次的状态，循环 ∞）
+```
+
+### 分支表
+
+| 分支 | 条件 | flag 范围 | 结果 |
+|------|------|----------|------|
+| 无唱和 | `flag==0 AND rel≤20` | 0 | 无事发生，事件正常显示 |
+| 新人唱和 | `flag==0 AND rel>20` | 0 → 5 | 开启新唱和周期 |
+| 唱和进行中 | `flag>0 AND flag≠1` | 5→4→3→2 | 递减中，不触发中断 |
+| 强制唱和 | `flag==1` | 1 | 优先触发强制唱和 |
+| 拒绝唱和 | 用户点婉言谢绝 | 5 | `relation -5`，可能降到 ≤20 关掉 Step 1 |
+
+### 关键教训
+
+1. **`event_result` 在 `check_interruption` 之后执行** — 如果想用减量来触发中断（减到 1），必须确保中断在减量之前不触发（用 `==0` 而非 `>0` 做守卫）
+2. **First-match-wins 的优先级可以精确控制** — Step 0 的 `== 1` 是精确匹配，Step 1 的 `== 0` 是范围匹配。精确匹配放前面确保不会被范围匹配抢走
+3. **不需要额外 bool flag 来防重入** — int flag 的值域天然提供了"空闲/活跃/临界"三种状态。多一个 flag 就多一个可能忘记重置的状态
+4. **中断条件和目标事件的 entry requirement 不能互斥** — 如果中断的条件是 `flag == 0`（flag 为空时触发），但目标事件 `request_libai_changhe` 的 entry requirement 是 `flag > 0`（flag 非空才能显示），这俩条件是互斥的。`push_event` 绕过了 pool 筛选，但 `_on_push_event` 中的防御检查会**重新检查 entry requirement** → 条件不满足 → push 被静默丢弃 → 事件不显示也没有任何错误提示 😭。修复：要么中断条件包含 entry requirement 的逻辑，要么干脆移除目标事件的 entry requirement（如果它只通过 push_event 触发的话）。

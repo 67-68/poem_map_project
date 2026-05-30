@@ -11,7 +11,7 @@
 
 [sub_resource type="Resource" id="Resource_tbpbu"]
 script = ExtResource("3_s0st3")
-flag_id = "flag_libai_changhe_request.val=0"
+flag_id = "flag_libai_changhe_request"
 type = "int"
 value = 0
 
@@ -55,10 +55,29 @@ script = ExtResource("7_3466r")
 choice_result = SubResource("Resource_yntpj")
 description = "拂袖而去"
 
+[sub_resource type="Resource" id="Resource_41w4a"]
+script = ExtResource("3_s0st3")
+flag_id = "flag_relation_with_libai"
+type = "int"
+value = -20
+operation = "append"
+
+[sub_resource type="Resource" id="Resource_jeg0a"]
+script = ExtResource("6_5kuoh")
+
+[sub_resource type="Resource" id="Resource_dlsux"]
+script = ExtResource("4_1we4o")
+operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_41w4a"), SubResource("Resource_jeg0a")])
+
+[sub_resource type="Resource" id="Resource_u2s4u"]
+script = ExtResource("7_3466r")
+choice_result = SubResource("Resource_dlsux")
+description = "拂袖而去"
+
 [resource]
 script = ExtResource("8_yntpj")
 event_result = SubResource("Resource_thu6i")
-options = Array[ExtResource("5_lg01x")]([SubResource("Resource_lg01x"), SubResource("Resource_6dw27")])
+options = Array[ExtResource("5_lg01x")]([SubResource("Resource_lg01x"), SubResource("Resource_6dw27"), SubResource("Resource_u2s4u")])
 uuid = "libai_force_changhe"
 name = "李白强迫唱和"
 description = "李白醉醺醺地盯着你：来都来了，必须与我一和！"
