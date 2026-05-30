@@ -80,10 +80,18 @@ func compare(_player_state: PlayerState) -> bool:
 				current_val = false
 			var bool_str = str(value).to_lower()
 			var target_val = bool_str == 'true' or bool_str == 't' or bool_str == '1' or bool_str == 'yes'
-			if operator == REQ_OPERATOR.COMPARE.LESS_THAN:
-				return bool(current_val) < target_val
-			else:
-				return bool(current_val) > target_val
+			match operator:
+				REQ_OPERATOR.COMPARE.LESS_THAN:
+					return bool(current_val) < target_val
+				REQ_OPERATOR.COMPARE.GREATER_THAN:
+					return bool(current_val) > target_val
+				REQ_OPERATOR.COMPARE.EQUAL:
+					return bool(current_val) == target_val
+				REQ_OPERATOR.COMPARE.NOT_EQUAL:
+					return bool(current_val) != target_val
+				_:
+					Logging.err("FlagRequirement: 未知的比较操作符 bool: %s" % operator)
+					return false
 		_:
 			Logging.err('Unknown flag type: %s for flag %s' % [type, flag_id])
 			return false
