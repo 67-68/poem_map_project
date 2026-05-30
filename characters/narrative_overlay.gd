@@ -18,6 +18,8 @@ var _event_queue: Array[Dictionary] = []
 var _event_stack: Array[Dictionary] = []
 
 var _is_active: bool = false
+# 中断检查递归保护：阻止 check_interruption → push_event → apply_narrative 无限循环
+var _is_checking_interruption: bool = false
 var _current_from_stack: bool = false
 var _saved_time_scale: float = 1.0
 
@@ -153,6 +155,21 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 		_event_queue.append({ "data": data, "context": context })
 		Logging.info("事件已入队等待: " + data.name)
 		return
+
+	# ── Pre-event Interruption Sequence（一层递归保护）──
+	# 在事件 init 之前执行前置中断序列。
+	# 如果 check_interruption 中的 operator push 了替代事件到栈，
+	# _on_push_event 会同步触发 _process_stack → 嵌套 apply_narrative。
+	# _is_checking_interruption 阻止这种嵌套的无限递归（仅允许一层）。
+	if not _is_checking_interruption and data.has_method("check_interruption"):
+		_is_checking_interruption = true
+		data.check_interruption(context)
+		_is_checking_interruption = false
+
+		# 中断序列 push 了事件到栈 → 让栈事件替代当前事件
+		if _is_active:
+			Logging.info("apply_narrative: 被中断序列替换，放弃当前事件 " + data.name)
+			return
 
 	_is_active = true
 	# data.init() 返回合并了 provider 动态生成的选项的全量数组

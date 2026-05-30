@@ -7,6 +7,77 @@ class_name BaseEvent extends GameEntity
 @export var epitaph_text: String = ''
 @export var emotion_configs: Array[EmotionConfigs] = []
 
+# ──────────────────────────────────────────────
+# Pre-event Interruption Sequence（前置中断序列）
+# ──────────────────────────────────────────────
+# 按优先级排列的中断处理器列表。每个 step 包含一个 requirement（守卫）
+# 和一个 operator（应为 PushEventOperator / PopEventOperator）。
+#
+# check_interruption(context) 按优先级顺序检查：
+#   1. init requirement + operator（从 context 解析参数）
+#   2. requirement.compare(PlayerState) 检查
+#      - ✅ 通过 → 执行 operator（push/pop 替代事件到栈），然后 break
+#      - ❌ 失败 → 跳过，尝试下一个 step
+#   3. 首个通过的 step 胜出（first-match-wins），后续 steps 不再检查
+#
+# 典型场景：事件触发前检查多个条件，按优先级决定是否用另一个事件替代。
+# ──────────────────────────────────────────────
+class InterruptionStep:
+    var requirement: BaseRequirements
+    var operator: BaseOperator  # 应为 PushEventOperator 或 PopEventOperator
+
+    func _init(p_requirement: BaseRequirements = null, p_operator: BaseOperator = null):
+        requirement = p_requirement
+        operator = p_operator
+
+var pre_event_interrupter_sequence: Array[InterruptionStep] = []
+
+func check_interruption(context: Dictionary) -> void:
+    """
+    按优先级执行前置中断序列（first-match-wins）。
+    
+    遍历 steps：
+    - requirement 通过 ✅ → 执行 operator（push/pop 替代事件），然后 break
+    - requirement 失败 ❌ → 跳过，尝试下一步
+    
+    首个通过的 step 胜出并结束检查。全部失败则无操作。
+    该方法不阻断事件本身触发。
+    """
+    Logging.debug('check_interruption: %d steps in sequence' % pre_event_interrupter_sequence.size())
+
+    for i in range(pre_event_interrupter_sequence.size()):
+        var step = pre_event_interrupter_sequence[i]
+        if not step:
+            Logging.warn('check_interruption: found null step at index %d, skipping' % i)
+            continue
+
+        # 1. init 阶段：让 requirement 和 operator 从 context 解析参数
+        if step.requirement:
+            step.requirement.init(context)
+        if step.operator:
+            step.operator.init(context)
+
+        # 2. 检查 requirement —— 守卫逻辑
+        var passed: bool = true
+        if step.requirement:
+            passed = step.requirement.compare(PlayerState)
+
+        if not passed:
+            Logging.debug('check_interruption: step %d requirement failed, trying next step' % i)
+            continue
+
+        # 3. requirement 通过 → 执行 operator（push/pop event），然后结束
+        Logging.debug('check_interruption: step %d passed, executing operator and breaking' % i)
+        if step.operator:
+            step.operator.operate()
+        else:
+            Logging.warn('check_interruption: step %d passed but operator is null, no action taken' % i)
+
+        Logging.debug('check_interruption: resolved at step %d, sequence done' % i)
+        return  # first-match-wins
+
+    Logging.debug('check_interruption: no step passed, no interruption triggered')
+
 func init(context: Dictionary) -> Array:
     # Phase 1: provider.init 先执行，修改 context
     if provider:
