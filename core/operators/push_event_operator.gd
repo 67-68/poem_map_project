@@ -8,9 +8,12 @@ class_name PushEventOperator extends BaseOperator
 var _captured_context: Dictionary = {}
 
 func operate():
-	Logging.info("PushEventOperator: Pushing event with key: %s" % event_key)
+	Logging.info("PushEventOperator: Pushing event with key: %s, context keys: %s, has guests: %s" % [event_key, _captured_context.keys(), _captured_context.has("guests")])
+	if _captured_context.has("guests"):
+		Logging.info("PushEventOperator: guests value = %s" % str(_captured_context.get("guests")))
 	EventBus.push_event.emit(event_key, _captured_context)
 
 func init(context: Dictionary) -> Dictionary:
 	_captured_context = context.duplicate()
+	Logging.info("PushEventOperator.init: captured context for event %s, keys: %s, has guests: %s" % [event_key, _captured_context.keys(), _captured_context.has("guests")])
 	return context

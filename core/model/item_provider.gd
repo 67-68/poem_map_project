@@ -30,6 +30,9 @@ func init(context: Dictionary) -> Dictionary:
 
 
 func provide(context: Dictionary) -> Array:
+	Logging.info("[ItemProvider] provide: list_key=%s, context keys=%s" % [list_key, context.keys()])
+	for k in context:
+		Logging.info("[ItemProvider] context[%s] = %s (type=%s)" % [k, str(context[k]), typeof(context[k])])
 	var target_list: Array = context.get(list_key, [])
 	var options: Array = []
 

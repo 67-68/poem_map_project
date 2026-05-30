@@ -7,6 +7,12 @@ func execute(event_data: DataHelper.EventData) -> void:
     # 🤓☝️ 核心修正 1：图的构建绝对只能做一次！
     var adjacency_list = creates_adjacency_list(events.values())
     
+    # 🚨 ItemProvider Context 依赖警告：如果事件链从中道切入（如 $ event_key），
+    #   上游 custom_context_params 注入的数据不会出现在 context 中，
+    #   ItemProvider 的 context.get(list_key, []) 会返回空数组。
+    #   参考：DOCUMENTATIONS/old_bugs.md → 2026-05-30 条目
+    printerr("🚨 [EventChainLinter] ItemProvider 依赖上游 context 传递！如果从中道切入事件链（如 $ event_key），list_key 对应数据将不存在于 context 中，ItemProvider 会返回空列表。请确保始终从定义 custom_context_params 的入口事件触发。参考文档 DOCUMENTATIONS/old_bugs.md")
+    
     var visited = {} # 0: white, 1: gray, 2: black
     for e_uuid in events.keys(): 
         visited[e_uuid] = 0 

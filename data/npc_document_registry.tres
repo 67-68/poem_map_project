@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="ResourceRegistry" format=3]
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://cmf7vml56aslm"]
 
-[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_fvhrg"]
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_y7fj5"]
 
 [resource]
-script = ExtResource("1_fvhrg")
+script = ExtResource("1_y7fj5")
 resources = {
 "npc_doc_libai": "res://data/npc_document/npc_doc_libai.tres"
 }
