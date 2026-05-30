@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCDocument" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://mbd5xnwsnqvh" path="res://model/npc_document.gd" id="1_udmdi"]
+
+[resource]
+script = ExtResource("1_udmdi")
+taste_id = "libai_taste"
+name = "李白"
+uuid = "npc_doc_libai"

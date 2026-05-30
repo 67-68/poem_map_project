@@ -33,6 +33,8 @@ var life_path_points: Dictionary
 
 var poem_taste: Dictionary
 
+var npc_document: Dictionary
+
 var event_options: Dictionary
 
 var state_transistors: Dictionary
@@ -54,6 +56,7 @@ func _init() -> void:
 	tags = Util.create_dict_from_registry(load("res://data/tres_tags_registry.tres"))
 	event_options = Util.create_dict_from_registry(load("res://data/event_options_registry.tres"))
 	poem_taste = Util.create_dict_from_registry(load("res://data/poem_taste_registry.tres"))
+	npc_document = Util.create_dict_from_registry(load("res://data/npc_document_registry.tres"))
 	#breakpoint
 	state_transistors = Util.create_dict_from_registry(load("res://data/tres_state_transistors_registry.tres"))
 
