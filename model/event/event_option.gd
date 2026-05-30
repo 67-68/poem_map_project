@@ -26,9 +26,11 @@ func init(context: Dictionary) -> Dictionary:
     # 🔒 不直接修改 self.description（会污染 Resource 的永久属性），
     #    而是存入 transient 字段 _resolved_description，
     #    渲染时优先读取 _resolved_description
-    if not description.is_empty() and "{" in description:
-        _resolved_description = Util.resolve_template(description, context_, self)
-        Logging.info("[EventOption] 解析后 description: %s" % _resolved_description)
+    if not description.is_empty():
+        # 使用 tr_and_resolve：CONSTANT 先 tr() 查表再插值，普通文本直接返回
+        _resolved_description = Util.tr_and_resolve(description, context_, self)
+        if _resolved_description != description:
+            Logging.info("[EventOption] 解析后 description: %s" % _resolved_description)
     
     if requirement:
         requirement.init(context_)

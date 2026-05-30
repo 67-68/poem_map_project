@@ -403,3 +403,49 @@ static func resolve_template(text: String, context: Dictionary, instance: Object
 		result = result.left(start) + replacement + result.substr(end)
 	
 	return result
+
+
+# ──────────────────────────────────────────────
+# 翻译 + 动态插值：tr() 查表 + 模板解析 串联
+# ──────────────────────────────────────────────
+# 流程：
+#   1. 如果是 CONSTANT（全大写，如 CHOOSE_TARGET）→ tr() 查翻译表
+#   2. 普通文本跳过步骤 1
+#   3. 统一检查结果中是否有 {@key}/{key} 占位符 → resolve_template 插值
+#   4. 插值结果不再递归 tr()
+#
+# @param text:     原始文本（可能是翻译 key，也可能是带占位符的普通文本）
+# @param context:  运行时字典，用于 {@key} 插值
+# @param instance: 调用方对象，用于 {key} 插值
+# @return:         最终展示文本
+# ──────────────────────────────────────────────
+static func tr_and_resolve(text: String, context: Dictionary, instance: Object) -> String:
+	if text.is_empty():
+		return text
+	
+	# Step 1: CONSTANT → tr() 查表翻译
+	var result = text
+	if _is_constant_key(text):
+		result = TranslationServer.translate(text)
+		Logging.info("[tr_and_resolve] tr('%s') → '%s'" % [text, result])
+	
+	# Step 2: 统一检查占位符并插值（无论是否经过翻译）
+	if not result.is_empty() and "{" in result:
+		result = resolve_template(result, context, instance)
+	
+	return result
+
+
+# 判断是否为 CONSTANT 翻译 key（全大写，允许数字和下划线）
+static func _is_constant_key(text: String) -> bool:
+	if text.is_empty():
+		return false
+	
+	for i in text.length():
+		var c = text[i]
+		var code = c.unicode_at(0)
+		# 允许：A-Z (65-90), _ (95), 0-9 (48-57)
+		if not ((code >= 65 and code <= 90) or code == 95 or (code >= 48 and code <= 57)):
+			return false
+	
+	return true
