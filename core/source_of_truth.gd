@@ -46,6 +46,10 @@ static var debug_dashboard_state = {
         "fatigue": 0,
         "sick": 0,
         "inspiration": 0,
+    },
+
+    "flags": {
+        "flag_relation_with_libai":30
     }
 }
 

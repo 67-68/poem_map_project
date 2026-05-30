@@ -38,11 +38,20 @@ func init_traits():
 	var action_tracks = SourceOfTruth.debug_dashboard_state.action_tracks
 	for track_name in action_tracks:
 		var trait_uuid = action_tracks[track_name]
-		add_trait(trait_uuid)	
+		add_trait(trait_uuid)
+
+func init_flags():
+	"""从 SourceOfTruth 加载初始 flag 到 PlayerState"""
+	var flag_data = SourceOfTruth.debug_dashboard_state.flags
+	for flag_id in flag_data:
+		var flag_val = flag_data[flag_id]
+		set_flag(flag_id, flag_val)
+		Logging.info('init_flags: flag %s set to %s from SourceOfTruth' % [flag_id, str(flag_val)])
 
 func _ready():
 	init_props()
 	init_traits()
+	init_flags()
 	
 	current_location = 'yong_zhou'
 
