@@ -247,6 +247,101 @@ static func parse_provider_field(provider_str: String) -> BaseProvider:
     
     return provider
 
+# ═══════════════════════════════════════════════════════════
+# Interruption 解析（interruptions 列）
+#
+# CSV interruptions 列语法（支持多个，逗号分隔）：
+#   interrupt_event(requirement_syntax, operator_syntax)
+#
+# 示例：
+#   interrupt_event(prop_gt(name=money, val=50), push_event(event_key=event_poverty))
+#   interrupt_event(flag_bool_has(name=has_sword), push_event(event_key=event_duel))
+#
+# requirement_syntax 使用 parse_requirements() 解析（复用现有需求语法）
+# operator_syntax    使用 MicroDSLParser.parse_consequence_operators() 解析
+# ═══════════════════════════════════════════════════════════
+
+# 解析单个 interrupt_event(...) 调用，返回 ConditionalOperator 实例
+static func parse_interruption_field(interruption_str: String) -> ConditionalOperator:
+    interruption_str = interruption_str.strip_edges()
+    if interruption_str.is_empty():
+        Logging.warn("parse_interruption_field: 空字符串")
+        return null
+    
+    # 提取函数名和参数内容
+    var paren_open = interruption_str.find("(")
+    var paren_close = interruption_str.rfind(")")
+    if paren_open == -1 or paren_close == -1 or paren_close <= paren_open:
+        Logging.err("parse_interruption_field: 缺少括号，格式应为 interrupt_event(req, op): %s" % interruption_str)
+        return null
+    
+    var func_name = interruption_str.substr(0, paren_open).strip_edges()
+    if func_name != "interrupt_event":
+        Logging.err("parse_interruption_field: 未知函数 '%s'，期望 'interrupt_event': %s" % [func_name, interruption_str])
+        return null
+    
+    var args_str = interruption_str.substr(paren_open + 1, paren_close - paren_open - 1)
+    if args_str.is_empty():
+        Logging.err("parse_interruption_field: 缺少参数: %s" % interruption_str)
+        return null
+    
+    # 用 split_expressions 分割两个位置参数（按顶级逗号分割，避开括号内的逗号）
+    var args = NamedDSLParser.split_expressions(args_str)
+    if args.size() < 2:
+        Logging.err("parse_interruption_field: 需要 2 个参数（requirement, operator），实际 %d: %s" % [args.size(), interruption_str])
+        return null
+    
+    var requirement_syntax = args[0].strip_edges()
+    var operator_syntax = args[1].strip_edges()
+    
+    # 解析 requirement
+    var requirement: BaseRequirements = null
+    if not requirement_syntax.is_empty():
+        requirement = parse_requirements(requirement_syntax)
+        if requirement == null:
+            Logging.warn("parse_interruption_field: requirement 解析失败: '%s'" % requirement_syntax)
+    
+    # 解析 operators（支持多个 operator，逗号分隔）
+    var operators: Array[BaseOperator] = []
+    if not operator_syntax.is_empty():
+        operators = MicroDSLParser.parse_consequence_operators(operator_syntax)
+        if operators.is_empty():
+            Logging.warn("parse_interruption_field: operator 解析失败: '%s'" % operator_syntax)
+    
+    # 创建 ConditionalOperator
+    var cond_op = ConditionalOperator.new()
+    cond_op.condition = requirement
+    cond_op.condition_success_result = operators
+    # condition_fail_result 留空 — 中断场景中条件不通过就是跳过，无需额外操作
+    
+    Logging.info("parse_interruption_field: 解析成功 (requirement=%s, operators=%d)" % [requirement_syntax, operators.size()])
+    return cond_op
+
+
+# 解析 interruptions 列（支持多个 interrupt_event() 调用，逗号分隔）
+# 返回 Array[ConditionalOperator]
+static func parse_interruptions_field(interruptions_str: String) -> Array[ConditionalOperator]:
+    var results: Array[ConditionalOperator] = []
+    
+    if interruptions_str.is_empty():
+        return results
+    
+    var expressions = NamedDSLParser.split_expressions(interruptions_str)
+    for expr in expressions:
+        var clean_expr = expr.strip_edges()
+        if clean_expr.is_empty():
+            continue
+        
+        var cond_op = parse_interruption_field(clean_expr)
+        if cond_op:
+            results.append(cond_op)
+        else:
+            Logging.warn("parse_interruptions_field: 子项解析失败，已跳过: '%s'" % clean_expr)
+    
+    Logging.info("parse_interruptions_field: 解析完成，共 %d 个 interrupt 步骤" % results.size())
+    return results
+
+
 # 解析随机事件（row_type = 'random_event'）
 static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 检测空行
@@ -332,6 +427,15 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     if emotion_config_str and not emotion_config_str.is_empty():
         event.emotion_configs = parse_emotion_configs(emotion_config_str)
         Logging.info("Event 级 emotion_config 解析成功: uuid=%s" % uuid)
+
+    # 解析前置中断序列（interruptions 列）
+    # 语法: interrupt_event(req_syntax, op_syntax), interrupt_event(req_syntax2, op_syntax2)
+    var interruptions_str = row.get('interruptions', '')
+    if interruptions_str and not interruptions_str.is_empty():
+        var interruptions = parse_interruptions_field(interruptions_str)
+        if not interruptions.is_empty():
+            event.pre_event_interrupter_sequence = interruptions
+            Logging.info("Event interruptions 解析成功: uuid=%s, count=%d" % [uuid, interruptions.size()])
 
     return event
 

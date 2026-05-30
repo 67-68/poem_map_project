@@ -191,7 +191,42 @@ flag_bool_has(name=flag_visited_palace), prop_gt(name=money, val=100)
 >
 > 💡 **context 自动传递**: `push_event` 和 `queue_event` 在 DSL 中调用时，当前事件的 `context` 会被自动捕获并传递给被触发的事件，无需手动传递参数。
 
-#### 3.6 队列事件操作符
+#### 3.6 前置中断事件（Interruptions）
+
+在事件触发前，可以通过 `interrupt_event` 检查条件并决定是否用另一个事件替代当前事件。
+
+**语法**:
+```
+interrupt_event(requirement_syntax, operator_syntax)
+```
+
+| 参数 | 类型 | 说明 | 示例 |
+|------|------|------|------|
+| `requirement_syntax` | String | 守卫条件（复用 requirement DSL 语法） | `prop_gt(name=money, val=50)` |
+| `operator_syntax` | String | 条件通过后执行的操作符（复用 operator DSL 语法） | `push_event(event_key=evt_poverty)` |
+
+**行为**: 按优先级（CSV 中出现顺序）依次检查每个 `interrupt_event` 的条件（first-match-wins）：
+- ✅ 条件通过 → 执行对应的操作符（如 `push_event` 推入替代事件），结束检查
+- ❌ 条件不通过 → 跳过，尝试下一个
+
+**CSV 列名**: `interruptions`
+
+**示例**：
+```csv
+interruptions
+interrupt_event(prop_gt(name=money, val=50), push_event(event_key=evt_poverty))
+interrupt_event(flag_bool_has(name=has_sword), pop_event())
+```
+
+多个 `interrupt_event` 用逗号分隔：
+```csv
+interruptions
+interrupt_event(prop_gt(name=money, val=50), push_event(event_key=evt_poverty)),interrupt_event(flag_bool_has(name=has_sword), push_event(event_key=evt_duel))
+```
+
+**实现**：每个 `interrupt_event` 解析为一个 [`ConditionalOperator`](core/model/conditional_operator.gd) 实例，`requirement_syntax` 由 `parse_requirements()` 解析，`operator_syntax` 由 `MicroDSLParser.parse_consequence_operators()` 解析。
+
+#### 3.7 队列事件操作符
 
 | 函数 | 参数 | 说明 | 示例 |
 |------|------|------|------|
@@ -419,6 +454,7 @@ Logging.warn("⚠ 旧语法已弃用，请迁移到新语法: %s" % old_syntax_s
 
 **操作符系统**:
 - `core/model/base_operator.gd` - 基础操作符类
+- `core/model/conditional_operator.gd` - 条件操作符（中断事件使用）
 - `core/model/property_operator.gd` - 属性操作符
 - `core/model/trait_operator.gd` - 特性操作符
 - `core/operators/flag_operator.gd` - 标志位操作符

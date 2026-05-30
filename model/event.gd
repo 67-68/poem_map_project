@@ -10,27 +10,20 @@ class_name BaseEvent extends GameEntity
 # ──────────────────────────────────────────────
 # Pre-event Interruption Sequence（前置中断序列）
 # ──────────────────────────────────────────────
-# 按优先级排列的中断处理器列表。每个 step 包含一个 requirement（守卫）
-# 和一个 operator（应为 PushEventOperator / PopEventOperator）。
+# 每个 step 是一个 ConditionalOperator，包含：
+#   - condition:               BaseRequirements（守卫条件）
+#   - condition_success_result: Array[BaseOperator]（条件通过后执行的操作）
 #
-# check_interruption(context) 按优先级顺序检查：
-#   1. init requirement + operator（从 context 解析参数）
-#   2. requirement.compare(PlayerState) 检查
-#      - ✅ 通过 → 执行 operator（push/pop 替代事件到栈），然后 break
+# check_interruption(context) 按优先级顺序检查（first-match-wins）：
+#   1. init condition + success operators（从 context 解析参数）
+#   2. condition.compare(PlayerState) 检查
+#      - ✅ 通过 → 执行 success operators，然后 break
 #      - ❌ 失败 → 跳过，尝试下一个 step
-#   3. 首个通过的 step 胜出（first-match-wins），后续 steps 不再检查
+#   3. 首个通过的 step 胜出，后续不再检查
 #
 # 典型场景：事件触发前检查多个条件，按优先级决定是否用另一个事件替代。
 # ──────────────────────────────────────────────
-class InterruptionStep:
-    var requirement: BaseRequirements
-    var operator: BaseOperator  # 应为 PushEventOperator 或 PopEventOperator
-
-    func _init(p_requirement: BaseRequirements = null, p_operator: BaseOperator = null):
-        requirement = p_requirement
-        operator = p_operator
-
-var pre_event_interrupter_sequence: Array[InterruptionStep] = []
+var pre_event_interrupter_sequence: Array[ConditionalOperator] = []
 
 func check_interruption(context: Dictionary) -> void:
     """
@@ -46,32 +39,34 @@ func check_interruption(context: Dictionary) -> void:
     Logging.debug('check_interruption: %d steps in sequence' % pre_event_interrupter_sequence.size())
 
     for i in range(pre_event_interrupter_sequence.size()):
-        var step = pre_event_interrupter_sequence[i]
+        var step: ConditionalOperator = pre_event_interrupter_sequence[i]
         if not step:
             Logging.warn('check_interruption: found null step at index %d, skipping' % i)
             continue
 
-        # 1. init 阶段：让 requirement 和 operator 从 context 解析参数
-        if step.requirement:
-            step.requirement.init(context)
-        if step.operator:
-            step.operator.init(context)
+        # 1. init 阶段：让 condition 和 success operators 从 context 解析参数
+        if step.condition:
+            step.condition.init(context)
+        for op in step.condition_success_result:
+            if op:
+                op.init(context)
 
-        # 2. 检查 requirement —— 守卫逻辑
+        # 2. 检查 condition —— 守卫逻辑
         var passed: bool = true
-        if step.requirement:
-            passed = step.requirement.compare(PlayerState)
+        if step.condition:
+            passed = step.condition.compare(PlayerState)
 
         if not passed:
-            Logging.debug('check_interruption: step %d requirement failed, trying next step' % i)
+            Logging.debug('check_interruption: step %d condition failed, trying next step' % i)
             continue
 
-        # 3. requirement 通过 → 执行 operator（push/pop event），然后结束
-        Logging.debug('check_interruption: step %d passed, executing operator and breaking' % i)
-        if step.operator:
-            step.operator.operate()
-        else:
-            Logging.warn('check_interruption: step %d passed but operator is null, no action taken' % i)
+        # 3. condition 通过 → 执行 success operators（push/pop event），然后结束
+        Logging.debug('check_interruption: step %d passed, executing %d operators and breaking' % [i, step.condition_success_result.size()])
+        for op in step.condition_success_result:
+            if op:
+                op.operate()
+            else:
+                Logging.warn('check_interruption: step %d contains null operator in success_result' % i)
 
         Logging.debug('check_interruption: resolved at step %d, sequence done' % i)
         return  # first-match-wins
