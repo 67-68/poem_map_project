@@ -59,10 +59,13 @@ func operate():
         Logging.debug('PoemTypeChooseOperator: Found POEM trait %s' % t)
         data.append(trait_)
 
-    Logging.debug('PoemTypeChooseOperator: Emitting start_picker with %d poem traits' % data.size())
-    EventBus.start_picker.emit(data)
-    var trait_picked = await EventBus.end_picking
-    
+    # 🏗️ 不再直接 await end_picking，改为推入事件栈顶
+    # 这样 Picker 受 _is_active 保护，不会被栈上新事件覆盖
+    Logging.debug('PoemTypeChooseOperator: Pushing picker to stack with %d poem traits' % data.size())
+    EventBus.push_picker.emit(data, _on_trait_picked)
+
+
+func _on_trait_picked(trait_picked):
     #breakpoint
     if not trait_picked:
         poem_taste.not_entered_result.operate()
