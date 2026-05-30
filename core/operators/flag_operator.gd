@@ -11,8 +11,11 @@ class_name FlagOperator extends BaseOperator
 @export var value: Variant
 @export_enum(
 		'set',
-		'append'
+		'append',
+		'reduce_if_above'
 ) var operation := 'set'
+@export var threshold: int = 0
+@export var amount: int = 0
 @export var target_flag_id_from_context: String = ''
 
 func init(_context: Dictionary) -> Dictionary:
@@ -60,6 +63,18 @@ func operate():
 				PlayerState.set_flag(flag_id, int(value), 'int')
 			elif operation == 'append':
 				PlayerState.append_flag(flag_id, int(value))
+			elif operation == 'reduce_if_above':
+				var current = PlayerState.get_flag(flag_id)
+				if current == null:
+					Logging.warn('FlagOperator.reduce_if_above: flag "%s" is null, skipping' % flag_id)
+					return
+				var current_int = int(current)
+				if current_int > threshold:
+					var new_val = current_int - amount
+					PlayerState.set_flag(flag_id, new_val, 'int')
+					Logging.debug('FlagOperator.reduce_if_above: flag "%s" reduced from %d to %d (threshold=%d, amount=%d)' % [flag_id, current_int, new_val, threshold, amount])
+				else:
+					Logging.debug('FlagOperator.reduce_if_above: flag "%s" value %d <= threshold %d, no change' % [flag_id, current_int, threshold])
 		'bool':
 			if operation == 'set':
 				var bool_str = str(value).to_lower()

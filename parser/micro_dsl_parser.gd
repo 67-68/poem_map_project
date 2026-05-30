@@ -47,6 +47,7 @@ const FUNC_FLAG_STR_SET := "flag_str_set"
 const FUNC_FLAG_STR_APPEND := "flag_str_append"
 const FUNC_FLAG_INT_SET := "flag_int_set"
 const FUNC_FLAG_INT_APPEND := "flag_int_append"
+const FUNC_FLAG_INT_REDUCE_IF_ABOVE := "flag_int_reduce_if_above"
 const FUNC_PUSH_EVENT := "push_event"
 const FUNC_POP_EVENT := "pop_event"
 const FUNC_QUEUE_EVENT := "queue_event"
@@ -92,6 +93,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_FLAG_STR_APPEND] = func(p, r): return _create_flag_operator_str_append(p, r)
 	cd[FUNC_FLAG_INT_SET] = func(p, r): return _create_flag_operator_int_set(p, r)
 	cd[FUNC_FLAG_INT_APPEND] = func(p, r): return _create_flag_operator_int_append(p, r)
+	cd[FUNC_FLAG_INT_REDUCE_IF_ABOVE] = func(p, r): return _create_flag_operator_int_reduce_if_above(p, r)
 	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
 	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
 	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
@@ -392,6 +394,18 @@ static func _create_flag_operator_int_append(parsed: NamedDSLParser.ParseResult,
 	if not _resolve_flag_name(parsed, op, data):
 		return null
 	
+	return op
+
+static func _create_flag_operator_int_reduce_if_above(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
+	var op = FlagOperator.new()
+	op.type = "int"
+	op.operation = "reduce_if_above"
+	op.threshold = NamedDSLParser.get_int_param(parsed, "threshold", 0)
+	op.amount = NamedDSLParser.get_int_param(parsed, "amount", 0)
+
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+
 	return op
 
 # ──────────────────────────────────────────────

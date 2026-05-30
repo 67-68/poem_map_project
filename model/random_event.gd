@@ -17,7 +17,8 @@ func init(context: Dictionary) -> Array:
     var all_options = super.init(context)
     if event_result:
         event_result.init(context)
-    
+        event_result.operate()
+
     return all_options
 
 # 会被使用time operator中的source tag匹配. 由于无法集合两个enum那就单独写再集合

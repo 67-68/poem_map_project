@@ -142,6 +142,19 @@ func test_new_flag_operators():
 	assert_eq(parsed_ops[1].flag_id, "score", "新语法: 第二个flag_id正确")
 	assert_eq(parsed_ops[1].value, 50, "新语法: 第二个值应为50")
 
+func test_new_flag_int_reduce_if_above():
+	var op_str = "flag_int_reduce_if_above(name=score, threshold=100, amount=50)"
+	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
+
+	assert_eq(parsed_ops.size(), 1, "新语法: 应该解析出一个操作符")
+	assert_true(parsed_ops[0] is FlagOperator, "新语法: 应为FlagOperator")
+	var op = parsed_ops[0] as FlagOperator
+	assert_eq(op.flag_id, "score", "新语法: flag_id正确")
+	assert_eq(op.type, "int", "新语法: 类型应为int")
+	assert_eq(op.operation, "reduce_if_above", "新语法: operation应为reduce_if_above")
+	assert_eq(op.threshold, 100, "新语法: threshold应为100")
+	assert_eq(op.amount, 50, "新语法: amount应为50")
+
 func test_new_flag_replace():
 	var op_str = "flag_bool_replace(from=old_status, to=new_status)"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)

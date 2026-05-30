@@ -157,8 +157,8 @@ row_type | template | uuid | context | requirements | title | description | resu
     - 标志位操作:
       - 布尔: `flag_bool_set(name=<标志ID>, val=true/false)` / `flag_bool_replace(name=<标志ID>, old=<旧值>, new=<新值>)`
       - 字符串: `flag_str_set(name=<标志ID>, val=<内容>)` / `flag_str_append(name=<标志ID>, val=<内容>)`
-      - 整数: `flag_int_set(name=<标志ID>, val=<数值>)` / `flag_int_append(name=<标志ID>, val=<数值>)`
-      - 示例: `flag_bool_set(name=flag_bribed, val=true)`, `flag_str_set(name=flag_player_title, val=官员)`
+      - 整数: `flag_int_set(name=<标志ID>, val=<数值>)` / `flag_int_append(name=<标志ID>, val=<数值>)` / `flag_int_reduce_if_above(name=<标志ID>, threshold=<阈值>, amount=<减量>)`
+      - 示例: `flag_bool_set(name=flag_bribed, val=true)`, `flag_str_set(name=flag_player_title, val=官员)`, `flag_int_reduce_if_above(name=score, threshold=100, amount=50)`
     - 栈事件操作:
       - `push_event(event_key=<事件KEY>)` — 将事件推入栈顶（LIFO），当前事件结束后优先播放
       - `pop_event()` — 弹出当前栈顶事件，播放下一个栈中事件

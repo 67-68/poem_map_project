@@ -178,6 +178,7 @@ flag_bool_has(name=flag_visited_palace), prop_gt(name=money, val=100)
 | `flag_str_append` | name, val | 追加字符串标志 | `flag_str_append(name=log, val=新事件)` |
 | `flag_int_set` | name, val | 设置整数标志 | `flag_int_set(name=score, val=100)` |
 | `flag_int_append` | name, val | 追加整数标志 | `flag_int_append(name=score, val=50)` |
+| `flag_int_reduce_if_above` | name, threshold, amount | 整数标志超过阈值则减量 | `flag_int_reduce_if_above(name=score, threshold=100, amount=50)` |
 
 #### 3.5 栈事件操作符
 
@@ -268,6 +269,7 @@ Event_ID,Trigger_Tags,requirements,Title,Desc,background,weight,Opt_A_Text,Opt_A
 | `flag:str:set:name:李四` | `flag_str_set(name=name, val=李四)` |
 | `flag:int:add:score:50` | `flag_int_append(name=score, val=50)` |
 | `flag:int:set:health:100` | `flag_int_set(name=health, val=100)` |
+| _（无旧语法）_ | `flag_int_reduce_if_above(name=score, threshold=100, amount=50)` |
 | `push_event` | `push_event(event_key=evt_aftermath)`（新语法） |
 | `pop_event` | `pop_event()`（新语法） |
 | `queue_event`（新增） | `queue_event(event_key=evt_aftermath)`（新语法） |
