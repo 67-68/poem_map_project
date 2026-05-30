@@ -143,6 +143,14 @@ flag_bool_has(name=flag_visited_palace), prop_gt(name=money, val=100)
 | `flag_int_set` | name, val | 设置整数标志 | `flag_int_set(name=score, val=100)` |
 | `flag_int_append` | name, val | 追加整数标志 | `flag_int_append(name=score, val=50)` |
 | `flag_int_reduce_if_above` | name, threshold, amount | 整数标志超过阈值则减量 | `flag_int_reduce_if_above(name=score, threshold=100, amount=50)` |
+| `temp_flag_bool_set` | name, val | **临时**设置布尔标志（会话结束自动回滚） | `temp_flag_bool_set(name=temp_has_key, val=true)` |
+| `temp_flag_str_set` | name, val | **临时**设置字符串标志（会话结束自动回滚） | `temp_flag_str_set(name=temp_title, val=TR_Drunk)` |
+| `temp_flag_str_append` | name, val | **临时**追加字符串标志 | `temp_flag_str_append(name=temp_log, val=新事件)` |
+| `temp_flag_int_set` | name, val | **临时**设置整数标志 | `temp_flag_int_set(name=temp_score, val=100)` |
+| `temp_flag_int_append` | name, val | **临时**追加整数标志 | `temp_flag_int_append(name=temp_score, val=50)` |
+| `temp_flag_int_reduce_if_above` | name, threshold, amount | **临时**整数标志超过阈值则减量 | `temp_flag_int_reduce_if_above(name=temp_score, threshold=100, amount=50)` |
+
+> 💡 **临时标志位**：前缀 `temp_` 的标志位操作符（`temp_flag_*`）与普通 `flag_*` 功能完全一致，但会自动注册反向清理算子到 `PlayerState.session_deferred_cleanups`。当会话/场景结束时，调用 `PlayerState.flush_cleanups()` 即可逆序回滚所有临时 flag，恢复到操作前状态。适用于场景内临时状态（如进入某区域的标记），无需手动清理。
 
 ### 3.5 栈事件操作符
 

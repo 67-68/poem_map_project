@@ -6,6 +6,7 @@
 script = ExtResource("1_44wta")
 resources = {
 "drink_with_libai": "res://data/random_events/drink_with_libai.tres",
+"event_changhe_guest": "res://data/random_events/event_changhe_guest.tres",
 "event_chat_guest": "res://data/random_events/event_chat_guest.tres",
 "event_talk_guest": "res://data/random_events/event_talk_guest.tres",
 "jiaoyou_poem_public": "res://data/random_events/jiaoyou_poem_public.tres",

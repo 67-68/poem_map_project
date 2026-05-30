@@ -11,11 +11,29 @@ class_name FlagRequirement extends BaseRequirements
 @export var value: Variant
 @export var operator: REQ_OPERATOR.COMPARE = REQ_OPERATOR.COMPARE.GREATER_THAN
 @export var failed_hint: String
+## 动态 flag 名称：从 context 中取指定 key 的值作为 flag_id
+## 与 FlagOperator.target_flag_id_from_context 行为一致
+@export var target_flag_id_from_context: String = ""
+## flag_id 前缀：在 target_flag_id_from_context 解析后拼接到 flag_id 前面
+## 例如 prefix="talked_to_" + resolved="libai" → flag_id="talked_to_libai"
+@export var flag_id_prefix: String = ""
 
 func get_referenced_flags() -> Array:
 	if flag_id.is_empty():
 		return []
 	return [flag_id]
+
+func init(context: Dictionary) -> Dictionary:
+	# 动态解析 flag_id：如果 target_flag_id_from_context 不为空，
+	# 从 context 中取出对应的值作为运行时 flag_id
+	if not target_flag_id_from_context.is_empty():
+		var resolved = context.get(target_flag_id_from_context)
+		if resolved != null:
+			flag_id = flag_id_prefix + str(resolved)
+			Logging.debug('FlagRequirement.init: resolved flag_id from context key "%s" -> "%s" (prefix="%s")' % [target_flag_id_from_context, flag_id, flag_id_prefix])
+		else:
+			Logging.warn('FlagRequirement.init: context key "%s" not found, flag_id remains "%s"' % [target_flag_id_from_context, flag_id])
+	return context
 
 func compare(_player_state: PlayerState) -> bool:
 	if not PlayerState.has_flag(flag_id):

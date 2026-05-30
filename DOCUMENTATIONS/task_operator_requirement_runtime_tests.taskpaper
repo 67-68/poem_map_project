@@ -1,0 +1,60 @@
+Operator & Requirement 运行时测试 — 任务拆分:
+概述: 为 TempFlagOperator 和 FlagRequirement 添加运行时 (operate/compare) 测试。现有测试只覆盖了 DSL 解析层，没有任何代码调用过 .operate() 或 .compare()。
+预计工时: 2-3 小时
+测试框架: GUT (Godot Unit Test)
+测试文件: tests/test_operators_runtime.gd
+
+Phase 1: 测试基础设施搭建:
+估算: 15min
+[ ] 创建 tests/test_operators_runtime.gd (extends GutTest)
+[ ] 实现 before_each: 清理 PlayerState.flags.clear() 和 PlayerState.session_deferred_cleanups.clear()
+[ ] 确认 Database.flags 在 @tool 模式下的可用性
+
+Phase 2: TempFlagOperator — bool/set 分支:
+估算: 20min
+涉及文件: core/operators/temp_flag_operator.gd:19-71, core/operators/flag_operator.gd:50-88
+[ ] test_tempflag_bool_set_with_prior_value(): 预设 flag=true, set false -> 操作后 false, 清理算子 value=true, flush 后恢复 true
+[ ] test_tempflag_bool_set_without_prior_value(): 无 flag, set true -> 操作后 true, 清理算子 value=false, flush 后移除
+
+Phase 3: TempFlagOperator — str/set 分支:
+估算: 15min
+[ ] test_tempflag_str_set_with_prior_value(): 预设 flag="hello", set "world" -> 清理算子 value="hello", flush 后恢复 "hello"
+[ ] test_tempflag_str_set_without_prior_value(): 无 flag, set "temp" -> 清理算子 value="", flush 后移除
+
+Phase 4: TempFlagOperator — int/set 与 int/append 分支:
+估算: 25min
+[ ] test_tempflag_int_set_with_prior_value(): 预设 flag=100, set 50 -> flush 后恢复 100
+[ ] test_tempflag_int_set_without_prior_value(): 无 flag, set 30 -> flush 后恢复 0
+[ ] test_tempflag_int_append(): 预设 flag=10, append 5 -> flag=15, 清理算子 append -5, flush 后恢复 10
+[ ] test_tempflag_int_append_no_prior(): 无 flag, append 5 -> flag=5, flush 后恢复 0
+
+Phase 5: TempFlagOperator — int/reduce_if_above 分支 (最复杂):
+估算: 25min
+[ ] test_tempflag_reduce_if_above_reduced(): 预设 flag=100, threshold=50, amount=30 -> 操作后 70, 清理算子 append 30, flush 后 100
+[ ] test_tempflag_reduce_if_above_not_reduced(): 预设 flag=30, threshold=50 -> 不满足条件, flag 不变, 不注册清理
+
+Phase 6: FlagRequirement — str 类型比较:
+估算: 20min
+涉及文件: core/requirements/flag_requirement.gd:20-71, core/player_state.gd:275-276
+[ ] test_flagreq_str_equal(): 预设 flag="hello", operator=EQUAL -> compare 返回 true
+[ ] test_flagreq_str_not_equal(): value="world", operator=NOT_EQUAL -> compare 返回 true
+[ ] test_flagreq_str_not_set(): 无 flag, value="" operator=EQUAL -> compare 返回 true (null 兜底)
+
+Phase 7: FlagRequirement — int 类型比较:
+估算: 20min
+[ ] test_flagreq_int_gt(): 预设 flag=100, operator=GREATER_THAN value=50 -> true
+[ ] test_flagreq_int_lt(): operator=LESS_THAN value=200 -> true
+[ ] test_flagreq_int_eq(): operator=EQUAL value=100 -> true
+[ ] test_flagreq_int_ne(): operator=NOT_EQUAL value=50 -> true
+[ ] test_flagreq_int_not_set(): 无 flag, operator=EQUAL value=0 -> true (null 兜底为 0)
+
+Phase 8: FlagRequirement — bool 类型比较:
+估算: 15min
+[ ] test_flagreq_bool_has(): 预设 flag=true, operator=GREATER_THAN value=false -> true
+[ ] test_flagreq_bool_not_has(): 预设 flag=true, operator=LESS_THAN value=true -> false (1 < 1)
+[ ] test_flagreq_bool_not_set(): 无 flag, operator=LESS_THAN value=true -> true (false < true)
+
+Phase 9: 运行测试并修复:
+估算: 15min
+[ ] godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -gselect=test_operators_runtime.gd
+[ ] 修复任何失败的断言

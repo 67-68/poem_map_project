@@ -5,3 +5,6 @@ chain_strange_poet_2,bool,FALSE
 chain_strange_poet_3,bool,FALSE
 flag_relation_with_libai,int,0
 flag_libai_changhe_shown,bool,FALSE
+talked_to_libai,bool,FALSE
+talked_to_wangwei,bool,FALSE
+talked_to_dengqian,bool,FALSE

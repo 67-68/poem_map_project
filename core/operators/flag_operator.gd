@@ -17,6 +17,9 @@ class_name FlagOperator extends BaseOperator
 @export var threshold: int = 0
 @export var amount: int = 0
 @export var target_flag_id_from_context: String = ''
+## flag_id 前缀：在 target_flag_id_from_context 解析后拼接到 flag_id 前面
+## 例如 prefix="talked_to_" + resolved="libai" → flag_id="talked_to_libai"
+@export var flag_id_prefix: String = ''
 
 func init(_context: Dictionary) -> Dictionary:
 	#breakpoint
@@ -26,8 +29,8 @@ func init(_context: Dictionary) -> Dictionary:
 
 	var flag_uid = _context.get(target_flag_id_from_context)
 	if flag_uid:
-		flag_id = flag_uid
-		Logging.debug('FlagOperator.init: resolved flag_id from context key "%s" -> "%s"' % [target_flag_id_from_context, flag_id])
+		flag_id = flag_id_prefix + str(flag_uid)
+		Logging.debug('FlagOperator.init: resolved flag_id from context key "%s" -> "%s" (prefix="%s")' % [target_flag_id_from_context, flag_id, flag_id_prefix])
 	else:
 		Logging.warn('FlagOperator.init: context key "%s" not found in context, flag_id remains "%s"' % [target_flag_id_from_context, flag_id])
 	return _context

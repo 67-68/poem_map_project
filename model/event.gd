@@ -23,7 +23,8 @@ class_name BaseEvent extends GameEntity
 #
 # 典型场景：事件触发前检查多个条件，按优先级决定是否用另一个事件替代。
 # ──────────────────────────────────────────────
-var pre_event_interrupter_sequence: Array[ConditionalOperator] = []
+# ⚡ 移除 :Array 类型标注，避免 @tool 模式下 .tres 序列化为 null 后赋值 Array 被拒绝 💀
+@export var pre_event_interrupter_sequence = []
 
 func check_interruption(context: Dictionary) -> void:
     """

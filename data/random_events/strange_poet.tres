@@ -31,6 +31,7 @@ trait_name = "main_jiaoyou_1"
 script = ExtResource("8_g0ewv")
 requirement = SubResource("Resource_1lxqv")
 options = Array[ExtResource("2_1mi3i")]([SubResource("Resource_ok3pw")])
+pre_event_interrupter_sequence = null
 uuid = "strange_poet"
 name = "奇怪的诗人"
 description = "你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。"

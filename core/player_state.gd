@@ -13,6 +13,10 @@ extends Node
 var emotions: Dictionary = {}
 var flags: Dictionary = {}  # flag_id -> value (str/int/bool)
 
+# 存活于整个"玩法会话"（如整场宴会）的析构队列
+# TempFlagOperator 会在这里注册反向清理算子
+var session_deferred_cleanups: Array[BaseOperator] = []
+
 signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
 signal location_changed(location)
@@ -298,9 +302,41 @@ func clear_ambition():
 
 func get_location():
 	var loc = Database.territories.get(current_location)
-	if loc == null: 
+	if loc == null:
 		loc = Database.base_province.get(current_location)
 	if not loc:
 		Logging.err('do not find location %s' % current_location)
 		return null
 	return loc
+
+
+# ═══════════════════════════════════════════════════════
+# 临时标志位清理系统
+# ═══════════════════════════════════════════════════════
+
+## 注册一个反向清理算子到会话级析构队列
+## TempFlagOperator.operate() 内部会自动调用此方法
+func defer_cleanup(cleanup_operator: BaseOperator):
+	session_deferred_cleanups.append(cleanup_operator)
+	Logging.info('defer_cleanup: registered cleanup for flag "%s"' % cleanup_operator.flag_id)
+
+
+## 逆序执行所有已注册的清理算子（LIFO），然后清空队列
+## 应在会话/场景切换时调用（如宴会结束、大规模场景切换）
+func flush_cleanups():
+	var count = session_deferred_cleanups.size()
+	if count == 0:
+		return
+
+	Logging.info('flush_cleanups: executing %d deferred cleanups (LIFO order)' % count)
+
+	# 逆序执行，后污染的先清理，保证状态回滚的安全
+	for i in range(count - 1, -1, -1):
+		var op = session_deferred_cleanups[i] as BaseOperator
+		if op:
+			op.operate()
+		else:
+			Logging.warn('flush_cleanups: null operator at index %d, skipping' % i)
+
+	session_deferred_cleanups.clear()
+	Logging.info('flush_cleanups: all cleanups executed, queue cleared')

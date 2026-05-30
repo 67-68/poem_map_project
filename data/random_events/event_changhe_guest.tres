@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://d3uk6n7lnnlik"]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_1wuxs"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_1062v"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_gnicc"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="3_nby8q"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_me15v"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_hnt5p"]
+
+[sub_resource type="Resource" id="Resource_n45vk"]
+script = ExtResource("4_me15v")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_ego0v"]
+script = ExtResource("5_hnt5p")
+choice_result = SubResource("Resource_n45vk")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("3_nby8q")
+weight = 0.0
+options = Array[ExtResource("2_1062v")]([SubResource("Resource_ego0v"), null])
+pre_event_interrupter_sequence = null
+uuid = "event_changhe_guest"
+name = "和@{target_npc}唱和"
+description = "对方等待着你先出一首诗"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

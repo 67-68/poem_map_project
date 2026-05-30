@@ -16,6 +16,43 @@ static func _get_row_depth(row: Dictionary) -> int:
                 return val.length()
     return 0
 
+# ──────────────────────────────────────────────
+# CSV 数据 Linter 验证：检测 results 列中的 requirement-only 函数
+# ──────────────────────────────────────────────
+# 场景：用户在 Google Sheets 中把 requirement 函数（如 flag_int_lt）
+# 错误地填在 results 列。此函数仅做验证报错，不自动修数据。
+# 数据问题需要在 Google Sheets 源头手动修复。
+#
+# 已知的 requirement-only 函数名列表（来自 MicroDSLParser._requirement_dispatch）
+const _REQUIREMENT_ONLY_FUNCS: Array[String] = [
+    "prop_gt", "prop_lt",
+    "trait_has", "trait_not_has",
+    "flag_bool_has", "flag_bool_not_has",
+    "flag_str_is", "flag_str_not",
+    "flag_int_gt", "flag_int_lt", "flag_int_eq", "flag_int_ne",
+]
+
+# Linter 验证：检测 results 列中是否有 requirement-only 函数并报错
+# 🚨 不修改数据，只报错。数据问题需在 Google Sheets 源头修复。
+static func _lint_results_column(results_str: String, uuid: String) -> void:
+    if results_str.is_empty():
+        return
+    
+    var expressions = NamedDSLParser.split_expressions(results_str)
+    if expressions.is_empty():
+        return
+    
+    for expr in expressions:
+        var clean_expr = expr.strip_edges()
+        if clean_expr.is_empty():
+            continue
+        var paren_idx = clean_expr.find("(")
+        if paren_idx == -1:
+            continue
+        var func_name = clean_expr.substr(0, paren_idx).strip_edges()
+        if _REQUIREMENT_ONLY_FUNCS.find(func_name) != -1:
+            Logging.err("[Linter] 事件 '%s' 的 results 列包含了 requirement 函数 '%s'，请将其迁移到 requirements 列 💀" % [uuid, clean_expr])
+
 # 解析 context DSL 字段
 # 语法格式（用 | 分隔字段，避免与 tag 内部的逗号冲突）：
 #   tag:tagA:sub:cat:attr,tagB:sub:cat:attr|weight:15.5|background:(bg_rural_poor)|customKey:customValue
@@ -292,7 +329,12 @@ static func parse_interruption_field(interruption_str: String) -> ConditionalOpe
         return null
     
     var requirement_syntax = args[0].strip_edges()
-    var operator_syntax = args[1].strip_edges()
+    # 合并剩余参数作为 operators（args[1..] 都是 operator，可能存在多个）
+    var operator_syntax = ""
+    for i in range(1, args.size()):
+        if i > 1:
+            operator_syntax += ", "
+        operator_syntax += args[i].strip_edges()
     
     # 解析 requirement
     var requirement: BaseRequirements = null
@@ -319,9 +361,11 @@ static func parse_interruption_field(interruption_str: String) -> ConditionalOpe
 
 
 # 解析 interruptions 列（支持多个 interrupt_event() 调用，逗号分隔）
-# 返回 Array[ConditionalOperator]
-static func parse_interruptions_field(interruptions_str: String) -> Array[ConditionalOperator]:
-    var results: Array[ConditionalOperator] = []
+# ⚡ 返回非类型化 Array，因为 BaseEvent.pre_event_interrupter_sequence 声明为 @export var ...: Array = []
+# 使用类型化返回值 Array[ConditionalOperator] 在 @tool 模式下赋值给 @export Array 属性会导致
+# "Invalid assignment of property or key" 错误，进而导致整个 parse_random_event 函数中断 💀
+static func parse_interruptions_field(interruptions_str: String) -> Array:
+    var results: Array = []
     
     if interruptions_str.is_empty():
         return results
@@ -420,6 +464,8 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 解析事件级别结果（即使不选选项也会执行）
     var results_str = row.get('results')
     if results_str and not results_str.is_empty():
+        # 🚨 Linter 检查：results 列中不应包含 requirement 函数
+        _lint_results_column(results_str, uuid)
         event.event_result = parse_choice_result(results_str)
 
     # 解析情绪配置（目前仅 event 级别支持，未来 option 可能也有自己的 emotion_config）
@@ -499,6 +545,7 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
     # 选项的结果（选择后执行）
     var results_str = row.get('results')
     if results_str and not results_str.is_empty():
+        _lint_results_column(results_str, uuid)
         event.event_result = parse_choice_result(results_str)
 
     # 选项的 emotion_config：虽然未来 option 可能也有自己的 config
@@ -531,7 +578,7 @@ static func parse_flag(row: Dictionary) -> Flag:
     # 解析必需字段 flag_id
     var flag_id = row.get('flag_id')
     if not flag_id or flag_id.is_empty():
-        push_error("flag_id is required")
+        Logging.err("parse_flag: flag_id is required")
         return null
     flag.uuid = flag_id
 
@@ -866,7 +913,7 @@ static func parse_trait(row: Dictionary) -> Trait:
 
     var trait_id = row.get('trait_id')
     if not trait_id or trait_id.is_empty():
-        push_error("trait_id is required")
+        Logging.err("parse_trait: trait_id is required")
         return null
     trait_.uuid = trait_id
 
@@ -1041,6 +1088,8 @@ static func _pda_transition(stack: Array[RandomEvent], resources: Array[Resource
             var event = parse_random_event(row)
             if event:
                 stack.push_back(event)
+            else:
+                Logging.warn("random_event 解析失败 (row %d)，该行被跳过，后续 option 将找不到父事件 💀" % (row_index + 1))
         
         "option":
             if stack.is_empty():

@@ -32,6 +32,7 @@ value = true
 script = ExtResource("8_20sti")
 requirement = SubResource("Resource_dmfue")
 options = Array[ExtResource("2_yctuc")]([SubResource("Resource_bnl0p")])
+pre_event_interrupter_sequence = null
 uuid = "libai_after"
 name = "奇怪的诗人4"
 description = "他专门来感谢我"

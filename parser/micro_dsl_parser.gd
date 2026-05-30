@@ -50,6 +50,15 @@ const FUNC_FLAG_STR_APPEND := "flag_str_append"
 const FUNC_FLAG_INT_SET := "flag_int_set"
 const FUNC_FLAG_INT_APPEND := "flag_int_append"
 const FUNC_FLAG_INT_REDUCE_IF_ABOVE := "flag_int_reduce_if_above"
+
+# Temp flag variants — 临时标志位，自动注册反向清理算子
+const FUNC_TEMP_FLAG_BOOL_SET := "temp_flag_bool_set"
+const FUNC_TEMP_FLAG_STR_SET := "temp_flag_str_set"
+const FUNC_TEMP_FLAG_STR_APPEND := "temp_flag_str_append"
+const FUNC_TEMP_FLAG_INT_SET := "temp_flag_int_set"
+const FUNC_TEMP_FLAG_INT_APPEND := "temp_flag_int_append"
+const FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE := "temp_flag_int_reduce_if_above"
+
 const FUNC_PUSH_EVENT := "push_event"
 const FUNC_POP_EVENT := "pop_event"
 const FUNC_QUEUE_EVENT := "queue_event"
@@ -99,6 +108,12 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_FLAG_INT_SET] = func(p, r): return _create_flag_operator_int_set(p, r)
 	cd[FUNC_FLAG_INT_APPEND] = func(p, r): return _create_flag_operator_int_append(p, r)
 	cd[FUNC_FLAG_INT_REDUCE_IF_ABOVE] = func(p, r): return _create_flag_operator_int_reduce_if_above(p, r)
+	cd[FUNC_TEMP_FLAG_BOOL_SET] = func(p, r): return _create_temp_flag_operator_bool_set(p, r)
+	cd[FUNC_TEMP_FLAG_STR_SET] = func(p, r): return _create_temp_flag_operator_str_set(p, r)
+	cd[FUNC_TEMP_FLAG_STR_APPEND] = func(p, r): return _create_temp_flag_operator_str_append(p, r)
+	cd[FUNC_TEMP_FLAG_INT_SET] = func(p, r): return _create_temp_flag_operator_int_set(p, r)
+	cd[FUNC_TEMP_FLAG_INT_APPEND] = func(p, r): return _create_temp_flag_operator_int_append(p, r)
+	cd[FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE] = func(p, r): return _create_temp_flag_operator_int_reduce_if_above(p, r)
 	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
 	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
 	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
@@ -413,6 +428,84 @@ static func _create_flag_operator_int_reduce_if_above(parsed: NamedDSLParser.Par
 		return null
 
 	return op
+
+# ──────────────────────────────────────────────
+# Temp flag operator 辅助创建方法
+# 与 flag_* 对应，但返回 TempFlagOperator 而非 FlagOperator
+# ──────────────────────────────────────────────
+
+static func _create_temp_flag_operator_bool_set(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
+	var op = TempFlagOperator.new()
+	op.type = "bool"
+	op.operation = "set"
+	op.value = NamedDSLParser.get_bool_param(parsed, "val", true)
+
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+
+	return op
+
+
+static func _create_temp_flag_operator_str_set(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
+	var op = TempFlagOperator.new()
+	op.type = "str"
+	op.operation = "set"
+	op.value = NamedDSLParser.get_str_param(parsed, "val")
+
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+
+	return op
+
+
+static func _create_temp_flag_operator_str_append(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
+	var op = TempFlagOperator.new()
+	op.type = "str"
+	op.operation = "append"
+	op.value = NamedDSLParser.get_str_param(parsed, "val")
+
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+
+	return op
+
+
+static func _create_temp_flag_operator_int_set(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
+	var op = TempFlagOperator.new()
+	op.type = "int"
+	op.operation = "set"
+	op.value = NamedDSLParser.get_int_param(parsed, "val")
+
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+
+	return op
+
+
+static func _create_temp_flag_operator_int_append(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
+	var op = TempFlagOperator.new()
+	op.type = "int"
+	op.operation = "append"
+	op.value = NamedDSLParser.get_int_param(parsed, "val")
+
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+
+	return op
+
+
+static func _create_temp_flag_operator_int_reduce_if_above(parsed: NamedDSLParser.ParseResult, data: String) -> BaseOperator:
+	var op = TempFlagOperator.new()
+	op.type = "int"
+	op.operation = "reduce_if_above"
+	op.threshold = NamedDSLParser.get_int_param(parsed, "threshold", 0)
+	op.amount = NamedDSLParser.get_int_param(parsed, "amount", 0)
+
+	if not _resolve_flag_name(parsed, op, data):
+		return null
+
+	return op
+
 
 # ──────────────────────────────────────────────
 # 辅助方法：创建各种操作符/需求对象

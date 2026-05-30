@@ -32,5 +32,6 @@ description = "libai_hejiu_2(15好感以上)"
 script = ExtResource("4_r81hc")
 weight = 0.0
 options = Array[ExtResource("2_1byd7")]([SubResource("Resource_tlaoo"), SubResource("Resource_ofawl")])
+pre_event_interrupter_sequence = null
 uuid = "libai_welcome_hejiu"
 name = "李白邀请喝酒"

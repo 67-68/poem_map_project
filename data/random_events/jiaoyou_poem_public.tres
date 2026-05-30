@@ -30,5 +30,6 @@ description = "献上诗词"
 [resource]
 script = ExtResource("7_8gk6h")
 options = Array[ExtResource("2_7dyke")]([SubResource("Resource_7dyke")])
+pre_event_interrupter_sequence = null
 uuid = "jiaoyou_poem_public"
 name = "交游呈现诗词公开"
