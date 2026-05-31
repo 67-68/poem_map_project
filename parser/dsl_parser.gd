@@ -555,13 +555,18 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     var _dsl_template_str = row.get('template', '')
     _lint_dsl_field(_dsl_template_str, "template", uuid)
 
-    # 解析事件级别结果（即使不选选项也会执行）
-    var results_str = row.get('results')
-    if results_str and not results_str.is_empty():
-        # 🚨 Linter 检查：results 列中不应包含 requirement 函数
-        _lint_results_column(results_str, uuid)
-        _lint_dsl_field(results_str, "results", uuid)
-        event.event_result = parse_choice_result(results_str)
+    # 🚨 旧版 results 列检测：如果在 event row 上发现 results 列，报错
+    var legacy_results_str = row.get('results')
+    if legacy_results_str and not legacy_results_str.is_empty():
+        Logging.err("Event '%s' (uuid=%s): 'results' column is no longer supported for event rows. Use 'on_enter' column instead. See DOCUMENTATIONS/events/operator_variable_lifecycle.md §9.3" % [event.name, uuid])
+
+    # 解析 on_enter 结果（舞台置景，即使不选选项也会执行）
+    # 对应三层铁幕契约第一层：Event on_enter
+    # 参见 DOCUMENTATIONS/events/operator_variable_lifecycle.md §9.3
+    var on_enter_str = row.get('on_enter')
+    if on_enter_str and not on_enter_str.is_empty():
+        _lint_dsl_field(on_enter_str, "on_enter", uuid)
+        event.on_enter_result = parse_choice_result(on_enter_str)
 
     # 解析情绪配置（目前仅 event 级别支持，未来 option 可能也有自己的 emotion_config）
     var emotion_config_str = row.get('emotion_config', '')
@@ -627,7 +632,7 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
         event.name = template_result.description
         event.description = template_result.description
         event.requirement = template_result.requirement
-        event.event_result = template_result.choice_result
+        event.on_enter_result = template_result.choice_result
     else:
         # 无 template / 类型不匹配 → 创建新对象
         event = RandomEvent.new({})
@@ -654,11 +659,13 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
     _lint_text_field(event.description, "description", uuid)
 
     # 选项的结果（选择后执行）
+    # 注意：选项行的 results 列设置的是 choice_result（通过 on_enter_result 传递），
+    # 不同于事件行的 on_enter 列。
     var results_str = row.get('results')
     _lint_dsl_field(results_str if results_str != null else "", "results", uuid)
     if results_str and not results_str.is_empty():
         _lint_results_column(results_str, uuid)
-        event.event_result = parse_choice_result(results_str)
+        event.on_enter_result = parse_choice_result(results_str)
 
     # 选项的 emotion_config：虽然未来 option 可能也有自己的 config
     # 但目前只有 event 有，option 忽略并 warn（如果写了的话）
@@ -1271,7 +1278,7 @@ static func _pda_transition(stack: Array[RandomEvent], resources: Array[Resource
                     var opt = EventOption.new()
                     opt.description = opt_event.name
                     opt.requirement = opt_event.requirement
-                    opt.choice_result = opt_event.event_result
+                    opt.choice_result = opt_event.on_enter_result
                     opt.custom_context_params = opt_event.custom_context_params.duplicate()
                     
                     parent.options.append(opt)

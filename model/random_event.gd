@@ -42,22 +42,37 @@ func _get_property_list() -> Array:
 
 @export var weight: float = 10.0
 @export var requirement: BaseRequirements
-# 事件级别的结果（即使不选任何选项也会执行）
-@export var event_result: ChoiceResult
+# on_enter_result（原名 event_result）已提升到 BaseEvent.on_enter_result
+# 保留注释以提示迁移，不再在此处 @export
 
 # 从 context DSL 解析出的自定义参数，init 时通过 merge_context 合并入 context
 var custom_context_params: Dictionary = {}
 
-func init(context: Dictionary) -> Array:
+# ──────────────────────────────────────────────
+# on_enter — 舞台置景
+# ──────────────────────────────────────────────
+# 重写 BaseEvent.on_enter()，在事件级结果执行之前先合并自定义参数。
+#
+# 执行顺序：
+#   1. custom_context_params merge → context 注入 CSV/DSL 参数
+#   2. super.on_enter() → event_result.init() + event_result.operate()
+#
+# 这确保 event_result 中的 operator 可以读取到 custom_context_params 注入的字段。
+# ──────────────────────────────────────────────
+func on_enter(context: Dictionary) -> void:
     # 将 CSV context 中的自定义参数合并进 init context
+    # 必须在 event_result 之前执行，因为 operator 可能依赖这些参数
     if not custom_context_params.is_empty():
         Util.merge_context(context, custom_context_params)
     
-    var all_options = super.init(context)
-    if event_result:
-        event_result.init(context)
-        event_result.operate()
+    # 执行事件级结果（舞台置景）
+    super.on_enter(context)
 
+
+func init(context: Dictionary) -> Array:
+    # on_enter 已在 super.init() → BaseEvent.init() 中调用，
+    # 所有前置逻辑（custom_context_params merge + event_result）已在 on_enter 中完成。
+    var all_options = super.init(context)
     return all_options
 
 # 会被使用time operator中的source tag匹配. 由于无法集合两个enum那就单独写再集合

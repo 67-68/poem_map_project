@@ -160,6 +160,105 @@ func find_triggerable_item(uuid: String):
 		return event_options[uuid]
 
 
+func find_from_all(key: String):
+	# 遍历所有资源库，按 key（UUID/ID）查找第一个匹配的条目
+	# random_events 是嵌套结构（main_tag -> uuid -> item），需展开搜索
+
+	# ── 核心数据 ──
+	if poet_data.has(key):
+		Logging.info("find_from_all: found key '%s' in poet_data" % key)
+		return poet_data[key]
+	if poem_data.has(key):
+		Logging.info("find_from_all: found key '%s' in poem_data" % key)
+		return poem_data[key]
+	if factions.has(key):
+		Logging.info("find_from_all: found key '%s' in factions" % key)
+		return factions[key]
+	if base_province.has(key):
+		Logging.info("find_from_all: found key '%s' in base_province" % key)
+		return base_province[key]
+	if territories.has(key):
+		Logging.info("find_from_all: found key '%s' in territories" % key)
+		return territories[key]
+	if msger_data.has(key):
+		Logging.info("find_from_all: found key '%s' in msger_data" % key)
+		return msger_data[key]
+
+	# ── 事件数据 ──
+	if history_events.has(key):
+		Logging.info("find_from_all: found key '%s' in history_events" % key)
+		return history_events[key]
+	if normal_poem_events.has(key):
+		Logging.info("find_from_all: found key '%s' in normal_poem_events" % key)
+		return normal_poem_events[key]
+	if legendary_poems.has(key):
+		Logging.info("find_from_all: found key '%s' in legendary_poems" % key)
+		return legendary_poems[key]
+
+	# random_events 是嵌套的，遍历所有 tag bucket
+	for tag_bucket in random_events:
+		if random_events[tag_bucket].has(key):
+			Logging.info("find_from_all: found key '%s' in random_events[%s]" % [key, tag_bucket])
+			return random_events[tag_bucket][key]
+
+	if end_random_events.has(key):
+		Logging.info("find_from_all: found key '%s' in end_random_events" % key)
+		return end_random_events[key]
+	if chat_bubble_data.has(key):
+		Logging.info("find_from_all: found key '%s' in chat_bubble_data" % key)
+		return chat_bubble_data[key]
+	if focused_chat_data.has(key):
+		Logging.info("find_from_all: found key '%s' in focused_chat_data" % key)
+		return focused_chat_data[key]
+	if ambitions.has(key):
+		Logging.info("find_from_all: found key '%s' in ambitions" % key)
+		return ambitions[key]
+	if traits.has(key):
+		Logging.info("find_from_all: found key '%s' in traits" % key)
+		return traits[key]
+	if properties.has(key):
+		Logging.info("find_from_all: found key '%s' in properties" % key)
+		return properties[key]
+	if actions.has(key):
+		Logging.info("find_from_all: found key '%s' in actions" % key)
+		return actions[key]
+	if decisions.has(key):
+		Logging.info("find_from_all: found key '%s' in decisions" % key)
+		return decisions[key]
+	if decided_events.has(key):
+		Logging.info("find_from_all: found key '%s' in decided_events" % key)
+		return decided_events[key]
+
+	# ── 其他数据 ──
+	if imaginaries.has(key):
+		Logging.info("find_from_all: found key '%s' in imaginaries" % key)
+		return imaginaries[key]
+	if tags.has(key):
+		Logging.info("find_from_all: found key '%s' in tags" % key)
+		return tags[key]
+	if flags.has(key):
+		Logging.info("find_from_all: found key '%s' in flags" % key)
+		return flags[key]
+	if life_path_points.has(key):
+		Logging.info("find_from_all: found key '%s' in life_path_points" % key)
+		return life_path_points[key]
+	if poem_taste.has(key):
+		Logging.info("find_from_all: found key '%s' in poem_taste" % key)
+		return poem_taste[key]
+	if npc_document.has(key):
+		Logging.info("find_from_all: found key '%s' in npc_document" % key)
+		return npc_document[key]
+	if event_options.has(key):
+		Logging.info("find_from_all: found key '%s' in event_options" % key)
+		return event_options[key]
+	if state_transistors.has(key):
+		Logging.info("find_from_all: found key '%s' in state_transistors" % key)
+		return state_transistors[key]
+
+	Logging.warn("find_from_all: key '%s' not found in any resource library" % key)
+	return null
+
+
 func load_actual_positions(mesh_size) -> void:
 	wash_positions(base_province, mesh_size)
 	wash_positions(poem_data, mesh_size, true)

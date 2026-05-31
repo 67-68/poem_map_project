@@ -26,6 +26,56 @@ class_name BaseEvent extends GameEntity
 # ⚡ 移除 :Array 类型标注，避免 @tool 模式下 .tres 序列化为 null 后赋值 Array 被拒绝 💀
 @export var pre_event_interrupter_sequence = []
 
+
+# ╔══════════════════════════════════════════════════════════════════╗
+# ║  三层铁幕契约 · 第一层：Event on_enter（舞台置景）               ║
+# ╚══════════════════════════════════════════════════════════════════╝
+#
+# 职责：
+#   构建当前事件的绝对上下文。所有前置计算、flag 初始化、依赖注入
+#   必须在此完成。玩家甚至还没看到 UI，一切准备工作必须在此刻结束。
+#
+# 执行时机：
+#   init() 最开头，provider.init / provider.provide / options.init
+#   之前执行。确保所有选项的 requirement/choice_result 在初始化时
+#   就能读取到 on_enter 设置好的 context 和 PlayerState。
+#
+# 合法操作：
+#   FlagOperator(set), EmotionOperator, ImaginaryOperator,
+#   TraitReplaceOperator, PropertyRangeOperator (用在 ConditionalOperator 内)
+#
+# 契约红线：
+#   - ❌ PushEventOperator / PopEventOperator（那是 interruption 的职责）
+#   - ❌ 任何"因为玩家选了某个特定选项才应该发生"的后果操作
+#   - ❌ 在 on_enter 中放置 choice_result 级别的消耗逻辑
+#
+# 隐喻：
+#   话剧开场前，场务把李白的酒杯摆好，把灯光打亮。观众还没入场，
+#   台上的一切都应该处于"就绪"状态。
+#
+# 参见 DOCUMENTATIONS/events/operator_variable_lifecycle.md §9.3
+# ──────────────────────────────────────────────
+
+# 事件级入场结果（即使不选任何选项也会执行）。
+# 常用于 flag 初始化、情感值预设、imagenary 置景。
+# 这是 on_enter 阶段的核心执行载体。
+# 对应 CSV 中的 on_enter 列。
+@export var on_enter_result: ChoiceResult
+
+
+# ──────────────────────────────────────────────
+# on_enter — 舞台置景
+# ──────────────────────────────────────────────
+# 子类可重写此方法以添加自定义的 on_enter 逻辑（如合入 custom_context_params），
+# 但必须调用 super.on_enter(context) 以确保事件级结果被执行。
+# ──────────────────────────────────────────────
+func on_enter(context: Dictionary) -> void:
+    if on_enter_result:
+        on_enter_result.init(context)
+        on_enter_result.operate()
+        Logging.info("BaseEvent.on_enter: on_enter_result executed for event '%s'" % name)
+
+
 func check_interruption(context: Dictionary) -> void:
     """
     按优先级执行前置中断序列（first-match-wins）。
@@ -77,7 +127,12 @@ func check_interruption(context: Dictionary) -> void:
 
     Logging.debug('check_interruption: no step passed, no interruption triggered')
 
+
 func init(context: Dictionary) -> Array:
+    # Phase 0: on_enter — 舞台置景，构建绝对上下文
+    # 在 provider/options 初始化之前执行，确保所有前置条件就绪
+    on_enter(context)
+    
     # Phase 1: provider.init 先执行，修改 context
     if provider:
         context = provider.init(context)
