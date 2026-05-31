@@ -35,6 +35,7 @@ func _init_option(data: BaseOption):
 			return
 		if not pass_prop:
 			disabled = true
+			if not data.requirement.get("failed_hint"): return
 			text = "[%s]%s" % [data.requirement.failed_hint, text] # failed hint 包括描写和属性要求
 			if data.requirement.failed_hint.length() > 10:
 				Logging.warn('property requirement of %s length > 15 char, can be ugly' % data.requirement.failed_hint)

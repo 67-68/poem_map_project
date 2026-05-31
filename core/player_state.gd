@@ -48,10 +48,30 @@ func init_flags():
 		set_flag(flag_id, flag_val)
 		Logging.info('init_flags: flag %s set to %s from SourceOfTruth' % [flag_id, str(flag_val)])
 
+func init_imaginaries():
+	"""从 SourceOfTruth 加载意象初始等级到 Database.imaginaries 中的 ImaginaryTag"""
+	var imaginary_data = SourceOfTruth.debug_dashboard_state.get("imaginaries", {})
+	if imaginary_data.is_empty():
+		Logging.info('init_imaginaries: no imaginary data in SourceOfTruth, skipping')
+		return
+
+	for uuid in imaginary_data:
+		var level = imaginary_data[uuid] as int
+		if level <= 0:
+			Logging.info('init_imaginaries: imaginary %s level <= 0 (%d), skipping' % [uuid, level])
+			continue
+		var imaginary = Database.imaginaries.get(uuid) as ImaginaryTag
+		if not imaginary:
+			Logging.warn('init_imaginaries: imaginary %s not found in Database.imaginaries, skipping' % uuid)
+			continue
+		imaginary.current_level = level
+		Logging.info('init_imaginaries: set imaginary %s (%s) to level %d' % [uuid, imaginary.name, level])
+
 func _ready():
 	init_props()
 	init_traits()
 	init_flags()
+	init_imaginaries()
 	
 	current_location = 'yong_zhou'
 

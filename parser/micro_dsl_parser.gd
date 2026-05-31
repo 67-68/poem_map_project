@@ -67,6 +67,10 @@ const FUNC_RANDOM_PICK := "random_pick"
 const FUNC_CONTEXT_FETCH := "context_fetch"
 const FUNC_NPC_BATCH_CHECK := "npc_batch_check"
 
+# Custom operators — 飞花令玩家应答
+const FUNC_IMAGINARY_HAS_LEVEL := "imaginary_has_level"
+const FUNC_IMAGINARY_LEVEL_REWARD := "imaginary_level_reward"
+
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
 # func_name → handler(parsed: ParseResult, raw: String) -> Variant
@@ -93,6 +97,7 @@ static func _ensure_dispatch() -> void:
 	rd[FUNC_FLAG_INT_LT] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.LESS_THAN)
 	rd[FUNC_FLAG_INT_EQ] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.EQUAL)
 	rd[FUNC_FLAG_INT_NE] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.NOT_EQUAL)
+	rd[FUNC_IMAGINARY_HAS_LEVEL] = func(p, r): return _exec_imaginary_has_level_req(p, r)
 	
 	# ── Consequence Operators ──
 	var cd = _consequence_dispatch
@@ -124,6 +129,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_RANDOM_PICK] = func(p, r): return _exec_random_pick_op(p, r)
 	cd[FUNC_CONTEXT_FETCH] = func(p, r): return _exec_context_fetch_op(p, r)
 	cd[FUNC_NPC_BATCH_CHECK] = func(p, r): return _exec_npc_batch_check_op(p, r)
+	cd[FUNC_IMAGINARY_LEVEL_REWARD] = func(p, r): return _exec_imaginary_level_reward_op(p, r)
 
 # ──────────────────────────────────────────────
 # Tags
@@ -714,4 +720,37 @@ static func _exec_npc_batch_check_op(parsed: NamedDSLParser.ParseResult, raw: St
 
 	Logging.info("npc_batch_check operator 解析成功: participants=%s, target=%s, prop=%s, template=%s" % [
 		op.participants_key, op.target_context_key, op.check_prop, op.text_template])
+	return op
+
+
+# ─── imaginary_has_level ─────────────────────────────────────────
+
+# DSL 语法: imaginary_has_level(min_level=1)
+# 返回 ImaginaryLevelRequirement（存在性检查模式）
+static func _exec_imaginary_has_level_req(parsed: NamedDSLParser.ParseResult, raw: String) -> ImaginaryLevelRequirement:
+	var min_level = NamedDSLParser.get_int_param(parsed, "min_level", 1)
+
+	var req = ImaginaryLevelRequirement.new()
+	req.min_level = min_level
+	req.check_any = true
+
+	Logging.info("imaginary_has_level requirement 创建成功: min_level=%d (check_any)" % min_level)
+	return req
+
+
+# ─── imaginary_level_reward ──────────────────────────────────────
+
+# DSL 语法: imaginary_level_reward(l3_fame=50, l2_fame=20, l1_fame=0)
+# 返回 ImaginaryLevelRewardOperator（弹出 picker 让玩家选意象，按等级给名声）
+static func _exec_imaginary_level_reward_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ImaginaryLevelRewardOperator:
+	var l3_fame = NamedDSLParser.get_int_param(parsed, "l3_fame", 50)
+	var l2_fame = NamedDSLParser.get_int_param(parsed, "l2_fame", 20)
+	var l1_fame = NamedDSLParser.get_int_param(parsed, "l1_fame", 0)
+
+	var op = ImaginaryLevelRewardOperator.new()
+	op.l3_fame = l3_fame
+	op.l2_fame = l2_fame
+	op.l1_fame = l1_fame
+
+	Logging.info("imaginary_level_reward operator 创建成功: l3_fame=%d, l2_fame=%d, l1_fame=%d" % [l3_fame, l2_fame, l1_fame])
 	return op

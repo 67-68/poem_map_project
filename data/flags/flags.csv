@@ -7,7 +7,7 @@ flag_relation_with_libai,int,0
 flag_libai_changhe_shown,bool,FALSE
 talked_to_libai,bool,FALSE
 talked_to_wangwei,bool,FALSE
-talked_to_zhengqian,bool,FALSE
+talked_to_dengqian,bool,FALSE
 talk_count_libai,int,0
 talk_count_wangwei,int,0
-talk_count_zhengqian,int,0
+talk_count_dengqian,int,0

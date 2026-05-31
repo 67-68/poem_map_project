@@ -48,6 +48,11 @@ static var debug_dashboard_state = {
         "inspiration": 0,
     },
 
+    "imaginaries": {
+        # imaginary UUID -> 初始等级
+        "emotion:ambition": 2,
+    },
+
     "flags": {
         "flag_relation_with_libai":30
     }
