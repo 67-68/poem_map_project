@@ -39,7 +39,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("2_jobqn")
 weight = 0.0
-event_result = SubResource("Resource_6msi5")
+on_enter_result = SubResource("Resource_6msi5")
 options = Array[ExtResource("1_2dral")]([SubResource("Resource_xlgee")])
 pre_event_interrupter_sequence = null
 uuid = "event_chat_guest"

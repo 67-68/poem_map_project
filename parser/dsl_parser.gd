@@ -661,11 +661,27 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
     # 选项的结果（选择后执行）
     # 注意：选项行的 results 列设置的是 choice_result（通过 on_enter_result 传递），
     # 不同于事件行的 on_enter 列。
+    # 🚨 合并策略：当 template 已有 on_enter_result（如 MenuStartOperator）时，
+    #   将 CSV results 的 operators 追加到其后，而非直接覆盖。
+    #   参见 DOCUMENTATIONS/old_bugs.md §2026-05-28: EventOption template 的 operators 通过 PDA 链路丢失
     var results_str = row.get('results')
     _lint_dsl_field(results_str if results_str != null else "", "results", uuid)
     if results_str and not results_str.is_empty():
         _lint_results_column(results_str, uuid)
-        event.on_enter_result = parse_choice_result(results_str)
+        var csv_result = parse_choice_result(results_str)
+        var csv_op_count = csv_result.operators.size()
+        
+        # 合并：template operators 在前，CSV results operators 在后
+        if event.on_enter_result and not event.on_enter_result.operators.is_empty():
+            var merged_ops = event.on_enter_result.operators.duplicate()
+            merged_ops.append_array(csv_result.operators)
+            csv_result.operators = merged_ops
+            Logging.info("parse_option_row: 合并 template operators (%d) + CSV results operators (%d) 用于 option '%s'" % [
+                event.on_enter_result.operators.size(),
+                csv_op_count,
+                uuid])
+        
+        event.on_enter_result = csv_result
 
     # 选项的 emotion_config：虽然未来 option 可能也有自己的 config
     # 但目前只有 event 有，option 忽略并 warn（如果写了的话）
@@ -1264,10 +1280,22 @@ static func _pda_transition(stack: Array[RandomEvent], resources: Array[Resource
                 if not requirements_str.is_empty():
                     opt.requirement = parse_requirements(requirements_str)
                 
-                # 如果 CSV 行有显式的 results，覆盖 template 的 choice_result
+                # 如果 CSV 行有显式的 results，合并到 template 的 choice_result 之后
+                # 🚨 合并而非覆盖：template 的 operators（如 MenuStartOperator）在前，
+                #    CSV results 的 operators（如 PopEventOperator）在后。
+                #    参见 DOCUMENTATIONS/old_bugs.md §2026-05-28
                 var results_str = row.get('results', '')
                 if not results_str.is_empty():
-                    opt.choice_result = parse_choice_result(results_str)
+                    var csv_result = parse_choice_result(results_str)
+                    if opt.choice_result and not opt.choice_result.operators.is_empty():
+                        var merged_ops = opt.choice_result.operators.duplicate()
+                        merged_ops.append_array(csv_result.operators)
+                        csv_result.operators = merged_ops
+                        Logging.info("_pda_transition: 合并 template operators (%d) + CSV results operators (%d) 用于 option '%s'" % [
+                            opt.choice_result.operators.size(),
+                            csv_result.operators.size() - opt.choice_result.operators.size(),
+                            opt.uuid])
+                    opt.choice_result = csv_result
                 
                 parent.options.append(opt)
             else:

@@ -13,14 +13,14 @@ script = ExtResource("4_7dyke")
 key_of_resource_in_context = "poem_taste"
 next_event_key = "demonstrate_poem_to_people"
 
-[sub_resource type="Resource" id="Resource_lf4m1"]
+[sub_resource type="Resource" id="Resource_am0wb"]
 script = ExtResource("5_4t7gw")
 operators = Array[ExtResource("3_am0wb")]([SubResource("Resource_x1pmm")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
-[sub_resource type="Resource" id="Resource_k6bg6"]
+[sub_resource type="Resource" id="Resource_7dyke"]
 script = ExtResource("6_so401")
-choice_result = SubResource("Resource_lf4m1")
+choice_result = SubResource("Resource_am0wb")
 custom_context_params = {
 "poem_taste": "urn:poem_taste:zhuoliu_basic_taste"
 }
@@ -29,6 +29,6 @@ description = "献上诗词"
 
 [resource]
 script = ExtResource("7_8gk6h")
-options = Array[ExtResource("2_7dyke")]([SubResource("Resource_k6bg6")])
+options = Array[ExtResource("2_7dyke")]([SubResource("Resource_7dyke")])
 uuid = "jiaoyou_poem_public"
 name = "交游呈现诗词公开"

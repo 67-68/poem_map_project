@@ -88,9 +88,9 @@ condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_
 
 [resource]
 script = ExtResource("7_lswy1")
-event_result = SubResource("Resource_etiw7")
 options = Array[ExtResource("2_lnht4")]([SubResource("Resource_2litf")])
 pre_event_interrupter_sequence = [SubResource("Resource_qqgwl"), SubResource("Resource_s76ol")]
+on_enter_result = SubResource("Resource_etiw7")
 uuid = "mid_of_wenhuaquan_party"
 name = "在盛大讲话完毕之后"
 description = "正式开场！你看见有人斗诗有人讲话，还有人在扫荡小食"

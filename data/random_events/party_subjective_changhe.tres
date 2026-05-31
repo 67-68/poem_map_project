@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_re"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_baseop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_eo"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="6_peo"]
+[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="7_tco"]
+[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="8_pt"]
+[ext_resource type="Script" uid="uid://bj2nv77uffcp7" path="res://core/operators/context_fetch_operators.gd" id="9_cfo"]
+
+; ── on_enter: ContextFetchOperators: target_npc → npc_document.taste_id → urn:poem_taste:{taste_id} ──
+[sub_resource type="Resource" id="Resource_cfo"]
+script = ExtResource("9_cfo")
+fetched_key = "target_npc"
+datasource_name = "npc_document"
+prop_from_result = "taste_id"
+key_stored_context = "poem_taste"
+urn_prefix = "poem_taste"
+
+[sub_resource type="Resource" id="Resource_cr_on_enter"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("3_baseop")]([SubResource("Resource_cfo")])
+
+; ── PoemTaste 占位（运行时会通过 poem_taste URN 替换） ──
+[sub_resource type="Resource" id="Resource_pt_acc"]
+script = ExtResource("4_cr")
+
+[sub_resource type="Resource" id="Resource_pt_rej"]
+script = ExtResource("4_cr")
+
+[sub_resource type="Resource" id="Resource_pt_not"]
+script = ExtResource("4_cr")
+
+[sub_resource type="Resource" id="Resource_pt_placeholder"]
+script = ExtResource("8_pt")
+uuid = "placeholder"
+accepted_result = SubResource("Resource_pt_acc")
+rejected_result = SubResource("Resource_pt_rej")
+not_entered_result = SubResource("Resource_pt_not")
+
+; ── 选项1：唱和 ──
+[sub_resource type="Resource" id="Resource_tco"]
+script = ExtResource("7_tco")
+poem_taste = SubResource("Resource_pt_placeholder")
+key_to_get_poem_taste = "poem_taste"
+
+[sub_resource type="Resource" id="Resource_cr_changhe"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("3_baseop")]([SubResource("Resource_tco")])
+
+[sub_resource type="Resource" id="Resource_opt_changhe"]
+script = ExtResource("5_eo")
+choice_result = SubResource("Resource_cr_changhe")
+description = "唱和"
+
+; ── 选项2：回去（pop 回上一个事件） ──
+[sub_resource type="Resource" id="Resource_peo"]
+script = ExtResource("6_peo")
+
+[sub_resource type="Resource" id="Resource_cr_back"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("3_baseop")]([SubResource("Resource_peo")])
+
+[sub_resource type="Resource" id="Resource_opt_back"]
+script = ExtResource("5_eo")
+choice_result = SubResource("Resource_cr_back")
+description = "回去"
+
+; ── 主资源 ──
+[resource]
+script = ExtResource("2_re")
+weight = 0.0
+on_enter_result = SubResource("Resource_cr_on_enter")
+options = Array[ExtResource("1_bo")]([SubResource("Resource_opt_changhe"), SubResource("Resource_opt_back")])
+pre_event_interrupter_sequence = null
+uuid = "party_subjective_changhe"
+name = "主动唱和"
+description = "你决定与{@target_npc}唱和一首"

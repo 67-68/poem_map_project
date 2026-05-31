@@ -6,6 +6,10 @@ class_name ContextFetchOperators extends BaseOperator
 @export var prop_from_result: String
 @export var key_stored_context: String
 
+# 🏷️ 可选 URN 前缀：如果设置，提取的值会被包裹为 "urn:{urn_prefix}:{extracted}"
+# 例如 urn_prefix = "poem_taste"，提取 value = "libai_taste" → 存入 "urn:poem_taste:libai_taste"
+@export var urn_prefix: String = ""
+
 
 func init(_context: Dictionary) -> Dictionary:
 	# ── 校验：三个配置项都必须有值 ──
@@ -51,8 +55,14 @@ func init(_context: Dictionary) -> Dictionary:
 		Logging.err("ContextFetchOperators: property '%s' not found on result object (type: %s)" % [prop_from_result, typeof(result)])
 		return _context
 
-	_context[key_stored_context] = extracted
-	Logging.info("ContextFetchOperators: stored property '%s' (value: %s) into context[%s]" % [prop_from_result, str(extracted), key_stored_context])
+	# ── URN 拼装：如果设置了 urn_prefix，把 bare ID 包装成完整 URN ──
+	if not urn_prefix.is_empty() and extracted is String:
+		var urn = "urn:%s:%s" % [urn_prefix, extracted]
+		_context[key_stored_context] = urn
+		Logging.info("ContextFetchOperators: stored URN '%s' (from property '%s' with prefix '%s') into context[%s]" % [urn, prop_from_result, urn_prefix, key_stored_context])
+	else:
+		_context[key_stored_context] = extracted
+		Logging.info("ContextFetchOperators: stored property '%s' (value: %s) into context[%s]" % [prop_from_result, str(extracted), key_stored_context])
 	return _context
 
 

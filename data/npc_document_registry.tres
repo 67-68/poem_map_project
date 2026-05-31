@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_y7fj5")
 resources = {
-"npc_doc_libai": "res://data/npc_document/npc_doc_libai.tres"
+"libai": "res://data/npc_document/npc_doc_libai.tres"
 }
