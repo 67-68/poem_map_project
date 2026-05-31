@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="NPCDocument" format=3 uid="uid://dvl43wkt3qowe"]
+
+[ext_resource type="Script" uid="uid://mbd5xnwsnqvh" path="res://model/npc_document.gd" id="1_udmdi"]
+
+[resource]
+script = ExtResource("1_udmdi")
+taste_id = ""
+name = "王维"
+uuid = "wangwei"
+prop = {
+"TALENT": 75
+}

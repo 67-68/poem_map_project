@@ -474,3 +474,82 @@ if ev is RandomEvent and ev.requirement:
 1. **Interruption 条件和 Entry Requirement 是正交的** — 前者在源事件的 `check_interruption()` 中检查，后者在目标事件 pool 筛选时检查。`push_event` 绕过 pool 筛选，两者之间没有自动的守护关系。
 2. **` and ` 语法**填补了 interruption 条件无法表达多条件 AND 守卫的空白。相比用逗号（会被 `split_expressions` 误拆成第 3 个参数），` and ` 作为关键词分隔符是侵入性最小的方案。
 3. **防御深度**：数据层（CSV 条件）→ 代码层（`_on_push_event` 检查）→ 提醒层（linter），三层防御确保这个问题不会再次出现。
+
+## 2026-05-31: 飞花令 Runtime — 类型契约断裂 + CSV 转义迷宫
+
+### 场景
+实现飞花令（feihualing）玩法全流程：RandomPickOperator 抽意象 → ItemProvider 展示选项 → ContextFetchOperators 查意象数据 → NpcBatchCheckOperator 批量检定 NPC。
+
+### 诱因 1：`parse_context` 产出 `PackedStringArray`，下游只认 `Array`
+CSV context 列 `guests=[libai;wangwei;dengqian]` 被 [`dsl_parser.gd:193`](parser/dsl_parser.gd:193) 解析为 `PackedStringArray`（故意选择，内存效率高）。但 [`NpcBatchCheckOperator:62`](core/operators/npc_batch_check_operator.gd:62) 只检查 `is Array`，直接拒绝。ItemProvider 没炸是因为 `for item in target_list` 兼容两种类型。
+
+**根因**：数据生产方（`parse_context`）和消费方（operator）之间的类型契约只靠「运行时撞上才知道」来验证，没有中间层做归一化。`PackedStringArray` 和 `Array` 在 GDScript 里行为相似但不相同，`is` 检查就是分水岭。
+
+**教训**：
+- 跨层传递集合数据时，必须在**消费入口**做归一化（NpcBatchCheckOperator 现在先检查 `is Array or is PackedStringArray`，再统一 `Array(participants)` 转成 `Array`）。
+- `parse_context` 选 `PackedStringArray` 本身没错（更紧凑），但这个选择应该通过文档或类型守卫传播到所有下游。隐式类型契约 = 定时炸弹 💀
+
+### 诱因 2：CSV 四重引号 `""""` 看似工作其实是运气
+[`random_events.csv:32`](data/random_events/random_events.csv:32) 的 provider 列用了 `""""` 四重引号包裹参数值。这个项目的 CSV 解析器（[`csv_parser.gd`](core/utils/csv_parser.gd)）用 `"` toggle 模式（不是标准 CSV 的 `""` → 一个字面量 `"`），所以 `""""` 和 `""` 在功能上完全等价——都只是两次 `in_quotes` 翻转，最终都不产出引号字符。
+
+但**这只是巧合**：如果哪天换上了标准 CSV 解析器（或者把文件塞回 Google Sheets 编辑再导出），`""""` 就真的变成两个字面量 `"` 了。
+
+**教训**：自定义 CSV 解析器用 `"` toggle 模式而非标准 `""` escape 模式，导致与 Google Sheets 的 CSV 格式存在「语义鸿沟」：
+- Google Sheets 里：`""` = 一个字面量 `"`
+- 本项目：`""` = 两次 in_quotes 翻转，不产出任何字符
+- 同一个文件在两种解析器下行为不同，但看起来都「正确」——这是最危险的那种不一致 💀
+
+解决方案：要么保持 toggle 模式且永远不用 Google Sheets 编辑此文件，要么统一成标准 CSV escaping。当前选择前者（文件全手工维护），但这一点应该写进项目文档的 CSV 格式说明里。
+
+### 诱因 3：`ctx.duplicate()` 连带 `PackedStringArray` 进入 `format_args`
+[`NpcBatchCheckOperator:97`](core/operators/npc_batch_check_operator.gd:97) 的 `var format_args = ctx.duplicate()` 把整个 context（含 `guests:PackedStringArray`）复制进 format_args。虽然 `String.format()` 只匹配模板中的 `{keyword}` 占位符，不会遍历所有键，但这意味着 `guests` 这样的集合数据被不必要地带入格式化上下文——如果哪天有人在翻译模板里写了 `{guests}`，`String.format()` 遇到 `PackedStringArray` 的行为是未定义的。
+
+**教训**：`format_args` 应该只包含模板实际需要的键。`ctx.duplicate()` 是懒惰的「全部拿来」模式，正确做法是显式构建：
+```gdscript
+var format_args = {"npc_name": tr("CHAR_NAME_%s" % ...)}
+# 只复制模板需要的 context 字段
+for key in ["keyword", "imaginary_desc"]:
+    if ctx.has(key):
+        format_args[key] = str(ctx[key])
+```
+但这是优化级别的建议——当前实现够用。记住这个隐患就行。
+
+### 相关文件
+- [`parser/dsl_parser.gd:193`](parser/dsl_parser.gd:193) — `PackedStringArray()` 产出源头
+- [`core/operators/npc_batch_check_operator.gd:62-72`](core/operators/npc_batch_check_operator.gd:62) — 修复：兼容 Array + PackedStringArray + 归一化
+- [`data/random_events/random_events.csv:32`](data/random_events/random_events.csv:32) — 四重引号修复
+- [`core/utils/csv_parser.gd`](core/utils/csv_parser.gd) — `"` toggle 模式解析器，与标准 CSV 存在语义鸿沟
+
+---
+
+## 2026.05.31 — 飞花令修复补丁（第二阶段）
+
+### 问题 1：Resource.has() 不存在
+
+**诱因**：`doc` 是 `NPCDocument`（extends `Resource`），`Resource` 没有 `.has()` 方法。
+`NPCDocument.prop` 有默认值 `= {}`，不会为 null。
+
+**现象**：`Database.query_prop()` 调用 `doc.has("prop")` → 崩溃。
+
+**修复**：`var props: Dictionary = doc.prop; if props.is_empty():` — 直接访问 prop 字段
+（保证非 null），判空用 `is_empty()`。
+
+### 问题 2：翻译文件在 Resource 脚本中不生效
+
+**诱因**：Godot 4 的 `[locale] translations=PackedStringArray(...)` 自动加载机制
+在 `@tool` Resource 脚本（非 Node）的 `tr()` 调用中可能不工作。引擎只在 Node 初始化时
+绑定翻译上下文，Resource 脚本的 `tr()` 绕过 TranslationServer。
+
+**现象**：`tr("FEIHUALING_FAIL")` 返回 `"FEIHUALING_FAIL"` 而非中文文本。
+`.zh.translation` 文件内容完整但不被 `tr()` 访问。
+
+**修复**：在 `Database._init()` 中显式调用 `TranslationServer.add_translation(trans)` 注入
+翻译资源。同时添加调试日志确认加载状态。
+
+**防御建议**：所有依赖翻译的 `@tool` Resource 都应通过 TranslationServer 而非 `tr()` 获取
+翻译，或在 Autoload 中统一注入。
+
+### 相关文件
+- [`core/database.gd:48-57`](core/database.gd:48) — 显式加载翻译
+- [`data/translations/dynamic_events.csv`](data/translations/dynamic_events.csv) — 翻译表
+- [`data/translations/dynamic_events.zh.translation`](data/translations/dynamic_events.zh.translation) — 编译后翻译资源

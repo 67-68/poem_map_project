@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b6n68peodcd8r"]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_bbyde"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_m1d88"]
+[ext_resource type="Script" uid="uid://bj2nv77uffcp7" path="res://core/operators/context_fetch_operators.gd" id="3_4w4yg"]
+[ext_resource type="Script" uid="uid://cwprsg78wnilm" path="res://core/operators/npc_batch_check_operator.gd" id="4_3208g"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_jwf50"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="6_cahmx"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="7_4w4yg"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_uh3s3"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_3208g"]
+
+[sub_resource type="Resource" id="Resource_jwf50"]
+script = ExtResource("3_4w4yg")
+fetched_key = "feihualing_chosen_word"
+datasource_name = "imaginaries"
+prop_from_result = "name"
+key_stored_context = "keyword"
+
+[sub_resource type="Resource" id="Resource_cahmx"]
+script = ExtResource("3_4w4yg")
+fetched_key = "feihualing_chosen_word"
+datasource_name = "imaginaries"
+prop_from_result = "description"
+key_stored_context = "imaginary_desc"
+
+[sub_resource type="Resource" id="Resource_uh3s3"]
+script = ExtResource("4_3208g")
+participants_key = "guests"
+target_context_key = "npc_report"
+check_prop = "TALENT"
+text_template = "FEIHUALING"
+
+[sub_resource type="Resource" id="Resource_0u4nv"]
+script = ExtResource("5_jwf50")
+operators = Array[ExtResource("2_m1d88")]([SubResource("Resource_jwf50"), SubResource("Resource_cahmx"), SubResource("Resource_uh3s3")])
+
+[sub_resource type="Resource" id="Resource_hoa4e"]
+script = ExtResource("7_4w4yg")
+
+[sub_resource type="Resource" id="Resource_v4cqd"]
+script = ExtResource("5_jwf50")
+operators = Array[ExtResource("2_m1d88")]([SubResource("Resource_hoa4e")])
+
+[sub_resource type="Resource" id="Resource_c86jx"]
+script = ExtResource("8_3208g")
+choice_result = SubResource("Resource_v4cqd")
+description = "返回"
+
+[resource]
+script = ExtResource("7_uh3s3")
+options = Array[ExtResource("6_cahmx")]([SubResource("Resource_c86jx")])
+on_enter_result = SubResource("Resource_0u4nv")
+uuid = "feihualing_other_done"
+name = "飞花令"
+description = "你选择了以「{@keyword}」为题吟咏。[br][br]{@imaginary_desc}[br][br]{@npc_report}"

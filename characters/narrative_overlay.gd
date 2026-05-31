@@ -285,7 +285,11 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	# 3. 填充内容
 	$Background.texture = data.icon # 假设这是插画
 	$Background/Margin/VBox/TitleLabel.text = data.name
-	$Background/Margin/VBox/ContentLabel.text = data.description
+	# 🚨 使用 tr_and_resolve 解析 description 中的 {@context_key} 模板插值
+	# on_enter 阶段已将动态内容写入 context，此时 data.description 中的
+	# {@keyword}、{@imaginary_desc}、{@npc_report} 等占位符
+	# 会被替换为 context 中的实际值。
+	$Background/Margin/VBox/ContentLabel.text = Util.tr_and_resolve(data.description, context, data)
 	$Background/Margin/VBox/ExampleLabel.text = data.example # 比如诗词原文
 
 	# 使用 init() 返回的全量选项（含 provider 动态生成的），而非 data.options（仅静态选项）

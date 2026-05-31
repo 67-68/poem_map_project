@@ -1,0 +1,6 @@
+keys,zh
+FEIHUALING_SUCCESS,{npc_name} 巧妙地吟出了「{keyword}」字，满座皆惊！
+FEIHUALING_FAIL,{npc_name} 支支吾吾，半天憋不出一个字，尬住了…
+CHAR_NAME_LIBAI,李白
+CHAR_NAME_WANGWEI,王维
+CHAR_NAME_ZHENGQIAN,郑虔

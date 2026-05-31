@@ -20,7 +20,7 @@ operators = Array[ExtResource("3_k2gmq")]([SubResource("Resource_gjxqx")])
 script = ExtResource("6_rcfd1")
 choice_result = SubResource("Resource_3vy8a")
 custom_context_params = {
-"guests": PackedStringArray("libai", "wangwei", "dengqian")
+"guests": PackedStringArray("libai", "wangwei", "zhengqian")
 }
 description = "去"
 

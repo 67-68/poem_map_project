@@ -63,6 +63,9 @@ const FUNC_PUSH_EVENT := "push_event"
 const FUNC_POP_EVENT := "pop_event"
 const FUNC_QUEUE_EVENT := "queue_event"
 const FUNC_RANDOM := "random"
+const FUNC_RANDOM_PICK := "random_pick"
+const FUNC_CONTEXT_FETCH := "context_fetch"
+const FUNC_NPC_BATCH_CHECK := "npc_batch_check"
 
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
@@ -118,6 +121,9 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
 	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
 	cd[FUNC_RANDOM] = func(p, r): return _exec_random_op(p, r)
+	cd[FUNC_RANDOM_PICK] = func(p, r): return _exec_random_pick_op(p, r)
+	cd[FUNC_CONTEXT_FETCH] = func(p, r): return _exec_context_fetch_op(p, r)
+	cd[FUNC_NPC_BATCH_CHECK] = func(p, r): return _exec_npc_batch_check_op(p, r)
 
 # ──────────────────────────────────────────────
 # Tags
@@ -614,4 +620,98 @@ static func _exec_random_op(parsed: NamedDSLParser.ParseResult, raw: String) -> 
 	op.failed_hint = NamedDSLParser.get_str_param(parsed, "failed_hint")
 	
 	Logging.info("random operator 解析成功: val=%d, success=%s, fail=%s" % [val, success_str, fail_str])
+	return op
+
+
+# ─── random_pick ─────────────────────────────────────────────────
+
+# DSL 语法: random_pick(datasource_name="feihualing_imageries", prop_from_result="name", key_stored_context="feihualing_words", select_count=4)
+# 解析为 RandomPickOperator，随机从 Database 的数据源中选取 N 个条目
+static func _exec_random_pick_op(parsed: NamedDSLParser.ParseResult, raw: String) -> RandomPickOperator:
+	var datasource_name = NamedDSLParser.get_str_param(parsed, "datasource_name")
+	if datasource_name.is_empty():
+		Logging.err("random_pick: 缺少 datasource_name 参数: %s" % raw)
+		return null
+
+	var key_stored_context = NamedDSLParser.get_str_param(parsed, "key_stored_context")
+	if key_stored_context.is_empty():
+		Logging.err("random_pick: 缺少 key_stored_context 参数: %s" % raw)
+		return null
+
+	var op = RandomPickOperator.new()
+	op.datasource_name = datasource_name
+	op.prop_from_result = NamedDSLParser.get_str_param(parsed, "prop_from_result")
+	op.key_stored_context = key_stored_context
+	op.select_count = NamedDSLParser.get_int_param(parsed, "select_count", 4)
+
+	Logging.info("random_pick operator 解析成功: datasource=%s, prop=%s, key=%s, count=%d" % [
+		op.datasource_name, op.prop_from_result, op.key_stored_context, op.select_count])
+	return op
+
+
+# ─── context_fetch ──────────────────────────────────────────────
+
+# DSL 语法: context_fetch(fetched_key="feihualing_chosen_word", datasource_name="imaginaries", prop_from_result="name", key_stored_context="chosen_word_display")
+# 解析为 ContextFetchOperators，从 Database 的数据源中用 context key 的值查数据
+static func _exec_context_fetch_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ContextFetchOperators:
+	var fetched_key = NamedDSLParser.get_str_param(parsed, "fetched_key")
+	if fetched_key.is_empty():
+		Logging.err("context_fetch: 缺少 fetched_key 参数: %s" % raw)
+		return null
+
+	var datasource_name = NamedDSLParser.get_str_param(parsed, "datasource_name")
+	if datasource_name.is_empty():
+		Logging.err("context_fetch: 缺少 datasource_name 参数: %s" % raw)
+		return null
+
+	var key_stored_context = NamedDSLParser.get_str_param(parsed, "key_stored_context")
+	if key_stored_context.is_empty():
+		Logging.err("context_fetch: 缺少 key_stored_context 参数: %s" % raw)
+		return null
+
+	var op = ContextFetchOperators.new()
+	op.fetched_key = fetched_key
+	op.datasource_name = datasource_name
+	op.prop_from_result = NamedDSLParser.get_str_param(parsed, "prop_from_result")
+	op.key_stored_context = key_stored_context
+	op.urn_prefix = NamedDSLParser.get_str_param(parsed, "urn_prefix")
+
+	Logging.info("context_fetch operator 解析成功: fetched=%s, ds=%s, prop=%s, store=%s, urn=%s" % [
+		op.fetched_key, op.datasource_name, op.prop_from_result, op.key_stored_context, op.urn_prefix])
+	return op
+
+
+# ─── npc_batch_check ───────────────────────────────────────────
+
+# DSL 语法: npc_batch_check(participants_key="guests", target_context_key="npc_report", check_prop="TALENT", text_template="FEIHUALING")
+# 解析为 NpcBatchCheckOperator，批量检定 NPC + 生成战报
+static func _exec_npc_batch_check_op(parsed: NamedDSLParser.ParseResult, raw: String) -> NpcBatchCheckOperator:
+	var participants_key = NamedDSLParser.get_str_param(parsed, "participants_key")
+	if participants_key.is_empty():
+		Logging.err("npc_batch_check: 缺少 participants_key 参数: %s" % raw)
+		return null
+
+	var target_context_key = NamedDSLParser.get_str_param(parsed, "target_context_key")
+	if target_context_key.is_empty():
+		Logging.err("npc_batch_check: 缺少 target_context_key 参数: %s" % raw)
+		return null
+
+	var check_prop = NamedDSLParser.get_str_param(parsed, "check_prop")
+	if check_prop.is_empty():
+		Logging.err("npc_batch_check: 缺少 check_prop 参数: %s" % raw)
+		return null
+
+	var text_template = NamedDSLParser.get_str_param(parsed, "text_template")
+	if text_template.is_empty():
+		Logging.err("npc_batch_check: 缺少 text_template 参数: %s" % raw)
+		return null
+
+	var op = NpcBatchCheckOperator.new()
+	op.participants_key = participants_key
+	op.target_context_key = target_context_key
+	op.check_prop = check_prop
+	op.text_template = text_template
+
+	Logging.info("npc_batch_check operator 解析成功: participants=%s, target=%s, prop=%s, template=%s" % [
+		op.participants_key, op.target_context_key, op.check_prop, op.text_template])
 	return op

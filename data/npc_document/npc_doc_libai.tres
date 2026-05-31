@@ -7,3 +7,6 @@ script = ExtResource("1_udmdi")
 taste_id = "libai_taste"
 name = "李白"
 uuid = "libai"
+prop = {
+"TALENT": 80
+}

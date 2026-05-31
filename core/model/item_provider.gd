@@ -23,6 +23,18 @@ class_name ItemProvider extends BaseProvider
 @export var option_requirements: BaseRequirements = null
 @export var option_emotion_configs: Array[EmotionConfigs] = []
 
+## ── 展示名查找（display lookup）──
+## 当 list_key 中的 item 是 ID（如 uuid）而非展示名时，用这两个字段做 lookup。
+## 例如 list_key 存的是 imaginaries 的 uuid，display_datasource="imaginaries"，
+## display_prop="name"，按钮上会显示意象的 name 而非原始 uuid。
+##
+## 机制：在 _build_option() 中，对每个 item（作为 key），从
+##   Database[display_datasource][item].get(display_prop)
+## 取值替换 text_template 中的 {item}。
+## payload 依然传原始的 item（uuid/ID），保证目标事件能正确 lookup。
+@export var display_datasource: String = ""
+@export var display_prop: String = ""
+
 
 func init(context: Dictionary) -> Dictionary:
 	Logging.info("[ItemProvider] init: list_key=%s, template=%s" % [list_key, text_template])
@@ -50,7 +62,24 @@ func provide(context: Dictionary) -> Array:
 
 
 func _build_option(item) -> EventOption:
-	var button_text = text_template.replace("{item}", str(item))
+	# ── 展示名查找：如果设置了 display_datasource/prop，用 item(作为 key) 查数据库拿展示文本 ──
+	var display_text = str(item)
+	if not display_datasource.is_empty() and not display_prop.is_empty():
+		var db = Database.get(display_datasource)
+		if db != null and db.has(item):
+			var obj = db[item]
+			if obj != null:
+				var resolved = obj.get(display_prop)
+				if resolved != null:
+					display_text = str(resolved)
+				else:
+					Logging.warn("[ItemProvider] display_datasource='%s' display_prop='%s' not found on item '%s'" % [display_datasource, display_prop, str(item)])
+			else:
+				Logging.warn("[ItemProvider] display_datasource='%s' item '%s' is null" % [display_datasource, str(item)])
+		else:
+			Logging.warn("[ItemProvider] display_datasource='%s' does not have key '%s'" % [display_datasource, str(item)])
+
+	var button_text = text_template.replace("{item}", display_text)
 	var payload = {payload_key: item}
 
 	var option = EventOption.new()

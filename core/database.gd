@@ -22,6 +22,7 @@ var actions: Dictionary
 var decisions: Dictionary
 var decided_events: Dictionary
 var imaginaries: Dictionary
+var feihualing_imageries: Dictionary
 var tags: Dictionary
 
 var legendary_poems: Dictionary
@@ -43,6 +44,19 @@ var state_transistors: Dictionary
 func _init() -> void:
 	index_image = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
 	Logging.current_level = Logging.Level.DEBUG
+
+	# 显式加载翻译：确保 Resource 脚本能访问翻译
+	var trans_path = "res://data/translations/dynamic_events.zh.translation"
+	if ResourceLoader.exists(trans_path):
+		var trans = load(trans_path)
+		if trans is Translation:
+			TranslationServer.add_translation(trans)
+			Logging.info("Database: translations loaded from %s" % trans_path)
+		else:
+			Logging.warn("Database: loaded translation is not a Translation resource (got %s)" % typeof(trans))
+	else:
+		Logging.warn("Database: translation file not found at %s" % trans_path)
+	Logging.info("Database: tr(FEIHUALING_FAIL) = '%s'" % TranslationServer.translate("FEIHUALING_FAIL"))
 
 	base_province = Util.create_dict(DataLoader.load_csv_model(Territory, 'base_province'))
 	territories = Util.create_dict(DataLoader.load_csv_model(Territory, 'territories'))
@@ -73,6 +87,12 @@ func _init() -> void:
 	decisions = event_data.decisions
 	decided_events = event_data.decided_events
 	imaginaries = event_data.imaginaries
+	# 飞花令意象库：从主意象字典中筛选环境类意象
+	feihualing_imageries = {}
+	for uuid in imaginaries:
+		if uuid.begins_with("environment:"):
+			feihualing_imageries[uuid] = imaginaries[uuid]
+	Logging.info("Database: feihualing_imageries loaded with %d entries" % feihualing_imageries.size())
 	legendary_poems = event_data.legendary_poems
 	normal_poem_events = event_data.normal_poem_events
 
@@ -288,6 +308,43 @@ func get_active_imaginaries() -> Dictionary:
 		if imaginary.basic_imaginaries.size() > 0:
 			active_imaginaries[imaginary_uuid] = imaginary
 	return active_imaginaries
+
+
+## 查询 NPC 的指定属性值。
+##
+## 从 npc_document[npc_id].prop[prop_name] 中读取。
+## 如果 NPC 文档不存在或属性未定义，返回 0 并记录错误日志。
+##
+## 参数:
+##   npc_id:    NPC 的 UUID（如 "libai"、"dufu"）
+##   prop_name: 属性名（如 "TALENT"、"HEALTH"），建议使用 ENUMS.PROPS 枚举
+##
+## 返回:
+##   int — 属性值，不存在时返回 0
+##
+## 典型用途:
+##   NpcBatchCheckOperator 在 on_enter 阶段批量检定 NPC 时调用。
+func query_prop(npc_id: String, prop_name: String) -> int:
+	var doc = npc_document.get(npc_id)
+	if doc == null:
+		Logging.err('Database.query_prop: npc_document not found for "%s"' % npc_id)
+		return 0
+
+	# doc.prop 是 @export var prop: Dictionary = {}（NPCDocument），保证非 null
+	var props: Dictionary = doc.prop
+	if props.is_empty():
+		Logging.warn('Database.query_prop: npc_document["%s"].prop is empty (no properties defined)' % npc_id)
+		return 0
+	if not props.has(prop_name):
+		Logging.warn('Database.query_prop: npc "%s" has no property "%s" defined in prop dict' % [npc_id, prop_name])
+		return 0
+
+	var val = props[prop_name]
+	if val is int:
+		return val
+
+	Logging.warn('Database.query_prop: npc "%s" property "%s" is not int (got %s), converting' % [npc_id, prop_name, typeof(val)])
+	return int(val)
 
 
 func get_random_events(main_tag: String = '') -> Dictionary:
