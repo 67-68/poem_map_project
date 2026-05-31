@@ -93,7 +93,7 @@ func _on_push_event(data: Variant, context: Dictionary):
 	# 防御性深拷贝：栈中的 context 必须是完全隔离的快照
 	# 契约：调用方（PushEventOperator等）负责提供独立 context，
 	# 但这里做二次防御，防止其他 emit push_event 的路径忘记 duplicate
-	_event_stack.push_front({ "data": ev, "context": context.duplicate(true) })
+	_event_stack.push_front({ "data": ev, "context": context.duplicate(true), "processed": false })
 	Logging.info("事件已推入栈: " + ev.name)
 
 	if not _is_active:
@@ -106,6 +106,8 @@ func _on_pop_event():
 		# Picker 条目没有 "data" 字段（只有 BaseEvent 条目有）
 		if entry.has("data"):
 			var ev: BaseEvent = entry.get("data")
+			if not entry.get("processed", false):
+				Logging.err("pop_event: 事件 '%s' 被弹出但从未被处理过！可能存在事件丢失" % ev.name)
 			Logging.info("pop_event: 弹出栈事件 - " + ev.name)
 		else:
 			Logging.info("pop_event: 弹出栈条目")
@@ -162,6 +164,7 @@ func _process_stack():
 			_show_picker_from_stack(entry)
 		else:
 			_current_from_stack = true
+			entry["processed"] = true
 			apply_narrative(entry.data, entry.context)
 	else:
 		Logging.warn("_process_stack: 栈为空")
@@ -229,6 +232,11 @@ func _on_end_picking(entity: Variant):
 	var callback: Callable = entry.get("on_selected", Callable())
 	if callback.is_valid():
 		callback.call(entity)
+
+	# 🚩 注意：不自动 pop 触发 picker 的源事件
+	# picker 只是临时挂起的模态层，源事件仍在栈顶被 peek，
+	# 弹出 picker 后，源事件会通过 _process_next() 重新展示。
+	# 源事件的后续生命周期由其自身的 PopEventOperator 管理。
 
 	# 像事件一样恢复世界
 	TimeService.resume_world()
@@ -312,7 +320,8 @@ func _end_narrative(choice):
 	# 3. 恢复世界 (以及之前保存的时间流速)
 	TimeService.resume_world()
 	Engine.time_scale = _saved_time_scale
-	_is_active = false
+	# 🚩 _is_active 保持 true，防止 execute_result 期间的 push_picker/push_event
+	# 触发 _process_stack 导致栈事件被中途处理（与 operator 迭代产生竞态）
 	Logging.done('narrative finished')
 	EventBus.event_confirmed.emit() # 绑定事件系统信号
 
@@ -324,6 +333,10 @@ func _end_narrative(choice):
 	# current_event_data 会在下一次 apply_narrative 时被自然覆盖。
 	var _completed_data: BaseEvent = current_event_data
 	await ConsequenceExecuter.execute_result(choice)
+
+	# 🚩 execute_result 完成后才释放 _is_active，避免 operator 迭代中途
+	# push_picker/push_event 误触 _process_stack
+	_is_active = false
 
 	# 在执行后果后进行 imaginary 判定，确保 emotion 已被修改
 	imaginary_manager.add_imagenary(_completed_data)
