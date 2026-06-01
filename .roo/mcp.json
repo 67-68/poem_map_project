@@ -1,0 +1,16 @@
+{
+	"mcpServers": {
+		"godot-tool": {
+			"command": "/home/vscode/mcp_venv/bin/mcp",
+			"args": [
+				"run",
+				"/Users/lennon/Projects/poem_map_project/godot_mcp.py"
+			],
+			"disabled": false,
+			"autoApprove": [],
+			"alwaysAllow": [
+				"run_godot_script"
+			]
+		}
+	}
+}

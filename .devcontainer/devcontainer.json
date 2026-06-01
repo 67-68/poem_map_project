@@ -1,0 +1,27 @@
+{
+    "name": "Godot AI Sandbox",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "godot_tools.editor_path": "/usr/local/bin/godot",
+                "python.defaultInterpreterPath": "/usr/bin/python3"
+            },
+            "extensions": [
+                "geequlim.godot-tools",    // Godot 语言支持
+                "ms-python.python",        // Python 支持
+                "rooveterinaryinc.roo-cline" // 把这只赛博野兽直接关进笼子里
+            ]
+        }
+    },
+
+    // 🤓☝️ 核心外科手术：强制绝对路径对齐
+    "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
+    "workspaceFolder": "${localWorkspaceFolder}",
+    
+    // 赋予容器与宿主网络通信的能力（如果你需要连外部云端）
+    "forwardPorts": [],
+    "remoteUser": "vscode"
+}

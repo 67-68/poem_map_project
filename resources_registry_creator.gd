@@ -19,7 +19,7 @@ func create_all_registries() -> void:
 		print("跳过无UUID文件: ", skip_files_without_uuid)
 		print("覆盖已存在文件: ", overwrite_existing)
 		print("")
-	
+
 	# 加载ResourceRegistry类
 	var resource_registry_script = load(RESOURCE_REGISTRY_PATH)
 	if not resource_registry_script:

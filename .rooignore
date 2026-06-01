@@ -1,0 +1,20 @@
+# 🤓☝️ 绝对不要让 AI 碰的版本控制和缓存生态
+.git
+.gitignore
+.gitattributes
+
+# Godot 引擎的黑盒缓存 (如果它去读这个，Token 会瞬间爆炸 💀)
+.godot/
+*.import
+
+# 语言和环境黑盒
+__pycache__/
+.venv/
+env/
+node_modules/
+
+# 编译产物和临时文件
+build/
+dist/
+*.log
+.DS_Store
