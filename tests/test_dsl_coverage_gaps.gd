@@ -471,67 +471,6 @@ func test_p1_parse_flag_invalid_type():
 
 
 # ════════════════════════════════════════════════════════════
-# 🟢 P2: 情绪配置 DSL — parse_emotion_configs
-# ════════════════════════════════════════════════════════════
-# ⚠ 注意：parse_emotion_configs 内部调用了 get_imaginary_from_name()
-# 依赖 Database.imaginaries，在测试环境可能返回 null。
-# 测试主要验证 DSL 解析层不崩溃。
-
-func test_p2_parse_emotion_configs_basic():
-	"""parse_emotion_configs 应解析基本格式 imaginary_name <- conditions"""
-	var configs = DSLParser.parse_emotion_configs("sorrow <- emotion:sorrow:>10")
-	# 如果 Database.imaginaries 不可用，返回空数组是预期行为
-	# 测试目标：不崩溃，走完解析流程
-	assert_not_null(configs, "parse_emotion_configs 不应返回 null")
-
-
-func test_p2_parse_emotion_configs_and():
-	"""parse_emotion_configs 支持 & (AND) 条件"""
-	var configs = DSLParser.parse_emotion_configs(
-		"joy <- emotion:joy:>5 & emotion:sorrow:<3"
-	)
-	assert_not_null(configs, "AND 条件不应返回 null")
-
-
-func test_p2_parse_emotion_configs_or():
-	"""parse_emotion_configs 支持 | (OR) 条件"""
-	var configs = DSLParser.parse_emotion_configs(
-		"anger <- emotion:anger:>5 | emotion:fear:>10"
-	)
-	assert_not_null(configs, "OR 条件不应返回 null")
-
-
-func test_p2_parse_emotion_configs_complex():
-	"""parse_emotion_configs 支持 & 和 | 混合"""
-	var configs = DSLParser.parse_emotion_configs(
-		"sorrow <- emotion:sorrow:>10 & emotion:joy:<5 | emotion:fear:>15"
-	)
-	assert_not_null(configs, "混合条件不应返回 null")
-
-
-func test_p2_parse_emotion_configs_multiple():
-	"""parse_emotion_configs 支持分号分隔多个配置"""
-	var configs = DSLParser.parse_emotion_configs(
-		"sorrow <- emotion:sorrow:>10; joy <- emotion:joy:>5"
-	)
-	assert_not_null(configs, "多个配置不应返回 null")
-
-
-func test_p2_parse_emotion_configs_empty():
-	"""parse_emotion_configs 空字符串应返回空数组"""
-	var configs = DSLParser.parse_emotion_configs("")
-	assert_eq(configs.size(), 0, "空字符串应返回空数组")
-
-
-func test_p2_parse_emotion_configs_invalid_format():
-	"""parse_emotion_configs 无效格式应跳过并继续"""
-	# 缺少 <- 分割符
-	var configs = DSLParser.parse_emotion_configs("invalid_format_no_arrow")
-	assert_not_null(configs, "无效格式不应返回 null，应为空数组")
-	assert_eq(configs.size(), 0, "无效格式应返回空数组")
-
-
-# ════════════════════════════════════════════════════════════
 # 🟢 P2: 未测试的 Requirement 操作符
 # ════════════════════════════════════════════════════════════
 

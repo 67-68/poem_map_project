@@ -5,8 +5,6 @@ class_name BaseEvent extends GameEntity
 @export var example: String
 @export var audio: AudioStream = null
 @export var epitaph_text: String = ''
-@export var emotion_configs: Array[EmotionConfigs] = []
-
 # ──────────────────────────────────────────────
 # Pre-event Interruption Sequence（前置中断序列）
 # ──────────────────────────────────────────────

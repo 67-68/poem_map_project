@@ -1,4 +1,14 @@
 # [unreleased]
+## Removed
+- 整个 Emotional Config 系统连根拔起 — 删除 `EmotionConfigs` 类、`ImagenaryEvaluator`、`ImaginaryManager` 节点及所有相关逻辑
+- `BaseEvent.emotion_configs` 字段（`model/event.gd`）
+- `EventOption.emotion_configs` 字段（`model/event/event_option.gd`）
+- `ItemProvider.option_emotion_configs` 字段及相关逻辑
+- `DSLParser` 中 `parse_emotion_configs` / `parse_single_emotion_config` / `get_imaginary_from_name` / `parse_single_emotion_condition` 方法
+- `main.tscn` 中的 `ImagenaryManager` 节点
+- CSV `emotion_config` 列
+- 测试 `test_p2_parse_emotion_configs_*` 全套
+
 ## Added
 - `PopToEventOperator` — 按事件 ID 寻址弹栈操作符，从栈中弹出到指定事件层级，未找到时报错无效果
 - `EventBus.pop_to_event(event_key: String)` — 新信号，支持按 key 寻址弹栈

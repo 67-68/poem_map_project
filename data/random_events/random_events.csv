@@ -1,5 +1,5 @@
-row_type,uuid,context,requirements,title,description,on_enter,results,interruptions,provider,template,emotion_config
-random_event,test1,"trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:study:poetry]|weight=15.5|background=bg_rural_poor","prop_gt(name=money,val=50),trait_has(name=official)",长安酒馆奇遇,你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,,,,,,
+row_type,uuid,context,requirements,title,description,on_enter,results,interruptions,provider,template
+random_event,test1,"trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:study:poetry]|weight=15.5|background=bg_rural_poor","prop_gt(name=money,val=50),trait_has(name=official)",长安酒馆奇遇,你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,,,,,
 >option,test1_give_money,,"prop_gt(name=money,val=100)",,,,"prop_sub(name=money,val=100),trait_add(name=corrupt)",,,,
 random_event,strange_poet,trigger_tags=[test1:test1:test1:test1],trait_has(name=main_jiaoyou_1),奇怪的诗人,你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,,,,,,
 >option,strange_poet_opt,,,,上前跟他说话,,"flag_bool_set(name=chain_strange_poet_1,val=true)",,,,

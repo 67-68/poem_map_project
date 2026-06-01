@@ -568,13 +568,6 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
         _lint_dsl_field(on_enter_str, "on_enter", uuid)
         event.on_enter_result = parse_choice_result(on_enter_str)
 
-    # 解析情绪配置（目前仅 event 级别支持，未来 option 可能也有自己的 emotion_config）
-    var emotion_config_str = row.get('emotion_config', '')
-    if emotion_config_str and not emotion_config_str.is_empty():
-        _lint_dsl_field(emotion_config_str, "emotion_config", uuid)
-        event.emotion_configs = parse_emotion_configs(emotion_config_str)
-        Logging.info("Event 级 emotion_config 解析成功: uuid=%s" % uuid)
-
     # 解析前置中断序列（interruptions 列）
     # 语法: interrupt_event(req_syntax, op_syntax), interrupt_event(req_syntax2, op_syntax2)
     var interruptions_str = row.get('interruptions', '')
@@ -826,12 +819,6 @@ static func parse_option(row: Dictionary, letter: String) -> BaseOption:
     if result_str and not result_str.is_empty():
         option.choice_result = parse_choice_result(result_str)
     
-    # 解析情绪配置
-    var emotion_config_key = "opt_%s_emotion_config" % letter
-    var emotion_config_str = row.get(emotion_config_key)
-    if emotion_config_str and not emotion_config_str.is_empty():
-        option.emotion_configs = parse_emotion_configs(emotion_config_str)
-    
     return option
 
 # 解析选项门槛
@@ -848,150 +835,6 @@ static func parse_choice_result(result_str: String) -> ChoiceResult:
     choice_result.operators = MicroDSLParser.parse_consequence_operators(result_str)
     return choice_result
 
-# 解析情绪配置（支持多个配置，用分号分隔）
-# 语法格式：imaginary_name <- condA&condB | condC;imaginary_name2 <- condD
-# 先处理 | (OR)，然后处理 & (AND)
-static func parse_emotion_configs(emotion_config_str: String) -> Array[EmotionConfigs]:
-    var emotion_configs: Array[EmotionConfigs] = []
-    
-    # 分割多个配置（用分号分隔）
-    var config_parts = emotion_config_str.split(';')
-    if config_parts.is_empty():
-        print("Warning: Empty emotion_config")
-        return []
-    
-    for config_str in config_parts:
-        var clean_config = config_str.strip_edges()
-        if clean_config.is_empty():
-            continue
-        
-        var emotion_config = parse_single_emotion_config(clean_config)
-        if emotion_config:
-            emotion_configs.append(emotion_config)
-    
-    return emotion_configs
-
-# 解析单个情绪配置
-# 语法格式：imaginary_name <- condA&condB | condC
-static func parse_single_emotion_config(config_str: String) -> EmotionConfigs:
-    var emotion_config = EmotionConfigs.new()
-    
-    # 解析配置：imaginary_name <- conditions
-    var config_parts = config_str.split('<-')
-    if config_parts.size() != 2:
-        print("Warning: Invalid emotion_config format, expected 'imaginary_name <- conditions': %s" % config_str)
-        return null
-    
-    var imaginary_name = config_parts[0].strip_edges()
-    var conditions_str = config_parts[1].strip_edges()
-    
-    # 设置目标意象（从字符串映射到ImaginaryTag对象）
-    emotion_config.target_imagenary_blueprint = get_imaginary_from_name(imaginary_name)
-    if not emotion_config.target_imagenary_blueprint:
-        print("Warning: Could not find imaginary: %s" % imaginary_name)
-        return null
-    
-    # 解析条件：先处理 | (OR)，然后处理 & (AND)
-    var or_groups = conditions_str.split('|')
-    var all_requirements: Array[BaseRequirements] = []
-    
-    for or_group in or_groups:
-        var clean_or_group = or_group.strip_edges()
-        if clean_or_group.is_empty():
-            continue
-        
-        # 处理 & (AND) 组
-        var and_conditions = clean_or_group.split('&')
-        var and_requirements: Array[BaseRequirements] = []
-        
-        for condition in and_conditions:
-            var clean_condition = condition.strip_edges()
-            if clean_condition.is_empty():
-                continue
-            
-            var requirement = parse_single_emotion_condition(clean_condition)
-            if requirement:
-                and_requirements.append(requirement)
-        
-        # 如果AND组有多个条件，创建复合需求
-        if and_requirements.size() == 1:
-            all_requirements.append(and_requirements[0])
-        elif and_requirements.size() > 1:
-            var complex_req = ComplexRequirements.new()
-            complex_req.operators = and_requirements
-            complex_req.current_operator = REQ_OPERATOR.LOGIC.AND
-            all_requirements.append(complex_req)
-    
-    # 如果有多个OR组，创建OR逻辑
-    if all_requirements.size() == 1:
-        emotion_config.requirements = all_requirements
-    elif all_requirements.size() > 1:
-        var or_complex_req = ComplexRequirements.new()
-        or_complex_req.operators = all_requirements
-        or_complex_req.current_operator = REQ_OPERATOR.LOGIC.OR
-        emotion_config.requirements = [or_complex_req]
-    
-    return emotion_config
-
-# 辅助方法：从名字获取ImaginaryTag对象
-static func get_imaginary_from_name(imaginary_name: String) -> ImaginaryTag:
-    # 尝试直接作为两段式UUID
-    var imaginary = Database.imaginaries.get(imaginary_name)
-    if imaginary:
-        return imaginary as ImaginaryTag
-    
-    # 如果是四段式，尝试映射到两段式
-    var parts = imaginary_name.split(':')
-    if parts.size() == 4:
-        # 假设格式：domain:subcategory:category:specific_attribute
-        # 映射到两段式：subcategory:category
-        var two_part_uuid = parts[1] + ':' + parts[2]
-        imaginary = Database.imaginaries.get(two_part_uuid)
-        if imaginary:
-            return imaginary as ImaginaryTag
-    
-    print("Warning: Could not map imaginary_name '%s' to ImaginaryTag" % imaginary_name)
-    return null
-
-# 解析单个情绪条件
-static func parse_single_emotion_condition(condition: String) -> BaseRequirements:
-    # 支持情绪条件：emotion:sorrow:>10
-    if condition.begins_with('emotion:'):
-        var parts = condition.substr(8).split(':')  # 去掉"emotion:"前缀
-        if parts.size() == 2:
-            var emotion_name = parts[0]
-            var operator_str = parts[1]
-
-            var emotion_req = EmotionRequirement.new()
-            emotion_req.volatile_stat = emotion_name
-
-            if operator_str.begins_with('>'):
-                emotion_req.value = operator_str.substr(1).to_int()
-                emotion_req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
-            elif operator_str.begins_with('<'):
-                emotion_req.value = operator_str.substr(1).to_int()
-                emotion_req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
-            else:
-                # 默认为大于
-                emotion_req.value = operator_str.to_int()
-                emotion_req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
-
-            return emotion_req
-
-    # 支持属性条件：prop:money:>50
-    elif condition.begins_with('prop:'):
-        return MicroDSLParser.parse_property_requirement(condition)
-
-    # 支持特性条件：trait:has:official
-    elif condition.begins_with('trait:'):
-        return MicroDSLParser.parse_trait_requirement(condition)
-
-    # 支持标志位条件：flag:bool:has:xxx
-    elif condition.begins_with('flag:'):
-        return MicroDSLParser.parse_flag_requirement(condition)
-
-    print("Warning: Unknown condition type: %s" % condition)
-    return null
 
 # 验证解析结果
 static func validate_event(event: RandomEvent) -> bool:

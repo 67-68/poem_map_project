@@ -3,8 +3,6 @@ class_name EventOption extends BaseOption
 # 使用description作为button text
 @export var choice_result: ChoiceResult
 @export var requirement: BaseRequirements = null
-@export var emotion_configs: Array[EmotionConfigs] = []
-
 # 从 context DSL 解析出的自定义参数，init 时 merge 进 context
 @export var custom_context_params: Dictionary = {}
 

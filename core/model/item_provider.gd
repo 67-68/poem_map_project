@@ -18,11 +18,9 @@ class_name ItemProvider extends BaseProvider
 ## 是否使用 PushEventOperator（默认 false，使用 EventOperator/request_event_key）
 @export var use_push_event: bool = false
 
-## option 额外参数，例如 requirements、emotion_configs 等
+## option 额外参数，例如 requirements 等
 ## 如果设置，会被应用到每一个生成的选项上
 @export var option_requirements: BaseRequirements = null
-@export var option_emotion_configs: Array[EmotionConfigs] = []
-
 ## ── 展示名查找（display lookup）──
 ## 当 list_key 中的 item 是 ID（如 uuid）而非展示名时，用这两个字段做 lookup。
 ## 例如 list_key 存的是 imaginaries 的 uuid，display_datasource="imaginaries"，
@@ -98,8 +96,6 @@ func _build_option(item) -> EventOption:
 	# 可选的额外配置
 	if option_requirements:
 		option.requirement = option_requirements
-	if not option_emotion_configs.is_empty():
-		option.emotion_configs = option_emotion_configs
 
 	return option
 

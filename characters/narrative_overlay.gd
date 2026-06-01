@@ -26,9 +26,6 @@ var _is_checking_interruption: bool = false
 var _current_from_stack: bool = false
 var _saved_time_scale: float = 1.0
 
-# 引用 imaginary_manager
-@onready var imaginary_manager = get_node("/root/Main/CoreSystems/ImagenaryManager")
-
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
@@ -394,9 +391,6 @@ func _end_narrative(choice):
 	# 🚩 execute_result 完成后才释放 _is_active，避免 operator 迭代中途
 	# push_picker/push_event 误触 _process_stack
 	_is_active = false
-
-	# 在执行后果后进行 imaginary 判定，确保 emotion 已被修改
-	imaginary_manager.add_imagenary(_completed_data)
 
 	# 处理后续事件：栈 (LIFO) 优先，队列 (FIFO) 次之
 	_process_next()
