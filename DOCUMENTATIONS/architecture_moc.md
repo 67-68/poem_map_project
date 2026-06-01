@@ -19,6 +19,8 @@
   > 游戏事件 CSV 的表头结构、PDA 层级规则、字段格式规范、Template URN 机制
 - **标签体系设计规范** [tag_pattern_confliction.md](tag_pattern_confliction.md)
   > 三段式到四段式的演进，TagManager标准化机制，向后兼容策略
+- **Tag 幂等性创建原则** [tag_idempotent_creation.md](tag_idempotent_creation.md)
+  > MECE 三问法：动作归属→气质定调→结果产出，封闭词典约束，Linter 规约执行
 - **历史Bug记录** [old_bugs.md](old_bugs.md)
   > 已修复问题的归档记录，包括根本原因分析和修复方案
 
@@ -38,4 +40,5 @@
 - 保持文档分类与实际架构层级一致
 
 ## 📝 维护日志
+- 2026-06-01: 新增 Tag 幂等性创建原则文档（`tag_idempotent_creation.md`），定义 MECE 本体论构建流程
 - 2026-05-26: 新增质量保证分类，添加Event Data Linter架构重构文档
