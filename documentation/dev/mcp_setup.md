@@ -174,9 +174,62 @@ RUN apt-get update && apt-get install -y libfontconfig1
 
 ---
 
+## 新增工具: `run_safe_shell_command` (安全 Shell 执行)
+
+> 添加日期: 2026-06-01
+
+### 背景
+
+Roo Code 的 `execute_command` 工具在容器环境下有时会生成带 `cd /path &&` 前缀的命令，导致执行失败（因 `cd` 权限被拒）。为彻底解决此问题，新增 `run_safe_shell_command` 工具。
+
+### 设计原则
+
+1. **命令与参数分离** — AI 传入 `command="git"` + `args=["show", "abc123"]`，而非拼接字符串
+2. **白名单校验** — 只有 `ALLOWED_COMMANDS` 中的命令可被执行
+3. **零 shell** — 使用 `subprocess.run([cmd, ...])` 而非 `shell=True`，从根本上杜绝注入
+4. **自动锁工作目录** — 强制在 `WORKSPACE_DIR` 执行，AI 无需手动 `cd`
+
+### 安全策略
+
+| 层级 | 机制 | 说明 |
+|------|------|------|
+| L1 | 命令白名单 | 仅允许 `git`, `ls`, `cat`, `python3` 等预设命令 |
+| L2 | 参数黑名单 | 禁止参数中包含 `;`, `\|`, `` ` ``, `$(` 等 shell 元字符 |
+| L3 | 无 shell 执行 | 直接传递参数列表给子进程，无 shell 解释器介入 |
+| L4 | 强制工作目录 | `cwd=WORKSPACE_DIR` 硬编码，不可绕过 |
+| L5 | 超时熔断 | 默认 30s，硬上限 120s，防止 fork 炸弹 |
+
+### 调用示例
+
+```json
+// 查看 Git 提交
+{ "command": "git", "args": ["show", "abc123"] }
+
+// 列出目录
+{ "command": "ls", "args": ["-la", "core/"] }
+
+// 搜索代码
+{ "command": "grep", "args": ["-rn", "TODO", "ui/"] }
+
+// 会被拦截:
+// { "command": "rm", "args": ["-rf", "/"] }       → rm 不在白名单
+// { "command": "git", "args": [";", "rm", "-rf"] } → ; 在黑名单
+```
+
+### 白名单当前内容
+
+```
+git, cat, ls, head, tail, wc, find, grep,
+sort, uniq, echo, printf,
+python3, pip3,
+godot, mcp
+```
+
+---
+
 ## 验证方法
 
-MCP Server 重启后，在 Roo Code 中调用 `run_godot_script` 工具即可验证。
+MCP Server 重启后，在 Roo Code 中调用对应工具即可验证。
 
 ```json
 // 调用示例
