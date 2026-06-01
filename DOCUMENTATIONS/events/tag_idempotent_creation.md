@@ -12,7 +12,7 @@ Tag 系统如果没有创建规约，最终必然演变成一本没人看得懂�
 
 ## 🔪 三问法：幂等性创建流程
 
-每次你（或策划）面对一个新事件/场景/动作时，必须**机械式地回答三个问题**，才能生成 Tag。这就叫**幂等性（Idempotency）**——同样的输入，永远输出同样的 Tag。
+每次你（或策划）面对一个新事件/场景/动作时，必须**机械式地回答三个问题**，才能生成 Tag。这就叫**幂等性（Idempotency）**——同样的输入，永远输出同样的 Tag。这三个问题产出的是标签的前三个类比，第四个类别取决于事件自己的属性，比如说“月下听琴”的第四个类别就是“qin_under_moon“
 
 ### 第 1 问：动作归属（Domain & Category）
 
@@ -61,6 +61,21 @@ Tag 系统如果没有创建规约，最终必然演变成一本没人看得懂�
 | `brawl` | 斗殴相关 | — |
 | `commerce` | 商业相关 | — |
 | `art` | 艺术相关 | `art:dance`、`art:music` |
+
+### 🔪 架构切片：第四级标签的绝对生成法则 (The 4th Tag SOP)
+前三级标签 (domain:category:type) 解决的是“这件事的性质是什么”（比如 action:entertain:elegant）。
+第四级标签 (specific) 只有一个职责：指出这场事件的【原子核心实体（Atomic Entity）】！
+
+它必须遵守以下三个死命令：
+
+必须是纯粹的名词！ 绝对不允许出现任何状态描述词、时间词、地点词或形容词 😡。
+
+必须是系统的最小资源单位！ 比如具体的乐器、具体的舞蹈流派、具体的官职。
+
+去语境化（De-contextualization）！ 剥离掉所有外部条件。
+
+错误示范： qin_under_moon（混入了环境）、sad_qin（混入了情绪）、qin_with_friend（混入了人物）。
+正确唯一解： guqin（古琴）。
 
 ---
 
@@ -177,3 +192,74 @@ Tag 系统如果没有创建规约，最终必然演变成一本没人看得懂�
    - 更新本文档的词典表
    - 更新 Linter 规则
    - 添加至少 3 个能证明该新值有用的案例
+
+
+# 另：
+在使用完成上面的方法之后，使用这一套方法搭配@tag_dictionary 决定一个事件的tag。不是每一维度都必须有一个tag
+
+### 第二种分类方法：五维分面法 (The 5-Facet Framework)
+
+不要去死磕一个事件属于什么“绝对分类”，而是把世界拆解成 5 个独立的面（Facet）。你的事件库配置表里，每个事件的 `Trigger_Tags` 应该是一个数组，从以下 5 个维度中按需挑选拼装：
+
+#### 1. 动因面 (Action) —— “你在干什么？”
+
+这是事件发生的直接触发器。玩家点击了什么按钮？执行了什么动作？
+
+* **你的对应 Tag：** `ACTION_MAIN_JIAOYOU_GENERAL` (交游), `ACTION_TRAVEL_EXILE_GENERAL` (贬谪), `ACTION_SPECIAL_DEEPSEEK_GENERAL` (冥想)。
+* **架构意义：** 没有 Action，事件就不会被主动触发。
+
+#### 2. 状态面 (Actor State) —— “你现在是个什么东西？”
+
+这是事件发生时，主角自身的物理或社会属性前置条件。
+
+* **你的对应 Tag：** `ACTOR_HEALTH_SICK_GENERAL` (生病), `ACTOR_HEALTH_DRUNK_GENERAL` (宿醉), `ACTOR_EMOTION_DESPAIR_GENERAL` (郁结)。
+* **架构意义：** 同样是“交游 (Action)”，生病时触发的交游和宿醉时触发的交游，拉起的是完全不同的事件。
+
+#### 3. 环境/时局面 (Environment/Social) —— “外部世界怎么了？”
+
+这是大唐的客观底色。季节、灾荒、朝堂动荡。
+
+* **你的对应 Tag：** `SOCIAL_NATURE_AUTUMN_GENERAL` (秋风), `SOCIAL_WAR_RUIN_GENERAL` (战乱), `SOCIAL_COURT_CORRUPT_GENERAL` (朝堂腐败)。
+* **架构意义：** 限制事件的发生时空。安史之乱爆发前，绝对不能刷出带有 `WAR_RUIN` 标签的事件。
+
+#### 4. 审美/意境面 (Vibe/Theme) —— “这件事的文学灵魂是什么？”
+
+这是你作为诗词模拟器最核心的独创维度！它是事件产出意象（Imaginary）的暗示。
+
+* **你的对应 Tag：** `INTEL_VIBE_ZEN_GENERAL` (禅意), `INTEL_VIBE_TAO_GENERAL` (求仙), `INTEL_VIBE_HISTORY_GENERAL` (沧桑)。
+* **架构意义：** 当玩家需要收集【禅意】类意象去写诗时，他会刻意去寻找带有 `INTEL_VIBE_ZEN` 标签的事件（比如去古刹拜谒）。
+
+#### 5. 对象面 (Target) —— “跟谁？” (可选，如果涉及具体 NPC 或阵营)
+
+* *你的列表中目前通过 Action 融合了，比如 `ACTION_RELATION_FRIEND_GENERAL`。建议将其独立为 `TARGET_FACTION_QINGLIU` 或 `TARGET_NPC_LIBAI`，这样解耦更干净。*
+
+---
+
+### 架构实战：多标签交集碰撞 (Tag Intersection)
+
+使用了五维分面法后，你的事件配置和触发逻辑将变得极其立体且高度复用。
+
+**场景设定：** 玩家当前处于【秋天】(`SOCIAL_NATURE_AUTUMN`)，且处于【极度郁结】状态 (`ACTOR_EMOTION_DESPAIR`)。他点击了【登高】按钮 (`ACTION_MAIN_DENGGAO`)。
+
+此时，事件管理器 (Event Manager) 会拿着这三个 Tag 去扫你的事件库。
+
+**事件 A：普通的登高**
+
+* `Tags: [ACTION_MAIN_DENGGAO]`
+* *匹配度：命中 1 个。*
+
+**事件 B：秋日登高思乡**
+
+* `Tags: [ACTION_MAIN_DENGGAO, SOCIAL_NATURE_AUTUMN, INTEL_VIBE_HISTORY]`
+* *匹配度：命中 2 个。*
+
+**事件 C：绝境中的绝唱（极稀有事件）**
+
+* `Tags: [ACTION_MAIN_DENGGAO, SOCIAL_NATURE_AUTUMN, ACTOR_EMOTION_DESPAIR]`
+* *匹配度：命中 3 个（完美契合）！* 最终系统拉起事件 C。文本描述可能是：“秋风萧瑟，你满心郁结，登上高台，只觉天地苍茫，怆然而涕下。”结算时直接给予极品意象。
+
+### 总结给你的行动建议
+
+1. **打散你的事件 Tag 数组：** 不要妄图用一个 Tag 描述完整个事件（比如不要搞出 `ACTION_DENGGAO_IN_AUTUMN_WHILE_SICK` 这种怪物）。拆成 `[ACTION_DENGGAO, SOCIAL_AUTUMN, ACTOR_SICK]`。
+2. **清理目前的命名库：** 你的库底子非常棒，充满了唐诗的浪漫主义气息。保持这种 `大类_子类_细分` 的格式。
+3. **情绪获取顺理成章：** 就像你之前问的情感怎么获取？当一个事件同时挂载了 `ACTION_TRAVEL_EXILE` 和 `SOCIAL_WAR_RUIN` 时，甚至都不需要你手写代码，系统自动根据这两个 Tag 就能推导出应该在 `on_enter` 时给玩家增加 `DESPAIR`（绝望）属性。标签本身就是数据的驱动力。
