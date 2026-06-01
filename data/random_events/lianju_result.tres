@@ -28,4 +28,4 @@ options = Array[ExtResource("2_baseopt")]([SubResource("Resource_opt_continue")]
 pre_event_interrupter_sequence = null
 uuid = "lianju_result"
 name = "联句·结果"
-description = "你以「{@lianju_picked_name}」对句，赢得 {@lianju_score} 文名！"
+description = "你以「{@lianju_picked_name}」对句，赢得 {@lianju_score} 文名！[br]{@lianju_evaluation}"

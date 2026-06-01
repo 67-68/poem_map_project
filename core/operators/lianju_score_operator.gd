@@ -120,10 +120,23 @@ func _apply_score():
 
 	EventBus.lianju_score_calculated.emit(_final_score)
 
+	# 根据分数计算评语
+	var evaluation: String
+	if _final_score >= 40:
+		evaluation = "妙绝！此句浑然天成，四座皆惊！"
+	elif _final_score >= 25:
+		evaluation = "佳句！宾客纷纷点头赞许。"
+	elif _final_score >= 10:
+		evaluation = "尚可，中规中矩。"
+	else:
+		evaluation = "你的对句平淡无奇…"
+	Logging.info("LianjuScoreOperator: evaluation = '%s' (score=%d)" % [evaluation, _final_score])
+
 	var ctx = {
 		"lianju_score": _final_score,
 		"lianju_picked_name": _picked_name,
 		"lianju_emotion_match": _had_emotion_match,
+		"lianju_evaluation": evaluation,
 	}
 	if _picked_imaginary:
 		ctx["lianju_picked_level"] = _picked_imaginary.current_level
