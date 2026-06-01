@@ -158,6 +158,7 @@ flag_bool_has(name=flag_visited_palace), prop_gt(name=money, val=100)
 |------|------|------|------|
 | `push_event` | event_key | 将事件推入栈顶（LIFO 优先级处理，栈为空后才处理普通队列） | `push_event(event_key=evt_aftermath)` |
 | `pop_event` | 无参数 | 弹出当前栈顶事件，播放下一个栈中事件 | `pop_event()` |
+| `pop_to_event` | event_key | 在栈中搜索指定事件 ID，弹出到该层级（目标事件留在栈顶重新展示），未找到时报错无效果 | `pop_to_event(event_key=mid_of_wenhuaquan_party)` |
 
 > 💡 **使用场景**：适用于"必须在当前事件链结束后才能处理其他事件"的场景。例如事件 A 的结果中 `push_event(event_key=evt_aftermath)` 将 aftermath 推入栈 → 当前事件结束后栈不为空 → 自动播放 aftermath → aftermath 中 `pop_event()` 弹出自身 → 栈空 → 回到普通队列。
 >

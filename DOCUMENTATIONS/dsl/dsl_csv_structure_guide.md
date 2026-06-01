@@ -166,7 +166,8 @@ row_type | template | uuid | context | requirements | title | description | resu
     - 栈事件操作:
       - `push_event(event_key=<事件KEY>)` — 将事件推入栈顶（LIFO），当前事件结束后优先播放
       - `pop_event()` — 弹出当前栈顶事件，播放下一个栈中事件
-      - 示例: `push_event(event_key=evt_aftermath)`, `pop_event()`
+      - `pop_to_event(event_key=<事件KEY>)` — 在栈中搜索指定事件 ID，弹出到该层级（目标事件留在栈顶重新展示），未找到时报错无效果
+      - 示例: `push_event(event_key=evt_aftermath)`, `pop_event()`, `pop_to_event(event_key=mid_of_wenhuaquan_party)`
     - 队列事件操作（新）:
       - `queue_event(event_key=<事件KEY>)` — 将事件排入普通事件队列（FIFO），排队等候处理
       - 示例: `queue_event(event_key=evt_aftermath)`

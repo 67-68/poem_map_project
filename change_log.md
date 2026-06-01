@@ -1,5 +1,8 @@
 # [unreleased]
 ## Added
+- `PopToEventOperator` — 按事件 ID 寻址弹栈操作符，从栈中弹出到指定事件层级，未找到时报错无效果
+- `EventBus.pop_to_event(event_key: String)` — 新信号，支持按 key 寻址弹栈
+- `NarrativeOverlay._on_pop_to_event()` — 栈搜索 + 弹出到目标事件的处理器
 - controller 支持 `$ dsl {consequence_operators}` 语法，可直接执行 DSL 操作符链
 - `parse_flag_requirement` 的 int 分支实现（5 段式 `flag:int:OPERATOR:FLAG_ID:VALUE`）
 - `interrupt_event(requirement_syntax, operator_syntax)` DSL 语法，用于事件触发前的中断检查（`interruptions` 列）
