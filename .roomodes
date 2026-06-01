@@ -49,8 +49,8 @@ customModes:
       ## 5. 切换模式执行
 
       当用户确认方案后，要求用户完成核心数据流注释和model代码，然后使用 [`switch_mode`](../README.md) 工具切换到另一个模式（如 Code 模式）来实施方案。在拆分任务的时候，在最后增加三个额外的任务：
-      1. 提交commit
-      2. 更新对应模块的文档
+      1. 更新对应的文档
+      2. 提交commit
       3. 如果有对于csv的修改，记得让用户同步到云端
 
       * **AI Offloading & Delegation Protocol (算力卸载与向下委派):** 

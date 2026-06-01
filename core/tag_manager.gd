@@ -22,3 +22,20 @@ static func normalize_3part_depreciated_tag(tag: String):
     if tag.split(':').size() <= 3:
         tag += ":general"
     return tag
+
+# ──────────────────────────────────────────────
+# 前缀匹配工具（用于 tag 系统革新）
+# ──────────────────────────────────────────────
+
+## 提取 tag 的前 N 级前缀（默认前 3 级）
+## 例如：get_prefix("actor:health:sick:general", 3) → "actor:health:sick"
+static func get_prefix(tag: String, levels: int = 3) -> String:
+    var parts = tag.split(":")
+    var count = mini(parts.size(), levels)
+    var prefix_parts = parts.slice(0, count)
+    return prefix_parts.join(":")
+
+## 前缀匹配：比较两个 tag 的前 N 级是否相同（默认前 3 级）
+## 第 4 级及以后被完全忽略
+static func prefix_match(tag_a: String, tag_b: String, levels: int = 3) -> bool:
+    return get_prefix(tag_a, levels) == get_prefix(tag_b, levels)

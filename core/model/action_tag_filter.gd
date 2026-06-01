@@ -3,14 +3,6 @@ class_name ActionTagFilter extends BaseEventPoolFilter
 static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[EventTicket]:
     var new_events = {}
     var current_tags = PlayerState.current_action_tags
-
-    # 🔍 检查输入标签是否为三段式（向后兼容检查）
-    for tag in current_tags:
-        if tag.split(':').size() <= 3:
-            breakpoint
-            if tag.ends_with('general'):
-                Logging.err('标签 %s 有三段式标签但带着general' % tag)
-            push_error("🚨 [ActionTagFilter] 发现三段式标签注入: %s，应该在注入时通过 TagManager.normalize_3part_depreciated_tag() 标准化为四段式" % tag)
     
     for ticket in tickets:
         var e: BaseEvent
@@ -39,16 +31,18 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
             Logging.warn("检查自己是不是又忘记给玩家加current tags了！！！又筛选掉了")
             continue
 
-        # 3. 对暗号与权重狂欢
+        # 3. 🚀 革新匹配：前缀匹配，仅对比前3级，第4级忽略
         for tag in current_tags:
-            if e.target_tags.has(tag):
-                if new_events.has(ticket.event_uuid):
-                    # 多个 tag 命中，继续追加原始权重
-                    new_events[ticket.event_uuid].weight += ticket.original_weight * 3 # 这里可能出问题，导致一个事件反复出现
-                else:
-                    new_events[ticket.event_uuid] = ticket
-                    # 首次命中，权重起飞！
-                    new_events[ticket.event_uuid].weight *= 9
+            for target_tag in e.target_tags:
+                if TagManager.prefix_match(tag, target_tag, 3):
+                    if new_events.has(ticket.event_uuid):
+                        # 多个 tag 命中，继续追加原始权重
+                        new_events[ticket.event_uuid].weight += ticket.original_weight * 3
+                    else:
+                        new_events[ticket.event_uuid] = ticket
+                        # 首次命中，权重起飞！
+                        new_events[ticket.event_uuid].weight *= 9
+                    break  # 一个事件匹配一个当前 tag 就够了，跳出 target_tag 内层循环
                     
     # 将字典的值强转回 Array[EventTicket]
     var result: Array[EventTicket] = []

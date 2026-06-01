@@ -18,10 +18,9 @@ func _on_button_pressed() -> void:
 	if action.action_results:
 		for r in action.action_results: r.operate()
 	
-	# 🔧 标准化标签：确保三段式标签转换为四段式
+	# 🚀 革新后：不再需要标准化，前缀匹配自动忽略第4级
 	for tag in action.action_tags:
-		var normalized_tag = TagManager.normalize_3part_depreciated_tag(tag)
-		PlayerState.current_action_tags.append(normalized_tag)
+		PlayerState.current_action_tags.append(tag)
 	var context = {'main_tag': action.main_tag}
 	EventManager.scan_events(0, context)
 

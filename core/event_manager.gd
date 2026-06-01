@@ -63,7 +63,8 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
     for t in tags:
         for e in Database.normal_poem_events.values():
             for target_tag in e.target_tags:
-                if target_tag == t:
+                # 🚀 革新匹配：前缀匹配，仅对比前3级
+                if TagManager.prefix_match(target_tag, t, 3):
                     tickets.append(_create_ticket(e))
     #breakpoint
     scan_events_from_tickets(tickets, 0.0, 'da_you_shi', {})
