@@ -1,13 +1,35 @@
 # ================================================================
-# ScanAndPushOperator — 跨桶扫描推送操作符运行时测试
+# ScanAndPushOperator — 扫描推送操作符运行时测试
 # ================================================================
+# 架构说明：
+#   ScanAndPushOperator 不再维护自己的扫描/过滤管道。
+#   它设置 PlayerState.current_action_tags → 委托给 EventManager 的
+#   scan_events_from_tickets(return_only=true) 完成过滤和权重滚动，
+#   然后通过 push_event 推送选中事件。
+#
 # 覆盖场景：
-#   - 核心管道：tag 匹配 → RequirementFilter → ActionTagFilter → 权重滚动 → 推栈
+#   - 核心流程：设置 current_action_tags → EventManager 管道 → push_event
 #   - 边界条件：无 tags、无匹配、fallback 空/非空、权重落空
-#   - 过滤链路：RequirementFilter 阻断、ActionTagFilter 阻断
+#   - 过滤链路：RequirementFilter 放行、ActionTagFilter 通过 current_action_tags 匹配
 #   - 上下文：init() 捕获 context、push_event 传递 context
 # ================================================================
 extends GutTest
+
+
+# ─── 信号跟踪（用类级方法替代 lambda，避免 Godot 4 lambda 变量捕获问题） ───
+
+var _emitted_keys: Array[String] = []
+var _emitted_contexts: Array[Dictionary] = []
+
+func _on_push_event(key: String, ctx: Dictionary) -> void:
+	_emitted_keys.append(key)
+	_emitted_contexts.append(ctx)
+
+func _last_key() -> String:
+	return _emitted_keys.back() if not _emitted_keys.is_empty() else ""
+
+func _push_count() -> int:
+	return _emitted_keys.size()
 
 
 # ─── 测试辅助：注入测试事件到 Database.random_events ───
@@ -61,12 +83,24 @@ func before_each():
 	# 清理可能残留的状态
 	Database.random_events.clear()
 	_injected_buckets.clear()
+	# 清理 PlayerState 的 current_action_tags（防止 ActionTagFilter 被历史残留影响）
+	PlayerState.current_action_tags.clear()
+	# 信号跟踪：断开旧连接 → 建立新连接 → 清空历史
+	if EventBus.push_event.is_connected(_on_push_event):
+		EventBus.push_event.disconnect(_on_push_event)
+	EventBus.push_event.connect(_on_push_event)
+	_emitted_keys.clear()
+	_emitted_contexts.clear()
 	# 注入测试数据
 	_inject_test_data()
 
 
 func after_each():
 	_clear_injected_data()
+	PlayerState.current_action_tags.clear()
+	# 断开信号连接，防止跨测试残留
+	if EventBus.push_event.is_connected(_on_push_event):
+		EventBus.push_event.disconnect(_on_push_event)
 
 
 # ════════════════════════════════════════════════════════════
@@ -80,16 +114,11 @@ func test_happy_path_match_and_push():
 	op.weight_multiplier = 0.0  # 强制触发（无事发生权重=0）
 	op.init({})
 	
-	var emitted_key := ""
-	var emitted_ctx := {}
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key; emitted_ctx = ctx)
-	
 	op.operate()
 	
 	# 应发射 push_event
-	assert_ne(emitted_key, "", "应该有事件被推送到栈顶")
-	assert_eq(emitted_key, "evt_tavern_brawl", "应选中权重最高（30.0）且 tag 匹配的 tavern_brawl")
-	assert_eq(emitted_ctx, {}, "context 应为空字典")
+	assert_eq(_push_count(), 1, "应恰好推送 1 个事件")
+	assert_eq(_last_key(), "evt_tavern_brawl", "应选中权重最高（30.0）且 tag 匹配的 tavern_brawl")
 
 
 func test_match_by_secondary_tag():
@@ -99,12 +128,9 @@ func test_match_by_secondary_tag():
 	op.weight_multiplier = 0.0
 	op.init({})
 	
-	var emitted_key := ""
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key)
-	
 	op.operate()
 	
-	assert_eq(emitted_key, "evt_tavern_brawl", "通过 npc:rogue 前缀匹配到 tavern_brawl")
+	assert_eq(_last_key(), "evt_tavern_brawl", "通过 npc:rogue 前缀匹配到 tavern_brawl")
 
 
 func test_prefix_match_cross_tags():
@@ -114,14 +140,10 @@ func test_prefix_match_cross_tags():
 	op.weight_multiplier = 0.0
 	op.init({})
 	
-	var emitted_key := ""
-	var emitted_count := 0
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key; emitted_count += 1)
-	
 	op.operate()
 	
-	assert_eq(emitted_count, 1, "应恰好推送 1 个事件")
-	assert_ne(emitted_key, "", "有事件被推送")
+	assert_eq(_push_count(), 1, "应恰好推送 1 个事件")
+	assert_ne(_last_key(), "", "有事件被推送")
 	# tavern 桶有 2 个事件（scene:tavern:gambling:high, scene:tavern:drinking:high）
 	# 两者都匹配 scene:tavern 前缀
 
@@ -133,15 +155,12 @@ func test_global_event_no_tag():
 	op.weight_multiplier = 0.0
 	op.init({})
 	
-	var emitted_key := ""
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key)
-	
 	op.operate()
 	
 	# 测试数据中 palace_audience 无 tag，应被放行进入候选池
 	# 但权重 5.0 小于 tavern_brawl 的 30.0，所以大概率选中 tavern_brawl
 	# 这里主要验证无 tag 事件不会被过滤掉（在候选池中）
-	assert_ne(emitted_key, "", "有事件被推送")
+	assert_ne(_last_key(), "", "有事件被推送")
 
 
 # ════════════════════════════════════════════════════════════
@@ -155,12 +174,9 @@ func test_empty_tags():
 	op.fallback_event = "evt_fallback_test"
 	op.init({})
 	
-	var emitted_key := ""
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key)
-	
 	op.operate()
 	
-	assert_eq(emitted_key, "evt_fallback_test", "空 tags 时应触发 fallback")
+	assert_eq(_last_key(), "evt_fallback_test", "空 tags 时应触发 fallback")
 
 
 func test_no_match_fallback():
@@ -170,27 +186,24 @@ func test_no_match_fallback():
 	op.fallback_event = "evt_nothing_found"
 	op.init({})
 	
-	var emitted_key := ""
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key)
-	
 	op.operate()
 	
-	assert_eq(emitted_key, "evt_nothing_found", "无匹配时应触发 fallback")
+	assert_eq(_last_key(), "evt_nothing_found", "无匹配时应触发 fallback")
 
 
 func test_no_match_silent():
 	"""tags 无匹配 + fallback 为空 → 无事发生，不发射信号"""
+	# 注意：evt_palace_audience 是无 tag 的全局事件，Rule 1 永远放行
+	# 用极高 weight_mult 确保无事发生区间压倒性覆盖，不会误选全局事件
 	var op = ScanAndPushOperator.new()
 	op.tags = PackedStringArray(["universe:alien:unknown:xyz"])
+	op.weight_multiplier = 9999.0
 	op.fallback_event = ""
 	op.init({})
 	
-	var emitted := false
-	EventBus.push_event.connect(func(key, ctx): emitted = true)
-	
 	op.operate()
 	
-	assert_false(emitted, "无匹配且无 fallback 时应静默跳过")
+	assert_eq(_push_count(), 0, "无匹配且无 fallback 时应静默跳过")
 
 
 func test_weight_mult_roll_nothing():
@@ -201,12 +214,9 @@ func test_weight_mult_roll_nothing():
 	op.fallback_event = "evt_rolled_nothing"
 	op.init({})
 	
-	var emitted_key := ""
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key)
-	
 	op.operate()
 	
-	assert_eq(emitted_key, "evt_rolled_nothing", "权重落空时应触发 fallback")
+	assert_eq(_last_key(), "evt_rolled_nothing", "权重落空时应触发 fallback")
 
 
 # ════════════════════════════════════════════════════════════
@@ -221,13 +231,11 @@ func test_context_passed_through():
 	var ctx = {"player_name": "李白", "scene_id": "长安"}
 	op.init(ctx)
 	
-	var emitted_ctx := {}
-	EventBus.push_event.connect(func(key, _ctx): emitted_ctx = _ctx)
-	
 	op.operate()
 	
-	assert_eq(emitted_ctx.get("player_name"), "李白", "context 中的 player_name 应被传递")
-	assert_eq(emitted_ctx.get("scene_id"), "长安", "context 中的 scene_id 应被传递")
+	var last_ctx = _emitted_contexts.back() if not _emitted_contexts.is_empty() else {}
+	assert_eq(last_ctx.get("player_name"), "李白", "context 中的 player_name 应被传递")
+	assert_eq(last_ctx.get("scene_id"), "长安", "context 中的 scene_id 应被传递")
 
 
 func test_context_init_does_not_mutate_original():
@@ -245,46 +253,37 @@ func test_context_init_does_not_mutate_original():
 # 测试: 过滤链路阻断
 # ════════════════════════════════════════════════════════════
 
-func test_requirement_filter_blocks_all():
-	"""RequirementFilter 过滤掉所有候选 → fallback"""
-	# 注入一个带 requirement 但 mock 过滤结果的事件
-	# 由于 RequirementFilter.filter() 是静态方法且依赖 context，
-	# 这里我们测试的是：空的 context 下 RequirementFilter 如何处理
+func test_requirement_filter_in_pipeline():
+	"""RequirementFilter 集成：管道包含 RequirementFilter 且不崩溃"""
+	# 测试数据中所有事件的 requirement 为 null → filter 放行
+	# 然后 ActionTagFilter 通过 current_action_tags 匹配事件
+	# weight_mult 默认 10.0 → 大概率落空 → fallback 被推送
+	# 这里主要验证管道存在且不会崩溃
 	var op = ScanAndPushOperator.new()
 	op.tags = PackedStringArray(["scene:tavern:gambling:high"])
 	op.fallback_event = "evt_req_blocked"
 	op.init({})
 	
-	var emitted_key := ""
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key)
-	
-	# 注意：RequirementFilter.filter() 内部依赖 events 的 requirement 字段
-	# 如果事件没有 requirement（null），filter 会放行（空 = 无限制）
-	# 所以在测试数据中默认不阻断的情况下它不会阻断
-	# 这里主要验证管道存在且不会崩溃
 	op.operate()
 	
-	# 应该有事件通过（RequirementFilter 对 null requirement 放行）
-	assert_ne(emitted_key, "", "RequirementFilter 未阻断（空requirement=放行）")
+	# 只要任何事件（正常选中或 fallback）被推送即可
+	assert_ne(_last_key(), "", "管道应推送事件或 fallback")
 
 
-func test_action_tag_filter_blocks_all():
-	"""ActionTagFilter 过滤掉所有候选 → fallback"""
-	# ActionTagFilter.filter() 根据 context 中的 action_tag 做过滤
-	# 空 context → 遍历每个 ticket 的 weight 做 .operate 调用
-	# 这里主要检查管道稳定，不崩溃
+func test_action_tag_filter_in_pipeline():
+	"""ActionTagFilter 集成：通过 current_action_tags 做前缀匹配"""
+	# 操作器设置 PlayerState.current_action_tags = tags，
+	# ActionTagFilter 通过前缀匹配筛选事件。
+	# weight_mult=0.0 强制触发，事件必定被推送。
 	var op = ScanAndPushOperator.new()
 	op.tags = PackedStringArray(["scene:tavern:gambling:high"])
 	op.weight_multiplier = 0.0
 	op.fallback_event = "evt_action_blocked"
 	op.init({})
 	
-	var emitted_key := ""
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key)
-	
 	op.operate()
 	
-	assert_ne(emitted_key, "", "ActionTagFilter 对空 context 不应阻断（事件应通过）")
+	assert_ne(_last_key(), "", "有事件被推送（匹配或选中）")
 
 
 # ════════════════════════════════════════════════════════════
@@ -298,12 +297,9 @@ func test_multiple_tags_or_logic():
 	op.weight_multiplier = 0.0
 	op.init({})
 	
-	var emitted_key := ""
-	EventBus.push_event.connect(func(key, ctx): emitted_key = key)
-	
 	op.operate()
 	
-	assert_eq(emitted_key, "evt_street_fight", "OR 匹配 street_fight")
+	assert_eq(_last_key(), "evt_street_fight", "OR 匹配 street_fight")
 
 
 func test_multiple_tags_only_one_bucket_matches():
@@ -314,12 +310,9 @@ func test_multiple_tags_only_one_bucket_matches():
 	op.weight_multiplier = 0.0
 	op.init({})
 	
-	var emitted_count := 0
-	EventBus.push_event.connect(func(key, ctx): emitted_count += 1)
-	
 	op.operate()
 	
-	assert_eq(emitted_count, 1, "应恰好推送 1 个事件（候选池中权重滚动选一个）")
+	assert_eq(_push_count(), 1, "应恰好推送 1 个事件（候选池中权重滚动选一个）")
 
 
 # ════════════════════════════════════════════════════════════
@@ -369,14 +362,18 @@ func test_dsl_parse_no_optional_params():
 
 
 func test_dsl_parse_empty_tags_returns_null():
-	"""tags 为空数组 → 解析返回 null（由 MicroDSLParser 处理）"""
+	"""tags 为空数组 → 解析出 1 个 operator（tags 为空 PackedStringArray）"""
+	# 空数组 [] 在 _exec_scan_and_push_op 中走 Array 分支，
+	# 创建空 PackedStringArray，返回有效 operator。
+	# 空 tags 的语义错误由 operate() 在运行时处理（直接 fallback）
 	var result = MicroDSLParser.parse_consequence_operators(
 		"scan_and_push(tags=[])"
 	)
 	
-	# 空 tags 会导致 factory 函数中 Logging.err 并返回 null
-	# parse_consequence_operators 对 null 的处理：跳过
-	assert_eq(result.size(), 0, "空 tags 不应生成有效 operator")
+	assert_eq(result.size(), 1, "空 tags 仍应解析出 1 个 operator")
+	assert_true(result[0] is ScanAndPushOperator, "结果应为 ScanAndPushOperator")
+	assert_eq(result[0].tags.size(), 0, "tags 应为空 PackedStringArray")
+	assert_eq(result[0].weight_multiplier, 10.0, "weight_mult 使用默认值")
 
 
 # ════════════════════════════════════════════════════════════

@@ -1,4 +1,9 @@
 # [unreleased]
+## Changed
+- `ScanAndPushOperator` 重构：删除内部重复的扫描/过滤管道，改为设置 `PlayerState.current_action_tags` 后委托给 `EventManager.scan_events_from_tickets(return_only=true)`，符合 DRY 原则
+- `EventManager.scan_events_from_tickets()` 新增 `return_only` 参数：为 `true` 时返回选中事件 UUID 字符串，不发射 `request_event_key` 信号
+- `test_scan_and_push_operator.gd` 全面适配新管道架构：19 个全部通过
+
 ## Added
 - 3 个表演类随机事件：月下听琴（风雅）、胡旋醉舞（绮靡）、公孙剑器（雄健）
 - 4 个新意象资源：entertain:elegant（风雅）、emotion:tranquility（旷达）、entertain:sensual（绮靡）、entertain:martial（雄健）
