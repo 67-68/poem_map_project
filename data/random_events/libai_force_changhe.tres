@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" path="res://core/model/emotion_configs.gd" id="1_tbpbu"]
 [ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_thu6i"]
 [ext_resource type="Script" path="res://core/operators/flag_operator.gd" id="3_s0st3"]
 [ext_resource type="Script" path="res://model/choice_result.gd" id="4_1we4o"]
@@ -10,31 +9,31 @@
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="7_3466r"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="8_yntpj"]
 
-[sub_resource type="Resource" id="Resource_thu6i"]
+[sub_resource type="Resource" id="Resource_tbpbu"]
 script = ExtResource("3_s0st3")
 flag_id = "flag_libai_changhe_request"
 type = "int"
 value = 0
 
-[sub_resource type="Resource" id="Resource_s0st3"]
+[sub_resource type="Resource" id="Resource_thu6i"]
 script = ExtResource("4_1we4o")
-operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_thu6i")])
+operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_tbpbu")])
 
 [sub_resource type="Resource" id="Resource_x1pmm"]
 script = ExtResource("6_thu6i")
 key_of_resource_in_context = "poem_taste"
 next_event_key = "demonstrate_poem_to_people"
 
-[sub_resource type="Resource" id="Resource_1we4o"]
+[sub_resource type="Resource" id="Resource_s0st3"]
 script = ExtResource("6_5kuoh")
 
-[sub_resource type="Resource" id="Resource_lg01x"]
+[sub_resource type="Resource" id="Resource_1we4o"]
 script = ExtResource("4_1we4o")
-operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_x1pmm"), SubResource("Resource_1we4o")])
+operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_x1pmm"), SubResource("Resource_s0st3")])
 
-[sub_resource type="Resource" id="Resource_5kuoh"]
+[sub_resource type="Resource" id="Resource_lg01x"]
 script = ExtResource("7_3466r")
-choice_result = SubResource("Resource_lg01x")
+choice_result = SubResource("Resource_1we4o")
 custom_context_params = {
 "poem_taste": "urn:poem_taste:libai_taste",
 "taste_owner_relation_flag": "flag_relation_with_libai"
@@ -42,48 +41,48 @@ custom_context_params = {
 uuid = "libai_force_changhe_accept"
 description = "和一首！"
 
-[sub_resource type="Resource" id="Resource_3466r"]
+[sub_resource type="Resource" id="Resource_5kuoh"]
 script = ExtResource("3_s0st3")
 flag_id = "flag_relation_with_libai"
 type = "int"
 value = -20
 operation = "append"
+
+[sub_resource type="Resource" id="Resource_3466r"]
+script = ExtResource("6_5kuoh")
 
 [sub_resource type="Resource" id="Resource_yntpj"]
-script = ExtResource("6_5kuoh")
+script = ExtResource("4_1we4o")
+operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_5kuoh"), SubResource("Resource_3466r")])
 
 [sub_resource type="Resource" id="Resource_6dw27"]
-script = ExtResource("4_1we4o")
-operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_3466r"), SubResource("Resource_yntpj")])
-
-[sub_resource type="Resource" id="Resource_41w4a"]
 script = ExtResource("7_3466r")
-choice_result = SubResource("Resource_6dw27")
+choice_result = SubResource("Resource_yntpj")
 description = "拂袖而去"
 
-[sub_resource type="Resource" id="Resource_jeg0a"]
+[sub_resource type="Resource" id="Resource_41w4a"]
 script = ExtResource("3_s0st3")
 flag_id = "flag_relation_with_libai"
 type = "int"
 value = -20
 operation = "append"
 
-[sub_resource type="Resource" id="Resource_dlsux"]
+[sub_resource type="Resource" id="Resource_jeg0a"]
 script = ExtResource("6_5kuoh")
 
-[sub_resource type="Resource" id="Resource_u2s4u"]
+[sub_resource type="Resource" id="Resource_dlsux"]
 script = ExtResource("4_1we4o")
-operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_jeg0a"), SubResource("Resource_dlsux")])
+operators = Array[ExtResource("2_thu6i")]([SubResource("Resource_41w4a"), SubResource("Resource_jeg0a")])
 
-[sub_resource type="Resource" id="Resource_20k2h"]
+[sub_resource type="Resource" id="Resource_u2s4u"]
 script = ExtResource("7_3466r")
-choice_result = SubResource("Resource_u2s4u")
+choice_result = SubResource("Resource_dlsux")
 description = "拂袖而去"
 
 [resource]
 script = ExtResource("8_yntpj")
-options = Array[ExtResource("5_lg01x")]([SubResource("Resource_5kuoh"), SubResource("Resource_41w4a"), SubResource("Resource_20k2h")])
-on_enter_result = SubResource("Resource_s0st3")
+options = Array[ExtResource("5_lg01x")]([SubResource("Resource_lg01x"), SubResource("Resource_6dw27"), SubResource("Resource_u2s4u")])
+on_enter_result = SubResource("Resource_thu6i")
 uuid = "libai_force_changhe"
 name = "李白强迫唱和"
 description = "李白醉醺醺地盯着你：来都来了，必须与我一和！"

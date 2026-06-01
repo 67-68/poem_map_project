@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" path="res://core/model/emotion_configs.gd" id="1_djxbv"]
 [ext_resource type="Script" path="res://model/event/base_option.gd" id="2_7j63j"]
 [ext_resource type="Script" path="res://core/model/base_operator.gd" id="3_djxbv"]
 [ext_resource type="Script" path="res://core/operators/push_event_operator.gd" id="4_7j63j"]
@@ -8,22 +7,22 @@
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="6_uf0ko"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="7_yqxd8"]
 
-[sub_resource type="Resource" id="Resource_djxbv"]
+[sub_resource type="Resource" id="Resource_gw3rk"]
 script = ExtResource("4_7j63j")
 event_key = "mid_of_wenhuaquan_party"
 
-[sub_resource type="Resource" id="Resource_7j63j"]
+[sub_resource type="Resource" id="Resource_djxbv"]
 script = ExtResource("5_3dqip")
-operators = Array[ExtResource("3_djxbv")]([SubResource("Resource_djxbv")])
+operators = Array[ExtResource("3_djxbv")]([SubResource("Resource_gw3rk")])
 
-[sub_resource type="Resource" id="Resource_3dqip"]
+[sub_resource type="Resource" id="Resource_7j63j"]
 script = ExtResource("6_uf0ko")
-choice_result = SubResource("Resource_7j63j")
+choice_result = SubResource("Resource_djxbv")
 description = "（鼓掌）"
 
 [resource]
 script = ExtResource("7_yqxd8")
-options = Array[ExtResource("2_7j63j")]([SubResource("Resource_3dqip")])
+options = Array[ExtResource("2_7j63j")]([SubResource("Resource_7j63j")])
 uuid = "start_of_wenhuaquan_party"
 name = "文化圈盛大筵席!"
 description = "你们假装这是一段很长的很棒的写景抒情文字"

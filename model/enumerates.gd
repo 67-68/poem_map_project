@@ -46,7 +46,12 @@ enum ACTION_TAGS {
     ACTOR_HEALTH_DEATH_GENERAL,
 
     # 灵感特殊行动
-    ACTION_SPECIAL_DEEPSEEK_GENERAL # organize thuought
+    ACTION_SPECIAL_DEEPSEEK_GENERAL, # organize thuought
+
+    # 娱乐/宴饮表演类
+    ACTION_ENTERTAIN_ELEGANT_GENERAL, # 风雅/琴棋书画
+    ACTION_ENTERTAIN_SENSUAL_GENERAL, # 绮靡/酒色歌舞
+    ACTION_ENTERTAIN_MARTIAL_GENERAL  # 雄健/剑舞武艺
 }
 
 enum PROPS {

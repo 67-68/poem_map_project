@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" path="res://core/model/emotion_configs.gd" id="1_udb0x"]
 [ext_resource type="Script" path="res://model/event/base_option.gd" id="2_lnht4"]
 [ext_resource type="Script" path="res://core/model/base_operator.gd" id="3_f46my"]
 [ext_resource type="Script" path="res://core/operators/flag_operator.gd" id="3_hgl8j"]
@@ -67,71 +66,70 @@ choice_result = SubResource("Resource_jyhsk")
 description = "参加联句"
 
 [sub_resource type="Resource" id="Resource_6dq02"]
+script = ExtResource("11_scanpush")
+tags = PackedStringArray("action:entertain:elegant", "action:entertain:martial")
+weight_multiplier = 0.0
+
+[sub_resource type="Resource" id="Resource_ri67r"]
+script = ExtResource("5_hgl8j")
+operators = Array[ExtResource("3_f46my")]([SubResource("Resource_6dq02")])
+
+[sub_resource type="Resource" id="Resource_s76ol"]
+script = ExtResource("6_0tt3c")
+choice_result = SubResource("Resource_ri67r")
+description = "欣赏艺术"
+
+[sub_resource type="Resource" id="Resource_oq8gc"]
 script = ExtResource("8_0tt3c")
 flag_id = "flag_libai_changhe_request"
 type = "int"
 value = 1
 operator = 2
 
-[sub_resource type="Resource" id="Resource_ri67r"]
+[sub_resource type="Resource" id="Resource_p2y8i"]
 script = ExtResource("4_cbnop")
 event_key = "libai_force_changhe"
 
-[sub_resource type="Resource" id="Resource_s76ol"]
+[sub_resource type="Resource" id="Resource_yuguk"]
 script = ExtResource("10_etiw7")
-condition = SubResource("Resource_6dq02")
-condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_ri67r")])
+condition = SubResource("Resource_oq8gc")
+condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_p2y8i")])
 
-[sub_resource type="Resource" id="Resource_oq8gc"]
+[sub_resource type="Resource" id="Resource_kxq5q"]
 script = ExtResource("8_0tt3c")
 flag_id = "flag_relation_with_libai"
 type = "int"
 value = 20
 
-[sub_resource type="Resource" id="Resource_p2y8i"]
+[sub_resource type="Resource" id="Resource_v6k28"]
 script = ExtResource("8_0tt3c")
 flag_id = "flag_libai_changhe_request"
 type = "int"
 value = 0
 operator = 2
 
-[sub_resource type="Resource" id="Resource_yuguk"]
+[sub_resource type="Resource" id="Resource_v4noq"]
 script = ExtResource("10_gdny2")
-operators = Array[ExtResource("8_lswy1")]([SubResource("Resource_oq8gc"), SubResource("Resource_p2y8i")])
+operators = Array[ExtResource("8_lswy1")]([SubResource("Resource_kxq5q"), SubResource("Resource_v6k28")])
 
-[sub_resource type="Resource" id="Resource_kxq5q"]
+[sub_resource type="Resource" id="Resource_2aayb"]
 script = ExtResource("4_cbnop")
 event_key = "request_libai_changhe"
 
-[sub_resource type="Resource" id="Resource_v6k28"]
+[sub_resource type="Resource" id="Resource_ryf1p"]
 script = ExtResource("9_lswy1")
 random_value = 99
-success_operator = SubResource("Resource_kxq5q")
+success_operator = SubResource("Resource_2aayb")
 
-[sub_resource type="Resource" id="Resource_v4noq"]
+[sub_resource type="Resource" id="Resource_44ojx"]
 script = ExtResource("10_etiw7")
-condition = SubResource("Resource_yuguk")
-condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_v6k28")])
-
-[sub_resource type="Resource" id="Resource_art_scan"]
-script = ExtResource("11_scanpush")
-tags = PackedStringArray(["action:entertain:elegant", "action:entertain:martial"])
-weight_multiplier = 0.0
-fallback_event = ""
-
-[sub_resource type="Resource" id="Resource_art_result"]
-script = ExtResource("5_hgl8j")
-operators = Array[ExtResource("3_f46my")]([SubResource("Resource_art_scan")])
-
-[sub_resource type="Resource" id="Resource_art_option"]
-script = ExtResource("6_0tt3c")
-choice_result = SubResource("Resource_art_result")
-description = "欣赏艺术"
+condition = SubResource("Resource_v4noq")
+condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_ryf1p")])
 
 [resource]
 script = ExtResource("7_lswy1")
-options = Array[ExtResource("2_lnht4")]([SubResource("Resource_2litf"), SubResource("Resource_qqgwl"), SubResource("Resource_tub3m"), SubResource("Resource_art_option")])
-pre_event_interrupter_sequence = [SubResource("Resource_s76ol"), SubResource("Resource_v4noq")]
+options = Array[ExtResource("2_lnht4")]([SubResource("Resource_2litf"), SubResource("Resource_qqgwl"), SubResource("Resource_tub3m"), SubResource("Resource_s76ol")])
+pre_event_interrupter_sequence = [SubResource("Resource_yuguk"), SubResource("Resource_44ojx")]
 on_enter_result = SubResource("Resource_etiw7")
 uuid = "mid_of_wenhuaquan_party"
 name = "在盛大讲话完毕之后"

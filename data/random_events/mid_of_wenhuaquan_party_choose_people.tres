@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" path="res://core/model/emotion_configs.gd" id="1_pmq1t"]
 [ext_resource type="Script" path="res://model/event/base_option.gd" id="2_kfyn1"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="3_hvmw1"]
 [ext_resource type="Script" path="res://core/model/item_provider.gd" id="3_kfyn1"]
@@ -9,19 +8,19 @@
 [ext_resource type="Script" path="res://model/choice_result.gd" id="5_bt0i2"]
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="6_vsboh"]
 
-[sub_resource type="Resource" id="Resource_ytsi2"]
+[sub_resource type="Resource" id="Resource_mac76"]
 script = ExtResource("4_xwktu")
 
-[sub_resource type="Resource" id="Resource_xwktu"]
+[sub_resource type="Resource" id="Resource_ytsi2"]
 script = ExtResource("5_bt0i2")
-operators = Array[ExtResource("3_ytsi2")]([SubResource("Resource_ytsi2")])
+operators = Array[ExtResource("3_ytsi2")]([SubResource("Resource_mac76")])
 
-[sub_resource type="Resource" id="Resource_bt0i2"]
+[sub_resource type="Resource" id="Resource_xwktu"]
 script = ExtResource("6_vsboh")
-choice_result = SubResource("Resource_xwktu")
+choice_result = SubResource("Resource_ytsi2")
 description = "回到大厅"
 
-[sub_resource type="Resource" id="Resource_vsboh"]
+[sub_resource type="Resource" id="Resource_bt0i2"]
 script = ExtResource("3_kfyn1")
 list_key = "guests"
 text_template = "走向 {item}"
@@ -31,8 +30,8 @@ use_push_event = true
 
 [resource]
 script = ExtResource("3_hvmw1")
-options = Array[ExtResource("2_kfyn1")]([SubResource("Resource_bt0i2")])
-provider = SubResource("Resource_vsboh")
+options = Array[ExtResource("2_kfyn1")]([SubResource("Resource_xwktu")])
+provider = SubResource("Resource_bt0i2")
 uuid = "mid_of_wenhuaquan_party_choose_people"
 name = "要选谁呢？"
 description = "商务还是运动？"

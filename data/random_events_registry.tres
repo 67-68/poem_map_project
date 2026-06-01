@@ -6,6 +6,7 @@
 script = ExtResource("1_44wta")
 resources = {
 "drink_with_libai": "res://data/random_events/drink_with_libai.tres",
+"elegant_qin_recital": "res://data/random_events/elegant_qin_recital.tres",
 "event_changhe_guest": "res://data/random_events/event_changhe_guest.tres",
 "event_chat_guest": "res://data/random_events/event_chat_guest.tres",
 "event_talk_guest": "res://data/random_events/event_talk_guest.tres",
@@ -22,10 +23,12 @@ resources = {
 "libai_force_changhe": "res://data/random_events/libai_force_changhe.tres",
 "libai_unveilation": "res://data/random_events/libai_unveilation.tres",
 "libai_welcome_hejiu": "res://data/random_events/libai_welcome_hejiu.tres",
+"martial_sword_dance": "res://data/random_events/martial_sword_dance.tres",
 "mid_of_wenhuaquan_party": "res://data/random_events/mid_of_wenhuaquan_party.tres",
 "mid_of_wenhuaquan_party_choose_people": "res://data/random_events/mid_of_wenhuaquan_party_choose_people.tres",
 "party_subjective_changhe": "res://data/random_events/party_subjective_changhe.tres",
 "request_libai_changhe": "res://data/random_events/request_libai_changhe.tres",
+"sensual_huxuan_dance": "res://data/random_events/sensual_huxuan_dance.tres",
 "start_of_wenhuaquan_party": "res://data/random_events/start_of_wenhuaquan_party.tres",
 "strange_poet": "res://data/random_events/strange_poet.tres",
 "test1": "res://data/random_events/test1.tres",

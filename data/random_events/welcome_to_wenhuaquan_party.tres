@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" path="res://core/model/emotion_configs.gd" id="1_gjxqx"]
 [ext_resource type="Script" path="res://model/event/base_option.gd" id="2_3vy8a"]
 [ext_resource type="Script" path="res://core/model/base_operator.gd" id="3_k2gmq"]
 [ext_resource type="Script" path="res://core/operators/queue_event_operator.gd" id="4_wvqrs"]
@@ -8,28 +7,28 @@
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="6_rcfd1"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="7_6rh1c"]
 
-[sub_resource type="Resource" id="Resource_gjxqx"]
+[sub_resource type="Resource" id="Resource_x0piq"]
 script = ExtResource("4_wvqrs")
 event_key = "start_of_wenhuaquan_party"
 
-[sub_resource type="Resource" id="Resource_3vy8a"]
+[sub_resource type="Resource" id="Resource_gjxqx"]
 script = ExtResource("5_r3wt3")
-operators = Array[ExtResource("3_k2gmq")]([SubResource("Resource_gjxqx")])
+operators = Array[ExtResource("3_k2gmq")]([SubResource("Resource_x0piq")])
 
-[sub_resource type="Resource" id="Resource_k2gmq"]
+[sub_resource type="Resource" id="Resource_3vy8a"]
 script = ExtResource("6_rcfd1")
-choice_result = SubResource("Resource_3vy8a")
+choice_result = SubResource("Resource_gjxqx")
 custom_context_params = {
 "guests": PackedStringArray("libai", "wangwei", "zhengqian")
 }
 description = "去"
 
-[sub_resource type="Resource" id="Resource_wvqrs"]
+[sub_resource type="Resource" id="Resource_k2gmq"]
 script = ExtResource("6_rcfd1")
 description = "不去"
 
 [resource]
 script = ExtResource("7_6rh1c")
-options = Array[ExtResource("2_3vy8a")]([SubResource("Resource_k2gmq"), SubResource("Resource_wvqrs")])
+options = Array[ExtResource("2_3vy8a")]([SubResource("Resource_3vy8a"), SubResource("Resource_k2gmq")])
 uuid = "welcome_to_wenhuaquan_party"
 name = "被文化圈邀请到宴席"

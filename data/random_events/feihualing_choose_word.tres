@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" path="res://core/model/emotion_configs.gd" id="1_giiqh"]
 [ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_orbua"]
 [ext_resource type="Script" path="res://core/operators/random_pick_operator.gd" id="3_86jhn"]
 [ext_resource type="Script" path="res://model/choice_result.gd" id="4_ruvm1"]
@@ -8,17 +7,17 @@
 [ext_resource type="Script" path="res://core/model/item_provider.gd" id="6_7ikpg"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="7_7carv"]
 
-[sub_resource type="Resource" id="Resource_giiqh"]
+[sub_resource type="Resource" id="Resource_3gs24"]
 script = ExtResource("3_86jhn")
 datasource_name = "feihualing_imageries"
 prop_from_result = "uuid"
 key_stored_context = "feihualing_words"
 
-[sub_resource type="Resource" id="Resource_orbua"]
+[sub_resource type="Resource" id="Resource_giiqh"]
 script = ExtResource("4_ruvm1")
-operators = Array[ExtResource("2_orbua")]([SubResource("Resource_giiqh")])
+operators = Array[ExtResource("2_orbua")]([SubResource("Resource_3gs24")])
 
-[sub_resource type="Resource" id="Resource_86jhn"]
+[sub_resource type="Resource" id="Resource_orbua"]
 script = ExtResource("6_7ikpg")
 list_key = "feihualing_words"
 text_template = "以「{item}」为题"
@@ -30,8 +29,8 @@ display_prop = "name"
 
 [resource]
 script = ExtResource("7_7carv")
-provider = SubResource("Resource_86jhn")
-on_enter_result = SubResource("Resource_orbua")
+provider = SubResource("Resource_orbua")
+on_enter_result = SubResource("Resource_giiqh")
 uuid = "feihualing_choose_word"
 name = "选择意象"
 description = "你要吟咏什么主题？"

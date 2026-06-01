@@ -9,6 +9,10 @@ resources = {
 "court:prosper": "res://data/tres_imaginaries/court__prosper.tres",
 "emotion:ambition": "res://data/tres_imaginaries/emotion__ambition.tres",
 "emotion:despair": "res://data/tres_imaginaries/emotion__despair.tres",
+"emotion:tranquility": "res://data/tres_imaginaries/emotion__tranquility.tres",
+"entertain:elegant": "res://data/tres_imaginaries/entertain__elegant.tres",
+"entertain:martial": "res://data/tres_imaginaries/entertain__martial.tres",
+"entertain:sensual": "res://data/tres_imaginaries/entertain__sensual.tres",
 "environment:flower": "res://data/tres_imaginaries/environment__flower.tres",
 "environment:moon": "res://data/tres_imaginaries/environment__moon.tres",
 "environment:snow": "res://data/tres_imaginaries/environment__snow.tres",
@@ -17,9 +21,5 @@ resources = {
 "relation:friend": "res://data/tres_imaginaries/relation__friend.tres",
 "relation:patron": "res://data/tres_imaginaries/relation__patron.tres",
 "travel:exile": "res://data/tres_imaginaries/travel__exile.tres",
-"travel:parting": "res://data/tres_imaginaries/travel__parting.tres",
-"entertain:elegant": "res://data/tres_imaginaries/entertain__elegant.tres",
-"emotion:tranquility": "res://data/tres_imaginaries/emotion__tranquility.tres",
-"entertain:sensual": "res://data/tres_imaginaries/entertain__sensual.tres",
-"entertain:martial": "res://data/tres_imaginaries/entertain__martial.tres"
+"travel:parting": "res://data/tres_imaginaries/travel__parting.tres"
 }
