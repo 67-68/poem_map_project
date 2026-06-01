@@ -9,6 +9,12 @@ extends Node
             notify_property_list_changed()
             start_sync_queue() # 🚨 启动队列机制！
 
+## 🗂️ 本地优先模式
+## 启用后，优先读取本地已存在的 CSV 文件，跳过云端拉取。
+## 仅当本地文件不存在时，自动降级到云端拉取。
+## 适合离线开发或频繁调试场景，省流量防限速 💀
+@export var prefer_local_files: bool = false
+
 @export_group("Godot Cache Management")
 ## 💀 删掉 .godot 导入缓存文件夹，强制 Godot 全量重新导入所有资源
 ## Godot 4 的导入缓存机制会导致修改代码后不生效（因为缓存的字节码没更新）
@@ -64,9 +70,19 @@ var _current_job_index: int = -1
 const MAX_RETRIES = 3
 
 func _ready():
-    # 自动启动同步队列（可选，根据需要开启）
-    # start_sync_queue()
-    pass
+    # CLI 模式检测：当通过 godot --headless -s <entry.gd> --sync --prefer-local 启动时
+    # 🚨 注意：如果 csv_cloud_loader 是通过 CLI 入口脚本 (csv_cloud_sync_cli.gd) 实例化的，
+    #          这里不做任何操作，由入口脚本负责启动同步。
+    #          此处的 CLI 检测是兜底方案，当脚本被单独 -s 运行时生效。
+    var args = OS.get_cmdline_args()
+    var should_sync = "--sync" in args
+    var prefer_local = "--prefer-local" in args
+    
+    if should_sync:
+        print("===== CLI 模式启动 csv_cloud_loader =====")
+        print("prefer_local_files: %s" % prefer_local)
+        prefer_local_files = prefer_local
+        start_sync_queue()
 
 # 🚨 启动队列机制
 func start_sync_queue() -> void:
@@ -74,7 +90,8 @@ func start_sync_queue() -> void:
         push_error("DATA_MANIFEST 为空，没有配置任何数据源！💀")
         return
     
-    print("===== 开始云端数据同步队列 =====")
+    var source_mode = "本地优先" if prefer_local_files else "云端"
+    print("===== 开始数据同步队列 (%s 模式) =====" % source_mode)
     print("共需同步 %d 个数据源" % DATA_MANIFEST.size())
     
     _current_job_index = 0
@@ -131,6 +148,21 @@ func process_next_job() -> void:
         return
 
     print("\n===== 开始处理任务 [%d/%d]: %s (数据类型: %s) =====" % [_current_job_index + 1, DATA_MANIFEST.size(), job_name, job_data_type])
+    
+    # 🚨 本地优先模式：检查本地CSV文件是否存在
+    if prefer_local_files:
+        var local_content = _read_local_csv(job_save_path)
+        if local_content != "":
+            print("✅ 本地CSV文件存在，跳过云端下载: %s" % job_save_path)
+            _process_csv_data(local_content, job_save_path, job_data_type)
+            _current_job_index += 1
+            process_next_job()
+            return
+        else:
+            print("⚠️ 本地CSV文件不存在（路径: %s），降级到云端拉取..." % job_save_path)
+    
+    # 默认/降级：从云端拉取
+    retry_count = 0
     fetch_events_from_cloud(job_url, job_save_path, job_data_type)
 
 var retry_count = 0
@@ -192,6 +224,94 @@ func parse_csv_line(line: String) -> Array[String]:
     result.append(current)
     return result
 
+# 📖 读取本地 CSV 文件内容
+# 优先使用 res:// 路径，如果文件不存在返回空字符串
+# 调用方根据返回值是否为空判断是否需要降级到云端
+func _read_local_csv(save_path: String) -> String:
+    if not FileAccess.file_exists(save_path):
+        print("本地CSV文件不存在: %s" % save_path)
+        return ""
+    
+    var file = FileAccess.open(save_path, FileAccess.READ)
+    if file == null:
+        push_error("无法打开本地CSV文件: %s 💀" % save_path)
+        return ""
+    
+    var content = file.get_as_text()
+    file.close()
+    print("成功读取本地CSV文件: %s (%d 字节)" % [save_path, content.length()])
+    return content
+
+# 🧩 共享解析链路：解析原始 CSV 内容、创建 Resource、注入数据库、保存 .tres
+# 这是「获取层」和「持久化层」之间的共享方法，无论数据来自云端还是本地都走这里
+func _process_csv_data(raw_csv_string: String, save_path: String, data_type: String) -> void:
+    # 将包含几百行文本的 raw_csv_string 交给你之前写好的微语法解析器
+    var csv_lines = raw_csv_string.split("\n")
+    if csv_lines.size() < 2:
+        push_error("CSV 数据不足，至少需要表头和一行数据")
+        return
+    
+    # 解析表头
+    var csv_headers = csv_lines[0].strip_edges().split(",")
+
+    # 解析每一行数据
+    var csv_data: Array[Dictionary] = []
+    for i in range(1, csv_lines.size()):
+        var line = csv_lines[i].strip_edges()
+        if line.is_empty():
+            continue
+
+        # 简单的CSV解析，处理引号包裹的字段
+        var values = parse_csv_line(line)
+        var row_data = {}
+
+        for j in range(csv_headers.size()):
+            if j < values.size():
+                var key = csv_headers[j].strip_edges()
+                var value = values[j].strip_edges()
+                # 去除字段值的引号
+                if value.begins_with('"') and value.ends_with('"'):
+                    value = value.substr(1, value.length() - 2)
+                row_data[key] = value
+
+        if not row_data.is_empty():
+            csv_data.append(row_data)
+    
+    # 使用 DSL 解析器解析数据（根据 data_type 选择不同的解析逻辑）
+    var resources = DSLParser.parse_csv_data(csv_data, data_type)
+
+    # 将解析成功的资源注入到数据库（根据类型）
+    for resource in resources:
+        if resource is RandomEvent:
+            print("事件注入成功: %s" % resource.uuid)
+        elif resource is Flag:
+            print("标志位注入成功: %s" % resource.uuid)
+        elif resource is Trait:
+            print("特性注入成功: %s" % resource.uuid)
+        else:
+            print("资源注入成功: %s" % resource.resource_path)
+
+    print("数据注入完成！共注入 %d 个资源 🤓☝️" % resources.size())
+
+    # 调试：检查资源有效性
+    if resources.is_empty():
+        print("Warning: DSLParser 返回空资源数组，跳过保存")
+        return
+
+    # 调试：检查转换后的资源数组
+    print("资源数组转换完成，大小: %d" % resources.size())
+    for i in range(min(resources.size(), 3)):  # 只打印前3个
+        var res = resources[i]
+        print("资源[%d]: 类名=%s, resource_path=%s" % [i, res.get_class(), res.resource_path])
+
+    # 从CSV路径推断.tres保存路径（同目录下）
+    var tres_save_path = save_path.get_base_dir() + "/"
+    save_resources_to_tres(resources, tres_save_path)
+
+    # 🚨 立即静默刷新registry，确保下一个表的 template URN 能找到本表刚保存的 .tres
+    # 只有最后一次全量同步完成后才输出日志，中间刷新静默执行
+    _regenerate_registries(true)
+
 func fetch_events_from_cloud(url: String, save_path: String = "res://tests/", data_type: String = "random_event") -> void:
     print("开始请求云端数据: %s (尝试 %d/%d)" % [url, retry_count + 1, MAX_RETRIES + 1])
     
@@ -228,89 +348,17 @@ func fetch_events_from_cloud(url: String, save_path: String = "res://tests/", da
         return
     
     print("成功获取数据，大小: %d 字节" % raw_csv_string.length())
-    print("\n===== 原始CSV文件内容 =====")
-    print(raw_csv_string)
-    print("===== CSV文件内容结束 =====\n")
     
     # 重置重试计数器
     retry_count = 0
     
-    # 保存原始CSV文件到指定路径
+    # 保存原始CSV文件到指定路径，下次本地优先模式可以直接使用
     if not save_path.is_empty():
         save_raw_csv(raw_csv_string, save_path)
     
-    # 将包含几百行文本的 raw_csv_string 交给你之前写好的微语法解析器
-    var csv_lines = raw_csv_string.split("\n")
-    if csv_lines.size() < 2:
-        push_error("CSV 数据不足，至少需要表头和一行数据")
-        # 数据格式错误，跳过当前任务继续下一个
-        _current_job_index += 1
-        process_next_job()
-        return
+    # 🧩 共享解析链路：解析、创建资源、保存 .tres
+    _process_csv_data(raw_csv_string, save_path, data_type)
     
-    # 解析表头
-    var csv_headers = csv_lines[0].strip_edges().split(",")
-
-    # 解析每一行数据
-    var csv_data: Array[Dictionary] = []
-    for i in range(1, csv_lines.size()):
-        var line = csv_lines[i].strip_edges()
-        if line.is_empty():
-            continue
-
-        # 简单的CSV解析，处理引号包裹的字段
-        var values = parse_csv_line(line)
-        var row_data = {}
-
-        for j in range(csv_headers.size()):
-            if j < values.size():
-                var key = csv_headers[j].strip_edges()
-                var value = values[j].strip_edges()
-                # 去除字段值的引号
-                if value.begins_with('"') and value.ends_with('"'):
-                    value = value.substr(1, value.length() - 2)
-                row_data[key] = value
-
-        if not row_data.is_empty():
-            csv_data.append(row_data)
-    
-    # 使用 DSL 解析器解析数据（根据 data_type 选择不同的解析逻辑）
-    var resources = DSLParser.parse_csv_data(csv_data, data_type)
-
-    # 将解析成功的资源注入到数据库（根据类型）
-    for resource in resources:
-        if resource is RandomEvent:
-            print("云端事件注入成功: %s" % resource.uuid)
-        elif resource is Flag:
-            print("云端标志位注入成功: %s" % resource.uuid)
-        elif resource is Trait:
-            print("云端特性注入成功: %s" % resource.uuid)
-        else:
-            print("云端资源注入成功: %s" % resource.resource_path)
-
-    print("云端数据注入完成！共注入 %d 个资源 🤓☝️" % resources.size())
-
-    # 调试：检查资源有效性
-    if resources.is_empty():
-        print("Warning: DSLParser 返回空资源数组，跳过保存")
-        _current_job_index += 1
-        process_next_job()
-        return
-
-    # 调试：检查转换后的资源数组
-    print("资源数组转换完成，大小: %d" % resources.size())
-    for i in range(min(resources.size(), 3)):  # 只打印前3个
-        var res = resources[i]
-        print("资源[%d]: 类名=%s, resource_path=%s" % [i, res.get_class(), res.resource_path])
-
-    # 从CSV路径推断.tres保存路径（同目录下）
-    var tres_save_path = save_path.get_base_dir() + "/"
-    save_resources_to_tres(resources, tres_save_path)
-
-    # 🚨 立即静默刷新registry，确保下一个表的 template URN 能找到本表刚保存的 .tres
-    # 只有最后一次全量同步完成后才输出日志，中间刷新静默执行
-    _regenerate_registries(true)
-
     print("云端数据注入成功！系统活过来了 🤓☝️")
 
     # 🚨 当前任务完成，推进到下一个任务

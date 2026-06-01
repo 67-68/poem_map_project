@@ -35,6 +35,57 @@ MCP Server 通过 [FastMCP](https://github.com/jlowin/fastmcp) 框架实现，�
 | `mcp[cli]` Python 包 | `/home/vscode/mcp_venv` | 见下方坑点 |
 | Godot 4.6.3 | `/usr/local/bin/godot` | 无头模式运行 |
 
+## 新增工具: CSV 云同步自动优先本地模式
+
+🤓☝️ `run_godot_script` 已内置 CSV 同步脚本的自动识别逻辑：
+
+- 当 `script_name` 包含 `csv_cloud_sync_cli.gd` 时，**自动追加** `--sync --prefer-local` 参数
+- 调用方无需手动传递任何额外参数，AI 和用户都可以无脑调用
+
+### 调用示例
+
+```
+# 直接调用 CSV 同步，自动使用本地优先模式：
+run_godot_script("core/csv_cloud_sync_cli.gd")
+
+# 等价于手动传递参数：
+#   godot --headless -s core/csv_cloud_sync_cli.gd -- --sync --prefer-local
+```
+
+### 手动调用（不经过 MCP 自动识别）
+
+```bash
+godot --headless -s core/csv_cloud_sync_cli.gd -- --sync
+godot --headless -s core/csv_cloud_sync_cli.gd -- --sync --prefer-local
+```
+
+## 数据流架构
+
+```
+AI / 用户
+    │
+    ▼
+run_godot_script("core/csv_cloud_sync_cli.gd")
+    │ 自动追加 --sync --prefer-local
+    ▼
+godot --headless -s core/csv_cloud_sync_cli.gd -- --sync --prefer-local
+    │
+    ▼
+csv_cloud_sync_cli.gd (extends SceneTree)
+    │ 解析 CLI 参数
+    │ 实例化 csv_cloud_loader.gd
+    ▼
+csv_cloud_loader.gd
+    │ prefer_local_files = true
+    │ start_sync_queue()
+    ▼
+process_next_job()
+    ├─ 本地 CSV 存在? → _read_local_csv() → _process_csv_data()
+    └─ 本地 CSV 不存在? → fetch_events_from_cloud() → _process_csv_data()
+```
+
+---
+
 ## 配置文件
 
 ### [`.roo/mcp.json`](../.roo/mcp.json)
@@ -116,6 +167,8 @@ RUN apt-get update && apt-get install -y libfontconfig1
 **根因**: `godot --headless -s` 只能运行继承 `SceneTree` 或 `MainLoop` 的脚本（即 Godot 入口脚本），工具类脚本需要用 `preload` / `load` 方式加载。
 
 **解决**: 需要编写一个入口包装脚本，或者确认目标脚本是否支持 `-s` 模式。
+
+**本项目的解决案**: 创建了 `core/csv_cloud_sync_cli.gd`，它 `extends SceneTree`，在 `_init()` 中加载并实例化 `csv_cloud_loader.gd`（`@tool extends Node`），然后调用其方法。这种「入口包装器 + 核心逻辑」的分离模式就是坑 5 的推荐解法 🤓☝️。
 
 ---
 

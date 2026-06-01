@@ -3,6 +3,9 @@
 - controller 支持 `$ dsl {consequence_operators}` 语法，可直接执行 DSL 操作符链
 - `parse_flag_requirement` 的 int 分支实现（5 段式 `flag:int:OPERATOR:FLAG_ID:VALUE`）
 - `interrupt_event(requirement_syntax, operator_syntax)` DSL 语法，用于事件触发前的中断检查（`interruptions` 列）
+- `csv_cloud_loader.gd` 新增 `prefer_local_files` 选项，优先使用本地 CSV 文件，不存在时自动降级到云端拉取
+- `csv_cloud_sync_cli.gd` 新增 CLI 入口脚本（extends SceneTree），支持 `godot -s` 命令行调用
+- `godot_mcp.py` 自动识别 `csv_cloud_sync_cli.gd` 调用并追加 `--sync --prefer-local` 参数
 
 ## Fixed
 - `DSLParser.parse_state_transistor()` CSV 列名对不上的 Bug：`target_resource_urn` → `target_resource`，`current_resource_urn` → `current_resource`，`triggered_event_key` → `triggered_event`

@@ -12,6 +12,9 @@ mcp = FastMCP("GodotToolController")
 # 定义一个绝对安全的工作目录边界 (防止目录穿越攻击)
 WORKSPACE_DIR = "/Users/lennon/Projects/poem_map_project"
 
+# CSV 云同步 CLI 入口脚本名（用于自动识别并追加 prefer-local 参数）
+CSV_SYNC_SCRIPT_NAME = "csv_cloud_sync_cli.gd"
+
 @mcp.tool()
 def run_godot_script(script_name: str, args: list[str] = None) -> str:
     """
@@ -29,6 +32,15 @@ def run_godot_script(script_name: str, args: list[str] = None) -> str:
         
     if not os.path.exists(target_path):
         return f"执行失败：找不到脚本文件 {target_path}"
+
+    # 🤓☝️ 自动识别 CSV 云同步脚本，追加 --sync --prefer-local 参数
+    # 这样调用方无需手动传递这些参数，AI 和用户都可以无脑调用
+    if CSV_SYNC_SCRIPT_NAME in script_name:
+        if "--sync" not in args:
+            args.append("--sync")
+        if "--prefer-local" not in args:
+            args.append("--prefer-local")
+        logging.info(f"自动识别 CSV 同步脚本，已追加 --sync --prefer-local 参数")
 
     # 2. 组装安全的执行命令 (强制 Headless)
     # Godot 4 传参规范: godot --headless -s <script> -- <args>
