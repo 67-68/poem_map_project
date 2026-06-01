@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://bq2ks3b5k3vpi"]
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3]
 
-[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_phcvc"]
+[ext_resource type="Script" path="res://core/model/resources.gd" id="1_phcvc"]
 
 [resource]
 script = ExtResource("1_phcvc")

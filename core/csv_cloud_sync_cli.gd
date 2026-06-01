@@ -26,8 +26,10 @@ func _get_sep(char: String, count: int) -> String:
 	return result
 
 func _init() -> void:
-	# 解析命令行参数
-	var args = OS.get_cmdline_args()
+	# 🤓☝️ 使用 OS.get_cmdline_user_args() 获取 -- 分隔符之后的用户参数
+	# OS.get_cmdline_args() 只返回 Godot 引擎的参数，不包含用户参数
+	var args = OS.get_cmdline_user_args()
+	
 	var should_sync = "--sync" in args
 	var prefer_local = "--prefer-local" in args
 	

@@ -74,7 +74,8 @@ func _ready():
     # 🚨 注意：如果 csv_cloud_loader 是通过 CLI 入口脚本 (csv_cloud_sync_cli.gd) 实例化的，
     #          这里不做任何操作，由入口脚本负责启动同步。
     #          此处的 CLI 检测是兜底方案，当脚本被单独 -s 运行时生效。
-    var args = OS.get_cmdline_args()
+    # 🤓☝️ 使用 OS.get_cmdline_user_args() 获取 -- 分隔符之后的用户参数
+    var args = OS.get_cmdline_user_args()
     var should_sync = "--sync" in args
     var prefer_local = "--prefer-local" in args
     

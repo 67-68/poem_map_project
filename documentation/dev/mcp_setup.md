@@ -42,6 +42,8 @@ MCP Server 通过 [FastMCP](https://github.com/jlowin/fastmcp) 框架实现，�
 - 当 `script_name` 包含 `csv_cloud_sync_cli.gd` 时，**自动追加** `--sync --prefer-local` 参数
 - 调用方无需手动传递任何额外参数，AI 和用户都可以无脑调用
 
+> ⏳ **注意：执行后需等待几秒。** Godot 引擎需要冷启动（加载引擎自身），之后 DSL 解析器需要逐条编译 CSV 数据生成 `.tres` 资源文件。数据集越大等待越久，通常在 **3-10 秒** 内完成。如果返回超时（MCP 默认 60s 超时），后台进程仍在运行，稍后重试即可。
+
 ### 调用示例
 
 ```
