@@ -81,7 +81,7 @@ func scan_death_events():
     #breakpoint
     scan_events_from_tickets(initial_tickets, 0.0, '', {})
 
-func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", context: Dictionary = {}):
+func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", context: Dictionary = {}, return_only: bool = false):
     """
     从给定的事件票据池中扫描事件的核心逻辑
 
@@ -90,6 +90,7 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
         nothing_multiplication_weight: 无事发生的权重倍数，默认为10
         fallback_event_uuid: 当无事发生时使用的事件UUID，可选
         context: 上下文字典，包含main_tag等信息
+        return_only: 为 true 时不发射 request_event_key，直接返回选中事件的 UUID
     """
     Logging.info("[EventManager] Starting event scan from " + str(initial_tickets.size()) + " initial tickets")
     # 致命修复 1：每次重新算命前，必须清空上一次的签筒！
@@ -106,10 +107,12 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
     
     # 开始命运抽奖
     var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid)
+    if return_only:
+        return ev_name if ev_name else ""
     if ev_name:
         EventBus.request_event_key.emit(ev_name, context)
         Logging.info("[EventManager] 命运降临: " + ev_name)
-    else: 
+    else:
         Logging.info("[EventManager] 这次抽取事件，岁月静好")
     
 
