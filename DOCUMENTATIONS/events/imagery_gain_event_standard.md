@@ -2,176 +2,116 @@
 
 ## 概述
 
-意象（Imaginary）是玩家拼凑诗句的"手牌/战利品"，属于离散资源。本文档定义**意象获取事件**的标准结构——即当玩家触发某个事件时，系统如何判定是否给予意象、给予什么意象。
+意象（Imaginary）是玩家拼凑诗句的"手牌/战利品"。本文档定义**意象（Imagery）在游戏事件中的获取机制**——即意象的 `basic_imaginaries` 数组如何被添加内容、通过什么途径触发。
 
 ---
 
-## 核心数据流
+## 数据结构
 
-### 完整链路
-
-```
-事件触发 → EventBus.event_shown → ImaginaryManager.add_imagenary(ev)
-                                           ↓
-                                   检查 ev.emotion_configs
-                                           ↓
-                               ┌──────────┴──────────┐
-                               │                     │
-                           有配置                 无配置
-                               │                     │
-                               ↓                     ↓
-                   ImagenaryEvaluator.evaluate   跳过（输出警告）
-                               │
-                               ↓
-                   返回结构化数据:
-                   [{ blueprint: ImaginaryTag, context_tags: [...] }]
-                               │
-                               ↓
-                   构造 entry: { "blueprint_id": String, "contexts": Array[String] }
-                               │
-                               ↓
-                   ImaginaryTag.basic_imaginaries.append(entry)
-                               │
-                               ↓
-                   根据阈值更新 current_level
-                               │
-                               ↓
-                   EventBus.imaginary_changed.emit()
-```
-
-### 关键触发点
-
-| 环节 | 位置 | 说明 |
-|------|------|------|
-| 信号发射 | `characters/narrative_overlay.gd:324` | 事件初始化完成后 emit `event_shown` |
-| 意象管理 | `core/imaginary_manager.gd` | `add_imagenary()` 处理所有意象逻辑 |
-| 条件校验 | `core/imagenary_evaluator.gd` | `evaluate_local_configs()` 批量校验 |
-| 数据模型 | `core/model/imaginary.gd` | `ImaginaryTag` 数据结构 |
-
----
-
-## EmotionConfigs 结构（核心配置）
-
-每个事件可以挂载多个 `EmotionConfigs`，每个配置定义一个意象的掉落条件和上下文。
-
-### 数据结构
+每个 `ImaginaryTag` 包含一个 `basic_imaginaries: Array[Dictionary]`，存储玩家获得该意象的记录：
 
 ```gdscript
-class EmotionConfigs:
-    blueprint: ImaginaryTag       # 目标意象（强类型引用，废除字符串 UID）
-    context_tags: Array[String]   # 叙事上下文，如 ["with_li_bai", "sad"]
-    requirements: Array           # 校验条件数组（基于玩家状态）
+# core/model/imaginary.gd
+@export var basic_imaginaries: Array[Dictionary] = []
 ```
 
-### 字段说明
-
-| 字段 | 类型 | 必需 | 说明 |
-|------|------|------|------|
-| `blueprint` | `ImaginaryTag` | ✅ | 要掉落的意象对象，直接引用 .tres 资源 |
-| `context_tags` | `Array[String]` | ❌ | 本次获得的叙事上下文标签 |
-| `requirements` | `Array[Dict]` | ❌ | 获取条件，见下文 |
-
-### Requirements 条件格式
-
-```json
-[
-  {
-    "stat": "drunk_level",
-    "op": ">=",
-    "val": 30
-  },
-  {
-    "stat": "talent",
-    "op": ">=",
-    "val": 80
-  }
-]
-```
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `stat` | `String` | 玩家属性名（如 `drunk_level`, `talent`, `sorrow`） |
-| `op` | `String` | 比较运算符：`>=`, `<=`, `>`, `<`, `==` |
-| `val` | `int`/`float` | 比较阈值 |
-
----
-
-## 三种意象获取模式
-
-### 模式 1：情绪门槛模式（最常用）
-
-**原理：** 意象掉落与玩家的情绪状态挂钩。情绪值达到门槛才掉落对应意象。
-
-**适用场景：** 送别 → 悲伤达到阈值 → 获得"断肠"意象
-
-**配置示例：**
+### entry 结构
 
 ```gdscript
-# 送别事件中，sorrow > 10 获得 despair 意象
-[sub_resource type="Resource" id="Resource_emotion_cfg_despair"]
-script = ExtResource("7_emotion_cfg")
-blueprint = ExtResource("9_imaginary_despair")
-context_tags = Array[String](["farewell"])
-
-[sub_resource type="Resource" id="Resource_emotion_req_sorrow"]
-script = ExtResource("8_emotion_req")
-volatile_stat = "sorrow"
-value = 10
-operator = 0  # GREATER_THAN
-
-# requirements 挂载到 emotion_cfg
-Resource_emotion_cfg_despair.requirements = SubResource("Resource_emotion_req_sorrow")
-```
-
-### 模式 2：复合属性模式
-
-**原理：** 多个属性联合判定，支持天赋折扣（高 talent 降低门槛）。
-
-**适用场景：** 醉酒场景中，根据 talent 高低给予不同意象
-
-**配置示例：**
-
-```json
-// 诗人专属意象（高 talent 低门槛）
 {
-  "imagery": "emotion:sorrow:poetic_sorrow",
-  "requirements": [
-    {"stat": "drunk_level", "op": ">=", "val": 30},
-    {"stat": "talent", "op": ">=", "val": 80}
-  ]
-}
-
-// 蠢货兜底意象（低 talent 也能拿，但质量差）
-{
-  "imagery": "emotion:sorrow:cursing",
-  "requirements": [
-    {"stat": "drunk_level", "op": ">=", "val": 30},
-    {"stat": "talent", "op": "<", "val": 80}
-  ]
+    "blueprint_id": String,   # 意象的 blueprint ID，如 "emotion:despair"
+    "contexts": Array[String] # 叙事上下文标签，如 ["farewell", "with_libai"]
 }
 ```
 
-### 模式 3：环境被动渲染模式
+---
 
-**原理：** 不依赖玩家选择，基于时间/季节/地点自动获得意象。
+## 现有意象获取途径
 
-**适用场景：** 秋风起时自动积累秋日意象
+### 途径 1：通过 EventBus 信号 (基础设施层)
 
-**配置示例：**
+系统提供了一个信号用于添加意象：
 
 ```gdscript
-# 在回合结算 Operator 中
-if season == "autumn":
-    var entry = {
-        "blueprint_id": "nature:autumn:leaves",
-        "contexts": ["seasonal"]
-    }
-    imaginary_tag.basic_imaginaries.append(entry)
+# core/eventbus.gd
+signal request_add_imaginary(tag: String)
+```
+
+发送方式：
+```gdscript
+EventBus.request_add_imaginary.emit("emotion:despair")
+```
+
+> **注意：** 当前该信号暂未连接任何监听器。如需启用，需要在合适的管理器节点中连接并实现添加逻辑。
+
+### 途径 2：通过 CustomEventOption 的动态初始化
+
+在 `CustomEventOption.init()` 中通过 `ImaginaryOperator` 操作意象等级：
+
+```gdscript
+# 在 CustomEventOption 的自定义类型中
+func upgrade_random_imagery():
+    var active_imaginaries = Database.get_active_imaginaries()
+    if not active_imaginaries:
+        description = '怎么连imagery都没有啊。浪费了这一次的机会'
+        return
+    
+    var random_imaginary = active_imaginaries.keys()[randi() % active_imaginaries.size()]
+    description = '将要升级Imaginary: %s' % random_imaginary.name
+    
+    var operator = ImaginaryOperator.new()
+    operator.imaginary_name = random_imaginary
+    operator.operation = "upgrade_1"
+    
+    choice_result = ChoiceResult.new()
+    choice_result.operators.append(operator)
+```
+
+详见 [`event_option_system.md`](event_option_system.md) 的 CustomEventOption 章节。
+
+### 途径 3：通过 ImaginaryOperator
+
+`ImaginaryOperator` 直接操作意象等级（升级/降级），可在事件选项的 `ChoiceResult` 中配置：
+
+```gdscript
+# core/operators/imaginary_operator.gd
+@export var imaginary_name: String    # 两段式 ID，如 "emotion:despair"
+@export_enum("upgrade_1", "downgrade_1") var operation: String
+
+func operate():
+    var ima = Database.imaginaries.get(imaginary_name) as ImaginaryTag
+    match operation:
+        'upgrade_1':
+            if not ima.current_level == 3: ima.current_level += 1
+        'downgrade_1':
+            if not ima.current_level == 0: ima.current_level -= 1
 ```
 
 ---
 
-## 创建一个新意象获取事件的完整步骤
+## 意象等级晋升机制
+
+每个意象有累积计数（`basic_imaginaries.size()`），达到阈值自动升级：
+
+| 等级 | 条件 | 效果 |
+|------|------|------|
+| **Level 1** | `basic_imaginaries.size() < l2_threshold` | 默认 |
+| **Level 2** | `l2_threshold <= basic_imaginaries.size() <= l3_threshold` | 可用作诗词创作 |
+| **Level 3** | `basic_imaginaries.size() > l3_threshold` | 高质量意象，解锁传奇诗词 |
+
+### 消耗循环
+
+每次诗词创作后（见 [`ui/poem_crafter.gd:166-171`](../../ui/poem_crafter.gd:166)）：
+
+| 变化 | 值 |
+|------|-----|
+| 阈值提升 | `l3_threshold += 3`（让下次升级更困难） |
+| 等级重置 | `current_level = 1`（重新积累） |
+| 结构保留 | `basic_imaginaries` 数组保持不变 |
+
+---
+
+## 创建意象获取事件的完整步骤
 
 ### Step 1：确认意象蓝图
 
@@ -183,95 +123,48 @@ if season == "autumn":
 | `name` | 断肠 |
 | `l3_threshold` | 4（默认） |
 
-### Step 2：确定获取条件
+### Step 2：确定获取方式
 
-根据事件叙事，回答：
+根据事件叙事，选择添加方式：
 
-1. **这个意象在什么情绪下获得？** → 对应 `requirements` 中的情绪门槛
-2. **需要什么附加属性？** → 如 talent、drunk_level 等
-3. **这个意象的上下文是什么？** → 如 `farewell`、`battle` 等
+| 方式 | 适用场景 | 实现路径 |
+|------|---------|---------|
+| 信号触发 | 需要在事件展示时自动添加 | 连接 `request_add_imaginary` 并实现 handler |
+| ImaginaryOperator | 选项结算时升级已有意象 | 在选项的 `ChoiceResult` 中添加 operator |
+| CustomEventOption | 动态计算添加哪个意象 | 实现 `custom_type` 分支 |
 
-### Step 3：创建 EmotionConfigs
+### Step 3：配置事件选项
 
-在事件资源的 `emotion_configs` 数组中添加配置：
-
-```gdscript
-[sub_resource type="Resource" id="Resource_emotion_cfg_despair"]
-script = ExtResource("7_emotion_cfg")
-blueprint = ExtResource("9_imaginary_despair")
-context_tags = Array[String](["farewell"])
-
-# 在事件资源中引用
-[resource]
-emotion_configs = Array[ExtResource("7_emotion_cfg")]([
-    SubResource("Resource_emotion_cfg_despair"),
-    # ... 其他意象配置
-])
-```
-
-### Step 4：配置事件选项的情绪操作
-
-在事件选项的 `ChoiceResult` 中添加 `EmotionOperator`，让玩家选择后改变情绪：
+在事件选项的 `ChoiceResult` 中添加 `ImaginaryOperator`：
 
 ```gdscript
-[sub_resource type="Resource" id="Resource_emotion_sorrow"]
-script = ExtResource("6_emotion_op")
-_emotion = 0  # ENUMS.EMOTION.SORROW
-str_emotion = "sorrow"
-value = 15
-
-[sub_resource type="Resource" id="Resource_choice_result"]
-script = ExtResource("3_fttgn")
-operators = Array[ExtResource("1_ykdg5")]([
-    SubResource("Resource_fcovv"),           # 原有的 stat_operator
-    SubResource("Resource_emotion_sorrow")    # 新增的情绪操作符
-])
+# 在 .tres 文件中或代码中
+var op = ImaginaryOperator.new()
+op.imaginary_name = "emotion:despair"
+op.operation = "upgrade_1"
+choice_result.operators.append(op)
 ```
 
-### Step 5：配置 Tag 匹配
+### Step 4：配置 Tag 匹配
 
 使用 [Tag 幂等性创建原则](tag_idempotent_creation.md) 为事件配置 `Trigger_Tags`，确保事件能在合适的时机被触发。
 
-### Step 6：验证
+### Step 5：验证
 
 1. 事件是否能被正确触发（通过 Tag 匹配）
-2. 情绪操作符是否能正确改变玩家情绪
-3. 情绪门槛校验是否生效
-4. 意象是否按预期添加到 `basic_imaginaries`
-5. 意象等级是否按阈值更新
-
----
-
-## 等级晋升机制
-
-每个意象有累积计数，达到阈值自动升级：
-
-| 等级 | 条件 | 效果 |
-|------|------|------|
-| **Level 1** | `basic_imaginaries.size() < l2_threshold` | 默认 |
-| **Level 2** | `l2_threshold <= basic_imaginaries.size() <= l3_threshold` | 可用作诗词创作 |
-| **Level 3** | `basic_imaginaries.size() > l3_threshold` | 高质量意象，解锁传奇诗词 |
-
-### 天赋折扣
-
-| talent 值 | 门槛折扣 | 说明 |
-|-----------|---------|------|
-| `talent > 50` | 5 折 | 天赋异禀，更易获得意象 |
-| `talent > 30` | 7.5 折 | 有点天赋，略占优势 |
-| `talent <= 30` | 无折扣 | 普通人 |
+2. ImaginaryOperator 是否能正确修改意象等级
+3. `basic_imaginaries` 结构是否符合预期
+4. 意象等级是否按阈值更新
 
 ---
 
 ## 创建清单 (Checklist)
 
-创建意象获取事件时，逐项确认：
-
-- [ ] `ImaginaryTag` 蓝图资源已存在
-- [ ] `EmotionConfigs.blueprint` 指向正确的 `ImaginaryTag` 资源
-- [ ] 情绪门槛数值合理（不太高也不太低）
-- [ ] `context_tags` 包含了叙事上下文（如地点、人物）
-- [ ] 事件选项的 `ChoiceResult` 包含 `EmotionOperator`
+- [ ] `ImaginaryTag` 蓝图资源已存在（uuid + name + l3_threshold）
+- [ ] 确定了意象获取方式（信号 / operator / custom option）
+- [ ] 事件选项的 `ChoiceResult` 包含正确的 operator
 - [ ] 事件已配置正确的 `Trigger_Tags`
+- [ ] `basic_imaginaries` 的 entry 结构 `{"blueprint_id": String, "contexts": Array}` 正确
 - [ ] 意象消耗逻辑已在 `PoemCrafter` 中处理（阈值提升 + 等级重置）
 
 ---
@@ -280,10 +173,9 @@ operators = Array[ExtResource("1_ykdg5")]([
 
 | 错误 | 症状 | 修复 |
 |------|------|------|
-| `emotion_configs` 为空 | 意象管理器输出警告，意象不生效 | 添加至少一个 `EmotionConfigs` |
-| `blueprint` 引用 null | 运行时错误 | 确认 `.tres` 资源路径正确 |
-| 情绪门槛过高 | 玩家永远达不到条件 | 检查 `requirements` 数值是否合理 |
-| 缺少 `EmotionOperator` | 玩家情绪不变，意象获取条件永远不满足 | 在选项结果中添加情绪操作符 |
+| `imaginary_name` 拼写错误 | `ImaginaryOperator` 输出 err "can not found imagery" | 确认 `Database.imaginaries` 中存在该 key |
+| 意象等级未提升 | `current_level` 无变化 | 检查 `operation` 是否为 `upgrade_1`，以及等级是否已到 3 |
+| `request_add_imaginary` 无效果 | 信号发出但意象无变化 | 确认信号已被连接（connect）并有 handler 实现 |
 | Tag 匹配不到事件 | 事件永远不会被拉起 | 检查 `Trigger_Tags` 是否在词典范围内 |
 
 ---
@@ -292,10 +184,9 @@ operators = Array[ExtResource("1_ykdg5")]([
 
 | 文档 | 内容 |
 |------|------|
-| [情绪-意象系统设计](../imaginary/emotion_imaginary_system.md) | 情绪与意象连接机制 |
 | [Imaginary 系统技术报告](../imaginary/imaginary_system_report.md) | 完整系统架构 |
-| [环境情绪注入设计](./design_get_emotion_in_event.md) | on_enter 情绪注入模式 |
-| [情绪获取系统](./emotion_get_system.md) | 情绪三大获取通道 |
+| [情绪-意象系统设计](../imaginary/emotion_imaginary_system.md) | 情绪与意象的关联设计 |
+| [事件选项系统](./event_option_system.md) | CustomEventOption 和 ChoiceResult |
 | [Tag 幂等性创建原则](./tag_idempotent_creation.md) | 事件 Tag 规范 |
-| [Imaginary Manager](../../core/imaginary_manager.gd) | 意象管理器源码 |
-| [Imagenary Evaluator](../../core/imagenary_evaluator.gd) | 条件校验器源码 |
+| [ImaginaryOperator](../../core/operators/imaginary_operator.gd) | 意象操作符源码 |
+| [ImaginaryTag 模型](../../core/model/imaginary.gd) | 意象数据结构源码 |

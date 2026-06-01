@@ -84,6 +84,5 @@
 ## 相关文档
 
 - [情绪获取系统](./emotion_get_system.md) — 情绪获取的三大通道
-- [情绪-意象系统](../imaginary/emotion_imaginary_system.md) — 情绪与意象的连接机制
 - [事件选项系统](./event_option_system.md) — 选项结果的情绪操作符
-- [意象获取事件标准规范](./imagery_gain_event_standard.md) — 情绪作为意象获取门槛的具体配置
+- [意象获取事件标准规范](./imagery_gain_event_standard.md) — 意象获取的现有途径和标准流程
