@@ -53,6 +53,7 @@
 
 ## 📝 维护日志
 
+- 2026-06-01: 新增 Qdrant 本地向量库查询指南（`qdrant_vector_search.md`），涵盖 curl/Python 查询方法、Filter 过滤、语义搜索等
 - 2026-06-01: 新增 Tag 幂等性创建原则文档（`tag_idempotent_creation.md`），定义 MECE 三问法创建流程、动作/气质封闭词典、Linter 规约执行
 - 2026-05-26: 完成Event Data Linter架构重构，建立契约设计模式和Rule流水线架构，消除反射依赖，性能提升约100倍
 - 2026-05-26: 创建Linter架构重构文档，记录契约设计、流水线架构、数据抽象层等核心设计决策
