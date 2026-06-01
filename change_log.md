@@ -1,4 +1,9 @@
 # [unreleased]
+## Added
+- 3 个表演类随机事件：月下听琴（风雅）、胡旋醉舞（绮靡）、公孙剑器（雄健）
+- 4 个新意象资源：entertain:elegant（风雅）、emotion:tranquility（旷达）、entertain:sensual（绮靡）、entertain:martial（雄健）
+- 以上资源均注册到 tres_imaginaries_registry.tres 和 tres_random_event_registry.tres
+
 ## Removed
 - 整个 Emotional Config 系统连根拔起 — 删除 `EmotionConfigs` 类、`ImagenaryEvaluator`、`ImaginaryManager` 节点及所有相关逻辑
 - `BaseEvent.emotion_configs` 字段（`model/event.gd`）

@@ -17,5 +17,9 @@ resources = {
 "relation:friend": "res://data/tres_imaginaries/relation__friend.tres",
 "relation:patron": "res://data/tres_imaginaries/relation__patron.tres",
 "travel:exile": "res://data/tres_imaginaries/travel__exile.tres",
-"travel:parting": "res://data/tres_imaginaries/travel__parting.tres"
+"travel:parting": "res://data/tres_imaginaries/travel__parting.tres",
+"entertain:elegant": "res://data/tres_imaginaries/entertain__elegant.tres",
+"emotion:tranquility": "res://data/tres_imaginaries/emotion__tranquility.tres",
+"entertain:sensual": "res://data/tres_imaginaries/entertain__sensual.tres",
+"entertain:martial": "res://data/tres_imaginaries/entertain__martial.tres"
 }
