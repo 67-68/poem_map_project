@@ -138,12 +138,15 @@ static func _parse_params(params_str: String) -> Dictionary:
 	for i in range(params_str.length()):
 		var c = params_str[i]
 		match c:
-			'(':
+			'(', '[':
 				depth += 1
 				current += c
-			')':
+			')', ']':
 				depth -= 1
 				current += c
+				if depth < 0:
+					Logging.err("NamedDSLParser: 括号/方括号不匹配: %s" % params_str)
+					return {}
 			',':
 				if depth == 0:
 					_parse_single_param(current.strip_edges(), params)
@@ -180,8 +183,8 @@ static func _parse_single_param(param_str: String, params: Dictionary) -> void:
 	# 解析值
 	params[key] = _parse_value(val_str)
 
-# 解析值为正确的类型（字符串/整数/浮点数/布尔值/动态引用）
-# 类型推断优先级：@动态引用 > 双引号字符串 > 布尔值 > 整数 > 浮点数 > 裸字符串
+# 解析值为正确的类型（字符串/整数/浮点数/布尔值/动态引用/数组）
+# 类型推断优先级：@动态引用 > [数组] > "双引号字符串" > 布尔值 > 整数 > 浮点数 > 裸字符串
 # 裸字符串（无引号）是标准用法，不产生任何 WARN
 static func _parse_value(val_str: String) -> Variant:
 	val_str = val_str.strip_edges()
@@ -200,6 +203,26 @@ static func _parse_value(val_str: String) -> Variant:
 			return ""
 		Logging.info("NamedDSLParser: 解析为动态引用 @%s" % key)
 		return DynamicRef.new(key)
+	
+	# 🚀 数组字面量: [val1, val2, val3]
+	# _parse_params 已确保 [] 内的逗号不会被误分割为顶级参数分隔符
+	# 每个元素去除首尾空格和引号包裹，返回 PackedStringArray
+	if val_str.begins_with("[") and val_str.ends_with("]"):
+		var inner = val_str.substr(1, val_str.length() - 2).strip_edges()
+		if inner.is_empty():
+			return PackedStringArray()
+		var parts = inner.split(",")
+		var arr = PackedStringArray()
+		for part in parts:
+			var clean = part.strip_edges()
+			if clean.is_empty():
+				continue
+			# 去除双引号包裹
+			if clean.begins_with("\"") and clean.ends_with("\""):
+				clean = clean.substr(1, clean.length() - 2)
+			arr.append(clean)
+		Logging.info("NamedDSLParser: 解析为数组: %s (size=%d)" % [str(arr), arr.size()])
+		return arr
 	
 	# 显式字符串（双引号包裹）
 	if val_str.begins_with("\"") and val_str.ends_with("\""):

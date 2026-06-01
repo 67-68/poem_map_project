@@ -59,6 +59,7 @@ const FUNC_TEMP_FLAG_INT_SET := "temp_flag_int_set"
 const FUNC_TEMP_FLAG_INT_APPEND := "temp_flag_int_append"
 const FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE := "temp_flag_int_reduce_if_above"
 
+const FUNC_SCAN_AND_PUSH := "scan_and_push"
 const FUNC_PUSH_EVENT := "push_event"
 const FUNC_POP_EVENT := "pop_event"
 const FUNC_QUEUE_EVENT := "queue_event"
@@ -122,6 +123,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_TEMP_FLAG_INT_SET] = func(p, r): return _create_temp_flag_operator_int_set(p, r)
 	cd[FUNC_TEMP_FLAG_INT_APPEND] = func(p, r): return _create_temp_flag_operator_int_append(p, r)
 	cd[FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE] = func(p, r): return _create_temp_flag_operator_int_reduce_if_above(p, r)
+	cd[FUNC_SCAN_AND_PUSH] = func(p, r): return _exec_scan_and_push_op(p, r)
 	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
 	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
 	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
@@ -559,6 +561,37 @@ static func _create_emotion_operator(emotion_name: String, value: int) -> BaseOp
 	operator.str_emotion = emotion_name
 	operator.value = value
 	return operator
+
+
+# ─── scan_and_push ────────────────────────────────────────────
+
+static func _exec_scan_and_push_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ScanAndPushOperator:
+	var op = ScanAndPushOperator.new()
+
+	# tags: PackedStringArray — 必需参数
+	var tags_val = parsed.params.get("tags")
+	if tags_val is PackedStringArray:
+		op.tags = tags_val
+	elif tags_val is Array:
+		# 兼容非类型化 Array → PackedStringArray
+		var psa = PackedStringArray()
+		for v in tags_val:
+			psa.append(str(v))
+		op.tags = psa
+	else:
+		Logging.err("scan_and_push 缺少 tags 参数或格式错误 (期望 PackedStringArray): %s" % raw)
+		return null
+
+	# weight_mult: float — 可选，默认 10.0
+	var wm = parsed.params.get("weight_mult", 10.0)
+	if wm is float or wm is int:
+		op.weight_multiplier = float(wm)
+
+	# fallback: String — 可选
+	op.fallback_event = NamedDSLParser.get_str_param(parsed, "fallback")
+
+	Logging.info("scan_and_push 解析成功: tags=%s, weight_mult=%.1f, fallback=%s" % [str(op.tags), op.weight_multiplier, op.fallback_event])
+	return op
 
 
 # ─── push_event / pop_event ─────────────────────────────────

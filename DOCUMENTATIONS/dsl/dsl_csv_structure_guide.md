@@ -164,6 +164,11 @@ row_type | template | uuid | context | requirements | title | description | resu
       - 整数: `flag_int_set(name=<标志ID>, val=<数值>)` / `flag_int_append(name=<标志ID>, val=<数值>)` / `flag_int_reduce_if_above(name=<标志ID>, threshold=<阈值>, amount=<减量>)`
       - 示例: `flag_bool_set(name=flag_bribed, val=true)`, `flag_str_set(name=flag_player_title, val=官员)`, `flag_int_reduce_if_above(name=score, threshold=100, amount=50)`
     - 栈事件操作:
+      - `scan_and_push(tags=[<标签列表>], weight_mult=<权重系数>, fallback=<兜底事件KEY>)` — 按 tag 前缀匹配跨桶扫描随机事件，权重滚动选中后推入栈顶（LIFO）
+        - `tags`：`PackedStringArray`，例 `["scene:tavern:gambling:high","npc:rogue:encounter:random"]`
+        - `weight_mult`：可选，float，权重倍数，默认 10.0
+        - `fallback`：可选，String，无匹配时兜底事件 key
+        - 示例: `scan_and_push(tags=["scene:tavern:gambling:high"], weight_mult=5.0, fallback="evt_tavern_brawl")`
       - `push_event(event_key=<事件KEY>)` — 将事件推入栈顶（LIFO），当前事件结束后优先播放
       - `pop_event()` — 弹出当前栈顶事件，播放下一个栈中事件
       - `pop_to_event(event_key=<事件KEY>)` — 在栈中搜索指定事件 ID，弹出到该层级（目标事件留在栈顶重新展示），未找到时报错无效果

@@ -156,13 +156,16 @@ flag_bool_has(name=flag_visited_palace), prop_gt(name=money, val=100)
 
 | 函数 | 参数 | 说明 | 示例 |
 |------|------|------|------|
+| `scan_and_push` | tags, weight_mult, fallback | 按 tag 前缀匹配跨桶扫描随机事件，选中后通过权重滚动推入栈顶 | `scan_and_push(tags=["scene:tavern:gambling:high","npc:rogue:encounter:random"], weight_mult=5.0, fallback="event_lucky_find")` |
 | `push_event` | event_key | 将事件推入栈顶（LIFO 优先级处理，栈为空后才处理普通队列） | `push_event(event_key=evt_aftermath)` |
 | `pop_event` | 无参数 | 弹出当前栈顶事件，播放下一个栈中事件 | `pop_event()` |
 | `pop_to_event` | event_key | 在栈中搜索指定事件 ID，弹出到该层级（目标事件留在栈顶重新展示），未找到时报错无效果 | `pop_to_event(event_key=mid_of_wenhuaquan_party)` |
 
 > 💡 **使用场景**：适用于"必须在当前事件链结束后才能处理其他事件"的场景。例如事件 A 的结果中 `push_event(event_key=evt_aftermath)` 将 aftermath 推入栈 → 当前事件结束后栈不为空 → 自动播放 aftermath → aftermath 中 `pop_event()` 弹出自身 → 栈空 → 回到普通队列。
 >
-> 💡 **context 自动传递**：`push_event` 和 `queue_event` 在 DSL 中调用时，当前事件的 `context` 会被自动捕获并传递给被触发的事件，无需手动传递参数。
+> 💡 **`scan_and_push` 扫描逻辑**：扫描全部 `Database.random_events` 桶，对每个事件的 `target_tags` 与输入 tags 做前缀匹配（`TagManager.prefix_match`），符合条件的生成 `EventTicket` → 通过 `RequirementFilter` / `ActionTagFilter` 过滤 → 按权重滚动选中 → 推入栈顶。权重基础值（1.0）乘以 `weight_mult` 系数。未匹配到任何事件时触发 `fallback` 兜底事件。
+>
+> 💡 **context 自动传递**：`push_event`、`queue_event` 和 `scan_and_push` 在 DSL 中调用时，当前事件的 `context` 会被自动捕获并传递给被触发的事件，无需手动传递参数。
 
 ### 3.6 队列事件操作符
 
