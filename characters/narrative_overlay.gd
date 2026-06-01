@@ -46,6 +46,7 @@ func _ready() -> void:
 	)
 	EventBus.push_event.connect(_on_push_event)
 	EventBus.pop_event.connect(_on_pop_event)
+	EventBus.pop_to_event.connect(_on_pop_to_event)
 	EventBus.push_picker.connect(_on_push_picker)
 	EventBus.end_picking.connect(_on_end_picking)
 
@@ -117,6 +118,58 @@ func _on_pop_event():
 
 	if not _is_active:
 		_process_next()
+
+
+func _on_pop_to_event(event_key: String):
+	"""
+	根据事件 ID 在栈中查找并弹出到对应层级。
+	
+	搜索顺序：从栈顶（index 0）向栈底遍历。
+	跳过 picker 条目（type == "picker"），只匹配 BaseEvent 条目。
+	匹配条件：entry.data.uuid == event_key 或 entry.data.name == event_key
+	
+	分支逻辑：
+	- ✅ 找到目标事件 → 弹出目标事件之上的所有条目，目标事件留在栈顶
+	   （标记 processed = false，使 _process_next 可以重新展示）
+	- ❌ 未找到目标事件 → Logging.err + 无效果（不修改栈）
+	"""
+	var found_index = -1
+	for i in range(_event_stack.size()):
+		var entry = _event_stack[i]
+		# 跳过 picker 条目（没有 "data" 字段的 BaseEvent）
+		if entry is Dictionary and entry.get("type") == "picker":
+			continue
+		var ev: BaseEvent = entry.get("data")
+		if ev and (ev.uuid == event_key or ev.name == event_key):
+			found_index = i
+			break
+
+	if found_index == -1:
+		Logging.err("pop_to_event: 事件 '%s' 未在栈中找到，忽略" % event_key)
+		return
+
+	# 弹出目标事件之上的所有条目（index 0 到 found_index - 1）
+	# 目标事件本身保留在栈顶，以便 _process_next 重新展示
+	for i in range(found_index):
+		var entry = _event_stack.pop_front()
+		if entry.has("data"):
+			var ev: BaseEvent = entry.get("data")
+			if not entry.get("processed", false):
+				Logging.warn("pop_to_event: 事件 '%s' 被弹出但从未被处理过！" % ev.name)
+			Logging.info("pop_to_event: 弹出栈事件 - " + ev.name)
+		else:
+			Logging.info("pop_to_event: 弹出栈条目（picker等）")
+
+	# 目标事件现在在栈顶（index 0）
+	# 重置 processed 标记，使其可以被 _process_next 重新展示
+	if _event_stack.size() > 0:
+		_event_stack[0]["processed"] = false
+		Logging.info("pop_to_event: 已弹出到事件 '%s'，准备重新展示" % event_key)
+
+	# 如果不处于活跃状态，处理下一个事件
+	if not _is_active:
+		_process_next()
+
 
 # --- Picker 栈条目 -------------------------------------
 
