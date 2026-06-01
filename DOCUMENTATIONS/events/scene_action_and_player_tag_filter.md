@@ -27,7 +27,7 @@ if a.area_tags and not a.area_tags.is_empty():
 
 ## 2. 玩家标签与事件匹配（Action-based）
 
-**匹配逻辑**（在<<ref_file file="/Users/lennon/Projects/poem_map_project/core/model/action_tag_filter.gd" lines="18-38" />）：
+**匹配逻辑**（在<<ref_file file="/Users/lennon/Projects/poem_map_project/core/model/action_tag_filter.gd" lines="15-45" />）：
 
 ```gdscript
 # 1. 没有标签的全局事件永远放行
@@ -39,17 +39,20 @@ if not e.target_tags or e.target_tags.is_empty():
 if not current_tags or current_tags.is_empty():
     continue
 
-# 3. 标签匹配：只要事件包含玩家任一标签就命中
+# 3. 🚀 革新匹配：前缀匹配，仅对比前3级，第4级忽略
 for tag in current_tags:
-    if e.target_tags.has(tag):
-        # 首次命中权重x3，多次命中累加
+    for target_tag in e.target_tags:
+        if TagManager.prefix_match(tag, target_tag, 3):
+            # 首次命中权重x3，多次命中累加
 ```
 
 **机制**：
 - `PlayerState.current_action_tags`是**动态临时标签池**
-- 执行action时会将action的`action_tags`注入玩家标签池（<<ref_file file="/Users/lennon/Projects/poem_map_project/ui/scene_action_panel.gd" line="21" />）
-- 事件的`target_tags`是合并了`action_tags`、`area_tags`和`_target_tags`的标签集合（<<ref_file file="/Users/lennon/Projects/poem_map_project/model/random_event.gd" lines="6-19" />）
-- **只要事件的target_tags包含玩家当前任一标签，事件就会被选中，且权重提升**
+- 执行action时会将action的`action_tags`直接注入玩家标签池（不再做三段式→四段式标准化）
+- 事件的`target_tags`是合并了`action_tags`、`area_tags`和`_target_tags`的标签集合
+- **前缀匹配：只对比标签的前3级（如 `actor:health:sick`），第4级（如 `:general` / `:plague`）被完全忽略**
+- **示例：`actor:health:sick:general` 和 `actor:health:sick:plague` 现在可以匹配，因为前3级都是 `actor:health:sick`**
+- **首次命中权重 x9，多次命中追加 x3**
 
 ## 总结
 

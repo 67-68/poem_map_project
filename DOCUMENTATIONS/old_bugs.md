@@ -1,5 +1,38 @@
 # Old Bugs
 
+## 2026-06-01: 🚀 Tag 系统革新 — 前缀匹配消灭三段式/四段式补丁链
+
+### 变更内容
+从**精确字符串匹配**（`e.target_tags.has(tag)`）改为**前缀匹配**（`TagManager.prefix_match(tag, target_tag, 3)`）。
+
+### 解决的历史问题
+- **三段式 vs 四段式不匹配**（见下方案例）— 不再需要 `normalize_3part_depreciated_tag()` 补 `:general`
+- **3-part 标签注入即报警**（`action_tag_filter.gd` 中的校验代码）— 直接删除
+- **精确匹配灵活性不足**— `actor:health:sick:general` 无法匹配 `actor:health:sick:plague`，现在可以
+
+### 新匹配规则
+- 只比较标签的前 3 级（如 `actor:health:sick`），第 4 级被忽略
+- 例如：`action:travel:parting:general` 和 `action:travel:parting:withLibai` → 匹配 ✅
+- 示例：`social:court:corrupt:general` 和 `social:court:corrupt`（缺第4级）→ 匹配 ✅
+
+### 原理
+```gdscript
+# 改前：必须完全相等
+e.target_tags.has(tag)
+
+# 改后：只对比前3级
+TagManager.prefix_match(tag, target_tag, 3)
+# 等价于：tag.split(":")[:3].join(":") == target_tag.split(":")[:3].join(":")
+```
+
+### 涉及文件
+- [`core/tag_manager.gd`](core/tag_manager.gd) — 新增 `get_prefix()` / `prefix_match()`
+- [`core/model/action_tag_filter.gd`](core/model/action_tag_filter.gd) — 匹配逻辑改造
+- [`core/event_manager.gd`](core/event_manager.gd) — `scan_poem_events` 匹配改造
+- [`ui/scene_action_panel.gd`](ui/scene_action_panel.gd) — 删除 `normalize_3part_depreciated_tag` 调用
+- [`model/random_event.gd`](model/random_event.gd) — 删除 `normalize_3part_depreciated_tag` 调用
+- [`core/model/time_operator.gd`](core/model/time_operator.gd) — 删除 `normalize_3part_depreciated_tag` 调用
+
 ## 核心教训速览 — 场景 → 诱因
 
 - **标签三段式 vs 四段式不匹配** → `ENUMS.to_action_str()` 生成三段式（`actor:health:sick`），`TagManager.normalize_3part_depreciated_tag()` 补成四段式（`actor:health:sick:general`），精确字符串匹配直接爆炸 💀
