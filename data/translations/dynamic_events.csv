@@ -1,6 +1,8 @@
 keys,zh
 FEIHUALING_SUCCESS,{npc_name} 巧妙地吟出了「{keyword}」字，满座皆惊！
 FEIHUALING_FAIL,{npc_name} 支支吾吾，半天憋不出一个字，尬住了…
+LIANJU_SUCCESS,{npc_name} 以「{@lianju_npc_name}」为题，吟出一联，满座击节赞叹！
+LIANJU_FAIL,{npc_name} 憋了半天，没能对上联句，气氛有些尴尬…
 CHAR_NAME_LIBAI,李白
 CHAR_NAME_WANGWEI,王维
 CHAR_NAME_ZHENGQIAN,郑虔

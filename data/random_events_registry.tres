@@ -13,6 +13,11 @@ resources = {
 "feihualing_other_done": "res://data/random_events/feihualing_other_done.tres",
 "feihualing_start": "res://data/random_events/feihualing_start.tres",
 "jiaoyou_poem_public": "res://data/random_events/jiaoyou_poem_public.tres",
+"lianju_intro": "res://data/random_events/lianju_intro.tres",
+"lianju_npc_turn": "res://data/random_events/lianju_npc_turn.tres",
+"lianju_player_turn": "res://data/random_events/lianju_player_turn.tres",
+"lianju_result": "res://data/random_events/lianju_result.tres",
+"lianju_show_poem": "res://data/random_events/lianju_show_poem.tres",
 "libai_after": "res://data/random_events/libai_after.tres",
 "libai_force_changhe": "res://data/random_events/libai_force_changhe.tres",
 "libai_unveilation": "res://data/random_events/libai_unveilation.tres",
@@ -27,3 +32,4 @@ resources = {
 "the_man_got_power": "res://data/random_events/the_man_got_power.tres",
 "welcome_to_wenhuaquan_party": "res://data/random_events/welcome_to_wenhuaquan_party.tres"
 }
+

@@ -1,0 +1,73 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_emoconf"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_baseopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_baseop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_eo"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_pusheo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_re"]
+[ext_resource type="Script" uid="uid://qdqvvly5ndfr" path="res://core/operators/random_pick_operator.gd" id="8_rpo"]
+[ext_resource type="Script" uid="uid://bj2nv77uffcp7" path="res://core/operators/context_fetch_operators.gd" id="9_cfo"]
+[ext_resource type="Script" uid="uid://cwprsg78wnilm" path="res://core/operators/npc_batch_check_operator.gd" id="10_nbco"]
+[ext_resource type="Script" path="res://core/operators/context_first_operator.gd" id="11_cfo_first"]
+
+[sub_resource type="Resource" id="Resource_rpo"]
+script = ExtResource("8_rpo")
+datasource_name = "imaginaries"
+prop_from_result = "uuid"
+key_stored_context = "lianju_npc_imaginary"
+select_count = 1
+
+[sub_resource type="Resource" id="Resource_cfo_first"]
+script = ExtResource("11_cfo_first")
+source_key = "lianju_npc_imaginary"
+target_key = "lianju_npc_imaginary"
+
+[sub_resource type="Resource" id="Resource_cfo_name"]
+script = ExtResource("9_cfo")
+fetched_key = "lianju_npc_imaginary"
+datasource_name = "imaginaries"
+prop_from_result = "name"
+key_stored_context = "lianju_npc_name"
+
+[sub_resource type="Resource" id="Resource_cfo_desc"]
+script = ExtResource("9_cfo")
+fetched_key = "lianju_npc_imaginary"
+datasource_name = "imaginaries"
+prop_from_result = "description"
+key_stored_context = "lianju_npc_desc"
+
+[sub_resource type="Resource" id="Resource_nbco"]
+script = ExtResource("10_nbco")
+participants_key = "guests"
+target_context_key = "npc_couplet"
+check_prop = "TALENT"
+text_template = "LIANJU"
+
+[sub_resource type="Resource" id="Resource_cr_on_enter"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("3_baseop")]([SubResource("Resource_rpo"), SubResource("Resource_cfo_first"), SubResource("Resource_cfo_name"), SubResource("Resource_cfo_desc"), SubResource("Resource_nbco")])
+
+[sub_resource type="Resource" id="Resource_push_show"]
+script = ExtResource("6_pusheo")
+event_key = "lianju_show_poem"
+
+[sub_resource type="Resource" id="Resource_cr_show"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("3_baseop")]([SubResource("Resource_push_show")])
+
+[sub_resource type="Resource" id="Resource_opt_show"]
+script = ExtResource("5_eo")
+choice_result = SubResource("Resource_cr_show")
+description = "欣赏联句"
+
+[resource]
+script = ExtResource("7_re")
+weight = 0.0
+on_enter_result = SubResource("Resource_cr_on_enter")
+options = Array[ExtResource("2_baseopt")]([SubResource("Resource_opt_show")])
+pre_event_interrupter_sequence = null
+uuid = "lianju_npc_turn"
+name = "联句·宾先"
+description = "宾客以「{@lianju_npc_name}」为题，略作沉吟，开口吟道：[br][br]{@npc_couplet}"

@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_emoconf"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_baseopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_baseop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_eo"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_pusheo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_re"]
+
+[sub_resource type="Resource" id="Resource_push_start"]
+script = ExtResource("6_pusheo")
+event_key = "lianju_npc_turn"
+
+[sub_resource type="Resource" id="Resource_cr_start"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("3_baseop")]([SubResource("Resource_push_start")])
+
+[sub_resource type="Resource" id="Resource_opt_start"]
+script = ExtResource("5_eo")
+choice_result = SubResource("Resource_cr_start")
+description = "开始联句"
+
+[resource]
+script = ExtResource("7_re")
+weight = 0.0
+options = Array[ExtResource("2_baseopt")]([SubResource("Resource_opt_start")])
+pre_event_interrupter_sequence = null
+uuid = "lianju_intro"
+name = "联句"
+description = "联句规则：宾客先就一意象作联句，你对句时需选择你的意象。[br]评分依据：[br]  · 意象等级（L1/L2/L3）决定基础分[br]  · 若你的当前情绪与所选意象契合，将获得额外倍率加成[br]  · 等级越高、情绪越合，得分越高！"

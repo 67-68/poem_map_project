@@ -45,6 +45,7 @@ signal imaginary_changed()
 signal request_add_imaginary(tag: String)
 signal on_trait_change()
 signal on_flag_change()
+signal lianju_score_calculated(score: int)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

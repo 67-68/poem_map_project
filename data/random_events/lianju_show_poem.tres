@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_emoconf"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_baseopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_baseop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_eo"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_pusheo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_re"]
+
+[sub_resource type="Resource" id="Resource_push_myturn"]
+script = ExtResource("6_pusheo")
+event_key = "lianju_player_turn"
+
+[sub_resource type="Resource" id="Resource_cr_myturn"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("3_baseop")]([SubResource("Resource_push_myturn")])
+
+[sub_resource type="Resource" id="Resource_opt_myturn"]
+script = ExtResource("5_eo")
+choice_result = SubResource("Resource_cr_myturn")
+description = "轮到我了"
+
+[resource]
+script = ExtResource("7_re")
+weight = 0.0
+options = Array[ExtResource("2_baseopt")]([SubResource("Resource_opt_myturn")])
+pre_event_interrupter_sequence = null
+uuid = "lianju_show_poem"
+name = "联句·赏诗"
+description = "{@npc_couplet}[br][br]——好一句「{@lianju_npc_name}」！现在轮到你对句了。"
