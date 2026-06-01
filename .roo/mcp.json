@@ -11,6 +11,18 @@
 			"alwaysAllow": [
 				"run_godot_script"
 			]
+		},
+		"godot-rag-bridge": {
+			"command": "/home/vscode/mcp_venv/bin/mcp",
+			"args": [
+				"run",
+				"/Users/lennon/Projects/poem_map_project/godot_rag_bridge.py"
+			],
+			"disabled": false,
+			"autoApprove": [],
+			"alwaysAllow": [
+				"semantic_code_search"
+			]
 		}
 	}
 }

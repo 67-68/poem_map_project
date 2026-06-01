@@ -1,7 +1,7 @@
 # MCP (Model Context Protocol) 搭建记录
 
 > 搭建日期: 2026-06-01
-> 相关文件: [`godot_mcp.py`](../godot_mcp.py), [`.roo/mcp.json`](../.roo/mcp.json)
+> 相关文件: [`godot_mcp.py`](../godot_mcp.py), [`godot_rag_bridge.py`](../godot_rag_bridge.py), [`.roo/mcp.json`](../.roo/mcp.json)
 
 ---
 
@@ -112,6 +112,107 @@ process_next_job()
 
 ```python
 WORKSPACE_DIR = "/Users/lennon/Projects/poem_map_project"
+```
+
+---
+
+## Godot RAG Bridge: 语义代码搜索
+
+> 相关文件: [`godot_rag_bridge.py`](../godot_rag_bridge.py)
+
+本项目通过第二个 MCP Server 提供基于向量检索的**语义代码搜索**能力，让 AI 可以用自然语言直接从项目的代码库和文档中找到相关上下文。
+
+### 架构
+
+```
+Roo Code (AI)
+    │  semantic_code_search("事件系统怎么实现的？")
+    ▼
+godot_rag_bridge.py (FastMCP Server)
+    │  POST /api/embeddings (Ollama)
+    ▼
+Ollama (host.docker.internal:11434)
+    │  nomic-embed-text → 768-dim vector
+    ▼
+Qdrant (host.docker.internal:6333)
+    │  collection: ws-48af07278f848afa
+    │  cosine similarity search
+    ▼
+返回 Top-K 代码片段 → AI 上下文
+```
+
+### 工具: `semantic_code_search`
+
+| 项 | 值 |
+|----|-----|
+| **工具名** | `semantic_code_search` |
+| **入参** | `query` (str, 必填) — 自然语言查询 |
+| | `top_k` (int, 可选, 默认 3, 范围 1-10) — 返回结果数 |
+| **出参** | 格式化的代码片段列表，含文件路径、行号范围、相关度评分 |
+
+### 调用示例
+
+```
+semantic_code_search(query="事件系统的三层铁幕契约是什么？")
+```
+
+返回格式：
+```
+🔍 找到与 '事件系统的三层铁幕契约是什么？' 最相关的 3 个代码片段:
+
+--- 📄 [DOCUMENTATIONS/events/event_system_best_practices_examples.md](DOCUMENTATIONS/events/event_system_best_practices_examples.md) (相关度: 0.853, 行 14-28) ---
+```
+（代码片段内容）
+```
+
+### 依赖
+
+| 组件 | 地址 | 说明 |
+|------|------|------|
+| Ollama | `host.docker.internal:11434` | `nomic-embed-text` 模型，生成文本向量 |
+| Qdrant | `host.docker.internal:6333` | `ws-48af07278f848afa` collection, 768-dim Cosine |
+
+### 配置文件
+
+```json
+{
+    "mcpServers": {
+        "godot-rag-bridge": {
+            "command": "/home/vscode/mcp_venv/bin/mcp",
+            "args": [
+                "run",
+                "/Users/lennon/Projects/poem_map_project/godot_rag_bridge.py"
+            ],
+            "disabled": false,
+            "autoApprove": [],
+            "alwaysAllow": [
+                "semantic_code_search"
+            ]
+        }
+    }
+}
+```
+
+### 数据流
+
+```
+semantic_code_search("查询文本")
+    │
+    ├─ 1. 参数校验 (query 非空, top_k 钳位)
+    │
+    ├─ 2. Ollama Embedding
+    │   POST http://host.docker.internal:11434/api/embeddings
+    │   { model: "nomic-embed-text", prompt: "查询文本" }
+    │   → 768-dim float vector
+    │
+    ├─ 3. Qdrant 向量搜索
+    │   POST http://host.docker.internal:6333/collections/ws-48af07278f848afa/points/search
+    │   { vector: [...], limit: top_k, with_payload: true }
+    │   → Top-K 结果含 payload: { filePath, codeChunk, startLine, endLine }
+    │
+    └─ 4. 格式化输出
+        → "📄 [filePath] (相关度: X.XXX, 行 L-L)"
+        → "```\ncodeChunk\n```"
 ```
 
 ---
