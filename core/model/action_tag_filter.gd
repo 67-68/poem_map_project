@@ -31,10 +31,10 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
             Logging.warn("检查自己是不是又忘记给玩家加current tags了！！！又筛选掉了")
             continue
 
-        # 3. 🚀 革新匹配：前缀匹配，仅对比前3级，第4级忽略
+        # 3. 🚀 革新匹配：前缀匹配（短 tag 做前缀，匹配长 tag）
         for tag in current_tags:
             for target_tag in e.target_tags:
-                if TagManager.prefix_match(tag, target_tag, 3):
+                if TagManager.prefix_match(tag, target_tag):
                     if new_events.has(ticket.event_uuid):
                         # 多个 tag 命中，继续追加原始权重
                         new_events[ticket.event_uuid].weight += ticket.original_weight * 3

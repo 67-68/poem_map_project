@@ -11,18 +11,20 @@
 - **精确匹配灵活性不足**— `actor:health:sick:general` 无法匹配 `actor:health:sick:plague`，现在可以
 
 ### 新匹配规则
-- 只比较标签的前 3 级（如 `actor:health:sick`），第 4 级被忽略
-- 例如：`action:travel:parting:general` 和 `action:travel:parting:withLibai` → 匹配 ✅
-- 示例：`social:court:corrupt:general` 和 `social:court:corrupt`（缺第4级）→ 匹配 ✅
+- **前缀匹配**：短的 tag 作为前缀，匹配长的 tag，按冒号分段
+- 不限制级数，输几级就用几级匹配
+- 例如：`actor:health` → 匹配 `actor:health:sick:general` ✅
+- 例如：`actor:health:sick` → 匹配 `actor:health:sick:general` ✅
+- 例如：`actor:health` → 不匹配 `actor:healthcare` ❌（分段边界保护）
 
 ### 原理
 ```gdscript
 # 改前：必须完全相等
 e.target_tags.has(tag)
 
-# 改后：只对比前3级
-TagManager.prefix_match(tag, target_tag, 3)
-# 等价于：tag.split(":")[:3].join(":") == target_tag.split(":")[:3].join(":")
+# 改后：灵活的字符串前缀匹配 + 冒号分段边界检查
+TagManager.prefix_match(tag, target_tag)
+# 逻辑：短的 tag 作为前缀，检查长的 tag 是否以它开头，且剩余部分为空或 : 开头
 ```
 
 ### 涉及文件

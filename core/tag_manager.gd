@@ -27,15 +27,24 @@ static func normalize_3part_depreciated_tag(tag: String):
 # 前缀匹配工具（用于 tag 系统革新）
 # ──────────────────────────────────────────────
 
-## 提取 tag 的前 N 级前缀（默认前 3 级）
-## 例如：get_prefix("actor:health:sick:general", 3) → "actor:health:sick"
-static func get_prefix(tag: String, levels: int = 3) -> String:
-    var parts = tag.split(":")
-    var count = mini(parts.size(), levels)
-    var prefix_parts = parts.slice(0, count)
-    return prefix_parts.join(":")
-
-## 前缀匹配：比较两个 tag 的前 N 级是否相同（默认前 3 级）
-## 第 4 级及以后被完全忽略
-static func prefix_match(tag_a: String, tag_b: String, levels: int = 3) -> bool:
-    return get_prefix(tag_a, levels) == get_prefix(tag_b, levels)
+## 前缀匹配：短的 tag 作为前缀，匹配长的 tag
+## 规则：
+##   - 用短的 tag 去匹配长的 tag 的开头
+##   - 必须按冒号分段匹配，防止 actor:health 误匹配 actor:healthcare
+##   - 如果两 tag 长度相同，则全等匹配
+##
+## 示例：
+##   prefix_match("actor:health", "actor:health:sick:general")  → true
+##   prefix_match("actor:health", "actor:healthcare")           → false ❌ 分段边界
+##   prefix_match("actor:health:sick", "actor:health:sick:general") → true
+##   prefix_match("actor:health:sick:general", "actor:health")  → true (方向无关)
+static func prefix_match(tag_a: String, tag_b: String) -> bool:
+    var shorter = tag_a if tag_a.length() <= tag_b.length() else tag_b
+    var longer = tag_a if tag_a.length() > tag_b.length() else tag_b
+    
+    if not longer.begins_with(shorter):
+        return false
+    
+    # 确认分段边界：剩余部分要么为空，要么以 : 开头
+    var remaining = longer.substr(shorter.length())
+    return remaining.is_empty() or remaining.begins_with(":")

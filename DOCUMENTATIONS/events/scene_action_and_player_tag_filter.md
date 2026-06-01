@@ -39,10 +39,10 @@ if not e.target_tags or e.target_tags.is_empty():
 if not current_tags or current_tags.is_empty():
     continue
 
-# 3. 🚀 革新匹配：前缀匹配，仅对比前3级，第4级忽略
+# 3. 🚀 革新匹配：前缀匹配（短 tag 做前缀，匹配长 tag）
 for tag in current_tags:
     for target_tag in e.target_tags:
-        if TagManager.prefix_match(tag, target_tag, 3):
+        if TagManager.prefix_match(tag, target_tag):
             # 首次命中权重x3，多次命中累加
 ```
 
@@ -50,8 +50,10 @@ for tag in current_tags:
 - `PlayerState.current_action_tags`是**动态临时标签池**
 - 执行action时会将action的`action_tags`直接注入玩家标签池（不再做三段式→四段式标准化）
 - 事件的`target_tags`是合并了`action_tags`、`area_tags`和`_target_tags`的标签集合
-- **前缀匹配：只对比标签的前3级（如 `actor:health:sick`），第4级（如 `:general` / `:plague`）被完全忽略**
-- **示例：`actor:health:sick:general` 和 `actor:health:sick:plague` 现在可以匹配，因为前3级都是 `actor:health:sick`**
+- **前缀匹配：短的 tag 作为前缀去匹配长的 tag，按冒号分段**
+- **示例：`actor:health` → 匹配 `actor:health:sick:general` ✅，不匹配 `actor:healthcare` ❌**
+- **示例：`actor:health:sick` → 匹配 `actor:health:sick:general` ✅**
+- **不限制级数，你输几级就用几级匹配**
 - **首次命中权重 x9，多次命中追加 x3**
 
 ## 总结
