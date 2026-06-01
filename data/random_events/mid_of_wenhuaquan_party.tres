@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://core/operators/random_operator.gd" id="9_lswy1"]
 [ext_resource type="Script" path="res://core/model/conditional_operator.gd" id="10_etiw7"]
 [ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_gdny2"]
+[ext_resource type="Script" path="res://core/operators/scan_and_push_operator.gd" id="11_scanpush"]
 
 [sub_resource type="Resource" id="Resource_lswy1"]
 script = ExtResource("3_hgl8j")
@@ -112,9 +113,24 @@ script = ExtResource("10_etiw7")
 condition = SubResource("Resource_yuguk")
 condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_v6k28")])
 
+[sub_resource type="Resource" id="Resource_art_scan"]
+script = ExtResource("11_scanpush")
+tags = PackedStringArray(["action:entertain:elegant", "action:entertain:martial"])
+weight_multiplier = 0.0
+fallback_event = ""
+
+[sub_resource type="Resource" id="Resource_art_result"]
+script = ExtResource("5_hgl8j")
+operators = Array[ExtResource("3_f46my")]([SubResource("Resource_art_scan")])
+
+[sub_resource type="Resource" id="Resource_art_option"]
+script = ExtResource("6_0tt3c")
+choice_result = SubResource("Resource_art_result")
+description = "欣赏艺术"
+
 [resource]
 script = ExtResource("7_lswy1")
-options = Array[ExtResource("2_lnht4")]([SubResource("Resource_2litf"), SubResource("Resource_qqgwl"), SubResource("Resource_tub3m")])
+options = Array[ExtResource("2_lnht4")]([SubResource("Resource_2litf"), SubResource("Resource_qqgwl"), SubResource("Resource_tub3m"), SubResource("Resource_art_option")])
 pre_event_interrupter_sequence = [SubResource("Resource_s76ol"), SubResource("Resource_v4noq")]
 on_enter_result = SubResource("Resource_etiw7")
 uuid = "mid_of_wenhuaquan_party"

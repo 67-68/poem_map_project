@@ -1,4 +1,7 @@
 # [unreleased]
+## Added
+- `mid_of_wenhuaquan_party` 事件新增「欣赏艺术」选项，使用 `ScanAndPushOperator` 扫描 `action:entertain:elegant` / `action:entertain:martial` 标签事件池，动态推送匹配的随机事件
+
 ## Changed
 - `ScanAndPushOperator` 重构：删除内部重复的扫描/过滤管道，改为设置 `PlayerState.current_action_tags` 后委托给 `EventManager.scan_events_from_tickets(return_only=true)`，符合 DRY 原则
 - `EventManager.scan_events_from_tickets()` 新增 `return_only` 参数：为 `true` 时返回选中事件 UUID 字符串，不发射 `request_event_key` 信号

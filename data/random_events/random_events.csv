@@ -25,6 +25,7 @@ random_event,mid_of_wenhuaquan_party,,,在盛大讲话完毕之后,正式开场�
 >option,wenhuaquan_people_choice,,,走向熙熙攘攘的人群,,,push_event(event_key=mid_of_wenhuaquan_party_choose_people),,,,
 >option,feihualing_option,,,参加飞花令,,,push_event(event_key=feihualing_start),,,,
 >option,lianju_option,,,参加联句,,,push_event(event_key=lianju_intro),,,,
+>option,art_appreciation_option,,,欣赏艺术,,,scan_and_push(tags=["action:entertain:elegant","action:entertain:martial"], weight_mult=0.0, fallback=""),,,,
 random_event,mid_of_wenhuaquan_party_choose_people,,,要选谁呢？,商务还是运动？,,,,"item_provider(list_key=""guests"", text_template=""走向 {item}"", target_event_key=""event_talk_guest"", payload_key=""target_npc"",use_push_event=true)",,
 >option,,,,回到大厅,,,pop_event(),,,,
 random_event,feihualing_start,,,飞花令,宴席上有人提议玩飞花令，是否参与？,,,,,,
