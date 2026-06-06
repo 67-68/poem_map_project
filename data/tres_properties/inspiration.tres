@@ -6,4 +6,7 @@
 script = ExtResource("1_l3cyt")
 uuid = "inspiration"
 name = "inspiration"
+hard_max = 100
+soft_max = 90
+decay_threshold = 25
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"

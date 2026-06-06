@@ -26,15 +26,21 @@ enum PROPS {
 }
 ```
 
-### 2. Property 资源类
+### 2. Property 资源类（单一类型）
 
-每个 PROPS 对应一个 `Property` 资源实例，定义在 `core/model/property.gd`：
+所有 PROPS 共享同一个 `Property` 类，通过 `.tres` 中的配置区分行为，定义在 [`core/model/property.gd`](../core/model/property.gd)：
 
 ```gdscript
 class_name Property extends GameEntity
     @export var val: int = 0                          # 当前值
+    @export var hard_max: int = -1                    # 硬上限（-1 = 无限制），PlayerState 自动 clamp
+    @export var soft_max: int = -1                    # 软上限（-1 = 无限制），SurvivalManager 参考触发溢出
+    @export var decay_threshold: int = -1             # 衰减阈值（-1 = 无衰减），SurvivalManager 参考触发衰减
     @export var staged_perceptions: Array[PropStagedPerceptionData] = []  # 阶段性描述
 ```
+
+> 不再区分 `InvolatileEmotionProp` / `UnboundedProperty` 子类 — 全部收敛到单一 `Property`。
+> 通过 `hard_max=100` + `soft_max=90` 等配置值来模拟原"有上限属性"的行为。
 
 ### 3. 资源注册表
 
@@ -142,10 +148,26 @@ resources = {
 script = ExtResource("1_l3cyt")
 uuid = "new_prop"
 name = "new_prop"
+hard_max = 100       # 硬上限（-1 = 无限制）
+soft_max = 90        # 软上限（-1 = 无限制）
+decay_threshold = 25 # 衰减阈值（-1 = 无衰减）
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"
 ```
 
-### 步骤 4：（可选）在 PlayerState 中初始化
+### 步骤 4：配置上限值
+
+根据属性类型设置不同的上限策略：
+
+| 场景 | hard_max | soft_max | decay_threshold | 示例属性 |
+|------|----------|----------|-----------------|----------|
+| **有上限（0-100）** | 100 | 90 | 25 或 90 | fatigue, drunk, burnout, sick, inspiration |
+| **无上限** | -1 | -1 | -1 | money, health, official_prestige, literary_fame, talent |
+
+- `hard_max` 由 [`PlayerState.append_stat()`](../core/player_state.gd:112) 和 [`set_stat_val()`](../core/player_state.gd:142) 自动 clamp
+- `hard_max` 可通过 [`force_set_stat_val()`](../core/player_state.gd:157) 绕过（用于 debug / 特殊场景）
+- `soft_max` 和 `decay_threshold` 由 [`SurvivalManager`](../core/survival_manager.gd) 在结算管线中引用
+
+### 步骤 5：（可选）在 PlayerState 中初始化
 
 如果需要在游戏开始时设置初始值，在 `core/player_state.gd` 的 `_ready()` 中添加：
 
@@ -171,35 +193,31 @@ static func to_prop_str(item) -> String:
     return "default_storable_item"
 ```
 
-### 属性变更逻辑
+### 属性变更逻辑与上限 clamp
 
-`PlayerState.change_stat()` 方法包含复杂的乘数逻辑：
+`PlayerState.append_stat()` 方法包含乘数逻辑 + hard_max clamp：
 
 1. 检查 Ambition 的 buffer_to_prop
 2. 检查 Ambition 的 buffer_to_region
 3. 检查各个 Trait 的 buffer_to_prop 和 buffer_to_region
 4. 应用所有乘数后执行加法操作
+5. **硬上限 clamp**：如果属性 `hard_max >= 0`，自动 `clamp(val, 0, hard_max)`
 
 ```gdscript
-func change_stat(stat_name, data):
-    var amount_to_change = data
-    
-    # Ambition 乘数
-    if ambition and ambition.buffer_to_prop and ambition.buffer_to_prop.has_operator(stat_name):
-        amount_to_change = ambition.buffer_to_prop.match_and_multiply(stat_name, amount_to_change)
-    
-    # Region 乘数
-    if ambition and ambition.buffer_to_region and ambition.buffer_to_region.has_operator(current_location):
-        amount_to_change = ambition.buffer_to_region.match_and_multiply(current_location, amount_to_change)
-    
-    # Trait 乘数
-    for t_name in traits:
-        var t = Database.traits.get(t_name)
-        if t.buffer_to_prop and t.buffer_to_prop.has_operator(stat_name):
-            amount_to_change = t.buffer_to_prop.match_and_multiply(stat_name, amount_to_change)
-    
+func append_stat(stat_name, data):
+    # ... 乘数逻辑 ...
     stat.val += amount_to_change
+    if stat.hard_max >= 0 and stat.val > stat.hard_max:
+        stat.val = stat.hard_max
     player_stat_changed.emit(stat_name)
+```
+
+`set_stat_val()` 也包含同样的 hard_max clamp + 最小值 0 clamp。
+
+**强制设值（跳过 hard_max）**：
+
+```gdscript
+PlayerState.force_set_stat_val('drunk', 999)  # 不会 clamp
 ```
 
 ### 阶段性感知
@@ -259,11 +277,51 @@ func get_staged_perception_text() -> String:
 - INSPIRATION 是一种特殊的 PROP，用于兑换意象
 - 其他 PROPS（如 DRUNK）可能影响意象获得的成本
 
+## 上限机制详解
+
+### hard_max（硬上限）
+
+- **定义位置**：每个 `.tres` 文件中的 `hard_max` 字段
+- **执行位置**：[`PlayerState.append_stat()`](../core/player_state.gd:112) 和 [`set_stat_val()`](../core/player_state.gd:142)
+- **行为**：任何通过 `append_stat` / `set_stat_val` 的修改都会被 clamp 到 `[0, hard_max]`
+- **绕过方式**：调用 [`force_set_stat_val()`](../core/player_state.gd:157) 可跳过 hard_max 检查
+- **默认值**：`-1` 表示无限制
+
+### soft_max（软上限）
+
+- **定义位置**：每个 `.tres` 文件中的 `soft_max` 字段
+- **用途**：供 [`SurvivalManager`](../core/survival_manager.gd) 在结算管线中参考
+- **行为**：`_process_fatigue_accumulation()` 使用 soft_max 作为溢出触发阈值
+  - 如 drunk >= soft_max → 溢出到 fatigue，然后复位到 `soft_max - 1`
+- **默认值**：`-1` 表示无软上限（兜底 `100`）
+
+### decay_threshold（衰减阈值）
+
+- **定义位置**：每个 `.tres` 文件中的 `decay_threshold` 字段
+- **用途**：供 `SurvivalManager._decay_volatile_emotions()` 使用
+- **行为**：`decay(prop, threshold, decay_val)`：若当前值 > threshold，扣减 decay_val；否则清零
+- **默认值**：`-1` 表示无衰减（兜底 `25`）
+
+### 当前各属性配置
+
+| 属性 | hard_max | soft_max | decay_threshold |
+|------|----------|----------|-----------------|
+| `drunk` | 100 | 90 | 25 |
+| `fatigue` | 100 | 90 | 90 |
+| `burnout` | 100 | 90 | -1 |
+| `sick` | 100 | 90 | -1 |
+| `inspiration` | 100 | 90 | 25 |
+| `money` | -1 | -1 | -1 |
+| `health` | -1 | -1 | -1 |
+| `official_prestige` | -1 | -1 | -1 |
+| `literary_fame` | -1 | -1 | -1 |
+| `talent` | -1 | -1 | -1 |
+
 ## 未来扩展
 
 ### 可能的增强功能
-1. **属性上限**：为属性设置最大值/最小值限制
-2. **属性衰减**：某些属性随时间自然变化（如疲劳恢复）
+1. ~~属性上限~~ ✅ **已实现**（hard_max + soft_max 双上限机制）
+2. **属性衰减**：某些属性随时间自然变化（如疲劳恢复）（部分通过 decay_threshold 实现）
 3. **属性依赖**：属性之间存在依赖关系（如健康影响才华）
 4. **动态属性**：运行时动态添加/移除属性
 5. **属性历史**：记录属性变化历史用于调试和回放

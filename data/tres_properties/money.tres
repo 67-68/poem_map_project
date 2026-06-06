@@ -6,4 +6,7 @@
 script = ExtResource("1_kxe2f")
 uuid = "money"
 name = "money"
+hard_max = -1
+soft_max = -1
+decay_threshold = -1
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"

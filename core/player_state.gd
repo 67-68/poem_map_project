@@ -110,6 +110,10 @@ func append_stat(stat_name, data):
 
 	Logging.info('change stat %s by %d' % [stat_name, amount_to_change])
 	stat.val += amount_to_change # 永远执行加法
+	# hard_max clamp
+	if stat.hard_max >= 0 and stat.val > stat.hard_max:
+		stat.val = stat.hard_max
+		Logging.info('change stat %s clamped to hard_max=%d' % [stat_name, stat.hard_max])
 	player_stat_changed.emit(stat_name)
 
 func get_stat_val(stat_name):
@@ -139,8 +143,34 @@ func set_stat_val(stat_name, data):
 		Logging.err('do not find stat %s' % stat_name)
 		return
 	
+	# hard_max clamp
+	if stat.hard_max >= 0 and data > stat.hard_max:
+		data = stat.hard_max
+		Logging.info('set stat %s clamped to hard_max=%d' % [stat_name, stat.hard_max])
+	if data < 0:
+		data = 0
+		Logging.info('set stat %s clamped to min_val=0' % stat_name)
+	
 	stat.val = data
 	Logging.info('set stat %s to %d' % [stat_name, data])
+	player_stat_changed.emit(stat_name)
+
+func force_set_stat_val(stat_name, data):
+	"""强制设值，跳过 hard_max 检查（用于 debug / 特殊场景）"""
+	if stat_name is int:
+		var int_stat = ENUMS.to_prop_str(stat_name)
+		if not int_stat:
+			Logging.err('do not find stat %s' % stat_name)
+			return
+		stat_name = int_stat
+	
+	var stat = Database.properties.get(stat_name)
+	if not stat:
+		Logging.err('do not find stat %s' % stat_name)
+		return
+	
+	stat.force_set_val(data)
+	Logging.info('force set stat %s to %d (bypassed hard_max)' % [stat_name, data])
 	player_stat_changed.emit(stat_name)
 
 func get_emotion(stat_name):

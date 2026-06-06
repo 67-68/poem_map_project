@@ -7,4 +7,7 @@
 script = ExtResource("1_chrk0")
 uuid = "burnout"
 name = "burnout"
+hard_max = 100
+soft_max = 90
+decay_threshold = -1
 metadata/_custom_type_script = "uid://d3ded43r40m3s"

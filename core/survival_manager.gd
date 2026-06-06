@@ -7,6 +7,26 @@ class_name SurvivalManager extends Node
 func get_prop(data): return PlayerState.get_stat_val(data)
 func append_prop(data,val):PlayerState.append_stat(data,val)
 func set_prop(data,val):PlayerState.set_stat_val(data,val)
+func force_set_prop(data,val):PlayerState.force_set_stat_val(data,val)
+
+# ─── 属性配置访问 ────────────────────────────────────
+func _get_prop_config(prop_enum) -> Property:
+    var key = ENUMS.to_prop_str(prop_enum)
+    return Database.properties.get(key) as Property
+
+func _get_soft_max(prop_enum) -> int:
+    var prop = _get_prop_config(prop_enum)
+    if prop and prop.soft_max >= 0:
+        return prop.soft_max
+    # 兜底：默认 100（兼容无 soft_max 的老属性）
+    return 100
+
+func _get_decay_threshold(prop_enum) -> int:
+    var prop = _get_prop_config(prop_enum)
+    if prop and prop.decay_threshold >= 0:
+        return prop.decay_threshold
+    # 兜底：默认 25
+    return 25
 
 func _cost_survival():
     #breakpoint
@@ -28,21 +48,26 @@ func decay(prop_enum, threshold, decay_val):
         append_prop(prop_enum, -current_val)
 
 func _decay_volatile_emotions():
-    decay(ENUMS.PROPS.DRUNK, 25, 25)
-    decay(ENUMS.PROPS.INSPIRATION,25,25)
-    decay(ENUMS.PROPS.FATIGUE,90,90) # 只有90以上不能归零
+    # 使用各属性自身的 decay_threshold，不再硬编码
+    decay(ENUMS.PROPS.DRUNK, _get_decay_threshold(ENUMS.PROPS.DRUNK), _get_decay_threshold(ENUMS.PROPS.DRUNK))
+    decay(ENUMS.PROPS.INSPIRATION, _get_decay_threshold(ENUMS.PROPS.INSPIRATION), _get_decay_threshold(ENUMS.PROPS.INSPIRATION))
+    decay(ENUMS.PROPS.FATIGUE, _get_decay_threshold(ENUMS.PROPS.FATIGUE), _get_decay_threshold(ENUMS.PROPS.FATIGUE))
 
 func _process_fatigue_accumulation():
-    # 让属性 < 100
-    if get_prop(ENUMS.PROPS.DRUNK) >= 100:
+    # 使用 soft_max 替换魔法数字 100，溢出后复位到 soft_max - 1
+    var drunk_soft = _get_soft_max(ENUMS.PROPS.DRUNK)
+    var fatigue_soft = _get_soft_max(ENUMS.PROPS.FATIGUE)
+    var burnout_soft = _get_soft_max(ENUMS.PROPS.BURNOUT)
+
+    if get_prop(ENUMS.PROPS.DRUNK) >= drunk_soft:
         append_prop(ENUMS.PROPS.FATIGUE, 20)
-        set_prop(ENUMS.PROPS.DRUNK,99)
-    if get_prop(ENUMS.PROPS.FATIGUE) >= 100:
+        set_prop(ENUMS.PROPS.DRUNK, drunk_soft - 1)
+    if get_prop(ENUMS.PROPS.FATIGUE) >= fatigue_soft:
         append_prop(ENUMS.PROPS.BURNOUT, 10)
-        set_prop(ENUMS.PROPS.FATIGUE,99)
-    if get_prop(ENUMS.PROPS.BURNOUT) >= 100:
+        set_prop(ENUMS.PROPS.FATIGUE, fatigue_soft - 1)
+    if get_prop(ENUMS.PROPS.BURNOUT) >= burnout_soft:
         append_prop(ENUMS.PROPS.HEALTH,-20)
-        set_prop(ENUMS.PROPS.BURNOUT,99)
+        set_prop(ENUMS.PROPS.BURNOUT, burnout_soft - 1)
 
 func aggregate_trait_effect():
     for t in PlayerState.get_traits():
