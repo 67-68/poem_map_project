@@ -3,3 +3,4 @@
 /android/
 # 忽略本地大语言模型与向量数据库的挂载卷 😡
 qdrant_storage/
+.env

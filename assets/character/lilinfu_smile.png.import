@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b3rx4c6ilgt1d"
-path="res://.godot/imported/Idle-Sheet.png-7fd21cba2fb47f79886cee2d9449f323.ctex"
+uid="uid://cckktvmpe61oe"
+path="res://.godot/imported/lilinfu_smile.png-1529d64adb1689069d72b1cc458b0dd1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/character/Idle-Sheet.png"
-dest_files=["res://.godot/imported/Idle-Sheet.png-7fd21cba2fb47f79886cee2d9449f323.ctex"]
+source_file="res://assets/character/lilinfu_smile.png"
+dest_files=["res://.godot/imported/lilinfu_smile.png-1529d64adb1689069d72b1cc458b0dd1.ctex"]
 
 [params]
 

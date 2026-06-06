@@ -1,4 +1,4 @@
-class_name FocusedChatLine extends GameEntity
+class_name FocusedChatLine extends Resource
 enum ChatPosition {
 	LEFT,
 	RIGHT
@@ -6,29 +6,7 @@ enum ChatPosition {
 
 # name 作为speaker_name
 # description: text
-@export var chat_position: int
+@export var name: String
+@export var description: String
+@export var chat_position: ChatPosition
 @export var texture: Texture2D # 不用管上级的icon图标丢失
-
-func _init(data: Dictionary):
-	super._init(data)
-	var props = data.get("properties", data.get("property", {}))
-	var raw_tex = data.get('texture',props.get('texture',GameConfig.DEFAULT_ICON_PATH))
-	if raw_tex is Texture:
-		texture = raw_tex
-	elif raw_tex is String:
-		if FileAccess.file_exists(GameConfig.CHARACTER_PATH + raw_tex):
-			raw_tex = GameConfig.CHARACTER_PATH + raw_tex
-		elif FileAccess.file_exists(GameConfig.ICON_PATH + raw_tex):
-			raw_tex = GameConfig.ICON_PATH + raw_tex
-		elif FileAccess.file_exists(raw_tex):
-			pass
-		else:
-			raw_tex = GameConfig.DEFAULT_ICON_PATH
-		
-		texture = load(raw_tex)
-	
-	var raw_chat_position = data.get('chat_position',props.get('chat_position'))
-	if raw_chat_position is int: # enum or int
-		chat_position = raw_chat_position
-	else:		
-		chat_position = ChatPosition[raw_chat_position]

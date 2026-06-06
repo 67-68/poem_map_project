@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brmo56j1lbopc"
-path="res://.godot/imported/li_linfu.png-8f9e1889ff14cc3d93e39f6e9f73424f.ctex"
+uid="uid://b45evy8cpq1sg"
+path="res://.godot/imported/lilinfu_solemn.png-9c5e9a56191108c2724ac3736ec58cd7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/character/li_linfu.png"
-dest_files=["res://.godot/imported/li_linfu.png-8f9e1889ff14cc3d93e39f6e9f73424f.ctex"]
+source_file="res://assets/character/lilinfu_solemn.png"
+dest_files=["res://.godot/imported/lilinfu_solemn.png-9c5e9a56191108c2724ac3736ec58cd7.ctex"]
 
 [params]
 

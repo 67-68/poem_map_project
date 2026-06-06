@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ce4oye8irdbuk"
-path="res://.godot/imported/Run-Sheet.png-0348d34970bc6a1bd5cac731878b5336.ctex"
+uid="uid://btkd7cxp6yr3d"
+path="res://.godot/imported/dufu_nervous.png-128d9fad416b69121d7b465e9fd7956e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/character/Run-Sheet.png"
-dest_files=["res://.godot/imported/Run-Sheet.png-0348d34970bc6a1bd5cac731878b5336.ctex"]
+source_file="res://assets/character/dufu_nervous.png"
+dest_files=["res://.godot/imported/dufu_nervous.png-128d9fad416b69121d7b465e9fd7956e.ctex"]
 
 [params]
 
