@@ -17,7 +17,6 @@
 #   parse_flag — Flag 三种类型 default value 处理
 #
 # 🟢 P2（中等风险，边缘功能）
-#   parse_emotion_configs — 情绪配置 DSL
 #   flag_bool_not_has / flag_str_not / flag_int_eq / flag_int_ne —
 #     4 个已注册但零测试的 requirement
 #   DynamicRef @context_key — 动态标志位引用分支

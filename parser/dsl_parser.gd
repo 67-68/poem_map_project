@@ -70,7 +70,7 @@ static func _lint_text_field(text: String, field_name: String, uuid: String) -> 
             Logging.warn("[Linter] 事件 '%s' 的 '%s' 字段包含英文标点 '%s' (位置 %d, 附近: '...%s...')，请替换为全角标点 💀" % [uuid, field_name, punct, idx, context_snippet])
 
 # Linter 验证：检测 DSL 代码字段中的全角标点
-# DSL 代码字段（requirements/results/context/interruptions/provider/template/emotion_config）
+# DSL 代码字段（requirements/results/context/interruptions/provider/template）
 # 只能使用 ASCII 标点。出现全角标点会破坏 DSL 解析器。
 static func _lint_dsl_field(text: String, field_name: String, uuid: String) -> void:
     if text.is_empty():
@@ -675,12 +675,6 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
                 uuid])
         
         event.on_enter_result = csv_result
-
-    # 选项的 emotion_config：虽然未来 option 可能也有自己的 config
-    # 但目前只有 event 有，option 忽略并 warn（如果写了的话）
-    var emotion_config_str = row.get('emotion_config', '')
-    if emotion_config_str and not emotion_config_str.is_empty():
-        Logging.warn("Option 行暂不支持 emotion_config，已忽略: uuid=%s" % uuid)
 
     return event
 

@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="HistoryEvent" format=3 uid="uid://testpickerb"]
 
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="1_opt"]
-[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_s47jt"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_op"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="4_bo"]

@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b7vj1i68spvtf"]
 
-[ext_resource type="Script" uid="uid://dnxww6ol71i7d" path="res://core/model/emotion_configs.gd" id="1_cuklk"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_cyqr5"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_cuklk"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_laim4"]
