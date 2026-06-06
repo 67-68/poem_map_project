@@ -73,20 +73,20 @@ def default_config() -> EventPipelineConfig:
                     PipelineDimensionValue(
                         id="L0", name="门子/家奴",
                         description="最底层的门卫、仆役，守门索贿，玩家需要打点才能进门",
-                        scale=10,
-                        operator_dsl='prop_sub(name="money", val=10)',
+                        scale=1.0,
+                        operator_dsl='prop_sub(name=money; val=10)',
                     ),
                     PipelineDimensionValue(
                         id="L1", name="清客/文法吏",
                         description="中层幕僚、文书小吏，递话要钱，比直接面对权贵便宜",
-                        scale=30,
-                        operator_dsl='prop_sub(name="money", val=10)',
+                        scale=1.5,
+                        operator_dsl='prop_sub(name=money; val=10)',
                     ),
                     PipelineDimensionValue(
                         id="L2", name="权贵本尊",
                         description="直接面对高官权贵，需要重大代价才能获得见面机会",
-                        scale=50,
-                        operator_dsl='prop_sub(name="money", val=10), prop_sub(name="fatigue", val=5)',
+                        scale=2.0,
+                        operator_dsl='prop_sub(name=money; val=10)|prop_sub(name=fatigue; val=5)',
                     ),
                 ],
             ),
@@ -98,20 +98,20 @@ def default_config() -> EventPipelineConfig:
                     PipelineDimensionValue(
                         id="TypeA", name="金钱掠夺",
                         description="对方通过明示或暗示索取钱财，这是最常见的资源掠夺方式",
-                        scale=1,
-                        operator_dsl='prop_sub(name="money", val=20)',
+                        scale=1.0,
+                        operator_dsl='prop_sub(name=money; val=20)',
                     ),
                     PipelineDimensionValue(
                         id="TypeB", name="生命/健康损耗",
                         description="对方耗着玩家、让玩家长时间等候、带病工作等身体损耗",
-                        scale=1,
-                        operator_dsl='prop_sub(name="health", val=5)',
+                        scale=1.0,
+                        operator_dsl='prop_sub(name=health; val=5)',
                     ),
                     PipelineDimensionValue(
                         id="TypeC", name="精神PUA",
                         description="对方通过羞辱、冷落、贬低玩家地位来获取精神快感",
-                        scale=1,
-                        operator_dsl='prop_sub(name="fatigue", val=10)',
+                        scale=1.0,
+                        operator_dsl='prop_sub(name=fatigue; val=10)',
                     ),
                 ],
             ),
@@ -123,19 +123,19 @@ def default_config() -> EventPipelineConfig:
                     PipelineDimensionValue(
                         id="M0", name="媚上邀功",
                         description="对方为了讨好上级而故意为难玩家，把玩家当投名状",
-                        scale=1,
+                        scale=1.0,
                         operator_dsl="",
                     ),
                     PipelineDimensionValue(
                         id="M1", name="纯粹寻租/变态",
                         description="对方纯粹为了享受支配欲和权力快感，毫无制度性理由",
-                        scale=2,
+                        scale=1.5,
                         operator_dsl="",
                     ),
                     PipelineDimensionValue(
                         id="M2", name="制度性冷漠",
                         description="对方并非刻意针对玩家，而是制度本身如此，玩家只是碰上了",
-                        scale=1,
+                        scale=1.0,
                         operator_dsl="",
                     ),
                 ],
@@ -193,13 +193,17 @@ def scale_dsl_operator(dsl: str, scale: int) -> str:
             original_val = int(args["val"])
         except (ValueError, TypeError):
             raise ValueError(f"DSL 'val' 参数不是整数: {args['val']} (in: {dsl})")
-        args["val"] = str(original_val * scale)
+        scaled = original_val * scale
+        # 如果结果是整数，输出整数（避免 "val=15.0" 这种多余的小数点）
+        if scaled == int(scaled):
+            args["val"] = str(int(scaled))
+        else:
+            args["val"] = str(scaled)
 
     # 使用 ; 作为参数分隔符（Layer 1）
+    # val 之外的字符串参数不加引号（NamedDSLParser 自动处理）
     new_args = "; ".join(
-        f'{k}="{v}"'
-        if isinstance(v, str) and not v.isdigit() and v not in ("true", "false")
-        else f"{k}={v}"
+        f"{k}={v}"
         for k, v in args.items()
     )
     return f"{func_name}({new_args})"

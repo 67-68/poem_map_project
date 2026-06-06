@@ -1146,7 +1146,7 @@ static func _pda_transition(stack: Array[RandomEvent], resources: Array[Resource
                 if opt_event:
                     var parent = stack.back()
                     var opt = EventOption.new()
-                    opt.description = opt_event.name
+                    opt.description = opt_event.description
                     opt.requirement = opt_event.requirement
                     opt.choice_result = opt_event.on_enter_result
                     opt.custom_context_params = opt_event.custom_context_params.duplicate()

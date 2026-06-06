@@ -20,7 +20,7 @@ class PipelineDimensionValue(BaseModel):
     id: str = ""
     name: str = ""
     description: str = ""
-    scale: int = 1
+    scale: float = 1.0
     operator_dsl: str = ""
 
 
