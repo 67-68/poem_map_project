@@ -2,7 +2,6 @@ class_name AmbitionData extends GameEntity
 
 # name use parent
 # Description also use parent
-@export var underscored_prop: String = '' # 最多三个会被展示
 
 # stage and text; core part
 @export var current_stage := 0
@@ -15,13 +14,10 @@ class_name AmbitionData extends GameEntity
 # 这里是硬性的属性变化 -> 进度文本变化触发器
 @export var staged_perceptions: Array[StagedPerceptionData]
 # 类似 {stage1: aaa, stage2: bbb, stage3:ccc}
-
 @export var ambition_traits: Array[String] = [] # 这里存储字符串，实际上从总trait数据库查找内容
-@export var ambition_trais_comes_from := ENUMS.TRAITS
 
-# deadline
+# deadline (display only; execution logic removed)
 @export var deadline: float = 907.0
-@export var deadline_fail_result: Array[BaseOperator] = []
 @export var deadline_warning: String = ''
 
 func get_stage_perception() -> String:
