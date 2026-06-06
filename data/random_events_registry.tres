@@ -9,6 +9,7 @@ resources = {
 "elegant_qin_recital": "res://data/random_events/elegant_qin_recital.tres",
 "event_changhe_guest": "res://data/random_events/event_changhe_guest.tres",
 "event_chat_guest": "res://data/random_events/event_chat_guest.tres",
+"event_first_blood_right_prime": "res://data/random_events/event_first_blood_right_prime.tres",
 "event_talk_guest": "res://data/random_events/event_talk_guest.tres",
 "feihualing_choose_word": "res://data/random_events/feihualing_choose_word.tres",
 "feihualing_other_done": "res://data/random_events/feihualing_other_done.tres",

@@ -3,10 +3,21 @@ extends Node
 @export var current_event_pool: Array[EventTicket] = []
 var filters: Array[Callable] = [RequirementFilter.filter,ActionTagFilter.filter]
 
+## 外部通过此信号注入一个事件 key，下一次抽取强制命中该事件（单次消费）
+signal guarantee_next(event_key: String)
+
+## 存储被保证的事件 key，抽取后清空
+var _guaranteed_event_key: String = ""
+
 func _ready():
     Logging.info("[EventManager] EventManager initialized")
     TimeService.on_xun_tick.connect(scan_events)
     Logging.info("[EventManager] Connected to TimeService.on_xun_tick")
+    guarantee_next.connect(_on_guarantee_next)
+
+func _on_guarantee_next(event_key: String) -> void:
+    _guaranteed_event_key = event_key
+    Logging.info("[EventManager] Guaranteed next event: " + event_key)
 
 func _create_ticket(event: BaseEvent) -> EventTicket:
     var ticket = EventTicket.new()
@@ -120,7 +131,22 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
     Logging.info("[EventManager] Starting event roll")
     if current_event_pool.is_empty():
         Logging.info("[EventManager] Event pool is empty, returning null")
+        # 如果有 guarantee 但池空了，消费掉并警告
+        if _guaranteed_event_key:
+            Logging.warn("[EventManager] Guaranteed event '" + _guaranteed_event_key + "' cannot be fulfilled, pool is empty")
+            _guaranteed_event_key = ""
         return null
+
+    # ── 优先检查 guarantee_next 保证机制 ──
+    if _guaranteed_event_key:
+        var guaranteed = _guaranteed_event_key
+        _guaranteed_event_key = ""  # 单次消费，立即清空
+        for ticket in current_event_pool:
+            if ticket.event_uuid == guaranteed:
+                Logging.info("[EventManager] 🎯 Guaranteed event selected: " + guaranteed)
+                return guaranteed
+        # 保证的事件已被 filter 筛掉，回退正常抽取
+        Logging.warn("[EventManager] Guaranteed event '" + guaranteed + "' not in pool after filters, falling back to normal roll")
 
     var total_weight := 0.0
     for ticket in current_event_pool:
@@ -147,7 +173,7 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
             Logging.info("[EventManager] Event selected: " + ticket.event_uuid)
             return ticket.event_uuid
             
-    # 如果 roll 出来的数字落在了 null_weight 的区间里，说明抽中了“无事发生”
+    # 如果 roll 出来的数字落在了 null_weight 的区间里，说明抽中了"无事发生"
     if fallback_event_uuid != "":
         Logging.info("[EventManager] Roll fell in null weight range, using fallback event: " + fallback_event_uuid)
         return fallback_event_uuid
