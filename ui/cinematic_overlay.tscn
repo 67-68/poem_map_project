@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cua5pcl2s75q"]
 
 [ext_resource type="Script" path="res://ui/cinematic_overlay.gd" id="1_gy4pk"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="2_font"]
 
 [node name="CinematicOverlay" type="CanvasLayer"]
 layer = 128
@@ -14,7 +15,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0, 0, 0, 0)
+color = Color(0, 0, 0, 1)
 
 [node name="TextLabel" type="RichTextLabel" parent="."]
 visible = false
@@ -33,7 +34,9 @@ offset_bottom = 100.0
 bbcode_enabled = true
 fit_content = true
 mouse_filter = 2
+alignment = 1
 theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_constants/line_separation = 8
+theme_override_fonts/normal_font = ExtResource("2_font")
 theme_override_font_sizes/normal_font_size = 32
 autowrap_mode = 3

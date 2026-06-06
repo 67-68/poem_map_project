@@ -33,19 +33,19 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 [sub_resource type="Resource" id="Resource_uhya7"]
 script = ExtResource("6_ivce5")
 stage_id = "stage0"
-perception_text = "长安城内，你不过是一介无名草芥"
+perception_text = "「状态」长安布衣。相府的门房连正眼都不会看你。长安城的名利场里，查无此人。"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_62cbg"]
 script = ExtResource("6_ivce5")
 stage_id = "stage1"
-perception_text = "相府的门房已认得你，你只欠一个面圣的契机"
+perception_text = "「状态」名动公卿。你的干谒诗已被多位权贵传阅。只要再多送些盘缠，补上几首好诗，似乎就只差那临门一脚了"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_fb1kn"]
 script = ExtResource("6_ivce5")
 stage_id = "stage2"
-perception_text = "一纸圣旨，绿袍加身，你终于踏出致君尧舜的第一步！"
+perception_text = "窃比稷契。相国已向你许下重诺。你自认才华已比肩上古贤相稷与契，立登要路津，就在今朝！"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_6qswf"]
@@ -87,6 +87,7 @@ ambition_traits = Array[String]([""])
 start_year = 742.0
 deadline = 745.0
 deadline_fail_result = Array[ExtResource("3_0es00")]([SubResource("Resource_gedux"), SubResource("Resource_0uysx")])
-deadline_warning = "天宝四载秋，若仍无建树，你的仕途幻想将彻底破灭，并付出惨痛代价。"
+deadline_warning = "天宝六载秋科举，若叩不开这扇门，你的一身才华，终将沦为盛世的笑柄。"
 uuid = "dufu_ambition"
 name = "致君尧舜上"
+description = "你想齐家治国平天下，而这需要以跃入体制为前提。带着半生心血的行卷，你站到了长安的朱门之外。权贵的手指缝里，漏下的是天下士子的命运。"

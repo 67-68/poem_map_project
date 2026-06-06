@@ -64,9 +64,9 @@ func play_text_sequence(texts: Array[String], config: Dictionary = {}) -> void:
 		text_label.show()
 		await _typewrite(text, ts)
 		
-		# 停留
+		# 停留（使用 pause-proof 定时器）
 		if tpd > 0.0:
-			await get_tree().create_timer(tpd).timeout
+			await _wait_seconds(tpd)
 		
 		# 非最后一段：淡出再淡入显示下一段
 		if i < texts.size() - 1:
@@ -91,7 +91,19 @@ func _typewrite(full_text: String, speed: float) -> void:
 	for i in range(full_text.length()):
 		text_label.text = full_text.left(i + 1)
 		if speed > 0.0:
-			await get_tree().create_timer(speed).timeout
+			await _wait_seconds(speed)
+
+
+func _wait_seconds(seconds: float) -> void:
+	## 创建一个不受世界暂停影响的定时器
+	var timer := Timer.new()
+	timer.wait_time = seconds
+	timer.one_shot = true
+	timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(timer)
+	timer.start()
+	await timer.timeout
+	timer.queue_free()
 
 
 func _fade_in(duration: float) -> void:
