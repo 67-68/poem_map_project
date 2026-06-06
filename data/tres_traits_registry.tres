@@ -6,6 +6,7 @@
 script = ExtResource("1_slend")
 resources = {
 "main_baiye_1": "res://data/tres_traits/main_baiye_1.tres",
+"reserve_baiye": "res://data/tres_traits/reserve_baiye.tres",
 "main_baiye_2": "res://data/tres_traits/main_baiye_2.tres",
 "main_baiye_3": "res://data/tres_traits/main_baiye_3.tres",
 "main_baiye_4": "res://data/tres_traits/main_baiye_4.tres",

@@ -18,12 +18,13 @@ static var debug_dashboard_state = {
     # 维度 3：六大 Action 的反噬状态机 (The 6-Track Corruption State)
     # 这是你真正需要密切关注的"癌症分期"
     "action_tracks": {
-        "BAIYE": "main_baiye_2",    # 当前处于：阶段2（幕僚）
-        "FENGZHAO": "main_fengzhao_1",
-        "DUZHUO": "main_duzhuo_1",        # 正常
-        "DENGGAO": "main_denggao_1",      # 正常
-        "FANGSHI": "main_fangshi_1", 
-        "JIAOYOU": "main_jiaoyou_1",  # 这些key其实没用，因为不需要分辨，全部塞进去trait就行了
+    	"BAIYE": "main_baiye_2",    # 当前处于：阶段2（幕僚）
+    	"FENGZHAO": "main_fengzhao_1",
+    	"DUZHUO": "main_duzhuo_1",        # 正常
+    	"DENGGAO": "main_denggao_1",      # 正常
+    	"FANGSHI": "main_fangshi_1",
+    	"JIAOYOU": "main_jiaoyou_1",  # 这些key其实没用，因为不需要分辨，全部塞进去trait就行了
+    	"RESERVE_BAIYE": "reserve_baiye", # 自动预定拜谒
         
         # 社交
         # _rumor/_close/_core/_enemy

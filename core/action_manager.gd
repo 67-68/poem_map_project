@@ -3,6 +3,11 @@ extends Node
 const MAX_PICK_COUNT: int = 6
 var _reserved_action_ids: Array[String] = []
 
+## 持有这些 trait 时，自动预定对应的行动
+const TRAIT_AUTO_RESERVE_MAP: Dictionary = {
+	"reserve_baiye": "bai_ye",
+}
+
 
 ## 预定一个 action，确保本回合必定被选中。
 ## 返回 true 表示预定成功，false 表示失败（见 push_error）。
@@ -32,6 +37,15 @@ func clear_reservations() -> void:
 func get_available_scene_actions() -> Dictionary:
 	#breakpoint
 	print("[ActionManager] 开始获取可用场景动作")
+
+	# ── Phase 0: Trait 驱动自动预定 ──
+	for trait_id in TRAIT_AUTO_RESERVE_MAP:
+		if PlayerState.has_trait(trait_id):
+			var action_id := TRAIT_AUTO_RESERVE_MAP[trait_id] as String
+			var ok := reserve_action(action_id)
+			if ok:
+				Logging.info("[ActionManager] trait %s 触发自动预定: %s" % [trait_id, action_id])
+
 	var actions := {}
 	
 	# 统一去 base_prov 里拿位置数据
