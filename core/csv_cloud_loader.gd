@@ -15,6 +15,26 @@ extends Node
 ## 适合离线开发或频繁调试场景，省流量防限速 💀
 @export var prefer_local_files: bool = false
 
+@export_group("Generated Events Import Pipeline")
+## 📥 导入正交生成管线产出的 CSV 事件数据
+##
+## 点击后，扫描 res://data/generated_events/ 目录下的 *_events.csv 文件，
+## 使用 DSLParser 解析并保存为 .tres 资源，最后刷新 resources registry。
+##
+## 这是 Phase B（Python 生成脚本） → Phase C（Godot 加载端）的桥接按钮。
+## 完整的管线是：
+##   Python 生成 → data/generated_events/*_events.csv
+##   → csv_cloud_loader 读取并解析 → DSLParser 创建 RandomEvent Resource
+##   → save_resources_to_tres 保存为 .tres
+##   → _regenerate_registries 刷新 Registry
+## 全程零代码改动，点一下就行 🤓☝️
+@export var import_generated_events: bool = false:
+    set(val):
+        import_generated_events = false
+        if val == true:
+            notify_property_list_changed()
+            _import_generated_events_from_csv()
+
 @export_group("Godot Cache Management")
 ## 💀 删掉 .godot 导入缓存文件夹，强制 Godot 全量重新导入所有资源
 ## Godot 4 的导入缓存机制会导致修改代码后不生效（因为缓存的字节码没更新）
@@ -454,6 +474,94 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
             skipped_count += 1
 
     print("成功保存 %d/%d 个资源到 %s 文件夹 (跳过 %d 个)" % [saved_count, resources.size(), folder_path, skipped_count])
+
+# 📥 导入正交生成管线产出的 CSV 事件数据
+# 这是 Phase B（Python 生成）→ Phase C（Godot 加载）的桥接函数。
+#
+# 流程：
+#   1. 扫描 data/generated_events/ 目录下最新的 *_events.csv
+#   2. 读取 CSV 内容
+#   3. 通过 _process_csv_data() 走完整管线：DSLParser → .tres → Registry
+#   4. 最后显式刷新 Registry（尽管 _process_csv_data 内部已刷新一次）
+#
+# 这个函数不需要任何配置，点一下按钮就行 🤓☝️
+func _import_generated_events_from_csv() -> void:
+    print("\n===== 📥 开始导入生成事件 CSV =====")
+    
+    var GENERATED_DIR = "res://data/generated_events/"
+    
+    # 确保目录存在
+    if not DirAccess.dir_exists_absolute(GENERATED_DIR):
+        print("⚠️  目录不存在: %s" % GENERATED_DIR)
+        print("   请先运行 Python 生成脚本: poetry run python tools/generate_orthogonal_events.py")
+        return
+    
+    # ── 1. 扫描 *_events.csv 文件 ──
+    var dir = DirAccess.open(GENERATED_DIR)
+    if not dir:
+        push_error("无法打开目录: %s 💀" % GENERATED_DIR)
+        return
+    
+    var csv_files: Array[String] = []
+    dir.list_dir_begin()
+    var file_name = dir.get_next()
+    while file_name != "":
+        if file_name.ends_with("_events.csv") and not file_name.begins_with("."):
+            csv_files.append(file_name)
+        file_name = dir.get_next()
+    dir.list_dir_end()
+    
+    if csv_files.is_empty():
+        print("⚠️  未找到 *_events.csv 文件")
+        print("   请先运行 Python 生成脚本: poetry run python tools/generate_orthogonal_events.py")
+        return
+    
+    # ── 2. 按文件名排序，取最新的（文件名包含 id，按字母序即按创建顺序） ──
+    csv_files.sort()
+    var latest_csv = csv_files[-1]
+    var csv_path = GENERATED_DIR + latest_csv
+    print("✅ 找到 %d 个 CSV 文件，取最新的: %s" % [csv_files.size(), csv_path])
+    
+    # ── 3. 读取 CSV 内容 ──
+    if not FileAccess.file_exists(csv_path):
+        push_error("文件不存在: %s 💀" % csv_path)
+        return
+    
+    var file = FileAccess.open(csv_path, FileAccess.READ)
+    if file == null:
+        push_error("无法打开文件: %s 💀" % csv_path)
+        return
+    
+    var csv_content = file.get_as_text()
+    file.close()
+    print("✅ 成功读取 CSV: %s (%d 字节)" % [csv_path, csv_content.length()])
+    
+    if csv_content.is_empty():
+        push_error("CSV 文件为空，跳过导入 💀")
+        return
+    
+    # ── 4. 走完整管线：DSLParser → .tres → Registry ──
+    # 🧩 _process_csv_data 内部会：
+    #   - 解析 CSV headers + rows → Array[Dictionary]
+    #   - 调用 DSLParser.parse_csv_data(csv_data, "random_event")
+    #   - 遍历资源注入数据库
+    #   - save_resources_to_tres(resources, tres_save_path)
+    #   - _regenerate_registries(true) 静默刷新
+    #
+    # 🚨 传入原始 CSV 文件的完整路径作为 save_path，
+    #    这样 _process_csv_data 会自动推导 .tres 保存目录为 GENERATED_DIR
+    _process_csv_data(csv_content, csv_path, "random_event")
+    
+    # ── 5. 显式刷新 Registry（冗余但无害，确保 .tres 被注册） ──
+    print("\n===== 🔄 刷新 Resources Registry =====")
+    _regenerate_registries()
+    
+    print("\n✅ 生成事件导入完成！")
+    print("   CSV 源文件: %s" % csv_path)
+    print("   .tres 输出目录: %s" % GENERATED_DIR)
+    print("   请检查 Registry: res://data/generated_events_registry.tres")
+    print("===== 📥 导入完成 =====\n")
+
 
 # 💀 清空 .godot 导入缓存文件夹（带三重安全保险 + 废纸篓回收）
 # Godot 4 会把编译后的脚本字节码缓存到 .godot/ 下，
