@@ -83,7 +83,7 @@ Event (CSV 行)
 
 ```csv
 event_id,desc,option_1_text,option_1_req,option_1_op,option_2_text,option_2_req,option_2_op,option_3_text,option_3_req,option_3_op
-event_art_huxuan,胡姬在鼓点中疯狂旋转，权贵们大声喝彩，酒池肉林，纸醉金迷。,拔剑起舞，与权贵同乐！,prop_gt(ARROGANCE,20) prop_gt(MONEY,500),prop_add(MONEY,-500) flag_add(zhuoliu_favor,20) imaginary_add_random(tags=emotion:arrogance),朱门酒肉臭！你忍无可忍，拂袖而去。,prop_gt(ANGER,40),flag_add(zhuoliu_favor,-50) prop_add(LITERARY_FAME,30) imaginary_add_random(tags=emotion:anger),你默默喝完杯中酒，只觉得吵闹。,,prop_add(DRUNK,10) emotion_add(SORROW,10)
+event_art_huxuan,胡姬在鼓点中疯狂旋转，权贵们大声喝彩，酒池肉林，纸醉金迷。,拔剑起舞，与权贵同乐！,prop_gt(name=ARROGANCE; val=20) prop_gt(name=MONEY; val=500),prop_add(name=MONEY; val=-500) flag_int_append(name=zhuoliu_favor; val=20) imaginary_add_random(tags=emotion:arrogance),朱门酒肉臭！你忍无可忍，拂袖而去。,prop_gt(name=ANGER; val=40),flag_int_append(name=zhuoliu_favor; val=-50) prop_add(name=LITERARY_FAME; val=30) imaginary_add_random(tags=emotion:anger),你默默喝完杯中酒，只觉得吵闹。,,prop_add(name=DRUNK; val=10) emo_add(name=SORROW; val=10)
 ```
 
 ### 3.2 各分支详解

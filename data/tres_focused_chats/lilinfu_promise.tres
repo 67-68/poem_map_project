@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="FocusedChat" format=3 uid="uid://lq68gti0bgdo"]
+
+[ext_resource type="Script" uid="uid://dsb2koxwa7ypp" path="res://model/single_focused_chat.gd" id="1_3b1jx"]
+[ext_resource type="Script" uid="uid://bgapuvasp48wh" path="res://model/focused_chat.gd" id="1_lvsy2"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_1jfdq"]
+[ext_resource type="Texture2D" uid="uid://cckktvmpe61oe" path="res://assets/character/lilinfu_smile.png" id="2_sndk8"]
+[ext_resource type="Texture2D" uid="uid://btkd7cxp6yr3d" path="res://assets/character/dufu_nervous.png" id="3_rsi40"]
+[ext_resource type="Texture2D" uid="uid://b45evy8cpq1sg" path="res://assets/character/lilinfu_solemn.png" id="4_id27c"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="6_d35yp"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="7_ar2h4"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="8_36yy7"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="9_bc0rs"]
+
+[sub_resource type="Resource" id="Resource_60p20"]
+script = ExtResource("1_3b1jx")
+name = "旁白"
+description = "穿过重重院落，相府的奢华让你甚至不敢抬头。你被引至一处熏着沉香的幽静暖阁。珠帘掀开，那位权倾朝野的大唐右相，并没有端坐在高堂之上。"
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_3b1jx"]
+script = ExtResource("1_3b1jx")
+name = "李林甫"
+description = "是子美吗？快，上前些，让老夫好好看看。"
+chat_position = 1
+texture = ExtResource("2_sndk8")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_1jfdq"]
+script = ExtResource("1_3b1jx")
+name = "杜甫"
+description = "相爷，草民那卷《雕赋》……不知是否污了相爷的眼。"
+texture = ExtResource("3_rsi40")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_vjgar"]
+script = ExtResource("1_3b1jx")
+name = "李林甫"
+description = "（叹气）大唐太庞大了，朝堂上尽是些尸位素餐的蠢物。老夫昨夜挑灯将你的赋看了三遍……字字珠玑，这是王佐之才啊！"
+chat_position = 1
+texture = ExtResource("4_id27c")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_g4m7r"]
+script = ExtResource("1_3b1jx")
+name = "旁白"
+description = "他竟亲自离座，走到你面前。那双翻手为云覆手为雨的手，重重地、却又极具温度地拍了拍你的肩膀。"
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_kivvs"]
+script = ExtResource("1_3b1jx")
+name = "李林甫"
+description = "天下，太需要你这样的年轻人了。回去好好歇息，无需再四处奔波受气。明年的春闱科举，老夫要在紫宸殿的金榜上，看到你的名字"
+chat_position = 1
+texture = ExtResource("2_sndk8")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_qhufj"]
+script = ExtResource("7_ar2h4")
+metadata/_custom_type_script = "uid://f5l815u48h2v"
+
+[sub_resource type="Resource" id="Resource_6nef4"]
+script = ExtResource("8_36yy7")
+operators = Array[ExtResource("6_d35yp")]([SubResource("Resource_qhufj")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_15a57"]
+script = ExtResource("9_bc0rs")
+choice_result = SubResource("Resource_6nef4")
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("1_lvsy2")
+chats = Array[ExtResource("1_3b1jx")]([SubResource("Resource_60p20"), SubResource("Resource_3b1jx"), SubResource("Resource_1jfdq"), SubResource("Resource_vjgar"), SubResource("Resource_g4m7r"), SubResource("Resource_kivvs")])
+options = Array[ExtResource("2_1jfdq")]([SubResource("Resource_15a57")])
+uuid = "lilinfu_promise"
+name = "面见右相"
+description = "你终于获得了一次面见右相的机会"
+metadata/_custom_type_script = "uid://bgapuvasp48wh"

@@ -23,7 +23,7 @@ Trait（特征/身份）是玩家在游戏过程中通过行为积累获得的**
 
 ```
 # 过程积累：玩家干坏事，只调用最基础的 prop_add
-prop_add(name=CORRUPTION_SCORE, val=10)
+prop_add(name=CORRUPTION_SCORE; val=10)
 
 # 后台结算：Milestone Observer 在回合结束时统一结算
 if CORRUPTION_SCORE > 100:

@@ -52,6 +52,8 @@ const _FULLWIDTH_PUNCTUATION_CHARS: Array[String] = [
     "\uff1b",            # ； 应使用 ;
     "\uff01",            # ！ 应使用 !
     "\uff1f",            # ？ 应使用 ?
+    "\uff5c",            # ｜ 应使用 |
+    "\uff0f",            # ／ 应使用 /
 ]
 
 # Linter 验证：检测纯文本字段中的英文标点
@@ -106,15 +108,18 @@ static func _lint_results_column(results_str: String, uuid: String) -> void:
             Logging.err("[Linter] 事件 '%s' 的 results 列包含了 requirement 函数 '%s'，请将其迁移到 requirements 列 💀" % [uuid, clean_expr])
 
 # 解析 context DSL 字段
-# 语法格式（用 | 分隔字段，避免与 tag 内部的逗号冲突）：
-#   tag:tagA:sub:cat:attr,tagB:sub:cat:attr|weight:15.5|background:(bg_rural_poor)|customKey:customValue
-# 也支持 = 作为 kv 分隔符（文档推荐格式）：
-#   trigger_tags=[tagA:sub:cat:attr,tagB:sub:cat:attr]|weight=15.5|background=bg_rural_poor
+# 语法格式（用 | 分隔字段，分层符号避免歧义）：
+#   trigger_tags=[tagA:sub:cat:attr/tagB:sub:cat:attr]|weight=15.5|background=bg_rural_poor|customKey=customValue
 # 已知字段:
-#   tag / trigger_tags -> 触发标签列表（支持 [tag1,tag2] 方括号语法）
+#   tag / trigger_tags -> 触发标签列表（支持 [tag1/tag2] 方括号语法，Layer 2 / 分隔）
 #   weight             -> 权重（float）
 #   background         -> 背景图 URN
 #   其他 key:value     -> 自定义模板参数
+#
+# 分层符号（按嵌套层级）：
+#   Layer 0: |（顶层字段分隔符）
+#   Layer 1: ;（字段值内的 k=v 链分隔符）
+#   Layer 2: /（数组/列表元素分隔符）
 static func parse_context(context_str: String) -> Dictionary:
     var result = {
         "trigger_tags": [] as Array[String],  # 🚨 必须用类型化 Array，否则 Godot 4 拒绝赋值给 Array[String] 变量
@@ -126,7 +131,7 @@ static func parse_context(context_str: String) -> Dictionary:
     if context_str.is_empty():
         return result
     
-    # 用 | 作为字段分隔符，避免与 tag 内部的逗号冲突
+    # 用 | 作为字段分隔符（Layer 0）
     var fields = context_str.split("|")
     for field in fields:
         field = field.strip_edges()
@@ -150,11 +155,11 @@ static func parse_context(context_str: String) -> Dictionary:
         
         match key:
             "tag", "trigger_tags":
-                # 支持方括号语法: [tag1,tag2] — 剥离括号再按逗号拆分
+                # 支持方括号语法: [tag1/tag2] — 剥离括号再按 / 拆分（Layer 2）
                 if value.begins_with("[") and value.ends_with("]"):
                     value = value.substr(1, value.length() - 2)
-                # 逗号分隔的多个 4 段式 tag
-                var tags = value.split(",")
+                # / 分隔的多个 4 段式 tag
+                var tags = value.split("/")
                 for tag_str in tags:
                     var clean_tag = tag_str.strip_edges()
                     if not clean_tag.is_empty():
@@ -181,11 +186,11 @@ static func parse_context(context_str: String) -> Dictionary:
             
             _:
                 # 自定义模板参数
-                # 支持逗号分隔多个 key:value 对（如: poem_taste: urn:poem_taste:libai_taste, taste_owner_relation_flag:flag_relation_with_libai）
-                # 方案：先存第一个 key:value，再检测 value 中的逗号并尝试拆分附加键值对
+                # 支持 ; 分隔多个 key:value 对（如: poem_taste=urn:poem_taste:libai_taste; taste_owner_relation_flag=flag_relation_with_libai）
+                # 方案：先存第一个 key:value，再检测 value 中的 ; 并尝试拆分附加键值对
                 
-                # 🚨 方括号数组语法必须在逗号处理逻辑之前检测
-                # 语法：some_name=[val1;val2;val3] — 用分号避免与逗号 key:value 扩展冲突
+                # 🚨 方括号数组语法必须在 ; 处理逻辑之前检测
+                # 语法：some_name=[val1;val2;val3] — Layer 1 ; 分隔数组元素
                 if value.begins_with("[") and value.ends_with("]"):
                     var inner = value.substr(1, value.length() - 2)
                     if inner.contains(";"):
@@ -200,12 +205,12 @@ static func parse_context(context_str: String) -> Dictionary:
                         # 无分号 → 单元素数组（保持类型一致）
                         var clean_val = inner.strip_edges()
                         result.custom_params[key] = PackedStringArray([clean_val]) if not clean_val.is_empty() else PackedStringArray()
-                    continue  # 🚨 跳过后续逗号处理逻辑
+                    continue  # 🚨 跳过后续 ; 处理逻辑
                 
                 result.custom_params[key] = value
                 
-                if value.contains(","):
-                    var sub_parts = value.split(",")
+                if value.contains(";"):
+                    var sub_parts = value.split(";")
                     # 第一个子段作为当前 key 的精确值（去掉 strip）
                     result.custom_params[key] = sub_parts[0].strip_edges()
                     # 剩余子段尝试解析为额外的 key:value
@@ -227,8 +232,8 @@ static func parse_context(context_str: String) -> Dictionary:
                             var ev = part.substr(kv_div + 1).strip_edges()
                             result.custom_params[ek] = ev
                         else:
-                            # 没有分隔符，说明是前一个值的延续（值中含逗号），拼回去
-                            result.custom_params[key] += "," + part
+                            # 没有分隔符，拼回去
+                            result.custom_params[key] += ";" + part
     
     return result
 
@@ -339,12 +344,12 @@ static func parse_provider_field(provider_str: String) -> BaseProvider:
 # ═══════════════════════════════════════════════════════════
 # Interruption 解析（interruptions 列）
 #
-# CSV interruptions 列语法（支持多个，逗号分隔）：
-#   interrupt_event(requirement_syntax, operator_syntax)
+# CSV interruptions 列语法（支持多个，| 分隔）：
+#   interrupt_event(requirement_syntax| operator_syntax)
 #
 # 示例：
-#   interrupt_event(prop_gt(name=money, val=50), push_event(event_key=event_poverty))
-#   interrupt_event(flag_bool_has(name=has_sword), push_event(event_key=event_duel))
+#   interrupt_event(prop_gt(name=money; val=50)| push_event(event_key=event_poverty))
+#   interrupt_event(flag_bool_has(name=has_sword)| push_event(event_key=event_duel))
 #
 # requirement_syntax 使用 parse_requirements() 解析（复用现有需求语法）
 # operator_syntax    使用 MicroDSLParser.parse_consequence_operators() 解析
@@ -361,7 +366,7 @@ static func parse_interruption_field(interruption_str: String) -> ConditionalOpe
     var paren_open = interruption_str.find("(")
     var paren_close = interruption_str.rfind(")")
     if paren_open == -1 or paren_close == -1 or paren_close <= paren_open:
-        Logging.err("parse_interruption_field: 缺少括号，格式应为 interrupt_event(req, op): %s" % interruption_str)
+        Logging.err("parse_interruption_field: 缺少括号，格式应为 interrupt_event(req| op): %s" % interruption_str)
         return null
     
     var func_name = interruption_str.substr(0, paren_open).strip_edges()
@@ -374,7 +379,7 @@ static func parse_interruption_field(interruption_str: String) -> ConditionalOpe
         Logging.err("parse_interruption_field: 缺少参数: %s" % interruption_str)
         return null
     
-    # 用 split_expressions 分割两个位置参数（按顶级逗号分割，避开括号内的逗号）
+    # 用 split_expressions 分割两个位置参数（按顶级 | 分割，Layer 0）
     var args = NamedDSLParser.split_expressions(args_str)
     if args.size() < 2:
         Logging.err("parse_interruption_field: 需要 2 个参数（requirement, operator），实际 %d: %s" % [args.size(), interruption_str])
@@ -385,12 +390,12 @@ static func parse_interruption_field(interruption_str: String) -> ConditionalOpe
     var operator_syntax = ""
     for i in range(1, args.size()):
         if i > 1:
-            operator_syntax += ", "
+            operator_syntax += "|"
         operator_syntax += args[i].strip_edges()
     
     # 解析 requirement
     # 支持 " and " 语法（带空格，避免误匹配含 and 的关键词）
-    # 示例: interrupt_event(cond1 and cond2, op)
+    # 示例: interrupt_event(cond1 and cond2| op)
     #       → 分割为 cond1, cond2，合并为 ComplexRequirements（AND 逻辑）
     # 如果无 " and "，回退到现有逗号分隔的 AND 语法
     var requirement: BaseRequirements = null
@@ -418,12 +423,12 @@ static func parse_interruption_field(interruption_str: String) -> ConditionalOpe
                 requirement = parsed_reqs[0]
             # parsed_reqs 为空 → requirement 保持 null
         else:
-            # 无 " and " 语法，回退到原有逗号分隔语法
+            # 无 " and " 语法，回退到原有 | 分隔语法（Layer 0）
             requirement = parse_requirements(requirement_syntax)
             if requirement == null:
                 Logging.warn("parse_interruption_field: requirement 解析失败: '%s'" % requirement_syntax)
     
-    # 解析 operators（支持多个 operator，逗号分隔）
+    # 解析 operators（支持多个 operator，| 分隔，Layer 0）
     var operators: Array[BaseOperator] = []
     if not operator_syntax.is_empty():
         operators = MicroDSLParser.parse_consequence_operators(operator_syntax)
@@ -440,7 +445,7 @@ static func parse_interruption_field(interruption_str: String) -> ConditionalOpe
     return cond_op
 
 
-# 解析 interruptions 列（支持多个 interrupt_event() 调用，逗号分隔）
+# 解析 interruptions 列（支持多个 interrupt_event() 调用，| 分隔，Layer 0）
 # ⚡ 返回非类型化 Array，因为 BaseEvent.pre_event_interrupter_sequence 声明为 @export var ...: Array = []
 # 使用类型化返回值 Array[ConditionalOperator] 在 @tool 模式下赋值给 @export Array 属性会导致
 # "Invalid assignment of property or key" 错误，进而导致整个 parse_random_event 函数中断 💀
@@ -569,7 +574,7 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
         event.on_enter_result = parse_choice_result(on_enter_str)
 
     # 解析前置中断序列（interruptions 列）
-    # 语法: interrupt_event(req_syntax, op_syntax), interrupt_event(req_syntax2, op_syntax2)
+    # 语法: interrupt_event(req_syntax| op_syntax)|interrupt_event(req_syntax2| op_syntax2)
     var interruptions_str = row.get('interruptions', '')
     if not interruptions_str.is_empty():
         _lint_dsl_field(interruptions_str, "interruptions", uuid)
@@ -740,12 +745,12 @@ static func parse_background(bg: String) -> Texture2D:
     return TextureResLoader.get_background(bg)
 
 # 解析触发条件，支持多个条件的AND组合
-# 使用 NamedDSLParser.split_expressions() 处理顶级逗号分割，
-# 防止括号内的参数逗号被误分割（如 prop_gt(name=money, val=50)）
+# 使用 NamedDSLParser.split_expressions() 处理顶级 | 分割（Layer 0），
+# 防止括号内的参数 ; 被误分割（如 prop_gt(name=money; val=50)）
 static func parse_requirements(requirements_str: String) -> BaseRequirements:
     var parsed_requirements: Array[BaseRequirements] = []
     
-    # 统一使用 split_expressions 处理逗号分割，兼容有括号和无括号的新语法表达式
+    # 统一使用 split_expressions 处理 | 分割（Layer 0），兼容有括号和无括号的新语法表达式
     var expressions = NamedDSLParser.split_expressions(requirements_str)
     
     for clean_req in expressions:
@@ -780,7 +785,7 @@ static func parse_single_requirement(req_str: String) -> BaseRequirements:
 static func parse_options(row: Dictionary) -> Array[BaseOption]:
     var options: Array[BaseOption] = []
 
-    # 支持多个选项：1, 2, 3, 4等
+    # 支持多个选项：1/2/3/4等
     var option_numbers = ['1', '2', '3', '4', '5', '6']
 
     for number in option_numbers:
@@ -905,7 +910,7 @@ static func parse_trait(row: Dictionary) -> Trait:
     if not lasting_xun_str.is_empty():
         trait_.lasting_xun = lasting_xun_str.to_int()
 
-    # 解析 trait_effect_operations — DSL 格式: prop:property:±value,prop:property:±value
+    # 解析 trait_effect_operations — DSL 格式: prop_add(name=money; val=±value)|prop_sub(name=reputation; val=±value)
     var effect_ops_str = row.get('trait_effect_operations', '')
     if not effect_ops_str.is_empty():
         var all_ops = MicroDSLParser.parse_consequence_operators(effect_ops_str)

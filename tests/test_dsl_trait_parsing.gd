@@ -44,7 +44,7 @@ func test_new_trait_requirement_not_has():
 # --- 新语法: Property Requirement ---
 
 func test_new_property_requirement_gt():
-	var req_str = "prop_gt(name=money, val=50)"
+	var req_str = "prop_gt(name=money; val=50)"
 	var parsed_req = MicroDSLParser.parse_property_requirement(req_str)
 	
 	assert_not_null(parsed_req, "新语法: prop_gt解析结果不应为null")
@@ -53,7 +53,7 @@ func test_new_property_requirement_gt():
 	assert_eq(parsed_req.operator, REQ_OPERATOR.COMPARE.GREATER_THAN, "新语法: 操作符应为GREATER_THAN")
 
 func test_new_property_requirement_lt():
-	var req_str = "prop_lt(name=health, val=30)"
+	var req_str = "prop_lt(name=health; val=30)"
 	var parsed_req = MicroDSLParser.parse_property_requirement(req_str)
 	
 	assert_not_null(parsed_req, "新语法: prop_lt解析结果不应为null")
@@ -63,7 +63,7 @@ func test_new_property_requirement_lt():
 
 func test_new_property_requirement_param_order():
 	# 测试参数顺序无关
-	var req_str = "prop_gt(val=50, name=money)"
+	var req_str = "prop_gt(val=50; name=money)"
 	var parsed_req = MicroDSLParser.parse_property_requirement(req_str)
 	
 	assert_not_null(parsed_req, "新语法: 参数顺序无关")
@@ -82,7 +82,7 @@ func test_new_flag_bool_has():
 	assert_eq(parsed_req.value, true, "新语法: 期望值为true")
 
 func test_new_flag_int_gt():
-	var req_str = "flag_int_gt(name=flag_score, val=100)"
+	var req_str = "flag_int_gt(name=flag_score; val=100)"
 	var parsed_req = MicroDSLParser.parse_flag_requirement(req_str)
 	
 	assert_not_null(parsed_req, "新语法: flag_int_gt解析结果不应为null")
@@ -91,7 +91,7 @@ func test_new_flag_int_gt():
 	assert_eq(parsed_req.value, 100, "新语法: 值应为100")
 
 func test_new_flag_str_is():
-	var req_str = 'flag_str_is(name=player_name, val=张三)'
+	var req_str = 'flag_str_is(name=player_name; val=张三)'
 	var parsed_req = MicroDSLParser.parse_flag_requirement(req_str)
 	
 	assert_not_null(parsed_req, "新语法: flag_str_is解析结果不应为null")
@@ -119,7 +119,7 @@ func test_new_trait_operator_remove():
 	assert_eq(parsed_ops[0].operator, REQ_OPERATOR.CRUD.REMOVE, "新语法: 操作符应为REMOVE")
 
 func test_new_property_operators():
-	var op_str = "prop_add(name=prestige, val=50), prop_sub(name=money, val=100)"
+	var op_str = "prop_add(name=prestige; val=50)|prop_sub(name=money; val=100)"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
 	
 	assert_eq(parsed_ops.size(), 2, "新语法: 应该解析出两个操作符")
@@ -131,7 +131,7 @@ func test_new_property_operators():
 	assert_eq(parsed_ops[1].value, -100, "新语法: 第二个操作符值应为-100（prop_sub取负）")
 
 func test_new_flag_operators():
-	var op_str = "flag_bool_set(name=has_key, val=true), flag_int_append(name=score, val=50)"
+	var op_str = "flag_bool_set(name=has_key; val=true)|flag_int_append(name=score; val=50)"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
 	
 	assert_eq(parsed_ops.size(), 2, "新语法: 应该解析出两个操作符")
@@ -143,7 +143,7 @@ func test_new_flag_operators():
 	assert_eq(parsed_ops[1].value, 50, "新语法: 第二个值应为50")
 
 func test_new_flag_int_reduce_if_above():
-	var op_str = "flag_int_reduce_if_above(name=score, threshold=100, amount=50)"
+	var op_str = "flag_int_reduce_if_above(name=score; threshold=100; amount=50)"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
 
 	assert_eq(parsed_ops.size(), 1, "新语法: 应该解析出一个操作符")
@@ -156,7 +156,7 @@ func test_new_flag_int_reduce_if_above():
 	assert_eq(op.amount, 50, "新语法: amount应为50")
 
 func test_new_flag_replace():
-	var op_str = "flag_bool_replace(from=old_status, to=new_status)"
+	var op_str = "flag_bool_replace(from=old_status; to=new_status)"
 	var parsed_ops = MicroDSLParser.parse_consequence_operators(op_str)
 	
 	assert_eq(parsed_ops.size(), 1, "新语法: 应该解析出一个替换操作符")
@@ -164,7 +164,7 @@ func test_new_flag_replace():
 # --- 新语法: 复合条件 ---
 
 func test_new_complex_requirements():
-	var req_str = "prop_gt(name=money, val=50), trait_has(name=official), flag_bool_has(name=flag_visited)"
+	var req_str = "prop_gt(name=money; val=50)|trait_has(name=official)|flag_bool_has(name=flag_visited)"
 	var parsed_req = DSLParser.parse_requirements(req_str)
 	
 	assert_not_null(parsed_req, "新语法: 复合条件不应为null")
@@ -177,14 +177,14 @@ func test_new_dsl_csv_integration():
 			"row_type": "random_event",
 			"uuid": "test_event_01",
 			"trigger_tags": "action:intent:study:poetry",
-			"requirements": "trait_has(name=official), prop_gt(name=money, val=50)",
+			"requirements": "trait_has(name=official)|prop_gt(name=money; val=50)",
 			"title": "测试事件",
 			"description": "这是一个测试",
 		},
 		{
 			"row_type": ">option",
 			"title": "选择A",
-			"results": "trait_add(name=corrupt), prop_sub(name=money, val=100)"
+			"results": "trait_add(name=corrupt)|prop_sub(name=money; val=100)"
 		}
 	]
 	
@@ -251,14 +251,14 @@ func test_old_dsl_csv_integration():
 			"row_type": "random_event",
 			"uuid": "test_event_02",
 			"trigger_tags": "action:intent:study:poetry",
-			"requirements": "trait_has(name=official), prop_gt(name=money, val=50)",
+			"requirements": "trait_has(name=official)|prop_gt(name=money; val=50)",
 			"title": "测试事件",
 			"description": "这是一个测试",
 		},
 		{
 			"row_type": ">option",
 			"title": "选择A",
-			"results": "trait_add(name=corrupt), prop_sub(name=money, val=100)"
+			"results": "trait_add(name=corrupt)|prop_sub(name=money; val=100)"
 		}
 	]
 	
@@ -278,7 +278,7 @@ func test_old_dsl_csv_integration():
 	assert_eq(trait_ops[0].str_traits, "corrupt", "trait操作符应该指定正确的trait名称")
 
 func test_old_multiple_trait_requirements():
-	var req_str = "trait_has(name=official), trait_not_has(name=corrupt)"
+	var req_str = "trait_has(name=official)|trait_not_has(name=corrupt)"
 	var parsed_req = DSLParser.parse_requirements(req_str)
 	
 	assert_not_null(parsed_req, "复合requirement不应为null")

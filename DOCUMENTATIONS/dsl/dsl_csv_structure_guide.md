@@ -22,7 +22,7 @@ CSV 文件的第一行必须包含以下字段（按顺序）：
 row_type | template | uuid | context | requirements | title | description | results | emotion_config
 ```
 
-> **注意**：CSV 本身用逗号分隔，但 `context`、`requirements`、`results` 等字段内部使用 DSL 语法（管道符 `|` 或逗号分隔键值对）。
+> **注意**：CSV 本身用逗号分隔列，但 `context`、`requirements`、`results` 等字段内部的 DSL 语法**完全消除逗号**，使用层次化符号：`|`（Layer 0 表达式分隔）、`;`（Layer 1 参数分隔）、`/`（Layer 2 标签/数组元素分隔）。
 > 字段名中的 `|` 是视觉分隔符，实际 CSV 表头是：`row_type,template,uuid,context,requirements,title,description,results`
 
 ### 字段总览
@@ -85,7 +85,7 @@ row_type | template | uuid | context | requirements | title | description | resu
 #### context (可选)
 - **类型**: `String`（DSL 上下文语法）
 - **描述**: 包含事件/选项的上下文信息，如触发标签、权重、背景、自定义参数等
-- **格式**: 用 `|`（管道符）分隔的键值对（避免与标签内部的冒号 `:` 冲突）
+- **格式**: 用 `|`（管道符）分隔的键值对
   ```
   trigger_tags=<tag_syntax>|weight=<float>|background=<string>|custom_params=<json>
   ```
@@ -96,9 +96,9 @@ row_type | template | uuid | context | requirements | title | description | resu
   - `background` — 背景图片资源名
   - `custom_params` — JSON 格式的自定义参数（可选）
 - **示例**:
-  - `trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor`
-  - `trigger_tags=action:intent:study:poetry`
-- **注意**: 字段内不要有多余空格；推荐使用 `|` 作为字段分隔符和 `=` 作为 kv 分隔符的新格式
+  - `trigger_tags=[actor:status:temporary:drunk/city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor`
+  - `trigger_tags=[action:intent:study:poetry]`
+- **注意**: 字段内不要有多余空格；标签列表用方括号 `[...]` 包裹，内部用 `/` 分隔（Layer 2）
 
 ##### 触发标签格式 (trigger_tags)
 
@@ -108,9 +108,9 @@ row_type | template | uuid | context | requirements | title | description | resu
   - 示例: `actor:status:temporary:drunk`, `city:econ:level:prosperous`
 - **三段式（兼容）**: `domain:category:value`
   - 示例: `actor:status:drunk`, `city:econ:prosperous`
-- **多个标签（推荐）**: 使用方括号包裹的逗号分隔列表
-  - 格式: `trigger_tags=[tag1,tag2,tag3]`
-  - 示例: `trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]`
+- **多个标签（推荐）**: 使用方括号包裹的 `/` 分隔列表（Layer 2）
+  - 格式: `trigger_tags=[tag1/tag2/tag3]`
+  - 示例: `trigger_tags=[actor:status:temporary:drunk/city:econ:level:prosperous]`
   - 方括号语法在 `context` 字段中能避免歧义，是推荐用法
 
 **支持的 Domain**:
@@ -125,18 +125,18 @@ row_type | template | uuid | context | requirements | title | description | resu
 
 #### requirements (可选)
 - **类型**: `String`（DSL 条件格式）
-- **描述**: 事件触发的额外条件，多个条件用逗号分隔（AND 逻辑）
+- **描述**: 事件触发的额外条件，多个条件用 `|` 分隔（Layer 0，AND 逻辑）
   - **新语法**（命名参数函数调用，推荐）:
-    - 属性条件: `prop_gt(name=<属性名>, val=<数值>)` 或 `prop_lt(name=<属性名>, val=<数值>)`
-      - 示例: `prop_gt(name=money, val=50)`, `prop_lt(name=health, val=30)`
+    - 属性条件: `prop_gt(name=<属性名>; val=<数值>)` 或 `prop_lt(name=<属性名>; val=<数值>)`
+      - 示例: `prop_gt(name=money; val=50)`, `prop_lt(name=health; val=30)`
     - 特性条件: `trait_has(name=<特性名>)` 或 `trait_not_has(name=<特性名>)`
       - 示例: `trait_has(name=official)`, `trait_not_has(name=corrupt)`
     - 标志位条件:
       - 布尔: `flag_bool_has(name=<标志ID>)` / `flag_bool_not_has(name=<标志ID>)`
-      - 字符串: `flag_str_is(name=<标志ID>, val=<值>)` / `flag_str_not(name=<标志ID>, val=<值>)`
-      - 整数: `flag_int_gt(name=<标志ID>, val=<数值>)` / `flag_int_lt(name=<标志ID>, val=<数值>)`
-      - 示例: `flag_bool_has(name=flag_player_has_key)`, `flag_str_is(name=flag_player_title, val=官员)`
-- **多条件组合**: `prop_gt(name=money, val=50),trait_has(name=official),flag_bool_has(name=flag_has_key)`
+      - 字符串: `flag_str_is(name=<标志ID>; val=<值>)` / `flag_str_not(name=<标志ID>; val=<值>)`
+      - 整数: `flag_int_gt(name=<标志ID>; val=<数值>)` / `flag_int_lt(name=<标志ID>; val=<数值>)`
+      - 示例: `flag_bool_has(name=flag_player_has_key)`, `flag_str_is(name=flag_player_title; val=官员)`
+- **多条件组合**: `prop_gt(name=money; val=50)|trait_has(name=official)|flag_bool_has(name=flag_has_key)`
 - **注意**: options 行的 requirements 控制选项的**可用性**（不可用则禁用/隐藏）
 
 #### title (可选)
@@ -154,21 +154,21 @@ row_type | template | uuid | context | requirements | title | description | resu
 #### results (可选，主要用在选项行)
 - **类型**: `String`（DSL 结果格式）
 - **描述**: 选择该选项后执行的结果操作符。对于 `random_event` 行，该字段通常为空。
-    - 属性操作: `prop_add(name=<属性名>, val=<数值>)` / `prop_sub(name=<属性名>, val=<数值>)` / `prop_set(name=<属性名>, val=<数值>)`
-      - 示例: `prop_sub(name=money, val=100)`, `prop_add(name=literary_fame, val=15)`
+    - 属性操作: `prop_add(name=<属性名>; val=<数值>)` / `prop_sub(name=<属性名>; val=<数值>)` / `prop_set(name=<属性名>; val=<数值>)`
+      - 示例: `prop_sub(name=money; val=100)`, `prop_add(name=literary_fame; val=15)`
     - 特性操作: `trait_add(name=<特性名>)` 或 `trait_remove(name=<特性名>)`
       - 示例: `trait_add(name=corrupt)`, `trait_remove(name=weak)`
     - 标志位操作:
-      - 布尔: `flag_bool_set(name=<标志ID>, val=true/false)` / `flag_bool_replace(name=<标志ID>, old=<旧值>, new=<新值>)`
-      - 字符串: `flag_str_set(name=<标志ID>, val=<内容>)` / `flag_str_append(name=<标志ID>, val=<内容>)`
-      - 整数: `flag_int_set(name=<标志ID>, val=<数值>)` / `flag_int_append(name=<标志ID>, val=<数值>)` / `flag_int_reduce_if_above(name=<标志ID>, threshold=<阈值>, amount=<减量>)`
-      - 示例: `flag_bool_set(name=flag_bribed, val=true)`, `flag_str_set(name=flag_player_title, val=官员)`, `flag_int_reduce_if_above(name=score, threshold=100, amount=50)`
+      - 布尔: `flag_bool_set(name=<标志ID>; val=true/false)` / `flag_bool_replace(from=<旧标志ID>; to=<新标志ID>)`
+      - 字符串: `flag_str_set(name=<标志ID>; val=<内容>)` / `flag_str_append(name=<标志ID>; val=<内容>)`
+      - 整数: `flag_int_set(name=<标志ID>; val=<数值>)` / `flag_int_append(name=<标志ID>; val=<数值>)` / `flag_int_reduce_if_above(name=<标志ID>; threshold=<阈值>; amount=<减量>)`
+      - 示例: `flag_bool_set(name=flag_bribed; val=true)`, `flag_str_set(name=flag_player_title; val=官员)`, `flag_int_reduce_if_above(name=score; threshold=100; amount=50)`
     - 栈事件操作:
-      - `scan_and_push(tags=[<标签列表>], weight_mult=<权重系数>, fallback=<兜底事件KEY>)` — 按 tag 前缀匹配跨桶扫描随机事件，权重滚动选中后推入栈顶（LIFO）
+      - `scan_and_push(tags=[<标签列表>]; weight_mult=<权重系数>; fallback=<兜底事件KEY>)` — 按 tag 前缀匹配跨桶扫描随机事件，权重滚动选中后推入栈顶（LIFO）
         - `tags`：`PackedStringArray`，例 `["scene:tavern:gambling:high","npc:rogue:encounter:random"]`
         - `weight_mult`：可选，float，权重倍数，默认 10.0
         - `fallback`：可选，String，无匹配时兜底事件 key
-        - 示例: `scan_and_push(tags=["scene:tavern:gambling:high"], weight_mult=5.0, fallback="evt_tavern_brawl")`
+        - 示例: `scan_and_push(tags=["scene:tavern:gambling:high"]; weight_mult=5.0; fallback="evt_tavern_brawl")`
       - `push_event(event_key=<事件KEY>)` — 将事件推入栈顶（LIFO），当前事件结束后优先播放
       - `pop_event()` — 弹出当前栈顶事件，播放下一个栈中事件
       - `pop_to_event(event_key=<事件KEY>)` — 在栈中搜索指定事件 ID，弹出到该层级（目标事件留在栈顶重新展示），未找到时报错无效果
@@ -176,7 +176,7 @@ row_type | template | uuid | context | requirements | title | description | resu
     - 队列事件操作（新）:
       - `queue_event(event_key=<事件KEY>)` — 将事件排入普通事件队列（FIFO），排队等候处理
       - 示例: `queue_event(event_key=evt_aftermath)`
-- **新语法示例**: `prop_sub(name=money, val=100),trait_add(name=corrupt),flag_bool_set(name=flag_bribed, val=true)`
+- **新语法示例**: `prop_sub(name=money; val=100)|trait_add(name=corrupt)|flag_bool_set(name=flag_bribed; val=true)`
 
 #### emotion_config (可选，仅 event 级别)
 - **类型**: `String`（DSL 情绪配置格式）
@@ -270,15 +270,14 @@ IN_EVENT + (2+, option)      → IN_EVENT   + 挂载到栈顶（更深层嵌套�
 ---
 ## 完整示例解析
 
-> **注意**：context 字段内部使用 `|` 作为字段分隔符（避免与标签内的 `,` 冲突）。
-> 所有示例中的 context 值在写入真实 CSV 时，如果包含逗号需要用双引号包裹。
+> **注意**：DSL 内部**完全消除逗号**，采用层次化符号：`|`（Layer 0 表达式分隔）、`;`（Layer 1 参数分隔）、`/`（Layer 2 标签/数组元素分隔）。
 
 ### 示例 1: 简单事件（新式表头）
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
 random_event,,a1b2c3d4-e5f6-7890-abcd-ef1234567890,trigger_tags=[action:intent:study:poetry],,简单诗会,参加一个简单的诗会活动,,
-  option,,,,,参与,,prop_add(name=literary_fame, val=10)
+  option,,,,,参与,,prop_add(name=literary_fame; val=10)
 ```
 
 **解析**:
@@ -286,15 +285,15 @@ random_event,,a1b2c3d4-e5f6-7890-abcd-ef1234567890,trigger_tags=[action:intent:s
 - depth 1: 选项 `参与`，无门槛，文学名声 +10
 - 注意选项行前面的**两个空格**表示 depth 1
 - context 中 `trigger_tags=[...]` 的方括号语法清晰指明了标签列表的边界
-- results 使用新语法 `prop_add(name=literary_fame, val=10)`，旧语法 `prop:literary_fame:+10` 仍向后兼容
+- results 使用 DSL 语法 `prop_add(name=literary_fame; val=10)`
 
 ### 示例 2: 使用模板的事件
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901-bcde-f23456789012,trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor,prop_gt(name=money, val=50),,长安酒馆奇遇,你在长安的酒馆中遇到了一个神秘人。,
-  option,,,,,塞钱贿赂,prop_gt(name=money, val=100),prop_sub(name=money, val=100),trait_add(name=corrupt)
-  option,,,,,与之对诗,prop_gt(name=literary_fame, val=20),prop_add(name=literary_fame, val=15)
+random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901-bcde-f23456789012,trigger_tags=[actor:status:temporary:drunk/city:econ:level:prosperous]|weight=15.5|background=bg_rural_poor,prop_gt(name=money; val=50),,长安酒馆奇遇,你在长安的酒馆中遇到了一个神秘人。,
+  option,,,,,塞钱贿赂,prop_gt(name=money; val=100),prop_sub(name=money; val=100)|trait_add(name=corrupt)
+  option,,,,,与之对诗,prop_gt(name=literary_fame; val=20),prop_add(name=literary_fame; val=15)
 ```
 
 **解析**:
@@ -304,33 +303,33 @@ random_event,urn:random-event:test_event_pool_2_meet_the_poor,b2c3d4e5-f6a7-8901
   - 这里 `context`、`title`、`description` 覆盖了模板的对应字段
   - UUID 被替换为 `b2c3d4e5-...`
 - 两个选项是在 CSV 行中**新增**的，不会替换模板的选项（它们会被合并）
-- context 使用 `|` 分隔多个字段，通过 `[...]` 包裹多个标签
-- requirements/results 使用新语法，如 `prop_gt(name=money, val=50)`、`prop_sub(name=money, val=100)`
+- context 使用 `|` 分隔多个字段，通过 `[...]` 包裹多个标签（内部 `/` 分隔）
+- requirements/results 使用新语法，如 `prop_gt(name=money; val=50)`、`prop_sub(name=money; val=100)|trait_add(name=corrupt)`
 
 ### 示例 3: 多选项事件 + 复杂 context
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,c3d4e5f6-a7b8-9012-cdef-345678901234,trigger_tags=[action:travel:mode:road]|weight=8.0|background=bg_mountain,prop_gt(name=health, val=30),山贼拦路,在山路上遇到了山贼。,
-  option,,,,,武力反抗,prop_gt(name=strength, val=40),prop_sub(name=health, val=20),prop_add(name=prestige, val=10),trait_add(name=brave)
-  option,,,,,交钱保命,prop_gt(name=money, val=50),prop_sub(name=money, val=50)
-  option,,,,,智取脱身,prop_gt(name=intel, val=35),prop_add(name=intel, val=10),prop_add(name=prestige, val=15)
-  option,,,,,呼救求助,trait_has(name=connected),prop_sub(name=money, val=20)
+random_event,,c3d4e5f6-a7b8-9012-cdef-345678901234,trigger_tags=[action:travel:mode:road]|weight=8.0|background=bg_mountain,prop_gt(name=health; val=30),山贼拦路,在山路上遇到了山贼。,
+  option,,,,,武力反抗,prop_gt(name=strength; val=40),prop_sub(name=health; val=20)|prop_add(name=prestige; val=10)|trait_add(name=brave)
+  option,,,,,交钱保命,prop_gt(name=money; val=50),prop_sub(name=money; val=50)
+  option,,,,,智取脱身,prop_gt(name=intel; val=35),prop_add(name=intel; val=10)|prop_add(name=prestige; val=15)
+  option,,,,,呼救求助,trait_has(name=connected),prop_sub(name=money; val=20)
 ```
 
 **解析**:
 - context 中包含多个字段：`trigger_tags`、`weight`、`background`，用 `|` 分隔
 - 4 个选项，每个有不同的条件和结果
 - 每个选项行前有 2 个空格缩进
-- 所有 DSL 表达式使用新语法，如 `prop_gt(name=strength, val=40)`、`trait_has(name=connected)`
+- 所有 DSL 表达式使用新语法，如 `prop_gt(name=strength; val=40)`、`trait_has(name=connected)`
 
 ### 示例 4: 包含标志位的事件
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
 random_event,,d4e5f6a7-b8c9-0123-defa-456789012345,trigger_tags=[action:enter:location:palace],flag_bool_has(name=flag_player_visited_palace),再次进宫,你再次来到皇宫。,
-  option,,,,,贿赂守卫,prop_gt(name=money, val=50),prop_sub(name=money, val=50),flag_bool_replace(name=flag_reputation, old=low, new=high)
-  option,,,,,直接拜访,flag_str_is(name=flag_player_title, val=官员),prop_add(name=prestige, val=20)
+  option,,,,,贿赂守卫,prop_gt(name=money; val=50),prop_sub(name=money; val=50)|flag_bool_replace(from=flag_reputation; to=flag_high_reputation)
+  option,,,,,直接拜访,flag_str_is(name=flag_player_title; val=官员),prop_add(name=prestige; val=20)
 ```
 
 **解析**:
@@ -343,8 +342,8 @@ random_event,,d4e5f6a7-b8c9-0123-defa-456789012345,trigger_tags=[action:enter:lo
 ```csv
 row_type,template,uuid,context,requirements,title,description,results,emotion_config
 random_event,,e5f6a7b8-c9d0-1234-efab-567890123456,trigger_tags=[actor:status:sad]|weight=12.0,,雨夜思乡,窗外下着雨，你独坐房中，心中涌起思乡之情。,,sorrow <- emotion:sorrow:>10;homesick <- emotion:sorrow:>20&emotion:loneliness:>5
-  option,,,,,,借酒浇愁,,prop_sub(name=health, val=10),prop_sub(name=money, val=20)
-  option,,,,,,写诗抒怀,,prop_add(name=literary_fame, val=15)
+  option,,,,,,借酒浇愁,,prop_sub(name=health; val=10)|prop_sub(name=money; val=20)
+  option,,,,,,写诗抒怀,,prop_add(name=literary_fame; val=15)
 ```
 
 **解析**:
@@ -359,8 +358,8 @@ random_event,,e5f6a7b8-c9d0-1234-efab-567890123456,trigger_tags=[actor:status:sa
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
 random_event,,f6a7b8c9-d0e1-2345-fabc-678901234567,trigger_tags=[action:travel:mode:road]|weight=10.0,,山间偶遇,你在山间小路上遇到了一个采药的老者。,
->option,,,,,,虚心请教,,prop_add(name=wisdom, val=10)
->option,,,,,,购买草药,prop_gt(name=money, val=30),prop_sub(name=money, val=30),prop_add(name=health, val=15)
+>option,,,,,,虚心请教,,prop_add(name=wisdom; val=10)
+>option,,,,,,购买草药,prop_gt(name=money; val=30),prop_sub(name=money; val=30)|prop_add(name=health; val=15)
 >option,,,,,,匆匆赶路,,,
 ```
 
@@ -373,17 +372,17 @@ random_event,,f6a7b8c9-d0e1-2345-fabc-678901234567,trigger_tags=[action:travel:m
 
 ```csv
 row_type,template,uuid,context,requirements,title,description,results
-random_event,,g7a8b9c0-d1e2-3456-fbcd-789012345678,trigger_tags=[actor:status:temporary:drunk,city:econ:level:prosperous,action:intent:study:poetry]|weight=20.0|background=bg_rural_poor,prop_gt(name=money, val=30),,长安诗会,长安城正在举办一年一度的诗会，各地文人雅士齐聚一堂。,
->option,,,,,,即兴赋诗,prop_gt(name=literary_fame, val=15),prop_add(name=literary_fame, val=25),prop_add(name=prestige, val=10)
->option,,,,,,以酒会友,prop_gt(name=money, val=50),prop_sub(name=money, val=30),trait_add(name=sociable)
->option,,,,,,旁听学习,,prop_add(name=wisdom, val=5)
+random_event,,g7a8b9c0-d1e2-3456-fbcd-789012345678,trigger_tags=[actor:status:temporary:drunk/city:econ:level:prosperous/action:intent:study:poetry]|weight=20.0|background=bg_rural_poor,prop_gt(name=money; val=30),,长安诗会,长安城正在举办一年一度的诗会，各地文人雅士齐聚一堂。,
+>option,,,,,,即兴赋诗,prop_gt(name=literary_fame; val=15),prop_add(name=literary_fame; val=25)|prop_add(name=prestige; val=10)
+>option,,,,,,以酒会友,prop_gt(name=money; val=50),prop_sub(name=money; val=30)|trait_add(name=sociable)
+>option,,,,,,旁听学习,,prop_add(name=wisdom; val=5)
 ```
 
 **解析**:
-- 三个触发标签用方括号 `[...]` 包裹，逗号分隔，边界清晰无歧义
+- 三个触发标签用方括号 `[...]` 包裹，`/` 分隔（Layer 2），边界清晰无歧义
 - 方括号语法在 context 字段中尤为重要：因为 context 本身也用 `|` 分隔字段，
   标签列表用 `[...]` 包裹后，解析器能准确识别标签的起止位置
-- 解析器会剥离方括号，将内部逗号分隔的标签逐一解析，通过 `MicroDSLParser.parse_tags()` 验证格式
+- 解析器会剥离方括号，将内部 `/` 分隔的标签逐一解析，通过 `MicroDSLParser.parse_tags()` 验证格式
 
 ---
 

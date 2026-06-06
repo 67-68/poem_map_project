@@ -27,7 +27,7 @@
 |------|-----|
 | **逻辑** | 只加 **1 种**情绪，给中高数值 |
 | **场景** | 纯粹的环境冲击 |
-| **DSL** | `prop_add(name=SORROW, val=15)` |
+| **DSL** | `prop_add(name=SORROW; val=15)` |
 | **叙事示例** | 事件【路过马嵬坡】。`on_enter` 瞬间空气中弥漫的死寂让玩家 `SORROW +15`，确立整个事件的悲凉底色 |
 
 ### Pattern B：零和博弈 (The Push-Pull) — 内心冲突
@@ -36,7 +36,7 @@
 |------|-----|
 | **逻辑** | 增加一种情绪，**扣除**另一种对立情绪 |
 | **场景** | 价值观的强行扭转 |
-| **DSL** | `prop_add(name=ARROGANCE, val=20), prop_add(name=TRANQUILITY, val=-20)` |
+| **DSL** | `prop_add(name=ARROGANCE; val=20) | prop_add(name=TRANQUILITY; val=-20)` |
 | **叙事示例** | 事件【御赐金牌】。皇帝赏赐千金，狂傲暴涨，归隐的旷达被瞬间摧毁 |
 
 ### Pattern C：催化剂捆绑 (The Catalyst) — 驱动剧情
@@ -45,7 +45,7 @@
 |------|-----|
 | **逻辑** | 1 种基础情绪 + `AMBITION`（入世动力） |
 | **场景** | 激发玩家改变现状的欲望 |
-| **DSL** | `prop_add(name=ANGER, val=10), prop_add(name=AMBITION, val=15)` |
+| **DSL** | `prop_add(name=ANGER; val=10) | prop_add(name=AMBITION; val=15)` |
 | **叙事示例** | 事件【目睹贪官强抢民女】。不仅感到愤怒，更产生"必须往上爬"的野心 |
 
 ---
@@ -71,7 +71,7 @@
 
 ## 情绪极化后的 UI 表现
 
-如果在 `on_enter` 阶段执行了 `prop_add(name=SORROW, val=15)`，必须让玩家立刻感知到情绪变化。可选方案：
+如果在 `on_enter` 阶段执行了 `prop_add(name=SORROW; val=15)`，必须让玩家立刻感知到情绪变化。可选方案：
 
 | 方案 | 实现方式 |
 |------|---------|

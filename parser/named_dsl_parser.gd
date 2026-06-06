@@ -3,21 +3,26 @@ class_name NamedDSLParser extends GDScript
 # ──────────────────────────────────────────────
 # 命名参数 DSL 核心解析器
 #
-# 解析格式：func_name(param1=val1, param2=val2, ...)
+# 解析格式：func_name(param1=val1; param2=val2; ...)
 #
 # 设计原则：
 # 1. 函数名编码了 type + action（如 prop_gt, flag_bool_set）
 # 2. 参数必须命名，位置无关
 # 3. 字符串值用双引号包裹，数字/布尔值裸写
-# 4. 顶级逗号分隔多个表达式（逗号不在括号内）
+# 4. 顶级 | 分隔多个表达式（| 不在括号内）
 # 5. @ 前缀表示动态上下文引用（运行时从 context 解析）
 #
+# 分层符号（按嵌套层级）：
+#   Layer 0: |（顶层表达式分隔符）
+#   Layer 1: ;（函数参数分隔符）
+#   Layer 2: /（数组元素分隔符）
+#
 # 示例：
-#   prop_gt(name="money", val=50)
+#   prop_gt(name="money"; val=50)
 #   trait_has(name="official")
-#   flag_bool_set(name="xxx", val=true)
-#   flag_str_set(name=@initiator_flag, val="TR_Drunk")  # name 动态解析
-#   prop_add(name="money", val=100), trait_add(name="corrupt")
+#   flag_bool_set(name="xxx"; val=true)
+#   flag_str_set(name=@initiator_flag; val="TR_Drunk")  # name 动态解析
+#   prop_add(name="money"; val=100)|trait_add(name="corrupt")
 #
 # Debug 要求：
 # - 每个分支都有 logging.err 日志
@@ -69,7 +74,7 @@ static func parse_single(expr: String) -> ParseResult:
 	var paren_close = expr.rfind(")")
 	
 	if paren_open == -1 or paren_close == -1 or paren_close <= paren_open:
-		Logging.err("NamedDSLParser: 缺少括号，格式应为 func_name(param=val, ...): %s" % expr)
+		Logging.err("NamedDSLParser: 缺少括号，格式应为 func_name(param=val; ...): %s" % expr)
 		return null
 	
 	var func_name = expr.substr(0, paren_open).strip_edges()
@@ -85,7 +90,7 @@ static func parse_single(expr: String) -> ParseResult:
 	
 	return result
 
-# 分割多个顶级表达式（逗号不在括号内的才是分割符）
+# 分割多个顶级表达式（| 不在括号内的才是分割符，Layer 0）
 # 返回 String 数组
 static func split_expressions(data: String) -> PackedStringArray:
 	var expressions: PackedStringArray = []
@@ -104,7 +109,7 @@ static func split_expressions(data: String) -> PackedStringArray:
 				if depth < 0:
 					Logging.err("NamedDSLParser: 括号不匹配: %s" % data)
 					return []
-			',':
+			'|':
 				if depth == 0:
 					var trimmed = current.strip_edges()
 					if not trimmed.is_empty():
@@ -123,7 +128,7 @@ static func split_expressions(data: String) -> PackedStringArray:
 	return expressions
 
 # 解析参数列表字符串为 Dictionary
-# 输入: name="money", val=50
+# 输入: name="money"; val=50
 # 输出: {"name": "money", "val": 50}
 static func _parse_params(params_str: String) -> Dictionary:
 	var params: Dictionary = {}
@@ -131,7 +136,7 @@ static func _parse_params(params_str: String) -> Dictionary:
 	if params_str.is_empty():
 		return params
 	
-	# 按逗号分割参数（处理嵌套括号）
+	# 按 ; 分割参数（Layer 1，处理嵌套括号）
 	var depth = 0
 	var current = ""
 	
@@ -147,7 +152,7 @@ static func _parse_params(params_str: String) -> Dictionary:
 				if depth < 0:
 					Logging.err("NamedDSLParser: 括号/方括号不匹配: %s" % params_str)
 					return {}
-			',':
+			';':
 				if depth == 0:
 					_parse_single_param(current.strip_edges(), params)
 					current = ""
@@ -204,14 +209,14 @@ static func _parse_value(val_str: String) -> Variant:
 		Logging.info("NamedDSLParser: 解析为动态引用 @%s" % key)
 		return DynamicRef.new(key)
 	
-	# 🚀 数组字面量: [val1, val2, val3]
-	# _parse_params 已确保 [] 内的逗号不会被误分割为顶级参数分隔符
+	# 🚀 数组字面量: [val1/val2/val3]
+	# _parse_params 已确保 [] 内的 / 不会被误分割为顶层参数分隔符
 	# 每个元素去除首尾空格和引号包裹，返回 PackedStringArray
 	if val_str.begins_with("[") and val_str.ends_with("]"):
 		var inner = val_str.substr(1, val_str.length() - 2).strip_edges()
 		if inner.is_empty():
 			return PackedStringArray()
-		var parts = inner.split(",")
+		var parts = inner.split("/")
 		var arr = PackedStringArray()
 		for part in parts:
 			var clean = part.strip_edges()

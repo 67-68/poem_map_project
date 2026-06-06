@@ -140,8 +140,9 @@ static func _ensure_dispatch() -> void:
 # ──────────────────────────────────────────────
 
 # 解析触发标签格式：domain:subcategory:category:specific_attribute (4段)
+# 输入为单个 4 段式标签，split('/') 为兼容 Layer 2 分隔符
 static func parse_tags(data: String) -> Array[String]:
-	var tags = data.split(',')
+	var tags = data.split('/')
 	var parsed_tags: Array[String] = []
 	
 	for tag in tags:
@@ -209,7 +210,7 @@ static func parse_flag_requirement(data: String) -> FlagRequirement:
 	return parse_requirement(data) as FlagRequirement
 
 # 解析结果操作符列表
-# 新语法: prop_add(name="money", val=100), trait_add(name="corrupt")
+# 新语法: prop_add(name="money"; val=100)|trait_add(name="corrupt")
 static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
 	var operators: Array[BaseOperator] = []
 	

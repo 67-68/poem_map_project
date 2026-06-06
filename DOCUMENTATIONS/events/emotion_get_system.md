@@ -21,7 +21,7 @@
 **DSL 配置示例 — 听古琴选项结算：**
 
 ```gdscript
-Option_1_Op: prop_add(name=MONEY, val=-200), prop_add(name=TRANQUILITY, val=15), prop_add(name=FATIGUE, val=10)
+Option_1_Op: prop_add(name=MONEY; val=-200) | prop_add(name=TRANQUILITY; val=15) | prop_add(name=FATIGUE; val=10)
 ```
 
 **玩家行为逻辑：** "我马上要去参加李白的狂欢宴会，但 ARROGANCE（狂傲）不够，无法解锁拼酒的特殊选项。我得先去西市花钱看场剑器舞，把狂傲值刷上去。"
@@ -36,12 +36,12 @@ Option_1_Op: prop_add(name=MONEY, val=-200), prop_add(name=TRANQUILITY, val=15),
 
 ```gdscript
 # 选项 1：写诗痛骂朝廷（需要狂傲底色）
-Option_1_Req: prop_gt(name=ARROGANCE, val=30)
-Option_1_Op: prop_add(name=OFFICIAL_PRESTIGE, val=-50), prop_add(name=ANGER, val=20), imaginary_add(id="sword")
+Option_1_Req: prop_gt(name=ARROGANCE; val=30)
+Option_1_Op: prop_add(name=OFFICIAL_PRESTIGE; val=-50) | prop_add(name=ANGER; val=20) | imaginary_add(id="sword")
 
 # 选项 2：强忍悲痛，送别朋友（理智/隐忍路线）
-Option_2_Req: 
-Option_2_Op: prop_add(name=SORROW, val=15), prop_add(name=AMBITION, val=5)
+Option_2_Req:
+Option_2_Op: prop_add(name=SORROW; val=15) | prop_add(name=AMBITION; val=5)
 ```
 
 **行为逻辑：** 玩家为了活命选择选项 2，虽保住官位，但系统冷酷地塞了 15 点 SORROW 和 5 点 AMBITION。长此以往，玩家会变成一个极度压抑的功利主义者。
@@ -54,8 +54,8 @@ Option_2_Op: prop_add(name=SORROW, val=15), prop_add(name=AMBITION, val=5)
 
 | 触发条件 | 效果 | 叙事对应 |
 |---------|------|---------|
-| 秋季每旬 | `prop_add(name=SORROW, val=2)` | 自古逢秋悲寂寥 |
-| 在名山节点驻留 | `prop_add(name=TRANQUILITY, val=3)` | 山水涤荡心灵 |
+| 秋季每旬 | `prop_add(name=SORROW; val=2)` | 自古逢秋悲寂寥 |
+| 在名山节点驻留 | `prop_add(name=TRANQUILITY; val=3)` | 山水涤荡心灵 |
 
 ---
 

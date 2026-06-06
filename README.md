@@ -123,8 +123,8 @@ Google Sheets (线上 CSV)
 事件配置使用自定义 DSL，**命名参数函数调用**格式：
 
 ```csv
-requirements: prop_gt(name=money, val=50), flag_bool_has(name=met_libai)
-operations:   prop_add(name=money, val=100), trait_add(name=reputation_rising)
+requirements: prop_gt(name=money; val=50) | flag_bool_has(name=met_libai)
+operations:   prop_add(name=money; val=100) | trait_add(name=reputation_rising)
 ```
 
 取代了旧式的冒号分割语法（`prop:money:>50`），**消灭位置依赖，参数名即文档** 🤓☝️。

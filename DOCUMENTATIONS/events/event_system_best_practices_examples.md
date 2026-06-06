@@ -28,13 +28,13 @@
 # ── Hub 事件 ──
 random_event,mid_of_wenhuaquan_party,,,在盛大讲话完毕之后,
   正式开场！你看见有人斗诗有人讲话，还有人在扫荡小食,
-  "flag_int_reduce_if_above(name=flag_libai_changhe_request, threshold=0, amount=1)",
+  "flag_int_reduce_if_above(name=flag_libai_changhe_request; threshold=0; amount=1)",
   ,
-  "interrupt_event(flag_int_eq(name=flag_libai_changhe_request,val=1),
-     push_event(event_key=libai_force_changhe)),
-   interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20) 
-     and flag_int_eq(name=flag_libai_changhe_request,val=0),
-     random(val=99,success=push_event(event_key=request_libai_changhe)))",
+  "interrupt_event(flag_int_eq(name=flag_libai_changhe_request; val=1);
+     push_event(event_key=libai_force_changhe)) |
+   interrupt_event(flag_int_gt(name=flag_relation_with_libai; val=20)
+     and flag_int_eq(name=flag_libai_changhe_request; val=0);
+     random(val=99; success=push_event(event_key=request_libai_changhe)))",
   ,
   ,
 
@@ -133,17 +133,17 @@ random_event,feihualing_other_done,,,飞花令,
 
 >option,feihualing_other_done_imaginary,,
   imaginary_has_level(min_level=1),妙语连珠,妙语连珠,
-  "imaginary_level_reward(l3_fame=50,l2_fame=20,l1_fame=0)",,
+  "imaginary_level_reward(l3_fame=50; l2_fame=20; l1_fame=0)",,
 
 >option,feihualing_other_done_inspiration,,
-  "prop_gt(name=inspiration,val=19)",灵感硬接,灵感硬接,
-  "prop_sub(name=inspiration,val=20),
-   prop_add(name=literary_fame,val=15),
+  "prop_gt(name=inspiration; val=19)",灵感硬接,灵感硬接,
+  "prop_sub(name=inspiration; val=20) |
+   prop_add(name=literary_fame; val=15) |
    pop_event()",,
 
 >option,feihualing_other_done_penalty,,,自罚三杯,自罚三杯,
-  "prop_add(name=drunk,val=10),
-   prop_sub(name=literary_fame,val=5),
+  "prop_add(name=drunk; val=10) |
+   prop_sub(name=literary_fame; val=5) |
    pop_event()",,
 ```
 
@@ -453,13 +453,13 @@ RandomEvent
 ```csv
 # mid_of_wenhuaquan_party 的 interruptions 列：
 interrupt_event(
-  flag_int_eq(name=flag_libai_changhe_request,val=1),
+  flag_int_eq(name=flag_libai_changhe_request; val=1);
   push_event(event_key=libai_force_changhe)
-),
+) |
 interrupt_event(
-  flag_int_gt(name=flag_relation_with_libai,val=20) 
-    and flag_int_eq(name=flag_libai_changhe_request,val=0),
-  random(val=99, success=push_event(event_key=request_libai_changhe))
+  flag_int_gt(name=flag_relation_with_libai; val=20)
+    and flag_int_eq(name=flag_libai_changhe_request; val=0);
+  random(val=99; success=push_event(event_key=request_libai_changhe))
 )
 ```
 
@@ -485,14 +485,14 @@ Phase 4: choice_result 执行
 ```csv
 # 1. 玩家在 party 中遇到了李白 → request_libai_changhe 事件
 >option,opt_accept,,,欣然应和,,
-  "flag_int_set(name=flag_libai_changhe_request, val=5),pop_event()",,
+  "flag_int_set(name=flag_libai_changhe_request; val=5) | pop_event()",,
 
 # 2. 回到 Hub → on_enter 每帧递减 flag
-"flag_int_reduce_if_above(name=flag_libai_changhe_request, threshold=0, amount=1)"
+"flag_int_reduce_if_above(name=flag_libai_changhe_request; threshold=0; amount=1)"
 
 # 3. 当 flag == 1 时（还剩 1 回合）→ 中断触发
 # 4. libai_force_changhe 事件中：
-"flag_int_set(name=flag_libai_changhe_request,val=0)"  ← 清零，防止循环中断
+"flag_int_set(name=flag_libai_changhe_request; val=0)"  ← 清零，防止循环中断
 ```
 
 ### 中断事件 [`libai_force_changhe.tres`](../../data/random_events/libai_force_changhe.tres) 结构
@@ -504,7 +504,7 @@ RandomEvent
 │   ├── poem_taste via context
 │   └── choice_result: pop_event()
 ├── 选项2: "拂袖而去"
-│   └── choice_result: flag_append(relation_libai, -20) + pop_event()
+│   └── choice_result: flag_int_append(name=relation_libai; val=-20) | pop_event()
 ```
 
 ### 换数据指南
@@ -512,7 +512,7 @@ RandomEvent
 | 要换什么 | 修改位置 |
 |----------|----------|
 | 中断条件 | `interrupt_event()` 的第一个参数：`flag_xxx==N` / `flag_xxx>N` / `prop_xxx>N` |
-| 中断概率 | `random(val=N, success=...)` 的 val 参数 |
+| 中断概率 | `random(val=N; success=...)` 的 val 参数 |
 | 中断事件 | `push_event(event_key=你的事件uuid)` |
 | 多条件 | 用 ` and ` 连接：`flag_a>5 and flag_b==0` |
 | 循环预防 | 中断事件 on_enter 中必须修改触发条件（如清零 flag） |
@@ -522,11 +522,11 @@ RandomEvent
 ```
 # ❌ 错误：中断条件依赖 event_result 改变的值
 # event_result 在 check_interruption 之后执行，来不及影响中断
-interrupt_event(flag_wine_count>0, random(20, push=evt_wine_interrupt))
-event_result=flag_int_set(name=flag_wine_count, val=-1)
+interrupt_event(flag_wine_count>0; random(20; push=evt_wine_interrupt))
+event_result=flag_int_set(name=flag_wine_count; val=-1)
 
 # ✅ 正确：用 flag_idle==0（空闲态）做守卫
-interrupt_event(flag_idle==0, random(20, push=evt_wine_interrupt))
+interrupt_event(flag_idle==0; random(20; push=evt_wine_interrupt))
 ```
 
 ---

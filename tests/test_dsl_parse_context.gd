@@ -14,7 +14,7 @@ func test_parse_context_splits_comma_separated_kv():
 	  custom_params["poem_taste"] = "urn:poem_taste:libai_taste"
 	  custom_params["taste_owner_relation_flag"] = "flag_relation_with_libai"
 	"""
-	var context_str = "poem_taste: urn:poem_taste:libai_taste, taste_owner_relation_flag:flag_relation_with_libai"
+	var context_str = "poem_taste: urn:poem_taste:libai_taste| taste_owner_relation_flag:flag_relation_with_libai"
 	var result = DSLParser.parse_context(context_str)
 	
 	assert_has(result, "custom_params", "parse_context 应返回 custom_params 字典")
@@ -47,7 +47,7 @@ func test_parse_context_multiple_fields():
 	"""
 	管道符分隔的多字段 + 逗号分割：验证组合场景
 	"""
-	var context_str = "poem_taste: urn:poem_taste:libai_taste, taste_owner_relation_flag:flag_relation_with_libai | weight=15"
+	var context_str = "poem_taste: urn:poem_taste:libai_taste| taste_owner_relation_flag:flag_relation_with_libai | weight=15"
 	var result = DSLParser.parse_context(context_str)
 	
 	assert_has(result.custom_params, "poem_taste")
@@ -61,7 +61,7 @@ func test_parse_context_value_with_internal_colons():
 	"""
 	值本身包含冒号的情况（如 URN），确保正确找到 key:value 的分隔冒号
 	"""
-	var context_str = "urn_key: urn:prefix:some:value, extra_key:extra_val"
+	var context_str = "urn_key: urn:prefix:some:value| extra_key:extra_val"
 	var result = DSLParser.parse_context(context_str)
 	
 	assert_has(result.custom_params, "urn_key")

@@ -78,7 +78,7 @@ func test_p0_queue_event_missing_key():
 func test_p0_event_chain_in_consequence_operators():
 	"""验证事件操作符可以在 parse_consequence_operators 中混合使用"""
 	var ops = MicroDSLParser.parse_consequence_operators(
-		"push_event(event_key=event_poverty), pop_event(), queue_event(event_key=event_duel)"
+		"push_event(event_key=event_poverty)|pop_event()|queue_event(event_key=event_duel)"
 	)
 	assert_eq(ops.size(), 3, "应解析出 3 个操作符")
 	assert_true(ops[0] is PushEventOperator, "第一个应为 PushEventOperator")
@@ -93,7 +93,7 @@ func test_p0_event_chain_in_consequence_operators():
 func test_p0_random_operator_basic():
 	"""random(val=N, success=op) 应解析为 RandomOperator，random_value 正确"""
 	var op = MicroDSLParser.parse_operator(
-		'random(val=80, success=prop_add(name="money", val=100))'
+		'random(val=80; success=prop_add(name="money"; val=100))'
 	)
 	assert_not_null(op, "random 不应返回 null")
 	assert_true(op is RandomOperator, "应为 RandomOperator")
@@ -110,7 +110,7 @@ func test_p0_random_operator_basic():
 func test_p0_random_operator_with_fail():
 	"""random(val=N, success=op, fail=op) 应解析成功/失败两个分支"""
 	var op = MicroDSLParser.parse_operator(
-		'random(val=60, success=trait_add(name=brave), fail=prop_add(name="reputation", val=-5))'
+		'random(val=60; success=trait_add(name=brave); fail=prop_add(name="reputation"; val=-5))'
 	)
 	assert_not_null(op, "random 不应返回 null")
 	assert_true(op is RandomOperator, "应为 RandomOperator")
@@ -128,14 +128,14 @@ func test_p0_random_operator_with_fail():
 func test_p0_random_operator_val_clamping():
 	"""random val 超出 0-100 范围应被 clamp 并发出 warn"""
 	var op_above = MicroDSLParser.parse_operator(
-		'random(val=150, success=prop_add(name="money", val=10))'
+		'random(val=150; success=prop_add(name="money"; val=10))'
 	)
 	assert_not_null(op_above, "val=150 的 random 不应为 null")
 	var cast_above = op_above as RandomOperator
 	assert_eq(cast_above.random_value, 100, "val=150 应被 clamp 到 100")
 
 	var op_below = MicroDSLParser.parse_operator(
-		'random(val=-10, success=prop_add(name="money", val=10))'
+		'random(val=-10; success=prop_add(name="money"; val=10))'
 	)
 	assert_not_null(op_below, "val=-10 的 random 不应为 null")
 	var cast_below = op_below as RandomOperator
@@ -145,8 +145,8 @@ func test_p0_random_operator_val_clamping():
 func test_p0_random_operator_with_hints():
 	"""random 的 success_hint / failed_hint 应被正确解析"""
 	var op = MicroDSLParser.parse_operator(
-		'random(val=50, success=prop_add(name="money", val=10), '
-		+ 'success_hint="成功了！", failed_hint="失败了...")'
+		'random(val=50; success=prop_add(name="money"; val=10); '
+		+ 'success_hint="成功了！"; failed_hint="失败了...")'
 	)
 	assert_not_null(op, "random 不应返回 null")
 	var cast_op = op as RandomOperator
@@ -161,7 +161,7 @@ func test_p0_random_operator_with_hints():
 
 func test_p0_emo_add_operator():
 	"""emo_add(name=emo, val=N) 应解析为 EmotionOperator，value 为正数"""
-	var op = MicroDSLParser.parse_operator("emo_add(name=sorrow, val=10)")
+	var op = MicroDSLParser.parse_operator("emo_add(name=sorrow; val=10)")
 	assert_not_null(op, "emo_add 不应返回 null")
 	assert_true(op is EmotionOperator, "应为 EmotionOperator")
 	var cast_op = op as EmotionOperator
@@ -171,7 +171,7 @@ func test_p0_emo_add_operator():
 
 func test_p0_emo_sub_operator():
 	"""emo_sub(name=emo, val=N) 应解析为 EmotionOperator，value 为负数"""
-	var op = MicroDSLParser.parse_operator("emo_sub(name=anger, val=5)")
+	var op = MicroDSLParser.parse_operator("emo_sub(name=anger; val=5)")
 	assert_not_null(op, "emo_sub 不应返回 null")
 	assert_true(op is EmotionOperator, "应为 EmotionOperator")
 	var cast_op = op as EmotionOperator
@@ -181,7 +181,7 @@ func test_p0_emo_sub_operator():
 
 func test_p0_emo_set_operator():
 	"""emo_set(name=emo, val=N) 应解析为 EmotionOperator，value 为直接设置值"""
-	var op = MicroDSLParser.parse_operator("emo_set(name=joy, val=50)")
+	var op = MicroDSLParser.parse_operator("emo_set(name=joy; val=50)")
 	assert_not_null(op, "emo_set 不应返回 null")
 	assert_true(op is EmotionOperator, "应为 EmotionOperator")
 	var cast_op = op as EmotionOperator
@@ -191,7 +191,7 @@ func test_p0_emo_set_operator():
 
 func test_p0_emo_sub_abs_protection():
 	"""emo_sub 的 abs 保护：val=-3 应变为 -abs(-3)=-3，而不是 3"""
-	var op = MicroDSLParser.parse_operator("emo_sub(name=fear, val=-3)")
+	var op = MicroDSLParser.parse_operator("emo_sub(name=fear; val=-3)")
 	assert_not_null(op, "emo_sub 不应返回 null")
 	var cast_op = op as EmotionOperator
 	assert_eq(cast_op.value, -3, "val=-3 经 abs 保护后取负应为 -3")
@@ -199,7 +199,7 @@ func test_p0_emo_sub_abs_protection():
 
 func test_p0_emo_add_abs_protection():
 	"""emo_add 的 abs 保护：val=-5 应变为 abs(-5)=5"""
-	var op = MicroDSLParser.parse_operator("emo_add(name=fear, val=-5)")
+	var op = MicroDSLParser.parse_operator("emo_add(name=fear; val=-5)")
 	assert_not_null(op, "emo_add 不应返回 null")
 	var cast_op = op as EmotionOperator
 	assert_eq(cast_op.value, 5, "val=-5 经 abs 保护后应为 5")
@@ -215,7 +215,7 @@ func test_p0_emo_missing_name():
 func test_p0_emo_operators_in_sequence():
 	"""多个情绪操作符混合使用应被正确解析"""
 	var ops = MicroDSLParser.parse_consequence_operators(
-		"emo_add(name=sorrow, val=10), emo_sub(name=anger, val=5), emo_set(name=joy, val=50)"
+		"emo_add(name=sorrow; val=10)|emo_sub(name=anger; val=5)|emo_set(name=joy; val=50)"
 	)
 	assert_eq(ops.size(), 3, "应解析出 3 个情绪操作符")
 	assert_true(ops[0] is EmotionOperator, "第一个应为 EmotionOperator")
@@ -232,7 +232,7 @@ func test_p0_emo_operators_in_sequence():
 
 func test_p0_prop_set_operator():
 	"""prop_set(name=prop, val=N) 应解析为 PropertyOperator，set 语义"""
-	var op = MicroDSLParser.parse_operator("prop_set(name=health, val=100)")
+	var op = MicroDSLParser.parse_operator("prop_set(name=health; val=100)")
 	assert_not_null(op, "prop_set 不应返回 null")
 	assert_true(op is PropertyOperator, "应为 PropertyOperator")
 	var cast_op = op as PropertyOperator
@@ -249,7 +249,7 @@ func test_p0_prop_set_missing_name():
 func test_p0_prop_set_with_prop_add_sub():
 	"""prop_set 与 prop_add / prop_sub 混合使用"""
 	var ops = MicroDSLParser.parse_consequence_operators(
-		"prop_add(name=money, val=50), prop_set(name=health, val=100), prop_sub(name=money, val=30)"
+		"prop_add(name=money; val=50)|prop_set(name=health; val=100)|prop_sub(name=money; val=30)"
 	)
 	assert_eq(ops.size(), 3, "应解析出 3 个操作符")
 	assert_true(ops[0] is PropertyOperator, "第一个应为 PropertyOperator")
@@ -266,7 +266,7 @@ func test_p0_prop_set_with_prop_add_sub():
 func test_p1_parse_interruption_field_basic():
 	"""interrupt_event(req, op) 应解析为 ConditionalOperator"""
 	var cond_op = DSLParser.parse_interruption_field(
-		"interrupt_event(prop_gt(name=money, val=50), push_event(event_key=event_poverty))"
+		"interrupt_event(prop_gt(name=money; val=50)|push_event(event_key=event_poverty))"
 	)
 	assert_not_null(cond_op, "interrupt_event 不应返回 null")
 	assert_true(cond_op is ConditionalOperator, "应为 ConditionalOperator")
@@ -279,8 +279,8 @@ func test_p1_parse_interruption_field_basic():
 func test_p1_parse_interruption_field_multiple_operators():
 	"""interrupt_event(req, op1, op2) 支持多个 operator（逗号分隔）"""
 	var cond_op = DSLParser.parse_interruption_field(
-		"interrupt_event(prop_gt(name=money, val=50), "
-		+ "push_event(event_key=event_poverty), trait_add(name=corrupt))"
+		"interrupt_event(prop_gt(name=money; val=50)|"
+		+ "push_event(event_key=event_poverty)|trait_add(name=corrupt))"
 	)
 	assert_not_null(cond_op, "interrupt_event 不应返回 null")
 	assert_eq(cond_op.condition_success_result.size(), 2,
@@ -300,7 +300,7 @@ func test_p1_parse_interruption_field_empty():
 func test_p1_parse_interruption_field_missing_parens():
 	"""缺少括号应返回 null"""
 	var cond_op = DSLParser.parse_interruption_field(
-		"interrupt_event prop_gt(name=money, val=50), push_event(event_key=test)"
+		"interrupt_event prop_gt(name=money; val=50)|push_event(event_key=test)"
 	)
 	assert_null(cond_op, "缺少括号应返回 null")
 
@@ -308,7 +308,7 @@ func test_p1_parse_interruption_field_missing_parens():
 func test_p1_parse_interruption_field_wrong_func_name():
 	"""函数名不是 interrupt_event 应返回 null"""
 	var cond_op = DSLParser.parse_interruption_field(
-		"some_other_func(prop_gt(name=money, val=50), push_event(event_key=test))"
+		"some_other_func(prop_gt(name=money; val=50)|push_event(event_key=test))"
 	)
 	assert_null(cond_op, "非 interrupt_event 函数应返回 null")
 
@@ -316,7 +316,7 @@ func test_p1_parse_interruption_field_wrong_func_name():
 func test_p1_parse_interruption_field_flag_req():
 	"""interrupt_event 支持 flag_bool_has 作为条件"""
 	var cond_op = DSLParser.parse_interruption_field(
-		"interrupt_event(flag_bool_has(name=has_sword), push_event(event_key=event_duel))"
+		"interrupt_event(flag_bool_has(name=has_sword)|push_event(event_key=event_duel))"
 	)
 	assert_not_null(cond_op, "flag requirement 的 interrupt_event 不应返回 null")
 	assert_not_null(cond_op.condition, "condition 不应为 null")
@@ -332,8 +332,8 @@ func test_p1_parse_interruption_field_flag_req():
 func test_p1_parse_interruptions_field_multiple():
 	"""parse_interruptions_field 应支持多个 interrupt_event 逗号分隔"""
 	var cond_ops = DSLParser.parse_interruptions_field(
-		"interrupt_event(prop_gt(name=money, val=50), push_event(event_key=event_poverty)), "
-		+ "interrupt_event(flag_bool_has(name=has_sword), push_event(event_key=event_duel))"
+		"interrupt_event(prop_gt(name=money; val=50)|push_event(event_key=event_poverty))|"
+		+ "interrupt_event(flag_bool_has(name=has_sword)|push_event(event_key=event_duel))"
 	)
 	assert_eq(cond_ops.size(), 2, "应解析出 2 个 ConditionalOperator")
 	assert_true(cond_ops[0] is ConditionalOperator, "第一个应为 ConditionalOperator")
@@ -343,7 +343,7 @@ func test_p1_parse_interruptions_field_multiple():
 func test_p1_parse_interruptions_field_single():
 	"""parse_interruptions_field 支持单个 interrupt_event"""
 	var cond_ops = DSLParser.parse_interruptions_field(
-		"interrupt_event(prop_gt(name=money, val=50), push_event(event_key=event_poverty))"
+		"interrupt_event(prop_gt(name=money; val=50)|push_event(event_key=event_poverty))"
 	)
 	assert_eq(cond_ops.size(), 1, "应解析出 1 个 ConditionalOperator")
 
@@ -364,7 +364,7 @@ func test_p1_parse_interruptions_field_empty():
 func test_p1_parse_provider_field_basic():
 	"""parse_provider_field 应尝试解析并创建 provider 实例"""
 	var provider = DSLParser.parse_provider_field(
-		'item_provider(list_key="guests", text_template="走向 {item}")'
+		'item_provider(list_key="guests"; text_template="走向 {item}")'
 	)
 	# 测试只验证解析层不崩溃，实例化依赖 @tool 模式可用性
 	if provider != null:
@@ -486,9 +486,9 @@ func test_p2_flag_bool_not_has():
 
 
 func test_p2_flag_str_not():
-	"""flag_str_not(name=xxx, val=yyy) 应解析为 FlagRequirement(str, NOT_EQUAL)"""
+	"""flag_str_not(name=xxx; val=yyy) 应解析为 FlagRequirement(str, NOT_EQUAL)"""
 	var req = MicroDSLParser.parse_requirement(
-		'flag_str_not(name=player_name, val=张三)'
+		'flag_str_not(name=player_name; val=张三)'
 	)
 	assert_not_null(req, "flag_str_not 不应返回 null")
 	assert_true(req is FlagRequirement, "应为 FlagRequirement")
@@ -500,8 +500,8 @@ func test_p2_flag_str_not():
 
 
 func test_p2_flag_int_eq():
-	"""flag_int_eq(name=xxx, val=N) 应解析为 FlagRequirement(int, EQUAL)"""
-	var req = MicroDSLParser.parse_requirement("flag_int_eq(name=flag_score, val=100)")
+	"""flag_int_eq(name=xxx; val=N) 应解析为 FlagRequirement(int, EQUAL)"""
+	var req = MicroDSLParser.parse_requirement("flag_int_eq(name=flag_score; val=100)")
 	assert_not_null(req, "flag_int_eq 不应返回 null")
 	assert_true(req is FlagRequirement, "应为 FlagRequirement")
 	var cast_req = req as FlagRequirement
@@ -512,8 +512,8 @@ func test_p2_flag_int_eq():
 
 
 func test_p2_flag_int_ne():
-	"""flag_int_ne(name=xxx, val=N) 应解析为 FlagRequirement(int, NOT_EQUAL)"""
-	var req = MicroDSLParser.parse_requirement("flag_int_ne(name=flag_score, val=50)")
+	"""flag_int_ne(name=xxx; val=N) 应解析为 FlagRequirement(int, NOT_EQUAL)"""
+	var req = MicroDSLParser.parse_requirement("flag_int_ne(name=flag_score; val=50)")
 	assert_not_null(req, "flag_int_ne 不应返回 null")
 	assert_true(req is FlagRequirement, "应为 FlagRequirement")
 	var cast_req = req as FlagRequirement
@@ -529,7 +529,7 @@ func test_p2_flag_int_ne():
 
 func test_p2_dynamic_ref_flag_bool_set():
 	"""flag_bool_set(name=@ctx_key, val=true) 应解析 DynamicRef"""
-	var op = MicroDSLParser.parse_operator("flag_bool_set(name=@initiator_flag, val=true)")
+	var op = MicroDSLParser.parse_operator("flag_bool_set(name=@initiator_flag; val=true)")
 	assert_not_null(op, "DynamicRef flag_bool_set 不应返回 null")
 	assert_true(op is FlagOperator, "应为 FlagOperator")
 	var cast_op = op as FlagOperator
@@ -540,7 +540,7 @@ func test_p2_dynamic_ref_flag_bool_set():
 
 func test_p2_dynamic_ref_flag_int_append():
 	"""flag_int_append(name=@ctx_key, val=N) 应解析 DynamicRef"""
-	var op = MicroDSLParser.parse_operator("flag_int_append(name=@target_npc, val=10)")
+	var op = MicroDSLParser.parse_operator("flag_int_append(name=@target_npc; val=10)")
 	assert_not_null(op, "DynamicRef flag_int_append 不应返回 null")
 	assert_true(op is FlagOperator, "应为 FlagOperator")
 	var cast_op = op as FlagOperator
@@ -551,7 +551,7 @@ func test_p2_dynamic_ref_flag_int_append():
 func test_p2_dynamic_ref_flag_str_set():
 	"""flag_str_set(name=@ctx_key, val=xxx) 应解析 DynamicRef"""
 	var op = MicroDSLParser.parse_operator(
-		'flag_str_set(name=@initiator_name, val="TR_Drunk")'
+		'flag_str_set(name=@initiator_name; val="TR_Drunk")'
 	)
 	assert_not_null(op, "DynamicRef flag_str_set 不应返回 null")
 	assert_true(op is FlagOperator, "应为 FlagOperator")
@@ -598,7 +598,7 @@ func test_p3_parse_trait_effect_operations():
 	var row = {
 		"trait_id": "trait_effect_test",
 		"trait_name": "效果测试",
-		"trait_effect_operations": "prop_add(name=money, val=10), prop_sub(name=health, val=5)"
+		"trait_effect_operations": "prop_add(name=money; val=10)|prop_sub(name=health; val=5)"
 	}
 	var trait_ = DSLParser.parse_trait(row)
 	assert_not_null(trait_, "trait 不应为 null")
@@ -638,8 +638,8 @@ func test_p3_parse_state_transistor_with_dsl_fields():
 	var row = {
 		"uuid": "transistor_02",
 		"target_resource": "urn:flag:score_flag",
-		"requirement": "prop_gt(name=money, val=50)",
-		"operators": "prop_add(name=money, val=-50), trait_add(name=spent_money)"
+		"requirement": "prop_gt(name=money; val=50)",
+		"operators": "prop_add(name=money; val=-50)|trait_add(name=spent_money)"
 	}
 	var transistor = DSLParser.parse_state_transistor(row)
 	assert_not_null(transistor, "state_transistor 不应为 null")
@@ -695,7 +695,7 @@ func test_p3_parse_context_bracket_array_empty():
 func test_p3_parse_context_trigger_tags_bracket():
 	"""parse_context 的 trigger_tags 支持方括号语法 [tag1,tag2]"""
 	var result = DSLParser.parse_context(
-		"trigger_tags=[action:intent:study:poetry,action:intent:study:calligraphy]"
+		"trigger_tags=[action:intent:study:poetry/action:intent:study:calligraphy]"
 	)
 	assert_has(result, "trigger_tags", "应返回 trigger_tags")
 	assert_gt(result.trigger_tags.size(), 0, "trigger_tags 不应为空")
@@ -713,7 +713,7 @@ func test_p3_parse_context_trigger_tags_bracket():
 
 func test_p0_temp_flag_bool_set():
 	"""temp_flag_bool_set(name=xxx, val=true) 应解析为 TempFlagOperator"""
-	var op = MicroDSLParser.parse_operator("temp_flag_bool_set(name=temp_has_key, val=true)")
+	var op = MicroDSLParser.parse_operator("temp_flag_bool_set(name=temp_has_key; val=true)")
 	assert_not_null(op, "temp_flag_bool_set 不应返回 null")
 	assert_true(op is TempFlagOperator, "应为 TempFlagOperator")
 	var cast_op = op as TempFlagOperator
@@ -725,7 +725,7 @@ func test_p0_temp_flag_bool_set():
 
 func test_p0_temp_flag_bool_set_false():
 	"""temp_flag_bool_set(name=xxx, val=false) 正确解析 false"""
-	var op = MicroDSLParser.parse_operator("temp_flag_bool_set(name=temp_remove_me, val=false)")
+	var op = MicroDSLParser.parse_operator("temp_flag_bool_set(name=temp_remove_me; val=false)")
 	assert_not_null(op, "temp_flag_bool_set false 不应返回 null")
 	var cast_op = op as TempFlagOperator
 	assert_eq(cast_op.value, false, "value 应为 false")
@@ -739,7 +739,7 @@ func test_p0_temp_flag_bool_set_missing_name():
 
 func test_p0_temp_flag_str_set():
 	"""temp_flag_str_set(name=xxx, val=yyy) 应解析为 TempFlagOperator"""
-	var op = MicroDSLParser.parse_operator('temp_flag_str_set(name=temp_title, val=TR_Drunk)')
+	var op = MicroDSLParser.parse_operator('temp_flag_str_set(name=temp_title; val=TR_Drunk)')
 	assert_not_null(op, "temp_flag_str_set 不应返回 null")
 	assert_true(op is TempFlagOperator, "应为 TempFlagOperator")
 	var cast_op = op as TempFlagOperator
@@ -751,7 +751,7 @@ func test_p0_temp_flag_str_set():
 
 func test_p0_temp_flag_str_append():
 	"""temp_flag_str_append(name=xxx, val=yyy) 应解析为 TempFlagOperator"""
-	var op = MicroDSLParser.parse_operator('temp_flag_str_append(name=temp_log, val=新事件)')
+	var op = MicroDSLParser.parse_operator('temp_flag_str_append(name=temp_log; val=新事件)')
 	assert_not_null(op, "temp_flag_str_append 不应返回 null")
 	assert_true(op is TempFlagOperator, "应为 TempFlagOperator")
 	var cast_op = op as TempFlagOperator
@@ -763,7 +763,7 @@ func test_p0_temp_flag_str_append():
 
 func test_p0_temp_flag_int_set():
 	"""temp_flag_int_set(name=xxx, val=N) 应解析为 TempFlagOperator"""
-	var op = MicroDSLParser.parse_operator("temp_flag_int_set(name=temp_score, val=100)")
+	var op = MicroDSLParser.parse_operator("temp_flag_int_set(name=temp_score; val=100)")
 	assert_not_null(op, "temp_flag_int_set 不应返回 null")
 	assert_true(op is TempFlagOperator, "应为 TempFlagOperator")
 	var cast_op = op as TempFlagOperator
@@ -775,7 +775,7 @@ func test_p0_temp_flag_int_set():
 
 func test_p0_temp_flag_int_append():
 	"""temp_flag_int_append(name=xxx, val=N) 应解析为 TempFlagOperator"""
-	var op = MicroDSLParser.parse_operator("temp_flag_int_append(name=temp_score, val=50)")
+	var op = MicroDSLParser.parse_operator("temp_flag_int_append(name=temp_score; val=50)")
 	assert_not_null(op, "temp_flag_int_append 不应返回 null")
 	assert_true(op is TempFlagOperator, "应为 TempFlagOperator")
 	var cast_op = op as TempFlagOperator
@@ -788,7 +788,7 @@ func test_p0_temp_flag_int_append():
 func test_p0_temp_flag_int_reduce_if_above():
 	"""temp_flag_int_reduce_if_above 应解析为 TempFlagOperator"""
 	var op = MicroDSLParser.parse_operator(
-		"temp_flag_int_reduce_if_above(name=temp_sanity, threshold=10, amount=5)"
+		"temp_flag_int_reduce_if_above(name=temp_sanity; threshold=10; amount=5)"
 	)
 	assert_not_null(op, "temp_flag_int_reduce_if_above 不应返回 null")
 	assert_true(op is TempFlagOperator, "应为 TempFlagOperator")
@@ -803,9 +803,9 @@ func test_p0_temp_flag_int_reduce_if_above():
 func test_p0_temp_flag_operators_in_sequence():
 	"""多个 temp_flag 操作符混合使用应被正确解析"""
 	var ops = MicroDSLParser.parse_consequence_operators(
-		"temp_flag_bool_set(name=temp_has_key, val=true), "
-		+ "temp_flag_int_append(name=temp_score, val=50), "
-		+ "temp_flag_str_set(name=temp_title, val=TR_Drunk)"
+		"temp_flag_bool_set(name=temp_has_key; val=true)|"
+		+ "temp_flag_int_append(name=temp_score; val=50)|"
+		+ "temp_flag_str_set(name=temp_title; val=TR_Drunk)"
 	)
 	assert_eq(ops.size(), 3, "应解析出 3 个操作符")
 	assert_true(ops[0] is TempFlagOperator, "第一个应为 TempFlagOperator")
@@ -819,8 +819,8 @@ func test_p0_temp_flag_operators_in_sequence():
 func test_p0_temp_flag_mixed_with_regular_flag():
 	"""temp_flag 与普通 flag 操作符混合解析"""
 	var ops = MicroDSLParser.parse_consequence_operators(
-		"temp_flag_bool_set(name=temp_entered_tavern, val=true), "
-		+ "flag_bool_set(name=global_has_key, val=true)"
+		"temp_flag_bool_set(name=temp_entered_tavern; val=true)|"
+		+ "flag_bool_set(name=global_has_key; val=true)"
 	)
 	assert_eq(ops.size(), 2, "应解析出 2 个操作符")
 	assert_true(ops[0] is TempFlagOperator, "第一个应为 TempFlagOperator")
@@ -831,7 +831,7 @@ func test_p0_temp_flag_mixed_with_regular_flag():
 func test_p0_temp_flag_with_dynamic_ref():
 	"""temp_flag 支持 @DynamicRef 语法"""
 	var op = MicroDSLParser.parse_operator(
-		'temp_flag_str_set(name=@initiator_flag, val="TR_Drunk")'
+		'temp_flag_str_set(name=@initiator_flag; val="TR_Drunk")'
 	)
 	assert_not_null(op, "DynamicRef temp_flag_str_set 不应返回 null")
 	assert_true(op is TempFlagOperator, "应为 TempFlagOperator")
@@ -843,8 +843,8 @@ func test_p0_temp_flag_with_dynamic_ref():
 func test_p0_temp_flag_with_regular_operators_in_consequence():
 	"""temp_flag 与 prop_add / trait_add 等混合使用"""
 	var ops = MicroDSLParser.parse_consequence_operators(
-		"prop_add(name=money, val=100), "
-		+ "temp_flag_bool_set(name=temp_met_libai, val=true), "
+		"prop_add(name=money; val=100)|"
+		+ "temp_flag_bool_set(name=temp_met_libai; val=true)|"
 		+ "trait_add(name=drunk)"
 	)
 	assert_eq(ops.size(), 3, "应解析出 3 个操作符")

@@ -322,7 +322,7 @@ func test_multiple_tags_only_one_bucket_matches():
 func test_dsl_parse_scan_and_push():
 	"""MicroDSLParser.parse_consequence_operators 能正确解析 scan_and_push"""
 	var result = MicroDSLParser.parse_consequence_operators(
-		"scan_and_push(tags=[\"scene:tavern:gambling:high\"], weight_mult=5.0, fallback=\"evt_aftermath\")"
+		"scan_and_push(tags=[\"scene:tavern:gambling:high\"]; weight_mult=5.0; fallback=\"evt_aftermath\")"
 	)
 	
 	assert_eq(result.size(), 1, "应解析出 1 个 operator")
@@ -338,7 +338,7 @@ func test_dsl_parse_scan_and_push():
 func test_dsl_parse_multiple_tags():
 	"""scan_and_push 的 tags 支持多元素数组"""
 	var result = MicroDSLParser.parse_consequence_operators(
-		"scan_and_push(tags=[\"scene:tavern:gambling\", \"npc:rogue\"])"
+		"scan_and_push(tags=[\"scene:tavern:gambling\" / \"npc:rogue\"])"
 	)
 	
 	assert_eq(result.size(), 1, "应解析出 1 个 operator")

@@ -17,20 +17,20 @@
 使用 `interrupt_event` + `random` 操作符组合：
 
 ```csv
-interrupt_event(<requirement>, random(val=<概率0-100>, success=push_event(event_key=<目标事件>)))
+interrupt_event(<requirement>|random(val=<概率0-100>; success=push_event(event_key=<目标事件>)))
 ```
 
 **示例**：在 `mid_of_wenhuaquan_party` 之前检查李白关系 > 20，5% 概率触发 `request_libai_changhe`
 
 ```csv
-random_event,,,,mid_of_wenhuaquan_party,,,title,description,,,,interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20),random(val=5,success=push_event(event_key=request_libai_changhe)))
+random_event,,,,mid_of_wenhuaquan_party,,,title,description,,,,interrupt_event(flag_int_gt(name=flag_relation_with_libai;val=20)|random(val=5;success=push_event(event_key=request_libai_changhe)))
 ```
 
 ### 约束条件
 
 #### 1. `interrupt_event` 只接受 2 个参数
 
-`interrupt_event(requirement_syntax, operator_syntax)` 的值通过 [`split_expressions`](parser/named_dsl_parser.gd) 按**顶级逗号**分割，只能拆出 2 段：
+`interrupt_event(requirement_syntax|operator_syntax)` 的值通过 [`split_expressions`](parser/named_dsl_parser.gd) 按**顶级 `|`** 分割，只能拆出 2 段：
 
 ```gdscript
 # parser/dsl_parser.gd:289
@@ -39,17 +39,17 @@ if args.size() < 2:
     Logging.err("需要 2 个参数（requirement, operator）")
 ```
 
-这意味着 `requirement_syntax` 只能是一个**单一的条件表达式**，不能放入 `条件A, 条件B` 这样的复合条件（因为额外的逗号会被当成第 3 个参数）。
+这意味着 `requirement_syntax` 只能是一个**单一的条件表达式**，不能放入 `条件A|条件B` 这样的复合条件（因为额外的 `|` 会被当成 `operator_syntax` 解析，造成逻辑错误）。
 
 **如果需要多条件守卫**，使用 ` and ` 语法（带空格）在 `requirement_syntax` 中组合多个条件：
 
 ```
-interrupt_event(cond1 and cond2, operator_syntax)
+interrupt_event(cond1 and cond2|operator_syntax)
 ```
 
 示例：
 ```csv
-interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20) and flag_int_lt(name=flag_libai_changhe_request,val=1), random(val=99, success=push_event(event_key=request_libai_changhe)))
+interrupt_event(flag_int_gt(name=flag_relation_with_libai;val=20) and flag_int_lt(name=flag_libai_changhe_request;val=1)|random(val=99; success=push_event(event_key=request_libai_changhe)))
 ```
 
 解析器会将 ` and ` 前后的表达式分别解析为独立的 `BaseRequirements`，然后合并为 `ComplexRequirements`（AND 逻辑）。详见 [`parser/dsl_parser.gd`](parser/dsl_parser.gd):383。
@@ -75,7 +75,7 @@ if _is_active:
 
 #### 3. `random` 操作符
 
-DSL 语法：`random(val=<概率>, success=<操作符>, fail=<操作符（可选）>, success_hint=<提示>, failed_hint=<提示>)`
+DSL 语法：`random(val=<概率>; success=<操作符>; fail=<操作符（可选）>; success_hint=<提示>; failed_hint=<提示>)`
 
 - `val`：0-100 的整数，表示成功概率
 - `success`：成功时执行的操作符表达式（字符串）
@@ -144,10 +144,10 @@ flag_libai_changhe_shown,bool,FALSE
 
 | 操作 | DSL 语法 |
 |------|---------|
-| 检查 int 大于 | `flag_int_gt(name=flag_relation_with_libai, val=20)` |
+| 检查 int 大于 | `flag_int_gt(name=flag_relation_with_libai; val=20)` |
 | 检查 bool 为真 | `flag_bool_has(name=flag_libai_changhe_shown)` |
-| 设置 bool | `flag_bool_set(name=flag_libai_changhe_shown, val=true)` |
-| 追加 int | `flag_int_append(name=flag_relation_with_libai, val=5)` |
+| 设置 bool | `flag_bool_set(name=flag_libai_changhe_shown; val=true)` |
+| 追加 int | `flag_int_append(name=flag_relation_with_libai; val=5)` |
 
 ---
 
@@ -191,16 +191,16 @@ row_type | template | provider | uuid | context | requirements | title | descrip
 
 **已修复**（2026-05-30）：
 
-1. **CSV 解析器**已修复：[`core/utils/csv_parser.gd`](core/utils/csv_parser.gd) 和 [`core/csv_cloud_loader.gd`](core/csv_cloud_loader.gd) 的 `_parse_csv_line()` 现在会跟踪括号深度（`paren_depth`），函数内部的逗号不再被当作 CSV 列分隔符。
+1. **CSV 解析器**已修复：[`core/utils/csv_parser.gd`](core/utils/csv_parser.gd) 和 [`core/csv_cloud_loader.gd`](core/csv_cloud_loader.gd) 的 `_parse_csv_line()` 现在会跟踪括号深度（`paren_depth`），函数内部的 `;` 不再被当作 CSV 列分隔符。
 
-2. **interruptions 列**现在支持多个 `interrupt_event()` 调用，用逗号分隔即可：
+2. **interruptions 列**现在支持多个 `interrupt_event()` 调用，用 `|` 分隔（Layer 0）即可：
    ```
-   interrupt_event(cond1, op1), interrupt_event(cond2, op2)
+   interrupt_event(cond1; op1) | interrupt_event(cond2; op2)
    ```
 
 3. **` and ` 语法**（2026-05-30 新增）：`requirement_syntax` 支持用 ` and `（带空格）连接多个条件，自动组合为 AND 逻辑：
    ```
-   interrupt_event(cond1 and cond2, operator_syntax)
+   interrupt_event(cond1 and cond2; operator_syntax)
    ```
    解析器内部将 ` and ` 分割的每个条件独立解析，合并为 `ComplexRequirements`。详见 [`parser/dsl_parser.gd`](parser/dsl_parser.gd):383。
 
@@ -232,16 +232,16 @@ row_type | template | provider | uuid | context | requirements | title | descrip
 
 ### 实现方案
 
-多个 `interrupt_event()` 用逗号分隔，按优先级从高到低排列。`check_interruption` 是 **first-match-wins**，第一个条件通过就执行对应操作并结束，后面的不检查。
+多个 `interrupt_event()` 用 `|` 分隔（Layer 0），按优先级从高到低排列。`check_interruption` 是 **first-match-wins**，第一个条件通过就执行对应操作并结束，后面的不检查。
 
 ```csv
-interrupt_event(<高优先级条件>, <操作>), interrupt_event(<低优先级条件>, <操作>)
+interrupt_event(<高优先级条件>; <操作>) | interrupt_event(<低优先级条件>; <操作>)
 ```
 
 ### 实战案例：李白唱和两步序列
 
 ```csv
-interrupt_event(flag_int_eq(name=flag_libai_changhe_request,val=1),push_event(event_key=libai_force_changhe)), interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20) and flag_int_eq(name=flag_libai_changhe_request,val=0),random(val=99,success=push_event(event_key=request_libai_changhe)))
+interrupt_event(flag_int_eq(name=flag_libai_changhe_request;val=1)|push_event(event_key=libai_force_changhe))|interrupt_event(flag_int_gt(name=flag_relation_with_libai;val=20) and flag_int_eq(name=flag_libai_changhe_request;val=0)|random(val=99;success=push_event(event_key=request_libai_changhe)))
 ```
 
 | Step | 优先级 | 条件 | 触发时 flag | 操作 |
@@ -264,9 +264,9 @@ interrupt_event(flag_int_eq(name=flag_libai_changhe_request,val=1),push_event(ev
 不需要额外 bool 标志来跟踪"是否已触发"。**flag 的值本身就是状态机** 🤓☝️。减少一个 flag 就减少一个可能泄露/忘记重置的状态。
 
 对应的 DSL 条件：
-- `flag_int_eq(name=xxx, val=0)` — flag 不存在或为 0（空闲状态）
-- `flag_int_gt(name=xxx, val=0)` — flag 存在且 > 0（活跃状态）
-- `flag_int_eq(name=xxx, val=1)` — flag 精确等于 1（临界状态）
+- `flag_int_eq(name=xxx; val=0)` — flag 不存在或为 0（空闲状态）
+- `flag_int_gt(name=xxx; val=0)` — flag 存在且 > 0（活跃状态）
+- `flag_int_eq(name=xxx; val=1)` — flag 精确等于 1（临界状态）
 
 **2. `flag_int_eq(val=0)` 不会"永远不可能实现"**
 
@@ -323,7 +323,7 @@ var all_options = data.init(context)
 # 💀 错误：flag_int_set(name=flag_libai_changhe_request.val=0)
 #                           ^ 这里用了句点，解析器认为参数名是 "flag_libai_changhe_request.val"
 
-# ✅ 正确：flag_int_set(name=flag_libai_changhe_request, val=0)
+# ✅ 正确：flag_int_set(name=flag_libai_changhe_request; val=0)
 ```
 
 所有 DSL 参数分隔符必须是英文逗号 `,`。句点 `.` 不会被识别为分隔符，整个字符串会被当成一个参数名。
