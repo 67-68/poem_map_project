@@ -1,13 +1,13 @@
 extends Camera2D
 
 @export_group("大唐时空视界控制")
-@export var min_zoom: float = 0.3   # 大地图极远
+@export var min_zoom: float = 0.1   # 大地图极远
 @export var max_zoom: float = 2.0   # 城市街道极近
 @export var zoom_speed: float = 0.2 # 缩放步长
 
 # 🤓☝️ 核心架构：设定一个极其明确的跨维度阈值！
 # 当缩放大于这个值时，视为进入城市；小于等于这个值，退回大地图
-@export var city_threshold: float = 1.2 
+@export var city_threshold: float = 0.5
 
 var _dragging: bool = false
 var _last_mouse_pos: Vector2 = Vector2.ZERO
@@ -20,6 +20,7 @@ func _ready() -> void:
     print("🎥 [DebugCamera] 已上线. 滚轮缩放，右键/中键拖拽，Q键复位。")
     enabled = true
     _target_zoom = zoom.x
+    _apply_zoom(0.7)
 
 func _unhandled_input(event: InputEvent) -> void:
     # 1. 缩放控制 (滚轮)

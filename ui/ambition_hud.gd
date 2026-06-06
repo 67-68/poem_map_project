@@ -8,6 +8,10 @@ var ambition
 @onready var ambition_label: Label = $Mar/HBox/VBox/HBox/StageName
 @onready var deadline_label: Label = $Mar/HBox/VBox/DeadlineResult
 @onready var dynamic_state_label: Label = $Mar/HBox/VBox/DynamicStateLabel
+@onready var progress_bar: ProgressBar = $Mar/HBox/VBox/ProgressContainer/ProgressBar
+@onready var progress_label: Label = $Mar/HBox/VBox/ProgressContainer/ProgressLabel
+
+var _tracked_prop: Property  # 缓存的属性资源引用，避免每次查 Database
 
 func _ready() -> void:
 	Logging.info("AmbitionHUD: Starting initialization")
@@ -60,7 +64,49 @@ func _load_static():
 	var full_text = ambition.description
 	Logging.info("AmbitionHUD: Setting vague text: %s" % full_text)
 	vague_label.text = full_text
+
+	# 解析追踪的属性资源，并刷新进度显示
+	_resolve_tracked_property()
+	_update_progress()
 	Logging.info("AmbitionHUD: Static content loading complete")
+
+func _resolve_tracked_property() -> void:
+	"""根据 ambition.tracked_property 从 Database 中取出对应的 Property 资源"""
+	if not ambition or ambition.tracked_property.is_empty():
+		_tracked_prop = null
+		Logging.warn("AmbitionHUD: No tracked property configured for ambition")
+		return
+	
+	_tracked_prop = Database.properties.get(ambition.tracked_property)
+	if not _tracked_prop:
+		Logging.err("AmbitionHUD: tracked property '%s' not found in Database" % ambition.tracked_property)
+	else:
+		Logging.info("AmbitionHUD: Resolved tracked property '%s' (soft_max=%d, val=%d)" % [ambition.tracked_property, _tracked_prop.soft_max, _tracked_prop.val])
+
+func _update_progress() -> void:
+	"""更新进度显示：soft_max >= 0 显示 ProgressBar，否则显示纯数字 Label"""
+	if not _tracked_prop:
+		progress_bar.hide()
+		progress_label.hide()
+		Logging.warn("AmbitionHUD: No tracked property to display progress")
+		return
+	
+	var val = _tracked_prop.val
+	var soft_max = _tracked_prop.soft_max
+	
+	if soft_max >= 0:
+		# 有软上限 → ProgressBar
+		progress_bar.show()
+		progress_label.hide()
+		progress_bar.max_value = soft_max
+		progress_bar.value = val
+		Logging.info("AmbitionHUD: ProgressBar updated: %d/%d" % [val, soft_max])
+	else:
+		# soft_max == -1，无上限 → 只显示数值
+		progress_bar.hide()
+		progress_label.show()
+		progress_label.text = str(val)
+		Logging.info("AmbitionHUD: Progress number updated: %d" % val)
 
 func _on_model_stat_changed(_prop_name):
 	Logging.info("AmbitionHUD: Stat changed signal received, prop: %s" % _prop_name)
@@ -89,6 +135,10 @@ func _on_model_stat_changed(_prop_name):
 			Logging.warn("AmbitionHUD: No perception found for new stage")
 	else:
 		Logging.info("AmbitionHUD: Stage requirements not yet met")
+
+	# 如果变更的属性是追踪的属性，更新进度显示
+	if not ambition.tracked_property.is_empty() and _prop_name == ambition.tracked_property:
+		_update_progress()
 
 func _find_requirement_by_stage_id(stage_id: String) -> BaseRequirements:
 	Logging.info("AmbitionHUD: Searching for requirement with stage_id: %s" % stage_id)

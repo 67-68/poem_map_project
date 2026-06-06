@@ -15,12 +15,18 @@ const MAIN_ACTION_PREFIXES: Dictionary = {
 ## 存储匹配上的 SceneAction 引用: prefix → SceneAction
 var _action_map: Dictionary = {}
 
+## 存储各按钮当前的 Tween 引用，用于清除闪光
+var _flash_tweens: Dictionary = {}
+
 
 func _ready() -> void:
 	# 1. 监听 SceneActionScroll 输出的已选中行动
 	EventBus.selected_actions_change.connect(_on_selected_actions_changed)
 
-	# 2. 连接所有大地图按钮的 pressed 信号 + 初始全部 disabled
+	# 2. 监听锁定行动信号（触发闪光效果）
+	EventBus.locked_actions_selected.connect(_on_locked_actions_selected)
+
+	# 3. 连接所有大地图按钮的 pressed 信号 + 初始全部 disabled
 	for prefix in MAIN_ACTION_PREFIXES:
 		var btn_path: String = MAIN_ACTION_PREFIXES[prefix]
 		var btn: Button = get_node(btn_path)
@@ -32,9 +38,62 @@ func _ready() -> void:
 		btn.pressed.connect(_on_map_action_button_pressed.bind(prefix))
 
 
+## 清除所有按钮的闪光效果（下次正常刷新时调用）
+func _clear_all_flash_effects() -> void:
+	for prefix in MAIN_ACTION_PREFIXES:
+		var tween = _flash_tweens.get(prefix)
+		if tween:
+			tween.kill()
+		_flash_tweens.erase(prefix)
+		var btn = _get_btn(prefix)
+		if btn:
+			btn.modulate = Color.WHITE
+
+
+func _get_btn(prefix: String) -> Button:
+	var btn_path: String = MAIN_ACTION_PREFIXES.get(prefix, "")
+	if btn_path.is_empty():
+		return null
+	return get_node(btn_path) as Button
+
+
+func _flash_button(prefix: String) -> void:
+	# 清除该按钮已有的闪光 tween
+	var old_tween = _flash_tweens.get(prefix)
+	if old_tween:
+		old_tween.kill()
+
+	var btn = _get_btn(prefix)
+	if not btn:
+		return
+
+	# 缓慢呼吸闪光：亮黄 ↔ 白，循环 4 次，每步 0.4s
+	var tween := create_tween().set_loops(4)
+	tween.tween_property(btn, "modulate", Color(2.0, 2.0, 0.6), 0.4)
+	tween.tween_property(btn, "modulate", Color.WHITE, 0.4)
+	_flash_tweens[prefix] = tween
+
+
+func _on_locked_actions_selected(actions: Array) -> void:
+	for action in actions:
+		if not action is SceneAction:
+			Logging.warn("[ActionMap] locked_actions_selected 中包含非 SceneAction 对象")
+			continue
+
+		var tag: String = action.main_tag
+		for prefix in MAIN_ACTION_PREFIXES:
+			if tag.begins_with(prefix):
+				_flash_button(prefix)
+				Logging.info("[ActionMap] 锁定行动闪光: %s (%s)" % [action.name, tag])
+				break
+
+
 func _on_selected_actions_changed(selected_actions: Array) -> void:
 	# 清空上一轮的状态
 	_action_map.clear()
+
+	# 消除上一轮的锁定闪光效果
+	_clear_all_flash_effects()
 
 	# 将所有按钮重置为禁用
 	for prefix in MAIN_ACTION_PREFIXES:

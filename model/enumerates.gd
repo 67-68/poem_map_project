@@ -62,7 +62,8 @@ enum PROPS {
     BURNOUT, # 长期的精神疲惫，精神疾病
     DRUNK, # 双刃剑：降低理性，但可能提供某些意象的获取折扣
     SICK, # 疲劳，到达阈值直接强制睡觉。把那个该死的 STRESS 删了！
-    INSPIRATION  # 灵感（这玩意其实更像一种代币或 Buffer，用来兑换意象）
+    INSPIRATION,  # 灵感（这玩意其实更像一种代币或 Buffer，用来兑换意象）
+    CAREER_PROGRESS  # 职业进展（仕途/声望/生涯阶段进度，0 = 起步）
 }
 
 # 2. 核心情绪层 (The Soul - 意象生成的真正温床，建议采用双向坐标系)

@@ -3,15 +3,7 @@ class_name PropertyRequirement extends BaseRequirements
 # 在选项中使用，用来判断某个player state的property是否达标
 
 # 单个property requirement
-@export_enum(
-    'literary_fame',
-    'official_prestige',
-    'talent',
-    'money',
-		'health',
-		'emotion',
-) var property := ''
-
+@export var property := ''
 @export var value: int
 @export var operator: REQ_OPERATOR.COMPARE
 @export var failed_hint: String

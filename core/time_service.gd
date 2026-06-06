@@ -117,7 +117,6 @@ func _ready() -> void:
 	GameState.year = GameState.start_year
 	_last_total_days = int(GameState.year * DAYS_PER_YEAR)
 	Engine.time_scale = 1
-	pause()
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return

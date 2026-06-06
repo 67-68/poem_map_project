@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="HistoryEvent" format=3 uid="uid://d0fl2y2w84h06"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_wsgjf"]
+[ext_resource type="Script" uid="uid://cb7y7amwmeuo4" path="res://core/model/history_event.gd" id="2_gu7hk"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_sw8lf"]
+[ext_resource type="Script" uid="uid://bhm8bigwrwgjm" path="res://core/operators/play_transition_operator.gd" id="3_b7ob1"]
+[ext_resource type="Script" uid="uid://bryo5p0rhq86y" path="res://core/operators/lock_actions_operator.gd" id="4_b7ob1"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_eg5du"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_easdu"]
+
+[sub_resource type="Resource" id="Resource_3y1xc"]
+script = ExtResource("3_b7ob1")
+texts = Array[String](["「自谓颇挺出，立登要路津。」", "天宝四年，秋。你默念着自己的诗句，带着这股想要致君尧舜上的狂妄，一头撞进了这座权力的迷宫。", "但长安的盛世太过喧嚣...", "根本没人听得见，一个异乡人的野心。"])
+metadata/_custom_type_script = "uid://bhm8bigwrwgjm"
+
+[sub_resource type="Resource" id="Resource_eg5du"]
+script = ExtResource("4_b7ob1")
+action_types = Array[int]([0])
+metadata/_custom_type_script = "uid://bryo5p0rhq86y"
+
+[sub_resource type="Resource" id="Resource_osg28"]
+script = ExtResource("4_eg5du")
+operators = Array[ExtResource("2_sw8lf")]([SubResource("Resource_3y1xc"), SubResource("Resource_eg5du")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_frvph"]
+script = ExtResource("5_easdu")
+choice_result = SubResource("Resource_osg28")
+description = "踏入长安，谋求出身"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_gu7hk")
+options = Array[ExtResource("1_wsgjf")]([SubResource("Resource_frvph")])
+uuid = "event_intro_745"
+description = "你站在长安的明德门外，抬头望着这座被盛世狂热笼罩的庞大都城。你的行囊里没有多少盘缠，只有一卷你自认足以惊动天下公卿的诗稿。"
+metadata/_custom_type_script = "uid://cb7y7amwmeuo4"

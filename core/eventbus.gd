@@ -34,6 +34,9 @@ signal request_advance_time(days: int)
 
 signal focus_city_map(enable: bool)
 signal selected_actions_change(actions: Array)
+## 锁定行动被选中时广播，携带被锁定的 SceneAction 数组
+## ActionMap 监听此信号对按钮施加闪光效果
+signal locked_actions_selected(actions: Array)
 signal avaialble_decision_change(decision)
 
 signal show_tombstone_screen(death_reason: String)

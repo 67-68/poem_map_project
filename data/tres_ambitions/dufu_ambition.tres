@@ -25,10 +25,9 @@ metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_6qswf"]
 script = ExtResource("8_cwpco")
-property = "official_prestige"
-value = 14
+property = "career_progress"
+value = 69
 operator = 1
-failed_hint = "官场声望不足"
 metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 
 [sub_resource type="Resource" id="Resource_r8ywo"]
@@ -39,10 +38,9 @@ metadata/_custom_type_script = "uid://cg2ww0cyd8b07"
 
 [sub_resource type="Resource" id="Resource_aov7t"]
 script = ExtResource("8_cwpco")
-property = "official_prestige"
-value = 49
+property = "career_progress"
+value = 99
 operator = 1
-failed_hint = "官场声望不足"
 metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 
 [sub_resource type="Resource" id="Resource_p6pgc"]

@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="ResourceRegistry" format=3]
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://cg4noqecg1kpd"]
 
-[ext_resource type="Script" path="res://core/model/resources.gd" id="1_slend"]
+[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_slend"]
 
 [resource]
 script = ExtResource("1_slend")
 resources = {
 "main_baiye_1": "res://data/tres_traits/main_baiye_1.tres",
-"reserve_baiye": "res://data/tres_traits/reserve_baiye.tres",
 "main_baiye_2": "res://data/tres_traits/main_baiye_2.tres",
 "main_baiye_3": "res://data/tres_traits/main_baiye_3.tres",
 "main_baiye_4": "res://data/tres_traits/main_baiye_4.tres",
@@ -80,5 +79,6 @@ resources = {
 "relation_zhengqian_core": "res://data/tres_traits/relation_zhengqian_core.tres",
 "relation_zhengqian_enemy": "res://data/tres_traits/relation_zhengqian_enemy.tres",
 "relation_zhengqian_rumor": "res://data/tres_traits/relation_zhengqian_rumor.tres",
+"reserve_baiye": "res://data/tres_traits/reserve_baiye.tres",
 "test_coder_debug": "res://data/tres_traits/test_coder_debug.tres"
 }
