@@ -4,10 +4,14 @@ extends Node
 var filters: Array[Callable] = [RequirementFilter.filter,ActionTagFilter.filter]
 
 ## 外部通过此信号注入一个事件 key，下一次抽取强制命中该事件（单次消费）
-signal guarantee_next(event_key: String)
+## 新增 main_tag 参数：非空时仅在对应的 main_tag 抽奖中生效；空字符串为通用保证。
+signal guarantee_next(event_key: String, main_tag: String)
 
 ## 存储被保证的事件 key，抽取后清空
 var _guaranteed_event_key: String = ""
+
+## 存储被保证事件的 main_tag，用于匹配当前抽奖的 main_tag
+var _guaranteed_main_tag: String = ""
 
 func _ready():
     Logging.info("[EventManager] EventManager initialized")
@@ -15,9 +19,10 @@ func _ready():
     Logging.info("[EventManager] Connected to TimeService.on_xun_tick")
     guarantee_next.connect(_on_guarantee_next)
 
-func _on_guarantee_next(event_key: String) -> void:
+func _on_guarantee_next(event_key: String, main_tag: String) -> void:
     _guaranteed_event_key = event_key
-    Logging.info("[EventManager] Guaranteed next event: " + event_key)
+    _guaranteed_main_tag = main_tag
+    Logging.info("[EventManager] Guaranteed next event: " + event_key + " (main_tag: '" + main_tag + "')")
 
 func _create_ticket(event: BaseEvent) -> EventTicket:
     var ticket = EventTicket.new()
@@ -117,7 +122,7 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
     Logging.info("[EventManager] Event pool populated with " + str(current_event_pool.size()) + " eligible events")
     
     # 开始命运抽奖
-    var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid)
+    var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid, context)
     if return_only:
         return ev_name if ev_name else ""
     if ev_name:
@@ -127,26 +132,50 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
         Logging.info("[EventManager] 这次抽取事件，岁月静好")
     
 
-func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: String = ""):
+func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", context: Dictionary = {}):
     Logging.info("[EventManager] Starting event roll")
-    if current_event_pool.is_empty():
-        Logging.info("[EventManager] Event pool is empty, returning null")
-        # 如果有 guarantee 但池空了，消费掉并警告
-        if _guaranteed_event_key:
-            Logging.warn("[EventManager] Guaranteed event '" + _guaranteed_event_key + "' cannot be fulfilled, pool is empty")
-            _guaranteed_event_key = ""
-        return null
 
     # ── 优先检查 guarantee_next 保证机制 ──
+    # 必须在 pool 空检查之前，因为无 main_tag 的 guarantee 可以旁路 pool
     if _guaranteed_event_key:
-        var guaranteed = _guaranteed_event_key
-        _guaranteed_event_key = ""  # 单次消费，立即清空
-        for ticket in current_event_pool:
-            if ticket.event_uuid == guaranteed:
-                Logging.info("[EventManager] 🎯 Guaranteed event selected: " + guaranteed)
-                return guaranteed
-        # 保证的事件已被 filter 筛掉，回退正常抽取
-        Logging.warn("[EventManager] Guaranteed event '" + guaranteed + "' not in pool after filters, falling back to normal roll")
+        var g_key = _guaranteed_event_key
+        var g_tag = _guaranteed_main_tag
+        var current_main_tag = context.get('main_tag', '')
+
+        # 分支 A: 无 main_tag → 通用保证，直接 find_triggerable_item 旁路所有 filter
+        if g_tag.is_empty():
+            _guaranteed_event_key = ""
+            _guaranteed_main_tag = ""
+            var item = Database.find_triggerable_item(g_key)
+            # 🔮 边界情况：如果未来需要区分事件类型（random_events vs end_random_events 等），在此处扩展
+            if item is BaseEvent:
+                Logging.info("[EventManager] 🎯 Guaranteed (no tag) event: " + g_key)
+                return g_key
+            else:
+                Logging.warn("[EventManager] Guaranteed (no tag) key '" + g_key + "' not found or not a BaseEvent, falling back to normal roll")
+            # fall through to normal roll
+
+        # 分支 B: 带 main_tag → 检查是否匹配当前抽奖的 main_tag
+        elif g_tag == current_main_tag:
+            _guaranteed_event_key = ""
+            _guaranteed_main_tag = ""
+            # 在 pool 中搜索被保证的事件
+            for ticket in current_event_pool:
+                if ticket.event_uuid == g_key:
+                    Logging.info("[EventManager] 🎯 Guaranteed event (" + g_tag + "): " + g_key)
+                    return g_key
+            # 保证的事件已被 filter 筛掉，或不在当前池中，回退
+            Logging.warn("[EventManager] Guaranteed event '" + g_key + "' not in pool after filters, falling back to normal roll")
+            # fall through to normal roll
+
+        # 分支 C: main_tag 不匹配 → 保留 guarantee 供后续抽奖使用
+        else:
+            Logging.warn("[EventManager] Guarantee main_tag '" + g_tag + "' != current main_tag '" + current_main_tag + "', preserving guarantee")
+
+    # ── 正常轮盘抽取 ──
+    if current_event_pool.is_empty():
+        Logging.info("[EventManager] Event pool is empty, returning null")
+        return null
 
     var total_weight := 0.0
     for ticket in current_event_pool:

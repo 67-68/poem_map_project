@@ -1,4 +1,13 @@
 # [unreleased]
+## Changed
+- `GuaranteeNextOperator` 新增 `main_tag` 导出字段 — 可选限定保证事件仅在指定 main_tag 的抽奖中生效
+- `EventManager.guarantee_next` 信号签名扩展为 `(event_key: String, main_tag: String)`
+- `EventManager.roll_events()` 实现 guarantee 三路分支逻辑：
+  - **分支 A**（无 main_tag）：通用保证，通过 `Database.find_triggerable_item` 旁路所有 filter 强制命中
+  - **分支 B**（main_tag 匹配）：正常消耗 guarantee，从当前事件池中搜索
+  - **分支 C**（main_tag 不匹配）：保留 guarantee 供后续抽奖使用，不消耗
+- `test_guarantee_next_operator.gd` 新增 11 个测试覆盖三路分支 + 边界条件，28 个断言全部通过
+
 ## Added
 - Cinematic Overlay System — 系统级过场容器，黑屏打字机文字序列，用于年份过渡、角色死亡墓志铭等叙事插叙
   - `CinematicOverlay` (CanvasLayer, layer=128) — 独立于 UI 层的全屏覆盖，打字机效果 + 淡入淡出
