@@ -197,10 +197,8 @@ static func to_prop_str(item) -> String:
 
 `PlayerState.append_stat()` 方法包含乘数逻辑 + hard_max clamp：
 
-1. 检查 Ambition 的 buffer_to_prop
-2. 检查 Ambition 的 buffer_to_region
-3. 检查各个 Trait 的 buffer_to_prop 和 buffer_to_region
-4. 应用所有乘数后执行加法操作
+1. 检查各个 Trait 的 buffer_to_prop 和 buffer_to_region
+2. 应用所有乘数后执行加法操作
 5. **硬上限 clamp**：如果属性 `hard_max >= 0`，自动 `clamp(val, 0, hard_max)`
 
 ```gdscript
@@ -252,7 +250,7 @@ func get_staged_perception_text() -> String:
 - 不影响现有代码逻辑
 
 ### 4. 灵活的操作符
-- 支持多种乘数系统（Ambition、Trait、Region）
+- 支持多种乘数系统（Trait 的 buffer_to_prop / buffer_to_region）
 - 实现复杂的属性变化逻辑
 
 ## 注意事项

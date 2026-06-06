@@ -73,8 +73,7 @@ func _load_static():
 	Logging.info("AmbitionHUD: Setting time text: %s" % deadline_text)
 	time_label.text = deadline_text
 
-	var buff_description = ambition.buff_description
-	var full_text = ambition.description + "\n" + buff_description
+	var full_text = ambition.description
 	Logging.info("AmbitionHUD: Setting vague text: %s" % full_text)
 	vague_label.text = full_text
 	Logging.info("AmbitionHUD: Static content loading complete")

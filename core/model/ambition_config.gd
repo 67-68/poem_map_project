@@ -16,19 +16,10 @@ class_name AmbitionData extends GameEntity
 @export var staged_perceptions: Array[StagedPerceptionData]
 # 类似 {stage1: aaa, stage2: bbb, stage3:ccc}
 
-# buff
-@export var buffer_to_prop: DictMultiplyOperator
-# buffer to property; 会在属性增加的时候被查找来计算增益
-@export var buffer_to_region: DictMultiplyOperator
-# 在某个地区干某件事的时候属性增加
-# {"area": {"type_of_point": 1.5} } 在某个area，获取type_of_point类型点数，增强0.5倍
-@export var buff_description: String = ""
-# 未来可能需要做多个阶段的buff，不然玩家会在一个地方一直逗留
 @export var ambition_traits: Array[String] = [] # 这里存储字符串，实际上从总trait数据库查找内容
 @export var ambition_trais_comes_from := ENUMS.TRAITS
 
 # deadline
-@export var start_year: float = 720.0
 @export var deadline: float = 907.0
 @export var deadline_fail_result: Array[BaseOperator] = []
 @export var deadline_warning: String = ''

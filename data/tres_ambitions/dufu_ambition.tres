@@ -1,24 +1,11 @@
 [gd_resource type="Resource" script_class="AmbitionData" format=3 uid="uid://64cs8vcd5ime"]
 
-[ext_resource type="Script" uid="uid://cwotf742e2n0f" path="res://core/model/multiply_operator.gd" id="1_ko76q"]
-[ext_resource type="Script" uid="uid://potskta4ums3" path="res://core/model/dict_multiply_operator.gd" id="2_x6q7h"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_0es00"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_8hisv"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/property_operator.gd" id="4_8hisv"]
 [ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="5_s8pw1"]
 [ext_resource type="Script" uid="uid://bte53fleub1ki" path="res://model/staged_perception_data.gd" id="6_ivce5"]
 [ext_resource type="Script" uid="uid://cg2ww0cyd8b07" path="res://model/staged_requirement_data.gd" id="7_8wcjv"]
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="8_cwpco"]
-
-[sub_resource type="Resource" id="Resource_0xj0a"]
-script = ExtResource("1_ko76q")
-key = "official_prestige"
-value = 1.5
-metadata/_custom_type_script = "uid://cwotf742e2n0f"
-
-[sub_resource type="Resource" id="Resource_nawls"]
-script = ExtResource("2_x6q7h")
-operators = Array[ExtResource("1_ko76q")]([SubResource("Resource_0xj0a")])
-metadata/_custom_type_script = "uid://potskta4ums3"
 
 [sub_resource type="Resource" id="Resource_gedux"]
 script = ExtResource("4_8hisv")
@@ -81,10 +68,7 @@ script = ExtResource("5_s8pw1")
 leveled_stages = Array[String](["stage0", "stage1", "stage2"])
 staged_requirements = Array[ExtResource("7_8wcjv")]([SubResource("Resource_r8ywo"), SubResource("Resource_p6pgc")])
 staged_perceptions = Array[ExtResource("6_ivce5")]([SubResource("Resource_uhya7"), SubResource("Resource_62cbg"), SubResource("Resource_fb1kn")])
-buffer_to_prop = SubResource("Resource_nawls")
-buff_description = "心系庙堂：获取官场声望时有极强动力，额外获得 50% 收益。"
-ambition_traits = Array[String]([""])
-start_year = 742.0
+ambition_traits = Array[String]([])
 deadline = 745.0
 deadline_fail_result = Array[ExtResource("3_0es00")]([SubResource("Resource_gedux"), SubResource("Resource_0uysx")])
 deadline_warning = "天宝六载秋科举，若叩不开这扇门，你的一身才华，终将沦为盛世的笑柄。"

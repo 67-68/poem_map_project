@@ -91,13 +91,6 @@ func append_stat(stat_name, data):
 
 	var amount_to_change = data
 
-	# 使用新的调用方式，先检查操作符是否存在
-	if ambition and ambition.buffer_to_prop and ambition.buffer_to_prop.has_operator(stat_name):
-		amount_to_change = ambition.buffer_to_prop.match_and_multiply(stat_name, amount_to_change)
-	
-	if ambition and ambition.buffer_to_region and ambition.buffer_to_region.has_operator(current_location):
-		amount_to_change = ambition.buffer_to_region.match_and_multiply(current_location, amount_to_change)
-	
 	for t_name in traits:
 		var t = Database.traits.get(t_name)
 		if not t:
