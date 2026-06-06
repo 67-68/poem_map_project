@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="Property" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="Property" format=3 uid="uid://clllna214w7i6"]
 
 [ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_xeosg"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="2_6wq60"]
 
 [resource]
 script = ExtResource("1_xeosg")
+hard_max = 99
 uuid = "career_progress"
 name = "career_progress"
-hard_max = -1
-soft_max = -1
-decay_threshold = -1
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"

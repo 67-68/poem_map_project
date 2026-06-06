@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://b163u42sk43on"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_qstco"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_fc71i"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_mkuuv"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_bmk4i"]
+[ext_resource type="Script" uid="uid://dn32iqeg6626h" path="res://core/model/ambition_operator.gd" id="4_bmk4i"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_o00fq"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="5_o00fq"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_vvcmu"]
+
+[sub_resource type="Resource" id="Resource_5mfuc"]
+script = ExtResource("3_bmk4i")
+_property = 10
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_o00fq"]
+script = ExtResource("3_bmk4i")
+_property = 3
+value = -15
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_vvcmu"]
+script = ExtResource("4_bmk4i")
+ambition_name = "dufu_ambition"
+metadata/_custom_type_script = "uid://dn32iqeg6626h"
+
+[sub_resource type="Resource" id="Resource_4ucww"]
+script = ExtResource("5_o00fq")
+metadata/_custom_type_script = "uid://byn0qqw1xm33f"
+
+[sub_resource type="Resource" id="Resource_bh1ae"]
+script = ExtResource("4_o00fq")
+operators = Array[ExtResource("2_mkuuv")]([SubResource("Resource_5mfuc"), SubResource("Resource_o00fq"), SubResource("Resource_vvcmu"), SubResource("Resource_4ucww")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_y3v7k"]
+script = ExtResource("5_vvcmu")
+choice_result = SubResource("Resource_bh1ae")
+description = "磨墨，在卷首郑重写下你的名字"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_fc71i")
+options = Array[ExtResource("1_qstco")]([SubResource("Resource_y3v7k")])
+uuid = "event_ambition_start"
+name = "中年寻志"
+description = "长安的物价贵得令人咋舌。你在城南偏僻的客舍里租下了一张散发着霉味的床榻，点燃了身上最后半截劣质的残烛。案几上，是你准备投递给当朝右相李林甫的诗文。夜风透窗，烛火摇晃得让人心慌。窗外的萤火虫闪烁，好像暗示着你，和你的才华的命运"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

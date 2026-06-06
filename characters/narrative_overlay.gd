@@ -209,6 +209,7 @@ func _resolve_event_for_stack(data: Variant) -> BaseEvent:
 	if data is String:
 		var ev = Database.history_events.get(data)
 		if not ev: ev = Database.normal_poem_events.get(data)
+		if not ev: ev = Database.decided_events.get(data)
 		if not ev: ev = Database.find_triggerable_item(data)
 		if not ev:
 			breakpoint

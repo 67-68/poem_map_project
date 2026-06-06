@@ -1,7 +1,7 @@
 extends Node
 
-var start_year := 720.0
-var end_year := 907.0
+var start_year := 745.0
+var end_year := 755.9
 var time_span := end_year - start_year
 
 var year: float

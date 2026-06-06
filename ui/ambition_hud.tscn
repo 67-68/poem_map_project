@@ -108,19 +108,17 @@ theme_override_font_sizes/font_size = 16
 text = "「状态」没有人认得你，你是彻底的无名之辈"
 autowrap_mode = 3
 
-[node name="ProgressContainer" type="HBoxContainer" parent="Mar/HBox/VBox"]
+[node name="ProgressContainer" type="HBoxContainer" parent="Mar/HBox/VBox" unique_id=2035710588]
 custom_minimum_size = Vector2(238, 0)
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="Mar/HBox/VBox/ProgressContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="Mar/HBox/VBox/ProgressContainer" unique_id=1708339698]
 custom_minimum_size = Vector2(238, 12)
 layout_mode = 2
 size_flags_horizontal = 3
 show_percentage = false
-theme_override_styles/background = null
-theme_override_styles/fill = null
 
-[node name="ProgressLabel" type="Label" parent="Mar/HBox/VBox/ProgressContainer"]
+[node name="ProgressLabel" type="Label" parent="Mar/HBox/VBox/ProgressContainer" unique_id=289782107]
 custom_minimum_size = Vector2(238, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.54509807, 0.14509805, 0, 1)

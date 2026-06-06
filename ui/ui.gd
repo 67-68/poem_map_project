@@ -7,6 +7,7 @@ func _ready():
 	queue = PopupQueue.new(_draw_chat,EventBus.bubble_complete)
 	EventBus.request_add_chat.connect(
 		func(item): queue.add_item(item))
+	TimeService.play()
 
 func _draw_chat(data):
 	if data is ChatBubble:
