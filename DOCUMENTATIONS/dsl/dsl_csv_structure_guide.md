@@ -22,8 +22,8 @@ CSV 文件的第一行必须包含以下字段（按顺序）：
 row_type | template | uuid | context | requirements | title | description | results | emotion_config
 ```
 
-> **注意**：CSV 本身用逗号分隔列，但 `context`、`requirements`、`results` 等字段内部的 DSL 语法**完全消除逗号**，使用层次化符号：`|`（Layer 0 表达式分隔）、`;`（Layer 1 参数分隔）、`/`（Layer 2 标签/数组元素分隔）。
-> 字段名中的 `|` 是视觉分隔符，实际 CSV 表头是：`row_type,template,uuid,context,requirements,title,description,results`
+> **注意**：CSV 本身用逗号分隔列。`context`、`requirements`、`results` 等字段内部的 DSL 语法**完全消除逗号**，使用 3 层层次化符号：`|`（Layer 0 — 两个 CSV 逗号之间的顶层分隔）、`;`（Layer 1 — 函数/块内部参数分隔）、`/`（Layer 2 — 数组元素分隔）。
+> Tag 内部的 `:` 是特殊情况（`domain:category:type:specific`），不属于 DSL 层分隔符系统。详见 [`dsl_syntax_reference.md`](dsl_syntax_reference.md) 的「层次化数据模型」章节。
 
 ### 字段总览
 
@@ -270,7 +270,7 @@ IN_EVENT + (2+, option)      → IN_EVENT   + 挂载到栈顶（更深层嵌套�
 ---
 ## 完整示例解析
 
-> **注意**：DSL 内部**完全消除逗号**，采用层次化符号：`|`（Layer 0 表达式分隔）、`;`（Layer 1 参数分隔）、`/`（Layer 2 标签/数组元素分隔）。
+> **注意**：DSL 内部**完全消除逗号**，采用 3 层层次化符号：`|`（Layer 0 — 两个 CSV 逗号之间的顶层表达式分隔）、`;`（Layer 1 — 函数参数分隔）、`/`（Layer 2 — 数组元素分隔）。Tag 内的 `:` 是特殊情况，不属于 DSL 层分隔符。详见 [`dsl_syntax_reference.md`](dsl_syntax_reference.md) 的「层次化数据模型」章节。
 
 ### 示例 1: 简单事件（新式表头）
 

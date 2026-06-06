@@ -18,13 +18,50 @@
 函数名(参数名=值; 参数名=值; ...)
 ```
 
-### 层次化符号映射
+### 层次化数据模型（3 层抽象）
 
-| 层次 | 符号 | 使用场景 | 示例 |
-|------|------|---------|------|
-| Layer 0 | `\|` | 表达式级分隔（括号外层） | `func1()\|func2()` |
-| Layer 1 | `;` | 函数参数分隔（括号内层） | `func(a=1; b=2)` |
-| Layer 2 | `/` | 数组/标签内元素分隔 | `trigger_tags=[tag1/tag2]` |
+DSL 的层次由**数据模型嵌套深度**定义：每深入一层，数据就多一层结构包裹。从 CSV 列值的内容开始算起：
+
+| 层 | 分隔符 | 数据模型深度 | 含义 | 示例 |
+|----|--------|-------------|------|------|
+| Layer 0 | `\|` | 两个 CSV 逗号之间的顶层 | 顶层并列的表达式或键值对 | `, prop_gt(...)\|trait_has(...),` |
+| Layer 1 | `;` | 在 `\|` 分隔的单个块内部，或函数内部 | 函数的命名参数，或同层结构化数据 | `func(a=1; b=2)` |
+| Layer 2 | `/` | 在函数参数值内部 | 数组/列表中的元素 | `func(a=1; b=[x/y/z])` |
+
+**举例说明层级关系**：
+
+```
+CSV 列值（两个逗号之间的内容）
+└─ Layer 0 (|):  prop_gt(name=money; val=50)|trait_has(name=official)
+                      │
+                      └─ Layer 1 (;):  name=money; val=50   ← 在 () 内部
+```
+
+```
+CSV 列值（两个逗号之间的内容）
+└─ Layer 0 (|):  trigger_tags=[tag1/tag2/tag3]|weight=15.5
+                      │
+                      └─ Layer 2 (/):  tag1/tag2/tag3   ← 在 [] 内部（跳过 Layer 1，直入数组）
+```
+
+```
+CSV 列值
+└─ Layer 0 (|):  func(key1=[a/b]; key2=val2)|other_func(x=y)
+                      │                            │
+                      └─ Layer 2 (/): a/b       ← 在 [] 内部
+                      └─ Layer 1 (;): key1=[a/b]; key2=val2  ← 在 () 内部
+```
+
+> **Tag 的 `:` 是特殊情况**：Tag 格式 `domain:category:type:specific`（如 `actor:status:temporary:drunk`）是独立的子语言，`:` 是 Tag 本体语法的一部分，不属于 DSL 层次分隔符系统。Tag 作为整体（或以 `/` 分割的 Tag 数组）被 DSL 承载。
+
+#### 容器操作符的递归嵌套（Layer 0 穿透）
+
+`random()` 等容器操作符的 `success`/`fail` 参数值本身是操作符表达式，解析器递归调用 `split_expressions()`。此时 `|` 在容器参数内部仍然表示 Layer 0 分隔：
+
+```
+random(val=80; success=prop_add(name=money; val=100)|flag_bool_set(name=flag_quest_done; val=true); fail=prop_sub(name=reputation; val=5))
+#                └─ 嵌套的 Layer 0 (|) ────────────────────────────────┘
+```
 
 - **函数名**：编码了操作类型 + 动作（如 `prop_gt` = 属性大于检查）
 - **参数名**：固定名称（如 `name`、`val`、`from`、`to`）
