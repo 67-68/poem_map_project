@@ -15,7 +15,7 @@ func _on_next_poet_button_pressed() -> void:
 			GameState.year).
 		point_year)
 	else:
-		EventBus.request_text_popup.emit('choose a poet')
+		EventBus.request_toast.emit('choose a poet', 0)
 
 func speed_up():
 	TimeService.speed_up()

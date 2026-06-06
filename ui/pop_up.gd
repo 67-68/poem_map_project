@@ -1,3 +1,4 @@
+# @deprecated 使用 SimpleToast (res://world/simple_toast.gd) + EventBus.request_toast 代替
 extends Control
 
 var tw: Tween

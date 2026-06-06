@@ -52,7 +52,26 @@ func get_provided_traits() -> Array:
 func operate():
     if operator == REQ_OPERATOR.CRUD.ADD:
         PlayerState.add_trait(trait_key)
+        _emit_float_text(trait_key)
     elif operator == REQ_OPERATOR.CRUD.REMOVE:
         PlayerState.remove_trait(trait_key)
     else:
         print('TraitOperator: unsupported operator %s for trait operations' % operator)
+
+func _emit_float_text(trait_name: String) -> void:
+    if trait_name.is_empty():
+        return
+    var trait_obj = Database.traits.get(trait_name)
+    if not trait_obj:
+        return
+    var text = trait_obj.description
+    if text.is_empty():
+        text = trait_obj.name
+    if text.is_empty():
+        return
+    
+    var world_pos = Vector2.ZERO
+    if PlayerState and PlayerState.has_method("get_global_position"):
+        world_pos = PlayerState.get_global_position()
+    
+    EventBus.request_float_text.emit(text, world_pos)

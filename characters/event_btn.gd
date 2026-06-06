@@ -51,13 +51,13 @@ func disable_btn():
 	self.modulate = Color.GRAY
 	disabled = true
 	var reason = option.disabled_reason if 'disabled_reason' in option else "选项已禁用"
-	EventBus.request_warning_toast.emit(reason)
+	EventBus.request_toast.emit(reason, 1)
 
 func double_check() -> bool:
 	if 'double_check' not in option or not option.double_check: return true
 	click_count += 1
 	if not click_count >= 2:
-		EventBus.request_warning_toast.emit(option.double_check_reason)
+		EventBus.request_toast.emit(option.double_check_reason, 1)
 		return false
-	else: return true 
+	else: return true
 	

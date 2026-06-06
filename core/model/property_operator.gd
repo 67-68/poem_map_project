@@ -29,7 +29,27 @@ func init(_context: Dictionary) -> Dictionary:
     return _context
 
 func operate():
-    PlayerState.append_stat(property,value)
+    PlayerState.append_stat(property, value)
+    
+    # ── 飘字反馈：属性变化后 emit 模糊文本 ──
+    _emit_float_text(value)
+
+func _emit_float_text(delta: int) -> void:
+    if delta == 0:
+        return
+    var prop = Database.properties.get(property)
+    if not prop:
+        return
+    var perception_text = prop.get_change_perception_text(delta)
+    if perception_text.is_empty():
+        return
+    
+    # 从 PlayerState 获取玩家世界坐标作为飘字位置
+    var world_pos = Vector2.ZERO
+    if PlayerState and PlayerState.has_method("get_global_position"):
+        world_pos = PlayerState.get_global_position()
+    
+    EventBus.request_float_text.emit(perception_text, world_pos)
 
 func get_referenced_flags() -> Array:
     return []

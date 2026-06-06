@@ -4,30 +4,53 @@ signal recycle_requested(text_instance)
 
 @onready var label: RichTextLabel = $Label
 
-# Called when the node enters the scene tree for the first time.
+# ── 预设配置常量 ─────────────────────────────────────
+const CONFIG_GAIN := {  # 属性增加（绿色）
+	"color": Color(0.6, 1.0, 0.6, 1.0),
+	"start_scale": Vector2(0.4, 0.4),
+	"end_scale": 0.7,
+	"rise_distance": 50.0,
+	"duration": 1.5,
+}
+const CONFIG_LOSS := {  # 属性减少（红色）
+	"color": Color(1.0, 0.4, 0.4, 1.0),
+	"start_scale": Vector2(0.4, 0.4),
+	"end_scale": 0.7,
+	"rise_distance": 50.0,
+	"duration": 1.5,
+}
+const CONFIG_ITEM := {  # 物品/意象获得（金色）
+	"color": Color(1.0, 0.84, 0.0, 1.0),
+	"start_scale": Vector2(0.3, 0.3),
+	"end_scale": 0.8,
+	"rise_distance": 70.0,
+	"duration": 2.0,
+}
+
 func _ready() -> void:
 	modulate.a = 0
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-func play(content, pos):
-	position = pos
-	scale = Vector2(0.4,0.4)
+func play(content: String, world_pos: Vector2, config: Dictionary = {}) -> void:
+	position = world_pos
+	scale = config.get("start_scale", CONFIG_GAIN.start_scale)
+	modulate = config.get("color", CONFIG_GAIN.color)
 	modulate.a = 1
 	show()
 
 	label.text = content
 
+	var rise_distance = config.get("rise_distance", CONFIG_GAIN.rise_distance)
+	var duration = config.get("duration", CONFIG_GAIN.duration)
+	var end_scale = config.get("end_scale", CONFIG_GAIN.end_scale)
+
 	var tw = create_tween()
 	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tw.tween_property(self, "position:y", position.y, 1.5).from(position.y + 50)
+	tw.tween_property(self, "position:y", position.y, duration).from(position.y + rise_distance)
 	tw.parallel()
 	tw.set_trans(Tween.TRANS_BACK)
-	tw.tween_property(self, "scale", Vector2(0.7,0.7), 0.4)
+	tw.tween_property(self, "scale", Vector2(end_scale, end_scale), 0.4)
 	tw.parallel()
-	tw.tween_property(self, "modulate:a", 0.0, 0.5).set_delay(1.0)
+	tw.tween_property(self, "modulate:a", 0.0, 0.5).set_delay(max(duration - 0.5, 0.0))
 	tw.tween_callback(on_finished)
 
 func on_finished():

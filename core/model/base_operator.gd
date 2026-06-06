@@ -13,10 +13,8 @@ func operate():
     Logging.warn('someone call the super method of stat operator, which is mean to be rewrite from child class')
 
 func show_hint(hint_: String = ''):
-    if not hint:
-        EventBus.request_warning_toast.emit(hint)
-    else:
-        EventBus.request_warning_toast.emit(hint_)
+    var msg = hint if not hint else hint_
+    EventBus.request_toast.emit(msg, 1)
 
 ## 契约方法：返回该Operator引用的flag ID数组
 ## 子类应该重写此方法以声明它依赖哪些flag

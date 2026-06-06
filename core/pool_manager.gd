@@ -2,15 +2,24 @@ class_name PoolManager extends Node
 
 var _pool: Array[FloatingText] = []
 
-var _container: Node2D # 所有容器的父节点；垃圾箱
+var _container: Node2D
 
 func _ready():
 	_container = Node2D.new()
 	_container.name = 'PoolContainer'
 	_container.z_index = 100
 	add_child(_container)
+	
+	# 监听飘字信号
+	EventBus.request_float_text.connect(_on_request_float_text)
 
-func spawn(content: String, glob_pos: Vector2):
+## EventBus 回调：收到飘字请求时从池中取出实例并播放
+func _on_request_float_text(content: String, world_pos: Vector2) -> void:
+	spawn(content, world_pos)
+
+## 兼容旧接口：直接用 content + world_pos 播放
+## 自动判断使用哪种预设配置
+func spawn(content: String, glob_pos: Vector2, config: Dictionary = {}):
 	var instance: FloatingText
 
 	if _pool.is_empty():
@@ -19,7 +28,7 @@ func spawn(content: String, glob_pos: Vector2):
 		instance = _pool.pop_back()
 	
 	instance.move_to_front()
-	instance.play(content,glob_pos)
+	instance.play(content, glob_pos, config)
 
 func create_new_instance():
 	var inst = GameConfig.FLOAT_TEXT_SCENE.instantiate()

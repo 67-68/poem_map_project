@@ -5,8 +5,23 @@ signal user_click_map(data: Variant)
 signal place_holder()
 signal user_clicked(data: Variant)
 signal request_start_black(enable: bool)
+
+# ── 飘字/通知系统信号 ───────────────────────────────────
+# [新] 世界坐标飘字 (FloatingText)
+# content: 模糊文本 (支持 BBCode), 如 "[color=#FFD700]塞外风情[/color]"
+# world_pos: 世界坐标 Vector2
+signal request_float_text(content: String, world_pos: Vector2)
+# [新] UI Toast (合并 SimpleToast + pop_up)
+# content: 文本内容
+# type: 0=普通提示, 1=警告
+signal request_toast(content: String, type: int)
+# ────────────────────────────────────────────────────────
+
+# @deprecated 改用 request_toast(content, 0)
 signal request_text_popup(text: String)
+# @deprecated 改用 request_toast(content, 1)
 signal request_warning_toast(data: String)
+
 signal request_rain(enable: bool)
 signal request_daylight(enable: bool)
 
