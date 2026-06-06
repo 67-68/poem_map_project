@@ -1,5 +1,10 @@
 # [unreleased]
 ## Added
+- Cinematic Overlay System — 系统级过场容器，黑屏打字机文字序列，用于年份过渡、角色死亡墓志铭等叙事插叙
+  - `CinematicOverlay` (CanvasLayer, layer=128) — 独立于 UI 层的全屏覆盖，打字机效果 + 淡入淡出
+  - `cinematic` 作为事件栈第 3 种条目类型 — 与 BaseEvent、Picker 同级，复用 LIFO 栈生命周期
+  - `PlayTransitionOperator` — 遵守 BaseOperator 契约，emit `push_cinematic` 推入栈
+  - DSL 语法: `play_transition(texts=["天宝四年，秋。", "你踏入长安。"])`
 - `mid_of_wenhuaquan_party` 事件新增「欣赏艺术」选项，使用 `ScanAndPushOperator` 扫描 `action:entertain:elegant` / `action:entertain:martial` 标签事件池，动态推送匹配的随机事件
 
 ## Changed

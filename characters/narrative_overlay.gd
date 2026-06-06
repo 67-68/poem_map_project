@@ -46,6 +46,7 @@ func _ready() -> void:
 	EventBus.pop_to_event.connect(_on_pop_to_event)
 	EventBus.push_picker.connect(_on_push_picker)
 	EventBus.end_picking.connect(_on_end_picking)
+	EventBus.push_cinematic.connect(_on_push_cinematic)
 
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -186,6 +187,21 @@ func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null):
 		_process_stack()
 
 
+# --- Cinematic 栈条目 -----------------------------------
+
+func _on_push_cinematic(texts: Array[String]):
+	var entry := {
+		"type": "cinematic",
+		"texts": texts.duplicate(),
+		"processed": false,
+	}
+	_event_stack.push_front(entry)
+	Logging.info("Cinematic 已推入栈顶，%d 段文字" % texts.size())
+
+	if not _is_active:
+		_process_stack()
+
+
 # 将 data（BaseEvent 或 String key）解析为 BaseEvent
 func _resolve_event_for_stack(data: Variant) -> BaseEvent:
 	if data is BaseEvent:
@@ -212,6 +228,9 @@ func _process_stack():
 		var entry = _event_stack[0]
 		if entry is Dictionary and entry.get("type") == "picker":
 			_show_picker_from_stack(entry)
+		elif entry is Dictionary and entry.get("type") == "cinematic":
+			entry["processed"] = true
+			_show_cinematic_from_stack(entry)
 		else:
 			_current_from_stack = true
 			entry["processed"] = true
@@ -230,6 +249,11 @@ func _process_next():
 		if entry is Dictionary and entry.get("type") == "picker":
 			Logging.info("弹出栈中的下一个 Picker")
 			_show_picker_from_stack(entry)
+			return
+		if entry is Dictionary and entry.get("type") == "cinematic":
+			Logging.info("弹出栈中的下一个 Cinematic")
+			entry["processed"] = true
+			_show_cinematic_from_stack(entry)
 			return
 		_current_from_stack = true
 		var ev: BaseEvent = entry.get("data")
@@ -289,6 +313,35 @@ func _on_end_picking(entity: Variant):
 	# 源事件的后续生命周期由其自身的 PopEventOperator 管理。
 
 	# 像事件一样恢复世界
+	TimeService.resume_world()
+	Engine.time_scale = _saved_time_scale
+	_is_active = false
+	# 处理下一个栈/队列事件
+	_process_next()
+
+
+# --- Cinematic 栈条目生命周期 ---------------------------
+
+func _show_cinematic_from_stack(entry: Dictionary):
+	_is_active = true
+	_saved_time_scale = Engine.time_scale
+	# 像事件/Picker 一样暂停世界
+	TimeService.pause_world(true)
+
+	var texts: Array[String] = entry.get("texts", [])
+	Logging.info("Cinematic 播放中，%d 段文字" % texts.size())
+
+	# 触发 CinematicOverlay 播放
+	EventBus.cinematic_start.emit(texts)
+
+	# 等待过场播完
+	await EventBus.cinematic_finished
+
+	# 弹出栈
+	_event_stack.pop_front()
+	Logging.info("Cinematic 已从栈中弹出")
+
+	# 恢复世界
 	TimeService.resume_world()
 	Engine.time_scale = _saved_time_scale
 	_is_active = false

@@ -40,6 +40,7 @@
 [ext_resource type="Script" uid="uid://dw61ft7sugtq3" path="res://ui/radar_painting.gd" id="32_radar"]
 [ext_resource type="PackedScene" uid="uid://fnnxu25q66uu" path="res://ui/social_wall_panel.tscn" id="33_0cp0l"]
 [ext_resource type="Script" uid="uid://cljs6te3xyu25" path="res://ui/social_wall_panel.gd" id="34_d2t1y"]
+[ext_resource type="PackedScene" path="res://ui/cinematic_overlay.tscn" id="35_cinematic"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -370,6 +371,8 @@ metadata/_custom_type_script = "uid://dgg4voth1dy5y"
 [node name="SurvivalManager" type="Node" parent="CoreSystems" unique_id=2016997853]
 script = ExtResource("30_kq58d")
 metadata/_custom_type_script = "uid://dinmvxb5j0il4"
+
+[node name="CinematicOverlay" parent="." instance=ExtResource("35_cinematic")]
 
 [connection signal="value_changed" from="UI/HSlider" to="UI/HSlider" method="_on_value_changed"]
 [connection signal="pressed" from="UI/LeftButtonContainer/V/PlayerButton" to="UI/LeftButtonContainer/V/PlayerButton" method="_on_pressed"]

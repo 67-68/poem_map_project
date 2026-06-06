@@ -71,6 +71,7 @@ const FUNC_NPC_BATCH_CHECK := "npc_batch_check"
 # Custom operators — 飞花令玩家应答
 const FUNC_IMAGINARY_HAS_LEVEL := "imaginary_has_level"
 const FUNC_IMAGINARY_LEVEL_REWARD := "imaginary_level_reward"
+const FUNC_PLAY_TRANSITION := "play_transition"
 
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
@@ -132,6 +133,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_CONTEXT_FETCH] = func(p, r): return _exec_context_fetch_op(p, r)
 	cd[FUNC_NPC_BATCH_CHECK] = func(p, r): return _exec_npc_batch_check_op(p, r)
 	cd[FUNC_IMAGINARY_LEVEL_REWARD] = func(p, r): return _exec_imaginary_level_reward_op(p, r)
+	cd[FUNC_PLAY_TRANSITION] = func(p, r): return _exec_play_transition_op(p, r)
 
 # ──────────────────────────────────────────────
 # Tags
@@ -786,4 +788,33 @@ static func _exec_imaginary_level_reward_op(parsed: NamedDSLParser.ParseResult, 
 	op.l1_fame = l1_fame
 
 	Logging.info("imaginary_level_reward operator 创建成功: l3_fame=%d, l2_fame=%d, l1_fame=%d" % [l3_fame, l2_fame, l1_fame])
+	return op
+
+
+# ─── play_transition ─────────────────────────────────────────
+
+# DSL 语法: play_transition(texts=["天宝四年，秋。", "你带着半生积蓄，踏入长安。"])
+# 解析为 PlayTransitionOperator，推入 Cinematic 到事件栈
+static func _exec_play_transition_op(parsed: NamedDSLParser.ParseResult, raw: String) -> PlayTransitionOperator:
+	var texts_val = parsed.params.get("texts")
+	var texts: Array[String] = []
+
+	if texts_val is PackedStringArray:
+		for v in texts_val:
+			texts.append(v)
+	elif texts_val is Array:
+		for v in texts_val:
+			texts.append(str(v))
+	else:
+		var single = NamedDSLParser.get_str_param(parsed, "texts")
+		if not single.is_empty():
+			texts.append(single)
+
+	if texts.is_empty():
+		Logging.err("play_transition 缺少 texts 参数: %s" % raw)
+		return null
+
+	var op = PlayTransitionOperator.new()
+	op.texts = texts
+	Logging.info("play_transition operator 创建成功: %d 段文字" % texts.size())
 	return op
