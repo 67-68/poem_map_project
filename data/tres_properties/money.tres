@@ -1,6 +1,61 @@
-[gd_resource type="Resource" script_class="Property" load_steps=2 format=3 uid="uid://do6142gq63fd3"]
+[gd_resource type="Resource" script_class="Property" load_steps=13 format=3 uid="uid://do6142gq63fd3"]
 
 [ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_kxe2f"]
+[ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="2_cp"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="3_sp"]
+
+[sub_resource type="Resource" id="PropChangePerceptionData_1"]
+script = ExtResource("2_cp")
+min_delta = 1
+max_delta = 5
+gain_text = "荷包微沉，多了几文铜钱"
+loss_text = "用了几文铜钱"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_2"]
+script = ExtResource("2_cp")
+min_delta = 6
+max_delta = 20
+gain_text = "一笔不小的进项"
+loss_text = "花销不小呢"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_3"]
+script = ExtResource("2_cp")
+min_delta = 21
+max_delta = 100
+gain_text = "你掂量着一大袋钱，沉重厚实"
+loss_text = "这一下可花了不少"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_4"]
+script = ExtResource("2_cp")
+min_delta = 101
+max_delta = 9999
+gain_text = "富可敌国！银钱堆积如山"
+loss_text = "倾家荡产..."
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_1"]
+script = ExtResource("3_sp")
+stage_val = 0
+perception_text = "囊中羞涩"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_2"]
+script = ExtResource("3_sp")
+stage_val = 50
+perception_text = "尚可度日"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_3"]
+script = ExtResource("3_sp")
+stage_val = 200
+perception_text = "小有积蓄"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_4"]
+script = ExtResource("3_sp")
+stage_val = 1000
+perception_text = "家资殷实"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_5"]
+script = ExtResource("3_sp")
+stage_val = 5000
+perception_text = "富甲一方"
 
 [resource]
 script = ExtResource("1_kxe2f")
@@ -10,3 +65,5 @@ hard_max = -1
 soft_max = -1
 decay_threshold = -1
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"
+change_perceptions = [SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")]
+staged_perceptions = [SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")]

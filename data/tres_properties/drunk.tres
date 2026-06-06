@@ -1,6 +1,61 @@
-[gd_resource type="Resource" script_class="Property" load_steps=2 format=3 uid="uid://b3m5anke7kjyj"]
+[gd_resource type="Resource" script_class="Property" load_steps=12 format=3 uid="uid://b3m5anke7kjyj"]
 
 [ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_l3cyt"]
+[ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="2_cp"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="3_sp"]
+
+[sub_resource type="Resource" id="PropChangePerceptionData_1"]
+script = ExtResource("2_cp")
+min_delta = 1
+max_delta = 15
+gain_text = "微醺，面颊发热"
+loss_text = "酒意稍散"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_2"]
+script = ExtResource("2_cp")
+min_delta = 16
+max_delta = 40
+gain_text = "酒至半酣，兴致正高"
+loss_text = "醒了几分"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_3"]
+script = ExtResource("2_cp")
+min_delta = 41
+max_delta = 70
+gain_text = "酣醉，步履蹒跚"
+loss_text = "吐了一场，清醒不少"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_4"]
+script = ExtResource("2_cp")
+min_delta = 71
+max_delta = 100
+gain_text = "烂醉如泥，不省人事"
+loss_text = "宿醉方醒，头痛欲裂"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_1"]
+script = ExtResource("3_sp")
+stage_val = 0
+perception_text = "神清气爽"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_2"]
+script = ExtResource("3_sp")
+stage_val = 25
+perception_text = "微醺"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_3"]
+script = ExtResource("3_sp")
+stage_val = 50
+perception_text = "酒酣耳热"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_4"]
+script = ExtResource("3_sp")
+stage_val = 75
+perception_text = "酩酊大醉"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_5"]
+script = ExtResource("3_sp")
+stage_val = 100
+perception_text = "烂醉如泥"
 
 [resource]
 script = ExtResource("1_l3cyt")
@@ -10,3 +65,5 @@ hard_max = 100
 soft_max = 90
 decay_threshold = 25
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"
+change_perceptions = [SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")]
+staged_perceptions = [SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")]

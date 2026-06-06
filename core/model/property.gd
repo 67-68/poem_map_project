@@ -13,20 +13,35 @@ class_name Property extends GameEntity
 var default_staged_perception: Array[PropStagedPerceptionData]
 
 func _ready():
-	default_staged_perception.append(PropStagedPerceptionData.new(0, "初始状态"))
-	default_staged_perception.append(PropStagedPerceptionData.new(20, "成长中"))
-	default_staged_perception.append(PropStagedPerceptionData.new(40, "成熟"))
-	default_staged_perception.append(PropStagedPerceptionData.new(60, "GoodGood"))
+	var p1 = PropStagedPerceptionData.new()
+	p1.stage_val = 0; p1.perception_text = "初始状态"
+	default_staged_perception.append(p1)
+	var p2 = PropStagedPerceptionData.new()
+	p2.stage_val = 20; p2.perception_text = "成长中"
+	default_staged_perception.append(p2)
+	var p3 = PropStagedPerceptionData.new()
+	p3.stage_val = 40; p3.perception_text = "成熟"
+	default_staged_perception.append(p3)
+	var p4 = PropStagedPerceptionData.new()
+	p4.stage_val = 60; p4.perception_text = "GoodGood"
+	default_staged_perception.append(p4)
 
+## 返回当前数值对应的阶段感知文本（最高匹配档位）
+## 例如 stage_val=[0,25,50,75], val=60 → 返回 stage_val=50 的文本
+## .tres 中按升序配置，代码从高到低匹配确保返回最高档
 func get_staged_perception_text() -> String:
-	for perception in staged_perceptions:
+	# 从高到低遍历 staged_perceptions，返回最高匹配档位
+	for i in range(staged_perceptions.size() - 1, -1, -1):
+		var perception = staged_perceptions[i]
 		if perception.stage_val <= val:
 			return perception.perception_text
 
-	for perception in default_staged_perception:
+	# fallback 默认感知
+	for i in range(default_staged_perception.size() - 1, -1, -1):
+		var perception = default_staged_perception[i]
 		if perception.stage_val <= val:
 			return perception.perception_text
-			
+	
 	return "未知状态"
 
 ## 根据变化量 delta 返回描述性文本（用于飘字系统）

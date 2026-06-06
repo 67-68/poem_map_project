@@ -1,6 +1,54 @@
-[gd_resource type="Resource" script_class="Property" load_steps=2 format=3 uid="uid://0bcuq1atm5bs"]
+[gd_resource type="Resource" script_class="Property" load_steps=12 format=3 uid="uid://0bcuq1atm5bs"]
 
 [ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_l3cyt"]
+[ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="2_cp"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="3_sp"]
+
+[sub_resource type="Resource" id="PropChangePerceptionData_1"]
+script = ExtResource("2_cp")
+min_delta = 1
+max_delta = 10
+gain_text = "精神稍振"
+loss_text = "偶感不适"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_2"]
+script = ExtResource("2_cp")
+min_delta = 11
+max_delta = 30
+gain_text = "容光焕发"
+loss_text = "病来如山倒"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_3"]
+script = ExtResource("2_cp")
+min_delta = 31
+max_delta = 9999
+gain_text = "脱胎换骨，百病不侵"
+loss_text = "命悬一线"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_1"]
+script = ExtResource("3_sp")
+stage_val = 0
+perception_text = "奄奄一息"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_2"]
+script = ExtResource("3_sp")
+stage_val = 20
+perception_text = "体弱多病"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_3"]
+script = ExtResource("3_sp")
+stage_val = 50
+perception_text = "尚算康健"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_4"]
+script = ExtResource("3_sp")
+stage_val = 100
+perception_text = "身强体健"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_5"]
+script = ExtResource("3_sp")
+stage_val = 300
+perception_text = "百病不侵"
 
 [resource]
 script = ExtResource("1_l3cyt")
@@ -10,3 +58,5 @@ hard_max = -1
 soft_max = -1
 decay_threshold = -1
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"
+change_perceptions = [SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3")]
+staged_perceptions = [SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")]

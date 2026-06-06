@@ -1,7 +1,61 @@
-[gd_resource type="Resource" script_class="Property" load_steps=3 format=3 uid="uid://b3m5anke7kjyk"]
+[gd_resource type="Resource" script_class="Property" load_steps=12 format=3 uid="uid://b3m5anke7kjyk"]
 
 [ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_l3cyt"]
 [ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="2_dfis1"]
+[ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="3_cp"]
+
+[sub_resource type="Resource" id="PropChangePerceptionData_1"]
+script = ExtResource("3_cp")
+min_delta = 1
+max_delta = 15
+gain_text = "稍感疲惫"
+loss_text = "歇了一口气"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_2"]
+script = ExtResource("3_cp")
+min_delta = 16
+max_delta = 40
+gain_text = "疲态渐显"
+loss_text = "恢复了些气力"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_3"]
+script = ExtResource("3_cp")
+min_delta = 41
+max_delta = 70
+gain_text = "身心俱疲"
+loss_text = "神清气爽"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_4"]
+script = ExtResource("3_cp")
+min_delta = 71
+max_delta = 100
+gain_text = "筋疲力尽"
+loss_text = "脱胎换骨"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_1"]
+script = ExtResource("2_dfis1")
+stage_val = 0
+perception_text = "精力充沛"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_2"]
+script = ExtResource("2_dfis1")
+stage_val = 25
+perception_text = "略感疲惫"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_3"]
+script = ExtResource("2_dfis1")
+stage_val = 50
+perception_text = "身心俱疲"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_4"]
+script = ExtResource("2_dfis1")
+stage_val = 75
+perception_text = "筋疲力尽"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_5"]
+script = ExtResource("2_dfis1")
+stage_val = 100
+perception_text = "濒临崩溃"
 
 [resource]
 script = ExtResource("1_l3cyt")
@@ -11,3 +65,5 @@ hard_max = 100
 soft_max = 90
 decay_threshold = 90
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"
+change_perceptions = [SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")]
+staged_perceptions = [SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")]
