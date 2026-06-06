@@ -9,8 +9,8 @@ func on_focus_city_map(enable: bool):
 	if enable:
 		Logging.info('change bg into city')
 		var map = TextureResLoader.get_icon_simpler(PlayerState.current_location)
-		$background/TextureRect.texture = map
-		$background/TextureRect.visible = true
+		$background/ActionMapContainer/ActionMap.texture = map
+		$background/ActionMapContainer.visible = true
 		$background/PathMesh.visible = false
 		$background/FactionMesh.visible = false
 		$background/BorderMesh.visible = false
@@ -18,7 +18,7 @@ func on_focus_city_map(enable: bool):
 		$background/ClickMesh.visible = false
 	else:
 		Logging.info('change bg into world')
-		$background/TextureRect.visible = false
+		$background/ActionMapContainer.visible = false
 		$background/PathMesh.visible = true
 		$background/FactionMesh.visible = true
 		$background/BorderMesh.visible = true

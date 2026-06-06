@@ -4,11 +4,7 @@ enum AREA_TAGS { # 包括地区特性和地区本身?
     AREA_HORSE_WEALTH,
     AREA_EXCESSIVE_OFFICIAL,
 }
-"
-DEPRECIATED!!!
-DEPRECIATED!!!
-DEPRECIATED!!!
-"
+
 enum ACTION_TAGS { 
     # NOW use 4-part tag format: {category}_{subcategory}_{type}_{specific}
     # Example: "action_travel_parting_withLiBai"
@@ -176,7 +172,7 @@ enum POEM_TYPE {
 
 enum ACTION_TYPE {
     BAI_YE, # 拜谒
-    SONG_BIE,
+    JIAO_YOU,
     DENG_GAO,
     FANG_SHI, # 坊市
     FENG_ZHAO, # 奉召

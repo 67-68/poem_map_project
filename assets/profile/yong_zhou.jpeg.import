@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdmq5r5u4mbcx"
-path="res://.godot/imported/yong_zhou.jpg-06bc64eb6c3e2fb6419759433b21f9e5.ctex"
+uid="uid://vb2moqnvch18"
+path="res://.godot/imported/yong_zhou.jpeg-37f18975febd103b8f97453e5084ca73.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/profile/yong_zhou.jpg"
-dest_files=["res://.godot/imported/yong_zhou.jpg-06bc64eb6c3e2fb6419759433b21f9e5.ctex"]
+source_file="res://assets/profile/yong_zhou.jpeg"
+dest_files=["res://.godot/imported/yong_zhou.jpeg-37f18975febd103b8f97453e5084ca73.ctex"]
 
 [params]
 

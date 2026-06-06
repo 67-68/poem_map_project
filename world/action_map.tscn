@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://c0txm06uyp3vk"]
+
+[ext_resource type="Texture2D" uid="uid://vb2moqnvch18" path="res://assets/profile/yong_zhou.jpeg" id="1_3hnf2"]
+[ext_resource type="Script" uid="uid://bokgwhliemj8q" path="res://world/action_map.gd" id="1_buayu"]
+
+[node name="ActionMapContainer" type="PanelContainer" unique_id=2089701176]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_buayu")
+
+[node name="ActionMap" type="TextureRect" parent="." unique_id=747085125]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+texture = ExtResource("1_3hnf2")
+expand_mode = 1
+
+[node name="Button" type="Button" parent="ActionMap" unique_id=19114578]
+layout_mode = 0
+offset_left = 525.0
+offset_top = 232.0
+offset_right = 645.0
+offset_bottom = 272.0
+text = "权贵府（干晔）"
+
+[node name="Button2" type="Button" parent="ActionMap" unique_id=2081444459]
+layout_mode = 0
+offset_left = 916.0
+offset_top = 291.0
+offset_right = 1031.0
+offset_bottom = 323.0
+text = "山水园林(交游)
+"
+
+[node name="Button3" type="Button" parent="ActionMap" unique_id=1571835994]
+layout_mode = 0
+offset_left = 426.0
+offset_top = 147.0
+offset_right = 466.0
+offset_bottom = 178.0
+text = "登高"
+
+[node name="Button4" type="Button" parent="ActionMap" unique_id=561332536]
+layout_mode = 0
+offset_left = 878.0
+offset_top = 405.0
+offset_right = 918.0
+offset_bottom = 436.0
+text = "坊市"
+
+[node name="Button5" type="Button" parent="ActionMap" unique_id=1569758349]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 356.0
+offset_right = 83.0
+offset_bottom = 387.0
+text = "独酌"
+
+[node name="Button6" type="Button" parent="ActionMap" unique_id=1230399613]
+layout_mode = 0
+offset_left = 522.0
+offset_top = 319.0
+offset_right = 635.0
+offset_bottom = 392.0
+text = "奉召"

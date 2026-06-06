@@ -19,6 +19,18 @@ static func _load_texture_with_fallback(name: String, folder_path: String, fallb
     if ResourceLoader.exists(name):
         return load(name)
     
+    name = name.replace(".jpg", ".png")
+    if ResourceLoader.exists(name):
+        return load(name)
+    
+    name = name.replace(".jpg", ".jpeg")
+    if ResourceLoader.exists(name):
+        return load(name)
+
+    name = name.replace(".png", ".jpeg")
+    if ResourceLoader.exists(name):
+        return load(name)
+    
     Logging.warn("纹理不存在: %s, 尝试使用default background" % name)
     return load(fallback_path)
 

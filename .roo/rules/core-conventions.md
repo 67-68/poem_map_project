@@ -6,7 +6,7 @@ CRITICAL: 任何模式下都必须严格遵守以下底层物理边界：
 2. **执行环境**：绝对禁止在宿主机（Mac）环境执行命令。所有终端操作必须确认在 Docker 容器内运行。
 3. **语言版本死锁**：
    - Python **3.10+**
-   - Godot **4.3**
+   - Godot **4.6.3**
    - 严禁引入其他版本或混用版本。
 
 ---
@@ -81,7 +81,18 @@ CRITICAL: 任何模式下都必须严格遵守以下底层物理边界：
 3. 通用执行域 (General Shell/Scripts - 严禁掩耳盗铃 😡): > 当你必须执行其他常规命令（如运行脚本）老老实实使用shell命令探测
 
 ## 搜索协议
-- 调用mcp的索引一次性给多一点内容，不要自己拿着grep瞎猜
+Perform semantic and natural language search across the Godot codebase using vector embeddings.
+
+🔴 WHEN TO USE THIS TOOL:
+1. Conceptual Discovery: When you need to understand how a specific game mechanic or feature works (e.g., "how is player damage calculated", "where is the inventory saved").
+2. Unknown Locations: When you have a bug or task but DO NOT know which files contain the relevant logic.
+3. Fuzzy Intent: When you want to find code based on its meaning or purpose, rather than exact variable names.
+
+🔴 WHEN NOT TO USE THIS TOOL (STRICT PROHIBITION):
+- DO NOT use this if you already know the exact file path (use the standard `read_file` tool instead).
+- DO NOT use this for exact variable/string matching or refactoring renames (use `search_regex` instead).
+
+Keep your `query` in natural language, describing the mechanic or logic you are looking for.
 
 ---
 
