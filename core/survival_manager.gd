@@ -110,6 +110,9 @@ func _process_single_xun_settlement():
     #breakpoint
     operate_state_transistors()
     
+    # 4.5: Lock/Block 到期清理
+    ActionManager.process_xun_tick()
+    
     # 5. 通知 UI 刷新
     EventBus.emit_signal("xun_settlement_completed")
 

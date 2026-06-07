@@ -24,7 +24,6 @@ static var debug_dashboard_state = {
     	"DENGGAO": "main_denggao_1",      # 正常
     	"FANGSHI": "main_fangshi_1",
     	"JIAOYOU": "main_jiaoyou_1",  # 这些key其实没用，因为不需要分辨，全部塞进去trait就行了
-    	"RESERVE_BAIYE": "reserve_baiye", # 自动预定拜谒
         
         # 社交
         # _rumor/_close/_core/_enemy
