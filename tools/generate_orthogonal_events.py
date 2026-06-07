@@ -5,6 +5,7 @@
 用法:
   export DEEPSEEK_API_KEY="sk-xxx"
   python3 tools/generate_orthogonal_events.py  --config <json_or_py>
+  eg. python3 tools/generate_orthogonal_events.py --config tools/bai_ye_honeymoon_config.json
 
 示例:
   # 使用内置默认配置（拜谒蜜月期）
@@ -31,10 +32,16 @@ import time
 from pathlib import Path
 from typing import Optional
 
+# ── 自动将项目根目录加入 sys.path，消除 PYTHONPATH=. 的依赖 ──
+_project_root = Path(__file__).resolve().parent.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
+
 from openai import OpenAI
 
 from tools.config import (
     EventPipelineConfig,
+    OptionFeature,
     PipelineDimension,
     PipelineDimensionValue,
     PromptFeature,
@@ -144,7 +151,7 @@ def default_config() -> EventPipelineConfig:
         word_count_min=80,
         word_count_max=200,
         max_retries=3,
-        api_model="deepseek-chat",
+        api_model="deepseek-reasoner",
         output_dir="data/generated_events/",
     )
 
@@ -359,7 +366,7 @@ def build_user_prompt(
     cfg: EventPipelineConfig,
 ) -> str:
     """组装 User Prompt（包含当前维度组合信息）。"""
-    return f"""请为以下维度组合生成一个拜谒事件：
+    lines = [f"""请为以下维度组合生成一个拜谒事件：
 
 ## 维度组合
 1. {d1.name}: {dv1.name}（{dv1.description}）
@@ -369,26 +376,62 @@ def build_user_prompt(
 ## 输出要求
 - title：15字以内的事件标题
 - description：{cfg.word_count_min}-{cfg.word_count_max}字的事件描述
-- 使用全角中文标点
+- 使用全角中文标点"""]
+
+    # 如果有选项定义，注入到 prompt 中
+    if cfg.option_features:
+        lines.append("""
+## 选项
+为以下每个选项生成描述文本（每个不超过20字）：""")
+        for of in cfg.option_features:
+            if of.text.strip():
+                lines.append(f"- {of.id}: {of.text.strip()}")
+        # 用实际的 option id 生成格式示例
+        opt_examples = "\n".join(f" {of.id}: <{of.id}文本>" for of in cfg.option_features)
+        lines.append(f"""
+输出格式如下，不要多余的内容：
+
+title: <你的标题>
+description: <你的描述>
+options:
+{opt_examples}""")
+    else:
+        lines.append("""
 - 只返回以下格式的两行，不要多余的内容：
 
 title: <你的标题>
-description: <你的描述>"""
+description: <你的描述>""")
+
+    return "\n".join(lines)
 
 
 def parse_llm_response(response: str) -> dict:
-    """解析 LLM 返回的 title/description。"""
+    """解析 LLM 返回的 title/description/options。"""
     title = ""
     description = ""
+    options: dict[str, str] = {}
+    in_options = False
 
     for line in response.split("\n"):
         line = line.strip()
-        if line.startswith("title:") or line.startswith("title："):
-            title = line.split(":", 1)[1].strip() if ":" in line else line.split("：", 1)[1].strip()
-        elif line.startswith("description:") or line.startswith("description："):
-            description = line.split(":", 1)[1].strip() if ":" in line else line.split("：", 1)[1].strip()
+        if not line:
+            in_options = False
+            continue
 
-    return {"title": title, "description": description}
+        if line.startswith("title:") or line.startswith("title："):
+            sep = "：" if "：" in line else ":"
+            title = line.split(sep, 1)[1].strip()
+        elif line.startswith("description:") or line.startswith("description："):
+            sep = "：" if "：" in line else ":"
+            description = line.split(sep, 1)[1].strip()
+        elif line.lower().startswith("options"):
+            in_options = True
+        elif in_options and ":" in line:
+            # 解析 " option_id: option text"
+            key, val = line.split(":", 1)
+            options[key.strip()] = val.strip()
+
+    return {"title": title, "description": description, "options": options}
 
 
 def validate_response(parsed: dict, cfg: EventPipelineConfig) -> Optional[str]:
@@ -406,6 +449,15 @@ def validate_response(parsed: dict, cfg: EventPipelineConfig) -> Optional[str]:
         return f"description 过短 ({desc_len}字，要求{cfg.word_count_min}-{cfg.word_count_max}字)"
     if desc_len > cfg.word_count_max * 1.2:
         return f"description 过长 ({desc_len}字，要求{cfg.word_count_max}字以内)"
+
+    # 如果定义了选项，验证每个选项都有文本
+    options = parsed.get("options", {})
+    for of in cfg.option_features:
+        opt_text = options.get(of.id, "").strip()
+        if not opt_text:
+            return f"选项 '{of.id}' 为空"
+        if len(opt_text) > 30:
+            return f"选项 '{of.id}' 过长 ({len(opt_text)}字，限制30字以内)"
 
     return None
 
@@ -608,9 +660,39 @@ def main():
                     else:
                         print(f"     DSL: (无操作)")
 
-                    option_text = "（确认）"
+                    # ★ 追加 universal_result（也参与 Scale 缩放）
+                    final_dsl = scaled_dsl
+                    if cfg.universal_result:
+                        try:
+                            scaled_universal = scale_all_operators(
+                                [cfg.universal_result], combined_scale
+                            )
+                        except ValueError as e:
+                            print(f"  ❌ universal_result DSL 缩放失败: {e}")
+                            fail_count += 1
+                            break
+                        if final_dsl:
+                            final_dsl = f"{final_dsl} | {scaled_universal}"
+                        else:
+                            final_dsl = scaled_universal
+                        print(f"     +universal(scaled={combined_scale}): {scaled_universal}")
+
                     write_event_row(writer, uuid, title, description, requirement=cfg.universal_requirement)
-                    write_option_row(writer, option_text, scaled_dsl)
+
+                    # ── 写选项行 ──
+                    options = parsed.get("options", {})
+                    if cfg.option_features and options:
+                        for of in cfg.option_features:
+                            opt_text = options.get(of.id, "").strip()
+                            if not opt_text:
+                                opt_text = "（确认）"
+                            write_option_row(writer, opt_text, final_dsl)
+                            print(f"     option [{of.id}]: {opt_text}")
+                    else:
+                        # 回退：没有 option_features 时用默认选项
+                        option_text = "（确认）"
+                        write_option_row(writer, option_text, final_dsl)
+                        print(f"     option: {option_text}")
                     success_count += 1
                     break
                 else:

@@ -15,6 +15,16 @@ class PromptFeature(BaseModel):
     text: str = ""
 
 
+class OptionFeature(BaseModel):
+    """选项定义：指定一个选项的标识和 AI 生成指令。
+
+    id: 选项的唯一标识（uuid key），如 "option_accept"
+    text: AI 指令，如 "用15字以内描述接受贿赂的方案"
+    """
+    id: str = ""
+    text: str = ""
+
+
 class PipelineDimensionValue(BaseModel):
     """维度值：正交矩阵中的一个具体节点。"""
     id: str = ""
@@ -42,6 +52,9 @@ class EventPipelineConfig(BaseModel):
     ai_persona: str = ""
     prompt_features: list[PromptFeature] = []
 
+    # 选项定义（让 AI 生成选项文本）
+    option_features: list[OptionFeature] = []
+
     # 正交维度
     dimensions: list[PipelineDimension] = []
 
@@ -51,6 +64,13 @@ class EventPipelineConfig(BaseModel):
     # 默认空字符串表示不添加 requirement。
     # 例如: "prop_gt(name=ambition,val=0),prop_lt(name=ambition,val=70)"
     universal_requirement: str = ""
+
+    # 通用选项结果（类似 universal_requirement，但作用于每个选项的 results 列）
+    # 使用 prop_add/prop_sub/prop_set 等属性操作 DSL，
+    # 多个表达式用 | 分隔（Layer 0 OR 逻辑），
+    # 最终会和维度缩放后的 DSL 合并。
+    # 例如: "prop_add(name=career_progress; val=1)"
+    universal_result: str = ""
 
     # 生成参数
     word_count_min: int = 80
