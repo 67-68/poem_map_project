@@ -989,6 +989,21 @@ def main():
                 override_min=cfg.word_count_min, override_max=cfg.word_count_max,
             )
 
+            # 🚨 额外校验：插件声明的字段必须在 parsed 中存在且非空
+            if error is None and plugins:
+                for plugin in plugins:
+                    for field in plugin.get_extra_output_fields():
+                        val = parsed.get(field, "")
+                        if not val:
+                            extra = parsed.get("_extra", {})
+                            val = extra.get(field, "")
+                        if not val or not val.strip():
+                            error = f"缺少插件字段 '{field}'（{plugin.plugin_id} 要求）"
+                            print(f"  ❌ {error}")
+                            break
+                    if error:
+                        break
+
             if error is None:
                 print(f"\n✅ 校验通过")
                 title = parsed["title"]
@@ -1031,6 +1046,10 @@ def main():
                     plugins, current_combos, cfg, parsed, response,
                     combined_scale, uuid,
                 )
+
+                # 🚨 从 context_extras 剥离 failed_hint，它只用于 option_req 模板替换
+                failed_hint_val = context_extras.pop("failed_hint", "") if context_extras else ""
+
                 if context_extras:
                     print(f"📎 插件 context 富化: {context_extras}")
 
@@ -1055,15 +1074,27 @@ def main():
                 # option 行
                 options = parsed.get("options", {})
                 if cfg.option_features and options:
+                    # 构建选项级 requirement（模板替换）
+                    option_req = cfg.universal_option_requirement or ""
+                    if option_req and failed_hint_val:
+                        option_req = option_req.replace("{failed_hint}", failed_hint_val)
+                    req_csv = f'"{option_req}"' if option_req else ''
+
                     for of in cfg.option_features:
                         opt_text = options.get(of.id, "").strip()
                         if not opt_text:
                             opt_text = "（确认）"
                         dsl_csv = final_dsl.replace('"', '""')
-                        print(f'  >option,,,,,"{opt_text}","{dsl_csv}",,,,')
+                        print(f'  >option,,,{req_csv},"{opt_text}","{dsl_csv}",,,,')
                 else:
+                    # 构建选项级 requirement（模板替换）
+                    option_req = cfg.universal_option_requirement or ""
+                    if option_req and failed_hint_val:
+                        option_req = option_req.replace("{failed_hint}", failed_hint_val)
+                    req_csv = f'"{option_req}"' if option_req else ''
+
                     dsl_csv = final_dsl.replace('"', '""')
-                    print(f'  >option,,,,,"（确认）","{dsl_csv}",,,,')
+                    print(f'  >option,,,{req_csv},"（确认）","{dsl_csv}",,,,')
 
                 success = True
                 break
@@ -1081,6 +1112,7 @@ def main():
                         user_prompt = build_user_prompt(
                             current_combos, cfg,
                             word_count_min=current_min, word_count_max=current_max,
+                            plugins=plugins,
                         )
                     continue
                 print(f"  ⏭️ 跳过（已达最大重试次数）")
@@ -1212,6 +1244,10 @@ def main():
                         plugins, current_combos, cfg, parsed, response,
                         combined_scale, uuid,
                     )
+
+                    # 🚨 从 context_extras 剥离 failed_hint，它只用于 option_req 模板替换
+                    failed_hint_val = context_extras.pop("failed_hint", "") if context_extras else ""
+
                     if context_extras:
                         print(f"     📎 插件 context: {context_extras}")
 
@@ -1224,8 +1260,11 @@ def main():
                     # ── 构建选项级 requirement（模板替换） ──
                     # 此时 failed_hint 必定存在（已在插件字段校验中确保）
                     option_req = cfg.universal_option_requirement or ""
-                    if option_req and context_extras and "failed_hint" in context_extras:
-                        option_req = option_req.replace("{failed_hint}", context_extras["failed_hint"])
+                    if option_req and failed_hint_val:
+                        option_req = option_req.replace("{failed_hint}", failed_hint_val)
+                    elif option_req and "{failed_hint}" in option_req:
+                        print(f"  ⚠️ failed_hint 不在 context_extras 中，{{failed_hint}} 模板将替换为空")
+                        option_req = option_req.replace("{failed_hint}", "")
 
                     # ── 写选项行 ──
                     options = parsed.get("options", {})
