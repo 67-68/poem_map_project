@@ -274,6 +274,13 @@ class EventPipelineConfig(BaseModel):
     # 例如: "prop_add(name=career_progress; val=1)"
     universal_result: str = ""
 
+    # 通用选项 requirement（CSV option 行的 requirements 列）
+    # 使用 poem_has 等 requirement DSL，支持模板变量 {failed_hint}，
+    # 该变量会被插件动态注入的 failed_hint 字段替换。
+    # 默认空字符串表示不添加选项级 requirement。
+    # 例如: "poem_has(type=GAN_YE; min_level=1; failed_hint=\"{failed_hint}\")"
+    universal_option_requirement: str = ""
+
     # Plugin Hook 系统：启用的插件 ID 列表
     # 每个 ID 对应 PLUGIN_REGISTRY 中已注册的 EventPromptPlugin 实例。
     # 插件在以下 3 个 Hook 点注入行为:

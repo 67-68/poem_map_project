@@ -70,6 +70,8 @@ python3 tools/generate_orthogonal_events.py --trial
 - `option_features`：选项定义，让 AI 生成选项文本
 - `dimensions`：正交维度定义，每个维度包含多个值（含 DSL operator 和 scale）
 - `universal_tags` / `universal_requirement` / `universal_result`：通用触发标签、条件和结果
+- `universal_option_requirement`：**选项级** requirement DSL，支持 `{failed_hint}` 模板变量（由插件注入），例如 `poem_has(type=GAN_YE; min_level=1; failed_hint="{failed_hint}")`
+- `plugins`：启用的插件 ID 列表，通过 3 个 Hook 点注入行为（见下文）
 
 #### TextFeature Registry（文本特征中央库）
 
@@ -119,6 +121,55 @@ python3 tools/generate_orthogonal_events.py --trial
 | `load_text_features_library(path?)` | 加载 registry JSON，返回 `TextFeatureLibrary` 实例 |
 | `resolve_text_features(config_data, library?)` | 将 config dict 中的 key 列表解析为完整对象（原地修改） |
 
+### Plugin Hook 系统
+
+插件系统允许在不修改 generate_orthogonal_events.py 核心逻辑的情况下，向管线注入自定义行为。
+
+**3 个 Hook 点：**
+
+| Hook | 方法 | 时机 | 作用 |
+|------|------|------|------|
+| 1 | `get_prompt_fragment(combos, cfg)` | 构建 User Prompt 时 | 注入额外的指令文本 |
+| 2 | `get_extra_output_fields()` | 解析 AI 响应时 | 声明 AI 输出中的额外字段名 |
+| 3 | `enrich_context(ctx: PluginContext)` | 写入 CSV 前 | 提取/处理数据，返回 `dict[str,str]` 注入 context_extras |
+
+**配置方式：**
+```json
+{
+  "plugins": ["ganye_failed_hint"],
+  "universal_option_requirement": "poem_has(type=GAN_YE; min_level=1; failed_hint=\"{failed_hint}\")"
+}
+```
+
+**模板替换机制：**
+- `universal_option_requirement` 中的 `{failed_hint}` 占位符在运行时被 Hook 3 返回的 `context_extras["failed_hint"]` 替换
+- 替换发生在写入 CSV 前，最终 option 行的 requirements 列包含完整的 DSL（如 `poem_has(type=GAN_YE; min_level=1; failed_hint="去写首干谒诗再来")`）
+
+**内置插件：**
+
+| 插件 ID | 文件 | 用途 |
+|---------|------|------|
+| `failed_hint` | [`tools/plugins/failed_hint_plugin.py`](../tools/plugins/failed_hint_plugin.py) | 通用的失败条件提示（用于 0-70 蜜月期） |
+| `ganye_failed_hint` | [`tools/plugins/ganye_failed_hint_plugin.py`](../tools/plugins/ganye_failed_hint_plugin.py) | 干谒诗专用失败条件提示（用于 70-100 真实面目期） |
+
+**添加新插件：**
+1. 在 [`tools/plugins/`](../tools/plugins/) 中创建新文件，继承 `EventPromptPlugin`
+2. 实现所需 Hook 方法
+3. 在文件末尾调用 `register_plugin(YourPlugin())`
+4. 在 JSON 配置的 `plugins` 列表中引用插件 ID
+
+### DSL Operator 缩放范围
+
+`scale_dsl_operator()` 对 `val` 参数做 Scale 乘算。支持的 operator 集合：
+
+| 类型 | 可缩放 | 说明 |
+|------|--------|------|
+| `prop_add`, `prop_sub`, `prop_set` | ✅ | Property 操作（数值属性） |
+| `emo_add`, `emo_sub` | ✅ | 情绪操作（如 `emo_add(name=anger; val=10)`） |
+| `emo_set` | ❌ | 情绪设定（不允许缩放） |
+| `trait_add`, `trait_remove` | ❌ | Trait 操作 |
+| `flag_bool_set`, `flag_str_set` 等 | ❌ | Flag 操作 |
+
 ### 数据导入 Godot
 
 `csv_cloud_loader.gd` 提供了两个入口将生成的 CSV 导入 Godot：
@@ -130,7 +181,14 @@ python3 tools/generate_orthogonal_events.py --trial
 
 处理流程与云端数据完全一致：CSV → DSLParser → `.tres` → Registry。
 
-## 四、新增生成配置的完整步骤
+## 四、现有配置文件
+
+| 配置文件 | 阶段 | 用途 |
+|---------|------|------|
+| [`tools/bai_ye_honeymoon_config.json`](../tools/bai_ye_honeymoon_config.json) | 拜谒蜜月期 (0-70) | 内置默认配置 |
+| [`tools/event_base_config_bai_ye_real_appearance.json`](../tools/event_base_config_bai_ye_real_appearance.json) | 拜谒真实面目 (70-100) | 70-100 阶段的权力阻击事件，含干谒诗 requirement |
+
+## 五、新增生成配置的完整步骤
 
 1. 创建 JSON 配置文件，例如 `tools/foo_config.json`
 2. 运行 `python3 tools/generate_orthogonal_events.py --config tools/foo_config.json`
@@ -146,7 +204,7 @@ python3 tools/generate_orthogonal_events.py --trial
    ```
 5. 在 Godot 编辑器中点击 `import_generated_events` 或 `sync_all_data` 即可导入
 
-## 五、注意事项
+## 六、注意事项
 
 #### 配置加载流程（含 Registry 解析）
 

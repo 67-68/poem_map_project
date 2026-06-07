@@ -179,9 +179,9 @@ def default_config() -> EventPipelineConfig:
 # 2. DSL 缩放器
 # ════════════════════════════════════════════════════════════════
 
-ALLOWED_PROP_OPS = {"prop_add", "prop_sub", "prop_set"}
+SCALABLE_OPS = {"prop_add", "prop_sub", "prop_set", "emo_add", "emo_sub"}
 KNOWN_NON_PROP_OPS = {
-    "emo_add", "emo_sub", "emo_set",
+    "emo_set",
     "trait_add", "trait_remove",
     "flag_bool_set", "flag_str_set", "flag_str_append",
     "flag_int_set", "flag_int_append", "flag_int_reduce_if_above",
@@ -203,12 +203,12 @@ def scale_dsl_operator(dsl: str, scale: int) -> str:
     if func_name in KNOWN_NON_PROP_OPS:
         raise ValueError(
             f"不支持的 operator 类型: '{func_name}'。"
-            f"当前只支持 PropertyOperator ({', '.join(sorted(ALLOWED_PROP_OPS))})"
+            f"当前只支持可缩放 Operator ({', '.join(sorted(SCALABLE_OPS))})"
         )
-    if func_name not in ALLOWED_PROP_OPS:
+    if func_name not in SCALABLE_OPS:
         raise ValueError(
             f"未知 operator: '{func_name}'。"
-            f"允许的 PropertyOperator: {', '.join(sorted(ALLOWED_PROP_OPS))}"
+            f"允许的可缩放 Operator: {', '.join(sorted(SCALABLE_OPS))}"
         )
 
     args_str = dsl[paren_idx + 1 : dsl.rfind(")")]
@@ -733,13 +733,13 @@ def write_event_row(writer, uuid: str, title: str, description: str, tags: list[
     ])
 
 
-def write_option_row(writer, description: str, result_dsl: str):
+def write_option_row(writer, description: str, result_dsl: str, requirement: str = ""):
     """写一个 option 子行。结果 DSL 放在 results 列。"""
     writer.writerow([
         ">option",  # row_type（> 前缀标记深度1，DSLParser PDA 支持）
         "",         # uuid
         "",         # context
-        "",         # requirements
+        requirement,  # requirements 列 → ⚡ 选项级 requirement（如 poem_has）
         "",         # title
         description,  # description 列 → option 文本
         "",         # on_enter
@@ -1155,6 +1155,21 @@ def main():
                     override_min=cfg.word_count_min, override_max=cfg.word_count_max,
                 )
 
+                # 🚨 额外校验：插件声明的字段必须在 parsed 中存在且非空
+                if error is None and plugins:
+                    for plugin in plugins:
+                        for field in plugin.get_extra_output_fields():
+                            val = parsed.get(field, "")
+                            if not val:
+                                extra = parsed.get("_extra", {})
+                                val = extra.get(field, "")
+                            if not val or not val.strip():
+                                error = f"缺少插件字段 '{field}'（{plugin.plugin_id} 要求）"
+                                print(f"  ❌ {error}")
+                                break
+                        if error:
+                            break
+
                 if error is None:
                     title = parsed["title"]
                     description = parsed["description"]
@@ -1206,6 +1221,12 @@ def main():
                         context_extras=context_extras or None,
                     )
 
+                    # ── 构建选项级 requirement（模板替换） ──
+                    # 此时 failed_hint 必定存在（已在插件字段校验中确保）
+                    option_req = cfg.universal_option_requirement or ""
+                    if option_req and context_extras and "failed_hint" in context_extras:
+                        option_req = option_req.replace("{failed_hint}", context_extras["failed_hint"])
+
                     # ── 写选项行 ──
                     options = parsed.get("options", {})
                     if cfg.option_features and options:
@@ -1213,12 +1234,12 @@ def main():
                             opt_text = options.get(of.id, "").strip()
                             if not opt_text:
                                 opt_text = "（确认）"
-                            write_option_row(writer, opt_text, final_dsl)
+                            write_option_row(writer, opt_text, final_dsl, requirement=option_req)
                             print(f"     option [{of.id}]: {opt_text}")
                     else:
                         # 回退：没有 option_features 时用默认选项
                         option_text = "（确认）"
-                        write_option_row(writer, option_text, final_dsl)
+                        write_option_row(writer, option_text, final_dsl, requirement=option_req)
                         print(f"     option: {option_text}")
                     success_count += 1
                     break

@@ -803,7 +803,13 @@ static func _exec_poem_req(parsed: NamedDSLParser.ParseResult, raw: String) -> P
 	# 解析 min_level 参数
 	req.lowest_poem_level = NamedDSLParser.get_int_param(parsed, "min_level", 0)
 
-	Logging.info("poem_has requirement 创建成功: types=%s, min_level=%d" % [str(req.accepted_poem_types), req.lowest_poem_level])
+	# 解析可选的 failed_hint 参数（由插件动态生成，通过模板替换注入）
+	# 格式: poem_has(type=GAN_YE; min_level=1; failed_hint="去写首干谒诗再来")
+	var fh = NamedDSLParser.get_str_param(parsed, "failed_hint", "")
+	if not fh.is_empty():
+		req.failed_hint = fh
+
+	Logging.info("poem_has requirement 创建成功: types=%s, min_level=%d, failed_hint=%s" % [str(req.accepted_poem_types), req.lowest_poem_level, req.failed_hint])
 	return req
 
 
