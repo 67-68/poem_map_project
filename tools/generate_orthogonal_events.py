@@ -513,12 +513,24 @@ def write_csv_header(writer):
     writer.writerow(CSV_HEADER)
 
 
-def write_event_row(writer, uuid: str, title: str, description: str, tags: str = "bai_ye", requirement: str = ""):
-    """写一个 random_event 行。结果 DSL 放在 option 行，不在 event 行。"""
+def write_event_row(writer, uuid: str, title: str, description: str, tags: list[str] | None = None, requirement: str = ""):
+    """写一个 random_event 行。结果 DSL 放在 option 行，不在 event 行。
+    
+    tags: 触发标签列表。单标签输出 trigger_tags=tag，多标签输出 trigger_tags=[tag1/tag2]。
+    """
+    if tags is None:
+        tags = ["bai_ye"]
+    # 多标签用方括号 + / 分隔（DSL Parser 标准格式），单标签兼容旧格式
+    if len(tags) > 1:
+        tags_expr = "[" + "/".join(tags) + "]"
+    elif len(tags) == 1:
+        tags_expr = tags[0]
+    else:
+        tags_expr = ""
     writer.writerow([
         "random_event",
         uuid,
-        f"trigger_tags={tags}|weight=10",  # context 列
+        f"trigger_tags={tags_expr}|weight=10",  # context 列
         requirement,  # requirements 列（universal requirement 或空）
         title,  # title 列
         description,  # description 列
@@ -709,7 +721,7 @@ def main():
                             final_dsl = scaled_universal
                         print(f"     +universal(scaled={combined_scale}): {scaled_universal}")
 
-                    write_event_row(writer, uuid, title, description, requirement=cfg.universal_requirement)
+                    write_event_row(writer, uuid, title, description, tags=cfg.universal_tags, requirement=cfg.universal_requirement)
 
                     # ── 写选项行 ──
                     options = parsed.get("options", {})

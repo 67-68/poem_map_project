@@ -58,6 +58,13 @@ class EventPipelineConfig(BaseModel):
     # 正交维度
     dimensions: list[PipelineDimension] = []
 
+    # 通用触发标签（CSV context 列的 trigger_tags）
+    # 列表中的字符串会作为事件的触发标签，格式为:
+    #   单标签: trigger_tags=bai_ye|weight=10
+    #   多标签: trigger_tags=[tag1/tag2]|weight=10
+    # 默认 ["bai_ye"] 保持向后兼容。
+    universal_tags: list[str] = ["bai_ye"]
+
     # 通用事件 requirement（CSV requirements 列）
     # 使用 prop_gt/prop_lt/prop_eq 等属性比较 DSL，
     # 多个表达式用逗号分隔（AND 逻辑）。
