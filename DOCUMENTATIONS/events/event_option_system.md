@@ -1,105 +1,50 @@
 # Event Option 系统文档
 
-## 概述
+## 1. 选项类型
 
-Event Option 系统是游戏事件系统中用于处理玩家选择的组件系统。每个事件可以包含多个选项，玩家通过选择不同的选项来触发不同的游戏结果。系统采用面向对象设计，支持多种选项类型和灵活的扩展机制。
-
-## 架构设计
-
-### 类层次结构
-
-```
-Resource (Godot 基类)
-    └── BaseOption (基础选项类)
-            ├── EventOption (标准事件选项)
-            ├── CustomEventOption (自定义事件选项)
-            ├── ComplexEventOption (复杂事件选项)
-            └── PropertyOption (属性检查选项)
-```
-
-### 核心组件
-
-#### 1. BaseOption (基础选项类)
+### 1. BaseOption (基础选项)
 
 **文件位置**: `model/event/base_option.gd`
 
-**职责**: 所有选项类型的基类，定义通用接口和生命周期方法。
+**核心属性**:
+- `uuid: String` — 唯一标识
+- `description: String` — 按钮文本
 
-**核心方法**:
-```gdscript
-func init():
-    # 子类可以重写这个方法来初始化选项逻辑
-    pass
-```
+**说明**: 所有选项的基类，提供最基础的属性。
 
-**设计原理**: 
-- 继承自 `Resource` 而非 `Node`，因为选项是数据结构而非场景对象
-- `init()` 方法在选项被创建为 UI 按钮时调用，替代了 `Node._ready()` 的功能
-- 提供虚函数模式，允许子类自定义初始化逻辑
+---
 
-#### 2. EventOption (标准事件选项)
+### 2. EventOption (标准事件选项)
 
 **文件位置**: `model/event/event_option.gd`
 
-**用途**: 最常用的选项类型，用于大多数事件的静态选项。
+**核心属性**:
+- `description: String` — 按钮文本（支持模板插值 `{@context_key}`）
+- `choice_result: ChoiceResult` — 选择该选项后的结果执行链
+- `requirement: BaseRequirements` — 选项可用性守卫条件
+- `custom_context_params: Dictionary` — 自定义上下文参数
 
-**属性**:
-- `description: String` - 按钮显示文本
-- `choice_result: ChoiceResult` - 选择后执行的结果
-- `requirements: BaseRequirements` - 选项的触发条件
+**说明**: 最常用的选项类型。支持条件守卫和模板文本解析。
 
-**使用场景**: 
-- 固定描述的选项
-- 固定结果的选项
-- 需要条件判断的选项
+---
 
-**示例**:
-```gdscript
-var option = EventOption.new()
-option.description = "接受邀请"
-option.choice_result = parse_choice_result("money+10,reputation+5")
-option.requirements = parse_requirements("prop:money>=100")
-```
-
-#### 3. CustomEventOption (自定义事件选项)
+### 3. CustomEventOption (自定义选项)
 
 **文件位置**: `model/event/custom_event_option.gd`
 
-**用途**: 处理特殊逻辑的选项，支持动态计算描述和结果。
+**用途**: 需要自定义初始化逻辑的特殊选项。
 
 **属性**:
-- `custom_type: String` - 自定义类型枚举
-- 继承 BaseOption 的所有属性
+- `custom_type: String` — 自定义类型标识
+- `choice_result: ChoiceResult`
 
-**当前支持的类型**:
-- `upgrade_random_imagery` - 随机升级一个 Imaginary
-
-**工作流程**:
-1. 选项被创建为按钮时调用 `init()`
-2. `init()` 根据 `custom_type` 执行对应的逻辑
-3. 动态设置 `description` 和 `choice_result`
-
-**实现示例**:
+**使用示例**:
 ```gdscript
-func init():
-    match custom_type:
-        'upgrade_random_imagery': upgrade_random_imagery()
-
-func upgrade_random_imagery():
-    var active_imaginaries = Database.get_active_imaginaries()
-    if not active_imaginaries:
-        description = '怎么连imagery都没有啊。浪费了这一次的机会'
-        return
-    
-    var random_imaginary = active_imaginaries.keys()[randi() % active_imaginaries.size()]
-    description = '将要升级Imaginary: %s' % random_imaginary.name
-    
-    var operator = ImaginaryOperator.new()
-    operator.imaginary_name = random_imaginary
-    operator.operation = "upgrade_1"
-    
-    choice_result = ChoiceResult.new()
-    choice_result.operators.append(operator)
+# 创建自定义选项
+var option = CustomEventOption.new()
+option.custom_type = "upgrade_random_imagery"
+option.description = "提升随机的意象等级"
+option.choice_result = your_choice_result
 ```
 
 **扩展指南**: 添加新的自定义类型：
@@ -107,24 +52,31 @@ func upgrade_random_imagery():
 2. 在 `init()` 的 match 语句中添加对应的分支
 3. 实现具体的处理函数
 
-#### 4. ComplexEventOption (复杂事件选项)
+---
+
+### 4. ComplexEventOption (复杂事件选项)
 
 **文件位置**: `model/event/complex_event_option.gd`
 
 **用途**: 支持禁用状态和二次确认的复杂选项。
 
-**扩展属性**:
-- `is_disabled: bool` - 是否禁用选项
-- `disabled_reason: String` - 禁用原因提示
-- `double_check: bool` - 是否需要二次确认
-- `double_check_reason: String` - 二次确认提示
+**属性**:
+- `double_check: bool` — 是否需要二次确认
+- `double_check_reason: String` — 二次确认提示
+- `is_disabled: bool` — **@deprecated** 请使用 `NarrativeLockRequirement` 替代
+- `disabled_reason: String` — **@deprecated** 同上，用 `NarrativeLockRequirement.failed_hint` 替代
+
+**说明**:
+`is_disabled` / `disabled_reason` 已废弃，改为在 `requirement` 字段中放入 `NarrativeLockRequirement`。
+`ComplexEventOption.init()` 自动做桥接转换，旧资源不受影响。
 
 **使用场景**:
 - 危险操作需要确认
-- 临时禁用的选项
-- 需要额外提示的选项
+- 叙事锁定选项（玩家可点击查看原因）
 
-#### 5. PropertyOption (属性检查选项)
+---
+
+### 5. PropertyOption (属性检查选项)
 
 **文件位置**: `model/event/property_option.gd`
 
@@ -139,9 +91,11 @@ func upgrade_random_imagery():
 - 自动处理属性名称的枚举转换
 - 专门的属性要求检查
 
-## 完整工作流程
+---
 
-### 1. 事件触发流程
+## 2. 完整工作流程
+
+### 2.1 事件触发流程
 
 ```
 EventManager.scan_events()
@@ -173,15 +127,15 @@ choice_result.operate()
 执行所有操作符
 ```
 
-### 2. 选项初始化时机
+### 2.2 选项初始化时机
 
 **关键代码位置**: `characters/event_btn.gd`
 
 ```gdscript
-func _init(data: BaseOption):
-    data.init()  # 🔑 关键：在这里调用初始化
-    option = data
-    # ... UI 设置
+func _init_option(data: BaseOption):
+    # 🔑 关键：在这里调用初始化
+    # 选项作为 Resource 没有 _ready() 生命周期
+    # 在按钮创建时初始化确保每次显示都是最新状态
 ```
 
 **设计理由**:
@@ -189,24 +143,78 @@ func _init(data: BaseOption):
 - 在按钮创建时初始化确保每次显示都是最新状态
 - 支持动态计算选项内容和结果
 
-### 3. 条件检查机制
+---
 
-**检查时机**: 在 `EventBtn._init()` 中
+## 3. 统一验证管线 (Unified Validation Pipeline)
 
-```gdscript
-if data.requirements:
-    var pass_prop = data.requirements.compare(PlayerState)
-    if not pass_prop:
-        disabled = true
-        text = "[%s]%s" % [data.requirements.failed_hint, text]
+**核心设计原则**: 所有"这个选项能不能用"的判断，统一走 `requirement.compare(PlayerState)` 一条路。
+
+### 3.1 管线拓扑
+
+```
+EventBtn._init_option(data)
+    │
+    ├─ data.requirement == null → 通过验证，连接 confirmed()
+    │
+    └─ data.requirement != null
+         └─ requirement.compare(PlayerState)
+              ├─ true  → 通过验证，连接 confirmed()
+              ├─ null  → 属性未找到，Logging.err + 返回
+              └─ false → 禁用按钮，原因见 requirement.get_failed_hint()
+                         连接 disable_btn（点击后变灰 + Toast 提示）
 ```
 
-**支持的检查类型**:
-- 属性检查 (prop:money>=100)
-- 特征检查 (trait:brave)
-- 复合条件检查 (AND/OR 逻辑)
+### 3.2 验证结果
 
-### 4. 结果执行机制
+所有 Requirement 子类共同遵守以下契约：
+
+| 接口 | 返回 | 说明 |
+|------|------|------|
+| `compare(PlayerState)` | `bool` 或 `null` | 条件判定。`true`=通过, `false`=失败, `null`=配置错误 |
+| `failed_hint` | `@export var String` | 可替换的失败提示文案（CSV / .tres 中直接配置） |
+| `get_failed_hint()` | `String` | 返回失败提示。默认返回 `failed_hint`，子类可重写提供动态文案 |
+
+### 3.3 支持的检查类型
+
+| Requirement 类型 | 文件路径 | 说明 |
+|-----------------|---------|------|
+| `PropertyRequirement` | `core/property_requirement.gd` | 属性检查 (money > 100) |
+| `FlagRequirement` | `core/requirements/flag_requirement.gd` | 标志位检查 |
+| `TraitRequirement` | `core/requirements/trait_requirement.gd` | 特征检查 (has/not_has) |
+| `PropRangeRequirement` | `core/requirements/range_requirement.gd` | 属性范围检查 |
+| `EmotionRequirement` | `core/requirements/emotion_requirement.gd` | 情绪值检查 |
+| `ImaginaryLevelRequirement` | `core/requirements/imaginary_level_requirement.gd` | 意象等级检查 |
+| `PoemRequirement` | `core/requirements/poem_requirement.gd` | 诗词检查 |
+| `ComplexRequirements` | `core/model/multiple_requiremenets.gd` | AND/OR 复合条件 |
+| `NarrativeLockRequirement` | `core/requirements/narrative_lock_requirement.gd` | **叙事锁** — 替代 is_disabled |
+
+### 3.4 NarrativeLockRequirement (叙事锁)
+
+**用途**: 替代 `ComplexEventOption.is_disabled` 硬编码。把"叙事禁用"也变成一种 Requirement，
+统一到验证管线中。
+
+**配置方式**: 在 EventOption 的 `requirement` 字段中放入 `NarrativeLockRequirement` 实例，
+设置 `failed_hint` 为锁定原因。
+
+```gdscript
+# 手动创建
+var lock = NarrativeLockRequirement.new()
+lock.failed_hint = "你现在不能这样做"
+option.requirement = lock
+
+# 或通过 ComplexEventOption 的 is_disabled 桥接（旧用法依旧可用）
+option.is_disabled = true
+option.disabled_reason = "你现在不能这样做"
+```
+
+**行为**: `compare()` 永远返回 `false`（无条件锁定）。
+点击按钮时变灰并弹出 Toast 显示 `failed_hint`。
+
+**扩展**: 未来可通过添加 `lock_flag_id` / `lock_flag_value` 实现条件锁（只在特定叙事状态下锁定）。
+
+---
+
+## 4. 结果执行机制
 
 **核心类**: `ChoiceResult`
 
@@ -225,9 +233,11 @@ func operate():
 - `EventOperator` - 触发新事件
 - 其他自定义操作符
 
-## 使用指南
+---
 
-### 创建标准选项
+## 5. 使用指南
+
+### 5.1 创建标准选项
 
 ```gdscript
 # 在事件资源文件中直接配置
@@ -238,7 +248,7 @@ choice_result = SubResource("choice_result")
 requirements = SubResource("requirements")
 ```
 
-### 使用自定义选项
+### 5.2 使用自定义选项
 
 ```gdscript
 # 1. 创建 CustomEventOption 资源
@@ -252,7 +262,7 @@ script = ExtResource("random_event.gd")
 options = Array[Object]([SubResource("custom_option")])
 ```
 
-### 添加新的自定义类型
+### 5.3 添加新的自定义类型
 
 1. 在 `CustomEventOption` 中添加类型枚举：
 ```gdscript
@@ -283,7 +293,7 @@ func your_custom_function():
     choice_result.operators.append(operator)
 ```
 
-### 使用复杂选项
+### 5.4 使用复杂选项
 
 ```gdscript
 var option = ComplexEventOption.new()
@@ -294,50 +304,57 @@ option.double_check_reason = "确定要执行此操作吗？"
 option.choice_result = your_choice_result
 ```
 
-## 最佳实践
+### 5.5 使用叙事锁
 
-### 1. 何时使用自定义选项
-
-**使用 CustomEventOption 的场景**:
-- 需要根据游戏状态动态生成选项描述
-- 选项结果需要运行时计算
-- 需要访问数据库或复杂逻辑
-- 选项内容随机变化
-
-**使用标准 EventOption 的场景**:
-- 固定的描述和结果
-- 简单的条件检查
-- 静态配置即可满足需求
-
-### 2. 性能考虑
-
-**避免在 init() 中执行耗时操作**:
 ```gdscript
-func init():
-    # ❌ 避免这种
-    for i in range(10000):
-        heavy_calculation()
-    
-    # ✅ 推荐：预先计算或缓存
-    if _cached_result:
-        description = _cached_result
-    else:
-        _cached_result = calculate_once()
-        description = _cached_result
+var option = EventOption.new()
+option.description = "被锁住的选项"
+
+# 方式 A：直接使用 NarrativeLockRequirement（推荐）
+var lock = NarrativeLockRequirement.new()
+lock.failed_hint = "剧情尚未推进到这一步"
+option.requirement = lock
+
+# 方式 B：结合其他 requirement
+var complex = ComplexRequirements.new()
+complex.current_operator = REQ_OPERATOR.LOGIC.AND
+complex.operators = [
+    NarrativeLockRequirement.new(),  # 叙事锁
+    PropRequirement.new(),           # 属性要求
+]
+lock.failed_hint = "门锁着"
+# 两个条件都满足才能解锁
 ```
 
-### 3. 错误处理
+---
 
-**在 init() 中添加边界检查**:
-```gdscript
-func upgrade_random_imagery():
-    var active_imaginaries = Database.get_active_imaginaries()
-    if not active_imaginaries:
-        description = '怎么连imagery都没有啊。浪费了这一次的机会'
-        return  # 安全返回
-```
+## 6. Q&A
 
-### 4. 调试技巧
+### Q: 选项的 requirements 在哪里检查？
+
+**A**: 在 `EventBtn._init_option()` 中通过统一验证管线检查。无论是 `PropertyRequirement`（属性不够）
+还是 `NarrativeLockRequirement`（叙事锁定），都走 `requirement.compare(PlayerState)` 一条路。
+不满足时按钮变灰，点击显示 `get_failed_hint()` 的提示。
+
+### Q: `is_disabled` 和 `NarrativeLockRequirement` 的关系？
+
+**A**: `is_disabled` 已废弃，功能由 `NarrativeLockRequirement` 替代。
+`ComplexEventOption.init()` 会自动将 `is_disabled=true` 桥接为 `NarrativeLockRequirement`，
+旧资源无需改动即可正常工作。
+
+### Q: `failed_hint` 从哪里来？
+
+**A**: `failed_hint` 是 `BaseRequirements` 的 `@export` 属性，所有 Requirement 子类都继承它。
+可以在 CSV / `.tres` / Inspector 中直接配置。`get_failed_hint()` 默认返回 `failed_hint`，
+子类可重写提供动态文案。
+
+### Q: 为什么不用 `_ready()` 方法？
+
+**A**: `BaseOption` 继承自 `Resource`，而 `Resource` 在 Godot 中没有 `_ready()` 生命周期方法。`_ready()` 是 `Node` 的方法，只有场景树中的节点才会调用。因此我们使用 `init()` 方法在按钮创建时手动调用初始化。
+
+---
+
+## 7. 调试技巧
 
 **添加日志跟踪初始化**:
 ```gdscript
@@ -348,57 +365,3 @@ func init():
             Logging.debug("Executing upgrade_random_imagery")
             upgrade_random_imagery()
 ```
-
-## 常见问题
-
-### Q: 为什么不用 _ready() 方法？
-
-**A**: `BaseOption` 继承自 `Resource`，而 `Resource` 在 Godot 中没有 `_ready()` 生命周期方法。`_ready()` 是 `Node` 的方法，只有场景树中的节点才会调用。因此我们使用 `init()` 方法在按钮创建时手动调用初始化。
-
-### Q: 选项的 requirements 在哪里检查？
-
-**A**: 在 `EventBtn._init()` 中检查。当按钮创建时会立即检查条件，如果不满足则禁用按钮并显示失败提示。
-
-### Q: 如何在选项中触发新事件？
-
-**A**: 使用 `EventOperator`:
-```gdscript
-var operator = EventOperator.new()
-operator.event_key = "some_event_key"
-choice_result.operators.append(operator)
-```
-
-### Q: CustomEventOption 和动态生成选项有什么区别？
-
-**A**: 
-- `CustomEventOption` 是预定义的特殊逻辑，通过 `custom_type` 区分
-- 动态生成选项是在运行时完全创建新的选项实例
-- 前者是配置化的扩展，后者是程序化的生成
-
-## 相关文件
-
-- **核心类**: 
-  - `model/event/base_option.gd`
-  - `model/event/event_option.gd`
-  - `model/event/custom_event_option.gd`
-  - `model/event/complex_event_option.gd`
-  - `model/event/property_option.gd`
-
-- **UI 组件**:
-  - `characters/event_btn.gd`
-  - `ui/option_btns.gd`
-  - `characters/narrative_overlay.gd`
-
-- **执行系统**:
-  - `model/choice_result.gd`
-  - `core/consequence_executer.gd`
-
-- **事件管理**:
-  - `core/event_manager.gd`
-  - `core/eventbus.gd`
-
-## 扩展阅读
-
-- [事件系统架构](./event_result.md)
-- [Imaginary 系统](./imaginary_system_report.md)
-- [属性系统](./props_system.md)

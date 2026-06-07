@@ -6,7 +6,6 @@ class_name PropertyRequirement extends BaseRequirements
 @export var property := ''
 @export var value: int
 @export var operator: REQ_OPERATOR.COMPARE
-@export var failed_hint: String
 
 func compare(player_state: PlayerState):
 	var stat_front = player_state.get_stat_val(property)

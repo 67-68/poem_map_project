@@ -13,7 +13,6 @@ class_name EmotionRequirement extends BaseRequirements
 
 @export var value: int
 @export var operator: REQ_OPERATOR.COMPARE
-@export var failed_hint: String
 
 func compare(player_state: PlayerState):
 	var stat_front = player_state.get_emotion(volatile_stat)

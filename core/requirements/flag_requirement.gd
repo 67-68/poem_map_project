@@ -10,7 +10,6 @@ class_name FlagRequirement extends BaseRequirements
 ) var type := ''
 @export var value: Variant
 @export var operator: REQ_OPERATOR.COMPARE = REQ_OPERATOR.COMPARE.GREATER_THAN
-@export var failed_hint: String
 ## 动态 flag 名称：从 context 中取指定 key 的值作为 flag_id
 ## 与 FlagOperator.target_flag_id_from_context 行为一致
 @export var target_flag_id_from_context: String = ""
