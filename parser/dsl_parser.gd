@@ -30,6 +30,7 @@ const _REQUIREMENT_ONLY_FUNCS: Array[String] = [
     "flag_bool_has", "flag_bool_not_has",
     "flag_str_is", "flag_str_not",
     "flag_int_gt", "flag_int_lt", "flag_int_eq", "flag_int_ne",
+    "poem_has",
 ]
 
 # 必须使用全角标点的 ASCII 等价物集合（用于纯文本字段校验）

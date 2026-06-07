@@ -33,6 +33,7 @@ const FUNC_FLAG_INT_GT := "flag_int_gt"
 const FUNC_FLAG_INT_LT := "flag_int_lt"
 const FUNC_FLAG_INT_EQ := "flag_int_eq"
 const FUNC_FLAG_INT_NE := "flag_int_ne"
+const FUNC_POEM_HAS := "poem_has"
 
 # Consequence operators
 const FUNC_PROP_ADD := "prop_add"
@@ -100,6 +101,7 @@ static func _ensure_dispatch() -> void:
 	rd[FUNC_FLAG_INT_EQ] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.EQUAL)
 	rd[FUNC_FLAG_INT_NE] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.NOT_EQUAL)
 	rd[FUNC_IMAGINARY_HAS_LEVEL] = func(p, r): return _exec_imaginary_has_level_req(p, r)
+	rd[FUNC_POEM_HAS] = func(p, r): return _exec_poem_req(p, r)
 	
 	# ── Consequence Operators ──
 	var cd = _consequence_dispatch
@@ -771,6 +773,37 @@ static func _exec_imaginary_has_level_req(parsed: NamedDSLParser.ParseResult, ra
 	req.check_any = true
 
 	Logging.info("imaginary_has_level requirement 创建成功: min_level=%d (check_any)" % min_level)
+	return req
+
+
+# ─── poem_has ────────────────────────────────────────────────────
+
+# DSL 语法: poem_has(type=[GAN_YE/YING_ZHI] ; min_level=2)
+# 返回 PoemRequirement（检查玩家是否拥有符合条件的诗词 trait）
+static func _exec_poem_req(parsed: NamedDSLParser.ParseResult, raw: String) -> PoemRequirement:
+	var req = PoemRequirement.new()
+
+	# 解析 type 参数（数组格式 [GAN_YE/YING_ZHI] → PackedStringArray）
+	if parsed.params.has("type"):
+		var type_val = parsed.params["type"]
+		if type_val is PackedStringArray:
+			for type_str in type_val:
+				for i in ENUMS.POEM_TYPE.size():
+					if ENUMS.POEM_TYPE.keys()[i] == type_str:
+						req.accepted_poem_types.append(i)
+						break
+		elif type_val is String and not (type_val as String).is_empty():
+			# 单个类型回退，如 type=GAN_YE
+			var single_type = type_val as String
+			for i in ENUMS.POEM_TYPE.size():
+				if ENUMS.POEM_TYPE.keys()[i] == single_type:
+					req.accepted_poem_types.append(i)
+					break
+
+	# 解析 min_level 参数
+	req.lowest_poem_level = NamedDSLParser.get_int_param(parsed, "min_level", 0)
+
+	Logging.info("poem_has requirement 创建成功: types=%s, min_level=%d" % [str(req.accepted_poem_types), req.lowest_poem_level])
 	return req
 
 
