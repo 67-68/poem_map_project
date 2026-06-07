@@ -17,6 +17,9 @@
   # dry-run 只看 prompt 不调 API
   python3 tools/generate_orthogonal_events.py --dry-run
 
+  # trial 试运行：实际调 1 次 API，打印全部中间产物，不保存 CSV
+  python3 tools/generate_orthogonal_events.py --trial
+
 输出:
   data/generated_events/<config.id>_events.csv
 """
@@ -719,6 +722,7 @@ def main():
     parser.add_argument("--config", default=None, help="JSON 配置文件路径（默认使用内置示例配置）")
     parser.add_argument("--output-dir", default=None, help="输出目录（覆盖配置中的路径）")
     parser.add_argument("--dry-run", action="store_true", help="只打印 Prompt，不调 API")
+    parser.add_argument("--trial", action="store_true", help="试运行：调1次API，打印所有中间产物，不保存CSV")
     parser.add_argument("--max-events", type=int, default=0, help="最多生成事件数（0=全部）")
     args = parser.parse_args()
 
@@ -758,6 +762,10 @@ def main():
     if not api_key:
         if args.dry_run:
             print("⚠️  未设置 DEEPSEEK_API_KEY（dry-run 跳过）")
+        elif args.trial:
+            print("⚠️  未设置 DEEPSEEK_API_KEY（trial 模式无法调 API）")
+            print("   export DEEPSEEK_API_KEY='sk-xxx'")
+            sys.exit(1)
         else:
             print("❌ 请设置环境变量 DEEPSEEK_API_KEY")
             print("   export DEEPSEEK_API_KEY='sk-xxx'")
@@ -769,7 +777,11 @@ def main():
     system_prompt = build_system_prompt(cfg)
     print(f"\n📋 System Prompt ({len(system_prompt)} chars):")
     print("-" * 40)
-    print(system_prompt[:600] + "..." if len(system_prompt) > 600 else system_prompt)
+    if args.trial:
+        # trial 模式完整打印
+        print(system_prompt)
+    else:
+        print(system_prompt[:600] + "..." if len(system_prompt) > 600 else system_prompt)
     print("-" * 40)
 
     if args.dry_run:
@@ -782,6 +794,183 @@ def main():
         print(user_prompt)
         print("-" * 40)
         print("\n✅ Dry-run 完成")
+        return
+
+    # ════════════════════════════════════════════════════════════════
+    # 8a. 试运行模式（--trial）
+    # ════════════════════════════════════════════════════════════════
+
+    if args.trial:
+        print("\n🧪 试运行模式 — 将实际调用 API 1 次，不保存任何文件")
+
+        # 只跑第一个组合
+        values_tuple = combinations[0]
+        combined_scale = 1.0
+        scale_parts = []
+        uuid_parts = [cfg.id]
+        for val in values_tuple:
+            combined_scale *= val.scale
+            scale_parts.append(str(val.scale))
+            uuid_parts.append(val.id)
+        uuid = "_".join(uuid_parts).lower()
+
+        current_combos = _make_combos(cfg.dimensions, values_tuple)
+
+        print(f"\n📦 组合: {uuid}")
+        print(f"  Scale: {'×'.join(scale_parts)} = {combined_scale}")
+
+        # 打印维度详情
+        print(f"\n📋 维度详情:")
+        for combo in current_combos:
+            print(f"  - {combo.dimension.name}: {combo.value.name} ({combo.value.description})")
+
+        # ── 自适应边界收缩状态 ──
+        current_min = cfg.word_count_min
+        current_max = cfg.word_count_max
+        SHRINK_STEP = 20
+        MIN_GAP = 10
+
+        user_prompt = build_user_prompt(
+            current_combos, cfg,
+            word_count_min=current_min, word_count_max=current_max,
+        )
+        print(f"\n📋 User Prompt ({len(user_prompt)} chars):")
+        print("-" * 40)
+        print(user_prompt)
+        print("-" * 40)
+
+        # ── API 调用（带重试 + 自适应收缩） ──
+        success = False
+        skip = False
+        for attempt in range(cfg.max_retries + 1):
+            if attempt > 0:
+                print(f"\n  🔄 重试 {attempt}/{cfg.max_retries}...")
+                time.sleep(1)
+
+            try:
+                print(f"\n🤖 调用 API ({cfg.api_model})...")
+                response = llm.generate_event_text(system_prompt, user_prompt)
+            except Exception as e:
+                print(f"  ❌ API 调用失败: {e}")
+                if attempt < cfg.max_retries:
+                    continue
+                print(f"  ⏭️ 跳过（已达最大重试次数）")
+                skip = True
+                break
+
+            # 打印原始响应
+            print(f"\n📨 API Raw Response ({len(response)} chars):")
+            print("-" * 40)
+            print(response)
+            print("-" * 40)
+
+            parsed = parse_llm_response(response)
+            print(f"\n🔍 Parsed Result:")
+            print(f"  title: {parsed['title']!r}")
+            print(f"  description: {parsed['description']!r}")
+            if parsed.get("options"):
+                for k, v in parsed["options"].items():
+                    print(f"  option [{k}]: {v!r}")
+
+            error = validate_response(
+                parsed, cfg,
+                override_min=cfg.word_count_min, override_max=cfg.word_count_max,
+            )
+
+            if error is None:
+                print(f"\n✅ 校验通过")
+                title = parsed["title"]
+                description = parsed["description"]
+
+                # ── DSL 缩放 ──
+                operator_dsls = [val.operator_dsl for val in values_tuple]
+                try:
+                    scaled_dsl = scale_all_operators(operator_dsls, combined_scale)
+                except ValueError as e:
+                    print(f"  ❌ DSL 缩放失败: {e}")
+                    break
+
+                print(f"\n⚙️ 缩放后 DSL:")
+                if scaled_dsl:
+                    print(f"  {scaled_dsl}")
+                else:
+                    print(f"  (无操作)")
+
+                final_dsl = scaled_dsl
+                if cfg.universal_result:
+                    try:
+                        scaled_universal = scale_all_operators(
+                            [cfg.universal_result], combined_scale
+                        )
+                    except ValueError as e:
+                        print(f"  ❌ universal_result DSL 缩放失败: {e}")
+                        break
+                    if final_dsl:
+                        final_dsl = f"{final_dsl} | {scaled_universal}"
+                    else:
+                        final_dsl = scaled_universal
+                    print(f"  +universal(scaled={combined_scale}): {scaled_universal}")
+
+                # ── CSV 预览 ──
+                print(f"\n📄 CSV 预览（不会写入文件）:")
+
+                # event 行
+                tags_expr = ",".join(cfg.universal_tags)
+                requirement = cfg.universal_requirement or "(无)"
+                desc_preview = description[:80] + "..." if len(description) > 80 else description
+                print(f"  ┌─ [event] ─────────────────────────────")
+                print(f"  │ trigger_tags: {tags_expr}")
+                print(f"  │ uuid:         {uuid}")
+                print(f"  │ requirement:  {requirement}")
+                print(f"  │ title:        {title}")
+                print(f"  │ description:  {desc_preview}")
+                print(f"  └───────────────────────────────────────")
+
+                # option 行
+                options = parsed.get("options", {})
+                if cfg.option_features and options:
+                    for of in cfg.option_features:
+                        opt_text = options.get(of.id, "").strip()
+                        if not opt_text:
+                            opt_text = "（确认）"
+                        print(f"  ┌─ [option] ────────────────────────────")
+                        print(f"  │ description: {opt_text}")
+                        print(f"  │ results:     {final_dsl}")
+                        print(f"  └───────────────────────────────────────")
+                else:
+                    print(f"  ┌─ [option] ────────────────────────────")
+                    print(f"  │ description: （确认）")
+                    print(f"  │ results:     {final_dsl}")
+                    print(f"  └───────────────────────────────────────")
+
+                success = True
+                break
+            else:
+                print(f"\n❌ 校验失败: {error}")
+                if attempt < cfg.max_retries:
+                    # ── 自适应边界收缩 ──
+                    old_min, old_max = current_min, current_max
+                    if "过短" in error:
+                        current_min = min(current_min + SHRINK_STEP, current_max - MIN_GAP)
+                    elif "过长" in error:
+                        current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
+                    if current_min != old_min or current_max != old_max:
+                        print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
+                        user_prompt = build_user_prompt(
+                            current_combos, cfg,
+                            word_count_min=current_min, word_count_max=current_max,
+                        )
+                    continue
+                print(f"  ⏭️ 跳过（已达最大重试次数）")
+                skip = True
+                break
+
+        if success:
+            print(f"\n✅ 试运行完成 — API 调用成功，未保存任何文件")
+        elif skip:
+            print(f"\n⏭️ 试运行完成 — 已跳过，未保存任何文件")
+        else:
+            print(f"\n⚠️ 试运行完成 — 出现异常，未保存任何文件")
         return
 
     # ── 执行生成 ──
@@ -837,9 +1026,10 @@ def main():
                     break
 
                 parsed = parse_llm_response(response)
+                # 🚨 校验始终使用原始字数边界，自适应收缩只影响 AI prompt 中的要求
                 error = validate_response(
                     parsed, cfg,
-                    override_min=current_min, override_max=current_max,
+                    override_min=cfg.word_count_min, override_max=cfg.word_count_max,
                 )
 
                 if error is None:

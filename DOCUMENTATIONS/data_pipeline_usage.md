@@ -51,8 +51,11 @@ python3 tools/generate_orthogonal_events.py
 # 使用自定义 JSON 配置
 python3 tools/generate_orthogonal_events.py --config tools/my_config.json
 
-# 只看 Prompt 不调 API（调试用）
+# 只看 Prompt 不调 API（调试 System/User Prompt 结构）
 python3 tools/generate_orthogonal_events.py --dry-run
+
+# 试运行：实际调 1 次 API，打印全部中间产物，不保存 CSV（验证生成质量）
+python3 tools/generate_orthogonal_events.py --trial
 ```
 
 输出文件：`data/generated_events/<config.id>_events.csv`
