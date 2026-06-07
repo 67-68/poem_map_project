@@ -274,6 +274,15 @@ class EventPipelineConfig(BaseModel):
     # 例如: "prop_add(name=career_progress; val=1)"
     universal_result: str = ""
 
+    # Plugin Hook 系统：启用的插件 ID 列表
+    # 每个 ID 对应 PLUGIN_REGISTRY 中已注册的 EventPromptPlugin 实例。
+    # 插件在以下 3 个 Hook 点注入行为:
+    #   1. get_prompt_fragment() — User Prompt 注入额外指令
+    #   2. get_extra_output_fields() — 声明额外解析字段
+    #   3. enrich_context() — 富化 CSV context 列
+    # 示例: ["failed_hint"]
+    plugins: list[str] = []
+
     # 生成参数
     word_count_min: int = 80
     word_count_max: int = 200

@@ -52,6 +52,16 @@ from tools.config import (
     PromptFeature,
     resolve_text_features,
 )
+from tools.plugin_base import (
+    PLUGIN_REGISTRY,
+    EventPromptPlugin,
+    PluginContext,
+    register_plugin,
+    resolve_plugins,
+)
+
+# ── 自动注册插件（import 触发 register_plugin） ──
+import tools.plugins  # noqa: F401 — 确保 PLUGIN_REGISTRY 已填充
 
 
 # ════════════════════════════════════════════════════════════════
@@ -488,6 +498,7 @@ def build_user_prompt(
     cfg: EventPipelineConfig,
     word_count_min: Optional[int] = None,
     word_count_max: Optional[int] = None,
+    plugins: Optional[list[EventPromptPlugin]] = None,
 ) -> str:
     """组装 User Prompt（包含当前维度组合信息）。
     
@@ -496,6 +507,9 @@ def build_user_prompt(
     
     可通过 word_count_min/word_count_max 覆盖 cfg 中的默认长度约束，
     用于自适应重试时动态调整 LLM 看到的字数要求。
+
+    如果传入了 plugins，会调用每个 plugin.get_prompt_fragment() 将
+    插件自定义指令追加到 prompt 末尾（Hook 1）。
     """
     effective_min = word_count_min if word_count_min is not None else cfg.word_count_min
     effective_max = word_count_max if word_count_max is not None else cfg.word_count_max
@@ -537,18 +551,36 @@ options:
 title: <你的标题>
 description: <你的描述>""")
 
+    # ── Hook 1: 插件 Prompt 片段注入 ──
+    if plugins:
+        for plugin in plugins:
+            fragment = plugin.get_prompt_fragment(combos, cfg)
+            if fragment.strip():
+                lines.append(f"\n## 额外要求（{plugin.plugin_id}）\n{fragment.strip()}")
+
     return "\n".join(lines)
 
 
 def parse_llm_response(response: str) -> dict:
-    """解析 LLM 返回的 title/description/options。"""
+    """解析 LLM 返回的 title/description/options 及任意额外字段。
+
+    Hook 2 支持：插件声明的额外字段（如 failed_hint）会被自动捕获到
+    parsed["_extra"] dict 中，供后续 enrich_context() 使用。
+
+    返回 dict 结构:
+        title:       事件标题
+        description: 事件描述
+        options:     {option_id: option_text, ...}
+        _extra:      {field_name: field_value, ...}（非标准字段）
+    """
     title = ""
     description = ""
     options: dict[str, str] = {}
+    extra: dict[str, str] = {}
     in_options = False
 
-    for line in response.split("\n"):
-        line = line.strip()
+    for raw_line in response.split("\n"):
+        line = raw_line.strip()
         if not line:
             in_options = False
             continue
@@ -562,11 +594,30 @@ def parse_llm_response(response: str) -> dict:
         elif line.lower().startswith("options"):
             in_options = True
         elif in_options and ":" in line:
-            # 解析 " option_id: option text"
-            key, val = line.split(":", 1)
-            options[key.strip()] = val.strip()
+            # options 块内：仅缩进行才是选项；非缩进行自动退出 options 模式
+            if raw_line[0] in (" ", "\t"):
+                key, val = line.split(":", 1)
+                options[key.strip()] = val.strip()
+            else:
+                # 非缩进 → 退出 options 模式，交给下方 extra 捕获
+                in_options = False
+                # 不 return，直接 fall through 到 extra 捕获逻辑
+        if ":" in line and not in_options:
+            # 捕获 title/description/options 之外的所有顶层 key: value 行
+            if line.startswith("title:") or line.startswith("title："):
+                continue
+            if line.startswith("description:") or line.startswith("description："):
+                continue
+            if line.lower().startswith("options"):
+                continue
+            sep_idx = line.find(":")
+            key = line[:sep_idx].strip()
+            val = line[sep_idx + 1:].strip()
+            # 过滤掉空 key 和数字开头（避免误抓非字段行）
+            if key and not key[0].isdigit() and key not in ("title", "description", "options"):
+                extra[key] = val
 
-    return {"title": title, "description": description, "options": options}
+    return {"title": title, "description": description, "options": options, "_extra": extra}
 
 
 def validate_response(
@@ -640,22 +691,37 @@ def write_csv_header(writer):
     writer.writerow(CSV_HEADER)
 
 
-def write_event_row(writer, uuid: str, title: str, description: str, tags: list[str] | None = None, requirement: str = ""):
-    """写一个 random_event 行。结果 DSL 放在 option 行，不在 event 行。
-    
-    tags: 触发标签列表。统一使用 [tag1/tag2] 方括号 + / 分隔格式（DSL Parser 标准格式）。
+def _build_context_column(tags: list[str], context_extras: dict[str, str] | None = None) -> str:
+    """构建 CSV context 列字符串。
+
+    基础格式: trigger_tags=[...]|weight=10
+    Hook 3 支持: 通过 context_extras 追加 |key=value 对。
     """
-    if tags is None:
-        tags = ["bai_ye"]
-    # 统一方括号 + / 分隔（单 tag 也加方括号，DSL Parser 标准格式）
     if tags:
         tags_expr = "[" + "/".join(tags) + "]"
     else:
         tags_expr = ""
+    ctx = f"trigger_tags={tags_expr}|weight=10"
+    if context_extras:
+        for k, v in context_extras.items():
+            if v:
+                ctx += f"|{k}={v}"
+    return ctx
+
+
+def write_event_row(writer, uuid: str, title: str, description: str, tags: list[str] | None = None, requirement: str = "", context_extras: dict[str, str] | None = None):
+    """写一个 random_event 行。结果 DSL 放在 option 行，不在 event 行。
+    
+    tags: 触发标签列表。统一使用 [tag1/tag2] 方括号 + / 分隔格式（DSL Parser 标准格式）。
+    context_extras: 插件通过 enrich_context() 返回的额外 key=value 对（Hook 3）。
+    """
+    if tags is None:
+        tags = ["bai_ye"]
+    context = _build_context_column(tags, context_extras)
     writer.writerow([
         "random_event",
         uuid,
-        f"trigger_tags={tags_expr}|weight=10",  # context 列
+        context,  # context 列（含插件富化）
         requirement,  # requirements 列（universal requirement 或空）
         title,  # title 列
         description,  # description 列
@@ -715,6 +781,43 @@ def _make_combos(
     ]
 
 
+# ════════════════════════════════════════════════════════════════
+# 9. Plugin Hook 辅助函数
+# ════════════════════════════════════════════════════════════════
+
+def _build_plugin_context_extras(
+    plugins: list[EventPromptPlugin],
+    combos: list[DimensionCombo],
+    cfg: EventPipelineConfig,
+    parsed: dict,
+    raw_response: str,
+    combined_scale: float,
+    uuid: str,
+) -> dict[str, str]:
+    """调用所有插件的 enrich_context() 并合并 context_extras。
+
+    这是 Hook 3 的调度入口。每个插件的 enrich_context() 接收 PluginContext
+    （全量管线状态），返回 key=value 对，最终合并为一个 dict 传给 write_event_row。
+    """
+    extras: dict[str, str] = {}
+    ctx = PluginContext(
+        combos=combos,
+        cfg=cfg,
+        raw_response=raw_response,
+        parsed=parsed,
+        combined_scale=combined_scale,
+        uuid=uuid,
+    )
+    for plugin in plugins:
+        try:
+            result = plugin.enrich_context(ctx)
+            if result:
+                extras.update(result)
+        except Exception as e:
+            print(f"  ⚠️ 插件 '{plugin.plugin_id}'.enrich_context() 异常: {e}")
+    return extras
+
+
 def main():
     parser = argparse.ArgumentParser(description="正交事件生成管线")
     parser.add_argument("--config", default=None, help="JSON 配置文件路径（默认使用内置示例配置）")
@@ -731,6 +834,16 @@ def main():
         cfg = default_config()
 
     print(f"📖 配置: {cfg.name}")
+
+    # ── 解析插件 ──
+    plugins: list[EventPromptPlugin] = []
+    if cfg.plugins:
+        try:
+            plugins = resolve_plugins(cfg.plugins)
+            print(f"🔌 已加载插件: {[p.plugin_id for p in plugins]}")
+        except KeyError as e:
+            print(f"❌ 插件加载失败: {e}")
+            sys.exit(1)
 
     dim_count = len(cfg.dimensions)
     if dim_count < 1:
@@ -786,7 +899,7 @@ def main():
         print("\n🏁 Dry-run 模式，不会调用 API")
         first_values = combinations[0]
         first_combos = _make_combos(cfg.dimensions, first_values)
-        user_prompt = build_user_prompt(first_combos, cfg)
+        user_prompt = build_user_prompt(first_combos, cfg, plugins=plugins)
         print(f"\n📋 示例 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
         print(user_prompt)
@@ -831,6 +944,7 @@ def main():
         user_prompt = build_user_prompt(
             current_combos, cfg,
             word_count_min=current_min, word_count_max=current_max,
+            plugins=plugins,
         )
         print(f"\n📋 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
@@ -912,6 +1026,14 @@ def main():
                 # ── CSV 预览（使用与 write_event_row 一致的格式化）──
                 print(f"\n📄 CSV 预览（不会写入文件）:")
 
+                # ── Hook 3: 插件 context 富化 ──
+                context_extras = _build_plugin_context_extras(
+                    plugins, current_combos, cfg, parsed, response,
+                    combined_scale, uuid,
+                )
+                if context_extras:
+                    print(f"📎 插件 context 富化: {context_extras}")
+
                 # 构建 context 列（与 write_event_row 一致的 tag 格式化）
                 tags = cfg.universal_tags or ["bai_ye"]
                 if tags:
@@ -919,6 +1041,10 @@ def main():
                 else:
                     tags_expr = ""
                 context = f"trigger_tags={tags_expr}|weight=10"
+                if context_extras:
+                    for k, v in context_extras.items():
+                        if v:
+                            context += f"|{k}={v}"
 
                 # event 行（实际 CSV 格式）
                 requirement_col = cfg.universal_requirement if cfg.universal_requirement else ""
@@ -1004,6 +1130,7 @@ def main():
             user_prompt = build_user_prompt(
                 current_combos, cfg,
                 word_count_min=current_min, word_count_max=current_max,
+                plugins=plugins,
             )
 
             for attempt in range(cfg.max_retries + 1):
@@ -1065,7 +1192,19 @@ def main():
                             final_dsl = scaled_universal
                         print(f"     +universal(scaled={combined_scale}): {scaled_universal}")
 
-                    write_event_row(writer, uuid, title, description, tags=cfg.universal_tags, requirement=cfg.universal_requirement)
+                    # ── Hook 3: 插件 context 富化 ──
+                    context_extras = _build_plugin_context_extras(
+                        plugins, current_combos, cfg, parsed, response,
+                        combined_scale, uuid,
+                    )
+                    if context_extras:
+                        print(f"     📎 插件 context: {context_extras}")
+
+                    write_event_row(
+                        writer, uuid, title, description,
+                        tags=cfg.universal_tags, requirement=cfg.universal_requirement,
+                        context_extras=context_extras or None,
+                    )
 
                     # ── 写选项行 ──
                     options = parsed.get("options", {})
@@ -1097,6 +1236,7 @@ def main():
                             user_prompt = build_user_prompt(
                                 current_combos, cfg,
                                 word_count_min=current_min, word_count_max=current_max,
+                                plugins=plugins,
                             )
                         continue
                     print(f"  ⏭️ 跳过（已达最大重试次数）")

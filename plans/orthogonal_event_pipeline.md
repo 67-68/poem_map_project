@@ -366,13 +366,84 @@ option,,接受（花费...）,"","","","prop_sub(name="money",val=300), prop_sub
    - DSL 数值缩放 + 合法性校验
    - CSV 输出（DSLParser 兼容列格式）
 
-### Phase C: Godot 加载端 ✅
+### Phase C: 插件 Hook 系统 ✅
 
-3. ✅ 修正 Python CSV 列名以匹配 DSLParser 期望：
+> 提供 Plugin Hook 机制，允许在不修改 `generate_orthogonal_events.py` 主流程的前提下，
+> 定制 Prompt、扩展 AI 输出字段、富化 CSV context 列。
+
+#### 架构概览
+
+```
+config.json: plugins = ["failed_hint"]
+       │
+       ▼
+tools/plugin_base.py          ← EventPromptPlugin 基类 + PLUGIN_REGISTRY
+tools/plugins/__init__.py     ← 自动发现 & 注册所有插件模块
+tools/plugins/failed_hint_plugin.py  ← 示例实现
+       │
+       ├── Hook 1: get_prompt_fragment()     → 向 User Prompt 注入额外指令
+       ├── Hook 2: get_extra_output_fields() → 声明 AI 需返回的额外 YAML 字段
+       └── Hook 3: enrich_context()          → 根据 parsed 结果富化 CSV context 列
+```
+
+#### 三个 Hook 点
+
+| Hook | 方法 | 触发时机 | 用途 |
+|------|------|----------|------|
+| **Hook 1** | `get_prompt_fragment(combos, cfg) → str` | Prompt 组装末尾 | 注入额外指令（如"写出失败条件"） |
+| **Hook 2** | `get_extra_output_fields() → list[str]` | 配置加载 | 声明 AI 需输出的额外字段名 |
+| **Hook 3** | `enrich_context(ctx: PluginContext) → dict` | 解析后、写 CSV 前 | 根据 parsed 内容追加 `\|key=value` 对 |
+
+#### PluginContext 数据类
+
+```python
+@dataclass
+class PluginContext:
+    combos: list[DimensionCombo]       # 当前组合的维度信息
+    cfg: EventPipelineConfig           # 完整管线配置
+    raw_response: str                  # LLM 原始响应文本
+    parsed: dict                       # parse_llm_response() 结果（含 _extra）
+    combined_scale: float              # 组合 scale 值
+    uuid: str                          # 该事件的 UUID
+```
+
+#### 扩展字段解析规则
+
+`parse_llm_response()` 自动捕获 AI 响应中所有非标准顶层字段到 `parsed["_extra"]`：
+- `title` / `description` / `options` 之外的 `key: value` 行 → 存入 `_extra`
+- `options` 块内仅缩进行为选项；非缩进行自动退出 options 模式
+- `enrich_context()` 优先读取 `parsed["failed_hint"]`，回退到 `parsed["_extra"]["failed_hint"]`
+
+#### 使用方法
+
+1. 在 `tools/plugins/` 下创建插件模块（如 `my_plugin.py`）
+2. 继承 `EventPromptPlugin`，实现需要的 Hook 方法
+3. 调用 `register_plugin(MyPlugin())` 注册
+4. 在 `config.json` 的 `plugins` 列表中添加插件 ID：
+
+```json
+{
+  "plugins": ["failed_hint"],
+  "dimensions": [...]
+}
+```
+
+#### 与 Extractor Context 的区别
+
+| | Extractor Context | Plugin Context |
+|---|---|---|
+| **生命周期** | `expand_combinations()` 维度展开阶段 | AI 生成 & 后处理阶段 |
+| **数据内容** | `{"dimensions": {...}}`，用于派生维度值 | `parsed` 响应 + `combos` + `cfg` |
+| **传递方式** | `register_extractor()` 的 `context` 参数 | `enrich_context(ctx: PluginContext)` 参数 |
+| **用途** | 维度值生成（如从场景标签推导） | Prompt 注入 & 输出富化 |
+
+### Phase D: Godot 加载端 ✅
+
+5. ✅ 修正 Python CSV 列名以匹配 DSLParser 期望：
    - `context` 列使用 `trigger_tags=xxx|weight=N` 格式
    - `results` 列仅在 option 行使用（event 行留空避免 DSLParser 报错）
    - `>option` row_type 前缀满足 PDA 深度检测
-4. ✅ 在 `core/csv_cloud_loader.gd` 添加 `import_generated_events` 按钮
+6. ✅ 在 `core/csv_cloud_loader.gd` 添加 `import_generated_events` 按钮
    - 扫描 `res://data/generated_events/*_events.csv`
    - 复用 `_process_csv_data()` 完整管线：DSLParser → .tres → Registry
    - 零代码改动，点一下按钮即可
