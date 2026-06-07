@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_lqex8")
 resources = {
-"uid://dcp7jgbogh7o6": "res://data/tres_focused_chats/dufu_fail_to_become_official.tres"
+"lilinfu_promise": "res://data/tres_focused_chats/lilinfu_promise.tres"
 }

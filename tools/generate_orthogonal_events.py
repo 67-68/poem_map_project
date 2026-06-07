@@ -364,8 +364,16 @@ def build_user_prompt(
     d2: PipelineDimension, dv2: PipelineDimensionValue,
     d3: PipelineDimension, dv3: PipelineDimensionValue,
     cfg: EventPipelineConfig,
+    word_count_min: Optional[int] = None,
+    word_count_max: Optional[int] = None,
 ) -> str:
-    """组装 User Prompt（包含当前维度组合信息）。"""
+    """组装 User Prompt（包含当前维度组合信息）。
+    
+    可通过 word_count_min/word_count_max 覆盖 cfg 中的默认长度约束，
+    用于自适应重试时动态调整 LLM 看到的字数要求。
+    """
+    effective_min = word_count_min if word_count_min is not None else cfg.word_count_min
+    effective_max = word_count_max if word_count_max is not None else cfg.word_count_max
     lines = [f"""请为以下维度组合生成一个拜谒事件：
 
 ## 维度组合
@@ -375,7 +383,7 @@ def build_user_prompt(
 
 ## 输出要求
 - title：15字以内的事件标题
-- description：{cfg.word_count_min}-{cfg.word_count_max}字的事件描述
+- description：{effective_min}-{effective_max}字的事件描述
 - 使用全角中文标点"""]
 
     # 如果有选项定义，注入到 prompt 中
@@ -434,8 +442,20 @@ def parse_llm_response(response: str) -> dict:
     return {"title": title, "description": description, "options": options}
 
 
-def validate_response(parsed: dict, cfg: EventPipelineConfig) -> Optional[str]:
-    """验证 LLM 响应。返回 None 表示通过，返回字符串表示错误信息。"""
+def validate_response(
+    parsed: dict,
+    cfg: EventPipelineConfig,
+    override_min: Optional[int] = None,
+    override_max: Optional[int] = None,
+) -> Optional[str]:
+    """验证 LLM 响应。返回 None 表示通过，返回字符串表示错误信息。
+    
+    可通过 override_min/override_max 覆盖 cfg 中的默认长度约束，
+    用于自适应重试时动态调整验证边界。
+    """
+    effective_min = override_min if override_min is not None else cfg.word_count_min
+    effective_max = override_max if override_max is not None else cfg.word_count_max
+
     if not parsed["title"]:
         return "title 为空"
     if len(parsed["title"]) > 20:
@@ -445,10 +465,10 @@ def validate_response(parsed: dict, cfg: EventPipelineConfig) -> Optional[str]:
         return "description 为空"
 
     desc_len = len(parsed["description"])
-    if desc_len < cfg.word_count_min:
-        return f"description 过短 ({desc_len}字，要求{cfg.word_count_min}-{cfg.word_count_max}字)"
-    if desc_len > cfg.word_count_max * 1.2:
-        return f"description 过长 ({desc_len}字，要求{cfg.word_count_max}字以内)"
+    if desc_len < effective_min:
+        return f"description 过短 ({desc_len}字，要求{effective_min}-{effective_max}字)"
+    if desc_len > effective_max * 1.2:
+        return f"description 过长 ({desc_len}字，要求{effective_max}字以内)"
 
     # 如果定义了选项，验证每个选项都有文本
     options = parsed.get("options", {})
@@ -621,7 +641,16 @@ def main():
             print(f"\n[{idx + 1}/{len(combinations)}] {uuid}")
             print(f"  Scale: {dv1.scale}×{dv2.scale}×{dv3.scale} = {combined_scale}")
 
-            user_prompt = build_user_prompt(d1, dv1, d2, dv2, d3, dv3, cfg)
+            # ── 自适应边界收缩状态（每组合独立重置） ──
+            current_min = cfg.word_count_min
+            current_max = cfg.word_count_max
+            SHRINK_STEP = 20
+            MIN_GAP = 10
+
+            user_prompt = build_user_prompt(
+                d1, dv1, d2, dv2, d3, dv3, cfg,
+                word_count_min=current_min, word_count_max=current_max,
+            )
 
             for attempt in range(cfg.max_retries + 1):
                 if attempt > 0:
@@ -639,7 +668,10 @@ def main():
                     break
 
                 parsed = parse_llm_response(response)
-                error = validate_response(parsed, cfg)
+                error = validate_response(
+                    parsed, cfg,
+                    override_min=current_min, override_max=current_max,
+                )
 
                 if error is None:
                     title = parsed["title"]
@@ -698,6 +730,20 @@ def main():
                 else:
                     print(f"  ❌ 验证失败: {error}")
                     if attempt < cfg.max_retries:
+                        # ── 自适应边界收缩（阶梯增压）──
+                        old_min, old_max = current_min, current_max
+                        if "过短" in error:
+                            # 太短 → 硬抬下限，逼 LLM 写更长（80→100→120）
+                            current_min = min(current_min + SHRINK_STEP, current_max - MIN_GAP)
+                        elif "过长" in error:
+                            # 太长 → 硬压上限（200→180→160）
+                            current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
+                        if current_min != old_min or current_max != old_max:
+                            print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
+                            user_prompt = build_user_prompt(
+                                d1, dv1, d2, dv2, d3, dv3, cfg,
+                                word_count_min=current_min, word_count_max=current_max,
+                            )
                         continue
                     print(f"  ⏭️ 跳过（已达最大重试次数）")
                     skip_count += 1

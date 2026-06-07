@@ -49,9 +49,10 @@ func _on_add_messager(msg: Messager):
 	$background/PathMesh.add_child(msg)
 
 func load_character_point():
-	var character_point = load("res://world/character_point.tscn")
-	for item in Database.poet_data.values():
-		var node = character_point.instantiate()
+	pass
+	#var character_point = load("res://world/character_point.tscn")
+	#for item in Database.poet_data.values():
+		#var node = character_point.instantiate()
 		#var vec = Vector2(Database.life_path_points[item.path_point_keys[0]].position)
 		#var color = item.color
 		#node.modulate = color
