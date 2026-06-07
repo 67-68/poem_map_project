@@ -3,10 +3,18 @@
 
 镜像 Godot 侧 model/pipeline/ 下的 Resource 类结构。
 供 generate_orthogonal_events.py 使用。
+
+数据模型层级：
+  PipelineDimensionValue (基类)
+    └── SceneValue (扩展: tags 字段)
+  PipelineDimension (维度定义)
+    └── 支持 dynamic 派生轴
+  DimensionCombo (展开后的维度+值对)
+  EventPipelineConfig (根配置)
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Callable, Optional
 
 
 class PromptFeature(BaseModel):
@@ -26,20 +34,59 @@ class OptionFeature(BaseModel):
 
 
 class PipelineDimensionValue(BaseModel):
-    """维度值：正交矩阵中的一个具体节点。"""
+    """维度值：正交矩阵中的一个具体节点。
+    
+    tags 字段主要用于 SceneValue 场景，但放在基类避免 Pydantic
+    反序列化时丢失字段。非场景值的 tags 默认空列表，无影响。
+    """
     id: str = ""
     name: str = ""
     description: str = ""
     scale: float = 1.0
     operator_dsl: str = ""
+    tags: list[str] = []  # Dynamic Dimension 用：预定义标签 ID 列表
+
+
+class SceneValue(PipelineDimensionValue):
+    """场景维度值：PipelineDimensionValue 的别名类型。
+    
+    语义标记类型：标识这个维度值是一个"场景"。
+    tags 字段继承自基类，存储场景的预定义标签 ID
+    （如 "env_society_festival", "vibe_aesthetic_sensual"），
+    供 Dynamic Dimension 的 Extractor 函数提取使用。
+    """
+    pass
 
 
 class PipelineDimension(BaseModel):
-    """维度定义：正交矩阵中的一个轴。"""
+    """维度定义：正交矩阵中的一个轴。
+    
+    dynamic=True 时，该轴的值不是预先定义在 values 中，而是
+    通过 EXTRACTOR_REGISTRY 中的 value_extractor_key 函数，
+    在展开笛卡尔积时根据其他已确定的轴动态派生。
+    """
     id: str = ""
     name: str = ""
     description: str = ""
     values: list[PipelineDimensionValue] = []
+
+    # Dynamic Dimension 支持
+    dynamic: bool = False
+    value_extractor_key: str = ""
+    value_extractor_config: dict = {}
+
+
+class DimensionCombo(BaseModel):
+    """展开后的维度组合对：一个已选中的维度定义 + 选中的维度值。
+    
+    替代 build_user_prompt 中硬编码的 d1/dv1/d2/dv2/d3/dv3 参数，
+    使其支持任意数量的维度。
+    
+    dimension: 维度定义（如 "场景" 维度）
+    value:     该维度下选中的具体值（如 "长安夜宴"）
+    """
+    dimension: PipelineDimension
+    value: PipelineDimensionValue
 
 
 class EventPipelineConfig(BaseModel):

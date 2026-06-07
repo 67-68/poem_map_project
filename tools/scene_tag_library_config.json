@@ -1,0 +1,80 @@
+{
+  "id": "scene_tag_demo",
+  "name": "场景-标签演示库",
+  "background_context": "大唐天宝年间，你在长安城中经历着各式各样的际遇。每一个场景都有其独特的气息和氛围。",
+  "ai_persona": "你是一位精通唐朝生活百态的叙事设计师，擅长用白描手法呈现不同场景下的氛围。",
+  "prompt_features": [
+    {
+      "id": "stateless_narrative",
+      "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"
+    },
+    {
+      "id": "scene_focus",
+      "text": "重点描写场景的环境氛围，让场景本身说话。"
+    }
+  ],
+  "option_features": [
+    {
+      "id": "option_accept",
+      "text": "用20字以内描述玩家在场景中的行动"
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "scene",
+      "name": "场景",
+      "description": "事件发生的具体场景",
+      "values": [
+        {
+          "id": "scene_banquet",
+          "name": "长安夜宴",
+          "description": "长安城中权贵的奢华宴会，丝竹管弦，觥筹交错",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=fatigue; val=5)",
+          "tags": ["action_main_baiye", "env_society_festival", "vibe_aesthetic_sensual", "target_faction_zhuoliu"]
+        },
+        {
+          "id": "scene_temple",
+          "name": "古刹避雨",
+          "description": "荒废的古刹，蛛网密布，佛像斑驳，唯有檐角铜铃作响",
+          "scale": 1.0,
+          "operator_dsl": "prop_add(name=health; val=3)",
+          "tags": ["action_main_baiye", "env_nature_snowstorm", "vibe_philosophy_zen"]
+        },
+        {
+          "id": "scene_battlefield",
+          "name": "边塞劳军",
+          "description": "边塞风沙漫天，军营中军旗猎猎，士卒面有菜色",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=health; val=5)",
+          "tags": ["action_main_baiye", "env_society_war", "vibe_theme_martial", "target_faction_military"]
+        },
+        {
+          "id": "scene_drinking",
+          "name": "酒馆独酌",
+          "description": "长安城西市的一家小酒馆，胡姬当垆，酒香四溢",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=money; val=5)",
+          "tags": ["action_main_baiye", "vibe_aesthetic_sensual", "action_entertain_drink"]
+        }
+      ]
+    },
+    {
+      "id": "scene_tag",
+      "name": "场景标签意象",
+      "description": "从当前场景的标签中提取的意象（剔除 main tag）",
+      "dynamic": true,
+      "value_extractor_key": "scene_tags",
+      "value_extractor_config": {
+        "exclude": ["action_main_baiye"]
+      },
+      "values": []
+    }
+  ],
+  "universal_tags": ["scene_tag_demo"],
+  "word_count_min": 60,
+  "word_count_max": 150,
+  "max_retries": 3,
+  "api_model": "deepseek-reasoner",
+  "output_dir": "data/generated_events/"
+}

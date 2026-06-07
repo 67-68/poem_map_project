@@ -1,5 +1,5 @@
 """
-单元测试 — generate_orthogonal_events.py 的 DSL 解析/缩放核心函数。
+单元测试 — generate_orthogonal_events.py 核心函数。
 
 运行:
     python3 -m unittest tools.test_generate_orthogonal_events -v
@@ -9,9 +9,17 @@ import unittest
 import sys
 sys.path.insert(0, ".")
 
+from tools.config import (
+    DimensionCombo,
+    PipelineDimension,
+    PipelineDimensionValue,
+)
 from tools.generate_orthogonal_events import (
+    _extract_scene_tags,
+    _make_combos,
     _parse_dsl_args,
     _split_dsl_expressions,
+    expand_combinations,
     scale_dsl_operator,
     scale_all_operators,
     default_config,
@@ -338,6 +346,258 @@ class TestDefaultConfig(unittest.TestCase):
         self.assertIn("prop_sub(name=money; val=30)", result)
         self.assertIn("prop_sub(name=fatigue; val=15)", result)
         self.assertIn("prop_sub(name=fatigue; val=30)", result)
+
+
+# ════════════════════════════════════════════════════════════════
+# Dynamic Dimension — _extract_scene_tags
+# ════════════════════════════════════════════════════════════════
+
+class TestExtractSceneTags(unittest.TestCase):
+    """_extract_scene_tags: 从 context 中提取场景标签"""
+
+    def test_basic_extraction(self):
+        """有 tags 的维度值 → 提取为派生值列表"""
+        context = {
+            "dimensions": {
+                "scene": PipelineDimensionValue(
+                    id="s1", name="Scene 1",
+                    tags=["tag_a", "tag_b", "tag_c"],
+                ),
+            }
+        }
+        result = _extract_scene_tags(context, {"exclude": []})
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result[0].id, "tag_a")
+        self.assertEqual(result[1].id, "tag_b")
+        self.assertEqual(result[2].id, "tag_c")
+
+    def test_exclude_filter(self):
+        """exclude 列表中的标签被剔除"""
+        context = {
+            "dimensions": {
+                "scene": PipelineDimensionValue(
+                    id="s1", name="Scene 1",
+                    tags=["action_main_baiye", "tag_b", "tag_c"],
+                ),
+            }
+        }
+        result = _extract_scene_tags(context, {"exclude": ["action_main_baiye"]})
+        self.assertEqual(len(result), 2)
+        ids = [v.id for v in result]
+        self.assertNotIn("action_main_baiye", ids)
+        self.assertIn("tag_b", ids)
+        self.assertIn("tag_c", ids)
+
+    def test_no_tags_returns_empty(self):
+        """无 tags → 返回空列表"""
+        context = {
+            "dimensions": {
+                "scene": PipelineDimensionValue(id="s1", name="Scene 1"),
+            }
+        }
+        result = _extract_scene_tags(context, {"exclude": []})
+        self.assertEqual(result, [])
+
+    def test_multiple_dimensions_only_first_used(self):
+        """多个维度中有 tags 时，只用第一个"""
+        context = {
+            "dimensions": {
+                "dim_a": PipelineDimensionValue(
+                    id="a", name="A",
+                    tags=["tag_x"],
+                ),
+                "dim_b": PipelineDimensionValue(
+                    id="b", name="B",
+                    tags=["tag_y"],
+                ),
+            }
+        }
+        result = _extract_scene_tags(context, {"exclude": []})
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].id, "tag_x")
+
+    def test_all_excluded_returns_empty(self):
+        """所有标签都被 exclude → 返回空"""
+        context = {
+            "dimensions": {
+                "scene": PipelineDimensionValue(
+                    id="s1", name="Scene 1",
+                    tags=["tag_a", "tag_b"],
+                ),
+            }
+        }
+        result = _extract_scene_tags(context, {"exclude": ["tag_a", "tag_b"]})
+        self.assertEqual(result, [])
+
+    def test_derived_value_is_pipeline_dimension_value(self):
+        """派生值是 PipelineDimensionValue 实例"""
+        context = {
+            "dimensions": {
+                "scene": PipelineDimensionValue(
+                    id="s1", name="Scene 1",
+                    tags=["tag_a"],
+                ),
+            }
+        }
+        result = _extract_scene_tags(context, {"exclude": []})
+        self.assertIsInstance(result[0], PipelineDimensionValue)
+        self.assertEqual(result[0].scale, 1.0)
+        self.assertEqual(result[0].operator_dsl, "")
+
+
+# ════════════════════════════════════════════════════════════════
+# Dynamic Dimension — expand_combinations
+# ════════════════════════════════════════════════════════════════
+
+class TestExpandCombinations(unittest.TestCase):
+    """expand_combinations: 带 Dynamic Dimension 的笛卡尔积展开"""
+
+    def setUp(self):
+        self.scene_dim = PipelineDimension(
+            id="scene",
+            name="场景",
+            values=[
+                PipelineDimensionValue(
+                    id="s1", name="Scene 1",
+                    tags=["tag_a", "tag_b"],
+                ),
+                PipelineDimensionValue(
+                    id="s2", name="Scene 2",
+                    tags=["tag_b", "tag_c"],
+                ),
+            ],
+        )
+        self.tag_dim = PipelineDimension(
+            id="scene_tag",
+            name="场景标签",
+            dynamic=True,
+            value_extractor_key="scene_tags",
+            value_extractor_config={"exclude": []},
+            values=[],
+        )
+
+    def test_all_static_dims(self):
+        """全静态维度 → 正常笛卡尔积"""
+        dim_a = PipelineDimension(
+            id="a", name="A",
+            values=[
+                PipelineDimensionValue(id="a1", name="A1"),
+                PipelineDimensionValue(id="a2", name="A2"),
+            ],
+        )
+        dim_b = PipelineDimension(
+            id="b", name="B",
+            values=[
+                PipelineDimensionValue(id="b1", name="B1"),
+            ],
+        )
+        result = list(expand_combinations([dim_a, dim_b]))
+        self.assertEqual(len(result), 2)  # 2 × 1
+        self.assertEqual(result[0][0].id, "a1")
+        self.assertEqual(result[0][1].id, "b1")
+        self.assertEqual(result[1][0].id, "a2")
+        self.assertEqual(result[1][1].id, "b1")
+
+    def test_dynamic_expands_correct_count(self):
+        """场景 s1(2 tags) + s2(2 tags) = 4 组合"""
+        result = list(expand_combinations([self.scene_dim, self.tag_dim]))
+        self.assertEqual(len(result), 4)
+
+    def test_dynamic_expands_s1_tags(self):
+        """s1 的派生值 = tag_a, tag_b"""
+        result = list(expand_combinations([self.scene_dim, self.tag_dim]))
+        s1_combos = [r for r in result if r[0].id == "s1"]
+        self.assertEqual(len(s1_combos), 2)
+        tag_ids = [r[1].id for r in s1_combos]
+        self.assertIn("tag_a", tag_ids)
+        self.assertIn("tag_b", tag_ids)
+
+    def test_dynamic_expands_s2_tags(self):
+        """s2 的派生值 = tag_b, tag_c"""
+        result = list(expand_combinations([self.scene_dim, self.tag_dim]))
+        s2_combos = [r for r in result if r[0].id == "s2"]
+        self.assertEqual(len(s2_combos), 2)
+        tag_ids = [r[1].id for r in s2_combos]
+        self.assertIn("tag_b", tag_ids)
+        self.assertIn("tag_c", tag_ids)
+
+    def test_dynamic_with_exclude(self):
+        """exclude tag_b → s1(1 tag) + s2(1 tag) = 2 组合"""
+        tag_dim_excluded = PipelineDimension(
+            id="scene_tag",
+            name="场景标签",
+            dynamic=True,
+            value_extractor_key="scene_tags",
+            value_extractor_config={"exclude": ["tag_b"]},
+            values=[],
+        )
+        result = list(expand_combinations([self.scene_dim, tag_dim_excluded]))
+        self.assertEqual(len(result), 2)
+        # 不应该有 tag_b
+        for r in result:
+            self.assertNotEqual(r[1].id, "tag_b")
+
+    def test_no_tags_skips_combination(self):
+        """场景无 tags → 跳过该场景"""
+        dim_with_empty = PipelineDimension(
+            id="scene",
+            name="场景",
+            values=[
+                PipelineDimensionValue(id="s1", name="Scene 1"),  # no tags
+                PipelineDimensionValue(id="s2", name="Scene 2", tags=["tag_x"]),
+            ],
+        )
+        result = list(expand_combinations([dim_with_empty, self.tag_dim]))
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0][0].id, "s2")
+        self.assertEqual(result[0][1].id, "tag_x")
+
+    def test_mixed_static_and_dynamic(self):
+        """静态维度 + 动态维度 混合"""
+        static_dim = PipelineDimension(
+            id="static",
+            name="静态",
+            values=[
+                PipelineDimensionValue(id="x", name="X"),
+                PipelineDimensionValue(id="y", name="Y"),
+            ],
+        )
+        result = list(expand_combinations([static_dim, self.scene_dim, self.tag_dim]))
+        # 2 statics × 4 scene×tag = 8
+        self.assertEqual(len(result), 8)
+        # 每个结果 3 个值
+        for r in result:
+            self.assertEqual(len(r), 3)
+
+
+# ════════════════════════════════════════════════════════════════
+# _make_combos — DimensionCombo 组装
+# ════════════════════════════════════════════════════════════════
+
+class TestMakeCombos(unittest.TestCase):
+    """_make_combos: 维度定义列表 + 值元组 → DimensionCombo 列表"""
+
+    def test_basic_conversion(self):
+        dims = [
+            PipelineDimension(id="a", name="A", values=[PipelineDimensionValue(id="a1")]),
+            PipelineDimension(id="b", name="B", values=[PipelineDimensionValue(id="b1")]),
+        ]
+        values = (PipelineDimensionValue(id="a1"), PipelineDimensionValue(id="b1"))
+        combos = _make_combos(dims, values)
+        self.assertEqual(len(combos), 2)
+        self.assertIsInstance(combos[0], DimensionCombo)
+        self.assertEqual(combos[0].dimension.id, "a")
+        self.assertEqual(combos[0].value.id, "a1")
+        self.assertEqual(combos[1].dimension.id, "b")
+        self.assertEqual(combos[1].value.id, "b1")
+
+    def test_mismatched_lengths(self):
+        dims = [
+            PipelineDimension(id="a", name="A", values=[PipelineDimensionValue(id="a1")]),
+        ]
+        values = (PipelineDimensionValue(id="a1"), PipelineDimensionValue(id="b1"))
+        with self.assertRaises(ValueError):
+            _make_combos(dims, values)
 
 
 if __name__ == "__main__":

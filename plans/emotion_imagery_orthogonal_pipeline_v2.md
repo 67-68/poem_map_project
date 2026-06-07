@@ -364,16 +364,12 @@ LLM Prompt（包含 NPC 对象信息）
 
 | ID | 名称 | Tag 预设 | 意象白名单 |
 |-----|------|---------|-----------|
-| `scene_banquet` | 长安夜宴 | `[ACTION_SOCIAL_BANQUET, ENV_SOCIETY_FESTIVAL, TARGET_FACTION_ZHUOLIU, VIBE_AESTHETIC_SENSUAL]` | `wine_cup, red_sleeve, ink_stone, empty_cup` |
-| `scene_exile` | 岭南贬谪 | `[ACTION_TRAVEL_EXILE, ENV_NATURE_AUTUMNWIND, VIBE_THEME_HISTORY]` | `cold_moon, falling_leaf, lone_snow, broken_halberd, rusty_sword` |
-| `scene_temple` | 古刹避雨 | `[ACTION_TRAVEL_ROAM, ENV_NATURE_SNOWSTORM, VIBE_PHILOSOPHY_ZEN]` | `temple_bell, incense_ash, broken_string, cold_moon` |
-| `scene_battlefield` | 边塞劳军 | `[ACTION_TRAVEL_ROAM, ENV_SOCIETY_WAR, TARGET_FACTION_MILITARY, VIBE_THEME_MARTIAL]` | `beacon_fire, broken_halberd, blood_stain, starving_bone, torn_flag, border_flag` |
-| `scene_farewell` | 灞桥送别 | `[ACTION_SOCIAL_PARTING, ENV_NATURE_SPRINGBLOSSOM, VIBE_THEME_HISTORY]` | `willow_branch, lone_sail, wine_gourd, empty_cup` |
-| `scene_climb` | 登高望远 | `[ACTION_TRAVEL_CLIMB, VIBE_PHILOSOPHY_ZEN]` | `high_tower, cold_moon, falling_leaf, ruined_wall` |
-| `scene_brawl` | 市井冲突 | `[ACTION_SOCIAL_BRAWL, VIBE_THEME_MARTIAL]` | `rusty_sword, cold_blade, blood_stain, broken_halberd` |
-| `scene_monastery` | 寻仙访道 | `[ACTION_TRAVEL_ROAM, VIBE_PHILOSOPHY_TAO]` | `incense_ash, temple_bell, wine_gourd, lone_snow` |
-| `scene_drinking` | 酒馆独酌 | `[ACTION_ENTERTAIN_DRINK, VIBE_AESTHETIC_SENSUAL]` | `empty_cup, wine_gourd, cold_moon, red_sleeve` |
-| `scene_palace` | 朝堂觐见 | `[ACTION_WORK_GOVERN, ENV_POLITICS_PROSPER, TARGET_FACTION_ROYAL]` | `ink_stone, red_sleeve, beacon_fire, cold_blade` |
+// 当前的场景数据有问题，删除了
+
+### 额外前期野心意象
+ENV_POLITICS_PROSPER:cloud_and_sun (云日) - “总为浮云能蔽日”，代表靠近皇权、盛世气象。
+TARGET_FACTION_ROYAL:jade_step (玉阶) - 代表朝堂、权力中枢、升迁之路。
+TARGET_OBJECT_SWORD:giant_roc (大鹏) - 李白最爱，代表不甘平庸、一飞冲天。
 
 ---
 

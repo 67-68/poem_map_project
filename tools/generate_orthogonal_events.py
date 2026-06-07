@@ -30,7 +30,7 @@ import re
 import sys
 import time
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 # ── 自动将项目根目录加入 sys.path，消除 PYTHONPATH=. 的依赖 ──
 _project_root = Path(__file__).resolve().parent.parent
@@ -40,6 +40,7 @@ if str(_project_root) not in sys.path:
 from openai import OpenAI
 
 from tools.config import (
+    DimensionCombo,
     EventPipelineConfig,
     OptionFeature,
     PipelineDimension,
@@ -304,7 +305,115 @@ def _split_dsl_expressions(dsl: str) -> list[str]:
 
 
 # ════════════════════════════════════════════════════════════════
-# 3. LLM 调用（DeepSeek API）
+# 3. Dynamic Dimension — Extractor Registry
+# ════════════════════════════════════════════════════════════════
+#
+# Extractor 函数注册表：key → Callable(context, config) -> list[PipelineDimensionValue]
+#   context: {"dimensions": {dim_id: PipelineDimensionValue, ...}}
+#   config:  从 PipelineDimension.value_extractor_config 传入
+#
+# 注册方式:
+#   register_extractor("scene_tags", _extract_scene_tags)
+
+EXTRACTOR_REGISTRY: dict[str, Callable] = {}
+
+
+def register_extractor(key: str, fn: Callable):
+    """注册一个 Extractor 函数到全局注册表。"""
+    EXTRACTOR_REGISTRY[key] = fn
+
+
+def _extract_scene_tags(
+    context: dict,
+    config: dict,
+) -> list[PipelineDimensionValue]:
+    """从 context 中寻找带 tags 的维度值，提取 tags 生成派生维度值。
+    
+    遍历 context["dimensions"]，找到第一个有非空 tags 的维度值，
+    提取其 tags 字段，过滤掉 exclude 列表中的标签，
+    将每个剩余 tag 映射为一个 PipelineDimensionValue。
+    
+    context = {"dimensions": {"scene": PipelineDimensionValue(tags=[...]), ...}}
+    config  = {"exclude": ["action_main_baiye"]}
+    """
+    for dim_id, dv in context["dimensions"].items():
+        if dv.tags:
+            exclude = set(config.get("exclude", []))
+            filtered = [t for t in dv.tags if t not in exclude]
+            return [
+                PipelineDimensionValue(
+                    id=t, name=t, description=f"场景标签: {t}",
+                    scale=1.0, operator_dsl="",
+                )
+                for t in filtered
+            ]
+    return []  # 无合法派生值 → 跳过该场景组合
+
+
+register_extractor("scene_tags", _extract_scene_tags)
+
+
+# ════════════════════════════════════════════════════════════════
+# 4. Dynamic Dimension — 笛卡尔积展开
+# ════════════════════════════════════════════════════════════════
+
+def expand_combinations(
+    dimensions: list[PipelineDimension],
+    registry: dict[str, Callable] | None = None,
+):
+    """展开所有维度组合，支持 Dynamic Dimension。
+    
+    1. 分离 static dims 和 dynamic dims
+    2. static dims 正常笛卡尔积
+    3. 对每个 static 组合，调用 Extractor 获取 dynamic 派生值
+    4. static × dynamic 产生最终组合
+    
+    Yields:
+        tuple[PipelineDimensionValue, ...]: 一个完整组合的维度值元组
+    """
+    registry = registry or EXTRACTOR_REGISTRY
+    static_dims = [d for d in dimensions if not d.dynamic]
+    dynamic_dims = [d for d in dimensions if d.dynamic]
+
+    for static_values in itertools.product(*[d.values for d in static_dims]):
+        # 构建上下文
+        context = {
+            "dimensions": {
+                dim.id: val
+                for dim, val in zip(static_dims, static_values)
+            }
+        }
+
+        if not dynamic_dims:
+            yield static_values
+            continue
+
+        # 解析 dynamic dims
+        dynamic_value_lists = []
+        skip = False
+        for dyn_dim in dynamic_dims:
+            if dyn_dim.value_extractor_key and dyn_dim.value_extractor_key in registry:
+                derived = registry[dyn_dim.value_extractor_key](
+                    context, dyn_dim.value_extractor_config,
+                )
+                if not derived:
+                    skip = True
+                    break
+                dynamic_value_lists.append(derived)
+            else:
+                # fallback: 无注册的 extractor，用静态 values（降级为非动态）
+                dynamic_value_lists.append(dyn_dim.values)
+
+        if skip:
+            continue  # 该 static 组合无合法 dynamic 派生值
+
+        # static × dynamic 完整组合
+        for dyn_values in itertools.product(*dynamic_value_lists):
+            yield static_values + dyn_values
+
+
+# ════════════════════════════════════════════════════════════════
+# 5. LLM 调用（DeepSeek API）
 # ════════════════════════════════════════════════════════════════
 
 class LLMClient:
@@ -337,12 +446,12 @@ class LLMClient:
 
 
 # ════════════════════════════════════════════════════════════════
-# 4. Prompt 组装
+# 6. Prompt 组装
 # ════════════════════════════════════════════════════════════════
 
 def build_system_prompt(cfg: EventPipelineConfig) -> str:
     """组装 System Prompt。"""
-    parts = ["你是唐朝官场叙事设计师。你只负责生成事件文本，不要输出任何额外内容。"]
+    parts = [f"你是{cfg.name}叙事设计师。你只负责生成事件文本，不要输出任何额外内容。"]
 
     if cfg.background_context.strip():
         parts.append(f"\n## 世界观背景\n{cfg.background_context.strip()}")
@@ -360,26 +469,29 @@ def build_system_prompt(cfg: EventPipelineConfig) -> str:
 
 
 def build_user_prompt(
-    d1: PipelineDimension, dv1: PipelineDimensionValue,
-    d2: PipelineDimension, dv2: PipelineDimensionValue,
-    d3: PipelineDimension, dv3: PipelineDimensionValue,
+    combos: list[DimensionCombo],
     cfg: EventPipelineConfig,
     word_count_min: Optional[int] = None,
     word_count_max: Optional[int] = None,
 ) -> str:
     """组装 User Prompt（包含当前维度组合信息）。
     
+    接受任意数量的 DimensionCombo（替代硬编码的 d1/dv1/d2/dv2/d3/dv3），
+    自动生成维度组合描述。
+    
     可通过 word_count_min/word_count_max 覆盖 cfg 中的默认长度约束，
     用于自适应重试时动态调整 LLM 看到的字数要求。
     """
     effective_min = word_count_min if word_count_min is not None else cfg.word_count_min
     effective_max = word_count_max if word_count_max is not None else cfg.word_count_max
-    lines = [f"""请为以下维度组合生成一个拜谒事件：
+    combo_lines = "\n".join(
+        f"{i}. {combo.dimension.name}: {combo.value.name}（{combo.value.description}）"
+        for i, combo in enumerate(combos, 1)
+    )
+    lines = [f"""请为以下维度组合生成一个{cfg.name}事件：
 
 ## 维度组合
-1. {d1.name}: {dv1.name}（{dv1.description}）
-2. {d2.name}: {dv2.name}（{dv2.description}）
-3. {d3.name}: {dv3.name}（{dv3.description}）
+{combo_lines}
 
 ## 输出要求
 - title：15字以内的事件标题
@@ -483,7 +595,7 @@ def validate_response(
 
 
 # ════════════════════════════════════════════════════════════════
-# 5. CSV 输出（DSLParser 兼容格式）
+# 7. CSV 输出（DSLParser 兼容格式）
 # ════════════════════════════════════════════════════════════════
 #
 # 列名对齐 DSLParser 的 Dictionary key 访问：
@@ -560,7 +672,7 @@ def write_option_row(writer, description: str, result_dsl: str):
 
 
 # ════════════════════════════════════════════════════════════════
-# 6. 主流程
+# 8. 主流程
 # ════════════════════════════════════════════════════════════════
 
 def load_config_from_json(path: str) -> EventPipelineConfig:
@@ -568,6 +680,21 @@ def load_config_from_json(path: str) -> EventPipelineConfig:
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     return EventPipelineConfig.model_validate(data)
+
+
+def _make_combos(
+    dimensions: list[PipelineDimension],
+    values: tuple[PipelineDimensionValue, ...],
+) -> list[DimensionCombo]:
+    """将维度定义列表和对应的值元组组装为 DimensionCombo 列表。"""
+    if len(dimensions) != len(values):
+        raise ValueError(
+            f"dimensions ({len(dimensions)}) and values ({len(values)}) length mismatch"
+        )
+    return [
+        DimensionCombo(dimension=dim, value=val)
+        for dim, val in zip(dimensions, values)
+    ]
 
 
 def main():
@@ -586,16 +713,18 @@ def main():
 
     print(f"📖 配置: {cfg.name}")
 
-    # 检查必须有 3 个维度
-    if len(cfg.dimensions) != 3:
-        print(f"❌ 配置必须有恰好 3 个维度，当前有 {len(cfg.dimensions)} 个")
+    dim_count = len(cfg.dimensions)
+    if dim_count < 1:
+        print(f"❌ 配置至少需要 1 个维度，当前有 {dim_count} 个")
         sys.exit(1)
 
-    d1, d2, d3 = cfg.dimensions
-
-    # ── 展开所有组合 ──
-    combinations = list(itertools.product(d1.values, d2.values, d3.values))
-    print(f"   组合数: {len(combinations)} ({len(d1.values)}×{len(d2.values)}×{len(d3.values)})")
+    # ── 展开所有组合（支持 Dynamic Dimension） ──
+    combinations = list(expand_combinations(cfg.dimensions))
+    dim_value_counts = [
+        f"{len(d.values)}" if not d.dynamic else f"({d.value_extractor_key})"
+        for d in cfg.dimensions
+    ]
+    print(f"   组合数: {len(combinations)} ({'×'.join(dim_value_counts)})")
 
     if args.max_events > 0:
         combinations = combinations[: args.max_events]
@@ -628,8 +757,9 @@ def main():
 
     if args.dry_run:
         print("\n🏁 Dry-run 模式，不会调用 API")
-        dv1, dv2, dv3 = combinations[0]
-        user_prompt = build_user_prompt(d1, dv1, d2, dv2, d3, dv3, cfg)
+        first_values = combinations[0]
+        first_combos = _make_combos(cfg.dimensions, first_values)
+        user_prompt = build_user_prompt(first_combos, cfg)
         print(f"\n📋 示例 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
         print(user_prompt)
@@ -646,12 +776,22 @@ def main():
         writer = csv.writer(f)
         write_csv_header(writer)
 
-        for idx, (dv1, dv2, dv3) in enumerate(combinations):
-            combined_scale = dv1.scale * dv2.scale * dv3.scale
-            uuid = f"{cfg.id}_{dv1.id}_{dv2.id}_{dv3.id}".lower()
+        for idx, values_tuple in enumerate(combinations):
+            # Scale: 所有维度值的 scale 乘积
+            combined_scale = 1.0
+            scale_parts = []
+            uuid_parts = [cfg.id]
+            for val in values_tuple:
+                combined_scale *= val.scale
+                scale_parts.append(str(val.scale))
+                uuid_parts.append(val.id)
+            uuid = "_".join(uuid_parts).lower()
+
+            # 组装 DimensionCombo 列表
+            current_combos = _make_combos(cfg.dimensions, values_tuple)
 
             print(f"\n[{idx + 1}/{len(combinations)}] {uuid}")
-            print(f"  Scale: {dv1.scale}×{dv2.scale}×{dv3.scale} = {combined_scale}")
+            print(f"  Scale: {'×'.join(scale_parts)} = {combined_scale}")
 
             # ── 自适应边界收缩状态（每组合独立重置） ──
             current_min = cfg.word_count_min
@@ -660,7 +800,7 @@ def main():
             MIN_GAP = 10
 
             user_prompt = build_user_prompt(
-                d1, dv1, d2, dv2, d3, dv3, cfg,
+                current_combos, cfg,
                 word_count_min=current_min, word_count_max=current_max,
             )
 
@@ -691,7 +831,8 @@ def main():
                     print(f"  ✅ title: {title}")
                     print(f"     desc: {description[:60]}...")
 
-                    operator_dsls = [dv1.operator_dsl, dv2.operator_dsl, dv3.operator_dsl]
+                    # ── DSL 缩放：收集所有维度值的 operator_dsl ──
+                    operator_dsls = [val.operator_dsl for val in values_tuple]
                     try:
                         scaled_dsl = scale_all_operators(operator_dsls, combined_scale)
                     except ValueError as e:
@@ -745,15 +886,13 @@ def main():
                         # ── 自适应边界收缩（阶梯增压）──
                         old_min, old_max = current_min, current_max
                         if "过短" in error:
-                            # 太短 → 硬抬下限，逼 LLM 写更长（80→100→120）
                             current_min = min(current_min + SHRINK_STEP, current_max - MIN_GAP)
                         elif "过长" in error:
-                            # 太长 → 硬压上限（200→180→160）
                             current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
                         if current_min != old_min or current_max != old_max:
                             print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
                             user_prompt = build_user_prompt(
-                                d1, dv1, d2, dv2, d3, dv3, cfg,
+                                current_combos, cfg,
                                 word_count_min=current_min, word_count_max=current_max,
                             )
                         continue
