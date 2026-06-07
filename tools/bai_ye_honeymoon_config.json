@@ -107,5 +107,6 @@
   "word_count_max": 200,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
-  "output_dir": "data/generated_events/"
+  "output_dir": "data/generated_events/",
+  "universal_tags": ["action:main:baiye"]
 }

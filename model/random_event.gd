@@ -89,7 +89,7 @@ var target_tags: Array[String] = []:
     set(tags):
         _target_tags = tags
 
-var _target_tags: Array[String] = []
+@export var _target_tags: Array[String] = []
 # 为了csv数据输入服务，数据输入不是ENUM格式，需要额外地方存
 
 @export var _action_tags: Array[ENUMS.ACTION_TAGS] = []

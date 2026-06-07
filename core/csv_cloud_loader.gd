@@ -81,22 +81,17 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "save_path": "res://data/random_events/random_events.csv",
         "data_type": "random_event"
     },
-    {
-        "name": "拜谒事件池",
-        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=764155115&single=true&output=csv",
-        "save_path": "res://data/tres_random_event_bai_ye/bai_ye_events.csv",
-        "data_type": "random_event"
-    },
     # ════════════════════════════════════════════════════════════════
     # 🏠 本地生成事件（Phase B Python 管线产物）
     # is_generated = true 时，系统跳过云端拉取，直接从本地 CSV 读取。
-    # .tres 输出目录自动推导为 CSV 所在目录（data/generated_events/）。
+    # .tres 输出目录需要手动指定（通过 tres_output_dir 字段）。
     # ════════════════════════════════════════════════════════════════
     {
         "name": "拜谒蜜月期生成事件（本地生成）",
         "save_path": "res://data/generated_events/bai_ye_honeymoon_events.csv",
         "data_type": "random_event",
         "is_generated": true,
+        "tres_output_dir": "res://data/tres_random_event_bai_ye",
     },
 ]
 
@@ -178,6 +173,7 @@ func process_next_job() -> void:
     var job_save_path = current_job.get("save_path", "")
     var job_data_type = current_job.get("data_type", "random_event")
     var job_is_generated = current_job.get("is_generated", false)
+    var job_tres_output_dir = current_job.get("tres_output_dir", "")
 
     # ── 分支 A: 本地生成文件（Phase B 管线产物） ──
     if job_is_generated:
@@ -187,7 +183,7 @@ func process_next_job() -> void:
             push_error("生成事件 CSV 文件不存在: %s 💀" % job_save_path)
             print("请先运行 Python 生成脚本: poetry run python tools/generate_orthogonal_events.py")
         else:
-            _process_csv_data(local_content, job_save_path, job_data_type)
+            _process_csv_data(local_content, job_save_path, job_data_type, job_tres_output_dir)
         _current_job_index += 1
         process_next_job()
         return
@@ -296,7 +292,7 @@ func _read_local_csv(save_path: String) -> String:
 
 # 🧩 共享解析链路：解析原始 CSV 内容、创建 Resource、注入数据库、保存 .tres
 # 这是「获取层」和「持久化层」之间的共享方法，无论数据来自云端还是本地都走这里
-func _process_csv_data(raw_csv_string: String, save_path: String, data_type: String) -> void:
+func _process_csv_data(raw_csv_string: String, save_path: String, data_type: String, tres_output_dir: String = "") -> void:
     # 将包含几百行文本的 raw_csv_string 交给你之前写好的微语法解析器
     var csv_lines = raw_csv_string.split("\n")
     if csv_lines.size() < 2:
@@ -356,8 +352,9 @@ func _process_csv_data(raw_csv_string: String, save_path: String, data_type: Str
         var res = resources[i]
         print("资源[%d]: 类名=%s, resource_path=%s" % [i, res.get_class(), res.resource_path])
 
-    # 从CSV路径推断.tres保存路径（同目录下）
-    var tres_save_path = save_path.get_base_dir() + "/"
+    # 从CSV路径推断.tres保存路径
+    # 如果指定了 tres_output_dir，使用指定的路径；否则使用CSV所在目录
+    var tres_save_path = tres_output_dir if not tres_output_dir.is_empty() else save_path.get_base_dir() + "/"
     save_resources_to_tres(resources, tres_save_path)
 
     # 🚨 立即静默刷新registry，确保下一个表的 template URN 能找到本表刚保存的 .tres
@@ -567,6 +564,7 @@ func _import_generated_events_from_csv() -> void:
         var name = entry.get("name", "Unknown")
         var csv_path = entry.get("save_path", "")
         var data_type = entry.get("data_type", "random_event")
+        var tres_output_dir = entry.get("tres_output_dir", "")
         
         if csv_path.is_empty():
             print("⚠️  条目 '%s' 的 save_path 为空，跳过" % name)
@@ -574,6 +572,10 @@ func _import_generated_events_from_csv() -> void:
         
         print("\n--- 处理: %s ---" % name)
         print("   CSV: %s" % csv_path)
+        if not tres_output_dir.is_empty():
+            print("   .tres 输出: %s (手动指定)" % tres_output_dir)
+        else:
+            print("   .tres 输出: %s (自动推导自 CSV 路径)" % csv_path.get_base_dir() + "/")
         
         # ── 3. 读取 CSV 内容 ──
         if not FileAccess.file_exists(csv_path):
@@ -600,9 +602,9 @@ func _import_generated_events_from_csv() -> void:
         #   - 解析 CSV headers + rows → Array[Dictionary]
         #   - 调用 DSLParser.parse_csv_data(csv_data, data_type)
         #   - 遍历资源注入数据库
-        #   - save_resources_to_tres(resources, csv所在目录)
+        #   - save_resources_to_tres(resources, csv所在目录 或 tres_output_dir)
         #   - _regenerate_registries(true) 静默刷新
-        _process_csv_data(csv_content, csv_path, data_type)
+        _process_csv_data(csv_content, csv_path, data_type, tres_output_dir)
         success_count += 1
     
     # ── 5. 显式刷新 Registry（确保所有 .tres 被注册） ──
@@ -613,8 +615,7 @@ func _import_generated_events_from_csv() -> void:
     print("   成功处理: %d/%d 个条目" % [success_count, generated_entries.size()])
     if not orphan_csvs.is_empty():
         print("   ⚠️  目录中还有 %d 个未收录的 CSV（见上方列表）" % orphan_csvs.size())
-    print("   .tres 输出目录: %s" % GENERATED_DIR)
-    print("   Registry: res://data/generated_events_registry.tres")
+    print("   .tres 输出目录: 由各条目的 tres_output_dir 字段指定（详见上方处理日志）")
     print("===== 📥 导入完成 =====\n")
 
 
