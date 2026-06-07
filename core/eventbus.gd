@@ -7,10 +7,10 @@ signal user_clicked(data: Variant)
 signal request_start_black(enable: bool)
 
 # ── 飘字/通知系统信号 ───────────────────────────────────
-# [新] 世界坐标飘字 (FloatingText)
+# [新] 屏幕 UI 飘字 (FloatingText)
 # content: 模糊文本 (支持 BBCode), 如 "[color=#FFD700]塞外风情[/color]"
-# world_pos: 世界坐标 Vector2
-signal request_float_text(content: String, world_pos: Vector2)
+# 自动定位到屏幕顶部居中，无需传入位置参数
+signal request_float_text(content: String)
 # [新] UI Toast (合并 SimpleToast + pop_up)
 # content: 文本内容
 # type: 0=普通提示, 1=警告

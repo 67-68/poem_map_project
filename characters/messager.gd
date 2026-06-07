@@ -89,7 +89,7 @@ func start_travel():
 func start_timer():
 	if allow_timer:
 		#breakpoint
-		TextPoolManager.spawn(txt,$MsgPathFollow.global_position)
+		TextPoolManager.spawn(txt)
 		print($MsgPathFollow.global_position)
 		var timer = get_tree().create_timer(randi() % 5)
 		timer.timeout.connect(start_timer)

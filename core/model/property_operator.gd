@@ -29,27 +29,30 @@ func init(_context: Dictionary) -> Dictionary:
     return _context
 
 func operate():
+    Logging.debug("PropertyOperator.operate: property=%s, value=%d" % [property, value])
     PlayerState.append_stat(property, value)
     
     # ── 飘字反馈：属性变化后 emit 模糊文本 ──
     _emit_float_text(value)
 
 func _emit_float_text(delta: int) -> void:
+    Logging.debug("PropertyOperator._emit_float_text: property=%s, delta=%d" % [property, delta])
     if delta == 0:
+        Logging.debug("PropertyOperator._emit_float_text: delta=0, skip")
         return
     var prop = Database.properties.get(property)
     if not prop:
+        Logging.err("PropertyOperator._emit_float_text: property '%s' not found in Database" % property)
         return
     var perception_text = prop.get_change_perception_text(delta)
+    Logging.debug("PropertyOperator._emit_float_text: get_change_perception_text(%d) -> '%s'" % [delta, perception_text])
     if perception_text.is_empty():
+        Logging.debug("PropertyOperator._emit_float_text: perception_text is empty, skip")
         return
     
-    # 从 PlayerState 获取玩家世界坐标作为飘字位置
-    var world_pos = Vector2.ZERO
-    if PlayerState and PlayerState.has_method("get_global_position"):
-        world_pos = PlayerState.get_global_position()
-    
-    EventBus.request_float_text.emit(perception_text, world_pos)
+    # FloatingText 现在使用 Control 自动定位到屏幕顶部居中
+    Logging.debug("PropertyOperator._emit_float_text: emitting request_float_text('%s')" % perception_text)
+    EventBus.request_float_text.emit(perception_text)
 
 func get_referenced_flags() -> Array:
     return []

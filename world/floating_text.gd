@@ -1,4 +1,4 @@
-class_name FloatingText extends Node2D
+class_name FloatingText extends Control
 
 signal recycle_requested(text_instance)
 
@@ -29,9 +29,10 @@ const CONFIG_ITEM := {  # 物品/意象获得（金色）
 
 func _ready() -> void:
 	modulate.a = 0
+	# 锚点和偏移已在 .tscn 中配置（顶部居中，offset_top=80）
 
-func play(content: String, world_pos: Vector2, config: Dictionary = {}) -> void:
-	position = world_pos
+func play(content: String, config: Dictionary = {}) -> void:
+	Logging.debug("FloatingText.play: content='%s', config=%s" % [content, config])
 	scale = config.get("start_scale", CONFIG_GAIN.start_scale)
 	modulate = config.get("color", CONFIG_GAIN.color)
 	modulate.a = 1
@@ -43,9 +44,13 @@ func play(content: String, world_pos: Vector2, config: Dictionary = {}) -> void:
 	var duration = config.get("duration", CONFIG_GAIN.duration)
 	var end_scale = config.get("end_scale", CONFIG_GAIN.end_scale)
 
+	# 显式设置起始位置（下方 rise_distance 像素处），再 tween 到目标位置
+	var target_offset = offset_top
+	offset_top = target_offset + rise_distance
+
 	var tw = create_tween()
 	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tw.tween_property(self, "position:y", position.y, duration).from(position.y + rise_distance)
+	tw.tween_property(self, "offset_top", target_offset, duration)
 	tw.parallel()
 	tw.set_trans(Tween.TRANS_BACK)
 	tw.tween_property(self, "scale", Vector2(end_scale, end_scale), 0.4)

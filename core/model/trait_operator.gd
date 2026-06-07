@@ -70,8 +70,5 @@ func _emit_float_text(trait_name: String) -> void:
     if text.is_empty():
         return
     
-    var world_pos = Vector2.ZERO
-    if PlayerState and PlayerState.has_method("get_global_position"):
-        world_pos = PlayerState.get_global_position()
-    
-    EventBus.request_float_text.emit(text, world_pos)
+    # FloatingText 现在使用 Control 自动定位到屏幕顶部居中
+    EventBus.request_float_text.emit(text)

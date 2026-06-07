@@ -53,6 +53,6 @@ func _detect_and_emit():
 func _emit_text(prov_id):
 	var prov_name = Database.base_province[prov_id].name
 	Logging.info("进入了：" + prov_name)
-	TextPoolManager.spawn('test',global_position)
+	TextPoolManager.spawn('test')
 
 # ankize: 获取mesh大小的方法
