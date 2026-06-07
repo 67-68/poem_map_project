@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://behpcx1fhx16c"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_gy0uy"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_sfkm8"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_vqwxw"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_nbmwh"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_4rahu"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_ekheu"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ijccg"]
+
+[sub_resource type="Resource" id="Resource_l206w"]
+script = ExtResource("3_vqwxw")
+value = -10
+
+[sub_resource type="Resource" id="Resource_qq8cf"]
+script = ExtResource("3_vqwxw")
+value = -20
+
+[sub_resource type="Resource" id="Resource_nru5s"]
+script = ExtResource("3_vqwxw")
+value = 10
+
+[sub_resource type="Resource" id="Resource_g3j2s"]
+script = ExtResource("4_nbmwh")
+operators = Array[ExtResource("2_sfkm8")]([SubResource("Resource_l206w"), SubResource("Resource_qq8cf"), SubResource("Resource_nru5s")])
+
+[sub_resource type="Resource" id="Resource_n8sxd"]
+script = ExtResource("5_4rahu")
+choice_result = SubResource("Resource_g3j2s")
+description = "取出三百文钱，递过去"
+
+[sub_resource type="Resource" id="Resource_hkhvr"]
+script = ExtResource("6_ekheu")
+property = "career_progress"
+value = 70
+
+[resource]
+script = ExtResource("7_ijccg")
+requirement = SubResource("Resource_hkhvr")
+options = Array[ExtResource("1_gy0uy")]([SubResource("Resource_n8sxd")])
+uuid = "bai_ye_honeymoon_l0_typea_m2"
+name = "门包之规"
+description = "辰时三刻，你来到安仁坊一朱门之前。门子斜倚在石狮旁，手捧茶碗，目光从你身上掠过。你递上名刺，他接过却不看一眼，只将茶碗沿轻轻一磕。“郎君初来？”他抬了抬下巴，“规矩晓得吧？”远处传来更鼓声，街上行人匆匆。他等着，并不看你。"

@@ -2,15 +2,15 @@ flowchart TD
     %% 事件链依赖关系图
 
     subgraph Chain0[链 0: 1个事件]
-        test_picker_chain_A[test_pic]
+        event_intro_745[event_in]
     end
 
     subgraph Chain1[链 1: 1个事件]
-        test_picker_chain_B[test_pic]
+        normal_bai_ye[normal_b]
     end
 
     subgraph Chain2[链 2: 1个事件]
-        normal_bai_ye[normal_b]
+        normal_jiao_you[normal_j]
     end
 
     subgraph Chain3[链 3: 1个事件]
@@ -54,59 +54,60 @@ flowchart TD
     end
 
     subgraph Chain13[链 13: 1个事件]
-        event_talk_guest[event_ta]
+        event_first_blood_ri[event_fi]
     end
 
     subgraph Chain14[链 14: 1个事件]
-        feihualing_choose_wo[feihuali]
+        event_talk_guest[event_ta]
     end
 
     subgraph Chain15[链 15: 1个事件]
-        feihualing_other_don[feihuali]
+        feihualing_choose_wo[feihuali]
     end
 
     subgraph Chain16[链 16: 1个事件]
-        feihualing_start[feihuali]
+        feihualing_other_don[feihuali]
     end
 
     subgraph Chain17[链 17: 1个事件]
-        jiaoyou_poem_public[jiaoyou_]
+        feihualing_start[feihuali]
     end
 
     subgraph Chain18[链 18: 1个事件]
-        lianju_intro[lianju_i]
+        jiaoyou_poem_public[jiaoyou_]
     end
 
     subgraph Chain19[链 19: 1个事件]
-        lianju_npc_turn[lianju_n]
+        lianju_intro[lianju_i]
     end
 
     subgraph Chain20[链 20: 1个事件]
-        lianju_player_turn[lianju_p]
+        lianju_npc_turn[lianju_n]
     end
 
     subgraph Chain21[链 21: 1个事件]
-        lianju_result[lianju_r]
+        lianju_player_turn[lianju_p]
     end
 
     subgraph Chain22[链 22: 1个事件]
+        lianju_result[lianju_r]
+    end
+
+    subgraph Chain23[链 23: 1个事件]
         lianju_show_poem[lianju_s]
     end
 
-    subgraph Chain23[链 23: 4个事件]
+    subgraph Chain24[链 24: 4个事件]
         libai_after[libai_af]
         strange_poet[strange_]
         the_man_got_power[the_man_]
         libai_unveilation[libai_un]
     end
 
-    subgraph Chain24[链 24: 2个事件]
+    subgraph Chain25[链 25: 3个事件]
         libai_force_changhe[libai_fo]
-        request_libai_changh[request_]
-    end
-
-    subgraph Chain25[链 25: 1个事件]
         libai_welcome_hejiu[libai_we]
+        request_libai_changh[request_]
     end
 
     subgraph Chain26[链 26: 1个事件]
@@ -162,114 +163,120 @@ flowchart TD
     end
 
     subgraph Chain39[链 39: 1个事件]
-        event_money_lower_0[event_mo]
+        event_ambition_start[event_am]
     end
 
     subgraph Chain40[链 40: 1个事件]
-        event_money_lower_0_[event_mo]
+        event_money_lower_0[event_mo]
     end
 
     subgraph Chain41[链 41: 1个事件]
-        court:corrupt[court:co]
+        event_money_lower_0_[event_mo]
     end
 
     subgraph Chain42[链 42: 1个事件]
-        court:prosper[court:pr]
+        court:corrupt[court:co]
     end
 
     subgraph Chain43[链 43: 1个事件]
-        emotion:ambition[emotion:]
+        court:prosper[court:pr]
     end
 
     subgraph Chain44[链 44: 1个事件]
-        emotion:despair[emotion:]
+        emotion:ambition[emotion:]
     end
 
     subgraph Chain45[链 45: 1个事件]
-        emotion:tranquility[emotion:]
+        emotion:despair[emotion:]
     end
 
     subgraph Chain46[链 46: 1个事件]
-        entertain:elegant[entertai]
+        emotion:tranquility[emotion:]
     end
 
     subgraph Chain47[链 47: 1个事件]
-        entertain:martial[entertai]
+        entertain:elegant[entertai]
     end
 
     subgraph Chain48[链 48: 1个事件]
-        entertain:sensual[entertai]
+        entertain:martial[entertai]
     end
 
     subgraph Chain49[链 49: 1个事件]
-        environment:flower[environm]
+        entertain:sensual[entertai]
     end
 
     subgraph Chain50[链 50: 1个事件]
-        environment:moon[environm]
+        environment:flower[environm]
     end
 
     subgraph Chain51[链 51: 1个事件]
-        environment:snow[environm]
+        environment:moon[environm]
     end
 
     subgraph Chain52[链 52: 1个事件]
-        environment:wind[environm]
+        environment:snow[environm]
     end
 
     subgraph Chain53[链 53: 1个事件]
-        health:drunk[health:d]
+        environment:wind[environm]
     end
 
     subgraph Chain54[链 54: 1个事件]
-        relation:friend[relation]
+        health:drunk[health:d]
     end
 
     subgraph Chain55[链 55: 1个事件]
-        relation:patron[relation]
+        relation:friend[relation]
     end
 
     subgraph Chain56[链 56: 1个事件]
-        travel:exile[travel:e]
+        relation:patron[relation]
     end
 
     subgraph Chain57[链 57: 1个事件]
-        travel:parting[travel:p]
+        travel:exile[travel:e]
     end
 
     subgraph Chain58[链 58: 1个事件]
-        rteates[rteates]
+        travel:parting[travel:p]
     end
 
     subgraph Chain59[链 59: 1个事件]
-        normal_gan_ye[normal_g]
+        rteates[rteates]
     end
 
     subgraph Chain60[链 60: 1个事件]
-        normal_huai_gu[normal_h]
+        normal_gan_ye[normal_g]
     end
 
     subgraph Chain61[链 61: 1个事件]
-        normal_ji_lv[normal_j]
+        normal_huai_gu[normal_h]
     end
 
     subgraph Chain62[链 62: 1个事件]
-        normal_shan_shui[normal_s]
+        normal_ji_lv[normal_j]
     end
 
     subgraph Chain63[链 63: 1个事件]
-        normal_ying_zhi[normal_y]
+        normal_shan_shui[normal_s]
     end
 
     subgraph Chain64[链 64: 1个事件]
+        normal_ying_zhi[normal_y]
+    end
+
+    subgraph Chain65[链 65: 1个事件]
         normal_zeng_da[normal_z]
     end
 
     libai_after --> strange_poet
     libai_after --> the_man_got_power
+    libai_force_changhe --> libai_welcome_hejiu
     libai_force_changhe --> request_libai_changh
     libai_unveilation --> libai_after
     request_libai_changh --> libai_force_changhe
+    request_libai_changh --> libai_welcome_hejiu
     strange_poet --> libai_after
     strange_poet --> the_man_got_power
     the_man_got_power --> libai_unveilation

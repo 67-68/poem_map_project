@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bxu3af7eiwvid"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_kc3rs"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_5jjl5"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_hkt14"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_j3xdl"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_7v0nx"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_k6n1n"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_vvq5k"]
+
+[sub_resource type="Resource" id="Resource_5bnv0"]
+script = ExtResource("3_hkt14")
+value = -10
+
+[sub_resource type="Resource" id="Resource_eaj8b"]
+script = ExtResource("3_hkt14")
+value = -10
+
+[sub_resource type="Resource" id="Resource_2yrkx"]
+script = ExtResource("3_hkt14")
+value = 10
+
+[sub_resource type="Resource" id="Resource_4167v"]
+script = ExtResource("4_j3xdl")
+operators = Array[ExtResource("2_5jjl5")]([SubResource("Resource_5bnv0"), SubResource("Resource_eaj8b"), SubResource("Resource_2yrkx")])
+
+[sub_resource type="Resource" id="Resource_k433g"]
+script = ExtResource("5_7v0nx")
+choice_result = SubResource("Resource_4167v")
+description = "低头塞去银两，恳请通报"
+
+[sub_resource type="Resource" id="Resource_mel7v"]
+script = ExtResource("6_k6n1n")
+property = "career_progress"
+value = 70
+
+[resource]
+script = ExtResource("7_vvq5k")
+requirement = SubResource("Resource_mel7v")
+options = Array[ExtResource("1_kc3rs")]([SubResource("Resource_k433g")])
+uuid = "bai_ye_honeymoon_l0_typec_m0"
+name = "寒门骄奴"
+description = "“相爷今日有要务，不见闲人。”你拱手道愿等。他冷笑一声，引你至侧门穿廊处。时值腊月，寒风如刀。你站了半个时辰，腿脚发麻。他偶尔踱过，瞥你一眼，转头对同伴低语：“这些新科进士，日日来扰，也不知带了几分诚心。”言罢，故意将你晾在风口。"

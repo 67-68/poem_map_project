@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://crgha8hrq2d5b"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_g4374"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_rya10"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_wfeby"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_372hf"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_iy788"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_mdgin"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_7jpqt"]
+
+[sub_resource type="Resource" id="Resource_887o7"]
+script = ExtResource("3_wfeby")
+value = -22
+
+[sub_resource type="Resource" id="Resource_nw7g6"]
+script = ExtResource("3_wfeby")
+value = -22
+
+[sub_resource type="Resource" id="Resource_lsye0"]
+script = ExtResource("3_wfeby")
+value = 22
+
+[sub_resource type="Resource" id="Resource_s5koo"]
+script = ExtResource("4_372hf")
+operators = Array[ExtResource("2_rya10")]([SubResource("Resource_887o7"), SubResource("Resource_nw7g6"), SubResource("Resource_lsye0")])
+
+[sub_resource type="Resource" id="Resource_qstqw"]
+script = ExtResource("5_iy788")
+choice_result = SubResource("Resource_s5koo")
+description = "躬身作揖，请他在拜帖上批注"
+
+[sub_resource type="Resource" id="Resource_eb7vg"]
+script = ExtResource("6_mdgin")
+property = "career_progress"
+value = 70
+
+[resource]
+script = ExtResource("7_7jpqt")
+requirement = SubResource("Resource_eb7vg")
+options = Array[ExtResource("1_g4374")]([SubResource("Resource_qstqw")])
+uuid = "bai_ye_honeymoon_l1_typec_m1"
+name = "幕僚冷面授机宜"
+description = "“字俗气重，毫无风骨。”又瞥你衣裳：“初入仕途，不知深浅。”他将拜帖掷回桌角，慢悠悠道：“侍郎公事忙，你且回去，好生习字。”话音未落，已转身翻阅案牍，再不看你。廊外蝉声聒噪，室内寂静如铁。"

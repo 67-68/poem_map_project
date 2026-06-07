@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://barracvnr57kj"]
 
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_orbua"]
-[ext_resource type="Script" path="res://core/operators/random_pick_operator.gd" id="3_86jhn"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="4_ruvm1"]
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="5_7vn8i"]
-[ext_resource type="Script" path="res://core/model/item_provider.gd" id="6_7ikpg"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="7_7carv"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_orbua"]
+[ext_resource type="Script" uid="uid://qdqvvly5ndfr" path="res://core/operators/random_pick_operator.gd" id="3_86jhn"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_ruvm1"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="5_7vn8i"]
+[ext_resource type="Script" uid="uid://lnvpvefpsar1" path="res://core/model/item_provider.gd" id="6_7ikpg"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_7carv"]
 
 [sub_resource type="Resource" id="Resource_3gs24"]
 script = ExtResource("3_86jhn")
@@ -19,13 +19,7 @@ operators = Array[ExtResource("2_orbua")]([SubResource("Resource_3gs24")])
 
 [sub_resource type="Resource" id="Resource_orbua"]
 script = ExtResource("6_7ikpg")
-list_key = "feihualing_words"
-text_template = "以「{item}」为题"
-target_event_key = "feihualing_other_done"
-payload_key = "feihualing_chosen_word"
-use_push_event = true
-display_datasource = "imaginaries"
-display_prop = "name"
+list_key = "feihualing_words, display_datasource=imaginaries, display_prop=name, text_template=以「{item}」为题, target_event_key=feihualing_other_done, payload_key=feihualing_chosen_word, use_push_event=true"
 
 [resource]
 script = ExtResource("7_7carv")

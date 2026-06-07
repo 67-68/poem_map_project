@@ -5,7 +5,5 @@
 [resource]
 script = ExtResource("1_xfnnm")
 resources = {
-"event_intro_745": "res://data/tres_history_event/event_intro_745.tres",
-"test_picker_chain_A": "res://data/tres_history_event/test_picker_chain_A.tres",
-"test_picker_chain_B": "res://data/tres_history_event/test_picker_chain_B.tres"
+"event_intro_745": "res://data/tres_history_event/event_intro_745.tres"
 }

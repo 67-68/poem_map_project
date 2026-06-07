@@ -5,5 +5,32 @@
 [resource]
 script = ExtResource("1_egs84")
 resources = {
+"bai_ye_honeymoon_l0_typea_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typea_m0.tres",
+"bai_ye_honeymoon_l0_typea_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typea_m1.tres",
+"bai_ye_honeymoon_l0_typea_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typea_m2.tres",
+"bai_ye_honeymoon_l0_typeb_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typeb_m0.tres",
+"bai_ye_honeymoon_l0_typeb_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typeb_m1.tres",
+"bai_ye_honeymoon_l0_typeb_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typeb_m2.tres",
+"bai_ye_honeymoon_l0_typec_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typec_m0.tres",
+"bai_ye_honeymoon_l0_typec_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typec_m1.tres",
+"bai_ye_honeymoon_l0_typec_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l0_typec_m2.tres",
+"bai_ye_honeymoon_l1_typea_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typea_m0.tres",
+"bai_ye_honeymoon_l1_typea_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typea_m1.tres",
+"bai_ye_honeymoon_l1_typea_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typea_m2.tres",
+"bai_ye_honeymoon_l1_typeb_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typeb_m0.tres",
+"bai_ye_honeymoon_l1_typeb_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typeb_m1.tres",
+"bai_ye_honeymoon_l1_typeb_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typeb_m2.tres",
+"bai_ye_honeymoon_l1_typec_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typec_m0.tres",
+"bai_ye_honeymoon_l1_typec_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typec_m1.tres",
+"bai_ye_honeymoon_l1_typec_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l1_typec_m2.tres",
+"bai_ye_honeymoon_l2_typea_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typea_m0.tres",
+"bai_ye_honeymoon_l2_typea_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typea_m1.tres",
+"bai_ye_honeymoon_l2_typea_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typea_m2.tres",
+"bai_ye_honeymoon_l2_typeb_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typeb_m0.tres",
+"bai_ye_honeymoon_l2_typeb_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typeb_m1.tres",
+"bai_ye_honeymoon_l2_typeb_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typeb_m2.tres",
+"bai_ye_honeymoon_l2_typec_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typec_m0.tres",
+"bai_ye_honeymoon_l2_typec_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typec_m1.tres",
+"bai_ye_honeymoon_l2_typec_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typec_m2.tres",
 "normal_bai_ye": "res://data/tres_random_event_bai_ye/normal_bai_ye.tres"
 }

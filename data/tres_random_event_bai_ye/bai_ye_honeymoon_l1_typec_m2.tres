@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://d21gmssrn711b"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_vqooj"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3upna"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_ftgft"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_4g6ib"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_y2ai2"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_xj1d8"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_3o717"]
+
+[sub_resource type="Resource" id="Resource_8hhku"]
+script = ExtResource("3_ftgft")
+value = -15
+
+[sub_resource type="Resource" id="Resource_mfngh"]
+script = ExtResource("3_ftgft")
+value = -15
+
+[sub_resource type="Resource" id="Resource_7aphi"]
+script = ExtResource("3_ftgft")
+value = 15
+
+[sub_resource type="Resource" id="Resource_v46nm"]
+script = ExtResource("4_4g6ib")
+operators = Array[ExtResource("2_3upna")]([SubResource("Resource_8hhku"), SubResource("Resource_mfngh"), SubResource("Resource_7aphi")])
+
+[sub_resource type="Resource" id="Resource_5cy7b"]
+script = ExtResource("5_y2ai2")
+choice_result = SubResource("Resource_v46nm")
+description = "躬身赔笑，请先生指点规矩"
+
+[sub_resource type="Resource" id="Resource_v3t3v"]
+script = ExtResource("6_xj1d8")
+property = "career_progress"
+value = 70
+
+[resource]
+script = ExtResource("7_3o717")
+requirement = SubResource("Resource_v3t3v")
+options = Array[ExtResource("1_vqooj")]([SubResource("Resource_5cy7b")])
+uuid = "bai_ye_honeymoon_l1_typec_m2"
+name = "礼单上的尘埃"
+description = "午时三刻，你于权贵府邸偏厅候见。一青衣清客坐于案后，指尖翻动你的名帖与礼单，半晌不语。案上茶盏已凉，他忽将礼单轻轻一推，纸角沾上浮尘。“进士的拜帖，留个名字便可。至于礼单…总得有个懂规矩的人过目。”他垂目饮茶，不再看你。门外脚步声来来去去，无人为你添水。"

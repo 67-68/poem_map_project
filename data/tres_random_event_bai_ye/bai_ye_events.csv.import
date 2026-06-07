@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cmff5gaimnehm"
+
+[deps]
+
+files=["res://data/tres_random_event_bai_ye/bai_ye_events.uuid.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.context.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.requirements.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.title.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.description.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.en.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.results.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.en.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.en.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.en.translation"]
+
+source_file="res://data/tres_random_event_bai_ye/bai_ye_events.csv"
+dest_files=["res://data/tres_random_event_bai_ye/bai_ye_events.uuid.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.context.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.requirements.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.title.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.description.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.en.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.results.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.en.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.en.translation", "res://data/tres_random_event_bai_ye/bai_ye_events.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

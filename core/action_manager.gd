@@ -8,7 +8,6 @@ const TRAIT_AUTO_RESERVE_MAP: Dictionary = {
 	"reserve_baiye": "bai_ye",
 }
 
-
 ## 预定一个 action，确保本回合必定被选中。
 ## 返回 true 表示预定成功，false 表示失败（见 push_error）。
 func reserve_action(action_id: String) -> bool:

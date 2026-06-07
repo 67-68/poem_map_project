@@ -80,7 +80,14 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=0&single=true&output=csv",
         "save_path": "res://data/random_events/random_events.csv",
         "data_type": "random_event"
-    }
+    },
+    {
+        "name": "拜谒事件池",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=764155115&single=true&output=csv",
+        "save_path": "res://data/tres_random_event_bai_ye/bai_ye_events.csv",
+        "data_type": "random_event"
+    },
+    
 ]
 
 # 任务指针：当前正在下载第几个文件？
