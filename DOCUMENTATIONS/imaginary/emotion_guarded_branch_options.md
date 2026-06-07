@@ -1,5 +1,13 @@
 # 情绪守卫的多分支选项设计模式
 
+> ⚠️ **此文档的意象掉落逻辑已被 V2 架构升级。**
+> 新方案见 [`plans/emotion_imagery_orthogonal_pipeline_v2.md`](../../plans/emotion_imagery_orthogonal_pipeline_v2.md)
+>
+> **升级内容：** 旧方案使用 `imaginary_add_random(tags=emotion:arrogance)` 从情绪标签池随机抽取（唯心主义）。
+> V2 改为"场景提供合法意象白名单 → 意象自带情绪亲缘度(0-100) → 按选项情绪打出最高分"，保证意象不会脱离物理场景约束。
+>
+> **保留内容：** 多分支选项的 `requirements` 守卫逻辑和兜底机制完全保留。
+
 ## 概述
 
 本文档记录了一种核心的事件叙事设计模式：**通过 Requirement 守卫提供多分支情绪选项，让玩家自主选择获得的意象类型和后果**。
