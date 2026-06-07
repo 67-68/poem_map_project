@@ -8,37 +8,40 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_mdgin"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_7jpqt"]
 
-[sub_resource type="Resource" id="Resource_887o7"]
+[sub_resource type="Resource" id="Resource_g4374"]
 script = ExtResource("3_wfeby")
-value = -22
+str_props = "money"
+value = -15
 
-[sub_resource type="Resource" id="Resource_nw7g6"]
+[sub_resource type="Resource" id="Resource_rya10"]
 script = ExtResource("3_wfeby")
-value = -22
+str_props = "fatigue"
+value = -15
 
-[sub_resource type="Resource" id="Resource_lsye0"]
+[sub_resource type="Resource" id="Resource_wfeby"]
 script = ExtResource("3_wfeby")
-value = 22
+str_props = "career_progress"
+value = 15
 
-[sub_resource type="Resource" id="Resource_s5koo"]
+[sub_resource type="Resource" id="Resource_372hf"]
 script = ExtResource("4_372hf")
-operators = Array[ExtResource("2_rya10")]([SubResource("Resource_887o7"), SubResource("Resource_nw7g6"), SubResource("Resource_lsye0")])
+operators = Array[ExtResource("2_rya10")]([SubResource("Resource_g4374"), SubResource("Resource_rya10"), SubResource("Resource_wfeby")])
 
-[sub_resource type="Resource" id="Resource_qstqw"]
+[sub_resource type="Resource" id="Resource_iy788"]
 script = ExtResource("5_iy788")
-choice_result = SubResource("Resource_s5koo")
+choice_result = SubResource("Resource_372hf")
 description = "拱手应诺，侍立廊下等候"
 
-[sub_resource type="Resource" id="Resource_eb7vg"]
+[sub_resource type="Resource" id="Resource_mdgin"]
 script = ExtResource("6_mdgin")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_7jpqt")
-requirement = SubResource("Resource_eb7vg")
+requirement = SubResource("Resource_mdgin")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_g4374")]([SubResource("Resource_qstqw")])
+options = Array[ExtResource("1_g4374")]([SubResource("Resource_iy788")])
 uuid = "bai_ye_honeymoon_l1_typec_m1"
 name = "冰茶慢饮"
 description = "你递上名帖，在右相府西厢候了半个时辰。终于进来一位青衣清客，手持茶盏却不落座，绕着你的衣袍走了一圈。“新科进士？嗯...这料子是蜀锦？我竟不曾见过。”他捏起你袖口轻轻一搓，松手，转身将半盏冷茶泼向阶下青苔。“李相日理万机，哪得闲见你这样的？这样罢——你且站这里，等我把手头《六典》条陈理完。何时有空，自会唤你。”他走进内室，留下半掩的帘子。你听见里头传来研墨声，夹杂一声极轻的笑。"

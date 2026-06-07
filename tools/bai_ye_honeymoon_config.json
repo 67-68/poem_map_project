@@ -32,14 +32,14 @@
           "id": "L1",
           "name": "清客/文法吏",
           "description": "中层幕僚、文书小吏，递话要钱，比直接面对权贵便宜",
-          "scale": 1.5,
+          "scale": 1.10,
           "operator_dsl": "prop_sub(name=money; val=10)"
         },
         {
           "id": "L2",
           "name": "权贵本尊",
           "description": "直接面对高官权贵，需要重大代价才能获得见面机会",
-          "scale": 2.0,
+          "scale": 1.25,
           "operator_dsl": "prop_sub(name=money; val=10)|prop_sub(name=fatigue; val=5)"
         }
       ]
@@ -88,7 +88,7 @@
           "id": "M1",
           "name": "纯粹寻租/变态",
           "description": "对方纯粹为了享受支配欲和权力快感，毫无制度性理由",
-          "scale": 1.5,
+          "scale": 1.15,
           "operator_dsl": ""
         },
         {

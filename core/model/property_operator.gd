@@ -1,7 +1,7 @@
 @tool
 class_name PropertyOperator extends BaseOperator
 
-@export var _property: ENUMS.PROPS = ENUMS.PROPS.OFFICIAL_PRESTIGE
+@export var _property: ENUMS.PROPS = -1
 var property := '':
     get():
         if str_props:
@@ -11,7 +11,7 @@ var property := '':
     set(value):
         str_props = value
 
-var str_props: String = ""
+@export var str_props: String = ""
 @export var value: int = 0
 @export var context_key_for_multiplication: String = "property_multiplication"
 

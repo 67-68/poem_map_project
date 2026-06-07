@@ -8,37 +8,40 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_mcpcd"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_tp1f0"]
 
-[sub_resource type="Resource" id="Resource_ii763"]
+[sub_resource type="Resource" id="Resource_gpgjr"]
 script = ExtResource("3_6ntyv")
-value = -22
+str_props = "money"
+value = -15
 
-[sub_resource type="Resource" id="Resource_hm380"]
+[sub_resource type="Resource" id="Resource_4x51k"]
 script = ExtResource("3_6ntyv")
+str_props = "money"
 value = -45
 
-[sub_resource type="Resource" id="Resource_l24rx"]
+[sub_resource type="Resource" id="Resource_6ntyv"]
 script = ExtResource("3_6ntyv")
-value = 22
+str_props = "career_progress"
+value = 15
 
-[sub_resource type="Resource" id="Resource_5sfph"]
+[sub_resource type="Resource" id="Resource_m07wa"]
 script = ExtResource("4_m07wa")
-operators = Array[ExtResource("2_4x51k")]([SubResource("Resource_ii763"), SubResource("Resource_hm380"), SubResource("Resource_l24rx")])
+operators = Array[ExtResource("2_4x51k")]([SubResource("Resource_gpgjr"), SubResource("Resource_4x51k"), SubResource("Resource_6ntyv")])
 
-[sub_resource type="Resource" id="Resource_r4htk"]
+[sub_resource type="Resource" id="Resource_dx4u2"]
 script = ExtResource("5_dx4u2")
-choice_result = SubResource("Resource_5sfph")
+choice_result = SubResource("Resource_m07wa")
 description = "谢过指点，取出银两奉上"
 
-[sub_resource type="Resource" id="Resource_e7yal"]
+[sub_resource type="Resource" id="Resource_mcpcd"]
 script = ExtResource("6_mcpcd")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_tp1f0")
-requirement = SubResource("Resource_e7yal")
+requirement = SubResource("Resource_mcpcd")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_gpgjr")]([SubResource("Resource_r4htk")])
+options = Array[ExtResource("1_gpgjr")]([SubResource("Resource_dx4u2")])
 uuid = "bai_ye_honeymoon_l1_typea_m1"
 name = "门帖之价"
 description = "“郎君字迹清隽，只是这纸上墨色淡了些。”说罢用笔尖在你名帖旁轻点，“若用松烟墨重誊一份，送礼帖时也体面。东街文坊有上等墨锭，三两银一枚——倒不是非用不可，全看郎君心意。”言毕垂目饮茶，不再看你。"

@@ -8,37 +8,40 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_a2khn"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_axhkd"]
 
-[sub_resource type="Resource" id="Resource_jeytd"]
+[sub_resource type="Resource" id="Resource_kbtgt"]
 script = ExtResource("3_a1s08")
-value = -15
+str_props = "money"
+value = -12
 
-[sub_resource type="Resource" id="Resource_eowwq"]
+[sub_resource type="Resource" id="Resource_m6578"]
 script = ExtResource("3_a1s08")
-value = -15
+str_props = "fatigue"
+value = -12
 
-[sub_resource type="Resource" id="Resource_lev8p"]
+[sub_resource type="Resource" id="Resource_a1s08"]
 script = ExtResource("3_a1s08")
-value = 15
+str_props = "career_progress"
+value = 12
 
-[sub_resource type="Resource" id="Resource_m0v2m"]
+[sub_resource type="Resource" id="Resource_ldo8n"]
 script = ExtResource("4_ldo8n")
-operators = Array[ExtResource("2_m6578")]([SubResource("Resource_jeytd"), SubResource("Resource_eowwq"), SubResource("Resource_lev8p")])
+operators = Array[ExtResource("2_m6578")]([SubResource("Resource_kbtgt"), SubResource("Resource_m6578"), SubResource("Resource_a1s08")])
 
-[sub_resource type="Resource" id="Resource_1n4vc"]
+[sub_resource type="Resource" id="Resource_i0sgh"]
 script = ExtResource("5_i0sgh")
-choice_result = SubResource("Resource_m0v2m")
+choice_result = SubResource("Resource_ldo8n")
 description = "依言重写拜帖，明日再来。"
 
-[sub_resource type="Resource" id="Resource_rsaho"]
+[sub_resource type="Resource" id="Resource_a2khn"]
 script = ExtResource("6_a2khn")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_axhkd")
-requirement = SubResource("Resource_rsaho")
+requirement = SubResource("Resource_a2khn")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_kbtgt")]([SubResource("Resource_1n4vc")])
+options = Array[ExtResource("1_kbtgt")]([SubResource("Resource_i0sgh")])
 uuid = "bai_ye_honeymoon_l1_typec_m0"
 name = "清客赠言如刀"
 description = "“年兄此帖，措辞粗疏，字迹潦草，竟似未通文墨。”语毕将帖掷回案头，转身研墨，留你立于堂中。蝉声聒噪间，他头也不抬：“重写一帖，措辞须卑，字迹须正。明日午前若不来，便不必再至了。”话毕自顾饮茶，再不抬眼。"

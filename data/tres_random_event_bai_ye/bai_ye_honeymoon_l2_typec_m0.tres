@@ -8,41 +8,45 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_ee7jb"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_47dol"]
 
-[sub_resource type="Resource" id="Resource_j8vcx"]
+[sub_resource type="Resource" id="Resource_syti4"]
 script = ExtResource("3_f5r5b")
-value = -20
+str_props = "money"
+value = -12
 
-[sub_resource type="Resource" id="Resource_hinoh"]
+[sub_resource type="Resource" id="Resource_p2ynu"]
 script = ExtResource("3_f5r5b")
+str_props = "fatigue"
 value = -10
 
-[sub_resource type="Resource" id="Resource_eflv0"]
+[sub_resource type="Resource" id="Resource_f5r5b"]
 script = ExtResource("3_f5r5b")
-value = -20
+str_props = "fatigue"
+value = -12
 
-[sub_resource type="Resource" id="Resource_uswc2"]
+[sub_resource type="Resource" id="Resource_jf003"]
 script = ExtResource("3_f5r5b")
-value = 20
+str_props = "career_progress"
+value = 12
 
-[sub_resource type="Resource" id="Resource_j7q3v"]
+[sub_resource type="Resource" id="Resource_6hwcb"]
 script = ExtResource("4_jf003")
-operators = Array[ExtResource("2_p2ynu")]([SubResource("Resource_j8vcx"), SubResource("Resource_hinoh"), SubResource("Resource_eflv0"), SubResource("Resource_uswc2")])
+operators = Array[ExtResource("2_p2ynu")]([SubResource("Resource_syti4"), SubResource("Resource_p2ynu"), SubResource("Resource_f5r5b"), SubResource("Resource_jf003")])
 
-[sub_resource type="Resource" id="Resource_fi07f"]
+[sub_resource type="Resource" id="Resource_ee7jb"]
 script = ExtResource("5_6hwcb")
-choice_result = SubResource("Resource_j7q3v")
+choice_result = SubResource("Resource_6hwcb")
 description = "将玉鱼悄然收入袖中"
 
-[sub_resource type="Resource" id="Resource_3gotp"]
+[sub_resource type="Resource" id="Resource_47dol"]
 script = ExtResource("6_ee7jb")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_47dol")
-requirement = SubResource("Resource_3gotp")
+requirement = SubResource("Resource_47dol")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_syti4")]([SubResource("Resource_fi07f")])
+options = Array[ExtResource("1_syti4")]([SubResource("Resource_ee7jb")])
 uuid = "bai_ye_honeymoon_l2_typec_m0"
 name = "右相府中的空椅"
 description = "你耗费半月俸禄，辗转求得右相府管事的一封引荐信。这日午后，你被引入花厅等候。一个时辰过去，茶换三盏，不见人来。忽听屏风后传来笑声，右相李林甫的族弟李岫踱步而出，手中把玩着一枚玉鱼。“新科进士？”他扫了你一眼，“近来相爷正议裁汰冗官，你来得不是时候。”语罢，他将玉鱼随手搁在案上，转身便走。案上玉鱼与你的引荐信并排放着，不言自明。"

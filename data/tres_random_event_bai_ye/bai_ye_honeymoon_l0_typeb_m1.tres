@@ -8,37 +8,40 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_18g71"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_mvqe6"]
 
-[sub_resource type="Resource" id="Resource_6lheb"]
+[sub_resource type="Resource" id="Resource_tr8ch"]
 script = ExtResource("3_vc7pq")
-value = -15
+str_props = "money"
+value = -12
 
-[sub_resource type="Resource" id="Resource_w170s"]
+[sub_resource type="Resource" id="Resource_rao5f"]
 script = ExtResource("3_vc7pq")
+str_props = "health"
 value = -7
 
-[sub_resource type="Resource" id="Resource_t1l0y"]
+[sub_resource type="Resource" id="Resource_vc7pq"]
 script = ExtResource("3_vc7pq")
-value = 15
+str_props = "career_progress"
+value = 12
 
-[sub_resource type="Resource" id="Resource_uhao5"]
+[sub_resource type="Resource" id="Resource_np5e5"]
 script = ExtResource("4_np5e5")
-operators = Array[ExtResource("2_rao5f")]([SubResource("Resource_6lheb"), SubResource("Resource_w170s"), SubResource("Resource_t1l0y")])
+operators = Array[ExtResource("2_rao5f")]([SubResource("Resource_tr8ch"), SubResource("Resource_rao5f"), SubResource("Resource_vc7pq")])
 
-[sub_resource type="Resource" id="Resource_dvs6j"]
+[sub_resource type="Resource" id="Resource_vmt8o"]
 script = ExtResource("5_vmt8o")
-choice_result = SubResource("Resource_uhao5")
+choice_result = SubResource("Resource_np5e5")
 description = "近前拱手，低声道：“劳烦通融。”"
 
-[sub_resource type="Resource" id="Resource_sgmu5"]
+[sub_resource type="Resource" id="Resource_18g71"]
 script = ExtResource("6_18g71")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_mvqe6")
-requirement = SubResource("Resource_sgmu5")
+requirement = SubResource("Resource_18g71")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_tr8ch")]([SubResource("Resource_dvs6j")])
+options = Array[ExtResource("1_tr8ch")]([SubResource("Resource_vmt8o")])
 uuid = "bai_ye_honeymoon_l0_typeb_m1"
 name = "寒门久候"
 description = "“相公今日议事，恐不得闲。且候着。”语罢，自顾与旁侧小厮说笑。日影渐移，檐角冰棱滴水，你立于阶下，足胫渐僵，腹中饥鸣。门子偶尔抬眼，见你神色依旧，便又低头剔指甲，再无他话。如是半个时辰过去，门内并无人出入，亦无传唤之意。"

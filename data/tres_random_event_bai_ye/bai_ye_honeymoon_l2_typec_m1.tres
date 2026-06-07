@@ -10,18 +10,22 @@
 
 [sub_resource type="Resource" id="Resource_4450c"]
 script = ExtResource("3_1im3n")
+str_props = "money"
 value = -30
 
 [sub_resource type="Resource" id="Resource_04bf7"]
 script = ExtResource("3_1im3n")
+str_props = "fatigue"
 value = -15
 
 [sub_resource type="Resource" id="Resource_80v1y"]
 script = ExtResource("3_1im3n")
+str_props = "fatigue"
 value = -30
 
 [sub_resource type="Resource" id="Resource_eps6j"]
 script = ExtResource("3_1im3n")
+str_props = "career_progress"
 value = 30
 
 [sub_resource type="Resource" id="Resource_51k3q"]
