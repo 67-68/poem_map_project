@@ -47,6 +47,7 @@ func _ready() -> void:
 	EventBus.push_picker.connect(_on_push_picker)
 	EventBus.end_picking.connect(_on_end_picking)
 	EventBus.push_cinematic.connect(_on_push_cinematic)
+	EventBus.push_focused_chat.connect(_on_push_focused_chat)
 
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -187,6 +188,48 @@ func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null):
 		_process_stack()
 
 
+# --- FocusChat 栈条目 -----------------------------------
+
+func _on_push_focused_chat(data: Variant):
+	var entry := {
+		"type": "focused_chat",
+		"data": data,
+		"processed": false,
+	}
+	_event_stack.push_front(entry)
+	Logging.info("FocusChat 已推入栈顶")
+
+	if not _is_active:
+		_process_stack()
+
+
+func _show_focused_chat_from_stack(entry: Dictionary):
+	_is_active = true
+	_saved_time_scale = Engine.time_scale
+	# 像事件/Picker 一样暂停世界
+	TimeService.pause_world(true)
+
+	var data = entry.get("data")
+	Logging.info("FocusChat 显示中")
+
+	# 动态实例化 FocusChatOverlay 并挂载到 NarrativeOverlay 下
+	var overlay = preload("res://ui/focus_chat_overlay.tscn").instantiate()
+	add_child(overlay)
+
+	# 连接完成信号：overlay 播完后自行 queue_free，此回调负责弹出栈并恢复
+	overlay.chat_finished.connect(func(_result: ChoiceResult):
+		_event_stack.pop_front()
+		Logging.info("FocusChat 已从栈中弹出")
+
+		TimeService.resume_world()
+		Engine.time_scale = _saved_time_scale
+		_is_active = false
+		_process_next()
+	)
+
+	overlay.play_dialogue_sequence(data)
+
+
 # --- Cinematic 栈条目 -----------------------------------
 
 func _on_push_cinematic(texts: Array[String]):
@@ -232,6 +275,9 @@ func _process_stack():
 		elif entry is Dictionary and entry.get("type") == "cinematic":
 			entry["processed"] = true
 			_show_cinematic_from_stack(entry)
+		elif entry is Dictionary and entry.get("type") == "focused_chat":
+			entry["processed"] = true
+			_show_focused_chat_from_stack(entry)
 		else:
 			_current_from_stack = true
 			entry["processed"] = true
@@ -255,6 +301,11 @@ func _process_next():
 			Logging.info("弹出栈中的下一个 Cinematic")
 			entry["processed"] = true
 			_show_cinematic_from_stack(entry)
+			return
+		if entry is Dictionary and entry.get("type") == "focused_chat":
+			Logging.info("弹出栈中的下一个 FocusChat")
+			entry["processed"] = true
+			_show_focused_chat_from_stack(entry)
 			return
 		_current_from_stack = true
 		var ev: BaseEvent = entry.get("data")

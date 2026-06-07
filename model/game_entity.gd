@@ -1,5 +1,9 @@
 @tool
-class_name GameEntity extends Resource
+# @deprecated 与 core/game_entity.gd 的 class_name GameEntity 冲突。
+# core/game_entity.gd 的版本包含 owner_uuids/tags 字段，
+# 被 base_repository.gd / poem_repository.gd 使用，因此保留 core 版。
+# 此文件保留但禁用 class_name，Godot 会使用 core/game_entity.gd。
+#extends Resource
 
 @export var uuid: String
 @export var name: String

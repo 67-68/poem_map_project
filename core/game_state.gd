@@ -51,7 +51,12 @@ func init_buffers() -> void:
 	)
 
 	chat_buffer = ManualBuffer.new(
-		func(item): EventBus.request_add_chat.emit(item),
+		func(item):
+			# FocusedChat 走 NarrativeOverlay 栈系统，ChatBubble 走 PopupQueue
+			if item is FocusedChat:
+				EventBus.push_focused_chat.emit(item)
+			else:
+				EventBus.request_add_chat.emit(item),
 		[]
 	)
 	if Database.chat_bubble_data:
