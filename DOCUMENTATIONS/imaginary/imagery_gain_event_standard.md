@@ -147,7 +147,7 @@ choice_result.operators.append(op)
 
 ### Step 4：配置 Tag 匹配
 
-使用 [Tag 幂等性创建原则](tag_idempotent_creation.md) 为事件配置 `Trigger_Tags`，确保事件能在合适的时机被触发。
+使用 [大唐 Tag 本体论与五维宪法](../events/tag_dictioinary.md) 为事件配置 `Trigger_Tags`，确保事件能在合适的时机被触发。
 
 ### Step 5：验证
 
@@ -187,6 +187,6 @@ choice_result.operators.append(op)
 | [Imaginary 系统技术报告](../imaginary/imaginary_system_report.md) | 完整系统架构 |
 | [情绪-意象系统设计](../imaginary/emotion_imaginary_system.md) | 情绪与意象的关联设计 |
 | [事件选项系统](./event_option_system.md) | CustomEventOption 和 ChoiceResult |
-| [Tag 幂等性创建原则](./tag_idempotent_creation.md) | 事件 Tag 规范 |
+| [大唐 Tag 本体论与五维宪法](../events/tag_dictioinary.md) | 事件 Tag 规范 |
 | [ImaginaryOperator](../../core/operators/imaginary_operator.gd) | 意象操作符源码 |
 | [ImaginaryTag 模型](../../core/model/imaginary.gd) | 意象数据结构源码 |

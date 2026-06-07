@@ -22,7 +22,7 @@
 - [`dsl/dsl_syntax_reference.md`](dsl/dsl_syntax_reference.md) - DSL 语法参考手册（条件/结果操作符大全）
 - [`dsl/dsl_csv_structure_guide.md`](dsl/dsl_csv_structure_guide.md) - CSV 数据结构指南（表头/PDA/字段格式）
 - `tag_pattern_confliction.md` - 标签体系设计规范（格式演进历史）
-- `tag_idempotent_creation.md` - Tag 幂等性创建原则（本体论构建/三问法）
+- `tag_dictioinary.md` - 大唐 Tag 本体论与五维宪法（枚举词典 + 创建规约）
 - `old_bugs.md` - 历史Bug记录
 
 ### 4. 架构与质量保证 (Architecture & QA)
@@ -54,7 +54,7 @@
 ## 📝 维护日志
 
 - 2026-06-01: 新增 Qdrant 本地向量库查询指南（`qdrant_vector_search.md`），涵盖 curl/Python 查询方法、Filter 过滤、语义搜索等
-- 2026-06-01: 新增 Tag 幂等性创建原则文档（`tag_idempotent_creation.md`），定义 MECE 三问法创建流程、动作/气质封闭词典、Linter 规约执行
+- 2026-06-07: 合并 tag_idempotent_creation.md 入 tag_dictioinary.md，确立五维宪法为唯一 Tag 规范
 - 2026-05-26: 完成Event Data Linter架构重构，建立契约设计模式和Rule流水线架构，消除反射依赖，性能提升约100倍
 - 2026-05-26: 创建Linter架构重构文档，记录契约设计、流水线架构、数据抽象层等核心设计决策
 - 2026-05-25: 更新DSL文档和CSV指南中的标签格式说明，采用最新的四段式标签规范（domain:category:type:specific），同时保持三段式向后兼容
