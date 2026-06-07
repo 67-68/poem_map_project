@@ -643,15 +643,13 @@ def write_csv_header(writer):
 def write_event_row(writer, uuid: str, title: str, description: str, tags: list[str] | None = None, requirement: str = ""):
     """写一个 random_event 行。结果 DSL 放在 option 行，不在 event 行。
     
-    tags: 触发标签列表。单标签输出 trigger_tags=tag，多标签输出 trigger_tags=[tag1/tag2]。
+    tags: 触发标签列表。统一使用 [tag1/tag2] 方括号 + / 分隔格式（DSL Parser 标准格式）。
     """
     if tags is None:
         tags = ["bai_ye"]
-    # 多标签用方括号 + / 分隔（DSL Parser 标准格式），单标签兼容旧格式
-    if len(tags) > 1:
+    # 统一方括号 + / 分隔（单 tag 也加方括号，DSL Parser 标准格式）
+    if tags:
         tags_expr = "[" + "/".join(tags) + "]"
-    elif len(tags) == 1:
-        tags_expr = tags[0]
     else:
         tags_expr = ""
     writer.writerow([
@@ -911,20 +909,22 @@ def main():
                         final_dsl = scaled_universal
                     print(f"  +universal(scaled={combined_scale}): {scaled_universal}")
 
-                # ── CSV 预览 ──
+                # ── CSV 预览（使用与 write_event_row 一致的格式化）──
                 print(f"\n📄 CSV 预览（不会写入文件）:")
 
-                # event 行
-                tags_expr = ",".join(cfg.universal_tags)
-                requirement = cfg.universal_requirement or "(无)"
-                desc_preview = description[:80] + "..." if len(description) > 80 else description
-                print(f"  ┌─ [event] ─────────────────────────────")
-                print(f"  │ trigger_tags: {tags_expr}")
-                print(f"  │ uuid:         {uuid}")
-                print(f"  │ requirement:  {requirement}")
-                print(f"  │ title:        {title}")
-                print(f"  │ description:  {desc_preview}")
-                print(f"  └───────────────────────────────────────")
+                # 构建 context 列（与 write_event_row 一致的 tag 格式化）
+                tags = cfg.universal_tags or ["bai_ye"]
+                if tags:
+                    tags_expr = "[" + "/".join(tags) + "]"
+                else:
+                    tags_expr = ""
+                context = f"trigger_tags={tags_expr}|weight=10"
+
+                # event 行（实际 CSV 格式）
+                requirement_col = cfg.universal_requirement if cfg.universal_requirement else ""
+                desc_csv = description.replace('"', '""')  # CSV 双引号转义
+                desc_preview = desc_csv[:60] + "..." if len(desc_csv) > 60 else desc_csv
+                print(f'  random_event,{uuid},{context},{requirement_col},"{title}","{desc_preview}",,,,,,')
 
                 # option 行
                 options = parsed.get("options", {})
@@ -933,15 +933,11 @@ def main():
                         opt_text = options.get(of.id, "").strip()
                         if not opt_text:
                             opt_text = "（确认）"
-                        print(f"  ┌─ [option] ────────────────────────────")
-                        print(f"  │ description: {opt_text}")
-                        print(f"  │ results:     {final_dsl}")
-                        print(f"  └───────────────────────────────────────")
+                        dsl_csv = final_dsl.replace('"', '""')
+                        print(f'  >option,,,,,"{opt_text}","{dsl_csv}",,,,')
                 else:
-                    print(f"  ┌─ [option] ────────────────────────────")
-                    print(f"  │ description: （确认）")
-                    print(f"  │ results:     {final_dsl}")
-                    print(f"  └───────────────────────────────────────")
+                    dsl_csv = final_dsl.replace('"', '""')
+                    print(f'  >option,,,,,"（确认）","{dsl_csv}",,,,')
 
                 success = True
                 break
