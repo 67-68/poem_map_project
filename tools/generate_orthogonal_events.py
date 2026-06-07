@@ -185,6 +185,7 @@ KNOWN_NON_PROP_OPS = {
     "trait_add", "trait_remove",
     "flag_bool_set", "flag_str_set", "flag_str_append",
     "flag_int_set", "flag_int_append", "flag_int_reduce_if_above",
+    "use_template",
 }
 
 
@@ -199,6 +200,10 @@ def scale_dsl_operator(dsl: str, scale: int) -> str:
         raise ValueError(f"DSL 语句缺少括号: {dsl}")
 
     func_name = dsl[:paren_idx].strip()
+
+    # use_template 不需要缩放，直接原样返回
+    if func_name == "use_template":
+        return dsl
 
     if func_name in KNOWN_NON_PROP_OPS:
         raise ValueError(

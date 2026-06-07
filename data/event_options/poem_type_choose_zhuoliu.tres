@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="EventOption" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_propop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_eo"]
+[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="5_tco"]
+[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="6_pt"]
+
+; ── accepted_result: career_progress + 4（干谒诗被赏识的固定增益） ──
+; 该值不受 Python scale 缩放，但受运行时 property_multiplication context 影响
+[sub_resource type="Resource" id="Resource_acc_prop"]
+script = ExtResource("2_propop")
+str_props = "career_progress"
+value = 4
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_acc_cr"]
+script = ExtResource("3_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_acc_prop")])
+
+; ── rejected_result: fatigue + 5（诗被嫌弃） ──
+[sub_resource type="Resource" id="Resource_rej_prop"]
+script = ExtResource("2_propop")
+str_props = "fatigue"
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_rej_cr"]
+script = ExtResource("3_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_rej_prop")])
+
+; ── not_entered_result: 空（玩家取消选择，无操作） ──
+[sub_resource type="Resource" id="Resource_not_cr"]
+script = ExtResource("3_cr")
+operators = Array[ExtResource("1_baseop")]([])
+
+; ── PoemTaste 配置（硬编码，不从 context 动态加载） ──
+[sub_resource type="Resource" id="Resource_taste"]
+script = ExtResource("6_pt")
+uuid = "poem_type_choose_zhuoliu_taste"
+_accepted_poem_types = Array[int]([0])  ; GAN_YE（干谒诗）
+lowest_poem_level = 1
+accepted_result = SubResource("Resource_acc_cr")
+rejected_result = SubResource("Resource_rej_cr")
+not_entered_result = SubResource("Resource_not_cr")
+metadata/_custom_type_script = "uid://4seqlwtem2i3"
+
+; ── PoemTypeChooseOperator（key_to_get_poem_taste="" → 使用硬编码 PoemTaste） ──
+[sub_resource type="Resource" id="Resource_tco"]
+script = ExtResource("5_tco")
+poem_taste = SubResource("Resource_taste")
+key_to_get_poem_taste = ""
+metadata/_custom_type_script = "uid://w6wvp8tdisfu"
+
+; ── wrapper ChoiceResult ──
+[sub_resource type="Resource" id="Resource_wrapper_cr"]
+script = ExtResource("3_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_tco")])
+
+; ── EventOption 主资源 ──
+[resource]
+script = ExtResource("4_eo")
+choice_result = SubResource("Resource_wrapper_cr")
+uuid = "poem_type_choose_zhuoliu"
+description = "展示诗词"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"

@@ -221,11 +221,57 @@ static func parse_consequence_operators(data: String) -> Array[BaseOperator]:
 	
 	var expressions = NamedDSLParser.split_expressions(data)
 	for expr in expressions:
+		# 🎯 use_template(urn=event_option:xxx) — 内联展开模板的 operators
+		if expr.begins_with("use_template("):
+			var template_ops = _expand_use_template(expr)
+			if template_ops.size() > 0:
+				operators.append_array(template_ops)
+			continue
+		
 		var op = parse_operator(expr)
 		if op:
 			operators.append(op)
 	
 	return operators
+
+
+# ── use_template DSL 展开 ──
+# 语法: use_template(urn=event_option:xxx)
+# 行为: 加载 URN 对应的 EventOption.tres，取其 choice_result.operators，
+#       深度复制（duplicate）每个 operator 后内联追加到当前 operators 数组。
+static func _expand_use_template(expr: String) -> Array[BaseOperator]:
+	var result_ops: Array[BaseOperator] = []
+	var parsed = NamedDSLParser.parse_single(expr)
+	if parsed == null:
+		Logging.err("use_template 解析失败: %s" % expr)
+		return result_ops
+	
+	var urn = NamedDSLParser.get_str_param(parsed, "urn")
+	if urn.is_empty():
+		Logging.err("use_template 缺少 urn 参数: %s" % expr)
+		return result_ops
+	
+	# 补全 URN 前缀
+	if not urn.begins_with("urn:"):
+		urn = "urn:" + urn
+	
+	var template = URN.get_resource_through_urn(urn)
+	if template == null:
+		Logging.err("use_template: 无法加载资源 %s (from: %s)" % [urn, expr])
+		return result_ops
+	
+	if not template is EventOption:
+		Logging.err("use_template: %s 不是 EventOption 类型，实际类型: %s" % [urn, typeof(template)])
+		return result_ops
+	
+	for op in template.choice_result.operators:
+		if op:
+			# 深度复制，避免多个展开共享同一份 Operator 实例
+			result_ops.append(op.duplicate(true))
+		else:
+			Logging.warn("use_template: %s 中存在 null operator" % urn)
+	
+	return result_ops
 
 # ═══════════════════════════════════════════════════════════
 # 内部处理器（需求）
