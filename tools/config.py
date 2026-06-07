@@ -5,6 +5,10 @@
 供 generate_orthogonal_events.py 使用。
 
 数据模型层级：
+  TextFeature (基类)
+    ├── PromptFeature (风格挂件)
+    ├── OptionFeature (选项定义)
+    └── FactFeature (事实约束)
   PipelineDimensionValue (基类)
     └── SceneValue (扩展: tags 字段)
   PipelineDimension (维度定义)
@@ -17,20 +21,37 @@ from pydantic import BaseModel, Field
 from typing import Callable, Optional
 
 
-class PromptFeature(BaseModel):
-    """"挂件"：一段纯文本，注入到 AI Prompt 中以微调文本风格。"""
+class TextFeature(BaseModel):
+    """文本特征基类：所有注入 AI Prompt 的文本片段的公共抽象。
+
+    id:   特征的唯一标识
+    text: 文本内容（风格指令 / 选项描述 / 事实约束等）
+    """
     id: str = ""
     text: str = ""
 
 
-class OptionFeature(BaseModel):
+class PromptFeature(TextFeature):
+    """"挂件"：一段纯文本，注入到 AI Prompt 中以微调文本风格。"""
+    pass
+
+
+class OptionFeature(TextFeature):
     """选项定义：指定一个选项的标识和 AI 生成指令。
 
     id: 选项的唯一标识（uuid key），如 "option_accept"
     text: AI 指令，如 "用15字以内描述接受贿赂的方案"
     """
-    id: str = ""
-    text: str = ""
+    pass
+
+
+class FactFeature(TextFeature):
+    """事实约束：AI 必须严格遵循的事实陈述，不得编造。
+
+    id:   事实的唯一标识，如 "bai_ye_venue"
+    text: 事实陈述，如 "去拜谒的地方可以是王府或者右相府"
+    """
+    pass
 
 
 class PipelineDimensionValue(BaseModel):
@@ -98,6 +119,9 @@ class EventPipelineConfig(BaseModel):
     background_context: str = ""
     ai_persona: str = ""
     prompt_features: list[PromptFeature] = []
+
+    # 事实约束（AI 必须严格遵循，不得编造）
+    fact_features: list[FactFeature] = []
 
     # 选项定义（让 AI 生成选项文本）
     option_features: list[OptionFeature] = []

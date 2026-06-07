@@ -42,6 +42,7 @@ from openai import OpenAI
 from tools.config import (
     DimensionCombo,
     EventPipelineConfig,
+    FactFeature,
     OptionFeature,
     PipelineDimension,
     PipelineDimensionValue,
@@ -71,6 +72,9 @@ def default_config() -> EventPipelineConfig:
         prompt_features=[
             PromptFeature(id="stateless_narrative", text="使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"),
             PromptFeature(id="tone_cautious", text="不要过于戏剧化，保持冷静克制的叙事语气，突出官场的虚伪和客套。"),
+        ],
+        fact_features=[
+            FactFeature(id="bai_ye_venue", text="去拜谒的地方可以是王府、右相府或六部衙门，这些地点在长安城中真实存在。"),
         ],
         dimensions=[
             PipelineDimension(
@@ -464,6 +468,13 @@ def build_system_prompt(cfg: EventPipelineConfig) -> str:
         for pf in cfg.prompt_features:
             if pf.text.strip():
                 parts.append(f"- {pf.text.strip()}")
+
+    if cfg.fact_features:
+        parts.append("\n## 你必须严格遵循的事实")
+        for ff in cfg.fact_features:
+            if ff.text.strip():
+                parts.append(f"- {ff.text.strip()}")
+        parts.append("\n以上是你要严格遵循的事实陈述，除此之外不要自己编造任何设定。")
 
     return "\n".join(parts)
 

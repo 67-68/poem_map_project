@@ -87,7 +87,17 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "save_path": "res://data/tres_random_event_bai_ye/bai_ye_events.csv",
         "data_type": "random_event"
     },
-    
+    # ════════════════════════════════════════════════════════════════
+    # 🏠 本地生成事件（Phase B Python 管线产物）
+    # is_generated = true 时，系统跳过云端拉取，直接从本地 CSV 读取。
+    # .tres 输出目录自动推导为 CSV 所在目录（data/generated_events/）。
+    # ════════════════════════════════════════════════════════════════
+    {
+        "name": "拜谒蜜月期生成事件（本地生成）",
+        "save_path": "res://data/generated_events/bai_ye_honeymoon_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
 ]
 
 # 任务指针：当前正在下载第几个文件？
@@ -165,10 +175,24 @@ func process_next_job() -> void:
     
     var current_job = DATA_MANIFEST[_current_job_index]
     var job_name = current_job.get("name", "Unknown")
-    var job_url = current_job.get("url", "")
     var job_save_path = current_job.get("save_path", "")
     var job_data_type = current_job.get("data_type", "random_event")
+    var job_is_generated = current_job.get("is_generated", false)
 
+    # ── 分支 A: 本地生成文件（Phase B 管线产物） ──
+    if job_is_generated:
+        print("\n===== 开始处理任务 [%d/%d]: %s (本地生成数据) =====" % [_current_job_index + 1, DATA_MANIFEST.size(), job_name])
+        var local_content = _read_local_csv(job_save_path)
+        if local_content == "":
+            push_error("生成事件 CSV 文件不存在: %s 💀" % job_save_path)
+            print("请先运行 Python 生成脚本: poetry run python tools/generate_orthogonal_events.py")
+        else:
+            _process_csv_data(local_content, job_save_path, job_data_type)
+        _current_job_index += 1
+        process_next_job()
+        return
+
+    var job_url = current_job.get("url", "")
     if job_url.is_empty():
         push_error("任务 %s 的 URL 为空，跳过 💀" % job_name)
         _current_job_index += 1
@@ -495,78 +519,102 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
 func _import_generated_events_from_csv() -> void:
     print("\n===== 📥 开始导入生成事件 CSV =====")
     
+    # ── 1. 收集 DATA_MANIFEST 中所有 is_generated 条目 ──
+    var generated_entries: Array[Dictionary] = []
+    for entry in DATA_MANIFEST:
+        if entry.get("is_generated", false):
+            generated_entries.append(entry)
+    
+    if generated_entries.is_empty():
+        print("⚠️  DATA_MANIFEST 中没有 is_generated 条目")
+        print("   请先在 DATA_MANIFEST 中添加生成事件配置")
+        print("   然后运行 Python 生成脚本: poetry run python tools/generate_orthogonal_events.py")
+        return
+    
+    print("✅ 找到 %d 个生成事件条目，开始全量解析..." % generated_entries.size())
+    
     var GENERATED_DIR = "res://data/generated_events/"
     
-    # 确保目录存在
-    if not DirAccess.dir_exists_absolute(GENERATED_DIR):
-        print("⚠️  目录不存在: %s" % GENERATED_DIR)
-        print("   请先运行 Python 生成脚本: poetry run python tools/generate_orthogonal_events.py")
-        return
+    # ├ 兜底：扫描目录中是否有 manifest 未收录的 CSV（防遗漏）
+    var orphan_csvs: Array[String] = []
+    if DirAccess.dir_exists_absolute(GENERATED_DIR):
+        var dir = DirAccess.open(GENERATED_DIR)
+        if dir:
+            dir.list_dir_begin()
+            var file_name = dir.get_next()
+            while file_name != "":
+                if file_name.ends_with("_events.csv") and not file_name.begins_with("."):
+                    # 检查这个 CSV 是否已被 manifest 收录
+                    var full_path = GENERATED_DIR + file_name
+                    var is_covered = false
+                    for entry in generated_entries:
+                        if entry.get("save_path", "") == full_path:
+                            is_covered = true
+                            break
+                    if not is_covered:
+                        orphan_csvs.append(full_path)
+                file_name = dir.get_next()
+            dir.list_dir_end()
+    if not orphan_csvs.is_empty():
+        print("⚠️  发现 %d 个未收录到 DATA_MANIFEST 的 CSV 文件:" % orphan_csvs.size())
+        for oc in orphan_csvs:
+            print("   - %s" % oc)
+        print("   建议将其加入 DATA_MANIFEST（is_generated=true）")
     
-    # ── 1. 扫描 *_events.csv 文件 ──
-    var dir = DirAccess.open(GENERATED_DIR)
-    if not dir:
-        push_error("无法打开目录: %s 💀" % GENERATED_DIR)
-        return
+    # ── 2. 全量遍历 generated_entries，逐个解析 ──
+    var success_count = 0
+    for entry in generated_entries:
+        var name = entry.get("name", "Unknown")
+        var csv_path = entry.get("save_path", "")
+        var data_type = entry.get("data_type", "random_event")
+        
+        if csv_path.is_empty():
+            print("⚠️  条目 '%s' 的 save_path 为空，跳过" % name)
+            continue
+        
+        print("\n--- 处理: %s ---" % name)
+        print("   CSV: %s" % csv_path)
+        
+        # ── 3. 读取 CSV 内容 ──
+        if not FileAccess.file_exists(csv_path):
+            print("⚠️  CSV 文件不存在: %s" % csv_path)
+            print("   请先运行 Python 生成脚本生成此文件")
+            continue
+        
+        var file = FileAccess.open(csv_path, FileAccess.READ)
+        if file == null:
+            push_error("无法打开文件: %s 💀" % csv_path)
+            continue
+        
+        var csv_content = file.get_as_text()
+        file.close()
+        
+        if csv_content.is_empty():
+            push_error("CSV 文件为空，跳过: %s 💀" % csv_path)
+            continue
+        
+        print("✅ 成功读取 CSV (%d 字节)" % csv_content.length())
+        
+        # ── 4. 走完整管线：DSLParser → .tres → Registry ──
+        # 🧩 _process_csv_data 内部会：
+        #   - 解析 CSV headers + rows → Array[Dictionary]
+        #   - 调用 DSLParser.parse_csv_data(csv_data, data_type)
+        #   - 遍历资源注入数据库
+        #   - save_resources_to_tres(resources, csv所在目录)
+        #   - _regenerate_registries(true) 静默刷新
+        _process_csv_data(csv_content, csv_path, data_type)
+        success_count += 1
     
-    var csv_files: Array[String] = []
-    dir.list_dir_begin()
-    var file_name = dir.get_next()
-    while file_name != "":
-        if file_name.ends_with("_events.csv") and not file_name.begins_with("."):
-            csv_files.append(file_name)
-        file_name = dir.get_next()
-    dir.list_dir_end()
-    
-    if csv_files.is_empty():
-        print("⚠️  未找到 *_events.csv 文件")
-        print("   请先运行 Python 生成脚本: poetry run python tools/generate_orthogonal_events.py")
-        return
-    
-    # ── 2. 按文件名排序，取最新的（文件名包含 id，按字母序即按创建顺序） ──
-    csv_files.sort()
-    var latest_csv = csv_files[-1]
-    var csv_path = GENERATED_DIR + latest_csv
-    print("✅ 找到 %d 个 CSV 文件，取最新的: %s" % [csv_files.size(), csv_path])
-    
-    # ── 3. 读取 CSV 内容 ──
-    if not FileAccess.file_exists(csv_path):
-        push_error("文件不存在: %s 💀" % csv_path)
-        return
-    
-    var file = FileAccess.open(csv_path, FileAccess.READ)
-    if file == null:
-        push_error("无法打开文件: %s 💀" % csv_path)
-        return
-    
-    var csv_content = file.get_as_text()
-    file.close()
-    print("✅ 成功读取 CSV: %s (%d 字节)" % [csv_path, csv_content.length()])
-    
-    if csv_content.is_empty():
-        push_error("CSV 文件为空，跳过导入 💀")
-        return
-    
-    # ── 4. 走完整管线：DSLParser → .tres → Registry ──
-    # 🧩 _process_csv_data 内部会：
-    #   - 解析 CSV headers + rows → Array[Dictionary]
-    #   - 调用 DSLParser.parse_csv_data(csv_data, "random_event")
-    #   - 遍历资源注入数据库
-    #   - save_resources_to_tres(resources, tres_save_path)
-    #   - _regenerate_registries(true) 静默刷新
-    #
-    # 🚨 传入原始 CSV 文件的完整路径作为 save_path，
-    #    这样 _process_csv_data 会自动推导 .tres 保存目录为 GENERATED_DIR
-    _process_csv_data(csv_content, csv_path, "random_event")
-    
-    # ── 5. 显式刷新 Registry（冗余但无害，确保 .tres 被注册） ──
+    # ── 5. 显式刷新 Registry（确保所有 .tres 被注册） ──
     print("\n===== 🔄 刷新 Resources Registry =====")
     _regenerate_registries()
     
     print("\n✅ 生成事件导入完成！")
-    print("   CSV 源文件: %s" % csv_path)
+    print("   成功处理: %d/%d 个条目" % [success_count, generated_entries.size()])
+    if not orphan_csvs.is_empty():
+        print("   ⚠️  目录中还有 %d 个未收录的 CSV（见上方列表）" % orphan_csvs.size())
     print("   .tres 输出目录: %s" % GENERATED_DIR)
-    print("   请检查 Registry: res://data/generated_events_registry.tres")
+    print("   Registry: res://data/generated_events_registry.tres")
     print("===== 📥 导入完成 =====\n")
 
 

@@ -13,6 +13,12 @@
       "text": "不要过于戏剧化，保持冷静克制的叙事语气，突出官场的虚伪和客套。"
     }
   ],
+  "fact_features": [
+    {
+      "id": "bai_ye_venue",
+      "text": "去拜谒的地方可以是王府、右相府或六部衙门，这些地点在长安城中真实存在。"
+    }
+  ],
   "option_features": [
     {
       "id": "option_accept",
