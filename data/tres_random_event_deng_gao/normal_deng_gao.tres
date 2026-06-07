@@ -85,7 +85,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_2bf1o")
-_action_tags = Array[int]([1, 4, 5, 9, 12, 13, 15, 16, 17, 20])
+_action_tags = Array[int]([1, 4, 5, 9, 12, 13, 15, 16, 17, 31])
 options = Array[ExtResource("1_x85t5")]([SubResource("Resource_yoky8"), SubResource("Resource_tdvqp")])
 uuid = "normal_deng_gao"
 name = "尝试登高"

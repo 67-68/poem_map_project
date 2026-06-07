@@ -60,7 +60,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_sqtt5")
-_action_tags = Array[int]([1, 0, 2, 3, 5, 8, 10, 12, 17, 23])
+_action_tags = Array[int]([1, 0, 2, 3, 5, 8, 10, 12, 17, 34])
 options = Array[ExtResource("1_bby3f")]([SubResource("Resource_3e53e"), SubResource("Resource_jpyk3")])
 uuid = "normal_du_zhuo"
 name = "简单的喝闷酒"

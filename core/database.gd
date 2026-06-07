@@ -355,9 +355,16 @@ func get_random_events(main_tag: String = '') -> Dictionary:
 			all_events.merge(random_events[tag_bucket])
 		return all_events
 	else:
-		if random_events.has(main_tag):
-			Logging.info('get_random_events: returning events for main tag: ' + main_tag)
-			return random_events[main_tag]
+		# 前缀匹配：用 main_tag 匹配所有桶 key（如 action:main:baiye 匹配 action:main:baiye:general）
+		var matching_events = {}
+		var matched_buckets: Array[String] = []
+		for bucket_key in random_events:
+			if TagManager.prefix_match(main_tag, bucket_key):
+				matching_events.merge(random_events[bucket_key])
+				matched_buckets.append(bucket_key)
+
+		if matching_events.is_empty():
+			Logging.err('get_random_events: no bucket prefix-matched main tag: ' + main_tag)
 		else:
-			Logging.err('get_random_events: main tag not found: ' + main_tag)
-			return {}
+			Logging.info('get_random_events: main tag "%s" prefix-matched buckets: %s' % [main_tag, str(matched_buckets)])
+		return matching_events

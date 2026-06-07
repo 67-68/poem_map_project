@@ -66,7 +66,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_laim4")
-_action_tags = Array[int]([1, 10, 13, 21])
+_action_tags = Array[int]([1, 10, 13, 32])
 options = Array[Object]([SubResource("Resource_w17rw"), SubResource("Resource_rnkl6")])
 uuid = "normal_fang_shi"
 name = "去坊市看热闹"

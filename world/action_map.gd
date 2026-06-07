@@ -140,6 +140,7 @@ func _on_map_action_button_pressed(prefix: String) -> void:
 			r.operate()
 
 	# 2. 追加 action_tags
+	# 也就是说，这里提供的action:main:baiye:general会导致无法匹配action:main:baiye?
 	for tag in action.action_tags:
 		PlayerState.current_action_tags.append(tag)
 

@@ -31,7 +31,7 @@ enum ACTION_TAGS {
     INTEL_VIBE_TAO_GENERAL, # 求仙/丹药/狂傲
     INTEL_VIBE_HISTORY_GENERAL, # 废垒/夕阳/沧桑
 
-    ACTION_MAIN_BAIYE_GENERAL, # 基本的六种标签。每个行动都需要有对应的标签，每个对应的“主线任务事件”也需要有
+    ACTION_MAIN_BAIYE_GENERAL, # 基本的六种标签。每个行动都需要有对应的标签，每个对应的"主线任务事件"也需要有
     ACTION_MAIN_JIAOYOU_GENERAL, # 交游 instead of 送别
     ACTION_MAIN_DENGGAO_GENERAL,
     ACTION_MAIN_FANGSHI_GENERAL,
@@ -47,7 +47,17 @@ enum ACTION_TAGS {
     # 娱乐/宴饮表演类
     ACTION_ENTERTAIN_ELEGANT_GENERAL, # 风雅/琴棋书画
     ACTION_ENTERTAIN_SENSUAL_GENERAL, # 绮靡/酒色歌舞
-    ACTION_ENTERTAIN_MARTIAL_GENERAL  # 雄健/剑舞武艺
+    ACTION_ENTERTAIN_MARTIAL_GENERAL, # 雄健/剑舞武艺
+
+    # 3 段式枚举值（用于 bucket 路由和数据层，不含 :general 后缀）
+    # 放在末尾避免移位破坏已有 .tres 文件中的整数值
+    ACTION_MAIN_BAIYE,
+    ACTION_MAIN_JIAOYOU,
+    ACTION_MAIN_DENGGAO,
+    ACTION_MAIN_FANGSHI,
+    ACTION_MAIN_FENGZHAO,
+    ACTION_MAIN_DUZHUO,
+    ACTION_SPECIAL_DEEPSEEK,
 }
 
 enum PROPS {

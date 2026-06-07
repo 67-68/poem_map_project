@@ -20,8 +20,8 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [resource]
 script = ExtResource("3_hnu0c")
-_main_tag = 23
-_action_tags = Array[int]([1, 0, 2, 3, 5, 8, 10, 12, 17, 23])
+_main_tag = 34
+_action_tags = Array[int]([1, 0, 2, 3, 5, 8, 10, 12, 17, 34])
 action_results = Array[ExtResource("2_3angc")]([SubResource("Resource_lpic5"), SubResource("Resource_rs55l")])
 uuid = "du_zhuo"
 name = "宅在家里"

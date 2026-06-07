@@ -70,14 +70,16 @@ class EventData:
 static func load_event_data() -> EventData:
 	var history_events = Util.create_dict_from_registry(load("res://data/tres_history_event_registry.tres"))
 	
+	# 桶 key 用 3 段式枚举（如 ACTION_MAIN_BAIYE → "action:main:baiye"）
+	# 由 Database.get_random_events() 通过前缀匹配与 4 段式 main_tag 对接
 	var random_events = {
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_BAIYE_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_bai_ye_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_JIAOYOU_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_jiao_you_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DENGGAO_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_deng_gao_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FANGSHI_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_fang_shi_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FENGZHAO_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_feng_zhao_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DUZHUO_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_du_zhuo_registry.tres")),
-		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_SPECIAL_DEEPSEEK_GENERAL): Util.create_dict_from_registry(load("res://data/tres_random_event_special_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_BAIYE): Util.create_dict_from_registry(load("res://data/tres_random_event_bai_ye_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_JIAOYOU): Util.create_dict_from_registry(load("res://data/tres_random_event_jiao_you_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DENGGAO): Util.create_dict_from_registry(load("res://data/tres_random_event_deng_gao_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FANGSHI): Util.create_dict_from_registry(load("res://data/tres_random_event_fang_shi_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_FENGZHAO): Util.create_dict_from_registry(load("res://data/tres_random_event_feng_zhao_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_MAIN_DUZHUO): Util.create_dict_from_registry(load("res://data/tres_random_event_du_zhuo_registry.tres")),
+		ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTION_SPECIAL_DEEPSEEK): Util.create_dict_from_registry(load("res://data/tres_random_event_special_registry.tres")),
 		'random_events': Util.create_dict_from_registry(load("res://data/random_events_registry.tres"))
 	}
 	
