@@ -15,10 +15,22 @@
     └── 支持 dynamic 派生轴
   DimensionCombo (展开后的维度+值对)
   EventPipelineConfig (根配置)
+
+Registry 模型 (中央特征库):
+  TextFeatureLibrary
 """
+
+import json
+import os
+from pathlib import Path
 
 from pydantic import BaseModel, Field
 from typing import Callable, Optional
+
+
+# ── Registry 目录（tools/） ──
+_REGISTRY_DIR = Path(__file__).resolve().parent
+_DEFAULT_REGISTRY_PATH = _REGISTRY_DIR / "text_features_registry.json"
 
 
 class TextFeature(BaseModel):
@@ -52,6 +64,118 @@ class FactFeature(TextFeature):
     text: 事实陈述，如 "去拜谒的地方可以是王府或者右相府"
     """
     pass
+
+
+class TextFeatureLibrary(BaseModel):
+    """文本特征中央库：从 text_features_registry.json 加载的完整特征集合。
+
+    加载器通过 _FEATURE_KEY_MAP 将 JSON 中的 prompt_features /
+    fact_features / option_features 三个数组按 id 索引为 dict，
+    供 resolve_text_features() 快速 O(1) 查找。
+    """
+    prompt_features: list[PromptFeature] = []
+    fact_features: list[FactFeature] = []
+    option_features: list[OptionFeature] = []
+
+    # 按 id 索引的内部缓存，由 _build_index() 填充
+    _prompt_index: dict[str, PromptFeature] = {}
+    _fact_index: dict[str, FactFeature] = {}
+    _option_index: dict[str, OptionFeature] = {}
+
+    def model_post_init(self, __context):
+        """Pydantic v2 初始化钩子：加载完成后建立索引。"""
+        self._build_index()
+
+    def _build_index(self):
+        """将列表按 id 建立 dict 索引以便 O(1) 查找。"""
+        self._prompt_index = {f.id: f for f in self.prompt_features}
+        self._fact_index = {f.id: f for f in self.fact_features}
+        self._option_index = {f.id: f for f in self.option_features}
+
+    def resolve_prompt(self, key: str) -> PromptFeature:
+        if key not in self._prompt_index:
+            raise KeyError(f"TextFeatureLibrary 中未找到 prompt_feature: '{key}'")
+        return self._prompt_index[key]
+
+    def resolve_fact(self, key: str) -> FactFeature:
+        if key not in self._fact_index:
+            raise KeyError(f"TextFeatureLibrary 中未找到 fact_feature: '{key}'")
+        return self._fact_index[key]
+
+    def resolve_option(self, key: str) -> OptionFeature:
+        if key not in self._option_index:
+            raise KeyError(f"TextFeatureLibrary 中未找到 option_feature: '{key}'")
+        return self._option_index[key]
+
+
+# ── 特征字段名 → 索引名 / resolve 方法名的映射表 ──
+_FEATURE_KEY_MAP: dict[str, tuple[str, str]] = {
+    "prompt_features": ("_prompt_index", "resolve_prompt"),
+    "fact_features":   ("_fact_index",   "resolve_fact"),
+    "option_features": ("_option_index", "resolve_option"),
+}
+
+
+def load_text_features_library(
+    registry_path: str | Path | None = None,
+) -> TextFeatureLibrary:
+    """从 JSON 文件加载 TextFeature 中央库。
+
+    参数:
+        registry_path: JSON 文件路径，默认 tools/text_features_registry.json
+
+    返回:
+        TextFeatureLibrary 实例（已建立索引）
+    """
+    path = Path(registry_path) if registry_path else _DEFAULT_REGISTRY_PATH
+    if not path.exists():
+        raise FileNotFoundError(
+            f"TextFeature 注册文件不存在: {path}"
+        )
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    return TextFeatureLibrary.model_validate(data)
+
+
+def resolve_text_features(
+    config_data: dict,
+    library: TextFeatureLibrary | None = None,
+) -> dict:
+    """将 config_data 中的 TextFeature key 列表解析为完整对象。
+
+    遍历 config_data 中 _FEATURE_KEY_MAP 定义的字段名，
+    如果字段值是 list[str]（key 列表），则从 library 中
+    按 key 查找替换为 list[PromptFeature|FactFeature|OptionFeature]。
+
+    参数:
+        config_data: 从 JSON 加载的原始配置 dict
+        library:     已加载的 TextFeatureLibrary；为 None 时自动加载
+
+    返回:
+        修改后的 config_data（原 dict 已原地修改，也返回引用方便链式调用）
+
+    引发:
+        KeyError: 某个 key 在 library 中不存在
+    """
+    if library is None:
+        library = load_text_features_library()
+
+    for field_name, (_index_attr, resolve_method) in _FEATURE_KEY_MAP.items():
+        raw = config_data.get(field_name)
+        if raw is None:
+            continue  # 字段不存在 → 跳过
+
+        # 只有 list[str] 需要 resolve；list[dict] 保持原样（向后兼容）
+        if not raw or not isinstance(raw[0], str):
+            continue
+
+        resolved = []
+        for key in raw:
+            fn = getattr(library, resolve_method)
+            resolved.append(fn(key))
+        config_data[field_name] = resolved
+
+    return config_data
 
 
 class PipelineDimensionValue(BaseModel):

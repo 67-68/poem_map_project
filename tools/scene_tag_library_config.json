@@ -4,20 +4,11 @@
   "background_context": "大唐天宝年间，你在长安城中经历着各式各样的际遇。每一个场景都有其独特的气息和氛围。",
   "ai_persona": "你是一位精通唐朝生活百态的叙事设计师，擅长用白描手法呈现不同场景下的氛围。",
   "prompt_features": [
-    {
-      "id": "stateless_narrative",
-      "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"
-    },
-    {
-      "id": "scene_focus",
-      "text": "重点描写场景的环境氛围，让场景本身说话。"
-    }
+    "stateless_narrative",
+    "scene_focus"
   ],
   "option_features": [
-    {
-      "id": "option_accept",
-      "text": "用20字以内描述玩家在场景中的行动"
-    }
+    "option_accept_scene"
   ],
   "dimensions": [
     {

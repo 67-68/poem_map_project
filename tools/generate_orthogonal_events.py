@@ -47,6 +47,7 @@ from tools.config import (
     PipelineDimension,
     PipelineDimensionValue,
     PromptFeature,
+    resolve_text_features,
 )
 
 
@@ -687,9 +688,14 @@ def write_option_row(writer, description: str, result_dsl: str):
 # ════════════════════════════════════════════════════════════════
 
 def load_config_from_json(path: str) -> EventPipelineConfig:
-    """从 JSON 文件加载配置。"""
+    """从 JSON 文件加载配置，自动解析 TextFeature key 为完整对象。"""
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
+
+    # 如果 prompt_features / fact_features / option_features
+    # 是 list[str]（key 列表），从中央特征库解析为完整对象
+    resolve_text_features(data)
+
     return EventPipelineConfig.model_validate(data)
 
 

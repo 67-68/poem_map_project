@@ -68,6 +68,54 @@ python3 tools/generate_orthogonal_events.py --dry-run
 - `dimensions`：正交维度定义，每个维度包含多个值（含 DSL operator 和 scale）
 - `universal_tags` / `universal_requirement` / `universal_result`：通用触发标签、条件和结果
 
+#### TextFeature Registry（文本特征中央库）
+
+`prompt_features` / `fact_features` / `option_features` 不再直接在 JSON 配置中内联定义完整对象，而是引用中央特征库 [`tools/text_features_registry.json`](../tools/text_features_registry.json) 中的 key：
+
+```json
+// ❌ 旧方式：每条配置内联完整定义
+"prompt_features": [
+  {"id": "stateless_narrative", "text": "使用无状态叙事..."}
+]
+
+// ✅ 新方式：配置只存 key，加载时从 Registry 解析
+"prompt_features": ["stateless_narrative"]
+```
+
+中央特征库结构：
+
+```json
+{
+  "prompt_features": [
+    {"id": "stateless_narrative", "text": "使用无状态叙事，不要引用玩家过去的具体经历..."},
+    {"id": "tone_cautious", "text": "不要过于戏剧化，保持冷静克制的叙事语气..."}
+  ],
+  "fact_features": [
+    {"id": "bai_ye_venue", "text": "去拜谒的地方可以是王府、右相府或六部衙门..."}
+  ],
+  "option_features": [
+    {"id": "option_accept", "text": "用20字以内描述接受对方要求的方案"}
+  ]
+}
+```
+
+**优势：**
+- 消除跨配置文件的重复定义（如 `stateless_narrative` 被多个配置共用）
+- 添加新 feature 只需在 registry 中注册一次，任意配置通过 key 引用
+- 向后兼容：`list[dict]` 内联写法的旧配置仍可正常加载
+
+**添加新 feature 的步骤：**
+1. 在 [`tools/text_features_registry.json`](../tools/text_features_registry.json) 对应数组中添加 `{"id": "...", "text": "..."}`
+2. 在目标配置的对应字段中添加 key 字符串
+
+**Python API 参考（`tools/config.py`）：**
+
+| 函数/类 | 说明 |
+|---------|------|
+| `TextFeatureLibrary` | Registry 的 Pydantic 模型，含 `resolve_prompt(key)` / `resolve_fact(key)` / `resolve_option(key)` 方法 |
+| `load_text_features_library(path?)` | 加载 registry JSON，返回 `TextFeatureLibrary` 实例 |
+| `resolve_text_features(config_data, library?)` | 将 config dict 中的 key 列表解析为完整对象（原地修改） |
+
 ### 数据导入 Godot
 
 `csv_cloud_loader.gd` 提供了两个入口将生成的 CSV 导入 Godot：
@@ -96,6 +144,20 @@ python3 tools/generate_orthogonal_events.py --dry-run
 5. 在 Godot 编辑器中点击 `import_generated_events` 或 `sync_all_data` 即可导入
 
 ## 五、注意事项
+
+#### 配置加载流程（含 Registry 解析）
+
+```mermaid
+flowchart LR
+    R[tools/text_features_registry.json]
+    C[config.json 只存 key 列表]
+    L[load_config_from_json]
+    E[EventPipelineConfig]
+    
+    R -->|load_text_features_library| L
+    C -->|json.load| L
+    L -->|resolve_text_features| E
+```
 
 - **排序依赖**：`DATA_MANIFEST` 中 trait 和 flag 必须排在 random_event 之前，否则 template URN 解析会失败
 - **CSV 格式**：生成 CSV 的列名必须与 `DSLParser.parse_random_event()` 中的 `row.get()` key 完全一致
