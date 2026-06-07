@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://bbhusqdeo3sg7"]
+[gd_resource type="Resource" script_class="ResourceRegistry" format=3]
 
-[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_00h2s"]
+[ext_resource type="Script" path="res://core/model/resources.gd" id="1_00h2s"]
 
 [resource]
 script = ExtResource("1_00h2s")
 resources = {
+"baiye_asking_for_actual_stuff": "res://data/tres_decided_events/baiye_asking_for_actual_stuff.tres",
 "demonstrate_poem_to_people": "res://data/tres_decided_events/demonstrate_poem_to_people.tres",
 "event_ambition_start": "res://data/tres_decided_events/event_ambition_start.tres",
 "event_money_lower_0": "res://data/tres_decided_events/event_money_lower_0.tres",

@@ -1,47 +1,47 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b61e4ehvrmnh2"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_8a6qb"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_tabge"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_bmvlg"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_e7k45"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_034fk"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_co805"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_bjfm5"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_8a6qb"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_tabge"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_bmvlg"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_e7k45"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="5_034fk"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="6_co805"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_bjfm5"]
 
-[sub_resource type="Resource" id="Resource_wkaxr"]
+[sub_resource type="Resource" id="Resource_8a6qb"]
 script = ExtResource("3_bmvlg")
 value = -30
 
-[sub_resource type="Resource" id="Resource_ui4xf"]
+[sub_resource type="Resource" id="Resource_tabge"]
 script = ExtResource("3_bmvlg")
 value = -15
 
-[sub_resource type="Resource" id="Resource_1oxnd"]
+[sub_resource type="Resource" id="Resource_bmvlg"]
 script = ExtResource("3_bmvlg")
 value = -60
 
-[sub_resource type="Resource" id="Resource_ujooa"]
+[sub_resource type="Resource" id="Resource_e7k45"]
 script = ExtResource("3_bmvlg")
 value = 30
 
-[sub_resource type="Resource" id="Resource_osfmh"]
+[sub_resource type="Resource" id="Resource_034fk"]
 script = ExtResource("4_e7k45")
-operators = Array[ExtResource("2_tabge")]([SubResource("Resource_wkaxr"), SubResource("Resource_ui4xf"), SubResource("Resource_1oxnd"), SubResource("Resource_ujooa")])
+operators = Array[ExtResource("2_tabge")]([SubResource("Resource_8a6qb"), SubResource("Resource_tabge"), SubResource("Resource_bmvlg"), SubResource("Resource_e7k45")])
 
-[sub_resource type="Resource" id="Resource_pyr4v"]
+[sub_resource type="Resource" id="Resource_co805"]
 script = ExtResource("5_034fk")
-choice_result = SubResource("Resource_osfmh")
+choice_result = SubResource("Resource_034fk")
 description = "倾尽家财，再备重礼入府求见。"
 
-[sub_resource type="Resource" id="Resource_7lddk"]
+[sub_resource type="Resource" id="Resource_bjfm5"]
 script = ExtResource("6_co805")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_bjfm5")
-requirement = SubResource("Resource_7lddk")
-options = Array[ExtResource("1_8a6qb")]([SubResource("Resource_pyr4v")])
+requirement = SubResource("Resource_bjfm5")
+options = Array[ExtResource("1_8a6qb")]([SubResource("Resource_co805")])
 uuid = "bai_ye_honeymoon_l2_typea_m1"
 name = "炭火名帖"
 description = "“听闻你文章不错。”随即拿起你的名帖，在手中掂了掂，转手丢入炭火盆中。火苗舔舐纸缘，他盯着你的眼睛缓缓道：“这帖子太轻了。本阁的门槛，得用真金白银铸才配踩进来。你回去想想。”话音未落，书童已上前送客。"

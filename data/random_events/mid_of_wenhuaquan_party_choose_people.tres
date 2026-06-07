@@ -1,12 +1,12 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://citjpod5c7aty"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_kfyn1"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="3_hvmw1"]
-[ext_resource type="Script" uid="uid://lnvpvefpsar1" path="res://core/model/item_provider.gd" id="3_kfyn1"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_ytsi2"]
-[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="4_xwktu"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_bt0i2"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_vsboh"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="2_kfyn1"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="3_hvmw1"]
+[ext_resource type="Script" path="res://core/model/item_provider.gd" id="3_kfyn1"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="3_ytsi2"]
+[ext_resource type="Script" path="res://core/operators/pop_event_operator.gd" id="4_xwktu"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_bt0i2"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_vsboh"]
 
 [sub_resource type="Resource" id="Resource_mac76"]
 script = ExtResource("4_xwktu")

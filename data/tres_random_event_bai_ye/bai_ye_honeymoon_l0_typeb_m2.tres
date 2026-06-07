@@ -1,43 +1,43 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b64unq70tbx27"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_310pd"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_t071c"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_kxqxg"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_h25d6"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_6sn8t"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_463xu"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_jd3pn"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_310pd"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_t071c"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_kxqxg"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_h25d6"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="5_6sn8t"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="6_463xu"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_jd3pn"]
 
-[sub_resource type="Resource" id="Resource_odu13"]
+[sub_resource type="Resource" id="Resource_310pd"]
 script = ExtResource("3_kxqxg")
 value = -10
 
-[sub_resource type="Resource" id="Resource_1qhif"]
+[sub_resource type="Resource" id="Resource_t071c"]
 script = ExtResource("3_kxqxg")
 value = -5
 
-[sub_resource type="Resource" id="Resource_v8r20"]
+[sub_resource type="Resource" id="Resource_kxqxg"]
 script = ExtResource("3_kxqxg")
 value = 10
 
-[sub_resource type="Resource" id="Resource_em02y"]
+[sub_resource type="Resource" id="Resource_h25d6"]
 script = ExtResource("4_h25d6")
-operators = Array[ExtResource("2_t071c")]([SubResource("Resource_odu13"), SubResource("Resource_1qhif"), SubResource("Resource_v8r20")])
+operators = Array[ExtResource("2_t071c")]([SubResource("Resource_310pd"), SubResource("Resource_t071c"), SubResource("Resource_kxqxg")])
 
-[sub_resource type="Resource" id="Resource_16jdl"]
+[sub_resource type="Resource" id="Resource_6sn8t"]
 script = ExtResource("5_6sn8t")
-choice_result = SubResource("Resource_em02y")
+choice_result = SubResource("Resource_h25d6")
 description = "递上银两，门子引路入内"
 
-[sub_resource type="Resource" id="Resource_8c0e8"]
+[sub_resource type="Resource" id="Resource_463xu"]
 script = ExtResource("6_463xu")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_jd3pn")
-requirement = SubResource("Resource_8c0e8")
-options = Array[ExtResource("1_310pd")]([SubResource("Resource_16jdl")])
+requirement = SubResource("Resource_463xu")
+options = Array[ExtResource("1_310pd")]([SubResource("Resource_6sn8t")])
 uuid = "bai_ye_honeymoon_l0_typeb_m2"
 name = "冬晨候门"
 description = "“相公今日会客，请在此候着。”檐下冷风刺骨，你站了半个时辰，双脚麻木，靴底积水成冰。门子缩在门房内烤火，偶尔探出头来，看你一眼，又缩回去。你欲上前再问，他却抢先开口：“规矩如此，我也没法子。”你便知今日这番苦等，是白饶的。"

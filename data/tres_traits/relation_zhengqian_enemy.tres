@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://bhpkvim4yhd0"]
+[gd_resource type="Resource" script_class="Trait" format=3]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_0fdqs"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_7vnsw"]
+[ext_resource type="Script" path="res://core/model/trait.gd" id="1_0fdqs"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="2_7vnsw"]
 
 [resource]
 script = ExtResource("1_0fdqs")

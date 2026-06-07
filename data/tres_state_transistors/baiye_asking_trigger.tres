@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="StateTransistor" format=3]
+
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_eu1jr"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="2_fvsi3"]
+[ext_resource type="Script" path="res://core/model/state_transistor.gd" id="2_q8xph"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="3_cfi6b"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="4_chh5e"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="5_vxqeq"]
+
+[sub_resource type="Resource" id="Resource_fvsi3"]
+script = ExtResource("3_cfi6b")
+property = "career_progress"
+value = 69
+operator = 1
+
+[sub_resource type="Resource" id="Resource_cfi6b"]
+script = ExtResource("4_chh5e")
+flag_id = "baiye_asking_triggered"
+type = "bool"
+value = true
+operator = 0
+
+[sub_resource type="Resource" id="Resource_chh5e"]
+script = ExtResource("5_vxqeq")
+operators = Array[ExtResource("2_fvsi3")]([SubResource("Resource_fvsi3"), SubResource("Resource_cfi6b")])
+
+[resource]
+script = ExtResource("2_q8xph")
+uuid = "baiye_asking_trigger"
+target_resource_urn = "urn:flag:baiye_asking_triggered"
+transist_value = "=true"
+triggered_event_key = "baiye_asking_for_actual_stuff"
+requirements = SubResource("Resource_chh5e")

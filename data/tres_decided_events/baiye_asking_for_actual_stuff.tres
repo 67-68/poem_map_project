@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://v6hvgc7117hp"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_jpock"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_f6jbk"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_r7oxe"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_s62ot"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_mbja2"]
+
+[sub_resource type="Resource" id="Resource_1kf6c"]
+script = ExtResource("3_s62ot")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_047sh"]
+script = ExtResource("4_mbja2")
+choice_result = SubResource("Resource_1kf6c")
+description = "我要考上！崛起吧唐人！"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_r7oxe")
+options = Array[ExtResource("1_jpock")]([SubResource("Resource_047sh")])
+uuid = "baiye_asking_for_actual_stuff"
+name = "开始实际拜谒"
+description = "你感觉逐渐和豪强们打好关系了，现在应该开始实际请求他们的支持了"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

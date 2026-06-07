@@ -1,2 +1,3 @@
 uuid,target_resource,transist_value,current_resource,triggered_event,requirement,operators,第 8 列,第 9 列
 relation_libai_rumor_transist_close,urn:trait:relation_libai_close,TRUE,urn:trait:relation_libai_rumor,libai_welcome_hejiu,"flag_int_gt(name=flag_relation_with_libai,val=10)",,"flag_int_set(name=flag_relation_with_libai,val=20)",
+baiye_asking_trigger,urn:flag:baiye_asking_triggered,=true,,baiye_asking_for_actual_stuff,"prop_gt(name=career_progress; val=69)|flag_bool_not_has(name=baiye_asking_triggered)",,,
