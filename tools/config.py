@@ -493,6 +493,101 @@ def default_config() -> EventPipelineConfig:
 # JSON 配置加载器
 # ════════════════════════════════════════════════════════════════
 
+_EXT_DIM_DB_PATH = _REGISTRY_DIR / "imagery_dimension_db.json"
+
+
+def _collect_unique_linked_ids(dimensions: list[dict]) -> set[str]:
+    """收集所有维度值中的 linked_value_ids（去重）。"""
+    ids: set[str] = set()
+    for dim in dimensions:
+        for val in dim.get("values", []):
+            for linked_id in val.get("linked_value_ids", []):
+                ids.add(linked_id)
+    return ids
+
+
+def _load_external_dimension_db() -> list[dict]:
+    """从 imagery_dimension_db.json 加载外部维度库，返回 PipelineDimension 兼容的 dict 列表。
+
+    文件结构（通用维度容器）:
+        { "dimensions": [ { "id": ..., "name": ..., "values": [...] }, ... ] }
+    """
+    if not _EXT_DIM_DB_PATH.exists():
+        raise FileNotFoundError(
+            f"外部维度数据库不存在: {_EXT_DIM_DB_PATH}，"
+            f"请确保工具目录下存在该文件"
+        )
+    with open(_EXT_DIM_DB_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    return data.get("dimensions", [])
+
+
+def _build_value_id_to_dim_index(
+    dimensions: list[dict],
+) -> dict[str, int]:
+    """构建 value_id → dimension_index 的映射（用于 O(1) 查找）。"""
+    idx: dict[str, int] = {}
+    for dim_i, dim in enumerate(dimensions):
+        for val in dim.get("values", []):
+            idx[val["id"]] = dim_i
+    return idx
+
+
+def _resolve_linked_value_ids(data: dict):
+    """解析 dimensions 中的 linked_value_ids：若引用的 ID 不在现有维度中，
+    从外部维度数据库查找并自动注入匹配的维度。
+
+    通用设计：数据库可包含任意多个维度定义，按需自动注入。
+    """
+    dimensions: list[dict] = data.get("dimensions", [])
+    if not dimensions:
+        return
+
+    linked_ids = _collect_unique_linked_ids(dimensions)
+    if not linked_ids:
+        return  # 没有 linked_value_ids，无需处理
+
+    # 构建现有维度值的 ID 索引
+    existing_idx = _build_value_id_to_dim_index(dimensions)
+    existing_dim_ids = {d["id"] for d in dimensions}
+
+    # 检查是否有 linked_id 不在现有维度中
+    missing = linked_ids - set(existing_idx.keys())
+    if not missing:
+        return  # 所有引用都已满足
+
+    # 加载外部维度数据库
+    ext_dims = _load_external_dimension_db()
+    ext_idx = _build_value_id_to_dim_index(ext_dims)
+    ext_dim_ids = {d["id"] for d in ext_dims}
+
+    # 检查缺失的 ID 是否在外部数据库中有对应
+    still_missing = missing - set(ext_idx.keys())
+    if still_missing:
+        raise KeyError(
+            f"linked_value_ids 中引用的值 {sorted(still_missing)} "
+            f"既不在现有维度中，也不在外部维度数据库 "
+            f"({_EXT_DIM_DB_PATH}) 中"
+        )
+
+    # 确定需要注入的外部维度（按所属维度分组去重）
+    dim_ids_to_inject: set[str] = set()
+    for linked_id in missing:
+        ext_dim_i = ext_idx[linked_id]
+        dim_ids_to_inject.add(ext_dims[ext_dim_i]["id"])
+
+    # 去重：跳过已存在的维度
+    for dim_id in dim_ids_to_inject:
+        if dim_id in existing_dim_ids:
+            continue
+        # 从外部数据库中找到完整定义
+        ext_dim = next(d for d in ext_dims if d["id"] == dim_id)
+        dimensions.append(ext_dim)
+        print(f"  🗄️  自动注入外部维度 '{dim_id}' "
+              f"({len(ext_dim.get('values', []))} 个值)，"
+              f"满足 linked_value_ids 引用")
+
+
 def load_config_from_json(path: str) -> EventPipelineConfig:
     """从 JSON 文件加载配置，自动解析 TextFeature key 为完整对象。"""
     with open(path, "r", encoding="utf-8") as f:
@@ -534,5 +629,11 @@ def load_config_from_json(path: str) -> EventPipelineConfig:
             for field in ("demand_context", "action_style", "resolution_style"):
                 if field in nc_dict:
                     setattr(nc, field, nc_dict[field])
+
+    # ════════════════════════════════════════════════════════════════
+    # 🆕 自动解析 linked_value_ids：若引用的值不在现有维度中，
+    #    从意象维度数据库注入 imagery 维度
+    # ════════════════════════════════════════════════════════════════
+    _resolve_linked_value_ids(data)
 
     return EventPipelineConfig.model_validate(data)

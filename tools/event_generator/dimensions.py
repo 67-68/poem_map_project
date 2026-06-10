@@ -75,15 +75,83 @@ def _validate_linked_value_ids(dimensions: list[PipelineDimension]):
 # 笛卡尔积展开（核心算法）
 # ════════════════════════════════════════════════════════════════
 
+def _group_linked_by_target(
+    dimensions: list[PipelineDimension],
+    values_tuple: tuple[PipelineDimensionValue, ...],
+) -> list[dict[int, PipelineDimensionValue]]:
+    """将 values_tuple 中所有值的 linked_value_ids 按目标维度分组，
+    生成替换方案列表（支持叉积：同一目标维度的多个不同值 → 多方案）。
+
+    算法:
+      1. 遍历每个维度值，收集 linked_value_ids
+      2. 按目标维度索引分组
+      3. 如果某目标维度有多于一个唯一值 → 叉积展开
+      4. 返回所有可能的替换方案
+
+    Returns:
+        list[dict[int, PipelineDimensionValue]]: 替换方案列表。
+        每个 dict 是 {target_dim_index: replacement_value}。
+        如果没有任何 linked_value_ids，返回 [{}]（一个空替换方案）。
+
+    Raises:
+        ValueError: linked_value_ids 指向不存在或自身维度的值
+    """
+    # ── 第一步：收集所有替换候选，按目标维度分组 ──
+    # target_groups: dict[target_dim_idx, list[PipelineDimensionValue]]
+    target_groups: dict[int, list[PipelineDimensionValue]] = {}
+
+    for src_idx, (dim, val) in enumerate(zip(dimensions, values_tuple)):
+        for linked_id in val.linked_value_ids:
+            target_idx, target_val = _find_value_by_id(dimensions, linked_id)
+            if target_idx not in target_groups:
+                target_groups[target_idx] = []
+            target_groups[target_idx].append(target_val)
+
+    if not target_groups:
+        return [{}]
+
+    # ── 第二步：对每个目标维度去重，提取唯一值列表 ──
+    # unique_options: list[list[PipelineDimensionValue]]
+    # 每个子列表对应一个目标维度的所有可能替换值
+    unique_options: list[list[PipelineDimensionValue]] = []
+    target_dim_indices: list[int] = []
+
+    for target_idx, vals in target_groups.items():
+        # 保持顺序去重
+        seen: set[str] = set()
+        uniq: list[PipelineDimensionValue] = []
+        for v in vals:
+            if v.id not in seen:
+                seen.add(v.id)
+                uniq.append(v)
+        unique_options.append(uniq)
+        target_dim_indices.append(target_idx)
+
+    # ── 第三步：叉积展开 ──
+    # 对每个目标维度，从唯一值列表中选一个，组合成替换方案
+    schemes: list[dict[int, PipelineDimensionValue]] = []
+    for selection in itertools.product(*unique_options):
+        scheme: dict[int, PipelineDimensionValue] = {}
+        for target_idx, chosen_val in zip(target_dim_indices, selection):
+            scheme[target_idx] = chosen_val
+        schemes.append(scheme)
+
+    return schemes
+
+
 def expand_combinations(dimensions: list[PipelineDimension]):
-    """展开所有维度组合，支持 linked_value_ids 值级引用。
+    """展开所有维度组合，支持 linked_value_ids 值级叉积引用。
 
     算法：
       1. 校验全局 linked_value_ids 约束（主维度不冲突）
       2. 正常笛卡尔积展开所有维度
       3. 对每个组合，检测值的 linked_value_ids
-      4. 如果有引用 → 覆盖模式替换对应维度的槽位
-      5. yield 最终组合
+      4. 如果存在 → 按目标维度分组，同一维度的多个不同值做叉积展开
+      5. yield 所有最终组合（含去重）
+
+    典型用例（场景-意象）：
+      scene_dailou.linked_value_ids = ["imagery_jade_step", "imagery_cloud_and_sun"]
+      → 生成 2 个事件：(scene_dailou, imagery_jade_step) 和 (scene_dailou, imagery_cloud_and_sun)
 
     Args:
         dimensions: 维度定义列表
@@ -100,52 +168,26 @@ def expand_combinations(dimensions: list[PipelineDimension]):
     # ── 去重集合：用 value id 元组标识已 yield 的组合 ──
     yielded: set[tuple[str, ...]] = set()
 
-    # ── 正常笛卡尔积 ──
+    # ── 正常笛卡尔积展开 ──
     for values_tuple in itertools.product(*[d.values for d in dimensions]):
-        # 收集替换映射: {target_dim_index: replacement_value}
-        replacements: dict[int, PipelineDimensionValue] = {}
-        error = None
+        # 计算所有替换方案（支持叉积）
+        schemes = _group_linked_by_target(dimensions, values_tuple)
 
-        for src_idx, (dim, val) in enumerate(zip(dimensions, values_tuple)):
-            for linked_id in val.linked_value_ids:
-                try:
-                    target_idx, target_val = _find_value_by_id(dimensions, linked_id)
-                except ValueError as e:
-                    error = str(e)
-                    break
+        # ── 对每个替换方案，构造最终组合并 yield ──
+        for replacements in schemes:
+            if replacements:
+                new_values = list(values_tuple)
+                for dim_idx, replacement_val in replacements.items():
+                    new_values[dim_idx] = replacement_val
+                result = tuple(new_values)
+            else:
+                result = values_tuple
 
-                # 检查同一维度的多个链接是否冲突
-                if target_idx in replacements:
-                    existing = replacements[target_idx]
-                    if existing.id != target_val.id:
-                        error = (
-                            f"linked_value_ids 冲突：维度 '{dimensions[target_idx].id}' "
-                            f"已被替换为 '{existing.id}'，不能同时替换为 '{target_val.id}'"
-                        )
-                        break
-                else:
-                    replacements[target_idx] = target_val
-
-            if error:
-                break
-
-        if error:
-            raise ValueError(error)
-
-        # ── 构造最终组合 ──
-        if replacements:
-            new_values = list(values_tuple)
-            for dim_idx, replacement_val in replacements.items():
-                new_values[dim_idx] = replacement_val
-            result = tuple(new_values)
-        else:
-            result = values_tuple
-
-        # ── 去重：跳过已 yield 过的组合 ──
-        result_ids = tuple(v.id for v in result)
-        if result_ids not in yielded:
-            yielded.add(result_ids)
-            yield result
+            # ── 去重：跳过已 yield 过的组合 ──
+            result_ids = tuple(v.id for v in result)
+            if result_ids not in yielded:
+                yielded.add(result_ids)
+                yield result
 
 
 # ════════════════════════════════════════════════════════════════

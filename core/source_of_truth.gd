@@ -30,7 +30,7 @@ static var debug_dashboard_state = {
         "LIBAI": 'relation_libai_rumor',
 
         # 诗词
-        "POEM_BAIYE": 'poem_ying_zhi_1', # 不要大写, 会出问题
+        "POEM_BAIYE": 'poem_gan_ye_1', # 不要大写, 会出问题
         'POEM_shanshui': 'poem_deng_gao_1'
     },
     
@@ -46,7 +46,7 @@ static var debug_dashboard_state = {
         "fatigue": 0,
         "sick": 0,
         "inspiration": 0,
-        "career_progress": 80,
+        "career_progress": 70,
     },
 
     "imaginaries": {

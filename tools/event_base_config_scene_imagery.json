@@ -1,11 +1,13 @@
 {
   "id": "scene_imagery_library",
   "name": "场景-意象获取事件库",
-  "background_context": "大唐天宝年间，长安城内外。你在不同的场景中经历着不同的心境，这些场景会触发特定的意象获取事件。每个场景都有自己独特的物理特征和精神投射。",
-  "ai_persona": "你是一位精通唐朝生活和意象征象学的叙事设计师，擅长将物理场景转化为精神意象。",
+  "background_context": "大唐天宝年间，长安城。你是一个野心勃勃的士人，无时无刻不在寻找向上爬的机会。在你眼中，长安城不是诗意盎然的盛世画卷——它是权力金字塔的实体化。每一个场景在你看来都是权力结构的切片：朱门是壁垒，台阶是等级，远山是你够不到的天际线。你在不同的场景中经历着不同的心境，但底层逻辑从来不变：你看到的永远是——权力在哪里？我怎么才能爬上去？",
+  "ai_persona": "你是一位冷眼解剖权力符号的叙事设计师。你的文风像一把钝刀——不锋利，但每一刀都拉得生疼。你笔下的主角是一个彻底被权力欲驱动的官迷：看朱门想到的是门槛高度，看台阶想到的是品级差距，看宴席想到的是座次排列。你从不写主角的心理活动——永远只用三种物理切片来暗示他极度的权力饥渴：\n1. 感官的越界（触觉/视觉的僭越）：紧盯着不该看的东西，身体做出僭越的微动作。\n2. 生理的压抑（痛感与紧绷）：渴望但得不到时，身体的硬直、握拳、屏息、指节发白。\n3. 视角的扭曲（眼中只有权力）：忽略周遭正常的人和景，视线死死锚定在代表权力的实体上。\n你坚信：意象不是诗意的顿悟——它是权力的图腾被角色在某个瞬间窥见时，身体做出的本能反应。",
   "prompt_features": [
     "stateless_narrative",
-    "scene_focus"
+    "scene_focus",
+    "forbid_inner_monologue",
+    "power_metaphor_lens"
   ],
   "option_features": [
     "option_accept_scene"
@@ -22,7 +24,20 @@
           "description": "大明宫外的破晓，凌晨寒风，百官按品级站在院外等候早朝。宫门紧闭，铜钉在晨曦中泛着冷光",
           "stored_to": "fengzhao",
           "tags": ["TARGET_PLACE_JADESTEP_DAILOU", "ENV_POLITICS_CLOUD_DAILOU"],
-          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "fengzhao_trigger",
+            "demand_context": "意象触发媒介——主角在权力核心的边缘等待，某个物理细节让权力具象化：宫门开启前的漫长沉默、百官按品级整理衣冠时衣料摩擦的次序、晨曦在某件紫袍的金线绣纹上反光刺眼。意象不是被'感受到'的，而是被权力在空间中留下的物理痕迹'刺痛眼睛'而被迫看到的。",
+            "action_style": "主角的动作只有等候时的本能反应——目光追随某样东西（某人的官服下摆、铜钉的反光、旗帜的飘动方向）、身体在寒风中不自觉的微动作（搓手、跺脚、缩肩）。动作描写必须克制且中性。【严禁】主角主动上前、搭话、或做出任何超出'等候者'身份的动作。",
+            "resolution_style": "意象在那个稍纵即逝的瞬间被'撞见'——不是获得，是看见。用一个具体的物理细节收束（某扇门开合时泄出的一线灯光、某人的背影遮挡了初阳、一阵风带来的熏炉香气）。不解释这个意象意味着什么，也不写主角的内心反应。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你站在宫门外，感受到了权力的威严", "reason": "直接写了'感受'，杀死了意象的物理触发机制。必须通过外部细节让读者自己 infer"},
+              {"field": "demand_context", "bad": "寒风中你想起十年寒窗，就是为了有朝一日踏入这扇门", "reason": "心理回忆是上帝视角，禁止。只用此时此刻此地发生的物理细节"},
+              {"field": "action_style", "bad": "你昂首挺胸走向宫门", "reason": "奉召场景中主角地位卑微，动作不能有自信或张扬的姿态"},
+              {"field": "resolution_style", "bad": "你获得了意象'玉阶'，心中暗喜", "reason": "意象不是道具，不能用'获得''收好'来描述。它是瞬间的精神共鸣，转瞬即逝"},
+              {"field": "resolution_style", "bad": "你明白了，权力就像这宫门一样冰冷，但你一定要进去", "reason": "禁止替主角总结感悟。意象的意义留给读者自己解读"}
+            ]
+          }
         },
         {
           "id": "scene_jixian",
@@ -30,7 +45,18 @@
           "description": "皇家图书馆，书架通天，典籍堆中埋首。窗外偶尔有紫袍官员经过，脚步声在回廊中回荡",
           "stored_to": "fengzhao",
           "tags": ["TARGET_PLACE_JADESTEP_JIXIAN", "ENV_POLITICS_CLOUD_JIXIAN"],
-          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "fengzhao_trigger",
+            "demand_context": "意象触发媒介——主角在典籍堆中劳作时，某个与权力相关的物理印记闯入视野：某本奏疏上朱批的力度、窗外官员经过时影子在书页上的移动速度、某卷档案中记载的官员迁转记录在纸面上形成的时间阶梯。意象在'知识与权力的交界处'被触发——手中的书卷不是学问，是权力的化石。",
+            "action_style": "主角的动作限于修书者的身体本能——翻页的手指在某页停留过久、目光从书页上抬起追随窗外的脚步声、研墨时手腕的停顿。动作克制，通过微小的肢体滞留暗示注意力的偏移。【严禁】主角放下工作主动探听、翻阅禁书或与官员搭话。",
+            "resolution_style": "意象在书卷的某个物理细节与窗外现实的某个瞬间之间被触发——两者的重叠让权力露出轮廓。用墨迹、纸张、书页的某一角收束，不展开任何心理活动。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你翻阅典籍，感受到了知识就是力量", "reason": "说教式的感悟，不是物理触发。要用具体的物——朱批的力度、纸的质地、墨的浓淡"},
+              {"field": "action_style", "bad": "你放下书卷，走到窗前张望", "reason": "主角不能主动探索。动作必须是被动的、本能的——目光追随而不是身体移动"},
+              {"field": "resolution_style", "bad": "你学到了很多，感觉离权力更近了一步", "reason": "禁止内心独白。用外部细节呈现一切"}
+            ]
+          }
         },
         {
           "id": "scene_huaqing",
@@ -38,7 +64,18 @@
           "description": "温泉外苑，水汽氤氲中隐约可见权贵身影。你在外围守卫，听着里面的丝竹管弦和欢笑声",
           "stored_to": "fengzhao",
           "tags": ["TARGET_PLACE_JADESTEP_HUAQING", "ENV_POLITICS_CLOUD_HUAQING"],
-          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "fengzhao_trigger",
+            "demand_context": "意象触发媒介——主角在权贵享乐的外围站岗，被某个排他性的物理细节刺痛：水汽氤氲中模糊的剪影、丝竹声与外面的寂静之间的断裂、某位官员出来时脸上意犹未尽的表情。意象在'里与外'的边界上被触发——隔着一道门、一重帘、一阵笑声的距离，权力在咫尺之外。",
+            "action_style": "主角的身体处于站岗姿势的紧绷中——目光试图穿透水汽、耳廓微动追辨里面的谈话、握戟的手因长时间不动而指节发白。动作全是压抑的本能，不能有松弛或舒展。【严禁】主角移动位置、探头探脑、或试图混入内苑。",
+            "resolution_style": "意象在里外的某个连接点被触发——一扇门开合时泄露的片段、某人的影子映在帘上的轮廓、一阵风带来的脂粉香气混着酒气。用感官的某个碎片收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你在外苑守卫，心中向往着里面的奢华生活", "reason": "写了心理活动，违反禁止内心独白指令。用身体反应呈现：目光、耳廓、握戟的力度"},
+              {"field": "demand_context", "bad": "你听到里面的丝竹声，想起了自己曾经也有过的欢乐时光", "reason": "回忆是上帝视角。只写此时此刻此地"},
+              {"field": "resolution_style", "bad": "你感到自己与权力之间隔着一道无法逾越的鸿沟", "reason": "替主角下结论。意象留白，让读者自己感受"}
+            ]
+          }
         },
         {
           "id": "scene_zhongnan",
@@ -46,7 +83,18 @@
           "description": "山风呼啸，云海翻腾。站在绝顶俯瞰，长安城如棋盘般渺小，天地间只剩风声和自己的心跳",
           "stored_to": "denggao",
           "tags": ["TARGET_MYTH_GIANTROC_ZHONGNAN", "ENV_POLITICS_CLOUD_ZHONGNAN"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "denggao_trigger",
+            "demand_context": "意象触发媒介——主角站在高处俯瞰时，视线不自觉地追踪权力的痕迹：宫城的反光、官员车马的尘烟轨迹、坊市中人流的流向汇聚到某个深宅大院。意象在'高度带来的幻觉'中被触发——仿佛自己已凌驾于这一切之上，但脚下坚硬的岩石提醒他：你不过是在看，不是在坐。意象是一个'hovering'状态的权力幻梦。",
+            "action_style": "主角的身体被高度牵引——目光不自觉地向长安城的方向延伸、身体微微前倾仿佛要扑出去、手指在岩石上无意识地摩挲。动作透露出一种'想吞下去但够不着'的焦灼。【严禁】主角抒情感叹风景壮美、吟诗作对或盘腿打坐。这不是在旅游。",
+            "resolution_style": "意象在俯瞰的某个细节中闪现——某条街道上车马的排列像官服上密匝匝的针脚、某座宅邸的屋顶在阳光下闪了一下又暗下去。用视野中权力的某个瞬间收束，不写感悟。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你站在终南山上，感叹天地之壮阔，心中豁然开朗", "reason": "这不是登高望远的心灵净化，权力的视角下没有豁然开朗。意象必须与权力挂钩"},
+              {"field": "action_style", "bad": "你深吸一口气，对着群山吟诗一首", "reason": "主角是官迷不是诗人。他的视线永远追着权力，不是风景"},
+              {"field": "resolution_style", "bad": "你感到自己的心胸变得开阔了", "reason": "禁止内心独白。用外部细节呈现"}
+            ]
+          }
         },
         {
           "id": "scene_leyou",
@@ -54,7 +102,18 @@
           "description": "汉代荒冢上，夕阳如血。长安城在暮色中渐次亮起灯火，苍茫天地间独你一人伫立",
           "stored_to": "denggao",
           "tags": ["TARGET_MYTH_GIANTROC_LEYOU", "ENV_POLITICS_CLOUD_LEYOU"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "denggao_trigger",
+            "demand_context": "意象触发媒介——主角在荒冢残阳中，暮色逐渐吞噬长安城的轮廓。意象在'消逝'的边缘被触发：灯火一盏一盏亮起来，每盏灯代表一个有权有势之人的夜晚——而主角站在荒冢上，被黑暗包裹。意象带着倒计时的压迫感——时间在流逝，权力在别处分发，而你在原地。",
+            "action_style": "主角的身体定格在伫立姿势中的僵直——目光追随着每一盏亮起的灯火、手指无意识地掐进掌心、呼吸在暮色沉降中变得越来越浅。动作全是'被留在外面'的人的本能反应。【严禁】主角做出拥抱夕阳、伸展双臂等抒情感叹的文艺动作。",
+            "resolution_style": "意象在某一盏灯亮起的瞬间被触发——那盏灯的位置、颜色、与其他灯的关系让主角的身体出现一个微小反应。用灯和暗之间的对比收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "夕阳如血，你想起了自己逝去的青春", "reason": "心理回忆，违反指令。意象必须锚定在当下的物理触发——灯、暮色、长安城的轮廓"},
+              {"field": "action_style", "bad": "你张开双臂拥抱夕阳，感受着天地之美", "reason": "主角不是诗人是官迷。他的注意力永远在长安城的方向，在那些亮起来的灯上"},
+              {"field": "resolution_style", "bad": "你感到一种苍凉的悲哀", "reason": "禁止内心独白。用外部细节呈现——灯亮了，灯下不是你，仅此而已"}
+            ]
+          }
         },
         {
           "id": "scene_dayan",
@@ -62,7 +121,18 @@
           "description": "塔顶俯瞰长安，坊市如棋格。暮鼓声中，归鸦绕塔，红尘在脚下喧嚣却遥远",
           "stored_to": "denggao",
           "tags": ["TARGET_MYTH_GIANTROC_DAYAN", "ENV_POLITICS_CLOUD_DAYAN"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "denggao_trigger",
+            "demand_context": "意象触发媒介——主角在塔顶，被'高度差'扭曲了权力的视觉比例：街上的官员像蝼蚁般蠕动，某个权力中心在俯瞰下变成了巴掌大的方块。意象在'比例的错乱'中被触发——原来那些让你仰望的东西，从上面看如此渺小。但这个认知改变不了任何事：下去之后，你还是得仰望。",
+            "action_style": "主角的身体被高度影响——扶着栏杆的手因用力而指节发白、视线在'俯瞰的快感'和'落回地面后的恐惧'之间反复横跳、身体微微前倾又后仰。动作中有一种眩晕的拉锯感。【严禁】主角在塔上泰然自若、潇洒凭栏远眺。高度对官迷来说是毒药——越看越焦灼。",
+            "resolution_style": "意象在'看到一个东西然后意识到它有多渺小'的瞬间被触发——某座宅邸、某条街道、某顶官轿从上面看像玩具。用俯瞰与实景之间的落差收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你站在塔顶，感受着佛法的无边", "reason": "主角不是来礼佛的，是来看权力的。从宗教角度写就偏离了人物"},
+              {"field": "action_style", "bad": "你凭栏远眺，衣袂飘飘，心中宁静", "reason": "泰然自若的姿态不符合官迷的心理状态。高度只会让他更焦灼"},
+              {"field": "resolution_style", "bad": "你感到自己超脱了世俗的烦恼", "reason": "禁止内心独白。用俯瞰的物理反差呈现一切"}
+            ]
+          }
         },
         {
           "id": "scene_keshe",
@@ -70,7 +140,18 @@
           "description": "油灯如豆，破窗外寒风呜咽。桌上残酒冷炙，墙壁缝隙可见邻家炊烟，更显己身孤寂",
           "stored_to": "duzhuo",
           "tags": ["TARGET_MYTH_GIANTROC_KESHE"],
-          "linked_value_ids": ["imagery_giant_roc"]
+          "linked_value_ids": ["imagery_giant_roc"],
+          "narrative_constraint": {
+            "type": "duzhuo_trigger",
+            "demand_context": "意象触发媒介——主角在孤独中，被周遭某个无意间闯入感知的权力符号刺痛：隔壁房间有人谈论官职升迁的只言片语透过破壁传来、油灯火苗在穿堂风中扭曲像某人的官袍下摆、墙上裂缝的形状恰好像一张告身（委任状）。意象在'最不设防的时候'被触发——连独处时权力都不放过你，它无处不在。",
+            "action_style": "主角的身体在独处中反而更紧绷——听见隔壁话语时停住手中的酒杯、目光盯着墙上裂缝的某一处不放、呼吸在某个瞬间屏住了。独处时的身体比公共场合更诚实地暴露出对权力的执念。【严禁】主角在客舍中安然入睡、洒脱独饮或自我安慰。",
+            "resolution_style": "意象被'不该出现权力的地方出现了权力的痕迹'触发——某件与权力相关的物在破败环境中显得格格不入。用这个错位收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你独自坐在客舍中，感到非常孤独", "reason": "主角的孤独不是感伤的，是'被权力排除在外'的焦灼。意象必须与权力相关"},
+              {"field": "action_style", "bad": "你自斟自饮，倒也自在", "reason": "主角不是洒脱的隐士。他在独处时反而更焦灼——别人在宴饮，他在这里喝冷酒"},
+              {"field": "resolution_style", "bad": "你想起了远方的家人，心中一阵酸楚", "reason": "禁止内心独白和心理回忆。用物的错位呈现一切"}
+            ]
+          }
         },
         {
           "id": "scene_jiusi",
@@ -78,7 +159,18 @@
           "description": "西市酒肆人声鼎沸，胡姬旋舞。你坐在暗角，冷眼旁观醉生梦死的众生相",
           "stored_to": "duzhuo",
           "tags": ["TARGET_MYTH_GIANTROC_JIUSI"],
-          "linked_value_ids": ["imagery_giant_roc"]
+          "linked_value_ids": ["imagery_giant_roc"],
+          "narrative_constraint": {
+            "type": "duzhuo_trigger",
+            "demand_context": "意象触发媒介——主角在喧嚣中独坐暗角，被某个'不属于这个阶层'的细节锁定目光：某桌客人腰间玉佩的质地远超出他的消费水平、胡姬旋舞时眼神在某处停留的时间异常、角落里一个不起眼的黑灰色身影在观察所有人。意象在'热闹中的格格不入'中被触发——大家都在醉，只有主角在看，而且看到的永远是权力。",
+            "action_style": "主角的身体处于'假装放松实则警惕'的状态——手指在酒杯边缘无意识地摩挲、目光在人群中反复扫描某个目标、坐姿看似松弛但背脊是僵直的。冷眼旁观不是超脱，是狩猎前的屏息。【严禁】主角加入狂欢、与人拼桌、或真的喝醉。",
+            "resolution_style": "意象在某个不该出现的人或物上被触发——一个细节暴露了某个人的真实身份或某个角落的权力暗流。用这个暴露的瞬间收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你坐在酒肆角落，享受着这片刻的轻松", "reason": "主角在酒肆里也不是来放松的，是来观察权力暗流的"},
+              {"field": "action_style", "bad": "你被胡姬的美貌吸引，目不转睛", "reason": "主角看的是权力的痕迹，不是美女。他的注意力不会停留在无关的事物上"},
+              {"field": "resolution_style", "bad": "你感到自己与这里格格不入", "reason": "禁止内心独白。用视线锚定的对象呈现——大家都在看胡姬，你在看角落里的那个人"}
+            ]
+          }
         },
         {
           "id": "scene_baqiao",
@@ -86,7 +178,18 @@
           "description": "大雪纷飞中灞桥横跨渭水，酒亭茅檐低垂。送别的行人折柳相赠，离歌在风雪中若隐若现",
           "stored_to": "duzhuo",
           "tags": ["TARGET_MYTH_GIANTROC_BAQIAO"],
-          "linked_value_ids": ["imagery_giant_roc"]
+          "linked_value_ids": ["imagery_giant_roc"],
+          "narrative_constraint": {
+            "type": "duzhuo_trigger",
+            "demand_context": "意象触发媒介——主角在送别的场景中，被'别人在向高处走而你停在原地'的事实刺痛：某位官员被簇拥着上马远去时马蹄溅起的雪泥、送行者中有人低声议论'某某高升了'、风雪中酒旗被吹得啪啪作响像鞭子抽在脸上。意象在'被留下'的感觉中被触发——每个离开的人都比他更有前途，而他还不知道下一站在哪里。",
+            "action_style": "主角的身体在送别场景中表现出不自然的静止——所有人都挥手道别时他的手臂垂着、目光追着远去的人马直到变成黑点、握着酒杯的手忘记放下。静止就是最响亮的语言——他没有可送的人，也没有人送他。【严禁】主角上前寒暄套近乎、主动送诗赠言、或强装洒脱加入送别的行列。",
+            "resolution_style": "意象在送别队伍远去后留下的空白中被触发——雪地上杂乱的脚印朝同一个方向延伸、酒亭中某个人不经意的一句话。用别人离去后的寂静收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你在灞桥送别友人，心中满是不舍", "reason": "主角没有友可送。意象的触发点不是离愁别绪，而是'别人在走，你在看'的权力落差"},
+              {"field": "action_style", "bad": "你折下一枝柳条递给将要远行的人", "reason": "送柳条是送别人的动作，不是被留下的人的动作。被留下的人应该是僵住的"},
+              {"field": "resolution_style", "bad": "你感到人生无常", "reason": "禁止内心独白和人生感慨。用雪地上的脚印——所有人都在往前走——收束"}
+            ]
+          }
         },
         {
           "id": "scene_qujiang",
@@ -94,7 +197,18 @@
           "description": "水边诗会，曲水流觞。文人墨客吟诗作对，酒杯顺水漂流至你面前",
           "stored_to": "jiaoyou",
           "tags": ["TARGET_MYTH_GIANTROC_QUJIANG", "ENV_POLITICS_CLOUD_QUJIANG"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "jiaoyou_trigger",
+            "demand_context": "意象触发媒介——主角在交际场合中，被某个'社交等级的信号'锁定注意力：酒杯漂到面前时周围人眼中微妙的评估目光、某人在吟诗时故意看向某个权贵的位置、座次中有人被安排在'不该在'的位置。意象在'社交面具的缝隙'中被触发——所有人都在演戏，但主角能看见面具下面赤裸裸的权力交易。",
+            "action_style": "主角的身体在交际中保持'待机'状态——接过酒杯时不自然地紧了紧手指、目光在其他人脸上快速扫描又移开、听到某句话时脖颈的肌肉微微绷紧。表面在参加诗会，身体在收集权力情报。【严禁】主角真正投入诗会的氛围、与人吟诗唱和、或展露出享受的表情。",
+            "resolution_style": "意象在社交礼仪的某个细微裂隙中被触发——一个不该有的眼神交换、一句被压低声音的话、一个人殷勤过头地给另一个人斟酒。用这个裂隙收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你参加曲江诗会，与文友们吟诗作对，好不快活", "reason": "主角不是来交朋友的，诗会对他来说是权力交易所"},
+              {"field": "action_style", "bad": "你接过酒杯一饮而尽，哈哈大笑", "reason": "主角在社交中始终保持警惕，不会真正放松。动作必须带着紧绷感"},
+              {"field": "resolution_style", "bad": "你感到权力的游戏无处不在", "reason": "禁止总结陈词。用体态语言呈现——你看到了什么让你的眼神闪烁了一下"}
+            ]
+          }
         },
         {
           "id": "scene_zhaidi",
@@ -102,7 +216,18 @@
           "description": "高门大院外，你站在偏院等候。院内丝竹声声，但你的席位在外院冷案上，连残羹都轮不到",
           "stored_to": "jiaoyou",
           "tags": ["TARGET_MYTH_GIANTROC_ZHAIDI", "ENV_POLITICS_CLOUD_ZHAIDI"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "jiaoyou_trigger",
+            "demand_context": "意象触发媒介——主角在'里与外'的物理边界上被反复提醒自己的位置：传菜的人端着珍馐从面前经过但没他的份、内院传来的笑声在回廊中变了调传到外院时已模糊不清、某位姗姗来迟的客人被直接迎入内院连通报都不用。意象在'被选择性忽视'中被触发——你不是没资格，你是压根不在他们的视线里。",
+            "action_style": "主角的身体表现出'假装不在意'的僵硬——坐在冷案前脊背挺得笔直、目光追着每一个端着菜经过的人、手指在酒杯上反复摩挲但一口没喝。每一个动作都在说'我不属于这里'但身体拒绝离开。【严禁】主角起身向内院张望、拦住下人质问、或愤然离席。",
+            "resolution_style": "意象在某个'内外分界'的细节上被触发——一扇半掩的门、一个被帘子遮住的身影、一碟放在远处够不到的菜。用这个分界线的刺眼存在收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你在权贵宅邸外院等候，心中愤愤不平", "reason": "写了心理活动而不是身体反应。愤懑应该通过肢体呈现——挺直的背脊、没有喝酒的酒杯"},
+              {"field": "action_style", "bad": "你索性自斟自饮，不去理会内院的喧嚣", "reason": "主角不会真的不在乎。假装不在乎才是他的真实状态"},
+              {"field": "resolution_style", "bad": "你感到自己受到了侮辱", "reason": "禁止内心独白。用那道门——门内门外两个世界——呈现一切"}
+            ]
+          }
         },
         {
           "id": "scene_huji",
@@ -110,7 +235,18 @@
           "description": "三教九流汇聚的酒肆，胡姬的琵琶声如珠落玉盘。有人在角落里痛哭，有人在桌上起舞",
           "stored_to": "jiaoyou",
           "tags": ["TARGET_MYTH_GIANTROC_HUJI", "ENV_POLITICS_CLOUD_HUJI"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "narrative_constraint": {
+            "type": "jiaoyou_trigger",
+            "demand_context": "意象触发媒介——主角在鱼龙混杂之地，被某个'不该在这里的人或物'锁定：一个穿着明显与身份不符的人在角落里冷眼观察、有人借着醉意在桌下递了个什么东西、琵琶声在某个人经过时停顿了一拍又继续。意象在'三教九流的暗流'中被触发——权贵不会来这种地方，但权力的代理人和信息贩子会。这里是权力的地下交易所。",
+            "action_style": "主角的身体在狂欢的噪音中保持异样的安静——目光锁定某个目标人物、对身边的喧闹毫无反应、手指在桌面上无意识地画着什么。周围越吵，主角越静。动静对比本身就是一种语言。【严禁】主角被氛围感染开始跳舞或狂欢、或被胡姬的美貌吸引而分心。",
+            "resolution_style": "意象在'不该发生的事发生了'的瞬间被触发——一次对视、一个手势、一件不该出现的东西。用这个越界的瞬间收束。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你在胡姬酒肆中尽情狂欢，享受着长安的夜生活", "reason": "主角在任何地方都在看权力的暗流，即使在最乱的酒肆也不是来放松的"},
+              {"field": "action_style", "bad": "你被胡姬拉去跳舞，开心地加入了狂欢", "reason": "主角不会放下警惕。周围越乱，他反而越静"},
+              {"field": "resolution_style", "bad": "你感到权力无处不在", "reason": "禁止总结。用你看到的那只手、那个眼神、那件不该出现的东西收束"}
+            ]
+          }
         }
       ]
     }
@@ -120,5 +256,6 @@
   "word_count_max": 200,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
-  "output_dir": "data/generated_events/"
+  "output_dir": "data/generated_events/",
+  "final_directive": "【核心指令】每次生成只写一个场景、一个意象触发瞬间。场景铺垫不超过 30 字。意象必须通过外部物理细节触发——绝不用心理活动做桥梁。意象不是被'获得'的，而是在场景的某个瞬间被'看见'的。禁止使用'你感到''你想起了''你意识到'等心理动词。禁止替主角总结感悟或解释意象的含义。意象的意义留给读者自己解读。三种物理切片（感官越界、生理压抑、视角扭曲）必须至少出现一种。"
 }

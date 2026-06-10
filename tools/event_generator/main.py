@@ -149,7 +149,7 @@ def main():
     # ── 展开所有组合（支持 Dynamic Dimension） ──
     combinations = list(expand_combinations(cfg.dimensions))
     dim_value_counts = [
-        f"{len(d.values)}" if not d.dynamic else f"({d.value_extractor_key})"
+        f"{len(d.values)}" if not getattr(d, 'dynamic', False) else f"({getattr(d, 'value_extractor_key', '?')})"
         for d in cfg.dimensions
     ]
     print(f"   组合数: {len(combinations)} ({'×'.join(dim_value_counts)})")

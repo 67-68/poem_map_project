@@ -1,0 +1,32 @@
+{
+  "dimensions": [
+    {
+      "id": "imagery",
+      "name": "意象",
+      "description": "独立意象数据库：场景中触发的权力意象类型。通过 linked_value_ids 从场景配置引用，运行时注入维度组合。",
+      "values": [
+        {
+          "id": "imagery_jade_step",
+          "name": "玉阶意象",
+          "description": "权力的具象化阶梯——宫门的铜钉、御道的汉白玉、品级站位的间距、衣冠服饰上的等级标记。意象聚焦于'层级'本身：看得见的门槛和够不着的台阶。",
+          "scale": 1.0,
+          "operator_dsl": ""
+        },
+        {
+          "id": "imagery_giant_roc",
+          "name": "大鹏意象",
+          "description": "挣脱束缚的幻想——俯瞰、凌驾、一飞冲天的欲望投射。意象聚焦于'超越'：高度差带来的权力幻觉、对现状的激烈否定、飞出去/爬上去的动能。",
+          "scale": 1.0,
+          "operator_dsl": ""
+        },
+        {
+          "id": "imagery_cloud_and_sun",
+          "name": "云日意象",
+          "description": "被遮蔽的权力核心——皇帝（太阳）被层层遮蔽、天光被高墙切割、盛世将尽的阴霾。意象聚焦于'阻隔'：看得见但够不着的权力中心，弥漫的压抑感。",
+          "scale": 1.0,
+          "operator_dsl": ""
+        }
+      ]
+    }
+  ]
+}
