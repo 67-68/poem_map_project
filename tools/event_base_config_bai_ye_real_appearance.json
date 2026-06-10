@@ -9,7 +9,8 @@
     "forbid_comedy_exaggeration",
     "forbid_god_view_psychology",
     "ambiguous_narrative",
-    "anti_repetition"
+    "anti_repetition",
+    "anonymous_officials"
   ],
   "anti_repetition_directive": "极度痛恨重复的意象表达。在生成同一批次的不同事件时，绝对禁止复用相同的具象动作（如涉及'火'的任何动作、同一种纸张处置方式、同一种羞辱姿势等）。必须在物理损坏、生活消耗、结构性无视、才华剥夺等维度中强制跳跃。",
   "fact_features": [

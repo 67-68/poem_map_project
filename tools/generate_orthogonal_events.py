@@ -161,6 +161,191 @@ class SlidingBlacklist:
 
 
 # ════════════════════════════════════════════════════════════════
+# 1b. 沙盒缓存运行时状态
+# ════════════════════════════════════════════════════════════════
+
+class SandboxManager:
+    """沙盒缓存：为每对 dimension-value 预生成 2-3 个创作关键词。
+
+    设计原则（源自架构师奥卡姆剃刀 🪒）:
+      - 关键词粒度是 dimension-value 对，不是组合（组合太多，缓存会爆炸 💀）
+      - 生成阶段随机从每个维度值的词池中 pick 一个，注入 prompt
+      - 自动检测：运行时检查 ``<config_path>.sandbox`` 是否存在，
+        不存在则自动调用 API 生成
+
+    Sandbox 文件格式（JSON）:
+    .. code-block:: json
+
+        {
+          "dim_id": {
+            "val_id": ["keyword1", "keyword2", "keyword3"],
+            ...
+          },
+          ...
+        }
+    """
+
+    KEYWORD_COUNT = 3  # 每个 dimension-value 生成的关键词数
+
+    def __init__(
+        self,
+        config_path: str | None,
+        llm: LLMClient,
+        cfg: EventPipelineConfig,
+    ):
+        self.cfg = cfg
+        self.llm = llm
+        # sandbox 文件路径 = 配置文件路径 + ".sandbox"
+        # 如果无配置文件（内置配置），则回退到 <cfg.id>.sandbox
+        if config_path:
+            self.sandbox_path = config_path + ".sandbox"
+        else:
+            self.sandbox_path = f"{cfg.id}.sandbox"
+        # _data[dim_id][val_id] = [keyword, ...]
+        self._data: dict[str, dict[str, list[str]]] = {}
+
+    # ── 公开接口 ──────────────────────────────────────────────
+
+    def load(self) -> bool:
+        """从磁盘加载沙盒缓存。
+
+        Returns:
+            True 如果文件存在且加载成功，否则 False。
+        """
+        if not os.path.exists(self.sandbox_path):
+            return False
+        try:
+            with open(self.sandbox_path, "r", encoding="utf-8") as f:
+                self._data = json.load(f)
+            # 简单完整性检查：至少有一个维度有数据
+            if not self._data:
+                print(f"  ⚠️ 沙盒文件 '{self.sandbox_path}' 为空，将重新生成")
+                return False
+            total_kws = sum(
+                len(kws) for val_map in self._data.values() for kws in val_map.values()
+            )
+            print(f"  📦 沙盒已加载: {self.sandbox_path} "
+                  f"({len(self._data)} 个维度, {total_kws} 个关键词)")
+            return True
+        except (json.JSONDecodeError, OSError) as e:
+            print(f"  ⚠️ 沙盒文件 '{self.sandbox_path}' 读取失败: {e}，将重新生成")
+            return False
+
+    def save(self) -> None:
+        """将沙盒缓存写入磁盘。"""
+        with open(self.sandbox_path, "w", encoding="utf-8") as f:
+            json.dump(self._data, f, ensure_ascii=False, indent=2)
+        total_kws = sum(
+            len(kws) for val_map in self._data.values() for kws in val_map.values()
+        )
+        print(f"  💾 沙盒已保存: {self.sandbox_path} "
+              f"({len(self._data)} 个维度, {total_kws} 个关键词)")
+
+    def generate(self) -> None:
+        """遍历所有维度值，调用 API 为每个 dimension-value 生成 2-3 个关键词。
+
+        符合 Coder 模式的穷举日志要求：每个生成步骤都有输出。
+        """
+        print(f"\n🏗️  沙盒自动生成: 为 {len(self.cfg.dimensions)} 个维度的每个值生成关键词...")
+
+        for dim in self.cfg.dimensions:
+            dim_id = dim.id
+            if dim_id not in self._data:
+                self._data[dim_id] = {}
+
+            for val in dim.values:
+                val_id = val.id
+                # 跳过已缓存的
+                if val_id in self._data[dim_id] and self._data[dim_id][val_id]:
+                    continue
+
+                print(f"    🔑 [{dim.name} / {val.name}] 生成关键词...", end=" ")
+                try:
+                    keywords = self._generate_keywords_for(dim, val)
+                    self._data[dim_id][val_id] = keywords
+                    print(f"{', '.join(keywords)}")
+                except Exception as e:
+                    print(f"❌ 失败: {e}")
+                    # 失败时用 fallback 关键词
+                    fallback = [f"{val.name}相关情节"]
+                    self._data[dim_id][val_id] = fallback
+                    print(f"    ⚠️  使用 fallback: {fallback}")
+
+                # API 调用间隔，避免限流
+                time.sleep(0.5)
+
+        self.save()
+
+    def get_keywords(self, dim_id: str, val_id: str) -> list[str]:
+        """获取指定 dimension-value 的关键词列表。"""
+        return self._data.get(dim_id, {}).get(val_id, [])
+
+    def get_prompt_block(self, combos: list[DimensionCombo]) -> str:
+        """为当前组合随机 pick 每个维度值的 1 个关键词，组装成 prompt 块。
+
+        每次调用都重新随机选择，确保同一组合多次重试时获得不同的种子。
+        """
+        picked: list[str] = []
+        for combo in combos:
+            kw_pool = self.get_keywords(combo.dimension.id, combo.value.id)
+            if not kw_pool:
+                continue
+            chosen = random.choice(kw_pool)
+            picked.append(f"  - {combo.dimension.name}「{combo.value.name}」→ {chosen}")
+
+        if not picked:
+            return ""
+
+        lines = ["\n## 🎲 创作种子（沙盒关键词）",
+                 "在创作时请围绕以下关键词展开情节：\n"]
+        lines.extend(picked)
+        return "\n".join(lines)
+
+    # ── 内部方法 ──────────────────────────────────────────────
+
+    def _generate_keywords_for(
+        self,
+        dim: PipelineDimension,
+        val: PipelineDimensionValue,
+    ) -> list[str]:
+        """为单个 dimension-value 调用 API 生成关键词。
+
+        使用轻量级 prompt，不包含完整事件生成的上下文。
+        """
+        system_prompt = (
+            "你是一位精通中国古典文学和古代官场文化的叙事设计师。"
+            "你的任务是针对给定的叙事维度及具体取值，"
+            "生成3个创作关键词，每个关键词10字以内。"
+            "关键词聚焦于该维度取值本身的典型情节场景，"
+            "不要包含角色名或特定事件标题。"
+        )
+        user_prompt = (
+            f"维度名称：{dim.name}\n"
+            f"维度描述：{dim.description}\n"
+            f"取值名称：{val.name}\n"
+            f"取值描述：{val.description}\n\n"
+            f"请为上述维度取值生成 {self.KEYWORD_COUNT} 个创作关键词，"
+            f"每行一个，不要编号，不要多余内容："
+        )
+
+        response = self.llm.generate_event_text(system_prompt, user_prompt)
+
+        # 解析响应：按行切割，去掉空行和标点符号
+        raw_lines = response.strip().split("\n")
+        keywords: list[str] = []
+        for line in raw_lines:
+            # 去除常见的列表标记（-、*、数字、引号）
+            cleaned = line.strip().strip("-*·\"'“”‘’").strip()
+            # 去除前置序号如 1. 1、 等
+            cleaned = re.sub(r"^\d+[\.、\s)]*\s*", "", cleaned).strip()
+            if cleaned and len(cleaned) <= 30:
+                keywords.append(cleaned)
+
+        # 确保不超过 KEYWORD_COUNT
+        return keywords[: self.KEYWORD_COUNT]
+
+
+# ════════════════════════════════════════════════════════════════
 # 1. 内置示例配置（拜谒 - 蜜月期）
 # ════════════════════════════════════════════════════════════════
 
@@ -601,6 +786,7 @@ def build_user_prompt(
     word_count_max: Optional[int] = None,
     plugins: Optional[list[EventPromptPlugin]] = None,
     blacklist: Optional[SlidingBlacklist] = None,
+    sandbox_keywords_block: Optional[str] = None,
 ) -> str:
     """组装 User Prompt（包含当前维度组合信息）。
     
@@ -616,6 +802,9 @@ def build_user_prompt(
     如果传入了 blacklist，会：
       - 在输出格式中追加 summary 嵌套块（如果尚未存在）
       - 在 prompt 末尾追加黑名单历史列表
+
+    如果传入了 sandbox_keywords_block（非空字符串），会在黑名单之前
+    追加"🎲 创作种子"区块，引导 AI 围绕沙盒关键词展开创作。
     """
     effective_min = word_count_min if word_count_min is not None else cfg.word_count_min
     effective_max = word_count_max if word_count_max is not None else cfg.word_count_max
@@ -732,6 +921,10 @@ summary:
             fragment = plugin.get_prompt_fragment(combos, cfg)
             if fragment.strip():
                 lines.append(f"\n## 额外要求（{plugin.plugin_id}）\n{fragment.strip()}")
+
+    # ── 沙盒关键词注入 ──
+    if sandbox_keywords_block and sandbox_keywords_block.strip():
+        lines.append(sandbox_keywords_block)
 
     # ── 黑名单历史注入（Phase 4: prompt 片段） ──
     if blacklist is not None:
@@ -1222,6 +1415,22 @@ def main():
 
     llm = LLMClient(api_key=api_key or "dry-run", model=cfg.api_model)
 
+    # ── 初始化沙盒缓存 ──
+    sandbox: Optional[SandboxManager] = None
+    # 除非 dry-run，否则初始化沙盒（dry-run 没有 LLM 可用也没有必要）
+    if not args.dry_run:
+        sandbox = SandboxManager(
+            config_path=args.config,
+            llm=llm,
+            cfg=cfg,
+        )
+        if sandbox.load():
+            print(f"  ✅ 沙盒缓存就绪")
+        else:
+            print(f"  🏗️  沙盒缓存不存在，自动生成中...")
+            sandbox.generate()
+        print(f"  📍 沙盒路径: {sandbox.sandbox_path}")
+
     # 组装 system prompt
     system_prompt = build_system_prompt(cfg)
     print(f"\n📋 System Prompt ({len(system_prompt)} chars):")
@@ -1237,7 +1446,13 @@ def main():
         print("\n🏁 Dry-run 模式，不会调用 API")
         first_values = combinations[0]
         first_combos = _make_combos(cfg.dimensions, first_values)
-        user_prompt = build_user_prompt(first_combos, cfg, plugins=plugins, blacklist=blacklist)
+        # 沙盒在 dry-run 模式下未初始化，跳过
+        sandbox_block = ""
+        user_prompt = build_user_prompt(
+            first_combos, cfg,
+            plugins=plugins, blacklist=blacklist,
+            sandbox_keywords_block=sandbox_block,
+        )
         print(f"\n📋 示例 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
         print(user_prompt)
@@ -1283,11 +1498,13 @@ def main():
         SHRINK_STEP = 20
         MIN_GAP = 10
 
+        sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
         user_prompt = build_user_prompt(
             current_combos, cfg,
             word_count_min=current_min, word_count_max=current_max,
             plugins=plugins,
             blacklist=blacklist,
+            sandbox_keywords_block=sandbox_block,
         )
         print(f"\n📋 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
@@ -1455,11 +1672,14 @@ def main():
                         current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
                     if current_min != old_min or current_max != old_max:
                         print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
+                        # 重试时 sandbox 重新随机 pick，获得不同的创作种子
+                        sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
                         user_prompt = build_user_prompt(
                             current_combos, cfg,
                             word_count_min=current_min, word_count_max=current_max,
                             plugins=plugins,
                             blacklist=blacklist,
+                            sandbox_keywords_block=sandbox_block,
                         )
                     continue
                 print(f"  ⏭️ 跳过（已达最大重试次数）")
@@ -1506,11 +1726,13 @@ def main():
             SHRINK_STEP = 20
             MIN_GAP = 10
 
+            sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
             user_prompt = build_user_prompt(
                 current_combos, cfg,
                 word_count_min=current_min, word_count_max=current_max,
                 plugins=plugins,
                 blacklist=blacklist,
+                sandbox_keywords_block=sandbox_block,
             )
 
             for attempt in range(cfg.max_retries + 1):
@@ -1643,11 +1865,13 @@ def main():
                             current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
                         if current_min != old_min or current_max != old_max:
                             print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
+                            sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
                             user_prompt = build_user_prompt(
                                 current_combos, cfg,
                                 word_count_min=current_min, word_count_max=current_max,
                                 plugins=plugins,
                                 blacklist=blacklist,
+                                sandbox_keywords_block=sandbox_block,
                             )
                         continue
                     print(f"  ⏭️ 跳过（已达最大重试次数）")

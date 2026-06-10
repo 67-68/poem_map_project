@@ -5,9 +5,14 @@
     python3 -m unittest tools.test_generate_orthogonal_events -v
 """
 import itertools
+import json
+import os
+import random
+import tempfile
 import unittest
 import sys
 sys.path.insert(0, ".")
+from unittest.mock import MagicMock
 
 from tools.config import (
     BlacklistDimensionConfig,
@@ -26,6 +31,8 @@ from tools.generate_orthogonal_events import (
     scale_dsl_operator,
     scale_all_operators,
     SlidingBlacklist,
+    SandboxManager,
+    LLMClient,
     default_config,
 )
 
@@ -815,6 +822,155 @@ summary:
         self.assertEqual(parsed["options"]["opt_a"], "选项A")
         self.assertEqual(parsed["options"]["opt_b"], "选项B")
         self.assertEqual(parsed["summary"]["description"], "对描述的摘要")
+
+
+# ════════════════════════════════════════════════════════════════
+# SandboxManager — 沙盒缓存
+# ════════════════════════════════════════════════════════════════
+
+class TestSandboxManager(unittest.TestCase):
+    """SandboxManager: 加载/保存/关键词管理/prompt 块生成。"""
+
+    def setUp(self):
+        """构建最小沙盒场景。"""
+        self.dim1 = PipelineDimension(
+            id="test_dim",
+            name="测试维度",
+            description="测试维度描述",
+            values=[
+                PipelineDimensionValue(
+                    id="v1", name="值1", description="测试值1",
+                    scale=1.0, operator_dsl="",
+                ),
+                PipelineDimensionValue(
+                    id="v2", name="值2", description="测试值2",
+                    scale=1.0, operator_dsl="",
+                ),
+            ],
+        )
+        self.cfg = EventPipelineConfig(
+            id="test_cfg",
+            name="测试配置",
+            background_context="测试",
+            dimensions=[self.dim1],
+            prompt_features=[],
+            option_features=[],
+            universal_tags=[],
+        )
+        # 用 MagicMock 替代真实 LLMClient
+        self.mock_llm = MagicMock(spec=LLMClient)
+        self.mock_llm.generate_event_text.return_value = (
+            "- 关键词A\n- 关键词B\n- 关键词C"
+        )
+        # 临时目录存放 sandbox 文件
+        self.tmpdir = tempfile.mkdtemp()
+        self.sandbox_path = os.path.join(self.tmpdir, "test_cfg.sandbox")
+
+    def _make_manager(self, config_path: str | None = None) -> SandboxManager:
+        """构造 SandboxManager，强制使用自定义 sandbox 路径。"""
+        mgr = SandboxManager(
+            config_path=config_path,
+            llm=self.mock_llm,
+            cfg=self.cfg,
+        )
+        # 覆盖 sandbox_path 到临时目录
+        mgr.sandbox_path = self.sandbox_path
+        return mgr
+
+    def test_load_missing_file_returns_false(self):
+        """sandbox 文件不存在时 load() 返回 False。"""
+        mgr = self._make_manager()
+        self.assertFalse(mgr.load())
+
+    def test_save_and_load_roundtrip(self):
+        """save() 后 load() 能正确恢复数据。"""
+        mgr = self._make_manager()
+        mgr._data = {
+            "test_dim": {
+                "v1": ["关键词A", "关键词B", "关键词C"],
+                "v2": ["关键词D", "关键词E"],
+            }
+        }
+        mgr.save()
+        self.assertTrue(os.path.exists(self.sandbox_path))
+
+        # 新实例加载
+        mgr2 = self._make_manager()
+        self.assertTrue(mgr2.load())
+        self.assertEqual(
+            mgr2.get_keywords("test_dim", "v1"),
+            ["关键词A", "关键词B", "关键词C"],
+        )
+        self.assertEqual(
+            mgr2.get_keywords("test_dim", "v2"),
+            ["关键词D", "关键词E"],
+        )
+
+    def test_get_keywords_returns_empty_for_missing(self):
+        """不存在的维度/值返回空列表。"""
+        mgr = self._make_manager()
+        self.assertEqual(mgr.get_keywords("nonexistent", "v1"), [])
+        self.assertEqual(mgr.get_keywords("test_dim", "nonexistent"), [])
+
+    def test_get_prompt_block_returns_formatted_block(self):
+        """get_prompt_block() 返回格式化的 prompt 块。"""
+        mgr = self._make_manager()
+        mgr._data = {
+            "test_dim": {
+                "v1": ["门子索要门包", "门子刁难", "门子勒索"],
+            }
+        }
+        combo = DimensionCombo(dimension=self.dim1, value=self.dim1.values[0])
+        block = mgr.get_prompt_block([combo])
+        self.assertIn("🎲 创作种子", block)
+        self.assertIn("测试维度", block)
+        self.assertIn("值1", block)
+        # 随机选一个关键词，肯定在池子里
+        self.assertTrue(
+            any(kw in block for kw in ["门子索要门包", "门子刁难", "门子勒索"]),
+            msg=f"block 中应包含任一关键词，实际: {block}",
+        )
+
+    def test_get_prompt_block_empty_when_no_keywords(self):
+        """没有关键词时返回空字符串。"""
+        mgr = self._make_manager()
+        combo = DimensionCombo(dimension=self.dim1, value=self.dim1.values[0])
+        block = mgr.get_prompt_block([combo])
+        self.assertEqual(block, "")
+
+    def test_random_pick_changes_across_calls(self):
+        """连续多次 get_prompt_block 应该随机 pick 到不同的关键词。"""
+        mgr = self._make_manager()
+        mgr._data = {
+            "test_dim": {
+                "v1": ["关键词A", "关键词B", "关键词C"],
+            }
+        }
+        combo = DimensionCombo(dimension=self.dim1, value=self.dim1.values[0])
+        # 固定 seed 做确定性测试
+        random.seed(42)
+        block1 = mgr.get_prompt_block([combo])
+        random.seed(99)
+        block2 = mgr.get_prompt_block([combo])
+        # 统计概率上，两个 seed 很可能 pick 不同
+        contains_a1 = "关键词A" in block1 or "关键词B" in block1 or "关键词C" in block1
+        contains_a2 = "关键词A" in block2 or "关键词B" in block2 or "关键词C" in block2
+        self.assertTrue(contains_a1)
+        self.assertTrue(contains_a2)
+
+    def test_load_corrupted_file_returns_false(self):
+        """损坏的 sandbox 文件返回 False。"""
+        with open(self.sandbox_path, "w", encoding="utf-8") as f:
+            f.write("这不是 JSON")
+        mgr = self._make_manager()
+        self.assertFalse(mgr.load())
+
+    def test_load_empty_file_returns_false(self):
+        """空 JSON 对象返回 False。"""
+        with open(self.sandbox_path, "w", encoding="utf-8") as f:
+            json.dump({}, f)
+        mgr = self._make_manager()
+        self.assertFalse(mgr.load())
 
 
 if __name__ == "__main__":
