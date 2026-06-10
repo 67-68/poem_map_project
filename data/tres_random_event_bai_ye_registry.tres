@@ -32,5 +32,14 @@ resources = {
 "bai_ye_honeymoon_l2_typec_m0": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typec_m0.tres",
 "bai_ye_honeymoon_l2_typec_m1": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typec_m1.tres",
 "bai_ye_honeymoon_l2_typec_m2": "res://data/tres_random_event_bai_ye/bai_ye_honeymoon_l2_typec_m2.tres",
+"bai_ye_real_appearance_l0_typea": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l0_typea.tres",
+"bai_ye_real_appearance_l0_typeb": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l0_typeb.tres",
+"bai_ye_real_appearance_l0_typec": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l0_typec.tres",
+"bai_ye_real_appearance_l1_typea": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l1_typea.tres",
+"bai_ye_real_appearance_l1_typeb": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l1_typeb.tres",
+"bai_ye_real_appearance_l1_typec": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l1_typec.tres",
+"bai_ye_real_appearance_l2_typea": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l2_typea.tres",
+"bai_ye_real_appearance_l2_typeb": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l2_typeb.tres",
+"bai_ye_real_appearance_l2_typec": "res://data/tres_random_event_bai_ye/bai_ye_real_appearance_l2_typec.tres",
 "normal_bai_ye": "res://data/tres_random_event_bai_ye/normal_bai_ye.tres"
 }

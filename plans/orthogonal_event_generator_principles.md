@@ -97,3 +97,4 @@ def get_prompt_fragment(self, combos, cfg) -> str:
 
 ## 测试:
 - 使用DOCUMENTATIONS/events/prompt_engineering_principles.md检查配置是否过拟合
+- 使用trail随机输出配置

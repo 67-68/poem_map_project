@@ -93,6 +93,13 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "is_generated": true,
         "tres_output_dir": "res://data/tres_random_event_bai_ye",
     },
+    {
+        "name": "拜谒真实面目",
+        "save_path": "res://data/generated_events/bai_ye_real_appearance_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+        "tres_output_dir": "res://data/tres_random_event_bai_ye",
+    },
 ]
 
 # 任务指针：当前正在下载第几个文件？
