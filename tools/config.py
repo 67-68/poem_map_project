@@ -10,9 +10,8 @@
     ├── OptionFeature (选项定义)
     └── FactFeature (事实约束)
   PipelineDimensionValue (基类)
-    └── SceneValue (扩展: tags 字段)
   PipelineDimension (维度定义)
-    └── 支持 dynamic 派生轴
+    └── 支持 linked_value_ids 值级引用 + DEPRECATED dynamic 派生轴
   DimensionCombo (展开后的维度+值对)
   EventPipelineConfig (根配置)
 
@@ -242,8 +241,10 @@ def resolve_text_features(
 class PipelineDimensionValue(BaseModel):
     """维度值：正交矩阵中的一个具体节点。
     
-    tags 字段主要用于 SceneValue 场景，但放在基类避免 Pydantic
-    反序列化时丢失字段。非场景值的 tags 默认空列表，无影响。
+    linked_value_ids: 跨维度值引用列表。当该值被选中时，引用的维度值
+        会以覆盖模式替换对应维度的槽位。所有 linked_value_ids 必须
+        指向同一目标维度，且不能指向自身所属的维度。
+        示例：["TypeA"] 表示"当此值选中时，资源掠夺维度固定为 TypeA"。
     
     narrative_constraint: 可选的结构化叙事约束，描述该维度值对应的
         NPC 行为、玩家动作、揭晓方式和反面教材。
@@ -255,19 +256,8 @@ class PipelineDimensionValue(BaseModel):
     description: str = ""
     scale: float = 1.0
     operator_dsl: str = ""
-    tags: list[str] = []  # Dynamic Dimension 用：预定义标签 ID 列表
+    linked_value_ids: list[str] = []
     narrative_constraint: Optional[NarrativeConstraint] = None
-
-
-class SceneValue(PipelineDimensionValue):
-    """场景维度值：PipelineDimensionValue 的别名类型。
-    
-    语义标记类型：标识这个维度值是一个"场景"。
-    tags 字段继承自基类，存储场景的预定义标签 ID
-    （如 "env_society_festival", "vibe_aesthetic_sensual"），
-    供 Dynamic Dimension 的 Extractor 函数提取使用。
-    """
-    pass
 
 
 class BlacklistDimensionConfig(BaseModel):
@@ -297,19 +287,14 @@ class BlacklistDimensionConfig(BaseModel):
 class PipelineDimension(BaseModel):
     """维度定义：正交矩阵中的一个轴。
     
-    dynamic=True 时，该轴的值不是预先定义在 values 中，而是
-    通过 EXTRACTOR_REGISTRY 中的 value_extractor_key 函数，
-    在展开笛卡尔积时根据其他已确定的轴动态派生。
+    新版使用 linked_value_ids 在 PipelineDimensionValue 级别做值级引用。
+    
+    value_extractor_config: [DEPRECATED] 保留供内联计算读取的配置 dict。
     """
     id: str = ""
     name: str = ""
     description: str = ""
     values: list[PipelineDimensionValue] = []
-
-    # Dynamic Dimension 支持
-    dynamic: bool = False
-    value_extractor_key: str = ""
-    value_extractor_config: dict = {}
 
     # 维度级滑动黑名单
     blacklist_config: Optional[BlacklistDimensionConfig] = None

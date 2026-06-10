@@ -1,8 +1,13 @@
 # Dynamic Dimension 架构设计
 
-> **版本：** v1.0
-> **用途：** 场景×标签正交事件库的底层架构支撑
-> **状态：** ✅ 已实现
+> **⚠️ 已废弃**
+>
+> 此文档描述的旧版 `EXTRACTOR_REGISTRY` + `_extract_scene_tags()` 架构已被重构。
+> 新版使用 `linked_value_ids` 值级引用机制 + 内联计算。
+> 详见：[`dynamic_dimension_refactor.md`](dynamic_dimension_refactor.md)
+
+> **版本：** v1.0（已废弃）
+> **用途：** 场景×标签正交事件库的底层架构支撑（旧版）
 > **前置文档：** [`orthogonal_event_pipeline.md`](orthogonal_event_pipeline.md)
 
 ---

@@ -8,5 +8,5 @@ tools/event_generator — 正交事件生成管线模块包。
   dsl_parser.py      纯函数 DSL 缩放器
   io_csv.py          CSV 输出
   state_managers.py  SandboxManager + SlidingBlacklist
-  dimensions.py      EXTRACTOR_REGISTRY + expand_combinations + _make_combos
+  dimensions.py      expand_combinations + _make_combos + linked_value_ids
 """

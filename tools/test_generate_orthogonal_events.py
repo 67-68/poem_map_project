@@ -37,7 +37,7 @@ from tools.event_generator.state_managers import (
     SandboxManager,
 )
 from tools.event_generator.dimensions import (
-    _extract_scene_tags,
+    _find_value_by_id,
     _make_combos,
     expand_combinations,
 )
@@ -366,225 +366,171 @@ class TestDefaultConfig(unittest.TestCase):
 
 
 # ════════════════════════════════════════════════════════════════
-# Dynamic Dimension — _extract_scene_tags
+# linked_value_ids — 值级引用
 # ════════════════════════════════════════════════════════════════
 
-class TestExtractSceneTags(unittest.TestCase):
-    """_extract_scene_tags: 从 context 中提取场景标签"""
+class TestValidateLinkedValueIds(unittest.TestCase):
+    """_validate_linked_value_ids: 全局约束校验"""
 
-    def test_basic_extraction(self):
-        """有 tags 的维度值 → 提取为派生值列表"""
-        context = {
-            "dimensions": {
-                "scene": PipelineDimensionValue(
-                    id="s1", name="Scene 1",
-                    tags=["tag_a", "tag_b", "tag_c"],
-                ),
-            }
-        }
-        result = _extract_scene_tags(context, {"exclude": []})
-        self.assertEqual(len(result), 3)
-        self.assertEqual(result[0].id, "tag_a")
-        self.assertEqual(result[1].id, "tag_b")
-        self.assertEqual(result[2].id, "tag_c")
+    def test_no_links_is_ok(self):
+        """无 linked_value_ids → 通过"""
+        dims = [
+            PipelineDimension(id="a", values=[PipelineDimensionValue(id="a1")]),
+        ]
+        # 不应抛出异常
+        expand_combinations(dims)
 
-    def test_exclude_filter(self):
-        """exclude 列表中的标签被剔除"""
-        context = {
-            "dimensions": {
-                "scene": PipelineDimensionValue(
-                    id="s1", name="Scene 1",
-                    tags=["action_main_baiye", "tag_b", "tag_c"],
-                ),
-            }
-        }
-        result = _extract_scene_tags(context, {"exclude": ["action_main_baiye"]})
-        self.assertEqual(len(result), 2)
-        ids = [v.id for v in result]
-        self.assertNotIn("action_main_baiye", ids)
-        self.assertIn("tag_b", ids)
-        self.assertIn("tag_c", ids)
+    def test_single_main_dimension_is_ok(self):
+        """只有一个维度有 linked_value_ids → 通过"""
+        dims = [
+            PipelineDimension(id="a", values=[
+                PipelineDimensionValue(id="a1", linked_value_ids=["b1"]),
+            ]),
+            PipelineDimension(id="b", values=[
+                PipelineDimensionValue(id="b1"),
+                PipelineDimensionValue(id="b2"),
+            ]),
+        ]
+        expand_combinations(dims)  # 不应抛出异常
 
-    def test_no_tags_returns_empty(self):
-        """无 tags → 返回空列表"""
-        context = {
-            "dimensions": {
-                "scene": PipelineDimensionValue(id="s1", name="Scene 1"),
-            }
-        }
-        result = _extract_scene_tags(context, {"exclude": []})
-        self.assertEqual(result, [])
+    def test_two_main_dimensions_raises(self):
+        """两个维度都有 linked_value_ids → 报错"""
+        dims = [
+            PipelineDimension(id="a", values=[
+                PipelineDimensionValue(id="a1", linked_value_ids=["b1"]),
+            ]),
+            PipelineDimension(id="b", values=[
+                PipelineDimensionValue(id="b1", linked_value_ids=["a1"]),
+            ]),
+        ]
+        with self.assertRaises(ValueError) as ctx:
+            list(expand_combinations(dims))
+        self.assertIn("多个维度使用了 linked_value_ids", str(ctx.exception))
 
-    def test_multiple_dimensions_only_first_used(self):
-        """多个维度中有 tags 时，只用第一个"""
-        context = {
-            "dimensions": {
-                "dim_a": PipelineDimensionValue(
-                    id="a", name="A",
-                    tags=["tag_x"],
-                ),
-                "dim_b": PipelineDimensionValue(
-                    id="b", name="B",
-                    tags=["tag_y"],
-                ),
-            }
-        }
-        result = _extract_scene_tags(context, {"exclude": []})
-        self.assertEqual(len(result), 1)
-        self.assertEqual(result[0].id, "tag_x")
-
-    def test_all_excluded_returns_empty(self):
-        """所有标签都被 exclude → 返回空"""
-        context = {
-            "dimensions": {
-                "scene": PipelineDimensionValue(
-                    id="s1", name="Scene 1",
-                    tags=["tag_a", "tag_b"],
-                ),
-            }
-        }
-        result = _extract_scene_tags(context, {"exclude": ["tag_a", "tag_b"]})
-        self.assertEqual(result, [])
-
-    def test_derived_value_is_pipeline_dimension_value(self):
-        """派生值是 PipelineDimensionValue 实例"""
-        context = {
-            "dimensions": {
-                "scene": PipelineDimensionValue(
-                    id="s1", name="Scene 1",
-                    tags=["tag_a"],
-                ),
-            }
-        }
-        result = _extract_scene_tags(context, {"exclude": []})
-        self.assertIsInstance(result[0], PipelineDimensionValue)
-        self.assertEqual(result[0].scale, 1.0)
-        self.assertEqual(result[0].operator_dsl, "")
+    def test_self_reference_raises(self):
+        """指向自身维度 → 报错"""
+        dims = [
+            PipelineDimension(id="a", values=[
+                PipelineDimensionValue(id="a1", linked_value_ids=["a1"]),
+            ]),
+        ]
+        with self.assertRaises(ValueError) as ctx:
+            list(expand_combinations(dims))
+        self.assertIn("指向自身维度", str(ctx.exception))
 
 
-# ════════════════════════════════════════════════════════════════
-# Dynamic Dimension — expand_combinations
-# ════════════════════════════════════════════════════════════════
+class TestFindValueById(unittest.TestCase):
+    """_find_value_by_id: 按 ID 查找维度值"""
+
+    def test_finds_matching_value(self):
+        """找到匹配的维度值"""
+        dims = [
+            PipelineDimension(id="a", values=[PipelineDimensionValue(id="a1")]),
+            PipelineDimension(id="b", values=[PipelineDimensionValue(id="b1")]),
+        ]
+        idx, val = _find_value_by_id(dims, "b1")
+        self.assertEqual(idx, 1)
+        self.assertEqual(val.id, "b1")
+
+    def test_not_found_raises(self):
+        """未找到 → 抛 ValueError"""
+        dims = [
+            PipelineDimension(id="a", values=[PipelineDimensionValue(id="a1")]),
+        ]
+        with self.assertRaises(ValueError):
+            _find_value_by_id(dims, "nonexistent")
+
 
 class TestExpandCombinations(unittest.TestCase):
-    """expand_combinations: 带 Dynamic Dimension 的笛卡尔积展开"""
+    """expand_combinations: 笛卡尔积展开（含 linked_value_ids 支持）"""
 
-    def setUp(self):
-        self.scene_dim = PipelineDimension(
-            id="scene",
-            name="场景",
-            values=[
-                PipelineDimensionValue(
-                    id="s1", name="Scene 1",
-                    tags=["tag_a", "tag_b"],
-                ),
-                PipelineDimensionValue(
-                    id="s2", name="Scene 2",
-                    tags=["tag_b", "tag_c"],
-                ),
-            ],
-        )
-        self.tag_dim = PipelineDimension(
-            id="scene_tag",
-            name="场景标签",
-            dynamic=True,
-            value_extractor_key="scene_tags",
-            value_extractor_config={"exclude": []},
-            values=[],
-        )
+    def test_basic_cartesian_product(self):
+        """全无链接 → 正常笛卡尔积"""
+        dims = [
+            PipelineDimension(id="a", values=[
+                PipelineDimensionValue(id="a1"),
+                PipelineDimensionValue(id="a2"),
+            ]),
+            PipelineDimension(id="b", values=[
+                PipelineDimensionValue(id="b1"),
+                PipelineDimensionValue(id="b2"),
+            ]),
+        ]
+        result = list(expand_combinations(dims))
+        self.assertEqual(len(result), 4)  # 2 × 2
+        ids = [(r[0].id, r[1].id) for r in result]
+        self.assertIn(("a1", "b1"), ids)
+        self.assertIn(("a1", "b2"), ids)
+        self.assertIn(("a2", "b1"), ids)
+        self.assertIn(("a2", "b2"), ids)
 
-    def test_all_static_dims(self):
-        """全静态维度 → 正常笛卡尔积"""
-        dim_a = PipelineDimension(
-            id="a", name="A",
-            values=[
-                PipelineDimensionValue(id="a1", name="A1"),
-                PipelineDimensionValue(id="a2", name="A2"),
-            ],
-        )
-        dim_b = PipelineDimension(
-            id="b", name="B",
-            values=[
-                PipelineDimensionValue(id="b1", name="B1"),
-            ],
-        )
-        result = list(expand_combinations([dim_a, dim_b]))
-        self.assertEqual(len(result), 2)  # 2 × 1
-        self.assertEqual(result[0][0].id, "a1")
-        self.assertEqual(result[0][1].id, "b1")
-        self.assertEqual(result[1][0].id, "a2")
-        self.assertEqual(result[1][1].id, "b1")
+    def test_single_linked_value_replacement(self):
+        """值 a1 链接到 b1 → a1 组合中 b 维度固定为 b1"""
+        dims = [
+            PipelineDimension(id="a", values=[
+                PipelineDimensionValue(id="a1", linked_value_ids=["b1"]),
+                PipelineDimensionValue(id="a2"),
+            ]),
+            PipelineDimension(id="b", values=[
+                PipelineDimensionValue(id="b1"),
+                PipelineDimensionValue(id="b2"),
+            ]),
+        ]
+        result = list(expand_combinations(dims))
+        # a1: (a1, b1) 固定; a2: (a2, b1), (a2, b2)
+        self.assertEqual(len(result), 3)
+        a1_combos = [r for r in result if r[0].id == "a1"]
+        self.assertEqual(len(a1_combos), 1)
+        self.assertEqual(a1_combos[0][1].id, "b1")
 
-    def test_dynamic_expands_correct_count(self):
-        """场景 s1(2 tags) + s2(2 tags) = 4 组合"""
-        result = list(expand_combinations([self.scene_dim, self.tag_dim]))
-        self.assertEqual(len(result), 4)
+        a2_combos = [r for r in result if r[0].id == "a2"]
+        self.assertEqual(len(a2_combos), 2)
+        b_ids = [r[1].id for r in a2_combos]
+        self.assertIn("b1", b_ids)
+        self.assertIn("b2", b_ids)
 
-    def test_dynamic_expands_s1_tags(self):
-        """s1 的派生值 = tag_a, tag_b"""
-        result = list(expand_combinations([self.scene_dim, self.tag_dim]))
-        s1_combos = [r for r in result if r[0].id == "s1"]
-        self.assertEqual(len(s1_combos), 2)
-        tag_ids = [r[1].id for r in s1_combos]
-        self.assertIn("tag_a", tag_ids)
-        self.assertIn("tag_b", tag_ids)
+    def test_multiple_linked_references(self):
+        """主维度值链接到多个其他维度值"""
+        dims = [
+            PipelineDimension(id="a", values=[
+                PipelineDimensionValue(id="a1", linked_value_ids=["b1"]),
+                PipelineDimensionValue(id="a2"),
+            ]),
+            PipelineDimension(id="b", values=[
+                PipelineDimensionValue(id="b1"),
+                PipelineDimensionValue(id="b2"),
+            ]),
+            PipelineDimension(id="c", values=[
+                PipelineDimensionValue(id="c1"),
+                PipelineDimensionValue(id="c2"),
+            ]),
+        ]
+        result = list(expand_combinations(dims))
+        # a1: (a1, b1, c1), (a1, b1, c2) = 2
+        # a2: (a2, b1, c1), (a2, b1, c2), (a2, b2, c1), (a2, b2, c2) = 4
+        self.assertEqual(len(result), 6)
+        a1_combos = [r for r in result if r[0].id == "a1"]
+        self.assertEqual(len(a1_combos), 2)
+        for r in a1_combos:
+            self.assertEqual(r[1].id, "b1")  # b 维度固定
 
-    def test_dynamic_expands_s2_tags(self):
-        """s2 的派生值 = tag_b, tag_c"""
-        result = list(expand_combinations([self.scene_dim, self.tag_dim]))
-        s2_combos = [r for r in result if r[0].id == "s2"]
-        self.assertEqual(len(s2_combos), 2)
-        tag_ids = [r[1].id for r in s2_combos]
-        self.assertIn("tag_b", tag_ids)
-        self.assertIn("tag_c", tag_ids)
-
-    def test_dynamic_with_exclude(self):
-        """exclude tag_b → s1(1 tag) + s2(1 tag) = 2 组合"""
-        tag_dim_excluded = PipelineDimension(
-            id="scene_tag",
-            name="场景标签",
-            dynamic=True,
-            value_extractor_key="scene_tags",
-            value_extractor_config={"exclude": ["tag_b"]},
-            values=[],
-        )
-        result = list(expand_combinations([self.scene_dim, tag_dim_excluded]))
+    def test_no_conflict_when_all_links_same_dimension(self):
+        """多个值链接到同一目标维度 → 不冲突"""
+        dims = [
+            PipelineDimension(id="a", values=[
+                PipelineDimensionValue(id="a1", linked_value_ids=["b1"]),
+                PipelineDimensionValue(id="a2", linked_value_ids=["b1"]),
+            ]),
+            PipelineDimension(id="b", values=[
+                PipelineDimensionValue(id="b1"),
+                PipelineDimensionValue(id="b2"),
+            ]),
+        ]
+        result = list(expand_combinations(dims))
+        # a1: (a1, b1); a2: (a2, b1) = 2
         self.assertEqual(len(result), 2)
-        # 不应该有 tag_b
         for r in result:
-            self.assertNotEqual(r[1].id, "tag_b")
-
-    def test_no_tags_skips_combination(self):
-        """场景无 tags → 跳过该场景"""
-        dim_with_empty = PipelineDimension(
-            id="scene",
-            name="场景",
-            values=[
-                PipelineDimensionValue(id="s1", name="Scene 1"),  # no tags
-                PipelineDimensionValue(id="s2", name="Scene 2", tags=["tag_x"]),
-            ],
-        )
-        result = list(expand_combinations([dim_with_empty, self.tag_dim]))
-        self.assertEqual(len(result), 1)
-        self.assertEqual(result[0][0].id, "s2")
-        self.assertEqual(result[0][1].id, "tag_x")
-
-    def test_mixed_static_and_dynamic(self):
-        """静态维度 + 动态维度 混合"""
-        static_dim = PipelineDimension(
-            id="static",
-            name="静态",
-            values=[
-                PipelineDimensionValue(id="x", name="X"),
-                PipelineDimensionValue(id="y", name="Y"),
-            ],
-        )
-        result = list(expand_combinations([static_dim, self.scene_dim, self.tag_dim]))
-        # 2 statics × 4 scene×tag = 8
-        self.assertEqual(len(result), 8)
-        # 每个结果 3 个值
-        for r in result:
-            self.assertEqual(len(r), 3)
+            self.assertEqual(r[1].id, "b1")
 
 
 # ════════════════════════════════════════════════════════════════
