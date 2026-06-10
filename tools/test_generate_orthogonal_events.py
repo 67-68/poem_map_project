@@ -10,7 +10,9 @@ import sys
 sys.path.insert(0, ".")
 
 from tools.config import (
+    BlacklistDimensionConfig,
     DimensionCombo,
+    EventPipelineConfig,
     PipelineDimension,
     PipelineDimensionValue,
 )
@@ -20,8 +22,10 @@ from tools.generate_orthogonal_events import (
     _parse_dsl_args,
     _split_dsl_expressions,
     expand_combinations,
+    parse_llm_response,
     scale_dsl_operator,
     scale_all_operators,
+    SlidingBlacklist,
     default_config,
 )
 
@@ -598,6 +602,219 @@ class TestMakeCombos(unittest.TestCase):
         values = (PipelineDimensionValue(id="a1"), PipelineDimensionValue(id="b1"))
         with self.assertRaises(ValueError):
             _make_combos(dims, values)
+
+
+# ════════════════════════════════════════════════════════════════
+# SlidingBlacklist — 滑动黑名单生命周期
+# ════════════════════════════════════════════════════════════════
+
+class TestSlidingBlacklistInit(unittest.TestCase):
+    """SlidingBlacklist.init_from_config: 扫描维度配置"""
+
+    def test_no_blacklist_returns_none(self):
+        """没有维度配置黑名单 → 返回 None"""
+        cfg = EventPipelineConfig(
+            id="test",
+            name="Test",
+            dimensions=[
+                PipelineDimension(id="a", name="A", values=[PipelineDimensionValue(id="a1")]),
+            ],
+        )
+        bl = SlidingBlacklist.init_from_config(cfg)
+        self.assertIsNone(bl)
+
+    def test_single_blacklist_returns_instance(self):
+        """一个维度配置黑名单 → 返回 SlidingBlacklist 实例"""
+        cfg = EventPipelineConfig(
+            id="test",
+            name="Test",
+            dimensions=[
+                PipelineDimension(
+                    id="a", name="A",
+                    blacklist_config=BlacklistDimensionConfig(
+                        tracked_field="description",
+                        tracked_field_description="事件描述",
+                        max_items=10,
+                    ),
+                    values=[PipelineDimensionValue(id="a1")],
+                ),
+            ],
+        )
+        bl = SlidingBlacklist.init_from_config(cfg)
+        self.assertIsNotNone(bl)
+        self.assertEqual(bl.tracked_field, "description")
+        self.assertEqual(bl.max_items, 10)
+
+    def test_multi_blacklist_raises(self):
+        """多个维度配置黑名单 → 抛 ValueError"""
+        cfg = EventPipelineConfig(
+            id="test",
+            name="Test",
+            dimensions=[
+                PipelineDimension(
+                    id="a", name="A",
+                    blacklist_config=BlacklistDimensionConfig(tracked_field="description"),
+                    values=[PipelineDimensionValue(id="a1")],
+                ),
+                PipelineDimension(
+                    id="b", name="B",
+                    blacklist_config=BlacklistDimensionConfig(tracked_field="title"),
+                    values=[PipelineDimensionValue(id="b1")],
+                ),
+            ],
+        )
+        with self.assertRaises(ValueError) as ctx:
+            SlidingBlacklist.init_from_config(cfg)
+        self.assertIn("最多只能有一个维度配置黑名单", str(ctx.exception))
+
+
+class TestSlidingBlacklistLifecycle(unittest.TestCase):
+    """SlidingBlacklist 三阶段生命周期: prompt → extract → update"""
+
+    def setUp(self):
+        self.cfg = EventPipelineConfig(
+            id="test",
+            name="Test",
+            dimensions=[
+                PipelineDimension(
+                    id="dim_a", name="维度A",
+                    blacklist_config=BlacklistDimensionConfig(
+                        tracked_field="description",
+                        tracked_field_description="事件描述",
+                        max_items=3,
+                    ),
+                    values=[
+                        PipelineDimensionValue(id="v1", name="值1"),
+                        PipelineDimensionValue(id="v2", name="值2"),
+                    ],
+                ),
+            ],
+        )
+        self.bl = SlidingBlacklist.init_from_config(self.cfg)
+        self.combos_v1 = _make_combos(
+            self.cfg.dimensions,
+            (PipelineDimensionValue(id="v1", name="值1"),),
+        )
+        self.combos_v2 = _make_combos(
+            self.cfg.dimensions,
+            (PipelineDimensionValue(id="v2", name="值2"),),
+        )
+
+    def test_empty_blacklist_returns_empty_block(self):
+        """尚无历史 → get_prompt_block 返回空字符串"""
+        block = self.bl.get_prompt_block(self.combos_v1)
+        self.assertEqual(block, "")
+
+    def test_extract_and_update_then_block_non_empty(self):
+        """extract_and_update 后 → get_prompt_block 非空"""
+        parsed = {"summary": {"description": "玩家被门子索要了五两银子"}}
+        self.bl.extract_and_update(parsed, self.combos_v1)
+        block = self.bl.get_prompt_block(self.combos_v1)
+        self.assertIn("五两银子", block)
+
+    def test_per_value_isolation(self):
+        """不同维度值的黑名单相互隔离"""
+        parsed_v1 = {"summary": {"description": "门子让玩家在寒风中等待"}}
+        parsed_v2 = {"summary": {"description": "清客暗示需要润笔费"}}
+        self.bl.extract_and_update(parsed_v1, self.combos_v1)
+        self.bl.extract_and_update(parsed_v2, self.combos_v2)
+
+        block_v1 = self.bl.get_prompt_block(self.combos_v1)
+        block_v2 = self.bl.get_prompt_block(self.combos_v2)
+
+        self.assertIn("寒风中等待", block_v1)
+        self.assertNotIn("润笔费", block_v1)
+        self.assertIn("润笔费", block_v2)
+        self.assertNotIn("寒风中等待", block_v2)
+
+    def test_sliding_window_trims_oldest(self):
+        """超出 max_items (3) 时丢弃最老的条目"""
+        items = [f"事件第{i}号" for i in range(1, 6)]
+        for item in items:
+            parsed = {"summary": {"description": item}}
+            self.bl.extract_and_update(parsed, self.combos_v1)
+
+        block = self.bl.get_prompt_block(self.combos_v1)
+        # 只保留最近 3 条: 事件第3号、事件第4号、事件第5号
+        self.assertNotIn("事件第1号", block, "最老条目应被裁剪")
+        self.assertNotIn("事件第2号", block, "次老条目应被裁剪")
+        self.assertIn("事件第3号", block)
+        self.assertIn("事件第4号", block)
+        self.assertIn("事件第5号", block)
+
+    def test_missing_summary_skips_update(self):
+        """parsed 中没有 summary 块 → 跳过更新"""
+        parsed = {"title": "测试", "description": "desc"}
+        self.bl.extract_and_update(parsed, self.combos_v1)
+        block = self.bl.get_prompt_block(self.combos_v1)
+        self.assertEqual(block, "")
+
+    def test_missing_tracked_field_skips_update(self):
+        """summary 中没有 tracked_field → 跳过更新"""
+        parsed = {"summary": {"other_field": "xxx"}}
+        self.bl.extract_and_update(parsed, self.combos_v1)
+        block = self.bl.get_prompt_block(self.combos_v1)
+        self.assertEqual(block, "")
+
+
+# ════════════════════════════════════════════════════════════════
+# parse_llm_response — summary 嵌套块解析
+# ════════════════════════════════════════════════════════════════
+
+class TestParseLlmResponseSummary(unittest.TestCase):
+    """parse_llm_response 对 summary 嵌套块的解析"""
+
+    def test_summary_block_parsed(self):
+        """基本 summary 嵌套块解析"""
+        response = """title: 门子索贿
+description: 门子伸手要钱
+summary:
+  description: 门子索贿五两银子"""
+        parsed = parse_llm_response(response)
+        self.assertIn("summary", parsed)
+        self.assertEqual(parsed["summary"]["description"], "门子索贿五两银子")
+
+    def test_summary_with_multiple_fields(self):
+        """summary 块包含多个字段"""
+        response = """title: 门子索贿
+description: 门子伸手要钱
+summary:
+  description: 门子索贿五两银子
+  extra_info: 额外信息"""
+        parsed = parse_llm_response(response)
+        self.assertEqual(parsed["summary"]["description"], "门子索贿五两银子")
+        self.assertEqual(parsed["summary"]["extra_info"], "额外信息")
+
+    def test_summary_only_with_indent(self):
+        """只有缩进的子字段才归 summary，非缩进 → 退出 summary 模式"""
+        response = """title: 测试
+summary:
+  description: 摘要内容
+extra_field: 这不是 summary 子字段"""
+        parsed = parse_llm_response(response)
+        self.assertEqual(parsed["summary"]["description"], "摘要内容")
+        self.assertEqual(parsed["_extra"]["extra_field"], "这不是 summary 子字段")
+
+    def test_no_summary_returns_empty_dict(self):
+        """没有 summary 块 → summary 返回空 dict"""
+        response = """title: 测试
+description: 描述"""
+        parsed = parse_llm_response(response)
+        self.assertEqual(parsed["summary"], {})
+
+    def test_summary_after_options(self):
+        """在 options 块之后的 summary"""
+        response = """title: 测试
+description: 描述
+options:
+  opt_a: 选项A
+  opt_b: 选项B
+summary:
+  description: 对描述的摘要"""
+        parsed = parse_llm_response(response)
+        self.assertEqual(parsed["options"]["opt_a"], "选项A")
+        self.assertEqual(parsed["options"]["opt_b"], "选项B")
+        self.assertEqual(parsed["summary"]["description"], "对描述的摘要")
 
 
 if __name__ == "__main__":

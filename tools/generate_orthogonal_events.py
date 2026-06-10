@@ -44,6 +44,7 @@ if str(_project_root) not in sys.path:
 from openai import OpenAI
 
 from tools.config import (
+    BlacklistDimensionConfig,
     DimensionCombo,
     EventPipelineConfig,
     FactFeature,
@@ -64,6 +65,99 @@ from tools.plugin_base import (
 
 # ── 自动注册插件（import 触发 register_plugin） ──
 import tools.plugins  # noqa: F401 — 确保 PLUGIN_REGISTRY 已填充
+
+
+# ════════════════════════════════════════════════════════════════
+# 1a. 滑动黑名单运行时状态
+# ════════════════════════════════════════════════════════════════
+
+class SlidingBlacklist:
+    """维度级滑动黑名单运行时状态。
+
+    生命周期（三阶段钩子）:
+      1. init_from_config(cfg) — 扫描配置，如果恰好一个维度配置了黑名单则初始化
+      2. get_prompt_block(combos) — 根据当前维度值生成黑名单 prompt 片段
+      3. extract_and_update(parsed, combos) — 从 AI 响应提取 summary 并更新黑名单
+    """
+
+    def __init__(self, dimension: PipelineDimension, cfg: BlacklistDimensionConfig):
+        self.dimension = dimension
+        self.tracked_field = cfg.tracked_field
+        self.tracked_field_description = cfg.tracked_field_description or cfg.tracked_field
+        self.max_items = cfg.max_items
+        # val_id -> list[tracked_field_value]
+        self._history: dict[str, list[str]] = {}
+
+    @classmethod
+    def init_from_config(cls, cfg: EventPipelineConfig) -> Optional["SlidingBlacklist"]:
+        """扫描所有维度，找到挂载了 blacklist_config 的维度。
+
+        Returns:
+            SlidingBlacklist 实例，如果没有任何维度配置黑名单则返回 None。
+
+        Raises:
+            ValueError: 如果有超过一个维度配置了黑名单。
+        """
+        blacklisted = [d for d in cfg.dimensions if d.blacklist_config is not None]
+        if not blacklisted:
+            return None
+        if len(blacklisted) > 1:
+            dim_names = [d.name or d.id for d in blacklisted]
+            raise ValueError(
+                f"最多只能有一个维度配置黑名单，发现 {len(blacklisted)} 个: {dim_names}"
+            )
+        dim = blacklisted[0]
+        return cls(dim, dim.blacklist_config)  # type: ignore[arg-type]
+
+    def _get_val_id(self, combos: list[DimensionCombo]) -> str:
+        """从 combos 中找到本维度对应的值 ID。"""
+        for combo in combos:
+            if combo.dimension.id == self.dimension.id:
+                return combo.value.id
+        raise ValueError(f"组合中未找到维度 '{self.dimension.id}' 对应的值")
+
+    def get_prompt_block(self, combos: list[DimensionCombo]) -> str:
+        """根据当前维度组合，生成黑名单 prompt 片段（Phase 1 消费）。
+
+        如果该维度值尚无黑名单历史，返回空字符串。
+        """
+        val_id = self._get_val_id(combos)
+        items = self._history.get(val_id, [])
+        if not items:
+            return ""
+        lines = ["\n## ⛔ 黑名单（已为此维度值生成的内容，严禁重复）"]
+        lines.append(
+            f"以下是为当前维度值已生成的 summary.{self.tracked_field_description} "
+            "列表，请确保新生成的内容与已有内容在情节上有明显区分：\n"
+        )
+        for i, item in enumerate(items, 1):
+            text = item[:120] + "..." if len(item) > 120 else item
+            lines.append(f"{i}. {text}")
+        return "\n".join(lines)
+
+    def extract_and_update(self, parsed: dict, combos: list[DimensionCombo]) -> None:
+        """从解析后的 LLM 响应中提取 summary.{tracked_field} 并更新黑名单（Phase 2 消费）。
+
+        符合 Coder 模式的穷举日志要求：每个分支都有 logging。
+        """
+        val_id = self._get_val_id(combos)
+        summary = parsed.get("summary")
+        if not isinstance(summary, dict):
+            print("  ⚠️ 黑名单: parsed 中缺少 summary 块，跳过更新")
+            return
+        value = summary.get(self.tracked_field, "")
+        if not value or not value.strip():
+            print(f"  ⚠️ 黑名单: summary 中缺少 '{self.tracked_field}' 字段，跳过更新")
+            return
+        if val_id not in self._history:
+            self._history[val_id] = []
+        self._history[val_id].append(value.strip())
+        print(f"  📋 黑名单已更新 [{self.dimension.name} / {val_id}]: "
+              f"共 {len(self._history[val_id])} 条")
+        # 滑动窗口：超出 max_items 时丢弃最老的
+        if len(self._history[val_id]) > self.max_items:
+            self._history[val_id] = self._history[val_id][-self.max_items:]
+            print(f"  📋 黑名单滑动窗口已裁剪: 保留最近 {self.max_items} 条")
 
 
 # ════════════════════════════════════════════════════════════════
@@ -506,6 +600,7 @@ def build_user_prompt(
     word_count_min: Optional[int] = None,
     word_count_max: Optional[int] = None,
     plugins: Optional[list[EventPromptPlugin]] = None,
+    blacklist: Optional[SlidingBlacklist] = None,
 ) -> str:
     """组装 User Prompt（包含当前维度组合信息）。
     
@@ -517,6 +612,10 @@ def build_user_prompt(
 
     如果传入了 plugins，会调用每个 plugin.get_prompt_fragment() 将
     插件自定义指令追加到 prompt 末尾（Hook 1）。
+
+    如果传入了 blacklist，会：
+      - 在输出格式中追加 summary 嵌套块（如果尚未存在）
+      - 在 prompt 末尾追加黑名单历史列表
     """
     effective_min = word_count_min if word_count_min is not None else cfg.word_count_min
     effective_max = word_count_max if word_count_max is not None else cfg.word_count_max
@@ -561,6 +660,18 @@ options:
 
 title: <你的标题>
 description: <你的描述>""")
+
+    # ── 黑名单输出格式注入（Phase 5: 动态 summary.{tracked_field}） ──
+    # 在已有输出格式的末尾追加 summary 嵌套块
+    if blacklist is not None:
+        tf = blacklist.tracked_field
+        tf_desc = blacklist.tracked_field_description
+        summary_block = f"""
+同时，在输出的最后附加一个 summary 块，对 {tf_desc} 进行摘要总结：
+
+summary:
+  {tf}: <对{tf_desc}的摘要>"""
+        lines.append(summary_block)
 
     # ── Narrative Constraint: 结构化"写作契约"区块 ──
     # 收集所有维度的 narrative_constraint
@@ -622,66 +733,95 @@ description: <你的描述>""")
             if fragment.strip():
                 lines.append(f"\n## 额外要求（{plugin.plugin_id}）\n{fragment.strip()}")
 
+    # ── 黑名单历史注入（Phase 4: prompt 片段） ──
+    if blacklist is not None:
+        block = blacklist.get_prompt_block(combos)
+        if block.strip():
+            lines.append(block)
+
     return "\n".join(lines)
 
 
 def parse_llm_response(response: str) -> dict:
-    """解析 LLM 返回的 title/description/options 及任意额外字段。
+    """解析 LLM 返回的 title/description/options/summary 及任意额外字段。
 
     Hook 2 支持：插件声明的额外字段（如 failed_hint）会被自动捕获到
     parsed["_extra"] dict 中，供后续 enrich_context() 使用。
+
+    summary 支持嵌套块解析（YAML-like 缩进）:
+        summary:
+          description: <文本>
+          extra_field: <值>
 
     返回 dict 结构:
         title:       事件标题
         description: 事件描述
         options:     {option_id: option_text, ...}
+        summary:     {field_name: field_value, ...}（summary 嵌套块）
         _extra:      {field_name: field_value, ...}（非标准字段）
     """
     title = ""
     description = ""
     options: dict[str, str] = {}
+    summary: dict[str, str] = {}
     extra: dict[str, str] = {}
     in_options = False
+    in_summary = False
 
     for raw_line in response.split("\n"):
         line = raw_line.strip()
         if not line:
             in_options = False
+            in_summary = False
             continue
 
-        if line.startswith("title:") or line.startswith("title："):
+        # ── Block-mode handlers (必须优先于 keyword 匹配，避免 summary 内的
+        #    description: 覆盖主 description) ──
+        if in_summary:
+            if ":" in line and raw_line[0] in (" ", "\t"):
+                key, val = line.split(":", 1)
+                summary[key.strip()] = val.strip()
+                continue
+            else:
+                in_summary = False
+
+        if in_options:
+            if ":" in line and raw_line[0] in (" ", "\t"):
+                key, val = line.split(":", 1)
+                options[key.strip()] = val.strip()
+                continue
+            else:
+                in_options = False
+
+        # ── Keyword matching ──
+        if line.lower().startswith("summary"):
+            in_summary = True
+        elif line.lower().startswith("options"):
+            in_options = True
+        elif line.startswith("title:") or line.startswith("title："):
             sep = "：" if "：" in line else ":"
             title = line.split(sep, 1)[1].strip()
         elif line.startswith("description:") or line.startswith("description："):
             sep = "：" if "：" in line else ":"
             description = line.split(sep, 1)[1].strip()
-        elif line.lower().startswith("options"):
-            in_options = True
-        elif in_options and ":" in line:
-            # options 块内：仅缩进行才是选项；非缩进行自动退出 options 模式
-            if raw_line[0] in (" ", "\t"):
-                key, val = line.split(":", 1)
-                options[key.strip()] = val.strip()
-            else:
-                # 非缩进 → 退出 options 模式，交给下方 extra 捕获
-                in_options = False
-                # 不 return，直接 fall through 到 extra 捕获逻辑
-        if ":" in line and not in_options:
-            # 捕获 title/description/options 之外的所有顶层 key: value 行
-            if line.startswith("title:") or line.startswith("title："):
-                continue
-            if line.startswith("description:") or line.startswith("description："):
-                continue
-            if line.lower().startswith("options"):
-                continue
+        elif ":" in line:
+            # 捕获所有其他顶层 key: value 行
             sep_idx = line.find(":")
             key = line[:sep_idx].strip()
             val = line[sep_idx + 1:].strip()
             # 过滤掉空 key 和数字开头（避免误抓非字段行）
-            if key and not key[0].isdigit() and key not in ("title", "description", "options"):
+            if key and not key[0].isdigit() and key not in (
+                "title", "description", "options", "summary",
+            ):
                 extra[key] = val
 
-    return {"title": title, "description": description, "options": options, "_extra": extra}
+    return {
+        "title": title,
+        "description": description,
+        "options": options,
+        "summary": summary,
+        "_extra": extra,
+    }
 
 
 def validate_response(
@@ -909,21 +1049,36 @@ def load_config_from_json(path: str) -> EventPipelineConfig:
 
     # 解析 narrative_constraint 中的 text feature key
     # 将 demand_context / action_style 等字段的 key 引用解析为实际文本
+    # 注意：resolve_text_features() 已将 list[str] 转为 Pydantic 对象，
+    # 所以要先检查类型再决定用 .get() 还是 .getattr()
     library = load_text_features_library()
     for opt in data.get("option_features", []):
-        nc = opt.get("narrative_constraint")
-        if not nc or not isinstance(nc, dict):
+        if isinstance(opt, dict):
+            nc = opt.get("narrative_constraint")
+        else:
+            nc = getattr(opt, "narrative_constraint", None)
+        if not nc:
             continue
+        if isinstance(nc, dict):
+            nc_dict = nc
+        else:
+            # Pydantic BaseModel → dict
+            nc_dict = nc.model_dump()
         for field in ("demand_context", "action_style", "resolution_style"):
-            val = nc.get(field, "")
+            val = nc_dict.get(field, "")
             if not val or not isinstance(val, str):
                 continue
             # 如果该值在 prompt_features 中有对应 entry，则解析为实际文本
             try:
                 feature = library.resolve_prompt(val)
-                nc[field] = feature.text
+                nc_dict[field] = feature.text
             except KeyError:
                 pass  # 不是 key 引用，保持原值（向后兼容 inline text）
+        # 如果是 Pydantic 对象，将更新后的 dict 写回
+        if not isinstance(opt, dict) and isinstance(nc, dict):
+            for field in ("demand_context", "action_style", "resolution_style"):
+                if field in nc_dict:
+                    setattr(nc, field, nc_dict[field])
 
     return EventPipelineConfig.model_validate(data)
 
@@ -1015,6 +1170,19 @@ def main():
     for plugin in plugins:
         plugin.init(cfg)
 
+    # ── 初始化滑动黑名单 ──
+    blacklist: Optional[SlidingBlacklist] = None
+    try:
+        blacklist = SlidingBlacklist.init_from_config(cfg)
+        if blacklist is not None:
+            print(f"📋 滑动黑名单已启用: "
+                  f"维度='{blacklist.dimension.name}', "
+                  f"追踪字段='{blacklist.tracked_field}', "
+                  f"最大条目={blacklist.max_items}")
+    except ValueError as e:
+        print(f"❌ 黑名单配置错误: {e}")
+        sys.exit(1)
+
     dim_count = len(cfg.dimensions)
     if dim_count < 1:
         print(f"❌ 配置至少需要 1 个维度，当前有 {dim_count} 个")
@@ -1069,7 +1237,7 @@ def main():
         print("\n🏁 Dry-run 模式，不会调用 API")
         first_values = combinations[0]
         first_combos = _make_combos(cfg.dimensions, first_values)
-        user_prompt = build_user_prompt(first_combos, cfg, plugins=plugins)
+        user_prompt = build_user_prompt(first_combos, cfg, plugins=plugins, blacklist=blacklist)
         print(f"\n📋 示例 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
         print(user_prompt)
@@ -1119,6 +1287,7 @@ def main():
             current_combos, cfg,
             word_count_min=current_min, word_count_max=current_max,
             plugins=plugins,
+            blacklist=blacklist,
         )
         print(f"\n📋 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
@@ -1269,6 +1438,10 @@ def main():
                     req_csv = f'"{opt_req}"' if opt_req else ''
                     print(f'  >option,,,{req_csv},"（确认）","{dsl_csv}",,,,')
 
+                # ── 更新滑动黑名单 ──
+                if blacklist is not None:
+                    blacklist.extract_and_update(parsed, current_combos)
+
                 success = True
                 break
             else:
@@ -1286,6 +1459,7 @@ def main():
                             current_combos, cfg,
                             word_count_min=current_min, word_count_max=current_max,
                             plugins=plugins,
+                            blacklist=blacklist,
                         )
                     continue
                 print(f"  ⏭️ 跳过（已达最大重试次数）")
@@ -1336,6 +1510,7 @@ def main():
                 current_combos, cfg,
                 word_count_min=current_min, word_count_max=current_max,
                 plugins=plugins,
+                blacklist=blacklist,
             )
 
             for attempt in range(cfg.max_retries + 1):
@@ -1450,6 +1625,11 @@ def main():
                         )
                         write_option_row(writer, option_text, scaled_dsl, requirement=opt_req)
                         print(f"     option: {option_text}")
+
+                    # ── 更新滑动黑名单 ──
+                    if blacklist is not None:
+                        blacklist.extract_and_update(parsed, current_combos)
+
                     success_count += 1
                     break
                 else:
@@ -1467,6 +1647,7 @@ def main():
                                 current_combos, cfg,
                                 word_count_min=current_min, word_count_max=current_max,
                                 plugins=plugins,
+                                blacklist=blacklist,
                             )
                         continue
                     print(f"  ⏭️ 跳过（已达最大重试次数）")

@@ -48,6 +48,11 @@
       "id": "extraction_type",
       "name": "资源掠夺机制",
       "description": "玩家在这次拜谒中付出的主要代价类型",
+      "blacklist_config": {
+        "tracked_field": "description",
+        "tracked_field_description": "事件描述（包括具体做了什么和情节发展）",
+        "max_items": 20
+      },
       "values": [
         {
           "id": "TypeA",

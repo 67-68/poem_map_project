@@ -270,6 +270,30 @@ class SceneValue(PipelineDimensionValue):
     pass
 
 
+class BlacklistDimensionConfig(BaseModel):
+    """维度级滑动黑名单配置。
+
+    挂载到 PipelineDimension.blacklist_config，表示该维度启用黑名单机制。
+    配置驱动 tracked_field（如 summary.description），运行时自动注入 prompt
+    并维护每个维度值的生成摘要历史。
+
+    约束：一个 EventPipelineConfig 中最多只有一个维度挂载 blacklist_config。
+    """
+    tracked_field: str = Field(
+        default="description",
+        description="黑名单追踪的字段名（如 'description'），运行时会在输出格式中自动追加 summary.<tracked_field>",
+    )
+    tracked_field_description: str = Field(
+        default="",
+        description="对 tracked_field 的中文语义描述，用于黑名单 prompt 说明 AI 应该总结什么",
+    )
+    max_items: int = Field(
+        default=20,
+        ge=1,
+        description="黑名单滑动窗口最大条目数。超出时丢弃最老的条目。",
+    )
+
+
 class PipelineDimension(BaseModel):
     """维度定义：正交矩阵中的一个轴。
     
@@ -286,6 +310,9 @@ class PipelineDimension(BaseModel):
     dynamic: bool = False
     value_extractor_key: str = ""
     value_extractor_config: dict = {}
+
+    # 维度级滑动黑名单
+    blacklist_config: Optional[BlacklistDimensionConfig] = None
 
 
 class DimensionCombo(BaseModel):
