@@ -29,6 +29,7 @@ import csv
 import itertools
 import json
 import os
+import random
 import re
 import sys
 import time
@@ -816,21 +817,49 @@ def write_option_row(writer, description: str, result_dsl: str, requirement: str
 
 
 def _build_option_dsl(
-    scaled_dim_dsl: str,
+    combos: list[DimensionCombo],
     choice: OptionFeature,
-    combined_scale: float,
     universal_result: str = "",
 ) -> str:
     """构建选项级结果 DSL = 维度开销 + 选项自己的 result（或 universal_result fallback）
     
-    每个选项的结果由两部分组成：
-    1. 维度开销（dimension costs）：所有维度值的 operator_dsl 缩放后拼接
-    2. 选项自身 result（choice.result）：如果非空则叠加；如果为空则用 universal_result 兜底
+    支持 accept_influence 过滤：选项可以声明只接受哪些维度的影响。
     
-    这样固定选项（如"冷眼旁观"）可以有自己的 result（prop_sub career_progress），
-    而 AI 生成的选项可以继续用 universal_result。
+    每个选项的结果由三部分组成：
+    1. 维度开销（dimension costs）：根据 accept_influence 过滤后的维度 operator_dsl 缩放后拼接
+    2. 选项自身 result（choice.result）：如果非空则叠加；如果为空则用 universal_result 兜底
+    3. 所有数值均按过滤后的 combined_scale 缩放
+    
+    过滤规则（choice.accept_influence）：
+      - None → 接受全部维度（向后兼容）
+      - []   → 拒绝所有维度影响（如"拂袖而去"类选项）
+      - [id] → 只接受指定 dimension.id 的 scale + operator_dsl
     """
-    # 决定使用哪个 result：per-option > universal_result > 空
+    # ── 根据 accept_influence 过滤维度 ──
+    if choice.accept_influence is not None:
+        # 白名单模式：只保留在 accept_influence 列表中的维度
+        accepted = [
+            c for c in combos
+            if c.dimension.id in choice.accept_influence
+        ]
+    else:
+        # None = 接受全部（向后兼容）
+        accepted = combos
+
+    # ── 计算过滤后的 combined_scale ──
+    combined_scale = 1.0
+    for combo in accepted:
+        combined_scale *= combo.value.scale
+
+    # ── 收集并缩放维度 DSL ──
+    operator_dsls = [combo.value.operator_dsl for combo in accepted]
+    try:
+        scaled_dim_dsl = scale_all_operators(operator_dsls, combined_scale)
+    except ValueError as e:
+        print(f"  ⚠️ 维度 DSL 缩放失败: {e}，跳过")
+        scaled_dim_dsl = ""
+
+    # ── 决定使用哪个 result：per-option > universal_result > 空 ──
     result_dsl = choice.result if choice.result else universal_result
     if not result_dsl:
         return scaled_dim_dsl
@@ -958,7 +987,11 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="只打印 Prompt，不调 API")
     parser.add_argument("--trial", action="store_true", help="试运行：调1次API，打印所有中间产物，不保存CSV")
     parser.add_argument("--max-events", type=int, default=0, help="最多生成事件数（0=全部）")
+    parser.add_argument("--random", action="store_true", help="随机模式: 在 trial 模式下随机选择一个维度组合（而非总是第一个）")
     args = parser.parse_args()
+
+    if args.random and not args.trial:
+        print("⚠️  --random 仅在 --trial 模式下生效，已忽略")
 
     # ── 加载配置 ──
     if args.config:
@@ -1051,8 +1084,12 @@ def main():
     if args.trial:
         print("\n🧪 试运行模式 — 将实际调用 API 1 次，不保存任何文件")
 
-        # 只跑第一个组合
-        values_tuple = combinations[0]
+        # 随机或默认选择组合
+        if args.random and len(combinations) > 1:
+            values_tuple = random.choice(combinations)
+            print(f"  🎲 随机模式: 从 {len(combinations)} 个组合中随机选取")
+        else:
+            values_tuple = combinations[0]
         combined_scale = 1.0
         scale_parts = []
         uuid_parts = [cfg.id]
@@ -1206,9 +1243,9 @@ def main():
                             if not opt_text:
                                 opt_text = choice.text if choice.text.strip() else "（确认）"
 
-                        # 结果 DSL：维度开销 + per-option result（或 universal_result fallback）
+                        # 结果 DSL：维度开销（按 accept_influence 过滤）+ per-option result
                         opt_dsl = _build_option_dsl(
-                            scaled_dsl, choice, combined_scale,
+                            current_combos, choice,
                             universal_result=cfg.universal_result or "",
                         )
                         dsl_csv = opt_dsl.replace('"', '""')
@@ -1389,9 +1426,9 @@ def main():
                                 if not opt_text:
                                     opt_text = choice.text if choice.text.strip() else "（确认）"
 
-                            # 结果 DSL：维度开销 + per-option result（或 universal_result fallback）
+                            # 结果 DSL：维度开销（按 accept_influence 过滤）+ per-option result
                             opt_dsl = _build_option_dsl(
-                                scaled_dsl, choice, combined_scale,
+                                current_combos, choice,
                                 universal_result=cfg.universal_result or "",
                             )
 

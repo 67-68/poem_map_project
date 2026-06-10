@@ -91,6 +91,10 @@ class OptionFeature(TextFeature):
     result: 选项级结果 DSL，如 "prop_sub(name=career_progress; val=2)"
     requirement: 选项级需求 DSL，如 'poem_has(type=GAN_YE; min_level=1)'
     fixed:  True=固定文本（跳过 AI 生成），False=AI 生成
+    accept_influence: 接受的维度影响白名单（dimension ID 列表）。
+                      None=接受全部维度影响（向后兼容），
+                      []=拒绝所有维度影响（如"拂袖而去"类选项），
+                      ["dim_A"]=只接受指定维度的 scale + operator_dsl。
     narrative_constraint: 结构化叙事约束（可选），如 blind_box_transaction
     plugins: 插件配置挂载点（可选），key=插件ID, value=插件自定义结构
              如 {"failed_hint": {"style": "mock_direct_speech", "max_chars": 20}}
@@ -103,6 +107,10 @@ class OptionFeature(TextFeature):
     requirement: str = ""
     fixed: bool = False
     prompt: str = ""
+    accept_influence: Optional[list[str]] = Field(
+        default=None,
+        description="接受的维度影响白名单（dimension ID 列表）。None=接受全部（向后兼容）",
+    )
     narrative_constraint: Optional[NarrativeConstraint] = None
     plugins: dict[str, dict] = Field(
         default_factory=dict,

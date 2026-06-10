@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_dxgfc"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_v8p1c"]
 
-[sub_resource type="Resource" id="Resource_1sjdg"]
+[sub_resource type="Resource" id="Resource_x1ebc"]
 script = ExtResource("3_tbecs")
 str_props = "money"
 value = -10
 
-[sub_resource type="Resource" id="Resource_tt4hv"]
+[sub_resource type="Resource" id="Resource_x285l"]
 script = ExtResource("3_tbecs")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_tbecs"]
+[sub_resource type="Resource" id="Resource_dllil"]
 script = ExtResource("3_tbecs")
 str_props = "career_progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_11vex"]
+[sub_resource type="Resource" id="Resource_yflg6"]
 script = ExtResource("4_11vex")
-operators = Array[ExtResource("2_tt4hv")]([SubResource("Resource_1sjdg"), SubResource("Resource_tt4hv"), SubResource("Resource_tbecs")])
+operators = Array[ExtResource("2_tt4hv")]([SubResource("Resource_x1ebc"), SubResource("Resource_x285l"), SubResource("Resource_dllil")])
 
-[sub_resource type="Resource" id="Resource_4mv8h"]
+[sub_resource type="Resource" id="Resource_4mtxl"]
 script = ExtResource("5_4mv8h")
-choice_result = SubResource("Resource_11vex")
+choice_result = SubResource("Resource_yflg6")
 description = "取出银钱递进门子袖中，低声道劳烦。"
 
-[sub_resource type="Resource" id="Resource_dxgfc"]
+[sub_resource type="Resource" id="Resource_cuo4j"]
 script = ExtResource("6_dxgfc")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_v8p1c")
-requirement = SubResource("Resource_dxgfc")
+requirement = SubResource("Resource_cuo4j")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_1sjdg")]([SubResource("Resource_4mv8h")])
+options = Array[ExtResource("1_1sjdg")]([SubResource("Resource_4mtxl")])
 uuid = "bai_ye_honeymoon_l0_typea_m0"
 name = "门吏索谒钱"
 description = "“相公今日在书房会客，吩咐过闲人不得打扰。”说罢，目光在你腰间钱袋上停了一停，又移向别处。廊下传来脚步声，一个捧茶的小仆走过，这门子忽然厉声喝道：“站远些！也不看看这是什么地方！”转头又对你压低声音：“若要通报，总得先让在下沾些墨香。”"

@@ -8,45 +8,45 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_co805"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_bjfm5"]
 
-[sub_resource type="Resource" id="Resource_8a6qb"]
+[sub_resource type="Resource" id="Resource_wkaxr"]
 script = ExtResource("3_bmvlg")
 str_props = "money"
 value = -15
 
-[sub_resource type="Resource" id="Resource_tabge"]
+[sub_resource type="Resource" id="Resource_ui4xf"]
 script = ExtResource("3_bmvlg")
 str_props = "fatigue"
 value = -12
 
-[sub_resource type="Resource" id="Resource_bmvlg"]
+[sub_resource type="Resource" id="Resource_1oxnd"]
 script = ExtResource("3_bmvlg")
 str_props = "money"
 value = -60
 
-[sub_resource type="Resource" id="Resource_e7k45"]
+[sub_resource type="Resource" id="Resource_ujooa"]
 script = ExtResource("3_bmvlg")
 str_props = "career_progress"
 value = 15
 
-[sub_resource type="Resource" id="Resource_034fk"]
+[sub_resource type="Resource" id="Resource_osfmh"]
 script = ExtResource("4_e7k45")
-operators = Array[ExtResource("2_tabge")]([SubResource("Resource_8a6qb"), SubResource("Resource_tabge"), SubResource("Resource_bmvlg"), SubResource("Resource_e7k45")])
+operators = Array[ExtResource("2_tabge")]([SubResource("Resource_wkaxr"), SubResource("Resource_ui4xf"), SubResource("Resource_1oxnd"), SubResource("Resource_ujooa")])
 
-[sub_resource type="Resource" id="Resource_co805"]
+[sub_resource type="Resource" id="Resource_pyr4v"]
 script = ExtResource("5_034fk")
-choice_result = SubResource("Resource_034fk")
+choice_result = SubResource("Resource_osfmh")
 description = "倾囊市纸，献于座前"
 
-[sub_resource type="Resource" id="Resource_bjfm5"]
+[sub_resource type="Resource" id="Resource_7lddk"]
 script = ExtResource("6_co805")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_bjfm5")
-requirement = SubResource("Resource_bjfm5")
+requirement = SubResource("Resource_7lddk")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_8a6qb")]([SubResource("Resource_co805")])
+options = Array[ExtResource("1_8a6qb")]([SubResource("Resource_pyr4v")])
 uuid = "bai_ye_honeymoon_l2_typea_m1"
 name = "画前荐礼"
 description = "中书令府邸正堂，沉香木案上悬一幅《春江游宴图》。你站了半个时辰，李林甫才从屏风后踱出，目光掠过你的名刺，落在那画上。“此乃吴道子早年手笔，本王前日偶得。”他捻着玉带，语气平淡如论晨起天光，“只是裱工粗疏，缺一味托裱的诚意。听说你祖上藏过澄心堂纸？”他的指尖轻叩画轴，铜鎏金指套敲出清脆声响。侍者捧来空卷轴与墨砚，静静立在一旁。"

@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_psc34"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_0npp3"]
 
-[sub_resource type="Resource" id="Resource_8vf2t"]
+[sub_resource type="Resource" id="Resource_paebv"]
 script = ExtResource("3_vtmpa")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_rtxw6"]
+[sub_resource type="Resource" id="Resource_wojcj"]
 script = ExtResource("3_vtmpa")
 str_props = "money"
 value = -15
 
-[sub_resource type="Resource" id="Resource_vtmpa"]
+[sub_resource type="Resource" id="Resource_cm17q"]
 script = ExtResource("3_vtmpa")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_ygkyk"]
+[sub_resource type="Resource" id="Resource_ft6dg"]
 script = ExtResource("4_ygkyk")
-operators = Array[ExtResource("2_rtxw6")]([SubResource("Resource_8vf2t"), SubResource("Resource_rtxw6"), SubResource("Resource_vtmpa")])
+operators = Array[ExtResource("2_rtxw6")]([SubResource("Resource_paebv"), SubResource("Resource_wojcj"), SubResource("Resource_cm17q")])
 
-[sub_resource type="Resource" id="Resource_ok27m"]
+[sub_resource type="Resource" id="Resource_n2n5v"]
 script = ExtResource("5_ok27m")
-choice_result = SubResource("Resource_ygkyk")
+choice_result = SubResource("Resource_ft6dg")
 description = "取一贯钱，随小厮去账房"
 
-[sub_resource type="Resource" id="Resource_psc34"]
+[sub_resource type="Resource" id="Resource_uo778"]
 script = ExtResource("6_psc34")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_0npp3")
-requirement = SubResource("Resource_psc34")
+requirement = SubResource("Resource_uo778")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_8vf2t")]([SubResource("Resource_ok27m")])
+options = Array[ExtResource("1_8vf2t")]([SubResource("Resource_n2n5v")])
 uuid = "bai_ye_honeymoon_l1_typea_m2"
 name = "换簿之礼"
 description = "“郎中日理万机，拜谒者甚多，这登门簿还是三年前的旧本，字迹漫漶，该换新册了。”他将簿册合上，手指轻轻叩了叩封皮，便转身出去。你注意到案角压着一张纸，上面写着“制新册需纸墨钱一贯”。门外脚步声渐远，小厮探头进来，低声道：“这是规矩，换了簿子才好通传。”"

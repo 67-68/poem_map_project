@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_yvweo"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_n0oet"]
 
-[sub_resource type="Resource" id="Resource_vxv4h"]
+[sub_resource type="Resource" id="Resource_ks8oq"]
 script = ExtResource("3_thhql")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_6duxt"]
+[sub_resource type="Resource" id="Resource_gxvkc"]
 script = ExtResource("3_thhql")
 str_props = "money"
 value = -15
 
-[sub_resource type="Resource" id="Resource_thhql"]
+[sub_resource type="Resource" id="Resource_501y5"]
 script = ExtResource("3_thhql")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_lh62a"]
+[sub_resource type="Resource" id="Resource_mmrgy"]
 script = ExtResource("4_lh62a")
-operators = Array[ExtResource("2_6duxt")]([SubResource("Resource_vxv4h"), SubResource("Resource_6duxt"), SubResource("Resource_thhql")])
+operators = Array[ExtResource("2_6duxt")]([SubResource("Resource_ks8oq"), SubResource("Resource_gxvkc"), SubResource("Resource_501y5")])
 
-[sub_resource type="Resource" id="Resource_ttrtq"]
+[sub_resource type="Resource" id="Resource_26bik"]
 script = ExtResource("5_ttrtq")
-choice_result = SubResource("Resource_lh62a")
+choice_result = SubResource("Resource_mmrgy")
 description = "取出银两，称谢道：“有劳先生打点。”"
 
-[sub_resource type="Resource" id="Resource_yvweo"]
+[sub_resource type="Resource" id="Resource_4c7hf"]
 script = ExtResource("6_yvweo")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_n0oet")
-requirement = SubResource("Resource_yvweo")
+requirement = SubResource("Resource_4c7hf")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_vxv4h")]([SubResource("Resource_ttrtq")])
+options = Array[ExtResource("1_vxv4h")]([SubResource("Resource_26bik")])
 uuid = "bai_ye_honeymoon_l1_typea_m0"
 name = "递话之费"
 description = "“郎君来得不巧，相爷正批阅陇右军报。”他捻起案上的一支笔，笔尖在砚台里缓缓搅动，又低声补了句：“听闻郎君文采斐然，只是这递话的纸墨，向来要东市‘文锦坊’的货，一份便是一两银子的本钱。”你看见他袖口露出半截红封，那是方才另一位谒者留下的。"

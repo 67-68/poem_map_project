@@ -8,45 +8,45 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_osjeo"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ljhoi"]
 
-[sub_resource type="Resource" id="Resource_dm2qu"]
+[sub_resource type="Resource" id="Resource_odja6"]
 script = ExtResource("3_e5rb2")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_ttf8v"]
+[sub_resource type="Resource" id="Resource_4ejq2"]
 script = ExtResource("3_e5rb2")
 str_props = "fatigue"
 value = -10
 
-[sub_resource type="Resource" id="Resource_e5rb2"]
+[sub_resource type="Resource" id="Resource_n444n"]
 script = ExtResource("3_e5rb2")
 str_props = "money"
 value = -40
 
-[sub_resource type="Resource" id="Resource_wusn2"]
+[sub_resource type="Resource" id="Resource_7pl26"]
 script = ExtResource("3_e5rb2")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_rv4qn"]
+[sub_resource type="Resource" id="Resource_hgjk6"]
 script = ExtResource("4_wusn2")
-operators = Array[ExtResource("2_ttf8v")]([SubResource("Resource_dm2qu"), SubResource("Resource_ttf8v"), SubResource("Resource_e5rb2"), SubResource("Resource_wusn2")])
+operators = Array[ExtResource("2_ttf8v")]([SubResource("Resource_odja6"), SubResource("Resource_4ejq2"), SubResource("Resource_n444n"), SubResource("Resource_7pl26")])
 
-[sub_resource type="Resource" id="Resource_osjeo"]
+[sub_resource type="Resource" id="Resource_emg1k"]
 script = ExtResource("5_rv4qn")
-choice_result = SubResource("Resource_rv4qn")
+choice_result = SubResource("Resource_hgjk6")
 description = "解下银袋双手呈上。"
 
-[sub_resource type="Resource" id="Resource_ljhoi"]
+[sub_resource type="Resource" id="Resource_7ovj2"]
 script = ExtResource("6_osjeo")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_ljhoi")
-requirement = SubResource("Resource_ljhoi")
+requirement = SubResource("Resource_7ovj2")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_dm2qu")]([SubResource("Resource_osjeo")])
+options = Array[ExtResource("1_dm2qu")]([SubResource("Resource_emg1k")])
 uuid = "bai_ye_honeymoon_l2_typea_m0"
 name = "相府献金"
 description = "“新科进士？好，好。”他呷一口茶，忽然叹道：“圣人近日问起底下可有人才，老夫正愁无人荐贤。只是这引荐之礼，需得周全些，免教人说我轻慢了朝廷体统。”说罢，目光落在你腰间玉带上，久久不移。"

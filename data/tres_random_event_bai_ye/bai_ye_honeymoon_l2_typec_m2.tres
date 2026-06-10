@@ -8,45 +8,45 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_1wxwc"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_7fd5b"]
 
-[sub_resource type="Resource" id="Resource_snnkg"]
+[sub_resource type="Resource" id="Resource_mpipd"]
 script = ExtResource("3_p03en")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_c1wdj"]
+[sub_resource type="Resource" id="Resource_ig07u"]
 script = ExtResource("3_p03en")
 str_props = "fatigue"
 value = -10
 
-[sub_resource type="Resource" id="Resource_p03en"]
+[sub_resource type="Resource" id="Resource_vp0fb"]
 script = ExtResource("3_p03en")
 str_props = "fatigue"
 value = -12
 
-[sub_resource type="Resource" id="Resource_tj4hb"]
+[sub_resource type="Resource" id="Resource_ibdv2"]
 script = ExtResource("3_p03en")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_suabg"]
+[sub_resource type="Resource" id="Resource_oj33l"]
 script = ExtResource("4_tj4hb")
-operators = Array[ExtResource("2_c1wdj")]([SubResource("Resource_snnkg"), SubResource("Resource_c1wdj"), SubResource("Resource_p03en"), SubResource("Resource_tj4hb")])
+operators = Array[ExtResource("2_c1wdj")]([SubResource("Resource_mpipd"), SubResource("Resource_ig07u"), SubResource("Resource_vp0fb"), SubResource("Resource_ibdv2")])
 
-[sub_resource type="Resource" id="Resource_1wxwc"]
+[sub_resource type="Resource" id="Resource_w474d"]
 script = ExtResource("5_suabg")
-choice_result = SubResource("Resource_suabg")
+choice_result = SubResource("Resource_oj33l")
 description = "敛容端坐，谨候垂询"
 
-[sub_resource type="Resource" id="Resource_7fd5b"]
+[sub_resource type="Resource" id="Resource_2y2yp"]
 script = ExtResource("6_1wxwc")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_7fd5b")
-requirement = SubResource("Resource_7fd5b")
+requirement = SubResource("Resource_2y2yp")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_snnkg")]([SubResource("Resource_1wxwc")])
+options = Array[ExtResource("1_snnkg")]([SubResource("Resource_w474d")])
 uuid = "bai_ye_honeymoon_l2_typec_m2"
 name = "冷榻待问"
 description = "巳时三刻，你被引入尚书省户部侍郎刘晏的內厅。他正伏案批阅文书，头也不抬，只道一句“且坐”。你躬身坐下，茶也未上。约莫两刻钟后，他展卷问你“岭南漕粮折价几何”，未等你答完，又低头写判词。如此往复三次，你始终跪坐于冰冷的地席之上，膝盖隐隐发麻。门外的漏壶滴水声清晰可闻。"

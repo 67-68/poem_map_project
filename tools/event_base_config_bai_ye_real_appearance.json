@@ -8,8 +8,10 @@
     "tone_cold_malice",
     "forbid_comedy_exaggeration",
     "forbid_god_view_psychology",
-    "ambiguous_narrative"
+    "ambiguous_narrative",
+    "anti_repetition"
   ],
+  "anti_repetition_directive": "极度痛恨重复的意象表达。在生成同一批次的不同事件时，绝对禁止复用相同的具象动作（如涉及'火'的任何动作、同一种纸张处置方式、同一种羞辱姿势等）。必须在物理损坏、生活消耗、结构性无视、才华剥夺等维度中强制跳跃。",
   "fact_features": [
     "bai_ye_venue"
   ],
@@ -37,6 +39,7 @@
       "id": "option_cold_eye",
       "text": "拂袖而去",
       "result": "prop_sub(name=career_progress; val=2)",
+      "accept_influence": [],
       "fixed": true
     }
   ],
@@ -54,7 +57,7 @@
           "operator_dsl": "prop_sub(name=money; val=5)",
           "narrative_constraint": {
             "type": "power_gate_L0",
-            "demand_context": "门子索要门包或名帖，以物理阻挡为手段（拦门、不通报、让玩家在门外挨冻）。NPC 是底层文盲，看不懂诗，诗在他眼里不如引火纸。【严禁】门子涉及政治迫害、流放、杀头等超越微权力的夸张情节。",
+            "demand_context": "门子索要门包或名帖，以物理阻挡为手段（拦门、不通报、让玩家在门外挨冻）。NPC 是底层文盲，看不懂诗，诗在他眼里只是任意一种没有价值的日常消耗品，任何低贱的处置方式都是合理的。【严禁】门子涉及政治迫害、流放、杀头等超越微权力的夸张情节。【严禁】在不同事件中重复使用相同的处置方式。",
             "action_style": "玩家只能被动回应——递上名帖、掏出银钱、退回门外。动作描写保持中性。【严禁】玩家主动质问、反击、讲道理或发表议论。",
             "resolution_style": "NPC 验货后反应。有实惠（钱/诗）则放行但态度仍傲慢，无实惠则嘲讽后赶人。用动作和表情呈现结果，不用内心独白。",
             "negative_examples": [
@@ -126,14 +129,14 @@
         {
           "id": "TypeB",
           "name": "精神摧毁 — 愤怒的积累",
-          "description": "最难愈合的伤在心里。被当众念诗嘲笑、被踩踏诗稿、被当引火纸——每一次被羞辱都在心底埋下愤怒。",
+          "description": "最难愈合的伤在心里。被当众念诗嘲笑、被踩踏诗稿——每一次被羞辱都在心底埋下愤怒。",
           "scale": 1.0,
           "operator_dsl": "prop_sub(name=health; val=10)",
           "narrative_constraint": {
             "type": "cost_spirit",
-            "demand_context": "NPC 用具体动作贬低玩家的诗和尊严——怪腔怪调念诗、用鞋碾诗稿、吩咐拿去引火。羞辱越具体越残忍，不要喊口号式的辱骂。",
+            "demand_context": "NPC 用具体动作贬低玩家的诗和尊严——羞辱必须通过具体的外在动作呈现（念、踩、丢、揉等任何形式），动作必须与 NPC 身份阶层匹配。羞辱越具体越残忍，不要喊口号式的辱骂。【严禁】在同一批次的不同事件中复用相同的羞辱动作。",
             "action_style": "",
-            "resolution_style": "呈现诗稿被糟蹋的方式——被揉皱、被踩踏、被引火、被当废纸。糟蹋诗的方式就是糟蹋灵魂的方式。",
+            "resolution_style": "呈现诗稿被糟蹋的方式——被揉皱、被踩踏、被丢弃、被当废纸。糟蹋诗的方式就是糟蹋灵魂的方式。【严禁】在不同事件中复用相同的糟蹋方式。",
             "negative_examples": [
               {"field": "demand_context", "bad": "NPC 骂你'废物'、'垃圾'", "reason": "直白的辱骂太廉价。要用对诗的具体动作来羞辱——念诗的怪腔调、碾诗稿的鞋底，这些细节比骂一万句都狠"},
               {"field": "resolution_style", "bad": "你感到非常愤怒，但忍住了", "reason": "不要写玩家的内心感受。只用外部动作和场景呈现，让玩家自己感受"}
@@ -143,14 +146,14 @@
         {
           "id": "TypeC",
           "name": "才华剥削 — 灵魂的质押",
-          "description": "最阴险的代价——才华被吞噬。诗稿被引火、被改得面目全非、署名被抹去、被逼写政治黑材料。",
+          "description": "最阴险的代价——才华被吞噬。诗稿被改得面目全非、署名被抹去、被逼写政治黑材料，或被任意其他形式剥夺。",
           "scale": 1.0,
           "operator_dsl": "prop_sub(name=talent; val=10)",
           "narrative_constraint": {
             "type": "cost_talent",
-            "demand_context": "NPC 掠夺或改造玩家的诗——门子拿去引火、文法吏改得面目全非、权贵抢夺署名权或逼写黑材料。呈现的是才华被消耗的过程。",
+            "demand_context": "NPC 掠夺或改造玩家的诗——或沦为低贱的日常消耗品、或被篡改得面目全非、或剥夺署名权、或逼迫撰写违心之辞。呈现的是才华被消耗的过程。掠夺方式必须与 NPC 身份阶层匹配。【严禁】在同一批次的不同事件中复用相同的掠夺方式。",
             "action_style": "",
-            "resolution_style": "呈现不可逆的损失感——诗变成引火纸化为灰烬、被改得面目全非的稿子、被抹去的署名。用诗的下场暗示才华的流失。",
+            "resolution_style": "呈现不可逆的损失感——被低贱处置的残稿、被涂改得面目全非的草稿、被抹去的署名、或被掠夺的完成品。用诗稿的下场暗示才华的流失。【严禁】复用相同的处置方式。",
             "negative_examples": [
               {"field": "demand_context", "bad": "权贵说：'你的诗不错，以后替我写'", "reason": "太温和。要呈现强制性和掠夺感——不是征求同意，而是直接宣告"},
               {"field": "resolution_style", "bad": "你意识到自己的才华正在被消耗", "reason": "不要写玩家的内心活动。用诗稿被处理的外部事实呈现后果"}
@@ -162,7 +165,7 @@
   ],
   "universal_requirement": "prop_gt(name=career_progress; val=70),prop_lt(name=career_progress; val=100)",
   "plugins": ["failed_hint"],
-  "word_count_min": 80,
+  "word_count_min": 40,
   "word_count_max": 200,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
