@@ -46,6 +46,7 @@ from tools.config import (
     DimensionCombo,
     EventPipelineConfig,
     FactFeature,
+    load_text_features_library,
     OptionFeature,
     PipelineDimension,
     PipelineDimensionValue,
@@ -533,15 +534,19 @@ def build_user_prompt(
 - 使用全角中文标点"""]
 
     # 如果有选项定义，注入到 prompt 中
-    if cfg.option_features:
+    # 只注入非固定选项（fixed=False），固定选项直接使用配置文本，不劳烦 AI
+    ai_options = [of for of in (cfg.option_features or []) if not of.fixed]
+    if ai_options:
         lines.append("""
 ## 选项
 为以下每个选项生成描述文本（每个不超过20字）：""")
-        for of in cfg.option_features:
-            if of.text.strip():
-                lines.append(f"- {of.id}: {of.text.strip()}")
+        for of in ai_options:
+            # 使用 prompt 字段，如果为空则回退到 text（向后兼容）
+            instruction = of.prompt if of.prompt.strip() else of.text
+            if instruction.strip():
+                lines.append(f"- {of.id}: {instruction.strip()}")
         # 用实际的 option id 生成格式示例
-        opt_examples = "\n".join(f" {of.id}: <{of.id}文本>" for of in cfg.option_features)
+        opt_examples = "\n".join(f" {of.id}: <{of.id}文本>" for of in ai_options)
         lines.append(f"""
 输出格式如下，不要多余的内容：
 
@@ -555,6 +560,59 @@ options:
 
 title: <你的标题>
 description: <你的描述>""")
+
+    # ── Narrative Constraint: 结构化"写作契约"区块 ──
+    # 收集所有维度的 narrative_constraint
+    dim_constrained = [
+        combo for combo in combos
+        if combo.value.narrative_constraint is not None
+    ]
+    # 遍历所有选项，对有 narrative_constraint 且字段非空的选项渲染固定格式约束
+    constrained_options = [
+        of for of in (cfg.option_features or [])
+        if of.narrative_constraint is not None
+    ]
+    if dim_constrained or constrained_options:
+        lines.append("\n## 📜 写作契约 (Narrative Constraint)")
+
+        # ── 维度级约束 ──
+        for combo in dim_constrained:
+            nc = combo.value.narrative_constraint
+            type_tag = f" [{nc.type}]" if nc.type else ""
+            lines.append(f"\n### 维度 \"{combo.value.name}\"{type_tag}")
+            if nc.demand_context:
+                lines.append(f"- 📣 索取层 (NPC Demand): {nc.demand_context}")
+            if nc.action_style:
+                lines.append(f"- 🎭 执行层 (Player Action): {nc.action_style}")
+            if nc.resolution_style:
+                lines.append(f"- 💀 揭晓层 (System Resolution): {nc.resolution_style}")
+            if nc.negative_examples:
+                lines.append(f"\n  ⛔ 反面教材（禁止出现以下写法）:")
+                for ex in nc.negative_examples:
+                    if ex.bad:
+                        lines.append(f"    ❌ [{ex.field}] \"{ex.bad}\"")
+                    if ex.reason:
+                        lines.append(f"      原因: {ex.reason}")
+
+        # ── 选项级约束 ──
+        for of in constrained_options:
+            nc = of.narrative_constraint
+            type_tag = f" [{nc.type}]" if nc.type else ""
+            lines.append(f"\n### 选项 \"{of.id}\"{type_tag}")
+            if nc.demand_context:
+                lines.append(f"- 📣 索取层 (NPC Demand): {nc.demand_context}")
+            if nc.action_style:
+                lines.append(f"- 🎭 执行层 (Player Action): {nc.action_style}")
+            if nc.resolution_style:
+                lines.append(f"- 💀 揭晓层 (System Resolution): {nc.resolution_style}")
+            # ── 反面教材（Negative Prompting）──
+            if nc.negative_examples:
+                lines.append(f"\n  ⛔ 反面教材（禁止出现以下写法）:")
+                for ex in nc.negative_examples:
+                    if ex.bad:
+                        lines.append(f"    ❌ [{ex.field}] \"{ex.bad}\"")
+                    if ex.reason:
+                        lines.append(f"      原因: {ex.reason}")
 
     # ── Hook 1: 插件 Prompt 片段注入 ──
     if plugins:
@@ -653,9 +711,11 @@ def validate_response(
     if desc_len > effective_max * 1.2:
         return f"description 过长 ({desc_len}字，要求{effective_max}字以内)"
 
-    # 如果定义了选项，验证每个选项都有文本
+    # 如果定义了选项，验证每个非固定选项（fixed=False）都有 AI 生成的文本
+    # 固定选项（fixed=True）直接使用配置文本，不校验
+    ai_options = [of for of in (cfg.option_features or []) if not of.fixed]
     options = parsed.get("options", {})
-    for of in cfg.option_features:
+    for of in ai_options:
         opt_text = options.get(of.id, "").strip()
         if not opt_text:
             return f"选项 '{of.id}' 为空"
@@ -755,6 +815,56 @@ def write_option_row(writer, description: str, result_dsl: str, requirement: str
     ])
 
 
+def _build_option_dsl(
+    scaled_dim_dsl: str,
+    choice: OptionFeature,
+    combined_scale: float,
+    universal_result: str = "",
+) -> str:
+    """构建选项级结果 DSL = 维度开销 + 选项自己的 result（或 universal_result fallback）
+    
+    每个选项的结果由两部分组成：
+    1. 维度开销（dimension costs）：所有维度值的 operator_dsl 缩放后拼接
+    2. 选项自身 result（choice.result）：如果非空则叠加；如果为空则用 universal_result 兜底
+    
+    这样固定选项（如"冷眼旁观"）可以有自己的 result（prop_sub career_progress），
+    而 AI 生成的选项可以继续用 universal_result。
+    """
+    # 决定使用哪个 result：per-option > universal_result > 空
+    result_dsl = choice.result if choice.result else universal_result
+    if not result_dsl:
+        return scaled_dim_dsl
+
+    try:
+        scaled_result = scale_all_operators([result_dsl], combined_scale)
+    except ValueError as e:
+        print(f"  ⚠️ 选项 '{choice.id}' result DSL 缩放失败: {e}，跳过")
+        return scaled_dim_dsl
+
+    if scaled_dim_dsl:
+        return f"{scaled_dim_dsl} | {scaled_result}"
+    return scaled_result
+
+
+def _build_option_requirement(
+    choice: OptionFeature,
+    failed_hint_val: str = "",
+    universal_option_requirement: str = "",
+) -> str:
+    """构建选项级 requirement = 选项自己的 requirement（或 universal fallback）
+    
+    支持 {failed_hint} 模板变量替换。
+    """
+    req = choice.requirement if choice.requirement else universal_option_requirement
+    if not req:
+        return ""
+    if "{failed_hint}" in req and failed_hint_val:
+        req = req.replace("{failed_hint}", failed_hint_val)
+    elif "{failed_hint}" in req:
+        req = req.replace("{failed_hint}", "")
+    return req
+
+
 # ════════════════════════════════════════════════════════════════
 # 8. 主流程
 # ════════════════════════════════════════════════════════════════
@@ -767,6 +877,24 @@ def load_config_from_json(path: str) -> EventPipelineConfig:
     # 如果 prompt_features / fact_features / option_features
     # 是 list[str]（key 列表），从中央特征库解析为完整对象
     resolve_text_features(data)
+
+    # 解析 narrative_constraint 中的 text feature key
+    # 将 demand_context / action_style 等字段的 key 引用解析为实际文本
+    library = load_text_features_library()
+    for opt in data.get("option_features", []):
+        nc = opt.get("narrative_constraint")
+        if not nc or not isinstance(nc, dict):
+            continue
+        for field in ("demand_context", "action_style", "resolution_style"):
+            val = nc.get(field, "")
+            if not val or not isinstance(val, str):
+                continue
+            # 如果该值在 prompt_features 中有对应 entry，则解析为实际文本
+            try:
+                feature = library.resolve_prompt(val)
+                nc[field] = feature.text
+            except KeyError:
+                pass  # 不是 key 引用，保持原值（向后兼容 inline text）
 
     return EventPipelineConfig.model_validate(data)
 
@@ -849,6 +977,10 @@ def main():
         except KeyError as e:
             print(f"❌ 插件加载失败: {e}")
             sys.exit(1)
+
+    # ── Phase 0: 插件初始化（扫描配置构建内部状态） ──
+    for plugin in plugins:
+        plugin.init(cfg)
 
     dim_count = len(cfg.dimensions)
     if dim_count < 1:
@@ -1028,21 +1160,6 @@ def main():
                 else:
                     print(f"  (无操作)")
 
-                final_dsl = scaled_dsl
-                if cfg.universal_result:
-                    try:
-                        scaled_universal = scale_all_operators(
-                            [cfg.universal_result], combined_scale
-                        )
-                    except ValueError as e:
-                        print(f"  ❌ universal_result DSL 缩放失败: {e}")
-                        break
-                    if final_dsl:
-                        final_dsl = f"{final_dsl} | {scaled_universal}"
-                    else:
-                        final_dsl = scaled_universal
-                    print(f"  +universal(scaled={combined_scale}): {scaled_universal}")
-
                 # ── CSV 预览（使用与 write_event_row 一致的格式化）──
                 print(f"\n📄 CSV 预览（不会写入文件）:")
 
@@ -1076,29 +1193,43 @@ def main():
                 desc_preview = desc_csv[:60] + "..." if len(desc_csv) > 60 else desc_csv
                 print(f'  random_event,{uuid},{context},{requirement_col},"{title}","{desc_preview}",,,,,,')
 
-                # option 行
+                # ── option 行（per-option result/requirement + 固定选项支持）──
+                # 每个选项独立计算 result DSL 和 requirement
                 options = parsed.get("options", {})
-                if cfg.option_features and options:
-                    # 构建选项级 requirement（模板替换）
-                    option_req = cfg.universal_option_requirement or ""
-                    if option_req and failed_hint_val:
-                        option_req = option_req.replace("{failed_hint}", failed_hint_val)
-                    req_csv = f'"{option_req}"' if option_req else ''
+                if cfg.option_features:
+                    for choice in cfg.option_features:
+                        # 文本：固定选项用 choice.text，AI 选项用 parsed response（有 fallback）
+                        if choice.fixed:
+                            opt_text = choice.text if choice.text.strip() else "（冷眼旁观）"
+                        else:
+                            opt_text = options.get(choice.id, "").strip()
+                            if not opt_text:
+                                opt_text = choice.text if choice.text.strip() else "（确认）"
 
-                    for of in cfg.option_features:
-                        opt_text = options.get(of.id, "").strip()
-                        if not opt_text:
-                            opt_text = "（确认）"
-                        dsl_csv = final_dsl.replace('"', '""')
+                        # 结果 DSL：维度开销 + per-option result（或 universal_result fallback）
+                        opt_dsl = _build_option_dsl(
+                            scaled_dsl, choice, combined_scale,
+                            universal_result=cfg.universal_result or "",
+                        )
+                        dsl_csv = opt_dsl.replace('"', '""')
+
+                        # requirement：per-option（或 universal fallback），含模板替换
+                        opt_req = _build_option_requirement(
+                            choice, failed_hint_val,
+                            universal_option_requirement=cfg.universal_option_requirement or "",
+                        )
+                        req_csv = f'"{opt_req}"' if opt_req else ''
+
                         print(f'  >option,,,{req_csv},"{opt_text}","{dsl_csv}",,,,')
                 else:
-                    # 构建选项级 requirement（模板替换）
-                    option_req = cfg.universal_option_requirement or ""
-                    if option_req and failed_hint_val:
-                        option_req = option_req.replace("{failed_hint}", failed_hint_val)
-                    req_csv = f'"{option_req}"' if option_req else ''
-
-                    dsl_csv = final_dsl.replace('"', '""')
+                    # 无 option_features 时：用默认选项 + universal fallback
+                    dsl_csv = scaled_dsl.replace('"', '""')
+                    opt_req = _build_option_requirement(
+                        OptionFeature(id="default"),
+                        failed_hint_val,
+                        universal_option_requirement=cfg.universal_option_requirement or "",
+                    )
+                    req_csv = f'"{opt_req}"' if opt_req else ''
                     print(f'  >option,,,{req_csv},"（确认）","{dsl_csv}",,,,')
 
                 success = True
@@ -1227,23 +1358,6 @@ def main():
                     else:
                         print(f"     DSL: (无操作)")
 
-                    # ★ 追加 universal_result（也参与 Scale 缩放）
-                    final_dsl = scaled_dsl
-                    if cfg.universal_result:
-                        try:
-                            scaled_universal = scale_all_operators(
-                                [cfg.universal_result], combined_scale
-                            )
-                        except ValueError as e:
-                            print(f"  ❌ universal_result DSL 缩放失败: {e}")
-                            fail_count += 1
-                            break
-                        if final_dsl:
-                            final_dsl = f"{final_dsl} | {scaled_universal}"
-                        else:
-                            final_dsl = scaled_universal
-                        print(f"     +universal(scaled={combined_scale}): {scaled_universal}")
-
                     # ── Hook 3: 插件 context 富化 ──
                     context_extras = _build_plugin_context_extras(
                         plugins, current_combos, cfg, parsed, response,
@@ -1262,28 +1376,42 @@ def main():
                         context_extras=context_extras or None,
                     )
 
-                    # ── 构建选项级 requirement（模板替换） ──
-                    # 此时 failed_hint 必定存在（已在插件字段校验中确保）
-                    option_req = cfg.universal_option_requirement or ""
-                    if option_req and failed_hint_val:
-                        option_req = option_req.replace("{failed_hint}", failed_hint_val)
-                    elif option_req and "{failed_hint}" in option_req:
-                        print(f"  ⚠️ failed_hint 不在 context_extras 中，{{failed_hint}} 模板将替换为空")
-                        option_req = option_req.replace("{failed_hint}", "")
-
-                    # ── 写选项行 ──
+                    # ── 写选项行（per-option result/requirement + 固定选项支持）──
+                    # 每个选项独立计算 result DSL 和 requirement
                     options = parsed.get("options", {})
-                    if cfg.option_features and options:
-                        for of in cfg.option_features:
-                            opt_text = options.get(of.id, "").strip()
-                            if not opt_text:
-                                opt_text = "（确认）"
-                            write_option_row(writer, opt_text, final_dsl, requirement=option_req)
-                            print(f"     option [{of.id}]: {opt_text}")
+                    if cfg.option_features:
+                        for choice in cfg.option_features:
+                            # 文本：固定选项用 choice.text，AI 选项用 parsed response（有 fallback）
+                            if choice.fixed:
+                                opt_text = choice.text if choice.text.strip() else "（冷眼旁观）"
+                            else:
+                                opt_text = options.get(choice.id, "").strip()
+                                if not opt_text:
+                                    opt_text = choice.text if choice.text.strip() else "（确认）"
+
+                            # 结果 DSL：维度开销 + per-option result（或 universal_result fallback）
+                            opt_dsl = _build_option_dsl(
+                                scaled_dsl, choice, combined_scale,
+                                universal_result=cfg.universal_result or "",
+                            )
+
+                            # requirement：per-option（或 universal fallback），含模板替换
+                            opt_req = _build_option_requirement(
+                                choice, failed_hint_val,
+                                universal_option_requirement=cfg.universal_option_requirement or "",
+                            )
+
+                            write_option_row(writer, opt_text, opt_dsl, requirement=opt_req)
+                            print(f"     option [{choice.id}]: {opt_text}")
                     else:
-                        # 回退：没有 option_features 时用默认选项
+                        # 回退：没有 option_features 时用默认选项 + universal fallback
                         option_text = "（确认）"
-                        write_option_row(writer, option_text, final_dsl, requirement=option_req)
+                        opt_req = _build_option_requirement(
+                            OptionFeature(id="default"),
+                            failed_hint_val,
+                            universal_option_requirement=cfg.universal_option_requirement or "",
+                        )
+                        write_option_row(writer, option_text, scaled_dsl, requirement=opt_req)
                         print(f"     option: {option_text}")
                     success_count += 1
                     break

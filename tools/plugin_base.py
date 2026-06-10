@@ -121,18 +121,40 @@ class EventPromptPlugin:
     """事件 Prompt 插件基类。
 
     子类需覆盖的方法：
-      plugin_id           — [必需] 插件唯一标识
-      get_prompt_fragment — [可选] 返回注入 User Prompt 的文本
+      plugin_id              — [必需] 插件唯一标识
+      init(cfg)              — [可选] Phase 0: 管线初始化时扫描配置构建状态
+      get_prompt_fragment    — [可选] 返回注入 User Prompt 的文本
       get_extra_output_fields — [可选] 声明额外解析字段
-      enrich_context      — [可选] 返回追加到 CSV context 列的 key=value 对
+      enrich_context         — [可选] 返回追加到 CSV context 列的 key=value 对
 
     用法示例见文件头部 docstring。
+
+    生命周期:
+      Phase 0: init(cfg)      — 管线启动时调用一次，插件在此扫描配置构建内部状态
+      Phase 1: get_prompt_fragment  — 每组合调用，注入 User Prompt
+      Phase 2: get_extra_output_fields — 每组合调用，声明额外解析字段
+      Phase 3: enrich_context — 每组合调用，富化 CSV context 列
     """
 
     @property
     def plugin_id(self) -> str:
         """插件唯一标识符，在 PLUGIN_REGISTRY 中的 key。"""
         return ""
+
+    # ── Phase 0: 插件初始化（配置扫描） ──
+
+    def init(self, cfg: Any) -> None:
+        """Phase 0: 管线初始化时调用，整个生命周期只调一次。
+
+        插件在此扫描 cfg 中自己关心的字段，构建内部状态，
+        供后续 get_prompt_fragment() / enrich_context() 使用。
+
+        参数:
+            cfg: 完整管线配置（EventPipelineConfig）
+
+        默认实现是空操作，向后兼容。
+        """
+        pass
 
     # ── Hook 1: Prompt 注入 ──
 

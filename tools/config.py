@@ -48,13 +48,66 @@ class PromptFeature(TextFeature):
     pass
 
 
-class OptionFeature(TextFeature):
-    """选项定义：指定一个选项的标识和 AI 生成指令。
+class NegativeExample(BaseModel):
+    """反面教材：告诉 AI「不要做什么」的对照样本。
 
-    id: 选项的唯一标识（uuid key），如 "option_accept"
-    text: AI 指令，如 "用15字以内描述接受贿赂的方案"
+    field:  指向的约束字段名（如 "action_style" / "resolution_style" / "demand_context"）
+    bad:    反面示例文本（AI 应当避免的写法）
+    reason: 该示例为什么是错的（解释违背了哪条原则）
     """
-    pass
+    field: str = ""
+    bad: str = ""
+    reason: str = ""
+
+
+class NarrativeConstraint(BaseModel):
+    """🎯 叙事约束：硬性写作规则 (Narrative Constraint)
+
+    将特定的叙事模式固化为结构化约束，管线以固定格式渲染为独立区块，
+    比纯文本 prompt_feature 更难被 AI 忽略。
+
+    所有字段均为可选，可按需单独使用任意组合。
+    未来可自由添加新字段，不会破坏已有配置。
+
+    type:              约束类型标签（metadata，仅用于管线 debug / 日志，不参与约束计算）
+    demand_context:    约束 event description 中 NPC 如何提出需求（Layer 1: 索取层）
+    action_style:      约束 option.text 的写法 / 玩家动作描写（Layer 2: 执行层）
+    resolution_style:  约束 failed_hint 的写法 / NPC 揭晓反应（Layer 3: 揭晓层）
+    negative_examples: 反面教材列表，每条包含 field/bad/reason
+    """
+    type: str = ""
+    demand_context: str = ""
+    action_style: str = ""
+    resolution_style: str = ""
+    negative_examples: list[NegativeExample] = []
+
+
+class OptionFeature(TextFeature):
+    """选项模板 (ChoiceTemplate)：每个选项的完整定义。
+
+    id:     选项唯一标识，也是 AI 输出字段名
+    prompt: AI 指令，告诉 AI 为这个选项生成什么文本
+    text:   固定文本（fixed=True）/ AI指令兜底（prompt为空时的 AI 指令）
+    result: 选项级结果 DSL，如 "prop_sub(name=career_progress; val=2)"
+    requirement: 选项级需求 DSL，如 'poem_has(type=GAN_YE; min_level=1)'
+    fixed:  True=固定文本（跳过 AI 生成），False=AI 生成
+    narrative_constraint: 结构化叙事约束（可选），如 blind_box_transaction
+    plugins: 插件配置挂载点（可选），key=插件ID, value=插件自定义结构
+             如 {"failed_hint": {"style": "mock_direct_speech", "max_chars": 20}}
+
+    narrative_constraint 的字段全部可选，按需使用。
+    管线 build_user_prompt() 只渲染非空字段到 "📜 写作契约" 区块。
+    plugins 字段由插件在 init() 阶段扫描使用，管线不直接消费。
+    """
+    result: str = ""
+    requirement: str = ""
+    fixed: bool = False
+    prompt: str = ""
+    narrative_constraint: Optional[NarrativeConstraint] = None
+    plugins: dict[str, dict] = Field(
+        default_factory=dict,
+        description="插件级配置挂载点: {plugin_id: {config_dict}}",
+    )
 
 
 class FactFeature(TextFeature):
@@ -183,6 +236,11 @@ class PipelineDimensionValue(BaseModel):
     
     tags 字段主要用于 SceneValue 场景，但放在基类避免 Pydantic
     反序列化时丢失字段。非场景值的 tags 默认空列表，无影响。
+    
+    narrative_constraint: 可选的结构化叙事约束，描述该维度值对应的
+        NPC 行为、玩家动作、揭晓方式和反面教材。
+        当维度值的 description 字段包含文学叙事时，建议将约束拆解到
+        narrative_constraint 中，避免样例过拟合（few-shot overfitting）。
     """
     id: str = ""
     name: str = ""
@@ -190,6 +248,7 @@ class PipelineDimensionValue(BaseModel):
     scale: float = 1.0
     operator_dsl: str = ""
     tags: list[str] = []  # Dynamic Dimension 用：预定义标签 ID 列表
+    narrative_constraint: Optional[NarrativeConstraint] = None
 
 
 class SceneValue(PipelineDimensionValue):

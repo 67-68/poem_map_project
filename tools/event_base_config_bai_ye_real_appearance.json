@@ -1,19 +1,44 @@
 {
   "id": "bai_ye_real_appearance",
   "name": "拜谒 - 真实面目 (70-100)",
-  "background_context": "天宝年间（公元742年—756年），长安城的繁华之下暗流涌动。权相李林甫一手遮天，「口蜜腹剑」成为官场通行证。安禄山身兼三镇节度使，胡风浸染朝堂，汉族士大夫的上升通道被层层堵死。\n\n玩家已不再是初入仕途的愣头青——野心值突破70后，你开始触碰官场的真实底线。之前那些门子索贿、清客刁难不过是开胃菜。现在你面对的是真正的权力绞肉机：曾经对你客客气气的人开始露出獠牙，制度性的壁垒如同铜墙铁壁，而高高在上的权贵们甚至懒得以礼相待。\n\n这是一个「规则本身就是为了阻止你」的世界。每个微笑背后都藏着算盘，每次拜谒都是一场尊严与资源的豪赌。你需要的不再是运气，而是真正的筹码——以及一首能敲开权力大门的干谒诗。\n\n但你要记住：这次拜谒只是敲门砖。事件的叙事呈现权力的碾压感，而真正的破局在于你是否拿得出那首干谒诗——有诗，你才有资格选择「通关」的选项；没诗，你只能灰溜溜地被挡在门外。你是用才华硬闯，还是用钱开路，全看你手中的筹码。",
+  "background_context": "天宝年间（742-756），长安城。权相李林甫把持朝纲，安禄山身兼三镇节度使，汉族士大夫上升通道被层层堵死。\n\n玩家野心值 70-100 阶段：玩家开始触碰官场真实底线。制度性壁垒呈铜墙铁壁之态，权贵对玩家的态度从客气转为冷漠或剥削。这是一个规则本身就在阻止你上升的世界。",
   "ai_persona": "你是一位精通唐朝官场厚黑学和权力博弈的叙事设计师。你的文风冷峻而锋利，像一把解剖刀，剖开官场温情脉脉的表面，露出赤裸裸的权力交易。你擅长用细节呈现权力的碾压感——一个眼神、一句漫不经心的话、一次故意的冷落，都比直白的辱骂更有杀伤力。你深知「真正的恶意往往穿着礼貌的外衣」这一真理。你的叙事克制但毫不留情，让玩家在看似平常的互动中感受到彻骨的寒意。",
   "prompt_features": [
     "stateless_narrative",
     "tone_cold_malice",
     "forbid_comedy_exaggeration",
-    "forbid_god_view_psychology"
+    "forbid_god_view_psychology",
+    "ambiguous_narrative"
   ],
   "fact_features": [
     "bai_ye_venue"
   ],
   "option_features": [
-    "option_accept"
+    {
+      "id": "option_accept",
+      "prompt": "用20字以内描述玩家回应的动作（递上某物/呈上名帖/献上包裹）",
+      "result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=career_progress; val=3)",
+      "requirement": "poem_has(type=GAN_YE; min_level=1; failed_hint=\"{failed_hint}\")",
+      "plugins": {
+        "failed_hint": {
+          "style": "mock_direct_speech",
+          "max_chars": 20,
+          "context": "NPC 验货后发现没有诗词时的嘲讽反应"
+        }
+      },
+      "narrative_constraint": {
+        "type": "blind_box_transaction",
+        "demand_context": "NPC_ask_poem",
+        "action_style": "plain_action"
+      },
+      "fixed": false
+    },
+    {
+      "id": "option_cold_eye",
+      "text": "拂袖而去",
+      "result": "prop_sub(name=career_progress; val=2)",
+      "fixed": true
+    }
   ],
   "dimensions": [
     {
@@ -24,23 +49,55 @@
         {
           "id": "L0",
           "name": "物理隔绝 — 门子的傲慢",
-          "description": "最外层的物理屏障。门子、家奴、看门狗——这些最底层的权力附庸者，却是你见权贵的第一道鬼门关。他们不需要理由就能把你拦在门外：今天老爷不见客、你的名帖不够体面、甚至单纯因为你没给门包。你的干谒诗在他眼里不如一张引火纸——门子根本看不懂诗，塞给他还不如塞一锭银子实在。你连门都进不去，诗稿被随手扔在地上，被来往的靴子踩上脚印。在这个层级，对方用的是最原始的权力——让你连门都进不去。描写应聚焦于门子的傲慢、刁难、索贿，以及一个残酷的事实：你的诗，在文盲眼里一文不值。",
+          "description": "最外层物理屏障，门子/家奴/看门狗级别的底层权力附庸者。他们用最原始的权力拦住你——不让进门。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=money; val=10)"
+          "operator_dsl": "prop_sub(name=money; val=5)",
+          "narrative_constraint": {
+            "type": "power_gate_L0",
+            "demand_context": "门子索要门包或名帖，以物理阻挡为手段（拦门、不通报、让玩家在门外挨冻）。NPC 是底层文盲，看不懂诗，诗在他眼里不如引火纸。【严禁】门子涉及政治迫害、流放、杀头等超越微权力的夸张情节。",
+            "action_style": "玩家只能被动回应——递上名帖、掏出银钱、退回门外。动作描写保持中性。【严禁】玩家主动质问、反击、讲道理或发表议论。",
+            "resolution_style": "NPC 验货后反应。有实惠（钱/诗）则放行但态度仍傲慢，无实惠则嘲讽后赶人。用动作和表情呈现结果，不用内心独白。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "门子冷笑一声：'就凭你也想见我家老爷？来人，乱棍打出去！'", "reason": "门子的权力只有'不让进门'，不能指挥家丁行凶或威胁生命"},
+              {"field": "action_style", "bad": "你义正辞严地斥责门子势利眼，说出一番大道理", "reason": "玩家在 L0 没有反击权，只能被动应对，不能发表议论或道德谴责"},
+              {"field": "resolution_style", "bad": "门子仔细读了你的诗，点点头说'好诗'", "reason": "门子是文盲，看不懂诗。验货只看有没有纸，不看内容"}
+            ]
+          }
         },
         {
           "id": "L1",
           "name": "制度隔绝 — 文法吏的围剿",
-          "description": "你终于进了门，却发现自己陷入了更可怕的迷宫。清客、文书、掌书记——这些中层的文法吏笑着收下你的诗，然后逐字批注：「犯忌」「僭越」「不合体统」「用典失当」。他们强迫你按他们的意思改——把锋芒磨平、把棱角削圆、把骨头换成棉花。你的干谒诗被阉割成一篇四平八稳的马屁文，句句得体，字字恶心。这是制度性的暴力——温柔而致命，它不毁掉你的诗，它把你的诗变成一具精致的尸体。描写应突出那种被规则玩弄的无力感，对方表面上彬彬有礼，实际上每一笔批注都在剜你的心。",
+          "description": "玩家进门后遭遇中层文法吏的围剿。笑里藏刀的批注、温柔的阉割——他们把诗改得面目全非。",
           "scale": 1.10,
-          "operator_dsl": "prop_sub(name=money; val=10)"
+          "operator_dsl": "prop_sub(name=fatigue; val=10)",
+          "narrative_constraint": {
+            "type": "power_gate_L1",
+            "demand_context": "清客/文书/掌书记笑着收下诗稿，然后逐字批注——「犯忌」「僭越」「不合体统」「用典失当」。强迫玩家按他们的意思修改，把锋芒磨平、棱角削圆。表面彬彬有礼，实则每一笔批注都在阉割诗的灵魂。【严禁】文法吏直接撕毁诗稿或人身攻击——他们的暴力是制度性的，不是野蛮的。",
+            "action_style": "玩家只能被动接受修改要求——点头应允、沉默执笔、按批注重写。动作可以是「接过批注」「研墨重写」「删去某句」等具体动作。【严禁】玩家反驳、争辩或拒绝修改。",
+            "resolution_style": "诗被改完后，文法吏满意或挑剔地点头。呈现被规则玩弄的无力感——诗变得四平八稳、字字恶心，但通过了。用细节呈现'温柔的暴力'。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "文法吏把诗稿摔在地上踩了两脚：'这种垃圾也敢递上来？'", "reason": "L1 的暴力是制度性的、微笑的。摔稿踩踏的行为太野蛮，不符合中层文官的行为模式"},
+              {"field": "resolution_style", "bad": "文法吏看后勃然大怒，把你赶了出去", "reason": "L1 的围剿是让你'改到通过'而不是'赶你走'，赶人是 L0 门子的行为"}
+            ]
+          }
         },
         {
           "id": "L2",
           "name": "虚伪的降维打击 — 权贵的羞辱",
-          "description": "你终于站在了权贵面前。然后你发现，之前的层层阻挠居然是最仁慈的部分。权贵漫不经心地把玩你的诗稿，然后轻描淡写地说一句「尚可」，随手递给下人：「送到八公子房里，明日曲江宴上用得上。」你的署名被抹去，诗成了别人的晋身之阶。或者他笑着把诗稿还给你：「诗写得好，但本相要的不是这个——替本相写一篇驳清流疏，明日送来。」你耗费心血写就的干谒诗，要么被掠夺、要么被践踏、要么被改造成政治打手。每次微笑都是刀子，每句鼓励都是贬低。描写应体现权力不对等造成的窒息感和羞辱感——你连愤怒的资格都没有。",
+          "description": "玩家终于站在权贵面前。之前的层层阻挠居然是最仁慈的部分——权贵对你的消耗是降维式的。",
           "scale": 1.25,
-          "operator_dsl": "prop_sub(name=money; val=15)|prop_sub(name=fatigue; val=5)"
+          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=fatigue; val=5)",
+          "narrative_constraint": {
+            "type": "power_gate_L2",
+            "demand_context": "权贵漫不经心把玩诗稿，轻描淡写一句「尚可」后随手处置——或把诗送给他人署名，或命令玩家写政治黑材料。每次微笑都是刀子，每句鼓励都是贬低。【严禁】权贵直接辱骂或发怒——他们的恶是漫不经心的冷漠，不是情绪化的暴怒。",
+            "action_style": "玩家只能呈上诗稿、沉默等待、躬身领命。动作描写突出卑微和渺小——权贵的动作描写要多（把玩、随手递、轻描淡写），玩家的动作要少且克制。【严禁】玩家表现不满、愤怒或任何形式的反抗。",
+            "resolution_style": "揭露权力不对等造成的窒息感——诗被掠夺署名、被改造成政治打手、或被当作废纸。玩家连愤怒的资格都没有。用动作和场景呈现结果。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "权贵拍案而起：'大胆！竟敢写这种诗讽刺本相！'", "reason": "权贵的恶是漫不经心的降维打击，不是情绪化的暴怒。拍案而起太戏剧化"},
+              {"field": "action_style", "bad": "你不卑不亢地回视权贵，朗声道：'在下无愧于心'", "reason": "玩家在权贵面前没有平等对视的资格，动作必须体现地位碾压"},
+              {"field": "resolution_style", "bad": "权贵赏识你的才华，把你收为门生", "reason": "L2 的核心是羞辱和掠夺，不是赏识。赏识是低野心阶段的剧情"}
+            ]
+          }
         }
       ]
     },
@@ -52,31 +109,59 @@
         {
           "id": "TypeA",
           "name": "金钱掠夺 — 官场的通行证",
-          "description": "最赤裸的代价——钱。从门子的门包到清客的中介费，到权贵面前必须打点的「茶钱」，在唐朝的官场里，没有钱连被羞辱的资格都没有。描写可以聚焦于各种明暗的索贿手段：太师椅旁「不小心」打开的锦盒、书案上「恰好」缺了一角的银锭、下人递茶时意味深长的手势。钱在这里不是交易，是投名状——你愿意出多少钱，就代表你有多大的诚意被剥削。",
+          "description": "最赤裸的代价——钱。明暗索贿手段：锦盒、银锭、意味深长的手势。钱是投名状。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=money; val=20)"
+          "operator_dsl": "prop_sub(name=money; val=20)",
+          "narrative_constraint": {
+            "type": "cost_money",
+            "demand_context": "通过环境细节暗示索贿——太师椅旁「不小心」打开的锦盒、书案上「恰好」缺了一角的银锭、下人递茶时意味深长的手势。不要直接说'要钱'，用物呈现需求。",
+            "action_style": "",
+            "resolution_style": "交钱后对方态度微妙变化——或更热情、或更轻蔑（嫌少）。用表情和动作呈现。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "门子伸手：'拿钱来，不然别想进去'", "reason": "太直白，破坏了含蓄的索贿氛围。要用环境和细节暗示，不要直接说'要钱'"},
+              {"field": "resolution_style", "bad": "你数出二十两银子递上，门子眉开眼笑", "reason": "不要写玩家具体数钱的动作，保持中性交割描写"}
+            ]
+          }
         },
         {
           "id": "TypeB",
           "name": "精神摧毁 — 愤怒的积累",
-          "description": "最难愈合的伤不在身上，在心里。门子当着你的面念你的诗，然后用怪腔怪调嘲笑：「哟，还押韵呢？」；文法吏把诗稿往地上一扔，用鞋碾了碾：「这种货色也敢递上来？」；权贵甚至不屑于看你的诗，吩咐下人：「拿去做引火纸。」每一次被羞辱、每一次被无视、每一次你的心血被当垃圾对待，都在你的心底埋下一颗愤怒的种子。这种代价表面上不疼不痒，实际上它会改变你的底色——让一个正气凛然的士人逐渐走向偏激和阴暗。描写应聚焦于那些让人血压升高的屈辱细节——你的诗被糟蹋的方式，就是你的灵魂被糟蹋的方式。",
+          "description": "最难愈合的伤在心里。被当众念诗嘲笑、被踩踏诗稿、被当引火纸——每一次被羞辱都在心底埋下愤怒。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=health; val=10)"
+          "operator_dsl": "prop_sub(name=health; val=10)",
+          "narrative_constraint": {
+            "type": "cost_spirit",
+            "demand_context": "NPC 用具体动作贬低玩家的诗和尊严——怪腔怪调念诗、用鞋碾诗稿、吩咐拿去引火。羞辱越具体越残忍，不要喊口号式的辱骂。",
+            "action_style": "",
+            "resolution_style": "呈现诗稿被糟蹋的方式——被揉皱、被踩踏、被引火、被当废纸。糟蹋诗的方式就是糟蹋灵魂的方式。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "NPC 骂你'废物'、'垃圾'", "reason": "直白的辱骂太廉价。要用对诗的具体动作来羞辱——念诗的怪腔调、碾诗稿的鞋底，这些细节比骂一万句都狠"},
+              {"field": "resolution_style", "bad": "你感到非常愤怒，但忍住了", "reason": "不要写玩家的内心感受。只用外部动作和场景呈现，让玩家自己感受"}
+            ]
+          }
         },
         {
           "id": "TypeC",
           "name": "才华剥削 — 灵魂的质押",
-          "description": "最阴险的代价——你的才华正在被吞噬。门子把你的诗稿拿去引火，文法吏把你的诗改得面目全非，权贵直接抢走你的署名权或者逼你写政治黑材料。每一次拜谒都在消耗你的灵气，让你离一个真正的诗人越来越远。这种代价表面上不痛不痒，但当你发现自己的笔下再也写不出好诗时，你已经废了。描写应聚焦于那些不易察觉却致命的损耗——你的灵光在被消磨，你的才气在被掏空，你却还浑然不觉地以为这是成长的代价。",
+          "description": "最阴险的代价——才华被吞噬。诗稿被引火、被改得面目全非、署名被抹去、被逼写政治黑材料。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=talent; val=10)"
+          "operator_dsl": "prop_sub(name=talent; val=10)",
+          "narrative_constraint": {
+            "type": "cost_talent",
+            "demand_context": "NPC 掠夺或改造玩家的诗——门子拿去引火、文法吏改得面目全非、权贵抢夺署名权或逼写黑材料。呈现的是才华被消耗的过程。",
+            "action_style": "",
+            "resolution_style": "呈现不可逆的损失感——诗变成引火纸化为灰烬、被改得面目全非的稿子、被抹去的署名。用诗的下场暗示才华的流失。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "权贵说：'你的诗不错，以后替我写'", "reason": "太温和。要呈现强制性和掠夺感——不是征求同意，而是直接宣告"},
+              {"field": "resolution_style", "bad": "你意识到自己的才华正在被消耗", "reason": "不要写玩家的内心活动。用诗稿被处理的外部事实呈现后果"}
+            ]
+          }
         }
       ]
     }
   ],
   "universal_requirement": "prop_gt(name=career_progress; val=70),prop_lt(name=career_progress; val=100)",
-  "universal_result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=career_progress; val=3)",
-  "universal_option_requirement": "poem_has(type=GAN_YE; min_level=1; failed_hint=\"{failed_hint}\")",
-  "plugins": ["ganye_failed_hint"],
+  "plugins": ["failed_hint"],
   "word_count_min": 80,
   "word_count_max": 200,
   "max_retries": 3,

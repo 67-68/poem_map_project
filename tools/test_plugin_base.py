@@ -12,6 +12,7 @@ sys.path.insert(0, ".")
 from tools.config import (
     DimensionCombo,
     EventPipelineConfig,
+    OptionFeature,
     PipelineDimension,
     PipelineDimensionValue,
 )
@@ -63,13 +64,17 @@ class TestPluginB(EventPromptPlugin):
 # 测试夹具（Test Fixtures）
 # ════════════════════════════════════════════════════════════════
 
-def _make_dummy_cfg(plugins: list[str] | None = None) -> EventPipelineConfig:
+def _make_dummy_cfg(
+    plugins: list[str] | None = None,
+    option_features: list[OptionFeature] | None = None,
+) -> EventPipelineConfig:
     return EventPipelineConfig(
         id="test_cfg",
         name="测试配置",
         word_count_min=10,
         word_count_max=50,
         plugins=plugins or [],
+        option_features=option_features or [],
     )
 
 
@@ -352,10 +357,28 @@ class TestFailedHintPlugin(unittest.TestCase):
 
     def test_get_prompt_fragment(self):
         """prompt fragment 包含 failed_hint 相关说明"""
-        plugin = get_plugin("failed_hint")
-        fragment = plugin.get_prompt_fragment([], None)
+        plugin = FailedHintPlugin()
+        cfg = _make_dummy_cfg(
+            plugins=["failed_hint"],
+            option_features=[
+                OptionFeature(
+                    id="option_accept",
+                    text="接受",
+                    plugins={
+                        "failed_hint": {
+                            "style": "mock_direct_speech",
+                            "max_chars": 20,
+                            "context": "NPC 验货后发现没有诗词时的反应",
+                        }
+                    },
+                ),
+            ],
+        )
+        plugin.init(cfg)
+        fragment = plugin.get_prompt_fragment([], cfg)
         self.assertIn("failed_hint", fragment)
-        self.assertIn("干晔", fragment)
+        self.assertIn("必须使用直接引语", fragment)
+        self.assertIn("NPC 验货后发现没有诗词时的反应", fragment)
 
     def test_get_extra_output_fields(self):
         """声明 failed_hint 字段"""
@@ -385,8 +408,24 @@ class TestFailedHintPlugin(unittest.TestCase):
 
     def test_end_to_end_prompt_and_parse(self):
         """端到端: prompt 注入 → AI 响应 → 解析 → context 富化"""
+        cfg = _make_dummy_cfg(
+            plugins=["failed_hint"],
+            option_features=[
+                OptionFeature(
+                    id="option_accept",
+                    text="接受",
+                    plugins={
+                        "failed_hint": {
+                            "style": "mock_direct_speech",
+                            "max_chars": 20,
+                            "context": "NPC 验货后发现没有诗词时的反应",
+                        }
+                    },
+                ),
+            ],
+        )
         plugin = FailedHintPlugin()
-        cfg = _make_dummy_cfg(plugins=["failed_hint"])
+        plugin.init(cfg)
 
         # 模拟 build_user_prompt 含插件
         combos = _make_dummy_combos()
