@@ -72,42 +72,32 @@ operators = Array[ExtResource("2_j7fxv")]([SubResource("Resource_yl3gp"), SubRes
 script = ExtResource("7_3nbei")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-failed_hint = "“纸片子？当引火都嫌薄。”"
+failed_hint = "“就这？拿张破纸糊弄谁呢？”门子将名帖掷于地，獒犬凑上前嗅了嗅。"
 
 [sub_resource type="Resource" id="Resource_lmyjj"]
 script = ExtResource("8_1fyrm")
 choice_result = SubResource("Resource_am1j0")
 requirement = SubResource("Resource_34vvp")
-description = "递上名帖，拱手致意"
+description = "递上名帖与一袋银铤"
 
 [sub_resource type="Resource" id="Resource_hg25v"]
-script = ExtResource("3_lgmwc")
-str_props = "money"
-value = -5
-
-[sub_resource type="Resource" id="Resource_malp0"]
-script = ExtResource("3_lgmwc")
-str_props = "money"
-value = -20
-
-[sub_resource type="Resource" id="Resource_3dvwx"]
 script = ExtResource("3_lgmwc")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_e0i7p"]
+[sub_resource type="Resource" id="Resource_malp0"]
 script = ExtResource("4_cr0ua")
-operators = Array[ExtResource("2_j7fxv")]([SubResource("Resource_hg25v"), SubResource("Resource_malp0"), SubResource("Resource_3dvwx")])
+operators = Array[ExtResource("2_j7fxv")]([SubResource("Resource_hg25v")])
 
-[sub_resource type="Resource" id="Resource_fuefb"]
+[sub_resource type="Resource" id="Resource_3dvwx"]
 script = ExtResource("8_1fyrm")
-choice_result = SubResource("Resource_e0i7p")
+choice_result = SubResource("Resource_malp0")
 description = "拂袖而去"
 
 [resource]
 script = ExtResource("9_286qv")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_yl3gp")]([SubResource("Resource_lmyjj"), SubResource("Resource_fuefb")])
+options = Array[ExtResource("1_yl3gp")]([SubResource("Resource_lmyjj"), SubResource("Resource_3dvwx")])
 uuid = "bai_ye_real_appearance_l0_typea"
-name = "门槛上的青铜饕餮"
-description = "右相府朱漆大门紧闭，只开了一条缝。门子斜倚在门框上，手指不经意地摩挲着腰间钱袋的系绳。他的目光从你头顶扫过，落回门内石阶上的一片落叶。冷风从门缝里钻出来，带着炭火和残羹的气味。"
+name = "门子与恶犬"
+description = "“今日相爷有令，只接诗词拜帖与门包。”说着，用拇指摩挲腰间绣囊——囊口露出一角银锭的光。獒犬低吠一声，他朝门口努努嘴：“规矩如此，请吧。”"

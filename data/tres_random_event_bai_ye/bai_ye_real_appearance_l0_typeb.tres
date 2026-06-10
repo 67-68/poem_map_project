@@ -72,42 +72,32 @@ operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_gi123"), SubRes
 script = ExtResource("7_v515i")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-failed_hint = "“连张纸都没有？滚远些。”"
+failed_hint = "“字都不识，装什么文雅？”"
 
 [sub_resource type="Resource" id="Resource_t6j60"]
 script = ExtResource("8_lufar")
 choice_result = SubResource("Resource_urwjk")
 requirement = SubResource("Resource_lxmfi")
-description = "递上名帖"
+description = "从怀中取出一张纸，递了过去"
 
 [sub_resource type="Resource" id="Resource_dbuv6"]
-script = ExtResource("3_7rury")
-str_props = "money"
-value = -5
-
-[sub_resource type="Resource" id="Resource_ihknr"]
-script = ExtResource("3_7rury")
-str_props = "health"
-value = -10
-
-[sub_resource type="Resource" id="Resource_k7hrk"]
 script = ExtResource("3_7rury")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_w5ynb"]
+[sub_resource type="Resource" id="Resource_ihknr"]
 script = ExtResource("4_ky54g")
-operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_dbuv6"), SubResource("Resource_ihknr"), SubResource("Resource_k7hrk")])
+operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_dbuv6")])
 
-[sub_resource type="Resource" id="Resource_q3jpq"]
+[sub_resource type="Resource" id="Resource_k7hrk"]
 script = ExtResource("8_lufar")
-choice_result = SubResource("Resource_w5ynb")
+choice_result = SubResource("Resource_ihknr")
 description = "拂袖而去"
 
 [resource]
 script = ExtResource("9_0vjbd")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_gi123")]([SubResource("Resource_t6j60"), SubResource("Resource_q3jpq")])
+options = Array[ExtResource("1_gi123")]([SubResource("Resource_t6j60"), SubResource("Resource_k7hrk")])
 uuid = "bai_ye_real_appearance_l0_typeb"
-name = "引火之诗"
-description = "“要见老爷？把你的诗拿来。若是那等无病呻吟的玩意儿，正好给厨下引火。”说着，伸出两根脏兮兮的手指，像捻一只虫子。"
+name = "袖手冷眼索礼"
+description = "“今日天热，我家老爷不见客。你若有兴头，留张纸在此，回头我替你烧了——当给灶王爷添点柴火。”他伸出两指，从你手中拈过那页纸，连看也不看，转身压到石阶下湿砖缝里，嘟囔：“垫桌脚正好。”"

@@ -8,45 +8,45 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_3bb5t"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_yo28w"]
 
-[sub_resource type="Resource" id="Resource_4450c"]
+[sub_resource type="Resource" id="Resource_cat5y"]
 script = ExtResource("3_1im3n")
 str_props = "money"
 value = -15
 
-[sub_resource type="Resource" id="Resource_04bf7"]
+[sub_resource type="Resource" id="Resource_gakkm"]
 script = ExtResource("3_1im3n")
 str_props = "fatigue"
 value = -12
 
-[sub_resource type="Resource" id="Resource_80v1y"]
+[sub_resource type="Resource" id="Resource_1im3n"]
 script = ExtResource("3_1im3n")
 str_props = "fatigue"
 value = -15
 
-[sub_resource type="Resource" id="Resource_eps6j"]
+[sub_resource type="Resource" id="Resource_385xx"]
 script = ExtResource("3_1im3n")
 str_props = "career_progress"
 value = 15
 
-[sub_resource type="Resource" id="Resource_51k3q"]
+[sub_resource type="Resource" id="Resource_14hx2"]
 script = ExtResource("4_385xx")
-operators = Array[ExtResource("2_gakkm")]([SubResource("Resource_4450c"), SubResource("Resource_04bf7"), SubResource("Resource_80v1y"), SubResource("Resource_eps6j")])
+operators = Array[ExtResource("2_gakkm")]([SubResource("Resource_cat5y"), SubResource("Resource_gakkm"), SubResource("Resource_1im3n"), SubResource("Resource_385xx")])
 
-[sub_resource type="Resource" id="Resource_p8oo2"]
+[sub_resource type="Resource" id="Resource_3bb5t"]
 script = ExtResource("5_14hx2")
-choice_result = SubResource("Resource_51k3q")
+choice_result = SubResource("Resource_14hx2")
 description = "次日携手抄策论再访相府"
 
-[sub_resource type="Resource" id="Resource_i4lyu"]
+[sub_resource type="Resource" id="Resource_yo28w"]
 script = ExtResource("6_3bb5t")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_yo28w")
-requirement = SubResource("Resource_i4lyu")
+requirement = SubResource("Resource_yo28w")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_cat5y")]([SubResource("Resource_p8oo2")])
+options = Array[ExtResource("1_cat5y")]([SubResource("Resource_3bb5t")])
 uuid = "bai_ye_honeymoon_l2_typec_m1"
 name = "右相赐坐"
 description = "“新科？文章做得如何？”不等你回答，又对清客笑道：“这些后生，总以为笔下几篇赋就能济世。”清客们附和而笑。你方要开口，他已端起茶盏。仆从上前：“相爷乏了。”你只得起身告辞，却听他漫声道：“明日再来，带着你那份策论——要手抄的，字须端正。”"

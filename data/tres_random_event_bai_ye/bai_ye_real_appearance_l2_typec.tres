@@ -77,47 +77,32 @@ operators = Array[ExtResource("2_hnskt")]([SubResource("Resource_s7vot"), SubRes
 script = ExtResource("7_prwf4")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-failed_hint = "“空手而来，是本相高估了你。”"
+failed_hint = "“无诗也敢登门？”"
 
 [sub_resource type="Resource" id="Resource_0lh1e"]
 script = ExtResource("8_pgvel")
 choice_result = SubResource("Resource_g8naa")
 requirement = SubResource("Resource_7mtea")
-description = "躬身呈上诗稿"
+description = "呈上诗稿"
 
 [sub_resource type="Resource" id="Resource_640c2"]
-script = ExtResource("3_2k8qx")
-str_props = "health"
-value = -6
-
-[sub_resource type="Resource" id="Resource_s4trh"]
-script = ExtResource("3_2k8qx")
-str_props = "fatigue"
-value = -6
-
-[sub_resource type="Resource" id="Resource_8vni1"]
-script = ExtResource("3_2k8qx")
-str_props = "talent"
-value = -12
-
-[sub_resource type="Resource" id="Resource_07bc0"]
 script = ExtResource("3_2k8qx")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_plsnd"]
+[sub_resource type="Resource" id="Resource_s4trh"]
 script = ExtResource("4_apbaa")
-operators = Array[ExtResource("2_hnskt")]([SubResource("Resource_640c2"), SubResource("Resource_s4trh"), SubResource("Resource_8vni1"), SubResource("Resource_07bc0")])
+operators = Array[ExtResource("2_hnskt")]([SubResource("Resource_640c2")])
 
-[sub_resource type="Resource" id="Resource_1y0t0"]
+[sub_resource type="Resource" id="Resource_8vni1"]
 script = ExtResource("8_pgvel")
-choice_result = SubResource("Resource_plsnd")
+choice_result = SubResource("Resource_s4trh")
 description = "拂袖而去"
 
 [resource]
 script = ExtResource("9_3p8c5")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_s7vot")]([SubResource("Resource_0lh1e"), SubResource("Resource_1y0t0")])
+options = Array[ExtResource("1_s7vot")]([SubResource("Resource_0lh1e"), SubResource("Resource_8vni1")])
 uuid = "bai_ye_real_appearance_l2_typec"
-name = "被篡改的署名"
-description = "“尚可。”随即随手递给身旁的文书：“改成贺某人升迁的颂词，署名用张主簿的名字。”文书当面落笔，你的诗句被朱笔勾划得面目全非。"
+name = "冷茶与残稿"
+description = "“诗尚可，把名字抹了，改日送与刘参军。”又转头向你笑道：“赐坐，赏你一壶茶。”侍从端来一壶冷茶，壶身冰凉，你握着，指尖发麻。"

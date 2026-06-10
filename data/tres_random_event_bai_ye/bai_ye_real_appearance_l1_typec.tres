@@ -72,42 +72,32 @@ operators = Array[ExtResource("2_76k4p")]([SubResource("Resource_mbwq5"), SubRes
 script = ExtResource("7_8cxtp")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-failed_hint = "“这卷纸，连引火都嫌薄呢。”"
+failed_hint = "空手而来，何以见人？"
 
 [sub_resource type="Resource" id="Resource_jxasa"]
 script = ExtResource("8_cspnk")
 choice_result = SubResource("Resource_dd7vm")
 requirement = SubResource("Resource_y5tvn")
-description = "递上诗卷"
+description = "接过批注研墨重写"
 
 [sub_resource type="Resource" id="Resource_woaki"]
-script = ExtResource("3_gjdbl")
-str_props = "fatigue"
-value = -11
-
-[sub_resource type="Resource" id="Resource_p4epi"]
-script = ExtResource("3_gjdbl")
-str_props = "talent"
-value = -11
-
-[sub_resource type="Resource" id="Resource_5j0wk"]
 script = ExtResource("3_gjdbl")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_6j4b1"]
+[sub_resource type="Resource" id="Resource_p4epi"]
 script = ExtResource("4_nsl4u")
-operators = Array[ExtResource("2_76k4p")]([SubResource("Resource_woaki"), SubResource("Resource_p4epi"), SubResource("Resource_5j0wk")])
+operators = Array[ExtResource("2_76k4p")]([SubResource("Resource_woaki")])
 
-[sub_resource type="Resource" id="Resource_vy8p1"]
+[sub_resource type="Resource" id="Resource_5j0wk"]
 script = ExtResource("8_cspnk")
-choice_result = SubResource("Resource_6j4b1")
+choice_result = SubResource("Resource_p4epi")
 description = "拂袖而去"
 
 [resource]
 script = ExtResource("9_02i5e")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_mbwq5")]([SubResource("Resource_jxasa"), SubResource("Resource_vy8p1")])
+options = Array[ExtResource("1_mbwq5")]([SubResource("Resource_jxasa"), SubResource("Resource_5j0wk")])
 uuid = "bai_ye_real_appearance_l1_typec"
-name = "诗稿入瓮"
-description = "「改。」你将诗稿铺开，研墨重写。字句被一层层磨去棱角，最后化作四平八稳的应制之体。掌书记满意地点头，抽出其中一页引燃了烛芯。灰烬飘落时，你看到诗上署名已被涂黑。"
+name = "红笔批注之下"
+description = "改。你研墨重写，删去锋芒。他看后点头，又提起笔，将你的署名轻轻划去，在旁添上代拟二字。诗稿变得四平八稳，墨迹未干的朱红像一道伤口。"

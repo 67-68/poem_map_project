@@ -77,47 +77,32 @@ operators = Array[ExtResource("2_sndjo")]([SubResource("Resource_jkbsp"), SubRes
 script = ExtResource("7_krj15")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-failed_hint = "“就这？也配称诗？”"
+failed_hint = "“就带这个？当本官是善堂？”"
 
 [sub_resource type="Resource" id="Resource_4ve4i"]
 script = ExtResource("8_qkk42")
 choice_result = SubResource("Resource_e3yy1")
 requirement = SubResource("Resource_2xib2")
-description = "躬身呈上诗稿"
+description = "躬身呈上诗卷"
 
 [sub_resource type="Resource" id="Resource_3mh5l"]
-script = ExtResource("3_f23m7")
-str_props = "health"
-value = -6
-
-[sub_resource type="Resource" id="Resource_cn61w"]
-script = ExtResource("3_f23m7")
-str_props = "fatigue"
-value = -6
-
-[sub_resource type="Resource" id="Resource_l6x66"]
-script = ExtResource("3_f23m7")
-str_props = "money"
-value = -25
-
-[sub_resource type="Resource" id="Resource_oddbh"]
 script = ExtResource("3_f23m7")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_bfkrr"]
+[sub_resource type="Resource" id="Resource_cn61w"]
 script = ExtResource("4_hh7iy")
-operators = Array[ExtResource("2_sndjo")]([SubResource("Resource_3mh5l"), SubResource("Resource_cn61w"), SubResource("Resource_l6x66"), SubResource("Resource_oddbh")])
+operators = Array[ExtResource("2_sndjo")]([SubResource("Resource_3mh5l")])
 
-[sub_resource type="Resource" id="Resource_k8b0c"]
+[sub_resource type="Resource" id="Resource_l6x66"]
 script = ExtResource("8_qkk42")
-choice_result = SubResource("Resource_bfkrr")
+choice_result = SubResource("Resource_cn61w")
 description = "拂袖而去"
 
 [resource]
 script = ExtResource("9_j4bat")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_jkbsp")]([SubResource("Resource_4ve4i"), SubResource("Resource_k8b0c")])
+options = Array[ExtResource("1_jkbsp")]([SubResource("Resource_4ve4i"), SubResource("Resource_l6x66")])
 uuid = "bai_ye_real_appearance_l2_typea"
-name = "锦盒轻启"
-description = "“诗词倒还工整——拿几首近作来瞧瞧。”话落，他将诗稿递给侍从：“抄一份给杨节度送去。”"
+name = "末席之辱"
+description = "“抄下，署你名。” 他转头看你时，侍从递上茶盏，指尖在杯沿轻叩三下。尚书指了指角落的矮几：“赐座末席——年轻人，该懂的事，都在茶里了。”"

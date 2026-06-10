@@ -77,47 +77,32 @@ operators = Array[ExtResource("2_1dkmo")]([SubResource("Resource_nudc8"), SubRes
 script = ExtResource("7_dr8tc")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-failed_hint = "“就这？”"
+failed_hint = "“既无诗才，何苦登门？”"
 
 [sub_resource type="Resource" id="Resource_178fj"]
 script = ExtResource("8_usqu7")
 choice_result = SubResource("Resource_3micu")
 requirement = SubResource("Resource_rapnd")
-description = "躬身呈上诗卷"
+description = "递上名帖"
 
 [sub_resource type="Resource" id="Resource_jtcqx"]
-script = ExtResource("3_jgwoe")
-str_props = "health"
-value = -6
-
-[sub_resource type="Resource" id="Resource_12wq3"]
-script = ExtResource("3_jgwoe")
-str_props = "fatigue"
-value = -6
-
-[sub_resource type="Resource" id="Resource_fc8t4"]
-script = ExtResource("3_jgwoe")
-str_props = "health"
-value = -12
-
-[sub_resource type="Resource" id="Resource_gqrdr"]
 script = ExtResource("3_jgwoe")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_wx32s"]
+[sub_resource type="Resource" id="Resource_12wq3"]
 script = ExtResource("4_t8dk0")
-operators = Array[ExtResource("2_1dkmo")]([SubResource("Resource_jtcqx"), SubResource("Resource_12wq3"), SubResource("Resource_fc8t4"), SubResource("Resource_gqrdr")])
+operators = Array[ExtResource("2_1dkmo")]([SubResource("Resource_jtcqx")])
 
-[sub_resource type="Resource" id="Resource_jvt6x"]
+[sub_resource type="Resource" id="Resource_fc8t4"]
 script = ExtResource("8_usqu7")
-choice_result = SubResource("Resource_wx32s")
+choice_result = SubResource("Resource_12wq3")
 description = "拂袖而去"
 
 [resource]
 script = ExtResource("9_wav3n")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_nudc8")]([SubResource("Resource_178fj"), SubResource("Resource_jvt6x")])
+options = Array[ExtResource("1_nudc8")]([SubResource("Resource_178fj"), SubResource("Resource_fc8t4")])
 uuid = "bai_ye_real_appearance_l2_typeb"
-name = "诗烬"
-description = "“这句式倒新鲜，念给老夫听听。”他怪腔怪调地念了其中一句，引得侍从们窃笑。念完，他把诗卷递给身边一位门客：“拿去引火吧，这纸倒是好纸。”诗卷被随手丢向炭盆，火舌舔过纸边，墨迹瞬间扭曲。"
+name = "空帖之辱"
+description = "进入厅堂，权贵斜倚凭几，指尖敲桌。“诗呢？”他问得随意。你递上名帖。他拆开封缄，抽出空无一字的纸笺，嘴角笑意不变。他将纸笺摊平于地，起身踱步，靴尖轻碾纸面，又踏住你长衫下摆的边角。"
