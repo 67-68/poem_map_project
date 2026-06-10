@@ -198,6 +198,7 @@
 | `POLITICS` | `corrupt` | 权臣当道 |
 | | `prosper` | 开元盛世 |
 | | `inquisition` | 文字狱/党争 |
+| | `cloud` | 🆕 浮云蔽日/云天遮掩 |
 | `SOCIETY` | `famine` | 灾荒饿殍 |
 | | `war` | 安史战乱 |
 | | `festival` | 上元佳节 |
@@ -209,6 +210,7 @@
 - `ENV_NATURE_NIGHTMOON`
 - `ENV_POLITICS_CORRUPT`
 - `ENV_POLITICS_PROSPER`
+- `ENV_POLITICS_CLOUD`
 - `ENV_POLITICS_INQUISITION`
 - `ENV_SOCIETY_FAMINE`
 - `ENV_SOCIETY_WAR`
@@ -262,6 +264,8 @@
 | `OBJECT` | `guqin` | 古琴 |
 | | `sword` | 剑 |
 | | `wine` | 酒 |
+| `MYTH` | `giantroc` | 🆕 大鹏（图腾，象征个人狂傲与一飞冲天） |
+| `PLACE` | `jadestep` | 🆕 玉阶（政治地标，象征权力中枢与阶级跃升） |
 
 **完整枚举值：**
 - `TARGET_FACTION_QINGLIU`
@@ -275,6 +279,8 @@
 - `TARGET_OBJECT_GUQIN`
 - `TARGET_OBJECT_SWORD`
 - `TARGET_OBJECT_WINE`
+- `TARGET_MYTH_GIANTROC`  🆕
+- `TARGET_PLACE_JADESTEP`  🆕
 
 ---
 

@@ -1,0 +1,110 @@
+{
+  "scene_dailou": {
+    "imagery_jade_step": [
+      "仰望前排紫袍踏过玉阶",
+      "品级站位如天堑望不到宫门"
+    ],
+    "imagery_cloud_and_sun": [
+      "视线被官服仪仗层层遮蔽",
+      "金光在琉璃瓦顶却照不到自己"
+    ]
+  },
+  "scene_jixian": {
+    "imagery_jade_step": [
+      "抱古籍爬高阶仰望上官",
+      "校书郎的案牍离宰相咫尺天涯"
+    ],
+    "imagery_cloud_and_sun": [
+      "窗外天光被高墙切割",
+      "书架阴影中阳光照不到角落"
+    ]
+  },
+  "scene_huaqing": {
+    "imagery_jade_step": [
+      "温泉水流过玉阶到脚下已冰冷",
+      "听到内院欢笑声却进不去"
+    ],
+    "imagery_cloud_and_sun": [
+      "白雾把皇权包裹得严严实实",
+      "蒸汽弥漫看不清里面在上演什么"
+    ]
+  },
+  "scene_zhongnan": {
+    "imagery_giant_roc": [
+      "狂风鼓袖想跃入深渊一飞冲天",
+      "俯瞰长安想凌驾万物之上"
+    ],
+    "imagery_cloud_and_sun": [
+      "远眺长安城被浑浊阴霾笼罩",
+      "阳光透不进长安上空的云层"
+    ]
+  },
+  "scene_leyou": {
+    "imagery_giant_roc": [
+      "孤鹰盘旋九天之上没有腐鼠也要飞",
+      "荒冢上独立的身影如大鹏"
+    ],
+    "imagery_cloud_and_sun": [
+      "巨大落日被西边暗云吞没",
+      "盛世将尽的悲凉感"
+    ]
+  },
+  "scene_dayan": {
+    "imagery_giant_roc": [
+      "塔顶看行人如蝼蚁在座都是垃圾",
+      "终将凌驾众生的自命不凡"
+    ],
+    "imagery_cloud_and_sun": [
+      "伸手就能摸到飘过的云彩",
+      "云被吹散皇帝就能看到塔顶的我"
+    ]
+  },
+  "scene_keshe": {
+    "imagery_giant_roc": [
+      "灯火把影子投在墙上如蛰伏鹏翼",
+      "破壁黑影蠢蠢欲动待振翅"
+    ]
+  },
+  "scene_jiusi": {
+    "imagery_giant_roc": [
+      "冷笑门荫纨绔燕雀安知大鹏之志",
+      "独坐暗角总有一天掀了这桌"
+    ]
+  },
+  "scene_baqiao": {
+    "imagery_giant_roc": [
+      "漫天雪羽如大鹏抖落的羽毛",
+      "当了皮裘换酒也要狂歌振翅"
+    ]
+  },
+  "scene_qujiang": {
+    "imagery_giant_roc": [
+      "拍案而起赋诗惊满座如巨鸟入鸡群",
+      "砸杯当众吟出狂放之辞"
+    ],
+    "imagery_cloud_and_sun": [
+      "芙蓉园被云雾遮挡报国无门",
+      "欢宴下暗涌的政治阴云"
+    ]
+  },
+  "scene_zhaidi": {
+    "imagery_giant_roc": [
+      "拂袖而去大鹏绝不吃腐鼠",
+      "冷宴残羹配不上我的抱负"
+    ],
+    "imagery_cloud_and_sun": [
+      "隔绝内外院的高墙如人造黑云",
+      "内堂赏赐外院冷席如天壤"
+    ]
+  },
+  "scene_huji": {
+    "imagery_giant_roc": [
+      "击剑高歌如鲲鹏解缚逍遥游",
+      "脱离朝堂礼法灵魂短暂自由"
+    ],
+    "imagery_cloud_and_sun": [
+      "边关老兵痛哭奸臣瞒报军情",
+      "天下危亡的阴霾重重压下"
+    ]
+  }
+}

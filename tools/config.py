@@ -257,6 +257,7 @@ class PipelineDimensionValue(BaseModel):
     scale: float = 1.0
     operator_dsl: str = ""
     linked_value_ids: list[str] = []
+    stored_to: str = ""
     narrative_constraint: Optional[NarrativeConstraint] = None
 
 

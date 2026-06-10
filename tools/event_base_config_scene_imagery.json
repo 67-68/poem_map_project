@@ -1,0 +1,124 @@
+{
+  "id": "scene_imagery_library",
+  "name": "场景-意象获取事件库",
+  "background_context": "大唐天宝年间，长安城内外。你在不同的场景中经历着不同的心境，这些场景会触发特定的意象获取事件。每个场景都有自己独特的物理特征和精神投射。",
+  "ai_persona": "你是一位精通唐朝生活和意象征象学的叙事设计师，擅长将物理场景转化为精神意象。",
+  "prompt_features": [
+    "stateless_narrative",
+    "scene_focus"
+  ],
+  "option_features": [
+    "option_accept_scene"
+  ],
+  "dimensions": [
+    {
+      "id": "scene",
+      "name": "场景",
+      "description": "物理场景定义（stored_to 标记存档路由；tags 存放 4 段式意象 tag 给插件生成 operator DSL；linked_value_ids 引用独立意象数据库节点）",
+      "values": [
+        {
+          "id": "scene_dailou",
+          "name": "待漏院听更",
+          "description": "大明宫外的破晓，凌晨寒风，百官按品级站在院外等候早朝。宫门紧闭，铜钉在晨曦中泛着冷光",
+          "stored_to": "fengzhao",
+          "tags": ["TARGET_PLACE_JADESTEP_DAILOU", "ENV_POLITICS_CLOUD_DAILOU"],
+          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"]
+        },
+        {
+          "id": "scene_jixian",
+          "name": "集贤院修书",
+          "description": "皇家图书馆，书架通天，典籍堆中埋首。窗外偶尔有紫袍官员经过，脚步声在回廊中回荡",
+          "stored_to": "fengzhao",
+          "tags": ["TARGET_PLACE_JADESTEP_JIXIAN", "ENV_POLITICS_CLOUD_JIXIAN"],
+          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"]
+        },
+        {
+          "id": "scene_huaqing",
+          "name": "华清池扈从",
+          "description": "温泉外苑，水汽氤氲中隐约可见权贵身影。你在外围守卫，听着里面的丝竹管弦和欢笑声",
+          "stored_to": "fengzhao",
+          "tags": ["TARGET_PLACE_JADESTEP_HUAQING", "ENV_POLITICS_CLOUD_HUAQING"],
+          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"]
+        },
+        {
+          "id": "scene_zhongnan",
+          "name": "终南山绝顶",
+          "description": "山风呼啸，云海翻腾。站在绝顶俯瞰，长安城如棋盘般渺小，天地间只剩风声和自己的心跳",
+          "stored_to": "denggao",
+          "tags": ["TARGET_MYTH_GIANTROC_ZHONGNAN", "ENV_POLITICS_CLOUD_ZHONGNAN"],
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+        },
+        {
+          "id": "scene_leyou",
+          "name": "乐游原残阳",
+          "description": "汉代荒冢上，夕阳如血。长安城在暮色中渐次亮起灯火，苍茫天地间独你一人伫立",
+          "stored_to": "denggao",
+          "tags": ["TARGET_MYTH_GIANTROC_LEYOU", "ENV_POLITICS_CLOUD_LEYOU"],
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+        },
+        {
+          "id": "scene_dayan",
+          "name": "慈恩寺大雁塔",
+          "description": "塔顶俯瞰长安，坊市如棋格。暮鼓声中，归鸦绕塔，红尘在脚下喧嚣却遥远",
+          "stored_to": "denggao",
+          "tags": ["TARGET_MYTH_GIANTROC_DAYAN", "ENV_POLITICS_CLOUD_DAYAN"],
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+        },
+        {
+          "id": "scene_keshe",
+          "name": "破败客舍寒夜",
+          "description": "油灯如豆，破窗外寒风呜咽。桌上残酒冷炙，墙壁缝隙可见邻家炊烟，更显己身孤寂",
+          "stored_to": "duzhuo",
+          "tags": ["TARGET_MYTH_GIANTROC_KESHE"],
+          "linked_value_ids": ["imagery_giant_roc"]
+        },
+        {
+          "id": "scene_jiusi",
+          "name": "繁华酒肆暗角",
+          "description": "西市酒肆人声鼎沸，胡姬旋舞。你坐在暗角，冷眼旁观醉生梦死的众生相",
+          "stored_to": "duzhuo",
+          "tags": ["TARGET_MYTH_GIANTROC_JIUSI"],
+          "linked_value_ids": ["imagery_giant_roc"]
+        },
+        {
+          "id": "scene_baqiao",
+          "name": "灞桥风雪酒亭",
+          "description": "大雪纷飞中灞桥横跨渭水，酒亭茅檐低垂。送别的行人折柳相赠，离歌在风雪中若隐若现",
+          "stored_to": "duzhuo",
+          "tags": ["TARGET_MYTH_GIANTROC_BAQIAO"],
+          "linked_value_ids": ["imagery_giant_roc"]
+        },
+        {
+          "id": "scene_qujiang",
+          "name": "曲江池流觞亭",
+          "description": "水边诗会，曲水流觞。文人墨客吟诗作对，酒杯顺水漂流至你面前",
+          "stored_to": "jiaoyou",
+          "tags": ["TARGET_MYTH_GIANTROC_QUJIANG", "ENV_POLITICS_CLOUD_QUJIANG"],
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+        },
+        {
+          "id": "scene_zhaidi",
+          "name": "权贵宅邸外院",
+          "description": "高门大院外，你站在偏院等候。院内丝竹声声，但你的席位在外院冷案上，连残羹都轮不到",
+          "stored_to": "jiaoyou",
+          "tags": ["TARGET_MYTH_GIANTROC_ZHAIDI", "ENV_POLITICS_CLOUD_ZHAIDI"],
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+        },
+        {
+          "id": "scene_huji",
+          "name": "胡姬酒肆狂欢",
+          "description": "三教九流汇聚的酒肆，胡姬的琵琶声如珠落玉盘。有人在角落里痛哭，有人在桌上起舞",
+          "stored_to": "jiaoyou",
+          "tags": ["TARGET_MYTH_GIANTROC_HUJI", "ENV_POLITICS_CLOUD_HUJI"],
+          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"]
+        }
+      ]
+    }
+  ],
+  "universal_tags": ["scene_imagery"],
+  "word_count_min": 40,
+  "word_count_max": 200,
+  "max_retries": 3,
+  "api_model": "deepseek-reasoner",
+  "output_dir": "data/generated_events/"
+}
