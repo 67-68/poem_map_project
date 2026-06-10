@@ -390,3 +390,163 @@ class EventPipelineConfig(BaseModel):
     max_retries: int = 3
     api_model: str = "deepseek-chat"
     output_dir: str = "data/generated_events/"
+
+
+# ════════════════════════════════════════════════════════════════
+# 内置示例配置（拜谒 - 蜜月期）
+# ════════════════════════════════════════════════════════════════
+
+def default_config() -> EventPipelineConfig:
+    """返回默认的拜谒蜜月期配置。"""
+    return EventPipelineConfig(
+        id="bai_ye_honeymoon",
+        name="拜谒 - 蜜月期 (0-70)",
+        background_context="""
+大唐天宝年间（公元742年—756年），长安城。此时正值唐玄宗在位后期，朝政日益腐败，权相李林甫把持朝纲，官场中充斥着"口蜜腹剑"的风气。
+
+玩家是初入仕途的进士，需要在长安城中通过拜谒权贵来获得举荐和升迁机会。权贵府邸门前，从门子到清客到权贵本人，层层关卡都需要打点。这是一个表面上讲究礼数、实则处处要钱的世界。
+
+蜜月期（玩家野心值0-70）：这个阶段玩家尚处于对官场的幻想期，遇到的阻碍虽然令人不快，但还没有到彻底打破幻想的程度。对方多少还保留着表面上的客气和礼数。
+""".strip(),
+        ai_persona="""
+你是一位精通唐朝官场文化和人情世故的叙事设计师。你擅长用克制、白描的手法呈现官场中微妙的权力关系。你的文风接近唐传奇，简洁有力，不煽情不议论，让事实本身说话。你深刻理解"无状态叙事"——每个事件都是独立的切片，不依赖玩家的过往经历。
+""".strip(),
+        prompt_features=[
+            PromptFeature(id="stateless_narrative", text="使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"),
+            PromptFeature(id="tone_cautious", text="不要过于戏剧化，保持冷静克制的叙事语气，突出官场的虚伪和客套。"),
+        ],
+        fact_features=[
+            FactFeature(id="bai_ye_venue", text="去拜谒的地方可以是王府、右相府或六部衙门，这些地点在长安城中真实存在。"),
+        ],
+        dimensions=[
+            PipelineDimension(
+                id="power_level",
+                name="权力阻击位",
+                description="玩家拜谒时面对的门槛等级，级别越高付出的代价越大",
+                values=[
+                    PipelineDimensionValue(
+                        id="L0", name="门子/家奴",
+                        description="最底层的门卫、仆役，守门索贿，玩家需要打点才能进门",
+                        scale=1.0,
+                        operator_dsl='prop_sub(name=money; val=10)',
+                    ),
+                    PipelineDimensionValue(
+                        id="L1", name="清客/文法吏",
+                        description="中层幕僚、文书小吏，递话要钱，比直接面对权贵便宜",
+                        scale=1.5,
+                        operator_dsl='prop_sub(name=money; val=10)',
+                    ),
+                    PipelineDimensionValue(
+                        id="L2", name="权贵本尊",
+                        description="直接面对高官权贵，需要重大代价才能获得见面机会",
+                        scale=2.0,
+                        operator_dsl='prop_sub(name=money; val=10)|prop_sub(name=fatigue; val=5)',
+                    ),
+                ],
+            ),
+            PipelineDimension(
+                id="extraction_type",
+                name="资源掠夺机制",
+                description="玩家在这次拜谒中付出的主要代价类型",
+                values=[
+                    PipelineDimensionValue(
+                        id="TypeA", name="金钱掠夺",
+                        description="对方通过明示或暗示索取钱财，这是最常见的资源掠夺方式",
+                        scale=1.0,
+                        operator_dsl='prop_sub(name=money; val=20)',
+                    ),
+                    PipelineDimensionValue(
+                        id="TypeB", name="生命/健康损耗",
+                        description="对方耗着玩家、让玩家长时间等候、带病工作等身体损耗",
+                        scale=1.0,
+                        operator_dsl='prop_sub(name=health; val=5)',
+                    ),
+                    PipelineDimensionValue(
+                        id="TypeC", name="精神PUA",
+                        description="对方通过羞辱、冷落、贬低玩家地位来获取精神快感",
+                        scale=1.0,
+                        operator_dsl='prop_sub(name=fatigue; val=10)',
+                    ),
+                ],
+            ),
+            PipelineDimension(
+                id="evil_motive",
+                name="平庸之恶动机",
+                description="对方为难玩家的内在动机，这决定了事件的道德底色",
+                values=[
+                    PipelineDimensionValue(
+                        id="M0", name="媚上邀功",
+                        description="对方为了讨好上级而故意为难玩家，把玩家当投名状",
+                        scale=1.0,
+                        operator_dsl="",
+                    ),
+                    PipelineDimensionValue(
+                        id="M1", name="纯粹寻租/变态",
+                        description="对方纯粹为了享受支配欲和权力快感，毫无制度性理由",
+                        scale=1.5,
+                        operator_dsl="",
+                    ),
+                    PipelineDimensionValue(
+                        id="M2", name="制度性冷漠",
+                        description="对方并非刻意针对玩家，而是制度本身如此，玩家只是碰上了",
+                        scale=1.0,
+                        operator_dsl="",
+                    ),
+                ],
+            ),
+        ],
+        word_count_min=80,
+        word_count_max=200,
+        max_retries=3,
+        api_model="deepseek-reasoner",
+        output_dir="data/generated_events/",
+    )
+
+
+# ════════════════════════════════════════════════════════════════
+# JSON 配置加载器
+# ════════════════════════════════════════════════════════════════
+
+def load_config_from_json(path: str) -> EventPipelineConfig:
+    """从 JSON 文件加载配置，自动解析 TextFeature key 为完整对象。"""
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    # 如果 prompt_features / fact_features / option_features
+    # 是 list[str]（key 列表），从中央特征库解析为完整对象
+    resolve_text_features(data)
+
+    # 解析 narrative_constraint 中的 text feature key
+    # 将 demand_context / action_style 等字段的 key 引用解析为实际文本
+    # 注意：resolve_text_features() 已将 list[str] 转为 Pydantic 对象，
+    # 所以要先检查类型再决定用 .get() 还是 .getattr()
+    library = load_text_features_library()
+    for opt in data.get("option_features", []):
+        if isinstance(opt, dict):
+            nc = opt.get("narrative_constraint")
+        else:
+            nc = getattr(opt, "narrative_constraint", None)
+        if not nc:
+            continue
+        if isinstance(nc, dict):
+            nc_dict = nc
+        else:
+            # Pydantic BaseModel → dict
+            nc_dict = nc.model_dump()
+        for field in ("demand_context", "action_style", "resolution_style"):
+            val = nc_dict.get(field, "")
+            if not val or not isinstance(val, str):
+                continue
+            # 如果该值在 prompt_features 中有对应 entry，则解析为实际文本
+            try:
+                feature = library.resolve_prompt(val)
+                nc_dict[field] = feature.text
+            except KeyError:
+                pass  # 不是 key 引用，保持原值（向后兼容 inline text）
+        # 如果是 Pydantic 对象，将更新后的 dict 写回
+        if not isinstance(opt, dict) and isinstance(nc, dict):
+            for field in ("demand_context", "action_style", "resolution_style"):
+                if field in nc_dict:
+                    setattr(nc, field, nc_dict[field])
+
+    return EventPipelineConfig.model_validate(data)

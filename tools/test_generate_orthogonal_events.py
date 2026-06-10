@@ -1,5 +1,5 @@
 """
-单元测试 — generate_orthogonal_events.py 核心函数。
+单元测试 — 正交事件生成管线核心函数。
 
 运行:
     python3 -m unittest tools.test_generate_orthogonal_events -v
@@ -20,20 +20,26 @@ from tools.config import (
     EventPipelineConfig,
     PipelineDimension,
     PipelineDimensionValue,
+    default_config,
 )
-from tools.generate_orthogonal_events import (
-    _extract_scene_tags,
-    _make_combos,
+from tools.event_generator.dsl_parser import (
     _parse_dsl_args,
     _split_dsl_expressions,
-    expand_combinations,
-    parse_llm_response,
     scale_dsl_operator,
     scale_all_operators,
+)
+from tools.event_generator.llm_client import (
+    LLMClient,
+    parse_llm_response,
+)
+from tools.event_generator.state_managers import (
     SlidingBlacklist,
     SandboxManager,
-    LLMClient,
-    default_config,
+)
+from tools.event_generator.dimensions import (
+    _extract_scene_tags,
+    _make_combos,
+    expand_combinations,
 )
 
 
