@@ -91,6 +91,43 @@ func present_by_id(id: String, pos: ENUMS.IMAGE_POS, size: Vector2 = Vector2(100
 	return handle
 
 
+## 按 ID 展示图片，位置使用绝对像素坐标。
+## [param pos] 屏幕绝对像素坐标，例如 Vector2(960, 540)。
+## [param size] 目标显示尺寸 (默认 100x100)，保持宽高比缩放
+func present_by_id_at(id: String, pos: Vector2, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
+	var tex = _resolve_texture(id)
+	if tex == null:
+		Logging.err("%s: present_by_id_at 失败，无法解析纹理: id=%s" % [LOG_TAG, id])
+		return null
+
+	var handle = present(tex, pos, size)
+	_active_images[id] = handle
+	Logging.info("%s: present_by_id_at → id=%s pos=%s" % [LOG_TAG, id, pos])
+	return handle
+
+
+## 按 ID 展示图片，位置使用归一化坐标 (0.0~1.0)。
+## [param normalized_pos] 屏幕归一化坐标，例如 Vector2(0.5, 0.3) 表示屏幕 50% 横、30% 纵位置。
+## [param size] 目标显示尺寸 (默认 100x100)，保持宽高比缩放
+func present_by_id_normalized(id: String, normalized_pos: Vector2, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
+	var tex = _resolve_texture(id)
+	if tex == null:
+		Logging.err("%s: present_by_id_normalized 失败，无法解析纹理: id=%s" % [LOG_TAG, id])
+		return null
+
+	var screen := Vector2()
+	if get_viewport() != null:
+		screen = get_viewport().get_visible_rect().size
+	else:
+		screen = Vector2(1920, 1080)
+
+	var global_pos := Vector2(screen.x * normalized_pos.x, screen.y * normalized_pos.y)
+	var handle = present(tex, global_pos, size)
+	_active_images[id] = handle
+	Logging.info("%s: present_by_id_normalized → id=%s normalized_pos=%s pixel_pos=%s" % [LOG_TAG, id, normalized_pos, global_pos])
+	return handle
+
+
 ## 回溯已有图片句柄 (无需传递 Texture2D)
 ## 如果该 ID 对应的图片已被销毁，返回 null
 func recall(id: String) -> ImageHandle:

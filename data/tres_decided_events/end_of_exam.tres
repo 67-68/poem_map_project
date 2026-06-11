@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://cf3n6bcvbty64"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_m3x1n"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_wc6w3"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_4ccc5"]
+[ext_resource type="Script" uid="uid://c65vlkthmq8ip" path="res://core/operators/image_shatter_operator.gd" id="2_06hn4"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_bw5tr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_06hn4"]
+
+[sub_resource type="Resource" id="Resource_hixgn"]
+script = ExtResource("2_06hn4")
+image_id = "career_progress_bar"
+metadata/_custom_type_script = "uid://c65vlkthmq8ip"
+
+[sub_resource type="Resource" id="Resource_2d5uh"]
+script = ExtResource("3_bw5tr")
+operators = Array[ExtResource("1_wc6w3")]([SubResource("Resource_hixgn")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_bw5tr"]
+script = ExtResource("5_06hn4")
+description = "结束了"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_4ccc5")
+options = Array[ExtResource("1_m3x1n")]([SubResource("Resource_bw5tr")])
+on_enter_result = SubResource("Resource_2d5uh")
+uuid = "end_of_exam"
+name = "结束了...?"
+description = "你彻底失败了"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

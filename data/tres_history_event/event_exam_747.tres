@@ -3,9 +3,16 @@
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_w7s0s"]
 [ext_resource type="Script" uid="uid://cb7y7amwmeuo4" path="res://core/model/history_event.gd" id="2_blpch"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_rv50i"]
+[ext_resource type="Script" uid="uid://b1151jgebsgcu" path="res://core/operators/image_present_operator.gd" id="3_5vqp1"]
 [ext_resource type="Script" uid="uid://dtw3kde1u305k" path="res://core/operators/push_focused_chat_operator.gd" id="3_l4c64"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_5vqp1"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_o2f43"]
+
+[sub_resource type="Resource" id="Resource_o2f43"]
+script = ExtResource("3_5vqp1")
+image_id = "career_progress_bar"
+position = "0,125"
+metadata/_custom_type_script = "uid://b1151jgebsgcu"
 
 [sub_resource type="Resource" id="Resource_qrlep"]
 script = ExtResource("3_l4c64")
@@ -14,7 +21,7 @@ metadata/_custom_type_script = "uid://dtw3kde1u305k"
 
 [sub_resource type="Resource" id="Resource_4m2sr"]
 script = ExtResource("4_5vqp1")
-operators = Array[ExtResource("2_rv50i")]([null, SubResource("Resource_qrlep")])
+operators = Array[ExtResource("2_rv50i")]([SubResource("Resource_o2f43"), SubResource("Resource_qrlep")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_taiv1"]
