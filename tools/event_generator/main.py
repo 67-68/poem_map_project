@@ -592,6 +592,21 @@ def main():
                                 all_tags.append(tag)
                     tags_to_use = all_tags if all_tags else (cfg.universal_tags or ["bai_ye"])
 
+                    # 🆕 从维度 values 中提取 stored_to（取第一个非空值）
+                    # 用于 CSV context 列的 store_to 路由指令，
+                    # Godot 端 STORE_TO_PATH_MAP 根据此值将 .tres 路由到对应目录。
+                    stored_to = ""
+                    for combo in current_combos:
+                        if combo.value.stored_to:
+                            stored_to = combo.value.stored_to
+                            break
+
+                    # 将 stored_to 注入 context_extras（追加到已有插件富化内容后）
+                    if stored_to:
+                        if context_extras is None:
+                            context_extras = {}
+                        context_extras["store_to"] = stored_to
+
                     write_event_row(
                         writer, uuid, title, description,
                         tags=tags_to_use, requirement=cfg.universal_requirement,

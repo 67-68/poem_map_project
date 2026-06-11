@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c21dmbgkymyo8"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_f6bop"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cg3mq"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_sqqfq"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_6eo1t"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_21qsj"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_ko7su"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_1f15h"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_vuiv6"]
+
+[sub_resource type="Resource" id="Resource_h62fk"]
+script = ExtResource("3_sqqfq")
+str_props = "money"
+value = 15
+
+[sub_resource type="Resource" id="Resource_s5e3r"]
+script = ExtResource("4_6eo1t")
+value = 10
+
+[sub_resource type="Resource" id="Resource_fvj6j"]
+script = ExtResource("5_21qsj")
+imagery_name = "TARGET_MYTH_GIANTROC_HUJI"
+
+[sub_resource type="Resource" id="Resource_6g3b8"]
+script = ExtResource("6_ko7su")
+operators = Array[ExtResource("2_cg3mq")]([SubResource("Resource_h62fk"), SubResource("Resource_s5e3r"), SubResource("Resource_fvj6j")])
+
+[sub_resource type="Resource" id="Resource_08lb7"]
+script = ExtResource("7_1f15h")
+choice_result = SubResource("Resource_6g3b8")
+description = "（冷眼旁观）"
+
+[resource]
+script = ExtResource("8_vuiv6")
+_target_tags = Array[String](["action:main:jiaoyou"])
+options = Array[ExtResource("1_f6bop")]([SubResource("Resource_08lb7")])
+uuid = "scene_imagery_library_scene_huji_imagery_giant_roc"
+name = "大鹏玉佩"
+description = "胡姬的琵琶声溅满酒肆，有人在角落痛哭，有人在桌上踏歌。你的视线越过这一切，钉在一个商人腰间的玉佩上——大鹏振翅，玉质温润，雕工是宫中的样式。一个不该出现在市井之物。身体微微一硬，手指在桌上叩了三下，像是数着翅膀扇动的次数。"

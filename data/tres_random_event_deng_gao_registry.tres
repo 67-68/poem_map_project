@@ -5,5 +5,11 @@
 [resource]
 script = ExtResource("1_jtemo")
 resources = {
-"normal_deng_gao": "res://data/tres_random_event_deng_gao/normal_deng_gao.tres"
+"normal_deng_gao": "res://data/tres_random_event_deng_gao/normal_deng_gao.tres",
+"scene_imagery_library_scene_dayan_imagery_cloud_and_sun": "res://data/tres_random_event_deng_gao/scene_imagery_library_scene_dayan_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_dayan_imagery_giant_roc": "res://data/tres_random_event_deng_gao/scene_imagery_library_scene_dayan_imagery_giant_roc.tres",
+"scene_imagery_library_scene_leyou_imagery_cloud_and_sun": "res://data/tres_random_event_deng_gao/scene_imagery_library_scene_leyou_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_leyou_imagery_giant_roc": "res://data/tres_random_event_deng_gao/scene_imagery_library_scene_leyou_imagery_giant_roc.tres",
+"scene_imagery_library_scene_zhongnan_imagery_cloud_and_sun": "res://data/tres_random_event_deng_gao/scene_imagery_library_scene_zhongnan_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_zhongnan_imagery_giant_roc": "res://data/tres_random_event_deng_gao/scene_imagery_library_scene_zhongnan_imagery_giant_roc.tres"
 }

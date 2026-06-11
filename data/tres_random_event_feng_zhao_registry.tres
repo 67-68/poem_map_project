@@ -5,5 +5,11 @@
 [resource]
 script = ExtResource("1_kxy0l")
 resources = {
-"normal_feng_zhao": "res://data/tres_random_event_feng_zhao/normal_feng_zhao.tres"
+"normal_feng_zhao": "res://data/tres_random_event_feng_zhao/normal_feng_zhao.tres",
+"scene_imagery_library_scene_dailou_imagery_cloud_and_sun": "res://data/tres_random_event_feng_zhao/scene_imagery_library_scene_dailou_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_dailou_imagery_jade_step": "res://data/tres_random_event_feng_zhao/scene_imagery_library_scene_dailou_imagery_jade_step.tres",
+"scene_imagery_library_scene_huaqing_imagery_cloud_and_sun": "res://data/tres_random_event_feng_zhao/scene_imagery_library_scene_huaqing_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_huaqing_imagery_jade_step": "res://data/tres_random_event_feng_zhao/scene_imagery_library_scene_huaqing_imagery_jade_step.tres",
+"scene_imagery_library_scene_jixian_imagery_cloud_and_sun": "res://data/tres_random_event_feng_zhao/scene_imagery_library_scene_jixian_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_jixian_imagery_jade_step": "res://data/tres_random_event_feng_zhao/scene_imagery_library_scene_jixian_imagery_jade_step.tres"
 }

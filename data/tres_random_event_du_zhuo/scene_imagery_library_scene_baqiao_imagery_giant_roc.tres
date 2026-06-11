@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cg8tbl2dvrrvm"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_v7ku8"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_7cfoa"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_5b2nb"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_h0u05"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_4sl3l"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_203y8"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_vma41"]
+
+[sub_resource type="Resource" id="Resource_iimsl"]
+script = ExtResource("3_5b2nb")
+value = 10
+
+[sub_resource type="Resource" id="Resource_p0470"]
+script = ExtResource("4_h0u05")
+imagery_name = "TARGET_MYTH_GIANTROC_BAQIAO"
+
+[sub_resource type="Resource" id="Resource_b3nep"]
+script = ExtResource("5_4sl3l")
+operators = Array[ExtResource("2_7cfoa")]([SubResource("Resource_iimsl"), SubResource("Resource_p0470")])
+
+[sub_resource type="Resource" id="Resource_yjd1u"]
+script = ExtResource("6_203y8")
+choice_result = SubResource("Resource_b3nep")
+description = "（冷眼旁观）"
+
+[resource]
+script = ExtResource("7_vma41")
+_target_tags = Array[String](["action:main:duzhuo"])
+options = Array[ExtResource("1_v7ku8")]([SubResource("Resource_yjd1u")])
+uuid = "scene_imagery_library_scene_baqiao_imagery_giant_roc"
+name = "雪中无别"
+description = "灞桥风雪中，送别的人群挤满酒亭。你站在檐下，看他们折柳、碰杯、抱拳——每一双手都在挥别。你的手臂垂在身侧，雪花落上袖口，化不开。远处雪幕里，一个骑马人的身影逐渐缩小，马铃被风声吞没。你身体微微前倾，随即绷直——面前的路被新雪覆盖，没有一个脚印朝你的方向延伸。"

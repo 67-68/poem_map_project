@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dbcuqvwmpesle"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_lfrr8"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cmx0p"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_573fg"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_8qusf"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_s7rcq"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_2mi5t"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_h2wvt"]
+
+[sub_resource type="Resource" id="Resource_v1smf"]
+script = ExtResource("3_573fg")
+value = 10
+
+[sub_resource type="Resource" id="Resource_cg6ph"]
+script = ExtResource("4_8qusf")
+imagery_name = "TARGET_MYTH_GIANTROC_LEYOU"
+
+[sub_resource type="Resource" id="Resource_301jj"]
+script = ExtResource("5_s7rcq")
+operators = Array[ExtResource("2_cmx0p")]([SubResource("Resource_v1smf"), SubResource("Resource_cg6ph")])
+
+[sub_resource type="Resource" id="Resource_sgkgn"]
+script = ExtResource("6_2mi5t")
+choice_result = SubResource("Resource_301jj")
+description = "（冷眼旁观）"
+
+[resource]
+script = ExtResource("7_h2wvt")
+_target_tags = Array[String](["action:main:denggao"])
+options = Array[ExtResource("1_lfrr8")]([SubResource("Resource_sgkgn")])
+uuid = "scene_imagery_library_scene_leyou_imagery_giant_roc"
+name = "灯火计数"
+description = "残阳如凝血，浸透汉代荒冢的乱石。你站在土丘最高处，衣摆被风扯向长安方向，布料在肋骨上拉出紧绷的弦。长安城在暮色中渐次亮起灯火，你开始计数——第一盏，指节抵住腰带扣；第二盏，喉结向下沉一寸；第三盏，脚趾在靴内蜷紧。灯一盏接一盏地亮，你身体里有什么东西被一盏一盏地抽走。直到其中一盏，偏在东南角，比其他灯更亮更冷，像一把匕首插进暮色的肋间。然后黑暗涌上来，把所有灯牌位都吞没——光与暗的边界在你脚下，你站在黑暗这一侧。"

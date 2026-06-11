@@ -5,5 +5,8 @@
 [resource]
 script = ExtResource("1_2br3h")
 resources = {
-"normal_du_zhuo": "res://data/tres_random_event_du_zhuo/normal_du_zhuo.tres"
+"normal_du_zhuo": "res://data/tres_random_event_du_zhuo/normal_du_zhuo.tres",
+"scene_imagery_library_scene_baqiao_imagery_giant_roc": "res://data/tres_random_event_du_zhuo/scene_imagery_library_scene_baqiao_imagery_giant_roc.tres",
+"scene_imagery_library_scene_jiusi_imagery_giant_roc": "res://data/tres_random_event_du_zhuo/scene_imagery_library_scene_jiusi_imagery_giant_roc.tres",
+"scene_imagery_library_scene_keshe_imagery_giant_roc": "res://data/tres_random_event_du_zhuo/scene_imagery_library_scene_keshe_imagery_giant_roc.tres"
 }

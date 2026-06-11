@@ -5,5 +5,11 @@
 [resource]
 script = ExtResource("1_0b683")
 resources = {
-"normal_jiao_you": "res://data/tres_random_event_jiao_you/normal_jiao_you.tres"
+"normal_jiao_you": "res://data/tres_random_event_jiao_you/normal_jiao_you.tres",
+"scene_imagery_library_scene_huji_imagery_cloud_and_sun": "res://data/tres_random_event_jiao_you/scene_imagery_library_scene_huji_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_huji_imagery_giant_roc": "res://data/tres_random_event_jiao_you/scene_imagery_library_scene_huji_imagery_giant_roc.tres",
+"scene_imagery_library_scene_qujiang_imagery_cloud_and_sun": "res://data/tres_random_event_jiao_you/scene_imagery_library_scene_qujiang_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_qujiang_imagery_giant_roc": "res://data/tres_random_event_jiao_you/scene_imagery_library_scene_qujiang_imagery_giant_roc.tres",
+"scene_imagery_library_scene_zhaidi_imagery_cloud_and_sun": "res://data/tres_random_event_jiao_you/scene_imagery_library_scene_zhaidi_imagery_cloud_and_sun.tres",
+"scene_imagery_library_scene_zhaidi_imagery_giant_roc": "res://data/tres_random_event_jiao_you/scene_imagery_library_scene_zhaidi_imagery_giant_roc.tres"
 }

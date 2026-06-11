@@ -5,5 +5,9 @@
 [resource]
 script = ExtResource("1_phcvc")
 resources = {
-"normal_fang_shi": "res://data/tres_random_event_fang_shi/normal_fang_shi.tres"
+"normal_fang_shi": "res://data/tres_random_event_fang_shi/normal_fang_shi.tres",
+"scene_imagery_library_scene_dongshi_imagery_medicine_stall": "res://data/tres_random_event_fang_shi/scene_imagery_library_scene_dongshi_imagery_medicine_stall.tres",
+"scene_imagery_library_scene_fumen_imagery_dry_lips": "res://data/tres_random_event_fang_shi/scene_imagery_library_scene_fumen_imagery_dry_lips.tres",
+"scene_imagery_library_scene_nanyuan_imagery_medicine_stall": "res://data/tres_random_event_fang_shi/scene_imagery_library_scene_nanyuan_imagery_medicine_stall.tres",
+"scene_imagery_library_scene_wenying_imagery_ink_for_sale": "res://data/tres_random_event_fang_shi/scene_imagery_library_scene_wenying_imagery_ink_for_sale.tres"
 }

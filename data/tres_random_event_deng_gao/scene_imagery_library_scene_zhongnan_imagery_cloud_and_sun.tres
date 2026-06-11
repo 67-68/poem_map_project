@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://ttl36g1sij64"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_i1l7l"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g24yl"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_7ym53"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_7t1ws"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_mhcak"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_2ri1d"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_mpwch"]
+
+[sub_resource type="Resource" id="Resource_hm06p"]
+script = ExtResource("3_7ym53")
+value = 10
+
+[sub_resource type="Resource" id="Resource_d4va1"]
+script = ExtResource("4_7t1ws")
+imagery_name = "TARGET_MYTH_GIANTROC_ZHONGNAN"
+
+[sub_resource type="Resource" id="Resource_ay53i"]
+script = ExtResource("5_mhcak")
+operators = Array[ExtResource("2_g24yl")]([SubResource("Resource_hm06p"), SubResource("Resource_d4va1")])
+
+[sub_resource type="Resource" id="Resource_jhff6"]
+script = ExtResource("6_2ri1d")
+choice_result = SubResource("Resource_ay53i")
+description = "（冷眼旁观）"
+
+[resource]
+script = ExtResource("7_mpwch")
+_target_tags = Array[String](["action:main:denggao"])
+options = Array[ExtResource("1_i1l7l")]([SubResource("Resource_jhff6")])
+uuid = "scene_imagery_library_scene_zhongnan_imagery_cloud_and_sun"
+name = "绝顶云光碎"
+description = "山风从背后推搡，将你的身体压向前方。云海翻腾，长安如棋盘摊在脚下——阳光被云层撕成碎金，落在东市是整片，落在西坊是几缕，落在皇城方向是一道窄窄的亮线。你的手指在袖中攥紧，指节抵着掌心。风又拽了拽衣襟，提醒你这高度有多虚。云层合拢时，所有光斑同时熄灭，像谁吹熄了一盏灯。"

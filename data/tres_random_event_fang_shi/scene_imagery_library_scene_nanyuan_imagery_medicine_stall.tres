@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bjsddffg6impj"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_limy0"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_oli6b"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_wka1c"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_bwdn6"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_yxtq7"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_vlp4o"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_1tjx2"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_ksu82"]
+
+[sub_resource type="Resource" id="Resource_csvcn"]
+script = ExtResource("3_wka1c")
+str_props = "money"
+value = 25
+
+[sub_resource type="Resource" id="Resource_bhejn"]
+script = ExtResource("4_bwdn6")
+value = 10
+
+[sub_resource type="Resource" id="Resource_hbx7h"]
+script = ExtResource("5_yxtq7")
+imagery_name = "TARGET_OBJECT_MEDICINE_NANYUAN"
+
+[sub_resource type="Resource" id="Resource_dgkwi"]
+script = ExtResource("6_vlp4o")
+operators = Array[ExtResource("2_oli6b")]([SubResource("Resource_csvcn"), SubResource("Resource_bhejn"), SubResource("Resource_hbx7h")])
+
+[sub_resource type="Resource" id="Resource_c75qu"]
+script = ExtResource("7_1tjx2")
+choice_result = SubResource("Resource_dgkwi")
+description = "（冷眼旁观）"
+
+[resource]
+script = ExtResource("8_ksu82")
+_target_tags = Array[String](["action:main:fangshi"])
+options = Array[ExtResource("1_limy0")]([SubResource("Resource_c75qu")])
+uuid = "scene_imagery_library_scene_nanyuan_imagery_medicine_stall"
+name = "血泡碾药土"
+description = "那人的袍角扫过马镫，金线绣的云纹一闪。你低头，继续拔下一根草。指甲缝里的泥干了，戥子铜绿蹭在袖口，洗不掉。水桶里映出张脸——指甲嵌着泥，眉眼看不清，像是另一个人的。"

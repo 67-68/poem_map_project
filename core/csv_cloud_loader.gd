@@ -100,6 +100,13 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "is_generated": true,
         "tres_output_dir": "res://data/tres_random_event_bai_ye",
     },
+    {
+        "name": "野心生活事件",
+        "save_path": "res://data/generated_events/scene_imagery_library_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+        "tres_output_dir": "res://data/random_events",
+    },
 ]
 
 # 🗺️ store_to 路径映射表
