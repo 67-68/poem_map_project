@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cq2w6d1yniw7f"
+
+[deps]
+
+files=["res://data/generated_events/scene_imagery_library_events.uuid.translation", "res://data/generated_events/scene_imagery_library_events.context.translation", "res://data/generated_events/scene_imagery_library_events.en.translation", "res://data/generated_events/scene_imagery_library_events.title.translation", "res://data/generated_events/scene_imagery_library_events.description.translation", "res://data/generated_events/scene_imagery_library_events.en.translation", "res://data/generated_events/scene_imagery_library_events.results.translation", "res://data/generated_events/scene_imagery_library_events.en.translation", "res://data/generated_events/scene_imagery_library_events.en.translation", "res://data/generated_events/scene_imagery_library_events.en.translation"]
+
+source_file="res://data/generated_events/scene_imagery_library_events.csv"
+dest_files=["res://data/generated_events/scene_imagery_library_events.uuid.translation", "res://data/generated_events/scene_imagery_library_events.context.translation", "res://data/generated_events/scene_imagery_library_events.en.translation", "res://data/generated_events/scene_imagery_library_events.title.translation", "res://data/generated_events/scene_imagery_library_events.description.translation", "res://data/generated_events/scene_imagery_library_events.en.translation", "res://data/generated_events/scene_imagery_library_events.results.translation", "res://data/generated_events/scene_imagery_library_events.en.translation", "res://data/generated_events/scene_imagery_library_events.en.translation", "res://data/generated_events/scene_imagery_library_events.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

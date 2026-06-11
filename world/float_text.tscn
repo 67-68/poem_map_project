@@ -1,13 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjovu0oau7pv2"]
+[gd_scene format=3 uid="uid://bjovu0oau7pv2"]
 
 [ext_resource type="Script" uid="uid://csf8s1p01advm" path="res://world/floating_text.gd" id="1_cmcny"]
 
-[node name="FloatingText" type="Control"]
-anchors_preset = 1
+[node name="FloatingText" type="Control" unique_id=648058592]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.0
 anchor_right = 0.5
-anchor_bottom = 0.0
 offset_left = -200.0
 offset_top = 80.0
 offset_right = 200.0
@@ -17,16 +17,10 @@ grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("1_cmcny")
 
-[node name="Label" type="RichTextLabel" parent="."]
-anchors_preset = 15
-anchor_left = 0.0
-anchor_top = 0.0
+[node name="Label" type="RichTextLabel" parent="." unique_id=263794236]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

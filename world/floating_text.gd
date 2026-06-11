@@ -41,21 +41,21 @@ func play(content: String, config: Dictionary = {}) -> void:
 	label.text = content
 
 	var rise_distance = config.get("rise_distance", CONFIG_GAIN.rise_distance)
-    var duration = config.get("duration", CONFIG_GAIN.duration)
-    var end_scale = config.get("end_scale", CONFIG_GAIN.end_scale)
+	var duration = config.get("duration", CONFIG_GAIN.duration)
+	var end_scale = config.get("end_scale", CONFIG_GAIN.end_scale)
 
-    # 🤓☝️ 丢掉你那愚蠢的 offset_top，直接对 position 下手！
-    # 记录当前 Y 坐标，将初始位置下压 rise_distance
-    var target_y = position.y
-    position.y = target_y + rise_distance
+	# 🤓☝️ 丢掉你那愚蠢的 offset_top，直接对 position 下手！
+	# 记录当前 Y 坐标，将初始位置下压 rise_distance
+	var target_y = position.y
+	position.y = target_y + rise_distance
 
-    var tw = create_tween()
-    tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-    
-    # 😡 替换掉 "offset_top"，改为缓动 "position:y"
-    tw.tween_property(self, "position:y", target_y, duration)
-    
-    tw.parallel()
+	var tw = create_tween()
+	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	# 😡 替换掉 "offset_top"，改为缓动 "position:y"
+	tw.tween_property(self, "position:y", target_y, duration)
+	
+	tw.parallel()
 	tw.tween_property(self, "modulate:a", 0.0, 0.5).set_delay(max(duration - 0.5, 0.0))
 	tw.tween_callback(on_finished)
 

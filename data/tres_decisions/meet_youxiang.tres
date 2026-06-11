@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="Decision" format=3 uid="uid://cqyhwxny3oj8g"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_lsx8t"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="2_ri2ju"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_3mgou"]
+[ext_resource type="Script" uid="uid://gq6m2qeuguk2" path="res://core/model/decision.gd" id="4_7t8qu"]
+[ext_resource type="Script" uid="uid://dh6tkcf3cubge" path="res://core/model/event_operator.gd" id="5_ri2ju"]
+
+[sub_resource type="Resource" id="Resource_gt0"]
+script = ExtResource("2_ri2ju")
+property = "career_progress"
+operator = 1
+metadata/_custom_type_script = "uid://pyecoqx4dr1i"
+
+[sub_resource type="Resource" id="Resource_lt100"]
+script = ExtResource("2_ri2ju")
+property = "career_progress"
+value = 100
+metadata/_custom_type_script = "uid://pyecoqx4dr1i"
+
+[sub_resource type="Resource" id="Resource_push"]
+script = ExtResource("5_ri2ju")
+event_key = "way_to_youxiangfu"
+metadata/_custom_type_script = "uid://dh6tkcf3cubge"
+
+[resource]
+script = ExtResource("4_7t8qu")
+action_results = Array[ExtResource("3_3mgou")]([SubResource("Resource_push")])
+aciton_requirements = Array[ExtResource("1_lsx8t")]([SubResource("Resource_gt0"), SubResource("Resource_lt100")])
+uuid = "meet_youxiang"
+name = "面见右相"
+description = "是时候去拜访一下那位一人之下的右相了..."
+metadata/_custom_type_script = "uid://gq6m2qeuguk2"

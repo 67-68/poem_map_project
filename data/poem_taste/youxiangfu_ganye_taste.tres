@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="PoemTaste" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="3_pushe"]
+[ext_resource type="Script" uid="uid://bxdw08m7bfi13" path="res://core/operators/info_demo_operator.gd" id="4_info"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_cr"]
+[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="6_pt"]
+
+[sub_resource type="Resource" id="Resource_acc_pe"]
+script = ExtResource("2_pe")
+metadata/_custom_type_script = "uid://byn0qqw1xm33f"
+
+[sub_resource type="Resource" id="Resource_acc_pushe"]
+script = ExtResource("3_pushe")
+event_key = "youxiangfu_hall_l1_revisit"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[sub_resource type="Resource" id="Resource_acc_cr"]
+script = ExtResource("5_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_acc_pe"), SubResource("Resource_acc_pushe")])
+
+[sub_resource type="Resource" id="Resource_rej_info"]
+script = ExtResource("4_info")
+info = "你提笔悬腕，却迟迟落不下去——这诗稿上的批注字字如刀，你无从下笔。清客见状，微微摇头，将诗稿收回袖中。"
+metadata/_custom_type_script = "uid://bxdw08m7bfi13"
+
+[sub_resource type="Resource" id="Resource_rej_pe"]
+script = ExtResource("2_pe")
+metadata/_custom_type_script = "uid://byn0qqw1xm33f"
+
+[sub_resource type="Resource" id="Resource_rej_cr"]
+script = ExtResource("5_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_rej_info"), SubResource("Resource_rej_pe")])
+
+[sub_resource type="Resource" id="Resource_not_cr"]
+script = ExtResource("5_cr")
+operators = Array[ExtResource("1_baseop")]([])
+
+[resource]
+script = ExtResource("6_pt")
+uuid = "youxiangfu_ganye_taste"
+_accepted_poem_types = Array[int]([0])
+lowest_poem_level = 3
+accepted_result = SubResource("Resource_acc_cr")
+rejected_result = SubResource("Resource_rej_cr")
+not_entered_result = SubResource("Resource_not_cr")
+metadata/_custom_type_script = "uid://4seqlwtem2i3"

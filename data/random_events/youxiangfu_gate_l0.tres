@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="3_pushe"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_prop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_eo"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="7_bo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_re"]
+[ext_resource type="Script" uid="uid://gwr4c2x26au3" path="res://core/requirements/narrative_lock_requirement.gd" id="9_nlr"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_pr"]
+
+[sub_resource type="Resource" id="Resource_req_money_100"]
+script = ExtResource("10_pr")
+property = "money"
+operator = 3
+value = 100
+metadata/_custom_type_script = "uid://pyecoqx4dr1i"
+
+[sub_resource type="Resource" id="Resource_sub_money"]
+script = ExtResource("4_prop")
+str_props = "money"
+value = -100
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_push_hall"]
+script = ExtResource("3_pushe")
+event_key = "youxiangfu_hall_l1"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[sub_resource type="Resource" id="Resource_cr_pay"]
+script = ExtResource("5_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_sub_money"), SubResource("Resource_push_hall")])
+
+[sub_resource type="Resource" id="Resource_opt_pay"]
+script = ExtResource("6_eo")
+requirement = SubResource("Resource_req_money_100")
+choice_result = SubResource("Resource_cr_pay")
+description = "将袖中所有银钱尽数倒在他摊开的掌中"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_nlock"]
+script = ExtResource("9_nlr")
+failed_hint = "门卫对你虎视眈眈，不交钱还想走？"
+metadata/_custom_type_script = "uid://gwr4c2x26au3"
+
+[sub_resource type="Resource" id="Resource_cr_empty"]
+script = ExtResource("5_cr")
+operators = Array[ExtResource("1_baseop")]([])
+
+[sub_resource type="Resource" id="Resource_opt_locked"]
+script = ExtResource("6_eo")
+requirement = SubResource("Resource_nlock")
+choice_result = SubResource("Resource_cr_empty")
+description = "转身离去"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_pe_broke"]
+script = ExtResource("2_pe")
+metadata/_custom_type_script = "uid://byn0qqw1xm33f"
+
+[sub_resource type="Resource" id="Resource_set_money_zero"]
+script = ExtResource("4_prop")
+str_props = "money"
+value = 0
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_cr_broke"]
+script = ExtResource("5_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_set_money_zero"), SubResource("Resource_pe_broke")])
+
+[sub_resource type="Resource" id="Resource_opt_broke"]
+script = ExtResource("6_eo")
+choice_result = SubResource("Resource_cr_broke")
+description = "将剩余银钱尽数倒出"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("8_re")
+options = Array[ExtResource("7_bo")]([SubResource("Resource_opt_pay"), SubResource("Resource_opt_locked"), SubResource("Resource_opt_broke")])
+uuid = "youxiangfu_gate_l0"
+name = "右相府门卫"
+description = "相府青鞜大门半开，门房的胖汉横跨在石阶上，正用小指抠着牙缝，连正眼都没落在一个穿布衣的访客身上。当你踏上第一级台阶，一截包着铜皮的水火棍猛地横扫过来，险些砸碎你的膝盖。「相爷府的门，也配沾你的酸泥？」胖汉冷哼一声，蒲扇般的手掌直直摊在你眼前。他掂了掂另一只手里的空钱袋，铜钱碰撞的暗哑声在寒风里格外刺耳。"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

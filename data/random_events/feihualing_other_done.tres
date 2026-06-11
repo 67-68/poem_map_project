@@ -1,17 +1,17 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c01yp6tf88teg"]
 
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_m1d88"]
-[ext_resource type="Script" path="res://core/operators/context_fetch_operators.gd" id="3_4w4yg"]
-[ext_resource type="Script" path="res://core/operators/npc_batch_check_operator.gd" id="4_3208g"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="5_jwf50"]
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="6_cahmx"]
-[ext_resource type="Script" path="res://core/operators/imaginary_level_reward_operator.gd" id="7_0u4nv"]
-[ext_resource type="Script" path="res://core/operators/pop_event_operator.gd" id="7_4w4yg"]
-[ext_resource type="Script" path="res://core/requirements/imaginary_level_requirement.gd" id="7_3208g"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="7_uh3s3"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_3208g"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="9_jwf50"]
-[ext_resource type="Script" path="res://core/model/property_operator.gd" id="10_hoa4e"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_m1d88"]
+[ext_resource type="Script" uid="uid://bj2nv77uffcp7" path="res://core/operators/context_fetch_operators.gd" id="3_4w4yg"]
+[ext_resource type="Script" uid="uid://cwprsg78wnilm" path="res://core/operators/npc_batch_check_operator.gd" id="4_3208g"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_jwf50"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="6_cahmx"]
+[ext_resource type="Script" uid="uid://bsss76ega4clt" path="res://core/operators/imaginary_level_reward_operator.gd" id="7_0u4nv"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="7_4w4yg"]
+[ext_resource type="Script" uid="uid://c3wrp6pt5lams" path="res://core/requirements/imaginary_level_requirement.gd" id="7_3208g"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_uh3s3"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_3208g"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="9_jwf50"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="10_hoa4e"]
 
 [sub_resource type="Resource" id="Resource_cahmx"]
 script = ExtResource("3_4w4yg")
@@ -57,10 +57,12 @@ description = "妙语连珠"
 
 [sub_resource type="Resource" id="Resource_hj86t"]
 script = ExtResource("10_hoa4e")
+str_props = "inspiration"
 value = -20
 
 [sub_resource type="Resource" id="Resource_n3bq1"]
 script = ExtResource("10_hoa4e")
+str_props = "literary_fame"
 value = 15
 
 [sub_resource type="Resource" id="Resource_l0yfd"]
@@ -84,10 +86,12 @@ description = "灵感硬接"
 
 [sub_resource type="Resource" id="Resource_01yfa"]
 script = ExtResource("10_hoa4e")
+str_props = "drunk"
 value = 10
 
 [sub_resource type="Resource" id="Resource_58h51"]
 script = ExtResource("10_hoa4e")
+str_props = "literary_fame"
 value = -5
 
 [sub_resource type="Resource" id="Resource_pqwxo"]

@@ -5,5 +5,6 @@
 [resource]
 script = ExtResource("1_s12qf")
 resources = {
+"meet_youxiang": "res://data/tres_decisions/meet_youxiang.tres",
 "update_to_rank8_official": "res://data/tres_decisions/update_to_rank8_official.tres"
 }

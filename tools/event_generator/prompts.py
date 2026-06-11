@@ -16,7 +16,10 @@ if TYPE_CHECKING:
 
 
 def build_system_prompt(cfg: EventPipelineConfig) -> str:
-    """组装 System Prompt。"""
+    """组装 System Prompt。
+
+    利用 Recency Bias：最核心的约束（final_directive）放在绝对末尾。
+    """
     parts = [f"你是{cfg.name}叙事设计师。你只负责生成事件文本，不要输出任何额外内容。"]
 
     if cfg.background_context.strip():
@@ -37,6 +40,10 @@ def build_system_prompt(cfg: EventPipelineConfig) -> str:
             if ff.text.strip():
                 parts.append(f"- {ff.text.strip()}")
         parts.append("\n以上是你要严格遵循的事实陈述，除此之外不要自己编造任何设定。")
+
+    # 🚨 指令后置：final_directive 永远放在 Prompt 最后一行
+    if cfg.final_directive and cfg.final_directive.strip():
+        parts.append(f"\n## ⚠️ 绝对指令（最后一行，优先级最高）\n{cfg.final_directive.strip()}")
 
     return "\n".join(parts)
 

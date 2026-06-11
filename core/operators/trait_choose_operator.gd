@@ -84,11 +84,13 @@ func _on_trait_picked(trait_picked):
     if level < poem_taste.lowest_poem_level:
         Logging.debug('PoemTypeChooseOperator: Level %s below threshold %s, executing rejected_result' % [level, poem_taste.lowest_poem_level])
         poem_taste.rejected_result.operate()
-        return
-
-    if poem_type in poem_taste.accepted_poem_types:
+    elif poem_type in poem_taste.accepted_poem_types:
         Logging.debug('PoemTypeChooseOperator: Type %s in accepted_poem_types, executing accepted_result' % poem_type)
         poem_taste.accepted_result.operate()
     else:
         Logging.debug('PoemTypeChooseOperator: Type %s in rejected_poem_type, executing rejected_result' % poem_type)
         poem_taste.rejected_result.operate()
+    
+    # 🔥 过没过都扣除对应的诗词（但不进入 picker 的不扣）
+    PlayerState.remove_trait(trait_picked.uuid)
+    Logging.debug('PoemTypeChooseOperator: 诗词已被消耗: %s' % trait_picked.uuid)

@@ -19,8 +19,22 @@ func refresh_current_decisions():
 	var decisions = []
 	for d_uuid in Database.decisions:
 		var d = Database.decisions[d_uuid]
+		
+		# 1. 检查是否已被禁用
 		if d.disabled:
 			continue
+		
+		# 2. 检查前置需求（aciton_requirements）
+		var req_passed = true
+		if d.aciton_requirements:
+			for req in d.aciton_requirements:
+				if not req.compare(PlayerState):
+					req_passed = false
+					break
+		if not req_passed:
+			continue
+		
+		# 3. 检查地区标签
 		if not d.area_tags:
 			var panel = preload("res://ui/decision_panel.tscn").instantiate()
 			panel.inititalization(d)

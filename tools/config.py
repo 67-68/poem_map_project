@@ -371,6 +371,10 @@ class EventPipelineConfig(BaseModel):
     # 示例: ["failed_hint"]
     plugins: list[str] = []
 
+    # 核心指令（final_directive）：渲染到 system prompt 绝对末尾
+    # 利用 Recency Bias：最后一行约束最强。禁止使用心理动词等强约束放这里。
+    final_directive: str = ""
+
     # 生成参数
     word_count_min: int = 80
     word_count_max: int = 200

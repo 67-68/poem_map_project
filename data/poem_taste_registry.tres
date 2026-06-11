@@ -6,5 +6,6 @@
 script = ExtResource("1_c6kci")
 resources = {
 "libai_taste": "res://data/poem_taste/libai_taste.tres",
+"youxiangfu_ganye_taste": "res://data/poem_taste/youxiangfu_ganye_taste.tres",
 "zhuoliu_basic_taste": "res://data/poem_taste/zhuoliu_basic_taste.tres"
 }

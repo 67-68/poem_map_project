@@ -6,5 +6,6 @@
 script = ExtResource("1_hvaev")
 resources = {
 "poem_giving_option": "res://data/event_options/poem_giving_option.tres",
+"poem_type_choose_youxiangfu": "res://data/event_options/poem_type_choose_youxiangfu.tres",
 "poem_type_choose_zhuoliu": "res://data/event_options/poem_type_choose_zhuoliu.tres"
 }

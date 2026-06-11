@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="3_pushe"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_emo"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_eo"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="7_bo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_re"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_br"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_pr"]
+
+[sub_resource type="Resource" id="Resource_req_money"]
+script = ExtResource("10_pr")
+property = "money"
+operator = 1
+value = 100
+metadata/_custom_type_script = "uid://pyecoqx4dr1i"
+
+[sub_resource type="Resource" id="Resource_push_gate"]
+script = ExtResource("3_pushe")
+event_key = "youxiangfu_gate_l0"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[sub_resource type="Resource" id="Resource_cr_knock"]
+script = ExtResource("5_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_push_gate")])
+
+[sub_resource type="Resource" id="Resource_opt_knock"]
+script = ExtResource("6_eo")
+requirement = SubResource("Resource_req_money")
+choice_result = SubResource("Resource_cr_knock")
+description = "迈上台阶，叩响门环"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_emo_frust"]
+script = ExtResource("4_emo")
+emotion = "frustration"
+value = 10
+metadata/_custom_type_script = "uid://f5l815u48h2v"
+
+[sub_resource type="Resource" id="Resource_pe_leave"]
+script = ExtResource("2_pe")
+metadata/_custom_type_script = "uid://byn0qqw1xm33f"
+
+[sub_resource type="Resource" id="Resource_cr_leave"]
+script = ExtResource("5_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_pe_leave"), SubResource("Resource_emo_frust")])
+
+[sub_resource type="Resource" id="Resource_opt_leave"]
+script = ExtResource("6_eo")
+choice_result = SubResource("Resource_cr_leave")
+description = "转身离去"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("8_re")
+options = Array[ExtResource("7_bo")]([SubResource("Resource_opt_knock"), SubResource("Resource_opt_leave")])
+uuid = "youxiangfu_outer_wall"
+name = "相府青门外"
+description = "拐过街角，一面高耸得仿佛没有尽头的青砖坊墙将天光生生截断。几十个穿着旧青袍或麻布衣的士子，像冻僵的鹌鹑一样贴着墙根瑟缩排开，没人敢出声，连咳嗽都被死死捂在袖子里。你走到队伍最末端站定。抬头望去，三丈高的朱漆大门紧紧闭合，两尊巨大的石狮子在阴影中俯视着阶下的蝼蚁。一阵穿堂冷风卷过，门上磨盘大小的兽面衔环发出一声沉闷的金属撞击音，墙根下的几十颗脑袋同时条件反射般地瑟缩了一下。你呼出的白气，在这堵绝对寂静的高墙前，瞬间便被吹得粉碎。"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

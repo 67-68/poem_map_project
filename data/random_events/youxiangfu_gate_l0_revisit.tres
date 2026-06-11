@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="2_pushe"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_eo"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="5_bo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_re"]
+
+[sub_resource type="Resource" id="Resource_push_revisit"]
+script = ExtResource("2_pushe")
+event_key = "youxiangfu_hall_l1_revisit"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[sub_resource type="Resource" id="Resource_cr_enter"]
+script = ExtResource("3_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_push_revisit")])
+
+[sub_resource type="Resource" id="Resource_opt_enter"]
+script = ExtResource("4_eo")
+choice_result = SubResource("Resource_cr_enter")
+description = "步入府中"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("6_re")
+options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_enter")])
+uuid = "youxiangfu_gate_l0_revisit"
+name = "右相府门卫·再访"
+description = "再次来到相府门前。那胖大门房正与一个西域商贾低声调笑，余光扫到你走近。他甚至没有停下嘴里的诨话，只是懒洋洋地用鞋底踢开挡在路中间的扫帚，留出一条仅供一人侧身挤入的缝隙，随后便低下头，继续盘算着手里新得的银锞子。你掸去袖上的灰尘，从那道狭窄的缝隙中艰难挤入。"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

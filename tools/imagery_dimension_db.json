@@ -25,6 +25,27 @@
           "description": "被遮蔽的权力核心——皇帝（太阳）被层层遮蔽、天光被高墙切割、盛世将尽的阴霾。意象聚焦于'阻隔'：看得见但够不着的权力中心，弥漫的压抑感。",
           "scale": 1.0,
           "operator_dsl": "emo_add(name=frustration; val=10)"
+        },
+        {
+          "id": "imagery_medicine_stall",
+          "name": "药摊意象",
+          "description": "劳力换钱的生理卑微感——蹲在地上数铜钱时膝盖的酸痛、指尖沾着的草药汁液洗不掉、称药时戥子上的铜绿蹭到袖口上洗不干净。意象聚焦于'体力与收入的剪刀差'：每一文钱都是用肌肉的酸痛换来的。",
+          "scale": 1.0,
+          "operator_dsl": "emo_add(name=sorrow; val=10)"
+        },
+        {
+          "id": "imagery_ink_for_sale",
+          "name": "鬻文意象",
+          "description": "才华被物化的撕裂感——写墓志铭时笔尖在纸上划出的声音像在数钱、对方按字数付钱时目光在你的笔上称斤论两、墨汁滴在润笔费上洇开成一团黑色污渍。意象聚焦于'文字的异化'：每一个字都被标了价。",
+          "scale": 1.0,
+          "operator_dsl": "emo_add(name=anger; val=10)"
+        },
+        {
+          "id": "imagery_dry_lips",
+          "name": "乞食意象",
+          "description": "尊严被剥削的生理记忆——干裂的嘴唇说着恭维话、咽唾沫时喉结的上下滚动暴露了饥饿、门房的目光像刮过骨头的钝刀一样在身上游走。意象聚焦于'自我矮化的生理痕迹'：身体比嘴更诚实。",
+          "scale": 1.0,
+          "operator_dsl": "emo_add(name=sorrow; val=10)"
         }
       ]
     }
