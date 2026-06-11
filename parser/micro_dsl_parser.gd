@@ -60,6 +60,12 @@ const FUNC_TEMP_FLAG_INT_SET := "temp_flag_int_set"
 const FUNC_TEMP_FLAG_INT_APPEND := "temp_flag_int_append"
 const FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE := "temp_flag_int_reduce_if_above"
 
+const FUNC_IMAGE_PRESENT := "image_present"
+const FUNC_IMAGE_SLIDE := "image_slide"
+const FUNC_IMAGE_SHATTER := "image_shatter"
+const FUNC_IMAGE_FADE_OUT := "image_fade_out"
+const FUNC_IMAGE_REMOVE := "image_remove"
+
 const FUNC_SCAN_AND_PUSH := "scan_and_push"
 const FUNC_PUSH_EVENT := "push_event"
 const FUNC_POP_EVENT := "pop_event"
@@ -140,6 +146,12 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_IMAGINARY_LEVEL_REWARD] = func(p, r): return _exec_imaginary_level_reward_op(p, r)
 	cd[FUNC_IMAGERY_ADD] = func(p, r): return _exec_imagery_add_op(p, r)
 	cd[FUNC_PLAY_TRANSITION] = func(p, r): return _exec_play_transition_op(p, r)
+	# ── Image Operators ──
+	cd[FUNC_IMAGE_PRESENT] = func(p, r): return _exec_image_present_op(p, r)
+	cd[FUNC_IMAGE_SLIDE] = func(p, r): return _exec_image_slide_op(p, r)
+	cd[FUNC_IMAGE_SHATTER] = func(p, r): return _exec_image_shatter_op(p, r)
+	cd[FUNC_IMAGE_FADE_OUT] = func(p, r): return _exec_image_fade_out_op(p, r)
+	cd[FUNC_IMAGE_REMOVE] = func(p, r): return _exec_image_remove_op(p, r)
 
 # ──────────────────────────────────────────────
 # Tags
@@ -934,4 +946,103 @@ static func _exec_play_transition_op(parsed: NamedDSLParser.ParseResult, raw: St
 	var op = PlayTransitionOperator.new()
 	op.texts = texts
 	Logging.info("play_transition operator 创建成功: %d 段文字" % texts.size())
+	return op
+
+
+# ─── image_present ─────────────────────────────────────────
+
+# DSL 语法: image_present(id="juanzhou", pos="center")
+# 解析为 ImagePresentOperator，按 ID 展示图片
+static func _exec_image_present_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ImagePresentOperator:
+	var image_id = NamedDSLParser.get_str_param(parsed, "id")
+	if image_id.is_empty():
+		Logging.err("image_present 缺少 id 参数: %s" % raw)
+		return null
+
+	var pos = NamedDSLParser.get_str_param(parsed, "pos", "center")
+	if pos.is_empty():
+		pos = "center"
+
+	var op = ImagePresentOperator.new()
+	op.image_id = image_id
+	op.position = pos
+	Logging.info("image_present operator 创建成功: id=%s, pos=%s" % [image_id, pos])
+	return op
+
+
+# ─── image_slide ──────────────────────────────────────────
+
+# DSL 语法: image_slide(id="juanzhou", pos="top_center", duration=1.5)
+# 解析为 ImageSlideOperator，滑动已有图片到目标位置
+static func _exec_image_slide_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ImageSlideOperator:
+	var image_id = NamedDSLParser.get_str_param(parsed, "id")
+	if image_id.is_empty():
+		Logging.err("image_slide 缺少 id 参数: %s" % raw)
+		return null
+
+	var pos = NamedDSLParser.get_str_param(parsed, "pos", "center")
+	var duration_val = parsed.params.get("duration", 1.0)
+	var duration = float(duration_val) if duration_val != null else 1.0
+
+	var op = ImageSlideOperator.new()
+	op.image_id = image_id
+	op.target_position = pos
+	op.duration = duration
+	Logging.info("image_slide operator 创建成功: id=%s, pos=%s, duration=%.2f" % [image_id, pos, duration])
+	return op
+
+
+# ─── image_shatter ────────────────────────────────────────
+
+# DSL 语法: image_shatter(id="juanzhou", duration=1.0)
+# 解析为 ImageShatterOperator，粉碎已有图片
+static func _exec_image_shatter_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ImageShatterOperator:
+	var image_id = NamedDSLParser.get_str_param(parsed, "id")
+	if image_id.is_empty():
+		Logging.err("image_shatter 缺少 id 参数: %s" % raw)
+		return null
+
+	var duration_val = parsed.params.get("duration", 1.0)
+	var duration = float(duration_val)
+
+	var op = ImageShatterOperator.new()
+	op.image_id = image_id
+	op.duration = duration
+	Logging.info("image_shatter operator 创建成功: id=%s, duration=%.2f" % [image_id, duration])
+	return op
+
+
+# ─── image_fade_out ───────────────────────────────────────
+
+# DSL 语法: image_fade_out(id="juanzhou", duration=2.0)
+# 解析为 ImageFadeOutOperator，淡出已有图片
+static func _exec_image_fade_out_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ImageFadeOutOperator:
+	var image_id = NamedDSLParser.get_str_param(parsed, "id")
+	if image_id.is_empty():
+		Logging.err("image_fade_out 缺少 id 参数: %s" % raw)
+		return null
+
+	var duration_val = parsed.params.get("duration", 1.0)
+	var duration = float(duration_val)
+
+	var op = ImageFadeOutOperator.new()
+	op.image_id = image_id
+	op.duration = duration
+	Logging.info("image_fade_out operator 创建成功: id=%s, duration=%.2f" % [image_id, duration])
+	return op
+
+
+# ─── image_remove ─────────────────────────────────────────
+
+# DSL 语法: image_remove(id="juanzhou")
+# 解析为 ImageRemoveOperator，立即移除已有图片
+static func _exec_image_remove_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ImageRemoveOperator:
+	var image_id = NamedDSLParser.get_str_param(parsed, "id")
+	if image_id.is_empty():
+		Logging.err("image_remove 缺少 id 参数: %s" % raw)
+		return null
+
+	var op = ImageRemoveOperator.new()
+	op.image_id = image_id
+	Logging.info("image_remove operator 创建成功: id=%s" % image_id)
 	return op

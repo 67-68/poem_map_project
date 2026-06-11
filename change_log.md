@@ -1,4 +1,15 @@
 # [unreleased]
+## Added
+- `ImageManager` (Autoload) + `ImageHandle` — 统一的 stateful 图片管理架构
+  - `ImageManager.present(tex, pos) → ImageHandle`：展示图片并返回操作句柄
+  - `ImageManager.play_shatter(tex, pos)`：便捷 fire-and-forget 粉碎
+  - `ImageManager.play_slide(tex, from, to)`：便捷 fire-and-forget 滑动
+  - `ImageHandle.slide_to(target, duration) → Signal`：滑动到目标位置，可 await
+  - `ImageHandle.shatter(duration, params)`：粉碎解体并自动销毁
+  - `ImageHandle.fade_out(duration)`：淡出并自动销毁
+  - `ImageHandle.set_opacity() / set_scale() / set_modulate()`：链式属性修改
+  - 旧 `ImageEffectManager` 标记为 `@deprecated`，所有方法转发到 `ImageManager`
+
 ## Changed
 - `GuaranteeNextOperator` 新增 `main_tag` 导出字段 — 可选限定保证事件仅在指定 main_tag 的抽奖中生效
 - `EventManager.guarantee_next` 信号签名扩展为 `(event_key: String, main_tag: String)`
