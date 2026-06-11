@@ -110,6 +110,10 @@ func _show_current_line():
 		right_portrait.modulate = Color(1, 1, 1, 1)
 		left_portrait.modulate = Color(0.5, 0.5, 0.5, 1)
 
+	# 3. 执行当前行的 operators（动画、属性修改等）
+	# 注意：operator 内的动画使用 TWEEN_PAUSE_PROCESS，与翻页并发播放
+	line.execute_operators(_context)
+
 # 专属善后部 (只由按钮点击，或无选项结束时调用)
 # NarrativeOverlay 已连接 chat_finished 信号，负责 pop 栈 + 恢复世界
 func try_end_dialogue(choice_result: ChoiceResult = null):

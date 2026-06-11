@@ -24,7 +24,11 @@ var _active_images: Dictionary = {}
 
 
 func _ready() -> void:
-	_create_effect_layer()
+	# 注意: CanvasLayer 不在 _ready() 中创建
+	# Godot 4 autoload 的 _ready() 期间场景树未完全就绪，
+	# get_tree().root.add_child() 无法正确挂载节点（parent 会变成 <Object#null>)
+	# 改为在 present() 首次调用时延迟初始化 (_ensure_effect_layer)
+	
 	# 连接 EventBus 信号 (如果存在 request_play_shatter)
 	if EventBus.has_signal("request_play_shatter"):
 		EventBus.request_play_shatter.connect(_on_request_play_shatter)
@@ -34,12 +38,19 @@ func _ready() -> void:
 
 
 ## 展示一张图片并返回操作句柄
-func present(tex: Texture2D, global_pos: Vector2) -> ImageHandle:
-	var handle = ImageHandle.new(tex, global_pos, _effect_layer)
+## [param size] 目标显示尺寸 (默认 100x100)，保持宽高比缩放
+func present(tex: Texture2D, global_pos: Vector2, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
+	# 确保 CanvasLayer 已正确挂载到场景树（延迟初始化）
+	_ensure_effect_layer()
+	if _effect_layer == null or not is_instance_valid(_effect_layer):
+		Logging.err("%s: present 失败，无法创建有效的 CanvasLayer" % LOG_TAG)
+		return null
+	
+	var handle = ImageHandle.new(tex, global_pos, _effect_layer, size)
 	_effect_layer.add_child(handle._sprite)
 	_active_handles.append(handle)
 	handle._sprite.tree_exited.connect(_on_handle_freed.bind(handle))
-	Logging.info("%s: present → tex=%s pos=%s" % [LOG_TAG, tex.resource_path, global_pos])
+	Logging.info("%s: present → tex=%s pos=%s, sprite_name=%s" % [LOG_TAG, tex.resource_path, global_pos, handle._sprite.name])
 	return handle
 
 
@@ -67,14 +78,14 @@ func register_image(id: String, tex: Texture2D) -> void:
 ##   1. _texture_registry 中已注册
 ##   2. TextureResLoader.get_background(id) 兜底
 ##   3. TextureResLoader.get_icon_simpler(id) 兜底
-func present_by_id(id: String, pos: ENUMS.IMAGE_POS) -> ImageHandle:
+func present_by_id(id: String, pos: ENUMS.IMAGE_POS, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
 	var tex = _resolve_texture(id)
 	if tex == null:
 		Logging.err("%s: present_by_id 失败，无法解析纹理: id=%s" % [LOG_TAG, id])
 		return null
 
 	var global_pos = _resolve_pos(pos)
-	var handle = present(tex, global_pos)
+	var handle = present(tex, global_pos, size)
 	_active_images[id] = handle
 	Logging.info("%s: present_by_id → id=%s pos=%s" % [LOG_TAG, id, ENUMS.IMAGE_POS.keys()[pos]])
 	return handle
@@ -104,12 +115,18 @@ func unregister_image(id: String) -> void:
 
 # ── 内部 ──────────────────────────────────────────────────
 
-func _create_effect_layer() -> void:
+## 确保 CanvasLayer 已正确创建并挂载到场景树。
+## 使用延迟初始化模式以规避 autoload _ready() 期间场景树未就绪的问题。
+func _ensure_effect_layer() -> void:
+	if _effect_layer != null and is_instance_valid(_effect_layer) and _effect_layer.is_inside_tree():
+		return
+	
+	# 首次创建或重新创建（如果之前创建失败/被销毁）
 	_effect_layer = CanvasLayer.new()
 	_effect_layer.layer = 128
 	_effect_layer.name = "ImageEffectLayer"
 	get_tree().root.add_child(_effect_layer)
-	Logging.debug("%s: CanvasLayer 已创建并挂载到 root" % LOG_TAG)
+	Logging.info("%s: CanvasLayer 已创建并挂载到 root (parent=%s)" % [LOG_TAG, _effect_layer.get_parent()])
 
 
 func _on_handle_freed(handle: ImageHandle) -> void:

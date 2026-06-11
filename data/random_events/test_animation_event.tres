@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cgnhc10ydpnrh"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_r3wt3"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_k2gmq"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_5r3wt"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_6rcfd"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_7rh1c"]
+[ext_resource type="Script" uid="uid://cv0qhsyosi7fj" path="res://core/operators/image_slide_operator.gd" id="6_gxmis"]
+[ext_resource type="Script" uid="uid://b1151jgebsgcu" path="res://core/operators/image_present_operator.gd" id="7_8rcfd"]
+[ext_resource type="Script" uid="uid://c65vlkthmq8ip" path="res://core/operators/image_shatter_operator.gd" id="7_apye4"]
+[ext_resource type="Script" uid="uid://bsotwx0rb5bwq" path="res://core/operators/image_remove_operator.gd" id="8_apye4"]
+
+[sub_resource type="Resource" id="Resource_present"]
+script = ExtResource("7_8rcfd")
+image_id = "juanzhou"
+position = "top_center"
+
+[sub_resource type="Resource" id="Result_present"]
+script = ExtResource("4_5r3wt")
+operators = Array[ExtResource("2_k2gmq")]([SubResource("Resource_present")])
+
+[sub_resource type="Resource" id="Option_present"]
+script = ExtResource("5_6rcfd")
+choice_result = SubResource("Result_present")
+description = "展示卷轴图片"
+
+[sub_resource type="Resource" id="Resource_apye4"]
+script = ExtResource("6_gxmis")
+image_id = "juanzhou"
+target_position = "center_left"
+metadata/_custom_type_script = "uid://cv0qhsyosi7fj"
+
+[sub_resource type="Resource" id="Result_slide"]
+script = ExtResource("4_5r3wt")
+operators = Array[ExtResource("2_k2gmq")]([SubResource("Resource_apye4")])
+
+[sub_resource type="Resource" id="Option_slide"]
+script = ExtResource("5_6rcfd")
+choice_result = SubResource("Result_slide")
+description = "测试滑动动画"
+
+[sub_resource type="Resource" id="Resource_dnmgq"]
+script = ExtResource("7_apye4")
+image_id = "juanzhou"
+metadata/_custom_type_script = "uid://c65vlkthmq8ip"
+
+[sub_resource type="Resource" id="Result_shatter"]
+script = ExtResource("4_5r3wt")
+operators = Array[ExtResource("2_k2gmq")]([SubResource("Resource_dnmgq")])
+
+[sub_resource type="Resource" id="Option_shatter"]
+script = ExtResource("5_6rcfd")
+choice_result = SubResource("Result_shatter")
+description = "测试粉碎动画"
+
+[sub_resource type="Resource" id="Resource_u6jm5"]
+script = ExtResource("8_apye4")
+image_id = "juanzhou"
+metadata/_custom_type_script = "uid://bsotwx0rb5bwq"
+
+[sub_resource type="Resource" id="Result_fade"]
+script = ExtResource("4_5r3wt")
+operators = Array[ExtResource("2_k2gmq")]([SubResource("Resource_u6jm5")])
+
+[sub_resource type="Resource" id="Option_fade"]
+script = ExtResource("5_6rcfd")
+choice_result = SubResource("Result_fade")
+description = "测试淡出动画"
+
+[resource]
+script = ExtResource("6_7rh1c")
+options = Array[ExtResource("1_r3wt3")]([SubResource("Option_present"), SubResource("Option_slide"), SubResource("Option_shatter"), SubResource("Option_fade")])
+uuid = "test_animation_event"
+name = "AnimationObject 测试事件"
+description = "手动测试 AnimationObject 三种动画效果"

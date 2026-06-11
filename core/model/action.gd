@@ -26,3 +26,7 @@ var area_tags:
 
 @export var action_results: Array[BaseOperator]
 @export var aciton_requirements: Array[BaseRequirements]
+
+## 🆕 当前活跃的 generator（由 DeferredLockActionOperator 生成并挂载）
+## null = 无活跃 generator；非 null = 每次点击 action 时消费一个 operator
+var generator: Generator = null

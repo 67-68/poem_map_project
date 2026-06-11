@@ -306,6 +306,27 @@ func _validate_flag_type(flag_id: String) -> String:
 		return ''
 	return flag_def.type
 
+## 注册一个虚拟 flag 到 Database.flags（运行时内存态，不持久化到 tres）。
+## 用于 DeferredLockActionOperator 等需要在运行时动态创建计数器 flag 的场景。
+## 如果 flag_id 已存在（可能是正式注册的 flag），不覆盖。
+func register_virtual_flag(flag_id: String, type: String) -> void:
+	if flag_id.is_empty():
+		Logging.err("[PlayerState] register_virtual_flag: flag_id 为空")
+		return
+	if type not in ['str', 'int', 'bool']:
+		Logging.err("[PlayerState] register_virtual_flag: 未知类型 %s" % type)
+		return
+	if Database.flags.has(flag_id):
+		Logging.debug("[PlayerState] register_virtual_flag: flag %s 已存在，跳过" % flag_id)
+		return
+	var virtual_flag = Flag.new()
+	virtual_flag.type = type
+	virtual_flag.uuid = flag_id
+	virtual_flag.name = flag_id
+	Database.flags[flag_id] = virtual_flag
+	Logging.info("[PlayerState] 注册虚拟 flag: %s (type=%s)" % [flag_id, type])
+
+
 func set_flag(flag_id: String, value, type: String = ''):
 	if type.is_empty():
 		type = _validate_flag_type(flag_id)

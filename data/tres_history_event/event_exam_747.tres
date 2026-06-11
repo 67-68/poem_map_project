@@ -14,7 +14,7 @@ metadata/_custom_type_script = "uid://dtw3kde1u305k"
 
 [sub_resource type="Resource" id="Resource_4m2sr"]
 script = ExtResource("4_5vqp1")
-operators = Array[ExtResource("2_rv50i")]([SubResource("Resource_qrlep")])
+operators = Array[ExtResource("2_rv50i")]([null, SubResource("Resource_qrlep")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_taiv1"]

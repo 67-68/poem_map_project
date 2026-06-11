@@ -34,6 +34,7 @@ resources = {
 "start_of_wenhuaquan_party": "res://data/random_events/start_of_wenhuaquan_party.tres",
 "strange_poet": "res://data/random_events/strange_poet.tres",
 "test1": "res://data/random_events/test1.tres",
+"test_animation_event": "res://data/random_events/test_animation_event.tres",
 "the_man_got_power": "res://data/random_events/the_man_got_power.tres",
 "way_to_youxiangfu": "res://data/random_events/youxiangfu_way.tres",
 "welcome_to_wenhuaquan_party": "res://data/random_events/welcome_to_wenhuaquan_party.tres",

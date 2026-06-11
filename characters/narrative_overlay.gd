@@ -28,6 +28,7 @@ var _saved_time_scale: float = 1.0
 
 # 动画追踪 — 等待后台 AnimationObject 播完再处理下一个事件
 var _active_animations: Array[AnimationObject] = []
+var _waiting_for_animations: bool = false
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -51,6 +52,7 @@ func _ready() -> void:
 	EventBus.end_picking.connect(_on_end_picking)
 	EventBus.push_cinematic.connect(_on_push_cinematic)
 	EventBus.push_focused_chat.connect(_on_push_focused_chat)
+	EventBus.request_track_stage_animation.connect(track_animation)
 
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -308,9 +310,10 @@ func _process_next():
 	if _is_active:
 		return
 
-	# 🚨 等待后台动画播完再处理下一个事件
+	# 🚨 等待后台动画播完再处理下一个事件（callback 驱动，见 _on_animation_finished）
 	if not _active_animations.is_empty():
-		await _await_stage_animations()
+		_waiting_for_animations = true
+		return
 
 	# 栈优先 (LIFO) — peek 不移除，留待 PopEventOperator 显式 pop / Picker 自行 pop
 	if _event_stack.size() > 0:
@@ -519,9 +522,29 @@ func _end_narrative(choice):
 	# 在 _is_active=false 时经由 _on_push_focused_chat → _process_stack 显示了 FocusChat），
 	# 那么栈顶条目的 processed=true，此时不能盲目重置 _is_active，否则已显示的内容
 	# 会被 _process_next 重复触发（双弹窗 Bug）。
+	#
+	# 🔴 注意：必须区分「当前事件自身的栈条目」（processed=true 但从栈上弹出即可）
+	# 和「execute_result 期间被激活的自管理条目（FocusChat/Picker/Cinematic）」。
+	# 前者的 processed=true 是 _process_stack 在处理当前事件时设置的，不是异常。
 	if _event_stack.size() > 0 and _event_stack[0].get("processed", false):
-		Logging.info("_end_narrative: 栈顶条目已处理（如 FocusChat 已显示），跳过 _is_active 重置")
-		return
+		var entry = _event_stack[0]
+		var entry_type = entry.get("type", "")
+
+		# 分支 A: 当前事件自身在栈上的条目 → 正常弹出，让系统继续处理后续事件
+		if entry.get("data") == _completed_data:
+			_event_stack.pop_front()
+			Logging.info("_end_narrative: 自动弹出已完成的栈事件 '%s'" % _completed_data.name)
+
+		# 分支 B: execute_result 期间 FocusChat/Picker/Cinematic 被激活
+		# → 由它们自行管理生命周期（chat_finished / _on_end_picking / cinematic_finished 会 pop 自身）
+		elif entry_type in ["focused_chat", "picker", "cinematic"]:
+			Logging.info("_end_narrative: 栈顶条目已处理（如 FocusChat 已显示），跳过 _is_active 重置")
+			return
+
+		# 分支 C: 未知类型（防御性，不应发生）
+		else:
+			Logging.warn("_end_narrative: 栈顶存在未知类型条目 type='%s'，强制弹出" % entry_type)
+			_event_stack.pop_front()
 
 	# 🚩 execute_result 完成后才释放 _is_active，避免 operator 迭代中途
 	# push_picker/push_event 误触 _process_stack
@@ -544,16 +567,7 @@ func track_animation(anim: AnimationObject) -> void:
 
 func _on_animation_finished(anim: AnimationObject) -> void:
 	_active_animations.erase(anim)
-
-
-## 等待所有活跃动画播完
-func _await_stage_animations() -> void:
-	if _active_animations.is_empty():
-		return
-	var signals: Array[Signal] = []
-	for anim in _active_animations:
-		if anim.is_playing:
-			signals.append(anim.finished)
-	if signals.is_empty():
-		return
-	await signal(signals)
+	# 如果 _process_next 正在等待所有动画播完，播完后恢复事件处理
+	if _waiting_for_animations and _active_animations.is_empty():
+		_waiting_for_animations = false
+		_process_next()

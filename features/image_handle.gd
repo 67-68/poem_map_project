@@ -17,13 +17,21 @@ var _tween: Tween
 ## [param tex] 纹理
 ## [param pos] 全局屏幕坐标
 ## [param layer] 父级 CanvasLayer, 用于获取 SceneTree
-func _init(tex: Texture2D, pos: Vector2, layer: CanvasLayer) -> void:
+## [param size] 目标显示尺寸 (默认 100x100)，保持宽高比缩放
+func _init(tex: Texture2D, pos: Vector2, layer: CanvasLayer, size: Vector2 = Vector2(100, 100)) -> void:
 	_sprite = Sprite2D.new()
 	_sprite.texture = tex
 	_sprite.global_position = pos
 	_sprite.centered = true
 	# 给个默认材质确保 modulate 可用
 	_sprite.material = CanvasItemMaterial.new()
+	
+	# 按目标尺寸缩放，保持宽高比 (cover 模式: min 确保完全可见)
+	var tex_size := tex.get_size()
+	if tex_size != Vector2.ZERO and size != Vector2.ZERO:
+		var scale: float = minf(size.x / tex_size.x, size.y / tex_size.y)
+		_sprite.scale = Vector2(scale, scale)
+		Logging.debug("%s: 缩放 size=%s tex_size=%s scale=%.4f" % [LOG_TAG, size, tex_size, scale])
 
 
 ## 滑动到目标位置
