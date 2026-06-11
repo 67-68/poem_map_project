@@ -102,6 +102,18 @@ const DATA_MANIFEST: Array[Dictionary] = [
     },
 ]
 
+# 🗺️ store_to 路径映射表
+# 当 CSV 的 context 列指定了 store_to=<key> 时，根据此表将 .tres 文件路由到对应目录。
+# 如果 key 不在映射表中，直接使用 key 作为 res:// 相对路径（如 store_to=data/mydir → res://data/mydir）
+const STORE_TO_PATH_MAP: Dictionary = {
+    "baiye": "res://data/tres_random_event_bai_ye",
+    "jiaoyou": "res://data/tres_random_event_jiao_you",
+    "denggao": "res://data/tres_random_event_deng_gao",
+    "fangshi": "res://data/tres_random_event_fang_shi",
+    "fengzhao": "res://data/tres_random_event_feng_zhao",
+    "duzhuo": "res://data/tres_random_event_du_zhuo",
+}
+
 # 任务指针：当前正在下载第几个文件？
 var _current_job_index: int = -1
 
@@ -422,6 +434,8 @@ func fetch_events_from_cloud(url: String, save_path: String = "res://tests/", da
     process_next_job()
 
 # 保存resources为.tres文件到指定文件夹
+# 🆕 支持逐资源 store_to 路由：如果 resource 是 RandomEvent 且 custom_context_params 中有 store_to，
+#   则根据 store_to key 查 STORE_TO_PATH_MAP 确定实际保存路径；未命中则直接作为 res:// 路径使用。
 func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> void:
     # 确保文件夹存在
     if not folder_path.ends_with("/"):
@@ -446,6 +460,27 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
             print("Warning: 跳过无效资源 (类名: %s)" % resource.get_class())
             skipped_count += 1
             continue
+
+        # 🆕 逐资源 store_to 路由检测
+        # 如果资源是 RandomEvent 且 custom_context_params 中有 store_to，根据映射表或直接路径路由
+        var actual_folder_path = folder_path
+        if resource is RandomEvent:
+            var custom_params = resource.custom_context_params
+            if custom_params.has("store_to"):
+                var store_key: String = custom_params["store_to"]
+                if STORE_TO_PATH_MAP.has(store_key):
+                    actual_folder_path = STORE_TO_PATH_MAP[store_key]
+                    print("🆕 store_to 命中映射表: key=%s → path=%s" % [store_key, actual_folder_path])
+                else:
+                    # 未命中映射表，直接使用 key 作为 res:// 相对路径
+                    actual_folder_path = "res://" + store_key.trim_prefix("/")
+                    print("🆕 store_to 未命中映射表，直接使用 raw key: key=%s → path=%s" % [store_key, actual_folder_path])
+                if not actual_folder_path.ends_with("/"):
+                    actual_folder_path += "/"
+                # 确保目标文件夹存在
+                if not DirAccess.dir_exists_absolute(actual_folder_path):
+                    DirAccess.make_dir_absolute(actual_folder_path)
+                    print("创建 store_to 文件夹: %s" % actual_folder_path)
 
         # 构造文件名，优先使用uuid，其次使用resource_name，最后使用resource_path的文件名
         var base_filename = ""
@@ -497,7 +532,7 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
         # 直接使用转换后的文件名，不添加索引，直接覆盖已存在的文件
         var final_filename = safe_filename
 
-        var file_path = "%s%s.tres" % [folder_path, final_filename]
+        var file_path = "%s%s.tres" % [actual_folder_path, final_filename]
 
         # 保存为.tres文件
         var save_result = ResourceSaver.save(resource, file_path)
@@ -508,7 +543,7 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
             push_error("保存资源失败: %s, 错误代码: %d" % [file_path, save_result])
             skipped_count += 1
 
-    print("成功保存 %d/%d 个资源到 %s 文件夹 (跳过 %d 个)" % [saved_count, resources.size(), folder_path, skipped_count])
+    print("成功保存 %d/%d 个资源  (跳过 %d 个)" % [saved_count, resources.size(), skipped_count])
 
 # 📥 导入正交生成管线产出的 CSV 事件数据
 # 这是 Phase B（Python 生成）→ Phase C（Godot 加载）的桥接函数。

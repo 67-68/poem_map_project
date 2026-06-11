@@ -545,6 +545,11 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 从 context 中提取自定义参数，init 时 merge 进 context
     event.custom_context_params = context_data.custom_params
 
+    # 🆕 store_to 路由指令：通过 custom_context_params 传递到保存阶段
+    # 在 save_resources_to_tres() 中根据此值路由到对应目录
+    if not context_data.store_to.is_empty():
+        event.custom_context_params["store_to"] = context_data.store_to
+
     # 解析触发条件
     var requirements_str = row.get('requirements')
     if requirements_str and not requirements_str.is_empty():
@@ -649,6 +654,10 @@ static func parse_option_row(row: Dictionary) -> RandomEvent:
     _lint_dsl_field(context_str, "context", uuid)
     var context_data = parse_context(context_str)
     event.custom_context_params = context_data.custom_params
+
+    # 🚨 option 行禁止使用 store_to（这是个路由指令，只有 event 能指定）
+    if not context_data.store_to.is_empty():
+        Logging.err("parse_option_row: option 行不能指定 store_to！uuid=%s, value=%s" % [uuid, context_data.store_to])
 
     # 选项的触发条件（通常是选择条件）
     var requirements_str = row.get('requirements')
