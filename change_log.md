@@ -1,5 +1,14 @@
 # [unreleased]
 ## Added
+- `AnimationObject` 类型体系 — 时间驱动舞台动画的一等公民抽象
+  - `AnimationObject` (`model/animation_object.gd`) — `RefCounted` 基类，`finished` 信号 + `start()/stop()` 生命周期
+  - `SlideAnimation` (`model/slide_animation.gd`) — 平滑缓动滑动，内部 Tween 强制 `TWEEN_PAUSE_PROCESS`
+  - `ShatterAnimation` (`model/shatter_animation.gd`) — ShaderMaterial 切换粉碎解体
+  - `FadeOutAnimation` (`model/fade_out_animation.gd`) — 透明度淡出销毁
+  - `ImageHandle.create_slide()/create_shatter()/create_fade_out()` — 工厂方法（旧方法保留向后兼容）
+  - `NarrativeOverlay._active_animations` + `track_animation()` — 事件队列自动等待动画播完再处理下个事件
+  - 所有 AnimationObject Tween 均设置 `TWEEN_PAUSE_PROCESS`，世界暂停时动画继续播放
+
 - `ImageManager` (Autoload) + `ImageHandle` — 统一的 stateful 图片管理架构
   - `ImageManager.present(tex, pos) → ImageHandle`：展示图片并返回操作句柄
   - `ImageManager.play_shatter(tex, pos)`：便捷 fire-and-forget 粉碎

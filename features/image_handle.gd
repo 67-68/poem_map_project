@@ -97,6 +97,23 @@ func set_modulate(color: Color) -> ImageHandle:
 	return self
 
 
+# ── AnimationObject 工厂 ──────────────────────────────
+
+## 创建滑动动画对象（可被 NarrativeOverlay 追踪）
+func create_slide(target_pos: Vector2, duration: float = 1.0) -> SlideAnimation:
+	return SlideAnimation.new(_sprite, target_pos, duration)
+
+
+## 创建粉碎动画对象
+func create_shatter(duration: float = 1.0, params: Dictionary = {}) -> ShatterAnimation:
+	return ShatterAnimation.new(_sprite, duration, params)
+
+
+## 创建淡出动画对象
+func create_fade_out(duration: float = 1.0) -> FadeOutAnimation:
+	return FadeOutAnimation.new(_sprite, duration)
+
+
 # ── 内部 ──────────────────────────────────────────────
 
 func _update_shader_progress(val: float, mat: ShaderMaterial) -> void:

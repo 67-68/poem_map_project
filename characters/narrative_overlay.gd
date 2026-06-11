@@ -26,6 +26,9 @@ var _is_checking_interruption: bool = false
 var _current_from_stack: bool = false
 var _saved_time_scale: float = 1.0
 
+# 动画追踪 — 等待后台 AnimationObject 播完再处理下一个事件
+var _active_animations: Array[AnimationObject] = []
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
@@ -304,6 +307,11 @@ func _process_stack():
 func _process_next():
 	if _is_active:
 		return
+
+	# 🚨 等待后台动画播完再处理下一个事件
+	if not _active_animations.is_empty():
+		await _await_stage_animations()
+
 	# 栈优先 (LIFO) — peek 不移除，留待 PopEventOperator 显式 pop / Picker 自行 pop
 	if _event_stack.size() > 0:
 		var entry = _event_stack[0]
@@ -521,3 +529,31 @@ func _end_narrative(choice):
 
 	# 处理后续事件：栈 (LIFO) 优先，队列 (FIFO) 次之
 	_process_next()
+
+
+# --- 动画追踪 ------------------------------------------
+
+## 注册动画到追踪列表（Operator 或 Picker 在创建后调用此方法）
+func track_animation(anim: AnimationObject) -> void:
+	if anim.finished.is_connected(_on_animation_finished.bind(anim)):
+		return
+	_active_animations.append(anim)
+	anim.finished.connect(_on_animation_finished.bind(anim), CONNECT_ONE_SHOT)
+	anim.start()
+
+
+func _on_animation_finished(anim: AnimationObject) -> void:
+	_active_animations.erase(anim)
+
+
+## 等待所有活跃动画播完
+func _await_stage_animations() -> void:
+	if _active_animations.is_empty():
+		return
+	var signals: Array[Signal] = []
+	for anim in _active_animations:
+		if anim.is_playing:
+			signals.append(anim.finished)
+	if signals.is_empty():
+		return
+	await signal(signals)
