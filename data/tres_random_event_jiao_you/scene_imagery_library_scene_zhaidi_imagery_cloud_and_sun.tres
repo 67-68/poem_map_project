@@ -9,32 +9,32 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_qsfjr"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_kiy48"]
 
-[sub_resource type="Resource" id="Resource_a3dq4"]
+[sub_resource type="Resource" id="Resource_jdg2x"]
 script = ExtResource("3_7rblu")
 str_props = "money"
 value = 15
 
-[sub_resource type="Resource" id="Resource_35q0v"]
+[sub_resource type="Resource" id="Resource_ta72a"]
 script = ExtResource("4_y0hkj")
 value = 10
 
-[sub_resource type="Resource" id="Resource_mfcna"]
+[sub_resource type="Resource" id="Resource_7rblu"]
 script = ExtResource("5_q5r6d")
 imagery_name = "TARGET_MYTH_GIANTROC_ZHAIDI"
 
-[sub_resource type="Resource" id="Resource_rqywy"]
+[sub_resource type="Resource" id="Resource_y0hkj"]
 script = ExtResource("6_e11ue")
-operators = Array[ExtResource("2_ta72a")]([SubResource("Resource_a3dq4"), SubResource("Resource_35q0v"), SubResource("Resource_mfcna")])
+operators = Array[ExtResource("2_ta72a")]([SubResource("Resource_jdg2x"), SubResource("Resource_ta72a"), SubResource("Resource_7rblu")])
 
-[sub_resource type="Resource" id="Resource_vmlce"]
+[sub_resource type="Resource" id="Resource_q5r6d"]
 script = ExtResource("7_qsfjr")
-choice_result = SubResource("Resource_rqywy")
+choice_result = SubResource("Resource_y0hkj")
 description = "（冷眼旁观）"
 
 [resource]
 script = ExtResource("8_kiy48")
 _target_tags = Array[String](["action:main:jiaoyou"])
-options = Array[ExtResource("1_jdg2x")]([SubResource("Resource_vmlce")])
+options = Array[ExtResource("1_jdg2x")]([SubResource("Resource_q5r6d")])
 uuid = "scene_imagery_library_scene_zhaidi_imagery_cloud_and_sun"
 name = "门帘掀起的那一瞬"
 description = "背脊挺得发僵，像是脊椎骨要从皮肉里戳出来。酒杯握在指间，忘了放下，忘了喝，只是把它攥成一件道具。传菜小厮的路径从斜角切过，脖颈随着那道轨迹转动，幅度大得几乎拧出声来。风掀了门帘一脚，内院的地毯边缘露出来——那红色扎进眼底，像是太阳被云层咬去半边后残存的一线天光。远处桌上摆着整只炙羊，这边的案上空空如也。脊梁又拔高了一寸，指节在杯沿上泛白。"

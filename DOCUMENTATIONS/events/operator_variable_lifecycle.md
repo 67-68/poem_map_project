@@ -176,13 +176,14 @@ func get_demanded_traits() -> Array:
 | `QueueEventOperator` | `event_key` | `_captured_context` | ✅ `init()` 捕获 context 快照 |
 | `MenuStartOperator` | `resource_to_put_in_context`, `key_of_resource_in_context`, `next_event_key` | `context` (成员变量) | ✅ `init()` 深拷贝 + 注入资源 |
 | `PoemTypeChooseOperator` | `poem_taste` (Resource), `key_to_get_poem_taste`, `property_multiplication` | — | ✅ `init()` 从 context 解析 poem_taste |
-| `EmotionOperator` | `_emotion` (ENUM), `str_emotion`, `value`, `archetype` | — | ❌ |
+| `EmotionOperator` | `_emotion` (ENUM), `str_emotion`, `value`, `archetype`, `mode` | — | ❌ |
 | `ImaginaryOperator` | `imaginary_name`, `operation` | — | ❌ |
 | `TraitReplaceOperator` | `_replace_other_trait`, `_to_be_replaced_trait` | — | ❌ |
 | `RandomOperator` | `random_value`, `success_operator`, `fail_operator`, `success_hint`, `failed_hint` | — | ❌ |
 | `SystemOperator` | `command`, `death_hint` | — | ❌ |
 | `InfoDemoOperator` | `info` | — | ❌ |
 | `PropertyRangeOperator` | `min_value`, `max_value`, `_property` (ENUM), `result_operator` | — | ❌ |
+| `ForceSetPropertyOperator` | `_property` (ENUM), `value` | — | ❌ |
 | `PopEventOperator` | (无) | — | ❌ |
 | `ConditionalOperator` | `condition`, `condition_success_result`, `condition_fail_result` | — | ✅ 内部 operator 的 init/operate 链 |
 
@@ -198,7 +199,8 @@ func get_demanded_traits() -> Array:
 |----------|---------|---------------|
 | `FlagReplaceOperator` | 硬编码 `to_be_replaced_flag_id` / `replace_with_flag_id` | `Database.flags` |
 | `ImaginaryOperator` | 硬编码 `imaginary_name` / `operation` | `Database.imaginaries` |
-| `EmotionOperator` | 硬编码 `_emotion` / `str_emotion` / `value` / `archetype` | `PlayerState` |
+| `EmotionOperator` | 硬编码 `_emotion` / `str_emotion` / `value` / `archetype` / `mode` | `PlayerState` |
+| `ForceSetPropertyOperator` | 硬编码 `_property` / `value` | `PlayerState` |
 | `TraitReplaceOperator` | 硬编码 `_replace_other_trait` / `_to_be_replaced_trait` | `PlayerState` |
 | `SystemOperator` | 硬编码 `command` / `death_hint` | 全局系统 |
 | `InfoDemoOperator` | 硬编码 `info` | `EventBus.request_warning_toast` |
@@ -505,7 +507,8 @@ Operator 的变量可以引用以下三类数据源，每种有**不同的生命
 | `FlagOperator` | `PlayerState.get_flag()`、`PlayerState.has_flag()` | `PlayerState.set_flag()`、`PlayerState.append_flag()` |
 | `FlagReplaceOperator` | `Database.flags.get()` | `flag.val_bool =` |
 | `TraitReplaceOperator` | `PlayerState.get_traits()` | `PlayerState.remove_trait()`、`PlayerState.add_trait()` |
-| `EmotionOperator` | — | `PlayerState.append_emotion()` |
+| `EmotionOperator` | `PlayerState.get_emotion()` (reduce_to_lowest_zero mode) | `PlayerState.append_emotion()`、`PlayerState.set_emotion()`（取决于 `mode`） |
+| `ForceSetPropertyOperator` | — | `PlayerState.force_set_stat_val()` |
 | `PropertyRangeOperator` | `PlayerState.get(property)` | — |
 | `PoemTypeChooseOperator` | `PlayerState.get_traits()` | — |
 

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ImaginaryTag" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://dk86isxs4lamx" path="res://core/model/imaginary.gd" id="1_6fl8j"]
+
+[resource]
+script = ExtResource("1_6fl8j")
+uuid = "object:medicine"
+name = "药摊意象"
+metadata/_custom_type_script = "uid://dk86isxs4lamx"

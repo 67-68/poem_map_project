@@ -9,32 +9,32 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_oer0q"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_kda52"]
 
-[sub_resource type="Resource" id="Resource_pcmha"]
+[sub_resource type="Resource" id="Resource_yrppe"]
 script = ExtResource("3_mciir")
 str_props = "money"
 value = 25
 
-[sub_resource type="Resource" id="Resource_4nluq"]
+[sub_resource type="Resource" id="Resource_jej6u"]
 script = ExtResource("4_ux2xf")
 value = 10
 
-[sub_resource type="Resource" id="Resource_6f6la"]
+[sub_resource type="Resource" id="Resource_mciir"]
 script = ExtResource("5_j6aay")
 imagery_name = "TARGET_OBJECT_INK_WENYING"
 
-[sub_resource type="Resource" id="Resource_eckaq"]
+[sub_resource type="Resource" id="Resource_ux2xf"]
 script = ExtResource("6_kwnn7")
-operators = Array[ExtResource("2_jej6u")]([SubResource("Resource_pcmha"), SubResource("Resource_4nluq"), SubResource("Resource_6f6la")])
+operators = Array[ExtResource("2_jej6u")]([SubResource("Resource_yrppe"), SubResource("Resource_jej6u"), SubResource("Resource_mciir")])
 
-[sub_resource type="Resource" id="Resource_ffwyj"]
+[sub_resource type="Resource" id="Resource_j6aay"]
 script = ExtResource("7_oer0q")
-choice_result = SubResource("Resource_eckaq")
+choice_result = SubResource("Resource_ux2xf")
 description = "（冷眼旁观）"
 
 [resource]
 script = ExtResource("8_kda52")
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_yrppe")]([SubResource("Resource_ffwyj")])
+options = Array[ExtResource("1_yrppe")]([SubResource("Resource_j6aay")])
 uuid = "scene_imagery_library_scene_wenying_imagery_ink_for_sale"
 name = "鬻文计数"
 description = "笔尖在劣质纸上犁过，墨臭混着楼下酒肆的油烟气。主顾扔过来一袋钱，你握笔的手稳住，另一只手却在桌沿抠下一根木刺。他数铜板时，你的视线死死钉在他指缝间的钱币上——笔尖的沙沙声和叮当声搅在一起。一滴墨从笔锋坠落，恰好洇在钱袋的绳结上，黑色缓慢地渗进麻线纹理里。"

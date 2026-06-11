@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_slend")
 resources = {
+"lilinfu_student": "res://data/tres_traits/lilinfu_student.tres",
 "main_baiye_1": "res://data/tres_traits/main_baiye_1.tres",
 "main_baiye_2": "res://data/tres_traits/main_baiye_2.tres",
 "main_baiye_3": "res://data/tres_traits/main_baiye_3.tres",

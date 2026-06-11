@@ -87,25 +87,34 @@ func _connect_imaginary_signals():
 
 
 func _on_request_add_imaginary(tag: String):
-	"""处理意象获取请求：在 Database.imaginaries 中查找 tag 并添加 basic_imaginary 条目"""
+	"""处理意象获取请求：解析 4 段式 tag，用中间两段匹配 Database.imaginaries 的 key，完整 tag 作为 blueprint_id 存入"""
 	if tag.is_empty():
 		Logging.err("PlayerState._on_request_add_imaginary: tag 为空")
 		return
 
-	var imaginary = Database.imaginaries.get(tag) as ImaginaryTag
-	if not imaginary:
-		Logging.err("PlayerState._on_request_add_imaginary: Database.imaginaries 中未找到 tag '%s'" % tag)
+	# 解析 4 段式 tag，提取中间两段作为 ImaginaryTag 的 key
+	# 例如 TARGET_MYTH_GIANTROC_DAYAN → 中间两段 MYTH:GIANTROC
+	var segments = tag.split("_")
+	if segments.size() < 3:
+		Logging.err("PlayerState._on_request_add_imaginary: tag '%s' 段数不足 (%d)，需要至少 3 段" % [tag, segments.size()])
 		return
 
-	# 每次都添加新条目（允许重复）
+	var imaginary_key = segments[1] + ":" + segments[2]
+	# 注册表/资源文件中的 key 使用小写（如 myth:giantroc），tag 段是大写（如 MYTH:GIANTROC）
+	var imaginary = Database.imaginaries.get(imaginary_key.to_lower()) as ImaginaryTag
+	if not imaginary:
+		Logging.err("PlayerState._on_request_add_imaginary: 从中间两段 '%s' 未找到对应的 ImaginaryTag（tag='%s'）" % [imaginary_key, tag])
+		return
+
+	# 每次都添加新条目（允许重复），完整 4 段 tag 作为 blueprint_id
 	var new_entry = {
 		"blueprint_id": tag,
 		"contexts": []
 	}
 	imaginary.basic_imaginaries.append(new_entry)
 	var count = imaginary.basic_imaginaries.size()
-	Logging.info("PlayerState._on_request_add_imaginary: 意象 '%s' (%s) 已添加 (第 %d 条)，当前总量: %d" %
-		[tag, imaginary.name, count, count])
+	Logging.info("PlayerState._on_request_add_imaginary: blueprint '%s' 已存入意象 '%s' (%s) (第 %d 条)，当前总量: %d" %
+		[tag, imaginary_key, imaginary.name, count, count])
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()

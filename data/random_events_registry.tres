@@ -29,6 +29,7 @@ resources = {
 "mid_of_wenhuaquan_party_choose_people": "res://data/random_events/mid_of_wenhuaquan_party_choose_people.tres",
 "party_subjective_changhe": "res://data/random_events/party_subjective_changhe.tres",
 "request_libai_changhe": "res://data/random_events/request_libai_changhe.tres",
+"scene_imagery_library_scene_wenying_imagery_ink_for_sale": "res://data/random_events/scene_imagery_library_scene_wenying_imagery_ink_for_sale.tres",
 "sensual_huxuan_dance": "res://data/random_events/sensual_huxuan_dance.tres",
 "start_of_wenhuaquan_party": "res://data/random_events/start_of_wenhuaquan_party.tres",
 "strange_poet": "res://data/random_events/strange_poet.tres",

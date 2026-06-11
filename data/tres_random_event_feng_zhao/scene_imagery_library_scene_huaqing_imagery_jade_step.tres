@@ -8,27 +8,27 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_od3dt"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_4l4b0"]
 
-[sub_resource type="Resource" id="Resource_7pw33"]
+[sub_resource type="Resource" id="Resource_4xrrv"]
 script = ExtResource("3_4vhc4")
 value = 10
 
-[sub_resource type="Resource" id="Resource_a0cga"]
+[sub_resource type="Resource" id="Resource_losnp"]
 script = ExtResource("4_w2fg2")
 imagery_name = "TARGET_PLACE_JADESTEP_HUAQING"
 
-[sub_resource type="Resource" id="Resource_jw63j"]
+[sub_resource type="Resource" id="Resource_4vhc4"]
 script = ExtResource("5_omkw7")
-operators = Array[ExtResource("2_losnp")]([SubResource("Resource_7pw33"), SubResource("Resource_a0cga")])
+operators = Array[ExtResource("2_losnp")]([SubResource("Resource_4xrrv"), SubResource("Resource_losnp")])
 
-[sub_resource type="Resource" id="Resource_bxtey"]
+[sub_resource type="Resource" id="Resource_w2fg2"]
 script = ExtResource("6_od3dt")
-choice_result = SubResource("Resource_jw63j")
+choice_result = SubResource("Resource_4vhc4")
 description = "（冷眼旁观）"
 
 [resource]
 script = ExtResource("7_4l4b0")
 _target_tags = Array[String](["action:main:fengzhao"])
-options = Array[ExtResource("1_4xrrv")]([SubResource("Resource_bxtey")])
+options = Array[ExtResource("1_4xrrv")]([SubResource("Resource_w2fg2")])
 uuid = "scene_imagery_library_scene_huaqing_imagery_jade_step"
 name = "隔乐窥阶"
 description = "水汽从温泉池漫过来，裹着硫磺味和变调的丝竹声。你站在外苑的石板地上，耳廓微动——那曲子本该是高亢的《凉州》，但被湿气浸透，音阶软塌塌地滑下去，像一节节断开的玉片。你的目光穿过蒸汽，钉在内院门口那三级汉白玉台阶上，水珠顺着阶棱滚落，在暗处泛出冷光。指节扣紧刀鞘，骨节发白。"

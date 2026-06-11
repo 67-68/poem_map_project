@@ -18,8 +18,14 @@ resources = {
 "environment:snow": "res://data/tres_imaginaries/environment__snow.tres",
 "environment:wind": "res://data/tres_imaginaries/environment__wind.tres",
 "health:drunk": "res://data/tres_imaginaries/health__drunk.tres",
+"myth:giantroc": "res://data/tres_imaginaries/myth__giantroc.tres",
+"object:ink": "res://data/tres_imaginaries/object__ink.tres",
+"object:medicine": "res://data/tres_imaginaries/object__medicine.tres",
+"place:jadestep": "res://data/tres_imaginaries/place__jadestep.tres",
+"politics:cloud": "res://data/tres_imaginaries/politics__cloud.tres",
 "relation:friend": "res://data/tres_imaginaries/relation__friend.tres",
 "relation:patron": "res://data/tres_imaginaries/relation__patron.tres",
+"society:famine": "res://data/tres_imaginaries/society__famine.tres",
 "travel:exile": "res://data/tres_imaginaries/travel__exile.tres",
 "travel:parting": "res://data/tres_imaginaries/travel__parting.tres"
 }
