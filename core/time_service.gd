@@ -116,6 +116,9 @@ func _ready() -> void:
 		Logging.info("Xun tick: %s" % current_xun))
 	GameState.year = GameState.start_year
 	_last_total_days = int(GameState.year * DAYS_PER_YEAR)
+	Logging.info("TimeService._ready: GameState.year set to %f, event_queue has %d items" % [GameState.year, event_queue.size()])
+	if event_queue.size() > 0:
+		Logging.info("  queue items: %s" % event_queue.map(func(e): return "{name:%s time:%f}" % [e.get("name","?"), e.time]))
 	Engine.time_scale = 1
 	pause()
 
@@ -131,6 +134,7 @@ func _process(delta: float) -> void:
 	# 2. 检查浮点数队列 (你原有的逻辑)
 	while not event_queue.is_empty() and GameState.year >= event_queue[0].time:
 		var event = event_queue.pop_front()
+		Logging.info("_process: FIRING event name='%s' time=%f at year=%f" % [event.get("name","?"), event.time, GameState.year])
 		if event.callback.is_valid():
 			pause_world(true) # 关键！触发事件时必须强制暂停游戏，防止弹窗地狱！
 			event.callback.call()
@@ -154,6 +158,8 @@ func slow_down():
 func register(trigger_time: float, function: Callable, name: String, epitaph_text: String = '', save_to_history: bool = true, entity: GameEntity = null):
 	var event_data = {"time": trigger_time, "callback": function, "entity": entity, "name": name, "epitaph_text": epitaph_text}
 	
+	Logging.info("TimeService.register: name='%s' trigger_time=%f GameState.year=%f added_to_queue=%s" % [name, trigger_time, GameState.year, str(trigger_time >= GameState.year)])
+	
 	# 动态事件（比如信使移动）只需进当前队列；剧本事件需要进史书
 	if save_to_history:
 		master_timeline.append(event_data)
@@ -165,6 +171,7 @@ func register(trigger_time: float, function: Callable, name: String, epitaph_tex
 		event_queue.append(event_data)
 		event_queue.sort_custom(func(a, b): return a.time < b.time)
 		future_event_registered.emit(event_data)
+		Logging.info("  → event_queue is now: %s" % event_queue.map(func(e): return "{name:%s time:%f}" % [e.get("name","?"), e.time]))
 
 func register_to_master_timeline(time: float, name: String, epitaph_text: String = ''):
 	"""
@@ -187,6 +194,24 @@ func jump_to(new_year: float):
 	GameState.ratio_time = clampf(remap(GameState.year, GameState.start_year, GameState.end_year, 0, 1), 0.0, 1.0)
 	
 	_rebuild_queue_from_master()
+
+
+func jump_to_clean(new_year: float):
+	"""
+	干净跳转：设置年份、同步天数、更新 ratio，清空 event_queue（不重建队列）。
+	适合调试场景，跳转后不会触发任何历史事件回调。
+	"""
+	Logging.info("Clean jump to: %s — event queue wiped, nothing will fire" % new_year)
+	GameState.year = new_year
+	# 💀 极度重要：同步底层天数缓存，防止 _process 醒来后疯狂补帧！
+	_last_total_days = int(GameState.year * DAYS_PER_YEAR)
+
+	EventBus.year_changed.emit(GameState.year)
+	GameState.ratio_time = clampf(remap(GameState.year, GameState.start_year, GameState.end_year, 0, 1), 0.0, 1.0)
+
+	# 🗑️ 核弹级清空待办：不重建队列，不触发任何事件
+	event_queue.clear()
+	Logging.info("Clean jump: event queue cleared, %d events in master timeline preserved" % master_timeline.size())
 
 
 # --- 修改 2：重写 advance_time，复用 _process 的发报逻辑！ ---

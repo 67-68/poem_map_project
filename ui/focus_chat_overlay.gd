@@ -1,10 +1,10 @@
 # GalgameOverlay.gd
 extends Control
 
-@onready var left_portrait = $MarginContainer/LeftCharacter
-@onready var right_portrait = $MarginContainer/RightCharacter
-@onready var text_label = $MarginContainer/Panel/VBox/ChatLabel
-@onready var name_label = $MarginContainer/Panel/VBox/NameLabel
+@onready var left_portrait = $Background/MarginContainer/VBox/HBox/LeftCharacter
+@onready var right_portrait = $Background/MarginContainer/VBox/HBox/RightCharacter
+@onready var text_label = $Background/MarginContainer/VBox/HBox2/Panel/VBox/ChatLabel
+@onready var name_label = $Background/MarginContainer/VBox/HBox2/Panel/VBox/NameLabel
 
 var _dialogue_sequence: Array = []
 var _current_index: int = 0
@@ -21,8 +21,8 @@ func play_dialogue_sequence(dialogues: FocusedChat):
 	_current_background = dialogues.icon  # FocusedChat.icon 作为默认背景
 	$Background.texture = _current_background
 	_current_index = 0
-	$MarginContainer/VBoxContainer/Title.text = dialogues.name
-	$MarginContainer/VBoxContainer/Description.text = dialogues.description
+	$Background/MarginContainer/VBox/HBox/V/Title.text = dialogues.name
+	$Background/MarginContainer/VBox/HBox/V/Description.text = dialogues.description
 
 	if data.options.size() > 0:
 		use_choice = true
@@ -31,15 +31,15 @@ func play_dialogue_sequence(dialogues: FocusedChat):
 	find_texture()
 
 func find_texture():
-	if not $MarginContainer/LeftCharacter.texture:
+	if not $Background/MarginContainer/VBox/HBox/LeftCharacter.texture:
 		for dia in _dialogue_sequence:
 			if dia.texture and dia.chat_position == FocusedChatLine.ChatPosition.LEFT:
-				$MarginContainer/LeftCharacter.texture = dia.texture
+				$Background/MarginContainer/VBox/HBox/LeftCharacter.texture = dia.texture
 				break
-	if not $MarginContainer/RightCharacter.texture:
+	if not $Background/MarginContainer/VBox/HBox/RightCharacter.texture:
 		for dia in _dialogue_sequence:
 			if dia.texture and dia.chat_position == FocusedChatLine.ChatPosition.RIGHT:
-				$MarginContainer/RightCharacter.texture = dia.texture
+				$Background/MarginContainer/VBox/HBox/RightCharacter.texture = dia.texture
 				break
 
 # 在切换说话人时，加一个微微向上弹跳的动画
@@ -52,12 +52,11 @@ func _bounce_portrait(portrait_node: TextureRect):
 # 接管点击事件，用来翻页
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		get_viewport().set_input_as_handled()
-		# ⚠️ 防弹装甲 1：如果选项已经弹出来了，绝对、立刻吞掉屏幕点击事件！
-		# 逼着玩家去点按钮，不准他们再点屏幕翻页！
+		# ⚠️ 防弹装甲 1：如果选项已经弹出来了，不要吞事件——让按钮自己收点击
 		if choice_created:
 			return
 
+		get_viewport().set_input_as_handled()
 		_current_index += 1
 		_show_current_line()
 
@@ -69,9 +68,9 @@ func _show_current_line():
 	if _current_index >= _dialogue_sequence.size():
 		if use_choice and not choice_created:
 			# 展现选项，并立刻打断渲染逻辑！
-			$MarginContainer/OptionBtns.visible = true
+			$Background/MarginContainer/VBox/OptionBtns.visible = true
 			# 把 try_end_dialogue 作为 Callable 传给按钮，让按钮被点时调用它
-			$MarginContainer/OptionBtns.apply_btns(data.options, try_end_dialogue)
+			$Background/MarginContainer/VBox/OptionBtns.apply_btns(data.options, try_end_dialogue)
 			choice_created = true
 		else:
 			# 没话说了，而且本来就没选项，直接黯然退场

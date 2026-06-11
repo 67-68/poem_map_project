@@ -221,9 +221,17 @@ func _show_focused_chat_from_stack(entry: Dictionary):
 	add_child(overlay)
 
 	# 连接完成信号：overlay 播完后自行 queue_free，此回调负责弹出栈并恢复
-	overlay.chat_finished.connect(func(_result: ChoiceResult):
+	overlay.chat_finished.connect(func(result: ChoiceResult):
+		# 🚨 必须先 pop 当前 FocusChat，再执行 operators
+		# result.operate() 可能通过 PushFocusedChatOperator push 新事件到栈顶，
+		# 如果先 operate 再 pop_front，新 push 的条目会被误 pop
 		_event_stack.pop_front()
 		Logging.info("FocusChat 已从栈中弹出")
+
+		# 🚨 执行选项的 ChoiceResult，触发其中的 operators（如 PushFocusedChatOperator）
+		# 这是 FocusChat 链式触发的关键步骤，之前被忽略导致无法进入下一段对话
+		if result:
+			ConsequenceExecuter.execute_result(result)
 
 		TimeService.resume_world()
 		Engine.time_scale = _saved_time_scale
@@ -496,6 +504,14 @@ func _end_narrative(choice):
 	# current_event_data 会在下一次 apply_narrative 时被自然覆盖。
 	var _completed_data: BaseEvent = current_event_data
 	await ConsequenceExecuter.execute_result(choice)
+
+	# 🚩 守卫：如果 execute_result 已经触发了栈内容的处理（例如 PushFocusedChatOperator
+	# 在 _is_active=false 时经由 _on_push_focused_chat → _process_stack 显示了 FocusChat），
+	# 那么栈顶条目的 processed=true，此时不能盲目重置 _is_active，否则已显示的内容
+	# 会被 _process_next 重复触发（双弹窗 Bug）。
+	if _event_stack.size() > 0 and _event_stack[0].get("processed", false):
+		Logging.info("_end_narrative: 栈顶条目已处理（如 FocusChat 已显示），跳过 _is_active 重置")
+		return
 
 	# 🚩 execute_result 完成后才释放 _is_active，避免 operator 迭代中途
 	# push_picker/push_event 误触 _process_stack

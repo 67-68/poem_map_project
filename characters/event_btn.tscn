@@ -4,7 +4,8 @@
 
 [node name="EventBtn" type="Button" unique_id=455919761]
 z_index = 100
-custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+size_flags_horizontal = 1
 offset_right = 8.0
 offset_bottom = 8.0
 autowrap_mode = 1

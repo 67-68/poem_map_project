@@ -131,8 +131,11 @@ func _build_life_path_points_from_poems() -> void:
 
 
 func _register_events_with_time_service() -> void:
+	Logging.info("=== _register_events_with_time_service called, GameState.year=%f ===" % GameState.year)
 	for d in history_events.values():
-		TimeService.register(d.target_year, GameState.event_buffer.pop_item, d.name, d.epitaph_text, true, d)
+		Logging.info("Registering event '%s' with target_year=%f" % [d.name if d.has_method("get_name") else d.uuid, d.target_year])
+		# ⚠️ 使用 pop_specific.bind(d) 而非 pop_item，确保每个事件触发时弹出自己而非 items[0]
+		TimeService.register(d.target_year, GameState.event_buffer.pop_specific.bind(d), d.name, d.epitaph_text, true, d)
 	for d in poem_data.values():
 		TimeService.register(d.year, GameState.poem_buffer.pop_item, d.name, '', true, d)
 

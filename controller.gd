@@ -55,6 +55,16 @@ func parse(new_text):
 			Logging.info('Executing DSL: %s, got %d operators' % [dsl_content, operators.size()])
 			for op in operators:
 				op.operate()
+		elif parts.size() >= 3 and parts[1] == 'time':
+			# $ time <year> — 跳转到指定年份，重建事件队列
+			var target_year = float(parts[2])
+			Logging.info('Jump to year %s' % target_year)
+			TimeService.jump_to(target_year)
+		elif parts.size() >= 3 and parts[1] == 'time_clean':
+			# $ time_clean <year> — 跳转到指定年份，不触发任何事件
+			var target_year = float(parts[2])
+			Logging.info('Clean jump to year %s' % target_year)
+			TimeService.jump_to_clean(target_year)
 		elif parts.size() == 2:
 			# $ event_key — 触发事件（原有逻辑）
 			EventBus.request_event_key.emit(parts[1], {})

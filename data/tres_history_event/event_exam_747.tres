@@ -25,6 +25,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_blpch")
+target_year = 747.2
 options = Array[ExtResource("1_w7s0s")]([SubResource("Resource_taiv1")])
 uuid = "event_exam_747"
 name = "天宝六年春，大考之日。"

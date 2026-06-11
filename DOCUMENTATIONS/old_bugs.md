@@ -588,3 +588,137 @@ for key in ["keyword", "imaginary_desc"]:
 - [`core/database.gd:48-57`](core/database.gd:48) — 显式加载翻译
 - [`data/translations/dynamic_events.csv`](data/translations/dynamic_events.csv) — 翻译表
 - [`data/translations/dynamic_events.zh.translation`](data/translations/dynamic_events.zh.translation) — 编译后翻译资源
+
+## 2026-06-11: FocusChat 双重显示 — `_end_narrative` 盲目重置 `_is_active`
+
+### 问题描述
+
+Narrative 显示 FocusChat 时，同一个 FocusChat 实例显示了两次，用户需要关闭两次。
+
+日志时序：
+```
+[18:01:43] FocusChat 已推入栈顶
+[18:01:43] FocusChat 显示中              ← 第 1 次
+[18:01:43] 弹出栈中的下一个 FocusChat
+[18:01:43] FocusChat 显示中              ← 第 2 次（重复！）
+...
+[18:01:47] FocusChat 已从栈中弹出          ← 第 1 次 pop
+[18:01:48] FocusChat 已从栈中弹出          ← 第 2 次 pop
+```
+
+### 根本原因
+
+在 [`characters/narrative_overlay.gd`](characters/narrative_overlay.gd) 的 `_end_narrative()` 中，`ConsequenceExecuter.execute_result(choice)` 执行后，结果中的 `PushFocusedChatOperator` 被触发，会：
+
+1. 将 FocusChat 推入 `_event_stack`
+2. 由于 `_is_active` 此时为 `false`（`_end_narrative` 在 `execute_result` **之后**才重置），进入 `_process_stack()`
+3. `_process_stack()` → `_show_focused_chat_from_stack()` → 设置 `_is_active = true` → FocusChat 显示（第 1 次）
+
+**`execute_result` 返回后**，`_end_narrative` 继续执行：
+
+4. **盲目设置 `_is_active = false`** — 覆盖了 `_show_focused_chat_from_stack` 已经设置好的 `true`
+5. 调用 `_process_next()` → 栈顶仍然是同一个 FocusChat 条目（`processed = true`，但 `_process_next` 没检查！）→ 再次进入 `_show_focused_chat_from_stack` → 第 2 次显示
+
+**核心冲突**：`execute_result()` 是同步的，但其触发的 operator 会异步地通过栈系统处理 FocusChat 显示。`_end_narrative` 假设 `execute_result` 返回后一切如初（`_is_active = false`），但这个假设不成立——operator 执行期间栈系统已经被激活了。
+
+### 影响范围
+
+- 所有在 `ChoiceResult` 中通过 `PushFocusedChatOperator` 触发的 FocusChat 显示
+- 类似模式（如 `PushEventOperator` 推 Cinematic）也可能受到相同问题的影响（如果 Cinematic 也是通过栈系统处理）
+
+### 修复方案
+
+在 [`characters/narrative_overlay.gd:500-506`](characters/narrative_overlay.gd:500) 的 `_end_narrative()` 中，在 `execute_result` 之后、`_is_active = false` 之前，添加守卫检查：
+
+```gdscript
+# execute_result 返回后，检查栈顶是否已被 operator 处理
+# （例如 PushFocusedChatOperator 触发栈系统显示了 FocusChat）
+if _event_stack.size() > 0 and _event_stack[0].get("processed", false):
+    Logging.info("_end_narrative: 栈顶条目已处理（如 FocusChat 已显示），跳过 _is_active 重置")
+    # 让已激活的栈条目（FocusChat）的 chat_finished 信号自行处理 pop + _process_next
+    return
+
+_is_active = false
+_process_next()
+```
+
+守卫逻辑：
+1. **检查栈非空且栈顶已标记 `processed = true`** — 说明 `execute_result` 期间栈系统已被激活，焦点内容已显示
+2. **直接 return** — 不重置 `_is_active`，不调用 `_process_next`。让 FocusChat 的 `chat_finished` 信号（在 `_show_focused_chat_from_stack` 中连接）自然触发 pop + `_process_next`
+3. **如果栈为空或栈顶未处理** — 走原有逻辑，正常清理循环
+
+### 修复文件
+
+- [`characters/narrative_overlay.gd:500-506`](characters/narrative_overlay.gd:500) — `_end_narrative()` 新增守卫条件
+
+### 关键教训
+
+1. **`execute_result()` 不是纯函数** — 它执行 operator，而 operator 可能改变全局状态（栈系统、`_is_active`）。调用方不能假设 `execute_result` 返回后世界与调用前一致。
+2. **`_is_active` 的「谁设置谁负责」模式** — 多个代码路径都可能设置 `_is_active`，`_end_narrative` 盲目重置就是踩到了这个雷。更好的设计可能是用引用计数或状态机替代单一的布尔守卫。
+3. **同步调用 ≠ 同步语义** — `execute_result` 虽然是 `await` 的，但其内部的 operator 可能通过栈系统（`_process_stack`）异步激活新内容。回调完成后的「后处理」必须检查栈状态，不能假设「我刚出来」=「一切归零」。
+4. **类似的守卫模式也应该应用于 Picker/Cinematic** — 如果 `PushFocusedChatOperator` 放在 Picker 的 choice result 中执行，要确保 Picker 的回调也有同样的防御检查。
+
+## 2026-06-11: 🎯 HistoryEvent 开局触发错乱 — event_exam_747 在 year=745 误触发
+
+### 问题描述
+`event_exam_747.tres`（target_year=747.2）在游戏开局（year=745）直接触发，导致玩家在开局就看到天宝六年的考试事件。
+
+### 根本原因（三重多米诺骨牌）
+
+**第一重：Autoload 初始化顺序**
+- [`project.godot:26-28`](project.godot:26) Autoload 顺序为 `GameState → Database → TimeService`
+- `Database._ready()` 在 `TimeService._ready()` 之前执行 → 注册事件时 `GameState.year` 还是默认值 **0.0**
+- 所有事件的 `trigger_time >= 0.0` 都成立 → 全部错误加入 `event_queue`
+
+**第二重：event_intro_745.tres 缺少字段**
+- [`event_intro_745.tres`](data/tres_history_event/event_intro_745.tres) 没有 `target_year` 字段 → 默认值 **720.0**
+- 没有 `name` 字段 → 日志中显示为 `name=''`
+- 720.0 远早于 745.0 → `_process` 第一帧就触发
+
+**第三重：ManualBuffer.pop_item 架构缺陷**
+- [`manual_buffer.gd:13-15`](core/manual_buffer.gd:13) 所有事件共享同一个回调 `pop_item`
+- `pop_item()` 总是弹出 `items[0]`，不检查哪个事件的 timer 触发了它
+- Registry 顺序：`event_exam_747` 在前 → items[0] = event_exam_747
+- `event_intro_745` 的 timer 触发 → `pop_item()` 弹出 `event_exam_747`！
+
+### 触发完整链路
+```
+Database._ready() 早于 TimeService._ready()
+→ GameState.year = 0.0
+→ event_intro_745(720.0) + event_exam_747(747.2) 都进了 event_queue
+
+UI._ready() → TimeService.play()
+→ _process 第一帧: year = 745.000044
+→ event_queue[0].time = 720.0 <= 745.0 → 触发
+→ pop_item() → 弹出 items[0] = event_exam_747 🚨
+```
+
+### 修复方案
+
+**Fix 1: 修复 event_intro_745.tres**
+- 添加 `target_year = 745.0`
+- 添加 `name = "天宝四载，初入长安"`
+
+**Fix 2: ManualBuffer 添加 pop_specific**
+- 新增 `pop_specific(item)` 方法，按 item 查找而非弹 items[0]
+- [`manual_buffer.gd:18-28`](core/manual_buffer.gd:18)
+
+**Fix 3: database.gd 改用 pop_specific.bind(d)**
+- [`database.gd:136`](core/database.gd:136) 每个事件绑定自己的 `pop_specific` 回调
+- 确保 `event_intro_745` 的 timer 触发时弹出 `event_intro_745`
+
+**Fix 4: 调整 Autoload 顺序**
+- 把 `TimeService` 移到 `Database` 之前
+- 确保注册事件时 `GameState.year` 已被设置为 745.0
+
+### 涉及文件
+- [`data/tres_history_event/event_intro_745.tres`](data/tres_history_event/event_intro_745.tres) — 添加 target_year + name
+- [`core/manual_buffer.gd`](core/manual_buffer.gd) — 新增 pop_specific(item)
+- [`core/database.gd:133-138`](core/database.gd:133) — 改用 pop_specific.bind(d)
+- [`project.godot:26-28`](project.godot:26) — 调整 autoload 顺序
+
+### 关键教训
+1. **Autoload 顺序即契约** — `_ready()` 按 project.godot 中的声明顺序执行。一个 autoload 的 `_ready()` 不能依赖另一个 autoload 的 `_ready()` 副作用，除非已确认顺序。
+2. **`pop_item` 是共享回调的陷阱** — 多个事件注册同一个 `pop_item` 回调，`pop_item` 又不知道谁调了它，必然导致错弹。每事件独立回调是正确姿势。
+3. **Resource 默认值是最隐蔽的 Bug** — `target_year: float = 720.0` 这个默认值即使在没有 `target_year` 字段的 `.tres` 文件中也能正常工作，但 720.0 不符合任何业务预期，默默毒害了整个时间线。
+4. **`.tres` 文件缺少 `@export` 字段不会报错** — 只会默默用默认值。这种静默失败比显式报错更难排查，需要更谨慎的字段完整性校验。

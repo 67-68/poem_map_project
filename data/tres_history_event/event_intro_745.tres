@@ -42,6 +42,8 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_gu7hk")
+target_year = 745.0
+name = "天宝四载，初入长安"
 options = Array[ExtResource("1_wsgjf")]([SubResource("Resource_frvph")])
 uuid = "event_intro_745"
 description = "你站在长安的明德门外，抬头望着这座被盛世狂热笼罩的庞大都城。你的行囊里没有多少盘缠，只有一卷你自认足以惊动天下公卿的诗稿。"

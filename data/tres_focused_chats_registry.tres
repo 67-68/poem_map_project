@@ -5,5 +5,8 @@
 [resource]
 script = ExtResource("1_lqex8")
 resources = {
+"focused_chat_enter_exam": "res://data/tres_focused_chats/focused_chat_enter_exam.tres",
+"focused_chat_exam_first_question": "res://data/tres_focused_chats/focused_chat_exam_first_question.tres",
+"focused_chat_exam_second_question": "res://data/tres_focused_chats/focused_chat_exam_second_question.tres",
 "lilinfu_promise": "res://data/tres_focused_chats/lilinfu_promise.tres"
 }

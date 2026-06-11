@@ -11,3 +11,4 @@ talked_to_dengqian,bool,FALSE
 talk_count_libai,int,0
 talk_count_wangwei,int,0
 talk_count_dengqian,int,0
+baiye_asking_triggered,bool,FALSE

@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_uorex")
 resources = {
+"baiye_asking_triggered": "res://data/flags/baiye_asking_triggered.tres",
 "chain_strange_poet_1": "res://data/flags/chain_strange_poet_1.tres",
 "chain_strange_poet_2": "res://data/flags/chain_strange_poet_2.tres",
 "chain_strange_poet_3": "res://data/flags/chain_strange_poet_3.tres",
