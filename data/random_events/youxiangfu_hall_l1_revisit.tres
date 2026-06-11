@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://djrmqw4ghdp6u"]
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_eo"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="5_bo"]
+[ext_resource type="Script" uid="uid://dtw3kde1u305k" path="res://core/operators/push_focused_chat_operator.gd" id="6_0bdr6"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_re"]
 
 [sub_resource type="Resource" id="Resource_pe"]
@@ -21,9 +22,24 @@ choice_result = SubResource("Resource_cr_thanks")
 description = "接过诗稿，拱手道谢"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
+[sub_resource type="Resource" id="Resource_nlm7t"]
+script = ExtResource("6_0bdr6")
+chat_uuid = "lilinfu_promise"
+
+[sub_resource type="Resource" id="Resource_k8ru1"]
+script = ExtResource("3_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_nlm7t")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_0bdr6"]
+script = ExtResource("4_eo")
+choice_result = SubResource("Resource_k8ru1")
+description = "面见右相"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
 [resource]
 script = ExtResource("6_re")
-options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_thanks")])
+options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_thanks"), SubResource("Resource_0bdr6")])
 uuid = "youxiangfu_hall_l1_revisit"
 name = "管家为难·清客"
 description = "你再次步入前堂。那青袍掌书记正低头翻阅着你昨日呕心沥血献上的诗卷，甚至随手拿朱笔在上面乱勾了几笔。你急忙上前一步拱手，他却仿佛没看见面前这个大活人似的，径直向一旁的侍女招手：「这诗稿的纸张质地太糙，拿去垫偏殿那张缺了角的酸枝木桌吧，莫要划伤了相爷的玉管笔。」从头到尾，他的目光未曾在你身上停留半寸。"

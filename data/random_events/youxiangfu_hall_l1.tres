@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c7biltdlofiey"]
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
@@ -8,13 +8,12 @@
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="6_bo"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_re"]
 [ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="8_tco"]
-[ext_resource type="Resource" path="res://data/poem_taste/youxiangfu_ganye_taste.tres" id="10_taste"]
+[ext_resource type="Resource" uid="uid://dqqf3t8tk5g3p" path="res://data/poem_taste/youxiangfu_ganye_taste.tres" id="10_taste"]
 
 [sub_resource type="Resource" id="Resource_tco"]
 script = ExtResource("8_tco")
 poem_taste = ExtResource("10_taste")
 key_to_get_poem_taste = ""
-property_multiplication = 1.0
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
 [sub_resource type="Resource" id="Resource_cr_poem"]
@@ -27,15 +26,14 @@ choice_result = SubResource("Resource_cr_poem")
 description = "上前一步，拱手请命：在下愿献拙作"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
-[sub_resource type="Resource" id="Resource_pe"]
-script = ExtResource("2_pe")
-metadata/_custom_type_script = "uid://byn0qqw1xm33f"
-
 [sub_resource type="Resource" id="Resource_set_money_zero"]
 script = ExtResource("3_prop")
 str_props = "money"
-value = 0
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_pe"]
+script = ExtResource("2_pe")
+metadata/_custom_type_script = "uid://byn0qqw1xm33f"
 
 [sub_resource type="Resource" id="Resource_cr_bribe"]
 script = ExtResource("4_cr")

@@ -212,6 +212,10 @@ func _show_focused_chat_from_stack(entry: Dictionary):
 	var data = entry.get("data")
 	Logging.info("FocusChat 显示中")
 
+	# 🚨 NarrativeOverlay 默认是 hide() 的（_ready 中调用），
+	# 必须 show() 才能让子节点 FocusChatOverlay 可见
+	show()
+
 	# 动态实例化 FocusChatOverlay 并挂载到 NarrativeOverlay 下
 	var overlay = preload("res://ui/focus_chat_overlay.tscn").instantiate()
 	add_child(overlay)

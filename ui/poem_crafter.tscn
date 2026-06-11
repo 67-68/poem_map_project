@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbc1m6wmmi5os"]
+[gd_scene format=3 uid="uid://cbc1m6wmmi5os"]
 
 [ext_resource type="Script" uid="uid://d28jgf66xnd51" path="res://ui/poem_crafter.gd" id="1_otk17"]
 [ext_resource type="PackedScene" uid="uid://co4eess1lguhe" path="res://ui/imaginery_item.tscn" id="1_ps720"]
-[ext_resource type="Texture2D" uid="uid://bkggqxw8e3vjh" path="res://assets/character/li_linfu_smirk.png" id="2_otk17"]
+[ext_resource type="Texture2D" uid="uid://cckktvmpe61oe" path="res://assets/character/lilinfu_smile.png" id="2_otk17"]
 [ext_resource type="PackedScene" uid="uid://dhm3awu3pacwl" path="res://ui/poem_slot.tscn" id="3_o11fd"]
 
 [node name="H" type="HBoxContainer"]

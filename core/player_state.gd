@@ -34,6 +34,7 @@ func init_props():
 	append_stat(ENUMS.PROPS.INSPIRATION, resources.inspiration)
 	append_stat(ENUMS.PROPS.HEALTH, resources.health)
 	append_stat(ENUMS.PROPS.CAREER_PROGRESS, resources.career_progress)
+	append_stat(ENUMS.PROPS.MONEY, resources.money)
 
 func init_traits():
 	var action_tracks = SourceOfTruth.debug_dashboard_state.action_tracks

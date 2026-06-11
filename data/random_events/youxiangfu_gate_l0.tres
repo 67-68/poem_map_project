@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b57y55a6pg3ma"]
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
@@ -11,16 +11,9 @@
 [ext_resource type="Script" uid="uid://gwr4c2x26au3" path="res://core/requirements/narrative_lock_requirement.gd" id="9_nlr"]
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_pr"]
 
-[sub_resource type="Resource" id="Resource_req_money_100"]
-script = ExtResource("10_pr")
-property = "money"
-operator = 3
-value = 100
-metadata/_custom_type_script = "uid://pyecoqx4dr1i"
-
 [sub_resource type="Resource" id="Resource_sub_money"]
 script = ExtResource("4_prop")
-str_props = "money"
+_property = 3
 value = -100
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
@@ -33,38 +26,43 @@ metadata/_custom_type_script = "uid://cxfcnsval1p54"
 script = ExtResource("5_cr")
 operators = Array[ExtResource("1_baseop")]([SubResource("Resource_sub_money"), SubResource("Resource_push_hall")])
 
+[sub_resource type="Resource" id="Resource_req_money_100"]
+script = ExtResource("10_pr")
+property = "money"
+value = 100
+operator = 1
+metadata/_custom_type_script = "uid://pyecoqx4dr1i"
+
 [sub_resource type="Resource" id="Resource_opt_pay"]
 script = ExtResource("6_eo")
-requirement = SubResource("Resource_req_money_100")
 choice_result = SubResource("Resource_cr_pay")
+requirement = SubResource("Resource_req_money_100")
 description = "将袖中所有银钱尽数倒在他摊开的掌中"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_cr_empty"]
+script = ExtResource("5_cr")
 
 [sub_resource type="Resource" id="Resource_nlock"]
 script = ExtResource("9_nlr")
 failed_hint = "门卫对你虎视眈眈，不交钱还想走？"
 metadata/_custom_type_script = "uid://gwr4c2x26au3"
 
-[sub_resource type="Resource" id="Resource_cr_empty"]
-script = ExtResource("5_cr")
-operators = Array[ExtResource("1_baseop")]([])
-
 [sub_resource type="Resource" id="Resource_opt_locked"]
 script = ExtResource("6_eo")
-requirement = SubResource("Resource_nlock")
 choice_result = SubResource("Resource_cr_empty")
+requirement = SubResource("Resource_nlock")
 description = "转身离去"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
-
-[sub_resource type="Resource" id="Resource_pe_broke"]
-script = ExtResource("2_pe")
-metadata/_custom_type_script = "uid://byn0qqw1xm33f"
 
 [sub_resource type="Resource" id="Resource_set_money_zero"]
 script = ExtResource("4_prop")
 str_props = "money"
-value = 0
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_pe_broke"]
+script = ExtResource("2_pe")
+metadata/_custom_type_script = "uid://byn0qqw1xm33f"
 
 [sub_resource type="Resource" id="Resource_cr_broke"]
 script = ExtResource("5_cr")
@@ -73,7 +71,7 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_set_money_zero
 [sub_resource type="Resource" id="Resource_opt_broke"]
 script = ExtResource("6_eo")
 choice_result = SubResource("Resource_cr_broke")
-description = "将剩余银钱尽数倒出"
+description = "将剩余银钱尽数倒出，期望他可以放了你"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]

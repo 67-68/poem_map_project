@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dsb2koxwa7ypp" path="res://model/single_focused_chat.gd" id="1_3b1jx"]
 [ext_resource type="Script" uid="uid://bgapuvasp48wh" path="res://model/focused_chat.gd" id="1_lvsy2"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_1jfdq"]
+[ext_resource type="Texture2D" uid="uid://6h08klf8hnfl" path="res://assets/profile/daming_palace.png" id="2_d35yp"]
 [ext_resource type="Texture2D" uid="uid://cckktvmpe61oe" path="res://assets/character/lilinfu_smile.png" id="2_sndk8"]
 [ext_resource type="Texture2D" uid="uid://btkd7cxp6yr3d" path="res://assets/character/dufu_nervous.png" id="3_rsi40"]
 [ext_resource type="Texture2D" uid="uid://b45evy8cpq1sg" path="res://assets/character/lilinfu_solemn.png" id="4_id27c"]
@@ -17,6 +18,7 @@
 script = ExtResource("1_3b1jx")
 name = "旁白"
 description = "穿过重重院落，相府的奢华让你甚至不敢抬头。你被引至一处熏着沉香的幽静暖阁。珠帘掀开，那位权倾朝野的大唐右相，并没有端坐在高堂之上。"
+background = ExtResource("2_d35yp")
 metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
 
 [sub_resource type="Resource" id="Resource_3b1jx"]

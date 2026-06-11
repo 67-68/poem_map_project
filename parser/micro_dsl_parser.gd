@@ -63,6 +63,7 @@ const FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE := "temp_flag_int_reduce_if_above"
 const FUNC_SCAN_AND_PUSH := "scan_and_push"
 const FUNC_PUSH_EVENT := "push_event"
 const FUNC_POP_EVENT := "pop_event"
+const FUNC_PUSH_FOCUSED_CHAT := "push_focused_chat"
 const FUNC_QUEUE_EVENT := "queue_event"
 const FUNC_RANDOM := "random"
 const FUNC_RANDOM_PICK := "random_pick"
@@ -130,6 +131,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_SCAN_AND_PUSH] = func(p, r): return _exec_scan_and_push_op(p, r)
 	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
 	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
+	cd[FUNC_PUSH_FOCUSED_CHAT] = func(p, r): return _exec_push_focused_chat_op(p, r)
 	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
 	cd[FUNC_RANDOM] = func(p, r): return _exec_random_op(p, r)
 	cd[FUNC_RANDOM_PICK] = func(p, r): return _exec_random_pick_op(p, r)
@@ -661,6 +663,18 @@ static func _exec_push_event_op(parsed: NamedDSLParser.ParseResult, raw: String)
 
 static func _exec_pop_event_op(_parsed: NamedDSLParser.ParseResult, raw: String) -> PopEventOperator:
 	return PopEventOperator.new()
+
+
+# ─── push_focused_chat ──────────────────────────────────────────
+
+static func _exec_push_focused_chat_op(parsed: NamedDSLParser.ParseResult, raw: String) -> PushFocusedChatOperator:
+	var uuid = NamedDSLParser.get_str_param(parsed, "chat_uuid")
+	if uuid.is_empty():
+		Logging.err("push_focused_chat 缺少 chat_uuid 参数: %s" % raw)
+		return null
+	var op = PushFocusedChatOperator.new()
+	op.chat_uuid = uuid
+	return op
 
 
 # ─── queue_event ──────────────────────────────────────────────

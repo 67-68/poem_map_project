@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://i5ex3a2tdi4m"]
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
@@ -8,15 +8,6 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_eo"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="7_bo"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_re"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_br"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_pr"]
-
-[sub_resource type="Resource" id="Resource_req_money"]
-script = ExtResource("10_pr")
-property = "money"
-operator = 1
-value = 100
-metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 
 [sub_resource type="Resource" id="Resource_push_gate"]
 script = ExtResource("3_pushe")
@@ -29,20 +20,18 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_push_gate")])
 
 [sub_resource type="Resource" id="Resource_opt_knock"]
 script = ExtResource("6_eo")
-requirement = SubResource("Resource_req_money")
 choice_result = SubResource("Resource_cr_knock")
 description = "迈上台阶，叩响门环"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
-[sub_resource type="Resource" id="Resource_emo_frust"]
-script = ExtResource("4_emo")
-emotion = "frustration"
-value = 10
-metadata/_custom_type_script = "uid://f5l815u48h2v"
-
 [sub_resource type="Resource" id="Resource_pe_leave"]
 script = ExtResource("2_pe")
 metadata/_custom_type_script = "uid://byn0qqw1xm33f"
+
+[sub_resource type="Resource" id="Resource_emo_frust"]
+script = ExtResource("4_emo")
+value = 10
+metadata/_custom_type_script = "uid://f5l815u48h2v"
 
 [sub_resource type="Resource" id="Resource_cr_leave"]
 script = ExtResource("5_cr")
