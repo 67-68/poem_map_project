@@ -72,6 +72,7 @@ const FUNC_NPC_BATCH_CHECK := "npc_batch_check"
 # Custom operators — 飞花令玩家应答
 const FUNC_IMAGINARY_HAS_LEVEL := "imaginary_has_level"
 const FUNC_IMAGINARY_LEVEL_REWARD := "imaginary_level_reward"
+const FUNC_IMAGERY_ADD := "imagery_add"                      # 🆕 意象获取操作符
 const FUNC_PLAY_TRANSITION := "play_transition"
 
 # ─────────────────────────────────────────────────────────────
@@ -135,6 +136,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_CONTEXT_FETCH] = func(p, r): return _exec_context_fetch_op(p, r)
 	cd[FUNC_NPC_BATCH_CHECK] = func(p, r): return _exec_npc_batch_check_op(p, r)
 	cd[FUNC_IMAGINARY_LEVEL_REWARD] = func(p, r): return _exec_imaginary_level_reward_op(p, r)
+	cd[FUNC_IMAGERY_ADD] = func(p, r): return _exec_imagery_add_op(p, r)
 	cd[FUNC_PLAY_TRANSITION] = func(p, r): return _exec_play_transition_op(p, r)
 
 # ──────────────────────────────────────────────
@@ -874,6 +876,21 @@ static func _exec_imaginary_level_reward_op(parsed: NamedDSLParser.ParseResult, 
 	op.l1_fame = l1_fame
 
 	Logging.info("imaginary_level_reward operator 创建成功: l3_fame=%d, l2_fame=%d, l1_fame=%d" % [l3_fame, l2_fame, l1_fame])
+	return op
+
+
+# ─── imagery_add ────────────────────────────────────────────────
+
+# DSL 语法: imagery_add(name=ENV_POLITICS_CLOUD_LEYOU)
+# 返回 ImageryAcquisitionOperator（广播 EventBus.request_add_imaginary）
+static func _exec_imagery_add_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ImageryAcquisitionOperator:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	if name.is_empty():
+		Logging.err("imagery_add 缺少 name 参数: %s" % raw)
+		return null
+	var op = ImageryAcquisitionOperator.new()
+	op.imagery_name = name
+	Logging.info("imagery_add operator 创建成功: name=%s" % name)
 	return op
 
 

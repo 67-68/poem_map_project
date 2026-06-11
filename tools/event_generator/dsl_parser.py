@@ -14,6 +14,7 @@ KNOWN_NON_PROP_OPS = {
     "flag_bool_set", "flag_str_set", "flag_str_append",
     "flag_int_set", "flag_int_append", "flag_int_reduce_if_above",
     "use_template",
+    "imagery_add",                # 🆕 意象获取操作符（非缩放，直接 emit EventBus signal）
 }
 
 

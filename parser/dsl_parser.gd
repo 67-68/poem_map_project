@@ -126,6 +126,7 @@ static func parse_context(context_str: String) -> Dictionary:
         "trigger_tags": [] as Array[String],  # 🚨 必须用类型化 Array，否则 Godot 4 拒绝赋值给 Array[String] 变量
         "weight": 10.0,
         "background": "",
+        "store_to": "",  # 🆕 store_to 路由指令：指定 .tres 输出目录的 key
         "custom_params": {}
     }
     
@@ -184,6 +185,12 @@ static func parse_context(context_str: String) -> Dictionary:
                 if value.begins_with("(") and value.ends_with(")"):
                     value = value.substr(1, value.length() - 2)
                 result.background = value
+            
+            "store_to":
+                # 🆕 store_to 路由指令：指定生成的 .tres 文件输出目录
+                # value 是 key，后续在 save_resources_to_tres() 中查 STORE_TO_PATH_MAP
+                # 如果 key 不在映射表中，直接作为 res:// 相对路径使用
+                result.store_to = value
             
             _:
                 # 自定义模板参数

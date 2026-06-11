@@ -1,6 +1,7 @@
 {
   "id": "scene_imagery_library",
   "name": "场景-意象获取事件库",
+  "plugins": ["imagery_acquisition"],
   "background_context": "大唐天宝年间，长安城。你是一个野心勃勃的士人，无时无刻不在寻找向上爬的机会。在你眼中，长安城不是诗意盎然的盛世画卷——它是权力金字塔的实体化。每一个场景在你看来都是权力结构的切片：朱门是壁垒，台阶是等级，远山是你够不到的天际线。你在不同的场景中经历着不同的心境，但底层逻辑从来不变：你看到的永远是——权力在哪里？我怎么才能爬上去？",
   "ai_persona": "你是一位冷眼解剖权力符号的叙事设计师。你的文风像一把钝刀——不锋利，但每一刀都拉得生疼。你笔下的主角是一个彻底被权力欲驱动的官迷：看朱门想到的是门槛高度，看台阶想到的是品级差距，看宴席想到的是座次排列。你从不写主角的心理活动——永远只用三种物理切片来暗示他极度的权力饥渴：\n1. 感官的越界（触觉/视觉的僭越）：紧盯着不该看的东西，身体做出僭越的微动作。\n2. 生理的压抑（痛感与紧绷）：渴望但得不到时，身体的硬直、握拳、屏息、指节发白。\n3. 视角的扭曲（眼中只有权力）：忽略周遭正常的人和景，视线死死锚定在代表权力的实体上。\n你坚信：意象不是诗意的顿悟——它是权力的图腾被角色在某个瞬间窥见时，身体做出的本能反应。",
   "prompt_features": [
@@ -23,7 +24,7 @@
           "name": "待漏院听更",
           "description": "大明宫外的破晓，凌晨寒风，百官按品级站在院外等候早朝。宫门紧闭，铜钉在晨曦中泛着冷光",
           "stored_to": "fengzhao",
-          "tags": ["TARGET_PLACE_JADESTEP_DAILOU", "ENV_POLITICS_CLOUD_DAILOU"],
+          "tags": ["action:main:fengzhao", "TARGET_PLACE_JADESTEP_DAILOU", "ENV_POLITICS_CLOUD_DAILOU"],
           "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "fengzhao_trigger",
@@ -44,7 +45,7 @@
           "name": "集贤院修书",
           "description": "皇家图书馆，书架通天，典籍堆中埋首。窗外偶尔有紫袍官员经过，脚步声在回廊中回荡",
           "stored_to": "fengzhao",
-          "tags": ["TARGET_PLACE_JADESTEP_JIXIAN", "ENV_POLITICS_CLOUD_JIXIAN"],
+          "tags": ["action:main:fengzhao", "TARGET_PLACE_JADESTEP_JIXIAN", "ENV_POLITICS_CLOUD_JIXIAN"],
           "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "fengzhao_trigger",
@@ -63,7 +64,7 @@
           "name": "华清池扈从",
           "description": "温泉外苑，水汽氤氲中隐约可见权贵身影。你在外围守卫，听着里面的丝竹管弦和欢笑声",
           "stored_to": "fengzhao",
-          "tags": ["TARGET_PLACE_JADESTEP_HUAQING", "ENV_POLITICS_CLOUD_HUAQING"],
+          "tags": ["action:main:fengzhao", "TARGET_PLACE_JADESTEP_HUAQING", "ENV_POLITICS_CLOUD_HUAQING"],
           "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "fengzhao_trigger",
@@ -82,7 +83,7 @@
           "name": "终南山绝顶",
           "description": "山风呼啸，云海翻腾。站在绝顶俯瞰，长安城如棋盘般渺小，天地间只剩风声和自己的心跳",
           "stored_to": "denggao",
-          "tags": ["TARGET_MYTH_GIANTROC_ZHONGNAN", "ENV_POLITICS_CLOUD_ZHONGNAN"],
+          "tags": ["action:main:denggao", "TARGET_MYTH_GIANTROC_ZHONGNAN", "ENV_POLITICS_CLOUD_ZHONGNAN"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "denggao_trigger",
@@ -101,7 +102,7 @@
           "name": "乐游原残阳",
           "description": "汉代荒冢上，夕阳如血。长安城在暮色中渐次亮起灯火，苍茫天地间独你一人伫立",
           "stored_to": "denggao",
-          "tags": ["TARGET_MYTH_GIANTROC_LEYOU", "ENV_POLITICS_CLOUD_LEYOU"],
+          "tags": ["action:main:denggao", "TARGET_MYTH_GIANTROC_LEYOU", "ENV_POLITICS_CLOUD_LEYOU"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "denggao_trigger",
@@ -120,7 +121,7 @@
           "name": "慈恩寺大雁塔",
           "description": "塔顶俯瞰长安，坊市如棋格。暮鼓声中，归鸦绕塔，红尘在脚下喧嚣却遥远",
           "stored_to": "denggao",
-          "tags": ["TARGET_MYTH_GIANTROC_DAYAN", "ENV_POLITICS_CLOUD_DAYAN"],
+          "tags": ["action:main:denggao", "TARGET_MYTH_GIANTROC_DAYAN", "ENV_POLITICS_CLOUD_DAYAN"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "denggao_trigger",
@@ -139,7 +140,7 @@
           "name": "破败客舍寒夜",
           "description": "油灯如豆，破窗外寒风呜咽。桌上残酒冷炙，墙壁缝隙可见邻家炊烟，更显己身孤寂",
           "stored_to": "duzhuo",
-          "tags": ["TARGET_MYTH_GIANTROC_KESHE"],
+          "tags": ["action:main:duzhuo", "TARGET_MYTH_GIANTROC_KESHE"],
           "linked_value_ids": ["imagery_giant_roc"],
           "narrative_constraint": {
             "type": "duzhuo_trigger",
@@ -158,7 +159,7 @@
           "name": "繁华酒肆暗角",
           "description": "西市酒肆人声鼎沸，胡姬旋舞。你坐在暗角，冷眼旁观醉生梦死的众生相",
           "stored_to": "duzhuo",
-          "tags": ["TARGET_MYTH_GIANTROC_JIUSI"],
+          "tags": ["action:main:duzhuo", "TARGET_MYTH_GIANTROC_JIUSI"],
           "linked_value_ids": ["imagery_giant_roc"],
           "narrative_constraint": {
             "type": "duzhuo_trigger",
@@ -177,7 +178,7 @@
           "name": "灞桥风雪酒亭",
           "description": "大雪纷飞中灞桥横跨渭水，酒亭茅檐低垂。送别的行人折柳相赠，离歌在风雪中若隐若现",
           "stored_to": "duzhuo",
-          "tags": ["TARGET_MYTH_GIANTROC_BAQIAO"],
+          "tags": ["action:main:duzhuo", "TARGET_MYTH_GIANTROC_BAQIAO"],
           "linked_value_ids": ["imagery_giant_roc"],
           "narrative_constraint": {
             "type": "duzhuo_trigger",
@@ -196,7 +197,7 @@
           "name": "曲江池流觞亭",
           "description": "水边诗会，曲水流觞。文人墨客吟诗作对，酒杯顺水漂流至你面前",
           "stored_to": "jiaoyou",
-          "tags": ["TARGET_MYTH_GIANTROC_QUJIANG", "ENV_POLITICS_CLOUD_QUJIANG"],
+          "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_QUJIANG", "ENV_POLITICS_CLOUD_QUJIANG"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "jiaoyou_trigger",
@@ -215,7 +216,7 @@
           "name": "权贵宅邸外院",
           "description": "高门大院外，你站在偏院等候。院内丝竹声声，但你的席位在外院冷案上，连残羹都轮不到",
           "stored_to": "jiaoyou",
-          "tags": ["TARGET_MYTH_GIANTROC_ZHAIDI", "ENV_POLITICS_CLOUD_ZHAIDI"],
+          "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_ZHAIDI", "ENV_POLITICS_CLOUD_ZHAIDI"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "jiaoyou_trigger",
@@ -234,7 +235,7 @@
           "name": "胡姬酒肆狂欢",
           "description": "三教九流汇聚的酒肆，胡姬的琵琶声如珠落玉盘。有人在角落里痛哭，有人在桌上起舞",
           "stored_to": "jiaoyou",
-          "tags": ["TARGET_MYTH_GIANTROC_HUJI", "ENV_POLITICS_CLOUD_HUJI"],
+          "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_HUJI", "ENV_POLITICS_CLOUD_HUJI"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
           "narrative_constraint": {
             "type": "jiaoyou_trigger",

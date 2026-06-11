@@ -363,10 +363,15 @@ def main():
                 if context_extras:
                     print(f"📎 插件 context 富化: {context_extras}")
 
-                # 构建 context 列（与 write_event_row 一致的 tag 格式化）
-                tags = cfg.universal_tags or ["bai_ye"]
-                if tags:
-                    tags_expr = "[" + "/".join(tags) + "]"
+                # 构建 context 列：优先从维度 values 的 tags 中收集 action 标签
+                all_tags = []
+                for combo in current_combos:
+                    for tag in combo.value.tags:
+                        if tag.startswith("action:"):
+                            all_tags.append(tag)
+                tags_to_use = all_tags if all_tags else (cfg.universal_tags or ["bai_ye"])
+                if tags_to_use:
+                    tags_expr = "[" + "/".join(tags_to_use) + "]"
                 else:
                     tags_expr = ""
                 context = f"trigger_tags={tags_expr}|weight=10"
@@ -399,6 +404,16 @@ def main():
                             current_combos, choice,
                             universal_result=cfg.universal_result or "",
                         )
+
+                        # ── Hook 4: 插件选项结果 DSL 扩展 ──
+                        for plugin in plugins:
+                            try:
+                                extra = plugin.get_option_result_extras(current_combos, choice)
+                                if extra:
+                                    opt_dsl = f"{opt_dsl} | {extra}" if opt_dsl else extra
+                            except Exception as e:
+                                print(f"  ⚠️ 插件 '{plugin.plugin_id}'.get_option_result_extras() 异常: {e}")
+
                         dsl_csv = opt_dsl.replace('"', '""')
 
                         # requirement：per-option（或 universal fallback），含模板替换
@@ -569,9 +584,17 @@ def main():
                     if context_extras:
                         print(f"     📎 插件 context: {context_extras}")
 
+                    # 从维度 values 的 tags 中收集 action 标签
+                    all_tags = []
+                    for combo in current_combos:
+                        for tag in combo.value.tags:
+                            if tag.startswith("action:"):
+                                all_tags.append(tag)
+                    tags_to_use = all_tags if all_tags else (cfg.universal_tags or ["bai_ye"])
+
                     write_event_row(
                         writer, uuid, title, description,
-                        tags=cfg.universal_tags, requirement=cfg.universal_requirement,
+                        tags=tags_to_use, requirement=cfg.universal_requirement,
                         context_extras=context_extras or None,
                     )
 
@@ -593,6 +616,15 @@ def main():
                                 current_combos, choice,
                                 universal_result=cfg.universal_result or "",
                             )
+
+                            # ── Hook 4: 插件选项结果 DSL 扩展 ──
+                            for plugin in plugins:
+                                try:
+                                    extra = plugin.get_option_result_extras(current_combos, choice)
+                                    if extra:
+                                        opt_dsl = f"{opt_dsl} | {extra}" if opt_dsl else extra
+                                except Exception as e:
+                                    print(f"  ⚠️ 插件 '{plugin.plugin_id}'.get_option_result_extras() 异常: {e}")
 
                             # requirement：per-option（或 universal fallback），含模板替换
                             opt_req = _build_option_requirement(

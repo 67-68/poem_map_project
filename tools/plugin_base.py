@@ -2,10 +2,11 @@
 正交事件生成管线 — Plugin Hook 系统
 
 提供 EventPromptPlugin 基类和 PLUGIN_REGISTRY 注册表。
-插件可以在 3 个 Hook 点注入自定义行为：
+插件可以在 4 个 Hook 点注入自定义行为：
   1. get_prompt_fragment() — User Prompt 中注入额外指令
   2. get_extra_output_fields() — 声明额外解析字段
   3. enrich_context() — 富化 CSV context 列
+  4. get_option_result_extras() — 追加选项结果 DSL
 
 用法:
 ```python
@@ -24,6 +25,9 @@ class MyPlugin(EventPromptPlugin):
 
     def enrich_context(self, ctx) -> dict[str, str]:
         return {"my_field": ctx.parsed.get("my_field", "")}
+
+    def get_option_result_extras(self, combos, choice) -> str:
+        return ""
 
 register_plugin(MyPlugin())
 ```
@@ -126,6 +130,7 @@ class EventPromptPlugin:
       get_prompt_fragment    — [可选] 返回注入 User Prompt 的文本
       get_extra_output_fields — [可选] 声明额外解析字段
       enrich_context         — [可选] 返回追加到 CSV context 列的 key=value 对
+      get_option_result_extras — [可选] 返回追加到选项 result DSL 的文本
 
     用法示例见文件头部 docstring。
 
@@ -134,6 +139,7 @@ class EventPromptPlugin:
       Phase 1: get_prompt_fragment  — 每组合调用，注入 User Prompt
       Phase 2: get_extra_output_fields — 每组合调用，声明额外解析字段
       Phase 3: enrich_context — 每组合调用，富化 CSV context 列
+      Phase 4: get_option_result_extras — 每选项调用，追加选项结果 DSL
     """
 
     @property
@@ -205,3 +211,25 @@ class EventPromptPlugin:
             key=value 对的 dict，空 dict 表示不追加。
         """
         return {}
+
+    # ── Hook 4: 选项结果 DSL 扩展 ──
+
+    def get_option_result_extras(
+        self,
+        combos: list[Any],
+        choice: Any,
+    ) -> str:
+        """返回追加到选项结果 DSL 的额外文本。
+
+        每个选项在构建完 result DSL 后，管线会调用此方法。
+        返回的非空字符串会以 | 分隔追加到选项的 results 列。
+
+        参数:
+            combos: 当前维度组合列表（DimensionCombo）
+            choice: 当前选项定义（OptionFeature）
+
+        返回:
+            额外 DSL 字符串（如 "imagery_add(name=ENV_POLITICS_CLOUD_LEYOU)"），
+            空字符串表示不追加。
+        """
+        return ""
