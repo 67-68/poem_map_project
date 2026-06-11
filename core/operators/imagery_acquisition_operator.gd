@@ -11,8 +11,15 @@ class_name ImageryAcquisitionOperator extends BaseOperator
 
 
 func operate():
+    Logging.info("ImageryAcquisitionOperator.operate: 开始执行，imagery_name='%s'" % imagery_name)
+
     if imagery_name.is_empty():
-        Logging.err("ImageryAcquisitionOperator: imagery_name 为空")
+        Logging.err("ImageryAcquisitionOperator.operate: imagery_name 为空，跳过")
         return
 
+    # 可选：校验 imagery_name 是否在 Database.imaginaries 中存在
+    if not Database.imaginaries.has(imagery_name):
+        Logging.warn("ImageryAcquisitionOperator.operate: imagery_name '%s' 在 Database.imaginaries 中不存在，但将继续广播" % imagery_name)
+
     EventBus.request_add_imaginary.emit(imagery_name)
+    Logging.info("ImageryAcquisitionOperator.operate: 已广播 request_add_imaginary('%s')" % imagery_name)

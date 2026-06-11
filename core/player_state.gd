@@ -73,8 +73,42 @@ func _ready():
 	init_traits()
 	init_flags()
 	init_imaginaries()
+	_connect_imaginary_signals()
 	
 	current_location = 'yong_zhou'
+
+
+# ─── 意象获取信号处理 ─────────────────────────────────────────
+
+func _connect_imaginary_signals():
+	"""连接 EventBus.request_add_imaginary 信号"""
+	EventBus.request_add_imaginary.connect(_on_request_add_imaginary)
+	Logging.info("PlayerState: connected request_add_imaginary signal")
+
+
+func _on_request_add_imaginary(tag: String):
+	"""处理意象获取请求：在 Database.imaginaries 中查找 tag 并添加 basic_imaginary 条目"""
+	if tag.is_empty():
+		Logging.err("PlayerState._on_request_add_imaginary: tag 为空")
+		return
+
+	var imaginary = Database.imaginaries.get(tag) as ImaginaryTag
+	if not imaginary:
+		Logging.err("PlayerState._on_request_add_imaginary: Database.imaginaries 中未找到 tag '%s'" % tag)
+		return
+
+	# 每次都添加新条目（允许重复）
+	var new_entry = {
+		"blueprint_id": tag,
+		"contexts": []
+	}
+	imaginary.basic_imaginaries.append(new_entry)
+	var count = imaginary.basic_imaginaries.size()
+	Logging.info("PlayerState._on_request_add_imaginary: 意象 '%s' (%s) 已添加 (第 %d 条)，当前总量: %d" %
+		[tag, imaginary.name, count, count])
+
+	# 通知 UI 更新
+	EventBus.imaginary_changed.emit()
 
 func append_stat(stat_name, data):
 	if stat_name is int:

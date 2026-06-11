@@ -5,11 +5,11 @@ extends Label
 func _ready() -> void:
 	EventBus.imaginary_changed.connect(update_label)
 
-func update_label():
+func update_label() -> void:
 	text = 'imaginaries: \n'
 	for i_name in Database.imaginaries:
-		var i = Database.imaginaries.get(i_name)
-		if i.basic_imaginaries:
+		var i: ImaginaryTag = Database.imaginaries[i_name]
+		if i.basic_imaginaries.size() > 0:
 			text += '- %s: %s imas, level %s' % [i.name, i.basic_imaginaries.size(), i.current_level]
 			for entry in i.basic_imaginaries:
 				var blueprint_id = entry.get("blueprint_id", "")
