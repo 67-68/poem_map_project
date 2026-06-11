@@ -12,11 +12,13 @@ var choice_created := false
 var use_choice := false
 var data: FocusedChat
 var _current_background: Texture2D  # 追踪当前背景，用于延续逻辑
+var _context: Dictionary = {}       # 从触发事件传递过来的 context，用于 EventOption.init()
 
 signal chat_finished(result: ChoiceResult)
 
-func play_dialogue_sequence(dialogues: FocusedChat):
+func play_dialogue_sequence(dialogues: FocusedChat, context: Dictionary = {}):
 	data = dialogues
+	_context = context.duplicate(true)
 	_dialogue_sequence = dialogues.chats
 	_current_background = dialogues.icon  # FocusedChat.icon 作为默认背景
 	$Background.texture = _current_background
@@ -67,6 +69,12 @@ func _show_current_line():
 	# 1. 终点判定：是不是已经没话说了？
 	if _current_index >= _dialogue_sequence.size():
 		if use_choice and not choice_created:
+			# 🔒 对每个 option 执行 init(context)，确保：
+			#   - EventOption: custom_context_params 合并、{@key} 模板插值、requirement/choice_result 初始化
+			#   - BaseOption: 无操作（空实现）
+			for opt in data.options:
+				opt.init(_context)
+			
 			# 展现选项，并立刻打断渲染逻辑！
 			$Background/MarginContainer/VBox/OptionBtns.visible = true
 			# 把 try_end_dialogue 作为 Callable 传给按钮，让按钮被点时调用它

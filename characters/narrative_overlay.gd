@@ -190,10 +190,11 @@ func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null):
 
 # --- FocusChat 栈条目 -----------------------------------
 
-func _on_push_focused_chat(data: Variant):
+func _on_push_focused_chat(data: Variant, context: Dictionary = {}):
 	var entry := {
 		"type": "focused_chat",
 		"data": data,
+		"context": context.duplicate(true),
 		"processed": false,
 	}
 	_event_stack.push_front(entry)
@@ -210,6 +211,7 @@ func _show_focused_chat_from_stack(entry: Dictionary):
 	TimeService.pause_world(true)
 
 	var data = entry.get("data")
+	var context: Dictionary = entry.get("context", {})
 	Logging.info("FocusChat 显示中")
 
 	# 🚨 NarrativeOverlay 默认是 hide() 的（_ready 中调用），
@@ -239,7 +241,7 @@ func _show_focused_chat_from_stack(entry: Dictionary):
 		_process_next()
 	)
 
-	overlay.play_dialogue_sequence(data)
+	overlay.play_dialogue_sequence(data, context)
 
 
 # --- Cinematic 栈条目 -----------------------------------

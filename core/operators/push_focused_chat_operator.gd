@@ -13,7 +13,7 @@ func operate():
 		Logging.err("PushFocusedChatOperator: FocusedChat not found: %s" % chat_uuid)
 		return
 	Logging.info("PushFocusedChatOperator: Pushing focused chat: %s" % chat_uuid)
-	EventBus.push_focused_chat.emit(focused_chat)
+	EventBus.push_focused_chat.emit(focused_chat, _captured_context)
 
 func init(context: Dictionary) -> Dictionary:
 	_captured_context = context.duplicate()

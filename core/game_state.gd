@@ -54,7 +54,7 @@ func init_buffers() -> void:
 		func(item):
 			# FocusedChat 走 NarrativeOverlay 栈系统，ChatBubble 走 PopupQueue
 			if item is FocusedChat:
-				EventBus.push_focused_chat.emit(item)
+				EventBus.push_focused_chat.emit(item, {})
 			else:
 				EventBus.request_add_chat.emit(item),
 		[]

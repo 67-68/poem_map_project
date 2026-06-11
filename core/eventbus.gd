@@ -47,7 +47,7 @@ signal bubble_complete()
 signal request_add_chat(data: Variant)
 
 # --- FocusChat 栈条目（仿 Picker/Cinematic 模式）--------
-signal push_focused_chat(data: Variant)    # 触发方 → NarrativeOverlay: 推入栈
+signal push_focused_chat(data: Variant, context: Dictionary)    # 触发方 → NarrativeOverlay: 推入栈（含 context）
 signal focused_chat_start(data: Variant)   # NarrativeOverlay → FocusChatOverlay: 开始播放
 signal focused_chat_finished(result: Variant) # FocusChatOverlay → NarrativeOverlay: 播放完毕
 
