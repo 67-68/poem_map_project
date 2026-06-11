@@ -164,7 +164,7 @@
       ]
     }
   ],
-  "universal_requirement": "prop_gt(name=career_progress; val=70),prop_lt(name=career_progress; val=100)",
+  "universal_requirement": "prop_gt(name=career_progress; val=70)|prop_lt(name=career_progress; val=100)",
   "plugins": ["failed_hint"],
   "word_count_min": 40,
   "word_count_max": 200,

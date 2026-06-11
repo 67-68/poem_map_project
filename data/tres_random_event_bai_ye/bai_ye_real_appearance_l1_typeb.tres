@@ -9,34 +9,24 @@
 [ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="7_26xr7"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_kbg2g"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_gnx6m"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_rsvvo"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_031ag"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_yjb8w"]
 
-[sub_resource type="Resource" id="Resource_qhnty"]
+[sub_resource type="Resource" id="Resource_rsvvo"]
 script = ExtResource("3_ehqy0")
 str_props = "fatigue"
 value = -11
 
-[sub_resource type="Resource" id="Resource_ev3hp"]
+[sub_resource type="Resource" id="Resource_031ag"]
 script = ExtResource("3_ehqy0")
 str_props = "health"
 value = -11
 
-[sub_resource type="Resource" id="Resource_ehqy0"]
+[sub_resource type="Resource" id="Resource_yjb8w"]
 script = ExtResource("3_ehqy0")
 str_props = "career_progress"
 value = 4
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_rsvvo"]
-script = ExtResource("4_rsvvo")
-operators = Array[ExtResource("2_ev3hp")]([SubResource("Resource_ehqy0")])
-
-[sub_resource type="Resource" id="Resource_031ag"]
-script = ExtResource("4_rsvvo")
-
-[sub_resource type="Resource" id="Resource_yjb8w"]
-script = ExtResource("3_ehqy0")
-str_props = "fatigue"
-value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_26xr7"]
@@ -44,60 +34,89 @@ script = ExtResource("4_rsvvo")
 operators = Array[ExtResource("2_ev3hp")]([SubResource("Resource_yjb8w")])
 
 [sub_resource type="Resource" id="Resource_kbg2g"]
+script = ExtResource("4_rsvvo")
+
+[sub_resource type="Resource" id="Resource_gnx6m"]
+script = ExtResource("3_ehqy0")
+str_props = "fatigue"
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_ekey2"]
+script = ExtResource("4_rsvvo")
+operators = Array[ExtResource("2_ev3hp")]([SubResource("Resource_gnx6m")])
+
+[sub_resource type="Resource" id="Resource_jd7bm"]
 script = ExtResource("5_031ag")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_rsvvo")
-rejected_result = SubResource("Resource_26xr7")
-not_entered_result = SubResource("Resource_031ag")
+accepted_result = SubResource("Resource_26xr7")
+rejected_result = SubResource("Resource_ekey2")
+not_entered_result = SubResource("Resource_kbg2g")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_gnx6m"]
+[sub_resource type="Resource" id="Resource_axkpw"]
 script = ExtResource("6_yjb8w")
-poem_taste = SubResource("Resource_kbg2g")
+poem_taste = SubResource("Resource_jd7bm")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_ekey2"]
+[sub_resource type="Resource" id="Resource_4udnx"]
 script = ExtResource("3_ehqy0")
 str_props = "career_progress"
 value = 3
 
-[sub_resource type="Resource" id="Resource_jd7bm"]
+[sub_resource type="Resource" id="Resource_hbj78"]
 script = ExtResource("4_rsvvo")
-operators = Array[ExtResource("2_ev3hp")]([SubResource("Resource_qhnty"), SubResource("Resource_ev3hp"), SubResource("Resource_gnx6m"), SubResource("Resource_ekey2")])
+operators = Array[ExtResource("2_ev3hp")]([SubResource("Resource_rsvvo"), SubResource("Resource_031ag"), SubResource("Resource_axkpw"), SubResource("Resource_4udnx")])
 
-[sub_resource type="Resource" id="Resource_axkpw"]
+[sub_resource type="Resource" id="Resource_l78ff"]
 script = ExtResource("7_26xr7")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-failed_hint = "“诗呢？莫非今日只带了一张嘴来？”"
+failed_hint = "诗呢?莫非今日只带了一张嘴来?"
 
-[sub_resource type="Resource" id="Resource_4udnx"]
+[sub_resource type="Resource" id="Resource_yv3sx"]
 script = ExtResource("8_kbg2g")
-choice_result = SubResource("Resource_jd7bm")
-requirement = SubResource("Resource_axkpw")
+choice_result = SubResource("Resource_hbj78")
+requirement = SubResource("Resource_l78ff")
 description = "将诗卷平放于案"
 
-[sub_resource type="Resource" id="Resource_hbj78"]
+[sub_resource type="Resource" id="Resource_rb1ea"]
 script = ExtResource("3_ehqy0")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_l78ff"]
+[sub_resource type="Resource" id="Resource_jnqv6"]
 script = ExtResource("4_rsvvo")
-operators = Array[ExtResource("2_ev3hp")]([SubResource("Resource_hbj78")])
+operators = Array[ExtResource("2_ev3hp")]([SubResource("Resource_rb1ea")])
 
-[sub_resource type="Resource" id="Resource_yv3sx"]
+[sub_resource type="Resource" id="Resource_02uli"]
 script = ExtResource("8_kbg2g")
-choice_result = SubResource("Resource_l78ff")
+choice_result = SubResource("Resource_jnqv6")
 description = "拂袖而去"
+
+[sub_resource type="Resource" id="Resource_bqgdl"]
+script = ExtResource("10_031ag")
+property = "career_progress"
+value = 70
+operator = 1
+
+[sub_resource type="Resource" id="Resource_j50q4"]
+script = ExtResource("10_031ag")
+property = "career_progress"
+value = 100
+
+[sub_resource type="Resource" id="Resource_m1chx"]
+script = ExtResource("11_yjb8w")
+operators = Array[ExtResource("9_rsvvo")]([SubResource("Resource_bqgdl"), SubResource("Resource_j50q4")])
 
 [resource]
 script = ExtResource("9_gnx6m")
+requirement = SubResource("Resource_m1chx")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_qhnty")]([SubResource("Resource_4udnx"), SubResource("Resource_yv3sx")])
+options = Array[ExtResource("1_qhnty")]([SubResource("Resource_yv3sx"), SubResource("Resource_02uli")])
 uuid = "bai_ye_real_appearance_l1_typeb"
 name = "朱批与苔痕"
-description = "“年兄这‘京华’二字犯忌，‘孤鸿’之典僭越了。还有这句不通，失当，当改。”旁边一人踱步时踩住你长衫的衣角，又从案上抽走那张你觉得最得意的句子，递到窗下念给旁人听——当个笑话。你执笔，按批注逐一删改。指节叩桌，韵律在指下被重新填平。末了，那清客点头，指腹抹过墨迹新鲜的字句，将诗稿合上，递还于你。篇什四平八稳，韵脚工整如尸，却出了他这间值房。"
+description = "年兄这'京华'二字犯忌,'孤鸿'之典僭越了.还有这句不通,失当,当改.旁边一人踱步时踩住你长衫的衣角,又从案上抽走那张你觉得最得意的句子,递到窗下念给旁人听——当个笑话.你执笔,按批注逐一删改.指节叩桌,韵律在指下被重新填平.末了,那清客点头,指腹抹过墨迹新鲜的字句,将诗稿合上,递还于你.篇什四平八稳,韵脚工整如尸,却出了他这间值房."

@@ -173,12 +173,38 @@ def _build_option_requirement(
     """构建选项级 requirement = 选项自己的 requirement（或 universal fallback）
 
     支持 {failed_hint} 模板变量替换。
+    自动清洗 failed_hint_val 中的全角标点为 ASCII 标点，避免 Linter 报错。
     """
     req = choice.requirement if choice.requirement else universal_option_requirement
     if not req:
         return ""
     if "{failed_hint}" in req and failed_hint_val:
-        req = req.replace("{failed_hint}", failed_hint_val)
+        # 🚨 清洗全角标点 → ASCII 标点（AI 生成的 failed_hint 常带全角符号）
+        sanitized = _sanitize_fullwidth_punct(failed_hint_val)
+        req = req.replace("{failed_hint}", sanitized)
     elif "{failed_hint}" in req:
         req = req.replace("{failed_hint}", "")
     return req
+
+
+def _sanitize_fullwidth_punct(text: str) -> str:
+    """将全角标点替换为 ASCII 标点，保持 DSL 字段清洁。"""
+    mapping = {
+        '，': ',',
+        '。': '.',
+        '？': '?',
+        '！': '!',
+        '：': ':',
+        '；': ';',
+        '“': '"',
+        '”': '"',
+        '‘': "'",
+        '’': "'",
+        '【': '[',
+        '】': ']',
+        '（': '(',
+        '）': ')',
+    }
+    for fw, hw in mapping.items():
+        text = text.replace(fw, hw)
+    return text

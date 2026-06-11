@@ -9,34 +9,24 @@
 [ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="7_v515i"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_lufar"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_0vjbd"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_ky54g"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_qa2io"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_ql86e"]
 
-[sub_resource type="Resource" id="Resource_gi123"]
+[sub_resource type="Resource" id="Resource_ky54g"]
 script = ExtResource("3_7rury")
 str_props = "money"
 value = -5
 
-[sub_resource type="Resource" id="Resource_6pgn0"]
+[sub_resource type="Resource" id="Resource_qa2io"]
 script = ExtResource("3_7rury")
 str_props = "health"
 value = -10
 
-[sub_resource type="Resource" id="Resource_7rury"]
+[sub_resource type="Resource" id="Resource_ql86e"]
 script = ExtResource("3_7rury")
 str_props = "career_progress"
 value = 4
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_ky54g"]
-script = ExtResource("4_ky54g")
-operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_7rury")])
-
-[sub_resource type="Resource" id="Resource_qa2io"]
-script = ExtResource("4_ky54g")
-
-[sub_resource type="Resource" id="Resource_ql86e"]
-script = ExtResource("3_7rury")
-str_props = "fatigue"
-value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_v515i"]
@@ -44,60 +34,89 @@ script = ExtResource("4_ky54g")
 operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_ql86e")])
 
 [sub_resource type="Resource" id="Resource_lufar"]
+script = ExtResource("4_ky54g")
+
+[sub_resource type="Resource" id="Resource_0vjbd"]
+script = ExtResource("3_7rury")
+str_props = "fatigue"
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_dq3ql"]
+script = ExtResource("4_ky54g")
+operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_0vjbd")])
+
+[sub_resource type="Resource" id="Resource_urwjk"]
 script = ExtResource("5_qa2io")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_ky54g")
-rejected_result = SubResource("Resource_v515i")
-not_entered_result = SubResource("Resource_qa2io")
+accepted_result = SubResource("Resource_v515i")
+rejected_result = SubResource("Resource_dq3ql")
+not_entered_result = SubResource("Resource_lufar")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_0vjbd"]
+[sub_resource type="Resource" id="Resource_lxmfi"]
 script = ExtResource("6_ql86e")
-poem_taste = SubResource("Resource_lufar")
+poem_taste = SubResource("Resource_urwjk")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_dq3ql"]
+[sub_resource type="Resource" id="Resource_t6j60"]
 script = ExtResource("3_7rury")
 str_props = "career_progress"
 value = 3
 
-[sub_resource type="Resource" id="Resource_urwjk"]
+[sub_resource type="Resource" id="Resource_dbuv6"]
 script = ExtResource("4_ky54g")
-operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_gi123"), SubResource("Resource_6pgn0"), SubResource("Resource_0vjbd"), SubResource("Resource_dq3ql")])
+operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_ky54g"), SubResource("Resource_qa2io"), SubResource("Resource_lxmfi"), SubResource("Resource_t6j60")])
 
-[sub_resource type="Resource" id="Resource_lxmfi"]
+[sub_resource type="Resource" id="Resource_ihknr"]
 script = ExtResource("7_v515i")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-failed_hint = "“字都不识，装什么文雅？”"
+failed_hint = "字都不识,装什么文雅?"
 
-[sub_resource type="Resource" id="Resource_t6j60"]
+[sub_resource type="Resource" id="Resource_k7hrk"]
 script = ExtResource("8_lufar")
-choice_result = SubResource("Resource_urwjk")
-requirement = SubResource("Resource_lxmfi")
-description = "从怀中取出一张纸，递了过去"
+choice_result = SubResource("Resource_dbuv6")
+requirement = SubResource("Resource_ihknr")
+description = "从怀中取出一张纸,递了过去"
 
-[sub_resource type="Resource" id="Resource_dbuv6"]
+[sub_resource type="Resource" id="Resource_w5ynb"]
 script = ExtResource("3_7rury")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_ihknr"]
+[sub_resource type="Resource" id="Resource_q3jpq"]
 script = ExtResource("4_ky54g")
-operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_dbuv6")])
+operators = Array[ExtResource("2_6pgn0")]([SubResource("Resource_w5ynb")])
 
-[sub_resource type="Resource" id="Resource_k7hrk"]
+[sub_resource type="Resource" id="Resource_1agup"]
 script = ExtResource("8_lufar")
-choice_result = SubResource("Resource_ihknr")
+choice_result = SubResource("Resource_q3jpq")
 description = "拂袖而去"
+
+[sub_resource type="Resource" id="Resource_vja6j"]
+script = ExtResource("10_qa2io")
+property = "career_progress"
+value = 70
+operator = 1
+
+[sub_resource type="Resource" id="Resource_xj3fk"]
+script = ExtResource("10_qa2io")
+property = "career_progress"
+value = 100
+
+[sub_resource type="Resource" id="Resource_v4klv"]
+script = ExtResource("11_ql86e")
+operators = Array[ExtResource("9_ky54g")]([SubResource("Resource_vja6j"), SubResource("Resource_xj3fk")])
 
 [resource]
 script = ExtResource("9_0vjbd")
+requirement = SubResource("Resource_v4klv")
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_gi123")]([SubResource("Resource_t6j60"), SubResource("Resource_k7hrk")])
+options = Array[ExtResource("1_gi123")]([SubResource("Resource_k7hrk"), SubResource("Resource_1agup")])
 uuid = "bai_ye_real_appearance_l0_typeb"
 name = "袖手冷眼索礼"
-description = "“今日天热，我家老爷不见客。你若有兴头，留张纸在此，回头我替你烧了——当给灶王爷添点柴火。”他伸出两指，从你手中拈过那页纸，连看也不看，转身压到石阶下湿砖缝里，嘟囔：“垫桌脚正好。”"
+description = "今日天热,我家老爷不见客.你若有兴头,留张纸在此,回头我替你烧了——当给灶王爷添点柴火.他伸出两指,从你手中拈过那页纸,连看也不看,转身压到石阶下湿砖缝里,嘟囔:垫桌脚正好."

@@ -58,6 +58,8 @@ signal selected_actions_change(actions: Array)
 ## 锁定行动被选中时广播，携带被锁定的 SceneAction 数组
 ## ActionMap 监听此信号对按钮施加闪光效果
 signal locked_actions_selected(actions: Array)
+## 请求 SceneActionScroll 刷新行动面板（事件链结束后恢复 UI 状态）
+signal request_refresh_action_panel()
 signal avaialble_decision_change(decision)
 
 signal show_tombstone_screen(death_reason: String)

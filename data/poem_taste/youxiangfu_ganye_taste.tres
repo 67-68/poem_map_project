@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PoemTaste" format=3]
+[gd_resource type="Resource" script_class="PoemTaste" format=3 uid="uid://dqqf3t8tk5g3p"]
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
@@ -20,6 +20,9 @@ metadata/_custom_type_script = "uid://cxfcnsval1p54"
 script = ExtResource("5_cr")
 operators = Array[ExtResource("1_baseop")]([SubResource("Resource_acc_pe"), SubResource("Resource_acc_pushe")])
 
+[sub_resource type="Resource" id="Resource_not_cr"]
+script = ExtResource("5_cr")
+
 [sub_resource type="Resource" id="Resource_rej_info"]
 script = ExtResource("4_info")
 info = "你提笔悬腕，却迟迟落不下去——这诗稿上的批注字字如刀，你无从下笔。清客见状，微微摇头，将诗稿收回袖中。"
@@ -32,10 +35,6 @@ metadata/_custom_type_script = "uid://byn0qqw1xm33f"
 [sub_resource type="Resource" id="Resource_rej_cr"]
 script = ExtResource("5_cr")
 operators = Array[ExtResource("1_baseop")]([SubResource("Resource_rej_info"), SubResource("Resource_rej_pe")])
-
-[sub_resource type="Resource" id="Resource_not_cr"]
-script = ExtResource("5_cr")
-operators = Array[ExtResource("1_baseop")]([])
 
 [resource]
 script = ExtResource("6_pt")

@@ -152,6 +152,7 @@
           "stored_to": "jiaoyou",
           "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_QUJIANG", "ENV_POLITICS_CLOUD_QUJIANG"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "operator_dsl": "prop_add(name=money; val=15)",
           "narrative_constraint": {
             "type": "jiaoyou_trigger",
             "demand_context": "",
@@ -166,6 +167,7 @@
           "stored_to": "jiaoyou",
           "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_ZHAIDI", "ENV_POLITICS_CLOUD_ZHAIDI"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "operator_dsl": "prop_add(name=money; val=15)",
           "narrative_constraint": {
             "type": "jiaoyou_trigger",
             "demand_context": "",
@@ -180,6 +182,7 @@
           "stored_to": "jiaoyou",
           "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_HUJI", "ENV_POLITICS_CLOUD_HUJI"],
           "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "operator_dsl": "prop_add(name=money; val=15)",
           "narrative_constraint": {
             "type": "jiaoyou_trigger",
             "demand_context": "",
@@ -194,6 +197,7 @@
           "stored_to": "fangshi",
           "tags": ["action:main:fangshi", "TARGET_OBJECT_MEDICINE_DONGSHI", "ENV_SOCIETY_FAMINE"],
           "linked_value_ids": ["imagery_medicine_stall"],
+          "operator_dsl": "prop_add(name=money; val=25)",
           "narrative_constraint": {
             "type": "fangshi_trigger",
             "demand_context": "",
@@ -208,6 +212,7 @@
           "stored_to": "fangshi",
           "tags": ["action:main:fangshi", "TARGET_OBJECT_INK_WENYING", "ENV_SOCIETY_FAMINE"],
           "linked_value_ids": ["imagery_ink_for_sale"],
+          "operator_dsl": "prop_add(name=money; val=25)",
           "narrative_constraint": {
             "type": "fangshi_trigger",
             "demand_context": "",
@@ -222,6 +227,7 @@
           "stored_to": "fangshi",
           "tags": ["action:main:fangshi", "TARGET_OBJECT_MEDICINE_NANYUAN", "ENV_SOCIETY_FAMINE"],
           "linked_value_ids": ["imagery_medicine_stall"],
+          "operator_dsl": "prop_add(name=money; val=25)",
           "narrative_constraint": {
             "type": "fangshi_trigger",
             "demand_context": "",
