@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="FocusedChat" format=3 uid="uid://ccwl1xs7dl50s"]
+
+[ext_resource type="Script" uid="uid://dsb2koxwa7ypp" path="res://model/single_focused_chat.gd" id="1_anmoj"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_7vltk"]
+[ext_resource type="Texture2D" uid="uid://bubvdlseqqiiy" path="res://assets/character/go_to_exam.png" id="2_dua3m"]
+[ext_resource type="Script" uid="uid://bgapuvasp48wh" path="res://model/focused_chat.gd" id="3_y2scg"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="4_2j76i"]
+[ext_resource type="Script" uid="uid://dtw3kde1u305k" path="res://core/operators/push_focused_chat_operator.gd" id="5_eplko"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_5yrgl"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_vp8ee"]
+
+[sub_resource type="Resource" id="Resource_24m2y"]
+script = ExtResource("1_anmoj")
+name = "你带着这几年在长安四处干谒换来的微薄名望，深吸一口气，跨过贡院高高的门槛。阳光洒在你的白袍上，你觉得大唐的未来就在你笔下。"
+background = ExtResource("2_dua3m")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_80nte"]
+script = ExtResource("5_eplko")
+chat_uuid = "focused_chat_exam_first_question"
+metadata/_custom_type_script = "uid://dtw3kde1u305k"
+
+[sub_resource type="Resource" id="Resource_013d7"]
+script = ExtResource("6_5yrgl")
+operators = Array[ExtResource("4_2j76i")]([SubResource("Resource_80nte")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_510n1"]
+script = ExtResource("7_vp8ee")
+choice_result = SubResource("Resource_013d7")
+description = "开始考试"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("3_y2scg")
+chats = Array[ExtResource("1_anmoj")]([SubResource("Resource_24m2y")])
+options = Array[ExtResource("2_7vltk")]([SubResource("Resource_510n1")])
+uuid = "focused_chat_enter_exam"
+name = "进入贡院"
+metadata/_custom_type_script = "uid://bgapuvasp48wh"

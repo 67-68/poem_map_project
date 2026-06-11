@@ -8,8 +8,9 @@ var ambition
 @onready var ambition_label: Label = $Mar/HBox/VBox/HBox/StageName
 @onready var deadline_label: Label = $Mar/HBox/VBox/DeadlineResult
 @onready var dynamic_state_label: Label = $Mar/HBox/VBox/DynamicStateLabel
-@onready var progress_bar: ProgressBar = $Mar/HBox/VBox/ProgressContainer/ProgressBar
+@onready var progress_bar: ProgressBar = $Mar/HBox/VBox/ProgressContainer/ProgressFrame/ProgressBar
 @onready var progress_label: Label = $Mar/HBox/VBox/ProgressContainer/ProgressLabel
+@onready var progress_overlay_label: Label = $Mar/HBox/VBox/ProgressContainer/ProgressFrame/ProgressOverlayLabel
 
 var _tracked_prop: Property  # 缓存的属性资源引用，避免每次查 Database
 
@@ -84,10 +85,11 @@ func _resolve_tracked_property() -> void:
 		Logging.info("AmbitionHUD: Resolved tracked property '%s' (soft_max=%d, val=%d)" % [ambition.tracked_property, _tracked_prop.soft_max, _tracked_prop.val])
 
 func _update_progress() -> void:
-	"""更新进度显示：soft_max >= 0 显示 ProgressBar，否则显示纯数字 Label"""
+	"""更新进度显示：soft_max >= 0 显示金色框 ProgressBar + "val / soft_max" 文本，否则显示纯数字 Label"""
 	if not _tracked_prop:
 		progress_bar.hide()
 		progress_label.hide()
+		progress_overlay_label.hide()
 		Logging.warn("AmbitionHUD: No tracked property to display progress")
 		return
 	
@@ -95,15 +97,18 @@ func _update_progress() -> void:
 	var soft_max = _tracked_prop.soft_max
 	
 	if soft_max >= 0:
-		# 有软上限 → ProgressBar
+		# 有软上限 → 金色框 ProgressBar + "val / soft_max" 覆盖文本
 		progress_bar.show()
+		progress_overlay_label.show()
 		progress_label.hide()
 		progress_bar.max_value = soft_max
 		progress_bar.value = val
+		progress_overlay_label.text = "%d / %d" % [val, soft_max]
 		Logging.info("AmbitionHUD: ProgressBar updated: %d/%d" % [val, soft_max])
 	else:
 		# soft_max == -1，无上限 → 只显示数值
 		progress_bar.hide()
+		progress_overlay_label.hide()
 		progress_label.show()
 		progress_label.text = str(val)
 		Logging.info("AmbitionHUD: Progress number updated: %d" % val)

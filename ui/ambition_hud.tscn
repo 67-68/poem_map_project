@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b2yq3w4rx1nu6" path="res://assets/black_line.png" id="4_u8j85"]
 [ext_resource type="Shader" uid="uid://bljxotoiibak3" path="res://shaders/candle_shader.gdshader" id="4_xikl0"]
 [ext_resource type="Texture2D" uid="uid://db6knepxierlx" path="res://assets/candle_main_副本.PNG" id="6_u8j85"]
+[ext_resource type="Shader" uid="uid://jrh6ew4ou6u3" path="res://shaders/golden_shine.gdshader" id="7_rb2yo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lswn8"]
 shader = ExtResource("4_xikl0")
@@ -13,6 +14,30 @@ shader_parameter/raw_burn_progress = 0.0
 shader_parameter/edge_softness = 0.02
 shader_parameter/ember_color = Color(0.8, 0.2, 0, 1)
 shader_parameter/ember_width = 0.05
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2y3x4"]
+shader = ExtResource("7_rb2yo")
+shader_parameter/speed = 1.2
+shader_parameter/intensity = 0.35
+shader_parameter/gold_color = Color(1, 0.843, 0, 1)
+shader_parameter/highlight_color = Color(1, 0.95, 0.6, 1)
+shader_parameter/band_width = 0.15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_9k8m7"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.08, 0.06, 0.02, 0.5)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.843, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="AmbitionHUD" type="TextureRect" unique_id=273595331]
 custom_minimum_size = Vector2(320, 200)
@@ -112,12 +137,44 @@ autowrap_mode = 3
 custom_minimum_size = Vector2(238, 0)
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="Mar/HBox/VBox/ProgressContainer" unique_id=1708339698]
-custom_minimum_size = Vector2(238, 12)
+[node name="ProgressFrame" type="Panel" parent="Mar/HBox/VBox/ProgressContainer"]
+custom_minimum_size = Vector2(238, 24)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_9k8m7")
+material = SubResource("ShaderMaterial_2y3x4")
+
+[node name="ProgressBar" type="ProgressBar" parent="Mar/HBox/VBox/ProgressContainer/ProgressFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = -4.0
+offset_bottom = -2.0
 size_flags_horizontal = 3
 show_percentage = false
 
+[node name="ProgressOverlayLabel" type="Label" parent="Mar/HBox/VBox/ProgressContainer/ProgressFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = -4.0
+offset_bottom = -2.0
+theme_override_colors/font_color = Color(1, 0.843, 0, 1)
+theme_override_fonts/font = ExtResource("3_hj3uc")
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "0 / 100"
 [node name="ProgressLabel" type="Label" parent="Mar/HBox/VBox/ProgressContainer" unique_id=289782107]
 custom_minimum_size = Vector2(238, 0)
 layout_mode = 2

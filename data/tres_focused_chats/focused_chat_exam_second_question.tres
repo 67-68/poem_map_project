@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="FocusedChat" format=3 uid="uid://ck7vnkv3jxhu2"]
+
+[ext_resource type="Script" uid="uid://dsb2koxwa7ypp" path="res://model/single_focused_chat.gd" id="1_t8ywb"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_1amxv"]
+[ext_resource type="Texture2D" uid="uid://hbcbpb7t2j4c" path="res://assets/character/omnious_guardian.png" id="2_1p5uu"]
+[ext_resource type="Script" uid="uid://dipsh2f0qa3ei" path="res://model/event/complex_event_option.gd" id="3_1amxv"]
+[ext_resource type="Script" uid="uid://bgapuvasp48wh" path="res://model/focused_chat.gd" id="3_fc7bs"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="4_e23ao"]
+[ext_resource type="Script" uid="uid://bxdw08m7bfi13" path="res://core/operators/info_demo_operator.gd" id="5_1p5uu"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_tr3sl"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_r0syb"]
+[ext_resource type="Script" uid="uid://bhm8bigwrwgjm" path="res://core/operators/play_transition_operator.gd" id="7_tr3sl"]
+
+[sub_resource type="Resource" id="Resource_fc7bs"]
+script = ExtResource("1_t8ywb")
+name = "试卷的第二题并非诗词经义，而是策问：“今圣上垂拱而治，右相理政，天下如何？”你握紧了笔，冷汗滴在纸上。主考官（李林甫的心腹）在走道里来回巡视，眼神阴冷。"
+background = ExtResource("2_1p5uu")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_8s4po"]
+script = ExtResource("3_1amxv")
+is_disabled = true
+disabled_reason = "考官死死盯着你的笔尖。你敢写下半个字，今天就别想活着走出贡院。"
+description = "针砭时弊：言明边镇兵权过重，朝堂言路闭塞。"
+metadata/_custom_type_script = "uid://dipsh2f0qa3ei"
+
+[sub_resource type="Resource" id="Resource_qha22"]
+script = ExtResource("5_1p5uu")
+info = "你感到一阵反胃"
+metadata/_custom_type_script = "uid://bxdw08m7bfi13"
+
+[sub_resource type="Resource" id="Resource_r0syb"]
+script = ExtResource("7_tr3sl")
+texts = Array[String](["天宝六年，贡院放榜。你满怀信心地挤入人群，寻找自己的名字。", "没有。不仅没有你，你认识的所有才子，郑虔、高适……全都不在榜上.", "相国李林甫上表贺皇帝：‘天下英才尽入彀中，野无遗贤。’"])
+metadata/_custom_type_script = "uid://bhm8bigwrwgjm"
+
+[sub_resource type="Resource" id="Resource_yq8gi"]
+script = ExtResource("6_tr3sl")
+operators = Array[ExtResource("4_e23ao")]([SubResource("Resource_qha22"), SubResource("Resource_r0syb")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_672kh"]
+script = ExtResource("7_r0syb")
+choice_result = SubResource("Resource_yq8gi")
+description = "违心作答：“右相调理阴阳，海内晏清，真乃千古贤相！”"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("3_fc7bs")
+chats = Array[ExtResource("1_t8ywb")]([SubResource("Resource_fc7bs")])
+options = Array[ExtResource("2_1amxv")]([SubResource("Resource_8s4po"), SubResource("Resource_672kh")])
+uuid = "focused_chat_exam_second_question"
+name = "第二题"
+metadata/_custom_type_script = "uid://bgapuvasp48wh"

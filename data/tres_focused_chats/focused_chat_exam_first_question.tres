@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="FocusedChat" format=3 uid="uid://8pdi6yyo5ytv"]
+
+[ext_resource type="Script" uid="uid://dsb2koxwa7ypp" path="res://model/single_focused_chat.gd" id="1_frg3i"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_7fg7d"]
+[ext_resource type="Texture2D" uid="uid://bb1xbfmkl8dhs" path="res://assets/character/on_exam.png" id="2_soy4m"]
+[ext_resource type="Script" uid="uid://bgapuvasp48wh" path="res://model/focused_chat.gd" id="3_aex1n"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_u2308"]
+[ext_resource type="Script" uid="uid://dtw3kde1u305k" path="res://core/operators/push_focused_chat_operator.gd" id="4_soy4m"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_dfvon"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_njeug"]
+
+[sub_resource type="Resource" id="Resource_o0xhi"]
+script = ExtResource("1_frg3i")
+name = "正常的诗词题"
+background = ExtResource("2_soy4m")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_up1ad"]
+script = ExtResource("4_soy4m")
+chat_uuid = "focused_chat_exam_second_question"
+metadata/_custom_type_script = "uid://dtw3kde1u305k"
+
+[sub_resource type="Resource" id="Resource_wo3q0"]
+script = ExtResource("5_dfvon")
+operators = Array[ExtResource("3_u2308")]([SubResource("Resource_up1ad")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_7qvyt"]
+script = ExtResource("6_njeug")
+choice_result = SubResource("Resource_wo3q0")
+description = "选A"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("3_aex1n")
+chats = Array[ExtResource("1_frg3i")]([SubResource("Resource_o0xhi")])
+options = Array[ExtResource("2_7fg7d")]([SubResource("Resource_7qvyt")])
+uuid = "focused_chat_exam_first_question"
+name = "第一题"
+metadata/_custom_type_script = "uid://bgapuvasp48wh"

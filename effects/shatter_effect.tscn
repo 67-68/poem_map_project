@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhrwj1pfcjibq"]
+
+[ext_resource type="Script" path="res://effects/ShatterEffect.gd" id="1"]
+[ext_resource type="Shader" path="res://shaders/image_shatter.gdshader" id="2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tuu0k"]
+shader = ExtResource("2")
+shader_parameter/progress = 0.0
+shader_parameter/cell_size = 32.0
+shader_parameter/scatter_strength = 0.3
+shader_parameter/alpha_fade_start = 0.5
+shader_parameter/rotation_amount = 0.8
+
+[node name="ShatterEffect" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_tuu0k")

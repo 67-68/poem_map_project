@@ -77,6 +77,10 @@ signal on_trait_change()
 signal on_flag_change()
 signal lianju_score_calculated(score: int)
 
+# ── 图像特效信号 ──────────────────────────────────────────
+## 请求播放图片粉碎解体特效 (由 ImageEffectManager 监听)
+signal request_play_shatter(texture: Texture2D, global_pos: Vector2, duration: float)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		user_clicked.emit(null)
