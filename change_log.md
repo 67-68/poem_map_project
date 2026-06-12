@@ -1,4 +1,14 @@
 # [unreleased]
+## Added
+- 音效类别系统（AudioManager + UISoundComponent 联动）
+  - [`core/audio_manager.gd`](core/audio_manager.gd) — `_load_sfx_categories()` 在 `_ready()` 时扫描 `assets/sounds/` 下所有一级子目录，预加载 `.ogg/.wav/.mp3` 到 `_sfx_category_cache` 字典
+  - [`core/audio_manager.gd`](core/audio_manager.gd) — `play_sfx_category(category, pitch_rand)` 从指定类别缓存中随机选取一个音效播放
+  - [`features/ui_sound_component.gd`](features/ui_sound_component.gd) — 新增 `click_category` / `hover_category` 字段，非空时走类别随机播放，空则向后兼容 `click_sound` / `hover_sound`
+  - 使用方式：在 `assets/sounds/` 下建子目录（如 `click/`），放入 `.ogg` 文件，在 UISoundComponent Inspector 中设置 `click_category = "click"` 即可
+- UI Jitter 抖动反馈
+  - [`features/ui_sound_component.gd`](features/ui_sound_component.gd) — 新增 `enable_jitter` / `jitter_strength` / `jitter_duration` 导出字段
+  - `_apply_jitter()` — 对父 Control 的 `position` 做 6 次随机微偏移 Tween 序列 + 最后归位，模拟触电式抖动
+
 ## Changed
 - 叙事显示架构重构：`Background` (TextureRect) 重命名为 `EventUI`，独立脚本管理显示逻辑
   - [`characters/event_ui.gd`](characters/event_ui.gd) — 新增 `class_name EventUI extends TextureRect`
