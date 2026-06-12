@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_e8x76"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_dqgsi"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_dbi8h"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_g8guj"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_f00iv"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_smovc"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_0g3he"]
+
+[sub_resource type="Resource" id="Resource_ak33b"]
+script = ExtResource("3_dbi8h")
+value = 10
+
+[sub_resource type="Resource" id="Resource_lnwmj"]
+script = ExtResource("4_g8guj")
+imagery_name = "TARGET_MYTH_GIANTROC_DAYAN"
+
+[sub_resource type="Resource" id="Resource_5rrf6"]
+script = ExtResource("5_f00iv")
+operators = Array[ExtResource("2_dqgsi")]([SubResource("Resource_ak33b"), SubResource("Resource_lnwmj")])
+
+[sub_resource type="Resource" id="Resource_jrp0l"]
+script = ExtResource("6_smovc")
+choice_result = SubResource("Resource_5rrf6")
+description = "（冷眼旁观）"
+
+[resource]
+script = ExtResource("7_0g3he")
+era = "745_ambition"
+_target_tags = Array[String](["action:main:denggao"])
+options = Array[ExtResource("1_e8x76")]([SubResource("Resource_jrp0l")])
+uuid = "scene_imagery_library_scene_dayan_imagery_giant_roc"
+name = "塔顶瞰轿"
+description = "暮鼓声中，归鸦绕塔。你扶着栏杆，指节发白，视线在棋盘格般的坊市间游移。一辆官轿从东南坊门滑出，从塔顶看不过落叶大小，飘出十字街的棋格。你前倾，脊背绷直，仿佛要吞下那片小小的木片；又后仰，喉头收紧——你知道那顶轿子在地面上有多沉，轿帘里的人抬眼就能压垮你半条街。"

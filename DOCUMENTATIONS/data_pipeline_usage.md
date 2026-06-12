@@ -51,8 +51,18 @@ data/
 │   ├── duzhuo/
 │   ├── special/
 │   └── events/
-├── 4_eras/                【时代/剧本】历史事件、结局事件
-│   └── events/
+├── 4_eras/                【时代/剧本】各时代专属事件（由 era 字段驱动）
+│   ├── 745_ambition/      【745年·逐鹿之志】
+│   │   ├── baiye/
+│   │   │   ├── honey_moon/        子目录仅组织用途，不参与路由
+│   │   │   └── real_appearance/
+│   │   └── scene_imagery_library/
+│   ├── <next_era>/        【后续时代】
+│   └── events/            历史事件、结局事件（全局）
+│
+│   📌 核心原则：目录是给人看的，系统整理资源使用 tag。
+│   事件的 trigger_tags 决定池归属，era 字段决定时代可用性。
+│   子目录（如 honey_moon/）仅作组织用途，不产生子池隔离。
 └── 5_story_arcs/          【强线性剧情】不允许随机抽取的特殊场景
     └── ...
 ```

@@ -17,6 +17,8 @@ tag:<4段式tag>,<4段式tag>|weight:<float>|background:(<URN>)|<customKey>:<cus
 | `tag` / `trigger_tags` | 否 | String | 逗号分隔的触发标签列表，使用 4 段式格式。支持 `[tag1,tag2]` 方括号语法 |
 | `weight` | 否 | Float | 权重，默认 `10.0` |
 | `background` | 否 | String | 背景图 URN，用括号包裹。示例：`background:(bg_tavern_night)` |
+| `era` | 否 | String | 时代标记（如 `745_ambition`）。空=全时代可用。非空时只在 `GameState.current_era` 匹配时参与抽取 |
+| `store_to` | 否 | String | 🆕 .tres 输出路由指令，指定 CSV→.tres 同步时的输出目录 key（配合 `csv_cloud_loader.gd` 使用） |
 | `*customKey` | 否 | String / `PackedStringArray` | 自定义模板参数。普通值直接写字符串；方括号 `[a;b;c]` 语法自动解析为 `PackedStringArray` |
 
 ### 值分隔符规则

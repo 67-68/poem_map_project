@@ -127,6 +127,7 @@ static func parse_context(context_str: String) -> Dictionary:
         "weight": 10.0,
         "background": "",
         "store_to": "",  # 🆕 store_to 路由指令：指定 .tres 输出目录的 key
+        "era": "",       # 🆕 era 字段：标记该事件所属的时代（如 "745_ambition"），空=全时代可用
         "custom_params": {}
     }
     
@@ -191,6 +192,12 @@ static func parse_context(context_str: String) -> Dictionary:
                 # value 是 key，后续在 save_resources_to_tres() 中查 STORE_TO_PATH_MAP
                 # 如果 key 不在映射表中，直接作为 res:// 相对路径使用
                 result.store_to = value
+            
+            "era":
+                # 🆕 era 字段：标记该事件所属的时代
+                # 空字符串（默认值）表示对所有时代可用
+                # 非空时，只在 GameState.current_era 匹配时参与抽取
+                result.era = value
             
             _:
                 # 自定义模板参数
@@ -549,6 +556,9 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 在 save_resources_to_tres() 中根据此值路由到对应目录
     if not context_data.store_to.is_empty():
         event.custom_context_params["store_to"] = context_data.store_to
+
+    # 🆕 era 字段：从 context DSL 提取，标记事件所属时代
+    event.era = context_data.era
 
     # 解析触发条件
     var requirements_str = row.get('requirements')

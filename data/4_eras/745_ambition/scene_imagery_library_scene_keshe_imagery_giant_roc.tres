@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_melw6"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_61an6"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_ss3rc"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_65ncl"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_ficxs"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_jukke"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_f3nbx"]
+
+[sub_resource type="Resource" id="Resource_qhyod"]
+script = ExtResource("3_ss3rc")
+value = 10
+
+[sub_resource type="Resource" id="Resource_8ugsn"]
+script = ExtResource("4_65ncl")
+imagery_name = "TARGET_MYTH_GIANTROC_KESHE"
+
+[sub_resource type="Resource" id="Resource_3nwkd"]
+script = ExtResource("5_ficxs")
+operators = Array[ExtResource("2_61an6")]([SubResource("Resource_qhyod"), SubResource("Resource_8ugsn")])
+
+[sub_resource type="Resource" id="Resource_34drg"]
+script = ExtResource("6_jukke")
+choice_result = SubResource("Resource_3nwkd")
+description = "（冷眼旁观）"
+
+[resource]
+script = ExtResource("7_f3nbx")
+era = "745_ambition"
+_target_tags = Array[String](["action:main:duzhuo"])
+options = Array[ExtResource("1_melw6")]([SubResource("Resource_34drg")])
+uuid = "scene_imagery_library_scene_keshe_imagery_giant_roc"
+name = "寒夜闻升迁语"
+description = "油灯爆了个灯花，隔壁传来压低的咳嗽声，一句某某升了穿过板壁。你的手顿在杯沿上——酒还温着，但指节已经发白。破墙上挂着一幅褪色的大鹏图，翅羽缺了半片，爪子里攥着一截断簪，簪头隐约是官制缠枝纹。你盯着那纹路看，直到酒彻底冷透，再没喝一口。"

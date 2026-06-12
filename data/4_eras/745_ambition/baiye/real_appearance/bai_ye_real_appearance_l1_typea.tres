@@ -1,122 +1,123 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://neknl3go0yks"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_tolsr"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_sqsbg"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_txbc5"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_1dyp3"]
-[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="5_mobmq"]
-[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="6_f4ddt"]
-[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="7_tlp0n"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_j1wdo"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_1dyp3"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_qt2vt"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_mobmq"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_f4ddt"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_tolsr"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_sqsbg"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_txbc5"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_1dyp3"]
+[ext_resource type="Script" path="res://core/model/poem_taste.gd" id="5_mobmq"]
+[ext_resource type="Script" path="res://core/operators/trait_choose_operator.gd" id="6_f4ddt"]
+[ext_resource type="Script" path="res://core/requirements/poem_requirement.gd" id="7_tlp0n"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_j1wdo"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_1dyp3"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="9_qt2vt"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="10_mobmq"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_f4ddt"]
 
-[sub_resource type="Resource" id="Resource_1dyp3"]
+[sub_resource type="Resource" id="Resource_8a7d0"]
 script = ExtResource("3_txbc5")
 str_props = "fatigue"
 value = -11
 
-[sub_resource type="Resource" id="Resource_mobmq"]
+[sub_resource type="Resource" id="Resource_3ntnv"]
 script = ExtResource("3_txbc5")
 str_props = "money"
 value = -22
 
-[sub_resource type="Resource" id="Resource_f4ddt"]
+[sub_resource type="Resource" id="Resource_wcirk"]
 script = ExtResource("3_txbc5")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_tlp0n"]
+[sub_resource type="Resource" id="Resource_ah14y"]
 script = ExtResource("4_1dyp3")
-operators = Array[ExtResource("2_sqsbg")]([SubResource("Resource_f4ddt")])
+operators = Array[ExtResource("2_sqsbg")]([SubResource("Resource_wcirk")])
 
-[sub_resource type="Resource" id="Resource_j1wdo"]
+[sub_resource type="Resource" id="Resource_cjril"]
 script = ExtResource("4_1dyp3")
 
-[sub_resource type="Resource" id="Resource_qt2vt"]
+[sub_resource type="Resource" id="Resource_owj4s"]
 script = ExtResource("3_txbc5")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_adcbf"]
+[sub_resource type="Resource" id="Resource_g8tl0"]
 script = ExtResource("4_1dyp3")
-operators = Array[ExtResource("2_sqsbg")]([SubResource("Resource_qt2vt")])
+operators = Array[ExtResource("2_sqsbg")]([SubResource("Resource_owj4s")])
 
-[sub_resource type="Resource" id="Resource_qokd7"]
+[sub_resource type="Resource" id="Resource_xelh3"]
 script = ExtResource("5_mobmq")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_tlp0n")
-rejected_result = SubResource("Resource_adcbf")
-not_entered_result = SubResource("Resource_j1wdo")
+accepted_result = SubResource("Resource_ah14y")
+rejected_result = SubResource("Resource_g8tl0")
+not_entered_result = SubResource("Resource_cjril")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_58n0v"]
+[sub_resource type="Resource" id="Resource_0c4gt"]
 script = ExtResource("6_f4ddt")
-poem_taste = SubResource("Resource_qokd7")
+poem_taste = SubResource("Resource_xelh3")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_te82f"]
+[sub_resource type="Resource" id="Resource_16gu2"]
 script = ExtResource("3_txbc5")
 str_props = "career_progress"
 value = 3
 
-[sub_resource type="Resource" id="Resource_qhgt1"]
+[sub_resource type="Resource" id="Resource_wl6n0"]
 script = ExtResource("4_1dyp3")
-operators = Array[ExtResource("2_sqsbg")]([SubResource("Resource_1dyp3"), SubResource("Resource_mobmq"), SubResource("Resource_58n0v"), SubResource("Resource_te82f")])
+operators = Array[ExtResource("2_sqsbg")]([SubResource("Resource_8a7d0"), SubResource("Resource_3ntnv"), SubResource("Resource_0c4gt"), SubResource("Resource_16gu2")])
 
-[sub_resource type="Resource" id="Resource_gwtdk"]
+[sub_resource type="Resource" id="Resource_kxu7o"]
 script = ExtResource("7_tlp0n")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
 failed_hint = "阁下是来衙门散步的?"
 
-[sub_resource type="Resource" id="Resource_g7lm7"]
+[sub_resource type="Resource" id="Resource_rd1a7"]
 script = ExtResource("8_j1wdo")
-choice_result = SubResource("Resource_qhgt1")
-requirement = SubResource("Resource_gwtdk")
+choice_result = SubResource("Resource_wl6n0")
+requirement = SubResource("Resource_kxu7o")
 description = "研墨铺纸,将诗稿与名帖一并推回"
 
-[sub_resource type="Resource" id="Resource_k5pps"]
+[sub_resource type="Resource" id="Resource_vq280"]
 script = ExtResource("3_txbc5")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_t63pc"]
+[sub_resource type="Resource" id="Resource_1iig4"]
 script = ExtResource("4_1dyp3")
-operators = Array[ExtResource("2_sqsbg")]([SubResource("Resource_k5pps")])
+operators = Array[ExtResource("2_sqsbg")]([SubResource("Resource_vq280")])
 
-[sub_resource type="Resource" id="Resource_j05wf"]
+[sub_resource type="Resource" id="Resource_28l2o"]
 script = ExtResource("8_j1wdo")
-choice_result = SubResource("Resource_t63pc")
+choice_result = SubResource("Resource_1iig4")
 description = "拂袖而去"
 
-[sub_resource type="Resource" id="Resource_5xqxh"]
+[sub_resource type="Resource" id="Resource_pafeb"]
 script = ExtResource("10_mobmq")
 property = "career_progress"
 value = 70
 operator = 1
 
-[sub_resource type="Resource" id="Resource_3gbx3"]
+[sub_resource type="Resource" id="Resource_ank7k"]
 script = ExtResource("10_mobmq")
 property = "career_progress"
 value = 100
 
-[sub_resource type="Resource" id="Resource_yj4b3"]
+[sub_resource type="Resource" id="Resource_ranay"]
 script = ExtResource("11_f4ddt")
-operators = Array[ExtResource("9_1dyp3")]([SubResource("Resource_5xqxh"), SubResource("Resource_3gbx3")])
+operators = Array[ExtResource("9_1dyp3")]([SubResource("Resource_pafeb"), SubResource("Resource_ank7k")])
 
 [resource]
 script = ExtResource("9_qt2vt")
-requirement = SubResource("Resource_yj4b3")
+requirement = SubResource("Resource_ranay")
+era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_tolsr")]([SubResource("Resource_g7lm7"), SubResource("Resource_j05wf")])
+options = Array[ExtResource("1_tolsr")]([SubResource("Resource_rd1a7"), SubResource("Resource_28l2o")])
 uuid = "bai_ye_real_appearance_l1_typea"
 name = "红笔下的规矩"
 description = "此句'白日'犯讳,改'曛日';'天颜'僭越,须避;末句用典不合本朝体统,重拟.他抬眼,笑意不改,改完,我们再说下话."

@@ -70,6 +70,52 @@ ImaginaryManager (意象管理器)
 - `scan_poem_events()` - 诗词相关事件
 - `scan_death_events()` - 结局事件
 
-总体来说，这是一个**务实的事件系统架构**。对于单机游戏来说完全够用，但如果要支持大规模并发或复杂的事件依赖关系，可能需要重构为事件图或有向无环图结构 😨。
+### Era 时代感知事件路由 📅
 
-你现在遇到了什么具体问题？事件触发频率不对？还是权重算法有问题？
+从 `4_eras/` 目录结构引入后，事件系统新增了时代感知能力：
+
+```
+Database (数据核心)
+  ↓ _init() → scan result.bases
+  ↓ 提取所有 RandomEvent 资源
+  ↓ _extract_pool_tag() → 从 trigger_tags 提取 action:main:xxx 作为池标签
+  ↓ event.era → 同步构建 _events_by_era 索引
+  ↓
+get_random_events(main_tag, era):
+  ├─ 按 main_tag 定位到 random_events[pool_tag]
+  ├─ era="" → 返回全量池（不过滤）
+  └─ era="745_ambition" → 合并 era=""（全局） + era="745_ambition"（时代专属）
+```
+
+**核心原则 — 目录是给人看的，系统整理资源使用 tag：**
+- 事件的 `trigger_tags` 决定了它属于哪个事件池（如 `action:main:baiye`）
+- 事件的 `era` 字段决定了它在哪个时代可用
+- 目录结构仅作组织用途，不参与路由
+- 子目录（如 `honey_moon/`、`real_appearance/`）仅通过 `requirements` 区分，不做子池隔离
+
+**时代事件数据流：**
+```
+TimeService.on_xun_tick
+  ↓
+EventManager.scan_events(context)
+  ├─ context.era ← 从 GameState.current_era 获取（由 TimeService 推算）
+  ├─ context.main_tag ← 当前玩家的 action tag
+  ↓
+Database.get_random_events(main_tag, era)
+  ├─ 定位到 main_tag 对应的事件池
+  ├─ 合并全局（era=""）+ 时代专属（era 匹配）事件
+  ↓
+返回 { uuid: RandomEvent } 给 EventManager
+```
+
+**CSV 中的 era 声明：**
+```
+context: trigger_tags=[action:main:baiye]|weight=10|era=745_ambition
+                      ↑ 池标签              ↑ 时代标记
+```
+
+**注意：**
+- `era` 空字符串 = 全时代可用（全局事件）
+- 非空 `era` = 仅在对应时代可用
+- 查询时做 UNION 合并（全局 + 时代专属都参与抽取）
+- `GameState.current_era` 需要在 `GameState` 中新增（从 `TimeService` 推算）

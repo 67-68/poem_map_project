@@ -37,14 +37,15 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
 
     参数:
         nothing_multiplication_weight: 无事发生的权重倍数，默认为10
-        context: 上下文字典，包含main_tag等信息
+        context: 上下文字典，包含main_tag、era等信息
     """
     #breakpoint
     Logging.info("[EventManager] Starting event scan")
 
     var initial_tickets: Array[EventTicket] = []
     var main_tag = context.get('main_tag', '')
-    var events_to_scan = Database.get_random_events(main_tag)
+    var era = context.get('era', '')
+    var events_to_scan = Database.get_random_events(main_tag, era)
 
     for e in events_to_scan.values():
         initial_tickets.append(_create_ticket(e))

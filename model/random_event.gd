@@ -42,6 +42,10 @@ func _get_property_list() -> Array:
 
 @export var weight: float = 10.0
 @export var requirement: BaseRequirements
+# era 字段标记该事件所属的时代（如 "745_ambition"）。
+# 空字符串（默认值）表示该事件对所有时代可用。
+# 非空时，只有在 GameState.current_era 匹配时才会参与抽取。
+@export var era: String = ""
 # on_enter_result（原名 event_result）已提升到 BaseEvent.on_enter_result
 # 保留注释以提示迁移，不再在此处 @export
 

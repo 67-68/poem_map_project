@@ -1,26 +1,11 @@
 extends Node
 
-## 🆕 将旧的 ENUMS 标签映射到新的 DataScanner bases key
-## get_random_events(main_tag) 内部使用此表进行查找
-const MAIN_TAG_TO_BASES := {
-	"action:main:baiye": "3_actions_pool.baiye",
-	"action:main:jiaoyou": "3_actions_pool.jiaoyou",
-	"action:main:denggao": "3_actions_pool.denggao",
-	"action:main:fangshi": "3_actions_pool.fangshi",
-	"action:main:fengzhao": "3_actions_pool.fengzhao",
-	"action:main:duzhuo": "3_actions_pool.duzhuo",
-	"action:special:deepseek": "3_actions_pool.special",
-	"random_events": "3_actions_pool.events",
-}
-
-## 🆕 排除在 random_events 之外的 3_actions_pool bases（非随机事件类型）
-const NON_RANDOM_EVENT_BASES := [
-	"3_actions_pool.actions",
-	"3_actions_pool.decisions",
-	"3_actions_pool.focused_chats",
-	"3_actions_pool.decided_events",
-	"3_actions_pool.write_poem",
-]
+## 🚨 DEPRECATED: MAIN_TAG_TO_BASES 已废弃。
+## 现在 random_events 按事件的 trigger_tags 自动索引，不再依赖硬编码映射。
+## 路由逻辑：事件的 trigger_tags 中的第一个 action:main:<pool> 或 action:special:<pool>
+## 标签决定了它属于哪个池 — 目录是给人看的，系统整理资源使用 tag。
+##
+## 请改用 get_random_events(main_tag, era) 直接传入 action 标签。
 
 var index_image: Image
 
@@ -32,8 +17,12 @@ var territories: Dictionary
 var msger_data: Dictionary
 
 var history_events: Dictionary
-var random_events: Dictionary
+var random_events: Dictionary  # { "action:main:baiye": { uuid: RandomEvent } } — 按 trigger_tags 索引
 var end_random_events: Dictionary
+
+# 🆕 era 索引：{ "745_ambition": { uuid: RandomEvent } }
+# 由 random_events 构建时同步填充，用于 era 过滤查询
+var _events_by_era: Dictionary = {}
 
 var chat_bubble_data: Dictionary
 var focused_chat_data: Dictionary
@@ -137,12 +126,34 @@ func _init() -> void:
 	focused_chat_data = r.bases.get("3_actions_pool.focused_chats", {})
 	normal_poem_events = r.bases.get("3_actions_pool.write_poem", {})
 
-	# ── random_events：从 3_actions_pool 中提取随机事件桶（排除非随机类型）──
+	# ── random_events：从所有 bases 中提取 RandomEvent 资源，按 trigger_tags 索引 ──
+	# 目录是给人看的，系统整理资源使用 tag。
+	# 路由逻辑：事件的 trigger_tags 中的第一个 action:main:<pool> 或 action:special:<pool>
+	# 标签决定了它属于哪个池，不再依赖目录结构。
 	random_events = {}
+	_events_by_era = {}
 	for base_key in r.bases:
-		if base_key.begins_with("3_actions_pool.") and base_key not in NON_RANDOM_EVENT_BASES:
-			random_events[base_key] = r.bases[base_key]
-	Logging.info("Database: random_events 已从 %d 个桶加载" % random_events.size())
+		var bucket = r.bases[base_key]
+		for uuid in bucket:
+			var res = bucket[uuid]
+			if res is RandomEvent:
+				var event = res as RandomEvent
+				var pool_tag = _extract_pool_tag(event.target_tags)
+				if pool_tag.is_empty():
+					continue
+				if not random_events.has(pool_tag):
+					random_events[pool_tag] = {}
+				random_events[pool_tag][uuid] = event
+				
+				# 构建 era 索引（空 era 不索引，表示全时代可用）
+				var era = event.era
+				if not era.is_empty():
+					if not _events_by_era.has(era):
+						_events_by_era[era] = {}
+					_events_by_era[era][uuid] = event
+	
+	Logging.info("Database: random_events 已按 pool_tag 索引，%d 个池" % random_events.size())
+	Logging.info("Database: _events_by_era 已构建，%d 个时代" % _events_by_era.size())
 
 	# 飞花令意象库：从主意象字典中筛选环境类意象
 	feihualing_imageries = {}
@@ -305,25 +316,44 @@ func get_all_events_iterator() -> Dictionary:
 	return all_events
 
 
-func get_random_events(main_tag: String = '') -> Dictionary:
+## 获取指定主标签和时代的随机事件池。
+##
+## 参数:
+##   main_tag: 事件主标签，如 "action:main:baiye"。
+##             空字符串时返回所有随机事件（不过滤 era）。
+##   era:      当前时代标识，如 "745_ambition"。
+##             空字符串时返回指定池的所有事件（不过滤 era）。
+##             非空时，返回池中 era 为空（全时代通用）和 era 匹配的事件。
+##
+## 返回:
+##   { uuid: RandomEvent } — 经过 era 过滤的事件字典
+##
+func get_random_events(main_tag: String = '', era: String = '') -> Dictionary:
 	if main_tag.is_empty():
 		Logging.info('get_random_events: no main tag provided, returning all events')
 		var all_events = {}
-		for bucket in random_events:
-			all_events.merge(random_events[bucket])
+		for bucket in random_events.values():
+			all_events.merge(bucket)
 		return all_events
 
-	var bases_key = MAIN_TAG_TO_BASES.get(main_tag, "")
-	if bases_key.is_empty():
-		Logging.err('get_random_events: unknown main_tag "%s", no mapping to bases key' % main_tag)
+	var pool_events = random_events.get(main_tag)
+	if pool_events == null:
+		Logging.info('get_random_events: no events for main_tag "%s"' % main_tag)
 		return {}
 
-	if random_events.has(bases_key):
-		Logging.info('get_random_events: main_tag "%s" → bases_key "%s" (%d events)' % [main_tag, bases_key, random_events[bases_key].size()])
-		return random_events[bases_key]
+	if era.is_empty():
+		Logging.info('get_random_events: main_tag "%s" → %d events (no era filter)' % [main_tag, pool_events.size()])
+		return pool_events
 
-	Logging.err('get_random_events: bases_key "%s" not found in random_events' % bases_key)
-	return {}
+	# era 过滤：包括全时代通用（era=""）和 era 匹配的事件
+	var result = {}
+	for uuid in pool_events:
+		var event = pool_events[uuid]
+		if event.era.is_empty() or event.era == era:
+			result[uuid] = event
+
+	Logging.info('get_random_events: main_tag "%s", era="%s" → %d events (of %d pool total)' % [main_tag, era, result.size(), pool_events.size()])
+	return result
 
 
 # ════════════════════════════════════════════════════════════════
@@ -408,10 +438,9 @@ func get_end_random_event(uuid: String):
 	return end_random_events.get(uuid)
 
 func get_random_event_bucket(main_tag: String) -> Dictionary:
-	var bases_key = MAIN_TAG_TO_BASES.get(main_tag, "")
-	if bases_key.is_empty():
-		return {}
-	return random_events.get(bases_key, {})
+	## 获取指定主标签的随机事件桶（不过滤 era）。
+	## main_tag 直接作为 pool_tag 在 random_events 中查找。
+	return random_events.get(main_tag, {})
 
 func get_state_transistors_all() -> Dictionary:
 	return state_transistors
@@ -618,6 +647,10 @@ func _build_unified_index() -> void:
 	for bucket_key in random_events:
 		_scan_flat_dict(random_events[bucket_key], "random_events.%s" % str(bucket_key))
 
+	# ── 特殊：_events_by_era 也是嵌套结构，扫描以建立统一索引 ──
+	for era_key in _events_by_era:
+		_scan_flat_dict(_events_by_era[era_key], "era_events.%s" % str(era_key))
+
 	# ── 特殊：event_base_pool key 是 "ns.uuid"，resource 有独立 uuid ──
 	for full_id in event_base_pool:
 		_index_resource(event_base_pool[full_id], "event_base:%s" % full_id)
@@ -676,4 +709,24 @@ static func _resolve_resource_class_name(res: Resource) -> String:
 	var script_obj = res.get_script()
 	if script_obj and script_obj.has_method("get_global_name"):
 		return script_obj.get_global_name()
+	return ""
+
+
+# ════════════════════════════════════════════════════════════════
+# Helper: 从事件的 trigger_tags 中提取池标签
+# ════════════════════════════════════════════════════════════════
+
+## 从事件的 target_tags 中提取第一个 action: 标签作为池标签（pool_tag）。
+##
+## 池标签用于 random_events 索引键，取代旧的 MAIN_TAG_TO_BASES 硬编码映射。
+## 事件在 data/3_actions_pool/ 还是 data/4_eras/ 下不影响路由 — 系统只看 tag。
+##
+## 匹配规则：
+##   - 匹配以 "action:" 开头的标签（如 "action:main:baiye", "action:special:deepseek"）
+##   - 不匹配时返回空字符串（该事件不会被加入任何随机事件池）
+##   - 一个事件应有且只有一个 action:main:xxx 标签
+static func _extract_pool_tag(target_tags: Array) -> String:
+	for tag in target_tags:
+		if tag.begins_with("action:"):
+			return tag
 	return ""
