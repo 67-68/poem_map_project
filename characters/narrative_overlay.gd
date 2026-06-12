@@ -1,9 +1,11 @@
 class_name NarrativeOverlay extends Control
 
-# 引用子节点 (根据上面的新结构调整路径)
-@onready var main_card: TextureRect = $Background
+# 引用子节点
+# 🚨 event_ui 不写类型注解：class_name EventUI 在 parse 时尚未注册，
+# 但运行时 Godot 能正确解析 $EventUI 节点，调用方法无问题。
+@onready var event_ui = $EventUI
+@onready var main_card: TextureRect = $EventUI
 @onready var dimmer: ColorRect = $Dimmer
-@onready var btn_container: VBoxContainer = $Background/Margin/VBox/OptionBtns
 
 # 状态
 var current_event_data: BaseEvent
@@ -33,6 +35,8 @@ var _waiting_for_animations: bool = false
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
+	# EventUI 的选项选择信号桥接回 NarrativeOverlay 的生命周期
+	event_ui.option_selected.connect(_on_option_selected)
 	EventBus.request_event.connect(func(data, _context): apply_narrative(data, _context))
 	EventBus.request_event_key.connect(func(key, _context):
 		var ev = Database.history_events.get(key)
@@ -481,18 +485,15 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	TimeService.pause_world(true)
 	current_event_data = data
 
-	# 3. 填充内容
-	$Background.texture = data.icon # 假设这是插画
-	$Background/Margin/VBox/TitleLabel.text = data.name
-	# 🚨 使用 tr_and_resolve 解析 description 中的 {@context_key} 模板插值
-	# on_enter 阶段已将动态内容写入 context，此时 data.description 中的
-	# {@keyword}、{@imaginary_desc}、{@npc_report} 等占位符
-	# 会被替换为 context 中的实际值。
-	$Background/Margin/VBox/ContentLabel.text = Util.tr_and_resolve(data.description, context, data)
-	$Background/Margin/VBox/ExampleLabel.text = data.example # 比如诗词原文
-
-	# 使用 init() 返回的全量选项（含 provider 动态生成的），而非 data.options（仅静态选项）
-	$Background/Margin/VBox/OptionBtns.apply_btns(all_options, _on_option_selected)
+	# 3. 填充内容 — 委托给 EventUI
+	# FAST:  瞬间填充所有 UI 元素（默认，适用日常/随机事件）
+	# SLOW:  打字机逐阶段显示（title → desc → example → option，适用 story_arcs）
+	if data is BaseEvent and data.display_speed == BaseEvent.DisplaySpeed.SLOW:
+		Logging.info("NarrativeOverlay.apply_narrative: SLOW 模式（event='%s', namespace='%s'）" % [data.name, data._namespace])
+		event_ui.display_slow(data, all_options, context)
+	else:
+		Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
+		event_ui.display_instant(data, all_options, context)
 
 	AudioManager.play_sad()
 

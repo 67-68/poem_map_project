@@ -8,6 +8,11 @@ class_name ImageHandle extends RefCounted
 ##   - remove():   立即销毁
 ##
 ## 所有位置参数使用 UV 坐标 (0.0~1.0, 屏幕归一化空间)。
+##
+## ⚠️ 所有 Tween 均使用 TWEEN_PAUSE_PROCESS 模式，确保在场景树暂停
+##    （如 FocusedChat/事件弹窗期间 TimeService.pause_world）时动画
+##    仍能正常播放。如果发现动画在弹窗后卡住不播，优先检查 Tween
+##    创建时是否遗漏了 set_pause_mode 调用。
 
 const LOG_TAG := "ImageHandle"
 const SHATTER_SHADER := preload("res://shaders/image_shatter.gdshader")
@@ -44,6 +49,7 @@ func slide_to(target_uv: Vector2, duration: float = 1.0) -> Signal:
 	_kill_tween()
 	var target_pixel := _uv_to_pixel(target_uv)
 	_tween = _sprite.create_tween()
+	_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween.tween_property(_sprite, "global_position", target_pixel, duration) \
 		.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 	Logging.debug("%s: slide_to → uv=%s pixel=%s duration=%.2f" % [LOG_TAG, target_uv, target_pixel, duration])
@@ -71,6 +77,7 @@ func shatter(duration: float = 1.0, params: Dictionary = {}) -> void:
 	# Tween 驱动
 	_kill_tween()
 	_tween = _sprite.create_tween()
+	_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	_tween.tween_method(_update_shader_progress.bind(shader_mat), 0.0, 1.0, duration)
 	_tween.finished.connect(_destroy)
@@ -80,6 +87,7 @@ func shatter(duration: float = 1.0, params: Dictionary = {}) -> void:
 func fade_out(duration: float = 1.0) -> void:
 	_kill_tween()
 	_tween = _sprite.create_tween()
+	_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween.tween_property(_sprite, "modulate:a", 0.0, duration)
 	_tween.finished.connect(_destroy)
 	Logging.debug("%s: fade_out → duration=%.2f" % [LOG_TAG, duration])

@@ -1,4 +1,22 @@
 # [unreleased]
+## Changed
+- 叙事显示架构重构：`Background` (TextureRect) 重命名为 `EventUI`，独立脚本管理显示逻辑
+  - [`characters/event_ui.gd`](characters/event_ui.gd) — 新增 `class_name EventUI extends TextureRect`
+    - `display_instant()` — FAST 模式，瞬间填充所有 UI 元素（零回归）
+    - `display_slow()` — SLOW 模式，打字机逐阶段显示（title → desc → example → option）
+    - 打字机参数：`SLOW_SPEED=0.04s/字`（≈ 25 字/秒），`PHASE_PAUSE=0.6s` 阶段间停顿
+    - 左键点击跳过当前阶段，自动进入下一阶段
+  - [`characters/narrative_overlay.gd`](characters/narrative_overlay.gd) — `apply_narrative()` 路由分叉
+    - `display_speed == SLOW` → 委托 `event_ui.display_slow()`
+    - `display_speed == FAST`（默认） → 委托 `event_ui.display_instant()`
+    - 删除直接操作 label 的硬编码代码
+  - [`model/event.gd`](model/event.gd) — 新增 `DisplaySpeed` 枚举、`_namespace`、`display_speed` 字段（纯数据，零方法）
+  - [`core/event_base_loader.gd`](core/event_base_loader.gd) — `_load_resource()` 扫描时自动填充 `_namespace` 和 `display_speed`
+    - `_namespace` → 纯目录路径前缀（如 `"story_arcs.changan_rainfall."`）
+    - `display_speed` → 当 `current_ns.begins_with("story_arcs.")` 时自动设为 `SLOW`
+  - [`characters/narrative_overlay.tscn`](characters/narrative_overlay.tscn) — `Background` 节点重命名为 `EventUI`，挂载 `event_ui.gd`
+  - 所有层级均注入完整日志链（EventBaseLoader → NarrativeOverlay → EventUI），支持 `Logging.info/debug` 追踪
+
 ## Added
 - `AnimationObject` 类型体系 — 时间驱动舞台动画的一等公民抽象
   - `AnimationObject` (`model/animation_object.gd`) — `RefCounted` 基类，`finished` 信号 + `start()/stop()` 生命周期

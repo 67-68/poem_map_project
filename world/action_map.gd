@@ -139,6 +139,9 @@ func _on_map_action_button_pressed(prefix: String) -> void:
 		for r in action.action_results:
 			r.operate()
 
+	# ── 1.5 Generator 消费（统一入口） ──
+	ActionManager.consume_generator(action)
+
 	# 2. 追加 action_tags
 	# 也就是说，这里提供的action:main:baiye:general会导致无法匹配action:main:baiye?
 	for tag in action.action_tags:

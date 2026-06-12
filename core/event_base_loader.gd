@@ -108,6 +108,17 @@ static func _load_resource(
 	result.pool[full_id] = resource
 	Logging.info("EventBaseLoader: 加载事件 [%s] <- %s" % [full_id, file_path])
 
+	# ── 自动填充命名空间和显示速度 ──
+	# current_ns 是纯目录前缀，如 "story_arcs.changan_rainfall."（不包含 uuid）
+	# 这使 NarrativeOverlay 可以直接通过 _namespace.begins_with("story_arcs.") 做拦截
+	# 仅在资源是 BaseEvent 或其子类时写入（避免污染非事件资源）
+	if "_namespace" in resource:
+		resource.set("_namespace", current_ns)
+		Logging.info("EventBaseLoader: 写入 _namespace='%s' 到事件 '%s'" % [current_ns, full_id])
+	if "display_speed" in resource and current_ns.begins_with("story_arcs."):
+		resource.set("display_speed", 1)  # DisplaySpeed.SLOW
+		Logging.info("EventBaseLoader: 事件 '%s' 自动标记为 SLOW（namespace: %s）" % [full_id, current_ns])
+
 	# ── 按顶层 base 分表 ──
 	if top_level_base != "":
 		if not result.bases.has(top_level_base):

@@ -18,18 +18,8 @@ func _on_button_pressed() -> void:
 	if action.action_results:
 		for r in action.action_results: r.operate()
 	
-	# ── Generator 消费 ──
-	# 如果 action 上挂载了 generator，每次点击消费一个 operator
-	# 全部消费完 → 锁定 action 1 旬（自动解锁）→ 清空 generator
-	if action.generator:
-		var has_more := action.generator.execute_next()
-		if not has_more:
-			# Generator 已耗尽，锁定 action 1 旬，清空 generator 引用
-			var gen_name := action.generator.name
-			var action_type: int = action.generator.action_type
-			ActionManager.lock_action(action_type as int, 1)
-			action.generator = null
-			Logging.info("[SceneActionPanel] generator '%s' 已耗尽，action 锁定 1 旬，generator 已清空" % gen_name)
+	# ── Generator 消费（统一入口） ──
+	ActionManager.consume_generator(action)
 	
 	# 🚀 革新后：不再需要标准化，前缀匹配自动忽略第4级
 	for tag in action.action_tags:

@@ -294,3 +294,23 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 	# 抽取完成后自动清除预留，避免跨回合污染
 	clear_reservations()
 	return selected_actions
+
+
+# ════════════════════════════════════════════════════════════
+# Generator 消费（统一入口）
+# ════════════════════════════════════════════════════════════
+
+## 消费 action 上挂载的 generator 的一个 operator。
+## 如果 generator 已耗尽，自动锁定 action 1 旬并清空 generator 引用。
+## 由 SceneActionPanel 和 ActionMap 统一调用，避免逻辑重复。
+func consume_generator(action: Action) -> void:
+	if not action.generator:
+		return
+	
+	var has_more := action.generator.execute_next()
+	if not has_more:
+		var gen_name := action.generator.name
+		var action_type: int = action.generator.action_type
+		lock_action(action_type as int, 1)
+		action.generator = null
+		Logging.info("[ActionManager] generator '%s' 已耗尽，action 锁定 1 旬，generator 已清空" % gen_name)

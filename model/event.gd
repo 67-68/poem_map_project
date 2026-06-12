@@ -1,5 +1,21 @@
 @tool
 class_name BaseEvent extends GameEntity
+
+# ── 显示速度枚举（纯数据标记） ──────────────────────────
+# FAST:  瞬间填充所有 UI 元素（默认，适用日常/随机事件）
+# SLOW:  打字机逐阶段显示（适用 story_arcs 线性剧本）
+# ──────────────────────────────────────────────────────
+enum DisplaySpeed { FAST = 0, SLOW = 1 }
+
+# 命名空间前缀：由 EventBaseLoader 扫描目录结构自动写入
+# 格式为 "story_arcs.changan_rainfall."（纯目录路径，不含 uuid）
+# 用于 NarrativeOverlay 的路由拦截器判断显示模式
+@export var _namespace: String = ""
+
+# 显示模式：由 EventBaseLoader 根据 _namespace 自动设定，
+# 可通过 .tres 手动覆写
+@export var display_speed: int = DisplaySpeed.FAST
+
 @export var options: Array[BaseOption] = []
 @export var provider: BaseProvider
 @export var example: String
