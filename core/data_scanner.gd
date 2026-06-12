@@ -178,7 +178,7 @@ static func _load_csv(
 
 	# 调用 DataLoader 加载 CSV
 	# DataLoader.load_csv_model 接受 class reference，使用 model_class.new(item)
-	var items: Array = DataLoader.load_csv_model(model_class, csv_basename)
+	var items: Array = DataLoader.load_csv_model(model_class, file_path)
 	if items.is_empty():
 		Logging.warn("DataScanner: CSV 文件 '%s' 加载结果为空" % file_name)
 		return
