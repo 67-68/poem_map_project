@@ -59,22 +59,38 @@ resources = {
 }
 ```
 
-## Step 3: `core/database.gd` — 加入查找链
+## Step 3: `core/database.gd` — 加入统一索引
 
-如果新类型需要通过 `find_triggerable_item(uuid)` 按 uuid 查到，在函数末尾加对应分支：
+新类型必须加入 `_build_unified_index()` 的扫描链，才能被 `resolve()` 和类型化 Getter 找到。
+
+如果是平铺字典（uuid → Resource），在 `_build_unified_index()` 末尾追加：
 
 ```gdscript
-if artifacts.get(uuid):
-    return artifacts[uuid]
+_scan_flat_dict(artifacts, "artifacts")
 ```
 
-## Step 4: `DOCUMENTATIONS/urn_system.md` — 更新类型表格
+如果是嵌套结构（`{ tag: { uuid: Resource } }`，如 random_events），需要手动展开：
 
-在资源类型表格中追加一行：
+```gdscript
+for bucket_key in artifacts:
+    _scan_flat_dict(artifacts[bucket_key], "artifacts.%s" % str(bucket_key))
+```
 
+## Step 4: `core/database.gd` — 添加类型化 Getter
+
+在 `get_*` / `get_*_all` 方法区域添加对应方法（约 Phase 3 注释区域）：
+
+```gdscript
+func get_artifact(uuid: String):
+    return artifacts.get(uuid)
+
+func get_artifacts_all() -> Dictionary:
+    return artifacts
 ```
-| artifact | artifacts | Registry/CSV/DataHelper | 文物数据 |
-```
+
+## Step 5: `DOCUMENTATIONS/urn_system.md` — 更新文档
+
+在资源类型表格中追加一行，并补充 `get_artifact()` 和 `get_artifacts_all()` 到接口文档。
 
 ## 概览
 
@@ -84,5 +100,6 @@ if artifacts.get(uuid):
 | 声明变量 | `core/database.gd` 顶部 | +1 行 |
 | 加载数据 | `core/database.gd` _init() | +1 行 |
 | 创建 registry（如需） | `data/<type>_registry.tres` | 新建文件 |
-| 查找链 | `core/database.gd` find_triggerable_item() | +3 行 |
+| 加入统一索引 | `core/database.gd` _build_unified_index() | +1~5 行 |
+| 添加类型化 Getter | `core/database.gd` 方法区 | +6 行 |
 | 更新文档 | `DOCUMENTATIONS/urn_system.md` | +1 行表格 |

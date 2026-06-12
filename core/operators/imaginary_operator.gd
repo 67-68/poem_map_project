@@ -6,7 +6,7 @@ class_name ImaginaryOperator extends BaseOperator
 
 
 func operate():
-    var ima = Database.imaginaries.get(imaginary_name) as ImaginaryTag
+    var ima = Database.get_imaginary(imaginary_name) as ImaginaryTag
     if not ima: 
         Logging.err('imagery operator: can not found imagery: %s' % imaginary_name)
         return

@@ -38,7 +38,7 @@ func init_buffers() -> void:
 	)
 	event_buffer = ManualBuffer.new(
 		event_popup_queue.add_item,
-		Database.history_events.values()
+		Database.get_history_events_all().values()
 	)
 
 	poem_stack_manager = PopupQueue.new(
@@ -47,7 +47,7 @@ func init_buffers() -> void:
 	)
 	poem_buffer = ManualBuffer.new(
 		poem_stack_manager.add_item,
-		Database.poem_data.values()
+		Database.get_poem_data_all().values()
 	)
 
 	chat_buffer = ManualBuffer.new(
@@ -59,9 +59,9 @@ func init_buffers() -> void:
 				EventBus.request_add_chat.emit(item),
 		[]
 	)
-	if Database.chat_bubble_data:
+	if Database.get_chat_bubbles_all():
 		chat_buffer.add_items(
-			Database.chat_bubble_data.values() + Database.focused_chat_data.values()
+			Database.get_chat_bubbles_all().values() + Database.get_focused_chats_all().values()
 		)
 
 

@@ -19,8 +19,8 @@ func operate():
 	Logging.info("LianjuScoreOperator: Starting operate() — opening picker for player's imaginaries")
 
 	var data: Array[ImaginaryTag] = []
-	for uuid in Database.imaginaries:
-		var imaginary = Database.imaginaries[uuid] as ImaginaryTag
+	for uuid in Database.get_imaginaries_all():
+		var imaginary = Database.get_imaginary(uuid) as ImaginaryTag
 		if not imaginary:
 			continue
 		if imaginary.current_level < 1:

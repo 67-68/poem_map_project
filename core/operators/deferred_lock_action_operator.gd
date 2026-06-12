@@ -31,7 +31,7 @@ func operate():
 		var n := 1
 		while true:
 			var candidate := "flag_deferred_lock_%s_%d" % [action_name, n]
-			if not Database.flags.has(candidate) and not PlayerState.has_flag(candidate):
+			if Database.get_flag(candidate) == null and not PlayerState.has_flag(candidate):
 				counter_flag_id = candidate
 				break
 			n += 1
@@ -48,7 +48,7 @@ func operate():
 		Logging.err("[DeferredLockActionOperator] 无法解析 action_type %d 的 action_id" % action_type)
 		return
 
-	var action := Database.actions.get(action_id) as Action
+	var action := Database.get_action(action_id) as Action
 	if action == null:
 		Logging.err("[DeferredLockActionOperator] 未找到 action: %s" % action_id)
 		return

@@ -56,8 +56,8 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
     for i in imaginaries:
         imas[i.uuid] = i
 
-    for p in Database.legendary_poems.values():
-        if not Database.legendary_poems: 
+    for p in Database.get_legendary_poems_all().values():
+        if Database.get_legendary_poems_all().is_empty():
             Logging.err('the legendary poems is somehow contain nothing! this will cause error!!')
         var created = true
         for d in p.imagenary_demand:
@@ -77,7 +77,7 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
     # create tickets
     var tickets: Array[EventTicket] = []
     for t in tags:
-        for e in Database.normal_poem_events.values():
+        for e in Database.get_normal_poem_events_all().values():
             for target_tag in e.target_tags:
                 # 🚀 革新匹配：前缀匹配（短 tag 做前缀，匹配长 tag）
                 if TagManager.prefix_match(target_tag, t):
@@ -92,7 +92,7 @@ func scan_death_events():
     """
     Logging.info("[EventManager] Starting death event scan")
     var initial_tickets: Array[EventTicket] = []
-    for e in Database.end_random_events.values():
+    for e in Database.get_end_random_events_all().values():
         initial_tickets.append(_create_ticket(e))
     #breakpoint
     scan_events_from_tickets(initial_tickets, 0.0, '', {})
@@ -146,7 +146,7 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
         if g_tag.is_empty():
             _guaranteed_event_key = ""
             _guaranteed_main_tag = ""
-            var item = Database.find_triggerable_item(g_key)
+            var item = Database.resolve(g_key)
             # 🔮 边界情况：如果未来需要区分事件类型（random_events vs end_random_events 等），在此处扩展
             if item is BaseEvent:
                 Logging.info("[EventManager] 🎯 Guaranteed (no tag) event: " + g_key)

@@ -62,7 +62,7 @@ func init_imaginaries():
 		if level <= 0:
 			Logging.info('init_imaginaries: imaginary %s level <= 0 (%d), skipping' % [uuid, level])
 			continue
-		var imaginary = Database.imaginaries.get(uuid) as ImaginaryTag
+		var imaginary = Database.get_imaginary(uuid) as ImaginaryTag
 		if not imaginary:
 			Logging.warn('init_imaginaries: imaginary %s not found in Database.imaginaries, skipping' % uuid)
 			continue
@@ -102,7 +102,7 @@ func _on_request_add_imaginary(tag: String):
 
 	var imaginary_key = segments[1] + ":" + segments[2]
 	# 注册表/资源文件中的 key 使用小写（如 myth:giantroc），tag 段是大写（如 MYTH:GIANTROC）
-	var imaginary = Database.imaginaries.get(imaginary_key.to_lower()) as ImaginaryTag
+	var imaginary = Database.get_imaginary(imaginary_key.to_lower()) as ImaginaryTag
 	if not imaginary:
 		Logging.err("PlayerState._on_request_add_imaginary: 从中间两段 '%s' 未找到对应的 ImaginaryTag（tag='%s'）" % [imaginary_key, tag])
 		return
@@ -128,7 +128,7 @@ func append_stat(stat_name, data):
 			return
 		stat_name = int_stat
 
-	var stat = Database.properties.get(stat_name)
+	var stat = Database.get_property(stat_name)
 	# 需要提前登记stat
 	if not stat:
 		Logging.err('do not find stat %s' % stat_name)
@@ -137,7 +137,7 @@ func append_stat(stat_name, data):
 	var amount_to_change = data
 
 	for t_name in traits:
-		var t = Database.traits.get(t_name)
+		var t = Database.get_trait(t_name)
 		if not t:
 			Logging.err('do not find trait %s' % t_name)
 			continue
@@ -162,7 +162,7 @@ func get_stat_val(stat_name):
 			return
 		stat_name = int_stat
 	
-	var stat = Database.properties.get(stat_name)
+	var stat = Database.get_property(stat_name)
 	if not stat:
 		Logging.err('do not find stat %s' % stat_name)
 		return 0
@@ -176,7 +176,7 @@ func set_stat_val(stat_name, data):
 			return
 		stat_name = int_stat
 	
-	var stat = Database.properties.get(stat_name)
+	var stat = Database.get_property(stat_name)
 	if not stat:
 		Logging.err('do not find stat %s' % stat_name)
 		return
@@ -202,7 +202,7 @@ func force_set_stat_val(stat_name, data):
 			return
 		stat_name = int_stat
 	
-	var stat = Database.properties.get(stat_name)
+	var stat = Database.get_property(stat_name)
 	if not stat:
 		Logging.err('do not find stat %s' % stat_name)
 		return
@@ -297,7 +297,7 @@ func get_traits():
 # ─── Flag ────────────────────────────────────────────────────────────
 func _validate_flag_type(flag_id: String) -> String:
 	"""根据 Database.flags 定义校验 flag 的类型，返回 'str'/'int'/'bool' 或空字符串"""
-	var flag_def = Database.flags.get(flag_id)
+	var flag_def = Database.get_flag(flag_id)
 	if not flag_def:
 		Logging.err('flag %s not found in Database.flags' % flag_id)
 		return ''
@@ -316,7 +316,7 @@ func register_virtual_flag(flag_id: String, type: String) -> void:
 	if type not in ['str', 'int', 'bool']:
 		Logging.err("[PlayerState] register_virtual_flag: 未知类型 %s" % type)
 		return
-	if Database.flags.has(flag_id):
+	if Database.get_flag(flag_id) != null:
 		Logging.debug("[PlayerState] register_virtual_flag: flag %s 已存在，跳过" % flag_id)
 		return
 	var virtual_flag = Flag.new()
@@ -399,7 +399,7 @@ func remove_flag(flag_id: String):
 	EventBus.on_flag_change.emit()
 
 func set_ambition(ambition_key):
-	var ambition_ = Database.ambitions.get(ambition_key)
+	var ambition_ = Database.get_ambition(ambition_key)
 	if not ambition_: 
 		Logging.err('this ambition %s is non-exist' % ambition_key)
 		return
@@ -419,9 +419,9 @@ func clear_ambition():
 	ambition_changed.emit(null)
 
 func get_location():
-	var loc = Database.territories.get(current_location)
+	var loc = Database.get_territory(current_location)
 	if loc == null:
-		loc = Database.base_province.get(current_location)
+		loc = Database.get_province(current_location)
 	if not loc:
 		Logging.err('do not find location %s' % current_location)
 		return null

@@ -12,7 +12,7 @@ func force_set_prop(data,val):PlayerState.force_set_stat_val(data,val)
 # ─── 属性配置访问 ────────────────────────────────────
 func _get_prop_config(prop_enum) -> Property:
     var key = ENUMS.to_prop_str(prop_enum)
-    return Database.properties.get(key) as Property
+    return Database.get_property(key) as Property
 
 func _get_soft_max(prop_enum) -> int:
     var prop = _get_prop_config(prop_enum)
@@ -71,7 +71,7 @@ func _process_fatigue_accumulation():
 
 func aggregate_trait_effect():
     for t in PlayerState.get_traits():
-        var trait_ = Database.traits.get(t)
+        var trait_ = Database.get_trait(t)
         if not trait_: 
             Logging.warn('为什么player state中存在的triat在database没有？？')
             continue
@@ -79,8 +79,8 @@ func aggregate_trait_effect():
         trait_.operate_continuous_effect()
 
 func operate_state_transistors():
-    for s in Database.state_transistors:
-        var trans = Database.state_transistors[s]
+    for s in Database.get_state_transistors_all():
+        var trans = Database.get_state_transistors_all()[s]
         trans.transition()
 
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）

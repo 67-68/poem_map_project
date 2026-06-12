@@ -48,7 +48,7 @@ func operate():
     Logging.debug('PoemTypeChooseOperator: Starting operate()')
     var data = []
     for t in PlayerState.get_traits():
-        var trait_ = Database.traits.get(t)
+        var trait_ = Database.get_trait(t)
         if not trait_:
             Logging.err('PoemTypeChooseOperator: can not found trait %s' % t)
             continue

@@ -78,7 +78,7 @@ func _resolve_tracked_property() -> void:
 		Logging.warn("AmbitionHUD: No tracked property configured for ambition")
 		return
 	
-	_tracked_prop = Database.properties.get(ambition.tracked_property)
+	_tracked_prop = Database.get_property(ambition.tracked_property)
 	if not _tracked_prop:
 		Logging.err("AmbitionHUD: tracked property '%s' not found in Database" % ambition.tracked_property)
 	else:

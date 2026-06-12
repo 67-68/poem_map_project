@@ -31,7 +31,7 @@ func refresh_lut_image(ownership: Dictionary) -> ImageTexture:
 
 func _update_special_state(states: Dictionary):
 	for prov_uuid in states:
-		var province_color = Database.base_province[prov_uuid].color.to_html(false)
+		var province_color = Database.get_province(prov_uuid).color.to_html(false)
 		var col = prov_state_2_color.get(int(states[prov_uuid]))
 		
 		# 这里prov state to color 为什么不能使用get? because int as key?
@@ -53,7 +53,7 @@ func _update_special_state(states: Dictionary):
 
 func _update_faction(ownership: Dictionary):
 	for p_id in ownership.keys():
-		var province = Database.base_province.get(p_id)
+		var province = Database.get_province(p_id)
 		if not province: continue
 
 		var color_hex = province.color.to_html(false)
@@ -68,8 +68,8 @@ func _update_faction(ownership: Dictionary):
 	return lut_texture
 
 func _build_color_index():
-	for p_id in Database.base_province.keys():
-		var province: Territory = Database.base_province[p_id]
+	for p_id in Database.get_base_province_all():
+		var province = Database.get_province(p_id) as Territory
 		var color_hex = province.color.to_html(false)
 
 		if not _color_to_idx_map.has(color_hex):

@@ -192,13 +192,13 @@ func get_available_scene_actions() -> Dictionary:
 	var actions := {}
 	
 	# 统一去 base_prov 里拿位置数据
-	var loc = Database.base_province.get(PlayerState.current_location)
+	var loc = Database.get_province(PlayerState.current_location)
 	if not loc:
 		Logging.err("当前位置幽灵化: %s" % PlayerState.current_location)
 		return actions
 
-	for a_id in Database.actions:
-		var a = Database.actions[a_id]
+	for a_id in Database.get_actions_all():
+		var a = Database.get_action(a_id)
 		var is_valid = true # 🤓☝️ 设立拦截签证！
 		
 		# 0. 检查是否被 blocked
@@ -267,7 +267,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 			if selected_actions.size() >= pick_count:
 				break
 			if available_pool.has(reserved_id):
-				selected_actions.append(Database.actions[reserved_id] as SceneAction)
+				selected_actions.append(Database.get_action(reserved_id) as SceneAction)
 				available_pool.erase(reserved_id)
 			else:
 				Logging.err("[ActionManager] 预留 action %s 不在当前可用池中！" % reserved_id)
@@ -287,7 +287,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 		for action_id in available_pool:
 			cursor += pow(available_pool[action_id], 2)
 			if roll <= cursor:
-				selected_actions.append(Database.actions[action_id] as SceneAction)
+				selected_actions.append(Database.get_action(action_id) as SceneAction)
 				available_pool.erase(action_id) # 拿走，不放回！
 				break # 必须 break，进入下一轮抽取
 				

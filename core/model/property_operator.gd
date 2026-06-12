@@ -40,7 +40,7 @@ func _emit_float_text(delta: int) -> void:
     if delta == 0:
         Logging.debug("PropertyOperator._emit_float_text: delta=0, skip")
         return
-    var prop = Database.properties.get(property)
+    var prop = Database.get_property(property)
     if not prop:
         Logging.err("PropertyOperator._emit_float_text: property '%s' not found in Database" % property)
         return

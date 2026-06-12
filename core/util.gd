@@ -90,7 +90,7 @@ static func resolve_to_provinces(input_ids: Array) -> Array[String]:
 	# 只有在 Global.base_provinces 中存在的才保留
 	var final_list: Array[String] = []
 	for id in result_set.keys():
-		if Database.base_province.has(id):
+		if Database.get_province(id) != null:
 			final_list.append(id)
 		else:
 			# 这种通常是因为你传入了一个逻辑单位（如“范阳”），它本身不是地块
@@ -106,7 +106,7 @@ static func _explode_recursive(current_id: String, result_set: Dictionary, visit
 	visited[current_id] = true
 	
 	# 2. 从注册表获取实体数据. 这里的注册表指的是Territory而不是BaseProvince
-	var entity = Database.territories.get(current_id)
+	var entity = Database.get_territory(current_id)
 	if not entity:
 		# 如果注册表里没有，它可能就是一个原始州 ID，先放进结果集待查
 		result_set[current_id] = true

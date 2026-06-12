@@ -17,8 +17,8 @@ func operate():
         Logging.err("ImageryAcquisitionOperator.operate: imagery_name 为空，跳过")
         return
 
-    # 可选：校验 imagery_name 是否在 Database.imaginaries 中存在
-    if not Database.imaginaries.has(imagery_name):
+    # 可选：校验 imagery_name 是否在 Database 中存在
+    if Database.get_imaginary(imagery_name) == null:
         Logging.warn("ImageryAcquisitionOperator.operate: imagery_name '%s' 在 Database.imaginaries 中不存在，但将继续广播" % imagery_name)
 
     EventBus.request_add_imaginary.emit(imagery_name)

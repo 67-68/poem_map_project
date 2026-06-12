@@ -8,7 +8,7 @@ func on_trait_chnage():
 	var traits = PlayerState.get_traits()
 	Logging.info('[social wall panel] got traits count: %s' % traits.size())
 	for t in traits:
-		var traits_inst = Database.traits.get(t) as Trait
+		var traits_inst = Database.get_trait(t) as Trait
 		if not traits_inst:
 			Logging.err('[social wall panel] can not find this trait: %s' % t)
 			continue

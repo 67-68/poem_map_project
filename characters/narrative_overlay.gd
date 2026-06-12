@@ -39,9 +39,7 @@ func _ready() -> void:
 	event_ui.option_selected.connect(_on_option_selected)
 	EventBus.request_event.connect(func(data, _context): apply_narrative(data, _context))
 	EventBus.request_event_key.connect(func(key, _context):
-		var ev = Database.history_events.get(key)
-		if not ev: ev = Database.normal_poem_events.get(key)
-		if not ev: ev = Database.find_triggerable_item(key)
+		var ev = Database.resolve(key)
 		if not ev:
 			breakpoint
 			Logging.err("Event not found: " + key)
@@ -292,10 +290,7 @@ func _resolve_event_for_stack(data: Variant) -> BaseEvent:
 	if data is BaseEvent:
 		return data
 	if data is String:
-		var ev = Database.history_events.get(data)
-		if not ev: ev = Database.normal_poem_events.get(data)
-		if not ev: ev = Database.decided_events.get(data)
-		if not ev: ev = Database.find_triggerable_item(data)
+		var ev = Database.resolve(data)
 		if not ev:
 			breakpoint
 			Logging.err("push_event: Event not found: " + data)

@@ -61,7 +61,7 @@ func operate():
 func _emit_float_text(trait_name: String) -> void:
     if trait_name.is_empty():
         return
-    var trait_obj = Database.traits.get(trait_name)
+    var trait_obj = Database.get_trait(trait_name)
     if not trait_obj:
         return
     var text = trait_obj.description

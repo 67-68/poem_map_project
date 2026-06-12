@@ -55,7 +55,7 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D,
 
 	var names = []
 	for p in path_points:
-		names.append(Database.base_province.get(p).name)
+		names.append(Database.get_province(p).name)
 	print('path points', names)
 
 static func apply_msger_data(msger: Messager,data: MessagerData):

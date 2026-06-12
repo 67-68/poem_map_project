@@ -42,7 +42,7 @@ func render_entropy_death(cause_text: String) -> void:
 		bbcode += "[center][font_size=40][color=#555555]（绝笔无言，泯然众人）[/color][/font_size][/center]\n"
 	else:
 		for poem_key in PlayerState.created_poems:
-			var poem = Database.poem_data.get(poem_key)
+			var poem = Database.get_poem_data(poem_key)
 			if poem:
 				bbcode += "[center][font_size=42][color=#e2c08d]《%s》[/color][/font_size][/center]\n" % poem.title
 				bbcode += "[center][font_size=28][color=#d4b581]%s[/color][/font_size][/center]\n\n" % poem.content

@@ -15,7 +15,7 @@ func get_referenced_traits() -> Array:
 
 func compare(player_state) -> bool:
 	for t in player_state.get_traits():
-		var trait_data = Database.traits.get(t)
+		var trait_data = Database.get_trait(t)
 		if not trait_data:
 			Logging.warn("PoemRequirement: trait '%s' not found in Database" % str(t))
 			continue

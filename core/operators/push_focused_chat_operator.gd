@@ -8,7 +8,7 @@ class_name PushFocusedChatOperator extends BaseOperator
 var _captured_context: Dictionary = {}
 
 func operate():
-	var focused_chat = Database.focused_chat_data.get(chat_uuid)
+	var focused_chat = Database.get_focused_chat(chat_uuid)
 	if not focused_chat:
 		Logging.err("PushFocusedChatOperator: FocusedChat not found: %s" % chat_uuid)
 		return

@@ -51,7 +51,7 @@ func _detect_and_emit():
 		_last_prov_id = current_province_id
 
 func _emit_text(prov_id):
-	var prov_name = Database.base_province[prov_id].name
+	var prov_name = Database.get_province(prov_id).name
 	Logging.info("进入了：" + prov_name)
 	TextPoolManager.spawn('test')
 

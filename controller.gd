@@ -32,13 +32,13 @@ func parse(new_text):
 				return
 			EventBus.emit_signal(parts[2],str_to_var(parts[3]))
 		'give_trait':
-			var trait_ = Database.traits.get(parts[3])
+			var trait_ = Database.get_trait(parts[3])
 			if not trait_:
 				Logging.err('can not found trait %s ' % parts[3])
 				return
 			PlayerState.traits.append(trait_.uuid)
 		'event_result':
-			var ev = Database.find_triggerable_item(parts[2])
+			var ev = Database.resolve(parts[2])
 			# 🤓☝️ 鸭子类型：检查对象是否具有事件的必要属性
 			if not ev or not ev.has_method("get") or ev.get("uuid") == null or ev.get("options") == null:
 				Logging.err('can not found event for %s' % parts[2])

@@ -25,6 +25,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_hhuqa")
+display_speed = 1
 options = Array[ExtResource("1_em3it")]([SubResource("Resource_yed2k")])
 uuid = "event_changan_rainstop_market"
 name = "上元喜庆"

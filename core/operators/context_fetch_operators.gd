@@ -29,7 +29,7 @@ func init(_context: Dictionary) -> Dictionary:
 
 	if database == null:
 		Logging.warn("ContextFetchOperators: table '%s' not found in Database, falling back to find_from_all (性能开销)" % datasource_name)
-		result = Database.find_from_all(key)
+		result = Database.resolve(key)
 	else:
 		result = database.get(key)
 

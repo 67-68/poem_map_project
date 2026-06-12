@@ -10,7 +10,7 @@ static func get_bezier_path(p1_id: String, p2_id: String, x: float, y: float) ->
 	# 只需要添加所有的路点，利用控制点来做平滑和扰动
 	for i in range(node_indices.size()):
 		var curr_id = NavigationService.get_province_id_from_idx(node_indices[i])
-		var pos = Database.base_province[curr_id].uv_position * map_size
+		var pos = Database.get_province(curr_id).uv_position * map_size
 		pos.y += 40
 		
 		# 计算控制点 (Handle)

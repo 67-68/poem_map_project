@@ -41,7 +41,7 @@ func compare(player_state: PlayerState) -> bool:
 		Logging.warn("ImaginaryLevelRequirement: no resolved imaginary UUID, requirement fails")
 		return false
 
-	var imaginary = Database.imaginaries.get(_resolved_imaginary_uuid) as ImaginaryTag
+	var imaginary = Database.get_imaginary(_resolved_imaginary_uuid) as ImaginaryTag
 	if imaginary == null:
 		Logging.warn("ImaginaryLevelRequirement: imaginary '%s' not found in Database, requirement fails" % _resolved_imaginary_uuid)
 		return false
@@ -54,8 +54,8 @@ func compare(player_state: PlayerState) -> bool:
 
 ## 存在性检查：遍历所有意象，只要有任意一个意象等级 >= min_level 就返回 true
 func _check_any_imaginary() -> bool:
-	for uuid in Database.imaginaries:
-		var imaginary = Database.imaginaries[uuid] as ImaginaryTag
+	for uuid in Database.get_imaginaries_all():
+		var imaginary = Database.get_imaginary(uuid) as ImaginaryTag
 		if not imaginary:
 			continue
 		if imaginary.current_level >= min_level:

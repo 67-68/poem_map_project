@@ -1,7 +1,7 @@
 extends MarginContainer
 
 func apply_prop_key(prop_key: String):
-	var prop = Database.properties.get(prop_key)
+	var prop = Database.get_property(prop_key)
 	if not prop:
 		Logging.err("Property not found: " + prop_key)
 		return

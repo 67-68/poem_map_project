@@ -58,8 +58,8 @@ func operate():
 ## 注意：这里不做 tag 前缀匹配，匹配逻辑由 EventManager 的 ActionTagFilter 完成
 func _all_events_tickets() -> Array[EventTicket]:
 	var result: Array[EventTicket] = []
-	for bucket_key in Database.random_events:
-		var bucket = Database.random_events[bucket_key] as Dictionary
+	for bucket_key in Database.get_random_events_all():
+		var bucket = Database.get_random_events_all()[bucket_key] as Dictionary
 		if bucket.is_empty():
 			continue
 		for event_uuid in bucket:

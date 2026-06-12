@@ -46,6 +46,14 @@ var state_transistors: Dictionary
 var event_base_pool: Dictionary = {}
 var event_bases: Dictionary = {}
 
+# ════════════════════════════════════════════════════════════════
+# 统一数据访问基础设施
+# ════════════════════════════════════════════════════════════════
+# _raw_data_pool:  { uuid: Resource }  — 全量 uuid→Resource 扁平池，O(1) 查找
+# _index_by_class: { "ClassName": [uuid, ...] } — 按 class_name 的反向索引，支持类型过滤遍历
+var _raw_data_pool: Dictionary = {}
+var _index_by_class: Dictionary = {}
+
 
 func _init() -> void:
 	index_image = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
@@ -112,6 +120,7 @@ func _init() -> void:
 
 	_merge_cities()
 	_build_life_path_points_from_poems()
+	_build_unified_index()
 
 
 func _ready() -> void:
@@ -160,172 +169,6 @@ func _register_chat_with_time_service() -> void:
 			TimeService.register(d.year, GameState.chat_buffer.pop_item, 'focused_chat_name_placeholder', '', true, d)
 
 
-func find_triggerable_item(uuid: String):
-	# 🆕 event_base_pool 扁平查表（key = "namespace.uuid"，通过后缀匹配）
-	if not event_base_pool.is_empty():
-		for full_id in event_base_pool:
-			if full_id.ends_with("." + uuid) or full_id == uuid:
-				return event_base_pool[full_id]
-
-	if normal_poem_events.get(uuid):
-		return normal_poem_events[uuid]
-	for r in random_events:
-		if random_events.get(r).get(uuid):
-			return random_events.get(r).get(uuid)
-	if poem_data.get(uuid):
-		return poem_data[uuid]
-	if msger_data.get(uuid):
-		return msger_data[uuid]
-	if history_events.get(uuid):
-		return history_events[uuid]
-	if chat_bubble_data.get(uuid):
-		return chat_bubble_data[uuid]
-	if focused_chat_data.get(uuid):
-		return focused_chat_data[uuid]
-	if decided_events.get(uuid):
-		return decided_events[uuid]
-	for main_tag in random_events:
-		if random_events[main_tag].get(uuid):
-			return random_events[main_tag][uuid]
-	if actions.get(uuid):
-		return actions[uuid]
-	if ambitions.get(uuid):
-		return ambitions[uuid]
-	if traits.get(uuid):
-		return traits[uuid]
-	if properties.get(uuid):
-		return properties[uuid]
-	if decisions.get(uuid):
-		return decisions[uuid]
-	if end_random_events.get(uuid):
-		return end_random_events[uuid]
-	if event_options.get(uuid):
-		return event_options[uuid]
-
-
-func find_from_all(key: String):
-	# 遍历所有资源库，按 key（UUID/ID）查找第一个匹配的条目
-	# random_events 是嵌套结构（main_tag -> uuid -> item），需展开搜索
-
-	# ── eventbase.event_id 点号语法 ──
-	# 格式如 "actions.baiye_appearance" → base="actions", event_id="baiye_appearance"
-	if key.contains(".") and not event_bases.is_empty():
-		var dot_pos = key.find(".")
-		var base_name = key.substr(0, dot_pos)
-		var event_id = key.substr(dot_pos + 1)
-		if event_bases.has(base_name):
-			if event_bases[base_name].has(event_id):
-				Logging.info("find_from_all: found eventbase lookup '%s' -> event_bases['%s']['%s']" % [key, base_name, event_id])
-				return event_bases[base_name][event_id]
-			Logging.warn("find_from_all: eventbase '%s' 存在但未找到 event_id '%s'" % [base_name, event_id])
-		else:
-			Logging.info("find_from_all: key '%s' contains '.' but '%s' is not a registered event base (available: %s)" % [
-				key, base_name, str(event_bases.keys())])
-
-	# ── 核心数据 ──
-	if poet_data.has(key):
-		Logging.info("find_from_all: found key '%s' in poet_data" % key)
-		return poet_data[key]
-	if poem_data.has(key):
-		Logging.info("find_from_all: found key '%s' in poem_data" % key)
-		return poem_data[key]
-	if factions.has(key):
-		Logging.info("find_from_all: found key '%s' in factions" % key)
-		return factions[key]
-	if base_province.has(key):
-		Logging.info("find_from_all: found key '%s' in base_province" % key)
-		return base_province[key]
-	if territories.has(key):
-		Logging.info("find_from_all: found key '%s' in territories" % key)
-		return territories[key]
-	if msger_data.has(key):
-		Logging.info("find_from_all: found key '%s' in msger_data" % key)
-		return msger_data[key]
-
-	# ── 事件数据 ──
-	if history_events.has(key):
-		Logging.info("find_from_all: found key '%s' in history_events" % key)
-		return history_events[key]
-
-	# 🆕 event_base_pool 扁平查表（key = "namespace.uuid"）
-	if not event_base_pool.is_empty():
-		if event_base_pool.has(key):
-			Logging.info("find_from_all: found key '%s' in event_base_pool" % key)
-			return event_base_pool[key]
-		# 也支持裸 uuid 后缀匹配（如 "event_intro_745" 匹配 "history_events.event_intro_745"）
-		for full_id in event_base_pool:
-			if full_id.ends_with("." + key):
-				Logging.info("find_from_all: found key '%s' in event_base_pool (matched suffix: %s)" % [key, full_id])
-				return event_base_pool[full_id]
-	if normal_poem_events.has(key):
-		Logging.info("find_from_all: found key '%s' in normal_poem_events" % key)
-		return normal_poem_events[key]
-	if legendary_poems.has(key):
-		Logging.info("find_from_all: found key '%s' in legendary_poems" % key)
-		return legendary_poems[key]
-
-	# random_events 是嵌套的，遍历所有 tag bucket
-	for tag_bucket in random_events:
-		if random_events[tag_bucket].has(key):
-			Logging.info("find_from_all: found key '%s' in random_events[%s]" % [key, tag_bucket])
-			return random_events[tag_bucket][key]
-
-	if end_random_events.has(key):
-		Logging.info("find_from_all: found key '%s' in end_random_events" % key)
-		return end_random_events[key]
-	if chat_bubble_data.has(key):
-		Logging.info("find_from_all: found key '%s' in chat_bubble_data" % key)
-		return chat_bubble_data[key]
-	if focused_chat_data.has(key):
-		Logging.info("find_from_all: found key '%s' in focused_chat_data" % key)
-		return focused_chat_data[key]
-	if ambitions.has(key):
-		Logging.info("find_from_all: found key '%s' in ambitions" % key)
-		return ambitions[key]
-	if traits.has(key):
-		Logging.info("find_from_all: found key '%s' in traits" % key)
-		return traits[key]
-	if properties.has(key):
-		Logging.info("find_from_all: found key '%s' in properties" % key)
-		return properties[key]
-	if actions.has(key):
-		Logging.info("find_from_all: found key '%s' in actions" % key)
-		return actions[key]
-	if decisions.has(key):
-		Logging.info("find_from_all: found key '%s' in decisions" % key)
-		return decisions[key]
-	if decided_events.has(key):
-		Logging.info("find_from_all: found key '%s' in decided_events" % key)
-		return decided_events[key]
-
-	# ── 其他数据 ──
-	if imaginaries.has(key):
-		Logging.info("find_from_all: found key '%s' in imaginaries" % key)
-		return imaginaries[key]
-	if tags.has(key):
-		Logging.info("find_from_all: found key '%s' in tags" % key)
-		return tags[key]
-	if flags.has(key):
-		Logging.info("find_from_all: found key '%s' in flags" % key)
-		return flags[key]
-	if life_path_points.has(key):
-		Logging.info("find_from_all: found key '%s' in life_path_points" % key)
-		return life_path_points[key]
-	if poem_taste.has(key):
-		Logging.info("find_from_all: found key '%s' in poem_taste" % key)
-		return poem_taste[key]
-	if npc_document.has(key):
-		Logging.info("find_from_all: found key '%s' in npc_document" % key)
-		return npc_document[key]
-	if event_options.has(key):
-		Logging.info("find_from_all: found key '%s' in event_options" % key)
-		return event_options[key]
-	if state_transistors.has(key):
-		Logging.info("find_from_all: found key '%s' in state_transistors" % key)
-		return state_transistors[key]
-
-	Logging.warn("find_from_all: key '%s' not found in any resource library" % key)
-	return null
 
 
 func load_actual_positions(mesh_size) -> void:
@@ -417,3 +260,353 @@ func get_random_events(main_tag: String = '') -> Dictionary:
 		else:
 			Logging.info('get_random_events: main tag "%s" prefix-matched buckets: %s' % [main_tag, str(matched_buckets)])
 		return matching_events
+
+
+# ════════════════════════════════════════════════════════════════
+# Phase 3: 类型化 Getter 方法
+# ════════════════════════════════════════════════════════════════
+# 这些方法是外部代码访问数据的推荐方式。内部仍直接操作 dict 以保证性能。
+# 后续私有化 dict 后，这些 getter 将成为唯一访问通道。
+
+func get_trait(uuid: String):
+	return traits.get(uuid)
+
+func get_property(uuid: String):
+	return properties.get(uuid)
+
+func get_flag(uuid: String):
+	return flags.get(uuid)
+
+func get_imaginary(uuid: String):
+	return imaginaries.get(uuid)
+
+func get_action(uuid: String):
+	return actions.get(uuid)
+
+func get_focused_chat(uuid: String):
+	return focused_chat_data.get(uuid)
+
+func get_chat_bubble(uuid: String):
+	return chat_bubble_data.get(uuid)
+
+func get_ambition(uuid: String):
+	return ambitions.get(uuid)
+
+func get_decision(uuid: String):
+	return decisions.get(uuid)
+
+func get_npc_document(uuid: String):
+	return npc_document.get(uuid)
+
+func get_state_transistor(uuid: String):
+	return state_transistors.get(uuid)
+
+func get_poem(uuid: String):
+	return poem_data.get(uuid)
+
+func get_poet(uuid: String):
+	return poet_data.get(uuid)
+
+func get_faction(uuid: String):
+	return factions.get(uuid)
+
+func get_province(uuid: String):
+	return base_province.get(uuid)
+
+func get_territory(uuid: String):
+	return territories.get(uuid)
+
+func get_msger(uuid: String):
+	return msger_data.get(uuid)
+
+func get_tag(uuid: String):
+	return tags.get(uuid)
+
+func get_event_option(uuid: String):
+	return event_options.get(uuid)
+
+func get_poem_taste(uuid: String):
+	return poem_taste.get(uuid)
+
+func get_life_path_point(uuid: String):
+	return life_path_points.get(uuid)
+
+func get_history_event(uuid: String):
+	return history_events.get(uuid)
+
+func get_normal_poem_event(uuid: String):
+	return normal_poem_events.get(uuid)
+
+func get_legendary_poem(uuid: String):
+	return legendary_poems.get(uuid)
+
+func get_end_random_event(uuid: String):
+	return end_random_events.get(uuid)
+
+func get_random_event_bucket(main_tag: String) -> Dictionary:
+	return random_events.get(main_tag, {})
+
+func get_state_transistors_all() -> Dictionary:
+	return state_transistors
+
+func get_actions_all() -> Dictionary:
+	return actions
+
+func get_traits_all() -> Dictionary:
+	return traits
+
+func get_properties_all() -> Dictionary:
+	return properties
+
+func get_flags_all() -> Dictionary:
+	return flags
+
+func get_imaginaries_all() -> Dictionary:
+	return imaginaries
+
+func get_focused_chats_all() -> Dictionary:
+	return focused_chat_data
+
+func get_chat_bubbles_all() -> Dictionary:
+	return chat_bubble_data
+
+func get_history_events_all() -> Dictionary:
+	return history_events
+
+func get_normal_poem_events_all() -> Dictionary:
+	return normal_poem_events
+
+func get_legendary_poems_all() -> Dictionary:
+	return legendary_poems
+
+func get_end_random_events_all() -> Dictionary:
+	return end_random_events
+
+func get_random_events_all() -> Dictionary:
+	return random_events
+
+func get_poem_data_all() -> Dictionary:
+	return poem_data
+
+func get_poet_data_all() -> Dictionary:
+	return poet_data
+
+func get_life_path_points_all() -> Dictionary:
+	return life_path_points
+
+func get_factions_all() -> Dictionary:
+	return factions
+
+func get_decisions_all() -> Dictionary:
+	return decisions
+
+func get_msger_data_all() -> Dictionary:
+	return msger_data
+
+func get_base_province_all() -> Dictionary:
+	return base_province
+
+func get_territories_all() -> Dictionary:
+	return territories
+
+func get_ambitions_all() -> Dictionary:
+	return ambitions
+
+func get_event_options_all() -> Dictionary:
+	return event_options
+
+func get_poem_taste_all() -> Dictionary:
+	return poem_taste
+
+func get_npc_document_all() -> Dictionary:
+	return npc_document
+
+func get_event_base_pool_all() -> Dictionary:
+	return event_base_pool
+
+
+# ════════════════════════════════════════════════════════════════
+# Phase 2: 统一数据访问入口
+# ════════════════════════════════════════════════════════════════
+
+## 统一数据查找入口。
+##
+## 支持多种 key 格式：
+##   1. "base_name.event_id" — 点号语法，对应 event_bases 分表查找
+##   2. uuid — 直接命中 _raw_data_pool
+##   3. 后缀匹配 — _"ns.uuid" 池中以 uuid 后缀匹配（如 "event_intro_745"）
+##
+## 参数:
+##   key:         查找键（uuid / 点号语法）
+##   class_filter: 可选，限定 class_name（如 "BaseEvent"、"FocusedChat"），
+##                 非空时仅返回该类型资源，类型不匹配返回 null
+##   silent:      静默模式，不打印 warning（用于内部批量调用）
+##
+## 返回:
+##   Resource 实例，未找到时返回 null
+##
+func resolve(key: String, class_filter: String = "", silent: bool = false):
+	if key.is_empty():
+		return null
+
+	# ── 策略 1: 点号语法 "base_name.event_id" → event_bases 查表 ──
+	if key.contains("."):
+		var dot_pos = key.find(".")
+		var base_name = key.substr(0, dot_pos)
+		var event_id = key.substr(dot_pos + 1)
+		if event_bases.has(base_name) and event_bases[base_name].has(event_id):
+			var res = event_bases[base_name][event_id]
+			if _check_class_filter(res, class_filter):
+				return res
+
+	# ── 策略 2: 直接命中 _raw_data_pool ──
+	if _raw_data_pool.has(key):
+		var res = _raw_data_pool[key]
+		if _check_class_filter(res, class_filter):
+			return res
+
+	# ── 策略 3: 后缀匹配（"ns.uuid" 池中以 uuid 后缀匹配 key） ──
+	for full_id in _raw_data_pool:
+		if full_id.ends_with("." + key):
+			var res = _raw_data_pool[full_id]
+			if _check_class_filter(res, class_filter):
+				return res
+
+	if not silent:
+		Logging.warn("resolve: key '%s' 未找到" % key)
+	return null
+
+
+## 获取指定 class_name 的所有资源列表。
+## 通过 _index_by_class 反向索引实现 O(1) 类型过滤。
+func get_all_of_class(cls_name: String) -> Array:
+	if _index_by_class.has(cls_name):
+		var uuids = _index_by_class[cls_name]
+		var result: Array = []
+		for u in uuids:
+			if _raw_data_pool.has(u):
+				result.append(_raw_data_pool[u])
+		return result
+	return []
+
+
+func _check_class_filter(res: Variant, class_filter: String) -> bool:
+	"""校验 resource 是否匹配 class_filter，空 filter 视为匹配"""
+	if class_filter.is_empty():
+		return true
+	if res == null:
+		return false
+	var cls_name = _resolve_resource_class_name(res)
+	return cls_name == class_filter
+
+
+# ════════════════════════════════════════════════════════════════
+# Phase 1: 统一数据索引构建
+# ════════════════════════════════════════════════════════════════
+
+func _build_unified_index() -> void:
+	"""构建统一数据池 _raw_data_pool 和反向类索引 _index_by_class。
+	
+	扫描所有已知 Dictionary，提取具有 uuid 字段的 Resource 加入扁平池，
+	并按 class_name（如 BaseEvent、FocusedChat、Trait 等）建立反向索引。
+	
+	设计原则：
+	- 不破坏现有 dict 访问，向后兼容
+	- 运行时调用一次，O(n) 全量扫描
+	- uuid 冲突时 warn 并跳过（保留先写入者）
+	"""
+	_raw_data_pool.clear()
+	_index_by_class.clear()
+	Logging.info("Database: 开始构建统一数据索引...")
+
+	# ── 平铺字典扫描 ──
+	_scan_flat_dict(history_events, "history_events")
+	_scan_flat_dict(end_random_events, "end_random_events")
+	_scan_flat_dict(chat_bubble_data, "chat_bubble_data")
+	_scan_flat_dict(focused_chat_data, "focused_chat_data")
+	_scan_flat_dict(ambitions, "ambitions")
+	_scan_flat_dict(traits, "traits")
+	_scan_flat_dict(properties, "properties")
+	_scan_flat_dict(actions, "actions")
+	_scan_flat_dict(decisions, "decisions")
+	_scan_flat_dict(decided_events, "decided_events")
+	_scan_flat_dict(imaginaries, "imaginaries")
+	_scan_flat_dict(tags, "tags")
+	_scan_flat_dict(flags, "flags")
+	_scan_flat_dict(life_path_points, "life_path_points")
+	_scan_flat_dict(poem_taste, "poem_taste")
+	_scan_flat_dict(npc_document, "npc_document")
+	_scan_flat_dict(event_options, "event_options")
+	_scan_flat_dict(state_transistors, "state_transistors")
+	_scan_flat_dict(legendary_poems, "legendary_poems")
+	_scan_flat_dict(normal_poem_events, "normal_poem_events")
+	_scan_flat_dict(poet_data, "poet_data")
+	_scan_flat_dict(poem_data, "poem_data")
+	_scan_flat_dict(factions, "factions")
+	_scan_flat_dict(msger_data, "msger_data")
+	_scan_flat_dict(base_province, "base_province")
+	_scan_flat_dict(territories, "territories")
+
+	# ── 特殊：random_events 是嵌套结构 { main_tag: { uuid: Resource } } ──
+	for bucket_key in random_events:
+		_scan_flat_dict(random_events[bucket_key], "random_events.%s" % str(bucket_key))
+
+	# ── 特殊：event_base_pool key 是 "ns.uuid"，resource 有独立 uuid ──
+	for full_id in event_base_pool:
+		_index_resource(event_base_pool[full_id], "event_base:%s" % full_id)
+
+	var pool_size = _raw_data_pool.size()
+	var class_count = _index_by_class.size()
+	Logging.info("Database: 统一索引构建完成: 池内 %d 条目, %d 个类已索引" % [pool_size, class_count])
+
+
+func _scan_flat_dict(dict: Dictionary, source_desc: String) -> void:
+	"""扫描平铺字典的所有值，对 Resource 类型执行索引"""
+	for key in dict:
+		var val = dict[key]
+		if val is Resource:
+			_index_resource(val, "%s.%s" % [source_desc, str(key)])
+
+
+func _index_resource(res: Resource, source_desc: String) -> void:
+	"""提取 resource 的 uuid 和 class_name，写入 _raw_data_pool 和 _index_by_class"""
+	var uuid = _extract_uuid_from_resource(res)
+	if uuid.is_empty():
+		return
+
+	if _raw_data_pool.has(uuid):
+		Logging.warn("_build_unified_index: uuid 冲突 '%s' (来源: %s), 跳过" % [uuid, source_desc])
+		return
+
+	_raw_data_pool[uuid] = res
+
+	var cls_name = _resolve_resource_class_name(res)
+	if not cls_name.is_empty():
+		if not _index_by_class.has(cls_name):
+			_index_by_class[cls_name] = []
+		_index_by_class[cls_name].append(uuid)
+
+
+static func _extract_uuid_from_resource(res: Resource) -> String:
+	"""从 Resource 提取 uuid，优先 'uuid' 字段，兜底 'id' 字段"""
+	if "uuid" in res:
+		var val = res.get("uuid")
+		if val is String and not val.is_empty():
+			return val
+	if "id" in res:
+		var val = res.get("id")
+		if val is String and not val.is_empty():
+			return val
+	return ""
+
+
+static func _resolve_resource_class_name(res: Resource) -> String:
+	"""获取 Resource 的 class_name 字符串（通过 script.get_global_name()）
+	
+	对具有 class_name 定义的 GDScript 资源有效（如 BaseEvent、FocusedChat 等），
+	对纯引擎 Resource 或无脚本实例返回空字符串。
+	"""
+	var script_obj = res.get_script()
+	if script_obj and script_obj.has_method("get_global_name"):
+		return script_obj.get_global_name()
+	return ""

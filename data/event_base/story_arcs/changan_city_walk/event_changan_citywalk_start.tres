@@ -25,6 +25,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_60j70")
+display_speed = 2
 options = Array[ExtResource("1_fq03p")]([SubResource("Resource_a1quc")])
 example = "银瓶乍破水浆迸，铁骑突出刀枪鸣。"
 uuid = "event_changan_citywalk_start"

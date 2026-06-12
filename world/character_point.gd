@@ -20,7 +20,7 @@ func setup_emotion():
 
 	# 遍历每个点
 	for i in range(datamodel.path_point_keys.size()):
-		var point = Database.life_path_points[datamodel.path_point_keys[i]]
+		var point = Database.get_life_path_point(datamodel.path_point_keys[i])
 		
 		# 计算这个点在路径上的累计距离
 		# (Curve2D 有一个好用的函数可以直接算这个)
@@ -47,7 +47,7 @@ func _ready() -> void:
 	if datamodel:
 		$Label.text = datamodel.name
 		_create_path()
-		next_point_year = Database.life_path_points[datamodel.path_point_keys[0]].year
+		next_point_year = Database.get_life_path_point(datamodel.path_point_keys[0]).year
 
 	setup_emotion()
 
@@ -112,12 +112,12 @@ func _create_path() -> void:
 	time_position_curve = Curve.new()
 	for point in datamodel.path_point_keys:
 		print(datamodel.path_point_keys)
-		path.add_point(Database.life_path_points[point].position)
+		path.add_point(Database.get_life_path_point(point).position)
 	var path_ratio: float
 	var total_path = path.get_baked_length()
 	var time_ratio: float
 	for point in datamodel.path_point_keys:
-		point = Database.life_path_points[point]
+		point = Database.get_life_path_point(point)
 		time_ratio = (point.year - GameState.start_year) / GameState.time_span
 		path_ratio = path.get_closest_offset(point.position) / total_path
 		time_position_curve.add_point(Vector2(time_ratio,path_ratio))

@@ -30,8 +30,8 @@ func operate():
 	Logging.debug('FlagReplaceOperator: Starting operate()')
 
 	# 校验两个 flag 都存在
-	var to_be_replaced_flag = Database.flags.get(to_be_replaced_flag_id)
-	var replace_with_flag = Database.flags.get(replace_with_flag_id)
+	var to_be_replaced_flag = Database.get_flag(to_be_replaced_flag_id)
+	var replace_with_flag = Database.get_flag(replace_with_flag_id)
 
 	if not to_be_replaced_flag:
 		Logging.err('FlagReplaceOperator: Flag %s not found in Database.flags' % to_be_replaced_flag_id)

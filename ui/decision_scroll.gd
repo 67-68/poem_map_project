@@ -17,8 +17,8 @@ func refresh_current_decisions():
 		child.queue_free()	
 	
 	var decisions = []
-	for d_uuid in Database.decisions:
-		var d = Database.decisions[d_uuid]
+	for d_uuid in Database.get_decisions_all():
+		var d = Database.get_decision(d_uuid)
 		
 		# 1. 检查是否已被禁用
 		if d.disabled:

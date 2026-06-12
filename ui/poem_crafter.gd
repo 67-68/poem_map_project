@@ -17,7 +17,7 @@ func on_imaginary_changed():
 	# 检查意象数量是否变化，只有数量变化才重建
 	var current_count = $ImagenaryScroll/HFlowContainer.get_children().size()
 	var new_count = 0
-	for ima in Database.imaginaries.values():
+	for ima in Database.get_imaginaries_all().values():
 		if ima.basic_imaginaries.size() > 0:
 			new_count += 1
 
@@ -42,7 +42,7 @@ func setup_imagenaries():
 	for c in existing_children:
 		c.queue_free()
 	var active_imaginaries = 0
-	for ima in Database.imaginaries.values():
+	for ima in Database.get_imaginaries_all().values():
 		if ima.basic_imaginaries.size() > 0:
 			active_imaginaries += 1
 			Logging.info('PoemCrafter: creating item for imaginary with %d basic imaginaries' % ima.basic_imaginaries.size())

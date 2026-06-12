@@ -18,7 +18,7 @@ var sorted_msger_list: Array
 var _next_msger_time: float
 
 func _ready():
-	sorted_msger_list = Database.msger_data.values()
+	sorted_msger_list = Database.get_msger_data_all().values()
 	sorted_msger_list.sort_custom(func(a, b): return a.year < b.year)
 	_next_msger_time = sorted_msger_list[0].year
 
@@ -29,7 +29,7 @@ func _process(_delta):
 	if GameState.year > _next_msger_time:
 		Logging.info('messager triggered')
 		send_message(DataHelper.find_item_by_filter_list(sorted_msger_list,'year',_next_msger_time))
-		_next_msger_time = update_msger_time(_next_msger_time,Database.msger_data.values())
+		_next_msger_time = update_msger_time(_next_msger_time,Database.get_msger_data_all().values())
 
 
 static func update_msger_time(_next_msger_time, data):

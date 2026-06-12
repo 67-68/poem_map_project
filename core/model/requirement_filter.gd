@@ -18,7 +18,7 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
 
         # 如果没有 main_tag 或对应桶中没有，尝试从所有事件中查找
         if not e:
-            e = Database.find_triggerable_item(ticket.event_uuid)
+            e = Database.resolve(ticket.event_uuid)
 
         if not e:
             Logging.err("[RequirementFilter] Event not found: " + ticket.event_uuid)

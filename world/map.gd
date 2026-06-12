@@ -64,8 +64,8 @@ func load_character_point():
 
 func refresh_prov_2_fac():
 	# 1. 建立 [州ID -> 势力对象] 的映射
-	for fac_id in Database.factions:
-		var fac: Faction = Database.factions[fac_id]
+	for fac_id in Database.get_factions_all():
+		var fac: Faction = Database.get_faction(fac_id)
 		# 解析该势力下属的所有原子州 ID
 		var prov_ids = Util.resolve_to_provinces(fac.provinces)
 		for p_id in prov_ids:
@@ -155,8 +155,8 @@ func create_provinces():
 	load_indexs()
 
 func load_indexs():
-	for prov_uid in Database.base_province:
-		var prov = Database.base_province[prov_uid]
+	for prov_uid in Database.get_base_province_all():
+		var prov = Database.get_province(prov_uid)
 		color_2_province[prov.color.to_html(false)] = prov
 	GameState.color_2_province = color_2_province
 

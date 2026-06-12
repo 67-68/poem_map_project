@@ -30,7 +30,7 @@ func operate():
 	# ── 2. 发射选中行动变更信号（触发 UI 刷新） ──
 	var selected_actions: Array[SceneAction] = []
 	for action_id in locked_ids:
-		var action := Database.actions.get(action_id) as SceneAction
+		var action := Database.get_action(action_id) as SceneAction
 		if action:
 			selected_actions.append(action)
 	if selected_actions.size() > 0:

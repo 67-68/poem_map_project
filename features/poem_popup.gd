@@ -6,7 +6,7 @@ var tw: Tween
 @onready var book_panel = $BookPanel
 @onready var title_label = $BookPanel/MarginContainer/HBox/VBox/TitleLabel
 @onready var content_label = $BookPanel/MarginContainer/HBox/VBox/ContentLabel
-@onready var rarity_stamp = $BookPanel/MarginContainer/HBox/RarityStamp
+#@onready var rarity_stamp = $BookPanel/MarginContainer/HBox/RarityStamp
 
 func on_apply_poem(data: PoemData,poet_data):
 	position = data.position
@@ -43,8 +43,8 @@ func create_animation():
 	# 3. 初始状态重置 (此时是在测量之后)
 	content_label.visible_ratio = 0
 	title_label.modulate.a = 0
-	rarity_stamp.modulate.a = 0
-	rarity_stamp.scale = Vector2(3,3)
+	#rarity_stamp.modulate.a = 0
+	#rarity_stamp.scale = Vector2(3,3)
 
 	
 	# 重要：把宽度压扁，并让面板显现（虽然现在宽度是0）
@@ -62,7 +62,7 @@ func create_animation():
 	content_label.custom_minimum_size = sizes[
 		content_label
 	]
-	rarity_stamp.custom_minimum_size = Vector2(sizes[book_panel][1],sizes[book_panel][1])
+	#rarity_stamp.custom_minimum_size = Vector2(sizes[book_panel][1],sizes[book_panel][1])
 
 	# --- 后续动画 ---
 	tw = create_tween()
@@ -70,8 +70,8 @@ func create_animation():
 	tw.tween_property(title_label,'modulate:a',1.0,0.9)
 	tw.tween_property(content_label,'visible_ratio',1.0,1.5)
 	
-	tw.tween_property(rarity_stamp,'modulate:a',1,0.5)
-	tw.tween_property(rarity_stamp,'scale',Vector2(1,1),0.7)
+	#tw.tween_property(rarity_stamp,'modulate:a',1,0.5)
+	#tw.tween_property(rarity_stamp,'scale',Vector2(1,1),0.7)
 	
 	await tw.finished
 	AudioManager.play_sfx(preload("res://assets/sounds/stamp_sound.wav"))
@@ -89,7 +89,7 @@ func create_notification(poem_data: PoemData, poet_data: PoetData):
 	pass
 
 func end_animation():
-	SizeService.minimize_all([rarity_stamp,content_label,title_label])
+	#SizeService.minimize_all([rarity_stamp,content_label,title_label])
 	hide()
 	EventBus.poem_animation_finished.emit()
 
