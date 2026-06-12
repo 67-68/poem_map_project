@@ -9,7 +9,8 @@
 			"disabled": false,
 			"autoApprove": [],
 			"alwaysAllow": [
-				"run_godot_script"
+				"run_godot_script",
+				"run_godot_scene"
 			]
 		},
 		"godot-rag-bridge": {

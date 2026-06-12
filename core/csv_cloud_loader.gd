@@ -88,19 +88,19 @@ const DATA_MANIFEST: Array[Dictionary] = [
     # ════════════════════════════════════════════════════════════════
     {
         "name": "拜谒蜜月期生成事件（本地生成）",
-        "save_path": "res://data/generated_events/bai_ye_honeymoon_events.csv",
+        "save_path": "data/4_eras/745_ambition/baiye/honey_moon/_bai_ye_honeymoon_events.csv",
         "data_type": "random_event",
         "is_generated": true,
     },
     {
         "name": "拜谒真实面目",
-        "save_path": "res://data/generated_events/bai_ye_real_appearance_events.csv",
+        "save_path": "res://data/4_eras/745_ambition/baiye/real_appearance/_bai_ye_real_appearance_events.csv",
         "data_type": "random_event",
         "is_generated": true,
     },
     {
         "name": "野心生活事件",
-        "save_path": "res://data/generated_events/scene_imagery_library_events.csv",
+        "save_path": "res://data/4_eras/745_ambition/_scene_imagery_library_events.csv",
         "data_type": "random_event",
         "is_generated": true,
     },
@@ -109,13 +109,20 @@ const DATA_MANIFEST: Array[Dictionary] = [
 # 🗺️ store_to 路径映射表
 # 当 CSV 的 context 列指定了 store_to=<key> 时，根据此表将 .tres 文件路由到对应目录。
 # 如果 key 不在映射表中，直接使用 key 作为 res:// 相对路径（如 store_to=data/mydir → res://data/mydir）
+# 🗺️ store_to 路径映射表（v2：era-action 复合键）
+# 格式：<era_id>.<action_name> → res://data/<era_dir>/<action_dir>/
+# 例如 "745_ambition.fengzhao" → res://data/4_eras/745_ambition/fengzhao/
+# 🚨 旧版纯 action 键（fengzhao/denggao 等）已迁移为 era-action 复合键。
+#     保留 baiye 条目（旧格式，用于拜谒事件，后续也会迁移）。
 const STORE_TO_PATH_MAP: Dictionary = {
+    # ── 745_ambition 时代 ──
+    "745_ambition.fengzhao": "res://data/4_eras/745_ambition/fengzhao",
+    "745_ambition.denggao": "res://data/4_eras/745_ambition/denggao",
+    "745_ambition.duzhuo": "res://data/4_eras/745_ambition/duzhuo",
+    "745_ambition.jiaoyou": "res://data/4_eras/745_ambition/jiaoyou",
+    "745_ambition.fangshi": "res://data/4_eras/745_ambition/fangshi",
+    # ── 旧格式（待迁移） ──
     "baiye": "res://data/tres_random_event_bai_ye",
-    "jiaoyou": "res://data/tres_random_event_jiao_you",
-    "denggao": "res://data/tres_random_event_deng_gao",
-    "fangshi": "res://data/tres_random_event_fang_shi",
-    "fengzhao": "res://data/tres_random_event_feng_zhao",
-    "duzhuo": "res://data/tres_random_event_du_zhuo",
 }
 
 # 任务指针：当前正在下载第几个文件？

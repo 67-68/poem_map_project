@@ -1,34 +1,35 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bir7lfp1ffncu"]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_ddwrd"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_x0kca"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_i4c5n"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_agmv5"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_06bqv"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_ye0cf"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_b6jga"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_6hm5t"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_vfbl4"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_xo1ko"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_4pu4l"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_iwn2m"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_velf3"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ti4qt"]
 
-[sub_resource type="Resource" id="Resource_ddwrd"]
-script = ExtResource("3_i4c5n")
+[sub_resource type="Resource" id="Resource_sx5qo"]
+script = ExtResource("3_xo1ko")
 value = 10
 
-[sub_resource type="Resource" id="Resource_x0kca"]
-script = ExtResource("4_agmv5")
+[sub_resource type="Resource" id="Resource_7ftq4"]
+script = ExtResource("4_4pu4l")
 imagery_name = "TARGET_MYTH_GIANTROC_DAYAN"
 
-[sub_resource type="Resource" id="Resource_i4c5n"]
-script = ExtResource("5_06bqv")
-operators = Array[ExtResource("2_x0kca")]([SubResource("Resource_ddwrd"), SubResource("Resource_x0kca")])
+[sub_resource type="Resource" id="Resource_ey7b0"]
+script = ExtResource("5_iwn2m")
+operators = Array[ExtResource("2_vfbl4")]([SubResource("Resource_sx5qo"), SubResource("Resource_7ftq4")])
 
-[sub_resource type="Resource" id="Resource_agmv5"]
-script = ExtResource("6_ye0cf")
-choice_result = SubResource("Resource_i4c5n")
+[sub_resource type="Resource" id="Resource_qegtj"]
+script = ExtResource("6_velf3")
+choice_result = SubResource("Resource_ey7b0")
 description = "（冷眼旁观）"
 
 [resource]
-script = ExtResource("7_b6jga")
+script = ExtResource("7_ti4qt")
+era = "745_ambition"
 _target_tags = Array[String](["action:main:denggao"])
-options = Array[ExtResource("1_ddwrd")]([SubResource("Resource_agmv5")])
+options = Array[ExtResource("1_6hm5t")]([SubResource("Resource_qegtj")])
 uuid = "scene_imagery_library_scene_dayan_imagery_cloud_and_sun"
 name = "云日塔顶炊烟散"
 description = "日头被几块薄云交叠着裹住，天光如万千细针穿过云隙，一根一根钉在地上。俯首再望那宅邸，不过巴掌大，可你记得它门前的石阶——每一步都要仰起脖子才能看清匾额。暮鼓沉闷滚来，归鸦绕塔盘旋，你扶栏的手又往里扣了一分。"

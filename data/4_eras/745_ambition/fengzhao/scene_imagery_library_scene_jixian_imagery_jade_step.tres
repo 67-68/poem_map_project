@@ -1,34 +1,35 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://gcdxhyfw7wlm"]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_k4qpa"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_fuaod"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_lrayq"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_pfgn1"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_fwidq"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_0r78f"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_yhirn"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_huber"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_pglhu"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_ep5qt"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_82v8e"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_7sbrp"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_0q840"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_gls26"]
 
-[sub_resource type="Resource" id="Resource_k4qpa"]
-script = ExtResource("3_lrayq")
+[sub_resource type="Resource" id="Resource_3bc03"]
+script = ExtResource("3_ep5qt")
 value = 10
 
-[sub_resource type="Resource" id="Resource_fuaod"]
-script = ExtResource("4_pfgn1")
+[sub_resource type="Resource" id="Resource_shs56"]
+script = ExtResource("4_82v8e")
 imagery_name = "TARGET_PLACE_JADESTEP_JIXIAN"
 
-[sub_resource type="Resource" id="Resource_lrayq"]
-script = ExtResource("5_fwidq")
-operators = Array[ExtResource("2_fuaod")]([SubResource("Resource_k4qpa"), SubResource("Resource_fuaod")])
+[sub_resource type="Resource" id="Resource_cd5w5"]
+script = ExtResource("5_7sbrp")
+operators = Array[ExtResource("2_pglhu")]([SubResource("Resource_3bc03"), SubResource("Resource_shs56")])
 
-[sub_resource type="Resource" id="Resource_pfgn1"]
-script = ExtResource("6_0r78f")
-choice_result = SubResource("Resource_lrayq")
+[sub_resource type="Resource" id="Resource_h3f0u"]
+script = ExtResource("6_0q840")
+choice_result = SubResource("Resource_cd5w5")
 description = "（冷眼旁观）"
 
 [resource]
-script = ExtResource("7_yhirn")
+script = ExtResource("7_gls26")
+era = "745_ambition"
 _target_tags = Array[String](["action:main:fengzhao"])
-options = Array[ExtResource("1_k4qpa")]([SubResource("Resource_pfgn1")])
+options = Array[ExtResource("1_huber")]([SubResource("Resource_h3f0u")])
 uuid = "scene_imagery_library_scene_jixian_imagery_jade_step"
 name = "玉阶压痕"
 description = "抱古籍爬梯时膝盖抵住木阶的酸软，不比宫门外站着轻松。翻页时指尖在某处滞留——书页间夹着一片褪色的朱批压痕，墨迹渗入纸纹的深度，恰好是台阶一级的高度。光线从高窗斜切下来，在书脊上划出一道与丹墀同样的斜角。你盯着那道压痕，指节发白。"

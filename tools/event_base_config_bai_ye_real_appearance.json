@@ -1,6 +1,7 @@
 {
   "id": "bai_ye_real_appearance",
   "name": "拜谒 - 真实面目 (70-100)",
+  "era": "745_ambition",
   "background_context": "天宝年间（742-756），长安城。权相李林甫把持朝纲，安禄山身兼三镇节度使，汉族士大夫上升通道被层层堵死。\n\n玩家野心值 70-100 阶段：玩家开始触碰官场真实底线。制度性壁垒呈铜墙铁壁之态，权贵对玩家的态度从客气转为冷漠或剥削。这是一个规则本身就在阻止你上升的世界。",
   "ai_persona": "你是一位精通唐朝官场厚黑学和权力博弈的叙事设计师。你的文风冷峻而锋利，像一把解剖刀，剖开官场温情脉脉的表面，露出赤裸裸的权力交易。你擅长用细节呈现权力的碾压感——一个眼神、一句漫不经心的话、一次故意的冷落，都比直白的辱骂更有杀伤力。你深知「真正的恶意往往穿着礼貌的外衣」这一真理。你的叙事克制但毫不留情，让玩家在看似平常的互动中感受到彻骨的寒意。",
   "prompt_features": [
@@ -170,6 +171,6 @@
   "word_count_max": 200,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
-  "output_dir": "data/generated_events/",
+  "output_dir": "data/4_eras/745_ambition/baiye/real_appearance",
   "universal_tags": ["action:main:baiye"]
 }

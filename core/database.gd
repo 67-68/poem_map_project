@@ -84,11 +84,7 @@ func _init() -> void:
 		Logging.warn("Database: translation file not found at %s" % trans_path)
 	Logging.info("Database: tr(FEIHUALING_FAIL) = '%s'" % TranslationServer.translate("FEIHUALING_FAIL"))
 
-	# CSV 数据：base_province 和 territories 在 assets/maps/ 中，不经过 DataScanner
-	base_province = Util.create_dict(DataLoader.load_csv_model(Territory, 'base_province'))
-	territories = Util.create_dict(DataLoader.load_csv_model(Territory, 'territories'))
-
-	# ── 🆕 核心变更：单次扫描整个 data/ 目录树替代所有 Registry ──
+	# ── 单次扫描整个 data/ 目录树替代所有 Registry ──
 	var r = DataScanner.scan("res://data/")
 	_scanner_result = r
 	Logging.info("Database: DataScanner 扫描完成，pool=%d 条目，bases=%d 键" % [r.pool.size(), r.bases.size()])
@@ -101,6 +97,8 @@ func _init() -> void:
 	ambitions = r.bases.get("1_core_rules.ambitions", {})
 	imaginaries = r.bases.get("1_core_rules.imaginaries", {})
 	properties = r.bases.get("1_core_rules.properties", {})
+	base_province = r.bases.get("1_core_rules.base_province", {})
+	territories = r.bases.get("1_core_rules.territories", {})
 
 	# traits 需要 uuid→t.uuid 重映射（原始代码在 DataHelper 中做此处理）
 	var raw_traits = r.bases.get("1_core_rules.traits", {})
@@ -613,45 +611,12 @@ func _build_unified_index() -> void:
 	"""
 	_raw_data_pool.clear()
 	_index_by_class.clear()
-	Logging.info("Database: 开始构建统一数据索引...")
+	Logging.info("Database: 开始构建统一数据索引（SSOT：event_base_pool）...")
 
-	# ── 平铺字典扫描 ──
-	_scan_flat_dict(history_events, "history_events")
-	_scan_flat_dict(end_random_events, "end_random_events")
-	_scan_flat_dict(chat_bubble_data, "chat_bubble_data")
-	_scan_flat_dict(focused_chat_data, "focused_chat_data")
-	_scan_flat_dict(ambitions, "ambitions")
-	_scan_flat_dict(traits, "traits")
-	_scan_flat_dict(properties, "properties")
-	_scan_flat_dict(actions, "actions")
-	_scan_flat_dict(decisions, "decisions")
-	_scan_flat_dict(decided_events, "decided_events")
-	_scan_flat_dict(imaginaries, "imaginaries")
-	_scan_flat_dict(tags, "tags")
-	_scan_flat_dict(flags, "flags")
-	_scan_flat_dict(life_path_points, "life_path_points")
-	_scan_flat_dict(poem_taste, "poem_taste")
-	_scan_flat_dict(npc_document, "npc_document")
-	_scan_flat_dict(event_options, "event_options")
-	_scan_flat_dict(state_transistors, "state_transistors")
-	_scan_flat_dict(legendary_poems, "legendary_poems")
-	_scan_flat_dict(normal_poem_events, "normal_poem_events")
-	_scan_flat_dict(poet_data, "poet_data")
-	_scan_flat_dict(poem_data, "poem_data")
-	_scan_flat_dict(factions, "factions")
-	_scan_flat_dict(msger_data, "msger_data")
-	_scan_flat_dict(base_province, "base_province")
-	_scan_flat_dict(territories, "territories")
-
-	# ── 特殊：random_events 是嵌套结构 { main_tag: { uuid: Resource } } ──
-	for bucket_key in random_events:
-		_scan_flat_dict(random_events[bucket_key], "random_events.%s" % str(bucket_key))
-
-	# ── 特殊：_events_by_era 也是嵌套结构，扫描以建立统一索引 ──
-	for era_key in _events_by_era:
-		_scan_flat_dict(_events_by_era[era_key], "era_events.%s" % str(era_key))
-
-	# ── 特殊：event_base_pool key 是 "ns.uuid"，resource 有独立 uuid ──
+	# ── 单一数据源：event_base_pool（含 .tres 和简单 CSV）──
+	# event_base_pool = DataScanner 扫描 data/ 目录树构建的全量扁平池
+	# key = "ns.uuid"，value = Resource
+	# 所有 .tres 和简单 CSV 都汇集于此，_build_unified_index 只扫这一次
 	for full_id in event_base_pool:
 		_index_resource(event_base_pool[full_id], "event_base:%s" % full_id)
 

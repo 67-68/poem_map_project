@@ -320,6 +320,10 @@ class EventPipelineConfig(BaseModel):
     id: str = ""
     name: str = ""
 
+    # 🆕 era 标识：所属时代，如 "745_ambition"
+    # 生成事件时会自动注入 CSV context 列的 era=<value>，供 Godot 端路由使用。
+    era: str = ""
+
     # AI Prompt 组件
     background_context: str = ""
     ai_persona: str = ""

@@ -375,6 +375,8 @@ def main():
                 else:
                     tags_expr = ""
                 context = f"trigger_tags={tags_expr}|weight=10"
+                if cfg.era:
+                    context += f"|era={cfg.era}"
                 if context_extras:
                     for k, v in context_extras.items():
                         if v:
@@ -611,6 +613,7 @@ def main():
                         writer, uuid, title, description,
                         tags=tags_to_use, requirement=cfg.universal_requirement,
                         context_extras=context_extras or None,
+                        era=cfg.era,
                     )
 
                     # ── 写选项行（per-option result/requirement + 固定选项支持）──

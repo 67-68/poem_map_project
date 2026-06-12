@@ -1,40 +1,41 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bdc8rhip2gy6i"]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_dp14r"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ohqmj"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_ky1rh"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_fxo3b"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_6p18o"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_bscyq"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_44jk0"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_nlk4f"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_6urid"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_juuhv"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_ghoyy"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_3kae1"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_mawio"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_ecriw"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_bycjm"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_i2mhm"]
 
-[sub_resource type="Resource" id="Resource_dp14r"]
-script = ExtResource("3_ky1rh")
+[sub_resource type="Resource" id="Resource_3skm6"]
+script = ExtResource("3_ghoyy")
 str_props = "money"
 value = 25
 
-[sub_resource type="Resource" id="Resource_ohqmj"]
-script = ExtResource("4_fxo3b")
+[sub_resource type="Resource" id="Resource_p1fmg"]
+script = ExtResource("4_3kae1")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ky1rh"]
-script = ExtResource("5_6p18o")
+[sub_resource type="Resource" id="Resource_1lifv"]
+script = ExtResource("5_mawio")
 imagery_name = "TARGET_OBJECT_MEDICINE_DONGSHI"
 
-[sub_resource type="Resource" id="Resource_fxo3b"]
-script = ExtResource("6_bscyq")
-operators = Array[ExtResource("2_ohqmj")]([SubResource("Resource_dp14r"), SubResource("Resource_ohqmj"), SubResource("Resource_ky1rh")])
+[sub_resource type="Resource" id="Resource_1fco8"]
+script = ExtResource("6_ecriw")
+operators = Array[ExtResource("2_juuhv")]([SubResource("Resource_3skm6"), SubResource("Resource_p1fmg"), SubResource("Resource_1lifv")])
 
-[sub_resource type="Resource" id="Resource_6p18o"]
-script = ExtResource("7_44jk0")
-choice_result = SubResource("Resource_fxo3b")
+[sub_resource type="Resource" id="Resource_chxbn"]
+script = ExtResource("7_bycjm")
+choice_result = SubResource("Resource_1fco8")
 description = "（冷眼旁观）"
 
 [resource]
-script = ExtResource("8_nlk4f")
+script = ExtResource("8_i2mhm")
+era = "745_ambition"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_dp14r")]([SubResource("Resource_6p18o")])
+options = Array[ExtResource("1_6urid")]([SubResource("Resource_chxbn")])
 uuid = "scene_imagery_library_scene_dongshi_imagery_medicine_stall"
 name = "药摊铜钱与膝盖"
 description = "东市晌午，你蹲在药摊后，膝盖顶着粗粝的砖缝。三捆柴胡换了二十文，你低头数钱，指尖的草药汁在日头下泛着青黑——洗了三遍还在指甲缝里，像道嵌进去的疤。袖口蹭到戥子上的铜绿，晕开，又是一块洗不掉的印子。你伸直腿，膝盖咯噔一声，酸痛从骨缝里钻出来。旁边胡商吆喝着犀角，一匹绸缎从你摊前掠过，带起的风把你的药草吹歪了几根。你没抬头，掌心的铜钱磨得发烫——每一文都在替你记住蹲下时的重量。"

@@ -43,10 +43,11 @@ def write_csv_header(writer):
     writer.writerow(CSV_HEADER)
 
 
-def _build_context_column(tags: list[str], context_extras: dict[str, str] | None = None) -> str:
+def _build_context_column(tags: list[str], context_extras: dict[str, str] | None = None, era: str = "") -> str:
     """构建 CSV context 列字符串。
 
     基础格式: trigger_tags=[...]|weight=10
+    如果提供了 era，追加 |era=<value>（在 Hook 3 context_extras 之前，保持可读性）。
     Hook 3 支持: 通过 context_extras 追加 |key=value 对。
     """
     if tags:
@@ -54,6 +55,8 @@ def _build_context_column(tags: list[str], context_extras: dict[str, str] | None
     else:
         tags_expr = ""
     ctx = f"trigger_tags={tags_expr}|weight=10"
+    if era:
+        ctx += f"|era={era}"
     if context_extras:
         for k, v in context_extras.items():
             if v:
@@ -61,15 +64,16 @@ def _build_context_column(tags: list[str], context_extras: dict[str, str] | None
     return ctx
 
 
-def write_event_row(writer, uuid: str, title: str, description: str, tags: list[str] | None = None, requirement: str = "", context_extras: dict[str, str] | None = None):
+def write_event_row(writer, uuid: str, title: str, description: str, tags: list[str] | None = None, requirement: str = "", context_extras: dict[str, str] | None = None, era: str = ""):
     """写一个 random_event 行。结果 DSL 放在 option 行，不在 event 行。
 
     tags: 触发标签列表。统一使用 [tag1/tag2] 方括号 + / 分隔格式（DSL Parser 标准格式）。
     context_extras: 插件通过 enrich_context() 返回的额外 key=value 对（Hook 3）。
+    era: 时代标识，会自动注入 context 列的 |era=<value>。
     """
     if tags is None:
         tags = ["bai_ye"]
-    context = _build_context_column(tags, context_extras)
+    context = _build_context_column(tags, context_extras, era=era)
     writer.writerow([
         "random_event",
         uuid,

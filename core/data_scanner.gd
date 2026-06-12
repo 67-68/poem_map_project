@@ -71,6 +71,11 @@ static func _scan_dir(
 			entry_name = dir.get_next()
 			continue
 
+		# ── 跳过 _ 前缀文件/文件夹（DSL 源文件，已有预生成的 .tres）──
+		if entry_name.begins_with("_"):
+			entry_name = dir.get_next()
+			continue
+
 		var full_path = current_dir_path.path_join(entry_name)
 
 		if dir.current_is_dir():
@@ -195,6 +200,18 @@ static func _load_csv(
 	var csv_bases_key = top_level_base + "." + csv_basename if top_level_base != "" else csv_basename
 	result.bases[csv_bases_key] = csv_dict
 	Logging.info("DataScanner: CSV 加载完成 [%s] <- %s（%d 条）" % [csv_bases_key, file_path, csv_dict.size()])
+
+	# ── CSV 数据也写入全局 pool（SSOT：_build_unified_index 只扫 pool）──
+	for item_uuid in csv_dict:
+		var item = csv_dict[item_uuid]
+		var full_id = current_ns + item_uuid
+		if result.pool.has(full_id):
+			var msg = "DataScanner: CSV 池冲突！full_id='%s' 已存在" % full_id
+			push_error(msg)
+			result.duplicates.append(full_id)
+			continue
+		result.pool[full_id] = item
+		Logging.info("DataScanner: CSV 写入 pool [%s] <- %s" % [full_id, file_path])
 
 
 static func _extract_uuid(resource: Resource) -> String:

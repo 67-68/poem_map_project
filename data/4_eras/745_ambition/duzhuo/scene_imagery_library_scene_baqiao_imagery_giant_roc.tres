@@ -1,34 +1,35 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cg8tbl2dvrrvm"]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_v7ku8"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_7cfoa"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_5b2nb"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_h0u05"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_4sl3l"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_203y8"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_vma41"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_x8kn7"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_o70vd"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_3h1be"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_yo0fm"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_nlvew"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_3b8yd"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_4luxj"]
 
-[sub_resource type="Resource" id="Resource_v7ku8"]
-script = ExtResource("3_5b2nb")
+[sub_resource type="Resource" id="Resource_vml72"]
+script = ExtResource("3_3h1be")
 value = 10
 
-[sub_resource type="Resource" id="Resource_7cfoa"]
-script = ExtResource("4_h0u05")
+[sub_resource type="Resource" id="Resource_o07y6"]
+script = ExtResource("4_yo0fm")
 imagery_name = "TARGET_MYTH_GIANTROC_BAQIAO"
 
-[sub_resource type="Resource" id="Resource_5b2nb"]
-script = ExtResource("5_4sl3l")
-operators = Array[ExtResource("2_7cfoa")]([SubResource("Resource_v7ku8"), SubResource("Resource_7cfoa")])
+[sub_resource type="Resource" id="Resource_6j0o2"]
+script = ExtResource("5_nlvew")
+operators = Array[ExtResource("2_o70vd")]([SubResource("Resource_vml72"), SubResource("Resource_o07y6")])
 
-[sub_resource type="Resource" id="Resource_h0u05"]
-script = ExtResource("6_203y8")
-choice_result = SubResource("Resource_5b2nb")
+[sub_resource type="Resource" id="Resource_3ohg6"]
+script = ExtResource("6_3b8yd")
+choice_result = SubResource("Resource_6j0o2")
 description = "（冷眼旁观）"
 
 [resource]
-script = ExtResource("7_vma41")
+script = ExtResource("7_4luxj")
+era = "745_ambition"
 _target_tags = Array[String](["action:main:duzhuo"])
-options = Array[ExtResource("1_v7ku8")]([SubResource("Resource_h0u05")])
+options = Array[ExtResource("1_x8kn7")]([SubResource("Resource_3ohg6")])
 uuid = "scene_imagery_library_scene_baqiao_imagery_giant_roc"
 name = "雪中无别"
 description = "灞桥风雪中，送别的人群挤满酒亭。你站在檐下，看他们折柳、碰杯、抱拳——每一双手都在挥别。你的手臂垂在身侧，雪花落上袖口，化不开。远处雪幕里，一个骑马人的身影逐渐缩小，马铃被风声吞没。你身体微微前倾，随即绷直——面前的路被新雪覆盖，没有一个脚印朝你的方向延伸。"
