@@ -1,5 +1,27 @@
 extends Node
 
+## 🆕 将旧的 ENUMS 标签映射到新的 DataScanner bases key
+## get_random_events(main_tag) 内部使用此表进行查找
+const MAIN_TAG_TO_BASES := {
+	"action:main:baiye": "3_actions_pool.baiye",
+	"action:main:jiaoyou": "3_actions_pool.jiaoyou",
+	"action:main:denggao": "3_actions_pool.denggao",
+	"action:main:fangshi": "3_actions_pool.fangshi",
+	"action:main:fengzhao": "3_actions_pool.fengzhao",
+	"action:main:duzhuo": "3_actions_pool.duzhuo",
+	"action:special:deepseek": "3_actions_pool.special",
+	"random_events": "3_actions_pool.events",
+}
+
+## 🆕 排除在 random_events 之外的 3_actions_pool bases（非随机事件类型）
+const NON_RANDOM_EVENT_BASES := [
+	"3_actions_pool.actions",
+	"3_actions_pool.decisions",
+	"3_actions_pool.focused_chats",
+	"3_actions_pool.decided_events",
+	"3_actions_pool.write_poem",
+]
+
 var index_image: Image
 
 var poet_data: Dictionary
@@ -53,6 +75,7 @@ var event_bases: Dictionary = {}
 # _index_by_class: { "ClassName": [uuid, ...] } — 按 class_name 的反向索引，支持类型过滤遍历
 var _raw_data_pool: Dictionary = {}
 var _index_by_class: Dictionary = {}
+var _scanner_result = null
 
 
 func _init() -> void:
@@ -60,7 +83,7 @@ func _init() -> void:
 	Logging.current_level = Logging.Level.DEBUG
 
 	# 显式加载翻译：确保 Resource 脚本能访问翻译
-	var trans_path = "res://data/translations/dynamic_events.zh.translation"
+	var trans_path = "res://data/1_core_rules/translations/dynamic_events.zh.translation"
 	if ResourceLoader.exists(trans_path):
 		var trans = load(trans_path)
 		if trans is Translation:
@@ -72,50 +95,74 @@ func _init() -> void:
 		Logging.warn("Database: translation file not found at %s" % trans_path)
 	Logging.info("Database: tr(FEIHUALING_FAIL) = '%s'" % TranslationServer.translate("FEIHUALING_FAIL"))
 
+	# CSV 数据：base_province 和 territories 在 assets/maps/ 中，不经过 DataScanner
 	base_province = Util.create_dict(DataLoader.load_csv_model(Territory, 'base_province'))
 	territories = Util.create_dict(DataLoader.load_csv_model(Territory, 'territories'))
 
-	factions = Util.create_dict_from_registry(load("res://data/tres_factions_registry.tres"))
-	flags = Util.create_dict_from_registry(load("res://data/flags_registry.tres"))
-	life_path_points = Util.create_dict_from_registry(load("res://data/tres_path_points_registry.tres"))
-	poet_data = Util.create_dict_from_registry(load("res://data/tres_poet_data_registry.tres"))
-	poem_data = Util.create_dict_from_registry(load("res://data/tres_poem_data_registry.tres"))
-	msger_data = Util.create_dict_from_registry(load("res://data/tres_msger_data_registry.tres"))
-	tags = Util.create_dict_from_registry(load("res://data/tres_tags_registry.tres"))
-	event_options = Util.create_dict_from_registry(load("res://data/event_options_registry.tres"))
-	poem_taste = Util.create_dict_from_registry(load("res://data/poem_taste_registry.tres"))
-	npc_document = Util.create_dict_from_registry(load("res://data/npc_document_registry.tres"))
-	#breakpoint
-	state_transistors = Util.create_dict_from_registry(load("res://data/tres_state_transistors_registry.tres"))
+	# ── 🆕 核心变更：单次扫描整个 data/ 目录树替代所有 Registry ──
+	var r = DataScanner.scan("res://data/")
+	_scanner_result = r
+	Logging.info("Database: DataScanner 扫描完成，pool=%d 条目，bases=%d 键" % [r.pool.size(), r.bases.size()])
 
-	# 🚨 使用DataHelper的static函数统一加载所有事件相关数据
-	var event_data = DataHelper.load_event_data()
-	history_events = event_data.history_events
-	random_events = event_data.random_events
-	end_random_events = event_data.end_random_events
-	focused_chat_data = event_data.focused_chat_data
-	ambitions = event_data.ambitions
-	traits = event_data.traits
-	properties = event_data.properties
-	actions = event_data.actions
-	decisions = event_data.decisions
-	decided_events = event_data.decided_events
-	imaginaries = event_data.imaginaries
+	# ── 1_core_rules ──
+	factions = r.bases.get("1_core_rules.factions", {})
+	flags = r.bases.get("1_core_rules.flags", {})
+	event_options = r.bases.get("1_core_rules.event_options", {})
+	state_transistors = r.bases.get("1_core_rules.state_transistors", {})
+	ambitions = r.bases.get("1_core_rules.ambitions", {})
+	imaginaries = r.bases.get("1_core_rules.imaginaries", {})
+	properties = r.bases.get("1_core_rules.properties", {})
+
+	# traits 需要 uuid→t.uuid 重映射（原始代码在 DataHelper 中做此处理）
+	var raw_traits = r.bases.get("1_core_rules.traits", {})
+	traits = {}
+	for t in raw_traits.values():
+		if "uuid" in t:
+			traits[t.get("uuid")] = t
+
+	tags = {}  # tags 不再使用
+
+	# ── 2_characters ──
+	poet_data = r.bases.get("2_characters.poets", {})
+	poem_data = {}  # 原始文件已丢失，保持空字典避免 crash
+	npc_document = r.bases.get("2_characters.npc_docs", {})
+	poem_taste = r.bases.get("2_characters.poem_tastes", {})
+	life_path_points = r.bases.get("2_characters.life_path_points", {})
+	msger_data = r.bases.get("2_characters.messenger_data", {})
+
+	# ── 3_actions_pool ──
+	actions = r.bases.get("3_actions_pool.actions", {})
+	decisions = r.bases.get("3_actions_pool.decisions", {})
+	decided_events = r.bases.get("3_actions_pool.decided_events", {})
+	focused_chat_data = r.bases.get("3_actions_pool.focused_chats", {})
+	normal_poem_events = r.bases.get("3_actions_pool.write_poem", {})
+
+	# ── random_events：从 3_actions_pool 中提取随机事件桶（排除非随机类型）──
+	random_events = {}
+	for base_key in r.bases:
+		if base_key.begins_with("3_actions_pool.") and base_key not in NON_RANDOM_EVENT_BASES:
+			random_events[base_key] = r.bases[base_key]
+	Logging.info("Database: random_events 已从 %d 个桶加载" % random_events.size())
+
 	# 飞花令意象库：从主意象字典中筛选环境类意象
 	feihualing_imageries = {}
 	for uuid in imaginaries:
 		if uuid.begins_with("environment:"):
 			feihualing_imageries[uuid] = imaginaries[uuid]
 	Logging.info("Database: feihualing_imageries loaded with %d entries" % feihualing_imageries.size())
-	legendary_poems = event_data.legendary_poems
-	normal_poem_events = event_data.normal_poem_events
 
-	# 🆕 从 data/event_base/ 自动加载事件库字典
-	var eb_result = EventBaseLoader.scan()
-	event_base_pool = eb_result.pool
-	event_bases = eb_result.bases
-	if eb_result.duplicates.size() > 0:
-		Logging.err("EventBaseLoader: 检测到 %d 个 ID 冲突，请检查日志" % eb_result.duplicates.size())
+	# ── 4_eras ──
+	history_events = r.bases.get("4_eras.events.history_events", {})
+	end_random_events = r.bases.get("4_eras.events.end_random_events", {})
+
+	# ── 诗歌（2_characters/poems/ 中现有文件为传奇诗歌）──
+	legendary_poems = r.bases.get("2_characters.poems", {})
+
+	# ── 🆕 event_base：从 DataScanner 直接获取 ──
+	event_base_pool = r.pool
+	event_bases = r.bases
+	if r.duplicates.size() > 0:
+		Logging.err("DataScanner: 检测到 %d 个 ID 冲突，请检查日志" % r.duplicates.size())
 	Logging.info("Database: event_bases 已加载 %d 个 Base: %s" % [event_bases.size(), str(event_bases.keys())])
 
 	_merge_cities()
@@ -129,7 +176,10 @@ func _ready() -> void:
 
 
 func _merge_cities() -> void:
-	var cities = Util.create_dict_from_registry(load("res://data/tres_cities_registry.tres"))
+	if _scanner_result == null:
+		Logging.err("_merge_cities: _scanner_result is null, skipping")
+		return
+	var cities = _scanner_result.bases.get("2_characters.cities", {})
 	if cities:
 		for c_name in cities:
 			var c = cities[c_name]
@@ -239,27 +289,41 @@ func query_prop(npc_id: String, prop_name: String) -> int:
 	return int(val)
 
 
+## 获取所有事件的统一迭代器（兼容原 DataHelper.EventData.get_all_events_iterator()）
+## 供 linter 规则使用
+func get_all_events_iterator() -> Dictionary:
+	var all_events: Dictionary = {}
+	all_events.merge(history_events)
+	for bucket in random_events.values():
+		all_events.merge(bucket)
+	all_events.merge(end_random_events)
+	all_events.merge(ambitions)
+	all_events.merge(decided_events)
+	all_events.merge(imaginaries)
+	all_events.merge(legendary_poems)
+	all_events.merge(normal_poem_events)
+	return all_events
+
+
 func get_random_events(main_tag: String = '') -> Dictionary:
 	if main_tag.is_empty():
 		Logging.info('get_random_events: no main tag provided, returning all events')
 		var all_events = {}
-		for tag_bucket in random_events:
-			all_events.merge(random_events[tag_bucket])
+		for bucket in random_events:
+			all_events.merge(random_events[bucket])
 		return all_events
-	else:
-		# 前缀匹配：用 main_tag 匹配所有桶 key（如 action:main:baiye 匹配 action:main:baiye:general）
-		var matching_events = {}
-		var matched_buckets: Array[String] = []
-		for bucket_key in random_events:
-			if TagManager.prefix_match(main_tag, bucket_key):
-				matching_events.merge(random_events[bucket_key])
-				matched_buckets.append(bucket_key)
 
-		if matching_events.is_empty():
-			Logging.err('get_random_events: no bucket prefix-matched main tag: ' + main_tag)
-		else:
-			Logging.info('get_random_events: main tag "%s" prefix-matched buckets: %s' % [main_tag, str(matched_buckets)])
-		return matching_events
+	var bases_key = MAIN_TAG_TO_BASES.get(main_tag, "")
+	if bases_key.is_empty():
+		Logging.err('get_random_events: unknown main_tag "%s", no mapping to bases key' % main_tag)
+		return {}
+
+	if random_events.has(bases_key):
+		Logging.info('get_random_events: main_tag "%s" → bases_key "%s" (%d events)' % [main_tag, bases_key, random_events[bases_key].size()])
+		return random_events[bases_key]
+
+	Logging.err('get_random_events: bases_key "%s" not found in random_events' % bases_key)
+	return {}
 
 
 # ════════════════════════════════════════════════════════════════
@@ -344,7 +408,10 @@ func get_end_random_event(uuid: String):
 	return end_random_events.get(uuid)
 
 func get_random_event_bucket(main_tag: String) -> Dictionary:
-	return random_events.get(main_tag, {})
+	var bases_key = MAIN_TAG_TO_BASES.get(main_tag, "")
+	if bases_key.is_empty():
+		return {}
+	return random_events.get(bases_key, {})
 
 func get_state_transistors_all() -> Dictionary:
 	return state_transistors

@@ -6,10 +6,10 @@ uid="uid://cjuy74a5047vp"
 
 [deps]
 
-files=["res://data/tres_traits/traits.trait.translation", "res://data/tres_traits/traits.topic.translation", "res://data/tres_traits/traits.specific.translation", "res://data/tres_traits/traits.relate.translation", "res://data/tres_traits/traits.en.translation", "res://data/tres_traits/traits.en.translation", "res://data/tres_traits/traits.en.translation"]
+files=["res://data/1_core_rules/traits/traits.trait.translation", "res://data/1_core_rules/traits/traits.topic.translation", "res://data/1_core_rules/traits/traits.specific.translation", "res://data/1_core_rules/traits/traits.relate.translation", "res://data/1_core_rules/traits/traits.en.translation", "res://data/1_core_rules/traits/traits.en.translation", "res://data/1_core_rules/traits/traits.en.translation"]
 
-source_file="res://data/tres_traits/traits.csv"
-dest_files=["res://data/tres_traits/traits.trait.translation", "res://data/tres_traits/traits.topic.translation", "res://data/tres_traits/traits.specific.translation", "res://data/tres_traits/traits.relate.translation", "res://data/tres_traits/traits.en.translation", "res://data/tres_traits/traits.en.translation", "res://data/tres_traits/traits.en.translation"]
+source_file="res://data/1_core_rules/traits/traits.csv"
+dest_files=["res://data/1_core_rules/traits/traits.trait.translation", "res://data/1_core_rules/traits/traits.topic.translation", "res://data/1_core_rules/traits/traits.specific.translation", "res://data/1_core_rules/traits/traits.relate.translation", "res://data/1_core_rules/traits/traits.en.translation", "res://data/1_core_rules/traits/traits.en.translation", "res://data/1_core_rules/traits/traits.en.translation"]
 
 [params]
 

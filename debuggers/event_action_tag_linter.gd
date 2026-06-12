@@ -22,21 +22,15 @@ func start_linter() -> void:
 	注意：random_event使用target_tags（合并了area_tags和action_tags），所以统一检查所有标签
 	"""
 	print("开始检查event和action的tag...")
-	# 仿造Global, 加载所有action和event
-	var actions: Dictionary = Util.create_dict_from_registry(load("res://data/tres_actions_registry.tres"))
+	# 🆕 用 DataScanner 单次扫描替代所有 Registry 加载
+	var r = DataScanner.scan("res://data/")
+	var actions: Dictionary = r.bases.get("3_actions_pool.actions", {})
 
-	# 合并所有 random events 分桶
+	# 合并所有 random events（从 3_actions_pool 中提取，排除非随机类型）
 	var random_events: Dictionary = {}
-	random_events.merge(Util.create_dict_from_registry(load("res://data/tres_random_event_bai_ye_registry.tres")))
-	random_events.merge(Util.create_dict_from_registry(load("res://data/tres_random_event_jiao_you_registry.tres")))
-	random_events.merge(Util.create_dict_from_registry(load("res://data/tres_random_event_deng_gao_registry.tres")))
-	random_events.merge(Util.create_dict_from_registry(load("res://data/tres_random_event_fang_shi_registry.tres")))
-	random_events.merge(Util.create_dict_from_registry(load("res://data/tres_random_event_feng_zhao_registry.tres")))
-	random_events.merge(Util.create_dict_from_registry(load("res://data/tres_random_event_du_zhuo_registry.tres")))
-	random_events.merge(Util.create_dict_from_registry(load("res://data/tres_random_event_special_registry.tres")))
-
-	# 合并 poem events
-	random_events.merge(Util.create_dict_from_registry(load("res://data/tres_normal_poem_events_registry.tres")))
+	for base_key in r.bases:
+		if base_key.begins_with("3_actions_pool.") and base_key != "3_actions_pool.actions":
+			random_events.merge(r.bases[base_key])
 
 	var base_province = Util.create_dict(DataLoader.load_csv_model(Territory,'base_province')) # 州的加载。每个州不应该有sub_id
 	base_province.merge(Util.create_dict(DataLoader.load_csv_model(Territory,'territories')))

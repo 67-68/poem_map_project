@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://jystp6kggsvb"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_xq5hs"]
+[ext_resource type="Script" uid="uid://dipsh2f0qa3ei" path="res://model/event/complex_event_option.gd" id="2_jhtqw"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_wlnfx"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_doaqb"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_dqdj3"]
+[ext_resource type="Script" uid="uid://bldlywdhifyrj" path="res://core/operators/clear_scheduled_events.gd" id="4_a6jx1"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_bx36x"]
+
+[sub_resource type="Resource" id="Resource_doaqb"]
+script = ExtResource("2_jhtqw")
+is_disabled = true
+disabled_reason = "一阵寒风吹过，你猛地干呕起来。你的胃和你的脊梁比理智更早做出了决定——你已经无法强迫自己的双膝再弯下去了。(未解锁，正式版解锁）"
+description = "[未解锁] 捡起烂泥里的残稿。也许明天去右相府门前长跪不起，哪怕只求个幕僚的位子……"
+metadata/_custom_type_script = "uid://dipsh2f0qa3ei"
+
+[sub_resource type="Resource" id="Resource_n3tt2"]
+script = ExtResource("4_a6jx1")
+metadata/_custom_type_script = "uid://bldlywdhifyrj"
+
+[sub_resource type="Resource" id="Resource_a6jx1"]
+script = ExtResource("4_bx36x")
+operators = Array[ExtResource("3_doaqb")]([SubResource("Resource_n3tt2")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_bx36x"]
+script = ExtResource("3_dqdj3")
+choice_result = SubResource("Resource_a6jx1")
+description = "天大笑，将残酒猛地泼在那团烂泥般的诗稿上。去他娘的野无遗贤！"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_wlnfx")
+options = Array[ExtResource("1_xq5hs")]([SubResource("Resource_doaqb"), SubResource("Resource_bx36x")])
+uuid = "changan_walk_08_the_crossroads"
+description = "你独自站在冷风中。左手是那团糊满烂泥的干谒诗稿，右手是空荡荡的酒碗。过去的三年，你就像一台精确的机器，每天在那些朱门前计算着笑容的弧度和弯腰的角度。现在，你看着地上相国府马车留下的深深车辙，那股支撑着你的发条……好像断了。"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

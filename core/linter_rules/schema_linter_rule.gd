@@ -5,7 +5,7 @@ class_name SchemaLinterRule extends BaseLinterRule
 func _init():
 	rule_name = "Schema检查官"
 
-func execute(event_data: DataHelper.EventData) -> void:
+func execute(event_data: Node) -> void:
 	errors.clear()
 	warnings.clear()
 	

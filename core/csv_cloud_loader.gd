@@ -91,21 +91,18 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "save_path": "res://data/generated_events/bai_ye_honeymoon_events.csv",
         "data_type": "random_event",
         "is_generated": true,
-        "tres_output_dir": "res://data/tres_random_event_bai_ye",
     },
     {
         "name": "拜谒真实面目",
         "save_path": "res://data/generated_events/bai_ye_real_appearance_events.csv",
         "data_type": "random_event",
         "is_generated": true,
-        "tres_output_dir": "res://data/tres_random_event_bai_ye",
     },
     {
         "name": "野心生活事件",
         "save_path": "res://data/generated_events/scene_imagery_library_events.csv",
         "data_type": "random_event",
         "is_generated": true,
-        "tres_output_dir": "res://data/random_events",
     },
 ]
 

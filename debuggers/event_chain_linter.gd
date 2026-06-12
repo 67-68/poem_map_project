@@ -1,6 +1,6 @@
 class_name EventChainLinter extends BaseLinterRule
 
-func execute(event_data: DataHelper.EventData) -> void:
+func execute(event_data: Node) -> void:
     rule_name = 'chain event linter'
     var events = event_data.get_all_events_iterator() as Dictionary # [String, BaseEvent]
     

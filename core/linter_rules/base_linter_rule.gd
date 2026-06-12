@@ -8,7 +8,7 @@ var warnings: Array[String] = []
 
 ## 执行检查规则
 ## 子类必须重写此方法
-func execute(event_data: DataHelper.EventData) -> void:
+func execute(event_data: Node) -> void:
 	push_error("%s: execute() method not implemented" % rule_name)
 
 ## 添加错误信息

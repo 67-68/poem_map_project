@@ -2,12 +2,59 @@
 
 ## 一、数据流总览
 
-项目的数据从两个来源汇入 Godot 运行时：**云端 Google Sheets** 和 **本地 Python 生成管线**。两者统一经过 `DATA_MANIFEST`（定义在 [`core/csv_cloud_loader.gd`](../core/csv_cloud_loader.gd)）调度，最终产出 `.tres` 资源文件和 Registry 注册表。
+项目的数据从两个来源汇入 Godot 运行时：**云端 Google Sheets** 和 **本地 Python 生成管线**。两者统一经过 `DATA_MANIFEST`（定义在 [`core/csv_cloud_loader.gd`](../core/csv_cloud_loader.gd)）调度，最终产出 `.tres` 资源文件。运行时由 [`DataScanner`](../core/data_scanner.gd) 自动扫描 `data/` 目录树加载所有资源，零注册表文件。
 
 ```
 云端 Google Sheets  ──┐
-                      ├── DATA_MANIFEST 调度 ──→ DSLParser ──→ .tres ──→ Registry
-Python 生成管线  ─────┘
+                      ├── DATA_MANIFEST 调度 ──→ DSLParser ──→ .tres ──→ data/ 目录
+Python 生成管线  ─────┘                              ↓
+                                              DataScanner.scan("res://data/")
+                                                   ├── pool:  { "ns.uuid": Resource }
+                                                   └── bases: { "rel.path": { "uuid": Resource } }
+```
+
+### 语义目录结构
+
+`data/` 目录按语义分层，由 DataScanner 递归扫描：
+
+```
+data/
+├── 1_core_rules/          【核心规则】factions, flags, traits, properties, ambitions 等
+│   ├── factions/
+│   ├── flags/
+│   ├── traits/
+│   ├── properties/
+│   ├── ambitions/
+│   ├── imaginaries/
+│   ├── event_options/
+│   ├── state_transistors/
+│   └── translations/
+├── 2_characters/          【角色数据】诗人、城市、NPC 文档、诗评等
+│   ├── poets/
+│   ├── poems/
+│   ├── cities/
+│   ├── npc_docs/
+│   ├── poem_tastes/
+│   ├── life_path_points/
+│   └── messenger_data/
+├── 3_actions_pool/        【动作池】玩家决策、随机事件、飞花令等
+│   ├── actions/
+│   ├── decisions/
+│   ├── decided_events/
+│   ├── focused_chats/
+│   ├── write_poem/
+│   ├── baiye/
+│   ├── jiaoyou/
+│   ├── denggao/
+│   ├── fangshi/
+│   ├── fengzhao/
+│   ├── duzhuo/
+│   ├── special/
+│   └── events/
+├── 4_eras/                【时代/剧本】历史事件、结局事件
+│   └── events/
+└── 5_story_arcs/          【强线性剧情】不允许随机抽取的特殊场景
+    └── ...
 ```
 
 ## 二、云端数据同步
@@ -34,7 +81,7 @@ Python 生成管线  ─────┘
 3. 保存原始 CSV 到 `save_path`
 4. `_process_csv_data()` 接管：解析 CSV → 调用 `DSLParser.parse_csv_data()` → 创建 Godot Resource 对象 → 注入内存数据库
 5. `save_resources_to_tres()` 将资源保存为 `.tres` 文件到 CSV 所在目录
-6. `_regenerate_registries()` 刷新全局资源注册表
+6. 游戏启动时 `DataScanner.scan("res://data/")` 自动扫描并加载所有 `.tres` 资源
 
 ## 三、本地生成事件管线
 
@@ -179,7 +226,7 @@ python3 tools/generate_orthogonal_events.py --trial
 | `import_generated_events` 按钮 | 编辑器点击 | 遍历 `DATA_MANIFEST` 中所有 `is_generated=true` 的条目，逐个解析 |
 | `sync_all_data` 按钮或 CLI `--sync` | 编辑器点击或命令行 | 覆盖全部条目（云端 + 本地生成），根据 `is_generated` 区分处理策略 |
 
-处理流程与云端数据完全一致：CSV → DSLParser → `.tres` → Registry。
+处理流程：CSV → DSLParser → `.tres` → 存入 `data/generated_events/`。游戏启动时 DataScanner 自动扫描加载。
 
 ## 四、现有配置文件
 
@@ -203,10 +250,11 @@ python3 tools/generate_orthogonal_events.py --trial
    }
    ```
 5. 在 Godot 编辑器中点击 `import_generated_events` 或 `sync_all_data` 即可导入
+6. 重启或重新加载后，DataScanner 自动扫描新文件
 
 ## 六、注意事项
 
-#### 配置加载流程（含 Registry 解析）
+#### 配置加载流程
 
 ```mermaid
 flowchart LR
@@ -224,82 +272,139 @@ flowchart LR
 - **CSV 格式**：生成 CSV 的列名必须与 `DSLParser.parse_random_event()` 中的 `row.get()` key 完全一致
 - **本地优先模式的边界**：生成事件 CSV 本身就在本地，不受 `prefer_local_files` 影响
 - **兜底检测**：`import_generated_events` 执行时会扫描 `data/generated_events/` 目录，报告未被 `DATA_MANIFEST` 收录的 CSV 文件
+- **DataScanner 生命周期**：扫描发生在 `Database._init()` 阶段，确保所有数据在游戏逻辑启动前就绪。运行时新增的 `.tres` 文件需要重启或手动触发重新扫描。
 
-## 七、事件库 (EventBase) 系统
+## 七、事件库 (DataScanner) 系统
 
 ### 概述
 
-`data/event_base/` 目录提供了另一种加载事件资源的机制：**纯目录扫描，零注册表文件**。与 Registry 管线不同，EventBase 不需要 `resources_registry_creator` 生成 `.tres` 注册表，而是在运行时通过 `DirAccess` 递归扫描目录树，自动加载所有 `.tres` 文件。
+所有数据资源统一由 [`DataScanner`](../core/data_scanner.gd) 在 `Database._init()` 中单次扫描 `res://data/` 目录树加载。**零注册表文件，纯目录扫描**。DataScanner 自动处理 `.tres`/`.tscn` 资源的 Godot `load()` 和 `.csv` 文件的模型加载，并将文件夹层级映射为命名空间。
+
+### 核心数据结构
+
+DataScanner 返回 `LoadResult`，包含两个字典：
+
+| 字典 | 结构 | 用途 |
+|------|------|------|
+| `pool` | `{ "ns.uuid": Resource }` | 全量扁平池，O(1) UUID 查表 |
+| `bases` | `{ "rel.path": { "uuid": Resource } }` | 按完整相对路径分表，支持语义 key 访问 |
+| `duplicates` | `Array[String]` | ID 冲突列表，运行时检测防止静默覆盖 |
 
 ### 目录结构约定
 
 ```
-data/event_base/
-├── actions/                 【高频复用区】玩家主动点击抽取的事件池
-│   ├── baiye/
-│   ├── denggao/
-│   └── ...
-├── random_encounters/       【被动触发区】每旬随机砸到玩家头上的事件
-│   └── weather_changes/
-└── story_arcs/              【强线性剧本区】绝对不允许随机抽取的特殊场景！
-    ├── exam_747_fraud/
-    └── changan_rain_walk/
+data/
+├── 1_core_rules/          factions, flags, traits, properties...
+├── 2_characters/          poets, poems, cities, npc_docs...
+├── 3_actions_pool/        actions, decisions, baiye, jiaoyou...
+├── 4_eras/                history_events, end_random_events...
+└── 5_story_arcs/          强线性剧本（自动标记 SLOW 显示速度）
 ```
 
-### 命名空间机制
-
-- **文件夹层级 = 命名空间**：`actions/baiye/` 下的文件命名空间为 `actions.baiye.`
-- **运行时扁平化**：由 [`EventBaseLoader`](../core/event_base_loader.gd) 扫描为平坦的 `{ "ns.uuid": Resource }` 字典（`event_base_pool`）
-- **按 Base 分表**：每个顶层文件夹自动成为独立的字典（`event_bases["base_name"]["uuid"]`）
-- **查询语法**：支持 `Database.find_from_all("actions.event_id")` 点号语法
+DataScanner 的扫描规则：
+- **文件夹层级 = 命名空间**：`3_actions_pool/baiye/` 下的文件命名空间为 `3_actions_pool.baiye.`
+- **bases key = 完整相对路径**：如 `3_actions_pool.baiye`、`1_core_rules.traits`
+- **.tres/.tscn**：`load()` 原生加载，提取 uuid 构建 `full_id = ns + uuid`
+- **.csv**：通过 `CSV_MODEL_MAP` 映射模型类，`DataLoader.load_csv_model()` 加载
 
 ### 架构组件
 
 | 组件 | 文件 | 职责 |
 |------|------|------|
-| EventBaseLoader | [`core/event_base_loader.gd`](../core/event_base_loader.gd) | 递归扫描 + 命名空间合成 + 冲突检测 |
-| Database.event_base_pool | [`core/database.gd`](../core/database.gd:44) | 全量扁平事件字典 `{ "ns.uuid": Resource }` |
-| Database.event_bases | [`core/database.gd`](../core/database.gd:45) | 按顶层 base 分表 `{ "base_name": { "uuid": Resource } }` |
+| DataScanner | [`core/data_scanner.gd`](../core/data_scanner.gd) | 递归扫描 + 命名空间合成 + 冲突检测 + CSV 模型加载 |
+| Database._raw_data_pool | [`core/database.gd`](../core/database.gd:76) | 全量扁平资源字典 `{ uuid: Resource }`（含 event_base_pool） |
+| Database._index_by_class | [`core/database.gd`](../core/database.gd:77) | 按 class_name 的反向索引 `{ "ClassName": [uuid, ...] }` |
+| Database.event_bases | [`core/database.gd`](../core/database.gd:69) | DataScanner.bases 的完整引用，按完整相对路径分表 |
 
 ### 加载流程
 
 ```
 Game启动 → Database._init()
-           └─ EventBaseLoader.scan("res://data/event_base")
-              ├─ DirAccess 递归遍历目录树
-              ├─ .tres 文件 → load() → 提取 uuid
-              ├─ 合成 full_id = "ns.uuid"
-              ├─ 冲突检测（重复 full_id → push_error）
-              ├─ 写入 result.pool[full_id]
-              └─ 写入 result.bases[top_level_base][uuid]
+           └─ DataScanner.scan("res://data/")
+              ├─ DirAccess 递归遍历 data/ 目录树
+              ├─ .tres 文件 → load() → 提取 uuid → 构建 full_id = "ns.uuid"
+              ├─ .csv 文件 → DataLoader.load_csv_model() → 构建 bases 条目
+              ├─ 冲突检测（重复 full_id → push_error → 记录 duplicates）
+              ├─ 写入 result.pool[full_id] = resource
+              └─ 写入 result.bases[rel_path][uuid] = resource
 ```
 
-### 查询语法示例
+### 目录映射到 Database 字段
 
 ```gdscript
-# 点号语法（eventbase.event_id）
-Database.find_from_all("actions.baiye_appearance")
+# 在 Database._init() 中，通过 bases key 按语义赋值：
+factions         = r.bases.get("1_core_rules.factions", {})
+flags            = r.bases.get("1_core_rules.flags", {})
+traits           = r.bases.get("1_core_rules.traits", {})
+properties       = r.bases.get("1_core_rules.properties", {})
+ambitions        = r.bases.get("1_core_rules.ambitions", {})
+imaginaries      = r.bases.get("1_core_rules.imaginaries", {})
+event_options    = r.bases.get("1_core_rules.event_options", {})
+state_transistors = r.bases.get("1_core_rules.state_transistors", {})
 
-# 裸 uuid 后缀匹配（向后兼容）
-Database.find_from_all("baiye_appearance")
+poet_data         = r.bases.get("2_characters.poets", {})
+npc_document      = r.bases.get("2_characters.npc_docs", {})
+poem_taste        = r.bases.get("2_characters.poem_tastes", {})
+life_path_points  = r.bases.get("2_characters.life_path_points", {})
+msger_data        = r.bases.get("2_characters.messenger_data", {})
 
-# 完整命名空间路径
-Database.find_from_all("actions.baiye.baiye_appearance")
+actions           = r.bases.get("3_actions_pool.actions", {})
+decisions         = r.bases.get("3_actions_pool.decisions", {})
+decided_events    = r.bases.get("3_actions_pool.decided_events", {})
+focused_chat_data = r.bases.get("3_actions_pool.focused_chats", {})
+normal_poem_events= r.bases.get("3_actions_pool.write_poem", {})
 
-# 按 base 分表直接访问
-Database.event_bases["actions"]["baiye_appearance"]
+# random_events：排除 NON_RANDOM_EVENT_BASES 后自动构建
+random_events = {}
+for base_key in r.bases:
+    if base_key.begins_with("3_actions_pool.") and base_key not in NON_RANDOM_EVENT_BASES:
+        random_events[base_key] = r.bases[base_key]
 
-# 遍历某个 base 的所有事件
-for uuid in Database.event_bases["story_arcs"]:
-    var event = Database.event_bases["story_arcs"][uuid]
-    process_event(event)
+history_events    = r.bases.get("4_eras.events.history_events", {})
+end_random_events = r.bases.get("4_eras.events.end_random_events", {})
+legendary_poems   = r.bases.get("2_characters.poems", {})
+
+# 统一事件池/分表
+event_base_pool   = r.pool
+event_bases       = r.bases
 ```
 
-### 何时使用 EventBase vs Registry
+### 查询语法
 
-| 场景 | 推荐方式 | 原因 |
-|------|---------|------|
-| 传统 CSV 管线生成的事件 | Registry | 已有完整工具链支持 |
-| 手写/手动放置的 .tres 事件 | EventBase | 零配置，放下即加载 |
-| 需要分 Base 管理的大规模事件库 | EventBase | 自动按目录分表，查询路径清晰 |
-| 需要强类型注册表约束的场景 | Registry | Registry 提供显式的 UUID→路径映射 |
+```gdscript
+# 统一 data 查找（支持 uuid / 点号语法 / 后缀匹配）
+Database.resolve("3_actions_pool.baiye.some_event_uuid")
+
+# 裸 uuid 后缀匹配
+Database.resolve("some_event_uuid")
+
+# 按 base 分表直接访问
+Database.event_bases["3_actions_pool.baiye"]["some_event_uuid"]
+
+# 遍历某个 base 的所有事件
+for uuid in Database.event_bases["5_story_arcs"]:
+    var event = Database.event_bases["5_story_arcs"][uuid]
+    process_event(event)
+
+# 获取所有事件的统一迭代器（供 linter 使用）
+var all_events = Database.get_all_events_iterator()
+```
+
+### random_events 映射机制
+
+`get_random_events(main_tag)` 通过 `MAIN_TAG_TO_BASES` 将旧的 ENUMS tag 映射到 DataScanner bases key：
+
+```gdscript
+const MAIN_TAG_TO_BASES := {
+    "action:main:baiye":   "3_actions_pool.baiye",
+    "action:main:jiaoyou": "3_actions_pool.jiaoyou",
+    "action:main:denggao": "3_actions_pool.denggao",
+    "action:main:fangshi": "3_actions_pool.fangshi",
+    "action:main:fengzhao": "3_actions_pool.fengzhao",
+    "action:main:duzhuo":  "3_actions_pool.duzhuo",
+    "action:special:deepseek": "3_actions_pool.special",
+    "random_events":       "3_actions_pool.events",
+}
+```
+
+非随机事件类型（actions、decisions、focused_chats、decided_events、write_poem）通过 `NON_RANDOM_EVENT_BASES` 排除。

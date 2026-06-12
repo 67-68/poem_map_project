@@ -16,12 +16,8 @@ var linter_rules: Array[BaseLinterRule] = []
 func execute_linter() -> void:
 	print("===== 开始执行事件数据Linter (重构版) =====")
 	
-	# 🚨 调用DataHelper加载所有事件数据
-	var event_data = DataHelper.load_event_data()
-	
-	if not event_data:
-		push_error("事件数据加载失败！Linter终止 💀")
-		return
+	# 🆕 改用 Database autoload 实例（已通过 DataScanner 加载所有数据）
+	var event_data = Database
 	
 	# 初始化Rule流水线
 	_initialize_rule_pipeline()
