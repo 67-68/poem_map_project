@@ -10,7 +10,7 @@ class_name DeferredLockActionOperator extends BaseOperator
 
 ## 目标 action 类型（ENUMS.ACTION_TYPE 枚举值）
 ## generator 耗尽后此 action 会被锁定 1 旬
-@export var action_type: int = -1
+@export var action_type: ENUMS.ACTION_TYPE = -1
 
 ## Generator UUID（用于 debug / 追踪）
 @export var generator_uuid: String = ""
@@ -26,8 +26,17 @@ func operate():
 		return
 
 	if counter_flag_id.is_empty():
-		Logging.err("[DeferredLockActionOperator] counter_flag_id 为空，跳过")
-		return
+		# 自动生成 counter_flag_id：deferred_lock_{action_type_name}_{n}
+		var action_name = ENUMS.ACTION_TYPE.keys()[action_type].to_lower()
+		var n := 1
+		while true:
+			var candidate := "flag_deferred_lock_%s_%d" % [action_name, n]
+			if not Database.flags.has(candidate) and not PlayerState.has_flag(candidate):
+				counter_flag_id = candidate
+				break
+			n += 1
+		PlayerState.register_virtual_flag(counter_flag_id, 'int')
+		Logging.info("[DeferredLockActionOperator] 自动生成 counter_flag_id: %s" % counter_flag_id)
 
 	if action_type < 0 or action_type >= ENUMS.ACTION_TYPE.size():
 		Logging.err("[DeferredLockActionOperator] 无效的 action_type: %d" % action_type)

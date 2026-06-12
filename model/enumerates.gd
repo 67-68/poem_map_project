@@ -264,16 +264,16 @@ static func to_relation_str(item) -> String:
     Logging.err("Invalid province tag: " + str(item))
     return "default_storable_item"
 
-# ── 图片位置枚举 ────────────────────────────────────────────
+# ── 图片位置枚举 (UV 坐标 0.0~1.0) ─────────────────────────
 enum IMAGE_POS {
-    CENTER,       # 屏幕正中
-    TOP_LEFT,     # 左上角
-    TOP_CENTER,   # 顶部居中
-    TOP_RIGHT,    # 右上角
-    CENTER_LEFT,  # 左侧居中
-    CENTER_RIGHT, # 右侧居中
-    BOTTOM_LEFT,  # 左下角
-    BOTTOM_CENTER,# 底部居中
-    BOTTOM_RIGHT, # 右下角
-    FULL_SCREEN,  # 全屏拉伸
+    CENTER,       # UV(0.5, 0.5) 屏幕正中
+    TOP_LEFT,     # UV(0, 0)     左上角
+    TOP_CENTER,   # UV(0.5, 0)   顶部居中
+    TOP_RIGHT,    # UV(1, 0)     右上角
+    CENTER_LEFT,  # UV(0, 0.5)   左侧居中
+    CENTER_RIGHT, # UV(1, 0.5)   右侧居中
+    BOTTOM_LEFT,  # UV(0, 1)     左下角
+    BOTTOM_CENTER,# UV(0.5, 1)   底部居中
+    BOTTOM_RIGHT, # UV(1, 1)     右下角
+    FULL_SCREEN,  # UV(0.5, 0.5) 全屏拉伸
 }

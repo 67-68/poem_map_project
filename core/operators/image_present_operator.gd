@@ -10,9 +10,8 @@ class_name ImagePresentOperator extends BaseOperator
 ##
 ## [param image_id] 图片 ID (TextureResLoader 可解析的名字, 或已注册的 ID)
 ## [param position] 位置枚举名 (center / top_left / top_center / ...)
-##                 或 "x,y" 坐标。若两个值均 ≤ 1.0 视为归一化坐标 (0.0~1.0)，
-##                 否则视为绝对像素坐标。如 "0.5,0.3" = 屏幕 50% 横、30% 纵，
-##                 "960,540" = 绝对像素坐标 (960, 540)。
+##                 或 "x,y" UV 坐标 (0.0~1.0)。如 "0.5,0.3" = UV(0.5, 0.3)。
+##                 若两个值均 > 1.0 则视为绝对像素坐标，内部自动转换为 UV。
 ## [param size] 显示尺寸 "width,height" (默认 "100,100")，保持宽高比缩放
 
 @export var image_id: String = ""
@@ -34,26 +33,28 @@ func operate() -> void:
 	var raw_pos: Variant = _try_parse_position_as_vector(position)
 	if raw_pos != null:
 		var pos_vec: Vector2 = raw_pos as Vector2
-		# 两个值都 ≤ 1.0 → 当作归一化坐标；否则当作绝对像素坐标
+		# 两个值都 ≤ 1.0 → 当作 UV 坐标 (0.0~1.0)
 		if pos_vec.x <= 1.0 and pos_vec.y <= 1.0:
-			Logging.info("ImagePresentOperator.operate: 使用归一化坐标 pos=%s" % pos_vec)
-			var handle = ImageManager.present_by_id_normalized(image_id, pos_vec, size_vec)
+			Logging.info("ImagePresentOperator.operate: 使用 UV 坐标 pos=%s" % pos_vec)
+			var handle = ImageManager.present_by_id(image_id, pos_vec, size_vec)
 			if handle == null:
-				Logging.err("ImagePresentOperator.operate: present_by_id_normalized 失败 id='%s'" % image_id)
+				Logging.err("ImagePresentOperator.operate: present_by_id 失败 id='%s'" % image_id)
 		else:
-			Logging.info("ImagePresentOperator.operate: 使用绝对坐标 pos=%s" % pos_vec)
-			var handle = ImageManager.present_by_id_at(image_id, pos_vec, size_vec)
+			# > 1.0 → 视为绝对像素坐标，转换为 UV
+			Logging.info("ImagePresentOperator.operate: 使用绝对像素坐标 pos=%s" % pos_vec)
+			var uv = _pixel_to_uv(pos_vec)
+			var handle = ImageManager.present_by_id(image_id, uv, size_vec)
 			if handle == null:
-				Logging.err("ImagePresentOperator.operate: present_by_id_at 失败 id='%s'" % image_id)
+				Logging.err("ImagePresentOperator.operate: present_by_id 失败 id='%s'" % image_id)
 		return
 
-	# 兜底: 转换位置枚举字符串 → ENUMS.IMAGE_POS
-	var pos_enum = _parse_position(position)
-	if pos_enum == null:
+	# 兜底: 转换位置枚举字符串 → UV
+	var uv: Vector2 = _parse_position_to_uv(position)
+	if uv == Vector2.INF:
 		Logging.err("ImagePresentOperator.operate: 无效位置 '%s'，跳过" % position)
 		return
 
-	var handle = ImageManager.present_by_id(image_id, pos_enum, size_vec)
+	var handle = ImageManager.present_by_id(image_id, uv, size_vec)
 	if handle == null:
 		Logging.err("ImagePresentOperator.operate: present_by_id 失败 id='%s'" % image_id)
 
@@ -62,7 +63,7 @@ func operate() -> void:
 ## 例如: "0.5,0.3" → Vector2(0.5, 0.3)
 ##       "960,540" → Vector2(960, 540)
 ## 若无法解析（如枚举名 "center"），返回 null。
-## 两个值 ≤ 1.0 时视为归一化坐标，否则视为绝对像素坐标。
+## 两个值 ≤ 1.0 时视为 UV 坐标，否则视为绝对像素坐标。
 static func _try_parse_position_as_vector(pos_str: String) -> Variant:
 	var parts := pos_str.split(",", false)
 	if parts.size() != 2:
@@ -78,15 +79,31 @@ static func _try_parse_position_as_vector(pos_str: String) -> Variant:
 	return Vector2(x, y)
 
 
-## 将小写枚举名转为 ENUMS.IMAGE_POS 值
-static func _parse_position(pos_str: String) -> Variant:
+## 将绝对像素坐标转换为 UV (0.0~1.0)
+static func _pixel_to_uv(pixel: Vector2) -> Vector2:
+	var screen := _get_screen_size()
+	if screen == Vector2.ZERO:
+		return pixel  # fallback: 原值
+	return Vector2(pixel.x / screen.x, pixel.y / screen.y)
+
+
+## 获取屏幕尺寸 (像素)
+static func _get_screen_size() -> Vector2:
+	var viewport: Viewport = Engine.get_main_loop().root.get_viewport()
+	if viewport != null:
+		return viewport.get_visible_rect().size
+	return Vector2(1920, 1080)
+
+
+## 将枚举名转为 UV Vector2 (使用 ImageManager.resolve_uv)
+static func _parse_position_to_uv(pos_str: String) -> Vector2:
 	var upper = pos_str.to_upper()
 	# ENUMS.IMAGE_POS 的 keys() 返回 ["CENTER", "TOP_LEFT", ...]
 	var keys = ENUMS.IMAGE_POS.keys()
 	for i in range(keys.size()):
 		if keys[i] == upper:
-			return i
-	return null
+			return ImageManager.resolve_uv(i)
+	return Vector2.INF
 
 
 ## 将 "width,height" 格式的尺寸字符串转为 Vector2

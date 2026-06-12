@@ -2,15 +2,17 @@ extends Node
 ## 全局图像管理 Autoload
 ##
 ## 用法:
-##   var img = ImageManager.present(tex, pos)       # 展示 (Texture2D)
-##   var img = ImageManager.present_by_id("id", ENUMS.IMAGE_POS.CENTER)  # 展示 (by ID)
+##   var img = ImageManager.present(tex, uv)        # 展示 (Texture2D, UV 坐标)
+##   var img = ImageManager.present_by_id("id", uv) # 展示 (by ID, UV 坐标)
 ##   var img = ImageManager.recall("id")             # 回溯已有句柄 (无需 Texture2D)
-##   await img.slide_to(target_pos, 1.5)            # 滑动
+##   await img.slide_to(target_uv, 1.5)             # 滑动 (UV 坐标)
 ##   img.shatter(1.2)                                # 粉碎
 ##
 ##   便捷方法 (fire-and-forget):
-##   ImageManager.play_shatter(tex, pos, duration)
-##   ImageManager.play_slide(tex, from, to, duration)
+##   ImageManager.play_shatter(tex, uv, duration)
+##   ImageManager.play_slide(tex, from_uv, to_uv, duration)
+##
+## 所有位置参数为 UV 坐标 (0.0~1.0, 屏幕归一化空间)。
 
 const LOG_TAG := "ImageManager"
 
@@ -38,32 +40,36 @@ func _ready() -> void:
 
 
 ## 展示一张图片并返回操作句柄
+## [param uv] 屏幕归一化 UV 坐标 (0.0~1.0)
 ## [param size] 目标显示尺寸 (默认 100x100)，保持宽高比缩放
-func present(tex: Texture2D, global_pos: Vector2, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
+func present(tex: Texture2D, uv: Vector2, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
 	# 确保 CanvasLayer 已正确挂载到场景树（延迟初始化）
 	_ensure_effect_layer()
 	if _effect_layer == null or not is_instance_valid(_effect_layer):
 		Logging.err("%s: present 失败，无法创建有效的 CanvasLayer" % LOG_TAG)
 		return null
 	
-	var handle = ImageHandle.new(tex, global_pos, _effect_layer, size)
+	var handle = ImageHandle.new(tex, uv, _effect_layer, size)
 	_effect_layer.add_child(handle._sprite)
 	_active_handles.append(handle)
 	handle._sprite.tree_exited.connect(_on_handle_freed.bind(handle))
-	Logging.info("%s: present → tex=%s pos=%s, sprite_name=%s" % [LOG_TAG, tex.resource_path, global_pos, handle._sprite.name])
+	Logging.info("%s: present → tex=%s uv=%s, sprite_name=%s" % [LOG_TAG, tex.resource_path, uv, handle._sprite.name])
 	return handle
 
 
 ## 便捷方法: 快速粉碎
-func play_shatter(tex: Texture2D, pos: Vector2, duration: float = 1.0, params: Dictionary = {}) -> void:
-	var handle = present(tex, pos)
+## [param uv] 屏幕归一化 UV 坐标 (0.0~1.0)
+func play_shatter(tex: Texture2D, uv: Vector2, duration: float = 1.0, params: Dictionary = {}) -> void:
+	var handle = present(tex, uv)
 	handle.shatter(duration, params)
 
 
 ## 便捷方法: 快速滑动
-func play_slide(tex: Texture2D, from: Vector2, to: Vector2, duration: float = 1.0) -> void:
-	var handle = present(tex, from)
-	handle.slide_to(to, duration)
+## [param from_uv] 起始 UV 坐标 (0.0~1.0)
+## [param to_uv] 目标 UV 坐标 (0.0~1.0)
+func play_slide(tex: Texture2D, from_uv: Vector2, to_uv: Vector2, duration: float = 1.0) -> void:
+	var handle = present(tex, from_uv)
+	handle.slide_to(to_uv, duration)
 
 
 # ── ID 化 API ──────────────────────────────────────────────
@@ -74,57 +80,38 @@ func register_image(id: String, tex: Texture2D) -> void:
 	Logging.debug("%s: register_image → id=%s tex=%s" % [LOG_TAG, id, tex.resource_path])
 
 
-## 按 ID 展示图片。纹理按以下优先级解析:
+## 按 ID 展示图片 (UV 坐标)。纹理按以下优先级解析:
 ##   1. _texture_registry 中已注册
 ##   2. TextureResLoader.get_background(id) 兜底
 ##   3. TextureResLoader.get_icon_simpler(id) 兜底
-func present_by_id(id: String, pos: ENUMS.IMAGE_POS, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
+##
+## [param uv] 屏幕归一化 UV 坐标 (0.0~1.0)，例如 Vector2(0.5, 0.3) 表示屏幕 50% 横、30% 纵位置。
+## [param size] 目标显示尺寸 (默认 100x100)，保持宽高比缩放
+func present_by_id(id: String, uv: Vector2, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
 	var tex = _resolve_texture(id)
 	if tex == null:
 		Logging.err("%s: present_by_id 失败，无法解析纹理: id=%s" % [LOG_TAG, id])
 		return null
 
-	var global_pos = _resolve_pos(pos)
-	var handle = present(tex, global_pos, size)
+	var handle = present(tex, uv, size)
 	_active_images[id] = handle
-	Logging.info("%s: present_by_id → id=%s pos=%s" % [LOG_TAG, id, ENUMS.IMAGE_POS.keys()[pos]])
+	Logging.info("%s: present_by_id → id=%s uv=%s" % [LOG_TAG, id, uv])
 	return handle
 
 
-## 按 ID 展示图片，位置使用绝对像素坐标。
-## [param pos] 屏幕绝对像素坐标，例如 Vector2(960, 540)。
+## 按 IMAGE_POS 枚举展示图片 (内部转 UV)。
+## [param pos] IMAGE_POS 枚举值 (如 ENUMS.IMAGE_POS.CENTER = Vector2(0.5, 0.5))
 ## [param size] 目标显示尺寸 (默认 100x100)，保持宽高比缩放
-func present_by_id_at(id: String, pos: Vector2, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
+func present_by_enum(id: String, pos: ENUMS.IMAGE_POS, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
 	var tex = _resolve_texture(id)
 	if tex == null:
-		Logging.err("%s: present_by_id_at 失败，无法解析纹理: id=%s" % [LOG_TAG, id])
+		Logging.err("%s: present_by_enum 失败，无法解析纹理: id=%s" % [LOG_TAG, id])
 		return null
 
-	var handle = present(tex, pos, size)
+	var uv := resolve_uv(pos)
+	var handle = present(tex, uv, size)
 	_active_images[id] = handle
-	Logging.info("%s: present_by_id_at → id=%s pos=%s" % [LOG_TAG, id, pos])
-	return handle
-
-
-## 按 ID 展示图片，位置使用归一化坐标 (0.0~1.0)。
-## [param normalized_pos] 屏幕归一化坐标，例如 Vector2(0.5, 0.3) 表示屏幕 50% 横、30% 纵位置。
-## [param size] 目标显示尺寸 (默认 100x100)，保持宽高比缩放
-func present_by_id_normalized(id: String, normalized_pos: Vector2, size: Vector2 = Vector2(100, 100)) -> ImageHandle:
-	var tex = _resolve_texture(id)
-	if tex == null:
-		Logging.err("%s: present_by_id_normalized 失败，无法解析纹理: id=%s" % [LOG_TAG, id])
-		return null
-
-	var screen := Vector2()
-	if get_viewport() != null:
-		screen = get_viewport().get_visible_rect().size
-	else:
-		screen = Vector2(1920, 1080)
-
-	var global_pos := Vector2(screen.x * normalized_pos.x, screen.y * normalized_pos.y)
-	var handle = present(tex, global_pos, size)
-	_active_images[id] = handle
-	Logging.info("%s: present_by_id_normalized → id=%s normalized_pos=%s pixel_pos=%s" % [LOG_TAG, id, normalized_pos, global_pos])
+	Logging.info("%s: present_by_enum → id=%s pos=%s uv=%s" % [LOG_TAG, id, ENUMS.IMAGE_POS.keys()[pos], uv])
 	return handle
 
 
@@ -181,38 +168,32 @@ func _on_request_play_shatter(tex: Texture2D, pos: Vector2, duration: float) -> 
 	play_shatter(tex, pos, duration)
 
 
-## 解析 IMAGE_POS 枚举 → 全局屏幕坐标 Vector2
-func _resolve_pos(pos: ENUMS.IMAGE_POS) -> Vector2:
-	var screen := Vector2()
-	if get_viewport() != null:
-		screen = get_viewport().get_visible_rect().size
-	else:
-		# fallback: 1920x1080
-		screen = Vector2(1920, 1080)
-
+## 解析 IMAGE_POS 枚举 → UV Vector2 (0.0~1.0)
+## 例如: CENTER → Vector2(0.5, 0.5), TOP_LEFT → Vector2(0, 0)
+func resolve_uv(pos: ENUMS.IMAGE_POS) -> Vector2:
 	match pos:
 		ENUMS.IMAGE_POS.CENTER:
-			return screen * 0.5
+			return Vector2(0.5, 0.5)
 		ENUMS.IMAGE_POS.TOP_LEFT:
-			return Vector2.ZERO
+			return Vector2(0, 0)
 		ENUMS.IMAGE_POS.TOP_CENTER:
-			return Vector2(screen.x * 0.5, 0)
+			return Vector2(0.5, 0)
 		ENUMS.IMAGE_POS.TOP_RIGHT:
-			return Vector2(screen.x, 0)
+			return Vector2(1, 0)
 		ENUMS.IMAGE_POS.CENTER_LEFT:
-			return Vector2(0, screen.y * 0.5)
+			return Vector2(0, 0.5)
 		ENUMS.IMAGE_POS.CENTER_RIGHT:
-			return Vector2(screen.x, screen.y * 0.5)
+			return Vector2(1, 0.5)
 		ENUMS.IMAGE_POS.BOTTOM_LEFT:
-			return Vector2(0, screen.y)
+			return Vector2(0, 1)
 		ENUMS.IMAGE_POS.BOTTOM_CENTER:
-			return Vector2(screen.x * 0.5, screen.y)
+			return Vector2(0.5, 1)
 		ENUMS.IMAGE_POS.BOTTOM_RIGHT:
-			return screen
+			return Vector2(1, 1)
 		ENUMS.IMAGE_POS.FULL_SCREEN:
-			return screen * 0.5
+			return Vector2(0.5, 0.5)
 		_:
-			return screen * 0.5
+			return Vector2(0.5, 0.5)
 
 
 ## 解析 ID → Texture2D

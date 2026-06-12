@@ -26,20 +26,20 @@ func operate() -> void:
 		Logging.warn("ImageSlideOperator.operate: 图片 '%s' 不在活跃列表中，无法滑动" % image_id)
 		return
 
-	var pos_enum = _parse_position(target_position)
-	if pos_enum == null:
+	var uv = _parse_position_to_uv(target_position)
+	if uv == Vector2.INF:
 		Logging.err("ImageSlideOperator.operate: 无效目标位置 '%s'，跳过" % target_position)
 		return
 
-	var target_vec = ImageManager._resolve_pos(pos_enum)
-	handle.slide_to(target_vec, duration)
-	Logging.info("ImageSlideOperator.operate: 滑动 id='%s' → %s (%.2f秒)" % [image_id, target_vec, duration])
+	handle.slide_to(uv, duration)
+	Logging.info("ImageSlideOperator.operate: 滑动 id='%s' → uv=%s (%.2f秒)" % [image_id, uv, duration])
 
 
-static func _parse_position(pos_str: String) -> Variant:
+## 将枚举名转为 UV Vector2 (使用 ImageManager.resolve_uv)
+static func _parse_position_to_uv(pos_str: String) -> Vector2:
 	var upper = pos_str.to_upper()
 	var keys = ENUMS.IMAGE_POS.keys()
 	for i in range(keys.size()):
 		if keys[i] == upper:
-			return i
-	return null
+			return ImageManager.resolve_uv(i)
+	return Vector2.INF

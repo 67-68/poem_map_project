@@ -112,21 +112,25 @@ func _ready() -> void:
 # ── 工厂方法 ──────────────────────────────────────────────
 
 ## 展示一张图片并返回操作句柄
-func present(tex: Texture2D, global_pos: Vector2) -> ImageHandle:
-    var handle = ImageHandle.new(tex, global_pos)
+## [param uv] 屏幕归一化 UV 坐标 (0.0~1.0)
+func present(tex: Texture2D, uv: Vector2) -> ImageHandle:
+    var handle = ImageHandle.new(tex, uv)
     _effect_layer.add_child(handle._sprite)
     _active_handles.append(handle)
     handle.tree_exited.connect(_on_handle_freed.bind(handle))
     return handle
 
 ## 便捷方法: 快速粉碎 (原 play_shatter 行为, 不返回句柄)
-func play_shatter(tex: Texture2D, pos: Vector2, duration: float = 1.0, params: Dictionary = {}) -> void:
-    var handle = present(tex, pos)
+## [param uv] 屏幕归一化 UV 坐标 (0.0~1.0)
+func play_shatter(tex: Texture2D, uv: Vector2, duration: float = 1.0, params: Dictionary = {}) -> void:
+    var handle = present(tex, uv)
     handle.shatter(duration, params)
 
 ## 便捷方法: 快速滑动 (不返回句柄)
-func play_slide(tex: Texture2D, from: Vector2, to: Vector2, duration: float = 1.0) -> void:
-    var handle = present(tex, from)
+## [param from_uv] 起始 UV 坐标 (0.0~1.0)
+## [param to_uv] 目标 UV 坐标 (0.0~1.0)
+func play_slide(tex: Texture2D, from_uv: Vector2, to_uv: Vector2, duration: float = 1.0) -> void:
+    var handle = present(tex, from_uv)
     handle.slide_to(to, duration)
 
 # ── 内部 ──────────────────────────────────────────────────

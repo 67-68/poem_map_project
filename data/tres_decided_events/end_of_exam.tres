@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c65vlkthmq8ip" path="res://core/operators/image_shatter_operator.gd" id="2_06hn4"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_bw5tr"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_06hn4"]
+[ext_resource type="Script" uid="uid://e6mel3wfbday" path="res://core/operators/deferred_lock_action_operator.gd" id="5_bw5tr"]
 
 [sub_resource type="Resource" id="Resource_hixgn"]
 script = ExtResource("2_06hn4")
@@ -17,9 +18,19 @@ script = ExtResource("3_bw5tr")
 operators = Array[ExtResource("1_wc6w3")]([SubResource("Resource_hixgn")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
+[sub_resource type="Resource" id="Resource_44gst"]
+script = ExtResource("5_bw5tr")
+metadata/_custom_type_script = "uid://e6mel3wfbday"
+
+[sub_resource type="Resource" id="Resource_nifla"]
+script = ExtResource("3_bw5tr")
+operators = Array[ExtResource("1_wc6w3")]([SubResource("Resource_44gst")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
 [sub_resource type="Resource" id="Resource_bw5tr"]
 script = ExtResource("5_06hn4")
-description = "结束了"
+choice_result = SubResource("Resource_nifla")
+description = "结束了。？"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]

@@ -31,8 +31,8 @@ func operate() -> void:
 
 	match animation_type:
 		"slide":
-			var target_vec = ImageManager._resolve_pos(ENUMS.IMAGE_POS.CENTER)
-			anim = handle.create_slide(target_vec, duration)
+			var target_uv = ImageManager.resolve_uv(ENUMS.IMAGE_POS.CENTER)
+			anim = handle.create_slide(target_uv, duration)
 			Logging.info("TestAnimationOperator: 创建 SlideAnimation → center, %.2f秒" % duration)
 		"shatter":
 			anim = handle.create_shatter(duration)
