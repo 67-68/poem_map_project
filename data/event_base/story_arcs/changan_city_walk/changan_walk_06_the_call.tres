@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://bs0w0nb8ehlcd"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_0t2cx"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_l6jau"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="2_siawr"]
+
+[sub_resource type="Resource" id="Resource_wchke"]
+script = ExtResource("2_siawr")
+description = "犹豫了一下，你勉强的笑着，又开始狂笑，大步走向了那个同样落魄的老头。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_l6jau")
+options = Array[ExtResource("1_0t2cx")]([SubResource("Resource_wchke")])
+uuid = "changan_walk_06_the_call"
+description = "郑虔转过头，看到了浑身泥水、失魂落魄的你，也看到了地上的残稿。他没有问你考得如何，也没有丝毫的怜悯。他只是笑着扬了扬手里的酒葫芦，朝你招手：【子美！愣着干嘛？今夜金吾不禁，这上等的酸米酒，我请客！】"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

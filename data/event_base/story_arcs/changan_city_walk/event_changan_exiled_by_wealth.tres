@@ -25,6 +25,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_uj3mr")
+display_speed = 1
 options = Array[ExtResource("1_j5vkf")]([SubResource("Resource_v32sr")])
 uuid = "event_changan_exiled_by_wealth"
 name = "背叛"

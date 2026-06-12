@@ -31,6 +31,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_klwi2")
+display_speed = 1
 options = Array[ExtResource("1_88rd4")]([SubResource("Resource_vdojr")])
 uuid = "event_changan_fangshi"
 description = "你顺着人流走入西市。胡姬在酒肆二楼撒下花瓣，杂耍艺人喷出的火龙照亮了半条街。羊肉汤的浓烈香气直往鼻子里钻，你的胃里发出一阵痉挛的绞痛。路边的汤饼摊正冒着热气。"

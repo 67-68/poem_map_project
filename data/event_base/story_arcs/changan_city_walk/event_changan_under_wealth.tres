@@ -25,6 +25,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_6b3s6")
+display_speed = 2
 options = Array[ExtResource("1_vsgf1")]([SubResource("Resource_rpnuw")])
 uuid = "event_changan_under_wealth"
 name = "朱门远客"

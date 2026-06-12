@@ -31,6 +31,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_l2gta")
+display_speed = 2
 options = Array[ExtResource("1_unb2w")]([SubResource("Resource_ie5tf")])
 uuid = "event_changan_poorarea"
 name = "物伤其类"

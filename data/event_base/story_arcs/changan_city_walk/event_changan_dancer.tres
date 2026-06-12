@@ -15,6 +15,7 @@ metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_6ctoq"]
 script = ExtResource("4_78vi6")
+event_key = "changan_walk_04_market_trample_struggle"
 metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_fd7ld"]
@@ -30,6 +31,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_7fwya")
+display_speed = 2
 options = Array[ExtResource("1_qb5x3")]([SubResource("Resource_3lchp")])
 uuid = "event_changan_dancer"
 name = "欢呼"
