@@ -115,9 +115,15 @@ static func _load_resource(
 	if "_namespace" in resource:
 		resource.set("_namespace", current_ns)
 		Logging.info("EventBaseLoader: 写入 _namespace='%s' 到事件 '%s'" % [current_ns, full_id])
+	# 🚨 自动速度升级规则：仅当 display_speed 为默认值 FAST(0) 时才升级到 SLOW
+	# 如果 .tres 中手动设为 SLOW(1) 或 SLOWEST(2)，保持不动，尊重手动设定
 	if "display_speed" in resource and current_ns.begins_with("story_arcs."):
-		resource.set("display_speed", 1)  # DisplaySpeed.SLOW
-		Logging.info("EventBaseLoader: 事件 '%s' 自动标记为 SLOW（namespace: %s）" % [full_id, current_ns])
+		var cur_speed = resource.get("display_speed")
+		if cur_speed == 0:  # DisplaySpeed.FAST
+			resource.set("display_speed", 1)  # DisplaySpeed.SLOW
+			Logging.info("EventBaseLoader: 事件 '%s' 自动标记为 SLOW（namespace: %s）" % [full_id, current_ns])
+		else:
+			Logging.info("EventBaseLoader: 事件 '%s' 保持手动设定的 display_speed=%d（namespace: %s）" % [full_id, cur_speed, current_ns])
 
 	# ── 按顶层 base 分表 ──
 	if top_level_base != "":

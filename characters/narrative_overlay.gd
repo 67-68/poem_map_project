@@ -486,14 +486,19 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	current_event_data = data
 
 	# 3. 填充内容 — 委托给 EventUI
-	# FAST:  瞬间填充所有 UI 元素（默认，适用日常/随机事件）
-	# SLOW:  打字机逐阶段显示（title → desc → example → option，适用 story_arcs）
-	if data is BaseEvent and data.display_speed == BaseEvent.DisplaySpeed.SLOW:
-		Logging.info("NarrativeOverlay.apply_narrative: SLOW 模式（event='%s', namespace='%s'）" % [data.name, data._namespace])
-		event_ui.display_slow(data, all_options, context)
-	else:
-		Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
-		event_ui.display_instant(data, all_options, context)
+	# FAST:    瞬间填充所有 UI 元素（默认，适用日常/随机事件）
+	# SLOW:    打字机逐阶段显示（title → desc → example → option，适用 story_arcs）
+	# SLOWEST: 同打字机模式，但速度更慢（≈12 字/秒，适用需要沉浸感的线性剧本）
+	match data.display_speed:
+		BaseEvent.DisplaySpeed.SLOW:
+			Logging.info("NarrativeOverlay.apply_narrative: SLOW 模式（event='%s', namespace='%s'）" % [data.name, data._namespace])
+			event_ui.display_slow(data, all_options, context, EventUI.SLOW_SPEED)
+		BaseEvent.DisplaySpeed.SLOWEST:
+			Logging.info("NarrativeOverlay.apply_narrative: SLOWEST 模式（event='%s', namespace='%s'）" % [data.name, data._namespace])
+			event_ui.display_slow(data, all_options, context, EventUI.SLOWEST_SPEED)
+		_:
+			Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
+			event_ui.display_instant(data, all_options, context)
 
 	AudioManager.play_sad()
 

@@ -6,6 +6,8 @@ signal option_selected(choice_result)
 # ── 打字机参数 ──────────────────────────────────
 ## 打字机速度（秒/字），对应 story_arcs 要求的 20-30 字/秒 ≈ 0.04s/字
 const SLOW_SPEED: float = 0.04
+## SLOWEST 打字机速度（秒/字），慢一倍 ≈ 12 字/秒
+const SLOWEST_SPEED: float = 0.08
 ## 阶段间停顿（秒）
 const PHASE_PAUSE: float = 0.6
 
@@ -26,10 +28,21 @@ var _current_timer: Timer = null
 # 公共 API
 # ═══════════════════════════════════════════════
 
+## 清空所有 UI 内容，防止前一个事件的残留数据污染新事件
+func _clear_all() -> void:
+	Logging.info("EventUI._clear_all: 清空所有 UI 内容")
+	texture = null
+	_title_label.text = ""
+	_content_label.text = ""
+	_example_label.text = ""
+	_option_btns.apply_btns([], func(r): pass)
+
+
 ## FAST 模式：瞬间填充所有 UI 元素（默认行为）
 ## 等价于 old NarrativeOverlay.apply_narrative() 的 484-495 行
 func display_instant(event: BaseEvent, all_options: Array, context: Dictionary) -> void:
 	Logging.info("EventUI.display_instant: FAST 模式填充事件 '%s'" % event.name)
+	_clear_all()
 	texture = event.icon
 	_title_label.text = event.name
 	_content_label.text = Util.tr_and_resolve(event.description, context, event)
@@ -37,29 +50,30 @@ func display_instant(event: BaseEvent, all_options: Array, context: Dictionary) 
 	_show_options(all_options)
 
 
-## SLOW 模式：打字机逐阶段显示
+## SLOW / SLOWEST 模式：打字机逐阶段显示
 ## 显示顺序：title → description → example → option
 ## 用户左键点击可跳过当前阶段（填满文字后自动进入下一阶段）
-func display_slow(event: BaseEvent, all_options: Array, context: Dictionary) -> void:
-	Logging.info("EventUI.display_slow: SLOW 模式开始事件 '%s'" % event.name)
-	texture = event.icon
+## type_speed: 打字机速度（秒/字），默认 SLOW_SPEED，SLOWEST 模式传入 SLOWEST_SPEED
+func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, type_speed: float = SLOW_SPEED) -> void:
+	Logging.info("EventUI.display_slow: 模式开始事件 '%s'（type_speed=%.3f）" % [event.name, type_speed])
+	_clear_all()
 	_skip_requested = false
 
 	# Phase 1: Title
 	Logging.debug("EventUI: Phase 1 — Title 打字机开始")
-	await _typewrite_phase(_title_label, event.name)
+	await _typewrite_phase(_title_label, event.name, type_speed)
 	Logging.debug("EventUI: Phase 1 — Title 完成")
 
 	# Phase 2: Description（含 {@context_key} 模板插值）
 	Logging.debug("EventUI: Phase 2 — Description 打字机开始")
 	var desc: String = Util.tr_and_resolve(event.description, context, event)
-	await _typewrite_phase(_content_label, desc)
+	await _typewrite_phase(_content_label, desc, type_speed)
 	Logging.debug("EventUI: Phase 2 — Description 完成")
 
 	# Phase 3: Example（可选）
 	if not event.example.is_empty():
 		Logging.debug("EventUI: Phase 3 — Example 打字机开始")
-		await _typewrite_phase(_example_label, event.example)
+		await _typewrite_phase(_example_label, event.example, type_speed)
 		Logging.debug("EventUI: Phase 3 — Example 完成")
 	else:
 		Logging.debug("EventUI: Phase 3 — example 为空，跳过")
@@ -75,10 +89,11 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary) -> 
 # ═══════════════════════════════════════════════
 
 ## 执行一个打字机阶段（重置 skip 状态 → 打字机 → 阶段间停顿）
-func _typewrite_phase(label: Control, full_text: String) -> void:
+## type_speed: 打字机速度（秒/字），由 display_slow 传入
+func _typewrite_phase(label: Control, full_text: String, type_speed: float = SLOW_SPEED) -> void:
 	_skip_requested = false
 	label.text = ""
-	await _typewrite(label, full_text, SLOW_SPEED)
+	await _typewrite(label, full_text, type_speed)
 	if _skip_requested:
 		Logging.debug("EventUI: 阶段被用户跳过，进入短暂停留")
 	else:

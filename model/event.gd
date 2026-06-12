@@ -5,7 +5,7 @@ class_name BaseEvent extends GameEntity
 # FAST:  瞬间填充所有 UI 元素（默认，适用日常/随机事件）
 # SLOW:  打字机逐阶段显示（适用 story_arcs 线性剧本）
 # ──────────────────────────────────────────────────────
-enum DisplaySpeed { FAST = 0, SLOW = 1 }
+enum DisplaySpeed { FAST = 0, SLOW = 1, SLOWEST = 2 }
 
 # 命名空间前缀：由 EventBaseLoader 扫描目录结构自动写入
 # 格式为 "story_arcs.changan_rainfall."（纯目录路径，不含 uuid）
