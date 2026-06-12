@@ -140,7 +140,13 @@ func _on_map_action_button_pressed(prefix: String) -> void:
 			r.operate()
 
 	# ── 1.5 Generator 消费（统一入口） ──
+	var had_generator := action.generator != null
 	ActionManager.consume_generator(action)
+
+	# ⛔ generator 存在时 block 随机事件查找
+	# generator 内部通过 PushEventOperator 自行推送事件
+	if had_generator:
+		return
 
 	# 2. 追加 action_tags
 	# 也就是说，这里提供的action:main:baiye:general会导致无法匹配action:main:baiye?

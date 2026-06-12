@@ -19,7 +19,13 @@ func _on_button_pressed() -> void:
 		for r in action.action_results: r.operate()
 	
 	# ── Generator 消费（统一入口） ──
+	var had_generator := action.generator != null
 	ActionManager.consume_generator(action)
+	
+	# ⛔ generator 存在时 block 随机事件查找
+	# generator 内部通过 PushEventOperator 自行推送事件
+	if had_generator:
+		return
 	
 	# 🚀 革新后：不再需要标准化，前缀匹配自动忽略第4级
 	for tag in action.action_tags:
