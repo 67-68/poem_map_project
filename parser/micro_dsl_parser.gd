@@ -70,6 +70,7 @@ const FUNC_SCAN_AND_PUSH := "scan_and_push"
 const FUNC_PUSH_EVENT := "push_event"
 const FUNC_POP_EVENT := "pop_event"
 const FUNC_PUSH_FOCUSED_CHAT := "push_focused_chat"
+const FUNC_CLEAR_SCHEDULED_EVENTS := "clear_scheduled_events"
 const FUNC_QUEUE_EVENT := "queue_event"
 const FUNC_RANDOM := "random"
 const FUNC_RANDOM_PICK := "random_pick"
@@ -138,6 +139,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
 	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
 	cd[FUNC_PUSH_FOCUSED_CHAT] = func(p, r): return _exec_push_focused_chat_op(p, r)
+	cd[FUNC_CLEAR_SCHEDULED_EVENTS] = func(p, r): return _exec_clear_scheduled_events_op(p, r)
 	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
 	cd[FUNC_RANDOM] = func(p, r): return _exec_random_op(p, r)
 	cd[FUNC_RANDOM_PICK] = func(p, r): return _exec_random_pick_op(p, r)
@@ -675,6 +677,10 @@ static func _exec_push_event_op(parsed: NamedDSLParser.ParseResult, raw: String)
 
 static func _exec_pop_event_op(_parsed: NamedDSLParser.ParseResult, raw: String) -> PopEventOperator:
 	return PopEventOperator.new()
+
+
+static func _exec_clear_scheduled_events_op(_parsed: NamedDSLParser.ParseResult, raw: String) -> ClearScheduledEvents:
+	return ClearScheduledEvents.new()
 
 
 # ─── push_focused_chat ──────────────────────────────────────────

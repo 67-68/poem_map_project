@@ -43,6 +43,7 @@ signal request_event_key(key: String, context: Dictionary)
 signal push_event(data: Variant, context: Dictionary)
 signal pop_event()
 signal pop_to_event(event_key: String)
+signal clear_scheduled_events()
 signal bubble_complete()
 signal request_add_chat(data: Variant)
 

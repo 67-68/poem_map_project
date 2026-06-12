@@ -48,6 +48,7 @@ func _ready() -> void:
 	EventBus.push_event.connect(_on_push_event)
 	EventBus.pop_event.connect(_on_pop_event)
 	EventBus.pop_to_event.connect(_on_pop_to_event)
+	EventBus.clear_scheduled_events.connect(_on_clear_scheduled_events)
 	EventBus.push_picker.connect(_on_push_picker)
 	EventBus.end_picking.connect(_on_end_picking)
 	EventBus.push_cinematic.connect(_on_push_cinematic)
@@ -122,6 +123,24 @@ func _on_pop_event():
 
 	if not _is_active:
 		_process_next()
+
+
+func _on_clear_scheduled_events():
+	"""
+	清空栈和队列中所有已排期的事件。
+	通常由 ClearScheduledEvents operator 在 consequence 中调用，
+	用于强制中断当前事件链。
+	
+	✅ 清空 _event_stack（所有待处理的 BaseEvent / Picker / Cinematic / FocusChat）
+	✅ 清空 _event_queue（后备队列）
+	
+	注意：不修改 _is_active，不恢复世界时间 — 这些由 _end_narrative 的自然流程处理。
+	"""
+	var stack_size = _event_stack.size()
+	var queue_size = _event_queue.size()
+	_event_stack.clear()
+	_event_queue.clear()
+	Logging.info("ClearScheduledEvents: 已清空栈（%d 条目）和队列（%d 条目）" % [stack_size, queue_size])
 
 
 func _on_pop_to_event(event_key: String):
