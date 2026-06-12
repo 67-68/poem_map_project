@@ -1,0 +1,210 @@
+# ----------------------------------------------------------------
+# 全量数据加载器 (DataScanner)
+# ----------------------------------------------------------------
+# 递归扫描 data/ 目录树，将文件夹层级映射为命名空间，
+# 构建两种字典结构：
+#   1. pool: 扁平字典 { "ns.uuid": Resource }   —— O(1) 全量查表
+#   2. bases: 按完整相对路径分表 { "1_core_rules.traits": { "uuid": Resource } }
+#      —— 支持 Database 按语义 key 直接取用
+#
+# 设计原则：
+#   - 零中间注册表文件，纯 DirAccess 运行时递归扫描
+#   - .tres/.tscn → Godot load() 原生加载
+#   - .csv → DataLoader.load_csv_model() 加载，模型类通过目录名映射
+#   - 所有 Resource 的 uuid 字段保持不动，只用于构建 full_id
+#   - 加载时检测全 ID 冲突，防止运行时静默覆盖 💀
+# ----------------------------------------------------------------
+class_name DataScanner extends RefCounted
+
+# CSV 模型类预加载
+const Territory = preload("res://world/province_resource.gd")
+
+## CSV 文件→模型类映射表
+## key: CSV 文件名（不含扩展名），value: 对应的 class reference
+## 这是必要的，因为 CSV 不包含自身类型信息
+const CSV_MODEL_MAP: Dictionary = {
+	"base_province": Territory,
+	"territories": Territory,
+}
+
+## 扫描加载结果容器
+class LoadResult:
+	var pool: Dictionary = {}       # { "ns.uuid": Resource }
+	var bases: Dictionary = {}      # { "rel.path": { "uuid": Resource } }
+	var duplicates: Array[String] = []  # 检测到的冲突 ID 列表
+	var scanned_file_count: int = 0
+
+## 扫描 start_path 下的所有子文件夹和 .tres/.csv 文件
+## delim: 命名空间分隔符，建议使用 "."
+static func scan(
+	start_path: String = "res://data",
+	delim: String = "."
+) -> LoadResult:
+	var result = LoadResult.new()
+	var root_dir = DirAccess.open(start_path)
+	if not root_dir:
+		push_error("DataScanner: 无法打开根目录: " + start_path)
+		return result
+
+	_scan_dir(root_dir, start_path, "", delim, result, "")
+
+	Logging.info("DataScanner: 扫描完成，共扫描 %d 个文件，加载 %d 个条目，检测到 %d 个冲突，%d 个 Base" % [
+		result.scanned_file_count, result.pool.size(), result.duplicates.size(), result.bases.size()])
+	return result
+
+
+static func _scan_dir(
+	dir: DirAccess,
+	current_dir_path: String,
+	current_ns: String,
+	delim: String,
+	result: LoadResult,
+	top_level_base: String  # 当前分支所属的顶层 base 名称（根层时为空）
+) -> void:
+	if dir.list_dir_begin() != OK:
+		push_error("DataScanner: list_dir_begin 失败: " + current_dir_path)
+		return
+
+	var entry_name = dir.get_next()
+	while entry_name != "":
+		if entry_name in [".", "..", ".DS_Store"]:
+			entry_name = dir.get_next()
+			continue
+
+		var full_path = current_dir_path.path_join(entry_name)
+
+		if dir.current_is_dir():
+			# ── 递归子文件夹：累积命名空间 ──
+			var sub_dir = DirAccess.open(full_path)
+			if sub_dir:
+				var child_ns = current_ns + entry_name + delim
+				# 🚨 改进：bases key 使用完整相对路径而非仅顶层名
+				# 如 "3_actions_pool.baiye" 而非 "3_actions_pool"
+				var child_base = top_level_base + delim + entry_name if top_level_base != "" else entry_name
+				_scan_dir(sub_dir, full_path, child_ns, delim, result, child_base)
+			else:
+				push_error("DataScanner: 无法打开子文件夹: " + full_path)
+
+		elif entry_name.ends_with(".tres") or entry_name.ends_with(".tscn"):
+			# ── .tres/.tscn 资源文件 ──
+			result.scanned_file_count += 1
+			_load_resource(full_path, current_ns, result, top_level_base)
+
+		elif entry_name.ends_with(".csv"):
+			# ── CSV 文件：通过 DataLoader 加载 ──
+			result.scanned_file_count += 1
+			_load_csv(full_path, current_ns, result, top_level_base, entry_name)
+
+		entry_name = dir.get_next()
+
+	dir.list_dir_end()
+
+
+static func _load_resource(
+	file_path: String,
+	current_ns: String,
+	result: LoadResult,
+	top_level_base: String
+) -> void:
+	var resource = load(file_path)
+	if not resource:
+		push_error("DataScanner: 加载失败: " + file_path)
+		return
+
+	# 从资源中提取 uuid
+	var uuid = _extract_uuid(resource)
+	if uuid.is_empty():
+		Logging.warn("DataScanner: 跳过无 uuid 的资源: " + file_path)
+		return
+
+	var full_id = current_ns + uuid
+
+	# ── 全局池冲突检测 ──
+	if result.pool.has(full_id):
+		var msg = "DataScanner: ID 冲突！full_id='%s' 已存在（文件: %s）" % [full_id, file_path]
+		push_error(msg)
+		result.duplicates.append(full_id)
+		return
+
+	result.pool[full_id] = resource
+	Logging.info("DataScanner: 加载 [%s] <- %s" % [full_id, file_path])
+
+	# ── 自动填充命名空间 ──
+	# 对所有 Resource 写入 _namespace，便于调试追溯来源
+	if "_namespace" in resource:
+		resource.set("_namespace", current_ns)
+		Logging.info("DataScanner: 写入 _namespace='%s' 到资源 '%s'" % [current_ns, full_id])
+
+	# 🚨 自动速度升级规则：仅当 display_speed 为默认值 FAST(0) 时才升级到 SLOW
+	# 仅对 namespace 以 "5_story_arcs." 开头的资源生效
+	if "display_speed" in resource and current_ns.begins_with("5_story_arcs."):
+		var cur_speed = resource.get("display_speed")
+		if cur_speed == 0:  # DisplaySpeed.FAST
+			resource.set("display_speed", 1)  # DisplaySpeed.SLOW
+			Logging.info("DataScanner: 事件 '%s' 自动标记为 SLOW（namespace: %s）" % [full_id, current_ns])
+		else:
+			Logging.info("DataScanner: 事件 '%s' 保持手动设定的 display_speed=%d（namespace: %s）" % [full_id, cur_speed, current_ns])
+
+	# ── 按完整相对路径分表 ──
+	# top_level_base 现在是完整相对路径（如 "1_core_rules.traits"、"3_actions_pool.baiye"）
+	if top_level_base != "":
+		if not result.bases.has(top_level_base):
+			result.bases[top_level_base] = {}
+		if result.bases[top_level_base].has(uuid):
+			push_error("DataScanner: Base '%s' 内 uuid 冲突！uuid='%s' 已存在（文件: %s）" % [
+				top_level_base, uuid, file_path])
+			# 不 return，允许继续（全局池胜出）
+		result.bases[top_level_base][uuid] = resource
+
+
+static func _load_csv(
+	file_path: String,
+	current_ns: String,
+	result: LoadResult,
+	top_level_base: String,
+	file_name: String
+) -> void:
+	# 从 CSV 文件名（不含扩展名）查找对应的模型类
+	var csv_basename = file_name.get_basename()
+	var model_class = CSV_MODEL_MAP.get(csv_basename)
+	if model_class == null:
+		Logging.warn("DataScanner: CSV 文件 '%s' 未在 CSV_MODEL_MAP 中注册，跳过" % file_name)
+		return
+
+	# 调用 DataLoader 加载 CSV
+	# DataLoader.load_csv_model 接受 class reference，使用 model_class.new(item)
+	var items: Array = DataLoader.load_csv_model(model_class, csv_basename)
+	if items.is_empty():
+		Logging.warn("DataScanner: CSV 文件 '%s' 加载结果为空" % file_name)
+		return
+
+	# 构建 { uuid: item } 字典
+	var csv_dict: Dictionary = {}
+	for item in items:
+		if "uuid" in item:
+			var item_uuid = item.get("uuid")
+			if item_uuid is String and not item_uuid.is_empty():
+				csv_dict[item_uuid] = item
+
+	if csv_dict.is_empty():
+		Logging.warn("DataScanner: CSV 文件 '%s' 没有包含有效 uuid 的项目" % file_name)
+		return
+
+	# CSV 的 bases key 使用 "目录路径 + 文件名"
+	# 例如 "1_core_rules.base_province"
+	var csv_bases_key = top_level_base + "." + csv_basename if top_level_base != "" else csv_basename
+	result.bases[csv_bases_key] = csv_dict
+	Logging.info("DataScanner: CSV 加载完成 [%s] <- %s（%d 条）" % [csv_bases_key, file_path, csv_dict.size()])
+
+
+static func _extract_uuid(resource: Resource) -> String:
+	"""从 Resource 中提取 uuid，支持 'uuid' 和 'id' 字段"""
+	if "uuid" in resource:
+		var val = resource.get("uuid")
+		if val is String and not val.is_empty():
+			return val
+	if "id" in resource:
+		var val = resource.get("id")
+		if val is String and not val.is_empty():
+			return val
+	return ""

@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="ResourceRegistry" load_steps=2 format=3 uid="uid://dxpaidktplmuc"]
-
-[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_31lwu"]
-
-[resource]
-script = ExtResource("1_31lwu")
-resources = {
-"court:prosper": "res://data/tres_tags/court__prosper.tres"
-}

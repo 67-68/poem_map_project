@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="ResourceRegistry" format=3 uid="uid://b28mjvhmc4mqn"]
-
-[ext_resource type="Script" uid="uid://cmpxd0p1aad8o" path="res://core/model/resources.gd" id="1_b17yq"]
-
-[resource]
-script = ExtResource("1_b17yq")
-resources = {
-"rteates": "res://data/tres_legendary_poems/new_resource.tres"
-}
