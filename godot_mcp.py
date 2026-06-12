@@ -18,7 +18,8 @@ CSV_SYNC_SCRIPT_NAME = "csv_cloud_sync_cli.gd"
 @mcp.tool()
 def run_godot_script(script_name: str, args: list[str] = None) -> str:
     """
-    [严密契约] 运行指定的 Godot Tool 脚本。
+    [严密契约] 运行指定的 Godot Tool 脚本（--script 模式，不加载 autoload）。
+    仅适用于不依赖 autoload/class_name 的纯脚本。
     :param script_name: 必须是相对于项目根目录的脚本路径，例如 "addons/my_tool/build.gd"
     :param args: 传递给脚本的可选参数列表
     """
@@ -62,5 +63,45 @@ def run_godot_script(script_name: str, args: list[str] = None) -> str:
         )
         return f"Godot 脚本执行成功:\n{result.stdout}"
     except subprocess.CalledProcessError as e:
-        # 不要强行吞咽错误，把 Godot 吐出来的完整报错拍在 AI 脸上 😨
         return f"Godot 执行崩溃 (Exit Code {e.returncode}) 💀:\n{e.stderr}\n{e.stdout}"
+
+
+@mcp.tool()
+def run_godot_scene(scene_name: str, args: list[str] = None) -> str:
+    """
+    [场景模式] 运行指定的 Godot 场景（加载 autoload 和 class_name）。
+    适用于需要访问 Logging、PlayerState 等 autoload 的 @tool 脚本。
+    :param scene_name: 必须是相对于项目根目录的场景路径，例如 "parser/event_chain_builder.tscn"
+    :param args: 传递给场景的命令行参数列表（通过 OS.get_cmdline_args() 获取）
+    """
+    if args is None:
+        args = []
+        
+    # 1. 物理防御：路径清洗与限制 😡
+    target_path = os.path.abspath(os.path.join(WORKSPACE_DIR, scene_name))
+    if not target_path.startswith(WORKSPACE_DIR):
+        return "安全拦截 💀：禁止访问工作区外部的场景！"
+        
+    if not os.path.exists(target_path):
+        return f"执行失败：找不到场景文件 {target_path}"
+
+    # 2. 组装安全的执行命令 (强制 Headless，场景模式加载 autoload)
+    cmd = ["godot", "--headless", target_path]
+    if args:
+        cmd.append("--")
+        cmd.extend(args)
+        
+    logging.info(f"Triggering Godot Scene: {' '.join(cmd)}")
+
+    # 3. 阻塞式执行与错误捕获
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=WORKSPACE_DIR
+        )
+        return f"Godot 场景执行成功:\n{result.stdout}"
+    except subprocess.CalledProcessError as e:
+        return f"Godot 场景执行崩溃 (Exit Code {e.returncode}) 💀:\n{e.stderr}\n{e.stdout}"

@@ -25,14 +25,26 @@ func init(_context: Dictionary) -> Dictionary:
 	#breakpoint
 	if target_flag_id_from_context.is_empty():
 		Logging.warn('FlagOperator.init: target_flag_id_from_context is empty, flag_id remains "%s"' % flag_id)
-		return _context
-
-	var flag_uid = _context.get(target_flag_id_from_context)
-	if flag_uid:
-		flag_id = flag_id_prefix + str(flag_uid)
-		Logging.debug('FlagOperator.init: resolved flag_id from context key "%s" -> "%s" (prefix="%s")' % [target_flag_id_from_context, flag_id, flag_id_prefix])
 	else:
-		Logging.warn('FlagOperator.init: context key "%s" not found in context, flag_id remains "%s"' % [target_flag_id_from_context, flag_id])
+		var flag_uid = _context.get(target_flag_id_from_context)
+		if flag_uid:
+			flag_id = flag_id_prefix + str(flag_uid)
+			Logging.debug('FlagOperator.init: resolved flag_id from context key "%s" -> "%s" (prefix="%s")' % [target_flag_id_from_context, flag_id, flag_id_prefix])
+		else:
+			Logging.warn('FlagOperator.init: context key "%s" not found in context, flag_id remains "%s"' % [target_flag_id_from_context, flag_id])
+
+	# 🚨 虚注册：如果 flag_id 以 flag_once_ 开头且不在 Database.flags 中，
+	# 自动注册为虚拟 flag（和 DeferredLockActionOperator 一致）
+	if not flag_id.is_empty() and flag_id.begins_with("flag_once_"):
+		if not Engine.is_editor_hint():
+			if PlayerState and PlayerState.has_method("register_virtual_flag"):
+				PlayerState.register_virtual_flag(flag_id, type)
+				Logging.info('FlagOperator.init: 自动注册虚拟 flag_once: %s (type=%s)' % [flag_id, type])
+			else:
+				Logging.warn('FlagOperator.init: PlayerState 不可用，跳过虚拟 flag 注册: %s' % flag_id)
+		else:
+			Logging.info('FlagOperator.init: @tool 模式，跳过虚拟 flag 注册: %s' % flag_id)
+
 	return _context
 
 func get_referenced_flags() -> Array:

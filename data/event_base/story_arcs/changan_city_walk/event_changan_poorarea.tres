@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://rgcepqcifl7o"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_unb2w"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_2gahx"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_l2gta"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="3_tvfpo"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_1nk4l"]
+[ext_resource type="Script" uid="uid://bxdw08m7bfi13" path="res://core/operators/info_demo_operator.gd" id="4_tvfpo"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_g5ek5"]
+
+[sub_resource type="Resource" id="Resource_7r0va"]
+script = ExtResource("3_tvfpo")
+event_key = "event_changan_rainstop_market"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[sub_resource type="Resource" id="Resource_1nk4l"]
+script = ExtResource("4_tvfpo")
+info = "老天...我怎么没发现这里有这么多穷人？"
+metadata/_custom_type_script = "uid://bxdw08m7bfi13"
+
+[sub_resource type="Resource" id="Resource_xg5v4"]
+script = ExtResource("4_1nk4l")
+operators = Array[ExtResource("2_2gahx")]([SubResource("Resource_7r0va"), SubResource("Resource_1nk4l")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_ie5tf"]
+script = ExtResource("5_g5ek5")
+choice_result = SubResource("Resource_xg5v4")
+description = "靠在湿冷的墙壁上，直到雨停..."
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_l2gta")
+options = Array[ExtResource("1_unb2w")]([SubResource("Resource_ie5tf")])
+uuid = "event_changan_poorarea"
+name = "物伤其类"
+description = "你跌入屋背后的暗巷。这里积水没过脚踝，混合着腐烂的菜叶和马粪味。一个蜷缩在草席下的流民递过来半块发黑的胡饼：“别饿死了”。你下意识地想要摆手拒绝，却借着闪电，看清了自己伸出去的手——指甲缝里塞满黑泥，袖口破裂，比那流民好不到哪去"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

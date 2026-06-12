@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://d2qjti7w30epf"]
+
+[ext_resource type="Script" path="res://parser/event_chain_builder.gd" id="1_80tva"]
+
+[node name="EventChainBuilder" type="Node"]
+script = ExtResource("1_80tva")
