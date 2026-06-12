@@ -224,3 +224,82 @@ flowchart LR
 - **CSV 格式**：生成 CSV 的列名必须与 `DSLParser.parse_random_event()` 中的 `row.get()` key 完全一致
 - **本地优先模式的边界**：生成事件 CSV 本身就在本地，不受 `prefer_local_files` 影响
 - **兜底检测**：`import_generated_events` 执行时会扫描 `data/generated_events/` 目录，报告未被 `DATA_MANIFEST` 收录的 CSV 文件
+
+## 七、事件库 (EventBase) 系统
+
+### 概述
+
+`data/event_base/` 目录提供了另一种加载事件资源的机制：**纯目录扫描，零注册表文件**。与 Registry 管线不同，EventBase 不需要 `resources_registry_creator` 生成 `.tres` 注册表，而是在运行时通过 `DirAccess` 递归扫描目录树，自动加载所有 `.tres` 文件。
+
+### 目录结构约定
+
+```
+data/event_base/
+├── actions/                 【高频复用区】玩家主动点击抽取的事件池
+│   ├── baiye/
+│   ├── denggao/
+│   └── ...
+├── random_encounters/       【被动触发区】每旬随机砸到玩家头上的事件
+│   └── weather_changes/
+└── story_arcs/              【强线性剧本区】绝对不允许随机抽取的特殊场景！
+    ├── exam_747_fraud/
+    └── changan_rain_walk/
+```
+
+### 命名空间机制
+
+- **文件夹层级 = 命名空间**：`actions/baiye/` 下的文件命名空间为 `actions.baiye.`
+- **运行时扁平化**：由 [`EventBaseLoader`](../core/event_base_loader.gd) 扫描为平坦的 `{ "ns.uuid": Resource }` 字典（`event_base_pool`）
+- **按 Base 分表**：每个顶层文件夹自动成为独立的字典（`event_bases["base_name"]["uuid"]`）
+- **查询语法**：支持 `Database.find_from_all("actions.event_id")` 点号语法
+
+### 架构组件
+
+| 组件 | 文件 | 职责 |
+|------|------|------|
+| EventBaseLoader | [`core/event_base_loader.gd`](../core/event_base_loader.gd) | 递归扫描 + 命名空间合成 + 冲突检测 |
+| Database.event_base_pool | [`core/database.gd`](../core/database.gd:44) | 全量扁平事件字典 `{ "ns.uuid": Resource }` |
+| Database.event_bases | [`core/database.gd`](../core/database.gd:45) | 按顶层 base 分表 `{ "base_name": { "uuid": Resource } }` |
+
+### 加载流程
+
+```
+Game启动 → Database._init()
+           └─ EventBaseLoader.scan("res://data/event_base")
+              ├─ DirAccess 递归遍历目录树
+              ├─ .tres 文件 → load() → 提取 uuid
+              ├─ 合成 full_id = "ns.uuid"
+              ├─ 冲突检测（重复 full_id → push_error）
+              ├─ 写入 result.pool[full_id]
+              └─ 写入 result.bases[top_level_base][uuid]
+```
+
+### 查询语法示例
+
+```gdscript
+# 点号语法（eventbase.event_id）
+Database.find_from_all("actions.baiye_appearance")
+
+# 裸 uuid 后缀匹配（向后兼容）
+Database.find_from_all("baiye_appearance")
+
+# 完整命名空间路径
+Database.find_from_all("actions.baiye.baiye_appearance")
+
+# 按 base 分表直接访问
+Database.event_bases["actions"]["baiye_appearance"]
+
+# 遍历某个 base 的所有事件
+for uuid in Database.event_bases["story_arcs"]:
+    var event = Database.event_bases["story_arcs"][uuid]
+    process_event(event)
+```
+
+### 何时使用 EventBase vs Registry
+
+| 场景 | 推荐方式 | 原因 |
+|------|---------|------|
+| 传统 CSV 管线生成的事件 | Registry | 已有完整工具链支持 |
+| 手写/手动放置的 .tres 事件 | EventBase | 零配置，放下即加载 |
+| 需要分 Base 管理的大规模事件库 | EventBase | 自动按目录分表，查询路径清晰 |
+| 需要强类型注册表约束的场景 | Registry | Registry 提供显式的 UUID→路径映射 |

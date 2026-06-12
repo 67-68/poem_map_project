@@ -40,6 +40,12 @@ var event_options: Dictionary
 
 var state_transistors: Dictionary
 
+# 🆕 事件库：由 data/event_base/ 目录树自动加载
+# - event_base_pool: 扁平化全量池 { "ns.uuid": Resource }
+# - event_bases: 按顶层 base 分表 { "base_name": { "uuid": Resource } }，支持 eventbase.event_id 语法
+var event_base_pool: Dictionary = {}
+var event_bases: Dictionary = {}
+
 
 func _init() -> void:
 	index_image = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
@@ -96,6 +102,14 @@ func _init() -> void:
 	legendary_poems = event_data.legendary_poems
 	normal_poem_events = event_data.normal_poem_events
 
+	# 🆕 从 data/event_base/ 自动加载事件库字典
+	var eb_result = EventBaseLoader.scan()
+	event_base_pool = eb_result.pool
+	event_bases = eb_result.bases
+	if eb_result.duplicates.size() > 0:
+		Logging.err("EventBaseLoader: 检测到 %d 个 ID 冲突，请检查日志" % eb_result.duplicates.size())
+	Logging.info("Database: event_bases 已加载 %d 个 Base: %s" % [event_bases.size(), str(event_bases.keys())])
+
 	_merge_cities()
 	_build_life_path_points_from_poems()
 
@@ -147,6 +161,12 @@ func _register_chat_with_time_service() -> void:
 
 
 func find_triggerable_item(uuid: String):
+	# 🆕 event_base_pool 扁平查表（key = "namespace.uuid"，通过后缀匹配）
+	if not event_base_pool.is_empty():
+		for full_id in event_base_pool:
+			if full_id.ends_with("." + uuid) or full_id == uuid:
+				return event_base_pool[full_id]
+
 	if normal_poem_events.get(uuid):
 		return normal_poem_events[uuid]
 	for r in random_events:
@@ -187,6 +207,21 @@ func find_from_all(key: String):
 	# 遍历所有资源库，按 key（UUID/ID）查找第一个匹配的条目
 	# random_events 是嵌套结构（main_tag -> uuid -> item），需展开搜索
 
+	# ── eventbase.event_id 点号语法 ──
+	# 格式如 "actions.baiye_appearance" → base="actions", event_id="baiye_appearance"
+	if key.contains(".") and not event_bases.is_empty():
+		var dot_pos = key.find(".")
+		var base_name = key.substr(0, dot_pos)
+		var event_id = key.substr(dot_pos + 1)
+		if event_bases.has(base_name):
+			if event_bases[base_name].has(event_id):
+				Logging.info("find_from_all: found eventbase lookup '%s' -> event_bases['%s']['%s']" % [key, base_name, event_id])
+				return event_bases[base_name][event_id]
+			Logging.warn("find_from_all: eventbase '%s' 存在但未找到 event_id '%s'" % [base_name, event_id])
+		else:
+			Logging.info("find_from_all: key '%s' contains '.' but '%s' is not a registered event base (available: %s)" % [
+				key, base_name, str(event_bases.keys())])
+
 	# ── 核心数据 ──
 	if poet_data.has(key):
 		Logging.info("find_from_all: found key '%s' in poet_data" % key)
@@ -211,6 +246,17 @@ func find_from_all(key: String):
 	if history_events.has(key):
 		Logging.info("find_from_all: found key '%s' in history_events" % key)
 		return history_events[key]
+
+	# 🆕 event_base_pool 扁平查表（key = "namespace.uuid"）
+	if not event_base_pool.is_empty():
+		if event_base_pool.has(key):
+			Logging.info("find_from_all: found key '%s' in event_base_pool" % key)
+			return event_base_pool[key]
+		# 也支持裸 uuid 后缀匹配（如 "event_intro_745" 匹配 "history_events.event_intro_745"）
+		for full_id in event_base_pool:
+			if full_id.ends_with("." + key):
+				Logging.info("find_from_all: found key '%s' in event_base_pool (matched suffix: %s)" % [key, full_id])
+				return event_base_pool[full_id]
 	if normal_poem_events.has(key):
 		Logging.info("find_from_all: found key '%s' in normal_poem_events" % key)
 		return normal_poem_events[key]
