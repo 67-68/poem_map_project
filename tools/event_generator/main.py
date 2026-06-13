@@ -32,6 +32,7 @@ from tools.config import (
     load_config_from_json,
     EventPipelineConfig,
     DimensionCombo,
+    ImageryItem,
     OptionFeature,
 )
 from tools.plugin_base import (
@@ -50,6 +51,10 @@ from tools.event_generator.io_csv import write_csv_header, write_event_row, writ
 from tools.event_generator.state_managers import SandboxManager, SlidingBlacklist
 from tools.event_generator.dimensions import expand_combinations, _make_combos
 from tools.event_generator.dsl_parser import scale_all_operators
+from tools.event_generator.scorer import extract_image_pool, is_valid_combination, pick_best_image
+
+import json
+from typing import Optional as OptionalType
 
 
 # ════════════════════════════════════════════════════════════════
@@ -90,6 +95,53 @@ def _build_plugin_context_extras(
 
 
 # ════════════════════════════════════════════════════════════════
+# 意象正交剪枝/打分辅助函数
+# ════════════════════════════════════════════════════════════════
+
+def _select_imagery_for_combo(
+    current_combos: list[DimensionCombo],
+    cfg: EventPipelineConfig,
+    image_dict: dict[str, ImageryItem],
+    scene_dim_id: str | None,
+    emotion_dim_id: str | None,
+) -> ImageryItem | None:
+    """
+    意象正交剪枝/打分：extract → validate → pick → return ImageryItem or None。
+
+    如果 apply_dimension_imagery 为 False，或任一步骤失败，返回 None。
+    """
+    if not cfg.apply_dimension_imagery:
+        return None
+    if scene_dim_id is None or emotion_dim_id is None:
+        return None
+
+    # Step 1: 提取意象池
+    image_pool = extract_image_pool(current_combos, scene_dim_id)
+    if not image_pool:
+        return None
+
+    # Step 2: 场景×情绪剪枝
+    if not is_valid_combination(current_combos, scene_dim_id, emotion_dim_id):
+        return None
+
+    # Step 3: 从 combos 中提取目标情绪 ID
+    target_emotion: str | None = None
+    for combo in current_combos:
+        if combo.dimension.id == emotion_dim_id:
+            target_emotion = combo.value.id
+            break
+    if target_emotion is None:
+        return None
+
+    # Step 4: 按情绪亲缘度打分选择最佳意象
+    image_id = pick_best_image(image_pool, target_emotion, image_dict)
+    if image_id is None:
+        return None
+
+    return image_dict[image_id]
+
+
+# ════════════════════════════════════════════════════════════════
 # 主流程
 # ════════════════════════════════════════════════════════════════
 
@@ -113,6 +165,25 @@ def main():
         cfg = default_config()
 
     print(f"📖 配置: {cfg.name}")
+
+    # ── 🆕 加载意象字典（情绪-意象正交） ──
+    image_dict: dict[str, ImageryItem] = {}
+    if cfg.apply_dimension_imagery:
+        image_dict_path = Path(__file__).resolve().parent.parent / "data" / "image_dictionary.json"
+        if image_dict_path.exists():
+            raw = json.loads(image_dict_path.read_text(encoding="utf-8"))
+            for k, v in raw.items():
+                image_dict[k] = ImageryItem(**v)
+            print(f"🖼️  意象字典已加载: {len(image_dict)} 条")
+
+    # ── 从配置中推导场景/情绪维度 ID（用于意象正交） ──
+    scene_dim_id: str | None = None
+    emotion_dim_id: str | None = None
+    for dim in cfg.dimensions:
+        if dim.id == "scene":
+            scene_dim_id = dim.id
+        elif dim.id == "emotion":
+            emotion_dim_id = dim.id
 
     # ── 解析插件 ──
     plugins: list[EventPromptPlugin] = []
@@ -213,10 +284,15 @@ def main():
         first_combos = _make_combos(cfg.dimensions, first_values)
         # 沙盒在 dry-run 模式下未初始化，跳过
         sandbox_block = ""
+        # 🆕 意象正交选择
+        selected_image_item = _select_imagery_for_combo(first_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
+        if selected_image_item:
+            print(f"  🖼️  选中意象: {selected_image_item.name}")
         user_prompt = build_user_prompt(
             first_combos, cfg,
             plugins=plugins, blacklist=blacklist,
             sandbox_keywords_block=sandbox_block,
+            selected_image=selected_image_item,
         )
         print(f"\n📋 示例 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
@@ -264,12 +340,17 @@ def main():
         MIN_GAP = 10
 
         sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
+        # 🆕 意象正交选择
+        selected_image_item = _select_imagery_for_combo(current_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
+        if selected_image_item:
+            print(f"  🖼️  选中意象: {selected_image_item.name}")
         user_prompt = build_user_prompt(
             current_combos, cfg,
             word_count_min=current_min, word_count_max=current_max,
             plugins=plugins,
             blacklist=blacklist,
             sandbox_keywords_block=sandbox_block,
+            selected_image=selected_image_item,
         )
         print(f"\n📋 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
@@ -462,6 +543,7 @@ def main():
                             plugins=plugins,
                             blacklist=blacklist,
                             sandbox_keywords_block=sandbox_block,
+                            selected_image=selected_image_item,
                         )
                     continue
                 print(f"  ⏭️ 跳过（已达最大重试次数）")
@@ -509,12 +591,17 @@ def main():
             MIN_GAP = 10
 
             sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
+            # 🆕 意象正交选择
+            selected_image_item = _select_imagery_for_combo(current_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
+            if selected_image_item:
+                print(f"  🖼️  选中意象: {selected_image_item.name}")
             user_prompt = build_user_prompt(
                 current_combos, cfg,
                 word_count_min=current_min, word_count_max=current_max,
                 plugins=plugins,
                 blacklist=blacklist,
                 sandbox_keywords_block=sandbox_block,
+                selected_image=selected_image_item,
             )
 
             for attempt in range(cfg.max_retries + 1):
@@ -687,6 +774,7 @@ def main():
                                 plugins=plugins,
                                 blacklist=blacklist,
                                 sandbox_keywords_block=sandbox_block,
+                                selected_image=selected_image_item,
                             )
                         continue
                     print(f"  ⏭️ 跳过（已达最大重试次数）")

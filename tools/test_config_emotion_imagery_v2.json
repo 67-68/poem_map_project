@@ -1,0 +1,46 @@
+{
+  "id": "emotion_imagery_v2_test",
+  "name": "情绪-意象正交 V2 测试",
+  "era": "745_ambition",
+  "apply_dimension_imagery": true,
+  "background_context": "大唐天宝年间，长安城。一个野心勃勃的士人游走于不同场景之间，在权力的缝隙中寻找向上的机会。",
+  "ai_persona": "你是一位擅长意象与情绪融合的叙事设计师，善于通过场景细节传递角色心境。",
+  "dimensions": [
+    {
+      "id": "scene",
+      "name": "场景模板",
+      "values": [
+        {
+          "id": "scene_temple",
+          "name": "古刹",
+          "description": "深山中的千年古刹，青苔覆石阶，铜钟悬梁，香火氤氲中透着肃穆与寂寥",
+          "tags": ["VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_PHILOSOPHY_ZEN:incense_ash", "ENV_NATURE_SNOWSTORM:lone_snow"]
+        },
+        {
+          "id": "scene_battlefield",
+          "name": "边塞",
+          "description": "荒凉的古战场，残阳如血，断戟沉沙，风中隐约传来铁马兵戈的回响",
+          "tags": ["ENV_SOCIETY_WAR:beacon_fire", "ENV_SOCIETY_WAR:blood_stain", "ENV_SOCIETY_FAMINE:starving_bone", "TARGET_FACTION_MILITARY:torn_flag"]
+        },
+        {
+          "id": "scene_banquet",
+          "name": "夜宴",
+          "description": "灯火通明的盛大夜宴，觥筹交错间红袖招展，墨香与酒香混杂在暖融的空气里",
+          "tags": ["VIBE_AESTHETIC_SENSUAL:red_sleeve", "ACTION_ENTERTAIN_DRINK:empty_cup", "VIBE_AESTHETIC_ELEGANT:ink_stone"]
+        }
+      ]
+    },
+    {
+      "id": "emotion",
+      "name": "单情绪",
+      "values": [
+        {"id": "TRANQUILITY", "name": "旷达", "description": "超脱物外的淡然与通透"},
+        {"id": "SORROW", "name": "悲悯", "description": "对世事无常的哀悯与感伤"},
+        {"id": "ARROGANCE", "name": "狂傲", "description": "目空一切的桀骜与张扬"}
+      ]
+    }
+  ],
+  "word_count_min": 60,
+  "word_count_max": 120,
+  "output_dir": "data/generated_events/"
+}

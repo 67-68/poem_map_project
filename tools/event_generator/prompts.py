@@ -14,6 +14,12 @@ if TYPE_CHECKING:
     from tools.event_generator.state_managers import SlidingBlacklist
     from tools.plugin_base import EventPromptPlugin
 
+# 运行时导入 ImageryItem（避免类型检查时的循环依赖）
+try:
+    from tools.config import ImageryItem
+except ImportError:
+    ImageryItem = None  # type: ignore
+
 
 def build_system_prompt(cfg: EventPipelineConfig) -> str:
     """组装 System Prompt。
@@ -56,6 +62,7 @@ def build_user_prompt(
     plugins: Optional[list["EventPromptPlugin"]] = None,
     blacklist: Optional["SlidingBlacklist"] = None,
     sandbox_keywords_block: Optional[str] = None,
+    selected_image: Optional["ImageryItem"] = None,
 ) -> str:
     """组装 User Prompt（包含当前维度组合信息）。
 
@@ -200,5 +207,15 @@ summary:
         block = blacklist.get_prompt_block(combos)
         if block.strip():
             lines.append(block)
+
+    # ── 🆕 意象约束注入 ──
+    if selected_image is not None:
+        lines.append(f"""
+## 🎯 意象约束
+本事件的叙事必须体现以下意象的气质，但不要直接提及意象名称：
+- 意象：{selected_image.name}
+- 内涵：{selected_image.description}
+
+请在场景描写中自然地融入该意象的视觉/听觉/触觉细节。""")
 
     return "\n".join(lines)

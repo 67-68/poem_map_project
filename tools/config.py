@@ -386,6 +386,19 @@ class EventPipelineConfig(BaseModel):
     api_model: str = "deepseek-chat"
     output_dir: str = "data/generated_events/"
 
+    # 🆕 意象正交打分开关
+    # True → 提取维度 tags 的意象池 → 按情绪亲缘度打分 → 注入 Prompt
+    # False（默认）→ 完全向后兼容，不执行意象相关逻辑
+    apply_dimension_imagery: bool = False
+
+
+class ImageryItem(BaseModel):
+    """意象实体：28个意象的情绪亲缘度映射。"""
+    id: str = ""                    # "ENV_NATURE_NIGHTMOON:cold_moon"
+    name: str = ""                  # "寒月"
+    description: str = ""           # 意象的文学内涵介绍，供 AI Prompt 使用
+    affinities: dict[str, int] = {} # {"TRANQUILITY": 90, "SORROW": 80, ...}
+
 
 # ════════════════════════════════════════════════════════════════
 # 内置示例配置（拜谒 - 蜜月期）

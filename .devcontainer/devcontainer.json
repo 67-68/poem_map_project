@@ -7,12 +7,14 @@
         "vscode": {
             "settings": {
                 "godot_tools.editor_path": "/usr/local/bin/godot",
-                "python.defaultInterpreterPath": "/usr/bin/python3"
+                "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
             },
             "extensions": [
                 "geequlim.godot-tools",    // Godot 语言支持
                 "ms-python.python",        // Python 支持
-                "rooveterinaryinc.roo-cline" // 把这只赛博野兽直接关进笼子里
+                "rooveterinaryinc.roo-cline", // 把这只赛博野兽直接关进笼子里
+                "rooveterinaryinc.roo-code-nightly",
+                "eamodio.gitlens"
             ]
         }
     },
@@ -23,5 +25,13 @@
     
     // 赋予容器与宿主网络通信的能力（如果你需要连外部云端）
     "forwardPorts": [],
-    "remoteUser": "vscode"
+    "remoteUser": "root",
+
+    "mounts": [
+        "source=${localWorkspaceFolder}/.git,target=${containerWorkspaceFolder}/.git,type=bind,readonly",
+        "source=${localWorkspaceFolder}/readonly_test_target.md,target=${containerWorkspaceFolder}/readonly_test_target.md,type=bind,readonly",
+        // 2. 既然你是 root，卷挂载的目标路径也要改回神界专属路径
+        "source=vscode-server-data,target=/root/.vscode-server,type=volume"
+    ],
+    "postCreateCommand": "python3 -m venv .venv && .venv/bin/pip install -r requirements.txt",
 }

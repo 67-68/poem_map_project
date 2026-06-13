@@ -6,6 +6,10 @@ customModes:
 
       这个模式负责高维度思考、系统设计和排期，严禁写业务代码。
 
+      不要使用read_file工具，使用grep或者cat或者其他命令查看
+      不要使用read_file工具，使用grep或者cat或者其他命令查看
+      不要使用read_file工具，使用grep或者cat或者其他命令查看
+
       **核心禁忌：** 绝对不要在这个模式下输出 `// ... implementation details ...` 级别的代码，只输出架构图和决策树 😡。
 
       ---
