@@ -8,41 +8,41 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_1qhci"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_usfut"]
 
-[sub_resource type="Resource" id="Resource_kem48"]
+[sub_resource type="Resource" id="Resource_jldgd"]
 script = ExtResource("3_ctt80")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_umsq0"]
+[sub_resource type="Resource" id="Resource_681o2"]
 script = ExtResource("3_ctt80")
 str_props = "health"
 value = -7
 
-[sub_resource type="Resource" id="Resource_ctt80"]
+[sub_resource type="Resource" id="Resource_c8i1e"]
 script = ExtResource("3_ctt80")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_dufp8"]
+[sub_resource type="Resource" id="Resource_wtcft"]
 script = ExtResource("4_dufp8")
-operators = Array[ExtResource("2_umsq0")]([SubResource("Resource_kem48"), SubResource("Resource_umsq0"), SubResource("Resource_ctt80")])
+operators = Array[ExtResource("2_umsq0")]([SubResource("Resource_jldgd"), SubResource("Resource_681o2"), SubResource("Resource_c8i1e")])
 
-[sub_resource type="Resource" id="Resource_j1uwm"]
+[sub_resource type="Resource" id="Resource_imhha"]
 script = ExtResource("5_j1uwm")
-choice_result = SubResource("Resource_dufp8")
+choice_result = SubResource("Resource_wtcft")
 description = "近前拱手，低声道：“劳烦通融。”"
 
-[sub_resource type="Resource" id="Resource_1qhci"]
+[sub_resource type="Resource" id="Resource_6lpeo"]
 script = ExtResource("6_1qhci")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_usfut")
-requirement = SubResource("Resource_1qhci")
+requirement = SubResource("Resource_6lpeo")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_kem48")]([SubResource("Resource_j1uwm")])
+options = Array[ExtResource("1_kem48")]([SubResource("Resource_imhha")])
 uuid = "bai_ye_honeymoon_l0_typeb_m1"
 name = "寒门久候"
 description = "“相公今日议事，恐不得闲。且候着。”语罢，自顾与旁侧小厮说笑。日影渐移，檐角冰棱滴水，你立于阶下，足胫渐僵，腹中饥鸣。门子偶尔抬眼，见你神色依旧，便又低头剔指甲，再无他话。如是半个时辰过去，门内并无人出入，亦无传唤之意。"

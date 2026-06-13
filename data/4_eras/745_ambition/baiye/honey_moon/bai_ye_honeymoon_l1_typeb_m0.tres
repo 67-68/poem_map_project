@@ -8,41 +8,41 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_bltie"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_lqewk"]
 
-[sub_resource type="Resource" id="Resource_hdcyo"]
+[sub_resource type="Resource" id="Resource_e10f2"]
 script = ExtResource("3_k2t3v")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_oa3f4"]
+[sub_resource type="Resource" id="Resource_bn3w2"]
 script = ExtResource("3_k2t3v")
 str_props = "health"
 value = -7
 
-[sub_resource type="Resource" id="Resource_k2t3v"]
+[sub_resource type="Resource" id="Resource_arscf"]
 script = ExtResource("3_k2t3v")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_qdoh1"]
+[sub_resource type="Resource" id="Resource_w00bt"]
 script = ExtResource("4_qdoh1")
-operators = Array[ExtResource("2_oa3f4")]([SubResource("Resource_hdcyo"), SubResource("Resource_oa3f4"), SubResource("Resource_k2t3v")])
+operators = Array[ExtResource("2_oa3f4")]([SubResource("Resource_e10f2"), SubResource("Resource_bn3w2"), SubResource("Resource_arscf")])
 
-[sub_resource type="Resource" id="Resource_rjd3j"]
+[sub_resource type="Resource" id="Resource_tnqlj"]
 script = ExtResource("5_rjd3j")
-choice_result = SubResource("Resource_qdoh1")
+choice_result = SubResource("Resource_w00bt")
 description = "点头应允，俯身研墨提笔"
 
-[sub_resource type="Resource" id="Resource_bltie"]
+[sub_resource type="Resource" id="Resource_isk4b"]
 script = ExtResource("6_bltie")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_lqewk")
-requirement = SubResource("Resource_bltie")
+requirement = SubResource("Resource_isk4b")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_hdcyo")]([SubResource("Resource_rjd3j")])
+options = Array[ExtResource("1_hdcyo")]([SubResource("Resource_tnqlj")])
 uuid = "bai_ye_honeymoon_l1_typeb_m0"
 name = "抄牍待旦"
 description = "你投刺于户部某衙门，一名青衫清客含笑迎出，言上官正与众僚议事，请先至偏厅候见。厅中案上堆满待誊抄的户籍册，他连声告罪，说这些公文明日必须呈送尚书，若得你援手，上官议事毕或可拨冗一见。你从卯时坐到申正，腕酸目涩，饥肠辘辘，清客每半个时辰便来取走一摞写好的纸页，却总说“再稍候片刻”。其间你见他捧着一碟新脯，自往后院去了。"

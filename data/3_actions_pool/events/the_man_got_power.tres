@@ -8,21 +8,21 @@
 [ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="6_doltq"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_683ej"]
 
-[sub_resource type="Resource" id="Resource_ucmjp"]
+[sub_resource type="Resource" id="Resource_74lfr"]
 script = ExtResource("3_rgt2p")
 to_be_replaced_flag_id = "chain_strange_poet_1"
 replace_with_flag_id = "chain_strange_poet_2"
 
-[sub_resource type="Resource" id="Resource_3anyv"]
+[sub_resource type="Resource" id="Resource_pwrvt"]
 script = ExtResource("4_r661u")
-operators = Array[ExtResource("2_3anyv")]([SubResource("Resource_ucmjp")])
+operators = Array[ExtResource("2_3anyv")]([SubResource("Resource_74lfr")])
 
-[sub_resource type="Resource" id="Resource_rgt2p"]
+[sub_resource type="Resource" id="Resource_cop3b"]
 script = ExtResource("5_eshd2")
-choice_result = SubResource("Resource_3anyv")
+choice_result = SubResource("Resource_pwrvt")
 description = "担忧的打量着他"
 
-[sub_resource type="Resource" id="Resource_r661u"]
+[sub_resource type="Resource" id="Resource_ib4lw"]
 script = ExtResource("6_doltq")
 flag_id = "chain_strange_poet_1"
 type = "bool"
@@ -30,9 +30,9 @@ value = true
 
 [resource]
 script = ExtResource("7_683ej")
-requirement = SubResource("Resource_r661u")
+requirement = SubResource("Resource_ib4lw")
 _target_tags = Array[String](["test1:test1:test1:test1"])
-options = Array[ExtResource("1_ucmjp")]([SubResource("Resource_rgt2p")])
+options = Array[ExtResource("1_ucmjp")]([SubResource("Resource_cop3b")])
 uuid = "the_man_got_power"
 name = "奇怪的诗人2"
 description = "他看起来很醉"

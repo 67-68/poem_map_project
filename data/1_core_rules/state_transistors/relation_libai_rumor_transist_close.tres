@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="2_55om4"]
 [ext_resource type="Script" uid="uid://c7gkvf3ho6pgj" path="res://core/model/state_transistor.gd" id="3_gwbd8"]
 
-[sub_resource type="Resource" id="Resource_4g7jr"]
+[sub_resource type="Resource" id="Resource_wyex1"]
 script = ExtResource("2_55om4")
 flag_id = "flag_relation_with_libai,val=10"
 type = "int"
@@ -17,4 +17,4 @@ target_resource_urn = "urn:trait:relation_libai_close"
 transist_value = "TRUE"
 current_resource_urn = "urn:trait:relation_libai_rumor"
 triggered_event_key = "libai_welcome_hejiu"
-requirements = SubResource("Resource_4g7jr")
+requirements = SubResource("Resource_wyex1")

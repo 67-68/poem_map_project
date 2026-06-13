@@ -66,6 +66,12 @@ func _load_static():
 	Logging.info("AmbitionHUD: Setting vague text: %s" % full_text)
 	vague_label.text = full_text
 
+	# 初始化阶段感知文本（动态状态标签）
+	var initial_perception = _find_perception_by_stage_id(ambition.leveled_stages[ambition.current_stage])
+	if initial_perception:
+		dynamic_state_label.text = initial_perception.perception_text
+		Logging.info("AmbitionHUD: Initial perception text set: %s" % initial_perception.perception_text)
+
 	# 解析追踪的属性资源，并刷新进度显示
 	_resolve_tracked_property()
 	_update_progress()
@@ -138,39 +144,37 @@ func _on_model_stat_changed(_prop_name):
 		return
 	show()
 	Logging.info("ambition hud received stat changed signal")
-	if ambition.current_stage < 0 or ambition.current_stage >= ambition.leveled_stages.size():
-		Logging.error("AmbitionHUD: current_stage %d out of bounds [0, %d] for ambition %s" % [ambition.current_stage, ambition.leveled_stages.size() - 1, ambition.name])
-		return
-	var current_stage_name = ambition.leveled_stages[ambition.current_stage]
-	Logging.info("AmbitionHUD: Checking stage progression for current stage: %s" % current_stage_name)
-	var operators = _find_requirement_by_stage_id(current_stage_name)
-	if operators and operators.compare(PlayerState):
-		Logging.info("AmbitionHUD: Stage requirements met, advancing to next stage")
-		ambition.current_stage += 1
-		if ambition.current_stage >= ambition.leveled_stages.size():
-			Logging.error("AmbitionHUD: current_stage %d out of bounds [0, %d] after increment for ambition %s" % [ambition.current_stage, ambition.leveled_stages.size() - 1, ambition.name])
-			return
+
+	# 从高到低扫描所有 staged_requirements，找到第一个满足的 → 直接赋值
+	var new_stage = _evaluate_stage()
+	if new_stage != ambition.current_stage:
+		Logging.info("AmbitionHUD: Stage changed from %d to %d" % [ambition.current_stage, new_stage])
+		ambition.current_stage = new_stage
 		var perception = _find_perception_by_stage_id(ambition.leveled_stages[ambition.current_stage])
 		if perception:
 			Logging.info("AmbitionHUD: Setting perception text: %s" % perception.perception_text)
 			dynamic_state_label.text = perception.perception_text
 		else:
-			Logging.warn("AmbitionHUD: No perception found for new stage")
-	else:
-		Logging.info("AmbitionHUD: Stage requirements not yet met")
+			Logging.warn("AmbitionHUD: No perception found for stage: %s" % ambition.leveled_stages[ambition.current_stage])
 
 	# 如果变更的属性是追踪的属性，更新进度显示
 	if not ambition.tracked_property.is_empty() and _prop_name == ambition.tracked_property:
 		_update_progress()
 
-func _find_requirement_by_stage_id(stage_id: String) -> BaseRequirements:
-	Logging.info("AmbitionHUD: Searching for requirement with stage_id: %s" % stage_id)
-	for requirement in ambition.staged_requirements:
-		if requirement.stage_id == stage_id:
-			Logging.info("AmbitionHUD: Found requirement for stage: %s" % stage_id)
-			return requirement.requirement
-	Logging.warn("AmbitionHUD: No requirement found for stage_id: %s" % stage_id)
-	return null
+# 从高到低扫描 staged_requirements，找到第一个条件满足的 stage 索引
+# 语义：满足 staged_requirements[i] 的条件 → 直接进入 staged_requirements[i].stage_id
+# 无一满足 → 默认返回 stage 0（起始阶段）
+func _evaluate_stage() -> int:
+	for i in range(ambition.staged_requirements.size() - 1, -1, -1):
+		var req_data = ambition.staged_requirements[i]
+		if req_data.requirement and req_data.requirement.compare(PlayerState):
+			var stage_idx = ambition.leveled_stages.find(req_data.stage_id)
+			if stage_idx >= 0:
+				Logging.info("AmbitionHUD: Requirement matched for stage '%s' (idx=%d)" % [req_data.stage_id, stage_idx])
+				return stage_idx
+			else:
+				Logging.warn("AmbitionHUD: stage_id '%s' not found in leveled_stages" % req_data.stage_id)
+	return 0
 
 func _find_perception_by_stage_id(stage_id: String) -> StagedPerceptionData:
 	Logging.info("AmbitionHUD: Searching for perception with stage_id: %s" % stage_id)

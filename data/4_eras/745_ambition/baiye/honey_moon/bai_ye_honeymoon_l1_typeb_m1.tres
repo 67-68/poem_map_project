@@ -8,41 +8,41 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_uxm7o"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_5qcw7"]
 
-[sub_resource type="Resource" id="Resource_6weew"]
+[sub_resource type="Resource" id="Resource_fbhvb"]
 script = ExtResource("3_woh3a")
 str_props = "money"
 value = -15
 
-[sub_resource type="Resource" id="Resource_h7xj1"]
+[sub_resource type="Resource" id="Resource_ksc1m"]
 script = ExtResource("3_woh3a")
 str_props = "health"
 value = -11
 
-[sub_resource type="Resource" id="Resource_woh3a"]
+[sub_resource type="Resource" id="Resource_lsqon"]
 script = ExtResource("3_woh3a")
 str_props = "career_progress"
 value = 15
 
-[sub_resource type="Resource" id="Resource_8h1p1"]
+[sub_resource type="Resource" id="Resource_josd2"]
 script = ExtResource("4_8h1p1")
-operators = Array[ExtResource("2_h7xj1")]([SubResource("Resource_6weew"), SubResource("Resource_h7xj1"), SubResource("Resource_woh3a")])
+operators = Array[ExtResource("2_h7xj1")]([SubResource("Resource_fbhvb"), SubResource("Resource_ksc1m"), SubResource("Resource_lsqon")])
 
-[sub_resource type="Resource" id="Resource_w0dpa"]
+[sub_resource type="Resource" id="Resource_2mltg"]
 script = ExtResource("5_w0dpa")
-choice_result = SubResource("Resource_8h1p1")
+choice_result = SubResource("Resource_josd2")
 description = "颔首称谢，改日再备厚礼来拜。"
 
-[sub_resource type="Resource" id="Resource_uxm7o"]
+[sub_resource type="Resource" id="Resource_nm3ka"]
 script = ExtResource("6_uxm7o")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_5qcw7")
-requirement = SubResource("Resource_uxm7o")
+requirement = SubResource("Resource_nm3ka")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_6weew")]([SubResource("Resource_w0dpa")])
+options = Array[ExtResource("1_6weew")]([SubResource("Resource_2mltg")])
 uuid = "bai_ye_honeymoon_l1_typeb_m1"
 name = "午时侯见"
 description = "“李公正在拟稿，片刻便完。”又过半个时辰，李公方至，满面春风，连称：“怠慢怠慢，方才公务缠身。”却并不邀你坐下，只立在廊下寒暄数语，便以“侍郎大人等着回话”辞去。你空腹久立，头晕目眩，方知这“片刻”是两时辰。"

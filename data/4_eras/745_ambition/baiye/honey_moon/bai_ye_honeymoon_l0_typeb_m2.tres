@@ -8,41 +8,41 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_sjupg"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_7lh60"]
 
-[sub_resource type="Resource" id="Resource_yyv3c"]
+[sub_resource type="Resource" id="Resource_6nk6e"]
 script = ExtResource("3_jv8p8")
 str_props = "money"
 value = -10
 
-[sub_resource type="Resource" id="Resource_lo1fe"]
+[sub_resource type="Resource" id="Resource_pmwtn"]
 script = ExtResource("3_jv8p8")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_jv8p8"]
+[sub_resource type="Resource" id="Resource_3it7a"]
 script = ExtResource("3_jv8p8")
 str_props = "career_progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_xcc3g"]
+[sub_resource type="Resource" id="Resource_ydygi"]
 script = ExtResource("4_xcc3g")
-operators = Array[ExtResource("2_lo1fe")]([SubResource("Resource_yyv3c"), SubResource("Resource_lo1fe"), SubResource("Resource_jv8p8")])
+operators = Array[ExtResource("2_lo1fe")]([SubResource("Resource_6nk6e"), SubResource("Resource_pmwtn"), SubResource("Resource_3it7a")])
 
-[sub_resource type="Resource" id="Resource_yeest"]
+[sub_resource type="Resource" id="Resource_0rqod"]
 script = ExtResource("5_yeest")
-choice_result = SubResource("Resource_xcc3g")
+choice_result = SubResource("Resource_ydygi")
 description = "谢过老者，继续冒雨等候"
 
-[sub_resource type="Resource" id="Resource_sjupg"]
+[sub_resource type="Resource" id="Resource_5ppom"]
 script = ExtResource("6_sjupg")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_7lh60")
-requirement = SubResource("Resource_sjupg")
+requirement = SubResource("Resource_5ppom")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_yyv3c")]([SubResource("Resource_yeest")])
+options = Array[ExtResource("1_yyv3c")]([SubResource("Resource_0rqod")])
 uuid = "bai_ye_honeymoon_l0_typeb_m2"
 name = "雨中等候"
 description = "你持着名刺来到右相府前的东角门。门子瞄了一眼你的青衫，也不接拜帖，只说了句“相公今日议事，无暇见客”，便缩回门房去了。细雨渐密，你退到廊檐下站着，衣襟湿了大半。门房里有炭火和茶香，几个门子围着炉子闲话，偶尔有人探头看你一眼，又缩回去了。两个时辰过去，门始终没开。街对面卖胡饼的老者默默递过来半张油布，指了指天色。"
