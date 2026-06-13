@@ -27,50 +27,42 @@ const EventOption = preload("res://model/event/event_option.gd")
 const ChoiceResult = preload("res://model/choice_result.gd")
 const BaseOperator = preload("res://core/model/base_operator.gd")
 
-# ─── 已知事件注册表路径 ───
-# 从 SourceOfTruth.urn_resource_config 提取事件相关的 registry
-# 排除非事件的 registry（如 flag/trait/property/action 等）
-const EVENT_REGISTRY_PATHS: Array[String] = [
-	"res://data/tres_decided_events_registry.tres",
-	"res://data/tres_random_event_bai_ye_registry.tres",
-	"res://data/tres_random_event_deng_gao_registry.tres",
-	"res://data/tres_random_event_du_zhuo_registry.tres",
-	"res://data/tres_random_event_fang_shi_registry.tres",
-	"res://data/tres_random_event_feng_zhao_registry.tres",
-	"res://data/tres_random_event_jiao_you_registry.tres",
-	"res://data/tres_random_event_registry.tres",
-	"res://data/tres_random_event_special_registry.tres",
-	"res://data/tres_history_event_registry.tres",
-	"res://data/tres_normal_poem_events_registry.tres",
-	"res://data/tres_end_random_events_registry.tres",
+# ─── 已知事件数据目录 ───
+# 替代旧的 registry 文件系统。
+# 首次调用 find_event_path() 时扫描这些目录构建 event_key → path 缓存。
+const EVENT_SCAN_DIRS: Array[String] = [
+	"res://data/3_actions_pool/events/",
+	"res://data/3_actions_pool/decided_events/",
+	"res://data/4_eras/events/history_events/",
+	"res://data/4_eras/events/end_random_events/",
+	"res://data/3_actions_pool/write_poem/",
+	"res://data/5_story_arcs/",
 ]
 
-# 缓存已加载的 registry（避免重复 I/O）
-static var _registry_cache: Dictionary = {}  # registry_path -> Dictionary<event_key, resource_path>
+# 缓存：event_key（文件名去后缀）→ 完整 res:// 路径
+static var _event_path_cache: Dictionary = {}
+static var _cache_initialized: bool = false
 
 
 # ═══════════════════════════════════════════════════════
 # 公开接口
 # ═══════════════════════════════════════════════════════
 
-# 根据 event_key 在所有注册表中查找事件 .tres 路径
+# 根据 event_key 在所有事件数据目录中查找 .tres 路径
 # 返回 String（res:// 路径）或空字符串
 static func find_event_path(event_key: String) -> String:
 	if event_key.is_empty():
 		SafeLogger.err("[ChainTresEditor] find_event_path: event_key 为空")
 		return ""
-
-	# 遍历所有注册表
-	for registry_path in EVENT_REGISTRY_PATHS:
-		var registry = _load_registry(registry_path)
-		if registry == null:
-			continue
-		if registry.has(event_key):
-			var path = registry[event_key]
-			SafeLogger.info("[ChainTresEditor] 找到事件 '%s' 在 %s -> %s" % [event_key, registry_path, path])
-			return path
-
-	SafeLogger.err("[ChainTresEditor] 未在任何注册表中找到事件 '%s'" % event_key)
+	
+	_ensure_cache()
+	
+	if _event_path_cache.has(event_key):
+		var path: String = _event_path_cache[event_key]
+		SafeLogger.info("[ChainTresEditor] 找到事件 '%s' -> %s" % [event_key, path])
+		return path
+	
+	SafeLogger.err("[ChainTresEditor] 未在已知事件目录中找到事件 '%s'" % event_key)
 	return ""
 
 
@@ -236,30 +228,44 @@ static func load_find_req_save(event_key: String, opt_uuid: String, requirement)
 # 内部方法
 # ═══════════════════════════════════════════════════════
 
-# 加载注册表，返回 { event_key -> resource_path } 字典
-static func _load_registry(registry_path: String) -> Dictionary:
-	# 缓存命中
-	if _registry_cache.has(registry_path):
-		return _registry_cache[registry_path]
+# 构建事件路径缓存：扫描所有 EVENT_SCAN_DIRS，以文件名（去.tres后缀）为 key
+static func _ensure_cache() -> void:
+	if _cache_initialized:
+		return
+	_cache_initialized = true
+	_event_path_cache.clear()
+	
+	for dir_path in EVENT_SCAN_DIRS:
+		var dir = DirAccess.open(dir_path)
+		if not dir:
+			SafeLogger.warn("[ChainTresEditor] 无法打开事件目录: " + dir_path)
+			continue
+		if dir.list_dir_begin() != OK:
+			SafeLogger.warn("[ChainTresEditor] list_dir_begin 失败: " + dir_path)
+			continue
+		
+		var file_name = dir.get_next()
+		while file_name != "":
+			if file_name in [".", "..", ".DS_Store"]:
+				file_name = dir.get_next()
+				continue
+			if not file_name.ends_with(".tres"):
+				file_name = dir.get_next()
+				continue
+			
+			var full_path = dir_path.path_join(file_name)
+			var key = file_name.trim_suffix(".tres")
+			if not _event_path_cache.has(key):
+				_event_path_cache[key] = full_path
+			file_name = dir.get_next()
+		
+		dir.list_dir_end()
+	
+	SafeLogger.info("[ChainTresEditor] 事件路径缓存构建完成: %d 条记录" % _event_path_cache.size())
 
-	var resource = load(registry_path)
-	if resource == null:
-		SafeLogger.err("[ChainTresEditor] 加载注册表失败: %s" % registry_path)
-		_registry_cache[registry_path] = {}
-		return {}
 
-	if not resource is ResourceRegistry:
-		SafeLogger.err("[ChainTresEditor] %s 不是 ResourceRegistry" % registry_path)
-		_registry_cache[registry_path] = {}
-		return {}
-
-	var registry = (resource as ResourceRegistry).resources
-	_registry_cache[registry_path] = registry
-	SafeLogger.info("[ChainTresEditor] 加载注册表 %s: %d 条记录" % [registry_path, registry.size()])
-	return registry
-
-
-# 清除注册表缓存（用于测试/重载）
+# 清除事件路径缓存（用于测试/重载）
 static func clear_cache() -> void:
-	_registry_cache.clear()
-	SafeLogger.info("[ChainTresEditor] 注册表缓存已清除")
+	_cache_initialized = false
+	_event_path_cache.clear()
+	SafeLogger.info("[ChainTresEditor] 事件路径缓存已清除")

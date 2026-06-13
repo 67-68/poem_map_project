@@ -92,11 +92,11 @@ func execute(event_data: Node) -> void:
 	else:
 		print("✓ normal_poem_events 加载成功 (包含 %d 个普通诗词事件)" % event_data.normal_poem_events.size())
 	
-	# 验证flags
+	# 验证flags（通过 Database/DataScanner 填充）
 	if not event_data.flags:
-		add_warning("flags 为 null (flags_registry.tres 可能尚未生成)")
+		add_warning("flags 为 null (Database 尚未填充 flags 数据)")
 	elif event_data.flags.is_empty():
-		add_warning("flags 为空 (flags_registry.tres 可能尚未生成)")
+		add_warning("flags 为空 (Database.flags 无内容)")
 	else:
 		print("✓ flags 加载成功 (包含 %d 个标志位)" % event_data.flags.size())
 	

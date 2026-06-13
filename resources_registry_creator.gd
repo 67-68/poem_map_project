@@ -1,8 +1,12 @@
 @tool
 extends Node
 
-# 独立的Resources Registry创建逻辑
-# 这个文件可以被EditorScript和@tool脚本复用
+# 🚨 废弃 (DEPRECATED) — 2026-06-13
+# Registry 系统已全局切除，不再使用。
+# 所有资源查找已迁移至：
+#   编辑器模式 → URN._find_resource_in_dir() 通过 DirAccess 扫描 data_dir
+#   运行时模式 → Database 各字典（通过 DataScanner 填充）
+# 保留此文件仅作参考，不执行任何逻辑。
 
 const RESOURCE_REGISTRY_PATH = "res://core/model/resources.gd"
 const DATA_FOLDER = "res://data/"

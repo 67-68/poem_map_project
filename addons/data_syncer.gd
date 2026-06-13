@@ -164,10 +164,7 @@ func _run_downstream_validation_phases() -> void:
 	print("\n📦 ===== 资产下载完毕，开始下游固化与御史台会审 =====")
 	_current_job_idx = -1
 	
-	# 1. 刷新 Registry 注册表
-	_try_execute_sub_tool("res://resources_registry_creator.gd", "create_all_registries")
-	
-	# 2. 强行拉起事件 Linter 会审
+	# 1. 执行事件数据 Linter（注册表已全局切除，改用 DirAccess + Database 运行时填充）
 	_try_execute_sub_tool("res://core/event_data_linter.gd", "execute_linter")
 	
 	print("🏁 ===== 大唐 CI 流水线全线走通！杜甫活过来了 🤓☝️ =====\n")

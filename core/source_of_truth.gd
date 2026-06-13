@@ -62,100 +62,101 @@ static var debug_dashboard_state = {
 
 
 # ============================================================
-# URN Resource Config — URN_TYPE 到文件路径/数据库字段的映射
+# URN Resource Config — URN_TYPE 到目录/数据库字段的映射
 # ============================================================
-# 用于 get_resource_through_urn 在编辑器模式下直接加载 .tres 资源
-# 在非编辑器模式下，通过 db_field 在 database.gd 的字典中查找
+# data_dir: 编辑器模式下使用 DirAccess 扫描此目录下的 .tres 文件
+#            按 uuid 字段匹配 resource_id（零注册表文件 💀）
+# db_field:  运行时模式下通过 Database.get(field) 从已加载字典查找
 # ============================================================
 # 🚨 使用字符串 key 而不是 URN.URN_TYPE.XXX 枚举值。
 # @tool 模式下跨脚本 enum 常量解析异常，会导致字典 get() 查找失败 💀
 static var urn_resource_config: Dictionary = {
     "poet": {
-        "registry": "res://data/tres_poet_data_registry.tres",
+        "data_dir": "res://data/2_characters/poets/",
         "db_field": "poet_data",
     },
     "poem": {
-    	"registry": "res://data/tres_poem_data_registry.tres",
-    	"db_field": "poem_data",
+        "data_dir": "res://data/2_characters/poems/",
+        "db_field": "poem_data",
     },
     "poem_taste": {
-    	"registry": "res://data/poem_taste_registry.tres",
-    	"db_field": "poem_taste",
+        "data_dir": "res://data/2_characters/poem_tastes/",
+        "db_field": "poem_taste",
     },
     "faction": {
-        "registry": "res://data/tres_factions_registry.tres",
+        "data_dir": "res://data/1_core_rules/factions/",
         "db_field": "factions",
     },
     "msger": {
-        "registry": "res://data/tres_msger_data_registry.tres",
+        "data_dir": "res://data/2_characters/messenger_data/",
         "db_field": "msger_data",
     },
     "history_event": {
-        "registry": "res://data/tres_history_event_registry.tres",
+        "data_dir": "res://data/4_eras/events/history_events/",
         "db_field": "history_events",
     },
     "end_random_event": {
-        "registry": "res://data/tres_end_random_events_registry.tres",
+        "data_dir": "res://data/4_eras/events/end_random_events/",
         "db_field": "end_random_events",
     },
     "focused_chat": {
-        "registry": "res://data/tres_focused_chats_registry.tres",
+        "data_dir": "res://data/3_actions_pool/focused_chats/",
         "db_field": "focused_chat_data",
     },
     "ambition": {
-        "registry": "res://data/tres_ambitions_registry.tres",
+        "data_dir": "res://data/1_core_rules/ambitions/",
         "db_field": "ambitions",
     },
     "trait": {
-        "registry": "res://data/tres_traits_registry.tres",
+        "data_dir": "res://data/1_core_rules/traits/",
         "db_field": "traits",
     },
     "property": {
-        "registry": "res://data/tres_properties_registry.tres",
+        "data_dir": "res://data/1_core_rules/properties/",
         "db_field": "properties",
     },
     "action": {
-        "registry": "res://data/tres_actions_registry.tres",
+        "data_dir": "res://data/3_actions_pool/actions/",
         "db_field": "actions",
     },
     "decision": {
-        "registry": "res://data/tres_decisions_registry.tres",
+        "data_dir": "res://data/3_actions_pool/decisions/",
         "db_field": "decisions",
     },
     "decided_event": {
-        "registry": "res://data/tres_decided_events_registry.tres",
+        "data_dir": "res://data/3_actions_pool/decided_events/",
         "db_field": "decided_events",
     },
     "imaginary": {
-        "registry": "res://data/tres_imaginaries_registry.tres",
+        "data_dir": "res://data/1_core_rules/imaginaries/",
         "db_field": "imaginaries",
     },
     "tag": {
-        "registry": "res://data/tres_tags_registry.tres",
+        "data_dir": "",
         "db_field": "tags",
     },
     "flag": {
-        "registry": "res://data/flags_registry.tres",
+        "data_dir": "res://data/1_core_rules/flags/",
         "db_field": "flags",
     },
     "life_path_point": {
-        "registry": "res://data/tres_path_points_registry.tres",
+        "data_dir": "res://data/2_characters/life_path_points/",
         "db_field": "life_path_points",
     },
     "legendary_poem": {
-        "registry": "res://data/tres_legendary_poems_registry.tres",
+        "data_dir": "res://data/2_characters/poems/",
         "db_field": "legendary_poems",
     },
     "normal_poem_event": {
-        "registry": "res://data/tres_normal_poem_events_registry.tres",
+        "data_dir": "res://data/3_actions_pool/write_poem/",
         "db_field": "normal_poem_events",
     },
     "event_option": {
-        "registry": "res://data/event_options_registry.tres",
+        "data_dir": "res://data/1_core_rules/event_options/",
         "db_field": "event_options",
     },
     "state_transistor": {
-        "registry": "res://data/tres_state_transistors_registry.tres",
+        "data_dir": "res://data/1_core_rules/state_transistors/",
         "db_field": "state_transistors",
     },
 }

@@ -85,7 +85,7 @@ static func find_urn_type(type_str: String) -> int:
 # ============================================================
 # 通过 URN 字符串查找对应的 .tres 资源
 # 非编辑器模式：通过 Database singleton 在已加载的字典中查找
-# 编辑器模式：通过 SourceOfTruth 配置加载 registry 文件并查找
+# 编辑器模式：通过 SourceOfTruth 配置的 data_dir 使用 DirAccess 扫描目录
 # ============================================================
 static func get_resource_through_urn(urn_string: String):
 	"""通过 URN 获取对应的 Resource（仅 .tres 类型）
@@ -123,31 +123,42 @@ static func get_resource_through_urn(urn_string: String):
 			return null
 		return resource
 	else:
-		# 编辑器模式：通过 registry 文件查找
-		var registry_path: String = config["registry"]
-		var registry = load(registry_path)
-		if registry == null or registry.resources == null:
-			Logging.err("get_resource_through_urn: 无法加载 registry: " + registry_path)
+		# 编辑器模式：通过 DirAccess 扫描 data_dir 目录，按 uuid 匹配
+		var data_dir: String = config["data_dir"]
+		if data_dir.is_empty():
+			Logging.err("get_resource_through_urn: URN type '%s' 没有配置 data_dir, 无法在编辑器模式加载" % normalized_type)
 			return null
-		
-		# 第一步：尝试直接用 resource_id 作为 key 在 registry 中查找
-		if registry.resources.has(resource_id):
-			var resource = load(registry.resources[resource_id])
-			if resource:
-				return resource
-			Logging.err("get_resource_through_urn: registry 中有 key 但文件加载失败: " + registry.resources[resource_id])
-			return null
-		
-		# 第二步：key 匹配失败，加载所有资源并尝试按 uuid 匹配
-		Logging.warn("get_resource_through_urn: registry 中未找到 key '%s'，尝试按 uuid 遍历匹配..." % resource_id)
-		for key in registry.resources:
-			var file_path = registry.resources[key]
-			var resource = load(file_path)
-			if resource == null:
-				continue
-			if resource.get("uuid") == resource_id:
-				Logging.info("get_resource_through_urn: 通过 uuid 匹配成功: %s -> %s" % [resource_id, file_path])
-				return resource
-		
-		Logging.err("get_resource_through_urn: 在 registry %s 中未找到 resource_id/uuid = %s 的资源" % [registry_path, resource_id])
+		return _find_resource_in_dir(data_dir, resource_id)
+
+
+static func _find_resource_in_dir(data_dir: String, resource_id: String):
+	"""编辑器模式辅助：用 DirAccess 扫描 data_dir 目录下的 .tres/.tscn 文件，按 uuid 匹配资源"""
+	var dir = DirAccess.open(data_dir)
+	if not dir:
+		Logging.err("_find_resource_in_dir: 无法打开目录: " + data_dir)
 		return null
+	
+	if dir.list_dir_begin() != OK:
+		Logging.err("_find_resource_in_dir: list_dir_begin 失败: " + data_dir)
+		return null
+	
+	var file_name = dir.get_next()
+	while file_name != "":
+		if file_name in [".", "..", ".DS_Store"]:
+			file_name = dir.get_next()
+			continue
+		if not (file_name.ends_with(".tres") or file_name.ends_with(".tscn")):
+			file_name = dir.get_next()
+			continue
+		
+		var file_path = data_dir.path_join(file_name)
+		var resource = load(file_path)
+		if resource and resource.get("uuid") == resource_id:
+			dir.list_dir_end()
+			Logging.info("_find_resource_in_dir: 在 %s 中找到 uuid=%s 的资源: %s" % [data_dir, resource_id, file_path])
+			return resource
+		file_name = dir.get_next()
+	
+	dir.list_dir_end()
+	Logging.err("_find_resource_in_dir: 在 %s 中未找到 uuid=%s 的资源" % [data_dir, resource_id])
+	return null

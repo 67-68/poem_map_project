@@ -19,7 +19,7 @@ extends Node
 ## 📥 导入正交生成管线产出的 CSV 事件数据
 ##
 ## 点击后，扫描 res://data/generated_events/ 目录下的 *_events.csv 文件，
-## 使用 DSLParser 解析并保存为 .tres 资源，最后刷新 resources registry。
+## 使用 DSLParser 解析并保存为 .tres 资源。
 ##
 ## 这是 Phase B（Python 生成脚本） → Phase C（Godot 加载端）的桥接按钮。
 ## 完整的管线是：
@@ -167,7 +167,7 @@ func process_next_job() -> void:
         _current_job_index = -1
         
         
-        # 🚨 Registry创建完成后，执行事件数据Linter
+        # 🚨 数据同步完成后，执行事件数据Linter
         print("\n===== 开始执行事件数据Linter =====")
         var linter = EventDataLinter.new()
         linter.execute_linter()
@@ -536,8 +536,7 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
 # 流程：
 #   1. 扫描 data/generated_events/ 目录下最新的 *_events.csv
 #   2. 读取 CSV 内容
-#   3. 通过 _process_csv_data() 走完整管线：DSLParser → .tres → Registry
-#   4. 最后显式刷新 Registry（尽管 _process_csv_data 内部已刷新一次）
+#   3. 通过 _process_csv_data() 走完整管线：DSLParser → .tres
 #
 # 这个函数不需要任何配置，点一下按钮就行 🤓☝️
 func _import_generated_events_from_csv() -> void:
@@ -624,7 +623,7 @@ func _import_generated_events_from_csv() -> void:
         
         print("✅ 成功读取 CSV (%d 字节)" % csv_content.length())
         
-        # ── 4. 走完整管线：DSLParser → .tres → Registry ──
+        # ── 4. 走完整管线：DSLParser → .tres ──
         # 🧩 _process_csv_data 内部会：
         #   - 解析 CSV headers + rows → Array[Dictionary]
         #   - 调用 DSLParser.parse_csv_data(csv_data, data_type)
