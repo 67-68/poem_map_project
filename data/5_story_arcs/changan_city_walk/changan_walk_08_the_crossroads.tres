@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_dqdj3"]
 [ext_resource type="Script" uid="uid://bldlywdhifyrj" path="res://core/operators/clear_scheduled_events.gd" id="4_a6jx1"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_bx36x"]
+[ext_resource type="Script" uid="uid://dn32iqeg6626h" path="res://core/model/ambition_operator.gd" id="5_n3tt2"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_n3tt2"]
 
 [sub_resource type="Resource" id="Resource_doaqb"]
 script = ExtResource("2_jhtqw")
@@ -19,9 +21,19 @@ metadata/_custom_type_script = "uid://dipsh2f0qa3ei"
 script = ExtResource("4_a6jx1")
 metadata/_custom_type_script = "uid://bldlywdhifyrj"
 
+[sub_resource type="Resource" id="Resource_g5vli"]
+script = ExtResource("5_n3tt2")
+ambition_name = "ambition_loushi"
+metadata/_custom_type_script = "uid://dn32iqeg6626h"
+
+[sub_resource type="Resource" id="Resource_bjxyg"]
+script = ExtResource("6_n3tt2")
+event_key = "after_crashout"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
 [sub_resource type="Resource" id="Resource_a6jx1"]
 script = ExtResource("4_bx36x")
-operators = Array[ExtResource("3_doaqb")]([SubResource("Resource_n3tt2")])
+operators = Array[ExtResource("3_doaqb")]([SubResource("Resource_n3tt2"), SubResource("Resource_g5vli"), SubResource("Resource_bjxyg")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_bx36x"]

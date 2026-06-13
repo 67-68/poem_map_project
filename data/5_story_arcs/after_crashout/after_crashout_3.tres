@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://c8dfxanc1xui6"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_qaalk"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="2_4t1et"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_em36u"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_t5svl"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="3_em36u"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_uswuy"]
+
+[sub_resource type="Resource" id="Resource_7iekq"]
+script = ExtResource("3_em36u")
+event_key = "after_crashout_4"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[sub_resource type="Resource" id="Resource_7nue7"]
+script = ExtResource("4_uswuy")
+operators = Array[ExtResource("2_em36u")]([SubResource("Resource_7iekq")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_0mh2o"]
+script = ExtResource("2_4t1et")
+choice_result = SubResource("Resource_7nue7")
+description = "去吃点东西吧"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_t5svl")
+options = Array[ExtResource("1_qaalk")]([SubResource("Resource_0mh2o")])
+uuid = "after_crashout_3"
+description = "一路上，你都在愤恨着。你知道自己的才华，但这个杀千刀的世界，右相大人，就没来由的拦截了你。"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

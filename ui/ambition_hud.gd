@@ -85,7 +85,7 @@ func _resolve_tracked_property() -> void:
 		Logging.info("AmbitionHUD: Resolved tracked property '%s' (soft_max=%d, val=%d)" % [ambition.tracked_property, _tracked_prop.soft_max, _tracked_prop.val])
 
 func _update_progress() -> void:
-	"""更新进度显示：soft_max >= 0 显示金色框 ProgressBar + "val / soft_max" 文本，否则显示纯数字 Label"""
+	"""更新进度显示：优先展示属性的 staged_perception 文本，无配置时回退到裸数字"""
 	if not _tracked_prop:
 		progress_bar.hide()
 		progress_label.hide()
@@ -96,8 +96,27 @@ func _update_progress() -> void:
 	var val = _tracked_prop.val
 	var soft_max = _tracked_prop.soft_max
 	
+	# 优先使用设计师在 .tres 中配置的阶段感知文本（文学化描述）
+	if _tracked_prop.staged_perceptions.size() > 0:
+		var perception_text = _tracked_prop.get_staged_perception_text()
+		Logging.info("AmbitionHUD: Using staged perception text: '%s' (val=%d)" % [perception_text, val])
+		if soft_max >= 0:
+			progress_bar.show()
+			progress_overlay_label.show()
+			progress_label.hide()
+			progress_bar.max_value = soft_max
+			progress_bar.value = val
+			progress_overlay_label.text = perception_text
+		else:
+			progress_bar.hide()
+			progress_overlay_label.hide()
+			progress_label.show()
+			progress_label.text = perception_text
+		return
+	
+	# 无设计师配置 → 回退裸数字显示（旧逻辑）
+	Logging.info("AmbitionHUD: No staged_perceptions configured, falling back to raw numbers")
 	if soft_max >= 0:
-		# 有软上限 → 金色框 ProgressBar + "val / soft_max" 覆盖文本
 		progress_bar.show()
 		progress_overlay_label.show()
 		progress_label.hide()
@@ -106,7 +125,6 @@ func _update_progress() -> void:
 		progress_overlay_label.text = "%d / %d" % [val, soft_max]
 		Logging.info("AmbitionHUD: ProgressBar updated: %d/%d" % [val, soft_max])
 	else:
-		# soft_max == -1，无上限 → 只显示数值
 		progress_bar.hide()
 		progress_overlay_label.hide()
 		progress_label.show()

@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="AmbitionData" format=3 uid="uid://cl2u0wmr8x6c5"]
+
+[ext_resource type="Script" uid="uid://bjjv85stmu4sj" path="res://core/model/ambition_config.gd" id="1_1q1bl"]
+[ext_resource type="Script" uid="uid://bte53fleub1ki" path="res://model/staged_perception_data.gd" id="2_jocwt"]
+[ext_resource type="Script" uid="uid://cg2ww0cyd8b07" path="res://model/staged_requirement_data.gd" id="3_m20lk"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="4_jocwt"]
+
+[sub_resource type="Resource" id="Resource_lw84r"]
+script = ExtResource("2_jocwt")
+stage_id = "kuangke"
+perception_text = "你变成了狂客。是真狂还是假旷达，真逃避？谁也说不清。"
+metadata/_custom_type_script = "uid://bte53fleub1ki"
+
+[sub_resource type="Resource" id="Resource_i7m8w"]
+script = ExtResource("2_jocwt")
+stage_id = "fengying"
+perception_text = "你不止一次想起来自己的老婆孩子——但更多的是自己的政治报复。你曲意逢迎，希望这样可以带来好结局。"
+metadata/_custom_type_script = "uid://bte53fleub1ki"
+
+[sub_resource type="Resource" id="Resource_8um4d"]
+script = ExtResource("2_jocwt")
+stage_id = "zuanying"
+perception_text = "你被生活的重压折弯了腰，你不再在意什么政治，你唯一关系的就是填饱自己的肚子。"
+metadata/_custom_type_script = "uid://bte53fleub1ki"
+
+[sub_resource type="Resource" id="Resource_m20lk"]
+script = ExtResource("4_jocwt")
+trait_name = "kuangda_kuangke"
+metadata/_custom_type_script = "uid://b7oky8pcr22xp"
+
+[sub_resource type="Resource" id="Resource_j1028"]
+script = ExtResource("3_m20lk")
+stage_id = "kuangke"
+requirement = SubResource("Resource_m20lk")
+metadata/_custom_type_script = "uid://cg2ww0cyd8b07"
+
+[sub_resource type="Resource" id="Resource_jocwt"]
+script = ExtResource("4_jocwt")
+trait_name = "kuangda_fengying"
+metadata/_custom_type_script = "uid://b7oky8pcr22xp"
+
+[sub_resource type="Resource" id="Resource_dbol0"]
+script = ExtResource("3_m20lk")
+stage_id = "fengying"
+requirement = SubResource("Resource_jocwt")
+metadata/_custom_type_script = "uid://cg2ww0cyd8b07"
+
+[sub_resource type="Resource" id="Resource_xro7f"]
+script = ExtResource("4_jocwt")
+trait_name = "kuangda_zuanying"
+metadata/_custom_type_script = "uid://b7oky8pcr22xp"
+
+[sub_resource type="Resource" id="Resource_1u2ag"]
+script = ExtResource("3_m20lk")
+stage_id = "zuanying"
+requirement = SubResource("Resource_xro7f")
+metadata/_custom_type_script = "uid://cg2ww0cyd8b07"
+
+[resource]
+script = ExtResource("1_1q1bl")
+leveled_stages = Array[String](["kuangke", "fengying", "zuanying"])
+staged_requirements = Array[ExtResource("3_m20lk")]([SubResource("Resource_j1028"), SubResource("Resource_dbol0"), SubResource("Resource_1u2ag")])
+staged_perceptions = Array[ExtResource("2_jocwt")]([SubResource("Resource_lw84r"), SubResource("Resource_i7m8w"), SubResource("Resource_8um4d")])
+tracked_property = ""
+deadline = 755.9
+uuid = "ambition_loushi"
+name = "陋室通天"
+description = "尽管失败于一手遮天的右相府，你仍然相信你可以通过各种方法获得官职，清整这个世界。"
+metadata/_custom_type_script = "uid://bjjv85stmu4sj"
