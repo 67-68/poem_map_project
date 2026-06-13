@@ -9,6 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_6q0ou"]
 script = ExtResource("3_nopff")
+event_key = "changan_walk_08_the_crossroads"
 metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_hhs3e"]

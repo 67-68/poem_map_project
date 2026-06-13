@@ -544,14 +544,36 @@ func resolve(key: String, class_filter: String = "", silent: bool = false):
 		return null
 
 	# ── 策略 1: 点号语法 "base_name.event_id" → event_bases 查表 ──
+	# 使用 rfind 取最后一段为 event_id，左侧整体为 base_name（支持多层路径）
+	# 匹配优先级: 精确 > 前缀(递归子目录) > 后缀(叶子目录名)
 	if key.contains("."):
-		var dot_pos = key.find(".")
+		var dot_pos = key.rfind(".")
 		var base_name = key.substr(0, dot_pos)
 		var event_id = key.substr(dot_pos + 1)
-		if event_bases.has(base_name) and event_bases[base_name].has(event_id):
-			var res = event_bases[base_name][event_id]
-			if _check_class_filter(res, class_filter):
-				return res
+		
+		# 收集候选 base keys（去重保序）
+		var candidates: Array[String] = []
+		
+		# 1) 精确匹配
+		if event_bases.has(base_name):
+			candidates.append(base_name)
+		
+		# 2) 前缀匹配: base_name 是某目录 → 递归子目录
+		for bk in event_bases:
+			if bk.begins_with(base_name + ".") and not bk in candidates:
+				candidates.append(bk)
+		
+		# 3) 后缀匹配: base_name 是某叶子目录名
+		for bk in event_bases:
+			if bk.ends_with("." + base_name) and not bk in candidates:
+				candidates.append(bk)
+		
+		# 依次搜索候选 base
+		for bk in candidates:
+			if event_bases[bk].has(event_id):
+				var res = event_bases[bk][event_id]
+				if _check_class_filter(res, class_filter):
+					return res
 
 	# ── 策略 2: 直接命中 _raw_data_pool ──
 	if _raw_data_pool.has(key):

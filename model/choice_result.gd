@@ -7,7 +7,9 @@ func operate():
 	"""
 	执行所有操作符
 	"""
+	#breakpoint
 	if not operators:
+		#breakpoint
 		Logging.warn('Found null operator in ChoiceResult')
 	for op in operators:
 		if op:
