@@ -8,46 +8,46 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_vx2j2"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_xcq84"]
 
-[sub_resource type="Resource" id="Resource_ksjw7"]
+[sub_resource type="Resource" id="Resource_7y5d7"]
 script = ExtResource("3_xkc8h")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_epjrh"]
+[sub_resource type="Resource" id="Resource_4vy50"]
 script = ExtResource("3_xkc8h")
 str_props = "fatigue"
 value = -10
 
-[sub_resource type="Resource" id="Resource_hsu1u"]
+[sub_resource type="Resource" id="Resource_xkc8h"]
 script = ExtResource("3_xkc8h")
 str_props = "money"
 value = -40
 
-[sub_resource type="Resource" id="Resource_4frtn"]
+[sub_resource type="Resource" id="Resource_qbi1h"]
 script = ExtResource("3_xkc8h")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_6xjj8"]
+[sub_resource type="Resource" id="Resource_dddts"]
 script = ExtResource("4_qbi1h")
-operators = Array[ExtResource("2_4vy50")]([SubResource("Resource_ksjw7"), SubResource("Resource_epjrh"), SubResource("Resource_hsu1u"), SubResource("Resource_4frtn")])
+operators = Array[ExtResource("2_4vy50")]([SubResource("Resource_7y5d7"), SubResource("Resource_4vy50"), SubResource("Resource_xkc8h"), SubResource("Resource_qbi1h")])
 
-[sub_resource type="Resource" id="Resource_pd1lc"]
+[sub_resource type="Resource" id="Resource_vx2j2"]
 script = ExtResource("5_dddts")
-choice_result = SubResource("Resource_6xjj8")
+choice_result = SubResource("Resource_dddts")
 description = "躬身接过礼单，应承照办"
 
-[sub_resource type="Resource" id="Resource_de7ro"]
+[sub_resource type="Resource" id="Resource_xcq84"]
 script = ExtResource("6_vx2j2")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_xcq84")
-requirement = SubResource("Resource_de7ro")
+requirement = SubResource("Resource_xcq84")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_7y5d7")]([SubResource("Resource_pd1lc")])
+options = Array[ExtResource("1_7y5d7")]([SubResource("Resource_vx2j2")])
 uuid = "bai_ye_honeymoon_l2_typea_m2"
 name = "礼单如例"
 description = "你被引入右相府偏厅，中堂铺着青毡。仆役奉茶后退下。紫袍官员从屏风后转出，袍袖扫过案几，将一方墨迹未干的宣纸推到你面前。“这是规矩，历任都是如此。”他端起茶盏，目光落在窗外槐树上，“你且看看，明日回话便是。”"

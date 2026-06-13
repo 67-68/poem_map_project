@@ -11,77 +11,77 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_oe8ds"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_6b1wc"]
 
-[sub_resource type="Resource" id="Resource_u2c8v"]
+[sub_resource type="Resource" id="Resource_x5vcu"]
 script = ExtResource("3_gol42")
 str_props = "health"
 value = -6
 
-[sub_resource type="Resource" id="Resource_lf5g7"]
+[sub_resource type="Resource" id="Resource_bwhoq"]
 script = ExtResource("3_gol42")
 str_props = "fatigue"
 value = -6
 
-[sub_resource type="Resource" id="Resource_fvfg8"]
+[sub_resource type="Resource" id="Resource_gol42"]
 script = ExtResource("3_gol42")
 str_props = "health"
 value = -12
 
-[sub_resource type="Resource" id="Resource_a6cni"]
+[sub_resource type="Resource" id="Resource_3vedi"]
 script = ExtResource("3_gol42")
 str_props = "career_progress"
 value = 3
 
-[sub_resource type="Resource" id="Resource_1dc0n"]
+[sub_resource type="Resource" id="Resource_7tgdi"]
 script = ExtResource("4_3vedi")
-operators = Array[ExtResource("2_bwhoq")]([SubResource("Resource_u2c8v"), SubResource("Resource_lf5g7"), SubResource("Resource_fvfg8"), SubResource("Resource_a6cni")])
+operators = Array[ExtResource("2_bwhoq")]([SubResource("Resource_x5vcu"), SubResource("Resource_bwhoq"), SubResource("Resource_gol42"), SubResource("Resource_3vedi")])
 
-[sub_resource type="Resource" id="Resource_jmp8d"]
+[sub_resource type="Resource" id="Resource_upfvw"]
 script = ExtResource("5_7tgdi")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
 failed_hint = "既无诗才,何苦登门?"
 
-[sub_resource type="Resource" id="Resource_sg6ul"]
+[sub_resource type="Resource" id="Resource_j8ily"]
 script = ExtResource("6_upfvw")
-choice_result = SubResource("Resource_1dc0n")
-requirement = SubResource("Resource_jmp8d")
+choice_result = SubResource("Resource_7tgdi")
+requirement = SubResource("Resource_upfvw")
 description = "递上名帖"
 
-[sub_resource type="Resource" id="Resource_c558o"]
+[sub_resource type="Resource" id="Resource_01r20"]
 script = ExtResource("3_gol42")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_wonok"]
+[sub_resource type="Resource" id="Resource_oe8ds"]
 script = ExtResource("4_3vedi")
-operators = Array[ExtResource("2_bwhoq")]([SubResource("Resource_c558o")])
+operators = Array[ExtResource("2_bwhoq")]([SubResource("Resource_01r20")])
 
-[sub_resource type="Resource" id="Resource_8soe1"]
+[sub_resource type="Resource" id="Resource_6b1wc"]
 script = ExtResource("6_upfvw")
-choice_result = SubResource("Resource_wonok")
+choice_result = SubResource("Resource_oe8ds")
 description = "拂袖而去"
 
-[sub_resource type="Resource" id="Resource_i0pcs"]
+[sub_resource type="Resource" id="Resource_u2c8v"]
 script = ExtResource("8_01r20")
 property = "career_progress"
 value = 70
 operator = 1
 
-[sub_resource type="Resource" id="Resource_qys5i"]
+[sub_resource type="Resource" id="Resource_lf5g7"]
 script = ExtResource("8_01r20")
 property = "career_progress"
 value = 100
 
-[sub_resource type="Resource" id="Resource_dyqsd"]
+[sub_resource type="Resource" id="Resource_fvfg8"]
 script = ExtResource("9_oe8ds")
-operators = Array[ExtResource("7_j8ily")]([SubResource("Resource_i0pcs"), SubResource("Resource_qys5i")])
+operators = Array[ExtResource("7_j8ily")]([SubResource("Resource_u2c8v"), SubResource("Resource_lf5g7")])
 
 [resource]
 script = ExtResource("10_6b1wc")
-requirement = SubResource("Resource_dyqsd")
+requirement = SubResource("Resource_fvfg8")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_x5vcu")]([SubResource("Resource_sg6ul"), SubResource("Resource_8soe1")])
+options = Array[ExtResource("1_x5vcu")]([SubResource("Resource_j8ily"), SubResource("Resource_6b1wc")])
 uuid = "bai_ye_real_appearance_l2_typeb"
 name = "空帖之辱"
 description = "进入厅堂,权贵斜倚凭几,指尖敲桌.诗呢?他问得随意.你递上名帖.他拆开封缄,抽出空无一字的纸笺,嘴角笑意不变.他将纸笺摊平于地,起身踱步,靴尖轻碾纸面,又踏住你长衫下摆的边角."

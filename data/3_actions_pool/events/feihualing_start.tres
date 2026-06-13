@@ -1,39 +1,39 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://7784mo2ba7lu"]
 
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_6w4ot"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_1khnn"]
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="4_sr6dq"]
-[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="5_jpx75"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_7upxi"]
-[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="7_tatdw"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_hbfrs"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_0aw6w"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_0oecm"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="3_g76fk"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_28cwh"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_a4qb5"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_h0hsc"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_wvkue"]
 
-[sub_resource type="Resource" id="Resource_ivgw7"]
-script = ExtResource("5_jpx75")
+[sub_resource type="Resource" id="Resource_0aw6w"]
+script = ExtResource("3_g76fk")
 
-[sub_resource type="Resource" id="Resource_a1ddm"]
-script = ExtResource("3_1khnn")
-operators = Array[ExtResource("2_6w4ot")]([SubResource("Resource_ivgw7")])
+[sub_resource type="Resource" id="Resource_0oecm"]
+script = ExtResource("4_28cwh")
+operators = Array[ExtResource("2_0oecm")]([SubResource("Resource_0aw6w")])
 
-[sub_resource type="Resource" id="Resource_6w4ot"]
-script = ExtResource("6_7upxi")
-choice_result = SubResource("Resource_a1ddm")
+[sub_resource type="Resource" id="Resource_g76fk"]
+script = ExtResource("5_a4qb5")
+choice_result = SubResource("Resource_0oecm")
 
-[sub_resource type="Resource" id="Resource_1khnn"]
-script = ExtResource("7_tatdw")
+[sub_resource type="Resource" id="Resource_28cwh"]
+script = ExtResource("6_h0hsc")
 event_key = "feihualing_choose_word"
 
-[sub_resource type="Resource" id="Resource_sr6dq"]
-script = ExtResource("3_1khnn")
-operators = Array[ExtResource("2_6w4ot")]([SubResource("Resource_1khnn")])
+[sub_resource type="Resource" id="Resource_a4qb5"]
+script = ExtResource("4_28cwh")
+operators = Array[ExtResource("2_0oecm")]([SubResource("Resource_28cwh")])
 
-[sub_resource type="Resource" id="Resource_jpx75"]
-script = ExtResource("6_7upxi")
-choice_result = SubResource("Resource_sr6dq")
+[sub_resource type="Resource" id="Resource_h0hsc"]
+script = ExtResource("5_a4qb5")
+choice_result = SubResource("Resource_a4qb5")
 
 [resource]
-script = ExtResource("8_hbfrs")
-options = Array[ExtResource("4_sr6dq")]([SubResource("Resource_6w4ot"), SubResource("Resource_jpx75")])
+script = ExtResource("7_wvkue")
+options = Array[ExtResource("1_0aw6w")]([SubResource("Resource_g76fk"), SubResource("Resource_h0hsc")])
 uuid = "feihualing_start"
 name = "飞花令"
 description = "宴席上有人提议玩飞花令，是否参与？"

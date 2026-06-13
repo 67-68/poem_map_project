@@ -8,41 +8,41 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_i5no5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_0cd3p"]
 
-[sub_resource type="Resource" id="Resource_pa8xt"]
+[sub_resource type="Resource" id="Resource_uwksu"]
 script = ExtResource("3_ce8pd")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_mlhqi"]
+[sub_resource type="Resource" id="Resource_b1ah6"]
 script = ExtResource("3_ce8pd")
 str_props = "money"
 value = -15
 
-[sub_resource type="Resource" id="Resource_5hkks"]
+[sub_resource type="Resource" id="Resource_ce8pd"]
 script = ExtResource("3_ce8pd")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_7ppq7"]
+[sub_resource type="Resource" id="Resource_coesl"]
 script = ExtResource("4_coesl")
-operators = Array[ExtResource("2_b1ah6")]([SubResource("Resource_pa8xt"), SubResource("Resource_mlhqi"), SubResource("Resource_5hkks")])
+operators = Array[ExtResource("2_b1ah6")]([SubResource("Resource_uwksu"), SubResource("Resource_b1ah6"), SubResource("Resource_ce8pd")])
 
-[sub_resource type="Resource" id="Resource_hjlnb"]
+[sub_resource type="Resource" id="Resource_6rhex"]
 script = ExtResource("5_6rhex")
-choice_result = SubResource("Resource_7ppq7")
+choice_result = SubResource("Resource_coesl")
 description = "从袖中取出一锭银两递过去"
 
-[sub_resource type="Resource" id="Resource_jbx7i"]
+[sub_resource type="Resource" id="Resource_i5no5"]
 script = ExtResource("6_i5no5")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_0cd3p")
-requirement = SubResource("Resource_jbx7i")
+requirement = SubResource("Resource_i5no5")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_uwksu")]([SubResource("Resource_hjlnb")])
+options = Array[ExtResource("1_uwksu")]([SubResource("Resource_6rhex")])
 uuid = "bai_ye_honeymoon_l0_typea_m1"
 name = "门缝里的眼睛"
 description = "“谁呀？”你报了姓名和来意，他面无表情地哼了一声，目光往你的袖口处瞟了一瞬，随即别过脸去，像是在等待什么。冬日的寒风吹得你衣袍猎猎作响。他依然不开门，只是用脚尖轻轻点着门槛，嘴里哼着一支不成调的小曲。天色渐渐暗了。"

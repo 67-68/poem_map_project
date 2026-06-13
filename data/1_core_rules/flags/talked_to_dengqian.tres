@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="Flag" format=3 uid="uid://cxu0nrvdrov3t"]
 
-[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_g1vod"]
+[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_o74o4"]
 
 [resource]
-script = ExtResource("1_g1vod")
+script = ExtResource("1_o74o4")
 type = "bool"
 uuid = "talked_to_dengqian"

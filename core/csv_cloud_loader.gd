@@ -26,7 +26,6 @@ extends Node
 ##   Python 生成 → data/generated_events/*_events.csv
 ##   → csv_cloud_loader 读取并解析 → DSLParser 创建 RandomEvent Resource
 ##   → save_resources_to_tres 保存为 .tres
-##   → _regenerate_registries 刷新 Registry
 ## 全程零代码改动，点一下就行 🤓☝️
 @export var import_generated_events: bool = false:
     set(val):
@@ -60,25 +59,25 @@ const DATA_MANIFEST: Array[Dictionary] = [
     {
         "name": "trait_data",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=309055591&single=true&output=csv",
-        "save_path": "res://data/tres_traits/traits.csv",
+        "save_path": "res://data/1_core_rules/traits/_traits.csv",
         "data_type": "trait"
     },
     {
         "name": "flags_data",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=2126665400&single=true&output=csv",
-        "save_path": "res://data/flags/flags.csv",
-        "data_type": "flag"
+        "save_path": "res://data/1_core_rules/flags/_flags.csv",
+    "data_type": "flag"
     },
     {
         "name": "state_transistors",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=1696402287&single=true&output=csv",
-        "save_path": "res://data/tres_state_transistors/state_transistor.csv",
+        "save_path": "res://data/1_core_rules/state_transistors/_state_transistor.csv",
         "data_type": "state_transistor"
     },
     {
         "name": "随机事件池",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=0&single=true&output=csv",
-        "save_path": "res://data/random_events/random_events.csv",
+        "save_path": "res://data/3_actions_pool/events/_random_events.csv",
         "data_type": "random_event"
     },
     # ════════════════════════════════════════════════════════════════
@@ -160,26 +159,6 @@ func start_sync_queue() -> void:
     _current_job_index = 0
     process_next_job()
 
-# 刷新所有 registry 文件（每次保存 .tres 后调用）
-# 虽然全量扫描所有文件夹是 O(n) 重复劳动，但 CSV 同步本身就是低频操作，
-# 性能过剩到可以忽略不计 🤓☝️。主要是为了保证下一个表的 template URN
-# 能通过 registry 找到当前表刚保存的 .tres 文件。
-# 如果哪天你觉得同步太慢，99.99% 是网络问题，不是这里的问题 💀
-func _regenerate_registries(silent: bool = false) -> void:
-    if not silent:
-        print("\n===== 刷新resources registry文件 =====")
-    var registry_creator_script = load("res://resources_registry_creator.gd")
-    if not registry_creator_script:
-        push_error("无法加载resources_registry_creator.gd，跳过registry刷新 💀")
-        return
-    
-    var registry_creator = registry_creator_script.new()
-    registry_creator.overwrite_existing = true
-    registry_creator.skip_files_without_uuid = true
-    registry_creator.verbose = not silent  # 🚨 静默模式下关闭registry创建器的详细输出
-    registry_creator.create_all_registries()
-    if not silent:
-        print("===== Resources registry刷新完成 =====\n")
 
 # 处理下一个任务
 func process_next_job() -> void:
@@ -187,8 +166,6 @@ func process_next_job() -> void:
         print("===== 所有数据源同步完成！🤓☝️ =====")
         _current_job_index = -1
         
-        # 🚨 同步完成后，再刷新一次registry（冗余但无害）
-        _regenerate_registries()
         
         # 🚨 Registry创建完成后，执行事件数据Linter
         print("\n===== 开始执行事件数据Linter =====")
@@ -387,9 +364,6 @@ func _process_csv_data(raw_csv_string: String, save_path: String, data_type: Str
     var tres_save_path = tres_output_dir if not tres_output_dir.is_empty() else save_path.get_base_dir() + "/"
     save_resources_to_tres(resources, tres_save_path)
 
-    # 🚨 立即静默刷新registry，确保下一个表的 template URN 能找到本表刚保存的 .tres
-    # 只有最后一次全量同步完成后才输出日志，中间刷新静默执行
-    _regenerate_registries(true)
 
 func fetch_events_from_cloud(url: String, save_path: String = "res://tests/", data_type: String = "random_event") -> void:
     print("开始请求云端数据: %s (尝试 %d/%d)" % [url, retry_count + 1, MAX_RETRIES + 1])
@@ -656,13 +630,9 @@ func _import_generated_events_from_csv() -> void:
         #   - 调用 DSLParser.parse_csv_data(csv_data, data_type)
         #   - 遍历资源注入数据库
         #   - save_resources_to_tres(resources, csv所在目录 或 tres_output_dir)
-        #   - _regenerate_registries(true) 静默刷新
         _process_csv_data(csv_content, csv_path, data_type, tres_output_dir)
         success_count += 1
     
-    # ── 5. 显式刷新 Registry（确保所有 .tres 被注册） ──
-    print("\n===== 🔄 刷新 Resources Registry =====")
-    _regenerate_registries()
     
     print("\n✅ 生成事件导入完成！")
     print("   成功处理: %d/%d 个条目" % [success_count, generated_entries.size()])

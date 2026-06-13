@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="Flag" format=3 uid="uid://bkhx07l3d2aie"]
 
-[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_8ncx1"]
+[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_itnr0"]
 
 [resource]
-script = ExtResource("1_8ncx1")
+script = ExtResource("1_itnr0")
 type = "int"
 uuid = "talk_count_wangwei"

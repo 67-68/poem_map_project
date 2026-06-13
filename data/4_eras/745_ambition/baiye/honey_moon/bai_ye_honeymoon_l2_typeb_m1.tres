@@ -8,46 +8,46 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_qeim0"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ubdc5"]
 
-[sub_resource type="Resource" id="Resource_8w5h1"]
+[sub_resource type="Resource" id="Resource_hlyxy"]
 script = ExtResource("3_f5ajb")
 str_props = "money"
 value = -15
 
-[sub_resource type="Resource" id="Resource_3tne3"]
+[sub_resource type="Resource" id="Resource_grh5p"]
 script = ExtResource("3_f5ajb")
 str_props = "fatigue"
 value = -12
 
-[sub_resource type="Resource" id="Resource_mi4nd"]
+[sub_resource type="Resource" id="Resource_f5ajb"]
 script = ExtResource("3_f5ajb")
 str_props = "health"
 value = -12
 
-[sub_resource type="Resource" id="Resource_dpgie"]
+[sub_resource type="Resource" id="Resource_fxmax"]
 script = ExtResource("3_f5ajb")
 str_props = "career_progress"
 value = 15
 
-[sub_resource type="Resource" id="Resource_xoxvi"]
+[sub_resource type="Resource" id="Resource_a65yf"]
 script = ExtResource("4_fxmax")
-operators = Array[ExtResource("2_grh5p")]([SubResource("Resource_8w5h1"), SubResource("Resource_3tne3"), SubResource("Resource_mi4nd"), SubResource("Resource_dpgie")])
+operators = Array[ExtResource("2_grh5p")]([SubResource("Resource_hlyxy"), SubResource("Resource_grh5p"), SubResource("Resource_f5ajb"), SubResource("Resource_fxmax")])
 
-[sub_resource type="Resource" id="Resource_awf4d"]
+[sub_resource type="Resource" id="Resource_qeim0"]
 script = ExtResource("5_a65yf")
-choice_result = SubResource("Resource_xoxvi")
+choice_result = SubResource("Resource_a65yf")
 description = "躬身行礼：“学生恭候相公召见。”"
 
-[sub_resource type="Resource" id="Resource_xhjjn"]
+[sub_resource type="Resource" id="Resource_ubdc5"]
 script = ExtResource("6_qeim0")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_ubdc5")
-requirement = SubResource("Resource_xhjjn")
+requirement = SubResource("Resource_ubdc5")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_hlyxy")]([SubResource("Resource_awf4d")])
+options = Array[ExtResource("1_hlyxy")]([SubResource("Resource_qeim0")])
 uuid = "bai_ye_honeymoon_l2_typeb_m1"
 name = "烈日候见"
 description = "申时三刻，你被引入右相府后院，被告知相公稍后便至。日头西斜，院中无遮无拦，青砖地烫如炙铁。你整冠肃立，汗透重衫。一个时辰过去，两个时辰过去，廊下侍者换过两轮茶，无人来问。你喉间干涩，双腿微颤，终于听见脚步声——相公自内室缓步而出，瞥你一眼，道了声“辛苦了”，便转身入内，再无他言。"

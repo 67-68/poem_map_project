@@ -1,132 +1,132 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b2h8otyl5m0ta"]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_lnht4"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_f46my"]
-[ext_resource type="Script" uid="uid://clkjr0fnn00vd" path="res://core/operators/flag_operator.gd" id="3_hgl8j"]
-[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_cbnop"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_hgl8j"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_0tt3c"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_lswy1"]
-[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="8_0tt3c"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_lswy1"]
-[ext_resource type="Script" uid="uid://stqrpfx5803j" path="res://core/operators/random_operator.gd" id="9_lswy1"]
-[ext_resource type="Script" uid="uid://cki4yoh8sonh8" path="res://core/model/conditional_operator.gd" id="10_etiw7"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_gdny2"]
-[ext_resource type="Script" uid="uid://k3utrcyaqt3x" path="res://core/operators/scan_and_push_operator.gd" id="11_scanpush"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_wan66"]
+[ext_resource type="Script" uid="uid://clkjr0fnn00vd" path="res://core/operators/flag_operator.gd" id="2_d3cuv"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_xy651"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="4_rnled"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="5_2aukh"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_snqm8"]
+[ext_resource type="Script" uid="uid://k3utrcyaqt3x" path="res://core/operators/scan_and_push_operator.gd" id="7_nrs8s"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="8_a4amy"]
+[ext_resource type="Script" uid="uid://cki4yoh8sonh8" path="res://core/model/conditional_operator.gd" id="9_njqdq"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="10_i2m2c"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_x3d1l"]
+[ext_resource type="Script" uid="uid://stqrpfx5803j" path="res://core/operators/random_operator.gd" id="12_rjge3"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="13_7tdgs"]
 
-[sub_resource type="Resource" id="Resource_lswy1"]
-script = ExtResource("3_hgl8j")
+[sub_resource type="Resource" id="Resource_wan66"]
+script = ExtResource("2_d3cuv")
 flag_id = "flag_libai_changhe_request"
 type = "int"
 value = null
 operation = "reduce_if_above"
 amount = 1
 
-[sub_resource type="Resource" id="Resource_etiw7"]
-script = ExtResource("5_hgl8j")
-operators = Array[ExtResource("3_f46my")]([SubResource("Resource_lswy1")])
+[sub_resource type="Resource" id="Resource_d3cuv"]
+script = ExtResource("3_xy651")
+operators = Array[ExtResource("1_wan66")]([SubResource("Resource_wan66")])
 
-[sub_resource type="Resource" id="Resource_gdny2"]
-script = ExtResource("4_cbnop")
+[sub_resource type="Resource" id="Resource_xy651"]
+script = ExtResource("5_2aukh")
 event_key = "mid_of_wenhuaquan_party_choose_people"
 
-[sub_resource type="Resource" id="Resource_808qg"]
-script = ExtResource("5_hgl8j")
-operators = Array[ExtResource("3_f46my")]([SubResource("Resource_gdny2")])
+[sub_resource type="Resource" id="Resource_rnled"]
+script = ExtResource("3_xy651")
+operators = Array[ExtResource("1_wan66")]([SubResource("Resource_xy651")])
 
-[sub_resource type="Resource" id="Resource_2litf"]
-script = ExtResource("6_0tt3c")
-choice_result = SubResource("Resource_808qg")
+[sub_resource type="Resource" id="Resource_2aukh"]
+script = ExtResource("6_snqm8")
+choice_result = SubResource("Resource_rnled")
 
-[sub_resource type="Resource" id="Resource_8xbx2"]
-script = ExtResource("4_cbnop")
+[sub_resource type="Resource" id="Resource_snqm8"]
+script = ExtResource("5_2aukh")
 event_key = "feihualing_start"
 
-[sub_resource type="Resource" id="Resource_tebpn"]
-script = ExtResource("5_hgl8j")
-operators = Array[ExtResource("3_f46my")]([SubResource("Resource_8xbx2")])
+[sub_resource type="Resource" id="Resource_nrs8s"]
+script = ExtResource("3_xy651")
+operators = Array[ExtResource("1_wan66")]([SubResource("Resource_snqm8")])
 
-[sub_resource type="Resource" id="Resource_qqgwl"]
-script = ExtResource("6_0tt3c")
-choice_result = SubResource("Resource_tebpn")
+[sub_resource type="Resource" id="Resource_a4amy"]
+script = ExtResource("6_snqm8")
+choice_result = SubResource("Resource_nrs8s")
 
-[sub_resource type="Resource" id="Resource_h3jgw"]
-script = ExtResource("4_cbnop")
+[sub_resource type="Resource" id="Resource_njqdq"]
+script = ExtResource("5_2aukh")
 event_key = "lianju_intro"
 
-[sub_resource type="Resource" id="Resource_jyhsk"]
-script = ExtResource("5_hgl8j")
-operators = Array[ExtResource("3_f46my")]([SubResource("Resource_h3jgw")])
+[sub_resource type="Resource" id="Resource_i2m2c"]
+script = ExtResource("3_xy651")
+operators = Array[ExtResource("1_wan66")]([SubResource("Resource_njqdq")])
 
-[sub_resource type="Resource" id="Resource_tub3m"]
-script = ExtResource("6_0tt3c")
-choice_result = SubResource("Resource_jyhsk")
+[sub_resource type="Resource" id="Resource_x3d1l"]
+script = ExtResource("6_snqm8")
+choice_result = SubResource("Resource_i2m2c")
 
-[sub_resource type="Resource" id="Resource_6dq02"]
-script = ExtResource("11_scanpush")
+[sub_resource type="Resource" id="Resource_rjge3"]
+script = ExtResource("7_nrs8s")
 tags = PackedStringArray("action:entertain:elegant", "action:entertain:martial")
 weight_multiplier = 0.0
 
-[sub_resource type="Resource" id="Resource_ri67r"]
-script = ExtResource("5_hgl8j")
-operators = Array[ExtResource("3_f46my")]([SubResource("Resource_6dq02")])
+[sub_resource type="Resource" id="Resource_7tdgs"]
+script = ExtResource("3_xy651")
+operators = Array[ExtResource("1_wan66")]([SubResource("Resource_rjge3")])
 
-[sub_resource type="Resource" id="Resource_s76ol"]
-script = ExtResource("6_0tt3c")
-choice_result = SubResource("Resource_ri67r")
+[sub_resource type="Resource" id="Resource_k72hc"]
+script = ExtResource("6_snqm8")
+choice_result = SubResource("Resource_7tdgs")
 
-[sub_resource type="Resource" id="Resource_oq8gc"]
-script = ExtResource("8_0tt3c")
+[sub_resource type="Resource" id="Resource_i1hfe"]
+script = ExtResource("8_a4amy")
 flag_id = "flag_libai_changhe_request"
 type = "int"
 value = 1
 operator = 2
 
-[sub_resource type="Resource" id="Resource_p2y8i"]
-script = ExtResource("4_cbnop")
+[sub_resource type="Resource" id="Resource_2bdq3"]
+script = ExtResource("5_2aukh")
 event_key = "libai_force_changhe"
 
-[sub_resource type="Resource" id="Resource_yuguk"]
-script = ExtResource("10_etiw7")
-condition = SubResource("Resource_oq8gc")
-condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_p2y8i")])
+[sub_resource type="Resource" id="Resource_d4epv"]
+script = ExtResource("9_njqdq")
+condition = SubResource("Resource_i1hfe")
+condition_success_result = Array[ExtResource("1_wan66")]([SubResource("Resource_2bdq3")])
 
-[sub_resource type="Resource" id="Resource_kxq5q"]
-script = ExtResource("8_0tt3c")
+[sub_resource type="Resource" id="Resource_58rdr"]
+script = ExtResource("8_a4amy")
 flag_id = "flag_relation_with_libai"
 type = "int"
 value = 20
 
-[sub_resource type="Resource" id="Resource_v6k28"]
-script = ExtResource("8_0tt3c")
+[sub_resource type="Resource" id="Resource_dkm58"]
+script = ExtResource("8_a4amy")
 flag_id = "flag_libai_changhe_request"
 type = "int"
 value = 0
 operator = 2
 
-[sub_resource type="Resource" id="Resource_v4noq"]
-script = ExtResource("10_gdny2")
-operators = Array[ExtResource("8_lswy1")]([SubResource("Resource_kxq5q"), SubResource("Resource_v6k28")])
+[sub_resource type="Resource" id="Resource_42hpb"]
+script = ExtResource("11_x3d1l")
+operators = Array[ExtResource("10_i2m2c")]([SubResource("Resource_58rdr"), SubResource("Resource_dkm58")])
 
-[sub_resource type="Resource" id="Resource_2aayb"]
-script = ExtResource("4_cbnop")
+[sub_resource type="Resource" id="Resource_fegie"]
+script = ExtResource("5_2aukh")
 event_key = "request_libai_changhe"
 
-[sub_resource type="Resource" id="Resource_ryf1p"]
-script = ExtResource("9_lswy1")
+[sub_resource type="Resource" id="Resource_vpira"]
+script = ExtResource("12_rjge3")
 random_value = 99
-success_operator = SubResource("Resource_2aayb")
+success_operator = SubResource("Resource_fegie")
 
-[sub_resource type="Resource" id="Resource_44ojx"]
-script = ExtResource("10_etiw7")
-condition = SubResource("Resource_v4noq")
-condition_success_result = Array[ExtResource("3_f46my")]([SubResource("Resource_ryf1p")])
+[sub_resource type="Resource" id="Resource_mucw0"]
+script = ExtResource("9_njqdq")
+condition = SubResource("Resource_42hpb")
+condition_success_result = Array[ExtResource("1_wan66")]([SubResource("Resource_vpira")])
 
 [resource]
-script = ExtResource("7_lswy1")
-options = Array[ExtResource("2_lnht4")]([SubResource("Resource_2litf"), SubResource("Resource_qqgwl"), SubResource("Resource_tub3m"), SubResource("Resource_s76ol")])
-pre_event_interrupter_sequence = [SubResource("Resource_yuguk"), SubResource("Resource_44ojx")]
-on_enter_result = SubResource("Resource_etiw7")
+script = ExtResource("13_7tdgs")
+options = Array[ExtResource("4_rnled")]([SubResource("Resource_2aukh"), SubResource("Resource_a4amy"), SubResource("Resource_x3d1l"), SubResource("Resource_k72hc")])
+pre_event_interrupter_sequence = [SubResource("Resource_d4epv"), SubResource("Resource_mucw0")]
+on_enter_result = SubResource("Resource_d3cuv")
 uuid = "mid_of_wenhuaquan_party"
 name = "在盛大讲话完毕之后"
 description = "正式开场！你看见有人斗诗有人讲话，还有人在扫荡小食"

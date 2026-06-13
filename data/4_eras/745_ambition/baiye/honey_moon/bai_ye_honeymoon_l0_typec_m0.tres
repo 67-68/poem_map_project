@@ -8,41 +8,41 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_0orvn"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_8h12l"]
 
-[sub_resource type="Resource" id="Resource_xo6wo"]
+[sub_resource type="Resource" id="Resource_546lf"]
 script = ExtResource("3_jyero")
 str_props = "money"
 value = -10
 
-[sub_resource type="Resource" id="Resource_0kb5h"]
+[sub_resource type="Resource" id="Resource_dcbrm"]
 script = ExtResource("3_jyero")
 str_props = "fatigue"
 value = -10
 
-[sub_resource type="Resource" id="Resource_xgl27"]
+[sub_resource type="Resource" id="Resource_jyero"]
 script = ExtResource("3_jyero")
 str_props = "career_progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_f2itb"]
+[sub_resource type="Resource" id="Resource_8rol7"]
 script = ExtResource("4_8rol7")
-operators = Array[ExtResource("2_dcbrm")]([SubResource("Resource_xo6wo"), SubResource("Resource_0kb5h"), SubResource("Resource_xgl27")])
+operators = Array[ExtResource("2_dcbrm")]([SubResource("Resource_546lf"), SubResource("Resource_dcbrm"), SubResource("Resource_jyero")])
 
-[sub_resource type="Resource" id="Resource_y3nmq"]
+[sub_resource type="Resource" id="Resource_dh3qy"]
 script = ExtResource("5_dh3qy")
-choice_result = SubResource("Resource_f2itb")
+choice_result = SubResource("Resource_8rol7")
 description = "整袖躬身，高声报上籍贯履历"
 
-[sub_resource type="Resource" id="Resource_jupau"]
+[sub_resource type="Resource" id="Resource_0orvn"]
 script = ExtResource("6_0orvn")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_8h12l")
-requirement = SubResource("Resource_jupau")
+requirement = SubResource("Resource_0orvn")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_546lf")]([SubResource("Resource_y3nmq")])
+options = Array[ExtResource("1_546lf")]([SubResource("Resource_dh3qy")])
 uuid = "bai_ye_honeymoon_l0_typec_m0"
 name = "门隙传话"
 description = "“郎君且候，主人在宴客。”说罢转身掩门。你立于石阶前，听得门内传来说笑声与劝酒声，门子时而出入，见你仍站着，便皱眉道：“主人事忙，郎君若等不得，明日再来。”言毕又闭门。如此反复三回，暮色渐沉，门子始推开半扇门，扬声道：“主人问郎君姓名，着我传话。请郎君在此说与小人听，小人好回话。”却仍不延你入内。"

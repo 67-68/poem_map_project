@@ -1,26 +1,26 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://d31c1rt6cd41j"]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_kfyn1"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="3_hvmw1"]
-[ext_resource type="Script" uid="uid://lnvpvefpsar1" path="res://core/model/item_provider.gd" id="3_kfyn1"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_ytsi2"]
-[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="4_xwktu"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_bt0i2"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_vsboh"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_21hv6"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_fenru"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="3_c4n7t"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_xpblt"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_dfwe4"]
+[ext_resource type="Script" uid="uid://lnvpvefpsar1" path="res://core/model/item_provider.gd" id="6_g036t"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_hflg8"]
 
-[sub_resource type="Resource" id="Resource_mac76"]
-script = ExtResource("4_xwktu")
+[sub_resource type="Resource" id="Resource_21hv6"]
+script = ExtResource("3_c4n7t")
 
-[sub_resource type="Resource" id="Resource_ytsi2"]
-script = ExtResource("5_bt0i2")
-operators = Array[ExtResource("3_ytsi2")]([SubResource("Resource_mac76")])
+[sub_resource type="Resource" id="Resource_fenru"]
+script = ExtResource("4_xpblt")
+operators = Array[ExtResource("2_fenru")]([SubResource("Resource_21hv6")])
 
-[sub_resource type="Resource" id="Resource_xwktu"]
-script = ExtResource("6_vsboh")
-choice_result = SubResource("Resource_ytsi2")
+[sub_resource type="Resource" id="Resource_c4n7t"]
+script = ExtResource("5_dfwe4")
+choice_result = SubResource("Resource_fenru")
 
-[sub_resource type="Resource" id="Resource_bt0i2"]
-script = ExtResource("3_kfyn1")
+[sub_resource type="Resource" id="Resource_xpblt"]
+script = ExtResource("6_g036t")
 list_key = "guests"
 text_template = "走向 {item}"
 target_event_key = "event_talk_guest"
@@ -28,9 +28,9 @@ payload_key = "target_npc"
 use_push_event = true
 
 [resource]
-script = ExtResource("3_hvmw1")
-options = Array[ExtResource("2_kfyn1")]([SubResource("Resource_xwktu")])
-provider = SubResource("Resource_bt0i2")
+script = ExtResource("7_hflg8")
+options = Array[ExtResource("1_21hv6")]([SubResource("Resource_c4n7t")])
+provider = SubResource("Resource_xpblt")
 uuid = "mid_of_wenhuaquan_party_choose_people"
 name = "要选谁呢？"
 description = "商务还是运动？"

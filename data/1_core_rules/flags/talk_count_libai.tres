@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="Flag" format=3 uid="uid://c3tp6n0vlckce"]
 
-[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_yp3m1"]
+[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_a4j21"]
 
 [resource]
-script = ExtResource("1_yp3m1")
+script = ExtResource("1_a4j21")
 type = "int"
 uuid = "talk_count_libai"

@@ -8,41 +8,41 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_v3yhv"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_qhvwh"]
 
-[sub_resource type="Resource" id="Resource_04lil"]
+[sub_resource type="Resource" id="Resource_mg5ta"]
 script = ExtResource("3_57o4u")
 str_props = "money"
 value = -12
 
-[sub_resource type="Resource" id="Resource_8q51i"]
+[sub_resource type="Resource" id="Resource_tfx6q"]
 script = ExtResource("3_57o4u")
 str_props = "fatigue"
 value = -12
 
-[sub_resource type="Resource" id="Resource_gegwo"]
+[sub_resource type="Resource" id="Resource_57o4u"]
 script = ExtResource("3_57o4u")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_qpq2m"]
+[sub_resource type="Resource" id="Resource_tqtgp"]
 script = ExtResource("4_tqtgp")
-operators = Array[ExtResource("2_tfx6q")]([SubResource("Resource_04lil"), SubResource("Resource_8q51i"), SubResource("Resource_gegwo")])
+operators = Array[ExtResource("2_tfx6q")]([SubResource("Resource_mg5ta"), SubResource("Resource_tfx6q"), SubResource("Resource_57o4u")])
 
-[sub_resource type="Resource" id="Resource_ri1ae"]
+[sub_resource type="Resource" id="Resource_fmqxq"]
 script = ExtResource("5_fmqxq")
-choice_result = SubResource("Resource_qpq2m")
+choice_result = SubResource("Resource_tqtgp")
 description = "躬身告退，明日再带文章拜谒"
 
-[sub_resource type="Resource" id="Resource_v1yjf"]
+[sub_resource type="Resource" id="Resource_v3yhv"]
 script = ExtResource("6_v3yhv")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("7_qhvwh")
-requirement = SubResource("Resource_v1yjf")
+requirement = SubResource("Resource_v3yhv")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_mg5ta")]([SubResource("Resource_ri1ae")])
+options = Array[ExtResource("1_mg5ta")]([SubResource("Resource_fmqxq")])
 uuid = "bai_ye_honeymoon_l1_typec_m2"
 name = "廊下候见"
 description = "“且坐，待某厘清这笔度支。”此后近一个时辰，他时而与同僚低语，时而提笔勾画，偶尔瞥你一眼，目光掠过如看一件器物。茶凉了，无人续。你起身欲问，他抬手虚按：“急甚？衙门办事自有章程。”直至暮鼓将响，方道：“今日且回，改日携文章来。”"

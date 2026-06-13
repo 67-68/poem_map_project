@@ -1,4 +1,9 @@
 # [unreleased]
+## Fixed
+- 云端 CSV 同步管线输出目录与 Registry 重构成 Bug
+  - [`core/csv_cloud_loader.gd`](core/csv_cloud_loader.gd) — trait 数据 `save_path` 从 `res://data/tres_traits/traits.csv` 改为 `res://data/1_core_rules/traits/_traits.csv`，`.tres` 文件输出到 `data/1_core_rules/traits/` 目录，被 DataScanner 正确映射到 `bases["1_core_rules.traits"]`，修复了 `Database.get_trait("kuangda_kuangke")` 返回 `null` 的问题
+  - [`core/csv_cloud_loader.gd`](core/csv_cloud_loader.gd) — 彻底移除 `_regenerate_registries()` 函数定义及全部 4 处调用点，废弃 `resources_registry_creator.gd` 在 CSV 同步管线中的使用，数据定位完全由 DataScanner 硬编码目录扫描完成
+
 ## Added
 - 音效类别系统（AudioManager + UISoundComponent 联动）
   - [`core/audio_manager.gd`](core/audio_manager.gd) — `_load_sfx_categories()` 在 `_ready()` 时扫描 `assets/sounds/` 下所有一级子目录，预加载 `.ogg/.wav/.mp3` 到 `_sfx_category_cache` 字典

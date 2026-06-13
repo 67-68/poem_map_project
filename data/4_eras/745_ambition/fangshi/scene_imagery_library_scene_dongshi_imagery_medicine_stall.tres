@@ -9,33 +9,33 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_bycjm"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_i2mhm"]
 
-[sub_resource type="Resource" id="Resource_3skm6"]
+[sub_resource type="Resource" id="Resource_6urid"]
 script = ExtResource("3_ghoyy")
 str_props = "money"
 value = 25
 
-[sub_resource type="Resource" id="Resource_p1fmg"]
+[sub_resource type="Resource" id="Resource_juuhv"]
 script = ExtResource("4_3kae1")
 value = 10
 
-[sub_resource type="Resource" id="Resource_1lifv"]
+[sub_resource type="Resource" id="Resource_ghoyy"]
 script = ExtResource("5_mawio")
 imagery_name = "TARGET_OBJECT_MEDICINE_DONGSHI"
 
-[sub_resource type="Resource" id="Resource_1fco8"]
+[sub_resource type="Resource" id="Resource_3kae1"]
 script = ExtResource("6_ecriw")
-operators = Array[ExtResource("2_juuhv")]([SubResource("Resource_3skm6"), SubResource("Resource_p1fmg"), SubResource("Resource_1lifv")])
+operators = Array[ExtResource("2_juuhv")]([SubResource("Resource_6urid"), SubResource("Resource_juuhv"), SubResource("Resource_ghoyy")])
 
-[sub_resource type="Resource" id="Resource_chxbn"]
+[sub_resource type="Resource" id="Resource_mawio"]
 script = ExtResource("7_bycjm")
-choice_result = SubResource("Resource_1fco8")
+choice_result = SubResource("Resource_3kae1")
 description = "（冷眼旁观）"
 
 [resource]
 script = ExtResource("8_i2mhm")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_6urid")]([SubResource("Resource_chxbn")])
+options = Array[ExtResource("1_6urid")]([SubResource("Resource_mawio")])
 uuid = "scene_imagery_library_scene_dongshi_imagery_medicine_stall"
 name = "药摊铜钱与膝盖"
 description = "东市晌午，你蹲在药摊后，膝盖顶着粗粝的砖缝。三捆柴胡换了二十文，你低头数钱，指尖的草药汁在日头下泛着青黑——洗了三遍还在指甲缝里，像道嵌进去的疤。袖口蹭到戥子上的铜绿，晕开，又是一块洗不掉的印子。你伸直腿，膝盖咯噔一声，酸痛从骨缝里钻出来。旁边胡商吆喝着犀角，一匹绸缎从你摊前掠过，带起的风把你的药草吹歪了几根。你没抬头，掌心的铜钱磨得发烫——每一文都在替你记住蹲下时的重量。"
