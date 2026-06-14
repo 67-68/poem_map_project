@@ -6,7 +6,6 @@ extends Node
 
 
 @export var debug_find_orphan_id: bool = false:
-const Logging = preload("res://core/logger.gd")
 	set(val):
 		if val:
 			init()

@@ -2,7 +2,6 @@ class_name SchemaLinterRule extends BaseLinterRule
 ## Schema检查官
 ## 只管数据结构对不对（是不是null，数组空不空） 🤓☝️
 
-const Logging = preload("res://core/logger.gd")
 func _init():
 	rule_name = "Schema检查官"
 

@@ -25,7 +25,6 @@ const BaseEvent = preload("res://model/event.gd")
 const EventOption = preload("res://model/event/event_option.gd")
 const ChoiceResult = preload("res://model/choice_result.gd")
 const BaseOperator = preload("res://core/model/base_operator.gd")
-const Logging = preload("res://core/logger.gd")
 
 # ─── 已知事件数据目录 ───
 # 替代旧的 registry 文件系统。

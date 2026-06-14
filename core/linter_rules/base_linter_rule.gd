@@ -2,7 +2,6 @@ class_name BaseLinterRule extends RefCounted
 ## Linter检查规则的基类
 ## 所有具体的Rule都应该继承此类并实现execute方法
 
-const Logging = preload("res://core/logger.gd")
 var rule_name: String = "BaseRule"
 var errors: Array[String] = []
 var warnings: Array[String] = []

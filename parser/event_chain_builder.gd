@@ -26,7 +26,6 @@ extends Node
 # ─── preload 依赖（替代 class_name） ───
 const ChainDSLParser = preload("res://parser/chain_dsl_parser.gd")
 const ChainExecutor = preload("res://parser/chain_executor.gd")
-const Logging = preload("res://core/logger.gd")
 
 # ─── 入口 ───
 

@@ -6,7 +6,6 @@ extends RefCounted
 
 
 # 将资源数组导出到指定文件夹
-const Logging = preload("res://core/logger.gd")
 static func export_to_tres_folder(resources: Array[Resource], folder_path: String) -> void:
 	# 确保文件夹路径以 / 结尾
 	if not folder_path.ends_with("/"):

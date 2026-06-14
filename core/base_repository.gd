@@ -1,6 +1,5 @@
 class_name BaseRepository extends RefCounted
 
-const Logging = preload("res://core/logger.gd")
 var _data: Dictionary
 var caches: Dictionary 
 

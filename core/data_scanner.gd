@@ -18,7 +18,6 @@ class_name DataScanner extends RefCounted
 
 # CSV 模型类预加载
 const Territory = preload("res://world/province_resource.gd")
-const Logging = preload("res://core/logger.gd")
 
 ## CSV 文件→模型类映射表
 ## key: CSV 文件名（不含扩展名），value: 对应的 class reference

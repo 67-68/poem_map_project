@@ -19,7 +19,6 @@ extends RefCounted
 # ═══════════════════════════════════════════════════════
 
 # ─── preload 依赖（替代 class_name） ───
-const Logging = preload("res://core/logger.gd")
 
 const FLAG_PREFIX := "flag_once_"
 

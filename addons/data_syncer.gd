@@ -6,7 +6,6 @@ extends Node
 
 @export_group("Continuous Integration Pipeline")
 @export var sync_all_data: bool = false:
-const Logging = preload("res://core/logger.gd")
 	set(val):
 		sync_all_data = false 
 		if val == true:

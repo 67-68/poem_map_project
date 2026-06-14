@@ -16,7 +16,6 @@
 extends SceneTree
 
 # 等待主循环就绪的最大迭代次数（防止死循环）
-const Logging = preload("res://core/logger.gd")
 const MAX_INIT_WAIT_ITER: int = 20
 
 # 获取重复字符分隔线（Godot 4 GDScript 不支持字符串乘法）

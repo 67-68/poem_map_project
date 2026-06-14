@@ -5,7 +5,6 @@ class_name PoemTypeChooseOperator extends BaseOperator
 @export var key_to_get_poem_taste: String = 'poem_taste'
 @export var property_multiplication: float = 1.0
 
-const Logging = preload("res://core/logger.gd")
 func init(_context: Dictionary) -> Dictionary:
     #breakpoint
     if key_to_get_poem_taste and _context.get(key_to_get_poem_taste):

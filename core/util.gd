@@ -1,6 +1,5 @@
 class_name Util extends RefCounted
 
-const Logging = preload("res://core/logger.gd")
 static func get_highest_val_from_dict_vec2(dict: Dictionary, axis: int) -> float:
 	var max_val: float = 0.0
 	for val in dict.values():

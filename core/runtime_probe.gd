@@ -22,6 +22,7 @@ var _active_connections: Array[StreamPeerTCP] = []
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	var err := _server.listen(PORT)
 	if err != OK:
 		Logging.err("[RuntimeProbe] 活体探针启动失败！端口 " + str(PORT) + " 被占用，错误码: " + str(err))

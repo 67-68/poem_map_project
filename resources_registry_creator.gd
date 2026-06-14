@@ -8,7 +8,6 @@ extends Node
 #   运行时模式 → Database 各字典（通过 DataScanner 填充）
 # 保留此文件仅作参考，不执行任何逻辑。
 
-const Logging = preload("res://core/logger.gd")
 const RESOURCE_REGISTRY_PATH = "res://core/model/resources.gd"
 const DATA_FOLDER = "res://data/"
 

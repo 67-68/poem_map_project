@@ -8,7 +8,6 @@
 extends SceneTree
 
 
-const Logging = preload("res://core/logger.gd")
 func _init():
 	Logging.info("\n=== 飘字系统调试工具 ===\n")
 	

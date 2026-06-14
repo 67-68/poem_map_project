@@ -49,19 +49,18 @@ graph TB
 | 框架 | FastMCP (与 `godot_rag_bridge.py` 一致) |
 | 运行环境 | Docker 容器 (通过 `host.docker.internal` 访问宿主机) |
 
-### 3. 统一日志系统 - `core/logger.gd`
+### 3. 统一日志系统 - `core/logging.gd`
 
 | 属性 | 值 |
 |------|-----|
-| 路径 | [`core/logger.gd`](core/logger.gd) |
-| 注册方式 | `project.godot` → `[autoload]` → `Logging="*res://core/logger.gd"` |
+| 路径 | [`core/logging.gd`](core/logging.gd) |
+| 注册方式 | `class_name Logging`（全局类名，不依赖 autoload） |
 | 设计 | 纯静态函数内核 + 环形缓冲区 (500 条) |
 
 **设计要点:**
-- 所有公开函数均为 `static func`，即使 Autoload 未初始化也能调用
+- 所有公开函数均为 `static func`，通过 `class_name Logging` 全局可用
 - 静态环形缓冲区 (`_ring_buffer`) 缓存最近 500 条日志
-- `@tool` 模式和 `--headless` 模式下各脚本需通过 `const Logging = preload("res://core/logger.gd")` 调用
-- 运行时场景可直接使用 Autoload 提供的 `Logging.xxx()` 调用
+- `class_name Logging` 使其在所有上下文（`@tool`、`--headless`、runtime）中全局可用，无需 `preload` 或 autoload
 
 **API:**
 

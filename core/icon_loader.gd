@@ -1,5 +1,4 @@
 class_name IconLoader extends RefCounted
-const Logging = preload("res://core/logger.gd")
 static func get_icon(name: String) -> Texture2D:
     if name.is_empty():
         return load(GameConfig.DEFAULT_ICON)

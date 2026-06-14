@@ -2,7 +2,6 @@ class_name LinkerLinterRule extends BaseLinterRule
 ## 链接检查官
 ## 只管引用对不对（Trait A 被需求，但有没有人提供？Flag B 被 set，有没有在白名单里？）🤓☝️
 
-const Logging = preload("res://core/logger.gd")
 func _init():
 	rule_name = "链接检查官"
 

@@ -9,7 +9,6 @@ class_name EventDataLinter extends BaseLinterRule
 # 3. 抹平异构数据 - DataHelper提供统一事件迭代器，隐藏具体实现
 
 ## Linter Rule流水线
-const Logging = preload("res://core/logger.gd")
 var linter_rules: Array[BaseLinterRule] = []
 
 ## 执行Linter检查

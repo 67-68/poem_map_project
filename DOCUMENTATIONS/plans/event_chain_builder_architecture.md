@@ -224,7 +224,7 @@ source_opt="#0"    # 同上，#前缀可选
 | `--script` | `godot -s script.gd -- "DSL"` | ❌ 不可用 | ❌ 不可用 | `OS.get_cmdline_user_args()` |
 | 场景模式 | `godot scene.tscn -- "DSL"` | ✅ 可用 | ✅ 可用 | `OS.get_cmdline_user_args()` |
 
-**结论：** 必须使用场景模式（挂载到 `.tscn` 文件）来运行。`--script` 模式无法加载 `Logging` 等 autoload。
+**结论：** 必须使用场景模式（挂载到 `.tscn` 文件）来运行。`--script` 模式无法加载 autoload（如 `EventBus`、`GameState` 等）。
 
 ---
 

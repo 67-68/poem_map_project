@@ -25,7 +25,6 @@ const PushEventOperator = preload("res://core/operators/push_event_operator.gd")
 const PopEventOperator = preload("res://core/operators/pop_event_operator.gd")
 const FlagRequirement = preload("res://core/requirements/flag_requirement.gd")
 const FlagOperator = preload("res://core/operators/flag_operator.gd")
-const Logging = preload("res://core/logger.gd")
 const REQ_OPERATOR = preload("res://core/model/requirement_operator.gd")
 
 # ─── 执行结果 ───

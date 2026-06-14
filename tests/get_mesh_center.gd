@@ -1,7 +1,6 @@
 @tool
 extends MeshDataTool
 @export var start_ = false:
-const Logging = preload("res://core/logger.gd")
 	set(val):
 		if val:
 			start_ = false

@@ -2,7 +2,6 @@
 class_name EventActionTagLinter extends Node
 
 @export var start := false:
-const Logging = preload("res://core/logger.gd")
 	set(value):
 		start = false
 		if Engine.is_editor_hint():

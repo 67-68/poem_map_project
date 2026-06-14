@@ -1,5 +1,4 @@
 class_name PropParser extends RefCounted
-const Logging = preload("res://core/logger.gd")
 """
 用来解析属性
 """

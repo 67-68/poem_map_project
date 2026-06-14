@@ -20,7 +20,6 @@ extends RefCounted
 
 # ─── preload 依赖（替代 class_name） ───
 const NamedDSLParser = preload("res://parser/named_dsl_parser.gd")
-const Logging = preload("res://core/logger.gd")
 const ChainCommand = preload("res://parser/chain_command.gd")
 
 # ─── 函数名常量 ───

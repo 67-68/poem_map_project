@@ -9,7 +9,6 @@ extends RefCounted
 class_name DataLoader
 
 # 内部路径修正工具
-const Logging = preload("res://core/logger.gd")
 static func _fix_path(file_path: String, extension: String, global_path: String) -> String:
 	if not file_path.begins_with("res://") and not file_path.begins_with("user://"):
 		# 假设 GameConfig.DATA_PATH 已经定义好，且以 / 结尾

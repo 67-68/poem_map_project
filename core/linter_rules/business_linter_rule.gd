@@ -2,7 +2,6 @@ class_name BusinessLinterRule extends BaseLinterRule
 ## 业务规则检查官
 ## 专门负责校验策划的业务规则（拿了好处必须消耗时间等）🤓☝️
 
-const Logging = preload("res://core/logger.gd")
 func _init():
 	rule_name = "业务规则检查官"
 

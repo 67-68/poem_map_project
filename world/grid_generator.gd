@@ -5,7 +5,6 @@ extends MeshInstance2D
 @export var size: Vector2 = Vector2(1000, 1000)
 @export var subdivide: int = 100
 
-const Logging = preload("res://core/logger.gd")
 func _set_generate_grid(_val):
 	if not _val: return
 	

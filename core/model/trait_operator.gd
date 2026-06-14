@@ -2,7 +2,6 @@
 class_name TraitOperator extends BaseOperator
 
 @export var _trait_key: ENUMS.TRAITS # refers to the trait in trait base
-const Logging = preload("res://core/logger.gd")
 @export var str_traits: String = "":
     set(value):
         str_traits = value

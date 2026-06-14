@@ -22,7 +22,6 @@ config/icon="uid://ku7ifltn2syw"
 [autoload]
 
 GameConfig="*res://core/game_config.gd"
-Logging="*res://core/logger.gd"
 EventBus="*res://core/eventbus.gd"
 GameState="*res://core/game_state.gd"
 TimeService="*res://core/time_service.tscn"
