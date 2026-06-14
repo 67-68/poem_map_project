@@ -33,6 +33,7 @@ graph TB
 | 注册方式 | `project.godot` → `[autoload]` → `RuntimeProbe="*res://core/runtime_probe.gd"` |
 | 端口 | **6066** |
 | 协议 | 纯 HTTP/1.1 (TCPServer + 手写 HTTP 解析) |
+| Bind Address | **`0.0.0.0`**（强制 IPv4） |
 
 **只读契约:**
 - ✅ 仅响应 `GET` 请求
@@ -238,6 +239,7 @@ AI 可以直接调用以下工具获取游戏实时状态：
 | `探针返回 HTTP 405` | 使用了非 GET 方法 | 本探针只接受 GET 请求 |
 | 端口 6066 被占用 | 之前的进程未释放端口 | 等待几秒重试，或 kill 占用进程 |
 | `get_live_logs()` 返回空 | Logging 缓冲区无日志 | 确认游戏已启动一段时间，有足够的 Logging.xxx() 调用产生 |
+| TCP 握手成功但 HTTP 响应 **0 字节**（仅 Docker Desktop macOS） | Godot `TCPServer.listen()` 默认绑 IPv6，但 Docker Desktop 的 `host.docker.internal` 通过 vpnkit 发 IPv4 连接，IPv4 包无法到达 Godot 的 IPv6-only socket | 1. 确认 `core/runtime_probe.gd:26` 为 `_server.listen(PORT, "0.0.0.0")`；2. 重启 Godot；3. 在宿主机 `lsof -i :6066` 确认只有 Godot 监听 `*:6066`（无 VS Code forwardPorts 争抢） |
 
 ## 反悔成本
 

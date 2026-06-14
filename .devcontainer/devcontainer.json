@@ -23,8 +23,6 @@
     "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
     "workspaceFolder": "${localWorkspaceFolder}",
     
-    // 赋予容器与宿主网络通信的能力（如果你需要连外部云端）
-    "forwardPorts": [],
     "remoteUser": "root",
 
     "mounts": [

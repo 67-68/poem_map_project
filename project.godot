@@ -39,10 +39,9 @@ RuntimeProbe="*res://core/runtime_probe.gd"
 
 [debug]
 
-gdscript/autoload_on_startup=true
 file_logging/enable_file_logging=true
 file_logging/log_path="user://logs/game.log"
-
+gdscript/autoload_on_startup=true
 
 [display]
 
