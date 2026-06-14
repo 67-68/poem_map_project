@@ -1,0 +1,460 @@
+{
+  "id": "duotai_humiliation",
+  "name": "多态事件库 - 八大屈辱维度 × 六大网关",
+  "era": "754_humble_abode",
+
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。投诗干谒、献赋上书、奔走权门——该试的都试过了，该碰的壁也碰完了。\n\n这一年杜甫从长安城南的旅舍搬到了城西下杜城（陋室），一个连车马都懒得路过的角落。不是隐居——是穷得租不起好房子。不是绝望——是他终于看清楚了：这个世界的规则，从根子上就不是为他设计的。\n\n此时的杜甫经历过献三大礼赋的短暂荣光（754年初），也经历过李林甫「野无遗贤」的政治玩笑。他的诗名在文人圈里开始传开，但也仅仅是传开——名气和饭碗之间，隔着一整个长安城的铜墙铁壁。\n\n这是一个「该懂的全懂了，该有的全没有」的阶段。他看透了科举的门道、权贵的嘴脸、同侪的挣扎，但看透和改变之间，隔着一个时代的制度性壁垒。\n\n陋室不仅是物理空间，更是一种存在状态：你蹲在社会的缝里，清晰地看见光从哪里照进来，但那光永远照不到你身上。",
+
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代底层文人困境的叙事作家。你的文字像杜诗本身的风格一样——沉郁顿挫，克制冷峻。你不写心理活动，只写可见的动作、环境、对话和沉默。你深知真正的羞辱不是打骂，而是一个眼神的回避、一句漫不经心的「下次吧」、一次刻意的记不起名字。\n\n你擅长在看似平淡的日常场景中，呈现制度性的碾压感——门子的傲慢、同僚的背叛、权贵的遗忘、市井的冷漠。你笔下的每个人物都不是坏人，他们只是在自己的位置上做着「理所当然」的事，而正是这种「理所当然」构成了最令人窒息的结构性暴力。\n\n你的叙事克制到近乎残忍：不评价、不煽情、不说教。让场景自己说话，让动作本身成为批判。",
+
+  "prompt_features": [
+    "stateless_narrative",
+    "tone_cold_malice",
+    "forbid_god_view_psychology",
+    "forbid_inner_monologue",
+    "forbid_comedy_exaggeration",
+    "ambiguous_narrative",
+    "anti_repetition"
+  ],
+
+  "fact_features": [
+    "bai_ye_venue"
+  ],
+
+  "anti_repetition_directive": "极度痛恨重复的叙事套路。在生成同一批次的不同事件时，绝对禁止复用相同的羞辱形式（如两次被门子拦门、两次被索要财务、两次被当众贬低诗文）。必须在物理阻断、才华否定、经济盘剥、精神践踏、关系背叛、制度碾压等维度中强制跳跃。",
+
+  "final_directive": "【绝对禁忌】禁止使用任何心理活动描述（想、觉得、感到、意识到、明白）。禁止使用比喻和修辞（如「像刀割一样」「如坠冰窟」）。每个场景只写——谁做了什么、谁说了什么、周围的环境怎样。让读者自己感受，不要替他们感受。\n\n【钻营指令特例 — 低旷达分支】当生成钻营选项文本时，杜绝对话中可以表现出极度的谦卑和渴望，可以卑微到尘埃里——可以说「求大人赏口饭吃」「小的愿效犬马之劳」。但【绝对禁止】钻营选项让玩家出卖朋友、背叛恩人、或做违背良知的事。钻营可以跪，但不能脏。\n\n【核心契约】叙事是对称的——一个动作必须有一个对应的结果。NPC 可以恶意，但必须有动机；玩家可以卑微，但必须有尊严的底线（哪怕是钻营选项）。",
+
+  "narrative_constraint": {
+    "type": "polymorphic_humiliation_event",
+    "demand_context": "NPC 根据当前羞辱维度和场景，以合乎身份的方式向玩家提出要求。要求必须是具体的、可执行的、且与穷人身份匹配的——不是要玩家去杀人放火，而是写诗、跑腿、让座、忍让、掏钱这类日常性消耗。【严禁】超出时代背景或阶级身份的要求。",
+    "action_style": "玩家只能以三种范式之一回应——狂客（沉默/无视/高傲）、逢迎（顺从/讨好/笑纳）、钻营（卑微/哀求/献媚）。动作描写必须体现玩家的身份（穷文人/底层士子），不得使用贵族或武将的动作描写。",
+    "resolution_style": "NPC 对玩家回应的即时反应——可能是满意（得到了想要的）、失望（玩家不识相）、愤怒（被冒犯）、不屑（根本不关心）。用动作和对话呈现，不用内心独白。反应要小而真实，不夸张。",
+    "negative_examples": [
+      {"field": "demand_context", "bad": "宰相大人冷笑着说：'你这寒酸样也配见我？'", "reason": "除了拜谒外的场景不会有高官直接出现；要求应当是具体事务而非人身攻击"},
+      {"field": "action_style", "bad": "你昂首挺胸，不卑不亢地驳斥对方的无理要求", "reason": "狂客选项是沉默/无视/高傲，不是据理力争。逢迎和钻营更不能反击"},
+      {"field": "action_style", "bad": "你跪地磕头，泪流满面地哀求对方施舍", "reason": "钻营可以卑微，但不是卖惨表演。动作要节制，不是戏剧化的下跪"},
+      {"field": "resolution_style", "bad": "NPC 被你的才华折服，决定举荐你", "reason": "陋室期的核心体验是碰壁和消耗，不是逆袭。NPC 不会因为玩家的回应而改变其立场"}
+    ]
+  },
+
+  "universal_tags": ["duotai_humiliation"],
+
+  "universal_requirement": "prop_gt(name=ambition,val=50),prop_lt(name=ambition,val=100)",
+
+  "universal_result": "prop_add(name=exhaustion; val=1)|prop_add(name=fatigue; val=5)",
+
+  "universal_option_requirement": "",
+
+  "word_count_min": 40,
+  "word_count_max": 250,
+  "max_retries": 3,
+  "api_model": "deepseek-chat",
+  "output_dir": "data/generated_events/",
+
+  "apply_dimension_imagery": false,
+
+  "plugins": ["emotion_pair_imagery"],
+
+  "emotion_pairs": {
+    "pair_rebellion": {
+      "branch_A": {"emotion": "ARROGANCE", "desc": "狂傲——我不在乎你的规则"},
+      "branch_B": {"emotion": "TRANQUILITY", "desc": "静谧——这些都无关紧要"},
+      "fallback": {"emotion": "FATIGUE", "desc": "疲惫——我累了，就这样吧"}
+    },
+    "pair_survival": {
+      "branch_A": {"emotion": "FATIGUE", "desc": "疲惫——我撑不住了但还是得撑"},
+      "branch_B": {"emotion": "AMBITION", "desc": "野心——这点屈辱算什么，我还能忍"},
+      "fallback": {"emotion": "SORROW", "desc": "悲戚——怎么会这样"}
+    },
+    "pair_despair": {
+      "branch_A": {"emotion": "ANGER", "desc": "愤怒——这世界不该是这样的"},
+      "branch_B": {"emotion": "SORROW", "desc": "悲戚——罢了，都是命"},
+      "fallback": {"emotion": "FATIGUE", "desc": "疲惫——我已经没有力气生气了"}
+    }
+  },
+
+  "option_features": [
+    {
+      "id": "opt_kuangke",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以高旷达状态回应当前羞辱。动作特征是：沉默、无视、高傲、不在乎。不解释、不争辩、不讨好。",
+      "text": "（默然不语）",
+      "result": "prop_add(name=kuangda; val=2)|prop_sub(name=fatigue; val=3)",
+      "fixed": false,
+      "accept_influence": ["gateway"],
+      "pair_role": "branch_A",
+      "plugins": {
+        "emotion_pair_imagery": {
+          "branch_role": "branch_A"
+        }
+      }
+    },
+    {
+      "id": "opt_fengying",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以中旷达状态回应当前羞辱。动作特征是：顺从、配合、苦笑、按对方要求做。不硬顶、不巴结、保持基本的体面。",
+      "text": "（依言照做）",
+      "result": "prop_add(name=kuangda; val=1)|prop_sub(name=money; val=3)",
+      "fixed": false,
+      "accept_influence": ["gateway"],
+      "pair_role": "fallback",
+      "plugins": {
+        "emotion_pair_imagery": {
+          "branch_role": "fallback"
+        }
+      }
+    },
+    {
+      "id": "opt_zuanying",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以低旷达状态回应当前羞辱。动作特征是：卑微、讨好、献媚、主动示弱。可以说「求大人赏口饭吃」「小的愿效犬马之劳」之类极度谦卑的话。【绝对不能】出卖朋友、背叛恩人、或做违背良知的事。可以跪，但不能脏。",
+      "text": "（躬身赔笑，小心奉承）",
+      "result": "prop_add(name=kuangda; val=-1)|prop_add(name=money; val=5)|prop_sub(name=health; val=2)",
+      "fixed": false,
+      "accept_influence": ["gateway"],
+      "pair_role": "branch_B",
+      "plugins": {
+        "emotion_pair_imagery": {
+          "branch_role": "branch_B"
+        }
+      }
+    }
+  ],
+
+  "dimensions": [
+    {
+      "id": "humiliation_type",
+      "name": "屈辱维度 — 羞辱的形态",
+      "description": "陋室期杜甫日常经历的八种结构性羞辱。每种羞辱形态都有其独特的社会机制和情绪底色，通过 emotion_pair_id 绑定对应的情绪对，在选项生成时驱动 per-option 意象选择。",
+      "values": [
+        {
+          "id": "talent_commodification",
+          "name": "才华物化 — 诗在权贵眼中只是交易筹码",
+          "description": "杜甫的诗被当作等价物——换一顿饭、一件旧衣、一个引荐机会。才华本身不被尊重，被看作一种可以讨价还价的商品。",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=poem_power; val=1)",
+          "tags": [
+            "emotion_pair:pair_rebellion",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:humiliation_talent_commodification"
+          ],
+          "linked_value_ids": ["gateway_fangshi", "gateway_jiaoyou", "gateway_baiye", "gateway_duzhuo"],
+          "narrative_constraint": {
+            "type": "humiliation_talent_commodification",
+            "demand_context": "NPC 以某种形式索要或利用玩家的诗才来换取实际利益——「听说你会作诗？替我写一首贺寿诗，这顿饭就免了」「我家公子缺个捉刀人，写得好有赏」。NPC 的态度是工具性的——你的才华只是他要利用的资源，和人无关。【严禁】NPC 贬低诗的质量；他们不是不识货，而是太识货——知道你的诗能卖钱。",
+            "action_style": "玩家有三种回应范式——狂客（沉默地写诗，写完即走，不接对方递来的报酬）、逢迎（恭敬地写诗，双手奉上，接受报酬但不卑不亢）、钻营（主动表示愿意多写几首，讨好地询问对方是否还有其他需要）。【严禁】玩家在动作中表现对「才华被物化」的不满——这个选项层的情绪已经由 emotion_pair 处理，动作只需要呈现行为本身。",
+            "resolution_style": "NPC 拿到诗后的即时反应——满意地点点头随手收下、挑剔地指出哪里可以更好但还是收了、或者压根没认真看就塞进袖子里。用细微的动作和表情呈现，不夸张。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "权贵把诗稿摔在地上：'这种垃圾也配叫诗？'", "reason": "才华物化的核心不是贬低质量，而是工具化——他们需要你的诗，但不尊重你这个人"},
+              {"field": "action_style", "bad": "你冷冷地把诗揉成一团扔回去", "reason": "狂客的回应是沉默的无视，不是挑衅的反击"},
+              {"field": "resolution_style", "bad": "NPC 读完后热泪盈眶，说你是个天才", "reason": "不会被感动，他们只是完成了资源交换，不会对你有超出工具价值的情感反应"}
+            ]
+          }
+        },
+        {
+          "id": "aesthetic_violation",
+          "name": "审美强暴 — 被迫按别人的标准糟蹋自己的作品",
+          "description": "权贵或富商要求杜甫按他们的趣味修改诗作——把含蓄改成直白、把沉郁改成喜庆、把讽喻改成颂圣。不改就不付钱，不改就不给引荐。",
+          "scale": 1.05,
+          "operator_dsl": "prop_sub(name=poem_power; val=1)|prop_sub(name=health; val=2)",
+          "tags": [
+            "emotion_pair:pair_rebellion",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "ACTION_SOCIAL_PARTING:willow_branch",
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "action:humiliation_aesthetic_violation"
+          ],
+          "linked_value_ids": ["gateway_fangshi", "gateway_jiaoyou", "gateway_baiye", "gateway_duzhuo"],
+          "narrative_constraint": {
+            "type": "humiliation_aesthetic_violation",
+            "demand_context": "NPC 拿着杜甫的诗稿，指出需要修改之处——「这句太悲了，改成喜庆的」「这个典故太冷僻，换一个大家都懂的」「整体格调要昂扬向上，现在是皇帝圣明的时候」。要求越具体越好——不是抽象的批评，而是具体的改法。NPC 可能是附庸风雅的富商、奉命征诗的官吏、或自命清高的文人。【严禁】NPC 表现出恶意——他们真心觉得自己是对的，是在「帮」杜甫改进。",
+            "action_style": "三种回应——狂客（不反驳，但也不按对方要求改，交回去的原稿基本没动）、逢迎（默默按对方要求修改，删去自己最得意的句子）、钻营（主动询问对方还有哪些地方要改，变本加厉地迎合对方品味）。【严禁】玩家在动作中表现内心挣扎或不满。",
+            "resolution_style": "NPC 审阅修改稿后的反应。满意则点头收下，不满意则皱眉指出更多问题。反应要具体——「这句好多了」「还是不对，再改」。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "权贵把你叫到面前，劈头盖脸一顿骂：'写的什么狗屁'", "reason": "审美强暴的施暴者不认为自己是在施暴——他们是真的觉得自己品味更好"},
+              {"field": "action_style", "bad": "你据理力争，引经据典地解释原作的妙处", "reason": "辩解不是任何一种选项范式——狂客不说话，逢迎顺从，钻营讨好"},
+              {"field": "resolution_style", "bad": "NPC 大笑着说'这才是好诗'，然后把你的原稿烧了", "reason": "太戏剧化。真实的审美强暴是无趣的、刻板的，不是夸张的恶形恶状"}
+            ]
+          }
+        },
+        {
+          "id": "leftover_treatment",
+          "name": "残羹冷炙 — 接受施舍式的报酬，被当作打发叫花子",
+          "description": "杜甫付出了劳动——写诗、作文、抄录——换来的报酬却是一种羞辱：几文铜钱、一壶劣酒、一件破旧冬衣。不是不给钱，是给得让你觉得自己只值这个价。",
+          "scale": 1.1,
+          "operator_dsl": "prop_sub(name=health; val=5)",
+          "tags": [
+            "emotion_pair:pair_survival",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "VIBE_THEME_HISTORY:ruined_wall",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:humiliation_leftover_treatment"
+          ],
+          "linked_value_ids": ["gateway_fangshi", "gateway_jiaoyou", "gateway_baiye", "gateway_denggao"],
+          "narrative_constraint": {
+            "type": "humiliation_leftover_treatment",
+            "demand_context": "NPC 在玩家完成某事（写诗、跑腿、陪酒、抄录）后，给出明显低于付出的报酬——几枚铜钱不当数地丢在桌上、一件旧衣像施舍一样递过来、一壶劣酒说是「赏你的」。NPC 的态度不是刻意的羞辱，而是漫不经心地觉得「这些就够了」。【严禁】NPC 直接说出侮辱性的话——羞辱不在于言语，而在于给多少、怎么给。",
+            "action_style": "三种回应——狂客（不看报酬多少，直接收下或转身就走，表现出不在乎）、逢迎（道谢收下，没有多余表情）、钻营（感恩戴德地收下，连声道谢，表示下次还愿意效劳）。【严禁】玩家清点铜钱数量或在表情上流露不满。",
+            "resolution_style": "NPC 对玩家反应的态度——可能根本没有注意玩家的反应（最好的羞辱就是不在乎），或者对钻营的感恩表示满意地点头。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "管家把一把铜钱摔在你脸上：'拿了快滚'", "reason": "漫不经心的打发才是这个维度的核心，恶意辱骂太直接也太廉价了"},
+              {"field": "action_style", "bad": "你默默数了数铜钱，嘴角露出一丝苦笑", "reason": "苦笑是一种心理活动的外化，违背了禁止心理描写的原则"},
+              {"field": "resolution_style", "bad": "NPC 看你数钱，冷笑着说：'嫌少？'", "reason": "好的羞辱是施暴者根本不在乎你的反应，不会主动补刀"}
+            ]
+          }
+        },
+        {
+          "id": "cheap_labor",
+          "name": "廉价劳力 — 才华不值钱，体力才值钱",
+          "description": "作为士人却被当作普通劳力使用——不是让你写诗作文，而是让你抄录文书、整理书卷、跑腿送信。你的才华不被看见，你被当作一个识字很多的苦力。",
+          "scale": 1.15,
+          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=fatigue; val=10)",
+          "tags": [
+            "emotion_pair:pair_survival",
+            "VIBE_THEME_HISTORY:ruined_wall",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "ACTION_TRAVEL_BOAT:broken_oar",
+            "action:humiliation_cheap_labor"
+          ],
+          "linked_value_ids": ["gateway_fangshi", "gateway_jiaoyou", "gateway_baiye", "gateway_fengzhao"],
+          "narrative_constraint": {
+            "type": "humiliation_cheap_labor",
+            "demand_context": "NPC 分配给玩家纯粹的体力或工具性劳动——「把这些文书誊抄一遍」「把这些书卷搬到东厢」「去西市送一封信」。劳动本身与才华无关，士人的身份被完全无视。NPC 的态度是理所当然的——你一个穷书生，不用你干活用什么？【严禁】NPC 刻意侮辱或嘲笑——他们是真的觉得这些活就该你来干。",
+            "action_style": "三种回应——狂客（不拒绝，但做得敷衍、慢、漫不经心，让对方知道你不爽但抓不到把柄）、逢迎（认真完成，动作利落，表现出虽不情愿但认命的态度）、钻营（主动多干活，干完后询问还有什么需要帮忙的）。【严禁】玩家表达不满或抗议。",
+            "resolution_style": "NPC 验收劳动成果——可能随口说一句「放那儿吧」看都不看，也可能挑剔某个细节让你重做。不把你当人看的方式不是打骂，是根本不在意。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "你被拉去和仆役一起搬东西", "reason": "NPC 不是在羞辱你，他们是真的需要有人干这些活，且认为你干最合适——使唤的语气而不是命令的语气"},
+              {"field": "action_style", "bad": "你停下来擦了擦汗，叹息一声", "reason": "叹息是情绪外化，禁绝。动作要保持中性"},
+              {"field": "resolution_style", "bad": "管事的说'到底是读书人，干活就是利索'", "reason": "这不是夸奖，这是进一步把你定位为劳力。真实的反应是漠不关心的验收"}
+            ]
+          }
+        },
+        {
+          "id": "class_bullying",
+          "name": "阶级霸凌 — 权力的日常践踏",
+          "description": "不是因为做错了什么，仅仅因为身份低微就被当众羞辱——被要求让路、被呵斥退下、被当作不存在。这不是交易，是纯粹的权力展示。",
+          "scale": 1.2,
+          "operator_dsl": "prop_sub(name=health; val=8)|prop_sub(name=fatigue; val=5)",
+          "tags": [
+            "emotion_pair:pair_despair",
+            "TARGET_OBJECT_SWORD:cold_blade",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "VIBE_THEME_HISTORY:ruined_wall",
+            "action:humiliation_class_bullying"
+          ],
+          "linked_value_ids": ["gateway_baiye", "gateway_jiaoyou", "gateway_fengzhao", "gateway_denggao"],
+          "narrative_constraint": {
+            "type": "humiliation_class_bullying",
+            "demand_context": "NPC 以阶级优势地位直接碾压玩家——可能是高官的家奴把玩家从路边推开「没长眼吗？没看见公子的车驾？」、可能是衙门小吏当众呵斥玩家不懂规矩、可能是富商在酒宴上故意不介绍玩家。「你是谁来着？」——被忘记比被轻视更残忍。NPC 的行为不是针对玩家个人，而是针对一切「不够资格站在这里的人」。【严禁】NPC 进行人身攻击或物理伤害——赤裸的恶意不是高级的权力展示。",
+            "action_style": "三种回应——狂客（在被推开后默默站到一边，不看任何人，像什么都没发生一样维持自己的姿态）、逢迎（低头退开，躬身道歉，即使自己没错）、钻营（在退开后寻找机会讨好施暴者，试图把羞辱转化为关系）。【严禁】玩家争辩或表达不满。",
+            "resolution_style": "NPC 无视玩家的存在继续做自己的事。最好的阶级霸凌结果的不是对抗，是无视——你连成为对方对手的资格都没有。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "高官指着你骂：'你这寒门贱种也配来这种地方？'", "reason": "真实的阶级霸凌不是骂街，是视若无物——被推开、被跳过、被忘记"},
+              {"field": "action_style", "bad": "你咬着牙握紧拳头，强忍怒火", "reason": "动作不能携带情绪描写。握拳是愤怒的外化，禁绝"},
+              {"field": "resolution_style", "bad": "旁边有人替你打抱不平", "reason": "在阶级社会里，没有人会为底层的尊严站出来——那不是仗义，是找死"}
+            ]
+          }
+        },
+        {
+          "id": "peer_gap",
+          "name": "同侪落差 — 看着不如你的人爬到了你头上",
+          "description": "曾经同窗共读的朋友、一起参加科举的同侪，如今有人当上了官、有人入了权贵幕府、有人靠关系拿到了肥差。而杜甫还是那个杜甫——住的更破了、衣服更旧了、希望更渺茫了。",
+          "scale": 1.1,
+          "operator_dsl": "prop_sub(name=fatigue; val=10)",
+          "tags": [
+            "emotion_pair:pair_despair",
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ACTION_SOCIAL_PARTING:willow_branch",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:humiliation_peer_gap"
+          ],
+          "linked_value_ids": ["gateway_jiaoyou", "gateway_baiye", "gateway_duzhuo", "gateway_denggao"],
+          "narrative_constraint": {
+            "type": "humiliation_peer_gap",
+            "demand_context": "玩家遇到过去的同侪——对方如今已有官职、车马、随从。对比不需要刻意强调，只需要呈现两个画面：对方的锦衣玉食 vs 玩家的粗布寒碜。同侪的态度可能是真诚地同情（递给玩家一个装有铜钱的荷包）、可能是尴尬地回避（假装没看见）、可能是刻意地炫耀（「子美兄近来可好？我最近在XX部任职，也还算清闲」）。【严禁】同侪直接羞辱玩家——熟人之间真正的残酷是「我过得好，你过得不好，我们都知道，但我们都不说破」。",
+            "action_style": "三种回应——狂客（平静地打招呼，不寒暄不诉苦，像没事人一样聊些风月）、逢迎（恭维对方的成就，表示祝贺，收下好意但不卑不亢）、钻营（主动套近乎，暗示自己正在找门路，希望对方提携）。【严禁】玩家表现出嫉妒或酸楚。",
+            "resolution_style": "分别时的场景——可能是同侪匆匆离去（有公务在身）、可能是同侪塞过来什么东西后快步走开（不想被人看见在接济旧友）、可能是同侪约好改日再聚（一个双方都知道不会兑现的约定）。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "同窗骑在高头大马上，居高临下地俯视你：'哟，这不是子美吗？怎么还这么寒酸？'", "reason": "同侪之间的残酷是克制的、伪善的、尴尬的，不是直白的恶意"},
+              {"field": "action_style", "bad": "你在心里暗暗发誓一定要出人头地", "reason": "发誓是心理活动，禁绝"},
+              {"field": "resolution_style", "bad": "同侪被你的人格魅力折服，决定举荐你", "reason": "这不是逆袭爽文，同侪不会为了你冒险动用关系"}
+            ]
+          }
+        },
+        {
+          "id": "weak_harm_weak",
+          "name": "弱者相害 — 底层之间的相互倾轧",
+          "description": "比权贵的压迫更令人窒息的，是同样处于底层的人之间的相互伤害——门子刁难来投奔的更穷的亲戚、邻里因为一捆柴火争执、同行文人为了一个机会相互诋毁。弱者没有向上的通道，只能向下挤压更弱的人。",
+          "scale": 1.05,
+          "operator_dsl": "prop_sub(name=health; val=3)|prop_sub(name=fatigue; val=5)",
+          "tags": [
+            "emotion_pair:pair_despair",
+            "VIBE_THEME_HISTORY:ruined_wall",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:humiliation_weak_harm_weak"
+          ],
+          "linked_value_ids": ["gateway_fangshi", "gateway_duzhuo", "gateway_denggao"],
+          "narrative_constraint": {
+            "type": "humiliation_weak_harm_weak",
+            "demand_context": "另一个底层人物以某种方式侵害玩家利益——可能是邻居偷了晾在外面的衣物、可能是同行文人散布关于玩家的谣言、可能是车夫多收了车资、可能是摊贩短斤少两。加害者不是恶人，他们只是太穷了，穷到不得不从更穷的人身上扒一层皮。玩家能理解，但理解不等于不受伤。【严禁】加害者有明显的恶意或预谋——弱者的恶是即兴的、机会主义的、带着歉意的。",
+            "action_style": "三种回应——狂客（发现了但不追究，沉默地走开，像是没看见一样）、逢迎（苦笑一下算了，自认倒霉）、钻营（试图和对方拉关系套近乎，希望对方下次「照顾」自己）。【严禁】玩家和对方发生冲突或理论。",
+            "resolution_style": "加害者的反应——可能是心虚地避开玩家的目光、可能是若无其事地继续做自己的事、可能是发现玩家发现了但双方都装作没发生。真正的悲剧是底层之间没有赢家。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "邻居指着你鼻子骂：'就你这种人也配住这里？'", "reason": "弱者的伤害不是来自恶意，而是来自匮乏——偷东西不是因为恨你，是因为自己没得选了"},
+              {"field": "action_style", "bad": "你大声斥责对方的不道德行为", "reason": "玩家的反应是被动的，不能主动追究或质问"},
+              {"field": "resolution_style", "bad": "对方被你感动，把东西还了回来", "reason": "弱者的伤害不会因为你的大度就被纠正——东西拿不回来了，信任也回不来了"}
+            ]
+          }
+        },
+        {
+          "id": "hidden_charity",
+          "name": "隐秘的施舍 — 善意比恶意更难承受",
+          "description": "比羞辱更难面对的是善意——有人出于同情暗中帮助杜甫，但这份帮助本身就在不断提醒杜甫：你是一个需要被同情的人。朋友故意输棋留下银钱、亲戚在年节礼盒里多塞了东西、陌生人多给了几个铜板说「不用找了」。善意本身成了最大的屈辱。",
+          "scale": 1.0,
+          "operator_dsl": "prop_add(name=money; val=10)|prop_sub(name=fatigue; val=5)",
+          "tags": [
+            "emotion_pair:pair_survival",
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "ACTION_SOCIAL_PARTING:willow_branch",
+            "action:humiliation_hidden_charity"
+          ],
+          "linked_value_ids": ["gateway_fangshi", "gateway_jiaoyou", "gateway_baiye", "gateway_duzhuo"],
+          "narrative_constraint": {
+            "type": "humiliation_hidden_charity",
+            "demand_context": "NPC 以一种不让玩家难堪的方式提供帮助——「这壶酒我多了，你拿去吧」「这些旧书我留着也没用」「哎呀这银钱多找了你」。施舍者努力装作这只是巧合或无心之举，但双方都知道这是在接济。NPC 的态度是真诚且小心翼翼的——他们真的想帮忙，但不想伤害玩家的自尊。【严禁】NPC 表现出居高临下的怜悯或说教。",
+            "action_style": "三种回应——狂客（不接受——「不必了」，语气平静但坚定。宁可饿着也不接受施舍）、逢迎（接受，道谢，不多说什么。收下好意但保持体面）、钻营（接受并表现出感激，暗示自己确实处境困难，希望对方继续关照）。【严禁】玩家推让三次才接受——那种客套太戏剧化。",
+            "resolution_style": "双方心照不宣地分别。帮助者和受助者都不说破，各自带着复杂的情绪离开。施舍者的表情可能是松了一口气（帮到了）、也许是有些伤感（你竟然到了这个地步）。",
+            "negative_examples": [
+              {"field": "demand_context", "bad": "富商把一锭银子扔到你面前：'拿去花，别客气'", "reason": "隐秘的施舍的核心是「隐秘」，不是慷慨。真的帮助者会尽量让你不觉得这是施舍"},
+              {"field": "action_style", "bad": "你红着眼眶推辞：'这怎么好意思……'", "reason": "红眼眶是情绪外化。狂客不接受就是直接拒绝，逢迎接受就是自然收下，不会推让"},
+              {"field": "resolution_style", "bad": "你目送恩人远去，暗暗发誓以后一定要报答", "reason": "发誓是内心活动。即使要表达感激，也只能通过动作——目送、作揖、沉默地站在原地"}
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "gateway",
+      "name": "场景网关 — 事件发生的空间与社交语境",
+      "description": "杜甫日常活动的六大场景类型。每个网关决定了事件发生的物理空间、社交关系层和权力结构。",
+      "values": [
+        {
+          "id": "gateway_fangshi",
+          "name": "坊市 — 长安东西市的日常交易与偶遇",
+          "description": "长安东西两市及坊间街巷。这里是商品交易的空间，也是各阶层混杂的唯一场所。杜甫在这里买菜、沽酒、碰见熟人、遭遇市井纠纷。",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=money; val=3)",
+          "tags": [
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "action:scene_fangshi"
+          ],
+          "narrative_constraint": {
+            "type": "scene_fangshi",
+            "demand_context": "发生在长安东西市或坊间街巷。空间特征是嘈杂、拥挤、各色人等混杂。气味复杂——菜市、香料、马粪、炊烟。时间是白天居多。",
+            "action_style": "动作发生在人群中。玩家要侧身让路、要避开马车、要在摊贩的吆喝声中提高音量说话。动作要体现庶民阶层的身体经验。",
+            "resolution_style": "场景在熙攘中结束——人群继续流动，摊贩继续吆喝，杜甫继续走他的路。长安不会为任何人的悲欢停下。"
+          }
+        },
+        {
+          "id": "gateway_jiaoyou",
+          "name": "交游 — 文人圈子的社交场",
+          "description": "文人雅集、酒宴、诗会、友人家中。表面上是风雅聚会，实际上充满了阶层攀比、资源交换和人际博弈。",
+          "scale": 1.1,
+          "operator_dsl": "prop_sub(name=fatigue; val=5)",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "ACTION_SOCIAL_PARTING:willow_branch",
+            "action:scene_jiaoyou"
+          ],
+          "narrative_constraint": {
+            "type": "scene_jiaoyou",
+            "demand_context": "在某人宅邸或酒楼的雅间。桌上摆着酒菜，周围是谈笑风生的文人。有人在高谈阔论政治，有人在低声交换资源信息。杜甫的旧衣和沉默在这一桌人中显得格外突兀。",
+            "action_style": "动作要体现社交场中的微妙身体语言——端杯、搁筷、起身敬酒时的犹豫、被冷落时假装欣赏墙上的字画。",
+            "resolution_style": "聚会散场时众人在门口作别。有人乘车离去，有人相约下一场，杜甫独自走入夜色。"
+          }
+        },
+        {
+          "id": "gateway_baiye",
+          "name": "拜谒 — 权贵门前的等待与求见",
+          "description": "登门拜访权贵或官员，请求引荐或资助。这是一个典型的上下级权力空间——从门房到正堂，每一道门槛都在提醒你来这里不是做客，是求人。",
+          "scale": 1.2,
+          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=money; val=5)",
+          "tags": [
+            "TARGET_FACTION_ROYAL:jade_step",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:scene_baiye"
+          ],
+          "narrative_constraint": {
+            "type": "scene_baiye",
+            "demand_context": "在权贵宅邸门外或厅堂。空间是压抑的——高大的门楣、沉默的家奴、漫长得令人不安的等待。玩家可能在门房里坐着冷板凳，听着里面传来觥筹交错的笑声。",
+            "action_style": "等待是拜谒的核心动作——站着等、坐着等、在冷风里等。玩家能做的只有等待和被传唤。动作要突出被动性——捧着名帖、整理衣冠、在听到脚步声时站起来。",
+            "resolution_style": "被接见或被拒绝。被接见可能是三言两语打发，被拒绝可能是门子出来说一声「老爷今日不便」。结局总是狼藉的——玩家收拾名帖，转身离开。"
+          }
+        },
+        {
+          "id": "gateway_duzhuo",
+          "name": "独酌 — 酒肆中的独饮与旁观",
+          "description": "杜甫独自在小酒馆饮酒。这是一个微醺的旁观者视角——看邻桌的喧哗、听窗外的市声、想自己的心事。独酌是最私密也最脆弱的空间。",
+          "scale": 0.9,
+          "operator_dsl": "prop_sub(name=money; val=2)|prop_sub(name=fatigue; val=3)",
+          "tags": [
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ACTION_ENTERTAIN_DRINK:empty_cup",
+            "action:scene_duzhuo"
+          ],
+          "narrative_constraint": {
+            "type": "scene_duzhuo",
+            "demand_context": "在长安西市附近的小酒肆。昏暗的油灯、粗糙的木桌、劣质的酒。邻桌可能有醉汉喧哗、可能有胡姬弹唱、可能有商人在谈生意。杜甫坐在角落，一碗浊酒喝很久。",
+            "action_style": "动作缓慢而零碎——端起碗抿一口、放下、望着窗外出神、在桌上无意识地划字。重点不是动作本身，是动作之间的停顿。",
+            "resolution_style": "酒尽人散。杜甫放下酒钱起身离开，走入夜色。或者被某个事件打断——邻桌的争吵、突然来访的熟人、店家的逐客。"
+          }
+        },
+        {
+          "id": "gateway_denggao",
+          "name": "登高 — 城楼/土丘上的远眺与沉思",
+          "description": "杜甫独自登上长安城郊的某处高地——乐游原、曲江池畔的土坡、或某座废弃的城楼。登高是唐诗中最经典的母题之一——视野开阔了，心事也变得更重了。",
+          "scale": 0.85,
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "tags": [
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ACTION_TRAVEL_CLIMB:high_tower",
+            "action:scene_denggao"
+          ],
+          "narrative_constraint": {
+            "type": "scene_denggao",
+            "demand_context": "在长安城郊的高处。向下看是鳞次栉比的屋顶、远处是终南山的轮廓、风很大。登高者面对的往往不是风景，是自己无处安放的心事。可能与另一人同行，但多是登高后分开。",
+            "action_style": "动作是静态的——站立、眺望、被风吹动衣角。如果有同行者，对话也是断断续续的，被风声打断。",
+            "resolution_style": "日落风冷，起身下山。或者和同行者在暮色中分别，各自走向不同的方向。"
+          }
+        },
+        {
+          "id": "gateway_fengzhao",
+          "name": "奉召 — 被叫去应付差事",
+          "description": "被官府或权贵临时叫去应付某项差事——写公文、应制作文、陪席应酬。这不是正式的任命，而是一次性的、带有临时征调性质的劳务。奉召是一种「半强迫」的义务——不去不行，去了也没钱。",
+          "scale": 1.15,
+          "operator_dsl": "prop_sub(name=health; val=3)|prop_sub(name=fatigue; val=8)",
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "TARGET_OBJECT_SWORD:rusty_sword",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:scene_fengzhao"
+          ],
+          "narrative_constraint": {
+            "type": "scene_fengzhao",
+            "demand_context": "衙署或某个临时办公场所。空间是官僚化的——案牍、公文、穿梭的胥吏、沉默的上级。玩家被叫来是因为「你这方面擅长」，但不会因为擅长而得到尊重。",
+            "action_style": "动作是功能性的一一研墨、执笔、呈文、领命退出。玩家的身体不属于自己，属于这件差事。",
+            "resolution_style": "差事完成后离开。可能得到一句「辛苦了」，也可能连这句话都没有——门外的下一个等候者已经进来了。"
+          }
+        }
+      ]
+    }
+  ]
+}

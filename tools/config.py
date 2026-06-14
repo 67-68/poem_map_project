@@ -59,6 +59,28 @@ class NegativeExample(BaseModel):
     reason: str = ""
 
 
+class EmotionPairBranch(BaseModel):
+    """情绪对分支定义：一个选项分支绑定的情绪。
+
+    emotion: 情绪 ID，如 "ARROGANCE", "TRANQUILITY"
+    desc:    情绪的中文描述，如 "狂傲", "静谧"
+    """
+    emotion: str = ""
+    desc: str = ""
+
+
+class EmotionPairConfig(BaseModel):
+    """情绪对配置：定义一对精英选项 + 一个降级选项的情绪绑定。
+
+    branch_A: 精英分支 A — 通常对应 狂客 选项
+    branch_B: 精英分支 B — 通常对应 钻营 选项
+    fallback: 降级分支   — 通常对应 逢迎 选项
+    """
+    branch_A: EmotionPairBranch = Field(default_factory=EmotionPairBranch)
+    branch_B: EmotionPairBranch = Field(default_factory=EmotionPairBranch)
+    fallback: EmotionPairBranch = Field(default_factory=EmotionPairBranch)
+
+
 class NarrativeConstraint(BaseModel):
     """🎯 叙事约束：硬性写作规则 (Narrative Constraint)
 
@@ -114,6 +136,11 @@ class OptionFeature(TextFeature):
     plugins: dict[str, dict] = Field(
         default_factory=dict,
         description="插件级配置挂载点: {plugin_id: {config_dict}}",
+    )
+    pair_role: str = Field(
+        default="",
+        description="情绪对角色: 'branch_A' | 'fallback' | 'branch_B'。"
+                    "空字符串表示不使用 emotion_pair 意象绑定。",
     )
 
 
@@ -390,6 +417,16 @@ class EventPipelineConfig(BaseModel):
     # True → 提取维度 tags 的意象池 → 按情绪亲缘度打分 → 注入 Prompt
     # False（默认）→ 完全向后兼容，不执行意象相关逻辑
     apply_dimension_imagery: bool = False
+
+    # 🆕 情绪对定义字典
+    # key = emotion_pair_id (如 "pair_rebellion")
+    # value = EmotionPairConfig 定义 branch_A / branch_B / fallback 的情绪绑定
+    # 用于多态事件库：每个 humiliation_type 维度值携带 emotion_pair_id，
+    # 每个 option_feature 通过 pair_role 查询对应情绪，做 per-option 意象打分。
+    emotion_pairs: dict[str, EmotionPairConfig] = Field(
+        default_factory=dict,
+        description="情绪对定义字典: {pair_id: EmotionPairConfig}",
+    )
 
 
 class ImageryItem(BaseModel):
