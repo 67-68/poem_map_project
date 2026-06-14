@@ -36,10 +36,14 @@ ConsequenceExecuter="*res://core/consequence_executer.gd"
 EventManager="*res://core/event_manager.gd"
 ActionManager="*res://core/action_manager.gd"
 ImageManager="*res://features/image_manager.gd"
+RuntimeProbe="*res://core/runtime_probe.gd"
 
 [debug]
 
 gdscript/autoload_on_startup=true
+file_logging/enable_file_logging=true
+file_logging/log_path="user://logs/game.log"
+
 
 [display]
 

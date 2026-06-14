@@ -1,7 +1,7 @@
 {
 	"mcpServers": {
 		"godot-tool": {
-			"command": "/home/vscode/mcp_venv/bin/mcp",
+			"command": "/Users/lennon/Projects/poem_map_project/.venv/bin/mcp",
 			"args": [
 				"run",
 				"/Users/lennon/Projects/poem_map_project/godot_mcp.py"
@@ -14,7 +14,7 @@
 			]
 		},
 		"godot-rag-bridge": {
-			"command": "/home/vscode/mcp_venv/bin/mcp",
+			"command": "/Users/lennon/Projects/poem_map_project/.venv/bin/mcp",
 			"args": [
 				"run",
 				"/Users/lennon/Projects/poem_map_project/godot_rag_bridge.py"
@@ -23,6 +23,21 @@
 			"autoApprove": [],
 			"alwaysAllow": [
 				"semantic_code_search"
+			]
+		},
+		"godot-runtime-probe": {
+			"command": "/Users/lennon/Projects/poem_map_project/.venv/bin/mcp",
+			"args": [
+				"run",
+				"/Users/lennon/Projects/poem_map_project/godot_probe_mcp.py"
+			],
+			"disabled": false,
+			"autoApprove": [],
+			"alwaysAllow": [
+				"get_live_scene_tree",
+				"get_game_state",
+				"get_event_system",
+				"get_live_logs"
 			]
 		}
 	}
