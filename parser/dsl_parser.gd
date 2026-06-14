@@ -150,7 +150,7 @@ static func parse_context(context_str: String) -> Dictionary:
         elif colon_idx != -1:
             kv_split = colon_idx
         else:
-            print("Warning: Context 字段缺少分隔符 (= 或 :): %s" % field)
+            Logging.info("Warning: Context 字段缺少分隔符 (= 或 :): %s" % field)
             continue
         
         var key = field.substr(0, kv_split).strip_edges().to_lower()
@@ -177,7 +177,7 @@ static func parse_context(context_str: String) -> Dictionary:
             "weight":
                 var weight_val = value.to_float()
                 if weight_val == 0.0 and value != "0" and value != "0.0":
-                    print("Warning: Context weight 解析失败: %s" % value)
+                    Logging.info("Warning: Context weight 解析失败: %s" % value)
                 else:
                     result.weight = weight_val
             
@@ -505,7 +505,7 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 解析 uuid（必需）
     var uuid = row.get('uuid')
     if not uuid or uuid.is_empty():
-        push_error("UUID is required")
+        Logging.err("UUID is required")
         return null
 
     # 解析 template URN（可选），优先从已有资源 duplicate
@@ -739,7 +739,7 @@ static func parse_flag(row: Dictionary) -> Flag:
     # 解析 type 字段
     var flag_type = row.get('type', 'str')
     if flag_type not in ['str', 'int', 'bool']:
-        print("Warning: Invalid flag type '%s' for flag %s, defaulting to 'str'" % [flag_type, flag_id])
+        Logging.info("Warning: Invalid flag type '%s' for flag %s, defaulting to 'str'" % [flag_type, flag_id])
         flag_type = 'str'
     flag.type = flag_type
 
@@ -756,10 +756,10 @@ static func parse_flag(row: Dictionary) -> Flag:
             # 支持多种布尔值表示：true/false, t/f, 1/0, yes/no, TRUE/FALSE
             flag.val_bool = bool_str == 'true' or bool_str == 't' or bool_str == '1' or bool_str == 'yes'
         _:
-            print("Warning: Unknown flag type '%s', defaulting to str" % flag_type)
+            Logging.info("Warning: Unknown flag type '%s', defaulting to str" % flag_type)
             flag.val_str = str(default_value)
 
-    print("Flag解析成功: %s (type=%s, default=%s)" % [flag_id, flag_type, default_value])
+    Logging.info("Flag解析成功: %s (type=%s, default=%s)" % [flag_id, flag_type, default_value])
     return flag
 
 # 主要的CSV解析方法（保持向后兼容）
@@ -805,7 +805,7 @@ static func parse_requirements(requirements_str: String) -> BaseRequirements:
 static func parse_single_requirement(req_str: String) -> BaseRequirements:
     var req = MicroDSLParser.parse_requirement(req_str)
     if req == null:
-        print("Warning: Unknown requirement type: %s" % req_str)
+        Logging.info("Warning: Unknown requirement type: %s" % req_str)
     return req
 
 # 解析选项（1, 2, 3等）
@@ -852,7 +852,7 @@ static func parse_option(row: Dictionary, letter: String) -> BaseOption:
 static func parse_option_requirement(req_str: String) -> BaseRequirements:
     var req = MicroDSLParser.parse_requirement(req_str)
     if req == null:
-        print("Warning: Unknown option requirement type: %s" % req_str)
+        Logging.info("Warning: Unknown option requirement type: %s" % req_str)
     return req
 
 # 解析选择结果
@@ -868,14 +868,14 @@ static func validate_event(event: RandomEvent) -> bool:
         return false
 
     if not event.uuid or event.uuid.is_empty():
-        push_error("Event validation failed: missing ID")
+        Logging.err("Event validation failed: missing ID")
         return false
 
     if event.options.is_empty():
-        print("Warning: Event validation warning: no options for event %s" % event.uuid)
+        Logging.info("Warning: Event validation warning: no options for event %s" % event.uuid)
 
     if event.icon == null:
-        print("Warning: Event validation warning: no icon for event %s" % event.uuid)
+        Logging.info("Warning: Event validation warning: no icon for event %s" % event.uuid)
 
     return true
 
@@ -885,15 +885,15 @@ static func validate_flag(flag: Flag) -> bool:
         return false
 
     if not flag.uuid or flag.uuid.is_empty():
-        push_error("Flag validation failed: missing ID")
+        Logging.err("Flag validation failed: missing ID")
         return false
 
     if flag.type.is_empty():
-        print("Warning: Flag validation warning: no type for flag %s" % flag.uuid)
+        Logging.info("Warning: Flag validation warning: no type for flag %s" % flag.uuid)
         return false
 
     if flag.type not in ['str', 'int', 'bool']:
-        print("Warning: Flag validation warning: invalid type '%s' for flag %s" % [flag.type, flag.uuid])
+        Logging.info("Warning: Flag validation warning: invalid type '%s' for flag %s" % [flag.type, flag.uuid])
         return false
 
     return true
@@ -931,7 +931,7 @@ static func parse_trait(row: Dictionary) -> Trait:
         if enum_index >= 0:
             trait_._relate_to = enum_index
         else:
-            print("Warning: Unknown relate_to '%s' for trait %s" % [relate_to_str, trait_id])
+            Logging.info("Warning: Unknown relate_to '%s' for trait %s" % [relate_to_str, trait_id])
 
     var lasting_xun_str = row.get('lasting_xun', '')
     if not lasting_xun_str.is_empty():
@@ -947,9 +947,9 @@ static func parse_trait(row: Dictionary) -> Trait:
                 property_ops.append(op as PropertyOperator)
         trait_.trait_effect_operations = property_ops
         if property_ops.size() != all_ops.size():
-            print("Warning: trait %s: %d non-PropertyOperator entries in trait_effect_operations were filtered out" % [trait_id, all_ops.size() - property_ops.size()])
+            Logging.info("Warning: trait %s: %d non-PropertyOperator entries in trait_effect_operations were filtered out" % [trait_id, all_ops.size() - property_ops.size()])
 
-    print("Trait解析成功: %s (topic=%s)" % [trait_id, trait_.topic])
+    Logging.info("Trait解析成功: %s (topic=%s)" % [trait_id, trait_.topic])
     return trait_
 
 static func validate_trait(trait_: Trait) -> bool:
@@ -957,7 +957,7 @@ static func validate_trait(trait_: Trait) -> bool:
         return false
 
     if not trait_.uuid or trait_.uuid.is_empty():
-        push_error("Trait validation failed: missing trait_id")
+        Logging.err("Trait validation failed: missing trait_id")
         return false
 
     return true
@@ -1014,7 +1014,7 @@ static func validate_state_transistor(transistor: StateTransistor) -> bool:
         return false
 
     if transistor.target_resource_urn.is_empty():
-        push_error("StateTransistor validation failed: target_resource_urn is required")
+        Logging.err("StateTransistor validation failed: target_resource_urn is required")
         return false
 
     return true
@@ -1038,7 +1038,7 @@ static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "ran
         "trait", "flag", "state_transistor":
             return _parse_flat_data(csv_data, data_type)
         _:
-            push_error("parse_csv_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
+            Logging.err("parse_csv_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
             return []
     
     # ── random_event: 下推自动机 ──
@@ -1097,7 +1097,7 @@ static func _pda_transition(stack: Array[RandomEvent], resources: Array[Resource
         
         "option":
             if stack.is_empty():
-                push_error("下推自动机错误：option 行没有父事件 (row %d) 💀" % (row_index + 1))
+                Logging.err("下推自动机错误：option 行没有父事件 (row %d) 💀" % (row_index + 1))
                 return
             
             # 🚨 优先检测是否有 EventOption template
@@ -1204,21 +1204,21 @@ static func _parse_flat_data(csv_data: Array[Dictionary], data_type: String) -> 
                 if flag and validate_flag(flag):
                     resource = flag
                 else:
-                    print("Warning: Failed to parse flag at row %d" % (i + 1))
+                    Logging.info("Warning: Failed to parse flag at row %d" % (i + 1))
             "trait":
                 var trait_ = parse_trait(row)
                 if trait_ and validate_trait(trait_):
                     resource = trait_
                 else:
-                    print("Warning: Failed to parse trait at row %d" % (i + 1))
+                    Logging.info("Warning: Failed to parse trait at row %d" % (i + 1))
             "state_transistor":
                 var transistor = parse_state_transistor(row)
                 if transistor and validate_state_transistor(transistor):
                     resource = transistor
                 else:
-                    print("Warning: Failed to parse state_transistor at row %d" % (i + 1))
+                    Logging.info("Warning: Failed to parse state_transistor at row %d" % (i + 1))
             _:
-                push_error("_parse_flat_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
+                Logging.err("_parse_flat_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
                 continue
         
         if resource:

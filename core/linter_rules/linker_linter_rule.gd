@@ -2,6 +2,7 @@ class_name LinkerLinterRule extends BaseLinterRule
 ## 链接检查官
 ## 只管引用对不对（Trait A 被需求，但有没有人提供？Flag B 被 set，有没有在白名单里？）🤓☝️
 
+const Logging = preload("res://core/logger.gd")
 func _init():
 	rule_name = "链接检查官"
 
@@ -9,10 +10,10 @@ func execute(event_data: Node) -> void:
 	errors.clear()
 	warnings.clear()
 	
-	print("\n--- 链接检查官开始工作 ---")
+	Logging.info("\n--- 链接检查官开始工作 ---")
 	
 	var all_events = event_data.get_all_events_iterator()
-	print("✓ 获取到 %d 个事件" % all_events.size())
+	Logging.info("✓ 获取到 %d 个事件" % all_events.size())
 	
 	# 检查Trait供需关系
 	_check_trait_supply_demand(all_events)
@@ -20,11 +21,11 @@ func execute(event_data: Node) -> void:
 	# 检查Flag供需关系
 	_check_flag_supply_demand(all_events, event_data.flags)
 	
-	print("--- 链接检查官工作完成 ---\n")
+	Logging.info("--- 链接检查官工作完成 ---\n")
 
 ## 检查Trait供需关系
 func _check_trait_supply_demand(all_events: Dictionary) -> void:
-	print("\n--- 检查Trait供需关系 ---")
+	Logging.info("\n--- 检查Trait供需关系 ---")
 	
 	var all_trait_reqs = {}
 	var trait_providers = {}
@@ -34,7 +35,7 @@ func _check_trait_supply_demand(all_events: Dictionary) -> void:
 		var event = all_events[event_uuid]
 		_collect_trait_requirements_from_event(event, event_uuid, all_trait_reqs)
 	
-	print("✓ 收集到 %d 个不同的trait requirement" % all_trait_reqs.size())
+	Logging.info("✓ 收集到 %d 个不同的trait requirement" % all_trait_reqs.size())
 	
 	# 第二阶段：收集所有提供
 	for event_uuid in all_events:
@@ -46,11 +47,11 @@ func _check_trait_supply_demand(all_events: Dictionary) -> void:
 		if not trait_uuid in trait_providers or trait_providers[trait_uuid].is_empty():
 			add_error("Trait %s 被需求但没有事件提供" % trait_uuid)
 		else:
-			print("Trait %s: 由 %d 个事件提供 -> %s" % [trait_uuid, trait_providers[trait_uuid].size(), str(trait_providers[trait_uuid])])
+			Logging.info("Trait %s: 由 %d 个事件提供 -> %s" % [trait_uuid, trait_providers[trait_uuid].size(), str(trait_providers[trait_uuid])])
 
 ## 检查Flag供需关系
 func _check_flag_supply_demand(all_events: Dictionary, flags_dict: Dictionary) -> void:
-	print("\n--- 检查Flag供需关系 ---")
+	Logging.info("\n--- 检查Flag供需关系 ---")
 	
 	var all_flag_reqs = {}
 	var flag_providers = {}
@@ -60,7 +61,7 @@ func _check_flag_supply_demand(all_events: Dictionary, flags_dict: Dictionary) -
 		var event = all_events[event_uuid]
 		_collect_flag_requirements_from_event(event, event_uuid, all_flag_reqs)
 	
-	print("✓ 收集到 %d 个不同的flag requirement" % all_flag_reqs.size())
+	Logging.info("✓ 收集到 %d 个不同的flag requirement" % all_flag_reqs.size())
 	
 	# 第二阶段：收集所有提供
 	for event_uuid in all_events:
@@ -72,7 +73,7 @@ func _check_flag_supply_demand(all_events: Dictionary, flags_dict: Dictionary) -
 		if not flag_uuid in flag_providers or flag_providers[flag_uuid].is_empty():
 			add_error("Flag %s 被需求但没有事件提供" % flag_uuid)
 		else:
-			print("Flag %s: 由 %d 个事件提供 -> %s" % [flag_uuid, flag_providers[flag_uuid].size(), str(flag_providers[flag_uuid])])
+			Logging.info("Flag %s: 由 %d 个事件提供 -> %s" % [flag_uuid, flag_providers[flag_uuid].size(), str(flag_providers[flag_uuid])])
 
 ## 从事件中收集trait需求（使用契约方法，拒绝反射 😡）
 func _collect_trait_requirements_from_event(event: Variant, event_uuid: String, trait_reqs: Dictionary) -> void:

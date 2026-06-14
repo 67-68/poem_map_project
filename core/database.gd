@@ -69,7 +69,6 @@ var _scanner_result = null
 
 func _init() -> void:
 	index_image = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
-	Logging.current_level = Logging.Level.DEBUG
 
 	# 显式加载翻译：确保 Resource 脚本能访问翻译
 	var trans_path = "res://data/1_core_rules/translations/dynamic_events.zh.translation"

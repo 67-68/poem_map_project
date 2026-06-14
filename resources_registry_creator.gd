@@ -8,6 +8,7 @@ extends Node
 #   运行时模式 → Database 各字典（通过 DataScanner 填充）
 # 保留此文件仅作参考，不执行任何逻辑。
 
+const Logging = preload("res://core/logger.gd")
 const RESOURCE_REGISTRY_PATH = "res://core/model/resources.gd"
 const DATA_FOLDER = "res://data/"
 
@@ -19,34 +20,34 @@ var verbose: bool = true  # 是否输出详细日志（批量同步时静默可�
 # 主入口：创建所有resources registry文件
 func create_all_registries() -> void:
 	if verbose:
-		print("开始创建resources registry文件...")
-		print("跳过无UUID文件: ", skip_files_without_uuid)
-		print("覆盖已存在文件: ", overwrite_existing)
-		print("")
+		Logging.info("开始创建resources registry文件...")
+		Logging.info("跳过无UUID文件:  %s" % [skip_files_without_uuid])
+		Logging.info("覆盖已存在文件:  %s" % [overwrite_existing])
+		Logging.info("")
 
 	# 加载ResourceRegistry类
 	var resource_registry_script = load(RESOURCE_REGISTRY_PATH)
 	if not resource_registry_script:
-		print("错误：无法加载ResourceRegistry类")
+		Logging.info("错误：无法加载ResourceRegistry类")
 		return
 	
 	# 获取所有data文件夹
 	var data_folders = get_data_folders()
 	if verbose:
-		print("找到 ", data_folders.size(), " 个data文件夹: ", data_folders)
+		Logging.info("找到  %s 个data文件夹:  %s" % [data_folders.size(), data_folders])
 	
 	for folder_name in data_folders:
 		create_registry_for_folder(folder_name, resource_registry_script)
 	
 	if verbose:
-		print("\n所有resources registry文件创建完成！")
+		Logging.info("\n所有resources registry文件创建完成！")
 
 # 获取所有data文件夹
 func get_data_folders() -> Array:
 	var folders = []
 	var dir = DirAccess.open(DATA_FOLDER)
 	if not dir:
-		print("错误：无法打开data文件夹")
+		Logging.info("错误：无法打开data文件夹")
 		return folders
 	
 	dir.list_dir_begin()
@@ -65,13 +66,13 @@ func get_data_folders() -> Array:
 # 为指定文件夹创建registry文件
 func create_registry_for_folder(folder_name: String, resource_registry_script) -> void:
 	if verbose:
-		print("处理文件夹: ", folder_name)
+		Logging.info("处理文件夹:  %s" % [folder_name])
 	
 	# 检查registry文件是否已存在
 	var registry_path = DATA_FOLDER + folder_name + "_registry.tres"
 	if FileAccess.file_exists(registry_path) and not overwrite_existing:
 		if verbose:
-			print("  跳过：registry文件已存在 (设置overwrite_existing=true来覆盖)")
+			Logging.info("  跳过：registry文件已存在 (设置overwrite_existing=true来覆盖)")
 		return
 	
 	# 创建ResourceRegistry实例
@@ -83,7 +84,7 @@ func create_registry_for_folder(folder_name: String, resource_registry_script) -
 	var folder_path = DATA_FOLDER + folder_name + "/"
 	var dir = DirAccess.open(folder_path)
 	if not dir:
-		print("  错误：无法打开文件夹 ", folder_path)
+		Logging.info("  错误：无法打开文件夹  %s" % [folder_path])
 		return
 	
 	dir.list_dir_begin()
@@ -97,7 +98,7 @@ func create_registry_for_folder(folder_name: String, resource_registry_script) -
 			var file_path = folder_path + file_name
 			# 🚨 验证文件确实存在再处理
 			if not FileAccess.file_exists(file_path):
-				print("    警告：DirAccess 列出了文件但 FileAccess.file_exists 返回 false: ", file_path)
+				Logging.info("    警告：DirAccess 列出了文件但 FileAccess.file_exists 返回 false:  %s" % [file_path])
 				file_name = dir.get_next()
 				continue
 			
@@ -106,18 +107,18 @@ func create_registry_for_folder(folder_name: String, resource_registry_script) -
 				registry.resources[key] = file_path
 				resource_count += 1
 				if verbose:
-					print("    添加资源: ", key, " -> ", file_path)
+					Logging.info("    添加资源:  %s ->  %s" % [key, file_path])
 			else:
-				print("    警告：无法从 ", file_name, " 提取key")
+				Logging.info("    警告：无法从  %s 提取key" % [file_name])
 		file_name = dir.get_next()
 	
 	dir.list_dir_end()
 	
 	if verbose:
-		print("  文件夹内容 (", all_files.size(), " 项): ", all_files)
+		Logging.info("  文件夹内容 ( %s 项):  %s" % [all_files.size(), all_files])
 	
 	if resource_count == 0:
-		print("  警告：没有找到任何资源文件 (folder=", folder_name, ")")
+		Logging.info("  警告：没有找到任何资源文件 (folder= %s)" % [folder_name])
 		# 🚨 诊断：尝试直接 load 确认文件是否可达
 		_diagnose_folder(folder_path)
 		return
@@ -126,16 +127,16 @@ func create_registry_for_folder(folder_name: String, resource_registry_script) -
 	var result = ResourceSaver.save(registry, registry_path)
 	if result == OK:
 		if verbose:
-			print("  ✓ 创建registry文件: ", registry_path, " (包含 ", resource_count, " 个资源)")
+			Logging.info("  ✓ 创建registry文件:  %s (包含  %s 个资源)" % [registry_path, resource_count])
 	else:
-		print("  ✗ 错误：无法保存registry文件 ", registry_path)
+		Logging.info("  ✗ 错误：无法保存registry文件  %s" % [registry_path])
 
 # 🚨 诊断辅助：当 DirAccess 找不到文件时，尝试直接 load 已知路径
 func _diagnose_folder(folder_path: String) -> void:
-	print("  诊断：尝试直接探测文件夹 ", folder_path)
+	Logging.info("  诊断：尝试直接探测文件夹  %s" % [folder_path])
 	var dir = DirAccess.open(folder_path)
 	if not dir:
-		print("  诊断：DirAccess.open 失败")
+		Logging.info("  诊断：DirAccess.open 失败")
 		return
 	
 	dir.list_dir_begin()
@@ -146,15 +147,15 @@ func _diagnose_folder(folder_path: String) -> void:
 		if fname.ends_with(".tres"):
 			var fp = folder_path + fname
 			if ResourceLoader.exists(fp):
-				print("    诊断: 文件存在且 ResourceLoader.exists=true: ", fname)
+				Logging.info("    诊断: 文件存在且 ResourceLoader.exists=true:  %s" % [fname])
 				var res = load(fp)
 				if res and "uuid" in res:
-					print("    诊断: load() 成功, uuid=", res.get("uuid"))
+					Logging.info("    诊断: load() 成功, uuid= %s" % [res.get("uuid")])
 			else:
-				print("    诊断: ResourceLoader.exists=false: ", fname)
+				Logging.info("    诊断: ResourceLoader.exists=false:  %s" % [fname])
 		fname = dir.get_next()
 	dir.list_dir_end()
-	print("  诊断: 共列出 ", count, " 项")
+	Logging.info("  诊断: 共列出  %s 项" % [count])
 
 # 从资源文件中提取 key（uuid 或 id）
 # 优先级：
@@ -174,14 +175,14 @@ func extract_key_from_tres(file_path: String) -> String:
 			var id_val = resource.get("id")
 			if id_val is String and not id_val.is_empty():
 				if verbose:
-					print("    使用id字段作为key: ", id_val)
+					Logging.info("    使用id字段作为key:  %s" % [id_val])
 				return id_val
 	
 	# ── 方案二：资源加载失败 / 无 uuid 属性 → 文本解析兜底 ──
 	# 只搜索 [resource] 段落，跳过 [sub_resource] 避免被 option uuid 截胡
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if not file:
-		print("错误：无法打开文件 ", file_path)
+		Logging.info("错误：无法打开文件  %s" % [file_path])
 		return ""
 	
 	var content = file.get_as_text()
@@ -211,16 +212,16 @@ func extract_key_from_tres(file_path: String) -> String:
 	var id_result = id_regex.search(search_target)
 	if id_result:
 		if verbose:
-			print("    使用id字段作为key: ", id_result.get_string(1))
+			Logging.info("    使用id字段作为key:  %s" % [id_result.get_string(1)])
 		return id_result.get_string(1)
 	
 	# ── 方案三：纯兜底 ──
 	if skip_files_without_uuid:
 		if verbose:
-			print("    跳过：没有找到uuid或id字段")
+			Logging.info("    跳过：没有找到uuid或id字段")
 		return ""
 	else:
 		var file_name = file_path.get_file().get_basename()
 		if verbose:
-			print("    使用文件名作为key: ", file_name)
+			Logging.info("    使用文件名作为key:  %s" % [file_name])
 		return file_name

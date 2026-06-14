@@ -13,7 +13,7 @@ func _process(delta: float) -> void:
 
 func _on_value_changed(new_value: float) -> void:
 	GameState.year = lerp(GameState.start_year, GameState.end_year, new_value)
-	print('当前年份', GameState.year)
+	Logging.info("当前年份 %s" % [GameState.year])
 	if int(GameState.year) % 10 == 0:
 		EventBus.request_toast.emit('new decade %s' % int(GameState.year), 0)
  

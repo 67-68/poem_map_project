@@ -19,7 +19,7 @@ extends RefCounted
 # ═══════════════════════════════════════════════════════
 
 # ─── preload 依赖（替代 class_name） ───
-const SafeLogger = preload("res://parser/safe_logger.gd")
+const Logging = preload("res://core/logger.gd")
 
 const FLAG_PREFIX := "flag_once_"
 
@@ -31,11 +31,11 @@ const FLAG_PREFIX := "flag_once_"
 # 例如: flag_once_baiye_asking_for_actual_stuff_opt_go
 static func generate_once_flag_id(event_key: String, opt_uuid: String) -> String:
 	if event_key.is_empty() or opt_uuid.is_empty():
-		SafeLogger.err("[ChainFlagGenerator] generate_once_flag_id: event_key 或 opt_uuid 为空")
+		Logging.err("[ChainFlagGenerator] generate_once_flag_id: event_key 或 opt_uuid 为空")
 		return ""
 
 	var flag_id = FLAG_PREFIX + event_key + "_" + opt_uuid
-	SafeLogger.info("[ChainFlagGenerator] 生成 once flag_id: %s" % flag_id)
+	Logging.info("[ChainFlagGenerator] 生成 once flag_id: %s" % flag_id)
 	return flag_id
 
 
@@ -55,7 +55,7 @@ static func generate_once_requirement_dsl(event_key: String, opt_uuid: String) -
 	if flag_id.is_empty():
 		return ""
 	var dsl = 'flag_bool_not_has(name="%s")' % flag_id
-	SafeLogger.info("[ChainFlagGenerator] 生成 once requirement DSL: %s" % dsl)
+	Logging.info("[ChainFlagGenerator] 生成 once requirement DSL: %s" % dsl)
 	return dsl
 
 
@@ -66,5 +66,5 @@ static func generate_once_operator_dsl(event_key: String, opt_uuid: String) -> S
 	if flag_id.is_empty():
 		return ""
 	var dsl = 'flag_bool_set(name="%s"; val=true)' % flag_id
-	SafeLogger.info("[ChainFlagGenerator] 生成 once operator DSL: %s" % dsl)
+	Logging.info("[ChainFlagGenerator] 生成 once operator DSL: %s" % dsl)
 	return dsl

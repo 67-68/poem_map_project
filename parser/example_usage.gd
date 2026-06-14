@@ -23,20 +23,20 @@ static func test_parsing():
     var event = DSLParser.parse(example_csv_row)
     
     if event:
-        print("成功解析事件: ", event.uuid)
-        print("标题: ", event.name)
-        print("描述: ", event.description)
-        print("触发标签: ", event._target_tags)
-        print("选项数量: ", event.options.size())
-        print("图片存在: ", event.icon != null)
+        Logging.info("成功解析事件:  %s" % [event.uuid])
+        Logging.info("标题:  %s" % [event.name])
+        Logging.info("描述:  %s" % [event.description])
+        Logging.info("触发标签:  %s" % [event._target_tags])
+        Logging.info("选项数量:  %s" % [event.options.size()])
+        Logging.info("图片存在:  %s" % [event.icon != null])
         
         # 验证解析结果
         if DSLParser.validate_event(event):
-            print("事件验证通过")
+            Logging.info("事件验证通过")
         else:
-            print("事件验证失败")
+            Logging.info("事件验证失败")
     else:
-        print("解析事件失败")
+        Logging.info("解析事件失败")
 
 # 批量解析示例
 func test_batch_parsing():
@@ -69,33 +69,33 @@ func test_batch_parsing():
     ]
     
     var events = DSLParser.parse_csv_data(csv_data)
-    print("批量解析完成，共解析 %d 个事件" % events.size())
+    Logging.info("批量解析完成，共解析 %d 个事件" % events.size())
     
     for event in events:
-        print("- 事件: %s, 选项数: %d" % [event.uuid, event.options.size()])
+        Logging.info("- 事件: %s, 选项数: %d" % [event.uuid, event.options.size()])
 
 # 测试各种DSL格式（新语法）
 func test_dsl_formats():
-    print("\n=== 测试DSL格式解析（新语法）===")
+    Logging.info("\n=== 测试DSL格式解析（新语法）===")
     
     # 测试触发标签解析
     var tags = MicroDSLParser.parse_tags("actor:status:drunk,city:econ:prosperous,action:study:poetry")
-    print("触发标签: ", tags)
+    Logging.info("触发标签:  %s" % [tags])
     
     # 测试属性需求解析（新语法）
     var prop_req = MicroDSLParser.parse_property_requirement("prop_gt(name=money, val=50)")
     if prop_req:
-        print("属性需求: %s %s %d" % [prop_req.property, ">", prop_req.value])
+        Logging.info("属性需求: %s %s %d" % [prop_req.property, ">", prop_req.value])
     
     # 测试特性需求解析（新语法）
     var trait_req = MicroDSLParser.parse_trait_requirement("trait_has(name=official)")
-    print("特性需求解析: ", trait_req != null)
+    Logging.info("特性需求解析:  %s" % [trait_req != null])
     
     # 测试结果操作符解析（新语法）
     var operators = MicroDSLParser.parse_consequence_operators("prop_sub(name=money, val=100), trait_add(name=corrupt)")
-    print("结果操作符数量: ", operators.size())
+    Logging.info("结果操作符数量:  %s" % [operators.size()])
     
     # 测试复合需求解析（新语法）
     var complex_req_str = "prop_gt(name=money, val=50), prop_gt(name=literary_fame, val=30)"
     var complex_req = DSLParser.parse_requirements(complex_req_str)
-    print("复合需求解析: ", complex_req != null)
+    Logging.info("复合需求解析:  %s" % [complex_req != null])

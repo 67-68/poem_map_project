@@ -34,7 +34,7 @@ var _jitter_tween: Tween   # 防止多个 jitter 冲突
 func _ready() -> void:
 	var parent = get_parent()
 	if not parent:
-		push_warning("UISoundComponent: 没有父节点，无法工作")
+		Logging.warn("UISoundComponent: 没有父节点，无法工作")
 		return
 
 	# 连点击音效
@@ -56,7 +56,7 @@ func _connect_click_signal(parent: Node) -> void:
 			parent.connect(custom_click_signal, _on_click)
 			return
 		else:
-			push_warning("UISoundComponent: 父节点 [%s] 没有自定义点击信号 [%s]" % [parent.name, custom_click_signal])
+			Logging.warn("UISoundComponent: 父节点 [%s] 没有自定义点击信号 [%s]" % [parent.name, custom_click_signal])
 			# 降级自动检测
 
 	# 2. 自动检测常见点击信号
@@ -66,7 +66,7 @@ func _connect_click_signal(parent: Node) -> void:
 			return
 
 	# 3. 一个都没找到 → 警告但不崩溃
-	push_warning("UISoundComponent: 父节点 [%s] 没有可识别的点击信号，请手动设置 custom_click_signal" % parent.name)
+	Logging.warn("UISoundComponent: 父节点 [%s] 没有可识别的点击信号，请手动设置 custom_click_signal" % parent.name)
 
 
 # ── 悬停音效连接 ──
@@ -79,7 +79,7 @@ func _connect_hover_signal(parent: Node) -> void:
 			parent.connect(custom_hover_signal, _on_hover)
 			return
 		else:
-			push_warning("UISoundComponent: 父节点 [%s] 没有自定义悬停信号 [%s]" % [parent.name, custom_hover_signal])
+			Logging.warn("UISoundComponent: 父节点 [%s] 没有自定义悬停信号 [%s]" % [parent.name, custom_hover_signal])
 
 	for signal_name in _COMMON_HOVER_SIGNALS:
 		if parent.has_signal(signal_name):

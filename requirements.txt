@@ -1,3 +1,4 @@
 pydantic
 openai
 httpx
+mcp[cli]

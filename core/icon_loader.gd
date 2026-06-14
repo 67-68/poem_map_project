@@ -1,4 +1,5 @@
 class_name IconLoader extends RefCounted
+const Logging = preload("res://core/logger.gd")
 static func get_icon(name: String) -> Texture2D:
     if name.is_empty():
         return load(GameConfig.DEFAULT_ICON)
@@ -11,5 +12,5 @@ static func get_icon(name: String) -> Texture2D:
     if ResourceLoader.exists(final_path):
         return load(final_path) # Godot 的 load 自带缓存，不用担心性能
     else:
-        printerr("图标丢失: ", final_path)
+        Logging.err("图标丢失:  %s" % [final_path])
         return load(GameConfig.DEFAULT_ICON_PATH)

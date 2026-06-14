@@ -17,7 +17,7 @@ var _target_zoom: float = 1.0
 var _current_state: String = 'world'
 
 func _ready() -> void:
-    print("🎥 [DebugCamera] 已上线. 滚轮缩放，右键/中键拖拽，Q键复位。")
+    Logging.info("🎥 [DebugCamera] 已上线. 滚轮缩放，右键/中键拖拽，Q键复位。")
     enabled = true
     _target_zoom = zoom.x
     _apply_zoom(0.7)
@@ -68,4 +68,4 @@ func _apply_zoom(amount: float) -> void:
         _current_state = new_state
         # 发射信号给 UI 和 渲染层
         EventBus.focus_city_map.emit(_current_state == 'city')
-        print("🎥 视界已切换至: ", _current_state)
+        Logging.info("🎥 视界已切换至:  %s" % [_current_state])

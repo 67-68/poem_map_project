@@ -22,13 +22,13 @@ func reserve_action(action_id: String) -> bool:
 	# 1. 检查席位是否已满
 	if _reserved_action_ids.size() >= MAX_PICK_COUNT:
 		Logging.err("[ActionManager] 预留席位已满 (%d/%d)，预定失败: %s" % [MAX_PICK_COUNT, MAX_PICK_COUNT, action_id])
-		push_error("ActionManager: 预留席位已满，预定失败")
+		Logging.err("ActionManager: 预留席位已满，预定失败")
 		return false
 	
 	# 2. 检查是否重复预定
 	if action_id in _reserved_action_ids:
 		Logging.err("[ActionManager] action 已被重复预定: %s" % action_id)
-		push_error("ActionManager: 重复预定 action: %s" % action_id)
+		Logging.err("ActionManager: 重复预定 action: %s" % action_id)
 		return false
 	
 	_reserved_action_ids.append(action_id)
@@ -174,7 +174,7 @@ func process_xun_tick() -> void:
 
 func get_available_scene_actions() -> Dictionary:
 	#breakpoint
-	print("[ActionManager] 开始获取可用场景动作")
+	Logging.info("[ActionManager] 开始获取可用场景动作")
 
 	# ── Phase 0: _locked_in 驱动自动预留 ──
 	for action_id in _locked_in_actions:
@@ -203,7 +203,7 @@ func get_available_scene_actions() -> Dictionary:
 		
 		# 0. 检查是否被 blocked
 		if _blocked_actions.has(a_id):
-			print("[ActionManager] 动作 %s 被 blocked，拦截" % a_id)
+			Logging.info("[ActionManager] 动作 %s 被 blocked，拦截" % a_id)
 			continue
 		
 		# 1. 检查硬性需求 (Requirements)
@@ -214,7 +214,7 @@ func get_available_scene_actions() -> Dictionary:
 					break # 💀 打断内层循环，直接判死刑
 					
 		if not is_valid:
-			print("[ActionManager] 动作 %s 不满足需求条件，被拦截" % a_id)
+			Logging.info("[ActionManager] 动作 %s 不满足需求条件，被拦截" % a_id)
 			continue # 这个 continue 才会跳过外层的 a_id！
 			
 		# 2. 检查标签匹配 (Tags)
@@ -227,11 +227,11 @@ func get_available_scene_actions() -> Dictionary:
 						break
 						
 			if not tag_matched:
-				print("[ActionManager] 动作 %s 标签不匹配当前位置" % a_id)
+				Logging.info("[ActionManager] 动作 %s 标签不匹配当前位置" % a_id)
 				continue # 没有交集，直接滚蛋
 				
 		# 3. 活到最后的才是合法动作
-		print("[ActionManager] 动作 %s 完全合法，允许装载" % a_id)
+		Logging.info("[ActionManager] 动作 %s 完全合法，允许装载" % a_id)
 		append_counter(actions, a_id, a)
 		
 	return actions
@@ -259,7 +259,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 		# 校验：预留数量不能超过可用池大小
 		if _reserved_action_ids.size() > available_pool.size():
 			Logging.err("[ActionManager] 预留数量 (%d) 超过当前可用行动数量 (%d)，无法抽取" % [_reserved_action_ids.size(), available_pool.size()])
-			push_error("ActionManager: 预留数量超过当前可用行动数量")
+			Logging.err("ActionManager: 预留数量超过当前可用行动数量")
 			clear_reservations()
 			return selected_actions
 		
@@ -271,7 +271,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 				available_pool.erase(reserved_id)
 			else:
 				Logging.err("[ActionManager] 预留 action %s 不在当前可用池中！" % reserved_id)
-				push_error("ActionManager: 预留 action 不在当前可用池: %s" % reserved_id)
+				Logging.err("ActionManager: 预留 action 不在当前可用池: %s" % reserved_id)
 				# 继续处理其他预留，但这个跳过
 	
 	# --- Phase 2: 随机填充剩余席位 ---

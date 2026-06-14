@@ -2,10 +2,11 @@
 class_name EventActionTagLinter extends Node
 
 @export var start := false:
+const Logging = preload("res://core/logger.gd")
 	set(value):
 		start = false
 		if Engine.is_editor_hint():
-			printerr("在游戏打开后使用！")
+			Logging.err("在游戏打开后使用！")
 		start_linter()
 
 func start_linter() -> void:
@@ -21,7 +22,7 @@ func start_linter() -> void:
 	
 	注意：random_event使用target_tags（合并了area_tags和action_tags），所以统一检查所有标签
 	"""
-	print("开始检查event和action的tag...")
+	Logging.info("开始检查event和action的tag...")
 	# 🆕 用 DataScanner 单次扫描替代所有 Registry 加载
 	var r = DataScanner.scan("res://data/")
 	var actions: Dictionary = r.bases.get("3_actions_pool.actions", {})
@@ -50,7 +51,7 @@ func start_linter() -> void:
 			assign_or_add(all_event_tags,t)
 	
 	# 检查地区tag使用情况
-	print("\n=== 地区tag检查 ===")
+	Logging.info("\n=== 地区tag检查 ===")
 	
 	# 检查是否有地区的tag没有被任何action使用
 	var unused_area_tags = []
@@ -61,11 +62,11 @@ func start_linter() -> void:
 				unused_area_tags.append("%s (%s)" % [area_id, tag])
 	
 	if unused_area_tags.size() > 0:
-		print("以下地区tag没有被任何action使用:")
+		Logging.info("以下地区tag没有被任何action使用:")
 		for tag in unused_area_tags:
-			print("  - %s" % tag)
+			Logging.info("  - %s" % tag)
 	else:
-		print("所有地区tag都被action使用")
+		Logging.info("所有地区tag都被action使用")
 	
 	# 检查是否有action不满足任何地区tag
 	var invalid_action_area_tags = []
@@ -79,14 +80,14 @@ func start_linter() -> void:
 			invalid_action_area_tags.append(tag)
 	
 	if invalid_action_area_tags.size() > 0:
-		print("以下action的地区tag不存在于任何地区:")
+		Logging.info("以下action的地区tag不存在于任何地区:")
 		for tag in invalid_action_area_tags:
-			print("  - %s" % tag)
+			Logging.info("  - %s" % tag)
 	else:
-		print("所有action的地区tag都存在于地区中")
+		Logging.info("所有action的地区tag都存在于地区中")
 	
 	# 检查action tag使用情况
-	print("\n=== Action tag检查 ===")
+	Logging.info("\n=== Action tag检查 ===")
 	
 	# 检查是否有action的action_tag没有被任何事件使用
 	var unused_action_tags = []
@@ -95,11 +96,11 @@ func start_linter() -> void:
 			unused_action_tags.append(tag)
 	
 	if unused_action_tags.size() > 0:
-		print("以下action tag没有被任何事件使用:")
+		Logging.info("以下action tag没有被任何事件使用:")
 		for tag in unused_action_tags:
-			print("  - %s" % tag)
+			Logging.info("  - %s" % tag)
 	else:
-		print("所有action tag都被事件使用")
+		Logging.info("所有action tag都被事件使用")
 	
 	# 检查是否有事件使用了不属于任何action的tag
 	var invalid_event_action_tags = []
@@ -108,13 +109,13 @@ func start_linter() -> void:
 			invalid_event_action_tags.append(tag)
 	
 	if invalid_event_action_tags.size() > 0:
-		print("以下事件使用了不属于任何action的tag:")
+		Logging.info("以下事件使用了不属于任何action的tag:")
 		for tag in invalid_event_action_tags:
-			print("  - %s" % tag)
+			Logging.info("  - %s" % tag)
 	else:
-		print("所有事件的action tag都存在于action中")
+		Logging.info("所有事件的action tag都存在于action中")
 	
-	print("\n检查完成!")
+	Logging.info("\n检查完成!")
 
 func count_items(items):
 	var dict = {}

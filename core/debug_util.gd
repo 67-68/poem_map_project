@@ -9,7 +9,7 @@ class_name DebugUtils extends Node
 # 将 ImageTexture 导出为 PNG 文件
 static func save_texture_to_disk(tex: Texture2D, file_name: String = "debug_baked_map.png"):
 	if not tex:
-		printerr("💀 错误：你给我的纹理是空的，你想导出一片虚无吗？")
+		Logging.err("💀 错误：你给我的纹理是空的，你想导出一片虚无吗？")
 		return
 
 	var img: Image = tex.get_image()
@@ -18,9 +18,9 @@ static func save_texture_to_disk(tex: Texture2D, file_name: String = "debug_bake
 	var err = img.save_png(path)
 	if err == OK:
 		# 这里会打印出真实物理路径，直接去资源管理器打开它
-		print("✅ 审计成功！图片已保存至: ", ProjectSettings.globalize_path(path))
+		Logging.info("✅ 审计成功！图片已保存至:  %s" % [ProjectSettings.globalize_path(path)])
 	else:
-		printerr("❌ 导出失败，错误代码: ", err)
+		Logging.err("❌ 导出失败，错误代码:  %s" % [err])
 
 # 方案 B：实时监视窗 (Quick & Dirty)
 # 在屏幕左上角强行创建一个预览图层
@@ -47,7 +47,7 @@ static func show_runtime_preview(parent: Node, tex: Texture2D):
 	rect.add_child(frame)
 	
 	parent.add_child(rect)
-	print("👀 运行时预览已挂载，就在你屏幕左上角。")
+	Logging.info("👀 运行时预览已挂载，就在你屏幕左上角。")
 
 # ----------------------------------------------------------------
 # 架构师的调试建议：
@@ -65,10 +65,10 @@ static func find_orphans(all_province_ids: Array, connections: Dictionary) -> Ar
 			orphans.append(pid)
 	
 	if orphans.size() > 0:
-		push_warning("⚠️ [地图审计] 发现 %d 个孤岛州（无连接）！列表如下：" % orphans.size())
-		print(orphans)
+		Logging.warn("⚠️ [地图审计] 发现 %d 个孤岛州（无连接）！列表如下：" % orphans.size())
+		Logging.info(orphans)
 	else:
-		print("✅ [地图审计] 完美。所有州都至少有一个邻居。")
+		Logging.info("✅ [地图审计] 完美。所有州都至少有一个邻居。")
 		
 	return orphans
 
@@ -132,7 +132,7 @@ static func analyze_graph_connectivity(all_ids: Array, connections: Dictionary) 
 	Logging.info("总共有 %d 个互不连通的岛屿群组。" % islands.size())
 	
 	if islands.size() > 1:
-		push_error("❌ 严重警告：地图是分裂的！信使无法跨越岛屿。")
+		Logging.err("❌ 严重警告：地图是分裂的！信使无法跨越岛屿。")
 		for i in range(islands.size()):
 			var sample = islands[i].slice(0, min(5, islands[i].size())) # 只打印前5个看看
 			Logging.info("  - 岛屿 %d (包含 %d 个州): 例如 %s" % [i, islands[i].size(), sample])

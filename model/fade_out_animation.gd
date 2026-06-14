@@ -9,7 +9,7 @@ func _init(sprite: Sprite2D, duration: float):
 
 func start() -> void:
 	if not _sprite or not is_instance_valid(_sprite):
-		push_warning("FadeOutAnimation: sprite 已失效")
+		Logging.warn("FadeOutAnimation: sprite 已失效")
 		return
 	is_playing = true
 	_kill_tween()

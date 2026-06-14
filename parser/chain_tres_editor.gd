@@ -20,12 +20,12 @@ extends RefCounted
 # ═══════════════════════════════════════════════════════
 
 # ─── preload 依赖（替代 class_name） ───
-const SafeLogger = preload("res://parser/safe_logger.gd")
 const ResourceRegistry = preload("res://core/model/resources.gd")
 const BaseEvent = preload("res://model/event.gd")
 const EventOption = preload("res://model/event/event_option.gd")
 const ChoiceResult = preload("res://model/choice_result.gd")
 const BaseOperator = preload("res://core/model/base_operator.gd")
+const Logging = preload("res://core/logger.gd")
 
 # ─── 已知事件数据目录 ───
 # 替代旧的 registry 文件系统。
@@ -52,17 +52,17 @@ static var _cache_initialized: bool = false
 # 返回 String（res:// 路径）或空字符串
 static func find_event_path(event_key: String) -> String:
 	if event_key.is_empty():
-		SafeLogger.err("[ChainTresEditor] find_event_path: event_key 为空")
+		Logging.err("[ChainTresEditor] find_event_path: event_key 为空")
 		return ""
 	
 	_ensure_cache()
 	
 	if _event_path_cache.has(event_key):
 		var path: String = _event_path_cache[event_key]
-		SafeLogger.info("[ChainTresEditor] 找到事件 '%s' -> %s" % [event_key, path])
+		Logging.info("[ChainTresEditor] 找到事件 '%s' -> %s" % [event_key, path])
 		return path
 	
-	SafeLogger.err("[ChainTresEditor] 未在已知事件目录中找到事件 '%s'" % event_key)
+	Logging.err("[ChainTresEditor] 未在已知事件目录中找到事件 '%s'" % event_key)
 	return ""
 
 
@@ -71,19 +71,19 @@ static func find_event_path(event_key: String) -> String:
 static func load_event(event_key: String) -> BaseEvent:
 	var path = find_event_path(event_key)
 	if path.is_empty():
-		SafeLogger.err("[ChainTresEditor] load_event: 无法找到事件 '%s' 的路径" % event_key)
+		Logging.err("[ChainTresEditor] load_event: 无法找到事件 '%s' 的路径" % event_key)
 		return null
 
 	var resource = load(path)
 	if resource == null:
-		SafeLogger.err("[ChainTresEditor] load_event: 加载失败: %s (key=%s)" % [path, event_key])
+		Logging.err("[ChainTresEditor] load_event: 加载失败: %s (key=%s)" % [path, event_key])
 		return null
 
 	if not resource is BaseEvent:
-		SafeLogger.err("[ChainTresEditor] load_event: %s 不是 BaseEvent (key=%s, type=%s)" % [path, event_key, typeof(resource)])
+		Logging.err("[ChainTresEditor] load_event: %s 不是 BaseEvent (key=%s, type=%s)" % [path, event_key, typeof(resource)])
 		return null
 
-	SafeLogger.info("[ChainTresEditor] 成功加载事件 '%s': %s" % [event_key, path])
+	Logging.info("[ChainTresEditor] 成功加载事件 '%s': %s" % [event_key, path])
 	return resource as BaseEvent
 
 
@@ -94,10 +94,10 @@ static func load_event(event_key: String) -> BaseEvent:
 # 返回 EventOption 或 null
 static func find_option(event: BaseEvent, opt_id: String) -> EventOption:
 	if event == null:
-		SafeLogger.err("[ChainTresEditor] find_option: event 为 null")
+		Logging.err("[ChainTresEditor] find_option: event 为 null")
 		return null
 	if opt_id.is_empty():
-		SafeLogger.err("[ChainTresEditor] find_option: opt_id 为空")
+		Logging.err("[ChainTresEditor] find_option: opt_id 为空")
 		return null
 
 	# 尝试按 UUID 匹配
@@ -105,7 +105,7 @@ static func find_option(event: BaseEvent, opt_id: String) -> EventOption:
 		if option == null:
 			continue
 		if option.uuid == opt_id:
-			SafeLogger.info("[ChainTresEditor] 找到选项 (UUID='%s') 在事件 '%s'" % [opt_id, event.uuid])
+			Logging.info("[ChainTresEditor] 找到选项 (UUID='%s') 在事件 '%s'" % [opt_id, event.uuid])
 			return option as EventOption
 
 	# 尝试按索引匹配（支持 "0" / "#0" 格式）
@@ -120,10 +120,10 @@ static func find_option(event: BaseEvent, opt_id: String) -> EventOption:
 	if index >= 0 and index < event.options.size():
 		var option = event.options[index]
 		if option != null:
-			SafeLogger.info("[ChainTresEditor] 找到选项 (index=%d) 在事件 '%s': '%s'" % [index, event.uuid, option.uuid if not option.uuid.is_empty() else "(无UUID)"])
+			Logging.info("[ChainTresEditor] 找到选项 (index=%d) 在事件 '%s': '%s'" % [index, event.uuid, option.uuid if not option.uuid.is_empty() else "(无UUID)"])
 			return option as EventOption
 
-	SafeLogger.err("[ChainTresEditor] 在事件 '%s' 中未找到选项 '%s' (事件有 %d 个选项)" % [event.uuid, opt_id, event.options.size()])
+	Logging.err("[ChainTresEditor] 在事件 '%s' 中未找到选项 '%s' (事件有 %d 个选项)" % [event.uuid, opt_id, event.options.size()])
 	return null
 
 
@@ -131,20 +131,20 @@ static func find_option(event: BaseEvent, opt_id: String) -> EventOption:
 # 如果选项没有 choice_result，自动创建
 static func inject_operator(option: EventOption, operator: BaseOperator) -> bool:
 	if option == null:
-		SafeLogger.err("[ChainTresEditor] inject_operator: option 为 null")
+		Logging.err("[ChainTresEditor] inject_operator: option 为 null")
 		return false
 	if operator == null:
-		SafeLogger.err("[ChainTresEditor] inject_operator: operator 为 null")
+		Logging.err("[ChainTresEditor] inject_operator: operator 为 null")
 		return false
 
 	# 确保 choice_result 存在
 	if option.choice_result == null:
 		option.choice_result = ChoiceResult.new()
-		SafeLogger.info("[ChainTresEditor] 为选项 '%s' 创建新的 ChoiceResult" % option.uuid)
+		Logging.info("[ChainTresEditor] 为选项 '%s' 创建新的 ChoiceResult" % option.uuid)
 
 	# 追加 operator
 	option.choice_result.operators.append(operator)
-	SafeLogger.info("[ChainTresEditor] 已注入 %s 到选项 '%s' (%s)" % [operator.get_class(), option.uuid, option.description])
+	Logging.info("[ChainTresEditor] 已注入 %s 到选项 '%s' (%s)" % [operator.get_class(), option.uuid, option.description])
 	return true
 
 
@@ -152,17 +152,17 @@ static func inject_operator(option: EventOption, operator: BaseOperator) -> bool
 # 如果已有 requirement，在日志中警告（覆盖）
 static func set_requirement(option: EventOption, requirement) -> bool:
 	if option == null:
-		SafeLogger.err("[ChainTresEditor] set_requirement: option 为 null")
+		Logging.err("[ChainTresEditor] set_requirement: option 为 null")
 		return false
 	if requirement == null:
-		SafeLogger.err("[ChainTresEditor] set_requirement: requirement 为 null")
+		Logging.err("[ChainTresEditor] set_requirement: requirement 为 null")
 		return false
 
 	if option.requirement != null:
-		SafeLogger.warn("[ChainTresEditor] 选项 '%s' 已有 requirement，将被覆盖" % option.uuid)
+		Logging.warn("[ChainTresEditor] 选项 '%s' 已有 requirement，将被覆盖" % option.uuid)
 
 	option.requirement = requirement
-	SafeLogger.info("[ChainTresEditor] 已设置 requirement 到选项 '%s'" % option.uuid)
+	Logging.info("[ChainTresEditor] 已设置 requirement 到选项 '%s'" % option.uuid)
 	return true
 
 
@@ -170,20 +170,20 @@ static func set_requirement(option: EventOption, requirement) -> bool:
 # 返回 true 表示成功
 static func save_event(event: BaseEvent, event_key: String) -> bool:
 	if event == null:
-		SafeLogger.err("[ChainTresEditor] save_event: event 为 null")
+		Logging.err("[ChainTresEditor] save_event: event 为 null")
 		return false
 
 	var path = find_event_path(event_key)
 	if path.is_empty():
-		SafeLogger.err("[ChainTresEditor] save_event: 无法找到事件 '%s' 的路径" % event_key)
+		Logging.err("[ChainTresEditor] save_event: 无法找到事件 '%s' 的路径" % event_key)
 		return false
 
 	var result = ResourceSaver.save(event, path)
 	if result != OK:
-		SafeLogger.err("[ChainTresEditor] 保存失败: %s (code=%d)" % [path, result])
+		Logging.err("[ChainTresEditor] 保存失败: %s (code=%d)" % [path, result])
 		return false
 
-	SafeLogger.info("[ChainTresEditor] 成功保存事件 '%s' -> %s" % [event_key, path])
+	Logging.info("[ChainTresEditor] 成功保存事件 '%s' -> %s" % [event_key, path])
 	return true
 
 
@@ -238,10 +238,10 @@ static func _ensure_cache() -> void:
 	for dir_path in EVENT_SCAN_DIRS:
 		var dir = DirAccess.open(dir_path)
 		if not dir:
-			SafeLogger.warn("[ChainTresEditor] 无法打开事件目录: " + dir_path)
+			Logging.warn("[ChainTresEditor] 无法打开事件目录: " + dir_path)
 			continue
 		if dir.list_dir_begin() != OK:
-			SafeLogger.warn("[ChainTresEditor] list_dir_begin 失败: " + dir_path)
+			Logging.warn("[ChainTresEditor] list_dir_begin 失败: " + dir_path)
 			continue
 		
 		var file_name = dir.get_next()
@@ -261,11 +261,11 @@ static func _ensure_cache() -> void:
 		
 		dir.list_dir_end()
 	
-	SafeLogger.info("[ChainTresEditor] 事件路径缓存构建完成: %d 条记录" % _event_path_cache.size())
+	Logging.info("[ChainTresEditor] 事件路径缓存构建完成: %d 条记录" % _event_path_cache.size())
 
 
 # 清除事件路径缓存（用于测试/重载）
 static func clear_cache() -> void:
 	_cache_initialized = false
 	_event_path_cache.clear()
-	SafeLogger.info("[ChainTresEditor] 事件路径缓存已清除")
+	Logging.info("[ChainTresEditor] 事件路径缓存已清除")

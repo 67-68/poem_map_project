@@ -56,7 +56,7 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D,
 	var names = []
 	for p in path_points:
 		names.append(Database.get_province(p).name)
-	print('path points', names)
+	Logging.info("path points %s" % [names])
 
 static func apply_msger_data(msger: Messager,data: MessagerData):
 	"""
@@ -72,7 +72,7 @@ func start_travel():
 	# 1. 核心 API：获取路径的像素总长度
 	# get_baked_length() 是 Godot 预计算好的，性能极高
 	var total_distance = curve.get_baked_length()
-	print("🐎 信使出发！位置: ", global_position, " 路径长度: ", curve.get_baked_length())
+	Logging.info("🐎 信使出发！位置:  %s 路径长度:  %s" % [global_position, curve.get_baked_length()])
 	
 	# 2. 计算出这趟旅程实际需要的秒数
 	var travel_duration = total_distance / speed_px_per_sec
@@ -90,7 +90,7 @@ func start_timer():
 	if allow_timer:
 		#breakpoint
 		TextPoolManager.spawn(txt)
-		print($MsgPathFollow.global_position)
+		Logging.info($MsgPathFollow.global_position)
 		var timer = get_tree().create_timer(randi() % 5)
 		timer.timeout.connect(start_timer)
 

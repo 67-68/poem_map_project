@@ -18,7 +18,7 @@
             ]
         }
     },
-
+ 
     // 🤓☝️ 核心外科手术：强制绝对路径对齐
     "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
     "workspaceFolder": "${localWorkspaceFolder}",

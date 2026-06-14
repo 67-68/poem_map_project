@@ -1,5 +1,6 @@
 class_name BaseRepository extends RefCounted
 
+const Logging = preload("res://core/logger.gd")
 var _data: Dictionary
 var caches: Dictionary 
 
@@ -11,8 +12,8 @@ func _init(data: Array[GameEntity]):
 
 func get_by_id(uuid: String):
     var data_ = _data
-    print(data_)
-    print(_data)
+    Logging.info(data_)
+    Logging.info(_data)
     return data_.get(uuid,null)
 
 func get_all():
@@ -47,7 +48,7 @@ func build_up_cache(repositories, dataclass_to_build): # repositories: 0,1,2 poe
             for uuid in model_data.owner_uuids:
                 if uuid in _data:
                     caches[base_model][uuid].append(model_data.uuid)
-                    print("Cache append: ", base_model, " uuid: ", uuid, " model_data.uuid: ", model_data.uuid)
+                    Logging.info("Cache append:  %s uuid:  %s model_data.uuid:  %s" % [base_model, uuid, model_data.uuid])
 
 func create_cache_for_model(data_model):
     caches[data_model] = {}

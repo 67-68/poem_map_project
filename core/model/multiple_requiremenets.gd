@@ -96,7 +96,7 @@ func _init(data = {}):
             return
     var current_operator_ = PropParser.parse_any(data,true,'current_operator')
     if not current_operator_:
-        print('what is hell is the fucking bug that can not let me parse a single int??? fuck you')
+        Logging.info('what is hell is the fucking bug that can not let me parse a single int??? fuck you')
         current_operator_ = 0
     current_operator = current_operator_
     if not current_operator: 

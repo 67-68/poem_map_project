@@ -2,6 +2,7 @@ class_name BusinessLinterRule extends BaseLinterRule
 ## 业务规则检查官
 ## 专门负责校验策划的业务规则（拿了好处必须消耗时间等）🤓☝️
 
+const Logging = preload("res://core/logger.gd")
 func _init():
 	rule_name = "业务规则检查官"
 
@@ -9,7 +10,7 @@ func execute(event_data: Node) -> void:
 	errors.clear()
 	warnings.clear()
 	
-	print("\n--- 业务规则检查官开始工作 ---")
+	Logging.info("\n--- 业务规则检查官开始工作 ---")
 	
 	var all_events = event_data.get_all_events_iterator()
 	
@@ -19,11 +20,11 @@ func execute(event_data: Node) -> void:
 	# 检查Operator完整性
 	_check_operator_completeness(all_events)
 	
-	print("--- 业务规则检查官工作完成 ---\n")
+	Logging.info("--- 业务规则检查官工作完成 ---\n")
 
 ## 检查选项的时间推动和结果
 func _check_option_time_and_result(all_events: Dictionary) -> void:
-	print("\n--- 检查选项时间推动和结果 ---")
+	Logging.info("\n--- 检查选项时间推动和结果 ---")
 	
 	var violations = []
 	
@@ -32,11 +33,11 @@ func _check_option_time_and_result(all_events: Dictionary) -> void:
 		_check_event_options(event, event_uuid, violations)
 	
 	if violations.is_empty():
-		print("✓ 所有选项都正确处理了时间推动")
+		Logging.info("✓ 所有选项都正确处理了时间推动")
 	else:
-		print("❌ 发现 %d 个违规：" % violations.size())
+		Logging.info("❌ 发现 %d 个违规：" % violations.size())
 		for violation in violations:
-			print("  - %s" % violation)
+			Logging.info("  - %s" % violation)
 			add_error(violation)
 
 ## 检查单个事件的选项
@@ -144,7 +145,7 @@ func _has_positive_result(obj: Variant) -> bool:
 
 ## 检查Operator完整性
 func _check_operator_completeness(all_events: Dictionary) -> void:
-	print("\n--- 检查Operator完整性 ---")
+	Logging.info("\n--- 检查Operator完整性 ---")
 	
 	var operator_errors = []
 	
@@ -153,11 +154,11 @@ func _check_operator_completeness(all_events: Dictionary) -> void:
 		_validate_event_operators_recursive(event, event_uuid, operator_errors)
 	
 	if operator_errors.is_empty():
-		print("✓ 所有Operator都是完整的")
+		Logging.info("✓ 所有Operator都是完整的")
 	else:
-		print("❌ 发现 %d 个Operator完整性问题：" % operator_errors.size())
+		Logging.info("❌ 发现 %d 个Operator完整性问题：" % operator_errors.size())
 		for error in operator_errors:
-			print("  - %s" % error)
+			Logging.info("  - %s" % error)
 			add_error(error)
 
 ## 递归验证事件中的Operator完整性

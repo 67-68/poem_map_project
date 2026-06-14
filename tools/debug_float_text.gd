@@ -8,8 +8,9 @@
 extends SceneTree
 
 
+const Logging = preload("res://core/logger.gd")
 func _init():
-	print("\n=== 飘字系统调试工具 ===\n")
+	Logging.info("\n=== 飘字系统调试工具 ===\n")
 	
 	# ── 1. 创建测试 Property ──
 	var prop = Property.new()
@@ -47,14 +48,14 @@ func _init():
 	sp3.stage_val = 50; sp3.perception_text = "身心俱疲"
 	prop.staged_perceptions.append(sp3)
 	
-	print("[OK] 测试 Property 创建完成")
-	print("  uuid: %s" % prop.uuid)
-	print("  val: %d" % prop.val)
-	print("  change_perceptions: %d 条" % prop.change_perceptions.size())
-	print("  staged_perceptions: %d 条" % prop.staged_perceptions.size())
+	Logging.info("[OK] 测试 Property 创建完成")
+	Logging.info("  uuid: %s" % prop.uuid)
+	Logging.info("  val: %d" % prop.val)
+	Logging.info("  change_perceptions: %d 条" % prop.change_perceptions.size())
+	Logging.info("  staged_perceptions: %d 条" % prop.staged_perceptions.size())
 	
 	# ── 2. 测试 get_change_perception_text ──
-	print("\n--- get_change_perception_text 测试 ---")
+	Logging.info("\n--- get_change_perception_text 测试 ---")
 	
 	var tests = [
 		[10,  "增加 10（小量）"],
@@ -71,13 +72,13 @@ func _init():
 		var label = test[1] as String
 		var result = prop.get_change_perception_text(delta)
 		if result.is_empty():
-			print("  ❌ delta=%+d (%s): 返回空字符串！" % [delta, label])
+			Logging.info("  ❌ delta=%+d (%s): 返回空字符串！" % [delta, label])
 			all_pass = false
 		else:
-			print("  ✅ delta=%+d (%s): '%s'" % [delta, label, result])
+			Logging.info("  ✅ delta=%+d (%s): '%s'" % [delta, label, result])
 	
 	# ── 3. 测试 staged_perception fallback ──
-	print("\n--- get_staged_perception_text 测试 ---")
+	Logging.info("\n--- get_staged_perception_text 测试 ---")
 	var stage_tests = [
 		[0,   "val=0"],
 		[10,  "val=10"],
@@ -91,10 +92,10 @@ func _init():
 		prop.val = test[0] as int
 		var label = test[1] as String
 		var result = prop.get_staged_perception_text()
-		print("  %s → '%s'" % [label, result])
+		Logging.info("  %s → '%s'" % [label, result])
 	
 	# ── 4. 模拟 PropertyOperator 调用 ──
-	print("\n--- PropertyOperator 模拟 ---")
+	Logging.info("\n--- PropertyOperator 模拟 ---")
 	
 	var op = PropertyOperator.new()
 	op.str_props = "test_prop"
@@ -102,13 +103,13 @@ func _init():
 	for delta in [15, -15, 40, -40]:
 		op.value = delta
 		var perception_text = prop.get_change_perception_text(delta)
-		print("  PropertyOperator(property=%s, value=%+d) → '%s'" % [op.str_props, op.value, perception_text])
+		Logging.info("  PropertyOperator(property=%s, value=%+d) → '%s'" % [op.str_props, op.value, perception_text])
 	
 	# ── 总结 ──
-	print("\n=== 测试完成 ===")
+	Logging.info("\n=== 测试完成 ===")
 	if all_pass:
-		print("✅ 所有飘字文本测试通过")
+		Logging.info("✅ 所有飘字文本测试通过")
 	else:
-		print("❌ 存在失败项，请检查配置")
+		Logging.info("❌ 存在失败项，请检查配置")
 	
 	quit(0 if all_pass else 1)

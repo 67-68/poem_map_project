@@ -13,7 +13,7 @@ func _init(sprite: Sprite2D, duration: float, params: Dictionary = {}):
 
 func start() -> void:
 	if not _sprite or not is_instance_valid(_sprite):
-		push_warning("ShatterAnimation: sprite 已失效")
+		Logging.warn("ShatterAnimation: sprite 已失效")
 		return
 	is_playing = true
 	var shader_mat := ShaderMaterial.new()

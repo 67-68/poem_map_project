@@ -2,6 +2,7 @@ class_name BaseLinterRule extends RefCounted
 ## Linter检查规则的基类
 ## 所有具体的Rule都应该继承此类并实现execute方法
 
+const Logging = preload("res://core/logger.gd")
 var rule_name: String = "BaseRule"
 var errors: Array[String] = []
 var warnings: Array[String] = []
@@ -9,7 +10,7 @@ var warnings: Array[String] = []
 ## 执行检查规则
 ## 子类必须重写此方法
 func execute(event_data: Node) -> void:
-	push_error("%s: execute() method not implemented" % rule_name)
+	Logging.err("%s: execute() method not implemented" % rule_name)
 
 ## 添加错误信息
 func add_error(message: String) -> void:
@@ -31,16 +32,16 @@ func get_result() -> Dictionary:
 
 ## 打印检查结果
 func print_result() -> void:
-	print("\n--- %s 检查结果 ---" % rule_name)
+	Logging.info("\n--- %s 检查结果 ---" % rule_name)
 	if errors.is_empty() and warnings.is_empty():
-		print("✓ 检查通过，无问题")
+		Logging.info("✓ 检查通过，无问题")
 	else:
 		if not errors.is_empty():
-			print("❌ 发现 %d 个错误：" % errors.size())
+			Logging.info("❌ 发现 %d 个错误：" % errors.size())
 			for error in errors:
-				print("  - %s" % error)
+				Logging.info("  - %s" % error)
 		if not warnings.is_empty():
-			print("⚠️  发现 %d 个警告：" % warnings.size())
+			Logging.info("⚠️  发现 %d 个警告：" % warnings.size())
 			for warning in warnings:
-				print("  - %s" % warning)
-	print("--- 检查完成 ---\n")
+				Logging.info("  - %s" % warning)
+	Logging.info("--- 检查完成 ---\n")

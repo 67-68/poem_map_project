@@ -1,5 +1,6 @@
 class_name Util extends RefCounted
 
+const Logging = preload("res://core/logger.gd")
 static func get_highest_val_from_dict_vec2(dict: Dictionary, axis: int) -> float:
 	var max_val: float = 0.0
 	for val in dict.values():
@@ -193,13 +194,13 @@ static func bake_index_map(original_img: Image, color_to_idx_dict: Dictionary) -
 	var processed_img = Image.create_from_data(width, height, false, Image.FORMAT_RGBA8, dst_data)
 
 	# 纠错反馈循环
-	print("--- [重焙审计报告 (内存狂飙版)] ---")
-	print("字典大小: ", color_to_idx_dict.size())
-	print("匹配成功像素: ", match_count)
-	print("匹配失败像素: ", fail_count)
+	Logging.info("--- [重焙审计报告 (内存狂飙版)] ---")
+	Logging.info("字典大小:  %s" % [color_to_idx_dict.size()])
+	Logging.info("匹配成功像素:  %s" % [match_count])
+	Logging.info("匹配失败像素:  %s" % [fail_count])
 	if fail_count > 0:
-		print("典型失败颜色样例 (Hex): ", sample_fails.keys())
-	print("----------------------")
+		Logging.info("典型失败颜色样例 (Hex):  %s" % [sample_fails.keys()])
+	Logging.info("----------------------")
 	
 	return ImageTexture.create_from_image(processed_img)
 
@@ -321,7 +322,7 @@ static func merge_context(base: Dictionary, overlay: Dictionary) -> Dictionary:
 			continue
 		
 		# --- 其他类型 → 报错（未实现） ---
-		push_error("merge_context: 未实现的 overlay 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
+		Logging.err("merge_context: 未实现的 overlay 类型合并. key=%s, type=%s, value=%s" % [key, typeof(overlay_val), str(overlay_val)])
 	
 	return base
 

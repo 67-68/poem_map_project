@@ -111,7 +111,7 @@ func _create_path() -> void:
 	path = Curve2D.new()
 	time_position_curve = Curve.new()
 	for point in datamodel.path_point_keys:
-		print(datamodel.path_point_keys)
+		Logging.info(datamodel.path_point_keys)
 		path.add_point(Database.get_life_path_point(point).position)
 	var path_ratio: float
 	var total_path = path.get_baked_length()
@@ -124,7 +124,7 @@ func _create_path() -> void:
 
 func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		print("点到我了！我是：", $Label.text)
+		Logging.info("点到我了！我是： %s" % [$Label.text])
 		handle_selection(viewport,event,shape_idx)
 		GameState.current_selected_poet = datamodel
 		get_viewport().set_input_as_handled()

@@ -1,5 +1,6 @@
 class_name EventChainLinter extends BaseLinterRule
 
+const Logging = preload("res://core/logger.gd")
 func execute(event_data: Node) -> void:
     rule_name = 'chain event linter'
     var events = event_data.get_all_events_iterator() as Dictionary # [String, BaseEvent]
@@ -11,7 +12,7 @@ func execute(event_data: Node) -> void:
     #   上游 custom_context_params 注入的数据不会出现在 context 中，
     #   ItemProvider 的 context.get(list_key, []) 会返回空数组。
     #   参考：DOCUMENTATIONS/old_bugs.md → 2026-05-30 条目
-    printerr("🚨 [EventChainLinter] ItemProvider 依赖上游 context 传递！如果从中道切入事件链（如 $ event_key），list_key 对应数据将不存在于 context 中，ItemProvider 会返回空列表。请确保始终从定义 custom_context_params 的入口事件触发。参考文档 DOCUMENTATIONS/old_bugs.md")
+    Logging.err("🚨 [EventChainLinter] ItemProvider 依赖上游 context 传递！如果从中道切入事件链（如 $ event_key），list_key 对应数据将不存在于 context 中，ItemProvider 会返回空列表。请确保始终从定义 custom_context_params 的入口事件触发。参考文档 DOCUMENTATIONS/old_bugs.md")
     
     var visited = {} # 0: white, 1: gray, 2: black
     for e_uuid in events.keys(): 
@@ -34,43 +35,43 @@ func execute(event_data: Node) -> void:
         
 
 func _output_results(all_groups: Array[Array], adjacency_list: Dictionary, death_cycles: Array[Array]) -> void:
-    print("============================================================")
-    print("📊 事件链分析报告")
-    print("============================================================")
+    Logging.info("============================================================")
+    Logging.info("📊 事件链分析报告")
+    Logging.info("============================================================")
 
     # 1. 事件链统计
-    print("\n📈 统计概览")
-    print("  - 独立事件链数量: %d" % all_groups.size())
-    print("  - 死循环数量: %d" % death_cycles.size())
+    Logging.info("\n📈 统计概览")
+    Logging.info("  - 独立事件链数量: %d" % all_groups.size())
+    Logging.info("  - 死循环数量: %d" % death_cycles.size())
 
     # 2. 事件链详情
-    print("\n🔗 事件链详情")
+    Logging.info("\n🔗 事件链详情")
     for i in range(all_groups.size()):
         var chain = all_groups[i]
-        print("  链 %d: %d 个事件" % [i, chain.size()])
-        print("    %s" % ", ".join(chain))
+        Logging.info("  链 %d: %d 个事件" % [i, chain.size()])
+        Logging.info("    %s" % ", ".join(chain))
 
     # 3. Mermaid 图
     var mermaid_content = _generate_mermaid_diagram(all_groups, adjacency_list)
     _save_mermaid_to_file(mermaid_content)
 
     # 4. 死循环报告
-    print("\n🌀 死循环报告")
+    Logging.info("\n🌀 死循环报告")
     if death_cycles.is_empty():
-        print("  ✅ 未发现死循环，事件依赖关系健康")
+        Logging.info("  ✅ 未发现死循环，事件依赖关系健康")
     else:
-        print("  💀 发现 %d 个死循环" % death_cycles.size())
+        Logging.info("  💀 发现 %d 个死循环" % death_cycles.size())
         for i in range(death_cycles.size()):
             var cycle = death_cycles[i]
             var chain_idx = _find_chain_for_cycle(cycle, all_groups)
-            print("\n  循环 %d:" % i)
-            print("    路径: %s" % " -> ".join(cycle))
-            print("    所属链: %d" % chain_idx)
-            print("    链完整内容:")
-            print("      %s" % ", ".join(all_groups[chain_idx]))
+            Logging.info("\n  循环 %d:" % i)
+            Logging.info("    路径: %s" % " -> ".join(cycle))
+            Logging.info("    所属链: %d" % chain_idx)
+            Logging.info("    链完整内容:")
+            Logging.info("      %s" % ", ".join(all_groups[chain_idx]))
 
-    print("")
-    print("============================================================")
+    Logging.info("")
+    Logging.info("============================================================")
 
 func _sanitize_mermaid_id(uuid: String) -> String:
     # 替换 Mermaid 不支持的特殊字符
@@ -85,9 +86,9 @@ func _save_mermaid_to_file(mermaid_content: String) -> void:
     if file:
         file.store_string(mermaid_content)
         file.close()
-        print("  📁 Mermaid 图已保存到: res://debuggers/event_chain_diagram.mmd")
+        Logging.info("  📁 Mermaid 图已保存到: res://debuggers/event_chain_diagram.mmd")
     else:
-        printerr("  ❌ 无法保存 Mermaid 图文件")
+        Logging.err("  ❌ 无法保存 Mermaid 图文件")
 
 func _generate_mermaid_diagram(all_groups: Array[Array], adjacency_list: Dictionary) -> String:
     var lines = ["flowchart TD"]
@@ -164,7 +165,7 @@ func creates_adjacency_list(events: Array) -> Dictionary:
     for e in events:
         # 🤓☝️ 鸭子类型：检查对象是否具有事件所需的属性
         if not e.has_method("get") or e.get("uuid") == null or e.get("options") == null:
-            printerr("⚠️ 跳过非事件对象: type=%s" % e.get_class())
+            Logging.err("⚠️ 跳过非事件对象: type=%s" % e.get_class())
             continue
 
         var relies_set = {} # Dictionary 模拟 Set 进行去重
@@ -172,11 +173,11 @@ func creates_adjacency_list(events: Array) -> Dictionary:
 
         var options = e.options
         if options == null:
-            printerr("⚠️ Event has null options: event_uuid=%s" % e.uuid)
+            Logging.err("⚠️ Event has null options: event_uuid=%s" % e.uuid)
             continue
         for o in options:
             if o == null:
-                printerr("⚠️ Event has null option: event_uuid=%s" % e.uuid)
+                Logging.err("⚠️ Event has null option: event_uuid=%s" % e.uuid)
                 continue
             # 🚨 兼容两种命名：EventOption 用 requirement，PropertyOption/CustomEventOption 用 requirements
             var req = o.get("requirement") if "requirement" in o else (o.get("requirements") if "requirements" in o else null)
@@ -227,7 +228,7 @@ func creates_adjacency_list(events: Array) -> Dictionary:
     for e in events:
         # 🤓☝️ 鸭子类型：检查对象是否具有事件所需的属性（与第一次遍历保持一致）
         if not e.has_method("get") or e.get("uuid") == null or e.get("options") == null:
-            printerr("⚠️ 跳过非事件对象（第二次遍历）: type=%s" % e.get_class())
+            Logging.err("⚠️ 跳过非事件对象（第二次遍历）: type=%s" % e.get_class())
             continue
         adjacency_list[e.uuid] = [] # 初始化所有节点的边
 
@@ -242,7 +243,7 @@ func creates_adjacency_list(events: Array) -> Dictionary:
                         if not adjacency_list[provider_uuid].has(consumer_uuid):
                             adjacency_list[provider_uuid].append(consumer_uuid)
 
-    print('+==================================+')
-    print(adjacency_list)
-    print('+==================================+')
+    Logging.info('+==================================+')
+    Logging.info(adjacency_list)
+    Logging.info('+==================================+')
     return adjacency_list

@@ -4,7 +4,7 @@ func on_user_clicked(data: PoetData):
 	if not data == null:
 		var profile_path: String = ("res://assets/profile/%s.png" % data.uuid)
 		if not FileAccess.file_exists(profile_path):
-			print('do not found file %s' % profile_path)
+			Logging.info('do not found file %s' % profile_path)
 			return
 		$DescriptorContainer/PoetProfile.texture = load(profile_path)
 		$DescriptorContainer/PoetNameLabel.text = data.name

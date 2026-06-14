@@ -9,6 +9,7 @@ extends RefCounted
 class_name DataLoader
 
 # 内部路径修正工具
+const Logging = preload("res://core/logger.gd")
 static func _fix_path(file_path: String, extension: String, global_path: String) -> String:
 	if not file_path.begins_with("res://") and not file_path.begins_with("user://"):
 		# 假设 GameConfig.DATA_PATH 已经定义好，且以 / 结尾
@@ -22,14 +23,14 @@ static func load_json_model(model_class: Variant, file_path: String) -> Array:
 	file_path = _fix_path(file_path, "json",GameConfig.DATA_PATH)
 	
 	if not FileAccess.file_exists(file_path):
-		printerr("💀 JSON 丢失！文件路径：", file_path)
+		Logging.err("💀 JSON 丢失！文件路径： %s" % [file_path])
 		return []
 		
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	var content = JSON.parse_string(file.get_as_text())
 	
 	if content == null:
-		printerr("😡 JSON 格式错误，请检查语法：", file_path)
+		Logging.err("😡 JSON 格式错误，请检查语法： %s" % [file_path])
 		return []
 		
 	var result: Array = []
@@ -61,7 +62,7 @@ static func load_json_model(model_class: Variant, file_path: String) -> Array:
 static func load_csv_model(model_class: Variant, file_path: String) -> Array:
 	file_path = _fix_path(file_path, "csv", GameConfig.PERMANENT_DATA_PATH)
 	if not FileAccess.file_exists(file_path):
-		printerr("😨 CSV 档案被次元放逐了！路径：", file_path)
+		Logging.err("😨 CSV 档案被次元放逐了！路径： %s" % [file_path])
 		return []
 		
 	var file = FileAccess.open(file_path, FileAccess.READ)

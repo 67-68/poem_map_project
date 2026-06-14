@@ -7,9 +7,12 @@
 
 用法:
   export DEEPSEEK_API_KEY="sk-xxx"
-  python3 tools/generate_orthogonal_events.py --config <json_or_py>
-  python3 tools/generate_orthogonal_events.py --dry-run
-  python3 tools/generate_orthogonal_events.py --trial
+  .venv/bin/python tools/generate_orthogonal_events.py --config <json_or_py>
+  .venv/bin/python tools/generate_orthogonal_events.py --dry-run
+  .venv/bin/python tools/generate_orthogonal_events.py --trial
+  
+使用示例
+  .venv/bin/python tools/generate_orthogonal_events.py --config tools/event_base_config_duotai_humiliation.json --trial
 """
 
 import sys

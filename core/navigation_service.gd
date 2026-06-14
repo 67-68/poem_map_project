@@ -6,6 +6,7 @@ extends Node
 
 
 @export var debug_find_orphan_id: bool = false:
+const Logging = preload("res://core/logger.gd")
 	set(val):
 		if val:
 			init()
@@ -50,7 +51,7 @@ func _toggle_debug_view():
 	var border_mesh = GameState.map.get_node_or_null("background/BorderMesh") 
 	
 	if not border_mesh:
-		push_error("找不到 BorderMesh，无法计算坐标！")
+		Logging.err("找不到 BorderMesh，无法计算坐标！")
 		return
 
 	for item in Database.get_base_province_all().values():

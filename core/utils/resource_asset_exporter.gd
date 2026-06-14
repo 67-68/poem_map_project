@@ -6,6 +6,7 @@ extends RefCounted
 
 
 # 将资源数组导出到指定文件夹
+const Logging = preload("res://core/logger.gd")
 static func export_to_tres_folder(resources: Array[Resource], folder_path: String) -> void:
 	# 确保文件夹路径以 / 结尾
 	if not folder_path.ends_with("/"):
@@ -14,19 +15,19 @@ static func export_to_tres_folder(resources: Array[Resource], folder_path: Strin
 	# 确保文件夹存在
 	if not DirAccess.dir_exists_absolute(folder_path):
 		DirAccess.make_dir_absolute(folder_path)
-		print("[EXPORTER] 创建文件夹: %s" % folder_path)
+		Logging.info("[EXPORTER] 创建文件夹: %s" % folder_path)
 	
 	var saved_count = 0
 	var skipped_count = 0
 	
 	for resource in resources:
 		if resource == null:
-			print("[EXPORTER] Warning: 跳过 null 资源")
+			Logging.info("[EXPORTER] Warning: 跳过 null 资源")
 			skipped_count += 1
 			continue
 		
 		if not _is_resource_savable(resource):
-			print("[EXPORTER] Warning: 跳过无效资源 (类名: %s)" % resource.get_class())
+			Logging.info("[EXPORTER] Warning: 跳过无效资源 (类名: %s)" % resource.get_class())
 			skipped_count += 1
 			continue
 		
@@ -37,13 +38,13 @@ static func export_to_tres_folder(resources: Array[Resource], folder_path: Strin
 		
 		var save_result = ResourceSaver.save(resource, file_path)
 		if save_result == OK:
-			print("[EXPORTER] 保存资源到文件: %s" % file_path)
+			Logging.info("[EXPORTER] 保存资源到文件: %s" % file_path)
 			saved_count += 1
 		else:
-			push_error("[EXPORTER] 保存资源失败: %s, 错误代码: %d" % [file_path, save_result])
+			Logging.err("[EXPORTER] 保存资源失败: %s, 错误代码: %d" % [file_path, save_result])
 			skipped_count += 1
 	
-	print("[EXPORTER] 导出完成！成功: %d, 跳过: %d 🤓☝️" % [saved_count, skipped_count])
+	Logging.info("[EXPORTER] 导出完成！成功: %d, 跳过: %d 🤓☝️" % [saved_count, skipped_count])
 
 
 # 检查资源是否可以保存
@@ -74,7 +75,7 @@ static func _generate_resource_file_path(resource: Resource, folder_path: String
 		var invalid_chars_str = ""
 		for result in invalid_chars:
 			invalid_chars_str += result.get_string()
-		push_error("[EXPORTER] 资源名称包含非法字符: %s, 非法字符: %s, 拒绝保存" % [base_filename, invalid_chars_str])
+		Logging.err("[EXPORTER] 资源名称包含非法字符: %s, 非法字符: %s, 拒绝保存" % [base_filename, invalid_chars_str])
 		return ""
 	
 	# 确保文件名唯一
@@ -96,7 +97,7 @@ static func _extract_resource_filename(resource: Resource) -> String:
 		var uuid = resource.get("uuid")
 		if uuid is String and not uuid.is_empty():
 			base_filename = uuid
-			print("[EXPORTER] 使用 uuid 作为文件名: %s" % base_filename)
+			Logging.info("[EXPORTER] 使用 uuid 作为文件名: %s" % base_filename)
 	
 	# 如果没有 uuid，尝试获取 resource_name
 	if base_filename.is_empty() and resource.has_method("get_resource_name"):
@@ -114,7 +115,7 @@ static func _extract_resource_filename(resource: Resource) -> String:
 		# 使用资源的类名
 		base_filename = resource.get_class()
 		if base_filename == "Resource":
-			print("[EXPORTER] Warning: 资源没有有效名称，跳过保存 (类名: %s)" % base_filename)
+			Logging.info("[EXPORTER] Warning: 资源没有有效名称，跳过保存 (类名: %s)" % base_filename)
 			return ""
 	
 	return base_filename

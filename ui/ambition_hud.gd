@@ -54,7 +54,7 @@ func _load_static():
 	Logging.info("AmbitionHUD: Setting ambition name: %s" % ambition.name)
 	ambition_label.text = ambition.name
 	if ambition.current_stage < 0 or ambition.current_stage >= ambition.leveled_stages.size():
-		Logging.error("AmbitionHUD: current_stage %d out of bounds [0, %d] for ambition %s" % [ambition.current_stage, ambition.leveled_stages.size() - 1, ambition.name])
+		Logging.err("AmbitionHUD: current_stage %d out of bounds [0, %d] for ambition %s" % [ambition.current_stage, ambition.leveled_stages.size() - 1, ambition.name])
 	Logging.info("AmbitionHUD: Setting deadline warning: %s" % ambition.deadline_warning)
 	deadline_label.text = ambition.deadline_warning
 

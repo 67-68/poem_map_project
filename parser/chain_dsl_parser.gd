@@ -19,8 +19,8 @@ extends RefCounted
 # ═══════════════════════════════════════════════════════
 
 # ─── preload 依赖（替代 class_name） ───
-const SafeLogger = preload("res://parser/safe_logger.gd")
 const NamedDSLParser = preload("res://parser/named_dsl_parser.gd")
+const Logging = preload("res://core/logger.gd")
 const ChainCommand = preload("res://parser/chain_command.gd")
 
 # ─── 函数名常量 ───
@@ -38,13 +38,13 @@ const FUNC_CREATE_ONCE_OPTION := "create_once_option"
 # 返回: ChainCommand 或 null
 static func parse_single(dsl: String) -> ChainCommand:
 	if dsl.is_empty():
-		SafeLogger.err("[ChainDSLParser] 空 DSL 字符串")
+		Logging.err("[ChainDSLParser] 空 DSL 字符串")
 		return null
 
 	# 复用 NamedDSLParser 解析函数名 + 参数字典
 	var parsed = NamedDSLParser.parse_single(dsl)
 	if parsed == null:
-		SafeLogger.err("[ChainDSLParser] NamedDSLParser 解析失败: %s" % dsl)
+		Logging.err("[ChainDSLParser] NamedDSLParser 解析失败: %s" % dsl)
 		return null
 
 	# 按函数名分发
@@ -56,7 +56,7 @@ static func parse_single(dsl: String) -> ChainCommand:
 		FUNC_CREATE_ONCE_OPTION:
 			return _build_create_once_option(parsed, dsl)
 		_:
-			SafeLogger.err("[ChainDSLParser] 未知命令函数: %s (dsl: %s)" % [parsed.func_name, dsl])
+			Logging.err("[ChainDSLParser] 未知命令函数: %s (dsl: %s)" % [parsed.func_name, dsl])
 			return null
 
 
@@ -67,13 +67,13 @@ static func parse_batch(dsl: String) -> Array[ChainCommand]:
 	var commands: Array[ChainCommand] = []
 
 	if dsl.is_empty():
-		SafeLogger.warn("[ChainDSLParser] 批量解析：空字符串")
+		Logging.warn("[ChainDSLParser] 批量解析：空字符串")
 		return commands
 
 	# 复用 NamedDSLParser.split_expressions 按 | 分割
 	var expressions = NamedDSLParser.split_expressions(dsl)
 	if expressions.is_empty():
-		SafeLogger.err("[ChainDSLParser] 批量解析：split_expressions 返回空，dsl=%s" % dsl)
+		Logging.err("[ChainDSLParser] 批量解析：split_expressions 返回空，dsl=%s" % dsl)
 		return commands
 
 	for expr in expressions:
@@ -81,9 +81,9 @@ static func parse_batch(dsl: String) -> Array[ChainCommand]:
 		if cmd != null:
 			commands.append(cmd)
 		else:
-			SafeLogger.err("[ChainDSLParser] 批量解析：子表达式解析失败，跳过: %s" % expr)
+			Logging.err("[ChainDSLParser] 批量解析：子表达式解析失败，跳过: %s" % expr)
 
-	SafeLogger.info("[ChainDSLParser] 批量解析完成：%d 条命令 (from: %s)" % [commands.size(), dsl])
+	Logging.info("[ChainDSLParser] 批量解析完成：%d 条命令 (from: %s)" % [commands.size(), dsl])
 	return commands
 
 
@@ -98,17 +98,17 @@ static func _build_create_hierarchy(parsed: NamedDSLParser.ParseResult, raw: Str
 	var target = NamedDSLParser.get_str_param(parsed, "target")
 
 	if source.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_hierarchy 缺少 source 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_hierarchy 缺少 source 参数: %s" % raw)
 		return null
 	if source_opt.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_hierarchy 缺少 source_opt 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_hierarchy 缺少 source_opt 参数: %s" % raw)
 		return null
 	if target.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_hierarchy 缺少 target 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_hierarchy 缺少 target 参数: %s" % raw)
 		return null
 
 	var cmd = ChainCommand.create_hierarchy(source, source_opt, target, raw)
-	SafeLogger.info("[ChainDSLParser] 解析 create_hierarchy: source=%s, source_opt=%s, target=%s" % [source, source_opt, target])
+	Logging.info("[ChainDSLParser] 解析 create_hierarchy: source=%s, source_opt=%s, target=%s" % [source, source_opt, target])
 	return cmd
 
 
@@ -120,20 +120,20 @@ static func _build_create_reversible_hierarchy(parsed: NamedDSLParser.ParseResul
 	var b_opt = NamedDSLParser.get_str_param(parsed, "b_opt")
 
 	if a.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_reversible_hierarchy 缺少 a 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_reversible_hierarchy 缺少 a 参数: %s" % raw)
 		return null
 	if a_opt.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_reversible_hierarchy 缺少 a_opt 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_reversible_hierarchy 缺少 a_opt 参数: %s" % raw)
 		return null
 	if b.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_reversible_hierarchy 缺少 b 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_reversible_hierarchy 缺少 b 参数: %s" % raw)
 		return null
 	if b_opt.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_reversible_hierarchy 缺少 b_opt 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_reversible_hierarchy 缺少 b_opt 参数: %s" % raw)
 		return null
 
 	var cmd = ChainCommand.create_reversible_hierarchy(a, a_opt, b, b_opt, raw)
-	SafeLogger.info("[ChainDSLParser] 解析 create_reversible_hierarchy: a=%s, a_opt=%s, b=%s, b_opt=%s" % [a, a_opt, b, b_opt])
+	Logging.info("[ChainDSLParser] 解析 create_reversible_hierarchy: a=%s, a_opt=%s, b=%s, b_opt=%s" % [a, a_opt, b, b_opt])
 	return cmd
 
 
@@ -143,12 +143,12 @@ static func _build_create_once_option(parsed: NamedDSLParser.ParseResult, raw: S
 	var opt = NamedDSLParser.get_str_param(parsed, "opt")
 
 	if event.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_once_option 缺少 event 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_once_option 缺少 event 参数: %s" % raw)
 		return null
 	if opt.is_empty():
-		SafeLogger.err("[ChainDSLParser] create_once_option 缺少 opt 参数: %s" % raw)
+		Logging.err("[ChainDSLParser] create_once_option 缺少 opt 参数: %s" % raw)
 		return null
 
 	var cmd = ChainCommand.create_once_option(event, opt, raw)
-	SafeLogger.info("[ChainDSLParser] 解析 create_once_option: event=%s, opt=%s" % [event, opt])
+	Logging.info("[ChainDSLParser] 解析 create_once_option: event=%s, opt=%s" % [event, opt])
 	return cmd

@@ -18,6 +18,7 @@ class_name DataScanner extends RefCounted
 
 # CSV 模型类预加载
 const Territory = preload("res://world/province_resource.gd")
+const Logging = preload("res://core/logger.gd")
 
 ## CSV 文件→模型类映射表
 ## key: CSV 文件名（不含扩展名），value: 对应的 class reference
@@ -43,7 +44,7 @@ static func scan(
 	var result = LoadResult.new()
 	var root_dir = DirAccess.open(start_path)
 	if not root_dir:
-		push_error("DataScanner: 无法打开根目录: " + start_path)
+		Logging.err("DataScanner: 无法打开根目录: " + start_path)
 		return result
 
 	_scan_dir(root_dir, start_path, "", delim, result, "")
@@ -62,7 +63,7 @@ static func _scan_dir(
 	top_level_base: String  # 当前分支所属的顶层 base 名称（根层时为空）
 ) -> void:
 	if dir.list_dir_begin() != OK:
-		push_error("DataScanner: list_dir_begin 失败: " + current_dir_path)
+		Logging.err("DataScanner: list_dir_begin 失败: " + current_dir_path)
 		return
 
 	var entry_name = dir.get_next()
@@ -88,7 +89,7 @@ static func _scan_dir(
 				var child_base = top_level_base + delim + entry_name if top_level_base != "" else entry_name
 				_scan_dir(sub_dir, full_path, child_ns, delim, result, child_base)
 			else:
-				push_error("DataScanner: 无法打开子文件夹: " + full_path)
+				Logging.err("DataScanner: 无法打开子文件夹: " + full_path)
 
 		elif entry_name.ends_with(".tres") or entry_name.ends_with(".tscn"):
 			# ── .tres/.tscn 资源文件 ──
@@ -113,7 +114,7 @@ static func _load_resource(
 ) -> void:
 	var resource = load(file_path)
 	if not resource:
-		push_error("DataScanner: 加载失败: " + file_path)
+		Logging.err("DataScanner: 加载失败: " + file_path)
 		return
 
 	# 从资源中提取 uuid
@@ -127,7 +128,7 @@ static func _load_resource(
 	# ── 全局池冲突检测 ──
 	if result.pool.has(full_id):
 		var msg = "DataScanner: ID 冲突！full_id='%s' 已存在（文件: %s）" % [full_id, file_path]
-		push_error(msg)
+		Logging.err(msg)
 		result.duplicates.append(full_id)
 		return
 
@@ -156,7 +157,7 @@ static func _load_resource(
 		if not result.bases.has(top_level_base):
 			result.bases[top_level_base] = {}
 		if result.bases[top_level_base].has(uuid):
-			push_error("DataScanner: Base '%s' 内 uuid 冲突！uuid='%s' 已存在（文件: %s）" % [
+			Logging.err("DataScanner: Base '%s' 内 uuid 冲突！uuid='%s' 已存在（文件: %s）" % [
 				top_level_base, uuid, file_path])
 			# 不 return，允许继续（全局池胜出）
 		result.bases[top_level_base][uuid] = resource
@@ -207,7 +208,7 @@ static func _load_csv(
 		var full_id = current_ns + item_uuid
 		if result.pool.has(full_id):
 			var msg = "DataScanner: CSV 池冲突！full_id='%s' 已存在" % full_id
-			push_error(msg)
+			Logging.err(msg)
 			result.duplicates.append(full_id)
 			continue
 		result.pool[full_id] = item

@@ -9,12 +9,13 @@ class_name EventDataLinter extends BaseLinterRule
 # 3. 抹平异构数据 - DataHelper提供统一事件迭代器，隐藏具体实现
 
 ## Linter Rule流水线
+const Logging = preload("res://core/logger.gd")
 var linter_rules: Array[BaseLinterRule] = []
 
 ## 执行Linter检查
 ## 使用Rule流水线架构，每个Rule负责特定的检查领域
 func execute_linter() -> void:
-	print("===== 开始执行事件数据Linter (重构版) =====")
+	Logging.info("===== 开始执行事件数据Linter (重构版) =====")
 	
 	# 🆕 改用 Database autoload 实例（已通过 DataScanner 加载所有数据）
 	var event_data = Database
@@ -27,7 +28,7 @@ func execute_linter() -> void:
 	var total_warnings = 0
 	
 	for rule in linter_rules:
-		print("\n===== 执行 %s =====" % rule.rule_name)
+		Logging.info("\n===== 执行 %s =====" % rule.rule_name)
 		rule.execute(event_data)
 		rule.print_result()
 		
@@ -36,18 +37,18 @@ func execute_linter() -> void:
 		total_warnings += result.warnings.size()
 	
 	# 汇总结果
-	print("\n===== Linter执行汇总 🤓☝️ =====")
-	print("总错误数: %d" % total_errors)
-	print("总警告数: %d" % total_warnings)
+	Logging.info("\n===== Linter执行汇总 🤓☝️ =====")
+	Logging.info("总错误数: %d" % total_errors)
+	Logging.info("总警告数: %d" % total_warnings)
 	
 	if total_errors == 0 and total_warnings == 0:
-		print("✓ 所有检查通过，数据质量优秀！")
+		Logging.info("✓ 所有检查通过，数据质量优秀！")
 	elif total_errors == 0:
-		print("⚠️  有一些警告，但无致命错误")
+		Logging.info("⚠️  有一些警告，但无致命错误")
 	else:
-		print("❌ 发现错误，需要修复数据问题 💀")
+		Logging.info("❌ 发现错误，需要修复数据问题 💀")
 	
-	print("===== Linter执行完成 =====")
+	Logging.info("===== Linter执行完成 =====")
 
 ## 初始化Rule流水线
 ## 这里按顺序添加检查官，建立清晰的检查层次
@@ -66,4 +67,4 @@ func _initialize_rule_pipeline() -> void:
 	# Level 4: 事件链检查官 - 事件依赖关系验证
 	linter_rules.append(EventChainLinter.new())
 	
-	print("✓ Rule流水线初始化完成，共 %d 个检查官" % linter_rules.size())
+	Logging.info("✓ Rule流水线初始化完成，共 %d 个检查官" % linter_rules.size())

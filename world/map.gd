@@ -99,7 +99,7 @@ func render_factions():
 		mat.set_shader_parameter('color_to_idx_map', color_2_idx_tex)
 		Logging.info("大唐版图渲染成功：数据已注入 Shader。🤓☝️")
 	else:
-		Logging.error("材质获取失败！你是想把画涂在空气里吗？😡")
+		Logging.err("材质获取失败！你是想把画涂在空气里吗？😡")
 		
 
 func _unhandled_input(event: InputEvent) -> void:

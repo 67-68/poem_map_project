@@ -2,6 +2,7 @@
 class_name TraitOperator extends BaseOperator
 
 @export var _trait_key: ENUMS.TRAITS # refers to the trait in trait base
+const Logging = preload("res://core/logger.gd")
 @export var str_traits: String = "":
     set(value):
         str_traits = value
@@ -56,7 +57,7 @@ func operate():
     elif operator == REQ_OPERATOR.CRUD.REMOVE:
         PlayerState.remove_trait(trait_key)
     else:
-        print('TraitOperator: unsupported operator %s for trait operations' % operator)
+        Logging.info('TraitOperator: unsupported operator %s for trait operations' % operator)
 
 func _emit_float_text(trait_name: String) -> void:
     if trait_name.is_empty():

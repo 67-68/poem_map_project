@@ -101,7 +101,7 @@ func play_sfx(stream: AudioStream, pitch_randomness: float = 0.1, volume_db: flo
 func _load_sfx_categories() -> void:
 	var root_dir = DirAccess.open(SFX_ROOT)
 	if not root_dir:
-		push_warning("%s: 音效目录不存在 [%s]" % [LOG_TAG, SFX_ROOT])
+		Logging.warn("%s: 音效目录不存在 [%s]" % [LOG_TAG, SFX_ROOT])
 		return
 	
 	root_dir.list_dir_begin()
@@ -141,9 +141,9 @@ func _load_sfx_categories() -> void:
 		
 		if not streams.is_empty():
 			_sfx_category_cache[category] = streams
-			print("%s: 已加载类别 [%s] → %d 个音效" % [LOG_TAG, category, streams.size()])
+			Logging.info("%s: 已加载类别 [%s] → %d 个音效" % [LOG_TAG, category, streams.size()])
 		else:
-			print("%s: 类别 [%s] 为空，跳过" % [LOG_TAG, category])
+			Logging.info("%s: 类别 [%s] 为空，跳过" % [LOG_TAG, category])
 		
 		dir_name = root_dir.get_next()
 	root_dir.list_dir_end()
@@ -157,12 +157,12 @@ func play_sfx_category(category: String, pitch_randomness: float = 0.1, volume_d
 		return false
 	
 	if not _sfx_category_cache.has(category):
-		push_warning("%s: 未找到音效类别 [%s]，请确认 assets/sounds/%s/ 目录存在且包含音效文件" % [LOG_TAG, category, category])
+		Logging.warn("%s: 未找到音效类别 [%s]，请确认 assets/sounds/%s/ 目录存在且包含音效文件" % [LOG_TAG, category, category])
 		return false
 	
 	var streams = _sfx_category_cache[category] as Array[AudioStream]
 	if streams.is_empty():
-		push_warning("%s: 音效类别 [%s] 为空" % [LOG_TAG, category])
+		Logging.warn("%s: 音效类别 [%s] 为空" % [LOG_TAG, category])
 		return false
 	
 	# 随机选取一个

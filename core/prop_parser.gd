@@ -1,4 +1,5 @@
 class_name PropParser extends RefCounted
+const Logging = preload("res://core/logger.gd")
 """
 用来解析属性
 """
@@ -25,6 +26,6 @@ static func parse_any(data, get_properties = true, ...target_names):
 static func parse_and_create_cls(cls, data, get_properties = true, ...target_names):
 	var result = parse_any(data,get_properties,target_names)
 	if not result: 
-		print('Warning: no data found for %s' % target_names)
+		Logging.info('Warning: no data found for %s' % target_names)
 		result = {}
 	return cls.new(result)

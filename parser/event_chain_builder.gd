@@ -24,9 +24,9 @@ extends Node
 # ═══════════════════════════════════════════════════════
 
 # ─── preload 依赖（替代 class_name） ───
-const SafeLogger = preload("res://parser/safe_logger.gd")
 const ChainDSLParser = preload("res://parser/chain_dsl_parser.gd")
 const ChainExecutor = preload("res://parser/chain_executor.gd")
+const Logging = preload("res://core/logger.gd")
 
 # ─── 入口 ───
 
@@ -58,11 +58,11 @@ func _ready() -> void:
 				break
 
 	if not dsl.is_empty():
-		SafeLogger.info("[EventChainBuilder] 命令行模式: %s" % dsl)
+		Logging.info("[EventChainBuilder] 命令行模式: %s" % dsl)
 		_cli_run(dsl)
 		get_tree().quit(0)
 	else:
-		SafeLogger.info("[EventChainBuilder] 场景模式，等待 run() 调用")
+		Logging.info("[EventChainBuilder] 场景模式，等待 run() 调用")
 		# 场景模式下不自动退出
 
 
@@ -72,7 +72,7 @@ func _ready() -> void:
 # 用法: EventChainBuilder.run("create_hierarchy(...)")
 static func run(dsl: String) -> Dictionary:
 	if dsl.is_empty():
-		SafeLogger.err("[EventChainBuilder] run: DSL 为空")
+		Logging.err("[EventChainBuilder] run: DSL 为空")
 		return _result(false, "DSL 为空", [], [])
 
 	# 1. 解析 DSL 为 ChainCommand
@@ -102,17 +102,17 @@ static func _result(success: bool, message: String, messages: Array, commands: A
 		"command_count": commands.size(),
 	}
 	if not success:
-		SafeLogger.err("[EventChainBuilder] 失败: %s" % message)
+		Logging.err("[EventChainBuilder] 失败: %s" % message)
 	else:
-		SafeLogger.info("[EventChainBuilder] 成功: %s" % message)
+		Logging.info("[EventChainBuilder] 成功: %s" % message)
 	return result
 
 
 func _cli_run(dsl: String) -> void:
 	var result = run(dsl)
 	# 命令行输出 JSON
-	print(JSON.stringify(result, "\t", false))
+	Logging.info(JSON.stringify(result, "\t", false))
 	if not result.get("success", false):
-		SafeLogger.err("[EventChainBuilder] CLI 执行失败")
+		Logging.err("[EventChainBuilder] CLI 执行失败")
 	else:
-		SafeLogger.info("[EventChainBuilder] CLI 执行成功")
+		Logging.info("[EventChainBuilder] CLI 执行成功")

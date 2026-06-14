@@ -5,6 +5,7 @@ extends MeshInstance2D
 @export var size: Vector2 = Vector2(1000, 1000)
 @export var subdivide: int = 100
 
+const Logging = preload("res://core/logger.gd")
 func _set_generate_grid(_val):
 	if not _val: return
 	
@@ -41,4 +42,4 @@ func _set_generate_grid(_val):
 			st.add_index(bottom_left)
 			
 	mesh = st.commit()
-	print("🤓☝️ 架构师：大唐地理网格已精准生成。三角形总数: ", subdivide * subdivide * 2)
+	Logging.info("🤓☝️ 架构师：大唐地理网格已精准生成。三角形总数:  %s" % [subdivide * subdivide * 2])

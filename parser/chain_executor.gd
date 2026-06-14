@@ -18,7 +18,6 @@ extends RefCounted
 # ═══════════════════════════════════════════════════════
 
 # ─── preload 依赖（替代 class_name） ───
-const SafeLogger = preload("res://parser/safe_logger.gd")
 const ChainCommand = preload("res://parser/chain_command.gd")
 const ChainTresEditor = preload("res://parser/chain_tres_editor.gd")
 const ChainFlagGenerator = preload("res://parser/chain_flag_generator.gd")
@@ -26,6 +25,7 @@ const PushEventOperator = preload("res://core/operators/push_event_operator.gd")
 const PopEventOperator = preload("res://core/operators/pop_event_operator.gd")
 const FlagRequirement = preload("res://core/requirements/flag_requirement.gd")
 const FlagOperator = preload("res://core/operators/flag_operator.gd")
+const Logging = preload("res://core/logger.gd")
 const REQ_OPERATOR = preload("res://core/model/requirement_operator.gd")
 
 # ─── 执行结果 ───
@@ -49,7 +49,7 @@ static func execute(command: ChainCommand) -> ExecResult:
 	if command == null:
 		return ExecResult.new(false, "[ChainExecutor] 命令为 null", null)
 
-	SafeLogger.info("[ChainExecutor] 执行命令: %s" % str(command))
+	Logging.info("[ChainExecutor] 执行命令: %s" % str(command))
 
 	match command.type:
 		ChainCommand.CommandType.CREATE_HIERARCHY:
@@ -77,7 +77,7 @@ static func execute_batch(commands: Array[ChainCommand]) -> Dictionary:
 		else:
 			fail_count += 1
 
-	SafeLogger.info("[ChainExecutor] 批量执行完成: %d 成功, %d 失败 (共 %d 条)" % [success_count, fail_count, commands.size()])
+	Logging.info("[ChainExecutor] 批量执行完成: %d 成功, %d 失败 (共 %d 条)" % [success_count, fail_count, commands.size()])
 	return {
 		"success_count": success_count,
 		"fail_count": fail_count,
