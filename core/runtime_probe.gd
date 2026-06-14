@@ -117,9 +117,17 @@ func _handle_request(peer: StreamPeerTCP, request: Dictionary) -> void:
 		}))
 		return
 
-	var path := request["path"] as String
+	var full_path := request["path"] as String
 
-	match path:
+	# ── 分离路径和 query string ──
+	var endpoint_path := full_path
+	var query_params: Dictionary = {}
+	var qmark := full_path.find("?")
+	if qmark != -1:
+		endpoint_path = full_path.substr(0, qmark)
+		query_params = _parse_query_string(full_path.substr(qmark + 1))
+
+	match endpoint_path:
 		"/api/scene_tree":
 			_send_http_response(peer, 200, _serialize_scene_tree())
 
@@ -130,7 +138,9 @@ func _handle_request(peer: StreamPeerTCP, request: Dictionary) -> void:
 			_send_http_response(peer, 200, _serialize_event_system())
 
 		"/api/logs":
-			_send_http_response(peer, 200, _serialize_logs())
+			var since := int(query_params.get("since", "0"))
+			var limit := int(query_params.get("limit", "500"))
+			_send_http_response(peer, 200, _serialize_logs(since, limit))
 
 		_:
 			_send_http_response(peer, 404, JSON.stringify({
@@ -138,6 +148,22 @@ func _handle_request(peer: StreamPeerTCP, request: Dictionary) -> void:
 				"message": "未知端点。可用端点: /api/scene_tree, /api/game_state, /api/event_system, /api/logs",
 				"available_endpoints": ["/api/scene_tree", "/api/game_state", "/api/event_system", "/api/logs"]
 			}))
+
+
+# ── 极简 query string 解析器 ──
+static func _parse_query_string(qs: String) -> Dictionary:
+	"""
+	解析 URL query string，如 "since=10&limit=50" → {"since": "10", "limit": "50"}
+	只支持简单键值对，不处理嵌套/数组/URL 解码。
+	"""
+	var result: Dictionary = {}
+	if qs.is_empty():
+		return result
+	for pair in qs.split("&"):
+		var kv := pair.split("=", true, 1)
+		if kv.size() == 2 and not kv[0].is_empty():
+			result[kv[0]] = kv[1]
+	return result
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -323,8 +349,8 @@ func _serialize_event_system() -> String:
 # API 4: GET /api/logs
 # 返回 Logging 环形缓冲区中的最近日志
 # ─────────────────────────────────────────────────────────────────────────────
-func _serialize_logs() -> String:
-	var logs := Logging.get_logs_since(0, 500)
+func _serialize_logs(since: int = 0, limit: int = 500) -> String:
+	var logs := Logging.get_logs_since(since, limit)
 	var total := Logging.get_total_buffered()
 	var current_seq := Logging.get_current_seq()
 	var result := {
