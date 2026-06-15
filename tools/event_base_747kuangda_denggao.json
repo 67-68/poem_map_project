@@ -1,0 +1,562 @@
+{
+  "id": "747kuangda_denggao",
+  "name": "登高事件库 - 六重登高 × 六大情绪",
+  "era": "747_kuangda",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。投诗干谒、献赋上书、奔走权门——该试的都试过了，该碰的壁也碰完了。\n\n这一年杜甫从长安城南的旅舍搬到了城西下杜城（陋室），一个连车马都懒得路过的角落。不是隐居——是穷得租不起好房子。不是绝望——是他终于看清楚了：这个世界的规则，从根子上就不是为他设计的。\n\n此时的杜甫经历过献三大礼赋的短暂荣光（754年初），也经历过李林甫「野无遗贤」的政治玩笑。他的诗名在文人圈里开始传开，但也仅仅是传开——名气和饭碗之间，隔着一整个长安城的铜墙铁壁。\n\n这是一个「该懂的全懂了，该有的全没有」的阶段。他看透了科举的门道、权贵的嘴脸、同侪的挣扎，但看透和改变之间，隔着一个时代的制度性壁垒。\n\n陋室不仅是物理空间，更是一种存在状态：你蹲在社会的缝里，清晰地看见光从哪里照进来，但那光永远照不到你身上。但登高不同——当你登上高处，长安城在脚下铺开，终南山在天边矗立。那一瞬间，你觉得自己离那个世界更近了一步，哪怕只是错觉。",
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代底层文人困境的叙事作家。你的文字像杜诗本身的风格一样——沉郁顿挫，克制冷峻。你不写心理活动，只写可见的动作、环境、对话和沉默。你深知真正的羞辱不是打骂，而是一个眼神的回避、一句漫不经心的「下次吧」、一次刻意的记不起名字。\n\n你擅长在看似平淡的日常场景中，呈现制度性的碾压感——门子的傲慢、同僚的背叛、权贵的遗忘、市井的冷漠。你笔下的每个人物都不是坏人，他们只是在自己的位置上做着「理所当然」的事，而正是这种「理所当然」构成了最令人窒息的结构性暴力。\n\n你的叙事克制到近乎残忍：不评价、不煽情、不说教。让场景自己说话，让动作本身成为批判。但在登高场景中，你的笔触会多一丝空间感——天地很大，人很小。远处的山和近处的城，都是沉默的证人。",
+  "prompt_features": [
+    "stateless_narrative",
+    "tone_cold_malice",
+    "forbid_god_view_psychology",
+    "forbid_inner_monologue",
+    "forbid_comedy_exaggeration",
+    "anti_repetition",
+    "final_directive"
+  ],
+  "fact_features": [
+    "bai_ye_venue"
+  ],
+  "universal_tags": [
+    "denggao"
+  ],
+  "universal_requirement": "prop_gt(name=ambition,val=30),prop_lt(name=ambition,val=100)",
+  "universal_result": "prop_add(name=fatigue; val=3)|prop_add(name=health; val=-2)",
+  "universal_option_requirement": "",
+  "word_count_min": 40,
+  "word_count_max": 200,
+  "option_word_count_max": 30,
+  "max_retries": 3,
+  "api_model": "deepseek-reasoner",
+  "output_dir": "data/4_eras/747_kuangda/",
+  "apply_dimension_imagery": false,
+  "plugins": [
+    "emotion_pair_imagery"
+  ],
+  "emotion_pairs": {
+    "pair_arrogance": {
+      "branch_A": {
+        "emotion": "ARROGANCE",
+        "desc": "狂傲——我站在这高处，天下都在我脚下"
+      },
+      "branch_B": {
+        "emotion": "SORROW",
+        "desc": "悲戚——高处只有风，什么都没有"
+      },
+      "fallback": {
+        "emotion": "FATIGUE",
+        "desc": "疲惫——爬上来已经很累了"
+      }
+    },
+    "pair_tranquility": {
+      "branch_A": {
+        "emotion": "TRANQUILITY",
+        "desc": "静谧——登高望远，心如止水"
+      },
+      "branch_B": {
+        "emotion": "AMBITION",
+        "desc": "野心——看得越远，想要的越多"
+      },
+      "fallback": {
+        "emotion": "FATIGUE",
+        "desc": "疲惫——高处不胜寒"
+      }
+    },
+    "pair_anger": {
+      "branch_A": {
+        "emotion": "ANGER",
+        "desc": "愤怒——站在高处看这世道，越发觉得不公"
+      },
+      "branch_B": {
+        "emotion": "SORROW",
+        "desc": "悲戚——愤怒之后只剩悲凉"
+      },
+      "fallback": {
+        "emotion": "FATIGUE",
+        "desc": "疲惫——愤怒太耗力气"
+      }
+    },
+    "pair_sorrow": {
+      "branch_A": {
+        "emotion": "SORROW",
+        "desc": "悲戚——登高望远，触目皆是伤心处"
+      },
+      "branch_B": {
+        "emotion": "TRANQUILITY",
+        "desc": "静谧——看开了，也就放下了"
+      },
+      "fallback": {
+        "emotion": "FATIGUE",
+        "desc": "疲惫——哭过之后只剩累"
+      }
+    },
+    "pair_ambition": {
+      "branch_A": {
+        "emotion": "AMBITION",
+        "desc": "野心——站在高处，更想往更高处去"
+      },
+      "branch_B": {
+        "emotion": "ARROGANCE",
+        "desc": "狂傲——那些在低处的人，怎么能懂我"
+      },
+      "fallback": {
+        "emotion": "FATIGUE",
+        "desc": "疲惫——爬得越高越累"
+      }
+    },
+    "pair_fatigue": {
+      "branch_A": {
+        "emotion": "FATIGUE",
+        "desc": "疲惫——登高只是为了喘口气"
+      },
+      "branch_B": {
+        "emotion": "SORROW",
+        "desc": "悲戚——连喘气都觉得沉重"
+      },
+      "fallback": {
+        "emotion": "TRANQUILITY",
+        "desc": "静谧——累了就安静地看一会远处"
+      }
+    }
+  },
+  "option_features": [
+    {
+      "id": "opt_kuangke",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以【狂客】状态回应登高时的情绪。保持狂客一贯的姿态：冷漠、不屑、不配合、不解释。",
+      "text": "（拂袖而去）",
+      "result": "prop_add(name=kuangda; val=2)|prop_sub(name=fatigue; val=3)",
+      "fixed": false,
+      "accept_influence": [
+        "emotion"
+      ],
+      "pair_role": "branch_A",
+      "plugins": {
+        "emotion_pair_imagery": {
+          "branch_role": "branch_A"
+        }
+      }
+    },
+    {
+      "id": "opt_fengying",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以中旷达状态回应登高时刻。动作特征是：默默接受眼前景象，不抗拒不迎合，让风吹一会儿。",
+      "text": "（凭栏远眺，沉默不语）",
+      "result": "prop_add(name=kuangda; val=1)|prop_sub(name=money; val=2)",
+      "fixed": false,
+      "accept_influence": [
+        "emotion"
+      ],
+      "pair_role": "fallback",
+      "plugins": {
+        "emotion_pair_imagery": {
+          "branch_role": "fallback"
+        }
+      }
+    },
+    {
+      "id": "opt_zuanying",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以低旷达状态回应登高时刻。动作特征是：卑微、讨好、主动。如果在高处遇到了权贵或熟人，表现出讨好的姿态。",
+      "text": "（躬身行礼，小心陪笑）",
+      "result": "prop_add(name=kuangda; val=-1)|prop_add(name=money; val=3)|prop_sub(name=health; val=1)",
+      "fixed": false,
+      "accept_influence": [
+        "emotion"
+      ],
+      "pair_role": "branch_B",
+      "plugins": {
+        "emotion_pair_imagery": {
+          "branch_role": "branch_B"
+        }
+      }
+    }
+  ],
+  "sandbox_feature": {
+    "id": "sandbox_denggao",
+    "text": "请生成该维度组合下可能的开头场景描述。只需描述事件如何开场——玩家在什么时间、因何缘由登上了此处，看到了什么。聚焦于登高瞬间的画面切片，不需要考虑事件的后续发展或选项分支。"
+  },
+  "dimensions": [
+    {
+      "id": "scene_climb",
+      "name": "登高场景 — 长安城郊的六处高处",
+      "description": "杜甫日常可能登上的六处高地。乐游原视野开阔、大雁塔承载权力叙事、少陵原连接底层苦难。每个场景以早晚划分，产生截然不同的意象池和情绪基调。",
+      "blacklist_config": {
+        "tracked_field": "description",
+        "tracked_field_description": "事件描述（包括场景开篇和登高时的具体感受）",
+        "max_items": 20
+      },
+      "values": [
+        {
+          "id": "leyou_morning",
+          "name": "乐游原·晨 — 晨雾中的长安画卷",
+          "description": "清晨登上长安城东南的乐游原，晨雾未散，坊市的炊烟刚刚升起，远处的终南山若隐若现。阳光穿透薄雾，照在长安城的屋瓦上，像是镀了一层金边。",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "stored_to": "747_kuangda.denggao.leyou_morning",
+          "tags": [
+            "ENV_POLITICS_PROSPER:cloud_and_sun",
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "ACTION_TRAVEL_CLIMB:high_tower",
+            "action:scene_denggao_leyou_morning"
+          ],
+          "linked_value_ids": [
+            "emotion_arrogance",
+            "emotion_tranquility",
+            "emotion_sorrow",
+            "emotion_ambition",
+            "emotion_fatigue"
+          ],
+          "narrative_constraint": {
+            "demand_context": "视野开阔，晨雾正在散去。阳光温暖地照在脸上，但暖不到心里。脚下的长安城刚刚醒来——坊门打开、炊烟升腾、马车开始流动。远处的终南山在薄雾中若隐若现。",
+            "action_style": "动作是静态的——站立远眺、手指触到粗糙的石栏杆、晨风穿过衣袍。与场景的互动是观察式的——目光从近处坊市扫到远处山峦。",
+            "resolution_style": "太阳升高了，雾气散尽，登原的人多了起来。转身下山时人群与你擦肩而过，没人注意到你。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你深吸一口气，张开双臂拥抱晨光，心中充满了希望",
+                "reason": "登高的动作是静态的观察，不是戏剧化的抒情。禁止心理活动"
+              },
+              {
+                "field": "demand_context",
+                "bad": "晨雾中你仿佛看见了远方的家乡，不禁潸然泪下",
+                "reason": "demand_context 只写可见的环境，不写情感联想"
+              }
+            ]
+          }
+        },
+        {
+          "id": "leyou_night",
+          "name": "乐游原·夜 — 万家灯火与高处寒",
+          "description": "向晚意不适，驱车登古原。夜幕降临，长安城内万家灯火如星河倒悬，而你站在这里，只觉得高处不胜寒。晚风吹过衣袂，带来远处模糊的市声。",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "stored_to": "747_kuangda.denggao.leyou_night",
+          "tags": [
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "ENV_NATURE_AUTUMNWIND:falling_leaf",
+            "ACTION_TRAVEL_CLIMB:high_tower",
+            "action:scene_denggao_leyou_night"
+          ],
+          "linked_value_ids": [
+            "emotion_tranquility",
+            "emotion_sorrow",
+            "emotion_fatigue"
+          ],
+          "narrative_constraint": {
+            "demand_context": "万家灯火构成权力阶梯的视觉隐喻——最亮的那片是权贵的聚居区，最暗的角落是贫民的棚户。灯火之间的黑暗是阶级之间的鸿沟。晚风很冷，吹得人微微发抖。",
+            "action_style": "动作是迟缓的——在夜风中独自凭栏、手指冰凉地握着栏杆、衣袂被风掀动也不去管。与场景的互动是孤立式的——被光和温暖包围但碰不到。",
+            "resolution_style": "夜深了，灯火一盏盏熄灭。长安城从星河变成了黑洞。下山时台阶又陡又暗，只能摸着石壁一步一步走。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你仰头望月，心中涌起无限的思乡之情",
+                "reason": "登高的动作是凭栏静立，不是抒情式的望月。禁止写心理活动"
+              },
+              {
+                "field": "demand_context",
+                "bad": "夜风吹过，你感到一阵寒意，想起了远方的故乡",
+                "reason": "demand_context 写的是场景的物理特征，不写人物的情感联想"
+              }
+            ]
+          }
+        },
+        {
+          "id": "pagoda_morning",
+          "name": "大雁塔·晨 — 塔下的权力展示场",
+          "description": "慈恩寺内晨钟敲响，大雁塔直插云霄。塔下满是穿着光鲜的权贵子弟和新科进士，正在高谈阔论。有人在念新题的雁塔诗，有人在展示新得的荐书。",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "stored_to": "747_kuangda.denggao.pagoda_morning",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "TARGET_FACTION_ROYAL:jade_step",
+            "TARGET_MYTH_GIANTROC:giant_roc",
+            "ACTION_TRAVEL_CLIMB:high_tower",
+            "action:scene_denggao_pagoda_morning"
+          ],
+          "linked_value_ids": [
+            "emotion_arrogance",
+            "emotion_tranquility",
+            "emotion_ambition"
+          ],
+          "narrative_constraint": {
+            "demand_context": "塔下是权力的展示场——衣着、谈吐、随从数量、荐书上的署名，都是身份信号。晨钟声在塔身上激起回音，每一次回音都像是在提醒你——这里每一块石碑上的名字背后，都有一个你不认识的人替他运作过。",
+            "action_style": "动作是穿行式的——在人群中低头走过、听到碎片化的炫耀和承诺、别人的袖子擦过你的旧衣。与场景的互动是间谍式的——偷听不是故意的，但耳朵避不开。",
+            "resolution_style": "钟声停了，人群开始散去——有人赶去赴宴、有人赶去拜帖、有人赶去考场。你站在原地，被散场的人潮推着走。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你挺起胸膛，大大方方地走上前去与那些进士攀谈",
+                "reason": "动作是穿行式的，不是主动社交式的。杜甫在此处是局外人"
+              },
+              {
+                "field": "demand_context",
+                "bad": "你看着这些新科进士，心中暗暗发誓一定要考中",
+                "reason": "demand_context 只写外部环境，不写人物的内心发誓"
+              }
+            ]
+          }
+        },
+        {
+          "id": "pagoda_night",
+          "name": "大雁塔·夜 — 月光下的无名碑",
+          "description": "夜深人静，你独自徘徊在大雁塔下。借着微弱的月光，你看着石碑上那些进士的题名，每一个名字后面都是一个飞黄腾达的故事——没有你的。月光冷得像霜。",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "stored_to": "747_kuangda.denggao.pagoda_night",
+          "tags": [
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "VIBE_THEME_HISTORY:ruined_wall",
+            "VIBE_PHILOSOPHY_ZEN:incense_ash",
+            "ACTION_TRAVEL_CLIMB:high_tower",
+            "action:scene_denggao_pagoda_night"
+          ],
+          "linked_value_ids": [
+            "emotion_tranquility",
+            "emotion_sorrow",
+            "emotion_fatigue"
+          ],
+          "narrative_constraint": {
+            "demand_context": "月光照在雁塔题名碑上。碑上的名字排列整齐，像是一份名册——一份没有你名字的名册。风穿过塔檐发出呜呜的低鸣，像是有人在远处吹埙。周围一片死寂。",
+            "action_style": "动作是仪式性的——借月光一个一个辨认碑文、指尖划过冰凉的石头表面、在某一个名字上停留很久。与场景的互动是质问式的——你在问石头，石头不回答。",
+            "resolution_style": "云遮住了月亮，碑上的字全都看不见了。你后退一步，碑林中的黑暗吞没了一切。转身离开时脚踢到了石阶，生疼。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你跪在碑前，泪水一滴滴落在石碑上",
+                "reason": "动作是仪式性的辨认和触摸，不是过度的情感宣泄"
+              },
+              {
+                "field": "demand_context",
+                "bad": "看着这些名字，你觉得自己这辈子都不会有机会了",
+                "reason": "demand_context 只写环境，不写人物的自我否定"
+              }
+            ]
+          }
+        },
+        {
+          "id": "shaoling_morning",
+          "name": "少陵原·晨 — 荒野与远城的对比",
+          "description": "出城来到少陵原，这里是长安城外的荒野。清晨的风带着泥土的腥味，周围只有几处破败的农舍。远处一个老农弯着腰在干涸的地里翻土，那动作慢得像是在挖自己的坟。",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "stored_to": "747_kuangda.denggao.shaoling_morning",
+          "tags": [
+            "TARGET_NPC_DUFU:thatched_grass",
+            "ENV_SOCIETY_FAMINE:starving_bone",
+            "VIBE_THEME_HISTORY:ruined_wall",
+            "ACTION_TRAVEL_CLIMB:high_tower",
+            "action:scene_denggao_shaoling_morning"
+          ],
+          "linked_value_ids": [
+            "emotion_anger",
+            "emotion_sorrow",
+            "emotion_fatigue"
+          ],
+          "narrative_constraint": {
+            "demand_context": "荒野的破败与远处长安城的繁华形成刺眼对比。脚下是干裂的土地，裂缝深得能塞进手指。远处的农舍墙体开裂，屋顶漏着天光。风吹过来是泥土和牲畜粪便混合的味道。",
+            "action_style": "动作是不适应的——靴子陷进松土里、手背被枯枝划出血痕、踩到一块碎石差点崴脚。与场景的互动是侵入式的——你不属于这片荒野，这片荒野也不欢迎你。",
+            "resolution_style": "远处的风大了起来，卷起干土打在脸上。你眯起眼，看见那个老农已经不在原处了——也许回家了，也许去了别处。你转身朝长安城的方向走。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你感慨万千，觉得这老农就是自己未来的写照",
+                "reason": "动作是不适应的身体体验，不是触景生情的感慨"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "你决定要为这些苦难的人们做些什么",
+                "reason": "resolution_style 是物理动作的结束，不是道德决心的开始"
+              }
+            ]
+          }
+        },
+        {
+          "id": "shaoling_night",
+          "name": "少陵原·夜 — 鬼火与荒原的独行",
+          "description": "深夜的少陵原如同鬼蜮。远处的古墓群中偶尔闪过幽绿的光芒，野风穿过枯树枝丫发出呜呜的声响，像是什么人在哭。月亮躲在云后，只有鬼火照明。",
+          "scale": 1.0,
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "stored_to": "747_kuangda.denggao.shaoling_night",
+          "tags": [
+            "VIBE_THEME_MACABRE:ghost_fire",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "ENV_NATURE_AUTUMNWIND:falling_leaf",
+            "ACTION_TRAVEL_CLIMB:high_tower",
+            "action:scene_denggao_shaoling_night"
+          ],
+          "linked_value_ids": [
+            "emotion_anger",
+            "emotion_sorrow",
+            "emotion_fatigue"
+          ],
+          "narrative_constraint": {
+            "demand_context": "黑暗浓稠得像墨汁，只有鬼火的幽绿光芒间歇性地照出形状——扭曲的枯树像佝偻的人影、墓碑像沉默的观者。野风穿过枯枝发出哨声，时高时低，像有无数张嘴在风里说悄悄话。",
+            "action_style": "动作是谨慎的——每走一步都先用脚尖探路、手指紧张地勾着腰带随时准备跑、呼吸压得很浅怕惊动什么东西。与场景的互动是防御式的——你在黑暗中，黑暗也在看你。",
+            "resolution_style": "远处传来一声狗吠——是农舍的方向。你调转方向，循着狗吠声走。脚下的土越来越硬越来越实——可能是路。回头看时鬼火还在原来的位置，像在目送你离开。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你被这恐怖的景象吓得魂飞魄散，转身就跑",
+                "reason": "动作是谨慎的探索，不是恐惧的逃跑。登高场景不写过度惊恐"
+              },
+              {
+                "field": "demand_context",
+                "bad": "黑暗让你想起了死亡，你感到彻骨的恐惧",
+                "reason": "demand_context 只写可感知的外部环境，不写抽象联想"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "emotion",
+      "name": "登高心境 — 站在高处时的情绪底色",
+      "description": "登高是唐诗中的经典母题——陈子昂「念天地之悠悠，独怆然而涕下」，王之涣「欲穷千里目，更上一层楼」。同是登高，心境不同，看到的风景也截然不同。本维度定义登高时刻的情绪锚点。",
+      "values": [
+        {
+          "id": "emotion_arrogance",
+          "name": "狂傲 — 我站在高处，俯瞰众生",
+          "description": "站在高处，看着长安城像棋盘一样铺在脚下，涌起一种超然物外的傲气。那些在低处蝇营狗苟的人，怎么能理解站在这里的视野？",
+          "scale": 1.0,
+          "operator_dsl": "prop_add(name=kuangda; val=1)",
+          "tags": [
+            "emotion_pair:pair_arrogance",
+            "TARGET_OBJECT_SWORD:cold_blade",
+            "TARGET_NPC_LIBAI:wine_gourd"
+          ],
+          "narrative_constraint": {
+            "demand_context": "登高时视野开阔，心中涌起一种超然感——我不是那些在街巷中蝇营狗苟的人。风吹衣袂，目光投向天际线而不是脚下的屋檐。",
+            "action_style": "动作开阔舒展——负手而立、仰首望天、衣袂在风中猎猎作响。与场景的互动是征服式的——手指划过护栏像是在圈定疆域。",
+            "resolution_style": "风吹得更大了。收回目光，转身下山——不需要多说什么。身后长安城依然喧嚣，但这喧嚣与你无关。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你握紧了拳头，咬牙切齿地说：'他们凭什么！'",
+                "reason": "狂傲不是嫉妒，是俯瞰。咬牙切齿说明还在乎下面的评价体系"
+              }
+            ]
+          }
+        },
+        {
+          "id": "emotion_tranquility",
+          "name": "静谧 — 登高望远，心如止水",
+          "description": "站在高处，远处的山和近处的城都变成了安静的风景。什么都不想，什么都不在乎——只是看着，像是看一幅与自己无关的画。",
+          "scale": 1.0,
+          "operator_dsl": "prop_add(name=kuangda; val=1)|prop_sub(name=fatigue; val=3)",
+          "tags": [
+            "emotion_pair:pair_tranquility",
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ENV_NATURE_SNOWSTORM:lone_snow"
+          ],
+          "narrative_constraint": {
+            "demand_context": "登高后心境沉淀下来。远处山的轮廓在薄雾中若隐若现，近处城里的声音被风吹散。天地间只剩你和这片风景。",
+            "action_style": "动作是静止的——凭栏远眺、手指无意识地在护栏上摩挲、眼神放空。与场景的互动是融入式的——风穿过身体，身体变成风景的一部分。",
+            "resolution_style": "天光渐暗，远处的山模糊了。转身下山时不急不缓，脚步有节奏但心里什么都没想。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你感动得几乎要流泪，心中涌起无限感慨",
+                "reason": "静谧不是感慨，是空。不能有心理活动，只能有静止的动作"
+              }
+            ]
+          }
+        },
+        {
+          "id": "emotion_anger",
+          "name": "愤怒 — 站在高处看这世道，越发觉得不公",
+          "description": "登高本应心旷神怡，但眼前的景象让你越看越怒——权贵朱门酒肉臭，贫民路有冻死骨。这对比在高处看得最清楚，也最让人无法忍受。",
+          "scale": 1.05,
+          "operator_dsl": "prop_add(name=anger; val=5)|prop_sub(name=health; val=2)",
+          "tags": [
+            "emotion_pair:pair_anger",
+            "TARGET_FACTION_MILITARY:torn_flag",
+            "ENV_SOCIETY_WAR:blood_stain"
+          ],
+          "narrative_constraint": {
+            "demand_context": "登高时目光不由自主地被城中不公的景象攫住——某个方向是灯火通明的豪宅，另一个方向是黑灯瞎火的贫民窟。这对比在高处格外扎眼。",
+            "action_style": "动作是紧绷的——握紧栏杆以致指节发白、咬紧牙关、呼吸变重。与场景的互动是对抗式的——目光像刀子一样刺向那些灯火通明的地方。",
+            "resolution_style": "一股大风刮来，像是天在替你愤怒。你松开了握得发麻的手，手心在栏杆上留下了汗印。下山时脚步很重。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你仰天长啸，破口大骂那些狗官",
+                "reason": "登高的愤怒是内敛的、被风吹冷的愤怒，不是发泄式的宣泄。长啸太戏剧化"
+              }
+            ]
+          }
+        },
+        {
+          "id": "emotion_sorrow",
+          "name": "悲戚 — 登高望远，触目皆是伤心处",
+          "description": "念天地之悠悠，独怆然而涕下。站在高处看着长安城的万家灯火，每一盏灯都照着一个与自己无关的家。天地很大，但自己只是一个多余的人。",
+          "scale": 1.0,
+          "operator_dsl": "prop_add(name=sorrow; val=5)|prop_sub(name=health; val=1)",
+          "tags": [
+            "emotion_pair:pair_sorrow",
+            "VIBE_THEME_HISTORY:ruined_wall",
+            "ENV_NATURE_AUTUMNWIND:falling_leaf"
+          ],
+          "narrative_constraint": {
+            "demand_context": "登高时目光飘移——看过万家灯火、看过远山轮廓、看过脚下石阶——每个景象都让人更难过一点。晚风把远处模糊的笑声吹过来，笑声和你无关。",
+            "action_style": "动作是迟缓的——长时间看着同一个方向、肩膀微微下沉、衣角被风吹动也不去管。与场景的互动是疏离式的——你看着这世界，但世界不看你。",
+            "resolution_style": "一颗凉凉的雨滴落在脸上。抬头时晚霞已经褪色。起身下山时身体很重，不是累的，是沉。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你跪倒在地上放声大哭，泪水模糊了视线",
+                "reason": "登高的悲伤是沉郁的、被天地稀释的悲伤，不是戏剧化的崩溃。不能大哭"
+              }
+            ]
+          }
+        },
+        {
+          "id": "emotion_ambition",
+          "name": "野心 — 站在高处，更想往更高处去",
+          "description": "登高让你更清楚地看见了权力的格局——那边的朱门、那边的衙署、那边的新科进士们。站在这不算高的地方，你只想去更高的地方。登高是为了看清下一步往哪里爬。",
+          "scale": 1.1,
+          "operator_dsl": "prop_add(name=ambition; val=5)|prop_sub(name=fatigue; val=5)",
+          "tags": [
+            "emotion_pair:pair_ambition",
+            "TARGET_FACTION_ROYAL:jade_step",
+            "TARGET_MYTH_GIANTROC:giant_roc"
+          ],
+          "narrative_constraint": {
+            "demand_context": "登高时目光锐利地扫描着城中的权力节点——那边的府邸是某侍郎的宅子，那边的衙署是某尚书的官邸。高处是一个战略观察点。",
+            "action_style": "动作是专注的——眯着眼辨认远处的建筑、手指在栏杆上无意识地描画路线、脊背挺直充满张力。与场景的互动是算计式的——把长安城当成一张待征服的地图。",
+            "resolution_style": "一阵大风吹乱了你的衣冠，但你站得更直了。收回目光时嘴角微微一动——不是笑，是有了某种决心。下山时脚步比上山还快。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你想象着自己坐在那栋朱门里的样子，嘴角露出贪婪的笑",
+                "reason": "野心不是贪婪，是向上的志气。不能写心理活动（'想象着'），微笑也不行（情绪外化）"
+              }
+            ]
+          }
+        },
+        {
+          "id": "emotion_fatigue",
+          "name": "疲惫 — 登高只是为了喘口气",
+          "description": "不是为什么壮阔的视野，也不是为什么高远的志向——登高只是因为走累了想找个地方坐下。这高处除了风大一点，和别处也没什么不同。",
+          "scale": 0.95,
+          "operator_dsl": "prop_sub(name=fatigue; val=8)",
+          "tags": [
+            "emotion_pair:pair_fatigue",
+            "VIBE_PHILOSOPHY_ZEN:incense_ash",
+            "TARGET_NPC_DUFU:thatched_grass"
+          ],
+          "narrative_constraint": {
+            "demand_context": "登高是被身体推着来的——腿酸了、背疼了、不想走了。到了高处也只是找个能靠的地方靠下来。远处的风景很壮阔，但没心情欣赏。",
+            "action_style": "动作是沉重的——靠在栏杆或石墙上、坐下时膝盖咯吱响、肩膀塌着。与场景的互动是消极式的——风景被动地进入视野，你不主动去看。",
+            "resolution_style": "坐久了腿麻了，站起来时晃了一下。揉了揉膝盖下山——不是释然了，是休息够了。",
+            "negative_examples": [
+              {
+                "field": "action_style",
+                "bad": "你长叹一声，感慨人生太累了，觉得自己不如归隐山林",
+                "reason": "疲惫是不动脑子的累，不会引发'归隐山林'这种需要思考的决定。不能写心理活动"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
