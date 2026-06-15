@@ -12,9 +12,11 @@ __pycache__/
 .venv/
 env/
 node_modules/
+*.pyc
 
 # 编译产物和临时文件
 build/
 dist/
 *.log
 .DS_Store
+

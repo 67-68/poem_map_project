@@ -142,9 +142,6 @@ graph LR
 | `scene_focus` | 环境氛围描写 |
 | `NPC_ask_poem` | NPC 索要诗词模板 |
 | `plain_action` | 选项中性物理动作 |
-| `final_directive` | 终极硬约束——禁止心理描写/比喻修辞/上帝视角，利用末尾位置获得最强 Recency Bias 遵从度 |
-
-- **⚠️ `final_directive` 的特殊性**: 虽然 `final_directive` 是一个普通的 prompt_feature（通过 registry 解析注入），但它在 System Prompt 中的渲染位置与其他 prompt_feature 不同——它被渲染在 `## ⚠️ 绝对指令（最后一行，优先级最高）` 区块，位于 System Prompt 绝对末尾，利用 Recency Bias（近因效应）获得最强权重。适合放置跨维度的、不可协商的硬规则。
 
 - **约束级别总览**:
 

@@ -85,6 +85,8 @@ CRITICAL: 任何模式下都必须严格遵守以下底层物理边界：
 
 3. 通用执行域 (General Shell/Scripts - 严禁掩耳盗铃 😡): > 当你必须执行其他常规命令（如运行脚本）老老实实使用shell命令探测
 
+创建文件夹的时候不要使用花括号创建多个
+
 ## 搜索协议
 Perform semantic and natural language search across the Godot codebase using vector embeddings.
 

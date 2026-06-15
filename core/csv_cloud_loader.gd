@@ -103,6 +103,12 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "random_event",
         "is_generated": true,
     },
+    {
+        "name": "多态旷达事件",
+        "save_path": "res://data/4_eras/747_kuangda/duotai_humiliation_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
 ]
 
 # 🗺️ store_to 路径映射表
@@ -120,8 +126,13 @@ const STORE_TO_PATH_MAP: Dictionary = {
     "745_ambition.duzhuo": "res://data/4_eras/745_ambition/duzhuo",
     "745_ambition.jiaoyou": "res://data/4_eras/745_ambition/jiaoyou",
     "745_ambition.fangshi": "res://data/4_eras/745_ambition/fangshi",
-    # ── 旧格式（待迁移） ──
-    "baiye": "res://data/tres_random_event_bai_ye",
+    # ── 747_kuangda 时代 ──
+    "747_kuangda.fangshi": "res://data/4_eras/747_kuangda/fangshi",
+    "747_kuangda.jiaoyou": "res://data/4_eras/747_kuangda/jiaoyou",
+    "747_kuangda.baiye": "res://data/4_eras/747_kuangda/baiye",
+    "747_kuangda.duzhuo": "res://data/4_eras/747_kuangda/duzhuo",
+    "747_kuangda.denggao": "res://data/4_eras/747_kuangda/denggao",
+    "747_kuangda.fengzhao": "res://data/4_eras/747_kuangda/fengzhao",
 }
 
 # 任务指针：当前正在下载第几个文件？

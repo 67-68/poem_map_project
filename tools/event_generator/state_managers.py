@@ -315,6 +315,11 @@ class SandboxManager:
             f"每行一个，不要编号，不要多余内容："
         )
 
+        # 🆕 沙盒特征指令（如果有配置）
+        sandbox_feature = self.cfg.sandbox_feature
+        if sandbox_feature and sandbox_feature.text.strip():
+            user_prompt += f"\n\n附加创作指引：{sandbox_feature.text.strip()}"
+
         response = self.llm.generate_event_text(system_prompt, user_prompt)
 
         # 解析响应：按行切割，去掉空行和标点符号
