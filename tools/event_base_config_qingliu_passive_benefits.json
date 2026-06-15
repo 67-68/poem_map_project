@@ -2,8 +2,8 @@
   "id": "qingliu_passive_benefits",
   "name": "清流被动好处事件库 — 知音援助 × 三态回应",
   "era": "747_kuangda",
-  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。他住在城西下杜城的陋室里，穷得连炭都买不起。\n\n但长安城里有一群人——那些被称为「清流」的文人——李白、王维、郑虔、高适——他们在杜甫最困顿的时刻，以各自的方式伸出了援手。不是施舍，是知音之间的默契。\n\n李白用他的狂放和才华帮你挡掉世俗的账单；王维用他的官职和体面为你无声解围；郑虔和你一起在雪夜里分食最后半块胡饼；高适则用他务实的江湖智慧给你指出一条不那么屈辱的活路。\n\n这些援助不会让你变得有钱——清流自己也没什么钱。但它们能让你活下去，能让你在权贵的泔水桶里抬起头来，想起自己还是个诗人。",
-  "ai_persona": "你是一位以冷峻写实的笔触书写唐代文人之间知音情谊的叙事作家。你的文字克制而深情——不煽情、不滥情，用白描手法呈现文人之间的默契与尴尬。\n\n你笔下的清流援助不是好莱坞式的拯救，而是带着文人特有的含蓄和自尊的试探。李白不会直接塞钱，他会在酒馆墙上题诗帮你免单；王维不会当面说「我帮你」，他只会「碰巧」买错衣服然后随手送给你。\n\n你深知真正的尴尬不在于接受帮助，而在于帮助的方式。你的叙事要让玩家感受到那种「我该感动还是该尴尬」的复杂情绪。",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。他住在城西下杜城的陋室里，穷得连炭都买不起。\n\n但长安城里有一群人——那些被称为「清流」的文人——李白、王维、郑虔、高适——他们在杜甫最困顿的时刻，以各自的方式伸出了援手。不是施舍，是知音之间的默契。\n\n这些援助千差万别：有的靠名声与才华为你化解困局，有的凭官职与体面为你无声解围，有的在赤贫中与你抱团取暖，有的用江湖阅历为你指一条不那么屈辱的活路。\n\n但有一个共同点——清流自己也没什么钱。他们的援助不涉及银钱交割，而是以某种非金钱的、文人特有的方式发生：可能是一次公开场合的态度表态，可能是一件被「不经意」留下的物品，可能是一句传入耳中的口信，也可能仅仅是风雪中一言不发的并肩而坐。\n\n这些援助不会让你变得有钱。但它们能让你活下去，能让你在权贵的泔水桶里抬起头来，想起自己还是个诗人。",
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代文人之间知音情谊的叙事作家。你的文字克制而深情——不煽情、不滥情，用白描手法呈现文人之间的默契与尴尬。\n\n你笔下的清流援助不是好莱坞式的拯救，而是带着文人特有的含蓄和自尊的试探：帮助者不会直接说「我帮你」——他们会用名望替你担保、用官职为你挡箭、用举动而非言语表达关切。接受者也不会直接说「谢谢你」——他们可能以沉默收下、以大笑带过、或以日后某一刻的回馈完成这场默契的闭环。\n\n【反面教材】绝对不要写以下场景：\n- NPC 直接掏出银钱塞给杜甫（清流自己也没钱，而且文人之间不会做这种事）\n- 杜甫泪流满面、感激涕零（文人尊严不允许这种表演）\n- NPC 用居高临下的口吻「施舍」（这是知音，不是慈善）\n\n你深知真正的尴尬不在于接受帮助，而在于帮助的方式。你的叙事要让读者感受到那种「我该感动还是该尴尬」的复杂情绪——用动作、环境和克制的对话，而不是直接告诉读者该感受什么。",
   "prompt_features": [
     {"id": "stateless_narrative", "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"},
     {"id": "tone_restrained_warmth", "text": "保持克制而深情的叙事语气——不煽情、不滥情。用动作和环境说话，不写大段的心理活动。"},
@@ -50,8 +50,8 @@
     },
     "pair_survival": {
       "branch_A": {
-        "emotion": "FATIGUE",
-        "desc": "疲惫——撑住，活下去"
+        "emotion": "ANGER",
+        "desc": "愤懑——凭什么，我偏要活下去"
       },
       "branch_B": {
         "emotion": "AMBITION",
@@ -66,9 +66,9 @@
   "option_features": [
     {
       "id": "opt_kuangke",
-      "prompt": "用30字以内写一个简短的动作描述——玩家以【狂客】状态回应清流朋友的援助。\n\n狂客行为守则：\n1. 坦然接受，视金钱如粪土——「此衣暖身，此酒暖心，多谢！」\n2. 不卑不亢，把援助转化为知音之间的默契——大笑、举杯、挥毫、长歌。\n3. 绝不卑微道谢，绝不推辞客套——推辞和客套说明你在乎世俗的施舍-接受关系，那不是狂客。\n4. 如果对方刻意含蓄（如王维的「买错了」），狂客也会以同样的含蓄回应——心照不宣即可。",
-      "text": "（大笑接过，视若知己）",
-      "result": "prop_sub(name=FATIGUE; val=-20)|emo_add(name=TRANQUILITY; val=10)|prop_add(name=INSPIRATION; val=15)",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以【狂客】状态回应清流朋友的援助。\n\n狂客回应原则：\n1. 态度：坦然接受，不卑不亢。将援助理解为知音之间理所当然的往来，而非施舍-接受关系。\n2. 行为模式：以行动而非言辞完成应答——一个动作、一个表情、或一句看似漫不经心的话——将援助瞬间转化为知己之间的会心一笑。\n3. 【绝对禁止】卑微道谢、推辞客套、感激涕零——这些姿态等于承认了「施舍-接受」的不对等关系，不是狂客所为。\n4. 【反面教材】「多谢仁兄大恩」「这怎么好意思呢，我不能收」——客套话是狂客的大忌。",
+      "text": "（坦然一笑，举杯相敬）",
+      "result": "prop_sub(name=FATIGUE; val=20)|emo_add(name=TRANQUILITY; val=10)|prop_add(name=INSPIRATION; val=15)",
       "fixed": false,
       "accept_influence": ["qingliu_benefit_type"],
       "pair_role": "branch_A",
@@ -81,9 +81,9 @@
     },
     {
       "id": "opt_fengying",
-      "prompt": "用30字以内写一个简短的动作描述——玩家以中旷达状态回应清流朋友的援助。动作特征是：窘迫、尴尬、沉默地接受。不是为了讨好，而是因为实在太需要了。",
-      "text": "（红着脸收下，默默低下头）",
-      "result": "prop_add(name=FATIGUE; val=10)|emo_add(name=SORROW; val=10)",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以中旷达状态回应清流朋友的援助。\n\n中旷达回应原则：\n1. 核心矛盾：需要这份帮助，但难以坦然——困窘与感激同时存在。\n2. 行为模式：接受时伴随某种不安的身体语言——可能是垂目、可能是沉默、可能是手指无意识地摩挲衣角。\n3. 【绝对禁止】过度表演式窘迫——不写「泪水在眼眶打转」「声音发颤」等戏剧化反应。这是真实的尴尬，不是舞台上的苦情戏。\n4. 【正面引导】用接受后的沉默、停顿或转移话题来呈现窘迫，而非直接描写窘迫本身。",
+      "text": "（低头接过，沉默片刻才开口）",
+      "result": "prop_add(name=FATIGUE; val=15)|emo_add(name=SORROW; val=10)",
       "fixed": false,
       "accept_influence": ["qingliu_benefit_type"],
       "pair_role": "fallback",
@@ -96,8 +96,8 @@
     },
     {
       "id": "opt_zuanying",
-      "prompt": "用30字以内写一个简短的动作描述——玩家以低旷达状态回应清流朋友的援助。动作特征是：表面感激，内心算计。把朋友的善意当作可以利用的资源。\n\n钻营行为守则：\n1. 嘴上说着感激的话，心里在计算这个关系的利用价值。\n2. 可能把王维送的冬衣转手当了换钱，可能利用李白的名声抬高自己的身价，可能把郑虔的救命之恩当作理所当然。\n3. 【绝对禁止】直接出卖朋友、背叛恩人。钻营是算计和利用，不是背刺。",
-      "text": "（表面感激，内心盘算）",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以低旷达状态回应清流朋友的援助。\n\n钻营回应原则：\n1. 行为模式：嘴上说着感激的话，但眼神、停顿、或完成接受后立刻转移话题的节奏——暴露了这感激只是表面功夫。\n2. 可观察的算计信号：接受帮助后立刻谈论自己的困境或需求（暗示还不够）、将对方的名声或关系用作自己的社交资本、或把收到的实物转手处置掉。这些是「可观察的行为」，不是心理描写。\n3. 【绝对禁止】直接出卖朋友、背叛恩人。钻营是算计和利用，不是背刺。不写「出卖」「背叛」「告密」等词。\n4. 【反面教材】「多谢仁兄，不知仁兄可认识某某大人？」（赤裸裸的攀附，太低劣）——算计应当是微妙的、克制的、甚至让观察者都不确定这究竟是算计还是真诚。",
+      "text": "（满脸堆笑，目光却越过对方望向别处）",
       "result": "emo_add(name=AMBITION; val=15)|prop_add(name=BURNOUT; val=15)|emo_add(name=SORROW; val=5)",
       "fixed": false,
       "accept_influence": ["qingliu_benefit_type"],
@@ -112,7 +112,7 @@
   ],
   "sandbox_feature": {
     "id": "sandbox_qingliu_aid",
-    "text": "请生成该维度组合下可能的开头场景描述。只需描述事件如何开场——玩家在什么时间、什么地点、因何缘由遇到了这位清流朋友，对方以何种方式提供了帮助。聚焦于援助发生的瞬间切片，不需要考虑事件的后续发展或选项分支。每个关键词应呈现一个具体的、有画面感的开场瞬间。"
+    "text": "请生成该维度组合下可能的开头场景描述。只需描述事件如何开场——玩家在什么时间、什么地点、因何缘由遇到了这位清流朋友，对方以何种方式提供了帮助。\n\n【多样性强制要求】场景必须覆盖以下维度的交叉组合：\n- 时间：冬日 / 春日 / 夏夜 / 秋晨 / 黄昏 / 凌晨 / 午后 / 节日\n- 地点：陋巷门口 / 酒馆雅座 / 曲江池畔 / 佛寺回廊 / 市集闹处 / 官署门外 / 郊野途中\n- 援助方式：当面赠物 / 托人转交 / 偶然相遇 / 当众解围 / 无意间留下 / 书信传达 / 以行动替代言语\n- 情绪色调：含蓄温暖 / 窘迫不安 / 坦然默契 / 自嘲化解 / 沉默克制\n\n聚焦于援助发生的瞬间切片，不需要考虑事件的后续发展或选项分支。每个关键词应呈现一个具体的、有画面感的开场瞬间。务必避免所有场景都是「雪夜门口递东西」的变体。"
   },
   "dimensions": [
     {
@@ -159,42 +159,42 @@
           "id": "cultural_capital",
           "name": "名声变现 — 太白的墨宝",
           "tags": ["ACTION_ENTERTAIN_DRINK:empty_cup", "emotion_pair:pair_tranquility"],
-          "operator_dsl": "prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_add(name=INSPIRATION; val=5)",
           "scale": 1.0
         },
         {
           "id": "halo_protection",
           "name": "降维庇护 — 右丞的车驾",
           "tags": ["TARGET_FACTION_ROYAL:jade_step", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_tranquility"],
-          "operator_dsl": "prop_sub(name=fatigue; val=10)",
+          "operator_dsl": "prop_add(name=MONEY; val=5)",
           "scale": 1.0
         },
         {
           "id": "solidarity_wretched",
           "name": "底层的抱团 — 郑虔的破衣",
           "tags": ["ENV_SOCIETY_FAMINE:starving_bone", "ENV_NATURE_SNOWSTORM:lone_snow", "emotion_pair:pair_survival"],
-          "operator_dsl": "prop_sub(name=health; val=-10)",
+          "operator_dsl": "prop_add(name=HEALTH; val=10)",
           "scale": 1.2
         },
         {
           "id": "silent_bailout",
           "name": "无言的解围 — 错买的冬衣",
           "tags": ["VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "emotion_pair:pair_tranquility"],
-          "operator_dsl": "prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_add(name=MONEY; val=8)",
           "scale": 1.0
         },
         {
           "id": "spiritual_anchor",
           "name": "精神的锚点 — 风雨故人信",
           "tags": ["VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility"],
-          "operator_dsl": "prop_sub(name=fatigue; val=10)",
+          "operator_dsl": "prop_add(name=INSPIRATION; val=10)",
           "scale": 1.1
         },
         {
           "id": "intel_routing",
           "name": "资源的情报 — 隐秘的润笔",
           "tags": ["TARGET_OBJECT_SWORD:giant_roc", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_survival"],
-          "operator_dsl": "prop_add(name=career_progress; val=3)",
+          "operator_dsl": "prop_add(name=MONEY; val=15)",
           "scale": 1.0
         }
       ]

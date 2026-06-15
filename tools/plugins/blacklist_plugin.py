@@ -19,7 +19,7 @@ BlacklistPlugin — 内置黑名单插件（默认启用）
     - 打印注入详情（注入条数 + 内容预览）
 
   Phase 3 enrich_context():
-    - 从 parsed 提取各字段值（description + options）
+    - 从 parsed.summary 块提取各字段摘要（description + options）
     - 更新对应的黑名单历史
     - 打印更新详情（加入了什么内容）
 
@@ -167,9 +167,9 @@ class BlacklistPlugin(EventPromptPlugin):
             for i, item in enumerate(field_history, 1):
                 text = item[:100] + "..." if len(item) > 100 else item
                 lines.append(f"{i}. {text}")
-            # 打印注入详情
-            print(f"  📋 黑名单注入 [{self._key_dim.name} / {val_id} / {field}]: "
-                  f"{len(field_history)} 条历史")
+            # 📖 只读引用：将已有黑名单注入 prompt，不修改历史
+            print(f"  📖 引用黑名单 [{self._key_dim.name} / {val_id} / {field}]: "
+                  f"{len(field_history)} 条历史 → 注入 prompt（只读）")
             if field_history:
                 preview = field_history[-1][:60] + "..." if len(field_history[-1]) > 60 else field_history[-1]
                 print(f"     最近一条: \"{preview}\"")
@@ -182,12 +182,14 @@ class BlacklistPlugin(EventPromptPlugin):
     # ── Phase 3: 响应提取与更新 ──
 
     def enrich_context(self, ctx: PluginContext) -> dict[str, str]:
-        """从 parsed 响应中提取各字段值并更新黑名单历史。
+        """从 parsed 响应的 summary 块提取各字段摘要并更新黑名单历史。
 
         提取来源：
           - summary.description → 对应 description 字段
-          - summary.option_{id} → 对应 option 字段（如果 LLM 在 summary 块中输出）
-          - options.{id} → 回退：如果没有 summary 块，直接从 options dict 取
+          - summary.option_{id} → 对应 option 字段
+
+        注意：只提取摘要（summary 块），不 fallback 到原始 option 文本。
+        如果 LLM 未输出某个字段的摘要，该字段本轮不追加到黑名单。
 
         返回空 dict（不向 CSV 追加额外列）。
         """
@@ -209,21 +211,14 @@ class BlacklistPlugin(EventPromptPlugin):
             self._add_to_history("description", val_id, desc_val.strip())
 
         # ── 提取各 option 字段 ──
-        options = parsed.get("options", {})
         for field in self._tracked_fields:
             if not field.startswith("option_"):
                 continue
-            opt_id = field[len("option_"):]
 
-            # 优先从 summary 块提取（如果 LLM 在 summary 中输出了 option 摘要）
+            # 只从 summary 块提取摘要，不 fallback 到原始 option 文本
             opt_val = summary.get(field, "")
             if opt_val and opt_val.strip():
                 self._add_to_history(field, val_id, opt_val.strip())
-            else:
-                # 回退：直接从 options dict 取
-                opt_text = options.get(opt_id, "")
-                if opt_text and opt_text.strip():
-                    self._add_to_history(field, val_id, opt_text.strip())
 
         return {}
 
@@ -243,7 +238,8 @@ class BlacklistPlugin(EventPromptPlugin):
         preview = value[:60] + "..." if len(value) > 60 else value
         total = len(self._history[field][val_id])
         dim_name = self._key_dim.name if self._key_dim else "?"
-        print(f"  📋 黑名单 + [{dim_name} / {val_id} / {field}] "
+        # ✍️ 写入：验证通过后存入黑名单历史
+        print(f"  ✍️ 更新黑名单 [{dim_name} / {val_id} / {field}] "
               f"(#{total}/{self._max_items}): \"{preview}\"")
 
 
