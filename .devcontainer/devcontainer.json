@@ -31,5 +31,5 @@
         // 2. 既然你是 root，卷挂载的目标路径也要改回神界专属路径
         "source=vscode-server-data,target=/root/.vscode-server,type=volume"
     ],
-    "postCreateCommand": "python3 -m venv .venv && .venv/bin/pip install -r requirements.txt",
+    "postCreateCommand": "uv venv .venv && uv pip install -r requirements.txt"
 }
