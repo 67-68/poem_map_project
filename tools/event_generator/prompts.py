@@ -194,9 +194,13 @@ summary:
                 option_dsls.append((of.id, of.operator_dsl.strip()))
 
         # 也收集维度 values 的 operator_dsl（如果有）
+        # 只收集当前 combo 中选中的维度值，避免注入无关语义锚点
         dimension_dsls: list[tuple[str, str]] = []  # (dim_value_id, dsl_string)
+        selected_val_ids = {c.value.id for c in combos}  # 当前 combo 选中的维度值 ID 集合
         for dim in (cfg.dimensions or []):
             for val in (dim.values or []):
+                if val.id not in selected_val_ids:
+                    continue
                 if val.operator_dsl.strip():
                     dimension_dsls.append((val.id, val.operator_dsl.strip()))
 

@@ -30,15 +30,10 @@ def scale_dsl_operator(dsl: str, scale: int) -> str:
 
     func_name = dsl[:paren_idx].strip()
 
-    # use_template 不需要缩放，直接原样返回
-    if func_name == "use_template":
+    # use_template 与 KNOWN_NON_PROP_OPS 中的 operator 不需要缩放，直接原样返回
+    # 这些 operator 没有数值 val 参数（如 imagery_add, trait_add, flag_* 等）
+    if func_name == "use_template" or func_name in KNOWN_NON_PROP_OPS:
         return dsl
-
-    if func_name in KNOWN_NON_PROP_OPS:
-        raise ValueError(
-            f"不支持的 operator 类型: '{func_name}'。"
-            f"当前只支持可缩放 Operator ({', '.join(sorted(SCALABLE_OPS))})"
-        )
     if func_name not in SCALABLE_OPS:
         raise ValueError(
             f"未知 operator: '{func_name}'。"
