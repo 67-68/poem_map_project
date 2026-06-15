@@ -1,0 +1,107 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://k065vx3hru4y"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_mompk"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_k6b11"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_etr28"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_w7hik"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_45yjv"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_af83q"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_qqb1i"]
+
+[sub_resource type="Resource" id="Resource_2ypgy"]
+script = ExtResource("3_etr28")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_fxqsa"]
+script = ExtResource("3_etr28")
+str_props = "kuangda"
+value = 2
+
+[sub_resource type="Resource" id="Resource_tdc6w"]
+script = ExtResource("3_etr28")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_u8p84"]
+script = ExtResource("4_w7hik")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_vmr6e"]
+script = ExtResource("5_45yjv")
+operators = Array[ExtResource("2_k6b11")]([SubResource("Resource_2ypgy"), SubResource("Resource_fxqsa"), SubResource("Resource_tdc6w"), SubResource("Resource_u8p84")])
+
+[sub_resource type="Resource" id="Resource_436wg"]
+script = ExtResource("6_af83q")
+choice_result = SubResource("Resource_vmr6e")
+description = "你将笔搁在砚沿上，转身隐入人潮。"
+
+[sub_resource type="Resource" id="Resource_mkywb"]
+script = ExtResource("3_etr28")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_pakmr"]
+script = ExtResource("3_etr28")
+str_props = "kuangda"
+value = 1
+
+[sub_resource type="Resource" id="Resource_ufkpx"]
+script = ExtResource("3_etr28")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_70ak8"]
+script = ExtResource("4_w7hik")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_h6rvh"]
+script = ExtResource("5_45yjv")
+operators = Array[ExtResource("2_k6b11")]([SubResource("Resource_mkywb"), SubResource("Resource_pakmr"), SubResource("Resource_ufkpx"), SubResource("Resource_70ak8")])
+
+[sub_resource type="Resource" id="Resource_bgsi0"]
+script = ExtResource("6_af83q")
+choice_result = SubResource("Resource_h6rvh")
+description = "你蘸墨，按他要求写完，放下笔静候。"
+
+[sub_resource type="Resource" id="Resource_c0wnh"]
+script = ExtResource("3_etr28")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_71n6g"]
+script = ExtResource("3_etr28")
+str_props = "kuangda"
+value = -1
+
+[sub_resource type="Resource" id="Resource_3rv0o"]
+script = ExtResource("3_etr28")
+str_props = "money"
+value = 5
+
+[sub_resource type="Resource" id="Resource_1rwqk"]
+script = ExtResource("3_etr28")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_al1aj"]
+script = ExtResource("4_w7hik")
+imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+
+[sub_resource type="Resource" id="Resource_0dvsq"]
+script = ExtResource("5_45yjv")
+operators = Array[ExtResource("2_k6b11")]([SubResource("Resource_c0wnh"), SubResource("Resource_71n6g"), SubResource("Resource_3rv0o"), SubResource("Resource_1rwqk"), SubResource("Resource_al1aj")])
+
+[sub_resource type="Resource" id="Resource_33npf"]
+script = ExtResource("6_af83q")
+choice_result = SubResource("Resource_0dvsq")
+description = "你写好封面，又主动问可需帮誊内页，极尽谦和。"
+
+[resource]
+script = ExtResource("7_qqb1i")
+era = "747_kuangda"
+_target_tags = Array[String](["action:humiliation_cheap_labor", "action:scene_fangshi"])
+options = Array[ExtResource("1_mompk")]([SubResource("Resource_436wg"), SubResource("Resource_bgsi0"), SubResource("Resource_33npf")])
+uuid = "duotai_humiliation_cheap_labor_gateway_fangshi"
+name = "账册封面的屈才"
+description = "东市杂货铺前，旧识掌柜叫住你，递过一册空白账本和一方粗砚。“你正好认得字。过来帮我写个封面——要工整，别写诗，就写‘天宝十三载 杂货出入账’，字大些。”他说完便转身去应付另一顾客。摊前人来人往，猪油味混着草料气息。你握着笔，面前纸张空白。"

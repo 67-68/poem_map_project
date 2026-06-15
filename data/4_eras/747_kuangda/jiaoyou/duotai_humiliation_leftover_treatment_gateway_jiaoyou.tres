@@ -1,0 +1,107 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://47x5flfikiot"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_cjiax"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_w7wdo"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_u6qj5"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_kbm30"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_0uy30"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_2exvi"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_r3j5d"]
+
+[sub_resource type="Resource" id="Resource_0hltk"]
+script = ExtResource("3_u6qj5")
+str_props = "fatigue"
+value = -5
+
+[sub_resource type="Resource" id="Resource_8lh4d"]
+script = ExtResource("3_u6qj5")
+str_props = "kuangda"
+value = 2
+
+[sub_resource type="Resource" id="Resource_tg7lu"]
+script = ExtResource("3_u6qj5")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_3bya6"]
+script = ExtResource("4_kbm30")
+imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+
+[sub_resource type="Resource" id="Resource_wd4tf"]
+script = ExtResource("5_0uy30")
+operators = Array[ExtResource("2_w7wdo")]([SubResource("Resource_0hltk"), SubResource("Resource_8lh4d"), SubResource("Resource_tg7lu"), SubResource("Resource_3bya6")])
+
+[sub_resource type="Resource" id="Resource_h7f65"]
+script = ExtResource("6_2exvi")
+choice_result = SubResource("Resource_wd4tf")
+description = "搁笔于案，转身步入夜色。"
+
+[sub_resource type="Resource" id="Resource_6xewe"]
+script = ExtResource("3_u6qj5")
+str_props = "fatigue"
+value = -5
+
+[sub_resource type="Resource" id="Resource_ka27n"]
+script = ExtResource("3_u6qj5")
+str_props = "kuangda"
+value = 1
+
+[sub_resource type="Resource" id="Resource_85yab"]
+script = ExtResource("3_u6qj5")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_fxbb6"]
+script = ExtResource("4_kbm30")
+imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+
+[sub_resource type="Resource" id="Resource_8dqcy"]
+script = ExtResource("5_0uy30")
+operators = Array[ExtResource("2_w7wdo")]([SubResource("Resource_6xewe"), SubResource("Resource_ka27n"), SubResource("Resource_85yab"), SubResource("Resource_fxbb6")])
+
+[sub_resource type="Resource" id="Resource_1m0sa"]
+script = ExtResource("6_2exvi")
+choice_result = SubResource("Resource_8dqcy")
+description = "拱手称谢，将碎银收入囊中。"
+
+[sub_resource type="Resource" id="Resource_sdy0x"]
+script = ExtResource("3_u6qj5")
+str_props = "fatigue"
+value = -5
+
+[sub_resource type="Resource" id="Resource_ac3r2"]
+script = ExtResource("3_u6qj5")
+str_props = "kuangda"
+value = -1
+
+[sub_resource type="Resource" id="Resource_lhttp"]
+script = ExtResource("3_u6qj5")
+str_props = "money"
+value = 5
+
+[sub_resource type="Resource" id="Resource_k8ss8"]
+script = ExtResource("3_u6qj5")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_ngwh7"]
+script = ExtResource("4_kbm30")
+imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+
+[sub_resource type="Resource" id="Resource_tw1fh"]
+script = ExtResource("5_0uy30")
+operators = Array[ExtResource("2_w7wdo")]([SubResource("Resource_sdy0x"), SubResource("Resource_ac3r2"), SubResource("Resource_lhttp"), SubResource("Resource_k8ss8"), SubResource("Resource_ngwh7")])
+
+[sub_resource type="Resource" id="Resource_bto5t"]
+script = ExtResource("6_2exvi")
+choice_result = SubResource("Resource_tw1fh")
+description = "躬身接过银两，笑答：“谢员外赏，愿再效劳。”"
+
+[resource]
+script = ExtResource("7_r3j5d")
+era = "747_kuangda"
+_target_tags = Array[String](["action:humiliation_leftover_treatment", "action:scene_jiaoyou"])
+options = Array[ExtResource("1_cjiax")]([SubResource("Resource_h7f65"), SubResource("Resource_1m0sa"), SubResource("Resource_bto5t")])
+uuid = "duotai_humiliation_leftover_treatment_gateway_jiaoyou"
+name = "碎银换墓志"
+description = "“有劳杜先生。”银色在烛火下暗淡，不抵文墨之费。座中宾客谈笑如常，无人注目此银。"
