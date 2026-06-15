@@ -49,11 +49,10 @@ def scale_dsl_operator(dsl: str, scale: int) -> str:
         except (ValueError, TypeError):
             raise ValueError(f"DSL 'val' 参数不是整数: {args['val']} (in: {dsl})")
         scaled = original_val * scale
-        # 如果结果是整数，输出整数（避免 "val=15.0" 这种多余的小数点）
-        if scaled == int(scaled):
-            args["val"] = str(int(scaled))
-        else:
-            args["val"] = str(scaled)
+        # 🚨 强制 round() 到最接近整数 — Godot 侧 get_int_param() 做 to_int() 截断，
+        # 且属性系统值必须为整数。使用 round() 而非 int() 避免 IEEE 754 浮点精度损失，
+        # 例如 3 * 0.95 = 2.8499999999999996 → round() → 3 (而非 int 截断为 2)
+        args["val"] = str(round(scaled))
 
     # 使用 ; 作为参数分隔符（Layer 1）
     # val 之外的字符串参数不加引号（NamedDSLParser 自动处理）

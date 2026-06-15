@@ -2,7 +2,7 @@
   "id": "747kuangda_denggao",
   "name": "登高事件库 - 六重登高 × 六大情绪",
   "era": "747_kuangda",
-  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。投诗干谒、献赋上书、奔走权门——该试的都试过了，该碰的壁也碰完了。\n\n这一年杜甫从长安城南的旅舍搬到了城西下杜城（陋室），一个连车马都懒得路过的角落。不是隐居——是穷得租不起好房子。不是绝望——是他终于看清楚了：这个世界的规则，从根子上就不是为他设计的。\n\n此时的杜甫经历过献三大礼赋的短暂荣光（754年初），也经历过李林甫「野无遗贤」的政治玩笑。他的诗名在文人圈里开始传开，但也仅仅是传开——名气和饭碗之间，隔着一整个长安城的铜墙铁壁。\n\n这是一个「该懂的全懂了，该有的全没有」的阶段。他看透了科举的门道、权贵的嘴脸、同侪的挣扎，但看透和改变之间，隔着一个时代的制度性壁垒。\n\n陋室不仅是物理空间，更是一种存在状态：你蹲在社会的缝里，清晰地看见光从哪里照进来，但那光永远照不到你身上。但登高不同——当你登上高处，长安城在脚下铺开，终南山在天边矗立。那一瞬间，你觉得自己离那个世界更近了一步，哪怕只是错觉。",
+  "background_context": "747年，杜甫困居长安，投诗干谒、献赋上书、奔走权门——该试的都试过了，该碰的壁也碰完了。\n\n这一年杜甫从长安城南的旅舍搬到了城西下杜城（陋室），一个连车马都懒得路过的角落。不是隐居——是穷得租不起好房子。不是绝望——是他终于看清楚了：这个世界的规则，从根子上就不是为他设计的。\n\n此时的杜甫经历过献三大礼赋的短暂荣光（754年初），也经历过李林甫「野无遗贤」的政治玩笑。他的诗名在文人圈里开始传开，但也仅仅是传开——名气和饭碗之间，隔着一整个长安城的铜墙铁壁。\n\n这是一个「该懂的全懂了，该有的全没有」的阶段。他看透了科举的门道、权贵的嘴脸、同侪的挣扎，但看透和改变之间，隔着一个时代的制度性壁垒。\n\n陋室不仅是物理空间，更是一种存在状态：你蹲在社会的缝里，清晰地看见光从哪里照进来，但那光永远照不到你身上。但登高不同——当你登上高处，长安城在脚下铺开，终南山在天边矗立。那一瞬间，你觉得自己离那个世界更近了一步，哪怕只是错觉。",
   "ai_persona": "你是一位以冷峻写实的笔触书写唐代底层文人困境的叙事作家。你的文字像杜诗本身的风格一样——沉郁顿挫，克制冷峻。你不写心理活动，只写可见的动作、环境、对话和沉默。你深知真正的羞辱不是打骂，而是一个眼神的回避、一句漫不经心的「下次吧」、一次刻意的记不起名字。\n\n你擅长在看似平淡的日常场景中，呈现制度性的碾压感——门子的傲慢、同僚的背叛、权贵的遗忘、市井的冷漠。你笔下的每个人物都不是坏人，他们只是在自己的位置上做着「理所当然」的事，而正是这种「理所当然」构成了最令人窒息的结构性暴力。\n\n你的叙事克制到近乎残忍：不评价、不煽情、不说教。让场景自己说话，让动作本身成为批判。但在登高场景中，你的笔触会多一丝空间感——天地很大，人很小。远处的山和近处的城，都是沉默的证人。",
   "prompt_features": [
     "stateless_narrative",
@@ -129,7 +129,7 @@
       "id": "opt_kuangke",
       "prompt": "用30字以内写一个简短的动作描述——玩家以【狂客】状态回应登高时的情绪。保持狂客一贯的姿态：冷漠、不屑、不配合、不解释。",
       "text": "（拂袖而去）",
-      "result": "prop_add(name=kuangda; val=2)|prop_sub(name=fatigue; val=3)",
+      "result": "prop_add(name=inspiration; val=5)|prop_sub(name=burnout; val=5)",
       "fixed": false,
       "accept_influence": [
         "emotion"
@@ -139,7 +139,8 @@
         "emotion_pair_imagery": {
           "branch_role": "branch_A"
         }
-      }
+      },
+      "requirement": "prop_gt(name=kuangda; val=30)"
     },
     {
       "id": "opt_fengying",
@@ -155,7 +156,8 @@
         "emotion_pair_imagery": {
           "branch_role": "fallback"
         }
-      }
+      },
+      "requirement": ""
     },
     {
       "id": "opt_zuanying",
@@ -171,7 +173,8 @@
         "emotion_pair_imagery": {
           "branch_role": "branch_B"
         }
-      }
+      },
+      "requirement": "prop_lt(name=kuangda; val=20)"
     }
   ],
   "sandbox_feature": {
@@ -423,7 +426,7 @@
           "name": "狂傲 — 我站在高处，俯瞰众生",
           "description": "站在高处，看着长安城像棋盘一样铺在脚下，涌起一种超然物外的傲气。那些在低处蝇营狗苟的人，怎么能理解站在这里的视野？",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=kuangda; val=1)",
+          "operator_dsl": "emo_add(name=ARROGANCE; val=5)",
           "tags": [
             "emotion_pair:pair_arrogance",
             "TARGET_OBJECT_SWORD:cold_blade",
@@ -447,7 +450,7 @@
           "name": "静谧 — 登高望远，心如止水",
           "description": "站在高处，远处的山和近处的城都变成了安静的风景。什么都不想，什么都不在乎——只是看着，像是看一幅与自己无关的画。",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=kuangda; val=1)|prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "emo_add(name=TRANQUILITY; val=5)",
           "tags": [
             "emotion_pair:pair_tranquility",
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
@@ -471,7 +474,7 @@
           "name": "愤怒 — 站在高处看这世道，越发觉得不公",
           "description": "登高本应心旷神怡，但眼前的景象让你越看越怒——权贵朱门酒肉臭，贫民路有冻死骨。这对比在高处看得最清楚，也最让人无法忍受。",
           "scale": 1.05,
-          "operator_dsl": "prop_add(name=anger; val=5)|prop_sub(name=health; val=2)",
+          "operator_dsl": "emo_add(name=ANGER; val=5)",
           "tags": [
             "emotion_pair:pair_anger",
             "TARGET_FACTION_MILITARY:torn_flag",
@@ -495,7 +498,7 @@
           "name": "悲戚 — 登高望远，触目皆是伤心处",
           "description": "念天地之悠悠，独怆然而涕下。站在高处看着长安城的万家灯火，每一盏灯都照着一个与自己无关的家。天地很大，但自己只是一个多余的人。",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=sorrow; val=5)|prop_sub(name=health; val=1)",
+          "operator_dsl": "emo_add(name=SORROW; val=5)",
           "tags": [
             "emotion_pair:pair_sorrow",
             "VIBE_THEME_HISTORY:ruined_wall",
@@ -519,7 +522,7 @@
           "name": "野心 — 站在高处，更想往更高处去",
           "description": "登高让你更清楚地看见了权力的格局——那边的朱门、那边的衙署、那边的新科进士们。站在这不算高的地方，你只想去更高的地方。登高是为了看清下一步往哪里爬。",
           "scale": 1.1,
-          "operator_dsl": "prop_add(name=ambition; val=5)|prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "emo_add(name=AMBITION; val=5)",
           "tags": [
             "emotion_pair:pair_ambition",
             "TARGET_FACTION_ROYAL:jade_step",
@@ -543,7 +546,7 @@
           "name": "疲惫 — 登高只是为了喘口气",
           "description": "不是为什么壮阔的视野，也不是为什么高远的志向——登高只是因为走累了想找个地方坐下。这高处除了风大一点，和别处也没什么不同。",
           "scale": 0.95,
-          "operator_dsl": "prop_sub(name=fatigue; val=8)",
+          "operator_dsl": "emo_add(name=FATIGUE; val=5)",
           "tags": [
             "emotion_pair:pair_fatigue",
             "VIBE_PHILOSOPHY_ZEN:incense_ash",
