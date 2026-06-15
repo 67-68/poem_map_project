@@ -1,0 +1,161 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dx0xq04rmuudg"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_dsh4t"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_dlmxs"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_p3787"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_oepl5"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_nlwb5"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_t3foa"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_ioktm"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_hyesc"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_rsmrj"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_ftcpw"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_bf73n"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_y71up"]
+
+[sub_resource type="Resource" id="Resource_u8k28"]
+script = ExtResource("3_p3787")
+value = 5
+
+[sub_resource type="Resource" id="Resource_8ahed"]
+script = ExtResource("4_oepl5")
+str_props = "FATIGUE"
+value = 8
+
+[sub_resource type="Resource" id="Resource_utrh7"]
+script = ExtResource("4_oepl5")
+str_props = "FATIGUE"
+value = -28
+
+[sub_resource type="Resource" id="Resource_ffast"]
+script = ExtResource("4_oepl5")
+str_props = "BURNOUT"
+value = -14
+
+[sub_resource type="Resource" id="Resource_6sosw"]
+script = ExtResource("4_oepl5")
+str_props = "INSPIRATION"
+value = 19
+
+[sub_resource type="Resource" id="Resource_r5c34"]
+script = ExtResource("3_p3787")
+value = 10
+
+[sub_resource type="Resource" id="Resource_wpvw7"]
+script = ExtResource("5_nlwb5")
+imagery_name = "ENV_NATURE_SNOWSTORM:lone_snow"
+
+[sub_resource type="Resource" id="Resource_5yjq3"]
+script = ExtResource("6_t3foa")
+operators = Array[ExtResource("2_dlmxs")]([SubResource("Resource_u8k28"), SubResource("Resource_8ahed"), SubResource("Resource_utrh7"), SubResource("Resource_ffast"), SubResource("Resource_6sosw"), SubResource("Resource_r5c34"), SubResource("Resource_wpvw7")])
+
+[sub_resource type="Resource" id="Resource_wcjs5"]
+script = ExtResource("7_ioktm")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_ni84c"]
+script = ExtResource("8_hyesc")
+choice_result = SubResource("Resource_5yjq3")
+requirement = SubResource("Resource_wcjs5")
+description = "掸了掸肩上露水，头也不回地朝雾中走去。"
+
+[sub_resource type="Resource" id="Resource_1kt3d"]
+script = ExtResource("3_p3787")
+value = 5
+
+[sub_resource type="Resource" id="Resource_jkt22"]
+script = ExtResource("4_oepl5")
+str_props = "FATIGUE"
+value = 8
+
+[sub_resource type="Resource" id="Resource_x6awx"]
+script = ExtResource("4_oepl5")
+str_props = "FATIGUE"
+value = -14
+
+[sub_resource type="Resource" id="Resource_ljeq7"]
+script = ExtResource("3_p3787")
+value = 5
+
+[sub_resource type="Resource" id="Resource_bd16g"]
+script = ExtResource("5_nlwb5")
+imagery_name = "ENV_NATURE_SNOWSTORM:lone_snow"
+
+[sub_resource type="Resource" id="Resource_euac7"]
+script = ExtResource("6_t3foa")
+operators = Array[ExtResource("2_dlmxs")]([SubResource("Resource_1kt3d"), SubResource("Resource_jkt22"), SubResource("Resource_x6awx"), SubResource("Resource_ljeq7"), SubResource("Resource_bd16g")])
+
+[sub_resource type="Resource" id="Resource_my73y"]
+script = ExtResource("8_hyesc")
+choice_result = SubResource("Resource_euac7")
+description = "收回目光，继续看着雾中的终南山影。"
+
+[sub_resource type="Resource" id="Resource_olnav"]
+script = ExtResource("3_p3787")
+value = 5
+
+[sub_resource type="Resource" id="Resource_fo6si"]
+script = ExtResource("4_oepl5")
+str_props = "FATIGUE"
+value = 8
+
+[sub_resource type="Resource" id="Resource_u34gq"]
+script = ExtResource("3_p3787")
+value = 19
+
+[sub_resource type="Resource" id="Resource_w6leb"]
+script = ExtResource("3_p3787")
+value = 10
+
+[sub_resource type="Resource" id="Resource_6p7bu"]
+script = ExtResource("4_oepl5")
+str_props = "BURNOUT"
+value = 10
+
+[sub_resource type="Resource" id="Resource_o501a"]
+script = ExtResource("4_oepl5")
+str_props = "FATIGUE"
+value = 5
+
+[sub_resource type="Resource" id="Resource_gsp0b"]
+script = ExtResource("5_nlwb5")
+imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+
+[sub_resource type="Resource" id="Resource_ee0j6"]
+script = ExtResource("6_t3foa")
+operators = Array[ExtResource("2_dlmxs")]([SubResource("Resource_olnav"), SubResource("Resource_fo6si"), SubResource("Resource_u34gq"), SubResource("Resource_w6leb"), SubResource("Resource_6p7bu"), SubResource("Resource_o501a"), SubResource("Resource_gsp0b")])
+
+[sub_resource type="Resource" id="Resource_t1hao"]
+script = ExtResource("7_ioktm")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_olfbs"]
+script = ExtResource("8_hyesc")
+choice_result = SubResource("Resource_ee0j6")
+requirement = SubResource("Resource_t1hao")
+description = "稍稍侧身，给对方腾出半边靠着的树身。"
+
+[sub_resource type="Resource" id="Resource_ibdfy"]
+script = ExtResource("10_ftcpw")
+property = "ambition"
+value = 30
+operator = 1
+
+[sub_resource type="Resource" id="Resource_ft8dc"]
+script = ExtResource("10_ftcpw")
+property = "ambition"
+value = 100
+
+[sub_resource type="Resource" id="Resource_sjr3o"]
+script = ExtResource("11_bf73n")
+operators = Array[ExtResource("9_rsmrj")]([SubResource("Resource_ibdfy"), SubResource("Resource_ft8dc")])
+
+[resource]
+script = ExtResource("12_y71up")
+requirement = SubResource("Resource_sjr3o")
+era = "747_kuangda"
+_target_tags = Array[String](["action:scene_denggao_leyou_morning"])
+options = Array[ExtResource("1_dsh4t")]([SubResource("Resource_ni84c"), SubResource("Resource_my73y"), SubResource("Resource_olfbs")])
+uuid = "747kuangda_denggao_leyou_morning_emotion_fatigue"
+name = "雾重肩沉"
+description = "秋日清晨，你沿着湿滑的石阶登上乐游原。晨雾比前几日更浓，长安城的轮廓浮在雾中，像一幅未干透的水墨画。你靠在一棵老槐树粗糙的树干上时，膝盖咯吱响了一声。远处终南山的影子在雾里时隐时现，早市的叫卖声和人语碎片断断续续随风送上来。有人登原，在你身后几步停住——拂了拂石凳上的露水，坐了下来，没说话，也没起身离开。你垂下眼，看见自己袖口的泥渍和鞋帮上干涸的草屑。"

@@ -19,7 +19,7 @@
   "universal_tags": [
     "denggao"
   ],
-  "universal_requirement": "prop_gt(name=ambition,val=30),prop_lt(name=ambition,val=100)",
+  "universal_requirement": "prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
   "universal_result": "prop_add(name=FATIGUE; val=8)",
   "universal_option_requirement": "",
   "word_count_min": 40,
