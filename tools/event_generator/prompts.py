@@ -3,9 +3,11 @@ Prompt 组装 — 通信域。
 
 包含:
   build_system_prompt  组装 System Prompt
-  build_user_prompt    组装 User Prompt（含维度组合、插件、黑名单、沙盒）
+  build_user_prompt    组装 User Prompt（含维度组合、插件、黑名单、沙盒、语义锚点）
 """
 
+import json
+import os
 from typing import TYPE_CHECKING, Optional
 
 from tools.config import DimensionCombo, EventPipelineConfig, OptionFeature
@@ -19,6 +21,39 @@ try:
     from tools.config import ImageryItem
 except ImportError:
     ImageryItem = None  # type: ignore
+
+# ── Operator → Prompt 语义翻译器（单例懒加载） ──
+_translator_instance = None
+
+def get_translator() -> Optional[object]:
+    """
+    模块级单例懒加载 OperatorSemanticTranslator。
+
+    只在 semantic_anchors.enabled=True 时才会加载数据文件。
+    返回 None 表示翻译器不可用（文件缺失或未启用）。
+    """
+    global _translator_instance
+    if _translator_instance is not None:
+        return _translator_instance
+
+    # 检查数据文件是否齐全
+    data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
+    required_files = [
+        os.path.join(data_dir, 'semantic_properties.json'),
+        os.path.join(data_dir, 'semantic_traits.json'),
+        os.path.join(data_dir, 'semantic_emotions.json'),
+        os.path.join(data_dir, 'image_dictionary.json'),
+    ]
+    for fpath in required_files:
+        if not os.path.isfile(fpath):
+            return None  # 数据文件不全，不初始化
+
+    try:
+        from tools.event_generator.operator_translator import OperatorSemanticTranslator
+        _translator_instance = OperatorSemanticTranslator(*required_files)
+        return _translator_instance
+    except (ImportError, FileNotFoundError, json.JSONDecodeError):
+        return None
 
 
 def build_system_prompt(cfg: EventPipelineConfig) -> str:
@@ -141,6 +176,57 @@ description: <你的描述>""")
 summary:
   {tf}: <对{tf_desc}的摘要>"""
         lines.append(summary_block)
+
+    # ── 🆕 Sematic Anchor: 语义锚点注入（Operator → Prompt 翻译） ──
+    # 将 option_features[].operator_dsl 和 dimension values 的 operator_dsl
+    # 翻译为语义锚点文本，插入在选项描述之后、写作契约之前。
+    translator = get_translator()
+    semantic_enabled = bool(
+        cfg.semantic_anchors
+        and cfg.semantic_anchors.get('enabled', False)
+        and translator is not None
+    )
+    if semantic_enabled:
+        # 收集所有需要翻译的 DSL（按选项分组）
+        option_dsls: list[tuple[str, str]] = []  # (option_id, dsl_string)
+        for of in (cfg.option_features or []):
+            if of.operator_dsl.strip():
+                option_dsls.append((of.id, of.operator_dsl.strip()))
+
+        # 也收集维度 values 的 operator_dsl（如果有）
+        dimension_dsls: list[tuple[str, str]] = []  # (dim_value_id, dsl_string)
+        for dim in (cfg.dimensions or []):
+            for val in (dim.values or []):
+                if val.operator_dsl.strip():
+                    dimension_dsls.append((val.id, val.operator_dsl.strip()))
+
+        if option_dsls or dimension_dsls:
+            lines.append('\n## 🤖 语义锚点（Operator DSL 翻译）')
+
+            if option_dsls:
+                for opt_id, dsl in option_dsls:
+                    # 翻译每个选项的 DSL
+                    anchor_set = translator.translate(dsl)
+                    if not anchor_set.is_empty():
+                        fragment = translator.to_prompt_fragment(
+                            anchor_set,
+                            local_emotions=cfg.emotion_registry,
+                        )
+                        if fragment.strip():
+                            lines.append(f'\n### 选项 "{opt_id}" 的语义锚点')
+                            lines.append(fragment)
+
+            if dimension_dsls:
+                for val_id, dsl in dimension_dsls:
+                    anchor_set = translator.translate(dsl)
+                    if not anchor_set.is_empty():
+                        fragment = translator.to_prompt_fragment(
+                            anchor_set,
+                            local_emotions=cfg.emotion_registry,
+                        )
+                        if fragment.strip():
+                            lines.append(f'\n### 维度值 "{val_id}" 的语义锚点')
+                            lines.append(fragment)
 
     # ── Narrative Constraint: 结构化"写作契约"区块 ──
     # 收集所有维度的 narrative_constraint

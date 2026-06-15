@@ -1,0 +1,285 @@
+{
+	"burnout": {
+		"change_perceptions": [
+			{
+				"gain": "略感倦怠",
+				"loss": "倦意稍减",
+				"max_delta": 10,
+				"min_delta": 1
+			},
+			{
+				"gain": "意兴阑珊",
+				"loss": "重燃热情",
+				"max_delta": 30,
+				"min_delta": 11
+			},
+			{
+				"gain": "万念俱灰",
+				"loss": "重获新生",
+				"max_delta": 100,
+				"min_delta": 31
+			}
+		],
+		"name": "burnout"
+	},
+	"career_progress": {
+		"change_perceptions": [
+			{
+				"gain": "仕途小进",
+				"loss": "略有波折",
+				"max_delta": 10,
+				"min_delta": 1
+			},
+			{
+				"gain": "平步青云",
+				"loss": "宦海沉浮",
+				"max_delta": 30,
+				"min_delta": 11
+			},
+			{
+				"gain": "飞黄腾达",
+				"loss": "一落千丈",
+				"max_delta": 99,
+				"min_delta": 31
+			}
+		],
+		"name": "career_progress"
+	},
+	"drunk": {
+		"change_perceptions": [
+			{
+				"gain": "微醺，面颊发热",
+				"loss": "酒意稍散",
+				"max_delta": 15,
+				"min_delta": 1
+			},
+			{
+				"gain": "酒至半酣，兴致正高",
+				"loss": "醒了几分",
+				"max_delta": 40,
+				"min_delta": 16
+			},
+			{
+				"gain": "酣醉，步履蹒跚",
+				"loss": "吐了一场，清醒不少",
+				"max_delta": 70,
+				"min_delta": 41
+			},
+			{
+				"gain": "烂醉如泥，不省人事",
+				"loss": "宿醉方醒，头痛欲裂",
+				"max_delta": 100,
+				"min_delta": 71
+			}
+		],
+		"name": "drunk"
+	},
+	"fatigue": {
+		"change_perceptions": [
+			{
+				"gain": "稍感疲惫",
+				"loss": "歇了一口气",
+				"max_delta": 15,
+				"min_delta": 1
+			},
+			{
+				"gain": "疲态渐显",
+				"loss": "恢复了些气力",
+				"max_delta": 40,
+				"min_delta": 16
+			},
+			{
+				"gain": "身心俱疲",
+				"loss": "神清气爽",
+				"max_delta": 70,
+				"min_delta": 41
+			},
+			{
+				"gain": "筋疲力尽",
+				"loss": "脱胎换骨",
+				"max_delta": 100,
+				"min_delta": 71
+			}
+		],
+		"name": "fatigue"
+	},
+	"health": {
+		"change_perceptions": [
+			{
+				"gain": "精神稍振",
+				"loss": "偶感不适",
+				"max_delta": 10,
+				"min_delta": 1
+			},
+			{
+				"gain": "容光焕发",
+				"loss": "病来如山倒",
+				"max_delta": 30,
+				"min_delta": 11
+			},
+			{
+				"gain": "脱胎换骨，百病不侵",
+				"loss": "命悬一线",
+				"max_delta": 9999,
+				"min_delta": 31
+			}
+		],
+		"name": "health"
+	},
+	"inspiration": {
+		"change_perceptions": [
+			{
+				"gain": "灵光一闪",
+				"loss": "灵感枯竭",
+				"max_delta": 10,
+				"min_delta": 1
+			},
+			{
+				"gain": "文思如泉",
+				"loss": "文思枯竭",
+				"max_delta": 30,
+				"min_delta": 11
+			},
+			{
+				"gain": "灵感迸发",
+				"loss": "才尽",
+				"max_delta": 60,
+				"min_delta": 31
+			},
+			{
+				"gain": "如有神助",
+				"loss": "脑中一片空白",
+				"max_delta": 100,
+				"min_delta": 61
+			}
+		],
+		"name": "inspiration"
+	},
+	"literary_fame": {
+		"change_perceptions": [
+			{
+				"gain": "文思稍动，微名渐起",
+				"loss": "文名微损",
+				"max_delta": 5,
+				"min_delta": 1
+			},
+			{
+				"gain": "才名渐起，坊间偶有传颂",
+				"loss": "声名稍坠",
+				"max_delta": 20,
+				"min_delta": 6
+			},
+			{
+				"gain": "声名鹊起，文人争相传颂",
+				"loss": "文名受损，颇受微词",
+				"max_delta": 100,
+				"min_delta": 21
+			},
+			{
+				"gain": "文曲星动，天下皆知",
+				"loss": "声名狼藉，人人唾弃",
+				"max_delta": 9999,
+				"min_delta": 101
+			}
+		],
+		"name": "literary_fame"
+	},
+	"money": {
+		"change_perceptions": [
+			{
+				"gain": "荷包微沉，多了几文铜钱",
+				"loss": "用了几文铜钱",
+				"max_delta": 5,
+				"min_delta": 1
+			},
+			{
+				"gain": "一笔不小的进项",
+				"loss": "花销不小呢",
+				"max_delta": 20,
+				"min_delta": 6
+			},
+			{
+				"gain": "你掂量着一大袋钱，沉重厚实",
+				"loss": "这一下可花了不少",
+				"max_delta": 100,
+				"min_delta": 21
+			},
+			{
+				"gain": "富可敌国！银钱堆积如山",
+				"loss": "倾家荡产...",
+				"max_delta": 9999,
+				"min_delta": 101
+			}
+		],
+		"name": "money"
+	},
+	"official_prestige": {
+		"change_perceptions": [
+			{
+				"gain": "官声渐起",
+				"loss": "官声微损",
+				"max_delta": 10,
+				"min_delta": 1
+			},
+			{
+				"gain": "德政惠民，百姓称颂",
+				"loss": "官声受损，流言四起",
+				"max_delta": 50,
+				"min_delta": 11
+			},
+			{
+				"gain": "名满朝堂，权倾朝野",
+				"loss": "声名扫地",
+				"max_delta": 9999,
+				"min_delta": 51
+			}
+		],
+		"name": "official_prestige"
+	},
+	"sick": {
+		"change_perceptions": [
+			{
+				"gain": "偶染小恙",
+				"loss": "小恙初愈",
+				"max_delta": 10,
+				"min_delta": 1
+			},
+			{
+				"gain": "卧病在床",
+				"loss": "病势渐退",
+				"max_delta": 30,
+				"min_delta": 11
+			},
+			{
+				"gain": "病入膏肓",
+				"loss": "大病初愈",
+				"max_delta": 100,
+				"min_delta": 31
+			}
+		],
+		"name": "sick"
+	},
+	"talent": {
+		"change_perceptions": [
+			{
+				"gain": "才气微涨，灵光一闪",
+				"loss": "灵光稍逝",
+				"max_delta": 10,
+				"min_delta": 1
+			},
+			{
+				"gain": "才思泉涌，妙笔生花",
+				"loss": "才气枯竭，文思滞涩",
+				"max_delta": 50,
+				"min_delta": 11
+			},
+			{
+				"gain": "惊才绝艳，天人之资",
+				"loss": "江郎才尽",
+				"max_delta": 9999,
+				"min_delta": 51
+			}
+		],
+		"name": "talent"
+	}
+}

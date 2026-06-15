@@ -1,0 +1,22 @@
+{
+	"AMBITION": {
+		"cn_name": "野心",
+		"description": "世俗的野心（想做官、想入世）"
+	},
+	"ANGER": {
+		"cn_name": "愤懑",
+		"description": "愤懑，涵盖被贬、目睹不公"
+	},
+	"ARROGANCE": {
+		"cn_name": "狂傲",
+		"description": "狂傲/得意，涵盖饮酒作乐、金榜题名、无视权贵"
+	},
+	"SORROW": {
+		"cn_name": "悲悯",
+		"description": "愁苦/悲凉，涵盖送别与怀古"
+	},
+	"TRANQUILITY": {
+		"cn_name": "旷达",
+		"description": "旷达/空灵，涵盖山水田园、修道、释怀"
+	}
+}

@@ -1,0 +1,278 @@
+{
+	"kuangda_fengying": {
+		"name": "逢迎"
+	},
+	"kuangda_kuangke": {
+		"name": "狂客"
+	},
+	"kuangda_zuanying": {
+		"name": "钻营"
+	},
+	"lilinfu_student": {
+		"name": "右相门生"
+	},
+	"main_baiye_1": {
+		"name": "第一级拜谒"
+	},
+	"main_baiye_2": {
+		"name": "第二级拜谒"
+	},
+	"main_baiye_3": {
+		"name": "第三级拜谒"
+	},
+	"main_baiye_4": {
+		"name": "第四级拜谒"
+	},
+	"main_denggao_1": {
+		"name": "第一级登高"
+	},
+	"main_denggao_2": {
+		"name": "第二级登高"
+	},
+	"main_denggao_3": {
+		"name": "第三级登高"
+	},
+	"main_duzhuo_1": {
+		"name": "第一级独酌"
+	},
+	"main_duzhuo_2": {
+		"name": "第二级独酌"
+	},
+	"main_duzhuo_3": {
+		"name": "第三级独酌"
+	},
+	"main_fangshi_1": {
+		"name": "第一级坊市"
+	},
+	"main_fangshi_2": {
+		"name": "第二级坊市"
+	},
+	"main_fangshi_3": {
+		"name": "第三级坊市"
+	},
+	"main_fengzhao_1": {
+		"name": "第一级奉诏"
+	},
+	"main_fengzhao_2": {
+		"name": "第二级奉诏"
+	},
+	"main_fengzhao_3": {
+		"name": "第三级奉诏"
+	},
+	"main_fengzhao_4": {
+		"name": "第四级奉诏"
+	},
+	"main_jiaoyou_1": {
+		"name": "第一级交游"
+	},
+	"main_jiaoyou_2": {
+		"name": "第二级交游"
+	},
+	"main_jiaoyou_3": {
+		"name": "第三级交游"
+	},
+	"poem_deng_gao_1": {
+		"name": "普通登高诗词"
+	},
+	"poem_deng_gao_2": {
+		"name": "中级登高诗词"
+	},
+	"poem_deng_gao_3": {
+		"name": "高级登高诗词"
+	},
+	"poem_gan_ye_1": {
+		"name": "普通干晔诗"
+	},
+	"poem_gan_ye_2": {
+		"name": "中级干晔诗"
+	},
+	"poem_gan_ye_3": {
+		"name": "高级干晔诗"
+	},
+	"poem_huai_gu_1": {
+		"name": "普通怀古诗词"
+	},
+	"poem_huai_gu_2": {
+		"name": "中级怀古诗词"
+	},
+	"poem_huai_gu_3": {
+		"name": "高级怀古诗词"
+	},
+	"poem_ji_lv_1": {
+		"name": "普通羁旅诗词"
+	},
+	"poem_ji_lv_2": {
+		"name": "中级羁旅诗词"
+	},
+	"poem_ji_lv_3": {
+		"name": "高级羁旅诗词"
+	},
+	"poem_shan_shui_1": {
+		"name": "普通山水诗"
+	},
+	"poem_shan_shui_2": {
+		"name": "中级山水诗"
+	},
+	"poem_shan_shui_3": {
+		"name": "高级山水诗"
+	},
+	"poem_ying_zhi_1": {
+		"name": "普通应制诗"
+	},
+	"poem_ying_zhi_2": {
+		"name": "中级应制诗"
+	},
+	"poem_ying_zhi_3": {
+		"name": "高级应制诗"
+	},
+	"relation_gaoshi_close": {
+		"name": "关系好高适"
+	},
+	"relation_gaoshi_core": {
+		"name": "核心高适"
+	},
+	"relation_gaoshi_enemy": {
+		"name": "干掉高适"
+	},
+	"relation_gaoshi_rumor": {
+		"name": "听闻高适"
+	},
+	"relation_guoguofuren_close": {
+		"name": "关系好虢国夫人"
+	},
+	"relation_guoguofuren_core": {
+		"name": "核心虢国夫人"
+	},
+	"relation_guoguofuren_enemy": {
+		"name": "干掉虢国夫人"
+	},
+	"relation_guoguofuren_rumor": {
+		"name": "听闻虢国夫人"
+	},
+	"relation_hushang_close": {
+		"name": "关系好商人"
+	},
+	"relation_hushang_core": {
+		"name": "核心商人"
+	},
+	"relation_hushang_enemy": {
+		"name": "干掉商人"
+	},
+	"relation_hushang_rumor": {
+		"name": "听闻商人"
+	},
+	"relation_jiwen_close": {
+		"name": "关系好吉温"
+	},
+	"relation_jiwen_core": {
+		"name": "核心吉温"
+	},
+	"relation_jiwen_enemy": {
+		"name": "干掉吉温"
+	},
+	"relation_jiwen_rumor": {
+		"name": "听闻吉温"
+	},
+	"relation_libai_close": {
+		"name": "关系好李白"
+	},
+	"relation_libai_core": {
+		"name": "核心李白"
+	},
+	"relation_libai_enemy": {
+		"name": "干掉李白"
+	},
+	"relation_libai_rumor": {
+		"name": "听闻李白"
+	},
+	"relation_lilinfu_close": {
+		"name": "关系好李灵甫"
+	},
+	"relation_lilinfu_core": {
+		"name": "核心李灵甫"
+	},
+	"relation_lilinfu_enemy": {
+		"name": "干掉李灵甫"
+	},
+	"relation_lilinfu_rumor": {
+		"name": "听闻李灵甫"
+	},
+	"relation_qingliu_close": {
+		"name": "关系好清流"
+	},
+	"relation_qingliu_core": {
+		"name": "核心清流"
+	},
+	"relation_qingliu_enemy": {
+		"name": "干掉清流"
+	},
+	"relation_qingliu_rumor": {
+		"name": "听闻清流"
+	},
+	"relation_waiqi_close": {
+		"name": "关系好外戚"
+	},
+	"relation_waiqi_core": {
+		"name": "核心外戚"
+	},
+	"relation_waiqi_enemy": {
+		"name": "干掉外戚"
+	},
+	"relation_waiqi_rumor": {
+		"name": "听闻外戚"
+	},
+	"relation_wangwei_close": {
+		"name": "关系好王维"
+	},
+	"relation_wangwei_core": {
+		"name": "核心王维"
+	},
+	"relation_wangwei_enemy": {
+		"name": "干掉王维"
+	},
+	"relation_wangwei_rumor": {
+		"name": "听闻王维"
+	},
+	"relation_yangguozhong_close": {
+		"name": "关系好杨国忠"
+	},
+	"relation_yangguozhong_core": {
+		"name": "核心杨国忠"
+	},
+	"relation_yangguozhong_enemy": {
+		"name": "干掉杨国忠"
+	},
+	"relation_yangguozhong_rumor": {
+		"name": "听闻杨国忠"
+	},
+	"relation_youxiangfu_close": {
+		"name": "关系好右相府"
+	},
+	"relation_youxiangfu_core": {
+		"name": "核心右相府"
+	},
+	"relation_youxiangfu_enemy": {
+		"name": "干掉右相府"
+	},
+	"relation_youxiangfu_rumor": {
+		"name": "听闻右相府"
+	},
+	"relation_zhengqian_close": {
+		"name": "关系好郑虔"
+	},
+	"relation_zhengqian_core": {
+		"name": "核心郑虔"
+	},
+	"relation_zhengqian_enemy": {
+		"name": "干掉郑虔"
+	},
+	"relation_zhengqian_rumor": {
+		"name": "听闻郑虔"
+	},
+	"reserve_baiye": {
+		"name": "预定拜谒"
+	},
+	"test_coder_debug": {
+		"name": "测试用Coder特性"
+	}
+}

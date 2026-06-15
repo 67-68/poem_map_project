@@ -133,6 +133,11 @@ class OptionFeature(TextFeature):
         description="接受的维度影响白名单（dimension ID 列表）。None=接受全部（向后兼容）",
     )
     narrative_constraint: Optional[NarrativeConstraint] = None
+    operator_dsl: str = Field(
+        default="",
+        description="选项级 Operator DSL，如 'prop_add(name=talent; val=5) | emo_add(name=TRANQUILITY; val=10)'。"
+                    "由 OperatorSemanticTranslator 翻译为语义锚点注入 Prompt。",
+    )
     plugins: dict[str, dict] = Field(
         default_factory=dict,
         description="插件级配置挂载点: {plugin_id: {config_dict}}",
@@ -415,6 +420,25 @@ class EventPipelineConfig(BaseModel):
     api_model: str = "deepseek-chat"
     output_dir: str = "data/generated_events/"
 
+    # 🆕 本地情绪注册表（覆盖全局 semantic_emotions.json）
+    # key = emotion 枚举名（如 "TRANQUILITY"）
+    # value = {"cn_name": "旷达", "description": "超脱物外的淡然与通透"}
+    # 未在此处定义的 emotion 将 fallback 到全局数据文件
+    emotion_registry: dict = Field(
+        default_factory=dict,
+        description="本地情绪注册表，覆盖 global semantic_emotions.json fallback。"
+                    "可含 _note 等元信息字段，实际情绪条目为 {emotion_name: {cn_name, description}}",
+    )
+
+    # 🆕 语义锚点开关
+    # 启用后，operator_translator 会将 option_features[].operator_dsl 和
+    # dimensions[].values[].operator_dsl 翻译为语义锚点注入 Prompt
+    semantic_anchors: dict = Field(
+        default_factory=dict,
+        description="语义锚点配置: {'enabled': True} 启用翻译。"
+                    "可含 _note 等元信息字段",
+    )
+
     # 🆕 意象正交打分开关
     # True → 提取维度 tags 的意象池 → 按情绪亲缘度打分 → 注入 Prompt
     # False（默认）→ 完全向后兼容，不执行意象相关逻辑
@@ -435,6 +459,22 @@ class EventPipelineConfig(BaseModel):
     # 接受 PromptFeature（id + text），text 不为空时生效。
     # JSON 配置中 inline 定义即可，无需走中央 registry 解析。
     sandbox_feature: Optional[PromptFeature] = None
+
+    # 🆕 插件专属配置字典
+    # key = plugin_id (如 "emotion_pair_imagery")
+    # value = 该插件的自定义配置 dict
+    # 插件在 init() 中通过 cfg.plugin_config.get(self.plugin_id, {}) 读取
+    # 示例:
+    #   "plugin_config": {
+    #     "emotion_pair_imagery": {
+    #       "emotion_dimension_id": "emotion",
+    #       "scene_dimension_id": "scene_climb"
+    #     }
+    #   }
+    plugin_config: dict[str, dict] = Field(
+        default_factory=dict,
+        description="插件专属配置字典: {plugin_id: {config_key: config_value}}",
+    )
 
 
 class ImageryItem(BaseModel):
