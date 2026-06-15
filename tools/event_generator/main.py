@@ -152,6 +152,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="只打印 Prompt，不调 API")
     parser.add_argument("--trial", action="store_true", help="试运行：调1次API，打印所有中间产物，不保存CSV")
     parser.add_argument("--max-events", type=int, default=0, help="最多生成事件数（0=全部）")
+    parser.add_argument("--number", type=int, default=0, help="精确控制生成事件数（不能超过组合总数，与 --max-events 互斥）")
     parser.add_argument("--random", action="store_true", help="随机模式: 在 trial 模式下随机选择一个维度组合（而非总是第一个）")
     args = parser.parse_args()
 
@@ -225,6 +226,21 @@ def main():
     ]
     print(f"   组合数: {len(combinations)} ({'×'.join(dim_value_counts)})")
 
+    # ── --number 与 --max-events 互斥检测 ──
+    if args.number > 0 and args.max_events > 0:
+        print("❌ --number 和 --max-events 不能同时指定，请只使用其中一个")
+        sys.exit(1)
+
+    # ── --number 逻辑：精确控制，超出总组合数时报错 ──
+    if args.number > 0:
+        total = len(combinations)
+        if args.number > total:
+            print(f"❌ --number {args.number} 超过总组合数 {total}")
+            sys.exit(1)
+        combinations = combinations[: args.number]
+        print(f"   限制生成: {len(combinations)} 个")
+
+    # ── --max-events 逻辑（向后兼容）：静默截断 ──
     if args.max_events > 0:
         combinations = combinations[: args.max_events]
         print(f"   限制生成: {len(combinations)} 个")
