@@ -488,6 +488,11 @@ def main():
                             universal_result=cfg.universal_result or "",
                         )
 
+                        # ── 🆕 管线直连：将 selected_image_item.id 注入 option DSL ──
+                        if selected_image_item:
+                            imagery_dsl = f"imagery_add(name={selected_image_item.id})"
+                            opt_dsl = f"{opt_dsl} | {imagery_dsl}" if opt_dsl else imagery_dsl
+
                         # ── Hook 4: 插件选项结果 DSL 扩展 ──
                         for plugin in plugins:
                             try:
@@ -509,7 +514,11 @@ def main():
                         print(f'  >option,,,{req_csv},"{opt_text}","{dsl_csv}",,,,')
                 else:
                     # 无 option_features 时：用默认选项 + universal fallback
-                    dsl_csv = scaled_dsl.replace('"', '""')
+                    dsl_to_use = scaled_dsl
+                    if selected_image_item:
+                        imagery_dsl = f"imagery_add(name={selected_image_item.id})"
+                        dsl_to_use = f"{dsl_to_use} | {imagery_dsl}" if dsl_to_use else imagery_dsl
+                    dsl_csv = dsl_to_use.replace('"', '""')
                     opt_req = _build_option_requirement(
                         OptionFeature(id="default"),
                         failed_hint_val,
@@ -722,6 +731,11 @@ def main():
                                 universal_result=cfg.universal_result or "",
                             )
 
+                            # ── 🆕 管线直连：将 selected_image_item.id 注入 option DSL ──
+                            if selected_image_item:
+                                imagery_dsl = f"imagery_add(name={selected_image_item.id})"
+                                opt_dsl = f"{opt_dsl} | {imagery_dsl}" if opt_dsl else imagery_dsl
+
                             # ── Hook 4: 插件选项结果 DSL 扩展 ──
                             for plugin in plugins:
                                 try:
@@ -742,12 +756,16 @@ def main():
                     else:
                         # 回退：没有 option_features 时用默认选项 + universal fallback
                         option_text = "（确认）"
+                        dsl_to_use = scaled_dsl
+                        if selected_image_item:
+                            imagery_dsl = f"imagery_add(name={selected_image_item.id})"
+                            dsl_to_use = f"{dsl_to_use} | {imagery_dsl}" if dsl_to_use else imagery_dsl
                         opt_req = _build_option_requirement(
                             OptionFeature(id="default"),
                             failed_hint_val,
                             universal_option_requirement=cfg.universal_option_requirement or "",
                         )
-                        write_option_row(writer, option_text, scaled_dsl, requirement=opt_req)
+                        write_option_row(writer, option_text, dsl_to_use, requirement=opt_req)
                         print(f"     option: {option_text}")
 
                     # ── 更新滑动黑名单 ──
