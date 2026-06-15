@@ -1,14 +1,15 @@
 """
-多态事件情绪对意象插件 — Hook 4 实现。
+情绪对意象插件 — Hook 4 实现。
 
-每个多态事件（humiliation_type）携带 emotion_pair_id（通过维度值 tags 中的
+每个事件维度的值携带 emotion_pair_id（通过维度值 tags 中的
 "emotion_pair:<id>" 标签标记），每个选项通过 pair_role 绑定情绪对中的分支。
 
 管线流程:
-  Phase 0: init(cfg) — 读取 cfg.emotion_pairs 定义 + 加载 image_dictionary.json
+  Phase 0: init(cfg) — 读取 cfg.plugin_config 获取维度映射 +
+                       cfg.emotion_pairs 定义 + 加载 image_dictionary.json
   Phase 4: get_option_result_extras(combos, choice) —
     1. 从 choice.pair_role 获取分支角色（"branch_A" / "fallback" / "branch_B"）
-    2. 从 combos 中找 humiliation_type 维度值 → 扫描 tags 获取 emotion_pair_id
+    2. 从 combos 中找 emotion_dimension_id 维度值 → 扫描 tags 获取 emotion_pair_id
     3. 从 cfg.emotion_pairs[pair_id].{role}.emotion 解析目标情绪
     4. 从场景维度值的 tags 中 extract_image_pool
     5. 调用 pick_best_image() 按亲缘度打分
@@ -18,6 +19,12 @@
   在 JSON 配置的顶层 plugins 中引用:
     {
       "plugins": ["emotion_pair_imagery"],
+      "plugin_config": {
+        "emotion_pair_imagery": {
+          "emotion_dimension_id": "emotion",
+          "scene_dimension_id": "scene_climb"
+        }
+      },
       "emotion_pairs": {
         "pair_rebellion": {
           "branch_A": {"emotion": "ARROGANCE", "desc": "狂傲"},
@@ -31,8 +38,14 @@
     {"id": "opt_kuangke",  "pair_role": "branch_A", ...}
     {"id": "opt_fengying", "pair_role": "fallback", ...}
     {"id": "opt_zuanying", "pair_role": "branch_B", ...}
-  每个 humiliation_type 维度值需在 tags 中包含:
+  每个 emotion_dimension_id 维度值需在 tags 中包含:
     "emotion_pair:pair_rebellion"
+
+向后兼容:
+  未配置 plugin_config 时，插件默认:
+    emotion_dimension_id = "humiliation_type"
+    scene_dimension_id = "gateway"
+  以保证现有 duotai_humiliation 配置无需修改即可正常工作。
 """
 
 import json
@@ -45,9 +58,9 @@ from tools.event_generator.scorer import extract_image_pool, pick_best_image
 
 _IMAGE_DICT_PATH = Path(__file__).resolve().parent.parent / "data" / "image_dictionary.json"
 
-# ── 维度 ID 常量 ──
-_SCENE_DIM_ID = "gateway"           # 场景维度（第二维）
-_HUMILIATION_DIM_ID = "humiliation_type"  # 多态事件维度（第一维）
+# ── 默认维度 ID（向后兼容：未配置 plugin_config 时使用） ──
+_DEFAULT_EMOTION_DIM_ID = "humiliation_type"   # 情绪维度（第一维）
+_DEFAULT_SCENE_DIM_ID = "gateway"              # 场景维度（第二维）
 
 # Tags 前缀常量
 _TAG_EMOTION_PAIR_PREFIX = "emotion_pair:"
@@ -67,14 +80,18 @@ def _load_image_dict() -> dict:
     return image_dict
 
 
-def _extract_emotion_pair_id(combos: list) -> str | None:
-    """从 combos 中 humiliation_type 维度值的 tags 里提取 emotion_pair_id。
+def _extract_emotion_pair_id(combos: list, dim_id: str) -> str | None:
+    """从 combos 中指定维度值的 tags 里提取 emotion_pair_id。
 
     扫描 tags 中形如 "emotion_pair:pair_rebellion" 的标签，
     返回 "pair_rebellion" 部分，未找到返回 None。
+
+    参数:
+        combos: 维度组合列表
+        dim_id: 要扫描的维度 ID（如 "emotion" / "humiliation_type"）
     """
     for combo in combos:
-        if combo.dimension.id != _HUMILIATION_DIM_ID:
+        if combo.dimension.id != dim_id:
             continue
         for tag in combo.value.tags:
             tag = tag.strip()
@@ -93,11 +110,32 @@ class EmotionPairImageryPlugin(EventPromptPlugin):
     # ── Phase 0: 初始化 ──
 
     def init(self, cfg) -> None:
-        """读取 emotion_pairs 配置 + 加载意象字典。"""
+        """读取 plugin_config 获取维度映射 + emotion_pairs 配置 + 加载意象字典。
+
+        从 cfg.plugin_config["emotion_pair_imagery"] 中读取:
+          - emotion_dimension_id: 哪个维度的 tags 存放 emotion_pair: 标签（默认 "humiliation_type"）
+          - scene_dimension_id:    哪个维度的 tags 存放意象 whitelist（默认 "gateway"）
+        """
         self._cfg = cfg
         self._emotion_pairs = cfg.emotion_pairs
         self._image_dict = _load_image_dict()
         self._has_pairs = bool(self._emotion_pairs)
+
+        # ── 从 plugin_config 读取维度映射 ──
+        plugin_cfg = {}
+        if hasattr(cfg, "plugin_config") and cfg.plugin_config:
+            plugin_cfg = cfg.plugin_config.get("emotion_pair_imagery", {})
+        self._emotion_dim_id = plugin_cfg.get(
+            "emotion_dimension_id", _DEFAULT_EMOTION_DIM_ID,
+        )
+        self._scene_dim_id = plugin_cfg.get(
+            "scene_dimension_id", _DEFAULT_SCENE_DIM_ID,
+        )
+        logging.info(
+            "🔌  情绪对意象插件: emotion_dim=%s, scene_dim=%s",
+            self._emotion_dim_id, self._scene_dim_id,
+        )
+
         if not self._has_pairs:
             logging.warning("⚠️  情绪对意象插件: cfg.emotion_pairs 为空，插件将不产生任何效果")
 
@@ -112,10 +150,13 @@ class EmotionPairImageryPlugin(EventPromptPlugin):
 
         解析链：
           choice.pair_role
-            → humiliation_type.tags 中的 emotion_pair_id
+            → [{emotion_dim_id}].tags 中的 emotion_pair_id
               → cfg.emotion_pairs[pair_id].{role}.emotion
-                → extract_image_pool + pick_best_image
-                  → "imagery_add(name=<image_id>)"
+                → extract_image_pool(combos, scene_dim_id)
+                  → pick_best_image → "imagery_add(name=<image_id>)"
+
+        维度 ID 来自 init() 中从 cfg.plugin_config 读取的配置，
+        未配置时默认 emotion_dim_id="humiliation_type", scene_dim_id="gateway"。
 
         返回: "imagery_add(name=<image_id>)" 或空字符串。
         """
@@ -127,13 +168,13 @@ class EmotionPairImageryPlugin(EventPromptPlugin):
         if not pair_role:
             return ""   # 非情绪对选项，不处理
 
-        # Step 2: 提取 emotion_pair_id
-        pair_id = _extract_emotion_pair_id(combos)
+        # Step 2: 提取 emotion_pair_id（从配置的维度扫描）
+        pair_id = _extract_emotion_pair_id(combos, self._emotion_dim_id)
         if not pair_id:
             logging.warning(
                 "⚠️  情绪对意象插件: combos 中未找到 emotion_pair tag "
                 "(在维度 '%s' 的 tags 中搜索 '%s' 前缀)",
-                _HUMILIATION_DIM_ID, _TAG_EMOTION_PAIR_PREFIX,
+                self._emotion_dim_id, _TAG_EMOTION_PAIR_PREFIX,
             )
             return ""
 
@@ -160,11 +201,11 @@ class EmotionPairImageryPlugin(EventPromptPlugin):
             )
             return ""
 
-        # Step 5: 提取意象池
-        image_pool = extract_image_pool(combos, _SCENE_DIM_ID)
+        # Step 5: 提取意象池（从配置的场景维度）
+        image_pool = extract_image_pool(combos, self._scene_dim_id)
         if not image_pool:
             logging.info(
-                "🔍  情绪对意象插件: 场景维度 '%s' 无意象 tag，跳过", _SCENE_DIM_ID,
+                "🔍  情绪对意象插件: 场景维度 '%s' 无意象 tag，跳过", self._scene_dim_id,
             )
             return ""
 
