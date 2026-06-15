@@ -130,14 +130,17 @@ def validate_response(
     cfg: EventPipelineConfig,
     override_min: Optional[int] = None,
     override_max: Optional[int] = None,
+    override_option_max: Optional[int] = None,
 ) -> Optional[str]:
     """验证 LLM 响应。返回 None 表示通过，返回字符串表示错误信息。
 
     可通过 override_min/override_max 覆盖 cfg 中的默认长度约束，
     用于自适应重试时动态调整验证边界。
+    可通过 override_option_max 覆盖 cfg 中的默认选项字数约束。
     """
     effective_min = override_min if override_min is not None else cfg.word_count_min
     effective_max = override_max if override_max is not None else cfg.word_count_max
+    effective_option_max = override_option_max if override_option_max is not None else cfg.option_word_count_max
 
     if not parsed["title"]:
         return "title 为空"
@@ -161,7 +164,7 @@ def validate_response(
         opt_text = options.get(of.id, "").strip()
         if not opt_text:
             return f"选项 '{of.id}' 为空"
-        if len(opt_text) > 30:
-            return f"选项 '{of.id}' 过长 ({len(opt_text)}字，限制30字以内)"
+        if len(opt_text) > effective_option_max:
+            return f"选项 '{of.id}' 过长 ({len(opt_text)}字，限制{effective_option_max}字以内)"
 
     return None

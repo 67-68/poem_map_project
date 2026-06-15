@@ -59,6 +59,7 @@ def build_user_prompt(
     cfg: EventPipelineConfig,
     word_count_min: Optional[int] = None,
     word_count_max: Optional[int] = None,
+    option_word_count_max: Optional[int] = None,
     plugins: Optional[list["EventPromptPlugin"]] = None,
     blacklist: Optional["SlidingBlacklist"] = None,
     sandbox_keywords_block: Optional[str] = None,
@@ -71,6 +72,8 @@ def build_user_prompt(
 
     可通过 word_count_min/word_count_max 覆盖 cfg 中的默认长度约束，
     用于自适应重试时动态调整 LLM 看到的字数要求。
+    可通过 option_word_count_max 覆盖 cfg 中的默认选项字数约束，
+    用于自适应重试时动态调整 LLM 看到的选项字数要求。
 
     如果传入了 plugins，会调用每个 plugin.get_prompt_fragment() 将
     插件自定义指令追加到 prompt 末尾（Hook 1）。
@@ -84,6 +87,7 @@ def build_user_prompt(
     """
     effective_min = word_count_min if word_count_min is not None else cfg.word_count_min
     effective_max = word_count_max if word_count_max is not None else cfg.word_count_max
+    effective_option_max = option_word_count_max if option_word_count_max is not None else cfg.option_word_count_max
     combo_lines = "\n".join(
         f"{i}. {combo.dimension.name}: {combo.value.name}（{combo.value.description}）"
         for i, combo in enumerate(combos, 1)
@@ -102,9 +106,9 @@ def build_user_prompt(
     # 只注入非固定选项（fixed=False），固定选项直接使用配置文本，不劳烦 AI
     ai_options = [of for of in (cfg.option_features or []) if not of.fixed]
     if ai_options:
-        lines.append("""
+        lines.append(f"""
 ## 选项
-为以下每个选项生成描述文本（每个不超过20字）：""")
+为以下每个选项生成描述文本（每个不超过{effective_option_max}字）：""")
         for of in ai_options:
             # 使用 prompt 字段，如果为空则回退到 text（向后兼容）
             instruction = of.prompt if of.prompt.strip() else of.text

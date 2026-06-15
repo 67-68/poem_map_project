@@ -409,6 +409,8 @@ class EventPipelineConfig(BaseModel):
     # 生成参数
     word_count_min: int = 80
     word_count_max: int = 200
+    # 选项字数上限（校验阈值）。AI prompt 提示值通过自适应收缩动态调整，校验始终以此值为准
+    option_word_count_max: int = 30
     max_retries: int = 3
     api_model: str = "deepseek-chat"
     output_dir: str = "data/generated_events/"
@@ -427,6 +429,12 @@ class EventPipelineConfig(BaseModel):
         default_factory=dict,
         description="情绪对定义字典: {pair_id: EmotionPairConfig}",
     )
+
+    # 🆕 沙盒关键词生成提示：一段附加指令文本，注入到 SandboxManager 的
+    # _generate_keywords_for() 的 user_prompt 中，作为创作指引。
+    # 接受 PromptFeature（id + text），text 不为空时生效。
+    # JSON 配置中 inline 定义即可，无需走中央 registry 解析。
+    sandbox_feature: Optional[PromptFeature] = None
 
 
 class ImageryItem(BaseModel):

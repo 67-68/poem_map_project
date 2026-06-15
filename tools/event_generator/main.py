@@ -333,11 +333,24 @@ def main():
         for combo in current_combos:
             print(f"  - {combo.dimension.name}: {combo.value.name} ({combo.value.description})")
 
+        # 🆕 打印 store_to 路由
+        stored_to = ""
+        for combo in current_combos:
+            if combo.value.stored_to:
+                stored_to = combo.value.stored_to
+                break
+        if stored_to:
+            print(f"\n📂 store_to 路由: {stored_to} (→ data/4_eras/{stored_to.replace('.', '/')}/)")
+        else:
+            print(f"\n📂 store_to 路由: (无 — 将使用 output_dir 默认路径)")
+
         # ── 自适应边界收缩状态 ──
         current_min = cfg.word_count_min
         current_max = cfg.word_count_max
+        current_option_max = cfg.option_word_count_max
         SHRINK_STEP = 20
         MIN_GAP = 10
+        OPTION_SHRINK_STEP = 5
 
         sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
         # 🆕 意象正交选择
@@ -347,6 +360,7 @@ def main():
         user_prompt = build_user_prompt(
             current_combos, cfg,
             word_count_min=current_min, word_count_max=current_max,
+            option_word_count_max=current_option_max,
             plugins=plugins,
             blacklist=blacklist,
             sandbox_keywords_block=sandbox_block,
@@ -393,6 +407,7 @@ def main():
             error = validate_response(
                 parsed, cfg,
                 override_min=cfg.word_count_min, override_max=cfg.word_count_max,
+                override_option_max=cfg.option_word_count_max,
             )
 
             # 🚨 额外校验：插件声明的字段必须在 parsed 中存在且非空
@@ -440,6 +455,12 @@ def main():
 
                 # 🚨 从 context_extras 剥离 failed_hint，它只用于 option_req 模板替换
                 failed_hint_val = context_extras.pop("failed_hint", "") if context_extras else ""
+
+                # 🆕 将 stored_to 注入 context_extras（与正式 CSV 写入路径保持一致）
+                if stored_to:
+                    if context_extras is None:
+                        context_extras = {}
+                    context_extras["store_to"] = stored_to
 
                 if context_extras:
                     print(f"📎 插件 context 富化: {context_extras}")
@@ -538,17 +559,26 @@ def main():
                 if attempt < cfg.max_retries:
                     # ── 自适应边界收缩 ──
                     old_min, old_max = current_min, current_max
-                    if "过短" in error:
+                    old_option_max = current_option_max
+                    if "选项" in error and "过长" in error:
+                        current_option_max = max(current_option_max - OPTION_SHRINK_STEP, 5)
+                    elif "选项" in error and "过短" in error:
+                        current_option_max = min(current_option_max + OPTION_SHRINK_STEP, cfg.option_word_count_max)
+                    elif "过短" in error:
                         current_min = min(current_min + SHRINK_STEP, current_max - MIN_GAP)
                     elif "过长" in error:
                         current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
                     if current_min != old_min or current_max != old_max:
                         print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
+                    if current_option_max != old_option_max:
+                        print(f"  📐 自适应收缩(选项): {old_option_max} → {current_option_max}")
+                    if current_min != old_min or current_max != old_max or current_option_max != old_option_max:
                         # 重试时 sandbox 重新随机 pick，获得不同的创作种子
                         sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
                         user_prompt = build_user_prompt(
                             current_combos, cfg,
                             word_count_min=current_min, word_count_max=current_max,
+                            option_word_count_max=current_option_max,
                             plugins=plugins,
                             blacklist=blacklist,
                             sandbox_keywords_block=sandbox_block,
@@ -596,8 +626,10 @@ def main():
             # ── 自适应边界收缩状态（每组合独立重置） ──
             current_min = cfg.word_count_min
             current_max = cfg.word_count_max
+            current_option_max = cfg.option_word_count_max
             SHRINK_STEP = 20
             MIN_GAP = 10
+            OPTION_SHRINK_STEP = 5
 
             sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
             # 🆕 意象正交选择
@@ -607,6 +639,7 @@ def main():
             user_prompt = build_user_prompt(
                 current_combos, cfg,
                 word_count_min=current_min, word_count_max=current_max,
+                option_word_count_max=current_option_max,
                 plugins=plugins,
                 blacklist=blacklist,
                 sandbox_keywords_block=sandbox_block,
@@ -633,6 +666,7 @@ def main():
                 error = validate_response(
                     parsed, cfg,
                     override_min=cfg.word_count_min, override_max=cfg.word_count_max,
+                    override_option_max=cfg.option_word_count_max,
                 )
 
                 # 🚨 额外校验：插件声明的字段必须在 parsed 中存在且非空
@@ -779,16 +813,25 @@ def main():
                     if attempt < cfg.max_retries:
                         # ── 自适应边界收缩（阶梯增压）──
                         old_min, old_max = current_min, current_max
-                        if "过短" in error:
+                        old_option_max = current_option_max
+                        if "选项" in error and "过长" in error:
+                            current_option_max = max(current_option_max - OPTION_SHRINK_STEP, 5)
+                        elif "选项" in error and "过短" in error:
+                            current_option_max = min(current_option_max + OPTION_SHRINK_STEP, cfg.option_word_count_max)
+                        elif "过短" in error:
                             current_min = min(current_min + SHRINK_STEP, current_max - MIN_GAP)
                         elif "过长" in error:
                             current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
                         if current_min != old_min or current_max != old_max:
                             print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
+                        if current_option_max != old_option_max:
+                            print(f"  📐 自适应收缩(选项): {old_option_max} → {current_option_max}")
+                        if current_min != old_min or current_max != old_max or current_option_max != old_option_max:
                             sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
                             user_prompt = build_user_prompt(
                                 current_combos, cfg,
                                 word_count_min=current_min, word_count_max=current_max,
+                                option_word_count_max=current_option_max,
                                 plugins=plugins,
                                 blacklist=blacklist,
                                 sandbox_keywords_block=sandbox_block,
