@@ -17,6 +17,7 @@ import logging
 import urllib.request
 import urllib.error
 from mcp.server.fastmcp import FastMCP
+import sys
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Godot_Probe_MCP")
@@ -27,6 +28,8 @@ logger = logging.getLogger("Godot_Probe_MCP")
 # ==========================================
 GODOT_PROBE_BASE = "http://host.docker.internal:6066"
 REQUEST_TIMEOUT = 10  # 秒
+# 人类可读输出文件路径（供终端直接 cat 查看）
+HUMAN_OUTPUT_FILE = "/tmp/godot_probe_output.txt"
 
 # 实例化 MCP 节点
 mcp = FastMCP("Godot_Runtime_Probe")
@@ -329,6 +332,251 @@ def _format_log_lines(logs: list[dict]) -> list[str]:
 
 
 # ═════════════════════════════════════════════════════════════════════════════
+# 人类可读格式化函数（探针数据 → 终端友好输出）
+# ═════════════════════════════════════════════════════════════════════════════
+
+
+def _format_node(prefix: str, node: dict, is_last: bool) -> list[str]:
+    """递归格式化场景树节点。"""
+    name = node.get("name", "?")
+    class_name = node.get("class_name", "")
+    child_count = node.get("child_count", 0)
+    visible = node.get("visible", True)
+    children = node.get("children", [])
+
+    visible_mark = "✓" if visible else "✗"
+    if class_name:
+        label = f"{name} [{class_name}] (children={child_count}, visible={visible_mark})"
+    else:
+        label = f"{name} (children={child_count}, visible={visible_mark})"
+
+    lines: list[str] = []
+    connector = "└── " if is_last else "├── "
+    lines.append(f"{prefix}{connector}{label}")
+
+    child_prefix = prefix + ("    " if is_last else "│   ")
+    for i, child in enumerate(children):
+        child_is_last = (i == len(children) - 1)
+        lines.extend(_format_node(child_prefix, child, child_is_last))
+
+    return lines
+
+
+def _format_scene_tree_human(data: dict) -> str:
+    """
+    将场景树数据格式化为人类可读的树形结构。
+    """
+    if not data.get("ok", False):
+        error = data.get("error", "未知错误")
+        detail = data.get("detail", "")
+        return (
+            f"🌳 Godot 场景树\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"  ❌ 错误: {error}\n"
+            f"  详情: {detail}\n"
+        )
+
+    node_data = data.get("data")
+    if node_data is None:
+        return (
+            f"🌳 Godot 场景树\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"  (无数据 — Godot 可能尚未就绪)\n"
+        )
+
+    lines: list[str] = ["🌳 Godot 场景树"]
+    lines.append("━" * 60)
+
+    root_name = node_data.get("name", "root")
+    root_class = node_data.get("class_name", "")
+    root_children = node_data.get("children", [])
+    root_child_count = node_data.get("child_count", len(root_children))
+
+    root_label = f"📦 {root_name}"
+    if root_class:
+        root_label += f" [{root_class}]"
+    root_label += f" (children={root_child_count})"
+    lines.append(root_label)
+
+    for i, child in enumerate(root_children):
+        child_is_last = (i == len(root_children) - 1)
+        lines.extend(_format_node("", child, child_is_last))
+
+    return "\n".join(lines)
+
+
+def _format_game_state_human(data: dict) -> str:
+    """
+    将游戏状态数据格式化为人类可读的分区块输出。
+    """
+    if not data.get("ok", False):
+        error = data.get("error", "未知错误")
+        detail = data.get("detail", "")
+        return (
+            f"🎮 Godot 游戏状态\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"  ❌ 错误: {error}\n"
+            f"  详情: {detail}\n"
+        )
+
+    d = data.get("data")
+    if d is None:
+        return (
+            f"🎮 Godot 游戏状态\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"  (无数据 — Godot 可能尚未就绪)\n"
+        )
+
+    lines: list[str] = ["🎮 Godot 游戏状态"]
+    lines.append("━" * 60)
+
+    # ── 玩家信息 ──
+    player = d.get("player", {})
+    lines.append("👤 玩家信息")
+    name = player.get("name", "?")
+    location = player.get("current_location", "?")
+    lines.append(f"  姓名: {name}    位置: {location}")
+
+    ambition = player.get("ambition")
+    if ambition and ambition.get("key"):
+        lines.append(f"  志向: {ambition['key']} ({ambition.get('name', '')})")
+    else:
+        lines.append(f"  志向: (无)")
+
+    tags = player.get("current_action_tags", [])
+    if tags:
+        lines.append(f"  行动标签: [{', '.join(tags)}]")
+    else:
+        lines.append(f"  行动标签: (无)")
+
+    poem_count = player.get("created_poems_count", 0)
+    lines.append(f"  已创作诗篇: {poem_count} 首")
+    lines.append("")
+
+    # ── 属性数值 ──
+    stats = d.get("stats", {})
+    lines.append("📊 属性数值")
+    if stats:
+        for key in sorted(stats.keys()):
+            val = stats[key]
+            display_key = key.upper()
+            lines.append(f"  {display_key:25s} | {val:>5d}")
+    else:
+        lines.append("  (无)")
+    lines.append("")
+
+    # ── Traits ──
+    traits = d.get("traits", [])
+    lines.append(f"🏷️ Traits ({len(traits)})")
+    if traits:
+        for t in traits:
+            tk = t.get("key", "?")
+            tn = t.get("name", "?")
+            lines.append(f"  • {tk:20s} → {tn}")
+    else:
+        lines.append("  (无)")
+    lines.append("")
+
+    # ── Flags ──
+    flags = d.get("flags", {})
+    lines.append(f"🚩 Flags ({len(flags)})")
+    if flags:
+        for k in sorted(flags.keys()):
+            v = flags[k]
+            if isinstance(v, bool):
+                v_str = "true" if v else "false"
+            elif isinstance(v, str):
+                v_str = f'"{v}"'
+            else:
+                v_str = str(v)
+            lines.append(f"  {k:20s} = {v_str}")
+    else:
+        lines.append("  (无)")
+    lines.append("")
+
+    # ── Emotions ──
+    emotions = d.get("emotions", {})
+    lines.append(f"💭 Emotions ({len(emotions)})")
+    if emotions:
+        for ek in sorted(emotions.keys()):
+            ev = emotions[ek]
+            lines.append(f"  {ek:15s} = {ev:.2f}")
+    else:
+        lines.append("  (无)")
+    lines.append("")
+
+    # ── 游戏时间 ──
+    game = d.get("game", {})
+    lines.append("⏰ 游戏时间")
+    year = game.get("year", "?")
+    ratio = game.get("ratio_time", 0.0)
+    mood = game.get("mood", 0.0)
+    lines.append(f"  年份: {year}    时间比例: {ratio:.2f}    情绪值: {mood:.2f}")
+    span = game.get("time_span", "?")
+    start_y = game.get("start_year", "?")
+    end_y = game.get("end_year", "?")
+    lines.append(f"  时间跨度: {span} 年  ({start_y} → {end_y})")
+
+    return "\n".join(lines)
+
+
+def _format_event_system_human(data: dict) -> str:
+    """
+    将事件系统数据格式化为人类可读的输出。
+    """
+    if not data.get("ok", False):
+        error = data.get("error", "未知错误")
+        detail = data.get("detail", "")
+        return (
+            f"🎲 Godot 事件系统\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"  ❌ 错误: {error}\n"
+            f"  详情: {detail}\n"
+        )
+
+    d = data.get("data")
+    if d is None:
+        return (
+            f"🎲 Godot 事件系统\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"  (无数据 — Godot 可能尚未就绪)\n"
+        )
+
+    lines: list[str] = ["🎲 Godot 事件系统"]
+    lines.append("━" * 60)
+
+    # ── 保证事件 ──
+    guaranteed_key = d.get("guaranteed_event_key")
+    guaranteed_tag = d.get("guaranteed_main_tag")
+
+    lines.append("🔒 保证事件")
+    if guaranteed_key:
+        tag_display = guaranteed_tag if guaranteed_tag else "(无)"
+        lines.append(f"  事件 key: {guaranteed_key}    主标签: {tag_display}")
+    else:
+        lines.append("  (无保证事件)")
+    lines.append("")
+
+    # ── 签筒 ──
+    pool = d.get("current_event_pool", [])
+    pool_size = d.get("pool_size", len(pool))
+    lines.append(f"📦 签筒 ({pool_size} 个事件)")
+
+    if not pool:
+        lines.append("  签筒为空")
+    else:
+        lines.append(f"  {'event_uuid':45s} │ weight │ original_weight")
+        lines.append(f"  {'─' * 45}┼────────┼────────────────")
+        for ev in pool:
+            uuid = ev.get("event_uuid", "?")
+            w = ev.get("weight", 0)
+            ow = ev.get("original_weight", 0)
+            lines.append(f"  {uuid:45s} │ {w:>6d} │ {ow:>15d}")
+
+    return "\n".join(lines)
+
+
+# ═════════════════════════════════════════════════════════════════════════════
 # MCP Tool 定义
 # ═════════════════════════════════════════════════════════════════════════════
 
@@ -347,7 +595,14 @@ def get_live_scene_tree() -> str:
     前置条件: Godot 游戏必须正在运行（通过 VSCode 的 Launch Godot Project 启动）。
     """
     result = _do_probe_get("/api/scene_tree")
-    return json.dumps(result, ensure_ascii=False, indent=2)
+
+    human = _format_scene_tree_human(result)
+    raw = json.dumps(result, ensure_ascii=False, indent=2)
+
+    with open(HUMAN_OUTPUT_FILE, "w", encoding="utf-8") as f:
+        f.write(human)
+
+    return human + "\n\n" + "=" * 60 + "\n\n" + raw
 
 
 @mcp.tool()
@@ -369,7 +624,14 @@ def get_game_state() -> str:
     前置条件: Godot 游戏必须正在运行。
     """
     result = _do_probe_get("/api/game_state")
-    return json.dumps(result, ensure_ascii=False, indent=2)
+
+    human = _format_game_state_human(result)
+    raw = json.dumps(result, ensure_ascii=False, indent=2)
+
+    with open(HUMAN_OUTPUT_FILE, "w", encoding="utf-8") as f:
+        f.write(human)
+
+    return human + "\n\n" + "=" * 60 + "\n\n" + raw
 
 
 @mcp.tool()
@@ -388,7 +650,14 @@ def get_event_system() -> str:
     前置条件: Godot 游戏必须正在运行。
     """
     result = _do_probe_get("/api/event_system")
-    return json.dumps(result, ensure_ascii=False, indent=2)
+
+    human = _format_event_system_human(result)
+    raw = json.dumps(result, ensure_ascii=False, indent=2)
+
+    with open(HUMAN_OUTPUT_FILE, "w", encoding="utf-8") as f:
+        f.write(human)
+
+    return human + "\n\n" + "=" * 60 + "\n\n" + raw
 
 
 @mcp.tool()
