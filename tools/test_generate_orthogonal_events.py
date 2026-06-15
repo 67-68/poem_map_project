@@ -33,9 +33,10 @@ from tools.event_generator.llm_client import (
     parse_llm_response,
 )
 from tools.event_generator.state_managers import (
-    SlidingBlacklist,
     SandboxManager,
 )
+from tools.plugins.blacklist_plugin import BlacklistPlugin
+from tools.plugin_base import PluginContext
 from tools.event_generator.dimensions import (
     _find_value_by_id,
     _make_combos,
@@ -564,14 +565,14 @@ class TestMakeCombos(unittest.TestCase):
 
 
 # ════════════════════════════════════════════════════════════════
-# SlidingBlacklist — 滑动黑名单生命周期
+# BlacklistPlugin — 黑名单插件生命周期
 # ════════════════════════════════════════════════════════════════
 
-class TestSlidingBlacklistInit(unittest.TestCase):
-    """SlidingBlacklist.init_from_config: 扫描维度配置"""
+class TestBlacklistPluginInit(unittest.TestCase):
+    """BlacklistPlugin.init(): 扫描配置初始化"""
 
-    def test_no_blacklist_returns_none(self):
-        """没有维度配置黑名单 → 返回 None"""
+    def test_no_blacklist_falls_back_to_first_dimension(self):
+        """没有维度配置黑名单 → 回退到第一个维度，max_items 默认 20"""
         cfg = EventPipelineConfig(
             id="test",
             name="Test",
@@ -579,11 +580,14 @@ class TestSlidingBlacklistInit(unittest.TestCase):
                 PipelineDimension(id="a", name="A", values=[PipelineDimensionValue(id="a1")]),
             ],
         )
-        bl = SlidingBlacklist.init_from_config(cfg)
-        self.assertIsNone(bl)
+        bl = BlacklistPlugin()
+        bl.init(cfg)
+        self.assertIsNotNone(bl._key_dim)
+        self.assertEqual(bl._key_dim.id, "a")
+        self.assertEqual(bl._max_items, 20)
 
-    def test_single_blacklist_returns_instance(self):
-        """一个维度配置黑名单 → 返回 SlidingBlacklist 实例"""
+    def test_blacklist_config_respected(self):
+        """一个维度配置 blacklist_config → _key_dim 和 _max_items 正确"""
         cfg = EventPipelineConfig(
             id="test",
             name="Test",
@@ -599,13 +603,13 @@ class TestSlidingBlacklistInit(unittest.TestCase):
                 ),
             ],
         )
-        bl = SlidingBlacklist.init_from_config(cfg)
-        self.assertIsNotNone(bl)
-        self.assertEqual(bl.tracked_field, "description")
-        self.assertEqual(bl.max_items, 10)
+        bl = BlacklistPlugin()
+        bl.init(cfg)
+        self.assertEqual(bl._key_dim.id, "a")
+        self.assertEqual(bl._max_items, 10)
 
-    def test_multi_blacklist_raises(self):
-        """多个维度配置黑名单 → 抛 ValueError"""
+    def test_multi_blacklist_picks_first(self):
+        """多个维度配置黑名单 → BlacklistPlugin 选第一个，不抛异常"""
         cfg = EventPipelineConfig(
             id="test",
             name="Test",
@@ -622,13 +626,13 @@ class TestSlidingBlacklistInit(unittest.TestCase):
                 ),
             ],
         )
-        with self.assertRaises(ValueError) as ctx:
-            SlidingBlacklist.init_from_config(cfg)
-        self.assertIn("最多只能有一个维度配置黑名单", str(ctx.exception))
+        bl = BlacklistPlugin()
+        bl.init(cfg)
+        self.assertEqual(bl._key_dim.id, "a")
 
 
-class TestSlidingBlacklistLifecycle(unittest.TestCase):
-    """SlidingBlacklist 三阶段生命周期: prompt → extract → update"""
+class TestBlacklistPluginLifecycle(unittest.TestCase):
+    """BlacklistPlugin 生命周期: init → get_prompt_fragment → enrich_context"""
 
     def setUp(self):
         self.cfg = EventPipelineConfig(
@@ -649,7 +653,8 @@ class TestSlidingBlacklistLifecycle(unittest.TestCase):
                 ),
             ],
         )
-        self.bl = SlidingBlacklist.init_from_config(self.cfg)
+        self.bl = BlacklistPlugin()
+        self.bl.init(self.cfg)
         self.combos_v1 = _make_combos(
             self.cfg.dimensions,
             (PipelineDimensionValue(id="v1", name="值1"),),
@@ -660,26 +665,27 @@ class TestSlidingBlacklistLifecycle(unittest.TestCase):
         )
 
     def test_empty_blacklist_returns_empty_block(self):
-        """尚无历史 → get_prompt_block 返回空字符串"""
-        block = self.bl.get_prompt_block(self.combos_v1)
-        self.assertEqual(block, "")
+        """尚无历史 → get_prompt_fragment 不含黑名单内容"""
+        block = self.bl.get_prompt_fragment(self.combos_v1, self.cfg)
+        # BlacklistPlugin 始终输出 summary 格式要求（Part 1），但无历史时不包含黑名单块
+        self.assertNotIn("⛔", block)
 
-    def test_extract_and_update_then_block_non_empty(self):
-        """extract_and_update 后 → get_prompt_block 非空"""
+    def test_enrich_context_then_fragment_non_empty(self):
+        """enrich_context 后 → get_prompt_fragment 非空"""
         parsed = {"summary": {"description": "玩家被门子索要了五两银子"}}
-        self.bl.extract_and_update(parsed, self.combos_v1)
-        block = self.bl.get_prompt_block(self.combos_v1)
+        self.bl.enrich_context(PluginContext(parsed=parsed, combos=self.combos_v1))
+        block = self.bl.get_prompt_fragment(self.combos_v1, self.cfg)
         self.assertIn("五两银子", block)
 
     def test_per_value_isolation(self):
         """不同维度值的黑名单相互隔离"""
         parsed_v1 = {"summary": {"description": "门子让玩家在寒风中等待"}}
         parsed_v2 = {"summary": {"description": "清客暗示需要润笔费"}}
-        self.bl.extract_and_update(parsed_v1, self.combos_v1)
-        self.bl.extract_and_update(parsed_v2, self.combos_v2)
+        self.bl.enrich_context(PluginContext(parsed=parsed_v1, combos=self.combos_v1))
+        self.bl.enrich_context(PluginContext(parsed=parsed_v2, combos=self.combos_v2))
 
-        block_v1 = self.bl.get_prompt_block(self.combos_v1)
-        block_v2 = self.bl.get_prompt_block(self.combos_v2)
+        block_v1 = self.bl.get_prompt_fragment(self.combos_v1, self.cfg)
+        block_v2 = self.bl.get_prompt_fragment(self.combos_v2, self.cfg)
 
         self.assertIn("寒风中等待", block_v1)
         self.assertNotIn("润笔费", block_v1)
@@ -691,9 +697,9 @@ class TestSlidingBlacklistLifecycle(unittest.TestCase):
         items = [f"事件第{i}号" for i in range(1, 6)]
         for item in items:
             parsed = {"summary": {"description": item}}
-            self.bl.extract_and_update(parsed, self.combos_v1)
+            self.bl.enrich_context(PluginContext(parsed=parsed, combos=self.combos_v1))
 
-        block = self.bl.get_prompt_block(self.combos_v1)
+        block = self.bl.get_prompt_fragment(self.combos_v1, self.cfg)
         # 只保留最近 3 条: 事件第3号、事件第4号、事件第5号
         self.assertNotIn("事件第1号", block, "最老条目应被裁剪")
         self.assertNotIn("事件第2号", block, "次老条目应被裁剪")
@@ -702,18 +708,18 @@ class TestSlidingBlacklistLifecycle(unittest.TestCase):
         self.assertIn("事件第5号", block)
 
     def test_missing_summary_skips_update(self):
-        """parsed 中没有 summary 块 → 跳过更新"""
+        """parsed 中没有 summary 块 → 跳过更新，无黑名单注入"""
         parsed = {"title": "测试", "description": "desc"}
-        self.bl.extract_and_update(parsed, self.combos_v1)
-        block = self.bl.get_prompt_block(self.combos_v1)
-        self.assertEqual(block, "")
+        self.bl.enrich_context(PluginContext(parsed=parsed, combos=self.combos_v1))
+        block = self.bl.get_prompt_fragment(self.combos_v1, self.cfg)
+        self.assertNotIn("⛔", block)
 
     def test_missing_tracked_field_skips_update(self):
-        """summary 中没有 tracked_field → 跳过更新"""
+        """summary 中没有 description 字段 → 跳过更新，无黑名单注入"""
         parsed = {"summary": {"other_field": "xxx"}}
-        self.bl.extract_and_update(parsed, self.combos_v1)
-        block = self.bl.get_prompt_block(self.combos_v1)
-        self.assertEqual(block, "")
+        self.bl.enrich_context(PluginContext(parsed=parsed, combos=self.combos_v1))
+        block = self.bl.get_prompt_fragment(self.combos_v1, self.cfg)
+        self.assertNotIn("⛔", block)
 
 
 # ════════════════════════════════════════════════════════════════

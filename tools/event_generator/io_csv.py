@@ -153,8 +153,14 @@ def _build_option_dsl(
         print(f"  ⚠️ 维度 DSL 缩放失败: {e}，跳过")
         scaled_dim_dsl = ""
 
-    # ── 决定使用哪个 result：per-option > universal_result > 空 ──
-    result_dsl = choice.result if choice.result else universal_result
+    # ── universal_result 始终作为基础消耗注入 ──
+    # 每个选项都会获得 universal_result（基础消耗）+ choice.result（状态响应）
+    result_parts = []
+    if universal_result:
+        result_parts.append(universal_result)
+    if choice.result:
+        result_parts.append(choice.result)
+    result_dsl = " | ".join(result_parts)
     if not result_dsl:
         return scaled_dim_dsl
 

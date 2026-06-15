@@ -48,15 +48,13 @@ import tools.plugins  # noqa: F401
 from tools.event_generator.llm_client import LLMClient, parse_llm_response, validate_response
 from tools.event_generator.prompts import build_system_prompt, build_user_prompt
 from tools.event_generator.io_csv import write_csv_header, write_event_row, write_option_row, _build_option_dsl, _build_option_requirement
-from tools.event_generator.state_managers import SandboxManager, SlidingBlacklist
+from tools.event_generator.state_managers import SandboxManager
+from tools.plugin_base import PLUGIN_REGISTRY
 from tools.event_generator.dimensions import expand_combinations, _make_combos
 from tools.event_generator.dsl_parser import scale_all_operators
 from tools.event_generator.scorer import extract_image_pool, is_valid_combination, pick_best_image
 
 import json
-from typing import Optional as OptionalType
-
-
 # ════════════════════════════════════════════════════════════════
 # Plugin Hook 辅助函数
 # ════════════════════════════════════════════════════════════════
@@ -196,22 +194,22 @@ def main():
             print(f"❌ 插件加载失败: {e}")
             sys.exit(1)
 
+    # ── 内置黑名单插件：自动注入（无需 config 声明） ──
+    # 检查是否已被 config 显式声明，避免重复
+    plugin_ids = [p.plugin_id for p in plugins]
+    if "_builtin_blacklist" not in plugin_ids:
+        blacklist_plugin = PLUGIN_REGISTRY.get("_builtin_blacklist")
+        if blacklist_plugin:
+            plugins.append(blacklist_plugin)
+            print(f"🔌 内置黑名单插件已加载（无需配置声明）")
+        else:
+            print("  ⚠️ 内置黑名单插件未注册（BlacklistPlugin 可能未导入）")
+    else:
+        print(f"🔌 内置黑名单插件已在 config.plugins 中声明")
+
     # ── Phase 0: 插件初始化（扫描配置构建内部状态） ──
     for plugin in plugins:
         plugin.init(cfg)
-
-    # ── 初始化滑动黑名单 ──
-    blacklist: Optional[SlidingBlacklist] = None
-    try:
-        blacklist = SlidingBlacklist.init_from_config(cfg)
-        if blacklist is not None:
-            print(f"📋 滑动黑名单已启用: "
-                  f"维度='{blacklist.dimension.name}', "
-                  f"追踪字段='{blacklist.tracked_field}', "
-                  f"最大条目={blacklist.max_items}")
-    except ValueError as e:
-        print(f"❌ 黑名单配置错误: {e}")
-        sys.exit(1)
 
     dim_count = len(cfg.dimensions)
     if dim_count < 1:
@@ -306,7 +304,7 @@ def main():
             print(f"  🖼️  选中意象: {selected_image_item.name}")
         user_prompt = build_user_prompt(
             first_combos, cfg,
-            plugins=plugins, blacklist=blacklist,
+            plugins=plugins,
             sandbox_keywords_block=sandbox_block,
             selected_image=selected_image_item,
         )
@@ -378,7 +376,6 @@ def main():
             word_count_min=current_min, word_count_max=current_max,
             option_word_count_max=current_option_max,
             plugins=plugins,
-            blacklist=blacklist,
             sandbox_keywords_block=sandbox_block,
             selected_image=selected_image_item,
         )
@@ -564,10 +561,7 @@ def main():
                     req_csv = f'"{opt_req}"' if opt_req else ''
                     print(f'  >option,,,{req_csv},"（确认）","{dsl_csv}",,,,')
 
-                # ── 更新滑动黑名单 ──
-                if blacklist is not None:
-                    blacklist.extract_and_update(parsed, current_combos)
-
+                # 黑名单现已通过内置 BlacklistPlugin.enrich_context() 自动更新
                 success = True
                 break
             else:
@@ -596,7 +590,6 @@ def main():
                             word_count_min=current_min, word_count_max=current_max,
                             option_word_count_max=current_option_max,
                             plugins=plugins,
-                            blacklist=blacklist,
                             sandbox_keywords_block=sandbox_block,
                             selected_image=selected_image_item,
                         )
@@ -657,7 +650,6 @@ def main():
                 word_count_min=current_min, word_count_max=current_max,
                 option_word_count_max=current_option_max,
                 plugins=plugins,
-                blacklist=blacklist,
                 sandbox_keywords_block=sandbox_block,
                 selected_image=selected_image_item,
             )
@@ -818,10 +810,7 @@ def main():
                         write_option_row(writer, option_text, dsl_to_use, requirement=opt_req)
                         print(f"     option: {option_text}")
 
-                    # ── 更新滑动黑名单 ──
-                    if blacklist is not None:
-                        blacklist.extract_and_update(parsed, current_combos)
-
+                    # 黑名单现已通过内置 BlacklistPlugin.enrich_context() 自动更新
                     success_count += 1
                     break
                 else:
@@ -849,7 +838,6 @@ def main():
                                 word_count_min=current_min, word_count_max=current_max,
                                 option_word_count_max=current_option_max,
                                 plugins=plugins,
-                                blacklist=blacklist,
                                 sandbox_keywords_block=sandbox_block,
                                 selected_image=selected_image_item,
                             )

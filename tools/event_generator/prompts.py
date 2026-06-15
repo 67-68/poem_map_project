@@ -3,7 +3,9 @@ Prompt 组装 — 通信域。
 
 包含:
   build_system_prompt  组装 System Prompt
-  build_user_prompt    组装 User Prompt（含维度组合、插件、黑名单、沙盒、语义锚点）
+  build_user_prompt    组装 User Prompt（含维度组合、插件、沙盒、语义锚点）
+
+注意：黑名单功能已移至内置 BlacklistPlugin，不再通过 build_user_prompt 参数注入。
 """
 
 import json
@@ -13,7 +15,6 @@ from typing import TYPE_CHECKING, Optional
 from tools.config import DimensionCombo, EventPipelineConfig, OptionFeature
 
 if TYPE_CHECKING:
-    from tools.event_generator.state_managers import SlidingBlacklist
     from tools.plugin_base import EventPromptPlugin
 
 # 运行时导入 ImageryItem（避免类型检查时的循环依赖）
@@ -96,7 +97,6 @@ def build_user_prompt(
     word_count_max: Optional[int] = None,
     option_word_count_max: Optional[int] = None,
     plugins: Optional[list["EventPromptPlugin"]] = None,
-    blacklist: Optional["SlidingBlacklist"] = None,
     sandbox_keywords_block: Optional[str] = None,
     selected_image: Optional["ImageryItem"] = None,
 ) -> str:
@@ -113,11 +113,10 @@ def build_user_prompt(
     如果传入了 plugins，会调用每个 plugin.get_prompt_fragment() 将
     插件自定义指令追加到 prompt 末尾（Hook 1）。
 
-    如果传入了 blacklist，会：
-      - 在输出格式中追加 summary 嵌套块（如果尚未存在）
-      - 在 prompt 末尾追加黑名单历史列表
+    注意：黑名单功能已移至内置 BlacklistPlugin，通过插件 Hook 1 注入，
+    不再通过 build_user_prompt 参数传递。
 
-    如果传入了 sandbox_keywords_block（非空字符串），会在黑名单之前
+    如果传入了 sandbox_keywords_block（非空字符串），会在插件 Hook 之前
     追加"🎲 创作种子"区块，引导 AI 围绕沙盒关键词展开创作。
     """
     effective_min = word_count_min if word_count_min is not None else cfg.word_count_min
@@ -164,18 +163,6 @@ options:
 
 title: <你的标题>
 description: <你的描述>""")
-
-    # ── 黑名单输出格式注入（Phase 5: 动态 summary.{tracked_field}） ──
-    # 在已有输出格式的末尾追加 summary 嵌套块
-    if blacklist is not None:
-        tf = blacklist.tracked_field
-        tf_desc = blacklist.tracked_field_description
-        summary_block = f"""
-同时，在输出的最后附加一个 summary 块，对 {tf_desc} 进行摘要总结：
-
-summary:
-  {tf}: <对{tf_desc}的摘要>"""
-        lines.append(summary_block)
 
     # ── 🆕 Sematic Anchor: 语义锚点注入（Operator → Prompt 翻译） ──
     # 将 option_features[].operator_dsl 和 dimension values 的 operator_dsl
@@ -295,12 +282,6 @@ summary:
     # ── 沙盒关键词注入 ──
     if sandbox_keywords_block and sandbox_keywords_block.strip():
         lines.append(sandbox_keywords_block)
-
-    # ── 黑名单历史注入（Phase 4: prompt 片段） ──
-    if blacklist is not None:
-        block = blacklist.get_prompt_block(combos)
-        if block.strip():
-            lines.append(block)
 
     # ── 🆕 意象约束注入 ──
     if selected_image is not None:
