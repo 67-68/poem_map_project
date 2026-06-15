@@ -44,7 +44,8 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
 
     var initial_tickets: Array[EventTicket] = []
     var main_tag = context.get('main_tag', '')
-    var era = context.get('era', '')
+    # context 可主动指定 era；若未指定则使用 GameState.current_era（由 EraOperator 维护）
+    var era = context.get('era', GameState.current_era)
     var events_to_scan = Database.get_random_events(main_tag, era)
 
     for e in events_to_scan.values():

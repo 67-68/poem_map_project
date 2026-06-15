@@ -5,6 +5,14 @@ var end_year := 755.9
 var time_span := end_year - start_year
 
 var year: float
+## 当前时代标识（如 "ambition", "decline"）。
+## 空字符串表示无时代限制（所有 era="" 通用事件可用）。
+## 由 EraOperator 控制切换，用于 EventManager 事件池 era 过滤。
+var current_era: String = "":
+	set(val):
+		current_era = val
+		Logging.info('current era change to' % val)
+	
 var ratio_time: float = 0
 var mood: float = 0.5
 
