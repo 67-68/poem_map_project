@@ -27,8 +27,14 @@
   "option_word_count_max": 30,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
-  "output_dir": "data/4_eras/747_kuangda/",
+  "output_dir": "data/4_eras/747_kuangda/denggao",
   "apply_dimension_imagery": false,
+  "plugin_config": {
+    "emotion_pair_imagery": {
+      "emotion_dimension_id": "emotion",
+      "scene_dimension_id": "scene_climb"
+    }
+  },
   "plugins": [
     "emotion_pair_imagery"
   ],

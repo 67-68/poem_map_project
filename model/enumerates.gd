@@ -208,6 +208,37 @@ enum ACTION_TYPE {
     DU_ZHUO # 独酌
 }
 
+# ── 时代注册表 (Era IDs，由 EraOperator 控制) ─────────────────
+## 注册表将 enum key（如 AMBITION_745）映射为实际使用的 era 字符串（如 "745_ambition"）。
+## 这样 era 字符串可以以数字开头，同时保留 enum 的类型安全。
+enum ERAS {
+    AMBITION_745,      # 入世/功名时期
+    KUANGDA_747,
+}
+
+## 注册表：ERAS enum → 实际 era 字符串
+## key 是 ERAS 枚举值，value 是对应的 era 字符串（可数字开头）
+const ERA_REGISTRY: Dictionary = {
+    ERAS.AMBITION_745: "745_ambition",
+    ERAS.KUANGDA_747: "747_kuangda",
+}
+
+## 通过 ERAS 枚举值获取对应的 era 字符串
+static func to_era_str(era_enum: int) -> String:
+    var result = ERA_REGISTRY.get(era_enum)
+    if result != null:
+        return result
+    Logging.err("Invalid era enum: " + str(era_enum))
+    return ""
+
+## 检查 era 字符串是否在注册表中有效
+static func is_valid_era(era_str: String) -> bool:
+    return ERA_REGISTRY.values().has(era_str)
+
+## 获取所有有效的 era 字符串列表
+static func get_all_eras() -> Array:
+    return ERA_REGISTRY.values().duplicate()
+
 static func to_traits_str(item) -> String:
     var name = TRAITS.keys().get(item)
     if name: return name.to_lower()

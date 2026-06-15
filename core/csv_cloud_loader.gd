@@ -109,6 +109,12 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "random_event",
         "is_generated": true,
     },
+    {
+        "name": "旷达期登高事件",
+        "save_path": "res://data/4_eras/747_kuangda/denggao/747kuangda_denggao_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
 ]
 
 # 🗺️ store_to 路径映射表
