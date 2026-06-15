@@ -1,107 +1,107 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bdxfnde8ryk36"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_v85pk"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_icy3v"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_hfbw8"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_a44wt"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_kvpyx"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_10ara"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_h6srd"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_v85pk"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_icy3v"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_hfbw8"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_a44wt"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_kvpyx"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_10ara"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_h6srd"]
 
-[sub_resource type="Resource" id="Resource_nudfg"]
+[sub_resource type="Resource" id="Resource_v85pk"]
 script = ExtResource("3_hfbw8")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_xua6s"]
+[sub_resource type="Resource" id="Resource_icy3v"]
 script = ExtResource("3_hfbw8")
 str_props = "kuangda"
 value = 2
 
-[sub_resource type="Resource" id="Resource_fdtfp"]
+[sub_resource type="Resource" id="Resource_hfbw8"]
 script = ExtResource("3_hfbw8")
 str_props = "fatigue"
 value = -3
 
-[sub_resource type="Resource" id="Resource_yp7xs"]
+[sub_resource type="Resource" id="Resource_a44wt"]
 script = ExtResource("4_a44wt")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_f1vdt"]
+[sub_resource type="Resource" id="Resource_kvpyx"]
 script = ExtResource("5_kvpyx")
-operators = Array[ExtResource("2_icy3v")]([SubResource("Resource_nudfg"), SubResource("Resource_xua6s"), SubResource("Resource_fdtfp"), SubResource("Resource_yp7xs")])
+operators = Array[ExtResource("2_icy3v")]([SubResource("Resource_v85pk"), SubResource("Resource_icy3v"), SubResource("Resource_hfbw8"), SubResource("Resource_a44wt")])
 
-[sub_resource type="Resource" id="Resource_vbfdc"]
+[sub_resource type="Resource" id="Resource_10ara"]
 script = ExtResource("6_10ara")
-choice_result = SubResource("Resource_f1vdt")
+choice_result = SubResource("Resource_kvpyx")
 description = "搁下诗稿，起身走入人群，未回头。"
 
-[sub_resource type="Resource" id="Resource_a7yxj"]
+[sub_resource type="Resource" id="Resource_h6srd"]
 script = ExtResource("3_hfbw8")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_8wp7u"]
+[sub_resource type="Resource" id="Resource_nudfg"]
 script = ExtResource("3_hfbw8")
 str_props = "kuangda"
 value = 1
 
-[sub_resource type="Resource" id="Resource_2rwlq"]
+[sub_resource type="Resource" id="Resource_xua6s"]
 script = ExtResource("3_hfbw8")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_ww655"]
+[sub_resource type="Resource" id="Resource_fdtfp"]
 script = ExtResource("4_a44wt")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_op55i"]
+[sub_resource type="Resource" id="Resource_yp7xs"]
 script = ExtResource("5_kvpyx")
-operators = Array[ExtResource("2_icy3v")]([SubResource("Resource_a7yxj"), SubResource("Resource_8wp7u"), SubResource("Resource_2rwlq"), SubResource("Resource_ww655")])
+operators = Array[ExtResource("2_icy3v")]([SubResource("Resource_h6srd"), SubResource("Resource_nudfg"), SubResource("Resource_xua6s"), SubResource("Resource_fdtfp")])
 
-[sub_resource type="Resource" id="Resource_cng6t"]
+[sub_resource type="Resource" id="Resource_f1vdt"]
 script = ExtResource("6_10ara")
-choice_result = SubResource("Resource_op55i")
+choice_result = SubResource("Resource_yp7xs")
 description = "接过笔，划去原句，写下“户户有余粮”。"
 
-[sub_resource type="Resource" id="Resource_q2u85"]
+[sub_resource type="Resource" id="Resource_vbfdc"]
 script = ExtResource("3_hfbw8")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_6l4tx"]
+[sub_resource type="Resource" id="Resource_a7yxj"]
 script = ExtResource("3_hfbw8")
 str_props = "kuangda"
 value = -1
 
-[sub_resource type="Resource" id="Resource_yfmtf"]
+[sub_resource type="Resource" id="Resource_8wp7u"]
 script = ExtResource("3_hfbw8")
 str_props = "money"
 value = 5
 
-[sub_resource type="Resource" id="Resource_mkyjx"]
+[sub_resource type="Resource" id="Resource_2rwlq"]
 script = ExtResource("3_hfbw8")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_vyv32"]
+[sub_resource type="Resource" id="Resource_ww655"]
 script = ExtResource("4_a44wt")
 imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
 
-[sub_resource type="Resource" id="Resource_yy7fy"]
+[sub_resource type="Resource" id="Resource_op55i"]
 script = ExtResource("5_kvpyx")
-operators = Array[ExtResource("2_icy3v")]([SubResource("Resource_q2u85"), SubResource("Resource_6l4tx"), SubResource("Resource_yfmtf"), SubResource("Resource_mkyjx"), SubResource("Resource_vyv32")])
+operators = Array[ExtResource("2_icy3v")]([SubResource("Resource_vbfdc"), SubResource("Resource_a7yxj"), SubResource("Resource_8wp7u"), SubResource("Resource_2rwlq"), SubResource("Resource_ww655")])
 
-[sub_resource type="Resource" id="Resource_m5ccq"]
+[sub_resource type="Resource" id="Resource_cng6t"]
 script = ExtResource("6_10ara")
-choice_result = SubResource("Resource_yy7fy")
+choice_result = SubResource("Resource_op55i")
 description = "躬腰凑近，问：“先生看还有哪句不顺？小的这就改。”"
 
 [resource]
 script = ExtResource("7_h6srd")
 era = "747_kuangda"
 _target_tags = Array[String](["action:humiliation_aesthetic_violation", "action:scene_fangshi"])
-options = Array[ExtResource("1_v85pk")]([SubResource("Resource_vbfdc"), SubResource("Resource_cng6t"), SubResource("Resource_m5ccq")])
+options = Array[ExtResource("1_v85pk")]([SubResource("Resource_10ara"), SubResource("Resource_f1vdt"), SubResource("Resource_cng6t")])
 uuid = "duotai_humiliation_aesthetic_violation_gateway_fangshi"
 name = "市井改诗"
 description = "长安东市，鱼腥与香料的气味搅在一起。杜甫蹲在菜摊前拣一把蕨菜，算命先生王半仙从卦摊后探出头，手里捏着几张纸——是杜甫前日托人代售的诗稿。“杜先生，你这诗好是好，就是太悲了。”他手指点在纸上，“你看这句‘路有冻死骨’，换成‘户户有余粮’多吉利。再改两句，我替你卖个好价钱。”旁边卖胡饼的也凑过来看热闹。"

@@ -1,107 +1,107 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://salogmk1x2kn"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_8e87c"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_jp0nn"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_4a3eq"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_iiphm"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_encnw"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_g0i3d"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ycmes"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_8e87c"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_jp0nn"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_4a3eq"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_iiphm"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_encnw"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_g0i3d"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_ycmes"]
 
-[sub_resource type="Resource" id="Resource_jvcar"]
+[sub_resource type="Resource" id="Resource_8e87c"]
 script = ExtResource("3_4a3eq")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_7eete"]
+[sub_resource type="Resource" id="Resource_jp0nn"]
 script = ExtResource("3_4a3eq")
 str_props = "kuangda"
 value = 2
 
-[sub_resource type="Resource" id="Resource_h4dhv"]
+[sub_resource type="Resource" id="Resource_4a3eq"]
 script = ExtResource("3_4a3eq")
 str_props = "fatigue"
 value = -3
 
-[sub_resource type="Resource" id="Resource_v6rng"]
+[sub_resource type="Resource" id="Resource_iiphm"]
 script = ExtResource("4_iiphm")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_4rea5"]
+[sub_resource type="Resource" id="Resource_encnw"]
 script = ExtResource("5_encnw")
-operators = Array[ExtResource("2_jp0nn")]([SubResource("Resource_jvcar"), SubResource("Resource_7eete"), SubResource("Resource_h4dhv"), SubResource("Resource_v6rng")])
+operators = Array[ExtResource("2_jp0nn")]([SubResource("Resource_8e87c"), SubResource("Resource_jp0nn"), SubResource("Resource_4a3eq"), SubResource("Resource_iiphm")])
 
-[sub_resource type="Resource" id="Resource_wk2ky"]
+[sub_resource type="Resource" id="Resource_g0i3d"]
 script = ExtResource("6_g0i3d")
-choice_result = SubResource("Resource_4rea5")
+choice_result = SubResource("Resource_encnw")
 description = "将饼放回铺板，转身没入人流，未发一言。"
 
-[sub_resource type="Resource" id="Resource_nox0t"]
+[sub_resource type="Resource" id="Resource_ycmes"]
 script = ExtResource("3_4a3eq")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_81xhf"]
+[sub_resource type="Resource" id="Resource_jvcar"]
 script = ExtResource("3_4a3eq")
 str_props = "kuangda"
 value = 1
 
-[sub_resource type="Resource" id="Resource_pu2il"]
+[sub_resource type="Resource" id="Resource_7eete"]
 script = ExtResource("3_4a3eq")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_r0wrv"]
+[sub_resource type="Resource" id="Resource_h4dhv"]
 script = ExtResource("4_iiphm")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_pt5xy"]
+[sub_resource type="Resource" id="Resource_v6rng"]
 script = ExtResource("5_encnw")
-operators = Array[ExtResource("2_jp0nn")]([SubResource("Resource_nox0t"), SubResource("Resource_81xhf"), SubResource("Resource_pu2il"), SubResource("Resource_r0wrv")])
+operators = Array[ExtResource("2_jp0nn")]([SubResource("Resource_ycmes"), SubResource("Resource_jvcar"), SubResource("Resource_7eete"), SubResource("Resource_h4dhv")])
 
-[sub_resource type="Resource" id="Resource_q85dm"]
+[sub_resource type="Resource" id="Resource_4rea5"]
 script = ExtResource("6_g0i3d")
-choice_result = SubResource("Resource_pt5xy")
+choice_result = SubResource("Resource_v6rng")
 description = "接过饼，低首道声谢，咬了一口，目光落在街石上。"
 
-[sub_resource type="Resource" id="Resource_khixh"]
+[sub_resource type="Resource" id="Resource_wk2ky"]
 script = ExtResource("3_4a3eq")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_6usfy"]
+[sub_resource type="Resource" id="Resource_nox0t"]
 script = ExtResource("3_4a3eq")
 str_props = "kuangda"
 value = -1
 
-[sub_resource type="Resource" id="Resource_sfm7k"]
+[sub_resource type="Resource" id="Resource_81xhf"]
 script = ExtResource("3_4a3eq")
 str_props = "money"
 value = 5
 
-[sub_resource type="Resource" id="Resource_e0avn"]
+[sub_resource type="Resource" id="Resource_pu2il"]
 script = ExtResource("3_4a3eq")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_p4l5w"]
+[sub_resource type="Resource" id="Resource_r0wrv"]
 script = ExtResource("4_iiphm")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_ajr8x"]
+[sub_resource type="Resource" id="Resource_pt5xy"]
 script = ExtResource("5_encnw")
-operators = Array[ExtResource("2_jp0nn")]([SubResource("Resource_khixh"), SubResource("Resource_6usfy"), SubResource("Resource_sfm7k"), SubResource("Resource_e0avn"), SubResource("Resource_p4l5w")])
+operators = Array[ExtResource("2_jp0nn")]([SubResource("Resource_wk2ky"), SubResource("Resource_nox0t"), SubResource("Resource_81xhf"), SubResource("Resource_pu2il"), SubResource("Resource_r0wrv")])
 
-[sub_resource type="Resource" id="Resource_86bcc"]
+[sub_resource type="Resource" id="Resource_q85dm"]
 script = ExtResource("6_g0i3d")
-choice_result = SubResource("Resource_ajr8x")
+choice_result = SubResource("Resource_pt5xy")
 description = "双手捧饼，躬身轻语：“店主慈悲，小生窘迫，只怕受之有愧。”"
 
 [resource]
 script = ExtResource("7_ycmes")
 era = "747_kuangda"
 _target_tags = Array[String](["action:humiliation_hidden_charity", "action:scene_fangshi"])
-options = Array[ExtResource("1_8e87c")]([SubResource("Resource_wk2ky"), SubResource("Resource_q85dm"), SubResource("Resource_86bcc")])
+options = Array[ExtResource("1_8e87c")]([SubResource("Resource_g0i3d"), SubResource("Resource_4rea5"), SubResource("Resource_q85dm")])
 uuid = "duotai_humiliation_hidden_charity_gateway_fangshi"
 name = "饼铺前的多付银钱"
 description = "“刚才有客官多付了钱，说是请你吃的。”杜甫回头，只看见一个人影隐入熙攘人群，布衫的下摆一闪而没。"

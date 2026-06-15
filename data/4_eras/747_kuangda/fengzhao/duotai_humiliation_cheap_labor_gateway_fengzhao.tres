@@ -1,12 +1,45 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://4katw2g2j621"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_2qh2d"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_x6o1d"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_w7ww6"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_fltbm"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_5py70"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_v4j6q"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ykhbp"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_2qh2d"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_x6o1d"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_w7ww6"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_fltbm"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_5py70"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_v4j6q"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_ykhbp"]
+
+[sub_resource type="Resource" id="Resource_2qh2d"]
+script = ExtResource("3_w7ww6")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_x6o1d"]
+script = ExtResource("3_w7ww6")
+str_props = "fatigue"
+value = -9
+
+[sub_resource type="Resource" id="Resource_w7ww6"]
+script = ExtResource("3_w7ww6")
+str_props = "kuangda"
+value = 2
+
+[sub_resource type="Resource" id="Resource_fltbm"]
+script = ExtResource("3_w7ww6")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_5py70"]
+script = ExtResource("4_fltbm")
+imagery_name = "TARGET_OBJECT_SWORD:rusty_sword"
+
+[sub_resource type="Resource" id="Resource_v4j6q"]
+script = ExtResource("5_5py70")
+operators = Array[ExtResource("2_x6o1d")]([SubResource("Resource_2qh2d"), SubResource("Resource_x6o1d"), SubResource("Resource_w7ww6"), SubResource("Resource_fltbm"), SubResource("Resource_5py70")])
+
+[sub_resource type="Resource" id="Resource_ykhbp"]
+script = ExtResource("6_v4j6q")
+choice_result = SubResource("Resource_v4j6q")
+description = "未接掸子，跨过地上卷册，径直步出房门。"
 
 [sub_resource type="Resource" id="Resource_vpchl"]
 script = ExtResource("3_w7ww6")
@@ -21,16 +54,16 @@ value = -9
 [sub_resource type="Resource" id="Resource_842wk"]
 script = ExtResource("3_w7ww6")
 str_props = "kuangda"
-value = 2
+value = 1
 
 [sub_resource type="Resource" id="Resource_84ppe"]
 script = ExtResource("3_w7ww6")
-str_props = "fatigue"
+str_props = "money"
 value = -3
 
 [sub_resource type="Resource" id="Resource_0e160"]
 script = ExtResource("4_fltbm")
-imagery_name = "TARGET_OBJECT_SWORD:rusty_sword"
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
 [sub_resource type="Resource" id="Resource_w3bdm"]
 script = ExtResource("5_5py70")
@@ -39,7 +72,7 @@ operators = Array[ExtResource("2_x6o1d")]([SubResource("Resource_vpchl"), SubRes
 [sub_resource type="Resource" id="Resource_vgh84"]
 script = ExtResource("6_v4j6q")
 choice_result = SubResource("Resource_w3bdm")
-description = "未接掸子，跨过地上卷册，径直步出房门。"
+description = "接过掸子，拂净桌面，开始逐册检视年份。"
 
 [sub_resource type="Resource" id="Resource_wvsli"]
 script = ExtResource("3_w7ww6")
@@ -54,69 +87,36 @@ value = -9
 [sub_resource type="Resource" id="Resource_heqra"]
 script = ExtResource("3_w7ww6")
 str_props = "kuangda"
-value = 1
+value = -1
 
 [sub_resource type="Resource" id="Resource_rdkni"]
 script = ExtResource("3_w7ww6")
 str_props = "money"
-value = -3
-
-[sub_resource type="Resource" id="Resource_m4euo"]
-script = ExtResource("4_fltbm")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
-
-[sub_resource type="Resource" id="Resource_14un8"]
-script = ExtResource("5_5py70")
-operators = Array[ExtResource("2_x6o1d")]([SubResource("Resource_wvsli"), SubResource("Resource_3aw0g"), SubResource("Resource_heqra"), SubResource("Resource_rdkni"), SubResource("Resource_m4euo")])
-
-[sub_resource type="Resource" id="Resource_lac17"]
-script = ExtResource("6_v4j6q")
-choice_result = SubResource("Resource_14un8")
-description = "接过掸子，拂净桌面，开始逐册检视年份。"
-
-[sub_resource type="Resource" id="Resource_khvqa"]
-script = ExtResource("3_w7ww6")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_mthgb"]
-script = ExtResource("3_w7ww6")
-str_props = "fatigue"
-value = -9
-
-[sub_resource type="Resource" id="Resource_ntbf8"]
-script = ExtResource("3_w7ww6")
-str_props = "kuangda"
-value = -1
-
-[sub_resource type="Resource" id="Resource_aylyv"]
-script = ExtResource("3_w7ww6")
-str_props = "money"
 value = 5
 
-[sub_resource type="Resource" id="Resource_gu2cr"]
+[sub_resource type="Resource" id="Resource_m4euo"]
 script = ExtResource("3_w7ww6")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_n1vr0"]
+[sub_resource type="Resource" id="Resource_14un8"]
 script = ExtResource("4_fltbm")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_dwerg"]
+[sub_resource type="Resource" id="Resource_lac17"]
 script = ExtResource("5_5py70")
-operators = Array[ExtResource("2_x6o1d")]([SubResource("Resource_khvqa"), SubResource("Resource_mthgb"), SubResource("Resource_ntbf8"), SubResource("Resource_aylyv"), SubResource("Resource_gu2cr"), SubResource("Resource_n1vr0")])
+operators = Array[ExtResource("2_x6o1d")]([SubResource("Resource_wvsli"), SubResource("Resource_3aw0g"), SubResource("Resource_heqra"), SubResource("Resource_rdkni"), SubResource("Resource_m4euo"), SubResource("Resource_14un8")])
 
-[sub_resource type="Resource" id="Resource_20lba"]
+[sub_resource type="Resource" id="Resource_khvqa"]
 script = ExtResource("6_v4j6q")
-choice_result = SubResource("Resource_dwerg")
+choice_result = SubResource("Resource_lac17")
 description = "接过掸子，连连躬身，又问签条是否需备墨重写。"
 
 [resource]
 script = ExtResource("7_ykhbp")
 era = "747_kuangda"
 _target_tags = Array[String](["action:humiliation_cheap_labor", "action:scene_fengzhao"])
-options = Array[ExtResource("1_2qh2d")]([SubResource("Resource_vgh84"), SubResource("Resource_lac17"), SubResource("Resource_20lba")])
+options = Array[ExtResource("1_2qh2d")]([SubResource("Resource_ykhbp"), SubResource("Resource_vgh84"), SubResource("Resource_khvqa")])
 uuid = "duotai_humiliation_cheap_labor_gateway_fengzhao"
 name = "积年案牍"
 description = "「先扫灰，再分类。十年没翻过的账册，别弄混了年份。」他将一叠褪色的签条放在案角，便转身出了门。"

@@ -1,115 +1,115 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c01yp6tf88teg"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_76ncv"]
-[ext_resource type="Script" uid="uid://bj2nv77uffcp7" path="res://core/operators/context_fetch_operators.gd" id="2_5inot"]
-[ext_resource type="Script" uid="uid://cwprsg78wnilm" path="res://core/operators/npc_batch_check_operator.gd" id="3_4jr05"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_lwkl5"]
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="5_1t2lb"]
-[ext_resource type="Script" uid="uid://bsss76ega4clt" path="res://core/operators/imaginary_level_reward_operator.gd" id="6_821d1"]
-[ext_resource type="Script" uid="uid://c3wrp6pt5lams" path="res://core/requirements/imaginary_level_requirement.gd" id="7_21nwc"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_vsvd3"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="9_7nnxl"]
-[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="10_wovth"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="11_7k4v4"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_wyk80"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_76ncv"]
+[ext_resource type="Script" path="res://core/operators/context_fetch_operators.gd" id="2_5inot"]
+[ext_resource type="Script" path="res://core/operators/npc_batch_check_operator.gd" id="3_4jr05"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_lwkl5"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="5_1t2lb"]
+[ext_resource type="Script" path="res://core/operators/imaginary_level_reward_operator.gd" id="6_821d1"]
+[ext_resource type="Script" path="res://core/requirements/imaginary_level_requirement.gd" id="7_21nwc"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_vsvd3"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="9_7nnxl"]
+[ext_resource type="Script" path="res://core/operators/pop_event_operator.gd" id="10_wovth"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="11_7k4v4"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="12_wyk80"]
 
-[sub_resource type="Resource" id="Resource_mcr6r"]
+[sub_resource type="Resource" id="Resource_76ncv"]
 script = ExtResource("2_5inot")
 fetched_key = "feihualing_chosen_word"
 datasource_name = "imaginaries"
 prop_from_result = "name"
 key_stored_context = "keyword"
 
-[sub_resource type="Resource" id="Resource_pidff"]
+[sub_resource type="Resource" id="Resource_5inot"]
 script = ExtResource("2_5inot")
 fetched_key = "feihualing_chosen_word"
 datasource_name = "imaginaries"
 prop_from_result = "description"
 key_stored_context = "imaginary_desc"
 
-[sub_resource type="Resource" id="Resource_yhv3r"]
+[sub_resource type="Resource" id="Resource_4jr05"]
 script = ExtResource("3_4jr05")
 participants_key = "guests"
 target_context_key = "npc_report"
 check_prop = "TALENT"
 text_template = "FEIHUALING"
 
-[sub_resource type="Resource" id="Resource_h717p"]
+[sub_resource type="Resource" id="Resource_lwkl5"]
 script = ExtResource("4_lwkl5")
-operators = Array[ExtResource("1_76ncv")]([SubResource("Resource_mcr6r"), SubResource("Resource_pidff"), SubResource("Resource_yhv3r")])
+operators = Array[ExtResource("1_76ncv")]([SubResource("Resource_76ncv"), SubResource("Resource_5inot"), SubResource("Resource_4jr05")])
 
-[sub_resource type="Resource" id="Resource_6wrun"]
+[sub_resource type="Resource" id="Resource_1t2lb"]
 script = ExtResource("6_821d1")
 
-[sub_resource type="Resource" id="Resource_6xal5"]
+[sub_resource type="Resource" id="Resource_821d1"]
 script = ExtResource("4_lwkl5")
-operators = Array[ExtResource("1_76ncv")]([SubResource("Resource_6wrun")])
+operators = Array[ExtResource("1_76ncv")]([SubResource("Resource_1t2lb")])
 
-[sub_resource type="Resource" id="Resource_8gx8l"]
+[sub_resource type="Resource" id="Resource_21nwc"]
 script = ExtResource("7_21nwc")
 check_any = true
 
-[sub_resource type="Resource" id="Resource_5lnsq"]
+[sub_resource type="Resource" id="Resource_vsvd3"]
 script = ExtResource("8_vsvd3")
-choice_result = SubResource("Resource_6xal5")
-requirement = SubResource("Resource_8gx8l")
+choice_result = SubResource("Resource_821d1")
+requirement = SubResource("Resource_21nwc")
 description = "妙语连珠"
 
-[sub_resource type="Resource" id="Resource_bywkm"]
+[sub_resource type="Resource" id="Resource_7nnxl"]
 script = ExtResource("9_7nnxl")
 str_props = "inspiration"
 value = -20
 
-[sub_resource type="Resource" id="Resource_vpdbj"]
+[sub_resource type="Resource" id="Resource_wovth"]
 script = ExtResource("9_7nnxl")
 str_props = "literary_fame"
 value = 15
 
-[sub_resource type="Resource" id="Resource_ivi5x"]
+[sub_resource type="Resource" id="Resource_7k4v4"]
 script = ExtResource("10_wovth")
 
-[sub_resource type="Resource" id="Resource_qy1jv"]
+[sub_resource type="Resource" id="Resource_wyk80"]
 script = ExtResource("4_lwkl5")
-operators = Array[ExtResource("1_76ncv")]([SubResource("Resource_bywkm"), SubResource("Resource_vpdbj"), SubResource("Resource_ivi5x")])
+operators = Array[ExtResource("1_76ncv")]([SubResource("Resource_7nnxl"), SubResource("Resource_wovth"), SubResource("Resource_7k4v4")])
 
-[sub_resource type="Resource" id="Resource_12r3d"]
+[sub_resource type="Resource" id="Resource_mcr6r"]
 script = ExtResource("11_7k4v4")
 property = "inspiration"
 value = 19
 operator = 1
 
-[sub_resource type="Resource" id="Resource_r0xht"]
+[sub_resource type="Resource" id="Resource_pidff"]
 script = ExtResource("8_vsvd3")
-choice_result = SubResource("Resource_qy1jv")
-requirement = SubResource("Resource_12r3d")
+choice_result = SubResource("Resource_wyk80")
+requirement = SubResource("Resource_mcr6r")
 description = "灵感硬接"
 
-[sub_resource type="Resource" id="Resource_y25vg"]
+[sub_resource type="Resource" id="Resource_yhv3r"]
 script = ExtResource("9_7nnxl")
 str_props = "drunk"
 value = 10
 
-[sub_resource type="Resource" id="Resource_oorni"]
+[sub_resource type="Resource" id="Resource_h717p"]
 script = ExtResource("9_7nnxl")
 str_props = "literary_fame"
 value = -5
 
-[sub_resource type="Resource" id="Resource_by7bk"]
+[sub_resource type="Resource" id="Resource_6wrun"]
 script = ExtResource("10_wovth")
 
-[sub_resource type="Resource" id="Resource_dn31v"]
+[sub_resource type="Resource" id="Resource_6xal5"]
 script = ExtResource("4_lwkl5")
-operators = Array[ExtResource("1_76ncv")]([SubResource("Resource_y25vg"), SubResource("Resource_oorni"), SubResource("Resource_by7bk")])
+operators = Array[ExtResource("1_76ncv")]([SubResource("Resource_yhv3r"), SubResource("Resource_h717p"), SubResource("Resource_6wrun")])
 
-[sub_resource type="Resource" id="Resource_k4l5s"]
+[sub_resource type="Resource" id="Resource_8gx8l"]
 script = ExtResource("8_vsvd3")
-choice_result = SubResource("Resource_dn31v")
+choice_result = SubResource("Resource_6xal5")
 description = "自罚三杯"
 
 [resource]
 script = ExtResource("12_wyk80")
-options = Array[ExtResource("5_1t2lb")]([SubResource("Resource_5lnsq"), SubResource("Resource_r0xht"), SubResource("Resource_k4l5s")])
-on_enter_result = SubResource("Resource_h717p")
+options = Array[ExtResource("5_1t2lb")]([SubResource("Resource_vsvd3"), SubResource("Resource_pidff"), SubResource("Resource_8gx8l")])
+on_enter_result = SubResource("Resource_lwkl5")
 uuid = "feihualing_other_done"
 name = "飞花令"
 description = "你选择了以「{@keyword}」为题吟咏。[br][br]{@imaginary_desc}[br][br]{@npc_report}"

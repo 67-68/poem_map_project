@@ -151,10 +151,13 @@ def validate_response(
         return "description 为空"
 
     desc_len = len(parsed["description"])
-    if desc_len < effective_min:
-        return f"description 过短 ({desc_len}字，要求{effective_min}-{effective_max}字)"
-    if desc_len > effective_max * 1.2:
-        return f"description 过长 ({desc_len}字，要求{effective_max}字以内)"
+    # 统一使用百分比偏差：|实际-限制| / 限制 < 0.2 放过
+    effective_min_tolerance = int(effective_min * 0.8)
+    effective_max_tolerance = int(effective_max * 1.2)
+    if desc_len < effective_min_tolerance:
+        return f"description 过短 ({desc_len}字，允许{effective_min_tolerance}-{effective_max_tolerance}字，原始要求{effective_min}-{effective_max}字)"
+    if desc_len > effective_max_tolerance:
+        return f"description 过长 ({desc_len}字，允许{effective_min_tolerance}-{effective_max_tolerance}字，原始要求{effective_min}-{effective_max}字)"
 
     # 如果定义了选项，验证每个非固定选项（fixed=False）都有 AI 生成的文本
     # 固定选项（fixed=True）直接使用配置文本，不校验
@@ -164,7 +167,9 @@ def validate_response(
         opt_text = options.get(of.id, "").strip()
         if not opt_text:
             return f"选项 '{of.id}' 为空"
-        if len(opt_text) > effective_option_max:
-            return f"选项 '{of.id}' 过长 ({len(opt_text)}字，限制{effective_option_max}字以内)"
+        # 统一使用百分比偏差：|实际-限制| / 限制 < 0.2 放过
+        option_max_tolerance = int(effective_option_max * 1.2)
+        if len(opt_text) > option_max_tolerance:
+            return f"选项 '{of.id}' 过长 ({len(opt_text)}字，允许{option_max_tolerance}字以内，原始限制{effective_option_max}字以内)"
 
     return None

@@ -114,6 +114,12 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "save_path": "res://data/4_eras/747_kuangda/denggao/747kuangda_denggao_events.csv",
         "data_type": "random_event",
         "is_generated": true,
+    }, 
+    {
+        "name": "清流互助事件库",
+        "save_path": "res://data/4_eras/747_kuangda/qingliu_aid/qingliu_passive_benefits_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
     },
 ]
 

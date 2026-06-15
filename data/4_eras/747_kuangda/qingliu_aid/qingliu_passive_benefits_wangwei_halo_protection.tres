@@ -1,0 +1,135 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_dff44"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_oau3y"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_tvhnr"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_svx2b"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_qqu0r"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_fks07"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_rh2cx"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_1kmvm"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="9_p2ffs"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_svx2b"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="10_qqu0r"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_fks07"]
+
+[sub_resource type="Resource" id="Resource_svx2b"]
+script = ExtResource("3_tvhnr")
+str_props = "MONEY"
+value = 5
+
+[sub_resource type="Resource" id="Resource_qqu0r"]
+script = ExtResource("3_tvhnr")
+str_props = "FATIGUE"
+value = -20
+
+[sub_resource type="Resource" id="Resource_fks07"]
+script = ExtResource("4_svx2b")
+value = 10
+
+[sub_resource type="Resource" id="Resource_rh2cx"]
+script = ExtResource("3_tvhnr")
+str_props = "INSPIRATION"
+value = 15
+
+[sub_resource type="Resource" id="Resource_1kmvm"]
+script = ExtResource("5_qqu0r")
+imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+
+[sub_resource type="Resource" id="Resource_p2ffs"]
+script = ExtResource("6_fks07")
+operators = Array[ExtResource("2_oau3y")]([SubResource("Resource_svx2b"), SubResource("Resource_qqu0r"), SubResource("Resource_fks07"), SubResource("Resource_rh2cx"), SubResource("Resource_1kmvm")])
+
+[sub_resource type="Resource" id="Resource_gempe"]
+script = ExtResource("7_rh2cx")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_mx8na"]
+script = ExtResource("8_1kmvm")
+choice_result = SubResource("Resource_p2ffs")
+requirement = SubResource("Resource_gempe")
+description = "将荐书对折收入怀中，抬眼看他：「何不早来？」"
+
+[sub_resource type="Resource" id="Resource_jjxj8"]
+script = ExtResource("3_tvhnr")
+str_props = "MONEY"
+value = 5
+
+[sub_resource type="Resource" id="Resource_lsdni"]
+script = ExtResource("3_tvhnr")
+str_props = "FATIGUE"
+value = 15
+
+[sub_resource type="Resource" id="Resource_ybyhe"]
+script = ExtResource("4_svx2b")
+value = 10
+
+[sub_resource type="Resource" id="Resource_vjw7a"]
+script = ExtResource("6_fks07")
+operators = Array[ExtResource("2_oau3y")]([SubResource("Resource_jjxj8"), SubResource("Resource_lsdni"), SubResource("Resource_ybyhe")])
+
+[sub_resource type="Resource" id="Resource_ab58r"]
+script = ExtResource("8_1kmvm")
+choice_result = SubResource("Resource_vjw7a")
+description = "指尖触到纸沿时停了半拍，垂下眼去，一路不曾碰那纸。"
+
+[sub_resource type="Resource" id="Resource_0dqea"]
+script = ExtResource("3_tvhnr")
+str_props = "MONEY"
+value = 5
+
+[sub_resource type="Resource" id="Resource_bsoy6"]
+script = ExtResource("4_svx2b")
+value = 15
+
+[sub_resource type="Resource" id="Resource_ssryf"]
+script = ExtResource("3_tvhnr")
+str_props = "BURNOUT"
+value = 15
+
+[sub_resource type="Resource" id="Resource_t6fls"]
+script = ExtResource("4_svx2b")
+value = 5
+
+[sub_resource type="Resource" id="Resource_r1mer"]
+script = ExtResource("5_qqu0r")
+imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+
+[sub_resource type="Resource" id="Resource_bi8l2"]
+script = ExtResource("6_fks07")
+operators = Array[ExtResource("2_oau3y")]([SubResource("Resource_0dqea"), SubResource("Resource_bsoy6"), SubResource("Resource_ssryf"), SubResource("Resource_t6fls"), SubResource("Resource_r1mer")])
+
+[sub_resource type="Resource" id="Resource_snkx1"]
+script = ExtResource("7_rh2cx")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_t665o"]
+script = ExtResource("8_1kmvm")
+choice_result = SubResource("Resource_bi8l2")
+requirement = SubResource("Resource_snkx1")
+description = "连声称谢，目光却反复扫过荐书上右丞的印鉴——落款处空着一行。"
+
+[sub_resource type="Resource" id="Resource_crcfc"]
+script = ExtResource("10_qqu0r")
+property = "ambition"
+value = 30
+operator = 1
+
+[sub_resource type="Resource" id="Resource_gygdy"]
+script = ExtResource("10_qqu0r")
+property = "ambition"
+value = 100
+
+[sub_resource type="Resource" id="Resource_7ma73"]
+script = ExtResource("11_fks07")
+operators = Array[ExtResource("9_svx2b")]([SubResource("Resource_crcfc"), SubResource("Resource_gygdy")])
+
+[resource]
+script = ExtResource("9_p2ffs")
+requirement = SubResource("Resource_7ma73")
+era = "747_kuangda"
+_target_tags = Array[String](["qingliu_aid"])
+options = Array[ExtResource("1_dff44")]([SubResource("Resource_mx8na"), SubResource("Resource_ab58r"), SubResource("Resource_t665o")])
+uuid = "qingliu_passive_benefits_wangwei_halo_protection"
+name = "帘内一言"
+description = "「上来。」车中散出檀香。他一路无言，只在车驾转入辋川别业方向时，将一纸荐书搁在你膝上，不算什么好缺——崇文馆校书郎，正九品下。"

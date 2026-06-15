@@ -16,14 +16,14 @@
     {"id": "qingliu_era_facts", "text": "天宝十三载（754年），李白已离开长安浪迹江湖，但偶尔路过。王维任尚书右丞，半官半隐。郑虔任广文馆博士，极其清贫。高适在河西节度使幕府任职，尚未飞黄腾达。杜甫困居长安下杜城陋室。"}
   ],
   "universal_tags": ["qingliu_aid"],
-  "universal_requirement": "prop_gt(name=ambition,val=30),prop_lt(name=ambition,val=100)",
+  "universal_requirement": "prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
   "universal_result": "",
   "universal_option_requirement": "",
   "word_count_min": 40,
   "word_count_max": 200,
   "option_word_count_max": 30,
   "max_retries": 3,
-  "api_model": "deepseek-reasoner",
+  "api_model": "deepseek-v4-pro",
   "output_dir": "data/4_eras/747_kuangda/qingliu_aid",
   "apply_dimension_imagery": false,
   "plugin_config": {

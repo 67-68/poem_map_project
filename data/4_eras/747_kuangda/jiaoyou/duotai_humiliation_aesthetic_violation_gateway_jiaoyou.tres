@@ -1,107 +1,107 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bjbpnrsmv4qic"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_7vu0m"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_xpe67"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_q5p5t"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_1kri5"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_1j2bw"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_lyfg5"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_wy8vx"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_7vu0m"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_xpe67"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_q5p5t"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_1kri5"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_1j2bw"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_lyfg5"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_wy8vx"]
 
-[sub_resource type="Resource" id="Resource_hqd8w"]
+[sub_resource type="Resource" id="Resource_7vu0m"]
 script = ExtResource("3_q5p5t")
 str_props = "fatigue"
 value = -5
 
-[sub_resource type="Resource" id="Resource_p7dpk"]
+[sub_resource type="Resource" id="Resource_xpe67"]
 script = ExtResource("3_q5p5t")
 str_props = "kuangda"
 value = 2
 
-[sub_resource type="Resource" id="Resource_risgr"]
+[sub_resource type="Resource" id="Resource_q5p5t"]
 script = ExtResource("3_q5p5t")
 str_props = "fatigue"
 value = -3
 
-[sub_resource type="Resource" id="Resource_vfvtn"]
+[sub_resource type="Resource" id="Resource_1kri5"]
 script = ExtResource("4_1kri5")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_3ac8o"]
+[sub_resource type="Resource" id="Resource_1j2bw"]
 script = ExtResource("5_1j2bw")
-operators = Array[ExtResource("2_xpe67")]([SubResource("Resource_hqd8w"), SubResource("Resource_p7dpk"), SubResource("Resource_risgr"), SubResource("Resource_vfvtn")])
+operators = Array[ExtResource("2_xpe67")]([SubResource("Resource_7vu0m"), SubResource("Resource_xpe67"), SubResource("Resource_q5p5t"), SubResource("Resource_1kri5")])
 
-[sub_resource type="Resource" id="Resource_h35ss"]
+[sub_resource type="Resource" id="Resource_lyfg5"]
 script = ExtResource("6_lyfg5")
-choice_result = SubResource("Resource_3ac8o")
+choice_result = SubResource("Resource_1j2bw")
 description = "搁下笔，将诗稿卷入袖中，起身径自走向院门。"
 
-[sub_resource type="Resource" id="Resource_4oauu"]
+[sub_resource type="Resource" id="Resource_wy8vx"]
 script = ExtResource("3_q5p5t")
 str_props = "fatigue"
 value = -5
 
-[sub_resource type="Resource" id="Resource_d8muv"]
+[sub_resource type="Resource" id="Resource_hqd8w"]
 script = ExtResource("3_q5p5t")
 str_props = "kuangda"
 value = 1
 
-[sub_resource type="Resource" id="Resource_xrcvo"]
+[sub_resource type="Resource" id="Resource_p7dpk"]
 script = ExtResource("3_q5p5t")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_0xjxc"]
+[sub_resource type="Resource" id="Resource_risgr"]
 script = ExtResource("4_1kri5")
 imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
 
-[sub_resource type="Resource" id="Resource_u1i8j"]
+[sub_resource type="Resource" id="Resource_vfvtn"]
 script = ExtResource("5_1j2bw")
-operators = Array[ExtResource("2_xpe67")]([SubResource("Resource_4oauu"), SubResource("Resource_d8muv"), SubResource("Resource_xrcvo"), SubResource("Resource_0xjxc")])
+operators = Array[ExtResource("2_xpe67")]([SubResource("Resource_wy8vx"), SubResource("Resource_hqd8w"), SubResource("Resource_p7dpk"), SubResource("Resource_risgr")])
 
-[sub_resource type="Resource" id="Resource_1k136"]
+[sub_resource type="Resource" id="Resource_3ac8o"]
 script = ExtResource("6_lyfg5")
-choice_result = SubResource("Resource_u1i8j")
+choice_result = SubResource("Resource_vfvtn")
 description = "点头应允，提笔抹去原句，依言改作“双燕衔泥暖”。"
 
-[sub_resource type="Resource" id="Resource_xuhqq"]
+[sub_resource type="Resource" id="Resource_h35ss"]
 script = ExtResource("3_q5p5t")
 str_props = "fatigue"
 value = -5
 
-[sub_resource type="Resource" id="Resource_5fnl4"]
+[sub_resource type="Resource" id="Resource_4oauu"]
 script = ExtResource("3_q5p5t")
 str_props = "kuangda"
 value = -1
 
-[sub_resource type="Resource" id="Resource_838fj"]
+[sub_resource type="Resource" id="Resource_d8muv"]
 script = ExtResource("3_q5p5t")
 str_props = "money"
 value = 5
 
-[sub_resource type="Resource" id="Resource_5yvbt"]
+[sub_resource type="Resource" id="Resource_xrcvo"]
 script = ExtResource("3_q5p5t")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_bws3n"]
+[sub_resource type="Resource" id="Resource_0xjxc"]
 script = ExtResource("4_1kri5")
 imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
 
-[sub_resource type="Resource" id="Resource_1fvq2"]
+[sub_resource type="Resource" id="Resource_u1i8j"]
 script = ExtResource("5_1j2bw")
-operators = Array[ExtResource("2_xpe67")]([SubResource("Resource_xuhqq"), SubResource("Resource_5fnl4"), SubResource("Resource_838fj"), SubResource("Resource_5yvbt"), SubResource("Resource_bws3n")])
+operators = Array[ExtResource("2_xpe67")]([SubResource("Resource_h35ss"), SubResource("Resource_4oauu"), SubResource("Resource_d8muv"), SubResource("Resource_xrcvo"), SubResource("Resource_0xjxc")])
 
-[sub_resource type="Resource" id="Resource_ncu4v"]
+[sub_resource type="Resource" id="Resource_1k136"]
 script = ExtResource("6_lyfg5")
-choice_result = SubResource("Resource_1fvq2")
+choice_result = SubResource("Resource_u1i8j")
 description = "躬身笑问：“韦公高见，还有何处可润色？愿听教诲。”"
 
 [resource]
 script = ExtResource("7_wy8vx")
 era = "747_kuangda"
 _target_tags = Array[String](["action:humiliation_aesthetic_violation", "action:scene_jiaoyou"])
-options = Array[ExtResource("1_7vu0m")]([SubResource("Resource_h35ss"), SubResource("Resource_1k136"), SubResource("Resource_ncu4v")])
+options = Array[ExtResource("1_7vu0m")]([SubResource("Resource_lyfg5"), SubResource("Resource_3ac8o"), SubResource("Resource_1k136")])
 uuid = "duotai_humiliation_aesthetic_violation_gateway_jiaoyou"
 name = "雅集改稿令"
 description = "“子美，这句‘孤雁哀鸣夜’太萧瑟了。今日聚饮，当以喜气为佳，改成‘双燕衔泥暖’如何？”座中几人颔首称是，有人附和：“韦公此言正是，诗当合时宜。”"
