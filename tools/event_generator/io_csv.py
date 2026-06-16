@@ -153,12 +153,24 @@ def _build_option_dsl(
         print(f"  ⚠️ 维度 DSL 缩放失败: {e}，跳过")
         scaled_dim_dsl = ""
 
+    # ── 维度值级 option result 覆盖 ──
+    # 如果某个 dimension value 声明了 option_results[choice.id]，
+    # 用它替代 choice.result（维度场景负责"甜头"）。
+    override_result = ""
+    for combo in accepted:
+        if combo.value.option_results:
+            override_result = combo.value.option_results.get(choice.id, "")
+            if override_result:
+                break
+
     # ── universal_result 始终作为基础消耗注入 ──
-    # 每个选项都会获得 universal_result（基础消耗）+ choice.result（状态响应）
+    # result 优先级: 维度值 option_results 覆盖 > choice.result > 空
     result_parts = []
     if universal_result:
         result_parts.append(universal_result)
-    if choice.result:
+    if override_result:
+        result_parts.append(override_result)
+    elif choice.result:
         result_parts.append(choice.result)
     result_dsl = " | ".join(result_parts)
     if not result_dsl:

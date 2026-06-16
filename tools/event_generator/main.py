@@ -635,6 +635,12 @@ def run_trial_mode(
 # 生产模式
 # ════════════════════════════════════════════════════════════════
 
+def _compute_uuid(cfg_id: str, values_tuple: tuple) -> str:
+    """计算维度组合对应的 UUID（与 generate_one_event 内部逻辑一致）。"""
+    parts = [cfg_id] + [v.id for v in values_tuple]
+    return "_".join(parts).lower()
+
+
 def run_production_mode(
     combinations: list,
     cfg: EventPipelineConfig,
@@ -646,16 +652,49 @@ def run_production_mode(
     scene_dim_id: str | None,
     emotion_dim_id: str | None,
     output_path: str,
+    complete: bool = False,
 ) -> None:
-    """🏭 生产模式：遍历所有组合，生成事件并写入 CSV。"""
+    """🏭 生产模式：遍历所有组合，生成事件并写入 CSV。
+
+    complete: 补跑模式。检测已有 CSV 中成功生成的 UUID，只生成缺失的组合并追加写入。
+    """
     success_count = 0
     skip_count = 0
     fail_count = 0
 
-    with open(output_path, "w", newline="", encoding="utf-8") as f:
+    # ── --complete 模式：检测已有 CSV，过滤出缺失组合 ──
+    if complete:
+        if os.path.exists(output_path):
+            existing_uuids = set()
+            with open(output_path, "r", newline="", encoding="utf-8") as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    if row and row[0] == "random_event" and len(row) > 1 and row[1]:
+                        existing_uuids.add(row[1])
+            original_count = len(combinations)
+            combinations = [
+                vt for vt in combinations
+                if _compute_uuid(cfg.id, vt) not in existing_uuids
+            ]
+            missing_count = len(combinations)
+            print(f"🔍 --complete 模式：CSV 已有 {len(existing_uuids)} 个事件，需补跑 {missing_count}/{original_count}")
+            if missing_count == 0:
+                print("✅ 全部组合已生成，无需补跑")
+                return
+        else:
+            print(f"⚠️  --complete 模式：{output_path} 不存在，将从头生成")
+
+    # ── 决定写入模式：补跑则追加，首次则新建 ──
+    if complete and os.path.exists(output_path):
+        f = open(output_path, "a", newline="", encoding="utf-8")
+        writer = csv.writer(f)
+        print(f"  📎 追加模式（保留已有 {len(existing_uuids) if complete else 0} 个事件）")
+    else:
+        f = open(output_path, "w", newline="", encoding="utf-8")
         writer = csv.writer(f)
         write_csv_header(writer)
 
+    try:
         for idx, values_tuple in enumerate(combinations):
             print(f"\n[{idx + 1}/{len(combinations)}] ", end="")
 
@@ -691,6 +730,8 @@ def run_production_mode(
             else:  # fail
                 print(f"{result.uuid} ❌ 失败")
                 fail_count += 1
+    finally:
+        f.close()
 
     print(f"\n{'=' * 40}")
     print(f"📊 生成完成")
@@ -714,6 +755,7 @@ def main():
     parser.add_argument("--max-events", type=int, default=0, help="最多生成事件数（0=全部）")
     parser.add_argument("--number", type=int, default=0, help="精确控制生成事件数（不能超过组合总数，与 --max-events 互斥）")
     parser.add_argument("--random", action="store_true", help="随机模式: 在 trial 模式下随机选择一个维度组合（而非总是第一个）")
+    parser.add_argument("--complete", action="store_true", help="补跑模式：检测 CSV 中缺失的组合并追加生成（跳过已成功生成的事件）")
     args = parser.parse_args()
 
     if args.random and not args.trial:
@@ -883,6 +925,7 @@ def main():
         run_production_mode(
             combinations, cfg, system_prompt, llm, sandbox, plugins,
             image_dict, scene_dim_id, emotion_dim_id, output_path,
+            complete=args.complete,
         )
 
 
