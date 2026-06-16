@@ -2,16 +2,16 @@
   "id": "qingliu_daoxin_posui",
   "name": "清流-道心破碎事件库 — 社交API的全面崩溃",
   "era": "747_kuangda",
-  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n你一直在旷达——用狂客的姿态硬撑、用逢迎的嘴脸周旋、用钻营的手段开路。你告诉自己这是策略，是暂时的，是不得已而为之。\n\n但旷达是有上限的。\n\n当你的心力（BURNOUT）超过70，旷达的面具开始出现裂痕。社交场合中那些原本可以一笑而过的瞬间——被轻慢、被消费、被当作道具、被晾在门房——突然变得无法承受。独处时那些原本可以压下去的念头——你的才华到底值几个钱、你的坚持到底有没有意义——翻涌上来，堵在胸口。\n\n这不是一次性的崩溃。这是一个持续的、在每个社交触点被揭开的伤口。每一个看似平常的场面，都可能成为压垮道心的最后一根稻草。\n\n「道心破碎」事件库由此而生。",
-  "ai_persona": "你是一位以冷峻克制的笔触书写唐代文人精神困境的叙事作家。你的文字不煽情、不滥情——用白描和细节来呈现一个人的道心如何在日常社交和独处中慢慢碎裂。\n\n【关键叙事原则 — 日常中的崩塌】每个事件都发生在看似平常的场景中——一场宴会、一次拜谒、一段独酌。但叙述中必须通过微妙的细节传递出「不对劲」：对方目光中一闪而过的轻慢、自己手上一个停顿的动作、空气中一段突兀的沉默。不需要剧烈的冲突，只需要让读者感受到——这个人正在安静地碎裂。\n\n【情绪传递】你擅长用物象来传递情绪：打翻的酒盏在地砖上洇开的痕迹像一张地图、冷掉的茶汤表面凝结的油膜、手指在瓷杯上留下的指纹。让读者通过可见的细节感受到不可见的精神崩塌。\n\n【反面教材】绝对不要写以下场景：\n- 任何形式的内心独白或上帝视角心理剖析\n- 剧烈的情绪爆发或戏剧化的肢体冲突\n- 明确的自我总结（「他意识到」「他终于明白」）\n- 任何形式的励志或救赎暗示\n\n【重要规则】每个事件必须是「日常的刀锋」——一个普通到不能再普通的社交或独处瞬间，但因为角色的心力已经耗尽，这个瞬间变成了切割道心的刀刃。",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n长期策略：以旷达姿态应对长安社交——投诗干谒、奔走权门、逢迎周旋。当前心力（BURNOUT）已超过70，旷达面具出现结构性裂痕。\n\n事件库范畴：心力耗尽后的日常磨损。触发场景包括宴会、拜谒、门房等待、同侪聚会、独处。每次互动都可能累积额外消耗，但叙事聚焦于一个个体在普通瞬间中的安静碎裂——而非戏剧化的崩溃。",
+  "ai_persona": "你是一位以冷峻克制的笔触书写唐代文人精神困境的叙事作家。你的文字不煽情、不滥情——用白描和可见的细节来呈现一个人的道心如何在日常社交和独处中慢慢碎裂。\n\n【关键叙事原则】每个事件都锚定在看似平常的场景中。叙述通过任何一个微小的外部细节传递「不对劲」——一道目光的偏移、一个动作的中断、一段声音的缺席。不需要剧烈的冲突。让读者通过可见的外部世界感受到不可见的精神崩塌。\n\n【情绪传递媒介】情绪通过物象传递，而非通过心理描写传递。选择物象时，从不同的感官类别中切换——液体的静止或流动痕迹、织物的磨损或褶皱、光线的偏移或消逝、物件的位移或放置。不用物象做比喻（不写「像」、「如」、「仿佛」），只写物象本身的存在状态。",
   "prompt_features": [
     {
       "id": "tone_cold_restrained",
-      "text": "保持冷峻克制的叙事语气——用白描手法呈现道心碎裂的过程。不煽情、不评价、不总结。让细节自己说话。"
+      "text": "保持冷峻克制的叙事语气。用白描手法呈现道心碎裂的过程。让细节自己说话。"
     },
     {
       "id": "forbid_god_view_psychology",
-      "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」「他终于明白」。只写可见的动作、对话、环境和沉默。"
+      "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」「他终于明白」。不写任何形式的内心独白、自我总结或情感命名。只写可见的动作、对话、环境和沉默。"
     },
     {
       "id": "daily_knife_edge",
@@ -19,7 +19,7 @@
     },
     {
       "id": "object_as_emotion",
-      "text": "善于用物象传递情绪——茶汤上的油膜、杯沿的指纹、酒盏在案上滚过的轨迹、袍角沾上的泥点。让物象承载不可言说的感受。"
+      "text": "使用物象承载情绪。物象从以下抽象类别中任选一个渠道切入——液体的静止或流动痕迹、织物的磨损或褶皱、光线的偏移或消逝、物件的位移或放置。不得照搬沙盒种子中的具体物象。勿用比喻（不写「像」「如」「仿佛」），只写物象本身的存在状态。"
     },
     {
       "id": "anti_repetition",
@@ -27,7 +27,7 @@
     },
     {
       "id": "final_directive",
-      "text": "牢记：这不是戏剧化的崩溃。这是一个人在日常中安静碎裂的过程——可能没有人注意到。"
+      "text": "牢记：这不是一场戏剧化的崩溃。没有任何人注意到——或即便注意到也装作没注意到。这是一个人在日常中安静碎裂的过程。你写的是琐碎日常下的缓慢磨损，不是高潮。"
     }
   ],
   "fact_features": [],
@@ -48,7 +48,7 @@
   "option_features": [
     {
       "id": "opt_resign",
-      "prompt": "用30字以内写一个简短的【认命/承受】动作——沉默地接受这个局面，不做反抗，也不做讨好。动作特征：垂下视线、端起酒杯慢慢喝完、转身走开、独自坐回角落、把什么东西放回原处。克制平实，不带多余的情绪波动。",
+      "prompt": "写一个简短的【认命/承受】动作——沉默地接受这个局面。动作是一个被动的接受性身体动作：视线的收回、姿态的下沉、脚步的移开、手中物件的放下。动作本身不带情绪词汇，通过迟疑或沉默传递承受。",
       "text": "（垂下视线，端杯饮尽）",
       "result": "prop_add(name=fatigue; val=8) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=5)",
       "fixed": false,
@@ -81,7 +81,7 @@
           "tags": [
             "action:main:duzhuo"
           ],
-          "operator_dsl": "flag_int_sub(name=kuangda; val=5) | prop_sub(name=INSPIRATION; val=15) | prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=5)",
+          "operator_dsl": "flag_int_append(name=kuangda; val=-5) | prop_sub(name=INSPIRATION; val=15) | prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=5)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.duzhuo"
@@ -93,7 +93,7 @@
           "tags": [
             "action:main:duzhuo"
           ],
-          "operator_dsl": "flag_int_sub(name=kuangda; val=5) | emo_add(name=SORROW; val=8) | emo_sub(name=ARROGANCE; val=15) | prop_add(name=INSPIRATION; val=10)",
+          "operator_dsl": "flag_int_append(name=kuangda; val=-5) | emo_add(name=SORROW; val=8) | emo_sub(name=ARROGANCE; val=15) | prop_add(name=INSPIRATION; val=10)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.duzhuo"
@@ -113,11 +113,11 @@
         {
           "id": "porter_forbidden",
           "name": "门房的物理隔离",
-          "description": "你被拦在某位大人的门房外——不是主人不见你，是门子根本没把名帖递进去。门房里的炭火烧得正旺，门子坐在那里搓着手，连眼皮都没抬。你站在寒风里，意识到自己和这扇门之间的距离不是一个名帖能跨越的。",
+          "description": "你被拦在某位大人的门房外——不是主人不见你，是门子根本没把名帖递进去。门房里的炭火烧得正旺，门子坐在那里搓着手，连眼皮都没抬。你站在寒风里。你和这扇门之间的距离不是一个名帖能跨越的。",
           "tags": [
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=BURNOUT; val=8) | emo_add(name=ANGER; val=10) | flag_int_sub(name=kuangda; val=3)",
+          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=BURNOUT; val=8) | emo_add(name=ANGER; val=10) | flag_int_append(name=kuangda; val=-3)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
@@ -125,11 +125,11 @@
         {
           "id": "echo_chamber_losers",
           "name": "同温层的死锁",
-          "description": "你发现自己总是和同样失意的人聚在一起——没有能量的文人、没有资源的清客、没有前程的老书生。你们互相安慰、互相取暖、互相确认对方的才华被埋没。但你知道这是同温层的死锁：在这里永远得不到你真正需要的机会。",
+          "description": "你发现自己总是和同样失意的人聚在一起——没有能量的文人、没有资源的清客、没有前程的老书生。你们互相安慰、互相取暖、互相确认对方的才华被埋没。这是同温层的死锁：在这里永远得不到你真正需要的机会。",
           "tags": [
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=health; val=5) | emo_add(name=SORROW; val=10) | flag_int_sub(name=kuangda; val=3)",
+          "operator_dsl": "prop_sub(name=health; val=5) | emo_add(name=SORROW; val=10) | flag_int_append(name=kuangda; val=-3)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
@@ -161,11 +161,11 @@
         {
           "id": "connection_reset",
           "name": "被切断的瘟疫",
-          "description": "你发现过去熟络的几位朋友最近见了你都绕着走。以前收到请柬如今没了动静。你在酒肆门口偶遇其中一位——他看见你时愣了一下，然后找了一个拙劣的借口匆匆走开。你站在酒肆门口，意识到自己可能已经被某些圈子悄悄地、彻底地删除了。",
+          "description": "你发现过去熟络的几位朋友最近见了你都绕着走。以前收到的请柬如今没了动静。你在酒肆门口偶遇其中一位——他看见你时愣了一下，然后找了一个拙劣的借口匆匆走开。你站在酒肆门口。你已经被某些圈子悄悄地、彻底地删除了。",
           "tags": [
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=8) | flag_int_sub(name=kuangda; val=5) | prop_add(name=DRUNK; val=10)",
+          "operator_dsl": "prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=8) | flag_int_append(name=kuangda; val=-5) | prop_add(name=DRUNK; val=10)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"

@@ -1,4 +1,14 @@
 # [unreleased]
+## Added
+- **清流·道心破碎** 事件库（10个事件：3 独酌 + 7 社交）
+  - [`tools/event_base_config_qingliu_daoxin_posui.json`](tools/event_base_config_qingliu_daoxin_posui.json) — 事件配置，10个维度组合，`BURNOUT>70` 通用需求，`store_to` 路由到 duzhuo/jiaoyou/fangshi/baiye
+  - [`tools/event_base_config_qingliu_daoxin_posui_sandbox.json`](tools/event_base_config_qingliu_daoxin_posui_sandbox.json) — 30 条种子文本（每事件 3 条）
+  - [`data/4_eras/747_kuangda/qingliu_daoxin_posui/_qingliu_daoxin_posui_events.csv`](data/4_eras/747_kuangda/qingliu_daoxin_posui/_qingliu_daoxin_posui_events.csv) — 生成输出，含完整 DSL 操作链
+  - 独酌维度：frozen_imagery、subconscious_prosody、nonexistent_companion
+  - 社交维度：poverty_as_aesthetic、porter_forbidden、echo_chamber_losers、empty_endorsement、asymmetric_sunk_cost、connection_reset、prop_at_banquet
+  - 通用选项结果模板：`fatigue+8 / BURNOUT+5 / SORROW+5`
+  - [`tools/event_generator/main.py`](tools/event_generator/main.py) — 新增 `--complete-uuids` CLI flag，支持指定 UUID 重新生成并保留其余行
+
 ## Fixed
 - 云端 CSV 同步管线输出目录与 Registry 重构成 Bug
   - [`core/csv_cloud_loader.gd`](core/csv_cloud_loader.gd) — trait 数据 `save_path` 从 `res://data/tres_traits/traits.csv` 改为 `res://data/1_core_rules/traits/_traits.csv`，`.tres` 文件输出到 `data/1_core_rules/traits/` 目录，被 DataScanner 正确映射到 `bases["1_core_rules.traits"]`，修复了 `Database.get_trait("kuangda_kuangke")` 返回 `null` 的问题

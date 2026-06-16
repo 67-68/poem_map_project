@@ -653,6 +653,8 @@ def run_production_mode(
     emotion_dim_id: str | None,
     output_path: str,
     complete: bool = False,
+    preserved_rows: list[list[str]] | None = None,
+    regenerate_uuids: set[str] | None = None,
 ) -> None:
     """🏭 生产模式：遍历所有组合，生成事件并写入 CSV。
 
@@ -685,7 +687,18 @@ def run_production_mode(
             print(f"⚠️  --complete 模式：{output_path} 不存在，将从头生成")
 
     # ── 决定写入模式：补跑则追加，首次则新建 ──
-    if complete and os.path.exists(output_path):
+    if regenerate_uuids is not None:
+        # --complete-uuids 模式：写新文件，先写入保留行 + header，再追加新生成的行
+        f = open(output_path, "w", newline="", encoding="utf-8")
+        writer = csv.writer(f)
+        write_csv_header(writer)
+        if preserved_rows:
+            for row in preserved_rows:
+                writer.writerow(row)
+            print(f"  📎 保留 {len(preserved_rows)} 个已有事件，将重跑 {len(combinations)} 个")
+        else:
+            print(f"  📎 未找到保留行，将生成 {len(combinations)} 个新事件")
+    elif complete and os.path.exists(output_path):
         f = open(output_path, "a", newline="", encoding="utf-8")
         writer = csv.writer(f)
         print(f"  📎 追加模式（保留已有 {len(existing_uuids) if complete else 0} 个事件）")
@@ -756,6 +769,7 @@ def main():
     parser.add_argument("--number", type=int, default=0, help="精确控制生成事件数（不能超过组合总数，与 --max-events 互斥）")
     parser.add_argument("--random", action="store_true", help="随机模式: 在 trial 模式下随机选择一个维度组合（而非总是第一个）")
     parser.add_argument("--complete", action="store_true", help="补跑模式：检测 CSV 中缺失的组合并追加生成（跳过已成功生成的事件）")
+    parser.add_argument("--complete-uuids", default=None, help="重跑模式：指定要重新生成的 UUID（逗号分隔），保留其余已生成的行不变")
     args = parser.parse_args()
 
     if args.random and not args.trial:
@@ -920,6 +934,61 @@ def main():
         run_trial_mode(
             combinations, cfg, system_prompt, llm, sandbox, plugins,
             image_dict, scene_dim_id, emotion_dim_id, args,
+        )
+    elif args.complete_uuids:
+        # --complete-uuids 模式：只重跑指定 UUID 的事件，保留其余行
+        target_uuids = set(u.strip() for u in args.complete_uuids.split(",") if u.strip())
+        if not target_uuids:
+            print("❌ --complete-uuids 需要至少一个 UUID")
+            sys.exit(1)
+
+        # 过滤 combinations，只保留匹配目标 UUID 的
+        original_count = len(combinations)
+        target_combinations = [
+            vt for vt in combinations
+            if _compute_uuid(cfg.id, vt) in target_uuids
+        ]
+        found_count = len(target_combinations)
+        if found_count == 0:
+            print(f"❌ 未找到匹配目标 UUID 的组合")
+            print(f"   目标: {target_uuids}")
+            print(f"   可用组合 UUID 示例: {_compute_uuid(cfg.id, combinations[0])}")
+            sys.exit(1)
+        print(f"🔍 --complete-uuids 模式：共 {original_count} 个组合，匹配 {found_count} 个目标 UUID")
+
+        # 读取现有 CSV，提取要保留的行（非目标 UUID + 其选项行）
+        preserved_rows: list[list[str]] = []
+        preserve_current_event = False  # 标记是否正在保留当前 event block
+        if os.path.exists(output_path):
+            with open(output_path, "r", newline="", encoding="utf-8") as f:
+                reader = csv.reader(f)
+                for row in reader:
+                    if not row:
+                        continue
+                    if row[0] == "row_type":
+                        continue
+                    if row[0] == "random_event" and len(row) > 1:
+                        uuid = row[1]
+                        if uuid not in target_uuids:
+                            preserve_current_event = True
+                            preserved_rows.append(row)
+                        else:
+                            preserve_current_event = False
+                    elif row[0] == ">option":
+                        if preserve_current_event:
+                            preserved_rows.append(row)
+            event_count = sum(1 for r in preserved_rows if r[0] == "random_event")
+            print(f"   保留 {event_count} 个已有事件（共 {len(preserved_rows)} 行）")
+        else:
+            print(f"⚠️  {output_path} 不存在，将从头生成目标事件")
+
+        combinations = target_combinations
+        run_production_mode(
+            combinations, cfg, system_prompt, llm, sandbox, plugins,
+            image_dict, scene_dim_id, emotion_dim_id, output_path,
+            complete=args.complete,
+            preserved_rows=preserved_rows,
+            regenerate_uuids=target_uuids,
         )
     else:
         run_production_mode(
