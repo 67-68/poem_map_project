@@ -144,7 +144,7 @@
         {
           "id": "GAOSHI",
           "name": "高适",
-          "tags": ["TARGET_OBJECT_SWORD:giant_roc"],
+          "tags": ["VIBE_THEME_MARTIAL:giant_roc"],
           "operator_dsl": "",
           "linked_value_ids": ["silent_bailout", "intel_routing"]
         }
@@ -193,7 +193,7 @@
         {
           "id": "intel_routing",
           "name": "资源的情报 — 隐秘的润笔",
-          "tags": ["TARGET_OBJECT_SWORD:giant_roc", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_survival"],
+          "tags": ["VIBE_THEME_MARTIAL:giant_roc", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_survival"],
           "operator_dsl": "prop_add(name=MONEY; val=15)",
           "scale": 1.0
         }

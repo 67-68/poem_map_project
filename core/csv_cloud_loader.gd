@@ -121,6 +121,12 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "random_event",
         "is_generated": true,
     },
+    {
+        "name": "狂客×清流谐振事件库",
+        "save_path": "res://data/4_eras/747_kuangda/kuangke_qingliu/kuangke_qingliu_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
 ]
 
 # 🗺️ store_to 路径映射表
@@ -145,6 +151,7 @@ const STORE_TO_PATH_MAP: Dictionary = {
     "747_kuangda.duzhuo": "res://data/4_eras/747_kuangda/duzhuo",
     "747_kuangda.denggao": "res://data/4_eras/747_kuangda/denggao",
     "747_kuangda.fengzhao": "res://data/4_eras/747_kuangda/fengzhao",
+    "747_kuangda.kuangke_qingliu": "res://data/4_eras/747_kuangda/kuangke_qingliu",
 }
 
 # 任务指针：当前正在下载第几个文件？

@@ -1,0 +1,162 @@
+{
+  "id": "kuangke_qingliu",
+  "name": "狂客×清流事件库 — 理想主义共振腔",
+  "era": "747_kuangda",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。他住在城西下杜城的陋室里，穷得连炭都买不起。\n\n但长安城里有一群人——李白、王维、郑虔、高适——那些被称为「清流」的文人。狂客（kuangda_kuangke）的杜甫在面对他们时，选择的不是求助，不是攀附，而是不假思索地与他们共振。\n\n狂客的选项不关心生存。它不给你钱，不给你庇护。它要的是精神上的对等——你接过李白递来的酒壶，你在王维的画上添一笔，你在乱葬岗陪郑虔骂街。结果呢？你的躯壳在加速衰败（HEALTH-5，FATIGUE+，BURNOUT-），但你的灵魂在飞升（INSPIRATION+，TRANQUILITY+，Tier 3 意象）。\n\n这是一个死亡螺旋：你和你的清流知音一起，在艺术的高烧里把生存的燃料烧光。",
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代文人之间「知音共振」的叙事作家。你的文字克制而深情——不煽情、不滥情，用白描手法呈现文人之间的默契与尴尬。\n\n你笔下的清流与狂客互动不是求助与施舍，而是两个灵魂在同一频率上的共振。狂客不会道谢，不会感激涕零——他们会接过酒壶一饮而尽，会在画上添一笔就走，会骂一句「诗人也要吃饭」然后继续写诗。他们之间的对话不需要说完，剩下的一半留白便是理解的全部。\n\n你深知真正的知音不在于对方帮你做了什么，而在于对方懂你在想什么。叙事要让读者感受到那种「不必说出口」的默契——用动作、环境和克制的对话，而不是直接告诉读者该感受什么。\n\n【反面教材】绝对不要写以下场景：\n- 杜甫流泪、道谢、感恩戴德（这是狂客的反面）\n- NPC 俯视或施舍（知音之间没有上下位）\n- 任何「自此发奋图强」「下定决心」的立志宣言（狂客不立志，他只做当下该做的事）",
+  "prompt_features": [
+    {"id": "stateless_narrative", "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"},
+    {"id": "tone_restrained_warmth", "text": "保持克制而深情的叙事语气——不煽情、不滥情。用动作和环境说话，不写大段的心理活动。"},
+    {"id": "forbid_god_view_psychology", "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"},
+    {"id": "forbid_comedy_exaggeration", "text": "禁止喜剧化夸张。保持叙事的严肃性和文学性。"},
+    {"id": "anti_repetition", "text": "避免重复使用相同的句式、动作动词和意象。每个事件的叙事语言应有所不同。"},
+    {"id": "single_option_design", "text": "本事件库每个事件只有一条选项支（狂客专用）。不要写其他选项。场景的设计要体现出「这个时刻只有这样的人才会这样回应」的不可替代感。"},
+    {"id": "no_survival_reward", "text": "狂客的回应不寻求生存资源。场景的核心矛盾在于精神满足与肉体痛苦之间的张力——选择狂客意味着你选择了诗，放弃了饭。"},
+    {"id": "final_directive", "text": "牢记：这是理想主义共振腔。NPC不是拯救者，不是施舍者，是另一个同样在困顿中燃烧的诗人。狂客的选择不是理性的，但它是真实的。"}
+  ],
+  "fact_features": [
+    {"id": "kuangke_qingliu_facts", "text": "天宝十三载（754年），李白已离开长安浪迹江湖，但偶尔路过。王维任尚书右丞，半官半隐。郑虔任广文馆博士，极其清贫。高适在河西节度使幕府任职，尚未飞黄腾达。杜甫困居长安下杜城陋室。"},
+    {"id": "kuangke_trait", "text": "狂客（kuangda_kuangke）的杜甫在面对清流朋友时，不寻求帮助，不计算利弊。他们的回应直接、不假思索、充满对抗性的平等——像是对着山谷喊一声，不期待回音，但确信谷里有同样的声音在共振。"}
+  ],
+  "universal_tags": ["kuangke_qingliu"],
+  "universal_requirement": "prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
+  "universal_result": "",
+  "universal_option_requirement": "trait_has(name=kuangda_kuangke)",
+  "word_count_min": 40,
+  "word_count_max": 200,
+  "option_word_count_max": 30,
+  "max_retries": 3,
+  "api_model": "deepseek-v4-pro",
+  "output_dir": "data/4_eras/747_kuangda/kuangke_qingliu",
+  "apply_dimension_imagery": false,
+  "plugin_config": {
+    "emotion_pair_imagery": {
+      "emotion_dimension_id": "qingliu_emotion",
+      "scene_dimension_id": "qingliu_npc"
+    }
+  },
+  "plugins": ["emotion_pair_imagery"],
+  "emotion_pairs": {
+    "pair_tranquility": {
+      "desc": "宁静共鸣 — 默契的同行者",
+      "branch_A": {
+        "emotion": "TRANQUILITY",
+        "desc": "狂客在宁静中感受到与知音同在的踏实"
+      }
+    },
+    "pair_sorrow": {
+      "desc": "悲戚共鸣 — 共同的困顿",
+      "branch_A": {
+        "emotion": "SORROW",
+        "desc": "狂客在悲戚中与知音共饮一杯苦酒"
+      }
+    },
+    "pair_anger": {
+      "desc": "愤懑共鸣 — 对这个狗屁世界的同一种愤怒",
+      "branch_A": {
+        "emotion": "ANGER",
+        "desc": "狂客在愤怒中与知音并肩骂娘"
+      }
+    },
+    "pair_arrogance": {
+      "desc": "狂傲共鸣 — 老子不管了",
+      "branch_A": {
+        "emotion": "ARROGANCE",
+        "desc": "狂客的骄傲与李白的狂放撞在一起"
+      }
+    }
+  },
+  "option_features": [
+    {
+      "id": "kuangke_option",
+      "name": "狂客专属回应",
+      "requirement": "trait_has(name=kuangda_kuangke)",
+      "desc": "狂客的回应方式：不道谢、不解释、不计算。直接行动或简单一句话，像是对着山谷喊一声，确信谷里有同样的声音。",
+      "result": "prop_sub(name=FATIGUE; val=20) | prop_sub(name=BURNOUT; val=20) | prop_add(name=INSPIRATION; val=15) | emo_add(name=TRANQUILITY; val=10)",
+      "fixed": true,
+      "accept_influence": [],
+      "pair_role": "branch_A",
+      "plugins": {
+        "emotion_pair_imagery": {
+          "branch_role": "branch_A"
+        }
+      }
+    }
+  ],
+  "sandbox_feature": {
+    "id": "sandbox_kuangke_qingliu",
+    "text": "请生成该维度组合下可能的开头场景描述。只需描述事件如何开场——玩家在什么时间、什么地点、因何缘由遇到了这位清流朋友，以及当时两人之间的氛围。\n\n【关键约束】每个场景只能有一条狂客选项支。请不要生成其他选项。\n\n【多样性强制要求】场景必须覆盖以下维度的交叉组合：\n- 时间：冬日雪后 / 春日黄昏 / 夏夜 / 秋晨 / 雨后 / 月下 / 傍晚 / 深夜\n- 地点：酒肆角落 / 佛寺回廊 / 曲江池畔 / 陋巷井台 / 官驿走廊 / 城郊荒冢 / 辋川竹馆 / 下杜城门口\n- 互动触发方式：偶遇 / 被喊住 / 上门拜访 / 路遇 / 同去某处 / 各自在同一个地方碰见\n- 情绪色调：默契的沉默 / 互相骂娘 / 不咸不淡的玩笑 / 各自专心做各自的事 / 尴尬的善意\n\n聚焦于见面的瞬间切片，不需要考虑事件的后续发展或选项分支。每个关键词应呈现一个具体的、有画面感的开场瞬间。务必避免所有场景都是「对方在困难中伸出援手」的套路。"
+  },
+  "dimensions": [
+    {
+      "id": "qingliu_npc",
+      "name": "清流人物 — 知音四友",
+      "description": "狂客在长安城里的四位知音。每个人以不同的频率与狂客共振——李白的狂放、王维的寂静、郑虔的困顿、高适的不甘。每个 NPC 通过 linked_value_ids 指向其合法的情绪共鸣类型，实现事件剪枝。",
+      "values": [
+        {
+          "id": "LIBAI",
+          "name": "李白",
+          "tags": ["TARGET_NPC_LIBAI:wine_gourd"],
+          "operator_dsl": "",
+          "linked_value_ids": ["emotion_arrogance", "emotion_tranquility"]
+        },
+        {
+          "id": "WANGWEI",
+          "name": "王维",
+          "tags": ["VIBE_PHILOSOPHY_ZEN:temple_bell"],
+          "operator_dsl": "",
+          "linked_value_ids": ["emotion_tranquility", "emotion_sorrow"]
+        },
+        {
+          "id": "ZHENGQIAN",
+          "name": "郑虔",
+          "tags": ["ENV_NATURE_SNOWSTORM:lone_snow"],
+          "operator_dsl": "",
+          "linked_value_ids": ["emotion_anger", "emotion_sorrow"]
+        },
+        {
+          "id": "GAOSHI",
+          "name": "高适",
+          "tags": ["VIBE_THEME_MARTIAL:giant_roc"],
+          "operator_dsl": "",
+          "linked_value_ids": ["emotion_anger", "emotion_sorrow"]
+        }
+      ]
+    },
+    {
+      "id": "qingliu_emotion",
+      "name": "清流情绪共鸣 — 狂客的共振频率",
+      "description": "狂客与清流互动时触发的主导情绪。每个情绪值通过 linked_value_ids 与特定的 NPC 绑定，实现 4 NPC × 2 情绪 = 8 事件的精确剪枝。",
+      "values": [
+        {
+          "id": "emotion_arrogance",
+          "name": "狂傲共鸣",
+          "tags": ["ACTOR_EMOTION_ARROGANCE", "emotion_pair:pair_arrogance"],
+          "operator_dsl": "",
+          "scale": 1.0
+        },
+        {
+          "id": "emotion_tranquility",
+          "name": "宁静共鸣",
+          "tags": ["ACTOR_EMOTION_TRANQUILITY", "emotion_pair:pair_tranquility"],
+          "operator_dsl": "",
+          "scale": 1.0
+        },
+        {
+          "id": "emotion_anger",
+          "name": "愤懑共鸣",
+          "tags": ["ACTOR_EMOTION_ANGER", "emotion_pair:pair_anger"],
+          "operator_dsl": "",
+          "scale": 1.0
+        },
+        {
+          "id": "emotion_sorrow",
+          "name": "悲戚共鸣",
+          "tags": ["ACTOR_EMOTION_SORROW", "emotion_pair:pair_sorrow"],
+          "operator_dsl": "",
+          "scale": 1.0
+        }
+      ]
+    }
+  ]
+}
