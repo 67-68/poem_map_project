@@ -1,5 +1,12 @@
 # [unreleased]
 ## Added
+- **清流·焦虑** 事件库（4个事件：2 坊市 + 1 交游 + 1 独酌）
+  - [`tools/event_base_config_qingliu_jiaolv.json`](tools/event_base_config_qingliu_jiaolv.json) — 事件配置，单维度 `jiaolv_scenario`（4 值），`BURNOUT>50 & MONEY 10-50 & AMBITION 30-100` 通用需求，`store_to` 路由到 fangshi/jiaoyou/duzhuo
+  - [`tools/event_base_config_qingliu_jiaolv_sandbox.json`](tools/event_base_config_qingliu_jiaolv_sandbox.json) — 12 条叙事种子（每场景 3 条），单维度沙盒格式
+  - [`data/4_eras/747_kuangda/_qingliu_jiaolv_events.csv`](data/4_eras/747_kuangda/_qingliu_jiaolv_events.csv) — 生成输出，4 事件 + 4 选项（单选设计）
+  - 四个焦虑场景：status_tax（坊市的护城河 / 蜀锦袍子）、fomo_scam（情报贩子的杀猪盘）、illusion_control（赛博算命 / 胡僧玉佛）、doomsday_binge（鸩酒解渴 / 除夕买醉, scale=1.05）
+  - 通用选项结果：`burnout+3 / fatigue+5`，各场景 operator 以 `money 大额流失` + `情绪惩罚` 为核心
+  - Prompt 经 prompt-engineer 修复：移除过度拟合的具体比喻、消除「略带悲悯」与「不评判」的矛盾、叙事结构抽象为契约式约束
 - **清流·道心破碎** 事件库（10个事件：3 独酌 + 7 社交）
   - [`tools/event_base_config_qingliu_daoxin_posui.json`](tools/event_base_config_qingliu_daoxin_posui.json) — 事件配置，10个维度组合，`BURNOUT>70` 通用需求，`store_to` 路由到 duzhuo/jiaoyou/fangshi/baiye
   - [`tools/event_base_config_qingliu_daoxin_posui_sandbox.json`](tools/event_base_config_qingliu_daoxin_posui_sandbox.json) — 30 条种子文本（每事件 3 条）
