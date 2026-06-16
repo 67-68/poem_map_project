@@ -5,3 +5,6 @@
 qdrant_storage/
 .env
 *.pyc
+
+# 已经废弃对应API Key
+roo-code-settings.json
