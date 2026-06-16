@@ -18,6 +18,7 @@ import os
 import random
 import sys
 import time
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
@@ -55,6 +56,49 @@ from tools.event_generator.dsl_parser import scale_all_operators
 from tools.event_generator.scorer import extract_image_pool, is_valid_combination, pick_best_image
 
 import json
+
+# ════════════════════════════════════════════════════════════════
+# 数据类 — Pipeline 输出契约
+# ════════════════════════════════════════════════════════════════
+
+@dataclass
+class OptionRow:
+    """单个选项行的全部产物。"""
+    choice_id: str
+    text: str
+    dsl: str
+    requirement: str
+
+
+@dataclass
+class GenerationResult:
+    """生成一个事件的完整结果。统一 trial 和 production 两条管线的输出契约。"""
+    # ── 状态 ──
+    status: str       # "success" | "skip" | "fail"
+    error: str | None = None
+
+    # ── 组合标识 ──
+    uuid: str = ""
+    combined_scale: float = 1.0
+    scale_parts: list[str] = field(default_factory=list)
+    combos: list[DimensionCombo] = field(default_factory=list)
+    values_tuple: tuple = ()
+
+    # ── LLM 响应 ──
+    parsed: dict = field(default_factory=dict)
+    raw_response: str = ""
+
+    # ── 管线产物 ──
+    scaled_dsl: str = ""
+    context_extras: dict[str, str] | None = None
+    tags_to_use: list[str] = field(default_factory=list)
+    stored_to: str = ""
+    selected_image_item: ImageryItem | None = None
+
+    # ── 选项 ──
+    option_rows: list[OptionRow] = field(default_factory=list)
+
+
 # ════════════════════════════════════════════════════════════════
 # Plugin Hook 辅助函数
 # ════════════════════════════════════════════════════════════════
@@ -140,6 +184,521 @@ def _select_imagery_for_combo(
 
 
 # ════════════════════════════════════════════════════════════════
+# 核心管线 — 生成一个事件
+# ════════════════════════════════════════════════════════════════
+
+SHRINK_STEP = 20
+MIN_GAP = 10
+OPTION_SHRINK_STEP = 5
+
+
+def generate_one_event(
+    values_tuple: tuple,
+    cfg: EventPipelineConfig,
+    system_prompt: str,
+    llm: LLMClient,
+    sandbox: SandboxManager | None,
+    plugins: list[EventPromptPlugin],
+    image_dict: dict[str, ImageryItem],
+    scene_dim_id: str | None,
+    emotion_dim_id: str | None,
+    is_trial: bool = False,
+) -> GenerationResult:
+    """为一个维度组合生成一个完整事件。
+
+    这是 trial 和 production 两条管线的共同核心。调用方负责输出：
+      - trial: _print_generation_result() — 动态打印所有字段
+      - production: _write_result_to_csv() — 写入 CSV
+    """
+    # ── 计算标识符 ──
+    combined_scale = 1.0
+    scale_parts: list[str] = []
+    uuid_parts: list[str] = [cfg.id]
+    for val in values_tuple:
+        combined_scale *= val.scale
+        scale_parts.append(str(val.scale))
+        uuid_parts.append(val.id)
+    uuid = "_".join(uuid_parts).lower()
+    current_combos = _make_combos(cfg.dimensions, values_tuple)
+
+    # ── 自适应边界收缩状态（每组合独立重置） ──
+    current_min = cfg.word_count_min
+    current_max = cfg.word_count_max
+    current_option_max = cfg.option_word_count_max
+
+    # ── 提前计算不依赖 LLM 响应的属性 ──
+    sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
+    selected_image_item = _select_imagery_for_combo(current_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
+    stored_to = ""
+    for combo in current_combos:
+        if combo.value.stored_to:
+            stored_to = combo.value.stored_to
+            break
+
+    # ── 构建初始 user_prompt ──
+    user_prompt = build_user_prompt(
+        current_combos, cfg,
+        word_count_min=current_min, word_count_max=current_max,
+        option_word_count_max=current_option_max,
+        plugins=plugins,
+        sandbox_keywords_block=sandbox_block,
+        selected_image=selected_image_item,
+    )
+
+    # ── API 调用循环（重试 + 自适应收缩） ──
+    for attempt in range(cfg.max_retries + 1):
+        if attempt > 0:
+            print(f"  🔄 重试 {attempt}/{cfg.max_retries}...")
+            time.sleep(1)
+
+        # ── API 调用 ──
+        try:
+            response = llm.generate_event_text(system_prompt, user_prompt)
+        except Exception as e:
+            print(f"  ❌ API 调用失败: {e}")
+            if attempt < cfg.max_retries:
+                continue
+            return GenerationResult(
+                status="skip",
+                uuid=uuid, combined_scale=combined_scale,
+                scale_parts=scale_parts, combos=current_combos,
+                values_tuple=values_tuple,
+                stored_to=stored_to,
+                selected_image_item=selected_image_item,
+            )
+
+        parsed = parse_llm_response(response)
+
+        # ── 校验 ──
+        error = validate_response(
+            parsed, cfg,
+            override_min=cfg.word_count_min, override_max=cfg.word_count_max,
+            override_option_max=cfg.option_word_count_max,
+        )
+
+        # 🚨 额外校验：插件声明的字段必须在 parsed 中存在且非空
+        if error is None and plugins:
+            for plugin in plugins:
+                for field in plugin.get_extra_output_fields():
+                    val = parsed.get(field, "")
+                    if not val:
+                        extra = parsed.get("_extra", {})
+                        val = extra.get(field, "")
+                    if not val or not val.strip():
+                        error = f"缺少插件字段 '{field}'（{plugin.plugin_id} 要求）"
+                        print(f"  ❌ {error}")
+                        break
+                if error:
+                    break
+
+        if error is None:
+            # ════════════════════════════════════════════
+            # ✅ 校验通过 — 构建所有产物
+            # ════════════════════════════════════════════
+            title = parsed["title"]
+            description = parsed["description"]
+
+            # ── DSL 缩放 ──
+            operator_dsls = [val.operator_dsl for val in values_tuple]
+            try:
+                scaled_dsl = scale_all_operators(operator_dsls, combined_scale)
+            except ValueError as e:
+                print(f"  ❌ DSL 缩放失败: {e}")
+                return GenerationResult(
+                    status="fail", error=str(e),
+                    uuid=uuid, combined_scale=combined_scale,
+                    scale_parts=scale_parts, combos=current_combos,
+                    values_tuple=values_tuple, parsed=parsed,
+                    raw_response=response,
+                    stored_to=stored_to,
+                    selected_image_item=selected_image_item,
+                )
+
+            # ── Hook 3: 插件 context 富化 ──
+            context_extras = _build_plugin_context_extras(
+                plugins, current_combos, cfg, parsed, response,
+                combined_scale, uuid,
+            )
+
+            # 🚨 从 context_extras 剥离 failed_hint，它只用于 option_req 模板替换
+            failed_hint_val = context_extras.pop("failed_hint", "") if context_extras else ""
+
+            # 将 stored_to 注入 context_extras
+            if stored_to:
+                if context_extras is None:
+                    context_extras = {}
+                context_extras["store_to"] = stored_to
+
+            # ── 收集 tags ──
+            all_tags: list[str] = []
+            for combo in current_combos:
+                for tag in combo.value.tags:
+                    if tag.startswith("action:"):
+                        all_tags.append(tag)
+            tags_to_use = all_tags if all_tags else (cfg.universal_tags or ["bai_ye"])
+
+            # ── 构建选项行 ──
+            options = parsed.get("options", {})
+            option_rows: list[OptionRow] = []
+
+            if cfg.option_features:
+                for choice in cfg.option_features:
+                    # 文本
+                    if choice.fixed:
+                        opt_text = choice.text if choice.text.strip() else "（冷眼旁观）"
+                    else:
+                        opt_text = options.get(choice.id, "").strip()
+                        if not opt_text:
+                            opt_text = choice.text if choice.text.strip() else "（确认）"
+
+                    # 结果 DSL
+                    opt_dsl = _build_option_dsl(
+                        current_combos, choice,
+                        universal_result=cfg.universal_result or "",
+                    )
+
+                    # 🆕 管线直连：意象注入
+                    if selected_image_item:
+                        imagery_dsl = f"imagery_add(name={selected_image_item.id})"
+                        opt_dsl = f"{opt_dsl} | {imagery_dsl}" if opt_dsl else imagery_dsl
+
+                    # ── Hook 4: 插件选项结果 DSL 扩展 ──
+                    for plugin in plugins:
+                        try:
+                            extra = plugin.get_option_result_extras(current_combos, choice)
+                            if extra:
+                                opt_dsl = f"{opt_dsl} | {extra}" if opt_dsl else extra
+                        except Exception as e:
+                            print(f"  ⚠️ 插件 '{plugin.plugin_id}'.get_option_result_extras() 异常: {e}")
+
+                    # requirement
+                    opt_req = _build_option_requirement(
+                        choice, failed_hint_val,
+                        universal_option_requirement=cfg.universal_option_requirement or "",
+                    )
+
+                    option_rows.append(OptionRow(
+                        choice_id=choice.id,
+                        text=opt_text,
+                        dsl=opt_dsl,
+                        requirement=opt_req,
+                    ))
+            else:
+                # 无 option_features 时：回退到默认选项
+                default_dsl = scaled_dsl
+                if selected_image_item:
+                    imagery_dsl = f"imagery_add(name={selected_image_item.id})"
+                    default_dsl = f"{default_dsl} | {imagery_dsl}" if default_dsl else imagery_dsl
+                default_req = _build_option_requirement(
+                    OptionFeature(id="default"),
+                    failed_hint_val,
+                    universal_option_requirement=cfg.universal_option_requirement or "",
+                )
+                option_rows.append(OptionRow(
+                    choice_id="default",
+                    text="（确认）",
+                    dsl=default_dsl,
+                    requirement=default_req,
+                ))
+
+            # 黑名单现已通过内置 BlacklistPlugin.enrich_context() 自动更新
+            return GenerationResult(
+                status="success",
+                uuid=uuid, combined_scale=combined_scale,
+                scale_parts=scale_parts, combos=current_combos,
+                values_tuple=values_tuple,
+                parsed=parsed, raw_response=response,
+                scaled_dsl=scaled_dsl,
+                context_extras=context_extras,
+                tags_to_use=tags_to_use,
+                stored_to=stored_to,
+                selected_image_item=selected_image_item,
+                option_rows=option_rows,
+            )
+        else:
+            # ════════════════════════════════════════════
+            # ❌ 校验失败 — 自适应收缩 + 重试
+            # ════════════════════════════════════════════
+            print(f"  ❌ 验证失败: {error}")
+            if attempt < cfg.max_retries:
+                old_min, old_max = current_min, current_max
+                old_option_max = current_option_max
+                if "选项" in error and "过长" in error:
+                    current_option_max = max(current_option_max - OPTION_SHRINK_STEP, 5)
+                elif "选项" in error and "过短" in error:
+                    current_option_max = min(current_option_max + OPTION_SHRINK_STEP, cfg.option_word_count_max)
+                elif "过短" in error:
+                    current_min = min(current_min + SHRINK_STEP, current_max - MIN_GAP)
+                elif "过长" in error:
+                    current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
+                if current_min != old_min or current_max != old_max:
+                    print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
+                if current_option_max != old_option_max:
+                    print(f"  📐 自适应收缩(选项): {old_option_max} → {current_option_max}")
+                if current_min != old_min or current_max != old_max or current_option_max != old_option_max:
+                    sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
+                    user_prompt = build_user_prompt(
+                        current_combos, cfg,
+                        word_count_min=current_min, word_count_max=current_max,
+                        option_word_count_max=current_option_max,
+                        plugins=plugins,
+                        sandbox_keywords_block=sandbox_block,
+                        selected_image=selected_image_item,
+                    )
+                continue
+            print(f"  ⏭️ 跳过（已达最大重试次数）")
+            return GenerationResult(
+                status="skip",
+                uuid=uuid, combined_scale=combined_scale,
+                scale_parts=scale_parts, combos=current_combos,
+                values_tuple=values_tuple, parsed=parsed,
+                raw_response=response,
+                stored_to=stored_to,
+                selected_image_item=selected_image_item,
+            )
+
+    # 不应到达此处
+    return GenerationResult(
+        status="fail", error="未知错误",
+        uuid=uuid, combined_scale=combined_scale,
+        scale_parts=scale_parts, combos=current_combos,
+        values_tuple=values_tuple,
+        stored_to=stored_to,
+        selected_image_item=selected_image_item,
+    )
+
+
+# ════════════════════════════════════════════════════════════════
+# 动态字段打印 — Trial 模式输出
+# ════════════════════════════════════════════════════════════════
+
+def _print_generation_result(result: GenerationResult, cfg: EventPipelineConfig):
+    """动态打印 GenerationResult 的所有字段。
+
+    遍历 parsed 中的所有 key（title/description/options/summary/_extra），
+    确保插件新增字段后自动可见，无需修改此函数。
+    """
+    r = result
+
+    # ── 组合信息 ──
+    print(f"\n📦 组合: {r.uuid}")
+    print(f"  Scale: {'×'.join(r.scale_parts)} = {r.combined_scale}")
+
+    print(f"\n📋 维度详情:")
+    for combo in r.combos:
+        print(f"  - {combo.dimension.name}: {combo.value.name} ({combo.value.description})")
+
+    if r.stored_to:
+        print(f"\n📂 store_to 路由: {r.stored_to} (→ data/4_eras/{r.stored_to.replace('.', '/')}/)")
+    else:
+        print(f"\n📂 store_to 路由: (无 — 将使用 output_dir 默认路径)")
+
+    # ── raw response ──
+    print(f"\n📨 API Raw Response ({len(r.raw_response)} chars):")
+    print("-" * 40)
+    print(r.raw_response)
+    print("-" * 40)
+
+    # ── 选中意象 ──
+    if r.selected_image_item:
+        print(f"  🖼️  选中意象: {r.selected_image_item.name}")
+
+    # ── 🆕 动态展开 parsed 所有字段 ──
+    print(f"\n🔍 Parsed Result:")
+    # 固定字段
+    print(f"  title: {r.parsed.get('title', '')!r}")
+    print(f"  description: {r.parsed.get('description', '')!r}")
+
+    # summary 嵌套块
+    summary = r.parsed.get("summary", {})
+    if summary:
+        print(f"  summary:")
+        for k, v in summary.items():
+            print(f"    {k}: {v!r}")
+
+    # _extra 字段（插件 hook 2 注入）
+    extra = r.parsed.get("_extra", {})
+    if extra:
+        print(f"  _extra:")
+        for k, v in extra.items():
+            print(f"    {k}: {v!r}")
+
+    # options
+    options = r.parsed.get("options", {})
+    if options:
+        print(f"  options:")
+        for k, v in options.items():
+            print(f"    [{k}]: {v!r}")
+
+    # ── DSL ──
+    print(f"\n⚙️ 缩放后 DSL:")
+    if r.scaled_dsl:
+        print(f"  {r.scaled_dsl}")
+    else:
+        print(f"  (无操作)")
+
+    # ── context_extras ──
+    if r.context_extras:
+        print(f"\n📎 插件 context 富化: {r.context_extras}")
+
+    # ── CSV 预览（行为不变）──
+    print(f"\n📄 CSV 预览（不会写入文件）:")
+
+    # 构建 context 列（与 write_event_row 的内部 _build_context_column 一致的格式化）
+    tags_expr = ""
+    if r.tags_to_use:
+        tags_expr = "[" + "/".join(r.tags_to_use) + "]"
+    context = f"trigger_tags={tags_expr}|weight=10"
+    if cfg.era:
+        context += f"|era={cfg.era}"
+    if r.context_extras:
+        for k, v in r.context_extras.items():
+            if v:
+                context += f"|{k}={v}"
+
+    # event 行
+    requirement_col = cfg.universal_requirement if cfg.universal_requirement else ""
+    desc_csv = r.parsed.get("description", "").replace('"', '""')
+    desc_preview = desc_csv[:60] + "..." if len(desc_csv) > 60 else desc_csv
+    print(f'  random_event,{r.uuid},{context},{requirement_col},"{r.parsed.get("title", "")}","{desc_preview}",,,,,,')
+
+    # option 行
+    for opt in r.option_rows:
+        dsl_csv = opt.dsl.replace('"', '""')
+        req_csv = f'"{opt.requirement}"' if opt.requirement else ''
+        print(f'  >option,,,{req_csv},"{opt.text}","{dsl_csv}",,,,')
+        print(f"     option [{opt.choice_id}]: {opt.text}")
+
+
+# ════════════════════════════════════════════════════════════════
+# CSV 写入 — Production 模式输出
+# ════════════════════════════════════════════════════════════════
+
+def _write_result_to_csv(result: GenerationResult, writer, cfg: EventPipelineConfig) -> None:
+    """将 GenerationResult 写入 CSV writer。"""
+    r = result
+    write_event_row(
+        writer, r.uuid, r.parsed["title"], r.parsed["description"],
+        tags=r.tags_to_use, requirement=cfg.universal_requirement or "",
+        context_extras=r.context_extras or None,
+        era=cfg.era,
+    )
+    for opt in r.option_rows:
+        write_option_row(writer, opt.text, opt.dsl, requirement=opt.requirement)
+
+
+# ════════════════════════════════════════════════════════════════
+# 试运行模式
+# ════════════════════════════════════════════════════════════════
+
+def run_trial_mode(
+    combinations: list,
+    cfg: EventPipelineConfig,
+    system_prompt: str,
+    llm: LLMClient,
+    sandbox: SandboxManager | None,
+    plugins: list[EventPromptPlugin],
+    image_dict: dict[str, ImageryItem],
+    scene_dim_id: str | None,
+    emotion_dim_id: str | None,
+    args,
+) -> None:
+    """🧪 试运行：调 1 次 API，动态打印所有中间产物，不保存 CSV。"""
+    print("\n🧪 试运行模式 — 将实际调用 API 1 次，不保存任何文件")
+
+    # 随机或默认选择组合
+    if args.random and len(combinations) > 1:
+        values_tuple = random.choice(combinations)
+        print(f"  🎲 随机模式: 从 {len(combinations)} 个组合中随机选取")
+    else:
+        values_tuple = combinations[0]
+
+    result = generate_one_event(
+        values_tuple, cfg, system_prompt, llm, sandbox, plugins,
+        image_dict, scene_dim_id, emotion_dim_id,
+        is_trial=True,
+    )
+
+    if result.status == "success":
+        _print_generation_result(result, cfg)
+        print(f"\n✅ 试运行完成 — API 调用成功，未保存任何文件")
+    elif result.status == "skip":
+        print(f"\n⏭️ 试运行完成 — 已跳过，未保存任何文件")
+    else:
+        print(f"\n⚠️ 试运行完成 — 出现异常，未保存任何文件")
+
+
+# ════════════════════════════════════════════════════════════════
+# 生产模式
+# ════════════════════════════════════════════════════════════════
+
+def run_production_mode(
+    combinations: list,
+    cfg: EventPipelineConfig,
+    system_prompt: str,
+    llm: LLMClient,
+    sandbox: SandboxManager | None,
+    plugins: list[EventPromptPlugin],
+    image_dict: dict[str, ImageryItem],
+    scene_dim_id: str | None,
+    emotion_dim_id: str | None,
+    output_path: str,
+) -> None:
+    """🏭 生产模式：遍历所有组合，生成事件并写入 CSV。"""
+    success_count = 0
+    skip_count = 0
+    fail_count = 0
+
+    with open(output_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        write_csv_header(writer)
+
+        for idx, values_tuple in enumerate(combinations):
+            print(f"\n[{idx + 1}/{len(combinations)}] ", end="")
+
+            result = generate_one_event(
+                values_tuple, cfg, system_prompt, llm, sandbox, plugins,
+                image_dict, scene_dim_id, emotion_dim_id,
+            )
+
+            if result.status == "success":
+                print(f"{result.uuid}")
+                print(f"  Scale: {'×'.join(result.scale_parts)} = {result.combined_scale}")
+                if result.selected_image_item:
+                    print(f"  🖼️  选中意象: {result.selected_image_item.name}")
+                print(f"  ✅ title: {result.parsed.get('title', '')}")
+                desc_preview = result.parsed.get('description', '')[:60] + "..." if len(result.parsed.get('description', '')) > 60 else result.parsed.get('description', '')
+                print(f"     desc: {desc_preview}")
+                if result.scaled_dsl:
+                    print(f"     DSL: {result.scaled_dsl}")
+                else:
+                    print(f"     DSL: (无操作)")
+                if result.context_extras:
+                    print(f"     📎 插件 context: {result.context_extras}")
+                for opt in result.option_rows:
+                    print(f"     option [{opt.choice_id}]: {opt.text}")
+
+                _write_result_to_csv(result, writer, cfg)
+                success_count += 1
+
+            elif result.status == "skip":
+                print(f"{result.uuid} ⏭️ 跳过")
+                skip_count += 1
+
+            else:  # fail
+                print(f"{result.uuid} ❌ 失败")
+                fail_count += 1
+
+    print(f"\n{'=' * 40}")
+    print(f"📊 生成完成")
+    print(f"   成功: {success_count}")
+    print(f"   跳过: {skip_count}")
+    print(f"   失败: {fail_count}")
+    print(f"   输出: {output_path}")
+    print(f"{'=' * 40}")
+
+
+# ════════════════════════════════════════════════════════════════
 # 主流程
 # ════════════════════════════════════════════════════════════════
 
@@ -195,7 +754,6 @@ def main():
             sys.exit(1)
 
     # ── 内置黑名单插件：自动注入（无需 config 声明） ──
-    # 检查是否已被 config 显式声明，避免重复
     plugin_ids = [p.plugin_id for p in plugins]
     if "_builtin_blacklist" not in plugin_ids:
         blacklist_plugin = PLUGIN_REGISTRY.get("_builtin_blacklist")
@@ -267,7 +825,6 @@ def main():
 
     # ── 初始化沙盒缓存 ──
     sandbox: Optional[SandboxManager] = None
-    # 除非 dry-run，否则初始化沙盒（dry-run 没有 LLM 可用也没有必要）
     if not args.dry_run:
         sandbox = SandboxManager(
             config_path=args.config,
@@ -286,19 +843,17 @@ def main():
     print(f"\n📋 System Prompt ({len(system_prompt)} chars):")
     print("-" * 40)
     if args.trial:
-        # trial 模式完整打印
         print(system_prompt)
     else:
         print(system_prompt[:600] + "..." if len(system_prompt) > 600 else system_prompt)
     print("-" * 40)
 
+    # ── Dry-run ──
     if args.dry_run:
         print("\n🏁 Dry-run 模式，不会调用 API")
         first_values = combinations[0]
         first_combos = _make_combos(cfg.dimensions, first_values)
-        # 沙盒在 dry-run 模式下未初始化，跳过
         sandbox_block = ""
-        # 🆕 意象正交选择
         selected_image_item = _select_imagery_for_combo(first_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
         if selected_image_item:
             print(f"  🖼️  选中意象: {selected_image_item.name}")
@@ -315,544 +870,17 @@ def main():
         print("\n✅ Dry-run 完成")
         return
 
-    # ════════════════════════════════════════════════════════════════
-    # 试运行模式（--trial）
-    # ════════════════════════════════════════════════════════════════
-
+    # ── 路由到对应模式 ──
     if args.trial:
-        print("\n🧪 试运行模式 — 将实际调用 API 1 次，不保存任何文件")
-
-        # 随机或默认选择组合
-        if args.random and len(combinations) > 1:
-            values_tuple = random.choice(combinations)
-            print(f"  🎲 随机模式: 从 {len(combinations)} 个组合中随机选取")
-        else:
-            values_tuple = combinations[0]
-        combined_scale = 1.0
-        scale_parts = []
-        uuid_parts = [cfg.id]
-        for val in values_tuple:
-            combined_scale *= val.scale
-            scale_parts.append(str(val.scale))
-            uuid_parts.append(val.id)
-        uuid = "_".join(uuid_parts).lower()
-
-        current_combos = _make_combos(cfg.dimensions, values_tuple)
-
-        print(f"\n📦 组合: {uuid}")
-        print(f"  Scale: {'×'.join(scale_parts)} = {combined_scale}")
-
-        # 打印维度详情
-        print(f"\n📋 维度详情:")
-        for combo in current_combos:
-            print(f"  - {combo.dimension.name}: {combo.value.name} ({combo.value.description})")
-
-        # 🆕 打印 store_to 路由
-        stored_to = ""
-        for combo in current_combos:
-            if combo.value.stored_to:
-                stored_to = combo.value.stored_to
-                break
-        if stored_to:
-            print(f"\n📂 store_to 路由: {stored_to} (→ data/4_eras/{stored_to.replace('.', '/')}/)")
-        else:
-            print(f"\n📂 store_to 路由: (无 — 将使用 output_dir 默认路径)")
-
-        # ── 自适应边界收缩状态 ──
-        current_min = cfg.word_count_min
-        current_max = cfg.word_count_max
-        current_option_max = cfg.option_word_count_max
-        SHRINK_STEP = 20
-        MIN_GAP = 10
-        OPTION_SHRINK_STEP = 5
-
-        sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
-        # 🆕 意象正交选择
-        selected_image_item = _select_imagery_for_combo(current_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
-        if selected_image_item:
-            print(f"  🖼️  选中意象: {selected_image_item.name}")
-        user_prompt = build_user_prompt(
-            current_combos, cfg,
-            word_count_min=current_min, word_count_max=current_max,
-            option_word_count_max=current_option_max,
-            plugins=plugins,
-            sandbox_keywords_block=sandbox_block,
-            selected_image=selected_image_item,
+        run_trial_mode(
+            combinations, cfg, system_prompt, llm, sandbox, plugins,
+            image_dict, scene_dim_id, emotion_dim_id, args,
         )
-        print(f"\n📋 User Prompt ({len(user_prompt)} chars):")
-        print("-" * 40)
-        print(user_prompt)
-        print("-" * 40)
-
-        # ── API 调用（带重试 + 自适应收缩） ──
-        success = False
-        skip = False
-        for attempt in range(cfg.max_retries + 1):
-            if attempt > 0:
-                print(f"\n  🔄 重试 {attempt}/{cfg.max_retries}...")
-                time.sleep(1)
-
-            try:
-                print(f"\n🤖 调用 API ({cfg.api_model})...")
-                response = llm.generate_event_text(system_prompt, user_prompt)
-            except Exception as e:
-                print(f"  ❌ API 调用失败: {e}")
-                if attempt < cfg.max_retries:
-                    continue
-                print(f"  ⏭️ 跳过（已达最大重试次数）")
-                skip = True
-                break
-
-            # 打印原始响应
-            print(f"\n📨 API Raw Response ({len(response)} chars):")
-            print("-" * 40)
-            print(response)
-            print("-" * 40)
-
-            parsed = parse_llm_response(response)
-            print(f"\n🔍 Parsed Result:")
-            print(f"  title: {parsed['title']!r}")
-            print(f"  description: {parsed['description']!r}")
-            if parsed.get("options"):
-                for k, v in parsed["options"].items():
-                    print(f"  option [{k}]: {v!r}")
-
-            error = validate_response(
-                parsed, cfg,
-                override_min=cfg.word_count_min, override_max=cfg.word_count_max,
-                override_option_max=cfg.option_word_count_max,
-            )
-
-            # 🚨 额外校验：插件声明的字段必须在 parsed 中存在且非空
-            if error is None and plugins:
-                for plugin in plugins:
-                    for field in plugin.get_extra_output_fields():
-                        val = parsed.get(field, "")
-                        if not val:
-                            extra = parsed.get("_extra", {})
-                            val = extra.get(field, "")
-                        if not val or not val.strip():
-                            error = f"缺少插件字段 '{field}'（{plugin.plugin_id} 要求）"
-                            print(f"  ❌ {error}")
-                            break
-                    if error:
-                        break
-
-            if error is None:
-                print(f"\n✅ 校验通过")
-                title = parsed["title"]
-                description = parsed["description"]
-
-                # ── DSL 缩放 ──
-                operator_dsls = [val.operator_dsl for val in values_tuple]
-                try:
-                    scaled_dsl = scale_all_operators(operator_dsls, combined_scale)
-                except ValueError as e:
-                    print(f"  ❌ DSL 缩放失败: {e}")
-                    break
-
-                print(f"\n⚙️ 缩放后 DSL:")
-                if scaled_dsl:
-                    print(f"  {scaled_dsl}")
-                else:
-                    print(f"  (无操作)")
-
-                # ── CSV 预览（使用与 write_event_row 一致的格式化）──
-                print(f"\n📄 CSV 预览（不会写入文件）:")
-
-                # ── Hook 3: 插件 context 富化 ──
-                context_extras = _build_plugin_context_extras(
-                    plugins, current_combos, cfg, parsed, response,
-                    combined_scale, uuid,
-                )
-
-                # 🚨 从 context_extras 剥离 failed_hint，它只用于 option_req 模板替换
-                failed_hint_val = context_extras.pop("failed_hint", "") if context_extras else ""
-
-                # 🆕 将 stored_to 注入 context_extras（与正式 CSV 写入路径保持一致）
-                if stored_to:
-                    if context_extras is None:
-                        context_extras = {}
-                    context_extras["store_to"] = stored_to
-
-                if context_extras:
-                    print(f"📎 插件 context 富化: {context_extras}")
-
-                # 构建 context 列：优先从维度 values 的 tags 中收集 action 标签
-                all_tags = []
-                for combo in current_combos:
-                    for tag in combo.value.tags:
-                        if tag.startswith("action:"):
-                            all_tags.append(tag)
-                tags_to_use = all_tags if all_tags else (cfg.universal_tags or ["bai_ye"])
-                if tags_to_use:
-                    tags_expr = "[" + "/".join(tags_to_use) + "]"
-                else:
-                    tags_expr = ""
-                context = f"trigger_tags={tags_expr}|weight=10"
-                if cfg.era:
-                    context += f"|era={cfg.era}"
-                if context_extras:
-                    for k, v in context_extras.items():
-                        if v:
-                            context += f"|{k}={v}"
-
-                # event 行（实际 CSV 格式）
-                requirement_col = cfg.universal_requirement if cfg.universal_requirement else ""
-                desc_csv = description.replace('"', '""')  # CSV 双引号转义
-                desc_preview = desc_csv[:60] + "..." if len(desc_csv) > 60 else desc_csv
-                print(f'  random_event,{uuid},{context},{requirement_col},"{title}","{desc_preview}",,,,,,')
-
-                # ── option 行（per-option result/requirement + 固定选项支持）──
-                # 每个选项独立计算 result DSL 和 requirement
-                options = parsed.get("options", {})
-                if cfg.option_features:
-                    for choice in cfg.option_features:
-                        # 文本：固定选项用 choice.text，AI 选项用 parsed response（有 fallback）
-                        if choice.fixed:
-                            opt_text = choice.text if choice.text.strip() else "（冷眼旁观）"
-                        else:
-                            opt_text = options.get(choice.id, "").strip()
-                            if not opt_text:
-                                opt_text = choice.text if choice.text.strip() else "（确认）"
-
-                        # 结果 DSL：维度开销（按 accept_influence 过滤）+ per-option result
-                        opt_dsl = _build_option_dsl(
-                            current_combos, choice,
-                            universal_result=cfg.universal_result or "",
-                        )
-
-                        # ── 🆕 管线直连：将 selected_image_item.id 注入 option DSL ──
-                        if selected_image_item:
-                            imagery_dsl = f"imagery_add(name={selected_image_item.id})"
-                            opt_dsl = f"{opt_dsl} | {imagery_dsl}" if opt_dsl else imagery_dsl
-
-                        # ── Hook 4: 插件选项结果 DSL 扩展 ──
-                        for plugin in plugins:
-                            try:
-                                extra = plugin.get_option_result_extras(current_combos, choice)
-                                if extra:
-                                    opt_dsl = f"{opt_dsl} | {extra}" if opt_dsl else extra
-                            except Exception as e:
-                                print(f"  ⚠️ 插件 '{plugin.plugin_id}'.get_option_result_extras() 异常: {e}")
-
-                        dsl_csv = opt_dsl.replace('"', '""')
-
-                        # requirement：per-option（或 universal fallback），含模板替换
-                        opt_req = _build_option_requirement(
-                            choice, failed_hint_val,
-                            universal_option_requirement=cfg.universal_option_requirement or "",
-                        )
-                        req_csv = f'"{opt_req}"' if opt_req else ''
-
-                        print(f'  >option,,,{req_csv},"{opt_text}","{dsl_csv}",,,,')
-                else:
-                    # 无 option_features 时：用默认选项 + universal fallback
-                    dsl_to_use = scaled_dsl
-                    if selected_image_item:
-                        imagery_dsl = f"imagery_add(name={selected_image_item.id})"
-                        dsl_to_use = f"{dsl_to_use} | {imagery_dsl}" if dsl_to_use else imagery_dsl
-                    dsl_csv = dsl_to_use.replace('"', '""')
-                    opt_req = _build_option_requirement(
-                        OptionFeature(id="default"),
-                        failed_hint_val,
-                        universal_option_requirement=cfg.universal_option_requirement or "",
-                    )
-                    req_csv = f'"{opt_req}"' if opt_req else ''
-                    print(f'  >option,,,{req_csv},"（确认）","{dsl_csv}",,,,')
-
-                # 黑名单现已通过内置 BlacklistPlugin.enrich_context() 自动更新
-                success = True
-                break
-            else:
-                print(f"\n❌ 校验失败: {error}")
-                if attempt < cfg.max_retries:
-                    # ── 自适应边界收缩 ──
-                    old_min, old_max = current_min, current_max
-                    old_option_max = current_option_max
-                    if "选项" in error and "过长" in error:
-                        current_option_max = max(current_option_max - OPTION_SHRINK_STEP, 5)
-                    elif "选项" in error and "过短" in error:
-                        current_option_max = min(current_option_max + OPTION_SHRINK_STEP, cfg.option_word_count_max)
-                    elif "过短" in error:
-                        current_min = min(current_min + SHRINK_STEP, current_max - MIN_GAP)
-                    elif "过长" in error:
-                        current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
-                    if current_min != old_min or current_max != old_max:
-                        print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
-                    if current_option_max != old_option_max:
-                        print(f"  📐 自适应收缩(选项): {old_option_max} → {current_option_max}")
-                    if current_min != old_min or current_max != old_max or current_option_max != old_option_max:
-                        # 重试时 sandbox 重新随机 pick，获得不同的创作种子
-                        sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
-                        user_prompt = build_user_prompt(
-                            current_combos, cfg,
-                            word_count_min=current_min, word_count_max=current_max,
-                            option_word_count_max=current_option_max,
-                            plugins=plugins,
-                            sandbox_keywords_block=sandbox_block,
-                            selected_image=selected_image_item,
-                        )
-                    continue
-                print(f"  ⏭️ 跳过（已达最大重试次数）")
-                skip = True
-                break
-
-        if success:
-            print(f"\n✅ 试运行完成 — API 调用成功，未保存任何文件")
-        elif skip:
-            print(f"\n⏭️ 试运行完成 — 已跳过，未保存任何文件")
-        else:
-            print(f"\n⚠️ 试运行完成 — 出现异常，未保存任何文件")
-        return
-
-    # ── 执行生成 ──
-    success_count = 0
-    skip_count = 0
-    fail_count = 0
-
-    with open(output_path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        write_csv_header(writer)
-
-        for idx, values_tuple in enumerate(combinations):
-            # Scale: 所有维度值的 scale 乘积
-            combined_scale = 1.0
-            scale_parts = []
-            uuid_parts = [cfg.id]
-            for val in values_tuple:
-                combined_scale *= val.scale
-                scale_parts.append(str(val.scale))
-                uuid_parts.append(val.id)
-            uuid = "_".join(uuid_parts).lower()
-
-            # 组装 DimensionCombo 列表
-            current_combos = _make_combos(cfg.dimensions, values_tuple)
-
-            print(f"\n[{idx + 1}/{len(combinations)}] {uuid}")
-            print(f"  Scale: {'×'.join(scale_parts)} = {combined_scale}")
-
-            # ── 自适应边界收缩状态（每组合独立重置） ──
-            current_min = cfg.word_count_min
-            current_max = cfg.word_count_max
-            current_option_max = cfg.option_word_count_max
-            SHRINK_STEP = 20
-            MIN_GAP = 10
-            OPTION_SHRINK_STEP = 5
-
-            sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
-            # 🆕 意象正交选择
-            selected_image_item = _select_imagery_for_combo(current_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
-            if selected_image_item:
-                print(f"  🖼️  选中意象: {selected_image_item.name}")
-            user_prompt = build_user_prompt(
-                current_combos, cfg,
-                word_count_min=current_min, word_count_max=current_max,
-                option_word_count_max=current_option_max,
-                plugins=plugins,
-                sandbox_keywords_block=sandbox_block,
-                selected_image=selected_image_item,
-            )
-
-            for attempt in range(cfg.max_retries + 1):
-                if attempt > 0:
-                    print(f"  🔄 重试 {attempt}/{cfg.max_retries}...")
-                    time.sleep(1)
-
-                try:
-                    response = llm.generate_event_text(system_prompt, user_prompt)
-                except Exception as e:
-                    print(f"  ❌ API 调用失败: {e}")
-                    if attempt < cfg.max_retries:
-                        continue
-                    print(f"  ⏭️ 跳过（已达最大重试次数）")
-                    skip_count += 1
-                    break
-
-                parsed = parse_llm_response(response)
-                # 🚨 校验始终使用原始字数边界，自适应收缩只影响 AI prompt 中的要求
-                error = validate_response(
-                    parsed, cfg,
-                    override_min=cfg.word_count_min, override_max=cfg.word_count_max,
-                    override_option_max=cfg.option_word_count_max,
-                )
-
-                # 🚨 额外校验：插件声明的字段必须在 parsed 中存在且非空
-                if error is None and plugins:
-                    for plugin in plugins:
-                        for field in plugin.get_extra_output_fields():
-                            val = parsed.get(field, "")
-                            if not val:
-                                extra = parsed.get("_extra", {})
-                                val = extra.get(field, "")
-                            if not val or not val.strip():
-                                error = f"缺少插件字段 '{field}'（{plugin.plugin_id} 要求）"
-                                print(f"  ❌ {error}")
-                                break
-                        if error:
-                            break
-
-                if error is None:
-                    title = parsed["title"]
-                    description = parsed["description"]
-                    print(f"  ✅ title: {title}")
-                    print(f"     desc: {description[:60]}...")
-
-                    # ── DSL 缩放：收集所有维度值的 operator_dsl ──
-                    operator_dsls = [val.operator_dsl for val in values_tuple]
-                    try:
-                        scaled_dsl = scale_all_operators(operator_dsls, combined_scale)
-                    except ValueError as e:
-                        print(f"  ❌ DSL 缩放失败: {e}")
-                        fail_count += 1
-                        break
-
-                    if scaled_dsl:
-                        print(f"     DSL: {scaled_dsl}")
-                    else:
-                        print(f"     DSL: (无操作)")
-
-                    # ── Hook 3: 插件 context 富化 ──
-                    context_extras = _build_plugin_context_extras(
-                        plugins, current_combos, cfg, parsed, response,
-                        combined_scale, uuid,
-                    )
-
-                    # 🚨 从 context_extras 剥离 failed_hint，它只用于 option_req 模板替换
-                    failed_hint_val = context_extras.pop("failed_hint", "") if context_extras else ""
-
-                    if context_extras:
-                        print(f"     📎 插件 context: {context_extras}")
-
-                    # 从维度 values 的 tags 中收集 action 标签
-                    all_tags = []
-                    for combo in current_combos:
-                        for tag in combo.value.tags:
-                            if tag.startswith("action:"):
-                                all_tags.append(tag)
-                    tags_to_use = all_tags if all_tags else (cfg.universal_tags or ["bai_ye"])
-
-                    # 🆕 从维度 values 中提取 stored_to（取第一个非空值）
-                    # 用于 CSV context 列的 store_to 路由指令，
-                    # Godot 端 STORE_TO_PATH_MAP 根据此值将 .tres 路由到对应目录。
-                    stored_to = ""
-                    for combo in current_combos:
-                        if combo.value.stored_to:
-                            stored_to = combo.value.stored_to
-                            break
-
-                    # 将 stored_to 注入 context_extras（追加到已有插件富化内容后）
-                    if stored_to:
-                        if context_extras is None:
-                            context_extras = {}
-                        context_extras["store_to"] = stored_to
-
-                    write_event_row(
-                        writer, uuid, title, description,
-                        tags=tags_to_use, requirement=cfg.universal_requirement,
-                        context_extras=context_extras or None,
-                        era=cfg.era,
-                    )
-
-                    # ── 写选项行（per-option result/requirement + 固定选项支持）──
-                    # 每个选项独立计算 result DSL 和 requirement
-                    options = parsed.get("options", {})
-                    if cfg.option_features:
-                        for choice in cfg.option_features:
-                            # 文本：固定选项用 choice.text，AI 选项用 parsed response（有 fallback）
-                            if choice.fixed:
-                                opt_text = choice.text if choice.text.strip() else "（冷眼旁观）"
-                            else:
-                                opt_text = options.get(choice.id, "").strip()
-                                if not opt_text:
-                                    opt_text = choice.text if choice.text.strip() else "（确认）"
-
-                            # 结果 DSL：维度开销（按 accept_influence 过滤）+ per-option result
-                            opt_dsl = _build_option_dsl(
-                                current_combos, choice,
-                                universal_result=cfg.universal_result or "",
-                            )
-
-                            # ── 🆕 管线直连：将 selected_image_item.id 注入 option DSL ──
-                            if selected_image_item:
-                                imagery_dsl = f"imagery_add(name={selected_image_item.id})"
-                                opt_dsl = f"{opt_dsl} | {imagery_dsl}" if opt_dsl else imagery_dsl
-
-                            # ── Hook 4: 插件选项结果 DSL 扩展 ──
-                            for plugin in plugins:
-                                try:
-                                    extra = plugin.get_option_result_extras(current_combos, choice)
-                                    if extra:
-                                        opt_dsl = f"{opt_dsl} | {extra}" if opt_dsl else extra
-                                except Exception as e:
-                                    print(f"  ⚠️ 插件 '{plugin.plugin_id}'.get_option_result_extras() 异常: {e}")
-
-                            # requirement：per-option（或 universal fallback），含模板替换
-                            opt_req = _build_option_requirement(
-                                choice, failed_hint_val,
-                                universal_option_requirement=cfg.universal_option_requirement or "",
-                            )
-
-                            write_option_row(writer, opt_text, opt_dsl, requirement=opt_req)
-                            print(f"     option [{choice.id}]: {opt_text}")
-                    else:
-                        # 回退：没有 option_features 时用默认选项 + universal fallback
-                        option_text = "（确认）"
-                        dsl_to_use = scaled_dsl
-                        if selected_image_item:
-                            imagery_dsl = f"imagery_add(name={selected_image_item.id})"
-                            dsl_to_use = f"{dsl_to_use} | {imagery_dsl}" if dsl_to_use else imagery_dsl
-                        opt_req = _build_option_requirement(
-                            OptionFeature(id="default"),
-                            failed_hint_val,
-                            universal_option_requirement=cfg.universal_option_requirement or "",
-                        )
-                        write_option_row(writer, option_text, dsl_to_use, requirement=opt_req)
-                        print(f"     option: {option_text}")
-
-                    # 黑名单现已通过内置 BlacklistPlugin.enrich_context() 自动更新
-                    success_count += 1
-                    break
-                else:
-                    print(f"  ❌ 验证失败: {error}")
-                    if attempt < cfg.max_retries:
-                        # ── 自适应边界收缩（阶梯增压）──
-                        old_min, old_max = current_min, current_max
-                        old_option_max = current_option_max
-                        if "选项" in error and "过长" in error:
-                            current_option_max = max(current_option_max - OPTION_SHRINK_STEP, 5)
-                        elif "选项" in error and "过短" in error:
-                            current_option_max = min(current_option_max + OPTION_SHRINK_STEP, cfg.option_word_count_max)
-                        elif "过短" in error:
-                            current_min = min(current_min + SHRINK_STEP, current_max - MIN_GAP)
-                        elif "过长" in error:
-                            current_max = max(current_max - SHRINK_STEP, current_min + MIN_GAP)
-                        if current_min != old_min or current_max != old_max:
-                            print(f"  📐 自适应收缩: [{old_min}-{old_max}] → [{current_min}-{current_max}]")
-                        if current_option_max != old_option_max:
-                            print(f"  📐 自适应收缩(选项): {old_option_max} → {current_option_max}")
-                        if current_min != old_min or current_max != old_max or current_option_max != old_option_max:
-                            sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
-                            user_prompt = build_user_prompt(
-                                current_combos, cfg,
-                                word_count_min=current_min, word_count_max=current_max,
-                                option_word_count_max=current_option_max,
-                                plugins=plugins,
-                                sandbox_keywords_block=sandbox_block,
-                                selected_image=selected_image_item,
-                            )
-                        continue
-                    print(f"  ⏭️ 跳过（已达最大重试次数）")
-                    skip_count += 1
-                    break
-
-    print(f"\n{'=' * 40}")
-    print(f"📊 生成完成")
-    print(f"   成功: {success_count}")
-    print(f"   跳过: {skip_count}")
-    print(f"   失败: {fail_count}")
-    print(f"   输出: {output_path}")
-    print(f"{'=' * 40}")
+    else:
+        run_production_mode(
+            combinations, cfg, system_prompt, llm, sandbox, plugins,
+            image_dict, scene_dim_id, emotion_dim_id, output_path,
+        )
 
 
 if __name__ == "__main__":
