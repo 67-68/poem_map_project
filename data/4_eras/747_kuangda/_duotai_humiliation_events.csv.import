@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://sv5myq6w7cow"
+
+[deps]
+
+files=["res://data/4_eras/747_kuangda/_duotai_humiliation_events.uuid.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.context.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.requirements.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.title.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.description.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.en.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.results.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.en.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.en.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.en.translation"]
+
+source_file="res://data/4_eras/747_kuangda/_duotai_humiliation_events.csv"
+dest_files=["res://data/4_eras/747_kuangda/_duotai_humiliation_events.uuid.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.context.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.requirements.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.title.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.description.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.en.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.results.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.en.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.en.translation", "res://data/4_eras/747_kuangda/_duotai_humiliation_events.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
