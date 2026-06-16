@@ -34,7 +34,7 @@ value = 15
 
 [sub_resource type="Resource" id="Resource_ct0it"]
 script = ExtResource("5_mkce4")
-imagery_name = "TARGET_OBJECT_SWORD:giant_roc"
+imagery_name = "VIBE_THEME_MARTIAL:giant_roc"
 
 [sub_resource type="Resource" id="Resource_qgwon"]
 script = ExtResource("6_cjouk")
@@ -93,7 +93,7 @@ value = 5
 
 [sub_resource type="Resource" id="Resource_wu46f"]
 script = ExtResource("5_mkce4")
-imagery_name = "TARGET_OBJECT_SWORD:giant_roc"
+imagery_name = "VIBE_THEME_MARTIAL:giant_roc"
 
 [sub_resource type="Resource" id="Resource_awscy"]
 script = ExtResource("6_cjouk")

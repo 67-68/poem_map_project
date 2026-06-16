@@ -2,26 +2,58 @@
   "id": "kuangke_qingliu",
   "name": "狂客×清流事件库 — 理想主义共振腔",
   "era": "747_kuangda",
-  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。他住在城西下杜城的陋室里，穷得连炭都买不起。\n\n但长安城里有一群人——李白、王维、郑虔、高适——那些被称为「清流」的文人。狂客（kuangda_kuangke）的杜甫在面对他们时，选择的不是求助，不是攀附，而是不假思索地与他们共振。\n\n狂客的选项不关心生存。它不给你钱，不给你庇护。它要的是精神上的对等——你接过李白递来的酒壶，你在王维的画上添一笔，你在乱葬岗陪郑虔骂街。结果呢？你的躯壳在加速衰败（HEALTH-5，FATIGUE+，BURNOUT-），但你的灵魂在飞升（INSPIRATION+，TRANQUILITY+，Tier 3 意象）。\n\n这是一个死亡螺旋：你和你的清流知音一起，在艺术的高烧里把生存的燃料烧光。",
-  "ai_persona": "你是一位以冷峻写实的笔触书写唐代文人之间「知音共振」的叙事作家。你的文字克制而深情——不煽情、不滥情，用白描手法呈现文人之间的默契与尴尬。\n\n你笔下的清流与狂客互动不是求助与施舍，而是两个灵魂在同一频率上的共振。狂客不会道谢，不会感激涕零——他们会接过酒壶一饮而尽，会在画上添一笔就走，会骂一句「诗人也要吃饭」然后继续写诗。他们之间的对话不需要说完，剩下的一半留白便是理解的全部。\n\n你深知真正的知音不在于对方帮你做了什么，而在于对方懂你在想什么。叙事要让读者感受到那种「不必说出口」的默契——用动作、环境和克制的对话，而不是直接告诉读者该感受什么。\n\n【反面教材】绝对不要写以下场景：\n- 杜甫流泪、道谢、感恩戴德（这是狂客的反面）\n- NPC 俯视或施舍（知音之间没有上下位）\n- 任何「自此发奋图强」「下定决心」的立志宣言（狂客不立志，他只做当下该做的事）",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。他住在城西下杜城的陋室里，穷得连炭都买不起。\n\n长安城里有一群人——李白、王维、郑虔、高适——那些被称为「清流」的文人。他们各自以不同的方式燃烧着自己的才华，同样在困顿中不肯低头。\n\n狂客（kuangda_kuangke）的杜甫在面对这些清流朋友时，选择了一条不经济的路：不求助、不攀附、不计算得失。他回应的方式不是索取，而是共振——像音叉碰到同一个频率，不需要理由就开始振动。\n\n这不是互助。这是一个死亡螺旋：两个燃烧的灵魂碰到一起，烧得更旺，也烧得更快。躯壳在加速衰败，但灵魂在那一瞬间飞升。",
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代文人之间「知音共振」的叙事作家。你的文字克制而深情——不煽情、不滥情，用白描手法呈现文人之间的默契与尴尬。\n\n你笔下的清流与狂客互动不是求助与施舍，而是两个灵魂在同一频率上的共振。狂客回应的本质是一个不假思索的肢体动作——承接对方递来的任何物品，在对方未完成的事上留下自己的痕迹，用一句粗粝的市井话消解对方的情绪。对话不需要说完，剩下的一半留白便是理解的全部。\n\n你深知真正的知音不在于对方帮你做了什么，而在于对方懂你在想什么。叙事要让读者感受到那种「不必说出口」的默契——用动作、环境和克制的对话，而不是直接告诉读者该感受什么。\n\n【反面教材】绝对不要写以下场景：\n- 杜甫流泪、道谢、感恩戴德（这是狂客的反面）\n- NPC 俯视或施舍（知音之间没有上下位）\n- 任何「自此发奋图强」「下定决心」的立志宣言（狂客不立志，他只做当下该做的事）\n- 杜甫用语言安慰对方（狂客用行动共振，不用语言抚慰）\n\n【重要规则】每次叙事中必须直接提到当前 NPC 的名字（李白/王维/郑虔/高适），禁止使用「这位朋友」「那位清流」「对方」等模糊代称。",
   "prompt_features": [
-    {"id": "stateless_narrative", "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"},
-    {"id": "tone_restrained_warmth", "text": "保持克制而深情的叙事语气——不煽情、不滥情。用动作和环境说话，不写大段的心理活动。"},
-    {"id": "forbid_god_view_psychology", "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"},
-    {"id": "forbid_comedy_exaggeration", "text": "禁止喜剧化夸张。保持叙事的严肃性和文学性。"},
-    {"id": "anti_repetition", "text": "避免重复使用相同的句式、动作动词和意象。每个事件的叙事语言应有所不同。"},
-    {"id": "single_option_design", "text": "本事件库每个事件只有一条选项支（狂客专用）。不要写其他选项。场景的设计要体现出「这个时刻只有这样的人才会这样回应」的不可替代感。"},
-    {"id": "no_survival_reward", "text": "狂客的回应不寻求生存资源。场景的核心矛盾在于精神满足与肉体痛苦之间的张力——选择狂客意味着你选择了诗，放弃了饭。"},
-    {"id": "final_directive", "text": "牢记：这是理想主义共振腔。NPC不是拯救者，不是施舍者，是另一个同样在困顿中燃烧的诗人。狂客的选择不是理性的，但它是真实的。"}
+    {
+      "id": "stateless_narrative",
+      "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"
+    },
+    {
+      "id": "tone_restrained_warmth",
+      "text": "保持克制而深情的叙事语气——不煽情、不滥情。用动作和环境说话，不写大段的心理活动。"
+    },
+    {
+      "id": "forbid_god_view_psychology",
+      "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"
+    },
+    {
+      "id": "forbid_comedy_exaggeration",
+      "text": "禁止喜剧化夸张。保持叙事的严肃性和文学性。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "避免重复使用相同的句式、动作动词和意象。每个事件的叙事语言应有所不同。"
+    },
+    {
+      "id": "single_option_design",
+      "text": "本事件库每个事件只有一条选项支（狂客专用）。不要写其他选项。场景的设计要体现出「这个时刻只有这样的人才会这样回应」的不可替代感。"
+    },
+    {
+      "id": "no_survival_reward",
+      "text": "狂客的回应不寻求生存资源。场景的核心矛盾在于精神满足与肉体痛苦之间的张力——选择狂客意味着你选择了诗，放弃了饭。"
+    },
+    {
+      "id": "final_directive",
+      "text": "牢记：这是理想主义共振腔。NPC不是拯救者，不是施舍者，是另一个同样在困顿中燃烧的诗人。狂客的选择不是理性的，但它是真实的。"
+    }
   ],
   "fact_features": [
-    {"id": "kuangke_qingliu_facts", "text": "天宝十三载（754年），李白已离开长安浪迹江湖，但偶尔路过。王维任尚书右丞，半官半隐。郑虔任广文馆博士，极其清贫。高适在河西节度使幕府任职，尚未飞黄腾达。杜甫困居长安下杜城陋室。"},
-    {"id": "kuangke_trait", "text": "狂客（kuangda_kuangke）的杜甫在面对清流朋友时，不寻求帮助，不计算利弊。他们的回应直接、不假思索、充满对抗性的平等——像是对着山谷喊一声，不期待回音，但确信谷里有同样的声音在共振。"}
+    {
+      "id": "kuangke_qingliu_facts",
+      "text": "天宝十三载（754年），李白已离开长安浪迹江湖，但偶尔路过。王维任尚书右丞，半官半隐。郑虔任广文馆博士，极其清贫。高适在河西节度使幕府任职，尚未飞黄腾达。杜甫困居长安下杜城陋室。"
+    },
+    {
+      "id": "kuangke_trait",
+      "text": "狂客（kuangda_kuangke）的杜甫在面对清流朋友时，不寻求帮助，不计算利弊。他们的回应直接、不假思索、充满对抗性的平等——像是对着山谷喊一声，不期待回音，但确信谷里有同样的声音在共振。"
+    }
   ],
-  "universal_tags": ["kuangke_qingliu"],
-  "universal_requirement": "prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
+  "universal_tags": [
+    "kuangke_qingliu"
+  ],
+  "universal_requirement": "trait_has(name=kuangda_kuangke)|prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
   "universal_result": "",
-  "universal_option_requirement": "trait_has(name=kuangda_kuangke)",
+  "universal_option_requirement": "trait_has(name=kuangda_kuangke; failed_hint=\"{failed_hint}\")",
   "word_count_min": 40,
   "word_count_max": 200,
   "option_word_count_max": 30,
@@ -35,7 +67,10 @@
       "scene_dimension_id": "qingliu_npc"
     }
   },
-  "plugins": ["emotion_pair_imagery"],
+  "plugins": [
+    "emotion_pair_imagery",
+    "failed_hint"
+  ],
   "emotion_pairs": {
     "pair_tranquility": {
       "desc": "宁静共鸣 — 默契的同行者",
@@ -70,22 +105,30 @@
     {
       "id": "kuangke_option",
       "name": "狂客专属回应",
-      "requirement": "trait_has(name=kuangda_kuangke)",
-      "desc": "狂客的回应方式：不道谢、不解释、不计算。直接行动或简单一句话，像是对着山谷喊一声，确信谷里有同样的声音。",
+      "requirement": "trait_has(name=kuangda_kuangke; failed_hint=\"{failed_hint}\")",
+      "prompt": "用30字以内写一个简短的动作或对话描述——玩家以【狂客】状态回应清流朋友。\n\n狂客回应的本质：不解释、不道谢、不计算。像是对着山谷喊一声，确信谷里有同样的声音在共振。\n\n【情绪-行为映射矩阵】根据当前 NPC 与情绪，选择对应的行为姿态（不是具体动作，是姿态）：\n| NPC | 狂傲(ARROGANCE) | 宁静(TRANQUILITY) | 愤懑(ANGER) | 悲戚(SORROW) |\n|------|------------------|---------------------|---------------|---------------|\n| 李白 | 张扬·不回头 | 笃定·不解释 | — | — |\n| 王维 | — | 克制·不出声 | — | 温柔·不追问 |\n| 郑虔 | — | — | 粗粝·不劝解 | 平淡·不同情 |\n| 高适 | — | — | 干脆·不拖沓 | 安静·不说话 |\n\n行为姿态的含义（向量级约束）：\n- 「张扬」：动作幅度大、不征求许可、直接占有空间\n- 「笃定」：动作慢而确定、不需要理由、不等待回应\n- 「克制」：用最小幅度的动作完成回应、话越少越好\n- 「温柔」：用行动补全对方未说完的部分、不点破\n- 「粗粝」：用粗话或暴力动作共振、不试图让对方平静\n- 「平淡」：用一个日常到近乎冷漠的动作传递温度\n- 「干脆」：一个动作解决、不拖泥带水\n- 「安静」：物理上靠近、不说话、时间本身就是回应\n\n【绝对禁止】冷眼旁观式回应——不写「你看着他」「你默默看着」「你站在一旁注视着」。狂客是参与者，不是旁观者。\n【绝对禁止】感恩道谢、推辞客套、肉麻抒情。\n【正面引导】用一个动作或一句简短的话完成回应——行动比言辞有力，动作越具体越好。\n【重要】选项文本中必须提到当前 NPC 的名字（如李白/王维/郑虔/高适），不能只写「他」「清流朋友」等模糊指代。",
+      "text": "（走向前，接过酒壶）",
       "result": "prop_sub(name=FATIGUE; val=20) | prop_sub(name=BURNOUT; val=20) | prop_add(name=INSPIRATION; val=15) | emo_add(name=TRANQUILITY; val=10)",
-      "fixed": true,
-      "accept_influence": [],
-      "pair_role": "branch_A",
+      "fixed": false,
+      "accept_influence": [
+        "qingliu_npc",
+        "qingliu_emotion"
+      ],
       "plugins": {
         "emotion_pair_imagery": {
           "branch_role": "branch_A"
+        },
+        "failed_hint": {
+          "style": "inner_monologue",
+          "max_chars": 40,
+          "context": "玩家没有狂客特性（kuangda_kuangke），无法选择狂客专属的回应。\n\n【核心原则：因果归责】failed_hint 必须让玩家感受到「因为我没有选择狂客，所以我今天站在这里，只能看着，不能动」。\n\n【写作铁律】\n1. 必须出现转折词「但是/但/却」——转折是因果链的铰链\n2. 必须包含性格判断——「他不是那种人」「他没有那种疯劲」「他选择了计算」\n3. 必须出现一个未遂的动作——手伸出去但收回、话到嘴边但咽回、脚迈出去但转身\n4. 禁止纯环境描写、禁止纯生理反应（咳血、发抖、腿软）、禁止没有性格判断的犹豫\n\n【Good Case】\n「他看见李白扔过来的酒壶——手已经伸出去了。但他不是一个不计后果的人。他的手在袖口里攥紧，酒壶落在地上。」\n→ 好在哪里：本能想接(未遂动作) → 性格判断(不是那种人) → 后果(酒壶落地)。三步都在说「这是你选的性格，这是你选的后果。」\n\n【Bad Case — 因果链断裂】\n「他站在门槛内，想迈出那一步，却想起昨夜咳出的血丝，于是退回屋里，轻轻掩上了门。」\n→ 坏在哪里：只描述了犹豫。咳出的血丝是生理细节，不是性格因果。玩家不知道这是自己选的。"
         }
       }
     }
   ],
   "sandbox_feature": {
     "id": "sandbox_kuangke_qingliu",
-    "text": "请生成该维度组合下可能的开头场景描述。只需描述事件如何开场——玩家在什么时间、什么地点、因何缘由遇到了这位清流朋友，以及当时两人之间的氛围。\n\n【关键约束】每个场景只能有一条狂客选项支。请不要生成其他选项。\n\n【多样性强制要求】场景必须覆盖以下维度的交叉组合：\n- 时间：冬日雪后 / 春日黄昏 / 夏夜 / 秋晨 / 雨后 / 月下 / 傍晚 / 深夜\n- 地点：酒肆角落 / 佛寺回廊 / 曲江池畔 / 陋巷井台 / 官驿走廊 / 城郊荒冢 / 辋川竹馆 / 下杜城门口\n- 互动触发方式：偶遇 / 被喊住 / 上门拜访 / 路遇 / 同去某处 / 各自在同一个地方碰见\n- 情绪色调：默契的沉默 / 互相骂娘 / 不咸不淡的玩笑 / 各自专心做各自的事 / 尴尬的善意\n\n聚焦于见面的瞬间切片，不需要考虑事件的后续发展或选项分支。每个关键词应呈现一个具体的、有画面感的开场瞬间。务必避免所有场景都是「对方在困难中伸出援手」的套路。"
+    "text": "请生成该维度组合下的事件——包含场景描述和一条狂客选项。\n\n【场景要求】用40-200字描述开场瞬间——玩家在什么时间、什么地点、因何缘由遇到了这位清流朋友，以及当时两人之间的氛围。场景描述中必须明确写出对应 NPC 的名字（李白/王维/郑虔/高适），禁止使用「一位清流朋友」「对方」等模糊代称。聚焦于见面的切片瞬间，不需要考虑事件的前因后果。\n\n【选项要求】为这个场景写一条狂客专属选项（用30字以内）。狂客的回应必须是**主动的、参与的、互动的**——接动作、递东西、回话、并肩行动。绝对禁止「你站在一旁看着」「你默默注视」「你冷眼旁观」等旁观者姿态。狂客是这场互动的参与者，不是观众。\n\n【叙事设计模式 — 正确骨架（不是范例，不要复制其中任何具体动作）】\n模式A「并肩」：NPC在做某事 → 你不需要被邀请，直接加入做同一件事\n模式B「承接」：NPC递来/扔来/推来一个物件 → 你接住并用它做点什么\n模式C「补全」：NPC留下了一个未完成的痕迹（画、信、话） → 你在上面留下自己的痕迹\n模式D「消解」：NPC在抱怨/愤怒/焦虑 → 你用一句粗粝的市井话或一个暴力动作消解它\n模式E「并置」：NPC沉默 → 你沉默。两个人各做各的事，但身体在同一个空间里\n\n【反面范例 — 冷眼旁观 ❌】\n- 「你站在一旁看着他没有说话」\n- 「你默默注视着他远去的背影」\n- 「你靠在门框上冷眼看着这一切」\n\n【关键约束】每个事件只有一条狂客选项支，没有其他选项。场景和选项加起来构成一个完整的知音共振瞬间。\n\n【多样性强制要求】场景必须覆盖以下维度的交叉组合：\n- 时间：冬日雪后 / 春日黄昏 / 夏夜 / 秋晨 / 雨后 / 月下 / 傍晚 / 深夜\n- 地点：酒肆角落 / 佛寺回廊 / 曲江池畔 / 陋巷井台 / 官驿走廊 / 城郊荒冢 / 辋川竹馆 / 下杜城门口\n- 互动触发方式：偶遇 / 被喊住 / 上门拜访 / 路遇 / 同去某处 / 各自在同一个地方碰见\n- 情绪色调：默契的沉默 / 互相骂娘 / 不咸不淡的玩笑 / 各自专心做各自的事 / 尴尬的善意\n\n务必避免所有场景都是「对方在困难中伸出援手」的套路。可以参考 sandbox JSON 文件中的示例。\n\n{dynamic_blacklist}"
   },
   "dimensions": [
     {
@@ -96,30 +139,50 @@
         {
           "id": "LIBAI",
           "name": "李白",
-          "tags": ["TARGET_NPC_LIBAI:wine_gourd"],
+          "tags": [
+            "TARGET_NPC_LIBAI:wine_gourd"
+          ],
           "operator_dsl": "",
-          "linked_value_ids": ["emotion_arrogance", "emotion_tranquility"]
+          "linked_value_ids": [
+            "emotion_arrogance",
+            "emotion_tranquility"
+          ]
         },
         {
           "id": "WANGWEI",
           "name": "王维",
-          "tags": ["VIBE_PHILOSOPHY_ZEN:temple_bell"],
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell"
+          ],
           "operator_dsl": "",
-          "linked_value_ids": ["emotion_tranquility", "emotion_sorrow"]
+          "linked_value_ids": [
+            "emotion_tranquility",
+            "emotion_sorrow"
+          ]
         },
         {
           "id": "ZHENGQIAN",
           "name": "郑虔",
-          "tags": ["ENV_NATURE_SNOWSTORM:lone_snow"],
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow"
+          ],
           "operator_dsl": "",
-          "linked_value_ids": ["emotion_anger", "emotion_sorrow"]
+          "linked_value_ids": [
+            "emotion_anger",
+            "emotion_sorrow"
+          ]
         },
         {
           "id": "GAOSHI",
           "name": "高适",
-          "tags": ["VIBE_THEME_MARTIAL:giant_roc"],
+          "tags": [
+            "VIBE_THEME_MARTIAL:giant_roc"
+          ],
           "operator_dsl": "",
-          "linked_value_ids": ["emotion_anger", "emotion_sorrow"]
+          "linked_value_ids": [
+            "emotion_anger",
+            "emotion_sorrow"
+          ]
         }
       ]
     },
@@ -131,28 +194,40 @@
         {
           "id": "emotion_arrogance",
           "name": "狂傲共鸣",
-          "tags": ["ACTOR_EMOTION_ARROGANCE", "emotion_pair:pair_arrogance"],
+          "tags": [
+            "ACTOR_EMOTION_ARROGANCE",
+            "emotion_pair:pair_arrogance"
+          ],
           "operator_dsl": "",
           "scale": 1.0
         },
         {
           "id": "emotion_tranquility",
           "name": "宁静共鸣",
-          "tags": ["ACTOR_EMOTION_TRANQUILITY", "emotion_pair:pair_tranquility"],
+          "tags": [
+            "ACTOR_EMOTION_TRANQUILITY",
+            "emotion_pair:pair_tranquility"
+          ],
           "operator_dsl": "",
           "scale": 1.0
         },
         {
           "id": "emotion_anger",
           "name": "愤懑共鸣",
-          "tags": ["ACTOR_EMOTION_ANGER", "emotion_pair:pair_anger"],
+          "tags": [
+            "ACTOR_EMOTION_ANGER",
+            "emotion_pair:pair_anger"
+          ],
           "operator_dsl": "",
           "scale": 1.0
         },
         {
           "id": "emotion_sorrow",
           "name": "悲戚共鸣",
-          "tags": ["ACTOR_EMOTION_SORROW", "emotion_pair:pair_sorrow"],
+          "tags": [
+            "ACTOR_EMOTION_SORROW",
+            "emotion_pair:pair_sorrow"
+          ],
           "operator_dsl": "",
           "scale": 1.0
         }

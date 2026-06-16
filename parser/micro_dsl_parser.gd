@@ -313,7 +313,12 @@ static func _exec_trait_req(parsed: NamedDSLParser.ParseResult, raw: String, sho
 		Logging.err("特性需求缺少 name 参数: %s" % raw)
 		return null
 	
-	return _create_trait_has_requirement(name, should_have)
+	var req = _create_trait_has_requirement(name, should_have)
+	# 提取可选的 failed_hint 参数（由插件动态生成，通过模板替换注入）
+	var fh = NamedDSLParser.get_str_param(parsed, "failed_hint", "")
+	if not fh.is_empty():
+		req.failed_hint = fh
+	return req
 
 # Flag Requirement: bool
 static func _exec_flag_req_bool(parsed: NamedDSLParser.ParseResult, raw: String, is_has: bool) -> FlagRequirement:

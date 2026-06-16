@@ -89,7 +89,7 @@ value = 5
 
 [sub_resource type="Resource" id="Resource_h3gm0"]
 script = ExtResource("8_vt8hk")
-imagery_name = "TARGET_OBJECT_SWORD:giant_roc"
+imagery_name = "VIBE_THEME_MARTIAL:giant_roc"
 
 [sub_resource type="Resource" id="Resource_0ubyj"]
 script = ExtResource("5_kglax")
