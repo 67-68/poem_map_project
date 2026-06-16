@@ -1,0 +1,133 @@
+{
+  "id": "qingliu_jiaolv",
+  "name": "清流-焦虑事件库 — 焦虑驱动的短视行为",
+  "era": "747_kuangda",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n这一次，焦虑攥住了他的脊骨——不是普通的忧愁，是那种「时间不够了」的恐慌。投出去的十几封干谒诗石沉大海，下个月的房租还没有着落，老家的妻儿还在等他寄钱回去。他明明知道有些事是坑，但焦虑像蚂蚁一样啃着他的理智：万一呢？万一这件锦袍真的能敲开相府的门？万一这个情报贩子真的认识吏部的人？\n\n这些事件的共同前提是：你已经被焦虑（倦怠值爆表）压得喘不过气，手里还有一点钱——刚好够你做出一个错误的决定。\n\n这不是世界在碾压你。这是你自己的焦虑在剥削你。",
+  "ai_persona": "你是一位以冷峻白描书写唐代底层文人困境的叙事作家。你的文字克制——不煽情、不滥情、不对角色的选择做道德裁判。\n\n你深谙焦虑者的行为逻辑：理智尚未完成推演，身体已经开始行动。你的文笔要呈现这种被紧迫感支配的状态——不是愚蠢，不是贪婪，是恐惧把决策权从大脑移交给了手指。\n\n【反面教材】绝对不要写以下场景：\n- 任何「理性分析后做出最优选择」的冷静叙事（焦虑者不冷静）\n- 任何形式的「事后庆幸」或「幸亏当时没冲动」\n- NPC 直白地告诉玩家「你这是被骗了」（焦虑者的悲剧在于——没人骗他，是他自己骗自己）\n- 任何「这次过后我绝不会再这样」的立志宣言",
+  "prompt_features": [
+    {
+      "id": "tone_cold_despair",
+      "text": "保持冷峻克制的叙事语气。叙述者只呈现事实和动作，不做道德判断，不流露同情或轻蔑——任何情绪化的叙事立场都会削弱焦虑的纯粹性。"
+    },
+    {
+      "id": "forbid_god_view_psychology",
+      "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"
+    },
+    {
+      "id": "environment_as_emotion",
+      "text": "用环境细节承载情绪。焦虑只能通过以下三类信号呈现：(1) 身体的微观失控——重复性小动作、不自觉的触碰、节奏紊乱；(2) 注意力的异常分配——该关注的事务被忽略，无关细节被过度凝视；(3) 对时间与沉默的异常敏感。\n\n⛔ 反面教材：禁止直接列举「手指」「呼吸」「铜钱」「价格标签」等已在任何示例中出现过的具体物件——你必须选择新的、不重复的感官通道和身体部位来承载焦虑。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "句式、动词和感官通道不得与沙盒种子雷同。若种子以视觉细节开场，你的叙事应从触觉或听觉切入。禁止在连续生成中重复使用相同的动词组合和场景节奏。"
+    },
+    {
+      "id": "final_directive",
+      "text": "【核心契约】每一段叙事必须同时满足：(a) 事件中的每个 NPC 台词和细节都暗示玩家「你可以拒绝」；(b) 但叙事节奏本身让读者感到「拒绝根本不是一个可选项」。不得在文字中解释为什么——让沉默和动作本身的节拍来制造这种无法逃脱的引力。\n\n【叙事设计模式 — 正确骨架（不是范例，不要复制任何具体内容）】\n模式A「展示漏洞→精准打击」：对方先说出你一个不为外人所知的弱点（投了几次、等了多久），然后才报价\n模式B「创造入场券幻想」：对方卖的不是实质帮助，是「让你看起来像应该被认真对待的人」的符号\n模式C「信息不对称优势」：对方掌握你无法验证的信息，以「其他人都在做」制造紧迫感\n模式D「时间的压力容器」：对方在自然存在的焦虑节拍（除夕、黄昏、散席时）下递出一个即刻可得的出口\n\n{dynamic_blacklist}"
+    }
+  ],
+  "fact_features": [],
+  "universal_tags": [
+    "qingliu_jiaolv"
+  ],
+  "universal_requirement": "prop_gt(name=burnout; val=50) | prop_gt(name=money; val=10) | prop_lt(name=money; val=50) | prop_gt(name=ambition; val=30) | prop_lt(name=ambition; val=100)",
+  "universal_result": "prop_add(name=burnout; val=3) | prop_add(name=fatigue; val=5)",
+  "universal_option_requirement": "",
+  "word_count_min": 60,
+  "word_count_max": 250,
+  "option_word_count_max": 35,
+  "max_retries": 3,
+  "api_model": "deepseek-v4-pro",
+  "output_dir": "data/4_eras/747_kuangda/",
+  "apply_dimension_imagery": false,
+  "plugins": [],
+  "option_features": [
+    {
+      "id": "opt_jiaolv",
+      "prompt": "用30字以内写一个简短的【焦虑驱动】动作描述。\n\n结构要求（必须同时满足）：\n(1) 动作本身是支付/交出/跟随/取用中的一个——任何涉及转移财物或身体位移的动作；\n(2) 动作之前有一个 ≤5 字的微观停顿信号：可以是任何微小的、表示犹豫的物理细节，但不得使用沙盒种子或已生成事件中出现过的具体物件或身体部位；\n(3) 停顿之后，动作以某种不可逆的节奏完成——不是「终于」，是一个让读者知道「回不了头了」的物理瞬间。\n\n⛔ 绝对禁止：\n- 禁止写理性分析或权衡利弊的过程\n- 禁止写「最终还是」「咬咬牙」「一狠心」等陈词滥调\n- 禁止写慷慨激昂的消费姿态（这不是阔绰，是绝望）\n- 禁止动作完成后的后悔描写\n- 禁止在停顿信号中使用与沙盒种子或已生成事件相同的具体物件或身体部位\n\n核心任务：写一个身体在理智之前行动的决定性瞬间。",
+      "text": "（焦虑驱动的短视行为）",
+      "result": "",
+      "fixed": false,
+      "plugins": {},
+      "requirement": ""
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "jiaolv_scenario",
+      "name": "焦虑场景 — 四种短视行为的自我剥削模式",
+      "description": "四个基于焦虑驱动的自我剥削模式。核心矛盾：焦虑（倦怠值过高）让你明知是坑却控制不住往下跳。不是被骗——是你自己骗自己。",
+      "blacklist_config": {
+        "tracked_field": "description",
+        "tracked_field_description": "事件描述正文（包括场景细节、对话内容、动作描写）",
+        "max_items": 20
+      },
+      "values": [
+        {
+          "id": "status_tax",
+          "name": "身份税 — 社交准入的符号勒索",
+          "description": "一个中间人向你推销一个华而不实的身份符号——一件衣物、一件器物、一次短暂的身份租赁。它不承诺实质帮助，只承诺「让你看起来像应该被认真对待的人」。交易的不平等在于：你付出生存资料，得到的是可能毫无用处的符号。焦虑来源：连续社交挫败。",
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_jiaolv": "prop_sub(name=money; val=20) | prop_sub(name=health; val=5) | emo_add(name=SORROW; val=8) | prop_add(name=fatigue; val=8)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "fomo_scam",
+          "name": "内幕税 — 信息不对等的杀猪盘",
+          "description": "一个声称掌握稀缺内幕信息（考官偏好、补录名额、关系网动向）的中间人，以「别人都做了」的紧迫感向你索要高额对价。信息真假无法验证，但你会买——因为不买的代价是「万一」。焦虑来源：竞争信息不对等。",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:incense_ash",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_jiaolv": "prop_sub(name=money; val=25) | prop_sub(name=inspiration; val=5) | emo_add(name=ANGER; val=10) | prop_add(name=burnout; val=5)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "illusion_control",
+          "name": "操控感税 — 对失控的无效赎回",
+          "description": "一个陌生人通过展示超自然信息获取能力（说出你的过往细节、预测你的未来走势），向你兜售一个宣称能「改命」的物件。你购买的不是物件本身，是「我至少做了点什么」的幻觉。焦虑来源：长期努力无果，对命运彻底失控。",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_jiaolv": "prop_sub(name=money; val=18) | emo_sub(name=SORROW; val=10) | prop_add(name=burnout; val=8) | prop_add(name=fatigue; val=5)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "doomsday_binge",
+          "name": "末日税 — 绝望驱动的报复性消费",
+          "description": "在一股时间/金钱/责任的三重压力同时抵达的瞬间，你用最后一笔可支配资源换取一次即刻的感官解脱。不是放纵——是投降。花掉这笔钱的真实动机不是享受，是把「明天的烦恼」丢到明天。焦虑来源：对时间流逝的恐慌、对远方的愧疚、当下的极致孤独。",
+          "tags": [
+            "TARGET_NPC_LIBAI:wine_gourd",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:main:duzhuo"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_jiaolv": "prop_sub(name=money; val=15) | prop_add(name=DRUNK; val=20) | prop_add(name=inspiration; val=10) | emo_add(name=SORROW; val=15) | prop_sub(name=health; val=8)"
+          },
+          "scale": 1.05,
+          "stored_to": "747_kuangda.duzhuo"
+        }
+      ]
+    }
+  ]
+}

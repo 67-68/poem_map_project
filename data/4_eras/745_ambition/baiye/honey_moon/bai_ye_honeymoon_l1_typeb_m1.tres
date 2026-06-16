@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dq8xlfn3ssthd"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dukhtnkthp6yf"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_6weew"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_h7xj1"]
