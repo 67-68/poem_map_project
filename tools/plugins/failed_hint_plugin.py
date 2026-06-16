@@ -40,9 +40,9 @@ FailedHintPlugin — 配置驱动的失败提示插件（统一版）
 向后兼容:
   如果 option 没有 plugins.failed_hint 配置，插件不会为该选项注入任何内容。
 
-
-不同使用叙事模式速查
-1. 参考DOCUMENTATIONS/events/prompt_engineering_principles.md line 234, 让玩家知道他们自己的选择导致了这个结果
+注意: 本插件会自动注入 failed_hint 的「因果归责」写作质量规则（四铁律 + Good/Bad Case），
+无论 option_features 是否有 per-option 配置。这些规则是静态的，来自
+DOCUMENTATIONS/events/prompt_engineering_principles.md Section 7。
 """
 
 from tools.plugin_base import EventPromptPlugin, PluginContext, register_plugin
@@ -55,6 +55,35 @@ _STYLE_MAP = {
     "objective_fact": "使用客观陈述",
     "inner_monologue": "使用 NPC 内心独白",
 }
+
+# ── 静态因果归责质量规则（始终注入） ──
+_CAUSAL_ATTRIBUTION_RULES = """failed_hint 的写作必须遵循「因果归责」模型：
+
+【核心原则】
+failed_hint 的唯一职责是：让玩家感受到「因为我选择了这条路，所以我今天站在这里，只能看着，不能动。」
+它不是补充说明，不是环境描写，也不是角色当下的生理反应。
+
+【因果链模型】
+玩家的历史选择 → 当前的人格/性格 (trait) → 面对这个时刻的无力 (failed_hint)
+
+failed_hint 必须同时触及两层：
+1. 性格层：因为你不是狂客 / 因为你选择了算计 —— 这是你现在的样子
+2. 后果层：所以这个动作你做不了 / 这句话你说不出口 / 这个机会不属于你 —— 这是你现在的处境
+
+【写作铁律】
+1. 必须出现转折词「但是/但/却/不是」——转折词是因果链的铰链
+2. 必须包含性格判断——「他不是那种人」「他没有那种疯劲」「他选择了计算」
+3. 必须出现一个未遂的动作——手伸出去但收回、话到嘴边但咽回、脚迈出去但转身
+4. 禁止纯环境描写、禁止纯生理反应（咳血、发抖、腿软）、禁止没有性格判断的犹豫
+
+【Good Case — 因果归责正确】
+「他看见李白扔过来的酒壶——手已经伸出去了。但他不是一个不计后果的人。他的手在袖口里攥紧，酒壶落在地上。」
+→ 好在哪里：本能想接(未遂动作) → 性格判断(不是那种人) → 后果(酒壶落地)。三步都在说「这是你选的性格，这是你选的后果。」
+
+【Bad Case — 因果链断裂】
+「他站在门槛内，想迈出那一步，却想起昨夜咳出的血丝，于是退回屋里，轻轻掩上了门。」
+→ 坏在哪里：只描述了犹豫。咳出的血丝是生理细节，不是性格因果。玩家不知道这是自己选的。
+"""
 
 
 class FailedHintPlugin(EventPromptPlugin):
@@ -94,42 +123,69 @@ class FailedHintPlugin(EventPromptPlugin):
     def get_prompt_fragment(self, combos, cfg) -> str:
         """根据 init() 阶段缓存的规则动态构建 Prompt 文本。
 
-        如果没有任何 option 配置了 plugins.failed_hint，返回空字符串。
+        始终注入因果归责质量规则（四铁律 + Good/Bad Case）。
+        如果有 per-option 配置，额外注入格式要求。
         """
+        parts = [_CAUSAL_ATTRIBUTION_RULES]
+
         hint_rules = getattr(self, '_hint_rules', {})
-        if not hint_rules:
-            return ""
+        if hint_rules:
+            lines = ["\n请为每个选项输出独立的 failed_hint 字段。格式要求如下：\n"]
+            for opt_id, rule in hint_rules.items():
+                sub_parts = [f"针对选项 '{opt_id}' 的 failed_hint 规则："]
+                if rule["context"]:
+                    sub_parts.append(f"· {rule['context']}")
+                sub_parts.append(f"· {rule['style_desc']}")
+                sub_parts.append(f"· 控制在{rule['max_chars']}字以内")
+                lines.append("\n".join(sub_parts))
+            lines.append("\n输出格式（请严格按照以下命名输出每个字段）：")
+            for opt_id in hint_rules:
+                lines.append(f"failed_hint_{opt_id}: <内容>")
+            parts.append("\n".join(lines))
 
-        lines = ["另外，请输出一个 failed_hint 字段。\n"]
-
-        for opt_id, rule in hint_rules.items():
-            parts = [f"针对选项 '{opt_id}' 的 failed_hint 规则："]
-            if rule["context"]:
-                parts.append(f"· {rule['context']}")
-            parts.append(f"· {rule['style_desc']}")
-            parts.append(f"· 控制在{rule['max_chars']}字以内")
-            lines.append("\n".join(parts))
-
-        lines.append("\n输出格式：\nfailed_hint: <内容>")
-        return "\n".join(lines)
+        return "\n".join(parts)
 
     # ── Hook 2: 额外字段声明 ──
 
     def get_extra_output_fields(self) -> list[str]:
-        return ["failed_hint"]
+        """改为动态返回 per-option 字段名列表。
+
+        从 self._hint_rules 的 keys 生成 failed_hint_{opt_id} 字段名，
+        使 LLM 能意识到要为每个有 failed_hint 配置的选项输出独立字段。
+        """
+        hint_rules = getattr(self, '_hint_rules', {})
+        if not hint_rules:
+            return []
+        return [f"failed_hint_{opt_id}" for opt_id in hint_rules]
 
     # ── Hook 3: CSV Context 富化 ──
 
     def enrich_context(self, ctx: PluginContext) -> dict[str, str]:
-        """从 parsed 中提取 failed_hint 字段到 context_extras。
+        """从 parsed 中提取所有 failed_hint_{opt_id} 字段到 context_extras。
 
-        先尝试顶层字段，再回退到 _extra（兼容不同解析路径）。
+        遍历 self._hint_rules 的 keys，为每个有 failed_hint 配置的选项
+        提取对应的 LLM 输出字段。
         """
-        hint = ctx.parsed.get("failed_hint", "")
-        if not hint:
-            extra = ctx.parsed.get("_extra", {})
-            hint = extra.get("failed_hint", "")
-        return {"failed_hint": hint} if hint else {}
+        result = {}
+        hint_rules = getattr(self, '_hint_rules', {})
+        for opt_id in hint_rules:
+            key = f"failed_hint_{opt_id}"
+            hint = ctx.parsed.get(key, "")
+            if not hint:
+                extra = ctx.parsed.get("_extra", {})
+                hint = extra.get(key, "")
+            if hint:
+                result[key] = hint
+        return result
+
+    # ── Hook 4: 提供上下文内联提示 ──
+
+    def get_option_result_extras(self, ctx: PluginContext) -> dict[str, str]:
+        """废弃：之前把 per-option failed_hint 注入 result DSL，现在不再需要。
+
+        failed_hint 现在在 main.py 中已改为每选项动态查找，无需插件侧提前组装。
+        """
+        return {}
 
 
 # ════════════════════════════════════════════════════════════════

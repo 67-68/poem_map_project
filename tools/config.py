@@ -288,6 +288,7 @@ class PipelineDimensionValue(BaseModel):
     description: str = ""
     scale: float = 1.0
     operator_dsl: str = ""
+    option_results: dict[str, str] = {}
     linked_value_ids: list[str] = []
     tags: list[str] = []
     stored_to: str = ""
