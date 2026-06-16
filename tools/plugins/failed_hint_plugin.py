@@ -39,6 +39,10 @@ FailedHintPlugin — 配置驱动的失败提示插件（统一版）
 
 向后兼容:
   如果 option 没有 plugins.failed_hint 配置，插件不会为该选项注入任何内容。
+
+
+不同使用叙事模式速查
+1. 参考DOCUMENTATIONS/events/prompt_engineering_principles.md line 234, 让玩家知道他们自己的选择导致了这个结果
 """
 
 from tools.plugin_base import EventPromptPlugin, PluginContext, register_plugin
