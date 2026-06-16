@@ -320,9 +320,6 @@ def generate_one_event(
                 combined_scale, uuid,
             )
 
-            # 🚨 从 context_extras 剥离 failed_hint，它只用于 option_req 模板替换
-            failed_hint_val = context_extras.pop("failed_hint", "") if context_extras else ""
-
             # 将 stored_to 注入 context_extras
             if stored_to:
                 if context_extras is None:
@@ -371,9 +368,15 @@ def generate_one_event(
                         except Exception as e:
                             print(f"  ⚠️ 插件 '{plugin.plugin_id}'.get_option_result_extras() 异常: {e}")
 
+                    # 🆕 per-option failed_hint：从 context_extras 中按 option id 查找
+                    # 注意：使用 .pop() 防止重复消费/污染后续选项
+                    per_option_hint = ""
+                    if context_extras:
+                        per_option_hint = context_extras.pop(f"failed_hint_{choice.id}", "")
+
                     # requirement
                     opt_req = _build_option_requirement(
-                        choice, failed_hint_val,
+                        choice, per_option_hint,
                         universal_option_requirement=cfg.universal_option_requirement or "",
                     )
 
@@ -804,7 +807,7 @@ def main():
     # ── 准备输出 ──
     output_dir = args.output_dir or cfg.output_dir
     os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, f"{cfg.id}_events.csv")
+    output_path = os.path.join(output_dir, f"_{cfg.id}_events.csv")
     print(f"📝 输出: {output_path}")
 
     # ── 初始化 LLM ──

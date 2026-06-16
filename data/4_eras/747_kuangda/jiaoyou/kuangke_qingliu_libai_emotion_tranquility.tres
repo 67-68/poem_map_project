@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dotuoyx3lmlqy"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_sdxov"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_4jhhd"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_6xykw"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_d5bec"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_ufxur"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_1n3he"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_wwaoh"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_wc413"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="9_ra2ie"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_in6vo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_ryamk"]
+
+[sub_resource type="Resource" id="Resource_sdxov"]
+script = ExtResource("3_6xykw")
+str_props = "FATIGUE"
+value = -20
+
+[sub_resource type="Resource" id="Resource_4jhhd"]
+script = ExtResource("3_6xykw")
+str_props = "BURNOUT"
+value = -20
+
+[sub_resource type="Resource" id="Resource_6xykw"]
+script = ExtResource("3_6xykw")
+str_props = "INSPIRATION"
+value = 15
+
+[sub_resource type="Resource" id="Resource_d5bec"]
+script = ExtResource("4_d5bec")
+value = 10
+
+[sub_resource type="Resource" id="Resource_ufxur"]
+script = ExtResource("5_ufxur")
+operators = Array[ExtResource("2_4jhhd")]([SubResource("Resource_sdxov"), SubResource("Resource_4jhhd"), SubResource("Resource_6xykw"), SubResource("Resource_d5bec")])
+
+[sub_resource type="Resource" id="Resource_1n3he"]
+script = ExtResource("6_1n3he")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_wwaoh"]
+script = ExtResource("7_wwaoh")
+choice_result = SubResource("Resource_ufxur")
+requirement = SubResource("Resource_1n3he")
+description = "你爬上土台，在李白身旁躺下，也闭上眼。"
+
+[sub_resource type="Resource" id="Resource_wc413"]
+script = ExtResource("6_1n3he")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_ra2ie"]
+script = ExtResource("9_ra2ie")
+property = "ambition"
+value = 30
+operator = 1
+
+[sub_resource type="Resource" id="Resource_in6vo"]
+script = ExtResource("9_ra2ie")
+property = "ambition"
+value = 100
+
+[sub_resource type="Resource" id="Resource_ryamk"]
+script = ExtResource("10_in6vo")
+operators = Array[ExtResource("8_wc413")]([SubResource("Resource_wc413"), SubResource("Resource_ra2ie"), SubResource("Resource_in6vo")])
+
+[resource]
+script = ExtResource("11_ryamk")
+requirement = SubResource("Resource_ryamk")
+era = "747_kuangda"
+_target_tags = Array[String](["kuangke_qingliu", "action:main:jiaoyou"])
+options = Array[ExtResource("1_sdxov")]([SubResource("Resource_wwaoh")])
+uuid = "kuangke_qingliu_libai_emotion_tranquility"
+name = "土台上的白昼星辰"
+description = "“你猜我在看什么？”没等你回答，他自己接下去：“什么都没看。就是躺着。”然后他往旁边挪了挪，让出一块干裂的黄土。土台边沿的野草被晒得卷了边，远处的蝉鸣像一根绷紧的弦。"
