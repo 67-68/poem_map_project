@@ -133,6 +133,12 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "random_event",
         "is_generated": true,
     },
+    {
+        "name": "清流钻营事件库",
+        "save_path": "res://data/4_eras/747_kuangda/_qingliu_zuanying_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
 ]
 
 # 🗺️ store_to 路径映射表

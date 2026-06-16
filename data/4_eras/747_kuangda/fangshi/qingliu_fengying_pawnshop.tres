@@ -64,7 +64,7 @@ value = true
 script = ExtResource("8_1kyx3")
 choice_result = SubResource("Resource_1kyx3")
 requirement = SubResource("Resource_i2wli")
-description = "他攥紧的拳头在袖中撑开，又缓缓松开。终是低下头。"
+description = "一把抓回字画卷轴，笔和纸扫落在地，转身大步跨出当铺门槛。"
 
 [sub_resource type="Resource" id="Resource_gnsff"]
 script = ExtResource("3_kno6i")
@@ -121,7 +121,7 @@ value = true
 script = ExtResource("8_1kyx3")
 choice_result = SubResource("Resource_m70g5")
 requirement = SubResource("Resource_a0lba")
-description = "他飞快扫一眼当铺内间——没有熟人。眼神暗下去。"
+description = "目光迅速扫向当铺内室门帘，从袖中摸出一枚开元通宝往柜上推去。"
 
 [sub_resource type="Resource" id="Resource_ylwm7"]
 script = ExtResource("3_kno6i")
@@ -164,7 +164,7 @@ operators = Array[ExtResource("2_hr578")]([SubResource("Resource_ylwm7"), SubRes
 [sub_resource type="Resource" id="Resource_apnob"]
 script = ExtResource("8_1kyx3")
 choice_result = SubResource("Resource_o1mit")
-description = "他点点头，从袖中摸出印泥，拇指在当票上按下去。"
+description = "沉默片晌，提起那支秃笔，在糙纸上落下一行。"
 
 [sub_resource type="Resource" id="Resource_ft1ml"]
 script = ExtResource("10_yc5iq")
@@ -189,8 +189,8 @@ operators = Array[ExtResource("9_i2wli")]([SubResource("Resource_ft1ml"), SubRes
 script = ExtResource("13_8apsj")
 requirement = SubResource("Resource_gyaq0")
 era = "747_kuangda"
-_target_tags = Array[String](["qingliu_fengying", "action:main:fangshi"])
+_target_tags = Array[String](["action:main:fangshi"])
 options = Array[ExtResource("1_3uouy")]([SubResource("Resource_yc5iq"), SubResource("Resource_junl5"), SubResource("Resource_apnob")])
 uuid = "qingliu_fengying_pawnshop"
-name = "掌柜的算盘声"
-description = "木柜台被袖口磨出油亮的光。他把那卷泛黄的字画递上去，掌柜连绳结都没解，手指在算盘上拨了三下。“够你吃半个月。”算珠落定，掌柜抬起眼皮，“上次那件袍子也是这个价——你每次都这个时辰来，每次都这副表情。”"
+name = "当铺题诗"
+description = "西市当铺的柜台被无数人的手肘磨得油亮。掌柜从柜台后面抬起眼皮——他认得你。去年腊月你在这当了一件旧棉袍，开春又来当了一方洮砚。此刻你的字画卷轴尚未完全展开，他那根肥厚的手指已经压在画轴上，只露出半边题款。“你这幅画嘛——”他的目光从画上扫过，像在估一堆旧衣，“比上回那件袍子好点，但也好不到哪去。”他把价压到令人发指的低位，然后推过来一张糙纸和秃笔，“顺便题首诗夸夸我这当铺，我多给你二十文。”纸已经在桌案上铺好，笔尖已经干结。"

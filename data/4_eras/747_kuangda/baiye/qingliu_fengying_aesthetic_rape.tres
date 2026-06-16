@@ -64,7 +64,7 @@ value = true
 script = ExtResource("8_x8xsr")
 choice_result = SubResource("Resource_x8xsr")
 requirement = SubResource("Resource_sojlp")
-description = "手指在袖中蓦地攥住，几乎想夺回诗稿——但那个动作还没开始就散了，他松开了拳头。"
+description = "抓起诗稿，当着他的面撕成两半，纸屑落在他的砚台里。"
 
 [sub_resource type="Resource" id="Resource_4q1m7"]
 script = ExtResource("3_nca67")
@@ -121,7 +121,7 @@ value = true
 script = ExtResource("8_x8xsr")
 choice_result = SubResource("Resource_fk4sa")
 requirement = SubResource("Resource_61j6r")
-description = "目光扫过在场诸人，迅速估算谁能在考官面前帮忙说话——旋即垂下眼，没有。"
+description = "目光扫向考官身后那道门，想找个能递上话的熟人。"
 
 [sub_resource type="Resource" id="Resource_qgofc"]
 script = ExtResource("3_nca67")
@@ -169,7 +169,7 @@ operators = Array[ExtResource("2_00y1r")]([SubResource("Resource_qgofc"), SubRes
 [sub_resource type="Resource" id="Resource_aedch"]
 script = ExtResource("8_x8xsr")
 choice_result = SubResource("Resource_0oeqr")
-description = "他伸手接过了那支笔，蘸墨，在那个被朱笔圈出的诗眼上落了笔。没有停顿，也没有多余的话。"
+description = "从笔吏手中接过笔，在圈定的位置一笔一笔地改。"
 
 [sub_resource type="Resource" id="Resource_37jgs"]
 script = ExtResource("10_55a8l")
@@ -194,8 +194,8 @@ operators = Array[ExtResource("9_sojlp")]([SubResource("Resource_37jgs"), SubRes
 script = ExtResource("13_k4cyf")
 requirement = SubResource("Resource_cvuji")
 era = "747_kuangda"
-_target_tags = Array[String](["qingliu_fengying", "action:main:baiye"])
+_target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_dduhv")]([SubResource("Resource_55a8l"), SubResource("Resource_moajf"), SubResource("Resource_aedch")])
 uuid = "qingliu_fengying_aesthetic_rape"
-name = "朱批旧稿"
-description = "考官将你的诗稿推回桌案，朱笔圈住的正是全诗最得意的那一联。他没有解释为何要改，只是看向一旁负责誊抄的笔吏。你认得此人——上次干谒时，也是他在旁边记录。那时你曾主动为他润色过两首应酬诗。现在他望过来，嘴角没有笑意，眼神里是种平淡的了然。考官敲了敲砚台，笔吏已将墨研好，等你拿起笔来。窗外有雀鸟扑棱飞过，屋子里很静。"
+name = "朱笔圈诗眼"
+description = "考官把你的诗稿推回来，朱笔在颈联上圈了一笔。圈得圆熟利落，像做过很多次。旁边那位笔吏正在抄录，抄的还是你上次递来的干谒诗——他在旁边记了三年。他抬头看你一眼，眼神里没有鄙夷，只有了然。笔尖悬在纸上，等你说改。上次你就改了。"

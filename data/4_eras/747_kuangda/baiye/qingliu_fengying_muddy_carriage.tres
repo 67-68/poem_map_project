@@ -64,7 +64,7 @@ value = true
 script = ExtResource("8_1gubr")
 choice_result = SubResource("Resource_1gubr")
 requirement = SubResource("Resource_3ftv6")
-description = "肩膀绷紧一瞬，脚跟离地半寸，又落回去。"
+description = "拂袖转身，靴跟在冻硬的泥地上磕出脆响。"
 
 [sub_resource type="Resource" id="Resource_nycap"]
 script = ExtResource("3_8octr")
@@ -121,7 +121,7 @@ value = true
 script = ExtResource("8_1gubr")
 choice_result = SubResource("Resource_gy7qa")
 requirement = SubResource("Resource_d2f84")
-description = "目光扫过人群找熟人，没有。低头看靴。"
+description = "目光急速扫向府门内侧，寻找那位欠过你润笔的录事参军。"
 
 [sub_resource type="Resource" id="Resource_io2bc"]
 script = ExtResource("3_8octr")
@@ -159,7 +159,7 @@ operators = Array[ExtResource("2_wc6m2")]([SubResource("Resource_io2bc"), SubRes
 [sub_resource type="Resource" id="Resource_3u4xe"]
 script = ExtResource("8_1gubr")
 choice_result = SubResource("Resource_1byrm")
-description = "既已蹲了七天，不差这一弯腰。走过去，伸手。"
+description = "弯下腰，将袖口往上拢了拢。"
 
 [sub_resource type="Resource" id="Resource_dbp4v"]
 script = ExtResource("10_h5kdk")
@@ -184,8 +184,8 @@ operators = Array[ExtResource("9_3ftv6")]([SubResource("Resource_dbp4v"), SubRes
 script = ExtResource("13_rg2ka")
 requirement = SubResource("Resource_i2otb")
 era = "747_kuangda"
-_target_tags = Array[String](["qingliu_fengying", "action:main:baiye"])
+_target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_2m5h5")]([SubResource("Resource_h5kdk"), SubResource("Resource_j8ye3"), SubResource("Resource_3u4xe")])
 uuid = "qingliu_fengying_muddy_carriage"
-name = "靴与泥"
-description = "李相车架前的石板路上积雪未消，马蹄在辔头下焦躁刨地——那匹青骢马认得你。七日来你每日此时站在府门外，门子今晨对你点了点头，像对打更的老刘头打招呼。靴子飞出去的弧线在三丈外划进臭水沟，溅起的泥点落在你袍角。你蹲过七天的墙角正好对着那滩泥。周围官员的目光移过来——不是看诗人，是看熟面孔该有的眼色。"
+name = "鞋入臭水"
+description = "腊月里的泥泞又黑又稠，像煮过头的药渣。李相的车驾刚拐过街角，惊马前蹄一扬，那只锦缎绣鞋从轿帘里飞出来，划过一道弧，正落进路边尺许深的臭水沟。门子认得你——他冲你点了点头，像对隔三差五来串门的街坊。周围官员的目光齐刷刷落在你身上，不是看你这个诗人，是看这个“老熟人”。"

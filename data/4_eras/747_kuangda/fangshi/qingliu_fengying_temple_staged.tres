@@ -64,7 +64,7 @@ value = true
 script = ExtResource("8_sxn3l")
 choice_result = SubResource("Resource_sxn3l")
 requirement = SubResource("Resource_yspwr")
-description = "转身想走，脚已经动了半步——但诗稿还在手里，往哪儿走？"
+description = "一脚踢翻殿前的铜香炉，转身踏雪而去。"
 
 [sub_resource type="Resource" id="Resource_njl6c"]
 script = ExtResource("3_iuj8g")
@@ -121,7 +121,7 @@ value = true
 script = ExtResource("8_sxn3l")
 choice_result = SubResource("Resource_6r3kj")
 requirement = SubResource("Resource_b8llb")
-description = "目光越过和尚往斋堂里探——很快收回来，没人可找。"
+description = "目光扫向亲王随行的侍从，试图从某个熟面孔找到缝隙。"
 
 [sub_resource type="Resource" id="Resource_w3w6m"]
 script = ExtResource("3_iuj8g")
@@ -170,7 +170,7 @@ operators = Array[ExtResource("2_y2eju")]([SubResource("Resource_w3w6m"), SubRes
 [sub_resource type="Resource" id="Resource_xcotv"]
 script = ExtResource("8_sxn3l")
 choice_result = SubResource("Resource_fw3qo")
-description = "往旁边挪了两步，站在回廊柱后。和尚没再说什么。"
+description = "你把肩上的雪拍掉，往殿门边又挪了半步。"
 
 [sub_resource type="Resource" id="Resource_wighl"]
 script = ExtResource("10_jokkf")
@@ -195,8 +195,8 @@ operators = Array[ExtResource("9_yspwr")]([SubResource("Resource_wighl"), SubRes
 script = ExtResource("13_38tk2")
 requirement = SubResource("Resource_b1gpj")
 era = "747_kuangda"
-_target_tags = Array[String](["qingliu_fengying", "action:main:fangshi"])
+_target_tags = Array[String](["action:main:fangshi"])
 options = Array[ExtResource("1_dmttr")]([SubResource("Resource_jokkf"), SubResource("Resource_3r77q"), SubResource("Resource_xcotv")])
 uuid = "qingliu_fengying_temple_staged"
-name = "寺门外的老熟人"
-description = "“施主又来了。”顿了顿，补了后半句：“方丈说，今日斋堂有客，让您别在门口站着。”他没说让你走，也没说让你留。你攥着诗稿的手松了松——上回你在这里“偶遇”王给事中时，这和尚替你通报过。如今他看你的眼神，已像看一件旧家具。"
+name = "慈恩寺雪中偶遇"
+description = "“施主，上个月你也来过——那天是王给事中进香。今天亲王来，你又来了。”说完继续扫地。雪落在他刚扫过的青石上，又积了一层。殿门紧闭，里面传来亲王与方丈的谈笑，声音在雪里闷着，不太真切。"

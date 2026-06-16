@@ -64,7 +64,7 @@ value = true
 script = ExtResource("8_sn5ft")
 choice_result = SubResource("Resource_sn5ft")
 requirement = SubResource("Resource_bdsia")
-description = "拳头攥紧，脚跟已转了半圈——但门房的蔑笑让他想起上回拂袖而去的代价。"
+description = "转身就走，袖风扫落她掌心那枚铜钱。"
 
 [sub_resource type="Resource" id="Resource_y1c46"]
 script = ExtResource("3_2kuct")
@@ -121,7 +121,7 @@ value = true
 script = ExtResource("8_sn5ft")
 choice_result = SubResource("Resource_nl1ns")
 requirement = SubResource("Resource_q65p2")
-description = "目光扫过席间寻熟人，旋即收回——这里认得的人都只识他是捉刀人。"
+description = "从袖中摸出最后半贯铜钱，往她手里塞。"
 
 [sub_resource type="Resource" id="Resource_iag3n"]
 script = ExtResource("3_2kuct")
@@ -169,7 +169,7 @@ operators = Array[ExtResource("2_f6pp4")]([SubResource("Resource_iag3n"), SubRes
 [sub_resource type="Resource" id="Resource_cgaah"]
 script = ExtResource("8_sn5ft")
 choice_result = SubResource("Resource_n0g6t")
-description = "他退到墙根，从袖中摸出纸笔，开始替门房抄录次日要送的拜帖。"
+description = "走到小杌子边坐下，铺纸、研墨、提笔。"
 
 [sub_resource type="Resource" id="Resource_j1ok5"]
 script = ExtResource("10_416yb")
@@ -194,8 +194,8 @@ operators = Array[ExtResource("9_bdsia")]([SubResource("Resource_j1ok5"), SubRes
 script = ExtResource("13_vuopw")
 requirement = SubResource("Resource_pwbi4")
 era = "747_kuangda"
-_target_tags = Array[String](["qingliu_fengying", "action:main:jiaoyou"])
+_target_tags = Array[String](["action:main:jiaoyou"])
 options = Array[ExtResource("1_24kf4")]([SubResource("Resource_416yb"), SubResource("Resource_3m8n2"), SubResource("Resource_cgaah")])
 uuid = "qingliu_fengying_pingkangfang"
-name = "平康坊闭门旧账"
-description = "“又是你啊。上回你在这条巷子里来来回回走了七趟，我数着呢。”他低头继续揉面，扔下一句：“今晚不写诗进不去，整个坊都知道。”门房远远看见你袖子里露出的旧诗笺角——那是上月替张公子润色过的习作，他写的，你改的，署他的名。门房咧嘴一笑：“哟，捉刀人来了。公子在里头陪客，交代过——今晚只放进能即席赋诗的人。你嘛，门口等着吧。”"
+name = "平康坊闭门羹"
+description = "“哟，杜先生又来了。”那个“又”字咬得轻，但很准。楼上的丝竹声灌下来，她侧身挡着门，下巴朝坊墙边的小杌子一抬：“写首艳词，写好了让你进去。”语气像在吩咐一个熟客——一个不用客气的熟客。"

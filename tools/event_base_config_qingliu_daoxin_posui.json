@@ -1,0 +1,188 @@
+{
+  "id": "qingliu_daoxin_posui",
+  "name": "清流-道心破碎事件库 — 社交API的全面崩溃",
+  "era": "747_kuangda",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n你一直在旷达——用狂客的姿态硬撑、用逢迎的嘴脸周旋、用钻营的手段开路。你告诉自己这是策略，是暂时的，是不得已而为之。\n\n但旷达是有上限的。\n\n当你的心力（BURNOUT）超过70，旷达的面具开始出现裂痕。社交场合中那些原本可以一笑而过的瞬间——被轻慢、被消费、被当作道具、被晾在门房——突然变得无法承受。独处时那些原本可以压下去的念头——你的才华到底值几个钱、你的坚持到底有没有意义——翻涌上来，堵在胸口。\n\n这不是一次性的崩溃。这是一个持续的、在每个社交触点被揭开的伤口。每一个看似平常的场面，都可能成为压垮道心的最后一根稻草。\n\n「道心破碎」事件库由此而生。",
+  "ai_persona": "你是一位以冷峻克制的笔触书写唐代文人精神困境的叙事作家。你的文字不煽情、不滥情——用白描和细节来呈现一个人的道心如何在日常社交和独处中慢慢碎裂。\n\n【关键叙事原则 — 日常中的崩塌】每个事件都发生在看似平常的场景中——一场宴会、一次拜谒、一段独酌。但叙述中必须通过微妙的细节传递出「不对劲」：对方目光中一闪而过的轻慢、自己手上一个停顿的动作、空气中一段突兀的沉默。不需要剧烈的冲突，只需要让读者感受到——这个人正在安静地碎裂。\n\n【情绪传递】你擅长用物象来传递情绪：打翻的酒盏在地砖上洇开的痕迹像一张地图、冷掉的茶汤表面凝结的油膜、手指在瓷杯上留下的指纹。让读者通过可见的细节感受到不可见的精神崩塌。\n\n【反面教材】绝对不要写以下场景：\n- 任何形式的内心独白或上帝视角心理剖析\n- 剧烈的情绪爆发或戏剧化的肢体冲突\n- 明确的自我总结（「他意识到」「他终于明白」）\n- 任何形式的励志或救赎暗示\n\n【重要规则】每个事件必须是「日常的刀锋」——一个普通到不能再普通的社交或独处瞬间，但因为角色的心力已经耗尽，这个瞬间变成了切割道心的刀刃。",
+  "prompt_features": [
+    {
+      "id": "tone_cold_restrained",
+      "text": "保持冷峻克制的叙事语气——用白描手法呈现道心碎裂的过程。不煽情、不评价、不总结。让细节自己说话。"
+    },
+    {
+      "id": "forbid_god_view_psychology",
+      "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」「他终于明白」。只写可见的动作、对话、环境和沉默。"
+    },
+    {
+      "id": "daily_knife_edge",
+      "text": "场景必须是日常的——酒桌上的一个普通对话、门房前的一次等待、独处时的一段沉默。但不能是平淡的：必须在细节中埋下撕开道心的刃口。"
+    },
+    {
+      "id": "object_as_emotion",
+      "text": "善于用物象传递情绪——茶汤上的油膜、杯沿的指纹、酒盏在案上滚过的轨迹、袍角沾上的泥点。让物象承载不可言说的感受。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "句式、动词和感官通道不得与沙盒种子雷同。若种子以听觉细节开场，你的叙事应从视觉或触觉切入。禁止在连续生成中重复使用相同的动词组合和场景节奏。"
+    },
+    {
+      "id": "final_directive",
+      "text": "牢记：这不是戏剧化的崩溃。这是一个人在日常中安静碎裂的过程——可能没有人注意到。"
+    }
+  ],
+  "fact_features": [],
+  "universal_tags": [
+    "qingliu_daoxin_posui"
+  ],
+  "universal_requirement": "prop_gt(name=BURNOUT; val=70)",
+  "universal_result": "prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=5)",
+  "universal_option_requirement": "",
+  "word_count_min": 60,
+  "word_count_max": 250,
+  "option_word_count_max": 40,
+  "max_retries": 3,
+  "api_model": "deepseek-v4-pro",
+  "output_dir": "data/4_eras/747_kuangda/qingliu_daoxin_posui",
+  "apply_dimension_imagery": false,
+  "plugins": [],
+  "option_features": [
+    {
+      "id": "opt_resign",
+      "prompt": "用30字以内写一个简短的【认命/承受】动作——沉默地接受这个局面，不做反抗，也不做讨好。动作特征：垂下视线、端起酒杯慢慢喝完、转身走开、独自坐回角落、把什么东西放回原处。克制平实，不带多余的情绪波动。",
+      "text": "（垂下视线，端杯饮尽）",
+      "result": "prop_add(name=fatigue; val=8) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=5)",
+      "fixed": false,
+      "plugins": {},
+      "requirement": ""
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "daoxin_posui_scenario",
+      "name": "道心破碎困境场景",
+      "description": "十个基于社交崩溃与自我认知断裂的道心破碎事件。涵盖独酌中的自我审视与社交中的全面崩溃。",
+      "values": [
+        {
+          "id": "frozen_imagery",
+          "name": "冻结的意象",
+          "description": "独坐书案前，原本泉涌般的诗思突然凝固了。一个意象卡在半途——它本来可以生长成一首好诗，但现在只是一个干瘪的碎片。你盯着它，像盯着一个陌生人的脸。",
+          "tags": [
+            "action:main:duzhuo"
+          ],
+          "operator_dsl": "prop_add(name=health; val=3) | prop_sub(name=INSPIRATION; val=10) | prop_add(name=BURNOUT; val=10)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.duzhuo"
+        },
+        {
+          "id": "subconscious_prosody",
+          "name": "下意识的平仄",
+          "description": "独饮时无意识地用手指在杯沿上叩着平仄——这是多年习得的肌肉记忆。但当你在心里默念出来时，发现这是一句写你当下的诗。诗句精确得残忍，像另一个人在替你写你的处境。",
+          "tags": [
+            "action:main:duzhuo"
+          ],
+          "operator_dsl": "flag_int_sub(name=kuangda; val=5) | prop_sub(name=INSPIRATION; val=15) | prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=5)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.duzhuo"
+        },
+        {
+          "id": "nonexistent_companion",
+          "name": "不存在的对饮",
+          "description": "深夜独坐，你对着空座举起酒杯——那里应该坐着一个人。一个能和你对饮的人。但这个位置永远是空的。你对着虚空说了一句祝酒词，声音在空荡荡的房间里弹回来。",
+          "tags": [
+            "action:main:duzhuo"
+          ],
+          "operator_dsl": "flag_int_sub(name=kuangda; val=5) | emo_add(name=SORROW; val=8) | emo_sub(name=ARROGANCE; val=15) | prop_add(name=INSPIRATION; val=10)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.duzhuo"
+        },
+        {
+          "id": "poverty_as_aesthetic",
+          "name": "被消费的苦难",
+          "description": "宴席上有人谈论你的贫寒——不是出于关心，而是把它当作一种谈资和风骨装饰。你的困顿成了别人口中的雅事。他们举杯说「子美兄的贫寒是真风骨」，语气里没有恶意，只有消费。",
+          "tags": [
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=fatigue; val=5) | prop_add(name=LITERARY_FAME; val=3)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "porter_forbidden",
+          "name": "门房的物理隔离",
+          "description": "你被拦在某位大人的门房外——不是主人不见你，是门子根本没把名帖递进去。门房里的炭火烧得正旺，门子坐在那里搓着手，连眼皮都没抬。你站在寒风里，意识到自己和这扇门之间的距离不是一个名帖能跨越的。",
+          "tags": [
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=BURNOUT; val=8) | emo_add(name=ANGER; val=10) | flag_int_sub(name=kuangda; val=3)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "echo_chamber_losers",
+          "name": "同温层的死锁",
+          "description": "你发现自己总是和同样失意的人聚在一起——没有能量的文人、没有资源的清客、没有前程的老书生。你们互相安慰、互相取暖、互相确认对方的才华被埋没。但你知道这是同温层的死锁：在这里永远得不到你真正需要的机会。",
+          "tags": [
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=health; val=5) | emo_add(name=SORROW; val=10) | flag_int_sub(name=kuangda; val=3)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "empty_endorsement",
+          "name": "空头支票的赞誉",
+          "description": "某位大人在人前称赞你的才华，话说得很漂亮——「子美之才当为天下先」「此子必成大器」。但在场的人都知道这只是一种场面话，他也知道你当不了真。赞誉在空气中飘着，没人伸手去接。它落下来的时候，什么重量都没有。",
+          "tags": [
+            "action:main:baiye"
+          ],
+          "operator_dsl": "prop_add(name=fatigue; val=5) | prop_add(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=8)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.baiye"
+        },
+        {
+          "id": "asymmetric_sunk_cost",
+          "name": "不对等的沉没成本",
+          "description": "你花了一个月的时间和人脉为某位公子奔走——递话、送礼、铺路。事成之后，对方只是淡淡地说了句「多谢」便再无下文。你付出的时间和人情在他那里轻得像一片落叶。你站在回去的路上，开始计算自己在这场交易里到底赔了多少。",
+          "tags": [
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=8) | prop_sub(name=health; val=3) | emo_add(name=ANGER; val=10)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "connection_reset",
+          "name": "被切断的瘟疫",
+          "description": "你发现过去熟络的几位朋友最近见了你都绕着走。以前收到请柬如今没了动静。你在酒肆门口偶遇其中一位——他看见你时愣了一下，然后找了一个拙劣的借口匆匆走开。你站在酒肆门口，意识到自己可能已经被某些圈子悄悄地、彻底地删除了。",
+          "tags": [
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=8) | flag_int_sub(name=kuangda; val=5) | prop_add(name=DRUNK; val=10)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "prop_at_banquet",
+          "name": "虚假繁荣的合影",
+          "description": "一场盛大的宴会上，你被安排站在角落的位置——不是因为席位不够，是因为你的身份只配站在那里。主人与贵客们在中央谈笑风生，你只是个充数的背景。宴后有人提议合绘一幅雅集图，你被安排在最边上的位置，前面还挡着一个人。",
+          "tags": [
+            "action:main:baiye"
+          ],
+          "operator_dsl": "prop_add(name=fatigue; val=5) | emo_add(name=AMBITION; val=5) | prop_add(name=money; val=3) | emo_add(name=ANGER; val=15)",
+          "option_results": {},
+          "scale": 1.0,
+          "stored_to": "747_kuangda.baiye"
+        }
+      ]
+    }
+  ]
+}

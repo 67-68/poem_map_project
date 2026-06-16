@@ -42,7 +42,7 @@
   "option_word_count_max": 40,
   "max_retries": 3,
   "api_model": "deepseek-v4-pro",
-  "output_dir": "data/4_eras/747_kuangda/qingliu_zuanying",
+  "output_dir": "data/4_eras/747_kuangda/",
   "apply_dimension_imagery": false,
   "plugins": [
     "failed_hint"

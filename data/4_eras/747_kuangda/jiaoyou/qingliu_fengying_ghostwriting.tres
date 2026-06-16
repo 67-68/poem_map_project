@@ -64,7 +64,7 @@ value = true
 script = ExtResource("8_1vd5y")
 choice_result = SubResource("Resource_1vd5y")
 requirement = SubResource("Resource_veaau")
-description = "抬手拂开纸笔，冷笑到了唇边，肩膀却先垮了下去。"
+description = "掀案而起，酒盏在席面骨碌碌滚出三尺远。"
 
 [sub_resource type="Resource" id="Resource_8jy1r"]
 script = ExtResource("3_q4an7")
@@ -121,7 +121,7 @@ value = true
 script = ExtResource("8_1vd5y")
 choice_result = SubResource("Resource_d6ghs")
 requirement = SubResource("Resource_7jtw6")
-description = "目光扫向隔壁雅间，随即收回——那里没有你的人。"
+description = "目光迅速扫向主位，搜寻那位致仕多年的郑老大人。"
 
 [sub_resource type="Resource" id="Resource_a02yy"]
 script = ExtResource("3_q4an7")
@@ -164,7 +164,7 @@ operators = Array[ExtResource("2_auryo")]([SubResource("Resource_a02yy"), SubRes
 [sub_resource type="Resource" id="Resource_s28kf"]
 script = ExtResource("8_1vd5y")
 choice_result = SubResource("Resource_yojlg")
-description = "接过笔，铺平纸，像上次一样写下第一行。"
+description = "接过那支秃笔，在纸上落下第一个字。"
 
 [sub_resource type="Resource" id="Resource_7py4a"]
 script = ExtResource("10_se05f")
@@ -189,8 +189,8 @@ operators = Array[ExtResource("9_veaau")]([SubResource("Resource_7py4a"), SubRes
 script = ExtResource("13_regru")
 requirement = SubResource("Resource_cveni")
 era = "747_kuangda"
-_target_tags = Array[String](["qingliu_fengying", "action:main:jiaoyou"])
+_target_tags = Array[String](["action:main:jiaoyou"])
 options = Array[ExtResource("1_ot2cc")]([SubResource("Resource_se05f"), SubResource("Resource_lu0rh"), SubResource("Resource_s28kf")])
 uuid = "qingliu_fengying_ghostwriting"
-name = "雅间墨迹"
-description = "酒楼雅间的帘幕半垂，草包的手已经拍在你肩上——像上次韦府宴席上一样熟稔。他推过纸笔，墨已研好，纸已铺平。“老规矩，你写诗我署名。润笔不会少你的。”邻间的联句声穿过木墙，有人在吟“星垂平野阔”。你认得那声音，是去年在慈恩寺被你设法避开的一位诗人——那时你忙着给眼前这位草包润色诗稿，好让他能在贵主面前露脸。此刻那张熟悉的脸正对着你笑，笔杆横在碟沿上，等着你伸手。"
+name = "席间纸笔"
+description = "酒过三巡，郑家公子从袖中摸出叠得齐整的纸，铺在湿漉漉的桌面上。“上回那首《秋兴》改得好，家父逢人便夸。”他替你斟满酒，推过来，“今日再劳烦一回。”席上无人抬眼——他们都记得上次雅集，你替这位公子的诗润色了整整一个时辰。现下纸笔已备好，砚台也摆在你手边。那支笔的笔锋微秃，正是你上次落在郑家的。"
