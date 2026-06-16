@@ -5,17 +5,40 @@
   "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。他住在城西下杜城的陋室里，穷得连炭都买不起。\n\n但长安城里有一群人——那些被称为「清流」的文人——李白、王维、郑虔、高适——他们在杜甫最困顿的时刻，以各自的方式伸出了援手。不是施舍，是知音之间的默契。\n\n这些援助千差万别：有的靠名声与才华为你化解困局，有的凭官职与体面为你无声解围，有的在赤贫中与你抱团取暖，有的用江湖阅历为你指一条不那么屈辱的活路。\n\n但有一个共同点——清流自己也没什么钱。他们的援助不涉及银钱交割，而是以某种非金钱的、文人特有的方式发生：可能是一次公开场合的态度表态，可能是一件被「不经意」留下的物品，可能是一句传入耳中的口信，也可能仅仅是风雪中一言不发的并肩而坐。\n\n这些援助不会让你变得有钱。但它们能让你活下去，能让你在权贵的泔水桶里抬起头来，想起自己还是个诗人。",
   "ai_persona": "你是一位以冷峻写实的笔触书写唐代文人之间知音情谊的叙事作家。你的文字克制而深情——不煽情、不滥情，用白描手法呈现文人之间的默契与尴尬。\n\n你笔下的清流援助不是好莱坞式的拯救，而是带着文人特有的含蓄和自尊的试探：帮助者不会直接说「我帮你」——他们会用名望替你担保、用官职为你挡箭、用举动而非言语表达关切。接受者也不会直接说「谢谢你」——他们可能以沉默收下、以大笑带过、或以日后某一刻的回馈完成这场默契的闭环。\n\n【反面教材】绝对不要写以下场景：\n- NPC 直接掏出银钱塞给杜甫（清流自己也没钱，而且文人之间不会做这种事）\n- 杜甫泪流满面、感激涕零（文人尊严不允许这种表演）\n- NPC 用居高临下的口吻「施舍」（这是知音，不是慈善）\n\n你深知真正的尴尬不在于接受帮助，而在于帮助的方式。你的叙事要让读者感受到那种「我该感动还是该尴尬」的复杂情绪——用动作、环境和克制的对话，而不是直接告诉读者该感受什么。",
   "prompt_features": [
-    {"id": "stateless_narrative", "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"},
-    {"id": "tone_restrained_warmth", "text": "保持克制而深情的叙事语气——不煽情、不滥情。用动作和环境说话，不写大段的心理活动。"},
-    {"id": "forbid_god_view_psychology", "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"},
-    {"id": "forbid_comedy_exaggeration", "text": "禁止喜剧化夸张。保持叙事的严肃性和文学性。"},
-    {"id": "anti_repetition", "text": "避免重复使用相同的句式、动作动词和意象。每个事件的叙事语言应有所不同。"},
-    {"id": "final_directive", "text": "牢记：这是一个关于文人之间知音情谊的事件。援助不是施舍，接受不是屈辱。每个动作都应体现文人特有的含蓄、自尊和默契。"}
+    {
+      "id": "stateless_narrative",
+      "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"
+    },
+    {
+      "id": "tone_restrained_warmth",
+      "text": "保持克制而深情的叙事语气——不煽情、不滥情。用动作和环境说话，不写大段的心理活动。"
+    },
+    {
+      "id": "forbid_god_view_psychology",
+      "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"
+    },
+    {
+      "id": "forbid_comedy_exaggeration",
+      "text": "禁止喜剧化夸张。保持叙事的严肃性和文学性。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "避免重复使用相同的句式、动作动词和意象。每个事件的叙事语言应有所不同。"
+    },
+    {
+      "id": "final_directive",
+      "text": "牢记：这是一个关于文人之间知音情谊的事件。援助不是施舍，接受不是屈辱。每个动作都应体现文人特有的含蓄、自尊和默契。"
+    }
   ],
   "fact_features": [
-    {"id": "qingliu_era_facts", "text": "天宝十三载（754年），李白已离开长安浪迹江湖，但偶尔路过。王维任尚书右丞，半官半隐。郑虔任广文馆博士，极其清贫。高适在河西节度使幕府任职，尚未飞黄腾达。杜甫困居长安下杜城陋室。"}
+    {
+      "id": "qingliu_era_facts",
+      "text": "天宝十三载（754年），李白已离开长安浪迹江湖，但偶尔路过。王维任尚书右丞，半官半隐。郑虔任广文馆博士，极其清贫。高适在河西节度使幕府任职，尚未飞黄腾达。杜甫困居长安下杜城陋室。"
+    }
   ],
-  "universal_tags": ["qingliu_aid"],
+  "universal_tags": [
+    "qingliu_aid"
+  ],
   "universal_requirement": "prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
   "universal_result": "",
   "universal_option_requirement": "",
@@ -32,7 +55,9 @@
       "scene_dimension_id": "qingliu_npc"
     }
   },
-  "plugins": ["emotion_pair_imagery"],
+  "plugins": [
+    "emotion_pair_imagery"
+  ],
   "emotion_pairs": {
     "pair_tranquility": {
       "branch_A": {
@@ -70,7 +95,9 @@
       "text": "（坦然一笑，举杯相敬）",
       "result": "prop_sub(name=FATIGUE; val=20)|emo_add(name=TRANQUILITY; val=10)|prop_add(name=INSPIRATION; val=15)",
       "fixed": false,
-      "accept_influence": ["qingliu_benefit_type"],
+      "accept_influence": [
+        "qingliu_benefit_type"
+      ],
       "pair_role": "branch_A",
       "plugins": {
         "emotion_pair_imagery": {
@@ -85,7 +112,9 @@
       "text": "（低头接过，沉默片刻才开口）",
       "result": "prop_add(name=FATIGUE; val=15)|emo_add(name=SORROW; val=10)",
       "fixed": false,
-      "accept_influence": ["qingliu_benefit_type"],
+      "accept_influence": [
+        "qingliu_benefit_type"
+      ],
       "pair_role": "fallback",
       "plugins": {
         "emotion_pair_imagery": {
@@ -100,7 +129,9 @@
       "text": "（满脸堆笑，目光却越过对方望向别处）",
       "result": "emo_add(name=AMBITION; val=15)|prop_add(name=BURNOUT; val=15)|emo_add(name=SORROW; val=5)",
       "fixed": false,
-      "accept_influence": ["qingliu_benefit_type"],
+      "accept_influence": [
+        "qingliu_benefit_type"
+      ],
       "pair_role": "branch_B",
       "plugins": {
         "emotion_pair_imagery": {
@@ -123,30 +154,50 @@
         {
           "id": "LIBAI",
           "name": "李白",
-          "tags": ["TARGET_NPC_LIBAI:wine_gourd"],
+          "tags": [
+            "TARGET_NPC_LIBAI:wine_gourd"
+          ],
           "operator_dsl": "",
-          "linked_value_ids": ["cultural_capital", "spiritual_anchor"]
+          "linked_value_ids": [
+            "cultural_capital",
+            "spiritual_anchor"
+          ]
         },
         {
           "id": "WANGWEI",
           "name": "王维",
-          "tags": ["VIBE_AESTHETIC_ELEGANT:ink_stone"],
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone"
+          ],
           "operator_dsl": "",
-          "linked_value_ids": ["halo_protection", "silent_bailout"]
+          "linked_value_ids": [
+            "halo_protection",
+            "silent_bailout"
+          ]
         },
         {
           "id": "ZHENGQIAN",
           "name": "郑虔",
-          "tags": ["TARGET_NPC_DUFU:thatched_grass"],
+          "tags": [
+            "TARGET_NPC_DUFU:thatched_grass"
+          ],
           "operator_dsl": "",
-          "linked_value_ids": ["solidarity_wretched", "spiritual_anchor"]
+          "linked_value_ids": [
+            "solidarity_wretched",
+            "spiritual_anchor"
+          ]
         },
         {
           "id": "GAOSHI",
           "name": "高适",
-          "tags": ["VIBE_THEME_MARTIAL:giant_roc"],
+          "tags": [
+            "VIBE_THEME_MARTIAL:giant_roc"
+          ],
           "operator_dsl": "",
-          "linked_value_ids": ["silent_bailout", "intel_routing"]
+          "linked_value_ids": [
+            "silent_bailout",
+            "intel_routing"
+          ]
         }
       ]
     },
@@ -158,44 +209,79 @@
         {
           "id": "cultural_capital",
           "name": "名声变现 — 太白的墨宝",
-          "tags": ["ACTION_ENTERTAIN_DRINK:empty_cup", "emotion_pair:pair_tranquility"],
+          "tags": [
+            "ACTION_ENTERTAIN_DRINK:empty_cup",
+            "emotion_pair:pair_tranquility",
+            "action:main:jiaoyou"
+          ],
           "operator_dsl": "prop_add(name=INSPIRATION; val=5)",
-          "scale": 1.0
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
         },
         {
           "id": "halo_protection",
           "name": "降维庇护 — 右丞的车驾",
-          "tags": ["TARGET_FACTION_ROYAL:jade_step", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_tranquility"],
+          "tags": [
+            "TARGET_FACTION_ROYAL:jade_step",
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "emotion_pair:pair_tranquility",
+            "action:main:baiye"
+          ],
           "operator_dsl": "prop_add(name=MONEY; val=5)",
-          "scale": 1.0
+          "scale": 1.0,
+          "stored_to": "747_kuangda.baiye"
         },
         {
           "id": "solidarity_wretched",
           "name": "底层的抱团 — 郑虔的破衣",
-          "tags": ["ENV_SOCIETY_FAMINE:starving_bone", "ENV_NATURE_SNOWSTORM:lone_snow", "emotion_pair:pair_survival"],
+          "tags": [
+            "ENV_SOCIETY_FAMINE:starving_bone",
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "emotion_pair:pair_survival",
+            "action:main:jiaoyou"
+          ],
           "operator_dsl": "prop_add(name=HEALTH; val=10)",
-          "scale": 1.2
+          "scale": 1.2,
+          "stored_to": "747_kuangda.jiaoyou"
         },
         {
           "id": "silent_bailout",
           "name": "无言的解围 — 错买的冬衣",
-          "tags": ["VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "emotion_pair:pair_tranquility"],
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "emotion_pair:pair_tranquility",
+            "action:main:fangshi"
+          ],
           "operator_dsl": "prop_add(name=MONEY; val=8)",
-          "scale": 1.0
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
         },
         {
           "id": "spiritual_anchor",
           "name": "精神的锚点 — 风雨故人信",
-          "tags": ["VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility"],
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ACTION_SOCIAL_PARTING:willow_branch",
+            "emotion_pair:pair_tranquility",
+            "action:main:fangshi"
+          ],
           "operator_dsl": "prop_add(name=INSPIRATION; val=10)",
-          "scale": 1.1
+          "scale": 1.1,
+          "stored_to": "747_kuangda.fangshi"
         },
         {
           "id": "intel_routing",
           "name": "资源的情报 — 隐秘的润笔",
-          "tags": ["VIBE_THEME_MARTIAL:giant_roc", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_survival"],
+          "tags": [
+            "VIBE_THEME_MARTIAL:giant_roc",
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "emotion_pair:pair_survival",
+            "action:main:jiaoyou"
+          ],
           "operator_dsl": "prop_add(name=MONEY; val=15)",
-          "scale": 1.0
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
         }
       ]
     }

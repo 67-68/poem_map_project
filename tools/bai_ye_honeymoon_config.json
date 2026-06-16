@@ -28,21 +28,21 @@
           "name": "门子/家奴",
           "description": "最底层的门卫、仆役，守门索贿，玩家需要打点才能进门。【严禁逾越权力层级】：当前描写的是 L0 门房，他们是权力的最底层。他们绝对没有能力干涉朝政、调动官员或决定他人生死。他们的傲慢只能局限于'不给你通报'、'让你在门外挨冻'等微小的物理权力。严禁出现任何夸张的政治威胁（如流放、杀头）。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=money; val=10)"
+          "operator_dsl": ""
         },
         {
           "id": "L1",
           "name": "清客/文法吏",
           "description": "中层幕僚、文书小吏，递话要钱，比直接面对权贵便宜",
           "scale": 1.10,
-          "operator_dsl": "prop_sub(name=money; val=10)"
+          "operator_dsl": ""
         },
         {
           "id": "L2",
           "name": "权贵本尊",
           "description": "直接面对高官权贵，需要重大代价才能获得见面机会",
           "scale": 1.25,
-          "operator_dsl": "prop_sub(name=money; val=10)|prop_sub(name=fatigue; val=5)"
+          "operator_dsl": ""
         }
       ]
     },
@@ -75,7 +75,7 @@
           "name": "精神PUA",
           "description": "对方通过羞辱、冷落、贬低玩家地位来获取精神快感",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=fatigue; val=10)"
+          "operator_dsl": "prop_add(name=fatigue; val=10)"
         }
       ]
     },
@@ -96,7 +96,7 @@
           "name": "纯粹寻租/变态",
           "description": "对方纯粹为了享受支配欲和权力快感，毫无制度性理由",
           "scale": 1.15,
-          "operator_dsl": ""
+          "operator_dsl": "emo_add(name=ANGER; val=5)"
         },
         {
           "id": "M2",

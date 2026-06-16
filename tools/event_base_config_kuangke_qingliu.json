@@ -68,8 +68,7 @@
     }
   },
   "plugins": [
-    "emotion_pair_imagery",
-    "failed_hint"
+    "emotion_pair_imagery"
   ],
   "emotion_pairs": {
     "pair_tranquility": {
@@ -117,11 +116,6 @@
       "plugins": {
         "emotion_pair_imagery": {
           "branch_role": "branch_A"
-        },
-        "failed_hint": {
-          "style": "inner_monologue",
-          "max_chars": 40,
-          "context": "玩家没有狂客特性（kuangda_kuangke），无法选择狂客专属的回应。\n\n【核心原则：因果归责】failed_hint 必须让玩家感受到「因为我没有选择狂客，所以我今天站在这里，只能看着，不能动」。\n\n【写作铁律】\n1. 必须出现转折词「但是/但/却」——转折是因果链的铰链\n2. 必须包含性格判断——「他不是那种人」「他没有那种疯劲」「他选择了计算」\n3. 必须出现一个未遂的动作——手伸出去但收回、话到嘴边但咽回、脚迈出去但转身\n4. 禁止纯环境描写、禁止纯生理反应（咳血、发抖、腿软）、禁止没有性格判断的犹豫\n\n【Good Case】\n「他看见李白扔过来的酒壶——手已经伸出去了。但他不是一个不计后果的人。他的手在袖口里攥紧，酒壶落在地上。」\n→ 好在哪里：本能想接(未遂动作) → 性格判断(不是那种人) → 后果(酒壶落地)。三步都在说「这是你选的性格，这是你选的后果。」\n\n【Bad Case — 因果链断裂】\n「他站在门槛内，想迈出那一步，却想起昨夜咳出的血丝，于是退回屋里，轻轻掩上了门。」\n→ 坏在哪里：只描述了犹豫。咳出的血丝是生理细节，不是性格因果。玩家不知道这是自己选的。"
         }
       }
     }
@@ -146,7 +140,8 @@
           "linked_value_ids": [
             "emotion_arrogance",
             "emotion_tranquility"
-          ]
+          ],
+          "stored_to": "747_kuangda.jiaoyou"
         },
         {
           "id": "WANGWEI",
@@ -158,7 +153,8 @@
           "linked_value_ids": [
             "emotion_tranquility",
             "emotion_sorrow"
-          ]
+          ],
+          "stored_to": "747_kuangda.jiaoyou"
         },
         {
           "id": "ZHENGQIAN",
@@ -170,7 +166,8 @@
           "linked_value_ids": [
             "emotion_anger",
             "emotion_sorrow"
-          ]
+          ],
+          "stored_to": "747_kuangda.jiaoyou"
         },
         {
           "id": "GAOSHI",
@@ -196,40 +193,48 @@
           "name": "狂傲共鸣",
           "tags": [
             "ACTOR_EMOTION_ARROGANCE",
-            "emotion_pair:pair_arrogance"
+            "emotion_pair:pair_arrogance",
+            "action:main:jiaoyou"
           ],
           "operator_dsl": "",
-          "scale": 1.0
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
         },
         {
           "id": "emotion_tranquility",
           "name": "宁静共鸣",
           "tags": [
             "ACTOR_EMOTION_TRANQUILITY",
-            "emotion_pair:pair_tranquility"
+            "emotion_pair:pair_tranquility",
+            "action:main:jiaoyou"
           ],
           "operator_dsl": "",
-          "scale": 1.0
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
         },
         {
           "id": "emotion_anger",
           "name": "愤懑共鸣",
           "tags": [
             "ACTOR_EMOTION_ANGER",
-            "emotion_pair:pair_anger"
+            "emotion_pair:pair_anger",
+            "action:main:fangshi"
           ],
           "operator_dsl": "",
-          "scale": 1.0
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
         },
         {
           "id": "emotion_sorrow",
           "name": "悲戚共鸣",
           "tags": [
             "ACTOR_EMOTION_SORROW",
-            "emotion_pair:pair_sorrow"
+            "emotion_pair:pair_sorrow",
+            "action:main:denggao"
           ],
           "operator_dsl": "",
-          "scale": 1.0
+          "scale": 1.0,
+          "stored_to": "747_kuangda.denggao"
         }
       ]
     }
