@@ -16,8 +16,9 @@
 8. [沙盒模式 (Sandbox)](#8-沙盒模式-sandbox)
 9. [选项系统 (Option Features)](#9-选项系统-option-features)
 10. [跨维度引用 (linked_value_ids)](#10-跨维度引用-linked_value_ids)
-11. [通用全局字段](#11-通用全局字段)
-12. [配置场景速查表](#12-配置场景速查表)
+11. [虚拟维度追加 (virtual_dimension_ids)](#11-虚拟维度追加-virtual_dimension_ids)
+12. [通用全局字段](#12-通用全局字段)
+13. [配置场景速查表](#13-配置场景速查表)
 
 ---
 
@@ -620,7 +621,82 @@ const STORE_TO_PATH_MAP: Dictionary = {
 
 ---
 
-## 11. 通用全局字段
+## 11. 虚拟维度追加 (virtual_dimension_ids)
+
+`virtual_dimension_ids` 是 `linked_value_ids` 的互补机制：当某个维度值被选中时，以**虚拟追加**的方式引入额外维度参与笛卡尔积，而非替换已有维度。
+
+### 11.1 使用场景
+
+- **身份/角色注入**：某个场景值触发后在事件组合中追加 NPC/身份维度，让每条事件携带不同的交互角色
+- **叙事分支细化**：某个羞辱类型被选中后，追加情绪或应对策略为虚拟维度
+
+### 11.2 语法
+
+```jsonc
+{
+  "dimensions": [
+    {
+      "id": "scene",
+      "values": [
+        {
+          "id": "tavern_night",
+          "name": "酒肆夜饮",
+          "linked_value_ids": ["emotion_arrogance", "emotion_tranquility"],
+          "virtual_dimension_ids": [["npc_libai"], ["identity_qingliu_owner", "identity_shangren_guest"]]
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 11.3 语义对照表
+
+| 语法 | 语义 |
+|------|------|
+| `"virtual_dimension_ids": []` | 不追加任何虚拟维度 |
+| `"virtual_dimension_ids": [["id_a"]]` | 追加 1 个虚拟维度，含 1 个可选值 `id_a` |
+| `"virtual_dimension_ids": [["id_a", "id_b"]]` | 追加 1 个虚拟维度，含 2 个可选值 `id_a` 和 `id_b` |
+| `"virtual_dimension_ids": [["id_a"], ["id_b"]]` | 追加 2 个独立虚拟维度，各含 1 个可选值 |
+
+**核心规则**：每个 inner list（如 `["npc_libai"]`）作为一个独立的虚拟维度，与所有原始维度做笛卡尔积，追加到组合 tuple 末尾。
+
+### 11.4 与 linked_value_ids 的关系
+
+两者可以**同时存在于同一个维度值**上，互不冲突：
+
+- [`linked_value_ids`](#10-跨维度引用-linked_value_ids)：**替换语义**——当值被选中时，引用维度值替换目标维度槽位（打破正交性）。
+- [`virtual_dimension_ids`](#11-虚拟维度追加-virtual_dimension_ids)：**追加语义**——当值被选中时，引用的值作为新维度追加到组合末尾（扩展维度空间）。
+
+```
+原始组合: (scene=tavern_night, emotion=ARROGANCE)
+linked_value_ids 作用: 替换 emotion 槽位为 TRANQUILITY
+virtual_dimension_ids 作用: 追加虚拟维度到末尾
+最终组合: (scene=tavern_night, emotion=TRANQUILITY, vdim_0=npc_libai)
+```
+
+### 11.5 外部维度自动注入
+
+如果 [`virtual_dimension_ids`](#11-虚拟维度追加-virtual_dimension_ids) 引用的值 ID 不在当前配置的任何维度中，管线会从 [`tools/imagery_dimension_db.json`](../../tools/imagery_dimension_db.json) 自动注入该值所属的完整维度。注入逻辑与 [`linked_value_ids`](#10-跨维度引用-linked_value_ids) 的外部维度解析共用同一函数 [`_resolve_linked_value_ids()`](../../tools/event_generator/dimensions.py)。
+
+### 11.6 虚拟专用维度 (virtual-only)
+
+自动注入的外部维度如果**只被** [`virtual_dimension_ids`](#11-虚拟维度追加-virtual_dimension_ids) 引用（不被任何 [`linked_value_ids`](#10-跨维度引用-linked_value_ids) 引用），会被标记为 **virtual-only**：
+
+- virtual-only 维度**不参与基础笛卡尔积**
+- 仅当触发其引用来源的维度值时，才作为虚拟维度追加到该组合
+
+这避免了不必要的组合爆炸，确保外部身份/NPC 维度只在需要时才出现。
+
+### 11.7 约束
+
+- 每个 inner list 引用的值 ID 必须存在（本地维度或 [`imagery_dimension_db.json`](../../tools/imagery_dimension_db.json) 中）
+- 与 [`linked_value_ids`](#10-跨维度引用-linked_value_ids) 可共存，语义独立
+- 虚拟维度追加顺序与 inner list 在数组中的顺序一致
+
+---
+
+## 12. 通用全局字段
 
 这些字段作用于事件库的**所有事件**，用于减少重复配置。
 
@@ -635,7 +711,7 @@ const STORE_TO_PATH_MAP: Dictionary = {
 
 ---
 
-## 12. 配置场景速查表
+## 13. 配置场景速查表
 
 ### 场景 A：单一行动的事件库（如「拜谒 - 门子索贿」）
 
@@ -739,6 +815,7 @@ const STORE_TO_PATH_MAP: Dictionary = {
 - [ ] `option_features` 中每个选项的 `result` 和 `requirement` 已定义
 - [ ] 如果选项有固定文本，`fixed: true` 已设置
 - [ ] 如果维度值需要跨维度引用，`linked_value_ids` 已配置
+- [ ] 如果维度值需要追加虚拟维度，`virtual_dimension_ids` 已配置
 - [ ] 如果需要黑名单，确认只有一个维度挂载了 `blacklist_config`
 - [ ] `final_directive` 已撰写（利用 Recency Bias）
 - [ ] 沙盒文件已存在或允许管线首先生成
