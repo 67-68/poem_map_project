@@ -1,0 +1,56 @@
+{
+  "entries": {
+    "bai_ye_real_appearance": {
+      "config": "tools/event_base_config_bai_ye_real_appearance.json",
+      "csv": "data/4_eras/745_ambition/baiye/real_appearance/_bai_ye_real_appearance_events.csv"
+    },
+    "duotai_humiliation": {
+      "config": "tools/event_base_config_duotai_humiliation.json",
+      "csv": "data/4_eras/747_kuangda/_duotai_humiliation_events.csv"
+    },
+    "kuangke_qingliu": {
+      "config": "tools/event_base_config_kuangke_qingliu.json",
+      "csv": "data/4_eras/747_kuangda/_kuangke_qingliu_events.csv"
+    },
+    "kuangke_zhuoliu": {
+      "config": "tools/event_base_config_kuangke_zhuoliu.json",
+      "csv": "data/4_eras/747_kuangda/_kuangke_zhuoliu_events.csv"
+    },
+    "qingliu_daoxin_posui": {
+      "config": "tools/event_base_config_qingliu_daoxin_posui.json",
+      "csv": "data/4_eras/747_kuangda/_qingliu_daoxin_posui_events.csv"
+    },
+    "qingliu_fengying": {
+      "config": "tools/event_base_config_qingliu_fengying.json",
+      "csv": "data/4_eras/747_kuangda/_qingliu_fengying_events.csv"
+    },
+    "qingliu_jiaolv": {
+      "config": "tools/event_base_config_qingliu_jiaolv.json",
+      "csv": "data/4_eras/747_kuangda/_qingliu_jiaolv_events.csv"
+    },
+    "qingliu_passive_benefits": {
+      "config": "tools/event_base_config_qingliu_passive_benefits.json",
+      "csv": "data/4_eras/747_kuangda/_qingliu_passive_benefits_events.csv"
+    },
+    "qingliu_zuanying": {
+      "config": "tools/event_base_config_qingliu_zuanying.json",
+      "csv": "data/4_eras/747_kuangda/_qingliu_zuanying_events.csv"
+    },
+    "zhuoliu_fengying": {
+      "config": "tools/event_base_config_zhuoliu_fengying.json",
+      "csv": "data/4_eras/747_kuangda/_zhuoliu_fengying_events.csv"
+    },
+    "zhuoliu_lieqi": {
+      "config": "tools/event_base_config_zhuoliu_lieqi.json",
+      "csv": "data/4_eras/747_kuangda/_zhuoliu_lieqi_events.csv"
+    },
+    "zhuoliu_zuanying": {
+      "config": "tools/event_base_config_zhuoliu_zuanying.json",
+      "csv": "data/4_eras/747_kuangda/_zhuoliu_zuanying_events.csv"
+    },
+    "zize": {
+      "config": "tools/event_base_config_zize.json",
+      "csv": "data/4_eras/747_kuangda/_zize_events.csv"
+    }
+  }
+}

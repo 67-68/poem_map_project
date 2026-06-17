@@ -10,9 +10,12 @@
   .venv/bin/python tools/generate_orthogonal_events.py --config <json_or_py>
   .venv/bin/python tools/generate_orthogonal_events.py --dry-run
   .venv/bin/python tools/generate_orthogonal_events.py --trial
+  .venv/bin/python tools/generate_orthogonal_events.py --reassembly          # 全量重新应用配置
+  .venv/bin/python tools/generate_orthogonal_events.py --reassembly <key>    # 单条目重新应用配置
   
 使用示例
   .venv/bin/python tools/generate_orthogonal_events.py --config tools/event_base_config_duotai_humiliation.json --trial
+  .venv/bin/python tools/generate_orthogonal_events.py --reassembly duotai_humiliation
 """
 
 import sys

@@ -117,6 +117,49 @@ python3 tools/generate_orthogonal_events.py --trial
 
 输出文件：`data/generated_events/<config.id>_events.csv`
 
+#### Reassembly 模式（重新应用配置）
+
+`--reassembly` 模式在不调用 LLM 的前提下，**重新运行生成管线**，用新的 config 配置（dimensions、operators、scale 等）重新计算 DSL/context/requirements，但保留旧 CSV 中已有的 **AI 生成内容**（title、description、option 文本）。
+
+适用场景：修改了 config 中的 operator DSL、scale 系数、维度值后，需要批量刷新 CSV 中的 DSL 列，但不想重新调 API 浪费钱。
+
+```bash
+# 全量 reassembly — 处理注册表中所有条目
+python3 tools/generate_orthogonal_events.py --reassembly
+
+# 指定条目 — 只处理单个 config
+python3 tools/generate_orthogonal_events.py --reassembly duotai_humiliation
+```
+
+**注册表**：[`tools/event_config_registry.json`](../tools/event_config_registry.json) — 手动维护的显式映射文件，记录每个 config ←→ CSV 的对应关系：
+
+```json
+{
+  "entries": {
+    "duotai_humiliation": {
+      "config": "tools/event_base_config_duotai_humiliation.json",
+      "csv": "data/4_eras/747_kuangda/_duotai_humiliation_events.csv"
+    }
+  }
+}
+```
+
+**行为契约**：
+
+| 情形 | 行为 |
+|------|------|
+| config 组合在旧 CSV 中存在 | title/description/option 文本保留，DSL/context/requirements 重新计算并覆盖 |
+| config 组合在旧 CSV 中不存在 | 跳过该组合（打印 ⏭️ 日志），CSV 中原有行不变 |
+| 旧 CSV 中有但 config 已无的组合 | 该行会被保留（CSV 覆盖写，不删除行） |
+| `--reassembly`（无参数） | 遍历注册表全部 13 个条目 |
+| `--reassembly <key>` | 只处理指定 key 对应的条目 |
+
+**注意事项**：
+- 不需要设置 `DEEPSEEK_API_KEY`，全程不走 LLM
+- 输出**覆盖写入**原 CSV（in-place），建议修改 config 前备份
+- 新增的组合（旧 CSV 中不存在）会被跳过，如需补充需用普通 `--config` 模式单独生成
+- 插件 Hook 4（`get_option_result_extras`）仍会正常调用
+
 ### 配置文件结构
 
 配置文件（`.json` 或 Python 内置）定义以下核心组件：

@@ -99,6 +99,18 @@ class GenerationResult:
     option_rows: list[OptionRow] = field(default_factory=list)
 
 
+@dataclass
+class EventSnapshot:
+    """从旧 CSV 解析出的可复用 AI 生成内容 — Reassembly 模式专属。
+
+    仅存储 AI 生成的文本字段，不包含 DSL/context/requirements（它们会被重新计算覆盖）。
+    """
+    uuid: str
+    title: str
+    description: str
+    option_texts: list[str]  # 按 cfg.option_features 顺序
+
+
 # ════════════════════════════════════════════════════════════════
 # Plugin Hook 辅助函数
 # ════════════════════════════════════════════════════════════════
@@ -591,6 +603,354 @@ def _write_result_to_csv(result: GenerationResult, writer, cfg: EventPipelineCon
 
 
 # ════════════════════════════════════════════════════════════════
+# Reassembly 模式 — CSV 解析 + 旧内容重算
+# ════════════════════════════════════════════════════════════════
+
+def parse_old_csv_events(csv_path: str) -> dict[str, EventSnapshot]:
+    """解析旧 CSV，提取 title/description/option_texts 按 UUID 索引。
+
+    返回: {uuid: EventSnapshot}
+    不关心旧 CSV 的 DSL/context/requirements 列——它们会被重新计算覆盖。
+    """
+    events: dict[str, EventSnapshot] = {}
+    current_uuid = None
+    current_event: EventSnapshot | None = None
+
+    with open(csv_path, "r", newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if not row or row[0] == "row_type":
+                continue
+            if row[0] == "random_event" and len(row) > 1:
+                current_uuid = row[1]
+                current_event = EventSnapshot(
+                    uuid=current_uuid,
+                    title=row[4] if len(row) > 4 else "",
+                    description=row[5] if len(row) > 5 else "",
+                    option_texts=[],
+                )
+                events[current_uuid] = current_event
+            elif row[0] == ">option" and current_event is not None:
+                # option 文本在第 5 列（CSV description 列）
+                opt_text = row[5] if len(row) > 5 else ""
+                current_event.option_texts.append(opt_text)
+
+    return events
+
+
+def reassembly_one_event(
+    values_tuple: tuple,
+    cfg: EventPipelineConfig,
+    snapshot: EventSnapshot,
+    # sandbox 保留签名兼容但不使用（reassembly 不调 LLM，无 prompt 构建）
+    sandbox: SandboxManager | None = None,
+    plugins: list[EventPromptPlugin] | None = None,
+    image_dict: dict[str, ImageryItem] | None = None,
+    scene_dim_id: str | None = None,
+    emotion_dim_id: str | None = None,
+) -> GenerationResult:
+    """🔧 Reassembly 核心：不调 LLM，从旧 CSV snapshot 直接构建 GenerationResult。
+
+    这是 generate_one_event() 的并行变体，唯一区别是
+    parsed = {title, description, options} 来自旧 CSV 而非 LLM。
+    后半段（DSL 缩放、意象注入、plugin hooks、option 组装）完全复用原逻辑。
+    """
+    plugins = plugins or []
+    image_dict = image_dict or {}
+
+    # ── 计算标识符（同 generate_one_event）──
+    combined_scale = 1.0
+    scale_parts: list[str] = []
+    uuid_parts: list[str] = [cfg.id]
+    for val in values_tuple:
+        combined_scale *= val.scale
+        scale_parts.append(str(val.scale))
+        uuid_parts.append(val.id)
+    uuid = "_".join(uuid_parts).lower()
+    current_combos = _make_combos(cfg.dimensions, values_tuple)
+
+    # ── 提前计算不依赖 LLM 响应的属性（同 generate_one_event）──
+    selected_image_item = _select_imagery_for_combo(
+        current_combos, cfg, image_dict, scene_dim_id, emotion_dim_id,
+    )
+    stored_to = ""
+    for combo in current_combos:
+        if combo.value.stored_to:
+            stored_to = combo.value.stored_to
+            break
+
+    # ── 从 snapshot 构建 parsed dict（替代 LLM 响应）──
+    options_dict: dict[str, str] = {}
+    if cfg.option_features:
+        for i, choice in enumerate(cfg.option_features):
+            if i < len(snapshot.option_texts):
+                options_dict[choice.id] = snapshot.option_texts[i]
+
+    parsed = {
+        "title": snapshot.title,
+        "description": snapshot.description,
+        "options": options_dict,
+        "summary": {},
+        "_extra": {},
+    }
+
+    # ── DSL 缩放（同 generate_one_event）──
+    operator_dsls = [val.operator_dsl for val in values_tuple]
+    try:
+        scaled_dsl = scale_all_operators(operator_dsls, combined_scale)
+    except ValueError as e:
+        print(f"  ❌ DSL 缩放失败: {e}")
+        return GenerationResult(
+            status="fail", error=str(e),
+            uuid=uuid, combined_scale=combined_scale,
+            scale_parts=scale_parts, combos=current_combos,
+            values_tuple=values_tuple, parsed=parsed,
+            stored_to=stored_to,
+            selected_image_item=selected_image_item,
+        )
+
+    # ── Hook 3: 插件 context 富化 ──
+    context_extras = _build_plugin_context_extras(
+        plugins, current_combos, cfg, parsed, "",
+        combined_scale, uuid,
+    )
+    if stored_to:
+        if context_extras is None:
+            context_extras = {}
+        context_extras["store_to"] = stored_to
+
+    # ── 收集 tags ──
+    all_tags: list[str] = []
+    for combo in current_combos:
+        for tag in combo.value.tags:
+            if tag.startswith("action:"):
+                all_tags.append(tag)
+    tags_to_use = all_tags if all_tags else (cfg.universal_tags or ["bai_ye"])
+
+    # ── 构建选项行 ──
+    options = parsed.get("options", {})
+    option_rows: list[OptionRow] = []
+
+    if cfg.option_features:
+        for choice in cfg.option_features:
+            # 文本（来自旧 CSV snapshot）
+            if choice.fixed:
+                opt_text = choice.text if choice.text.strip() else "（冷眼旁观）"
+            else:
+                opt_text = options.get(choice.id, "").strip()
+                if not opt_text:
+                    opt_text = choice.text if choice.text.strip() else "（确认）"
+
+            # 结果 DSL
+            opt_dsl = _build_option_dsl(
+                current_combos, choice,
+                universal_result=cfg.universal_result or "",
+            )
+            if selected_image_item:
+                imagery_dsl = f"imagery_add(name={selected_image_item.id})"
+                opt_dsl = f"{opt_dsl} | {imagery_dsl}" if opt_dsl else imagery_dsl
+
+            # Hook 4: 插件选项结果 DSL 扩展
+            for plugin in plugins:
+                try:
+                    extra = plugin.get_option_result_extras(current_combos, choice)
+                    if extra:
+                        opt_dsl = f"{opt_dsl} | {extra}" if opt_dsl else extra
+                except Exception as e:
+                    print(f"  ⚠️ 插件 '{plugin.plugin_id}'.get_option_result_extras() 异常: {e}")
+
+            # per-option failed_hint（reassembly 中无 LLM 响应，为空）
+            per_option_hint = ""
+            if context_extras:
+                per_option_hint = context_extras.pop(f"failed_hint_{choice.id}", "")
+
+            opt_req = _build_option_requirement(
+                choice, per_option_hint,
+                universal_option_requirement=cfg.universal_option_requirement or "",
+            )
+
+            option_rows.append(OptionRow(
+                choice_id=choice.id,
+                text=opt_text,
+                dsl=opt_dsl,
+                requirement=opt_req,
+            ))
+    else:
+        default_dsl = scaled_dsl
+        if selected_image_item:
+            imagery_dsl = f"imagery_add(name={selected_image_item.id})"
+            default_dsl = f"{default_dsl} | {imagery_dsl}" if default_dsl else imagery_dsl
+        option_rows.append(OptionRow(
+            choice_id="default",
+            text="（确认）",
+            dsl=default_dsl,
+            requirement="",
+        ))
+
+    return GenerationResult(
+        status="success",
+        uuid=uuid, combined_scale=combined_scale,
+        scale_parts=scale_parts, combos=current_combos,
+        values_tuple=values_tuple,
+        parsed=parsed, raw_response="",
+        scaled_dsl=scaled_dsl,
+        context_extras=context_extras,
+        tags_to_use=tags_to_use,
+        stored_to=stored_to,
+        selected_image_item=selected_image_item,
+        option_rows=option_rows,
+    )
+
+
+def _load_registry() -> dict:
+    """加载 tools/event_config_registry.json 注册表。"""
+    registry_path = Path(__file__).resolve().parent.parent / "event_config_registry.json"
+    if not registry_path.exists():
+        print(f"❌ 注册表文件不存在: {registry_path}")
+        print("   请创建 tools/event_config_registry.json")
+        sys.exit(1)
+    with open(registry_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _run_reassembly_entry(entry_key: str, entry: dict) -> None:
+    """对注册表中的一个条目执行 reassembly。
+
+    entry: {"config": "tools/...json", "csv": "data/.../...csv"}
+    """
+    config_path = _project_root / entry["config"]
+    csv_path = _project_root / entry["csv"]
+
+    if not config_path.exists():
+        print(f"  ⚠️ [{entry_key}] config 不存在: {config_path}，跳过")
+        return
+    if not csv_path.exists():
+        print(f"  ⚠️ [{entry_key}] CSV 不存在: {csv_path}，跳过")
+        return
+
+    print(f"\n{'=' * 50}")
+    print(f"🔧 Reassembly: [{entry_key}]")
+    print(f"  Config: {entry['config']}")
+    print(f"  CSV:    {entry['csv']}")
+    print(f"{'=' * 50}")
+
+    # 1. 加载 config
+    cfg = load_config_from_json(str(config_path))
+
+    # 2. 加载意象字典
+    image_dict: dict[str, ImageryItem] = {}
+    if cfg.apply_dimension_imagery:
+        image_dict_path = _project_root / "data" / "image_dictionary.json"
+        if image_dict_path.exists():
+            raw = json.loads(image_dict_path.read_text(encoding="utf-8"))
+            for k, v in raw.items():
+                image_dict[k] = ImageryItem(**v)
+
+    # 3. 推导场景/情绪维度 ID
+    scene_dim_id: str | None = None
+    emotion_dim_id: str | None = None
+    for dim in cfg.dimensions:
+        if dim.id == "scene":
+            scene_dim_id = dim.id
+        elif dim.id == "emotion":
+            emotion_dim_id = dim.id
+
+    # 4. 加载插件
+    plugins: list[EventPromptPlugin] = []
+    if cfg.plugins:
+        try:
+            plugins = resolve_plugins(cfg.plugins)
+        except KeyError as e:
+            print(f"  ❌ [{entry_key}] 插件加载失败: {e}，跳过")
+            return
+
+    plugin_ids = [p.plugin_id for p in plugins]
+    if "_builtin_blacklist" not in plugin_ids:
+        blacklist_plugin = PLUGIN_REGISTRY.get("_builtin_blacklist")
+        if blacklist_plugin:
+            plugins.append(blacklist_plugin)
+
+    for plugin in plugins:
+        plugin.init(cfg)
+
+    # 5. 展开组合
+    combinations = list(expand_combinations(cfg.dimensions))
+    print(f"  📊 config 组合数: {len(combinations)}")
+
+    # 6. 解析旧 CSV
+    old_events = parse_old_csv_events(str(csv_path))
+    print(f"  📖 旧 CSV 事件数: {len(old_events)}")
+
+    # 7. 执行 reassembly
+    success_count = 0
+    not_found_count = 0
+    fail_count = 0
+    output_path = str(csv_path)
+
+    with open(output_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        write_csv_header(writer)
+
+        for idx, values_tuple in enumerate(combinations):
+            uuid = _compute_uuid(cfg.id, values_tuple)
+            snapshot = old_events.get(uuid)
+
+            if snapshot is None:
+                print(f"  ⏭️ [{idx+1}/{len(combinations)}] {uuid}: 旧 CSV 中未找到，跳过")
+                not_found_count += 1
+                continue
+
+            result = reassembly_one_event(
+                values_tuple, cfg, snapshot,
+                plugins=plugins,
+                image_dict=image_dict,
+                scene_dim_id=scene_dim_id,
+                emotion_dim_id=emotion_dim_id,
+            )
+
+            if result.status == "success":
+                print(f"  ✅ [{idx+1}/{len(combinations)}] {uuid}")
+                _write_result_to_csv(result, writer, cfg)
+                success_count += 1
+            else:
+                print(f"  ❌ [{idx+1}/{len(combinations)}] {uuid}: {result.error}")
+                fail_count += 1
+
+    print(f"\n  📊 [{entry_key}] 完成: 成功={success_count}, 跳過={not_found_count}, 失败={fail_count}")
+
+
+def run_reassembly_main(registry_key: str | None = None) -> None:
+    """Reassembly 模式顶层入口。
+
+    Args:
+        registry_key: 注册表 key。None = 全量注册表。
+    """
+    registry = _load_registry()
+    entries = registry.get("entries", {})
+
+    if not entries:
+        print("❌ 注册表为空")
+        sys.exit(1)
+
+    if registry_key is not None:
+        # 单一条目
+        if registry_key not in entries:
+            print(f"❌ 注册表中未找到 key: {registry_key}")
+            print(f"   可用 key: {list(entries.keys())}")
+            sys.exit(1)
+        _run_reassembly_entry(registry_key, entries[registry_key])
+    else:
+        # 全量注册表
+        print(f"\n🔄 Reassembly 全量模式 — {len(entries)} 个条目")
+        for key, entry in entries.items():
+            _run_reassembly_entry(key, entry)
+
+    print(f"\n{'=' * 50}")
+    print("✅ Reassembly 全部完成")
+    print(f"{'=' * 50}")
+
+
+# ════════════════════════════════════════════════════════════════
 # 试运行模式
 # ════════════════════════════════════════════════════════════════
 
@@ -770,7 +1130,17 @@ def main():
     parser.add_argument("--random", action="store_true", help="随机模式: 在 trial 模式下随机选择一个维度组合（而非总是第一个）")
     parser.add_argument("--complete", action="store_true", help="补跑模式：检测 CSV 中缺失的组合并追加生成（跳过已成功生成的事件）")
     parser.add_argument("--complete-uuids", default=None, help="重跑模式：指定要重新生成的 UUID（逗号分隔），保留其余已生成的行不变")
+    parser.add_argument("--reassembly", nargs="?", const="__ALL__", default=None,
+                        help="Reassembly 模式：从注册表或指定 key 对应的旧 CSV 中读取 AI 内容，"
+                             "用新的 config operator 配置重新计算 DSL/context，覆盖写回 CSV。"
+                             "无参数=全量注册表；有参数=注册表 key，如 'duotai_humiliation'")
     args = parser.parse_args()
+
+    # ── Reassembly 模式：早期路由（无需 LLM、sandbox、system prompt）──
+    if args.reassembly is not None:
+        key = args.reassembly if args.reassembly != "__ALL__" else None
+        run_reassembly_main(registry_key=key)
+        return
 
     if args.random and not args.trial:
         print("⚠️  --random 仅在 --trial 模式下生效，已忽略")
