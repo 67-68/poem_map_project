@@ -290,3 +290,87 @@ static func clear_favor(target_tag: String) -> void:
 	var flag_id = _build_flag_id(FLAG_PREFIX_FAVOR, target_tag)
 	PlayerState.remove_flag(flag_id)
 	Logging.info("RelationFlagManager: favor cleared for %s (flag=%s)" % [target_tag, flag_id])
+
+
+# ═══════════════════════════════════════════════════════════
+# 好感度社交倍率系统 — 信号钩子驱动的属性修正
+# ═══════════════════════════════════════════════════════════
+#
+# 架构概要：
+#   PlayerState.append_stat() 在属性变更前发射 before_property_change 信号，
+#   RelationFlagManager 监听此信号，根据 PlayerState.last_event.target_tag
+#   查询当前好感度，计算社交倍率，存入静态变量。
+#   append_stat() 在信号返回后读取此倍率，修正属性变化量。
+#
+# 好属性（玩家希望增加的）：
+#   literary_fame, official_prestige, talent, money, health, inspiration
+#
+# 坏属性（玩家希望减少的）：
+#   fatigue, burnout
+#
+# 倍率规则：
+#   高好感度 → 好属性倍率 >1.0（更多收益），坏属性倍率 <1.0（更少代价）
+#   低好感度 → 好属性倍率 <1.0（更少收益），坏属性倍率 >1.0（更多代价）
+# ═══════════════════════════════════════════════════════════
+
+## 硬编码的"好属性"对照表（key 为 Database.prop 的 uuid/name）
+const GOOD_PROPS: Dictionary = {
+	"literary_fame": true,
+	"official_prestige": true,
+	"talent": true,
+	"money": true,
+	"health": true,
+	"inspiration": true,
+}
+
+## 硬编码的"坏属性"对照表
+const BAD_PROPS: Dictionary = {
+	"fatigue": true,
+	"burnout": true,
+}
+
+## 由信号处理器写入、append_stat 读取并重置的社交倍率
+static var _current_favor_multiplier: float = 1.0
+
+## 连接 PlayerState 的 before_property_change 信号
+static func connect_to_player_state(player: PlayerState) -> void:
+	player.before_property_change.connect(_on_before_property_change)
+	Logging.info("RelationFlagManager: connected to PlayerState.before_property_change")
+
+## 信号处理器：在属性即将变更时计算好感度社交倍率
+static func _on_before_property_change(prop_name: String, delta: int) -> void:
+	var target_tag = PlayerState.last_event.get("target_tag", "")
+	if target_tag.is_empty():
+		_current_favor_multiplier = 1.0
+		return
+	
+	# 只对已知的好/坏属性施加倍率
+	var is_good = GOOD_PROPS.has(prop_name)
+	var is_bad = BAD_PROPS.has(prop_name)
+	if not is_good and not is_bad:
+		_current_favor_multiplier = 1.0
+		return
+	
+	var favor = get_favor(target_tag)
+	_current_favor_multiplier = _calculate_favor_multiplier(favor, is_good)
+	Logging.info("RelationFlagManager: favor=%d, prop=%s, is_good=%s, multiplier=%.2f" % [favor, prop_name, is_good, _current_favor_multiplier])
+
+## 根据好感度计算社交倍率
+##
+##   DEFAULT_FAVOR=30 → ratio=1.0（中性）
+##   favor=60 → ratio=2.0（高好感，好属性 2x，坏属性 0.5x）
+##   favor=10 → ratio≈0.33（低好感，好属性 0.33x，坏属性 3x）
+static func _calculate_favor_multiplier(favor: int, is_good: bool) -> float:
+	var ratio = float(favor) / float(DEFAULT_FAVOR)
+	if is_good:
+		return clampf(ratio, 0.2, 3.0)
+	else:
+		return clampf(1.0 / ratio, 0.2, 3.0)
+
+## 消费者模式：获取当前倍率并重置为 1.0
+##
+## 由 PlayerState.append_stat() 在 before_property_change 信号发射后调用。
+static func get_and_reset_favor_multiplier() -> float:
+	var m = _current_favor_multiplier
+	_current_favor_multiplier = 1.0
+	return m

@@ -13,6 +13,11 @@ extends Node
 var emotions: Dictionary = {}
 var flags: Dictionary = {}  # flag_id -> value (str/int/bool)
 
+## 当前正在处理的事件上下文
+## 由事件处理管道在处理事件前设置，包含 target_tag 等社交上下文信息。
+## RelationFlagManager 的 favor 倍率系统依赖此字段判断社交目标。
+var last_event: Dictionary = {}
+
 # 存活于整个"玩法会话"（如整场宴会）的析构队列
 # TempFlagOperator 会在这里注册反向清理算子
 var session_deferred_cleanups: Array[BaseOperator] = []
@@ -21,6 +26,11 @@ signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
 signal location_changed(location)
 signal emotion_changed(stat_name)
+
+## 属性即将变更时的信号钩子
+## 在 append_stat() 中 trait 倍率计算之后、实际写入 stat.val 之前发射。
+## RelationFlagManager 监听此信号，根据好感度对属性变化量施加社交倍率。
+signal before_property_change(prop_name: String, delta: int)
 
 func init_props():
 	var resources = SourceOfTruth.debug_dashboard_state.resources
@@ -145,6 +155,13 @@ func append_stat(stat_name, data):
 			amount_to_change = t.buffer_to_prop.match_and_multiply(stat_name, amount_to_change)
 		if t.buffer_to_region and t.buffer_to_region.has_operator(current_location):
 			amount_to_change = t.buffer_to_region.match_and_multiply(current_location, amount_to_change)
+
+	# ── 信号钩子：RelationFlagManager 在此根据好感度修正倍率 ──
+	before_property_change.emit(stat_name, amount_to_change)
+	var favor_multiplier = RelationFlagManager.get_and_reset_favor_multiplier()
+	if favor_multiplier != 1.0:
+		amount_to_change = int(amount_to_change * favor_multiplier)
+		Logging.info("change stat %s: favor multiplier applied (*%.2f) → %d" % [stat_name, favor_multiplier, amount_to_change])
 
 	Logging.info('change stat %s by %d' % [stat_name, amount_to_change])
 	stat.val += amount_to_change # 永远执行加法
