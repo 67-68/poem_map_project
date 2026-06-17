@@ -261,6 +261,18 @@
 | | `dufu` | 杜甫 |
 | | `wangwei` | 王维 |
 | | `yangguifei` | 杨贵妃 |
+| | `gaoshi` | 高适 |
+| | `zhengqian` | 郑虔 |
+| | `lilinfu` | 李灵甫 |
+| `IDENTITY` | `qingliu_owner` | 清流主人 |
+| | `qingliu_official` | 清流官（参军/侍郎/员外） |
+| | `zhuoliu_official` | 浊流官（参军/侍郎/员外） |
+| | `quangui` | 权贵 |
+| | `qingke` | 清客 |
+| | `menzi` | 门子 |
+| | `county_sheriff` | 县尉 |
+| | `vendor` | 商贩（掌柜/摊主/主簿） |
+| | `poor` | 穷人（乞丐/流民） |
 | `OBJECT` | `guqin` | 古琴 |
 | | `sword` | 剑 |
 | | `wine` | 酒 |
@@ -276,6 +288,18 @@
 - `TARGET_NPC_DUFU`
 - `TARGET_NPC_WANGWEI`
 - `TARGET_NPC_YANGGUIFEI`
+- `TARGET_NPC_GAOSHI`
+- `TARGET_NPC_ZHENGQIAN`
+- `TARGET_NPC_LILINFU`
+- `TARGET_IDENTITY_QINGLIU_OWNER`
+- `TARGET_IDENTITY_QINGLIU_OFFICIAL`
+- `TARGET_IDENTITY_ZHUOLIU_OFFICIAL`
+- `TARGET_IDENTITY_QUANGUI`
+- `TARGET_IDENTITY_QINGKE`
+- `TARGET_IDENTITY_MENZI`
+- `TARGET_IDENTITY_COUNTY_SHERIFF`
+- `TARGET_IDENTITY_VENDOR`
+- `TARGET_IDENTITY_POOR`
 - `TARGET_OBJECT_GUQIN`
 - `TARGET_OBJECT_SWORD`
 - `TARGET_OBJECT_WINE`

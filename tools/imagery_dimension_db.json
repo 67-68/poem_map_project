@@ -48,6 +48,67 @@
           "operator_dsl": "emo_add(name=sorrow; val=10)"
         }
       ]
+    },
+    {
+      "id": "social_identity",
+      "name": "社交身份",
+      "description": "独立社交身份数据库：事件中人类交互对象的身份类别。通过 virtual_dimension_ids 从 NPC 维度节点引用，运行时追加为虚拟维度。",
+      "values": [
+        {
+          "id": "identity_qingliu_owner",
+          "name": "清流主人",
+          "description": "清流派的核心主人，精神领袖。通常在事件中作为接待方、评判方或庇护者出现。",
+          "trigger_tag": "TARGET_IDENTITY_QINGLIU_OWNER"
+        },
+        {
+          "id": "identity_qingliu_official",
+          "name": "清流官",
+          "description": "清流派系的官员群体——参军、侍郎、员外。在事件上下文中由清流阵营语境区分。",
+          "trigger_tag": "TARGET_IDENTITY_QINGLIU_OFFICIAL"
+        },
+        {
+          "id": "identity_zhuoliu_official",
+          "name": "浊流官",
+          "description": "浊流派系的官员群体——参军、侍郎、员外。在事件上下文中由浊流阵营语境区分。",
+          "trigger_tag": "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
+        },
+        {
+          "id": "identity_quangui",
+          "name": "权贵",
+          "description": "依仗权势的浊流上层，典型如紫袍胖子权贵。拥有社会资源但缺乏文化声望。",
+          "trigger_tag": "TARGET_IDENTITY_QUANGUI"
+        },
+        {
+          "id": "identity_qingke",
+          "name": "清客",
+          "description": "依附于权贵门下的文人门客，文化水平较高但无实权，靠润色诗文/陪侍宴饮为生。",
+          "trigger_tag": "TARGET_IDENTITY_QINGKE"
+        },
+        {
+          "id": "identity_menzi",
+          "name": "门子",
+          "description": "门房传话的低级吏员，权力不大但掌握着\"见与不见\"的关键节点。",
+          "trigger_tag": "TARGET_IDENTITY_MENZI"
+        },
+        {
+          "id": "identity_county_sheriff",
+          "name": "县尉",
+          "description": "县级武装治安负责人，地方层面的执法者。",
+          "trigger_tag": "TARGET_IDENTITY_COUNTY_SHERIFF"
+        },
+        {
+          "id": "identity_vendor",
+          "name": "商贩",
+          "description": "市井商贩——掌柜、摊主、主簿（在交易语境中）。代表市场交换关系。",
+          "trigger_tag": "TARGET_IDENTITY_VENDOR"
+        },
+        {
+          "id": "identity_poor",
+          "name": "穷人",
+          "description": "底层流浪者——乞丐、流民。在社会边缘生存，与玩家的阶级差异最大。",
+          "trigger_tag": "TARGET_IDENTITY_POOR"
+        }
+      ]
     }
   ]
 }

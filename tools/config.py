@@ -278,6 +278,11 @@ class PipelineDimensionValue(BaseModel):
         指向同一目标维度，且不能指向自身所属的维度。
         示例：["TypeA"] 表示"当此值选中时，资源掠夺维度固定为 TypeA"。
     
+    virtual_dimension_ids: 虚拟维度追加列表。每个 inner list 成为一个
+        额外的虚拟维度，与所有原始维度做笛卡尔积。不替换任何现有维度。
+        每个 inner list 中的字符串是外部维度库中的维度值 ID，
+        如 ["identity_qingliu_owner", "identity_qingliu_official"]。
+    
     narrative_constraint: 可选的结构化叙事约束，描述该维度值对应的
         NPC 行为、玩家动作、揭晓方式和反面教材。
         当维度值的 description 字段包含文学叙事时，建议将约束拆解到
@@ -290,6 +295,7 @@ class PipelineDimensionValue(BaseModel):
     operator_dsl: str = ""
     option_results: dict[str, str] = {}
     linked_value_ids: list[str] = []
+    virtual_dimension_ids: list[list[str]] = []
     tags: list[str] = []
     stored_to: str = ""
     narrative_constraint: Optional[NarrativeConstraint] = None
@@ -605,12 +611,18 @@ _EXT_DIM_DB_PATH = _REGISTRY_DIR / "imagery_dimension_db.json"
 
 
 def _collect_unique_linked_ids(dimensions: list[dict]) -> set[str]:
-    """收集所有维度值中的 linked_value_ids（去重）。"""
+    """收集所有维度值中的 linked_value_ids 和 virtual_dimension_ids 内层 ID（去重）。
+
+    virtual_dimension_ids 中的每个 inner list 的每个 ID 都会被收集，
+    用于后续自动注入外部维度。"""
     ids: set[str] = set()
     for dim in dimensions:
         for val in dim.get("values", []):
             for linked_id in val.get("linked_value_ids", []):
                 ids.add(linked_id)
+            for inner_list in val.get("virtual_dimension_ids", []):
+                for vid in inner_list:
+                    ids.add(vid)
     return ids
 
 
