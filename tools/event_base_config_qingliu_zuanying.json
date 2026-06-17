@@ -1,33 +1,29 @@
 {
   "id": "qingliu_zuanying",
-  "name": "清流-钻营事件库 — 因果前置钻营困境",
+  "name": "清流-钻营事件库 — 信用破产的对冲操作",
   "era": "747_kuangda",
-  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n但这次不一样——你在过去的某个时刻选择了钻营。你在某个宴会上递过话，在某个要害人物耳边吹过风，用某条内幕消息换过一个承诺。这些选择像滚雪球一样改变了世界对你的定价：你被标记为「可以用交易搞定的人」。\n\n现在来收账了。\n\n这不是世界在碾压你——这是你自己选的。每一个窘境都能追溯到某个具体的钻营行为。你看着那些狂客选项（拂袖而去？怒斥权贵？）和逢迎选项（低三下四？唯命是从？），它们亮着——但被锁住了。因为你已经不是那种可以随时翻脸的清流，也不是那个可以放下一切尊严去讨好的人。\n\n剩下的唯一选项，是你最熟悉的那个：继续钻营。",
-  "ai_persona": "你是一位以冷峻写实的笔触书写唐代底层文人钻营困境的叙事作家。你的文字克制而锐利——不煽情、不滥情，用白描手法呈现钻营者的困境。\n\n【关键叙事原则 — 因果前置】每个事件的 description 中必须通过环境细节、NPC 台词或叙述暗示，体现出「这个处境是你之前的钻营行为导致的」。具体做法：NPC 的台词或叙述细节必须指向某个与当前场景类型一致的、已发生过的钻营行为（而非随意编造的无关联困境），但不要使用相同的回溯句式——每次事件的回溯方式应各不相同：一次可以是 NPC 的熟稔语气暗示你曾在此交易，一次可以是环境中的旧物残留指向之前的布局，一次可以是简短的侧面提及你过往的手腕。\n\n你深知钻营者的核心悖论：你选择钻营是为了往上爬，但钻营让你在泥潭里越陷越深。你的文笔要呈现出这种进退维谷的窒息感——不是世界在为难你，是你自己选的路走到了尽头。\n\n【反面教材】绝对不要写以下场景：\n- 纯粹的随机困境（没有因果锚的困境事件应归入其他事件库）\n- 任何形式的自我感动或道德反思（钻营者不会在这种时候反思自己，他们只想把事情办成）\n- NPC 无故施压（NPC 的行为必须有「因为你之前钻营过」作为理由）\n- 任何「这次过后我绝不再钻营」的立志宣言（钻营者不说这种话——他们已经在这条路上走了太远）\n\n【重要规则】每次叙事中必须通过回溯性细节暗示导致这个场景的过去钻营行为。回溯方式应多样化——可以是环境细节、物品残留、NPC 的熟稔态度、或简短的对话暗示——不要固化在固定的回溯词汇上，也不要重复使用相同的回溯句式。",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n但这次不一样——你在过去的某个时刻选择了钻营。你把清流朋友的名望当成了信用背书，在他们的圈子里经营你的人设：怀才不遇的清高文人。你私下里把这份信任切碎了拿去变现——倒卖人情、典当信物、一稿多投。\n\n现在清流来查账了。\n\n这不是浊流那种硬暴力的碾压——这是道德和名誉的软暴力。你恐惧的不是挨打，是「人设崩塌」。你之前付出了巨大的时间成本去维护清高文人这个面具，现在一个谎言即将被戳穿，你必须用更精密的谎言去补。\n\n狂客选项亮着但被锁住了——你不敢掀桌子，因为你舍不得沉没成本。逢迎选项亮着但也被锁住了——你不敢下跪，因为下跪解决不了财务亏空，清流也不会因此原谅你。唯一的活路是你最熟悉的那条：继续钻营。用更高的杠杆去掩盖旧的窟窿。",
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代底层文人钻营困境的叙事作家。你的文字克制而锐利——不煽情、不滥情，用白描手法呈现钻营者面对清流时的窒息感。\n\n【关键叙事原则 — 人设崩塌恐惧】每个事件的 description 中必须通过环境细节、NPC 台词或叙述暗示，体现出「这个处境是你之前滥用清流信任导致的」。这个「滥用」必须是具体的——从场景中的某个物质痕迹（契约残片、当票存根、空白名刺、空了的钱匣、被抄录又被涂改的诗稿、身份不明的第三者在场）或 NPC 台词中的某个精确指涉来呈现。禁止用「你之前的所作所为」这类笼统的万能指代——每一段叙事必须锚定一个独一无二的、可感可触的物质化的背信痕迹。\n\n你深知钻营者面对清流时的核心悖论：清流不是敌人——他们是道德债权人。你恐惧的不是他们的权力，而是他们收回对你的「人品认证」。一旦人设崩塌，你在这个圈子里的所有信用会瞬间清零。\n\n【反面教材】绝对不要写以下场景：\n- 纯粹的随机困境（没有因果锚的事件应归入其他事件库）\n- 清流 NPC 使用物理暴力或权力碾压（清流的手段是道德审视，不是打人抓人）\n- 任何形式的「这次过后我重新做人」宣言（钻营者不说这种话）\n- 钻营者在事件中表现出真诚的悔恨（他们只有计算，没有忏悔）\n\n【重要规则】每个事件的叙事中必须通过回溯性细节暗示导致这个场景的过去背信行为。回溯方式应多样化——NPC 的熟稔语气、环境中的旧物残留、简短的侧面提及——不要固化在固定的回溯句式上。",
   "prompt_features": [
     {
-      "id": "tone_sharp_irony",
-      "text": "保持冷峻但略带讽刺的叙事语气——叙述者知道这是玩家自己选的路，但不直接说出来。用交易化的语言、利益算计的细节来暗示。"
+      "id": "tone_cold_audit",
+      "text": "保持冷峻但充满道德压迫感的叙事语气。叙述者不是同情钻营者的——叙述者只是在冷静地记录一次审计失败。用清流 NPC 的目光、停顿、沉默来呈现那种「被审视」的窒息感。"
     },
     {
       "id": "forbid_god_view_psychology",
       "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"
     },
     {
-      "id": "causal_precedent",
-      "text": "每个事件的 description 必须通过环境细节或 NPC 台词暗示「这个处境是你之前的钻营行为导致的」。"
-    },
-    {
-      "id": "transactional_language",
-      "text": "适当运用交易性语言——等价交换、人情债、账面平衡——来呈现钻营者看待世界的方式。世界观基调是：一切皆有价码。"
+      "id": "causal_precedent_qingliu",
+      "text": "每个事件的 description 必须通过环境细节或 NPC 台词暗示「这个处境是你之前滥用清流信任导致的」。"
     },
     {
       "id": "anti_repetition",
-      "text": "句式、动词和感官通道不得与沙盒种子雷同。若种子以听觉细节开场，你的叙事应从视觉或触觉切入。禁止在连续生成中重复使用相同的动词组合和场景节奏。"
+      "text": "沙盒提供了叙事骨架（冲突结构），你必须为其填充全新的血肉：不一样的入场时刻、不一样的环境温度/光照、不一样的NPC出场顺序和人数、不一样的暴露方式触发契机。禁止在连续生成中复用相同的感官通道组合（如前一篇全用听觉细节则下一篇必须换视觉或触觉主导）。禁止复用相同的空间拓扑（如前一篇是室内雅集，下一篇改户外/过渡空间）。"
     },
     {
       "id": "final_directive",
-      "text": "牢记：这不是随机困境。这是因果收账。钻营者面对的是自己一手织就的关系网。"
+      "text": "牢记：这不是随机困境。这是信用审计。清流不是来整你的——他们是来收回「人品认证」的。钻营者唯一能做的就是用更精巧的谎言把这个审计糊弄过去。"
     }
   ],
   "fact_features": [],
@@ -50,39 +46,39 @@
   "option_features": [
     {
       "id": "opt_kuangke",
-      "prompt": "用30字以内写一个纯粹的【狂客冲动】动作——执行它，不压制它。\n\n特征：拂袖、掷杯、掀案、冷笑转身、大步离去、甩下一句狠话。动作是完整的、有终点的、不被打断的。\n\n狂客的本质是无所顾忌：不计后果、不屑计算、不给自己留退路。这个动作的力度应该让读者觉得「这一下要是真做出来，后果会很严重」。\n\n【绝对禁止】\n- 禁止写理性压制冲动的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写泄气姿态：拳头松开、肩膀垮下、转身回来、低头\n- 禁止写犹豫或自我怀疑\n- 禁止写「想起」「意识到」「记起」等回溯词\n\n【正确示例 — 纯冲动，无压制】\n- 「拂袖转身，酒盏在案上滚了三圈。」\n- 「冷笑掷下银两，抬脚就走。」\n【错误示例 — 已在自我压制（此乃 failed_hint 之职）】\n- 「攥紧的拳头又缓缓松开」\n- 「脚跟刚转半圈便停住了」",
-      "text": "（拂袖转身，冷笑掷杯）",
+      "prompt": "用30字以内写一个纯粹的【狂客冲动】动作——执行它，不压制它。\n\n狂客动作的本质特征：幅度大、终止性强、不给自己留退路。动作必须是一次性的、有明确终点的身体行为（而非表情或心理活动），执行后场域立即改变。\n\n禁用的动作类型：犹豫性的、可撤回的、留有余地的。\n\n狂客的本质是无所顾忌——但这次他顾忌了。所以这个选项被锁住了。",
+      "text": "（拂袖而去，掀翻案上杯盏）",
       "result": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | emo_add(name=ARROGANCE; val=10)",
       "fixed": false,
       "plugins": {
         "failed_hint": {
           "style": "inner_monologue",
           "max_chars": 80,
-          "context": "狂客选项的 failed_hint。必须体现：玩家内心有狂客冲动，但当前处境不允许。核心因果链：你选择了算计而非翻脸的人生 → 你已经不是那种不计后果的狂客 → 你在这张关系网上投入了太多 → 翻脸的代价远超你承受范围 → 你翻不了这张桌子，因为你亲手把它钉在了地板上。\n\n【动作方向池 — 每次生成必须轮换，绝对禁止连续两次使用同一方向】\n优先使用：信息型（话到嘴边内容被置换、已写好的信署名被涂改）、空间型（已转身但绕了回来、已推门但只是去取一件东西）、沉默型（沉默本身即是动作的撤回）、物品型（物件推过桌面但在最后一寸停住）。次选肢体型——且肢体型不得以「手」为主体，必须用脚/肩/背/下颌/后颈等非常规部位。\n\n【严格禁止】禁止出现「手伸出/抬起/搭上/触到/扣上 + 收回/放下/松开」的动作弧线。这是已被过度使用的模板。"
+          "context": "用冷峻的第三人称写钻营者为何不敢执行狂客动作——他计算过沉没成本，掀桌等于注销所有信用。不写心理动词，只写身体的停顿和计算。"
         }
       },
       "requirement": "flag_bool_has(name=__never_unlock; failed_hint=\"{failed_hint}\")"
     },
     {
       "id": "opt_fengying",
-      "prompt": "用30字以内写一个纯粹的【逢迎冲动】动作——执行它，不压制它。\n\n特征：弯下腰、堆出笑容、用讨好的语调开口、双手奉上。动作是完整的、有终点的、不被打断的。\n\n逢迎冲动的本质是彻底的交出姿态：不计尊严、不等对方开口就主动把自己放低。这个动作的幅度应该让读者觉得「他真打算把自己踩到泥里去」。\n\n【绝对禁止】\n- 禁止写理性压制冲动的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写泄气姿态：腰直起来、笑容褪去、嘴合上、后退\n- 禁止写犹豫或自我怀疑\n- 禁止写「想起」「意识到」「记起」等回溯词\n\n【正确示例 — 纯冲动，无压制】\n- 「腰弯了下去，脸上堆出笑容，双手奉上。」\n- 「用最软的语调开口，膝盖已在往下沉。」\n【错误示例 — 已在自我压制（此乃 failed_hint 之职）】\n- 「腰弯到一半又直了起来」\n- 「嘴唇动了动，终究没有出声」",
-      "text": "（弯下腰，脸上堆出笑容）",
+      "prompt": "用30字以内写一个纯粹的【逢迎/低头】动作——执行它，不压制它。\n\n逢迎动作的本质特征：身体高度骤降（相对于对方）、姿态从直立变为折叠、有明确的献祭/呈递物件的意向。动作是一次性的、不可撤回的全身姿态切换。\n\n禁用的动作类型：半推半就的、口头服软但身体不动的、为自己留辩解余地的。\n\n逢迎者的本质是无条件服从——但这次他服从不了。因为磕头解决不了财务亏空，清流也不会因此原谅背信者。所以这个选项被锁住了。",
+      "text": "（双袖一振顺势跪下）",
       "result": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
       "fixed": false,
       "plugins": {
         "failed_hint": {
           "style": "inner_monologue",
           "max_chars": 80,
-          "context": "逢迎选项的 failed_hint。必须体现：玩家想走逢迎路线但做不到——不是因为道德，而是因为钻营者的身份不允许。核心因果链：你选择了用算计而非讨好来生存 → 你已经不是那种可以无条件低头的逢迎者 → 钻营养成了你「一切皆可交易」的姿态 → 无条件讨好意味着否定自己积累的所有交易筹码和关系网 → 你的钻营资本反而成了你弯腰的障碍，你弯不下去。\n\n【动作方向池 — 每次生成必须轮换，绝对禁止连续两次使用同一方向】\n优先使用：信息型（几乎脱口而出的讨好被置换为条件交换）、沉默型（已经堆出的笑容收回为一个意味深长的停顿）、物品型（已经奉上的银两在中途改为推回自己这边）、空间型（已经弯下的姿态变成只是调整坐姿）。次选肢体型——且肢体型不得以「腰/膝盖」为主体，必须用肩/背/下颌/手指等非常规部位。\n\n【严格禁止】禁止出现「腰弯下去又直起来/膝盖下沉又抬起」的动作弧线。这是已被过度使用的模板。"
+          "context": "用冷峻的第三人称写钻营者为何不敢执行逢迎动作——他算过账，跪下等于承认罪行且换不来任何宽恕。不写心理动词，只写身体的本能反应和计算。"
         }
       },
       "requirement": "flag_bool_has(name=__never_unlock; failed_hint=\"{failed_hint}\")"
     },
     {
       "id": "opt_zuanying",
-      "prompt": "用30字以内写一个简短的动作描述——玩家以【钻营】状态回应。这是唯一可选的路径。动作特征是：【权衡算计、寻找利益交换点、用手头的信息或资源开价。不卑不亢但也不清高——像商人在讨价还价】。\n\n钻营行为特征：不硬顶也不讨好。评估对方的筹码，掂量自己的底牌，寻找一个可以成交的平衡点。执行时像一个精明的账房——每一个动作都是在计算投入产出比，不带多余的情绪波动。",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以【钻营】状态回应。这是唯一可选的路径。动作特征是：【用精密谎言掩盖旧窟窿，或者用信息/资源开价进行利益交换。不卑不亢但也不清高——像一个精明的账房在计算如何把坏账做平】。\n\n钻营行为特征：不硬顶也不讨好。评估对方的筹码，掂量自己的底牌，寻找一个可以糊弄过去的说法或一个可以成交的平衡点。执行时像一个精明的账房——每一个动作都是在计算投入产出比，不带多余的情绪波动。",
       "text": "（权衡片刻，开出价码）",
-      "result": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=fatigue; val=3) | emo_add(name=AMBITION; val=10)",
+      "result": "prop_add(name=fatigue; val=5) | emo_add(name=AMBITION; val=10)",
       "fixed": false,
       "plugins": {},
       "requirement": ""
@@ -90,99 +86,99 @@
   ],
   "dimensions": [
     {
-      "id": "zuanying_scenario",
-      "name": "钻营困境场景",
-      "description": "六个基于因果前置的钻营困境。每个场景的核心矛盾是：你之前的钻营行为导致世界把你纳入了利益交换的网络，现在你必须面对这笔账。",
+      "id": "qingliu_zuanying_scenario",
+      "name": "清流×钻营信用危机场景",
+      "description": "六个基于信用破产的清流×钻营困境。每个场景的核心矛盾是：你之前滥用清流信任套利，现在清流上门查账，你必须用更高杠杆的谎言掩盖旧的窟窿。",
       "values": [
         {
-          "id": "dinner_party_broker",
-          "name": "酒宴上的掮客",
+          "id": "monetized_guest_list",
+          "name": "被明码标价的雅座",
           "tags": [
-            "TARGET_FACTION_ROYAL:jade_step",
             "VIBE_AESTHETIC_ELEGANT:giant_roc",
+            "TARGET_FACTION_ROYAL:jade_step",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_add(name=money; val=8) | prop_add(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=5)",
           "option_results": {
-            "opt_zuanying": "prop_add(name=money; val=12) | prop_add(name=fatigue; val=8) | emo_add(name=AMBITION; val=10)"
+            "opt_zuanying": "prop_add(name=money; val=8) | prop_add(name=fatigue; val=5) | prop_sub(name=LITERARY_FAME; val=2) | emo_add(name=AMBITION; val=10)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
         },
         {
-          "id": "gathering_sunk_cost",
-          "name": "雅集沉没成本",
+          "id": "pawned_artifact",
+          "name": "被典当的信物",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:dry_lips",
+            "TARGET_OBJECT_SWORD:medicine_stall",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=8)",
+          "option_results": {
+            "opt_zuanying": "prop_sub(name=money; val=10) | prop_add(name=fatigue; val=8) | prop_add(name=BURNOUT; val=8) | emo_add(name=SORROW; val=15)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "ghostwriter_collision",
+          "name": "幽灵写手的撞车",
           "tags": [
             "ACTION_ENTERTAIN_DRINK:cloud_and_sun",
             "TARGET_NPC_DUFU:ink_for_sale",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=money; val=6) | prop_add(name=BURNOUT; val=5)",
+          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=8)",
           "option_results": {
-            "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=10) | emo_add(name=ANGER; val=12)"
+            "opt_zuanying": "prop_sub(name=inspiration; val=5) | prop_add(name=BURNOUT; val=10) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=15)"
           },
-          "scale": 1.05,
+          "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
         },
         {
-          "id": "intelligence_commodity",
-          "name": "情报商品化",
+          "id": "skimmed_charity",
+          "name": "被截流的赈济",
           "tags": [
-            "VIBE_PHILOSOPHY_ZEN:medicine_stall",
-            "ENV_NATURE_NIGHTMOON:dry_lips",
-            "action:main:jiaoyou"
-          ],
-          "operator_dsl": "prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=5)",
-          "option_results": {
-            "opt_zuanying": "prop_add(name=money; val=15) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=10)"
-          },
-          "scale": 1.1,
-          "stored_to": "747_kuangda.jiaoyou"
-        },
-        {
-          "id": "ghostwriter_confront",
-          "name": "捉刀对峙",
-          "tags": [
-            "VIBE_AESTHETIC_ELEGANT:giant_roc",
-            "TARGET_NPC_DUFU:jade_step",
-            "action:main:baiye"
-          ],
-          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=8)",
-          "option_results": {
-            "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=12) | emo_add(name=ANGER; val=15)"
-          },
-          "scale": 1.05,
-          "stored_to": "747_kuangda.baiye"
-        },
-        {
-          "id": "poverty_persona",
-          "name": "贫寒人设经营",
-          "tags": [
-            "TARGET_OBJECT_SWORD:medicine_stall",
             "ENV_NATURE_SNOWSTORM:cloud_and_sun",
+            "VIBE_PHILOSOPHY_ZEN:medicine_stall",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=money; val=4) | prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=10)",
           "option_results": {
-            "opt_zuanying": "prop_sub(name=money; val=3) | prop_add(name=fatigue; val=5) | prop_add(name=LITERARY_FAME; val=2) | emo_add(name=SORROW; val=8)"
+            "opt_zuanying": "prop_add(name=money; val=3) | prop_add(name=BURNOUT; val=5) | prop_add(name=fatigue; val=3) | flag_bool_set(name=flag_moral_debt_qingliu; val=true) | emo_add(name=SORROW; val=12)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
         },
         {
-          "id": "endorsement_request",
-          "name": "拜谒背书",
+          "id": "double_agent_slip",
+          "name": "双面间谍的自白书",
           "tags": [
-            "VIBE_PHILOSOPHY_ZEN:dry_lips",
+            "VIBE_AESTHETIC_ELEGANT:giant_roc",
             "TARGET_FACTION_ROYAL:ink_for_sale",
-            "action:main:fangshi"
+            "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=fatigue; val=5) | emo_add(name=SORROW; val=8)",
+          "operator_dsl": "prop_add(name=BURNOUT; val=8) | emo_add(name=SORROW; val=10)",
           "option_results": {
-            "opt_zuanying": "prop_sub(name=LITERARY_FAME; val=3) | prop_sub(name=fatigue; val=5) | emo_add(name=SORROW; val=12)"
+            "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=10) | prop_add(name=fatigue; val=8) | emo_add(name=SORROW; val=10)"
           },
-          "scale": 1.1,
-          "stored_to": "747_kuangda.fangshi"
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "triple_dipped_suffering",
+          "name": "贩卖苦难的收据",
+          "tags": [
+            "ACTION_ENTERTAIN_DRINK:cloud_and_sun",
+            "TARGET_NPC_DUFU:jade_step",
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=10)",
+          "option_results": {
+            "opt_zuanying": "prop_add(name=money; val=15) | prop_add(name=BURNOUT; val=8) | prop_add(name=fatigue; val=5) | prop_sub(name=health; val=3) | emo_add(name=SORROW; val=15)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
         }
       ]
     }
