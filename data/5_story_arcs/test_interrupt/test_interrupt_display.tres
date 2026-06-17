@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://test_interrupt_display"]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="2_pe"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_eo"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="5_bo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_re"]
+
+[sub_resource type="Resource" id="Resource_pe"]
+script = ExtResource("2_pe")
+metadata/_custom_type_script = "uid://byn0qqw1xm33f"
+
+[sub_resource type="Resource" id="Resource_cr_continue"]
+script = ExtResource("3_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_pe")])
+
+[sub_resource type="Resource" id="Resource_opt_continue"]
+script = ExtResource("4_eo")
+choice_result = SubResource("Resource_cr_continue")
+description = "继续在街上闲逛"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("6_re")
+options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_continue")])
+uuid = "test_interrupt_display"
+name = "街市漫步"
+description = "长安的街市一如既往地热闹。卖胡饼的摊贩在吆喝，西域来的珠宝商人在展示货品，远处传来一阵骚动的声音，似乎有人在争吵。你正犹豫要不要过去看看。"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"
