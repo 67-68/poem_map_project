@@ -115,7 +115,8 @@
           "name": "门房的物理隔离",
           "description": "你被拦在某位大人的门房外——不是主人不见你，是门子根本没把名帖递进去。门房里的炭火烧得正旺，门子坐在那里搓着手，连眼皮都没抬。你站在寒风里。你和这扇门之间的距离不是一个名帖能跨越的。",
           "tags": [
-            "action:main:fangshi"
+            "action:main:fangshi",
+            "TARGET_IDENTITY_MENZI"
           ],
           "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=BURNOUT; val=8) | emo_add(name=ANGER; val=10) | flag_int_append(name=kuangda; val=-3)",
           "option_results": {},
@@ -127,7 +128,8 @@
           "name": "同温层的死锁",
           "description": "你发现自己总是和同样失意的人聚在一起——没有能量的文人、没有资源的清客、没有前程的老书生。你们互相安慰、互相取暖、互相确认对方的才华被埋没。这是同温层的死锁：在这里永远得不到你真正需要的机会。",
           "tags": [
-            "action:main:fangshi"
+            "action:main:fangshi",
+            "TARGET_IDENTITY_QINGKE"
           ],
           "operator_dsl": "prop_sub(name=health; val=5) | emo_add(name=SORROW; val=10) | flag_int_append(name=kuangda; val=-3)",
           "option_results": {},

@@ -172,7 +172,8 @@
           "tags": [
             "ACTION_ENTERTAIN_DRINK:cloud_and_sun",
             "TARGET_NPC_DUFU:ink_for_sale",
-            "action:main:jiaoyou"
+            "action:main:jiaoyou",
+            "TARGET_IDENTITY_QUANGUI"
           ],
           "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=8)",
           "option_results": {
@@ -200,7 +201,12 @@
               }
             ],
             "action_style": "暴露的节奏是递进的——不是一上来就撞车。可能是有人先提了一句「最近某公子的诗大有长进」，你心里一紧；又有人接话「确实，尤其这句……」，你开始计算；第三个人把全诗念了出来，你发现那是你上个月卖出去的。叙事应呈现这个递进过程。"
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_quangui"
+            ]
+          ]
         },
         {
           "id": "skimmed_charity",
@@ -244,7 +250,8 @@
           "tags": [
             "VIBE_AESTHETIC_ELEGANT:giant_roc",
             "TARGET_FACTION_ROYAL:ink_for_sale",
-            "action:main:jiaoyou"
+            "action:main:jiaoyou",
+            "TARGET_IDENTITY_QUANGUI"
           ],
           "operator_dsl": "prop_add(name=BURNOUT; val=8) | emo_add(name=SORROW; val=10)",
           "option_results": {
@@ -272,7 +279,12 @@
               }
             ],
             "action_style": "暴露的机制是间接的——可能是一张没有署名的拜帖在茶余饭后被传阅嘲笑，嘲笑完了才有人突然说：等等，这个飞白体的收笔……席间的笑声从嘲讽变成了沉默。叙事应从集体反应（笑声、传阅、点评）过渡到个体反应（沉默、放下、看向某处）。"
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_quangui"
+            ]
+          ]
         },
         {
           "id": "triple_dipped_suffering",

@@ -155,48 +155,72 @@
           "id": "LIBAI",
           "name": "李白",
           "tags": [
-            "TARGET_NPC_LIBAI:wine_gourd"
+            "TARGET_NPC_LIBAI:wine_gourd",
+            "TARGET_IDENTITY_QINGLIU_OWNER"
           ],
           "operator_dsl": "",
           "linked_value_ids": [
             "cultural_capital",
             "spiritual_anchor"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_owner"
+            ]
           ]
         },
         {
           "id": "WANGWEI",
           "name": "王维",
           "tags": [
-            "VIBE_AESTHETIC_ELEGANT:ink_stone"
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
           ],
           "operator_dsl": "",
           "linked_value_ids": [
             "halo_protection",
             "silent_bailout"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_zhuoliu_official"
+            ]
           ]
         },
         {
           "id": "ZHENGQIAN",
           "name": "郑虔",
           "tags": [
-            "TARGET_NPC_DUFU:thatched_grass"
+            "TARGET_NPC_DUFU:thatched_grass",
+            "TARGET_IDENTITY_QINGLIU_OFFICIAL"
           ],
           "operator_dsl": "",
           "linked_value_ids": [
             "solidarity_wretched",
             "spiritual_anchor"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_official"
+            ]
           ]
         },
         {
           "id": "GAOSHI",
           "name": "高适",
           "tags": [
-            "VIBE_THEME_MARTIAL:giant_roc"
+            "VIBE_THEME_MARTIAL:giant_roc",
+            "TARGET_IDENTITY_QINGLIU_OFFICIAL"
           ],
           "operator_dsl": "",
           "linked_value_ids": [
             "silent_bailout",
             "intel_routing"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_official"
+            ]
           ]
         }
       ]

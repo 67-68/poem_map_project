@@ -152,7 +152,9 @@
             "TARGET_NPC_DUFU:thatched_grass",
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
             "ENV_NATURE_NIGHTMOON:cold_moon",
-            "action:humiliation_talent_commodification"
+            "action:humiliation_talent_commodification",
+            "TARGET_IDENTITY_QINGLIU_OFFICIAL",
+            "TARGET_NPC_ZHENGQIAN"
           ],
           "linked_value_ids": [
             "gateway_fangshi",
@@ -181,7 +183,12 @@
                 "reason": "不会被感动，他们只是完成了资源交换，不会对你有超出工具价值的情感反应"
               }
             ]
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_official"
+            ]
+          ]
         },
         {
           "id": "aesthetic_violation",
@@ -194,7 +201,8 @@
             "TARGET_NPC_DUFU:thatched_grass",
             "ACTION_SOCIAL_PARTING:willow_branch",
             "VIBE_AESTHETIC_ELEGANT:ink_stone",
-            "action:humiliation_aesthetic_violation"
+            "action:humiliation_aesthetic_violation",
+            "TARGET_IDENTITY_QINGKE"
           ],
           "linked_value_ids": [
             "gateway_fangshi",
@@ -278,7 +286,8 @@
             "VIBE_THEME_HISTORY:ruined_wall",
             "TARGET_NPC_DUFU:thatched_grass",
             "ACTION_TRAVEL_BOAT:broken_oar",
-            "action:humiliation_cheap_labor"
+            "action:humiliation_cheap_labor",
+            "TARGET_IDENTITY_VENDOR"
           ],
           "linked_value_ids": [
             "gateway_fangshi",
@@ -307,7 +316,12 @@
                 "reason": "这不是夸奖，这是进一步把你定位为劳力。真实的反应是漠不关心的验收"
               }
             ]
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_vendor"
+            ]
+          ]
         },
         {
           "id": "class_bullying",
@@ -320,7 +334,9 @@
             "TARGET_OBJECT_SWORD:cold_blade",
             "ENV_NATURE_NIGHTMOON:cold_moon",
             "VIBE_THEME_HISTORY:ruined_wall",
-            "action:humiliation_class_bullying"
+            "action:humiliation_class_bullying",
+            "TARGET_IDENTITY_QINGLIU_OFFICIAL",
+            "TARGET_IDENTITY_MENZI"
           ],
           "linked_value_ids": [
             "gateway_baiye",
@@ -349,7 +365,12 @@
                 "reason": "在阶级社会里，没有人会为底层的尊严站出来——那不是仗义，是找死"
               }
             ]
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_official"
+            ]
+          ]
         },
         {
           "id": "peer_gap",
@@ -362,7 +383,8 @@
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
             "ACTION_SOCIAL_PARTING:willow_branch",
             "ENV_NATURE_NIGHTMOON:cold_moon",
-            "action:humiliation_peer_gap"
+            "action:humiliation_peer_gap",
+            "TARGET_IDENTITY_QINGLIU_OFFICIAL"
           ],
           "linked_value_ids": [
             "gateway_jiaoyou",
@@ -391,7 +413,12 @@
                 "reason": "这不是逆袭爽文，同侪不会为了你冒险动用关系"
               }
             ]
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_official"
+            ]
+          ]
         },
         {
           "id": "weak_harm_weak",
@@ -404,7 +431,8 @@
             "VIBE_THEME_HISTORY:ruined_wall",
             "TARGET_NPC_DUFU:thatched_grass",
             "ENV_NATURE_NIGHTMOON:cold_moon",
-            "action:humiliation_weak_harm_weak"
+            "action:humiliation_weak_harm_weak",
+            "TARGET_IDENTITY_POOR"
           ],
           "linked_value_ids": [
             "gateway_fangshi",
@@ -432,7 +460,12 @@
                 "reason": "弱者的伤害不会因为你的大度就被纠正——东西拿不回来了，信任也回不来了"
               }
             ]
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_poor"
+            ]
+          ]
         },
         {
           "id": "hidden_charity",
@@ -445,7 +478,8 @@
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
             "ENV_NATURE_NIGHTMOON:cold_moon",
             "ACTION_SOCIAL_PARTING:willow_branch",
-            "action:humiliation_hidden_charity"
+            "action:humiliation_hidden_charity",
+            "TARGET_IDENTITY_VENDOR"
           ],
           "linked_value_ids": [
             "gateway_fangshi",
@@ -474,7 +508,12 @@
                 "reason": "发誓是内心活动。即使要表达感激，也只能通过动作——目送、作揖、沉默地站在原地"
               }
             ]
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_vendor"
+            ]
+          ]
         }
       ]
     },

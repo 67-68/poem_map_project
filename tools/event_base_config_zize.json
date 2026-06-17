@@ -79,14 +79,20 @@
           "tags": [
             "ACTION_ENTERTAIN_DRINK:empty_cup",
             "TARGET_NPC_DUFU:thatched_grass",
-            "action:main:duzhuo"
+            "action:main:duzhuo",
+            "TARGET_IDENTITY_QUANGUI"
           ],
           "operator_dsl": "prop_sub(name=money; val=2) | prop_sub(name=fatigue; val=3)",
           "option_results": {
             "opt_zize_bear": "emo_add(name=SORROW; val=20) | emo_add(name=ANGER; val=10) | prop_add(name=burnout; val=12) | prop_sub(name=health; val=3)"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.duzhuo"
+          "stored_to": "747_kuangda.duzhuo",
+          "virtual_dimension_ids": [
+            [
+              "identity_quangui"
+            ]
+          ]
         },
         {
           "id": "young_scholar",

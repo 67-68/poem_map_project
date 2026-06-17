@@ -134,51 +134,75 @@
           "id": "LIBAI",
           "name": "李白",
           "tags": [
-            "TARGET_NPC_LIBAI:wine_gourd"
+            "TARGET_NPC_LIBAI:wine_gourd",
+            "TARGET_IDENTITY_QINGLIU_OWNER"
           ],
           "operator_dsl": "",
           "linked_value_ids": [
             "emotion_arrogance",
             "emotion_tranquility"
           ],
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_owner"
+            ]
+          ]
         },
         {
           "id": "WANGWEI",
           "name": "王维",
           "tags": [
-            "VIBE_PHILOSOPHY_ZEN:temple_bell"
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
           ],
           "operator_dsl": "",
           "linked_value_ids": [
             "emotion_tranquility",
             "emotion_sorrow"
           ],
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "virtual_dimension_ids": [
+            [
+              "identity_zhuoliu_official"
+            ]
+          ]
         },
         {
           "id": "ZHENGQIAN",
           "name": "郑虔",
           "tags": [
-            "ENV_NATURE_SNOWSTORM:lone_snow"
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "TARGET_IDENTITY_QINGLIU_OFFICIAL"
           ],
           "operator_dsl": "",
           "linked_value_ids": [
             "emotion_anger",
             "emotion_sorrow"
           ],
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_official"
+            ]
+          ]
         },
         {
           "id": "GAOSHI",
           "name": "高适",
           "tags": [
-            "VIBE_THEME_MARTIAL:giant_roc"
+            "VIBE_THEME_MARTIAL:giant_roc",
+            "TARGET_IDENTITY_QINGLIU_OFFICIAL"
           ],
           "operator_dsl": "",
           "linked_value_ids": [
             "emotion_anger",
             "emotion_sorrow"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_qingliu_official"
+            ]
           ]
         }
       ]

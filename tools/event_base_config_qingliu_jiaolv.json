@@ -70,7 +70,8 @@
           "tags": [
             "VIBE_AESTHETIC_ELEGANT:ink_stone",
             "TARGET_NPC_DUFU:thatched_grass",
-            "action:main:fangshi"
+            "action:main:fangshi",
+            "TARGET_IDENTITY_MENZI"
           ],
           "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
           "option_results": {
@@ -202,7 +203,8 @@
           "tags": [
             "TARGET_NPC_LIBAI:wine_gourd",
             "ENV_NATURE_NIGHTMOON:cold_moon",
-            "action:main:duzhuo"
+            "action:main:duzhuo",
+            "TARGET_IDENTITY_VENDOR"
           ],
           "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
           "option_results": {
@@ -242,7 +244,12 @@
                 "reason": "禁止「半个时辰的盛唐」句式——沙盒种子中已使用的标志性语言"
               }
             ]
-          }
+          },
+          "virtual_dimension_ids": [
+            [
+              "identity_vendor"
+            ]
+          ]
         }
       ]
     }

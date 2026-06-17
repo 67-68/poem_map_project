@@ -82,7 +82,8 @@
           "tags": [
             "TARGET_FACTION_ROYAL:jade_step",
             "ACTION_ENTERTAIN_DRINK:empty_cup",
-            "action:main:jiaoyou"
+            "action:main:jiaoyou",
+            "TARGET_IDENTITY_QUANGUI"
           ],
           "operator_dsl": "prop_sub(name=INSPIRATION; val=3) | prop_add(name=BURNOUT; val=5)",
           "option_results": {
@@ -91,7 +92,12 @@
             "opt_zuanying": "prop_add(name=MONEY; val=8) | prop_add(name=BURNOUT; val=5) | emo_add(name=AMBITION; val=12)"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "virtual_dimension_ids": [
+            [
+              "identity_quangui"
+            ]
+          ]
         },
         {
           "id": "poverty_tourism",
@@ -116,7 +122,8 @@
           "tags": [
             "ACTION_ENTERTAIN_DRINK:empty_cup",
             "TARGET_FACTION_ROYAL:jade_step",
-            "action:main:jiaoyou"
+            "action:main:jiaoyou",
+            "TARGET_IDENTITY_QUANGUI"
           ],
           "operator_dsl": "prop_sub(name=MONEY; val=2) | prop_add(name=BURNOUT; val=8)",
           "option_results": {
@@ -125,7 +132,12 @@
             "opt_zuanying": "prop_add(name=MONEY; val=10) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15)"
           },
           "scale": 1.05,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "virtual_dimension_ids": [
+            [
+              "identity_quangui"
+            ]
+          ]
         },
         {
           "id": "ghostwriter_blood",
@@ -133,7 +145,8 @@
           "tags": [
             "TARGET_OBJECT_SWORD:cold_blade",
             "VIBE_THEME_MARTIAL:giant_roc",
-            "action:main:baiye"
+            "action:main:baiye",
+            "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
           ],
           "operator_dsl": "prop_sub(name=INSPIRATION; val=8) | prop_add(name=BURNOUT; val=12)",
           "option_results": {
@@ -142,7 +155,12 @@
             "opt_zuanying": "prop_add(name=MONEY; val=15) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15)"
           },
           "scale": 1.1,
-          "stored_to": "747_kuangda.baiye"
+          "stored_to": "747_kuangda.baiye",
+          "virtual_dimension_ids": [
+            [
+              "identity_zhuoliu_official"
+            ]
+          ]
         },
         {
           "id": "hijacked_grief",
@@ -150,7 +168,8 @@
           "tags": [
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
             "ENV_NATURE_NIGHTMOON:cold_moon",
-            "action:main:duzhuo"
+            "action:main:duzhuo",
+            "TARGET_IDENTITY_QUANGUI"
           ],
           "operator_dsl": "prop_sub(name=INSPIRATION; val=3) | emo_add(name=SORROW; val=15)",
           "option_results": {
@@ -159,7 +178,12 @@
             "opt_zuanying": "prop_add(name=MONEY; val=10) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15)"
           },
           "scale": 1.05,
-          "stored_to": "747_kuangda.duzhuo"
+          "stored_to": "747_kuangda.duzhuo",
+          "virtual_dimension_ids": [
+            [
+              "identity_quangui"
+            ]
+          ]
         }
       ]
     }
