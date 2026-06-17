@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bf2samcnk1nev"
+
+[deps]
+
+files=["res://data/4_eras/747_kuangda/_zize_events.uuid.translation", "res://data/4_eras/747_kuangda/_zize_events.context.translation", "res://data/4_eras/747_kuangda/_zize_events.requirements.translation", "res://data/4_eras/747_kuangda/_zize_events.title.translation", "res://data/4_eras/747_kuangda/_zize_events.description.translation", "res://data/4_eras/747_kuangda/_zize_events.en.translation", "res://data/4_eras/747_kuangda/_zize_events.results.translation", "res://data/4_eras/747_kuangda/_zize_events.en.translation", "res://data/4_eras/747_kuangda/_zize_events.en.translation", "res://data/4_eras/747_kuangda/_zize_events.en.translation"]
+
+source_file="res://data/4_eras/747_kuangda/_zize_events.csv"
+dest_files=["res://data/4_eras/747_kuangda/_zize_events.uuid.translation", "res://data/4_eras/747_kuangda/_zize_events.context.translation", "res://data/4_eras/747_kuangda/_zize_events.requirements.translation", "res://data/4_eras/747_kuangda/_zize_events.title.translation", "res://data/4_eras/747_kuangda/_zize_events.description.translation", "res://data/4_eras/747_kuangda/_zize_events.en.translation", "res://data/4_eras/747_kuangda/_zize_events.results.translation", "res://data/4_eras/747_kuangda/_zize_events.en.translation", "res://data/4_eras/747_kuangda/_zize_events.en.translation", "res://data/4_eras/747_kuangda/_zize_events.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

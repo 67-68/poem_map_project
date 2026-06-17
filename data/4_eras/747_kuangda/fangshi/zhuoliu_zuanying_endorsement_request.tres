@@ -1,0 +1,170 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c40niy0xosguo"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_nxham"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_b3d77"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_q81am"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_jsueo"]
+[ext_resource type="Script" uid="uid://clkjr0fnn00vd" path="res://core/operators/flag_operator.gd" id="5_c42f1"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_uqfft"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="7_1fiu6"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_wjtns"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="9_y6gsh"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_wmv54"]
+
+[sub_resource type="Resource" id="Resource_nxham"]
+script = ExtResource("3_q81am")
+str_props = "fatigue"
+value = -6
+
+[sub_resource type="Resource" id="Resource_b3d77"]
+script = ExtResource("4_jsueo")
+value = 9
+
+[sub_resource type="Resource" id="Resource_q81am"]
+script = ExtResource("3_q81am")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_jsueo"]
+script = ExtResource("3_q81am")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_c42f1"]
+script = ExtResource("5_c42f1")
+flag_id = "kuangda"
+type = "int"
+value = 3
+operation = "append"
+
+[sub_resource type="Resource" id="Resource_uqfft"]
+script = ExtResource("3_q81am")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_1fiu6"]
+script = ExtResource("4_jsueo")
+value = 11
+
+[sub_resource type="Resource" id="Resource_wjtns"]
+script = ExtResource("6_uqfft")
+operators = Array[ExtResource("2_b3d77")]([SubResource("Resource_nxham"), SubResource("Resource_b3d77"), SubResource("Resource_q81am"), SubResource("Resource_jsueo"), SubResource("Resource_c42f1"), SubResource("Resource_uqfft"), SubResource("Resource_1fiu6")])
+
+[sub_resource type="Resource" id="Resource_y6gsh"]
+script = ExtResource("7_1fiu6")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_wmv54"]
+script = ExtResource("8_wjtns")
+choice_result = SubResource("Resource_wjtns")
+requirement = SubResource("Resource_y6gsh")
+description = "转身抬脚就走，名帖在身后落地。"
+
+[sub_resource type="Resource" id="Resource_o2hs1"]
+script = ExtResource("3_q81am")
+str_props = "fatigue"
+value = -6
+
+[sub_resource type="Resource" id="Resource_1xask"]
+script = ExtResource("4_jsueo")
+value = 9
+
+[sub_resource type="Resource" id="Resource_6oac7"]
+script = ExtResource("3_q81am")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_fo00m"]
+script = ExtResource("3_q81am")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_3rgh4"]
+script = ExtResource("5_c42f1")
+flag_id = "kuangda"
+type = "int"
+value = 1
+operation = "append"
+
+[sub_resource type="Resource" id="Resource_ulk5d"]
+script = ExtResource("3_q81am")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_ds0je"]
+script = ExtResource("4_jsueo")
+value = 11
+
+[sub_resource type="Resource" id="Resource_wgbs4"]
+script = ExtResource("6_uqfft")
+operators = Array[ExtResource("2_b3d77")]([SubResource("Resource_o2hs1"), SubResource("Resource_1xask"), SubResource("Resource_6oac7"), SubResource("Resource_fo00m"), SubResource("Resource_3rgh4"), SubResource("Resource_ulk5d"), SubResource("Resource_ds0je")])
+
+[sub_resource type="Resource" id="Resource_etnbj"]
+script = ExtResource("7_1fiu6")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_5fp6v"]
+script = ExtResource("8_wjtns")
+choice_result = SubResource("Resource_wgbs4")
+requirement = SubResource("Resource_etnbj")
+description = "双袖一振顺势跪下，额头已触到石阶。"
+
+[sub_resource type="Resource" id="Resource_065gi"]
+script = ExtResource("3_q81am")
+str_props = "fatigue"
+value = -6
+
+[sub_resource type="Resource" id="Resource_da3ns"]
+script = ExtResource("4_jsueo")
+value = 9
+
+[sub_resource type="Resource" id="Resource_u34n1"]
+script = ExtResource("3_q81am")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_bcn75"]
+script = ExtResource("3_q81am")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_pdi7v"]
+script = ExtResource("3_q81am")
+str_props = "LITERARY_FAME"
+value = -3
+
+[sub_resource type="Resource" id="Resource_md61p"]
+script = ExtResource("3_q81am")
+str_props = "fatigue"
+value = -6
+
+[sub_resource type="Resource" id="Resource_iv3bd"]
+script = ExtResource("4_jsueo")
+value = 13
+
+[sub_resource type="Resource" id="Resource_s55rf"]
+script = ExtResource("6_uqfft")
+operators = Array[ExtResource("2_b3d77")]([SubResource("Resource_065gi"), SubResource("Resource_da3ns"), SubResource("Resource_u34n1"), SubResource("Resource_bcn75"), SubResource("Resource_pdi7v"), SubResource("Resource_md61p"), SubResource("Resource_iv3bd")])
+
+[sub_resource type="Resource" id="Resource_uiq5h"]
+script = ExtResource("8_wjtns")
+choice_result = SubResource("Resource_s55rf")
+description = "从袖中摸出一张折好的纸，推过桌面。"
+
+[sub_resource type="Resource" id="Resource_gimjk"]
+script = ExtResource("9_y6gsh")
+trait_name = "kuangda_zuanying"
+
+[resource]
+script = ExtResource("10_wmv54")
+requirement = SubResource("Resource_gimjk")
+era = "747_kuangda"
+_target_tags = Array[String](["action:main:fangshi"])
+options = Array[ExtResource("1_nxham")]([SubResource("Resource_wmv54"), SubResource("Resource_5fp6v"), SubResource("Resource_uiq5h")])
+uuid = "zhuoliu_zuanying_endorsement_request"
+name = "旧邸问价"
+description = "“上次你递的干谒诗，老爷压在案角看了三日。这次又来了？”他往前凑了半步，嗓音压到只有檐下能听见：“不过老爷听说，赵主事那条盐铁司的路子，是你给牵的线。你要是有什么消息或是条件，我一并进去说。”廊柱的影子斜在两人之间，他在等一个数字。"

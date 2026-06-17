@@ -9,53 +9,53 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_tejjx"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_mj7f5"]
 
-[sub_resource type="Resource" id="Resource_3tpwy"]
+[sub_resource type="Resource" id="Resource_1kl26"]
 script = ExtResource("3_34ush")
 str_props = "money"
 value = -8
 
-[sub_resource type="Resource" id="Resource_tmpgw"]
+[sub_resource type="Resource" id="Resource_s42w2"]
 script = ExtResource("3_34ush")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_vrmhq"]
+[sub_resource type="Resource" id="Resource_34ush"]
 script = ExtResource("4_6id76")
 value = 10
 
-[sub_resource type="Resource" id="Resource_opce0"]
+[sub_resource type="Resource" id="Resource_6id76"]
 script = ExtResource("3_34ush")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_0wjoi"]
+[sub_resource type="Resource" id="Resource_pck2x"]
 script = ExtResource("4_6id76")
 value = 5
 
-[sub_resource type="Resource" id="Resource_3law1"]
+[sub_resource type="Resource" id="Resource_7lq2s"]
 script = ExtResource("3_34ush")
 str_props = "fatigue"
 value = 8
 
-[sub_resource type="Resource" id="Resource_58kg8"]
+[sub_resource type="Resource" id="Resource_tejjx"]
 script = ExtResource("3_34ush")
 str_props = "BURNOUT"
 value = 5
 
-[sub_resource type="Resource" id="Resource_ikjjm"]
+[sub_resource type="Resource" id="Resource_mj7f5"]
 script = ExtResource("4_6id76")
 value = 5
 
-[sub_resource type="Resource" id="Resource_uu06k"]
+[sub_resource type="Resource" id="Resource_3tpwy"]
 script = ExtResource("5_pck2x")
-operators = Array[ExtResource("2_s42w2")]([SubResource("Resource_3tpwy"), SubResource("Resource_tmpgw"), SubResource("Resource_vrmhq"), SubResource("Resource_opce0"), SubResource("Resource_0wjoi"), SubResource("Resource_3law1"), SubResource("Resource_58kg8"), SubResource("Resource_ikjjm")])
+operators = Array[ExtResource("2_s42w2")]([SubResource("Resource_1kl26"), SubResource("Resource_s42w2"), SubResource("Resource_34ush"), SubResource("Resource_6id76"), SubResource("Resource_pck2x"), SubResource("Resource_7lq2s"), SubResource("Resource_tejjx"), SubResource("Resource_mj7f5")])
 
-[sub_resource type="Resource" id="Resource_c77d3"]
+[sub_resource type="Resource" id="Resource_tmpgw"]
 script = ExtResource("6_7lq2s")
-choice_result = SubResource("Resource_uu06k")
+choice_result = SubResource("Resource_3tpwy")
 description = "他把钱票折好，塞进袖口。手没有立刻抽出来。"
 
-[sub_resource type="Resource" id="Resource_7yqqc"]
+[sub_resource type="Resource" id="Resource_vrmhq"]
 script = ExtResource("7_tejjx")
 property = "BURNOUT"
 value = 70
@@ -63,10 +63,10 @@ operator = 1
 
 [resource]
 script = ExtResource("8_mj7f5")
-requirement = SubResource("Resource_7yqqc")
+requirement = SubResource("Resource_vrmhq")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:jiaoyou"])
-options = Array[ExtResource("1_1kl26")]([SubResource("Resource_c77d3")])
+options = Array[ExtResource("1_1kl26")]([SubResource("Resource_tmpgw")])
 uuid = "qingliu_daoxin_posui_asymmetric_sunk_cost"
 name = "五贯"
 description = "信封撕开的口子不齐。一张钱票叠了两折，面额五贯。纸张在指间翻过来——背面空白。翻回去。院墙外有人赶着驴车过去，蹄声慢得像绕远路。他把钱票沿原褶叠好，塞进袖口。手指触到袖衬破开的那一道口子——衬里冰凉。"

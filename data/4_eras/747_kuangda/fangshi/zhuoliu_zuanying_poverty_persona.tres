@@ -1,0 +1,178 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dgl6pswl3jfw"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_csy2j"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3ftjg"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_341r6"]
+[ext_resource type="Script" uid="uid://clkjr0fnn00vd" path="res://core/operators/flag_operator.gd" id="4_gkyow"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="5_4uxiy"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_dm08g"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="7_pkc7c"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_wvvfx"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="9_seyua"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_663s0"]
+
+[sub_resource type="Resource" id="Resource_csy2j"]
+script = ExtResource("3_341r6")
+str_props = "money"
+value = -4
+
+[sub_resource type="Resource" id="Resource_3ftjg"]
+script = ExtResource("3_341r6")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_341r6"]
+script = ExtResource("3_341r6")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_gkyow"]
+script = ExtResource("3_341r6")
+str_props = "fatigue"
+value = 5
+
+[sub_resource type="Resource" id="Resource_4uxiy"]
+script = ExtResource("4_gkyow")
+flag_id = "kuangda"
+type = "int"
+value = 3
+operation = "append"
+
+[sub_resource type="Resource" id="Resource_dm08g"]
+script = ExtResource("3_341r6")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_pkc7c"]
+script = ExtResource("5_4uxiy")
+value = 10
+
+[sub_resource type="Resource" id="Resource_wvvfx"]
+script = ExtResource("6_dm08g")
+operators = Array[ExtResource("2_3ftjg")]([SubResource("Resource_csy2j"), SubResource("Resource_3ftjg"), SubResource("Resource_341r6"), SubResource("Resource_gkyow"), SubResource("Resource_4uxiy"), SubResource("Resource_dm08g"), SubResource("Resource_pkc7c")])
+
+[sub_resource type="Resource" id="Resource_seyua"]
+script = ExtResource("7_pkc7c")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_663s0"]
+script = ExtResource("8_wvvfx")
+choice_result = SubResource("Resource_wvvfx")
+requirement = SubResource("Resource_seyua")
+description = "将纸条揉成一团掷还老周，袍子甩回摊上。"
+
+[sub_resource type="Resource" id="Resource_q3us6"]
+script = ExtResource("3_341r6")
+str_props = "money"
+value = -4
+
+[sub_resource type="Resource" id="Resource_21flv"]
+script = ExtResource("3_341r6")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_ufsqh"]
+script = ExtResource("3_341r6")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_xowoc"]
+script = ExtResource("3_341r6")
+str_props = "fatigue"
+value = 5
+
+[sub_resource type="Resource" id="Resource_w1mct"]
+script = ExtResource("4_gkyow")
+flag_id = "kuangda"
+type = "int"
+value = 1
+operation = "append"
+
+[sub_resource type="Resource" id="Resource_8sfiv"]
+script = ExtResource("3_341r6")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_6gi72"]
+script = ExtResource("5_4uxiy")
+value = 10
+
+[sub_resource type="Resource" id="Resource_rm2pl"]
+script = ExtResource("6_dm08g")
+operators = Array[ExtResource("2_3ftjg")]([SubResource("Resource_q3us6"), SubResource("Resource_21flv"), SubResource("Resource_ufsqh"), SubResource("Resource_xowoc"), SubResource("Resource_w1mct"), SubResource("Resource_8sfiv"), SubResource("Resource_6gi72")])
+
+[sub_resource type="Resource" id="Resource_1ttlh"]
+script = ExtResource("7_pkc7c")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_nxft6"]
+script = ExtResource("8_wvvfx")
+choice_result = SubResource("Resource_rm2pl")
+requirement = SubResource("Resource_1ttlh")
+description = "双手接过纸条，弯腰堆笑：“周爷的事就是我的事。”"
+
+[sub_resource type="Resource" id="Resource_sarwn"]
+script = ExtResource("3_341r6")
+str_props = "money"
+value = -4
+
+[sub_resource type="Resource" id="Resource_i8q5m"]
+script = ExtResource("3_341r6")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_yij7o"]
+script = ExtResource("3_341r6")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_183xm"]
+script = ExtResource("3_341r6")
+str_props = "fatigue"
+value = 5
+
+[sub_resource type="Resource" id="Resource_ec2rb"]
+script = ExtResource("3_341r6")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_rva1j"]
+script = ExtResource("3_341r6")
+str_props = "fatigue"
+value = 5
+
+[sub_resource type="Resource" id="Resource_c3hi5"]
+script = ExtResource("3_341r6")
+str_props = "LITERARY_FAME"
+value = 2
+
+[sub_resource type="Resource" id="Resource_lkd6u"]
+script = ExtResource("5_4uxiy")
+value = 8
+
+[sub_resource type="Resource" id="Resource_ffasi"]
+script = ExtResource("6_dm08g")
+operators = Array[ExtResource("2_3ftjg")]([SubResource("Resource_sarwn"), SubResource("Resource_i8q5m"), SubResource("Resource_yij7o"), SubResource("Resource_183xm"), SubResource("Resource_ec2rb"), SubResource("Resource_rva1j"), SubResource("Resource_c3hi5"), SubResource("Resource_lkd6u")])
+
+[sub_resource type="Resource" id="Resource_tv5md"]
+script = ExtResource("8_wvvfx")
+choice_result = SubResource("Resource_ffasi")
+description = "捏着纸条不接也不拒，平静开口：“递话可以，但你这摊子得替我瞒三年。”"
+
+[sub_resource type="Resource" id="Resource_fbyb4"]
+script = ExtResource("9_seyua")
+trait_name = "kuangda_zuanying"
+
+[resource]
+script = ExtResource("10_663s0")
+requirement = SubResource("Resource_fbyb4")
+era = "747_kuangda"
+_target_tags = Array[String](["action:main:fangshi"])
+options = Array[ExtResource("1_csy2j")]([SubResource("Resource_663s0"), SubResource("Resource_nxft6"), SubResource("Resource_tv5md")])
+uuid = "zhuoliu_zuanying_poverty_persona"
+name = "旧衣摊前的账本"
+description = "城东的旧衣摊弥漫着霉味和旧尘。你把那件洗得发白的袍子展开——袖口磨出毛边，领子泛黄，正合你经营多年的贫寒模样。摊主老周堆着笑递过来，袖子里却抖出一张纸条。“杜先生，上月南城那封信替你换了五贯，这账我记得。今天这件袍子，就不跟你砍价了——你帮我个忙。”他把纸条往你掌心推了推，上面写着城南韦府一个通房丫头的名字。“你替我给这个人递句话，她的私盐生意我查清了。不递，我就跟左邻右舍讲讲你穿旧袍子替人写密信的事。”"

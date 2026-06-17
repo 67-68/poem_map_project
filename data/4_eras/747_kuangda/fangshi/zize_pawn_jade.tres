@@ -1,0 +1,73 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bn7xgfyjo85ki"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_4mcvx"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_5x6h4"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_eug6m"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_sg23f"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_ahvnp"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_q1q1w"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_ndvsw"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_bswxb"]
+
+[sub_resource type="Resource" id="Resource_4mcvx"]
+script = ExtResource("3_eug6m")
+str_props = "money"
+
+[sub_resource type="Resource" id="Resource_5x6h4"]
+script = ExtResource("3_eug6m")
+str_props = "burnout"
+value = 3
+
+[sub_resource type="Resource" id="Resource_eug6m"]
+script = ExtResource("3_eug6m")
+str_props = "fatigue"
+value = 5
+
+[sub_resource type="Resource" id="Resource_sg23f"]
+script = ExtResource("3_eug6m")
+str_props = "money"
+value = 32
+
+[sub_resource type="Resource" id="Resource_ahvnp"]
+script = ExtResource("3_eug6m")
+str_props = "health"
+value = -5
+
+[sub_resource type="Resource" id="Resource_q1q1w"]
+script = ExtResource("4_sg23f")
+value = 26
+
+[sub_resource type="Resource" id="Resource_ndvsw"]
+script = ExtResource("3_eug6m")
+str_props = "burnout"
+value = 21
+
+[sub_resource type="Resource" id="Resource_bswxb"]
+script = ExtResource("3_eug6m")
+str_props = "inspiration"
+value = -5
+
+[sub_resource type="Resource" id="Resource_3yndy"]
+script = ExtResource("5_ahvnp")
+operators = Array[ExtResource("2_5x6h4")]([SubResource("Resource_4mcvx"), SubResource("Resource_5x6h4"), SubResource("Resource_eug6m"), SubResource("Resource_sg23f"), SubResource("Resource_ahvnp"), SubResource("Resource_q1q1w"), SubResource("Resource_ndvsw"), SubResource("Resource_bswxb")])
+
+[sub_resource type="Resource" id="Resource_bker2"]
+script = ExtResource("6_q1q1w")
+choice_result = SubResource("Resource_3yndy")
+description = "站住。袖口往下坠了一坠。继续往米铺走。"
+
+[sub_resource type="Resource" id="Resource_h1plr"]
+script = ExtResource("7_ndvsw")
+property = "burnout"
+value = 60
+operator = 1
+
+[resource]
+script = ExtResource("8_bswxb")
+requirement = SubResource("Resource_h1plr")
+era = "747_kuangda"
+_target_tags = Array[String](["action:main:fangshi"])
+options = Array[ExtResource("1_4mcvx")]([SubResource("Resource_bker2")])
+uuid = "zize_pawn_jade"
+name = "帕子叠好"
+description = "一道老裂痕从云纹中间贯过去，朝奉把它在窗口的光下翻了翻放回柜台。“死当？”你说是。他报的数刚好够付欠了半月的房租和三斗米。你没有还价。帕子在指间叠成方块时，原先包玉的凹处还带着一点余温，四角被玉佩压出的棱硌进掌心。麻绳从栅栏那边推过来，铜钱在绳上沉甸甸地响了一声。你松开帕子，把铜钱拨进袖口——手腕内侧那块被玉焐了十年的皮肉现在贴上了冰凉的方孔。"
