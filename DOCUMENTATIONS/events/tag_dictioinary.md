@@ -148,7 +148,9 @@
 
 | 二级分类 | 三级分类 (Type) | 含义 |
 |---------|----------------|------|
-| `HEALTH` | `sick` | 病痛 |
+| `HEALTH` | `sick` | 病痛（通用） |
+| | `sickAcute` | 急性病 |
+| | `sickChronic` | 慢性病 |
 | | `drunk` | 大醉 |
 | | `exhausted` | 极度疲劳 |
 | | `dying` | 濒死 |
@@ -157,6 +159,8 @@
 | | `anger` | 愤懑 |
 | | `tranquility` | 旷达 |
 | | `ambition` | 野心 |
+| `MENTAL` | `depression` | 郁症（增益衰减） |
+| | `mania` | 狂症（选项劫持） |
 | `FINANCE` | `broke` | 穷困潦倒 |
 | | `wealthy` | 腰缠万贯 |
 | `STATUS` | `wanted` | 被通缉 |
@@ -165,6 +169,8 @@
 
 **完整枚举值：**
 - `ACTOR_HEALTH_SICK`
+- `ACTOR_HEALTH_SICKACUTE`
+- `ACTOR_HEALTH_SICKCHRONIC`
 - `ACTOR_HEALTH_DRUNK`
 - `ACTOR_HEALTH_EXHAUSTED`
 - `ACTOR_HEALTH_DYING`
@@ -173,6 +179,8 @@
 - `ACTOR_EMOTION_ANGER`
 - `ACTOR_EMOTION_TRANQUILITY`
 - `ACTOR_EMOTION_AMBITION`
+- `ACTOR_MENTAL_DEPRESSION`
+- `ACTOR_MENTAL_MANIA`
 - `ACTOR_FINANCE_BROKE`
 - `ACTOR_FINANCE_WEALTHY`
 - `ACTOR_STATUS_WANTED`

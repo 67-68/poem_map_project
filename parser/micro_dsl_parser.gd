@@ -84,6 +84,8 @@ const FUNC_IMAGINARY_HAS_LEVEL := "imaginary_has_level"
 const FUNC_IMAGINARY_LEVEL_REWARD := "imaginary_level_reward"
 const FUNC_IMAGERY_ADD := "imagery_add"                      # 🆕 意象获取操作符
 const FUNC_PLAY_TRANSITION := "play_transition"
+const FUNC_LEVERAGE_ADD := "leverage_add"
+const FUNC_INFO := "info"
 
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
@@ -152,6 +154,8 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_IMAGINARY_LEVEL_REWARD] = func(p, r): return _exec_imaginary_level_reward_op(p, r)
 	cd[FUNC_IMAGERY_ADD] = func(p, r): return _exec_imagery_add_op(p, r)
 	cd[FUNC_PLAY_TRANSITION] = func(p, r): return _exec_play_transition_op(p, r)
+	cd[FUNC_LEVERAGE_ADD] = func(p, r): return _exec_leverage_add_op(p, r)
+	cd[FUNC_INFO] = func(p, r): return _exec_info_op(p, r)
 	# ── Image Operators ──
 	cd[FUNC_IMAGE_PRESENT] = func(p, r): return _exec_image_present_op(p, r)
 	cd[FUNC_IMAGE_SLIDE] = func(p, r): return _exec_image_slide_op(p, r)
@@ -1079,4 +1083,46 @@ static func _exec_image_remove_op(parsed: NamedDSLParser.ParseResult, raw: Strin
 	var op = ImageRemoveOperator.new()
 	op.image_id = image_id
 	Logging.info("image_remove operator 创建成功: id=%s" % image_id)
+	return op
+
+
+# ─── leverage_add ─────────────────────────────────────────
+
+# DSL 语法: leverage_add(target_tag="TARGET_IDENTITY_QUANGUI", key="quangui_corruption")
+#           leverage_add(target_tag="TARGET_NPC_LIBAI", key="libai_secret", silent=true)
+# 解析为 LeverageAddOperator，调用 RelationFlagManager.add_leverage()
+static func _exec_leverage_add_op(parsed: NamedDSLParser.ParseResult, raw: String) -> LeverageAddOperator:
+	var target_tag = NamedDSLParser.get_str_param(parsed, "target_tag")
+	if target_tag.is_empty():
+		Logging.err("leverage_add 缺少 target_tag 参数: %s" % raw)
+		return null
+
+	var key = NamedDSLParser.get_str_param(parsed, "key")
+	if key.is_empty():
+		Logging.err("leverage_add 缺少 key 参数: %s" % raw)
+		return null
+
+	var silent = NamedDSLParser.get_bool_param(parsed, "silent", false)
+
+	var op = LeverageAddOperator.new()
+	op.target_tag = target_tag
+	op.leverage_key = key
+	op.silent = silent
+	Logging.info("leverage_add operator 创建成功: target_tag=%s, key=%s, silent=%s" % [target_tag, key, str(silent)])
+	return op
+
+
+# ─── info ─────────────────────────────────────────────────
+
+# DSL 语法: info(msg="你注意到了一些可疑的事情")
+# 解析为 InfoDemoOperator，发射 request_toast 通知
+static func _exec_info_op(parsed: NamedDSLParser.ParseResult, raw: String) -> InfoDemoOperator:
+	var msg = NamedDSLParser.get_str_param(parsed, "msg")
+	if msg.is_empty():
+		Logging.err("info 缺少 msg 参数: %s" % raw)
+		return null
+
+	var op = InfoDemoOperator.new()
+	op.info = msg
+	Logging.info("info operator 创建成功: msg=%s" % msg)
 	return op

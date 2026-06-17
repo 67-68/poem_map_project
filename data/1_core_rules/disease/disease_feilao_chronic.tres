@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="Disease" format=3 uid="uid://bh7k3gldi0smq"]
+
+[ext_resource type="Script" uid="uid://dlydpw2dm2ro3" path="res://core/model/disease.gd" id="1_govja"]
+[ext_resource type="Script" uid="uid://cwotf742e2n0f" path="res://core/model/multiply_operator.gd" id="1_p21v0"]
+[ext_resource type="Script" uid="uid://potskta4ums3" path="res://core/model/dict_multiply_operator.gd" id="2_d2yke"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f7b60"]
+
+[sub_resource type="Resource" id="Resource_hxfui"]
+script = ExtResource("1_p21v0")
+key = "talent"
+value = 0.5
+metadata/_custom_type_script = "uid://cwotf742e2n0f"
+
+[sub_resource type="Resource" id="Resource_wlxnd"]
+script = ExtResource("2_d2yke")
+operators = Array[ExtResource("1_p21v0")]([SubResource("Resource_hxfui")])
+metadata/_custom_type_script = "uid://potskta4ums3"
+
+[sub_resource type="Resource" id="Resource_1h2tl"]
+script = ExtResource("3_f7b60")
+_property = 4
+value = -10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_2v0kj"]
+script = ExtResource("3_f7b60")
+_property = 6
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[resource]
+script = ExtResource("1_govja")
+on_enter_event = "event_disease_fenghan_diagnosis"
+progression_target = "disease_feilao_chronic"
+progression_xun = 6
+buffer_to_prop = SubResource("Resource_wlxnd")
+topic = "DISEASE"
+specific_topic = "CHRONIC"
+trait_effect_operations = Array[ExtResource("3_f7b60")]([SubResource("Resource_1h2tl"), SubResource("Resource_2v0kj")])
+uuid = "disease_feilao_chronic"
+name = "肺痨"
+description = "肺气已损，咳血不止，形销骨立。"

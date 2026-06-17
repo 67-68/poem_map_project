@@ -72,11 +72,18 @@ func _process_fatigue_accumulation():
 func aggregate_trait_effect():
     for t in PlayerState.get_traits():
         var trait_ = Database.get_trait(t)
-        if not trait_: 
+        if not trait_:
             Logging.warn('为什么player state中存在的triat在database没有？？')
             continue
         trait_.lasting_xun += 1
         trait_.operate_continuous_effect()
+        
+        # 疾病进展检查：如果 trait 是 Disease 且有 progression_target
+        if trait_ is Disease and not trait_.progression_target.is_empty():
+            if trait_.lasting_xun >= trait_.progression_xun:
+                Logging.info('[SurvivalManager] Disease progression: ' + t + ' → ' + trait_.progression_target)
+                PlayerState.remove_trait(t)
+                PlayerState.add_trait(trait_.progression_target)
 
 func operate_state_transistors():
     for s in Database.get_state_transistors_all():

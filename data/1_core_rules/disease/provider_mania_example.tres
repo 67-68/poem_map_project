@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ManiaProvider" format=3]
+
+[ext_resource type="Script" uid="uid://dg5svr182w3un" path="res://core/model/mania_provider.gd" id="1_3d5gj"]
+
+[resource]
+script = ExtResource("1_3d5gj")
+crazy_option_text = "狂笑不止，踽踽独行"
+crazy_event_key = "event_disease_zhanwang_crazy"
+resist_health_cost = 20
+resist_burnout_cost = 10

@@ -4,12 +4,13 @@ class_name Trait extends GameEntity
 @export var buffer_to_prop: DictMultiplyOperator
 @export var buffer_to_region: DictMultiplyOperator
 @export_enum(
-    'RELATION', 'POEM', 'MAIN_ROUTE'
+    'RELATION', 'POEM', 'MAIN_ROUTE', 'DISEASE', 'MENTAL_ILLNESS'
 ) var topic: String
 
 @export_enum(
     'HATE', 'HEARD', 'GOOD', 'CORE',
-    'GAN_YE', 'YING_ZHI', 'DENG_GAO', 'HUAI_GU', 'JI_LV', 'SHAN_SHUI'
+    'GAN_YE', 'YING_ZHI', 'DENG_GAO', 'HUAI_GU', 'JI_LV', 'SHAN_SHUI',
+    'ACUTE', 'CHRONIC', 'DEPRESSION', 'MANIA'
 ) var specific_topic: String # 为了社交系统准备；诗词类型也复用此字段
 
 @export var _relate_to: ENUMS.RELATION_TARGET = -1

@@ -144,25 +144,44 @@ func check_interruption(context: Dictionary) -> void:
 
 func init(context: Dictionary) -> Array:
     # Phase 0: on_enter — 舞台置景，构建绝对上下文
-    # 在 provider/options 初始化之前执行，确保所有前置条件就绪
     on_enter(context)
     
-    # Phase 1: provider.init 先执行，修改 context
-    if provider:
-        context = provider.init(context)
+    # Phase 0.5: 疾病选项劫持 — 扫描玩家是否拥有带 hijack_provider 的 Disease trait
+    var hijack_prov: BaseProvider = null
+    for t_key in PlayerState.get_traits():
+        var t = Database.get_trait(t_key)
+        if t is Disease and t.hijack_provider:
+            hijack_prov = t.hijack_provider
+            Logging.info('[BaseEvent] Disease hijack active: ' + t_key + ' hijacking event: ' + name)
+            break
     
-    # Phase 2: provider.provide 产出额外选项
-    # 🔒 使用临时数组合并，不修改永久属性 options（防止重复触发时选项累积）
     var all_options: Array[BaseOption] = options.duplicate()
-    if provider:
-        var extra_options: Array = provider.provide(context)
-        if extra_options.size() > 0:
-            all_options.append_array(extra_options)
     
-    # Phase 3: 所有选项（原生 + provider 产出的）统一初始化
+    if hijack_prov:
+        # ── 劫持路径：疾病 provider 接管 ──
+        # 1. hijack_provider.init 修改 context + 给原生选项增加额外消耗
+        context = hijack_prov.init(context)
+        # 2. hijack_provider.provide 产出狂症选项
+        var crazy_options: Array = hijack_prov.provide(context)
+        if crazy_options.size() > 0:
+            all_options.insert(0, crazy_options[0])  # 插到最前面
+        # 3. 跳过原始 provider（被劫持）
+    else:
+        # ── 正常路径：原始 provider ──
+        # Phase 1: provider.init 修改 context
+        if provider:
+            context = provider.init(context)
+        
+        # Phase 2: provider.provide 产出额外选项
+        if provider:
+            var extra_options: Array = provider.provide(context)
+            if extra_options.size() > 0:
+                all_options.append_array(extra_options)
+    
+    # Phase 3: 所有选项统一初始化
     for o in all_options:
         if o:
             o.init(context)
     
-    # 返回合并后的全量选项数组，供调用方（NarrativeOverlay）渲染按钮
+    # 返回合并后的全量选项数组
     return all_options

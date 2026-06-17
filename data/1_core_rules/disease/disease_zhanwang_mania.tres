@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Disease" format=3 uid="uid://bh7k3gldi0smq"]
+
+[ext_resource type="Script" uid="uid://dlydpw2dm2ro3" path="res://core/model/disease.gd" id="1_govja"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f7b60"]
+[ext_resource type="Resource" path="res://data/1_core_rules/disease/provider_mania_example.tres" id="4_k8c70"]
+
+[sub_resource type="Resource" id="Resource_1h2tl"]
+script = ExtResource("3_f7b60")
+_property = 4
+value = -10
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_2v0kj"]
+script = ExtResource("3_f7b60")
+_property = 1
+value = 5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[resource]
+script = ExtResource("1_govja")
+hijack_provider = ExtResource("4_k8c70")
+topic = "MENTAL_ILLNESS"
+specific_topic = "MANIA"
+trait_effect_operations = Array[ExtResource("3_f7b60")]([SubResource("Resource_1h2tl"), SubResource("Resource_2v0kj")])
+uuid = "disease_zhanwang_mania"
+name = "谵狂"
+description = "狂言谵语，不避亲疏，形神皆乱。"

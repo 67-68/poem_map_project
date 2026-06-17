@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event.gd" id="1_e0gjm"]
+
+[resource]
+script = ExtResource("1_e0gjm")
+uuid = "event_disease_zhanwang_crazy"
+name = "狂言"
+description = "你在市集中大笑不止，指着县衙的方向高声吟诵：\n\n「君不见——黄河之水天上来，奔流到海不复回！」\n\n路人侧目，孩童跟着起哄。你浑然不觉，只觉得胸中有一团火在烧，烧得你必须说些什么、喊些什么。"

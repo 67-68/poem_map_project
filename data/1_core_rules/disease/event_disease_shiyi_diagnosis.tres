@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event.gd" id="1_e0gjm"]
+
+[resource]
+script = ExtResource("1_e0gjm")
+uuid = "event_disease_shiyi_diagnosis"
+name = "壮志难酬"
+description = "你又落榜了。\n\n巷口的酒旗簌簌地响，你坐在榻上，手里攥着那张写满朱批的试卷，眼睛里干涩得挤不出一滴泪。窗外的喧哗声像是隔了一层水——你听得到，但什么也听不进去。"

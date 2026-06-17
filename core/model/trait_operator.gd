@@ -52,6 +52,10 @@ func get_provided_traits() -> Array:
 func operate():
     if operator == REQ_OPERATOR.CRUD.ADD:
         PlayerState.add_trait(trait_key)
+        # 疾病诊断：如果添加的 trait 是 Disease 且有 on_enter_event，触发 guarantee_next
+        var trait_obj = Database.get_trait(trait_key)
+        if trait_obj is Disease and not trait_obj.on_enter_event.is_empty():
+            EventManager.guarantee_next.emit(trait_obj.on_enter_event, "")
         _emit_float_text(trait_key)
     elif operator == REQ_OPERATOR.CRUD.REMOVE:
         PlayerState.remove_trait(trait_key)

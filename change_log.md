@@ -22,6 +22,17 @@
   - [`core/csv_cloud_loader.gd`](core/csv_cloud_loader.gd) — 彻底移除 `_regenerate_registries()` 函数定义及全部 4 处调用点，废弃 `resources_registry_creator.gd` 在 CSV 同步管线中的使用，数据定位完全由 DataScanner 硬编码目录扫描完成
 
 ## Added
+- **疾病系统（Disease 范例）** — Trait 子类 `Disease`，支持链式恶化、诊断事件、选项劫持
+  - [`core/model/disease.gd`](core/model/disease.gd) — `Disease extends Trait`，新增字段：`on_enter_event`（诊断事件触发）、`progression_target` / `progression_xun`（旬数推进）、`hijack_provider`（选项劫持）
+  - [`core/model/mania_provider.gd`](core/model/mania_provider.gd) — `ManiaProvider extends BaseProvider`，为狂症患者在所有事件选项中插入疯狂选项 + 增加健康消耗
+  - [`core/model/trait.gd`](core/model/trait.gd) — topic 枚举新增 `DISEASE` / `MENTAL_ILLNESS`
+  - [`core/event_manager.gd`](core/event_manager.gd) — `_guaranteed_event_key` 重构为 `_guaranteed_events: Array[Dictionary]` FIFO 队列，支持多事件堆叠
+  - [`core/trait_operator.gd`](core/trait_operator.gd) — ADD 后检测 `Disease.on_enter_event` → `guarantee_next.emit()`
+  - [`core/survival_manager.gd`](core/survival_manager.gd) — `aggregate_trait_effect()` 内检测 `Disease.progression_target` → `trait_replace`
+  - [`model/event.gd`](model/event.gd) — `BaseEvent.init()` 内扫描玩家 trait，发现带有 `hijack_provider` 的 `Disease` 即调度劫持
+  - `data/1_core_rules/disease/` — 4 个范例 Disease .tres（风寒急 / 肺痨 / 失意之郁 / 谵狂）、3 个诊断事件、1 个 ManiaProvider 配置
+  - [`DOCUMENTATIONS/events/tag_dictioinary.md`](DOCUMENTATIONS/events/tag_dictioinary.md) — 新增 sick/sickAcute/sickChronic/MENTAL(depression/mania) 枚举
+  - [`DOCUMENTATIONS/events/trait_designs.md`](DOCUMENTATIONS/events/trait_designs.md) — 新增「疾病系统 (Disease Subclass)」章节
 - 音效类别系统（AudioManager + UISoundComponent 联动）
   - [`core/audio_manager.gd`](core/audio_manager.gd) — `_load_sfx_categories()` 在 `_ready()` 时扫描 `assets/sounds/` 下所有一级子目录，预加载 `.ogg/.wav/.mp3` 到 `_sfx_category_cache` 字典
   - [`core/audio_manager.gd`](core/audio_manager.gd) — `play_sfx_category(category, pitch_rand)` 从指定类别缓存中随机选取一个音效播放

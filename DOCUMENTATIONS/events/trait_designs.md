@@ -88,9 +88,87 @@ Trait 应该有路线。低级酒鬼（嗜酒如命）可以进化成高级酒�
 
 ---
 
+---
+
+## 疾病系统 (Disease Subclass)
+
+`Disease` 是 `Trait` 的一个子类（[`core/model/disease.gd`](../../core/model/disease.gd)），专门用于**随时间推进恶化的负面身份**。疾病不是通过 Milestone Observer 结算的，而是通过**生存管理器（SurvivalManager）的 `aggregate_trait_effect()`** 在每旬自动推进。
+
+### 字段说明
+
+| 字段 | 类型 | 作用 |
+|------|------|------|
+| `on_enter_event` | String | 获得该疾病时通过 `guarantee_next` 触发的诊断事件 key |
+| `progression_target` | String | N 旬后替换为的下一个疾病 uuid（如 `"disease_zhanwang_mania"`） |
+| `progression_xun` | int | 推进所需的旬数（回合数） |
+| `hijack_provider` | BaseProvider | 选项劫持提供者（如 ManiaProvider 插入疯狂选项） |
+| `topic` | String | 大类：`DISEASE`（躯体）/ `MENTAL_ILLNESS`（精神） |
+| `specific_topic` | String | 小类：`sickAcute` / `sickChronic` / `depression` / `mania` |
+| `buffer_to_prop` | DictMultiplyOperator | 患病期间的属性比例增益/衰减（可选） |
+| `trait_effect_operations` | Array[PropertyOperator] | 每旬自动执行的属性变化 |
+
+### 生命周期
+
+```
+                    ┌─ 诊断事件 (on_enter_event) ──┐
+                    │                                │
+  [trait_operator ADD] ──→ guarantee_next.emit() ──→ 玩家体验诊断事件
+                    │
+                    ▼
+        每旬 survival_manager 结算:
+          - 执行 trait_effect_operations (±属性)
+          - 累计 progression_xun 计数
+          - 达到阈值 → trait_replace(progression_target)
+                    │
+                    ▼
+              下一阶段疾病
+```
+
+### 疾病链（进度系统）
+
+疾病采用**链式恶化**设计，每阶段约持续 6 旬（2 个月）：
+
+| 阶段 | 示例 | 属性影响 | 推进 |
+|------|------|---------|------|
+| **急性期**（`sickAcute`） | 风寒急 `disease_fenghan_acute` | 无（默认） | 6 旬 → 慢性期 |
+| **慢性期**（`sickChronic`） | 肺痨 `disease_feilao_chronic` | talent×0.5, money×0.6, literary_fame×0.8（衰减） | 6 旬 → 自身（锁定） |
+| **郁症**（`depression`） | 失意之郁 `disease_shiyi_depression` | HEALTH-3, LITERARY_FAME-3 每旬 | 6 旬 → 狂症 |
+| **狂症**（`mania`） | 谵狂 `disease_zhanwang_mania` | HEALTH-10, LITERARY_FAME+5 每旬 | **终端**（不推进） |
+| | | + hijack_provider 劫持事件选项 | |
+
+> **设计原则：** 躯体疾病（风寒→肺痨）遵循"急性→慢性"路径，精神疾病（失意之郁→谵狂）遵循"抑郁→狂躁"路径。慢性期和终端疾病的 `progression_target` 指向自身或为空，表示不再恶化。
+
+### 选项劫持 (hijack_provider)
+
+`hijack_provider` 是一个 `BaseProvider` 子类，在 [`BaseEvent.init()`](../../model/event.gd) 中被调度。当检测到玩家拥有带 `hijack_provider` 的 `Disease` trait 时：
+
+1. **`provide()`** → 在选项列表最前面插入特殊选项（如狂症选项）
+2. **`init()`** → 给所有现有选项增加额外代价（如健康消耗 + BURNOUT）
+
+当前实现：[`ManiaProvider`](../../core/model/mania_provider.gd)
+
+### 数据文件位置
+
+```
+data/1_core_rules/disease/
+├── disease_fenghan_acute.tres        # 风寒急（躯体·急性）
+├── disease_feilao_chronic.tres       # 肺痨（躯体·慢性）
+├── disease_shiyi_depression.tres     # 失意之郁（精神·抑郁）
+├── disease_zhanwang_mania.tres       # 谵狂（精神·狂躁·终端）
+├── event_disease_fenghan_diagnosis.tres   # 风寒诊断事件
+├── event_disease_shiyi_diagnosis.tres     # 壮志难酬诊断事件
+├── event_disease_zhanwang_crazy.tres      # 狂言事件（狂症触发）
+├── provider_mania_example.tres            # 狂症 Provider 配置
+├── _disease_diagnosis_events.csv          # CSV 同步源：诊断事件
+└── _disease_contamination_events.csv      # CSV 同步源：污染事件
+```
+
+---
+
 ## 相关文档
 
 - [情绪获取系统](./emotion_get_system.md) — Prop 积累的三大通道
 - [事件选项系统](./event_option_system.md) — 选择如何影响 Prop 积累
 - [环境情绪注入设计](./design_get_emotion_in_event.md) — on_enter 阶段的情绪变化
 - [情绪-意象系统](../imaginary/emotion_imaginary_system.md) — 情绪与意象的连接
+- [大唐 Tag 本体论与五维宪法](./tag_dictioinary.md) — 疾病 Tag 枚举（sickAcute/sickChronic/MENTAL）

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://d2exlmyd1vk4u"
+
+[deps]
+
+files=["res://data/1_core_rules/disease/_disease_diagnosis_events.uuid.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.context.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.title.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.description.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.results.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation"]
+
+source_file="res://data/1_core_rules/disease/_disease_diagnosis_events.csv"
+dest_files=["res://data/1_core_rules/disease/_disease_diagnosis_events.uuid.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.context.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.title.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.description.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.results.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation", "res://data/1_core_rules/disease/_disease_diagnosis_events.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

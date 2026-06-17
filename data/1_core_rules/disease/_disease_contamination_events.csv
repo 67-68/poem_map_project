@@ -1,0 +1,13 @@
+row_type,uuid,context,requirements,title,description,on_enter,results,interruptions,template,provider
+random_event,event_disease_fenghan_cough,trigger_tags=[actor:health:sickAcute]|weight=10|era=1_core_rules,,寒咳,一阵剧烈的咳嗽把你从案牍前拉起来。你弯腰扶住桌角，半天缓不过气。窗纸被吹得啪啪响，你的手抖得握不住笔。,,,,
+>option,,,,,强撑着写诗,,prop_sub(name=health; val=5) | prop_add(name=fatigue; val=10),,,
+>option,,,,,歇一歇，喝口热汤,,prop_sub(name=sick; val=5) | prop_sub(name=money; val=2),,,
+random_event,event_disease_feilao_hemoptysis,trigger_tags=[actor:health:sickChronic]|weight=10|era=1_core_rules,,咳血,晨起梳洗时，铜帕上赫然一摊血色。你怔怔地看着那片殷红，手指不自觉地攥紧了巾帕。\n\n秋风在窗外打着旋儿，你的命难道也要像这落叶一样了么？,,,,
+>option,,,,,唤郎中来,,prop_sub(name=money; val=10) | prop_add(name=health; val=5),,,
+>option,,,,,独自咽下这口气,,prop_add(name=health; val=-10),,,
+random_event,event_disease_shiyi_withdraw,trigger_tags=[actor:mental:depression]|weight=10|era=1_core_rules,,闭门不出,你推掉了所有邀约。门外的请柬堆了一摞，你连拆都懒得拆。\n\n谁也不想见。什么也不想做。诗也不想写。,,,,
+>option,,,,,勉强赴约,,prop_add(name=burnout; val=10) | emo_add(name=SORROW; val=5),,,
+>option,,,,,就让我静静吧,,prop_sub(name=literary_fame; val=5) | emo_add(name=SORROW; val=3),,,
+random_event,event_disease_zhanwang_outburst,trigger_tags=[actor:mental:mania]|weight=10|era=1_core_rules,,当街吟诗,你忽然推开窗户，对着街巷放声吟诵近日新作。路上行人驻足，有人击节叫好，有人皱眉摇头。\n\n你不在乎。你的诗句就是你的世界。,,,,
+>option,,,,,邀路人共饮,,prop_sub(name=money; val=5) | prop_add(name=drunk; val=15),,,
+>option,,,,,拂袖而去，继续写诗,,prop_add(name=literary_fame; val=3) | prop_sub(name=health; val=3),,,

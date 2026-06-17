@@ -106,6 +106,12 @@ func _init() -> void:
 		if "uuid" in t:
 			traits[t.get("uuid")] = t
 
+	# 疾病 trait（Disease extends Trait）从独立目录合并
+	var raw_diseases = r.bases.get("1_core_rules.disease", {})
+	for d in raw_diseases.values():
+		if d is Disease and "uuid" in d:
+			traits[d.get("uuid")] = d
+
 	tags = {}  # tags 不再使用
 
 	# ── 2_characters ──

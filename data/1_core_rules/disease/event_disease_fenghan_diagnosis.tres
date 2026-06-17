@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event.gd" id="1_e0gjm"]
+
+[resource]
+script = ExtResource("1_e0gjm")
+uuid = "event_disease_fenghan_diagnosis"
+name = "风寒入体"
+description = "长安的秋风裹着一层潮气钻进衣领。你缩了缩脖子，喉咙里泛起一阵腥甜。\n\n第二天醒来，头重如裹，四肢百骸像被人拆开又胡乱拼了回去。铜盆里的水映出一张泛着不正常潮红的脸——这大概就是「病」了。"
