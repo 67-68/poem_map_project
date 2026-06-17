@@ -28,6 +28,10 @@ var _is_checking_interruption: bool = false
 var _current_from_stack: bool = false
 var _saved_time_scale: float = 1.0
 
+# 中断按钮状态 — 存储 context.interrupt_event 中的 event_key 和清理后的 context
+var _pending_interrupt_event_key: String = ""
+var _pending_interrupt_context: Dictionary = {}
+
 # 动画追踪 — 等待后台 AnimationObject 播完再处理下一个事件
 var _active_animations: Array[AnimationObject] = []
 var _waiting_for_animations: bool = false
@@ -37,6 +41,7 @@ func _ready() -> void:
 		return
 	# EventUI 的选项选择信号桥接回 NarrativeOverlay 的生命周期
 	event_ui.option_selected.connect(_on_option_selected)
+	event_ui.interrupt_pressed.connect(_on_interrupt_pressed)
 	EventBus.request_event.connect(func(data, _context): apply_narrative(data, _context))
 	EventBus.request_event_key.connect(func(key, _context):
 		var ev = Database.resolve(key)
@@ -500,6 +505,22 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	# 5. 进场动画 (The Entrance)
 	_play_open_animation()
 
+	# 6. 扫描 context 中的 interrupt_event 字段，存储 event_key 和清理后的 context
+	var interrupt_event_data = context.get("interrupt_event", null)
+	if interrupt_event_data is Dictionary:
+		_pending_interrupt_event_key = interrupt_event_data.get("event_key", "")
+		# 深拷贝 context 并移除 interrupt_event，避免推到目标事件时造成无限递归
+		_pending_interrupt_context = context.duplicate(true)
+		_pending_interrupt_context.erase("interrupt_event")
+		if not _pending_interrupt_event_key.is_empty():
+			Logging.info("NarrativeOverlay: 中断按钮已配置，目标事件='%s'" % _pending_interrupt_event_key)
+		else:
+			Logging.debug("NarrativeOverlay: interrupt_event 存在但 event_key 为空")
+	else:
+		_pending_interrupt_event_key = ""
+		_pending_interrupt_context = {}
+		Logging.debug("NarrativeOverlay: context 中无 interrupt_event")
+
 func _on_option_selected(_choice_result):
 	# 这里可以加个逻辑：记录玩家的选择，或者处理 disabled 选项的拒绝音效
 	# 如果是有效选择，关闭界面
@@ -571,6 +592,56 @@ func _end_narrative(choice):
 	_is_active = false
 
 	# 处理后续事件：栈 (LIFO) 优先，队列 (FIFO) 次之
+	_process_next()
+
+
+# --- 中断按钮处理 -----------------------------------------
+
+func _on_interrupt_pressed() -> void:
+	Logging.info("NarrativeOverlay._on_interrupt_pressed: 中断按钮被点击，目标事件='%s'" % _pending_interrupt_event_key)
+
+	# 1. 退场动画（快速闭合）
+	if _tween: _tween.kill()
+	_tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	_tween.tween_property(dimmer, "modulate:a", 0.0, 0.2)
+	_tween.tween_property(main_card, "modulate:a", 0.0, 0.2)
+
+	# 等动画播完再执行逻辑
+	await _tween.finished
+
+	hide()
+
+	# 2. 恢复世界时间
+	TimeService.resume_world()
+	Engine.time_scale = _saved_time_scale
+	EventBus.event_confirmed.emit()
+
+	# 3. 如果当前事件在栈顶 → pop 掉（干净退出，不触发任何 option operator）
+	if _event_stack.size() > 0:
+		var top_entry = _event_stack[0]
+		if top_entry.has("data") and top_entry.get("data") == current_event_data:
+			_event_stack.pop_front()
+			Logging.info("_on_interrupt_pressed: 已弹出栈顶事件 '%s'" % current_event_data.name)
+		else:
+			Logging.info("_on_interrupt_pressed: 当前事件不在栈顶，不操作栈")
+	else:
+		Logging.info("_on_interrupt_pressed: 栈为空，不操作栈")
+
+	# 4. 如果目标事件 key 有效，在清除状态前先快照
+	var target_event_key := _pending_interrupt_event_key
+	var target_context := _pending_interrupt_context
+	_pending_interrupt_event_key = ""
+	_pending_interrupt_context = {}
+
+	# 5. 释放活跃锁
+	_is_active = false
+
+	# 6. 如果目标事件 key 有效，推到栈中让 _process_next 处理
+	if not target_event_key.is_empty():
+		EventBus.push_event.emit(target_event_key, target_context)
+		Logging.info("_on_interrupt_pressed: 目标事件 '%s' 已入栈" % target_event_key)
+
+	Logging.info("_on_interrupt_pressed: 中断流程完成，处理下一个事件")
 	_process_next()
 
 

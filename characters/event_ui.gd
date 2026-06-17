@@ -1,6 +1,7 @@
 class_name EventUI extends TextureRect
 
 signal option_selected(choice_result)
+signal interrupt_pressed()
 
 
 # ── 打字机参数 ──────────────────────────────────
@@ -13,15 +14,30 @@ const PHASE_PAUSE: float = 0.6
 
 
 # ── 子节点引用 ──────────────────────────────────
-@onready var _title_label: Label = $Margin/VBox/TitleLabel
+@onready var _title_label: Label = $Margin/VBox/HBox/TitleLabel
 @onready var _content_label: RichTextLabel = $Margin/VBox/ContentLabel
 @onready var _example_label: RichTextLabel = $Margin/VBox/ExampleLabel
 @onready var _option_btns: Control = $Margin/VBox/OptionBtns
+@onready var _interrupt_btn: Button = $Margin/VBox/HBox/InterruptBtn
 
 
 # ── 打字机状态 ──────────────────────────────────
 var _skip_requested: bool = false
 var _current_timer: Timer = null
+
+
+# ═══════════════════════════════════════════════
+# 初始化
+# ═══════════════════════════════════════════════
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+	_interrupt_btn.pressed.connect(func():
+		Logging.info("EventUI: 中断按钮被点击")
+		interrupt_pressed.emit()
+	)
+	_interrupt_btn.visible = false
 
 
 # ═══════════════════════════════════════════════
@@ -36,6 +52,24 @@ func _clear_all() -> void:
 	_content_label.text = ""
 	_example_label.text = ""
 	_option_btns.apply_btns([], func(r): pass)
+	_interrupt_btn.visible = false
+	_interrupt_btn.text = ""
+
+
+## 根据 context 中的 interrupt_event 数据配置中断按钮
+## 如果不存在 interrupt_event 或格式不正确，按钮保持隐藏
+func _setup_interrupt_from_context(context: Dictionary) -> void:
+	var interrupt_event_data = context.get("interrupt_event", null)
+	if interrupt_event_data is Dictionary:
+		var btn_text: String = interrupt_event_data.get("text", "")
+		if not btn_text.is_empty():
+			_interrupt_btn.text = btn_text
+			_interrupt_btn.visible = true
+			Logging.info("EventUI: 中断按钮已启用，文本='%s'" % btn_text)
+		else:
+			Logging.debug("EventUI: interrupt_event 存在但 text 为空，按钮不显示")
+	else:
+		Logging.debug("EventUI: context 中无 interrupt_event 或格式不正确，中断按钮保持隐藏")
 
 
 ## FAST 模式：瞬间填充所有 UI 元素（默认行为）
@@ -43,6 +77,7 @@ func _clear_all() -> void:
 func display_instant(event: BaseEvent, all_options: Array, context: Dictionary) -> void:
 	Logging.info("EventUI.display_instant: FAST 模式填充事件 '%s'" % event.name)
 	_clear_all()
+	_setup_interrupt_from_context(context)
 	texture = event.icon
 	_title_label.text = event.name
 	_content_label.text = Util.tr_and_resolve(event.description, context, event)
@@ -57,6 +92,7 @@ func display_instant(event: BaseEvent, all_options: Array, context: Dictionary) 
 func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, type_speed: float = SLOW_SPEED) -> void:
 	Logging.info("EventUI.display_slow: 模式开始事件 '%s'（type_speed=%.3f）" % [event.name, type_speed])
 	_clear_all()
+	_setup_interrupt_from_context(context)
 	_skip_requested = false
 
 	# Phase 1: Title
