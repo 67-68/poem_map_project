@@ -1,0 +1,198 @@
+{
+  "id": "zhuoliu_fengying",
+  "name": "浊流-逢迎事件库 — 因果前置逢迎困境",
+  "era": "747_kuangda",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n但这次不一样——你在过去的某个时刻选择了逢迎。你在浊流权贵的宴席上陪过笑，替他们的子弟润色过文章，帮他们整理过说不清来源的账目。这些选择像滚雪球一样改变了世界对你的定价：你在浊流的数据库里已经被标记为「家犬/玩物」。\n\n现在来收账了。\n\n这不是世界在碾压你——这是你自己选的。每一个窘境都能追溯到某个具体的逢迎行为。浊流不是来打你的——他们只是用你了。那种语气不是命令，是觉得「反正你也无所谓」。\n\n你看着那些选项——拍案而去的选项亮着但锁着，借机攀附的选项也亮着但锁着。因为你不是那种人，因为你没有那种资源。\n\n剩下的唯一选项，是你最熟悉的那个：继续逢迎。",
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代底层文人困境的叙事作家。你的文字克制而深情——不煽情、不滥情，用白描手法呈现逢迎者的困境。\n\n【关键叙事原则 — 因果前置】每个事件的 description 中必须通过环境细节、NPC 台词或叙述暗示，体现出「这个处境是你之前的逢迎行为导致的」。具体做法：NPC 的台词或叙述细节必须指向某个与当前场景类型一致的、已发生过的逢迎行为（而非随意编造的无关联羞辱），但不要使用相同的回溯句式——每次事件的回溯方式应各不相同：一次可以是 NPC 的熟稔语气，一次可以是环境中的旧物残留，一次可以是简短的侧面提及。\n\n【浊流专有叙事法则 — 不经意的恶意】浊流权贵对逢迎者的剥削不是戏剧化的暴行，而是日常的、不经意的、理所当然的。NPC 不做夸张的羞辱动作（不让你下跪、不把酒泼你脸上、不把你当众打骂）。他们的恶意表现为：给你的润笔费自动打五折、让你陪坐但不给你斟酒、让你改诗时语气像在吩咐一个熟客。他们不是敌人——他们只是觉得「这个人可以随便用」。这种「熟稔的轻视」比直接羞辱更令人窒息。\n\n你深知逢迎者的核心悖论：你选择逢迎是为了活下去，但逢迎让世界对你越来越随便。你的文笔要呈现出这种温水煮青蛙式的窒息感——不是世界在碾压你，是你自己选的。\n\n【反面教材】绝对不要写以下场景：\n- 纯粹的随机羞辱（没有因果锚的困境事件应归入 duotai_humiliation）\n- NPC 直接的物理暴力或公开羞辱（浊流是精致的利己主义者，不是街头混混）\n- 任何形式的自我感动或情感宣泄（逢迎者不会感动自己，只会越来越麻木）\n- NPC 无故施暴（NPC 的行为必须有「因为你之前逢迎过」作为理由）\n- 浊流 NPC 把你当众踩在脚下（那不是浊流，那是村霸）\n- 任何「这次过后我绝不再逢迎」的立志宣言（逢迎者不说这种话，他们只说「最后一次」）\n\n【重要规则】每次叙事中必须通过回溯性细节暗示导致这个场景的过去逢迎行为。回溯方式应多样化——可以是环境细节、物品残留、NPC 的熟稔态度、或简短的对话暗示——不要固化在固定的回溯词汇上，也不要重复使用相同的回溯句式。",
+  "prompt_features": [
+    {
+      "id": "tone_cold_irony",
+      "text": "保持冷峻但略带嘲讽的叙事语气——叙述者知道这是玩家自找的，但不直接说出来。用场景细节暗示。"
+    },
+    {
+      "id": "forbid_god_view_psychology",
+      "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"
+    },
+    {
+      "id": "causal_precedent",
+      "text": "每个事件的 description 必须通过环境细节或 NPC 台词暗示「这个处境是你之前的逢迎行为导致的」。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "句式、动词和感官通道不得与沙盒种子雷同。若种子以听觉细节开场，你的叙事应从视觉或触觉切入。禁止在连续生成中重复使用相同的动词组合和场景节奏。"
+    },
+    {
+      "id": "final_directive",
+      "text": "牢记：这不是随机羞辱。这是因果收账。逢迎者面对的是自己一手造成的局面。"
+    }
+  ],
+  "fact_features": [],
+  "universal_tags": [
+    "qingliu_zhuoliu"
+  ],
+  "universal_requirement": "trait_has(name=kuangda_fengying) | prop_gt(name=ambition; val=30) | prop_lt(name=ambition; val=100)",
+  "universal_result": "prop_add(name=BURNOUT; val=3) | prop_add(name=fatigue; val=5)",
+  "universal_option_requirement": "",
+  "word_count_min": 40,
+  "word_count_max": 200,
+  "option_word_count_max": 40,
+  "max_retries": 3,
+  "api_model": "deepseek-v4-pro",
+  "output_dir": "data/4_eras/747_kuangda/",
+  "apply_dimension_imagery": false,
+  "plugins": [
+    "failed_hint"
+  ],
+  "option_features": [
+    {
+      "id": "opt_kuangke",
+      "prompt": "用30字以内写一个纯粹的【狂客冲动】动作——执行它，不压制它。\n\n狂客动作的核心特质（不必拘泥于具体形式，只要符合以下抽象维度即可）：\n1. 一个让自己与当前空间产生断裂的肢体动作（身体离开原本位置、手中器物脱离手掌、姿态从收束变为舒展）\n2. 动作的终点是完整的——没有回收、没有迟疑、没有在中途转向\n3. 可以伴随简短的声响或一句话，但声音与动作同步结束\n\n狂客的本质是无所顾忌：不计后果、不屑计算、不给自己留退路。\n\n【绝对禁止】\n- 禁止写理性压制冲动的过程\n- 禁止出现转折词\n- 禁止写泄气姿态\n- 禁止写犹豫或自我怀疑",
+      "text": "（狂傲回应）",
+      "result": "",
+      "fixed": false,
+      "plugins": {
+        "failed_hint": {
+          "style": "inner_monologue",
+          "max_chars": 80,
+          "context": "狂客选项的 failed_hint。必须体现：玩家身体的本能反应已经与狂客冲动产生了断裂——不是「我不想做」，而是「我做不出来」。核心因果链：逢迎的内化 → 身体已经忘记了不经过计算的动作是什么感觉 → 拍案的动作在想像中完成了，但手掌只是微微张开，又合拢了。"
+        }
+      },
+      "requirement": "flag_bool_has(name=__never_unlock; failed_hint=\"{failed_hint}\")"
+    },
+    {
+      "id": "opt_zuanying",
+      "prompt": "用30字以内写一个纯粹的【钻营/算计】动作——执行它，不压制它。\n\n钻营动作的核心特质（不必拘泥于具体形式，只要符合以下抽象维度即可）：\n1. 一个将自身拥有的某种资源（信息、人脉、身份、物品）不动声色地暴露给目标对象的行为\n2. 动作的幅度是克制的——足够让对方注意到，但不足以让周围人侧目\n3. 行为的目的是建立一条新的利益通道，而非当场成交\n\n钻营的本质是用已有的筹码撬动更大的利益。\n\n【绝对禁止】\n- 禁止写攀附失败或犹豫\n- 禁止写道德挣扎\n- 禁止出卖朋友或背叛恩人\n- 禁止写过于卑微的乞求",
+      "text": "（借机钻营）",
+      "result": "",
+      "fixed": false,
+      "plugins": {
+        "failed_hint": {
+          "style": "inner_monologue",
+          "max_chars": 80,
+          "context": "钻营选项的 failed_hint。必须体现：玩家发现自己缺少钻营所必需的筹码——不是情报不够、不是身份不够，而是浊流圈子从未真正把你当作可以「交易」的人。核心因果链：逢迎让你被记住 → 但记住的方式是「好使唤」而非「可以合作」 → 你袖中摸不到一张对方愿意正眼看的名帖。"
+        }
+      },
+      "requirement": "flag_bool_has(name=__never_unlock; failed_hint=\"{failed_hint}\")"
+    },
+    {
+      "id": "opt_fengying",
+      "prompt": "用30字以内写一个简短的动作描述——玩家以【逢迎】状态回应。这是唯一可选的路径。动作特征是：【顺从、配合、不反抗、按对方要求做。不硬顶、不巴结、维持表面的体面但收起了任何试图拒绝的信号】。\n\n逢迎行为特征：对方说什么就做什么。不多做也不少做。不主动讨好但也不拒绝。执行时像被编好程的机关——动作精准地匹配对方的要求，但精准本身是唯一剩下的尊严。",
+      "text": "（依言照做）",
+      "result": "",
+      "fixed": false,
+      "plugins": {},
+      "requirement": ""
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "zhuoliu_fengying_scenario",
+      "name": "浊流逢迎困境场景",
+      "description": "六个基于因果前置的浊流逢迎困境。每个场景的核心矛盾是：你之前的逢迎行为让浊流把你当成了可以随便使唤的资源，现在你只能继续演下去。",
+      "values": [
+        {
+          "id": "banquet_assignment",
+          "name": "酒宴上的命题作文",
+          "tags": [
+            "TARGET_FACTION_ROYAL:jade_step",
+            "ACTION_ENTERTAIN_DRINK:empty_cup",
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=health; val=2) | prop_sub(name=fatigue; val=5)",
+          "option_results": {
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=10) | prop_add(name=DRUNK; val=8) | emo_add(name=SORROW; val=10)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "silent_table",
+          "name": "收过钱的陪坐",
+          "tags": [
+            "TARGET_NPC_DUFU:thatched_grass",
+            "ACTION_ENTERTAIN_DRINK:empty_cup",
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=inspiration; val=3) | prop_sub(name=fatigue; val=5)",
+          "option_results": {
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=3) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=8)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "borrowed_poem",
+          "name": "被'指导'的诗稿",
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "ENV_POLITICS_PROSPER:cloud_and_sun",
+            "action:main:baiye"
+          ],
+          "operator_dsl": "prop_sub(name=inspiration; val=5) | prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=12)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=8) | emo_add(name=SORROW; val=12) | prop_add(name=BURNOUT; val=5)"
+          },
+          "scale": 1.05,
+          "stored_to": "747_kuangda.baiye"
+        },
+        {
+          "id": "ledger_gap",
+          "name": "账本的缝隙",
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "TARGET_FACTION_ROYAL:jade_step",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=5) | prop_sub(name=fatigue; val=5)",
+          "option_results": {
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=burnout; val=5) | emo_add(name=SORROW; val=10)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "discounted_ink",
+          "name": "贱价的润笔",
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=inspiration; val=3)",
+          "option_results": {
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=6) | prop_add(name=fatigue; val=8) | emo_add(name=SORROW; val=8)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "reluctant_mentor",
+          "name": "不情愿的引路人",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:baiye"
+          ],
+          "operator_dsl": "prop_sub(name=inspiration; val=5) | prop_sub(name=health; val=3)",
+          "option_results": {
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=12)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=5) | emo_add(name=SORROW; val=15) | prop_add(name=BURNOUT; val=8)"
+          },
+          "scale": 1.1,
+          "stored_to": "747_kuangda.baiye"
+        }
+      ]
+    }
+  ]
+}
