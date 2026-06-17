@@ -9,7 +9,7 @@
 # ----------------------------------------------------------------
 extends GutTest
 
-const REQUIREMENTS_DSL = "prop_gt(name=ambition;val=0)|prop_lt(name=ambition;val=70)"
+const REQUIREMENTS_DSL = "emo_gt(name=ambition;val=0)|emo_lt(name=ambition;val=70)"
 
 # L0+TypeA+M0 (combined=1.0): money(10) | money(20)
 var _csv_l0_typea_m0: Array[Dictionary] = [

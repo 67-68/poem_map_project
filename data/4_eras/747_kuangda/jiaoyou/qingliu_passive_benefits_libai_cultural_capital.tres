@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bfu321lphwo8l"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bn2u385j46fi8"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_af5cd"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_035jb"]
@@ -9,127 +9,127 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_buttt"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_qwuyy"]
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_y8b4v"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_ynbrn"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="10_ynbrn"]
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_sggc4"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_ivh53"]
 
-[sub_resource type="Resource" id="Resource_af5cd"]
+[sub_resource type="Resource" id="Resource_a4ip7"]
 script = ExtResource("3_17wyp")
 str_props = "INSPIRATION"
 value = 5
 
-[sub_resource type="Resource" id="Resource_035jb"]
+[sub_resource type="Resource" id="Resource_8u7g7"]
 script = ExtResource("3_17wyp")
 str_props = "FATIGUE"
 value = -20
 
-[sub_resource type="Resource" id="Resource_17wyp"]
+[sub_resource type="Resource" id="Resource_jihko"]
 script = ExtResource("4_28jnp")
 value = 10
 
-[sub_resource type="Resource" id="Resource_28jnp"]
+[sub_resource type="Resource" id="Resource_30ceh"]
 script = ExtResource("3_17wyp")
 str_props = "INSPIRATION"
 value = 15
 
-[sub_resource type="Resource" id="Resource_x455q"]
+[sub_resource type="Resource" id="Resource_e0rh8"]
 script = ExtResource("5_x455q")
 imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
 
-[sub_resource type="Resource" id="Resource_en64f"]
+[sub_resource type="Resource" id="Resource_ih3uc"]
 script = ExtResource("6_en64f")
-operators = Array[ExtResource("2_035jb")]([SubResource("Resource_af5cd"), SubResource("Resource_035jb"), SubResource("Resource_17wyp"), SubResource("Resource_28jnp"), SubResource("Resource_x455q")])
+operators = Array[ExtResource("2_035jb")]([SubResource("Resource_a4ip7"), SubResource("Resource_8u7g7"), SubResource("Resource_jihko"), SubResource("Resource_30ceh"), SubResource("Resource_e0rh8")])
 
-[sub_resource type="Resource" id="Resource_buttt"]
+[sub_resource type="Resource" id="Resource_tc4f4"]
 script = ExtResource("7_buttt")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_qwuyy"]
+[sub_resource type="Resource" id="Resource_m6mq3"]
 script = ExtResource("8_qwuyy")
-choice_result = SubResource("Resource_en64f")
-requirement = SubResource("Resource_buttt")
+choice_result = SubResource("Resource_ih3uc")
+requirement = SubResource("Resource_tc4f4")
 description = "取案上残墨，在太白诗旁草草题了两个字：收到。"
 
-[sub_resource type="Resource" id="Resource_y8b4v"]
+[sub_resource type="Resource" id="Resource_3yrb4"]
 script = ExtResource("3_17wyp")
 str_props = "INSPIRATION"
 value = 5
 
-[sub_resource type="Resource" id="Resource_ynbrn"]
+[sub_resource type="Resource" id="Resource_w8lda"]
 script = ExtResource("3_17wyp")
 str_props = "FATIGUE"
 value = 15
 
-[sub_resource type="Resource" id="Resource_sggc4"]
+[sub_resource type="Resource" id="Resource_71c3q"]
 script = ExtResource("4_28jnp")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ivh53"]
+[sub_resource type="Resource" id="Resource_14hw8"]
 script = ExtResource("6_en64f")
-operators = Array[ExtResource("2_035jb")]([SubResource("Resource_y8b4v"), SubResource("Resource_ynbrn"), SubResource("Resource_sggc4")])
+operators = Array[ExtResource("2_035jb")]([SubResource("Resource_3yrb4"), SubResource("Resource_w8lda"), SubResource("Resource_71c3q")])
 
-[sub_resource type="Resource" id="Resource_a4ip7"]
+[sub_resource type="Resource" id="Resource_m4eej"]
 script = ExtResource("8_qwuyy")
-choice_result = SubResource("Resource_ivh53")
+choice_result = SubResource("Resource_14hw8")
 description = "对着那行「独立苍茫」垂目良久，转身时袖口蹭了一笔墨痕。"
 
-[sub_resource type="Resource" id="Resource_8u7g7"]
+[sub_resource type="Resource" id="Resource_idsa5"]
 script = ExtResource("3_17wyp")
 str_props = "INSPIRATION"
 value = 5
 
-[sub_resource type="Resource" id="Resource_jihko"]
+[sub_resource type="Resource" id="Resource_5ni5y"]
 script = ExtResource("4_28jnp")
 value = 15
 
-[sub_resource type="Resource" id="Resource_30ceh"]
+[sub_resource type="Resource" id="Resource_kydqp"]
 script = ExtResource("3_17wyp")
 str_props = "BURNOUT"
 value = 15
 
-[sub_resource type="Resource" id="Resource_e0rh8"]
+[sub_resource type="Resource" id="Resource_o840t"]
 script = ExtResource("4_28jnp")
 value = 5
 
-[sub_resource type="Resource" id="Resource_ih3uc"]
+[sub_resource type="Resource" id="Resource_7dnn6"]
 script = ExtResource("5_x455q")
 imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
 
-[sub_resource type="Resource" id="Resource_tc4f4"]
+[sub_resource type="Resource" id="Resource_7tw55"]
 script = ExtResource("6_en64f")
-operators = Array[ExtResource("2_035jb")]([SubResource("Resource_8u7g7"), SubResource("Resource_jihko"), SubResource("Resource_30ceh"), SubResource("Resource_e0rh8"), SubResource("Resource_ih3uc")])
+operators = Array[ExtResource("2_035jb")]([SubResource("Resource_idsa5"), SubResource("Resource_5ni5y"), SubResource("Resource_kydqp"), SubResource("Resource_o840t"), SubResource("Resource_7dnn6")])
 
-[sub_resource type="Resource" id="Resource_m6mq3"]
+[sub_resource type="Resource" id="Resource_f56ny"]
 script = ExtResource("7_buttt")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_3yrb4"]
+[sub_resource type="Resource" id="Resource_2iu2w"]
 script = ExtResource("8_qwuyy")
-choice_result = SubResource("Resource_tc4f4")
-requirement = SubResource("Resource_m6mq3")
+choice_result = SubResource("Resource_7tw55")
+requirement = SubResource("Resource_f56ny")
 description = "朝围观文士拱手：「太白兄盛情难却。列位若有雅集，子美愿携此诗同往。」"
 
-[sub_resource type="Resource" id="Resource_w8lda"]
+[sub_resource type="Resource" id="Resource_3t3d7"]
 script = ExtResource("10_ynbrn")
-property = "ambition"
+volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_71c3q"]
+[sub_resource type="Resource" id="Resource_y43mf"]
 script = ExtResource("10_ynbrn")
-property = "ambition"
+volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_14hw8"]
+[sub_resource type="Resource" id="Resource_i2c54"]
 script = ExtResource("11_sggc4")
-operators = Array[ExtResource("9_y8b4v")]([SubResource("Resource_w8lda"), SubResource("Resource_71c3q")])
+operators = Array[ExtResource("9_y8b4v")]([SubResource("Resource_3t3d7"), SubResource("Resource_y43mf")])
 
 [resource]
 script = ExtResource("12_ivh53")
-requirement = SubResource("Resource_14hw8")
+requirement = SubResource("Resource_i2c54")
 era = "747_kuangda"
 _target_tags = Array[String](["qingliu_aid", "action:main:jiaoyou"])
-options = Array[ExtResource("1_af5cd")]([SubResource("Resource_qwuyy"), SubResource("Resource_a4ip7"), SubResource("Resource_3yrb4")])
+options = Array[ExtResource("1_af5cd")]([SubResource("Resource_m6mq3"), SubResource("Resource_m4eej"), SubResource("Resource_2iu2w")])
 uuid = "qingliu_passive_benefits_libai_cultural_capital"
 name = "壁上龙蛇迹未干"
 description = "「杜二先生，这诗是写给你的！方才李太白就在这儿，说什么'寄问杜陵老'。」壁上的句子确有「独立苍茫」四字，像是隔空递过来的一杯酒。"

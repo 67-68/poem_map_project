@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dsve7ffrt6tlm"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bkltelhfe8xjl"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_coesl"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_6rhex"]
@@ -11,79 +11,79 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="9_hjlnb"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_jbx7i"]
 
-[sub_resource type="Resource" id="Resource_coesl"]
+[sub_resource type="Resource" id="Resource_eitos"]
 script = ExtResource("3_i5no5")
 str_props = "money"
 value = -23
 
-[sub_resource type="Resource" id="Resource_6rhex"]
+[sub_resource type="Resource" id="Resource_vmqop"]
 script = ExtResource("4_0cd3p")
 value = 6
 
-[sub_resource type="Resource" id="Resource_i5no5"]
+[sub_resource type="Resource" id="Resource_plcmg"]
 script = ExtResource("3_i5no5")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_0cd3p"]
+[sub_resource type="Resource" id="Resource_ltgiw"]
 script = ExtResource("5_pa8xt")
-operators = Array[ExtResource("2_6rhex")]([SubResource("Resource_i5no5")])
+operators = Array[ExtResource("2_6rhex")]([SubResource("Resource_plcmg")])
 
-[sub_resource type="Resource" id="Resource_pa8xt"]
+[sub_resource type="Resource" id="Resource_re75q"]
 script = ExtResource("5_pa8xt")
 
-[sub_resource type="Resource" id="Resource_mlhqi"]
+[sub_resource type="Resource" id="Resource_clais"]
 script = ExtResource("3_i5no5")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_5hkks"]
+[sub_resource type="Resource" id="Resource_l2uns"]
 script = ExtResource("5_pa8xt")
-operators = Array[ExtResource("2_6rhex")]([SubResource("Resource_mlhqi")])
+operators = Array[ExtResource("2_6rhex")]([SubResource("Resource_clais")])
 
-[sub_resource type="Resource" id="Resource_7ppq7"]
+[sub_resource type="Resource" id="Resource_w24rx"]
 script = ExtResource("6_mlhqi")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_0cd3p")
-rejected_result = SubResource("Resource_5hkks")
-not_entered_result = SubResource("Resource_pa8xt")
+accepted_result = SubResource("Resource_ltgiw")
+rejected_result = SubResource("Resource_l2uns")
+not_entered_result = SubResource("Resource_re75q")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_hjlnb"]
+[sub_resource type="Resource" id="Resource_j65qd"]
 script = ExtResource("7_5hkks")
-poem_taste = SubResource("Resource_7ppq7")
+poem_taste = SubResource("Resource_w24rx")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_jbx7i"]
+[sub_resource type="Resource" id="Resource_atbdl"]
 script = ExtResource("3_i5no5")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_eitos"]
+[sub_resource type="Resource" id="Resource_540se"]
 script = ExtResource("5_pa8xt")
-operators = Array[ExtResource("2_6rhex")]([SubResource("Resource_coesl"), SubResource("Resource_6rhex"), SubResource("Resource_hjlnb"), SubResource("Resource_jbx7i")])
+operators = Array[ExtResource("2_6rhex")]([SubResource("Resource_eitos"), SubResource("Resource_vmqop"), SubResource("Resource_j65qd"), SubResource("Resource_atbdl")])
 
-[sub_resource type="Resource" id="Resource_vmqop"]
+[sub_resource type="Resource" id="Resource_jm36e"]
 script = ExtResource("8_7ppq7")
-choice_result = SubResource("Resource_eitos")
+choice_result = SubResource("Resource_540se")
 description = "从袖中取出一串铜钱，悄然递入门子手中。"
 
-[sub_resource type="Resource" id="Resource_plcmg"]
+[sub_resource type="Resource" id="Resource_0wvpi"]
 script = ExtResource("9_hjlnb")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("10_jbx7i")
-requirement = SubResource("Resource_plcmg")
+requirement = SubResource("Resource_0wvpi")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_coesl")]([SubResource("Resource_vmqop")])
+options = Array[ExtResource("1_coesl")]([SubResource("Resource_jm36e")])
 uuid = "bai_ye_honeymoon_l0_typea_m1"
 name = "名帖三翻"
 description = "黄昏时分，你站在某部衙门侧门前，递上名帖。那门子接过名帖，却不急着看，先上下打量你一番。他慢慢翻开名帖，拇指在纸页边缘来回搓动，发出沙沙声响。你等了片刻，他仍不抬头，只是反复翻看那薄薄一页，仿佛上面有千百字需要辨认。秋风渐起，檐角铁马叮当，你衣袍被吹得猎猎作响。门子终于抬眼，目光从你脸上滑到你的袖口，又落回名帖上，拇指搓动的动作并未停下。他身后门房里透出暖黄灯火，隐约有茶香飘出，却无丝毫为你让路的意思。"

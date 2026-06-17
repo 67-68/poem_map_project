@@ -8,94 +8,94 @@
 [ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="6_xd3ye"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_fognu"]
 
-[sub_resource type="Resource" id="Resource_gxpqb"]
+[sub_resource type="Resource" id="Resource_4ftce"]
 script = ExtResource("3_gahox")
 str_props = "fatigue"
 value = -2
 
-[sub_resource type="Resource" id="Resource_qd6ee"]
+[sub_resource type="Resource" id="Resource_h8meg"]
 script = ExtResource("3_gahox")
 str_props = "kuangda"
 value = 1
 
-[sub_resource type="Resource" id="Resource_gahox"]
-script = ExtResource("3_gahox")
-str_props = "fatigue"
-value = -2
-
-[sub_resource type="Resource" id="Resource_32337"]
-script = ExtResource("4_32337")
-operators = Array[ExtResource("2_qd6ee")]([SubResource("Resource_gxpqb"), SubResource("Resource_qd6ee"), SubResource("Resource_gahox")])
-
-[sub_resource type="Resource" id="Resource_4sswn"]
-script = ExtResource("5_4sswn")
-choice_result = SubResource("Resource_32337")
-description = "杜甫未应答，转身望向远处的终南山。片刻后，缓步走下城楼。"
-
-[sub_resource type="Resource" id="Resource_xd3ye"]
-script = ExtResource("3_gahox")
-str_props = "fatigue"
-value = -2
-
-[sub_resource type="Resource" id="Resource_fognu"]
-script = ExtResource("3_gahox")
-str_props = "kuangda"
-
-[sub_resource type="Resource" id="Resource_4ftce"]
-script = ExtResource("3_gahox")
-str_props = "money"
-value = -2
-
-[sub_resource type="Resource" id="Resource_h8meg"]
-script = ExtResource("6_xd3ye")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
-
 [sub_resource type="Resource" id="Resource_x56h4"]
-script = ExtResource("4_32337")
-operators = Array[ExtResource("2_qd6ee")]([SubResource("Resource_xd3ye"), SubResource("Resource_fognu"), SubResource("Resource_4ftce"), SubResource("Resource_h8meg")])
+script = ExtResource("3_gahox")
+str_props = "fatigue"
+value = -2
 
 [sub_resource type="Resource" id="Resource_vmvsf"]
-script = ExtResource("5_4sswn")
-choice_result = SubResource("Resource_x56h4")
-description = "杜甫点头，收起袖中文稿，退至城墙东侧转角，将主位让出。"
+script = ExtResource("4_32337")
+operators = Array[ExtResource("2_qd6ee")]([SubResource("Resource_4ftce"), SubResource("Resource_h8meg"), SubResource("Resource_x56h4")])
 
 [sub_resource type="Resource" id="Resource_yf6t7"]
-script = ExtResource("3_gahox")
-str_props = "fatigue"
-value = -2
+script = ExtResource("5_4sswn")
+choice_result = SubResource("Resource_vmvsf")
+description = "杜甫未应答，转身望向远处的终南山。片刻后，缓步走下城楼。"
 
 [sub_resource type="Resource" id="Resource_ihc3w"]
 script = ExtResource("3_gahox")
-str_props = "kuangda"
+str_props = "fatigue"
+value = -2
 
 [sub_resource type="Resource" id="Resource_5v5wr"]
 script = ExtResource("3_gahox")
-str_props = "money"
-value = 4
+str_props = "kuangda"
 
 [sub_resource type="Resource" id="Resource_jt812"]
 script = ExtResource("3_gahox")
-str_props = "health"
-value = -1
+str_props = "money"
+value = -2
 
 [sub_resource type="Resource" id="Resource_sj8f7"]
 script = ExtResource("6_xd3ye")
-imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
 
 [sub_resource type="Resource" id="Resource_a8uwn"]
 script = ExtResource("4_32337")
-operators = Array[ExtResource("2_qd6ee")]([SubResource("Resource_yf6t7"), SubResource("Resource_ihc3w"), SubResource("Resource_5v5wr"), SubResource("Resource_jt812"), SubResource("Resource_sj8f7")])
+operators = Array[ExtResource("2_qd6ee")]([SubResource("Resource_ihc3w"), SubResource("Resource_5v5wr"), SubResource("Resource_jt812"), SubResource("Resource_sj8f7")])
 
 [sub_resource type="Resource" id="Resource_bfalo"]
 script = ExtResource("5_4sswn")
 choice_result = SubResource("Resource_a8uwn")
+description = "杜甫点头，收起袖中文稿，退至城墙东侧转角，将主位让出。"
+
+[sub_resource type="Resource" id="Resource_ubnpp"]
+script = ExtResource("3_gahox")
+str_props = "fatigue"
+value = -2
+
+[sub_resource type="Resource" id="Resource_uiffk"]
+script = ExtResource("3_gahox")
+str_props = "kuangda"
+
+[sub_resource type="Resource" id="Resource_vqnq3"]
+script = ExtResource("3_gahox")
+str_props = "money"
+value = 4
+
+[sub_resource type="Resource" id="Resource_wt3i3"]
+script = ExtResource("3_gahox")
+str_props = "health"
+value = -1
+
+[sub_resource type="Resource" id="Resource_wqn1x"]
+script = ExtResource("6_xd3ye")
+imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+
+[sub_resource type="Resource" id="Resource_6nijn"]
+script = ExtResource("4_32337")
+operators = Array[ExtResource("2_qd6ee")]([SubResource("Resource_ubnpp"), SubResource("Resource_uiffk"), SubResource("Resource_vqnq3"), SubResource("Resource_wt3i3"), SubResource("Resource_wqn1x")])
+
+[sub_resource type="Resource" id="Resource_3gkm3"]
+script = ExtResource("5_4sswn")
+choice_result = SubResource("Resource_6nijn")
 description = "杜甫躬身致歉，一面退至墙角，一面替随从按住被风吹起的席角。"
 
 [resource]
 script = ExtResource("7_fognu")
 era = "747_kuangda"
 _target_tags = Array[String](["action:humiliation_class_bullying", "action:scene_denggao"])
-options = Array[ExtResource("1_gxpqb")]([SubResource("Resource_4sswn"), SubResource("Resource_vmvsf"), SubResource("Resource_bfalo")])
+options = Array[ExtResource("1_gxpqb")]([SubResource("Resource_yf6t7"), SubResource("Resource_bfalo"), SubResource("Resource_3gkm3")])
 uuid = "duotai_humiliation_class_bullying_gateway_denggao"
 name = "城楼上的段落"
 description = "你登上乐游原东南角那座废弃的戍楼。风从终南山方向吹来，带着黄土与野草的气味。你正望着城南一片新绿的麦田，忽然听见身后石阶上传来脚步声——先是一个穿着青色圆领袍的随从快步上来，朝你打量了一眼，走回石阶方向，朝下面喊了一句:“张郎，这里有人。”片刻后，一个头戴银冠的年轻官员登上城楼，身后跟着三五个仆役抬着食盒和席子。随从走到你面前，语气平淡:“这位先生，我家公子要在这一带摆席，烦劳先生移步。”"

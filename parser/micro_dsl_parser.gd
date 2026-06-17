@@ -23,6 +23,8 @@ class_name MicroDSLParser extends GDScript
 # Requirements
 const FUNC_PROP_GT := "prop_gt"
 const FUNC_PROP_LT := "prop_lt"
+const FUNC_EMO_GT := "emo_gt"
+const FUNC_EMO_LT := "emo_lt"
 const FUNC_TRAIT_HAS := "trait_has"
 const FUNC_TRAIT_NOT_HAS := "trait_not_has"
 const FUNC_FLAG_BOOL_HAS := "flag_bool_has"
@@ -99,6 +101,8 @@ static func _ensure_dispatch() -> void:
 	var rd = _requirement_dispatch
 	rd[FUNC_PROP_GT] = func(p, r): return _exec_prop_req(p, r, REQ_OPERATOR.COMPARE.GREATER_THAN)
 	rd[FUNC_PROP_LT] = func(p, r): return _exec_prop_req(p, r, REQ_OPERATOR.COMPARE.LESS_THAN)
+	rd[FUNC_EMO_GT] = func(p, r): return _exec_emo_req(p, r, REQ_OPERATOR.COMPARE.GREATER_THAN)
+	rd[FUNC_EMO_LT] = func(p, r): return _exec_emo_req(p, r, REQ_OPERATOR.COMPARE.LESS_THAN)
 	rd[FUNC_TRAIT_HAS] = func(p, r): return _exec_trait_req(p, r, true)
 	rd[FUNC_TRAIT_NOT_HAS] = func(p, r): return _exec_trait_req(p, r, false)
 	rd[FUNC_FLAG_BOOL_HAS] = func(p, r): return _exec_flag_req_bool(p, r, true)
@@ -305,6 +309,17 @@ static func _exec_prop_req(parsed: NamedDSLParser.ParseResult, raw: String, comp
 		return null
 	
 	return _create_property_requirement(name, val, compare_op)
+
+# Emotion Requirement（emo_gt / emo_lt）
+static func _exec_emo_req(parsed: NamedDSLParser.ParseResult, raw: String, compare_op: REQ_OPERATOR.COMPARE) -> EmotionRequirement:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	
+	if name.is_empty():
+		Logging.err("情绪需求缺少 name 参数: %s" % raw)
+		return null
+	
+	return _create_emotion_requirement(name, val, compare_op)
 
 # Trait Requirement（共享 trait_has / trait_not_has）
 static func _exec_trait_req(parsed: NamedDSLParser.ParseResult, raw: String, should_have: bool) -> BaseRequirements:
@@ -602,6 +617,13 @@ static func _create_temp_flag_operator_int_reduce_if_above(parsed: NamedDSLParse
 static func _create_property_requirement(property_name: String, value: int, operator: REQ_OPERATOR.COMPARE) -> PropertyRequirement:
 	var req = PropertyRequirement.new()
 	req.property = property_name
+	req.value = value
+	req.operator = operator
+	return req
+
+static func _create_emotion_requirement(emotion_name: String, value: int, operator: REQ_OPERATOR.COMPARE) -> EmotionRequirement:
+	var req = EmotionRequirement.new()
+	req.volatile_stat = emotion_name
 	req.value = value
 	req.operator = operator
 	return req

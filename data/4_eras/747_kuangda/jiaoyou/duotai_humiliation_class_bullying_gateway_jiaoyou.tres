@@ -8,77 +8,44 @@
 [ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="6_fanu8"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ej0l5"]
 
-[sub_resource type="Resource" id="Resource_d88xb"]
+[sub_resource type="Resource" id="Resource_jjlxl"]
 script = ExtResource("3_yh001")
 str_props = "fatigue"
 value = -5
 
-[sub_resource type="Resource" id="Resource_csosa"]
+[sub_resource type="Resource" id="Resource_06rwt"]
 script = ExtResource("3_yh001")
 str_props = "kuangda"
 value = 2
 
-[sub_resource type="Resource" id="Resource_yh001"]
+[sub_resource type="Resource" id="Resource_4ol3x"]
 script = ExtResource("3_yh001")
 str_props = "fatigue"
 value = -3
 
-[sub_resource type="Resource" id="Resource_6ieue"]
+[sub_resource type="Resource" id="Resource_bhl0l"]
 script = ExtResource("4_6ieue")
-operators = Array[ExtResource("2_csosa")]([SubResource("Resource_d88xb"), SubResource("Resource_csosa"), SubResource("Resource_yh001")])
+operators = Array[ExtResource("2_csosa")]([SubResource("Resource_jjlxl"), SubResource("Resource_06rwt"), SubResource("Resource_4ol3x")])
 
-[sub_resource type="Resource" id="Resource_mss2e"]
+[sub_resource type="Resource" id="Resource_qlfxu"]
 script = ExtResource("5_mss2e")
-choice_result = SubResource("Resource_6ieue")
+choice_result = SubResource("Resource_bhl0l")
 description = "你放下空杯，起身走向窗边，负手看檐下竹影，再不回头。"
 
-[sub_resource type="Resource" id="Resource_fanu8"]
+[sub_resource type="Resource" id="Resource_cy1tu"]
 script = ExtResource("3_yh001")
 str_props = "fatigue"
 value = -5
 
-[sub_resource type="Resource" id="Resource_ej0l5"]
+[sub_resource type="Resource" id="Resource_7sg4p"]
 script = ExtResource("3_yh001")
 str_props = "kuangda"
 value = 1
 
-[sub_resource type="Resource" id="Resource_jjlxl"]
+[sub_resource type="Resource" id="Resource_iypf7"]
 script = ExtResource("3_yh001")
 str_props = "money"
 value = -3
-
-[sub_resource type="Resource" id="Resource_06rwt"]
-script = ExtResource("6_fanu8")
-imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
-
-[sub_resource type="Resource" id="Resource_4ol3x"]
-script = ExtResource("4_6ieue")
-operators = Array[ExtResource("2_csosa")]([SubResource("Resource_fanu8"), SubResource("Resource_ej0l5"), SubResource("Resource_jjlxl"), SubResource("Resource_06rwt")])
-
-[sub_resource type="Resource" id="Resource_bhl0l"]
-script = ExtResource("5_mss2e")
-choice_result = SubResource("Resource_4ol3x")
-description = "你自斟残酒仰尽，将杯倒扣案上，对主人微微颔首。"
-
-[sub_resource type="Resource" id="Resource_qlfxu"]
-script = ExtResource("3_yh001")
-str_props = "fatigue"
-value = -5
-
-[sub_resource type="Resource" id="Resource_cy1tu"]
-script = ExtResource("3_yh001")
-str_props = "kuangda"
-value = -1
-
-[sub_resource type="Resource" id="Resource_7sg4p"]
-script = ExtResource("3_yh001")
-str_props = "money"
-value = 5
-
-[sub_resource type="Resource" id="Resource_iypf7"]
-script = ExtResource("3_yh001")
-str_props = "health"
-value = -2
 
 [sub_resource type="Resource" id="Resource_6x23p"]
 script = ExtResource("6_fanu8")
@@ -86,18 +53,51 @@ imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
 
 [sub_resource type="Resource" id="Resource_kqb63"]
 script = ExtResource("4_6ieue")
-operators = Array[ExtResource("2_csosa")]([SubResource("Resource_qlfxu"), SubResource("Resource_cy1tu"), SubResource("Resource_7sg4p"), SubResource("Resource_iypf7"), SubResource("Resource_6x23p")])
+operators = Array[ExtResource("2_csosa")]([SubResource("Resource_cy1tu"), SubResource("Resource_7sg4p"), SubResource("Resource_iypf7"), SubResource("Resource_6x23p")])
 
 [sub_resource type="Resource" id="Resource_uuvov"]
 script = ExtResource("5_mss2e")
 choice_result = SubResource("Resource_kqb63")
+description = "你自斟残酒仰尽，将杯倒扣案上，对主人微微颔首。"
+
+[sub_resource type="Resource" id="Resource_cu7va"]
+script = ExtResource("3_yh001")
+str_props = "fatigue"
+value = -5
+
+[sub_resource type="Resource" id="Resource_hkh7f"]
+script = ExtResource("3_yh001")
+str_props = "kuangda"
+value = -1
+
+[sub_resource type="Resource" id="Resource_inlt5"]
+script = ExtResource("3_yh001")
+str_props = "money"
+value = 5
+
+[sub_resource type="Resource" id="Resource_5isxx"]
+script = ExtResource("3_yh001")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_mj8t4"]
+script = ExtResource("6_fanu8")
+imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+
+[sub_resource type="Resource" id="Resource_vk2tx"]
+script = ExtResource("4_6ieue")
+operators = Array[ExtResource("2_csosa")]([SubResource("Resource_cu7va"), SubResource("Resource_hkh7f"), SubResource("Resource_inlt5"), SubResource("Resource_5isxx"), SubResource("Resource_mj8t4")])
+
+[sub_resource type="Resource" id="Resource_rhf48"]
+script = ExtResource("5_mss2e")
+choice_result = SubResource("Resource_vk2tx")
 description = "你端起空壶，陪笑趋前：“大人兴高，待小的替大人斟满。”"
 
 [resource]
 script = ExtResource("7_ej0l5")
 era = "747_kuangda"
 _target_tags = Array[String](["action:humiliation_class_bullying", "action:scene_jiaoyou"])
-options = Array[ExtResource("1_d88xb")]([SubResource("Resource_mss2e"), SubResource("Resource_bhl0l"), SubResource("Resource_uuvov")])
+options = Array[ExtResource("1_d88xb")]([SubResource("Resource_qlfxu"), SubResource("Resource_uuvov"), SubResource("Resource_rhf48")])
 uuid = "duotai_humiliation_class_bullying_gateway_jiaoyou"
 name = "空壶待客"
 description = "「来人，换一壶来。」语未毕，已转身与邻座谈及今科进士的赋作。你手中的酒杯举在半空，杯底那一层薄酒映着烛光，像一枚铜钱大小。"

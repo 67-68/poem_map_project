@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://c1s7mpxnv056l"
+
+[deps]
+
+files=["res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.uuid.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.context.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.requirements.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.title.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.description.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.en.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.results.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.en.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.en.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.en.translation"]
+
+source_file="res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.csv"
+dest_files=["res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.uuid.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.context.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.requirements.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.title.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.description.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.en.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.results.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.en.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.en.translation", "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

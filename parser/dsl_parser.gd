@@ -26,11 +26,13 @@ static func _get_row_depth(row: Dictionary) -> int:
 # 已知的 requirement-only 函数名列表（来自 MicroDSLParser._requirement_dispatch）
 const _REQUIREMENT_ONLY_FUNCS: Array[String] = [
     "prop_gt", "prop_lt",
+    "emo_gt", "emo_lt",
     "trait_has", "trait_not_has",
     "flag_bool_has", "flag_bool_not_has",
     "flag_str_is", "flag_str_not",
     "flag_int_gt", "flag_int_lt", "flag_int_eq", "flag_int_ne",
     "poem_has",
+    "imaginary_has_level",
 ]
 
 # 必须使用全角标点的 ASCII 等价物集合（用于纯文本字段校验）

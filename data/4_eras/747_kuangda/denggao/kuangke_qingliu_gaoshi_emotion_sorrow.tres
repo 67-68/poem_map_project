@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://blqkvqw1b3bnm"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b3fvpdsymiame"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_47u6n"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_775jq"]
@@ -8,68 +8,68 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_vx7dw"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_fb6ts"]
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_drngq"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="9_euvst"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="9_euvst"]
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_sr3nm"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_867t6"]
 
-[sub_resource type="Resource" id="Resource_47u6n"]
+[sub_resource type="Resource" id="Resource_a175a"]
 script = ExtResource("3_3lqvn")
 str_props = "FATIGUE"
 value = -20
 
-[sub_resource type="Resource" id="Resource_775jq"]
+[sub_resource type="Resource" id="Resource_afafg"]
 script = ExtResource("3_3lqvn")
 str_props = "BURNOUT"
 value = -20
 
-[sub_resource type="Resource" id="Resource_3lqvn"]
+[sub_resource type="Resource" id="Resource_8pgyv"]
 script = ExtResource("3_3lqvn")
 str_props = "INSPIRATION"
 value = 15
 
-[sub_resource type="Resource" id="Resource_34wgb"]
+[sub_resource type="Resource" id="Resource_qnpgu"]
 script = ExtResource("4_34wgb")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ay3jk"]
+[sub_resource type="Resource" id="Resource_1nclu"]
 script = ExtResource("5_ay3jk")
-operators = Array[ExtResource("2_775jq")]([SubResource("Resource_47u6n"), SubResource("Resource_775jq"), SubResource("Resource_3lqvn"), SubResource("Resource_34wgb")])
+operators = Array[ExtResource("2_775jq")]([SubResource("Resource_a175a"), SubResource("Resource_afafg"), SubResource("Resource_8pgyv"), SubResource("Resource_qnpgu")])
 
-[sub_resource type="Resource" id="Resource_vx7dw"]
+[sub_resource type="Resource" id="Resource_nib3w"]
 script = ExtResource("6_vx7dw")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_fb6ts"]
+[sub_resource type="Resource" id="Resource_ejudt"]
 script = ExtResource("7_fb6ts")
-choice_result = SubResource("Resource_ay3jk")
-requirement = SubResource("Resource_vx7dw")
+choice_result = SubResource("Resource_1nclu")
+requirement = SubResource("Resource_nib3w")
 description = "走近，并排倚在另一棵柳树上，不说话，和高适一起看路的尽头。"
 
-[sub_resource type="Resource" id="Resource_drngq"]
+[sub_resource type="Resource" id="Resource_rhoag"]
 script = ExtResource("6_vx7dw")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_euvst"]
+[sub_resource type="Resource" id="Resource_gj1wk"]
 script = ExtResource("9_euvst")
-property = "ambition"
+volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_sr3nm"]
+[sub_resource type="Resource" id="Resource_ycdab"]
 script = ExtResource("9_euvst")
-property = "ambition"
+volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_867t6"]
+[sub_resource type="Resource" id="Resource_3hp4v"]
 script = ExtResource("10_sr3nm")
-operators = Array[ExtResource("8_drngq")]([SubResource("Resource_drngq"), SubResource("Resource_euvst"), SubResource("Resource_sr3nm")])
+operators = Array[ExtResource("8_drngq")]([SubResource("Resource_rhoag"), SubResource("Resource_gj1wk"), SubResource("Resource_ycdab")])
 
 [resource]
 script = ExtResource("11_867t6")
-requirement = SubResource("Resource_867t6")
+requirement = SubResource("Resource_3hp4v")
 era = "747_kuangda"
 _target_tags = Array[String](["kuangke_qingliu", "action:main:denggao"])
-options = Array[ExtResource("1_47u6n")]([SubResource("Resource_fb6ts")])
+options = Array[ExtResource("1_47u6n")]([SubResource("Resource_ejudt")])
 uuid = "kuangke_qingliu_gaoshi_emotion_sorrow"
 name = "第四十三道刀痕"
 description = "高适站在官驿门外的柳树下，出神地望着驿道尽头。秋风把他的衣摆反复掀起又落下。听见脚步声，他没有回头。「四十三天了。」手指摸上树干——密密麻麻的刀痕，最新那道还泛着青白的木茬。官袍穿在他身上总觉得大了一号，肩头空落落的。驿站门里有人喊了声「高参军」，他肩背一僵，却没应声。风把柳叶吹落在他肩上，他也没拂去。"

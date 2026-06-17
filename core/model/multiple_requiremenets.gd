@@ -91,17 +91,21 @@ func _init(data = {}):
             else:
                 Logging.err('ComplexRequirements: Failed to create PropertyRequirement at index %d' % i)
                 return
+        elif operator_type == 'EmotionRequirement':
+            var emo_req = PropParser.parse_and_create_cls(EmotionRequirement,op,true,'data')
+            if emo_req:
+                operators.append(emo_req)
+            else:
+                Logging.err('ComplexRequirements: Failed to create EmotionRequirement at index %d' % i)
+                return
         else:
             Logging.err('ComplexRequirements: Unknown operator type at index %d: %s' % [i, operator_type])
             return
     var current_operator_ = PropParser.parse_any(data,true,'current_operator')
-    if not current_operator_:
-        Logging.info('what is hell is the fucking bug that can not let me parse a single int??? fuck you')
+    if current_operator_ == null:
+        Logging.info('ComplexRequirements: current_operator not found in data, defaulting to AND(0)')
         current_operator_ = 0
     current_operator = current_operator_
-    if not current_operator: 
-        Logging.err('ComplexRequirements: Missing or invalid current_operator field in data: %s' % str(data))
-        return
     
     if current_operator != 0 and current_operator != 1:
         Logging.err('ComplexRequirements: Invalid current_operator value: %d, expected 0 (AND) or 1 (OR)' % current_operator)

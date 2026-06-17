@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dukhtnkthp6yf"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bifqtr5axaya1"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_8h1p1"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_w0dpa"]
@@ -11,79 +11,79 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="9_2mltg"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_nm3ka"]
 
-[sub_resource type="Resource" id="Resource_8h1p1"]
+[sub_resource type="Resource" id="Resource_ckc7a"]
 script = ExtResource("3_uxm7o")
 str_props = "health"
 value = -6
 
-[sub_resource type="Resource" id="Resource_w0dpa"]
+[sub_resource type="Resource" id="Resource_cc4s1"]
 script = ExtResource("4_5qcw7")
 value = 6
 
-[sub_resource type="Resource" id="Resource_uxm7o"]
+[sub_resource type="Resource" id="Resource_is0yp"]
 script = ExtResource("3_uxm7o")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_5qcw7"]
+[sub_resource type="Resource" id="Resource_4dur7"]
 script = ExtResource("5_fbhvb")
-operators = Array[ExtResource("2_w0dpa")]([SubResource("Resource_uxm7o")])
+operators = Array[ExtResource("2_w0dpa")]([SubResource("Resource_is0yp")])
 
-[sub_resource type="Resource" id="Resource_fbhvb"]
+[sub_resource type="Resource" id="Resource_o7qsf"]
 script = ExtResource("5_fbhvb")
 
-[sub_resource type="Resource" id="Resource_ksc1m"]
+[sub_resource type="Resource" id="Resource_oba2h"]
 script = ExtResource("3_uxm7o")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_lsqon"]
+[sub_resource type="Resource" id="Resource_a6dm1"]
 script = ExtResource("5_fbhvb")
-operators = Array[ExtResource("2_w0dpa")]([SubResource("Resource_ksc1m")])
+operators = Array[ExtResource("2_w0dpa")]([SubResource("Resource_oba2h")])
 
-[sub_resource type="Resource" id="Resource_josd2"]
+[sub_resource type="Resource" id="Resource_n370a"]
 script = ExtResource("6_ksc1m")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_5qcw7")
-rejected_result = SubResource("Resource_lsqon")
-not_entered_result = SubResource("Resource_fbhvb")
+accepted_result = SubResource("Resource_4dur7")
+rejected_result = SubResource("Resource_a6dm1")
+not_entered_result = SubResource("Resource_o7qsf")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_2mltg"]
+[sub_resource type="Resource" id="Resource_3phu2"]
 script = ExtResource("7_lsqon")
-poem_taste = SubResource("Resource_josd2")
+poem_taste = SubResource("Resource_n370a")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_nm3ka"]
+[sub_resource type="Resource" id="Resource_bcena"]
 script = ExtResource("3_uxm7o")
 str_props = "career_progress"
 value = 13
 
-[sub_resource type="Resource" id="Resource_ckc7a"]
+[sub_resource type="Resource" id="Resource_1cjv3"]
 script = ExtResource("5_fbhvb")
-operators = Array[ExtResource("2_w0dpa")]([SubResource("Resource_8h1p1"), SubResource("Resource_w0dpa"), SubResource("Resource_2mltg"), SubResource("Resource_nm3ka")])
+operators = Array[ExtResource("2_w0dpa")]([SubResource("Resource_ckc7a"), SubResource("Resource_cc4s1"), SubResource("Resource_3phu2"), SubResource("Resource_bcena")])
 
-[sub_resource type="Resource" id="Resource_cc4s1"]
+[sub_resource type="Resource" id="Resource_ot8wj"]
 script = ExtResource("8_josd2")
-choice_result = SubResource("Resource_ckc7a")
+choice_result = SubResource("Resource_1cjv3")
 description = "忍气吞声，继续伏案抄写，直到他说停"
 
-[sub_resource type="Resource" id="Resource_is0yp"]
+[sub_resource type="Resource" id="Resource_1h1vn"]
 script = ExtResource("9_2mltg")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("10_nm3ka")
-requirement = SubResource("Resource_is0yp")
+requirement = SubResource("Resource_1h1vn")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_8h1p1")]([SubResource("Resource_cc4s1")])
+options = Array[ExtResource("1_8h1p1")]([SubResource("Resource_ot8wj")])
 uuid = "bai_ye_honeymoon_l1_typeb_m1"
 name = "抄档候见"
 description = "玩家持帖至吏部衙门拜谒，清客王主事接过名帖，说侍郎大人最喜考校新进，命你入偏厅抄录百卷天宝初年官员考课旧档。王主事抱着手炉坐在案前，漫不经心翻着册子，不时指出你抄漏的批注。你从巳时抄到未时，手臂酸麻，咳嗽不止。王主事始终未放你离开，只说你抄完这卷便去通报。待你抄至八十三卷，咳得握不住笔时，王主事才起身说今日侍郎大人早已出府，明日再来吧。"
