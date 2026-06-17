@@ -1,0 +1,158 @@
+{
+  "id": "zize",
+  "name": "自责事件库 — 良心/自责的强制触发场景",
+  "era": "747_kuangda",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n当残酷现实直接碾过过来时，无论你套着哪种防御机制的外壳（狂客、逢迎、钻营），底层的良知都会被瞬间击穿。因为妻子和孩子不在长安（在洛阳或奉先），杜甫的软肋就变成了「对远方的愧疚」和「对身边同类/弱者的共情」。\n\n这6个场景无视玩家当前状态（狂客/逢迎/钻营），仅在 burnout（倦怠值）高于阈值时强制触发。核心矛盾：本心 vs 活下去的法则发生冲突时，任何表面的性格 Tag 都无效。",
+  "ai_persona": "你是一位以冷峻白描书写唐代底层文人困境的叙事作家。你的文字只呈现可见的物、动作与沉默——叙事者不评价，不解释，不同情。",
+  "prompt_features": [
+    {
+      "id": "style_constraints",
+      "text": "【风格约束 — 高于一切】\n(1) 叙事者全程零存在感：不评价、不解释、不同情。\n(2) 禁止任何形式的心理描写和内心独白——不写「他感到」「他心想」「他意识到」「他终于明白」。\n(3) 物象呈现本身即可，禁止「A 像/仿佛 B」的明喻句式将物象工具化。"
+    },
+    {
+      "id": "environment_as_conscience",
+      "text": "用环境物象承载本心和愧疚。物象从以下抽象类别中选择：液体的静止或流动痕迹、织物的磨损或褶皱、光线的偏移或消逝、物件的位移或放置。不得照搬沙盒种子中的具体物象。只写物象本身的存在状态。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "句式、动词和感官通道不得与沙盒种子雷同。若种子以视觉细节开场，你的叙事应从触觉或听觉切入。禁止在连续生成中重复使用相同的动词组合和场景节奏。"
+    }
+  ],
+  "final_directive": "【核心契约】每一段叙事必须同时满足：(a) 情境本身暗示「长安就是这样，你改变不了任何事」；(b) 玩家的唯一选项都是「吞下、无言、继续走下去」；(c) 叙事不给任何道德出口——不暗示、不安慰、不解脱。\n\n【叙事设计模式 — 每个模式必须包含「自责枢轴」：伸手→撞墙→吞下】\n每个模式都是一个两段式结构。第一段铺陈情境（信号的抵达），第二段必须写出角色尝试履行某个义务的微动作，然后撞上自己的无能。不写「他感到愧疚」，只写空的动作和哑的声音。\n\n模式A「远方的引力」：\n  STEP 1 — 信号抵达：远方（洛阳/奉先）的信/物件/消息以具体物象呈现。禁止写情感词（「温暖」「感动」「思念」），只写物的状态（纸的折痕、布料的磨损、墨迹的洇开）。\n  STEP 2 — 回应的空洞：【必须写】角色坐下磨墨或翻找袖中/屋内，准备回寄什么东西——然后发现没有东西可寄。桌上只有冷掉的半块饼和几枚铜钱。笔悬在半空，墨干了。物质的空映射道德的债。\n\n模式B「旁观者效应」：\n  STEP 1 — 目击：他人的苦难以具体物象呈现（血渗入砖缝、坊丁的铁钩、拖过地面的声音）。\n  STEP 2 — 收手的瞬间：【必须写】角色身体有一个前倾/攥拳/抬脚的微动作——表示本能想去介入——然后这个动作自行收回。手在袖子里攥紧然后松开。脚往前迈了半寸然后退回来。不是被外力阻止，是自己收的。这个「自己收了」就是自责的枢轴。\n\n模式C「镜像投射」：\n  STEP 1 — 映照：一个年轻/同类的人出现在面前，他身上有角色十年前自己的印记（青衫的料子、眼里的光、诗句的笔法）。\n  STEP 2 — 嘴里的废话：【必须写】角色张嘴想说什么——然后听见自己说出了与十年前别人敷衍自己时一模一样的话（「好好写」「再等等」「会有机会的」）。声音从自己嘴里出来，但听着像别人的。这个「听见自己说谎」就是自责的枢轴。\n\n模式C-2「退场的镜像」：\n  STEP 1 — 离别：一个人（朋友/同类）在长安耗尽一切后离开。重点不在送别场景，在临走时留下的一两件物事（赠书、枯叶、一张旧诗稿）。\n  STEP 2 — 咽回去的话：【必须写】角色喉咙动了一下——想说「我也走」或「留下来」——但没说出口。因为他清楚自己连那辆破牛车都雇不起，或者他已经没有「回去」的地方。喉咙滚一下，然后闭上嘴。这个沉默就是自责的枢轴。\n\n模式D「底线交易」：\n  STEP 1 — 物件离手：一个承载身份的物件（玉佩、书、笔）被推向当铺柜台或交换对象。物的状态（帕子磨得透光、玉上有一道老裂痕、书的扉页有旧题字）。\n  STEP 2 — 空袖子的重量：【必须写】交易完成后，物件原来占据的空间（袖子里、怀里的凹陷）空了出来。角色继续往前走时，那个空位被另一种东西填满——不是后悔，是铜钱在袖子里坠着的重量。原来的物件轻，现在的铜钱沉。这个轻与重的置换就是自责的枢轴。\n\n【反面教材 — 以下写法绝对禁止】\n❌ 只写信的内容很感人，不写角色回信/回寄时的物质无能 → 这不是自责，是家庭温情\n❌ 只写血淋淋的场面，不写角色收手的身体动作 → 这不是自责，是猎奇\n❌ 只写年轻士子的单纯热忱，不写角色说出了自己都厌恶的敷衍 → 这不是自责，是怀旧\n❌ 只写送别的凄凉，不写角色咽回去的那句话 → 这不是自责，是感伤\n❌ 只写当铺交易的屈辱，不写物件离开后空位被铜钱填满的重量 → 这不是自责，是卖惨\n\n{dynamic_blacklist}",
+  "fact_features": [],
+  "universal_tags": [
+    "zize"
+  ],
+  "universal_requirement": "prop_gt(name=burnout; val=60)",
+  "universal_result": "prop_add(name=burnout; val=3) | prop_add(name=fatigue; val=5)",
+  "universal_option_requirement": "",
+  "word_count_min": 60,
+  "word_count_max": 250,
+  "option_word_count_max": 35,
+  "max_retries": 3,
+  "api_model": "deepseek-v4-pro",
+  "output_dir": "data/4_eras/747_kuangda/",
+  "apply_dimension_imagery": false,
+  "plugins": [],
+  "option_features": [
+    {
+      "id": "opt_zize_bear",
+      "prompt": "用35字以内写一个简短的被动身体动作——不是反抗，不是逃避，是「算了」之后继续往前走的那一步。\n\n约束：\n(1) 一个短暂停顿信号（≤5字）→ 一个单一身体动作 → 戛然而止；\n(2) 动作必须在物理上「继续」而非「终结」——不写转身、不写关门、不写摔东西；\n(3) 禁止总结性副词（「终于」「最终」「还是」）；\n(4) 禁止在停顿信号中使用与沙盒种子相同的物件或部位名。",
+      "text": "（沉默承受）",
+      "result": "",
+      "fixed": false,
+      "plugins": {},
+      "requirement": ""
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "zize_scenario",
+      "name": "自责场景 — 6种良知被碾过的通用情境",
+      "description": "六个无视玩家当前状态（狂客/逢迎/钻营）、仅以 burnout 阈值门控的强制自责事件。核心矛盾：良知 vs 活下去的法则。",
+      "blacklist_config": {
+        "tracked_field": "description",
+        "tracked_field_description": "事件描述正文（包括场景细节、对话内容、动作描写）",
+        "max_items": 20
+      },
+      "values": [
+        {
+          "id": "home_letter",
+          "name": "报喜不报忧的家书",
+          "description": "年关将至，洛阳的妻子托人带来一封信和一双亲手缝的冬袜。信里没有抱怨，只是小心翼翼地问「长安冷不冷？若无官做，不如早归」。你看着那双针脚细密的冬袜——你本可以是个好丈夫、好父亲，但你把十年的光阴掷入了长安这口枯井。你只能在回信上撒谎。谎言是你仅剩的铠甲。",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:duzhuo"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=2) | prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_zize_bear": "prop_sub(name=burnout; val=5) | emo_add(name=SORROW; val=15) | prop_add(name=burnout; val=10) | prop_add(name=fatigue; val=5)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.duzhuo"
+        },
+        {
+          "id": "wine_boy",
+          "name": "替罪的酒保",
+          "description": "在你常去的廉价酒肆，一个十五六岁的酒保平时很崇拜你的诗，总偷偷给你多打半角酒。今天，一个权贵的豪奴喝醉了闹事，随手用酒坛砸碎了他的头。权贵扔下一小块碎银子作为「药费」扬长而去。酒保倒在血泊里抽搐，周围的看客（包括你）噤若寒蝉。你看着地上的碎银子——你意识到自己和那个豪奴一样，都是踩在这个少年尸体上的异类。你连替他喊冤的勇气都没有。",
+          "tags": [
+            "ACTION_ENTERTAIN_DRINK:empty_cup",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:duzhuo"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=2) | prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_zize_bear": "emo_add(name=SORROW; val=20) | emo_add(name=ANGER; val=10) | prop_add(name=burnout; val=12) | prop_sub(name=health; val=3)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.duzhuo"
+        },
+        {
+          "id": "young_scholar",
+          "name": "镜中的年轻士子",
+          "description": "一个刚从外地赶考来长安的年轻士子，穿着洗得发白的青衫，满眼放光地来拜访你。他拿着自己稚嫩但充满抱负的诗稿，向你请教「如何在长安一展宏图」。看着他，你就像看到了十年前刚进长安的自己。你可以把长安的残酷真相撕开给他看，也可以用旷达的空话敷衍他——但这两种做法，都是在亲手杀掉十年前的自己。",
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_zize_bear": "prop_sub(name=inspiration; val=10) | prop_sub(name=talent; val=3) | emo_add(name=SORROW; val=10) | prop_add(name=burnout; val=8)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "old_friend",
+          "name": "退租的故交",
+          "description": "你的一位至交好友，在长安苦熬了十二年，终于耗尽了最后一丝希望和家底。今天他退了租，雇了一辆最破旧的牛车准备回乡种地。他没有怪任何人，只是平静地把几本珍贵的藏书和一把破琴留给了你，笑着说：「子美，替我留在长安吧。」你看着他灰败的眼神，你知道「留在长安」不是一句祝福，而是一个最恶毒的诅咒。",
+          "tags": [
+            "ACTION_SOCIAL_PARTING:willow_branch",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "option_results": {
+            "opt_zize_bear": "emo_add(name=SORROW; val=15) | prop_add(name=burnout; val=15) | prop_add(name=fatigue; val=5) | emo_sub(name=AMBITION; val=10)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "frozen_corpse",
+          "name": "冻死骨的倒影",
+          "description": "极寒的冬晨，你出门路过朱雀大街的某个坊墙，看到墙角蜷缩着一具已经冻硬的尸体。负责清理的坊丁像拖死狗一样拖着尸体的脚。最让你恐惧的不是死人，而是你发现自己的第一反应竟然不是悲悯，而是庆幸那具尸体不是自己，甚至还在心里抱怨坊丁挡了你的路。大唐不仅在榨干你的肉体，还在悄无声息地剥夺你的人性。",
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=health; val=2)",
+          "option_results": {
+            "opt_zize_bear": "emo_sub(name=ARROGANCE; val=20) | emo_sub(name=AMBITION; val=20) | emo_sub(name=TRANQUILITY; val=20) | emo_add(name=SORROW; val=10) | prop_add(name=burnout; val=8)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "pawn_jade",
+          "name": "被典当的底线",
+          "description": "你的糊口的费用即将跌破底线，明天就要被赶出客栈。你翻遍了全身，只剩下当初离开洛阳时一位极重情义的长辈/恩师赠予你的一块代表「文人风骨」的旧玉佩。哪怕在最落魄、最逢迎的时候，你都把这块玉佩藏在贴身的衣袋里——仿佛只要它在，你就还是那个清白的杜子美。但现在，胃里的酸水和对明天的恐惧战胜了风骨。",
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=0)",
+          "option_results": {
+            "opt_zize_bear": "prop_add(name=money; val=30) | prop_sub(name=health; val=5) | emo_add(name=SORROW; val=25) | prop_add(name=burnout; val=20) | prop_sub(name=inspiration; val=5)"
+          },
+          "scale": 1.05,
+          "stored_to": "747_kuangda.fangshi"
+        }
+      ]
+    }
+  ]
+}

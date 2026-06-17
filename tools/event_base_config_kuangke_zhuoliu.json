@@ -1,0 +1,192 @@
+{
+  "id": "kuangke_zhuoliu",
+  "name": "狂客-浊流事件库 — 狂客的作茧自缚",
+  "era": "747_kuangda",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n但这次的处境和以往不同。你已经不是逢迎者，也不是钻营者——你在无数个选择里一再调用[狂傲]接口，把自己焊死在了狂客的状态机上。\n\n现在浊流找上门来了。\n\n不是因为你做错了什么——恰恰相反，是因为你的狂傲太有观赏价值。浊流高官们把你当猴耍，把你的尊严当酒桌上的余兴节目。他们知道你不会低头——你低头他们才扫兴。\n\n你可以看见两条活路：低头认怂（那是逢迎者的看家本领），暗中算计（那是钻营者的生存之道）。但这两条路都亮着锁。狂客的人设已经像一具铁棺材，把你钉在唯一的选项上——继续狂。\n\n低头认怂需要逢迎者的柔性，暗中算计需要钻营者的城府。狂客没有这些。狂客只有狂傲——而浊流花钱来看的，正是这个。",
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代底层文人困境的叙事作家。你的文字克制而深情——不煽情、不滥情，用白描手法呈现狂客的绝境。\n\n【关键叙事原则 — 狂客的无力感】每个事件的 description 中必须通过环境细节、NPC 台词或叙述暗示一对不对等的观看关系：浊流在看，狂客在被看——而你看穿了这种观看，却无法停止表演。浊流不是来杀你的——他们来是因为你的狂傲有价格。这种关系比直接的敌意更令人窒息。\n\n【核心悖论】狂客明明看见了活路（低头/算计），但他的人格固化的标签让他执行不了这些路径。他的狂傲已经成了一种绝症——不是因为不想治，而是因为人格模块已经固化了。\n\n【反面教材】绝对不要写以下场景：\n- 狂客真正发怒大喊大叫（狂客的狂傲是冷的，不是热血的）\n- 狂客自我感动式地歌颂自己的高洁（狂客不会自我感动，他只会冷笑）\n- 浊流 NPC 单纯地施暴（浊流来是因为有看头，不是来打人的）\n- 任何形式的「朝廷英明」或「官员正直」暗示（浊流就是浊流，不洗白）\n\n【重要规则】每次叙事中必须通过 NPC 的台词、动作或环境细节暗示浊流对狂客的观看关系——他们看你的方式，不是你与他们对峙的方式，是你作为一件展品被估价的方式。",
+  "prompt_features": [
+    {
+      "id": "tone_cold_irony",
+      "text": "保持冷峻但极具压迫感的叙事语气。用场景中的空间关系（谁站得高、谁坐着谁站着、谁在门内谁在门外）暗示不对等的权力结构，而非直述观看关系。"
+    },
+    {
+      "id": "forbid_god_view_psychology",
+      "text": "禁止上帝视角心理描写。不写「他感到」「他心想」「他意识到」。只写可见的动作、对话、环境和沉默。"
+    },
+    {
+      "id": "zhuoliu_consumer_gaze",
+      "text": "每个事件的 description 必须体现浊流 NPC 对狂客的非敌对性消遣关系——他们不是敌人，是带着估价眼神的看客。通过 NPC 的行为细节呈现这种消遣感：一个多余的停顿、一句模仿语气的复述、一次故意但不致命的条件吊高。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "句式、动词和感官通道不得与沙盒种子雷同。若种子以听觉细节开场，你的叙事应从视觉或触觉切入。禁止在连续生成中重复使用相同的动词组合和场景节奏。"
+    },
+    {
+      "id": "final_directive",
+      "text": "牢记：狂客不是受害者。狂客是自己一手雕出来的角色——浊流只是买了门票。叙事中不要让狂客变成单纯的被欺压者，要让读者看见「这是你自己选的，你只能演完」。"
+    }
+  ],
+  "fact_features": [],
+  "universal_tags": [
+    "qingliu_zhuoliu"
+  ],
+  "universal_requirement": "trait_has(name=kuangda_kuangke)",
+  "universal_result": "prop_add(name=BURNOUT; val=3) | prop_add(name=fatigue; val=5)",
+  "universal_option_requirement": "",
+  "word_count_min": 60,
+  "word_count_max": 250,
+  "option_word_count_max": 40,
+  "max_retries": 3,
+  "api_model": "deepseek-v4-pro",
+  "output_dir": "data/4_eras/747_kuangda/",
+  "apply_dimension_imagery": false,
+  "plugins": [
+    "failed_hint"
+  ],
+  "option_features": [
+    {
+      "id": "opt_fengying",
+      "prompt": "用30字以内写一个纯粹的【逢迎/低头】动作——执行它，不压制它。\n\n特征：一个具身的一次性顺从动作——身体在这一个瞬间完成对他者命令的完整执行。方向池（每次随机选择，不得在同一事件中重复同一方向）：姿态调整型（身体在空间中下沉或收缩）、交付型（将自己的产出或财产无条件移交）、语言顺从型（说出对方指定的内容而不附加任何自己的声音）、空间依附型（主动走向对方指定的位置而非站在原地等对方靠近）。动作是完整的、有终点的、不被打断的。\n\n逢迎的本质是无条件低头：不问代价、不计算、不给自己留面子。这个动作的完成感应该让读者觉得「他真的能弯得下去」。\n\n【绝对禁止】\n- 禁止写克制冲动的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写迟疑或自我怀疑",
+      "text": "（弯腰低头照做）",
+      "result": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+      "fixed": false,
+      "plugins": {
+        "failed_hint": {
+          "style": "inner_monologue",
+          "max_chars": 80,
+          "context": "逢迎选项的 failed_hint。必须体现：狂客内心想低头换取生存资源，但他的狂傲人设已经固化——他的身体拒绝执行任何向下/放弃/顺从的指令。核心因果链：你选择了太多狂傲的选项 → 世界把你标记为狂客 → 你的自尊模块拒绝执行任何低头指令 → 你弯不下去，不是因为道德，是因为人格已经固化。注意：身体部位必须从场景中的具体物品/动作出发，禁止固化为特定部位（手/腰/膝盖/肩膀/头），每次生成应绑定场景中的物理关系。"
+        }
+      },
+      "requirement": "flag_bool_has(name=__never_unlock; failed_hint=\"{failed_hint}\")"
+    },
+    {
+      "id": "opt_zuanying",
+      "prompt": "用30字以内写一个纯粹的【钻营/算计】动作——执行它，不压制它。\n\n特征：一个具身的一次性资源套利动作——在人际空间中进行一次试探性的交易评估或筹码移动。方向池（每次随机选择，不得在同一事件中重复同一方向）：信息扫描型（目光、听力或空间站位上的主动探测）、资源移动型（财物、名帖、信件的推出或收回）、关系绑定型（对某人发出一个试探性的信号——一个眼色、一次举杯、一个靠近）。动作是完整的、有终点的、不被打断的。\n\n钻营的本质是精于算计：用资源开路、掂量筹码、盘算人脉。这个动作的急切感应该让读者觉得「他真以为自己能撬开这扇门」。\n\n【绝对禁止】\n- 禁止写计算后发现为零继而放弃的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写泄气姿态：眼神暗下去、垂下眼、收回目光",
+      "text": "（暗中观察寻求可趁之机）",
+      "result": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+      "fixed": false,
+      "plugins": {
+        "failed_hint": {
+          "style": "inner_monologue",
+          "max_chars": 80,
+          "context": "钻营选项的 failed_hint。必须体现：狂客想暗中算计翻盘，但他没有钻营者的城府和筹码。核心因果链：你选择了狂傲而非算计 → 你没有积累任何交易资本和人脉网络 → 钻营需要长线经营，而狂客只会短线爆发 → 你的狂傲标签让你无法进入任何暗箱交易。"
+        }
+      },
+      "requirement": "flag_bool_has(name=__never_unlock; failed_hint=\"{failed_hint}\")"
+    },
+    {
+      "id": "opt_kuangke",
+      "prompt": "用30字以内写一个纯粹的【狂客】动作——执行它，不压制它。\n\n特征：一个具身的、一次性的、公开对抗的动作——用身体在空间中留下一个不可回收的姿态。动作是完整的、有终点的、不被打断的。可以是离开（空间弃绝）、沉默（回应弃绝）、毁坏某物（交换弃绝）、丢下一句无可挽回的话（对话弃绝）——但不限于这些方向。\n\n狂客的本质是无所顾忌：不计后果、不屑计算、不给自己留退路。这个动作的力度应该让读者觉得「后果会很严重，但他不打算收回」。\n\n【绝对禁止】\n- 禁止写理性压制冲动的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写泄气姿态\n- 禁止写犹豫或自我怀疑",
+      "text": "（拂袖冷笑硬刚）",
+      "result": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | emo_add(name=ARROGANCE; val=10)",
+      "fixed": false,
+      "plugins": {},
+      "requirement": ""
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "kuangke_zhuoliu_scenario",
+      "name": "狂客×浊流强迫性绝境",
+      "description": "六个基于浊流消费心态的强迫性绝境。每个场景的核心矛盾是：浊流在观赏狂客的狂傲，而狂客被困在自己的人设里，无法选择妥协或算计的活路。",
+      "values": [
+        {
+          "id": "zoo_animal",
+          "name": "被观赏的疯癫",
+          "tags": [
+            "VIBE_AESTHETIC_ELEGANT:ink_stone",
+            "action:main:baiye"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=10) | prop_add(name=burnout; val=10) | prop_add(name=fatigue; val=10)",
+          "option_results": {
+            "opt_fengying": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | emo_add(name=ARROGANCE; val=20) | imagery_add(name=VIBE_AESTHETIC_ELEGANT:ink_stone)"
+          },
+          "scale": 0.95,
+          "stored_to": "747_kuangda.baiye"
+        },
+        {
+          "id": "pride_ransom",
+          "name": "保释金的自尊定价",
+          "tags": [
+            "TARGET_OBJECT_SWORD:cold_blade",
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_add(name=sick; val=8) | prop_add(name=burnout; val=5)",
+          "option_results": {
+            "opt_fengying": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | prop_sub(name=health; val=14) | prop_add(name=sick; val=8) | prop_add(name=burnout; val=10) | emo_add(name=ARROGANCE; val=15) | imagery_add(name=TARGET_OBJECT_SWORD:cold_blade)"
+          },
+          "scale": 1.05,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "persona_hostage",
+          "name": "清高标签的绑架",
+          "tags": [
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=10) | prop_add(name=burnout; val=5) | emo_add(name=ANGER; val=8)",
+          "option_results": {
+            "opt_fengying": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | prop_sub(name=money; val=20) | prop_add(name=burnout; val=10) | emo_add(name=ANGER; val=15) | emo_add(name=ARROGANCE; val=10) | imagery_add(name=ENV_NATURE_NIGHTMOON:cold_moon)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "malicious_misinterpretation",
+          "name": "恶意的曲解",
+          "tags": [
+            "ACTION_TRAVEL_BOAT:lone_sail",
+            "action:main:baiye"
+          ],
+          "operator_dsl": "prop_sub(name=career_progress; val=8) | prop_sub(name=official_prestige; val=5)",
+          "option_results": {
+            "opt_fengying": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | prop_sub(name=career_progress; val=15) | prop_sub(name=official_prestige; val=10) | prop_add(name=literary_fame; val=5) | emo_add(name=ARROGANCE; val=20) | imagery_add(name=ACTION_TRAVEL_BOAT:lone_sail)"
+          },
+          "scale": 1.05,
+          "stored_to": "747_kuangda.baiye"
+        },
+        {
+          "id": "toxic_patron",
+          "name": "假知音的施舍",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=money; val=8) | prop_sub(name=health; val=3) | prop_add(name=burnout; val=3)",
+          "option_results": {
+            "opt_fengying": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | prop_sub(name=money; val=15) | prop_sub(name=health; val=5) | prop_add(name=burnout; val=5) | emo_add(name=TRANQUILITY; val=15) | emo_sub(name=ARROGANCE; val=5) | imagery_add(name=VIBE_PHILOSOPHY_ZEN:temple_bell)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "bleeding_smile",
+          "name": "绝境中的强颜欢笑",
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "action:main:duzhuo"
+          ],
+          "operator_dsl": "prop_add(name=sick; val=8) | prop_add(name=burnout; val=5)",
+          "option_results": {
+            "opt_fengying": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | prop_sub(name=health; val=14) | prop_add(name=sick; val=10) | prop_add(name=burnout; val=10) | emo_add(name=ARROGANCE; val=25) | emo_add(name=SORROW; val=15) | imagery_add(name=ENV_NATURE_SNOWSTORM:lone_snow)"
+          },
+          "scale": 1.1,
+          "stored_to": "747_kuangda.duzhuo"
+        }
+      ]
+    }
+  ]
+}

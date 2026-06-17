@@ -1,0 +1,167 @@
+{
+  "id": "zhuoliu_lieqi",
+  "name": "浊流-权贵猎奇事件库 — 人为刀俎我为鱼肉",
+  "era": "747_kuangda",
+  "background_context": "天宝十三载（754年），杜甫四十三岁，困居长安已近十年。\n\n你在长安混出了一点诗名，但身上没挂着任何官职护盾。在浊流权贵的数据库里，你变成了一个暴露在公网上的高危裸奔接口。\n\n他们锦衣玉食，最缺的就是情绪价值和乐子。当他们发现一个顶着'京兆杜氏'名号、才华绝顶却快要饿死的诗人时，他们主动发起的猎奇——在架构上，这叫 DDoS 级别的尊严攻击。\n\n核心逻辑：'我不是来帮你，也不是来害你的。我只是太无聊了，想拿棍子戳一下你这个高贵的稀有动物，看看你会发出什么惨叫。'\n\n这些事件即使触发——它们是浊流主动发起的被动猎奇。你无法选择是否遭遇，只能选择如何回应。三条路都在你面前：狂客的怒而反抗、逢迎的弯腰承受、钻营的当场交易。但你是哪种人，就只能走哪条路。",
+  "ai_persona": "你是一位以冷峻写实的笔触书写唐代底层文人被权贵猎奇困境的叙事作家。你的文字克制而锐利——不煽情、不滥情，用白描手法呈现猎物面对猎人的窒息感。\n\n【关键叙事原则 — 不对等的观看关系】每个事件的 description 中必须通过空间关系、NPC 台词或叙述细节，体现浊流权贵对杜甫的非敌对性消遣关系——他们不是敌人，是带着估价眼神的看客。他们的恶意表现为不经意的、理所当然的：让你给斗鸡写诗时的语气像在吩咐一个戏子、参观你破屋时的表情像在逛动物园、拿你打赌时的轻松像在赌马。\n\n【核心悖论】浊流不是来杀你的——杀你太无聊了。他们来是因为你的才华和贫穷之间的反差具有观赏价值。你越是痛苦，他们越是觉得这趟没白来。这种关系比直接的敌意更令人窒息。\n\n【反面教材】绝对不要写以下场景：\n- 浊流 NPC 直接的物理暴力或公开羞辱（浊流是精致的利己主义者，不是街头混混——他们用钱和权力羞辱你，不是用拳头）\n- NPC 无故施压（NPC 的行为必须有'找乐子'作为动机）\n- 任何形式的自我感动或情感宣泄（猎物没有资格感动自己）\n- 浊流 NPC 突然良心发现或表示尊重（浊流就是浊流，不洗白）\n\n【重要规则】每次叙事中必须通过空间关系暗示不对等的观看关系——谁站得高、谁坐着谁站着、谁在门内谁在门外、谁在暖阁里谁在雪地里。",
+  "prompt_features": [
+    {
+      "id": "tone_cold_spectacle",
+      "text": "保持冷峻但极具压迫感的叙事语气。用场景中的空间关系（谁站得高、谁坐着谁站着、谁在门内谁在门外）暗示不对等的权力结构。叙述者不站队——只是冷静地记录一场猎奇表演。"
+    },
+    {
+      "id": "forbid_god_view_psychology",
+      "text": "禁止上帝视角心理描写。不写'他感到''他心想''他意识到'。只写可见的动作、对话、环境和沉默。"
+    },
+    {
+      "id": "spectacle_gaze",
+      "text": "每个事件的 description 必须体现浊流 NPC 对杜甫的非敌对性消遣关系——他们不是敌人，是带着估价眼神的看客。通过 NPC 的行为细节呈现这种消遣感：一个多余的停顿、一句模仿语气的复述、一个故意但不致命的条件吊高。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "句式、动词和感官通道不得与沙盒种子雷同。若种子以听觉细节开场，你的叙事应从视觉或触觉切入。禁止在连续生成中重复使用相同的动词组合和场景节奏。"
+    },
+    {
+      "id": "final_directive",
+      "text": "牢记：浊流不是敌人——他们是观众。杜甫不是受害者——他是展品。叙事中不要让杜甫变成单纯的被欺压者，要让读者看见那种'被观看'的窒息感——他不是被打，他是被当成稀有动物围观。"
+    }
+  ],
+  "fact_features": [],
+  "universal_tags": [
+    "zhuoliu_lieqi"
+  ],
+  "universal_requirement": "trait_has(name=kuangda_kuangke) | trait_has(name=kuangda_fengying) | trait_has(name=kuangda_zuanying)",
+  "universal_result": "prop_add(name=BURNOUT; val=3) | prop_add(name=fatigue; val=3)",
+  "universal_option_requirement": "",
+  "word_count_min": 60,
+  "word_count_max": 250,
+  "option_word_count_max": 30,
+  "max_retries": 3,
+  "api_model": "deepseek-v4-pro",
+  "output_dir": "data/4_eras/747_kuangda/",
+  "apply_dimension_imagery": false,
+  "plugins": [],
+  "option_features": [
+    {
+      "id": "opt_kuangke",
+      "prompt": "用30字以内写一个纯粹的【狂客】动作——执行它，不压制它。\n\n特征：幅度大、终止性强、不给自己留退路。动作必须是一次性的、有明确终点的身体行为，执行后场域立即改变。\n\n狂客的本质是无所顾忌：不计后果、不屑计算、不给自己留退路。浊流把你当猴耍，你选择掀桌子。",
+      "text": "（拂袖转身，冷笑掷杯）",
+      "result": "emo_add(name=ARROGANCE; val=10)",
+      "fixed": false,
+      "plugins": {},
+      "requirement": "trait_has(name=kuangda_kuangke)"
+    },
+    {
+      "id": "opt_fengying",
+      "prompt": "用30字以内写一个纯粹的【逢迎】动作——执行它，不犹豫。\n\n特征：身体下沉或收缩、双手奉上自己的产出、说出对方指定的内容。动作是一次性的、完整的顺从。\n\n逢迎的本质是生存优先：尊严可以以后再捡，现在先活下来。浊流想看的就是你低头的姿态。",
+      "text": "（弯下腰，脸上堆出笑容）",
+      "result": "emo_add(name=SORROW; val=10)",
+      "fixed": false,
+      "plugins": {},
+      "requirement": "trait_has(name=kuangda_fengying)"
+    },
+    {
+      "id": "opt_zuanying",
+      "prompt": "用30字以内写一个简短的【钻营】动作——不卑不亢但也不清高，像商人在讨价还价。\n\n特征：权衡算计、寻找利益交换点、用手头的信息或资源开价。不硬顶也不讨好，评估对方的筹码，掂量自己的底牌。\n\n钻营的本质是把屈辱当场转化为交易：你来看我的笑话？行，但你得付门票钱。",
+      "text": "（权衡片刻，开出价码）",
+      "result": "emo_add(name=AMBITION; val=10)",
+      "fixed": false,
+      "plugins": {},
+      "requirement": "trait_has(name=kuangda_zuanying)"
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "lieqi_scenario",
+      "name": "权贵猎奇场景",
+      "description": "五个浊流权贵主动猎奇杜甫的场景。每个场景的核心矛盾是：浊流把杜甫当稀有动物围观，杜甫在三种人格面具中只能选择自己最熟悉的那种回应。",
+      "values": [
+        {
+          "id": "cockfight_ode",
+          "name": "斗鸡的千古绝唱",
+          "tags": [
+            "TARGET_FACTION_ROYAL:jade_step",
+            "ACTION_ENTERTAIN_DRINK:empty_cup",
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=INSPIRATION; val=3) | prop_add(name=BURNOUT; val=5)",
+          "option_results": {
+            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ARROGANCE; val=15) | prop_add(name=BURNOUT; val=5)",
+            "opt_fengying": "prop_add(name=MONEY; val=12) | prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=12)",
+            "opt_zuanying": "prop_add(name=MONEY; val=8) | prop_add(name=BURNOUT; val=5) | emo_add(name=AMBITION; val=12)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "poverty_tourism",
+          "name": "赛博贫困游",
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:fangshi"
+          ],
+          "operator_dsl": "prop_sub(name=HEALTH; val=3) | prop_add(name=BURNOUT; val=5)",
+          "option_results": {
+            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ANGER; val=15) | prop_add(name=BURNOUT; val=8)",
+            "opt_fengying": "prop_add(name=MONEY; val=10) | prop_add(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=12) | emo_add(name=SORROW; val=15)",
+            "opt_zuanying": "prop_add(name=MONEY; val=8) | prop_add(name=BURNOUT; val=8) | emo_add(name=AMBITION; val=12)"
+          },
+          "scale": 1.0,
+          "stored_to": "747_kuangda.fangshi"
+        },
+        {
+          "id": "swill_gambit",
+          "name": "斯德哥尔摩的对赌",
+          "tags": [
+            "ACTION_ENTERTAIN_DRINK:empty_cup",
+            "TARGET_FACTION_ROYAL:jade_step",
+            "action:main:jiaoyou"
+          ],
+          "operator_dsl": "prop_sub(name=MONEY; val=2) | prop_add(name=BURNOUT; val=8)",
+          "option_results": {
+            "opt_kuangke": "prop_sub(name=HEALTH; val=8) | emo_add(name=ARROGANCE; val=15) | prop_add(name=BURNOUT; val=5)",
+            "opt_fengying": "prop_add(name=MONEY; val=15) | prop_add(name=BURNOUT; val=15) | emo_add(name=SORROW; val=18)",
+            "opt_zuanying": "prop_add(name=MONEY; val=10) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15)"
+          },
+          "scale": 1.05,
+          "stored_to": "747_kuangda.jiaoyou"
+        },
+        {
+          "id": "ghostwriter_blood",
+          "name": "精神阉割的捉刀",
+          "tags": [
+            "TARGET_OBJECT_SWORD:cold_blade",
+            "VIBE_THEME_MARTIAL:giant_roc",
+            "action:main:baiye"
+          ],
+          "operator_dsl": "prop_sub(name=INSPIRATION; val=8) | prop_add(name=BURNOUT; val=12)",
+          "option_results": {
+            "opt_kuangke": "prop_sub(name=HEALTH; val=15) | emo_add(name=ARROGANCE; val=20) | prop_add(name=BURNOUT; val=10)",
+            "opt_fengying": "prop_add(name=MONEY; val=20) | prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=15) | emo_add(name=SORROW; val=20)",
+            "opt_zuanying": "prop_add(name=MONEY; val=15) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15)"
+          },
+          "scale": 1.1,
+          "stored_to": "747_kuangda.baiye"
+        },
+        {
+          "id": "hijacked_grief",
+          "name": "被打断的哀悼",
+          "tags": [
+            "VIBE_PHILOSOPHY_ZEN:temple_bell",
+            "ENV_NATURE_NIGHTMOON:cold_moon",
+            "action:main:duzhuo"
+          ],
+          "operator_dsl": "prop_sub(name=INSPIRATION; val=3) | emo_add(name=SORROW; val=15)",
+          "option_results": {
+            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ANGER; val=18) | prop_add(name=BURNOUT; val=8) | prop_add(name=LITERARY_FAME; val=3)",
+            "opt_fengying": "prop_add(name=MONEY; val=8) | prop_add(name=BURNOUT; val=15) | emo_add(name=SORROW; val=20)",
+            "opt_zuanying": "prop_add(name=MONEY; val=10) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15)"
+          },
+          "scale": 1.05,
+          "stored_to": "747_kuangda.duzhuo"
+        }
+      ]
+    }
+  ]
+}

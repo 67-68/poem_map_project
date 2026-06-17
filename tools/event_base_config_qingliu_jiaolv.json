@@ -77,7 +77,35 @@
             "opt_jiaolv": "prop_sub(name=money; val=20) | prop_sub(name=health; val=5) | emo_add(name=SORROW; val=8) | prop_add(name=fatigue; val=8)"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi"
+          "stored_to": "747_kuangda.fangshi",
+          "narrative_constraint": {
+            "type": "polymorphic_anxiety_event",
+            "demand_context": "NPC 的报价必须隐含——不说数字，说后果。不说「X两银子」，说「你穿着它走进去，门子不会问你名帖」。说话方式是从容的，不是急迫的——从容比急迫更有压迫感。",
+            "action_style": "禁止使用「手」「指」「腕」「掌」作为犹豫信号的载体。必须从以下未使用过的感官通道中选择：(1) 颈部/肩部的微动作 (2) 足部的位移犹豫 (3) 呼吸节奏的异常（不出现「呼吸」二字）(4) 视线对非关键物体的过度停留。",
+            "resolution_style": "交易完成后的环境必须出现一个微小的反讽细节——不是人物评价，是物本身的沉默：窗外一声与你无关的叫卖、烛火恰好在这时爆了一个灯花、一阵风把什么东西吹落了。不解释意义。",
+            "negative_examples": [
+              {
+                "field": "demand_context",
+                "bad": "他从樟木箱底翻出一方端砚，砚盖上刻着一个「张」字",
+                "reason": "禁止使用砚台、樟木箱、刻字旧物等已被沙盒种子锚定的具体物件"
+              },
+              {
+                "field": "demand_context",
+                "bad": "「你拿去拜谒时搁在拜帖旁边——什么都不用说，对方自己会看见。」",
+                "reason": "禁止使用拜帖场景——这是沙盒种子中已出现的标志性场景"
+              },
+              {
+                "field": "action_style",
+                "bad": "袖中的钱袋已被扯开，银两的凉意顺指缝滚落砚边",
+                "reason": "禁止「指缝」「银两滚落」——手部动作和货币物理位移的组合是已生成的陈词滥调"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "他把砚台往你这边推了半寸",
+                "reason": "禁止「推了半寸」这类NPC推物件的动作——同一个沉默的物理威胁已在多个事件中复用"
+              }
+            ]
+          }
         },
         {
           "id": "fomo_scam",
@@ -93,7 +121,35 @@
             "opt_jiaolv": "prop_sub(name=money; val=25) | prop_sub(name=inspiration; val=5) | emo_add(name=ANGER; val=10) | prop_add(name=burnout; val=5)"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "narrative_constraint": {
+            "type": "polymorphic_anxiety_event",
+            "demand_context": "NPC 的信息永远不完整。你听到的不是一个答案，是一个暗示+一个沉默。信息碎片化：可能是一个名字的偏旁、一个日期的模糊范围、一个「有人说」的消息源。NPC 的姿态不神秘——他可能在吃东西、在扫地、在经过时随口丢下一句。越是漫不经心，越有杀伤力。",
+            "action_style": "禁止使用「耳」「牙」「嘴」「唇」作为犹豫信号的载体。必须从以下未使用过的感官通道中选择：(1) 肩胛骨的紧绷与松弛 (2) 足尖方向的改变 (3) 对时间的异常敏感（心跳节拍感，不出现「心跳」二字）(4) 布料摩擦声的放大。",
+            "resolution_style": "交易完成后的「验证时刻」必须是缺失的——不写玩家是否打开了那张纸、验证了那条信息。只写他拿着那张纸时的一个肢体动作（不是表情，不是情绪），然后场景切断。",
+            "negative_examples": [
+              {
+                "field": "demand_context",
+                "bad": "他从袖口露出一角纸边，灯影一晃，暗红印痕隐约是吏部的式样",
+                "reason": "禁止袖口露纸边的动作——这是沙盒种子中信息贩子的标志性手势"
+              },
+              {
+                "field": "demand_context",
+                "bad": "「别人都买了，就差你。」",
+                "reason": "禁止直接使用「别人都」句式——这是沙盒种子中已生成的语言锚点"
+              },
+              {
+                "field": "action_style",
+                "bad": "银锭从汗湿的掌心滑过桌面，落在对方袖沿",
+                "reason": "禁止「掌」「银锭」「袖沿」——手部+货币+对方衣物的三件套组合已被生成"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "他补了一句：「别人都买了，就差你。」",
+                "reason": "禁止NPC在交易后追加语言确认——让沉默取代一切语言"
+              }
+            ]
+          }
         },
         {
           "id": "illusion_control",
@@ -109,7 +165,35 @@
             "opt_jiaolv": "prop_sub(name=money; val=18) | emo_sub(name=SORROW; val=10) | prop_add(name=burnout; val=8) | prop_add(name=fatigue; val=5)"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi"
+          "stored_to": "747_kuangda.fangshi",
+          "narrative_constraint": {
+            "type": "polymorphic_anxiety_event",
+            "demand_context": "NPC 展示「知道你不应该知道的事」的方式必须是低科技感的——不是算命、不是神通、不是任何需要口诀和道具的仪式。是你的衣着、鞋底泥、袖口磨损位置、被你忽略的日常细节——出卖了你。NPC 从你的体表痕迹读取你的故事，然后递出一个解决方案。",
+            "action_style": "禁止使用任何涉及「钱」的物理转移动作。本轮选项文本必须写一个「拿起」而非「交出」的动作——玩家主动取走那个物件，付款是同时发生或不发生的。禁止静态犹豫信号。必须是一个持续 ≥3秒 的缓慢动作过程（不是简短的一下）。",
+            "resolution_style": "物件已经在玩家手中。场景必须结束在一个「不合时宜的日常细节」上——不是物品的象征意义，是它的物理重量、温度、或是与你手掌的尺寸不匹配。",
+            "negative_examples": [
+              {
+                "field": "demand_context",
+                "bad": "「那里有一块洗不掉的墨渍——是你上个月写干谒诗时，写到第三句突然停了笔。」",
+                "reason": "禁止墨渍、干谒诗、第三句——此乃沙盒种子核心标志性场景，逐字重复"
+              },
+              {
+                "field": "demand_context",
+                "bad": "他指了一下你左手袖口的位置",
+                "reason": "禁止「左手袖口」等具体的身体定位——沙盒种子已锚定袖口作为信息线索来源"
+              },
+              {
+                "field": "action_style",
+                "bad": "一把铜钱滑进对方掌中",
+                "reason": "禁止「铜钱滑入掌中」——钱→掌的物理位移组合已被全部4个事件复用"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "铜镜里映着你的脸，边缘一圈铜绿",
+                "reason": "禁止以「镜中映脸」作为场景收束——这是沙盒种子中的标志性画面"
+              }
+            ]
+          }
         },
         {
           "id": "doomsday_binge",
@@ -125,7 +209,40 @@
             "opt_jiaolv": "prop_sub(name=money; val=15) | prop_add(name=DRUNK; val=20) | prop_add(name=inspiration; val=10) | emo_add(name=SORROW; val=15) | prop_sub(name=health; val=8)"
           },
           "scale": 1.05,
-          "stored_to": "747_kuangda.duzhuo"
+          "stored_to": "747_kuangda.duzhuo",
+          "narrative_constraint": {
+            "type": "polymorphic_anxiety_event",
+            "demand_context": "没有 NPC 推销。这次是你自己。触发物是一段环境中的时间信号——不是除夕、不是家信（这些都已被使用过）——必须是新的节拍标记：更声的次数不对、客栈掌柜收账本的声音、街童奔跑的方向改变了、梅雨季节的第一滴霉味。触发后不写心理，直接跳剪到你已经身处消费场所。",
+            "action_style": "禁止使用「钱」「铜板」「银」等任何货币词。禁止「老板/掌柜递上菜单/酒」的服务员式互动。选项文本必须是一个反常的生理/物理选择——你点了你从未点过的东西、你坐了你从未坐过的位置、你做了你从未在公共场合做的动作。这不是消费行为，是对日常身份的短暂抛弃。",
+            "resolution_style": "场景结束于感官高峰的骤然降调——不是后悔、不是账单、不是后果。是一个声音的消失、一个温度的回落、一个光线的变化。让「回来」比「沉溺」更残酷。",
+            "negative_examples": [
+              {
+                "field": "demand_context",
+                "bad": "除夕。爆竹声隔两条街传过来，闷闷的。",
+                "reason": "禁止除夕/爆竹声作为时间触发——此乃沙盒种子标志性开局，已生成使用"
+              },
+              {
+                "field": "demand_context",
+                "bad": "油灯芯子烧歪了，火苗一抖一抖。屋里那半壶浊酒你已经看了它四次",
+                "reason": "禁止油灯/浊酒/「看了X次」句式——沙盒种子复用的环境铺垫模式"
+              },
+              {
+                "field": "demand_context",
+                "bad": "家信是今早到的。信上只有两行字——妻子说米缸见了底",
+                "reason": "禁止家信作为触发物——已被沙盒种子使用，且此触发模式过于直白"
+              },
+              {
+                "field": "action_style",
+                "bad": "把仅剩的铜板滑进掌柜掌心",
+                "reason": "禁止「铜板滑入掌心」——货币物理转移的通用陈词"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "能做半个时辰的盛唐",
+                "reason": "禁止「半个时辰的盛唐」句式——沙盒种子中已使用的标志性语言"
+              }
+            ]
+          }
         }
       ]
     }

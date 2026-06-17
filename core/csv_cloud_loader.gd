@@ -145,6 +145,36 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "random_event",
         "is_generated": true,
     },
+    {
+        "name": "焦虑事件库",
+        "save_path": "res://data/4_eras/747_kuangda/_qingliu_jiaolv_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
+    {
+        "name": "自责事件库",
+        "save_path": "res://data/4_eras/747_kuangda/_zize_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
+    {
+        "name": "狂客-浊流事件库",
+        "save_path": "res://data/4_eras/747_kuangda/_kuangke_zhuoliu_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
+    {
+        "name": "浊流逢迎事件库",
+        "save_path": "res://data/4_eras/747_kuangda/_zhuoliu_fengying_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
+    {
+        "name": "浊流钻营事件库",
+        "save_path": "res://data/4_eras/747_kuangda/_zhuoliu_zuanying_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
 ]
 
 # 🗺️ store_to 路径映射表
