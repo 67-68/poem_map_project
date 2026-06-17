@@ -33,6 +33,19 @@
   - `data/1_core_rules/disease/` — 4 个范例 Disease .tres（风寒急 / 肺痨 / 失意之郁 / 谵狂）、3 个诊断事件、1 个 ManiaProvider 配置
   - [`DOCUMENTATIONS/events/tag_dictioinary.md`](DOCUMENTATIONS/events/tag_dictioinary.md) — 新增 sick/sickAcute/sickChronic/MENTAL(depression/mania) 枚举
   - [`DOCUMENTATIONS/events/trait_designs.md`](DOCUMENTATIONS/events/trait_designs.md) — 新增「疾病系统 (Disease Subclass)」章节
+- **疾病系统 Phase 2** — 污染事件库 + 桥接事件 + 现有事件库接入
+  - [`data/1_core_rules/disease/_disease_contamination_events.csv`](data/1_core_rules/disease/_disease_contamination_events.csv) — 16 个污染事件（4 疾病 × 4 事件），使用 trigger_tags 按疾病阶段过滤：`[actor:health:sickAcute]` / `[actor:health:sickChronic]` / `[actor:mental:depression]` / `[actor:mental:mania]`
+  - [`data/1_core_rules/disease/_disease_diagnosis_events.csv`](data/1_core_rules/disease/_disease_diagnosis_events.csv) — 5 个诊断+桥接事件（含 2 个 bridge 事件：fenghan_bridge / shiyi_bridge），桥接事件通过 `trait_add(name=disease_xxx)` 直接从 sick 态过渡到 Disease
+  - [`data/1_core_rules/disease/event_disease_bridge_fenghan.tres`](data/1_core_rules/disease/event_disease_bridge_fenghan.tres) — 风寒急桥接事件 .tres 桩
+  - [`data/1_core_rules/disease/event_disease_bridge_shiyi.tres`](data/1_core_rules/disease/event_disease_bridge_shiyi.tres) — 失意之郁桥接事件 .tres 桩
+  - 接入 747_kuangda 事件库（4 CSV × 1 trait_add）：
+    - [`data/4_eras/747_kuangda/_duotai_humiliation_events.csv`](data/4_eras/747_kuangda/_duotai_humiliation_events.csv) — 转身入人流 → `trait_add(name=disease_shiyi_depression)`
+    - [`data/4_eras/747_kuangda/_qingliu_daoxin_posui_events.csv`](data/4_eras/747_kuangda/_qingliu_daoxin_posui_events.csv) — 墨滴隐字 → `trait_add(name=disease_zhanwang_mania)`
+    - [`data/4_eras/747_kuangda/_qingliu_jiaolv_events.csv`](data/4_eras/747_kuangda/_qingliu_jiaolv_events.csv) — 买醉淋雨 → `trait_add(name=disease_fenghan_acute)`
+    - [`data/4_eras/747_kuangda/_kuangke_zhuoliu_events.csv`](data/4_eras/747_kuangda/_kuangke_zhuoliu_events.csv) — 雪夜转身 → `trait_add(name=disease_fenghan_acute)`
+  - 接入 745_ambition 事件库（1 CSV × 1 trait_add）：
+    - [`data/4_eras/745_ambition/_scene_imagery_library_events.csv`](data/4_eras/745_ambition/_scene_imagery_library_events.csv) — 冷眼旁观 → `trait_add(name=disease_fenghan_acute)`
+  - [`plans/disease_system_phase2.md`](plans/disease_system_phase2.md) — Phase 2 完整设计文档（疾病链生命周期、污染事件表、桥接事件、接入点）
 - 音效类别系统（AudioManager + UISoundComponent 联动）
   - [`core/audio_manager.gd`](core/audio_manager.gd) — `_load_sfx_categories()` 在 `_ready()` 时扫描 `assets/sounds/` 下所有一级子目录，预加载 `.ogg/.wav/.mp3` 到 `_sfx_category_cache` 字典
   - [`core/audio_manager.gd`](core/audio_manager.gd) — `play_sfx_category(category, pitch_rand)` 从指定类别缓存中随机选取一个音效播放

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event.gd" id="1_e0gjm"]
+
+[resource]
+script = ExtResource("1_e0gjm")
+uuid = "event_disease_bridge_fenghan"
+name = "病来如山倒"
+description = "你撑了很久。咳嗽、头痛、发冷——你都忍了。但今天早上你连坐都坐不起来了。铜盆里的水映出一张灰败的脸。你终于承认：这次是真的病了。"

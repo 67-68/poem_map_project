@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event.gd" id="1_e0gjm"]
+
+[resource]
+script = ExtResource("1_e0gjm")
+uuid = "event_disease_bridge_shiyi"
+name = "心疾成结"
+description = "你已经很久没有笑过了。久到记不清上次开怀是什么时候。胸口像压着一块石头，每个呼吸都沉甸甸的。朋友们说你想开些，可他们不知道——你连「想开」的力气都没有了。"
