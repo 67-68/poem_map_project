@@ -1,66 +1,66 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bflucpyaj4trb"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_1mou5"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_dr08n"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_3ap00"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_ibdal"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_8pv6g"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_8rg45"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_2wvuq"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_ith4m"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_1mou5"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_dr08n"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_3ap00"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_ibdal"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_8pv6g"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_8rg45"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="7_2wvuq"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="8_ith4m"]
 
-[sub_resource type="Resource" id="Resource_68gvb"]
+[sub_resource type="Resource" id="Resource_1mou5"]
 script = ExtResource("3_3ap00")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_30nys"]
+[sub_resource type="Resource" id="Resource_dr08n"]
 script = ExtResource("3_3ap00")
 str_props = "LITERARY_FAME"
 value = 5
 
-[sub_resource type="Resource" id="Resource_lbygp"]
+[sub_resource type="Resource" id="Resource_3ap00"]
 script = ExtResource("3_3ap00")
 str_props = "BURNOUT"
 value = 10
 
-[sub_resource type="Resource" id="Resource_u7ut6"]
+[sub_resource type="Resource" id="Resource_ibdal"]
 script = ExtResource("4_ibdal")
 value = 8
 
-[sub_resource type="Resource" id="Resource_7ikxf"]
+[sub_resource type="Resource" id="Resource_8pv6g"]
 script = ExtResource("3_3ap00")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_kb7kh"]
+[sub_resource type="Resource" id="Resource_8rg45"]
 script = ExtResource("4_ibdal")
 value = 5
 
-[sub_resource type="Resource" id="Resource_3c1q6"]
+[sub_resource type="Resource" id="Resource_2wvuq"]
 script = ExtResource("3_3ap00")
 str_props = "fatigue"
 value = 8
 
-[sub_resource type="Resource" id="Resource_ib36g"]
+[sub_resource type="Resource" id="Resource_ith4m"]
 script = ExtResource("3_3ap00")
 str_props = "BURNOUT"
 value = 5
 
-[sub_resource type="Resource" id="Resource_4y1tq"]
+[sub_resource type="Resource" id="Resource_68gvb"]
 script = ExtResource("4_ibdal")
 value = 5
 
-[sub_resource type="Resource" id="Resource_p1kni"]
+[sub_resource type="Resource" id="Resource_30nys"]
 script = ExtResource("5_8pv6g")
-operators = Array[ExtResource("2_dr08n")]([SubResource("Resource_68gvb"), SubResource("Resource_30nys"), SubResource("Resource_lbygp"), SubResource("Resource_u7ut6"), SubResource("Resource_7ikxf"), SubResource("Resource_kb7kh"), SubResource("Resource_3c1q6"), SubResource("Resource_ib36g"), SubResource("Resource_4y1tq")])
+operators = Array[ExtResource("2_dr08n")]([SubResource("Resource_1mou5"), SubResource("Resource_dr08n"), SubResource("Resource_3ap00"), SubResource("Resource_ibdal"), SubResource("Resource_8pv6g"), SubResource("Resource_8rg45"), SubResource("Resource_2wvuq"), SubResource("Resource_ith4m"), SubResource("Resource_68gvb")])
 
-[sub_resource type="Resource" id="Resource_tnj6l"]
+[sub_resource type="Resource" id="Resource_lbygp"]
 script = ExtResource("6_8rg45")
-choice_result = SubResource("Resource_p1kni")
+choice_result = SubResource("Resource_30nys")
 description = "他把手炉放回案上，放得比原来偏了半寸。"
 
-[sub_resource type="Resource" id="Resource_olkli"]
+[sub_resource type="Resource" id="Resource_u7ut6"]
 script = ExtResource("7_2wvuq")
 property = "BURNOUT"
 value = 70
@@ -68,10 +68,10 @@ operator = 1
 
 [resource]
 script = ExtResource("8_ith4m")
-requirement = SubResource("Resource_olkli")
+requirement = SubResource("Resource_u7ut6")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_1mou5")]([SubResource("Resource_tnj6l")])
+options = Array[ExtResource("1_1mou5")]([SubResource("Resource_lbygp")])
 uuid = "qingliu_daoxin_posui_empty_endorsement"
 name = "散席"
 description = "宴散时李大夫拉住他。烛台的火苗往西偏了一下。炭盆里的热已经散得差不多了。李大夫说子美之才当为天下先，说此子必成大器。旁边几个人围过来听着。李大夫的手停在他袖口上，压出一道褶。有人应和了两句，声调很高。有人低头去看案上的空酒盏。李大夫说完，回身招呼仆人备轿。袖口的褶还在。他站在那里，看着轿帘放下来。炭盆里的灰白了一层。"

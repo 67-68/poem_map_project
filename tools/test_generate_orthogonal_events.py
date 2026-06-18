@@ -4,6 +4,7 @@
 运行:
     python3 -m unittest tools.test_generate_orthogonal_events -v
 """
+import csv
 import itertools
 import json
 import os
@@ -12,12 +13,14 @@ import tempfile
 import unittest
 import sys
 sys.path.insert(0, ".")
-from unittest.mock import MagicMock
+from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 from tools.config import (
     BlacklistDimensionConfig,
     DimensionCombo,
     EventPipelineConfig,
+    OptionFeature,
     PipelineDimension,
     PipelineDimensionValue,
     default_config,
@@ -31,6 +34,14 @@ from tools.event_generator.dsl_parser import (
 from tools.event_generator.llm_client import (
     LLMClient,
     parse_llm_response,
+)
+from tools.event_generator.main import (
+    EventSnapshot,
+    GenerationResult,
+    OptionRow,
+    parse_old_csv_events,
+    reassembly_one_event,
+    _load_registry,
 )
 from tools.event_generator.state_managers import (
     SandboxManager,
@@ -933,3 +944,290 @@ class TestSandboxManager(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ════════════════════════════════════════════════════════════════
+# Reassembly 模式测试
+# ════════════════════════════════════════════════════════════════
+
+class TestEventSnapshot(unittest.TestCase):
+    """EventSnapshot dataclass 基础验证"""
+
+    def test_construction(self):
+        """构造和字段访问"""
+        snap = EventSnapshot(
+            uuid="test_abc",
+            title="测试标题",
+            description="测试描述",
+            option_texts=["选项A", "选项B"],
+        )
+        self.assertEqual(snap.uuid, "test_abc")
+        self.assertEqual(snap.title, "测试标题")
+        self.assertEqual(snap.description, "测试描述")
+        self.assertEqual(snap.option_texts, ["选项A", "选项B"])
+
+    def test_empty_option_texts(self):
+        """无选项时为空列表"""
+        snap = EventSnapshot(
+            uuid="test_empty",
+            title="空",
+            description="无选项",
+            option_texts=[],
+        )
+        self.assertEqual(snap.option_texts, [])
+
+
+class TestParseOldCsvEvents(unittest.TestCase):
+    """parse_old_csv_events — 从旧 CSV 解析 EventSnapshot"""
+
+    def _write_csv(self, path: str, rows: list[list[str]]):
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            for row in rows:
+                writer.writerow(row)
+
+    def test_single_event_no_options(self):
+        """单个事件，无选项行"""
+        header = ["row_type", "uuid", "context", "requirements", "title", "description",
+                   "on_enter", "results", "interruptions", "template", "provider"]
+        data = [
+            header,
+            ["random_event", "test_evt_001", "trigger_tags=[test]|weight=10", "",
+             "测试标题", "测试描述内容", "", "", "", "", ""],
+        ]
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False, encoding="utf-8") as f:
+            path = f.name
+            writer = csv.writer(f)
+            for row in data:
+                writer.writerow(row)
+        try:
+            result = parse_old_csv_events(path)
+            self.assertEqual(len(result), 1)
+            self.assertIn("test_evt_001", result)
+            snap = result["test_evt_001"]
+            self.assertEqual(snap.title, "测试标题")
+            self.assertEqual(snap.description, "测试描述内容")
+            self.assertEqual(snap.option_texts, [])
+        finally:
+            os.unlink(path)
+
+    def test_event_with_options(self):
+        """事件 + 3 个选项行"""
+        header = ["row_type", "uuid", "context", "requirements", "title", "description",
+                   "on_enter", "results", "interruptions", "template", "provider"]
+        data = [
+            header,
+            ["random_event", "evt_opt_001", "trigger_tags=[test]|weight=10", "",
+             "标题", "描述", "", "", "", "", ""],
+            # option 文本在 description 列（row[5]），匹配实际 CSV 格式
+            [">option", "", "", "", "", "选项A", "", "prop_add(name=x;val=1)", "", "", ""],
+            [">option", "", "", "", "", "选项B", "", "prop_add(name=y;val=2)", "", "", ""],
+            [">option", "", "", "", "", "选项C", "", "prop_add(name=z;val=3)", "", "", ""],
+        ]
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False, encoding="utf-8") as f:
+            path = f.name
+            writer = csv.writer(f)
+            for row in data:
+                writer.writerow(row)
+        try:
+            result = parse_old_csv_events(path)
+            self.assertEqual(len(result), 1)
+            snap = result["evt_opt_001"]
+            self.assertEqual(snap.title, "标题")
+            self.assertEqual(snap.option_texts, ["选项A", "选项B", "选项C"])
+        finally:
+            os.unlink(path)
+
+    def test_multiple_events(self):
+        """多个事件，各自带选项"""
+        header = ["row_type", "uuid", "context", "requirements", "title", "description",
+                   "on_enter", "results", "interruptions", "template", "provider"]
+        data = [
+            header,
+            ["random_event", "evt_001", "", "", "事件1", "描述1", "", "", "", "", ""],
+            [">option", "", "", "", "", "1-选项A", "", "", "", "", ""],
+            ["random_event", "evt_002", "", "", "事件2", "描述2", "", "", "", "", ""],
+            [">option", "", "", "", "", "2-选项A", "", "", "", "", ""],
+            [">option", "", "", "", "", "2-选项B", "", "", "", "", ""],
+        ]
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False, encoding="utf-8") as f:
+            path = f.name
+            writer = csv.writer(f)
+            for row in data:
+                writer.writerow(row)
+        try:
+            result = parse_old_csv_events(path)
+            self.assertEqual(len(result), 2)
+            self.assertEqual(result["evt_001"].option_texts, ["1-选项A"])
+            self.assertEqual(result["evt_002"].option_texts, ["2-选项A", "2-选项B"])
+        finally:
+            os.unlink(path)
+
+    def test_nonexistent_file(self):
+        """文件不存在时抛 FileNotFoundError"""
+        with self.assertRaises(FileNotFoundError):
+            parse_old_csv_events("/tmp/nonexistent_csv_file_12345.csv")
+
+    def test_empty_csv(self):
+        """只有 header 的 CSV 返回空 dict"""
+        header = ["row_type", "uuid", "context", "requirements", "title", "description",
+                   "on_enter", "results", "interruptions", "template", "provider"]
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False, encoding="utf-8") as f:
+            path = f.name
+            writer = csv.writer(f)
+            writer.writerow(header)
+        try:
+            result = parse_old_csv_events(path)
+            self.assertEqual(result, {})
+        finally:
+            os.unlink(path)
+
+
+class TestReassemblyOneEvent(unittest.TestCase):
+    """reassembly_one_event — 核心逻辑"""
+
+    def setUp(self):
+        self.v1 = PipelineDimensionValue(
+            id="v1", name="值1", description="测试值1",
+            scale=1.0, operator_dsl="prop_add(name=test;val=1)",
+            tags=["action:test"],
+        )
+        self.dim1 = PipelineDimension(
+            id="dim_test", name="测试维度",
+            values=[self.v1],
+        )
+        self.cfg = EventPipelineConfig(
+            id="test_cfg",
+            name="测试配置",
+            background_context="测试",
+            dimensions=[self.dim1],
+            prompt_features=[],
+            option_features=[
+                OptionFeature(id="opt_a", text="选项A"),
+                OptionFeature(id="opt_b", text="选项B"),
+            ],
+            universal_tags=[],
+        )
+        self.snapshot = EventSnapshot(
+            uuid="test_reassembly_001",
+            title="保留标题",
+            description="保留描述",
+            option_texts=["旧选项A内容", "旧选项B内容"],
+        )
+        # values_tuple 元素是 PipelineDimensionValue（同 expand_combinations 返回类型）
+        self.values_tuple = (self.v1,)
+
+    def test_result_status_success(self):
+        """返回 status='success' 的 GenerationResult"""
+        result = reassembly_one_event(
+            values_tuple=self.values_tuple,
+            cfg=self.cfg,
+            snapshot=self.snapshot,
+        )
+        self.assertEqual(result.status, "success")
+        self.assertEqual(result.uuid, "test_cfg_v1")
+
+    def test_title_and_description_preserved(self):
+        """title 和 description 来自 snapshot 而非 LLM"""
+        result = reassembly_one_event(
+            values_tuple=self.values_tuple,
+            cfg=self.cfg,
+            snapshot=self.snapshot,
+        )
+        self.assertEqual(result.parsed["title"], "保留标题")
+        self.assertEqual(result.parsed["description"], "保留描述")
+
+    def test_option_texts_preserved(self):
+        """option 文本来自 snapshot"""
+        result = reassembly_one_event(
+            values_tuple=self.values_tuple,
+            cfg=self.cfg,
+            snapshot=self.snapshot,
+        )
+        options = result.parsed.get("options", {})
+        self.assertEqual(options.get("opt_a"), "旧选项A内容")
+        self.assertEqual(options.get("opt_b"), "旧选项B内容")
+
+    def test_option_rows_built(self):
+        """option_rows 被正确构建，包含选项文本"""
+        result = reassembly_one_event(
+            values_tuple=self.values_tuple,
+            cfg=self.cfg,
+            snapshot=self.snapshot,
+        )
+        self.assertEqual(len(result.option_rows), 2)
+        self.assertEqual(result.option_rows[0].text, "旧选项A内容")
+        self.assertEqual(result.option_rows[1].text, "旧选项B内容")
+
+    def test_dsl_scaling_applied(self):
+        """DSL operator scaling 正常执行（operator_dsl 被展开到 option_rows）"""
+        result = reassembly_one_event(
+            values_tuple=self.values_tuple,
+            cfg=self.cfg,
+            snapshot=self.snapshot,
+        )
+        for row in result.option_rows:
+            self.assertIn("prop_add", row.dsl)
+
+    def test_combined_scale_computed(self):
+        """combined_scale = product of all value scales"""
+        result = reassembly_one_event(
+            values_tuple=self.values_tuple,
+            cfg=self.cfg,
+            snapshot=self.snapshot,
+        )
+        self.assertEqual(result.combined_scale, 1.0)
+        self.assertEqual(result.scale_parts, ["1.0"])
+
+    def test_snapshot_option_shortfall(self):
+        """snapshot 选项数少于 cfg.option_features 时，option_rows 回退到 choice.text"""
+        short_snapshot = EventSnapshot(
+            uuid="short",
+            title="短",
+            description="选项不足",
+            option_texts=["仅有选项A"],
+        )
+        result = reassembly_one_event(
+            values_tuple=self.values_tuple,
+            cfg=self.cfg,
+            snapshot=short_snapshot,
+        )
+        # option_rows 中 opt_a 保留 snapshot 文本
+        self.assertEqual(result.option_rows[0].text, "仅有选项A")
+        # option_rows 中 opt_b 回退到 choice.text
+        self.assertEqual(result.option_rows[1].text, "选项B")
+
+
+class TestLoadRegistry(unittest.TestCase):
+    """_load_registry — 注册表加载"""
+
+    def test_registry_exists_and_is_valid(self):
+        """tools/event_config_registry.json 存在且格式正确"""
+        registry = _load_registry()
+        self.assertIn("entries", registry)
+        entries = registry["entries"]
+        self.assertGreater(len(entries), 0, "注册表不应为空")
+        for key, entry in entries.items():
+            with self.subTest(key=key):
+                self.assertIn("config", entry, f"{key} 缺少 config")
+                self.assertIn("csv", entry, f"{key} 缺少 csv")
+                self.assertTrue(entry["config"].endswith(".json"),
+                                f"{key} config 应指向 .json 文件")
+                self.assertTrue(entry["csv"].endswith(".csv"),
+                                f"{key} csv 应指向 .csv 文件")
+
+    def test_registry_contains_known_keys(self):
+        """包含已知的 key"""
+        registry = _load_registry()
+        entries = registry["entries"]
+        for key in ["duotai_humiliation", "zize", "bai_ye_real_appearance"]:
+            with self.subTest(key=key):
+                self.assertIn(key, entries)
+
+    def test_registry_file_syntax(self):
+        """JSON 语法正确"""
+        registry_path = Path(__file__).resolve().parent / "event_config_registry.json"
+        with open(registry_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        self.assertIsInstance(data, dict)
+        self.assertIsInstance(data.get("entries"), dict)

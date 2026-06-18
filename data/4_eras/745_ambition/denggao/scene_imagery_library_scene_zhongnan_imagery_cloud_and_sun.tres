@@ -1,35 +1,35 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b1myugk5wywmn"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_6ma3w"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_h4whi"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_67vad"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_io2uw"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_ye6c4"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_ky7xe"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_sueej"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_6ma3w"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_h4whi"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_67vad"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_io2uw"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_ye6c4"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_ky7xe"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_sueej"]
 
-[sub_resource type="Resource" id="Resource_bbl5s"]
+[sub_resource type="Resource" id="Resource_6ma3w"]
 script = ExtResource("3_67vad")
 value = 10
 
-[sub_resource type="Resource" id="Resource_1p04q"]
+[sub_resource type="Resource" id="Resource_h4whi"]
 script = ExtResource("4_io2uw")
 imagery_name = "TARGET_MYTH_GIANTROC_ZHONGNAN"
 
-[sub_resource type="Resource" id="Resource_ggn5s"]
+[sub_resource type="Resource" id="Resource_67vad"]
 script = ExtResource("5_ye6c4")
-operators = Array[ExtResource("2_h4whi")]([SubResource("Resource_bbl5s"), SubResource("Resource_1p04q")])
+operators = Array[ExtResource("2_h4whi")]([SubResource("Resource_6ma3w"), SubResource("Resource_h4whi")])
 
-[sub_resource type="Resource" id="Resource_v3l4d"]
+[sub_resource type="Resource" id="Resource_io2uw"]
 script = ExtResource("6_ky7xe")
-choice_result = SubResource("Resource_ggn5s")
+choice_result = SubResource("Resource_67vad")
 description = "（冷眼旁观）"
 
 [resource]
 script = ExtResource("7_sueej")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:denggao"])
-options = Array[ExtResource("1_6ma3w")]([SubResource("Resource_v3l4d")])
+options = Array[ExtResource("1_6ma3w")]([SubResource("Resource_io2uw")])
 uuid = "scene_imagery_library_scene_zhongnan_imagery_cloud_and_sun"
 name = "绝顶云光碎"
 description = "山风从背后推搡，将你的身体压向前方。云海翻腾，长安如棋盘摊在脚下——阳光被云层撕成碎金，落在东市是整片，落在西坊是几缕，落在皇城方向是一道窄窄的亮线。你的手指在袖中攥紧，指节抵着掌心。风又拽了拽衣襟，提醒你这高度有多虚。云层合拢时，所有光斑同时熄灭，像谁吹熄了一盏灯。"

@@ -70,12 +70,14 @@ const FUNC_IMAGE_REMOVE := "image_remove"
 
 const FUNC_SCAN_AND_PUSH := "scan_and_push"
 const FUNC_PUSH_EVENT := "push_event"
+const FUNC_CONTEXT_KEY_PUSH_EVENT := "context_key_push_event"
 const FUNC_POP_EVENT := "pop_event"
 const FUNC_PUSH_FOCUSED_CHAT := "push_focused_chat"
 const FUNC_CLEAR_SCHEDULED_EVENTS := "clear_scheduled_events"
 const FUNC_QUEUE_EVENT := "queue_event"
 const FUNC_RANDOM := "random"
 const FUNC_RANDOM_PICK := "random_pick"
+const FUNC_CONDITIONAL_RANDOM := "conditional_random"
 const FUNC_CONTEXT_FETCH := "context_fetch"
 const FUNC_NPC_BATCH_CHECK := "npc_batch_check"
 
@@ -143,12 +145,14 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE] = func(p, r): return _create_temp_flag_operator_int_reduce_if_above(p, r)
 	cd[FUNC_SCAN_AND_PUSH] = func(p, r): return _exec_scan_and_push_op(p, r)
 	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
+	cd[FUNC_CONTEXT_KEY_PUSH_EVENT] = func(p, r): return _exec_context_key_push_event_op(p, r)
 	cd[FUNC_POP_EVENT] = func(p, r): return _exec_pop_event_op(p, r)
 	cd[FUNC_PUSH_FOCUSED_CHAT] = func(p, r): return _exec_push_focused_chat_op(p, r)
 	cd[FUNC_CLEAR_SCHEDULED_EVENTS] = func(p, r): return _exec_clear_scheduled_events_op(p, r)
 	cd[FUNC_QUEUE_EVENT] = func(p, r): return _exec_queue_event_op(p, r)
 	cd[FUNC_RANDOM] = func(p, r): return _exec_random_op(p, r)
 	cd[FUNC_RANDOM_PICK] = func(p, r): return _exec_random_pick_op(p, r)
+	cd[FUNC_CONDITIONAL_RANDOM] = func(p, r): return _exec_conditional_random_op(p, r)
 	cd[FUNC_CONTEXT_FETCH] = func(p, r): return _exec_context_fetch_op(p, r)
 	cd[FUNC_NPC_BATCH_CHECK] = func(p, r): return _exec_npc_batch_check_op(p, r)
 	cd[FUNC_IMAGINARY_LEVEL_REWARD] = func(p, r): return _exec_imaginary_level_reward_op(p, r)
@@ -694,6 +698,18 @@ static func _exec_scan_and_push_op(parsed: NamedDSLParser.ParseResult, raw: Stri
 	return op
 
 
+# ─── context_key_push_event ──────────────────────────────
+
+static func _exec_context_key_push_event_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ContextKeyPushEventOperator:
+	var args = parsed.args
+	if not args.has("context_key"):
+		Logging.err("context_key_push_event 缺少 context_key 参数: %s" % raw)
+		return null
+	var op = ContextKeyPushEventOperator.new()
+	op.context_key = str(args["context_key"])
+	return op
+
+
 # ─── push_event / pop_event ─────────────────────────────────
 
 static func _exec_push_event_op(parsed: NamedDSLParser.ParseResult, raw: String) -> PushEventOperator:
@@ -802,6 +818,58 @@ static func _exec_random_pick_op(parsed: NamedDSLParser.ParseResult, raw: String
 
 	Logging.info("random_pick operator 解析成功: datasource=%s, prop=%s, key=%s, count=%d" % [
 		op.datasource_name, op.prop_from_result, op.key_stored_context, op.select_count])
+	return op
+
+
+# ─── conditional_random ───────────────────────────────────────────
+
+# DSL 语法: conditional_random(base=80, modifiers=[trait_key/delta/label], success=prop_add(name="money", val=100), fail=prop_add(name="reputation", val=-5), success_hint="成功", failed_hint="失败")
+# 解析为 ConditionalRandomOperator，modifiers 使用 / 分隔元素，每个元素格式为 trait_key/delta/label
+static func _exec_conditional_random_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ConditionalRandomOperator:
+	var base = NamedDSLParser.get_int_param(parsed, "base", 50)
+	var op = ConditionalRandomOperator.new()
+	op.base_chance = clampi(base, 0, 99)
+
+	# 解析 modifiers 数组
+	# DSL 中写法: modifiers=[kuangda_kuangke/20/狂客修正/...]
+	var raw_modifiers = parsed.params.get("modifiers", null)
+	if raw_modifiers != null:
+		if raw_modifiers is Array:
+			for entry in raw_modifiers:
+				var entry_str: String = str(entry)
+				var parts = entry_str.split("/")
+				var modifier = ChanceModifier.new()
+				if parts.size() >= 1:
+					modifier.trait_key = parts[0].strip_edges()
+				if parts.size() >= 2:
+					modifier.delta = int(parts[1].strip_edges())
+				if parts.size() >= 3:
+					modifier.label = parts[2].strip_edges()
+				op.modifiers.append(modifier)
+				Logging.info("conditional_random: modifier parsed trait_key=%s delta=%d label=%s" % [modifier.trait_key, modifier.delta, modifier.label])
+		else:
+			Logging.warn("conditional_random: modifiers 不是数组类型: %s (raw: %s)" % [str(raw_modifiers), raw])
+
+	# 解析 success 子 operators（| 分隔的多个 operator 表达式）
+	var success_str = NamedDSLParser.get_str_param(parsed, "success")
+	if not success_str.is_empty():
+		var success_ops = parse_consequence_operators(success_str)
+		op.success_result = success_ops
+	else:
+		Logging.warn("conditional_random: 缺少 success 参数 (raw: %s)" % raw)
+
+	# 解析 fail 子 operators（可选，| 分隔的多个 operator 表达式）
+	var fail_str = NamedDSLParser.get_str_param(parsed, "fail")
+	if not fail_str.is_empty():
+		var fail_ops = parse_consequence_operators(fail_str)
+		op.fail_result = fail_ops
+
+	# 可选的 hint 参数
+	op.success_hint = NamedDSLParser.get_str_param(parsed, "success_hint")
+	op.failed_hint = NamedDSLParser.get_str_param(parsed, "failed_hint")
+
+	Logging.info("conditional_random operator 解析成功: base=%d, modifiers=%d, success=%d ops, fail=%d ops" % [
+		op.base_chance, op.modifiers.size(), op.success_result.size(), op.fail_result.size()])
 	return op
 
 

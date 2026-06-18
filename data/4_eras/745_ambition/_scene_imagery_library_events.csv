@@ -1,6 +1,6 @@
 row_type,uuid,context,requirements,title,description,on_enter,results,interruptions,template,provider
 random_event,scene_imagery_library_scene_dailou_imagery_jade_step,trigger_tags=[action:main:fengzhao]|weight=10|store_to=745_ambition.fengzhao|era=745_ambition,,玉阶声纹,卯时三刻，大明宫外霜气凝住。你立在三班队列中，目光刺向宫门——九排铜钉在曦光里泛出铁青色，像刻度。前排紫袍的衣料摩擦声在寂静中格外清晰，每一次拂动都精确地划出等级间距。铜壶滴漏的滴水声在长廊里折返，越来越钝。忽然，宫门内侧传来靴底踏过汉白玉的回响——那声音压过心跳，你的指节在袖内掐紧。门缝泄出一线光，短暂照亮御道第一级台阶，随即灭去。你的视线追着那道光，身体前倾了一寸。,,,,,
->option,,,,,（冷眼旁观）,,emo_add(name=ambition; val=10) | imagery_add(name=TARGET_PLACE_JADESTEP_DAILOU),,,
+>option,,,,,（冷眼旁观）,,emo_add(name=ambition; val=10) | imagery_add(name=TARGET_PLACE_JADESTEP_DAILOU) | trait_add(name=disease_fenghan_acute),,,
 random_event,scene_imagery_library_scene_dailou_imagery_cloud_and_sun,trigger_tags=[action:main:fengzhao]|weight=10|store_to=745_ambition.fengzhao|era=745_ambition,,云日隔重门,破晓前的寒气从砖缝里渗上来，你的靴底已经冻僵。百官的幞头挨着幞头，像一片低矮的乌云，把你的视线压在地面上——你看不见宫门，只听见铜壶滴漏的节奏从门缝里漏出来，一下，一下，和着衣料摩擦的细响。内里隐约传来靴声，越来越近，然后停住了。所有人同时屏息。门轴转动的声音很沉，一线昏黄的光从门扇的缝隙里泄出来，照亮了几只朝靴的靴尖，又熄灭了。指节在笏板上攥得发白，你听着那扇门虚掩着，却遮住了所有的天光。,,,,,
 >option,,,,,（冷眼旁观）,,emo_add(name=frustration; val=10) | imagery_add(name=TARGET_PLACE_JADESTEP_DAILOU),,,
 random_event,scene_imagery_library_scene_jixian_imagery_jade_step,trigger_tags=[action:main:fengzhao]|weight=10|store_to=745_ambition.fengzhao|era=745_ambition,,玉阶压痕,抱古籍爬梯时膝盖抵住木阶的酸软，不比宫门外站着轻松。翻页时指尖在某处滞留——书页间夹着一片褪色的朱批压痕，墨迹渗入纸纹的深度，恰好是台阶一级的高度。光线从高窗斜切下来，在书脊上划出一道与丹墀同样的斜角。你盯着那道压痕，指节发白。,,,,,

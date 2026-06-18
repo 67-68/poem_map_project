@@ -44,6 +44,11 @@
 | `SHAN_SHUI` | 山水 | 山水、田园相关 |
 每个诗词 trait 的 `specific_topic` 必须严格匹配上表枚举值，大小写一致。
 
+### 7. 泛型关系系统 (Relation Flag Manager)
+- `core/relation_flag_manager.gd` — `RelationFlagManager` 静态工具类，管理玩家与 NPC/社会身份之间的泛型关系 flag（把柄/威胁、帮助/交好）
+- 遵循 `flag_gen_{category}_{TARGET_TAG}` 命名约定，动态注册为 virtual flag
+- 约定事件文件落点：`data/1_core_rules/relations/`
+
 ## 🛠️ 文档规范
 
 - 文件名使用下划线分隔，避免特殊字符和空格

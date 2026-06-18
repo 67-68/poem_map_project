@@ -1,7 +1,8 @@
 extends Node
 
 @export var current_event_pool: Array[EventTicket] = []
-var filters: Array[Callable] = [RequirementFilter.filter,ActionTagFilter.filter]
+## 🆕 过滤器链：前置函数式过滤器 → 意向匹配 → CD 冷却检查
+var filters: Array[Callable] = [RequirementFilter.filter, ActionTagFilter.filter, CooldownFilter.filter]
 
 ## 外部通过此信号注入一个事件 key，下一次抽取强制命中该事件（单次消费）
 ## 新增 main_tag 参数：非空时仅在对应的 main_tag 抽奖中生效；空字符串为通用保证。
@@ -44,9 +45,13 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
     var era = context.get('era', GameState.current_era)
     var events_to_scan = Database.get_random_events(main_tag, era)
 
+    # 🆕 从 context 读取 fallback_event_uuid（由 Action.fallback_event_uuid 传递）
+    var fallback_uuid = context.get('fallback_event_uuid', '')
+    Logging.info("[EventManager] scan_events: main_tag='%s', fallback_event_uuid='%s'" % [main_tag, fallback_uuid])
+
     for e in events_to_scan.values():
         initial_tickets.append(_create_ticket(e))
-    scan_events_from_tickets(initial_tickets, nothing_multiplication_weight, '', context)
+    scan_events_from_tickets(initial_tickets, nothing_multiplication_weight, fallback_uuid, context)
 
 func scan_poem_events(imaginaries: Array[ImaginaryTag]):
     #breakpoint
@@ -124,6 +129,9 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
     if return_only:
         return ev_name if ev_name else ""
     if ev_name:
+        var ev = Database.resolve(ev_name, "BaseEvent", true)
+        if ev:
+            context = SocialActionResolver.enrich_context(ev, ev_name, context)
         EventBus.request_event_key.emit(ev_name, context)
         Logging.info("[EventManager] 命运降临: " + ev_name)
     else:
@@ -169,6 +177,9 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
 
     # ── 正常轮盘抽取 ──
     if current_event_pool.is_empty():
+        if fallback_event_uuid != "":
+            Logging.info("[EventManager] Event pool is empty, using fallback: " + fallback_event_uuid)
+            return fallback_event_uuid
         Logging.info("[EventManager] Event pool is empty, returning null")
         return null
 

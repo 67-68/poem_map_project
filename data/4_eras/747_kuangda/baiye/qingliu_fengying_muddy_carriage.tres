@@ -1,191 +1,191 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dod7u2c0nfefp"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_2m5h5"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_wc6m2"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_8octr"]
-[ext_resource type="Script" uid="uid://clkjr0fnn00vd" path="res://core/operators/flag_operator.gd" id="4_usk15"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="5_6ghwn"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_3qju3"]
-[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="7_ku56u"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_1gubr"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_3ftv6"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="10_h5kdk"]
-[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="11_nycap"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="12_pyvc4"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="13_rg2ka"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_2m5h5"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_wc6m2"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_8octr"]
+[ext_resource type="Script" path="res://core/operators/flag_operator.gd" id="4_usk15"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="5_6ghwn"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_3qju3"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="7_ku56u"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_1gubr"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_3ftv6"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="10_h5kdk"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="11_2m5h5"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="12_pyvc4"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="13_rg2ka"]
 
-[sub_resource type="Resource" id="Resource_2oe1u"]
+[sub_resource type="Resource" id="Resource_2m5h5"]
 script = ExtResource("3_8octr")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_ws1sh"]
+[sub_resource type="Resource" id="Resource_wc6m2"]
 script = ExtResource("3_8octr")
 str_props = "fatigue"
 value = -5
 
-[sub_resource type="Resource" id="Resource_3pyjw"]
+[sub_resource type="Resource" id="Resource_8octr"]
 script = ExtResource("3_8octr")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_l301r"]
+[sub_resource type="Resource" id="Resource_usk15"]
 script = ExtResource("3_8octr")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_n13tp"]
+[sub_resource type="Resource" id="Resource_6ghwn"]
 script = ExtResource("4_usk15")
 flag_id = "kuangda"
 type = "int"
 value = 3
 operation = "append"
 
-[sub_resource type="Resource" id="Resource_gy7qa"]
+[sub_resource type="Resource" id="Resource_3qju3"]
 script = ExtResource("3_8octr")
 str_props = "fatigue"
 value = -3
 
-[sub_resource type="Resource" id="Resource_d2f84"]
+[sub_resource type="Resource" id="Resource_ku56u"]
 script = ExtResource("5_6ghwn")
 value = 10
 
-[sub_resource type="Resource" id="Resource_j8ye3"]
+[sub_resource type="Resource" id="Resource_1gubr"]
 script = ExtResource("6_3qju3")
-operators = Array[ExtResource("2_wc6m2")]([SubResource("Resource_2oe1u"), SubResource("Resource_ws1sh"), SubResource("Resource_3pyjw"), SubResource("Resource_l301r"), SubResource("Resource_n13tp"), SubResource("Resource_gy7qa"), SubResource("Resource_d2f84")])
+operators = Array[ExtResource("2_wc6m2")]([SubResource("Resource_2m5h5"), SubResource("Resource_wc6m2"), SubResource("Resource_8octr"), SubResource("Resource_usk15"), SubResource("Resource_6ghwn"), SubResource("Resource_3qju3"), SubResource("Resource_ku56u")])
 
-[sub_resource type="Resource" id="Resource_io2bc"]
+[sub_resource type="Resource" id="Resource_3ftv6"]
 script = ExtResource("7_ku56u")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_mrtvn"]
+[sub_resource type="Resource" id="Resource_h5kdk"]
 script = ExtResource("8_1gubr")
-choice_result = SubResource("Resource_j8ye3")
-requirement = SubResource("Resource_io2bc")
+choice_result = SubResource("Resource_1gubr")
+requirement = SubResource("Resource_3ftv6")
 description = "拂袖转身，靴跟在冻硬的泥地上磕出脆响。"
 
-[sub_resource type="Resource" id="Resource_ohklc"]
+[sub_resource type="Resource" id="Resource_nycap"]
 script = ExtResource("3_8octr")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_ohodv"]
+[sub_resource type="Resource" id="Resource_pyvc4"]
 script = ExtResource("3_8octr")
 str_props = "fatigue"
 value = -5
 
-[sub_resource type="Resource" id="Resource_4pwie"]
+[sub_resource type="Resource" id="Resource_rg2ka"]
 script = ExtResource("3_8octr")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_lwjvp"]
+[sub_resource type="Resource" id="Resource_2oe1u"]
 script = ExtResource("3_8octr")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_1byrm"]
+[sub_resource type="Resource" id="Resource_ws1sh"]
 script = ExtResource("4_usk15")
 flag_id = "kuangda"
 type = "int"
 value = -2
 operation = "append"
 
-[sub_resource type="Resource" id="Resource_3u4xe"]
+[sub_resource type="Resource" id="Resource_3pyjw"]
 script = ExtResource("3_8octr")
 str_props = "money"
 value = 5
 
-[sub_resource type="Resource" id="Resource_dbp4v"]
+[sub_resource type="Resource" id="Resource_l301r"]
 script = ExtResource("3_8octr")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_mr4kq"]
+[sub_resource type="Resource" id="Resource_n13tp"]
 script = ExtResource("5_6ghwn")
 value = 10
 
-[sub_resource type="Resource" id="Resource_eo50i"]
+[sub_resource type="Resource" id="Resource_gy7qa"]
 script = ExtResource("6_3qju3")
-operators = Array[ExtResource("2_wc6m2")]([SubResource("Resource_ohklc"), SubResource("Resource_ohodv"), SubResource("Resource_4pwie"), SubResource("Resource_lwjvp"), SubResource("Resource_1byrm"), SubResource("Resource_3u4xe"), SubResource("Resource_dbp4v"), SubResource("Resource_mr4kq")])
+operators = Array[ExtResource("2_wc6m2")]([SubResource("Resource_nycap"), SubResource("Resource_pyvc4"), SubResource("Resource_rg2ka"), SubResource("Resource_2oe1u"), SubResource("Resource_ws1sh"), SubResource("Resource_3pyjw"), SubResource("Resource_l301r"), SubResource("Resource_n13tp")])
 
-[sub_resource type="Resource" id="Resource_i2otb"]
+[sub_resource type="Resource" id="Resource_d2f84"]
 script = ExtResource("7_ku56u")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_5h6xk"]
+[sub_resource type="Resource" id="Resource_j8ye3"]
 script = ExtResource("8_1gubr")
-choice_result = SubResource("Resource_eo50i")
-requirement = SubResource("Resource_i2otb")
+choice_result = SubResource("Resource_gy7qa")
+requirement = SubResource("Resource_d2f84")
 description = "目光急速扫向府门内侧，寻找那位欠过你润笔的录事参军。"
 
-[sub_resource type="Resource" id="Resource_f4qer"]
+[sub_resource type="Resource" id="Resource_io2bc"]
 script = ExtResource("3_8octr")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_kxk1c"]
+[sub_resource type="Resource" id="Resource_mrtvn"]
 script = ExtResource("3_8octr")
 str_props = "fatigue"
 value = -5
 
-[sub_resource type="Resource" id="Resource_w0iil"]
+[sub_resource type="Resource" id="Resource_ohklc"]
 script = ExtResource("3_8octr")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_5i315"]
+[sub_resource type="Resource" id="Resource_ohodv"]
 script = ExtResource("3_8octr")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_83j3d"]
+[sub_resource type="Resource" id="Resource_4pwie"]
 script = ExtResource("3_8octr")
 str_props = "money"
 value = 10
 
-[sub_resource type="Resource" id="Resource_wwjk3"]
+[sub_resource type="Resource" id="Resource_lwjvp"]
 script = ExtResource("5_6ghwn")
 value = 8
 
-[sub_resource type="Resource" id="Resource_ffhle"]
+[sub_resource type="Resource" id="Resource_1byrm"]
 script = ExtResource("6_3qju3")
-operators = Array[ExtResource("2_wc6m2")]([SubResource("Resource_f4qer"), SubResource("Resource_kxk1c"), SubResource("Resource_w0iil"), SubResource("Resource_5i315"), SubResource("Resource_83j3d"), SubResource("Resource_wwjk3")])
+operators = Array[ExtResource("2_wc6m2")]([SubResource("Resource_io2bc"), SubResource("Resource_mrtvn"), SubResource("Resource_ohklc"), SubResource("Resource_ohodv"), SubResource("Resource_4pwie"), SubResource("Resource_lwjvp")])
 
-[sub_resource type="Resource" id="Resource_qb01b"]
+[sub_resource type="Resource" id="Resource_3u4xe"]
 script = ExtResource("8_1gubr")
-choice_result = SubResource("Resource_ffhle")
+choice_result = SubResource("Resource_1byrm")
 description = "弯下腰，将袖口往上拢了拢。"
 
-[sub_resource type="Resource" id="Resource_5tu61"]
+[sub_resource type="Resource" id="Resource_dbp4v"]
 script = ExtResource("10_h5kdk")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_n8hfa"]
-script = ExtResource("11_nycap")
-volatile_stat = "ambition"
+[sub_resource type="Resource" id="Resource_mr4kq"]
+script = ExtResource("11_2m5h5")
+property = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_qiueb"]
-script = ExtResource("11_nycap")
-volatile_stat = "ambition"
+[sub_resource type="Resource" id="Resource_eo50i"]
+script = ExtResource("11_2m5h5")
+property = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_xqn5t"]
+[sub_resource type="Resource" id="Resource_i2otb"]
 script = ExtResource("12_pyvc4")
-operators = Array[ExtResource("9_3ftv6")]([SubResource("Resource_5tu61"), SubResource("Resource_n8hfa"), SubResource("Resource_qiueb")])
+operators = Array[ExtResource("9_3ftv6")]([SubResource("Resource_dbp4v"), SubResource("Resource_mr4kq"), SubResource("Resource_eo50i")])
 
 [resource]
 script = ExtResource("13_rg2ka")
-requirement = SubResource("Resource_xqn5t")
+requirement = SubResource("Resource_i2otb")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_2m5h5")]([SubResource("Resource_mrtvn"), SubResource("Resource_5h6xk"), SubResource("Resource_qb01b")])
+options = Array[ExtResource("1_2m5h5")]([SubResource("Resource_h5kdk"), SubResource("Resource_j8ye3"), SubResource("Resource_3u4xe")])
 uuid = "qingliu_fengying_muddy_carriage"
 name = "鞋入臭水"
 description = "腊月里的泥泞又黑又稠，像煮过头的药渣。李相的车驾刚拐过街角，惊马前蹄一扬，那只锦缎绣鞋从轿帘里飞出来，划过一道弧，正落进路边尺许深的臭水沟。门子认得你——他冲你点了点头，像对隔三差五来串门的街坊。周围官员的目光齐刷刷落在你身上，不是看你这个诗人，是看这个“老熟人”。"

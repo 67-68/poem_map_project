@@ -154,5 +154,8 @@ func _on_map_action_button_pressed(prefix: String) -> void:
 		PlayerState.current_action_tags.append(tag)
 
 	# 3. 扫描事件
-	var context = {'main_tag': action.main_tag}
+	var context = {
+	    'main_tag': action.main_tag,
+	    'fallback_event_uuid': action.fallback_event_uuid,
+	}
 	EventManager.scan_events(0, context)

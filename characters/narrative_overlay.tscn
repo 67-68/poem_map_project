@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dk5iruu4bknq6" path="res://characters/narrative_overlay.gd" id="1_htcev"]
 [ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="2_id4jo"]
 [ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="3_qlww5"]
-[ext_resource type="Script" uid="" path="res://characters/event_ui.gd" id="4_1hjkf"]
+[ext_resource type="Script" uid="uid://bfap7ivfv8w2v" path="res://characters/event_ui.gd" id="4_1hjkf"]
 
 [node name="NarrativeOverlay" type="Control" unique_id=756398830]
 z_index = 100
@@ -54,13 +54,19 @@ theme_override_constants/margin_bottom = 20
 [node name="VBox" type="VBoxContainer" parent="EventUI/Margin" unique_id=104575616]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="EventUI/Margin/VBox" unique_id=1228479842]
-custom_minimum_size = Vector2(800, 0)
+[node name="HBox" type="HBoxContainer" parent="EventUI/Margin/VBox" unique_id=1676507336]
 layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="EventUI/Margin/VBox/HBox" unique_id=1228479842]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "test"
 autowrap_mode = 3
 script = ExtResource("2_id4jo")
+
+[node name="InterruptBtn" type="Button" parent="EventUI/Margin/VBox/HBox" unique_id=1568982158]
+layout_mode = 2
 
 [node name="ExampleLabel" type="RichTextLabel" parent="EventUI/Margin/VBox" unique_id=562525502]
 clip_contents = false

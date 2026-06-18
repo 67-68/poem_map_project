@@ -30,3 +30,7 @@ var area_tags:
 ## 🆕 当前活跃的 generator（由 DeferredLockActionOperator 生成并挂载）
 ## null = 无活跃 generator；非 null = 每次点击 action 时消费一个 operator
 var generator: Generator = null
+
+## 🆕 兜底事件 UUID：当过滤器链全部过滤后池空时触发此事件
+## 例如 "event_baiye_cooldown_wall"（拜谒被拒叙事）
+@export var fallback_event_uuid: String = ""

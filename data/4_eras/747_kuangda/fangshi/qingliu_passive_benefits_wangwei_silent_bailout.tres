@@ -1,135 +1,135 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://qo84puewi00e"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_cy5of"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_run0v"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_0652o"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_hcy4l"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_8jyin"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_crwai"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_5lgpg"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_xkurk"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_cognj"]
-[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="10_edua0"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_eunsk"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_nq0ci"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_cy5of"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_run0v"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_0652o"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_hcy4l"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_8jyin"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_crwai"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_5lgpg"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_xkurk"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_cognj"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="10_cy5of"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_eunsk"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="12_nq0ci"]
 
-[sub_resource type="Resource" id="Resource_6q4io"]
+[sub_resource type="Resource" id="Resource_cy5of"]
 script = ExtResource("3_0652o")
 str_props = "MONEY"
 value = 8
 
-[sub_resource type="Resource" id="Resource_qsbgr"]
+[sub_resource type="Resource" id="Resource_run0v"]
 script = ExtResource("3_0652o")
 str_props = "FATIGUE"
 value = -20
 
-[sub_resource type="Resource" id="Resource_lnjtj"]
+[sub_resource type="Resource" id="Resource_0652o"]
 script = ExtResource("4_hcy4l")
 value = 10
 
-[sub_resource type="Resource" id="Resource_fnknv"]
+[sub_resource type="Resource" id="Resource_hcy4l"]
 script = ExtResource("3_0652o")
 str_props = "INSPIRATION"
 value = 15
 
-[sub_resource type="Resource" id="Resource_a550s"]
+[sub_resource type="Resource" id="Resource_8jyin"]
 script = ExtResource("5_8jyin")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_irxvw"]
+[sub_resource type="Resource" id="Resource_crwai"]
 script = ExtResource("6_crwai")
-operators = Array[ExtResource("2_run0v")]([SubResource("Resource_6q4io"), SubResource("Resource_qsbgr"), SubResource("Resource_lnjtj"), SubResource("Resource_fnknv"), SubResource("Resource_a550s")])
+operators = Array[ExtResource("2_run0v")]([SubResource("Resource_cy5of"), SubResource("Resource_run0v"), SubResource("Resource_0652o"), SubResource("Resource_hcy4l"), SubResource("Resource_8jyin")])
 
-[sub_resource type="Resource" id="Resource_pejhe"]
+[sub_resource type="Resource" id="Resource_5lgpg"]
 script = ExtResource("7_5lgpg")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_00cbq"]
+[sub_resource type="Resource" id="Resource_xkurk"]
 script = ExtResource("8_xkurk")
-choice_result = SubResource("Resource_irxvw")
-requirement = SubResource("Resource_pejhe")
+choice_result = SubResource("Resource_crwai")
+requirement = SubResource("Resource_5lgpg")
 description = "接过便穿上，只问了一句“《辋川集》何时付梓”。"
 
-[sub_resource type="Resource" id="Resource_3ymp1"]
+[sub_resource type="Resource" id="Resource_cognj"]
 script = ExtResource("3_0652o")
 str_props = "MONEY"
 value = 8
 
-[sub_resource type="Resource" id="Resource_02n1h"]
+[sub_resource type="Resource" id="Resource_edua0"]
 script = ExtResource("3_0652o")
 str_props = "FATIGUE"
 value = 15
 
-[sub_resource type="Resource" id="Resource_hw4a5"]
+[sub_resource type="Resource" id="Resource_eunsk"]
 script = ExtResource("4_hcy4l")
 value = 10
 
-[sub_resource type="Resource" id="Resource_3v78j"]
+[sub_resource type="Resource" id="Resource_nq0ci"]
 script = ExtResource("6_crwai")
-operators = Array[ExtResource("2_run0v")]([SubResource("Resource_3ymp1"), SubResource("Resource_02n1h"), SubResource("Resource_hw4a5")])
+operators = Array[ExtResource("2_run0v")]([SubResource("Resource_cognj"), SubResource("Resource_edua0"), SubResource("Resource_eunsk")])
 
-[sub_resource type="Resource" id="Resource_yvep0"]
+[sub_resource type="Resource" id="Resource_6q4io"]
 script = ExtResource("8_xkurk")
-choice_result = SubResource("Resource_3v78j")
+choice_result = SubResource("Resource_nq0ci")
 description = "默然许久，才低声道袍子针脚极细密。"
 
-[sub_resource type="Resource" id="Resource_m6mld"]
+[sub_resource type="Resource" id="Resource_qsbgr"]
 script = ExtResource("3_0652o")
 str_props = "MONEY"
 value = 8
 
-[sub_resource type="Resource" id="Resource_5jakc"]
+[sub_resource type="Resource" id="Resource_lnjtj"]
 script = ExtResource("4_hcy4l")
 value = 15
 
-[sub_resource type="Resource" id="Resource_y3n7m"]
+[sub_resource type="Resource" id="Resource_fnknv"]
 script = ExtResource("3_0652o")
 str_props = "BURNOUT"
 value = 15
 
-[sub_resource type="Resource" id="Resource_taa8w"]
+[sub_resource type="Resource" id="Resource_a550s"]
 script = ExtResource("4_hcy4l")
 value = 5
 
-[sub_resource type="Resource" id="Resource_2qvoa"]
+[sub_resource type="Resource" id="Resource_irxvw"]
 script = ExtResource("5_8jyin")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_wcx8u"]
+[sub_resource type="Resource" id="Resource_pejhe"]
 script = ExtResource("6_crwai")
-operators = Array[ExtResource("2_run0v")]([SubResource("Resource_m6mld"), SubResource("Resource_5jakc"), SubResource("Resource_y3n7m"), SubResource("Resource_taa8w"), SubResource("Resource_2qvoa")])
+operators = Array[ExtResource("2_run0v")]([SubResource("Resource_qsbgr"), SubResource("Resource_lnjtj"), SubResource("Resource_fnknv"), SubResource("Resource_a550s"), SubResource("Resource_irxvw")])
 
-[sub_resource type="Resource" id="Resource_av1ul"]
+[sub_resource type="Resource" id="Resource_00cbq"]
 script = ExtResource("7_5lgpg")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_vbj28"]
+[sub_resource type="Resource" id="Resource_3ymp1"]
 script = ExtResource("8_xkurk")
-choice_result = SubResource("Resource_wcx8u")
-requirement = SubResource("Resource_av1ul")
+choice_result = SubResource("Resource_pejhe")
+requirement = SubResource("Resource_00cbq")
 description = "穿上后连声说王右丞体恤，转而便问崇文馆可还有空缺。"
 
-[sub_resource type="Resource" id="Resource_b1b8t"]
-script = ExtResource("10_edua0")
-volatile_stat = "ambition"
+[sub_resource type="Resource" id="Resource_02n1h"]
+script = ExtResource("10_cy5of")
+property = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_bbix4"]
-script = ExtResource("10_edua0")
-volatile_stat = "ambition"
+[sub_resource type="Resource" id="Resource_hw4a5"]
+script = ExtResource("10_cy5of")
+property = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_buyoo"]
+[sub_resource type="Resource" id="Resource_3v78j"]
 script = ExtResource("11_eunsk")
-operators = Array[ExtResource("9_cognj")]([SubResource("Resource_b1b8t"), SubResource("Resource_bbix4")])
+operators = Array[ExtResource("9_cognj")]([SubResource("Resource_02n1h"), SubResource("Resource_hw4a5")])
 
 [resource]
 script = ExtResource("12_nq0ci")
-requirement = SubResource("Resource_buyoo")
+requirement = SubResource("Resource_3v78j")
 era = "747_kuangda"
-_target_tags = Array[String](["qingliu_aid", "action:main:fangshi"])
-options = Array[ExtResource("1_cy5of")]([SubResource("Resource_00cbq"), SubResource("Resource_yvep0"), SubResource("Resource_vbj28")])
+_target_tags = Array[String](["action:main:fangshi"])
+options = Array[ExtResource("1_cy5of")]([SubResource("Resource_xkurk"), SubResource("Resource_6q4io"), SubResource("Resource_3ymp1")])
 uuid = "qingliu_passive_benefits_wangwei_silent_bailout"
 name = "法物流通处"
 description = "大慈恩寺的法物流通处里，王维与你并肩站了许久。他在《金刚经》抄本前停下，未曾开口，只将一件厚实的棉袍搁在你臂弯上——“买重了。”语气如谈论今日风大一般平淡。你认得这件袍子，是方才寺门外那个辽东皮货商担来的。王维转身去付抄经的银钱，袍子就这么留在你手中，一言未再多说。"

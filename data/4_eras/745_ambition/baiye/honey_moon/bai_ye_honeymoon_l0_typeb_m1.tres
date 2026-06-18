@@ -1,89 +1,89 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bc7rh5jluutk6"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_dufp8"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_j1uwm"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_1qhci"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_usfut"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_jldgd"]
-[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="6_681o2"]
-[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="7_c8i1e"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_wtcft"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="9_imhha"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_6lpeo"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_dufp8"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_j1uwm"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_1qhci"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_usfut"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_jldgd"]
+[ext_resource type="Script" path="res://core/model/poem_taste.gd" id="6_681o2"]
+[ext_resource type="Script" path="res://core/operators/trait_choose_operator.gd" id="7_c8i1e"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_wtcft"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="9_imhha"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="10_6lpeo"]
 
-[sub_resource type="Resource" id="Resource_awh5b"]
+[sub_resource type="Resource" id="Resource_dufp8"]
 script = ExtResource("3_1qhci")
 str_props = "health"
 value = -6
 
-[sub_resource type="Resource" id="Resource_14a6a"]
+[sub_resource type="Resource" id="Resource_j1uwm"]
 script = ExtResource("4_usfut")
 value = 6
 
-[sub_resource type="Resource" id="Resource_jjw0x"]
+[sub_resource type="Resource" id="Resource_1qhci"]
 script = ExtResource("3_1qhci")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_ul3ke"]
+[sub_resource type="Resource" id="Resource_usfut"]
 script = ExtResource("5_jldgd")
-operators = Array[ExtResource("2_j1uwm")]([SubResource("Resource_jjw0x")])
+operators = Array[ExtResource("2_j1uwm")]([SubResource("Resource_1qhci")])
 
-[sub_resource type="Resource" id="Resource_xxxnd"]
+[sub_resource type="Resource" id="Resource_jldgd"]
 script = ExtResource("5_jldgd")
 
-[sub_resource type="Resource" id="Resource_1er4v"]
+[sub_resource type="Resource" id="Resource_681o2"]
 script = ExtResource("3_1qhci")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_4ige4"]
+[sub_resource type="Resource" id="Resource_c8i1e"]
 script = ExtResource("5_jldgd")
-operators = Array[ExtResource("2_j1uwm")]([SubResource("Resource_1er4v")])
+operators = Array[ExtResource("2_j1uwm")]([SubResource("Resource_681o2")])
 
-[sub_resource type="Resource" id="Resource_y0fni"]
+[sub_resource type="Resource" id="Resource_wtcft"]
 script = ExtResource("6_681o2")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_ul3ke")
-rejected_result = SubResource("Resource_4ige4")
-not_entered_result = SubResource("Resource_xxxnd")
+accepted_result = SubResource("Resource_usfut")
+rejected_result = SubResource("Resource_c8i1e")
+not_entered_result = SubResource("Resource_jldgd")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_34oxa"]
+[sub_resource type="Resource" id="Resource_imhha"]
 script = ExtResource("7_c8i1e")
-poem_taste = SubResource("Resource_y0fni")
+poem_taste = SubResource("Resource_wtcft")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_gg6lu"]
+[sub_resource type="Resource" id="Resource_6lpeo"]
 script = ExtResource("3_1qhci")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_lw4nk"]
+[sub_resource type="Resource" id="Resource_awh5b"]
 script = ExtResource("5_jldgd")
-operators = Array[ExtResource("2_j1uwm")]([SubResource("Resource_awh5b"), SubResource("Resource_14a6a"), SubResource("Resource_34oxa"), SubResource("Resource_gg6lu")])
+operators = Array[ExtResource("2_j1uwm")]([SubResource("Resource_dufp8"), SubResource("Resource_j1uwm"), SubResource("Resource_imhha"), SubResource("Resource_6lpeo")])
 
-[sub_resource type="Resource" id="Resource_6csyh"]
+[sub_resource type="Resource" id="Resource_14a6a"]
 script = ExtResource("8_wtcft")
-choice_result = SubResource("Resource_lw4nk")
+choice_result = SubResource("Resource_awh5b")
 description = "立在阶下雨中继续等待"
 
-[sub_resource type="Resource" id="Resource_m4gam"]
+[sub_resource type="Resource" id="Resource_jjw0x"]
 script = ExtResource("9_imhha")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("10_6lpeo")
-requirement = SubResource("Resource_m4gam")
+requirement = SubResource("Resource_jjw0x")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_dufp8")]([SubResource("Resource_6csyh")])
+options = Array[ExtResource("1_dufp8")]([SubResource("Resource_14a6a")])
 uuid = "bai_ye_honeymoon_l0_typeb_m1"
 name = "阶前冷雨"
 description = "“王爷今日倦了，还未起身。你且在外候着。”说罢，径自退回门房烤火。你立在阶下，冷雨渐密，衣衫半湿，寒意透骨。门内隐约传来门子与同伴谈笑之声，间或提及你“新科进士”的身份，语气轻蔑。"

@@ -114,6 +114,7 @@ func _ready() -> void:
 	)
 	on_xun_tick.connect(func():
 		Logging.info("Xun tick: %s" % current_xun))
+	RelationFlagManager.tick_all_cooldowns()
 	GameState.year = GameState.start_year
 	_last_total_days = int(GameState.year * DAYS_PER_YEAR)
 	Logging.info("TimeService._ready: GameState.year set to %f, event_queue has %d items" % [GameState.year, event_queue.size()])

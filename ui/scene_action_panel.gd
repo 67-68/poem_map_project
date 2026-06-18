@@ -30,5 +30,8 @@ func _on_button_pressed() -> void:
 	# 🚀 革新后：不再需要标准化，前缀匹配自动忽略第4级
 	for tag in action.action_tags:
 		PlayerState.current_action_tags.append(tag)
-	var context = {'main_tag': action.main_tag}
+	var context = {
+	    'main_tag': action.main_tag,
+	    'fallback_event_uuid': action.fallback_event_uuid,
+	}
 	EventManager.scan_events(0, context)

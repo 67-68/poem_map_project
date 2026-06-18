@@ -1,84 +1,84 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bnqqdmqohl6aa"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_m7jyu"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cjvrl"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_p3k1v"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_maeb8"]
-[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="5_6sqoj"]
-[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="6_hrkfc"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_33sfn"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="8_xlu0q"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_m1jxa"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_m7jyu"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_cjvrl"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_p3k1v"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_maeb8"]
+[ext_resource type="Script" path="res://core/model/poem_taste.gd" id="5_6sqoj"]
+[ext_resource type="Script" path="res://core/operators/trait_choose_operator.gd" id="6_hrkfc"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_33sfn"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="8_xlu0q"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="9_m1jxa"]
 
-[sub_resource type="Resource" id="Resource_cr54d"]
+[sub_resource type="Resource" id="Resource_m7jyu"]
 script = ExtResource("3_p3k1v")
 str_props = "health"
 value = -6
 
-[sub_resource type="Resource" id="Resource_how45"]
+[sub_resource type="Resource" id="Resource_cjvrl"]
 script = ExtResource("3_p3k1v")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_ks5q8"]
+[sub_resource type="Resource" id="Resource_p3k1v"]
 script = ExtResource("4_maeb8")
-operators = Array[ExtResource("2_cjvrl")]([SubResource("Resource_how45")])
+operators = Array[ExtResource("2_cjvrl")]([SubResource("Resource_cjvrl")])
 
-[sub_resource type="Resource" id="Resource_4drfm"]
+[sub_resource type="Resource" id="Resource_maeb8"]
 script = ExtResource("4_maeb8")
 
-[sub_resource type="Resource" id="Resource_xd1w3"]
+[sub_resource type="Resource" id="Resource_6sqoj"]
 script = ExtResource("3_p3k1v")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_yvbtw"]
+[sub_resource type="Resource" id="Resource_hrkfc"]
 script = ExtResource("4_maeb8")
-operators = Array[ExtResource("2_cjvrl")]([SubResource("Resource_xd1w3")])
+operators = Array[ExtResource("2_cjvrl")]([SubResource("Resource_6sqoj")])
 
-[sub_resource type="Resource" id="Resource_bjp1l"]
+[sub_resource type="Resource" id="Resource_33sfn"]
 script = ExtResource("5_6sqoj")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_ks5q8")
-rejected_result = SubResource("Resource_yvbtw")
-not_entered_result = SubResource("Resource_4drfm")
+accepted_result = SubResource("Resource_p3k1v")
+rejected_result = SubResource("Resource_hrkfc")
+not_entered_result = SubResource("Resource_maeb8")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_4v1ny"]
+[sub_resource type="Resource" id="Resource_xlu0q"]
 script = ExtResource("6_hrkfc")
-poem_taste = SubResource("Resource_bjp1l")
+poem_taste = SubResource("Resource_33sfn")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_k7dl8"]
+[sub_resource type="Resource" id="Resource_m1jxa"]
 script = ExtResource("3_p3k1v")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_w87mg"]
+[sub_resource type="Resource" id="Resource_cr54d"]
 script = ExtResource("4_maeb8")
-operators = Array[ExtResource("2_cjvrl")]([SubResource("Resource_cr54d"), SubResource("Resource_4v1ny"), SubResource("Resource_k7dl8")])
+operators = Array[ExtResource("2_cjvrl")]([SubResource("Resource_m7jyu"), SubResource("Resource_xlu0q"), SubResource("Resource_m1jxa")])
 
-[sub_resource type="Resource" id="Resource_3vv0h"]
+[sub_resource type="Resource" id="Resource_how45"]
 script = ExtResource("7_33sfn")
-choice_result = SubResource("Resource_w87mg")
+choice_result = SubResource("Resource_cr54d")
 description = "整了整衣冠，继续在阶下恭候"
 
-[sub_resource type="Resource" id="Resource_g5adu"]
+[sub_resource type="Resource" id="Resource_ks5q8"]
 script = ExtResource("8_xlu0q")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("9_m1jxa")
-requirement = SubResource("Resource_g5adu")
+requirement = SubResource("Resource_ks5q8")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_m7jyu")]([SubResource("Resource_3vv0h")])
+options = Array[ExtResource("1_m7jyu")]([SubResource("Resource_how45")])
 uuid = "bai_ye_honeymoon_l2_typeb_m2"
 name = "风雪跪候宴饮时"
 description = "“王爷正在宴客，请稍候。”玩家立于阶下，寒风卷着雪粒扑面。约半个时辰后，门内隐约传出丝竹声与谈笑，间或有劝酒之声。门子偶尔探头望一眼，又缩回门房。又过两刻，有仆役端着残羹出来，随手泼在阶前，汤水溅湿玩家袍角。玩家继续候至日头偏西，门子方道：“王爷今日倦了，明日再来罢。”"

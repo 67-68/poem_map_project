@@ -28,6 +28,7 @@ data/
 │   ├── imaginaries/
 │   ├── event_options/
 │   ├── state_transistors/
+│   ├── relations/         【泛型关系】event_threaten_* / event_help_* 事件文件
 │   └── translations/
 ├── 2_characters/          【角色数据】诗人、城市、NPC 文档、诗评等
 │   ├── poets/
