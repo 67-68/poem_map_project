@@ -225,3 +225,14 @@ flowchart TD
         DecoyKey[decoy_* 前缀] --> DecoyEvent[失败勒索事件]
     end
 ```
+
+---
+
+## 7. 实施状态
+
+| Phase | 内容 | 状态 |
+|-------|------|------|
+| Phase 1-4 | 架构设计 + 核心实现 | ✅ |
+| Phase 5 | 12 个杠杆点 DSL 注入 (33 条 leverage_add) | ✅ |
+| Phase 6 | CSV → .tres 导入 + 验证 | ✅ |
+| Phase 7 | 运行时测试 | ⏳ 待用户启动 Godot |

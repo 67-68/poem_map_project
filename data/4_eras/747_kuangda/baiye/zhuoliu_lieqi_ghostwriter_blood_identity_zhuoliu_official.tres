@@ -1,0 +1,203 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_ev2yd"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_vdjdw"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_a1o02"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_klxxx"]
+[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="5_6t7lc"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_bkl3u"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_lm100"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_dnpcu"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_vr8dt"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_834bv"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="11_tvqgt"]
+
+[sub_resource type="Resource" id="Resource_0d2tn"]
+script = ExtResource("3_a1o02")
+str_props = "INSPIRATION"
+value = -9
+
+[sub_resource type="Resource" id="Resource_m7vws"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 13
+
+[sub_resource type="Resource" id="Resource_42rft"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_5votn"]
+script = ExtResource("3_a1o02")
+str_props = "fatigue"
+value = 3
+
+[sub_resource type="Resource" id="Resource_t10p1"]
+script = ExtResource("3_a1o02")
+str_props = "HEALTH"
+value = -16
+
+[sub_resource type="Resource" id="Resource_tua4w"]
+script = ExtResource("4_klxxx")
+value = 22
+
+[sub_resource type="Resource" id="Resource_468jq"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 11
+
+[sub_resource type="Resource" id="Resource_e2g7p"]
+script = ExtResource("5_6t7lc")
+target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
+leverage_key = "zhuoliu_epitaph_coercion"
+
+[sub_resource type="Resource" id="Resource_wosln"]
+script = ExtResource("6_bkl3u")
+operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_0d2tn"), SubResource("Resource_m7vws"), SubResource("Resource_42rft"), SubResource("Resource_5votn"), SubResource("Resource_t10p1"), SubResource("Resource_tua4w"), SubResource("Resource_468jq"), SubResource("Resource_e2g7p")])
+
+[sub_resource type="Resource" id="Resource_npp5q"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_f75af"]
+script = ExtResource("8_dnpcu")
+choice_result = SubResource("Resource_wosln")
+requirement = SubResource("Resource_npp5q")
+description = "杜甫起身，将膝边那张纸连带碎银一起从冻土上拨开，从两人之间走过。"
+
+[sub_resource type="Resource" id="Resource_1v4uo"]
+script = ExtResource("3_a1o02")
+str_props = "INSPIRATION"
+value = -9
+
+[sub_resource type="Resource" id="Resource_6a67k"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 13
+
+[sub_resource type="Resource" id="Resource_is1rh"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_n24i1"]
+script = ExtResource("3_a1o02")
+str_props = "fatigue"
+value = 3
+
+[sub_resource type="Resource" id="Resource_8lm1g"]
+script = ExtResource("3_a1o02")
+str_props = "MONEY"
+value = 22
+
+[sub_resource type="Resource" id="Resource_qs15m"]
+script = ExtResource("3_a1o02")
+str_props = "LITERARY_FAME"
+value = -6
+
+[sub_resource type="Resource" id="Resource_g26gd"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 16
+
+[sub_resource type="Resource" id="Resource_xtxut"]
+script = ExtResource("4_klxxx")
+value = 22
+
+[sub_resource type="Resource" id="Resource_lds55"]
+script = ExtResource("5_6t7lc")
+target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
+leverage_key = "zhuoliu_epitaph_coercion"
+
+[sub_resource type="Resource" id="Resource_jy70a"]
+script = ExtResource("6_bkl3u")
+operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_1v4uo"), SubResource("Resource_6a67k"), SubResource("Resource_is1rh"), SubResource("Resource_n24i1"), SubResource("Resource_8lm1g"), SubResource("Resource_qs15m"), SubResource("Resource_g26gd"), SubResource("Resource_xtxut"), SubResource("Resource_lds55")])
+
+[sub_resource type="Resource" id="Resource_dih8u"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_fengying"
+
+[sub_resource type="Resource" id="Resource_aefh3"]
+script = ExtResource("8_dnpcu")
+choice_result = SubResource("Resource_jy70a")
+requirement = SubResource("Resource_dih8u")
+description = "杜甫伸手按住被风掀动的纸角，从怀中摸出笔，在冻土上润了润墨。"
+
+[sub_resource type="Resource" id="Resource_doukx"]
+script = ExtResource("3_a1o02")
+str_props = "INSPIRATION"
+value = -9
+
+[sub_resource type="Resource" id="Resource_eyd6d"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 13
+
+[sub_resource type="Resource" id="Resource_wrcre"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_vrq71"]
+script = ExtResource("3_a1o02")
+str_props = "fatigue"
+value = 3
+
+[sub_resource type="Resource" id="Resource_tld8r"]
+script = ExtResource("3_a1o02")
+str_props = "MONEY"
+value = 16
+
+[sub_resource type="Resource" id="Resource_8ec34"]
+script = ExtResource("3_a1o02")
+str_props = "BURNOUT"
+value = 11
+
+[sub_resource type="Resource" id="Resource_3lblx"]
+script = ExtResource("4_klxxx")
+value = 16
+
+[sub_resource type="Resource" id="Resource_urbdh"]
+script = ExtResource("5_6t7lc")
+target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
+leverage_key = "zhuoliu_epitaph_coercion"
+
+[sub_resource type="Resource" id="Resource_137y8"]
+script = ExtResource("6_bkl3u")
+operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_doukx"), SubResource("Resource_eyd6d"), SubResource("Resource_wrcre"), SubResource("Resource_vrq71"), SubResource("Resource_tld8r"), SubResource("Resource_8ec34"), SubResource("Resource_3lblx"), SubResource("Resource_urbdh")])
+
+[sub_resource type="Resource" id="Resource_ncqup"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_fqp5d"]
+script = ExtResource("8_dnpcu")
+choice_result = SubResource("Resource_137y8")
+requirement = SubResource("Resource_ncqup")
+description = "杜甫没碰那张纸，只问了一句：“碑刻成之后，拓片能带回长安一卷么？”"
+
+[sub_resource type="Resource" id="Resource_t3owp"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_ppdpy"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_fengying"
+
+[sub_resource type="Resource" id="Resource_kosvp"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_3uux4"]
+script = ExtResource("10_834bv")
+operators = Array[ExtResource("9_vr8dt")]([SubResource("Resource_t3owp"), SubResource("Resource_ppdpy"), SubResource("Resource_kosvp")])
+
+[resource]
+script = ExtResource("11_tvqgt")
+requirement = SubResource("Resource_3uux4")
+era = "747_kuangda"
+_target_tags = Array[String](["action:main:baiye"])
+options = Array[ExtResource("1_ev2yd")]([SubResource("Resource_f75af"), SubResource("Resource_aefh3"), SubResource("Resource_fqp5d")])
+uuid = "zhuoliu_lieqi_ghostwriter_blood_identity_zhuoliu_official"
+name = "碑记与刀环"
+description = "坊墙下的风是从北边灌进来的。年老的那个挡在你面前，离你三步，刚好占住你唯一能起身的方向。年轻的站在你身后，你听见他的手指一下一下拨着刀环，铁碰铁，不高不低，像在敲一种不需要旋律的拍子。年老的那个没有催，他把那个名字又说了一遍，放慢了说，像在教一个孩童认字。然后他从袖中取出一卷纸，展开——是空白的，只在上方端正地压了一方朱砂印。他将纸放在你膝边的冻土上，压了一小块碎银在纸角。风把纸边掀起一点，又落下。"

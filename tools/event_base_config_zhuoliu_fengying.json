@@ -151,9 +151,9 @@
           ],
           "operator_dsl": "prop_sub(name=money; val=5) | prop_sub(name=fatigue; val=5)",
           "option_results": {
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10)",
-            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
-            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=burnout; val=5) | emo_add(name=SORROW; val=10)"
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")",
+            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")",
+            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=burnout; val=5) | emo_add(name=SORROW; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"

@@ -101,7 +101,7 @@
           "option_results": {
             "opt_fengying": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
             "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | emo_add(name=ARROGANCE; val=20) | imagery_add(name=VIBE_AESTHETIC_ELEGANT:ink_stone)"
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | emo_add(name=ARROGANCE; val=20) | imagery_add(name=VIBE_AESTHETIC_ELEGANT:ink_stone) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_speech_pricing\")"
           },
           "scale": 0.95,
           "stored_to": "747_kuangda.baiye"
@@ -149,7 +149,7 @@
           "option_results": {
             "opt_fengying": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
             "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | prop_sub(name=career_progress; val=15) | prop_sub(name=official_prestige; val=10) | prop_add(name=literary_fame; val=5) | emo_add(name=ARROGANCE; val=20) | imagery_add(name=ACTION_TRAVEL_BOAT:lone_sail)"
+            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | prop_sub(name=career_progress; val=15) | prop_sub(name=official_prestige; val=10) | prop_add(name=literary_fame; val=5) | emo_add(name=ARROGANCE; val=20) | imagery_add(name=ACTION_TRAVEL_BOAT:lone_sail) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_textual_trap\")"
           },
           "scale": 1.05,
           "stored_to": "747_kuangda.baiye"

@@ -321,7 +321,12 @@
             [
               "identity_vendor"
             ]
-          ]
+          ],
+          "option_results": {
+            "opt_kuangke": "prop_add(name=kuangda; val=2)|prop_sub(name=fatigue; val=3)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")",
+            "opt_fengying": "prop_add(name=kuangda; val=1)|prop_sub(name=money; val=3)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")",
+            "opt_zuanying": "prop_add(name=kuangda; val=-1)|prop_add(name=money; val=5)|prop_sub(name=health; val=2)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")"
+          }
         },
         {
           "id": "class_bullying",

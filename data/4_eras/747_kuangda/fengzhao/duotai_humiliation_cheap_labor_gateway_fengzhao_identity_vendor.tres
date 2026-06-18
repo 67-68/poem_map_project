@@ -1,0 +1,168 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_5br6m"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_cqhqe"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_8mq22"]
+[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="4_u21rg"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_t2syp"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_afx1v"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_uewe1"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="8_s0otw"]
+
+[sub_resource type="Resource" id="Resource_ux8ny"]
+script = ExtResource("3_8mq22")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_v0kwm"]
+script = ExtResource("3_8mq22")
+str_props = "fatigue"
+value = -9
+
+[sub_resource type="Resource" id="Resource_j1qqw"]
+script = ExtResource("3_8mq22")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_wqw32"]
+script = ExtResource("3_8mq22")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_gpotj"]
+script = ExtResource("3_8mq22")
+str_props = "kuangda"
+value = 2
+
+[sub_resource type="Resource" id="Resource_l7de0"]
+script = ExtResource("3_8mq22")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_focym"]
+script = ExtResource("4_u21rg")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_n5ntx"]
+script = ExtResource("5_t2syp")
+imagery_name = "TARGET_OBJECT_SWORD:rusty_sword"
+
+[sub_resource type="Resource" id="Resource_qs8r0"]
+script = ExtResource("6_afx1v")
+operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_ux8ny"), SubResource("Resource_v0kwm"), SubResource("Resource_j1qqw"), SubResource("Resource_wqw32"), SubResource("Resource_gpotj"), SubResource("Resource_l7de0"), SubResource("Resource_focym"), SubResource("Resource_n5ntx")])
+
+[sub_resource type="Resource" id="Resource_wlc04"]
+script = ExtResource("7_uewe1")
+choice_result = SubResource("Resource_qs8r0")
+description = "未接掸子，跨过地上卷册，径直步出房门。"
+
+[sub_resource type="Resource" id="Resource_5a88j"]
+script = ExtResource("3_8mq22")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_w8a2o"]
+script = ExtResource("3_8mq22")
+str_props = "fatigue"
+value = -9
+
+[sub_resource type="Resource" id="Resource_n82pt"]
+script = ExtResource("3_8mq22")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_l0rut"]
+script = ExtResource("3_8mq22")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_epnru"]
+script = ExtResource("3_8mq22")
+str_props = "kuangda"
+value = 1
+
+[sub_resource type="Resource" id="Resource_tr5rc"]
+script = ExtResource("3_8mq22")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_1bspu"]
+script = ExtResource("4_u21rg")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_55kbl"]
+script = ExtResource("5_t2syp")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_milw7"]
+script = ExtResource("6_afx1v")
+operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_5a88j"), SubResource("Resource_w8a2o"), SubResource("Resource_n82pt"), SubResource("Resource_l0rut"), SubResource("Resource_epnru"), SubResource("Resource_tr5rc"), SubResource("Resource_1bspu"), SubResource("Resource_55kbl")])
+
+[sub_resource type="Resource" id="Resource_4gupl"]
+script = ExtResource("7_uewe1")
+choice_result = SubResource("Resource_milw7")
+description = "接过掸子，拂净桌面，开始逐册检视年份。"
+
+[sub_resource type="Resource" id="Resource_8frhw"]
+script = ExtResource("3_8mq22")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_jylug"]
+script = ExtResource("3_8mq22")
+str_props = "fatigue"
+value = -9
+
+[sub_resource type="Resource" id="Resource_knyor"]
+script = ExtResource("3_8mq22")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_xc1w5"]
+script = ExtResource("3_8mq22")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_d76rc"]
+script = ExtResource("3_8mq22")
+str_props = "kuangda"
+value = -1
+
+[sub_resource type="Resource" id="Resource_i34bh"]
+script = ExtResource("3_8mq22")
+str_props = "money"
+value = 6
+
+[sub_resource type="Resource" id="Resource_jsc23"]
+script = ExtResource("3_8mq22")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_28sa6"]
+script = ExtResource("4_u21rg")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_7jgvw"]
+script = ExtResource("5_t2syp")
+imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+
+[sub_resource type="Resource" id="Resource_nig45"]
+script = ExtResource("6_afx1v")
+operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_8frhw"), SubResource("Resource_jylug"), SubResource("Resource_knyor"), SubResource("Resource_xc1w5"), SubResource("Resource_d76rc"), SubResource("Resource_i34bh"), SubResource("Resource_jsc23"), SubResource("Resource_28sa6"), SubResource("Resource_7jgvw")])
+
+[sub_resource type="Resource" id="Resource_k0jmv"]
+script = ExtResource("7_uewe1")
+choice_result = SubResource("Resource_nig45")
+description = "接过掸子，连连躬身，又问签条是否需备墨重写。"
+
+[resource]
+script = ExtResource("8_s0otw")
+era = "747_kuangda"
+_target_tags = Array[String](["action:humiliation_cheap_labor", "action:scene_fengzhao"])
+options = Array[ExtResource("1_5br6m")]([SubResource("Resource_wlc04"), SubResource("Resource_4gupl"), SubResource("Resource_k0jmv")])
+uuid = "duotai_humiliation_cheap_labor_gateway_fengzhao_identity_vendor"
+name = "积年案牍"
+description = "「先扫灰，再分类。十年没翻过的账册，别弄混了年份。」他将一叠褪色的签条放在案角，便转身出了门。"

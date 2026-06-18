@@ -895,6 +895,16 @@ def _run_reassembly_entry(entry_key: str, entry: dict) -> None:
             uuid = _compute_uuid(cfg.id, values_tuple)
             snapshot = old_events.get(uuid)
 
+            # Fallback: config auto-injects _identity_* suffix via social_identity dimension,
+            # but old CSV events were generated before auto-injection and lack the suffix.
+            if snapshot is None:
+                import re
+                base_uuid = re.sub(r'_identity_\w+$', '', uuid)
+                if base_uuid != uuid:
+                    snapshot = old_events.get(base_uuid)
+                    if snapshot is not None:
+                        print(f"  🔄 [{idx+1}/{len(combinations)}] {uuid}: fallback 匹配到 {base_uuid}")
+
             if snapshot is None:
                 print(f"  ⏭️ [{idx+1}/{len(combinations)}] {uuid}: 旧 CSV 中未找到，跳过")
                 not_found_count += 1

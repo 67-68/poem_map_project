@@ -15,6 +15,7 @@ KNOWN_NON_PROP_OPS = {
     "flag_int_set", "flag_int_append", "flag_int_reduce_if_above",
     "use_template",
     "imagery_add",                # 🆕 意象获取操作符（非缩放，直接 emit EventBus signal）
+    "leverage_add",               # 🆕 把柄获取操作符（非缩放，不可缩放的 narratival 操作）
 }
 
 

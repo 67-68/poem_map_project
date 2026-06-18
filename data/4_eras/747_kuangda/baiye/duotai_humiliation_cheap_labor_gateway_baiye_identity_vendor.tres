@@ -1,0 +1,168 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_pjqda"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_pgx2l"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_j1v8i"]
+[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="4_s1f7p"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_ott0d"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_erobb"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_7pi1b"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="8_26ubp"]
+
+[sub_resource type="Resource" id="Resource_yrafu"]
+script = ExtResource("3_j1v8i")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_sfbua"]
+script = ExtResource("3_j1v8i")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_oj0fb"]
+script = ExtResource("3_j1v8i")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_d37eh"]
+script = ExtResource("3_j1v8i")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_v6pf8"]
+script = ExtResource("3_j1v8i")
+str_props = "kuangda"
+value = 2
+
+[sub_resource type="Resource" id="Resource_dlh3p"]
+script = ExtResource("3_j1v8i")
+str_props = "fatigue"
+value = -4
+
+[sub_resource type="Resource" id="Resource_jl7kp"]
+script = ExtResource("4_s1f7p")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_ows7c"]
+script = ExtResource("5_ott0d")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_17lma"]
+script = ExtResource("6_erobb")
+operators = Array[ExtResource("2_pgx2l")]([SubResource("Resource_yrafu"), SubResource("Resource_sfbua"), SubResource("Resource_oj0fb"), SubResource("Resource_d37eh"), SubResource("Resource_v6pf8"), SubResource("Resource_dlh3p"), SubResource("Resource_jl7kp"), SubResource("Resource_ows7c")])
+
+[sub_resource type="Resource" id="Resource_tt8l0"]
+script = ExtResource("7_7pi1b")
+choice_result = SubResource("Resource_17lma")
+description = "你没看名帖，转身走向大门。"
+
+[sub_resource type="Resource" id="Resource_3dqhj"]
+script = ExtResource("3_j1v8i")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_4qehr"]
+script = ExtResource("3_j1v8i")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_il3aj"]
+script = ExtResource("3_j1v8i")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_vfvhe"]
+script = ExtResource("3_j1v8i")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_j6mcy"]
+script = ExtResource("3_j1v8i")
+str_props = "kuangda"
+value = 1
+
+[sub_resource type="Resource" id="Resource_vyxei"]
+script = ExtResource("3_j1v8i")
+str_props = "money"
+value = -4
+
+[sub_resource type="Resource" id="Resource_41khj"]
+script = ExtResource("4_s1f7p")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_yakin"]
+script = ExtResource("5_ott0d")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_sntld"]
+script = ExtResource("6_erobb")
+operators = Array[ExtResource("2_pgx2l")]([SubResource("Resource_3dqhj"), SubResource("Resource_4qehr"), SubResource("Resource_il3aj"), SubResource("Resource_vfvhe"), SubResource("Resource_j6mcy"), SubResource("Resource_vyxei"), SubResource("Resource_41khj"), SubResource("Resource_yakin")])
+
+[sub_resource type="Resource" id="Resource_17e7o"]
+script = ExtResource("7_7pi1b")
+choice_result = SubResource("Resource_sntld")
+description = "你挽起袖子，磨墨，提笔，一字一字照写。"
+
+[sub_resource type="Resource" id="Resource_h2xis"]
+script = ExtResource("3_j1v8i")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_ooym6"]
+script = ExtResource("3_j1v8i")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_in0xe"]
+script = ExtResource("3_j1v8i")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_dsh0t"]
+script = ExtResource("3_j1v8i")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_a0xcd"]
+script = ExtResource("3_j1v8i")
+str_props = "kuangda"
+value = -1
+
+[sub_resource type="Resource" id="Resource_lwlok"]
+script = ExtResource("3_j1v8i")
+str_props = "money"
+value = 6
+
+[sub_resource type="Resource" id="Resource_hyblg"]
+script = ExtResource("3_j1v8i")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_ch2gj"]
+script = ExtResource("4_s1f7p")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_jf4cr"]
+script = ExtResource("5_ott0d")
+imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+
+[sub_resource type="Resource" id="Resource_b87tq"]
+script = ExtResource("6_erobb")
+operators = Array[ExtResource("2_pgx2l")]([SubResource("Resource_h2xis"), SubResource("Resource_ooym6"), SubResource("Resource_in0xe"), SubResource("Resource_dsh0t"), SubResource("Resource_a0xcd"), SubResource("Resource_lwlok"), SubResource("Resource_hyblg"), SubResource("Resource_ch2gj"), SubResource("Resource_jf4cr")])
+
+[sub_resource type="Resource" id="Resource_k6mld"]
+script = ExtResource("7_7pi1b")
+choice_result = SubResource("Resource_b87tq")
+description = "你拱手应道：“小的遵命。写完可要送去后堂？”"
+
+[resource]
+script = ExtResource("8_26ubp")
+era = "747_kuangda"
+_target_tags = Array[String](["action:humiliation_cheap_labor", "action:scene_baiye"])
+options = Array[ExtResource("1_pjqda")]([SubResource("Resource_tt8l0"), SubResource("Resource_17e7o"), SubResource("Resource_k6mld")])
+uuid = "duotai_humiliation_cheap_labor_gateway_baiye_identity_vendor"
+name = "名帖抄录"
+description = "“会写字吧？把这些替老爷誊了——字写大些，老爷眼神不济。”他指了指石桌，又指了指墙角一砚已经干涸的墨。"

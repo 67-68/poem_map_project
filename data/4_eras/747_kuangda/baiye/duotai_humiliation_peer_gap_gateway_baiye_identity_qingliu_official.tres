@@ -1,0 +1,148 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_ujowf"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_5b4qv"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_nueiq"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_n0ck7"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="5_wi66f"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="6_scc18"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_n56md"]
+
+[sub_resource type="Resource" id="Resource_hwetp"]
+script = ExtResource("3_nueiq")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_nad06"]
+script = ExtResource("3_nueiq")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_nrhyx"]
+script = ExtResource("3_nueiq")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_fpeyc"]
+script = ExtResource("3_nueiq")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_h81wl"]
+script = ExtResource("3_nueiq")
+str_props = "kuangda"
+value = 2
+
+[sub_resource type="Resource" id="Resource_eroff"]
+script = ExtResource("3_nueiq")
+str_props = "fatigue"
+value = -4
+
+[sub_resource type="Resource" id="Resource_mtusw"]
+script = ExtResource("4_n0ck7")
+operators = Array[ExtResource("2_5b4qv")]([SubResource("Resource_hwetp"), SubResource("Resource_nad06"), SubResource("Resource_nrhyx"), SubResource("Resource_fpeyc"), SubResource("Resource_h81wl"), SubResource("Resource_eroff")])
+
+[sub_resource type="Resource" id="Resource_k6nay"]
+script = ExtResource("5_wi66f")
+choice_result = SubResource("Resource_mtusw")
+description = "你站起身，朝门外走去，檐角日影未移半步，头也不回。"
+
+[sub_resource type="Resource" id="Resource_bnxe5"]
+script = ExtResource("3_nueiq")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_dwq1e"]
+script = ExtResource("3_nueiq")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_baeml"]
+script = ExtResource("3_nueiq")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_55uyx"]
+script = ExtResource("3_nueiq")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_y7u4n"]
+script = ExtResource("3_nueiq")
+str_props = "kuangda"
+value = 1
+
+[sub_resource type="Resource" id="Resource_jhe0u"]
+script = ExtResource("3_nueiq")
+str_props = "money"
+value = -4
+
+[sub_resource type="Resource" id="Resource_l44g2"]
+script = ExtResource("6_scc18")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_l0nko"]
+script = ExtResource("4_n0ck7")
+operators = Array[ExtResource("2_5b4qv")]([SubResource("Resource_bnxe5"), SubResource("Resource_dwq1e"), SubResource("Resource_baeml"), SubResource("Resource_55uyx"), SubResource("Resource_y7u4n"), SubResource("Resource_jhe0u"), SubResource("Resource_l44g2")])
+
+[sub_resource type="Resource" id="Resource_tw8k8"]
+script = ExtResource("5_wi66f")
+choice_result = SubResource("Resource_l0nko")
+description = "你拱手还礼，端起凉茶饮尽，将名帖留在桌上，缓步离去。"
+
+[sub_resource type="Resource" id="Resource_0wupy"]
+script = ExtResource("3_nueiq")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_345bq"]
+script = ExtResource("3_nueiq")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_e545q"]
+script = ExtResource("3_nueiq")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_fj068"]
+script = ExtResource("3_nueiq")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_vpbsi"]
+script = ExtResource("3_nueiq")
+str_props = "kuangda"
+value = -1
+
+[sub_resource type="Resource" id="Resource_bmqcj"]
+script = ExtResource("3_nueiq")
+str_props = "money"
+value = 6
+
+[sub_resource type="Resource" id="Resource_c2l1r"]
+script = ExtResource("3_nueiq")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_4guxt"]
+script = ExtResource("6_scc18")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_fctsu"]
+script = ExtResource("4_n0ck7")
+operators = Array[ExtResource("2_5b4qv")]([SubResource("Resource_0wupy"), SubResource("Resource_345bq"), SubResource("Resource_e545q"), SubResource("Resource_fj068"), SubResource("Resource_vpbsi"), SubResource("Resource_bmqcj"), SubResource("Resource_c2l1r"), SubResource("Resource_4guxt")])
+
+[sub_resource type="Resource" id="Resource_glu3w"]
+script = ExtResource("5_wi66f")
+choice_result = SubResource("Resource_fctsu")
+description = "你追上两步，躬身作揖：“郑兄提携则个，弟但求一饭之地。”"
+
+[resource]
+script = ExtResource("7_n56md")
+era = "747_kuangda"
+_target_tags = Array[String](["action:humiliation_peer_gap", "action:scene_baiye"])
+options = Array[ExtResource("1_ujowf")]([SubResource("Resource_k6nay"), SubResource("Resource_tw8k8"), SubResource("Resource_glu3w")])
+uuid = "duotai_humiliation_peer_gap_gateway_baiye_identity_qingliu_official"
+name = "门内门外"
+description = "“偏厅还有人等着？”门子低声答了句什么，郑某便不再言语。茶凉透时，他走出来，朝你拱拱手：“子美兄，改日再叙。”他身后跟着两个小厮，捧着食盒和锦帕。他没有停步，快步往外走，袍角带起一阵风，拂过你面前的茶碗。你站起身，门子拦住你：“老爷今日乏了，请明日再来。”"

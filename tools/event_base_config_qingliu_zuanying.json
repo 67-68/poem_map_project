@@ -104,7 +104,7 @@
           ],
           "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=5)",
           "option_results": {
-            "opt_zuanying": "prop_add(name=money; val=8) | prop_add(name=fatigue; val=5) | prop_sub(name=LITERARY_FAME; val=2) | emo_add(name=AMBITION; val=10)"
+            "opt_zuanying": "prop_add(name=money; val=8) | prop_add(name=fatigue; val=5) | prop_sub(name=LITERARY_FAME; val=2) | emo_add(name=AMBITION; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_class_discrimination\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou",
@@ -177,7 +177,7 @@
           ],
           "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=8)",
           "option_results": {
-            "opt_zuanying": "prop_sub(name=inspiration; val=5) | prop_add(name=BURNOUT; val=10) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=15)"
+            "opt_zuanying": "prop_sub(name=inspiration; val=5) | prop_add(name=BURNOUT; val=10) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_ghostwriter_scandal\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou",

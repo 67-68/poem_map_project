@@ -145,7 +145,7 @@
           ],
           "operator_dsl": "prop_sub(name=inspiration; val=5) | prop_sub(name=money; val=3)",
           "option_results": {
-            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=6)"
+            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=6) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_academic_fraud\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"

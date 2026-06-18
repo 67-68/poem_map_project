@@ -1,0 +1,137 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_0boc3"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_yuqt5"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_bwsl3"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_cqrx0"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_c5iug"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_fceuc"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_n7hqs"]
+
+[sub_resource type="Resource" id="Resource_yagfn"]
+script = ExtResource("3_bwsl3")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_g51j1"]
+script = ExtResource("3_bwsl3")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_euwnt"]
+script = ExtResource("3_bwsl3")
+str_props = "fatigue"
+value = 5
+
+[sub_resource type="Resource" id="Resource_4gki7"]
+script = ExtResource("3_bwsl3")
+str_props = "kuangda"
+value = 2
+
+[sub_resource type="Resource" id="Resource_mi7px"]
+script = ExtResource("3_bwsl3")
+str_props = "fatigue"
+value = -3
+
+[sub_resource type="Resource" id="Resource_uyvnv"]
+script = ExtResource("4_cqrx0")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_ftrae"]
+script = ExtResource("5_c5iug")
+operators = Array[ExtResource("2_yuqt5")]([SubResource("Resource_yagfn"), SubResource("Resource_g51j1"), SubResource("Resource_euwnt"), SubResource("Resource_4gki7"), SubResource("Resource_mi7px"), SubResource("Resource_uyvnv")])
+
+[sub_resource type="Resource" id="Resource_xs3am"]
+script = ExtResource("6_fceuc")
+choice_result = SubResource("Resource_ftrae")
+description = "将饼放回铺板，转身没入人流，未发一言。"
+
+[sub_resource type="Resource" id="Resource_yvgqa"]
+script = ExtResource("3_bwsl3")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_md22t"]
+script = ExtResource("3_bwsl3")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_p2emw"]
+script = ExtResource("3_bwsl3")
+str_props = "fatigue"
+value = 5
+
+[sub_resource type="Resource" id="Resource_u3ii2"]
+script = ExtResource("3_bwsl3")
+str_props = "kuangda"
+value = 1
+
+[sub_resource type="Resource" id="Resource_7hl0d"]
+script = ExtResource("3_bwsl3")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_wp2td"]
+script = ExtResource("4_cqrx0")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_aqs1a"]
+script = ExtResource("5_c5iug")
+operators = Array[ExtResource("2_yuqt5")]([SubResource("Resource_yvgqa"), SubResource("Resource_md22t"), SubResource("Resource_p2emw"), SubResource("Resource_u3ii2"), SubResource("Resource_7hl0d"), SubResource("Resource_wp2td")])
+
+[sub_resource type="Resource" id="Resource_7pvdu"]
+script = ExtResource("6_fceuc")
+choice_result = SubResource("Resource_aqs1a")
+description = "接过饼，低首道声谢，咬了一口，目光落在街石上。"
+
+[sub_resource type="Resource" id="Resource_3qhbg"]
+script = ExtResource("3_bwsl3")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_evkhk"]
+script = ExtResource("3_bwsl3")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_h3tar"]
+script = ExtResource("3_bwsl3")
+str_props = "fatigue"
+value = 5
+
+[sub_resource type="Resource" id="Resource_wbdmo"]
+script = ExtResource("3_bwsl3")
+str_props = "kuangda"
+value = -1
+
+[sub_resource type="Resource" id="Resource_do8pw"]
+script = ExtResource("3_bwsl3")
+str_props = "money"
+value = 5
+
+[sub_resource type="Resource" id="Resource_mupjh"]
+script = ExtResource("3_bwsl3")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_jlp1x"]
+script = ExtResource("4_cqrx0")
+imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+
+[sub_resource type="Resource" id="Resource_koxmp"]
+script = ExtResource("5_c5iug")
+operators = Array[ExtResource("2_yuqt5")]([SubResource("Resource_3qhbg"), SubResource("Resource_evkhk"), SubResource("Resource_h3tar"), SubResource("Resource_wbdmo"), SubResource("Resource_do8pw"), SubResource("Resource_mupjh"), SubResource("Resource_jlp1x")])
+
+[sub_resource type="Resource" id="Resource_02hbp"]
+script = ExtResource("6_fceuc")
+choice_result = SubResource("Resource_koxmp")
+description = "双手捧饼，躬身轻语：“店主慈悲，小生窘迫，只怕受之有愧。”"
+
+[resource]
+script = ExtResource("7_n7hqs")
+era = "747_kuangda"
+_target_tags = Array[String](["action:humiliation_hidden_charity", "action:scene_fangshi"])
+options = Array[ExtResource("1_0boc3")]([SubResource("Resource_xs3am"), SubResource("Resource_7pvdu"), SubResource("Resource_02hbp")])
+uuid = "duotai_humiliation_hidden_charity_gateway_fangshi_identity_vendor"
+name = "饼铺前的多付银钱"
+description = "“刚才有客官多付了钱，说是请你吃的。”杜甫回头，只看见一个人影隐入熙攘人群，布衫的下摆一闪而没。"

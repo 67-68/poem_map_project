@@ -1,0 +1,152 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_igb0b"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_650j8"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_fc42r"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_hws8g"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_fmq2n"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_ln62p"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_1b5ys"]
+
+[sub_resource type="Resource" id="Resource_as828"]
+script = ExtResource("3_fc42r")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_h4l1j"]
+script = ExtResource("3_fc42r")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_sqt8n"]
+script = ExtResource("3_fc42r")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_vh442"]
+script = ExtResource("3_fc42r")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_vvw2b"]
+script = ExtResource("3_fc42r")
+str_props = "kuangda"
+value = 2
+
+[sub_resource type="Resource" id="Resource_fsc3u"]
+script = ExtResource("3_fc42r")
+str_props = "fatigue"
+value = -4
+
+[sub_resource type="Resource" id="Resource_a5gv8"]
+script = ExtResource("4_hws8g")
+imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+
+[sub_resource type="Resource" id="Resource_dg5su"]
+script = ExtResource("5_fmq2n")
+operators = Array[ExtResource("2_650j8")]([SubResource("Resource_as828"), SubResource("Resource_h4l1j"), SubResource("Resource_sqt8n"), SubResource("Resource_vh442"), SubResource("Resource_vvw2b"), SubResource("Resource_fsc3u"), SubResource("Resource_a5gv8")])
+
+[sub_resource type="Resource" id="Resource_xxw4v"]
+script = ExtResource("6_ln62p")
+choice_result = SubResource("Resource_dg5su")
+description = "你站着未动，看了一眼茶碗，转身便走。"
+
+[sub_resource type="Resource" id="Resource_a53v3"]
+script = ExtResource("3_fc42r")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_alo7f"]
+script = ExtResource("3_fc42r")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_4tpic"]
+script = ExtResource("3_fc42r")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_0s5no"]
+script = ExtResource("3_fc42r")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_mqv8u"]
+script = ExtResource("3_fc42r")
+str_props = "kuangda"
+value = 1
+
+[sub_resource type="Resource" id="Resource_mnqri"]
+script = ExtResource("3_fc42r")
+str_props = "money"
+value = -4
+
+[sub_resource type="Resource" id="Resource_sid0r"]
+script = ExtResource("4_hws8g")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_pnf0p"]
+script = ExtResource("5_fmq2n")
+operators = Array[ExtResource("2_650j8")]([SubResource("Resource_a53v3"), SubResource("Resource_alo7f"), SubResource("Resource_4tpic"), SubResource("Resource_0s5no"), SubResource("Resource_mqv8u"), SubResource("Resource_mnqri"), SubResource("Resource_sid0r")])
+
+[sub_resource type="Resource" id="Resource_bv2g0"]
+script = ExtResource("6_ln62p")
+choice_result = SubResource("Resource_pnf0p")
+description = "你默然坐下，提笔写一首五绝，搁笔而去。"
+
+[sub_resource type="Resource" id="Resource_tdwk1"]
+script = ExtResource("3_fc42r")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_3ojmn"]
+script = ExtResource("3_fc42r")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_n2vnu"]
+script = ExtResource("3_fc42r")
+str_props = "exhaustion"
+value = 1
+
+[sub_resource type="Resource" id="Resource_xf01f"]
+script = ExtResource("3_fc42r")
+str_props = "fatigue"
+value = 6
+
+[sub_resource type="Resource" id="Resource_bus6e"]
+script = ExtResource("3_fc42r")
+str_props = "kuangda"
+value = -1
+
+[sub_resource type="Resource" id="Resource_qoouh"]
+script = ExtResource("3_fc42r")
+str_props = "money"
+value = 6
+
+[sub_resource type="Resource" id="Resource_1nhg8"]
+script = ExtResource("3_fc42r")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_suxry"]
+script = ExtResource("4_hws8g")
+imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+
+[sub_resource type="Resource" id="Resource_vgatw"]
+script = ExtResource("5_fmq2n")
+operators = Array[ExtResource("2_650j8")]([SubResource("Resource_tdwk1"), SubResource("Resource_3ojmn"), SubResource("Resource_n2vnu"), SubResource("Resource_xf01f"), SubResource("Resource_bus6e"), SubResource("Resource_qoouh"), SubResource("Resource_1nhg8"), SubResource("Resource_suxry")])
+
+[sub_resource type="Resource" id="Resource_7t18k"]
+script = ExtResource("6_ln62p")
+choice_result = SubResource("Resource_vgatw")
+description = "“献丑了。”——你写了两首，问门子可需另为一首。"
+
+[resource]
+script = ExtResource("7_1b5ys")
+era = "747_kuangda"
+_target_tags = Array[String](["action:humiliation_talent_commodification", "action:scene_baiye"])
+options = Array[ExtResource("1_igb0b")]([SubResource("Resource_xxw4v"), SubResource("Resource_bv2g0"), SubResource("Resource_7t18k")])
+uuid = "duotai_humiliation_talent_commodification_gateway_baiye_identity_qingliu_official"
+name = "茶凉诗契"
+description = "“郎君要见，先写一首茶诗。”案上备好纸笔，墨已研就。主人泰兴在帘后与人弈棋，棋子落声清脆。门子补一句：“老爷说了，诗写得好，这杯茶就算请你。不好——茶钱照付，人也请回。”"

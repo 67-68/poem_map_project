@@ -157,7 +157,7 @@ def _build_option_dsl(
     # 如果某个 dimension value 声明了 option_results[choice.id]，
     # 用它替代 choice.result（维度场景负责"甜头"）。
     override_result = ""
-    for combo in accepted:
+    for combo in combos:
         if combo.value.option_results:
             override_result = combo.value.option_results.get(choice.id, "")
             if override_result:

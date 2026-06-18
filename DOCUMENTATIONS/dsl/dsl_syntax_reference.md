@@ -225,6 +225,22 @@ flag_bool_has(name=flag_visited_palace)|prop_gt(name=money; val=100)
 >
 > 💡 **使用场景**：适用于"不紧急但需要排队处理"的事件。例如触发了一个不影响当前流程的支线事件，排到队列里等当前主线走完再播。
 
+### 3.7 杠杆操作符
+
+| 函数 | 参数 | 说明 | 示例 |
+|------|------|------|------|
+| `leverage_add` | target_tag; key; silent(可选) | 添加社会身份杠杆（把柄） | `leverage_add(target_tag=TARGET_IDENTITY_QUANGUI; key=quangui_corruption)` |
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `target_tag` | String | 目标身份标签（如 `TARGET_IDENTITY_QUANGUI`） |
+| `key` | String | 杠杆唯一标识键（如 `quangui_corruption`） |
+| `silent` | bool（可选，默认 false） | 是否静默添加（不弹出 toast 通知） |
+
+> 💡 **使用场景**：在事件结果中注入 `leverage_add`，为玩家积累针对特定社会身份的把柄。后续可通过威胁事件消耗把柄来触发特殊叙事。
+
+> 💡 **诱饵代币**：若 `key` 以 `decoy_` 前缀开头，则该杠杆为"诱饵代币"，使用时会路由到失败勒索事件而非成功威胁事件。
+
 ---
 
 ## 4. 中断事件（Interruptions）
