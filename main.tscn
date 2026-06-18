@@ -40,8 +40,8 @@
 [ext_resource type="PackedScene" uid="uid://fnnxu25q66uu" path="res://ui/social_wall_panel.tscn" id="33_0cp0l"]
 [ext_resource type="Script" uid="uid://cljs6te3xyu25" path="res://ui/social_wall_panel.gd" id="34_d2t1y"]
 [ext_resource type="PackedScene" uid="uid://cua5pcl2s75q" path="res://ui/cinematic_overlay.tscn" id="35_cinematic"]
-[ext_resource type="Script" path="res://core/fatigue_manager.gd" id="36_fatigue"]
-[ext_resource type="Script" path="res://ui/maobi_shake.gd" id="37_maobi"]
+[ext_resource type="Script" uid="uid://kfq72j60w3b8" path="res://core/fatigue_manager.gd" id="36_fatigue"]
+[ext_resource type="Script" uid="uid://7kgs8nddroem" path="res://ui/maobi_shake.gd" id="37_maobi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -52,7 +52,7 @@ shader_parameter/edge_softness = 0.01
 [sub_resource type="Theme" id="Theme_h2yge"]
 default_base_scale = 1.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h8e4i"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0cp0l"]
 resource_local_to_scene = true
 content_margin_left = 20.0
 content_margin_top = 20.0
@@ -66,7 +66,7 @@ texture_margin_right = 19.0
 content_margin_top = 20.0
 texture = ExtResource("19_lswn8")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4lmeg"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d2t1y"]
 resource_local_to_scene = true
 content_margin_left = 20.0
 content_margin_top = 20.0
@@ -113,7 +113,7 @@ script = ExtResource("1_ig7tw")
 offset_left = -97.5
 offset_right = 97.5
 size_flags_horizontal = 8
-theme_override_styles/panel = SubResource("StyleBoxTexture_h8e4i")
+theme_override_styles/panel = SubResource("StyleBoxTexture_0cp0l")
 
 [node name="PoetDescriptor" parent="UI" unique_id=285994705 instance=ExtResource("5_lquwl")]
 
@@ -258,7 +258,7 @@ offset_left = -72.0
 offset_top = -23.200012
 offset_right = 67.0
 offset_bottom = 36.799988
-theme_override_styles/panel = SubResource("StyleBoxTexture_4lmeg")
+theme_override_styles/panel = SubResource("StyleBoxTexture_d2t1y")
 
 [node name="PoemCreation" parent="UI" unique_id=1490017236 instance=ExtResource("29_facbu")]
 process_mode = 3
@@ -308,7 +308,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MaobiContainer" type="PanelContainer" parent="UI" unique_id=1375616340]
-script = ExtResource("37_maobi")
 z_index = 10
 anchors_preset = 6
 anchor_left = 1.0
@@ -320,6 +319,7 @@ offset_top = -20.0
 offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
+script = ExtResource("37_maobi")
 
 [node name="TextureRect" type="TextureRect" parent="UI/MaobiContainer" unique_id=837485037]
 layout_mode = 2
@@ -329,6 +329,7 @@ visible = false
 script = ExtResource("34_d2t1y")
 
 [node name="NarrativeOverlay" parent="UI" unique_id=1251280475 instance=ExtResource("11_vivmo")]
+visible = false
 z_index = 8
 offset_left = -450.0
 offset_top = -300.0
@@ -337,6 +338,7 @@ offset_bottom = 300.0
 scale = Vector2(1, 0.96530986)
 
 [node name="Control" type="Control" parent="UI" unique_id=1108839830]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 67.0
@@ -389,10 +391,11 @@ metadata/_custom_type_script = "uid://dgg4voth1dy5y"
 script = ExtResource("30_kq58d")
 metadata/_custom_type_script = "uid://dinmvxb5j0il4"
 
-[node name="FatigueManager" type="Node" parent="CoreSystems"]
+[node name="FatigueManager" type="Node" parent="CoreSystems" unique_id=1878531520]
 script = ExtResource("36_fatigue")
 
 [node name="CinematicOverlay" parent="." unique_id=1377896074 instance=ExtResource("35_cinematic")]
+visible = false
 
 [connection signal="value_changed" from="UI/HSlider" to="UI/HSlider" method="_on_value_changed"]
 [connection signal="pressed" from="UI/LeftButtonContainer/V/PlayerButton" to="UI/LeftButtonContainer/V/PlayerButton" method="_on_pressed"]

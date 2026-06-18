@@ -28,11 +28,16 @@ func get_demanded_traits() -> Array:
         result.append(to_be_replaced_trait)
     return result
 
-func get_provided_traits() -> Array:
-    var result = []
-    if not replace_other_trait.is_empty():
-        result.append(replace_other_trait)
-    return result
+func describe_preview() -> String:
+    var src_name = replace_other_trait
+    var dst_name = to_be_replaced_trait
+    var src_obj = Database.get_trait(replace_other_trait)
+    var dst_obj = Database.get_trait(to_be_replaced_trait)
+    if src_obj and not src_obj.name.is_empty():
+        src_name = src_obj.name
+    if dst_obj and not dst_obj.name.is_empty():
+        dst_name = dst_obj.name
+    return "「%s」→「%s」" % [dst_name, src_name]
 
 func operate():
     Logging.debug('TraitReplaceOperator: Starting operate()')

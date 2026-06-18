@@ -4,6 +4,9 @@ signal option_made(data: ChoiceResult) # 外部连接这个; 不要连接pressed
 var option: BaseOption
 var click_count := 0
 
+# 自定义工具提示缓存（由 _make_custom_tooltip 创建）
+var _cached_tooltip: Control = null
+
 static func create(data: BaseOption) -> EventBtn:
 	"""工厂方法：创建并初始化按钮"""
 	var scene = load("res://characters/event_btn.tscn")
@@ -60,4 +63,55 @@ func double_check() -> bool:
 		EventBus.request_toast.emit(option.double_check_reason, 1)
 		return false
 	else: return true
+
+# ── 自定义工具提示（Alt Reveal 双层 Tooltip）──
+
+func _make_custom_tooltip(for_text: String) -> Object:
+	"""
+	重写 Godot 的 _make_custom_tooltip 方法。
+	返回自定义 CustomTooltip 控件，支持 Alt 键切换叙事层/向量层。
+	"""
+	var tooltip = preload("res://ui/custom_tooltip.gd").new()
 	
+	# 先构建向量层文本，判断是否有向量数据
+	var has_vector_data := false
+	var vector_lines: Array[String] = []
+	
+	# (A) Requirement 摘要（Alt 下显示简略前提）
+	if option and 'requirement' in option and option.requirement \
+		and option.requirement.has_method('describe_requirement'):
+		var req_text = option.requirement.describe_requirement()
+		if not req_text.is_empty():
+			has_vector_data = true
+			vector_lines.append("[前提]")
+			vector_lines.append(req_text)
+	
+	# (B) Operator 预览（向量变化）
+	var operator_lines: Array[String] = []
+	if option and 'choice_result' in option and option.choice_result:
+		operator_lines = option.choice_result.format_preview()
+		if not operator_lines.is_empty():
+			has_vector_data = true
+	
+	if operator_lines.is_empty():
+		# 无 operator 的选项显示这句话
+		if has_vector_data:
+			vector_lines.append("")
+			vector_lines.append("[影响]")
+		vector_lines.append("你想知道什么发生了")
+	else:
+		if not vector_lines.is_empty():
+			vector_lines.append("")  # 空行分隔前提和向量
+		vector_lines.append("[影响]")
+		vector_lines.append_array(operator_lines)
+	
+	tooltip.set_vector_text("\n".join(vector_lines))
+	
+	# 叙事层：如果有向量数据可看，在锁定原因尾部追加 Alt 提示
+	var narrative_body = for_text
+	if has_vector_data:
+		narrative_body += "\n[color=gray][font_size=12]━━━ [按住 ALT 查看系统解析] ━━━[/font_size][/color]"
+	tooltip.set_narrative_text(narrative_body)
+	
+	_cached_tooltip = tooltip
+	return tooltip

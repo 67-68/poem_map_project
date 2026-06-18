@@ -21,6 +21,31 @@ var str_emotion: String = ""
 ## - reduce_to_lowest_zero: 如果当前值 > value 则减去 value，否则归零
 @export_enum('append', 'set', 'reduce_to_lowest_zero') var mode: String = 'append'
 
+## 情绪英文键 → 中文名映射（与 ui/emotion_radar.gd 保持一致）
+const _EMOTION_CN_NAMES: Dictionary = {
+	"sorrow": "愁苦",
+	"arrogance": "狂傲",
+	"anger": "愤懑",
+	"tranquility": "旷达",
+	"ambition": "野心",
+}
+
+func _get_emotion_cn_name() -> String:
+	return _EMOTION_CN_NAMES.get(emotion, emotion)
+
+func describe_preview() -> String:
+	if value == 0:
+		return ""
+	var cn_name = _get_emotion_cn_name()
+	var arrow = "↑" if value > 0 else "↓"
+	match mode:
+		'reduce_to_lowest_zero':
+			return "%s↓" % [cn_name]
+		'set':
+			return "%s →" % [cn_name]
+		_:
+			return "%s%s" % [cn_name, arrow]
+
 func operate():
 	# 先处理 archetype 效果
 	if archetype != -1:

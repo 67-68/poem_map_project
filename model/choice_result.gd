@@ -22,3 +22,16 @@ func init(context: Dictionary) -> Dictionary:
 		for op in operators:
 			op.init(context)
 	return context
+
+## 聚合所有 operator 的 describe_preview() 文本，过滤空字符串
+func format_preview() -> Array[String]:
+	var lines: Array[String] = []
+	if not operators or operators.is_empty():
+		return lines
+	for op in operators:
+		if not op:
+			continue
+		var text = op.describe_preview()
+		if not text.is_empty():
+			lines.append(text)
+	return lines

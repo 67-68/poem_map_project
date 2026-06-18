@@ -18,7 +18,7 @@ static var debug_dashboard_state = {
     # 维度 3：六大 Action 的反噬状态机 (The 6-Track Corruption State)
     # 这是你真正需要密切关注的"癌症分期"
     "action_tracks": {
-    	"BAIYE": "main_baiye_2",    # 当前处于：阶段2（幕僚）
+    	"BAIYE": "main_baiye_1",
     	"FENGZHAO": "main_fengzhao_1",
     	"DUZHUO": "main_duzhuo_1",        # 正常
     	"DENGGAO": "main_denggao_1",      # 正常
@@ -37,9 +37,9 @@ static var debug_dashboard_state = {
     
     # 维度 4：资源池 (The Expendables) - 最不重要的底层数值
     "resources": {
-        "money": 5000,
+        "money": 50,
         "health": 100,
-        "official_prestige": 100,
+        "official_prestige": 20,
         "literary_fame": 50,
         "talent": 50, # 如果才气不够就写不出春望，需要点各种事件来加才气
         "burnout": 0,
@@ -47,16 +47,16 @@ static var debug_dashboard_state = {
         "fatigue": 0,
         "sick": 0,
         "inspiration": 0,
-        "career_progress": 99,
+        "career_progress": 0,
     },
 
     "imaginaries": {
         # imaginary UUID -> 初始等级
-        "emotion:ambition": 2,
+        #"emotion:ambition": 2,
     },
 
     "flags": {
-        "flag_relation_with_libai":30
+        #"flag_relation_with_libai":30
     }
 }
 

@@ -111,4 +111,15 @@ func _init(data = {}):
         Logging.err('ComplexRequirements: Invalid current_operator value: %d, expected 0 (AND) or 1 (OR)' % current_operator)
         return
     
-    Logging.info('ComplexRequirements: Successfully initialized with %d operators and operator type %d' % [operators.size(), current_operator])
+func describe_requirement() -> String:
+    var parts: Array[String] = []
+    for req in operators:
+        if req and req.has_method('describe_requirement'):
+            var text = req.describe_requirement()
+            if not text.is_empty():
+                parts.append(text)
+    if parts.is_empty():
+        return ""
+    if current_operator == REQ_OPERATOR.LOGIC.OR:
+        return "或 ".join(parts)
+    return "\n".join(parts)

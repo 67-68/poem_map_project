@@ -17,6 +17,17 @@ func compare(player_state: PlayerState):
 	else:
 		return stat_front > value
 
+func describe_requirement() -> String:
+	if property.is_empty():
+		return ""
+	var prop = Database.get_property(property)
+	if not prop:
+		return ""
+	var perception = prop.get_staged_perception_at_threshold(value)
+	if perception.is_empty() or perception == "未知状态":
+		return ""
+	return "需要「%s」" % perception
+
 func get_referenced_flags() -> Array:
 	return []
 

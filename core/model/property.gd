@@ -58,6 +58,24 @@ func get_change_perception_text(delta: int) -> String:
 	# fallback: 使用阶段感知文本（当前状态的描述）
 	return get_staged_perception_text()
 
+## 根据指定阈值返回对应的阶段感知文本（用于 Alt 预览 requirement 翻译）。
+## 例如 threshold=5000，stage_val=[0, 2000, 5000, 10000] → 返回 stage_val=5000 的文本。
+## 与 get_staged_perception_text() 不同，此方法基于传入的 threshold 而非 this.val。
+func get_staged_perception_at_threshold(threshold: int) -> String:
+	# 从高到低遍历 staged_perceptions，返回最高匹配档位
+	for i in range(staged_perceptions.size() - 1, -1, -1):
+		var perception = staged_perceptions[i]
+		if perception.stage_val <= threshold:
+			return perception.perception_text
+
+	# fallback 默认感知
+	for i in range(default_staged_perception.size() - 1, -1, -1):
+		var perception = default_staged_perception[i]
+		if perception.stage_val <= threshold:
+			return perception.perception_text
+
+	return "未知状态"
+
 # 强制设值，跳过 hard_max 检查（给 debug/force_set_stat_val 用）
 func force_set_val(new_val: int) -> void:
 	val = new_val

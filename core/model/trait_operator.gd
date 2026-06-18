@@ -62,6 +62,19 @@ func operate():
     else:
         Logging.info('TraitOperator: unsupported operator %s for trait operations' % operator)
 
+func describe_preview() -> String:
+    if trait_key.is_empty():
+        return ""
+    var trait_obj = Database.get_trait(trait_key)
+    if not trait_obj:
+        return trait_key
+    var cn_name = trait_obj.name if not trait_obj.name.is_empty() else trait_key
+    if operator == REQ_OPERATOR.CRUD.ADD:
+        return "获得「%s」" % cn_name
+    elif operator == REQ_OPERATOR.CRUD.REMOVE:
+        return "失去「%s」" % cn_name
+    return ""
+
 func _emit_float_text(trait_name: String) -> void:
     if trait_name.is_empty():
         return

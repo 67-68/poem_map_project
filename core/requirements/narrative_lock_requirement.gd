@@ -10,6 +10,10 @@ class_name NarrativeLockRequirement extends BaseRequirements
 # 未来扩展：可添加 lock_flag_id / lock_flag_value 实现动态条件锁，
 #           只在特定叙事条件下才锁定选项。
 
+func describe_requirement() -> String:
+	# Alt 模式下不显示叙事锁文本——它始终在默认 tooltip 展示
+	return ""
+
 func compare(_data) -> bool:
 	# 叙事锁：只要存在就代表被锁定
 	# （可未来扩展为检查特定 flag 的条件锁）

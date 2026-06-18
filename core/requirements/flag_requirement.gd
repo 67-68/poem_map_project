@@ -2,6 +2,10 @@
 class_name FlagRequirement extends BaseRequirements
 # 用来判断某个 flag 是否达到要求
 
+func describe_requirement() -> String:
+	# flag 是内部系统，Alt 预览中不暴露
+	return ""
+
 @export var flag_id: String = ""
 @export_enum(
 		'str',

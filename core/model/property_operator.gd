@@ -54,6 +54,19 @@ func _emit_float_text(delta: int) -> void:
     Logging.debug("PropertyOperator._emit_float_text: emitting request_float_text('%s')" % perception_text)
     EventBus.request_float_text.emit(perception_text)
 
+func describe_preview() -> String:
+    if value == 0 or property.is_empty():
+        return ""
+    var prop = Database.get_property(property)
+    if not prop:
+        return ""
+    var cn_name = prop.name if not prop.name.is_empty() else property
+    var arrow = "↑" if value > 0 else "↓"
+    var perception_text = prop.get_change_perception_text(value)
+    if perception_text.is_empty():
+        return "%s%s" % [cn_name, arrow]
+    return "%s%s：%s" % [cn_name, arrow, perception_text]
+
 func get_referenced_flags() -> Array:
     return []
 

@@ -8,5 +8,16 @@ var property: String:
 	get():
 		return ENUMS.to_prop_str(_property)
 
+func describe_requirement() -> String:
+	if property.is_empty():
+		return ""
+	var prop = Database.get_property(property)
+	if not prop:
+		return ""
+	var min_text = prop.get_staged_perception_at_threshold(int(min_value))
+	if min_text.is_empty() or min_text == "未知状态":
+		return ""
+	return "需要「%s」" % min_text
+
 func compare(player_state) -> bool:
 	return player_state.get_stat_val(property) >= min_value and player_state.get_stat_val(property) <= max_value

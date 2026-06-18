@@ -42,5 +42,11 @@ func get_provided_traits() -> Array:
 func get_demanded_traits() -> Array:
     return []
 
+## 契约方法：返回该 Operator 的人类可读向量预览文本（用于 Alt 工具提示）。
+## 子类应重写此方法以提供有意义的预览文本。
+## 返回空字符串表示该 Operator 不在 Alt 预览中显示。
+func describe_preview() -> String:
+    return ""
+
 func init(_context: Dictionary) -> Dictionary:
     return _context

@@ -33,10 +33,17 @@ func _deferred_ready():
 		Logging.err("Label node not found!")
 		return
 	
+	# 【Fix #1】从场景实际 visible 状态同步，消除双状态脱钩
+	radar_visible = visible
+	
 	# 设置标签颜色为黑色，确保可见
 	emotion_label.modulate = Color(0, 0, 0, 1)
 	
+	# 【核心修复】同时连接旬 tick 和实时情绪变化信号
 	TimeService.on_xun_tick.connect(update_emotions)
+	if PlayerState.emotion_changed.is_connected(update_emotions):
+		PlayerState.emotion_changed.disconnect(update_emotions)
+	PlayerState.emotion_changed.connect(update_emotions)
 	update_emotions()
 
 func _input(event):
@@ -63,18 +70,27 @@ func update_emotions():
 	
 	# 构建情绪文本显示
 	var emotion_text = "情绪状态：\n"
+	var has_any_emotion := false
 	
 	for emotion_key in AXIS_CONFIG:
 		var emotion_value = PlayerState.get_emotion(emotion_key)
 		var label_text = AXIS_CONFIG[emotion_key]["label"]
 		emotion_text += "%s: %d\n" % [label_text, emotion_value]
+		if emotion_value > 0:
+			has_any_emotion = true
+	
+	# 【Fix #3】全零情绪时显示兜底提示
+	if not has_any_emotion:
+		emotion_text = "情绪尚未激活"
 	
 	emotion_label.text = emotion_text
 	
 	# 如果雷达绘制节点存在，也更新它
 	if radar_paint:
 		var points: Array[Vector2] = []
-		var center = Vector2(radar_paint.size.x / 2, radar_paint.size.y / 2)
+		# 【Fix #2】改用父节点自身 size 而非子节点 size，
+		# 避免子节点尚未完成布局时 size=(0,0)
+		var center = Vector2(size.x / 2, size.y / 2)
 		
 		# 遍历 AXIS_CONFIG，计算每个情绪轴的顶点
 		for emotion_key in AXIS_CONFIG:

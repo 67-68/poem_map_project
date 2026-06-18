@@ -1,20 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://d4k6orjo2c3h1"]
+[gd_scene format=3 uid="uid://d4k6orjo2c3h1"]
 
 [ext_resource type="Script" uid="uid://b84oxktxsnd56" path="res://ui/scene_action_scroll.gd" id="1_0r0bl"]
 [ext_resource type="PackedScene" uid="uid://c2m0tcydkhvro" path="res://ui/scene_action_panel.tscn" id="1_8wh7w"]
 
-[node name="SceneActionScr" type="ScrollContainer"]
+[node name="SceneActionScr" type="ScrollContainer" unique_id=1783840445]
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_0r0bl")
 
-[node name="V" type="VBoxContainer" parent="."]
+[node name="V" type="VBoxContainer" parent="." unique_id=1267074421]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SceneActionPanel" parent="V" instance=ExtResource("1_8wh7w")]
-layout_mode = 2
-
-[node name="SceneActionPanel2" parent="V" instance=ExtResource("1_8wh7w")]
+[node name="SceneActionPanel" parent="V" unique_id=2001965688 instance=ExtResource("1_8wh7w")]
 layout_mode = 2

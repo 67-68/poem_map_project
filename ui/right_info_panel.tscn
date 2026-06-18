@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgv42km6rey70"]
+[gd_scene format=3 uid="uid://bgv42km6rey70"]
 
 [ext_resource type="Texture2D" uid="uid://st52l6u6hob6" path="res://assets/profile/little_paper.png" id="1_qvv8g"]
 [ext_resource type="Script" uid="uid://ojn7m81iv33i" path="res://ui/right_info_panel.gd" id="2_3crwo"]
-[ext_resource type="Texture2D" uid="uid://6h08klf8hnfl" path="res://assets/profile/daming_palace.png" id="2_j2cme"]
 [ext_resource type="PackedScene" uid="uid://d4k6orjo2c3h1" path="res://ui/scene_action_scroll.tscn" id="4_3crwo"]
 [ext_resource type="PackedScene" uid="uid://cu1a2mhu4xv3n" path="res://ui/decision_scroll.tscn" id="5_3crwo"]
 
@@ -13,7 +12,7 @@ texture_margin_top = 20.0
 texture_margin_right = 20.0
 texture_margin_bottom = 20.0
 
-[node name="RightInfoPanel" type="PanelContainer"]
+[node name="RightInfoPanel" type="PanelContainer" unique_id=694608092]
 custom_minimum_size = Vector2(350, 450)
 anchors_preset = -1
 anchor_left = 0.95
@@ -28,46 +27,15 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_lnxk4")
 script = ExtResource("2_3crwo")
 
-[node name="V" type="VBoxContainer" parent="."]
+[node name="V" type="VBoxContainer" parent="." unique_id=1359430561]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="V"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "洛阳"
-horizontal_alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="V"]
-custom_minimum_size = Vector2(0, 210)
-layout_mode = 2
-tooltip_text = "城市风景"
-texture = ExtResource("2_j2cme")
-expand_mode = 1
-
-[node name="CityLabel" type="Label" parent="V"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "城市切片：虽然你在门口没有看到什么东西，但远方的城市金碧辉煌。"
-autowrap_mode = 1
-
-[node name="PriceLabel" type="Label" parent="V"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "物价：一斗米需要5元，但没什么人买"
-autowrap_mode = 1
-
-[node name="CityTags" type="Label" parent="V"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "标签：「繁华」，「Dynamic」"
-autowrap_mode = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="V"]
+[node name="HBoxContainer" type="HBoxContainer" parent="V" unique_id=1436855159]
 layout_mode = 2
 
-[node name="SceneActionScr" parent="V/HBoxContainer" instance=ExtResource("4_3crwo")]
+[node name="SceneActionScr" parent="V/HBoxContainer" unique_id=507890747 instance=ExtResource("4_3crwo")]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="DecisionScr" parent="V/HBoxContainer" instance=ExtResource("5_3crwo")]
+[node name="DecisionScr" parent="V/HBoxContainer" unique_id=2114190949 instance=ExtResource("5_3crwo")]
 layout_mode = 2

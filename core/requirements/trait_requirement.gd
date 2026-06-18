@@ -9,6 +9,17 @@ func get_referenced_traits() -> Array:
         return []
     return [trait_name]
 
+func describe_requirement() -> String:
+    if trait_name.is_empty():
+        return ""
+    var trait_obj = Database.get_trait(trait_name)
+    var cn_name = trait_obj.name if trait_obj and not trait_obj.name.is_empty() else trait_name
+    if operator == REQ_OPERATOR.EXIST.HAS:
+        return "需要「%s」" % cn_name
+    elif operator == REQ_OPERATOR.EXIST.NOT_HAS:
+        return "禁止「%s」" % cn_name
+    return ""
+
 func compare(player_state) -> bool:
     if operator == REQ_OPERATOR.EXIST.HAS:
         return player_state.has_trait(trait_name)

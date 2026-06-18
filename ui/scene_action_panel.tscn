@@ -1,35 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://c2m0tcydkhvro"]
+[gd_scene format=3 uid="uid://c2m0tcydkhvro"]
 
-[ext_resource type="Texture2D" uid="uid://bcuicm5oeumvp" path="res://assets/candle.jpg" id="1_4mrtc"]
 [ext_resource type="Script" uid="uid://dywj8x8aisr5k" path="res://ui/scene_action_panel.gd" id="1_vmy6r"]
 
-[node name="SceneActionPanel" type="VBoxContainer"]
+[node name="SceneActionPanel" type="Button" unique_id=1937966478]
+custom_minimum_size = Vector2(100, 0)
+offset_right = 100.0
+offset_bottom = 44.0
 size_flags_vertical = 3
 script = ExtResource("1_vmy6r")
 
-[node name="ActionTitleLabel" type="Label" parent="."]
+[node name="Mar" type="MarginContainer" parent="." unique_id=1646183931]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ActionTitleLabel" type="Label" parent="Mar" unique_id=744793047]
 layout_mode = 2
+size_flags_vertical = 1
 theme_override_font_sizes/font_size = 14
 text = "点燃蜡烛"
+horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 2
-
-[node name="ActionOutcomeLabel" type="Label" parent="."]
-custom_minimum_size = Vector2(90, 15)
-layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "变得明亮，消耗钱财。"
-autowrap_mode = 1
-
-[node name="TextureRect" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-size_flags_vertical = 3
-texture = ExtResource("1_4mrtc")
-expand_mode = 1
-
-[node name="Button" type="Button" parent="."]
-layout_mode = 2
-theme_override_font_sizes/font_size = 8
-text = "开始"
-
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -26,3 +26,9 @@ func init(context: Dictionary) -> Dictionary: # load and store context
 ## 默认返回 @export failed_hint 字段的值（可从 CSV / .tres 中配置）。
 func get_failed_hint() -> String:
     return failed_hint
+
+## 契约方法：返回该 Requirement 在 Alt 预览中的摘要文本（简略、不显式具体数据）。
+## 子类应重写此方法以提供有意义的预览文本。
+## 返回空字符串表示 Alt 模式下不显示此 Requirement。
+func describe_requirement() -> String:
+    return ""
