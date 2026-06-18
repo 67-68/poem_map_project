@@ -33,4 +33,5 @@ uuid = "deng_gao"
 name = "登高"
 description = "登高"
 icon = ExtResource("4_b6lfb")
+fallback_event_uuid = "event_cooldown_wall"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

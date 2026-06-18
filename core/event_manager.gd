@@ -166,6 +166,8 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
             for ticket in current_event_pool:
                 if ticket.event_uuid == g_key:
                     Logging.info("[EventManager] 🎯 Guaranteed event (" + g_tag + ") (FIFO): " + g_key)
+                    # 🆕 自动设置冷却
+                    _set_cooldown_for_drawn_event(context)
                     return g_key
             Logging.warn("[EventManager] Guaranteed event '" + g_key + "' not in pool after filters, popping and continuing")
             continue  # pop happened above, try next
@@ -206,6 +208,8 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
         Logging.info("[EventManager] Checking event '" + ticket.event_uuid + "', accumulated weight: " + str(current_accumulated))
         if roll <= current_accumulated:
             Logging.info("[EventManager] Event selected: " + ticket.event_uuid)
+            # 🆕 自动设置冷却
+            _set_cooldown_for_drawn_event(context)
             return ticket.event_uuid
             
     # 如果 roll 出来的数字落在了 null_weight 的区间里，说明抽中了"无事发生"
@@ -215,3 +219,19 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
     else:
         Logging.info("[EventManager] Roll fell in null weight range, no event triggered")
         return null
+
+
+## 事件被抽取后自动设置冷却
+## 从 context.main_tag 推导 CD 目标标签，调用 RelationFlagManager.set_cooldown
+func _set_cooldown_for_drawn_event(context: Dictionary) -> void:
+    var main_tag: String = context.get('main_tag', '')
+    if main_tag.is_empty():
+        return
+    
+    var target_tag := CooldownFilter._derive_cooldown_target(main_tag)
+    if target_tag.is_empty():
+        Logging.info("[EventManager] main_tag '%s' 无对应 CD 目标，跳过冷却设置" % main_tag)
+        return
+    
+    RelationFlagManager.set_cooldown(target_tag, 3)
+    Logging.info("[EventManager] 🧊 设置冷却: flag_gen_cd_%s = 3旬" % target_tag)

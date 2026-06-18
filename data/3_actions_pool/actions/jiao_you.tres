@@ -27,4 +27,5 @@ uuid = "jiao_you"
 name = "交游朋友"
 description = "交游"
 icon = ExtResource("4_ob7iq")
+fallback_event_uuid = "event_cooldown_wall"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

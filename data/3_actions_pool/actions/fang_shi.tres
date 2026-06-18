@@ -21,4 +21,5 @@ uuid = "fang_shi"
 name = "坊市游宴"
 description = "吃饭了"
 icon = ExtResource("4_qsksc")
+fallback_event_uuid = "event_cooldown_wall"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"
