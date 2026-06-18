@@ -27,6 +27,10 @@ signal player_stat_changed(prop_name)
 signal location_changed(location)
 signal emotion_changed(stat_name)
 
+## 情绪即将变更时的信号钩子
+## FatigueManager 监听此信号，根据疲劳值对情绪变化量施加疲劳倍率。
+signal before_emotion_change(emo_name: String, delta: int)
+
 ## 属性即将变更时的信号钩子
 ## 在 append_stat() 中 trait 倍率计算之后、实际写入 stat.val 之前发射。
 ## RelationFlagManager 监听此信号，根据好感度对属性变化量施加社交倍率。
@@ -163,6 +167,12 @@ func append_stat(stat_name, data):
 		amount_to_change = int(amount_to_change * favor_multiplier)
 		Logging.info("change stat %s: favor multiplier applied (*%.2f) → %d" % [stat_name, favor_multiplier, amount_to_change])
 
+	# ── 信号钩子：FatigueManager 在此根据疲劳值修正倍率 ──
+	var fatigue_multiplier = FatigueManager.get_and_reset_fatigue_multiplier()
+	if fatigue_multiplier != 1.0:
+		amount_to_change = int(amount_to_change * fatigue_multiplier)
+		Logging.info("change stat %s: fatigue multiplier applied (*%.2f) → %d" % [stat_name, fatigue_multiplier, amount_to_change])
+
 	Logging.info('change stat %s by %d' % [stat_name, amount_to_change])
 	stat.val += amount_to_change # 永远执行加法
 	# hard_max clamp
@@ -250,6 +260,13 @@ func append_emotion(stat_name, data):
 	
 	if not emotions.has(stat_name):
 		emotions[stat_name] = 0
+	
+	# ── 信号钩子：FatigueManager 在此根据疲劳值修正情绪倍率 ──
+	before_emotion_change.emit(stat_name, data)
+	var emotion_multiplier = FatigueManager.get_and_reset_emotion_multiplier()
+	if emotion_multiplier != 1.0:
+		data = int(data * emotion_multiplier)
+		Logging.info("change emotion %s: fatigue multiplier applied (*%.2f) → %d" % [stat_name, emotion_multiplier, data])
 	
 	emotions[stat_name] += data
 	Logging.info('change volatile stat %s by %d, new value: %d' % [stat_name, data, emotions[stat_name]])

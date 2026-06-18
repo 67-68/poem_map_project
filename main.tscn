@@ -22,7 +22,6 @@
 [ext_resource type="PackedScene" uid="uid://3s0i4r8kv6l4" path="res://ui/top_stat_item.tscn" id="17_82xsv"]
 [ext_resource type="Script" uid="uid://n7ktpe1ycxpa" path="res://ui/stats_items.gd" id="17_getpj"]
 [ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="19_lswn8"]
-[ext_resource type="Texture2D" uid="uid://b6dbp485agxus" path="res://data/default.png" id="20_a6jrf"]
 [ext_resource type="Script" uid="uid://cga3u2teu5n7e" path="res://ui/player_button.gd" id="21_xuqvo"]
 [ext_resource type="PackedScene" uid="uid://bagmf63e3hmbi" path="res://ui/left_player_panel.tscn" id="22_0odxb"]
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
@@ -41,6 +40,8 @@
 [ext_resource type="PackedScene" uid="uid://fnnxu25q66uu" path="res://ui/social_wall_panel.tscn" id="33_0cp0l"]
 [ext_resource type="Script" uid="uid://cljs6te3xyu25" path="res://ui/social_wall_panel.gd" id="34_d2t1y"]
 [ext_resource type="PackedScene" uid="uid://cua5pcl2s75q" path="res://ui/cinematic_overlay.tscn" id="35_cinematic"]
+[ext_resource type="Script" path="res://core/fatigue_manager.gd" id="36_fatigue"]
+[ext_resource type="Script" path="res://ui/maobi_shake.gd" id="37_maobi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
 shader = ExtResource("3_272bh")
@@ -51,7 +52,7 @@ shader_parameter/edge_softness = 0.01
 [sub_resource type="Theme" id="Theme_h2yge"]
 default_base_scale = 1.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4lmeg"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_h8e4i"]
 resource_local_to_scene = true
 content_margin_left = 20.0
 content_margin_top = 20.0
@@ -65,7 +66,7 @@ texture_margin_right = 19.0
 content_margin_top = 20.0
 texture = ExtResource("19_lswn8")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0cp0l"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4lmeg"]
 resource_local_to_scene = true
 content_margin_left = 20.0
 content_margin_top = 20.0
@@ -112,7 +113,7 @@ script = ExtResource("1_ig7tw")
 offset_left = -97.5
 offset_right = 97.5
 size_flags_horizontal = 8
-theme_override_styles/panel = SubResource("StyleBoxTexture_4lmeg")
+theme_override_styles/panel = SubResource("StyleBoxTexture_h8e4i")
 
 [node name="PoetDescriptor" parent="UI" unique_id=285994705 instance=ExtResource("5_lquwl")]
 
@@ -203,7 +204,6 @@ layout_mode = 2
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 tooltip_text = "打开人物面板"
-texture_normal = ExtResource("20_a6jrf")
 ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("21_xuqvo")
@@ -258,7 +258,7 @@ offset_left = -72.0
 offset_top = -23.200012
 offset_right = 67.0
 offset_bottom = 36.799988
-theme_override_styles/panel = SubResource("StyleBoxTexture_0cp0l")
+theme_override_styles/panel = SubResource("StyleBoxTexture_4lmeg")
 
 [node name="PoemCreation" parent="UI" unique_id=1490017236 instance=ExtResource("29_facbu")]
 process_mode = 3
@@ -306,6 +306,23 @@ offset_right = 132.0
 offset_bottom = 132.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="MaobiContainer" type="PanelContainer" parent="UI" unique_id=1375616340]
+script = ExtResource("37_maobi")
+z_index = 10
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/MaobiContainer" unique_id=837485037]
+layout_mode = 2
 
 [node name="SocialWallPanel" parent="UI" unique_id=1780260616 instance=ExtResource("33_0cp0l")]
 visible = false
@@ -371,6 +388,9 @@ metadata/_custom_type_script = "uid://dgg4voth1dy5y"
 [node name="SurvivalManager" type="Node" parent="CoreSystems" unique_id=2016997853]
 script = ExtResource("30_kq58d")
 metadata/_custom_type_script = "uid://dinmvxb5j0il4"
+
+[node name="FatigueManager" type="Node" parent="CoreSystems"]
+script = ExtResource("36_fatigue")
 
 [node name="CinematicOverlay" parent="." unique_id=1377896074 instance=ExtResource("35_cinematic")]
 
