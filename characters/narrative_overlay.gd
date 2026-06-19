@@ -1,4 +1,4 @@
-class_name NarrativeOverlay extends Control
+class_name NarrativeOverlay extends PanelContainer
 
 # 纸带模式（极乐迪斯科式）：NarrativeOverlay 不再是一次性弹窗，
 # 而是持续的追加式事件纸带。纸带全空时才 hide()。
@@ -102,10 +102,6 @@ func _show_tape():
 	_tween.set_parallel(true).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 
 	show()
-
-	# Dimmer 淡入
-	dimmer.modulate.a = 0.0
-	_tween.tween_property(dimmer, "modulate:a", 1.0, 0.5)
 
 	# 宣纸背景淡入
 	event_ui.modulate.a = 0.0

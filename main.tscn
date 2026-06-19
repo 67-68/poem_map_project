@@ -166,12 +166,8 @@ script = ExtResource("34_d2t1y")
 visible = false
 
 [node name="NarrativeOverlay" parent="UI" unique_id=1251280475 instance=ExtResource("11_vivmo")]
+visible = false
 z_index = 8
-custom_minimum_size = Vector2(0, 0)
-offset_left = -216.0
-offset_top = -315.0
-offset_right = 212.0
-offset_bottom = 338.67615
 scale = Vector2(1, 0.96530986)
 
 [node name="Controller" parent="UI" unique_id=1054828129 instance=ExtResource("24_jq2sk")]

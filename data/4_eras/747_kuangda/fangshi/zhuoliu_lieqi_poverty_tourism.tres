@@ -11,6 +11,54 @@
 [ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="9_1qm3s"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="10_vmu6x"]
 
+[sub_resource type="Resource" id="Resource_ha0y5"]
+script = ExtResource("3_tthki")
+str_props = "HEALTH"
+value = -3
+
+[sub_resource type="Resource" id="Resource_oka76"]
+script = ExtResource("3_tthki")
+str_props = "BURNOUT"
+value = 5
+
+[sub_resource type="Resource" id="Resource_tthki"]
+script = ExtResource("3_tthki")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_4g55r"]
+script = ExtResource("3_tthki")
+str_props = "fatigue"
+value = 3
+
+[sub_resource type="Resource" id="Resource_og0yd"]
+script = ExtResource("3_tthki")
+str_props = "HEALTH"
+value = -5
+
+[sub_resource type="Resource" id="Resource_5lm8c"]
+script = ExtResource("4_4g55r")
+value = 15
+
+[sub_resource type="Resource" id="Resource_5y27j"]
+script = ExtResource("3_tthki")
+str_props = "BURNOUT"
+value = 8
+
+[sub_resource type="Resource" id="Resource_mlb1d"]
+script = ExtResource("5_og0yd")
+operators = Array[ExtResource("2_oka76")]([SubResource("Resource_ha0y5"), SubResource("Resource_oka76"), SubResource("Resource_tthki"), SubResource("Resource_4g55r"), SubResource("Resource_og0yd"), SubResource("Resource_5lm8c"), SubResource("Resource_5y27j")])
+
+[sub_resource type="Resource" id="Resource_1qm3s"]
+script = ExtResource("6_5lm8c")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_vmu6x"]
+script = ExtResource("7_5y27j")
+choice_result = SubResource("Resource_mlb1d")
+requirement = SubResource("Resource_1qm3s")
+description = "他掀开破被子站起来，直直走出门，站在雪地里，不说话。"
+
 [sub_resource type="Resource" id="Resource_d5l7e"]
 script = ExtResource("3_tthki")
 str_props = "HEALTH"
@@ -33,155 +81,107 @@ value = 3
 
 [sub_resource type="Resource" id="Resource_3kodm"]
 script = ExtResource("3_tthki")
-str_props = "HEALTH"
-value = -5
-
-[sub_resource type="Resource" id="Resource_2hbjh"]
-script = ExtResource("4_4g55r")
-value = 15
-
-[sub_resource type="Resource" id="Resource_aa40j"]
-script = ExtResource("3_tthki")
-str_props = "BURNOUT"
-value = 8
-
-[sub_resource type="Resource" id="Resource_fyhpn"]
-script = ExtResource("5_og0yd")
-operators = Array[ExtResource("2_oka76")]([SubResource("Resource_d5l7e"), SubResource("Resource_qm4ex"), SubResource("Resource_ilhjm"), SubResource("Resource_cyt1k"), SubResource("Resource_3kodm"), SubResource("Resource_2hbjh"), SubResource("Resource_aa40j")])
-
-[sub_resource type="Resource" id="Resource_onfqf"]
-script = ExtResource("6_5lm8c")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_v3ora"]
-script = ExtResource("7_5y27j")
-choice_result = SubResource("Resource_fyhpn")
-requirement = SubResource("Resource_onfqf")
-description = "他掀开破被子站起来，直直走出门，站在雪地里，不说话。"
-
-[sub_resource type="Resource" id="Resource_dxoju"]
-script = ExtResource("3_tthki")
-str_props = "HEALTH"
-value = -3
-
-[sub_resource type="Resource" id="Resource_0j0hk"]
-script = ExtResource("3_tthki")
-str_props = "BURNOUT"
-value = 5
-
-[sub_resource type="Resource" id="Resource_2tgj0"]
-script = ExtResource("3_tthki")
-str_props = "BURNOUT"
-value = 3
-
-[sub_resource type="Resource" id="Resource_hyvoo"]
-script = ExtResource("3_tthki")
-str_props = "fatigue"
-value = 3
-
-[sub_resource type="Resource" id="Resource_hmvov"]
-script = ExtResource("3_tthki")
 str_props = "MONEY"
 value = 10
 
-[sub_resource type="Resource" id="Resource_d3c6l"]
+[sub_resource type="Resource" id="Resource_2hbjh"]
 script = ExtResource("3_tthki")
 str_props = "LITERARY_FAME"
 value = 3
 
-[sub_resource type="Resource" id="Resource_wkpsx"]
+[sub_resource type="Resource" id="Resource_aa40j"]
 script = ExtResource("3_tthki")
 str_props = "BURNOUT"
 value = 12
 
-[sub_resource type="Resource" id="Resource_xw6pn"]
+[sub_resource type="Resource" id="Resource_fyhpn"]
 script = ExtResource("4_4g55r")
 value = 15
 
+[sub_resource type="Resource" id="Resource_onfqf"]
+script = ExtResource("5_og0yd")
+operators = Array[ExtResource("2_oka76")]([SubResource("Resource_d5l7e"), SubResource("Resource_qm4ex"), SubResource("Resource_ilhjm"), SubResource("Resource_cyt1k"), SubResource("Resource_3kodm"), SubResource("Resource_2hbjh"), SubResource("Resource_aa40j"), SubResource("Resource_fyhpn")])
+
+[sub_resource type="Resource" id="Resource_v3ora"]
+script = ExtResource("6_5lm8c")
+trait_name = "kuangda_fengying"
+
+[sub_resource type="Resource" id="Resource_dxoju"]
+script = ExtResource("7_5y27j")
+choice_result = SubResource("Resource_onfqf")
+requirement = SubResource("Resource_v3ora")
+description = "他展开纸，不等对方开口，已开始默写昨日未完成的诗句。"
+
+[sub_resource type="Resource" id="Resource_0j0hk"]
+script = ExtResource("3_tthki")
+str_props = "HEALTH"
+value = -3
+
+[sub_resource type="Resource" id="Resource_2tgj0"]
+script = ExtResource("3_tthki")
+str_props = "BURNOUT"
+value = 5
+
+[sub_resource type="Resource" id="Resource_hyvoo"]
+script = ExtResource("3_tthki")
+str_props = "BURNOUT"
+value = 3
+
+[sub_resource type="Resource" id="Resource_hmvov"]
+script = ExtResource("3_tthki")
+str_props = "fatigue"
+value = 3
+
+[sub_resource type="Resource" id="Resource_d3c6l"]
+script = ExtResource("3_tthki")
+str_props = "MONEY"
+value = 8
+
+[sub_resource type="Resource" id="Resource_wkpsx"]
+script = ExtResource("3_tthki")
+str_props = "BURNOUT"
+value = 8
+
+[sub_resource type="Resource" id="Resource_xw6pn"]
+script = ExtResource("4_4g55r")
+value = 12
+
 [sub_resource type="Resource" id="Resource_axypk"]
 script = ExtResource("5_og0yd")
-operators = Array[ExtResource("2_oka76")]([SubResource("Resource_dxoju"), SubResource("Resource_0j0hk"), SubResource("Resource_2tgj0"), SubResource("Resource_hyvoo"), SubResource("Resource_hmvov"), SubResource("Resource_d3c6l"), SubResource("Resource_wkpsx"), SubResource("Resource_xw6pn")])
+operators = Array[ExtResource("2_oka76")]([SubResource("Resource_0j0hk"), SubResource("Resource_2tgj0"), SubResource("Resource_hyvoo"), SubResource("Resource_hmvov"), SubResource("Resource_d3c6l"), SubResource("Resource_wkpsx"), SubResource("Resource_xw6pn")])
 
 [sub_resource type="Resource" id="Resource_jjex7"]
 script = ExtResource("6_5lm8c")
-trait_name = "kuangda_fengying"
+trait_name = "kuangda_zuanying"
 
 [sub_resource type="Resource" id="Resource_rhq41"]
 script = ExtResource("7_5y27j")
 choice_result = SubResource("Resource_axypk")
 requirement = SubResource("Resource_jjex7")
-description = "他展开纸，不等对方开口，已开始默写昨日未完成的诗句。"
-
-[sub_resource type="Resource" id="Resource_mv1vd"]
-script = ExtResource("3_tthki")
-str_props = "HEALTH"
-value = -3
-
-[sub_resource type="Resource" id="Resource_kr0jg"]
-script = ExtResource("3_tthki")
-str_props = "BURNOUT"
-value = 5
-
-[sub_resource type="Resource" id="Resource_6arx5"]
-script = ExtResource("3_tthki")
-str_props = "BURNOUT"
-value = 3
-
-[sub_resource type="Resource" id="Resource_jjovq"]
-script = ExtResource("3_tthki")
-str_props = "fatigue"
-value = 3
-
-[sub_resource type="Resource" id="Resource_qfwvn"]
-script = ExtResource("3_tthki")
-str_props = "MONEY"
-value = 8
-
-[sub_resource type="Resource" id="Resource_feyv6"]
-script = ExtResource("3_tthki")
-str_props = "BURNOUT"
-value = 8
-
-[sub_resource type="Resource" id="Resource_gevh3"]
-script = ExtResource("4_4g55r")
-value = 12
-
-[sub_resource type="Resource" id="Resource_pyets"]
-script = ExtResource("5_og0yd")
-operators = Array[ExtResource("2_oka76")]([SubResource("Resource_mv1vd"), SubResource("Resource_kr0jg"), SubResource("Resource_6arx5"), SubResource("Resource_jjovq"), SubResource("Resource_qfwvn"), SubResource("Resource_feyv6"), SubResource("Resource_gevh3")])
-
-[sub_resource type="Resource" id="Resource_twct2"]
-script = ExtResource("6_5lm8c")
-trait_name = "kuangda_zuanying"
-
-[sub_resource type="Resource" id="Resource_1v1d2"]
-script = ExtResource("7_5y27j")
-choice_result = SubResource("Resource_pyets")
-requirement = SubResource("Resource_twct2")
 description = "“大人既喜观清寒，可愿听一句实话？”他隔着门帘开口，语气平和。"
 
-[sub_resource type="Resource" id="Resource_vyqnn"]
+[sub_resource type="Resource" id="Resource_mv1vd"]
 script = ExtResource("6_5lm8c")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_1vwbm"]
+[sub_resource type="Resource" id="Resource_kr0jg"]
 script = ExtResource("6_5lm8c")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_e1nf5"]
+[sub_resource type="Resource" id="Resource_6arx5"]
 script = ExtResource("6_5lm8c")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_dcknu"]
+[sub_resource type="Resource" id="Resource_jjovq"]
 script = ExtResource("9_1qm3s")
-operators = Array[ExtResource("8_mlb1d")]([SubResource("Resource_vyqnn"), SubResource("Resource_1vwbm"), SubResource("Resource_e1nf5")])
+operators = Array[ExtResource("8_mlb1d")]([SubResource("Resource_mv1vd"), SubResource("Resource_kr0jg"), SubResource("Resource_6arx5")])
 
 [resource]
 script = ExtResource("10_vmu6x")
-requirement = SubResource("Resource_dcknu")
+requirement = SubResource("Resource_jjovq")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_ha0y5")]([SubResource("Resource_v3ora"), SubResource("Resource_rhq41"), SubResource("Resource_1v1d2")])
+options = Array[ExtResource("1_ha0y5")]([SubResource("Resource_vmu6x"), SubResource("Resource_dxoju"), SubResource("Resource_rhq41")])
 uuid = "zhuoliu_lieqi_poverty_tourism"
 name = "赛博贫困游"
 description = "“看见这洞了么？屋里比屋外还冷三分。”他没有进屋，只是隔着门帘吩咐：子美，出来走两步，让她们看看你是怎么过冬的。帘子那头没有回应。他笑了一声，不高不低：“不打紧，我等得起。”"

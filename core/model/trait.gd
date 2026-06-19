@@ -3,6 +3,7 @@ class_name Trait extends GameEntity
 # name use parent
 @export var buffer_to_prop: DictMultiplyOperator
 @export var buffer_to_region: DictMultiplyOperator
+@export var display_char: String = ""  # 阳刻印章展示字，为空时取 name[0]
 @export_enum(
     'RELATION', 'POEM', 'MAIN_ROUTE', 'DISEASE', 'MENTAL_ILLNESS'
 ) var topic: String

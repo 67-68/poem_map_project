@@ -20,33 +20,33 @@ grow_vertical = 2
 size_flags_vertical = 4
 script = ExtResource("1_25hr5")
 
-[node name="HBoxContainer" type="VBoxContainer" parent="." unique_id=75601818]
+[node name="HBox" type="VBoxContainer" parent="." unique_id=75601818]
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Label_Era" type="Label" parent="HBoxContainer" unique_id=675401599]
+[node name="Label_Era" type="Label" parent="HBox" unique_id=675401599]
 process_mode = 3
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_v2d34")
-theme_type_variation = &"TitleText"
+theme_type_variation = &"DefaultText"
 text = "天宝十四载"
 
-[node name="HBox2" type="HBoxContainer" parent="HBoxContainer" unique_id=1329272013]
+[node name="HBox2" type="HBoxContainer" parent="HBox" unique_id=1329272013]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="SpeedIndicator" type="Label" parent="HBoxContainer/HBox2" unique_id=1396029595]
+[node name="SpeedIndicator" type="Label" parent="HBox/HBox2" unique_id=1396029595]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"DefaultText"
 text = "⏸"
 
-[node name="VSeparator" type="VSeparator" parent="HBoxContainer/HBox2" unique_id=400820493]
+[node name="VSeparator" type="VSeparator" parent="HBox/HBox2" unique_id=400820493]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Label_Gregorian" type="Label" parent="HBoxContainer/HBox2" unique_id=272728942]
+[node name="Label_Gregorian" type="Label" parent="HBox/HBox2" unique_id=272728942]
 process_mode = 3
 modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
 layout_mode = 2
@@ -55,7 +55,7 @@ theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
 text = "test"
 
-[node name="Label_Xun" type="Label" parent="HBoxContainer/HBox2" unique_id=431041916]
+[node name="Label_Xun" type="Label" parent="HBox/HBox2" unique_id=431041916]
 process_mode = 3
 modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
 layout_mode = 2
@@ -64,7 +64,7 @@ theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
 text = "上旬"
 
-[node name="RiMianXunDayCounter" type="TextureRect" parent="HBoxContainer" unique_id=797531913]
+[node name="TimeTexture" type="TextureRect" parent="HBox" unique_id=797531913]
 custom_minimum_size = Vector2(77, 77)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -73,26 +73,26 @@ texture = ExtResource("5_wxhbx")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="HBox" type="HBoxContainer" parent="HBoxContainer" unique_id=783313824]
+[node name="HBox" type="HBoxContainer" parent="HBox" unique_id=783313824]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="SpeedDown" type="Button" parent="HBoxContainer/HBox" unique_id=1939965589]
+[node name="SpeedDown" type="Button" parent="HBox/HBox" unique_id=1939965589]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "减速"
 theme_type_variation = &"ButtonTheme"
 text = "-"
 
-[node name="FlowPause" type="Button" parent="HBoxContainer/HBox" unique_id=606298550]
+[node name="FlowPause" type="Button" parent="HBox/HBox" unique_id=606298550]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "停止/开始"
 theme_type_variation = &"ButtonTheme"
 text = "⏸/▶"
 
-[node name="SpeedUp" type="Button" parent="HBoxContainer/HBox" unique_id=753981742]
+[node name="SpeedUp" type="Button" parent="HBox/HBox" unique_id=753981742]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "加速"

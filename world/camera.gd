@@ -60,12 +60,3 @@ func _apply_zoom(amount: float) -> void:
     # 丝滑补间动画
     var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
     tween.tween_property(self, "zoom", Vector2(_target_zoom, _target_zoom), 0.2)
-    
-    # 🌟 维度打击：精确的状态流转
-    var new_state = 'city' if _target_zoom >= city_threshold else 'world'
-    
-    if new_state != _current_state:
-        _current_state = new_state
-        # 发射信号给 UI 和 渲染层
-        EventBus.focus_city_map.emit(_current_state == 'city')
-        Logging.info("🎥 视界已切换至:  %s" % [_current_state])

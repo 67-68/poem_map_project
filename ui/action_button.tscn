@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c2m0tcydkhvro"]
 
-[ext_resource type="Script" uid="uid://dywj8x8aisr5k" path="res://ui/scene_action_panel.gd" id="1_vmy6r"]
+[ext_resource type="Script" uid="uid://dywj8x8aisr5k" path="res://ui/action_button.gd" id="1_vmy6r"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_vmy6r"]
 [ext_resource type="Texture2D" uid="uid://65hw8npat6e6" path="res://assets/profile/baiye_stamp.png" id="3_sm4xu"]
 
@@ -19,8 +19,12 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -5.5
+offset_right = 5.5
+offset_bottom = -11.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 theme = ExtResource("2_vmy6r")
 theme_type_variation = &"PanelTheme"
 
@@ -28,7 +32,7 @@ theme_type_variation = &"PanelTheme"
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer" unique_id=1269597281]
-custom_minimum_size = Vector2(66, 66)
+custom_minimum_size = Vector2(54, 54)
 layout_mode = 2
 size_flags_vertical = 0
 texture = ExtResource("3_sm4xu")
@@ -43,13 +47,15 @@ theme_type_variation = &"VBoxTheme"
 [node name="Title" type="Label" parent="Panel/HBoxContainer/VBoxContainer" unique_id=425399385]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 theme = ExtResource("2_vmy6r")
-theme_type_variation = &"TitleText"
+theme_type_variation = &"SubTitleText"
 text = "赴宴"
 autowrap_mode = 2
 
-[node name="Context" type="Label" parent="Panel/HBoxContainer/VBoxContainer" unique_id=910935909]
+[node name="Outcome" type="Label" parent="Panel/HBoxContainer/VBoxContainer" unique_id=910935909]
 layout_mode = 2
+mouse_filter = 1
 theme = ExtResource("2_vmy6r")
 theme_type_variation = &"DefaultText"
 text = "颍川，王维召开了盛大宴会"

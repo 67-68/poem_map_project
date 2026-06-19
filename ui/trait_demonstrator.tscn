@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dth2yy4tl8m8q"]
+
+[ext_resource type="Script" uid="uid://dt338vb6jcj68" path="res://ui/trait_demonstrator.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://12nirlu58pgm" path="res://ui/yang_ke.tscn" id="1_1llxn"]
+
+[node name="HBoxContainer" type="HBoxContainer" unique_id=972899098]
+script = ExtResource("1_script")
+theme_override_constants/separation = 0
+
+[node name="YangKe" parent="." unique_id=2030771061 instance=ExtResource("1_1llxn")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="TraitNameLabel" type="Label" parent="." unique_id=2142609938]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "身心俱疲"

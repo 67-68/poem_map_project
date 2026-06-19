@@ -1,4 +1,4 @@
-trait_id,trait_name,topic,specific_topic,relate_to,lasting_xun,trait_effect_operations,trait_endogenous_operations
+trait_id,trait_name,topic,specific_topic,relate_to,lasting_xun,trait_effect_operations,trait_endogenous_operations,display_char
 relation_lilinfu_rumor,听闻李灵甫,RELATION,HEARD,lilinfu,,,
 relation_lilinfu_close,关系好李灵甫,RELATION,GOOD,lilinfu,,,
 relation_lilinfu_core,核心李灵甫,RELATION,CORE,lilinfu,,,

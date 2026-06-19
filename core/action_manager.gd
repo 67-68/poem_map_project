@@ -191,13 +191,17 @@ func get_available_scene_actions() -> Dictionary:
 
 	var actions := {}
 	
+	var all_actions := Database.get_actions_all()
+	Logging.info("[ActionManager] 总动作池大小: %d，blocked: %d，locked: %d" % [all_actions.size(), _blocked_actions.size(), _locked_in_actions.size()])
+	
 	# 统一去 base_prov 里拿位置数据
 	var loc = Database.get_province(PlayerState.current_location)
 	if not loc:
 		Logging.err("当前位置幽灵化: %s" % PlayerState.current_location)
 		return actions
+	Logging.info("[ActionManager] 当前位置: %s, area_tags: %s" % [PlayerState.current_location, str(loc.area_tags)])
 
-	for a_id in Database.get_actions_all():
+	for a_id in all_actions:
 		var a = Database.get_action(a_id)
 		var is_valid = true # 🤓☝️ 设立拦截签证！
 		
@@ -211,6 +215,7 @@ func get_available_scene_actions() -> Dictionary:
 			for req in a.aciton_requirements:
 				if not req.compare(PlayerState):
 					is_valid = false # 签证拒签！
+					Logging.info("[ActionManager] 动作 %s 需求未满足: %s" % [a_id, req.describe_requirement()])
 					break # 💀 打断内层循环，直接判死刑
 					
 		if not is_valid:
@@ -227,13 +232,14 @@ func get_available_scene_actions() -> Dictionary:
 						break
 						
 			if not tag_matched:
-				Logging.info("[ActionManager] 动作 %s 标签不匹配当前位置" % a_id)
+				Logging.info("[ActionManager] 动作 %s 标签不匹配当前位置（loc tags=%s, action area_tags=%s）" % [a_id, str(loc.area_tags), str(a.area_tags)])
 				continue # 没有交集，直接滚蛋
 				
 		# 3. 活到最后的才是合法动作
 		Logging.info("[ActionManager] 动作 %s 完全合法，允许装载" % a_id)
 		append_counter(actions, a_id, a)
-		
+	
+	Logging.info("[ActionManager] get_available_scene_actions: 最终可用动作数=%d（来源池=%d，blocked=%d）" % [actions.size(), all_actions.size(), _blocked_actions.size()])
 	return actions
 
 

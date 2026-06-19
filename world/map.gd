@@ -6,24 +6,8 @@ var color_2_province: Dictionary
 var prov_2_fac: Dictionary = {}
 
 func on_focus_city_map(enable: bool):
-	if enable:
-		Logging.info('change bg into city')
-		var map = TextureResLoader.get_icon_simpler(PlayerState.current_location)
-		$background/ActionMapContainer/ActionMap.texture = map
-		$background/ActionMapContainer.visible = true
-		$background/PathMesh.visible = false
-		$background/FactionMesh.visible = false
-		$background/BorderMesh.visible = false
-		$background/TerrainMesh.visible = false
-		$background/ClickMesh.visible = false
-	else:
-		Logging.info('change bg into world')
-		$background/ActionMapContainer.visible = false
-		$background/PathMesh.visible = true
-		$background/FactionMesh.visible = true
-		$background/BorderMesh.visible = true
-		$background/TerrainMesh.visible = true
-		$background/ClickMesh.visible = true
+	# 大地图已降级为纯背景，不再切换 ActionMapContainer 可见性
+	pass
 
 
 func _ready() -> void:
