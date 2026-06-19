@@ -172,7 +172,7 @@ func register(trigger_time: float, function: Callable, name: String, epitaph_tex
 		event_queue.append(event_data)
 		event_queue.sort_custom(func(a, b): return a.time < b.time)
 		future_event_registered.emit(event_data)
-		Logging.info("  → event_queue is now: %s" % event_queue.map(func(e): return "{name:%s time:%f}" % [e.get("name","?"), e.time]))
+		Logging.info("  → event_queue is now: %s" % str(event_queue.map(func(e): return "{name:%s time:%f}" % [e.get("name","?"), e.time])))
 
 func register_to_master_timeline(time: float, name: String, epitaph_text: String = ''):
 	"""

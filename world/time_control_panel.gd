@@ -1,7 +1,10 @@
-extends CanvasLayer # 或者你的根节点类型
+extends MarginContainer
 
-@onready var label_era: Label = $Margin/Panel/Margin/VBox/Label_Era
-@onready var label_greg: Label = $Margin/Panel/Margin/VBox/HBox2/Label_Gregorian
+@onready var label_era: Label = $HBox/Label_Era
+@onready var label_greg: Label = $HBox/HBox2/Label_Gregorian
+@onready var indicator = $HBox/HBox2/SpeedIndicator
+@onready var label_xun = $HBox/HBox2/Label_Xun
+@onready var time_texture = $HBox/TimeTexture
 
 func on_start_end_btn_pressed():
 	if TimeService.time_start:
@@ -28,20 +31,20 @@ func _ready():
 	EventBus.year_changed.connect(_on_year_changed)
 	EventBus.speed_changed.connect(on_speed_changed)
 	TimeService.on_xun_tick.connect(func(): 
-		$Margin/Panel/Margin/VBox/HBox2/Label_Xun.text = TimeService.current_xun
+		label_xun.text = TimeService.current_xun
 	)
 	
 func on_speed_changed(spd: float):
 	if spd == -1:
-		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "烂柯(⏸)"
+		$HBox/HBox2/SpeedIndicator.text = "烂柯(⏸)"
 	elif spd == 4:
-		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "驷马难追(4)"
+		$HBox/HBox2/SpeedIndicator.text = "驷马难追(4)"
 	elif spd == 3:
-		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "光阴似箭(3)"
+		$HBox/HBox2/SpeedIndicator.text = "光阴似箭(3)"
 	elif spd == 2:
-		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "时不我待(2)"
+		$HBox/HBox2/SpeedIndicator.text = "时不我待(2)"
 	elif spd == 1:
-		$Margin/Panel/Margin/VBox/HBox/SpeedIndicator.text = "度日如年(1)"
+		$HBox/HBox2/SpeedIndicator.text = "度日如年(1)"
 
 	
 func _on_year_changed(current_float_year: float):
@@ -56,4 +59,4 @@ func _on_year_changed(current_float_year: float):
 	label_era.text = TimeService.get_era_text(current_year)
 
 func _process(_delta):
-	$Margin/Panel/Margin/VBox/RiMianXunDayCounter.modulate = Color.WHITE.lerp(Color.DARK_RED, float(TimeService.current_day) / 10.0)
+	time_texture.modulate = Color.WHITE.lerp(Color.DARK_RED, float(TimeService.current_day) / 10.0)

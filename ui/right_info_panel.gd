@@ -24,7 +24,7 @@ const CN_NAME_MAP: Dictionary = {
 func _ready() -> void:
 	# ── 写诗按钮初始化（UI only，暂不接逻辑）──
 	var title_label: Label = _write_poem_btn.get_node("Panel/HBoxContainer/VBoxContainer/Title")
-	var context_label: Label = _write_poem_btn.get_node("Panel/HBoxContainer/VBoxContainer/Context")
+	var context_label: Label = _write_poem_btn.get_node("Panel/HBoxContainer/VBoxContainer/Outcome")
 	var icon_rect: TextureRect = _write_poem_btn.get_node("Panel/HBoxContainer/TextureRect")
 	title_label.text = "写诗"
 	context_label.text = ""

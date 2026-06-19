@@ -1,15 +1,32 @@
 class_name NarrativeOverlay extends Control
 
+# 纸带模式（极乐迪斯科式）：NarrativeOverlay 不再是一次性弹窗，
+# 而是持续的追加式事件纸带。纸带全空时才 hide()。
+#
+# 四种条目类型：
+#   - Event: 完整 TapeEntry（标题+正文+选项），选后选项变文本烙印
+#   - Cinematic: 照常弹出 CinematicOverlay，播完后纸带追加 stub 摘要
+#   - Picker: 照常弹出 Picker，选完后纸带追加 stub 摘要
+#   - FocusChat: 照常弹出 FocusChatOverlay，播完后纸带追加 stub 摘要
+#
+# dim 策略:
+#   - Queue → 新 Event 条目: dim_previous_entries()
+#   - Stack → 新 Event 条目: 不 dim
+#   - Stack → 回归 Event 条目: clear_all_dim()
+#   - 特殊条目 stub: 不主动 dim（跟随纸带当前状态）
+
 # 引用子节点
 # 🚨 event_ui 不写类型注解：class_name EventUI 在 parse 时尚未注册，
 # 但运行时 Godot 能正确解析 $EventUI 节点，调用方法无问题。
-@onready var event_ui = $EventUI
-@onready var main_card: TextureRect = $EventUI
+@onready var event_ui = $EventHistory
 @onready var dimmer: ColorRect = $Dimmer
 
 # 状态
 var current_event_data: BaseEvent
 var _tween: Tween
+
+# 纸带是否已首次展示（控制 dimmer 淡入只播一次）
+var _tape_initialized: bool = false
 
 # 事件队列 (FIFO)，防止多个事件相互覆盖
 # 每个元素为 { "data": BaseEvent, "context": Dictionary }
@@ -17,9 +34,11 @@ var _event_queue: Array[Dictionary] = []
 
 # 事件栈 (LIFO)，优先级高于普通队列
 # 栈中的事件会先于队列处理；栈空时才处理队列
-# 支持两种条目类型：
+# 支持多种条目类型：
 #   - BaseEvent 条目: { "data": BaseEvent, "context": Dictionary }
 #   - Picker 条目:    { "type": "picker", "data": Array, "on_selected": Callable, "ui_constructor": Callable }
+#   - Cinematic 条目: { "type": "cinematic", "texts": Array[String], "processed": bool }
+#   - FocusChat 条目: { "type": "focused_chat", "data": Variant, "context": Dictionary, "processed": bool }
 var _event_stack: Array[Dictionary] = []
 
 var _is_active: bool = false
@@ -64,28 +83,34 @@ func _ready() -> void:
 
 	# 确保这玩意在暂停时也能点
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	hide()
+	# 纸带模式：不在 _ready 中 hide()，由 _process_next 在带空时 hide()
 
-func _play_open_animation():
+
+# ═══════════════════════════════════════════════
+# 纸带首次展示
+# ═══════════════════════════════════════════════
+
+func _show_tape():
+	"""显示纸带面板（dimmer 淡入 + 宣纸背景显示）"""
+	if _tape_initialized:
+		show()
+		return
+
+	_tape_initialized = true
 	if _tween: _tween.kill()
-	# 必须显式声明 Tween 的 Pause 模式，以防被 TimeService 杀掉
 	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_tween.set_parallel(true).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
-
-	# 修正中心点，确保缩放动画是从屏幕中央弹出的 (假设你的锚点是全屏)
-	main_card.pivot_offset = main_card.size / 2.0
+	_tween.set_parallel(true).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 
 	show()
 
-	# A. 遮罩变暗 (确保 Dimmer 基础颜色是不透明的黑！)
+	# Dimmer 淡入
 	dimmer.modulate.a = 0.0
 	_tween.tween_property(dimmer, "modulate:a", 1.0, 0.5)
 
-	# B. 卡片弹出 (从小变大 + 透明度)
-	main_card.scale = Vector2(0.8, 0.8)
-	main_card.modulate.a = 0.0
-	_tween.tween_property(main_card, "scale", Vector2(1.0, 1.0), 0.5)
-	_tween.tween_property(main_card, "modulate:a", 1.0, 0.3)
+	# 宣纸背景淡入
+	event_ui.modulate.a = 0.0
+	_tween.tween_property(event_ui, "modulate:a", 1.0, 0.5)
+
 
 # --- 事件栈处理 ----------------------------------------
 
@@ -95,17 +120,12 @@ func _on_push_event(data: Variant, context: Dictionary):
 		return
 
 	# 🚨 检查目标事件的 entry requirement
-	# 防止 interruption 无条件 push 一个 entry condition 不满足的事件
-	# （例如 flag_libai_changhe_request >= 1 时仍 push request_libai_changhe）
 	if ev is RandomEvent and ev.requirement:
 		ev.requirement.init(context)
 		if not ev.requirement.compare(PlayerState):
 			Logging.warn("push_event: 事件 '%s' 的 entry requirement 未通过，忽略 push" % ev.name)
 			return
 
-	# 防御性深拷贝：栈中的 context 必须是完全隔离的快照
-	# 契约：调用方（PushEventOperator等）负责提供独立 context，
-	# 但这里做二次防御，防止其他 emit push_event 的路径忘记 duplicate
 	_event_stack.push_front({ "data": ev, "context": context.duplicate(true), "processed": false })
 	Logging.info("事件已推入栈: " + ev.name)
 
@@ -116,7 +136,6 @@ func _on_push_event(data: Variant, context: Dictionary):
 func _on_pop_event():
 	if _event_stack.size() > 0:
 		var entry = _event_stack.pop_front()
-		# Picker 条目没有 "data" 字段（只有 BaseEvent 条目有）
 		if entry.has("data"):
 			var ev: BaseEvent = entry.get("data")
 			if not entry.get("processed", false):
@@ -125,107 +144,75 @@ func _on_pop_event():
 		else:
 			Logging.info("pop_event: 弹出栈条目")
 	else:
-		Logging.warn("pop_event: 栈为空，忽略")
-		return
+		Logging.warn("pop_event: 栈为空，无事件可弹出")
 
-	if not _is_active:
-		_process_next()
+	# 纸带模式：pop 后立即让 _process_next 处理栈/队列中的下一个，
+	# 可能触发回归路径
+	_process_next()
 
 
 func _on_clear_scheduled_events():
-	"""
-	清空栈和队列中所有已排期的事件。
-	通常由 ClearScheduledEvents operator 在 consequence 中调用，
-	用于强制中断当前事件链。
-	
-	✅ 清空 _event_stack（所有待处理的 BaseEvent / Picker / Cinematic / FocusChat）
-	✅ 清空 _event_queue（后备队列）
-	
-	注意：不修改 _is_active，不恢复世界时间 — 这些由 _end_narrative 的自然流程处理。
-	"""
 	var stack_size = _event_stack.size()
 	var queue_size = _event_queue.size()
 	_event_stack.clear()
 	_event_queue.clear()
+
 	Logging.info("ClearScheduledEvents: 已清空栈（%d 条目）和队列（%d 条目）" % [stack_size, queue_size])
 
 
 func _on_pop_to_event(event_key: String):
-	"""
-	根据事件 ID 在栈中查找并弹出到对应层级。
-	
-	搜索顺序：从栈顶（index 0）向栈底遍历。
-	跳过 picker 条目（type == "picker"），只匹配 BaseEvent 条目。
-	匹配条件：entry.data.uuid == event_key 或 entry.data.name == event_key
-	
-	分支逻辑：
-	- ✅ 找到目标事件 → 弹出目标事件之上的所有条目，目标事件留在栈顶
-	   （标记 processed = false，使 _process_next 可以重新展示）
-	- ❌ 未找到目标事件 → Logging.err + 无效果（不修改栈）
-	"""
-	var found_index = -1
+	# 从栈顶向下找到目标事件，pop 掉它上方的所有条目
 	for i in range(_event_stack.size()):
 		var entry = _event_stack[i]
-		# 跳过 picker 条目（没有 "data" 字段的 BaseEvent）
-		if entry is Dictionary and entry.get("type") == "picker":
+		if not entry.has("data"):
+			continue
+		if entry.type == "picker" or entry.type == "cinematic" or entry.type == "focused_chat":
 			continue
 		var ev: BaseEvent = entry.get("data")
-		if ev and (ev.uuid == event_key or ev.name == event_key):
-			found_index = i
-			break
+		if _event_identity_matches(ev, event_key):
+			# 弹出 i 个条目（目标以上的），保留目标本身
+			for _j in range(i):
+				_event_stack.pop_front()
+			# 目标事件本身保留在栈顶
+			var target_entry = _event_stack.pop_front()
+			if target_entry.has("data"):
+				target_entry["processed"] = false  # 重置，让 _process_next 重新展示
+			_event_stack.push_front(target_entry)
+			Logging.info("pop_to_event: 已弹出 %d 个条目，目标事件 '%s' 保留在栈顶" % [i, event_key])
+			_process_next()
+			return
 
-	if found_index == -1:
-		Logging.err("pop_to_event: 事件 '%s' 未在栈中找到，忽略" % event_key)
-		return
-
-	# 弹出目标事件之上的所有条目（index 0 到 found_index - 1）
-	# 目标事件本身保留在栈顶，以便 _process_next 重新展示
-	for i in range(found_index):
-		var entry = _event_stack.pop_front()
-		if entry.has("data"):
-			var ev: BaseEvent = entry.get("data")
-			if not entry.get("processed", false):
-				Logging.warn("pop_to_event: 事件 '%s' 被弹出但从未被处理过！" % ev.name)
-			Logging.info("pop_to_event: 弹出栈事件 - " + ev.name)
-		else:
-			Logging.info("pop_to_event: 弹出栈条目（picker等）")
-
-	# 目标事件现在在栈顶（index 0）
-	# 重置 processed 标记，使其可以被 _process_next 重新展示
-	if _event_stack.size() > 0:
-		_event_stack[0]["processed"] = false
-		Logging.info("pop_to_event: 已弹出到事件 '%s'，准备重新展示" % event_key)
-
-	# 如果不处于活跃状态，处理下一个事件
-	if not _is_active:
-		_process_next()
+	Logging.warn("pop_to_event: 未找到目标事件 '%s'，栈中无匹配条目" % event_key)
 
 
-# --- Picker 栈条目 -------------------------------------
+func _event_identity_matches(ev: BaseEvent, event_key: String) -> bool:
+	"""判断一个 BaseEvent 是否匹配给定的 event_key"""
+	if ev._namespace and event_key.begins_with(ev._namespace):
+		return true
+	return false
+
+
+# --- Picker 栈条目生命周期 -----------------------------
 
 func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null):
 	var entry := {
 		"type": "picker",
-		"data": data.duplicate(),
+		"data": data,
 		"on_selected": on_selected,
 		"ui_constructor": ui_constructor,
 	}
 	_event_stack.push_front(entry)
-	Logging.info("Picker 已推入栈顶，可选 %d 项" % data.size())
+	Logging.info("Picker 已推入栈顶，%d 个选项" % data.size())
 
-	# 此时可能在 _end_narrative 的 execute_result 调用链中，
-	# 不要立即 _process_stack——等 _end_narrative 自然走到 _process_next
 	if not _is_active:
 		_process_stack()
 
-
-# --- FocusChat 栈条目 -----------------------------------
 
 func _on_push_focused_chat(data: Variant, context: Dictionary = {}):
 	var entry := {
 		"type": "focused_chat",
 		"data": data,
-		"context": context.duplicate(true),
+		"context": context.duplicate(),
 		"processed": false,
 	}
 	_event_stack.push_front(entry)
@@ -236,35 +223,31 @@ func _on_push_focused_chat(data: Variant, context: Dictionary = {}):
 
 
 func _show_focused_chat_from_stack(entry: Dictionary):
+	# 纸带保持可见（作为背景上下文）
+	_show_tape()
+
 	_is_active = true
 	_saved_time_scale = Engine.time_scale
-	# 像事件/Picker 一样暂停世界
 	TimeService.pause_world(true)
 
 	var data = entry.get("data")
 	var context: Dictionary = entry.get("context", {})
 	Logging.info("FocusChat 显示中")
 
-	# 🚨 NarrativeOverlay 默认是 hide() 的（_ready 中调用），
-	# 必须 show() 才能让子节点 FocusChatOverlay 可见
 	show()
 
-	# 动态实例化 FocusChatOverlay 并挂载到 NarrativeOverlay 下
 	var overlay = preload("res://ui/focus_chat_overlay.tscn").instantiate()
 	add_child(overlay)
 
-	# 连接完成信号：overlay 播完后自行 queue_free，此回调负责弹出栈并恢复
 	overlay.chat_finished.connect(func(result: ChoiceResult):
-		# 🚨 必须先 pop 当前 FocusChat，再执行 operators
-		# result.operate() 可能通过 PushFocusedChatOperator push 新事件到栈顶，
-		# 如果先 operate 再 pop_front，新 push 的条目会被误 pop
 		_event_stack.pop_front()
 		Logging.info("FocusChat 已从栈中弹出")
 
-		# 🚨 执行选项的 ChoiceResult，触发其中的 operators（如 PushFocusedChatOperator）
-		# 这是 FocusChat 链式触发的关键步骤，之前被忽略导致无法进入下一段对话
 		if result:
 			ConsequenceExecuter.execute_result(result)
+
+		# 纸带追加 stub 摘要
+		event_ui.append_stub("chat", "💬 对话")
 
 		TimeService.resume_world()
 		Engine.time_scale = _saved_time_scale
@@ -290,7 +273,6 @@ func _on_push_cinematic(texts: Array[String]):
 		_process_stack()
 
 
-# 将 data（BaseEvent 或 String key）解析为 BaseEvent
 func _resolve_event_for_stack(data: Variant) -> BaseEvent:
 	if data is BaseEvent:
 		return data
@@ -310,11 +292,16 @@ func _process_stack():
 	if _is_active:
 		return
 	if _event_stack.size() > 0:
-		# peek 不移除，留待 PopEventOperator 显式 pop / Picker 自行 pop
 		var entry = _event_stack[0]
 		if entry is Dictionary and entry.get("type") == "picker":
+			# 纸带保持可见
+			_show_tape()
+			show()
 			_show_picker_from_stack(entry)
 		elif entry is Dictionary and entry.get("type") == "cinematic":
+			# 纸带保持可见
+			_show_tape()
+			show()
 			entry["processed"] = true
 			_show_cinematic_from_stack(entry)
 		elif entry is Dictionary and entry.get("type") == "focused_chat":
@@ -338,16 +325,20 @@ func _process_next():
 		_waiting_for_animations = true
 		return
 
-	# 栈优先 (LIFO) — peek 不移除，留待 PopEventOperator 显式 pop / Picker 自行 pop
+	# 栈优先 (LIFO)
 	if _event_stack.size() > 0:
 		var entry = _event_stack[0]
 		if entry is Dictionary and entry.get("type") == "picker":
 			Logging.info("弹出栈中的下一个 Picker")
+			_show_tape()
+			show()
 			_show_picker_from_stack(entry)
 			return
 		if entry is Dictionary and entry.get("type") == "cinematic":
 			Logging.info("弹出栈中的下一个 Cinematic")
 			entry["processed"] = true
+			_show_tape()
+			show()
 			_show_cinematic_from_stack(entry)
 			return
 		if entry is Dictionary and entry.get("type") == "focused_chat":
@@ -370,6 +361,13 @@ func _process_next():
 		var next_context: Dictionary = entry.get("context", {})
 		Logging.info("弹出队列中的下一个事件: " + next_event.name)
 		apply_narrative(next_event, next_context)
+		return
+
+	# 栈和队列全空 → 清空纸带，隐藏面板
+	Logging.info("_process_next: 栈和队列全空，清空纸带并隐藏")
+	event_ui.clear_all_tape()
+	hide()
+	_tape_initialized = false
 
 
 # --- Picker 栈条目生命周期 -----------------------------
@@ -377,7 +375,6 @@ func _process_next():
 func _show_picker_from_stack(entry: Dictionary):
 	_is_active = true
 	_saved_time_scale = Engine.time_scale
-	# 像事件一样暂停世界——picker 本质上就是换了壳的事件
 	TimeService.pause_world(true)
 
 	var data: Array = entry.get("data", [])
@@ -385,11 +382,9 @@ func _show_picker_from_stack(entry: Dictionary):
 
 	Logging.info("Picker 显示中，%d 个选项" % data.size())
 	EventBus.start_picker.emit(data, ui_constructor)
-	# 不再 await end_picking —— picker 完成由 _on_end_picking 信号处理器接管
 
 
 func _on_end_picking(entity: Variant):
-	# 从栈顶找到 picker 条目
 	if _event_stack.size() == 0:
 		Logging.warn("_on_end_picking: 栈为空，没有 picker 条目")
 		return
@@ -398,25 +393,22 @@ func _on_end_picking(entity: Variant):
 		Logging.warn("_on_end_picking: 栈顶不是 picker 条目，忽略")
 		return
 
-	# 弹出 picker 条目
 	_event_stack.pop_front()
 	Logging.info("Picker 已从栈中弹出")
 
-	# 执行选择后的逻辑（accepted / rejected / not_entered 等）
 	var callback: Callable = entry.get("on_selected", Callable())
 	if callback.is_valid():
 		callback.call(entity)
 
-	# 🚩 注意：不自动 pop 触发 picker 的源事件
-	# picker 只是临时挂起的模态层，源事件仍在栈顶被 peek，
-	# 弹出 picker 后，源事件会通过 _process_next() 重新展示。
-	# 源事件的后续生命周期由其自身的 PopEventOperator 管理。
+	# 纸带追加 stub 摘要
+	var summary: String = "→ 选择"
+	if entity and entity is GameEntity and entity.has_method("get_display_name"):
+		summary = "→ 选择了 [" + entity.get_display_name() + "]"
+	event_ui.append_stub("picker", summary)
 
-	# 像事件一样恢复世界
 	TimeService.resume_world()
 	Engine.time_scale = _saved_time_scale
 	_is_active = false
-	# 处理下一个栈/队列事件
 	_process_next()
 
 
@@ -425,29 +417,37 @@ func _on_end_picking(entity: Variant):
 func _show_cinematic_from_stack(entry: Dictionary):
 	_is_active = true
 	_saved_time_scale = Engine.time_scale
-	# 像事件/Picker 一样暂停世界
 	TimeService.pause_world(true)
 
 	var texts: Array[String] = entry.get("texts", [])
 	Logging.info("Cinematic 播放中，%d 段文字" % texts.size())
 
-	# 触发 CinematicOverlay 播放
 	EventBus.cinematic_start.emit(texts)
-
-	# 等待过场播完
 	await EventBus.cinematic_finished
 
-	# 弹出栈
 	_event_stack.pop_front()
 	Logging.info("Cinematic 已从栈中弹出")
 
-	# 恢复世界
+	# 纸带追加 stub 摘要
+	var summary: String = "⚡ 过场动画"
+	if texts.size() > 0:
+		# 用第一段文字的前 20 个字符作为摘要
+		var first := texts[0] as String
+		if first.length() > 20:
+			summary = "⚡ " + first.substr(0, 20) + "…"
+		else:
+			summary = "⚡ " + first
+	event_ui.append_stub("cinematic", summary)
+
 	TimeService.resume_world()
 	Engine.time_scale = _saved_time_scale
 	_is_active = false
-	# 处理下一个栈/队列事件
 	_process_next()
 
+
+# ═══════════════════════════════════════════════
+# apply_narrative — 纸带模式核心
+# ═══════════════════════════════════════════════
 
 func apply_narrative(data: BaseEvent, context: Dictionary):
 	# 如果已有事件在播放，入队等待
@@ -456,60 +456,65 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 		Logging.info("事件已入队等待: " + data.name)
 		return
 
-	# --- Pre-event Interruption Sequence（一层递归保护）---
-	# 在事件 init 之前执行前置中断序列。
-	# 如果 check_interruption 中的 operator push 了替代事件到栈，
-	# _on_push_event 会同步触发 _process_stack -> 嵌套 apply_narrative。
-	# _is_checking_interruption 阻止这种嵌套的无限递归（仅允许一层）。
+	# --- Pre-event Interruption Sequence ---
 	if not _is_checking_interruption and data.has_method("check_interruption"):
 		_is_checking_interruption = true
 		data.check_interruption(context)
 		_is_checking_interruption = false
 
-		# 中断序列 push 了事件到栈 -> 让栈事件替代当前事件
 		if _is_active:
 			Logging.info("apply_narrative: 被中断序列替换，放弃当前事件 " + data.name)
 			return
 
+	# 先显示纸带面板（如果还没显示）
+	_show_tape()
+
 	_is_active = true
-	# data.init() 返回合并了 provider 动态生成的选项的全量数组
 	var all_options: Array = data.init(context)
 	EventBus.event_shown.emit(data)
 	if data.epitaph_text:
 		TimeService.register_to_master_timeline(data.time, data.name, data.epitaph_text)
 
-	# 1. 保存当前时间流速并彻底暂停世界
 	_saved_time_scale = Engine.time_scale
-	# 在暂停之前切换
-	#EventBus.request_change_bg_modulate.emit(data.color)
 	TimeService.pause_world(true)
 	current_event_data = data
 
-	# 3. 填充内容 — 委托给 EventUI
-	# FAST:    瞬间填充所有 UI 元素（默认，适用日常/随机事件）
-	# SLOW:    打字机逐阶段显示（title → desc → example → option，适用 story_arcs）
-	# SLOWEST: 同打字机模式，但速度更慢（≈12 字/秒，适用需要沉浸感的线性剧本）
-	match data.display_speed:
-		BaseEvent.DisplaySpeed.SLOW:
-			Logging.info("NarrativeOverlay.apply_narrative: SLOW 模式（event='%s', namespace='%s'）" % [data.name, data._namespace])
-			event_ui.display_slow(data, all_options, context, EventUI.SLOW_SPEED)
-		BaseEvent.DisplaySpeed.SLOWEST:
-			Logging.info("NarrativeOverlay.apply_narrative: SLOWEST 模式（event='%s', namespace='%s'）" % [data.name, data._namespace])
-			event_ui.display_slow(data, all_options, context, EventUI.SLOWEST_SPEED)
-		_:
-			Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
-			event_ui.display_instant(data, all_options, context)
+	# 用 instance_id 作为纸带条目稳定标识符
+	var entry_id := str(data.get_instance_id())
+
+	# ── 分支：回归路径 vs 新事件路径 ──
+	if event_ui.has_entry(entry_id):
+		# === 回归路径（stack pop 后回归）===
+		Logging.info("apply_narrative: 回归路径，复活 entry_id='%s'" % entry_id)
+		event_ui.clear_all_dim()
+		event_ui.revive_entry(entry_id, all_options)
+		event_ui.scroll_to_entry(entry_id)
+	else:
+		# === 新事件路径 ===
+		Logging.info("apply_narrative: 新事件路径，追加 entry_id='%s' from_stack=%s" % [entry_id, _current_from_stack])
+
+		# dim 策略：queue 事件 dim 前序，stack 事件不 dim
+		if not _current_from_stack:
+			event_ui.dim_previous_entries()
+
+		# 根据显示速度路由
+		match data.display_speed:
+			BaseEvent.DisplaySpeed.SLOW:
+				Logging.info("NarrativeOverlay.apply_narrative: SLOW 模式（event='%s'）" % data.name)
+				event_ui.display_slow(data, all_options, context, _current_from_stack, entry_id, EventUI.SLOW_SPEED)
+			BaseEvent.DisplaySpeed.SLOWEST:
+				Logging.info("NarrativeOverlay.apply_narrative: SLOWEST 模式（event='%s'）" % data.name)
+				event_ui.display_slow(data, all_options, context, _current_from_stack, entry_id, EventUI.SLOWEST_SPEED)
+			_:
+				Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
+				event_ui.append_event_entry(data, all_options, context, _current_from_stack, entry_id)
 
 	AudioManager.play_sad()
 
-	# 5. 进场动画 (The Entrance)
-	_play_open_animation()
-
-	# 6. 扫描 context 中的 interrupt_event 字段，存储 event_key 和清理后的 context
+	# 扫描 context 中的 interrupt_event 字段
 	var interrupt_event_data = context.get("interrupt_event", null)
 	if interrupt_event_data is Dictionary:
 		_pending_interrupt_event_key = interrupt_event_data.get("event_key", "")
-		# 深拷贝 context 并移除 interrupt_event，避免推到目标事件时造成无限递归
 		_pending_interrupt_context = context.duplicate(true)
 		_pending_interrupt_context.erase("interrupt_event")
 		if not _pending_interrupt_event_key.is_empty():
@@ -521,102 +526,71 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 		_pending_interrupt_context = {}
 		Logging.debug("NarrativeOverlay: context 中无 interrupt_event")
 
-func _on_option_selected(_choice_result):
-	# 这里可以加个逻辑：记录玩家的选择，或者处理 disabled 选项的拒绝音效
-	# 如果是有效选择，关闭界面
-	_end_narrative(_choice_result)
+	# 滚动到底部
+	event_ui.scroll_to_bottom()
 
-func _end_narrative(choice):
-	# 1. 退场动画 (The Exit)
-	EventBus.request_restore_bg_modulate.emit(-1)
-	if _tween: _tween.kill()
-	_tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 
-	# 反向操作
-	_tween.tween_property(dimmer, "modulate:a", 0.0, 0.3)
-	_tween.tween_property(main_card, "scale", Vector2(0.9, 0.9), 0.3)
-	_tween.tween_property(main_card, "modulate:a", 0.0, 0.3)
+# ═══════════════════════════════════════════════
+# 选项选择与事件结束 — 纸带模式
+# ═══════════════════════════════════════════════
 
-	# 等动画播完再执行逻辑！
-	await _tween.finished
+func _on_option_selected(_choice_result, _choice_text: String = ""):
+	_end_narrative(_choice_result, _choice_text)
 
-	hide()
 
-	# 3. 恢复世界 (以及之前保存的时间流速)
+func _end_narrative(choice, choice_text: String = ""):
+	# 纸带模式：不退场、不 hide()，选项变文本烙印留在纸带上
+	var entry_id := str(current_event_data.get_instance_id())
+	event_ui.mark_chosen(entry_id, choice_text)
+
+	# 恢复世界
 	TimeService.resume_world()
 	Engine.time_scale = _saved_time_scale
-	# 🚩 _is_active 保持 true，防止 execute_result 期间的 push_picker/push_event
-	# 触发 _process_stack 导致栈事件被中途处理（与 operator 迭代产生竞态）
 	Logging.done('narrative finished')
-	EventBus.event_confirmed.emit() # 绑定事件系统信号
+	EventBus.event_confirmed.emit()
 
-	# 快照当前事件数据，防止 execute_result 期间触发新事件覆盖 current_event_data
-	# 注意：ConsequenceExecuter.execute_result 可能同步触发 apply_narrative 设置新的
-	# current_event_data，所以必须在 execute_result 之前快照。
-	# 同时，不能在这里设置 current_event_data = null，因为 execute_result 触发的
-	# 新事件正在显示中，其 _end_narrative 需要读取 current_event_data。
-	# current_event_data 会在下一次 apply_narrative 时被自然覆盖。
 	var _completed_data: BaseEvent = current_event_data
 	await ConsequenceExecuter.execute_result(choice)
 
-	# 🚩 守卫：如果 execute_result 已经触发了栈内容的处理（例如 PushFocusedChatOperator
-	# 在 _is_active=false 时经由 _on_push_focused_chat → _process_stack 显示了 FocusChat），
-	# 那么栈顶条目的 processed=true，此时不能盲目重置 _is_active，否则已显示的内容
-	# 会被 _process_next 重复触发（双弹窗 Bug）。
-	#
-	# 🔴 注意：必须区分「当前事件自身的栈条目」（processed=true 但从栈上弹出即可）
-	# 和「execute_result 期间被激活的自管理条目（FocusChat/Picker/Cinematic）」。
-	# 前者的 processed=true 是 _process_stack 在处理当前事件时设置的，不是异常。
+	# 🚩 守卫：处理 execute_result 期间可能激活的栈条目
 	if _event_stack.size() > 0 and _event_stack[0].get("processed", false):
-		var entry = _event_stack[0]
-		var entry_type = entry.get("type", "")
+		var guard_entry = _event_stack[0]
+		var entry_type = guard_entry.get("type", "")
 
-		# 分支 A: 当前事件自身在栈上的条目 → 正常弹出，让系统继续处理后续事件
-		if entry.get("data") == _completed_data:
+		# 分支 A: 当前事件自身在栈上的条目 → 正常弹出
+		if guard_entry.get("data") == _completed_data:
 			_event_stack.pop_front()
 			Logging.info("_end_narrative: 自动弹出已完成的栈事件 '%s'" % _completed_data.name)
 
 		# 分支 B: execute_result 期间 FocusChat/Picker/Cinematic 被激活
-		# → 由它们自行管理生命周期（chat_finished / _on_end_picking / cinematic_finished 会 pop 自身）
 		elif entry_type in ["focused_chat", "picker", "cinematic"]:
 			Logging.info("_end_narrative: 栈顶条目已处理（如 FocusChat 已显示），跳过 _is_active 重置")
 			return
 
-		# 分支 C: 未知类型（防御性，不应发生）
+		# 分支 C: 未知类型（防御性）
 		else:
 			Logging.warn("_end_narrative: 栈顶存在未知类型条目 type='%s'，强制弹出" % entry_type)
 			_event_stack.pop_front()
 
-	# 🚩 execute_result 完成后才释放 _is_active，避免 operator 迭代中途
-	# push_picker/push_event 误触 _process_stack
 	_is_active = false
-
-	# 处理后续事件：栈 (LIFO) 优先，队列 (FIFO) 次之
 	_process_next()
 
 
-# --- 中断按钮处理 -----------------------------------------
+# --- 中断按钮处理（纸带模式）----------------------------
 
 func _on_interrupt_pressed() -> void:
 	Logging.info("NarrativeOverlay._on_interrupt_pressed: 中断按钮被点击，目标事件='%s'" % _pending_interrupt_event_key)
 
-	# 1. 退场动画（快速闭合）
-	if _tween: _tween.kill()
-	_tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	_tween.tween_property(dimmer, "modulate:a", 0.0, 0.2)
-	_tween.tween_property(main_card, "modulate:a", 0.0, 0.2)
+	# 纸带模式：不退场、不 hide()，当前条目标记为已中断
+	var entry_id := str(current_event_data.get_instance_id())
+	event_ui.mark_chosen(entry_id, "[中断]")
 
-	# 等动画播完再执行逻辑
-	await _tween.finished
-
-	hide()
-
-	# 2. 恢复世界时间
+	# 恢复世界时间
 	TimeService.resume_world()
 	Engine.time_scale = _saved_time_scale
 	EventBus.event_confirmed.emit()
 
-	# 3. 如果当前事件在栈顶 → pop 掉（干净退出，不触发任何 option operator）
+	# 如果当前事件在栈顶 → pop 掉
 	if _event_stack.size() > 0:
 		var top_entry = _event_stack[0]
 		if top_entry.has("data") and top_entry.get("data") == current_event_data:
@@ -627,16 +601,13 @@ func _on_interrupt_pressed() -> void:
 	else:
 		Logging.info("_on_interrupt_pressed: 栈为空，不操作栈")
 
-	# 4. 如果目标事件 key 有效，在清除状态前先快照
 	var target_event_key := _pending_interrupt_event_key
 	var target_context := _pending_interrupt_context
 	_pending_interrupt_event_key = ""
 	_pending_interrupt_context = {}
 
-	# 5. 释放活跃锁
 	_is_active = false
 
-	# 6. 如果目标事件 key 有效，推到栈中让 _process_next 处理
 	if not target_event_key.is_empty():
 		EventBus.push_event.emit(target_event_key, target_context)
 		Logging.info("_on_interrupt_pressed: 目标事件 '%s' 已入栈" % target_event_key)
@@ -647,7 +618,6 @@ func _on_interrupt_pressed() -> void:
 
 # --- 动画追踪 ------------------------------------------
 
-## 注册动画到追踪列表（Operator 或 Picker 在创建后调用此方法）
 func track_animation(anim: AnimationObject) -> void:
 	if anim.finished.is_connected(_on_animation_finished.bind(anim)):
 		return
@@ -658,7 +628,6 @@ func track_animation(anim: AnimationObject) -> void:
 
 func _on_animation_finished(anim: AnimationObject) -> void:
 	_active_animations.erase(anim)
-	# 如果 _process_next 正在等待所有动画播完，播完后恢复事件处理
 	if _waiting_for_animations and _active_animations.is_empty():
 		_waiting_for_animations = false
 		_process_next()
