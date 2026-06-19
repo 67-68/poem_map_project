@@ -17,7 +17,7 @@ func describe_preview() -> String:
 	var prop = Database.get_property(property)
 	if not prop:
 		return ""
-	var cn_name = prop.name if not prop.name.is_empty() else property
+	var cn_name = prop.get_display_name() if not prop.name.is_empty() else property
 	var target_perception = prop.get_staged_perception_at_threshold(value)
 	return "%s → %s" % [cn_name, target_perception]
 

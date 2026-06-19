@@ -47,6 +47,19 @@ func get_staged_perception_text() -> String:
 ## 根据变化量 delta 返回描述性文本（用于飘字系统）
 ## delta > 0: 增加, delta < 0: 减少
 ## 优先匹配 change_perceptions 配置，未配置时 fallback 到 get_staged_perception_text()
+
+## 获取本地化显示名称
+## 将 name 转换为 PROPERTY_NAME_* 翻译 key，通过 tr() 获取中文显示名
+## 如果翻译表中没有对应条目，则回退到原始 name
+func get_display_name() -> String:
+	if name.is_empty():
+		return ""
+	var key = "PROPERTY_NAME_" + name.to_upper()
+	var translated = tr(key)
+	# 如果翻译结果等于 key 本身（未找到翻译），则回退到原始 name
+	if translated == key:
+		return name
+	return translated
 func get_change_perception_text(delta: int) -> String:
 	var abs_delta = abs(delta)
 	

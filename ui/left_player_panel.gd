@@ -88,7 +88,7 @@ func _rebuild_prop_grid() -> void:
 		var prop: Property = props[prop_key]
 		var label := Label.new()
 		label.theme_type_variation = &"DefaultText"
-		label.text = "「%s」：%s" % [prop.name, prop.get_staged_perception_text()]
+		label.text = "「%s」：%s" % [prop.get_display_name(), prop.get_staged_perception_text()]
 		_prop_grid.add_child(label)
 		Logging.info("LeftPlayerPanel: added prop label: %s" % label.text)
 
@@ -106,7 +106,7 @@ func _refresh_prop_grid() -> void:
 	for prop_key in props:
 		var prop: Property = props[prop_key]
 		var label: Label = children[idx]
-		var new_text := "「%s」：%s" % [prop.name, prop.get_staged_perception_text()]
+		var new_text := "「%s」：%s" % [prop.get_display_name(), prop.get_staged_perception_text()]
 		if label.text != new_text:
 			label.text = new_text
 			Logging.info("LeftPlayerPanel: updated prop label: %s" % new_text)
@@ -129,26 +129,11 @@ func _rebuild_trait_grid() -> void:
 			Logging.warn("LeftPlayerPanel: trait key '%s' not found in Database" % trait_key)
 			continue
 		
-		# HBoxContainer: icon + name
-		var hbox := HBoxContainer.new()
-		hbox.add_theme_constant_override("separation", 0)
-		
-		# 图标
-		if trait_data.icon:
-			var icon_rect := TextureRect.new()
-			icon_rect.texture = trait_data.icon
-			icon_rect.custom_minimum_size = Vector2(24, 24)
-			icon_rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-			hbox.add_child(icon_rect)
-		
-		# 名称
-		var name_label := Label.new()
-		name_label.theme_type_variation = &"DefaultText"
-		name_label.text = trait_data.name
-		hbox.add_child(name_label)
-		
-		_trait_grid.add_child(hbox)
-		Logging.info("LeftPlayerPanel: added trait hbox: %s" % trait_data.name)
+		# 使用 TraitDemonstrator（阳刻印章 + 名称）
+		var demonstrator = preload("res://ui/trait_demonstrator.tscn").instantiate()
+		demonstrator.set_trait(trait_data)
+		_trait_grid.add_child(demonstrator)
+		Logging.info("LeftPlayerPanel: added trait demonstrator: %s" % trait_data.name)
 
 func _refresh_trait_grid() -> void:
 	var trait_keys: Array = PlayerState.traits

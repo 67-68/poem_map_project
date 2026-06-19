@@ -60,7 +60,7 @@ func describe_preview() -> String:
     var prop = Database.get_property(property)
     if not prop:
         return ""
-    var cn_name = prop.name if not prop.name.is_empty() else property
+    var cn_name = prop.get_display_name() if not prop.name.is_empty() else property
     var arrow = "↑" if value > 0 else "↓"
     var perception_text = prop.get_change_perception_text(value)
     if perception_text.is_empty():

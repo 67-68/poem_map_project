@@ -7,7 +7,7 @@ func apply_prop_key(prop_key: String):
 		return
 	$VBoxContainer/HBoxContainer/TextureRect.texture = prop.icon if prop.get("icon") else TextureResLoader.get_icon(GameConfig.DEFAULT_ICON_PATH)
 	# 使用阶段感知文本替代裸数值
-	$VBoxContainer/HBoxContainer/Label.text = prop.name + ": " + prop.get_staged_perception_text()
+	$VBoxContainer/HBoxContainer/Label.text = prop.get_display_name() + ": " + prop.get_staged_perception_text()
 	
 	# 更新进度条
 	var progress_bar = $VBoxContainer/ProgressBar
