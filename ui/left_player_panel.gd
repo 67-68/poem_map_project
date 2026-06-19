@@ -1,85 +1,193 @@
 extends PanelContainer
 
-# 记录 UI 初始的锚点位置（绝对真理）
+## 左侧玩家信息面板
+## 显示玩家名字、属性、特质、野心按钮（hover 弹出 AmbitionHUD）
+## 保留侧滑动画（EventBus.request_change_left_panel_visibility）
+
+@export var ambition_hud: Control  # 由 main.tscn 连线到 AmbitionHUD 实例
+
+# ── 节点引用 ─────────────────────────────────────────────
+@onready var _name_label: Label = $"Panel/VBox/ScrollContainer/V/NameLabel"
+@onready var _ambition_btn: LinkButton = $"Panel/VBox/ScrollContainer/V/Ambition"
+@onready var _prop_grid: GridContainer = $"Panel/VBox/ScrollContainer/V/PropGrid"
+@onready var _trait_grid: GridContainer = $"Panel/VBox/ScrollContainer/V/TraitGrid"
+
+# 侧滑动画
 var _original_pos_x: float
 var _is_animating: bool = false
-var _is_visible_state: bool = true # 记录逻辑上的可见性
-
-# 动画滑动的距离
-const SLIDE_OFFSET: float = 50.0 
+var _is_visible_state: bool = true
+const SLIDE_OFFSET: float = 50.0
 const ANIM_DURATION: float = 0.3
 
+# ── 生命周期 ─────────────────────────────────────────────
+
 func _ready() -> void:
-    $V/NameLabel.text = PlayerState.player_name
-    $V/PlayerRect.texture = TextureResLoader.get_icon_simpler(PlayerState.player_name)
-    TimeService.on_xun_tick.connect(func():
-        update_dynamic_data()
-    )
-    EventBus.request_change_left_panel_visibility.connect(func():
-        if _is_visible_state:
-            hide_panel()
-        else:
-            show_panel()
-    )
+	Logging.info("LeftPlayerPanel: _ready start")
+	
+	# 静态数据
+	_name_label.text = PlayerState.player_name
+	Logging.info("LeftPlayerPanel: player_name=%s" % PlayerState.player_name)
+	
+	# 动态填充 PropGrid / TraitGrid
+	_rebuild_prop_grid()
+	_rebuild_trait_grid()
+	
+	# 订阅逐旬刷新
+	TimeService.on_xun_tick.connect(_on_stat_changed)
+	Logging.info("LeftPlayerPanel: connected to TimeService.on_xun_tick")
+	
+	# 野心 LinkButton → HoverPopupManager
+	if ambition_hud:
+		HoverPopupManager.register(_ambition_btn, ambition_hud, 0.5, 0.15)
+		Logging.info("LeftPlayerPanel: registered ambition_hud with HoverPopupManager")
+	else:
+		Logging.warn("LeftPlayerPanel: ambition_hud is null, hover popup disabled")
+	
+	# 野心按钮文本
+	_update_ambition_text()
+	
+	# 侧滑动画
+	_original_pos_x = position.x
+	
+	EventBus.request_change_left_panel_visibility.connect(func():
+		if _is_visible_state:
+			hide_panel()
+		else:
+			show_panel()
+	)
+	Logging.info("LeftPlayerPanel: _ready complete")
 
-    _record_original_position() # 没有container, 不需要call_deferred
+# ── 动态数据刷新 ────────────────────────────────────────
 
-func update_dynamic_data():
-    # 更新玩家名称
-    if PlayerState.ambition:
-        $V/AmbitionLabel.text = '野心' + PlayerState.ambition.name + '\n' 
-        $V/AmbitionLabel.text += PlayerState.ambition.get_stage_perception()
-    
-    var text = 'props: \n'
-    for s in Database.get_properties_all():
-        text += "%s: %s\n" % [s, Database.get_property(s).val]
-        text += 'stage-percep: %s\n' % Database.get_property(s).get_staged_perception_text()
-    $V/Scroll/V/PropLabel.text = text
+func _on_stat_changed() -> void:
+	Logging.info("LeftPlayerPanel: stat changed, refreshing")
+	_refresh_prop_grid()
+	_refresh_trait_grid()
+	_update_ambition_text()
 
-    # 展示所有trait
-    var trait_text = 'traits: \n'
-    for t in PlayerState.traits:
-        trait_text += "- %s\n" % t
-    $V/Scroll/V/TraitLabel.text = trait_text
+func _update_ambition_text() -> void:
+	if PlayerState.ambition:
+		_ambition_btn.text = "【野心】" + PlayerState.ambition.name
+		Logging.info("LeftPlayerPanel: ambition text updated to '%s'" % _ambition_btn.text)
+	else:
+		_ambition_btn.text = "【野心】暂无"
+		Logging.info("LeftPlayerPanel: no ambition data")
+
+# ── PropGrid 构建 ────────────────────────────────────────
+
+func _rebuild_prop_grid() -> void:
+	# 清空占位子节点
+	for child in _prop_grid.get_children():
+		child.queue_free()
+	Logging.info("LeftPlayerPanel: PropGrid cleared")
+	
+	var props: Dictionary = Database.get_properties_all()
+	Logging.info("LeftPlayerPanel: building PropGrid with %d properties" % props.size())
+	
+	for prop_key in props:
+		var prop: Property = props[prop_key]
+		var label := Label.new()
+		label.theme_type_variation = &"DefaultText"
+		label.text = "「%s」：%s" % [prop.name, prop.get_staged_perception_text()]
+		_prop_grid.add_child(label)
+		Logging.info("LeftPlayerPanel: added prop label: %s" % label.text)
+
+func _refresh_prop_grid() -> void:
+	var props: Dictionary = Database.get_properties_all()
+	var children := _prop_grid.get_children()
+	
+	# 如果子节点数量变了，重建
+	if children.size() != props.size():
+		Logging.info("LeftPlayerPanel: PropGrid count changed (%d→%d), rebuilding" % [children.size(), props.size()])
+		_rebuild_prop_grid()
+		return
+	
+	var idx := 0
+	for prop_key in props:
+		var prop: Property = props[prop_key]
+		var label: Label = children[idx]
+		var new_text := "「%s」：%s" % [prop.name, prop.get_staged_perception_text()]
+		if label.text != new_text:
+			label.text = new_text
+			Logging.info("LeftPlayerPanel: updated prop label: %s" % new_text)
+		idx += 1
+
+# ── TraitGrid 构建 ───────────────────────────────────────
+
+func _rebuild_trait_grid() -> void:
+	# 清空占位子节点
+	for child in _trait_grid.get_children():
+		child.queue_free()
+	Logging.info("LeftPlayerPanel: TraitGrid cleared")
+	
+	var trait_keys: Array = PlayerState.traits
+	Logging.info("LeftPlayerPanel: building TraitGrid with %d traits" % trait_keys.size())
+	
+	for trait_key in trait_keys:
+		var trait_data: Trait = Database.get_trait(trait_key)
+		if not trait_data:
+			Logging.warn("LeftPlayerPanel: trait key '%s' not found in Database" % trait_key)
+			continue
+		
+		# HBoxContainer: icon + name
+		var hbox := HBoxContainer.new()
+		hbox.add_theme_constant_override("separation", 0)
+		
+		# 图标
+		if trait_data.icon:
+			var icon_rect := TextureRect.new()
+			icon_rect.texture = trait_data.icon
+			icon_rect.custom_minimum_size = Vector2(24, 24)
+			icon_rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			hbox.add_child(icon_rect)
+		
+		# 名称
+		var name_label := Label.new()
+		name_label.theme_type_variation = &"DefaultText"
+		name_label.text = trait_data.name
+		hbox.add_child(name_label)
+		
+		_trait_grid.add_child(hbox)
+		Logging.info("LeftPlayerPanel: added trait hbox: %s" % trait_data.name)
+
+func _refresh_trait_grid() -> void:
+	var trait_keys: Array = PlayerState.traits
+	var children := _trait_grid.get_children()
+	
+	if children.size() != trait_keys.size():
+		Logging.info("LeftPlayerPanel: TraitGrid count changed (%d→%d), rebuilding" % [children.size(), trait_keys.size()])
+		_rebuild_trait_grid()
+		return
+	# 暂时不做逐字刷新（trait 变更更常见的触发路径是 add/remove，届时重建即可）
+	# 如果未来需要逐字刷新，可以在这里实现
+
+# ── 侧滑动画（保留不动）─────────────────────────────────
 
 func _record_original_position():
-    _original_pos_x = position.x
+	_original_pos_x = position.x
 
-# 消失：从当前（右）向左滑动，并渐隐
 func hide_panel():
-    if _is_animating or not _is_visible_state: return
-    _is_animating = true
-    _is_visible_state = false
-    
-    var tween = create_tween()
-    # 🤓☝️ 极其优雅的并行与缓动曲线
-    tween.set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-    
-    # 往左移动 SLIDE_OFFSET，同时透明度变为 0
-    tween.tween_property(self, "position:x", _original_pos_x - SLIDE_OFFSET, ANIM_DURATION)
-    tween.tween_property(self, "modulate:a", 0.0, ANIM_DURATION)
-    
-    # 动画彻底结束后，再把它从渲染树中物理剔除（防止阻挡鼠标点击）
-    tween.chain().tween_callback(func():
-        visible = false
-        _is_animating = false
-    )
+	if _is_animating or not _is_visible_state: return
+	_is_animating = true
+	_is_visible_state = false
+	
+	var tween = create_tween()
+	tween.set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position:x", _original_pos_x - SLIDE_OFFSET, ANIM_DURATION)
+	tween.tween_property(self, "modulate:a", 0.0, ANIM_DURATION)
+	tween.chain().tween_callback(func():
+		visible = false
+		_is_animating = false
+	)
 
-# 展示：从左向右滑回原位，并渐显
 func show_panel():
-    if _is_animating or _is_visible_state: return
-    _is_animating = true
-    _is_visible_state = true
-    
-    # 💀 必须先显示出来！否则后面的动画全是在虚空中播放！
-    visible = true 
-    
-    var tween = create_tween()
-    tween.set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-    
-    # 🤓☝️ 这就是你要的 .from() 魔法：
-    # 指定目标为原位/不透明，但要求引擎从 (原位-偏移量) 和 (完全透明) 开始动画！
-    tween.tween_property(self, "position:x", _original_pos_x, ANIM_DURATION).from(_original_pos_x - SLIDE_OFFSET)
-    tween.tween_property(self, "modulate:a", 1.0, ANIM_DURATION).from(0.0)
-    
-    tween.chain().tween_callback(func(): _is_animating = false)
+	if _is_animating or _is_visible_state: return
+	_is_animating = true
+	_is_visible_state = true
+	visible = true
+	
+	var tween = create_tween()
+	tween.set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position:x", _original_pos_x, ANIM_DURATION).from(_original_pos_x - SLIDE_OFFSET)
+	tween.tween_property(self, "modulate:a", 1.0, ANIM_DURATION).from(0.0)
+	tween.chain().tween_callback(func(): _is_animating = false)

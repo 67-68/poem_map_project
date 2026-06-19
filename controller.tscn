@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://1h1wvymxjj15"]
+
+[ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="1_jldtq"]
+
+[node name="Control" type="Control" unique_id=1054828129]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 67.0
+offset_bottom = 66.0
+script = ExtResource("1_jldtq")
+
+[node name="Controller" type="TextEdit" parent="." unique_id=2037976093]
+z_index = 100
+layout_mode = 0
+offset_left = -2.0
+offset_top = -1.0
+offset_right = 342.0
+offset_bottom = 231.0
+
+[node name="Button" type="Button" parent="." unique_id=113978325]
+custom_minimum_size = Vector2(80, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.5
+offset_top = 167.0
+offset_right = 44.5
+offset_bottom = 217.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[connection signal="gui_input" from="Controller" to="Controller" method="_on_gui_input"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

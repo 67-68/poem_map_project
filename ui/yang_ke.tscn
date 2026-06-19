@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://12nirlu58pgm"]
+
+[ext_resource type="Texture2D" uid="uid://bf8yoa100nf57" path="res://assets/profile/yang_ke.png" id="1_byqnv"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="2_3ecjc"]
+
+[node name="YangKe" type="TextureRect" unique_id=2030771061]
+custom_minimum_size = Vector2(25, 25)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_byqnv")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1129042612]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="MarginContainer" unique_id=1972134718]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.7882353, 0.16470589, 0.16470589, 1)
+theme_override_fonts/font = ExtResource("2_3ecjc")
+theme_override_font_sizes/font_size = 14
+text = "疲"
+horizontal_alignment = 1
+vertical_alignment = 1

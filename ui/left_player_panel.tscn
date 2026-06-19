@@ -1,72 +1,128 @@
-[gd_scene load_steps=5 format=3 uid="uid://bagmf63e3hmbi"]
+[gd_scene format=3 uid="uid://bagmf63e3hmbi"]
 
+[ext_resource type="Script" uid="uid://b5h78o2br8c0d" path="res://ui/left_player_panel.gd" id="1_g0yrc"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_r5rtj"]
-[ext_resource type="Script" uid="uid://b5h78o2br8c0d" path="res://ui/left_player_panel.gd" id="2_rlk2q"]
-[ext_resource type="Texture2D" uid="uid://b6dbp485agxus" path="res://data/default.png" id="3_kxi5c"]
+[ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="3_a0q7c"]
+[ext_resource type="PackedScene" uid="uid://12nirlu58pgm" path="res://ui/yang_ke.tscn" id="3_r5rtj"]
+[ext_resource type="Texture2D" uid="uid://cnu5fltxkafq3" path="res://assets/profile/maobi.png" id="4_kxi5c"]
+[ext_resource type="Script" uid="uid://7kgs8nddroem" path="res://ui/maobi_shake.gd" id="5_a0q7c"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_htxhm"]
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r5rtj"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+shadow_color = Color(0, 0, 0, 0.45882353)
+shadow_size = 10
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rlk2q"]
 texture = ExtResource("1_r5rtj")
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 
-[node name="LeftPlayerPanel" type="PanelContainer"]
-custom_minimum_size = Vector2(250, 500)
-anchors_preset = -1
-anchor_left = 0.02
-anchor_top = 0.5
-anchor_right = 0.02
-anchor_bottom = 0.5
-offset_top = -20.0
-offset_right = 40.0
-offset_bottom = 20.0
-grow_vertical = 2
-size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxTexture_htxhm")
-script = ExtResource("2_rlk2q")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b7l41"]
+texture = ExtResource("4_kxi5c")
 
-[node name="V" type="VBoxContainer" parent="."]
+[node name="ShadowBox" type="PanelContainer" unique_id=1492512419]
+custom_minimum_size = Vector2(350, 450)
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 351.0
+offset_bottom = 451.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_r5rtj")
+script = ExtResource("1_g0yrc")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1476221656]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_rlk2q")
+
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=751569234]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="V"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5939798, 0, 0.20468542, 1)
-text = "杜甫"
-horizontal_alignment = 1
-
-[node name="PlayerRect" type="TextureRect" parent="V"]
-custom_minimum_size = Vector2(0, 210)
-layout_mode = 2
-texture = ExtResource("3_kxi5c")
-expand_mode = 1
-
-[node name="AmbitionLabel" type="RichTextLabel" parent="V"]
-layout_mode = 2
-theme_override_colors/default_color = Color(0.50513715, 0.20151088, 4.813075e-08, 1)
-bbcode_enabled = true
-text = "野望：致君尧舜上
-进度：门卫逐渐熟络你的面孔"
-fit_content = true
-
-[node name="Scroll" type="ScrollContainer" parent="V"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBox" unique_id=1184716942]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="V" type="VBoxContainer" parent="V/Scroll"]
+[node name="V" type="VBoxContainer" parent="Panel/VBox/ScrollContainer" unique_id=1704935683]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PropLabel" type="RichTextLabel" parent="V/Scroll/V"]
+[node name="NameLabel" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=542808679]
 layout_mode = 2
-theme_override_colors/default_color = Color(0.2854644, 0.1797638, 0.036245197, 1)
-text = "Money: 50"
-fit_content = true
+theme_type_variation = &"TitleText"
+text = "杜甫[字子美]"
+horizontal_alignment = 1
 
-[node name="TraitLabel" type="RichTextLabel" parent="V/Scroll/V"]
+[node name="Label" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1735738424]
 layout_mode = 2
-theme_override_colors/default_color = Color(0.2854644, 0.1797638, 0.036245197, 1)
-text = "Trait
-- Example Trait"
-fit_content = true
+theme_type_variation = &"DefaultText"
+text = "京兆府·举子"
+horizontal_alignment = 1
+
+[node name="Ambition" type="LinkButton" parent="Panel/VBox/ScrollContainer/V" unique_id=1758074030]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_a0q7c")
+theme_type_variation = &"ButtonTheme"
+text = "【野心】致君尧舜上"
+text_direction = 1
+
+[node name="HSep2" type="HSeparator" parent="Panel/VBox/ScrollContainer/V" unique_id=894122215]
+layout_mode = 2
+
+[node name="Prop" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1291814332]
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "属性"
+
+[node name="PropGrid" type="GridContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=2139811712]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="Panel/VBox/ScrollContainer/V/PropGrid" unique_id=1198488489]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "「康」：身强体健"
+
+[node name="Label2" type="Label" parent="Panel/VBox/ScrollContainer/V/PropGrid" unique_id=1633792586]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "「财」：小有积蓄"
+
+[node name="Label3" type="Label" parent="Panel/VBox/ScrollContainer/V/PropGrid" unique_id=398140795]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "「疲」：身心俱疲"
+
+[node name="HSep3" type="HSeparator" parent="Panel/VBox/ScrollContainer/V" unique_id=2024317451]
+layout_mode = 2
+
+[node name="Prop2" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=126398624]
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "特质"
+
+[node name="TraitGrid" type="GridContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=1030034591]
+layout_mode = 2
+columns = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBox/ScrollContainer/V/TraitGrid" unique_id=1921177037]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="YangKe" parent="Panel/VBox/ScrollContainer/V/TraitGrid/HBoxContainer" unique_id=2030771061 instance=ExtResource("3_r5rtj")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Label3" type="Label" parent="Panel/VBox/ScrollContainer/V/TraitGrid/HBoxContainer" unique_id=801681512]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "身心俱疲"
+
+[node name="MaobiContainer" type="PanelContainer" parent="Panel/VBox" unique_id=479986917]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"PanelTheme"
+theme_override_styles/panel = SubResource("StyleBoxTexture_b7l41")
+script = ExtResource("5_a0q7c")

@@ -444,3 +444,29 @@ static func tick_all_cooldowns() -> void:
 
 	for flag_id in flags_to_remove:
 		PlayerState.remove_flag(flag_id)
+
+
+# ═══════════════════════════════════════════════════════════
+# 聚合查询 — 一次性获取所有目标的关系数据
+# ═══════════════════════════════════════════════════════════
+
+## 批量获取所有关系数据，供风闻面板等 UI 调用。
+##
+## @param targets: target_tag 数组，如 ["libai", "youxiangfu", ...]
+##                 来源: ENUMS.RELATION_TARGET.keys() → to_lower()
+## @return Dictionary: {target_tag: {leverage_keys: Array[String],
+##                                    help: int,
+##                                    favor: int,
+##                                    on_cooldown: bool}}
+## 无数据的目标返回空列表 / 0 / 默认值，不报错。
+static func get_all_relations(targets: Array[String]) -> Dictionary:
+	var result: Dictionary = {}
+	for target_tag in targets:
+		result[target_tag] = {
+			leverage_keys = get_leverage_keys(target_tag),
+			help = get_help(target_tag),
+			favor = get_favor(target_tag),
+			on_cooldown = is_on_cooldown(target_tag),
+		}
+	Logging.info("RelationFlagManager: get_all_relations queried %d targets" % targets.size())
+	return result

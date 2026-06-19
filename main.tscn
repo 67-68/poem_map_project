@@ -1,36 +1,22 @@
 [gd_scene format=3 uid="uid://cj83wfrijuncn"]
 
 [ext_resource type="PackedScene" uid="uid://digoh2dpxyn08" path="res://world/map.tscn" id="1_1bvp3"]
-[ext_resource type="Script" uid="uid://bvrkrcjw4keic" path="res://core/timeline.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://des4gpjt6ia0o" path="res://ui/ui.gd" id="3_2cqfq"]
 [ext_resource type="PackedScene" uid="uid://c1yjebq75g71y" path="res://world/camera.tscn" id="3_7mycd"]
-[ext_resource type="Shader" uid="uid://q4nidyfwfnf0" path="res://shaders/flash_light.gdshader" id="3_272bh"]
-[ext_resource type="Script" uid="uid://cwpqgyfo0ofqe" path="res://tests/test_bubble.gd" id="3_yaehf"]
-[ext_resource type="PackedScene" uid="uid://5shth4lj0a8t" path="res://ui/pop_up.tscn" id="4_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://8gipdq3nfr2d" path="res://ui/poet_descriptor.tscn" id="5_lquwl"]
-[ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="6_7mycd"]
-[ext_resource type="Texture2D" uid="uid://dafe3626abotl" path="res://assets/poem_bgs/juanzhou.png" id="7_w48qg"]
-[ext_resource type="PackedScene" uid="uid://cnkr0y7c3yen2" path="res://features/poem_popup.tscn" id="9_4c57u"]
+[ext_resource type="Shader" uid="uid://dhcglds1jsi1h" path="res://shaders/blur_bg.gdshader" id="3_xuqvo"]
 [ext_resource type="PackedScene" uid="uid://5q6bljtvpw4y" path="res://core/time_service.tscn" id="9_kek77"]
 [ext_resource type="PackedScene" uid="uid://q2vqxhwq5yvp" path="res://core/size_service.tscn" id="11_efxa6"]
 [ext_resource type="PackedScene" uid="uid://u88ye4xgrk8h" path="res://characters/narrative_overlay.tscn" id="11_vivmo"]
 [ext_resource type="PackedScene" uid="uid://ctja8gxdepflp" path="res://ui/simple_toast.tscn" id="12_2cqfq"]
-[ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="12_vivmo"]
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
-[ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="15_074og"]
 [ext_resource type="PackedScene" uid="uid://6ilphg3nn6wx" path="res://ui/debug_info.tscn" id="16_cegan"]
-[ext_resource type="PackedScene" uid="uid://3s0i4r8kv6l4" path="res://ui/top_stat_item.tscn" id="17_82xsv"]
-[ext_resource type="Script" uid="uid://n7ktpe1ycxpa" path="res://ui/stats_items.gd" id="17_getpj"]
-[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="19_lswn8"]
-[ext_resource type="Script" uid="uid://cga3u2teu5n7e" path="res://ui/player_button.gd" id="21_xuqvo"]
 [ext_resource type="PackedScene" uid="uid://bagmf63e3hmbi" path="res://ui/left_player_panel.tscn" id="22_0odxb"]
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
 [ext_resource type="Script" uid="uid://dv28khs0ehggj" path="res://ui/time_breath_ui.gd" id="24_htxhm"]
+[ext_resource type="PackedScene" uid="uid://1h1wvymxjj15" path="res://controller.tscn" id="24_jq2sk"]
 [ext_resource type="PackedScene" uid="uid://ci5u7rtqn6kan" path="res://ui/tomb_stone_screen.tscn" id="24_seu75"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="25_4k2k6"]
-[ext_resource type="Script" uid="uid://bucayho8g0lwb" path="res://ui/ambition_widget.gd" id="26_0rl1p"]
 [ext_resource type="Script" uid="uid://cgm5optu1xcgx" path="res://debuggers/linter_debugger_container.gd" id="27_xuqvo"]
-[ext_resource type="PackedScene" uid="uid://c2faq3olq16yp" path="res://ui/poem_start.tscn" id="28_ok6jj"]
 [ext_resource type="Script" uid="uid://dgg4voth1dy5y" path="res://debuggers/event_action_tag_linter.gd" id="28_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://dmsdo48sr46y6" path="res://ui/poem_creation_page.tscn" id="29_facbu"]
 [ext_resource type="PackedScene" uid="uid://c4cm25a8sdyj" path="res://ui/picker.tscn" id="30_b1qrp"]
@@ -41,91 +27,60 @@
 [ext_resource type="Script" uid="uid://cljs6te3xyu25" path="res://ui/social_wall_panel.gd" id="34_d2t1y"]
 [ext_resource type="PackedScene" uid="uid://cua5pcl2s75q" path="res://ui/cinematic_overlay.tscn" id="35_cinematic"]
 [ext_resource type="Script" uid="uid://kfq72j60w3b8" path="res://core/fatigue_manager.gd" id="36_fatigue"]
-[ext_resource type="Script" uid="uid://7kgs8nddroem" path="res://ui/maobi_shake.gd" id="37_maobi"]
+[ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="37_ambition"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mycd"]
-shader = ExtResource("3_272bh")
-shader_parameter/current_progress = 0.0
-shader_parameter/future_color = Color(0, 0.8, 1, 0.3)
-shader_parameter/edge_softness = 0.01
-
-[sub_resource type="Theme" id="Theme_h2yge"]
-default_base_scale = 1.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0cp0l"]
-resource_local_to_scene = true
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-texture = ExtResource("7_w48qg")
-texture_margin_left = 15.0
-texture_margin_right = 19.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_seu75"]
-content_margin_top = 20.0
-texture = ExtResource("19_lswn8")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d2t1y"]
-resource_local_to_scene = true
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-texture = ExtResource("7_w48qg")
-texture_margin_left = 15.0
-texture_margin_right = 19.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qsp4k"]
+shader = ExtResource("3_xuqvo")
+shader_parameter/blur_amount = 2.5
+shader_parameter/darken_amount = 0.5
 
 [node name="Main" type="Node" unique_id=1215220767]
 
-[node name="Worldroot" type="Node2D" parent="." unique_id=1353938909]
+[node name="MapLayer" type="CanvasLayer" parent="." unique_id=70316122]
+layer = -1
 
-[node name="Map" parent="Worldroot" unique_id=471961980 instance=ExtResource("1_1bvp3")]
+[node name="Worldroot" type="Node2D" parent="MapLayer" unique_id=1353938909]
 
-[node name="Camera" parent="Worldroot" unique_id=797425123 instance=ExtResource("3_7mycd")]
+[node name="Map" parent="MapLayer/Worldroot" unique_id=471961980 instance=ExtResource("1_1bvp3")]
+
+[node name="Camera" parent="MapLayer/Worldroot" unique_id=797425123 instance=ExtResource("3_7mycd")]
 position = Vector2(569, 326)
 
-[node name="TestBubble" type="Node2D" parent="Worldroot" unique_id=1341291808]
-position = Vector2(627, 295)
-script = ExtResource("3_yaehf")
+[node name="BlurOverlay" type="ColorRect" parent="MapLayer/Worldroot" unique_id=744947912]
+material = SubResource("ShaderMaterial_qsp4k")
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1984579798]
 script = ExtResource("3_2cqfq")
 
-[node name="HSlider" type="HSlider" parent="UI" unique_id=2015339477]
-material = SubResource("ShaderMaterial_7mycd")
-anchors_preset = 12
-anchor_top = 1.0
+[node name="Margin" type="MarginContainer" parent="UI" unique_id=1914085020]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1.0
-offset_top = -17.0
-offset_right = -1.0
-offset_bottom = -1.0
 grow_horizontal = 2
-grow_vertical = 0
-theme = SubResource("Theme_h2yge")
-max_value = 1.0
-step = 0.001
-script = ExtResource("1_ig7tw")
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="PopUp" parent="UI" unique_id=817806392 instance=ExtResource("4_1bvp3")]
-offset_left = -97.5
-offset_right = 97.5
-size_flags_horizontal = 8
-theme_override_styles/panel = SubResource("StyleBoxTexture_0cp0l")
+[node name="HBox" type="HBoxContainer" parent="UI/Margin" unique_id=152554922]
+layout_mode = 2
 
-[node name="PoetDescriptor" parent="UI" unique_id=285994705 instance=ExtResource("5_lquwl")]
+[node name="LeftPanel" parent="UI/Margin/HBox" unique_id=1345405692 instance=ExtResource("22_0odxb")]
+layout_mode = 2
+ambition_hud = NodePath("../../../AmbitionHUD")
 
-[node name="PoemPopup" parent="UI" unique_id=319491823 instance=ExtResource("9_4c57u")]
-offset_left = -302.15143
-offset_top = 185.14502
-offset_right = -262.15143
-offset_bottom = 225.14502
+[node name="Control" type="Control" parent="UI/Margin/HBox" unique_id=917736082]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightPanel" parent="UI/Margin/HBox" unique_id=604963217 instance=ExtResource("23_lswn8")]
+custom_minimum_size = Vector2(350, 450)
+layout_mode = 2
 
 [node name="SimpleToast" parent="UI" unique_id=446129939 instance=ExtResource("12_2cqfq")]
-
-[node name="TimeControlPanel" parent="UI" unique_id=16413986 instance=ExtResource("12_vivmo")]
 
 [node name="DebugInfo" parent="UI" unique_id=405302701 instance=ExtResource("16_cegan")]
 visible = false
@@ -133,84 +88,6 @@ offset_left = 281.0
 offset_top = 72.0
 offset_right = 615.51245
 offset_bottom = 272.0
-
-[node name="StatsItems" type="Control" parent="UI" unique_id=1187231369]
-layout_mode = 3
-anchor_left = 0.1
-anchor_right = 0.1
-offset_left = -116.0
-offset_right = 516.8
-offset_bottom = 208.0
-script = ExtResource("17_getpj")
-
-[node name="MoneyItem" parent="UI/StatsItems" unique_id=1246353456 instance=ExtResource("17_82xsv")]
-layout_mode = 0
-offset_right = 120.0
-offset_bottom = 55.0
-scale = Vector2(1, 1)
-
-[node name="HealthItem" parent="UI/StatsItems" unique_id=1140237008 instance=ExtResource("17_82xsv")]
-layout_mode = 0
-offset_left = 124.0
-offset_right = 244.0
-offset_bottom = 55.0
-scale = Vector2(1, 1)
-
-[node name="Drunk" parent="UI/StatsItems" unique_id=1379709045 instance=ExtResource("17_82xsv")]
-layout_mode = 0
-offset_left = 377.0
-offset_top = 5.0
-offset_right = 497.0
-offset_bottom = 60.0
-scale = Vector2(1, 1)
-
-[node name="Fatigue" parent="UI/StatsItems" unique_id=1923204151 instance=ExtResource("17_82xsv")]
-layout_mode = 0
-offset_left = 248.0
-offset_right = 368.0
-offset_bottom = 55.0
-scale = Vector2(1, 1)
-
-[node name="Burnout" parent="UI/StatsItems" unique_id=316053088 instance=ExtResource("17_82xsv")]
-layout_mode = 0
-offset_left = 387.8
-offset_top = 73.0
-offset_right = 507.8
-offset_bottom = 128.0
-scale = Vector2(1, 1)
-
-[node name="Sick" parent="UI/StatsItems" unique_id=184446418 instance=ExtResource("17_82xsv")]
-layout_mode = 0
-offset_left = 397.8
-offset_top = 138.0
-offset_right = 517.8
-offset_bottom = 193.0
-scale = Vector2(1, 1)
-
-[node name="LeftButtonContainer" type="PanelContainer" parent="UI" unique_id=1535708155]
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -250.0
-offset_right = 20.0
-offset_bottom = 250.0
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_seu75")
-
-[node name="V" type="VBoxContainer" parent="UI/LeftButtonContainer" unique_id=1076796302]
-layout_mode = 2
-
-[node name="PlayerButton" type="TextureButton" parent="UI/LeftButtonContainer/V" unique_id=2145643907]
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-tooltip_text = "打开人物面板"
-ignore_texture_size = true
-stretch_mode = 0
-script = ExtResource("21_xuqvo")
-
-[node name="LeftPlayerPanel" parent="UI" unique_id=1345405692 instance=ExtResource("22_0odxb")]
-
-[node name="RightInfoPanel" parent="UI" unique_id=604963217 instance=ExtResource("23_lswn8")]
 
 [node name="TombStoneScreen" parent="UI" unique_id=1673320443 instance=ExtResource("24_seu75")]
 visible = false
@@ -233,32 +110,6 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0.7766542, 0.60110056, 1)
 theme_override_fonts/font = ExtResource("25_4k2k6")
 text = "test time change"
-
-[node name="AmbitionWidget" type="VBoxContainer" parent="UI" unique_id=6740903]
-anchors_preset = -1
-anchor_left = 0.64
-anchor_right = 0.64
-offset_left = -160.0
-offset_right = 160.0
-offset_bottom = 212.0
-grow_horizontal = 2
-script = ExtResource("26_0rl1p")
-
-[node name="ToggleBtn" type="Button" parent="UI/AmbitionWidget" unique_id=531737500]
-layout_mode = 2
-text = "当前没有野心"
-
-[node name="AmbitionHUD" parent="UI/AmbitionWidget" unique_id=2026890542 instance=ExtResource("15_074og")]
-layout_mode = 2
-
-[node name="PoemStart" parent="UI" unique_id=1480581259 instance=ExtResource("28_ok6jj")]
-process_mode = 3
-z_index = 4
-offset_left = -72.0
-offset_top = -23.200012
-offset_right = 67.0
-offset_bottom = 36.799988
-theme_override_styles/panel = SubResource("StyleBoxTexture_d2t1y")
 
 [node name="PoemCreation" parent="UI" unique_id=1490017236 instance=ExtResource("29_facbu")]
 process_mode = 3
@@ -307,66 +158,23 @@ offset_bottom = 132.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MaobiContainer" type="PanelContainer" parent="UI" unique_id=1375616340]
-z_index = 10
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -20.0
-offset_bottom = 20.0
-grow_horizontal = 0
-grow_vertical = 2
-script = ExtResource("37_maobi")
-
-[node name="TextureRect" type="TextureRect" parent="UI/MaobiContainer" unique_id=837485037]
-layout_mode = 2
-
 [node name="SocialWallPanel" parent="UI" unique_id=1780260616 instance=ExtResource("33_0cp0l")]
 visible = false
 script = ExtResource("34_d2t1y")
 
-[node name="NarrativeOverlay" parent="UI" unique_id=1251280475 instance=ExtResource("11_vivmo")]
+[node name="AmbitionHUD" parent="UI" unique_id=382947561 instance=ExtResource("37_ambition")]
 visible = false
+
+[node name="NarrativeOverlay" parent="UI" unique_id=1251280475 instance=ExtResource("11_vivmo")]
 z_index = 8
-offset_left = -450.0
-offset_top = -300.0
-offset_right = 450.0
-offset_bottom = 300.0
+custom_minimum_size = Vector2(0, 0)
+offset_left = -216.0
+offset_top = -315.0
+offset_right = 212.0
+offset_bottom = 338.67615
 scale = Vector2(1, 0.96530986)
 
-[node name="Control" type="Control" parent="UI" unique_id=1108839830]
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 67.0
-offset_bottom = 66.0
-script = ExtResource("6_7mycd")
-
-[node name="Controller" type="TextEdit" parent="UI/Control" unique_id=1744803703]
-z_index = 100
-layout_mode = 0
-offset_left = -2.0
-offset_top = -1.0
-offset_right = 342.0
-offset_bottom = 231.0
-
-[node name="Button" type="Button" parent="UI/Control" unique_id=419248851]
-custom_minimum_size = Vector2(80, 50)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -35.5
-offset_top = 167.0
-offset_right = 44.5
-offset_bottom = 217.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="Controller" parent="UI" unique_id=1054828129 instance=ExtResource("24_jq2sk")]
 
 [node name="Picker" parent="UI" unique_id=213326312 instance=ExtResource("30_b1qrp")]
 visible = false
@@ -396,8 +204,3 @@ script = ExtResource("36_fatigue")
 
 [node name="CinematicOverlay" parent="." unique_id=1377896074 instance=ExtResource("35_cinematic")]
 visible = false
-
-[connection signal="value_changed" from="UI/HSlider" to="UI/HSlider" method="_on_value_changed"]
-[connection signal="pressed" from="UI/LeftButtonContainer/V/PlayerButton" to="UI/LeftButtonContainer/V/PlayerButton" method="_on_pressed"]
-[connection signal="gui_input" from="UI/Control/Controller" to="UI/Control/Controller" method="_on_gui_input"]
-[connection signal="pressed" from="UI/Control/Button" to="UI/Control" method="_on_button_pressed"]

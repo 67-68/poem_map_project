@@ -1,19 +1,30 @@
 [gd_scene format=3 uid="uid://bgv42km6rey70"]
 
-[ext_resource type="Texture2D" uid="uid://st52l6u6hob6" path="res://assets/profile/little_paper.png" id="1_qvv8g"]
 [ext_resource type="Script" uid="uid://ojn7m81iv33i" path="res://ui/right_info_panel.gd" id="2_3crwo"]
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_j2cme"]
 [ext_resource type="PackedScene" uid="uid://d4k6orjo2c3h1" path="res://ui/scene_action_scroll.tscn" id="4_3crwo"]
 [ext_resource type="PackedScene" uid="uid://cu1a2mhu4xv3n" path="res://ui/decision_scroll.tscn" id="5_3crwo"]
+[ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="5_lnxk4"]
+[ext_resource type="PackedScene" uid="uid://c2m0tcydkhvro" path="res://ui/action_button.tscn" id="6_3crwo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3crwo"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+shadow_color = Color(0, 0, 0, 0.45882353)
+shadow_size = 10
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lnxk4"]
-texture = ExtResource("1_qvv8g")
-texture_margin_left = 20.0
-texture_margin_top = 20.0
-texture_margin_right = 20.0
-texture_margin_bottom = 20.0
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+texture = ExtResource("2_j2cme")
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 
-[node name="RightInfoPanel" type="PanelContainer" unique_id=694608092]
-custom_minimum_size = Vector2(350, 450)
+[node name="ShadowBox" type="PanelContainer" unique_id=694608092]
+custom_minimum_size = Vector2(350, 500)
 anchors_preset = -1
 anchor_left = 0.95
 anchor_top = 0.5
@@ -24,18 +35,62 @@ offset_top = -20.0
 offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_lnxk4")
+theme_override_styles/panel = SubResource("StyleBoxFlat_3crwo")
 script = ExtResource("2_3crwo")
 
-[node name="V" type="VBoxContainer" parent="." unique_id=1359430561]
+[node name="Panel" type="PanelContainer" parent="." unique_id=1085748511]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_lnxk4")
+
+[node name="V" type="VBoxContainer" parent="Panel" unique_id=1359430561]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="V" unique_id=1436855159]
+[node name="TimeControlPanel" parent="Panel/V" unique_id=1263529797 instance=ExtResource("5_lnxk4")]
 layout_mode = 2
 
-[node name="SceneActionScr" parent="V/HBoxContainer" unique_id=507890747 instance=ExtResource("4_3crwo")]
+[node name="HSeparator" type="HSeparator" parent="Panel/V" unique_id=2067380814]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/V" unique_id=360085244]
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "风闻"
+
+[node name="InfoGrid" type="GridContainer" parent="Panel/V" unique_id=1897292568]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/V/InfoGrid" unique_id=1104806615]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "右相府：「死穴：西市私盐」  「恩义」"
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/V" unique_id=1463732044]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="Panel/V" unique_id=762180155]
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "决议"
+
+[node name="DecisionScr" parent="Panel/V" unique_id=2114190949 instance=ExtResource("5_3crwo")]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_vertical = 1
+
+[node name="HSeparator3" type="HSeparator" parent="Panel/V" unique_id=1637280986]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Panel/V" unique_id=1098974097]
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "行动"
+
+[node name="WritePoemContainer" type="VBoxContainer" parent="Panel/V" unique_id=836503812]
+layout_mode = 2
+
+[node name="WritePoemBtn" parent="Panel/V/WritePoemContainer" unique_id=3936185618 instance=ExtResource("6_3crwo")]
+layout_mode = 2
+
+[node name="SceneActionScr" parent="Panel/V" unique_id=507890747 instance=ExtResource("4_3crwo")]
 layout_mode = 2
 horizontal_scroll_mode = 0
-
-[node name="DecisionScr" parent="V/HBoxContainer" unique_id=2114190949 instance=ExtResource("5_3crwo")]
-layout_mode = 2

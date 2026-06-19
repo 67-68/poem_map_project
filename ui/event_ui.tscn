@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://6x6ysodpktqy"]
+
+[ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="1_ufy3p"]
+[ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="2_qrvr7"]
+
+[node name="Event" type="VBoxContainer" unique_id=198044391]
+custom_minimum_size = Vector2(200, 0)
+
+[node name="HBox" type="HBoxContainer" parent="." unique_id=491879260]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="HBox" unique_id=245641313]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = &"TitleText"
+text = "title"
+autowrap_mode = 3
+script = ExtResource("1_ufy3p")
+
+[node name="InterruptBtn" type="Button" parent="HBox" unique_id=1134293268]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_type_variation = &"ButtonTheme"
+text = "interruptBtn"
+
+[node name="ExampleLabel" type="RichTextLabel" parent="." unique_id=318671725]
+clip_contents = false
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+bbcode_enabled = true
+text = "example"
+fit_content = true
+
+[node name="ContentLabel" type="RichTextLabel" parent="." unique_id=1208982363]
+clip_contents = false
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+bbcode_enabled = true
+text = "content"
+fit_content = true
+
+[node name="OptionBtns" parent="." unique_id=764113464 instance=ExtResource("2_qrvr7")]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2

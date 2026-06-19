@@ -1,19 +1,21 @@
 [gd_scene format=3 uid="uid://u88ye4xgrk8h"]
 
 [ext_resource type="Script" uid="uid://dk5iruu4bknq6" path="res://characters/narrative_overlay.gd" id="1_htcev"]
-[ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="2_id4jo"]
-[ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="3_qlww5"]
+[ext_resource type="PackedScene" uid="uid://6x6ysodpktqy" path="res://ui/event_ui.tscn" id="3_ec6an"]
 [ext_resource type="Script" uid="uid://bfap7ivfv8w2v" path="res://characters/event_ui.gd" id="4_1hjkf"]
 
 [node name="NarrativeOverlay" type="Control" unique_id=756398830]
 z_index = 100
-custom_minimum_size = Vector2(900, 600)
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -216.0
+offset_top = -315.0
+offset_right = 212.0
+offset_bottom = 338.67615
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_htcev")
@@ -28,7 +30,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.6)
 
-[node name="EventUI" type="TextureRect" parent="." unique_id=1937522382]
+[node name="EventHistory" type="TextureRect" parent="." unique_id=1937522382]
 self_modulate = Color(1, 1, 1, 0.19607843)
 layout_mode = 1
 anchors_preset = 15
@@ -39,7 +41,7 @@ grow_vertical = 2
 expand_mode = 2
 script = ExtResource("4_1hjkf")
 
-[node name="Margin" type="MarginContainer" parent="EventUI" unique_id=328263658]
+[node name="Margin" type="MarginContainer" parent="EventHistory" unique_id=328263658]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,40 +53,13 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 20
 
-[node name="VBox" type="VBoxContainer" parent="EventUI/Margin" unique_id=104575616]
+[node name="ScrollContainer" type="ScrollContainer" parent="EventHistory/Margin" unique_id=1870292442]
 layout_mode = 2
 
-[node name="HBox" type="HBoxContainer" parent="EventUI/Margin/VBox" unique_id=1676507336]
-layout_mode = 2
-
-[node name="TitleLabel" type="Label" parent="EventUI/Margin/VBox/HBox" unique_id=1228479842]
+[node name="VBox_TapeContent" type="VBoxContainer" parent="EventHistory/Margin/ScrollContainer" unique_id=104575616]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "test"
-autowrap_mode = 3
-script = ExtResource("2_id4jo")
-
-[node name="InterruptBtn" type="Button" parent="EventUI/Margin/VBox/HBox" unique_id=1568982158]
-layout_mode = 2
-
-[node name="ExampleLabel" type="RichTextLabel" parent="EventUI/Margin/VBox" unique_id=562525502]
-clip_contents = false
-custom_minimum_size = Vector2(800, 0)
-layout_mode = 2
-bbcode_enabled = true
-fit_content = true
-
-[node name="ContentLabel" type="RichTextLabel" parent="EventUI/Margin/VBox" unique_id=2138047978]
-clip_contents = false
-custom_minimum_size = Vector2(800, 0)
-layout_mode = 2
-bbcode_enabled = true
-fit_content = true
-
-[node name="Control" type="Control" parent="EventUI/Margin/VBox" unique_id=497428212]
-layout_mode = 2
 size_flags_vertical = 3
 
-[node name="OptionBtns" parent="EventUI/Margin/VBox" unique_id=603856624 instance=ExtResource("3_qlww5")]
+[node name="Event" parent="EventHistory/Margin/ScrollContainer/VBox_TapeContent" unique_id=198044391 instance=ExtResource("3_ec6an")]
 layout_mode = 2

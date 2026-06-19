@@ -1,120 +1,100 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcqlc8yx4uo44"]
+[gd_scene format=3 uid="uid://bcqlc8yx4uo44"]
 
 [ext_resource type="Script" uid="uid://cy2dg1dthfmt5" path="res://world/time_control_panel.gd" id="1_25hr5"]
-[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_eoern"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_v2d34"]
-[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="3_v2d34"]
-[ext_resource type="Texture2D" uid="uid://c2vd1b2lnqctp" path="res://assets/ri_mian.jpg" id="5_wxhbx"]
+[ext_resource type="Texture2D" uid="uid://l280xbxc3ixw" path="res://assets/candle_main.PNG" id="5_wxhbx"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_25hr5"]
-texture = ExtResource("1_eoern")
-texture_margin_left = 15.0
-texture_margin_top = 15.0
-texture_margin_right = 15.0
-texture_margin_bottom = 15.0
-
-[sub_resource type="LabelSettings" id="LabelSettings_wxhbx"]
-shadow_color = Color(0, 0, 0, 1)
-
-[node name="TimeControlPanel" type="CanvasLayer"]
+[node name="Margin" type="MarginContainer" unique_id=1416243622]
 process_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.5
+offset_top = -66.0
+offset_right = 84.5
+offset_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
 script = ExtResource("1_25hr5")
 
-[node name="Margin" type="MarginContainer" parent="."]
-process_mode = 3
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -130.0
-offset_bottom = 89.0
-grow_horizontal = 0
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
+[node name="HBoxContainer" type="VBoxContainer" parent="." unique_id=75601818]
+layout_mode = 2
+size_flags_vertical = 0
 
-[node name="Panel" type="PanelContainer" parent="Margin"]
+[node name="Label_Era" type="Label" parent="HBoxContainer" unique_id=675401599]
 process_mode = 3
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_25hr5")
-
-[node name="Margin" type="MarginContainer" parent="Margin/Panel"]
-process_mode = 3
-layout_mode = 2
-
-[node name="VBox" type="VBoxContainer" parent="Margin/Panel/Margin"]
-process_mode = 3
-layout_mode = 2
-
-[node name="Label_Era" type="Label" parent="Margin/Panel/Margin/VBox"]
-process_mode = 3
-layout_mode = 2
+size_flags_horizontal = 4
 theme = ExtResource("2_v2d34")
-theme_type_variation = &"CnStyledFont"
-theme_override_fonts/font = ExtResource("3_v2d34")
+theme_type_variation = &"TitleText"
 text = "天宝十四载"
-label_settings = SubResource("LabelSettings_wxhbx")
 
-[node name="HBox2" type="HBoxContainer" parent="Margin/Panel/Margin/VBox"]
+[node name="HBox2" type="HBoxContainer" parent="HBoxContainer" unique_id=1329272013]
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="Label_Gregorian" type="Label" parent="Margin/Panel/Margin/VBox/HBox2"]
+[node name="SpeedIndicator" type="Label" parent="HBoxContainer/HBox2" unique_id=1396029595]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"DefaultText"
+text = "⏸"
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer/HBox2" unique_id=400820493]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label_Gregorian" type="Label" parent="HBoxContainer/HBox2" unique_id=272728942]
 process_mode = 3
 modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
 layout_mode = 2
 theme = ExtResource("2_v2d34")
+theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
 text = "test"
 
-[node name="Label_Xun" type="Label" parent="Margin/Panel/Margin/VBox/HBox2"]
+[node name="Label_Xun" type="Label" parent="HBoxContainer/HBox2" unique_id=431041916]
 process_mode = 3
 modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
 layout_mode = 2
 theme = ExtResource("2_v2d34")
+theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
 text = "上旬"
 
-[node name="HBox" type="HBoxContainer" parent="Margin/Panel/Margin/VBox"]
+[node name="RiMianXunDayCounter" type="TextureRect" parent="HBoxContainer" unique_id=797531913]
+custom_minimum_size = Vector2(77, 77)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("5_wxhbx")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="HBox" type="HBoxContainer" parent="HBoxContainer" unique_id=783313824]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="SpeedDown" type="Button" parent="Margin/Panel/Margin/VBox/HBox"]
+[node name="SpeedDown" type="Button" parent="HBoxContainer/HBox" unique_id=1939965589]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "减速"
+theme_type_variation = &"ButtonTheme"
 text = "-"
 
-[node name="FlowPause" type="Button" parent="Margin/Panel/Margin/VBox/HBox"]
+[node name="FlowPause" type="Button" parent="HBoxContainer/HBox" unique_id=606298550]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "停止/开始"
+theme_type_variation = &"ButtonTheme"
 text = "⏸/▶"
 
-[node name="Skip" type="Button" parent="Margin/Panel/Margin/VBox/HBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "跳过"
-text = "skip"
-
-[node name="SpeedUp" type="Button" parent="Margin/Panel/Margin/VBox/HBox"]
+[node name="SpeedUp" type="Button" parent="HBoxContainer/HBox" unique_id=753981742]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "加速"
+theme_type_variation = &"ButtonTheme"
 text = "+"
-
-[node name="VSeparator" type="VSeparator" parent="Margin/Panel/Margin/VBox/HBox"]
-layout_mode = 2
-
-[node name="SpeedIndicator" type="Label" parent="Margin/Panel/Margin/VBox/HBox"]
-layout_mode = 2
-text = "⏸"
-
-[node name="RiMianXunDayCounter" type="TextureRect" parent="Margin/Panel/Margin/VBox"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("5_wxhbx")
-expand_mode = 1
-
-[connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/SpeedDown" to="." method="slow_down"]
-[connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/FlowPause" to="." method="on_start_end_btn_pressed"]
-[connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/Skip" to="." method="_on_next_poet_button_pressed"]
-[connection signal="pressed" from="Margin/Panel/Margin/VBox/HBox/SpeedUp" to="." method="speed_up"]
