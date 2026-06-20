@@ -62,6 +62,7 @@ func _construct_layout() -> void:
 	_title_label.name = "TitleLabel"
 	_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_title_label.theme_type_variation = "TitleText"
+	_title_label.add_theme_color_override(&"font_color", NarrativeOverlay.DIM_HISTORY_INK_COLOR)
 	vbox.add_child(_title_label)
 
 	# ── HSeparator 2 ──
@@ -80,6 +81,7 @@ func _construct_layout() -> void:
 	_content_rtl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_content_rtl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_content_rtl.theme_type_variation = "NarrativeText"
+	_content_rtl.add_theme_color_override(&"default_color", NarrativeOverlay.DIM_HISTORY_INK_COLOR)
 	vbox.add_child(_content_rtl)
 
 	# ── HSeparator 3 ──

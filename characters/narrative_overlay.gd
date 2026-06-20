@@ -52,6 +52,9 @@ var _saved_time_scale: float = 1.0
 var _pending_interrupt_event_key: String = ""
 var _pending_interrupt_context: Dictionary = {}
 
+## 结算面板标记 — is_settlement 事件使用 Picker 式全屏高斯模糊而非事件层地图模糊
+var _is_settlement: bool = false
+
 # 动画追踪 — 等待后台 AnimationObject 播完再处理下一个事件
 var _active_animations: Array[AnimationObject] = []
 var _waiting_for_animations: bool = false
@@ -603,9 +606,6 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	# 先显示纸带面板（如果还没显示）
 	_show_tape()
 
-	# 触发地图高斯模糊 + 压暗
-	BlurManager.trigger_event_blur()
-
 	_is_active = true
 	var all_options: Array = data.init(context)
 	EventBus.event_shown.emit(data)
@@ -623,6 +623,7 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	if event_ui.has_entry(entry_id):
 		# === 回归路径（stack pop 后回归）===
 		Logging.info("apply_narrative: 回归路径，复活 entry_id='%s'" % entry_id)
+		BlurManager.trigger_event_blur()
 		event_ui.clear_all_dim()
 		event_ui.revive_entry(entry_id, all_options)
 		event_ui.scroll_to_entry(entry_id)
@@ -637,12 +638,15 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 		# ── 结算检测：结算事件走专用渲染路径，绕过打字机 ──
 		if context.get("is_settlement", false):
 			Logging.info("NarrativeOverlay.apply_narrative: 检测到结算事件，走专用渲染路径")
+			BlurManager.show_picker_blur()
+			_is_settlement = true
 			event_ui.append_settlement_entry(data, context)
 			# 结算不需要中断按钮
 			_pending_interrupt_event_key = ""
 			_pending_interrupt_context = {}
 			# 跳过 display_speed 路由，公共逻辑（register_scroll / AudioManager / scroll_to_bottom）在外部统一执行
 		else:
+			BlurManager.trigger_event_blur()
 			# 根据显示速度路由
 			match data.display_speed:
 				BaseEvent.DisplaySpeed.SLOW:
@@ -691,6 +695,11 @@ func _end_narrative(choice, choice_text: String = ""):
 	# 纸带模式：不退场、不 hide()，选项变文本烙印留在纸带上
 	var entry_id := str(current_event_data.get_instance_id())
 	event_ui.mark_chosen(entry_id, choice_text)
+
+	# ── 结算面板：清除 Picker 式全屏高斯模糊 ──
+	if _is_settlement:
+		BlurManager.hide_picker_blur()
+		_is_settlement = false
 
 	# 恢复世界
 	TimeService.resume_world()
