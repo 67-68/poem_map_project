@@ -634,17 +634,26 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 		if not _current_from_stack:
 			event_ui.dim_previous_entries()
 
-		# 根据显示速度路由
-		match data.display_speed:
-			BaseEvent.DisplaySpeed.SLOW:
-				Logging.info("NarrativeOverlay.apply_narrative: SLOW 模式（event='%s'）" % data.name)
-				event_ui.display_slow(data, all_options, context, _current_from_stack, entry_id, EventUI.SLOW_SPEED)
-			BaseEvent.DisplaySpeed.SLOWEST:
-				Logging.info("NarrativeOverlay.apply_narrative: SLOWEST 模式（event='%s'）" % data.name)
-				event_ui.display_slow(data, all_options, context, _current_from_stack, entry_id, EventUI.SLOWEST_SPEED)
-			_:
-				Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
-				event_ui.append_event_entry(data, all_options, context, _current_from_stack, entry_id)
+		# ── 结算检测：结算事件走专用渲染路径，绕过打字机 ──
+		if context.get("is_settlement", false):
+			Logging.info("NarrativeOverlay.apply_narrative: 检测到结算事件，走专用渲染路径")
+			event_ui.append_settlement_entry(data, context)
+			# 结算不需要中断按钮
+			_pending_interrupt_event_key = ""
+			_pending_interrupt_context = {}
+			# 跳过 display_speed 路由，公共逻辑（register_scroll / AudioManager / scroll_to_bottom）在外部统一执行
+		else:
+			# 根据显示速度路由
+			match data.display_speed:
+				BaseEvent.DisplaySpeed.SLOW:
+					Logging.info("NarrativeOverlay.apply_narrative: SLOW 模式（event='%s'）" % data.name)
+					event_ui.display_slow(data, all_options, context, _current_from_stack, entry_id, EventUI.SLOW_SPEED)
+				BaseEvent.DisplaySpeed.SLOWEST:
+					Logging.info("NarrativeOverlay.apply_narrative: SLOWEST 模式（event='%s'）" % data.name)
+					event_ui.display_slow(data, all_options, context, _current_from_stack, entry_id, EventUI.SLOWEST_SPEED)
+				_:
+					Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
+					event_ui.append_event_entry(data, all_options, context, _current_from_stack, entry_id)
 
 	# ── 注册纸带滚动容器（供 PgUp/PgDn 翻页）──
 	event_ui.register_scroll_for_input_manager()

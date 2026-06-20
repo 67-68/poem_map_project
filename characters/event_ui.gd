@@ -98,6 +98,25 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 	return entry
 
 
+## 追加结算条目到纸带（绕过常规打字机，直接全量显示）
+func append_settlement_entry(event: BaseEvent, context: Dictionary) -> void:
+	Logging.info("EventUI.append_settlement_entry: event='%s'" % event.name)
+
+	var entry: SettlementTapeEntry = preload("res://ui/settlement_tape_entry.tscn").instantiate()
+	entry.set_meta("entry_id", str(event.get_instance_id()))
+	entry.set_meta("entry_type", "settlement")
+
+	entry.populate(event)
+	entry.option_selected.connect(func(choice_result, choice_text):
+		option_selected.emit(choice_result, choice_text)
+	)
+
+	_tape_content.add_child(entry)
+	_active_entry_id = str(event.get_instance_id())
+	scroll_to_bottom()
+	Logging.info("EventUI.append_settlement_entry: 结算条目已追加到纸带")
+
+
 ## 追加一个 Stub 条目（Cinematic / Picker / FocusChat 播完后的纯文本摘要）
 func append_stub(stub_type: String, summary_text: String) -> void:
 	Logging.info("EventUI.append_stub: type='%s' text='%s'" % [stub_type, summary_text])

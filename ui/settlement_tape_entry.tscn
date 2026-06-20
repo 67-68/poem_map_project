@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bvcg7jmnk8qts"]
+
+[ext_resource type="Script" path="res://ui/settlement_tape_entry.gd" id="1_root"]
+
+[node name="SettlementTapeEntry" type="PanelContainer"]
+script = ExtResource("1_root")
