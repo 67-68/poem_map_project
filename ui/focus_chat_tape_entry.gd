@@ -1,5 +1,8 @@
 class_name FocusChatTapeEntry extends VBoxContainer
 ## 纸带密谈笔录 — 名章+对话文本，左/右对齐，点击翻页，选项在尾
+##
+## 文本渲染：使用 RichTextLabel（支持 BBCode 标记），
+## 可通过 description 字段传入 [color][b][i] 等标签。
 
 signal dialogue_finished(result: ChoiceResult)
 
@@ -13,6 +16,8 @@ var _option_btns: OptionBtns = null
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	add_theme_constant_override("separation", 12)
 	if _chat_data and _dialogue_sequence.size() > 0:
 		_show_current_line()
 
@@ -67,6 +72,7 @@ func _show_current_line() -> void:
 func _append_dialogue_line(line: FocusedChatLine) -> void:
 	var hbox := HBoxContainer.new()
 	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 	if line.chat_position == FocusedChatLine.ChatPosition.LEFT:
 		_setup_left_line(hbox, line)
@@ -100,46 +106,31 @@ func _setup_left_line(hbox: HBoxContainer, line: FocusedChatLine) -> void:
 	name_lbl.add_theme_color_override("font_color", Color(0.75, 0.25, 0.25))
 	name_lbl.add_theme_font_size_override("font_size", 16)
 
-	# 3. 对话文本（暗青色）
+	# 3. 对话文本（暗青色）— 使用 RichTextLabel 支持 BBCode
 	var text_lbl := RichTextLabel.new()
 	text_lbl.text = line.description
 	text_lbl.add_theme_color_override("default_color", Color(0.18, 0.36, 0.43))
 	text_lbl.fit_content = true
-	text_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_lbl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 	hbox.add_child(seal)
 	hbox.add_child(name_lbl)
 	hbox.add_child(text_lbl)
 
-	# 4. 可选水墨白描水印（10% 透明度）
-	if line.texture:
-		var watermark := TextureRect.new()
-		watermark.texture = line.texture
-		watermark.modulate = Color(1, 1, 1, 0.08)
-		watermark.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		watermark.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		watermark.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		watermark.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		watermark.size_flags_vertical = Control.SIZE_EXPAND_FILL
-
-		# 作为最后子节点，用聚拢拉伸铺满背景
-		hbox.add_child(watermark)
-		# 把水印移到最前做背景（因为是 HBox 最后一个子节点）
-		var idx := hbox.get_child_count() - 1
-		if idx > 0:
-			hbox.move_child(watermark, 0)
-
 
 func _setup_right_line(hbox: HBoxContainer, line: FocusedChatLine) -> void:
 	hbox.alignment = BoxContainer.ALIGNMENT_END
 
-	# 1. 对话文本（黑灰色）
+	# 1. 对话文本（黑灰色）— 使用 RichTextLabel 支持 BBCode
 	var text_lbl := RichTextLabel.new()
 	text_lbl.text = line.description
 	text_lbl.add_theme_color_override("default_color", Color(0.23, 0.23, 0.23))
 	text_lbl.fit_content = true
 	text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text_lbl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 	# 2. 说话人姓名（墨色）
 	var name_lbl := Label.new()

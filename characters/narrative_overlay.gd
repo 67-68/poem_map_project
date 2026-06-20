@@ -224,12 +224,16 @@ func _show_focused_chat_from_stack(entry: Dictionary):
 	_is_active = true
 	_saved_time_scale = Engine.time_scale
 	TimeService.pause_world(true)
+	Logging.info("FocusChat: pause_world 后 get_tree().paused=%s" % get_tree().paused)
 
 	var data = entry.get("data")
 	var context: Dictionary = entry.get("context", {})
 	Logging.info("FocusChat 显示中（纸带内嵌模式）")
 
 	show()
+
+	# 🚨 确保 EventUI 在 show() 后正确布局，防止点击穿透或偏移
+	await get_tree().process_frame
 
 	var chat_entry = event_ui.append_focus_chat_entry(data, context)
 	chat_entry.dialogue_finished.connect(_on_focused_chat_finished.bind(chat_entry, entry), CONNECT_ONE_SHOT)
@@ -340,8 +344,9 @@ func _process_next():
 		apply_narrative(next_event, next_context)
 		return
 
-	# 栈和队列全空 → 清空纸带，隐藏面板
+	# 栈和队列全空 → 清空纸带，隐藏面板，清除模糊
 	Logging.info("_process_next: 栈和队列全空，清空纸带并隐藏")
+	BlurManager.return_to_hub()
 	event_ui.clear_all_tape()
 	hide()
 	_tape_initialized = false
@@ -354,13 +359,17 @@ func _show_picker_from_stack(entry: Dictionary):
 	_saved_time_scale = Engine.time_scale
 	TimeService.pause_world(true)
 
+	# Picker 展示时模糊其他 UI 控件
+	BlurManager.trigger_picker_blur()
+
 	var data: Array = entry.get("data", [])
-	var ui_constructor = entry.get("ui_constructor", null)
+	var ui_constructor_raw = entry.get("ui_constructor")
+	var ui_constructor: Callable = ui_constructor_raw if ui_constructor_raw != null else Callable()
 
 	Logging.info("Picker 显示中（纸带内嵌模式），%d 个选项" % data.size())
 
 	var attachment = event_ui.append_picker_attachment(data, ui_constructor)
-	attachment.item_selected.connect(_on_picker_item_selected.bind(attachment, entry), CONNECT_ONE_SHOT)
+	attachment.item_selected.connect(func(e): _on_picker_item_selected(e, attachment, entry), CONNECT_ONE_SHOT)
 
 
 func _on_picker_item_selected(entity: Variant, _attachment, entry: Dictionary):
@@ -370,6 +379,9 @@ func _on_picker_item_selected(entity: Variant, _attachment, entry: Dictionary):
 
 	_event_stack.pop_front()
 	Logging.info("Picker 已从栈中弹出，选择了: %s" % str(entity))
+
+	# Picker 完成，清除 UI 模糊
+	BlurManager.end_picker_blur()
 
 	var callback: Callable = entry.get("on_selected", Callable())
 	if callback.is_valid():
@@ -450,6 +462,9 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 
 	# 先显示纸带面板（如果还没显示）
 	_show_tape()
+
+	# 触发地图高斯模糊 + 压暗
+	BlurManager.trigger_event_blur()
 
 	_is_active = true
 	var all_options: Array = data.init(context)
