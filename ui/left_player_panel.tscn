@@ -15,6 +15,10 @@ shadow_color = Color(0, 0, 0, 0.45882353)
 shadow_size = 10
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rlk2q"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
 texture = ExtResource("1_r5rtj")
 modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 
@@ -22,10 +26,10 @@ modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 texture = ExtResource("4_kxi5c")
 
 [node name="ShadowBox" type="PanelContainer" unique_id=1492512419]
-custom_minimum_size = Vector2(350, 450)
+custom_minimum_size = Vector2(320, 450)
 offset_left = 1.0
 offset_top = 1.0
-offset_right = 351.0
+offset_right = 321.0
 offset_bottom = 451.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_r5rtj")
 script = ExtResource("1_g0yrc")

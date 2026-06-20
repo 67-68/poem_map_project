@@ -19,7 +19,6 @@ class_name NarrativeOverlay extends PanelContainer
 # 🚨 event_ui 不写类型注解：class_name EventUI 在 parse 时尚未注册，
 # 但运行时 Godot 能正确解析 $EventUI 节点，调用方法无问题。
 @onready var event_ui = $EventHistory
-@onready var dimmer: ColorRect = $Dimmer
 
 # 状态
 var current_event_data: BaseEvent
@@ -92,44 +91,53 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════
 
 func _show_tape():
-	"""显示纸带面板 — 从屏幕顶部外滑入 + 透明度渐变 + 纸张摩擦音效"""
+	"""显示纸带面板 — 从屏幕顶部外滑入 + 透明度渐变 + 纸张摩擦音效
+
+	   ⚠️ NarrativeOverlay 现在被包在 ShadowBox(PanelContainer) 内，
+	   NarrativeOverlay.position 受父容器布局控制（layout_mode=2），
+	   因此动画必须操作 ShadowBox 的 position:y。
+	"""
+	var shadow := get_parent()
+
 	if _tape_initialized:
+		shadow.show()
 		show()
 		return
 
 	_tape_initialized = true
 	if _tween: _tween.kill()
 
-	# ── 延迟一帧记录纸带在布局中的原始位置 ──
-	#    ⚠️ 记录的是 position.y（像素坐标），不是 offset_top（anchor 偏移）！
-	#    对于锚定在 (0.5, 0.5) 的 PanelContainer：
-	#    position.y = viewport_height/2 + offset_top = 324 + (-315) = 9
+	# ── 延迟记录 ShadowBox 的静止位置（第一次调用时布局必定完成）──
 	if _tape_target_y == 0.0:
-		_tape_target_y = position.y
-		Logging.info("_show_tape: 记录纸带静止 position.y=%s (offset_top=%s)" % [_tape_target_y, offset_top])
+		_tape_target_y = shadow.position.y
+		Logging.info("_show_tape: 记录 ShadowBox 静止 position.y=%s" % _tape_target_y)
 
 	# ── 诊断日志 ──
 	var viewport_height := get_viewport_rect().size.y
 	Logging.info("=== _show_tape 动画日志 ===")
-	Logging.info("viewport_height=%s | _tape_target_y=%s | offset_top=%s" % [viewport_height, _tape_target_y, offset_top])
+	Logging.info("viewport_height=%s | ShadowBox._tape_target_y=%s" % [viewport_height, _tape_target_y])
 
-	# ── 1. 物理重置：埋到屏幕顶部外 ──
-	position.y = -(viewport_height + 100.0)
-	Logging.info("重置后 position.y=%s → Tween 目标 position.y=%s" % [position.y, _tape_target_y])
+	# ── 1. 物理重置：ShadowBox 埋到屏幕顶部外 ──
+	shadow.position.y = -(viewport_height + 100.0)
+	Logging.info("重置后 ShadowBox.position.y=%s → Tween 目标=%s" % [shadow.position.y, _tape_target_y])
 	modulate.a = 0.0
+
+	# 显示自身和父容器
+	shadow.show()
 	show()
 
 	# ── 2. 音效：纸张摩擦声 ──
 	AudioManager.play_sfx(load("res://assets/sounds/rustling_paper.wav"))
 
-	# ── 3. 并行 Tween：下落刹车 + 显形 ──
+	# ── 3. 并行 Tween：ShadowBox 下落刹车 + NarrativeOverlay 显形 ──
 	Logging.info("==============================")
 
 	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween.set_parallel(true)
 
 	# CUBIC + EASE_OUT：「快速拔出 → 极速刹车 → 稳稳停住」
-	_tween.tween_property(self, "position:y", _tape_target_y, 0.65) \
+	# 🚨 关键：tween 的是 ShadowBox.position:y，不是 self.position:y！
+	_tween.tween_property(shadow, "position:y", _tape_target_y, 0.65) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 	# SINE EASE_IN_OUT：前 0.3 秒平滑显形，避免像素撕裂
@@ -260,6 +268,7 @@ func _show_focused_chat_from_stack(entry: Dictionary):
 	var context: Dictionary = entry.get("context", {})
 	Logging.info("FocusChat 显示中（纸带内嵌模式）")
 
+	get_parent().show()
 	show()
 
 	# 🚨 确保 EventUI 在 show() 后正确布局，防止点击穿透或偏移
@@ -378,6 +387,7 @@ func _process_next():
 	Logging.info("_process_next: 栈和队列全空，清空纸带并隐藏")
 	BlurManager.return_to_hub()
 	event_ui.clear_all_tape()
+	get_parent().hide()
 	hide()
 	_tape_initialized = false
 
@@ -448,6 +458,7 @@ func _show_cinematic_from_stack(entry: Dictionary):
 
 	EventBus.cinematic_start.emit(texts)
 	await EventBus.cinematic_finished
+	await BlurManager.trigger_cinematic_post_blur(5.0)
 
 	_event_stack.pop_front()
 	Logging.info("Cinematic 已从栈中弹出")

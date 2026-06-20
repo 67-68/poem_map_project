@@ -47,8 +47,11 @@ position = Vector2(569, 326)
 
 [node name="BlurOverlay" type="ColorRect" parent="MapLayer/Worldroot" unique_id=744947912]
 material = SubResource("ShaderMaterial_qsp4k")
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1984579798]
 script = ExtResource("3_2cqfq")
@@ -69,11 +72,12 @@ theme_override_constants/margin_bottom = 10
 
 [node name="HBox" type="HBoxContainer" parent="UI/Margin" unique_id=152554922]
 layout_mode = 2
+theme_override_constants/separation = 30
 
 [node name="LeftPanel" parent="UI/Margin/HBox" unique_id=1345405692 instance=ExtResource("22_0odxb")]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="UI/Margin/HBox" unique_id=917736082]
+[node name="Control" type="Control" parent="UI/Margin/HBox" unique_id=1350421192]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -163,13 +167,20 @@ grow_vertical = 2
 visible = false
 script = ExtResource("34_d2t1y")
 
+[node name="Controller" parent="UI" unique_id=1054828129 instance=ExtResource("24_jq2sk")]
 
 [node name="NarrativeOverlay" parent="UI" unique_id=1251280475 instance=ExtResource("11_vivmo")]
 visible = false
 z_index = 8
-scale = Vector2(1, 0.96530986)
-
-[node name="Controller" parent="UI" unique_id=1054828129 instance=ExtResource("24_jq2sk")]
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 350.0
+offset_top = 3.0
+offset_right = 772.0
+offset_bottom = 645.0
 
 [node name="CoreSystems" type="Node" parent="." unique_id=1519963821]
 
