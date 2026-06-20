@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkwuh0c0531ni"
-path="res://.godot/imported/jiaoyou_stamp.png-3eb87d5aab03832412fbe39900033920.ctex"
+uid="uid://ba1t0o4t3266n"
+path="res://.godot/imported/baiye_stamp_reverted.png-dd3ca59c5581c8560ea0c83393895e12.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/profile/jiaoyou_stamp.png"
-dest_files=["res://.godot/imported/jiaoyou_stamp.png-3eb87d5aab03832412fbe39900033920.ctex"]
+source_file="res://assets/stamps/baiye_stamp_reverted.png"
+dest_files=["res://.godot/imported/baiye_stamp_reverted.png-dd3ca59c5581c8560ea0c83393895e12.ctex"]
 
 [params]
 

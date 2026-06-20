@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://de03dhvs0i586"
-path="res://.godot/imported/fangshi_stamp.png-72e420581c994d694577585cc07791e1.ctex"
+uid="uid://bbm1tg4n66cpr"
+path="res://.godot/imported/duzhuo_stamp.png-565308fa41a4b18cf9adeb88fa035894.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/profile/fangshi_stamp.png"
-dest_files=["res://.godot/imported/fangshi_stamp.png-72e420581c994d694577585cc07791e1.ctex"]
+source_file="res://assets/stamps/duzhuo_stamp.png"
+dest_files=["res://.godot/imported/duzhuo_stamp.png-565308fa41a4b18cf9adeb88fa035894.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bw10n4q5eevja"
-path="res://.godot/imported/chuangzuo_stamp.png-77202aefddaf3539134bcf75c750e39d.ctex"
+uid="uid://dc2u1s53yl8c1"
+path="res://.godot/imported/jiaoyou_stamp.png-eae3abbaf43715dea6d85d47e3ccd5a5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/profile/chuangzuo_stamp.png"
-dest_files=["res://.godot/imported/chuangzuo_stamp.png-77202aefddaf3539134bcf75c750e39d.ctex"]
+source_file="res://assets/stamps/jiaoyou_stamp.png"
+dest_files=["res://.godot/imported/jiaoyou_stamp.png-eae3abbaf43715dea6d85d47e3ccd5a5.ctex"]
 
 [params]
 

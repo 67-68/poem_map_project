@@ -4,7 +4,8 @@ extends PanelContainer
 ## 显示玩家名字、属性、特质、野心按钮（hover 弹出 AmbitionHUD）
 ## 保留侧滑动画（EventBus.request_change_left_panel_visibility）
 
-@export var ambition_hud: Control  # 由 main.tscn 连线到 AmbitionHUD 实例
+# 优先由 main.tscn 连线；若解析失败则回退到按路径查找
+var ambition_hud: Control
 
 # ── 节点引用 ─────────────────────────────────────────────
 @onready var _name_label: Label = $"Panel/VBox/ScrollContainer/V/NameLabel"
@@ -36,7 +37,12 @@ func _ready() -> void:
 	TimeService.on_xun_tick.connect(_on_stat_changed)
 	Logging.info("LeftPlayerPanel: connected to TimeService.on_xun_tick")
 	
-	# 野心 LinkButton → HoverPopupManager
+	# ── 野心 LinkButton → HoverPopupManager ──
+	# 优先信任 @export（main.tscn 手动连线），回退按绝对路径查找
+	if not ambition_hud:
+		ambition_hud = get_tree().root.get_node("Main/UI/AmbitionHUD") as Control
+		if ambition_hud:
+			Logging.info("LeftPlayerPanel: resolved ambition_hud by path fallback")
 	if ambition_hud:
 		HoverPopupManager.register(_ambition_btn, ambition_hud, 0.5, 0.15)
 		Logging.info("LeftPlayerPanel: registered ambition_hud with HoverPopupManager")
@@ -115,8 +121,9 @@ func _refresh_prop_grid() -> void:
 # ── TraitGrid 构建 ───────────────────────────────────────
 
 func _rebuild_trait_grid() -> void:
-	# 清空占位子节点
+	# 清空旧子节点：先 remove_child（立即解绑）再 queue_free（异步释放）
 	for child in _trait_grid.get_children():
+		_trait_grid.remove_child(child)
 		child.queue_free()
 	Logging.info("LeftPlayerPanel: TraitGrid cleared")
 	
@@ -131,14 +138,15 @@ func _rebuild_trait_grid() -> void:
 		
 		# 使用 TraitDemonstrator（阳刻印章 + 名称）
 		var demonstrator = preload("res://ui/trait_demonstrator.tscn").instantiate()
-		demonstrator.set_trait(trait_data)
 		_trait_grid.add_child(demonstrator)
+		demonstrator.set_trait(trait_data)
 		Logging.info("LeftPlayerPanel: added trait demonstrator: %s" % trait_data.name)
 
 func _refresh_trait_grid() -> void:
 	var trait_keys: Array = PlayerState.traits
 	var children := _trait_grid.get_children()
 	
+	# 不依赖 children.size() 比较（queue_free 异步导致不准），直接重建
 	if children.size() != trait_keys.size():
 		Logging.info("LeftPlayerPanel: TraitGrid count changed (%d→%d), rebuilding" % [children.size(), trait_keys.size()])
 		_rebuild_trait_grid()

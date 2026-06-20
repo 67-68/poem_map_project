@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_f652d"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f652d"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_yiapa"]
-[ext_resource type="Texture2D" uid="uid://cylr2i541fi7f" path="res://assets/character/npc_official_high.png" id="4_yiapa"]
+[ext_resource type="Texture2D" uid="uid://65hw8npat6e6" path="res://assets/stamps/baiye_stamp.png" id="4_yiapa"]
 
 [sub_resource type="Resource" id="Resource_yiapa"]
 script = ExtResource("3_f652d")

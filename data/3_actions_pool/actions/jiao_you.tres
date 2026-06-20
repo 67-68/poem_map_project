@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_slsqb"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_28qx7"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f06is"]
-[ext_resource type="Texture2D" uid="uid://dfe7xt8882qa5" path="res://assets/character/npc_scholar_poor.png" id="4_ob7iq"]
+[ext_resource type="Texture2D" uid="uid://bkwuh0c0531ni" path="res://assets/stamps/jiaoyou_stamp.png" id="4_ob7iq"]
 
 [sub_resource type="Resource" id="Resource_4fss1"]
 script = ExtResource("3_f06is")

@@ -191,6 +191,9 @@ func get_stat_val(stat_name):
 	
 	var stat = Database.get_property(stat_name)
 	if not stat:
+		# ── 转接器：emotion 兼容（ambition 等非 stat 资源） ──
+		if emotions.has(stat_name):
+			return emotions[stat_name]
 		Logging.err('do not find stat %s' % stat_name)
 		return 0
 	return stat.val

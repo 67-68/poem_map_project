@@ -38,16 +38,15 @@ func _ready() -> void:
 		Logging.info("AmbitionHUD: Entering stealth mode, hiding HUD")
 		return # 这里的 return 是安全的，因为信号已经绑好了
 	
-	# 3. 如果一开始就有数据，正常兜底
-	Logging.info("AmbitionHUD: Initial ambition found, displaying HUD")
-	show()
+	# 3. 如果一开始就有数据，正常兜底（已注册 HoverPopupManager，不主动 show）
+	Logging.info("AmbitionHUD: Initial ambition found, loading static content")
 	_load_static()
 	_on_model_stat_changed("")
 	Logging.info("AmbitionHUD: Initialization complete")
 	
 func _load_static():
 	if not ambition: return
-	show()
+	# 不再主动 show()——由 HoverPopupManager 控制显示时机
 	Logging.info("AmbitionHUD: Loading static content for ambition: %s" % str(ambition))
 
 	# 1. 挂载阶段名称 (静态)
@@ -142,7 +141,7 @@ func _on_model_stat_changed(_prop_name):
 	if not ambition:
 		Logging.warn('AmbitionHUD: No ambition available for display')
 		return
-	show()
+	# 不再主动 show()——由 HoverPopupManager 控制显示时机
 	Logging.info("ambition hud received stat changed signal")
 
 	# 从高到低扫描所有 staged_requirements，找到第一个满足的 → 直接赋值

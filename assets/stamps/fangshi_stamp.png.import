@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvqv250e1ws2t"
-path="res://.godot/imported/denggao_stamp.png-fb7d0373a86d8eddc5337f156e1486bf.ctex"
+uid="uid://cd3dtc8j116mk"
+path="res://.godot/imported/fangshi_stamp.png-0248562968c92c4163f14f887045d0c5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/profile/denggao_stamp.png"
-dest_files=["res://.godot/imported/denggao_stamp.png-fb7d0373a86d8eddc5337f156e1486bf.ctex"]
+source_file="res://assets/stamps/fangshi_stamp.png"
+dest_files=["res://.godot/imported/fangshi_stamp.png-0248562968c92c4163f14f887045d0c5.ctex"]
 
 [params]
 

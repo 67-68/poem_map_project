@@ -9,9 +9,7 @@ class_name PropertyRequirement extends BaseRequirements
 
 func compare(player_state: PlayerState):
 	var stat_front = player_state.get_stat_val(property)
-	if not (stat_front):
-		Logging.err('do not found stat %s in player stat, check pronounciation' % property)
-		return
+	# get_stat_val 对缺失 key 会 Logging.err + return 0，此处不再重复报 0 值
 	if operator == REQ_OPERATOR.COMPARE.LESS_THAN:
 		return stat_front < value
 	else:

@@ -175,8 +175,44 @@ func _on_show_timer_timeout(binding: HoverBinding) -> void:
 		Logging.info("HoverPopupManager: show timeout but user already left, aborting")
 		return
 	
+	_position_popup_at_mouse(binding)
 	binding.popup.visible = true
-	Logging.info("HoverPopupManager: showing popup=%s" % binding.popup.name)
+	Logging.info("HoverPopupManager: showing popup=%s at position %s" % [binding.popup.name, binding.popup.position])
+
+## 将 popup 定位到鼠标指针位置，clamp 到屏幕内（不低于屏幕上方）
+func _position_popup_at_mouse(binding: HoverBinding) -> void:
+	var popup = binding.popup
+	var mouse_pos = _canvas_layer.get_global_mouse_position()
+	var viewport_size = _canvas_layer.get_viewport_rect().size
+	
+	# 重置锚点为左上角，避免父级 CanvasLayer 的 anchor 干扰
+	popup.anchors_preset = Control.PRESET_TOP_LEFT
+	
+	# 获取 popup 实际尺寸（可能为 0，此时回退到 custom_minimum_size）
+	var popup_size = popup.size
+	if popup_size.x <= 0 or popup_size.y <= 0:
+		popup_size = popup.custom_minimum_size
+	# 如果仍然为 0，重设为合理默认值
+	if popup_size.x <= 0: popup_size.x = 320
+	if popup_size.y <= 0: popup_size.y = 200
+	
+	# 目标位置：鼠标右下方（偏移 10px，避免挡住 trigger）
+	var target_x = mouse_pos.x + 10
+	var target_y = mouse_pos.y + 10
+	
+	# clamp：不高于屏幕上方（y >= 0）
+	target_y = max(0.0, target_y)
+	# clamp 右边界
+	if target_x + popup_size.x > viewport_size.x:
+		target_x = mouse_pos.x - popup_size.x - 10
+	# clamp 下边界
+	if target_y + popup_size.y > viewport_size.y:
+		target_y = mouse_pos.y - popup_size.y - 10
+	# clamp 左边界（防止超出屏幕左侧）
+	target_x = max(0.0, target_x)
+	
+	popup.position = Vector2(target_x, target_y)
+	Logging.info("HoverPopupManager: positioned popup at (%d, %d)" % [target_x, target_y])
 
 func _maybe_hide(binding: HoverBinding) -> void:
 	# 如果 trigger 或 popup 任一还在 hover，不隐藏
@@ -224,8 +260,10 @@ func _on_popup_visibility_changed(binding: HoverBinding) -> void:
 	var popup = binding.popup
 	if not is_instance_valid(popup):
 		return
-	if popup.visible and _current_active != binding:
-		Logging.info("HoverPopupManager: popup '%s' shown outside hover state machine, forcing hide" % popup.name)
+	# 仅在已有其他活跃 popup 时才执行互斥拦截
+	# 当 _current_active == null（无 hover 上下文）时，popup 自主显示不应被压制
+	if popup.visible and _current_active != null and _current_active != binding:
+		Logging.info("HoverPopupManager: popup '%s' shown while '%s' is active, forcing hide" % [binding.popup.name, _current_active.trigger.name])
 		popup.visible = false
 
 ## register 后延迟一帧，覆盖 popup 自身 _ready() 里的 show()
