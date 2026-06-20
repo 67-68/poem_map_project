@@ -17,7 +17,8 @@ WORKSPACE_DIR = "/Users/lennon/Projects/poem_map_project"
 CSV_SYNC_SCRIPT_NAME = "csv_cloud_sync_cli.gd"
 
 # 子进程超时（秒），防止 Godot 崩溃后挂死导致 MCP 工具永久阻塞
-SUBPROCESS_TIMEOUT = 120
+# 必须低于 MCP 协议层 60s 超时，否则子进程来不及 kill 就裸超时
+SUBPROCESS_TIMEOUT = 15
 
 
 def _run_godot_subprocess(cmd: list[str], label: str) -> str:

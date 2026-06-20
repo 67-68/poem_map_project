@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="2_font"]
 
 [node name="CinematicOverlay" type="CanvasLayer"]
-layer = 128
+layer = 100
 script = ExtResource("1_gy4pk")
 
 [node name="Dimmer" type="ColorRect" parent="."]
@@ -38,5 +38,5 @@ alignment = 1
 theme_override_colors/default_color = Color(1, 1, 1, 1)
 theme_override_constants/line_separation = 8
 theme_override_fonts/normal_font = ExtResource("2_font")
-theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/normal_font_size = 72
 autowrap_mode = 3

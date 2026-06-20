@@ -19,7 +19,6 @@
 [ext_resource type="Script" uid="uid://cgm5optu1xcgx" path="res://debuggers/linter_debugger_container.gd" id="27_xuqvo"]
 [ext_resource type="Script" uid="uid://dgg4voth1dy5y" path="res://debuggers/event_action_tag_linter.gd" id="28_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://dmsdo48sr46y6" path="res://ui/poem_creation_page.tscn" id="29_facbu"]
-[ext_resource type="PackedScene" uid="uid://c4cm25a8sdyj" path="res://ui/picker.tscn" id="30_b1qrp"]
 [ext_resource type="Script" uid="uid://dinmvxb5j0il4" path="res://core/survival_manager.gd" id="30_kq58d"]
 [ext_resource type="Script" uid="uid://ck2mtudsybglf" path="res://ui/emotion_radar.gd" id="31_come4"]
 [ext_resource type="Script" uid="uid://dw61ft7sugtq3" path="res://ui/radar_painting.gd" id="32_radar"]
@@ -171,9 +170,6 @@ z_index = 8
 scale = Vector2(1, 0.96530986)
 
 [node name="Controller" parent="UI" unique_id=1054828129 instance=ExtResource("24_jq2sk")]
-
-[node name="Picker" parent="UI" unique_id=213326312 instance=ExtResource("30_b1qrp")]
-visible = false
 
 [node name="CoreSystems" type="Node" parent="." unique_id=1519963821]
 

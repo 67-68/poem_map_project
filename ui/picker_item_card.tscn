@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bnokquohfmbma"]
+
+[ext_resource type="Script" uid="uid://b40x5m646qi68" path="res://ui/picker_item_card.gd" id="1_8vobe"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vobe"]
+bg_color = Color(0.96, 0.93, 0.86, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.15)
+
+[node name="PickerItemCard" type="PanelContainer"]
+custom_minimum_size = Vector2(140, 100)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8vobe")
+script = ExtResource("1_8vobe")
+
+[node name="V" type="VBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="IconRect" type="TextureRect" parent="V"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 1
+
+[node name="NameLabel" type="Label" parent="V"]
+layout_mode = 2
+text = "name"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="DescLabel" type="Label" parent="V"]
+layout_mode = 2
+text = "description"
+horizontal_alignment = 1
+autowrap_mode = 1

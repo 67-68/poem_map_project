@@ -2,15 +2,11 @@ class_name AmbitionHUD extends Control
 # g说这里要分离判断逻辑，但我是一个独立游戏设计师🤓
 
 var ambition
-@onready var vague_label: Label = $Mar/HBox/VBox/VagueText
-@onready var timer_rect: TextureRect = $Mar/HBox/VBox/HBox/IncenseTimer
-@onready var time_label: Label = $Mar/HBox/VBox/HBox/TimeLabel
-@onready var ambition_label: Label = $Mar/HBox/VBox/HBox/StageName
-@onready var deadline_label: Label = $Mar/HBox/VBox/DeadlineResult
-@onready var dynamic_state_label: Label = $Mar/HBox/VBox/DynamicStateLabel
-@onready var progress_bar: ProgressBar = $Mar/HBox/VBox/ProgressContainer/ProgressFrame/ProgressBar
-@onready var progress_label: Label = $Mar/HBox/VBox/ProgressContainer/ProgressLabel
-@onready var progress_overlay_label: Label = $Mar/HBox/VBox/ProgressContainer/ProgressFrame/ProgressOverlayLabel
+@onready var vague_label: Label = $Mar/VBox/VagueText
+@onready var ambition_label: Label = $Mar/VBox/StageName
+@onready var deadline_label: Label = $Mar/VBox/DeadlineResult
+@onready var dynamic_state_label: Label = $Mar/VBox/DynamicStateLabel
+@onready var progress_dots_label: Label = $Mar/VBox/ProgressDots
 
 var _tracked_prop: Property  # 缓存的属性资源引用，避免每次查 Database
 
@@ -57,10 +53,6 @@ func _load_static():
 	Logging.info("AmbitionHUD: Setting deadline warning: %s" % ambition.deadline_warning)
 	deadline_label.text = ambition.deadline_warning
 
-	var deadline_text = TimeService.get_era_text(int(GameState.year))
-	Logging.info("AmbitionHUD: Setting time text: %s" % deadline_text)
-	time_label.text = deadline_text
-
 	var full_text = ambition.description
 	Logging.info("AmbitionHUD: Setting vague text: %s" % full_text)
 	vague_label.text = full_text
@@ -90,51 +82,53 @@ func _resolve_tracked_property() -> void:
 		Logging.info("AmbitionHUD: Resolved tracked property '%s' (soft_max=%d, val=%d)" % [ambition.tracked_property, _tracked_prop.soft_max, _tracked_prop.val])
 
 func _update_progress() -> void:
-	"""更新进度显示：优先展示属性的 staged_perception 文本，无配置时回退到裸数字"""
+	"""将 tracked_property 连续值映射为 Unicode 古典圆点：●●●◐○ + 文学化文本"""
 	if not _tracked_prop:
-		progress_bar.hide()
-		progress_label.hide()
-		progress_overlay_label.hide()
+		progress_dots_label.hide()
 		Logging.warn("AmbitionHUD: No tracked property to display progress")
 		return
 	
 	var val = _tracked_prop.val
-	var soft_max = _tracked_prop.soft_max
+	# soft_max 优先；若未配置（默认 -1）则回退到 hard_max
+	var max_val: int = _tracked_prop.soft_max if _tracked_prop.soft_max > 0 else _tracked_prop.hard_max
 	
-	# 优先使用设计师在 .tres 中配置的阶段感知文本（文学化描述）
-	if _tracked_prop.staged_perceptions.size() > 0:
-		var perception_text = _tracked_prop.get_staged_perception_text()
-		Logging.info("AmbitionHUD: Using staged perception text: '%s' (val=%d)" % [perception_text, val])
-		if soft_max >= 0:
-			progress_bar.show()
-			progress_overlay_label.show()
-			progress_label.hide()
-			progress_bar.max_value = soft_max
-			progress_bar.value = val
-			progress_overlay_label.text = perception_text
-		else:
-			progress_bar.hide()
-			progress_overlay_label.hide()
-			progress_label.show()
-			progress_label.text = perception_text
+	var dots_text := _generate_dots(val, max_val)
+	if dots_text.is_empty():
+		progress_dots_label.hide()
 		return
 	
-	# 无设计师配置 → 回退裸数字显示（旧逻辑）
-	Logging.info("AmbitionHUD: No staged_perceptions configured, falling back to raw numbers")
-	if soft_max >= 0:
-		progress_bar.show()
-		progress_overlay_label.show()
-		progress_label.hide()
-		progress_bar.max_value = soft_max
-		progress_bar.value = val
-		progress_overlay_label.text = "%d / %d" % [val, soft_max]
-		Logging.info("AmbitionHUD: ProgressBar updated: %d/%d" % [val, soft_max])
+	progress_dots_label.show()
+	
+	# 附加文学化描述文本（如果有 staged_perceptions 配置）
+	if _tracked_prop.staged_perceptions.size() > 0:
+		var perception_text = _tracked_prop.get_staged_perception_text()
+		Logging.info("AmbitionHUD: dots='%s' + perception='%s'" % [dots_text, perception_text])
+		progress_dots_label.text = dots_text + "  " + perception_text
 	else:
-		progress_bar.hide()
-		progress_overlay_label.hide()
-		progress_label.show()
-		progress_label.text = str(val)
-		Logging.info("AmbitionHUD: Progress number updated: %d" % val)
+		Logging.info("AmbitionHUD: dots='%s' (no staged_perceptions)" % dots_text)
+		progress_dots_label.text = dots_text
+
+
+## 将 val / max_val 映射为 5 档 Unicode 圆点：
+##   0~9%→○○○○○  10~19%→◐○○○○  20~29%→●○○○○ ... 90~99%→●●●●◐  100%→●●●●●
+func _generate_dots(val: float, max_val: float) -> String:
+	if max_val <= 0:
+		return ""
+	
+	var pct: float = clampf(val / max_val, 0.0, 1.0)
+	var filled: int = floori(pct * 5)              # 完整 ● 数量
+	var is_half: bool = (pct * 10) >= (filled * 2 + 1)  # 是否有半圆 ◐
+	var empty: int = 5 - filled - (1 if is_half else 0)
+	
+	var result := ""
+	for _i in filled:
+		result += "●"
+	if is_half:
+		result += "◐"
+	for _i in empty:
+		result += "○"
+	
+	return result
 
 func _on_model_stat_changed(_prop_name):
 	Logging.info("AmbitionHUD: Stat changed signal received, prop: %s" % _prop_name)

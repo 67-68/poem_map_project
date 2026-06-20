@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://ckkfn80c71m5e"]
+
+[ext_resource type="Script" uid="uid://cit0en6nhqp7v" path="res://ui/picker_tape_attachment.gd" id="1_qvtpk"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="2_26bj5"]
+
+[node name="PickerTapeAttachment" type="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_qvtpk")
+
+[node name="Header" type="Label" parent="."]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_26bj5")
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.55, 0.42, 0.31, 1)
+text = "【呈堂物证】"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 3
+
+[node name="Spacer" type="Control" parent="."]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 12)

@@ -3,44 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="1_3ftxo"]
 [ext_resource type="Script" uid="uid://dqj61x3f61w8q" path="res://ui/ambition_hud.gd" id="2_u8j85"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="3_hj3uc"]
-[ext_resource type="Texture2D" uid="uid://b2yq3w4rx1nu6" path="res://assets/black_line.png" id="4_u8j85"]
-[ext_resource type="Shader" uid="uid://bljxotoiibak3" path="res://shaders/candle_shader.gdshader" id="4_xikl0"]
-[ext_resource type="Texture2D" uid="uid://db6knepxierlx" path="res://assets/candle_main_副本.PNG" id="6_u8j85"]
-[ext_resource type="Shader" uid="uid://jrh6ew4ou6u3" path="res://shaders/golden_shine.gdshader" id="7_rb2yo"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lswn8"]
-shader = ExtResource("4_xikl0")
-shader_parameter/raw_burn_progress = 0.0
-shader_parameter/edge_softness = 0.02
-shader_parameter/ember_color = Color(0.8, 0.2, 0, 1)
-shader_parameter/ember_width = 0.05
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2y3x4"]
-shader = ExtResource("7_rb2yo")
-shader_parameter/speed = 1.2
-shader_parameter/intensity = 0.35
-shader_parameter/gold_color = Color(1, 0.843, 0, 1)
-shader_parameter/highlight_color = Color(1, 0.95, 0.6, 1)
-shader_parameter/band_width = 0.15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_9k8m7"]
-content_margin_left = 4.0
-content_margin_top = 2.0
-content_margin_right = 4.0
-content_margin_bottom = 2.0
-bg_color = Color(0.08, 0.06, 0.02, 0.5)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.843, 0, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [node name="AmbitionHUD" type="TextureRect" unique_id=273595331]
-custom_minimum_size = Vector2(320, 200)
+custom_minimum_size = Vector2(435, 200)
 anchors_preset = -1
 anchor_left = 0.6
 anchor_right = 0.6
@@ -54,25 +19,23 @@ expand_mode = 1
 script = ExtResource("2_u8j85")
 
 [node name="Mar" type="MarginContainer" parent="." unique_id=2042413875]
-layout_mode = 0
-offset_right = 290.0
-offset_bottom = 169.0
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="HBox" type="HBoxContainer" parent="Mar" unique_id=1501131552]
+[node name="VBox" type="VBoxContainer" parent="Mar" unique_id=852768951]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="VBox" type="VBoxContainer" parent="Mar/HBox" unique_id=852768951]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBox" type="HBoxContainer" parent="Mar/HBox/VBox" unique_id=543390469]
-layout_mode = 2
-
-[node name="StageName" type="Label" parent="Mar/HBox/VBox/HBox" unique_id=923612408]
+[node name="StageName" type="Label" parent="Mar/VBox" unique_id=923612408]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.54509807, 0.14509805, 0, 1)
@@ -80,24 +43,8 @@ theme_override_fonts/font = ExtResource("3_hj3uc")
 theme_override_font_sizes/font_size = 29
 text = "致君尧舜上"
 
-[node name="IncenseTimer" type="TextureRect" parent="Mar/HBox/VBox/HBox" unique_id=1129400142]
-modulate = Color(0.68456435, 0.109661676, 0.23869205, 1)
-material = SubResource("ShaderMaterial_lswn8")
-custom_minimum_size = Vector2(25, 25)
-layout_mode = 2
-texture = ExtResource("6_u8j85")
-expand_mode = 1
-
-[node name="TimeLabel" type="Label" parent="Mar/HBox/VBox/HBox" unique_id=124391808]
-custom_minimum_size = Vector2(38, 23)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7891921, 0.15497294, 0.12199094, 1)
-theme_override_fonts/font = ExtResource("3_hj3uc")
-theme_override_font_sizes/font_size = 10
-text = "天宝六年秋止"
-
-[node name="VagueText" type="Label" parent="Mar/HBox/VBox" unique_id=1789226383]
-custom_minimum_size = Vector2(238, 0)
+[node name="VagueText" type="Label" parent="Mar/VBox" unique_id=1789226383]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.17254902, 0.15686275, 0.14509805, 1)
@@ -107,8 +54,9 @@ text = "你想齐家治国平天下，而这需要以做官为前提。
 你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人"
 autowrap_mode = 3
 
-[node name="DeadlineResult" type="Label" parent="Mar/HBox/VBox" unique_id=24349763]
-custom_minimum_size = Vector2(238, 0)
+[node name="DeadlineResult" type="Label" parent="Mar/VBox" unique_id=24349763]
+clip_contents = true
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.34664103, 0.016675765, 3.6098065e-08, 1)
@@ -117,15 +65,8 @@ theme_override_font_sizes/font_size = 10
 text = "如果完不成，你的一身才华将无用武之处"
 autowrap_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="Mar/HBox/VBox" unique_id=1559297766]
-modulate = Color(1, 1, 1, 0.42745098)
-custom_minimum_size = Vector2(0, 1)
-layout_mode = 2
-texture = ExtResource("4_u8j85")
-expand_mode = 1
-
-[node name="DynamicStateLabel" type="Label" parent="Mar/HBox/VBox" unique_id=218237166]
-custom_minimum_size = Vector2(238, 0)
+[node name="DynamicStateLabel" type="Label" parent="Mar/VBox" unique_id=218237166]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_hj3uc")
@@ -133,52 +74,11 @@ theme_override_font_sizes/font_size = 16
 text = "「状态」没有人认得你，你是彻底的无名之辈"
 autowrap_mode = 3
 
-[node name="ProgressContainer" type="HBoxContainer" parent="Mar/HBox/VBox" unique_id=2035710588]
-custom_minimum_size = Vector2(238, 0)
+[node name="ProgressDots" type="Label" parent="Mar/VBox" unique_id=2035710588]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-
-[node name="ProgressFrame" type="Panel" parent="Mar/HBox/VBox/ProgressContainer"]
-custom_minimum_size = Vector2(238, 24)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_9k8m7")
-material = SubResource("ShaderMaterial_2y3x4")
-
-[node name="ProgressBar" type="ProgressBar" parent="Mar/HBox/VBox/ProgressContainer/ProgressFrame"]
-layout_mode = 1
-anchors_preset = 15
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 2.0
-offset_right = -4.0
-offset_bottom = -2.0
-size_flags_horizontal = 3
-show_percentage = false
-
-[node name="ProgressOverlayLabel" type="Label" parent="Mar/HBox/VBox/ProgressContainer/ProgressFrame"]
-layout_mode = 1
-anchors_preset = 15
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = 2.0
-offset_right = -4.0
-offset_bottom = -2.0
-theme_override_colors/font_color = Color(1, 0.843, 0, 1)
-theme_override_fonts/font = ExtResource("3_hj3uc")
-theme_override_font_sizes/font_size = 12
-horizontal_alignment = 1
-vertical_alignment = 1
-text = "0 / 100"
-[node name="ProgressLabel" type="Label" parent="Mar/HBox/VBox/ProgressContainer" unique_id=289782107]
-custom_minimum_size = Vector2(238, 0)
-layout_mode = 2
+theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.54509807, 0.14509805, 0, 1)
 theme_override_fonts/font = ExtResource("3_hj3uc")
-theme_override_font_sizes/font_size = 14
-text = "0"
+theme_override_font_sizes/font_size = 16
+text = "○○○○○"

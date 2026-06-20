@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dcmbq6w5dyfbo"]
+
+[ext_resource type="Script" uid="uid://c7o3bkyb3d40k" path="res://ui/focus_chat_tape_entry.gd" id="1_hpe22"]
+
+[node name="FocusChatTapeEntry" type="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_hpe22")

@@ -49,8 +49,6 @@ signal request_add_chat(data: Variant)
 
 # --- FocusChat 栈条目（仿 Picker/Cinematic 模式）--------
 signal push_focused_chat(data: Variant, context: Dictionary)    # 触发方 → NarrativeOverlay: 推入栈（含 context）
-signal focused_chat_start(data: Variant)   # NarrativeOverlay → FocusChatOverlay: 开始播放
-signal focused_chat_finished(result: Variant) # FocusChatOverlay → NarrativeOverlay: 播放完毕
 
 signal request_advance_time(days: int)
 
@@ -66,8 +64,6 @@ signal avaialble_decision_change(decision)
 signal show_tombstone_screen(death_reason: String)
 signal event_shown(event: Variant)
 signal poem_start_clicked()
-signal start_picker(data: Array, ui_constructor)
-signal end_picking(entity: Variant)
 signal push_picker(data: Array, on_selected: Callable, ui_constructor)
 signal push_cinematic(texts: Array[String])
 signal cinematic_start(texts: Array[String])

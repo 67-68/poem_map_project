@@ -26,8 +26,8 @@ func _ready() -> void:
 	var title_label: Label = _write_poem_btn.get_node("Panel/HBoxContainer/VBoxContainer/Title")
 	var context_label: Label = _write_poem_btn.get_node("Panel/HBoxContainer/VBoxContainer/Outcome")
 	var icon_rect: TextureRect = _write_poem_btn.get_node("Panel/HBoxContainer/TextureRect")
-	title_label.text = "写诗"
-	context_label.text = ""
+	title_label.text = "琢句"
+	context_label.text = "铺陈笔墨，直抒胸臆。"
 	icon_rect.texture = load("res://assets/stamps/chuangzuo_stamp.png")
 
 	# ── 风闻刷新 ──

@@ -76,7 +76,6 @@ func _ready() -> void:
 	EventBus.pop_to_event.connect(_on_pop_to_event)
 	EventBus.clear_scheduled_events.connect(_on_clear_scheduled_events)
 	EventBus.push_picker.connect(_on_push_picker)
-	EventBus.end_picking.connect(_on_end_picking)
 	EventBus.push_cinematic.connect(_on_push_cinematic)
 	EventBus.push_focused_chat.connect(_on_push_focused_chat)
 	EventBus.request_track_stage_animation.connect(track_animation)
@@ -228,30 +227,12 @@ func _show_focused_chat_from_stack(entry: Dictionary):
 
 	var data = entry.get("data")
 	var context: Dictionary = entry.get("context", {})
-	Logging.info("FocusChat 显示中")
+	Logging.info("FocusChat 显示中（纸带内嵌模式）")
 
 	show()
 
-	var overlay = preload("res://ui/focus_chat_overlay.tscn").instantiate()
-	add_child(overlay)
-
-	overlay.chat_finished.connect(func(result: ChoiceResult):
-		_event_stack.pop_front()
-		Logging.info("FocusChat 已从栈中弹出")
-
-		if result:
-			ConsequenceExecuter.execute_result(result)
-
-		# 纸带追加 stub 摘要
-		event_ui.append_stub("chat", "💬 对话")
-
-		TimeService.resume_world()
-		Engine.time_scale = _saved_time_scale
-		_is_active = false
-		_process_next()
-	)
-
-	overlay.play_dialogue_sequence(data, context)
+	var chat_entry = event_ui.append_focus_chat_entry(data, context)
+	chat_entry.dialogue_finished.connect(_on_focused_chat_finished.bind(chat_entry, entry), CONNECT_ONE_SHOT)
 
 
 # --- Cinematic 栈条目 -----------------------------------
@@ -376,31 +357,36 @@ func _show_picker_from_stack(entry: Dictionary):
 	var data: Array = entry.get("data", [])
 	var ui_constructor = entry.get("ui_constructor", null)
 
-	Logging.info("Picker 显示中，%d 个选项" % data.size())
-	EventBus.start_picker.emit(data, ui_constructor)
+	Logging.info("Picker 显示中（纸带内嵌模式），%d 个选项" % data.size())
+
+	var attachment = event_ui.append_picker_attachment(data, ui_constructor)
+	attachment.item_selected.connect(_on_picker_item_selected.bind(attachment, entry), CONNECT_ONE_SHOT)
 
 
-func _on_end_picking(entity: Variant):
+func _on_picker_item_selected(entity: Variant, _attachment, entry: Dictionary):
 	if _event_stack.size() == 0:
-		Logging.warn("_on_end_picking: 栈为空，没有 picker 条目")
-		return
-	var entry = _event_stack[0]
-	if not (entry is Dictionary and entry.get("type") == "picker"):
-		Logging.warn("_on_end_picking: 栈顶不是 picker 条目，忽略")
+		Logging.warn("_on_picker_item_selected: 栈为空，没有 picker 条目")
 		return
 
 	_event_stack.pop_front()
-	Logging.info("Picker 已从栈中弹出")
+	Logging.info("Picker 已从栈中弹出，选择了: %s" % str(entity))
 
 	var callback: Callable = entry.get("on_selected", Callable())
 	if callback.is_valid():
 		callback.call(entity)
 
-	# 纸带追加 stub 摘要
-	var summary: String = "→ 选择"
-	if entity and entity is GameEntity and entity.has_method("get_display_name"):
-		summary = "→ 选择了 [" + entity.get_display_name() + "]"
-	event_ui.append_stub("picker", summary)
+	TimeService.resume_world()
+	Engine.time_scale = _saved_time_scale
+	_is_active = false
+	_process_next()
+
+
+func _on_focused_chat_finished(result: ChoiceResult, _chat_entry, entry: Dictionary):
+	_event_stack.pop_front()
+	Logging.info("FocusChat 已从栈中弹出")
+
+	if result:
+		ConsequenceExecuter.execute_result(result)
 
 	TimeService.resume_world()
 	Engine.time_scale = _saved_time_scale

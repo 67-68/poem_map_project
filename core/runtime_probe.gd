@@ -297,7 +297,7 @@ func _serialize_game_state() -> String:
 				"name": ps.player_name,
 				"current_location": ps.current_location,
 				"ambition": {
-					"key": ps.ambition.key if ps.ambition else null,
+					"key": ps.ambition.uuid if ps.ambition else null,
 					"name": ps.ambition.name if ps.ambition else null
 				} if ps.ambition else null,
 				"current_action_tags": ps.current_action_tags,

@@ -9,8 +9,8 @@
 			"disabled": false,
 			"autoApprove": [],
 			"alwaysAllow": [
-				"run_godot_scene",
-				"run_godot_script"
+				"run_godot_script",
+				"run_godot_scene"
 			]
 		},
 		"godot-runtime-probe": {
@@ -23,9 +23,9 @@
 			"autoApprove": [],
 			"alwaysAllow": [
 				"get_live_scene_tree",
-				"get_game_state",
 				"get_event_system",
-				"get_live_logs"
+				"get_live_logs",
+				"get_game_state"
 			]
 		}
 	}

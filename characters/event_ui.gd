@@ -116,6 +116,41 @@ func append_stub(stub_type: String, summary_text: String) -> void:
 	Logging.info("EventUI.append_stub: stub 已追加到纸带")
 
 
+## 追加 FocusChat 密谈笔录到纸带 — 名章+对话逐行，点击翻页
+## 返回 FocusChatTapeEntry 实例，供 NarrativeOverlay 连接 dialogue_finished 信号
+func append_focus_chat_entry(data: FocusedChat, context: Dictionary = {}) -> FocusChatTapeEntry:
+	Logging.info("EventUI.append_focus_chat_entry: chat='%s'" % data.name)
+
+	var entry := preload("res://ui/focus_chat_tape_entry.tscn").instantiate()
+	_tape_content.add_child(entry)
+
+	# 延迟一帧让节点进入场景树，然后开始播放
+	call_deferred("_start_focus_chat", entry, data, context)
+
+	return entry
+
+
+func _start_focus_chat(entry: FocusChatTapeEntry, data: FocusedChat, context: Dictionary) -> void:
+	if not is_instance_valid(entry):
+		return
+	entry.play_dialogue_sequence(data, context)
+	scroll_to_bottom()
+
+
+## 追加 Picker 呈堂物证到纸带 — 木牍/令牌网格，选后定格
+## 返回 PickerTapeAttachment 实例，供 NarrativeOverlay 连接 item_selected 信号
+func append_picker_attachment(data: Array, ui_constructor: Callable = Callable()) -> PickerTapeAttachment:
+	Logging.info("EventUI.append_picker_attachment: items=%d" % data.size())
+
+	var attachment := preload("res://ui/picker_tape_attachment.tscn").instantiate()
+	_tape_content.add_child(attachment)
+	attachment.initialize(data, ui_constructor)
+
+	call_deferred("scroll_to_bottom")
+
+	return attachment
+
+
 ## 检查纸带上是否已有指定 entry_id 的条目
 func has_entry(entry_id: String) -> bool:
 	for child in _tape_content.get_children():

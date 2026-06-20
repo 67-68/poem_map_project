@@ -4,11 +4,11 @@ class_name CinematicOverlay extends CanvasLayer
 signal finished()
 
 ## 打字机速度（秒/字）
-@export var typewriter_speed: float = 0.05
-## 淡入淡出时长
-@export var fade_duration: float = 0.5
+@export var typewriter_speed: float = 0.08
+## 淡入淡出时长（冷酷切换 = 0.0）
+@export var fade_duration: float = 0.0
 ## 每段文字播完后的额外停留时间
-@export var text_pause_duration: float = 1.5
+@export var text_pause_duration: float = 2.5
 
 @onready var dimmer: ColorRect = $Dimmer
 @onready var text_label: RichTextLabel = $TextLabel
@@ -158,6 +158,10 @@ func _wait_seconds(seconds: float) -> void:
 
 
 func _fade_in(duration: float) -> void:
+	if duration <= 0.0:
+		dimmer.modulate.a = 1.0
+		text_label.modulate.a = 1.0
+		return
 	if _tween:
 		_tween.kill()
 	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -171,6 +175,10 @@ func _fade_in(duration: float) -> void:
 
 
 func _fade_out(duration: float) -> void:
+	if duration <= 0.0:
+		dimmer.modulate.a = 0.0
+		text_label.modulate.a = 0.0
+		return
 	if _tween:
 		_tween.kill()
 	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -184,6 +192,9 @@ func _fade_out(duration: float) -> void:
 
 
 func _swap_text(duration: float) -> void:
+	if duration <= 0.0:
+		text_label.text = ""
+		return
 	# 淡出旧文字
 	if _tween:
 		_tween.kill()
