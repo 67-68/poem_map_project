@@ -28,9 +28,9 @@ var _picker_blur_tween: Tween = null
 var _picker_blur_located: bool = false
 
 # ── 缓动参数 ─────────────────────────────────────────
-const MAP_BLUR_IN_AMOUNT: float = 3.0
+const MAP_BLUR_IN_AMOUNT: float = 6.0
 const MAP_BLUR_OUT_AMOUNT: float = 0.0
-const MAP_DARKEN_IN_AMOUNT: float = 0.6
+const MAP_DARKEN_IN_AMOUNT: float = 0.75
 const MAP_DARKEN_OUT_AMOUNT: float = 0.0
 const MAP_BLUR_IN_DURATION: float = 1.0
 const MAP_BLUR_OUT_DURATION: float = 0.8
@@ -101,11 +101,29 @@ func _ensure_map_overlay() -> bool:
 		Logging.err("%s: 找不到 BlurOverlay 节点，地图模糊不可用" % LOG_TAG)
 		return false
 
+	# BlurOverlay 父节点是 Worldroot (Node2D)，Control anchors 在 Node2D 下不生效，
+	# 必须显式设置为视口尺寸，否则 ColorRect 尺寸为 0 → 无 fragment 渲染 → 模糊不生效。
+	_set_map_overlay_fullscreen()
+
+	# 监听窗口大小变化，保持 overlay 铺满视口
+	if not get_tree().root.size_changed.is_connected(_set_map_overlay_fullscreen):
+		get_tree().root.size_changed.connect(_set_map_overlay_fullscreen)
+
 	# 确保初始状态：无模糊
 	_map_overlay.material.set("shader_parameter/blur_amount", 0.0)
 	_map_overlay.material.set("shader_parameter/darken_amount", 0.0)
-	Logging.info("%s: 地图 BlurOverlay 定位成功" % LOG_TAG)
+	Logging.info("%s: 地图 BlurOverlay 定位成功, size=%s" % [LOG_TAG, _map_overlay.size])
 	return true
+
+
+## 将 _map_overlay 尺寸强制设置为当前视口大小
+func _set_map_overlay_fullscreen() -> void:
+	if not _map_overlay or not is_instance_valid(_map_overlay):
+		return
+	var vp_size := get_viewport().get_visible_rect().size
+	_map_overlay.position = Vector2.ZERO
+	_map_overlay.size = vp_size
+	Logging.info("%s: _set_map_overlay_fullscreen: size=%s" % [LOG_TAG, vp_size])
 
 
 # ═══════════════════════════════════════════════

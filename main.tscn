@@ -27,11 +27,12 @@
 [ext_resource type="PackedScene" uid="uid://cua5pcl2s75q" path="res://ui/cinematic_overlay.tscn" id="35_cinematic"]
 [ext_resource type="Script" uid="uid://kfq72j60w3b8" path="res://core/fatigue_manager.gd" id="36_fatigue"]
 [ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="37_ambition"]
+[ext_resource type="Script" uid="uid://b74k1mainp82nw" path="res://main.gd" id="38_main"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsp4k"]
 shader = ExtResource("3_xuqvo")
-shader_parameter/blur_amount = 2.5
-shader_parameter/darken_amount = 0.5
+shader_parameter/blur_amount = 0.0
+shader_parameter/darken_amount = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pickerblur"]
 shader = ExtResource("3_xuqvo")
@@ -39,6 +40,7 @@ shader_parameter/blur_amount = 0.0
 shader_parameter/darken_amount = 0.0
 
 [node name="Main" type="Node" unique_id=1215220767]
+script = ExtResource("38_main")
 
 [node name="MapLayer" type="CanvasLayer" parent="." unique_id=70316122]
 layer = -1
@@ -78,6 +80,7 @@ script = ExtResource("3_2cqfq")
 visible = false
 
 [node name="Margin" type="MarginContainer" parent="UI" unique_id=1914085020]
+mouse_filter = 2
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -97,6 +100,7 @@ layout_mode = 2
 
 [node name="Control" type="Control" parent="UI/Margin/HBox" unique_id=1350421192]
 layout_mode = 2
+mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="RightPanel" parent="UI/Margin/HBox" unique_id=604963217 instance=ExtResource("23_lswn8")]

@@ -394,32 +394,70 @@ func _process_next():
 
 # --- Picker 局部压暗 ──────────────────────────────────
 
-## 纸带历史降维：除最新 Picker 外所有子节点 modulate → 灰暗
+## 纸带历史降维：除最新 Picker 外所有子节点叠加黑色半透明 ColorRect + modulate 灰暗
 ## 实现「旧史褪色，新抉择刺眼浮现」的视觉隐喻
+##
+## ⚠️ 层级陷阱：ColorRect 不能添加为 VBoxContainer entry 的子节点，
+## 否则 Container 布局系统会把 anchors 覆盖为 (0,0) 尺寸。
+## 正确做法：挂在 event_ui（TextureRect，非 Container）上，
+## 通过 global_position 坐标转换手动定位。
 const DIM_HISTORY_COLOR: Color = Color(0.4, 0.4, 0.4, 0.8)
 const DIM_HISTORY_DURATION: float = 0.5
+const DIM_OVERLAY_COLOR := Color(0.0, 0.0, 0.0, 0.55)
+const DIM_OVERLAY_NAME := "_HistoryDimOverlay"
 
 func _dim_tape_history(picker_node: Control) -> void:
 	var tape: VBoxContainer = event_ui._tape_content
 	if not tape:
 		Logging.warn("_dim_tape_history: _tape_content 为空")
 		return
+	var event_ui_global = event_ui.global_position
+	var dimmed_count := 0
 	for child in tape.get_children():
 		if child == picker_node:
 			continue
-		var t := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		t.tween_property(child, "modulate", DIM_HISTORY_COLOR, DIM_HISTORY_DURATION)
-	Logging.info("_dim_tape_history: 历史条目已压暗（%d 个）" % maxi(0, tape.get_child_count() - 1))
+
+		# 1. modulate 灰暗 — 内容本身褪色
+		var tm := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tm.tween_property(child, "modulate", DIM_HISTORY_COLOR, DIM_HISTORY_DURATION)
+
+		# 2. 叠加黑色 overlay — 挂在 event_ui 上避免 Container 布局干扰
+		var overlay := ColorRect.new()
+		overlay.name = DIM_OVERLAY_NAME
+		overlay.color = Color(0, 0, 0, 0)  # 初始透明
+		overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		overlay.z_index = 10  # 确保渲染在所有 entry 上方
+		# 手动定位：entry 全局坐标 → event_ui 局部坐标
+		var entry_global = child.global_position
+		overlay.position = entry_global - event_ui_global
+		overlay.size = child.size
+		event_ui.add_child(overlay)
+
+		var to := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		to.tween_property(overlay, "color", DIM_OVERLAY_COLOR, DIM_HISTORY_DURATION)
+
+		dimmed_count += 1
+	Logging.info("_dim_tape_history: 历史条目已压暗 + 黑纱 overlay 挂 event_ui（%d 个）" % dimmed_count)
 
 func _undim_tape_history() -> void:
 	var tape: VBoxContainer = event_ui._tape_content
 	if not tape:
 		Logging.warn("_undim_tape_history: _tape_content 为空")
 		return
+	# 1. 恢复所有 entry 的 modulate
+	var restored_count := 0
 	for child in tape.get_children():
-		var t := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		t.tween_property(child, "modulate", Color.WHITE, DIM_HISTORY_DURATION)
-	Logging.info("_undim_tape_history: 历史条目已恢复（%d 个）" % tape.get_child_count())
+		var tm := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tm.tween_property(child, "modulate", Color.WHITE, DIM_HISTORY_DURATION)
+		restored_count += 1
+
+	# 2. 找出挂在 event_ui 上的 overlay 并淡出清理
+	for overlay_child in event_ui.get_children():
+		if overlay_child is ColorRect and overlay_child.name == DIM_OVERLAY_NAME:
+			var to := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			to.tween_property(overlay_child, "color", Color(0, 0, 0, 0), DIM_HISTORY_DURATION)
+			to.finished.connect(overlay_child.queue_free, CONNECT_ONE_SHOT)
+	Logging.info("_undim_tape_history: modulate 已恢复 + overlay 挂 event_ui 清理（%d 个）" % restored_count)
 
 
 # --- Picker 栈条目生命周期 -----------------------------
