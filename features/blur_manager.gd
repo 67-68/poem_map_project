@@ -1,14 +1,17 @@
 ## 高斯模糊管理器 — 可复用的模糊效果控制器
 ##
-## 提供两种模糊模式：
-##   1. 地图模糊: 事件触发时模糊地图 + 压暗背景
-##   2. Picker 模糊: Picker 激活时在 UI 层插入模糊遮罩，模糊其他控件
+## 提供三种模糊模式：
+##   1. 地图模糊:   事件触发时模糊地图 + 压暗背景
+##   2. Picker 模糊: Picker 激活时在 Layer 50 插入全屏毛玻璃
+##                   TapeLayer (layer=100) 纸带悬浮其上，保持清晰
+##                   纸带内的历史条目通过 NarrativeOverlay._dim_tape_history() 局部压暗
+##   3. Cinematic:   独立 CanvasLayer (layer=100) 的全屏模糊
 ##
 ## 用法：
 ##   BlurManager.trigger_event_blur()    — 事件触发，模糊地图
 ##   BlurManager.return_to_hub()         — 纸带清空，清除地图模糊
-##   BlurManager.trigger_picker_blur()   — Picker 展示，模糊其他 UI
-##   BlurManager.end_picker_blur()       — Picker 完成，清除 UI 模糊
+##   BlurManager.show_picker_blur()      — Picker 展示，Layer 50 毛玻璃渐入
+##   BlurManager.hide_picker_blur()      — Picker 完成，Layer 50 毛玻璃渐出
 
 extends Node
 
@@ -19,13 +22,10 @@ var _map_overlay: ColorRect = null
 var _map_tween: Tween = null
 var _map_overlay_located: bool = false
 
-# ── Picker UI 模糊（运行时动态创建）────────────────────
-var _picker_overlay: ColorRect = null
-var _picker_tween: Tween = null
-var _picker_overlay_created: bool = false
-
-# Picker 模糊层 z_index — 高于常规 UI 控件，低于 NarrativeOverlay (z_index=8)
-const PICKER_BLUR_Z_INDEX := 5
+# ── Picker 模糊（main.tscn 预建的 PickerBlurLayer (layer=50) → PickerBlurOverlay）
+var _picker_blur_overlay: ColorRect = null
+var _picker_blur_tween: Tween = null
+var _picker_blur_located: bool = false
 
 # ── 缓动参数 ─────────────────────────────────────────
 const MAP_BLUR_IN_AMOUNT: float = 3.0
@@ -35,13 +35,13 @@ const MAP_DARKEN_OUT_AMOUNT: float = 0.0
 const MAP_BLUR_IN_DURATION: float = 1.0
 const MAP_BLUR_OUT_DURATION: float = 0.8
 
-const PICKER_BLUR_AMOUNT: float = 2.0
-const PICKER_DARKEN_AMOUNT: float = 0.3
+const PICKER_BLUR_AMOUNT: float = 3.5
+const PICKER_DARKEN_AMOUNT: float = 0.5
 const PICKER_BLUR_DURATION: float = 0.5
 
 # ── Cinematic 过场后模糊 ──────────────────────────────
 const CINEMATIC_POST_BLUR_AMOUNT: float = 5.0
-const CINEMATIC_POST_DARKEN_AMOUNT: float = 0.85
+const CINEMATIC_POST_DARKEN_AMOUNT: float = 0.0
 const CINEMATIC_POST_FADE_IN: float = 0.8
 const CINEMATIC_POST_FADE_OUT: float = 0.8
 
@@ -60,11 +60,11 @@ func _ready() -> void:
 
 func _deferred_init() -> void:
 	_ensure_map_overlay()
-	_ensure_picker_overlay()
-	Logging.info("%s: 延迟初始化完成，map=%s picker=%s" % [
+	_ensure_picker_blur_overlay()
+	Logging.info("%s: 延迟初始化完成，map=%s picker_blur=%s" % [
 		LOG_TAG,
 		"OK" if _map_overlay else "MISSING",
-		"OK" if _picker_overlay else "MISSING",
+		"OK" if _picker_blur_overlay else "MISSING",
 	])
 
 
@@ -109,55 +109,34 @@ func _ensure_map_overlay() -> bool:
 
 
 # ═══════════════════════════════════════════════
-# 懒加载：Picker 模糊
+# 懒加载：Picker 模糊（main.tscn 预建节点）
 # ═══════════════════════════════════════════════
 
-func _ensure_picker_overlay() -> bool:
-	if _picker_overlay and is_instance_valid(_picker_overlay):
+func _ensure_picker_blur_overlay() -> bool:
+	if _picker_blur_overlay and is_instance_valid(_picker_blur_overlay):
 		return true
-	# 节点已失效 → 重置标记，允许重新查找（防止场景切换后永久罢工）
-	if _picker_overlay_created and not (_picker_overlay and is_instance_valid(_picker_overlay)):
-		Logging.info("%s: Picker 遮罩已失效，重新创建" % LOG_TAG)
-		_picker_overlay_created = false
-		_picker_overlay = null
+	# 节点已失效 → 重置标记，允许重新查找
+	if _picker_blur_located and not (_picker_blur_overlay and is_instance_valid(_picker_blur_overlay)):
+		Logging.info("%s: PickerBlurOverlay 已失效，重新定位" % LOG_TAG)
+		_picker_blur_located = false
+		_picker_blur_overlay = null
 
-	if _picker_overlay_created:
+	if _picker_blur_located:
 		return false
 
-	_picker_overlay_created = true
+	_picker_blur_located = true
 
 	var main := _find_main_node()
 	if not main:
 		Logging.err("%s: 找不到 Main 节点，Picker 模糊不可用" % LOG_TAG)
 		return false
 
-	var ui_layer := main.find_child("UI", true, false) as CanvasLayer
-	if not ui_layer:
-		Logging.err("%s: 找不到 UI CanvasLayer，Picker 模糊不可用" % LOG_TAG)
+	_picker_blur_overlay = main.find_child("PickerBlurOverlay", true, false) as ColorRect
+	if not _picker_blur_overlay:
+		Logging.err("%s: 找不到 PickerBlurOverlay 节点（main.tscn 中 PickerBlurLayer → PickerBlurOverlay）" % LOG_TAG)
 		return false
 
-	var shader := load("res://shaders/blur_bg.gdshader") as Shader
-	if not shader:
-		Logging.err("%s: 无法加载 blur_bg.gdshader，Picker 模糊不可用" % LOG_TAG)
-		return false
-
-	var mat := ShaderMaterial.new()
-	mat.shader = shader
-	mat.set("shader_parameter/blur_amount", 0.0)
-	mat.set("shader_parameter/darken_amount", 0.0)
-
-	_picker_overlay = ColorRect.new()
-	_picker_overlay.name = "PickerBlurOverlay"
-	_picker_overlay.z_index = PICKER_BLUR_Z_INDEX
-	_picker_overlay.material = mat
-	_picker_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_picker_overlay.hide()
-
-	# 铺满全屏
-	_picker_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
-
-	ui_layer.add_child(_picker_overlay)
-	Logging.info("%s: PickerBlurOverlay 创建成功（z_index=%d）" % [LOG_TAG, PICKER_BLUR_Z_INDEX])
+	Logging.info("%s: PickerBlurOverlay 定位成功（layer=50，预建于 main.tscn）" % LOG_TAG)
 	return true
 
 
@@ -210,42 +189,44 @@ func return_to_hub() -> void:
 # 公共 API — Picker 模糊
 # ═══════════════════════════════════════════════
 
-## Picker 展示时：在 UI 层上覆盖模糊遮罩，模糊其他控件
-## NarrativeOverlay (z_index=8) 会自然地浮在模糊层之上，保持清晰
-func trigger_picker_blur() -> void:
-	if not _ensure_picker_overlay():
+## Picker 展示时触发 Layer 50 全屏毛玻璃渐入。
+## Layer 50 覆盖 MapLayer (layer=-1) 和 UI (layer=0)，但不覆盖 TapeLayer (layer=100)。
+## 纸带内的历史条目由 NarrativeOverlay._dim_tape_history() 局部压暗。
+func show_picker_blur() -> void:
+	if not _ensure_picker_blur_overlay():
 		return
 
-	_picker_overlay.show()
+	# kill 已存在的 tween（防止同时有淡入和淡出在跑）
+	if _picker_blur_tween and _picker_blur_tween.is_valid():
+		_picker_blur_tween.kill()
 
-	if _picker_tween and _picker_tween.is_valid():
-		_picker_tween.kill()
+	_picker_blur_overlay.show()
+	_picker_blur_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_picker_blur_tween.set_parallel(true)
+	_picker_blur_tween.tween_property(_picker_blur_overlay.material, "shader_parameter/blur_amount", PICKER_BLUR_AMOUNT, PICKER_BLUR_DURATION)
+	_picker_blur_tween.tween_property(_picker_blur_overlay.material, "shader_parameter/darken_amount", PICKER_DARKEN_AMOUNT, PICKER_BLUR_DURATION)
+	Logging.info("%s: Picker 模糊已触发（layer=50, blur=%.1f darken=%.1f duration=%.1fs）" % [
+		LOG_TAG, PICKER_BLUR_AMOUNT, PICKER_DARKEN_AMOUNT, PICKER_BLUR_DURATION,
+	])
 
-	Logging.info("%s: 触发 Picker UI 模糊 (blur=%.1f)" % [LOG_TAG, PICKER_BLUR_AMOUNT])
 
-	_picker_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_picker_tween.set_parallel(true)
-	_picker_tween.tween_property(_picker_overlay.material, "shader_parameter/blur_amount", PICKER_BLUR_AMOUNT, PICKER_BLUR_DURATION)
-	_picker_tween.tween_property(_picker_overlay.material, "shader_parameter/darken_amount", PICKER_DARKEN_AMOUNT, PICKER_BLUR_DURATION)
-
-
-## Picker 完成：清除 UI 模糊
-func end_picker_blur() -> void:
-	if not _ensure_picker_overlay():
+## Picker 完成时清除 Layer 50 毛玻璃渐出，纸带历史恢复清晰
+func hide_picker_blur() -> void:
+	if not _ensure_picker_blur_overlay():
 		return
 
-	if _picker_tween and _picker_tween.is_valid():
-		_picker_tween.kill()
+	# kill 已存在的 tween
+	if _picker_blur_tween and _picker_blur_tween.is_valid():
+		_picker_blur_tween.kill()
 
-	Logging.info("%s: 清除 Picker UI 模糊" % LOG_TAG)
-
-	_picker_tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	_picker_tween.set_parallel(true)
-	_picker_tween.tween_property(_picker_overlay.material, "shader_parameter/blur_amount", 0.0, PICKER_BLUR_DURATION)
-	_picker_tween.tween_property(_picker_overlay.material, "shader_parameter/darken_amount", 0.0, PICKER_BLUR_DURATION)
+	_picker_blur_tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_picker_blur_tween.set_parallel(true)
+	_picker_blur_tween.tween_property(_picker_blur_overlay.material, "shader_parameter/blur_amount", 0.0, PICKER_BLUR_DURATION)
+	_picker_blur_tween.tween_property(_picker_blur_overlay.material, "shader_parameter/darken_amount", 0.0, PICKER_BLUR_DURATION)
 
 	# 缓动结束后隐藏节点
-	_picker_tween.finished.connect(_picker_overlay.hide, CONNECT_ONE_SHOT)
+	_picker_blur_tween.finished.connect(_picker_blur_overlay.hide, CONNECT_ONE_SHOT)
+	Logging.info("%s: Picker 模糊已清除" % LOG_TAG)
 
 
 # ═══════════════════════════════════════════════
@@ -261,7 +242,7 @@ func end_picker_blur() -> void:
 ##
 ## 参数:
 ##   duration: 模糊持续的总时长（包括淡入淡出）。默认 5.0 秒。
-func trigger_cinematic_post_blur(duration: float = 5.0) -> void:
+func trigger_cinematic_post_blur(duration: float = 3.0) -> void:
 	Logging.info("%s: trigger_cinematic_post_blur 进入, duration=%.1f" % [LOG_TAG, duration])
 
 	var shader := load("res://shaders/blur_bg.gdshader") as Shader

@@ -392,6 +392,36 @@ func _process_next():
 	_tape_initialized = false
 
 
+# --- Picker 局部压暗 ──────────────────────────────────
+
+## 纸带历史降维：除最新 Picker 外所有子节点 modulate → 灰暗
+## 实现「旧史褪色，新抉择刺眼浮现」的视觉隐喻
+const DIM_HISTORY_COLOR: Color = Color(0.4, 0.4, 0.4, 0.8)
+const DIM_HISTORY_DURATION: float = 0.5
+
+func _dim_tape_history(picker_node: Control) -> void:
+	var tape: VBoxContainer = event_ui._tape_content
+	if not tape:
+		Logging.warn("_dim_tape_history: _tape_content 为空")
+		return
+	for child in tape.get_children():
+		if child == picker_node:
+			continue
+		var t := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		t.tween_property(child, "modulate", DIM_HISTORY_COLOR, DIM_HISTORY_DURATION)
+	Logging.info("_dim_tape_history: 历史条目已压暗（%d 个）" % maxi(0, tape.get_child_count() - 1))
+
+func _undim_tape_history() -> void:
+	var tape: VBoxContainer = event_ui._tape_content
+	if not tape:
+		Logging.warn("_undim_tape_history: _tape_content 为空")
+		return
+	for child in tape.get_children():
+		var t := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		t.tween_property(child, "modulate", Color.WHITE, DIM_HISTORY_DURATION)
+	Logging.info("_undim_tape_history: 历史条目已恢复（%d 个）" % tape.get_child_count())
+
+
 # --- Picker 栈条目生命周期 -----------------------------
 
 func _show_picker_from_stack(entry: Dictionary):
@@ -399,8 +429,8 @@ func _show_picker_from_stack(entry: Dictionary):
 	_saved_time_scale = Engine.time_scale
 	TimeService.pause_world(true)
 
-	# Picker 展示时模糊其他 UI 控件
-	BlurManager.trigger_picker_blur()
+	# Picker 展示时：Layer 50 全屏毛玻璃渐入
+	BlurManager.show_picker_blur()
 
 	var data: Array = entry.get("data", [])
 	var ui_constructor_raw = entry.get("ui_constructor")
@@ -411,6 +441,9 @@ func _show_picker_from_stack(entry: Dictionary):
 	var attachment = event_ui.append_picker_attachment(data, ui_constructor)
 	attachment.item_selected.connect(func(e): _on_picker_item_selected(e, attachment, entry), CONNECT_ONE_SHOT)
 
+	# 局部压暗：纸带内历史条目褪入阴影，Picker 保持高光
+	_dim_tape_history(attachment)
+
 
 func _on_picker_item_selected(entity: Variant, _attachment, entry: Dictionary):
 	if _event_stack.size() == 0:
@@ -420,8 +453,11 @@ func _on_picker_item_selected(entity: Variant, _attachment, entry: Dictionary):
 	_event_stack.pop_front()
 	Logging.info("Picker 已从栈中弹出，选择了: %s" % str(entity))
 
-	# Picker 完成，清除 UI 模糊
-	BlurManager.end_picker_blur()
+	# Picker 完成：Layer 50 毛玻璃渐出
+	BlurManager.hide_picker_blur()
+
+	# 恢复纸带历史亮度
+	_undim_tape_history()
 
 	var callback: Callable = entry.get("on_selected", Callable())
 	if callback.is_valid():
@@ -458,7 +494,7 @@ func _show_cinematic_from_stack(entry: Dictionary):
 
 	EventBus.cinematic_start.emit(texts)
 	await EventBus.cinematic_finished
-	await BlurManager.trigger_cinematic_post_blur(5.0)
+	await BlurManager.trigger_cinematic_post_blur(3.0)
 
 	_event_stack.pop_front()
 	Logging.info("Cinematic 已从栈中弹出")
