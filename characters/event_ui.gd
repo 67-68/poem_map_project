@@ -28,7 +28,7 @@ const NORMAL_COLOR: Color = Color.WHITE
 
 # ── 子节点引用 ──────────────────────────────────
 @onready var _tape_content: VBoxContainer = $Margin/ScrollContainer/VBox_TapeContent
-@onready var _scroll: ScrollContainer = $Margin/ScrollContainer
+@onready var _scroll: SmoothScrollContainer = $Margin/ScrollContainer
 
 # ── Event 条目模板 ─────────────────────────────
 var _event_template: PackedScene = preload("res://ui/event_ui.tscn")

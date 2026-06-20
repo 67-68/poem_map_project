@@ -1,4 +1,4 @@
-class_name SceneActionScroll extends ScrollContainer
+class_name SceneActionScroll extends SmoothScrollContainer
 
 func refresh():
 	"""

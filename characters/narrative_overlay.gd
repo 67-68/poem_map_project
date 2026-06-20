@@ -646,8 +646,7 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 				Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
 				event_ui.append_event_entry(data, all_options, context, _current_from_stack, entry_id)
 
-	# ── 注册 1-4 数字键回调 + 纸带滚动容器 ──
-	_register_number_keys_for_options(all_options)
+	# ── 注册纸带滚动容器（供 PgUp/PgDn 翻页）──
 	event_ui.register_scroll_for_input_manager()
 
 	AudioManager.play_sad()
@@ -681,7 +680,6 @@ func _on_option_selected(_choice_result, _choice_text: String = ""):
 
 func _end_narrative(choice, choice_text: String = ""):
 	# 纸带模式：不退场、不 hide()，选项变文本烙印留在纸带上
-	_unregister_number_keys()
 	var entry_id := str(current_event_data.get_instance_id())
 	event_ui.mark_chosen(entry_id, choice_text)
 
@@ -773,67 +771,3 @@ func _on_animation_finished(anim: AnimationObject) -> void:
 	if _waiting_for_animations and _active_animations.is_empty():
 		_waiting_for_animations = false
 		_process_next()
-
-
-# ═══════════════════════════════════════════════
-# 数字键回调（1-4）— 桥接到 InputManager
-# ═══════════════════════════════════════════════
-
-## 收集当前事件条目中 OptionBtns 的子按钮，包装成 Callable 注册
-func _register_number_keys_for_options(all_options: Array) -> void:
-	var callbacks: Array[Callable] = []
-	for i in range(min(all_options.size(), 4)):
-		var opt = all_options[i]
-		# 收集选项的触发 —— 注意：这里不对选项进行具体选择，
-		# 而是包装成 Callable，按 1-4 索引映射
-		var cb: Callable = func():
-			Logging.info("NarrativeOverlay: 数字键 %d 触发选项" % (i + 1))
-			# 模拟用户选择：查找并触发对应 EventBtn
-			var entry_id := str(current_event_data.get_instance_id())
-			var entry = event_ui._find_entry(entry_id)
-			if not entry:
-				Logging.warn("NarrativeOverlay: 未找到 entry_id='%s'" % entry_id)
-				return
-			var option_btns: Control = entry.get_node("OptionBtns")
-			if not option_btns:
-				Logging.warn("NarrativeOverlay: 未找到 OptionBtns 节点")
-				return
-			var btns := option_btns.get_children()
-			if i < btns.size():
-				# 尝试触发按钮的 pressed 信号
-				var btn = btns[i]
-				if "option_made" in btn:
-					# 对于 EventBtn：需要获取该选项关联的 ChoiceResult
-					# 简单方法：直接触发 pressed 信号
-					btn.pressed.emit()
-				else:
-					Logging.warn("NarrativeOverlay: 选项按钮无 option_made 信号")
-			else:
-				Logging.warn("NarrativeOverlay: 数字键 %d 超出按钮数 %d" % [i + 1, btns.size()])
-		callbacks.append(cb)
-
-	if callbacks.size() > 0:
-		_get_input_manager().register_number_key_callbacks(callbacks, "NarrativeOverlay")
-		Logging.info("NarrativeOverlay: 已注册 %d 个数字键回调" % callbacks.size())
-
-
-func _unregister_number_keys() -> void:
-	_get_input_manager().unregister_number_key_callbacks("NarrativeOverlay")
-
-
-func _get_input_manager() -> InputManager:
-	var tree := get_tree()
-	var root := tree.root
-	var main_node := root.get_node_or_null("Main")
-	if not main_node:
-		Logging.err("NarrativeOverlay._get_input_manager: 无法找到 Main 节点")
-		return null
-	var core_systems := main_node.get_node_or_null("CoreSystems")
-	if not core_systems:
-		Logging.err("NarrativeOverlay._get_input_manager: 无法找到 CoreSystems 节点")
-		return null
-	var im := core_systems.get_node_or_null("InputManager") as InputManager
-	if not im:
-		Logging.err("NarrativeOverlay._get_input_manager: 无法找到 InputManager 节点")
-		return null
-	return im
