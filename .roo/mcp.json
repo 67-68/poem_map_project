@@ -9,20 +9,8 @@
 			"disabled": false,
 			"autoApprove": [],
 			"alwaysAllow": [
-				"run_godot_script",
-				"run_godot_scene"
-			]
-		},
-		"godot-rag-bridge": {
-			"command": "/Users/lennon/Projects/poem_map_project/.venv/bin/mcp",
-			"args": [
-				"run",
-				"/Users/lennon/Projects/poem_map_project/godot_rag_bridge.py"
-			],
-			"disabled": false,
-			"autoApprove": [],
-			"alwaysAllow": [
-				"semantic_code_search"
+				"run_godot_scene",
+				"run_godot_script"
 			]
 		},
 		"godot-runtime-probe": {

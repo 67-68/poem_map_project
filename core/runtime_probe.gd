@@ -218,11 +218,18 @@ static func _serialize_node(node: Node, depth: int) -> Dictionary:
 	递归序列化节点。
 	返回: { name, class_name, child_count, visible, children[...] }
 	"""
+	# Window 节点继承 Node 而非 CanvasItem，没有 is_visible_in_tree() 方法
+	var visible: bool = true
+	if node is CanvasItem:
+		visible = node.is_visible_in_tree()
+	elif node.has_method("is_visible_in_tree"):
+		visible = node.is_visible_in_tree()
+
 	var result: Dictionary = {
 		"name": node.name,
 		"class_name": "",  # 后续尝试获取
 		"child_count": node.get_child_count(),
-		"visible": node.is_visible_in_tree(),
+		"visible": visible,
 	}
 
 	# 尝试获取脚本的 class_name（如果有 class_name 声明）
@@ -332,13 +339,22 @@ func _serialize_event_system() -> String:
 			"original_weight": ticket.original_weight
 		})
 
+	# 序列化 guarantee FIFO 队列（已从 _guaranteed_event_key/_guaranteed_main_tag 重构为 _guaranteed_events: Array[Dictionary]）
+	var guaranteed_events_data: Array[Dictionary] = []
+	for entry in em._guaranteed_events:
+		guaranteed_events_data.append({
+			"event_key": entry.event_key,
+			"main_tag": entry.main_tag,
+		})
+
 	var result := {
 		"ok": true,
 		"timestamp": Time.get_unix_time_from_system(),
 		"data": {
 			"current_event_pool": event_pool_data,
-			"guaranteed_event_key": em._guaranteed_event_key,
-			"guaranteed_main_tag": em._guaranteed_main_tag,
+			"guaranteed_events": guaranteed_events_data,
+			"guaranteed_event_key": "",  # 向后兼容：已废弃，保留字段避免下游解析崩溃
+			"guaranteed_main_tag": "",   # 向后兼容：已废弃
 			"pool_size": event_pool_data.size(),
 		}
 	}

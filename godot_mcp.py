@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 import subprocess
+import signal
 import logging
 import os
 
@@ -14,6 +15,61 @@ WORKSPACE_DIR = "/Users/lennon/Projects/poem_map_project"
 
 # CSV 云同步 CLI 入口脚本名（用于自动识别并追加 prefer-local 参数）
 CSV_SYNC_SCRIPT_NAME = "csv_cloud_sync_cli.gd"
+
+# 子进程超时（秒），防止 Godot 崩溃后挂死导致 MCP 工具永久阻塞
+SUBPROCESS_TIMEOUT = 120
+
+
+def _run_godot_subprocess(cmd: list[str], label: str) -> str:
+    """
+    统一进程管理：用 Popen 启动 Godot 子进程，wait(timeout) 等待，
+    无论成功/失败/超时都在 finally 中 SIGTERM → SIGKILL 确保不留僵尸。
+    """
+    proc = None
+    try:
+        logging.info(f"Triggering {label}: {' '.join(cmd)}")
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            cwd=WORKSPACE_DIR,
+        )
+        stdout, stderr = proc.communicate(timeout=SUBPROCESS_TIMEOUT)
+        if proc.returncode != 0:
+            return (
+                f"Godot {label} 执行崩溃 (Exit Code {proc.returncode}) 💀:\n"
+                f"{stderr}\n{stdout}"
+            )
+        return f"Godot {label} 执行成功:\n{stdout}"
+    except subprocess.TimeoutExpired:
+        # 超时时先 SIGTERM 优雅退出，再强制 SIGKILL
+        _kill_proc(proc, label)
+        return (
+            f"Godot {label} 执行超时 ({SUBPROCESS_TIMEOUT}s) 💀:\n"
+            f"子进程已被强制终止，防止残留僵尸进程。"
+        )
+    except Exception as e:
+        _kill_proc(proc, label)
+        return f"Godot {label} 执行遭遇未预期异常 💀: {str(e)}"
+
+
+def _kill_proc(proc, label: str):
+    """优雅终止 → 强制杀死，确保不留僵尸。"""
+    if proc is None:
+        return
+    try:
+        proc.terminate()
+        proc.wait(timeout=5)
+        logging.info(f"子进程({label}) SIGTERM 优雅终止成功")
+    except Exception:
+        try:
+            proc.kill()
+            proc.wait(timeout=2)
+            logging.warning(f"子进程({label}) SIGTERM 失败，已 SIGKILL 强制杀死")
+        except Exception:
+            logging.error(f"子进程({label}) 杀死失败，可能已自行退出")
+
 
 @mcp.tool()
 def run_godot_script(script_name: str, args: list[str] = None) -> str:
@@ -35,7 +91,6 @@ def run_godot_script(script_name: str, args: list[str] = None) -> str:
         return f"执行失败：找不到脚本文件 {target_path}"
 
     # 🤓☝️ 自动识别 CSV 云同步脚本，追加 --sync --prefer-local 参数
-    # 这样调用方无需手动传递这些参数，AI 和用户都可以无脑调用
     if CSV_SYNC_SCRIPT_NAME in script_name:
         if "--sync" not in args:
             args.append("--sync")
@@ -49,21 +104,8 @@ def run_godot_script(script_name: str, args: list[str] = None) -> str:
     if args:
         cmd.append("--")
         cmd.extend(args)
-        
-    logging.info(f"Triggering Godot: {' '.join(cmd)}")
 
-    # 3. 阻塞式执行与错误捕获
-    try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=WORKSPACE_DIR # 强制工作目录
-        )
-        return f"Godot 脚本执行成功:\n{result.stdout}"
-    except subprocess.CalledProcessError as e:
-        return f"Godot 执行崩溃 (Exit Code {e.returncode}) 💀:\n{e.stderr}\n{e.stdout}"
+    return _run_godot_subprocess(cmd, "脚本")
 
 
 @mcp.tool()
@@ -90,18 +132,5 @@ def run_godot_scene(scene_name: str, args: list[str] = None) -> str:
     if args:
         cmd.append("--")
         cmd.extend(args)
-        
-    logging.info(f"Triggering Godot Scene: {' '.join(cmd)}")
 
-    # 3. 阻塞式执行与错误捕获
-    try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            check=True,
-            cwd=WORKSPACE_DIR
-        )
-        return f"Godot 场景执行成功:\n{result.stdout}"
-    except subprocess.CalledProcessError as e:
-        return f"Godot 场景执行崩溃 (Exit Code {e.returncode}) 💀:\n{e.stderr}\n{e.stdout}"
+    return _run_godot_subprocess(cmd, "场景")

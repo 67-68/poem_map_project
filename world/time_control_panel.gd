@@ -30,9 +30,14 @@ func _ready():
 	# 监听时间流动
 	EventBus.year_changed.connect(_on_year_changed)
 	EventBus.speed_changed.connect(on_speed_changed)
-	TimeService.on_xun_tick.connect(func(): 
+	TimeService.on_xun_tick.connect(func():
 		label_xun.text = TimeService.current_xun
 	)
+	
+	# 按钮连接
+	$HBox/HBox/SpeedDown.pressed.connect(slow_down)
+	$HBox/HBox/FlowPause.pressed.connect(on_start_end_btn_pressed)
+	$HBox/HBox/SpeedUp.pressed.connect(speed_up)
 	
 func on_speed_changed(spd: float):
 	if spd == -1:

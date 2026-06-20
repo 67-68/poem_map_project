@@ -42,10 +42,10 @@ var _bindings: Dictionary = {}  # trigger → HoverBinding
 func _ready() -> void:
 	# 地雷三：创建神之层，保证 popup 永远在最顶层
 	_canvas_layer = CanvasLayer.new()
-	_canvas_layer.layer = 120
+	_canvas_layer.layer = 129
 	_canvas_layer.name = "HoverPopupCanvasLayer"
 	add_child(_canvas_layer)
-	Logging.info("HoverPopupManager: CanvasLayer(layer=120) created")
+	Logging.info("HoverPopupManager: CanvasLayer(layer=129) created")
 
 # ── 公开 API ─────────────────────────────────────────────
 
@@ -176,8 +176,18 @@ func _on_show_timer_timeout(binding: HoverBinding) -> void:
 		return
 	
 	_position_popup_at_mouse(binding)
+	# z_index 兜底：当 reparent 到 _canvas_layer 失败时（popup 仍留在 UI CanvasLayer），
+	# 高 z_index 确保 popup 渲染在 LeftPlayerPanel 等同级节点之上
+	binding.popup.z_index = 100
 	binding.popup.visible = true
-	Logging.info("HoverPopupManager: showing popup=%s at position %s" % [binding.popup.name, binding.popup.position])
+	Logging.info("HoverPopupManager: showing popup=%s at position %s, size=%s, parent=%s (layer=%d), z_index=%d" % [
+		binding.popup.name,
+		binding.popup.position,
+		binding.popup.size,
+		binding.popup.get_parent().name if binding.popup.get_parent() else "null",
+		binding.popup.get_parent().layer if binding.popup.get_parent() is CanvasLayer else -999,
+		binding.popup.z_index
+	])
 
 ## 将 popup 定位到鼠标指针位置，clamp 到屏幕内（不低于屏幕上方）
 func _position_popup_at_mouse(binding: HoverBinding) -> void:

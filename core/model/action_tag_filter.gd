@@ -54,6 +54,6 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
 	result.assign(new_events.values())
 	PlayerState.current_action_tags.clear()
 	if not result:
-		Logging.warn('filter 把所有事件都干掉了，很可能出问题了')
-		breakpoint
+		Logging.err('filter 把所有事件都干掉了，很可能出问题了')
+		#breakpoint
 	return result

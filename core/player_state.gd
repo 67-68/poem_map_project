@@ -437,7 +437,7 @@ func remove_flag(flag_id: String):
 
 func set_ambition(ambition_key):
 	var ambition_ = Database.get_ambition(ambition_key)
-	if not ambition_: 
+	if not ambition_:
 		Logging.err('this ambition %s is non-exist' % ambition_key)
 		return
 	if ambition:
@@ -446,6 +446,8 @@ func set_ambition(ambition_key):
 	ambition = ambition_
 	for t in ambition.ambition_traits:
 		add_trait(t)
+	# 同步写入 emotions 字典，让 get_stat_val() 的 emotion 适配器能找到它
+	emotions["ambition"] = 1.0
 	ambition_changed.emit(ambition)
 
 func clear_ambition():
@@ -453,6 +455,7 @@ func clear_ambition():
 		for t in ambition.ambition_traits:
 			remove_trait(t)
 	ambition = null
+	emotions.erase("ambition")
 	ambition_changed.emit(null)
 
 func get_location():
