@@ -8,12 +8,21 @@ signal option_selected(choice_result, choice_text: String)
 var _title_label: Label
 var _content_rtl: RichTextLabel
 var _confirm_btn: Button
+var _layout_ready := false
 
 
 func _ready() -> void:
+	_ensure_layout()
+	_connect_signals()
+
+
+## 确保布局已构造（幂等：多次调用只构造一次）
+func _ensure_layout() -> void:
+	if _layout_ready:
+		return
 	_purge_existing_children()
 	_construct_layout()
-	_connect_signals()
+	_layout_ready = true
 
 
 ## 清除编辑器中可能预置的子节点，确保纯代码构造
@@ -52,7 +61,7 @@ func _construct_layout() -> void:
 	_title_label = Label.new()
 	_title_label.name = "TitleLabel"
 	_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_title_label.add_theme_font_size_override("font_size", 22)
+	_title_label.theme_type_variation = "TitleText"
 	vbox.add_child(_title_label)
 
 	# ── HSeparator 2 ──
@@ -65,6 +74,10 @@ func _construct_layout() -> void:
 	_content_rtl = RichTextLabel.new()
 	_content_rtl.name = "ContentRichText"
 	_content_rtl.bbcode_enabled = true
+	_content_rtl.scroll_active = false
+	_content_rtl.clip_contents = false
+	_content_rtl.fit_content = true
+	_content_rtl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_content_rtl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_content_rtl.theme_type_variation = "NarrativeText"
 	vbox.add_child(_content_rtl)
@@ -94,17 +107,24 @@ func _connect_signals() -> void:
 
 
 func populate(event: BaseEvent) -> void:
-	Logging.info("SettlementTapeEntry.populate: event='%s'" % event.name)
+	Logging.info("SettlementTapeEntry.populate: event='%s' _layout_ready=%s" % [event.name, _layout_ready])
 
-	# 标题：使用 event.name（已在 MonthEndSettlement 中格式化为 "---- 天宝四载·仲春 结 ----"）
+	# 🔒 防御：populate 可能早于 _ready() 被调用（add_child 前），
+	#     此时 _title_label / _content_rtl 尚未构造。先强制初始化。
+	_ensure_layout()
+
 	if _title_label:
 		_title_label.text = event.name
+		Logging.info("SettlementTapeEntry.populate: title_label 已设置 = '%s'" % event.name)
+	else:
+		Logging.err("SettlementTapeEntry.populate: _title_label 为 null，无法设置标题")
 
-	# 内容：使用 event.description（已包含完整四段式 BBcode）
 	if _content_rtl:
 		_content_rtl.text = event.description
+		Logging.info("SettlementTapeEntry.populate: content_rtl 已设置（%d 字符）" % event.description.length())
+	else:
+		Logging.err("SettlementTapeEntry.populate: _content_rtl 为 null，无法设置内容")
 
-	# 按钮文本
 	if _confirm_btn and event.options.size() > 0:
 		_confirm_btn.text = event.options[0].description
 

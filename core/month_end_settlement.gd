@@ -136,14 +136,10 @@ func _build_settlement_event(_current: Dictionary, deltas: Dictionary) -> BaseEv
 	var era_season := _get_era_season_text()
 	event.name = "---- %s ----" % era_season
 
-	# ── event.description：完整四段式 BBcode ──
+	# ── event.description：三段式 BBcode（标题由 _title_label 独立渲染）──
 	var lines: PackedStringArray = []
 
-	# 第一段：标题
-	lines.append("[center][font_size=22]---- %s ----[/font_size][/center]" % era_season)
-	lines.append("")
-
-	# 第二段：「长安米贵」— 11行属性变化
+	# 第一段：「长安米贵」— 11行属性变化
 	lines.append("[font_size=16][b]「长安米贵」[/b][/font_size]")
 	if _all_deltas_zero(deltas):
 		lines.append("[i]本月诸般光景，与上月无异[/i]")
@@ -152,12 +148,12 @@ func _build_settlement_event(_current: Dictionary, deltas: Dictionary) -> BaseEv
 			lines.append(_delta_to_bbcode(prop, deltas[prop]))
 	lines.append("")
 
-	# 第三段：「状态衰变」
+	# 第二段：「状态衰变」
 	lines.append("[font_size=16][b]「状态衰变」[/b][/font_size]")
 	lines.append("[i]天道盈亏，自有定数。月盈则亏，水满则溢。[/i]")
 	lines.append("")
 
-	# 第四段：「潜伏暗线」
+	# 第三段：「潜伏暗线」
 	lines.append("[font_size=16][b]「潜伏暗线」[/b][/font_size]")
 	lines.append("[i]天机未显，静待时变。[/i]")
 
