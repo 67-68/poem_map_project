@@ -80,7 +80,7 @@ script = ExtResource("3_2cqfq")
 visible = false
 
 [node name="Margin" type="MarginContainer" parent="UI" unique_id=1914085020]
-mouse_filter = 2
+mouse_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -93,6 +93,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="HBox" type="HBoxContainer" parent="UI/Margin" unique_id=152554922]
 layout_mode = 2
+mouse_filter = 1
 theme_override_constants/separation = 30
 
 [node name="LeftPanel" parent="UI/Margin/HBox" unique_id=1345405692 instance=ExtResource("22_0odxb")]

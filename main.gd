@@ -35,6 +35,7 @@ var _positions_recorded: bool = false
 var _left_original_x: float
 var _right_original_x: float
 var _tape_original_y: float
+var _tape_was_visible: bool
 
 # 其他 UI 节点的可见性备份
 var _other_ui_nodes: Array[Node] = []
@@ -99,7 +100,7 @@ func _enter_map_only() -> void:
 	_kill_all_tweens()
 	_save_visibility()
 
-	var viewport_h := get_viewport_rect().size.y
+	var viewport_h := get_viewport().get_visible_rect().size.y
 
 	_tween_exit = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween_exit.set_parallel(true)
@@ -117,6 +118,10 @@ func _enter_map_only() -> void:
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_tween_exit.tween_property(_right_panel, "modulate:a", 0.0, FADE_DURATION) \
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	# ── 记录 NarrativeOverlay 进入前的可见性 ──
+	_tape_was_visible = _narrative_overlay.visible
+	Logging.info("Main: NarrativeOverlay 进入前 visible=%s" % _tape_was_visible)
 
 	# ── NarrativeOverlay → 往上推出（CUBIC+EASE_OUT，与 _show_tape 反向）──
 	_tween_exit.tween_property(_narrative_overlay, "position:y", _tape_original_y - viewport_h, SLIDE_DURATION) \
@@ -147,10 +152,16 @@ func _exit_map_only() -> void:
 	# 先恢复可见性，再播动画
 	_left_panel.visible = true
 	_right_panel.visible = true
-	_narrative_overlay.visible = true
+
+	# 恢复 NarrativeOverlay 进入前的可见性（原本不可见就不恢复）
+	if _tape_was_visible:
+		_narrative_overlay.visible = true
+		Logging.info("Main: 恢复 NarrativeOverlay 可见性")
+	else:
+		Logging.info("Main: NarrativeOverlay 原本不可见，不恢复")
 	_restore_visibility()
 
-	var viewport_h := get_viewport_rect().size.y
+	var viewport_h := get_viewport().get_visible_rect().size.y
 	var left_width := _left_panel.size.x
 	var right_width := _right_panel.size.x
 
@@ -180,13 +191,14 @@ func _exit_map_only() -> void:
 
 	_tween_enter.chain().tween_callback(func():
 		Logging.info("Main: 纯地图模式退出动画完成")
+	)
 
 
 # ═══════════════════════════════════════════════
 # 可见性保存/恢复/隐藏
 # ═══════════════════════════════════════════════
 
-func _save_visibility() -> void:
+func _save_visibility():
 	_other_ui_nodes = [
 		_ambition_hud, _simple_toast, _debug_info, _tomb_stone,
 		_time_breath, _poem_creation, _emotion_radar, _social_wall,
