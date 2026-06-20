@@ -7,7 +7,7 @@ signal cancelled()
 var _data: Array = []
 var _on_selected_callback: Callable = Callable()
 var _selected: bool = false
-var _item_card_scene: PackedScene = preload("res://ui/picker_item_card.tscn")
+var _item_card_scene: PackedScene = preload("res://picker_item.tscn")
 
 @onready var grid: GridContainer = $Grid
 @onready var header: Label = $Header
@@ -20,21 +20,21 @@ func initialize(data: Array, ui_constructor: Callable = Callable()) -> void:
 
 	# 填充网格
 	for entity in data:
-		var card: PickerItemCard
+		var card: PickerItem
 		if ui_constructor.is_null():
 			card = _item_card_scene.instantiate()
 			card.initialize(entity if entity is GameEntity else null)
 		else:
 			card = ui_constructor.call(entity)
-			if not card is PickerItemCard:
-				Logging.warn("PickerTapeAttachment: ui_constructor 返回的不是 PickerItemCard，跳过")
+			if not card is PickerItem:
+				Logging.warn("PickerTapeAttachment: ui_constructor 返回的不是 PickerItem，跳过")
 				continue
 
 		card.clicked.connect(func(_e): _on_card_clicked(card))
 		grid.add_child(card)
 
 
-func _on_card_clicked(card: PickerItemCard) -> void:
+func _on_card_clicked(card: PickerItem) -> void:
 	if _selected:
 		return
 	_selected = true
@@ -57,7 +57,7 @@ func _on_card_clicked(card: PickerItemCard) -> void:
 	for child in grid.get_children():
 		if child == card:
 			continue
-		var other := child as PickerItemCard
+		var other := child as PickerItem
 		if not other:
 			continue
 

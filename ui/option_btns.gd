@@ -21,8 +21,8 @@ func apply_btns(options: Array, callback: Callable): # list[BaseOption]
 		# 只有点击有效选项才触发结束
 		btn.option_made.connect(callback)
 
-	# ── 自注册 1-4 数字键到 InputManager ──
-	_register_number_keys()
+	# ── 自注册 1-4 数字键到 InputManager（延迟到下一帧，确保场景树完全就绪）──
+	call_deferred("_register_number_keys")
 
 
 func _exit_tree() -> void:

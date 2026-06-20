@@ -166,8 +166,12 @@ func _build_settlement_event(_current: Dictionary, deltas: Dictionary) -> BaseEv
 	# ── event.options：唯一选项 "合上考评" ──
 	var option := EventOption.new()
 	option.description = "合上考评"
-	# choice_result 为空（null），不做任何操作
-	# requirement 为空，任何情况下都能选
+
+	var result := ChoiceResult.new()
+	var pop_op := PopEventOperator.new()
+	result.operators = [pop_op]
+	option.choice_result = result
+
 	event.options = [option] as Array[BaseOption]
 
 	Logging.info("[MonthEndSettlement] 结算事件已构造：%s" % event.name)

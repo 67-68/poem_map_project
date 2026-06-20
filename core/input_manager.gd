@@ -25,6 +25,9 @@ var _system_menu_open: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	Logging.info("InputManager._ready: 节点已就绪 path=%s process_mode=%d 树状态=%s paused=%s" % [
+		get_path(), process_mode, is_inside_tree(), get_tree().paused if is_inside_tree() else "N/A"
+	])
 
 
 # ═══════════════════════════════════════════════
@@ -32,8 +35,17 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════
 
 func _input(event: InputEvent) -> void:
+	# DEBUG: 追踪所有输入事件是否到达 InputManager
+	if event is InputEventKey:
+		Logging.debug("InputManager._input: keycode=%d pressed=%s echo=%s" % [event.keycode, event.pressed, event.echo])
+	
 	if not event is InputEventKey or not event.pressed:
 		return
+
+	# DEBUG: 确认 _input 通过了过滤条件
+	Logging.debug("InputManager._input: 按键通过过滤 keycode=%d (SPACE=%d 1=%d ESC=%d TAB=%d PGUP=%d PGDN=%d)" % [
+		event.keycode, KEY_SPACE, KEY_1, KEY_ESCAPE, KEY_TAB, KEY_PAGEUP, KEY_PAGEDOWN
+	])
 
 	# ── 系统菜单模式：只放行 Esc（关闭菜单）──
 	if _system_menu_open:
@@ -43,26 +55,31 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
-	match event.keycode:
-		KEY_SPACE:
-			_on_space()
-			get_viewport().set_input_as_handled()
-		KEY_1, KEY_2, KEY_3, KEY_4:
-			var idx = event.keycode - KEY_1  # 0-based
-			_on_number_key(idx)
-			get_viewport().set_input_as_handled()
-		KEY_ESCAPE:
-			_on_esc()
-			get_viewport().set_input_as_handled()
-		KEY_TAB:
-			_on_tab()
-			get_viewport().set_input_as_handled()
-		KEY_PAGEUP:
-			_on_page_up()
-			get_viewport().set_input_as_handled()
-		KEY_PAGEDOWN:
-			_on_page_down()
-			get_viewport().set_input_as_handled()
+	# 使用 if/elif 链替代 match，避免 Godot 4 enum match 潜在问题
+	var kc := event.keycode as int
+	Logging.debug("InputManager._input: match前 keycode=%d" % kc)
+	
+	if kc == KEY_SPACE:
+		_on_space()
+		get_viewport().set_input_as_handled()
+	elif kc >= KEY_1 and kc <= KEY_4:
+		var idx = kc - KEY_1  # 0-based
+		_on_number_key(idx)
+		get_viewport().set_input_as_handled()
+	elif kc == KEY_ESCAPE:
+		_on_esc()
+		get_viewport().set_input_as_handled()
+	elif kc == KEY_TAB:
+		_on_tab()
+		get_viewport().set_input_as_handled()
+	elif kc == KEY_PAGEUP:
+		_on_page_up()
+		get_viewport().set_input_as_handled()
+	elif kc == KEY_PAGEDOWN:
+		_on_page_down()
+		get_viewport().set_input_as_handled()
+	else:
+		Logging.debug("InputManager._input: 未匹配任何快捷键 keycode=%d" % kc)
 
 
 # ═══════════════════════════════════════════════
@@ -188,28 +205,27 @@ func unregister_scroll_container() -> void:
 # ═══════════════════════════════════════════════
 
 func _get_system_menu() -> Node:
-	# 通过场景树绝对路径查找（InputManager 在 CoreSystems 下，SystemMenu 在 TapeLayer 下）
+	# SystemMenu 挂载在 root/Main/SystemMenuLayer/SystemMenu
 	var tree := get_tree()
 	if not tree:
 		return null
-	var root := tree.root
-	if not root:
+	var scene_root := tree.root
+	if not scene_root:
 		return null
-
-	# 路径：Main → TapeLayer → SystemMenu
-	var main_node := root.get_node_or_null("Main")
+	
+	var main_node := scene_root.get_node_or_null("Main")
 	if not main_node:
 		Logging.err("InputManager: 无法找到 Main 节点")
 		return null
-
-	var tape_layer := main_node.get_node_or_null("TapeLayer")
-	if not tape_layer:
-		Logging.err("InputManager: 无法找到 TapeLayer 节点")
+	
+	var system_menu_layer := main_node.get_node_or_null("SystemMenuLayer")
+	if not system_menu_layer:
+		Logging.err("InputManager: 无法找到 Main/SystemMenuLayer 节点")
 		return null
-
-	var system_menu := tape_layer.get_node_or_null("SystemMenu")
+	
+	var system_menu := system_menu_layer.get_node_or_null("SystemMenu")
 	if not system_menu:
-		Logging.err("InputManager: 无法找到 TapeLayer/SystemMenu 节点")
+		Logging.err("InputManager: 无法找到 Main/SystemMenuLayer/SystemMenu 节点")
 		return null
-
+	
 	return system_menu

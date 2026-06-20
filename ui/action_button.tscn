@@ -10,6 +10,7 @@ custom_minimum_size = Vector2(250, 65)
 offset_right = 100.0
 offset_bottom = 44.0
 size_flags_vertical = 3
+mouse_filter = 1
 theme = ExtResource("2_vmy6r")
 theme_type_variation = &"ButtonTheme"
 script = ExtResource("1_vmy6r")

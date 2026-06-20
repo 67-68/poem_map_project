@@ -160,7 +160,9 @@ func _request_show(binding: HoverBinding) -> void:
 	
 	# 地雷二：互斥锁 — 强制隐藏当前活跃的 popup
 	if _current_active != null and _current_active != binding:
-		Logging.info("HoverPopupManager: preempting %s for %s" % [_current_active.trigger.name, binding.trigger.name])
+		# 💀 防御僵尸节点：当前活跃的 trigger 可能正在被回收的路上
+		var active_name: String = _current_active.trigger.name if is_instance_valid(_current_active.trigger) else "<Freed_Zombie>"
+		Logging.info("HoverPopupManager: preempting %s for %s" % [active_name, binding.trigger.name])
 		_hide_popup(_current_active)
 	
 	_current_active = binding
@@ -276,7 +278,9 @@ func _on_popup_visibility_changed(binding: HoverBinding) -> void:
 	# 仅在已有其他活跃 popup 时才执行互斥拦截
 	# 当 _current_active == null（无 hover 上下文）时，popup 自主显示不应被压制
 	if popup.visible and _current_active != null and _current_active != binding:
-		Logging.info("HoverPopupManager: popup '%s' shown while '%s' is active, forcing hide" % [binding.popup.name, _current_active.trigger.name])
+		# 💀 同样的僵尸防御
+		var active_name: String = _current_active.trigger.name if is_instance_valid(_current_active.trigger) else "<Freed_Zombie>"
+		Logging.info("HoverPopupManager: popup '%s' shown while '%s' is active, forcing hide" % [binding.popup.name, active_name])
 		popup.visible = false
 
 ## register 后延迟一帧，覆盖 popup 自身 _ready() 里的 show()

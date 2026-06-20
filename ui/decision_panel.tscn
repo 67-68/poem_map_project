@@ -46,6 +46,7 @@ theme_override_constants/margin_right = 20
 
 [node name="Button" type="Button" parent="ActionPanel/V/MarginContainer"]
 layout_mode = 2
+mouse_filter = 1
 theme_override_font_sizes/font_size = 8
 text = "确认"
 

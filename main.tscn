@@ -28,8 +28,8 @@
 [ext_resource type="Script" uid="uid://kfq72j60w3b8" path="res://core/fatigue_manager.gd" id="36_fatigue"]
 [ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="37_ambition"]
 [ext_resource type="Script" uid="uid://b74k1mainp82nw" path="res://main.gd" id="38_main"]
-[ext_resource type="Script" uid="uid://inptmgr00001" path="res://core/input_manager.gd" id="39_inputmgr"]
-[ext_resource type="PackedScene" uid="uid://sysmenu00001" path="res://ui/system_menu.tscn" id="40_sysmenu"]
+[ext_resource type="Script" path="res://core/input_manager.gd" id="39_inputmgr"]
+[ext_resource type="PackedScene" path="res://ui/system_menu.tscn" id="40_sysmenu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsp4k"]
 shader = ExtResource("3_xuqvo")

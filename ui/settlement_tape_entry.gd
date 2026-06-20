@@ -9,6 +9,9 @@ var _title_label: Label
 var _content_rtl: RichTextLabel
 var _confirm_btn: Button
 
+## 缓存 event.options[0].choice_result，按下按钮时原样回传
+var _choice_result = null
+
 
 func _ready() -> void:
 	_purge_existing_children()
@@ -104,13 +107,14 @@ func populate(event: BaseEvent) -> void:
 	if _content_rtl:
 		_content_rtl.text = event.description
 
-	# 按钮文本：使用 options[0].description（即 "合上考评"）
+	# 按钮文本 + 缓存 choice_result（包含 PopEventOperator，按下时回传）
 	if _confirm_btn and event.options.size() > 0:
 		_confirm_btn.text = event.options[0].description
+		_choice_result = event.options[0].choice_result
 
-	Logging.info("SettlementTapeEntry.populate: 结算条目已填充完毕")
+	Logging.info("SettlementTapeEntry.populate: 结算条目已填充完毕，已缓存 choice_result=%s" % _choice_result)
 
 
 func _on_confirm_pressed() -> void:
-	Logging.info("SettlementTapeEntry: '合上考评' 被点击")
-	option_selected.emit(null, "合上考评")
+	Logging.info("SettlementTapeEntry: '合上考评' 被点击，转发 choice_result=%s" % _choice_result)
+	option_selected.emit(_choice_result, "合上考评")

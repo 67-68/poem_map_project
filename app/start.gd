@@ -11,8 +11,9 @@ func _process(delta: float) -> void:
 	pass
 
 func _on_pressed() -> void:
+	var tree := get_tree()
 	EventBus.request_start_black.emit(true)
-	await get_tree().create_timer(1.0).timeout
+	await tree.create_timer(1.0).timeout
 	EventBus.request_start_black.emit(false)
-	await get_tree().create_timer(1.0).timeout
-	get_tree().change_scene_to_file("res://main.tscn")
+	await tree.create_timer(1.0).timeout
+	tree.change_scene_to_file("res://main.tscn")
