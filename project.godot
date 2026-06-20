@@ -38,6 +38,7 @@ ImageManager="*res://features/image_manager.gd"
 RuntimeProbe="*res://core/runtime_probe.gd"
 HoverPopupManager="*res://ui/hover_popup_manager.gd"
 BlurManager="*res://features/blur_manager.gd"
+AncientOptionBtnManager="*res://core/ancient_option_btn_manager.gd"
 
 [debug]
 

@@ -4,6 +4,14 @@ signal option_made(data: ChoiceResult) # 外部连接这个; 不要连接pressed
 var option: BaseOption
 var click_count := 0
 
+# ── 枯墨下划线动画 ──────────────────────────────────
+const UNDERLINE_COLOR: Color = Color(0.55, 0.12, 0.08, 0.7)
+const UNDERLINE_HEIGHT: float = 2.0
+const HOVER_EXPAND_DURATION: float = 0.25
+const HOVER_SHRINK_DURATION: float = 0.15
+var _underline: ColorRect = null
+var _hover_tween: Tween = null
+
 # 自定义工具提示缓存（由 _make_custom_tooltip 创建）
 var _cached_tooltip: Control = null
 
@@ -15,6 +23,65 @@ static func create(data: BaseOption) -> EventBtn:
 	# 必须设为容器布局模式(1)，否则父 VBoxContainer 无法管理其尺寸（场景默认 layout_mode=2 固定定位）
 	btn.layout_mode = 1
 	return btn
+
+func _ready() -> void:
+	_suppress_default_button_states()
+	_setup_underline()
+
+## 压制 Godot Button 默认 hover/pressed/focus 样式
+## ButtonTheme 只定义了 normal，hover 时回退到默认主题会带阴影+异字体
+func _suppress_default_button_states() -> void:
+	var empty_style := StyleBoxEmpty.new()
+	add_theme_stylebox_override("hover", empty_style)
+	add_theme_stylebox_override("pressed", empty_style)
+	add_theme_stylebox_override("focus", empty_style)
+	# 字体颜色在所有状态下保持一致
+	add_theme_color_override("font_hover_color", get_theme_color("font_color", "ButtonTheme"))
+	add_theme_color_override("font_pressed_color", get_theme_color("font_color", "ButtonTheme"))
+	add_theme_color_override("font_focus_color", get_theme_color("font_color", "ButtonTheme"))
+
+## 创建枯墨下划线 ColorRect，置于按钮底部
+func _setup_underline() -> void:
+	_underline = ColorRect.new()
+	_underline.name = "UnderlineRect"
+	_underline.color = UNDERLINE_COLOR
+	# 使用 scale 实现左右展开：初始 scale.x=0（不可见）
+	_underline.scale = Vector2(0.0, 1.0)
+	# 手动锚定：底部铺满左右，高度固定
+	_underline.anchor_left = 0.0
+	_underline.anchor_right = 1.0
+	_underline.anchor_bottom = 1.0
+	_underline.anchor_top = 1.0
+	_underline.offset_top = -UNDERLINE_HEIGHT
+	_underline.offset_bottom = 0.0
+	_underline.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_underline)
+	
+	# 信号绑定
+	mouse_entered.connect(_on_hover_enter)
+	mouse_exited.connect(_on_hover_exit)
+	Logging.info("EventBtn._setup_underline: underline created for btn '%s'" % text)
+
+func _on_hover_enter() -> void:
+	if not _underline:
+		return
+	# 清除旧 tween
+	if _hover_tween and _hover_tween.is_valid():
+		_hover_tween.kill()
+	_hover_tween = create_tween()
+	_hover_tween.set_ease(Tween.EASE_OUT)
+	_hover_tween.set_trans(Tween.TRANS_CUBIC)
+	_hover_tween.tween_property(_underline, "scale", Vector2(1.0, 1.0), HOVER_EXPAND_DURATION)
+
+func _on_hover_exit() -> void:
+	if not _underline:
+		return
+	if _hover_tween and _hover_tween.is_valid():
+		_hover_tween.kill()
+	_hover_tween = create_tween()
+	_hover_tween.set_ease(Tween.EASE_IN)
+	_hover_tween.set_trans(Tween.TRANS_CUBIC)
+	_hover_tween.tween_property(_underline, "scale", Vector2(0.0, 1.0), HOVER_SHRINK_DURATION)
 
 func _init_option(data: BaseOption):
 	"""初始化选项数据"""
@@ -45,7 +112,20 @@ func _init_option(data: BaseOption):
 			return
 	
 	# 通过验证 → 正常触发
+	_register_to_manager(data)
 	pressed.connect(confirmed)
+
+## 生成注册 key 并注册到 AncientOptionBtnManager
+func _register_to_manager(data: BaseOption) -> void:
+	var btn_id := ""
+	if '_resolved_description' in data and data._resolved_description:
+		btn_id = data._resolved_description
+	else:
+		btn_id = data.description if 'description' in data else ""
+	if btn_id.is_empty():
+		Logging.warn("EventBtn._register_to_manager: 无法生成 btn_id，跳过注册")
+		return
+	AncientOptionBtnManager.register(btn_id, self)
 
 func confirmed():
 	if not double_check():
