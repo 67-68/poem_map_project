@@ -182,8 +182,11 @@ func _on_show_timer_timeout(binding: HoverBinding) -> void:
 ## 将 popup 定位到鼠标指针位置，clamp 到屏幕内（不低于屏幕上方）
 func _position_popup_at_mouse(binding: HoverBinding) -> void:
 	var popup = binding.popup
-	var mouse_pos = _canvas_layer.get_global_mouse_position()
-	var viewport_size = _canvas_layer.get_viewport_rect().size
+	# CanvasLayer 没有 get_global_mouse_position() / get_viewport_rect()
+	# 使用 autoload Node.get_viewport() 获取 Viewport 引用
+	var viewport := get_viewport()
+	var mouse_pos = viewport.get_mouse_position()
+	var viewport_size = viewport.get_visible_rect().size
 	
 	# 重置锚点为左上角，避免父级 CanvasLayer 的 anchor 干扰
 	popup.anchors_preset = Control.PRESET_TOP_LEFT

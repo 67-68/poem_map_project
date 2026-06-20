@@ -28,7 +28,7 @@ func _ready() -> void:
 	var icon_rect: TextureRect = _write_poem_btn.get_node("Panel/HBoxContainer/TextureRect")
 	title_label.text = "写诗"
 	context_label.text = ""
-	icon_rect.texture = load("res://assets/profile/chuangzuo_stamp.png")
+	icon_rect.texture = load("res://assets/stamps/chuangzuo_stamp.png")
 
 	# ── 风闻刷新 ──
 	_refresh_rumors()
