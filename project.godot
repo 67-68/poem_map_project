@@ -37,6 +37,7 @@ ActionManager="*res://core/action_manager.gd"
 ImageManager="*res://features/image_manager.gd"
 RuntimeProbe="*res://core/runtime_probe.gd"
 HoverPopupManager="*res://ui/hover_popup_manager.gd"
+BlurManager="*res://features/blur_manager.gd"
 
 [debug]
 

@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://wotbd0ebjf13" path="res://core/operators/force_set_property_operator.gd" id="8_rsi40"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="9_bc0rs"]
 [ext_resource type="Script" uid="uid://dphx7fnq7tlix" path="res://core/operators/block_action_operator.gd" id="9_id27c"]
+[ext_resource type="Script" uid="uid://bldlywdhifyrj" path="res://core/operators/clear_scheduled_events.gd" id="11_2dj3s"]
 
 [sub_resource type="Resource" id="Resource_60p20"]
 script = ExtResource("1_3b1jx")
@@ -80,14 +81,19 @@ action_types = Array[int]([0])
 xun_duration = 999
 metadata/_custom_type_script = "uid://dphx7fnq7tlix"
 
+[sub_resource type="Resource" id="Resource_6hog5"]
+script = ExtResource("11_2dj3s")
+metadata/_custom_type_script = "uid://bldlywdhifyrj"
+
 [sub_resource type="Resource" id="Resource_6nef4"]
 script = ExtResource("8_36yy7")
-operators = Array[ExtResource("6_d35yp")]([SubResource("Resource_sndk8"), SubResource("Resource_rsi40"), SubResource("Resource_id27c"), SubResource("Resource_d35yp")])
+operators = Array[ExtResource("6_d35yp")]([SubResource("Resource_sndk8"), SubResource("Resource_rsi40"), SubResource("Resource_id27c"), SubResource("Resource_d35yp"), SubResource("Resource_6hog5")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_15a57"]
 script = ExtResource("9_bc0rs")
 choice_result = SubResource("Resource_6nef4")
+description = "欣喜若狂"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]

@@ -16,6 +16,8 @@ var _item_card_scene: PackedScene = preload("res://ui/picker_item_card.tscn")
 func initialize(data: Array, ui_constructor: Callable = Callable()) -> void:
 	_data = data
 
+	header.theme_type_variation = &"DefaultText"
+
 	# 填充网格
 	for entity in data:
 		var card: PickerItemCard
@@ -28,7 +30,7 @@ func initialize(data: Array, ui_constructor: Callable = Callable()) -> void:
 				Logging.warn("PickerTapeAttachment: ui_constructor 返回的不是 PickerItemCard，跳过")
 				continue
 
-		card.clicked.connect(_on_card_clicked.bind(card))
+		card.clicked.connect(func(_e): _on_card_clicked(card))
 		grid.add_child(card)
 
 
@@ -38,7 +40,7 @@ func _on_card_clicked(card: PickerItemCard) -> void:
 	_selected = true
 
 	# 选中 Tween: 选中放大 + 金色边框
-	var selected_tween := create_tween().set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	var selected_tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	selected_tween.tween_property(card, "scale", Vector2(1.1, 1.1), 0.3)
 
 	# 变金边
@@ -59,7 +61,7 @@ func _on_card_clicked(card: PickerItemCard) -> void:
 		if not other:
 			continue
 
-		var tween := create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		var tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		tween.tween_property(other, "scale", Vector2(0.85, 0.85), 0.25)
 		tween.parallel().tween_property(other, "modulate", Color(0.5, 0.5, 0.5, 0.6), 0.25)
 
@@ -70,5 +72,5 @@ func _on_card_clicked(card: PickerItemCard) -> void:
 	var selected_entity := card.entity
 
 	# 延迟发射信号（让动画播完）
-	await get_tree().create_timer(0.4, false, true).timeout
+	await get_tree().create_timer(0.4, true, true).timeout
 	item_selected.emit(selected_entity)

@@ -12,6 +12,8 @@ static func create(data: BaseOption) -> EventBtn:
 	var scene = load("res://characters/event_btn.tscn")
 	var btn = scene.instantiate()
 	btn._init_option(data)
+	# 必须设为容器布局模式(1)，否则父 VBoxContainer 无法管理其尺寸（场景默认 layout_mode=2 固定定位）
+	btn.layout_mode = 1
 	return btn
 
 func _init_option(data: BaseOption):
@@ -21,8 +23,10 @@ func _init_option(data: BaseOption):
 	#     fallback 到 description（静态文本）
 	if '_resolved_description' in data and data._resolved_description:
 		text = data._resolved_description
+		Logging.info("EventBtn._init_option: 使用 _resolved_description='%s'" % text)
 	else:
 		text = data.description if 'description' in data else "选项"
+		Logging.info("EventBtn._init_option: 使用 description='%s' (has description=%s)" % [text, 'description' in data])
 	autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # Enable text wrapping
 	# custom_minimum_size 已经在场景中设置了，不需要重复设置
 	

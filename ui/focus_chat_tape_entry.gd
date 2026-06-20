@@ -55,7 +55,10 @@ func _show_current_line() -> void:
 	if _current_index >= _dialogue_sequence.size():
 		# 对话播完 → 显示选项（如有）
 		if _chat_data and _chat_data.options.size() > 0 and not _choice_created:
-			for opt in _chat_data.options:
+			Logging.info("FocusChatTapeEntry: 对话播完，options 数量=%d" % _chat_data.options.size())
+			for i in range(_chat_data.options.size()):
+				var opt = _chat_data.options[i]
+				Logging.info("FocusChatTapeEntry:   options[%d] description='%s' _resolved='%s'" % [i, opt.description if 'description' in opt else 'N/A', opt._resolved_description if '_resolved_description' in opt and opt._resolved_description else 'N/A'])
 				opt.init(_context)
 			_show_options()
 			_choice_created = true
@@ -106,10 +109,10 @@ func _setup_left_line(hbox: HBoxContainer, line: FocusedChatLine) -> void:
 	name_lbl.add_theme_color_override("font_color", Color(0.75, 0.25, 0.25))
 	name_lbl.add_theme_font_size_override("font_size", 16)
 
-	# 3. 对话文本（暗青色）— 使用 RichTextLabel 支持 BBCode
+	# 3. 对话文本（NarrativeText theme variant）— 使用 RichTextLabel 支持 BBCode
 	var text_lbl := RichTextLabel.new()
 	text_lbl.text = line.description
-	text_lbl.add_theme_color_override("default_color", Color(0.18, 0.36, 0.43))
+	text_lbl.theme_type_variation = "NarrativeText"
 	text_lbl.fit_content = true
 	text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -123,10 +126,12 @@ func _setup_left_line(hbox: HBoxContainer, line: FocusedChatLine) -> void:
 func _setup_right_line(hbox: HBoxContainer, line: FocusedChatLine) -> void:
 	hbox.alignment = BoxContainer.ALIGNMENT_END
 
-	# 1. 对话文本（黑灰色）— 使用 RichTextLabel 支持 BBCode
+	# 1. 对话文本（NarrativeText theme variant）— 右对齐（印章在右，文本需与右侧视觉连贯）
 	var text_lbl := RichTextLabel.new()
-	text_lbl.text = line.description
-	text_lbl.add_theme_color_override("default_color", Color(0.23, 0.23, 0.23))
+	# RichTextLabel 不支持 alignment 属性，改用 BBCode [right] 标签实现右对齐
+	text_lbl.bbcode_enabled = true
+	text_lbl.text = "[right]" + line.description + "[/right]"
+	text_lbl.theme_type_variation = "NarrativeText"
 	text_lbl.fit_content = true
 	text_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -160,22 +165,53 @@ func _setup_right_line(hbox: HBoxContainer, line: FocusedChatLine) -> void:
 
 
 func _show_options() -> void:
+	Logging.info("FocusChatTapeEntry: _show_options 被调用")
 	_option_btns = preload("res://ui/option_btns.tscn").instantiate()
-	_option_btns.apply_btns(_chat_data.options, _on_option_selected)
 	add_child(_option_btns)
+	_option_btns.apply_btns(_chat_data.options, _on_option_selected)
 
 
 func _on_option_selected(choice_result: ChoiceResult) -> void:
-	Logging.info("FocusChatTapeEntry: 选项已选，发出 dialogue_finished")
+	var chosen_text := _find_chosen_text(choice_result)
+	Logging.info("FocusChatTapeEntry: 选项已选「%s」，发出 dialogue_finished" % chosen_text)
 
-	# 追加一条"烙印"：显示被选中的文本
+	# ── "既决"烙印 ──
+	# 格式：「 既决：<选项文本> 」
+	# 暗朱砂红 + 极淡麻纸底色 + 微弱红色下划线 + 左缩进 20px + 上下双倍间距
 	var chosen_lbl := Label.new()
-	chosen_lbl.text = "【已录】"
-	chosen_lbl.add_theme_color_override("font_color", Color(0.70, 0.12, 0.12))
+	chosen_lbl.text = "「 既决：%s 」" % chosen_text
+	chosen_lbl.add_theme_color_override("font_color", Color(0.55, 0.10, 0.10))
 	chosen_lbl.add_theme_font_size_override("font_size", 14)
-	add_child(chosen_lbl)
+
+	# 极淡麻纸底色 + 微弱红色下划线
+	var bg_style := StyleBoxFlat.new()
+	bg_style.bg_color = Color(0.96, 0.93, 0.86, 0.20)
+	bg_style.border_width_left = 0
+	bg_style.border_width_right = 0
+	bg_style.border_width_top = 0
+	bg_style.border_width_bottom = 1
+	bg_style.border_color = Color(0.55, 0.10, 0.10, 0.25)
+	chosen_lbl.add_theme_stylebox_override("normal", bg_style)
+
+	# 左缩进 20px + 上下双倍间距（通过 MarginContainer 实现）
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 20)
+	# VBoxContainer separation=12，额外加 12px 使上下总间距 = 24px
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_child(chosen_lbl)
+	add_child(margin)
 
 	dialogue_finished.emit(choice_result)
+
+
+func _find_chosen_text(choice_result: ChoiceResult) -> String:
+	"""根据 ChoiceResult 反向查找选项的展示文本"""
+	for opt in _chat_data.options:
+		if opt.choice_result == choice_result:
+			var txt = opt._resolved_description if '_resolved_description' in opt and opt._resolved_description else opt.description
+			return txt
+	return "?"
 
 
 func _get_surname(name: String) -> String:

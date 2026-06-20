@@ -47,6 +47,7 @@ theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 20
 
 [node name="ScrollContainer" type="ScrollContainer" parent="EventHistory/Margin" unique_id=1870292442]
+horizontal_scroll_mode = 0
 layout_mode = 2
 
 [node name="VBox_TapeContent" type="VBoxContainer" parent="EventHistory/Margin/ScrollContainer" unique_id=104575616]

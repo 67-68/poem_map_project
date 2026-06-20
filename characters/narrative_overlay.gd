@@ -27,6 +27,8 @@ var _tween: Tween
 
 # 纸带是否已首次展示（控制 dimmer 淡入只播一次）
 var _tape_initialized: bool = false
+# 纸带静止时的 Y 偏移（动态读取于 _show_tape 首次调用，此时布局必定完成）
+var _tape_target_y: float = 0.0
 
 # 事件队列 (FIFO)，防止多个事件相互覆盖
 # 每个元素为 { "data": BaseEvent, "context": Dictionary }
@@ -90,21 +92,49 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════
 
 func _show_tape():
-	"""显示纸带面板（dimmer 淡入 + 宣纸背景显示）"""
+	"""显示纸带面板 — 从屏幕顶部外滑入 + 透明度渐变 + 纸张摩擦音效"""
 	if _tape_initialized:
 		show()
 		return
 
 	_tape_initialized = true
 	if _tween: _tween.kill()
-	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_tween.set_parallel(true).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 
+	# ── 延迟一帧记录纸带在布局中的原始位置 ──
+	#    ⚠️ 记录的是 position.y（像素坐标），不是 offset_top（anchor 偏移）！
+	#    对于锚定在 (0.5, 0.5) 的 PanelContainer：
+	#    position.y = viewport_height/2 + offset_top = 324 + (-315) = 9
+	if _tape_target_y == 0.0:
+		_tape_target_y = position.y
+		Logging.info("_show_tape: 记录纸带静止 position.y=%s (offset_top=%s)" % [_tape_target_y, offset_top])
+
+	# ── 诊断日志 ──
+	var viewport_height := get_viewport_rect().size.y
+	Logging.info("=== _show_tape 动画日志 ===")
+	Logging.info("viewport_height=%s | _tape_target_y=%s | offset_top=%s" % [viewport_height, _tape_target_y, offset_top])
+
+	# ── 1. 物理重置：埋到屏幕顶部外 ──
+	position.y = -(viewport_height + 100.0)
+	Logging.info("重置后 position.y=%s → Tween 目标 position.y=%s" % [position.y, _tape_target_y])
+	modulate.a = 0.0
 	show()
 
-	# 宣纸背景淡入
-	event_ui.modulate.a = 0.0
-	_tween.tween_property(event_ui, "modulate:a", 1.0, 0.5)
+	# ── 2. 音效：纸张摩擦声 ──
+	AudioManager.play_sfx(load("res://assets/sounds/rustling_paper.wav"))
+
+	# ── 3. 并行 Tween：下落刹车 + 显形 ──
+	Logging.info("==============================")
+
+	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween.set_parallel(true)
+
+	# CUBIC + EASE_OUT：「快速拔出 → 极速刹车 → 稳稳停住」
+	_tween.tween_property(self, "position:y", _tape_target_y, 0.65) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+	# SINE EASE_IN_OUT：前 0.3 秒平滑显形，避免像素撕裂
+	_tween.tween_property(self, "modulate:a", 1.0, 0.3) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
 # --- 事件栈处理 ----------------------------------------

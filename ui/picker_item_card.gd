@@ -4,14 +4,34 @@ class_name PickerItemCard extends PanelContainer
 signal clicked(entity: GameEntity)
 
 var entity: GameEntity = null
+var _pending_data: GameEntity = null
 
 @onready var icon_rect: TextureRect = $V/IconRect
 @onready var name_label: Label = $V/NameLabel
 @onready var desc_label: Label = $V/DescLabel
 
 
+func _ready() -> void:
+	name_label.theme_type_variation = &"DefaultText"
+	desc_label.theme_type_variation = &"DefaultText"
+	if _pending_data:
+		_apply_data(_pending_data)
+		_pending_data = null
+
+
 func initialize(entity_data: GameEntity) -> void:
+	if not is_node_ready():
+		_pending_data = entity_data
+		return
+	_apply_data(entity_data)
+
+
+func _apply_data(entity_data: GameEntity) -> void:
 	entity = entity_data
+	if not entity:
+		name_label.text = "无名"
+		desc_label.text = ""
+		return
 
 	name_label.text = entity.name
 	desc_label.text = entity.description

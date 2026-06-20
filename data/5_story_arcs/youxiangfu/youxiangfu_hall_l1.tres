@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="6_bo"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_re"]
 [ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="8_tco"]
-[ext_resource type="Resource" uid="uid://dqqf3t8tk5g3p" path="res://data/poem_taste/youxiangfu_ganye_taste.tres" id="10_taste"]
+[ext_resource type="Resource" uid="uid://dqqf3t8tk5g3p" path="res://data/2_characters/poem_tastes/youxiangfu_ganye_taste.tres" id="10_taste"]
 
 [sub_resource type="Resource" id="Resource_tco"]
 script = ExtResource("8_tco")

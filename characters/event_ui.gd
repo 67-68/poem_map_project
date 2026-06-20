@@ -208,14 +208,31 @@ func mark_chosen(entry_id: String, choice_text: String) -> void:
 	var option_btns: Control = entry.get_node("OptionBtns")
 	option_btns.hide()
 
-	# 2. 创建文本烙印 "→ 玩家选了 XXX"
-	var choice_label := Label.new()
-	choice_label.name = "ChoiceLabel"
-	choice_label.text = "→ " + choice_text
-	choice_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	choice_label.add_theme_color_override("font_color", Color(0.6, 0.2, 0.2, 1.0))  # 暗红色
-	choice_label.add_theme_font_size_override("font_size", 16)
-	entry.add_child(choice_label)
+	# 2. 创建文本烙印 "「 既决：XXX 」"（古典格式）
+	var chosen_lbl := Label.new()
+	chosen_lbl.name = "ChoiceLabel"
+	chosen_lbl.text = "「 既决：%s 」" % choice_text
+	chosen_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	chosen_lbl.add_theme_color_override("font_color", Color(0.55, 0.10, 0.10))
+	chosen_lbl.add_theme_font_size_override("font_size", 14)
+
+	# 极淡麻纸底色 + 微弱红色下划线
+	var bg_style := StyleBoxFlat.new()
+	bg_style.bg_color = Color(0.96, 0.93, 0.86, 0.20)
+	bg_style.border_width_left = 0
+	bg_style.border_width_right = 0
+	bg_style.border_width_top = 0
+	bg_style.border_width_bottom = 1
+	bg_style.border_color = Color(0.55, 0.10, 0.10, 0.25)
+	chosen_lbl.add_theme_stylebox_override("normal", bg_style)
+
+	# 左缩进 20px + 上下双倍间距（通过 MarginContainer 实现）
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 20)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_child(chosen_lbl)
+	entry.add_child(margin)
 
 	entry.set_meta("state", "chosen")
 	entry.set_meta("chosen_text", choice_text)
