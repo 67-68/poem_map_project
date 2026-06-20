@@ -9,9 +9,6 @@ var _title_label: Label
 var _content_rtl: RichTextLabel
 var _confirm_btn: Button
 
-## 缓存 event.options[0].choice_result，按下按钮时原样回传
-var _choice_result = null
-
 
 func _ready() -> void:
 	_purge_existing_children()
@@ -68,7 +65,7 @@ func _construct_layout() -> void:
 	_content_rtl = RichTextLabel.new()
 	_content_rtl.name = "ContentRichText"
 	_content_rtl.bbcode_enabled = true
-	_content_rtl.fit_content = true
+	_content_rtl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_content_rtl.theme_type_variation = "NarrativeText"
 	vbox.add_child(_content_rtl)
 
@@ -107,14 +104,15 @@ func populate(event: BaseEvent) -> void:
 	if _content_rtl:
 		_content_rtl.text = event.description
 
-	# 按钮文本 + 缓存 choice_result（包含 PopEventOperator，按下时回传）
+	# 按钮文本
 	if _confirm_btn and event.options.size() > 0:
 		_confirm_btn.text = event.options[0].description
-		_choice_result = event.options[0].choice_result
 
-	Logging.info("SettlementTapeEntry.populate: 结算条目已填充完毕，已缓存 choice_result=%s" % _choice_result)
+	Logging.info("SettlementTapeEntry.populate: 结算条目已填充完毕")
 
 
 func _on_confirm_pressed() -> void:
-	Logging.info("SettlementTapeEntry: '合上考评' 被点击，转发 choice_result=%s" % _choice_result)
-	option_selected.emit(_choice_result, "合上考评")
+	Logging.info("SettlementTapeEntry: '合上考评' 被点击，原地构造 PopEventOperator")
+	var result := ChoiceResult.new()
+	result.operators = [PopEventOperator.new()]
+	option_selected.emit(result, "合上考评")

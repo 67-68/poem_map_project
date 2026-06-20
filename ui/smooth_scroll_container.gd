@@ -7,7 +7,7 @@ class_name SmoothScrollContainer extends ScrollContainer
 ##   scroll_page(): PgUp/PgDn 入口（由 InputManager 调用）
 
 @export var scroll_speed: float = 120.0    # 滚轮每次步长 (像素)
-@export var pan_sensitivity: float = 0.35  # 触控板灵敏度系数 (相对 scroll_speed 的阻尼，越小越迟钝)
+@export var pan_sensitivity: float = 0.05  # 触控板灵敏度系数 (相对 scroll_speed 的阻尼，越小越迟钝)
 @export var smooth_weight: float = 15.0    # 插值系数 (越小惯性越大, 越大越干脆)
 @export var drag_friction: float = 1.0     # 拖拽摩擦力 (1.0=跟手, 0.5=纸很重扯不动)
 
@@ -60,13 +60,13 @@ func _process(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	# ── 拖拽开始：左键按下，且鼠标在本控件范围内 ──
+	# ⚠️ 不 accept_event()！否则子 Button 收不到点击，按钮将不可交互
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if _mouse_inside():
 			is_dragging = true
 			target_scroll = scroll_vertical
-			accept_event()
 			Logging.debug("SmoothScrollContainer[%s]: DRAG_START(via_input) sv=%.1f target=%.1f" % [name, scroll_vertical, target_scroll])
-			return
+		return
 	
 	# ── 拖拽滑动：鼠标移动，且处于拖拽状态（全局追踪，即使鼠标移出控件）──
 	if event is InputEventMouseMotion and is_dragging:
@@ -82,12 +82,12 @@ func _input(event: InputEvent) -> void:
 		return
 	
 	# ── 拖拽结束：左键释放（全局追踪）──
+	# ⚠️ 不 accept_event()！释放事件仍需穿透到子 Button
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 		if is_dragging:
 			is_dragging = false
-			accept_event()
 			Logging.debug("SmoothScrollContainer[%s]: DRAG_END(via_input) sv=%.1f target=%.1f" % [name, scroll_vertical, target_scroll])
-			return
+		return
 
 
 func _mouse_inside() -> bool:
