@@ -394,70 +394,95 @@ func _process_next():
 
 # --- Picker 局部压暗 ──────────────────────────────────
 
-## 纸带历史降维：除最新 Picker 外所有子节点叠加黑色半透明 ColorRect + modulate 灰暗
-## 实现「旧史褪色，新抉择刺眼浮现」的视觉隐喻
+## 纸带历史降维：墨褪纸存 — 只褪文本标签颜色，纸张底色原封不动
 ##
-## ⚠️ 层级陷阱：ColorRect 不能添加为 VBoxContainer entry 的子节点，
-## 否则 Container 布局系统会把 anchors 覆盖为 (0,0) 尺寸。
-## 正确做法：挂在 event_ui（TextureRect，非 Container）上，
-## 通过 global_position 坐标转换手动定位。
-const DIM_HISTORY_COLOR: Color = Color(0.4, 0.4, 0.4, 0.8)
-const DIM_HISTORY_DURATION: float = 0.5
-const DIM_OVERLAY_COLOR := Color(0.0, 0.0, 0.0, 0.55)
-const DIM_OVERLAY_NAME := "_HistoryDimOverlay"
+## 原则：压暗的是「墨迹」（Label/RichTextLabel 的 modulate），
+## 而不是「纸张」（PanelContainer/StyleBoxFlat 的背景）。
+## 绝不使用黑色半透明 ColorRect 遮罩（那是 CIA 档案黑条 💀）。
+const DIM_HISTORY_INK_COLOR: Color = Color(0.75, 0.62, 0.42, 0.35)
+
 
 func _dim_tape_history(picker_node: Control) -> void:
 	var tape: VBoxContainer = event_ui._tape_content
 	if not tape:
 		Logging.warn("_dim_tape_history: _tape_content 为空")
 		return
-	var event_ui_global = event_ui.global_position
+
 	var dimmed_count := 0
 	for child in tape.get_children():
 		if child == picker_node:
+			Logging.info("_dim_tape_history: 跳过 picker 节点 name='%s' class='%s'" % [child.name, child.get_class()])
 			continue
 
-		# 1. modulate 灰暗 — 内容本身褪色
-		var tm := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		tm.tween_property(child, "modulate", DIM_HISTORY_COLOR, DIM_HISTORY_DURATION)
+		Logging.info("_dim_tape_history: 开始褪墨 entry name='%s' class='%s' child_count=%d" % [child.name, child.get_class(), child.get_child_count()])
 
-		# 2. 叠加黑色 overlay — 挂在 event_ui 上避免 Container 布局干扰
-		var overlay := ColorRect.new()
-		overlay.name = DIM_OVERLAY_NAME
-		overlay.color = Color(0, 0, 0, 0)  # 初始透明
-		overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		overlay.z_index = 10  # 确保渲染在所有 entry 上方
-		# 手动定位：entry 全局坐标 → event_ui 局部坐标
-		var entry_global = child.global_position
-		overlay.position = entry_global - event_ui_global
-		overlay.size = child.size
-		event_ui.add_child(overlay)
-
-		var to := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		to.tween_property(overlay, "color", DIM_OVERLAY_COLOR, DIM_HISTORY_DURATION)
+		# 递归遍历历史条目内的所有 Label / RichTextLabel，直接设置 theme_override font_color
+		var text_count := _dim_text_nodes_recursive(child)
+		Logging.info("_dim_tape_history: entry '%s' 褪墨完成，共处理 %d 个文本节点" % [child.name, text_count])
 
 		dimmed_count += 1
-	Logging.info("_dim_tape_history: 历史条目已压暗 + 黑纱 overlay 挂 event_ui（%d 个）" % dimmed_count)
+	Logging.info("_dim_tape_history: 历史条目文本已褪墨（%d 个 entry）" % dimmed_count)
+
+
+## 递归遍历节点树，对所有 Label / RichTextLabel 直接设置 theme_override font_color
+## 返回处理的文本节点数量
+func _dim_text_nodes_recursive(node: Node) -> int:
+	var count := 0
+	for child_node in node.get_children():
+		if child_node is Label or child_node is RichTextLabel:
+			Logging.info("  _dim_text: 褪墨节点 name='%s' class='%s' path='%s' → font_color=%s text='%s'" % [
+				child_node.name,
+				child_node.get_class(),
+				str(child_node.get_path()),
+				str(DIM_HISTORY_INK_COLOR),
+				child_node.text if child_node is Label else "(RichTextLabel)"
+			])
+			if child_node is Label:
+				child_node.add_theme_color_override(&"font_color", DIM_HISTORY_INK_COLOR)
+			elif child_node is RichTextLabel:
+				child_node.add_theme_color_override(&"default_color", DIM_HISTORY_INK_COLOR)
+			count += 1
+		else:
+			count += _dim_text_nodes_recursive(child_node)
+	return count
+
 
 func _undim_tape_history() -> void:
 	var tape: VBoxContainer = event_ui._tape_content
 	if not tape:
 		Logging.warn("_undim_tape_history: _tape_content 为空")
 		return
-	# 1. 恢复所有 entry 的 modulate
+
+	# 递归恢复所有 Label / RichTextLabel 的 font_color 到默认
 	var restored_count := 0
 	for child in tape.get_children():
-		var tm := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		tm.tween_property(child, "modulate", Color.WHITE, DIM_HISTORY_DURATION)
+		Logging.info("_undim_tape_history: 开始恢复 entry name='%s' class='%s'" % [child.name, child.get_class()])
+		var text_count := _undim_text_nodes_recursive(child)
+		Logging.info("_undim_tape_history: entry '%s' 恢复完成，共处理 %d 个文本节点" % [child.name, text_count])
 		restored_count += 1
 
-	# 2. 找出挂在 event_ui 上的 overlay 并淡出清理
-	for overlay_child in event_ui.get_children():
-		if overlay_child is ColorRect and overlay_child.name == DIM_OVERLAY_NAME:
-			var to := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-			to.tween_property(overlay_child, "color", Color(0, 0, 0, 0), DIM_HISTORY_DURATION)
-			to.finished.connect(overlay_child.queue_free, CONNECT_ONE_SHOT)
-	Logging.info("_undim_tape_history: modulate 已恢复 + overlay 挂 event_ui 清理（%d 个）" % restored_count)
+	Logging.info("_undim_tape_history: 文本墨色已恢复（%d 个 entry）" % restored_count)
+
+
+## 递归遍历节点树，移除所有 Label / RichTextLabel 的 theme_override font_color
+## 返回处理的文本节点数量
+func _undim_text_nodes_recursive(node: Node) -> int:
+	var count := 0
+	for child_node in node.get_children():
+		if child_node is Label or child_node is RichTextLabel:
+			Logging.info("  _undim_text: 恢复节点 name='%s' class='%s' → 移除 font_color override text='%s'" % [
+				child_node.name,
+				child_node.get_class(),
+				child_node.text if child_node is Label else "(RichTextLabel)"
+			])
+			if child_node is Label:
+				child_node.remove_theme_color_override(&"font_color")
+			elif child_node is RichTextLabel:
+				child_node.remove_theme_color_override(&"default_color")
+			count += 1
+		else:
+			count += _undim_text_nodes_recursive(child_node)
+	return count
 
 
 # --- Picker 栈条目生命周期 -----------------------------
@@ -621,6 +646,10 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 				Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
 				event_ui.append_event_entry(data, all_options, context, _current_from_stack, entry_id)
 
+	# ── 注册 1-4 数字键回调 + 纸带滚动容器 ──
+	_register_number_keys_for_options(all_options)
+	event_ui.register_scroll_for_input_manager()
+
 	AudioManager.play_sad()
 
 	# 扫描 context 中的 interrupt_event 字段
@@ -652,6 +681,7 @@ func _on_option_selected(_choice_result, _choice_text: String = ""):
 
 func _end_narrative(choice, choice_text: String = ""):
 	# 纸带模式：不退场、不 hide()，选项变文本烙印留在纸带上
+	_unregister_number_keys()
 	var entry_id := str(current_event_data.get_instance_id())
 	event_ui.mark_chosen(entry_id, choice_text)
 
@@ -743,3 +773,67 @@ func _on_animation_finished(anim: AnimationObject) -> void:
 	if _waiting_for_animations and _active_animations.is_empty():
 		_waiting_for_animations = false
 		_process_next()
+
+
+# ═══════════════════════════════════════════════
+# 数字键回调（1-4）— 桥接到 InputManager
+# ═══════════════════════════════════════════════
+
+## 收集当前事件条目中 OptionBtns 的子按钮，包装成 Callable 注册
+func _register_number_keys_for_options(all_options: Array) -> void:
+	var callbacks: Array[Callable] = []
+	for i in range(min(all_options.size(), 4)):
+		var opt = all_options[i]
+		# 收集选项的触发 —— 注意：这里不对选项进行具体选择，
+		# 而是包装成 Callable，按 1-4 索引映射
+		var cb: Callable = func():
+			Logging.info("NarrativeOverlay: 数字键 %d 触发选项" % (i + 1))
+			# 模拟用户选择：查找并触发对应 EventBtn
+			var entry_id := str(current_event_data.get_instance_id())
+			var entry = event_ui._find_entry(entry_id)
+			if not entry:
+				Logging.warn("NarrativeOverlay: 未找到 entry_id='%s'" % entry_id)
+				return
+			var option_btns: Control = entry.get_node("OptionBtns")
+			if not option_btns:
+				Logging.warn("NarrativeOverlay: 未找到 OptionBtns 节点")
+				return
+			var btns := option_btns.get_children()
+			if i < btns.size():
+				# 尝试触发按钮的 pressed 信号
+				var btn = btns[i]
+				if "option_made" in btn:
+					# 对于 EventBtn：需要获取该选项关联的 ChoiceResult
+					# 简单方法：直接触发 pressed 信号
+					btn.pressed.emit()
+				else:
+					Logging.warn("NarrativeOverlay: 选项按钮无 option_made 信号")
+			else:
+				Logging.warn("NarrativeOverlay: 数字键 %d 超出按钮数 %d" % [i + 1, btns.size()])
+		callbacks.append(cb)
+
+	if callbacks.size() > 0:
+		_get_input_manager().register_number_key_callbacks(callbacks, "NarrativeOverlay")
+		Logging.info("NarrativeOverlay: 已注册 %d 个数字键回调" % callbacks.size())
+
+
+func _unregister_number_keys() -> void:
+	_get_input_manager().unregister_number_key_callbacks("NarrativeOverlay")
+
+
+func _get_input_manager() -> InputManager:
+	var tree := get_tree()
+	var root := tree.root
+	var main_node := root.get_node_or_null("Main")
+	if not main_node:
+		Logging.err("NarrativeOverlay._get_input_manager: 无法找到 Main 节点")
+		return null
+	var core_systems := main_node.get_node_or_null("CoreSystems")
+	if not core_systems:
+		Logging.err("NarrativeOverlay._get_input_manager: 无法找到 CoreSystems 节点")
+		return null
+	var im := core_systems.get_node_or_null("InputManager") as InputManager
+	if not im:
+		Logging.err("NarrativeOverlay._get_input_manager: 无法找到 InputManager 节点")
+		return null
+	return im

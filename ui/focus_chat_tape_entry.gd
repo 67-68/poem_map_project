@@ -64,12 +64,13 @@ func _show_current_line() -> void:
 			_choice_created = true
 		else:
 			# 无选项自动结束
+			_unregister_focuschat_number_keys()
 			dialogue_finished.emit(null)
-		return
+			return
 
-	var line: FocusedChatLine = _dialogue_sequence[_current_index]
-	_append_dialogue_line(line)
-	line.execute_operators(_context)
+		var line: FocusedChatLine = _dialogue_sequence[_current_index]
+		_append_dialogue_line(line)
+		line.execute_operators(_context)
 
 
 func _append_dialogue_line(line: FocusedChatLine) -> void:
@@ -170,8 +171,54 @@ func _show_options() -> void:
 	add_child(_option_btns)
 	_option_btns.apply_btns(_chat_data.options, _on_option_selected)
 
+	# ── 注册 1-4 数字键（密谈选项）──
+	_register_focuschat_number_keys()
+
+
+func _register_focuschat_number_keys() -> void:
+	"""收集 OptionBtns 中的子按钮，包装成 Callable 注册到 InputManager"""
+	var btns := _option_btns.get_children()
+	var callbacks: Array[Callable] = []
+	for i in range(min(btns.size(), 4)):
+		var btn = btns[i]
+		var cb: Callable = func():
+			Logging.info("FocusChatTapeEntry: 数字键 %d 触发密谈选项" % (i + 1))
+			if "option_made" in btn:
+				btn.option_made.emit(btn._option if "_option" in btn else null)
+			else:
+				# 回退：直接触发 pressed 信号
+				if btn.has_signal("pressed"):
+					btn.pressed.emit()
+		callbacks.append(cb)
+
+	var im := _get_input_manager()
+	if not im:
+		Logging.warn("FocusChatTapeEntry: 无法获取 InputManager")
+		return
+
+	if callbacks.size() > 0:
+		im.register_number_key_callbacks(callbacks, "FocusChat")
+		Logging.info("FocusChatTapeEntry: 已注册 %d 个密谈数字键回调" % callbacks.size())
+
+
+func _get_input_manager() -> InputManager:
+	var tree := get_tree()
+	if not tree:
+		return null
+	var root := tree.root
+	if not root:
+		return null
+	var main_node := root.get_node_or_null("Main")
+	if not main_node:
+		return null
+	var core_systems := main_node.get_node_or_null("CoreSystems")
+	if not core_systems:
+		return null
+	return core_systems.get_node_or_null("InputManager") as InputManager
+
 
 func _on_option_selected(choice_result: ChoiceResult) -> void:
+	_unregister_focuschat_number_keys()
 	var chosen_text := _find_chosen_text(choice_result)
 	Logging.info("FocusChatTapeEntry: 选项已选「%s」，发出 dialogue_finished" % chosen_text)
 
@@ -203,6 +250,12 @@ func _on_option_selected(choice_result: ChoiceResult) -> void:
 	add_child(margin)
 
 	dialogue_finished.emit(choice_result)
+
+
+func _unregister_focuschat_number_keys() -> void:
+	var im := _get_input_manager()
+	if im:
+		im.unregister_number_key_callbacks("FocusChat")
 
 
 func _find_chosen_text(choice_result: ChoiceResult) -> String:

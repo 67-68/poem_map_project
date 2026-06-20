@@ -53,6 +53,13 @@ func _ready() -> void:
 	Logging.info("Main: 纯地图模式脚本已就绪")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
+	# ── Tab 键盘切换纯地图模式（由 InputManager 发出）──
+	if not EventBus.has_signal("request_toggle_map_only"):
+		Logging.err("Main: EventBus 缺少 signal request_toggle_map_only，请在 eventbus.gd 中添加")
+	else:
+		EventBus.request_toggle_map_only.connect(_on_toggle_map_only)
+		Logging.info("Main: 已连接 EventBus.request_toggle_map_only")
+
 
 func _record_positions() -> void:
 	if _positions_recorded:
@@ -78,10 +85,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
-	# ── 纯地图模式下任意键 → 退出 ──
+	# ── 纯地图模式下任意键 → 退出（ESC/Tab 除外，由 InputManager 接管）──
 	if _is_map_only and event is InputEventKey and event.pressed:
-		# ESC 保留给原有暂停/退出逻辑，不拦截
-		if event.keycode == KEY_ESCAPE:
+		if event.keycode == KEY_ESCAPE or event.keycode == KEY_TAB:
 			return
 		Logging.info("Main: 按键 → 退出纯地图模式 (key=%s)" % event.keycode)
 		_exit_map_only()
@@ -192,6 +198,19 @@ func _exit_map_only() -> void:
 	_tween_enter.chain().tween_callback(func():
 		Logging.info("Main: 纯地图模式退出动画完成")
 	)
+
+
+# ═══════════════════════════════════════════════
+# Tab 键盘 toggle（由 InputManager 触发）
+# ═══════════════════════════════════════════════
+
+func _on_toggle_map_only() -> void:
+	Logging.info("Main: Tab → toggle 纯地图模式（当前=%s）" % _is_map_only)
+	if _is_map_only:
+		_exit_map_only()
+	else:
+		_record_positions()
+		_enter_map_only()
 
 
 # ═══════════════════════════════════════════════

@@ -28,6 +28,8 @@
 [ext_resource type="Script" uid="uid://kfq72j60w3b8" path="res://core/fatigue_manager.gd" id="36_fatigue"]
 [ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="37_ambition"]
 [ext_resource type="Script" uid="uid://b74k1mainp82nw" path="res://main.gd" id="38_main"]
+[ext_resource type="Script" uid="uid://inptmgr00001" path="res://core/input_manager.gd" id="39_inputmgr"]
+[ext_resource type="PackedScene" uid="uid://sysmenu00001" path="res://ui/system_menu.tscn" id="40_sysmenu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsp4k"]
 shader = ExtResource("3_xuqvo")
@@ -231,5 +233,13 @@ metadata/_custom_type_script = "uid://dinmvxb5j0il4"
 [node name="FatigueManager" type="Node" parent="CoreSystems" unique_id=1878531520]
 script = ExtResource("36_fatigue")
 
+[node name="InputManager" type="Node" parent="CoreSystems" unique_id=8910111213]
+script = ExtResource("39_inputmgr")
+
 [node name="CinematicOverlay" parent="." unique_id=1377896074 instance=ExtResource("35_cinematic")]
 visible = false
+
+[node name="SystemMenuLayer" type="CanvasLayer" parent="." unique_id=1415161718]
+layer = 1000
+
+[node name="SystemMenu" parent="SystemMenuLayer" unique_id=1920212223 instance=ExtResource("40_sysmenu")]

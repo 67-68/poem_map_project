@@ -38,6 +38,7 @@ signal request_restore_bg_modulate(duration: float)
 signal event_confirmed()
 
 signal request_change_left_panel_visibility(enable)
+signal request_toggle_map_only()
 signal request_event(data: Variant, context: Dictionary)
 signal request_event_key(key: String, context: Dictionary)
 signal push_event(data: Variant, context: Dictionary)

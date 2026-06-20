@@ -490,3 +490,32 @@ func _setup_interrupt_btn(interrupt_btn: Button, context: Dictionary) -> void:
 	else:
 		interrupt_btn.visible = false
 		Logging.debug("EventUI: context 中无 interrupt_event，中断按钮保持隐藏")
+
+
+# ═══════════════════════════════════════════════
+# InputManager 桥接 — 纸带滚动容器
+# ═══════════════════════════════════════════════
+
+func register_scroll_for_input_manager() -> void:
+	"""注册纸带 ScrollContainer，供 InputManager 处理 PgUp/PgDn"""
+	var im := _get_input_manager()
+	if not im:
+		Logging.warn("EventUI.register_scroll_for_input_manager: 无法获取 InputManager")
+		return
+	im.register_scroll_container(_scroll)
+
+
+func _get_input_manager() -> InputManager:
+	var tree := get_tree()
+	if not tree:
+		return null
+	var root := tree.root
+	if not root:
+		return null
+	var main_node := root.get_node_or_null("Main")
+	if not main_node:
+		return null
+	var core_systems := main_node.get_node_or_null("CoreSystems")
+	if not core_systems:
+		return null
+	return core_systems.get_node_or_null("InputManager") as InputManager
