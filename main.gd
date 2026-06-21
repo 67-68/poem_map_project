@@ -20,7 +20,6 @@ extends Node
 @onready var _tomb_stone: Node = $UI/TombStoneScreen
 @onready var _time_breath: CanvasLayer = $UI/TimeBreathUI
 @onready var _poem_creation: Node = $UI/PoemCreation
-@onready var _emotion_radar: ColorRect = $UI/EmotionRadar
 @onready var _social_wall: Node = $UI/SocialWallPanel
 @onready var _controller: Node = $UI/Controller
 @onready var _picker_blur: ColorRect = $PickerBlurLayer/PickerBlurOverlay
@@ -220,7 +219,7 @@ func _on_toggle_map_only() -> void:
 func _save_visibility():
 	_other_ui_nodes = [
 		_ambition_hud, _simple_toast, _debug_info, _tomb_stone,
-		_time_breath, _poem_creation, _emotion_radar, _social_wall,
+		_time_breath, _poem_creation, _social_wall,
 		_controller, _picker_blur, _blur_overlay, _cinematic_overlay,
 	]
 	_other_ui_visibility.clear()

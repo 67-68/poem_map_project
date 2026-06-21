@@ -114,6 +114,54 @@ text = "特质"
 layout_mode = 2
 columns = 2
 
+[node name="HSep4" type="HSeparator" parent="Panel/VBox/ScrollContainer/V" unique_id=886740982]
+layout_mode = 2
+
+[node name="EmotionHeader" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1799879772]
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "情绪"
+
+[node name="EmotionSorrow" type="RichTextLabel" parent="Panel/VBox/ScrollContainer/V" unique_id=2001002001]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+bbcode_enabled = true
+text = "[color=#8b8173][font_size=12]愁苦：心如止水[/font_size][/color]"
+fit_content = true
+scroll_active = false
+
+[node name="EmotionArrogance" type="RichTextLabel" parent="Panel/VBox/ScrollContainer/V" unique_id=2001002002]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+bbcode_enabled = true
+text = "[color=#8b8173][font_size=12]狂傲：心如止水[/font_size][/color]"
+fit_content = true
+scroll_active = false
+
+[node name="EmotionAnger" type="RichTextLabel" parent="Panel/VBox/ScrollContainer/V" unique_id=2001002003]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+bbcode_enabled = true
+text = "[color=#8b8173][font_size=12]愤懑：心如止水[/font_size][/color]"
+fit_content = true
+scroll_active = false
+
+[node name="EmotionTranquility" type="RichTextLabel" parent="Panel/VBox/ScrollContainer/V" unique_id=2001002004]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+bbcode_enabled = true
+text = "[color=#8b8173][font_size=12]旷达：心如止水[/font_size][/color]"
+fit_content = true
+scroll_active = false
+
+[node name="EmotionAmbition" type="RichTextLabel" parent="Panel/VBox/ScrollContainer/V" unique_id=2001002005]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+bbcode_enabled = true
+text = "[color=#8b8173][font_size=12]野心：心如止水[/font_size][/color]"
+fit_content = true
+scroll_active = false
+
 [node name="MaobiContainer" type="PanelContainer" parent="Panel/VBox" unique_id=479986917]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2

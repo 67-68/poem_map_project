@@ -20,8 +20,6 @@
 [ext_resource type="Script" uid="uid://dgg4voth1dy5y" path="res://debuggers/event_action_tag_linter.gd" id="28_qsp4k"]
 [ext_resource type="PackedScene" uid="uid://dmsdo48sr46y6" path="res://ui/poem_creation_page.tscn" id="29_facbu"]
 [ext_resource type="Script" uid="uid://dinmvxb5j0il4" path="res://core/survival_manager.gd" id="30_kq58d"]
-[ext_resource type="Script" uid="uid://ck2mtudsybglf" path="res://ui/emotion_radar.gd" id="31_come4"]
-[ext_resource type="Script" uid="uid://dw61ft7sugtq3" path="res://ui/radar_painting.gd" id="32_radar"]
 [ext_resource type="PackedScene" uid="uid://fnnxu25q66uu" path="res://ui/social_wall_panel.tscn" id="33_0cp0l"]
 [ext_resource type="Script" uid="uid://cljs6te3xyu25" path="res://ui/social_wall_panel.gd" id="34_d2t1y"]
 [ext_resource type="PackedScene" uid="uid://cua5pcl2s75q" path="res://ui/cinematic_overlay.tscn" id="35_cinematic"]
@@ -144,45 +142,6 @@ text = "test time change"
 [node name="PoemCreation" parent="UI" unique_id=1490017236 instance=ExtResource("29_facbu")]
 process_mode = 3
 
-[node name="EmotionRadar" type="ColorRect" parent="UI" unique_id=1495917120]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -131.5
-offset_top = -131.5
-offset_right = 131.5
-offset_bottom = 131.5
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("31_come4")
-
-[node name="RadarPainting" type="Control" parent="UI/EmotionRadar" unique_id=2044762257]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -131.5
-offset_top = -131.5
-offset_right = 131.5
-offset_bottom = 131.5
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("32_radar")
-
-[node name="Label" type="Label" parent="UI/EmotionRadar" unique_id=980405039]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -129.0
-offset_top = 61.0
 offset_right = 132.0
 offset_bottom = 132.0
 grow_horizontal = 2
