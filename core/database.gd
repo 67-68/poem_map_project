@@ -24,6 +24,10 @@ var end_random_events: Dictionary
 # 由 random_events 构建时同步填充，用于 era 过滤查询
 var _events_by_era: Dictionary = {}
 
+## Era 资源桶：{ "745_ambition": Era, "747_kuangda": Era }
+## 由 DataScanner 按 class_name 自动分类填充
+var eras: Dictionary = {}
+
 var chat_bubble_data: Dictionary
 var focused_chat_data: Dictionary
 var ambitions: Dictionary
@@ -180,6 +184,8 @@ func _init() -> void:
 				focused_chat_data[uuid] = res
 			elif res is LegendaryPoem:
 				legendary_poems[uuid] = res
+			elif res is Era:
+				eras[uuid] = res
 
 	Logging.info("Database: random_events 已按 pool_tag 索引，%d 个池" % random_events.size())
 	Logging.info("Database: _events_by_era 已构建，%d 个时代" % _events_by_era.size())
@@ -437,6 +443,9 @@ func get_territory(uuid: String):
 
 func get_msger(uuid: String):
 	return msger_data.get(uuid)
+
+func get_era(uuid: String):
+	return eras.get(uuid)
 
 func get_tag(uuid: String):
 	return tags.get(uuid)

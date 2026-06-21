@@ -10,10 +10,11 @@ class_name EraOperator extends BaseOperator
 @export_enum("set", "clear") var mode: String = "set"
 
 func operate():
-    # 校验 era 值的合法性（仅 set mode 需要，通过注册表）
+    # 校验 era 值的合法性（通过 Database.eras 桶动态校验，替代原 ENUMS.ERA_REGISTRY 硬编码）
     if mode == "set" and not era.is_empty():
-        if not ENUMS.is_valid_era(era):
-            Logging.err('[EraOperator] invalid era value: "%s" — must be one of: %s' % [era, ", ".join(ENUMS.get_all_eras())])
+        if not Database.eras.has(era):
+            var valid_eras = Database.eras.keys()
+            Logging.err('[EraOperator] invalid era value: "%s" — must be one of: %s' % [era, ", ".join(valid_eras)])
             return
 
     match mode:

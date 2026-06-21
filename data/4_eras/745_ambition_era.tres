@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Era" format=3]
+
+[ext_resource type="Script" uid="uid://wfy01ht15lc7" path="res://core/model/era.gd" id="1_era"]
+
+[resource]
+script = ExtResource("1_era")
+uuid = "745_ambition"
+name = "入世/功名时期"
+description = "745年，杜甫初入长安，怀抱功名之志"

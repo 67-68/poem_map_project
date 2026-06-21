@@ -208,36 +208,25 @@ enum ACTION_TYPE {
     DU_ZHUO # 独酌
 }
 
-# ── 时代注册表 (Era IDs，由 EraOperator 控制) ─────────────────
-## 注册表将 enum key（如 AMBITION_745）映射为实际使用的 era 字符串（如 "745_ambition"）。
-## 这样 era 字符串可以以数字开头，同时保留 enum 的类型安全。
-enum ERAS {
-    AMBITION_745,      # 入世/功名时期
-    KUANGDA_747,
-}
-
-## 注册表：ERAS enum → 实际 era 字符串
-## key 是 ERAS 枚举值，value 是对应的 era 字符串（可数字开头）
-const ERA_REGISTRY: Dictionary = {
-    ERAS.AMBITION_745: "745_ambition",
-    ERAS.KUANGDA_747: "747_kuangda",
-}
-
-## 通过 ERAS 枚举值获取对应的 era 字符串
-static func to_era_str(era_enum: int) -> String:
-    var result = ERA_REGISTRY.get(era_enum)
-    if result != null:
-        return result
-    Logging.err("Invalid era enum: " + str(era_enum))
-    return ""
-
-## 检查 era 字符串是否在注册表中有效
-static func is_valid_era(era_str: String) -> bool:
-    return ERA_REGISTRY.values().has(era_str)
-
-## 获取所有有效的 era 字符串列表
-static func get_all_eras() -> Array:
-    return ERA_REGISTRY.values().duplicate()
+## 将 ACTION_TAGS 枚举值映射到 ACTION_TYPE 枚举值。
+## 用于 SceneAction._main_tag → Era.accepted_actions 的合法性比对。
+## 返回 -1 表示该 tag 不映射到任何基础 action type。
+static func action_tag_to_action_type(tag: int) -> int:
+    match tag:
+        ACTION_TAGS.ACTION_MAIN_BAIYE:
+            return ACTION_TYPE.BAI_YE
+        ACTION_TAGS.ACTION_MAIN_JIAOYOU:
+            return ACTION_TYPE.JIAO_YOU
+        ACTION_TAGS.ACTION_MAIN_DENGGAO:
+            return ACTION_TYPE.DENG_GAO
+        ACTION_TAGS.ACTION_MAIN_FANGSHI:
+            return ACTION_TYPE.FANG_SHI
+        ACTION_TAGS.ACTION_MAIN_FENGZHAO:
+            return ACTION_TYPE.FENG_ZHAO
+        ACTION_TAGS.ACTION_MAIN_DUZHUO:
+            return ACTION_TYPE.DU_ZHUO
+        _:
+            return -1
 
 static func to_traits_str(item) -> String:
     var name = TRAITS.keys().get(item)
