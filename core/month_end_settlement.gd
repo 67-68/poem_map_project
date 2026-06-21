@@ -145,6 +145,8 @@ func _build_settlement_event(_current: Dictionary, deltas: Dictionary) -> BaseEv
 		lines.append("[i]本月诸般光景，与上月无异[/i]")
 	else:
 		for prop in PROP_DISPLAY_ORDER:
+			if deltas[prop] == 0:
+				continue
 			lines.append(_delta_to_bbcode(prop, deltas[prop]))
 	lines.append("")
 

@@ -608,6 +608,17 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 
 	_is_active = true
 	var all_options: Array = data.init(context)
+
+	# ── 防御性检查：选项文本全空 → 跳过整个事件 ──
+	# 数据错误（如 CSV 中 option 行 description 列漏填）会导致按钮无法生成 btn_id、
+	# 文本为空、无法注册到 AncientOptionBtnManager，玩家无法选择。
+	# 此时直接跳过该事件，处理队列/栈中的下一个，避免卡死。
+	if _has_no_displayable_option(all_options):
+		Logging.err("apply_narrative: 事件 '%s' 的所有选项文本为空（description 与 _resolved_description 均空），跳过该事件" % data.name)
+		_is_active = false
+		_process_next()
+		return
+
 	EventBus.event_shown.emit(data)
 	if data.epitaph_text:
 		TimeService.register_to_master_timeline(data.time, data.name, data.epitaph_text)
@@ -686,6 +697,24 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 # ═══════════════════════════════════════════════
 # 选项选择与事件结束 — 纸带模式
 # ═══════════════════════════════════════════════
+
+## 检查选项数组中是否存在至少一个可显示的选项（文本非空）。
+## 文本来源优先级：_resolved_description（动态解析后）> description（静态）。
+## 全空返回 true，表示该事件无可显示选项，应跳过。
+func _has_no_displayable_option(all_options: Array) -> bool:
+	if all_options.is_empty():
+		return true
+	for o in all_options:
+		if o == null:
+			continue
+		# 优先读取 _resolved_description（EventOption 的动态解析字段）
+		if '_resolved_description' in o and o._resolved_description and not o._resolved_description.is_empty():
+			return false
+		# fallback 到 description
+		if 'description' in o and o.description and not o.description.is_empty():
+			return false
+	return true
+
 
 func _on_option_selected(_choice_result, _choice_text: String = ""):
 	_end_narrative(_choice_result, _choice_text)

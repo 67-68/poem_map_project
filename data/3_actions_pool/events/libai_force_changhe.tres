@@ -58,6 +58,7 @@ operators = Array[ExtResource("1_n0epv")]([SubResource("Resource_nrgrc"), SubRes
 [sub_resource type="Resource" id="Resource_b1rql"]
 script = ExtResource("7_4cpbo")
 choice_result = SubResource("Resource_ugswx")
+description = "婉拒"
 
 [resource]
 script = ExtResource("8_ugswx")

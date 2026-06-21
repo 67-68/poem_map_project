@@ -43,7 +43,7 @@ func _construct_layout() -> void:
 	style.content_margin_left   = 12.0
 	style.content_margin_right  = 12.0
 	style.content_margin_top    = 8.0
-	style.content_margin_bottom = 8.0
+	style.content_margin_bottom = 36.0
 	add_theme_stylebox_override("panel", style)
 
 	# ── 内部 VBoxContainer ──
@@ -62,7 +62,7 @@ func _construct_layout() -> void:
 	_title_label.name = "TitleLabel"
 	_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_title_label.theme_type_variation = "TitleText"
-	_title_label.add_theme_color_override(&"font_color", NarrativeOverlay.DIM_HISTORY_INK_COLOR)
+	_title_label.add_theme_color_override(&"font_color", Color(0.65, 0.18, 0.12, 0.85))
 	vbox.add_child(_title_label)
 
 	# ── HSeparator 2 ──

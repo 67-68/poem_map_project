@@ -22,6 +22,36 @@ func _ready() -> void:
 		name, scroll_vertical,
 		get_v_scroll_bar().max_value, get_v_scroll_bar().page
 	])
+	_style_scrollbar()
+
+
+## 将原生滚动条压至极细枯褐色，不破坏纸带朱红边框契约
+func _style_scrollbar() -> void:
+	var vs := get_v_scroll_bar()
+	if not vs:
+		return
+
+	# 宽度压至 4px
+	vs.custom_minimum_size.x = 4
+
+	# 轨道透明（消灭灰色背景）
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color.TRANSPARENT
+	vs.add_theme_stylebox_override(&"scroll", track)
+
+	# 滑块：枯褐色半透明，圆角
+	var grabber := StyleBoxFlat.new()
+	grabber.bg_color = Color(0.30, 0.20, 0.12, 0.35)
+	grabber.corner_radius_top_left = 2
+	grabber.corner_radius_top_right = 2
+	grabber.corner_radius_bottom_left = 2
+	grabber.corner_radius_bottom_right = 2
+	vs.add_theme_stylebox_override(&"grabber", grabber)
+	vs.add_theme_stylebox_override(&"grabber_highlight", grabber)
+	vs.add_theme_stylebox_override(&"grabber_pressed", grabber)
+
+	# 去除滚动条与内容间的缝隙
+	add_theme_constant_override(&"scroll_bar_separation", 0)
 
 
 func _process(delta: float) -> void:
@@ -34,10 +64,10 @@ func _process(delta: float) -> void:
 	
 	# DEBUG: 每 60 帧打一条摘要日志，追踪 scroll_vertical vs target_scroll 的漂移
 	_frame_counter += 1
-	if _frame_counter % 60 == 0:
-		Logging.debug("SmoothScrollContainer[%s]: frame=%d sv=%.1f target=%.1f delta=%+.2f max=%.1f page=%.1f dragging=%s lerp_factor=%.3f" % [
-			name, _frame_counter, sv, ts, sv - ts, max_val, page, is_dragging, smooth_weight * delta
-		])
+	#if _frame_counter % 60 == 0:
+	#	Logging.debug("SmoothScrollContainer[%s]: frame=%d sv=%.1f target=%.1f delta=%+.2f max=%.1f page=%.1f dragging=%s lerp_factor=%.3f" % [
+	#		name, _frame_counter, sv, ts, sv - ts, max_val, page, is_dragging, smooth_weight * delta
+	#	])
 	
 	# 没有在用手死死拽着纸时，才允许惯性滑动生效
 	if not is_dragging and abs(sv - ts) > 1.0:
