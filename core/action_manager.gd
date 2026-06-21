@@ -239,13 +239,24 @@ func get_available_scene_actions() -> Dictionary:
 		if not GameState.current_era.is_empty():
 			var era_res = Database.eras.get(GameState.current_era)
 			if era_res:
+				var main_tag_val = a.get("_main_tag") if a is SceneAction else -1
+				var action_type = ENUMS.action_tag_to_action_type(main_tag_val)
+				
+				# 4a. 黑名单优先（rejected_actions）
+				# null / [] → 不拦截
+				# [...] → 拦截列表中指定的所有 action_type
+				var rejected = era_res.rejected_actions
+				if rejected != null and not rejected.is_empty():
+					if action_type >= 0 and rejected.has(action_type):
+						Logging.info("[ActionManager] 动作 %s 在当前时代 %s 的黑名单中，拦截" % [a_id, GameState.current_era])
+						continue
+				
+				# 4b. 白名单（accepted_actions）
 				# null → 全部允许（不拦截）
 				# []   → 全部禁止（拦截一切）
 				# [...] → 白名单（仅列表中的放行）
 				var accepted = era_res.accepted_actions
 				if accepted != null:
-					var main_tag_val = a.get("_main_tag") if a is SceneAction else -1
-					var action_type = ENUMS.action_tag_to_action_type(main_tag_val)
 					if action_type < 0 or not accepted.has(action_type):
 						Logging.info("[ActionManager] 动作 %s 不在当前时代 %s 的允许列表中，拦截" % [a_id, GameState.current_era])
 						continue
