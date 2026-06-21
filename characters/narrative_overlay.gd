@@ -647,10 +647,13 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 			return
 
 	# 先显示纸带面板（如果还没显示）
-	_show_tape()
-
-	# ── UIDecl 背景纹理动态替换 ──
-	_apply_ui_decl_background(data)
+	# 🚨 如果纸带已有历史条目且背景纹理变化 → 抽纸动画清空条目后重新滑入
+	if _needs_background_swap(data):
+		await _perform_background_swap(data)
+	else:
+		_show_tape()
+		# ── UIDecl 背景纹理动态替换 ──
+		_apply_ui_decl_background(data)
 
 	_is_active = true
 	var all_options: Array = data.init(context)
@@ -1001,3 +1004,94 @@ func _apply_ui_decl_background(data: BaseEvent) -> void:
 		return
 	style.texture = ui_decl.background_narrative
 	Logging.info("NarrativeOverlay._apply_ui_decl_background: event='%s' 背景纹理已替换" % data.name)
+
+
+# ── 背景纹理交换检测 ────────────────────────────
+
+## 判断是否需要「抽纸动画」：纸带上有历史条目 且 新事件带了不同的背景纹理。
+## @return: true → 需要抽上去清空条目再抽下来；false → 正常流程
+func _needs_background_swap(data: BaseEvent) -> bool:
+	# 条件 1：纸带上必须有历史条目
+	var history_child_count: int = event_ui._tape_content.get_child_count()
+	if history_child_count <= 0:
+		Logging.info("_needs_background_swap: 纸带无历史条目，无需交换背景")
+		return false
+
+	# 条件 2：新事件必须声明了 background_narrative
+	if not data.ui_decl or not data.ui_decl.background_narrative:
+		Logging.info("_needs_background_swap: 事件 '%s' 未声明 background_narrative，无需交换背景" % data.name)
+		return false
+
+	# 条件 3：新纹理 ≠ 当前纹理
+	var style: StyleBoxTexture = get("theme_override_styles/panel") as StyleBoxTexture
+	if not style:
+		Logging.info("_needs_background_swap: 无法获取当前 StyleBoxTexture，跳过交换")
+		return false
+
+	var current_texture: Texture2D = style.texture
+	var new_texture: Texture2D = data.ui_decl.background_narrative
+	if current_texture == new_texture:
+		Logging.info("_needs_background_swap: 背景纹理未变化（%s），无需交换" % current_texture.resource_path if current_texture else "(null)")
+		return false
+
+	Logging.info("_needs_background_swap: 检测到背景变化 '%s' → '%s'，触发抽纸动画" % [
+		current_texture.resource_path if current_texture else "(null)",
+		new_texture.resource_path if new_texture else "(null)"
+	])
+	return true
+
+
+# ── 抽纸动画：背景交换专用 ────────────────────────
+
+## 纸带有历史条目 + 背景纹理变化时执行：
+##   1. ShadowBox 向上滑出屏幕（CUBIC EASE_IN，0.5s）
+##   2. 清空纸带所有条目
+##   3. 重置 _tape_initialized 状态
+##   4. 应用新背景纹理
+##   5. 调用 _show_tape() 标准滑入
+##
+## ⚠️ 这是一个 async 方法，调用方必须 await
+func _perform_background_swap(data: BaseEvent):
+	var shadow := get_parent()
+	var viewport_height := get_viewport_rect().size.y
+
+	Logging.info("_perform_background_swap: 开始抽纸动画 — 当前 pos.y=%s, 历史条目数=%d" % [
+		shadow.position.y, event_ui._tape_content.get_child_count()
+	])
+
+	# ── 1. 杀死所有活跃 Tween，防止干扰 ──
+	if _tween:
+		_tween.kill()
+		_tween = null
+
+	# ── 2. 向上滑出：target = 屏幕顶部外 ──
+	var slide_out_target := -(viewport_height + 100.0)
+	var slide_out_duration := 0.5
+	var slide_out_tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	slide_out_tween.tween_property(shadow, "position:y", slide_out_target, slide_out_duration) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	# 同步淡出透明度
+	slide_out_tween.set_parallel(true)
+	slide_out_tween.tween_property(self, "modulate:a", 0.0, slide_out_duration * 0.6) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	Logging.info("_perform_background_swap: 滑出动画中... target=%s, duration=%s" % [slide_out_target, slide_out_duration])
+	await slide_out_tween.finished
+	Logging.info("_perform_background_swap: 滑出完成")
+
+	# ── 3. 清空纸带所有历史条目 ──
+	event_ui.clear_all_tape()
+	Logging.info("_perform_background_swap: 纸带条目已清空")
+
+	# ── 4. 重置 _tape_initialized，让 _show_tape 重新播放完整动画 ──
+	_tape_initialized = false
+
+	# ── 5. 应用新背景纹理 ──
+	_apply_ui_decl_background(data)
+
+	# ── 6. 标准滑入动画 ──
+	_show_tape()
+	# 等待滑入完成（Tween 时长 0.65s）
+	if _tween:
+		await _tween.finished
+	Logging.info("_perform_background_swap: 抽纸动画完成，新背景已就位")
