@@ -1,17 +1,37 @@
 [gd_scene format=3 uid="uid://6x6ysodpktqy"]
 
+[ext_resource type="Texture2D" uid="uid://bb1xbfmkl8dhs" path="res://assets/character/on_exam.png" id="1_qrvr7"]
 [ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="1_ufy3p"]
 [ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="2_qrvr7"]
 
-[node name="Event" type="TextureRect" unique_id=1933295132]
-offset_right = 200.0
-offset_bottom = 98.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ufy3p"]
+
+[node name="Event" type="PanelContainer" unique_id=1537400182]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -49.0
+offset_right = 100.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ufy3p")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1232497061]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_qrvr7")
 expand_mode = 1
 stretch_mode = 4
 
 [node name="VBox" type="VBoxContainer" parent="." unique_id=198044391]
 custom_minimum_size = Vector2(200, 0)
-layout_mode = 0
+layout_mode = 2
 
 [node name="HBox" type="HBoxContainer" parent="VBox" unique_id=491879260]
 layout_mode = 2

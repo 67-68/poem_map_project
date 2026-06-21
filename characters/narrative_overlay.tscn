@@ -27,6 +27,8 @@ shadow_size = 10
 texture = ExtResource("2_bsbx7")
 modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nuqx"]
+
 [node name="ShadowBox" type="PanelContainer" unique_id=467584234]
 custom_minimum_size = Vector2(320, 450)
 anchors_preset = 8
@@ -83,21 +85,14 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_qlww5")
 script = ExtResource("1_htcev")
 
-[node name="EventHistory" type="TextureRect" parent="NarrativeOverlay" unique_id=1937522382]
-self_modulate = Color(1, 1, 1, 0.19607843)
+[node name="EventHistory" type="PanelContainer" parent="NarrativeOverlay" unique_id=1937522382]
 z_index = 120
 layout_mode = 2
-texture = ExtResource("2_bsbx7")
-expand_mode = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2nuqx")
 script = ExtResource("4_1hjkf")
 
 [node name="Margin" type="MarginContainer" parent="NarrativeOverlay/EventHistory" unique_id=328263658]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 theme = ExtResource("4_2nuqx")
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 50

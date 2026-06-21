@@ -1,4 +1,4 @@
-class_name EventUI extends TextureRect
+class_name EventUI extends PanelContainer
 
 ## 纸带管理器：极乐迪斯科式事件纸带（Append-only Tape）
 ##
@@ -56,22 +56,21 @@ func _ready() -> void:
 ## 追加一个 Event 条目到纸带底部
 ## entry_id: 稳定标识符（事件 instance_id），用于 has_entry / revive_entry / mark_chosen
 ## 返回创建的 TapeEntry 节点，供 display_slow 打字机写入（FAST 模式用不到返回值）
-func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String) -> VBoxContainer:
+func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String):
 	Logging.info("EventUI.append_event_entry: event='%s' entry_id='%s' from_stack=%s" % [event.name, entry_id, from_stack])
 
-	_apply_event_icon(event)
-
-	var entry: VBoxContainer = _event_template.instantiate()
+	var entry = _event_template.instantiate()
+	_apply_event_icon(event, entry)
 	entry.set_meta("entry_id", entry_id)
 	entry.set_meta("entry_type", "event")
 	entry.set_meta("state", "awaiting_choice")
 	entry.set_meta("from_stack", from_stack)
 
 	# 子节点引用
-	var title_label: Label = entry.get_node("HBox/TitleLabel")
-	var content_label: RichTextLabel = entry.get_node("ContentLabel")
-	var example_label: RichTextLabel = entry.get_node("ExampleLabel")
-	var option_btns: Control = entry.get_node("OptionBtns")
+	var title_label: Label = entry.get_node("VBox/HBox/TitleLabel")
+	var content_label: RichTextLabel = entry.get_node("VBox/ContentLabel")
+	var example_label: RichTextLabel = entry.get_node("VBox/ExampleLabel")
+	var option_btns: Control = entry.get_node("VBox/OptionBtns")
 
 	# 填充内容
 	title_label.text = event.name
@@ -98,8 +97,6 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 ## 追加结算条目到纸带（绕过常规打字机，直接全量显示）
 func append_settlement_entry(event: BaseEvent, context: Dictionary) -> void:
 	Logging.info("EventUI.append_settlement_entry: event='%s'" % event.name)
-
-	_apply_event_icon(event)
 
 	var entry: SettlementTapeEntry = preload("res://ui/settlement_tape_entry.tscn").instantiate()
 	entry.set_meta("entry_id", str(event.get_instance_id()))
@@ -235,7 +232,7 @@ func revive_entry(entry_id: String, all_options: Array) -> void:
 
 	# 销毁文本烙印，重建选项按钮
 	_remove_choice_label(entry)
-	var option_btns: Control = entry.get_node("OptionBtns")
+	var option_btns: Control = entry.get_node("VBox/OptionBtns")
 	option_btns.show()
 
 	option_btns.apply_btns(all_options, func(r):
@@ -264,7 +261,7 @@ func mark_chosen(entry_id: String, choice_text: String) -> void:
 		return
 
 	# 1. 隐藏选项按钮
-	var option_btns: Control = entry.get_node("OptionBtns")
+	var option_btns: Control = entry.get_node("VBox/OptionBtns")
 	option_btns.hide()
 
 	# 2. 创建文本烙印 "「 既决：XXX 」"（古典格式）
@@ -286,12 +283,17 @@ func mark_chosen(entry_id: String, choice_text: String) -> void:
 	chosen_lbl.add_theme_stylebox_override("normal", bg_style)
 
 	# 左缩进 20px + 上下双倍间距（通过 MarginContainer 实现）
+	# 必须加入 VBox 而非根 PanelContainer — PanelContainer 不会垂直堆叠子节点
 	var margin := MarginContainer.new()
 	margin.add_theme_constant_override("margin_left", 20)
 	margin.add_theme_constant_override("margin_top", 12)
 	margin.add_theme_constant_override("margin_bottom", 12)
 	margin.add_child(chosen_lbl)
-	entry.add_child(margin)
+	var vbox := entry.get_node("VBox") as VBoxContainer
+	if vbox:
+		vbox.add_child(margin)
+	else:
+		entry.add_child(margin)
 
 	entry.set_meta("state", "chosen")
 	entry.set_meta("chosen_text", choice_text)
@@ -382,20 +384,18 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 	Logging.info("EventUI.display_slow: 模式开始事件 '%s'（type_speed=%.3f）" % [event.name, type_speed])
 	AudioManager.play_sfx_category("book_place")
 
-	# ── 动态设置背景纹理 ──
-	_apply_event_icon(event)
-
 	# Step 1: 创建空骨架 TapeEntry（不含正文和选项）
-	var entry: VBoxContainer = _event_template.instantiate()
+	var entry = _event_template.instantiate()
+	_apply_event_icon(event, entry)
 	entry.set_meta("entry_id", entry_id)
 	entry.set_meta("entry_type", "event")
 	entry.set_meta("state", "awaiting_choice")
 	entry.set_meta("from_stack", from_stack)
 
-	var title_label: Label = entry.get_node("HBox/TitleLabel")
-	var content_label: RichTextLabel = entry.get_node("ContentLabel")
-	var example_label: RichTextLabel = entry.get_node("ExampleLabel")
-	var option_btns: Control = entry.get_node("OptionBtns")
+	var title_label: Label = entry.get_node("VBox/HBox/TitleLabel")
+	var content_label: RichTextLabel = entry.get_node("VBox/ContentLabel")
+	var example_label: RichTextLabel = entry.get_node("VBox/ExampleLabel")
+	var option_btns: Control = entry.get_node("VBox/OptionBtns")
 
 	title_label.text = ""
 	content_label.text = ""
@@ -511,7 +511,9 @@ func _find_entry(entry_id: String) -> VBoxContainer:
 
 ## 从条目中移除 ChoiceLabel（用于 revive_entry）
 func _remove_choice_label(entry: VBoxContainer) -> void:
-	var choice_label := entry.get_node_or_null("ChoiceLabel")
+	var vbox := entry.get_node("VBox") as VBoxContainer
+	var target := vbox if vbox else entry
+	var choice_label := target.get_node_or_null("ChoiceLabel")
 	if choice_label:
 		choice_label.queue_free()
 
@@ -540,18 +542,31 @@ func _find_option_text(all_options: Array, choice_result) -> String:
 # 内部工具方法 — 纹理
 # ═══════════════════════════════════════════════
 
-## 根据事件的 icon 字段动态设置 EventUI (TextureRect) 的背景纹理和透明度
-func _apply_event_icon(event: BaseEvent) -> void:
+## 根据事件的 icon 字段动态设置背景纹理和透明度
+## 使用 tscn 中预定义的 TextureRect 子节点（已设置 layout_mode=2）
+func _apply_event_icon(event: BaseEvent, entry: PanelContainer) -> void:
+	var bg: TextureRect = entry.get_node("TextureRect")
+	if not bg:
+		Logging.warn("EventUI._apply_event_icon: entry 内未找到 TextureRect 子节点，跳过背景设置")
+		return
+
+	var tex: Texture2D
+	var alpha: float
+	var stretch: int
 	if event.icon != null:
-		self.texture = event.icon
-		self.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		self.self_modulate.a = 0.55
-		Logging.debug("EventUI._apply_event_icon: 设置 icon 纹理 (alpha=0.55, keep_aspect) for '%s'" % event.name)
+		tex = event.icon
+		alpha = 0.25
+		stretch = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		Logging.debug("EventUI._apply_event_icon: 设置 icon 纹理 (alpha=0.25, keep_aspect) for '%s'" % event.name)
 	else:
-		self.texture = load("res://assets/maps/宣纸.jpeg")
-		self.stretch_mode = TextureRect.STRETCH_SCALE
-		self.self_modulate.a = 0.196
-		Logging.debug("EventUI._apply_event_icon: 回退到默认宣纸纹理 (alpha=0.196, scale) for '%s'" % event.name)
+		tex = load("res://assets/maps/宣纸.jpeg")
+		alpha = 0.10
+		stretch = TextureRect.STRETCH_SCALE
+		Logging.debug("EventUI._apply_event_icon: 回退到默认宣纸纹理 (alpha=0.10, scale) for '%s'" % event.name)
+
+	bg.stretch_mode = stretch
+	bg.texture = tex
+	bg.self_modulate.a = alpha
 
 
 # ═══════════════════════════════════════════════
