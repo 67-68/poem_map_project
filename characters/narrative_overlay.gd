@@ -649,6 +649,9 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	# 先显示纸带面板（如果还没显示）
 	_show_tape()
 
+	# ── UIDecl 背景纹理动态替换 ──
+	_apply_ui_decl_background(data)
+
 	_is_active = true
 	var all_options: Array = data.init(context)
 
@@ -735,7 +738,11 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	# ── 注册纸带滚动容器（供 PgUp/PgDn 翻页）──
 	event_ui.register_scroll_for_input_manager()
 
-	AudioManager.play_sad()
+	# ── UIDecl 自定义音频优先 ──
+	if data.ui_decl and data.ui_decl.audio:
+		AudioManager.play_music(data.ui_decl.audio)
+	else:
+		AudioManager.play_sad()
 
 	# 扫描 context 中的 interrupt_event 字段，控制 ShadowBox 右侧 InterruptButton
 	var interrupt_event_data = context.get("interrupt_event", null)
@@ -976,3 +983,21 @@ func _on_animation_finished(anim: AnimationObject) -> void:
 	if _waiting_for_animations and _active_animations.is_empty():
 		_waiting_for_animations = false
 		_process_next()
+
+# ── UIDecl 背景纹理动态替换 ──────────────────────
+
+## 根据事件的 ui_decl.background_narrative 动态替换 NarrativeOverlay 纸带的
+## StyleBoxTexture 背景纹理。ui_decl 为空或 background_narrative 为空时保持默认宣纸纹理。
+func _apply_ui_decl_background(data: BaseEvent) -> void:
+	if not data.ui_decl:
+		return
+	var ui_decl: UIDecl = data.ui_decl
+	if not ui_decl.background_narrative:
+		return
+	# NarrativeOverlay 自身的 theme_override_styles/panel 是 StyleBoxTexture
+	var style: StyleBoxTexture = get("theme_override_styles/panel") as StyleBoxTexture
+	if not style:
+		Logging.warn("NarrativeOverlay._apply_ui_decl_background: 无法获取 StyleBoxTexture panel style")
+		return
+	style.texture = ui_decl.background_narrative
+	Logging.info("NarrativeOverlay._apply_ui_decl_background: event='%s' 背景纹理已替换" % data.name)

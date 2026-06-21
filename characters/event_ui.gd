@@ -5,7 +5,6 @@ class_name EventUI extends PanelContainer
 ## 职责：
 ## - 管理 ScrollContainer → VBox_TapeContent 内的 TapeEntry 生命周期
 ## - Event 条目：完整的标题/正文/选项区，选后选项变文本烙印
-## - Stub 条目：Cinematic/Picker/FocusChat 播完后的纯文本摘要行
 ## - dim / clear_all_dim 控制前序条目的可见性
 ##
 ## 契约：
@@ -80,6 +79,9 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 		example_label.hide()
 	else:
 		example_label.text = event.example
+
+	# ── UIDecl 颜色应用 ──
+	_apply_ui_decl_colors(event, title_label, content_label)
 
 	# 选项按钮 → 信号桥接（携带选项文本用于纸带烙印）
 	option_btns.apply_btns(all_options, func(r):
@@ -399,6 +401,9 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 	var option_btns: Control = entry.get_node("MarginContainer/VBox/OptionBtns")
 
 	title_label.text = ""
+	# ── UIDecl 颜色应用 ──
+	_apply_ui_decl_colors(event, title_label, content_label)
+
 	content_label.text = ""
 	example_label.text = ""
 	option_btns.hide()
@@ -549,6 +554,20 @@ func _find_option_text(all_options: Array, choice_result) -> String:
 # ═══════════════════════════════════════════════
 # 内部工具方法 — 纹理
 # ═══════════════════════════════════════════════
+
+## 根据事件的 ui_decl 应用 title/content 颜色覆盖
+func _apply_ui_decl_colors(event: BaseEvent, title_label: Label, content_label: RichTextLabel) -> void:
+	if not event.ui_decl:
+		return
+	var ui_decl: UIDecl = event.ui_decl
+	# Title 文字颜色：color_of_title_text 同时用于标题和内容
+	if not ui_decl.color_of_title_text.is_empty():
+		var title_color := UIDecl.resolve_color(ui_decl.color_of_title_text, 'title')
+		if title_color != Color():
+			title_label.add_theme_color_override(&"font_color", title_color)
+			content_label.add_theme_color_override(&"default_color", title_color)
+			Logging.info("EventUI._apply_ui_decl_colors: event='%s' title/content color=%s" % [event.name, ui_decl.color_of_title_text])
+
 
 ## 根据事件的 icon 字段动态设置背景纹理和透明度
 ## 使用 tscn 中预定义的 TextureRect 子节点（已设置 layout_mode=2）

@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bcaxc604aigwj"]
+
+[ext_resource type="Shader" uid="uid://jrh6ew4ou6u3" path="res://shaders/golden_shine.gdshader" id="1_yp35l"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kl8sn"]
+shader = ExtResource("1_yp35l")
+shader_parameter/speed = 1.0000000475
+shader_parameter/intensity = 1.0
+shader_parameter/gold_color = Color(1, 1, 1, 1)
+shader_parameter/highlight_color = Color(1, 0.95, 0.6, 1)
+
+[node name="Button" type="Button" unique_id=1007961655]
+material = SubResource("ShaderMaterial_kl8sn")
+offset_right = 8.0
+offset_bottom = 8.0

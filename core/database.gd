@@ -122,19 +122,26 @@ func _init() -> void:
 	life_path_points = r.bases.get("2_characters.life_path_points", {})
 	msger_data = r.bases.get("2_characters.messenger_data", {})
 
-	# ── 3_actions_pool ──
-	actions = r.bases.get("3_actions_pool.actions", {})
-	decisions = r.bases.get("3_actions_pool.decisions", {})
-	decided_events = r.bases.get("3_actions_pool.decided_events", {})
-	focused_chat_data = r.bases.get("3_actions_pool.focused_chats", {})
-	normal_poem_events = r.bases.get("3_actions_pool.write_poem", {})
-
-	# ── random_events：从所有 bases 中提取 RandomEvent 资源，按 trigger_tags 索引 ──
-	# 目录是给人看的，系统整理资源使用 tag。
-	# 路由逻辑：事件的 trigger_tags 中的第一个 action:main:<pool> 或 action:special:<pool>
-	# 标签决定了它属于哪个池，不再依赖目录结构。
+	# ── 统一类型扫描（单一真源）：遍历所有 bases，按 class_name 类型归类 ──
+	# 目录是给人看的，系统整理资源使用类型判断。
+	# Decision extends Action → Decision 判断必须在 Action 之前。
+	# RandomEvent extends BaseEvent → RandomEvent 判断必须在 BaseEvent 之前。
+	# HistoryEvent extends BaseEvent → HistoryEvent 判断必须在 BaseEvent 之前。
+	# SceneAction extends Action → 自动落入 Action 分支。
+	actions = {}
+	decisions = {}
 	random_events = {}
 	_events_by_era = {}
+	decided_events = {}
+	focused_chat_data = {}
+	history_events = {}
+	legendary_poems = {}
+
+	# normal_poem_events / end_random_events 是 RandomEvent 的语义子视图，
+	# 由数据所在目录定义语义范畴，不是独立类型，因此在 RandomEvent 分支中按 base_key 填充。
+	normal_poem_events = {}
+	end_random_events = {}
+
 	for base_key in r.bases:
 		var bucket = r.bases[base_key]
 		for uuid in bucket:
@@ -142,21 +149,43 @@ func _init() -> void:
 			if res is RandomEvent:
 				var event = res as RandomEvent
 				var pool_tag = _extract_pool_tag(event.target_tags)
-				if pool_tag.is_empty():
-					continue
-				if not random_events.has(pool_tag):
-					random_events[pool_tag] = {}
-				random_events[pool_tag][uuid] = event
-				
+				if not pool_tag.is_empty():
+					if not random_events.has(pool_tag):
+						random_events[pool_tag] = {}
+					random_events[pool_tag][uuid] = event
 				# 构建 era 索引（空 era 不索引，表示全时代可用）
 				var era = event.era
 				if not era.is_empty():
 					if not _events_by_era.has(era):
 						_events_by_era[era] = {}
 					_events_by_era[era][uuid] = event
-	
+				# 子视图：根据数据所在目录填充语义字典
+				if base_key == "3_actions_pool.write_poem":
+					normal_poem_events[uuid] = event
+				if base_key == "4_eras.events.end_random_events":
+					end_random_events[uuid] = event
+			elif res is Decision:
+				if decisions.has(uuid):
+					Logging.warn("Database: Decision uuid 冲突，%s 覆盖已有: %s" % [base_key, uuid])
+				decisions[uuid] = res
+			elif res is Action:
+				if actions.has(uuid):
+					Logging.warn("Database: Action uuid 冲突，%s 覆盖已有: %s" % [base_key, uuid])
+				actions[uuid] = res
+			elif res is HistoryEvent:
+				history_events[uuid] = res
+			elif res is BaseEvent:
+				decided_events[uuid] = res
+			elif res is FocusedChat:
+				focused_chat_data[uuid] = res
+			elif res is LegendaryPoem:
+				legendary_poems[uuid] = res
+
 	Logging.info("Database: random_events 已按 pool_tag 索引，%d 个池" % random_events.size())
 	Logging.info("Database: _events_by_era 已构建，%d 个时代" % _events_by_era.size())
+	Logging.info("Database: history_events=%d, decided_events=%d, focused_chat_data=%d" % [history_events.size(), decided_events.size(), focused_chat_data.size()])
+	Logging.info("Database: legendary_poems=%d, normal_poem_events=%d, end_random_events=%d" % [legendary_poems.size(), normal_poem_events.size(), end_random_events.size()])
+	Logging.info("Database: actions=%d, decisions=%d" % [actions.size(), decisions.size()])
 
 	# 飞花令意象库：从主意象字典中筛选环境类意象
 	feihualing_imageries = {}
@@ -164,13 +193,6 @@ func _init() -> void:
 		if uuid.begins_with("environment:"):
 			feihualing_imageries[uuid] = imaginaries[uuid]
 	Logging.info("Database: feihualing_imageries loaded with %d entries" % feihualing_imageries.size())
-
-	# ── 4_eras ──
-	history_events = r.bases.get("4_eras.events.history_events", {})
-	end_random_events = r.bases.get("4_eras.events.end_random_events", {})
-
-	# ── 诗歌（2_characters/poems/ 中现有文件为传奇诗歌）──
-	legendary_poems = r.bases.get("2_characters.poems", {})
 
 	# ── 🆕 event_base：从 DataScanner 直接获取 ──
 	event_base_pool = r.pool

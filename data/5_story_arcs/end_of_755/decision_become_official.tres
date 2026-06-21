@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Decision" format=3 uid="uid://dxei28d80l1t4"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_gcuvr"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_kbnnp"]
+[ext_resource type="Script" uid="uid://gq6m2qeuguk2" path="res://core/model/decision.gd" id="3_ccqib"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="3_kbnnp"]
+
+[sub_resource type="Resource" id="Resource_ccqib"]
+script = ExtResource("3_kbnnp")
+event_key = "event_get_official"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[resource]
+script = ExtResource("3_ccqib")
+available_from = 755.0
+available_until = 756.5
+action_results = Array[ExtResource("2_kbnnp")]([SubResource("Resource_ccqib")])
+uuid = "decision_become_official"
+name = "奉诏：吏部告身"
+description = "从八品下小官，月薪两斗麦"
+metadata/_custom_type_script = "uid://gq6m2qeuguk2"

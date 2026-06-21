@@ -7,6 +7,14 @@ class_name GameEntity extends Resource
 @export var owner_uuids: Array
 @export var tags: Array
 
+# ──────────────────────────────────────────────
+# UI 声明数据类：将事件的 UI 呈现策略收敛到独立 Resource
+# NarrativeOverlay / EventUI 可通过 event.ui_decl 一站式读取
+# 所有 UI 相关配置（display_speed / audio / epitaph_text / example 等）
+# 可选：留 null 时沿用 BaseEvent 上的同名字段
+# ──────────────────────────────────────────────
+@export var ui_decl: UIDecl = null
+
 func _init(data: Dictionary = {}):
     uuid = data.get('uuid', '')
     name = data.get('name', '')

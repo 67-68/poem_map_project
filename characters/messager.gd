@@ -48,7 +48,7 @@ func initialization(curve_: Curve2D, path_points_: Array, mesh_: MeshInstance2D,
 	
 	# 防御性编程 2：拿来主义，直接把引擎在 C++ 层算好的平滑曲线点塞进去
 	# get_baked_points() 会返回一条密度极高、绝对贴合的完美曲线
-	future_line.points = curve.get_baked_points()
+	#future_line.points = curve.get_baked_points()
 
 	# 如果有就给自己赋值
 	apply_msger_data(self,msger_data_)
@@ -69,21 +69,22 @@ static func apply_msger_data(msger: Messager,data: MessagerData):
 	if data.speed: msger.speed_px_per_sec = data.speed
 	
 func start_travel():
+	pass
 	# 1. 核心 API：获取路径的像素总长度
 	# get_baked_length() 是 Godot 预计算好的，性能极高
-	var total_distance = curve.get_baked_length()
-	Logging.info("🐎 信使出发！位置:  %s 路径长度:  %s" % [global_position, curve.get_baked_length()])
+	#var total_distance = curve.get_baked_length()
+	#Logging.info("🐎 信使出发！位置:  %s 路径长度:  %s" % [global_position, curve.get_baked_length()])
 	
 	# 2. 计算出这趟旅程实际需要的秒数
-	var travel_duration = total_distance / speed_px_per_sec
+	#var travel_duration = total_distance / speed_px_per_sec
 	
 	# 3. 扔给 Tween 自动执行
-	var tween = create_tween()
-	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property($MsgPathFollow, "progress_ratio", 1.0, travel_duration)
-	tween.tween_callback(end_timer)
-	allow_timer = true
-	start_timer()
+	#var tween = create_tween()
+	#tween.set_ease(Tween.EASE_IN_OUT)
+	#tween.tween_property($MsgPathFollow, "progress_ratio", 1.0, travel_duration)
+	#tween.tween_callback(end_timer)
+	#allow_timer = true
+	#start_timer()
 	
 
 func start_timer():

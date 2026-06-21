@@ -24,6 +24,20 @@ func inititalization(decision_: Decision):
 	$ActionPanel/V/TitleLabel.text = decision_.name
 	$ActionPanel/V/DescriptionLabel.text = decision_.description
 	
+	# ── UIDecl 颜色应用 ──
+	if decision_.ui_decl:
+		var ui_decl: UIDecl = decision_.ui_decl
+		# Title 文字颜色
+		if not ui_decl.color_of_title_text.is_empty():
+			var title_color := UIDecl.resolve_color(ui_decl.color_of_title_text, 'title')
+			if title_color != Color():
+				$ActionPanel/V/TitleLabel.add_theme_color_override(&"font_color", title_color)
+		# 普通文字颜色
+		if not ui_decl.color_of_default_text.is_empty():
+			var default_color := UIDecl.resolve_color(ui_decl.color_of_default_text, 'default')
+			if default_color != Color():
+				$ActionPanel/V/DescriptionLabel.add_theme_color_override(&"font_color", default_color)
+	
 	# ── Hover 底色绑定 ──
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)

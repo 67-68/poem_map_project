@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://cy2jy0fwbiew0"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_hbtks"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_1l313"]
+[ext_resource type="AudioStream" uid="uid://dtj5kyk7d463h" path="res://assets/sounds/royal_music.mp3" id="3_1vwh4"]
+[ext_resource type="Texture2D" uid="uid://dp1tbewdord1" path="res://assets/backgrounds/bg_sichou.jpg" id="4_ajw6r"]
+[ext_resource type="Script" uid="uid://bs881r2io48fq" path="res://model/ui_decl.gd" id="5_xqi4j"]
+
+[sub_resource type="Resource" id="Resource_4xcex"]
+script = ExtResource("5_xqi4j")
+audio = ExtResource("3_1vwh4")
+color_of_title_text = "gold"
+color_of_default_text = "zhusha_red"
+background_narrative = ExtResource("4_ajw6r")
+metadata/_custom_type_script = "uid://bs881r2io48fq"
+
+[resource]
+script = ExtResource("2_1l313")
+ui_decl = SubResource("Resource_4xcex")
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

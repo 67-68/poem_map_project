@@ -1,53 +1,41 @@
 shader_type canvas_item;
 
 // ============================================================
-// golden_shine.gdshader — 金色闪耀流光 Shader
+// golden_shine.gdshader — 呼吸脉动金光 Shader
 //
-// 用途: 为 UI 元素（进度条、边框）添加动态金色流光效果
-//      模拟唐风主线任务的金碧辉煌质感 🤓☝️
+// 用途: 为 UI 元素（按钮、标题）添加类似心跳的呼吸金光
+//      以 sin 波驱动，暗金 ↔ 亮金之间柔和脉动
 // ============================================================
 
-// 流光扫过的速度 (越大越快)
+// 呼吸频率 (Hz，值越大脉动越快)
 uniform float speed : hint_range(0.0, 5.0) = 1.2;
 
-// 闪耀强度 (0.0 = 无效果, 1.0 = 闪瞎狗眼)
+// 脉动强度 (0.0 = 无效果, 1.0 = 闪瞎)
 uniform float intensity : hint_range(0.0, 1.0) = 0.35;
 
-// 金色基调
+// 暗金色基调 (脉动低谷)
 uniform vec4 gold_color : source_color = vec4(1.0, 0.843, 0.0, 1.0);
 
-// 高光颜色 (更亮的金色扫光)
+// 高光金色 (脉动峰值)
 uniform vec4 highlight_color : source_color = vec4(1.0, 0.95, 0.6, 1.0);
 
-// 流光宽度 (0.0 ~ 0.5)
-uniform float band_width : hint_range(0.01, 0.5) = 0.15;
-
 void fragment() {
-	// 原始颜色 + 透明度
 	vec4 base = texture(TEXTURE, UV);
 	float alpha = base.a;
 
-	// ---- 流光计算 ----
-	// 斜向扫描: 用 UV.x + UV.y 制造对角线方向
-	float diagonal = UV.x + UV.y;
-	// TIME 驱动循环
-	float t = diagonal + TIME * speed;
-	// 取小数部分做循环
-	float scan = fract(t);
+	// ---- 呼吸脉动 ----
+	// sin 映射到 [0, 1]，周期由 speed 控制
+	float breathe = sin(TIME * speed * 3.14159) * 0.5 + 0.5;
 
-	// 两侧 smoothstep 渐入渐出
-	float glow = smoothstep(0.0, band_width, scan) * (1.0 - smoothstep(band_width, band_width * 2.0, scan));
-
-	// 将 glow 映射到强度范围
-	float shine = glow * intensity;
+	// 用强度缩放脉动幅度
+	float shine = breathe * intensity;
 
 	// ---- 颜色混合 ----
-	// 1. 基础金色调色: 混合 gold_color
+	// 基础金色调色: 始终混入一点点 gold_color 做底色
 	vec3 gold_tinted = mix(base.rgb, gold_color.rgb, 0.15);
 
-	// 2. 高光扫过: 混合 highlight_color
+	// 呼吸高光: 低谷→gold_color，峰值→highlight_color
 	vec3 final_rgb = mix(gold_tinted, highlight_color.rgb, shine);
 
-	// 3. 保持原始透明度，避免把背景透明像素点亮
 	COLOR = vec4(final_rgb, alpha);
 }
