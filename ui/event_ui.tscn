@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="1_ufy3p"]
 [ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="2_qrvr7"]
-[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="3_sfx"]
 
 [node name="Event" type="VBoxContainer" unique_id=198044391]
 custom_minimum_size = Vector2(200, 0)
@@ -18,18 +17,6 @@ theme_type_variation = &"TitleText"
 text = "title"
 autowrap_mode = 3
 script = ExtResource("1_ufy3p")
-
-[node name="InterruptBtn" type="Button" parent="HBox" unique_id=1134293268]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_type_variation = &"ButtonTheme"
-text = "interruptBtn"
-
-[node name="UISoundComponent" type="Node" parent="HBox/InterruptBtn"]
-script = ExtResource("3_sfx")
-click_category = "book_impact"
 
 [node name="ExampleLabel" type="RichTextLabel" parent="." unique_id=318671725]
 clip_contents = false

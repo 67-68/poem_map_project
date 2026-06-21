@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bv8snhe2s3kr7"]
 
+[ext_resource type="Texture2D" uid="uid://bb1xbfmkl8dhs" path="res://assets/character/on_exam.png" id="1_b2owr"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="2_pushe"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
@@ -28,4 +29,5 @@ options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_go")])
 uuid = "way_to_youxiangfu"
 name = "相府路上"
 description = "长安平康坊以南，右相府邸的坊墙连绵如铁。你沿街疾走，晨霜早已湿透了麻鞋。越靠近那两扇高耸的朱漆大门，周围的喧闹声便越是被一种死寂的威压吞没。你的手死死攥着袖口中那卷拜帖，骨节因过度用力而惨白。抬起头，相府门楼上的琉璃兽脊仿佛要刺破厚重的云层，你死死盯着那高不可攀的门槛，喉结艰难地滚动了一下，连呼吸都忘了吐出。"
+icon = ExtResource("1_b2owr")
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

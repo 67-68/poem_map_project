@@ -24,7 +24,6 @@ operators = Array[ExtResource("2_x6yjx")]([SubResource("Resource_atnbh"), SubRes
 [sub_resource type="Resource" id="Resource_sf7v3"]
 script = ExtResource("6_cw04v")
 choice_result = SubResource("Resource_6w1ox")
-description = "好，与君一和"
 
 [sub_resource type="Resource" id="Resource_chnyd"]
 script = ExtResource("3_6w1ox")
@@ -43,7 +42,6 @@ operators = Array[ExtResource("2_x6yjx")]([SubResource("Resource_chnyd"), SubRes
 [sub_resource type="Resource" id="Resource_6pusv"]
 script = ExtResource("6_cw04v")
 choice_result = SubResource("Resource_ctnsd")
-description = "今日不便"
 
 [resource]
 script = ExtResource("7_ctnsd")

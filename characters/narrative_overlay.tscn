@@ -4,7 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_bsbx7"]
 [ext_resource type="Script" uid="uid://bfap7ivfv8w2v" path="res://characters/event_ui.gd" id="4_1hjkf"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="4_2nuqx"]
-[ext_resource type="Script" path="res://ui/smooth_scroll_container.gd" id="5_smooth"]
+[ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="5_smooth"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nuqx"]
 border_width_left = 1
@@ -12,6 +13,14 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 shadow_color = Color(0, 0, 0, 0.45882353)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bsbx7"]
+bg_color = Color(0.7014739, 0.150574, 0.3028575, 0.7372549)
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_detail = 9
+shadow_color = Color(0, 0, 0, 0.42352942)
 shadow_size = 10
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qlww5"]
@@ -32,6 +41,31 @@ offset_bottom = 326.83807
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2nuqx")
+
+[node name="InterruptButton" type="Control" parent="." unique_id=682834335]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="InterruptButton" unique_id=1777029823]
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 0
+offset_left = 415.0
+offset_top = 112.83807
+offset_right = 443.0
+offset_bottom = 169.83807
+theme_override_styles/normal = SubResource("StyleBoxFlat_bsbx7")
+
+[node name="UISoundComponent" type="Node" parent="InterruptButton/Button" unique_id=482466886]
+script = ExtResource("6_sfx")
+click_category = "book_impact"
+
+[node name="Label" type="Label" parent="InterruptButton/Button" unique_id=439669529]
+layout_mode = 0
+offset_left = 427.0
+offset_top = 125.83807
+offset_right = 455.0
+offset_bottom = 155.83807
+horizontal_alignment = 1
+autowrap_mode = 1
 
 [node name="NarrativeOverlay" type="PanelContainer" parent="." unique_id=1703748906]
 z_index = 100

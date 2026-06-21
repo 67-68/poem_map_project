@@ -13,7 +13,6 @@ class_name EventUI extends TextureRect
 ## - 信号 option_selected(choice_result, choice_text) 桥接回 NarrativeOverlay
 
 signal option_selected(choice_result, choice_text: String)
-signal interrupt_pressed()
 
 
 # ── 打字机参数 ──────────────────────────────────
@@ -60,6 +59,16 @@ func _ready() -> void:
 func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String) -> VBoxContainer:
 	Logging.info("EventUI.append_event_entry: event='%s' entry_id='%s' from_stack=%s" % [event.name, entry_id, from_stack])
 
+	# ── 动态设置背景纹理 ──
+	if event.icon != null:
+		self.texture = event.icon
+		self.self_modulate.a = 0.55
+		Logging.debug("EventUI.append_event_entry: 设置 icon 纹理 (alpha=0.55)")
+	else:
+		self.texture = load("res://assets/maps/宣纸.jpeg")
+		self.self_modulate.a = 0.196
+		Logging.debug("EventUI.append_event_entry: 回退到默认宣纸纹理 (alpha=0.196)")
+
 	var entry: VBoxContainer = _event_template.instantiate()
 	entry.set_meta("entry_id", entry_id)
 	entry.set_meta("entry_type", "event")
@@ -71,7 +80,6 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 	var content_label: RichTextLabel = entry.get_node("ContentLabel")
 	var example_label: RichTextLabel = entry.get_node("ExampleLabel")
 	var option_btns: Control = entry.get_node("OptionBtns")
-	var interrupt_btn: Button = entry.get_node("HBox/InterruptBtn")
 
 	# 填充内容
 	title_label.text = event.name
@@ -80,9 +88,6 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 		example_label.hide()
 	else:
 		example_label.text = event.example
-
-	# 中断按钮
-	_setup_interrupt_btn(interrupt_btn, context)
 
 	# 选项按钮 → 信号桥接（携带选项文本用于纸带烙印）
 	option_btns.apply_btns(all_options, func(r):
@@ -101,6 +106,16 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 ## 追加结算条目到纸带（绕过常规打字机，直接全量显示）
 func append_settlement_entry(event: BaseEvent, context: Dictionary) -> void:
 	Logging.info("EventUI.append_settlement_entry: event='%s'" % event.name)
+
+	# ── 动态设置背景纹理 ──
+	if event.icon != null:
+		self.texture = event.icon
+		self.self_modulate.a = 0.55
+		Logging.debug("EventUI.append_settlement_entry: 设置 icon 纹理 (alpha=0.55)")
+	else:
+		self.texture = load("res://assets/maps/宣纸.jpeg")
+		self.self_modulate.a = 0.196
+		Logging.debug("EventUI.append_settlement_entry: 回退到默认宣纸纹理 (alpha=0.196)")
 
 	var entry: SettlementTapeEntry = preload("res://ui/settlement_tape_entry.tscn").instantiate()
 	entry.set_meta("entry_id", str(event.get_instance_id()))
@@ -394,13 +409,11 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 	var content_label: RichTextLabel = entry.get_node("ContentLabel")
 	var example_label: RichTextLabel = entry.get_node("ExampleLabel")
 	var option_btns: Control = entry.get_node("OptionBtns")
-	var interrupt_btn: Button = entry.get_node("HBox/InterruptBtn")
 
 	title_label.text = ""
 	content_label.text = ""
 	example_label.text = ""
 	option_btns.hide()
-	_setup_interrupt_btn(interrupt_btn, context)
 
 	_tape_content.add_child(entry)
 	_active_entry_id = entry_id
@@ -534,27 +547,6 @@ func _find_option_text(all_options: Array, choice_result) -> String:
 				return o._resolved_description
 			return o.description
 	return "?"
-
-
-## 配置中断按钮
-func _setup_interrupt_btn(interrupt_btn: Button, context: Dictionary) -> void:
-	var interrupt_event_data = context.get("interrupt_event", null)
-	if interrupt_event_data is Dictionary:
-		var btn_text: String = interrupt_event_data.get("text", "")
-		if not btn_text.is_empty():
-			interrupt_btn.text = btn_text
-			interrupt_btn.visible = true
-			interrupt_btn.pressed.connect(func():
-				Logging.info("EventUI: 中断按钮被点击")
-				interrupt_pressed.emit()
-			)
-			Logging.info("EventUI: 中断按钮已启用，文本='%s'" % btn_text)
-		else:
-			interrupt_btn.visible = false
-			Logging.debug("EventUI: interrupt_event 存在但 text 为空，按钮不显示")
-	else:
-		interrupt_btn.visible = false
-		Logging.debug("EventUI: context 中无 interrupt_event，中断按钮保持隐藏")
 
 
 # ═══════════════════════════════════════════════

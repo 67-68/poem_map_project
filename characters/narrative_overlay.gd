@@ -19,6 +19,8 @@ class_name NarrativeOverlay extends PanelContainer
 # 🚨 event_ui 不写类型注解：class_name EventUI 在 parse 时尚未注册，
 # 但运行时 Godot 能正确解析 $EventUI 节点，调用方法无问题。
 @onready var event_ui = $EventHistory
+# InterruptButton: ShadowBox 层级的右侧红色中断按钮
+@onready var _interrupt_button: Button = $"../InterruptButton/Button"
 
 # 状态
 var current_event_data: BaseEvent
@@ -64,7 +66,7 @@ func _ready() -> void:
 		return
 	# EventUI 的选项选择信号桥接回 NarrativeOverlay 的生命周期
 	event_ui.option_selected.connect(_on_option_selected)
-	event_ui.interrupt_pressed.connect(_on_interrupt_pressed)
+	_interrupt_button.pressed.connect(_on_interrupt_pressed)
 	EventBus.request_event.connect(func(data, _context): apply_narrative(data, _context))
 	EventBus.request_event_key.connect(func(key, _context):
 		var ev = Database.resolve(key)
@@ -686,6 +688,7 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 			# 结算不需要中断按钮
 			_pending_interrupt_event_key = ""
 			_pending_interrupt_context = {}
+			_interrupt_button.get_parent().visible = false
 			# 跳过 display_speed 路由，公共逻辑（register_scroll / AudioManager / scroll_to_bottom）在外部统一执行
 		else:
 			BlurManager.trigger_event_blur()
@@ -706,19 +709,28 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 
 	AudioManager.play_sad()
 
-	# 扫描 context 中的 interrupt_event 字段
+	# 扫描 context 中的 interrupt_event 字段，控制 ShadowBox 右侧 InterruptButton
 	var interrupt_event_data = context.get("interrupt_event", null)
 	if interrupt_event_data is Dictionary:
 		_pending_interrupt_event_key = interrupt_event_data.get("event_key", "")
 		_pending_interrupt_context = context.duplicate(true)
 		_pending_interrupt_context.erase("interrupt_event")
 		if not _pending_interrupt_event_key.is_empty():
-			Logging.info("NarrativeOverlay: 中断按钮已配置，目标事件='%s'" % _pending_interrupt_event_key)
+			# 按钮文本
+			var btn_text: String = interrupt_event_data.get("text", "中断")
+			_interrupt_button.get_node("Label").text = btn_text
+			# 按钮颜色：interrupt_event.color 或默认深红色
+			var btn_color: Color = interrupt_event_data.get("color", Color(0.70, 0.15, 0.30))
+			_interrupt_button.self_modulate = btn_color
+			_interrupt_button.get_parent().visible = true
+			Logging.info("NarrativeOverlay: 中断按钮已配置，目标事件='%s' text='%s'" % [_pending_interrupt_event_key, btn_text])
 		else:
+			_interrupt_button.get_parent().visible = false
 			Logging.debug("NarrativeOverlay: interrupt_event 存在但 event_key 为空")
 	else:
 		_pending_interrupt_event_key = ""
 		_pending_interrupt_context = {}
+		_interrupt_button.get_parent().visible = false
 		Logging.debug("NarrativeOverlay: context 中无 interrupt_event")
 
 	# 滚动到底部
@@ -797,11 +809,18 @@ func _end_narrative(choice, choice_text: String = ""):
 # --- 中断按钮处理（纸带模式）----------------------------
 
 func _on_interrupt_pressed() -> void:
+	if not _is_active:
+		Logging.warn("NarrativeOverlay._on_interrupt_pressed: 非活跃状态，忽略重复点击")
+		return
+
 	Logging.info("NarrativeOverlay._on_interrupt_pressed: 中断按钮被点击，目标事件='%s'" % _pending_interrupt_event_key)
 
-	# 纸带模式：不退场、不 hide()，当前条目标记为已中断
+	# 纸带模式：不退场、不 hide()，当前条目标记为已中断，隐藏按钮
+	_interrupt_button.get_parent().visible = false
+
 	var entry_id := str(current_event_data.get_instance_id())
 	event_ui.mark_chosen(entry_id, "[中断]")
+	Logging.info("NarrativeOverlay._on_interrupt_pressed: 跳过 execute_result，不执行当前事件结果")
 
 	# 恢复世界时间
 	TimeService.resume_world()
