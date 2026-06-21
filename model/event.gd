@@ -23,11 +23,12 @@ enum DisplaySpeed { FAST = 0, SLOW = 1, SLOWEST = 2 }
 @export var epitaph_text: String = ''
 
 # lasting_time — 事件自动推进超时（秒）
-# 从 context 字典中提取（lasting_time=5.0），非 @export，非持久化
+# @export 使其可在 .tres 文件中直接设置，同时在 CSV context 中也可通过 lasting_time=5.0 覆写
+# init() 中：context 有 lasting_time key → 覆盖；否则保留 .tres 中的值
 # 0 选项 + lasting_time > 0 → 展示后自动关闭
 # 1 选项 + lasting_time > 0 → 自动选择该选项
 # lasting_time == 0 → 退化为现有行为（手动选择/跳过）
-var lasting_time: float = 0.0
+@export var lasting_time: float = 0.0
 
 # ──────────────────────────────────────────────
 # on_returned — 回归叙事文本
@@ -165,8 +166,9 @@ func init(context: Dictionary) -> Array:
     # Phase 0: on_enter — 舞台置景，构建绝对上下文
     on_enter(context)
     
-    # Phase 0.25: lasting_time — 自动推进超时（从 context 提取，不写则默认 0 = 无自动推进）
-    lasting_time = context.get("lasting_time", 0.0)
+    # Phase 0.25: lasting_time — 自动推进超时（context 显式传入才覆盖 .tres 中的 @export 值）
+    if context.has("lasting_time"):
+        lasting_time = context.get("lasting_time", 0.0)
     Logging.debug("BaseEvent.init: lasting_time=%s for event '%s'" % [lasting_time, name])
     
     # Phase 0.5: 疾病选项劫持 — 扫描玩家是否拥有带 hijack_provider 的 Disease trait

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_opt"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="2_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_eo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="4_re"]
+
+[sub_resource type="Resource" id="Resource_empty_result"]
+script = ExtResource("2_cr")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_option"]
+script = ExtResource("3_eo")
+choice_result = SubResource("Resource_empty_result")
+description = "捏紧字条，继续等"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("4_re")
+options = Array[ExtResource("1_opt")]([SubResource("Resource_option")])
+uuid = "test_manual_1opt"
+name = "【测试】单选项·手动选（无超时）"
+description = "门廊下只剩下你一个人。远处的更鼓声像钝刀子缓缓割过长安的夜。字条上那个「候」字被你手心汗浸得快要糊开。你往墙上一靠，背脊一片凉意。这个时辰，该等还是该走？"

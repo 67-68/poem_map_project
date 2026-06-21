@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="1_test"]
+
+[resource]
+script = ExtResource("1_test")
+uuid = "test_auto_0opt"
+name = "【测试】零选项·时尽"
+description = "一阵风吹过，卷起几片枯叶。你站在晚秋的宫墙外，夕阳把投牒的人群烤成瘦长的剪影。没有人理会你，也没有人经过。你往袖里摸了摸那份诗稿，纸角已经起毛。天快黑了。"
+lasting_time = 3.0
