@@ -1,10 +1,17 @@
 [gd_scene format=3 uid="uid://6x6ysodpktqy"]
 
-[ext_resource type="Texture2D" uid="uid://bb1xbfmkl8dhs" path="res://assets/character/on_exam.png" id="1_qrvr7"]
 [ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="1_ufy3p"]
+[ext_resource type="Texture2D" uid="uid://d3oqxrnpyc7ol" path="res://assets/backgrounds/bg_study_quiet.png" id="2_218pq"]
 [ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="2_qrvr7"]
+[ext_resource type="Shader" uid="uid://b1rw3gxjxtsyx" path="res://shaders/woodcut_binary.gdshader" id="3_woodcut"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ufy3p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_woodcut"]
+shader = ExtResource("3_woodcut")
+shader_parameter/threshold = 0.1890000089775
+shader_parameter/ink_color = Color(0, 0, 0, 0.6862745)
+shader_parameter/paper_color = Color(1, 1, 1, 0.18431373)
 
 [node name="Event" type="PanelContainer" unique_id=1537400182]
 anchors_preset = 8
@@ -23,9 +30,10 @@ size_flags_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ufy3p")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1232497061]
+material = SubResource("ShaderMaterial_woodcut")
 layout_mode = 2
 mouse_filter = 2
-texture = ExtResource("1_qrvr7")
+texture = ExtResource("2_218pq")
 expand_mode = 1
 stretch_mode = 4
 

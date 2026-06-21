@@ -858,7 +858,7 @@ func _on_auto_advance_timeout(all_options: Array, entry_id: String) -> void:
 				break
 		if option:
 			var choice_result = option.get("choice_result") if option else null
-			var choice_text := event_ui._find_option_text(all_options, choice_result) if choice_result else "[自动]"
+			var choice_text = event_ui._find_option_text(all_options, choice_result) if choice_result else "[自动]"
 			_on_option_selected(choice_result, choice_text)
 		else:
 			Logging.err("NarrativeOverlay: auto-advance 到期但无法找到可显示选项，entry_id='%s'" % entry_id)
