@@ -92,7 +92,7 @@ func register(trigger: Control, popup: Control, delay: float = 0.5, hide_grace: 
 	call_deferred("_enforce_hidden", binding)
 	
 	_bindings[trigger] = binding
-	Logging.info("HoverPopupManager: registered trigger=%s popup=%s delay=%.2f hide_grace=%.2f" % [trigger.name, popup.name, delay, hide_grace])
+	#Logging.info("HoverPopupManager: registered trigger=%s popup=%s delay=%.2f hide_grace=%.2f" % [trigger.name, popup.name, delay, hide_grace])
 
 ## 取消注册
 func unregister(trigger: Control) -> void:
@@ -292,7 +292,7 @@ func _enforce_hidden(binding: HoverBinding) -> void:
 # ── 地雷一：自动收尸 ─────────────────────────────────────
 
 func _on_trigger_dying(trigger: Control) -> void:
-	Logging.info("HoverPopupManager: trigger=%s tree_exiting, auto-unregistering" % trigger.name)
+	#Logging.info("HoverPopupManager: trigger=%s tree_exiting, auto-unregistering" % trigger.name)
 	# 用 call_deferred 避免在 tree_exiting 信号中修改同一帧的 _bindings
 	call_deferred("unregister", trigger)
 

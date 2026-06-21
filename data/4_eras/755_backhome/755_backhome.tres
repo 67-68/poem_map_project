@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Era" format=3 uid="uid://c18u4ronhubel"]
+
+[ext_resource type="Script" uid="uid://wfy01ht15lc7" path="res://core/model/era.gd" id="1_g41dr"]
+
+[resource]
+script = ExtResource("1_g41dr")
+uuid = "755_backhome"
+name = "755年回奉先县"
+metadata/_custom_type_script = "uid://wfy01ht15lc7"

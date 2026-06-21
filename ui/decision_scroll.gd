@@ -42,17 +42,17 @@ func refresh_current_decisions():
 		if not req_passed:
 			continue
 		
-		# 4. 检查地区标签
+		# 4. 检查地区标签 — 复用 SceneActionPanel（action_button.tscn）
 		if not d.area_tags:
-			var panel = preload("res://ui/decision_panel.tscn").instantiate()
-			panel.inititalization(d)
+			var panel = preload("res://ui/action_button.tscn").instantiate()
+			panel.initialize(d)
 			$V.add_child(panel)
 			decisions.append(d)
 			continue
 		for t in d.area_tags:
 			if t in location.area_tags:
-				var panel = preload("res://ui/decision_panel.tscn").instantiate()
-				panel.inititalization(d)
+				var panel = preload("res://ui/action_button.tscn").instantiate()
+				panel.initialize(d)
 				$V.add_child(panel)
 				decisions.append(d)
 				break

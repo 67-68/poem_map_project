@@ -1,7 +1,7 @@
 class_name SceneActionPanel extends Button
-# 这是更加小的那个直接的button，不是上层承载他们的scroll
+# 通用行动/决议按钮 — 同时服务 SceneAction 和 Decision
 
-@export var action: SceneAction
+@export var action: Action
 
 ## 锁定闪光 Tween 引用（用于清除旧闪光）
 var _flash_tween: Tween = null
@@ -20,13 +20,19 @@ func _init() -> void:
 	_hover_style.bg_color = HOVER_BG_COLOR
 	_normal_style = StyleBoxEmpty.new()
 
-func initialize(action_: SceneAction = null): # 这里的info未来会用来做非对称信息
+func initialize(action_: Action = null):
 	#breakpoint
 	if action_:
 		action = action_
 		$Panel/HBoxContainer/VBoxContainer/Title.text = action.name
 		$Panel/HBoxContainer/VBoxContainer/Outcome.text = action.description
-		$Panel/HBoxContainer/TextureRect.texture = action.icon
+		
+		# ── 图标：有数据则显示，无数据则隐藏 ──
+		if action.icon:
+			$Panel/HBoxContainer/TextureRect.texture = action.icon
+			$Panel/HBoxContainer/TextureRect.visible = true
+		else:
+			$Panel/HBoxContainer/TextureRect.visible = false
 	else:
 		Logging.err('there\'s no action input in the init of scene action panel!!!')
 		return
@@ -34,8 +40,9 @@ func initialize(action_: SceneAction = null): # 这里的info未来会用来做�
 	# ── 点击：执行 action ──
 	pressed.connect(_on_button_pressed)
 	
-	# ── 锁定闪光（locked_actions_selected 迁移到右侧卡片）──
-	EventBus.locked_actions_selected.connect(_on_locked_actions_selected)
+	# ── 锁定闪光（仅 SceneAction 有 main_tag 可匹配）──
+	if action is SceneAction:
+		EventBus.locked_actions_selected.connect(_on_locked_actions_selected)
 	
 	# ── Hover 底色绑定 ──
 	mouse_entered.connect(_on_mouse_entered)
@@ -106,7 +113,7 @@ func _on_button_pressed() -> void:
 	if action.action_results:
 		for r in action.action_results: r.operate()
 	
-	# ── Generator 消费（统一入口） ──
+	# ── Generator 消费（统一入口）──
 	var had_generator := action.generator != null
 	ActionManager.consume_generator(action)
 	
@@ -116,10 +123,13 @@ func _on_button_pressed() -> void:
 		return
 	
 	# 🚀 革新后：不再需要标准化，前缀匹配自动忽略第4级
-	for tag in action.action_tags:
-		PlayerState.current_action_tags.append(tag)
-	var context = {
-		'main_tag': action.main_tag,
-		'fallback_event_uuid': action.fallback_event_uuid,
-	}
-	EventManager.scan_events(0, context)
+	# SceneAction 有 main_tag 用于事件扫描；Decision 无此字段，跳过
+	if action is SceneAction:
+		var scene_action := action as SceneAction
+		for tag in scene_action.action_tags:
+			PlayerState.current_action_tags.append(tag)
+		var context = {
+			'main_tag': scene_action.main_tag,
+			'fallback_event_uuid': scene_action.fallback_event_uuid,
+		}
+		EventManager.scan_events(0, context)

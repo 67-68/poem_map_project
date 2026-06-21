@@ -20,6 +20,9 @@ func operate():
 func init(context: Dictionary) -> Dictionary:
 	if operators:
 		for op in operators:
+			if not op:
+				Logging.err('theres a null operator in event choice result')
+				continue
 			op.init(context)
 	return context
 
