@@ -1,9 +1,64 @@
-[gd_resource type="Resource" script_class="BaseEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" path="res://model/event.gd" id="1_e0gjm"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_j2137"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_oj0ak"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_7bdcx"]
+[ext_resource type="Script" path="res://core/model/trait_operator.gd" id="4_t6erm"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_0mlr0"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_00j1m"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="7_y7ixg"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="8_mg0q6"]
+
+[sub_resource type="Resource" id="Resource_j2137"]
+script = ExtResource("3_7bdcx")
+str_props = "money"
+value = -8
+
+[sub_resource type="Resource" id="Resource_oj0ak"]
+script = ExtResource("4_t6erm")
+str_traits = "disease_fenghan_acute"
+
+[sub_resource type="Resource" id="Resource_7bdcx"]
+script = ExtResource("5_0mlr0")
+operators = Array[ExtResource("2_oj0ak")]([SubResource("Resource_j2137"), SubResource("Resource_oj0ak")])
+
+[sub_resource type="Resource" id="Resource_t6erm"]
+script = ExtResource("6_00j1m")
+choice_result = SubResource("Resource_7bdcx")
+description = "请大夫来诊脉"
+
+[sub_resource type="Resource" id="Resource_0mlr0"]
+script = ExtResource("3_7bdcx")
+str_props = "sick"
+value = 15
+
+[sub_resource type="Resource" id="Resource_00j1m"]
+script = ExtResource("3_7bdcx")
+str_props = "health"
+value = -10
+
+[sub_resource type="Resource" id="Resource_y7ixg"]
+script = ExtResource("5_0mlr0")
+operators = Array[ExtResource("2_oj0ak")]([SubResource("Resource_0mlr0"), SubResource("Resource_00j1m")])
+
+[sub_resource type="Resource" id="Resource_mg0q6"]
+script = ExtResource("6_00j1m")
+choice_result = SubResource("Resource_y7ixg")
+description = "再扛一扛，或许能过去"
+
+[sub_resource type="Resource" id="Resource_yg07l"]
+script = ExtResource("7_y7ixg")
+property = "sick"
+value = 50
+operator = 1
 
 [resource]
-script = ExtResource("1_e0gjm")
+script = ExtResource("8_mg0q6")
+weight = 100.0
+requirement = SubResource("Resource_yg07l")
+era = "1_core_rules"
+_target_tags = Array[String](["actor:health:sickAcute"])
+options = Array[ExtResource("1_j2137")]([SubResource("Resource_t6erm"), SubResource("Resource_mg0q6")])
 uuid = "event_disease_bridge_fenghan"
 name = "病来如山倒"
 description = "你撑了很久。咳嗽、头痛、发冷——你都忍了。但今天早上你连坐都坐不起来了。铜盆里的水映出一张灰败的脸。你终于承认：这次是真的病了。"

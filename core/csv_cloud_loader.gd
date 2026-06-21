@@ -81,6 +81,15 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "random_event"
     },
     # ════════════════════════════════════════════════════════════════
+    # 🔬 核心规则数据（本地维护，无需云端拉取）
+    # ════════════════════════════════════════════════════════════════
+    {
+        "name": "疾病事件（诊断+污染）",
+        "save_path": "res://data/1_core_rules/disease/_disease_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
+    # ════════════════════════════════════════════════════════════════
     # 🏠 本地生成事件（Phase B Python 管线产物）
     # is_generated = true 时，系统跳过云端拉取，直接从本地 CSV 读取。
     # .tres 输出目录需要手动指定（通过 tres_output_dir 字段）。

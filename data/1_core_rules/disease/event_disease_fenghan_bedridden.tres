@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_r018s"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_ckewm"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_wvtq7"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_lr1pe"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_6o736"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_ynxoy"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_766p7"]
+
+[sub_resource type="Resource" id="Resource_r018s"]
+script = ExtResource("3_wvtq7")
+str_props = "sick"
+value = 5
+
+[sub_resource type="Resource" id="Resource_ckewm"]
+script = ExtResource("4_lr1pe")
+value = 3
+
+[sub_resource type="Resource" id="Resource_wvtq7"]
+script = ExtResource("5_6o736")
+operators = Array[ExtResource("2_ckewm")]([SubResource("Resource_r018s"), SubResource("Resource_ckewm")])
+
+[sub_resource type="Resource" id="Resource_lr1pe"]
+script = ExtResource("6_ynxoy")
+choice_result = SubResource("Resource_wvtq7")
+description = "让友人进来，强撑着说说话"
+
+[sub_resource type="Resource" id="Resource_6o736"]
+script = ExtResource("3_wvtq7")
+str_props = "literary_fame"
+value = -3
+
+[sub_resource type="Resource" id="Resource_ynxoy"]
+script = ExtResource("3_wvtq7")
+str_props = "sick"
+value = -3
+
+[sub_resource type="Resource" id="Resource_766p7"]
+script = ExtResource("5_6o736")
+operators = Array[ExtResource("2_ckewm")]([SubResource("Resource_6o736"), SubResource("Resource_ynxoy")])
+
+[sub_resource type="Resource" id="Resource_2hgvr"]
+script = ExtResource("6_ynxoy")
+choice_result = SubResource("Resource_766p7")
+description = "托人传话：今日抱恙，改日再约"
+
+[resource]
+script = ExtResource("7_766p7")
+era = "1_core_rules"
+_target_tags = Array[String](["actor:health:sickAcute"])
+options = Array[ExtResource("1_r018s")]([SubResource("Resource_lr1pe"), SubResource("Resource_2hgvr")])
+uuid = "event_disease_fenghan_bedridden"
+name = "卧床"
+description = "你挣扎了几次都没能从榻上坐起来。四肢像灌了铅，额头烫得能煎蛋。门外有人叩门——是昨日约好同游的友人。你张了张嘴，声音哑得像破锣。"
