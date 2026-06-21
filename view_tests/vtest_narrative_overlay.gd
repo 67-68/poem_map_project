@@ -54,7 +54,7 @@ func test_narrative_scenarios(map):
 	# Case 0: 单选项事件 — 石壕吏
 	# -------------------------------------------------------------------------
 	var v0 = map.get('0')
-	if is_instance_valid(v0) and v0.has_method("apply_narrative"):
+	if is_instance_valid(v0):
 		var ev := BaseEvent.new()
 		ev.name = "石壕吏"
 		ev.description = "暮投石壕村，有吏夜捉人。老翁逾墙走，老妇出门看。"
@@ -64,13 +64,13 @@ func test_narrative_scenarios(map):
 		opt.description = "在墙角默默记录"
 		ev.options = [opt]
 
-		v0.apply_narrative(ev, {})
+		EventBus.request_event.emit(ev, {})
 
 	# -------------------------------------------------------------------------
 	# Case 1: 单选项事件 — 安史之乱
 	# -------------------------------------------------------------------------
 	var v1 = map.get('1')
-	if is_instance_valid(v1) and v1.has_method("apply_narrative"):
+	if is_instance_valid(v1):
 		var ev := BaseEvent.new()
 		ev.name = "安史之乱"
 		ev.description = "渔阳鼙鼓动地来，惊破霓裳羽衣曲。安禄山在范阳起兵，直指洛阳。"
@@ -80,13 +80,13 @@ func test_narrative_scenarios(map):
 		opt.description = "我知道了"
 		ev.options = [opt]
 
-		v1.apply_narrative(ev, {})
+		EventBus.request_event.emit(ev, {})
 
 	# -------------------------------------------------------------------------
 	# Case 2: 多选项事件 — 马嵬坡之变
 	# -------------------------------------------------------------------------
 	var v2 = map.get('2')
-	if is_instance_valid(v2) and v2.has_method("apply_narrative"):
+	if is_instance_valid(v2):
 		var ev := BaseEvent.new()
 		ev.name = "马嵬坡之变"
 		ev.description = "六军不发无奈何，宛转蛾眉马前死。禁军要求处死杨贵妃，否则拒绝开拔。"
@@ -100,13 +100,13 @@ func test_narrative_scenarios(map):
 
 		ev.options = [opt1, opt2]
 
-		v2.apply_narrative(ev, {})
+		EventBus.request_event.emit(ev, {})
 
 	# -------------------------------------------------------------------------
 	# Case 3: 单选项事件 — 收复长安
 	# -------------------------------------------------------------------------
 	var v3 = map.get('3')
-	if is_instance_valid(v3) and v3.has_method("apply_narrative"):
+	if is_instance_valid(v3):
 		var ev := BaseEvent.new()
 		ev.name = "收复长安"
 		ev.description = "剑外忽传收蓟北，初闻涕泪满衣裳。官军已收复京师！"
@@ -116,7 +116,7 @@ func test_narrative_scenarios(map):
 		opt.description = "漫卷诗书喜欲狂"
 		ev.options = [opt]
 
-		v3.apply_narrative(ev, {})
+		EventBus.request_event.emit(ev, {})
 
 
 func get_actions() -> Array[ViewTestAction]:

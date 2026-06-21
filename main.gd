@@ -105,8 +105,6 @@ func _enter_map_only() -> void:
 	_kill_all_tweens()
 	_save_visibility()
 
-	var viewport_h := get_viewport().get_visible_rect().size.y
-
 	_tween_exit = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween_exit.set_parallel(true)
 
@@ -128,17 +126,14 @@ func _enter_map_only() -> void:
 	_tape_was_visible = _narrative_overlay.visible
 	Logging.info("Main: NarrativeOverlay 进入前 visible=%s" % _tape_was_visible)
 
-	# ── NarrativeOverlay → 往上推出（CUBIC+EASE_OUT，与 _show_tape 反向）──
-	_tween_exit.tween_property(_narrative_overlay, "position:y", _tape_original_y - viewport_h, SLIDE_DURATION) \
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	_tween_exit.tween_property(_narrative_overlay, "modulate:a", 0.0, FADE_DURATION) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# ── NarrativeOverlay → 往上推出（委托 TapeVisualizer）──
+	_narrative_overlay.play_exit_animation(SLIDE_DURATION)
 
 	# ── 动画完成后隐藏节点 + 隐藏其他 UI ──
 	_tween_exit.chain().tween_callback(func():
 		_left_panel.visible = false
 		_right_panel.visible = false
-		_narrative_overlay.visible = false
+		# _narrative_overlay.visible 由 TapeVisualizer.play_exit_to_top 内部管理
 		_hide_other_ui()
 		Logging.info("Main: 纯地图模式动画完成 — 仅地图可见")
 	)
@@ -160,13 +155,12 @@ func _exit_map_only() -> void:
 
 	# 恢复 NarrativeOverlay 进入前的可见性（原本不可见就不恢复）
 	if _tape_was_visible:
-		_narrative_overlay.visible = true
-		Logging.info("Main: 恢复 NarrativeOverlay 可见性")
+		_narrative_overlay.play_enter_animation(SLIDE_DURATION)
+		Logging.info("Main: 恢复 NarrativeOverlay 可见性（委托 TapeVisualizer）")
 	else:
 		Logging.info("Main: NarrativeOverlay 原本不可见，不恢复")
 	_restore_visibility()
 
-	var viewport_h := get_viewport().get_visible_rect().size.y
 	var left_width := _left_panel.size.x
 	var right_width := _right_panel.size.x
 
@@ -185,13 +179,6 @@ func _exit_map_only() -> void:
 		.from(_right_original_x + right_width + 50.0) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_tween_enter.tween_property(_right_panel, "modulate:a", 1.0, FADE_DURATION) \
-		.from(0.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-
-	# ── NarrativeOverlay → 从上外滑回原位 ──
-	_tween_enter.tween_property(_narrative_overlay, "position:y", _tape_original_y, SLIDE_DURATION) \
-		.from(_tape_original_y - viewport_h) \
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	_tween_enter.tween_property(_narrative_overlay, "modulate:a", 1.0, FADE_DURATION) \
 		.from(0.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 	_tween_enter.chain().tween_callback(func():

@@ -2,8 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dk5iruu4bknq6" path="res://characters/narrative_overlay.gd" id="1_htcev"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_bsbx7"]
+[ext_resource type="Script" uid="uid://dncgf7oehejlj" path="res://characters/narrative_director.gd" id="3_sshou"]
 [ext_resource type="Script" uid="uid://bfap7ivfv8w2v" path="res://characters/event_ui.gd" id="4_1hjkf"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="4_2nuqx"]
+[ext_resource type="Script" uid="uid://bpngqavs0hbir" path="res://characters/tape_visualizer.gd" id="4_tb7k1"]
 [ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="5_smooth"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
 
@@ -29,7 +31,7 @@ modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nuqx"]
 
-[node name="ShadowBox" type="PanelContainer" unique_id=467584234]
+[node name="NarrativeOverlay" type="PanelContainer" unique_id=467584234]
 custom_minimum_size = Vector2(320, 450)
 anchors_preset = 8
 anchor_left = 0.5
@@ -43,6 +45,7 @@ offset_bottom = 326.83807
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2nuqx")
+script = ExtResource("1_htcev")
 
 [node name="InterruptButton" type="Control" parent="." unique_id=682834335]
 layout_mode = 2
@@ -78,20 +81,25 @@ text = "查看"
 horizontal_alignment = 1
 autowrap_mode = 1
 
-[node name="NarrativeOverlay" type="PanelContainer" parent="." unique_id=1703748906]
+[node name="NarrativeDirector" type="Node" parent="." unique_id=1867391960]
+script = ExtResource("3_sshou")
+
+[node name="TapeVisualizer" type="Node" parent="." unique_id=782844400]
+script = ExtResource("4_tb7k1")
+
+[node name="TapeContainer" type="PanelContainer" parent="." unique_id=1703748906]
 z_index = 100
 custom_minimum_size = Vector2(420, 640)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_qlww5")
-script = ExtResource("1_htcev")
 
-[node name="EventHistory" type="PanelContainer" parent="NarrativeOverlay" unique_id=1937522382]
+[node name="EventHistory" type="PanelContainer" parent="TapeContainer" unique_id=1937522382]
 z_index = 120
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_2nuqx")
 script = ExtResource("4_1hjkf")
 
-[node name="Margin" type="MarginContainer" parent="NarrativeOverlay/EventHistory" unique_id=328263658]
+[node name="Margin" type="MarginContainer" parent="TapeContainer/EventHistory" unique_id=328263658]
 layout_mode = 2
 theme = ExtResource("4_2nuqx")
 theme_override_constants/margin_left = 50
@@ -99,12 +107,12 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 20
 
-[node name="ScrollContainer" type="ScrollContainer" parent="NarrativeOverlay/EventHistory/Margin" unique_id=1870292442]
+[node name="ScrollContainer" type="ScrollContainer" parent="TapeContainer/EventHistory/Margin" unique_id=1870292442]
 layout_mode = 2
 horizontal_scroll_mode = 0
 script = ExtResource("5_smooth")
 
-[node name="VBox_TapeContent" type="VBoxContainer" parent="NarrativeOverlay/EventHistory/Margin/ScrollContainer" unique_id=104575616]
+[node name="VBox_TapeContent" type="VBoxContainer" parent="TapeContainer/EventHistory/Margin/ScrollContainer" unique_id=104575616]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

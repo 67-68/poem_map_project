@@ -81,7 +81,7 @@ func _construct_layout() -> void:
 	_content_rtl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_content_rtl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_content_rtl.theme_type_variation = "NarrativeText"
-	_content_rtl.add_theme_color_override(&"default_color", NarrativeOverlay.DIM_HISTORY_INK_COLOR)
+	_content_rtl.add_theme_color_override(&"default_color", TapeVisualizer.DIM_HISTORY_INK_COLOR)
 	vbox.add_child(_content_rtl)
 
 	# ── HSeparator 3 ──
