@@ -59,15 +59,7 @@ func _ready() -> void:
 func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String) -> VBoxContainer:
 	Logging.info("EventUI.append_event_entry: event='%s' entry_id='%s' from_stack=%s" % [event.name, entry_id, from_stack])
 
-	# ── 动态设置背景纹理 ──
-	if event.icon != null:
-		self.texture = event.icon
-		self.self_modulate.a = 0.55
-		Logging.debug("EventUI.append_event_entry: 设置 icon 纹理 (alpha=0.55)")
-	else:
-		self.texture = load("res://assets/maps/宣纸.jpeg")
-		self.self_modulate.a = 0.196
-		Logging.debug("EventUI.append_event_entry: 回退到默认宣纸纹理 (alpha=0.196)")
+	_apply_event_icon(event)
 
 	var entry: VBoxContainer = _event_template.instantiate()
 	entry.set_meta("entry_id", entry_id)
@@ -107,15 +99,7 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 func append_settlement_entry(event: BaseEvent, context: Dictionary) -> void:
 	Logging.info("EventUI.append_settlement_entry: event='%s'" % event.name)
 
-	# ── 动态设置背景纹理 ──
-	if event.icon != null:
-		self.texture = event.icon
-		self.self_modulate.a = 0.55
-		Logging.debug("EventUI.append_settlement_entry: 设置 icon 纹理 (alpha=0.55)")
-	else:
-		self.texture = load("res://assets/maps/宣纸.jpeg")
-		self.self_modulate.a = 0.196
-		Logging.debug("EventUI.append_settlement_entry: 回退到默认宣纸纹理 (alpha=0.196)")
+	_apply_event_icon(event)
 
 	var entry: SettlementTapeEntry = preload("res://ui/settlement_tape_entry.tscn").instantiate()
 	entry.set_meta("entry_id", str(event.get_instance_id()))
@@ -398,6 +382,9 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 	Logging.info("EventUI.display_slow: 模式开始事件 '%s'（type_speed=%.3f）" % [event.name, type_speed])
 	AudioManager.play_sfx_category("book_place")
 
+	# ── 动态设置背景纹理 ──
+	_apply_event_icon(event)
+
 	# Step 1: 创建空骨架 TapeEntry（不含正文和选项）
 	var entry: VBoxContainer = _event_template.instantiate()
 	entry.set_meta("entry_id", entry_id)
@@ -547,6 +534,24 @@ func _find_option_text(all_options: Array, choice_result) -> String:
 				return o._resolved_description
 			return o.description
 	return "?"
+
+
+# ═══════════════════════════════════════════════
+# 内部工具方法 — 纹理
+# ═══════════════════════════════════════════════
+
+## 根据事件的 icon 字段动态设置 EventUI (TextureRect) 的背景纹理和透明度
+func _apply_event_icon(event: BaseEvent) -> void:
+	if event.icon != null:
+		self.texture = event.icon
+		self.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		self.self_modulate.a = 0.55
+		Logging.debug("EventUI._apply_event_icon: 设置 icon 纹理 (alpha=0.55, keep_aspect) for '%s'" % event.name)
+	else:
+		self.texture = load("res://assets/maps/宣纸.jpeg")
+		self.stretch_mode = TextureRect.STRETCH_SCALE
+		self.self_modulate.a = 0.196
+		Logging.debug("EventUI._apply_event_icon: 回退到默认宣纸纹理 (alpha=0.196, scale) for '%s'" % event.name)
 
 
 # ═══════════════════════════════════════════════

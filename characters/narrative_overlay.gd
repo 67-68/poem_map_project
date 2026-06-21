@@ -67,6 +67,14 @@ func _ready() -> void:
 	# EventUI 的选项选择信号桥接回 NarrativeOverlay 的生命周期
 	event_ui.option_selected.connect(_on_option_selected)
 	_interrupt_button.pressed.connect(_on_interrupt_pressed)
+	Logging.info("NarrativeOverlay._ready: _interrupt_button 引用=%s, visible=%s, parent=%s, parent.visible=%s, Label.text='%s', tooltip='%s'" % [
+		_interrupt_button,
+		_interrupt_button.visible,
+		_interrupt_button.get_parent(),
+		_interrupt_button.get_parent().visible,
+		_interrupt_button.get_node_or_null("Label").text if _interrupt_button.get_node_or_null("Label") else "(null)",
+		_interrupt_button.tooltip_text
+	])
 	EventBus.request_event.connect(func(data, _context): apply_narrative(data, _context))
 	EventBus.request_event_key.connect(func(key, _context):
 		var ev = Database.resolve(key)
@@ -711,6 +719,7 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 
 	# 扫描 context 中的 interrupt_event 字段，控制 ShadowBox 右侧 InterruptButton
 	var interrupt_event_data = context.get("interrupt_event", null)
+	Logging.info("NarrativeOverlay.apply_narrative: interrupt_event_data=%s, _interrupt_button=%s, _interrupt_button.parent=%s" % [interrupt_event_data, _interrupt_button, _interrupt_button.get_parent() if _interrupt_button else "(null)"])
 	if interrupt_event_data is Dictionary:
 		_pending_interrupt_event_key = interrupt_event_data.get("event_key", "")
 		_pending_interrupt_context = context.duplicate(true)
@@ -718,7 +727,8 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 		if not _pending_interrupt_event_key.is_empty():
 			# 按钮文本
 			var btn_text: String = interrupt_event_data.get("text", "中断")
-			_interrupt_button.get_node("Label").text = btn_text
+			_interrupt_button.get_node("Margin/Label").text = btn_text
+			_interrupt_button.tooltip_text = btn_text
 			# 按钮颜色：interrupt_event.color 或默认深红色
 			var btn_color: Color = interrupt_event_data.get("color", Color(0.70, 0.15, 0.30))
 			_interrupt_button.self_modulate = btn_color
