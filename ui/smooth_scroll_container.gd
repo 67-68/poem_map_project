@@ -10,9 +10,12 @@ class_name SmoothScrollContainer extends ScrollContainer
 @export var pan_sensitivity: float = 0.05  # 触控板灵敏度系数 (相对 scroll_speed 的阻尼，越小越迟钝)
 @export var smooth_weight: float = 15.0    # 插值系数 (越小惯性越大, 越大越干脆)
 @export var drag_friction: float = 1.0     # 拖拽摩擦力 (1.0=跟手, 0.5=纸很重扯不动)
+@export var drag_deadzone: float = 8.0     # 拖拽死区（像素），触控板微动小于此值不算拖拽，保护 Button 点击
 
 var target_scroll: float = 0.0
 var is_dragging: bool = false
+var _drag_really_moving: bool = false     # 真正越过死区在拖拽？false 时 motion 不 accept
+var _drag_accumulated_y: float = 0.0      # 拖拽累计位移
 var _frame_counter: int = 0  # DEBUG: 帧计数器，用于追踪 lerp 行为
 
 
@@ -94,13 +97,26 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if _mouse_inside():
 			is_dragging = true
+			_drag_really_moving = false
+			_drag_accumulated_y = 0.0
 			target_scroll = scroll_vertical
 			AudioManager.play_sfx_category("book_friction", 0.03)
 			Logging.debug("SmoothScrollContainer[%s]: DRAG_START(via_input) sv=%.1f target=%.1f" % [name, scroll_vertical, target_scroll])
 		return
 	
 	# ── 拖拽滑动：鼠标移动，且处于拖拽状态（全局追踪，即使鼠标移出控件）──
+	# ⚠️ 死区保护：触控板微动（< drag_deadzone）不视为拖拽，不 accept_event()
+	# 让事件穿透到子 Button 完成点击
 	if event is InputEventMouseMotion and is_dragging:
+		_drag_accumulated_y += abs(event.relative.y)
+		if not _drag_really_moving and _drag_accumulated_y < drag_deadzone:
+			return  # 还未越过死区，事件穿透给 Button
+		
+		# 越过死区：标记正在真实拖拽，开始截获事件
+		if not _drag_really_moving:
+			_drag_really_moving = true
+			Logging.debug("SmoothScrollContainer[%s]: DRAG_DEADZONE_PASSED accumulated=%.1f deadzone=%.1f" % [name, _drag_accumulated_y, drag_deadzone])
+		
 		var v_scrollbar = get_v_scroll_bar()
 		var max_scroll = max(0.0, v_scrollbar.max_value - v_scrollbar.page)
 		var pull_delta = -(event.relative.y * drag_friction)
@@ -117,6 +133,8 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 		if is_dragging:
 			is_dragging = false
+			_drag_really_moving = false
+			_drag_accumulated_y = 0.0
 			Logging.debug("SmoothScrollContainer[%s]: DRAG_END(via_input) sv=%.1f target=%.1f" % [name, scroll_vertical, target_scroll])
 		return
 

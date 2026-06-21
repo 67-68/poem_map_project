@@ -82,11 +82,15 @@ func register(trigger: Control, popup: Control, delay: float = 0.5, hide_grace: 
 	popup.visibility_changed.connect(_on_popup_visibility_changed.bind(binding))
 	
 	# 地雷一：自动收尸
+	# ⚠️ 用 weakref 包裹 trigger — popup tree_exiting 时 trigger 可能已被释放
+	# 无法做 Object→Control 类型转换
 	trigger.tree_exiting.connect(_on_trigger_dying.bind(trigger))
-	popup.tree_exiting.connect(_on_popup_dying.bind(trigger))
+	popup.tree_exiting.connect(_on_popup_dying.bind(weakref(trigger)))
 	
-	# 地雷三：把 popup reparent 到神之层
-	popup.reparent(_canvas_layer)
+	# 地雷三：把 popup 添加到神之层
+	# ⚠️ 不能用 reparent() — popup 由 HoverInfoPopup.new() 创建，无 parent
+	# Godot 4 reparent() 要求节点必须有父节点，孤儿节点直接抛错
+	_canvas_layer.add_child(popup)
 	popup.visible = false
 	# 延迟一帧再 enforcing，覆盖 popup 自身 _ready() 里的 show() 调用
 	call_deferred("_enforce_hidden", binding)
@@ -122,6 +126,12 @@ func unregister(trigger: Control) -> void:
 		binding.show_timer.queue_free()
 	if binding.hide_timer and is_instance_valid(binding.hide_timer):
 		binding.hide_timer.queue_free()
+	
+	# 清理 popup（从 CanvasLayer 移除，防止僵尸节点累积阻挡鼠标事件）
+	# ⚠️ queue_free 会在下一帧安全移除节点；不能在此处 remove_child
+	# 因为 tree_exiting 信号触发时父节点正在修改子节点列表（blocked > 0）
+	if is_instance_valid(binding.popup):
+		binding.popup.queue_free()
 	
 	_bindings.erase(trigger)
 
@@ -293,11 +303,17 @@ func _enforce_hidden(binding: HoverBinding) -> void:
 
 func _on_trigger_dying(trigger: Control) -> void:
 	#Logging.info("HoverPopupManager: trigger=%s tree_exiting, auto-unregistering" % trigger.name)
-	# 用 call_deferred 避免在 tree_exiting 信号中修改同一帧的 _bindings
-	call_deferred("unregister", trigger)
+	# ⚠️ 不能用 call_deferred — deferred 执行时 trigger 已被释放，Godot 无法转换参数类型
+	# tree_exiting 信号中同步清理是安全的（节点还在但即将退出）
+	unregister(trigger)
 
-func _on_popup_dying(trigger: Control) -> void:
+func _on_popup_dying(trigger_ref: Variant) -> void:
 	# popup 挂了也清理对应的 trigger 注册
+	# ⚠️ trigger 参数为 weakref — tree_exiting 时原 trigger 可能已 freed
+	var trigger = trigger_ref.get_ref() if trigger_ref else null
+	if not trigger or not is_instance_valid(trigger):
+		Logging.info("HoverPopupManager: popup dying but trigger already freed, skip cleanup")
+		return
 	Logging.info("HoverPopupManager: popup for trigger=%s tree_exiting" % trigger.name)
 	if _bindings.has(trigger):
-		call_deferred("unregister", trigger)
+		unregister(trigger)
