@@ -22,6 +22,15 @@ static func create(data: BaseOption) -> EventBtn:
 	btn._init_option(data)
 	# 必须设为容器布局模式(1)，否则父 VBoxContainer 无法管理其尺寸（场景默认 layout_mode=2 固定定位）
 	btn.layout_mode = 1
+	
+	# ── 音效挂件注入 ──
+	var SfxCls := preload("res://features/ui_sound_component.gd")
+	var sfx := SfxCls.new()
+	sfx.name = "UISoundComponent"
+	sfx.click_category = "book_impact"
+	sfx.hover_category = "book_flip"
+	btn.add_child(sfx)
+	
 	return btn
 
 func _ready() -> void:

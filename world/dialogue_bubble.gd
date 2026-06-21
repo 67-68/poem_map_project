@@ -48,8 +48,9 @@ func setup(data: ChatBubble):
 func _input(event):
     if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
         # 吞掉这次点击，防止点到地图背后的州府
-        get_viewport().set_input_as_handled() 
+        get_viewport().set_input_as_handled()
         
+        AudioManager.play_sfx_category("book_flip")
         # 告诉我们之前写的 UI 缓冲池：玩家看完了，进行下一个！
         # 假设你的 UIManager 单例里持有 bubble_buffer
         EventBus.bubble_complete.emit()

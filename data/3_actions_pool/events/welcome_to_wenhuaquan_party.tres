@@ -30,7 +30,7 @@ description = "拒绝"
 [resource]
 script = ExtResource("6_7ojh0")
 options = Array[ExtResource("1_c8r05")]([SubResource("Resource_ulp6d"), SubResource("Resource_khu4x")])
-example = " s"
+on_returned = null
 uuid = "welcome_to_wenhuaquan_party"
 name = "被文化圈邀请到宴席"
 description = "test"

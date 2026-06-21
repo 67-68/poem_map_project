@@ -32,6 +32,7 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_SPACE and event.meta_pressed:
 		if _is_playing and not _skip_requested:
+			AudioManager.play_sfx_category("book_flip")
 			_skip()
 
 
@@ -40,6 +41,7 @@ func _on_dimmer_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if _is_playing and not _skip_requested:
 			Logging.info("CinematicOverlay: 用户点按快进")
+			AudioManager.play_sfx_category("book_flip")
 			_skip()
 
 

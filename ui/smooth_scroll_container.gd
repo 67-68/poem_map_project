@@ -95,6 +95,7 @@ func _input(event: InputEvent) -> void:
 		if _mouse_inside():
 			is_dragging = true
 			target_scroll = scroll_vertical
+			AudioManager.play_sfx_category("book_friction", 0.03)
 			Logging.debug("SmoothScrollContainer[%s]: DRAG_START(via_input) sv=%.1f target=%.1f" % [name, scroll_vertical, target_scroll])
 		return
 	

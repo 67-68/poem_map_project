@@ -98,6 +98,7 @@ func _update_progress() -> void:
 		return
 	
 	progress_dots_label.show()
+	AudioManager.play_sfx_category("ink_flip", 0.05)
 	
 	# 附加文学化描述文本（如果有 staged_perceptions 配置）
 	if _tracked_prop.staged_perceptions.size() > 0:

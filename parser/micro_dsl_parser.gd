@@ -722,8 +722,15 @@ static func _exec_push_event_op(parsed: NamedDSLParser.ParseResult, raw: String)
 	return op
 
 
-static func _exec_pop_event_op(_parsed: NamedDSLParser.ParseResult, raw: String) -> PopEventOperator:
-	return PopEventOperator.new()
+static func _exec_pop_event_op(parsed: NamedDSLParser.ParseResult, raw: String) -> PopEventOperator:
+	# DSL 语法: pop_event() 或 pop_event(text="你回过神来，发现自己还在书局里。")
+	# text 参数可选，作为回归过渡文本传递给 NarrativeOverlay
+	var transition_text = NamedDSLParser.get_str_param(parsed, "text", "")
+	var op = PopEventOperator.new()
+	op.transition_text = transition_text
+	if not transition_text.is_empty():
+		Logging.info("pop_event operator 创建成功: transition_text='%s'" % transition_text)
+	return op
 
 
 static func _exec_clear_scheduled_events_op(_parsed: NamedDSLParser.ParseResult, raw: String) -> ClearScheduledEvents:

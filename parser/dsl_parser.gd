@@ -598,6 +598,13 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
         _lint_dsl_field(on_enter_str, "on_enter", uuid)
         event.on_enter_result = parse_choice_result(on_enter_str)
 
+    # 解析 on_returned 回归叙事文本（纯字符串，非 DSL）
+    # 当子事件 pop_event 回到此事件时，与 transition_text 合并打印为 NarrativeText 条目
+    var on_returned_str = row.get('on_returned', '')
+    if on_returned_str and not on_returned_str.is_empty():
+        event.on_returned = on_returned_str
+        Logging.info("Event on_returned 解析成功: uuid=%s" % uuid)
+
     # 解析前置中断序列（interruptions 列）
     # 语法: interrupt_event(req_syntax| op_syntax)|interrupt_event(req_syntax2| op_syntax2)
     var interruptions_str = row.get('interruptions', '')

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bnokquohfmbma"]
 
 [ext_resource type="Script" uid="uid://b40x5m646qi68" path="res://ui/picker_item_card.gd" id="1_8vobe"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="2_sfx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vobe"]
 bg_color = Color(0.96, 0.93, 0.86, 1)
@@ -12,6 +13,12 @@ custom_minimum_size = Vector2(90, 64)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8vobe")
 script = ExtResource("1_8vobe")
+
+[node name="UISoundComponent" type="Node" parent="."]
+script = ExtResource("2_sfx")
+click_category = "stamp_impact"
+hover_category = "book_flip"
+custom_click_signal = "clicked"
 
 [node name="V" type="VBoxContainer" parent="."]
 layout_mode = 2

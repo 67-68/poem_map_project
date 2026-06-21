@@ -65,8 +65,8 @@ func _on_card_clicked(card: PickerItem) -> void:
 		tween.tween_property(other, "scale", Vector2(0.85, 0.85), 0.25)
 		tween.parallel().tween_property(other, "modulate", Color(0.5, 0.5, 0.5, 0.6), 0.25)
 
-	# 盖印音效（预留：可替换为真实音效）
-	# AudioManager.play_stamp_sound()
+	# 盖印音效
+	AudioManager.play_sfx_category("stamp_impact")
 
 	# 获取选中实体
 	var selected_entity := card.entity

@@ -42,7 +42,11 @@ signal request_toggle_map_only()
 signal request_event(data: Variant, context: Dictionary)
 signal request_event_key(key: String, context: Dictionary)
 signal push_event(data: Variant, context: Dictionary)
-signal pop_event()
+## pop_event — 弹出栈顶事件，回到栈中下一个事件
+## transition_text: 回归时打印的过渡文本（可选，传 "" 向后兼容）
+## 该文本会与目标事件的 on_returned 属性合并打印为 NarrativeText 条目
+## ⚠️ GDScript 信号参数不支持默认值，调用方必须显式传 "" 以保持兼容
+signal pop_event(transition_text: String)
 signal pop_to_event(event_key: String)
 signal clear_scheduled_events()
 signal bubble_complete()

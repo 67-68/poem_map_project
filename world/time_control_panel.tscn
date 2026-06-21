@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cy2dg1dthfmt5" path="res://world/time_control_panel.gd" id="1_25hr5"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_v2d34"]
 [ext_resource type="Texture2D" uid="uid://l280xbxc3ixw" path="res://assets/candle_main.PNG" id="5_wxhbx"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
 
 [node name="Margin" type="MarginContainer" unique_id=1416243622]
 process_mode = 3
@@ -85,6 +86,10 @@ tooltip_text = "减速"
 theme_type_variation = &"ButtonTheme"
 text = "-"
 
+[node name="UISoundComponent" type="Node" parent="HBox/HBox/SpeedDown"]
+script = ExtResource("6_sfx")
+click_category = "bell_impact"
+
 [node name="FlowPause" type="Button" parent="HBox/HBox" unique_id=606298550]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -92,9 +97,17 @@ tooltip_text = "停止/开始"
 theme_type_variation = &"ButtonTheme"
 text = "⏸/▶"
 
+[node name="UISoundComponent" type="Node" parent="HBox/HBox/FlowPause"]
+script = ExtResource("6_sfx")
+click_category = "bell_impact"
+
 [node name="SpeedUp" type="Button" parent="HBox/HBox" unique_id=753981742]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "加速"
 theme_type_variation = &"ButtonTheme"
 text = "+"
+
+[node name="UISoundComponent" type="Node" parent="HBox/HBox/SpeedUp"]
+script = ExtResource("6_sfx")
+click_category = "bell_impact"

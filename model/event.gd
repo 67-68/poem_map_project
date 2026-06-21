@@ -21,6 +21,18 @@ enum DisplaySpeed { FAST = 0, SLOW = 1, SLOWEST = 2 }
 @export var example: String
 @export var audio: AudioStream = null
 @export var epitaph_text: String = ''
+
+# ──────────────────────────────────────────────
+# on_returned — 回归叙事文本
+# ──────────────────────────────────────────────
+# 当子事件通过 pop_event 弹出栈后，玩家"回归"到此事件时，
+# NarrativeOverlay 会将 pop_event 的 transition_text 与此 on_returned
+# 合并打印为一个 NarrativeText 条目（叙事过渡），随后创建全新的事件条目
+# （而非复活旧条目的选项按钮）。
+#
+# 留空则回归时只打印 transition_text（若 transition_text 也为空则不打印）。
+# 对应 CSV 中的 on_returned 列。
+@export var on_returned: String = ''
 # ──────────────────────────────────────────────
 # Pre-event Interruption Sequence（前置中断序列）
 # ──────────────────────────────────────────────

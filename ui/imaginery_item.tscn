@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://co4eess1lguhe"]
+[gd_scene load_steps=4 format=3 uid="uid://co4eess1lguhe"]
 
 [ext_resource type="Script" uid="uid://ceg626ii2cuc3" path="res://ui/imaginery_item.gd" id="1_2uem4"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="2_sfx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3hkci"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -11,6 +12,12 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_3hkci")
 script = ExtResource("1_2uem4")
+
+[node name="UISoundComponent" type="Node" parent="."]
+script = ExtResource("2_sfx")
+click_category = "book_impact"
+hover_category = "book_flip"
+custom_click_signal = "imagenery_item_clicked"
 
 [node name="M" type="MarginContainer" parent="."]
 layout_mode = 2

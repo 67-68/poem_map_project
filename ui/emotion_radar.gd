@@ -26,11 +26,15 @@ func _deferred_ready():
 	radar_paint = get_node_or_null("RadarPainting")
 	emotion_label = get_node_or_null("Label")
 	
+	Logging.info("[EmotionRadar] _deferred_ready: radar_paint=%s emotion_label=%s self.visible=%s self.size=%s" % [
+		str(radar_paint), str(emotion_label), str(visible), str(size)
+	])
+	
 	if not radar_paint:
-		Logging.err("RadarPainting node not found!")
+		Logging.err("[EmotionRadar] RadarPainting node not found!")
 	
 	if not emotion_label:
-		Logging.err("Label node not found!")
+		Logging.err("[EmotionRadar] Label node not found!")
 		return
 	
 	# 【Fix #1】从场景实际 visible 状态同步，消除双状态脱钩
@@ -44,6 +48,7 @@ func _deferred_ready():
 	if PlayerState.emotion_changed.is_connected(update_emotions):
 		PlayerState.emotion_changed.disconnect(update_emotions)
 	PlayerState.emotion_changed.connect(update_emotions)
+	Logging.info("[EmotionRadar] _deferred_ready: signals connected, calling initial update_emotions()")
 	update_emotions()
 
 func _input(event):
@@ -65,7 +70,10 @@ func calculate_point(emotion_percent: float, angle: float, center: Vector2) -> V
 	return center + Vector2(x, y)
 
 func update_emotions():
+	Logging.info("[EmotionRadar] update_emotions() called")
+	
 	if not emotion_label:
+		Logging.err("[EmotionRadar] update_emotions: emotion_label is null, aborting")
 		return
 	
 	# 构建情绪文本显示
@@ -84,13 +92,16 @@ func update_emotions():
 		emotion_text = "情绪尚未激活"
 	
 	emotion_label.text = emotion_text
+	Logging.info("[EmotionRadar] update_emotions: label updated, has_any_emotion=%s" % str(has_any_emotion))
 	
 	# 如果雷达绘制节点存在，也更新它
 	if radar_paint:
+		Logging.info("[EmotionRadar] update_emotions: radar_paint exists, visible=%s size=%s" % [str(radar_paint.visible), str(radar_paint.size)])
 		var points: Array[Vector2] = []
 		# 【Fix #2】改用父节点自身 size 而非子节点 size，
 		# 避免子节点尚未完成布局时 size=(0,0)
 		var center = Vector2(size.x / 2, size.y / 2)
+		Logging.info("[EmotionRadar] update_emotions: parent center=%s parent.size=%s" % [str(center), str(size)])
 		
 		# 遍历 AXIS_CONFIG，计算每个情绪轴的顶点
 		for emotion_key in AXIS_CONFIG:
@@ -103,10 +114,19 @@ func update_emotions():
 			# 计算顶点坐标
 			var point = calculate_point(emotion_percent, angle, center)
 			points.append(point)
+			Logging.info("[EmotionRadar] update_emotions: key=%s val=%d pct=%.2f point=%s" % [emotion_key, emotion_value, emotion_percent, str(point)])
+		
+		Logging.info("[EmotionRadar] update_emotions: built %d points, about to call radar_paint.update_emotion_data()" % points.size())
 		
 		# 将数据传递给子节点进行渲染
 		if radar_paint.has_method("update_emotion_data"):
+			Logging.info("[EmotionRadar] update_emotions: radar_paint has update_emotion_data method, calling...")
 			radar_paint.update_emotion_data(points)
+			Logging.info("[EmotionRadar] update_emotions: radar_paint.update_emotion_data() returned successfully")
+		else:
+			Logging.err("[EmotionRadar] update_emotions: radar_paint does NOT have update_emotion_data method!")
+	else:
+		Logging.err("[EmotionRadar] update_emotions: radar_paint is NULL, cannot draw radar polygon")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

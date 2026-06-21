@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bkgnvye0ifc60"]
+[gd_scene load_steps=5 format=3 uid="uid://bkgnvye0ifc60"]
 
 [ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="1_4uqyj"]
 [ext_resource type="Script" uid="uid://q7dhqdalm6jd" path="res://ui/decision_panel.gd" id="1_qcnrq"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="2_sfx"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n54d2"]
 content_margin_left = 20.0
@@ -49,5 +50,9 @@ layout_mode = 2
 mouse_filter = 1
 theme_override_font_sizes/font_size = 8
 text = "确认"
+
+[node name="UISoundComponent" type="Node" parent="ActionPanel/V/MarginContainer/Button"]
+script = ExtResource("2_sfx")
+click_category = "book_impact"
 
 [connection signal="pressed" from="ActionPanel/V/MarginContainer/Button" to="." method="_on_button_pressed"]

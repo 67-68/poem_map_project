@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://1h1wvymxjj15"]
 
 [ext_resource type="Script" uid="uid://gyijkmccf5ve" path="res://controller.gd" id="1_jldtq"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="2_sfx"]
 
 [node name="Control" type="Control" unique_id=1054828129]
 visible = false
@@ -32,6 +33,10 @@ offset_right = 44.5
 offset_bottom = 217.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="UISoundComponent" type="Node" parent="Button"]
+script = ExtResource("2_sfx")
+click_category = "book_impact"
 
 [connection signal="gui_input" from="Controller" to="Controller" method="_on_gui_input"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

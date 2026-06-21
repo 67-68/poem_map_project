@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://ci5u7rtqn6kan"]
+[gd_scene load_steps=4 format=3 uid="uid://ci5u7rtqn6kan"]
 
 [ext_resource type="Script" uid="uid://dlm6ll2vhtvid" path="res://ui/tomb_stone_screen.gd" id="1_x36lu"]
 [ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="2_ixp4g"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="3_sfx"]
 
 [node name="TombStoneScreen" type="CanvasLayer"]
 script = ExtResource("1_x36lu")
@@ -63,5 +64,9 @@ offset_top = -40.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "退出观测"
+
+[node name="UISoundComponent" type="Node" parent="ColorRect/Button"]
+script = ExtResource("3_sfx")
+click_category = "book_impact"
 
 [connection signal="pressed" from="ColorRect/Button" to="." method="_on_button_pressed"]

@@ -5,6 +5,7 @@
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="3_a0q7c"]
 [ext_resource type="Texture2D" uid="uid://cnu5fltxkafq3" path="res://assets/profile/maobi.png" id="4_kxi5c"]
 [ext_resource type="Script" uid="uid://7kgs8nddroem" path="res://ui/maobi_shake.gd" id="5_a0q7c"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r5rtj"]
 border_width_left = 1
@@ -69,6 +70,10 @@ theme = ExtResource("3_a0q7c")
 theme_type_variation = &"ButtonTheme"
 text = "【野心】致君尧舜上"
 text_direction = 1
+
+[node name="UISoundComponent" type="Node" parent="Panel/VBox/ScrollContainer/V/Ambition" unique_id=1437012079]
+script = ExtResource("6_sfx")
+click_category = "book_impact"
 
 [node name="HSep2" type="HSeparator" parent="Panel/VBox/ScrollContainer/V" unique_id=894122215]
 layout_mode = 2

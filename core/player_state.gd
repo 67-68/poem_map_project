@@ -83,7 +83,20 @@ func init_imaginaries():
 		imaginary.current_level = level
 		Logging.info('init_imaginaries: set imaginary %s (%s) to level %d' % [uuid, imaginary.name, level])
 
+func init_emotions():
+	"""从 SourceOfTruth 加载初始情绪值到 PlayerState"""
+	var emotion_data = SourceOfTruth.debug_dashboard_state.get("emotions", {})
+	if emotion_data.is_empty():
+		Logging.info('init_emotions: no emotion data in SourceOfTruth, skipping')
+		return
+
+	for emo_name in emotion_data:
+		var emo_val = emotion_data[emo_name] as int
+		set_emotion(emo_name, emo_val)
+		Logging.info('init_emotions: set %s to %d from SourceOfTruth' % [emo_name, emo_val])
+
 func _ready():
+	init_emotions()
 	init_props()
 	init_traits()
 	init_flags()

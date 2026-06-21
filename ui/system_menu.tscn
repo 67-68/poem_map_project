@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cd6hwp2pe4b41"]
 
 [ext_resource type="Script" path="res://ui/system_menu.gd" id="1_sysmenu"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="2_sfx"]
 
 [node name="SystemMenu" type="CanvasLayer"]
 script = ExtResource("1_sysmenu")
@@ -37,8 +38,16 @@ layout_mode = 2
 theme_type_variation = &"ButtonTheme"
 text = "继续游戏"
 
+[node name="UISoundComponent" type="Node" parent="CenterContainer/VBoxContainer/ContinueBtn"]
+script = ExtResource("2_sfx")
+click_category = "book_impact"
+
 [node name="ReturnBtn" type="Button" parent="CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 theme_type_variation = &"ButtonTheme"
 text = "返回主菜单"
+
+[node name="UISoundComponent" type="Node" parent="CenterContainer/VBoxContainer/ReturnBtn"]
+script = ExtResource("2_sfx")
+click_category = "book_impact"

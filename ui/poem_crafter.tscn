@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://co4eess1lguhe" path="res://ui/imaginery_item.tscn" id="1_ps720"]
 [ext_resource type="Texture2D" uid="uid://cckktvmpe61oe" path="res://assets/character/lilinfu_smile.png" id="2_otk17"]
 [ext_resource type="PackedScene" uid="uid://dhm3awu3pacwl" path="res://ui/poem_slot.tscn" id="3_o11fd"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="4_sfx"]
 
 [node name="H" type="HBoxContainer"]
 anchors_preset = 15
@@ -79,6 +80,10 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 text = "开始创作"
+
+[node name="UISoundComponent" type="Node" parent="InputImagPanel/Button"]
+script = ExtResource("4_sfx")
+click_category = "book_impact"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="InputImagPanel"]
 layout_mode = 2

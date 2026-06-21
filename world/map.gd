@@ -92,6 +92,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if not prov:
 			Logging.debug('用户没有点击到province')
 			return
+		AudioManager.play_sfx_category("book_impact")
 		on_prov_clicked(prov)
 
 func on_prov_clicked(prov: Territory):

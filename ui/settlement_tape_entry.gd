@@ -100,6 +100,14 @@ func _construct_layout() -> void:
 	_confirm_btn.name = "ConfirmBtn"
 	_confirm_btn.text = "合上考评"
 	_confirm_btn.theme_type_variation = "ButtonTheme"
+	
+	# ── 音效挂件注入 ──
+	var SfxCls := preload("res://features/ui_sound_component.gd")
+	var sfx := SfxCls.new()
+	sfx.name = "UISoundComponent"
+	sfx.click_category = "stamp_impact"
+	_confirm_btn.add_child(sfx)
+	
 	option_btns.add_child(_confirm_btn)
 
 

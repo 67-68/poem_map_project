@@ -169,7 +169,8 @@ func _on_push_event(data: Variant, context: Dictionary):
 		_process_stack()
 
 
-func _on_pop_event():
+func _on_pop_event(transition_text: String = ""):
+	# ── 1. 弹出栈顶（子事件）──
 	if _event_stack.size() > 0:
 		var entry = _event_stack.pop_front()
 		if entry.has("data"):
@@ -182,8 +183,38 @@ func _on_pop_event():
 	else:
 		Logging.warn("pop_event: 栈为空，无事件可弹出")
 
+	# ── 2. 回归过渡处理：peek 栈顶父事件，合并打印 NarrativeText + invalidate 旧条目 ──
+	# 只有栈顶是 BaseEvent 条目时才处理（picker/cinematic/focused_chat 不需要回归叙事）
+	if _event_stack.size() > 0:
+		var top_entry = _event_stack[0]
+		if top_entry.has("data") and top_entry.get("data") is BaseEvent:
+			var parent_ev: BaseEvent = top_entry.get("data")
+			var on_returned: String = parent_ev.on_returned
+
+			# 合并 transition_text + on_returned 为一个 NarrativeText 条目
+			var combined_text := ""
+			if not transition_text.is_empty() and not on_returned.is_empty():
+				combined_text = transition_text + "\n\n" + on_returned
+			elif not transition_text.is_empty():
+				combined_text = transition_text
+			elif not on_returned.is_empty():
+				combined_text = on_returned
+
+			if not combined_text.is_empty():
+				Logging.info("pop_event: 打印回归过渡 NarrativeText (transition='%s' on_returned='%s')" % [transition_text, on_returned])
+				event_ui.append_narrative_text(combined_text)
+			else:
+				Logging.debug("pop_event: transition_text 和 on_returned 均为空，跳过 NarrativeText 打印")
+
+			# 废弃父事件的旧条目，让 apply_narrative 走新事件路径创建全新条目
+			var parent_entry_id := str(parent_ev.get_instance_id())
+			if event_ui.has_entry(parent_entry_id):
+				event_ui.invalidate_entry(parent_entry_id)
+				Logging.info("pop_event: 已废弃父事件 '%s' 的旧条目，将创建全新条目" % parent_ev.name)
+
+	# ── 3. 处理栈/队列中的下一个事件 ──
 	# 纸带模式：pop 后立即让 _process_next 处理栈/队列中的下一个，
-	# 可能触发回归路径
+	# 可能触发回归路径（此时 has_entry 返回 false → 新事件路径）
 	_process_next()
 
 

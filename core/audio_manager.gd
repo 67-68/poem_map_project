@@ -18,6 +18,9 @@ var _current_bgm_track: int = 1
 var _sfx_pool: Array[AudioStreamPlayer] = []
 const SFX_POOL_SIZE = 8 # 8个声道足够应付大多数 UI 情况了
 
+# ── Loop 播放器（独立，不占用 SFX 池）──
+var _loop_player: AudioStreamPlayer
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS # 必须全天候运行！
 	
@@ -30,7 +33,10 @@ func _ready():
 		var p = _create_player("SFX_%d" % i)
 		_sfx_pool.append(p)
 	
-	# 3. 扫描 assets/sounds/ 子目录，预加载分类音效
+	# 3. 初始化 Loop 播放器
+	_loop_player = _create_player("SFX_Loop")
+	
+	# 4. 扫描 assets/sounds/ 子目录，预加载分类音效
 	_load_sfx_categories()
 
 # 辅助函数：创建播放器
@@ -178,6 +184,53 @@ func get_sfx_category(category: String) -> Array[AudioStream]:
 # 获取所有已加载的类别名
 func get_all_sfx_categories() -> Array[String]:
 	return _sfx_category_cache.keys()
+
+
+func play_sfx_loop(category: String, pitch_randomness: float = 0.0, volume_db: float = 0.0) -> bool:
+	"""从类别随机选一个音效，用独立循环播放器无限循环。返回是否成功。"""
+	if category.is_empty():
+		return false
+	if not _loop_player:
+		Logging.warn("%s: _loop_player 未初始化" % LOG_TAG)
+		return false
+	if not _sfx_category_cache.has(category):
+		Logging.warn("%s: 未找到音效类别 [%s]，无法循环" % [LOG_TAG, category])
+		return false
+	
+	var streams = _sfx_category_cache[category] as Array[AudioStream]
+	if streams.is_empty():
+		return false
+	
+	var stream = streams[randi() % streams.size()]
+	_loop_player.stream = stream
+	_loop_player.volume_db = volume_db
+	if pitch_randomness > 0:
+		_loop_player.pitch_scale = randf_range(1.0 - pitch_randomness, 1.0 + pitch_randomness)
+	else:
+		_loop_player.pitch_scale = 1.0
+	# 循环：使用 finished 信号重新 play
+	if not _loop_player.finished.is_connected(_on_loop_finished):
+		_loop_player.finished.connect(_on_loop_finished)
+	_loop_player.play()
+	return true
+
+
+func stop_sfx_loop() -> void:
+	"""停止循环播放器。"""
+	if _loop_player:
+		if _loop_player.finished.is_connected(_on_loop_finished):
+			_loop_player.finished.disconnect(_on_loop_finished)
+		_loop_player.stop()
+
+
+func is_sfx_loop_playing() -> bool:
+	return _loop_player and _loop_player.playing
+
+
+func _on_loop_finished() -> void:
+	"""循环回调：重新播放。"""
+	if _loop_player and _loop_player.stream:
+		_loop_player.play()
 
 
 func _get_available_sfx_player() -> AudioStreamPlayer:

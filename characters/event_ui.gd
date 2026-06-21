@@ -171,11 +171,52 @@ func append_picker_attachment(data: Array, ui_constructor: Callable = Callable()
 
 
 ## 检查纸带上是否已有指定 entry_id 的条目
+## ⚠️ state="invalid_returned" 的条目视为不存在（已被 pop 回归路径废弃），
+## 让 apply_narrative 走新事件路径创建全新条目而非 revive 旧条目
 func has_entry(entry_id: String) -> bool:
 	for child in _tape_content.get_children():
 		if child.has_meta("entry_id") and child.get_meta("entry_id") == entry_id:
+			var state: String = child.get_meta("state", "")
+			if state == "invalid_returned":
+				continue
 			return true
 	return false
+
+
+## 废弃一个条目 — 将其 state 标记为 "invalid_returned"
+## 用于 pop_event 回归路径：旧条目不再被 has_entry 命中，
+## apply_narrative 会创建全新条目（保留完整事件历史）
+func invalidate_entry(entry_id: String) -> void:
+	Logging.info("EventUI.invalidate_entry: entry_id='%s'" % entry_id)
+	var entry := _find_entry(entry_id)
+	if not entry:
+		Logging.warn("EventUI.invalidate_entry: 未找到 entry_id='%s'，跳过" % entry_id)
+		return
+	entry.set_meta("state", "invalid_returned")
+	Logging.info("EventUI.invalidate_entry: entry_id='%s' 已废弃" % entry_id)
+
+
+## 追加一个 NarrativeText 条目到纸带底部
+## 用于 pop_event 回归时的过渡叙事文本（transition_text + on_returned 合并）
+## 使用 RichTextLabel + theme_type_variation="NarrativeText"，支持 BBCode
+func append_narrative_text(text: String) -> void:
+	if text.is_empty():
+		Logging.debug("EventUI.append_narrative_text: 文本为空，跳过")
+		return
+	Logging.info("EventUI.append_narrative_text: text='%s'" % text)
+
+	var rtl := RichTextLabel.new()
+	rtl.bbcode_enabled = true
+	rtl.text = text
+	rtl.theme_type_variation = "NarrativeText"
+	rtl.fit_content = true
+	rtl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rtl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	rtl.set_meta("entry_type", "narrative_text")
+
+	_tape_content.add_child(rtl)
+	Logging.info("EventUI.append_narrative_text: NarrativeText 条目已追加到纸带")
 
 
 ## 复活一个 chosen 状态的条目：文本烙印 → 选项按钮
@@ -340,6 +381,7 @@ func scroll_to_entry(entry_id: String) -> void:
 ## SLOW / SLOWEST 模式：打字机逐阶段写入 TapeEntry 的标签
 func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String, type_speed: float = SLOW_SPEED) -> void:
 	Logging.info("EventUI.display_slow: 模式开始事件 '%s'（type_speed=%.3f）" % [event.name, type_speed])
+	AudioManager.play_sfx_category("book_place")
 
 	# Step 1: 创建空骨架 TapeEntry（不含正文和选项）
 	var entry: VBoxContainer = _event_template.instantiate()
@@ -422,6 +464,9 @@ func _typewrite(label: Control, full_text: String, speed: float) -> void:
 			label.text = full_text
 			return
 		label.text = full_text.left(i + 1)
+		# 每 3 字播放一次吐字音效，避免音频泛滥
+		if i % 3 == 0:
+			AudioManager.play_sfx_category("ink_flip", 0.08)
 		await _wait(speed)
 		if _skip_requested:
 			Logging.debug("EventUI._typewrite: wait 后检测到 skip，填充全文")
@@ -446,6 +491,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if not _skip_requested:
 			Logging.debug("EventUI: 用户左键点击，跳过当前打字机阶段")
+			AudioManager.play_sfx_category("book_flip")
 		_skip_requested = true
 		if _current_timer:
 			_current_timer.wait_time = 0.0

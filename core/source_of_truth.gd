@@ -50,6 +50,14 @@ static var debug_dashboard_state = {
         "career_progress": 0,
     },
 
+    "emotions": {
+        "sorrow": 50,
+        "arrogance": 50,
+        "anger": 50,
+        "tranquility": 50,
+        "ambition": 50,
+    },
+
     "imaginaries": {
         # imaginary UUID -> 初始等级
         #"emotion:ambition": 2,

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bw87h2xen78iy"]
 
 [ext_resource type="Script" path="res://picker_item.gd" id="1_picker"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="2_sfx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q8f5q"]
 content_margin_left = 8.0
@@ -19,6 +20,12 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_q8f5q")
 script = ExtResource("1_picker")
+
+[node name="UISoundComponent" type="Node" parent="."]
+script = ExtResource("2_sfx")
+click_category = "stamp_impact"
+hover_category = "book_flip"
+custom_click_signal = "clicked"
 
 [node name="Label" type="Label" parent="." unique_id=536095088]
 layout_mode = 2

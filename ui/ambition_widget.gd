@@ -9,8 +9,15 @@ func _ready() -> void:
         if PlayerState.ambition:
             toggle_btn.text = PlayerState.ambition.name
     )
-    content_panel.visible = false 
+    content_panel.visible = false
     toggle_btn.pressed.connect(_on_toggle_pressed)
+    
+    # ── 音效挂件注入 ──
+    var SfxCls := preload("res://features/ui_sound_component.gd")
+    var sfx := SfxCls.new()
+    sfx.name = "UISoundComponent"
+    sfx.click_category = "book_impact"
+    toggle_btn.add_child(sfx)
 
 
 func _on_toggle_pressed() -> void:

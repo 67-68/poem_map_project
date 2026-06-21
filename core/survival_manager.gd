@@ -4,6 +4,8 @@ class_name SurvivalManager extends Node
 # 计划有一个月和一个旬的扣除费用
 # 但太复杂了先不做，目前只有旬的扣除费用，trait 扫描扣除也没做
 
+const HEARTBEAT_HEALTH_THRESHOLD: int = 20
+
 func get_prop(data): return PlayerState.get_stat_val(data)
 func append_prop(data,val):PlayerState.append_stat(data,val)
 func set_prop(data,val):PlayerState.set_stat_val(data,val)
@@ -108,6 +110,10 @@ func _process_single_xun_settlement():
     # 结算所有的长期代价，进行不可逆的惩罚。
     # 让属性 < 100
     _process_fatigue_accumulation()
+    
+    # 3.5: 濒危警告音效
+    _update_heartbeat_sfx()
+    
     death_judgement()
     
     # 第四阶段：衰减与重置 (Decay, Reset & GC)
@@ -131,12 +137,25 @@ func _process_health_checks():
     if get_prop(ENUMS.PROPS.SICK) > 0:
         append_prop(ENUMS.PROPS.HEALTH, -10)
 
+func _update_heartbeat_sfx() -> void:
+    """根据健康值启动/停止心跳循环音效。"""
+    var health: int = PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) as int
+    if health <= HEARTBEAT_HEALTH_THRESHOLD and health > 0:
+        if not AudioManager.is_sfx_loop_playing():
+            AudioManager.play_sfx_loop("heartbeat", 0.05)
+    else:
+        if AudioManager.is_sfx_loop_playing():
+            AudioManager.stop_sfx_loop()
+
+
 func death_judgement():
     """
     这里放死亡/结束游戏的条件
     """
     #breakpoint
     if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) <= 0:
+        # 停止心跳音效 —— 人没了还跳什么跳 😭
+        AudioManager.stop_sfx_loop()
         # ✅ 这里已经是四段式标签，无需标准化
         PlayerState.current_action_tags.append('actor:health:death:general')
         EventManager.scan_death_events()

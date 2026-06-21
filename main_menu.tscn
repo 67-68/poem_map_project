@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bm2pt10fn111x" path="res://app/start_page_background.gd" id="2_glbon"]
 [ext_resource type="Script" uid="uid://ugu818rrdil4" path="res://app/quit.gd" id="3_fu7sn"]
 [ext_resource type="Texture2D" uid="uid://dagub1i8rk8w4" path="res://assets/6768.png" id="4_jix8l"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="5_sfx"]
 
 [node name="MainMenu" type="Control" unique_id=2003337184]
 layout_mode = 3
@@ -39,14 +40,29 @@ layout_mode = 2
 text = "start"
 script = ExtResource("1_06t4h")
 
+[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/start"]
+script = ExtResource("5_sfx")
+click_category = "book_impact"
+hover_category = "book_flip"
+
 [node name="quit" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1329726196]
 layout_mode = 2
 text = "quit"
 script = ExtResource("3_fu7sn")
 
+[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/quit"]
+script = ExtResource("5_sfx")
+click_category = "book_impact"
+hover_category = "book_flip"
+
 [node name="setting" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1945141353]
 layout_mode = 2
 text = "setting"
+
+[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/setting"]
+script = ExtResource("5_sfx")
+click_category = "book_impact"
+hover_category = "book_flip"
 
 [node name="logo" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=1734031480]
 layout_mode = 2
