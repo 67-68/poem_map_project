@@ -576,6 +576,28 @@ func _apply_event_icon(event: BaseEvent, entry: PanelContainer) -> void:
 	bg.texture = tex
 	bg.self_modulate.a = alpha
 
+	# 赛博雕版 Shader：仅在有自定义 icon 纹理时启用二值化效果
+	# 回退到默认宣纸时不挂载 shader，保留原始麻纸纹理的柔和感
+	_apply_woodcut_shader(bg, event.icon != null)
+
+
+## 按纹理有无动态挂载/卸载 woodcut_binary 二值化 shader
+## has_icon: true → 启用雕版效果；false → 清除 shader 还原原始纹理
+func _apply_woodcut_shader(bg: TextureRect, has_icon: bool) -> void:
+	if has_icon:
+		var mat := bg.material as ShaderMaterial
+		if not mat or mat.shader == null:
+			mat = ShaderMaterial.new()
+			mat.shader = load("res://shaders/woodcut_binary.gdshader")
+			mat.set_shader_parameter("threshold", 0.5)
+			mat.set_shader_parameter("ink_color", Color(0.0, 0.0, 0.0, 0.85))
+			mat.set_shader_parameter("paper_color", Color(1.0, 1.0, 1.0, 0.0))
+			bg.material = mat
+			Logging.debug("EventUI._apply_woodcut_shader: 已挂载 woodcut shader")
+	else:
+		bg.material = null
+		Logging.debug("EventUI._apply_woodcut_shader: 无自定义 icon，已清除 shader")
+
 
 # ═══════════════════════════════════════════════
 # InputManager 桥接 — 纸带滚动容器

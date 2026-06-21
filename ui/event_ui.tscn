@@ -9,9 +9,9 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_woodcut"]
 shader = ExtResource("3_woodcut")
-shader_parameter/threshold = 0.1890000089775
-shader_parameter/ink_color = Color(0, 0, 0, 0.6862745)
-shader_parameter/paper_color = Color(1, 1, 1, 0.18431373)
+shader_parameter/threshold = 0.2000000095
+shader_parameter/ink_color = Color(0, 0, 0, 0.23529412)
+shader_parameter/paper_color = Color(0.83137256, 0.74509805, 0.654902, 1)
 
 [node name="Event" type="PanelContainer" unique_id=1537400182]
 anchors_preset = 8
@@ -35,7 +35,7 @@ layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("2_218pq")
 expand_mode = 1
-stretch_mode = 4
+stretch_mode = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=2004411851]
 layout_mode = 2
