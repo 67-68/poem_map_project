@@ -11,8 +11,9 @@ class_name EventUI extends PanelContainer
 ## 契约：
 ## - entry_id 由 NarrativeOverlay 侧传入（事件 instance_id）
 ## - 信号 option_selected(choice_result, choice_text) 桥接回 NarrativeOverlay
-
 signal option_selected(choice_result, choice_text: String)
+## SLOW 模式打字机全部阶段完成时发射（告知 NarrativeOverlay 可以启动 auto-advance Timer）
+signal display_complete
 
 
 # ── 打字机参数 ──────────────────────────────────
@@ -67,10 +68,10 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 	entry.set_meta("from_stack", from_stack)
 
 	# 子节点引用
-	var title_label: Label = entry.get_node("VBox/HBox/TitleLabel")
-	var content_label: RichTextLabel = entry.get_node("VBox/ContentLabel")
-	var example_label: RichTextLabel = entry.get_node("VBox/ExampleLabel")
-	var option_btns: Control = entry.get_node("VBox/OptionBtns")
+	var title_label: Label = entry.get_node("MarginContainer/VBox/HBox/TitleLabel")
+	var content_label: RichTextLabel = entry.get_node("MarginContainer/VBox/ContentLabel")
+	var example_label: RichTextLabel = entry.get_node("MarginContainer/VBox/ExampleLabel")
+	var option_btns: Control = entry.get_node("MarginContainer/VBox/OptionBtns")
 
 	# 填充内容
 	title_label.text = event.name
@@ -232,7 +233,7 @@ func revive_entry(entry_id: String, all_options: Array) -> void:
 
 	# 销毁文本烙印，重建选项按钮
 	_remove_choice_label(entry)
-	var option_btns: Control = entry.get_node("VBox/OptionBtns")
+	var option_btns: Control = entry.get_node("MarginContainer/VBox/OptionBtns")
 	option_btns.show()
 
 	option_btns.apply_btns(all_options, func(r):
@@ -261,7 +262,7 @@ func mark_chosen(entry_id: String, choice_text: String) -> void:
 		return
 
 	# 1. 隐藏选项按钮
-	var option_btns: Control = entry.get_node("VBox/OptionBtns")
+	var option_btns: Control = entry.get_node("MarginContainer/VBox/OptionBtns")
 	option_btns.hide()
 
 	# 2. 创建文本烙印 "「 既决：XXX 」"（古典格式）
@@ -289,7 +290,7 @@ func mark_chosen(entry_id: String, choice_text: String) -> void:
 	margin.add_theme_constant_override("margin_top", 12)
 	margin.add_theme_constant_override("margin_bottom", 12)
 	margin.add_child(chosen_lbl)
-	var vbox := entry.get_node("VBox") as VBoxContainer
+	var vbox := entry.get_node("MarginContainer/VBox") as VBoxContainer
 	if vbox:
 		vbox.add_child(margin)
 	else:
@@ -392,10 +393,10 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 	entry.set_meta("state", "awaiting_choice")
 	entry.set_meta("from_stack", from_stack)
 
-	var title_label: Label = entry.get_node("VBox/HBox/TitleLabel")
-	var content_label: RichTextLabel = entry.get_node("VBox/ContentLabel")
-	var example_label: RichTextLabel = entry.get_node("VBox/ExampleLabel")
-	var option_btns: Control = entry.get_node("VBox/OptionBtns")
+	var title_label: Label = entry.get_node("MarginContainer/VBox/HBox/TitleLabel")
+	var content_label: RichTextLabel = entry.get_node("MarginContainer/VBox/ContentLabel")
+	var example_label: RichTextLabel = entry.get_node("MarginContainer/VBox/ExampleLabel")
+	var option_btns: Control = entry.get_node("MarginContainer/VBox/OptionBtns")
 
 	title_label.text = ""
 	content_label.text = ""
@@ -435,6 +436,7 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 		option_selected.emit(r, txt)
 	)
 	Logging.info("EventUI.display_slow: 事件 '%s' 显示完成" % event.name)
+	display_complete.emit()
 
 
 # ═══════════════════════════════════════════════
@@ -443,7 +445,13 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 
 func _typewrite_phase(label: Control, full_text: String, type_speed: float = SLOW_SPEED) -> void:
 	_skip_requested = false
+
+	# Phase 0: 先全量填充文本撑开 label，测量并锁定最小高度，防止打字过程中 layout 抖动
+	label.text = full_text
+	await get_tree().process_frame  # 等一帧让 RichTextLabel 完成 bbcode/换行排版
+	label.custom_minimum_size.y = label.size.y
 	label.text = ""
+
 	await _typewrite(label, full_text, type_speed)
 	if _skip_requested:
 		Logging.debug("EventUI: 阶段被用户跳过，进入短暂停留")
@@ -511,7 +519,7 @@ func _find_entry(entry_id: String) -> VBoxContainer:
 
 ## 从条目中移除 ChoiceLabel（用于 revive_entry）
 func _remove_choice_label(entry: VBoxContainer) -> void:
-	var vbox := entry.get_node("VBox") as VBoxContainer
+	var vbox := entry.get_node("MarginContainer/VBox") as VBoxContainer
 	var target := vbox if vbox else entry
 	var choice_label := target.get_node_or_null("ChoiceLabel")
 	if choice_label:

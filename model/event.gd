@@ -22,6 +22,13 @@ enum DisplaySpeed { FAST = 0, SLOW = 1, SLOWEST = 2 }
 @export var audio: AudioStream = null
 @export var epitaph_text: String = ''
 
+# lasting_time — 事件自动推进超时（秒）
+# 从 context 字典中提取（lasting_time=5.0），非 @export，非持久化
+# 0 选项 + lasting_time > 0 → 展示后自动关闭
+# 1 选项 + lasting_time > 0 → 自动选择该选项
+# lasting_time == 0 → 退化为现有行为（手动选择/跳过）
+var lasting_time: float = 0.0
+
 # ──────────────────────────────────────────────
 # on_returned — 回归叙事文本
 # ──────────────────────────────────────────────
@@ -157,6 +164,10 @@ func check_interruption(context: Dictionary) -> void:
 func init(context: Dictionary) -> Array:
     # Phase 0: on_enter — 舞台置景，构建绝对上下文
     on_enter(context)
+    
+    # Phase 0.25: lasting_time — 自动推进超时（从 context 提取，不写则默认 0 = 无自动推进）
+    lasting_time = context.get("lasting_time", 0.0)
+    Logging.debug("BaseEvent.init: lasting_time=%s for event '%s'" % [lasting_time, name])
     
     # Phase 0.5: 疾病选项劫持 — 扫描玩家是否拥有带 hijack_provider 的 Disease trait
     var hijack_prov: BaseProvider = null

@@ -25,6 +25,8 @@ class_name NarrativeOverlay extends PanelContainer
 # 状态
 var current_event_data: BaseEvent
 var _tween: Tween
+# Auto-advance Timer：事件无选项或只有单选项时的自动推进计时器
+var _auto_advance_timer: Timer = null
 
 # 纸带是否已首次展示（控制 dimmer 淡入只播一次）
 var _tape_initialized: bool = false
@@ -650,15 +652,17 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 	_is_active = true
 	var all_options: Array = data.init(context)
 
-	# ── 防御性检查：选项文本全空 → 跳过整个事件 ──
+	# ── 防御性检查：选项文本全空 → lasting_time 决定行为 ──
 	# 数据错误（如 CSV 中 option 行 description 列漏填）会导致按钮无法生成 btn_id、
 	# 文本为空、无法注册到 AncientOptionBtnManager，玩家无法选择。
-	# 此时直接跳过该事件，处理队列/栈中的下一个，避免卡死。
+	# lasting_time > 0：展示事件后自动关闭（不跳过）；lasting_time == 0：退化为直接跳过
 	if _has_no_displayable_option(all_options):
-		Logging.err("apply_narrative: 事件 '%s' 的所有选项文本为空（description 与 _resolved_description 均空），跳过该事件" % data.name)
-		_is_active = false
-		_process_next()
-		return
+		if data.lasting_time <= 0.0:
+			Logging.err("apply_narrative: 事件 '%s' 的所有选项文本为空且 lasting_time=0，跳过该事件" % data.name)
+			_is_active = false
+			_process_next()
+			return
+		Logging.info("apply_narrative: 事件 '%s' 0 选项但 lasting_time=%.1f > 0，展示后自动关闭" % [data.name, data.lasting_time])
 
 	EventBus.event_shown.emit(data)
 	if data.epitaph_text:
@@ -679,6 +683,9 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 		event_ui.clear_all_dim()
 		event_ui.revive_entry(entry_id, all_options)
 		event_ui.scroll_to_entry(entry_id)
+		# 回归路径：同步完成，可启动 auto-advance
+		if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+			_start_auto_advance(data.lasting_time, all_options, entry_id)
 	else:
 		# === 新事件路径 ===
 		Logging.info("apply_narrative: 新事件路径，追加 entry_id='%s' from_stack=%s" % [entry_id, _current_from_stack])
@@ -705,12 +712,25 @@ func apply_narrative(data: BaseEvent, context: Dictionary):
 				BaseEvent.DisplaySpeed.SLOW:
 					Logging.info("NarrativeOverlay.apply_narrative: SLOW 模式（event='%s'）" % data.name)
 					event_ui.display_slow(data, all_options, context, _current_from_stack, entry_id, EventUI.SLOW_SPEED)
+					# SLOW 模式：等待打字机全部完成后启动 auto-advance
+					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+						event_ui.display_complete.connect(func():
+							_start_auto_advance(data.lasting_time, all_options, entry_id)
+						, CONNECT_ONE_SHOT)
 				BaseEvent.DisplaySpeed.SLOWEST:
 					Logging.info("NarrativeOverlay.apply_narrative: SLOWEST 模式（event='%s'）" % data.name)
 					event_ui.display_slow(data, all_options, context, _current_from_stack, entry_id, EventUI.SLOWEST_SPEED)
+					# SLOWEST 模式：等待打字机全部完成后启动 auto-advance
+					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+						event_ui.display_complete.connect(func():
+							_start_auto_advance(data.lasting_time, all_options, entry_id)
+						, CONNECT_ONE_SHOT)
 				_:
 					Logging.info("NarrativeOverlay.apply_narrative: FAST 模式（event='%s'）" % data.name)
 					event_ui.append_event_entry(data, all_options, context, _current_from_stack, entry_id)
+					# FAST 模式：同步返回，直接启动 auto-advance
+					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+						_start_auto_advance(data.lasting_time, all_options, entry_id)
 
 	# ── 注册纸带滚动容器（供 PgUp/PgDn 翻页）──
 	event_ui.register_scroll_for_input_manager()
@@ -769,11 +789,88 @@ func _has_no_displayable_option(all_options: Array) -> bool:
 	return true
 
 
+## 计數可显示选项数量（与 _has_no_displayable_option 同样逻辑，但返回 int）
+func _count_displayable_options(all_options: Array) -> int:
+	var count := 0
+	for o in all_options:
+		if o == null:
+			continue
+		if '_resolved_description' in o and not o._resolved_description.is_empty():
+			count += 1
+		elif 'description' in o and not o.description.is_empty():
+			count += 1
+	return count
+
+
+## 取消自动推进计时器（玩家手动点选 / 中断时调用）
+func _cancel_auto_advance() -> void:
+	if _auto_advance_timer:
+		_auto_advance_timer.queue_free()
+		_auto_advance_timer = null
+		Logging.info("NarrativeOverlay: auto-advance Timer 已取消")
+
+
+## 启动自动推进计时器 — lasting_time 秒后自动选择选项或关闭事件
+func _start_auto_advance(seconds: float, all_options: Array, entry_id: String) -> void:
+	_cancel_auto_advance()
+	_auto_advance_timer = Timer.new()
+	_auto_advance_timer.wait_time = seconds
+	_auto_advance_timer.one_shot = true
+	_auto_advance_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_auto_advance_timer)
+	_auto_advance_timer.timeout.connect(_on_auto_advance_timeout.bind(all_options, entry_id))
+	_auto_advance_timer.start()
+	Logging.info("NarrativeOverlay: auto-advance Timer 已启动（%.1f秒）entry_id='%s'" % [seconds, entry_id])
+
+
+## Timer 到期回调 — 0 选项自动关闭 / 1 选项自动选择
+func _on_auto_advance_timeout(all_options: Array, entry_id: String) -> void:
+	_auto_advance_timer = null
+	var displayable_count := _count_displayable_options(all_options)
+
+	if displayable_count == 0:
+		# 0 选项：静默关闭，不执行后果（类似中断，但不触发后续 push）
+		Logging.info("NarrativeOverlay: auto-advance 到期，0选项 → 自动关闭 entry_id='%s'" % entry_id)
+		event_ui.mark_chosen(entry_id, "[时尽]")
+		TimeService.resume_world()
+		Engine.time_scale = _saved_time_scale
+		EventBus.event_confirmed.emit()
+		if _event_stack.size() > 0:
+			var top_entry = _event_stack[0]
+			if top_entry.has("data") and top_entry.get("data") == current_event_data:
+				_event_stack.pop_front()
+				Logging.info("_on_auto_advance_timeout: 已弹出栈顶事件 '%s'" % current_event_data.name)
+		_is_active = false
+		_process_next()
+
+	elif displayable_count == 1:
+		# 1 选项：自动选择
+		Logging.info("NarrativeOverlay: auto-advance 到期，1选项 → 自动选择 entry_id='%s'" % entry_id)
+		var option = null
+		for o in all_options:
+			if o == null:
+				continue
+			if '_resolved_description' in o and not o._resolved_description.is_empty():
+				option = o
+				break
+			if 'description' in o and not o.description.is_empty():
+				option = o
+				break
+		if option:
+			var choice_result = option.get("choice_result") if option else null
+			var choice_text := event_ui._find_option_text(all_options, choice_result) if choice_result else "[自动]"
+			_on_option_selected(choice_result, choice_text)
+		else:
+			Logging.err("NarrativeOverlay: auto-advance 到期但无法找到可显示选项，entry_id='%s'" % entry_id)
+
+
 func _on_option_selected(_choice_result, _choice_text: String = ""):
+	_cancel_auto_advance()  # 玩家手动点击 → 取消自动推进
 	_end_narrative(_choice_result, _choice_text)
 
 
 func _end_narrative(choice, choice_text: String = ""):
+	_cancel_auto_advance()  # 防御性取消：确保无论哪个入口都不会残留 Timer
 	# 纸带模式：不退场、不 hide()，选项变文本烙印留在纸带上
 	var entry_id := str(current_event_data.get_instance_id())
 	event_ui.mark_chosen(entry_id, choice_text)
@@ -819,6 +916,7 @@ func _end_narrative(choice, choice_text: String = ""):
 # --- 中断按钮处理（纸带模式）----------------------------
 
 func _on_interrupt_pressed() -> void:
+	_cancel_auto_advance()  # 中断 = 用户主动退出，停掉所有自动推进
 	if not _is_active:
 		Logging.warn("NarrativeOverlay._on_interrupt_pressed: 非活跃状态，忽略重复点击")
 		return
