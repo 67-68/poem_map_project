@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://42wvjmu7lum"]
+
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_gr1n2"]
+[ext_resource type="Script" uid="uid://bfap7ivfv8w2v" path="res://characters/event_ui.gd" id="2_ly3h8"]
+[ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="3_7gel1"]
+[ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="4_lp6li"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sshou"]
+texture = ExtResource("1_gr1n2")
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nuqx"]
+
+[node name="TapeContainer2" type="PanelContainer" unique_id=1070279739]
+z_index = 100
+custom_minimum_size = Vector2(420, 640)
+theme_override_styles/panel = SubResource("StyleBoxTexture_sshou")
+
+[node name="EventHistory" type="PanelContainer" parent="." unique_id=918883914]
+z_index = 120
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2nuqx")
+script = ExtResource("2_ly3h8")
+
+[node name="Margin" type="MarginContainer" parent="EventHistory" unique_id=1589127906]
+layout_mode = 2
+theme = ExtResource("3_7gel1")
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="EventHistory/Margin" unique_id=2093577363]
+layout_mode = 2
+horizontal_scroll_mode = 0
+script = ExtResource("4_lp6li")
+
+[node name="VBox_TapeContent" type="VBoxContainer" parent="EventHistory/Margin/ScrollContainer" unique_id=302986572]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

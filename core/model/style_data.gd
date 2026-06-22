@@ -46,14 +46,17 @@ var progress_output_min: float = 0.0
 ## shader progress 参数输出区间上限 (0.0~1.0)
 var progress_output_max: float = 1.0
 
-# ── StyleBox 纹理 ─────────────────────────────────────────
-## 策略激活时替换的 StyleBoxTexture.texture（仅对 PanelContainer 生效）
+# ── StyleBox ────────────────────────────────────────────────
+## 策略激活时直接替换整个 StyleBox（仅对 PanelContainer 生效）
+## 通过 container.set("theme_override_styles/panel", data.stylebox) 整块替换
 ## null → 不修改 StyleBox
-var stylebox_texture: Texture2D = null
+var stylebox: StyleBox = null
+## 是否在 bind() 时立即应用 stylebox（而非等待 switch_strategy 事件触发）
+var stylebox_active_on_bind: bool = false
 
 # ── 目标控件 ──────────────────────────────────────────────
 ## 目标节点，其 material 属性将被注入 ShaderMaterial
-## 若为 PanelContainer 且 stylebox_texture 非 null，还会替换其 StyleBoxTexture.texture
+## 若为 PanelContainer 且 stylebox 非 null，还会替换其 theme_override_styles/panel
 var container: Control = null
 
 # ============================================================
@@ -103,5 +106,6 @@ func copy_from(other: StyleData) -> void:
 	shader_resource = other.shader_resource
 	shader_material = other.shader_material
 	shader_parameter_names = other.shader_parameter_names.duplicate()
-	stylebox_texture = other.stylebox_texture
+	stylebox = other.stylebox
+	stylebox_active_on_bind = other.stylebox_active_on_bind
 	container = other.container

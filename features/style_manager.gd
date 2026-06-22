@@ -25,7 +25,7 @@ const LOG_TAG := "StyleManager"
 ## { instance_id → { strategy_name: StyleData } }
 var _strategies: Dictionary = {}
 
-## { instance_id → { "material": Variant|null, "background_tex": Texture2D|null } }
+## { instance_id → { "material": ShaderMaterial|null, "stylebox": StyleBox|null } }
 var _default_states: Dictionary = {}
 
 ## { instance_id → active_strategy_name }
@@ -105,9 +105,13 @@ func bind(data: StyleData) -> void:
 		data.target_property_value,
 	])
 
-	# ── 自动激活（若 strategy_name 非空） ────────────────
-	if not data.strategy_name.is_empty():
-		_apply_strategy(data.container, data)
+	# ── 仅注册，不自动激活 shader。但若 stylebox_active_on_bind 则立即应用 stylebox ──
+	if data.stylebox_active_on_bind and data.container is PanelContainer and data.stylebox != null:
+		data.container.set("theme_override_styles/panel", data.stylebox)
+		# 更新 default_states 中的 stylebox，使后续 restore 以此为基准
+		if _default_states.has(id):
+			_default_states[id]["stylebox"] = data.stylebox.duplicate()
+		Logging.info("%s: bind → stylebox 已立即应用 (container=%s)" % [LOG_TAG, data.container.name])
 
 
 ## 切换 container 的活跃策略
@@ -157,24 +161,23 @@ func apply_event_background(container: Control, texture: Texture2D) -> void:
 		Logging.warn("%s: apply_event_background — container '%s' 不是 PanelContainer，跳过" % [LOG_TAG, container.name])
 		return
 
-	var style: StyleBoxTexture = container.get("theme_override_styles/panel") as StyleBoxTexture
-	if not style:
-		Logging.warn("%s: apply_event_background — container '%s' 没有 StyleBoxTexture panel style" % [LOG_TAG, container.name])
-		return
-
 	if texture != null:
-		# 临时覆盖
-		style.texture = texture
-		Logging.info("%s: apply_event_background → 临时覆盖 tex='%s' (container=%s)" % [LOG_TAG, texture.resource_path, container.name])
+		# 临时覆盖：构建临时 StyleBoxTexture 整块替换
+		var temp_stylebox := _make_temp_stylebox_texture(texture)
+		if temp_stylebox:
+			container.set("theme_override_styles/panel", temp_stylebox)
+			Logging.info("%s: apply_event_background → 临时覆盖 tex='%s' (container=%s)" % [LOG_TAG, texture.resource_path, container.name])
+		else:
+			Logging.warn("%s: apply_event_background — 无法构建临时 StyleBoxTexture (container=%s)" % [LOG_TAG, container.name])
 	else:
-		# 还原当前策略默认背景
-		var default_tex := get_default_background(container)
-		style.texture = default_tex
-		Logging.info("%s: apply_event_background → 还原默认 tex='%s' (container=%s)" % [
-			LOG_TAG,
-			default_tex.resource_path if default_tex else "(null)",
-			container.name,
-		])
+		# 还原优先级: 活跃策略的 stylebox > default_states
+		var active_sb := _get_active_strategy_stylebox(container)
+		if active_sb:
+			container.set("theme_override_styles/panel", active_sb)
+			Logging.info("%s: apply_event_background → 已还原活跃策略 StyleBox (container=%s)" % [LOG_TAG, container.name])
+		else:
+			_restore_stylebox_from_default(container)
+			Logging.info("%s: apply_event_background → 已还原默认 StyleBox (container=%s)" % [LOG_TAG, container.name])
 
 
 ## 读取 container 当前的 StyleBoxTexture 背景纹理
@@ -199,7 +202,10 @@ func get_default_background(container: Control) -> Texture2D:
 		return null
 
 	var def_state: Dictionary = _default_states[id]
-	return def_state.get("background_tex", null) as Texture2D
+	var saved_stylebox: StyleBox = def_state.get("stylebox", null)
+	if saved_stylebox is StyleBoxTexture:
+		return (saved_stylebox as StyleBoxTexture).texture
+	return null
 
 
 # ============================================================
@@ -298,13 +304,11 @@ func _apply_strategy(container: Control, data: StyleData) -> void:
 		pass
 
 	# ── 处理 StyleBox 背景 ────────────────────────────────
-	if container is PanelContainer and data.stylebox_texture != null:
-		var style: StyleBoxTexture = container.get("theme_override_styles/panel") as StyleBoxTexture
-		if style:
-			style.texture = data.stylebox_texture
-			Logging.info("%s: _apply_strategy → StyleBox 已切换 (container=%s tex=%s)" % [
-				LOG_TAG, container.name, data.stylebox_texture.resource_path
-			])
+	if container is PanelContainer and data.stylebox != null:
+		container.set("theme_override_styles/panel", data.stylebox)
+		Logging.info("%s: _apply_strategy → StyleBox 已整块替换 (container=%s)" % [
+			LOG_TAG, container.name,
+		])
 
 	# ── 标记活跃策略 ──────────────────────────────────────
 	_active_strategy[id] = data.strategy_name
@@ -333,12 +337,11 @@ func _restore_default(container: Control) -> void:
 		container.material = saved_mat
 	# 否则保持原样
 
-	# 还原 StyleBox 背景
+	# 还原 StyleBox（仅 PanelContainer）
 	if container is PanelContainer:
-		var saved_tex: Texture2D = def_state.get("background_tex", null)
-		var style: StyleBoxTexture = container.get("theme_override_styles/panel") as StyleBoxTexture
-		if style:
-			style.texture = saved_tex
+		var saved_stylebox: StyleBox = def_state.get("stylebox", null)
+		if saved_stylebox:
+			container.set("theme_override_styles/panel", saved_stylebox)
 
 	Logging.info("%s: _restore_default → container=%s" % [LOG_TAG, container.name])
 
@@ -349,20 +352,20 @@ func _capture_default(container: Control) -> void:
 
 	var def_state := {
 		"material": container.material if container.material is ShaderMaterial else null,
-		"background_tex": null,
+		"stylebox": null,
 	}
 
-	# 捕获 StyleBox 背景（仅 PanelContainer）
+	# 捕获 StyleBox（仅 PanelContainer）
 	if container is PanelContainer:
-		var style: StyleBoxTexture = container.get("theme_override_styles/panel") as StyleBoxTexture
+		var style: StyleBox = container.get("theme_override_styles/panel") as StyleBox
 		if style:
-			def_state["background_tex"] = style.texture
+			# 保存完整 StyleBox 副本（duplicate() 深拷贝）
+			def_state["stylebox"] = style.duplicate()
 
 	_default_states[id] = def_state
-	Logging.info("%s: _capture_default → container=%s bg_tex=%s" % [
+	Logging.info("%s: _capture_default → container=%s" % [
 		LOG_TAG,
 		container.name,
-		def_state["background_tex"].resource_path if def_state["background_tex"] else "(null)",
 	])
 
 
@@ -412,6 +415,47 @@ func _sync_progress(container: Control, data: StyleData) -> void:
 		str(data.shader_parameter_names),
 		container.name,
 	])
+
+
+# ============================================================
+# 内部方法 — StyleBox 辅助
+# ============================================================
+
+## 用纹理构建一个最小临时 StyleBoxTexture
+func _make_temp_stylebox_texture(tex: Texture2D) -> StyleBoxTexture:
+	if tex == null:
+		return null
+	var sbt := StyleBoxTexture.new()
+	sbt.texture = tex
+	return sbt
+
+
+## 从 default_states 还原完整 StyleBox 到 container
+func _restore_stylebox_from_default(container: Control) -> void:
+	if container == null:
+		return
+	var id := container.get_instance_id()
+	if not _default_states.has(id):
+		return
+	var saved_stylebox: StyleBox = _default_states[id].get("stylebox", null)
+	if saved_stylebox:
+		container.set("theme_override_styles/panel", saved_stylebox)
+
+
+## 获取当前活跃策略中注册的 stylebox（如有）
+## 用于 apply_event_background(null) 时优先还原到活跃策略背景
+func _get_active_strategy_stylebox(container: Control) -> StyleBox:
+	if container == null:
+		return null
+	var id := container.get_instance_id()
+	var active_name: String = _active_strategy.get(id, "")
+	if active_name.is_empty():
+		return null
+	var strategies: Dictionary = _strategies.get(id, {})
+	var data: StyleData = strategies.get(active_name, null)
+	if data == null:
+		return null
+	return data.stylebox
 
 
 # ============================================================

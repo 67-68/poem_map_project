@@ -1,0 +1,7 @@
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://cllfrwce54ttu"]
+
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_2as3f"]
+
+[resource]
+texture = ExtResource("1_2as3f")
+modulate_color = Color(0.16275251, 0.110103615, 0.062149122, 1)

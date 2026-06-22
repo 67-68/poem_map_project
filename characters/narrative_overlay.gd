@@ -533,20 +533,18 @@ func _needs_background_swap(data: BaseEvent) -> bool:
 
 ## 向 StyleManager 注册 tape_container 并绑定 frost 策略
 ## health=100 时 progress=0.0（无冻结），health=0 时 progress=1.0（彻底冻结）
+const FROST_MATERIAL := preload("res://shaders/frost_shader_material.tres")
+
 func _bind_frost_strategy() -> void:
 	var data := StyleData.new()
 	data.strategy_name = "frost"
 	data.target_property = "health"
 	data.start_property_value = 100.0
 	data.target_property_value = 0.0
-	data.shader_resource = preload("res://shaders/frost.gdshader")
+	data.shader_material = FROST_MATERIAL
 	data.shader_parameter_names = ["freeze_progress"]
 	data.container = tape_container
-	# stylebox_texture null → 不修改纸纹理
+	data.stylebox = preload("res://shaders/frostland_stylebox.tres")
 	StyleManager.bind(data)
-
-	# 首次 bind 后，初始为 default 策略（无 shader），
-	# 若希望默认激活 frost 可直接 switch：
-	StyleManager.switch_strategy(tape_container, "frost")
-
-	Logging.info("NarrativeOverlay: frost 策略已绑定 → tape_container")
+	# frost 仅在事件触发时由 StyleStrategyOperator 激活，默认不挂载 shader
+	Logging.info("NarrativeOverlay: frost 策略已注册 → tape_container (等待事件激活)")

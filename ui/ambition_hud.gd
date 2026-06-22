@@ -200,10 +200,7 @@ func _bind_decay_dirt_crack_strategy() -> void:
 	data.shader_material = DECAY_MATERIAL
 	data.shader_parameter_names = ["progress"]
 	data.container = self
-	# AmbitionHUD 是 TextureRect，非 PanelContainer，stylebox_texture 不适用
+	# AmbitionHUD 是 TextureRect，非 PanelContainer，stylebox 不适用
 	StyleManager.bind(data)
-
-	# 首次 bind 后激活此策略
-	StyleManager.switch_strategy(self, "decay_dirt_crack")
-
-	Logging.info("AmbitionHUD: decay_dirt_crack 策略已绑定 → AmbitionHUD (progress remap: 0→[%.3f, %.3f])" % [data.progress_output_min, data.progress_output_max])
+	# decay_dirt_crack 仅在事件触发时由 StyleStrategyOperator 激活，默认不挂载 shader
+	Logging.info("AmbitionHUD: decay_dirt_crack 策略已注册 → AmbitionHUD (等待事件激活, progress remap: 0→[%.3f, %.3f])" % [data.progress_output_min, data.progress_output_max])

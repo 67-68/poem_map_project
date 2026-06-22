@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://domupfjv11dux"]
+
+[ext_resource type="Shader" uid="uid://8iaphfh84pr0" path="res://shaders/frost.gdshader" id="1_1gvri"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1gvri"]
+noise_type = 2
+frequency = 0.0403
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vwy2f"]
+noise = SubResource("FastNoiseLite_1gvri")
+
+[resource]
+shader = ExtResource("1_1gvri")
+shader_parameter/frost_noise = SubResource("NoiseTexture2D_vwy2f")
+shader_parameter/freeze_progress = 1.0
+shader_parameter/frost_color = Color(0.20407969, 0.3175347, 0.41644347, 1)
