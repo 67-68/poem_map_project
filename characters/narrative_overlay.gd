@@ -72,6 +72,9 @@ func _ready() -> void:
 	# 中断按钮 → 先做 UI 标记再转发
 	_interrupt_button.pressed.connect(_on_interrupt_button_pressed)
 
+	# ── EventBus → Overlay 动画请求 ──
+	EventBus.request_overlay_animation.connect(_on_overlay_animation_requested)
+
 	Logging.info("NarrativeOverlay._ready: 信号接线完成")
 
 
@@ -342,6 +345,24 @@ func play_exit_animation(duration: float = 0.5) -> void:
 
 func play_enter_animation(duration: float = 0.5) -> void:
 	visualizer.play_enter_from_top(duration)
+
+
+# ═══════════════════════════════════════════════════════════════════
+# EventBus → Overlay 动画请求
+# ═══════════════════════════════════════════════════════════════════
+
+## 监听 request_overlay_animation 信号，按策略路由到 TapeVisualizer。
+## 当前支持策略:
+##   - "slide_out_and_back": 纸带下滑出视口再滑回原位
+func _on_overlay_animation_requested(strategy: String, params: Dictionary) -> void:
+	Logging.info("NarrativeOverlay._on_overlay_animation_requested: strategy='%s', params=%s" % [strategy, params])
+
+	match strategy:
+		"slide_out_and_back":
+			var duration: float = params.get("duration", 0.5)
+			visualizer.play_slide_out_and_back(duration)
+		_:
+			Logging.err("NarrativeOverlay._on_overlay_animation_requested: 未知策略 '%s'，跳过" % strategy)
 
 
 # ═══════════════════════════════════════════════════

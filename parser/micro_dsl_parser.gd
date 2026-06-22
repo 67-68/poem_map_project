@@ -67,6 +67,7 @@ const FUNC_IMAGE_SLIDE := "image_slide"
 const FUNC_IMAGE_SHATTER := "image_shatter"
 const FUNC_IMAGE_FADE_OUT := "image_fade_out"
 const FUNC_IMAGE_REMOVE := "image_remove"
+const FUNC_OVERLAY_ANIM := "overlay_anim"
 
 const FUNC_SCAN_AND_PUSH := "scan_and_push"
 const FUNC_PUSH_EVENT := "push_event"
@@ -166,6 +167,8 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_IMAGE_SHATTER] = func(p, r): return _exec_image_shatter_op(p, r)
 	cd[FUNC_IMAGE_FADE_OUT] = func(p, r): return _exec_image_fade_out_op(p, r)
 	cd[FUNC_IMAGE_REMOVE] = func(p, r): return _exec_image_remove_op(p, r)
+	# ── Overlay Animation Operator ──
+	cd[FUNC_OVERLAY_ANIM] = func(p, r): return _exec_overlay_anim_op(p, r)
 
 # ──────────────────────────────────────────────
 # Tags
@@ -1191,6 +1194,21 @@ static func _exec_leverage_add_op(parsed: NamedDSLParser.ParseResult, raw: Strin
 
 # DSL 语法: info(msg="你注意到了一些可疑的事情")
 # 解析为 InfoDemoOperator，发射 request_toast 通知
+# ─── overlay_anim ──────────────────────────────────────────
+# DSL 语法: overlay_anim(strategy="slide_out_and_back", duration=0.6)
+# 解析为 OverlayAnimationOperator，驱动 NarrativeOverlay 执行动画
+static func _exec_overlay_anim_op(parsed: NamedDSLParser.ParseResult, raw: String) -> OverlayAnimationOperator:
+	var strategy: String = str(parsed.attrs.get("strategy", "slide_out_and_back"))
+	if strategy.is_empty():
+		strategy = "slide_out_and_back"
+	var duration: float = float(parsed.attrs.get("duration", 0.5))
+	var op = OverlayAnimationOperator.new()
+	op.strategy = strategy
+	op.duration = duration
+	Logging.info("overlay_anim operator 创建成功: strategy=%s, duration=%.2f" % [strategy, duration])
+	return op
+
+
 static func _exec_info_op(parsed: NamedDSLParser.ParseResult, raw: String) -> InfoDemoOperator:
 	var msg = NamedDSLParser.get_str_param(parsed, "msg")
 	if msg.is_empty():

@@ -88,6 +88,11 @@ signal request_play_shatter(texture: Texture2D, global_pos: Vector2, duration: f
 ## 请求 NarrativeOverlay 追踪一个舞台动画（AnimationObject）
 signal request_track_stage_animation(anim: AnimationObject)
 
+## 请求 NarrativeOverlay 执行动画（策略驱动，日后可扩展为不同动画类编排）
+## strategy: 策略枚举名（当前支持 "slide_out_and_back"）
+## params:  策略参数字典，如 {"duration": 0.5}
+signal request_overlay_animation(strategy: String, params: Dictionary)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		user_clicked.emit(null)

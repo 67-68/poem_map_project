@@ -245,6 +245,43 @@ func undim_history_ink() -> void:
 
 
 # ═══════════════════════════════════════════════════════════════════
+# 8. play_slide_out_and_back() — 纸带下滑出视口再滑回原位
+# ═══════════════════════════════════════════════════════════════════
+
+## strategy="slide_out_and_back" 的动画实现。
+## 将 shadow_box 向下滑出屏幕底部，然后立即滑回 _tape_target_y。
+## 两段动画各占 duration/2 秒。
+## 使用 await，由调用方决定是否等待完成。
+func play_slide_out_and_back(duration: float = 0.5) -> void:
+	if _tween:
+		_tween.kill()
+
+	var viewport_h := get_tree().root.get_visible_rect().size.y
+	# 确保 _tape_target_y 已初始化（第一次 show 后才会有值，但此时纸带必定已展示）
+	if _tape_target_y == 0.0:
+		_tape_target_y = shadow_box.position.y
+
+	var half_duration := duration * 0.5
+	var slide_out_target: float = viewport_h + 100.0  # 滑到屏幕底部外
+
+	Logging.info("TapeVisualizer.play_slide_out_and_back: duration=%.2f, target_y=%.1f, slide_out_target=%.1f" % [duration, _tape_target_y, slide_out_target])
+
+	# 第一段：下滑到屏幕底部外
+	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween.tween_property(shadow_box, "position:y", slide_out_target, half_duration) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+
+	await _tween.finished
+
+	# 第二段：滑回原位
+	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween.tween_property(shadow_box, "position:y", _tape_target_y, half_duration) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+	Logging.info("TapeVisualizer.play_slide_out_and_back: 动画完成")
+
+
+# ═══════════════════════════════════════════════════════════════════
 # 私有递归方法
 # ═══════════════════════════════════════════════════════════════════
 

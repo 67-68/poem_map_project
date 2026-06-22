@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c_test_overlay_anim"]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://bv0vlnjgf69tk" path="res://core/operators/overlay_animation_operator.gd" id="2_overlay_anim_op"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_eo"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="5_bo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_re"]
+
+[sub_resource type="Resource" id="Resource_overlay_anim"]
+script = ExtResource("2_overlay_anim_op")
+strategy = "slide_out_and_back"
+duration = 0.6
+metadata/_custom_type_script = "uid://bv0vlnjgf69tk"
+
+[sub_resource type="Resource" id="Resource_cr_animate"]
+script = ExtResource("3_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_overlay_anim")])
+
+[sub_resource type="Resource" id="Resource_opt_animate"]
+script = ExtResource("4_eo")
+choice_result = SubResource("Resource_cr_animate")
+description = "触发纸带下滑回弹动画"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("6_re")
+options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_animate")])
+uuid = "test_overlay_anim_slide_out_back"
+name = "动画测试 — 纸带下滑回弹"
+description = "这是一个测试事件，用于验证 OverlayAnimationOperator 的 slide_out_and_back 策略。选择下方选项后，纸带应向下滑出视口再回弹到原位。"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"
