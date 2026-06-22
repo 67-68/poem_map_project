@@ -30,6 +30,7 @@ class_name NarrativeOverlay extends PanelContainer
 var current_event_data: BaseEvent
 var _auto_advance_timer: Timer = null
 var _is_settlement: bool = false
+var _default_background_texture: Texture2D  # tscn 中 tape_container 的初始宣纸纹理
 
 # ═══════════════════════════════════════════════════
 # _ready() — 信号接线
@@ -44,6 +45,14 @@ func _ready() -> void:
 	visualizer.shadow_box = self               # NarrativeOverlay 自身即外层容器
 	visualizer.tape_container = tape_container  # TapeContainer 内层纸纹理
 	visualizer.tape_content = event_ui._tape_content  # VBoxContainer 纸带内容
+
+	# ── 缓存默认背景纹理（tscn 中 tape_container 初始的宣纸纹理）──
+	var default_style := tape_container.get("theme_override_styles/panel") as StyleBoxTexture
+	if default_style:
+		_default_background_texture = default_style.texture
+		Logging.info("NarrativeOverlay._ready: 默认背景纹理已缓存 '%s'" % _default_background_texture.resource_path)
+	else:
+		Logging.warn("NarrativeOverlay._ready: 无法缓存默认背景纹理，tape_container panel 不是 StyleBoxTexture")
 
 	# ── Director → 渲染层 ──
 	director.tape_needs_show.connect(visualizer.play_show_tape)
@@ -428,25 +437,33 @@ func _on_auto_advance_timeout(all_options: Array, entry_id: String) -> void:
 # ── UIDecl 背景纹理动态替换 ──────────────────────
 
 ## 根据事件的 ui_decl.background_narrative 动态替换 TapeContainer 纸带的
-## StyleBoxTexture 背景纹理。ui_decl 为空或 background_narrative 为空时保持默认宣纸纹理。
+## StyleBoxTexture 背景纹理。有自定义纹理就用自定义；没有则回退到默认宣纸纹理。
+## 契约：总是设置纹理，绝不跳过 — 防止上一事件的定制纹理残留。
 func _apply_ui_decl_background(data: BaseEvent) -> void:
-	if not data.ui_decl:
-		return
-	var ui_decl: UIDecl = data.ui_decl
-	if not ui_decl.background_narrative:
-		return
-	# TapeContainer 的 theme_override_styles/panel 持有宣纸 StyleBoxTexture
 	var style: StyleBoxTexture = tape_container.get("theme_override_styles/panel") as StyleBoxTexture
 	if not style:
 		Logging.warn("NarrativeOverlay._apply_ui_decl_background: 无法获取 StyleBoxTexture panel style")
 		return
-	style.texture = ui_decl.background_narrative
-	Logging.info("NarrativeOverlay._apply_ui_decl_background: event='%s' 背景纹理已替换" % data.name)
+
+	var target_texture: Texture2D
+	if data.ui_decl and data.ui_decl.background_narrative:
+		target_texture = data.ui_decl.background_narrative
+	else:
+		target_texture = _default_background_texture
+
+	if target_texture:
+		style.texture = target_texture
+		Logging.info("NarrativeOverlay._apply_ui_decl_background: event='%s' 背景纹理 → '%s'" % [
+			data.name, target_texture.resource_path if target_texture else "(null)"
+		])
+	else:
+		Logging.warn("NarrativeOverlay._apply_ui_decl_background: 默认纹理缓存为空，跳过设置")
 
 
 # ── 背景纹理交换检测 ────────────────────────────
 
-## 判断是否需要「抽纸动画」：纸带上有历史条目 且 新事件带了不同的背景纹理。
+## 判断是否需要「抽纸动画」：纸带上有历史条目 且 目标纹理 ≠ 当前纹理。
+## 目标纹理 = 事件声明的 background_narrative，若无声明则回退 _default_background_texture。
 ## @return: true → 需要抽上去清空条目再抽下来；false → 正常流程
 func _needs_background_swap(data: BaseEvent) -> bool:
 	# 条件 1：纸带上必须有历史条目
@@ -455,19 +472,21 @@ func _needs_background_swap(data: BaseEvent) -> bool:
 		Logging.info("_needs_background_swap: 纸带无历史条目，无需交换背景")
 		return false
 
-	# 条件 2：新事件必须声明了 background_narrative
-	if not data.ui_decl or not data.ui_decl.background_narrative:
-		Logging.info("_needs_background_swap: 事件 '%s' 未声明 background_narrative，无需交换背景" % data.name)
-		return false
-
-	# 条件 3：新纹理 ≠ 当前纹理（从 TapeContainer 读取，非 NarrativeOverlay self）
+	# 条件 2：取出当前纹理与目标纹理（从 TapeContainer 读取，非 NarrativeOverlay self）
 	var style: StyleBoxTexture = tape_container.get("theme_override_styles/panel") as StyleBoxTexture
 	if not style:
 		Logging.info("_needs_background_swap: 无法获取当前 StyleBoxTexture，跳过交换")
 		return false
 
 	var current_texture: Texture2D = style.texture
-	var new_texture: Texture2D = data.ui_decl.background_narrative
+	# 目标纹理：事件声明了自定义背景就用自定义，否则回退默认宣纸
+	var new_texture: Texture2D
+	if data.ui_decl and data.ui_decl.background_narrative:
+		new_texture = data.ui_decl.background_narrative
+	else:
+		new_texture = _default_background_texture
+
+	# 条件 3：纹理确实不同
 	if current_texture == new_texture:
 		Logging.info("_needs_background_swap: 背景纹理未变化（%s），无需交换" % current_texture.resource_path if current_texture else "(null)")
 		return false

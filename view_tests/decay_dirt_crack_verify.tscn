@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Shader" path="res://shaders/decay_dirt_crack.gdshader" id="1_shader"]
+[ext_resource type="Script" path="res://view_tests/decay_dirt_crack_verify.gd" id="2_script"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_decay"]
+shader = ExtResource("1_shader")
+shader_parameter/progress = 0.3
+shader_parameter/dirt_color = Color(0.12, 0.08, 0.04, 1.0)
+shader_parameter/burn_edge_color = Color(0.50, 0.14, 0.02, 0.85)
+shader_parameter/crack_edge_width = 0.03
+
+[node name="DecayVerify" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_script")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 400.0
+material = SubResource("ShaderMaterial_decay")
