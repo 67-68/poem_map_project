@@ -6,6 +6,7 @@ func _ready() -> void:
 	super._ready()
 	PlayerState.location_changed.connect(func(): refresh_current_decisions())
 	EventBus.year_changed.connect(func(_year: float): refresh_current_decisions())
+	EventBus.decision_clicked.connect(func(): refresh_current_decisions())
 	refresh_current_decisions()
 	
 func refresh_current_decisions():
@@ -24,6 +25,10 @@ func refresh_current_decisions():
 		
 		# 1. 检查是否已被禁用
 		if d.disabled:
+			continue
+		
+		# 1.5. 检查点击次数上限（仅当前会话生效）
+		if d.allowed_count >= 0 and d._times_clicked > d.allowed_count:
 			continue
 		
 		# 2. 检查时间窗口

@@ -32,7 +32,7 @@ if PlayerState.has_flag('met_libai'):
 | 属性 | 类型 | 必需 | 说明 |
 |------|------|------|------|
 | `uuid` | `String` | 否 | 唯一标识符，用于资源查找和引用 |
-| `target_resource_urn` | `String` | **是** | 目标资源的 URN，表示"要转移到哪个资源" |
+| `target_resource_urn` | `String` | 否 | 目标资源的 URN，表示"要转移到哪个资源"。**为空时跳过状态转移（Phase 2/3），仅执行 operators 和 triggered_event。** 适用于纯事件触发场景（如距离阈值触发），配合 operators 中的 `flag_int_set` 可实现一次性触发。 |
 | `transist_value` | `String` | 否 | 转移的值，格式见下方约定 |
 | `current_resource_urn` | `String` | 否 | 当前资源的 URN（仅用于上下文日志，目前不参与逻辑） |
 | `triggered_event_key` | `String` | 否 | 转移完成后触发的事件 key |
@@ -195,7 +195,7 @@ CSV 表头映射到 [`StateTransistor`](../core/model/state_transistor.gd) 的�
 
 复用 [`DSLParser.parse_requirements()`](../parser/dsl_parser.gd:346) 逻辑，与 [`RandomEvent` 的 requirements 列](../parser/dsl_parser.gd:193) 完全一致。
 
-**格式：** 多个条件用 `,` 逗号分隔，逻辑关系为 **AND**（全部满足才通过）。
+**格式：** 多个条件用 `|` 竖线分隔，逻辑关系为 **AND**（全部满足才通过）。
 
 | 前缀 | 格式 | 示例 | 含义 |
 |------|------|------|------|
@@ -214,7 +214,7 @@ prop:location:=长安,flag:bool:is:met_libai
 
 复用 [`MicroDSLParser.parse_consequence_operators()`](../parser/micro_dsl_parser.gd:131) 逻辑，与 [`ChoiceResult` 的 operators](../parser/dsl_parser.gd:440) 和 [`Trait.trait_effect_operations`](../parser/dsl_parser.gd:666) 完全一致。
 
-**格式：** 多个操作符用 `,` 逗号分隔，逐个执行。
+**格式：** 多个操作符用 `|` 竖线分隔，逐个执行。
 
 | 前缀 | 格式 | 示例 | 含义 |
 |------|------|------|------|
@@ -257,7 +257,7 @@ t3.uuid = "transistor_quest_reward"
 t3.target_resource_urn = "urn:flag:finished_quest_01"
 t3.transist_value = "=true"
 t3.triggered_event_key = "event_quest_reward"
-t3.requirements = DSLParser.parse_requirements("prop:quest_progress:>=100,flag:bool:is:accepted_quest_01")
+t3.requirements = DSLParser.parse_requirements("prop:quest_progress:>=100|flag:bool:is:accepted_quest_01")
 t3.operators = MicroDSLParser.parse_consequence_operators("prop:money:+200,trait:add:reputation_rising")
 ```
 

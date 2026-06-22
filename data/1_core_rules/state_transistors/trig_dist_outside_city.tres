@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="StateTransistor" format=3]
+
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_xxl6x"]
+[ext_resource type="Script" path="res://core/operators/flag_operator.gd" id="2_kvcjh"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="2_xhkvn"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="3_kvcjh"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="4_nb3mc"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="5_kevd4"]
+[ext_resource type="Script" path="res://core/model/state_transistor.gd" id="6_4o150"]
+
+[sub_resource type="Resource" id="Resource_xhkvn"]
+script = ExtResource("2_kvcjh")
+flag_id = "trig_dist_outside_city, val=1"
+type = "int"
+value = 0
+
+[sub_resource type="Resource" id="Resource_kvcjh"]
+script = ExtResource("3_kvcjh")
+property = "distance, val=5"
+operator = 1
+
+[sub_resource type="Resource" id="Resource_nb3mc"]
+script = ExtResource("3_kvcjh")
+property = "distance, val=10"
+
+[sub_resource type="Resource" id="Resource_kevd4"]
+script = ExtResource("4_nb3mc")
+flag_id = "trig_dist_outside_city, val=1"
+type = "int"
+value = 0
+operator = 3
+
+[sub_resource type="Resource" id="Resource_4o150"]
+script = ExtResource("5_kevd4")
+operators = Array[ExtResource("2_xhkvn")]([SubResource("Resource_kvcjh"), SubResource("Resource_nb3mc"), SubResource("Resource_kevd4")])
+
+[resource]
+script = ExtResource("6_4o150")
+uuid = "trig_dist_outside_city"
+triggered_event_key = "backhome_outside_city_1"
+requirements = SubResource("Resource_4o150")
+operators = Array[ExtResource("1_xxl6x")]([SubResource("Resource_xhkvn")])

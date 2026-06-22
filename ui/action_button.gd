@@ -130,12 +130,29 @@ func _on_button_pressed() -> void:
 		action.action_results.size() if action and action.action_results else 0,
 		"yes" if action and action.generator != null else "no"
 	])
+	
+	# ── Decision 点击计数前置检查：在执行业务逻辑之前判断 ──
+	if action is Decision and action.allowed_count >= 0:
+		if action._times_clicked >= action.allowed_count:
+			# 已达上限，仅刷新 UI，不执行业务逻辑
+			Logging.info("SceneActionPanel: Decision '%s' already at limit (clicked=%d, allowed=%d), skip execution" % [
+				action.name, action._times_clicked, action.allowed_count
+			])
+			EventBus.decision_clicked.emit()
+			return
+		action.record_click()
+		Logging.info("SceneActionPanel: Decision '%s' click %d/%d" % [action.name, action._times_clicked, action.allowed_count])
+	
 	if action.action_results:
 		for r in action.action_results: r.operate()
 	
 	# ── Generator 消费（统一入口）──
 	var had_generator := action.generator != null
 	ActionManager.consume_generator(action)
+	
+	# ── Decision 点击后触发 UI 即时刷新 ──
+	if action is Decision and action.allowed_count >= 0:
+		EventBus.decision_clicked.emit()
 	
 	# ⛔ generator 存在时 block 随机事件查找
 	# generator 内部通过 PushEventOperator 自行推送事件

@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="StateTransistor" format=3]
+
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_8jy2y"]
+[ext_resource type="Script" path="res://core/operators/flag_operator.gd" id="2_aiq24"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="2_lre3g"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="3_aiq24"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="4_itf6y"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="5_jk3ax"]
+[ext_resource type="Script" path="res://core/model/state_transistor.gd" id="6_osgya"]
+
+[sub_resource type="Resource" id="Resource_lre3g"]
+script = ExtResource("2_aiq24")
+flag_id = "trig_dist_lishan, val=1"
+type = "int"
+value = 0
+
+[sub_resource type="Resource" id="Resource_aiq24"]
+script = ExtResource("3_aiq24")
+property = "distance, val=40"
+operator = 1
+
+[sub_resource type="Resource" id="Resource_itf6y"]
+script = ExtResource("3_aiq24")
+property = "distance, val=50"
+
+[sub_resource type="Resource" id="Resource_jk3ax"]
+script = ExtResource("4_itf6y")
+flag_id = "trig_dist_lishan, val=1"
+type = "int"
+value = 0
+operator = 3
+
+[sub_resource type="Resource" id="Resource_osgya"]
+script = ExtResource("5_jk3ax")
+operators = Array[ExtResource("2_lre3g")]([SubResource("Resource_aiq24"), SubResource("Resource_itf6y"), SubResource("Resource_jk3ax")])
+
+[resource]
+script = ExtResource("6_osgya")
+uuid = "trig_dist_lishan"
+triggered_event_key = "backhome_lishan_1"
+requirements = SubResource("Resource_osgya")
+operators = Array[ExtResource("1_8jy2y")]([SubResource("Resource_lre3g")])
