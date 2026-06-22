@@ -31,6 +31,8 @@ var current_event_data: BaseEvent
 var _auto_advance_timer: Timer = null
 var _is_settlement: bool = false
 var _default_background_texture: Texture2D  # tscn 中 tape_container 的初始宣纸纹理
+var _overlay_anim_in_progress: bool = false  # overlay 动画进行中，阻止 tape_needs_hide
+var _deferred_hide_pending: bool = false     # 动画期间收到 hide 请求，动画完成后执行
 
 # ═══════════════════════════════════════════════════
 # _ready() — 信号接线
@@ -77,6 +79,8 @@ func _ready() -> void:
 
 	# ── EventBus → Overlay 动画请求 ──
 	EventBus.request_overlay_animation.connect(_on_overlay_animation_requested)
+	# ── TapeVisualizer → 动画完成回调 ──
+	visualizer.overlay_animation_finished.connect(_on_overlay_animation_completed)
 
 	Logging.info("NarrativeOverlay._ready: 信号接线完成")
 
@@ -317,6 +321,12 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_hide_requested() -> void:
+	# 🚨 如果 overlay 动画正在进行中，延迟 hide 到动画完成后执行
+	if _overlay_anim_in_progress:
+		Logging.info("NarrativeOverlay._on_hide_requested: overlay 动画进行中，延迟 hide")
+		_deferred_hide_pending = true
+		return
+
 	BlurManager.return_to_hub()
 	event_ui.clear_all_tape()
 	visualizer.play_hide_tape()
@@ -362,10 +372,22 @@ func _on_overlay_animation_requested(strategy: String, params: Dictionary) -> vo
 
 	match strategy:
 		"slide_out_and_back":
+			_overlay_anim_in_progress = true
+			BlurManager.return_to_hub()
 			var duration: float = params.get("duration", 0.5)
 			visualizer.play_slide_out_and_back(duration)
 		_:
 			Logging.err("NarrativeOverlay._on_overlay_animation_requested: 未知策略 '%s'，跳过" % strategy)
+
+
+## 动画完成回调 — 清除标记，处理被延迟的 hide 请求
+func _on_overlay_animation_completed() -> void:
+	Logging.info("NarrativeOverlay._on_overlay_animation_completed: 动画标记清除")
+	_overlay_anim_in_progress = false
+	if _deferred_hide_pending:
+		_deferred_hide_pending = false
+		Logging.info("NarrativeOverlay._on_overlay_animation_completed: 执行延迟 hide")
+		_on_hide_requested()
 
 
 # ═══════════════════════════════════════════════════

@@ -9,6 +9,9 @@ class_name TapeVisualizer extends Node
 #   PlayerState / TimeService / ConsequenceExecuter / Database）。
 # =============================================================================
 
+## overlay 动画（如 slide_out_and_back）完成时发射
+signal overlay_animation_finished
+
 # ═══════════════════════════════════════════════════════════════════
 # @export 引用 — 在场景中挂载后配置
 # ═══════════════════════════════════════════════════════════════════
@@ -251,7 +254,8 @@ func undim_history_ink() -> void:
 ## strategy="slide_out_and_back" 的动画实现。
 ## 将 shadow_box 向下滑出屏幕底部，然后立即滑回 _tape_target_y。
 ## 两段动画各占 duration/2 秒。
-## 使用 await，由调用方决定是否等待完成。
+## 🚨 关键：使用 tween 链式回调 + 信号，禁止 await，
+## 否则控制权交还给 Director → 栈空 → tape_needs_hide → shadow_box.hide() 让动画白做。
 func play_slide_out_and_back(duration: float = 0.5) -> void:
 	if _tween:
 		_tween.kill()
@@ -270,15 +274,33 @@ func play_slide_out_and_back(duration: float = 0.5) -> void:
 	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween.tween_property(shadow_box, "position:y", slide_out_target, half_duration) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	# Chain: 下滑完成 → 滑回原位
+	_tween.tween_callback(_on_slide_out_finished.bind(duration, half_duration))
 
-	await _tween.finished
 
-	# 第二段：滑回原位
+## 下滑段完成后，触发回弹段
+func _on_slide_out_finished(duration: float, half_duration: float) -> void:
+	const HOLD_TIME: float = 2.0  # 滑出后停顿 2 秒再回弹
+	Logging.info("TapeVisualizer._on_slide_out_finished: 下滑完成，等待 %.1f 秒后回弹" % HOLD_TIME)
 	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	# 停顿 HOLD_TIME 秒后再回弹
+	_tween.tween_interval(HOLD_TIME)
 	_tween.tween_property(shadow_box, "position:y", _tape_target_y, half_duration) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	# Chain: 回弹完成 → 发射完成信号
+	_tween.tween_callback(_on_slide_back_finished)
 
-	Logging.info("TapeVisualizer.play_slide_out_and_back: 动画完成")
+
+## 回弹段完成后，发射完成信号
+func _on_slide_back_finished() -> void:
+	const POST_HOLD_TIME: float = 1.0  # 回弹后停顿再隐藏
+	Logging.info("TapeVisualizer._on_slide_back_finished: 回弹完成，等待 %.1f 秒后完成" % POST_HOLD_TIME)
+	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween.tween_interval(POST_HOLD_TIME)
+	_tween.tween_callback(func():
+		Logging.info("TapeVisualizer.play_slide_out_and_back: 动画完成")
+		overlay_animation_finished.emit()
+	)
 
 
 # ═══════════════════════════════════════════════════════════════════
