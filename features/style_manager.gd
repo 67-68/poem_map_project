@@ -34,6 +34,14 @@ var _active_strategy: Dictionary = {}
 ## 防重连标记
 var _signal_connected := false
 
+## { container_instance_id → { "narrative_text_theme": ..., "title_text_theme": ..., "inner_thought_theme": ..., "default_text_theme": ... } }
+## 活跃文本主题缓存，用于 child_entered_tree 信号触发时懒应用
+var _active_text_themes: Dictionary = {}
+
+## { watched_node_instance_id → container_instance_id }
+## 反向索引：记录哪些节点被连接了 child_entered_tree 信号，用于 cleanup
+var _watched_text_nodes: Dictionary = {}
+
 
 # ============================================================
 # _ready() — 初始化信号连接
@@ -313,6 +321,9 @@ func _apply_strategy(container: Control, data: StyleData) -> void:
 	# ── 标记活跃策略 ──────────────────────────────────────
 	_active_strategy[id] = data.strategy_name
 
+	# ── 应用文本 Theme Type Variation ──────────────────────
+	_apply_text_theme_variations(container, data)
+
 	# ── 首次进度同步 ──────────────────────────────────────
 	_sync_progress(container, data)
 
@@ -343,6 +354,9 @@ func _restore_default(container: Control) -> void:
 		if saved_stylebox:
 			container.set("theme_override_styles/panel", saved_stylebox)
 
+	# 还原文本 Theme Type Variation
+	_restore_text_theme_variations(container)
+
 	Logging.info("%s: _restore_default → container=%s" % [LOG_TAG, container.name])
 
 
@@ -353,6 +367,7 @@ func _capture_default(container: Control) -> void:
 	var def_state := {
 		"material": container.material if container.material is ShaderMaterial else null,
 		"stylebox": null,
+		"text_theme_variations": {},
 	}
 
 	# 捕获 StyleBox（仅 PanelContainer）
@@ -362,10 +377,17 @@ func _capture_default(container: Control) -> void:
 			# 保存完整 StyleBox 副本（duplicate() 深拷贝）
 			def_state["stylebox"] = style.duplicate()
 
+	# 捕获子控件文本 theme_type_variation
+	var text_variations := {}
+	for child in _get_all_text_controls(container):
+		text_variations[child.get_instance_id()] = child.theme_type_variation
+	def_state["text_theme_variations"] = text_variations
+
 	_default_states[id] = def_state
-	Logging.info("%s: _capture_default → container=%s" % [
+	Logging.info("%s: _capture_default → container=%s text_controls=%d" % [
 		LOG_TAG,
 		container.name,
+		text_variations.size(),
 	])
 
 
@@ -458,6 +480,255 @@ func _get_active_strategy_stylebox(container: Control) -> StyleBox:
 	return data.stylebox
 
 
+## 递归扫描 container 下所有 Label / RichTextLabel
+##
+## 返回它们组成的数组（用于 capture / apply / restore text theme variation）
+func _get_all_text_controls(root: Control) -> Array[Control]:
+	var result: Array[Control] = []
+	_collect_text_controls_recursive(root, result)
+	return result
+
+
+## 递归收集 Label / RichTextLabel 到 result 数组
+func _collect_text_controls_recursive(node: Node, result: Array[Control]) -> void:
+	if node is Label or node is RichTextLabel:
+		result.append(node as Control)
+	for child in node.get_children():
+		_collect_text_controls_recursive(child, result)
+
+
+## 将 StyleData 中的 text theme variation 应用到 container 下所有文本控件
+##
+## 规则:
+##   • RichTextLabel:
+##       - 若原 variation 为 "NarrativeText" 或空 → 替换为 narrative_text_theme
+##       - 若原 variation 为 "InnerThought"           → 替换为 inner_thought_theme
+##   • Label:
+##       - 若原 variation 为 "DefaultText" 或空       → 替换为 default_text_theme
+##       - 若原 variation 为 "TitleText"              → 替换为 title_text_theme
+##
+## 仅当 data 中对应的 theme 字段非空时才进行替换（空串 = 不修改）
+func _apply_text_theme_variations(container: Control, data: StyleData) -> void:
+	if data == null:
+		return
+
+	for child in _get_all_text_controls(container):
+		if child is RichTextLabel:
+			var old_variation: String = child.theme_type_variation
+			if old_variation == "NarrativeText" or old_variation.is_empty():
+				if not data.narrative_text_theme.is_empty():
+					# 清除 add_theme_color_override 钉死的颜色，让 variation 生效
+					if child.has_theme_color_override(&"default_color"):
+						child.remove_theme_color_override(&"default_color")
+					if child.has_theme_color_override(&"font_color"):
+						child.remove_theme_color_override(&"font_color")
+					child.theme_type_variation = data.narrative_text_theme
+					Logging.debug("%s: RichTextLabel '%s' theme: '%s' → '%s' (narrative)" % [
+						LOG_TAG, child.name, old_variation, data.narrative_text_theme,
+					])
+			elif old_variation == "InnerThought":
+				if not data.inner_thought_theme.is_empty():
+					if child.has_theme_color_override(&"default_color"):
+						child.remove_theme_color_override(&"default_color")
+					if child.has_theme_color_override(&"font_color"):
+						child.remove_theme_color_override(&"font_color")
+					child.theme_type_variation = data.inner_thought_theme
+					Logging.debug("%s: RichTextLabel '%s' theme: '%s' → '%s' (inner_thought)" % [
+						LOG_TAG, child.name, old_variation, data.inner_thought_theme,
+					])
+		elif child is Label:
+			var old_variation: String = child.theme_type_variation
+			if old_variation == "DefaultText" or old_variation.is_empty():
+				if not data.default_text_theme.is_empty():
+					if child.has_theme_color_override(&"font_color"):
+						child.remove_theme_color_override(&"font_color")
+					child.theme_type_variation = data.default_text_theme
+					Logging.debug("%s: Label '%s' theme: '%s' → '%s' (default)" % [
+						LOG_TAG, child.name, old_variation, data.default_text_theme,
+					])
+			elif old_variation == "TitleText":
+				if not data.title_text_theme.is_empty():
+					if child.has_theme_color_override(&"font_color"):
+						child.remove_theme_color_override(&"font_color")
+					child.theme_type_variation = data.title_text_theme
+					Logging.debug("%s: Label '%s' theme: '%s' → '%s' (title)" % [
+						LOG_TAG, child.name, old_variation, data.title_text_theme,
+					])
+
+	# ── 缓存活跃主题，供后续新增子控件懒应用 ──
+	var container_id := container.get_instance_id()
+	_active_text_themes[container_id] = {
+		"narrative_text_theme": data.narrative_text_theme,
+		"title_text_theme": data.title_text_theme,
+		"inner_thought_theme": data.inner_thought_theme,
+		"default_text_theme": data.default_text_theme,
+	}
+
+	# ── 递归监听容器子树中所有节点的 child_entered_tree ──
+	# 后续新增事件卡片会自动扫描并应用冻土字体
+	_watch_child_entered_tree_recursive(container, container_id)
+
+	Logging.info("%s: _apply_text_theme_variations → 已启用 child_entered_tree 懒监听 (container=%s)" % [
+		LOG_TAG, container.name,
+	])
+
+
+## 将 container 下的文本控件恢复到 default_states 中捕获的 theme_type_variation
+##
+## 同时清除 strategy 期间可能残留的 add_theme_color_override，
+## 新事件进入时 _apply_ui_decl_colors 会重新设置需要的颜色覆盖
+func _restore_text_theme_variations(container: Control) -> void:
+	var id := container.get_instance_id()
+
+	# ── 清理 child_entered_tree 信号监听 ──
+	_unwatch_child_entered_tree_recursive(container)
+	_active_text_themes.erase(id)
+
+	if not _default_states.has(id):
+		return
+
+	var saved_variations: Dictionary = _default_states[id].get("text_theme_variations", {})
+	if saved_variations.is_empty():
+		return
+
+	var count := 0
+	for child in _get_all_text_controls(container):
+		var child_id := child.get_instance_id()
+		if saved_variations.has(child_id):
+			# 清除 add_theme_color_override 残留，让原始 variation 颜色生效
+			if child.has_theme_color_override(&"font_color"):
+				child.remove_theme_color_override(&"font_color")
+			if child.has_theme_color_override(&"default_color"):
+				child.remove_theme_color_override(&"default_color")
+			child.theme_type_variation = saved_variations[child_id]
+			count += 1
+
+	if count > 0:
+		Logging.info("%s: _restore_text_theme_variations → 恢复 %d 个文本控件 (container=%s)" % [
+			LOG_TAG, count, container.name,
+		])
+
+
+# ── child_entered_tree 懒监听 ────────────────────────────
+
+## 递归为节点及其所有子孙连接 child_entered_tree 信号
+## 后续新增到纸带的 Event block 会自动扫描并应用冻土字体
+func _watch_child_entered_tree_recursive(node: Node, container_id: int) -> void:
+	if not is_instance_valid(node):
+		return
+
+	var node_id := node.get_instance_id()
+	if _watched_text_nodes.has(node_id):
+		return  # 已监听，跳过
+
+	if node.has_signal("child_entered_tree"):
+		if not node.child_entered_tree.is_connected(_on_new_child_entered):
+			node.child_entered_tree.connect(_on_new_child_entered)
+			_watched_text_nodes[node_id] = container_id
+
+	for child in node.get_children():
+		_watch_child_entered_tree_recursive(child, container_id)
+
+
+## 递归断开 child_entered_tree 信号
+func _unwatch_child_entered_tree_recursive(node: Node) -> void:
+	if not is_instance_valid(node):
+		return
+
+	var node_id := node.get_instance_id()
+	if _watched_text_nodes.has(node_id):
+		if node.has_signal("child_entered_tree") and node.child_entered_tree.is_connected(_on_new_child_entered):
+			node.child_entered_tree.disconnect(_on_new_child_entered)
+		_watched_text_nodes.erase(node_id)
+
+	for child in node.get_children():
+		_unwatch_child_entered_tree_recursive(child)
+
+
+## child_entered_tree 回调：新节点进入场景树时，递归扫描其子树并应用冻土字体
+func _on_new_child_entered(new_child: Node) -> void:
+	if not is_instance_valid(new_child):
+		return
+
+	# 找到此节点属于哪个 container
+	var node_id := new_child.get_instance_id()
+	# 向上追溯：检查当前节点或祖先节点是否在有 themed 的容器中
+	# 实际上我们从 _watched_text_nodes 中找匹配的 container_id
+	var container_id := _find_text_theme_container(new_child)
+	if container_id == 0:
+		# 未找到对应主题缓存 → 新节点进入前未被 watched 树覆盖
+		# 为新节点本身也注册监听（它可能有子节点）
+		return
+
+	var themes: Dictionary = _active_text_themes.get(container_id, {})
+	if themes.is_empty():
+		return
+
+	# 递归扫描新节点的子树并应用主题
+	_apply_text_theme_to_subtree(new_child, themes, container_id)
+
+	# 新节点也需要注册 child_entered_tree 监听它的子节点
+	_watch_child_entered_tree_recursive(new_child, container_id)
+
+
+## 向上追溯节点的 ancestors，找到某个被 watched 的节点对应的 container_id
+func _find_text_theme_container(node: Node) -> int:
+	var current: Node = node
+	while is_instance_valid(current):
+		var cid := current.get_instance_id()
+		if _watched_text_nodes.has(cid):
+			return _watched_text_nodes[cid]
+		current = current.get_parent() if current.get_parent() else null
+	# 兜底：搜索所有活跃 container_id 中有主题缓存的
+	# 这种情况不常见，但覆盖 _active_text_themes 比 _watched_text_nodes 更宽泛的情况
+	for cid in _active_text_themes:
+		return cid
+	return 0
+
+
+## 递归扫描节点子树中的文本控件并应用冻土主题
+func _apply_text_theme_to_subtree(node: Node, themes: Dictionary, container_id: int) -> void:
+	if not is_instance_valid(node):
+		return
+
+	if node is RichTextLabel:
+		var old_variation: String = node.theme_type_variation
+		var narrative_theme: String = themes.get("narrative_text_theme", "")
+		var inner_thought_theme: String = themes.get("inner_thought_theme", "")
+		if old_variation == "NarrativeText" or old_variation.is_empty():
+			if not narrative_theme.is_empty():
+				if node.has_theme_color_override(&"default_color"):
+					node.remove_theme_color_override(&"default_color")
+				if node.has_theme_color_override(&"font_color"):
+					node.remove_theme_color_override(&"font_color")
+				node.theme_type_variation = narrative_theme
+		elif old_variation == "InnerThought":
+			if not inner_thought_theme.is_empty():
+				if node.has_theme_color_override(&"default_color"):
+					node.remove_theme_color_override(&"default_color")
+				if node.has_theme_color_override(&"font_color"):
+					node.remove_theme_color_override(&"font_color")
+				node.theme_type_variation = inner_thought_theme
+
+	elif node is Label:
+		var old_variation: String = node.theme_type_variation
+		var default_theme: String = themes.get("default_text_theme", "")
+		var title_theme: String = themes.get("title_text_theme", "")
+		if old_variation == "DefaultText" or old_variation.is_empty():
+			if not default_theme.is_empty():
+				if node.has_theme_color_override(&"font_color"):
+					node.remove_theme_color_override(&"font_color")
+				node.theme_type_variation = default_theme
+		elif old_variation == "TitleText":
+			if not title_theme.is_empty():
+				if node.has_theme_color_override(&"font_color"):
+					node.remove_theme_color_override(&"font_color")
+				node.theme_type_variation = title_theme
+
+	for child in node.get_children():
+		_apply_text_theme_to_subtree(child, themes, container_id)
+
+
 # ============================================================
 # 生命周期清理
 # ============================================================
@@ -466,6 +737,14 @@ func _exit_tree() -> void:
 	if _signal_connected and PlayerState.has_signal("player_stat_changed"):
 		if PlayerState.player_stat_changed.is_connected(_on_player_stat_changed):
 			PlayerState.player_stat_changed.disconnect(_on_player_stat_changed)
+
+	# ── 清理 child_entered_tree 信号 ──
+	for node_id in _watched_text_nodes:
+		var node := instance_from_id(node_id) if is_instance_id_valid(node_id) else null
+		if node and node.has_signal("child_entered_tree") and node.child_entered_tree.is_connected(_on_new_child_entered):
+			node.child_entered_tree.disconnect(_on_new_child_entered)
+	_watched_text_nodes.clear()
+	_active_text_themes.clear()
 
 	_strategies.clear()
 	_default_states.clear()

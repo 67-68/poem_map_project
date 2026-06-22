@@ -54,6 +54,20 @@ var stylebox: StyleBox = null
 ## 是否在 bind() 时立即应用 stylebox（而非等待 switch_strategy 事件触发）
 var stylebox_active_on_bind: bool = false
 
+# ── Theme Type Variation ─────────────────────────────────
+## 叙事文本 theme_type_variation，应用于 RichTextLabel
+## 替换原有 "NarrativeText" variation 或无 variation 的 RichTextLabel
+var narrative_text_theme: String = ""
+## 标题文本 theme_type_variation，应用于 Label
+## 替换原有 "TitleText" variation 的 Label
+var title_text_theme: String = ""
+## 内心独白 theme_type_variation，应用于 RichTextLabel
+## 替换原有 "InnerThought" variation 的 RichTextLabel
+var inner_thought_theme: String = ""
+## 默认文本 theme_type_variation，应用于 Label
+## 替换原有 "DefaultText" variation 或无 variation 的 Label
+var default_text_theme: String = ""
+
 # ── 目标控件 ──────────────────────────────────────────────
 ## 目标节点，其 material 属性将被注入 ShaderMaterial
 ## 若为 PanelContainer 且 stylebox 非 null，还会替换其 theme_override_styles/panel
@@ -108,4 +122,8 @@ func copy_from(other: StyleData) -> void:
 	shader_parameter_names = other.shader_parameter_names.duplicate()
 	stylebox = other.stylebox
 	stylebox_active_on_bind = other.stylebox_active_on_bind
+	narrative_text_theme = other.narrative_text_theme
+	title_text_theme = other.title_text_theme
+	inner_thought_theme = other.inner_thought_theme
+	default_text_theme = other.default_text_theme
 	container = other.container

@@ -515,7 +515,7 @@ func _input(event: InputEvent) -> void:
 # ═══════════════════════════════════════════════
 
 ## 在纸带上按 entry_id 查找条目
-func _find_entry(entry_id: String) -> VBoxContainer:
+func _find_entry(entry_id: String) -> Control:
 	for child in _tape_content.get_children():
 		if child.has_meta("entry_id") and child.get_meta("entry_id") == entry_id:
 			return child
@@ -523,9 +523,11 @@ func _find_entry(entry_id: String) -> VBoxContainer:
 
 
 ## 从条目中移除 ChoiceLabel（用于 revive_entry）
-func _remove_choice_label(entry: VBoxContainer) -> void:
-	var vbox := entry.get_node("MarginContainer/VBox") as VBoxContainer
-	var target := vbox if vbox else entry
+func _remove_choice_label(entry: PanelContainer) -> void:
+	var vbox = entry.get_node("MarginContainer/VBox")
+	if not vbox is VBoxContainer:
+		breakpoint
+	var target = vbox if vbox else entry
 	var choice_label := target.get_node_or_null("ChoiceLabel")
 	if choice_label:
 		choice_label.queue_free()

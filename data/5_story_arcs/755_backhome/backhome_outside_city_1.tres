@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://dhr2t0fa24wxt"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_3x4t2"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_8lav0"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_8u5jl"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_shp4k"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_2cufq"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_yhcam"]
+[ext_resource type="Script" uid="uid://ojqxtgw57ec3" path="res://core/operators/imaginary_set_level_operator.gd" id="6_shp4k"]
+
+[sub_resource type="Resource" id="Resource_g1smy"]
+script = ExtResource("3_shp4k")
+str_props = "distance"
+value = 8
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_8u5jl"]
+script = ExtResource("3_shp4k")
+_property = 4
+value = -12
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_xnfye"]
+script = ExtResource("4_2cufq")
+operators = Array[ExtResource("2_8u5jl")]([SubResource("Resource_g1smy"), SubResource("Resource_8u5jl")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_atld0"]
+script = ExtResource("5_yhcam")
+choice_result = SubResource("Resource_xnfye")
+description = "向东走"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_yhcam"]
+script = ExtResource("3_shp4k")
+_property = 4
+value = -12
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_2cufq"]
+script = ExtResource("6_shp4k")
+imaginary_name = "action:travel:exile:green_robe_leave_changan"
+target_level = 3
+metadata/_custom_type_script = "uid://ojqxtgw57ec3"
+
+[sub_resource type="Resource" id="Resource_f46ou"]
+script = ExtResource("4_2cufq")
+operators = Array[ExtResource("2_8u5jl")]([SubResource("Resource_g1smy"), SubResource("Resource_yhcam"), SubResource("Resource_2cufq")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_fqfcp"]
+script = ExtResource("5_yhcam")
+choice_result = SubResource("Resource_f46ou")
+description = "盯着灞桥，直到雪盖满身"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_8lav0")
+options = Array[ExtResource("1_3x4t2")]([SubResource("Resource_atld0"), SubResource("Resource_fqfcp")])
+uuid = "backhome_outside_city_1"
+name = "灞桥之别"
+description = "灞桥的残柳被冻成铁丝。你努力挺直腰板，试图让那身薄得透风的从八品下绿袍显出几分官威，好对得起这十年的卑躬屈膝。你本想饮尽最后一口浊酒赋诗一首，但冻僵的酒壶粘住了嘴唇，撕下一层皮。狂风灌进胃里，把你精心排练的衣锦还乡，吹成了一个毫无知觉的死循环。"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"
