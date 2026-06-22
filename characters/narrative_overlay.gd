@@ -54,6 +54,9 @@ func _ready() -> void:
 	else:
 		Logging.warn("NarrativeOverlay._ready: 无法缓存默认背景纹理，tape_container panel 不是 StyleBoxTexture")
 
+	# ── StyleManager: 注册 tape_container 并绑定 frost 策略 ──
+	_bind_frost_strategy()
+
 	# ── Director → 渲染层 ──
 	director.tape_needs_show.connect(visualizer.play_show_tape)
 	director.tape_needs_hide.connect(_on_hide_requested)
@@ -465,24 +468,11 @@ func _on_auto_advance_timeout(all_options: Array, entry_id: String) -> void:
 ## StyleBoxTexture 背景纹理。有自定义纹理就用自定义；没有则回退到默认宣纸纹理。
 ## 契约：总是设置纹理，绝不跳过 — 防止上一事件的定制纹理残留。
 func _apply_ui_decl_background(data: BaseEvent) -> void:
-	var style: StyleBoxTexture = tape_container.get("theme_override_styles/panel") as StyleBoxTexture
-	if not style:
-		Logging.warn("NarrativeOverlay._apply_ui_decl_background: 无法获取 StyleBoxTexture panel style")
-		return
-
-	var target_texture: Texture2D
+	# 委托给 StyleManager 处理背景切换
+	var target_texture: Texture2D = null
 	if data.ui_decl and data.ui_decl.background_narrative:
 		target_texture = data.ui_decl.background_narrative
-	else:
-		target_texture = _default_background_texture
-
-	if target_texture:
-		style.texture = target_texture
-		Logging.info("NarrativeOverlay._apply_ui_decl_background: event='%s' 背景纹理 → '%s'" % [
-			data.name, target_texture.resource_path if target_texture else "(null)"
-		])
-	else:
-		Logging.warn("NarrativeOverlay._apply_ui_decl_background: 默认纹理缓存为空，跳过设置")
+	StyleManager.apply_event_background(tape_container, target_texture)
 
 
 # ── 背景纹理交换检测 ────────────────────────────
@@ -497,19 +487,14 @@ func _needs_background_swap(data: BaseEvent) -> bool:
 		Logging.info("_needs_background_swap: 纸带无历史条目，无需交换背景")
 		return false
 
-	# 条件 2：取出当前纹理与目标纹理（从 TapeContainer 读取，非 NarrativeOverlay self）
-	var style: StyleBoxTexture = tape_container.get("theme_override_styles/panel") as StyleBoxTexture
-	if not style:
-		Logging.info("_needs_background_swap: 无法获取当前 StyleBoxTexture，跳过交换")
-		return false
-
-	var current_texture: Texture2D = style.texture
+	# 条件 2：取出当前纹理与目标纹理（委托 StyleManager 查询）
+	var current_texture: Texture2D = StyleManager.get_container_background(tape_container)
 	# 目标纹理：事件声明了自定义背景就用自定义，否则回退默认宣纸
 	var new_texture: Texture2D
 	if data.ui_decl and data.ui_decl.background_narrative:
 		new_texture = data.ui_decl.background_narrative
 	else:
-		new_texture = _default_background_texture
+		new_texture = StyleManager.get_default_background(tape_container)
 
 	# 条件 3：纹理确实不同
 	if current_texture == new_texture:
@@ -521,3 +506,25 @@ func _needs_background_swap(data: BaseEvent) -> bool:
 		new_texture.resource_path if new_texture else "(null)"
 	])
 	return true
+
+# ── StyleManager: frost 策略绑定 ───────────────────────────
+
+## 向 StyleManager 注册 tape_container 并绑定 frost 策略
+## health=100 时 progress=0.0（无冻结），health=0 时 progress=1.0（彻底冻结）
+func _bind_frost_strategy() -> void:
+	var data := StyleData.new()
+	data.strategy_name = "frost"
+	data.target_property = "health"
+	data.start_property_value = 100.0
+	data.target_property_value = 0.0
+	data.shader_resource = preload("res://shaders/frost.gdshader")
+	data.shader_parameter_names = ["freeze_progress"]
+	data.container = tape_container
+	# stylebox_texture null → 不修改纸纹理
+	StyleManager.bind(data)
+
+	# 首次 bind 后，初始为 default 策略（无 shader），
+	# 若希望默认激活 frost 可直接 switch：
+	StyleManager.switch_strategy(tape_container, "frost")
+
+	Logging.info("NarrativeOverlay: frost 策略已绑定 → tape_container")

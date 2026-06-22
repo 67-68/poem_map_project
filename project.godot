@@ -40,7 +40,7 @@ HoverPopupManager="*res://ui/hover_popup_manager.gd"
 BlurManager="*res://features/blur_manager.gd"
 AncientOptionBtnManager="*res://core/ancient_option_btn_manager.gd"
 MonthEndSettlement="*res://core/month_end_settlement.gd"
-ShaderProgressManager="*res://features/shader_progress_manager.gd"
+StyleManager="*res://features/style_manager.gd"
 
 [debug]
 
