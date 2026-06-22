@@ -851,3 +851,46 @@ func test_p0_temp_flag_with_regular_operators_in_consequence():
 	assert_true(ops[0] is PropertyOperator, "第一个应为 PropertyOperator")
 	assert_true(ops[1] is TempFlagOperator, "第二个应为 TempFlagOperator")
 	assert_true(ops[2] is TraitOperator, "第三个应为 TraitOperator")
+
+
+# ─── imaginary_set_level ───────────────────────────────────────────
+
+func test_p0_imaginary_set_level_operator():
+	"""imaginary_set_level(name=emotion:ambition, level=2) 应解析为 ImaginarySetLevelOperator"""
+	var op = MicroDSLParser.parse_operator("imaginary_set_level(name=emotion:ambition; level=2)")
+	assert_not_null(op, "imaginary_set_level 不应返回 null")
+	assert_true(op is ImaginarySetLevelOperator, "应为 ImaginarySetLevelOperator")
+	var cast_op = op as ImaginarySetLevelOperator
+	assert_eq(cast_op.imaginary_name, "emotion:ambition", "imaginary_name 应为 emotion:ambition")
+	assert_eq(cast_op.target_level, 2, "target_level 应为 2")
+
+
+func test_p0_imaginary_set_level_missing_name():
+	"""imaginary_set_level 缺少 name 应返回 null"""
+	var op = MicroDSLParser.parse_operator("imaginary_set_level(level=1)")
+	assert_null(op, "imaginary_set_level 缺少 name 应返回 null")
+
+
+func test_p0_imaginary_set_level_level_out_of_range():
+	"""imaginary_set_level level 超出范围应返回 null"""
+	var op = MicroDSLParser.parse_operator("imaginary_set_level(name=emotion:ambition; level=5)")
+	assert_null(op, "imaginary_set_level level=5 超出范围应返回 null")
+
+
+func test_p0_imaginary_set_level_default_level():
+	"""imaginary_set_level 不传 level 时默认为 0"""
+	var op = MicroDSLParser.parse_operator("imaginary_set_level(name=emotion:ambition)")
+	assert_not_null(op, "imaginary_set_level 默认 level 不应返回 null")
+	var cast_op = op as ImaginarySetLevelOperator
+	assert_eq(cast_op.target_level, 0, "target_level 默认应为 0")
+
+
+func test_p0_imaginary_set_level_in_consequence():
+	"""imaginary_set_level 作为后果操作符与其他操作符混合解析"""
+	var ops = MicroDSLParser.parse_consequence_operators(
+		"imaginary_set_level(name=emotion:ambition; level=2)|"
+		+ "prop_add(name=literary_fame; val=50)"
+	)
+	assert_eq(ops.size(), 2, "应解析出 2 个操作符")
+	assert_true(ops[0] is ImaginarySetLevelOperator, "第一个应为 ImaginarySetLevelOperator")
+	assert_true(ops[1] is PropertyOperator, "第二个应为 PropertyOperator")

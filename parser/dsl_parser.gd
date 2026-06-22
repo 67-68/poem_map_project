@@ -33,6 +33,9 @@ const _REQUIREMENT_ONLY_FUNCS: Array[String] = [
     "flag_int_gt", "flag_int_lt", "flag_int_eq", "flag_int_ne",
     "poem_has",
     "imaginary_has_level",
+    "imaginary_set_level",
+    "imagery_add",
+    "imaginary_level_reward",
 ]
 
 # 必须使用全角标点的 ASCII 等价物集合（用于纯文本字段校验）
