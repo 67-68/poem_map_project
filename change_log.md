@@ -1,5 +1,12 @@
 # [unreleased]
 ## Added
+- **NarrativeOverlay 动画策略系统** — 纸带入场动画支持从底部滑入
+  - [`model/enumerates.gd`](model/enumerates.gd) — 新增 `enum ANIMATION_STRATEGY { DEFAULT, SLIDE_FROM_BOTTOM }`
+  - [`model/ui_decl.gd`](model/ui_decl.gd) — 新增 `@export var animation_strategy: int` 字段（默认 0 = DEFAULT）
+  - [`characters/tape_visualizer.gd`](characters/tape_visualizer.gd) — 新增 `play_show_tape_from_bottom()` 方法：shadow_box 从屏幕底部外（`y=+viewport`）CUBIC+EASE_OUT 滑入到 `_tape_target_y`
+  - [`characters/narrative_overlay.gd`](characters/narrative_overlay.gd) — `_on_event_ready_to_play` 中 `else` 分支按 `data.ui_decl.animation_strategy` 路由：`SLIDE_FROM_BOTTOM` → `play_show_tape_from_bottom()`；其他 → `play_show_tape()`
+  - 动画策略是每个事件的独立属性，事件结束后自动回归默认（DEFAULT），无需显式 revert
+  - [`data/5_story_arcs/755_backhome/event_demo_slide_from_bottom.tres`](data/5_story_arcs/755_backhome/event_demo_slide_from_bottom.tres) — 演示事件，`animation_strategy=1`，选择后打印 info 无副作用
 - **清流·焦虑** 事件库（4个事件：2 坊市 + 1 交游 + 1 独酌）
   - [`tools/event_base_config_qingliu_jiaolv.json`](tools/event_base_config_qingliu_jiaolv.json) — 事件配置，单维度 `jiaolv_scenario`（4 值），`BURNOUT>50 & MONEY 10-50 & AMBITION 30-100` 通用需求，`store_to` 路由到 fangshi/jiaoyou/duzhuo
   - [`tools/event_base_config_qingliu_jiaolv_sandbox.json`](tools/event_base_config_qingliu_jiaolv_sandbox.json) — 12 条叙事种子（每场景 3 条），单维度沙盒格式

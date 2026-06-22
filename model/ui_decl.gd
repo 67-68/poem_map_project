@@ -37,6 +37,11 @@ class_name UIDecl extends Resource
 @export_enum('gold', 'white', 'zhusha_red') var color_of_default_text = ''
 @export var background_narrative: Texture2D = null
 
+## NarrativeOverlay 纸带入场动画策略
+## 0 = ANIMATION_STRATEGY.DEFAULT（从顶部滑入）
+## 1 = ANIMATION_STRATEGY.SLIDE_FROM_BOTTOM（从底部滑入）
+@export var animation_strategy: int = 0
+
 # ── 颜色解析（静态工具方法）────────────────────────────
 
 static func resolve_color(enum_value: String, palette: String = 'title') -> Color:

@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://b5incwutdsyt"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_baseevt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_baseop"]
+[ext_resource type="Script" uid="uid://bxdw08m7bfi13" path="res://core/operators/info_demo_operator.gd" id="4_infoop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_choiceres"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_evtopt"]
+[ext_resource type="Script" uid="uid://bs881r2io48fq" path="res://model/ui_decl.gd" id="7_uidecl"]
+
+[sub_resource type="Resource" id="SubRes_info"]
+script = ExtResource("4_infoop")
+info = "纸带从底部滑入 —— 动画策略测试成功。"
+metadata/_custom_type_script = "uid://bxdw08m7bfi13"
+
+[sub_resource type="Resource" id="SubRes_choice"]
+script = ExtResource("5_choiceres")
+operators = Array[ExtResource("3_baseop")]([SubResource("SubRes_info")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="SubRes_option"]
+script = ExtResource("6_evtopt")
+choice_result = SubResource("SubRes_choice")
+description = "确认"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="SubRes_uidecl"]
+script = ExtResource("7_uidecl")
+animation_strategy = 1
+metadata/_custom_type_script = "uid://bs881r2io48fq"
+
+[resource]
+script = ExtResource("2_baseevt")
+options = Array[ExtResource("1_baseopt")]([SubResource("SubRes_option")])
+uuid = "demo_slide_from_bottom"
+name = "纸带测试 · 下方滑入"
+description = "此事件应从屏幕底部向上滑入。选择确认后无副作用，后续事件回归正常（默认顶部滑入）。"
+ui_decl = SubResource("SubRes_uidecl")
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

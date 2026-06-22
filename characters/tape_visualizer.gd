@@ -92,6 +92,50 @@ func play_hide_tape() -> void:
 
 
 # ═══════════════════════════════════════════════════════════════════
+# 2-b. play_show_tape_from_bottom() — 纸带从屏幕底部外滑入（↑）
+# ═══════════════════════════════════════════════════════════════════
+
+func play_show_tape_from_bottom() -> void:
+	if _tape_initialized:
+		shadow_box.show()
+		tape_container.show()
+		return
+
+	_tape_initialized = true
+	if _tween:
+		_tween.kill()
+
+	# 延迟记录 shadow_box 的静止位置（第一次调用时布局必定完成）
+	if _tape_target_y == 0.0:
+		_tape_target_y = shadow_box.position.y
+
+	var viewport_height := get_tree().root.get_visible_rect().size.y
+
+	# 物理重置：shadow_box 埋到屏幕底部外
+	shadow_box.position.y = viewport_height + 100.0
+	tape_container.modulate.a = 0.0
+
+	# 显示
+	shadow_box.show()
+	tape_container.show()
+
+	# 音效：纸张摩擦声
+	AudioManager.play_sfx(load("res://assets/sounds/rustling_paper.wav"))
+
+	# 并行 Tween：shadow_box 上升刹车 + tape_container 显形
+	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween.set_parallel(true)
+
+	# CUBIC + EASE_OUT：「快速上冲 → 极速刹车 → 稳稳停住」
+	_tween.tween_property(shadow_box, "position:y", _tape_target_y, 0.65) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+	# SINE EASE_IN_OUT：前 0.3 秒平滑显形，避免像素撕裂
+	_tween.tween_property(tape_container, "modulate:a", 1.0, 0.3) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+# ═══════════════════════════════════════════════════════════════════
 # 3. play_swap_background() — 抽纸动画
 # ═══════════════════════════════════════════════════════════════════
 

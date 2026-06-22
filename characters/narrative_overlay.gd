@@ -111,7 +111,11 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 				_apply_ui_decl_background(data)
 		)
 	else:
-		visualizer.play_show_tape()
+		# ── 动画策略路由 ──
+		if data.ui_decl and data.ui_decl.animation_strategy == ENUMS.ANIMATION_STRATEGY.SLIDE_FROM_BOTTOM:
+			visualizer.play_show_tape_from_bottom()
+		else:
+			visualizer.play_show_tape()
 		_apply_ui_decl_background(data)
 
 	# ── 分支：回归路径 vs 新事件路径 ──

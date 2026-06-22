@@ -303,3 +303,11 @@ enum IMAGE_POS {
     BOTTOM_RIGHT, # UV(1, 1)     右下角
     FULL_SCREEN,  # UV(0.5, 0.5) 全屏拉伸
 }
+
+# ── NarrativeOverlay 纸带入场动画策略 ─────────────────
+# DEFAULT:           从屏幕顶部外滑入（现有默认行为）
+# SLIDE_FROM_BOTTOM: 从屏幕底部外滑入（相反方向）
+enum ANIMATION_STRATEGY {
+    DEFAULT,
+    SLIDE_FROM_BOTTOM,
+}
