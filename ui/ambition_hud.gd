@@ -186,17 +186,9 @@ func _find_perception_by_stage_id(stage_id: String) -> StagedPerceptionData:
 
 ## 向 StyleManager 注册自身并绑定 decay_dirt_crack 策略
 ## distance=0 时 progress=0.0（完好），distance=100 时 progress=1.0（彻底毁坏）
-const DECAY_SHADER := preload("res://shaders/decay_dirt_crack.gdshader")
-const DIRT_NOISE := preload("res://shaders/dirt_noise.tres")
-const CRACK_NOISE := preload("res://shaders/crack_noise.tres")
+const DECAY_MATERIAL := preload("res://shaders/decay_shader_material.tres")
 
 func _bind_decay_dirt_crack_strategy() -> void:
-	# 创建预制 ShaderMaterial（使用 .tres 预制噪声纹理）
-	var mat := ShaderMaterial.new()
-	mat.shader = DECAY_SHADER
-	mat.set_shader_parameter("dirt_noise", DIRT_NOISE)
-	mat.set_shader_parameter("crack_noise", CRACK_NOISE)
-
 	var data := StyleData.new()
 	data.strategy_name = "decay_dirt_crack"
 	data.target_property = "distance"
@@ -205,7 +197,7 @@ func _bind_decay_dirt_crack_strategy() -> void:
 	# shader 只在 progress ∈ [0.27, 0.326] 有可见效果，remap 到这个区间
 	data.progress_output_min = 0.27
 	data.progress_output_max = 0.326
-	data.shader_material = mat
+	data.shader_material = DECAY_MATERIAL
 	data.shader_parameter_names = ["progress"]
 	data.container = self
 	# AmbitionHUD 是 TextureRect，非 PanelContainer，stylebox_texture 不适用

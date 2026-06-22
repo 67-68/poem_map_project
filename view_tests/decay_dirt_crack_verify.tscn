@@ -1,19 +1,8 @@
 [gd_scene format=3 uid="uid://cfswh4wuqrhic"]
 
-[ext_resource type="Shader" uid="uid://fqpvv6e4px8d" path="res://shaders/decay_dirt_crack.gdshader" id="1_shader"]
+[ext_resource type="Material" uid="uid://dfekcubir8ej4" path="res://shaders/decay_shader_material.tres" id="2_nwypk"]
 [ext_resource type="Script" uid="uid://bef68btx77uia" path="res://view_tests/decay_dirt_crack_verify.gd" id="2_script"]
-[ext_resource type="Texture2D" uid="uid://bmcxh1cg4x768" path="res://shaders/crack_noise.tres" id="3_4no1d"]
 [ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="3_nwypk"]
-[ext_resource type="Texture2D" uid="uid://cli1watm6w4hc" path="res://shaders/dirt_noise.tres" id="4_yiaa6"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_decay"]
-shader = ExtResource("1_shader")
-shader_parameter/dirt_noise = ExtResource("4_yiaa6")
-shader_parameter/crack_noise = ExtResource("3_4no1d")
-shader_parameter/progress = 0.326000015485
-shader_parameter/dirt_color = Color(0.5333425, 0.39612702, 0.2723292, 1)
-shader_parameter/burn_edge_color = Color(0.41971156, 0.23103097, 0.037847858, 0.8156863)
-shader_parameter/crack_edge_width = 0.0
 
 [node name="DecayVerify" type="Control" unique_id=1692913301]
 layout_mode = 3
@@ -25,7 +14,7 @@ grow_vertical = 2
 script = ExtResource("2_script")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1594483288]
-material = SubResource("ShaderMaterial_decay")
+material = ExtResource("2_nwypk")
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0

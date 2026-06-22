@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dfekcubir8ej4"]
+
+[ext_resource type="Shader" uid="uid://fqpvv6e4px8d" path="res://shaders/decay_dirt_crack.gdshader" id="1_vypmc"]
+[ext_resource type="Texture2D" uid="uid://bmcxh1cg4x768" path="res://shaders/crack_noise.tres" id="2_kjonh"]
+[ext_resource type="Texture2D" uid="uid://cli1watm6w4hc" path="res://shaders/dirt_noise.tres" id="3_qayup"]
+
+[resource]
+shader = ExtResource("1_vypmc")
+shader_parameter/dirt_noise = ExtResource("3_qayup")
+shader_parameter/crack_noise = ExtResource("2_kjonh")
+shader_parameter/progress = 0.326000015485
+shader_parameter/dirt_color = Color(0.25665432, 0.23471794, 0.24169296, 0.5803922)
+shader_parameter/burn_edge_color = Color(0.41971156, 0.23103097, 0.037847858, 0.8156863)
+shader_parameter/crack_edge_width = 0.0
