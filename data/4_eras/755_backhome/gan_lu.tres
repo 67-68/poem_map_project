@@ -2,10 +2,15 @@
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_urddk"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_0yigr"]
+[ext_resource type="Texture2D" uid="uid://dvmou2cxl8lf4" path="res://assets/stamps/ganlu_stamp.png" id="3_0yigr"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_miek1"]
 
 [resource]
 script = ExtResource("3_miek1")
+_main_tag = 36
+_action_tags = Array[int]([36])
 uuid = "gan_lu"
-name = "赶路"
+name = "归家"
+description = "长路漫漫，归乡"
+icon = ExtResource("3_0yigr")
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

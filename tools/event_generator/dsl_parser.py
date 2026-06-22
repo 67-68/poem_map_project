@@ -16,6 +16,7 @@ KNOWN_NON_PROP_OPS = {
     "use_template",
     "imagery_add",                # 🆕 意象获取操作符（非缩放，直接 emit EventBus signal）
     "leverage_add",               # 🆕 把柄获取操作符（非缩放，不可缩放的 narratival 操作）
+    "info",                       # 🆕 信息演示操作符（非缩放，直接 emit toast）
 }
 
 

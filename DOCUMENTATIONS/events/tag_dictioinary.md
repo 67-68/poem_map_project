@@ -5,6 +5,8 @@
 本文档是大唐世界观下 **五维宪法** 的唯一权威文档。所有出现在游戏配置中的 `Trigger_Tags`，必须且只能从以下 5 张表中挑选拼装。**禁止凭空发明新词，禁止从其他来源引入枚举值。**
 
 > **契约即自由：** 严格限定的词库防止拼写错误和近义词泛滥。所有 Tag 应通过 Linter 强校验，不在词表中的词直接阻断编译。
+但详细意象（即第四段内容）可以自己随便定义，specific 字段的内容不需要遵循dictionary
+
 
 ---
 
@@ -281,6 +283,7 @@
 | | `county_sheriff` | 县尉 |
 | | `vendor` | 商贩（掌柜/摊主/主簿） |
 | | `poor` | 穷人（乞丐/流民） |
+| `DEATH` | `bereavement` | 🆕 丧亲/幼子夭折（时代洪流下个体覆灭的终极形态） |
 | `OBJECT` | `guqin` | 古琴 |
 | | `sword` | 剑 |
 | | `wine` | 酒 |
@@ -308,6 +311,7 @@
 - `TARGET_IDENTITY_COUNTY_SHERIFF`
 - `TARGET_IDENTITY_VENDOR`
 - `TARGET_IDENTITY_POOR`
+- `TARGET_DEATH_BEREAVEMENT`  🆕
 - `TARGET_OBJECT_GUQIN`
 - `TARGET_OBJECT_SWORD`
 - `TARGET_OBJECT_WINE`

@@ -30,7 +30,8 @@
   "output_dir": "data/4_eras/747_kuangda/",
   "apply_dimension_imagery": false,
   "plugins": [
-    "emotion_pair_imagery"
+    "emotion_pair_imagery",
+    "info_demo"
   ],
   "emotion_pairs": {
     "pair_rebellion": {
@@ -90,6 +91,10 @@
       "plugins": {
         "emotion_pair_imagery": {
           "branch_role": "branch_A"
+        },
+        "info_demo": {
+          "prompt": "用15字以内写一句触发提示，当玩家选择此选项时在屏幕上弹出",
+          "max_chars": 15
         }
       }
     },
@@ -106,6 +111,10 @@
       "plugins": {
         "emotion_pair_imagery": {
           "branch_role": "fallback"
+        },
+        "info_demo": {
+          "prompt": "用15字以内写一句触发提示，当玩家选择此选项时在屏幕上弹出",
+          "max_chars": 15
         }
       }
     },
@@ -122,6 +131,10 @@
       "plugins": {
         "emotion_pair_imagery": {
           "branch_role": "branch_B"
+        },
+        "info_demo": {
+          "prompt": "用15字以内写一句触发提示，当玩家选择此选项时在屏幕上弹出",
+          "max_chars": 15
         }
       }
     }

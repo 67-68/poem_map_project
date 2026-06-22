@@ -1022,8 +1022,10 @@ static func validate_state_transistor(transistor: StateTransistor) -> bool:
     if not transistor:
         return false
 
-    if transistor.target_resource_urn.is_empty():
-        Logging.err("StateTransistor validation failed: target_resource_urn is required")
+    # target_resource_urn 可以为空（纯事件触发 / 纯 operators 模式），
+    # 但必须至少有一个有意义的字段
+    if transistor.target_resource_urn.is_empty() and transistor.triggered_event_key.is_empty() and transistor.operators.is_empty():
+        Logging.err("StateTransistor validation failed: at least one of target_resource_urn, triggered_event_key, or operators must be set")
         return false
 
     return true

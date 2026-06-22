@@ -2,8 +2,8 @@
   "id": "ganlu_journey",
   "name": "赶路旅途事件库 — 风雪回奉先八景",
   "era": "755_backhome",
-  "background_context": "天宝十四载（755年）深冬，杜甫终于获准离开长安，回奉先县探望寄居在那里的妻儿。但这趟「归家」之旅从一开始就注定是一场灾难——安禄山的大军在范阳已经集结完毕，朝廷上下还在装睡。\n\n此时的杜甫不过是从八品下的微末小官，在体制内不上不下，既没有清流的傲骨，也没有浊流的油水。他穿着那身象征身份的绿色官服上路，却发现这身衣服在风雪中只会吸满冰水，凝结成一副冰甲。\n\n这不是一趟普通的旅途。大唐的官僚系统在他面前展开全貌：驿站的腐化、流民的惨状、边军的异动、粮价的失控。每一个事件都是一道裂缝——透过这些裂缝，他看见了这个帝国即将崩塌的地基。而他的孩子还在奉先县等着，等着一个可能永远到不了的父亲。\n\n【核心叙事约束】\n1. 主角是杜甫，NPC可以是驿丞、流民、逃兵、奸商、路人。所有人物有血有肉，不是符号。\n2. 环境是冬日北方——风雪、冰河、冻土、枯树、灰蒙蒙的天。环境本身就是压迫者。\n3. 情绪基调：疲惫中的清醒，绝望中的尊严。不煽情，不滥情，白描胜于抒情。",
-  "ai_persona": "你是一位以冷峻白描书写唐代底层行旅的叙事作家。你的文字克制到近乎残忍：不评价、不煽情、不说教。让场景自己说话，让物象本身成为叙事者。\n\n【风格铁律】\n- 不写心理活动。不写「他感到」「他心想」「他意识到」。只写可见的动作、环境、对话和沉默。\n- 物象即情感。用冻裂的手指、结冰的衣袍、呼出的白气、踩碎冰壳的声音——这些物理细节代替心理描写。\n- 对话是武器。NPC的台词要体现权力关系：驿丞的居高临下、逃兵的粗野嘲弄、奸商的漫不经心。\n- 沉默即态度。用停顿、回避的目光、没有说出口的话——这些比说出口的更重要。",
+  "background_context": "天宝十四载（755年）深冬，杜甫终于获准离开长安，回奉先县探望寄居在那里的妻儿。但这趟「归家」之旅从一开始就注定是一场灾难——安禄山的大军在范阳已经集结完毕，朝廷上下还在装睡。\n\n此时的杜甫不过是从八品下的微末小官，在体制内不上不下，既没有清流的傲骨，也没有浊流的油水。他穿着那身象征身份的绿色官服上路，却发现这身衣服在风雪中吸足冰水后会变成另一种东西——越走越沉，越走越冷，像一件脱不下来的湿壳。\n\n这不是一趟普通的旅途。大唐的官僚系统在他面前展开全貌：驿站的腐化、流民的惨状、边军的异动、粮价的失控。每一个事件都是一道裂缝——透过这些裂缝，他看见了这个帝国即将崩塌的地基。而他的孩子还在奉先县等着，等着一个可能永远到不了的父亲。\n\n【核心叙事约束】\n1. 主角是杜甫，NPC可以是驿丞、流民、逃兵、奸商、路人。所有人物有血有肉，不是符号。\n2. 环境是冬日北方——风雪、冰河、冻土、枯树、灰蒙蒙的天。环境本身就是压迫者。\n3. 情绪基调：疲惫中的清醒，绝望中的尊严。不煽情，不滥情，白描胜于抒情。",
+  "ai_persona": "你是一位以冷峻白描书写唐代底层行旅的叙事作家。你的文字克制到近乎残忍：不评价、不煽情、不说教。让场景自己说话，让物象本身成为叙事者。\n\n【风格铁律】\n- 不写心理活动。不写「他感到」「他心想」「他意识到」。只写可见的动作、环境、对话和沉默。\n- 物象即情感。用皮肤的变色过程、衣物的物理形变、呼吸的可视化（白气）、材料在低温下的脆响——这些生理指标代替心理描写。\n- 对话是武器。NPC的台词要体现权力关系——但权力关系不是通过「凶狠」呈现，而是通过「漫不经心」。最伤人的不是被拒绝，而是对方拒绝时根本没看你。\n- 沉默即态度。用停顿、回避的目光、没有说出口的话——这些比说出口的更重要。",
   "prompt_features": [
     {
       "id": "style_constraints",
@@ -18,7 +18,7 @@
       "text": "禁上帝视角。不写远处的事物除非角色能看到/听到。不写他人的内心活动。"
     }
   ],
-  "final_directive": "【核心契约】\n(1) 每个事件的 description 是场景白描 + 环境 + 角色当下的物理状态。不预演选项结果。\n(2) 选项文本是简短动作描述（≤25字），描述杜甫的选择，不用解释为什么。\n(3) 叙事必须扎根于755年历史背景：安禄山尚未公开叛乱但边患已生、杨国忠当政、官场腐化、民间疾苦。\n(4) 这8个场景构成一条逐渐下沉的弧线：从官僚体系的拒绝（驿站）→ 身体的极限（冻伤）→ 道德的困境（流民）→ 身份的嘲讽（官服）→ 经济的绝望（粮价）→ 秩序的崩解（逃兵）→ 生命的脆弱（弃婴）→ 精神的崩溃与重生（狂歌）。每个场景比前一个更绝望，但叙事语气保持冷峻不变。",
+  "final_directive": "【核心契约】\n(1) 每个事件的 description 是场景白描 + 环境 + 角色当下的物理状态。不预演选项结果。\n(2) 选项文本是简短动作描述（≤25字），描述杜甫的选择，不用解释为什么。\n(3) 叙事必须扎根于755年历史背景：安禄山尚未公开叛乱但边患已生、杨国忠当政、官场腐化、民间疾苦。\n(4) 【场景间契约】8个场景各自独立，各自发生在旅途的不同阶段。不要写「比前面更绝望」——冷峻语气恒定不变。场景之间的差异不是通过「加重悲惨」来实现的，而是通过「切换物理体验的维度」：官僚之冷 → 肉体之冷 → 道德之冷 → 身份之冷 → 经济之冷 → 秩序之冷 → 生命之冷 → 精神之烫（唯一的燃烧）。冷是底色，烫是裂口。\n(5) 【绝对禁忌】禁止使用「冰甲」一词。禁止让角色「拍柜台」。禁止写「掏出/亮出官凭」作为默认动作——每次遇到体制互动时，重新发明你的动作词汇。",
   "fact_features": [],
   "universal_tags": [
     "ganlu_journey"
@@ -33,19 +33,27 @@
   "api_model": "deepseek-reasoner",
   "output_dir": "data/4_eras/755_backhome/",
   "apply_dimension_imagery": false,
-  "plugins": [],
+  "plugins": [
+    "info_demo"
+  ],
   "option_features": [
     {
       "id": "opt_idealist",
-      "prompt": "用25字以内写一个简短的动作描述——杜甫选择【气焰未灭】。特征是：他仍相信身份、秩序、原则应为自己运转。动作可能是亮出官身据理力争、拒绝妥协退让、坚持某件注定吃亏的事。核心不是「做什么」，而是「出手时还带着一股未被磨灭的傲气」。\n\n【启发范例·勿照抄】亮绿袍诘驿丞 / 弯腰拉坠沟的流民 / 铜板拍柜台上——共同点：不计后果的理直气壮。\n\n禁止写心理描写、自我感动、悲壮修辞。只写动作本身。\n\n【核心区分】此选项的动作带有「未被磨灭的气焰」——哪怕注定失败，出手时仍有一口未散的气。",
+      "prompt": "用25字以内写一个简短的动作描述——杜甫选择【气焰未灭】。\n\n【向量约束·不给你范例】\n- 时间向量：选择「快」的动作——出手没有犹豫间隙，像被推了一把。与之对立的选择是「慢」的——停顿、收手、绕行。\n- 姿态向量：选择身体朝向冲突方向的动作——面向对方、上前一步、以身体语言占据空间。与之对立的是背对、退后、缩小自己的空间占比。\n- 身份向量（可选）：可能调动官身身份——但注意：即使调动，出手方式也与「气焰已灭」有本质区别。区别不在「是否掏了官凭」，而在掏的姿态——是「亮出」（让对方看），还是「晃一下」（完成流程）。\n- 沉默约束：不写心理动机。不写「为了」「因为」。动作本身就是全部。\n\n【负面清单】禁止：自我感动式修辞、悲壮形容词、对动作后果的预演。",
       "text": "（坚持本心）",
       "result": "",
       "fixed": false,
-      "requirement": ""
+      "requirement": "",
+      "plugins": {
+        "info_demo": {
+          "prompt": "写一句≤25字的失败揭示。从NPC或环境的角度，用一句具体的事实漫不经心地展示杜甫的官凭在这个腐烂系统中毫无分量。白描、冷峻、不煽情——让玩家自己感受到无力，而不是被告知「你失败了」。",
+          "max_chars": 25
+        }
+      }
     },
     {
       "id": "opt_pragmatic",
-      "prompt": "用25字以内写一个简短的动作描述——杜甫选择【气焰已灭】。特征是：他已不再指望身份、秩序、原则能为自己运转。动作可能是沉默地掏出官凭过了关卡、绕开是非低头赶路、对不公视而不见——同样可能「使用官身」，但出手时没有争辩的欲望，只是走个形式。\n\n【启发范例·勿照抄】掏官凭晃一下便收起 / 绕开驿门走侧道 / 垂头等马队过完——共同点：认清了规则，懒得再争。\n\n禁止写贪婪、炫耀、洋洋得意。务实者的底色是疲惫和无奈。\n\n【核心区分】此选项的动作带着「已磨灭的气焰」——即使做同样的事（如亮出官身），也只是麻木地走流程，不是理直气壮地争取。",
+      "prompt": "用25字以内写一个简短的动作描述——杜甫选择【气焰已灭】。\n\n【向量约束·不给你范例】\n- 时间向量：选择「慢」的动作——停顿、算账、等对方说完、转身前多站一秒。与之对立的是「快」——据理力争、上前一步。\n- 姿态向量：选择身体背离冲突方向的动作——低头、收肩、让出空间、以最小体积经过。\n- 身份向量（可选）：可能同样调动官身——但出手方式与「气焰未灭」截然不同：不是「亮出」而是「掏出/晃过」；不是「让对方看」而是「完成流程」。用完后迅速收起，像它烫手。\n- 沉默约束：底色是疲惫而非精明。禁止写贪婪、炫耀或洋洋得意。\n\n【负面清单】禁止：将「放弃」写成「智慧」、将「沉默」写成「隐忍」。务实者不自我辩护。",
       "text": "（务实自保）",
       "result": "",
       "fixed": false,
@@ -77,7 +85,7 @@
         {
           "id": "scene_post_station",
           "name": "驿站的虚妄",
-          "description": "风雪交加，杜甫来到官府驿站试图进去烤火。驿丞居高临下地告诉他——里面全是被右相安排去骊山送鲜果的马夫，你这种不入流的闲曹没资格进。体制内的身份在底层执行逻辑里一文不值。\n\n【叙事约束】空间是压抑的门廊或前厅。驿丞不凶狠——他只是漫不经心地执行规则。暖阁里传出马夫们吃喝的声音。外面风雪正紧。",
+          "description": "风雪交加，杜甫来到官府驿站试图烤火取暖。驿丞拒绝让他入内——不是恶语相向，而是一种制度化的冷漠。暖阁里传出别人的喧哗与热气。驿门外的风雪是另一个世界。\n\n【叙事约束】空间限定：门廊或前厅——内外之间的过渡地带，看得见暖意但够不着。驿丞的情绪调性：不是凶狠，是漫不经心——拒绝一个微末官员对他来说和掸掉袖上灰尘一样不需要思考。声音设计：暖阁内的喧哗（人的热闹）+ 门外风雪（自然的冷酷），形成声音的夹角。杜甫的姿态：站着等、或者站着听完、或者转身——不在于「做什么」而在于「用了多长时间决定」。",
           "scale": 1.0,
           "operator_dsl": "",
           "stored_to": "755_backhome.ganlu",
@@ -87,14 +95,14 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=10) | emo_add(name=ANGER; val=10) | imagery_add(name=TRAVEL:exile)",
-            "opt_pragmatic": "prop_sub(name=money; val=15) | prop_add(name=health; val=5)"
+            "opt_idealist": "prop_sub(name=health; val=10) | emo_add(name=ANGER; val=10) | imagery_add(name=TRAVEL:exile) | prop_add(name=distance; val=6)",
+            "opt_pragmatic": "prop_sub(name=money; val=15) | prop_add(name=health; val=5) | prop_add(name=distance; val=10)"
           }
         },
         {
           "id": "scene_frozen_river",
           "name": "指直不得结",
-          "description": "渡过结冰的河面时，狂风（「猛风甚太白」）吹断了杜甫的腰带。他用冻僵的手指试图重新打结，但手指已经不听使唤——这是纯粹的物理压迫，没有选项，只有承受。\n\n【叙事约束】环境极度寒冷。风的声音覆盖一切。手指是主角——青紫、僵直、指甲缝渗血。打结这个动作应该写得令人牙酸。",
+          "description": "渡过结冰河面时，狂风撕扯衣物。某个维持正常行走的关键动作（系带/扣纽/拢衣襟）因手指冻僵而无法完成。这是纯粹的物理压迫——身体不听大脑的指令。\n\n【叙事约束】主角不是「人」而是「手指」——把摄像机对准手指本身。描写物理层面的背叛：青紫、僵直、皮色转灰、指甲缝渗血、试图弯曲时发出的关节声。声音世界：风声压倒一切，其他声音（冰裂声、布匹拍打声）被风撕碎。不要写「他试图系腰带」——写手指如何抓不住、如何滑脱、如何在面料上留下无用的痕迹。",
           "scale": 1.0,
           "operator_dsl": "",
           "stored_to": "755_backhome.ganlu",
@@ -104,13 +112,14 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=20) | trait_add(name=disease_dongshang_frostbite) | emo_add(name=SORROW; val=5) | imagery_add(name=ENVIRONMENT:snow) | imagery_add(name=ENVIRONMENT:wind)"
+            "opt_idealist": "prop_sub(name=health; val=20) | trait_add(name=disease_dongshang_frostbite) | emo_add(name=SORROW; val=5) | imagery_add(name=ENVIRONMENT:snow) | imagery_add(name=ENVIRONMENT:wind) | prop_add(name=distance; val=5)",
+            "opt_pragmatic": "prop_add(name=distance; val=8)"
           }
         },
         {
           "id": "scene_refugee",
           "name": "被碾压的流民",
-          "description": "一队赶往华清宫送海鲜的快马从官道飞驰而过，把挡路的流民撞下深沟。杜甫面临经典电车难题——但在这个时代，他没有拉杆的权利。\n\n【叙事约束】场景是官道。快马来去如电——送鲜果/海鲜的骑手，背后是杨国忠的奢侈需求。流民连脸都来不及看清就被撞下去了。沟深不见底。",
+          "description": "官道上一队快马飞驰而过——马背上的人有明确的目的地（运货/传令/赶场），而道旁的人没有。一个流民被撞下深沟。杜甫目击全程。\n\n【叙事约束】三个时间切片：(1) 马队未到前——积雪官道上的安静，流民的模糊轮廓；(2) 马队经过——速度、蹄声、溅起的碎冰/冻土，流民倒下的方向；(3) 马队过后——安静重新合拢，沟底没有声音。骑手不回头看——不是冷漠，是根本没注意。不要解释骑手是谁、运什么——留下信息真空。流民的面孔不写（模糊化处理）。",
           "scale": 1.0,
           "operator_dsl": "",
           "stored_to": "755_backhome.ganlu",
@@ -120,14 +129,14 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=8) | prop_add(name=fatigue; val=10) | emo_add(name=SORROW; val=10) | imagery_add(name=SOCIETY:famine)",
-            "opt_pragmatic": "emo_add(name=SORROW; val=3)"
+            "opt_idealist": "prop_sub(name=health; val=8) | prop_add(name=fatigue; val=10) | emo_add(name=SORROW; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=distance; val=6)",
+            "opt_pragmatic": "emo_add(name=SORROW; val=3) | prop_add(name=distance; val=10)"
           }
         },
         {
           "id": "scene_green_robe",
           "name": "绿袍的诅咒",
-          "description": "杜甫引以为傲的那身从八品下绿色官服，用的是最劣质的单薄丝帛。在雪地里行走时吸满水，结成了冰甲。这是对「老大意转拙」最生动的物理嘲讽——你拼命挣来的身份，正在杀死你。\n\n【叙事约束】官服是主角——描写它的质地、颜色、结冰的过程、冰渣掉落的声音。不是痛骂体制，而是让衣物本身说话。",
+          "description": "杜甫身穿从八品下绿色官服在雪中行走。劣质单薄的面料在风雪中发生物理变化——吸水、结冰、增重、板结。这件象征身份的衣物正在转变成一种身体负担。\n\n【叙事约束】主视角是「面料」而非「人」——描写面料从柔软到僵硬的全过程：湿水后的颜色变深、冰晶在纤维间隙中的形成、褶皱被冻死的形态、走路时面料与面料摩擦的声响变化。不要写「这身衣服羞辱了他」——让面料自己充当叙事者。不出现「冰甲」字样。",
           "scale": 1.0,
           "operator_dsl": "",
           "stored_to": "755_backhome.ganlu",
@@ -137,14 +146,14 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_add(name=health; val=3)",
-            "opt_pragmatic": "prop_sub(name=health; val=8) | prop_add(name=sick; val=5)"
+            "opt_idealist": "prop_add(name=health; val=3) | prop_add(name=distance; val=7)",
+            "opt_pragmatic": "prop_sub(name=health; val=8) | prop_add(name=sick; val=5) | prop_add(name=distance; val=12)"
           }
         },
         {
           "id": "scene_black_inn",
           "name": "野店奸商",
-          "description": "路边一家黑店。杜甫想买点生麦子带回奉先给孩子吃。但这里的粮价是长安的三倍。他只能眼睁睁看着——口袋里的铜板连几斗麦子都买不起。\n\n【叙事约束】空间是逼仄的黑店。店家不凶狠，只是报了个价然后等着。粮袋堆在角落。杜甫的手在袖子里捏着几个铜板。焦点是「买不起」这个沉默的时刻——不问价、不行乞、不骂奸商。只是算不过账，然后走。",
+          "description": "路边小店里粮价高得离奇。杜甫想给奉先的孩子带些麦子回去，袖中铜板算了又算，仍凑不够。\n\n【叙事约束】空间质感：逼仄、昏暗、墙缝透光、角落堆着粮袋（看得见但归不了自己）。店家的动作：报价→等待→不再看他——从头到尾不超过三句话。音轨：袖中铜板的碰响 > 店家的报价 > 沉默 > 门开时的风雪声。核心张力不是「店家坏」，是「算不过账」。不写乞求、不写愤怒——写计算的动作：手指在袖里捏铜板数、嘴唇微动默算、最后发现仍差三斗麦子时手指停止动作的那个瞬间。",
           "scale": 1.0,
           "operator_dsl": "",
           "stored_to": "755_backhome.ganlu",
@@ -154,13 +163,14 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=money; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=SOCIETY:famine)"
+            "opt_idealist": "prop_sub(name=money; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=distance; val=5)",
+            "opt_pragmatic": "prop_add(name=distance; val=8)"
           }
         },
         {
           "id": "scene_anlushan_shadow",
           "name": "安禄山的影子",
-          "description": "路上遇到几个操着范阳口音、带着刀伤的逃兵（或暗探）。他们看杜甫是个微末小官，不仅不跪拜，反而抢走了他仅剩的一点干粮。\n\n【叙事约束】绝对不要让逃兵透露「安禄山要造反」的准确信息。只需让他们留下一句带有胡音的嘲笑。这是大系统崩溃前兆的 Error Log 溢出——读者知道要发生什么，但叙事假装不知道。逃兵的态度是粗野但不凶狠——他们抢你的干粮就像拿自己的东西一样理所当然。",
+          "description": "路上遇到几个操范阳口音、身上带伤的陌生人。他们看杜甫是个微末小官，理所当然地取走了他仅剩的干粮。秩序在这里不运转了——华夷之别、官兵之序、财产权，全部宕机。\n\n【叙事约束】逃兵不可透露「安禄山要造反」的准确信息——他们的台词只包含：一句带有胡音的嘲笑/嘟囔、一句关于赶路/天气/食物的闲话。取干粮的动作如从自己口袋掏东西一样自然——不凶狠、不商量、不解释。杜甫的存在被降格为一件家具。不要让逃兵「意味深长」——他们自己也不知道自己有多重要。",
           "scale": 1.0,
           "operator_dsl": "",
           "stored_to": "755_backhome.ganlu",
@@ -170,13 +180,14 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=money; val=8) | prop_sub(name=health; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=COURT:corrupt)"
+            "opt_idealist": "prop_sub(name=money; val=8) | prop_sub(name=health; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=COURT:corrupt) | prop_add(name=distance; val=5)",
+            "opt_pragmatic": "prop_add(name=distance; val=8)"
           }
         },
         {
           "id": "scene_abandoned_baby",
           "name": "雪中弃婴",
-          "description": "雪堆里有微弱的哭声。杜甫扒开雪，发现不是他的孩子——而是一个已经被冻紫的无名弃婴。这个事件的作用是强行预演终局：让玩家对「哭声」产生应激反应（PTSD），为最后推开奉先县木门那一下做心理铺垫。\n\n【叙事约束】弃婴已经死了或濒死——不要给希望。描写要克制：冻紫的皮肤、小小的蜷缩的姿势、雪落在上面的样子。杜甫的动作是机械的——扒开雪、看到、然后呆住。不是痛哭，是沉默。",
+          "description": "雪堆里传来声音——断断续续，像小动物的咽气声。杜甫扒开雪，发现一个被遗弃的婴儿。已无生机或濒临无生机。\n\n【叙事约束】弃婴已经死了或濒死——不给希望。不要写「他想起自己孩子」——只需写他停顿的动作。描写顺序：(1) 雪的外观异常（隆起/异物色）；(2) 手的动作（扒开）；(3) 所见——皮肤色、蜷缩姿态、雪落在上面的样子；(4) 沉默。哭声不是「凄惨」——是「细」「断」「被风切碎」。杜甫不流泪、不喊叫、不祷告。他的反应尺度以「手指的移动」为单位。",
           "scale": 1.05,
           "operator_dsl": "",
           "stored_to": "755_backhome.ganlu",
@@ -186,13 +197,14 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=3) | emo_add(name=SORROW; val=20) | imagery_add(name=EMOTION:despair) | imagery_add(name=ENVIRONMENT:snow)"
+            "opt_idealist": "prop_sub(name=health; val=3) | emo_add(name=SORROW; val=20) | imagery_add(name=EMOTION:despair) | imagery_add(name=ENVIRONMENT:snow) | prop_add(name=distance; val=6)",
+            "opt_pragmatic": "prop_add(name=distance; val=10)"
           }
         },
         {
           "id": "scene_mad_song",
           "name": "狂歌破愁绝",
-          "description": "极度的寒冷和绝望让杜甫产生了短暂的幻觉。长安十年的记忆在脑海里无序闪烁——金榜题名时的狂喜、被李林甫「野无遗贤」愚弄的愤懑、陋室中的夜雨、无数次在权贵门前被拒之门外的羞辱。\n\n这是唯一一个可以回复 HEALTH 的事件。杜甫饮下最后一口浊酒，在风雪中大笑狂歌——代价是强制抹除某些意象（象征着在生死面前，那些虚伪的人脉和执念被大脑清空废弃）。\n\n【叙事约束】这是这组事件的情绪顶点也是转折点。癫狂中的清醒、崩溃中的重生。不要写「他疯了」——写他大笑、唱歌、在风雪中张开双臂。动作是释放的、不顾一切的、近乎宗教体验的。酒是媒介——浊酒入喉，冰火两重。",
+          "description": "极度寒冷和连续打击之后，杜甫身上某种东西断掉了。不是崩溃——是绷紧太久之后的释放。酒是触发媒介——浊酒入喉，风雪不再是对手而成了听众。\n\n【叙事约束】这是8个场景中唯一的能量上翘——不是「更绝望」，而是「放弃抵抗绝望」带来的意外轻盈。动作序列：(1) 饮酒——烈度、喉咙的灼烧感、嘴角漏出的液体；(2) 身体打开——张开双臂、仰头、面向天空/风雪；(3) 发声——大笑或唱歌，声音沙哑不规则，被风撕裂但不停；(4) 身体终于不再防御寒冷——冰块从衣袍上掉落，但不再去捡。不写「他想通了」——写他不再想。不写幻觉内容——写动作。不写「他疯了」——写他第一次不缩着肩膀走路。",
           "scale": 1.1,
           "operator_dsl": "",
           "stored_to": "755_backhome.ganlu",
@@ -202,7 +214,8 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_add(name=health; val=15) | prop_add(name=drunk; val=20) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=HEALTH:drunk)"
+            "opt_idealist": "prop_add(name=health; val=15) | prop_add(name=drunk; val=20) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=HEALTH:drunk) | prop_add(name=distance; val=8)",
+            "opt_pragmatic": "prop_add(name=distance; val=12)"
           }
         }
       ]

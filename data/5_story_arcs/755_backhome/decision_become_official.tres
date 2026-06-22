@@ -15,6 +15,7 @@ metadata/_custom_type_script = "uid://cxfcnsval1p54"
 script = ExtResource("3_ccqib")
 available_from = 755.0
 available_until = 756.5
+allowed_count = 1
 action_results = Array[ExtResource("2_kbnnp")]([SubResource("Resource_ccqib")])
 uuid = "decision_become_official"
 name = "奉诏：吏部告身"
