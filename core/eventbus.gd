@@ -66,6 +66,9 @@ signal locked_actions_selected(actions: Array)
 signal request_refresh_action_panel()
 signal avaialble_decision_change(decision)
 
+## 任意 Decision 被点击时触发，用于 DecisionScroll 即时刷新
+signal decision_clicked()
+
 signal show_tombstone_screen(death_reason: String)
 signal event_shown(event: Variant)
 signal poem_start_clicked()

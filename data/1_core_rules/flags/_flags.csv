@@ -12,3 +12,6 @@ talk_count_libai,int,0
 talk_count_wangwei,int,0
 talk_count_dengqian,int,0
 baiye_asking_triggered,bool,FALSE
+trig_dist_outside_city,int,0
+trig_dist_lishan,int,0
+trig_dist_indifferent_wind,int,0

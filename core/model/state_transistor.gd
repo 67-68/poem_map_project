@@ -20,42 +20,46 @@ func transition():
 
 	Logging.info('state_transistor: transition started for target %s' % target_resource_urn)
 
-	# ── Phase 2: 解析目标 URN ────────────────────────────────────────
-	var target_parsed = URN.parse_urn(target_resource_urn)
-	if target_parsed.is_empty():
-		Logging.err('state_transistor: failed to parse target URN: %s' % target_resource_urn)
-		return
+	# ── Phase 2/3: 状态转移（target_resource 为空时跳过） ────────────
+	if target_resource_urn.is_empty():
+		Logging.info('state_transistor: no target_resource_urn, skipping state transfer (Phase 2/3), proceeding to operators and event')
+	else:
+		# ── Phase 2: 解析目标 URN ────────────────────────────────────────
+		var target_parsed = URN.parse_urn(target_resource_urn)
+		if target_parsed.is_empty():
+			Logging.err('state_transistor: failed to parse target URN: %s' % target_resource_urn)
+			return
 
-	var target_resource_type: String = target_parsed.get('type', '')
-	var target_resource_key: String = target_parsed.get('resource_id', '')
+		var target_resource_type: String = target_parsed.get('type', '')
+		var target_resource_key: String = target_parsed.get('resource_id', '')
 
-	if target_resource_key.is_empty():
-		Logging.err('state_transistor: no resource_id in target URN: %s' % target_resource_urn)
-		return
+		if target_resource_key.is_empty():
+			Logging.err('state_transistor: no resource_id in target URN: %s' % target_resource_urn)
+			return
 
-	Logging.info('state_transistor: target type=%s, key=%s' % [target_resource_type, target_resource_key])
+		Logging.info('state_transistor: target type=%s, key=%s' % [target_resource_type, target_resource_key])
 
-	# 解析 current_resource_urn（可选，仅用于日志/校验上下文）
-	if not current_resource_urn.is_empty():
-		var current_parsed = URN.parse_urn(current_resource_urn)
-		if current_parsed.is_empty():
-			Logging.warn('state_transistor: failed to parse current_resource_urn: %s' % current_resource_urn)
-		else:
-			Logging.debug('state_transistor: current resource type=%s, key=%s' % [current_parsed.get('type', ''), current_parsed.get('resource_id', '')])
-
-	# ── Phase 3: 执行状态转移 ────────────────────────────────────────
-	match target_resource_type:
-		'flag':
-			_apply_flag_transition(target_resource_key)
-		'trait':
-			_apply_trait_transition(target_resource_key)
-		_:
-			Logging.warn('state_transistor: unhandled resource type "%s" for %s, falling back to generic URN lookup' % [target_resource_type, target_resource_urn])
-			var resource = URN.get_resource_through_urn(target_resource_urn)
-			if resource:
-				Logging.info('state_transistor: loaded resource via URN lookup: %s (%s)' % [target_resource_urn, resource.get_class()])
+		# 解析 current_resource_urn（可选，仅用于日志/校验上下文）
+		if not current_resource_urn.is_empty():
+			var current_parsed = URN.parse_urn(current_resource_urn)
+			if current_parsed.is_empty():
+				Logging.warn('state_transistor: failed to parse current_resource_urn: %s' % current_resource_urn)
 			else:
-				Logging.err('state_transistor: could not load resource for URN: %s' % target_resource_urn)
+				Logging.debug('state_transistor: current resource type=%s, key=%s' % [current_parsed.get('type', ''), current_parsed.get('resource_id', '')])
+
+		# ── Phase 3: 执行状态转移 ────────────────────────────────────────
+		match target_resource_type:
+			'flag':
+				_apply_flag_transition(target_resource_key)
+			'trait':
+				_apply_trait_transition(target_resource_key)
+			_:
+				Logging.warn('state_transistor: unhandled resource type "%s" for %s, falling back to generic URN lookup' % [target_resource_type, target_resource_urn])
+				var resource = URN.get_resource_through_urn(target_resource_urn)
+				if resource:
+					Logging.info('state_transistor: loaded resource via URN lookup: %s (%s)' % [target_resource_urn, resource.get_class()])
+				else:
+					Logging.err('state_transistor: could not load resource for URN: %s' % target_resource_urn)
 
 	# ── Phase 4: 执行后效 Operators ──────────────────────────────────
 	_execute_operators()
