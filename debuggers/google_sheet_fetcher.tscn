@@ -4,6 +4,7 @@
 
 [node name="GoogleSheetFetcher" type="Node" unique_id=635922665]
 script = ExtResource("1_taktn")
+prefer_local_files = true
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=660539800]
 

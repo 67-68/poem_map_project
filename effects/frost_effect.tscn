@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://5mnqglm3v87h"]
+
+[ext_resource type="Texture2D" uid="uid://bb1xbfmkl8dhs" path="res://assets/character/on_exam.png" id="2_00bju"]
+[ext_resource type="Shader" uid="uid://8iaphfh84pr0" path="res://shaders/frost.gdshader" id="2_shader"]
+
+[sub_resource type="FastNoiseLite" id="frost_fast"]
+noise_type = 2
+frequency = 0.04
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="frost_tex"]
+noise = SubResource("frost_fast")
+
+[sub_resource type="ShaderMaterial" id="frost_mat"]
+shader = ExtResource("2_shader")
+shader_parameter/frost_noise = SubResource("frost_tex")
+shader_parameter/freeze_progress = 0.29200001387
+shader_parameter/frost_color = Color(0.85, 0.9, 0.95, 1)
+
+[node name="FrostEffect" type="TextureRect" unique_id=1129199395]
+
+[node name="Sprite2D" type="TextureRect" parent="." unique_id=470260348]
+material = SubResource("frost_mat")
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 0
+offset_left = 512.0
+offset_top = 384.0
+offset_right = 512.0
+offset_bottom = 384.0
+texture = ExtResource("2_00bju")
+expand_mode = 1
