@@ -1,16 +1,40 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cfswh4wuqrhic"]
 
-[ext_resource type="Shader" path="res://shaders/decay_dirt_crack.gdshader" id="1_shader"]
-[ext_resource type="Script" path="res://view_tests/decay_dirt_crack_verify.gd" id="2_script"]
+[ext_resource type="Shader" uid="uid://fqpvv6e4px8d" path="res://shaders/decay_dirt_crack.gdshader" id="1_shader"]
+[ext_resource type="Script" uid="uid://bef68btx77uia" path="res://view_tests/decay_dirt_crack_verify.gd" id="2_script"]
+[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="3_nwypk"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8hpem"]
+noise_type = 2
+seed = 6
+frequency = 0.008
+offset = Vector3(81.08, 0, 0)
+fractal_octaves = 7
+fractal_lacunarity = 3.0
+cellular_return_type = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4no1d"]
+noise = SubResource("FastNoiseLite_8hpem")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yiaa6"]
+noise_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bqo31"]
+noise = SubResource("FastNoiseLite_yiaa6")
+seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_decay"]
 shader = ExtResource("1_shader")
+shader_parameter/dirt_noise = SubResource("NoiseTexture2D_bqo31")
+shader_parameter/crack_noise = SubResource("NoiseTexture2D_4no1d")
 shader_parameter/progress = 0.3
-shader_parameter/dirt_color = Color(0.12, 0.08, 0.04, 1.0)
-shader_parameter/burn_edge_color = Color(0.50, 0.14, 0.02, 0.85)
-shader_parameter/crack_edge_width = 0.03
+shader_parameter/dirt_color = Color(0.5333425, 0.39612702, 0.2723292, 1)
+shader_parameter/burn_edge_color = Color(0.41971156, 0.23103097, 0.037847858, 0.8156863)
+shader_parameter/crack_edge_width = 0.0
 
-[node name="DecayVerify" type="Control"]
+[node name="DecayVerify" type="Control" unique_id=1692913301]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,8 +43,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_script")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1594483288]
+material = SubResource("ShaderMaterial_decay")
 layout_mode = 0
 offset_right = 400.0
 offset_bottom = 400.0
-material = SubResource("ShaderMaterial_decay")
+texture = ExtResource("3_nwypk")

@@ -262,18 +262,15 @@ func register(trigger: Control, popup: Control, delay: float = 0.5, hide_grace: 
 	trigger.tree_exiting.connect(binding._bound_tree_exiting_trigger)
 	popup.tree_exiting.connect(binding._bound_tree_exiting_popup)
 
-	# 就地渲染：top_level = true，popup 脱离父节点坐标系统，直接对齐屏幕空间
-	# 零侵入 UI 继承链 — Theme、Control Scale、owner 全部保留
-	# ⚠️ popup 可能是孤儿（HoverInfoPopup.new()）或已有父节点（ambition_hud）
-	#   孤儿用 add_child，有父节点的用 reparent（Godot 4 要求节点有 parent 才能 reparent）
-	if popup.get_parent():
-		popup.reparent(self, false)
-	else:
+	# 就地渲染：top_level = true 使 popup 在屏幕坐标中渲染，完全脱离父节点 Transform。
+	# 零侵入 UI 继承链 — Theme、Control Scale、owner 全部保留在原始父节点下。
+	# ⚠️ 绝不 reparent：reparent 会触发 tree_exiting → _on_popup_dying → unregister，
+	#   导致刚注册的 binding 被立刻销毁。top_level 不需要变更父节点。
+	# ⚠️ 孤儿节点（HoverInfoPopup.new()）直接 add_child，无 tree_exiting 风险。
+	if not popup.get_parent():
 		add_child(popup)
 	popup.top_level = true
 	popup.visible = false
-	# 延迟一帧覆盖 popup 自身 _ready() 里的 show()
-	call_deferred("_enforce_hidden", binding)
 
 	_bindings[trigger] = binding
 	binding.state = HoverBinding.State.IDLE
@@ -460,12 +457,6 @@ func _on_popup_visibility_changed(trigger: Control) -> void:
 		var active_name: String = _current_active.trigger.name if is_instance_valid(_current_active.trigger) else "<Freed_Zombie>"
 		Logging.debug("HoverPopupManager: popup '%s' shown while '%s' is active, forcing hide" % [popup.name, active_name])
 		popup.visible = false
-
-## register 后延迟一帧，覆盖 popup 自身 _ready() 里的 show()
-func _enforce_hidden(binding: HoverBinding) -> void:
-	if not is_instance_valid(binding.popup):
-		return
-	binding.popup.visible = false
 
 # ── 自动收尸 ─────────────────────────────────────────────
 

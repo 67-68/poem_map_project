@@ -52,6 +52,20 @@ func initialize(action_: Action = null):
 	if not action.description.is_empty() or not action.action_results.is_empty() or not action.aciton_requirements.is_empty():
 		_register_hover_popup()
 
+
+## 差分更新：只刷 UI 文本/图标，不重建信号 & HoverPopup（已注册的 popup 绑定不变）
+func update_action(new_action: Action) -> void:
+	action = new_action
+	title.text = new_action.name
+	outcome.text = new_action.description
+	
+	# ── 图标：有数据则显示，无数据则隐藏 ──
+	if new_action.icon:
+		texture.texture = new_action.icon
+		texture.visible = true
+	else:
+		texture.visible = false
+
 ## 监听锁定行动信号，匹配当前 action 时触发呼吸闪光
 func _on_locked_actions_selected(locked_actions: Array) -> void:
 	if not action:

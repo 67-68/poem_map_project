@@ -58,6 +58,7 @@ enum ACTION_TAGS {
     ACTION_MAIN_FENGZHAO,
     ACTION_MAIN_DUZHUO,
     ACTION_SPECIAL_DEEPSEEK,
+    ACTION_SPECIAL_GANLU,
 }
 
 enum PROPS {
@@ -205,7 +206,8 @@ enum ACTION_TYPE {
     DENG_GAO,
     FANG_SHI, # 坊市
     FENG_ZHAO, # 奉召
-    DU_ZHUO # 独酌
+    DU_ZHUO, # 独酌
+    GAN_LU # 赶路
 }
 
 ## 将 ACTION_TAGS 枚举值映射到 ACTION_TYPE 枚举值。

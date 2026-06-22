@@ -45,10 +45,6 @@ func _ready() -> void:
 ##   help > 1 → 末尾追加 恩义：N
 ##   两者都为空 → 该目标不渲染
 func _refresh_rumors() -> void:
-	# 清空 InfoGrid
-	for child in _info_grid.get_children():
-		child.queue_free()
-
 	# 构建 target 列表（RELATION_TARGET 枚举 → to_lower 字符串）
 	var targets: Array[String] = []
 	for target_enum in ENUMS.RELATION_TARGET.values():
@@ -63,6 +59,8 @@ func _refresh_rumors() -> void:
 	# 批量查询所有关系数据
 	var all_relations: Dictionary = RelationFlagManager.get_all_relations(targets)
 
+	# ── 第一遍：收集所有要渲染的 label 文本 ──
+	var label_texts: Array[String] = []
 	for target_tag in targets:
 		var data: Dictionary = all_relations.get(target_tag, {})
 		var leverage_keys: Array = data.get("leverage_keys", [])
@@ -87,9 +85,26 @@ func _refresh_rumors() -> void:
 			if help_count > 1:
 				parts.append("恩义：%d" % help_count)
 
+		label_texts.append("%s：%s" % [cn_name, "  ".join(parts)])
+
+	# ── 第二遍：差分更新 UI ──
+	var children = _info_grid.get_children()
+	var target_count = label_texts.size()
+	var current_count = children.size()
+
+	# 1. 更新已有 Label
+	for i in range(min(current_count, target_count)):
+		children[i].text = label_texts[i]
+
+	# 2. 多余的销毁
+	for i in range(target_count, current_count):
+		children[i].queue_free()
+
+	# 3. 不足的新建
+	for i in range(current_count, target_count):
 		var label := Label.new()
 		label.theme_type_variation = "DefaultText"
-		label.text = "%s：%s" % [cn_name, "  ".join(parts)]
+		label.text = label_texts[i]
 		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		_info_grid.add_child(label)
 
