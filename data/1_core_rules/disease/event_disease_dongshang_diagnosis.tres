@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_3g24s"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="2_jn8vr"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_umkyr"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_2kc2e"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="3_qjy0a"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_uomea"]
+
+[sub_resource type="Resource" id="Resource_umkyr"]
+script = ExtResource("3_2kc2e")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_2kc2e"]
+script = ExtResource("3_2kc2e")
+str_props = "sick"
+value = -10
+
+[sub_resource type="Resource" id="Resource_uomea"]
+script = ExtResource("4_uomea")
+operators = Array[ExtResource("2_umkyr")]([SubResource("Resource_umkyr"), SubResource("Resource_2kc2e")])
+
+[sub_resource type="Resource" id="Resource_786fd"]
+script = ExtResource("2_jn8vr")
+choice_result = SubResource("Resource_uomea")
+description = "寻医问药"
+
+[sub_resource type="Resource" id="Resource_aa3g1"]
+script = ExtResource("3_2kc2e")
+str_props = "sick"
+value = 10
+
+[sub_resource type="Resource" id="Resource_67vy0"]
+script = ExtResource("3_2kc2e")
+str_props = "health"
+value = -8
+
+[sub_resource type="Resource" id="Resource_gw5dw"]
+script = ExtResource("4_uomea")
+operators = Array[ExtResource("2_umkyr")]([SubResource("Resource_aa3g1"), SubResource("Resource_67vy0")])
+
+[sub_resource type="Resource" id="Resource_lk8s2"]
+script = ExtResource("2_jn8vr")
+choice_result = SubResource("Resource_gw5dw")
+description = "置之不理"
+
+[resource]
+script = ExtResource("3_qjy0a")
+weight = 100.0
+era = "1_core_rules"
+options = Array[ExtResource("1_3g24s")]([SubResource("Resource_786fd"), SubResource("Resource_lk8s2")])
+uuid = "event_disease_dongshang_diagnosis"
+name = "指不得屈"
+description = "风雪已追了你三日。第一天你还能攥紧缰绳——第二天缰绳从你手里滑脱了三次——今天你连马鞭都握不住了。\\n\\n你低头看自己的手：十根手指肿得像十根红萝卜，指节处的皮肤绷得发亮，隐隐透着紫黑色。你试着弯曲食指——咔。不是关节的响声，是皮肉里冰碴碎裂的声音。指尖已经完全没了知觉，像十颗不属于你的石头挂在手掌上。\\n\\n这不是普通的冻疮。这冻到骨头里去了。"

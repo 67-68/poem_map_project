@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Disease" format=3 uid="uid://cl6bwt174051e"]
+
+[ext_resource type="Script" uid="uid://dlydpw2dm2ro3" path="res://core/model/disease.gd" id="1_govja"]
+
+[resource]
+script = ExtResource("1_govja")
+on_enter_event = "event_disease_dongshang_diagnosis"
+progression_target = "disease_dongshang_necrosis"
+progression_xun = 3
+topic = "DISEASE"
+specific_topic = "ACUTE"
+uuid = "disease_dongshang_frostbite"
+name = "冻伤初起"
+description = "指节冻伤，屈伸不利，皮肉青紫。"

@@ -1,0 +1,211 @@
+{
+  "id": "ganlu_journey",
+  "name": "赶路旅途事件库 — 风雪回奉先八景",
+  "era": "755_backhome",
+  "background_context": "天宝十四载（755年）深冬，杜甫终于获准离开长安，回奉先县探望寄居在那里的妻儿。但这趟「归家」之旅从一开始就注定是一场灾难——安禄山的大军在范阳已经集结完毕，朝廷上下还在装睡。\n\n此时的杜甫不过是从八品下的微末小官，在体制内不上不下，既没有清流的傲骨，也没有浊流的油水。他穿着那身象征身份的绿色官服上路，却发现这身衣服在风雪中只会吸满冰水，凝结成一副冰甲。\n\n这不是一趟普通的旅途。大唐的官僚系统在他面前展开全貌：驿站的腐化、流民的惨状、边军的异动、粮价的失控。每一个事件都是一道裂缝——透过这些裂缝，他看见了这个帝国即将崩塌的地基。而他的孩子还在奉先县等着，等着一个可能永远到不了的父亲。\n\n【核心叙事约束】\n1. 主角是杜甫，NPC可以是驿丞、流民、逃兵、奸商、路人。所有人物有血有肉，不是符号。\n2. 环境是冬日北方——风雪、冰河、冻土、枯树、灰蒙蒙的天。环境本身就是压迫者。\n3. 情绪基调：疲惫中的清醒，绝望中的尊严。不煽情，不滥情，白描胜于抒情。",
+  "ai_persona": "你是一位以冷峻白描书写唐代底层行旅的叙事作家。你的文字克制到近乎残忍：不评价、不煽情、不说教。让场景自己说话，让物象本身成为叙事者。\n\n【风格铁律】\n- 不写心理活动。不写「他感到」「他心想」「他意识到」。只写可见的动作、环境、对话和沉默。\n- 物象即情感。用冻裂的手指、结冰的衣袍、呼出的白气、踩碎冰壳的声音——这些物理细节代替心理描写。\n- 对话是武器。NPC的台词要体现权力关系：驿丞的居高临下、逃兵的粗野嘲弄、奸商的漫不经心。\n- 沉默即态度。用停顿、回避的目光、没有说出口的话——这些比说出口的更重要。",
+  "prompt_features": [
+    {
+      "id": "style_constraints",
+      "text": "【风格约束】\n(1) 叙事者零存在感。不评价，不解释，不同情。\n(2) 禁心理描写。不写「他感到」「他心想」「他意识到」。\n(3) 环境即压迫。寒冷、风雪、泥泞、饥饿——环境本身是叙事的一部分。\n(4) 物象承载情感。用冻裂的手指、结冰的衣袍、脚下冰壳碎裂的声音代替抒情。"
+    },
+    {
+      "id": "anti_repetition",
+      "text": "句式、动词和感官通道不得重复。若前段以视觉开场，下一段应从听觉或触觉切入。禁止在连续事件中重复使用相同的动词组合。"
+    },
+    {
+      "id": "no_god_view",
+      "text": "禁上帝视角。不写远处的事物除非角色能看到/听到。不写他人的内心活动。"
+    }
+  ],
+  "final_directive": "【核心契约】\n(1) 每个事件的 description 是场景白描 + 环境 + 角色当下的物理状态。不预演选项结果。\n(2) 选项文本是简短动作描述（≤25字），描述杜甫的选择，不用解释为什么。\n(3) 叙事必须扎根于755年历史背景：安禄山尚未公开叛乱但边患已生、杨国忠当政、官场腐化、民间疾苦。\n(4) 这8个场景构成一条逐渐下沉的弧线：从官僚体系的拒绝（驿站）→ 身体的极限（冻伤）→ 道德的困境（流民）→ 身份的嘲讽（官服）→ 经济的绝望（粮价）→ 秩序的崩解（逃兵）→ 生命的脆弱（弃婴）→ 精神的崩溃与重生（狂歌）。每个场景比前一个更绝望，但叙事语气保持冷峻不变。",
+  "fact_features": [],
+  "universal_tags": [
+    "ganlu_journey"
+  ],
+  "universal_requirement": "",
+  "universal_result": "",
+  "universal_option_requirement": "",
+  "word_count_min": 40,
+  "word_count_max": 250,
+  "option_word_count_max": 30,
+  "max_retries": 3,
+  "api_model": "deepseek-reasoner",
+  "output_dir": "data/4_eras/755_backhome/",
+  "apply_dimension_imagery": false,
+  "plugins": [],
+  "option_features": [
+    {
+      "id": "opt_idealist",
+      "prompt": "用25字以内写一个简短的动作描述——杜甫选择【气焰未灭】。特征是：他仍相信身份、秩序、原则应为自己运转。动作可能是亮出官身据理力争、拒绝妥协退让、坚持某件注定吃亏的事。核心不是「做什么」，而是「出手时还带着一股未被磨灭的傲气」。\n\n【启发范例·勿照抄】亮绿袍诘驿丞 / 弯腰拉坠沟的流民 / 铜板拍柜台上——共同点：不计后果的理直气壮。\n\n禁止写心理描写、自我感动、悲壮修辞。只写动作本身。\n\n【核心区分】此选项的动作带有「未被磨灭的气焰」——哪怕注定失败，出手时仍有一口未散的气。",
+      "text": "（坚持本心）",
+      "result": "",
+      "fixed": false,
+      "requirement": ""
+    },
+    {
+      "id": "opt_pragmatic",
+      "prompt": "用25字以内写一个简短的动作描述——杜甫选择【气焰已灭】。特征是：他已不再指望身份、秩序、原则能为自己运转。动作可能是沉默地掏出官凭过了关卡、绕开是非低头赶路、对不公视而不见——同样可能「使用官身」，但出手时没有争辩的欲望，只是走个形式。\n\n【启发范例·勿照抄】掏官凭晃一下便收起 / 绕开驿门走侧道 / 垂头等马队过完——共同点：认清了规则，懒得再争。\n\n禁止写贪婪、炫耀、洋洋得意。务实者的底色是疲惫和无奈。\n\n【核心区分】此选项的动作带着「已磨灭的气焰」——即使做同样的事（如亮出官身），也只是麻木地走流程，不是理直气壮地争取。",
+      "text": "（务实自保）",
+      "result": "",
+      "fixed": false,
+      "requirement": ""
+    }
+  ],
+  "emotion_pairs": {
+    "pair_compassion": {
+      "branch_A": {
+        "emotion": "SORROW",
+        "desc": "悲戚——这世界不该是这样的"
+      },
+      "branch_B": {
+        "emotion": "AMBITION",
+        "desc": "野心——我改变不了这些，先活下来"
+      },
+      "fallback": {
+        "emotion": "FATIGUE",
+        "desc": "疲惫——太累了，什么都不想管"
+      }
+    }
+  },
+  "dimensions": [
+    {
+      "id": "journey_scene",
+      "name": "旅途场景",
+      "description": "风雪归途中的八个核心场景",
+      "values": [
+        {
+          "id": "scene_post_station",
+          "name": "驿站的虚妄",
+          "description": "风雪交加，杜甫来到官府驿站试图进去烤火。驿丞居高临下地告诉他——里面全是被右相安排去骊山送鲜果的马夫，你这种不入流的闲曹没资格进。体制内的身份在底层执行逻辑里一文不值。\n\n【叙事约束】空间是压抑的门廊或前厅。驿丞不凶狠——他只是漫不经心地执行规则。暖阁里传出马夫们吃喝的声音。外面风雪正紧。",
+          "scale": 1.0,
+          "operator_dsl": "",
+          "stored_to": "755_backhome.ganlu",
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:ganlu"
+          ],
+          "option_results": {
+            "opt_idealist": "prop_sub(name=health; val=10) | emo_add(name=ANGER; val=10) | imagery_add(name=TRAVEL:exile)",
+            "opt_pragmatic": "prop_sub(name=money; val=15) | prop_add(name=health; val=5)"
+          }
+        },
+        {
+          "id": "scene_frozen_river",
+          "name": "指直不得结",
+          "description": "渡过结冰的河面时，狂风（「猛风甚太白」）吹断了杜甫的腰带。他用冻僵的手指试图重新打结，但手指已经不听使唤——这是纯粹的物理压迫，没有选项，只有承受。\n\n【叙事约束】环境极度寒冷。风的声音覆盖一切。手指是主角——青紫、僵直、指甲缝渗血。打结这个动作应该写得令人牙酸。",
+          "scale": 1.0,
+          "operator_dsl": "",
+          "stored_to": "755_backhome.ganlu",
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:ganlu"
+          ],
+          "option_results": {
+            "opt_idealist": "prop_sub(name=health; val=20) | trait_add(name=disease_dongshang_frostbite) | emo_add(name=SORROW; val=5) | imagery_add(name=ENVIRONMENT:snow) | imagery_add(name=ENVIRONMENT:wind)"
+          }
+        },
+        {
+          "id": "scene_refugee",
+          "name": "被碾压的流民",
+          "description": "一队赶往华清宫送海鲜的快马从官道飞驰而过，把挡路的流民撞下深沟。杜甫面临经典电车难题——但在这个时代，他没有拉杆的权利。\n\n【叙事约束】场景是官道。快马来去如电——送鲜果/海鲜的骑手，背后是杨国忠的奢侈需求。流民连脸都来不及看清就被撞下去了。沟深不见底。",
+          "scale": 1.0,
+          "operator_dsl": "",
+          "stored_to": "755_backhome.ganlu",
+          "tags": [
+            "ENV_SOCIETY_FAMINE:starving_bone",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:ganlu"
+          ],
+          "option_results": {
+            "opt_idealist": "prop_sub(name=health; val=8) | prop_add(name=fatigue; val=10) | emo_add(name=SORROW; val=10) | imagery_add(name=SOCIETY:famine)",
+            "opt_pragmatic": "emo_add(name=SORROW; val=3)"
+          }
+        },
+        {
+          "id": "scene_green_robe",
+          "name": "绿袍的诅咒",
+          "description": "杜甫引以为傲的那身从八品下绿色官服，用的是最劣质的单薄丝帛。在雪地里行走时吸满水，结成了冰甲。这是对「老大意转拙」最生动的物理嘲讽——你拼命挣来的身份，正在杀死你。\n\n【叙事约束】官服是主角——描写它的质地、颜色、结冰的过程、冰渣掉落的声音。不是痛骂体制，而是让衣物本身说话。",
+          "scale": 1.0,
+          "operator_dsl": "",
+          "stored_to": "755_backhome.ganlu",
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:ganlu"
+          ],
+          "option_results": {
+            "opt_idealist": "prop_add(name=health; val=3)",
+            "opt_pragmatic": "prop_sub(name=health; val=8) | prop_add(name=sick; val=5)"
+          }
+        },
+        {
+          "id": "scene_black_inn",
+          "name": "野店奸商",
+          "description": "路边一家黑店。杜甫想买点生麦子带回奉先给孩子吃。但这里的粮价是长安的三倍。他只能眼睁睁看着——口袋里的铜板连几斗麦子都买不起。\n\n【叙事约束】空间是逼仄的黑店。店家不凶狠，只是报了个价然后等着。粮袋堆在角落。杜甫的手在袖子里捏着几个铜板。焦点是「买不起」这个沉默的时刻——不问价、不行乞、不骂奸商。只是算不过账，然后走。",
+          "scale": 1.0,
+          "operator_dsl": "",
+          "stored_to": "755_backhome.ganlu",
+          "tags": [
+            "ENV_SOCIETY_FAMINE:starving_bone",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:ganlu"
+          ],
+          "option_results": {
+            "opt_idealist": "prop_sub(name=money; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=SOCIETY:famine)"
+          }
+        },
+        {
+          "id": "scene_anlushan_shadow",
+          "name": "安禄山的影子",
+          "description": "路上遇到几个操着范阳口音、带着刀伤的逃兵（或暗探）。他们看杜甫是个微末小官，不仅不跪拜，反而抢走了他仅剩的一点干粮。\n\n【叙事约束】绝对不要让逃兵透露「安禄山要造反」的准确信息。只需让他们留下一句带有胡音的嘲笑。这是大系统崩溃前兆的 Error Log 溢出——读者知道要发生什么，但叙事假装不知道。逃兵的态度是粗野但不凶狠——他们抢你的干粮就像拿自己的东西一样理所当然。",
+          "scale": 1.0,
+          "operator_dsl": "",
+          "stored_to": "755_backhome.ganlu",
+          "tags": [
+            "ENV_SOCIETY_WAR",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:ganlu"
+          ],
+          "option_results": {
+            "opt_idealist": "prop_sub(name=money; val=8) | prop_sub(name=health; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=COURT:corrupt)"
+          }
+        },
+        {
+          "id": "scene_abandoned_baby",
+          "name": "雪中弃婴",
+          "description": "雪堆里有微弱的哭声。杜甫扒开雪，发现不是他的孩子——而是一个已经被冻紫的无名弃婴。这个事件的作用是强行预演终局：让玩家对「哭声」产生应激反应（PTSD），为最后推开奉先县木门那一下做心理铺垫。\n\n【叙事约束】弃婴已经死了或濒死——不要给希望。描写要克制：冻紫的皮肤、小小的蜷缩的姿势、雪落在上面的样子。杜甫的动作是机械的——扒开雪、看到、然后呆住。不是痛哭，是沉默。",
+          "scale": 1.05,
+          "operator_dsl": "",
+          "stored_to": "755_backhome.ganlu",
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:ganlu"
+          ],
+          "option_results": {
+            "opt_idealist": "prop_sub(name=health; val=3) | emo_add(name=SORROW; val=20) | imagery_add(name=EMOTION:despair) | imagery_add(name=ENVIRONMENT:snow)"
+          }
+        },
+        {
+          "id": "scene_mad_song",
+          "name": "狂歌破愁绝",
+          "description": "极度的寒冷和绝望让杜甫产生了短暂的幻觉。长安十年的记忆在脑海里无序闪烁——金榜题名时的狂喜、被李林甫「野无遗贤」愚弄的愤懑、陋室中的夜雨、无数次在权贵门前被拒之门外的羞辱。\n\n这是唯一一个可以回复 HEALTH 的事件。杜甫饮下最后一口浊酒，在风雪中大笑狂歌——代价是强制抹除某些意象（象征着在生死面前，那些虚伪的人脉和执念被大脑清空废弃）。\n\n【叙事约束】这是这组事件的情绪顶点也是转折点。癫狂中的清醒、崩溃中的重生。不要写「他疯了」——写他大笑、唱歌、在风雪中张开双臂。动作是释放的、不顾一切的、近乎宗教体验的。酒是媒介——浊酒入喉，冰火两重。",
+          "scale": 1.1,
+          "operator_dsl": "",
+          "stored_to": "755_backhome.ganlu",
+          "tags": [
+            "ENV_NATURE_SNOWSTORM:lone_snow",
+            "TARGET_NPC_DUFU:thatched_grass",
+            "action:main:ganlu"
+          ],
+          "option_results": {
+            "opt_idealist": "prop_add(name=health; val=15) | prop_add(name=drunk; val=20) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=HEALTH:drunk)"
+          }
+        }
+      ]
+    }
+  ]
+}

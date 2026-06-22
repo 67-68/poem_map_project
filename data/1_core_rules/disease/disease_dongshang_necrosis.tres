@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="Disease" format=3 uid="uid://cl6bwt2gqn4vf"]
+
+[ext_resource type="Script" uid="uid://dlydpw2dm2ro3" path="res://core/model/disease.gd" id="1_govja"]
+[ext_resource type="Script" uid="uid://cwotf742e2n0f" path="res://core/model/multiply_operator.gd" id="1_p21v0"]
+[ext_resource type="Script" uid="uid://potskta4ums3" path="res://core/model/dict_multiply_operator.gd" id="2_d2yke"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f7b60"]
+
+[sub_resource type="Resource" id="Resource_nx1"]
+script = ExtResource("1_p21v0")
+key = "health"
+value = 0.8
+metadata/_custom_type_script = "uid://cwotf742e2n0f"
+
+[sub_resource type="Resource" id="Resource_nx2"]
+script = ExtResource("2_d2yke")
+operators = Array[ExtResource("1_p21v0")]([SubResource("Resource_nx1")])
+metadata/_custom_type_script = "uid://potskta4ums3"
+
+[sub_resource type="Resource" id="Resource_nx3"]
+script = ExtResource("3_f7b60")
+_property = 3
+value = -5
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_nx4"]
+script = ExtResource("3_f7b60")
+_property = 9
+value = 3
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[resource]
+script = ExtResource("1_govja")
+on_enter_event = "event_disease_dongshang_necrosis_onset"
+buffer_to_prop = SubResource("Resource_nx2")
+topic = "DISEASE"
+specific_topic = "CHRONIC"
+trait_effect_operations = Array[ExtResource("3_f7b60")]([SubResource("Resource_nx3"), SubResource("Resource_nx4")])
+uuid = "disease_dongshang_necrosis"
+name = "冻疮坏死"
+description = "指尖坏死，皮肉焦黑如炭，关节锁死，痛觉尽失。"

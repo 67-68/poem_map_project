@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_d4lyh"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="2_6drny"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_tyut7"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="3_14tjd"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_ijcjj"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_46wxo"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="6_a6bay"]
+
+[sub_resource type="Resource" id="Resource_tyut7"]
+script = ExtResource("3_ijcjj")
+str_props = "health"
+value = -5
+
+[sub_resource type="Resource" id="Resource_ijcjj"]
+script = ExtResource("3_ijcjj")
+str_props = "sick"
+value = 3
+
+[sub_resource type="Resource" id="Resource_46wxo"]
+script = ExtResource("3_ijcjj")
+str_props = "money"
+value = -2
+
+[sub_resource type="Resource" id="Resource_a6bay"]
+script = ExtResource("4_46wxo")
+operators = Array[ExtResource("2_tyut7")]([SubResource("Resource_tyut7"), SubResource("Resource_ijcjj"), SubResource("Resource_46wxo")])
+
+[sub_resource type="Resource" id="Resource_sa4fj"]
+script = ExtResource("2_6drny")
+choice_result = SubResource("Resource_a6bay")
+description = "割去坏死指头"
+
+[sub_resource type="Resource" id="Resource_08ibv"]
+script = ExtResource("3_ijcjj")
+str_props = "sick"
+value = 8
+
+[sub_resource type="Resource" id="Resource_umsg3"]
+script = ExtResource("6_a6bay")
+value = 5
+
+[sub_resource type="Resource" id="Resource_n2mgw"]
+script = ExtResource("4_46wxo")
+operators = Array[ExtResource("2_tyut7")]([SubResource("Resource_08ibv"), SubResource("Resource_umsg3")])
+
+[sub_resource type="Resource" id="Resource_626j2"]
+script = ExtResource("2_6drny")
+choice_result = SubResource("Resource_n2mgw")
+description = "裹以破布"
+
+[resource]
+script = ExtResource("3_14tjd")
+weight = 100.0
+era = "1_core_rules"
+_target_tags = Array[String](["actor:health:coldNecrosis"])
+options = Array[ExtResource("1_d4lyh")]([SubResource("Resource_sa4fj"), SubResource("Resource_626j2")])
+uuid = "event_disease_dongshang_necrosis_onset"
+name = "指骨坏死"
+description = "第七天了。你醒来的时候发现右手食指的指甲盖整个翻了起来——不是磕碰的，是冻死的。指甲底下的肉变成了黑色。不是紫黑，是焦黑，像烧过的木柴那种黑。你碰了碰，不疼。不疼才可怕。\\n\\n你把手指举到眼前。指尖那截已经分辨不出原来的肤色，皮肉像腊肉一样硬，关节完全锁死。你知道那根手指已经死了。它挂在你的手上，但已经不是你的了。再过几天——也许是明天——它会从指节上脱落，留下一截白森森的骨头。这就是冻疮走到尽头的样子。\\n\\n你看着自己的手。十根手指。还剩九根是活的。"

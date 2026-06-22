@@ -51,6 +51,10 @@
     "zize": {
       "config": "tools/event_base_config_zize.json",
       "csv": "data/4_eras/747_kuangda/_zize_events.csv"
+    },
+    "ganlu_journey": {
+      "config": "tools/event_base_config_ganlu_journey.json",
+      "csv": "data/4_eras/755_backhome/_ganlu_events.csv"
     }
   }
 }

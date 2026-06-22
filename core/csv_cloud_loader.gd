@@ -190,6 +190,12 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "random_event",
         "is_generated": true,
     },
+    {
+        "name": "赶路旅途事件库（本地生成）",
+        "save_path": "res://data/4_eras/755_backhome/_ganlu_events.csv",
+        "data_type": "random_event",
+        "is_generated": true,
+    },
 ]
 
 # 🗺️ store_to 路径映射表
@@ -215,6 +221,8 @@ const STORE_TO_PATH_MAP: Dictionary = {
     "747_kuangda.denggao": "res://data/4_eras/747_kuangda/denggao",
     "747_kuangda.fengzhao": "res://data/4_eras/747_kuangda/fengzhao",
     "747_kuangda.kuangke_qingliu": "res://data/4_eras/747_kuangda/kuangke_qingliu",
+    # ── 755_backhome 时代 ──
+    "755_backhome.ganlu": "res://data/4_eras/755_backhome",
 }
 
 # 任务指针：当前正在下载第几个文件？
