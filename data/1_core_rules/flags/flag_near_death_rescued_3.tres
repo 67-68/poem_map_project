@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Flag" format=3]
+
+[ext_resource type="Script" path="res://core/model/flag.gd" id="1_v1f2l"]
+
+[resource]
+script = ExtResource("1_v1f2l")
+type = "int"
+uuid = "flag_near_death_rescued_3"

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Trait" format=3]
+
+[ext_resource type="Script" path="res://core/model/trait.gd" id="1_d4vx1"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="2_0r4h0"]
+
+[resource]
+script = ExtResource("1_d4vx1")
+uuid = "near_death_mind_broken"
+name = "心智破损"

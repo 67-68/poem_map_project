@@ -15,3 +15,7 @@ baiye_asking_triggered,bool,FALSE
 trig_dist_outside_city,int,0
 trig_dist_lishan,int,0
 trig_dist_indifferent_wind,int,0
+flag_near_death_count,int,0
+flag_near_death_rescued_1,int,0
+flag_near_death_rescued_2,int,0
+flag_near_death_rescued_3,int,0

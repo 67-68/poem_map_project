@@ -150,15 +150,22 @@ func _update_heartbeat_sfx() -> void:
 
 func death_judgement():
     """
-    这里放死亡/结束游戏的条件
+    三层濒死兜底系统：
+    - flag_near_death_count < 3：自增计数器 + 强制续命 HEALTH=1
+    - flag_near_death_count >= 3：走死亡结算流程
     """
     #breakpoint
     if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) <= 0:
-        # 停止心跳音效 —— 人没了还跳什么跳 😭
-        AudioManager.stop_sfx_loop()
-        # ✅ 这里已经是四段式标签，无需标准化
-        PlayerState.current_action_tags.append('actor:health:death:general')
-        EventManager.scan_death_events()
+        var count: int = PlayerState.get_flag("flag_near_death_count") as int
+        if count < 3:
+            PlayerState.append_flag("flag_near_death_count", 1)
+            force_set_prop(ENUMS.PROPS.HEALTH, 1)
+            Logging.info('[SurvivalManager] Near-death count=%d, force_set health=1' % (count + 1))
+        else:
+            # 第三次濒死兜底已耗尽，走向真正的死亡
+            AudioManager.stop_sfx_loop()
+            PlayerState.current_action_tags.append('actor:health:death:general')
+            EventManager.scan_death_events()
 
 func _ready():
     TimeService.on_xun_tick.connect(_process_single_xun_settlement)

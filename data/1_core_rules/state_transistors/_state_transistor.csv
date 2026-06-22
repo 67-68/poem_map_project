@@ -3,3 +3,6 @@ relation_libai_rumor_transist_close,urn:trait:relation_libai_close,TRUE,urn:trai
 trig_dist_outside_city,,,,backhome_outside_city_1,"prop_gt(name=distance, val=5)|prop_lt(name=distance, val=10)|flag_int_ne(name=trig_dist_outside_city, val=1)","flag_int_set(name=trig_dist_outside_city, val=1)",,
 trig_dist_lishan,,,,backhome_lishan_1,"prop_gt(name=distance, val=40)|prop_lt(name=distance, val=50)|flag_int_ne(name=trig_dist_lishan, val=1)","flag_int_set(name=trig_dist_lishan, val=1)",,
 trig_dist_indifferent_wind,,,,backhome_indifferent_wind_1,"prop_gt(name=distance, val=70)|prop_lt(name=distance, val=80)|flag_int_ne(name=trig_dist_indifferent_wind, val=1)","flag_int_set(name=trig_dist_indifferent_wind, val=1)",,
+near_death_burn_manuscript_trans,,,,near_death_burn_manuscript,"flag_int_eq(name=flag_near_death_count, val=1)|flag_int_eq(name=flag_near_death_rescued_1, val=0)","flag_int_set(name=flag_near_death_rescued_1, val=1)",,
+near_death_sing_crazy_trans,,,,near_death_sing_crazy,"flag_int_eq(name=flag_near_death_count, val=2)|flag_int_eq(name=flag_near_death_rescued_2, val=0)","flag_int_set(name=flag_near_death_rescued_2, val=1)",,
+near_death_nothing_to_burn_trans,,,,near_death_nothing_to_burn,"flag_int_eq(name=flag_near_death_count, val=3)|flag_int_eq(name=flag_near_death_rescued_3, val=0)","flag_int_set(name=flag_near_death_rescued_3, val=1)",,
