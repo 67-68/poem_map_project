@@ -12,5 +12,5 @@ noise = SubResource("FastNoiseLite_1gvri")
 [resource]
 shader = ExtResource("1_1gvri")
 shader_parameter/frost_noise = SubResource("NoiseTexture2D_vwy2f")
-shader_parameter/freeze_progress = 1.0
+shader_parameter/freeze_progress = 0.4590000218025
 shader_parameter/frost_color = Color(0.20407969, 0.3175347, 0.41644347, 1)

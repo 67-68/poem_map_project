@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nuqx"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1

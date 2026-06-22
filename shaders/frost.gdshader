@@ -9,7 +9,7 @@ uniform vec4 frost_color : source_color = vec4(0.85, 0.9, 0.95, 1.0);
 
 void fragment() {
     // 1. 采样底图 (你那焦黑的残纸)
-    vec4 base_tex = texture(TEXTURE, UV);
+    vec4 base_tex = texture(TEXTURE, UV) * COLOR;
     
     // 2. 采样冰晶噪点
     float noise_val = texture(frost_noise, UV).r;
@@ -27,7 +27,11 @@ void fragment() {
     // ==========================================
     // 只有在噪点值符合阈值，且处于冻结线以下的部分，才会结霜
     // 随着进度加深，霜的密度（阈值）越来越大
-    float frost_intensity = smoothstep(0.7 - (freeze_progress * 0.5), 0.9, noise_val) * vertical_mask;
+    float raw_frost = smoothstep(0.7 - (freeze_progress * 0.5), 0.9, noise_val) * vertical_mask;
+    
+    // 硬阈值过滤：低于 0.05 的 frost 强制归零
+    // 防止深色/黑色背景下微小的 frost_intensity 通过 mix 产生可见的青蓝色污染
+    float frost_intensity = mix(0.0, raw_frost, step(0.05, raw_frost));
     
     // 将底层颜色与白霜颜色混合，模拟冰层的覆盖感
     vec4 final_color = mix(base_tex, frost_color, frost_intensity);

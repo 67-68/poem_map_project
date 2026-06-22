@@ -114,8 +114,10 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	# ── 背景交换判断（Overlay 决策，不是 Director）──
 	if _needs_background_swap(data):
 		# 通过回调注入清空条目 + 应用新纹理
+		# 与 _needs_background_swap 保持一致的 fallback 逻辑
+		var _swap_target_texture: Texture2D = data.ui_decl.background_narrative if (data.ui_decl and data.ui_decl.background_narrative) else StyleManager.get_default_background(tape_container)
 		await visualizer.play_swap_background(
-			data.ui_decl.background_narrative,
+			_swap_target_texture,
 			func():
 				event_ui.clear_all_tape()
 				_apply_ui_decl_background(data)
@@ -545,6 +547,10 @@ func _bind_frost_strategy() -> void:
 	data.shader_parameter_names = ["freeze_progress"]
 	data.container = tape_container
 	data.stylebox = preload("res://shaders/frostland_stylebox.tres")
+	data.narrative_text_theme = "FrozenNarrativeText"
+	data.title_text_theme = "FrozenTitleText"
+	data.inner_thought_theme = "FrozenInnerThoughtText"
+	data.default_text_theme = "FrozenDefaultText"
 	StyleManager.bind(data)
 	# frost 仅在事件触发时由 StyleStrategyOperator 激活，默认不挂载 shader
 	Logging.info("NarrativeOverlay: frost 策略已注册 → tape_container (等待事件激活)")

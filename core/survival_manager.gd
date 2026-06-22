@@ -154,10 +154,10 @@ func death_judgement():
     - flag_near_death_count < 3：自增计数器 + 强制续命 HEALTH=1
     - flag_near_death_count >= 3：走死亡结算流程
     """
-    #breakpoint
     if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) <= 0:
         var count: int = PlayerState.get_flag("flag_near_death_count") as int
         if count < 3:
+            breakpoint
             PlayerState.append_flag("flag_near_death_count", 1)
             force_set_prop(ENUMS.PROPS.HEALTH, 1)
             Logging.info('[SurvivalManager] Near-death count=%d, force_set health=1' % (count + 1))
