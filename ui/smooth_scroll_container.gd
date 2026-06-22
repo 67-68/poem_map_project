@@ -84,7 +84,9 @@ func _process(delta: float) -> void:
 		# DEBUG: 如果 lerp 后 scroll_vertical 没有朝 target 方向移动，或者被回弹了，记录异常
 		var new_sv = scroll_vertical
 		if abs(new_sv - ts) >= abs(prev_sv - ts) and abs(prev_sv - ts) > 2.0:
-			Logging.warn("SmoothScrollContainer[%s]: LERP_STALL sv %.1f->%.1f target=%.1f (no progress or regression)" % [name, prev_sv, new_sv, ts])
+			# 节流：每 60 帧最多打一条，防止刷屏
+			if _frame_counter % 60 == 0:
+				Logging.warn("SmoothScrollContainer[%s]: LERP_STALL sv %.1f->%.1f target=%.1f (no progress or regression)" % [name, prev_sv, new_sv, ts])
 	elif not is_dragging and abs(sv - ts) > 0.01:
 		scroll_vertical = ts  # snap to target
 		# 节流：每 60 帧最多打一条 SNAP 日志，防止刷屏

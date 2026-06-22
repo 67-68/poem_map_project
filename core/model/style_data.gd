@@ -38,6 +38,14 @@ var shader_material: ShaderMaterial = null
 ## 被驱动的 shader parameter 名列表，所有 param 共用同一 progress 值
 var shader_parameter_names: Array[String] = []
 
+# ── Progress 输出映射 ────────────────────────────────────
+## shader progress 参数输出区间下限 (0.0~1.0)
+## 某些 shader 只在特定范围内有效果，如 decay_dirt_crack 仅在 [0.27, 0.326]
+## compute_progress() 计算出 0.0~1.0 后，会 remap 到此区间再写入 shader
+var progress_output_min: float = 0.0
+## shader progress 参数输出区间上限 (0.0~1.0)
+var progress_output_max: float = 1.0
+
 # ── StyleBox 纹理 ─────────────────────────────────────────
 ## 策略激活时替换的 StyleBoxTexture.texture（仅对 PanelContainer 生效）
 ## null → 不修改 StyleBox
@@ -74,6 +82,14 @@ func compute_progress(current_val: float) -> float:
 	return clamped
 
 
+## 将 compute_progress() 的 0→1 结果 remap 到 [output_min, output_max] 区间
+##
+## 当 progress_output_min == progress_output_max 时返回 output_min
+func compute_progress_remapped(current_val: float) -> float:
+	var raw_progress := compute_progress(current_val)
+	return lerpf(progress_output_min, progress_output_max, raw_progress)
+
+
 ## 从另一个 StyleData 复制字段（用于 default 快照）
 func copy_from(other: StyleData) -> void:
 	if other == null:
@@ -82,6 +98,8 @@ func copy_from(other: StyleData) -> void:
 	target_property = other.target_property
 	start_property_value = other.start_property_value
 	target_property_value = other.target_property_value
+	progress_output_min = other.progress_output_min
+	progress_output_max = other.progress_output_max
 	shader_resource = other.shader_resource
 	shader_material = other.shader_material
 	shader_parameter_names = other.shader_parameter_names.duplicate()

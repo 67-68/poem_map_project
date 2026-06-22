@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c_test_style_ambition"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://62k6rkyqkj8s"]
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://dpdoe4fqn0hol" path="res://core/operators/style_strategy_operator.gd" id="2_style_op"]
@@ -10,9 +10,8 @@
 
 [sub_resource type="Resource" id="Resource_style_strategy"]
 script = ExtResource("2_style_op")
-strategy_name = "decay_dirt_crack"
 target_control = 1
-metadata/_custom_type_script = "uid://dpdoe4fqn0hol"
+strategy_name = "decay_dirt_crack"
 
 [sub_resource type="Resource" id="Resource_prop_distance"]
 script = ExtResource("3_prop_op")

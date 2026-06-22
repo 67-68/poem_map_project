@@ -16,13 +16,16 @@ func _ready() -> void:
 	Logging.info("AmbitionHUD: Connected to player_stat_changed signal")
 	
 	# 修正你的幽灵 Lambda：必须更新自身的 ambition 引用！
-	PlayerState.ambition_changed.connect(func(new_ambition): 
+	PlayerState.ambition_changed.connect(func(new_ambition):
 		Logging.info("AmbitionHUD: Received ambition_changed signal with new ambition: %s" % str(new_ambition))
 		ambition = new_ambition # <--- 救命的赋值
 		_load_static()
 		_on_model_stat_changed('')
 	)
 	Logging.info("ambition hud connected to player stat changed signal")
+
+	# ── StyleManager: 绑定 decay_dirt_crack 策略（必须走在所有 return 之前）──
+	_bind_decay_dirt_crack_strategy()
 
 	# 2. 状态嗅探与潜伏模式
 	Logging.info("AmbitionHUD: Checking initial ambition state")
@@ -39,9 +42,6 @@ func _ready() -> void:
 	_load_static()
 	_on_model_stat_changed("")
 	Logging.info("AmbitionHUD: Initialization complete")
-
-	# ── StyleManager: 绑定 decay_dirt_crack 策略 ──
-	_bind_decay_dirt_crack_strategy()
 	
 func _load_static():
 	if not ambition: return
@@ -187,19 +187,24 @@ func _find_perception_by_stage_id(stage_id: String) -> StagedPerceptionData:
 ## 向 StyleManager 注册自身并绑定 decay_dirt_crack 策略
 ## distance=0 时 progress=0.0（完好），distance=100 时 progress=1.0（彻底毁坏）
 const DECAY_SHADER := preload("res://shaders/decay_dirt_crack.gdshader")
+const DIRT_NOISE := preload("res://shaders/dirt_noise.tres")
+const CRACK_NOISE := preload("res://shaders/crack_noise.tres")
 
 func _bind_decay_dirt_crack_strategy() -> void:
-	# 创建预制 ShaderMaterial（含 noise 纹理）
+	# 创建预制 ShaderMaterial（使用 .tres 预制噪声纹理）
 	var mat := ShaderMaterial.new()
 	mat.shader = DECAY_SHADER
-	mat.set_shader_parameter("dirt_noise", _make_dirt_noise())
-	mat.set_shader_parameter("crack_noise", _make_crack_noise())
+	mat.set_shader_parameter("dirt_noise", DIRT_NOISE)
+	mat.set_shader_parameter("crack_noise", CRACK_NOISE)
 
 	var data := StyleData.new()
 	data.strategy_name = "decay_dirt_crack"
 	data.target_property = "distance"
 	data.start_property_value = 0.0
 	data.target_property_value = 100.0
+	# shader 只在 progress ∈ [0.27, 0.326] 有可见效果，remap 到这个区间
+	data.progress_output_min = 0.27
+	data.progress_output_max = 0.326
 	data.shader_material = mat
 	data.shader_parameter_names = ["progress"]
 	data.container = self
@@ -209,38 +214,4 @@ func _bind_decay_dirt_crack_strategy() -> void:
 	# 首次 bind 后激活此策略
 	StyleManager.switch_strategy(self, "decay_dirt_crack")
 
-	Logging.info("AmbitionHUD: decay_dirt_crack 策略已绑定 → AmbitionHUD")
-
-
-func _make_dirt_noise() -> NoiseTexture2D:
-	var fast_noise := FastNoiseLite.new()
-	fast_noise.noise_type = FastNoiseLite.TYPE_CELLULAR
-	fast_noise.frequency = 0.025
-	fast_noise.fractal_octaves = 3
-	fast_noise.fractal_lacunarity = 2.0
-	fast_noise.cellular_return_type = FastNoiseLite.RETURN_CELL_VALUE
-	fast_noise.cellular_distance_function = FastNoiseLite.DISTANCE_EUCLIDEAN
-
-	var tex := NoiseTexture2D.new()
-	tex.noise = fast_noise
-	tex.seamless = true
-	tex.width = 512
-	tex.height = 512
-	return tex
-
-
-func _make_crack_noise() -> NoiseTexture2D:
-	var fast_noise := FastNoiseLite.new()
-	fast_noise.noise_type = FastNoiseLite.TYPE_CELLULAR
-	fast_noise.frequency = 0.015
-	fast_noise.fractal_octaves = 2
-	fast_noise.fractal_lacunarity = 2.5
-	fast_noise.cellular_return_type = FastNoiseLite.RETURN_CELL_VALUE
-	fast_noise.cellular_distance_function = FastNoiseLite.DISTANCE_MANHATTAN
-
-	var tex := NoiseTexture2D.new()
-	tex.noise = fast_noise
-	tex.seamless = true
-	tex.width = 512
-	tex.height = 512
-	return tex
+	Logging.info("AmbitionHUD: decay_dirt_crack 策略已绑定 → AmbitionHUD (progress remap: 0→[%.3f, %.3f])" % [data.progress_output_min, data.progress_output_max])

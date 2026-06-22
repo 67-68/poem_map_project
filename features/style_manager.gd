@@ -391,8 +391,8 @@ func _sync_progress(container: Control, data: StyleData) -> void:
 	# ── 读取当前属性值 ────────────────────────────────────
 	var current_val: float = float(PlayerState.get_stat_val(data.target_property))
 
-	# ── 计算 progress ─────────────────────────────────────
-	var progress: float = data.compute_progress(current_val)
+	# ── 计算 progress（含 remap 到输出区间）───────────────
+	var progress: float = data.compute_progress_remapped(current_val)
 
 	# ── 写入 shader parameter ─────────────────────────────
 	var mat: Material = container.material
