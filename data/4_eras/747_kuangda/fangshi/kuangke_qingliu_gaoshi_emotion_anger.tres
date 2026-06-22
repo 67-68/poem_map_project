@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="6_a8vxy"]
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="7_2r3vh"]
 [ext_resource type="Script" path="res://core/model/base_requirement.gd" id="8_mr7j1"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="9_i252f"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="9_smsqj"]
 [ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_xu2kt"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="11_risnn"]
 
@@ -50,13 +50,13 @@ script = ExtResource("6_a8vxy")
 trait_name = "kuangda_kuangke"
 
 [sub_resource type="Resource" id="Resource_smsqj"]
-script = ExtResource("9_i252f")
+script = ExtResource("9_smsqj")
 property = "ambition"
 value = 30
 operator = 1
 
 [sub_resource type="Resource" id="Resource_xu2kt"]
-script = ExtResource("9_i252f")
+script = ExtResource("9_smsqj")
 property = "ambition"
 value = 100
 

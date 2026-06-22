@@ -1,102 +1,102 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_o7yaw"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_ymqli"]
-[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_ha4lv"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_svasu"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="5_480c2"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_v1e3v"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="7_tx6ys"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="8_i0xcy"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_nitpy"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="11_k7owq"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_qsnth"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_o7yaw"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_ymqli"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_ha4lv"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_svasu"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_480c2"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="7_v1e3v"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="8_tx6ys"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="9_i0xcy"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="10_sqfej"]
 
 [sub_resource type="Resource" id="Resource_qsnth"]
-script = ExtResource("3_ha4lv")
+script = ExtResource("3_ymqli")
 str_props = "money"
 value = -3
 
 [sub_resource type="Resource" id="Resource_o7yaw"]
-script = ExtResource("3_ha4lv")
+script = ExtResource("3_ymqli")
 str_props = "fatigue"
 value = -3
 
 [sub_resource type="Resource" id="Resource_ymqli"]
-script = ExtResource("3_ha4lv")
+script = ExtResource("3_ymqli")
 str_props = "burnout"
 value = 3
 
 [sub_resource type="Resource" id="Resource_ha4lv"]
-script = ExtResource("3_ha4lv")
+script = ExtResource("3_ymqli")
 str_props = "fatigue"
 value = 5
 
 [sub_resource type="Resource" id="Resource_svasu"]
-script = ExtResource("3_ha4lv")
+script = ExtResource("3_ymqli")
 str_props = "money"
 value = -18
 
 [sub_resource type="Resource" id="Resource_480c2"]
-script = ExtResource("4_svasu")
+script = ExtResource("4_ha4lv")
 value = -10
 
 [sub_resource type="Resource" id="Resource_v1e3v"]
-script = ExtResource("3_ha4lv")
+script = ExtResource("3_ymqli")
 str_props = "burnout"
 value = 8
 
 [sub_resource type="Resource" id="Resource_tx6ys"]
-script = ExtResource("3_ha4lv")
+script = ExtResource("3_ymqli")
 str_props = "fatigue"
 value = 5
 
 [sub_resource type="Resource" id="Resource_i0xcy"]
-script = ExtResource("5_480c2")
-operators = Array[ExtResource("2_ymqli")]([SubResource("Resource_qsnth"), SubResource("Resource_o7yaw"), SubResource("Resource_ymqli"), SubResource("Resource_ha4lv"), SubResource("Resource_svasu"), SubResource("Resource_480c2"), SubResource("Resource_v1e3v"), SubResource("Resource_tx6ys")])
+script = ExtResource("5_svasu")
+operators = Array[ExtResource("2_o7yaw")]([SubResource("Resource_qsnth"), SubResource("Resource_o7yaw"), SubResource("Resource_ymqli"), SubResource("Resource_ha4lv"), SubResource("Resource_svasu"), SubResource("Resource_480c2"), SubResource("Resource_v1e3v"), SubResource("Resource_tx6ys")])
 
 [sub_resource type="Resource" id="Resource_sqfej"]
-script = ExtResource("6_v1e3v")
+script = ExtResource("6_480c2")
 choice_result = SubResource("Resource_i0xcy")
 description = "指尖在筹身木纹的断茬处停了片刻，然后拿过来。"
 
 [sub_resource type="Resource" id="Resource_nitpy"]
-script = ExtResource("8_i0xcy")
+script = ExtResource("8_tx6ys")
 property = "burnout"
 value = 50
 operator = 1
 
 [sub_resource type="Resource" id="Resource_k7owq"]
-script = ExtResource("8_i0xcy")
+script = ExtResource("8_tx6ys")
 property = "money"
 value = 10
 operator = 1
 
 [sub_resource type="Resource" id="Resource_kuokq"]
-script = ExtResource("8_i0xcy")
+script = ExtResource("8_tx6ys")
 property = "money"
 value = 50
 
 [sub_resource type="Resource" id="Resource_6kbfp"]
-script = ExtResource("8_i0xcy")
+script = ExtResource("8_tx6ys")
 property = "ambition"
 value = 30
 operator = 1
 
 [sub_resource type="Resource" id="Resource_jyqjc"]
-script = ExtResource("8_i0xcy")
+script = ExtResource("8_tx6ys")
 property = "ambition"
 value = 100
 
 [sub_resource type="Resource" id="Resource_85ndo"]
-script = ExtResource("10_nitpy")
-operators = Array[ExtResource("7_tx6ys")]([SubResource("Resource_nitpy"), SubResource("Resource_k7owq"), SubResource("Resource_kuokq"), SubResource("Resource_6kbfp"), SubResource("Resource_jyqjc")])
+script = ExtResource("9_i0xcy")
+operators = Array[ExtResource("7_v1e3v")]([SubResource("Resource_nitpy"), SubResource("Resource_k7owq"), SubResource("Resource_kuokq"), SubResource("Resource_6kbfp"), SubResource("Resource_jyqjc")])
 
 [resource]
-script = ExtResource("11_k7owq")
+script = ExtResource("10_sqfej")
 requirement = SubResource("Resource_85ndo")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_o7yaw")]([SubResource("Resource_sqfej")])
+options = Array[ExtResource("1_qsnth")]([SubResource("Resource_sqfej")])
 uuid = "qingliu_jiaolv_illusion_control"
 name = "鞋底泥"
 description = "“上一个和你鞋底有一样泥的人，现在已不穿这双靴了。他拿了我一枚木筹，那天起，他的靴底再没沾过寺后泥土。”他从怀里摸出一枚拇指长的旧木筹，递到离你一尺远的地方，没有催促，只是让它悬在那里。"

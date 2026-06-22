@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_r0xel"]
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="8_ankot"]
 [ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_20yio"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="10_2q1ae"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="10_8dp21"]
 [ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_3on64"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="12_a25g5"]
 
@@ -110,13 +110,13 @@ requirement = SubResource("Resource_fg7gy")
 description = "连声称谢，目光却反复扫过荐书上右丞的印鉴——落款处空着一行。"
 
 [sub_resource type="Resource" id="Resource_e42r3"]
-script = ExtResource("10_2q1ae")
+script = ExtResource("10_8dp21")
 property = "ambition"
 value = 30
 operator = 1
 
 [sub_resource type="Resource" id="Resource_ks85n"]
-script = ExtResource("10_2q1ae")
+script = ExtResource("10_8dp21")
 property = "ambition"
 value = 100
 

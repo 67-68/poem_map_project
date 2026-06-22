@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_5e52l"]
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="8_d6dfs"]
 [ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_nadt7"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="10_rrvi2"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="10_tj21l"]
 [ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_75wms"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="12_le8ua"]
 
@@ -110,13 +110,13 @@ requirement = SubResource("Resource_lslb1")
 description = "连声称难得郑广文眼力，随即翻开其他废纸就近请教——可还有遗珠。"
 
 [sub_resource type="Resource" id="Resource_1fr3s"]
-script = ExtResource("10_rrvi2")
+script = ExtResource("10_tj21l")
 property = "ambition"
 value = 30
 operator = 1
 
 [sub_resource type="Resource" id="Resource_7epix"]
-script = ExtResource("10_rrvi2")
+script = ExtResource("10_tj21l")
 property = "ambition"
 value = 100
 
