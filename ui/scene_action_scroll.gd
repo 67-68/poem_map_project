@@ -23,6 +23,7 @@ func refresh():
 
 # 刷新场景化行动
 func _ready():
+	super._ready()
 	refresh()
 	TimeService.on_month_tick.connect(refresh)
 	EventBus.request_refresh_action_panel.connect(refresh)

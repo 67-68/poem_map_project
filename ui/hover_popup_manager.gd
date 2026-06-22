@@ -16,6 +16,8 @@ extends Node
 # ── 内部数据结构 ─────────────────────────────────────────
 
 class HoverBinding:
+	enum State { IDLE, DELAYING, SHOWING, HIDE_PENDING }
+	
 	var trigger: Control
 	var popup: Control
 	var delay: float = 0.5          # 悬停多久后弹出
@@ -24,6 +26,16 @@ class HoverBinding:
 	var hide_timer: Timer
 	var trigger_hovered: bool = false
 	var popup_hovered: bool = false
+	var state: State = State.IDLE
+	
+	# 已绑定的 Callable（用于 disconnect 时精确匹配）
+	var _bound_trigger_enter: Callable
+	var _bound_trigger_exit: Callable
+	var _bound_popup_enter: Callable
+	var _bound_popup_exit: Callable
+	var _bound_visibility_changed: Callable
+	var _bound_tree_exiting_trigger: Callable
+	var _bound_tree_exiting_popup: Callable
 	
 	func _init(p_trigger: Control, p_popup: Control, p_delay: float, p_hide_grace: float) -> void:
 		trigger = p_trigger
@@ -72,20 +84,28 @@ func register(trigger: Control, popup: Control, delay: float = 0.5, hide_grace: 
 	binding.hide_timer.timeout.connect(_on_hide_timer_timeout.bind(binding))
 	add_child(binding.hide_timer)
 	
-	# 信号绑定
-	trigger.mouse_entered.connect(_on_trigger_enter.bind(binding))
-	trigger.mouse_exited.connect(_on_trigger_exit.bind(binding))
-	popup.mouse_entered.connect(_on_popup_enter.bind(binding))
-	popup.mouse_exited.connect(_on_popup_exit.bind(binding))
+	# 信号绑定 —— 保存绑定的 Callable 以便 disconnect 时精确匹配
+	binding._bound_trigger_enter = _on_trigger_enter.bind(binding)
+	binding._bound_trigger_exit = _on_trigger_exit.bind(binding)
+	binding._bound_popup_enter = _on_popup_enter.bind(binding)
+	binding._bound_popup_exit = _on_popup_exit.bind(binding)
+	binding._bound_visibility_changed = _on_popup_visibility_changed.bind(binding)
+	binding._bound_tree_exiting_trigger = _on_trigger_dying.bind(trigger)
+	binding._bound_tree_exiting_popup = _on_popup_dying.bind(weakref(trigger))
+	
+	trigger.mouse_entered.connect(binding._bound_trigger_enter)
+	trigger.mouse_exited.connect(binding._bound_trigger_exit)
+	popup.mouse_entered.connect(binding._bound_popup_enter)
+	popup.mouse_exited.connect(binding._bound_popup_exit)
 	
 	# 越权拦截：popup 自己被外部代码 set visible=true 时强制执行状态机
-	popup.visibility_changed.connect(_on_popup_visibility_changed.bind(binding))
+	popup.visibility_changed.connect(binding._bound_visibility_changed)
 	
 	# 地雷一：自动收尸
 	# ⚠️ 用 weakref 包裹 trigger — popup tree_exiting 时 trigger 可能已被释放
 	# 无法做 Object→Control 类型转换
-	trigger.tree_exiting.connect(_on_trigger_dying.bind(trigger))
-	popup.tree_exiting.connect(_on_popup_dying.bind(weakref(trigger)))
+	trigger.tree_exiting.connect(binding._bound_tree_exiting_trigger)
+	popup.tree_exiting.connect(binding._bound_tree_exiting_popup)
 	
 	# 地雷三：把 popup 添加到神之层
 	# ⚠️ 不能用 reparent() — popup 由 HoverInfoPopup.new() 创建，无 parent
@@ -96,6 +116,7 @@ func register(trigger: Control, popup: Control, delay: float = 0.5, hide_grace: 
 	call_deferred("_enforce_hidden", binding)
 	
 	_bindings[trigger] = binding
+	binding.state = HoverBinding.State.IDLE
 	#Logging.info("HoverPopupManager: registered trigger=%s popup=%s delay=%.2f hide_grace=%.2f" % [trigger.name, popup.name, delay, hide_grace])
 
 ## 取消注册
@@ -103,23 +124,24 @@ func unregister(trigger: Control) -> void:
 	if not _bindings.has(trigger):
 		return
 	var binding: HoverBinding = _bindings[trigger]
-	Logging.info("HoverPopupManager: unregistering trigger=%s" % trigger.name)
+	# 🔇 降级为 DEBUG：正常生命周期事件，避免批量 free 时刷屏
+	Logging.debug("HoverPopupManager: unregistering trigger=%s" % trigger.name)
 	
 	# 如果正好是当前活跃的，强制隐藏
 	if _current_active == binding:
 		_hide_popup(binding)
 	
 	# 断开信号（如果节点还活着）
+	# 使用绑定时保存的 Callable 以精确匹配 .bind(binding) 包装
 	if is_instance_valid(trigger):
-		if trigger.mouse_entered.is_connected(_on_trigger_enter):
-			trigger.mouse_entered.disconnect(_on_trigger_enter)
-		if trigger.mouse_exited.is_connected(_on_trigger_exit):
-			trigger.mouse_exited.disconnect(_on_trigger_exit)
+		trigger.mouse_entered.disconnect(binding._bound_trigger_enter)
+		trigger.mouse_exited.disconnect(binding._bound_trigger_exit)
+		trigger.tree_exiting.disconnect(binding._bound_tree_exiting_trigger)
 	if is_instance_valid(binding.popup):
-		if binding.popup.mouse_entered.is_connected(_on_popup_enter):
-			binding.popup.mouse_entered.disconnect(_on_popup_enter)
-		if binding.popup.mouse_exited.is_connected(_on_popup_exit):
-			binding.popup.mouse_exited.disconnect(_on_popup_exit)
+		binding.popup.mouse_entered.disconnect(binding._bound_popup_enter)
+		binding.popup.mouse_exited.disconnect(binding._bound_popup_exit)
+		binding.popup.visibility_changed.disconnect(binding._bound_visibility_changed)
+		binding.popup.tree_exiting.disconnect(binding._bound_tree_exiting_popup)
 	
 	# 清理 Timer
 	if binding.show_timer and is_instance_valid(binding.show_timer):
@@ -164,6 +186,13 @@ func _on_popup_exit(binding: HoverBinding) -> void:
 # ── 核心逻辑 ─────────────────────────────────────────────
 
 func _request_show(binding: HoverBinding) -> void:
+	# 🩺 诊断：检查 _current_active 是否为僵尸 binding（popup 已 freed 但未清理）
+	if _current_active != null and not is_instance_valid(_current_active.popup):
+		Logging.err("HoverPopupManager: ZOMBIE _current_active detected! trigger=%s, forcing clear" % (
+			_current_active.trigger.name if is_instance_valid(_current_active.trigger) else "<Freed_Zombie>"
+		))
+		_current_active = null
+	
 	# 已经在显示这个 popup，无需操作
 	if _current_active == binding and binding.popup.visible:
 		return
@@ -176,6 +205,7 @@ func _request_show(binding: HoverBinding) -> void:
 		_hide_popup(_current_active)
 	
 	_current_active = binding
+	binding.state = HoverBinding.State.DELAYING
 	
 	# 启动延迟显示计时器
 	if binding.show_timer and is_instance_valid(binding.show_timer):
@@ -187,12 +217,13 @@ func _on_show_timer_timeout(binding: HoverBinding) -> void:
 		Logging.info("HoverPopupManager: show timeout but user already left, aborting")
 		return
 	
+	binding.state = HoverBinding.State.SHOWING
 	_position_popup_at_mouse(binding)
 	# z_index 兜底：当 reparent 到 _canvas_layer 失败时（popup 仍留在 UI CanvasLayer），
 	# 高 z_index 确保 popup 渲染在 LeftPlayerPanel 等同级节点之上
 	binding.popup.z_index = 100
 	binding.popup.visible = true
-	Logging.info("HoverPopupManager: showing popup=%s at position %s, size=%s, parent=%s (layer=%d), z_index=%d" % [
+	Logging.debug("HoverPopupManager: showing popup=%s at position %s, size=%s, parent=%s (layer=%d), z_index=%d" % [
 		binding.popup.name,
 		binding.popup.position,
 		binding.popup.size,
@@ -237,7 +268,7 @@ func _position_popup_at_mouse(binding: HoverBinding) -> void:
 	target_x = max(0.0, target_x)
 	
 	popup.position = Vector2(target_x, target_y)
-	Logging.info("HoverPopupManager: positioned popup at (%d, %d)" % [target_x, target_y])
+	Logging.debug("HoverPopupManager: positioned popup at (%d, %d)" % [target_x, target_y])
 
 func _maybe_hide(binding: HoverBinding) -> void:
 	# 如果 trigger 或 popup 任一还在 hover，不隐藏
@@ -248,15 +279,20 @@ func _maybe_hide(binding: HoverBinding) -> void:
 	if not binding.popup.visible:
 		if binding.show_timer and is_instance_valid(binding.show_timer):
 			binding.show_timer.stop()
+		if _current_active == binding:
+			_current_active = null
+		binding.state = HoverBinding.State.IDLE
 		return
 	
 	# SHOWING 状态，启动隐藏宽容计时器
+	binding.state = HoverBinding.State.HIDE_PENDING
 	if binding.hide_timer and is_instance_valid(binding.hide_timer):
 		binding.hide_timer.start(binding.hide_grace)
 
 func _on_hide_timer_timeout(binding: HoverBinding) -> void:
 	# 双检：超时时用户可能又回来了
 	if binding.trigger_hovered or binding.popup_hovered:
+		binding.state = HoverBinding.State.SHOWING
 		Logging.info("HoverPopupManager: hide timeout but user came back, aborting")
 		return
 	
@@ -264,9 +300,16 @@ func _on_hide_timer_timeout(binding: HoverBinding) -> void:
 
 func _hide_popup(binding: HoverBinding) -> void:
 	if not is_instance_valid(binding.popup):
+		Logging.err("HoverPopupManager: _hide_popup called but popup already freed! _current_active was %s, forcing clear" % (
+			"<SAME>" if _current_active == binding else "<DIFFERENT>"
+		))
+		# 🩹 即使 popup 已释放也必须清理 _current_active，防止状态机永久卡死
+		if _current_active == binding:
+			_current_active = null
+		binding.state = HoverBinding.State.IDLE
 		return
 	binding.popup.visible = false
-	Logging.info("HoverPopupManager: hiding popup=%s" % binding.popup.name)
+	Logging.debug("HoverPopupManager: hiding popup=%s" % binding.popup.name)
 	
 	# 停止所有计时器
 	if binding.show_timer and is_instance_valid(binding.show_timer):
@@ -274,6 +317,7 @@ func _hide_popup(binding: HoverBinding) -> void:
 	if binding.hide_timer and is_instance_valid(binding.hide_timer):
 		binding.hide_timer.stop()
 	
+	binding.state = HoverBinding.State.IDLE
 	if _current_active == binding:
 		_current_active = null
 
@@ -290,7 +334,8 @@ func _on_popup_visibility_changed(binding: HoverBinding) -> void:
 	if popup.visible and _current_active != null and _current_active != binding:
 		# 💀 同样的僵尸防御
 		var active_name: String = _current_active.trigger.name if is_instance_valid(_current_active.trigger) else "<Freed_Zombie>"
-		Logging.info("HoverPopupManager: popup '%s' shown while '%s' is active, forcing hide" % [binding.popup.name, active_name])
+		# 🔇 降级为 DEBUG：批量刷新时的正常竞争
+		Logging.debug("HoverPopupManager: popup '%s' shown while '%s' is active, forcing hide" % [binding.popup.name, active_name])
 		popup.visible = false
 
 ## register 后延迟一帧，覆盖 popup 自身 _ready() 里的 show()
@@ -312,8 +357,8 @@ func _on_popup_dying(trigger_ref: Variant) -> void:
 	# ⚠️ trigger 参数为 weakref — tree_exiting 时原 trigger 可能已 freed
 	var trigger = trigger_ref.get_ref() if trigger_ref else null
 	if not trigger or not is_instance_valid(trigger):
-		Logging.info("HoverPopupManager: popup dying but trigger already freed, skip cleanup")
+		Logging.debug("HoverPopupManager: popup dying but trigger already freed, skip cleanup")
 		return
-	Logging.info("HoverPopupManager: popup for trigger=%s tree_exiting" % trigger.name)
+	Logging.debug("HoverPopupManager: popup for trigger=%s tree_exiting" % trigger.name)
 	if _bindings.has(trigger):
 		unregister(trigger)

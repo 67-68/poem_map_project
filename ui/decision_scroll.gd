@@ -3,6 +3,7 @@ class_name DecisionScroll extends SmoothScrollContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	super._ready()
 	PlayerState.location_changed.connect(func(): refresh_current_decisions())
 	EventBus.year_changed.connect(func(_year: float): refresh_current_decisions())
 	refresh_current_decisions()

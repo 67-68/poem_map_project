@@ -110,6 +110,12 @@ func _on_mouse_exited() -> void:
 
 func _on_button_pressed() -> void:
 	#breakpoint
+	Logging.info("SceneActionPanel: BUTTON_PRESSED name=%s type=%s action_results=%d generator=%s" % [
+		action.name if action else "NULL",
+		action.get_class() if action else "NULL",
+		action.action_results.size() if action and action.action_results else 0,
+		"yes" if action and action.generator != null else "no"
+	])
 	if action.action_results:
 		for r in action.action_results: r.operate()
 	

@@ -21,6 +21,7 @@ func _init() -> void:
 	ct.set_script(ct_script)
 	ct.name = "CustomTooltip"
 	add_child(ct, false, INTERNAL_MODE_BACK)
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 ## 设置叙事层文本（默认可见，墨青色 NarrativeText）

@@ -10,7 +10,7 @@ class_name SmoothScrollContainer extends ScrollContainer
 @export var pan_sensitivity: float = 0.05  # 触控板灵敏度系数 (相对 scroll_speed 的阻尼，越小越迟钝)
 @export var smooth_weight: float = 15.0    # 插值系数 (越小惯性越大, 越大越干脆)
 @export var drag_friction: float = 1.0     # 拖拽摩擦力 (1.0=跟手, 0.5=纸很重扯不动)
-@export var drag_deadzone: float = 8.0     # 拖拽死区（像素），触控板微动小于此值不算拖拽，保护 Button 点击
+@export var drag_deadzone: float = 15.0     # 拖拽死区（像素），触控板微动小于此值不算拖拽，保护 Button 点击
 
 var target_scroll: float = 0.0
 var is_dragging: bool = false
@@ -57,6 +57,8 @@ func _style_scrollbar() -> void:
 	add_theme_constant_override(&"scroll_bar_separation", 0)
 
 
+const SCROLL_EPSILON: float = 1.5  # 滚动收敛容差。必须 > 1.0 防止 lerp/scroll_vertical_clamp 引起的每帧 1px 抖动
+
 func _process(delta: float) -> void:
 	var sv = scroll_vertical
 	var ts = target_scroll
@@ -73,16 +75,21 @@ func _process(delta: float) -> void:
 	#	])
 	
 	# 没有在用手死死拽着纸时，才允许惯性滑动生效
-	if not is_dragging and abs(sv - ts) > 1.0:
+	# 注意：差值阈值必须 > 1.0，否则 sv 和 ts 差 1.0 时会跳过 lerp 直接 SNAP，
+	# 但 SNAP 写入后又可能被 ScrollContainer 自身 clamp 回原值，形成每帧 1px 抖动，
+	# 导致子 Button 的屏幕坐标每帧变化，mouse_entered/mouse_exited 反复触发，hover popup 永远无法出现
+	if not is_dragging and abs(sv - ts) > SCROLL_EPSILON:
 		var prev_sv = sv
 		scroll_vertical = lerpf(sv, ts, smooth_weight * delta)
 		# DEBUG: 如果 lerp 后 scroll_vertical 没有朝 target 方向移动，或者被回弹了，记录异常
 		var new_sv = scroll_vertical
 		if abs(new_sv - ts) >= abs(prev_sv - ts) and abs(prev_sv - ts) > 2.0:
 			Logging.warn("SmoothScrollContainer[%s]: LERP_STALL sv %.1f->%.1f target=%.1f (no progress or regression)" % [name, prev_sv, new_sv, ts])
-	elif not is_dragging and abs(sv - ts) <= 1.0 and sv != ts:
+	elif not is_dragging and abs(sv - ts) > 0.01:
 		scroll_vertical = ts  # snap to target
-		Logging.debug("SmoothScrollContainer[%s]: SNAP sv=%.1f -> target=%.1f" % [name, sv, ts])
+		# 节流：每 60 帧最多打一条 SNAP 日志，防止刷屏
+		if _frame_counter % 60 == 0:
+			Logging.debug("SmoothScrollContainer[%s]: SNAP sv=%.1f -> target=%.1f" % [name, sv, ts])
 
 
 # ═══════════════════════════════════════════════

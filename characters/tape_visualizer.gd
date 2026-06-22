@@ -108,7 +108,7 @@ func play_swap_background(new_texture: Texture2D, apply_callback: Callable) -> v
 	var slide_out_duration := 0.5
 	var slide_out_tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	slide_out_tween.tween_property(shadow_box, "position:y", slide_out_target, slide_out_duration) \
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	slide_out_tween.set_parallel(true)
 	slide_out_tween.tween_property(tape_container, "modulate:a", 0.0, slide_out_duration * 0.6) \
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

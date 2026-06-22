@@ -427,7 +427,7 @@ func _on_auto_advance_timeout(all_options: Array, entry_id: String) -> void:
 
 # ── UIDecl 背景纹理动态替换 ──────────────────────
 
-## 根据事件的 ui_decl.background_narrative 动态替换 NarrativeOverlay 纸带的
+## 根据事件的 ui_decl.background_narrative 动态替换 TapeContainer 纸带的
 ## StyleBoxTexture 背景纹理。ui_decl 为空或 background_narrative 为空时保持默认宣纸纹理。
 func _apply_ui_decl_background(data: BaseEvent) -> void:
 	if not data.ui_decl:
@@ -435,8 +435,8 @@ func _apply_ui_decl_background(data: BaseEvent) -> void:
 	var ui_decl: UIDecl = data.ui_decl
 	if not ui_decl.background_narrative:
 		return
-	# NarrativeOverlay 自身的 theme_override_styles/panel 是 StyleBoxTexture
-	var style: StyleBoxTexture = get("theme_override_styles/panel") as StyleBoxTexture
+	# TapeContainer 的 theme_override_styles/panel 持有宣纸 StyleBoxTexture
+	var style: StyleBoxTexture = tape_container.get("theme_override_styles/panel") as StyleBoxTexture
 	if not style:
 		Logging.warn("NarrativeOverlay._apply_ui_decl_background: 无法获取 StyleBoxTexture panel style")
 		return
@@ -460,8 +460,8 @@ func _needs_background_swap(data: BaseEvent) -> bool:
 		Logging.info("_needs_background_swap: 事件 '%s' 未声明 background_narrative，无需交换背景" % data.name)
 		return false
 
-	# 条件 3：新纹理 ≠ 当前纹理
-	var style: StyleBoxTexture = get("theme_override_styles/panel") as StyleBoxTexture
+	# 条件 3：新纹理 ≠ 当前纹理（从 TapeContainer 读取，非 NarrativeOverlay self）
+	var style: StyleBoxTexture = tape_container.get("theme_override_styles/panel") as StyleBoxTexture
 	if not style:
 		Logging.info("_needs_background_swap: 无法获取当前 StyleBoxTexture，跳过交换")
 		return false
