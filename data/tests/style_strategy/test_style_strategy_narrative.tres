@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c_test_style_narrative"]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://dpdoe4fqn0hol" path="res://core/operators/style_strategy_operator.gd" id="2_style_op"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_prop_op"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_eo"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="6_bo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_re"]
+
+[sub_resource type="Resource" id="Resource_style_strategy"]
+script = ExtResource("2_style_op")
+strategy_name = "frost"
+target_control = 0
+metadata/_custom_type_script = "uid://dpdoe4fqn0hol"
+
+[sub_resource type="Resource" id="Resource_prop_health"]
+script = ExtResource("3_prop_op")
+str_props = "health"
+value = -20
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_cr_narrative"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_style_strategy"), SubResource("Resource_prop_health")])
+
+[sub_resource type="Resource" id="Resource_opt_narrative"]
+script = ExtResource("5_eo")
+choice_result = SubResource("Resource_cr_narrative")
+description = "饮尽杯中残酒"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("7_re")
+options = Array[ExtResource("6_bo")]([SubResource("Resource_opt_narrative")])
+uuid = "test_style_strategy_narrative"
+name = "风格策略测试 — NarrativeOverlay 霜冻"
+description = "窗外飘起了细雪，案头的烛火摇曳不定。你感到一阵寒意从脚底蔓延上来，仿佛连骨髓都被冻住了。选择下方选项后，NarrativeOverlay.tape_container 应切换至 frost 策略，health -20。"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

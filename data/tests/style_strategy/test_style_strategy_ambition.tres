@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c_test_style_ambition"]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://dpdoe4fqn0hol" path="res://core/operators/style_strategy_operator.gd" id="2_style_op"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_prop_op"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_eo"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="6_bo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_re"]
+
+[sub_resource type="Resource" id="Resource_style_strategy"]
+script = ExtResource("2_style_op")
+strategy_name = "decay_dirt_crack"
+target_control = 1
+metadata/_custom_type_script = "uid://dpdoe4fqn0hol"
+
+[sub_resource type="Resource" id="Resource_prop_distance"]
+script = ExtResource("3_prop_op")
+str_props = "distance"
+value = 50
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_cr_ambition"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("1_baseop")]([SubResource("Resource_style_strategy"), SubResource("Resource_prop_distance")])
+
+[sub_resource type="Resource" id="Resource_opt_ambition"]
+script = ExtResource("5_eo")
+choice_result = SubResource("Resource_cr_ambition")
+description = "踏入喧嚣的酒肆"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("7_re")
+options = Array[ExtResource("6_bo")]([SubResource("Resource_opt_ambition")])
+uuid = "test_style_strategy_ambition"
+name = "风格策略测试 — AmbitionHUD 裂痕腐蚀"
+description = "你推开酒肆的木门，暖烘烘的酒气和嘈杂的吆喝声迎面扑来。堂倌见你风尘仆仆的模样，殷勤地引你入座。角落里有几个胡商正在把玩一把镶着兽骨的弯刀。选择下方选项后，AmbitionHUD 应切换至 decay_dirt_crack 策略，distance +50。"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"
