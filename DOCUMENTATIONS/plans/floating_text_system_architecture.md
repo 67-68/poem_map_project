@@ -23,7 +23,7 @@
 ### 设计推导
 
 ```
-原始数据: prop_sub(name=money, val=50)
+原始数据: prop_sub(name=money; val=50)
         ↓
 传统做法: 飘 "-50 两"  ← 裸数据，杜绝
         ↓

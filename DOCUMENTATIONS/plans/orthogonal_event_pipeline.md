@@ -51,11 +51,11 @@ final_scale = dim1.scale × dim2.scale × dim3.scale
 ```
 final_scale = 30 × 1 × 1 = 30
 
-L1 的 operator_dsl:    prop_sub(name="money", val=10)   → val=10×30=300
-TypeA 的 operator_dsl:  prop_sub(name="money", val=20)   → val=20×30=600
+L1 的 operator_dsl:    prop_sub(name="money"; val=10)   → val=10×30=300
+TypeA 的 operator_dsl:  prop_sub(name="money"; val=20)   → val=20×30=600
 M0 的 operator_dsl:    （空）
 
-最终 result: prop_sub(name="money", val=300), prop_sub(name="money", val=600)
+最终 result: prop_sub(name="money"; val=300), prop_sub(name="money"; val=600)
 → PlayerState 中 money 减少 900（两条各自执行，不合并）
 ```
 
@@ -64,11 +64,11 @@ M0 的 operator_dsl:    （空）
 ```
 final_scale = 50 × 1 × 2 = 100
 
-L2 的 operator_dsl:    prop_sub(name="money", val=10)   → val=10×100=1000
-TypeC 的 operator_dsl:  emo_add(name="sorrow", val=3)    → val=3×100=300
-M1 的 operator_dsl:    prop_sub(name="health", val=2)    → val=2×100=200
+L2 的 operator_dsl:    prop_sub(name="money"; val=10)   → val=10×100=1000
+TypeC 的 operator_dsl:  emo_add(name="sorrow"; val=3)    → val=3×100=300
+M1 的 operator_dsl:    prop_sub(name="health"; val=2)    → val=2×100=200
 
-最终 result: prop_sub(name="money", val=1000), emo_add(name="sorrow", val=300), prop_sub(name="health", val=200)
+最终 result: prop_sub(name="money"; val=1000), emo_add(name="sorrow"; val=300), prop_sub(name="health"; val=200)
 ```
 
 ⚠️ **当前约束**：operator_dsl 只支持 PropertyOperator（prop_add/prop_sub/prop_set）。
@@ -144,7 +144,7 @@ class_name PipelineDimensionValue extends Resource
 @export var description: String             # AI 说明：这个值是什么意思
 @export var scale: int = 1                  # Scale 乘数
 @export var operator_dsl: String = ""       # 附加 DSL（只支持 PropertyOperator）
-# 示例: prop_sub(name="money", val=10)
+# 示例: prop_sub(name="money"; val=10)
 ```
 
 ### 2.4 PipelineDimension (`model/pipeline/pipeline_dimension.gd`)
@@ -205,7 +205,7 @@ id = "L0"
 name = "门子/家奴"
 description = "最底层的门卫、仆役，守门索贿"
 scale = 10
-operator_dsl = "prop_sub(name=\"money\", val=10)"
+operator_dsl = "prop_sub(name=\"money\"; val=10)"
 
 [sub_resource type="Resource" id="DimVal_L1"]
 script = ExtResource("3")
@@ -213,7 +213,7 @@ id = "L1"
 name = "清客/文法吏"
 description = "幕僚、文书小吏，递话要钱"
 scale = 30
-operator_dsl = "prop_sub(name=\"money\", val=10)"
+operator_dsl = "prop_sub(name=\"money\"; val=10)"
 
 [sub_resource type="Resource" id="DimVal_L2"]
 script = ExtResource("3")
@@ -221,7 +221,7 @@ id = "L2"
 name = "权贵本尊"
 description = "直接面对高官，需要重大代价"
 scale = 50
-operator_dsl = "prop_sub(name=\"money\", val=10), prop_sub(name=\"fatigue\", val=5)"
+operator_dsl = "prop_sub(name=\"money\"; val=10), prop_sub(name=\"fatigue\"; val=5)"
 
 [sub_resource type="Resource" id="Dim_Power"]
 script = ExtResource("2")
@@ -316,13 +316,13 @@ def process_dimension_operators(dim_values: list, final_scale: int) -> str:
     
     示例:
     dim_values = [
-        "prop_sub(name=\"money\", val=10)",
-        "prop_sub(name=\"money\", val=20)",
+        "prop_sub(name=\"money\"; val=10)",
+        "prop_sub(name=\"money\"; val=20)",
         ""
     ]
     final_scale = 30
     
-    返回: "prop_sub(name=\"money\", val=300), prop_sub(name=\"money\", val=600)"
+    返回: "prop_sub(name=\"money\"; val=300), prop_sub(name=\"money\"; val=600)"
     """
     scaled_dsls = []
     for dsl in dim_values:
@@ -341,7 +341,7 @@ def process_dimension_operators(dim_values: list, final_scale: int) -> str:
 ```csv
 row_type,uuid,title,description,context,requirements,on_enter,interruptions,template,provider
 random_event,gan_ye_honeymoon_l0_a_m0,"门房索贿","你来到李府门前，一个尖嘴猴腮的门子拦住了去路...","trigger_tags=bai_ye|weight=10","","","","",""
-option,,接受（花费...）,"","","","prop_sub(name="money",val=300), prop_sub(name="money",val=600)","","",""
+option,,接受（花费...）,"","","","prop_sub(name="money";val=300), prop_sub(name="money";val=600)","","",""
 ```
 
 ---

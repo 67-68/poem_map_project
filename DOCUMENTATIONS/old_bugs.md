@@ -459,7 +459,7 @@ rm -rf <project_root>/.godot/
 
 ### 问题描述
 
-`mid_of_wenhuaquan_party` 的 interruption 条件为 `flag_int_gt(name=flag_relation_with_libai,val=20)`，当李白好感 > 20 时触发 `push_event(event_key=request_libai_changhe)`。但 `request_libai_changhe` 的 entry requirement 是 `flag_int_lt(name=flag_libai_changhe_request,val=1)`。
+`mid_of_wenhuaquan_party` 的 interruption 条件为 `flag_int_gt(name=flag_relation_with_libai;val=20)`，当李白好感 > 20 时触发 `push_event(event_key=request_libai_changhe)`。但 `request_libai_changhe` 的 entry requirement 是 `flag_int_lt(name=flag_libai_changhe_request;val=1)`。
 
 当 `flag_libai_changhe_request >= 1` 时：
 1. interruption 条件（好感 > 20）仍然通过
@@ -483,10 +483,10 @@ rm -rf <project_root>/.godot/
 
 ```csv
 # 改前
-interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20), random(...))
+interrupt_event(flag_int_gt(name=flag_relation_with_libai;val=20), random(...))
 
 # 改后
-interrupt_event(flag_int_gt(name=flag_relation_with_libai,val=20) and flag_int_lt(name=flag_libai_changhe_request,val=1), random(...))
+interrupt_event(flag_int_gt(name=flag_relation_with_libai;val=20) and flag_int_lt(name=flag_libai_changhe_request;val=1), random(...))
 ```
 
 **第二层（代码层）**：在 `narrative_overlay.gd` 的 `_on_push_event()` 中增加防御检查
@@ -500,7 +500,7 @@ if ev is RandomEvent and ev.requirement:
 ```
 
 ### 修复文件
-- [`data/random_events/random_events.csv`](data/random_events/random_events.csv) — 第 24 行：`mid_of_wenhuaquan_party` interruption 条件加 ` and flag_int_lt(name=flag_libai_changhe_request,val=1)`
+- [`data/random_events/random_events.csv`](data/random_events/random_events.csv) — 第 24 行：`mid_of_wenhuaquan_party` interruption 条件加 ` and flag_int_lt(name=flag_libai_changhe_request;val=1)`
 - [`parser/dsl_parser.gd`](parser/dsl_parser.gd) — `parse_interruption_field()` 新增 ` and ` 语法支持
 - [`characters/narrative_overlay.gd`](characters/narrative_overlay.gd) — `_on_push_event()` 增加 entry requirement 防御检查
 

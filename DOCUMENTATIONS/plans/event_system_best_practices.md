@@ -182,8 +182,8 @@ random_event,feihualing_other_done,,,飞花令,你选择了以「{@keyword}」�
   context_fetch(fetched_key="feihualing_chosen_word",datasource_name="imaginaries",prop_from_result="description",key_stored_context="imaginary_desc"),
   npc_batch_check(participants_key="guests",target_context_key="npc_report",check_prop="TALENT",text_template="FEIHUALING"),,,
 >option,feihualing_other_done_imaginary,,imaginary_has_level(min_level=1),妙语连珠,妙语连珠,,imaginary_level_reward(l3_fame=50,l2_fame=20,l1_fame=0),,,
->option,feihualing_other_done_inspiration,,prop_gt(name=inspiration,val=19),灵感硬接,灵感硬接,,prop_sub(name=inspiration,val=20),prop_add(name=literary_fame,val=15),pop_event(),,,
->option,feihualing_other_done_penalty,,,自罚三杯,自罚三杯,,prop_add(name=drunk,val=10),prop_sub(name=literary_fame,val=5),pop_event(),,,
+>option,feihualing_other_done_inspiration,,prop_gt(name=inspiration;val=19),灵感硬接,灵感硬接,,prop_sub(name=inspiration;val=20),prop_add(name=literary_fame;val=15),pop_event(),,,
+>option,feihualing_other_done_penalty,,,自罚三杯,自罚三杯,,prop_add(name=drunk;val=10),prop_sub(name=literary_fame;val=5),pop_event(),,,
 ```
 
 **关键模式总结**：
@@ -283,7 +283,7 @@ random_event,lianju_player_turn,,,联句·我对,宾客以...轮到你一展诗�
 | `row_type` | ✅ | 行类型，`random_event` 或 `>option`（`>` 越多层级越深） | `random_event` |
 | `uuid` | ✅ | 事件唯一 ID | `feihualing_start` |
 | `context` | ❌ | 触发标签、权重、背景、自定义参数 | `trigger_tags=[...]\|weight=15.5\|background=bg_rural_poor` |
-| `requirements` | ❌ | 事件/选项触发条件 | `prop_gt(name=money,val=50),trait_has(name=official)` |
+| `requirements` | ❌ | 事件/选项触发条件 | `prop_gt(name=money;val=50),trait_has(name=official)` |
 | `title` | ✅ | 事件名称/选项按钮文字 | `飞花令` |
 | `description` | ❌ | 事件描述（支持 `{@key}` 插值） | `你选择了「{@keyword}」为题` |
 | `on_enter` | ❌ | 事件级入场操作（舞台置景） | `context_fetch(...),npc_batch_check(...)` |
@@ -297,8 +297,8 @@ random_event,lianju_player_turn,,,联句·我对,宾客以...轮到你一展诗�
 
 ```
 # 属性比较
-prop_gt(name=money,val=50)
-prop_lt(name=health,val=10)
+prop_gt(name=money;val=50)
+prop_lt(name=health;val=10)
 
 # 特性检查
 trait_has(name=official)
@@ -307,30 +307,30 @@ trait_not_has(name=corrupt)
 # Flag 检查
 flag_bool_has(name=chain_strange_poet_1)
 flag_bool_not_has(name=sword)
-flag_int_gt(name=flag_relation_with_libai,val=10)
-flag_int_lt(name=flag_relation_with_libai,val=5)
-flag_int_eq(name=flag_libai_changhe_request,val=1)
+flag_int_gt(name=flag_relation_with_libai;val=10)
+flag_int_lt(name=flag_relation_with_libai;val=5)
+flag_int_eq(name=flag_libai_changhe_request;val=1)
 
 # 意象等级检查
 imaginary_has_level(min_level=1)
 
 # 多个条件 AND 组合（逗号分隔）
-prop_gt(name=money,val=50),trait_has(name=official)
+prop_gt(name=money;val=50),trait_has(name=official)
 ```
 
 ### Results / on_enter 语法
 
 ```
 # 属性操作
-prop_add(name=literary_fame,val=15)
-prop_sub(name=money,val=100)
-prop_set(name=inspiration,val=0)
+prop_add(name=literary_fame;val=15)
+prop_sub(name=money;val=100)
+prop_set(name=inspiration;val=0)
 
 # Flag 操作
-flag_bool_set(name=chain_strange_poet_1,val=true)
+flag_bool_set(name=chain_strange_poet_1;val=true)
 flag_bool_replace(from=chain_strange_poet_1,to=chain_strange_poet_2)
-flag_int_set(name=flag_libai_changhe_request,val=5)
-flag_int_append(name=flag_relation_with_libai,val=-5)
+flag_int_set(name=flag_libai_changhe_request;val=5)
+flag_int_append(name=flag_relation_with_libai;val=-5)
 flag_int_reduce_if_above(name=flag_libai_changhe_request,threshold=0,amount=1)
 
 # Trait 操作
@@ -381,13 +381,13 @@ item_provider(
 # 支持多个 interrupt_event() 逗号分隔，first-match-wins
 
 interrupt_event(
-  flag_int_eq(name=flag_libai_changhe_request,val=1),
+  flag_int_eq(name=flag_libai_changhe_request;val=1),
   push_event(event_key=libai_force_changhe)
 )
 
 # 支持 AND 条件组合（用 " and " 语法，带空格）
 interrupt_event(
-  flag_int_gt(name=flag_relation_with_libai,val=20) and flag_int_eq(name=flag_libai_changhe_request,val=0),
+  flag_int_gt(name=flag_relation_with_libai;val=20) and flag_int_eq(name=flag_libai_changhe_request;val=0),
   random(val=99,success=push_event(event_key=request_libai_changhe))
 )
 ```

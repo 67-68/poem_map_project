@@ -309,7 +309,7 @@ options:
 | 字段 | 类型 | 消费位置 | 格式示例 |
 |------|------|---------|---------|
 | `universal_tags` | `list[str]` | CSV `trigger_tags` 列 | `["bai_ye"]` |
-| `universal_requirement` | `str` | CSV `requirements` 列 | `prop_gt(name=ambition,val=50),prop_lt(name=ambition,val=100)` |
+| `universal_requirement` | `str` | CSV `requirements` 列 | `prop_gt(name=ambition;val=50),prop_lt(name=ambition;val=100)` |
 | `universal_result` | `str` | 每个 option 行的 `results` 列（Layer 0，与维度花销合并） | `prop_add(name=exhaustion; val=1)\|prop_add(name=fatigue; val=5)` |
 | `universal_option_requirement` | `str` | CSV option 行的 `requirements` 列 | `poem_has(type=GAN_YE; min_level=1; failed_hint="{failed_hint}")` |
 

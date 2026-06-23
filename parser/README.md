@@ -91,8 +91,8 @@ trigger_tags=[actor:status:drunk/city:econ:prosperous/action:study:poetry]
 
 | 函数 | 说明 | 参数 |
 |------|------|------|
-| `prop_gt(name=, val=)` | 属性值大于 | name: 属性名, val: 数值 |
-| `prop_lt(name=, val=)` | 属性值小于 | name: 属性名, val: 数值 |
+| `prop_gt(name=; val=)` | 属性值大于 | name: 属性名, val: 数值 |
+| `prop_lt(name=; val=)` | 属性值小于 | name: 属性名, val: 数值 |
 
 示例：
 ```
@@ -119,8 +119,8 @@ trait_not_has(name=criminal)   # 不拥有罪犯特性
 |------|------|------|
 | `flag_bool_has(name=)` | bool flag 存在且为 true | name: flag_id |
 | `flag_bool_not_has(name=)` | bool flag 不存在或为 false | name: flag_id |
-| `flag_int_gt(name=, val=)` | int flag 值大于 | name: flag_id, val: 数值 |
-| `flag_int_lt(name=, val=)` | int flag 值小于 | name: flag_id, val: 数值 |
+| `flag_int_gt(name=; val=)` | int flag 值大于 | name: flag_id, val: 数值 |
+| `flag_int_lt(name=; val=)` | int flag 值小于 | name: flag_id, val: 数值 |
 | `flag_str_is(name=)` | str flag 值非空 | name: flag_id |
 | `flag_str_is_not(name=)` | str flag 值为空 | name: flag_id |
 
@@ -162,8 +162,8 @@ random(val=30; success=trait_add(name=promoted); fail=trait_add(name=demoted); s
 
 | 函数 | 说明 | 参数 |
 |------|------|------|
-| `prop_add(name=, val=)` | 属性增加 | name: 属性名, val: 数值 |
-| `prop_sub(name=, val=)` | 属性减少 | name: 属性名, val: 数值 |
+| `prop_add(name=; val=)` | 属性增加 | name: 属性名, val: 数值 |
+| `prop_sub(name=; val=)` | 属性减少 | name: 属性名, val: 数值 |
 
 示例：
 ```
@@ -188,11 +188,11 @@ trait_remove(name=sick)      # 移除疾病特性
 
 | 函数 | 说明 | 参数 |
 |------|------|------|
-| `flag_bool_set(name=, val=)` | 设置 bool flag | name: flag_id, val: true/false |
+| `flag_bool_set(name=; val=)` | 设置 bool flag | name: flag_id, val: true/false |
 | `flag_bool_replace(from=, to=)` | 替换 bool flag 名称 | from: 旧 flag_id, to: 新 flag_id |
-| `flag_str_set(name=, val=)` | 设置 str flag | name: flag_id, val: 字符串值 |
-| `flag_int_set(name=, val=)` | 设置 int flag | name: flag_id, val: 数值 |
-| `flag_int_append(name=, val=)` | int flag 增加 | name: flag_id, val: 数值 |
+| `flag_str_set(name=; val=)` | 设置 str flag | name: flag_id, val: 字符串值 |
+| `flag_int_set(name=; val=)` | 设置 int flag | name: flag_id, val: 数值 |
+| `flag_int_append(name=; val=)` | int flag 增加 | name: flag_id, val: 数值 |
 
 示例：
 ```

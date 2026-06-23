@@ -87,7 +87,7 @@
 
   // ── 通用全局配置 ──
   "universal_tags": ["scene_imagery"],
-  "universal_requirement": "prop_gt(name=ambition,val=0)",
+  "universal_requirement": "prop_gt(name=ambition;val=0)",
   "universal_result": "prop_add(name=career_progress; val=1)",
   "universal_option_requirement": "poem_has(type=GAN_YE; min_level=1; failed_hint=\"{failed_hint}\")",
 
@@ -703,7 +703,7 @@ virtual_dimension_ids 作用: 追加虚拟维度到末尾
 | 字段 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `universal_tags` | `list[str]` | `["bai_ye"]` | 兜底触发标签。当维度值无 `action:` 前缀 tag 时回退使用 |
-| `universal_requirement` | `str` | `""` | 全局事件 requirement，如 `"prop_gt(name=ambition,val=0),prop_lt(name=ambition,val=70)"` |
+| `universal_requirement` | `str` | `""` | 全局事件 requirement，如 `"prop_gt(name=ambition;val=0),prop_lt(name=ambition;val=70)"` |
 | `universal_result` | `str` | `""` | 全局选项结果 DSL，多个表达式用 `\|` 分隔（OR 逻辑），会与维度缩放后的 DSL 合并 |
 | `universal_option_requirement` | `str` | `""` | 全局选项 requirement，支持 `{failed_hint}` 模板变量 |
 | `final_directive` | `str` | `""` | 渲染到 system prompt 绝对末尾的最后指令。利用 Recency Bias 强化约束 |
