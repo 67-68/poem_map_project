@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dmdkbw4xs7ahn"]
+
+[ext_resource type="Shader" uid="uid://dx3acfmiun0ax" path="res://shaders/anlushan.gdshader" id="1_6b16m"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5byrg"]
+frequency = 0.0032
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0yq7m"]
+noise = SubResource("FastNoiseLite_5byrg")
+
+[resource]
+shader = ExtResource("1_6b16m")
+shader_parameter/infection_progress = 0.0
+shader_parameter/origin_point = Vector2(0.75, 0.25)
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_0yq7m")
+shader_parameter/blood_color = Color(0.35, 0.05, 0.05, 1)
+shader_parameter/edge_color = Color(1, 0, 0, 1)
+shader_parameter/edge_width = 0.0050000002375

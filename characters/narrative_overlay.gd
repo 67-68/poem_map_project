@@ -33,6 +33,7 @@ var _is_settlement: bool = false
 var _default_background_texture: Texture2D  # tscn 中 tape_container 的初始宣纸纹理
 var _overlay_anim_in_progress: bool = false  # overlay 动画进行中，阻止 tape_needs_hide
 var _deferred_hide_pending: bool = false     # 动画期间收到 hide 请求，动画完成后执行
+var _auto_advance_blocked: bool = false      # 非事件状态下阻止 _start_auto_advance（cinematic/picker/focuschat 等）
 
 # ═══════════════════════════════════════════════════
 # _ready() — 信号接线
@@ -89,6 +90,9 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
+	# ── 进入事件状态，解除 auto-advance 封锁 ──
+	_auto_advance_blocked = false
+
 	var data: BaseEvent = entry.get("data")
 	var context: Dictionary = entry.get("context", {})
 
@@ -258,6 +262,10 @@ func _on_interrupt_button_pressed() -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_picker_ready(entry: Dictionary) -> void:
+	# 🚨 进入 Picker 状态：取消任何残留的 auto-advance Timer，阻止 display_complete 二次启动
+	_cancel_auto_advance()
+	_auto_advance_blocked = true
+
 	visualizer.play_show_tape()
 	BlurManager.show_picker_blur()
 
@@ -285,6 +293,10 @@ func _on_picker_item_selected(entity, entry: Dictionary) -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_cinematic_ready(entry: Dictionary) -> void:
+	# 🚨 进入 Cinematic 状态：取消任何残留的 auto-advance Timer，阻止 display_complete 二次启动
+	_cancel_auto_advance()
+	_auto_advance_blocked = true
+
 	var texts: Array[String] = []
 	var raw_texts = entry.get("texts", [])
 	for t in raw_texts:
@@ -317,6 +329,10 @@ func _on_cinematic_ready(entry: Dictionary) -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_focused_chat_ready(entry: Dictionary) -> void:
+	# 🚨 进入 FocusChat 状态：取消任何残留的 auto-advance Timer，阻止 display_complete 二次启动
+	_cancel_auto_advance()
+	_auto_advance_blocked = true
+
 	visualizer.play_show_tape()
 
 	var data = entry.get("data")
@@ -339,6 +355,10 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_hide_requested() -> void:
+	# 🚨 隐藏纸带时取消 auto-advance（防止在 hide 动画期间触发）
+	_cancel_auto_advance()
+	_auto_advance_blocked = true
+
 	# 🚨 如果 overlay 动画正在进行中，延迟 hide 到动画完成后执行
 	if _overlay_anim_in_progress:
 		Logging.info("NarrativeOverlay._on_hide_requested: overlay 动画进行中，延迟 hide")
@@ -447,6 +467,10 @@ func _cancel_auto_advance() -> void:
 
 ## 启动自动推进计时器 — lasting_time 秒后自动选择选项或关闭事件
 func _start_auto_advance(seconds: float, all_options: Array, entry_id: String) -> void:
+	# 🚨 非事件状态下禁止启动 auto-advance（cinematic/picker/focuschat 活跃期间）
+	if _auto_advance_blocked:
+		Logging.info("_start_auto_advance: auto-advance 被封锁（_auto_advance_blocked=true），跳过 entry_id='%s'" % entry_id)
+		return
 	_cancel_auto_advance()
 	_auto_advance_timer = Timer.new()
 	_auto_advance_timer.wait_time = seconds

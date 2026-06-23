@@ -38,6 +38,12 @@ const _DEFAULT_MAPPINGS: Dictionary = {
 
 # 硬编码默认：时间线脚本（全体延迟 +10s，等打字机打完）
 const _DEFAULT_TIMELINES: Dictionary = {
+	"the_end": [
+		{ "delay": 0.0, "action": "set_title_font_size", "target": "tape_entry", "font_size": 72 },
+		{ "delay": 0.0, "action": "apply_shader", "target": "map_background", "material": preload("res://shaders/anlushan_shader_material.tres") },
+		{ "delay": 0.0, "action": "tween_infection", "target": "map_background", "tween_duration": 8.0 },
+		{ "delay": 0.0, "action": "camera_shake", "target": "camera", "duration": 8.0, "intensity": 2.0 },
+	],
 	"backhome_inside_the_wood": [
 		# Phase 0 — T+0s (call_deferred): 一开始纯黑字体 + 选项 chaos shader + 消除左右面板及 narrative_overlay 外层阴影
 		{ "delay": 0.0, "action": "ghostly_white", "target": "tape_entry" },
@@ -160,6 +166,16 @@ func _execute_stage(stage: Dictionary, entry_id: String, uuid: String) -> void:
 		"tween_burn":
 			var tween_duration: float = stage.get("tween_duration", 2.0)
 			_tween_burn_target(target, entry_id, tween_duration, uuid)
+		"set_title_font_size":
+			var font_size: int = stage.get("font_size", 72)
+			_set_title_font_size(entry_id, font_size)
+		"tween_infection":
+			var tween_duration: float = stage.get("tween_duration", 8.0)
+			_tween_infection_target(target, entry_id, tween_duration, uuid)
+		"camera_shake":
+			var shake_duration: float = stage.get("duration", 8.0)
+			var shake_intensity: float = stage.get("intensity", 2.0)
+			_camera_shake(shake_duration, shake_intensity)
 		_:
 			Logging.err("AnimationController._execute_stage: 未知 action='%s'" % action)
 
@@ -364,6 +380,14 @@ func _apply_shader_target(target: String, entry_id: String, material: ShaderMate
 			else:
 				Logging.err("AnimationController._apply_shader_target: 未找到 TapeContainer")
 
+		"map_background":
+			var bg := _get_map_background()
+			if bg:
+				bg.material = material
+				Logging.info("AnimationController._apply_shader_target: map_background 已挂载 shader (uuid='%s')" % uuid)
+			else:
+				Logging.err("AnimationController._apply_shader_target: 未找到 map_background (CanvasGroup)")
+
 		_:
 			Logging.err("AnimationController._apply_shader_target: 未知 target='%s'" % target)
 
@@ -500,6 +524,64 @@ func _get_narrative_overlay() -> Control:
 	return tape_layer.get_node_or_null("NarrativeOverlay") as Control
 
 
+# ═══════════════════════════════════════════════
+# set_title_font_size — 修改 tape entry 的 TitleLabel 字号
+# ═══════════════════════════════════════════════
+
+func _set_title_font_size(entry_id: String, font_size: int) -> void:
+	var entry := _find_tape_entry(entry_id)
+	if not entry:
+		Logging.err("AnimationController._set_title_font_size: 未找到 entry_id='%s'" % entry_id)
+		return
+
+	var title_label := entry.get_node_or_null("MarginContainer/VBox/HBox/TitleLabel") as Label
+	if title_label:
+		title_label.add_theme_font_size_override(&"font_size", font_size)
+		Logging.info("AnimationController._set_title_font_size: entry_id='%s' TitleLabel 字号 → %d" % [entry_id, font_size])
+	else:
+		Logging.err("AnimationController._set_title_font_size: 未找到 TitleLabel (entry_id='%s')" % entry_id)
+
+
+func _get_map_background() -> CanvasItem:
+	if not GameState.map:
+		Logging.err("AnimationController._get_map_background: GameState.map 为空")
+		return null
+	return GameState.map.get_node_or_null("background") as CanvasItem
+
+
+# ═══════════════════════════════════════════════
+# tween_infection — 对 map_background 的 infection_progress 做 0→1 tween
+# ═══════════════════════════════════════════════
+
+func _tween_infection_target(target: String, _entry_id: String, duration: float, uuid: String) -> void:
+	if target != "map_background":
+		Logging.err("AnimationController._tween_infection: target='%s' 不支持（仅支持 map_background）" % target)
+		return
+
+	var bg := _get_map_background()
+	if not bg:
+		Logging.err("AnimationController._tween_infection: 未找到 map_background")
+		return
+
+	var mat := bg.material as ShaderMaterial
+	if not mat:
+		Logging.err("AnimationController._tween_infection: map_background 上未挂载 ShaderMaterial，请先 apply_shader")
+		return
+
+	mat.set_shader_parameter("infection_progress", 0.0)
+
+	var tween := bg.create_tween()
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.set_ease(Tween.EASE_IN)
+	tween.tween_method(_set_infection_progress.bind(mat), 0.0, 1.0, duration)
+
+	Logging.info("AnimationController._tween_infection: map_background infection_progress 0→1 已启动，duration=%.1fs (uuid='%s')" % [duration, uuid])
+
+
+func _set_infection_progress(value: float, mat: ShaderMaterial) -> void:
+	mat.set_shader_parameter("infection_progress", value)
+
+
 func _get_tape_container() -> PanelContainer:
 	var main_node := _get_main_node()
 	if not main_node:
@@ -511,3 +593,67 @@ func _get_tape_container() -> PanelContainer:
 	if not narrative_overlay:
 		return null
 	return narrative_overlay.get_node_or_null("TapeContainer") as PanelContainer
+
+
+# ═══════════════════════════════════════════════
+# camera_shake — 轻微相机震动
+# ═══════════════════════════════════════════════
+
+func _get_camera() -> Camera2D:
+	var main_node := _get_main_node()
+	if not main_node:
+		return null
+	return main_node.get_node_or_null("MapLayer/Worldroot/Camera") as Camera2D
+
+
+func _camera_shake(duration: float, intensity: float) -> void:
+	var cam := _get_camera()
+	if not cam:
+		Logging.err("AnimationController._camera_shake: 未找到 Camera2D")
+		return
+
+	var shake_timer := Timer.new()
+	shake_timer.name = "CameraShakeTimer"
+	shake_timer.wait_time = 0.05
+	shake_timer.one_shot = false
+
+	var shake_data := {
+		"camera": cam,
+		"elapsed": 0.0,
+		"duration": duration,
+		"intensity": intensity,
+	}
+	shake_timer.timeout.connect(_camera_shake_tick.bind(shake_data))
+	add_child(shake_timer)
+	shake_timer.start()
+
+	# 到期停止 timer
+	var stop_timer := Timer.new()
+	stop_timer.name = "CameraShakeStopTimer"
+	stop_timer.one_shot = true
+	stop_timer.wait_time = duration
+	stop_timer.timeout.connect(_camera_shake_stop.bind(shake_timer, shake_data))
+	add_child(stop_timer)
+	stop_timer.start()
+
+	Logging.info("AnimationController._camera_shake: 震动已启动，duration=%.1fs intensity=%.1f" % [duration, intensity])
+
+
+func _camera_shake_tick(data: Dictionary) -> void:
+	var cam := data["camera"] as Camera2D
+	if not cam or not is_instance_valid(cam):
+		return
+	data["elapsed"] += 0.05
+	if data["elapsed"] >= data["duration"]:
+		return
+	var intensity: float = data["intensity"]
+	cam.offset = Vector2(randf_range(-intensity, intensity), randf_range(-intensity, intensity))
+
+
+func _camera_shake_stop(shake_timer: Timer, data: Dictionary) -> void:
+	if is_instance_valid(shake_timer):
+		shake_timer.queue_free()
+	var cam := data["camera"] as Camera2D
+	if cam and is_instance_valid(cam):
+		cam.offset = Vector2.ZERO
+	Logging.info("AnimationController._camera_shake: 震动已结束，offset 归零")

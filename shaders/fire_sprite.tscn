@@ -9,6 +9,7 @@ blend_mode = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=666769752]
 material = SubResource("CanvasItemMaterial_8wg2i")
+scale = Vector2(8, 8)
 texture = ExtResource("1_8wg2i")
 hframes = 10
 vframes = 6

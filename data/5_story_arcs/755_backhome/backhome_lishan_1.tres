@@ -46,7 +46,7 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 [sub_resource type="Resource" id="Resource_k7qva"]
 script = ExtResource("6_nwfle")
 imaginary_name = "court:corrupt:elite:royal_hot_spring_feast"
-target_level = 3
+target_level = 2
 metadata/_custom_type_script = "uid://ojqxtgw57ec3"
 
 [sub_resource type="Resource" id="Resource_fxifg"]

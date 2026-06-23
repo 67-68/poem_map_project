@@ -61,7 +61,7 @@ shader_parameter/faction_intensity = 1.0
 [node name="Map" type="Node2D" unique_id=2075997443]
 script = ExtResource("1_uvqf1")
 
-[node name="background" type="Node2D" parent="." unique_id=166125532]
+[node name="background" type="CanvasGroup" parent="." unique_id=357279078]
 position = Vector2(-82, 0)
 
 [node name="TerrainMesh" type="MeshInstance2D" parent="background" unique_id=936967447]

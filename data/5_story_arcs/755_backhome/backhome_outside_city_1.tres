@@ -45,7 +45,7 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 [sub_resource type="Resource" id="Resource_2cufq"]
 script = ExtResource("6_shp4k")
 imaginary_name = "action:travel:exile:green_robe_leave_changan"
-target_level = 3
+target_level = 2
 metadata/_custom_type_script = "uid://ojqxtgw57ec3"
 
 [sub_resource type="Resource" id="Resource_fdmyj"]

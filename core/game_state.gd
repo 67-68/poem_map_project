@@ -1,5 +1,9 @@
 extends Node
 
+## 🆕 游戏结束状态锁。当 system_operator 触发 game_over 时设为 true，
+## 用于阻止后续事件继续触发/推送。
+var is_game_over: bool = false
+
 var start_year := 745.0
 var end_year := 755.9
 var time_span := end_year - start_year

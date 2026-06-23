@@ -5,18 +5,30 @@ class_name SystemOperator extends BaseOperator
 @export var death_hint: String
 
 func operate() -> void:
+    Logging.info('SystemOperator.operate: command="%s", death_hint="%s"' % [command, death_hint])
+    
     match command:
         "game_over", "game over":
-            # 1. 冻结时间流逝
-            TimeService.pause()
-            # 2. 唤起那个极简的、只有诗词和墓志铭的结算 UI 覆盖层
+            # 1. 先检查 death_hint，避免空数据导致软死锁（时间冻结但无 UI 显示）
             if not death_hint:
-                Logging.err('can not find death hint')
+                Logging.err('SystemOperator.operate: death_hint is empty, game over aborted')
                 return
+            
+            # 2. 设置游戏结束状态锁，阻断后续事件链继续触发
+            GameState.is_game_over = true
+            Logging.info('SystemOperator.operate: GameState.is_game_over = true')
+            
+            # 3. 冻结时间流逝（必须放在 death_hint 检查之后）
+            TimeService.pause()
+            Logging.info('SystemOperator.operate: time paused')
+            
+            # 4. 唤起墓碑结算 UI
+            Logging.info('SystemOperator.operate: emitting show_tombstone_screen signal')
             EventBus.show_tombstone_screen.emit(death_hint)
+            
         "return_main":
-            # 卸载当前场景，回到主菜单
-            Logging.err('dont implement return to main yet')
-            # get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
+            Logging.warn('SystemOperator.operate: return_main triggered, switching to main_menu')
+            get_tree().change_scene_to_file("res://main_menu.tscn")
+            
         _:
-            Logging.err('wha the hell is ' + command)
+            Logging.err('SystemOperator.operate: unknown command "%s"' % command)

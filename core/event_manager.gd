@@ -36,6 +36,11 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
         nothing_multiplication_weight: 无事发生的权重倍数，默认为10
         context: 上下文字典，包含main_tag、era等信息
     """
+    # 🆕 游戏结束状态锁：如果已触发 game_over，不再扫描新事件
+    if GameState.is_game_over:
+        Logging.info("[EventManager] scan_events: GameState.is_game_over is true, skipping scan")
+        return
+    
     #breakpoint
     Logging.info("[EventManager] Starting event scan")
 
@@ -54,6 +59,9 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight, fallback_uuid, context)
 
 func scan_poem_events(imaginaries: Array[ImaginaryTag]):
+    if GameState.is_game_over:
+        Logging.info("[EventManager] scan_poem_events: GameState.is_game_over is true, skipping")
+        return
     #breakpoint
     var imas = {}
     for i in imaginaries:
@@ -93,6 +101,9 @@ func scan_death_events():
     """
     在结局之后使用，扫描死亡/失败/结束事件
     """
+    if GameState.is_game_over:
+        Logging.info("[EventManager] scan_death_events: GameState.is_game_over is true, skipping")
+        return
     Logging.info("[EventManager] Starting death event scan")
     var initial_tickets: Array[EventTicket] = []
     for e in Database.get_end_random_events_all().values():
@@ -111,6 +122,9 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
         context: 上下文字典，包含main_tag等信息
         return_only: 为 true 时不发射 request_event_key，直接返回选中事件的 UUID
     """
+    if GameState.is_game_over:
+        Logging.info("[EventManager] scan_events_from_tickets: GameState.is_game_over is true, skipping")
+        return
     Logging.info("[EventManager] Starting event scan from " + str(initial_tickets.size()) + " initial tickets")
     # 致命修复 1：每次重新算命前，必须清空上一次的签筒！
     current_event_pool.clear()

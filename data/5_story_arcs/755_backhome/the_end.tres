@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://bsni8otb7g1wf"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_pxufj"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="2_8dgk3"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_fl3i3"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ykpqv"]
+[ext_resource type="Script" uid="uid://c4swvur288j0n" path="res://core/operators/system_operator.gd" id="3_ttg22"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_k7f25"]
+
+[sub_resource type="Resource" id="Resource_8egul"]
+script = ExtResource("3_ttg22")
+command = "game_over"
+death_hint = "漁陽鼙鼓動地來，驚破霓裳羽衣曲。你在戰火中歸鄉，卻發現家園已成廢墟，而自己也未能躲過這場浩劫……"
+metadata/_custom_type_script = "uid://c4swvur288j0n"
+
+[sub_resource type="Resource" id="Resource_l8gsg"]
+script = ExtResource("4_k7f25")
+operators = Array[ExtResource("2_ykpqv")]([SubResource("Resource_8egul")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_6jsv1"]
+script = ExtResource("2_8dgk3")
+choice_result = SubResource("Resource_l8gsg")
+description = "..."
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_fl3i3")
+_namespace = "10"
+options = Array[ExtResource("1_pxufj")]([SubResource("Resource_6jsv1")])
+uuid = "the_end"
+name = "漁陽鼙鼓"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

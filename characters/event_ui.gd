@@ -402,18 +402,21 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 	# Step 2: Phase 1 — Title 打字机
 	Logging.debug("EventUI.display_slow: Phase 1 — Title 打字机开始")
 	await _typewrite_phase(title_label, event.name, type_speed)
+	scroll_to_bottom()
 	Logging.debug("EventUI.display_slow: Phase 1 — Title 完成")
 
 	# Step 3: Phase 2 — Description 打字机
 	Logging.debug("EventUI.display_slow: Phase 2 — Description 打字机开始")
 	var desc: String = Util.tr_and_resolve(event.description, context, event)
 	await _typewrite_phase(content_label, desc, type_speed)
+	scroll_to_bottom()
 	Logging.debug("EventUI.display_slow: Phase 2 — Description 完成")
 
 	# Step 4: Phase 3 — Example（可选）
 	if not event.example.is_empty():
 		Logging.debug("EventUI.display_slow: Phase 3 — Example 打字机开始")
 		await _typewrite_phase(example_label, event.example, type_speed)
+		scroll_to_bottom()
 		Logging.debug("EventUI.display_slow: Phase 3 — Example 完成")
 	else:
 		example_label.hide()
@@ -427,6 +430,7 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 		Logging.info("EventUI: SLOW 模式选项被选中，转发 option_selected 信号（entry_id='%s' text='%s'）" % [entry_id, txt])
 		option_selected.emit(r, txt)
 	)
+	scroll_to_bottom()
 	Logging.info("EventUI.display_slow: 事件 '%s' 显示完成" % event.name)
 	display_complete.emit()
 

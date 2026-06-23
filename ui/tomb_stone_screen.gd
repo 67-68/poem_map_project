@@ -2,13 +2,16 @@ class_name TombstoneScreen extends CanvasLayer
 
 @onready var portrait_rect: TextureRect = $ColorRect/M/H/M/Portrait
 @onready var monolith_text: RichTextLabel = $ColorRect/M/H/S/MonolithText
+
 func _ready():
 	hide()
 	EventBus.show_tombstone_screen.connect(render_entropy_death)
+	Logging.info('TombstoneScreen._ready: connected to show_tombstone_screen signal')
 
 
 ## 核心接口：接收系统级死因，拼装历史巨石碑
 func render_entropy_death(cause_text: String) -> void:
+	Logging.info('TombstoneScreen.render_entropy_death: showing tombstone, cause="%s"' % cause_text)
 	show()
 	# 1. 挂载极其冷酷的遗像 (可以根据死因切图，MVP阶段用同一张)
 	# portrait_rect.texture = load("res://assets/npc/dufu_dead.png")

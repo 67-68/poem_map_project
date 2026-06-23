@@ -7,15 +7,18 @@ func operate():
 	"""
 	执行所有操作符
 	"""
-	#breakpoint
 	if not operators:
-		#breakpoint
-		Logging.warn('Found null operator in ChoiceResult')
-	for op in operators:
+		Logging.warn('ChoiceResult.operate: operators is empty')
+		return
+	
+	Logging.info('ChoiceResult.operate: executing %d operator(s)' % operators.size())
+	for i in operators.size():
+		var op = operators[i]
 		if op:
+			Logging.info('ChoiceResult.operate: operator[%d] = %s' % [i, op.get_class()])
 			op.operate()
 		else:
-			Logging.warn('Found null operator in ChoiceResult')
+			Logging.warn('ChoiceResult.operate: operator[%d] is null, skipping' % i)
 
 func init(context: Dictionary) -> Dictionary:
 	if operators:

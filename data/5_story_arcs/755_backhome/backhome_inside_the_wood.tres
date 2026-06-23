@@ -8,12 +8,18 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_3b0ud"]
 [ext_resource type="Script" uid="uid://ojqxtgw57ec3" path="res://core/operators/imaginary_set_level_operator.gd" id="4_w4ex6"]
 [ext_resource type="Script" uid="uid://bhm8bigwrwgjm" path="res://core/operators/play_transition_operator.gd" id="5_bfjbd"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_bfjbd"]
 
 [sub_resource type="Resource" id="Resource_37ogv"]
 script = ExtResource("4_w4ex6")
 imaginary_name = "target:death:bereavement:son_die"
-target_level = 3
+target_level = 2
 metadata/_custom_type_script = "uid://ojqxtgw57ec3"
+
+[sub_resource type="Resource" id="Resource_uy2wo"]
+script = ExtResource("6_bfjbd")
+event_key = "the_end"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_rsttg"]
 script = ExtResource("5_bfjbd")
@@ -23,7 +29,7 @@ metadata/_custom_type_script = "uid://bhm8bigwrwgjm"
 
 [sub_resource type="Resource" id="Resource_w4ex6"]
 script = ExtResource("4_3b0ud")
-operators = Array[ExtResource("3_0l48l")]([SubResource("Resource_37ogv"), SubResource("Resource_rsttg")])
+operators = Array[ExtResource("3_0l48l")]([SubResource("Resource_37ogv"), SubResource("Resource_uy2wo"), SubResource("Resource_rsttg")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_41tl8"]
