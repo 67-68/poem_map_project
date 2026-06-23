@@ -39,15 +39,16 @@ const _DEFAULT_MAPPINGS: Dictionary = {
 # 硬编码默认：时间线脚本（全体延迟 +10s，等打字机打完）
 const _DEFAULT_TIMELINES: Dictionary = {
 	"backhome_inside_the_wood": [
-		# Phase 0 — T+0s (call_deferred): 一开始纯黑字体 + 选项 chaos shader
+		# Phase 0 — T+0s (call_deferred): 一开始纯黑字体 + 选项 chaos shader + 消除左右面板及 narrative_overlay 外层阴影
 		{ "delay": 0.0, "action": "ghostly_white", "target": "tape_entry" },
 		{ "delay": 0.0, "action": "apply_shader", "target": "option_btns", "material": preload("res://shaders/text_chaos_shader_material.tres") },
-		# Phase 1 — T+10s: 清除外层阴影（left/right panel + narrative_overlay 外层）; 不碰 TapeContainer 纹理
-		{ "delay": 10.0, "action": "clear_stylebox", "target": "left_panel" },
-		{ "delay": 10.0, "action": "clear_stylebox", "target": "right_panel" },
-		{ "delay": 10.0, "action": "clear_stylebox", "target": "narrative_overlay" },
-		# Phase 2 — T+12s: 隐藏 entry 背景图 + TapeContainer 挂 flame shader + 2s 燃烧
-		{ "delay": 12.0, "action": "hide_entry_bg", "target": "tape_entry" },
+		{ "delay": 0.0, "action": "clear_stylebox", "target": "left_panel" },
+		{ "delay": 0.0, "action": "clear_stylebox", "target": "right_panel" },
+		{ "delay": 0.0, "action": "clear_stylebox", "target": "narrative_overlay" },
+		# Phase 1 — T+10s: 隐藏 entry 背景图
+		{ "delay": 10.0, "action": "hide_entry_bg", "target": "tape_entry" },
+		# Phase 2 — T+12s: 生成火焰 sprite + TapeContainer 挂 flame shader + 2s 燃烧
+		{ "delay": 11.0, "action": "spawn_fire", "target": "tape_entry" },
 		{ "delay": 12.0, "action": "apply_shader", "target": "tape_container", "material": preload("res://shaders/flame_shader_material.tres") },
 		{ "delay": 12.0, "action": "tween_burn", "target": "tape_container", "tween_duration": 2.0 },
 	],
@@ -146,6 +147,8 @@ func _execute_stage(stage: Dictionary, entry_id: String, uuid: String) -> void:
 			_clear_stylebox_target(target)
 		"hide_entry_bg":
 			_hide_entry_bg(entry_id)
+		"spawn_fire":
+			_spawn_fire(entry_id)
 		"ghostly_white":
 			_ghostly_white_target(entry_id)
 		"apply_shader":
@@ -166,6 +169,80 @@ func _execute_stage(stage: Dictionary, entry_id: String, uuid: String) -> void:
 # ═══════════════════════════════════════════════
 
 # ═══════════════════════════════════════════════
+# spawn_fire — 生成火焰 sprite（CanvasLayer layer=99，低于 CinematicOverlay layer=100）
+# ═══════════════════════════════════════════════
+
+const FIRE_SPRITE_SCENE := preload("res://shaders/fire_sprite.tscn")
+
+func _spawn_fire(_entry_id: String) -> void:
+	var main_node := _get_main_node()
+	if not main_node:
+		Logging.err("AnimationController._spawn_fire: 未找到 Main 节点")
+		return
+
+	# 创建 CanvasLayer（layer=99，低于 CinematicOverlay 的 100）
+	var fire_layer := CanvasLayer.new()
+	fire_layer.name = "FireLayer"
+	fire_layer.layer = 99
+	main_node.add_child(fire_layer)
+
+	# 实例化火焰 sprite
+	var fire_sprite := FIRE_SPRITE_SCENE.instantiate()
+	fire_layer.add_child(fire_sprite)
+
+	# 定位到屏幕中下
+	var tree := get_tree()
+	if tree:
+		var viewport_size := tree.root.get_visible_rect().size if tree.root else Vector2(1920, 1080)
+		var tex_size := Vector2(512, 384)  # fire1_64.png at 64px × 8hframes / 6vframes 实际帧尺寸
+		if fire_sprite is Node2D:
+			fire_sprite.position = Vector2(viewport_size.x / 2.0, viewport_size.y - tex_size.y / 2.0 + 50)
+		elif fire_sprite is Control:
+			fire_sprite.position = Vector2(viewport_size.x / 2.0 - tex_size.x / 2.0, viewport_size.y - tex_size.y - 40)
+
+	# 启动火精灵动画：按时间切换 Sprite2D frame
+	var sprite := fire_sprite.get_node_or_null("Sprite2D") as Sprite2D
+	if sprite:
+		_animate_fire_sprite(sprite)
+
+	Logging.info("AnimationController._spawn_fire: 火焰 sprite 已生成（FireLayer, layer=99）")
+
+
+func _animate_fire_sprite(sprite: Sprite2D) -> void:
+	const HFRAMES: int = 10
+	const VFRAMES: int = 6
+	const TOTAL_FRAMES: int = 48
+	const FRAME_DURATION: float = 0.066
+
+	var timer := Timer.new()
+	timer.name = "FireAnimTimer"
+	timer.wait_time = FRAME_DURATION
+	timer.one_shot = false
+	var frame_data := {
+		"current": 0,
+		"sprite": sprite,
+		"hframes": HFRAMES,
+		"vframes": VFRAMES,
+		"total": TOTAL_FRAMES,
+	}
+	timer.timeout.connect(_fire_frame_tick.bind(frame_data))
+	add_child(timer)
+	timer.start()
+	Logging.info("AnimationController._animate_fire_sprite: 火焰帧动画已启动（48 帧, 15fps）")
+
+
+func _fire_frame_tick(data: Dictionary) -> void:
+	var sprite := data["sprite"] as Sprite2D
+	if not sprite or not is_instance_valid(sprite):
+		return
+	var idx: int = data["current"]
+	var col: int = idx % data["hframes"]
+	var row: int = idx / data["hframes"]
+	sprite.frame_coords = Vector2i(col, row)
+	data["current"] = (idx + 1) % data["total"]
+
+
+# ═══════════════════════════════════════════════
 # hide_entry_bg — 隐藏 tape entry 的背景 TextureRect
 # ═══════════════════════════════════════════════
 
@@ -184,29 +261,39 @@ func _hide_entry_bg(entry_id: String) -> void:
 
 
 func _clear_stylebox_target(target: String) -> void:
-	var node: Control = null
-
 	match target:
 		"left_panel":
-			node = _get_left_panel()
+			var node := _get_left_panel()
+			if node:
+				node.hide()
+				Logging.info("AnimationController._clear_stylebox: left_panel 已隐藏")
+			else:
+				Logging.warn("AnimationController._clear_stylebox: 未找到 left_panel")
 		"right_panel":
-			node = _get_right_panel()
+			var node := _get_right_panel()
+			if node:
+				node.hide()
+				Logging.info("AnimationController._clear_stylebox: right_panel 已隐藏")
+			else:
+				Logging.warn("AnimationController._clear_stylebox: 未找到 right_panel")
 		"narrative_overlay":
-			node = _get_narrative_overlay()
+			var node := _get_narrative_overlay()
+			if node:
+				var empty_box := StyleBoxEmpty.new()
+				node.add_theme_stylebox_override("panel", empty_box)
+				Logging.info("AnimationController._clear_stylebox: narrative_overlay shadow stylebox → StyleBoxEmpty")
+			else:
+				Logging.warn("AnimationController._clear_stylebox: 未找到 narrative_overlay")
 		"tape_container":
-			node = _get_tape_container()
+			var node := _get_tape_container()
+			if node:
+				var empty_box := StyleBoxEmpty.new()
+				node.add_theme_stylebox_override("panel", empty_box)
+				Logging.info("AnimationController._clear_stylebox: tape_container panel stylebox → StyleBoxEmpty")
+			else:
+				Logging.warn("AnimationController._clear_stylebox: 未找到 tape_container")
 		_:
 			Logging.err("AnimationController._clear_stylebox: 未知 target='%s'" % target)
-			return
-
-	if not node:
-		Logging.warn("AnimationController._clear_stylebox: 未找到 target='%s'" % target)
-		return
-
-	# 用 StyleBoxEmpty 替代原有 panel stylebox（消除阴影/背景纹理）
-	var empty_box := StyleBoxEmpty.new()
-	node.add_theme_stylebox_override("panel", empty_box)
-	Logging.info("AnimationController._clear_stylebox: target='%s' 的 panel stylebox 已替换为 StyleBoxEmpty" % target)
 
 
 # ═══════════════════════════════════════════════

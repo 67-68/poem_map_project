@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bq3u75p83nkrj"]
+
+[ext_resource type="Texture2D" uid="uid://dniyaluv3auwp" path="res://assets/backgrounds/fire1_64.png" id="1_8wg2i"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8wg2i"]
+blend_mode = 1
+
+[node name="Node2D" type="Node2D" unique_id=1207499129]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=666769752]
+material = SubResource("CanvasItemMaterial_8wg2i")
+texture = ExtResource("1_8wg2i")
+hframes = 10
+vframes = 6
