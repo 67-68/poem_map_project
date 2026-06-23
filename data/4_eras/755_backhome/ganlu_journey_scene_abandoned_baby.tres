@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b265hee5x3rwy"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_i7glx"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_hvlr3"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_8b14u"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_8sll1"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_gy7yn"]
+[ext_resource type="Script" uid="uid://bxdw08m7bfi13" path="res://core/operators/info_demo_operator.gd" id="6_x2g23"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_w4eam"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_uvy53"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_nvo2b"]
+
+[sub_resource type="Resource" id="Resource_bku06"]
+script = ExtResource("3_8b14u")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_r1m5q"]
+script = ExtResource("4_8sll1")
+value = 21
+
+[sub_resource type="Resource" id="Resource_bvv21"]
+script = ExtResource("5_gy7yn")
+imagery_name = "EMOTION:despair"
+
+[sub_resource type="Resource" id="Resource_a55jp"]
+script = ExtResource("5_gy7yn")
+imagery_name = "ENVIRONMENT:snow"
+
+[sub_resource type="Resource" id="Resource_ehmed"]
+script = ExtResource("3_8b14u")
+str_props = "distance"
+value = 6
+
+[sub_resource type="Resource" id="Resource_17pwp"]
+script = ExtResource("6_x2g23")
+info = "冻僵的唇间，连最后一缕白气都没有。"
+
+[sub_resource type="Resource" id="Resource_gtqf3"]
+script = ExtResource("7_w4eam")
+operators = Array[ExtResource("2_hvlr3")]([SubResource("Resource_bku06"), SubResource("Resource_r1m5q"), SubResource("Resource_bvv21"), SubResource("Resource_a55jp"), SubResource("Resource_ehmed"), SubResource("Resource_17pwp")])
+
+[sub_resource type="Resource" id="Resource_y0r8w"]
+script = ExtResource("8_uvy53")
+choice_result = SubResource("Resource_gtqf3")
+description = "脱下半臂，裹起婴孩，继续前行"
+
+[sub_resource type="Resource" id="Resource_my413"]
+script = ExtResource("3_8b14u")
+str_props = "distance"
+value = 10
+
+[sub_resource type="Resource" id="Resource_6tk2i"]
+script = ExtResource("7_w4eam")
+operators = Array[ExtResource("2_hvlr3")]([SubResource("Resource_my413")])
+
+[sub_resource type="Resource" id="Resource_xhrt1"]
+script = ExtResource("8_uvy53")
+choice_result = SubResource("Resource_6tk2i")
+description = "将雪重新拢上，起身赶路"
+
+[resource]
+script = ExtResource("9_nvo2b")
+era = "755_backhome"
+_target_tags = Array[String](["action:main:ganlu"])
+options = Array[ExtResource("1_i7glx")]([SubResource("Resource_y0r8w"), SubResource("Resource_xhrt1")])
+uuid = "ganlu_journey_scene_abandoned_baby"
+name = "雪中婴骸"
+description = "风雪中，道旁雪堆有一处隆起，颜色异于周遭——泛着青灰。他蹲下，手扒开覆雪，指节触到冰硬的织物。雪粒簌簌落下，露出蜷缩的脚趾，比指甲盖还小，皮肤已是冻透的青紫色。婴儿侧卧，姿态如睡，雪落在眼睑上，不化。风声灌耳，除此之外，再无声息。他蹲在原地，手指停在半空，新雪渐渐覆上他刚扒开的坑沿。"

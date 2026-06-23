@@ -1,12 +1,12 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c1qh0kk1obh8h"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_n0433"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_rmhxj"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_7g22c"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_0b5oe"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="5_6joy6"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_w5fm2"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="7_irkvg"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_n0433"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_rmhxj"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_7g22c"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_0b5oe"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_6joy6"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_w5fm2"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_irkvg"]
 
 [sub_resource type="Resource" id="Resource_n0433"]
 script = ExtResource("3_7g22c")

@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://eh2ohn86shp3"]
 
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_f7h5e"]
-[ext_resource type="Script" path="res://core/operators/random_pick_operator.gd" id="2_fvsg0"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="3_0n5md"]
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="4_hl6kx"]
-[ext_resource type="Script" path="res://core/model/item_provider.gd" id="5_qtlxx"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="6_fo00d"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_f7h5e"]
+[ext_resource type="Script" uid="uid://qdqvvly5ndfr" path="res://core/operators/random_pick_operator.gd" id="2_fvsg0"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_0n5md"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="4_hl6kx"]
+[ext_resource type="Script" uid="uid://lnvpvefpsar1" path="res://core/model/item_provider.gd" id="5_qtlxx"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_fo00d"]
 
 [sub_resource type="Resource" id="Resource_f7h5e"]
 script = ExtResource("2_fvsg0")

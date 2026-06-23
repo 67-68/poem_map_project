@@ -192,7 +192,7 @@ const DATA_MANIFEST: Array[Dictionary] = [
     },
     {
         "name": "赶路旅途事件库（本地生成）",
-        "save_path": "res://data/4_eras/755_backhome/_ganlu_events.csv",
+        "save_path": "res://data/4_eras/755_backhome/_ganlu_journey_events.csv",
         "data_type": "random_event",
         "is_generated": true,
     },

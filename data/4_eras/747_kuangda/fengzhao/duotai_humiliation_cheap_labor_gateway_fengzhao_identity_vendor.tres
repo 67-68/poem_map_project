@@ -1,13 +1,13 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://byacbbl003v1h"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_5br6m"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_cqhqe"]
-[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_8mq22"]
-[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="4_u21rg"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_t2syp"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="6_afx1v"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_uewe1"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="8_s0otw"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_5br6m"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cqhqe"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_8mq22"]
+[ext_resource type="Script" uid="uid://cam8c3etv60ba" path="res://core/operators/leverage_add_operator.gd" id="4_u21rg"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_t2syp"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_afx1v"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_uewe1"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_s0otw"]
 
 [sub_resource type="Resource" id="Resource_5br6m"]
 script = ExtResource("3_8mq22")

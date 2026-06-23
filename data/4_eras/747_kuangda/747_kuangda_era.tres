@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="Era" format=3]
+[gd_resource type="Resource" script_class="Era" format=3 uid="uid://va7b6jf2n0p0"]
 
 [ext_resource type="Script" uid="uid://wfy01ht15lc7" path="res://core/model/era.gd" id="1_era"]
 
 [resource]
 script = ExtResource("1_era")
+rejected_actions = Array[int]([6])
 uuid = "747_kuangda"
 name = "旷达时期"
 description = "747年，杜甫经历了官场失意后逐渐走向旷达"

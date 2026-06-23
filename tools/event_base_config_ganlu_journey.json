@@ -92,7 +92,13 @@
           "tags": [
             "ENV_NATURE_SNOWSTORM:lone_snow",
             "TARGET_NPC_DUFU:thatched_grass",
-            "action:main:ganlu"
+            "action:main:ganlu",
+            "TARGET_IDENTITY_MENZI"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_menzi"
+            ]
           ],
           "option_results": {
             "opt_idealist": "prop_sub(name=health; val=10) | emo_add(name=ANGER; val=10) | imagery_add(name=TRAVEL:exile) | prop_add(name=distance; val=6)",
@@ -126,7 +132,13 @@
           "tags": [
             "ENV_SOCIETY_FAMINE:starving_bone",
             "TARGET_NPC_DUFU:thatched_grass",
-            "action:main:ganlu"
+            "action:main:ganlu",
+            "TARGET_IDENTITY_POOR"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_poor"
+            ]
           ],
           "option_results": {
             "opt_idealist": "prop_sub(name=health; val=8) | prop_add(name=fatigue; val=10) | emo_add(name=SORROW; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=distance; val=6)",
@@ -160,7 +172,13 @@
           "tags": [
             "ENV_SOCIETY_FAMINE:starving_bone",
             "TARGET_NPC_DUFU:thatched_grass",
-            "action:main:ganlu"
+            "action:main:ganlu",
+            "TARGET_IDENTITY_VENDOR"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_vendor"
+            ]
           ],
           "option_results": {
             "opt_idealist": "prop_sub(name=money; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=distance; val=5)",
@@ -177,7 +195,13 @@
           "tags": [
             "ENV_SOCIETY_WAR",
             "TARGET_NPC_DUFU:thatched_grass",
-            "action:main:ganlu"
+            "action:main:ganlu",
+            "TARGET_IDENTITY_DESERTER"
+          ],
+          "virtual_dimension_ids": [
+            [
+              "identity_deserter"
+            ]
           ],
           "option_results": {
             "opt_idealist": "prop_sub(name=money; val=8) | prop_sub(name=health; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=COURT:corrupt) | prop_add(name=distance; val=5)",

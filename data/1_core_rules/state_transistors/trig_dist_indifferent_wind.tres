@@ -1,42 +1,44 @@
-[gd_resource type="Resource" script_class="StateTransistor" format=3]
+[gd_resource type="Resource" script_class="StateTransistor" format=3 uid="uid://c0fd81ogd3v75"]
 
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_fde2l"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="2_83l0p"]
-[ext_resource type="Script" path="res://core/operators/flag_operator.gd" id="2_m4nou"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="3_m4nou"]
-[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="4_pby68"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="5_plfnt"]
-[ext_resource type="Script" path="res://core/model/state_transistor.gd" id="6_difos"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_83l0p"]
+[ext_resource type="Script" uid="uid://clkjr0fnn00vd" path="res://core/operators/flag_operator.gd" id="2_m4nou"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="3_pby68"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="4_plfnt"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="5_difos"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="6_w55qk"]
+[ext_resource type="Script" uid="uid://c7gkvf3ho6pgj" path="res://core/model/state_transistor.gd" id="7_6fgqr"]
 
 [sub_resource type="Resource" id="Resource_83l0p"]
 script = ExtResource("2_m4nou")
-flag_id = "trig_dist_indifferent_wind, val=1"
+flag_id = "trig_dist_indifferent_wind"
 type = "int"
-value = 0
+value = 1
 
 [sub_resource type="Resource" id="Resource_m4nou"]
-script = ExtResource("3_m4nou")
-property = "distance, val=70"
+script = ExtResource("4_plfnt")
+property = "distance"
+value = 70
 operator = 1
 
 [sub_resource type="Resource" id="Resource_pby68"]
-script = ExtResource("3_m4nou")
-property = "distance, val=80"
+script = ExtResource("4_plfnt")
+property = "distance"
+value = 80
 
 [sub_resource type="Resource" id="Resource_plfnt"]
-script = ExtResource("4_pby68")
-flag_id = "trig_dist_indifferent_wind, val=1"
+script = ExtResource("5_difos")
+flag_id = "trig_dist_indifferent_wind"
 type = "int"
-value = 0
+value = 1
 operator = 3
 
 [sub_resource type="Resource" id="Resource_difos"]
-script = ExtResource("5_plfnt")
-operators = Array[ExtResource("2_83l0p")]([SubResource("Resource_m4nou"), SubResource("Resource_pby68"), SubResource("Resource_plfnt")])
+script = ExtResource("6_w55qk")
+operators = Array[ExtResource("3_pby68")]([SubResource("Resource_m4nou"), SubResource("Resource_pby68"), SubResource("Resource_plfnt")])
 
 [resource]
-script = ExtResource("6_difos")
+script = ExtResource("7_6fgqr")
 uuid = "trig_dist_indifferent_wind"
 triggered_event_key = "backhome_indifferent_wind_1"
 requirements = SubResource("Resource_difos")
-operators = Array[ExtResource("1_fde2l")]([SubResource("Resource_83l0p")])
+operators = Array[ExtResource("1_83l0p")]([SubResource("Resource_83l0p")])

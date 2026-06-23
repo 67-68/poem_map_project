@@ -1,28 +1,28 @@
-[gd_resource type="Resource" script_class="StateTransistor" format=3]
+[gd_resource type="Resource" script_class="StateTransistor" format=3 uid="uid://be2deokmn7c52"]
 
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_hxwff"]
-[ext_resource type="Script" path="res://core/operators/flag_operator.gd" id="2_lf7tl"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="3_o4yxv"]
-[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="4_o25j0"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="5_7tx06"]
-[ext_resource type="Script" path="res://core/model/state_transistor.gd" id="6_cil6y"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_hxwff"]
+[ext_resource type="Script" uid="uid://clkjr0fnn00vd" path="res://core/operators/flag_operator.gd" id="2_lf7tl"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="3_o4yxv"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="4_o25j0"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="5_7tx06"]
+[ext_resource type="Script" uid="uid://c7gkvf3ho6pgj" path="res://core/model/state_transistor.gd" id="6_cil6y"]
 
 [sub_resource type="Resource" id="Resource_hxwff"]
 script = ExtResource("2_lf7tl")
-flag_id = "flag_near_death_rescued_3, val=1"
+flag_id = "flag_near_death_rescued_3"
 type = "int"
-value = 0
+value = 1
 
 [sub_resource type="Resource" id="Resource_lf7tl"]
 script = ExtResource("4_o25j0")
-flag_id = "flag_near_death_count, val=3"
+flag_id = "flag_near_death_count"
 type = "int"
-value = 0
+value = 3
 operator = 2
 
 [sub_resource type="Resource" id="Resource_o4yxv"]
 script = ExtResource("4_o25j0")
-flag_id = "flag_near_death_rescued_3, val=0"
+flag_id = "flag_near_death_rescued_3"
 type = "int"
 value = 0
 operator = 2

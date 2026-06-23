@@ -107,6 +107,12 @@
           "name": "穷人",
           "description": "底层流浪者——乞丐、流民。在社会边缘生存，与玩家的阶级差异最大。",
           "trigger_tag": "TARGET_IDENTITY_POOR"
+        },
+        {
+          "id": "identity_deserter",
+          "name": "逃兵/乱兵",
+          "description": "脱离建制的军事人员——逃兵、乱兵。秩序崩溃的具象化，对平民财产权具有朴素掠夺性。多见于安史之乱题材。",
+          "trigger_tag": "TARGET_IDENTITY_DESERTER"
         }
       ]
     }

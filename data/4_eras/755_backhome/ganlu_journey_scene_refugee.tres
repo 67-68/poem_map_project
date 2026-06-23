@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bh4bg07twbqrf"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_odayg"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_k0vhh"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_7w71u"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_n5exf"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_bdukp"]
+[ext_resource type="Script" uid="uid://bxdw08m7bfi13" path="res://core/operators/info_demo_operator.gd" id="6_flus2"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_rp07g"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_ho53k"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_g4m0x"]
+
+[sub_resource type="Resource" id="Resource_26kb4"]
+script = ExtResource("3_7w71u")
+str_props = "health"
+value = -8
+
+[sub_resource type="Resource" id="Resource_jiucp"]
+script = ExtResource("3_7w71u")
+str_props = "fatigue"
+value = 10
+
+[sub_resource type="Resource" id="Resource_yn5ir"]
+script = ExtResource("4_n5exf")
+value = 10
+
+[sub_resource type="Resource" id="Resource_ff1cr"]
+script = ExtResource("5_bdukp")
+imagery_name = "SOCIETY:famine"
+
+[sub_resource type="Resource" id="Resource_81w2h"]
+script = ExtResource("3_7w71u")
+str_props = "distance"
+value = 6
+
+[sub_resource type="Resource" id="Resource_hwvq8"]
+script = ExtResource("6_flus2")
+info = "沟底无人应答，只有冰碴落进水里的回音。"
+
+[sub_resource type="Resource" id="Resource_tw7qw"]
+script = ExtResource("7_rp07g")
+operators = Array[ExtResource("2_k0vhh")]([SubResource("Resource_26kb4"), SubResource("Resource_jiucp"), SubResource("Resource_yn5ir"), SubResource("Resource_ff1cr"), SubResource("Resource_81w2h"), SubResource("Resource_hwvq8")])
+
+[sub_resource type="Resource" id="Resource_ro7me"]
+script = ExtResource("8_ho53k")
+choice_result = SubResource("Resource_tw7qw")
+description = "上前两步，朝沟底喊了句“喂——”"
+
+[sub_resource type="Resource" id="Resource_nno6i"]
+script = ExtResource("4_n5exf")
+value = 3
+
+[sub_resource type="Resource" id="Resource_sk0qu"]
+script = ExtResource("3_7w71u")
+str_props = "distance"
+value = 10
+
+[sub_resource type="Resource" id="Resource_b5oew"]
+script = ExtResource("7_rp07g")
+operators = Array[ExtResource("2_k0vhh")]([SubResource("Resource_nno6i"), SubResource("Resource_sk0qu")])
+
+[sub_resource type="Resource" id="Resource_fs38q"]
+script = ExtResource("8_ho53k")
+choice_result = SubResource("Resource_b5oew")
+description = "站在原地，等风吹完才继续走。"
+
+[resource]
+script = ExtResource("9_g4m0x")
+era = "755_backhome"
+_target_tags = Array[String](["action:main:ganlu"])
+options = Array[ExtResource("1_odayg")]([SubResource("Resource_ro7me"), SubResource("Resource_fs38q")])
+uuid = "ganlu_journey_scene_refugee"
+name = "冰辙压雪"
+description = "官道积雪未化，冻土裂出细纹。远处一个模糊轮廓蹲在道旁，背对风来的方向，膝盖上摊着半块干饼。马队蹄声先于影子抵达——碎冰从冻土上炸开，六匹快马并排碾过，颈下红绸被风扯成直线。那个轮廓侧翻进深沟，干饼落在路面上被蹄铁踏成粉末。骑手过完最后一匹时，沟底没有声音。风重新把雪末吹上路面，盖住饼屑。"

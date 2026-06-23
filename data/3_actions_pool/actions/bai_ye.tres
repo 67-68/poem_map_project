@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_f652d"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f652d"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_yiapa"]
-[ext_resource type="Texture2D" uid="uid://65hw8npat6e6" path="res://assets/stamps/baiye_stamp.png" id="4_yiapa"]
+[ext_resource type="Texture2D" uid="uid://bokcmb0kkcpu4" path="res://assets/stamps/baiye_stamp.png" id="4_yiapa"]
 
 [sub_resource type="Resource" id="Resource_yiapa"]
 script = ExtResource("3_f652d")
@@ -22,9 +22,9 @@ script = ExtResource("3_yiapa")
 _main_tag = 29
 _action_tags = Array[int]([4, 9, 10, 14, 29])
 action_results = Array[ExtResource("2_f652d")]([SubResource("Resource_yiapa"), SubResource("Resource_wlhiu")])
+fallback_event_uuid = "event_cooldown_wall"
 uuid = "bai_ye"
 name = "拜谒"
 description = "投刺候见，叩响朱门"
 icon = ExtResource("4_yiapa")
-fallback_event_uuid = "event_cooldown_wall"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

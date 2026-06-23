@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_g41dr")
-accepted_actions = Array[int]([0])
+accepted_actions = Array[int]([6])
 uuid = "755_backhome"
 name = "755年回奉先县"
 metadata/_custom_type_script = "uid://wfy01ht15lc7"

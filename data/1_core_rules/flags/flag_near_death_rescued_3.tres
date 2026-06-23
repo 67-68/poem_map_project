@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="Flag" format=3]
+[gd_resource type="Resource" script_class="Flag" format=3 uid="uid://bt5fbou3p6gir"]
 
-[ext_resource type="Script" path="res://core/model/flag.gd" id="1_v1f2l"]
+[ext_resource type="Script" uid="uid://cqrtis4j5hcr4" path="res://core/model/flag.gd" id="1_v1f2l"]
 
 [resource]
 script = ExtResource("1_v1f2l")

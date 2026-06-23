@@ -723,8 +723,7 @@ def reassembly_one_event(
     all_tags: list[str] = []
     for combo in current_combos:
         for tag in combo.value.tags:
-            if tag.startswith("action:"):
-                all_tags.append(tag)
+            all_tags.append(tag)
     tags_to_use = all_tags if all_tags else (cfg.universal_tags or ["bai_ye"])
 
     # ── 构建选项行 ──
