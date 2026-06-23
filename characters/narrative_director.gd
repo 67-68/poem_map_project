@@ -15,7 +15,6 @@ signal interrupt_unavailable()
 signal animation_tracking_started()
 signal event_confirmed_out()
 signal pop_return_text_ready(text: String)
-signal pop_invalidate_parent(entry_id: String)
 
 
 # ═══════════════════════════════════════════════
@@ -111,11 +110,10 @@ func _on_pop_event(transition_text: String = ""):
 			else:
 				Logging.debug("pop_event: transition_text 和 on_returned 均为空，跳过")
 
-			var parent_entry_id := str(parent_ev.get_instance_id())
-			pop_invalidate_parent.emit(parent_entry_id)
-			Logging.info("pop_event: 已发射 pop_invalidate_parent entry_id='%s'" % parent_entry_id)
-
-	_process_next()
+		# pop_event 不在此调用 _process_next() — 由 on_option_selected() guard 分支负责
+		# 将栈顶父事件的 processed 重置为 false，等待 guard 唤醒 _process_next()
+		if _event_stack.size() > 0:
+			_event_stack[0]["processed"] = false
 
 
 func _on_clear_scheduled_events():
@@ -391,8 +389,10 @@ func on_option_selected(choice, choice_text: String = ""):
 			_resume_world()
 			return
 		else:
-			Logging.warn("on_option_selected: 栈顶存在未知类型条目 type='%s'，强制弹出" % entry_type)
-			_event_stack.pop_front()
+			# 栈顶是 pop 回归后的父事件 (BaseEvent, processed=true)
+			# 不弹出！重置 processed=false，让 _process_next 重新处理
+			Logging.info("on_option_selected: 检测到 pop 回归父事件，重置 processed 标记")
+			_event_stack[0]["processed"] = false
 
 	_is_active = false
 	_resume_world()

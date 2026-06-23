@@ -54,7 +54,7 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════
 
 ## 追加一个 Event 条目到纸带底部
-## entry_id: 稳定标识符（事件 instance_id），用于 has_entry / revive_entry / mark_chosen
+## entry_id: 稳定标识符（事件 instance_id），用于 has_entry / mark_chosen
 ## 返回创建的 TapeEntry 节点，供 display_slow 打字机写入（FAST 模式用不到返回值）
 func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String):
 	Logging.info("EventUI.append_event_entry: event='%s' entry_id='%s' from_stack=%s" % [event.name, entry_id, from_stack])
@@ -96,6 +96,42 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 	Logging.info("EventUI.append_event_entry: 条目已追加到纸带（entry_id='%s'）" % entry_id)
 	return entry
 
+
+
+
+## 追加 pop 回归条目到纸带底部 — 仅选项按钮，不渲染 title/content/example
+## 旧条目的 "即决：xxx" 烙印保留在历史位置，底部新增空白选项
+func append_pop_regression_entry(event: BaseEvent, all_options: Array, entry_id: String) -> void:
+	Logging.info("EventUI.append_pop_regression_entry: event='%s' entry_id='%s'" % [event.name, entry_id])
+
+	var entry = _event_template.instantiate()
+	_apply_event_icon(event, entry)
+	entry.set_meta("entry_id", entry_id)
+	entry.set_meta("entry_type", "event")
+	entry.set_meta("state", "awaiting_choice")
+	entry.set_meta("from_stack", true)
+	entry.set_meta("pop_regression", true)
+
+	# 隐藏 title / content / example — pop 回归不需重复渲染正文
+	var title_label: Label = entry.get_node("MarginContainer/VBox/HBox/TitleLabel")
+	var content_label: RichTextLabel = entry.get_node("MarginContainer/VBox/ContentLabel")
+	var example_label: RichTextLabel = entry.get_node("MarginContainer/VBox/ExampleLabel")
+	title_label.hide()
+	content_label.hide()
+	example_label.hide()
+
+	# 仅渲染选项按钮
+	var option_btns: Control = entry.get_node("MarginContainer/VBox/OptionBtns")
+	option_btns.apply_btns(all_options, func(r):
+		var txt := _find_option_text(all_options, r)
+		Logging.info("EventUI: pop回归选项被选中，转发 option_selected 信号（entry_id='%s' text='%s'）" % [entry_id, txt])
+		option_selected.emit(r, txt)
+	)
+
+	_tape_content.add_child(entry)
+	_active_entry_id = entry_id
+
+	Logging.info("EventUI.append_pop_regression_entry: pop回归条目已追加（entry_id='%s'）" % entry_id)
 
 ## 追加结算条目到纸带（绕过常规打字机，直接全量显示）
 func append_settlement_entry(event: BaseEvent, context: Dictionary) -> void:
@@ -170,30 +206,11 @@ func append_picker_attachment(data: Array, ui_constructor: Callable = Callable()
 
 
 ## 检查纸带上是否已有指定 entry_id 的条目
-## ⚠️ state="invalid_returned" 的条目视为不存在（已被 pop 回归路径废弃），
-## 让 apply_narrative 走新事件路径创建全新条目而非 revive 旧条目
 func has_entry(entry_id: String) -> bool:
-	for child in _tape_content.get_children():
-		if child.has_meta("entry_id") and child.get_meta("entry_id") == entry_id:
-			var state: String = child.get_meta("state", "")
-			if state == "invalid_returned":
-				continue
-			return true
-	return false
-
-
-## 废弃一个条目 — 将其 state 标记为 "invalid_returned"
-## 用于 pop_event 回归路径：旧条目不再被 has_entry 命中，
-## apply_narrative 会创建全新条目（保留完整事件历史）
-func invalidate_entry(entry_id: String) -> void:
-	Logging.info("EventUI.invalidate_entry: entry_id='%s'" % entry_id)
-	var entry := _find_entry(entry_id)
-	if not entry:
-		Logging.warn("EventUI.invalidate_entry: 未找到 entry_id='%s'，跳过" % entry_id)
-		return
-	entry.set_meta("state", "invalid_returned")
-	Logging.info("EventUI.invalidate_entry: entry_id='%s' 已废弃" % entry_id)
-
+		for child in _tape_content.get_children():
+			if child.has_meta("entry_id") and child.get_meta("entry_id") == entry_id:
+				return true
+		return false
 
 ## 追加一个 NarrativeText 条目到纸带底部
 ## 用于 pop_event 回归时的过渡叙事文本（transition_text + on_returned 合并）
@@ -217,36 +234,6 @@ func append_narrative_text(text: String) -> void:
 	_tape_content.add_child(rtl)
 	Logging.info("EventUI.append_narrative_text: NarrativeText 条目已追加到纸带")
 
-
-## 复活一个 chosen 状态的条目：文本烙印 → 选项按钮
-## 用于 stack pop 后回归的事件
-func revive_entry(entry_id: String, all_options: Array) -> void:
-	Logging.info("EventUI.revive_entry: entry_id='%s' options=%d" % [entry_id, all_options.size()])
-
-	var entry := _find_entry(entry_id)
-	if not entry:
-		Logging.err("EventUI.revive_entry: 未找到 entry_id='%s'，无法复活" % entry_id)
-		return
-
-	var state: String = entry.get_meta("state", "")
-	if state != "chosen":
-		Logging.warn("EventUI.revive_entry: entry_id='%s' 状态为 '%s'（非 chosen），跳过复活" % [entry_id, state])
-		return
-
-	# 销毁文本烙印，重建选项按钮
-	_remove_choice_label(entry)
-	var option_btns: Control = entry.get_node("MarginContainer/VBox/OptionBtns")
-	option_btns.show()
-
-	option_btns.apply_btns(all_options, func(r):
-		var txt := _find_option_text(all_options, r)
-		Logging.info("EventUI: 复活条目选项被选中，转发 option_selected 信号（entry_id='%s' text='%s'）" % [entry_id, txt])
-		option_selected.emit(r, txt)
-	)
-
-	entry.set_meta("state", "awaiting_choice")
-	_active_entry_id = entry_id
-	Logging.info("EventUI.revive_entry: entry_id='%s' 已复活" % entry_id)
 
 
 ## 标记条目为已选择：选项按钮销毁 → 文本烙印
@@ -520,17 +507,6 @@ func _find_entry(entry_id: String) -> Control:
 		if child.has_meta("entry_id") and child.get_meta("entry_id") == entry_id:
 			return child
 	return null
-
-
-## 从条目中移除 ChoiceLabel（用于 revive_entry）
-func _remove_choice_label(entry: PanelContainer) -> void:
-	var vbox = entry.get_node("MarginContainer/VBox")
-	if not vbox is VBoxContainer:
-		breakpoint
-	var target = vbox if vbox else entry
-	var choice_label := target.get_node_or_null("ChoiceLabel")
-	if choice_label:
-		choice_label.queue_free()
 
 
 ## 从选项数组中寻找匹配 ChoiceResult 的选项，返回其显示文本
