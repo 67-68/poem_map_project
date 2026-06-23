@@ -46,6 +46,6 @@ script = ExtResource("8_4ex11")
 options = Array[ExtResource("1_wc5i7")]([SubResource("Resource_i1n1u")])
 uuid = "fengxian_familiar_path"
 name = "熟悉的路径"
-description = "你凭着十年前的记忆在这片田野里摸索。路早就被荒草吞没了大半，但方向还在骨头里。风从奉先县城那边吹过来，夹着一股柴烟味。"
+description = "你凭着十年前的记忆在这片田野里摸索。路早就被荒草吞没了大半，但方向还在骨头里。风从奉先县城那边吹过来，夹着一股[glitch]柴̧̧̱̰̣̱̈̄̃̇́̀́̄烟̄̂̈̆̂̇̌̀[/glitch]味。"
 icon = ExtResource("1_r6frj")
 ui_decl = SubResource("Resource_r6frj")

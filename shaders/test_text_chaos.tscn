@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://du5jc10a6mk2w"]
+
+[ext_resource type="Material" uid="uid://cxtob7xdbe0c6" path="res://shaders/text_chaos_shader_material.tres" id="1_o3c7d"]
+
+[node name="Label" type="RichTextLabel" unique_id=2025628881]
+material = ExtResource("1_o3c7d")
+offset_right = 215.0
+offset_bottom = 30.0
+theme_type_variation = &"FrozenNarrativeText"
+text = "test shader"
+fit_content = true

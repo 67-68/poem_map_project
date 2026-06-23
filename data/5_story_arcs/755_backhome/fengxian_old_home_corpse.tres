@@ -45,5 +45,5 @@ script = ExtResource("8_aappf")
 options = Array[ExtResource("1_75lp4")]([SubResource("Resource_ul8w8")])
 uuid = "fengxian_old_home_corpse"
 name = "旧居"
-description = "门虚掩着。你推开门，屋里的霉味混着一股甜腻的腐烂气息迎面扑来。地上趴着一具干尸——骨节粗大，肩宽，不像女人，更不是孩子。你蹲下来翻看尸体的手，指节上有老茧，是握锄头的痕迹。"
+description = "门虚掩着。你推开门，屋里的霉味混着一股甜腻的腐烂气息迎面扑来。地上趴着一具[glitch level=4]干尸[/glitch]——骨节粗大，肩宽，不像女人，更不是孩子。你蹲下来翻看尸体的手，指节上有老茧，是握锄头的痕迹。"
 ui_decl = SubResource("Resource_mkke1")

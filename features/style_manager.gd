@@ -1,21 +1,22 @@
 extends Node
 ## 视觉风格管理器 (Autoload) — 属性驱动 shader + StyleBox 策略引擎
 ##
+## 模式: 单容器 / 策略组（多容器同时切换）
+##   • data.container = $P  → 旧式单容器。switch_strategy 只影响这一个
+##   • data.containers = [$A, $B, $C] → 策略组模式。bind/switch 时同时生效
+##   • switch_strategy(任意组内容器, "frost") → 全组批量切换
+##
 ## 核心职责:
-##   • bind(data) — 注册一个命名策略，自动应用 shader + stylebox
-##   • switch_strategy(container, name) — 切换策略，空串回滚到 default
+##   • bind(data) — 注册策略，自动应用 shader + stylebox + text theme
+##   • switch_strategy(container, name) — 按策略组切换，空串回滚 default
 ##   • apply_event_background(container, tex) — 事件临时背景覆盖
 ##   • 监听 PlayerState.player_stat_changed，按活跃策略同步 progress
 ##
-## 用法:
+## 用法（策略组模式）:
 ##   var data = StyleData.new()
 ##   data.strategy_name = "frost"
-##   data.target_property = "health"
-##   data.start_property_value = 100.0   # 起点（血满）
-##   data.target_property_value = 0.0    # 终点（血空 → progress=1）
-##   data.shader_resource = preload("res://shaders/frost.gdshader")
+##   data.containers = [$TapeContainer, $SidePanel]
 ##   data.shader_parameter_names = ["freeze_progress"]
-##   data.container = $TapeContainer
 ##   StyleManager.bind(data)
 
 const LOG_TAG := "StyleManager"
@@ -42,6 +43,11 @@ var _active_text_themes: Dictionary = {}
 ## 反向索引：记录哪些节点被连接了 child_entered_tree 信号，用于 cleanup
 var _watched_text_nodes: Dictionary = {}
 
+## ★ 容器同伴映射: { container_instance_id → Array[int] } — 同组所有容器 id
+## bind() 时构建；switch_strategy() 据此批量切换组内所有容器
+## 单容器注册时该项映射为 [自身id]，保证 switch_strategy 行为一致
+var _container_peers: Dictionary = {}
+
 
 # ============================================================
 # _ready() — 初始化信号连接
@@ -59,73 +65,96 @@ func _ready() -> void:
 # 公共 API — 策略管理
 # ============================================================
 
-## 注册一个策略到目标 container
+## 注册一个策略到目标 container(s)
 ##
 ## [param data] StyleData，包含完整的策略描述
 ##
+## 容器解析: containers 非空 → 用 containers；否则退回到 container（向后兼容）
+## 策略组模式: containers 中的全部控件共享同一策略组，switch_strategy 时同时切换
+##
 ## 防御性:
-##   • container 为 null → Logging.err + return
+##   • container 和 containers 均为空 → Logging.err + return
 ##   • strategy_name 重名 → Logging.warn，覆盖旧策略
 ##   • 首次 bind 此 container → 自动 capture_default()
-##   • strategy_name 非空 → 自动 apply 此策略
 func bind(data: StyleData) -> void:
 	if Engine.is_editor_hint():
 		return
 
-	# ── 契约检查 ──────────────────────────────────────────
-	if data.container == null:
-		Logging.err("%s: bind 失败 — container 为 null" % LOG_TAG)
+	# ── 解析目标容器列表 ──────────────────────────────────
+	var targets: Array[Control] = _resolve_target_containers(data)
+	if targets.is_empty():
+		Logging.err("%s: bind 失败 — container 和 containers 均为空" % LOG_TAG)
 		return
 
-	if not is_instance_valid(data.container):
-		Logging.err("%s: bind 失败 — container 已被销毁" % LOG_TAG)
-		return
+	var strategy_name: String = data.strategy_name
+	if strategy_name.is_empty():
+		Logging.warn("%s: bind — strategy_name 为空，策略不会被自动激活" % LOG_TAG)
 
-	if data.strategy_name.is_empty():
-		Logging.warn("%s: bind — strategy_name 为空，策略不会被自动激活 (container=%s)" % [LOG_TAG, data.container.name])
+	# ── 构建同伴映射（每个容器记录同组所有容器的 id）─────
+	var all_ids: Array[int] = []
+	for c in targets:
+		if c != null and is_instance_valid(c):
+			all_ids.append(c.get_instance_id())
 
-	var id := data.container.get_instance_id()
+	for c in targets:
+		if c != null and is_instance_valid(c):
+			_container_peers[c.get_instance_id()] = all_ids
 
-	# ── 首次 bind 此 container → 捕获 default 状态 ──────
-	if not _default_states.has(id):
-		_capture_default(data.container)
+	# ── 遍历每个目标容器，执行注册 ────────────────────────
+	for c in targets:
+		if c == null:
+			Logging.err("%s: bind — 跳过 null container (strategy='%s')" % [LOG_TAG, strategy_name])
+			continue
 
-	# ── 注册策略 ──────────────────────────────────────────
-	if not _strategies.has(id):
-		_strategies[id] = {}
+		if not is_instance_valid(c):
+			Logging.err("%s: bind — 跳过已销毁 container (name=%s)" % [LOG_TAG, c.name if c else "?"])
+			continue
 
-	if _strategies[id].has(data.strategy_name):
-		Logging.warn("%s: bind — 策略 '%s' 已存在，覆盖旧策略 (container=%s)" % [LOG_TAG, data.strategy_name, data.container.name])
+		var id := c.get_instance_id()
 
-	_strategies[id][data.strategy_name] = data
+		# ── 首次 bind → 捕获 default 状态 ─────────────
+		if not _default_states.has(id):
+			_capture_default(c)
 
-	# ── 绑定 tree_exiting → 自动清理 ─────────────────────
-	if not data.container.tree_exiting.is_connected(_on_container_tree_exiting.bind(data.container)):
-		data.container.tree_exiting.connect(_on_container_tree_exiting.bind(data.container))
+		# ── 注册策略 ─────────────────────────────────
+		if not _strategies.has(id):
+			_strategies[id] = {}
 
-	Logging.info("%s: bind → strategy='%s' prop=%s container=%s params=%s start=%.1f target=%.1f" % [
-		LOG_TAG,
-		data.strategy_name,
-		data.target_property,
-		data.container.name,
-		str(data.shader_parameter_names),
-		data.start_property_value,
-		data.target_property_value,
-	])
+		if _strategies[id].has(strategy_name):
+			Logging.warn("%s: bind — 策略 '%s' 已存在，覆盖旧策略 (container=%s)" % [LOG_TAG, strategy_name, c.name])
 
-	# ── 仅注册，不自动激活 shader。但若 stylebox_active_on_bind 则立即应用 stylebox ──
-	if data.stylebox_active_on_bind and data.container is PanelContainer and data.stylebox != null:
-		data.container.set("theme_override_styles/panel", data.stylebox)
-		# 更新 default_states 中的 stylebox，使后续 restore 以此为基准
-		if _default_states.has(id):
-			_default_states[id]["stylebox"] = data.stylebox.duplicate()
-		Logging.info("%s: bind → stylebox 已立即应用 (container=%s)" % [LOG_TAG, data.container.name])
+		_strategies[id][strategy_name] = data
+
+		# ── 绑定 tree_exiting → 自动清理 ──────────────
+		if not c.tree_exiting.is_connected(_on_container_tree_exiting.bind(c)):
+			c.tree_exiting.connect(_on_container_tree_exiting.bind(c))
 
 
-## 切换 container 的活跃策略
+		Logging.info("%s: bind → strategy='%s' prop=%s container=%s params=%s start=%.1f target=%.1f" % [
+			LOG_TAG,
+			strategy_name,
+			data.target_property,
+			c.name,
+			str(data.shader_parameter_names),
+			data.start_property_value,
+			data.target_property_value,
+		])
+
+		# ── stylebox_active_on_bind → 立即应用 ──────────
+		if data.stylebox_active_on_bind and c is PanelContainer and data.stylebox != null:
+			c.set("theme_override_styles/panel", data.stylebox)
+			if _default_states.has(id):
+				_default_states[id]["stylebox"] = data.stylebox.duplicate()
+			Logging.info("%s: bind → stylebox 已立即应用 (container=%s)" % [LOG_TAG, c.name])
+
+
+## 切换策略组内所有容器的活跃策略
 ##
-## [param container] 目标控件
-## [param name] 策略名，空串 → 回滚到 default 状态
+## [param container] 组内任意一个容器（用于定位策略组），null → 报错
+## [param name] 策略名，空串 → 全组回滚到 default
+##
+## 行为: 通过 _container_peers[container_id] 找到组内所有容器，
+##       对每个容器执行 _apply_strategy 或 _restore_default
 func switch_strategy(container: Control, name: String) -> void:
 	if container == null:
 		Logging.err("%s: switch_strategy — container 为 null" % LOG_TAG)
@@ -135,22 +164,55 @@ func switch_strategy(container: Control, name: String) -> void:
 		Logging.err("%s: switch_strategy — container 已销毁" % LOG_TAG)
 		return
 
-	var id := container.get_instance_id()
+	# ── 通过同伴映射获取策略组内所有容器 ──────────────────
+	var container_id := container.get_instance_id()
+	var group_ids: Array = _container_peers.get(container_id, [container_id])  # 兜底：单容器
+	if group_ids.is_empty():
+		if name.is_empty():
+			# 空策略名且无组 → 回滚单个 container
+			_restore_default(container)
+			Logging.info("%s: switch_strategy → 回滚 default (单容器=%s)" % [LOG_TAG, container.name])
+		else:
+			Logging.err("%s: switch_strategy — 策略 '%s' 未在反向索引中找到" % [LOG_TAG, name])
+		return
 
 	if name.is_empty():
-		# 回滚到 default
-		_restore_default(container)
-		Logging.info("%s: switch_strategy → 回滚 default (container=%s)" % [LOG_TAG, container.name])
+		# 全组回滚 default
+		for cid in group_ids:
+			if not is_instance_id_valid(cid):
+				continue
+			var c := instance_from_id(cid) as Control
+			if c == null or not is_instance_valid(c):
+				continue
+			_restore_default(c)
+			Logging.info("%s: switch_strategy → 回滚 default (container=%s)" % [LOG_TAG, c.name])
 		return
 
-	# 查找策略
-	if not _strategies.has(id) or not _strategies[id].has(name):
-		Logging.err("%s: switch_strategy — 策略 '%s' 未找到 (container=%s)" % [LOG_TAG, name, container.name])
+	# ── 全组激活策略 ──────────────────────────────────────
+	# 从组内任意一个容器查出 StyleData（所有容器共享同一份 data 引用）
+	var data: StyleData = null
+	for cid in group_ids:
+		if not is_instance_id_valid(cid):
+			continue
+		if _strategies.has(cid) and _strategies[cid].has(name):
+			data = _strategies[cid][name]
+			break
+
+	if data == null:
+		Logging.err("%s: switch_strategy — 策略 '%s' 的 StyleData 未找到" % [LOG_TAG, name])
 		return
 
-	var data: StyleData = _strategies[id][name]
-	_apply_strategy(container, data)
-	Logging.info("%s: switch_strategy → '%s' (container=%s)" % [LOG_TAG, name, container.name])
+	var apply_count := 0
+	for cid in group_ids:
+		if not is_instance_id_valid(cid):
+			continue
+		var c := instance_from_id(cid) as Control
+		if c == null or not is_instance_valid(c):
+			continue
+		_apply_strategy(c, data)
+		apply_count += 1
+
+	Logging.info("%s: switch_strategy → '%s' 组批量切换 (%d 容器)" % [LOG_TAG, name, apply_count])
 
 
 # ============================================================
@@ -234,6 +296,9 @@ func unbind(container: Control) -> void:
 	# 断开信号
 	if is_instance_valid(container) and container.tree_exiting.is_connected(_on_container_tree_exiting):
 		container.tree_exiting.disconnect(_on_container_tree_exiting)
+
+	# ── 从同伴映射中清理 ──────────────────────────────────
+	_container_peers.erase(id)
 
 	_strategies.erase(id)
 	_default_states.erase(id)
@@ -437,6 +502,21 @@ func _sync_progress(container: Control, data: StyleData) -> void:
 		str(data.shader_parameter_names),
 		container.name,
 	])
+
+
+# ============================================================
+# 内部方法 — 容器解析
+# ============================================================
+
+## 从 StyleData 解析目标容器列表
+## containers 非空 → 返回 containers；否则退回 container 单元素数组
+## 两者都为空 → 返回空数组，由调用方报错
+func _resolve_target_containers(data: StyleData) -> Array[Control]:
+	if not data.containers.is_empty():
+		return data.containers
+	if data.container != null:
+		return [data.container]
+	return []
 
 
 # ============================================================
@@ -749,6 +829,7 @@ func _exit_tree() -> void:
 	_strategies.clear()
 	_default_states.clear()
 	_active_strategy.clear()
+	_container_peers.clear()
 	_signal_connected = false
 
 	Logging.info("%s: _exit_tree — StyleManager 已清理" % LOG_TAG)

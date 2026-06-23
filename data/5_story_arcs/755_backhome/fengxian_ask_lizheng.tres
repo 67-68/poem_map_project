@@ -38,4 +38,4 @@ script = ExtResource("8_7lvy4")
 options = Array[ExtResource("1_y5c3i")]([SubResource("Resource_8ih4e")])
 uuid = "fengxian_ask_lizheng"
 name = "村口的里正"
-description = "里正还坐在那张磨得发亮的木凳上，像是从未挪过。你走过去的时候，他正闭着眼晒太阳——不，也许只是在打盹。冬天的太阳没有温度，照在他脸上像一层薄灰。"
+description = "里正还坐在那张磨得发亮的木凳上，像是从未挪过。你走过去的时候，他正[glitch level=6]闭着眼[/glitch]晒太阳——不，也许只是在打盹。冬天的太阳没有温度，照在他脸上像一层薄灰。"

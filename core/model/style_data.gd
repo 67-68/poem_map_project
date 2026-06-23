@@ -1,15 +1,16 @@
 class_name StyleData extends RefCounted
-## 视觉风格数据模型 — 描述属性到 shader parameter + StyleBox 的映射
+## 视觉风格数据模型 — 属性→shader param + StyleBox 映射
+##
+## 模式: 单容器 / 策略组（多容器同时切换）
+##   • data.container = $Panel        → 旧式单容器（向后兼容）
+##   • data.containers = [$A, $B, $C] → 策略组模式，切换时同时生效
+##   • containers 非空时忽略 container；都为空则 bind() 报错
 ##
 ## 用法:
 ##   var data = StyleData.new()
 ##   data.strategy_name = "frost"
-##   data.target_property = "health"
-##   data.shader_resource = preload("res://shaders/frost.gdshader")
+##   data.containers = [$TapeContainer, $SidePanel]
 ##   data.shader_parameter_names = ["freeze_progress"]
-##   data.start_property_value = 100.0   # 起点
-##   data.target_property_value = 0.0    # 终点（反向：血越少 progress 越高）
-##   data.container = $TapeContainer
 ##   StyleManager.bind(data)
 
 const LOG_TAG := "StyleData"
@@ -68,8 +69,13 @@ var inner_thought_theme: String = ""
 ## 替换原有 "DefaultText" variation 或无 variation 的 Label
 var default_text_theme: String = ""
 
-# ── 目标控件 ──────────────────────────────────────────────
-## 目标节点，其 material 属性将被注入 ShaderMaterial
+# ── 目标控件（策略组模式）────────────────────────────────
+## ★ 策略组模式：多容器列表，bind/switch 时同时生效。非空时忽略 container。
+##   StyleManager.switch_strategy() 会同时切换组内所有容器的策略。
+var containers: Array[Control] = []
+
+# ── 目标控件（单容器兼容，仅 containers 为空时生效）─────
+## 旧式单容器。若 containers 非空，此字段被忽略。
 ## 若为 PanelContainer 且 stylebox 非 null，还会替换其 theme_override_styles/panel
 var container: Control = null
 
@@ -126,4 +132,5 @@ func copy_from(other: StyleData) -> void:
 	title_text_theme = other.title_text_theme
 	inner_thought_theme = other.inner_thought_theme
 	default_text_theme = other.default_text_theme
+	containers = other.containers.duplicate()
 	container = other.container

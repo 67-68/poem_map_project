@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cxtob7xdbe0c6"]
+
+[ext_resource type="Shader" uid="uid://ml6h2ak80nqi" path="res://shaders/text_chaos.gdshader" id="1_4s5nw"]
+
+[resource]
+shader = ExtResource("1_4s5nw")
+shader_parameter/glitch_intensity = 0.5
+shader_parameter/aberration_amount = 4.0
+shader_parameter/time_scale = 10.0

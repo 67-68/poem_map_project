@@ -211,6 +211,9 @@ func _init() -> void:
 	_build_life_path_points_from_poems()
 	_build_unified_index()
 
+	# ── 编译期预处理：对所有事件的文本字段注入 BBCode 默认参数 ──
+	_preprocess_all_entities()
+
 
 func _ready() -> void:
 	_register_events_with_time_service()
@@ -681,6 +684,26 @@ func _build_unified_index() -> void:
 	var pool_size = _raw_data_pool.size()
 	var class_count = _index_by_class.size()
 	Logging.info("Database: 统一索引构建完成: 池内 %d 条目, %d 个类已索引" % [pool_size, class_count])
+
+
+func _preprocess_all_entities() -> void:
+	"""遍历 event_base_pool 中所有 Resource，对其文本字段做 BBCode 参数注入。
+
+	只处理 GameEntity / BaseEvent 及其子类（BaseOption 由 BaseEvent 内部 options 数组覆盖），
+	使用 GlitchPreprocessor.DEFAULT_TAG_PARAMS 硬编码默认参数。
+	"""
+	var processed_count := 0
+	var total := event_base_pool.size()
+	for full_id in event_base_pool:
+		var res = event_base_pool[full_id]
+		if not (res is Resource):
+			continue
+		# 只预处理具有 description 或 options 的实体
+		if "description" in res or "options" in res:
+			GlitchPreprocessor.preprocess_entity(res)
+			processed_count += 1
+
+	Logging.info("Database: GlitchPreprocessor 编译期参数注入完成: %d/%d 个实体已处理" % [processed_count, total])
 
 
 func _scan_flat_dict(dict: Dictionary, source_desc: String) -> void:
