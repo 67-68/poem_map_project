@@ -253,14 +253,14 @@ profile_key = "755_backhome"
 
 ### 6.5 当前已注册的 Profile
 
-#### 6.5.1 `755_backhome` — 极寒风雪
+#### 6.5.1 `755_backhome` — 极寒风雪（低吼 + 尖啸）
 
 注册位置: [`main.gd`](main.gd:238) `_register_ambient_profiles()`
 
 | Layer | 语义 | 音频 | volume | replay_gap |
 |-------|------|------|--------|------------|
-| 0 (Void) | 连续底噪 | `Instrumental.mp3` | -18 dB | 0 (连续) |
-| 1 (Attack) | 随机尖啸 | `snow_baby_1.wav`, `snow_baby_2.wav`, `baby_final.wav` | -5 dB | 8~15s 间隔 |
+| 0 (Void) | 连续低频底噪 | `low_wind.wav` | 0 dB | 0 (连续) |
+| 1 (Attack) | 随机狂风尖啸 | `harsh_wind.wav` | -8 dB | 25~30s 间隔 |
 
 ### 6.6 架构决策
 
