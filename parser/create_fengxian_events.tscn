@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dtouditnbw8do"]
+
+[ext_resource type="Script" path="res://parser/create_fengxian_events.gd" id="1_creator"]
+
+[node name="FengxianCreator" type="Node"]
+script = ExtResource("1_creator")

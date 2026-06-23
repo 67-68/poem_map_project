@@ -18,6 +18,7 @@ operators = Array[ExtResource("2_siffe")]([SubResource("Resource_nklhw")])
 [sub_resource type="Resource" id="Resource_hxfrt"]
 script = ExtResource("5_0hta1")
 choice_result = SubResource("Resource_siffe")
+description = "好的"
 
 [resource]
 script = ExtResource("6_6eapa")

@@ -21,9 +21,11 @@ choice_result = SubResource("Resource_cmhwf")
 custom_context_params = {
 "guests": PackedStringArray("libai", "wangwei", "zhengqian")
 }
+description = "接受"
 
 [sub_resource type="Resource" id="Resource_khu4x"]
 script = ExtResource("5_j32db")
+description = "拒绝"
 
 [resource]
 script = ExtResource("6_7ojh0")

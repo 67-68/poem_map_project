@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cgnhc10ydpnrh"]
 
+[ext_resource type="AudioStream" uid="uid://vsi31koy8aow" path="res://assets/sounds/755_backhome/snow_baby_1.wav" id="1_53exg"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_r3wt3"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_k2gmq"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_5r3wt"]
@@ -70,6 +71,7 @@ description = "测试淡出动画"
 [resource]
 script = ExtResource("6_7rh1c")
 options = Array[ExtResource("1_r3wt3")]([SubResource("Option_present"), SubResource("Option_slide"), SubResource("Option_shatter"), SubResource("Option_fade")])
+audio = ExtResource("1_53exg")
 uuid = "test_animation_event"
 name = "AnimationObject 测试事件"
 description = "手动测试 AnimationObject 三种动画效果"

@@ -67,7 +67,7 @@ func parse(new_text):
 			TimeService.jump_to_clean(target_year)
 		elif parts.size() == 2:
 			# $ event_key — 触发事件（原有逻辑）
-			EventBus.request_event_key.emit(parts[1], {})
+			EventBus.push_event.emit(parts[1], {})
 	elif parts.size() == 2:
 		if GameState.has_method(parts[0]):
 			GameState.callv(parts[0],[parts[1]])
