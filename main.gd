@@ -52,6 +52,9 @@ func _ready() -> void:
 	Logging.info("Main: 纯地图模式脚本已就绪")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
+	# ── 注册 ambient profile ──
+	_register_ambient_profiles()
+
 	# ── Tab 键盘切换纯地图模式（由 InputManager 发出）──
 	if not EventBus.has_signal("request_toggle_map_only"):
 		Logging.err("Main: EventBus 缺少 signal request_toggle_map_only，请在 eventbus.gd 中添加")
@@ -230,6 +233,31 @@ func _restore_visibility() -> void:
 # ═══════════════════════════════════════════════
 # 工具
 # ═══════════════════════════════════════════════
+
+func _register_ambient_profiles() -> void:
+	# ── 755_backhome: 两层环境音 ──
+	# Layer 0: Void — 连续低温底噪（Instrumental）
+	# Layer 1: Attack — 随机暴风雪尖啸（8-15秒间隔）
+	const INSTRUMENTAL = preload("res://assets/sounds/755_backhome/Instrumental.mp3")
+	const SNOW_BABY_1 = preload("res://assets/sounds/755_backhome/snow_baby_1.wav")
+	const SNOW_BABY_2 = preload("res://assets/sounds/755_backhome/snow_baby_2.wav")
+	const BABY_FINAL = preload("res://assets/sounds/755_backhome/baby_final.wav")
+
+	AudioManager.register_ambient_profile("755_backhome", [
+		{
+			"streams": [INSTRUMENTAL],
+			"volume_db": -18.0,
+			"replay_gap": 0.0,       # 连续循环
+		},
+		{
+			"streams": [SNOW_BABY_1, SNOW_BABY_2, BABY_FINAL],
+			"volume_db": -5.0,
+			"replay_gap": 8.0,       # 随机间隔 8~15 秒
+			"replay_gap_max": 15.0,
+		},
+	])
+	Logging.info("Main: 已注册 ambient profile → 755_backhome")
+
 
 func _kill_all_tweens() -> void:
 	if _tween_exit:

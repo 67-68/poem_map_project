@@ -21,6 +21,13 @@ const SFX_POOL_SIZE = 8 # 8个声道足够应付大多数 UI 情况了
 # ── Loop 播放器（独立，不占用 SFX 池）──
 var _loop_player: AudioStreamPlayer
 
+# ── Ambient System（环境背景音）──
+var _ambient_active: bool = false
+var _ambient_paused: bool = false
+var _ambient_layers: Array = []  # Array[AmbientLayer]
+var _profiles: Dictionary = {}   # String -> Array[Dictionary] 注册的 profile
+var _bgm_was_playing: bool = false  # _process() 边缘检测
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS # 必须全天候运行！
 	
@@ -38,6 +45,28 @@ func _ready():
 	
 	# 4. 扫描 assets/sounds/ 子目录，预加载分类音效
 	_load_sfx_categories()
+
+# ── _process: 被动 BGM 互斥监控 ──
+func _process(_delta: float) -> void:
+	# 边缘检测：BGM 轨道状态变化时自动 pause/resume ambient
+	var bgm_now_playing: bool = false
+	if is_instance_valid(_bgm_track_1) and _bgm_track_1.playing:
+		bgm_now_playing = true
+	if is_instance_valid(_bgm_track_2) and _bgm_track_2.playing:
+		bgm_now_playing = true
+	
+	if not _ambient_active:
+		_bgm_was_playing = bgm_now_playing
+		return
+	
+	if bgm_now_playing and not _bgm_was_playing:
+		# BGM 从无到有 → pause ambient
+		_pause_ambient_internal()
+	elif not bgm_now_playing and _bgm_was_playing:
+		# BGM 从有到无 → resume ambient
+		_resume_ambient_internal()
+	
+	_bgm_was_playing = bgm_now_playing
 
 # 辅助函数：创建播放器
 func _create_player(node_name: String) -> AudioStreamPlayer:
@@ -238,6 +267,215 @@ func _get_available_sfx_player() -> AudioStreamPlayer:
 		if not p.playing:
 			return p
 	return null
+
+# ═══════════════════════════════════════════════════════
+# Ambient System（环境背景音）
+# ═══════════════════════════════════════════════════════
+
+class AmbientLayer:
+	var player: AudioStreamPlayer
+	var streams: Array[AudioStream] = []
+	var volume_db: float = 0.0
+	var replay_gap: float = 0.0       # 0 = 连续循环; >0 = 间隔重播
+	var replay_gap_max: float = 0.0   # 仅 replay_gap > 0 时有效
+	var gap_timer: SceneTreeTimer = null
+	var _index: int = -1
+
+	func _to_string() -> String:
+		return "AmbientLayer(idx=%d, streams=%d, vol=%.1fdB, gap=%.1f-%.1f)" % [_index, streams.size(), volume_db, replay_gap, replay_gap_max]
+
+	func setup(parent: Node, idx: int, config: Dictionary) -> bool:
+		_index = idx
+		player = AudioStreamPlayer.new()
+		player.name = "Ambient_%d" % idx
+		player.bus = "Master"
+		parent.add_child(player)
+
+		# streams
+		var raw = config.get("streams", [])
+		if raw is AudioStream:
+			streams = [raw as AudioStream]
+		elif raw is Array:
+			for s in raw:
+				if s is AudioStream:
+					streams.append(s)
+		if streams.is_empty():
+			Logging.warn("AmbientLayer[%d]: streams 为空，跳过" % idx)
+			return false
+
+		volume_db = config.get("volume_db", 0.0)
+		replay_gap = config.get("replay_gap", 0.0)
+		replay_gap_max = config.get("replay_gap_max", replay_gap)
+
+		if not player.finished.is_connected(_on_finished.bind(self)):
+			player.finished.connect(_on_finished.bind(self))
+		return true
+
+	func start() -> void:
+		if streams.is_empty():
+			return
+		player.volume_db = volume_db
+		_pick_and_play()
+
+	func _pick_and_play() -> void:
+		if streams.is_empty():
+			return
+		if streams.size() == 1:
+			player.stream = streams[0]
+		else:
+			player.stream = streams[randi() % streams.size()]
+		player.play()
+
+	func pause() -> void:
+		if player and player.playing:
+			player.stream_paused = true
+
+	func resume() -> void:
+		if player:
+			player.stream_paused = false
+
+	func stop() -> void:
+		_cancel_gap_timer()
+		if player and player.finished.is_connected(_on_finished.bind(self)):
+			player.finished.disconnect(_on_finished.bind(self))
+		if player:
+			player.stop()
+
+	func destroy() -> void:
+		stop()
+		if player:
+			player.queue_free()
+			player = null
+
+	func _cancel_gap_timer() -> void:
+		if gap_timer:
+			gap_timer.timeout.disconnect(_on_gap_timeout)
+			gap_timer = null
+
+	static func _on_finished(layer: AmbientLayer) -> void:
+		if not is_instance_valid(layer) or not is_instance_valid(layer.player):
+			return
+		if layer.replay_gap <= 0.0:
+			# 连续循环
+			layer._pick_and_play()
+		else:
+			# 随机间隔
+			layer._cancel_gap_timer()
+			var delay = randf_range(layer.replay_gap, layer.replay_gap_max)
+			layer.gap_timer = layer.player.get_tree().create_timer(delay)
+			layer.gap_timer.timeout.connect(layer._on_gap_timeout)
+
+	func _on_gap_timeout() -> void:
+		gap_timer = null
+		if not player:
+			return
+		_pick_and_play()
+
+
+# ── Public API ──
+
+## 注册 ambient profile。key 用于 set_ambient_profile() 快速引用。
+## layers: Array[Dictionary]，每项 { streams, volume_db, replay_gap, replay_gap_max }
+func register_ambient_profile(key: String, layers: Array) -> void:
+	if key.is_empty():
+		Logging.warn("%s: register_ambient_profile key 为空" % LOG_TAG)
+		return
+	if layers.is_empty():
+		Logging.warn("%s: register_ambient_profile layers 为空 [%s]" % [LOG_TAG, key])
+		return
+	_profiles[key] = layers
+	Logging.info("%s: 已注册 ambient profile [%s] → %d 层" % [LOG_TAG, key, layers.size()])
+
+
+## 激活指定 profile。若已有 active → 先 clear。
+## 若 BGM 正在播 → 加载但不启动（标记 paused 等待 _process 恢复）
+func set_ambient_profile(key: String) -> void:
+	if not _profiles.has(key):
+		Logging.warn("%s: 未找到 ambient profile [%s]" % [LOG_TAG, key])
+		return
+
+	clear_ambient_profile()
+
+	var layers_config = _profiles[key] as Array
+	for i in range(layers_config.size()):
+		var layer = AmbientLayer.new()
+		if layer.setup(self, i, layers_config[i]):
+			_ambient_layers.append(layer)
+
+	if _ambient_layers.is_empty():
+		Logging.warn("%s: set_ambient_profile [%s] 无有效层" % [LOG_TAG, key])
+		return
+
+	_ambient_active = true
+	Logging.info("%s: 已设置 ambient profile [%s] → %d 层" % [LOG_TAG, key, _ambient_layers.size()])
+
+	# 若 BGM 正在播，标记 paused 不启动
+	var bgm_playing := false
+	if is_instance_valid(_bgm_track_1) and _bgm_track_1.playing:
+		bgm_playing = true
+	if is_instance_valid(_bgm_track_2) and _bgm_track_2.playing:
+		bgm_playing = true
+
+	if bgm_playing:
+		_ambient_paused = true
+		_bgm_was_playing = true
+		Logging.info("%s: ambient profile [%s] 已加载但暂停（BGM 正在播放）" % [LOG_TAG, key])
+	else:
+		_ambient_paused = false
+		_bgm_was_playing = false
+		for layer in _ambient_layers:
+			(layer as AmbientLayer).start()
+		Logging.info("%s: ambient profile [%s] 开始播放" % [LOG_TAG, key])
+
+
+## 停止所有 ambient 层并清理
+func clear_ambient_profile() -> void:
+	if not _ambient_active:
+		return
+
+	Logging.info("%s: 清除 ambient profile，停止 %d 层" % [LOG_TAG, _ambient_layers.size()])
+	for layer in _ambient_layers:
+		(layer as AmbientLayer).destroy()
+	_ambient_layers.clear()
+	_ambient_active = false
+	_ambient_paused = false
+
+
+## 暂停所有 ambient 层
+func pause_ambient() -> void:
+	_pause_ambient_internal()
+
+
+## 恢复所有 ambient 层
+func resume_ambient() -> void:
+	_resume_ambient_internal()
+
+
+func is_ambient_active() -> bool:
+	return _ambient_active
+
+
+## 内部暂停（不记录日志，_process 也会调用）
+func _pause_ambient_internal() -> void:
+	if not _ambient_active or _ambient_paused:
+		return
+	_ambient_paused = true
+	Logging.info("%s: 暂停 ambient (%d 层)" % [LOG_TAG, _ambient_layers.size()])
+	for layer in _ambient_layers:
+		(layer as AmbientLayer).pause()
+
+
+## 内部恢复（不记录日志，_process 也会调用）
+func _resume_ambient_internal() -> void:
+	if not _ambient_active or not _ambient_paused:
+		return
+	_ambient_paused = false
+	Logging.info("%s: 恢复 ambient (%d 层)" % [LOG_TAG, _ambient_layers.size()])
+	for layer in _ambient_layers:
+		(layer as AmbientLayer).resume()
+
+
+# ═══════════════════════════════════════════════════════
 
 # 预加载常用音效，方便全局调用
 const SONG_SAD = preload("res://assets/sounds/sad_song.mp3") # 假设你有这个

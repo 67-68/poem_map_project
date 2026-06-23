@@ -199,3 +199,71 @@
 3. **非按钮类**: 在代码中直接调用 `AudioManager.play_sfx_category("分类名")`
 4. **循环类**: 调用 `AudioManager.play_sfx_loop("分类名")`，在适当时机调用 `stop_sfx_loop()`
 5. **节流**: 高频触发场景（如打字机）使用 `i % N == 0` 或时间阈值控制播放频率
+
+---
+
+## 6. Ambient System（环境背景音系统）
+
+> 新增于 2026-06-23  
+> 实现文件: [`AudioManager`](core/audio_manager.gd) + [`AmbientAudioOperator`](core/operators/ambient_audio_operator.gd)
+
+### 6.1 概念
+
+Ambient System 提供**多层叠加的环境背景音**，用于营造空间氛围（如风雪呼啸、虫鸣底噪）。每一层是独立的 `AudioStreamPlayer`，可以同时播放。
+
+与 BGM 系统自动互斥：BGM 播放时 ambient 自动暂停，BGM 停止后自动恢复。Loop/SFX 不受影响。
+
+### 6.2 层数据结构
+
+每层由以下字段定义（`Dictionary` 格式）：
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `streams` | `AudioStream` 或 `Array[AudioStream]` | 是 | 曲目池。单个流或数组 |
+| `volume_db` | `float` | 否 | 该层独立音量，默认 0.0 |
+| `replay_gap` | `float` | 否 | `0` = 连续循环；`> 0` = 播完后等待 N 秒再随机选曲重播 |
+| `replay_gap_max` | `float` | 否 | 仅 `replay_gap > 0` 时有效，实际间隔 = `randf_range(replay_gap, replay_gap_max)` |
+
+### 6.3 API
+
+| 方法 | 参数 | 说明 |
+|------|------|------|
+| `AudioManager.register_ambient_profile(key, layers)` | `key: String`, `layers: Array[Dictionary]` | 注册一个 ambient profile |
+| `AudioManager.set_ambient_profile(key)` | `key: String` | 激活指定 profile（先 clear 旧的）。BGM 在播时自动暂停 |
+| `AudioManager.clear_ambient_profile()` | — | 停止并清理所有 ambient 层 |
+| `AudioManager.pause_ambient()` | — | 暂停所有层 |
+| `AudioManager.resume_ambient()` | — | 恢复所有层 |
+| `AudioManager.is_ambient_active()` | — | 查询 ambient 是否激活 |
+
+### 6.4 Operator 控制
+
+通过 [`AmbientAudioOperator`](core/operators/ambient_audio_operator.gd) 在事件中控制：
+
+```tres
+[sub_resource type="Resource" id="ambient_op"]
+script = ExtResource("ambient_audio_operator")
+action = "set_profile"
+profile_key = "755_backhome"
+```
+
+| action 值 | 说明 |
+|-----------|------|
+| `"set_profile"` | 激活 `profile_key` 指定的 profile |
+| `"clear"` | 停止所有 ambient |
+
+### 6.5 当前已注册的 Profile
+
+#### 6.5.1 `755_backhome` — 极寒风雪
+
+注册位置: [`main.gd`](main.gd:238) `_register_ambient_profiles()`
+
+| Layer | 语义 | 音频 | volume | replay_gap |
+|-------|------|------|--------|------------|
+| 0 (Void) | 连续底噪 | `Instrumental.mp3` | -18 dB | 0 (连续) |
+| 1 (Attack) | 随机尖啸 | `snow_baby_1.wav`, `snow_baby_2.wav`, `baby_final.wav` | -5 dB | 8~15s 间隔 |
+
+### 6.6 架构决策
+
+- **BGM 互斥**: 由 `AudioManager._process()` 被动监控 `_bgm_track_1/2.playing`，不修改 `play_music()` 代码
+- **Loop/SFX 不管**: `play_sfx_loop()` / `play_sfx()` 不触发 ambient 暂停
+- **profile 激活时机**: 通过 operator 在事件中触发（如进入特定时代/场景的第一个事件），而非硬编码在场景切换逻辑中
