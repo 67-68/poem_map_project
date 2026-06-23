@@ -137,8 +137,11 @@ func is_action_blocked(action_type: ENUMS.ACTION_TYPE) -> bool:
 ## 每旬结算时调用（由 SurvivalManager.xun_tick 驱动）。
 ## 递减 locked/blocked 计数器，到期自动清除。
 func process_xun_tick() -> void:
+	Logging.info("[ActionManager] ═══ 旬结算开始 ═══")
+	
 	# ── 锁定到期清理 ──
 	var expired_locks: Array[String] = []
+	var decremented_locks: Array[String] = []
 	for action_id in _locked_in_actions:
 		var remaining: int = _locked_in_actions[action_id]
 		if remaining == -1:
@@ -146,14 +149,25 @@ func process_xun_tick() -> void:
 		remaining -= 1
 		if remaining <= 0:
 			expired_locks.append(action_id)
-			Logging.info("[ActionManager] 锁定到期: %s" % action_id)
+			Logging.info("[ActionManager] 🔓 锁定到期（完成解锁）: %s" % action_id)
 		else:
 			_locked_in_actions[action_id] = remaining
+			decremented_locks.append(action_id)
 	for action_id in expired_locks:
 		_locked_in_actions.erase(action_id)
 	
+	# 🆕 锁定冷却递减通报
+	if decremented_locks.size() > 0:
+		var dec_lock_details: Array[String] = []
+		for lid in decremented_locks:
+			dec_lock_details.append("%s→%d旬" % [lid, _locked_in_actions[lid]])
+		Logging.info("[ActionManager] 🔒 锁定冷却递减 (%d): %s" % [decremented_locks.size(), ", ".join(dec_lock_details)])
+	if expired_locks.size() > 0:
+		Logging.info("[ActionManager] ✅ 锁定完全解锁 (%d): %s" % [expired_locks.size(), ", ".join(expired_locks)])
+	
 	# ── 阻塞到期清理 ──
 	var expired_blocks: Array[String] = []
+	var decremented_blocks: Array[String] = []
 	for action_id in _blocked_actions:
 		var remaining: int = _blocked_actions[action_id]
 		if remaining == -1:
@@ -161,11 +175,36 @@ func process_xun_tick() -> void:
 		remaining -= 1
 		if remaining <= 0:
 			expired_blocks.append(action_id)
-			Logging.info("[ActionManager] 阻塞到期: %s" % action_id)
+			Logging.info("[ActionManager] 🟢 阻塞到期（完成解阻）: %s" % action_id)
 		else:
 			_blocked_actions[action_id] = remaining
+			decremented_blocks.append(action_id)
 	for action_id in expired_blocks:
 		_blocked_actions.erase(action_id)
+	
+	# 🆕 阻塞冷却递减通报
+	if decremented_blocks.size() > 0:
+		var dec_block_details: Array[String] = []
+		for bid in decremented_blocks:
+			dec_block_details.append("%s→%d旬" % [bid, _blocked_actions[bid]])
+		Logging.info("[ActionManager] 🚫 阻塞冷却递减 (%d): %s" % [decremented_blocks.size(), ", ".join(dec_block_details)])
+	if expired_blocks.size() > 0:
+		Logging.info("[ActionManager] ✅ 阻塞完全解阻 (%d): %s" % [expired_blocks.size(), ", ".join(expired_blocks)])
+	
+	# 🆕 结算后状态汇总
+	var active_locks: Array[String] = []
+	for lid in _locked_in_actions:
+		var rem = _locked_in_actions[lid]
+		active_locks.append("%s(%s旬)" % [lid, "∞" if rem == -1 else str(rem)])
+	var active_blocks: Array[String] = []
+	for bid in _blocked_actions:
+		var rem = _blocked_actions[bid]
+		active_blocks.append("%s(%s旬)" % [bid, "∞" if rem == -1 else str(rem)])
+	
+	if active_locks.size() > 0 or active_blocks.size() > 0:
+		Logging.info("[ActionManager] ═══ 旬结算后: 🔒锁定[%s] | 🚫阻塞[%s] ═══" % [", ".join(active_locks) if active_locks.size() > 0 else "无", ", ".join(active_blocks) if active_blocks.size() > 0 else "无"])
+	else:
+		Logging.info("[ActionManager] ═══ 旬结算后: 无任何锁定/阻塞 ═══")
 
 
 # ════════════════════════════════════════════════════════════
@@ -174,7 +213,21 @@ func process_xun_tick() -> void:
 
 func get_available_scene_actions() -> Dictionary:
 	#breakpoint
-	Logging.info("[ActionManager] 开始获取可用场景动作")
+	Logging.info("[ActionManager] ═══ 开始获取可用场景动作 ═══")
+
+	# ── Phase 0 前置通报：当前锁定/阻塞状态 ──
+	if _locked_in_actions.size() > 0:
+		var locked_list: Array[String] = []
+		for lid in _locked_in_actions:
+			var rem = _locked_in_actions[lid]
+			locked_list.append("%s(%s旬)" % [lid, "∞" if rem == -1 else str(rem)])
+		Logging.info("[ActionManager] 🔒 当前持久锁定 (%d): %s" % [_locked_in_actions.size(), ", ".join(locked_list)])
+	if _blocked_actions.size() > 0:
+		var blocked_list: Array[String] = []
+		for bid in _blocked_actions:
+			var rem = _blocked_actions[bid]
+			blocked_list.append("%s(%s旬)" % [bid, "∞" if rem == -1 else str(rem)])
+		Logging.info("[ActionManager] 🚫 当前持久阻塞 (%d): %s" % [_blocked_actions.size(), ", ".join(blocked_list)])
 
 	# ── Phase 0: _locked_in 驱动自动预留 ──
 	for action_id in _locked_in_actions:
@@ -189,7 +242,13 @@ func get_available_scene_actions() -> Dictionary:
 			_reserved_action_ids.erase(action_id)
 			Logging.info("[ActionManager] _blocked 过滤，移除预留: %s" % action_id)
 
+	if _reserved_action_ids.size() > 0:
+		Logging.info("[ActionManager] 📌 本回合预留席位 (%d/%d): %s" % [_reserved_action_ids.size(), MAX_PICK_COUNT, ", ".join(_reserved_action_ids)])
+
 	var actions := {}
+	var num_with_npc := 0   # 「有人」计数器
+	var num_solo := 0       # 「无人」计数器
+	var num_intercepted := 0 # 被拦截计数器
 	
 	var all_actions := Database.get_actions_all()
 	Logging.info("[ActionManager] 总动作池大小: %d，blocked: %d，locked: %d" % [all_actions.size(), _blocked_actions.size(), _locked_in_actions.size()])
@@ -205,9 +264,21 @@ func get_available_scene_actions() -> Dictionary:
 		var a = Database.get_action(a_id)
 		var is_valid = true # 🤓☝️ 设立拦截签证！
 		
+		# 🆕 判定「有人」/「无人」（基于 CD 目标推导）
+		var action_npc_label := "无人"
+		if a is SceneAction:
+			var main_tag_str: String = a.main_tag if a.main_tag else ""
+			if not main_tag_str.is_empty():
+				var cd_target := CooldownFilter._derive_cooldown_target(main_tag_str)
+				if not cd_target.is_empty():
+					action_npc_label = "有人→%s" % cd_target
+				else:
+					action_npc_label = "无人"
+		
 		# 0. 检查是否被 blocked
 		if _blocked_actions.has(a_id):
-			Logging.info("[ActionManager] 动作 %s 被 blocked，拦截" % a_id)
+			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 被阻塞" % [action_npc_label, a_id])
+			num_intercepted += 1
 			continue
 		
 		# 1. 检查硬性需求 (Requirements)
@@ -215,11 +286,12 @@ func get_available_scene_actions() -> Dictionary:
 			for req in a.aciton_requirements:
 				if not req.compare(PlayerState):
 					is_valid = false # 签证拒签！
-					Logging.info("[ActionManager] 动作 %s 需求未满足: %s" % [a_id, req.describe_requirement()])
+					Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 需求未满足 → %s" % [action_npc_label, a_id, req.describe_requirement()])
 					break # 💀 打断内层循环，直接判死刑
 					
 		if not is_valid:
-			Logging.info("[ActionManager] 动作 %s 不满足需求条件，被拦截" % a_id)
+			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 不满足需求条件" % [action_npc_label, a_id])
+			num_intercepted += 1
 			continue # 这个 continue 才会跳过外层的 a_id！
 			
 		# 2. 检查标签匹配 (Tags)
@@ -232,7 +304,8 @@ func get_available_scene_actions() -> Dictionary:
 						break
 						
 			if not tag_matched:
-				Logging.info("[ActionManager] 动作 %s 标签不匹配当前位置（loc tags=%s, action area_tags=%s）" % [a_id, str(loc.area_tags), str(a.area_tags)])
+				Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 标签不匹配 (loc=%s, action=%s)" % [action_npc_label, a_id, str(loc.area_tags), str(a.area_tags)])
+				num_intercepted += 1
 				continue # 没有交集，直接滚蛋
 				
 		# 4. Era 合法性检查（三层语义）
@@ -248,7 +321,8 @@ func get_available_scene_actions() -> Dictionary:
 				var rejected = era_res.rejected_actions
 				if rejected != null and not rejected.is_empty():
 					if action_type >= 0 and rejected.has(action_type):
-						Logging.info("[ActionManager] 动作 %s 在当前时代 %s 的黑名单中，拦截" % [a_id, GameState.current_era])
+						Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 时代黑名单 (era=%s)" % [action_npc_label, a_id, GameState.current_era])
+						num_intercepted += 1
 						continue
 				
 				# 4b. 白名单（accepted_actions）
@@ -258,14 +332,22 @@ func get_available_scene_actions() -> Dictionary:
 				var accepted = era_res.accepted_actions
 				if accepted != null:
 					if action_type < 0 or not accepted.has(action_type):
-						Logging.info("[ActionManager] 动作 %s 不在当前时代 %s 的允许列表中，拦截" % [a_id, GameState.current_era])
+						Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 不在时代白名单 (era=%s)" % [action_npc_label, a_id, GameState.current_era])
+						num_intercepted += 1
 						continue
 
 		# 3. 活到最后的才是合法动作
-		Logging.info("[ActionManager] 动作 %s 完全合法，允许装载" % a_id)
+		var locked_mark := " 🔒" if _locked_in_actions.has(a_id) else ""
+		Logging.info("[ActionManager] ✅ 装载 [%s] %s%s" % [action_npc_label, a_id, locked_mark])
 		append_counter(actions, a_id, a)
+		if action_npc_label.begins_with("有人"):
+			num_with_npc += 1
+		else:
+			num_solo += 1
 	
-	Logging.info("[ActionManager] get_available_scene_actions: 最终可用动作数=%d（来源池=%d，blocked=%d）" % [actions.size(), all_actions.size(), _blocked_actions.size()])
+	# 🆕 最终汇总
+	var unlocked_count := actions.size() - _locked_in_actions.size()
+	Logging.info("[ActionManager] ═══ 可用池汇总: 总合法=%d | 👤有人=%d | 🚶无人=%d | 🔒已锁定=%d | 🔓未锁定=%d | 🚫拦截=%d ═══" % [actions.size(), num_with_npc, num_solo, _locked_in_actions.size(), max(0, unlocked_count), num_intercepted])
 	return actions
 
 
@@ -286,6 +368,8 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 	var selected_actions: Array[SceneAction] = []
 	var available_pool = action_pool.duplicate() # 复制一份，避免污染原池
 	
+	Logging.info("[ActionManager] 🎲 开始抽取行动 (目标%d个, 池中%d, 预留%d)" % [pick_count, action_pool.size(), _reserved_action_ids.size()])
+	
 	# --- Phase 1: 处理预留席位 ---
 	if _reserved_action_ids.size() > 0:
 		# 校验：预留数量不能超过可用池大小
@@ -301,6 +385,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 			if available_pool.has(reserved_id):
 				selected_actions.append(Database.get_action(reserved_id) as SceneAction)
 				available_pool.erase(reserved_id)
+				Logging.info("[ActionManager] 🎯 预留抽取: %s" % reserved_id)
 			else:
 				Logging.err("[ActionManager] 预留 action %s 不在当前可用池中！" % reserved_id)
 				Logging.err("ActionManager: 预留 action 不在当前可用池: %s" % reserved_id)
@@ -321,8 +406,32 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 			if roll <= cursor:
 				selected_actions.append(Database.get_action(action_id) as SceneAction)
 				available_pool.erase(action_id) # 拿走，不放回！
+				Logging.info("[ActionManager] 🎲 随机抽取: %s" % action_id)
 				break # 必须 break，进入下一轮抽取
-				
+	
+	# 🆕 抽取结果汇总
+	var reserved_count := 0
+	var random_count := 0
+	if _reserved_action_ids.size() > 0:
+		reserved_count = min(_reserved_action_ids.size(), selected_actions.size())
+	random_count = selected_actions.size() - reserved_count
+	
+	var npc_count := 0
+	var solo_count := 0
+	var names: Array[String] = []
+	for sa in selected_actions:
+		names.append(sa.uuid)
+		if sa is SceneAction:
+			var main_tag_str: String = sa.main_tag if sa.main_tag else ""
+			if not main_tag_str.is_empty():
+				var cd_target := CooldownFilter._derive_cooldown_target(main_tag_str)
+				if cd_target.is_empty():
+					solo_count += 1
+				else:
+					npc_count += 1
+	
+	Logging.info("[ActionManager] ═══ 本轮抽取结果: 共%d个 | 🔒预留%d | 🎲随机%d | 👤有人%d | 🚶无人%d → %s ═══" % [selected_actions.size(), reserved_count, random_count, npc_count, solo_count, ", ".join(names)])
+	
 	# 抽取完成后自动清除预留，避免跨回合污染
 	clear_reservations()
 	return selected_actions
