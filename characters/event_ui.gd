@@ -458,20 +458,114 @@ func _typewrite(label: Control, full_text: String, speed: float) -> void:
 		label.text = full_text
 		return
 
-	for i in range(full_text.length()):
+	# 预分词：将 BBCode 标签块（如 [glitch]...[/glitch]）整体识别为原子段
+	var segments := _tokenize_bbcode(full_text)
+	var displayed := ""
+	var literal_char_count := 0  # 仅统计普通文本字符，用于音效节拍
+
+	for seg in segments:
 		if _skip_requested:
 			Logging.debug("EventUI._typewrite: 检测到 skip，填充全文（%d 字）" % full_text.length())
 			label.text = full_text
 			return
-		label.text = full_text.left(i + 1)
-		# 每 3 字播放一次吐字音效，避免音频泛滥
-		if i % 3 == 0:
+
+		if seg["is_bbcode"]:
+			# BBCode 块：整体一次性输出
+			displayed += seg["text"]
+			label.text = displayed
 			AudioManager.play_sfx_category("ink_flip", 0.08)
-		await _wait(speed)
-		if _skip_requested:
-			Logging.debug("EventUI._typewrite: wait 后检测到 skip，填充全文")
-			label.text = full_text
-			return
+			await _wait(speed)
+			if _skip_requested:
+				Logging.debug("EventUI._typewrite: wait 后检测到 skip，填充全文")
+				label.text = full_text
+				return
+		else:
+			# 普通文本：逐字符打字
+			var lit: String = seg["text"]
+			for j in range(lit.length()):
+				if _skip_requested:
+					Logging.debug("EventUI._typewrite: 检测到 skip，填充全文（%d 字）" % full_text.length())
+					label.text = full_text
+					return
+				displayed += lit[j]
+				label.text = displayed
+				# 每 3 字播放一次吐字音效，避免音频泛滥
+				if literal_char_count % 3 == 0:
+					AudioManager.play_sfx_category("ink_flip", 0.08)
+				literal_char_count += 1
+				await _wait(speed)
+				if _skip_requested:
+					Logging.debug("EventUI._typewrite: wait 后检测到 skip，填充全文")
+					label.text = full_text
+					return
+
+
+## 将文本预切割为 literal 段和 bbcode 段。
+## 返回 Array[Dictionary]，每个元素 {"is_bbcode": bool, "text": String}
+func _tokenize_bbcode(text: String) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	var i := 0
+	var current_literal := ""
+
+	while i < text.length():
+		if text[i] == "[":
+			var close_bracket := text.find("]", i)
+			if close_bracket == -1:
+				# 没有闭合 ]，当作普通字符
+				current_literal += text[i]
+				i += 1
+				continue
+
+			var tag_section := text.substr(i + 1, close_bracket - i - 1)
+
+			# 跳过闭合标签如 [/glitch] —— 它已经在块匹配中被消费，不应单独出现
+			if tag_section.begins_with("/"):
+				current_literal += text[i]
+				i += 1
+				continue
+
+			# 提取标签名（空格前或 ] 前）
+			var space_idx := tag_section.find(" ")
+			var tag_name: String
+			if space_idx == -1:
+				tag_name = tag_section
+			else:
+				tag_name = tag_section.substr(0, space_idx)
+
+			if tag_name.is_empty():
+				current_literal += text[i]
+				i += 1
+				continue
+
+			# 搜索匹配的闭合标签 [/tag_name]
+			var closing_tag := "[/%s]" % tag_name
+			var closing_idx := text.find(closing_tag, close_bracket + 1)
+
+			if closing_idx == -1:
+				# 没有匹配闭合标签，当作普通字符
+				current_literal += text[i]
+				i += 1
+				continue
+
+			# 完整 BBCode 块
+			var bbcode_text := text.substr(i, closing_idx + closing_tag.length() - i)
+
+			# 提交累积的普通文本
+			if not current_literal.is_empty():
+				result.append({"is_bbcode": false, "text": current_literal})
+				current_literal = ""
+
+			result.append({"is_bbcode": true, "text": bbcode_text})
+			i = closing_idx + closing_tag.length()
+		else:
+			current_literal += text[i]
+			i += 1
+
+	# 提交剩余的普通文本
+	if not current_literal.is_empty():
+		result.append({"is_bbcode": false, "text": current_literal})
+
+	return result
 
 
 func _wait(seconds: float) -> void:

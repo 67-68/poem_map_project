@@ -67,7 +67,7 @@
 
 | 文件 | 触发场景 | 调用位置 |
 |------|---------|---------|
-| [`characters/event_ui.gd`](characters/event_ui.gd:494) | 用户左键点击跳过打字机 | `_input()` |
+| [`characters/event_ui.gd`](characters/event_ui.gd:584) | 用户左键点击跳过打字机 | `_input()` |
 | [`ui/cinematic_overlay.gd`](ui/cinematic_overlay.gd:35) | Cmd+Space 跳过过场 | `_input()` |
 | [`ui/cinematic_overlay.gd`](ui/cinematic_overlay.gd:44) | 点按 Dimmer 快进过场 | `_on_dimmer_gui_input()` |
 | [`world/dialogue_bubble.gd`](world/dialogue_bubble.gd:53) | 点击推进对话气泡 | `_input()` |
@@ -103,7 +103,8 @@
 
 | 文件 | 触发场景 | 节流策略 |
 |------|---------|---------|
-| [`characters/event_ui.gd`](characters/event_ui.gd:469) | 打字机逐字吐出正文 | `i % 3 == 0`（每3字） |
+| [`characters/event_ui.gd`](characters/event_ui.gd:476) | 打字机 BBCode 块整体吐出 | 每次一个 BBCode 段 |
+| [`characters/event_ui.gd`](characters/event_ui.gd:494) | 打字机逐字吐出普通文本 | `literal_char_count % 3 == 0`（每3字） |
 | [`ui/ambition_hud.gd`](ui/ambition_hud.gd:101) | 雄心进度条更新 | 每次 `_update_progress()` |
 
 ---

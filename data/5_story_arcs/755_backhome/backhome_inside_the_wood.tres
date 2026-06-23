@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://cb3qt0j6hhb2j"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_jtxd8"]
+[ext_resource type="Texture2D" uid="uid://cssugkdoesue5" path="res://assets/backgrounds/bg_broke_baby_carrier.png" id="1_xclyn"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_xclyn"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_0l48l"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_um40o"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_3b0ud"]
+[ext_resource type="Script" uid="uid://ojqxtgw57ec3" path="res://core/operators/imaginary_set_level_operator.gd" id="4_w4ex6"]
+[ext_resource type="Script" uid="uid://bhm8bigwrwgjm" path="res://core/operators/play_transition_operator.gd" id="5_bfjbd"]
+
+[sub_resource type="Resource" id="Resource_37ogv"]
+script = ExtResource("4_w4ex6")
+imaginary_name = "target:death:bereavement:son_die"
+target_level = 3
+metadata/_custom_type_script = "uid://ojqxtgw57ec3"
+
+[sub_resource type="Resource" id="Resource_rsttg"]
+script = ExtResource("5_bfjbd")
+texts = Array[String](["你摸着身上那层发绿的从八品下官服。你突然意识到一个极其恐怖的逻辑悖论……", "【默思失业徒，因念远戍卒。】"])
+overlay_opacity = 0.3
+metadata/_custom_type_script = "uid://bhm8bigwrwgjm"
+
+[sub_resource type="Resource" id="Resource_w4ex6"]
+script = ExtResource("4_3b0ud")
+operators = Array[ExtResource("3_0l48l")]([SubResource("Resource_37ogv"), SubResource("Resource_rsttg")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_41tl8"]
+script = ExtResource("3_um40o")
+choice_result = SubResource("Resource_w4ex6")
+description = "[0x000000F4: CRITICAL_OBJECT_TERMINATION]"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("2_xclyn")
+display_speed = 2
+options = Array[ExtResource("1_jtxd8")]([SubResource("Resource_41tl8")])
+lasting_time = 5.0
+uuid = "backhome_inside_the_wood"
+name = "推开门"
+description = "门开了。屋里比外面更冷。没有哭声。土炕上的那个小小的襁褓，已经和底下的稻草[glitch level=5.0]冻结成了一块坚硬的冰疙瘩[/glitch]。你本能地想要把怀里那层象征身份的绿袍脱下来盖上去，但那层布料早就被风雪撕成了碎条。大唐的从八品下右卫率府兵曹参军，站在大唐的盛世里。你试图调用那个名为‘父亲’的接口，但物理世界只向你抛回了[glitch level=10.0]ERR_TARGET_ENTITY_DEAD[/glitch]。"
+icon = ExtResource("1_xclyn")
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

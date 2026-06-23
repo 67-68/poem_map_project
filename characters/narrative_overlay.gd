@@ -121,6 +121,8 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 				event_ui.clear_all_tape()
 				_apply_ui_decl_background(data)
 		)
+		# ⭐ 背景交换完成后统一渲染事件内容 + 设置 auto-advance
+		_render_event_content(data, all_options, context, from_stack, entry_id)
 	else:
 		# ── 动画策略路由 ──
 		if data.ui_decl and data.ui_decl.animation_strategy == ENUMS.ANIMATION_STRATEGY.SLIDE_FROM_BOTTOM:
@@ -129,49 +131,8 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 			visualizer.play_show_tape()
 		_apply_ui_decl_background(data)
 
-		# ── 分支：pop 回归路径 vs 新事件路径 ──
-		# pop 回归的父事件在纸带上已存在旧条目（含 "即决" 烙印），
-		# 底部追加仅选项的新条目，不重复渲染 title/content/example
-		if event_ui.has_entry(entry_id):
-			# === pop 回归路径：底部追加纯选项条目 ===
-			Logging.info("_on_event_ready_to_play: pop回归路径 entry_id='%s'" % entry_id)
-			BlurManager.trigger_event_blur()
-			event_ui.clear_all_dim()
-			event_ui.append_pop_regression_entry(data, all_options, entry_id)
-			event_ui.scroll_to_bottom()
-			if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
-				_start_auto_advance(data.lasting_time, all_options, entry_id)
-		else:
-			# === 新事件路径 ===
-			Logging.info("_on_event_ready_to_play: 新事件路径 entry_id='%s' from_stack=%s" % [entry_id, from_stack])
-
-			if not from_stack:
-				event_ui.dim_previous_entries()
-
-			if context.get("is_settlement", false):
-				Logging.info("_on_event_ready_to_play: 检测到结算事件")
-				BlurManager.show_picker_blur()
-				_is_settlement = true
-				event_ui.append_settlement_entry(data, context)
-			else:
-				BlurManager.trigger_event_blur()
-				match data.display_speed:
-					BaseEvent.DisplaySpeed.SLOW:
-						event_ui.display_slow(data, all_options, context, from_stack, entry_id, EventUI.SLOW_SPEED)
-						if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
-							event_ui.display_complete.connect(func():
-								_start_auto_advance(data.lasting_time, all_options, entry_id)
-							, CONNECT_ONE_SHOT)
-					BaseEvent.DisplaySpeed.SLOWEST:
-						event_ui.display_slow(data, all_options, context, from_stack, entry_id, EventUI.SLOWEST_SPEED)
-						if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
-							event_ui.display_complete.connect(func():
-								_start_auto_advance(data.lasting_time, all_options, entry_id)
-							, CONNECT_ONE_SHOT)
-					_:
-						event_ui.append_event_entry(data, all_options, context, from_stack, entry_id)
-						if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
-							_start_auto_advance(data.lasting_time, all_options, entry_id)
+		# ⭐ 统一的事件内容渲染 + auto-advance 设置
+		_render_event_content(data, all_options, context, from_stack, entry_id)
 
 		# ── 公共尾逻辑 ──
 	event_ui.register_scroll_for_input_manager()
@@ -180,6 +141,59 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	else:
 		AudioManager.play_sad()
 	event_ui.scroll_to_bottom()
+
+
+# ═══════════════════════════════════════════════════
+# 事件内容渲染 + auto-advance（提取自 _on_event_ready_to_play）
+# ═══════════════════════════════════════════════════
+
+## 渲染事件内容并设置 auto-advance Timer
+## 在 _on_event_ready_to_play 的 if/else 两个分支中统一调用，
+## 确保 background_swap 路径和正常路径都不遗漏。
+func _render_event_content(data: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String) -> void:
+	# ── 分支：pop 回归路径 vs 新事件路径 ──
+	# pop 回归的父事件在纸带上已存在旧条目（含 "即决" 烙印），
+	# 底部追加仅选项的新条目，不重复渲染 title/content/example
+	if event_ui.has_entry(entry_id):
+		# === pop 回归路径：底部追加纯选项条目 ===
+		Logging.info("_render_event_content: pop回归路径 entry_id='%s'" % entry_id)
+		BlurManager.trigger_event_blur()
+		event_ui.clear_all_dim()
+		event_ui.append_pop_regression_entry(data, all_options, entry_id)
+		event_ui.scroll_to_bottom()
+		if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+			_start_auto_advance(data.lasting_time, all_options, entry_id)
+	else:
+		# === 新事件路径 ===
+		Logging.info("_render_event_content: 新事件路径 entry_id='%s' from_stack=%s" % [entry_id, from_stack])
+
+		if not from_stack:
+			event_ui.dim_previous_entries()
+
+		if context.get("is_settlement", false):
+			Logging.info("_render_event_content: 检测到结算事件")
+			BlurManager.show_picker_blur()
+			_is_settlement = true
+			event_ui.append_settlement_entry(data, context)
+		else:
+			BlurManager.trigger_event_blur()
+			match data.display_speed:
+				BaseEvent.DisplaySpeed.SLOW:
+					event_ui.display_slow(data, all_options, context, from_stack, entry_id, EventUI.SLOW_SPEED)
+					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+						event_ui.display_complete.connect(func():
+							_start_auto_advance(data.lasting_time, all_options, entry_id)
+						, CONNECT_ONE_SHOT)
+				BaseEvent.DisplaySpeed.SLOWEST:
+					event_ui.display_slow(data, all_options, context, from_stack, entry_id, EventUI.SLOWEST_SPEED)
+					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+						event_ui.display_complete.connect(func():
+							_start_auto_advance(data.lasting_time, all_options, entry_id)
+						, CONNECT_ONE_SHOT)
+				_:
+					event_ui.append_event_entry(data, all_options, context, from_stack, entry_id)
+					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+						_start_auto_advance(data.lasting_time, all_options, entry_id)
 
 
 # ═══════════════════════════════════════════════════
@@ -279,7 +293,8 @@ func _on_cinematic_ready(entry: Dictionary) -> void:
 
 	Logging.info("NarrativeOverlay._on_cinematic_ready: %d 段文字" % texts.size())
 
-	EventBus.cinematic_start.emit(texts)
+	var config: Dictionary = entry.get("config", {})
+	EventBus.cinematic_start.emit(texts, config)
 	await EventBus.cinematic_finished
 	await BlurManager.trigger_cinematic_post_blur(3.0)
 

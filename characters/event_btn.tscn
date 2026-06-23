@@ -4,8 +4,6 @@
 
 [node name="EventBtn" type="Button" unique_id=455919761]
 z_index = 100
-layout_mode = 2
-size_flags_horizontal = 1
 offset_right = 8.0
 offset_bottom = 8.0
 theme_type_variation = &"ButtonTheme"

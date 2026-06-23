@@ -181,10 +181,11 @@ func _on_push_focused_chat(data: Variant, context: Dictionary = {}):
 		_process_next()
 
 
-func _on_push_cinematic(texts: Array[String]):
+func _on_push_cinematic(texts: Array[String], config: Dictionary = {}):
 	var entry := {
 		"type": "cinematic",
 		"texts": texts.duplicate(),
+		"config": config.duplicate(),
 		"processed": false,
 	}
 	_event_stack.push_front(entry)

@@ -52,6 +52,7 @@ description = "不去问人，直接凭着直觉去找那间漏雨的老屋"
 
 [sub_resource type="Resource" id="Resource_346j0"]
 script = ExtResource("5_gjrey")
+event_key = "backhome_the_wood"
 metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_tln5y"]

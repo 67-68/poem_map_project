@@ -9,6 +9,8 @@ signal finished()
 @export var fade_duration: float = 0.0
 ## 每段文字播完后的额外停留时间
 @export var text_pause_duration: float = 2.5
+## 遮罩层透明度（0 = 完全不透明黑遮罩，1 = 完全透明无遮罩）
+@export var overlay_opacity: float = 0.0
 
 @onready var dimmer: ColorRect = $Dimmer
 @onready var text_label: RichTextLabel = $TextLabel
@@ -58,12 +60,12 @@ func _skip() -> void:
 		_current_timer.wait_time = 0.0
 
 
-func _on_cinematic_start(texts: Array[String]) -> void:
+func _on_cinematic_start(texts: Array[String], config: Dictionary = {}) -> void:
 	Logging.info("CinematicOverlay: 收到过场请求，%d 段文字" % texts.size())
 	if _is_playing:
 		Logging.warn("CinematicOverlay: 正在播放中，忽略重复请求")
 		return
-	await play_text_sequence(texts)
+	await play_text_sequence(texts, config)
 	Logging.info("CinematicOverlay: 过场播放完毕")
 	EventBus.cinematic_finished.emit()
 
@@ -83,6 +85,7 @@ func play_text_sequence(texts: Array[String], config: Dictionary = {}) -> void:
 	var ts: float = config.get("typewriter_speed", typewriter_speed)
 	var fd: float = config.get("fade_duration", fade_duration)
 	var tpd: float = config.get("text_pause_duration", text_pause_duration)
+	overlay_opacity = config.get("overlay_opacity", overlay_opacity)
 	
 	# 显示并淡入
 	show()
@@ -169,19 +172,20 @@ func _wait_seconds(seconds: float) -> void:
 
 
 func _fade_in(duration: float) -> void:
+	var dimmer_target: float = 1.0 - overlay_opacity
 	if duration <= 0.0:
-		dimmer.modulate.a = 1.0
+		dimmer.modulate.a = dimmer_target
 		text_label.modulate.a = 1.0
 		return
 	if _tween:
 		_tween.kill()
 	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween.set_parallel(true)
-	_tween.tween_property(dimmer, "modulate:a", 1.0, duration)
+	_tween.tween_property(dimmer, "modulate:a", dimmer_target, duration)
 	_tween.tween_property(text_label, "modulate:a", 1.0, duration)
 	await _tween.finished
 	if _skip_requested:
-		dimmer.modulate.a = 1.0
+		dimmer.modulate.a = dimmer_target
 		text_label.modulate.a = 1.0
 
 

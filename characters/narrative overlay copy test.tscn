@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://42wvjmu7lum"]
 
-[ext_resource type="Material" uid="uid://domupfjv11dux" path="res://shaders/frost_shader_material.tres" id="1_7gel1"]
+[ext_resource type="Material" uid="uid://cghmm2w70cvik" path="res://shaders/flame_shader_material.tres" id="1_7gel1"]
 [ext_resource type="StyleBox" uid="uid://cllfrwce54ttu" path="res://shaders/frostland_stylebox.tres" id="2_lp6li"]
 [ext_resource type="Script" uid="uid://bfap7ivfv8w2v" path="res://characters/event_ui.gd" id="2_ly3h8"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="3_7gel1"]
