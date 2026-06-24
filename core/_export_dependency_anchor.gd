@@ -1,0 +1,51 @@
+# _export_dependency_anchor.gd — HTML5 导出依赖锚点
+# 此脚本挂载在 _export_dependency_anchor.tscn 上，仅用于强迫导出器
+# 在 export_filter="scenes" 模式下追踪 class_name 依赖链。
+# preload() 是硬文件引用，导出器无法将其"孤儿剔除"。
+# 运行时永不被实例化，const 不会占用实例内存。
+
+extends Node
+
+# ═══════════ 预加载锚点（硬文件依赖，强制导出器打包）═══════════
+const __preload_00 = preload("res://core/model/action.gd")
+const __preload_01 = preload("res://core/model/action_tag_filter.gd")
+const __preload_02 = preload("res://core/adjacency_manager.gd")
+const __preload_03 = preload("res://core/model/ambition_config.gd")
+const __preload_04 = preload("res://model/animation_object.gd")
+const __preload_05 = preload("res://model/event.gd")
+const __preload_06 = preload("res://core/model/base_operator.gd")
+const __preload_07 = preload("res://model/event/base_option.gd")
+const __preload_08 = preload("res://model/choice_result.gd")
+const __preload_09 = preload("res://core/model/cooldown_filter.gd")
+const __preload_10 = preload("res://core/data_helper.gd")
+const __preload_11 = preload("res://core/data_scanner.gd")
+const __preload_12 = preload("res://core/debug_util.gd")
+const __preload_13 = preload("res://core/model/decision.gd")
+const __preload_14 = preload("res://core/model/disease.gd")
+const __preload_15 = preload("res://core/model/era.gd")
+const __preload_16 = preload("res://model/event/event_option.gd")
+const __preload_17 = preload("res://core/model/event_ticket.gd")
+const __preload_18 = preload("res://core/model/flag.gd")
+const __preload_19 = preload("res://model/focused_chat.gd")
+const __preload_20 = preload("res://core/game_entity.gd")
+const __preload_21 = preload("res://shaders/glitch_preprocessor.gd")
+const __preload_22 = preload("res://core/model/history_event.gd")
+const __preload_23 = preload("res://features/image_handle.gd")
+const __preload_24 = preload("res://core/model/imaginary.gd")
+const __preload_25 = preload("res://core/model/legendary_poem.gd")
+const __preload_26 = preload("res://core/manual_buffer.gd")
+const __preload_27 = preload("res://characters/poem_data.gd")
+const __preload_28 = preload("res://characters/poet_data.gd")
+const __preload_29 = preload("res://characters/poet_life_point.gd")
+const __preload_30 = preload("res://core/operators/pop_event_operator.gd")
+const __preload_31 = preload("res://core/stack_manager.gd")
+const __preload_32 = preload("res://model/random_event.gd")
+const __preload_33 = preload("res://core/relation_flag_manager.gd")
+const __preload_34 = preload("res://core/model/requirement_filter.gd")
+const __preload_35 = preload("res://core/model/scene_action.gd")
+const __preload_36 = preload("res://core/social_action_resolver.gd")
+const __preload_37 = preload("res://core/source_of_truth.gd")
+const __preload_38 = preload("res://core/model/style_data.gd")
+const __preload_39 = preload("res://core/tag_manager.gd")
+const __preload_40 = preload("res://core/texture_resource_loader.gd")
+const __preload_41 = preload("res://core/tier_determiner.gd")
