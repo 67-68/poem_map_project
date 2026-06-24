@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/bg_villiage_wall.png-2f524f7ef85bfe1ce1dc8cba
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
