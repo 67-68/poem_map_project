@@ -40,7 +40,7 @@ layout_mode = 2
 text = "start"
 script = ExtResource("1_06t4h")
 
-[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/start"]
+[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/start" unique_id=916397072]
 script = ExtResource("5_sfx")
 click_category = "book_impact"
 hover_category = "book_flip"
@@ -50,7 +50,7 @@ layout_mode = 2
 text = "quit"
 script = ExtResource("3_fu7sn")
 
-[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/quit"]
+[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/quit" unique_id=775175277]
 script = ExtResource("5_sfx")
 click_category = "book_impact"
 hover_category = "book_flip"
@@ -59,7 +59,7 @@ hover_category = "book_flip"
 layout_mode = 2
 text = "setting"
 
-[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/setting"]
+[node name="UISoundComponent" type="Node" parent="MarginContainer/VBoxContainer/setting" unique_id=1446917243]
 script = ExtResource("5_sfx")
 click_category = "book_impact"
 hover_category = "book_flip"

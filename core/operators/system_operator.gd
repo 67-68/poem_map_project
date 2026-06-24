@@ -27,8 +27,9 @@ func operate() -> void:
             EventBus.show_tombstone_screen.emit(death_hint)
             
         "return_main":
-            Logging.warn('SystemOperator.operate: return_main triggered, switching to main_menu')
-            get_tree().change_scene_to_file("res://main_menu.tscn")
+            # Resource 子类无法直接调用 get_tree()，需要 EventBus 信号中转
+            Logging.warn('SystemOperator.operate: return_main triggered, emitting return_to_main_menu signal')
+            EventBus.request_return_to_main_menu.emit()
             
         _:
             Logging.err('SystemOperator.operate: unknown command "%s"' % command)

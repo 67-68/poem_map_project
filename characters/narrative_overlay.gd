@@ -142,8 +142,6 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	event_ui.register_scroll_for_input_manager()
 	if data.ui_decl and data.ui_decl.audio:
 		AudioManager.play_music(data.ui_decl.audio)
-	else:
-		AudioManager.play_sad()
 	event_ui.scroll_to_bottom()
 
 

@@ -6,7 +6,8 @@ class_name TombstoneScreen extends CanvasLayer
 func _ready():
 	hide()
 	EventBus.show_tombstone_screen.connect(render_entropy_death)
-	Logging.info('TombstoneScreen._ready: connected to show_tombstone_screen signal')
+	EventBus.request_return_to_main_menu.connect(_on_return_to_main_menu)
+	Logging.info('TombstoneScreen._ready: connected to show_tombstone_screen and request_return_to_main_menu signals')
 
 
 ## 核心接口：接收系统级死因，拼装历史巨石碑
@@ -55,4 +56,9 @@ func render_entropy_death(cause_text: String) -> void:
 	monolith_text.text = bbcode
 
 func _on_button_pressed() -> void:
+	Logging.info('TombstoneScreen: exit button pressed, returning to main menu')
+	get_tree().change_scene_to_file("res://main_menu.tscn")
+
+func _on_return_to_main_menu() -> void:
+	Logging.info('TombstoneScreen: return_to_main_menu signal received, returning to main menu')
 	get_tree().change_scene_to_file("res://main_menu.tscn")

@@ -70,6 +70,8 @@ signal avaialble_decision_change(decision)
 signal decision_clicked()
 
 signal show_tombstone_screen(death_reason: String)
+## 请求返回主菜单（由 SystemOperator.return_main 触发，TombstoneScreen 监听）
+signal request_return_to_main_menu()
 signal event_shown(event: Variant)
 signal poem_start_clicked()
 signal push_picker(data: Array, on_selected: Callable, ui_constructor)
