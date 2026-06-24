@@ -553,3 +553,10 @@ def pick_best_image_for_emotion(scene_pool: list[str], target_emotion: str) -> s
 | 更新旧文档过时标记 | 已完成 ✅ |
 | 提交 commit | — |
 | 同步 CSV 到云端 | — |
+
+---
+
+## 相关文档
+
+- [意象阶级·合成坍缩·诗词评价引擎 V3](imagery_tier_synthesis_poem_engine.md) — Tier 系统、感悟坍缩、墨水污染定律、诗词评价引擎
+- 碎片 Tier 由获取时的 IAM + 情绪运行时判定（见 `core/tier_determiner.gd`）

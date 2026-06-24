@@ -1,0 +1,3 @@
+row_type,uuid,context,requirements,title,description,on_enter,results,interruptions,template,provider
+random_event,drunken_oblivion_drown_memory,trigger_tags=[action:main:duzhuo]|weight=15|era=747_kuangda|store_to=747_kuangda.duzhuo,prop_gt(name=burnout; val=40) | prop_gt(name=money; val=15),买醉忘忧,酒旗在风里拍得猎猎作响。你推开那扇半掩的门，酒保看你一眼便不再说话——他认得这种眼神。你要了最烈的那种，不是品，是灌。每一口下去，昨日在权贵门前的记忆就淡一分。酒坛见底时，昨夜那张谄媚的嘴脸终于开始模糊——像墨迹在水里散开。你不记得付了多少钱，只记得走出门时，长安的月光刺得眼睛发酸。,,,,,,
+>option,,,,,仰头饮尽最后一碗。碗底朝天，一滴不剩。,,prop_sub(name=money; val=15) | prop_sub(name=health; val=8) | prop_add(name=drunk; val=25) | emo_add(name=SORROW; val=10),,,

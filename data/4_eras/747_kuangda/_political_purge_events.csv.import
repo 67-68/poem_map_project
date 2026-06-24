@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cq8orb7vlvtg"
+
+[deps]
+
+files=["res://data/4_eras/747_kuangda/_political_purge_events.uuid.translation", "res://data/4_eras/747_kuangda/_political_purge_events.context.translation", "res://data/4_eras/747_kuangda/_political_purge_events.requirements.translation", "res://data/4_eras/747_kuangda/_political_purge_events.title.translation", "res://data/4_eras/747_kuangda/_political_purge_events.description.translation", "res://data/4_eras/747_kuangda/_political_purge_events.en.translation", "res://data/4_eras/747_kuangda/_political_purge_events.results.translation", "res://data/4_eras/747_kuangda/_political_purge_events.en.translation", "res://data/4_eras/747_kuangda/_political_purge_events.en.translation", "res://data/4_eras/747_kuangda/_political_purge_events.en.translation"]
+
+source_file="res://data/4_eras/747_kuangda/_political_purge_events.csv"
+dest_files=["res://data/4_eras/747_kuangda/_political_purge_events.uuid.translation", "res://data/4_eras/747_kuangda/_political_purge_events.context.translation", "res://data/4_eras/747_kuangda/_political_purge_events.requirements.translation", "res://data/4_eras/747_kuangda/_political_purge_events.title.translation", "res://data/4_eras/747_kuangda/_political_purge_events.description.translation", "res://data/4_eras/747_kuangda/_political_purge_events.en.translation", "res://data/4_eras/747_kuangda/_political_purge_events.results.translation", "res://data/4_eras/747_kuangda/_political_purge_events.en.translation", "res://data/4_eras/747_kuangda/_political_purge_events.en.translation", "res://data/4_eras/747_kuangda/_political_purge_events.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://ge1m6vb4aggn"
+
+[deps]
+
+files=["res://data/4_eras/747_kuangda/_drunken_oblivion_events.uuid.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.context.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.requirements.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.title.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.description.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.en.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.results.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.en.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.en.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.en.translation"]
+
+source_file="res://data/4_eras/747_kuangda/_drunken_oblivion_events.csv"
+dest_files=["res://data/4_eras/747_kuangda/_drunken_oblivion_events.uuid.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.context.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.requirements.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.title.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.description.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.en.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.results.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.en.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.en.translation", "res://data/4_eras/747_kuangda/_drunken_oblivion_events.en.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

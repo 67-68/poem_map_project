@@ -244,8 +244,8 @@ func _register_ambient_profiles() -> void:
 	# ── 755_backhome: 两层环境音 ──
 	# Layer 0: Void — 连续低频底噪（low_wind）
 	# Layer 1: Attack — 随机狂风尖啸（harsh_wind，25-30秒间隔）
-	const LOW_WIND = preload("res://assets/sounds/755_backhome/low_wind.opus")
-	const HARSH_WIND = preload("res://assets/sounds/755_backhome/harsh_wind.opus")
+	const LOW_WIND = preload("res://assets/sounds/755_backhome/low_wind.ogg")
+	const HARSH_WIND = preload("res://assets/sounds/755_backhome/harsh_wind.ogg")
 
 	AudioManager.register_ambient_profile("755_backhome", [
 		{

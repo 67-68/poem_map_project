@@ -190,3 +190,16 @@ choice_result.operators.append(op)
 | [大唐 Tag 本体论与五维宪法](../events/tag_dictioinary.md) | 事件 Tag 规范 |
 | [ImaginaryOperator](../../core/operators/imaginary_operator.gd) | 意象操作符源码 |
 | [ImaginaryTag 模型](../../core/model/imaginary.gd) | 意象数据结构源码 |
+
+---
+
+## Tier 阶级体系 (V3)
+
+获取意象碎片时，系统根据当前 IAM（狂客/钻营/逢迎）和情绪值为碎片打上 Tier 烙印（1-3）。
+• Tier 3 (高洁): 狂客 + 旷达/狂傲
+• Tier 2 (沉重): 愤怒/悲伤（任意 IAM）
+• Tier 1 (污染): 钻营/逢迎 + 功利/疲惫，兜底默认为 1
+
+详见 [意象阶级·合成坍缩·诗词评价引擎 V3](../plans/imagery_tier_synthesis_poem_engine.md)
+
+Tier 判定逻辑实现在 `core/tier_determiner.gd`，碎片获取时自动调用。

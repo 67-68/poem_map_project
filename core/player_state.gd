@@ -135,9 +135,11 @@ func _on_request_add_imaginary(tag: String):
 		return
 
 	# 每次都添加新条目（允许重复），完整 4 段 tag 作为 blueprint_id
+	var tier = TierDeterminer.determine_tier()
 	var new_entry = {
 		"blueprint_id": tag,
-		"contexts": []
+		"contexts": [],
+		"tier": tier
 	}
 	imaginary.basic_imaginaries.append(new_entry)
 	var count = imaginary.basic_imaginaries.size()

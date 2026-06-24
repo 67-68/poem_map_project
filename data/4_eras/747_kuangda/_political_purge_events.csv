@@ -1,0 +1,3 @@
+row_type,uuid,context,requirements,title,description,on_enter,results,interruptions,template,provider
+random_event,political_purge_poem,trigger_tags=[action:special:poem_purge]|weight=100|era=747_kuangda|store_to=747_kuangda.special,flag_gt(name=flag_poem_tier2_count; val=0),诗案风声,你的诗在坊间流传开来。长安的雪还未化尽，已经有吏员在抄录你的诗句——不是仰慕。你将名单一封一封收好。墨迹未干，窗外已有脚步声在雪上停住。,,flag_int_set(name=flag_poem_tier2_count; val=0),,,,
+>option,,,,,推开窗，看是谁,,prop_sub(name=health; val=10) | prop_sub(name=money; val=20) | emo_add(name=ANGER; val=20) | prop_add(name=burnout; val=10),,,

@@ -43,14 +43,19 @@ func setup_imagenaries():
 		c.queue_free()
 	var active_imaginaries = 0
 	for ima in Database.get_imaginaries_all().values():
-		if ima.basic_imaginaries.size() > 0:
-			active_imaginaries += 1
-			Logging.info('PoemCrafter: creating item for imaginary with %d basic imaginaries' % ima.basic_imaginaries.size())
-			var item = preload("res://ui/imaginery_item.tscn").instantiate()
-			item.init(ima)
-			item.imagenery_item_clicked.connect(on_item_clicked)
+			if ima.basic_imaginaries.size() > 0:
+				active_imaginaries += 1
+				Logging.info('PoemCrafter: creating item for imaginary with %d basic imaginaries' % ima.basic_imaginaries.size())
+				var item = preload("res://ui/imaginery_item.tscn").instantiate()
+				item.init(ima)
+				item.imagenery_item_clicked.connect(on_item_clicked)
+				item.comprehend_requested.connect(func(it: ImagenaryItem):
+					var success = ImaginaryComprehender.comprehend_category(it.imaginary_tag.uuid)
+					if success:
+						setup_imagenaries()
+				)
 
-			$ImagenaryScroll/HFlowContainer.add_child(item)
+				$ImagenaryScroll/HFlowContainer.add_child(item)
 	Logging.info('PoemCrafter: setup complete, created %d items' % active_imaginaries)
 
 func render_slots():
@@ -104,16 +109,16 @@ func on_item_clicked(imaginary_item: ImagenaryItem):
 	render_slots()
 
 	if selected_imaginaries.size() == 3:
-		Logging.info('PoemCrafter: reached max level, calculating poem')
-		var imas: Array[ImaginaryTag] = []
-		for item in selected_imaginaries:
-			imas.append(item.imaginary_tag)
-		Logging.info('PoemCrafter: calculating poem from %d imaginaries' % imas.size())
-		var cost = PoemCraftingCalculator.calculate(imas)
-		var text = PoemCraftingCalculator.translate(cost)
-		$InputImagPanel/Button.tooltip_text = text
-		$InputImagPanel/RichTextLabel.text = text
-		Logging.info('PoemCrafter: poem text set: %s' % text)
+			Logging.info('PoemCrafter: reached max level, calculating poem')
+			var imas: Array[ImaginaryTag] = []
+			for item in selected_imaginaries:
+				imas.append(item.imaginary_tag)
+			Logging.info('PoemCrafter: calculating poem from %d imaginaries' % imas.size())
+			var result = PoemCraftingCalculator.calculate_poem_grade(imas)
+			var text = PoemCraftingCalculator.translate(result.operators)
+			$InputImagPanel/Button.tooltip_text = text
+			$InputImagPanel/RichTextLabel.text = text
+			Logging.info('PoemCrafter: poem text set: %s' % text)
 
 	refresh_image()
 
@@ -145,11 +150,16 @@ func _on_button_pressed() -> void:
 	for item in selected_imaginaries:
 		imas.append(item.imaginary_tag)
 	Logging.info('PoemCrafter: collecting %d imaginaries for crafting' % imas.size())
-	var ops = PoemCraftingCalculator.calculate(imas)
-	Logging.info('PoemCrafter: calculated %d operations' % ops.size())
-	for op in ops:
-		Logging.info('PoemCrafter: executing operation')
-		op.operate()
+
+	# 新：调用诗词评价引擎
+	var result = PoemCraftingCalculator.calculate_poem_grade(imas)
+	Logging.info('PoemCrafter: poem grade calculated, %d operators' % result.operators.size())
+
+	# 执行结算算子
+	result.operate()
+
+	# 新：阅后即焚 — 删除投入的概念
+	ImaginaryComprehender.consume_concepts(imas)
 
 	#breakpoint
 	Logging.info('PoemCrafter: scanning for poem events')
@@ -162,13 +172,6 @@ func _on_button_pressed() -> void:
 				PlayerState.current_action_tags.append(blueprint_id)
 
 	EventManager.scan_poem_events(imas)
-	Logging.info('PoemCrafter: updating l3_thresholds for %d imaginaries' % imas.size())
-	for i in imas:
-		if i:
-			var old_threshold = i.l3_threshold
-			i.l3_threshold += 3
-			i.current_level = 1
-			Logging.info('PoemCrafter: updated l3_threshold from %d to %d' % [old_threshold, i.l3_threshold])
 	Logging.info('PoemCrafter: poem crafting complete')
 
 	# 清空状态
