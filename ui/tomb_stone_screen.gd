@@ -4,16 +4,23 @@ class_name TombstoneScreen extends CanvasLayer
 @onready var monolith_text: RichTextLabel = $ColorRect/M/H/S/MonolithText
 
 func _ready():
-	hide()
-	EventBus.show_tombstone_screen.connect(render_entropy_death)
+	Logging.info('TombstoneScreen._ready: entering as standalone scene root, reading death_cause from GameState')
+	
+	# 从 GameState 跨场景读取死亡原因
+	var cause: String = GameState.death_cause
+	if cause.is_empty():
+		Logging.err('TombstoneScreen._ready: GameState.death_cause is empty, using fallback')
+		cause = "观测者消逝于无名的熵增..."
+	
+	render_entropy_death(cause)
 	EventBus.request_return_to_main_menu.connect(_on_return_to_main_menu)
-	Logging.info('TombstoneScreen._ready: connected to show_tombstone_screen and request_return_to_main_menu signals')
+	Logging.info('TombstoneScreen._ready: connected to request_return_to_main_menu signal')
 
 
 ## 核心接口：接收系统级死因，拼装历史巨石碑
 func render_entropy_death(cause_text: String) -> void:
 	Logging.info('TombstoneScreen.render_entropy_death: showing tombstone, cause="%s"' % cause_text)
-	show()
+	# 作为独立场景根节点，self 即 scene root，无需 show()/hide()
 	# 1. 挂载极其冷酷的遗像 (可以根据死因切图，MVP阶段用同一张)
 	# portrait_rect.texture = load("res://assets/npc/dufu_dead.png")
 	

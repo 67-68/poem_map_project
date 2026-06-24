@@ -117,8 +117,6 @@ offset_top = 72.0
 offset_right = 615.51245
 offset_bottom = 272.0
 
-[node name="TombStoneScreen" parent="UI" unique_id=1673320443 instance=ExtResource("24_seu75")]
-visible = false
 
 [node name="TimeBreathUI" type="CanvasLayer" parent="UI" unique_id=389675700]
 script = ExtResource("24_htxhm")

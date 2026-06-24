@@ -83,9 +83,20 @@ func _ready() -> void:
 		timeline_scripts = merged
 
 	EventBus.event_shown.connect(_on_event_shown)
-	Logging.info("AnimationController: 已连接 EventBus.event_shown")
+	EventBus.show_tombstone_screen.connect(_on_game_over)
+	Logging.info("AnimationController: 已连接 EventBus.event_shown 和 show_tombstone_screen")
 	Logging.info("  - shader_mappings: %s" % shader_mappings.keys())
 	Logging.info("  - timeline_scripts: %s" % timeline_scripts.keys())
+
+
+## 游戏结束：清理所有存活 Timer / Tween，避免场景销毁后回调访问 freed object
+func _on_game_over(_death_hint: String = "") -> void:
+	Logging.info("AnimationController._on_game_over: 清理所有 Timer 子节点")
+	for child in get_children():
+		if child is Timer:
+			child.stop()
+			child.queue_free()
+	Logging.info("AnimationController._on_game_over: 清理完成")
 
 
 # ═══════════════════════════════════════════════
@@ -248,8 +259,12 @@ func _animate_fire_sprite(sprite: Sprite2D) -> void:
 
 
 func _fire_frame_tick(data: Dictionary) -> void:
-	var sprite := data["sprite"] as Sprite2D
-	if not sprite or not is_instance_valid(sprite):
+	# 防御性检查：场景切换后 Sprite2D 可能已被销毁
+	var sprite_obj = data.get("sprite")
+	if not sprite_obj or not is_instance_valid(sprite_obj):
+		return
+	var sprite := sprite_obj as Sprite2D
+	if not sprite:
 		return
 	var idx: int = data["current"]
 	var col: int = idx % data["hframes"]
@@ -640,8 +655,12 @@ func _camera_shake(duration: float, intensity: float) -> void:
 
 
 func _camera_shake_tick(data: Dictionary) -> void:
-	var cam := data["camera"] as Camera2D
-	if not cam or not is_instance_valid(cam):
+	# 防御性检查：场景切换后 Camera2D 可能已被销毁
+	var cam_obj = data.get("camera")
+	if not cam_obj or not is_instance_valid(cam_obj):
+		return
+	var cam := cam_obj as Camera2D
+	if not cam:
 		return
 	data["elapsed"] += 0.05
 	if data["elapsed"] >= data["duration"]:

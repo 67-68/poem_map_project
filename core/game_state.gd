@@ -4,6 +4,10 @@ extends Node
 ## 用于阻止后续事件继续触发/推送。
 var is_game_over: bool = false
 
+## 🆕 死亡原因文本。由 main.gd 在接收到 show_tombstone_screen 信号后写入，
+## 供 tomb_stone_screen.tscn（独立场景）在 _ready() 中跨场景读取。
+var death_cause: String = ""
+
 var start_year := 745.0
 var end_year := 755.9
 var time_span := end_year - start_year

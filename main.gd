@@ -17,7 +17,6 @@ extends Node
 @onready var _ambition_hud: Node = $UI/AmbitionHUD
 @onready var _simple_toast: Node = $UI/SimpleToast
 @onready var _debug_info: Node = $UI/DebugInfo
-@onready var _tomb_stone: Node = $UI/TombStoneScreen
 @onready var _time_breath: CanvasLayer = $UI/TimeBreathUI
 @onready var _poem_creation: Node = $UI/PoemCreation
 @onready var _social_wall: Node = $UI/SocialWallPanel
@@ -61,6 +60,13 @@ func _ready() -> void:
 	else:
 		EventBus.request_toggle_map_only.connect(_on_toggle_map_only)
 		Logging.info("Main: 已连接 EventBus.request_toggle_map_only")
+
+	# ── 游戏结束 → 切换到独立墓碑场景 ──
+	if not EventBus.has_signal("show_tombstone_screen"):
+		Logging.err("Main: EventBus 缺少 signal show_tombstone_screen，请在 eventbus.gd 中添加")
+	else:
+		EventBus.show_tombstone_screen.connect(_on_game_over)
+		Logging.info("Main: 已连接 EventBus.show_tombstone_screen -> _on_game_over")
 
 
 func _record_positions() -> void:
@@ -208,7 +214,7 @@ func _on_toggle_map_only() -> void:
 
 func _save_visibility():
 	_other_ui_nodes = [
-		_ambition_hud, _simple_toast, _debug_info, _tomb_stone,
+		_ambition_hud, _simple_toast, _debug_info,
 		_time_breath, _poem_creation, _social_wall,
 		_controller, _picker_blur, _blur_overlay, _cinematic_overlay,
 	]
@@ -255,6 +261,24 @@ func _register_ambient_profiles() -> void:
 		},
 	])
 	Logging.info("Main: 已注册 ambient profile → 755_backhome (low_wind: 0dB连续 + harsh_wind: -8dB, 25-30s间隔)")
+
+
+## 游戏结束：写入死因到 GameState，切换场景到独立墓碑屏幕
+func _on_game_over(death_hint: String) -> void:
+	Logging.info("Main: 游戏结束 signal 收到，death_hint=\"%s\"，切换到独立墓碑场景" % death_hint)
+	_kill_all_tweens()
+	GameState.death_cause = death_hint
+	# 延迟一帧切换场景，确保当前帧的所有 Tween 回调/协程安全退出
+	call_deferred("_do_change_to_tombstone")
+
+
+func _do_change_to_tombstone() -> void:
+	Logging.info("Main: 执行场景切换 -> res://ui/tomb_stone_screen.tscn")
+	var tree := get_tree()
+	if not tree:
+		Logging.err("Main: get_tree() 为 null，无法切换场景")
+		return
+	tree.change_scene_to_file("res://ui/tomb_stone_screen.tscn")
 
 
 func _kill_all_tweens() -> void:

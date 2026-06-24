@@ -143,7 +143,12 @@ func play_show_tape_from_bottom() -> void:
 # ═══════════════════════════════════════════════════════════════════
 
 func play_swap_background(new_texture: Texture2D, apply_callback: Callable) -> void:
-	var viewport_height := get_tree().root.get_visible_rect().size.y
+	# 防御性检查：场景可能在销毁中（如 game_over 切换场景），get_tree() 可能为 null
+	var tree := get_tree()
+	if not tree or not tree.root:
+		Logging.warn("TapeVisualizer.play_swap_background: tree or tree.root is null, skipping")
+		return
+	var viewport_height := tree.root.get_visible_rect().size.y
 
 	# 1. 杀死所有活跃 Tween，防止干扰
 	if _tween:
