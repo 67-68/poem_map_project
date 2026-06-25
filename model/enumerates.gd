@@ -188,7 +188,13 @@ enum TRAITS {
 
     KUANGDA_KUANGKE,
     KUANGDA_FENGYING,
-    KUANGDA_ZUANYING
+    KUANGDA_ZUANYING,
+
+    # 疾病特性（stage-based disease traits）
+    DISEASE_FENGHAN_ACUTE,
+    DISEASE_FEILAO_CHRONIC,
+    DISEASE_SHIYI_DEPRESSION,
+    DISEASE_ZHANWANG_MANIA,
 }
 
 enum POEM_TYPE {
@@ -243,14 +249,17 @@ static func from_traits_str(str_name: String) -> int:
         if key.to_lower() == normalized:
             return i
     Logging.err("Invalid trait string: " + str_name)
+    Logging.err("  💡 提示：如果 trait 名称无误，请检查是否已在 TRAITS 枚举中注册")
     return -1
 
 static func to_action_str(item) -> String:
-    var name = ACTION_TAGS.keys().get(item)
+    if item < 0 or item >= ACTION_TAGS.size():
+        Logging.err("Invalid action tag: %d (bounds: [0, %d))" % [item, ACTION_TAGS.size()])
+        return "default_storable_item"
+    var name = ACTION_TAGS.keys()[item]
     if name:
         name = name.replace("_", ":")
         return name.to_lower()
-    #breakpoint
     Logging.err("Invalid action tag: " + str(item))
     return "default_storable_item"
 

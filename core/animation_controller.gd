@@ -85,8 +85,8 @@ func _ready() -> void:
 	EventBus.event_shown.connect(_on_event_shown)
 	EventBus.show_tombstone_screen.connect(_on_game_over)
 	Logging.info("AnimationController: 已连接 EventBus.event_shown 和 show_tombstone_screen")
-	Logging.info("  - shader_mappings: %s" % shader_mappings.keys())
-	Logging.info("  - timeline_scripts: %s" % timeline_scripts.keys())
+	Logging.info("  - shader_mappings: " + str(shader_mappings.keys()))
+	Logging.info("  - timeline_scripts: " + str(timeline_scripts.keys()))
 
 
 ## 游戏结束：清理所有存活 Timer / Tween，避免场景销毁后回调访问 freed object

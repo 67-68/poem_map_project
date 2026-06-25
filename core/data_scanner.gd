@@ -8,7 +8,8 @@
 #      —— 支持 Database 按语义 key 直接取用
 #
 # 设计原则：
-#   - 零中间注册表文件，纯 DirAccess 运行时递归扫描
+#   - 第一级：DirAccess 运行时递归扫描（桌面端）
+#   - 第二级：预构建 JSON 索引降级（HTML5 端 DirAccess 不可用时）
 #   - .tres/.tscn → Godot load() 原生加载
 #   - .csv → DataLoader.load_csv_model() 加载，模型类通过目录名映射
 #   - 所有 Resource 的 uuid 字段保持不动，只用于构建 full_id
@@ -18,6 +19,9 @@ class_name DataScanner extends RefCounted
 
 # CSV 模型类预加载
 const Territory = preload("res://world/province_resource.gd")
+
+# HTML5 降级：预构建文件清单路径
+const _FILE_INDEX_PATH := "res://data/_file_index.json"
 
 ## CSV 文件→模型类映射表
 ## key: CSV 文件名（不含扩展名），value: 对应的 class reference
@@ -36,20 +40,113 @@ class LoadResult:
 
 ## 扫描 start_path 下的所有子文件夹和 .tres/.csv 文件
 ## delim: 命名空间分隔符，建议使用 "."
+## 策略：先尝试 DirAccess 递归扫描（桌面端），如返回 0 文件则降级到预构建索引（HTML5 端）
 static func scan(
 	start_path: String = "res://data",
 	delim: String = "."
 ) -> LoadResult:
 	var result = LoadResult.new()
+
+	# 第一级：DirAccess 递归扫描（桌面端正常工作）
 	var root_dir = DirAccess.open(start_path)
-	if not root_dir:
-		Logging.err("DataScanner: 无法打开根目录: " + start_path)
+	if root_dir:
+		_scan_dir(root_dir, start_path, "", delim, result, "")
+		Logging.info("DataScanner: DirAccess 扫描完成，共扫描 %d 个文件，加载 %d 个条目，检测到 %d 个冲突，%d 个 Base" % [
+			result.scanned_file_count, result.pool.size(), result.duplicates.size(), result.bases.size()])
+	else:
+		Logging.warn("DataScanner: 无法打开根目录: " + start_path)
+
+	# 第二级：DirAccess 返回 0 文件 → 降级到预构建索引
+	if result.scanned_file_count == 0:
+		Logging.warn("DataScanner: DirAccess 返回 0 文件，降级到预构建索引 %s" % _FILE_INDEX_PATH)
+		var fallback_result = _scan_from_index(start_path, delim)
+		if fallback_result.scanned_file_count > 0:
+			result = fallback_result
+			Logging.info("DataScanner: 预构建索引扫描完成，共扫描 %d 个文件，加载 %d 个条目，检测到 %d 个冲突，%d 个 Base" % [
+				result.scanned_file_count, result.pool.size(), result.duplicates.size(), result.bases.size()])
+		else:
+			Logging.err("DataScanner: 预构建索引也未找到任何文件！")
+
+	return result
+
+
+## 从预构建 JSON 索引加载（HTML5 降级路径）
+## 索引格式：{ "files": ["1_core_rules/properties/ruler_stat.tres", ...] }
+static func _scan_from_index(
+	start_path: String,
+	delim: String
+) -> LoadResult:
+	var result = LoadResult.new()
+
+	if not FileAccess.file_exists(_FILE_INDEX_PATH):
+		Logging.err("DataScanner: 预构建索引文件不存在: " + _FILE_INDEX_PATH)
 		return result
 
-	_scan_dir(root_dir, start_path, "", delim, result, "")
+	var index_file = FileAccess.open(_FILE_INDEX_PATH, FileAccess.READ)
+	if not index_file:
+		Logging.err("DataScanner: 无法打开预构建索引文件: " + _FILE_INDEX_PATH)
+		return result
 
-	Logging.info("DataScanner: 扫描完成，共扫描 %d 个文件，加载 %d 个条目，检测到 %d 个冲突，%d 个 Base" % [
-		result.scanned_file_count, result.pool.size(), result.duplicates.size(), result.bases.size()])
+	var raw = index_file.get_as_text()
+	index_file.close()
+
+	var json = JSON.new()
+	var parse_err = json.parse(raw)
+	if parse_err != OK:
+		Logging.err("DataScanner: 预构建索引 JSON 解析失败: " + _FILE_INDEX_PATH)
+		return result
+
+	var data = json.get_data()
+	if not data is Dictionary or not data.has("files"):
+		Logging.err("DataScanner: 预构建索引格式异常，缺少 'files' 字段")
+		return result
+
+	var files: Array = data.get("files", [])
+	if files.is_empty():
+		Logging.warn("DataScanner: 预构建索引中 'files' 为空数组")
+		return result
+
+	Logging.info("DataScanner: 预构建索引包含 %d 个文件路径" % files.size())
+
+	for rel_path in files:
+		if not rel_path is String:
+			continue
+		var file_path = start_path.path_join(rel_path)
+
+		# 从相对路径重建 namespace 和 base
+		var parts: PackedStringArray = rel_path.split("/")
+		if parts.size() < 1:
+			Logging.err("DataScanner: 无效的索引路径: " + rel_path)
+			continue
+
+		var file_name = parts[parts.size() - 1]
+		var dir_parts = parts.slice(0, parts.size() - 1)
+
+		# 重建 namespace：目录层级用 delim 拼接
+		var current_ns = ""
+		if dir_parts.size() > 0:
+			current_ns = ".".join(dir_parts) + delim
+
+		# 重建 top_level_base：目录层级用 delim 拼接
+		var top_level_base = ""
+		if dir_parts.size() > 0:
+			top_level_base = ".".join(dir_parts)
+
+		# 根据扩展名分流加载
+		if file_name.ends_with(".tres") or file_name.ends_with(".tscn"):
+			result.scanned_file_count += 1
+			_load_resource(file_path, current_ns, result, top_level_base)
+		elif file_name.ends_with(".csv"):
+			# ── 完整性检查：CSV 可能被 Godot translation importer 转换成 .translation ──
+			if not FileAccess.file_exists(file_path):
+				Logging.warn("DataScanner: 索引中的 CSV 文件未打包！可能被 translation importer 转换: " + file_path)
+				Logging.warn("  提示：检查 %s.import 是否设为 importer=\"csv_translation\"，需改为 importer=\"keep\"" % file_path)
+				continue
+			result.scanned_file_count += 1
+			_load_csv(file_path, current_ns, result, top_level_base, file_name)
+		else:
+			Logging.warn("DataScanner: 索引中跳过未知类型文件: " + rel_path)
+
 	return result
 
 

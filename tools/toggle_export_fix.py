@@ -12,6 +12,7 @@ HTML5 导出要求 Logging 和 ENUMS 作为 autoload 才能注册 class_name。
   python tools/toggle_export_fix.py status   # 查看当前状态
 """
 
+import re
 import sys
 from pathlib import Path
 
@@ -21,6 +22,15 @@ AUTOLOAD_ENTRIES = [
     'Logging="*res://core/logging.gd"',
     'ENUMS="*res://model/enumerates.gd"',
 ]
+
+# autoload key → .gd 文件路径（相对于项目根目录）
+AUTOLOAD_GD_PATHS = {
+    "Logging": "core/logging.gd",
+    "ENUMS": "model/enumerates.gd",
+}
+
+# class_name 行的正则：匹配已注释或未注释的 class_name 声明（单独占一行）
+_CLASS_NAME_RE = re.compile(r'^(?P<indent>\s*)(?P<comment>#\s*)?class_name\s+\w+')
 
 
 def read_project() -> str:
@@ -93,6 +103,60 @@ def remove_entries(content: str) -> str:
     return "".join(result)
 
 
+def _comment_class_name(gd_path: str) -> None:
+    """注释掉 .gd 文件中的 class_name 行。"""
+    full_path = Path(__file__).resolve().parent.parent / gd_path
+    if not full_path.exists():
+        print(f"⚠ 跳过不存在的文件: {gd_path}")
+        return
+
+    lines = full_path.read_text(encoding="utf-8").splitlines(keepends=True)
+    modified = False
+    for i, line in enumerate(lines):
+        m = _CLASS_NAME_RE.match(line)
+        if m and m.group("comment") is None:
+            # 未注释的 class_name → 加上注释
+            lines[i] = f"# {line.lstrip()}"
+            modified = True
+        elif m and m.group("comment") is not None:
+            # 已经是注释状态，跳过
+            modified = True  # 已存在就算完成
+
+    if modified:
+        full_path.write_text("".join(lines), encoding="utf-8")
+        print(f"  ✓ {gd_path}: class_name 已注释")
+    else:
+        print(f"  - {gd_path}: 未找到 class_name 行，跳过")
+
+
+def _uncomment_class_name(gd_path: str) -> None:
+    """恢复 .gd 文件中被注释的 class_name 行。"""
+    full_path = Path(__file__).resolve().parent.parent / gd_path
+    if not full_path.exists():
+        print(f"⚠ 跳过不存在的文件: {gd_path}")
+        return
+
+    lines = full_path.read_text(encoding="utf-8").splitlines(keepends=True)
+    modified = False
+    for i, line in enumerate(lines):
+        m = _CLASS_NAME_RE.match(line)
+        if m and m.group("comment") is not None:
+            # 已注释的 class_name → 去掉注释前缀
+            indent = m.group("indent")
+            body = line[m.end("comment"):] if m.group("comment") else line[m.end("indent"):]
+            lines[i] = f"{indent}{body.lstrip()}"
+            modified = True
+        elif m and m.group("comment") is None:
+            # 已经是未注释状态，跳过
+            modified = True
+
+    if modified:
+        full_path.write_text("".join(lines), encoding="utf-8")
+        print(f"  ✓ {gd_path}: class_name 已恢复")
+    else:
+        print(f"  - {gd_path}: 未找到 class_name 行，跳过")
+
+
 def cmd_add():
     content = read_project()
     status = get_autoload_status(content)
@@ -106,6 +170,10 @@ def cmd_add():
     write_project(content)
     print("✓ Logging + ENUMS 已加入 project.godot [autoload]。")
 
+    # 同步注释 class_name
+    for key, gd_path in AUTOLOAD_GD_PATHS.items():
+        _comment_class_name(gd_path)
+
 
 def cmd_remove():
     content = read_project()
@@ -116,6 +184,10 @@ def cmd_remove():
     new_content = remove_entries(content)
     write_project(new_content)
     print("✓ Logging + ENUMS 已从 project.godot [autoload] 移除。")
+
+    # 同步恢复 class_name
+    for key, gd_path in AUTOLOAD_GD_PATHS.items():
+        _uncomment_class_name(gd_path)
 
 
 def cmd_status():

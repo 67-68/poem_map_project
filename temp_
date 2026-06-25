@@ -1,386 +1,322 @@
-index.js:452 Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
-index.js:452 OpenGL API OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium)) - Compatibility - Using Device: WebKit - WebKit WebGL
-index.js:452 Build configuration: Emscripten 4.0.20, single-threaded, no GDExtension support.
-index.js:452 [11:59:39] [WARN] Database: translation file not found at res://data/1_core_rules/translations/dynamic_events.zh.translation
-index.js:452 [11:59:39] [INFO] Database: tr(FEIHUALING_FAIL) = 'FEIHUALING_FAIL'
-index.js:452 [11:59:39] [ERROR] DataScanner: 无法打开根目录: res://data/
-index.js:452 [11:59:39] [INFO] Database: DataScanner 扫描完成，pool=0 条目，bases=0 键
-index.js:452 [11:59:39] [INFO] Database: random_events 已按 pool_tag 索引，0 个池
-index.js:452 [11:59:39] [INFO] Database: _events_by_era 已构建，0 个时代
-index.js:452 [11:59:39] [INFO] Database: history_events=0, decided_events=0, focused_chat_data=0
-index.js:452 [11:59:39] [INFO] Database: legendary_poems=0, normal_poem_events=0, end_random_events=0
-index.js:452 [11:59:39] [INFO] Database: actions=0, decisions=0
-index.js:452 [11:59:39] [INFO] Database: feihualing_imageries loaded with 0 entries
-index.js:452 [11:59:39] [INFO] Database: event_bases 已加载 0 个 Base: []
-index.js:452 [11:59:39] [INFO] Database: 开始构建统一数据索引（SSOT：event_base_pool）...
-index.js:452 [11:59:39] [INFO] Database: 统一索引构建完成: 池内 0 条目, 0 个类已索引
-index.js:452 [11:59:39] [INFO] Database: GlitchPreprocessor 编译期参数注入完成: 0/0 个实体已处理
-index.js:452 [11:59:39] [INFO] ManualBuffer._init: 0 items added: []
-index.js:452 [11:59:39] [INFO] ManualBuffer._init: 0 items added: []
-index.js:452 [11:59:39] [INFO] ManualBuffer._init: 0 items added: []
-index.js:452 [11:59:39] [INFO] RelationFlagManager: tick_all_cooldowns — scanning for cd flags
-index.js:452 [11:59:39] [INFO] TimeService._ready: GameState.year set to 745.000000, event_queue has 0 items
-index.js:452 [11:59:39] [INFO] === _register_events_with_time_service called, GameState.year=745.000000 ===
-index.js:452 [11:59:39] [WARN] AudioManager: 音效目录不存在 [res://assets/sounds]
-index.js:452 [11:59:39] [INFO] set volatile stat sorrow to 50
-index.js:452 [11:59:39] [INFO] init_emotions: set sorrow to 50 from SourceOfTruth
-index.js:452 [11:59:39] [INFO] set volatile stat arrogance to 50
-index.js:452 [11:59:39] [INFO] init_emotions: set arrogance to 50 from SourceOfTruth
-index.js:452 [11:59:39] [INFO] set volatile stat anger to 50
-index.js:452 [11:59:39] [INFO] init_emotions: set anger to 50 from SourceOfTruth
-index.js:452 [11:59:39] [INFO] set volatile stat tranquility to 50
-index.js:452 [11:59:39] [INFO] init_emotions: set tranquility to 50 from SourceOfTruth
-index.js:452 [11:59:39] [INFO] set volatile stat ambition to 50
-index.js:452 [11:59:39] [INFO] init_emotions: set ambition to 50 from SourceOfTruth
-index.js:452 [11:59:39] [ERROR] do not find stat official_prestige
-index.js:452 [11:59:39] [ERROR] do not find stat literary_fame
-index.js:452 [11:59:39] [ERROR] do not find stat talent
-index.js:452 [11:59:39] [ERROR] do not find stat burnout
-index.js:452 [11:59:39] [ERROR] do not find stat drunk
-index.js:452 [11:59:39] [ERROR] do not find stat fatigue
-index.js:452 [11:59:39] [ERROR] do not find stat sick
-index.js:452 [11:59:39] [ERROR] do not find stat inspiration
-index.js:452 [11:59:39] [ERROR] do not find stat health
-index.js:452 [11:59:39] [ERROR] do not find stat career_progress
-index.js:452 [11:59:39] [ERROR] do not find stat money
-index.js:452 [11:59:39] [INFO] init_imaginaries: no imaginary data in SourceOfTruth, skipping
-index.js:452 [11:59:39] [INFO] PlayerState: connected request_add_imaginary signal
-index.js:452 [11:59:39] [INFO] [EventManager] EventManager initialized
-index.js:452 [11:59:39] [INFO] [EventManager] Connected to TimeService.on_xun_tick
-index.js:452 [11:59:39] [DEBUG] ImageManager: 已连接 EventBus.request_play_shatter
-index.js:467 ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
-onPrintError @ index.js:467
-put_char @ index.js:1
-write @ index.js:1
-write @ index.js:1
-doWritev @ index.js:1
-_fd_write @ index.js:1
-$func28624 @ 08864982:0x12f5ad1
-$func11078 @ 08864982:0x60cdee
-$func8607 @ 08864982:0x469d00
-$func37558 @ 08864982:0x15e3cff
-$func4233 @ 08864982:0x21feff
-$func37561 @ 08864982:0x15e3eef
-$func37556 @ 08864982:0x15e3bea
-$func356 @ 08864982:0x4c132
-$func343 @ 08864982:0x4a9bc
-$func17502 @ 08864982:0x91c0a0
-$func37091 @ 08864982:0x15c9e7f
-$func2282 @ 08864982:0x13f4ce
-$func43088 @ 08864982:0x178f3d9
-$func766 @ 08864982:0x784e2
-$func5025 @ 08864982:0x2760bc
-$func644 @ 08864982:0x69f10
-$func24368 @ 08864982:0xe4d69b
-$func24368 @ 08864982:0xe4d653
-$func8219 @ 08864982:0x404f9b
-$func66098 @ 08864982:0x1bf8e8b
-$rf @ 08864982:0xbd2d6d
-$sf @ 08864982:0x1734d3d
-callMain @ index.js:1
-(anonymous) @ index.js:798
-(anonymous) @ index.js:793
-Promise.then
-start @ index.js:772
-(anonymous) @ index.js:831
-Promise.then
-startGame @ index.js:830
-(anonymous) @ (index):202
-(anonymous) @ (index):216
-index.js:467    at: listen (core/io/tcp_server.cpp:54)
-onPrintError @ index.js:467
-put_char @ index.js:1
-write @ index.js:1
-write @ index.js:1
-doWritev @ index.js:1
-_fd_write @ index.js:1
-$func28624 @ 08864982:0x12f5ad1
-$func11078 @ 08864982:0x60cdee
-$func8607 @ 08864982:0x469d00
-$func37558 @ 08864982:0x15e3cff
-$func4233 @ 08864982:0x21feff
-$func37561 @ 08864982:0x15e3f13
-$func37556 @ 08864982:0x15e3bea
-$func356 @ 08864982:0x4c132
-$func343 @ 08864982:0x4a9bc
-$func17502 @ 08864982:0x91c0a0
-$func37091 @ 08864982:0x15c9e7f
-$func2282 @ 08864982:0x13f4ce
-$func43088 @ 08864982:0x178f3d9
-$func766 @ 08864982:0x784e2
-$func5025 @ 08864982:0x2760bc
-$func644 @ 08864982:0x69f10
-$func24368 @ 08864982:0xe4d69b
-$func24368 @ 08864982:0xe4d653
-$func8219 @ 08864982:0x404f9b
-$func66098 @ 08864982:0x1bf8e8b
-$rf @ 08864982:0xbd2d6d
-$sf @ 08864982:0x1734d3d
-callMain @ index.js:1
-(anonymous) @ index.js:798
-(anonymous) @ index.js:793
-Promise.then
-start @ index.js:772
-(anonymous) @ index.js:831
-Promise.then
-startGame @ index.js:830
-(anonymous) @ (index):202
-(anonymous) @ (index):216
-index.js:467    GDScript backtrace (most recent call first):
-onPrintError @ index.js:467
-put_char @ index.js:1
-write @ index.js:1
-write @ index.js:1
-doWritev @ index.js:1
-_fd_write @ index.js:1
-$func28624 @ 08864982:0x12f5ad1
-$func14750 @ 08864982:0x7c4d1d
-$func2257 @ 08864982:0x13093e
-$func15718 @ 08864982:0x8517b9
-$func11078 @ 08864982:0x60cdd9
-$func8607 @ 08864982:0x469d00
-$func37558 @ 08864982:0x15e3cff
-$func4233 @ 08864982:0x21feff
-$func37561 @ 08864982:0x15e3f8e
-$func37556 @ 08864982:0x15e3bea
-$func356 @ 08864982:0x4c132
-$func343 @ 08864982:0x4a9bc
-$func17502 @ 08864982:0x91c0a0
-$func37091 @ 08864982:0x15c9e7f
-$func2282 @ 08864982:0x13f4ce
-$func43088 @ 08864982:0x178f3d9
-$func766 @ 08864982:0x784e2
-$func5025 @ 08864982:0x2760bc
-$func644 @ 08864982:0x69f10
-$func24368 @ 08864982:0xe4d69b
-$func24368 @ 08864982:0xe4d653
-$func8219 @ 08864982:0x404f9b
-$func66098 @ 08864982:0x1bf8e8b
-$rf @ 08864982:0xbd2d6d
-$sf @ 08864982:0x1734d3d
-callMain @ index.js:1
-(anonymous) @ index.js:798
-(anonymous) @ index.js:793
-Promise.then
-start @ index.js:772
-(anonymous) @ index.js:831
-Promise.then
-startGame @ index.js:830
-(anonymous) @ (index):202
-(anonymous) @ (index):216
-index.js:467        [0] _ready (res://core/runtime_probe.gd:26)
-onPrintError @ index.js:467
-put_char @ index.js:1
-write @ index.js:1
-write @ index.js:1
-doWritev @ index.js:1
-_fd_write @ index.js:1
-$func28624 @ 08864982:0x12f5ad1
-$func11078 @ 08864982:0x60cdee
-$func8607 @ 08864982:0x469d00
-$func37558 @ 08864982:0x15e3cff
-$func4233 @ 08864982:0x21feff
-$func37561 @ 08864982:0x15e3f8e
-$func37556 @ 08864982:0x15e3bea
-$func356 @ 08864982:0x4c132
-$func343 @ 08864982:0x4a9bc
-$func17502 @ 08864982:0x91c0a0
-$func37091 @ 08864982:0x15c9e7f
-$func2282 @ 08864982:0x13f4ce
-$func43088 @ 08864982:0x178f3d9
-$func766 @ 08864982:0x784e2
-$func5025 @ 08864982:0x2760bc
-$func644 @ 08864982:0x69f10
-$func24368 @ 08864982:0xe4d69b
-$func24368 @ 08864982:0xe4d653
-$func8219 @ 08864982:0x404f9b
-$func66098 @ 08864982:0x1bf8e8b
-$rf @ 08864982:0xbd2d6d
-$sf @ 08864982:0x1734d3d
-callMain @ index.js:1
-(anonymous) @ index.js:798
-(anonymous) @ index.js:793
-Promise.then
-start @ index.js:772
-(anonymous) @ index.js:831
-Promise.then
-startGame @ index.js:830
-(anonymous) @ (index):202
-(anonymous) @ (index):216
-index.js:452 [11:59:39] [ERROR] [RuntimeProbe] 活体探针启动失败！端口 6066 被占用，错误码: 20
-index.js:452 [11:59:39] [INFO] HoverPopupManager: initialized (v2 — top_level rendering, autonomous state machine)
-index.js:452 [11:59:39] [INFO] [MonthEndSettlement] 月末结算系统就绪，连接 on_month_tick
-index.js:452 [11:59:39] [ERROR] do not find stat money
-index.js:452 [11:59:39] [ERROR] do not find stat health
-index.js:452 [11:59:39] [ERROR] do not find stat fatigue
-index.js:452 [11:59:39] [ERROR] do not find stat burnout
-index.js:452 [11:59:39] [ERROR] do not find stat drunk
-index.js:452 [11:59:39] [ERROR] do not find stat sick
-index.js:452 [11:59:39] [ERROR] do not find stat inspiration
-index.js:452 [11:59:39] [ERROR] do not find stat talent
-index.js:452 [11:59:39] [ERROR] do not find stat literary_fame
-index.js:452 [11:59:39] [ERROR] do not find stat official_prestige
-index.js:452 [11:59:39] [ERROR] do not find stat career_progress
-index.js:452 [11:59:39] [INFO] [MonthEndSettlement] 快照已捕获：{ 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 2: 0, 1: 0, 0: 0, 10: 0 }
-index.js:452 [11:59:39] [INFO] StyleManager: 已连接 PlayerState.player_stat_changed
-index.js:452 [11:59:39] [INFO] StyleManager: _ready — StyleManager 已就绪
-index.js:452 [11:59:39] [INFO] AnimationController: 已连接 EventBus.event_shown 和 show_tombstone_screen
-index.js:452 [11:59:39] [INFO]   - shader_mappings: backhome_the_wood
-index.js:467 ERROR: String formatting error: not all arguments converted during string formatting.
-onPrintError @ index.js:467
-put_char @ index.js:1
-write @ index.js:1
-write @ index.js:1
-doWritev @ index.js:1
-_fd_write @ index.js:1
-$func28624 @ 08864982:0x12f5ad1
-$func11078 @ 08864982:0x60cdee
-$func8607 @ 08864982:0x469d00
-$func37558 @ 08864982:0x15e3cff
-$func4233 @ 08864982:0x21feff
-$func37561 @ 08864982:0x15e3eef
-$func37556 @ 08864982:0x15e3bea
-$func356 @ 08864982:0x4c132
-$func367 @ 08864982:0x4d20e
-$func32622 @ 08864982:0x14a291b
-$func2282 @ 08864982:0x134554
-$func43088 @ 08864982:0x178f3d9
-$func766 @ 08864982:0x784e2
-$func5025 @ 08864982:0x2760bc
-$func644 @ 08864982:0x69f10
-$func24368 @ 08864982:0xe4d69b
-$func24368 @ 08864982:0xe4d653
-$func8219 @ 08864982:0x404f9b
-$func66098 @ 08864982:0x1bf8e8b
-$rf @ 08864982:0xbd2d6d
-$sf @ 08864982:0x1734d3d
-callMain @ index.js:1
-(anonymous) @ index.js:798
-(anonymous) @ index.js:793
-Promise.then
-start @ index.js:772
-(anonymous) @ index.js:831
-Promise.then
-startGame @ index.js:830
-(anonymous) @ (index):202
-(anonymous) @ (index):216
-index.js:467    at: validated_evaluate (core/variant/variant_op.h:770)
-onPrintError @ index.js:467
-put_char @ index.js:1
-write @ index.js:1
-write @ index.js:1
-doWritev @ index.js:1
-_fd_write @ index.js:1
-$func28624 @ 08864982:0x12f5ad1
-$func11078 @ 08864982:0x60cdee
-$func8607 @ 08864982:0x469d00
-$func37558 @ 08864982:0x15e3cff
-$func4233 @ 08864982:0x21feff
-$func37561 @ 08864982:0x15e3f13
-$func37556 @ 08864982:0x15e3bea
-$func356 @ 08864982:0x4c132
-$func367 @ 08864982:0x4d20e
-$func32622 @ 08864982:0x14a291b
-$func2282 @ 08864982:0x134554
-$func43088 @ 08864982:0x178f3d9
-$func766 @ 08864982:0x784e2
-$func5025 @ 08864982:0x2760bc
-$func644 @ 08864982:0x69f10
-$func24368 @ 08864982:0xe4d69b
-$func24368 @ 08864982:0xe4d653
-$func8219 @ 08864982:0x404f9b
-$func66098 @ 08864982:0x1bf8e8b
-$rf @ 08864982:0xbd2d6d
-$sf @ 08864982:0x1734d3d
-callMain @ index.js:1
-(anonymous) @ index.js:798
-(anonymous) @ index.js:793
-Promise.then
-start @ index.js:772
-(anonymous) @ index.js:831
-Promise.then
-startGame @ index.js:830
-(anonymous) @ (index):202
-(anonymous) @ (index):216
-index.js:467    GDScript backtrace (most recent call first):
-onPrintError @ index.js:467
-put_char @ index.js:1
-write @ index.js:1
-write @ index.js:1
-doWritev @ index.js:1
-_fd_write @ index.js:1
-$func28624 @ 08864982:0x12f5ad1
-$func14750 @ 08864982:0x7c4d1d
-$func2257 @ 08864982:0x13093e
-$func15718 @ 08864982:0x8517b9
-$func11078 @ 08864982:0x60cdd9
-$func8607 @ 08864982:0x469d00
-$func37558 @ 08864982:0x15e3cff
-$func4233 @ 08864982:0x21feff
-$func37561 @ 08864982:0x15e3f8e
-$func37556 @ 08864982:0x15e3bea
-$func356 @ 08864982:0x4c132
-$func367 @ 08864982:0x4d20e
-$func32622 @ 08864982:0x14a291b
-$func2282 @ 08864982:0x134554
-$func43088 @ 08864982:0x178f3d9
-$func766 @ 08864982:0x784e2
-$func5025 @ 08864982:0x2760bc
-$func644 @ 08864982:0x69f10
-$func24368 @ 08864982:0xe4d69b
-$func24368 @ 08864982:0xe4d653
-$func8219 @ 08864982:0x404f9b
-$func66098 @ 08864982:0x1bf8e8b
-$rf @ 08864982:0xbd2d6d
-$sf @ 08864982:0x1734d3d
-callMain @ index.js:1
-(anonymous) @ index.js:798
-(anonymous) @ index.js:793
-Promise.then
-start @ index.js:772
-(anonymous) @ index.js:831
-Promise.then
-startGame @ index.js:830
-(anonymous) @ (index):202
-(anonymous) @ (index):216
-index.js:467        [0] _ready (res://core/animation_controller.gd:89)
-onPrintError @ index.js:467
-put_char @ index.js:1
-write @ index.js:1
-write @ index.js:1
-doWritev @ index.js:1
-_fd_write @ index.js:1
-$func28624 @ 08864982:0x12f5ad1
-$func11078 @ 08864982:0x60cdee
-$func8607 @ 08864982:0x469d00
-$func37558 @ 08864982:0x15e3cff
-$func4233 @ 08864982:0x21feff
-$func37561 @ 08864982:0x15e3f8e
-$func37556 @ 08864982:0x15e3bea
-$func356 @ 08864982:0x4c132
-$func367 @ 08864982:0x4d20e
-$func32622 @ 08864982:0x14a291b
-$func2282 @ 08864982:0x134554
-$func43088 @ 08864982:0x178f3d9
-$func766 @ 08864982:0x784e2
-$func5025 @ 08864982:0x2760bc
-$func644 @ 08864982:0x69f10
-$func24368 @ 08864982:0xe4d69b
-$func24368 @ 08864982:0xe4d653
-$func8219 @ 08864982:0x404f9b
-$func66098 @ 08864982:0x1bf8e8b
-$rf @ 08864982:0xbd2d6d
-$sf @ 08864982:0x1734d3d
-callMain @ index.js:1
-(anonymous) @ index.js:798
-(anonymous) @ index.js:793
-Promise.then
-start @ index.js:772
-(anonymous) @ index.js:831
-Promise.then
-startGame @ index.js:830
-(anonymous) @ (index):202
-(anonymous) @ (index):216
-index.js:452 [11:59:39] [INFO]   - timeline_scripts: %s
-index.js:452 [11:59:39] [ERROR] BlurManager: 找不到 Main 节点，Picker 模糊不可用
-index.js:452 [11:59:39] [INFO] BlurManager: 延迟初始化完成，picker_blur=MISSING
+index.js:452 [14:25:19] [INFO] load 295 model (res://world/province_resource.gd):<GDScript#-9223371998434949749> from res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 加载完成 [1_core_rules.base_province] <- res://data/1_core_rules/base_province.csv（295 条）
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ting2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yi1_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xiongnu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.andongduhufu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xi1_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gua_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ying2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.su4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qita_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.sha_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.feng1_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gui_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ping_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hui_zhou_return] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ji_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yun_zhou_cloud] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.you_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.you3_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shuo_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.liang_zhou_cold] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yi4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xia_zhou_summer] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.sheng_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.dai4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.cang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ding_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lan2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ying_zhou_hai_wai_xian_dao] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.huan2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yan_zhou_salt] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xin_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ling2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bing_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lai_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yin_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.di_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shen1_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.deng1_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.guan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yi_zhou_wing] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shi2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.zhao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.de_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qing_zhou_green] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bei4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.sui_zhou_appease] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.zi_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qi_zhou_zhan_guo] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ji2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xing_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fen_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bo_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qing_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hui_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.mi_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xi_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yan_zhou_prelong] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.min2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.han_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qin4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gun_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ji4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yuan_zhou_orginal] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wei_zhou_cao_cao] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lv_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yi_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.si_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xiang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lu4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jin_zhou_chao_dai] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yun_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ci_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.kuo_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.he_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.dan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jun_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.li_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.pu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jing_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ze_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wei_zhou_shield] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jiang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hua_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.dai_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hai_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tai_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.cao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.huai_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ning_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wei_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qin2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.song_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.zheng_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xuan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bian_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.luo_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.pu_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.long_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shan_zhou_shan_xi] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.min_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qi_zhou_mountain] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hua_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chen_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chu_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qiao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xu_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ru_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bo_zhou_little] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.die_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.cheng_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.dang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.feng4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fang_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yu_zhou_hesitation] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ying3_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.deng_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yang_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.liang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fu_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xing_zhou_flourish] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jun_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chu_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shou_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wen_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jin_zhou_gold] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.song_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.guang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.run_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.li_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shen_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lu2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.he_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xiang_zhou_xiang_yang] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.su_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ji_zhou_set] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.sui_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.long_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jing_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bi_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xuan_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.mao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shi_zhou_start] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tong_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ba_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.an_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.mian_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.huang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ying_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.kui_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gui_zhou_return] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.kai_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qi_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.peng_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xia_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yi_zhou_shu_di] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jing_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.zi_zhou_mu_xin] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ming_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yue_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.guo_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ya_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.mian_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.he_yu_qian] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fu_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.e_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jiang_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shi_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.mu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tai_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jian_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.sui_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qiong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.zhong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wu_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.rao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.pu_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.he_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.mei_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ling_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.peng_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bei_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.zi_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yu2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yue_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.kuo_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qian_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jia_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jin_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.rong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wen_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lang_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xi_zhou_river] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.si_zhou_think] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.rong__zhou_ji_mi] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bo1_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chen_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jian_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fu_zhou_4] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.heng_tan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yuan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ji_zhou_fortune] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yi_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fu_zhou_5] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fei_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bo_zhou_same_with_other] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wu_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qian_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qian__zhou_ji_mi] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.quan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yong_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ting_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.zhang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ying4_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chen_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.dao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.liu_qiu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gui_zhou_expensive] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.rong_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shao_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shao_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chao_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lian_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.he_zhou_4] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xun_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gui_zhou_gui_lin_shan_shui] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.guang_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.liu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fu_zhou_6] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yi_zhou_complex] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jiao__zhou_ji_mi] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.meng_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xiang_zhou_elephant] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.wu_zhou_4] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.feng_zhou_close] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.cheng_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yan2_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.teng_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xun_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xin_duan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.kang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gui_zhou_ling_yi_ge] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bin_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yao_zhong_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.heng_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.xiu_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.luan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.chun_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yao_zhong_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.pan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.long_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.dou_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gang_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qin_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lian_zhou_2] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.bai_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.gao_bian_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lian_zhou_3] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.luo_lei_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.feng_zhou_mountain] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.ai_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qiong__zhou_etc] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.yan3_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.huan_zhou] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tu_bo] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.india] <- res://data/1_core_rules/base_province.csv
+index.js:452 [14:25:19] [INFO] load 23 model (res://world/province_resource.gd):<GDScript#-9223371998434949749> from res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 加载完成 [1_core_rules.territories] <- res://data/1_core_rules/territories.csv（23 条）
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.longyou_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.guannei_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hedong_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hebei_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.henan_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.huainan_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shannan_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jiangnan_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jiannan_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lingnan_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.qianzhong_dao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.tang_chao] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.fanyang_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hedong_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shuofang_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.hexi_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.anxi_beiting_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jiannan_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.longyou_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.lingnan_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.shannan_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.huainan_jiedushi] <- res://data/1_core_rules/territories.csv
+index.js:452 [14:25:19] [INFO] DataScanner: CSV 写入 pool [1_core_rules.jiangnan_jiedushi] <- res://data/1_core_rules/territories.csv
