@@ -1,12 +1,38 @@
 extends MarginContainer
 
 const TOTAL_DAYS: int = 10
+const TOTAL_SLOTS: int = 5
 
 @onready var label_era: Label = $HBox/Label_Era
 @onready var label_greg: Label = $HBox/HBox2/Label_Gregorian
 @onready var label_xun = $HBox/HBox2/Label_Xun
 @onready var label_time_left: Label = $HBox/HBox2/TimeLeft
 @onready var time_texture = $HBox/TimeTexture
+
+# ════════════════════════════════════════════════════════════
+# 静态工具方法（可被 GUT 直接测试，无需场景树）
+# ════════════════════════════════════════════════════════════
+
+## 将剩余天数格式化为 5 字符的圆点串。
+## ● = 2天, ◐ = 1天, ○ = 0天
+## 防御性兜底: time_val 不在 [0, total_days] 时返回全白圆。
+static func format_time_dots(time_val: int, total_days: int = 10, total_slots: int = 5) -> String:
+	if time_val < 0 or time_val > total_days:
+		return "○".repeat(total_slots)
+	
+	var black: int = time_val / 2
+	var half: int = time_val % 2
+	var white: int = total_slots - black - half
+	
+	var parts: Array[String] = []
+	for _i in range(black):
+		parts.append("●")
+	if half:
+		parts.append("◐")
+	for _i in range(white):
+		parts.append("○")
+	return "".join(parts)
+
 
 func _ready():
 	# 始终保持暂停，不自动推进时间
@@ -27,29 +53,7 @@ func _ready():
 
 func _refresh_time_left() -> void:
 	var time_val: int = int(PlayerState.get_stat_val("time"))
-	# 剩余天数 (0 ~ 10)，已消耗 = TOTAL_DAYS - time_val
-	var consumed: int = max(0, TOTAL_DAYS - time_val)
-	var remaining: int = max(0, time_val)
-	
-	var parts: Array[String] = []
-	
-	# 已消耗：空心圆 (○) 和半空心 (◑)
-	var consumed_full: int = consumed / 2
-	var consumed_half: bool = (consumed % 2) == 1
-	for i in range(consumed_full):
-		parts.append("○")
-	if consumed_half:
-		parts.append("◑")
-	
-	# 剩余：实心圆 (●) 和半实 (◐)
-	var remaining_full: int = remaining / 2
-	var remaining_half: bool = (remaining % 2) == 1
-	for i in range(remaining_full):
-		parts.append("●")
-	if remaining_half:
-		parts.append("◐")
-	
-	label_time_left.text = "".join(parts)
+	label_time_left.text = format_time_dots(time_val)
 
 func _on_year_changed(current_float_year: float):
 	var current_year = int(floor(current_float_year))
