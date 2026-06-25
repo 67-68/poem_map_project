@@ -58,6 +58,22 @@ func refresh_current_decisions():
 	
 	# ── 第二遍：差分更新 UI ──
 	var children = $V.get_children()
+	
+	# 空状态：显示占位文本
+	if decisions.is_empty():
+		# 清空所有已有的 action_button
+		for child in children:
+			child.queue_free()
+		# 如果还没有 placeholder label，创建一个
+		var placeholder := _get_or_create_placeholder()
+		if placeholder.get_parent() == null:
+			$V.add_child(placeholder)
+		EventBus.avaialble_decision_change.emit([])
+		return
+	
+	# 确保移除 placeholder
+	_remove_placeholder()
+	
 	var target_count = decisions.size()
 	var current_count = children.size()
 	
@@ -76,3 +92,28 @@ func refresh_current_decisions():
 		$V.add_child(panel)
 	
 	EventBus.avaialble_decision_change.emit(decisions)
+
+# ── 空状态占位 Label 管理 ──
+
+const PLACEHOLDER_NAME := &"__decision_placeholder__"
+const PLACEHOLDER_TEXT := "江湖风平浪静，此处暂且无事。"
+
+func _get_or_create_placeholder() -> Label:
+	var path := NodePath(PLACEHOLDER_NAME)
+	var label := $V.get_node_or_null(path) as Label
+	if label:
+		return label
+	label = Label.new()
+	label.name = PLACEHOLDER_NAME
+	label.text = PLACEHOLDER_TEXT
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override(&"font_size", 18)
+	label.add_theme_color_override(&"font_color", Color(0.4, 0.4, 0.4, 0.7))
+	return label
+
+func _remove_placeholder() -> void:
+	var path := NodePath(PLACEHOLDER_NAME)
+	var label := $V.get_node_or_null(path)
+	if label:
+		label.reparent(self, false)
+		label.queue_free()
