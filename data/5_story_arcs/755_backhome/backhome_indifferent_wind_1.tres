@@ -15,7 +15,7 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_ks26h"]
 script = ExtResource("3_q5w5u")
-str_props = "distance"
+str_props = "progress"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 

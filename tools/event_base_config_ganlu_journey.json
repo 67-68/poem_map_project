@@ -71,7 +71,7 @@
         "desc": "野心——我改变不了这些，先活下来"
       },
       "fallback": {
-        "emotion": "FATIGUE",
+        "emotion": "NUMBNESS",
         "desc": "疲惫——太累了，什么都不想管"
       }
     }
@@ -101,8 +101,8 @@
             ]
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=10) | emo_add(name=ANGER; val=10) | imagery_add(name=TRAVEL:exile) | prop_add(name=distance; val=6)",
-            "opt_pragmatic": "prop_sub(name=money; val=15) | prop_add(name=health; val=5) | prop_add(name=distance; val=10)"
+            "opt_idealist": "prop_sub(name=health; val=10) | emo_add(name=ANGER; val=10) | imagery_add(name=TRAVEL:exile) | prop_add(name=progress; val=6)",
+            "opt_pragmatic": "prop_sub(name=money; val=15) | prop_add(name=health; val=5) | prop_add(name=progress; val=10)"
           }
         },
         {
@@ -118,8 +118,8 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=20) | trait_add(name=disease_dongshang_frostbite) | emo_add(name=SORROW; val=5) | imagery_add(name=ENVIRONMENT:snow) | imagery_add(name=ENVIRONMENT:wind) | prop_add(name=distance; val=5)",
-            "opt_pragmatic": "prop_add(name=distance; val=8)"
+            "opt_idealist": "prop_sub(name=health; val=20) | trait_add(name=disease_dongshang_frostbite) | emo_add(name=SORROW; val=5) | imagery_add(name=ENVIRONMENT:snow) | imagery_add(name=ENVIRONMENT:wind) | prop_add(name=progress; val=5)",
+            "opt_pragmatic": "prop_add(name=progress; val=8)"
           }
         },
         {
@@ -141,8 +141,8 @@
             ]
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=8) | prop_add(name=health; val=10) | emo_add(name=SORROW; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=distance; val=6)",
-            "opt_pragmatic": "emo_add(name=SORROW; val=3) | prop_add(name=distance; val=10)"
+            "opt_idealist": "prop_sub(name=health; val=8) | prop_add(name=health; val=10) | emo_add(name=SORROW; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=progress; val=6)",
+            "opt_pragmatic": "emo_add(name=SORROW; val=3) | prop_add(name=progress; val=10)"
           }
         },
         {
@@ -158,8 +158,8 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_add(name=health; val=3) | prop_add(name=distance; val=7)",
-            "opt_pragmatic": "prop_sub(name=health; val=8) | prop_sub(name=health; val=5) | prop_add(name=distance; val=12)"
+            "opt_idealist": "prop_add(name=health; val=3) | prop_add(name=progress; val=7)",
+            "opt_pragmatic": "prop_sub(name=health; val=8) | prop_sub(name=health; val=5) | prop_add(name=progress; val=12)"
           }
         },
         {
@@ -181,8 +181,8 @@
             ]
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=money; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=distance; val=5)",
-            "opt_pragmatic": "prop_add(name=distance; val=8)"
+            "opt_idealist": "prop_sub(name=money; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=progress; val=5)",
+            "opt_pragmatic": "prop_add(name=progress; val=8)"
           }
         },
         {
@@ -204,8 +204,8 @@
             ]
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=money; val=8) | prop_sub(name=health; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=COURT:corrupt) | prop_add(name=distance; val=5)",
-            "opt_pragmatic": "prop_add(name=distance; val=8)"
+            "opt_idealist": "prop_sub(name=money; val=8) | prop_sub(name=health; val=5) | emo_add(name=ANGER; val=10) | imagery_add(name=COURT:corrupt) | prop_add(name=progress; val=5)",
+            "opt_pragmatic": "prop_add(name=progress; val=8)"
           }
         },
         {
@@ -221,8 +221,8 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=3) | emo_add(name=SORROW; val=20) | imagery_add(name=EMOTION:despair) | imagery_add(name=ENVIRONMENT:snow) | prop_add(name=distance; val=6)",
-            "opt_pragmatic": "prop_add(name=distance; val=10)"
+            "opt_idealist": "prop_sub(name=health; val=3) | emo_add(name=SORROW; val=20) | imagery_add(name=EMOTION:despair) | imagery_add(name=ENVIRONMENT:snow) | prop_add(name=progress; val=6)",
+            "opt_pragmatic": "prop_add(name=progress; val=10)"
           }
         },
         {
@@ -238,8 +238,8 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_add(name=health; val=15) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=HEALTH:drunk) | prop_add(name=distance; val=8)",
-            "opt_pragmatic": "prop_add(name=distance; val=12)"
+            "opt_idealist": "prop_add(name=health; val=15) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=HEALTH:drunk) | prop_add(name=progress; val=8)",
+            "opt_pragmatic": "prop_add(name=progress; val=12)"
           }
         }
       ]

@@ -37,9 +37,15 @@ func _cost_survival():
         if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) < 0:
             OperatorFactory.create_event_operator('event_money_lower_0_wandering').operate()
         return
-    PlayerState.append_stat(ENUMS.PROPS.MONEY, -5)
+    var money_ok: bool = PlayerState.append_stat(ENUMS.PROPS.MONEY, -5)
+    if not money_ok:
+        Logging.err('[SurvivalManager] _cost_survival: append_stat MONEY failed')
     if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) < 0:
         OperatorFactory.create_event_operator('event_money_lower_0').operate()
+    Logging.info('[SurvivalManager] _cost_survival: attempting refresh_time via TimeOperator')
+    var to = TimeOperator.new()
+    to.refresh_time = true
+    to.operate()
 
 func decay(prop_enum, threshold, decay_val):
     var current_val = get_prop(prop_enum)

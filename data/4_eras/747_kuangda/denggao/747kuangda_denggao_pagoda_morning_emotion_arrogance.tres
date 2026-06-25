@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_wxyul"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_fesxj"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_u2iy1"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_eod1s"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_u2iy1"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_eod1s"]
 [ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_d0oer"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_ch7iq"]
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_u7lb3"]
@@ -13,149 +13,140 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_qyq3h"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_aom25"]
 
-[sub_resource type="Resource" id="Resource_3irgp"]
+[sub_resource type="Resource" id="Resource_wxyul"]
 script = ExtResource("3_u2iy1")
+value = 5
+
+[sub_resource type="Resource" id="Resource_fesxj"]
+script = ExtResource("4_eod1s")
 str_props = "health"
-value = 5
-
-[sub_resource type="Resource" id="Resource_3v4tv"]
-script = ExtResource("4_eod1s")
-value = 5
-
-[sub_resource type="Resource" id="Resource_2uneb"]
-script = ExtResource("3_u2iy1")
-str_props = "BURNOUT"
-value = -15
-
-[sub_resource type="Resource" id="Resource_mcf5q"]
-script = ExtResource("3_u2iy1")
-str_props = "INSPIRATION"
-value = 20
-
-[sub_resource type="Resource" id="Resource_fky80"]
-script = ExtResource("4_eod1s")
 value = 10
 
-[sub_resource type="Resource" id="Resource_iy2mv"]
+[sub_resource type="Resource" id="Resource_u2iy1"]
+script = ExtResource("4_eod1s")
+str_props = "health"
+value = -30
+
+[sub_resource type="Resource" id="Resource_eod1s"]
+script = ExtResource("4_eod1s")
+str_props = "health"
+value = -15
+
+[sub_resource type="Resource" id="Resource_d0oer"]
+script = ExtResource("3_u2iy1")
+value = 10
+
+[sub_resource type="Resource" id="Resource_ch7iq"]
 script = ExtResource("5_d0oer")
 imagery_name = "TARGET_FACTION_ROYAL:jade_step"
 
-[sub_resource type="Resource" id="Resource_cua60"]
-script = ExtResource("3_u2iy1")
-str_props = "time"
-value = -10
-
-[sub_resource type="Resource" id="Resource_a16x1"]
+[sub_resource type="Resource" id="Resource_u7lb3"]
 script = ExtResource("6_ch7iq")
-operators = Array[ExtResource("2_fesxj")]([SubResource("Resource_3irgp"), SubResource("Resource_3v4tv"), SubResource("Resource_2uneb"), SubResource("Resource_mcf5q"), SubResource("Resource_fky80"), SubResource("Resource_iy2mv"), SubResource("Resource_cua60")])
+operators = Array[ExtResource("2_fesxj")]([SubResource("Resource_wxyul"), SubResource("Resource_fesxj"), SubResource("Resource_u2iy1"), SubResource("Resource_eod1s"), SubResource("Resource_d0oer"), SubResource("Resource_ch7iq")])
 
-[sub_resource type="Resource" id="Resource_rge65"]
+[sub_resource type="Resource" id="Resource_1a5cl"]
 script = ExtResource("7_u7lb3")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_8qlx1"]
+[sub_resource type="Resource" id="Resource_ksexl"]
 script = ExtResource("8_1a5cl")
-choice_result = SubResource("Resource_a16x1")
-requirement = SubResource("Resource_rge65")
+choice_result = SubResource("Resource_u7lb3")
+requirement = SubResource("Resource_1a5cl")
 description = "你解下腰间酒葫芦，对着塔下遥遥一举，自顾饮尽。"
 
-[sub_resource type="Resource" id="Resource_jbmty"]
+[sub_resource type="Resource" id="Resource_114uo"]
 script = ExtResource("3_u2iy1")
+value = 5
+
+[sub_resource type="Resource" id="Resource_qyq3h"]
+script = ExtResource("4_eod1s")
 str_props = "health"
-value = 5
+value = 10
 
-[sub_resource type="Resource" id="Resource_ixehq"]
+[sub_resource type="Resource" id="Resource_aom25"]
 script = ExtResource("4_eod1s")
-value = 5
+str_props = "health"
+value = -15
 
-[sub_resource type="Resource" id="Resource_3d6br"]
-script = ExtResource("4_eod1s")
-value = 5
-
-[sub_resource type="Resource" id="Resource_ne81t"]
-script = ExtResource("5_d0oer")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
-
-[sub_resource type="Resource" id="Resource_o7jtu"]
+[sub_resource type="Resource" id="Resource_3irgp"]
 script = ExtResource("3_u2iy1")
-str_props = "time"
-value = -10
+value = 5
 
-[sub_resource type="Resource" id="Resource_8oanp"]
+[sub_resource type="Resource" id="Resource_3v4tv"]
 script = ExtResource("6_ch7iq")
-operators = Array[ExtResource("2_fesxj")]([SubResource("Resource_jbmty"), SubResource("Resource_ixehq"), SubResource("Resource_3d6br"), SubResource("Resource_ne81t"), SubResource("Resource_o7jtu")])
+operators = Array[ExtResource("2_fesxj")]([SubResource("Resource_114uo"), SubResource("Resource_qyq3h"), SubResource("Resource_aom25"), SubResource("Resource_3irgp")])
 
-[sub_resource type="Resource" id="Resource_4cpd8"]
+[sub_resource type="Resource" id="Resource_2uneb"]
 script = ExtResource("8_1a5cl")
-choice_result = SubResource("Resource_8oanp")
+choice_result = SubResource("Resource_3v4tv")
 description = "你松了松衣领，任风吹散襟口热意，转身倚栏眺望终南山。"
 
-[sub_resource type="Resource" id="Resource_63ayw"]
+[sub_resource type="Resource" id="Resource_mcf5q"]
 script = ExtResource("3_u2iy1")
+value = 5
+
+[sub_resource type="Resource" id="Resource_fky80"]
+script = ExtResource("4_eod1s")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_iy2mv"]
+script = ExtResource("3_u2iy1")
+value = 20
+
+[sub_resource type="Resource" id="Resource_cua60"]
+script = ExtResource("3_u2iy1")
+value = 10
+
+[sub_resource type="Resource" id="Resource_a16x1"]
+script = ExtResource("4_eod1s")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_rge65"]
+script = ExtResource("4_eod1s")
 str_props = "health"
 value = 5
 
-[sub_resource type="Resource" id="Resource_rihfo"]
-script = ExtResource("4_eod1s")
-value = 5
-
-[sub_resource type="Resource" id="Resource_qakel"]
-script = ExtResource("4_eod1s")
-value = 20
-
-[sub_resource type="Resource" id="Resource_itk73"]
-script = ExtResource("4_eod1s")
-value = 10
-
-[sub_resource type="Resource" id="Resource_a0sy4"]
-script = ExtResource("3_u2iy1")
-str_props = "BURNOUT"
-value = 10
-
-[sub_resource type="Resource" id="Resource_pe1uk"]
+[sub_resource type="Resource" id="Resource_8qlx1"]
 script = ExtResource("5_d0oer")
 imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
 
-[sub_resource type="Resource" id="Resource_rq0m6"]
-script = ExtResource("3_u2iy1")
-str_props = "time"
-value = -10
-
-[sub_resource type="Resource" id="Resource_wdtgp"]
+[sub_resource type="Resource" id="Resource_jbmty"]
 script = ExtResource("6_ch7iq")
-operators = Array[ExtResource("2_fesxj")]([SubResource("Resource_63ayw"), SubResource("Resource_rihfo"), SubResource("Resource_qakel"), SubResource("Resource_itk73"), SubResource("Resource_a0sy4"), SubResource("Resource_pe1uk"), SubResource("Resource_rq0m6")])
+operators = Array[ExtResource("2_fesxj")]([SubResource("Resource_mcf5q"), SubResource("Resource_fky80"), SubResource("Resource_iy2mv"), SubResource("Resource_cua60"), SubResource("Resource_a16x1"), SubResource("Resource_rge65"), SubResource("Resource_8qlx1")])
 
-[sub_resource type="Resource" id="Resource_q81gt"]
+[sub_resource type="Resource" id="Resource_ixehq"]
 script = ExtResource("7_u7lb3")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_f65el"]
+[sub_resource type="Resource" id="Resource_3d6br"]
 script = ExtResource("8_1a5cl")
-choice_result = SubResource("Resource_wdtgp")
-requirement = SubResource("Resource_q81gt")
+choice_result = SubResource("Resource_jbmty")
+requirement = SubResource("Resource_ixehq")
 description = "你侧耳听了听塔下的谈笑声，然后掸平衣褶，站直了身子。"
 
-[sub_resource type="Resource" id="Resource_ke1hn"]
+[sub_resource type="Resource" id="Resource_ne81t"]
 script = ExtResource("10_114uo")
-volatile_stat = "ambition"
+volatile_stat = "AMBITION"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_tfb7v"]
+[sub_resource type="Resource" id="Resource_o7jtu"]
 script = ExtResource("10_114uo")
-volatile_stat = "ambition"
+volatile_stat = "AMBITION"
 value = 100
 
-[sub_resource type="Resource" id="Resource_vw7g5"]
+[sub_resource type="Resource" id="Resource_8oanp"]
 script = ExtResource("11_qyq3h")
-operators = Array[ExtResource("9_ksexl")]([SubResource("Resource_ke1hn"), SubResource("Resource_tfb7v")])
+operators = Array[ExtResource("9_ksexl")]([SubResource("Resource_ne81t"), SubResource("Resource_o7jtu")])
 
 [resource]
 script = ExtResource("12_aom25")
-requirement = SubResource("Resource_vw7g5")
+requirement = SubResource("Resource_8oanp")
 era = "747_kuangda"
-_target_tags = Array[String](["action:scene_denggao_pagoda_morning"])
-options = Array[ExtResource("1_wxyul")]([SubResource("Resource_8qlx1"), SubResource("Resource_4cpd8"), SubResource("Resource_f65el")])
+_target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_pagoda_morning", "emotion_pair:pair_arrogance", "TARGET_OBJECT_SWORD:cold_blade", "TARGET_NPC_LIBAI:wine_gourd"])
+options = Array[ExtResource("1_wxyul")]([SubResource("Resource_ksexl"), SubResource("Resource_2uneb"), SubResource("Resource_3d6br")])
 uuid = "747kuangda_denggao_pagoda_morning_emotion_arrogance"
 name = "塔顶振衣嗤名利"
 description = "晨钟撞碎塔下湿雾。你登至第七层时，两腋生风。拂晓的长安城在脚下摊开如棋盘——坊市方正，街巷纵横，那些朱门与锦袍都缩成模糊的色块。塔下传来新科进士们高谈阔论的回声，被风撕成断断续续的碎片。你伸手掸了掸袖口沾着的塔灰，有几粒尘埃飘落下去，融进下界的晨光里。"

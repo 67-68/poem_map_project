@@ -8,28 +8,28 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_2f706"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ml6eu"]
 
-[sub_resource type="Resource" id="Resource_iemw1"]
+[sub_resource type="Resource" id="Resource_rv0t1"]
 script = ExtResource("3_kgeal")
 value = 10
 
-[sub_resource type="Resource" id="Resource_2qe36"]
+[sub_resource type="Resource" id="Resource_sdwx3"]
 script = ExtResource("4_800b0")
 imagery_name = "TARGET_PLACE_JADESTEP_JIXIAN"
 
-[sub_resource type="Resource" id="Resource_af7wa"]
+[sub_resource type="Resource" id="Resource_kgeal"]
 script = ExtResource("5_rsaru")
-operators = Array[ExtResource("2_sdwx3")]([SubResource("Resource_iemw1"), SubResource("Resource_2qe36")])
+operators = Array[ExtResource("2_sdwx3")]([SubResource("Resource_rv0t1"), SubResource("Resource_sdwx3")])
 
-[sub_resource type="Resource" id="Resource_epppf"]
+[sub_resource type="Resource" id="Resource_800b0"]
 script = ExtResource("6_2f706")
-choice_result = SubResource("Resource_af7wa")
+choice_result = SubResource("Resource_kgeal")
 description = "（冷眼旁观）"
 
 [resource]
 script = ExtResource("7_ml6eu")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:fengzhao"])
-options = Array[ExtResource("1_rv0t1")]([SubResource("Resource_epppf")])
+options = Array[ExtResource("1_rv0t1")]([SubResource("Resource_800b0")])
 uuid = "scene_imagery_library_scene_jixian_imagery_cloud_and_sun"
 name = "滞留的朱批"
 description = "集贤院的书架如城墙般层层叠起，将天光切成细长的条。你指尖停在一本泛黄奏疏的折页处——那页上的朱批比正文更密，墨迹深深陷入纸纹，形成一圈微凹的压痕。窗外一阵靴声由远及近，又隐入回廊尽头。你的拇指不自觉地在朱批边缘来回摩挲，感受那道凹陷的纹理，直至指腹磨出燥热。光线移动，朱批渐渐没入阴影。"

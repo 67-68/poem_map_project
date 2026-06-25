@@ -185,13 +185,13 @@ func _find_perception_by_stage_id(stage_id: String) -> StagedPerceptionData:
 # ── StyleManager: decay_dirt_crack 策略绑定 ────────────────
 
 ## 向 StyleManager 注册自身并绑定 decay_dirt_crack 策略
-## distance=0 时 progress=0.0（完好），distance=100 时 progress=1.0（彻底毁坏）
+## progress=0 时 progress=0.0（完好），progress=100 时 progress=1.0（彻底毁坏）
 const DECAY_MATERIAL := preload("res://shaders/decay_shader_material.tres")
 
 func _bind_decay_dirt_crack_strategy() -> void:
 	var data := StyleData.new()
 	data.strategy_name = "decay_dirt_crack"
-	data.target_property = "distance"
+	data.target_property = "progress"
 	data.start_property_value = 0.0
 	data.target_property_value = 100.0
 	# shader 只在 progress ∈ [0.27, 0.326] 有可见效果，remap 到这个区间

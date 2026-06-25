@@ -49,7 +49,7 @@
         "desc": "悲戚——高处只有风，什么都没有"
       },
       "fallback": {
-        "emotion": "FATIGUE",
+        "emotion": "NUMBNESS",
         "desc": "疲惫——爬上来已经很累了"
       }
     },
@@ -63,7 +63,7 @@
         "desc": "野心——看得越远，想要的越多"
       },
       "fallback": {
-        "emotion": "FATIGUE",
+        "emotion": "NUMBNESS",
         "desc": "疲惫——高处不胜寒"
       }
     },
@@ -77,7 +77,7 @@
         "desc": "悲戚——愤怒之后只剩悲凉"
       },
       "fallback": {
-        "emotion": "FATIGUE",
+        "emotion": "NUMBNESS",
         "desc": "疲惫——愤怒太耗力气"
       }
     },
@@ -91,7 +91,7 @@
         "desc": "静谧——看开了，也就放下了"
       },
       "fallback": {
-        "emotion": "FATIGUE",
+        "emotion": "NUMBNESS",
         "desc": "疲惫——哭过之后只剩累"
       }
     },
@@ -105,13 +105,13 @@
         "desc": "狂傲——那些在低处的人，怎么能懂我"
       },
       "fallback": {
-        "emotion": "FATIGUE",
+        "emotion": "NUMBNESS",
         "desc": "疲惫——爬得越高越累"
       }
     },
-    "pair_fatigue": {
+    "pair_numbness": {
       "branch_A": {
-        "emotion": "FATIGUE",
+        "emotion": "NUMBNESS",
         "desc": "疲惫——登高只是为了喘口气"
       },
       "branch_B": {
@@ -209,7 +209,7 @@
             "emotion_tranquility",
             "emotion_sorrow",
             "emotion_ambition",
-            "emotion_fatigue"
+            "emotion_numbness"
           ],
           "narrative_constraint": {
             "demand_context": "晨光初照。有人登原——脚步声由远及近，或在你身后停下，或从你身旁走过时放慢了步子。也许对方认识你，也许不认识。风把远处早市的叫卖声和人语碎片断断续续送上来。你站在这里，被看见。",
@@ -244,7 +244,7 @@
           "linked_value_ids": [
             "emotion_tranquility",
             "emotion_sorrow",
-            "emotion_fatigue"
+            "emotion_numbness"
           ],
           "narrative_constraint": {
             "demand_context": "夜色吞没了远景。你凭声音判断世界的状态——某个方向传来断续的笛声或歌谣、近处有虫鸣突然停了又续上、身后有窸窣声无法确定来源。风声里裹着人语碎片，听不清内容但辨得出情绪。",
@@ -316,7 +316,7 @@
           "linked_value_ids": [
             "emotion_tranquility",
             "emotion_sorrow",
-            "emotion_fatigue"
+            "emotion_numbness"
           ],
           "narrative_constraint": {
             "demand_context": "月光被塔身挡去一半，另一半照出地面的裂缝。有什么东西在塔基的砖缝里窸窣——可能是鼠，也可能是别的。头顶塔檐上传来翅膀扑棱的声音，然后归于安静。远处墙角的阴影里，有一双反光的眼睛，然后暗了。",
@@ -352,7 +352,7 @@
           "linked_value_ids": [
             "emotion_anger",
             "emotion_sorrow",
-            "emotion_fatigue"
+            "emotion_numbness"
           ],
           "narrative_constraint": {
             "demand_context": "天光还亮着，但远处的云在快速移动。风突然变了方向，把刚才的土腥味换成了雨前的湿腥气。几只鸟在低空急促地掠过，叫声比平日尖利。地面上干裂的纹路和你来时的脚印正在被风吹模糊。什么东西要来了。",
@@ -388,7 +388,7 @@
           "linked_value_ids": [
             "emotion_anger",
             "emotion_sorrow",
-            "emotion_fatigue"
+            "emotion_numbness"
           ],
           "narrative_constraint": {
             "demand_context": "月光只够照出脚下三步。远处有人影——也可能是树影——停住不动。你看不清对方的轮廓，分不出男女，判断不了距离。狗吠声从那个人影的方向传来，然后是沉默。你不动，那个人影也不动。",
@@ -536,13 +536,13 @@
           }
         },
         {
-          "id": "emotion_fatigue",
+          "id": "emotion_numbness",
           "name": "疲惫 — 登高只是为了喘口气",
           "description": "不是为什么壮阔的视野，也不是为什么高远的志向——登高只是因为走累了想找个地方坐下。这高处除了风大一点，和别处也没什么不同。",
           "scale": 0.95,
           "operator_dsl": "",
           "tags": [
-            "emotion_pair:pair_fatigue",
+            "emotion_pair:pair_numbness",
             "VIBE_PHILOSOPHY_ZEN:incense_ash",
             "TARGET_NPC_DUFU:thatched_grass"
           ],

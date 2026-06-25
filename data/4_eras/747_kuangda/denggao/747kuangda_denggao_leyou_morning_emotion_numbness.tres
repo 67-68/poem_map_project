@@ -1,0 +1,140 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://q0vobi3fy0qb"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_3p4rm"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_gyx1d"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_vjm3j"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_mo0fg"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_yk6fv"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_4ixkl"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_jdi0u"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="8_snxqj"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_d4ced"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="10_m56jh"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_iypie"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_l5n0k"]
+
+[sub_resource type="Resource" id="Resource_3p4rm"]
+script = ExtResource("3_vjm3j")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_gyx1d"]
+script = ExtResource("3_vjm3j")
+str_props = "health"
+value = -28
+
+[sub_resource type="Resource" id="Resource_vjm3j"]
+script = ExtResource("3_vjm3j")
+str_props = "health"
+value = -14
+
+[sub_resource type="Resource" id="Resource_mo0fg"]
+script = ExtResource("4_mo0fg")
+value = 10
+
+[sub_resource type="Resource" id="Resource_yk6fv"]
+script = ExtResource("5_yk6fv")
+operators = Array[ExtResource("2_gyx1d")]([SubResource("Resource_3p4rm"), SubResource("Resource_gyx1d"), SubResource("Resource_vjm3j"), SubResource("Resource_mo0fg")])
+
+[sub_resource type="Resource" id="Resource_4ixkl"]
+script = ExtResource("6_4ixkl")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_jdi0u"]
+script = ExtResource("7_jdi0u")
+choice_result = SubResource("Resource_yk6fv")
+requirement = SubResource("Resource_4ixkl")
+description = "（[狂客动作]）"
+
+[sub_resource type="Resource" id="Resource_snxqj"]
+script = ExtResource("3_vjm3j")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_d4ced"]
+script = ExtResource("3_vjm3j")
+str_props = "health"
+value = -14
+
+[sub_resource type="Resource" id="Resource_m56jh"]
+script = ExtResource("4_mo0fg")
+value = 5
+
+[sub_resource type="Resource" id="Resource_iypie"]
+script = ExtResource("8_snxqj")
+imagery_name = "ENV_NATURE_SNOWSTORM:lone_snow"
+
+[sub_resource type="Resource" id="Resource_l5n0k"]
+script = ExtResource("5_yk6fv")
+operators = Array[ExtResource("2_gyx1d")]([SubResource("Resource_snxqj"), SubResource("Resource_d4ced"), SubResource("Resource_m56jh"), SubResource("Resource_iypie")])
+
+[sub_resource type="Resource" id="Resource_ins2j"]
+script = ExtResource("7_jdi0u")
+choice_result = SubResource("Resource_l5n0k")
+description = "（[旷达动作]）"
+
+[sub_resource type="Resource" id="Resource_aiobe"]
+script = ExtResource("3_vjm3j")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_ppbbn"]
+script = ExtResource("4_mo0fg")
+value = 19
+
+[sub_resource type="Resource" id="Resource_fnwaf"]
+script = ExtResource("4_mo0fg")
+value = 10
+
+[sub_resource type="Resource" id="Resource_n28mv"]
+script = ExtResource("3_vjm3j")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_5src4"]
+script = ExtResource("3_vjm3j")
+str_props = "health"
+value = 5
+
+[sub_resource type="Resource" id="Resource_te5po"]
+script = ExtResource("8_snxqj")
+imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+
+[sub_resource type="Resource" id="Resource_o1yma"]
+script = ExtResource("5_yk6fv")
+operators = Array[ExtResource("2_gyx1d")]([SubResource("Resource_aiobe"), SubResource("Resource_ppbbn"), SubResource("Resource_fnwaf"), SubResource("Resource_n28mv"), SubResource("Resource_5src4"), SubResource("Resource_te5po")])
+
+[sub_resource type="Resource" id="Resource_2nv7n"]
+script = ExtResource("6_4ixkl")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_otuvy"]
+script = ExtResource("7_jdi0u")
+choice_result = SubResource("Resource_o1yma")
+requirement = SubResource("Resource_2nv7n")
+description = "（[低旷达动作]）"
+
+[sub_resource type="Resource" id="Resource_4ndtm"]
+script = ExtResource("10_m56jh")
+volatile_stat = "AMBITION"
+value = 30
+operator = 1
+
+[sub_resource type="Resource" id="Resource_wur8o"]
+script = ExtResource("10_m56jh")
+volatile_stat = "AMBITION"
+value = 100
+
+[sub_resource type="Resource" id="Resource_45o3i"]
+script = ExtResource("11_iypie")
+operators = Array[ExtResource("9_d4ced")]([SubResource("Resource_4ndtm"), SubResource("Resource_wur8o")])
+
+[resource]
+script = ExtResource("12_l5n0k")
+requirement = SubResource("Resource_45o3i")
+era = "747_kuangda"
+_target_tags = Array[String](["ENV_POLITICS_PROSPER:cloud_and_sun", "ENV_NATURE_SNOWSTORM:lone_snow", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_leyou_morning", "emotion_pair:pair_numbness", "VIBE_PHILOSOPHY_ZEN:incense_ash", "TARGET_NPC_DUFU:thatched_grass"])
+options = Array[ExtResource("1_3p4rm")]([SubResource("Resource_jdi0u"), SubResource("Resource_ins2j"), SubResource("Resource_otuvy")])
+uuid = "747kuangda_denggao_leyou_morning_emotion_numbness"
+name = "雾重肩沉"
+description = "秋日清晨，你沿着湿滑的石阶登上乐游原。晨雾比前几日更浓，长安城的轮廓浮在雾中，像一幅未干透的水墨画。你靠在一棵老槐树粗糙的树干上时，膝盖咯吱响了一声。远处终南山的影子在雾里时隐时现，早市的叫卖声和人语碎片断断续续随风送上来。有人登原，在你身后几步停住——拂了拂石凳上的露水，坐了下来，没说话，也没起身离开。你垂下眼，看见自己袖口的泥渍和鞋帮上干涸的草屑。"

@@ -9,57 +9,72 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_61yks"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_7qy4u"]
 
-[sub_resource type="Resource" id="Resource_kb5t2"]
+[sub_resource type="Resource" id="Resource_2ykvf"]
+script = ExtResource("3_bdmlb")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_asmuv"]
+script = ExtResource("3_bdmlb")
+str_props = "progress"
+value = 3
+
+[sub_resource type="Resource" id="Resource_bdmlb"]
 script = ExtResource("3_bdmlb")
 str_props = "health"
 value = 16
 
-[sub_resource type="Resource" id="Resource_7w0lu"]
-script = ExtResource("3_bdmlb")
-str_props = "drunk"
-value = 22
-
-[sub_resource type="Resource" id="Resource_krjnq"]
+[sub_resource type="Resource" id="Resource_fj6fv"]
 script = ExtResource("4_fj6fv")
 value = 11
 
-[sub_resource type="Resource" id="Resource_0lj7g"]
+[sub_resource type="Resource" id="Resource_gaidx"]
 script = ExtResource("5_gaidx")
 imagery_name = "HEALTH:drunk"
 
-[sub_resource type="Resource" id="Resource_eayob"]
+[sub_resource type="Resource" id="Resource_2003i"]
 script = ExtResource("3_bdmlb")
-str_props = "distance"
+str_props = "progress"
 value = 9
 
-[sub_resource type="Resource" id="Resource_vynld"]
+[sub_resource type="Resource" id="Resource_61yks"]
 script = ExtResource("6_2003i")
-operators = Array[ExtResource("2_asmuv")]([SubResource("Resource_kb5t2"), SubResource("Resource_7w0lu"), SubResource("Resource_krjnq"), SubResource("Resource_0lj7g"), SubResource("Resource_eayob")])
+operators = Array[ExtResource("2_asmuv")]([SubResource("Resource_2ykvf"), SubResource("Resource_asmuv"), SubResource("Resource_bdmlb"), SubResource("Resource_fj6fv"), SubResource("Resource_gaidx"), SubResource("Resource_2003i")])
 
-[sub_resource type="Resource" id="Resource_81ycb"]
+[sub_resource type="Resource" id="Resource_7qy4u"]
 script = ExtResource("7_61yks")
-choice_result = SubResource("Resource_vynld")
+choice_result = SubResource("Resource_61yks")
 description = "将酒碗碎片踢进风里，仰头长笑"
 
-[sub_resource type="Resource" id="Resource_f2e66"]
+[sub_resource type="Resource" id="Resource_kb5t2"]
 script = ExtResource("3_bdmlb")
-str_props = "distance"
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_7w0lu"]
+script = ExtResource("3_bdmlb")
+str_props = "progress"
+value = 3
+
+[sub_resource type="Resource" id="Resource_krjnq"]
+script = ExtResource("3_bdmlb")
+str_props = "progress"
 value = 13
 
-[sub_resource type="Resource" id="Resource_hvmsc"]
+[sub_resource type="Resource" id="Resource_0lj7g"]
 script = ExtResource("6_2003i")
-operators = Array[ExtResource("2_asmuv")]([SubResource("Resource_f2e66")])
+operators = Array[ExtResource("2_asmuv")]([SubResource("Resource_kb5t2"), SubResource("Resource_7w0lu"), SubResource("Resource_krjnq")])
 
-[sub_resource type="Resource" id="Resource_klcly"]
+[sub_resource type="Resource" id="Resource_eayob"]
 script = ExtResource("7_61yks")
-choice_result = SubResource("Resource_hvmsc")
+choice_result = SubResource("Resource_0lj7g")
 description = "默默放下酒碗，转身缩回门槛后"
 
 [resource]
 script = ExtResource("8_7qy4u")
 era = "755_backhome"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu"])
-options = Array[ExtResource("1_2ykvf")]([SubResource("Resource_81ycb"), SubResource("Resource_klcly")])
+options = Array[ExtResource("1_2ykvf")]([SubResource("Resource_7qy4u"), SubResource("Resource_eayob")])
 uuid = "ganlu_journey_scene_mad_song"
 name = "浊酒祭风"
 description = "破庙檐下，杜甫摸出最后三文钱换得半碗浊酒。酒入喉时没有暖意——只有一道灼烧感从喉咙一路撕到胃，像吞了一根烧红的铁钉。他走出庙门，酒碗摔碎在石阶上，冰块从衣袍褶皱间簌簌掉落。他仰头，不是看天——是让风雪灌进领口。双臂张开，关节咔咔作响。他开始笑。不是疯子的笑——是沙哑的、断断续续的、像破风箱漏气的笑声，一声一声被风撕碎又拼起来。膝盖不再弯曲，腰背第一次挺直。他唱的是当年在齐赵间漫游时学的野调，词不全了，但调子还在。"

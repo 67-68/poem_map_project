@@ -68,7 +68,6 @@
 | 文件 | 触发场景 | 调用位置 |
 |------|---------|---------|
 | [`characters/event_ui.gd`](characters/event_ui.gd:584) | 用户左键点击跳过打字机 | `_input()` |
-| [`ui/cinematic_overlay.gd`](ui/cinematic_overlay.gd:35) | Cmd+Space 跳过过场 | `_input()` |
 | [`ui/cinematic_overlay.gd`](ui/cinematic_overlay.gd:44) | 点按 Dimmer 快进过场 | `_on_dimmer_gui_input()` |
 | [`world/dialogue_bubble.gd`](world/dialogue_bubble.gd:53) | 点击推进对话气泡 | `_input()` |
 

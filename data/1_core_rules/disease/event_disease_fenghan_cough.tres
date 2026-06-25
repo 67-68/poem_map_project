@@ -7,49 +7,49 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_helf6"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_tnrln"]
 
-[sub_resource type="Resource" id="Resource_lqvwq"]
+[sub_resource type="Resource" id="Resource_fk3ea"]
 script = ExtResource("3_7qmrl")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_yysbs"]
+[sub_resource type="Resource" id="Resource_w4e2j"]
 script = ExtResource("3_7qmrl")
 str_props = "fatigue"
 value = 10
 
-[sub_resource type="Resource" id="Resource_setf6"]
+[sub_resource type="Resource" id="Resource_7qmrl"]
 script = ExtResource("4_mpku2")
-operators = Array[ExtResource("2_w4e2j")]([SubResource("Resource_lqvwq"), SubResource("Resource_yysbs")])
+operators = Array[ExtResource("2_w4e2j")]([SubResource("Resource_fk3ea"), SubResource("Resource_w4e2j")])
 
-[sub_resource type="Resource" id="Resource_lhed0"]
+[sub_resource type="Resource" id="Resource_mpku2"]
 script = ExtResource("5_helf6")
-choice_result = SubResource("Resource_setf6")
+choice_result = SubResource("Resource_7qmrl")
 description = "强撑着写诗"
 
-[sub_resource type="Resource" id="Resource_loml2"]
+[sub_resource type="Resource" id="Resource_helf6"]
 script = ExtResource("3_7qmrl")
 str_props = "sick"
 value = -5
 
-[sub_resource type="Resource" id="Resource_pphku"]
+[sub_resource type="Resource" id="Resource_tnrln"]
 script = ExtResource("3_7qmrl")
 str_props = "money"
 value = -2
 
-[sub_resource type="Resource" id="Resource_y6sau"]
+[sub_resource type="Resource" id="Resource_lqvwq"]
 script = ExtResource("4_mpku2")
-operators = Array[ExtResource("2_w4e2j")]([SubResource("Resource_loml2"), SubResource("Resource_pphku")])
+operators = Array[ExtResource("2_w4e2j")]([SubResource("Resource_helf6"), SubResource("Resource_tnrln")])
 
-[sub_resource type="Resource" id="Resource_qlxq6"]
+[sub_resource type="Resource" id="Resource_yysbs"]
 script = ExtResource("5_helf6")
-choice_result = SubResource("Resource_y6sau")
+choice_result = SubResource("Resource_lqvwq")
 description = "歇一歇，喝口热汤"
 
 [resource]
 script = ExtResource("6_tnrln")
 era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickAcute"])
-options = Array[ExtResource("1_fk3ea")]([SubResource("Resource_lhed0"), SubResource("Resource_qlxq6")])
+options = Array[ExtResource("1_fk3ea")]([SubResource("Resource_mpku2"), SubResource("Resource_yysbs")])
 uuid = "event_disease_fenghan_cough"
 name = "寒咳"
 description = "一阵剧烈的咳嗽把你从案牍前拉起来。你弯腰扶住桌角，半天缓不过气。窗纸被吹得啪啪响，你的手抖得握不住笔。"

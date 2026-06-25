@@ -13,12 +13,6 @@ _property = 1
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_m1nii"]
-script = ExtResource("3_f06is")
-_property = 5
-value = 5
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
 [sub_resource type="Resource" id="Resource_time"]
 script = ExtResource("5_timeop")
 day = 2.0
@@ -28,7 +22,7 @@ metadata/_custom_type_script = "uid://khw2s6fgrkem"
 script = ExtResource("3_28qx7")
 _main_tag = 30
 _action_tags = Array[int]([2, 0, 1, 3, 5, 7, 8, 30, 11])
-action_results = Array[ExtResource("2_slsqb")]([SubResource("Resource_4fss1"), SubResource("Resource_m1nii"), SubResource("Resource_time")])
+action_results = Array[ExtResource("2_slsqb")]([SubResource("Resource_4fss1"), SubResource("Resource_time")])
 uuid = "jiao_you"
 name = "交游朋友"
 description = "交游"

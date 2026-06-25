@@ -2,7 +2,7 @@ extends Node
 class_name InputManager
 
 ## InputManager — 全局快捷键总线
-## 职责：统一拦截 Space / 1-4 / Esc / Tab / PageUp / PageDown
+## 职责：统一拦截 1-4 / Esc / Tab / PageUp / PageDown
 ## 通过 _input 在 _unhandled_input 之前消费事件，确保暂停时也能响应
 ##
 ## 注册模式：
@@ -59,10 +59,7 @@ func _input(event: InputEvent) -> void:
 	var kc := event.keycode as int
 	Logging.debug("InputManager._input: match前 keycode=%d" % kc)
 	
-	if kc == KEY_SPACE:
-		_on_space()
-		get_viewport().set_input_as_handled()
-	elif kc >= KEY_1 and kc <= KEY_4:
+	if kc >= KEY_1 and kc <= KEY_4:
 		var idx = kc - KEY_1  # 0-based
 		_on_number_key(idx)
 		get_viewport().set_input_as_handled()
@@ -80,19 +77,6 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	else:
 		Logging.debug("InputManager._input: 未匹配任何快捷键 keycode=%d" % kc)
-
-
-# ═══════════════════════════════════════════════
-# Space — 拨弄时间（暂停/继续）
-# ═══════════════════════════════════════════════
-
-func _on_space() -> void:
-	if TimeService.time_start:
-		Logging.info("InputManager: Space → TimeService.pause()")
-		TimeService.pause()
-	else:
-		Logging.info("InputManager: Space → TimeService.play()")
-		TimeService.play()
 
 
 # ═══════════════════════════════════════════════

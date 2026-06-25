@@ -35,19 +35,14 @@ static var debug_dashboard_state = {
         'POEM_shanshui': 'poem_deng_gao_1'
     },
     
-    # 维度 4：资源池 (The Expendables) - 最不重要的底层数值
+    # 维度 4：资源池 (The Expendables) - 核心六属性
     "resources": {
         "money": 50,
         "health": 100,
-        "official_prestige": 20,
         "literary_fame": 50,
-        "talent": 50, # 如果才气不够就写不出春望，需要点各种事件来加才气
-        "burnout": 0,
-        "drunk": 0,
-        "fatigue": 0,
-        "sick": 0,
-        "inspiration": 0,
-        "career_progress": 0,
+        "talent": 50,
+        "progress": 0,
+        "time": 10,
     },
 
     "emotions": {

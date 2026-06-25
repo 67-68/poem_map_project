@@ -8,6 +8,39 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_4rr8a"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_raicx"]
 
+[sub_resource type="Resource" id="Resource_ipx0l"]
+script = ExtResource("3_b03bk")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_46xlu"]
+script = ExtResource("3_b03bk")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_b03bk"]
+script = ExtResource("3_b03bk")
+str_props = "progress"
+value = 2
+
+[sub_resource type="Resource" id="Resource_rf3hn"]
+script = ExtResource("3_b03bk")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_fixyx"]
+script = ExtResource("4_rf3hn")
+imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+
+[sub_resource type="Resource" id="Resource_4rr8a"]
+script = ExtResource("5_fixyx")
+operators = Array[ExtResource("2_46xlu")]([SubResource("Resource_ipx0l"), SubResource("Resource_46xlu"), SubResource("Resource_b03bk"), SubResource("Resource_rf3hn"), SubResource("Resource_fixyx")])
+
+[sub_resource type="Resource" id="Resource_raicx"]
+script = ExtResource("6_4rr8a")
+choice_result = SubResource("Resource_4rr8a")
+description = "目光越过纸和老板的脸，转身迈入人流。"
+
 [sub_resource type="Resource" id="Resource_yhb4w"]
 script = ExtResource("3_b03bk")
 str_props = "money"
@@ -21,102 +54,65 @@ value = -3
 [sub_resource type="Resource" id="Resource_gs65g"]
 script = ExtResource("3_b03bk")
 str_props = "progress"
-value = 2
+value = 1
 
 [sub_resource type="Resource" id="Resource_g18hs"]
 script = ExtResource("3_b03bk")
-str_props = "health"
+str_props = "money"
 value = -3
 
 [sub_resource type="Resource" id="Resource_3ds8o"]
-script = ExtResource("4_rf3hn")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+script = ExtResource("5_fixyx")
+operators = Array[ExtResource("2_46xlu")]([SubResource("Resource_yhb4w"), SubResource("Resource_qtcn6"), SubResource("Resource_gs65g"), SubResource("Resource_g18hs")])
 
 [sub_resource type="Resource" id="Resource_7q8um"]
-script = ExtResource("5_fixyx")
-operators = Array[ExtResource("2_46xlu")]([SubResource("Resource_yhb4w"), SubResource("Resource_qtcn6"), SubResource("Resource_gs65g"), SubResource("Resource_g18hs"), SubResource("Resource_3ds8o")])
+script = ExtResource("6_4rr8a")
+choice_result = SubResource("Resource_3ds8o")
+description = "怔了半瞬，提笔蘸墨，低头写了几行。"
 
 [sub_resource type="Resource" id="Resource_kdvf4"]
-script = ExtResource("6_4rr8a")
-choice_result = SubResource("Resource_7q8um")
-description = "目光越过纸和老板的脸，转身迈入人流。"
+script = ExtResource("3_b03bk")
+str_props = "money"
+value = -3
 
 [sub_resource type="Resource" id="Resource_qehyk"]
 script = ExtResource("3_b03bk")
-str_props = "money"
+str_props = "health"
 value = -3
 
 [sub_resource type="Resource" id="Resource_e8eev"]
 script = ExtResource("3_b03bk")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_j8qup"]
-script = ExtResource("3_b03bk")
-str_props = "progress"
-value = 1
-
-[sub_resource type="Resource" id="Resource_3qd4m"]
-script = ExtResource("3_b03bk")
-str_props = "money"
-value = -3
-
-[sub_resource type="Resource" id="Resource_2la05"]
-script = ExtResource("4_rf3hn")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
-
-[sub_resource type="Resource" id="Resource_huur4"]
-script = ExtResource("5_fixyx")
-operators = Array[ExtResource("2_46xlu")]([SubResource("Resource_qehyk"), SubResource("Resource_e8eev"), SubResource("Resource_j8qup"), SubResource("Resource_3qd4m"), SubResource("Resource_2la05")])
-
-[sub_resource type="Resource" id="Resource_68slm"]
-script = ExtResource("6_4rr8a")
-choice_result = SubResource("Resource_huur4")
-description = "怔了半瞬，提笔蘸墨，低头写了几行。"
-
-[sub_resource type="Resource" id="Resource_2i3di"]
-script = ExtResource("3_b03bk")
-str_props = "money"
-value = -3
-
-[sub_resource type="Resource" id="Resource_qymdw"]
-script = ExtResource("3_b03bk")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_cl7vw"]
-script = ExtResource("3_b03bk")
 str_props = "progress"
 value = -1
 
-[sub_resource type="Resource" id="Resource_ixyc2"]
+[sub_resource type="Resource" id="Resource_j8qup"]
 script = ExtResource("3_b03bk")
 str_props = "money"
 value = 5
 
-[sub_resource type="Resource" id="Resource_22ghk"]
+[sub_resource type="Resource" id="Resource_3qd4m"]
 script = ExtResource("3_b03bk")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_m0ww1"]
+[sub_resource type="Resource" id="Resource_2la05"]
 script = ExtResource("4_rf3hn")
 imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
 
-[sub_resource type="Resource" id="Resource_owwcx"]
+[sub_resource type="Resource" id="Resource_huur4"]
 script = ExtResource("5_fixyx")
-operators = Array[ExtResource("2_46xlu")]([SubResource("Resource_2i3di"), SubResource("Resource_qymdw"), SubResource("Resource_cl7vw"), SubResource("Resource_ixyc2"), SubResource("Resource_22ghk"), SubResource("Resource_m0ww1")])
+operators = Array[ExtResource("2_46xlu")]([SubResource("Resource_kdvf4"), SubResource("Resource_qehyk"), SubResource("Resource_e8eev"), SubResource("Resource_j8qup"), SubResource("Resource_3qd4m"), SubResource("Resource_2la05")])
 
-[sub_resource type="Resource" id="Resource_r77dx"]
+[sub_resource type="Resource" id="Resource_68slm"]
 script = ExtResource("6_4rr8a")
-choice_result = SubResource("Resource_owwcx")
+choice_result = SubResource("Resource_huur4")
 description = "躬身拱手：“愿效劳——若嫌不足，还能再添三首。”"
 
 [resource]
 script = ExtResource("7_raicx")
 era = "747_kuangda"
 _target_tags = Array[String](["emotion_pair:pair_rebellion", "TARGET_NPC_DUFU:thatched_grass", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_talent_commodification", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_NPC_ZHENGQIAN", "ENV_NATURE_NIGHTMOON:cold_moon", "TARGET_NPC_DUFU:thatched_grass", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:scene_fangshi"])
-options = Array[ExtResource("1_ipx0l")]([SubResource("Resource_kdvf4"), SubResource("Resource_68slm"), SubResource("Resource_r77dx")])
+options = Array[ExtResource("1_ipx0l")]([SubResource("Resource_raicx"), SubResource("Resource_7q8um"), SubResource("Resource_68slm")])
 uuid = "duotai_humiliation_talent_commodification_gateway_fangshi_identity_qingliu_official"
 name = "纸铺前的交易"
 description = "西市东街第三间纸铺，摊上堆着宣州楮纸和蜀郡麻纸。老板是个四十来岁的瘦削汉子，正用湿布擦柜台。见你路过，他抬头打量了你两眼，放下抹布，从架子上抽出一刀纸，搁在柜面上。“听说你会作诗？”他说得很随意，像在问菜价。“替我写一首夸我铺子的——笔在这，墨在这，写好了，这刀纸你拿去，不用给钱。”他说话时眼睛看着纸，没看你。"

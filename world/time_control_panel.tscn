@@ -36,6 +36,9 @@ text = "天宝十四载"
 layout_mode = 2
 size_flags_horizontal = 4
 
+[node name="TimeLeft" type="Label" parent="HBox/HBox2" unique_id=988730346]
+layout_mode = 2
+
 [node name="VSeparator" type="VSeparator" parent="HBox/HBox2" unique_id=400820493]
 layout_mode = 2
 size_flags_horizontal = 4

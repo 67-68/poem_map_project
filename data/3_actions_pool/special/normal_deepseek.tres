@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://fehywsxat6t5"]
 
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_uv0lu"]
 [ext_resource type="Script" uid="uid://vktcbkdq2pva" path="res://model/event/custom_event_option.gd" id="2_ypmmf"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="3_87spk"]
 
@@ -26,7 +27,7 @@ metadata/_custom_type_script = "uid://vktcbkdq2pva"
 [resource]
 script = ExtResource("3_87spk")
 _action_tags = Array[int]([35, 12, 16, 15, 4])
-options = Array[Object]([SubResource("Resource_j077k"), SubResource("Resource_5jbby"), SubResource("Resource_l78tw"), SubResource("Resource_ysbb1")])
+options = Array[ExtResource("1_uv0lu")]([SubResource("Resource_j077k"), SubResource("Resource_5jbby"), SubResource("Resource_l78tw"), SubResource("Resource_ysbb1")])
 uuid = "normal_deepseek"
 name = "一般探索思绪"
 description = "你舒展身体，回忆自己都做了什么..."

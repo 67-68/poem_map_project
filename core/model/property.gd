@@ -94,3 +94,13 @@ func get_staged_perception_at_threshold(threshold: int) -> String:
 # 强制设值，跳过 hard_max 检查（给 debug/force_set_stat_val 用）
 func force_set_val(new_val: int) -> void:
 	val = new_val
+
+## 安全设值，自动 clamp 到 [0, hard_max] 范围
+## hard_max == -1 时只 clamp 到 >= 0
+func set_val(new_val: int) -> void:
+	var clamped: int = new_val
+	if clamped < 0:
+		clamped = 0
+	if hard_max >= 0 and clamped > hard_max:
+		clamped = hard_max
+	val = clamped

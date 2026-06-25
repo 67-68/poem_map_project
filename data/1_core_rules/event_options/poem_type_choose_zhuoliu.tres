@@ -11,7 +11,7 @@
 ; 该值不受 Python scale 缩放，但受运行时 property_multiplication context 影响
 [sub_resource type="Resource" id="Resource_acc_prop"]
 script = ExtResource("2_propop")
-str_props = "career_progress"
+str_props = "progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
@@ -22,7 +22,7 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_acc_prop")])
 ; ── rejected_result: fatigue + 5（诗被嫌弃） ──
 [sub_resource type="Resource" id="Resource_rej_prop"]
 script = ExtResource("2_propop")
-str_props = "fatigue"
+str_props = "health"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 

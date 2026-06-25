@@ -1,0 +1,130 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cby8dfbuc77hi"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_ndtcx"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_em8b7"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_674eb"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_l7sjd"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_4nf2w"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_x4lp0"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_xbhsp"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_gcgmt"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_nmpuf"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="10_slv8o"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_3xoi1"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_7wrkc"]
+
+[sub_resource type="Resource" id="Resource_ndtcx"]
+script = ExtResource("3_674eb")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_em8b7"]
+script = ExtResource("3_674eb")
+str_props = "health"
+value = -22
+
+[sub_resource type="Resource" id="Resource_674eb"]
+script = ExtResource("4_l7sjd")
+value = 11
+
+[sub_resource type="Resource" id="Resource_l7sjd"]
+script = ExtResource("5_4nf2w")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_4nf2w"]
+script = ExtResource("6_x4lp0")
+operators = Array[ExtResource("2_em8b7")]([SubResource("Resource_ndtcx"), SubResource("Resource_em8b7"), SubResource("Resource_674eb"), SubResource("Resource_l7sjd")])
+
+[sub_resource type="Resource" id="Resource_x4lp0"]
+script = ExtResource("7_xbhsp")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_xbhsp"]
+script = ExtResource("8_gcgmt")
+choice_result = SubResource("Resource_4nf2w")
+requirement = SubResource("Resource_x4lp0")
+description = "就着菜市的喧嚷大声念出旧作，念到第三句时郑虔回头，两人隔着人潮笑了。"
+
+[sub_resource type="Resource" id="Resource_gcgmt"]
+script = ExtResource("3_674eb")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_nmpuf"]
+script = ExtResource("3_674eb")
+str_props = "health"
+value = 16
+
+[sub_resource type="Resource" id="Resource_slv8o"]
+script = ExtResource("4_l7sjd")
+value = 11
+
+[sub_resource type="Resource" id="Resource_3xoi1"]
+script = ExtResource("5_4nf2w")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_7wrkc"]
+script = ExtResource("6_x4lp0")
+operators = Array[ExtResource("2_em8b7")]([SubResource("Resource_gcgmt"), SubResource("Resource_nmpuf"), SubResource("Resource_slv8o"), SubResource("Resource_3xoi1")])
+
+[sub_resource type="Resource" id="Resource_hpjpi"]
+script = ExtResource("8_gcgmt")
+choice_result = SubResource("Resource_7wrkc")
+description = "接过时触到那片焦痕，指腹在纸缘停留了一瞬，低头默默将稿纸卷回。"
+
+[sub_resource type="Resource" id="Resource_nk2wh"]
+script = ExtResource("3_674eb")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_16im1"]
+script = ExtResource("4_l7sjd")
+value = 16
+
+[sub_resource type="Resource" id="Resource_njtau"]
+script = ExtResource("3_674eb")
+str_props = "health"
+value = 16
+
+[sub_resource type="Resource" id="Resource_yfo1u"]
+script = ExtResource("4_l7sjd")
+value = 6
+
+[sub_resource type="Resource" id="Resource_iud5k"]
+script = ExtResource("6_x4lp0")
+operators = Array[ExtResource("2_em8b7")]([SubResource("Resource_nk2wh"), SubResource("Resource_16im1"), SubResource("Resource_njtau"), SubResource("Resource_yfo1u")])
+
+[sub_resource type="Resource" id="Resource_jykyq"]
+script = ExtResource("7_xbhsp")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_518hp"]
+script = ExtResource("8_gcgmt")
+choice_result = SubResource("Resource_iud5k")
+requirement = SubResource("Resource_jykyq")
+description = "连声称难得郑广文眼力，随即翻开其他废纸就近请教——可还有遗珠。"
+
+[sub_resource type="Resource" id="Resource_gjmf0"]
+script = ExtResource("10_slv8o")
+volatile_stat = "AMBITION"
+value = 30
+operator = 1
+
+[sub_resource type="Resource" id="Resource_lme16"]
+script = ExtResource("10_slv8o")
+volatile_stat = "AMBITION"
+value = 100
+
+[sub_resource type="Resource" id="Resource_2pjl2"]
+script = ExtResource("11_3xoi1")
+operators = Array[ExtResource("9_nmpuf")]([SubResource("Resource_gjmf0"), SubResource("Resource_lme16")])
+
+[resource]
+script = ExtResource("12_7wrkc")
+requirement = SubResource("Resource_2pjl2")
+era = "747_kuangda"
+_target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility", "action:main:fangshi"])
+options = Array[ExtResource("1_ndtcx")]([SubResource("Resource_xbhsp"), SubResource("Resource_hpjpi"), SubResource("Resource_518hp")])
+uuid = "qingliu_passive_benefits_zhengqian_spiritual_anchor_identity_qingliu_official"
+name = "菜市口旧稿"
+description = "春晨下杜城菜市口，郑虔从人潮中挤出来拦住你，从怀里掏出一卷被油渍浸透的旧稿——去岁你丢进灶膛的那卷，被他从火口抢了回来。他什么也没说，只是把那卷纸塞进你手里，转身便走。纸张边缘焦痕犹在，烟熏味混着菜市的葱韭气息。"

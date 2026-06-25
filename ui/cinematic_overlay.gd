@@ -30,14 +30,6 @@ func _ready() -> void:
 	dimmer.gui_input.connect(_on_dimmer_gui_input)
 
 
-## 捕获 Cmd+Space 快捷键，跳过正在播放的过场
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.keycode == KEY_SPACE and event.meta_pressed:
-		if _is_playing and not _skip_requested:
-			AudioManager.play_sfx_category("book_flip")
-			_skip()
-
-
 ## 点按 Dimmer（全屏遮罩）以快进过场
 func _on_dimmer_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

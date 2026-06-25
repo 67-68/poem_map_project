@@ -133,8 +133,6 @@ func _process(delta: float) -> void:
 	# 1. 浮点时间匀速流逝 (保留你原有的半即时逻辑)
 	GameState.year += speed * delta / DAYS_PER_YEAR
 	EventBus.year_changed.emit(GameState.year)
-	current_day = TimeService._last_total_days % 10
-	current_day_of_year = TimeService._last_total_days % DAYS_PER_YEAR
 
 	# 2. 检查浮点数队列 (你原有的逻辑)
 	while not event_queue.is_empty() and GameState.year >= event_queue[0].time:
@@ -145,6 +143,10 @@ func _process(delta: float) -> void:
 			event.callback.call()
 
 	_emit_time_events()
+	# current_day / current_day_of_year 在 _emit_time_events() 之后更新，
+	# 确保与 _last_total_days 同步（避免帧滞后显示上一帧的旧值）
+	current_day = TimeService._last_total_days % 10
+	current_day_of_year = TimeService._last_total_days % DAYS_PER_YEAR
 	
 func speed_up():
 	if speed != 4:

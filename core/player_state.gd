@@ -36,14 +36,32 @@ signal before_emotion_change(emo_name: String, delta: int)
 ## RelationFlagManager 监听此信号，根据好感度对属性变化量施加社交倍率。
 signal before_property_change(prop_name: String, delta: int)
 
+var _init_props_retry_count: int = 0
+const MAX_INIT_PROPS_RETRY: int = 5
+
 func init_props():
 	var resources = SourceOfTruth.debug_dashboard_state.resources
 	append_stat(ENUMS.PROPS.MONEY, resources.money)
 	append_stat(ENUMS.PROPS.HEALTH, resources.health)
 	append_stat(ENUMS.PROPS.LITERARY_FAME, resources.literary_fame)
 	append_stat(ENUMS.PROPS.TALENT, resources.talent)
-	append_stat(ENUMS.PROPS.PROGRESS, resources.career_progress)
-	append_stat(ENUMS.PROPS.TIME, 10)
+	append_stat(ENUMS.PROPS.PROGRESS, resources.progress)
+	if not append_stat(ENUMS.PROPS.TIME, 10):
+		breakpoint
+		Logging.warn('init_props: TIME stat not found in Database, will retry via call_deferred')
+		_init_props_retry_count = 0
+		call_deferred("_retry_init_time")
+
+func _retry_init_time():
+	_init_props_retry_count += 1
+	if _init_props_retry_count > MAX_INIT_PROPS_RETRY:
+		Logging.err('_retry_init_time: exceeded max retry count %d, giving up' % MAX_INIT_PROPS_RETRY)
+		return
+	if append_stat(ENUMS.PROPS.TIME, 10):
+		Logging.info('_retry_init_time: TIME stat initialized successfully on retry %d' % _init_props_retry_count)
+	else:
+		Logging.warn('_retry_init_time: TIME stat still not found, retry %d/%d' % [_init_props_retry_count, MAX_INIT_PROPS_RETRY])
+		call_deferred("_retry_init_time")
 
 func init_traits():
 	var action_tracks = SourceOfTruth.debug_dashboard_state.action_tracks
@@ -144,15 +162,16 @@ func _on_request_add_imaginary(tag: String):
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()
 
-func append_stat(stat_name, data):
+func append_stat(stat_name, data) -> bool:
 	if stat_name is int:
 		var int_stat = ENUMS.to_prop_str(stat_name)
 		if not int_stat:
+			breakpoint
 			Logging.err('do not find stat %s' % stat_name)
-			return
+			return false
 		stat_name = int_stat
 	
-	# _time → time 映射：外部只能通过 TimeOperator 操作 _time
+	# _time → time 映射：外部只能通过 TimeOperator 操作 _`
 	if stat_name == "_time":
 		stat_name = "time"
 
@@ -160,7 +179,7 @@ func append_stat(stat_name, data):
 	# 需要提前登记stat
 	if not stat:
 		Logging.err('do not find stat %s' % stat_name)
-		return
+		return false
 
 	var amount_to_change = data
 
@@ -188,12 +207,10 @@ func append_stat(stat_name, data):
 		Logging.info("change stat %s: fatigue multiplier applied (*%.2f) → %d" % [stat_name, fatigue_multiplier, amount_to_change])
 
 	Logging.info('change stat %s by %d' % [stat_name, amount_to_change])
-	stat.val += amount_to_change # 永远执行加法
-	# hard_max clamp
-	if stat.hard_max >= 0 and stat.val > stat.hard_max:
-		stat.val = stat.hard_max
-		Logging.info('change stat %s clamped to hard_max=%d' % [stat_name, stat.hard_max])
+	var new_val: int = stat.val + amount_to_change
+	stat.set_val(new_val)
 	player_stat_changed.emit(stat_name)
+	return true
 
 func get_stat_val(stat_name):
 	if stat_name is int:
@@ -212,12 +229,12 @@ func get_stat_val(stat_name):
 		return 0
 	return stat.val
 
-func set_stat_val(stat_name, data):
+func set_stat_val(stat_name, data) -> bool:
 	if stat_name is int:
 		var int_stat = ENUMS.to_prop_str(stat_name)
 		if not int_stat:
 			Logging.err('do not find stat %s' % stat_name)
-			return
+			return false
 		stat_name = int_stat
 	
 	# _time → time 映射：外部只能通过 TimeOperator 操作 _time
@@ -227,19 +244,12 @@ func set_stat_val(stat_name, data):
 	var stat = Database.get_property(stat_name)
 	if not stat:
 		Logging.err('do not find stat %s' % stat_name)
-		return
+		return false
 	
-	# hard_max clamp
-	if stat.hard_max >= 0 and data > stat.hard_max:
-		data = stat.hard_max
-		Logging.info('set stat %s clamped to hard_max=%d' % [stat_name, stat.hard_max])
-	if data < 0:
-		data = 0
-		Logging.info('set stat %s clamped to min_val=0' % stat_name)
-	
-	stat.val = data
+	stat.set_val(data)
 	Logging.info('set stat %s to %d' % [stat_name, data])
 	player_stat_changed.emit(stat_name)
+	return true
 
 func force_set_stat_val(stat_name, data):
 	"""强制设值，跳过 hard_max 检查（用于 debug / 特殊场景）"""

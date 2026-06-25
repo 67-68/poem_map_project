@@ -1,0 +1,141 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://caseqbw3svb0r"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_r3n8k"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ohl77"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_0g3m8"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_kyr6p"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_2os7r"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_kb336"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_g7ppl"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="8_morfh"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_iakqj"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="10_74lv5"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_c2s8a"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_sldbv"]
+
+[sub_resource type="Resource" id="Resource_r3n8k"]
+script = ExtResource("3_0g3m8")
+str_props = "HEALTH"
+value = 12
+
+[sub_resource type="Resource" id="Resource_ohl77"]
+script = ExtResource("3_0g3m8")
+str_props = "literary_fame"
+value = 4
+
+[sub_resource type="Resource" id="Resource_0g3m8"]
+script = ExtResource("3_0g3m8")
+str_props = "health"
+value = -24
+
+[sub_resource type="Resource" id="Resource_kyr6p"]
+script = ExtResource("4_kyr6p")
+value = 12
+
+[sub_resource type="Resource" id="Resource_2os7r"]
+script = ExtResource("5_2os7r")
+operators = Array[ExtResource("2_ohl77")]([SubResource("Resource_r3n8k"), SubResource("Resource_ohl77"), SubResource("Resource_0g3m8"), SubResource("Resource_kyr6p")])
+
+[sub_resource type="Resource" id="Resource_kb336"]
+script = ExtResource("6_kb336")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_g7ppl"]
+script = ExtResource("7_g7ppl")
+choice_result = SubResource("Resource_2os7r")
+requirement = SubResource("Resource_kb336")
+description = "接过毡子披上，顺手把桌上半壶浊酒推到他面前。"
+
+[sub_resource type="Resource" id="Resource_morfh"]
+script = ExtResource("3_0g3m8")
+str_props = "HEALTH"
+value = 12
+
+[sub_resource type="Resource" id="Resource_iakqj"]
+script = ExtResource("3_0g3m8")
+str_props = "literary_fame"
+value = 4
+
+[sub_resource type="Resource" id="Resource_74lv5"]
+script = ExtResource("3_0g3m8")
+str_props = "health"
+value = 18
+
+[sub_resource type="Resource" id="Resource_c2s8a"]
+script = ExtResource("4_kyr6p")
+value = 12
+
+[sub_resource type="Resource" id="Resource_sldbv"]
+script = ExtResource("8_morfh")
+imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+
+[sub_resource type="Resource" id="Resource_qmae1"]
+script = ExtResource("5_2os7r")
+operators = Array[ExtResource("2_ohl77")]([SubResource("Resource_morfh"), SubResource("Resource_iakqj"), SubResource("Resource_74lv5"), SubResource("Resource_c2s8a"), SubResource("Resource_sldbv")])
+
+[sub_resource type="Resource" id="Resource_bt2te"]
+script = ExtResource("7_g7ppl")
+choice_result = SubResource("Resource_qmae1")
+description = "手指碰到毡子时顿了一下。披上后低头研墨，许久没有说话。"
+
+[sub_resource type="Resource" id="Resource_b0rp8"]
+script = ExtResource("3_0g3m8")
+str_props = "HEALTH"
+value = 12
+
+[sub_resource type="Resource" id="Resource_vnqet"]
+script = ExtResource("3_0g3m8")
+str_props = "literary_fame"
+value = 4
+
+[sub_resource type="Resource" id="Resource_1qj8x"]
+script = ExtResource("4_kyr6p")
+value = 18
+
+[sub_resource type="Resource" id="Resource_xsm0l"]
+script = ExtResource("3_0g3m8")
+str_props = "health"
+value = 18
+
+[sub_resource type="Resource" id="Resource_4o2oi"]
+script = ExtResource("4_kyr6p")
+value = 6
+
+[sub_resource type="Resource" id="Resource_w8sbp"]
+script = ExtResource("5_2os7r")
+operators = Array[ExtResource("2_ohl77")]([SubResource("Resource_b0rp8"), SubResource("Resource_vnqet"), SubResource("Resource_1qj8x"), SubResource("Resource_xsm0l"), SubResource("Resource_4o2oi")])
+
+[sub_resource type="Resource" id="Resource_hv4lj"]
+script = ExtResource("6_kb336")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_di6q2"]
+script = ExtResource("7_g7ppl")
+choice_result = SubResource("Resource_w8sbp")
+requirement = SubResource("Resource_hv4lj")
+description = "接过毡子连声道谢，随即提起广文馆近日可有富家子弟求学。"
+
+[sub_resource type="Resource" id="Resource_p47h4"]
+script = ExtResource("10_74lv5")
+volatile_stat = "AMBITION"
+value = 30
+operator = 1
+
+[sub_resource type="Resource" id="Resource_okn66"]
+script = ExtResource("10_74lv5")
+volatile_stat = "AMBITION"
+value = 100
+
+[sub_resource type="Resource" id="Resource_ss2w7"]
+script = ExtResource("11_c2s8a")
+operators = Array[ExtResource("9_iakqj")]([SubResource("Resource_p47h4"), SubResource("Resource_okn66")])
+
+[resource]
+script = ExtResource("12_sldbv")
+requirement = SubResource("Resource_ss2w7")
+era = "747_kuangda"
+_target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ENV_SOCIETY_FAMINE:starving_bone", "ENV_NATURE_SNOWSTORM:lone_snow", "emotion_pair:pair_survival", "action:main:jiaoyou"])
+options = Array[ExtResource("1_r3n8k")]([SubResource("Resource_g7ppl"), SubResource("Resource_bt2te"), SubResource("Resource_di6q2")])
+uuid = "qingliu_passive_benefits_zhengqian_solidarity_wretched_identity_qingliu_official"
+name = "破毡披肩"
+description = "“明日广文馆有课，用不上这个。”毡子上还带着他刚离开的体温。你看见他肩膀在灯下微微发颤。"
