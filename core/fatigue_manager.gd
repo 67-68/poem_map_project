@@ -1,41 +1,12 @@
 class_name FatigueManager extends Node
 # FatigueManager — 疲劳惩罚倍率管理器
+# ⚠️ FATIGUE 属性已从系统中移除，此管理器已停止工作。
 #
 # 架构概要：
 #   PlayerState.append_stat() 在属性变更前发射 before_property_change 信号，
 #   PlayerState.append_emotion() 在情绪变更前发射 before_emotion_change 信号，
-#   FatigueManager 监听这两个信号，根据当前 fatigue 值计算惩罚倍率，
-#   存入静态变量，调用方在信号返回后读取并应用。
-#
-# 倍率规则（fatigue > 70）：
-#   好属性（玩家希望增加的）→ 0.5x（收益减半）
-#   坏属性（玩家希望减少的）→ 2.0x（代价加倍）
-#   情绪 → 0.5x（感受钝化）
-#
-# fatigue <= 70 → 倍率 = 1.0（无影响）
-# ═══════════════════════════════════════════════════════════
-
-## 硬编码的"好属性"对照表（key 为 Database.prop 的 uuid/name）
-const GOOD_PROPS: Dictionary = {
-	"literary_fame": true,
-	"official_prestige": true,
-	"talent": true,
-	"money": true,
-	"health": true,
-	"inspiration": true,
-	"career_progress": true,
-}
-
-## 硬编码的"坏属性"对照表
-const BAD_PROPS: Dictionary = {
-	"fatigue": true,
-	"burnout": true,
-	"sick": true,
-	"drunk": true,
-}
-
-## 疲劳触发阈值
-const FATIGUE_THRESHOLD: int = 70
+#   FatigueManager 监听这两个信号。当前由于 fatigue 属性不存在，
+#   所有倍率保持 1.0（无影响）。
 
 ## 由 before_property_change 信号处理器写入、append_stat 读取并重置的属性倍率
 static var _current_fatigue_multiplier: float = 1.0
@@ -55,34 +26,14 @@ static func connect_to_player_state() -> void:
 	Logging.info("FatigueManager: connected to PlayerState.before_property_change and before_emotion_change")
 
 
-## 信号处理器：属性即将变更时根据疲劳值计算惩罚倍率
-static func _on_before_property_change(prop_name: String, delta: int) -> void:
-	var fatigue = PlayerState.get_stat_val(&"fatigue")
-	if fatigue <= FATIGUE_THRESHOLD:
-		_current_fatigue_multiplier = 1.0
-		return
-
-	# 只对已知的好/坏属性施加疲劳倍率
-	var is_good = GOOD_PROPS.has(prop_name)
-	var is_bad = BAD_PROPS.has(prop_name)
-	if not is_good and not is_bad:
-		_current_fatigue_multiplier = 1.0
-		return
-
-	if is_good:
-		_current_fatigue_multiplier = 0.5
-	else:
-		_current_fatigue_multiplier = 2.0
-	Logging.info("FatigueManager: fatigue=%d, prop=%s, is_good=%s, multiplier=%.2f" % [fatigue, prop_name, is_good, _current_fatigue_multiplier])
+## 信号处理器：Fatigue 属性已移除，始终返回倍率 1.0
+static func _on_before_property_change(_prop_name: String, _delta: int) -> void:
+	_current_fatigue_multiplier = 1.0
 
 
-## 信号处理器：情绪即将变更时根据疲劳值计算惩罚倍率
+## 信号处理器：Fatigue 属性已移除，始终返回倍率 1.0
 static func _on_before_emotion_change(_emo_name: String, _delta: int) -> void:
-	var fatigue = PlayerState.get_stat_val(&"fatigue")
-	if fatigue > FATIGUE_THRESHOLD:
-		_current_emotion_multiplier = 0.5
-	else:
-		_current_emotion_multiplier = 1.0
+	_current_emotion_multiplier = 1.0
 
 
 ## 消费者模式：获取当前属性倍率并重置为 1.0

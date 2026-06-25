@@ -10,8 +10,6 @@ const ARROGANCE_THRESHOLD := 30
 const ANGER_THRESHOLD := 30
 const SORROW_THRESHOLD := 30
 const AMBITION_THRESHOLD := 25
-const BURNOUT_THRESHOLD := 25
-
 # ── Tier 判定 ──────────────────────────────────────────
 static func determine_tier() -> int:
 	# Step 1: 判断当前 IAM（用 int 枚举，走 PlayerState.has_trait 内部 to_traits_str 转换）
@@ -29,7 +27,6 @@ static func determine_tier() -> int:
 	var anger: int = PlayerState.get_emotion(ENUMS.EMOTION.ANGER)
 	var sorrow: int = PlayerState.get_emotion(ENUMS.EMOTION.SORROW)
 	var ambition: int = PlayerState.get_emotion(ENUMS.EMOTION.AMBITION)
-	var burnout: int = PlayerState.get_stat_val("burnout")  # PROP，非 emotion
 
 	# Step 3: 按优先级判定
 	# Tier 3 (高洁): kuangke + (tranquility >= 30 or arrogance >= 30)
@@ -40,8 +37,8 @@ static func determine_tier() -> int:
 	if anger >= ANGER_THRESHOLD or sorrow >= SORROW_THRESHOLD:
 		return 2
 
-	# Tier 1 (污染): zuanying/fengying + (ambition >= 25 or burnout >= 25)
-	if iam in ["zuanying", "fengying"] and (ambition >= AMBITION_THRESHOLD or burnout >= BURNOUT_THRESHOLD):
+	# Tier 1 (污染): zuanying/fengying + ambition >= 25
+	if iam in ["zuanying", "fengying"] and ambition >= AMBITION_THRESHOLD:
 		return 1
 
 	# 兜底污染

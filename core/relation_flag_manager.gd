@@ -303,10 +303,7 @@ static func clear_favor(target_tag: String) -> void:
 #   append_stat() 在信号返回后读取此倍率，修正属性变化量。
 #
 # 好属性（玩家希望增加的）：
-#   literary_fame, official_prestige, talent, money, health, inspiration
-#
-# 坏属性（玩家希望减少的）：
-#   fatigue, burnout
+#   literary_fame, progress, talent, money, health
 #
 # 倍率规则：
 #   高好感度 → 好属性倍率 >1.0（更多收益），坏属性倍率 <1.0（更少代价）
@@ -316,18 +313,14 @@ static func clear_favor(target_tag: String) -> void:
 ## 硬编码的"好属性"对照表（key 为 Database.prop 的 uuid/name）
 const GOOD_PROPS: Dictionary = {
 	"literary_fame": true,
-	"official_prestige": true,
+	"progress": true,
 	"talent": true,
 	"money": true,
 	"health": true,
-	"inspiration": true,
 }
 
 ## 硬编码的"坏属性"对照表
-const BAD_PROPS: Dictionary = {
-	"fatigue": true,
-	"burnout": true,
-}
+const BAD_PROPS: Dictionary = {}
 
 ## 由信号处理器写入、append_stat 读取并重置的社交倍率
 static var _current_favor_multiplier: float = 1.0

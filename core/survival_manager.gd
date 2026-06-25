@@ -50,26 +50,10 @@ func decay(prop_enum, threshold, decay_val):
         append_prop(prop_enum, -current_val)
 
 func _decay_volatile_emotions():
-    # 使用各属性自身的 decay_threshold，不再硬编码
-    decay(ENUMS.PROPS.DRUNK, _get_decay_threshold(ENUMS.PROPS.DRUNK), _get_decay_threshold(ENUMS.PROPS.DRUNK))
-    decay(ENUMS.PROPS.INSPIRATION, _get_decay_threshold(ENUMS.PROPS.INSPIRATION), _get_decay_threshold(ENUMS.PROPS.INSPIRATION))
-    decay(ENUMS.PROPS.FATIGUE, _get_decay_threshold(ENUMS.PROPS.FATIGUE), _get_decay_threshold(ENUMS.PROPS.FATIGUE))
+    pass
 
 func _process_fatigue_accumulation():
-    # 使用 soft_max 替换魔法数字 100，溢出后复位到 soft_max - 1
-    var drunk_soft = _get_soft_max(ENUMS.PROPS.DRUNK)
-    var fatigue_soft = _get_soft_max(ENUMS.PROPS.FATIGUE)
-    var burnout_soft = _get_soft_max(ENUMS.PROPS.BURNOUT)
-
-    if get_prop(ENUMS.PROPS.DRUNK) >= drunk_soft:
-        append_prop(ENUMS.PROPS.FATIGUE, 20)
-        set_prop(ENUMS.PROPS.DRUNK, drunk_soft - 1)
-    if get_prop(ENUMS.PROPS.FATIGUE) >= fatigue_soft:
-        append_prop(ENUMS.PROPS.BURNOUT, 10)
-        set_prop(ENUMS.PROPS.FATIGUE, fatigue_soft - 1)
-    if get_prop(ENUMS.PROPS.BURNOUT) >= burnout_soft:
-        append_prop(ENUMS.PROPS.HEALTH,-20)
-        set_prop(ENUMS.PROPS.BURNOUT, burnout_soft - 1)
+    pass
 
 func aggregate_trait_effect():
     for t in PlayerState.get_traits():
@@ -130,12 +114,7 @@ func _process_single_xun_settlement():
     EventBus.emit_signal("xun_settlement_completed")
 
 func _process_health_checks():
-    if get_prop(ENUMS.PROPS.DRUNK) > 50:
-        append_prop(ENUMS.PROPS.FATIGUE, -20)
-    if get_prop(ENUMS.PROPS.BURNOUT) > 30:
-        append_prop(ENUMS.PROPS.SICK, 5)
-    if get_prop(ENUMS.PROPS.SICK) > 0:
-        append_prop(ENUMS.PROPS.HEALTH, -10)
+    pass
 
 func _update_heartbeat_sfx() -> void:
     """根据健康值启动/停止心跳循环音效。"""

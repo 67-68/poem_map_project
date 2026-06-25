@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://d07yyps3wufy"]
+
+[ext_resource type="Script" path="res://tools/_sync_csv_to_tres.gd" id="1_sync"]
+
+[node name="SyncCSVToTRES" type="Node"]
+script = ExtResource("1_sync")

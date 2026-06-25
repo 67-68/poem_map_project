@@ -14,9 +14,7 @@ static var archetype_effects = {
 			ENUMS.EMOTION.ARROGANCE: 15,
 			ENUMS.EMOTION.TRANQUILITY: -10
 		},
-		"props": {
-			ENUMS.PROPS.DRUNK: 5
-		}
+		"props": {}
 	},
 	ARCHETYPE.ZEN: {
 		"emotions": {
@@ -39,9 +37,7 @@ static var archetype_effects = {
 			ENUMS.EMOTION.SORROW: 15,
 			ENUMS.EMOTION.AMBITION: -5
 		},
-		"props": {
-			ENUMS.PROPS.FATIGUE: 5
-		}
+		"props": {}
 	},
 	ARCHETYPE.FLATTERER: {
 		"emotions": {
@@ -56,9 +52,7 @@ static var archetype_effects = {
 			ENUMS.EMOTION.SORROW: -10,
 			ENUMS.EMOTION.AMBITION: -10
 		},
-		"props": {
-			ENUMS.PROPS.DRUNK: 15
-		}
+		"props": {}
 	}
 }
 

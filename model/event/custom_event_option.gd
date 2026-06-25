@@ -21,11 +21,6 @@ func upgrade_random_imagery():
         description = '怎么连imagery都没有啊。浪费了这一次的机会'
         return
     
-    if not PlayerState.get_emotion(ENUMS.PROPS.INSPIRATION) > 25:
-        description = '目前没有灵感'
-        return
-
-    PlayerState.set_emotion(ENUMS.PROPS.INSPIRATION,0)
     # 随机选择一个imagery
     var random_imaginary = active_imaginaries.keys()[randi() % active_imaginaries.size()]
     description = '将要升级Imaginary: %s' % random_imaginary.name

@@ -62,19 +62,12 @@ enum ACTION_TAGS {
 }
 
 enum PROPS {
-    OFFICIAL_PRESTIGE,
-    LITERARY_FAME,
-    TALENT,
     MONEY,
     HEALTH,
-
-    # 注意，以下这几个和上面的不是一个类型的，他们是 0 -> 100(最大)的
-    FATIGUE, # 短期的疲惫，行动点 影响才华产出效率
-    BURNOUT, # 长期的精神疲惫，精神疾病
-    DRUNK, # 双刃剑：降低理性，但可能提供某些意象的获取折扣
-    SICK, # 疲劳，到达阈值直接强制睡觉。把那个该死的 STRESS 删了！
-    INSPIRATION,  # 灵感（这玩意其实更像一种代币或 Buffer，用来兑换意象）
-    CAREER_PROGRESS  # 职业进展（仕途/声望/生涯阶段进度，0 = 起步） 目前仅在745 baiye era use
+    LITERARY_FAME,
+    TALENT,
+    PROGRESS,
+    TIME
 }
 
 # 2. 核心情绪层 (The Soul - 意象生成的真正温床，建议采用双向坐标系)

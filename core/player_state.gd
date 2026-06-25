@@ -38,17 +38,12 @@ signal before_property_change(prop_name: String, delta: int)
 
 func init_props():
 	var resources = SourceOfTruth.debug_dashboard_state.resources
-	append_stat(ENUMS.PROPS.OFFICIAL_PRESTIGE, resources.official_prestige)
+	append_stat(ENUMS.PROPS.MONEY, resources.money)
+	append_stat(ENUMS.PROPS.HEALTH, resources.health)
 	append_stat(ENUMS.PROPS.LITERARY_FAME, resources.literary_fame)
 	append_stat(ENUMS.PROPS.TALENT, resources.talent)
-	append_stat(ENUMS.PROPS.BURNOUT, resources.burnout)
-	append_stat(ENUMS.PROPS.DRUNK, resources.drunk)
-	append_stat(ENUMS.PROPS.FATIGUE, resources.fatigue)
-	append_stat(ENUMS.PROPS.SICK, resources.sick)
-	append_stat(ENUMS.PROPS.INSPIRATION, resources.inspiration)
-	append_stat(ENUMS.PROPS.HEALTH, resources.health)
-	append_stat(ENUMS.PROPS.CAREER_PROGRESS, resources.career_progress)
-	append_stat(ENUMS.PROPS.MONEY, resources.money)
+	append_stat(ENUMS.PROPS.PROGRESS, resources.career_progress)
+	append_stat(ENUMS.PROPS.TIME, 10)
 
 func init_traits():
 	var action_tracks = SourceOfTruth.debug_dashboard_state.action_tracks
@@ -156,6 +151,10 @@ func append_stat(stat_name, data):
 			Logging.err('do not find stat %s' % stat_name)
 			return
 		stat_name = int_stat
+	
+	# _time → time 映射：外部只能通过 TimeOperator 操作 _time
+	if stat_name == "_time":
+		stat_name = "time"
 
 	var stat = Database.get_property(stat_name)
 	# 需要提前登记stat
@@ -220,6 +219,10 @@ func set_stat_val(stat_name, data):
 			Logging.err('do not find stat %s' % stat_name)
 			return
 		stat_name = int_stat
+	
+	# _time → time 映射：外部只能通过 TimeOperator 操作 _time
+	if stat_name == "_time":
+		stat_name = "time"
 	
 	var stat = Database.get_property(stat_name)
 	if not stat:

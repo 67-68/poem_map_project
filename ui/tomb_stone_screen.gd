@@ -32,9 +32,9 @@ func render_entropy_death(cause_text: String) -> void:
 	bbcode += "[center][color=#aaaaaa]%s[/color][/center]\n\n" % cause_text
 	
 	# 【左上角：风化的世俗属性】 极低透明度的灰色（#88888855），代表无人在意 💀
-	bbcode += "[color=#88888855][font_size=16]数据快照 | 财富:%d | 官场名声:%d [/font_size][/color]\n\n" % [
+	bbcode += "[color=#88888855][font_size=16]数据快照 | 财富:%d | 仕途进程:%d [/font_size][/color]\n\n" % [
 		PlayerState.get_stat_val(ENUMS.PROPS.MONEY),
-		PlayerState.get_stat_val(ENUMS.PROPS.OFFICIAL_PRESTIGE)
+		PlayerState.get_stat_val(ENUMS.PROPS.PROGRESS)
 	]
 	
 	# 【中部：平庸的历史长河】

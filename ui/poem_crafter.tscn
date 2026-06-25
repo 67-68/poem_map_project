@@ -2,11 +2,29 @@
 
 [ext_resource type="Script" uid="uid://d28jgf66xnd51" path="res://ui/poem_crafter.gd" id="1_otk17"]
 [ext_resource type="PackedScene" uid="uid://co4eess1lguhe" path="res://ui/imaginery_item.tscn" id="1_ps720"]
+[ext_resource type="Script" uid="uid://ojn7m81iv33i" path="res://ui/right_info_panel.gd" id="2_83xno"]
 [ext_resource type="Texture2D" uid="uid://cckktvmpe61oe" path="res://assets/character/lilinfu_smile.png" id="2_otk17"]
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="3_36lce"]
 [ext_resource type="PackedScene" uid="uid://dhm3awu3pacwl" path="res://ui/poem_slot.tscn" id="3_o11fd"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="4_sfx"]
 
-[node name="H" type="HBoxContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rixq6"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+shadow_color = Color(0, 0, 0, 0.45882353)
+shadow_size = 10
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nkd15"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+texture = ExtResource("3_36lce")
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
+
+[node name="H" type="HBoxContainer" unique_id=1314100312]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -16,41 +34,51 @@ scale = Vector2(1, 1.0082988)
 theme_override_constants/separation = 10
 script = ExtResource("1_otk17")
 
-[node name="ImagenaryScroll" type="ScrollContainer" parent="."]
+[node name="ShadowBox" type="PanelContainer" parent="." unique_id=1214157939]
+custom_minimum_size = Vector2(320, 500)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rixq6")
+script = ExtResource("2_83xno")
+
+[node name="Panel" type="PanelContainer" parent="ShadowBox" unique_id=937197515]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_nkd15")
+
+[node name="ImagenaryScroll" type="ScrollContainer" parent="." unique_id=310450488]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HFlowContainer" type="HFlowContainer" parent="ImagenaryScroll"]
+[node name="HFlowContainer" type="HFlowContainer" parent="ImagenaryScroll" unique_id=281603437]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ImageneryItem" parent="ImagenaryScroll/HFlowContainer" instance=ExtResource("1_ps720")]
+[node name="ImageneryItem" parent="ImagenaryScroll/HFlowContainer" unique_id=68539205 instance=ExtResource("1_ps720")]
 layout_mode = 2
 script = null
 
-[node name="ImageneryItem2" parent="ImagenaryScroll/HFlowContainer" instance=ExtResource("1_ps720")]
+[node name="ImageneryItem2" parent="ImagenaryScroll/HFlowContainer" unique_id=1026238507 instance=ExtResource("1_ps720")]
 layout_mode = 2
 script = null
 
-[node name="ImageneryItem3" parent="ImagenaryScroll/HFlowContainer" instance=ExtResource("1_ps720")]
+[node name="ImageneryItem3" parent="ImagenaryScroll/HFlowContainer" unique_id=1219083935 instance=ExtResource("1_ps720")]
 layout_mode = 2
 script = null
 
-[node name="ImageneryItem4" parent="ImagenaryScroll/HFlowContainer" instance=ExtResource("1_ps720")]
+[node name="ImageneryItem4" parent="ImagenaryScroll/HFlowContainer" unique_id=75862062 instance=ExtResource("1_ps720")]
 layout_mode = 2
 script = null
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1335481736]
 custom_minimum_size = Vector2(3, 0)
 layout_mode = 2
 color = Color(0, 0, 0, 1)
 
-[node name="InputImagPanel" type="VBoxContainer" parent="."]
+[node name="InputImagPanel" type="VBoxContainer" parent="." unique_id=531798169]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="InputImagPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="InputImagPanel" unique_id=1811283455]
 custom_minimum_size = Vector2(350, 350)
 layout_mode = 2
 theme_override_constants/margin_left = 50
@@ -58,34 +86,34 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 50
 
-[node name="TextureRect" type="TextureRect" parent="InputImagPanel/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="InputImagPanel/MarginContainer" unique_id=1410283406]
 layout_mode = 2
 texture = ExtResource("2_otk17")
 expand_mode = 1
 
-[node name="H" type="HBoxContainer" parent="InputImagPanel"]
+[node name="H" type="HBoxContainer" parent="InputImagPanel" unique_id=1122163985]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PoemSlot" parent="InputImagPanel/H" instance=ExtResource("3_o11fd")]
+[node name="PoemSlot" parent="InputImagPanel/H" unique_id=1206392433 instance=ExtResource("3_o11fd")]
 layout_mode = 2
 
-[node name="PoemSlot2" parent="InputImagPanel/H" instance=ExtResource("3_o11fd")]
+[node name="PoemSlot2" parent="InputImagPanel/H" unique_id=1586651438 instance=ExtResource("3_o11fd")]
 layout_mode = 2
 
-[node name="PoemSlot3" parent="InputImagPanel/H" instance=ExtResource("3_o11fd")]
+[node name="PoemSlot3" parent="InputImagPanel/H" unique_id=958388417 instance=ExtResource("3_o11fd")]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="InputImagPanel"]
+[node name="Button" type="Button" parent="InputImagPanel" unique_id=290102770]
 layout_mode = 2
 size_flags_vertical = 3
 text = "开始创作"
 
-[node name="UISoundComponent" type="Node" parent="InputImagPanel/Button"]
+[node name="UISoundComponent" type="Node" parent="InputImagPanel/Button" unique_id=418807036]
 script = ExtResource("4_sfx")
 click_category = "book_impact"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="InputImagPanel"]
+[node name="RichTextLabel" type="RichTextLabel" parent="InputImagPanel" unique_id=1350550608]
 layout_mode = 2
 text = "代价是..."
 fit_content = true

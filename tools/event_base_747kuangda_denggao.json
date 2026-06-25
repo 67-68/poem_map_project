@@ -19,8 +19,8 @@
   "universal_tags": [
     "denggao"
   ],
-  "universal_requirement": "prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
-  "universal_result": "prop_add(name=FATIGUE; val=8)",
+  "universal_requirement": "emo_gt(name=AMBITION; val=30)|emo_lt(name=AMBITION; val=100)",
+  "universal_result": "prop_add(name=health; val=10)",
   "universal_option_requirement": "",
   "word_count_min": 30,
   "word_count_max": 150,
@@ -129,7 +129,7 @@
       "id": "opt_kuangke",
       "prompt": "用30字以内，写杜甫以狂客姿态回应眼前的处境。\n狂客的行为契约：不接对方抛出的议题。对方的球落在地上，你打你的球。\n回应必须是「换台」——用一个与对方期待完全无关的动作或短句，宣告这场对话的规则不由你定。\n{dynamic_blacklist}",
       "text": "（[狂客动作]）",
-      "result": "prop_sub(name=FATIGUE; val=30)|prop_sub(name=BURNOUT; val=15)|prop_add(name=INSPIRATION; val=20)|emo_add(name=TRANQUILITY; val=10)",
+      "result": "prop_sub(name=health; val=30)|prop_sub(name=health; val=15)|emo_add(name=TRANQUILITY; val=10)",
       "fixed": false,
       "accept_influence": [
         "emotion"
@@ -146,7 +146,7 @@
       "id": "opt_fengying",
       "prompt": "用30字以内，写杜甫以旷达姿态回应眼前的处境。\n旷达的行为契约：接受但不评价。动作本身即是完整的回应——不收下显得抗拒，加了表情或态度就变成了表态。\n回应必须是「收下然后该干嘛干嘛」——一个平淡的接取动作之后，注意力已移回自己手头的事或眼前的风景。\n{dynamic_blacklist}",
       "text": "（[旷达动作]）",
-      "result": "prop_sub(name=FATIGUE; val=15)|emo_add(name=SORROW; val=5)",
+      "result": "prop_sub(name=health; val=15)|emo_add(name=SORROW; val=5)",
       "fixed": false,
       "accept_influence": [
         "emotion"
@@ -163,7 +163,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内，写杜甫以低旷达姿态回应眼前的处境。\n低旷达的行为契约：把自己变成对方需要的形状。动力的来源在外不在内——对方的身份、对方的视线、对方的语气，决定了你的身体怎么摆。\n回应必须是「向外适配」——先读对方的需求，再调整自己。可以是一句话、一个动作、一次沉默。\n{dynamic_blacklist}",
       "text": "（[低旷达动作]）",
-      "result": "emo_add(name=AMBITION; val=20)|emo_add(name=ANGER; val=10)|prop_add(name=BURNOUT; val=10)|prop_add(name=FATIGUE; val=5)",
+      "result": "emo_add(name=AMBITION; val=20)|emo_add(name=ANGER; val=10)|prop_add(name=health; val=10)|prop_add(name=health; val=5)",
       "fixed": false,
       "accept_influence": [
         "emotion"
@@ -197,7 +197,7 @@
           "name": "乐游原·晨 — 晨雾中的长安画卷",
           "description": "清晨登上长安城东南的乐游原，晨雾未散，坊市的炊烟刚刚升起，远处的终南山若隐若现。阳光穿透薄雾，照在长安城的屋瓦上，像是镀了一层金边。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=FATIGUE; val=2)",
+          "operator_dsl": "prop_sub(name=health; val=2)",
           "tags": [
             "ENV_POLITICS_PROSPER:cloud_and_sun",
             "ENV_NATURE_SNOWSTORM:lone_snow",
@@ -234,7 +234,7 @@
           "name": "乐游原·夜 — 万家灯火与高处寒",
           "description": "向晚意不适，驱车登古原。夜幕降临，长安城内万家灯火如星河倒悬，而你站在这里，只觉得高处不胜寒。晚风吹过衣袂，带来远处模糊的市声。",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=FATIGUE; val=2)",
+          "operator_dsl": "prop_add(name=health; val=2)",
           "tags": [
             "ENV_NATURE_NIGHTMOON:cold_moon",
             "ENV_NATURE_AUTUMNWIND:falling_leaf",
@@ -269,7 +269,7 @@
           "name": "大雁塔·晨 — 塔下的权力展示场",
           "description": "慈恩寺内晨钟敲响，大雁塔直插云霄。塔下满是穿着光鲜的权贵子弟和新科进士，正在高谈阔论。有人在念新题的雁塔诗，有人在展示新得的荐书。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=BURNOUT; val=1)",
+          "operator_dsl": "prop_sub(name=health; val=1)",
           "tags": [
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
             "TARGET_FACTION_ROYAL:jade_step",
@@ -305,7 +305,7 @@
           "name": "大雁塔·夜 — 月光下的无名碑",
           "description": "夜深人静，你独自徘徊在大雁塔下。借着微弱的月光，你看着石碑上那些进士的题名，每一个名字后面都是一个飞黄腾达的故事——没有你的。月光冷得像霜。",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=FATIGUE; val=2)",
+          "operator_dsl": "prop_add(name=health; val=2)",
           "tags": [
             "ENV_NATURE_NIGHTMOON:cold_moon",
             "VIBE_THEME_HISTORY:ruined_wall",
@@ -341,7 +341,7 @@
           "name": "少陵原·晨 — 荒野与远城的对比",
           "description": "出城来到少陵原，这里是长安城外的荒野。清晨的风带着泥土的腥味，周围只有几处破败的农舍。远处一个老农弯着腰在干涸的地里翻土，那动作慢得像是在挖自己的坟。",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=FATIGUE; val=3)",
+          "operator_dsl": "prop_add(name=health; val=3)",
           "tags": [
             "TARGET_NPC_DUFU:thatched_grass",
             "ENV_SOCIETY_FAMINE:starving_bone",
@@ -377,7 +377,7 @@
           "name": "少陵原·夜 — 鬼火与荒原的独行",
           "description": "深夜的少陵原如同鬼蜮。远处的古墓群中偶尔闪过幽绿的光芒，野风穿过枯树枝丫发出呜呜的声响，像是什么人在哭。月亮躲在云后，只有鬼火照明。",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=FATIGUE; val=3)|prop_add(name=BURNOUT; val=1)",
+          "operator_dsl": "prop_add(name=health; val=3)|prop_add(name=health; val=1)",
           "tags": [
             "VIBE_THEME_MACABRE:ghost_fire",
             "ENV_NATURE_NIGHTMOON:cold_moon",
@@ -540,7 +540,7 @@
           "name": "疲惫 — 登高只是为了喘口气",
           "description": "不是为什么壮阔的视野，也不是为什么高远的志向——登高只是因为走累了想找个地方坐下。这高处除了风大一点，和别处也没什么不同。",
           "scale": 0.95,
-          "operator_dsl": "emo_add(name=FATIGUE; val=5)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_fatigue",
             "VIBE_PHILOSOPHY_ZEN:incense_ash",

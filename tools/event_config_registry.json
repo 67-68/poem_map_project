@@ -55,6 +55,14 @@
     "ganlu_journey": {
       "config": "tools/event_base_config_ganlu_journey.json",
       "csv": "data/4_eras/755_backhome/_ganlu_journey_events.csv"
+    },
+    "747kuangda_denggao": {
+      "config": "tools/event_base_747kuangda_denggao.json",
+      "csv": "data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.csv"
+    },
+    "bai_ye_honeymoon": {
+      "config": "tools/bai_ye_honeymoon_config.json",
+      "csv": "data/4_eras/745_ambition/baiye/honey_moon/_bai_ye_honeymoon_events.csv"
     }
   }
 }

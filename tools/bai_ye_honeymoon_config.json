@@ -34,7 +34,7 @@
           "id": "L1",
           "name": "清客/文法吏",
           "description": "中层幕僚、文书小吏，递话要钱，比直接面对权贵便宜",
-          "scale": 1.10,
+          "scale": 1.1,
           "operator_dsl": ""
         },
         {
@@ -75,7 +75,7 @@
           "name": "精神PUA",
           "description": "对方通过羞辱、冷落、贬低玩家地位来获取精神快感",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=fatigue; val=10)"
+          "operator_dsl": "prop_add(name=health; val=10)"
         }
       ]
     },
@@ -108,12 +108,14 @@
       ]
     }
   ],
-  "universal_requirement": "prop_lt(name=career_progress; val=70)",
-  "universal_result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=career_progress; val=10)",
+  "universal_requirement": "prop_lt(name=progress; val=70)",
+  "universal_result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=progress; val=10)",
   "word_count_min": 80,
   "word_count_max": 200,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
   "output_dir": "data/4_eras/745_ambition/baiye/honey_moon",
-  "universal_tags": ["action:main:baiye"]
+  "universal_tags": [
+    "action:main:baiye"
+  ]
 }

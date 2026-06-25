@@ -1,18 +1,12 @@
 @tool
 class_name TimeOperator extends BaseOperator
+## 时间操作器。通过 PlayerState 接口修改 time 属性。
+## 外部仅能操作 _time，PlayerState 内部将其映射到 time。
 
 @export var day: float = 10.0
-@export var _source_tags: Array[ENUMS.ACTION_TAGS] = []
-var source_tags: Array[String] = []:
-	get():
-		var result: Array[String] = []
-		for tag in _source_tags:
-			var tag_str = ENUMS.to_action_str(tag)
-			result.append(tag_str)
-		return result
 
 func operate():
-	PlayerState.current_action_tags = source_tags
-	TimeService.advance_time(int(day))
-	Logging.info('Time change by %s days, new year: %s' % [day, GameState.year])
-	PlayerState.current_action_tags.clear()
+	var actual_day: int = max(0, int(day))
+	PlayerState.append_stat("_time", -actual_day)
+	TimeService.advance_time(actual_day)
+	Logging.info('TimeOperator: 消耗 %d 天，调用 TimeService.advance_time(%d)' % [actual_day, actual_day])
