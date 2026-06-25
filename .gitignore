@@ -10,3 +10,4 @@ qdrant_storage/
 roo-code-settings.json
 .DS_Store
 build/*
+build/
