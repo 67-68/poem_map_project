@@ -356,6 +356,112 @@ func test_tier2_increments_flag_poem_tier2_count():
 
 
 # ════════════════════════════════════════════════════════════
+# F. 管道乘数矩阵测试 (Section 10)
+# ════════════════════════════════════════════════════════════
+
+func test_channel_broadcast_tier1_zero_output():
+	"""BROADCAST + Tier 1 → 工业垃圾，secular=0, history=0"""
+	var concepts = _make_tiered_concepts([1, 1])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.DENG_GAO)
+
+	# BROADCAST Tier 1: 两个乘数都是 0，不应有 money/literary_fame 产出
+	var has_reward_op = false
+	var has_trait = false
+	for op in result.operators:
+		if op is PropertyOperator and (op.property == "money" or op.property == "literary_fame"):
+			has_reward_op = true
+		if op is TraitOperator:
+			has_trait = true
+	assert_false(has_reward_op, "BROADCAST + Tier 1 不应有 money/literary_fame 产出")
+	assert_true(has_trait, "应有 [无病呻吟的废纸] trait")
+
+
+func test_channel_broadcast_tier2_fame_boost():
+	"""BROADCAST + Tier 2 → literary_fame * 1.2, money 惩罚清零"""
+	var concepts = _make_tiered_concepts([2, 2])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.HUAI_GU)
+
+	var has_fame = false
+	var has_negative_money = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "literary_fame" and op.value > 0:
+			has_fame = true
+		if op is PropertyOperator and op.property == "money" and op.value < 0:
+			has_negative_money = true
+	assert_true(has_fame, "应有 literary_fame 产出")
+	assert_false(has_negative_money, "BROADCAST 不应有 money 惩罚")
+
+
+func test_channel_broadcast_tier3_fame_max():
+	"""BROADCAST + Tier 3 → literary_fame * 1.5"""
+	var concepts = _make_tiered_concepts([3, 3])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.SHAN_SHUI)
+
+	var has_fame = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "literary_fame" and op.value > 0:
+			has_fame = true
+	assert_true(has_fame, "应有 literary_fame 产出")
+
+
+func test_channel_secular_tier1_money_boost():
+	"""SECULAR + Tier 1 → money * 1.5"""
+	var concepts = _make_tiered_concepts([1, 1])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.GAN_YE)
+
+	var has_money = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "money" and op.value > 0:
+			has_money = true
+	assert_true(has_money, "应有 money 产出")
+
+
+func test_channel_secular_tier2_political_suicide():
+	"""SECULAR + Tier 2 → 政治自杀，负 money * 3 + [触怒龙颜的死书]"""
+	var concepts = _make_tiered_concepts([2, 2])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.YING_ZHI)
+
+	var has_negative_money = false
+	var has_death_trait = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "money" and op.value < 0:
+			has_negative_money = true
+		if op is TraitOperator:
+			has_death_trait = true
+	assert_true(has_negative_money, "SECULAR + Tier 2 应有负 money")
+	assert_true(has_death_trait, "应有 [触怒龙颜的死书]")
+
+
+func test_channel_secular_tier3_no_secular():
+	"""SECULAR + Tier 3 → history 保持, secular=0（狂客不伺候权贵）"""
+	var concepts = _make_tiered_concepts([3, 3])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.GAN_YE)
+
+	var has_money = false
+	var has_fame = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "money":
+			has_money = true
+		if op is PropertyOperator and op.property == "literary_fame" and op.value > 0:
+			has_fame = true
+	assert_false(has_money, "SECULAR + Tier 3 不应有 money")
+	assert_true(has_fame, "应有 literary_fame")
+
+
+func test_legacy_no_poem_type_unchanged():
+	"""不传 poem_type → legacy 行为不变"""
+	var concepts = _make_tiered_concepts([1, 1])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+
+	# legacy Tier 1: 应有 money 产出
+	var has_money = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "money" and op.value > 0:
+			has_money = true
+	assert_true(has_money, "Legacy 路径 Tier 1 应有 money 产出")
+
+
+# ════════════════════════════════════════════════════════════
 # 辅助方法
 # ════════════════════════════════════════════════════════════
 

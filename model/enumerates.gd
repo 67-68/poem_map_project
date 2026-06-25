@@ -206,6 +206,20 @@ enum POEM_TYPE {
     SHAN_SHUI
 }
 
+## POEM_TYPE → 管道分组映射
+const POEM_TYPE_CHANNEL = {
+    POEM_TYPE.GAN_YE: "SECULAR",
+    POEM_TYPE.YING_ZHI: "SECULAR",
+    POEM_TYPE.DENG_GAO: "BROADCAST",
+    POEM_TYPE.HUAI_GU: "BROADCAST",
+    POEM_TYPE.JI_LV: "BROADCAST",
+    POEM_TYPE.SHAN_SHUI: "BROADCAST",
+}
+
+## 获取诗词类型的管道分组（SECULAR 功利 / BROADCAST 情绪）
+static func get_poem_type_channel(poem_type: int) -> String:
+    return POEM_TYPE_CHANNEL.get(poem_type, "BROADCAST")
+
 enum ACTION_TYPE {
     BAI_YE, # 拜谒
     JIAO_YOU,
