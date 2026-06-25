@@ -9,6 +9,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if not Database:
+		Logging.err("property_label: Database autoload not ready in _process, skipping frame")
+		return
 	text = base_text
 	for s in Database.get_properties_all():
 		text += "%s: %s\n" % [s, Database.get_property(s).val]

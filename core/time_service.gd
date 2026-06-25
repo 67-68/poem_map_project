@@ -126,6 +126,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 
+	if not GameState:
+		Logging.err("time_service: GameState autoload not ready in _process, skipping frame")
+		return
+
 	# 1. 浮点时间匀速流逝 (保留你原有的半即时逻辑)
 	GameState.year += speed * delta / DAYS_PER_YEAR
 	EventBus.year_changed.emit(GameState.year)

@@ -171,6 +171,9 @@ func _refresh_emotions(_unused: String = "") -> void:
 # ── PropGrid 构建 ────────────────────────────────────────
 
 func _rebuild_prop_grid() -> void:
+	if not Database:
+		Logging.err("LeftPlayerPanel: Database autoload not ready in _rebuild_prop_grid, skipping")
+		return
 	# 清空占位子节点
 	for child in _prop_grid.get_children():
 		child.queue_free()
@@ -188,6 +191,9 @@ func _rebuild_prop_grid() -> void:
 		Logging.info("LeftPlayerPanel: added prop label: %s" % label.text)
 
 func _refresh_prop_grid() -> void:
+	if not Database:
+		Logging.err("LeftPlayerPanel: Database autoload not ready in _refresh_prop_grid, skipping")
+		return
 	var props: Dictionary = Database.get_properties_all()
 	var children := _prop_grid.get_children()
 	

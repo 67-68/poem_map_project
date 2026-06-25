@@ -52,10 +52,14 @@ func init_buffers() -> void:
 		func(x): EventBus.request_event.emit(x, {}),
 		EventBus.event_confirmed
 	)
-	event_buffer = ManualBuffer.new(
-		event_popup_queue.add_item,
-		Database.get_history_events_all().values()
-	)
+	if not Database:
+		Logging.err("game_state: Database autoload not ready in init_buffers, using empty list")
+		event_buffer = ManualBuffer.new(event_popup_queue.add_item, [])
+	else:
+		event_buffer = ManualBuffer.new(
+			event_popup_queue.add_item,
+			Database.get_history_events_all().values()
+		)
 
 	poem_stack_manager = PopupQueue.new(
 		_apply_poem_data,
