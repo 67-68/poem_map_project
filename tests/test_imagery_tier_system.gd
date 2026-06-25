@@ -1,0 +1,378 @@
+# ════════════════════════════════════════════════════════════
+# 意象阶级·合成坍缩·诗词评价引擎 单元测试
+# 覆盖：TierDeterminer / ImaginaryComprehender / PoemCraftingCalculator
+# ════════════════════════════════════════════════════════════
+extends GutTest
+
+
+# ════════════════════════════════════════════════════════════
+# before_each — 重置 PlayerState 和 Database
+# ════════════════════════════════════════════════════════════
+
+func before_each():
+	# 清理 traits
+	PlayerState.traits.clear()
+	# 清理 emotions
+	PlayerState.emotions.clear()
+	# 清理 properties (burnout 等 stat 存在 Database.properties 中)
+	Database.properties.clear()
+	# 清理 flags
+	PlayerState.flags.clear()
+	# 清理 Database.imaginaries
+	Database.imaginaries.clear()
+
+
+# ════════════════════════════════════════════════════════════
+# A. TierDeterminer.determine_tier() 测试
+# ════════════════════════════════════════════════════════════
+
+func test_tier3_kuangke_tranquility():
+	"""kuangke + tranquility >= 30 → Tier 3"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_KUANGKE)
+	PlayerState.set_emotion(ENUMS.EMOTION.TRANQUILITY, 35)
+
+	assert_eq(TierDeterminer.determine_tier(), 3, "kuangke + tranquility >= 30 应为 Tier 3")
+
+
+func test_tier3_kuangke_arrogance():
+	"""kuangke + arrogance >= 30 → Tier 3"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_KUANGKE)
+	PlayerState.set_emotion(ENUMS.EMOTION.ARROGANCE, 40)
+
+	assert_eq(TierDeterminer.determine_tier(), 3, "kuangke + arrogance >= 30 应为 Tier 3")
+
+
+func test_tier3_kuangke_below_threshold():
+	"""kuangke 但 tranquility 和 arrogance 都低于阈值 → 降级"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_KUANGKE)
+	PlayerState.set_emotion(ENUMS.EMOTION.TRANQUILITY, 20)
+	PlayerState.set_emotion(ENUMS.EMOTION.ARROGANCE, 10)
+
+	# 没有 anger/sorrow 触发 Tier 2，也没有 zuanying/fengying 触发 Tier 1
+	# 兜底为 Tier 1
+	var result = TierDeterminer.determine_tier()
+	assert_ne(result, 3, "kuangke 但情绪不足不应为 Tier 3")
+	assert_ne(result, 2, "没有 anger/sorrow 不应为 Tier 2")
+
+
+func test_tier2_anger():
+	"""anger >= 30 → Tier 2 (任意 IAM)"""
+	PlayerState.set_emotion(ENUMS.EMOTION.ANGER, 35)
+
+	assert_eq(TierDeterminer.determine_tier(), 2, "anger >= 30 应为 Tier 2")
+
+
+func test_tier2_sorrow():
+	"""sorrow >= 30 → Tier 2 (任意 IAM)"""
+	PlayerState.set_emotion(ENUMS.EMOTION.SORROW, 50)
+
+	assert_eq(TierDeterminer.determine_tier(), 2, "sorrow >= 30 应为 Tier 2")
+
+
+func test_tier2_anger_below_threshold():
+	"""anger < 30 且 sorrow < 30 → 不触发 Tier 2"""
+	PlayerState.set_emotion(ENUMS.EMOTION.ANGER, 20)
+	PlayerState.set_emotion(ENUMS.EMOTION.SORROW, 10)
+
+	var result = TierDeterminer.determine_tier()
+	assert_ne(result, 2, "愤怒/愁苦不足不应为 Tier 2")
+
+
+func test_tier1_zuanying_ambition():
+	"""zuanying + ambition >= 25 → Tier 1"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_ZUANYING)
+	PlayerState.set_emotion(ENUMS.EMOTION.AMBITION, 30)
+
+	assert_eq(TierDeterminer.determine_tier(), 1, "zuanying + ambition >= 25 应为 Tier 1")
+
+
+func test_tier1_zuanying_burnout():
+	"""zuanying + burnout >= 25 → Tier 1"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_ZUANYING)
+	var prop = Property.new()
+	prop.val = 30
+	Database.properties["burnout"] = prop
+
+	assert_eq(TierDeterminer.determine_tier(), 1, "zuanying + burnout >= 25 应为 Tier 1")
+
+
+func test_tier1_fengying_ambition():
+	"""fengying + ambition >= 25 → Tier 1"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_FENGYING)
+	PlayerState.set_emotion(ENUMS.EMOTION.AMBITION, 25)
+
+	assert_eq(TierDeterminer.determine_tier(), 1, "fengying + ambition >= 25 应为 Tier 1")
+
+
+func test_tier1_default_no_traits():
+	"""无 IAM trait → 兜底 Tier 1"""
+	var result = TierDeterminer.determine_tier()
+	assert_eq(result, 1, "无 IAM trait 时默认应为 Tier 1")
+
+
+func test_tier3_priority_over_tier2():
+	"""kuangke + tranquility >= 30 且 anger >= 30 → Tier 3 优先于 Tier 2"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_KUANGKE)
+	PlayerState.set_emotion(ENUMS.EMOTION.TRANQUILITY, 35)
+	PlayerState.set_emotion(ENUMS.EMOTION.ANGER, 40)
+
+	assert_eq(TierDeterminer.determine_tier(), 3, "Tier 3 优先级应高于 Tier 2")
+
+
+func test_tier2_priority_over_tier1():
+	"""anger >= 30 且 zuanying + ambition >= 25 → Tier 2 优先于 Tier 1"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_ZUANYING)
+	PlayerState.set_emotion(ENUMS.EMOTION.ANGER, 35)
+	PlayerState.set_emotion(ENUMS.EMOTION.AMBITION, 30)
+
+	assert_eq(TierDeterminer.determine_tier(), 2, "Tier 2 优先级应高于 Tier 1")
+
+
+# ════════════════════════════════════════════════════════════
+# B. ImaginaryComprehender.comprehend_category() 测试
+# ════════════════════════════════════════════════════════════
+
+func test_comprehend_insufficient_fragments():
+	"""碎片不足 l2_threshold → 返回 false"""
+	var ima = _make_imaginary("test_cat")
+	ima.basic_imaginaries.append(_make_fragment("frag1", 3))
+	# l2_threshold = 2，但只有 1 个碎片
+	Database.imaginaries["test_cat"] = ima
+
+	var success = ImaginaryComprehender.comprehend_category("test_cat")
+	assert_false(success, "碎片不足时应返回 false")
+	assert_eq(ima.basic_imaginaries.size(), 1, "碎片不应被清空")
+
+
+func test_comprehend_nonexistent_category():
+	"""category 不存在 → 返回 false"""
+	var success = ImaginaryComprehender.comprehend_category("nonexistent")
+	assert_false(success, "不存在的 category 应返回 false")
+
+
+func test_comprehend_ink_contamination_min_tier():
+	"""墨水污染定律：final_tier = min(所有碎片 tier)"""
+	var ima = _make_imaginary("test_cat")
+	ima.basic_imaginaries.append(_make_fragment("frag1", 3))  # Tier 3
+	ima.basic_imaginaries.append(_make_fragment("frag2", 2))  # Tier 2 ← 污染
+	ima.basic_imaginaries.append(_make_fragment("frag3", 1))  # Tier 1 ← 最低
+	Database.imaginaries["test_cat"] = ima
+
+	var success = ImaginaryComprehender.comprehend_category("test_cat")
+	assert_true(success, "坍缩应成功")
+	assert_eq(ima.current_tier, 1, "墨水污染：final_tier = min(3,2,1) = 1")
+
+
+func test_comprehend_all_tier3():
+	"""全部碎片 Tier 3 → final_tier = 3"""
+	var ima = _make_imaginary("test_cat")
+	ima.basic_imaginaries.append(_make_fragment("frag1", 3))
+	ima.basic_imaginaries.append(_make_fragment("frag2", 3))
+	Database.imaginaries["test_cat"] = ima
+
+	var success = ImaginaryComprehender.comprehend_category("test_cat")
+	assert_true(success)
+	assert_eq(ima.current_tier, 3)
+
+
+func test_comprehend_level_clamp():
+	"""level = clamp(fragments.size(), 0, 2)"""
+	var ima = _make_imaginary("test_cat")
+	ima.basic_imaginaries.append(_make_fragment("f1", 3))
+	ima.basic_imaginaries.append(_make_fragment("f2", 3))
+	ima.basic_imaginaries.append(_make_fragment("f3", 3))  # 3 个碎片 → level = 2
+	Database.imaginaries["test_cat"] = ima
+
+	var success = ImaginaryComprehender.comprehend_category("test_cat")
+	assert_true(success)
+	assert_eq(ima.current_level, 2, "3 个碎片应 clamp 到 level 2")
+
+
+func test_comprehend_level_exactly_1():
+	"""2 个碎片 → level = 2"""
+	var ima = _make_imaginary("test_cat")
+	ima.basic_imaginaries.append(_make_fragment("f1", 2))
+	ima.basic_imaginaries.append(_make_fragment("f2", 2))
+	Database.imaginaries["test_cat"] = ima
+
+	var success = ImaginaryComprehender.comprehend_category("test_cat")
+	assert_true(success)
+	assert_eq(ima.current_level, 2)
+
+
+func test_comprehend_clears_fragments():
+	"""坍缩后 basic_imaginaries 必须清空"""
+	var ima = _make_imaginary("test_cat")
+	ima.basic_imaginaries.append(_make_fragment("f1", 3))
+	ima.basic_imaginaries.append(_make_fragment("f2", 3))
+	Database.imaginaries["test_cat"] = ima
+
+	ImaginaryComprehender.comprehend_category("test_cat")
+	assert_eq(ima.basic_imaginaries.size(), 0, "坍缩后碎片应被清空")
+
+
+# ════════════════════════════════════════════════════════════
+# C. ImaginaryComprehender.consume_concepts() 测试
+# ════════════════════════════════════════════════════════════
+
+func test_consume_concepts_removes_from_database():
+	"""consume_concepts 应从 Database.imaginaries 中删除概念"""
+	var c1 = _make_imaginary("c1")
+	var c2 = _make_imaginary("c2")
+	Database.imaginaries["c1"] = c1
+	Database.imaginaries["c2"] = c2
+
+	assert_true(Database.imaginaries.has("c1"), "删除前 c1 应存在")
+
+	ImaginaryComprehender.consume_concepts([c1, c2])
+
+	assert_false(Database.imaginaries.has("c1"), "c1 应被删除")
+	assert_false(Database.imaginaries.has("c2"), "c2 应被删除")
+
+
+# ════════════════════════════════════════════════════════════
+# D. PoemCraftingCalculator.calculate_poem_grade() 测试
+# ════════════════════════════════════════════════════════════
+
+func test_poem_tier1_produces_money():
+	"""Tier 1 配方 → 台阁体，产出 money"""
+	var concepts = _make_tiered_concepts([1, 1])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+
+	assert_not_null(result)
+	var has_money = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "money" and op.value > 0:
+			has_money = true
+			break
+	assert_true(has_money, "Tier 1 应有正面 money 产出")
+
+
+func test_poem_tier2_produces_fame_and_negative_money():
+	"""Tier 2 配方 → 诗史，产出 literary_fame + 贬为 negative money"""
+	var concepts = _make_tiered_concepts([2, 2])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+
+	var has_fame = false
+	var has_negative_money = false
+	var has_push = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "literary_fame" and op.value > 0:
+			has_fame = true
+		if op is PropertyOperator and op.property == "money" and op.value < 0:
+			has_negative_money = true
+		if op is PushEventOperator:
+			has_push = true
+	assert_true(has_fame, "Tier 2 应有 literary_fame 产出")
+	assert_true(has_negative_money, "Tier 2 应有 negative money 惩罚")
+	assert_true(has_push, "Tier 2 应 push 政治审查事件")
+
+
+func test_poem_tier3_produces_fame():
+	"""Tier 3 配方 → 绝唱，产出 literary_fame"""
+	var concepts = _make_tiered_concepts([3, 3])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+
+	var has_fame = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "literary_fame" and op.value > 0:
+			assert_false(op.property == "money" and op.value < 0, "Tier 3 不应有 money 惩罚")
+			has_fame = true
+	assert_true(has_fame, "Tier 3 应有 literary_fame 产出")
+
+
+func test_bucket_effect_lowest_tier_wins():
+	"""木桶效应：混合 [3,2,1] → min_tier=1 → 按 Tier 1 配方"""
+	var concepts = _make_tiered_concepts([3, 2, 1])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+
+	# Tier 1 配方产出 money
+	var has_money = false
+	var has_fame = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "money" and op.value > 0:
+			has_money = true
+		if op is PropertyOperator and op.property == "literary_fame" and op.value > 0:
+			has_fame = true
+	assert_true(has_money, "木桶效应：min tier=1 → 应有 money 产出")
+	assert_false(has_fame, "木桶效应：min tier=1 → 不应有 literary_fame")
+
+
+func test_hypocrisy_zuanying_tier3():
+	"""IAM=zuanying 且 min_tier=3 → 虚伪反噬，返回空 result (仅 trait operator)"""
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_ZUANYING)
+
+	var concepts = _make_tiered_concepts([3, 3])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+
+	assert_eq(result.operators.size(), 1, "虚伪反噬应只产生 1 个算子")
+	assert_true(result.operators[0] is TraitOperator, "应为 TraitOperator")
+
+
+func test_hypocrisy_not_triggered_without_zuanying():
+	"""IAM!=zuanying + min_tier=3 → 不应触发虚伪反噬"""
+	# kuangke 不应触发 hypocrisy
+	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_KUANGKE)
+
+	var concepts = _make_tiered_concepts([3, 3])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+
+	for op in result.operators:
+		assert_false(op is TraitOperator, "kuangke 不应触发虚伪反噬")
+
+
+func test_health_cost_present():
+	"""所有配方都有健康消耗"""
+	var concepts = _make_tiered_concepts([3, 3])
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+
+	var has_health = false
+	for op in result.operators:
+		if op is PropertyOperator and op.property == "health" and op.value < 0:
+			has_health = true
+	assert_true(has_health, "应有健康消耗")
+
+
+# ════════════════════════════════════════════════════════════
+# E. flag_poem_tier2_count 递增测试 (E.1 Bug 回归)
+# ════════════════════════════════════════════════════════════
+
+func test_tier2_increments_flag_poem_tier2_count():
+	"""每次 Tier 2 作诗应递增 flag_poem_tier2_count"""
+	# 注册 flag（否则 append_flag 会因 flag 未注册而失败）
+	var flag_def = Flag.new()
+	flag_def.type = "int"
+	Database.flags["flag_poem_tier2_count"] = flag_def
+
+	var concepts = _make_tiered_concepts([2, 2])
+
+	# 第一次
+	PoemCraftingCalculator.calculate_poem_grade(concepts)
+	assert_eq(PlayerState.get_flag("flag_poem_tier2_count"), 1, "第一次 Tier 2 诗后 count=1")
+
+	# 第二次
+	PoemCraftingCalculator.calculate_poem_grade(concepts)
+	assert_eq(PlayerState.get_flag("flag_poem_tier2_count"), 2, "第二次 Tier 2 诗后 count=2")
+
+
+# ════════════════════════════════════════════════════════════
+# 辅助方法
+# ════════════════════════════════════════════════════════════
+
+func _make_imaginary(uuid: String) -> ImaginaryTag:
+	var ima = ImaginaryTag.new()
+	ima.uuid = uuid
+	return ima
+
+func _make_fragment(blueprint_id: String, tier: int) -> Dictionary:
+	return {"blueprint_id": blueprint_id, "contexts": [], "tier": tier}
+
+func _make_tiered_concepts(tiers: Array) -> Array[ImaginaryTag]:
+	var result: Array[ImaginaryTag] = []
+	for t in tiers:
+		var ima = ImaginaryTag.new()
+		ima.uuid = "concept_tier%d_%d" % [t, randi()]
+		ima.current_tier = t
+		ima.current_level = 2
+		result.append(ima)
+	return result

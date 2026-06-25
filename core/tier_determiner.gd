@@ -14,13 +14,13 @@ const BURNOUT_THRESHOLD := 25
 
 # ── Tier 判定 ──────────────────────────────────────────
 static func determine_tier() -> int:
-	# Step 1: 判断当前 IAM
+	# Step 1: 判断当前 IAM（用 int 枚举，走 PlayerState.has_trait 内部 to_traits_str 转换）
 	var iam := ""
-	if PlayerState.has_trait("KUANGDA_KUANGKE"):
+	if PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_KUANGKE):
 		iam = "kuangke"
-	elif PlayerState.has_trait("KUANGDA_ZUANYING"):
+	elif PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_ZUANYING):
 		iam = "zuanying"
-	elif PlayerState.has_trait("KUANGDA_FENGYING"):
+	elif PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_FENGYING):
 		iam = "fengying"
 
 	# Step 2: 读取情绪值

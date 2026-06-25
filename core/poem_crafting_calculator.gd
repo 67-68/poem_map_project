@@ -72,7 +72,8 @@ static func calculate_poem_grade(concepts: Array[ImaginaryTag]) -> ChoiceResult:
 			var secular_val = total_level * (-20)
 			result.operators.append(OperatorFactory.create_property_operator("literary_fame", history_val))
 			result.operators.append(OperatorFactory.create_property_operator("money", secular_val))
-			# 🆕 政治审查
+			# 🆕 递增诗史计数 → 触发政治审查
+			PlayerState.append_flag("flag_poem_tier2_count", 1)
 			result.operators.append(OperatorFactory.create_push_event_operator("political_purge_poem"))
 
 		3:  # 绝唱：千古SSS，世俗0
