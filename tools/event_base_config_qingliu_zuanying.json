@@ -35,7 +35,7 @@
     "qingliu_zuanying"
   ],
   "universal_requirement": "trait_has(name=kuangda_zuanying)",
-  "universal_result": "prop_add(name=BURNOUT; val=3) | prop_add(name=fatigue; val=5)",
+  "universal_result": "prop_add(name=health; val=-3)|prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 60,
   "word_count_max": 250,
@@ -52,7 +52,7 @@
       "id": "opt_kuangke",
       "prompt": "用30字以内写一个纯粹的【狂客冲动】动作——执行它，不压制它。\n\n狂客动作的本质特征：幅度大、终止性强、不给自己留退路。动作必须是一次性的、有明确终点的身体行为（而非表情或心理活动），执行后场域立即改变。\n\n禁用的动作类型：犹豫性的、可撤回的、留有余地的。\n\n狂客的本质是无所顾忌——但这次他顾忌了。所以这个选项被锁住了。",
       "text": "（拂袖而去，掀翻案上杯盏）",
-      "result": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | emo_add(name=ARROGANCE; val=10)",
+      "result": "prop_add(name=progress; val=3) | prop_sub(name=health; val=3) | emo_add(name=ARROGANCE; val=10)",
       "fixed": false,
       "plugins": {
         "failed_hint": {
@@ -67,7 +67,7 @@
       "id": "opt_fengying",
       "prompt": "用30字以内写一个纯粹的【逢迎/低头】动作——执行它，不压制它。\n\n逢迎动作的本质特征：身体高度骤降（相对于对方）、姿态从直立变为折叠、有明确的献祭/呈递物件的意向。动作是一次性的、不可撤回的全身姿态切换。\n\n禁用的动作类型：半推半就的、口头服软但身体不动的、为自己留辩解余地的。\n\n逢迎者的本质是无条件服从——但这次他服从不了。因为磕头解决不了财务亏空，清流也不会因此原谅背信者。所以这个选项被锁住了。",
       "text": "（双袖一振顺势跪下）",
-      "result": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+      "result": "prop_add(name=progress; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
       "fixed": false,
       "plugins": {
         "failed_hint": {
@@ -82,7 +82,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内写一个简短的动作描述——玩家以【钻营】状态回应。这是唯一可选的路径。动作特征是：【用精密谎言掩盖旧窟窿，或者用信息/资源开价进行利益交换。不卑不亢但也不清高——像一个精明的账房在计算如何把坏账做平】。\n\n钻营行为特征：不硬顶也不讨好。评估对方的筹码，掂量自己的底牌，寻找一个可以糊弄过去的说法或一个可以成交的平衡点。执行时像一个精明的账房——每一个动作都是在计算投入产出比，不带多余的情绪波动。",
       "text": "（权衡片刻，开出价码）",
-      "result": "prop_add(name=fatigue; val=5) | emo_add(name=AMBITION; val=10)",
+      "result": "prop_add(name=health; val=5) | emo_add(name=AMBITION; val=10)",
       "fixed": false,
       "plugins": {},
       "requirement": ""
@@ -102,9 +102,9 @@
             "TARGET_FACTION_ROYAL:jade_step",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=5)",
+          "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=health; val=3) | emo_add(name=SORROW; val=5)",
           "option_results": {
-            "opt_zuanying": "prop_add(name=money; val=8) | prop_add(name=fatigue; val=5) | prop_sub(name=LITERARY_FAME; val=2) | emo_add(name=AMBITION; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_class_discrimination\")"
+            "opt_zuanying": "prop_add(name=money; val=8) | prop_add(name=health; val=5) | prop_sub(name=LITERARY_FAME; val=2) | emo_add(name=AMBITION; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_class_discrimination\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou",
@@ -138,9 +138,9 @@
             "TARGET_OBJECT_SWORD:medicine_stall",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=8)",
+          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=3) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=8)",
           "option_results": {
-            "opt_zuanying": "prop_sub(name=money; val=10) | prop_add(name=fatigue; val=8) | prop_add(name=BURNOUT; val=8) | emo_add(name=SORROW; val=15)"
+            "opt_zuanying": "prop_sub(name=money; val=10) | prop_add(name=health; val=8) | prop_add(name=health; val=8) | emo_add(name=SORROW; val=15)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi",
@@ -175,9 +175,9 @@
             "action:main:jiaoyou",
             "TARGET_IDENTITY_QUANGUI"
           ],
-          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=8)",
+          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=8)",
           "option_results": {
-            "opt_zuanying": "prop_sub(name=inspiration; val=5) | prop_add(name=BURNOUT; val=10) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_ghostwriter_scandal\")"
+            "opt_zuanying": "prop_add(name=health; val=10) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_ghostwriter_scandal\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou",
@@ -216,9 +216,9 @@
             "VIBE_PHILOSOPHY_ZEN:medicine_stall",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=10)",
+          "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=health; val=3) | emo_add(name=SORROW; val=10)",
           "option_results": {
-            "opt_zuanying": "prop_add(name=money; val=3) | prop_add(name=BURNOUT; val=5) | prop_add(name=fatigue; val=3) | flag_bool_set(name=flag_moral_debt_qingliu; val=true) | emo_add(name=SORROW; val=12)"
+            "opt_zuanying": "prop_add(name=money; val=3) | prop_add(name=health; val=5) | prop_add(name=health; val=3) | flag_bool_set(name=flag_moral_debt_qingliu; val=true) | emo_add(name=SORROW; val=12)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi",
@@ -253,9 +253,9 @@
             "action:main:jiaoyou",
             "TARGET_IDENTITY_QUANGUI"
           ],
-          "operator_dsl": "prop_add(name=BURNOUT; val=8) | emo_add(name=SORROW; val=10)",
+          "operator_dsl": "prop_add(name=health; val=8) | emo_add(name=SORROW; val=10)",
           "option_results": {
-            "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=10) | prop_add(name=fatigue; val=8) | emo_add(name=SORROW; val=10)"
+            "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=health; val=10) | prop_add(name=health; val=8) | emo_add(name=SORROW; val=10)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou",
@@ -294,9 +294,9 @@
             "TARGET_NPC_DUFU:jade_step",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=10)",
+          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=health; val=3) | emo_add(name=SORROW; val=10)",
           "option_results": {
-            "opt_zuanying": "prop_add(name=money; val=15) | prop_add(name=BURNOUT; val=8) | prop_add(name=fatigue; val=5) | prop_sub(name=health; val=3) | emo_add(name=SORROW; val=15)"
+            "opt_zuanying": "prop_add(name=money; val=15) | prop_add(name=health; val=8) | prop_add(name=health; val=5) | prop_sub(name=health; val=3) | emo_add(name=SORROW; val=15)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou",

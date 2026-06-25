@@ -30,8 +30,8 @@
   "universal_tags": [
     "qingliu_jiaolv"
   ],
-  "universal_requirement": "prop_gt(name=burnout; val=50) | prop_gt(name=money; val=10) | prop_lt(name=money; val=50) | prop_gt(name=ambition; val=30) | prop_lt(name=ambition; val=100)",
-  "universal_result": "prop_add(name=burnout; val=3) | prop_add(name=fatigue; val=5)",
+  "universal_requirement": "prop_lt(name=health; val=50) | prop_gt(name=money; val=10) | prop_lt(name=money; val=50) | emo_gt(name=AMBITION; val=30) | emo_lt(name=AMBITION; val=100)",
+  "universal_result": "prop_add(name=health; val=-3)|prop_add(name=money; val=5)",
   "universal_option_requirement": "",
   "word_count_min": 60,
   "word_count_max": 250,
@@ -73,9 +73,9 @@
             "action:main:fangshi",
             "TARGET_IDENTITY_MENZI"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_jiaolv": "prop_sub(name=money; val=20) | prop_sub(name=health; val=5) | emo_add(name=SORROW; val=8) | prop_add(name=fatigue; val=8)"
+            "opt_jiaolv": "prop_sub(name=money; val=20) | prop_sub(name=health; val=5) | emo_add(name=SORROW; val=8) | prop_add(name=health; val=8)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi",
@@ -117,9 +117,9 @@
             "TARGET_NPC_DUFU:thatched_grass",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_jiaolv": "prop_sub(name=money; val=25) | prop_sub(name=inspiration; val=5) | emo_add(name=ANGER; val=10) | prop_add(name=burnout; val=5)"
+            "opt_jiaolv": "prop_sub(name=money; val=25) | emo_add(name=ANGER; val=10) | prop_add(name=health; val=5)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou",
@@ -161,9 +161,9 @@
             "ENV_NATURE_SNOWSTORM:lone_snow",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_jiaolv": "prop_sub(name=money; val=18) | emo_sub(name=SORROW; val=10) | prop_add(name=burnout; val=8) | prop_add(name=fatigue; val=5)"
+            "opt_jiaolv": "prop_sub(name=money; val=18) | emo_sub(name=SORROW; val=10) | prop_add(name=health; val=8) | prop_add(name=health; val=5)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi",
@@ -206,9 +206,9 @@
             "action:main:duzhuo",
             "TARGET_IDENTITY_VENDOR"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_jiaolv": "prop_sub(name=money; val=15) | prop_add(name=DRUNK; val=20) | prop_add(name=inspiration; val=10) | emo_add(name=SORROW; val=15) | prop_sub(name=health; val=8)"
+            "opt_jiaolv": "prop_sub(name=money; val=15) | emo_add(name=SORROW; val=15) | prop_sub(name=health; val=8)"
           },
           "scale": 1.05,
           "stored_to": "747_kuangda.duzhuo",

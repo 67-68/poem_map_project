@@ -19,8 +19,8 @@
   "universal_tags": [
     "duotai_humiliation"
   ],
-  "universal_requirement": "prop_gt(name=ambition,val=50),prop_lt(name=ambition,val=100)",
-  "universal_result": "prop_add(name=exhaustion; val=1)|prop_add(name=fatigue; val=5)",
+  "universal_requirement": "emo_gt(name=AMBITION; val=50),emo_lt(name=AMBITION; val=100)",
+  "universal_result": "prop_add(name=health; val=-3)",
   "universal_option_requirement": "",
   "word_count_min": 40,
   "word_count_max": 250,
@@ -82,7 +82,7 @@
       "id": "opt_kuangke",
       "prompt": "用30字以内写一个简短的动作描述——玩家以【狂客】状态回应当前羞辱。\n\n⚠️ 行为铁律第0条：狂客不对不配的人展示才华。才华只给配得上的人，这些人不配。\n狂客对一切羞辱性场景的回应姿态统一为「无视·不碰·离开」：不写、不改、不抄；不捡钱、不碰赏物、不看施舍品；不反驳、不解释、不告退——直接消失。与羞辱物发生任何形式的身体接触（捡起、拾取、抛掷、收下、推开）即自动降格为逢迎/钻营。\n\n狂客行为守则（四层情绪模型）：\n1.【根权限：冷傲·ARROGANCE】对规则体系的降维蔑视——我不在乎你的规则，因为你的规则是垃圾。表现：冰冷的嘲弄、优雅的不屑、视若无物。例如李白让高力士脱靴——不是愤怒，是觉得理所应当。\n2.【底色：超脱·TRANQUILITY】当不屑都懒得表达时，进入天人合一的冷清——端起酒杯看月亮，大笑离场，留下权贵像个傻子。\n3.【极值：神圣愤怒·ANGER】狂客会愤怒，但绝不因个人得失——只为天道不公、苍生苦难。自己饿肚子冷傲以对，看到平民被践踏才拔剑。\n4.【绝对禁止】禁止描写任何'激动'、'气急败坏'、'大呼小叫'、'拍桌大骂'、'破口大骂'的行为！激动说明还在乎这个评价体系——那是逢迎/钻营的状态，不是狂客。禁止配合对方要求写诗/改稿/抄录。禁止以任何方式触碰施舍物——不捡铜钱、不拾衣物、不接荷包、不握碎银。触碰即承认羞辱交易的成立，与狂客本质矛盾。狂客对羞辱物的唯一正确回应是：不看、不碰、离开。\n\n核心公式：狂客 = 冷傲的拒绝 ≡ 拒绝执行系统错误代码的黑客。",
       "text": "（拂袖而去）",
-      "result": "prop_add(name=kuangda; val=2)|prop_sub(name=fatigue; val=3)",
+      "result": "prop_add(name=progress; val=2)|prop_sub(name=health; val=3)",
       "fixed": false,
       "accept_influence": [
         "gateway"
@@ -102,7 +102,7 @@
       "id": "opt_fengying",
       "prompt": "用30字以内写一个简短的动作描述——玩家以中旷达状态回应当前羞辱。动作特征是：顺从、配合、苦笑、按对方要求做。不硬顶、不巴结、保持基本的体面。",
       "text": "（依言照做）",
-      "result": "prop_add(name=kuangda; val=1)|prop_sub(name=money; val=3)",
+      "result": "prop_add(name=progress; val=1)|prop_sub(name=money; val=3)",
       "fixed": false,
       "accept_influence": [
         "gateway"
@@ -122,7 +122,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内写一个简短的动作描述——玩家以低旷达状态回应当前羞辱。动作特征是：卑微、讨好、献媚、主动示弱。可以说「求大人赏口饭吃」「小的愿效犬马之劳」之类极度谦卑的话。【绝对不能】出卖朋友、背叛恩人、或做违背良知的事。可以跪，但不能脏。",
       "text": "（躬身赔笑，小心奉承）",
-      "result": "prop_add(name=kuangda; val=-1)|prop_add(name=money; val=5)|prop_sub(name=health; val=2)",
+      "result": "prop_add(name=progress; val=-1)|prop_add(name=money; val=5)|prop_sub(name=health; val=2)",
       "fixed": false,
       "accept_influence": [
         "gateway"
@@ -293,7 +293,7 @@
           "name": "廉价劳力 — 才华不值钱，体力才值钱",
           "description": "作为士人却被当作普通劳力使用——不是让你写诗作文，而是让你抄录文书、整理书卷、跑腿送信。你的才华不被看见，你被当作一个识字很多的苦力。",
           "scale": 1.15,
-          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=fatigue; val=10)",
+          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=health; val=10)",
           "tags": [
             "emotion_pair:pair_survival",
             "VIBE_THEME_HISTORY:ruined_wall",
@@ -336,9 +336,9 @@
             ]
           ],
           "option_results": {
-            "opt_kuangke": "prop_add(name=kuangda; val=2)|prop_sub(name=fatigue; val=3)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")",
-            "opt_fengying": "prop_add(name=kuangda; val=1)|prop_sub(name=money; val=3)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")",
-            "opt_zuanying": "prop_add(name=kuangda; val=-1)|prop_add(name=money; val=5)|prop_sub(name=health; val=2)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")"
+            "opt_kuangke": "prop_add(name=progress; val=2)|prop_sub(name=health; val=3)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")",
+            "opt_fengying": "prop_add(name=progress; val=1)|prop_sub(name=money; val=3)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")",
+            "opt_zuanying": "prop_add(name=progress; val=-1)|prop_add(name=money; val=5)|prop_sub(name=health; val=2)|leverage_add(target_tag=\"TARGET_IDENTITY_VENDOR\"; key=\"vendor_cheap_labor\")"
           }
         },
         {
@@ -346,7 +346,7 @@
           "name": "阶级霸凌 — 权力的日常践踏",
           "description": "不是因为做错了什么，仅仅因为身份低微就被当众羞辱——被要求让路、被呵斥退下、被当作不存在。这不是交易，是纯粹的权力展示。",
           "scale": 1.2,
-          "operator_dsl": "prop_sub(name=health; val=8)|prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=8)|prop_sub(name=health; val=5)",
           "tags": [
             "emotion_pair:pair_despair",
             "TARGET_OBJECT_SWORD:cold_blade",
@@ -395,7 +395,7 @@
           "name": "同侪落差 — 看着不如你的人爬到了你头上",
           "description": "曾经同窗共读的朋友、一起参加科举的同侪，如今有人当上了官、有人入了权贵幕府、有人靠关系拿到了肥差。而杜甫还是那个杜甫——住的更破了、衣服更旧了、希望更渺茫了。",
           "scale": 1.1,
-          "operator_dsl": "prop_sub(name=fatigue; val=10)",
+          "operator_dsl": "prop_sub(name=health; val=10)",
           "tags": [
             "emotion_pair:pair_despair",
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
@@ -443,7 +443,7 @@
           "name": "弱者相害 — 底层之间的相互倾轧",
           "description": "比权贵的压迫更令人窒息的，是同样处于底层的人之间的相互伤害——门子刁难来投奔的更穷的亲戚、邻里因为一捆柴火争执、同行文人为了一个机会相互诋毁。弱者没有向上的通道，只能向下挤压更弱的人。",
           "scale": 1.05,
-          "operator_dsl": "prop_sub(name=health; val=3)|prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=3)|prop_sub(name=health; val=5)",
           "tags": [
             "emotion_pair:pair_despair",
             "VIBE_THEME_HISTORY:ruined_wall",
@@ -490,7 +490,7 @@
           "name": "隐秘的施舍 — 善意比恶意更难承受",
           "description": "比羞辱更难面对的是善意——有人出于同情暗中帮助杜甫，但这份帮助本身就在不断提醒杜甫：你是一个需要被同情的人。朋友故意输棋留下银钱、亲戚在年节礼盒里多塞了东西、陌生人多给了几个铜板说「不用找了」。善意本身成了最大的屈辱。",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=money; val=10)|prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_add(name=money; val=10)|prop_sub(name=health; val=5)",
           "tags": [
             "emotion_pair:pair_survival",
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
@@ -564,7 +564,7 @@
           "name": "交游 — 文人圈子的社交场",
           "description": "文人雅集、酒宴、诗会、友人家中。表面上是风雅聚会，实际上充满了阶层攀比、资源交换和人际博弈。",
           "scale": 1.1,
-          "operator_dsl": "prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=5)",
           "stored_to": "747_kuangda.jiaoyou",
           "tags": [
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
@@ -602,7 +602,7 @@
           "name": "独酌 — 酒肆中的独饮与旁观",
           "description": "杜甫独自在小酒馆饮酒。这是一个微醺的旁观者视角——看邻桌的喧哗、听窗外的市声、想自己的心事。独酌是最私密也最脆弱的空间。",
           "scale": 0.9,
-          "operator_dsl": "prop_sub(name=money; val=2)|prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=2)|prop_sub(name=health; val=3)",
           "stored_to": "747_kuangda.duzhuo",
           "tags": [
             "ENV_NATURE_NIGHTMOON:cold_moon",
@@ -621,7 +621,7 @@
           "name": "登高 — 城楼/土丘上的远眺与沉思",
           "description": "杜甫独自登上长安城郊的某处高地——乐游原、曲江池畔的土坡、或某座废弃的城楼。登高是唐诗中最经典的母题之一——视野开阔了，心事也变得更重了。",
           "scale": 0.85,
-          "operator_dsl": "prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=health; val=3)",
           "stored_to": "747_kuangda.denggao",
           "tags": [
             "ENV_NATURE_NIGHTMOON:cold_moon",
@@ -640,7 +640,7 @@
           "name": "奉召 — 被叫去应付差事",
           "description": "被官府或权贵临时叫去应付某项差事——写公文、应制作文、陪席应酬。这不是正式的任命，而是一次性的、带有临时征调性质的劳务。奉召是一种「半强迫」的义务——不去不行，去了也没钱。",
           "scale": 1.15,
-          "operator_dsl": "prop_sub(name=health; val=3)|prop_sub(name=fatigue; val=8)",
+          "operator_dsl": "prop_sub(name=health; val=3)|prop_sub(name=health; val=8)",
           "stored_to": "747_kuangda.fengzhao",
           "tags": [
             "VIBE_AESTHETIC_ELEGANT:ink_stone",

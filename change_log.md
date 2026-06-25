@@ -1,5 +1,15 @@
 # [unreleased]
 
+## Changed
+- **属性矩阵大清理** — 属性从 12+6 缩减至 6 个核心属性
+  - [`model/enumerates.gd`](model/enumerates.gd) — `PROPS` 枚举重构：只保留 `MONEY`, `HEALTH`, `TIME`, `LITERARY_FAME`, `PROGRESS`, `TALENT`
+  - [`core/player_state.gd`](core/player_state.gd) — `init_props()` 适配新枚举，`TIME` 初始化为 10（每旬重置），`PROGRESS` 从 `resources.career_progress` 映射
+  - **新增 `TIME` 属性**：每旬自动重置为 10，代表玩家可支配的时间资源
+  - **废弃属性映射**：`fatigue`/`burnout`/`sick` → 并入 `health`；`career_progress`/`official_prestige` → 合并为 `progress`；`ambition`/`inspiration`/`drunk` → 删除
+  - 代码层 12 个文件适配：所有 `player_state.gd`、`survival_manager.gd`、`month_end_settlement.gd`、`consequence_executer.gd` 等文件中的 `change_stat`/`get_stat_val` 调用全部迁移到新属性名
+  - 16 个 Config JSON（`tools/event_base_config_*.json`）中 177 处 `operator_dsl`/`result` 属性引用全部替换
+  - 16 个 CSV（`data/4_eras/747_kuangda/` 下各事件库）全量 reassembly 重生成
+
 那个完全没有错误的git提交是错的. 我发现我打开了搜索框筛选了东西
 太整蛊了, 搞了一个晚上 + 一个早上的注册表之类的方法尝试不要全部import, 最后发现项目体积和资源全部import差不多, 因为最后还是使用了直接打包assets文件夹
 sometimes simpler is better, 总有可以优化的资源空间

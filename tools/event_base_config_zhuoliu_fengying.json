@@ -30,8 +30,8 @@
   "universal_tags": [
     "qingliu_zhuoliu"
   ],
-  "universal_requirement": "trait_has(name=kuangda_fengying) | prop_gt(name=ambition; val=30) | prop_lt(name=ambition; val=100)",
-  "universal_result": "prop_add(name=BURNOUT; val=3) | prop_add(name=fatigue; val=5)",
+  "universal_requirement": "trait_has(name=kuangda_fengying) | emo_gt(name=AMBITION; val=30) | emo_lt(name=AMBITION; val=100)",
+  "universal_result": "prop_add(name=health; val=-3)|prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 40,
   "word_count_max": 200,
@@ -98,11 +98,11 @@
             "ACTION_ENTERTAIN_DRINK:empty_cup",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=health; val=2) | prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=2) | prop_sub(name=health; val=5)",
           "option_results": {
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10)",
-            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
-            "opt_fengying": "prop_add(name=money; val=10) | prop_add(name=DRUNK; val=8) | emo_add(name=SORROW; val=10)"
+            "opt_kuangke": "prop_add(name=progress; val=3) | emo_add(name=ARROGANCE; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=10) | emo_add(name=SORROW; val=10)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
@@ -115,11 +115,11 @@
             "ACTION_ENTERTAIN_DRINK:empty_cup",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=inspiration; val=3) | prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=5)",
           "option_results": {
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10)",
-            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
-            "opt_fengying": "prop_add(name=money; val=3) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=8)"
+            "opt_kuangke": "prop_add(name=progress; val=3) | emo_add(name=ARROGANCE; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=3) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=8)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
@@ -132,11 +132,11 @@
             "ENV_POLITICS_PROSPER:cloud_and_sun",
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_sub(name=inspiration; val=5) | prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=12)",
-            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
-            "opt_fengying": "prop_add(name=money; val=8) | emo_add(name=SORROW; val=12) | prop_add(name=BURNOUT; val=5)"
+            "opt_kuangke": "prop_add(name=progress; val=3) | emo_add(name=ARROGANCE; val=12)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=8) | emo_add(name=SORROW; val=12) | prop_add(name=health; val=5)"
           },
           "scale": 1.05,
           "stored_to": "747_kuangda.baiye"
@@ -149,11 +149,11 @@
             "TARGET_FACTION_ROYAL:jade_step",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=money; val=5) | prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=money; val=5) | prop_sub(name=health; val=5)",
           "option_results": {
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")",
-            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")",
-            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=burnout; val=5) | emo_add(name=SORROW; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")"
+            "opt_kuangke": "prop_add(name=progress; val=3) | emo_add(name=ARROGANCE; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | emo_add(name=AMBITION; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")",
+            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_accounting_fraud\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
@@ -166,11 +166,11 @@
             "ENV_NATURE_NIGHTMOON:cold_moon",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=inspiration; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=3)",
           "option_results": {
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=10)",
-            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
-            "opt_fengying": "prop_add(name=money; val=6) | prop_add(name=fatigue; val=8) | emo_add(name=SORROW; val=8)"
+            "opt_kuangke": "prop_add(name=progress; val=3) | emo_add(name=ARROGANCE; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=6) | prop_add(name=health; val=8) | emo_add(name=SORROW; val=8)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
@@ -183,11 +183,11 @@
             "TARGET_NPC_DUFU:thatched_grass",
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_sub(name=inspiration; val=5) | prop_sub(name=health; val=3)",
+          "operator_dsl": "prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_kuangke": "flag_int_append(name=kuangda; val=3) | emo_add(name=ARROGANCE; val=12)",
-            "opt_zuanying": "flag_int_append(name=kuangda; val=-2) | emo_add(name=AMBITION; val=10)",
-            "opt_fengying": "prop_add(name=money; val=5) | emo_add(name=SORROW; val=15) | prop_add(name=BURNOUT; val=8)"
+            "opt_kuangke": "prop_add(name=progress; val=3) | emo_add(name=ARROGANCE; val=12)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | emo_add(name=AMBITION; val=10)",
+            "opt_fengying": "prop_add(name=money; val=5) | emo_add(name=SORROW; val=15) | prop_add(name=health; val=8)"
           },
           "scale": 1.1,
           "stored_to": "747_kuangda.baiye"

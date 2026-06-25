@@ -51,8 +51,8 @@
   "universal_tags": [
     "kuangke_qingliu"
   ],
-  "universal_requirement": "trait_has(name=kuangda_kuangke)|prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
-  "universal_result": "",
+  "universal_requirement": "trait_has(name=kuangda_kuangke)|emo_gt(name=AMBITION; val=30)|emo_lt(name=AMBITION; val=100)",
+  "universal_result": "prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "trait_has(name=kuangda_kuangke; failed_hint=\"{failed_hint}\")",
   "word_count_min": 40,
   "word_count_max": 200,
@@ -107,7 +107,7 @@
       "requirement": "trait_has(name=kuangda_kuangke; failed_hint=\"{failed_hint}\")",
       "prompt": "用30字以内写一个简短的动作或对话描述——玩家以【狂客】状态回应清流朋友。\n\n狂客回应的本质：不解释、不道谢、不计算。像是对着山谷喊一声，确信谷里有同样的声音在共振。\n\n【情绪-行为映射矩阵】根据当前 NPC 与情绪，选择对应的行为姿态（不是具体动作，是姿态）：\n| NPC | 狂傲(ARROGANCE) | 宁静(TRANQUILITY) | 愤懑(ANGER) | 悲戚(SORROW) |\n|------|------------------|---------------------|---------------|---------------|\n| 李白 | 张扬·不回头 | 笃定·不解释 | — | — |\n| 王维 | — | 克制·不出声 | — | 温柔·不追问 |\n| 郑虔 | — | — | 粗粝·不劝解 | 平淡·不同情 |\n| 高适 | — | — | 干脆·不拖沓 | 安静·不说话 |\n\n行为姿态的含义（向量级约束）：\n- 「张扬」：动作幅度大、不征求许可、直接占有空间\n- 「笃定」：动作慢而确定、不需要理由、不等待回应\n- 「克制」：用最小幅度的动作完成回应、话越少越好\n- 「温柔」：用行动补全对方未说完的部分、不点破\n- 「粗粝」：用粗话或暴力动作共振、不试图让对方平静\n- 「平淡」：用一个日常到近乎冷漠的动作传递温度\n- 「干脆」：一个动作解决、不拖泥带水\n- 「安静」：物理上靠近、不说话、时间本身就是回应\n\n【绝对禁止】冷眼旁观式回应——不写「你看着他」「你默默看着」「你站在一旁注视着」。狂客是参与者，不是旁观者。\n【绝对禁止】感恩道谢、推辞客套、肉麻抒情。\n【正面引导】用一个动作或一句简短的话完成回应——行动比言辞有力，动作越具体越好。\n【重要】选项文本中必须提到当前 NPC 的名字（如李白/王维/郑虔/高适），不能只写「他」「清流朋友」等模糊指代。",
       "text": "（走向前，接过酒壶）",
-      "result": "prop_sub(name=FATIGUE; val=20) | prop_sub(name=BURNOUT; val=20) | prop_add(name=INSPIRATION; val=15) | emo_add(name=TRANQUILITY; val=10)",
+      "result": "prop_sub(name=health; val=20) | prop_sub(name=health; val=20) | emo_add(name=TRANQUILITY; val=10)",
       "fixed": false,
       "accept_influence": [
         "qingliu_npc",

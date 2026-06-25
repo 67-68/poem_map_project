@@ -2,27 +2,24 @@
 
 ## 设计意图
 
-PROPS 系统是玩家的核心属性系统，用于存储和管理玩家的持久状态。与情绪（EMOTION）系统的临时性不同，PROPS 代表玩家的长期属性，如官职、声望、财富等。
+PROPS 系统是玩家的核心属性系统，用于存储和管理玩家的持久状态。与情绪（EMOTION）系统的临时性不同，PROPS 代表玩家的长期属性，如财富、健康、声望等。
 
-这个系统通过资源注册表（ResourceRegistry）模式实现数据的集中管理和加载，确保所有属性在游戏启动时正确初始化。
+> **2025-06 大清理**：属性从 12+6 缩减至 6 个核心属性，废弃 fatigue/burnout/sick（并入 health）、career_progress/official_prestige（合并为 progress）、ambition/inspiration/drunk（删除），新增 TIME（每旬重置 10）。
 
 ## 核心概念
 
 ### 1. PROPS 枚举定义
 
-PROPS 枚举定义在 `model/enumerates.gd` 中，包含 9 个核心属性：
+PROPS 枚举定义在 [`model/enumerates.gd`](../model/enumerates.gd) 中，包含 6 个核心属性：
 
 ```gdscript
 enum PROPS {
-    OFFICIAL_PRESTIGE,  # 官职声望
-    LITERARY_FAME,      # 文学声望
-    TALENT,             # 才华
-    MONEY,              # 金钱
-    HEALTH,             # 健康
-    FATIGUE,            # 疲劳（影响才华产出效率）
-    DRUNK,              # 醉酒（双刃剑：降低理性，但可能提供意象获取折扣）
-    SICK,               # 病痛（疲劳阈值强制睡觉）
-    INSPIRATION         # 灵感（代币/Buffer，用于兑换意象）
+    MONEY,          # 金钱
+    HEALTH,         # 健康（吸收 fatigue/burnout/sick 语义）
+    TIME,           # 时间（每旬重置为 10，代表可支配时间资源）
+    LITERARY_FAME,  # 文学声望
+    PROGRESS,       # 仕途进度（合并 career_progress + official_prestige）
+    TALENT          # 才华
 }
 ```
 
@@ -42,40 +39,35 @@ class_name Property extends GameEntity
 > 不再区分 `InvolatileEmotionProp` / `UnboundedProperty` 子类 — 全部收敛到单一 `Property`。
 > 通过 `hard_max=100` + `soft_max=90` 等配置值来模拟原"有上限属性"的行为。
 
-### 3. 资源注册表
+### 3. 初始化机制
 
-所有 Property 资源通过 `tres_properties_registry.tres` 注册，由 Database 统一加载。
+属性不再通过独立的 `tres_properties_registry.tres` 注册表文件加载，而是直接在 `PlayerState._ready()` 中通过 `SourceOfTruth.debug_dashboard_state.resources` 初始化：
+
+```gdscript
+func init_props():
+    var resources = SourceOfTruth.debug_dashboard_state.resources
+    append_stat(ENUMS.PROPS.MONEY, resources.money)
+    append_stat(ENUMS.PROPS.HEALTH, resources.health)
+    append_stat(ENUMS.PROPS.LITERARY_FAME, resources.literary_fame)
+    append_stat(ENUMS.PROPS.TALENT, resources.talent)
+    append_stat(ENUMS.PROPS.PROGRESS, resources.career_progress)
+    append_stat(ENUMS.PROPS.TIME, 10)
+```
 
 ## 数据流转
 
 ### 初始化流程
 
 ```
-1. Database._init() 执行
+1. PlayerState._ready() 执行
    ↓
-2. 加载 tres_properties_registry.tres
-   properties = Util.create_dict_from_registry(load("res://data/tres_properties_registry.tres"))
+2. init_props() 从 SourceOfTruth.debug_dashboard_state.resources 读取初始值
    ↓
-3. 注册表加载各个 .tres 文件
-   - drunk.tres
-   - emotion.tres
-   - fatigue.tres
-   - health.tres
-   - inspiration.tres
-   - literary_fame.tres
-   - money.tres
-   - official_prestige.tres
-   - sick.tres
-   - talent.tres
+3. append_stat() 为每个枚举属性设置初始值
+   - TIME 硬编码初始化为 10（每旬由 month_end_settlement 重置）
+   - PROGRESS 从 resources.career_progress 读取（兼容旧字段名）
    ↓
-4. 创建 Property 实例并存入 Database.properties 字典
-   ↓
-5. PlayerState._ready() 初始化特定属性值
-   change_stat('official_prestige', 14)
-   change_stat('literary_fame', 50)
-   change_stat('talent', 50)
-   ↓
-6. 游戏运行时通过 change_stat/get_stat_val 操作属性
+4. 游戏运行时通过 change_stat/get_stat_val 操作属性
 ```
 
 ### 运行时操作
@@ -95,86 +87,68 @@ var talent = PlayerState.get_stat_val(ENUMS.PROPS.TALENT)
 ## 文件结构
 
 ```
-model/enumerates.gd                    # PROPS 枚举定义
-├── core/model/property.gd             # Property 类定义
-├── data/tres_properties_registry.tres # 属性注册表
-└── data/tres_properties/
-    ├── drunk.tres                     # 各个属性的资源文件
-    ├── emotion.tres
-    ├── fatigue.tres
-    ├── health.tres
-    ├── inspiration.tres
-    ├── literary_fame.tres
-    ├── money.tres
-    ├── official_prestige.tres
-    ├── sick.tres
-    └── talent.tres
+model/enumerates.gd              # PROPS 枚举定义（6 个属性）
+├── core/model/property.gd       # Property 类定义
+├── core/player_state.gd         # init_props() 初始化逻辑
+├── core/source_of_truth.gd      # debug_dashboard_state 初始值
+└── core/survival_manager.gd     # 每月结算管线（衰减/溢出）
 ```
+
+## 属性对照表
+
+| 新属性 | 旧属性（已废弃/合并） | 说明 |
+|--------|----------------------|------|
+| `MONEY` | `money` | 无变化 |
+| `HEALTH` | `health` + `fatigue` + `burnout` + `sick` | 健康统一吸收疲劳、倦怠、疾病语义 |
+| `LITERARY_FAME` | `literary_fame` | 无变化 |
+| `TALENT` | `talent` | 无变化 |
+| `PROGRESS` | `career_progress` + `official_prestige` | 仕途进度合并官职声望 |
+| `TIME` | **新增** | 每旬重置为 10，代表可支配时间资源 |
+
+### 已删除的属性
+
+| 旧属性 | 删除原因 |
+|--------|----------|
+| `ambition` | 过度细分，无明确游戏机制支撑 |
+| `inspiration` | 代币属性，移除后由事件直接控制 |
+| `drunk` | 醉酒状态由情绪系统覆盖 |
 
 ## 如何添加新的 PROPS
 
 ### 步骤 1：在枚举中添加新属性
 
-在 `model/enumerates.gd` 的 `PROPS` 枚举中添加：
+在 [`model/enumerates.gd`](../model/enumerates.gd) 的 `PROPS` 枚举中添加：
 
 ```gdscript
 enum PROPS {
-    # ... 现有属性
+    MONEY,
+    HEALTH,
+    TIME,
+    LITERARY_FAME,
+    PROGRESS,
+    TALENT,
     NEW_PROP  # 新属性
 }
 ```
 
-### 步骤 2：在注册表中注册
+### 步骤 2：在 PlayerState 中初始化
 
-在 `data/tres_properties_registry.tres` 的 `resources` 字典中添加：
+在 [`core/player_state.gd`](../core/player_state.gd) 的 `init_props()` 中添加：
 
 ```gdscript
-resources = {
-    # ... 现有属性
-    "new_prop": "res://data/tres_properties/new_prop.tres"
-}
+append_stat(ENUMS.PROPS.NEW_PROP, initial_value)
 ```
 
-### 步骤 3：创建属性资源文件
+### 步骤 3：在 SourceOfTruth 中配置默认值（可选）
 
-在 `data/tres_properties/` 目录创建 `new_prop.tres`：
+如果需要从调试面板设置初始值，在 `core/source_of_truth.gd` 的 `debug_dashboard_state.resources` 中添加对应字段。
 
-```gdscript
-[gd_resource type="Resource" script_class="Property" load_steps=2 format=3 uid="uid://..."]
+### 步骤 4：在事件/CSV 中引用
 
-[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_l3cyt"]
+在 Config JSON 的 `operator_dsl` 或 `result` 字段中使用新属性名（小写）：
 
-[resource]
-script = ExtResource("1_l3cyt")
-uuid = "new_prop"
-name = "new_prop"
-hard_max = 100       # 硬上限（-1 = 无限制）
-soft_max = 90        # 软上限（-1 = 无限制）
-decay_threshold = 25 # 衰减阈值（-1 = 无衰减）
-metadata/_custom_type_script = "uid://b3m5anke7kjyi"
 ```
-
-### 步骤 4：配置上限值
-
-根据属性类型设置不同的上限策略：
-
-| 场景 | hard_max | soft_max | decay_threshold | 示例属性 |
-|------|----------|----------|-----------------|----------|
-| **有上限（0-100）** | 100 | 90 | 25 或 90 | fatigue, drunk, burnout, sick, inspiration |
-| **无上限** | -1 | -1 | -1 | money, health, official_prestige, literary_fame, talent |
-
-- `hard_max` 由 [`PlayerState.append_stat()`](../core/player_state.gd:112) 和 [`set_stat_val()`](../core/player_state.gd:142) 自动 clamp
-- `hard_max` 可通过 [`force_set_stat_val()`](../core/player_state.gd:157) 绕过（用于 debug / 特殊场景）
-- `soft_max` 和 `decay_threshold` 由 [`SurvivalManager`](../core/survival_manager.gd) 在结算管线中引用
-
-### 步骤 5：（可选）在 PlayerState 中初始化
-
-如果需要在游戏开始时设置初始值，在 `core/player_state.gd` 的 `_ready()` 中添加：
-
-```gdscript
-func _ready():
-    # ... 现有初始化
-    change_stat('new_prop', initial_value)
+result: "new_prop+5"
 ```
 
 ## 技术细节
@@ -193,13 +167,21 @@ static func to_prop_str(item) -> String:
     return "default_storable_item"
 ```
 
+### TIME 属性特殊处理
+
+`TIME` 是唯一具有固定重置逻辑的属性：
+
+- 每旬开始时由 `month_end_settlement.gd` 重置为 10
+- 代表玩家在当前旬内可进行的行动次数
+- 不参与 SurvivalManager 的衰减/溢出管线
+
 ### 属性变更逻辑与上限 clamp
 
 `PlayerState.append_stat()` 方法包含乘数逻辑 + hard_max clamp：
 
 1. 检查各个 Trait 的 buffer_to_prop 和 buffer_to_region
 2. 应用所有乘数后执行加法操作
-5. **硬上限 clamp**：如果属性 `hard_max >= 0`，自动 `clamp(val, 0, hard_max)`
+3. **硬上限 clamp**：如果属性 `hard_max >= 0`，自动 `clamp(val, 0, hard_max)`
 
 ```gdscript
 func append_stat(stat_name, data):
@@ -215,7 +197,7 @@ func append_stat(stat_name, data):
 **强制设值（跳过 hard_max）**：
 
 ```gdscript
-PlayerState.force_set_stat_val('drunk', 999)  # 不会 clamp
+PlayerState.force_set_stat_val('health', 999)  # 不会 clamp
 ```
 
 ### 阶段性感知
@@ -237,16 +219,16 @@ func get_staged_perception_text() -> String:
 
 ## 系统优势
 
-### 1. 集中管理
-- 所有属性通过注册表统一管理
-- 避免散落在各个文件中的硬编码
+### 1. 精简属性集
+- 6 个核心属性覆盖全部游戏机制，减少认知负担
+- 删除过度细分的中间属性，避免数值膨胀
 
 ### 2. 强类型安全
 - 枚举定义确保属性名称的一致性
 - 编译时检查避免拼写错误
 
 ### 3. 可扩展性
-- 添加新属性只需修改注册表
+- 添加新属性只需修改枚举 + PlayerState 初始化
 - 不影响现有代码逻辑
 
 ### 4. 灵活的操作符
@@ -255,71 +237,69 @@ func get_staged_perception_text() -> String:
 
 ## 注意事项
 
-1. **命名一致性**：枚举名使用大写下划线，资源文件使用小写下划线
-2. **UID 唯一性**：每个 .tres 文件需要唯一的 UID
-3. **初始化时机**：属性在 Database._init() 时加载，在 PlayerState._ready() 时设置初始值
-4. **性能考虑**：属性变更会触发信号，频繁变更可能影响性能
-5. **数据持久化**：Property 资源中的 val 值在运行时修改，需要考虑存档机制
+1. **命名一致性**：枚举名使用大写下划线（`LITERARY_FAME`），字符串键使用小写下划线（`literary_fame`）
+2. **TIME 重置**：每旬由 month_end_settlement 自动重置为 10，不要在事件中手动修改 TIME
+3. **PROGRESS 兼容**：`init_props()` 从 `resources.career_progress` 读取初始值，保持 SourceOfTruth 字段名兼容
+4. **初始化时机**：属性在 PlayerState._ready() 时设置初始值
+5. **性能考虑**：属性变更会触发信号，频繁变更可能影响性能
+6. **数据持久化**：Property 资源中的 val 值在运行时修改，需要考虑存档机制
 
 ## 与其他系统的关系
 
 ### 与 EMOTION 系统的区别
-- **PROPS**：持久属性，长期存储（如金钱、健康）
+- **PROPS**：持久属性，长期存储（如金钱、健康、声望）
 - **EMOTION**：临时状态，短期变化（如悲伤、狂傲）
 
 ### 与 TRAIT 系统的交互
 - Trait 可以通过 buffer_to_prop 影响 PROPS 的变化
 - PROPS 的值可能影响 TRAIT 的获得或失去条件
 
-### 与 IMAGINARY 系统的关系
-- INSPIRATION 是一种特殊的 PROP，用于兑换意象
-- 其他 PROPS（如 DRUNK）可能影响意象获得的成本
+### 与 SurvivalManager 的关系
+- 每月结算管线对 PROPS 执行衰减和溢出处理
+- TIME 不参与结算管线（独立重置）
 
 ## 上限机制详解
 
 ### hard_max（硬上限）
 
-- **定义位置**：每个 `.tres` 文件中的 `hard_max` 字段
-- **执行位置**：[`PlayerState.append_stat()`](../core/player_state.gd:112) 和 [`set_stat_val()`](../core/player_state.gd:142)
+- **定义位置**：每个 Property 实例的 `hard_max` 字段
+- **执行位置**：[`PlayerState.append_stat()`](../core/player_state.gd) 和 `set_stat_val()`
 - **行为**：任何通过 `append_stat` / `set_stat_val` 的修改都会被 clamp 到 `[0, hard_max]`
-- **绕过方式**：调用 [`force_set_stat_val()`](../core/player_state.gd:157) 可跳过 hard_max 检查
+- **绕过方式**：调用 `force_set_stat_val()` 可跳过 hard_max 检查
 - **默认值**：`-1` 表示无限制
 
 ### soft_max（软上限）
 
-- **定义位置**：每个 `.tres` 文件中的 `soft_max` 字段
+- **定义位置**：每个 Property 实例的 `soft_max` 字段
 - **用途**：供 [`SurvivalManager`](../core/survival_manager.gd) 在结算管线中参考
-- **行为**：`_process_fatigue_accumulation()` 使用 soft_max 作为溢出触发阈值
-  - 如 drunk >= soft_max → 溢出到 fatigue，然后复位到 `soft_max - 1`
-- **默认值**：`-1` 表示无软上限（兜底 `100`）
+- **行为**：属性超过 soft_max 时触发溢出逻辑
+- **默认值**：`-1` 表示无软上限
 
 ### decay_threshold（衰减阈值）
 
-- **定义位置**：每个 `.tres` 文件中的 `decay_threshold` 字段
-- **用途**：供 `SurvivalManager._decay_volatile_emotions()` 使用
-- **行为**：`decay(prop, threshold, decay_val)`：若当前值 > threshold，扣减 decay_val；否则清零
-- **默认值**：`-1` 表示无衰减（兜底 `25`）
+- **定义位置**：每个 Property 实例的 `decay_threshold` 字段
+- **用途**：供 `SurvivalManager` 在结算管线中使用
+- **行为**：若当前值 > threshold，扣减 decay_val；否则清零
+- **默认值**：`-1` 表示无衰减
 
 ### 当前各属性配置
 
-| 属性 | hard_max | soft_max | decay_threshold |
-|------|----------|----------|-----------------|
-| `drunk` | 100 | 90 | 25 |
-| `fatigue` | 100 | 90 | 90 |
-| `burnout` | 100 | 90 | -1 |
-| `sick` | 100 | 90 | -1 |
-| `inspiration` | 100 | 90 | 25 |
-| `money` | -1 | -1 | -1 |
-| `health` | -1 | -1 | -1 |
-| `official_prestige` | -1 | -1 | -1 |
-| `literary_fame` | -1 | -1 | -1 |
-| `talent` | -1 | -1 | -1 |
+| 属性 | hard_max | soft_max | decay_threshold | 说明 |
+|------|----------|----------|-----------------|------|
+| `money` | -1 | -1 | -1 | 无上限 |
+| `health` | -1 | -1 | -1 | 无上限（吸收 fatigue/burnout/sick） |
+| `time` | -1 | -1 | -1 | 每旬重置，不参与衰减 |
+| `literary_fame` | -1 | -1 | -1 | 无上限 |
+| `progress` | -1 | -1 | -1 | 无上限 |
+| `talent` | -1 | -1 | -1 | 无上限 |
+
+> 当前所有 6 个属性均为无上限（`hard_max=-1`）。如后续需要限制某个属性（如 talent 上限 100），只需在 Property 实例中设置 `hard_max=100`，PlayerState 自动 clamp。
 
 ## 未来扩展
 
 ### 可能的增强功能
-1. ~~属性上限~~ ✅ **已实现**（hard_max + soft_max 双上限机制）
-2. **属性衰减**：某些属性随时间自然变化（如疲劳恢复）（部分通过 decay_threshold 实现）
+1. **属性上限** — 如需限制（如 talent 上限 100），在对应的 Property 实例中设置 `hard_max` 即可，PlayerState 自动 clamp
+2. **属性衰减**：某些属性随时间自然变化（如健康衰减）
 3. **属性依赖**：属性之间存在依赖关系（如健康影响才华）
 4. **动态属性**：运行时动态添加/移除属性
 5. **属性历史**：记录属性变化历史用于调试和回放

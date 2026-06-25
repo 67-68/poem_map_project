@@ -31,7 +31,7 @@
     "zhuoliu_lieqi"
   ],
   "universal_requirement": "trait_has(name=kuangda_kuangke) | trait_has(name=kuangda_fengying) | trait_has(name=kuangda_zuanying)",
-  "universal_result": "prop_add(name=BURNOUT; val=3) | prop_add(name=fatigue; val=3)",
+  "universal_result": "prop_add(name=health; val=-5)|prop_add(name=money; val=-5)",
   "universal_option_requirement": "",
   "word_count_min": 60,
   "word_count_max": 250,
@@ -85,11 +85,11 @@
             "action:main:jiaoyou",
             "TARGET_IDENTITY_QUANGUI"
           ],
-          "operator_dsl": "prop_sub(name=INSPIRATION; val=3) | prop_add(name=BURNOUT; val=5)",
+          "operator_dsl": "prop_add(name=health; val=5)",
           "option_results": {
-            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ARROGANCE; val=15) | prop_add(name=BURNOUT; val=5) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_cockfight_gambling\")",
-            "opt_fengying": "prop_add(name=MONEY; val=12) | prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=12) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_cockfight_gambling\")",
-            "opt_zuanying": "prop_add(name=MONEY; val=8) | prop_add(name=BURNOUT; val=5) | emo_add(name=AMBITION; val=12) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_cockfight_gambling\")"
+            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ARROGANCE; val=15) | prop_add(name=health; val=5) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_cockfight_gambling\")",
+            "opt_fengying": "prop_add(name=MONEY; val=12) | prop_add(name=health; val=10) | emo_add(name=SORROW; val=12) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_cockfight_gambling\")",
+            "opt_zuanying": "prop_add(name=MONEY; val=8) | prop_add(name=health; val=5) | emo_add(name=AMBITION; val=12) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_cockfight_gambling\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou",
@@ -107,11 +107,11 @@
             "TARGET_NPC_DUFU:thatched_grass",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=HEALTH; val=3) | prop_add(name=BURNOUT; val=5)",
+          "operator_dsl": "prop_sub(name=HEALTH; val=3) | prop_add(name=health; val=5)",
           "option_results": {
-            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ANGER; val=15) | prop_add(name=BURNOUT; val=8)",
-            "opt_fengying": "prop_add(name=MONEY; val=10) | prop_add(name=LITERARY_FAME; val=3) | prop_add(name=BURNOUT; val=12) | emo_add(name=SORROW; val=15)",
-            "opt_zuanying": "prop_add(name=MONEY; val=8) | prop_add(name=BURNOUT; val=8) | emo_add(name=AMBITION; val=12)"
+            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ANGER; val=15) | prop_add(name=health; val=8)",
+            "opt_fengying": "prop_add(name=MONEY; val=10) | prop_add(name=LITERARY_FAME; val=3) | prop_add(name=health; val=12) | emo_add(name=SORROW; val=15)",
+            "opt_zuanying": "prop_add(name=MONEY; val=8) | prop_add(name=health; val=8) | emo_add(name=AMBITION; val=12)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
@@ -125,11 +125,11 @@
             "action:main:jiaoyou",
             "TARGET_IDENTITY_QUANGUI"
           ],
-          "operator_dsl": "prop_sub(name=MONEY; val=2) | prop_add(name=BURNOUT; val=8)",
+          "operator_dsl": "prop_sub(name=MONEY; val=2) | prop_add(name=health; val=8)",
           "option_results": {
-            "opt_kuangke": "prop_sub(name=HEALTH; val=8) | emo_add(name=ARROGANCE; val=15) | prop_add(name=BURNOUT; val=5) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_swill_gamble\")",
-            "opt_fengying": "prop_add(name=MONEY; val=15) | prop_add(name=BURNOUT; val=15) | emo_add(name=SORROW; val=18) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_swill_gamble\")",
-            "opt_zuanying": "prop_add(name=MONEY; val=10) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_swill_gamble\")"
+            "opt_kuangke": "prop_sub(name=HEALTH; val=8) | emo_add(name=ARROGANCE; val=15) | prop_add(name=health; val=5) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_swill_gamble\")",
+            "opt_fengying": "prop_add(name=MONEY; val=15) | prop_add(name=health; val=15) | emo_add(name=SORROW; val=18) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_swill_gamble\")",
+            "opt_zuanying": "prop_add(name=MONEY; val=10) | prop_add(name=health; val=10) | emo_add(name=AMBITION; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_swill_gamble\")"
           },
           "scale": 1.05,
           "stored_to": "747_kuangda.jiaoyou",
@@ -148,11 +148,11 @@
             "action:main:baiye",
             "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
           ],
-          "operator_dsl": "prop_sub(name=INSPIRATION; val=8) | prop_add(name=BURNOUT; val=12)",
+          "operator_dsl": "prop_add(name=health; val=12)",
           "option_results": {
-            "opt_kuangke": "prop_sub(name=HEALTH; val=15) | emo_add(name=ARROGANCE; val=20) | prop_add(name=BURNOUT; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_epitaph_coercion\")",
-            "opt_fengying": "prop_add(name=MONEY; val=20) | prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=15) | emo_add(name=SORROW; val=20) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_epitaph_coercion\")",
-            "opt_zuanying": "prop_add(name=MONEY; val=15) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_epitaph_coercion\")"
+            "opt_kuangke": "prop_sub(name=HEALTH; val=15) | emo_add(name=ARROGANCE; val=20) | prop_add(name=health; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_epitaph_coercion\")",
+            "opt_fengying": "prop_add(name=MONEY; val=20) | prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=health; val=15) | emo_add(name=SORROW; val=20) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_epitaph_coercion\")",
+            "opt_zuanying": "prop_add(name=MONEY; val=15) | prop_add(name=health; val=10) | emo_add(name=AMBITION; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_epitaph_coercion\")"
           },
           "scale": 1.1,
           "stored_to": "747_kuangda.baiye",
@@ -171,11 +171,11 @@
             "action:main:duzhuo",
             "TARGET_IDENTITY_QUANGUI"
           ],
-          "operator_dsl": "prop_sub(name=INSPIRATION; val=3) | emo_add(name=SORROW; val=15)",
+          "operator_dsl": "emo_add(name=SORROW; val=15)",
           "option_results": {
-            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ANGER; val=18) | prop_add(name=BURNOUT; val=8) | prop_add(name=LITERARY_FAME; val=3) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_paper_ash\")",
-            "opt_fengying": "prop_add(name=MONEY; val=8) | prop_add(name=BURNOUT; val=15) | emo_add(name=SORROW; val=20) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_paper_ash\")",
-            "opt_zuanying": "prop_add(name=MONEY; val=10) | prop_add(name=BURNOUT; val=10) | emo_add(name=AMBITION; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_paper_ash\")"
+            "opt_kuangke": "prop_sub(name=HEALTH; val=5) | emo_add(name=ANGER; val=18) | prop_add(name=health; val=8) | prop_add(name=LITERARY_FAME; val=3) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_paper_ash\")",
+            "opt_fengying": "prop_add(name=MONEY; val=8) | prop_add(name=health; val=15) | emo_add(name=SORROW; val=20) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_paper_ash\")",
+            "opt_zuanying": "prop_add(name=MONEY; val=10) | prop_add(name=health; val=10) | emo_add(name=AMBITION; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QUANGUI\"; key=\"quangui_paper_ash\")"
           },
           "scale": 1.05,
           "stored_to": "747_kuangda.duzhuo",

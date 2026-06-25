@@ -24,7 +24,7 @@
     "ganlu_journey"
   ],
   "universal_requirement": "",
-  "universal_result": "",
+  "universal_result": "prop_add(name=health; val=-5)|prop_add(name=progress; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 40,
   "word_count_max": 250,
@@ -141,7 +141,7 @@
             ]
           ],
           "option_results": {
-            "opt_idealist": "prop_sub(name=health; val=8) | prop_add(name=fatigue; val=10) | emo_add(name=SORROW; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=distance; val=6)",
+            "opt_idealist": "prop_sub(name=health; val=8) | prop_add(name=health; val=10) | emo_add(name=SORROW; val=10) | imagery_add(name=SOCIETY:famine) | prop_add(name=distance; val=6)",
             "opt_pragmatic": "emo_add(name=SORROW; val=3) | prop_add(name=distance; val=10)"
           }
         },
@@ -159,7 +159,7 @@
           ],
           "option_results": {
             "opt_idealist": "prop_add(name=health; val=3) | prop_add(name=distance; val=7)",
-            "opt_pragmatic": "prop_sub(name=health; val=8) | prop_add(name=sick; val=5) | prop_add(name=distance; val=12)"
+            "opt_pragmatic": "prop_sub(name=health; val=8) | prop_sub(name=health; val=5) | prop_add(name=distance; val=12)"
           }
         },
         {
@@ -238,7 +238,7 @@
             "action:main:ganlu"
           ],
           "option_results": {
-            "opt_idealist": "prop_add(name=health; val=15) | prop_add(name=drunk; val=20) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=HEALTH:drunk) | prop_add(name=distance; val=8)",
+            "opt_idealist": "prop_add(name=health; val=15) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=HEALTH:drunk) | prop_add(name=distance; val=8)",
             "opt_pragmatic": "prop_add(name=distance; val=12)"
           }
         }

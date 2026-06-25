@@ -30,8 +30,8 @@
   "universal_tags": [
     "qingliu_fengying"
   ],
-  "universal_requirement": "trait_has(name=kuangda_fengying) | prop_gt(name=ambition; val=30) | prop_lt(name=ambition; val=100)",
-  "universal_result": "prop_add(name=BURNOUT; val=3) | prop_add(name=fatigue; val=5)",
+  "universal_requirement": "trait_has(name=kuangda_fengying) | emo_gt(name=AMBITION; val=30) | emo_lt(name=AMBITION; val=100)",
+  "universal_result": "prop_add(name=health; val=-3)|prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 60,
   "word_count_max": 250,
@@ -48,7 +48,7 @@
       "id": "opt_kuangke",
       "prompt": "用30字以内写一个纯粹的【狂客冲动】动作——执行它，不压制它。\n\n特征：拂袖、掷杯、掀案、冷笑转身、大步离去、甩下一句狠话。动作是完整的、有终点的、不被打断的。\n\n狂客的本质是无所顾忌：不计后果、不屑计算、不给自己留退路。这个动作的力度应该让读者觉得「这一下要是真做出来，后果会很严重」。\n\n【绝对禁止】\n- 禁止写理性压制冲动的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写泄气姿态：拳头松开、肩膀垮下、转身回来、低头\n- 禁止写犹豫或自我怀疑\n- 禁止写「想起」「意识到」「记起」等回溯词\n\n【正确示例 — 纯冲动，无压制】\n- 「拂袖转身，酒盏在案上滚了三圈。」\n- 「冷笑掷下银两，抬脚就走。」\n【错误示例 — 已在自我压制（此乃 failed_hint 之职）】\n- 「攥紧的拳头又缓缓松开」\n- 「脚跟刚转半圈便停住了」",
       "text": "（攥拳欲斥，终又松开）",
-      "result": "flag_int_append(name=kuangda; val=3) | prop_sub(name=fatigue; val=3) | emo_add(name=ARROGANCE; val=10)",
+      "result": "prop_add(name=progress; val=3) | prop_sub(name=health; val=3) | emo_add(name=ARROGANCE; val=10)",
       "fixed": false,
       "plugins": {
         "failed_hint": {
@@ -63,7 +63,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内写一个纯粹的【钻营冲动】动作——执行它，不压制它。\n\n特征：目光在人群中快速扫寻熟人、向某位大人递眼色、从袖中摸出银两准备打点、侧身往暗处试探门路。动作是完整的、有终点的、不被打断的。\n\n钻营的本质是精于计算：想用资源开路、掂量筹码、盘算人脉。这个动作的急切感应该让读者觉得「他真以为自己能撬开这扇门」。\n\n【绝对禁止】\n- 禁止写计算后发现为零继而放弃的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写泄气姿态：眼神暗下去、垂下眼、收回目光、无果\n- 禁止写犹豫或自我怀疑\n\n【正确示例 — 纯冲动，无压制】\n- 「目光迅速扫过席间，锁定东首那位穿绛紫袍的大人。」\n- 「从袖中摸出两枚开元通宝，指甲在钱沿上刮了两下。」\n【错误示例 — 已在自我压制（此乃 failed_hint 之职）】\n- 「目光扫过人群，旋即收回」\n- 「眼神暗下去，没有熟人」",
       "text": "（目光四顾寻路，无果）",
-      "result": "flag_int_append(name=kuangda; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+      "result": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
       "fixed": false,
       "plugins": {
         "failed_hint": {
@@ -78,7 +78,7 @@
       "id": "opt_fengying",
       "prompt": "用30字以内写一个简短的动作描述——玩家以【逢迎】状态回应。这是唯一可选的路径。动作特征是：【顺从、配合、苦笑、按对方要求做。不硬顶、不巴结、保持基本的体面但终究低下了头】。\n\n逢迎行为特征：对方说什么就做什么。不多做也不少做。不主动讨好但也不拒绝。执行时像被编好程的机关——不带多余的情绪波动，也没有额外的抗拒姿态。",
       "text": "（依言照做）",
-      "result": "flag_int_append(name=kuangda; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
+      "result": "prop_add(name=progress; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
       "fixed": false,
       "plugins": {},
       "requirement": ""
@@ -98,9 +98,9 @@
             "VIBE_AESTHETIC_ELEGANT:ink_stone",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=health; val=2) | prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=2) | prop_sub(name=health; val=5)",
           "option_results": {
-            "opt_fengying": "prop_sub(name=money; val=8) | prop_add(name=DRUNK; val=15) | prop_sub(name=BURNOUT; val=5) | emo_add(name=SORROW; val=8)"
+            "opt_fengying": "prop_sub(name=money; val=8) | prop_sub(name=health; val=5) | emo_add(name=SORROW; val=8)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
@@ -113,9 +113,9 @@
             "TARGET_OBJECT_SWORD:rusty_sword",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=money; val=5) | prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=5) | prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_fengying": "prop_add(name=money; val=5) | prop_add(name=fatigue; val=8) | emo_add(name=SORROW; val=10)"
+            "opt_fengying": "prop_add(name=money; val=5) | prop_add(name=health; val=8) | emo_add(name=SORROW; val=10)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
@@ -128,7 +128,7 @@
             "ENV_NATURE_NIGHTMOON:cold_moon",
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_sub(name=health; val=5) | prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=5) | prop_sub(name=health; val=5)",
           "option_results": {
             "opt_fengying": "prop_add(name=money; val=10) | emo_add(name=SORROW; val=8)"
           },
@@ -143,9 +143,9 @@
             "TARGET_NPC_DUFU:thatched_grass",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=inspiration; val=5) | prop_sub(name=money; val=3)",
+          "operator_dsl": "prop_sub(name=money; val=3)",
           "option_results": {
-            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=fatigue; val=5) | emo_add(name=SORROW; val=6) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_academic_fraud\")"
+            "opt_fengying": "prop_add(name=money; val=8) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=6) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_academic_fraud\")"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
@@ -158,9 +158,9 @@
             "ACTION_ENTERTAIN_DRINK:empty_cup",
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_sub(name=inspiration; val=8) | prop_sub(name=fatigue; val=3)",
+          "operator_dsl": "prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_fengying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=DRUNK; val=8) | prop_sub(name=BURNOUT; val=3) | emo_add(name=SORROW; val=15)"
+            "opt_fengying": "prop_add(name=LITERARY_FAME; val=3) | prop_sub(name=health; val=3) | emo_add(name=SORROW; val=15)"
           },
           "scale": 1.1,
           "stored_to": "747_kuangda.baiye"
@@ -173,9 +173,9 @@
             "ENV_NATURE_SNOWSTORM:lone_snow",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=health; val=8) | prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=8) | prop_sub(name=health; val=5)",
           "option_results": {
-            "opt_fengying": "emo_add(name=TRANQUILITY; val=8) | flag_int_append(name=kuangda; val=8) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=5)"
+            "opt_fengying": "emo_add(name=TRANQUILITY; val=8) | prop_add(name=progress; val=8) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=5)"
           },
           "scale": 1.05,
           "stored_to": "747_kuangda.fangshi"

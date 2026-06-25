@@ -21,7 +21,7 @@
     {
       "id": "option_accept",
       "prompt": "用20字以内描述玩家回应的动作（递上某物/呈上名帖/献上包裹）",
-      "result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=career_progress; val=3)",
+      "result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=progress; val=3)",
       "requirement": "poem_has(type=GAN_YE; min_level=1; failed_hint=\"{failed_hint}\")",
       "plugins": {
         "failed_hint": {
@@ -40,7 +40,7 @@
     {
       "id": "option_cold_eye",
       "text": "拂袖而去",
-      "result": "prop_sub(name=career_progress; val=2)",
+      "result": "prop_sub(name=progress; val=2)",
       "accept_influence": [],
       "fixed": true
     }
@@ -63,9 +63,21 @@
             "action_style": "玩家只能被动回应——递上名帖、掏出银钱、退回门外。动作描写保持中性。【严禁】玩家主动质问、反击、讲道理或发表议论。",
             "resolution_style": "NPC 验货后反应。有实惠（钱/诗）则放行但态度仍傲慢，无实惠则嘲讽后赶人。用动作和表情呈现结果，不用内心独白。",
             "negative_examples": [
-              {"field": "demand_context", "bad": "门子冷笑一声：'就凭你也想见我家老爷？来人，乱棍打出去！'", "reason": "门子的权力只有'不让进门'，不能指挥家丁行凶或威胁生命"},
-              {"field": "action_style", "bad": "你义正辞严地斥责门子势利眼，说出一番大道理", "reason": "玩家在 L0 没有反击权，只能被动应对，不能发表议论或道德谴责"},
-              {"field": "resolution_style", "bad": "门子仔细读了你的诗，点点头说'好诗'", "reason": "门子是文盲，看不懂诗。验货只看有没有纸，不看内容"}
+              {
+                "field": "demand_context",
+                "bad": "门子冷笑一声：'就凭你也想见我家老爷？来人，乱棍打出去！'",
+                "reason": "门子的权力只有'不让进门'，不能指挥家丁行凶或威胁生命"
+              },
+              {
+                "field": "action_style",
+                "bad": "你义正辞严地斥责门子势利眼，说出一番大道理",
+                "reason": "玩家在 L0 没有反击权，只能被动应对，不能发表议论或道德谴责"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "门子仔细读了你的诗，点点头说'好诗'",
+                "reason": "门子是文盲，看不懂诗。验货只看有没有纸，不看内容"
+              }
             ]
           }
         },
@@ -73,16 +85,24 @@
           "id": "L1",
           "name": "制度隔绝 — 文法吏的围剿",
           "description": "玩家进门后遭遇中层文法吏的围剿。笑里藏刀的批注、温柔的阉割——他们把诗改得面目全非。",
-          "scale": 1.10,
-          "operator_dsl": "prop_sub(name=fatigue; val=10)",
+          "scale": 1.1,
+          "operator_dsl": "prop_sub(name=health; val=10)",
           "narrative_constraint": {
             "type": "power_gate_L1",
             "demand_context": "清客/文书/掌书记笑着收下诗稿，然后逐字批注——「犯忌」「僭越」「不合体统」「用典失当」。强迫玩家按他们的意思修改，把锋芒磨平、棱角削圆。表面彬彬有礼，实则每一笔批注都在阉割诗的灵魂。【严禁】文法吏直接撕毁诗稿或人身攻击——他们的暴力是制度性的，不是野蛮的。",
             "action_style": "玩家只能被动接受修改要求——点头应允、沉默执笔、按批注重写。动作可以是「接过批注」「研墨重写」「删去某句」等具体动作。【严禁】玩家反驳、争辩或拒绝修改。",
             "resolution_style": "诗被改完后，文法吏满意或挑剔地点头。呈现被规则玩弄的无力感——诗变得四平八稳、字字恶心，但通过了。用细节呈现'温柔的暴力'。",
             "negative_examples": [
-              {"field": "demand_context", "bad": "文法吏把诗稿摔在地上踩了两脚：'这种垃圾也敢递上来？'", "reason": "L1 的暴力是制度性的、微笑的。摔稿踩踏的行为太野蛮，不符合中层文官的行为模式"},
-              {"field": "resolution_style", "bad": "文法吏看后勃然大怒，把你赶了出去", "reason": "L1 的围剿是让你'改到通过'而不是'赶你走'，赶人是 L0 门子的行为"}
+              {
+                "field": "demand_context",
+                "bad": "文法吏把诗稿摔在地上踩了两脚：'这种垃圾也敢递上来？'",
+                "reason": "L1 的暴力是制度性的、微笑的。摔稿踩踏的行为太野蛮，不符合中层文官的行为模式"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "文法吏看后勃然大怒，把你赶了出去",
+                "reason": "L1 的围剿是让你'改到通过'而不是'赶你走'，赶人是 L0 门子的行为"
+              }
             ]
           }
         },
@@ -91,16 +111,28 @@
           "name": "虚伪的降维打击 — 权贵的羞辱",
           "description": "玩家终于站在权贵面前。之前的层层阻挠居然是最仁慈的部分——权贵对你的消耗是降维式的。",
           "scale": 1.25,
-          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=fatigue; val=5)",
+          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=health; val=5)",
           "narrative_constraint": {
             "type": "power_gate_L2",
             "demand_context": "权贵漫不经心把玩诗稿，轻描淡写一句「尚可」后随手处置——或把诗送给他人署名，或命令玩家写政治黑材料。每次微笑都是刀子，每句鼓励都是贬低。【严禁】权贵直接辱骂或发怒——他们的恶是漫不经心的冷漠，不是情绪化的暴怒。",
             "action_style": "玩家只能呈上诗稿、沉默等待、躬身领命。动作描写突出卑微和渺小——权贵的动作描写要多（把玩、随手递、轻描淡写），玩家的动作要少且克制。【严禁】玩家表现不满、愤怒或任何形式的反抗。",
             "resolution_style": "揭露权力不对等造成的窒息感——诗被掠夺署名、被改造成政治打手、或被当作废纸。玩家连愤怒的资格都没有。用动作和场景呈现结果。",
             "negative_examples": [
-              {"field": "demand_context", "bad": "权贵拍案而起：'大胆！竟敢写这种诗讽刺本相！'", "reason": "权贵的恶是漫不经心的降维打击，不是情绪化的暴怒。拍案而起太戏剧化"},
-              {"field": "action_style", "bad": "你不卑不亢地回视权贵，朗声道：'在下无愧于心'", "reason": "玩家在权贵面前没有平等对视的资格，动作必须体现地位碾压"},
-              {"field": "resolution_style", "bad": "权贵赏识你的才华，把你收为门生", "reason": "L2 的核心是羞辱和掠夺，不是赏识。赏识是低野心阶段的剧情"}
+              {
+                "field": "demand_context",
+                "bad": "权贵拍案而起：'大胆！竟敢写这种诗讽刺本相！'",
+                "reason": "权贵的恶是漫不经心的降维打击，不是情绪化的暴怒。拍案而起太戏剧化"
+              },
+              {
+                "field": "action_style",
+                "bad": "你不卑不亢地回视权贵，朗声道：'在下无愧于心'",
+                "reason": "玩家在权贵面前没有平等对视的资格，动作必须体现地位碾压"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "权贵赏识你的才华，把你收为门生",
+                "reason": "L2 的核心是羞辱和掠夺，不是赏识。赏识是低野心阶段的剧情"
+              }
             ]
           }
         }
@@ -123,8 +155,16 @@
             "action_style": "",
             "resolution_style": "交钱后对方态度微妙变化——或更热情、或更轻蔑（嫌少）。用表情和动作呈现。",
             "negative_examples": [
-              {"field": "demand_context", "bad": "门子伸手：'拿钱来，不然别想进去'", "reason": "太直白，破坏了含蓄的索贿氛围。要用环境和细节暗示，不要直接说'要钱'"},
-              {"field": "resolution_style", "bad": "你数出二十两银子递上，门子眉开眼笑", "reason": "不要写玩家具体数钱的动作，保持中性交割描写"}
+              {
+                "field": "demand_context",
+                "bad": "门子伸手：'拿钱来，不然别想进去'",
+                "reason": "太直白，破坏了含蓄的索贿氛围。要用环境和细节暗示，不要直接说'要钱'"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "你数出二十两银子递上，门子眉开眼笑",
+                "reason": "不要写玩家具体数钱的动作，保持中性交割描写"
+              }
             ]
           }
         },
@@ -140,8 +180,16 @@
             "action_style": "",
             "resolution_style": "呈现诗稿被糟蹋的方式——被揉皱、被踩踏、被丢弃、被当废纸。糟蹋诗的方式就是糟蹋灵魂的方式。【严禁】在不同事件中复用相同的糟蹋方式。",
             "negative_examples": [
-              {"field": "demand_context", "bad": "NPC 骂你'废物'、'垃圾'", "reason": "直白的辱骂太廉价。要用对诗的具体动作来羞辱——念诗的怪腔调、碾诗稿的鞋底，这些细节比骂一万句都狠"},
-              {"field": "resolution_style", "bad": "你感到非常愤怒，但忍住了", "reason": "不要写玩家的内心感受。只用外部动作和场景呈现，让玩家自己感受"}
+              {
+                "field": "demand_context",
+                "bad": "NPC 骂你'废物'、'垃圾'",
+                "reason": "直白的辱骂太廉价。要用对诗的具体动作来羞辱——念诗的怪腔调、碾诗稿的鞋底，这些细节比骂一万句都狠"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "你感到非常愤怒，但忍住了",
+                "reason": "不要写玩家的内心感受。只用外部动作和场景呈现，让玩家自己感受"
+              }
             ]
           }
         },
@@ -157,20 +205,33 @@
             "action_style": "",
             "resolution_style": "呈现不可逆的损失感——被低贱处置的残稿、被涂改得面目全非的草稿、被抹去的署名、或被掠夺的完成品。用诗稿的下场暗示才华的流失。【严禁】复用相同的处置方式。",
             "negative_examples": [
-              {"field": "demand_context", "bad": "权贵说：'你的诗不错，以后替我写'", "reason": "太温和。要呈现强制性和掠夺感——不是征求同意，而是直接宣告"},
-              {"field": "resolution_style", "bad": "你意识到自己的才华正在被消耗", "reason": "不要写玩家的内心活动。用诗稿被处理的外部事实呈现后果"}
+              {
+                "field": "demand_context",
+                "bad": "权贵说：'你的诗不错，以后替我写'",
+                "reason": "太温和。要呈现强制性和掠夺感——不是征求同意，而是直接宣告"
+              },
+              {
+                "field": "resolution_style",
+                "bad": "你意识到自己的才华正在被消耗",
+                "reason": "不要写玩家的内心活动。用诗稿被处理的外部事实呈现后果"
+              }
             ]
           }
         }
       ]
     }
   ],
-  "universal_requirement": "prop_gt(name=career_progress; val=70)|prop_lt(name=career_progress; val=100)",
-  "plugins": ["failed_hint"],
+  "universal_requirement": "prop_gt(name=progress; val=70)|prop_lt(name=progress; val=100)",
+  "plugins": [
+    "failed_hint"
+  ],
   "word_count_min": 40,
   "word_count_max": 200,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
   "output_dir": "data/4_eras/745_ambition/baiye/real_appearance",
-  "universal_tags": ["action:main:baiye"]
+  "universal_tags": [
+    "action:main:baiye"
+  ],
+  "universal_result": "prop_add(name=progress; val=5)"
 }

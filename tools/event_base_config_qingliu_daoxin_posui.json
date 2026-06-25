@@ -34,8 +34,8 @@
   "universal_tags": [
     "qingliu_daoxin_posui"
   ],
-  "universal_requirement": "prop_gt(name=BURNOUT; val=70)",
-  "universal_result": "prop_add(name=BURNOUT; val=3) | emo_add(name=SORROW; val=5)",
+  "universal_requirement": "prop_lt(name=health; val=30)",
+  "universal_result": "prop_add(name=health; val=-3)",
   "universal_option_requirement": "",
   "word_count_min": 60,
   "word_count_max": 250,
@@ -50,7 +50,7 @@
       "id": "opt_resign",
       "prompt": "写一个简短的【认命/承受】动作——沉默地接受这个局面。动作是一个被动的接受性身体动作：视线的收回、姿态的下沉、脚步的移开、手中物件的放下。动作本身不带情绪词汇，通过迟疑或沉默传递承受。",
       "text": "（垂下视线，端杯饮尽）",
-      "result": "prop_add(name=fatigue; val=8) | prop_add(name=BURNOUT; val=5) | emo_add(name=SORROW; val=5)",
+      "result": "prop_add(name=health; val=8) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=5)",
       "fixed": false,
       "plugins": {},
       "requirement": ""
@@ -69,7 +69,7 @@
           "tags": [
             "action:main:duzhuo"
           ],
-          "operator_dsl": "prop_add(name=health; val=3) | prop_sub(name=INSPIRATION; val=10) | prop_add(name=BURNOUT; val=10)",
+          "operator_dsl": "prop_add(name=health; val=3) | prop_add(name=health; val=10)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.duzhuo"
@@ -81,7 +81,7 @@
           "tags": [
             "action:main:duzhuo"
           ],
-          "operator_dsl": "flag_int_append(name=kuangda; val=-5) | prop_sub(name=INSPIRATION; val=15) | prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=5)",
+          "operator_dsl": "prop_add(name=progress; val=-5) | prop_add(name=health; val=10) | emo_add(name=SORROW; val=5)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.duzhuo"
@@ -93,7 +93,7 @@
           "tags": [
             "action:main:duzhuo"
           ],
-          "operator_dsl": "flag_int_append(name=kuangda; val=-5) | emo_add(name=SORROW; val=8) | emo_sub(name=ARROGANCE; val=15) | prop_add(name=INSPIRATION; val=10)",
+          "operator_dsl": "prop_add(name=progress; val=-5) | emo_add(name=SORROW; val=8) | emo_sub(name=ARROGANCE; val=15)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.duzhuo"
@@ -105,7 +105,7 @@
           "tags": [
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=fatigue; val=5) | prop_add(name=LITERARY_FAME; val=3)",
+          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=health; val=5) | prop_add(name=LITERARY_FAME; val=3)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
@@ -118,7 +118,7 @@
             "action:main:fangshi",
             "TARGET_IDENTITY_MENZI"
           ],
-          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=BURNOUT; val=8) | emo_add(name=ANGER; val=10) | flag_int_append(name=kuangda; val=-3)",
+          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=health; val=8) | emo_add(name=ANGER; val=10) | prop_add(name=progress; val=-3)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
@@ -131,7 +131,7 @@
             "action:main:fangshi",
             "TARGET_IDENTITY_QINGKE"
           ],
-          "operator_dsl": "prop_sub(name=health; val=5) | emo_add(name=SORROW; val=10) | flag_int_append(name=kuangda; val=-3)",
+          "operator_dsl": "prop_sub(name=health; val=5) | emo_add(name=SORROW; val=10) | prop_add(name=progress; val=-3)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"
@@ -143,7 +143,7 @@
           "tags": [
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_add(name=fatigue; val=5) | prop_add(name=LITERARY_FAME; val=5) | prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=8)",
+          "operator_dsl": "prop_add(name=health; val=5) | prop_add(name=LITERARY_FAME; val=5) | prop_add(name=health; val=10) | emo_add(name=SORROW; val=8)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.baiye"
@@ -167,7 +167,7 @@
           "tags": [
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_add(name=BURNOUT; val=10) | emo_add(name=SORROW; val=8) | flag_int_append(name=kuangda; val=-5) | prop_add(name=DRUNK; val=10)",
+          "operator_dsl": "prop_add(name=health; val=10) | emo_add(name=SORROW; val=8) | prop_add(name=progress; val=-5)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
@@ -179,7 +179,7 @@
           "tags": [
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_add(name=fatigue; val=5) | emo_add(name=AMBITION; val=5) | prop_add(name=money; val=3) | emo_add(name=ANGER; val=15)",
+          "operator_dsl": "prop_add(name=health; val=5) | emo_add(name=AMBITION; val=5) | prop_add(name=money; val=3) | emo_add(name=ANGER; val=15)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.baiye"

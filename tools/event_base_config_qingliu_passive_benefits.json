@@ -39,8 +39,8 @@
   "universal_tags": [
     "qingliu_aid"
   ],
-  "universal_requirement": "prop_gt(name=ambition; val=30)|prop_lt(name=ambition; val=100)",
-  "universal_result": "",
+  "universal_requirement": "emo_gt(name=AMBITION; val=30)|emo_lt(name=AMBITION; val=100)",
+  "universal_result": "prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 40,
   "word_count_max": 200,
@@ -93,7 +93,7 @@
       "id": "opt_kuangke",
       "prompt": "用30字以内写一个简短的动作描述——玩家以【狂客】状态回应清流朋友的援助。\n\n狂客回应原则：\n1. 态度：坦然接受，不卑不亢。将援助理解为知音之间理所当然的往来，而非施舍-接受关系。\n2. 行为模式：以行动而非言辞完成应答——一个动作、一个表情、或一句看似漫不经心的话——将援助瞬间转化为知己之间的会心一笑。\n3. 【绝对禁止】卑微道谢、推辞客套、感激涕零——这些姿态等于承认了「施舍-接受」的不对等关系，不是狂客所为。\n4. 【反面教材】「多谢仁兄大恩」「这怎么好意思呢，我不能收」——客套话是狂客的大忌。",
       "text": "（坦然一笑，举杯相敬）",
-      "result": "prop_sub(name=FATIGUE; val=20)|emo_add(name=TRANQUILITY; val=10)|prop_add(name=INSPIRATION; val=15)",
+      "result": "prop_sub(name=health; val=20)|emo_add(name=TRANQUILITY; val=10)",
       "fixed": false,
       "accept_influence": [
         "qingliu_benefit_type"
@@ -110,7 +110,7 @@
       "id": "opt_fengying",
       "prompt": "用30字以内写一个简短的动作描述——玩家以中旷达状态回应清流朋友的援助。\n\n中旷达回应原则：\n1. 核心矛盾：需要这份帮助，但难以坦然——困窘与感激同时存在。\n2. 行为模式：接受时伴随某种不安的身体语言——可能是垂目、可能是沉默、可能是手指无意识地摩挲衣角。\n3. 【绝对禁止】过度表演式窘迫——不写「泪水在眼眶打转」「声音发颤」等戏剧化反应。这是真实的尴尬，不是舞台上的苦情戏。\n4. 【正面引导】用接受后的沉默、停顿或转移话题来呈现窘迫，而非直接描写窘迫本身。",
       "text": "（低头接过，沉默片刻才开口）",
-      "result": "prop_add(name=FATIGUE; val=15)|emo_add(name=SORROW; val=10)",
+      "result": "prop_add(name=health; val=15)|emo_add(name=SORROW; val=10)",
       "fixed": false,
       "accept_influence": [
         "qingliu_benefit_type"
@@ -127,7 +127,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内写一个简短的动作描述——玩家以低旷达状态回应清流朋友的援助。\n\n钻营回应原则：\n1. 行为模式：嘴上说着感激的话，但眼神、停顿、或完成接受后立刻转移话题的节奏——暴露了这感激只是表面功夫。\n2. 可观察的算计信号：接受帮助后立刻谈论自己的困境或需求（暗示还不够）、将对方的名声或关系用作自己的社交资本、或把收到的实物转手处置掉。这些是「可观察的行为」，不是心理描写。\n3. 【绝对禁止】直接出卖朋友、背叛恩人。钻营是算计和利用，不是背刺。不写「出卖」「背叛」「告密」等词。\n4. 【反面教材】「多谢仁兄，不知仁兄可认识某某大人？」（赤裸裸的攀附，太低劣）——算计应当是微妙的、克制的、甚至让观察者都不确定这究竟是算计还是真诚。",
       "text": "（满脸堆笑，目光却越过对方望向别处）",
-      "result": "emo_add(name=AMBITION; val=15)|prop_add(name=BURNOUT; val=15)|emo_add(name=SORROW; val=5)",
+      "result": "emo_add(name=AMBITION; val=15)|prop_add(name=health; val=15)|emo_add(name=SORROW; val=5)",
       "fixed": false,
       "accept_influence": [
         "qingliu_benefit_type"
@@ -238,7 +238,7 @@
             "emotion_pair:pair_tranquility",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_add(name=INSPIRATION; val=5)",
+          "operator_dsl": "",
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
         },
@@ -290,7 +290,7 @@
             "emotion_pair:pair_tranquility",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_add(name=INSPIRATION; val=10)",
+          "operator_dsl": "",
           "scale": 1.1,
           "stored_to": "747_kuangda.fangshi"
         },
