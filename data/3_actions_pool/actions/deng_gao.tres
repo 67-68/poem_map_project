@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_5044y"]
 [ext_resource type="Texture2D" uid="uid://d2fkera73a5dj" path="res://assets/stamps/denggao_stamp.png" id="4_b6lfb"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="5_ebpm8"]
+[ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="6_timeop"]
 
 [sub_resource type="Resource" id="Resource_228l6"]
 script = ExtResource("3_5044y")
@@ -24,11 +25,16 @@ _property = 2
 value = 1
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
+[sub_resource type="Resource" id="Resource_time"]
+script = ExtResource("6_timeop")
+day = 5.0
+metadata/_custom_type_script = "uid://khw2s6fgrkem"
+
 [resource]
 script = ExtResource("5_ebpm8")
 _main_tag = 31
 _action_tags = Array[int]([1, 4, 5, 9, 12, 13, 15, 16, 17, 31])
-action_results = Array[ExtResource("2_1nf2l")]([SubResource("Resource_228l6"), SubResource("Resource_x3gdk"), SubResource("Resource_wn3pn")])
+action_results = Array[ExtResource("2_1nf2l")]([SubResource("Resource_228l6"), SubResource("Resource_x3gdk"), SubResource("Resource_wn3pn"), SubResource("Resource_time")])
 fallback_event_uuid = "event_cooldown_wall"
 uuid = "deng_gao"
 name = "登高"

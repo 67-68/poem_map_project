@@ -9,54 +9,54 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_dnsl8"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_s5b7p"]
 
-[sub_resource type="Resource" id="Resource_3c4o5"]
+[sub_resource type="Resource" id="Resource_n1goe"]
 script = ExtResource("3_l0u07")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_s3ox6"]
+[sub_resource type="Resource" id="Resource_qiqet"]
 script = ExtResource("3_l0u07")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_l0u07"]
+[sub_resource type="Resource" id="Resource_ea7gu"]
 script = ExtResource("3_l0u07")
 str_props = "LITERARY_FAME"
 value = 3
 
-[sub_resource type="Resource" id="Resource_npx0e"]
+[sub_resource type="Resource" id="Resource_q5j5i"]
 script = ExtResource("3_l0u07")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_m2rce"]
+[sub_resource type="Resource" id="Resource_e27p0"]
 script = ExtResource("4_npx0e")
 value = 5
 
-[sub_resource type="Resource" id="Resource_ok5ka"]
+[sub_resource type="Resource" id="Resource_fbn5s"]
 script = ExtResource("3_l0u07")
 str_props = "fatigue"
 value = 8
 
-[sub_resource type="Resource" id="Resource_dnsl8"]
+[sub_resource type="Resource" id="Resource_m3dtn"]
 script = ExtResource("3_l0u07")
 str_props = "BURNOUT"
 value = 5
 
-[sub_resource type="Resource" id="Resource_s5b7p"]
+[sub_resource type="Resource" id="Resource_mk62r"]
 script = ExtResource("4_npx0e")
 value = 5
 
-[sub_resource type="Resource" id="Resource_n1goe"]
+[sub_resource type="Resource" id="Resource_3k83u"]
 script = ExtResource("5_m2rce")
-operators = Array[ExtResource("2_s3ox6")]([SubResource("Resource_3c4o5"), SubResource("Resource_s3ox6"), SubResource("Resource_l0u07"), SubResource("Resource_npx0e"), SubResource("Resource_m2rce"), SubResource("Resource_ok5ka"), SubResource("Resource_dnsl8"), SubResource("Resource_s5b7p")])
+operators = Array[ExtResource("2_s3ox6")]([SubResource("Resource_n1goe"), SubResource("Resource_qiqet"), SubResource("Resource_ea7gu"), SubResource("Resource_q5j5i"), SubResource("Resource_e27p0"), SubResource("Resource_fbn5s"), SubResource("Resource_m3dtn"), SubResource("Resource_mk62r")])
 
-[sub_resource type="Resource" id="Resource_qiqet"]
+[sub_resource type="Resource" id="Resource_waxb6"]
 script = ExtResource("6_ok5ka")
-choice_result = SubResource("Resource_n1goe")
+choice_result = SubResource("Resource_3k83u")
 description = "搁下酒杯时手腕顿了一下。剩余的酒液在杯中晃了两圈才停下来。垂眼。埋首。"
 
-[sub_resource type="Resource" id="Resource_ea7gu"]
+[sub_resource type="Resource" id="Resource_yfjnd"]
 script = ExtResource("7_dnsl8")
 property = "BURNOUT"
 value = 70
@@ -64,10 +64,10 @@ operator = 1
 
 [resource]
 script = ExtResource("8_s5b7p")
-requirement = SubResource("Resource_ea7gu")
+requirement = SubResource("Resource_yfjnd")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:jiaoyou"])
-options = Array[ExtResource("1_3c4o5")]([SubResource("Resource_qiqet")])
+options = Array[ExtResource("1_3c4o5")]([SubResource("Resource_waxb6")])
 uuid = "qingliu_daoxin_posui_poverty_as_aesthetic"
 name = "举杯饮寒酸"
 description = "绯袍官员举杯时，酒液在杯口溢出一道细痕。他说子美兄的贫寒是真的，语气像是在介绍一道菜的做法。席上几个青袍官员纷纷侧身看过来。有人指着你领口的补丁说这是真风骨，说完夹了一块羊肉。你低头看袖口的磨痕。那块磨损处今天早上还没有发白。酒杯搁在唇边，酒气涌上来，酒液却迟迟没有入口。"

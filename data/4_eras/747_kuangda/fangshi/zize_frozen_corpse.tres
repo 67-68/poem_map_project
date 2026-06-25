@@ -9,52 +9,52 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_o5h4r"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_c4gh7"]
 
-[sub_resource type="Resource" id="Resource_iyeqf"]
+[sub_resource type="Resource" id="Resource_ph7af"]
 script = ExtResource("3_wxqa8")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_7b4x0"]
+[sub_resource type="Resource" id="Resource_4lgu8"]
 script = ExtResource("3_wxqa8")
 str_props = "burnout"
 value = 3
 
-[sub_resource type="Resource" id="Resource_wxqa8"]
+[sub_resource type="Resource" id="Resource_ei7vb"]
 script = ExtResource("3_wxqa8")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_ervo5"]
+[sub_resource type="Resource" id="Resource_1iedq"]
 script = ExtResource("4_ervo5")
 value = -20
 
-[sub_resource type="Resource" id="Resource_h7qhd"]
+[sub_resource type="Resource" id="Resource_6arb0"]
 script = ExtResource("4_ervo5")
 value = -20
 
-[sub_resource type="Resource" id="Resource_evfqk"]
+[sub_resource type="Resource" id="Resource_tb3ta"]
 script = ExtResource("4_ervo5")
 value = -20
 
-[sub_resource type="Resource" id="Resource_o5h4r"]
+[sub_resource type="Resource" id="Resource_wvc4j"]
 script = ExtResource("4_ervo5")
 value = 10
 
-[sub_resource type="Resource" id="Resource_c4gh7"]
+[sub_resource type="Resource" id="Resource_cb30v"]
 script = ExtResource("3_wxqa8")
 str_props = "burnout"
 value = 8
 
-[sub_resource type="Resource" id="Resource_ph7af"]
+[sub_resource type="Resource" id="Resource_a7gh5"]
 script = ExtResource("5_h7qhd")
-operators = Array[ExtResource("2_7b4x0")]([SubResource("Resource_iyeqf"), SubResource("Resource_7b4x0"), SubResource("Resource_wxqa8"), SubResource("Resource_ervo5"), SubResource("Resource_h7qhd"), SubResource("Resource_evfqk"), SubResource("Resource_o5h4r"), SubResource("Resource_c4gh7")])
+operators = Array[ExtResource("2_7b4x0")]([SubResource("Resource_ph7af"), SubResource("Resource_4lgu8"), SubResource("Resource_ei7vb"), SubResource("Resource_1iedq"), SubResource("Resource_6arb0"), SubResource("Resource_tb3ta"), SubResource("Resource_wvc4j"), SubResource("Resource_cb30v")])
 
-[sub_resource type="Resource" id="Resource_4lgu8"]
+[sub_resource type="Resource" id="Resource_tcyoh"]
 script = ExtResource("6_evfqk")
-choice_result = SubResource("Resource_ph7af")
+choice_result = SubResource("Resource_a7gh5")
 description = "袖口蹭过坊墙，干土簌簌落下。你继续穿过路口。"
 
-[sub_resource type="Resource" id="Resource_ei7vb"]
+[sub_resource type="Resource" id="Resource_7xvgj"]
 script = ExtResource("7_o5h4r")
 property = "burnout"
 value = 60
@@ -62,10 +62,10 @@ operator = 1
 
 [resource]
 script = ExtResource("8_c4gh7")
-requirement = SubResource("Resource_ei7vb")
+requirement = SubResource("Resource_7xvgj")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_iyeqf")]([SubResource("Resource_4lgu8")])
+options = Array[ExtResource("1_iyeqf")]([SubResource("Resource_tcyoh")])
 uuid = "zize_frozen_corpse"
 name = "坊墙下"
 description = "铁钩刮过石板的声音先于坊丁的身影抵达。你起先以为坊墙下是一堆破被褥，走近三步才看清被褥里伸出的半只手——手指收拢，掌心空着，指甲暗紫色。坊丁走近时你往后退了一步，手不自觉伸进怀里，指腹触到那几枚铜钱，还在。铜钱贴着肋骨，温热。你停了半秒，把铜钱在指间转了一下，按回原处。坊丁弯下腰时你已从他和那具身体旁绕了过去，袖口蹭过坊墙的粗面，带下一撮干土。"

@@ -9,50 +9,50 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_kga6u"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_y33su"]
 
-[sub_resource type="Resource" id="Resource_22wl7"]
+[sub_resource type="Resource" id="Resource_41q6l"]
 script = ExtResource("3_wwk21")
 str_props = "fatigue"
 value = -3
 
-[sub_resource type="Resource" id="Resource_ddtlt"]
+[sub_resource type="Resource" id="Resource_sur8m"]
 script = ExtResource("3_wwk21")
 str_props = "burnout"
 value = 3
 
-[sub_resource type="Resource" id="Resource_wwk21"]
+[sub_resource type="Resource" id="Resource_21j38"]
 script = ExtResource("3_wwk21")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_qn5sk"]
+[sub_resource type="Resource" id="Resource_0hxf4"]
 script = ExtResource("3_wwk21")
 str_props = "inspiration"
 value = -10
 
-[sub_resource type="Resource" id="Resource_o8ylv"]
+[sub_resource type="Resource" id="Resource_8eps7"]
 script = ExtResource("3_wwk21")
 str_props = "talent"
 value = -3
 
-[sub_resource type="Resource" id="Resource_be80q"]
+[sub_resource type="Resource" id="Resource_2w2c2"]
 script = ExtResource("4_qn5sk")
 value = 10
 
-[sub_resource type="Resource" id="Resource_kga6u"]
+[sub_resource type="Resource" id="Resource_l54k1"]
 script = ExtResource("3_wwk21")
 str_props = "burnout"
 value = 8
 
-[sub_resource type="Resource" id="Resource_y33su"]
+[sub_resource type="Resource" id="Resource_7pepa"]
 script = ExtResource("5_o8ylv")
-operators = Array[ExtResource("2_ddtlt")]([SubResource("Resource_22wl7"), SubResource("Resource_ddtlt"), SubResource("Resource_wwk21"), SubResource("Resource_qn5sk"), SubResource("Resource_o8ylv"), SubResource("Resource_be80q"), SubResource("Resource_kga6u")])
+operators = Array[ExtResource("2_ddtlt")]([SubResource("Resource_41q6l"), SubResource("Resource_sur8m"), SubResource("Resource_21j38"), SubResource("Resource_0hxf4"), SubResource("Resource_8eps7"), SubResource("Resource_2w2c2"), SubResource("Resource_l54k1")])
 
-[sub_resource type="Resource" id="Resource_41q6l"]
+[sub_resource type="Resource" id="Resource_454mj"]
 script = ExtResource("6_be80q")
-choice_result = SubResource("Resource_y33su")
+choice_result = SubResource("Resource_7pepa")
 description = "顿一下。把那截秃笔推还给他。"
 
-[sub_resource type="Resource" id="Resource_sur8m"]
+[sub_resource type="Resource" id="Resource_cwdlp"]
 script = ExtResource("7_kga6u")
 property = "burnout"
 value = 60
@@ -60,10 +60,10 @@ operator = 1
 
 [resource]
 script = ExtResource("8_y33su")
-requirement = SubResource("Resource_sur8m")
+requirement = SubResource("Resource_cwdlp")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_22wl7")]([SubResource("Resource_41q6l")])
+options = Array[ExtResource("1_22wl7")]([SubResource("Resource_454mj")])
 uuid = "zize_young_scholar"
 name = "那件松了的青衫"
 description = "他在门口站定时你正数着袖里的铜钱。余光先触到那件青衫——经纬洗得松了，透出里层麻布的纹路。他往前迈了一步，门槛的阴影从他脚背移到脚踝。你听见自己的脊椎一节节凉下去。他问“先生在长安怎么才能被人看见”。你张开嘴。舌根往上颚顶了一下。然后你听见一句话从自己喉咙里出来——“好好写，总会有人看见的”。那声音薄得像坊墙外飘进来的叫卖。他低着头认真点头，袖子里摸出一截秃笔，用唾沫润了润笔尖，抬头说“您再说一遍，我记一记”。你说不用记了。他写字的姿势让你想起十年前租住在城南土墙房里，每天蘸井水在桌上练字的时辰。"

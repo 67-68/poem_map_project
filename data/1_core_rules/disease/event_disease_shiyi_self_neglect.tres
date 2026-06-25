@@ -8,47 +8,47 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_vydyd"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_3cwxk"]
 
-[sub_resource type="Resource" id="Resource_g0gg1"]
+[sub_resource type="Resource" id="Resource_naw75"]
 script = ExtResource("3_rswbg")
 str_props = "burnout"
 value = -5
 
-[sub_resource type="Resource" id="Resource_062o3"]
+[sub_resource type="Resource" id="Resource_rq0at"]
 script = ExtResource("4_70h26")
 value = -3
 
-[sub_resource type="Resource" id="Resource_rswbg"]
+[sub_resource type="Resource" id="Resource_8bk8q"]
 script = ExtResource("5_5j2j5")
-operators = Array[ExtResource("2_062o3")]([SubResource("Resource_g0gg1"), SubResource("Resource_062o3")])
+operators = Array[ExtResource("2_062o3")]([SubResource("Resource_naw75"), SubResource("Resource_rq0at")])
 
-[sub_resource type="Resource" id="Resource_70h26"]
+[sub_resource type="Resource" id="Resource_ngp4p"]
 script = ExtResource("6_vydyd")
-choice_result = SubResource("Resource_rswbg")
+choice_result = SubResource("Resource_8bk8q")
 description = "强打精神研墨写诗"
 
-[sub_resource type="Resource" id="Resource_5j2j5"]
+[sub_resource type="Resource" id="Resource_xjrpv"]
 script = ExtResource("4_70h26")
 value = 10
 
-[sub_resource type="Resource" id="Resource_vydyd"]
+[sub_resource type="Resource" id="Resource_1u1om"]
 script = ExtResource("3_rswbg")
 str_props = "literary_fame"
 value = -5
 
-[sub_resource type="Resource" id="Resource_3cwxk"]
+[sub_resource type="Resource" id="Resource_rn42d"]
 script = ExtResource("5_5j2j5")
-operators = Array[ExtResource("2_062o3")]([SubResource("Resource_5j2j5"), SubResource("Resource_vydyd")])
+operators = Array[ExtResource("2_062o3")]([SubResource("Resource_xjrpv"), SubResource("Resource_1u1om")])
 
-[sub_resource type="Resource" id="Resource_naw75"]
+[sub_resource type="Resource" id="Resource_aga1v"]
 script = ExtResource("6_vydyd")
-choice_result = SubResource("Resource_3cwxk")
+choice_result = SubResource("Resource_rn42d")
 description = "继续躺着，什么都不做"
 
 [resource]
 script = ExtResource("7_3cwxk")
 era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:depression"])
-options = Array[ExtResource("1_g0gg1")]([SubResource("Resource_70h26"), SubResource("Resource_naw75")])
+options = Array[ExtResource("1_g0gg1")]([SubResource("Resource_ngp4p"), SubResource("Resource_aga1v")])
 uuid = "event_disease_shiyi_self_neglect"
 name = "自弃"
 description = "砚台里的墨早就干透了，笔尖的毛都炸开了。案头的诗集落了厚厚一层灰，你甚至懒得吹一吹。你知道应该写点什么——你是个诗人啊——但你盯着白纸，脑子里一片空白。什么都不想做。什么都不在乎。"

@@ -13,115 +13,115 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_fvfg8"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_a6cni"]
 
-[sub_resource type="Resource" id="Resource_gol42"]
+[sub_resource type="Resource" id="Resource_1dc0n"]
 script = ExtResource("3_7tgdi")
 str_props = "health"
 value = -6
 
-[sub_resource type="Resource" id="Resource_3vedi"]
+[sub_resource type="Resource" id="Resource_jmp8d"]
 script = ExtResource("3_7tgdi")
 str_props = "fatigue"
 value = -6
 
-[sub_resource type="Resource" id="Resource_7tgdi"]
+[sub_resource type="Resource" id="Resource_sg6ul"]
 script = ExtResource("3_7tgdi")
 str_props = "health"
 value = -12
 
-[sub_resource type="Resource" id="Resource_upfvw"]
+[sub_resource type="Resource" id="Resource_c558o"]
 script = ExtResource("3_7tgdi")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_j8ily"]
+[sub_resource type="Resource" id="Resource_wonok"]
 script = ExtResource("4_upfvw")
-operators = Array[ExtResource("2_3vedi")]([SubResource("Resource_upfvw")])
+operators = Array[ExtResource("2_3vedi")]([SubResource("Resource_c558o")])
 
-[sub_resource type="Resource" id="Resource_01r20"]
+[sub_resource type="Resource" id="Resource_8soe1"]
 script = ExtResource("4_upfvw")
 
-[sub_resource type="Resource" id="Resource_oe8ds"]
+[sub_resource type="Resource" id="Resource_i0pcs"]
 script = ExtResource("3_7tgdi")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_6b1wc"]
+[sub_resource type="Resource" id="Resource_qys5i"]
 script = ExtResource("4_upfvw")
-operators = Array[ExtResource("2_3vedi")]([SubResource("Resource_oe8ds")])
+operators = Array[ExtResource("2_3vedi")]([SubResource("Resource_i0pcs")])
 
-[sub_resource type="Resource" id="Resource_u2c8v"]
+[sub_resource type="Resource" id="Resource_dyqsd"]
 script = ExtResource("5_j8ily")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_j8ily")
-rejected_result = SubResource("Resource_6b1wc")
-not_entered_result = SubResource("Resource_01r20")
+accepted_result = SubResource("Resource_wonok")
+rejected_result = SubResource("Resource_qys5i")
+not_entered_result = SubResource("Resource_8soe1")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_lf5g7"]
+[sub_resource type="Resource" id="Resource_nvsv7"]
 script = ExtResource("6_01r20")
-poem_taste = SubResource("Resource_u2c8v")
+poem_taste = SubResource("Resource_dyqsd")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_fvfg8"]
+[sub_resource type="Resource" id="Resource_dgmra"]
 script = ExtResource("3_7tgdi")
 str_props = "career_progress"
 value = 4
 
-[sub_resource type="Resource" id="Resource_a6cni"]
+[sub_resource type="Resource" id="Resource_1smo5"]
 script = ExtResource("4_upfvw")
-operators = Array[ExtResource("2_3vedi")]([SubResource("Resource_gol42"), SubResource("Resource_3vedi"), SubResource("Resource_7tgdi"), SubResource("Resource_lf5g7"), SubResource("Resource_fvfg8")])
+operators = Array[ExtResource("2_3vedi")]([SubResource("Resource_1dc0n"), SubResource("Resource_jmp8d"), SubResource("Resource_sg6ul"), SubResource("Resource_nvsv7"), SubResource("Resource_dgmra")])
 
-[sub_resource type="Resource" id="Resource_1dc0n"]
+[sub_resource type="Resource" id="Resource_83bgt"]
 script = ExtResource("7_oe8ds")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
 
-[sub_resource type="Resource" id="Resource_jmp8d"]
+[sub_resource type="Resource" id="Resource_b120t"]
 script = ExtResource("8_6b1wc")
-choice_result = SubResource("Resource_a6cni")
-requirement = SubResource("Resource_1dc0n")
+choice_result = SubResource("Resource_1smo5")
+requirement = SubResource("Resource_83bgt")
 description = "递上名帖"
 
-[sub_resource type="Resource" id="Resource_sg6ul"]
+[sub_resource type="Resource" id="Resource_8exu0"]
 script = ExtResource("3_7tgdi")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_c558o"]
+[sub_resource type="Resource" id="Resource_vpfu8"]
 script = ExtResource("4_upfvw")
-operators = Array[ExtResource("2_3vedi")]([SubResource("Resource_sg6ul")])
+operators = Array[ExtResource("2_3vedi")]([SubResource("Resource_8exu0")])
 
-[sub_resource type="Resource" id="Resource_wonok"]
+[sub_resource type="Resource" id="Resource_x2vax"]
 script = ExtResource("8_6b1wc")
-choice_result = SubResource("Resource_c558o")
+choice_result = SubResource("Resource_vpfu8")
 description = "拂袖而去"
 
-[sub_resource type="Resource" id="Resource_8soe1"]
+[sub_resource type="Resource" id="Resource_k518w"]
 script = ExtResource("10_lf5g7")
 property = "career_progress"
 value = 70
 operator = 1
 
-[sub_resource type="Resource" id="Resource_i0pcs"]
+[sub_resource type="Resource" id="Resource_khqli"]
 script = ExtResource("10_lf5g7")
 property = "career_progress"
 value = 100
 
-[sub_resource type="Resource" id="Resource_qys5i"]
+[sub_resource type="Resource" id="Resource_7ylve"]
 script = ExtResource("11_fvfg8")
-operators = Array[ExtResource("9_u2c8v")]([SubResource("Resource_8soe1"), SubResource("Resource_i0pcs")])
+operators = Array[ExtResource("9_u2c8v")]([SubResource("Resource_k518w"), SubResource("Resource_khqli")])
 
 [resource]
 script = ExtResource("12_a6cni")
-requirement = SubResource("Resource_qys5i")
+requirement = SubResource("Resource_7ylve")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_gol42")]([SubResource("Resource_jmp8d"), SubResource("Resource_wonok")])
+options = Array[ExtResource("1_gol42")]([SubResource("Resource_b120t"), SubResource("Resource_x2vax")])
 uuid = "bai_ye_real_appearance_l2_typeb"
 name = "空帖之辱"
 description = "进入厅堂,权贵斜倚凭几,指尖敲桌.诗呢?他问得随意.你递上名帖.他拆开封缄,抽出空无一字的纸笺,嘴角笑意不变.他将纸笺摊平于地,起身踱步,靴尖轻碾纸面,又踏住你长衫下摆的边角."

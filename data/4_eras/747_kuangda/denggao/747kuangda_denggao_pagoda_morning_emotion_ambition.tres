@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_lx06s"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ql8vu"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_lyax8"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_y8y4e"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_lyax8"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_y8y4e"]
 [ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_gepwe"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_oju4n"]
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_fwyyj"]
@@ -13,149 +13,149 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_7028c"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_a1dci"]
 
-[sub_resource type="Resource" id="Resource_lx06s"]
-script = ExtResource("3_lyax8")
-value = 6
-
-[sub_resource type="Resource" id="Resource_ql8vu"]
-script = ExtResource("4_y8y4e")
-str_props = "FATIGUE"
-value = 9
-
-[sub_resource type="Resource" id="Resource_lyax8"]
-script = ExtResource("4_y8y4e")
-str_props = "FATIGUE"
-value = -33
-
-[sub_resource type="Resource" id="Resource_y8y4e"]
-script = ExtResource("4_y8y4e")
-str_props = "BURNOUT"
-value = -16
-
-[sub_resource type="Resource" id="Resource_gepwe"]
-script = ExtResource("4_y8y4e")
-str_props = "INSPIRATION"
-value = 22
-
-[sub_resource type="Resource" id="Resource_oju4n"]
-script = ExtResource("3_lyax8")
-value = 11
-
-[sub_resource type="Resource" id="Resource_fwyyj"]
-script = ExtResource("5_gepwe")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
-
-[sub_resource type="Resource" id="Resource_iosbk"]
-script = ExtResource("6_oju4n")
-operators = Array[ExtResource("2_ql8vu")]([SubResource("Resource_lx06s"), SubResource("Resource_ql8vu"), SubResource("Resource_lyax8"), SubResource("Resource_y8y4e"), SubResource("Resource_gepwe"), SubResource("Resource_oju4n"), SubResource("Resource_fwyyj")])
-
-[sub_resource type="Resource" id="Resource_ajare"]
-script = ExtResource("7_fwyyj")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_uof3p"]
-script = ExtResource("8_iosbk")
-choice_result = SubResource("Resource_iosbk")
-requirement = SubResource("Resource_ajare")
-description = "转身向塔下吟诗者，从袖中抽出一卷旧纸，迎风展开。"
-
-[sub_resource type="Resource" id="Resource_7028c"]
-script = ExtResource("3_lyax8")
-value = 6
-
-[sub_resource type="Resource" id="Resource_a1dci"]
-script = ExtResource("4_y8y4e")
-str_props = "FATIGUE"
-value = 9
-
 [sub_resource type="Resource" id="Resource_vwmnu"]
-script = ExtResource("4_y8y4e")
-str_props = "FATIGUE"
-value = -16
+script = ExtResource("3_lyax8")
+str_props = "health"
+value = 5
 
 [sub_resource type="Resource" id="Resource_5dc0j"]
-script = ExtResource("3_lyax8")
+script = ExtResource("4_y8y4e")
 value = 6
 
 [sub_resource type="Resource" id="Resource_8333f"]
-script = ExtResource("5_gepwe")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+script = ExtResource("3_lyax8")
+str_props = "BURNOUT"
+value = -16
 
 [sub_resource type="Resource" id="Resource_c0551"]
-script = ExtResource("6_oju4n")
-operators = Array[ExtResource("2_ql8vu")]([SubResource("Resource_7028c"), SubResource("Resource_a1dci"), SubResource("Resource_vwmnu"), SubResource("Resource_5dc0j"), SubResource("Resource_8333f")])
-
-[sub_resource type="Resource" id="Resource_hfb12"]
-script = ExtResource("8_iosbk")
-choice_result = SubResource("Resource_c0551")
-description = "收回视线，在阶上蹲下，食指轻划青苔表面，起身拍手。"
-
-[sub_resource type="Resource" id="Resource_e21mg"]
 script = ExtResource("3_lyax8")
-value = 6
-
-[sub_resource type="Resource" id="Resource_q7am7"]
-script = ExtResource("4_y8y4e")
-str_props = "FATIGUE"
-value = 9
-
-[sub_resource type="Resource" id="Resource_3jsrx"]
-script = ExtResource("3_lyax8")
+str_props = "INSPIRATION"
 value = 22
 
-[sub_resource type="Resource" id="Resource_dmwnm"]
-script = ExtResource("3_lyax8")
+[sub_resource type="Resource" id="Resource_hfb12"]
+script = ExtResource("4_y8y4e")
 value = 11
 
-[sub_resource type="Resource" id="Resource_cbm3w"]
-script = ExtResource("4_y8y4e")
-str_props = "BURNOUT"
-value = 11
-
-[sub_resource type="Resource" id="Resource_14t2a"]
-script = ExtResource("4_y8y4e")
-str_props = "FATIGUE"
-value = 6
-
-[sub_resource type="Resource" id="Resource_ykqla"]
+[sub_resource type="Resource" id="Resource_e21mg"]
 script = ExtResource("5_gepwe")
 imagery_name = "TARGET_FACTION_ROYAL:jade_step"
 
-[sub_resource type="Resource" id="Resource_r5tin"]
+[sub_resource type="Resource" id="Resource_q7am7"]
+script = ExtResource("3_lyax8")
+str_props = "time"
+value = -10
+
+[sub_resource type="Resource" id="Resource_3jsrx"]
 script = ExtResource("6_oju4n")
-operators = Array[ExtResource("2_ql8vu")]([SubResource("Resource_e21mg"), SubResource("Resource_q7am7"), SubResource("Resource_3jsrx"), SubResource("Resource_dmwnm"), SubResource("Resource_cbm3w"), SubResource("Resource_14t2a"), SubResource("Resource_ykqla")])
+operators = Array[ExtResource("2_ql8vu")]([SubResource("Resource_vwmnu"), SubResource("Resource_5dc0j"), SubResource("Resource_8333f"), SubResource("Resource_c0551"), SubResource("Resource_hfb12"), SubResource("Resource_e21mg"), SubResource("Resource_q7am7")])
+
+[sub_resource type="Resource" id="Resource_dmwnm"]
+script = ExtResource("7_fwyyj")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_cbm3w"]
+script = ExtResource("8_iosbk")
+choice_result = SubResource("Resource_3jsrx")
+requirement = SubResource("Resource_dmwnm")
+description = "转身向塔下吟诗者，从袖中抽出一卷旧纸，迎风展开。"
+
+[sub_resource type="Resource" id="Resource_14t2a"]
+script = ExtResource("3_lyax8")
+str_props = "health"
+value = 5
+
+[sub_resource type="Resource" id="Resource_ykqla"]
+script = ExtResource("4_y8y4e")
+value = 6
+
+[sub_resource type="Resource" id="Resource_r5tin"]
+script = ExtResource("4_y8y4e")
+value = 6
 
 [sub_resource type="Resource" id="Resource_x1xmv"]
+script = ExtResource("5_gepwe")
+imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+
+[sub_resource type="Resource" id="Resource_p4axr"]
+script = ExtResource("3_lyax8")
+str_props = "time"
+value = -10
+
+[sub_resource type="Resource" id="Resource_ugb2r"]
+script = ExtResource("6_oju4n")
+operators = Array[ExtResource("2_ql8vu")]([SubResource("Resource_14t2a"), SubResource("Resource_ykqla"), SubResource("Resource_r5tin"), SubResource("Resource_x1xmv"), SubResource("Resource_p4axr")])
+
+[sub_resource type="Resource" id="Resource_02q6c"]
+script = ExtResource("8_iosbk")
+choice_result = SubResource("Resource_ugb2r")
+description = "收回视线，在阶上蹲下，食指轻划青苔表面，起身拍手。"
+
+[sub_resource type="Resource" id="Resource_gbs83"]
+script = ExtResource("3_lyax8")
+str_props = "health"
+value = 5
+
+[sub_resource type="Resource" id="Resource_n5nsa"]
+script = ExtResource("4_y8y4e")
+value = 6
+
+[sub_resource type="Resource" id="Resource_klh6f"]
+script = ExtResource("4_y8y4e")
+value = 22
+
+[sub_resource type="Resource" id="Resource_u6hsn"]
+script = ExtResource("4_y8y4e")
+value = 11
+
+[sub_resource type="Resource" id="Resource_cgofo"]
+script = ExtResource("3_lyax8")
+str_props = "BURNOUT"
+value = 11
+
+[sub_resource type="Resource" id="Resource_c0vat"]
+script = ExtResource("5_gepwe")
+imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+
+[sub_resource type="Resource" id="Resource_5jgu3"]
+script = ExtResource("3_lyax8")
+str_props = "time"
+value = -10
+
+[sub_resource type="Resource" id="Resource_fckdq"]
+script = ExtResource("6_oju4n")
+operators = Array[ExtResource("2_ql8vu")]([SubResource("Resource_gbs83"), SubResource("Resource_n5nsa"), SubResource("Resource_klh6f"), SubResource("Resource_u6hsn"), SubResource("Resource_cgofo"), SubResource("Resource_c0vat"), SubResource("Resource_5jgu3")])
+
+[sub_resource type="Resource" id="Resource_g6xo6"]
 script = ExtResource("7_fwyyj")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_p4axr"]
+[sub_resource type="Resource" id="Resource_qqnkx"]
 script = ExtResource("8_iosbk")
-choice_result = SubResource("Resource_r5tin")
-requirement = SubResource("Resource_x1xmv")
+choice_result = SubResource("Resource_fckdq")
+requirement = SubResource("Resource_g6xo6")
 description = "整了整衣襟，向最近一群进士走近两步，抱拳低首。"
 
-[sub_resource type="Resource" id="Resource_ugb2r"]
+[sub_resource type="Resource" id="Resource_yt8gu"]
 script = ExtResource("10_uof3p")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_02q6c"]
+[sub_resource type="Resource" id="Resource_bk63s"]
 script = ExtResource("10_uof3p")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_gbs83"]
+[sub_resource type="Resource" id="Resource_2tlai"]
 script = ExtResource("11_7028c")
-operators = Array[ExtResource("9_ajare")]([SubResource("Resource_ugb2r"), SubResource("Resource_02q6c")])
+operators = Array[ExtResource("9_ajare")]([SubResource("Resource_yt8gu"), SubResource("Resource_bk63s")])
 
 [resource]
 script = ExtResource("12_a1dci")
-requirement = SubResource("Resource_gbs83")
+requirement = SubResource("Resource_2tlai")
 era = "747_kuangda"
 _target_tags = Array[String](["action:scene_denggao_pagoda_morning"])
-options = Array[ExtResource("1_lx06s")]([SubResource("Resource_uof3p"), SubResource("Resource_hfb12"), SubResource("Resource_p4axr")])
+options = Array[ExtResource("1_lx06s")]([SubResource("Resource_cbm3w"), SubResource("Resource_02q6c"), SubResource("Resource_qqnkx")])
 uuid = "747kuangda_denggao_pagoda_morning_emotion_ambition"
 name = "塔砖裂纹与青苔"
 description = "卯时，慈恩寺钟声震荡塔檐。塔基石板湿滑，晨露反光。塔下广场上，新科进士们倚栏吟诗，佩玉相碰，有人高声念诵新题。杜甫立在塔阶旁，右手扶住第一块塔砖，指腹沿着砖面一道裂纹从左划到右。视线越过人群，锁定远处朱门与衙署的轮廓。阶上青苔在晨光中泛着暗绿。钟声歇时，他换了一只脚承重，手指仍停在裂纹尽头。"

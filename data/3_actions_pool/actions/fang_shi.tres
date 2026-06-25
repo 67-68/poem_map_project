@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_ojs7x"]
 [ext_resource type="Texture2D" uid="uid://cd3dtc8j116mk" path="res://assets/stamps/fangshi_stamp.png" id="4_qsksc"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="5_2gju4"]
+[ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="6_timeop"]
 
 [sub_resource type="Resource" id="Resource_nrg8x"]
 script = ExtResource("3_ojs7x")
@@ -12,11 +13,16 @@ _property = 3
 value = -5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
+[sub_resource type="Resource" id="Resource_time"]
+script = ExtResource("6_timeop")
+day = 4.0
+metadata/_custom_type_script = "uid://khw2s6fgrkem"
+
 [resource]
 script = ExtResource("5_2gju4")
 _main_tag = 32
 _action_tags = Array[int]([1, 10, 13, 32])
-action_results = Array[ExtResource("2_i5atp")]([SubResource("Resource_nrg8x")])
+action_results = Array[ExtResource("2_i5atp")]([SubResource("Resource_nrg8x"), SubResource("Resource_time")])
 fallback_event_uuid = "event_cooldown_wall"
 uuid = "fang_shi"
 name = "游宴"

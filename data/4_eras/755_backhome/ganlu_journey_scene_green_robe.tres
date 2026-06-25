@@ -1,65 +1,60 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://con18mq5w6uh"]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_feyed"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_5hfuw"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_vg4ue"]
-[ext_resource type="Script" uid="uid://bxdw08m7bfi13" path="res://core/operators/info_demo_operator.gd" id="4_4brw5"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_f6amg"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_1xwaq"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_pg4jl"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_0m0u6"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_feyed"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_5hfuw"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_vg4ue"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_4brw5"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_f6amg"]
 
-[sub_resource type="Resource" id="Resource_b5o76"]
-script = ExtResource("3_vg4ue")
+[sub_resource type="Resource" id="Resource_1xwaq"]
+script = ExtResource("3_5hfuw")
 str_props = "health"
 value = 3
 
-[sub_resource type="Resource" id="Resource_03yr0"]
-script = ExtResource("3_vg4ue")
+[sub_resource type="Resource" id="Resource_pg4jl"]
+script = ExtResource("3_5hfuw")
 str_props = "distance"
 value = 7
 
-[sub_resource type="Resource" id="Resource_fhpx0"]
-script = ExtResource("4_4brw5")
-info = "驿丞拨开官凭，说：“这纸湿了，看不真。”"
+[sub_resource type="Resource" id="Resource_b5o76"]
+script = ExtResource("4_vg4ue")
+operators = Array[ExtResource("2_feyed")]([SubResource("Resource_1xwaq"), SubResource("Resource_pg4jl")])
 
-[sub_resource type="Resource" id="Resource_xixjs"]
-script = ExtResource("5_f6amg")
-operators = Array[ExtResource("2_5hfuw")]([SubResource("Resource_b5o76"), SubResource("Resource_03yr0"), SubResource("Resource_fhpx0")])
-
-[sub_resource type="Resource" id="Resource_ave2o"]
-script = ExtResource("6_1xwaq")
-choice_result = SubResource("Resource_xixjs")
+[sub_resource type="Resource" id="Resource_03yr0"]
+script = ExtResource("5_4brw5")
+choice_result = SubResource("Resource_b5o76")
 description = "解下官凭举到驿丞眼前，挡住他打算回话"
 
-[sub_resource type="Resource" id="Resource_pe70c"]
-script = ExtResource("3_vg4ue")
+[sub_resource type="Resource" id="Resource_fhpx0"]
+script = ExtResource("3_5hfuw")
 str_props = "health"
 value = -8
 
-[sub_resource type="Resource" id="Resource_eyxde"]
-script = ExtResource("3_vg4ue")
+[sub_resource type="Resource" id="Resource_xixjs"]
+script = ExtResource("3_5hfuw")
 str_props = "sick"
 value = 5
 
-[sub_resource type="Resource" id="Resource_eu2mt"]
-script = ExtResource("3_vg4ue")
+[sub_resource type="Resource" id="Resource_ave2o"]
+script = ExtResource("3_5hfuw")
 str_props = "distance"
 value = 12
 
-[sub_resource type="Resource" id="Resource_cqflc"]
-script = ExtResource("5_f6amg")
-operators = Array[ExtResource("2_5hfuw")]([SubResource("Resource_pe70c"), SubResource("Resource_eyxde"), SubResource("Resource_eu2mt")])
+[sub_resource type="Resource" id="Resource_pe70c"]
+script = ExtResource("4_vg4ue")
+operators = Array[ExtResource("2_feyed")]([SubResource("Resource_fhpx0"), SubResource("Resource_xixjs"), SubResource("Resource_ave2o")])
 
-[sub_resource type="Resource" id="Resource_g2wlv"]
-script = ExtResource("6_1xwaq")
-choice_result = SubResource("Resource_cqflc")
+[sub_resource type="Resource" id="Resource_eyxde"]
+script = ExtResource("5_4brw5")
+choice_result = SubResource("Resource_pe70c")
 description = "攥紧领口，转身把官凭收进袖中"
 
 [resource]
-script = ExtResource("7_pg4jl")
+script = ExtResource("6_f6amg")
 era = "755_backhome"
-_target_tags = Array[String](["action:main:ganlu"])
-options = Array[ExtResource("1_feyed")]([SubResource("Resource_ave2o"), SubResource("Resource_g2wlv")])
+_target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu"])
+options = Array[ExtResource("1_0m0u6")]([SubResource("Resource_03yr0"), SubResource("Resource_eyxde")])
 uuid = "ganlu_journey_scene_green_robe"
 name = "绿袍结冰"
 description = "下摆先湿透，从腰际往下，青色缓缓浸成墨绿。冰晶在纤维间长出，先是一层薄霜，再是细针，把经纬撑开，裂出细响。裤子膝盖处板结成壳，每迈一步，面料摺叠处发出纸张揉碎般的声音。他低头看了一眼——前襟也硬了，贴在胸口，呼吸时扯不动。"

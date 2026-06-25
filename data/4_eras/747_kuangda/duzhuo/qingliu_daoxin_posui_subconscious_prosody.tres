@@ -10,60 +10,60 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="8_wj5f3"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_80arv"]
 
-[sub_resource type="Resource" id="Resource_7pkg7"]
+[sub_resource type="Resource" id="Resource_vp7po"]
 script = ExtResource("3_tp4iq")
 flag_id = "kuangda"
 type = "int"
 value = -5
 operation = "append"
 
-[sub_resource type="Resource" id="Resource_dwcq6"]
+[sub_resource type="Resource" id="Resource_dcyuu"]
 script = ExtResource("4_lb70a")
 str_props = "INSPIRATION"
 value = -15
 
-[sub_resource type="Resource" id="Resource_tp4iq"]
+[sub_resource type="Resource" id="Resource_gr8dk"]
 script = ExtResource("4_lb70a")
 str_props = "BURNOUT"
 value = 10
 
-[sub_resource type="Resource" id="Resource_lb70a"]
+[sub_resource type="Resource" id="Resource_n4j1s"]
 script = ExtResource("5_d0shu")
 value = 5
 
-[sub_resource type="Resource" id="Resource_d0shu"]
+[sub_resource type="Resource" id="Resource_hpmtj"]
 script = ExtResource("4_lb70a")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_p8lcj"]
+[sub_resource type="Resource" id="Resource_04bts"]
 script = ExtResource("5_d0shu")
 value = 5
 
-[sub_resource type="Resource" id="Resource_34esb"]
+[sub_resource type="Resource" id="Resource_xka6k"]
 script = ExtResource("4_lb70a")
 str_props = "fatigue"
 value = 8
 
-[sub_resource type="Resource" id="Resource_wj5f3"]
+[sub_resource type="Resource" id="Resource_3c1tc"]
 script = ExtResource("4_lb70a")
 str_props = "BURNOUT"
 value = 5
 
-[sub_resource type="Resource" id="Resource_80arv"]
+[sub_resource type="Resource" id="Resource_wf1gn"]
 script = ExtResource("5_d0shu")
 value = 5
 
-[sub_resource type="Resource" id="Resource_vp7po"]
+[sub_resource type="Resource" id="Resource_rx4di"]
 script = ExtResource("6_p8lcj")
-operators = Array[ExtResource("2_dwcq6")]([SubResource("Resource_7pkg7"), SubResource("Resource_dwcq6"), SubResource("Resource_tp4iq"), SubResource("Resource_lb70a"), SubResource("Resource_d0shu"), SubResource("Resource_p8lcj"), SubResource("Resource_34esb"), SubResource("Resource_wj5f3"), SubResource("Resource_80arv")])
+operators = Array[ExtResource("2_dwcq6")]([SubResource("Resource_vp7po"), SubResource("Resource_dcyuu"), SubResource("Resource_gr8dk"), SubResource("Resource_n4j1s"), SubResource("Resource_hpmtj"), SubResource("Resource_04bts"), SubResource("Resource_xka6k"), SubResource("Resource_3c1tc"), SubResource("Resource_wf1gn")])
 
-[sub_resource type="Resource" id="Resource_dcyuu"]
+[sub_resource type="Resource" id="Resource_h33jj"]
 script = ExtResource("7_34esb")
-choice_result = SubResource("Resource_vp7po")
+choice_result = SubResource("Resource_rx4di")
 description = "将手指从杯沿上收回来搁在膝上。衣料摩擦声停顿。油花从正中缓缓漂向杯壁。"
 
-[sub_resource type="Resource" id="Resource_gr8dk"]
+[sub_resource type="Resource" id="Resource_ug8sn"]
 script = ExtResource("8_wj5f3")
 property = "BURNOUT"
 value = 70
@@ -71,10 +71,10 @@ operator = 1
 
 [resource]
 script = ExtResource("9_80arv")
-requirement = SubResource("Resource_gr8dk")
+requirement = SubResource("Resource_ug8sn")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:duzhuo"])
-options = Array[ExtResource("1_7pkg7")]([SubResource("Resource_dcyuu")])
+options = Array[ExtResource("1_7pkg7")]([SubResource("Resource_h33jj")])
 uuid = "qingliu_daoxin_posui_subconscious_prosody"
 name = "酒局叩杯成谶句"
 description = "酒已过三巡。手指不自觉地叩着杯沿——平、仄、平、仄、平。你停下手。刚才叩出的句式恰好是一句五言。你在心里默念出来。杯中残酒表面微震了一下，复归静止。酒液上浮着一粒未散的油花。你盯着这粒油花。手指搁在膝上，不再叩了。座中有人正劝下一轮酒，声音从左手边传来，你没有转头。"

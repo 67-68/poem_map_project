@@ -10,55 +10,55 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="8_py2x5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_d71v8"]
 
-[sub_resource type="Resource" id="Resource_5bdpl"]
+[sub_resource type="Resource" id="Resource_2s4fv"]
 script = ExtResource("3_5o85d")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_nnjkt"]
+[sub_resource type="Resource" id="Resource_xlayw"]
 script = ExtResource("4_wwoxb")
 value = 10
 
-[sub_resource type="Resource" id="Resource_5o85d"]
+[sub_resource type="Resource" id="Resource_k5pbh"]
 script = ExtResource("5_qyegs")
 flag_id = "kuangda"
 type = "int"
 value = -3
 operation = "append"
 
-[sub_resource type="Resource" id="Resource_wwoxb"]
+[sub_resource type="Resource" id="Resource_ondd5"]
 script = ExtResource("3_5o85d")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_qyegs"]
+[sub_resource type="Resource" id="Resource_bmua5"]
 script = ExtResource("4_wwoxb")
 value = 5
 
-[sub_resource type="Resource" id="Resource_gr5q2"]
+[sub_resource type="Resource" id="Resource_a8oxq"]
 script = ExtResource("3_5o85d")
 str_props = "fatigue"
 value = 8
 
-[sub_resource type="Resource" id="Resource_bo42i"]
+[sub_resource type="Resource" id="Resource_pkjdj"]
 script = ExtResource("3_5o85d")
 str_props = "BURNOUT"
 value = 5
 
-[sub_resource type="Resource" id="Resource_py2x5"]
+[sub_resource type="Resource" id="Resource_ertnk"]
 script = ExtResource("4_wwoxb")
 value = 5
 
-[sub_resource type="Resource" id="Resource_d71v8"]
+[sub_resource type="Resource" id="Resource_bnry4"]
 script = ExtResource("6_gr5q2")
-operators = Array[ExtResource("2_nnjkt")]([SubResource("Resource_5bdpl"), SubResource("Resource_nnjkt"), SubResource("Resource_5o85d"), SubResource("Resource_wwoxb"), SubResource("Resource_qyegs"), SubResource("Resource_gr5q2"), SubResource("Resource_bo42i"), SubResource("Resource_py2x5")])
+operators = Array[ExtResource("2_nnjkt")]([SubResource("Resource_2s4fv"), SubResource("Resource_xlayw"), SubResource("Resource_k5pbh"), SubResource("Resource_ondd5"), SubResource("Resource_bmua5"), SubResource("Resource_a8oxq"), SubResource("Resource_pkjdj"), SubResource("Resource_ertnk")])
 
-[sub_resource type="Resource" id="Resource_2s4fv"]
+[sub_resource type="Resource" id="Resource_dxe83"]
 script = ExtResource("7_bo42i")
-choice_result = SubResource("Resource_d71v8")
+choice_result = SubResource("Resource_bnry4")
 description = "他将手中杯盏放回桌面，让底圈恰好覆住那道旧痕的中心。"
 
-[sub_resource type="Resource" id="Resource_xlayw"]
+[sub_resource type="Resource" id="Resource_npeq5"]
 script = ExtResource("8_py2x5")
 property = "BURNOUT"
 value = 70
@@ -66,10 +66,10 @@ operator = 1
 
 [resource]
 script = ExtResource("9_d71v8")
-requirement = SubResource("Resource_xlayw")
+requirement = SubResource("Resource_npeq5")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_5bdpl")]([SubResource("Resource_2s4fv")])
+options = Array[ExtResource("1_5bdpl")]([SubResource("Resource_dxe83")])
 uuid = "qingliu_daoxin_posui_echo_chamber_losers"
 name = "旧痕"
 description = "清客拽住他的袖口。酒肆二楼，窗格投下的光斑正从桌沿撤走。那人说近日结识了侍郎家的西席，这回总该有门路了。他说门路两个字时，手指在桌面上一圈圈地划。桌面有陈年酒渍干涸后留下的深浅圆痕，他的指甲正沿着一道旧痕的边沿走。杜甫点头。那人的袖口脱了线，半根丝头悬在腕骨上方，随着手势轻轻荡。风从窗缝进来，光斑完全移到了地板外沿。"

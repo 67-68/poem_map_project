@@ -9,44 +9,45 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_y7ixg"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_mg0q6"]
 
-[sub_resource type="Resource" id="Resource_j2137"]
+[sub_resource type="Resource" id="Resource_yg07l"]
 script = ExtResource("3_7bdcx")
 str_props = "money"
 value = -8
 
-[sub_resource type="Resource" id="Resource_oj0ak"]
+[sub_resource type="Resource" id="Resource_qsbls"]
 script = ExtResource("4_t6erm")
+_trait_key = 61
 str_traits = "disease_fenghan_acute"
 
-[sub_resource type="Resource" id="Resource_7bdcx"]
+[sub_resource type="Resource" id="Resource_whrgw"]
 script = ExtResource("5_0mlr0")
-operators = Array[ExtResource("2_oj0ak")]([SubResource("Resource_j2137"), SubResource("Resource_oj0ak")])
+operators = Array[ExtResource("2_oj0ak")]([SubResource("Resource_yg07l"), SubResource("Resource_qsbls")])
 
-[sub_resource type="Resource" id="Resource_t6erm"]
+[sub_resource type="Resource" id="Resource_u8lb3"]
 script = ExtResource("6_00j1m")
-choice_result = SubResource("Resource_7bdcx")
+choice_result = SubResource("Resource_whrgw")
 description = "请大夫来诊脉"
 
-[sub_resource type="Resource" id="Resource_0mlr0"]
+[sub_resource type="Resource" id="Resource_anywl"]
 script = ExtResource("3_7bdcx")
 str_props = "sick"
 value = 15
 
-[sub_resource type="Resource" id="Resource_00j1m"]
+[sub_resource type="Resource" id="Resource_mox2y"]
 script = ExtResource("3_7bdcx")
 str_props = "health"
 value = -10
 
-[sub_resource type="Resource" id="Resource_y7ixg"]
+[sub_resource type="Resource" id="Resource_wvn7o"]
 script = ExtResource("5_0mlr0")
-operators = Array[ExtResource("2_oj0ak")]([SubResource("Resource_0mlr0"), SubResource("Resource_00j1m")])
+operators = Array[ExtResource("2_oj0ak")]([SubResource("Resource_anywl"), SubResource("Resource_mox2y")])
 
-[sub_resource type="Resource" id="Resource_mg0q6"]
+[sub_resource type="Resource" id="Resource_81t5v"]
 script = ExtResource("6_00j1m")
-choice_result = SubResource("Resource_y7ixg")
+choice_result = SubResource("Resource_wvn7o")
 description = "再扛一扛，或许能过去"
 
-[sub_resource type="Resource" id="Resource_yg07l"]
+[sub_resource type="Resource" id="Resource_4tbnt"]
 script = ExtResource("7_y7ixg")
 property = "sick"
 value = 50
@@ -55,10 +56,10 @@ operator = 1
 [resource]
 script = ExtResource("8_mg0q6")
 weight = 100.0
-requirement = SubResource("Resource_yg07l")
+requirement = SubResource("Resource_4tbnt")
 era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickAcute"])
-options = Array[ExtResource("1_j2137")]([SubResource("Resource_t6erm"), SubResource("Resource_mg0q6")])
+options = Array[ExtResource("1_j2137")]([SubResource("Resource_u8lb3"), SubResource("Resource_81t5v")])
 uuid = "event_disease_bridge_fenghan"
 name = "病来如山倒"
 description = "你撑了很久。咳嗽、头痛、发冷——你都忍了。但今天早上你连坐都坐不起来了。铜盆里的水映出一张灰败的脸。你终于承认：这次是真的病了。"

@@ -12,64 +12,64 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_7kq03"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_uqgwm"]
 
-[sub_resource type="Resource" id="Resource_5jbbg"]
+[sub_resource type="Resource" id="Resource_38cea"]
 script = ExtResource("3_b1lmv")
 str_props = "FATIGUE"
 value = -20
 
-[sub_resource type="Resource" id="Resource_wm2ks"]
+[sub_resource type="Resource" id="Resource_mkilf"]
 script = ExtResource("3_b1lmv")
 str_props = "BURNOUT"
 value = -20
 
-[sub_resource type="Resource" id="Resource_b1lmv"]
+[sub_resource type="Resource" id="Resource_keiww"]
 script = ExtResource("3_b1lmv")
 str_props = "INSPIRATION"
 value = 15
 
-[sub_resource type="Resource" id="Resource_7o44c"]
+[sub_resource type="Resource" id="Resource_sb63i"]
 script = ExtResource("4_7o44c")
 value = 10
 
-[sub_resource type="Resource" id="Resource_lt4bq"]
+[sub_resource type="Resource" id="Resource_wy062"]
 script = ExtResource("5_lt4bq")
-operators = Array[ExtResource("2_wm2ks")]([SubResource("Resource_5jbbg"), SubResource("Resource_wm2ks"), SubResource("Resource_b1lmv"), SubResource("Resource_7o44c")])
+operators = Array[ExtResource("2_wm2ks")]([SubResource("Resource_38cea"), SubResource("Resource_mkilf"), SubResource("Resource_keiww"), SubResource("Resource_sb63i")])
 
-[sub_resource type="Resource" id="Resource_ogxav"]
+[sub_resource type="Resource" id="Resource_4wdmr"]
 script = ExtResource("6_ogxav")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_mljpq"]
+[sub_resource type="Resource" id="Resource_4v6bg"]
 script = ExtResource("7_mljpq")
-choice_result = SubResource("Resource_lt4bq")
-requirement = SubResource("Resource_ogxav")
+choice_result = SubResource("Resource_wy062")
+requirement = SubResource("Resource_4wdmr")
 description = "你接过纸卷看也不看，一脚把井台上的碎砚台踢进井里：「听个响。」"
 
-[sub_resource type="Resource" id="Resource_37041"]
+[sub_resource type="Resource" id="Resource_lcu3o"]
 script = ExtResource("6_ogxav")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_oaovl"]
+[sub_resource type="Resource" id="Resource_bu56o"]
 script = ExtResource("9_oaovl")
 property = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_7kq03"]
+[sub_resource type="Resource" id="Resource_4m8of"]
 script = ExtResource("9_oaovl")
 property = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_uqgwm"]
+[sub_resource type="Resource" id="Resource_y3awl"]
 script = ExtResource("10_7kq03")
-operators = Array[ExtResource("8_37041")]([SubResource("Resource_37041"), SubResource("Resource_oaovl"), SubResource("Resource_7kq03")])
+operators = Array[ExtResource("8_37041")]([SubResource("Resource_lcu3o"), SubResource("Resource_bu56o"), SubResource("Resource_4m8of")])
 
 [resource]
 script = ExtResource("11_uqgwm")
-requirement = SubResource("Resource_uqgwm")
+requirement = SubResource("Resource_y3awl")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_5jbbg")]([SubResource("Resource_mljpq")])
+options = Array[ExtResource("1_5jbbg")]([SubResource("Resource_4v6bg")])
 uuid = "kuangke_qingliu_zhengqian_emotion_anger"
 name = "井台上的愤懑"
 description = "广文馆后院，郑虔把一摞学生默写的诗卷摔在井台上，井绳晃了两晃。碎纸从捆扎处崩开，散了一地。「错别字比对的还多——有个学生把『烽火』写成了『峰火』，我怎么教的？」他用拇指和中指掐着鼻梁，掌根压住眼睛，把一卷皱巴巴的纸往你怀里塞，「你看看，你自己看。」纸上的墨迹洇了水，字都鼓着毛边。郑虔的手腕在抖。"

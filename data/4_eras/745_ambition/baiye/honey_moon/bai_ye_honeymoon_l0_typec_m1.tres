@@ -11,79 +11,79 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="9_pf1jk"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_7m5eu"]
 
-[sub_resource type="Resource" id="Resource_qy0j0"]
+[sub_resource type="Resource" id="Resource_e6l28"]
 script = ExtResource("3_tudxq")
 str_props = "fatigue"
 value = -12
 
-[sub_resource type="Resource" id="Resource_g0w71"]
+[sub_resource type="Resource" id="Resource_dcic8"]
 script = ExtResource("4_otjc8")
 value = 6
 
-[sub_resource type="Resource" id="Resource_tudxq"]
+[sub_resource type="Resource" id="Resource_33pvr"]
 script = ExtResource("3_tudxq")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_otjc8"]
+[sub_resource type="Resource" id="Resource_8cvew"]
 script = ExtResource("5_t5eyy")
-operators = Array[ExtResource("2_g0w71")]([SubResource("Resource_tudxq")])
+operators = Array[ExtResource("2_g0w71")]([SubResource("Resource_33pvr")])
 
-[sub_resource type="Resource" id="Resource_t5eyy"]
+[sub_resource type="Resource" id="Resource_87lpm"]
 script = ExtResource("5_t5eyy")
 
-[sub_resource type="Resource" id="Resource_xf4dj"]
+[sub_resource type="Resource" id="Resource_rdmgu"]
 script = ExtResource("3_tudxq")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_gpsh5"]
+[sub_resource type="Resource" id="Resource_sdlrl"]
 script = ExtResource("5_t5eyy")
-operators = Array[ExtResource("2_g0w71")]([SubResource("Resource_xf4dj")])
+operators = Array[ExtResource("2_g0w71")]([SubResource("Resource_rdmgu")])
 
-[sub_resource type="Resource" id="Resource_82vpn"]
+[sub_resource type="Resource" id="Resource_2jiqq"]
 script = ExtResource("6_xf4dj")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_otjc8")
-rejected_result = SubResource("Resource_gpsh5")
-not_entered_result = SubResource("Resource_t5eyy")
+accepted_result = SubResource("Resource_8cvew")
+rejected_result = SubResource("Resource_sdlrl")
+not_entered_result = SubResource("Resource_87lpm")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_pf1jk"]
+[sub_resource type="Resource" id="Resource_cyshv"]
 script = ExtResource("7_gpsh5")
-poem_taste = SubResource("Resource_82vpn")
+poem_taste = SubResource("Resource_2jiqq")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_7m5eu"]
+[sub_resource type="Resource" id="Resource_v1wbh"]
 script = ExtResource("3_tudxq")
 str_props = "career_progress"
 value = 12
 
-[sub_resource type="Resource" id="Resource_e6l28"]
+[sub_resource type="Resource" id="Resource_go1tk"]
 script = ExtResource("5_t5eyy")
-operators = Array[ExtResource("2_g0w71")]([SubResource("Resource_qy0j0"), SubResource("Resource_g0w71"), SubResource("Resource_pf1jk"), SubResource("Resource_7m5eu")])
+operators = Array[ExtResource("2_g0w71")]([SubResource("Resource_e6l28"), SubResource("Resource_dcic8"), SubResource("Resource_cyshv"), SubResource("Resource_v1wbh")])
 
-[sub_resource type="Resource" id="Resource_dcic8"]
+[sub_resource type="Resource" id="Resource_jpy1b"]
 script = ExtResource("8_82vpn")
-choice_result = SubResource("Resource_e6l28")
+choice_result = SubResource("Resource_go1tk")
 description = "赔笑再唤，将名帖轻放于门槛上"
 
-[sub_resource type="Resource" id="Resource_33pvr"]
+[sub_resource type="Resource" id="Resource_efkk0"]
 script = ExtResource("9_pf1jk")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("10_7m5eu")
-requirement = SubResource("Resource_33pvr")
+requirement = SubResource("Resource_efkk0")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_qy0j0")]([SubResource("Resource_dcic8")])
+options = Array[ExtResource("1_qy0j0")]([SubResource("Resource_jpy1b")])
 uuid = "bai_ye_honeymoon_l0_typec_m1"
 name = "冷眼拒帖"
 description = "“劳烦通传。”门子纹丝不动，仿佛未闻。你略提高声，他又似无意地转过头，与廊下小厮说起闲话。你的手悬在半空，名帖边缘微微翘起。街上有行人投来一瞥，又匆匆移开。门子始终未接你手中之物，只在你反复唤第三声时，从鼻间发出一声极轻的冷笑，转身踱入门内，留你一人立在风里。"

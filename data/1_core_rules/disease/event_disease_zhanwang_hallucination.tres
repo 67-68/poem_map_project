@@ -8,47 +8,47 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_nwl5u"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_0thmo"]
 
-[sub_resource type="Resource" id="Resource_kario"]
+[sub_resource type="Resource" id="Resource_qrhia"]
 script = ExtResource("3_5kvb5")
 value = 10
 
-[sub_resource type="Resource" id="Resource_gjqts"]
+[sub_resource type="Resource" id="Resource_1lqac"]
 script = ExtResource("4_7aebx")
 str_props = "drunk"
 value = 15
 
-[sub_resource type="Resource" id="Resource_5kvb5"]
+[sub_resource type="Resource" id="Resource_hsptj"]
 script = ExtResource("5_ina2o")
-operators = Array[ExtResource("2_gjqts")]([SubResource("Resource_kario"), SubResource("Resource_gjqts")])
+operators = Array[ExtResource("2_gjqts")]([SubResource("Resource_qrhia"), SubResource("Resource_1lqac")])
 
-[sub_resource type="Resource" id="Resource_7aebx"]
+[sub_resource type="Resource" id="Resource_72htr"]
 script = ExtResource("6_nwl5u")
-choice_result = SubResource("Resource_5kvb5")
+choice_result = SubResource("Resource_hsptj")
 description = "与幻影对谈，自得其乐"
 
-[sub_resource type="Resource" id="Resource_ina2o"]
+[sub_resource type="Resource" id="Resource_ydq8r"]
 script = ExtResource("3_5kvb5")
 value = -5
 
-[sub_resource type="Resource" id="Resource_nwl5u"]
+[sub_resource type="Resource" id="Resource_xellv"]
 script = ExtResource("4_7aebx")
 str_props = "sick"
 value = 5
 
-[sub_resource type="Resource" id="Resource_0thmo"]
+[sub_resource type="Resource" id="Resource_h1uul"]
 script = ExtResource("5_ina2o")
-operators = Array[ExtResource("2_gjqts")]([SubResource("Resource_ina2o"), SubResource("Resource_nwl5u")])
+operators = Array[ExtResource("2_gjqts")]([SubResource("Resource_ydq8r"), SubResource("Resource_xellv")])
 
-[sub_resource type="Resource" id="Resource_qrhia"]
+[sub_resource type="Resource" id="Resource_1syjl"]
 script = ExtResource("6_nwl5u")
-choice_result = SubResource("Resource_0thmo")
+choice_result = SubResource("Resource_h1uul")
 description = "猛然清醒，惊出一身冷汗"
 
 [resource]
 script = ExtResource("7_0thmo")
 era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:mania"])
-options = Array[ExtResource("1_kario")]([SubResource("Resource_7aebx"), SubResource("Resource_qrhia")])
+options = Array[ExtResource("1_kario")]([SubResource("Resource_72htr"), SubResource("Resource_1syjl")])
 uuid = "event_disease_zhanwang_hallucination"
 name = "谵语"
 description = "你对着空无一人的角落说话。那里站着一个人——不，是一个影子——不，是一个你认识的人。他/她对你微笑，伸手递来一杯酒。你接过并不存在的酒杯，一饮而尽。旁人看你对着空气碰杯，纷纷摇头走开。"

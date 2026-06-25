@@ -51,6 +51,10 @@ func initialize(action_: Action = null):
 	# ── Hover Popup（Alt 双层揭示）──
 	if not action.description.is_empty() or not action.action_results.is_empty() or not action.aciton_requirements.is_empty():
 		_register_hover_popup()
+	
+	# ── 时间不足锁定 ──
+	PlayerState.player_stat_changed.connect(_on_time_changed)
+	_refresh_time_lock()
 
 
 ## 差分更新：只刷 UI 文本/图标，不重建信号 & HoverPopup（已注册的 popup 绑定不变）
@@ -65,6 +69,35 @@ func update_action(new_action: Action) -> void:
 		texture.visible = true
 	else:
 		texture.visible = false
+	
+	# ── 时间不足锁定 ──
+	_refresh_time_lock()
+
+
+# ════════════════════════════════════════════════════════════
+# 时间锁定
+# ════════════════════════════════════════════════════════════
+
+## 根据当前 time 属性与行动消耗天数，锁定/解锁按钮
+func _refresh_time_lock() -> void:
+	var cost := ActionManager.get_action_day_cost(action)
+	if cost <= 0:
+		return
+	var current_time := int(PlayerState.get_stat_val("time"))
+	if current_time < cost:
+		disabled = true
+		tooltip_text = "这个行动需要 %d 天，时间不足" % cost
+		Logging.info("SceneActionPanel: 时间不足锁定 action=%s (需要%d天, 剩余%d天)" % [action.uuid if action else "NULL", cost, current_time])
+	else:
+		disabled = false
+		tooltip_text = ""
+
+
+## 监听 time 属性变化，实时刷新锁定状态
+func _on_time_changed(prop_name: String) -> void:
+	if prop_name == "time":
+		_refresh_time_lock()
+
 
 ## 监听锁定行动信号，匹配当前 action 时触发呼吸闪光
 func _on_locked_actions_selected(locked_actions: Array) -> void:

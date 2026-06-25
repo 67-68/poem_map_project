@@ -13,123 +13,123 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_75wms"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_le8ua"]
 
-[sub_resource type="Resource" id="Resource_rrvi2"]
+[sub_resource type="Resource" id="Resource_ykgpm"]
 script = ExtResource("3_bw4bu")
 str_props = "INSPIRATION"
 value = 11
 
-[sub_resource type="Resource" id="Resource_7l5s2"]
+[sub_resource type="Resource" id="Resource_mll64"]
 script = ExtResource("3_bw4bu")
 str_props = "FATIGUE"
 value = -22
 
-[sub_resource type="Resource" id="Resource_bw4bu"]
+[sub_resource type="Resource" id="Resource_obl6h"]
 script = ExtResource("4_ckfx8")
 value = 11
 
-[sub_resource type="Resource" id="Resource_ckfx8"]
+[sub_resource type="Resource" id="Resource_h4um6"]
 script = ExtResource("3_bw4bu")
 str_props = "INSPIRATION"
 value = 16
 
-[sub_resource type="Resource" id="Resource_np3lu"]
+[sub_resource type="Resource" id="Resource_ljyob"]
 script = ExtResource("5_np3lu")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_bbnlj"]
+[sub_resource type="Resource" id="Resource_62bws"]
 script = ExtResource("6_bbnlj")
-operators = Array[ExtResource("2_7l5s2")]([SubResource("Resource_rrvi2"), SubResource("Resource_7l5s2"), SubResource("Resource_bw4bu"), SubResource("Resource_ckfx8"), SubResource("Resource_np3lu")])
+operators = Array[ExtResource("2_7l5s2")]([SubResource("Resource_ykgpm"), SubResource("Resource_mll64"), SubResource("Resource_obl6h"), SubResource("Resource_h4um6"), SubResource("Resource_ljyob")])
 
-[sub_resource type="Resource" id="Resource_5e52l"]
+[sub_resource type="Resource" id="Resource_ubnxy"]
 script = ExtResource("7_5e52l")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_d6dfs"]
+[sub_resource type="Resource" id="Resource_lslb1"]
 script = ExtResource("8_d6dfs")
-choice_result = SubResource("Resource_bbnlj")
-requirement = SubResource("Resource_5e52l")
+choice_result = SubResource("Resource_62bws")
+requirement = SubResource("Resource_ubnxy")
 description = "就着菜市的喧嚷大声念出旧作，念到第三句时郑虔回头，两人隔着人潮笑了。"
 
-[sub_resource type="Resource" id="Resource_nadt7"]
+[sub_resource type="Resource" id="Resource_kbotu"]
 script = ExtResource("3_bw4bu")
 str_props = "INSPIRATION"
 value = 11
 
-[sub_resource type="Resource" id="Resource_tj21l"]
+[sub_resource type="Resource" id="Resource_1fr3s"]
 script = ExtResource("3_bw4bu")
 str_props = "FATIGUE"
 value = 16
 
-[sub_resource type="Resource" id="Resource_75wms"]
+[sub_resource type="Resource" id="Resource_7epix"]
 script = ExtResource("4_ckfx8")
 value = 11
 
-[sub_resource type="Resource" id="Resource_le8ua"]
+[sub_resource type="Resource" id="Resource_j8rar"]
 script = ExtResource("5_np3lu")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_ykgpm"]
+[sub_resource type="Resource" id="Resource_ki0c6"]
 script = ExtResource("6_bbnlj")
-operators = Array[ExtResource("2_7l5s2")]([SubResource("Resource_nadt7"), SubResource("Resource_tj21l"), SubResource("Resource_75wms"), SubResource("Resource_le8ua")])
+operators = Array[ExtResource("2_7l5s2")]([SubResource("Resource_kbotu"), SubResource("Resource_1fr3s"), SubResource("Resource_7epix"), SubResource("Resource_j8rar")])
 
-[sub_resource type="Resource" id="Resource_mll64"]
+[sub_resource type="Resource" id="Resource_qorlh"]
 script = ExtResource("8_d6dfs")
-choice_result = SubResource("Resource_ykgpm")
+choice_result = SubResource("Resource_ki0c6")
 description = "接过时触到那片焦痕，指腹在纸缘停留了一瞬，低头默默将稿纸卷回。"
 
-[sub_resource type="Resource" id="Resource_obl6h"]
+[sub_resource type="Resource" id="Resource_ice5w"]
 script = ExtResource("3_bw4bu")
 str_props = "INSPIRATION"
 value = 11
 
-[sub_resource type="Resource" id="Resource_h4um6"]
+[sub_resource type="Resource" id="Resource_th11t"]
 script = ExtResource("4_ckfx8")
 value = 16
 
-[sub_resource type="Resource" id="Resource_ljyob"]
+[sub_resource type="Resource" id="Resource_rr8ln"]
 script = ExtResource("3_bw4bu")
 str_props = "BURNOUT"
 value = 16
 
-[sub_resource type="Resource" id="Resource_62bws"]
+[sub_resource type="Resource" id="Resource_x6kbv"]
 script = ExtResource("4_ckfx8")
 value = 6
 
-[sub_resource type="Resource" id="Resource_ubnxy"]
+[sub_resource type="Resource" id="Resource_s3b48"]
 script = ExtResource("6_bbnlj")
-operators = Array[ExtResource("2_7l5s2")]([SubResource("Resource_obl6h"), SubResource("Resource_h4um6"), SubResource("Resource_ljyob"), SubResource("Resource_62bws")])
+operators = Array[ExtResource("2_7l5s2")]([SubResource("Resource_ice5w"), SubResource("Resource_th11t"), SubResource("Resource_rr8ln"), SubResource("Resource_x6kbv")])
 
-[sub_resource type="Resource" id="Resource_lslb1"]
+[sub_resource type="Resource" id="Resource_3oax4"]
 script = ExtResource("7_5e52l")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_kbotu"]
+[sub_resource type="Resource" id="Resource_smatt"]
 script = ExtResource("8_d6dfs")
-choice_result = SubResource("Resource_ubnxy")
-requirement = SubResource("Resource_lslb1")
+choice_result = SubResource("Resource_s3b48")
+requirement = SubResource("Resource_3oax4")
 description = "连声称难得郑广文眼力，随即翻开其他废纸就近请教——可还有遗珠。"
 
-[sub_resource type="Resource" id="Resource_1fr3s"]
+[sub_resource type="Resource" id="Resource_dppn8"]
 script = ExtResource("10_tj21l")
 property = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_7epix"]
+[sub_resource type="Resource" id="Resource_glq60"]
 script = ExtResource("10_tj21l")
 property = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_j8rar"]
+[sub_resource type="Resource" id="Resource_wiu18"]
 script = ExtResource("11_75wms")
-operators = Array[ExtResource("9_nadt7")]([SubResource("Resource_1fr3s"), SubResource("Resource_7epix")])
+operators = Array[ExtResource("9_nadt7")]([SubResource("Resource_dppn8"), SubResource("Resource_glq60")])
 
 [resource]
 script = ExtResource("12_le8ua")
-requirement = SubResource("Resource_j8rar")
+requirement = SubResource("Resource_wiu18")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_rrvi2")]([SubResource("Resource_d6dfs"), SubResource("Resource_mll64"), SubResource("Resource_kbotu")])
+options = Array[ExtResource("1_rrvi2")]([SubResource("Resource_lslb1"), SubResource("Resource_qorlh"), SubResource("Resource_smatt")])
 uuid = "qingliu_passive_benefits_zhengqian_spiritual_anchor"
 name = "菜市口旧稿"
 description = "春晨下杜城菜市口，郑虔从人潮中挤出来拦住你，从怀里掏出一卷被油渍浸透的旧稿——去岁你丢进灶膛的那卷，被他从火口抢了回来。他什么也没说，只是把那卷纸塞进你手里，转身便走。纸张边缘焦痕犹在，烟熏味混着菜市的葱韭气息。"

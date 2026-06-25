@@ -10,75 +10,75 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="8_arscf"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_w00bt"]
 
-[sub_resource type="Resource" id="Resource_k2t3v"]
+[sub_resource type="Resource" id="Resource_tnqlj"]
 script = ExtResource("3_rjd3j")
 str_props = "health"
 value = -6
 
-[sub_resource type="Resource" id="Resource_qdoh1"]
+[sub_resource type="Resource" id="Resource_isk4b"]
 script = ExtResource("3_rjd3j")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_rjd3j"]
+[sub_resource type="Resource" id="Resource_bil64"]
 script = ExtResource("4_bltie")
-operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_qdoh1")])
+operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_isk4b")])
 
-[sub_resource type="Resource" id="Resource_bltie"]
+[sub_resource type="Resource" id="Resource_7dwpm"]
 script = ExtResource("4_bltie")
 
-[sub_resource type="Resource" id="Resource_lqewk"]
+[sub_resource type="Resource" id="Resource_7th2j"]
 script = ExtResource("3_rjd3j")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_e10f2"]
+[sub_resource type="Resource" id="Resource_c4en7"]
 script = ExtResource("4_bltie")
-operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_lqewk")])
+operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_7th2j")])
 
-[sub_resource type="Resource" id="Resource_bn3w2"]
+[sub_resource type="Resource" id="Resource_4wosw"]
 script = ExtResource("5_lqewk")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_rjd3j")
-rejected_result = SubResource("Resource_e10f2")
-not_entered_result = SubResource("Resource_bltie")
+accepted_result = SubResource("Resource_bil64")
+rejected_result = SubResource("Resource_c4en7")
+not_entered_result = SubResource("Resource_7dwpm")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_arscf"]
+[sub_resource type="Resource" id="Resource_tmhl1"]
 script = ExtResource("6_e10f2")
-poem_taste = SubResource("Resource_bn3w2")
+poem_taste = SubResource("Resource_4wosw")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_w00bt"]
+[sub_resource type="Resource" id="Resource_ycjy7"]
 script = ExtResource("3_rjd3j")
 str_props = "career_progress"
 value = 11
 
-[sub_resource type="Resource" id="Resource_tnqlj"]
+[sub_resource type="Resource" id="Resource_p2d52"]
 script = ExtResource("4_bltie")
-operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_k2t3v"), SubResource("Resource_arscf"), SubResource("Resource_w00bt")])
+operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_tnqlj"), SubResource("Resource_tmhl1"), SubResource("Resource_ycjy7")])
 
-[sub_resource type="Resource" id="Resource_isk4b"]
+[sub_resource type="Resource" id="Resource_o0enw"]
 script = ExtResource("7_bn3w2")
-choice_result = SubResource("Resource_tnqlj")
+choice_result = SubResource("Resource_p2d52")
 description = "立在帘侧继续候着，不动声色"
 
-[sub_resource type="Resource" id="Resource_bil64"]
+[sub_resource type="Resource" id="Resource_ne0ab"]
 script = ExtResource("8_arscf")
 property = "career_progress"
 value = 70
 
 [resource]
 script = ExtResource("9_w00bt")
-requirement = SubResource("Resource_bil64")
+requirement = SubResource("Resource_ne0ab")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_k2t3v")]([SubResource("Resource_isk4b")])
+options = Array[ExtResource("1_k2t3v")]([SubResource("Resource_o0enw")])
 uuid = "bai_ye_honeymoon_l1_typeb_m0"
 name = "衙门口的风雪"
 description = "“尚书大人昨日议贡举事至深夜，今日恐未得闲。”说着用火箸拨了拨炉中炭，火星一溅即灭。他在炉边坐下，自斟一盏茶，翻册页时不急不缓，偶尔抬眼看窗外天色。你立在门帘旁，冷风从帘隙灌入，足底渐麻。清客翻完一卷册子，又另取一卷来读，像是忘了你还在。"

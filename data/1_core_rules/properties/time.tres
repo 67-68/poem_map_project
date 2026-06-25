@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="Property" load_steps=7 format=3 uid="uid://btime0000001"]
+
+[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_kxe2f"]
+[ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="2_cp"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="3_sp"]
+
+[sub_resource type="Resource" id="PropChangePerceptionData_1"]
+script = ExtResource("2_cp")
+min_delta = 1
+max_delta = 3
+gain_text = "时光从容，岁月静好"
+loss_text = "时光流逝"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_2"]
+script = ExtResource("2_cp")
+min_delta = 4
+max_delta = 6
+gain_text = "偷得浮生半日闲"
+loss_text = "光阴似箭，日月如梭"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_1"]
+script = ExtResource("3_sp")
+stage_val = 0
+perception_text = "时间紧迫"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_2"]
+script = ExtResource("3_sp")
+stage_val = 5
+perception_text = "尚有余裕"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_3"]
+script = ExtResource("3_sp")
+stage_val = 8
+perception_text = "时间充裕"
+
+[resource]
+script = ExtResource("1_kxe2f")
+uuid = "time"
+name = "time"
+hard_max = 10
+soft_max = 10
+decay_threshold = -1
+metadata/_custom_type_script = "uid://b3m5anke7kjyi"
+change_perceptions = [SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2")]
+staged_perceptions = [SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3")]

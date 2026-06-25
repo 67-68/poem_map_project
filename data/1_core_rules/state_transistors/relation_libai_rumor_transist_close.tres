@@ -5,13 +5,13 @@
 [ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="3_wyex1"]
 [ext_resource type="Script" uid="uid://c7gkvf3ho6pgj" path="res://core/model/state_transistor.gd" id="4_nhp00"]
 
-[sub_resource type="Resource" id="Resource_55om4"]
+[sub_resource type="Resource" id="Resource_bqbc3"]
 script = ExtResource("2_gwbd8")
 flag_id = "flag_relation_with_libai"
 type = "int"
 value = 20
 
-[sub_resource type="Resource" id="Resource_gwbd8"]
+[sub_resource type="Resource" id="Resource_cyc1o"]
 script = ExtResource("3_wyex1")
 flag_id = "flag_relation_with_libai"
 type = "int"
@@ -24,5 +24,5 @@ target_resource_urn = "urn:trait:relation_libai_close"
 transist_value = "TRUE"
 current_resource_urn = "urn:trait:relation_libai_rumor"
 triggered_event_key = "libai_welcome_hejiu"
-requirements = SubResource("Resource_gwbd8")
-operators = Array[ExtResource("1_55om4")]([SubResource("Resource_55om4")])
+requirements = SubResource("Resource_cyc1o")
+operators = Array[ExtResource("1_55om4")]([SubResource("Resource_bqbc3")])

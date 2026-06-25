@@ -13,123 +13,123 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_3on64"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_a25g5"]
 
-[sub_resource type="Resource" id="Resource_2q1ae"]
+[sub_resource type="Resource" id="Resource_08euj"]
 script = ExtResource("3_8kx82")
 str_props = "MONEY"
 value = 5
 
-[sub_resource type="Resource" id="Resource_nljxo"]
+[sub_resource type="Resource" id="Resource_cjfqj"]
 script = ExtResource("3_8kx82")
 str_props = "FATIGUE"
 value = -20
 
-[sub_resource type="Resource" id="Resource_8kx82"]
+[sub_resource type="Resource" id="Resource_7u5fx"]
 script = ExtResource("4_ni7dv")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ni7dv"]
+[sub_resource type="Resource" id="Resource_oi2xf"]
 script = ExtResource("3_8kx82")
 str_props = "INSPIRATION"
 value = 15
 
-[sub_resource type="Resource" id="Resource_feesj"]
+[sub_resource type="Resource" id="Resource_a2em3"]
 script = ExtResource("5_feesj")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_tnjck"]
+[sub_resource type="Resource" id="Resource_4o6mu"]
 script = ExtResource("6_tnjck")
-operators = Array[ExtResource("2_nljxo")]([SubResource("Resource_2q1ae"), SubResource("Resource_nljxo"), SubResource("Resource_8kx82"), SubResource("Resource_ni7dv"), SubResource("Resource_feesj")])
+operators = Array[ExtResource("2_nljxo")]([SubResource("Resource_08euj"), SubResource("Resource_cjfqj"), SubResource("Resource_7u5fx"), SubResource("Resource_oi2xf"), SubResource("Resource_a2em3")])
 
-[sub_resource type="Resource" id="Resource_r0xel"]
+[sub_resource type="Resource" id="Resource_ns4gc"]
 script = ExtResource("7_r0xel")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_ankot"]
+[sub_resource type="Resource" id="Resource_fg7gy"]
 script = ExtResource("8_ankot")
-choice_result = SubResource("Resource_tnjck")
-requirement = SubResource("Resource_r0xel")
+choice_result = SubResource("Resource_4o6mu")
+requirement = SubResource("Resource_ns4gc")
 description = "将荐书对折收入怀中，抬眼看他：「何不早来？」"
 
-[sub_resource type="Resource" id="Resource_20yio"]
+[sub_resource type="Resource" id="Resource_rvucu"]
 script = ExtResource("3_8kx82")
 str_props = "MONEY"
 value = 5
 
-[sub_resource type="Resource" id="Resource_8dp21"]
+[sub_resource type="Resource" id="Resource_e42r3"]
 script = ExtResource("3_8kx82")
 str_props = "FATIGUE"
 value = 15
 
-[sub_resource type="Resource" id="Resource_3on64"]
+[sub_resource type="Resource" id="Resource_ks85n"]
 script = ExtResource("4_ni7dv")
 value = 10
 
-[sub_resource type="Resource" id="Resource_a25g5"]
+[sub_resource type="Resource" id="Resource_cwol3"]
 script = ExtResource("6_tnjck")
-operators = Array[ExtResource("2_nljxo")]([SubResource("Resource_20yio"), SubResource("Resource_8dp21"), SubResource("Resource_3on64")])
+operators = Array[ExtResource("2_nljxo")]([SubResource("Resource_rvucu"), SubResource("Resource_e42r3"), SubResource("Resource_ks85n")])
 
-[sub_resource type="Resource" id="Resource_08euj"]
+[sub_resource type="Resource" id="Resource_us21j"]
 script = ExtResource("8_ankot")
-choice_result = SubResource("Resource_a25g5")
+choice_result = SubResource("Resource_cwol3")
 description = "指尖触到纸沿时停了半拍，垂下眼去，一路不曾碰那纸。"
 
-[sub_resource type="Resource" id="Resource_cjfqj"]
+[sub_resource type="Resource" id="Resource_i2u5r"]
 script = ExtResource("3_8kx82")
 str_props = "MONEY"
 value = 5
 
-[sub_resource type="Resource" id="Resource_7u5fx"]
+[sub_resource type="Resource" id="Resource_oo2ej"]
 script = ExtResource("4_ni7dv")
 value = 15
 
-[sub_resource type="Resource" id="Resource_oi2xf"]
+[sub_resource type="Resource" id="Resource_y4yhu"]
 script = ExtResource("3_8kx82")
 str_props = "BURNOUT"
 value = 15
 
-[sub_resource type="Resource" id="Resource_a2em3"]
+[sub_resource type="Resource" id="Resource_so2h3"]
 script = ExtResource("4_ni7dv")
 value = 5
 
-[sub_resource type="Resource" id="Resource_4o6mu"]
+[sub_resource type="Resource" id="Resource_rif7g"]
 script = ExtResource("5_feesj")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_ns4gc"]
+[sub_resource type="Resource" id="Resource_813b8"]
 script = ExtResource("6_tnjck")
-operators = Array[ExtResource("2_nljxo")]([SubResource("Resource_cjfqj"), SubResource("Resource_7u5fx"), SubResource("Resource_oi2xf"), SubResource("Resource_a2em3"), SubResource("Resource_4o6mu")])
+operators = Array[ExtResource("2_nljxo")]([SubResource("Resource_i2u5r"), SubResource("Resource_oo2ej"), SubResource("Resource_y4yhu"), SubResource("Resource_so2h3"), SubResource("Resource_rif7g")])
 
-[sub_resource type="Resource" id="Resource_fg7gy"]
+[sub_resource type="Resource" id="Resource_auf61"]
 script = ExtResource("7_r0xel")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_rvucu"]
+[sub_resource type="Resource" id="Resource_gonn6"]
 script = ExtResource("8_ankot")
-choice_result = SubResource("Resource_ns4gc")
-requirement = SubResource("Resource_fg7gy")
+choice_result = SubResource("Resource_813b8")
+requirement = SubResource("Resource_auf61")
 description = "连声称谢，目光却反复扫过荐书上右丞的印鉴——落款处空着一行。"
 
-[sub_resource type="Resource" id="Resource_e42r3"]
+[sub_resource type="Resource" id="Resource_uxndf"]
 script = ExtResource("10_8dp21")
 property = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_ks85n"]
+[sub_resource type="Resource" id="Resource_1bbuk"]
 script = ExtResource("10_8dp21")
 property = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_cwol3"]
+[sub_resource type="Resource" id="Resource_8t5dh"]
 script = ExtResource("11_3on64")
-operators = Array[ExtResource("9_20yio")]([SubResource("Resource_e42r3"), SubResource("Resource_ks85n")])
+operators = Array[ExtResource("9_20yio")]([SubResource("Resource_uxndf"), SubResource("Resource_1bbuk")])
 
 [resource]
 script = ExtResource("12_a25g5")
-requirement = SubResource("Resource_cwol3")
+requirement = SubResource("Resource_8t5dh")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_2q1ae")]([SubResource("Resource_ankot"), SubResource("Resource_08euj"), SubResource("Resource_rvucu")])
+options = Array[ExtResource("1_2q1ae")]([SubResource("Resource_fg7gy"), SubResource("Resource_us21j"), SubResource("Resource_gonn6")])
 uuid = "qingliu_passive_benefits_wangwei_halo_protection"
 name = "帘内一言"
 description = "「上来。」车中散出檀香。他一路无言，只在车驾转入辋川别业方向时，将一纸荐书搁在你膝上，不算什么好缺——崇文馆校书郎，正九品下。"

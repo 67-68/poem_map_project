@@ -58,7 +58,7 @@ description = "默默放下酒碗，转身缩回门槛后"
 [resource]
 script = ExtResource("8_7qy4u")
 era = "755_backhome"
-_target_tags = Array[String](["action:main:ganlu"])
+_target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu"])
 options = Array[ExtResource("1_2ykvf")]([SubResource("Resource_81ycb"), SubResource("Resource_klcly")])
 uuid = "ganlu_journey_scene_mad_song"
 name = "浊酒祭风"

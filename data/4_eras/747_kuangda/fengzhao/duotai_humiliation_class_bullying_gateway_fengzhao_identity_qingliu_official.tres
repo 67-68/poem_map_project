@@ -8,141 +8,126 @@
 [ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="6_cfpq1"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_os75q"]
 
-[sub_resource type="Resource" id="Resource_lydkh"]
+[sub_resource type="Resource" id="Resource_vhyq1"]
 script = ExtResource("3_68pwg")
 str_props = "health"
 value = -3
-
-[sub_resource type="Resource" id="Resource_4o0om"]
-script = ExtResource("3_68pwg")
-str_props = "fatigue"
-value = -9
-
-[sub_resource type="Resource" id="Resource_68pwg"]
-script = ExtResource("3_68pwg")
-str_props = "exhaustion"
-value = 1
-
-[sub_resource type="Resource" id="Resource_w181s"]
-script = ExtResource("3_68pwg")
-str_props = "fatigue"
-value = 6
-
-[sub_resource type="Resource" id="Resource_3jc1m"]
-script = ExtResource("3_68pwg")
-str_props = "kuangda"
-value = 2
-
-[sub_resource type="Resource" id="Resource_cfpq1"]
-script = ExtResource("3_68pwg")
-str_props = "fatigue"
-value = -3
-
-[sub_resource type="Resource" id="Resource_os75q"]
-script = ExtResource("4_w181s")
-operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_lydkh"), SubResource("Resource_4o0om"), SubResource("Resource_68pwg"), SubResource("Resource_w181s"), SubResource("Resource_3jc1m"), SubResource("Resource_cfpq1")])
-
-[sub_resource type="Resource" id="Resource_vhyq1"]
-script = ExtResource("5_3jc1m")
-choice_result = SubResource("Resource_os75q")
-description = "将抄笔搁回笔架，转身步出值房，不看任何人一眼。"
 
 [sub_resource type="Resource" id="Resource_ynppa"]
 script = ExtResource("3_68pwg")
 str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_uj3vj"]
-script = ExtResource("3_68pwg")
-str_props = "fatigue"
 value = -9
 
-[sub_resource type="Resource" id="Resource_qt5vw"]
-script = ExtResource("3_68pwg")
-str_props = "exhaustion"
-value = 1
-
-[sub_resource type="Resource" id="Resource_hb1hf"]
-script = ExtResource("3_68pwg")
-str_props = "fatigue"
-value = 6
-
-[sub_resource type="Resource" id="Resource_e7laq"]
-script = ExtResource("3_68pwg")
-str_props = "kuangda"
-value = 1
-
-[sub_resource type="Resource" id="Resource_5toom"]
-script = ExtResource("3_68pwg")
-str_props = "money"
-value = -3
-
-[sub_resource type="Resource" id="Resource_kjuyd"]
-script = ExtResource("6_cfpq1")
-imagery_name = "TARGET_OBJECT_SWORD:rusty_sword"
-
-[sub_resource type="Resource" id="Resource_4ykhf"]
-script = ExtResource("4_w181s")
-operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_ynppa"), SubResource("Resource_uj3vj"), SubResource("Resource_qt5vw"), SubResource("Resource_hb1hf"), SubResource("Resource_e7laq"), SubResource("Resource_5toom"), SubResource("Resource_kjuyd")])
-
-[sub_resource type="Resource" id="Resource_f2y5j"]
-script = ExtResource("5_3jc1m")
-choice_result = SubResource("Resource_4ykhf")
-description = "略顿首，将公文归位，低声道“告退”，自行离去。"
-
-[sub_resource type="Resource" id="Resource_n5jhd"]
+[sub_resource type="Resource" id="Resource_uj3vj"]
 script = ExtResource("3_68pwg")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_tpvmh"]
+[sub_resource type="Resource" id="Resource_qt5vw"]
 script = ExtResource("3_68pwg")
-str_props = "fatigue"
+str_props = "progress"
+value = 2
+
+[sub_resource type="Resource" id="Resource_hb1hf"]
+script = ExtResource("3_68pwg")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_e7laq"]
+script = ExtResource("4_w181s")
+operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_vhyq1"), SubResource("Resource_ynppa"), SubResource("Resource_uj3vj"), SubResource("Resource_qt5vw"), SubResource("Resource_hb1hf")])
+
+[sub_resource type="Resource" id="Resource_5toom"]
+script = ExtResource("5_3jc1m")
+choice_result = SubResource("Resource_e7laq")
+description = "将抄笔搁回笔架，转身步出值房，不看任何人一眼。"
+
+[sub_resource type="Resource" id="Resource_kjuyd"]
+script = ExtResource("3_68pwg")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_4ykhf"]
+script = ExtResource("3_68pwg")
+str_props = "health"
 value = -9
 
-[sub_resource type="Resource" id="Resource_ov4kk"]
+[sub_resource type="Resource" id="Resource_f2y5j"]
 script = ExtResource("3_68pwg")
-str_props = "exhaustion"
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_n5jhd"]
+script = ExtResource("3_68pwg")
+str_props = "progress"
 value = 1
 
-[sub_resource type="Resource" id="Resource_yxo4u"]
+[sub_resource type="Resource" id="Resource_tpvmh"]
 script = ExtResource("3_68pwg")
-str_props = "fatigue"
-value = 6
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_ov4kk"]
+script = ExtResource("6_cfpq1")
+imagery_name = "TARGET_OBJECT_SWORD:rusty_sword"
+
+[sub_resource type="Resource" id="Resource_yxo4u"]
+script = ExtResource("4_w181s")
+operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_kjuyd"), SubResource("Resource_4ykhf"), SubResource("Resource_f2y5j"), SubResource("Resource_n5jhd"), SubResource("Resource_tpvmh"), SubResource("Resource_ov4kk")])
 
 [sub_resource type="Resource" id="Resource_uxmni"]
-script = ExtResource("3_68pwg")
-str_props = "kuangda"
-value = -1
+script = ExtResource("5_3jc1m")
+choice_result = SubResource("Resource_yxo4u")
+description = "略顿首，将公文归位，低声道“告退”，自行离去。"
 
 [sub_resource type="Resource" id="Resource_aa2uh"]
 script = ExtResource("3_68pwg")
-str_props = "money"
-value = 6
+str_props = "health"
+value = -3
 
 [sub_resource type="Resource" id="Resource_yyd8r"]
 script = ExtResource("3_68pwg")
 str_props = "health"
-value = -2
+value = -9
 
 [sub_resource type="Resource" id="Resource_p4ngh"]
+script = ExtResource("3_68pwg")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_6d42j"]
+script = ExtResource("3_68pwg")
+str_props = "progress"
+value = -1
+
+[sub_resource type="Resource" id="Resource_wyhut"]
+script = ExtResource("3_68pwg")
+str_props = "money"
+value = 6
+
+[sub_resource type="Resource" id="Resource_wuefl"]
+script = ExtResource("3_68pwg")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_1yjpu"]
 script = ExtResource("6_cfpq1")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_6d42j"]
+[sub_resource type="Resource" id="Resource_7exqe"]
 script = ExtResource("4_w181s")
-operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_n5jhd"), SubResource("Resource_tpvmh"), SubResource("Resource_ov4kk"), SubResource("Resource_yxo4u"), SubResource("Resource_uxmni"), SubResource("Resource_aa2uh"), SubResource("Resource_yyd8r"), SubResource("Resource_p4ngh")])
+operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_aa2uh"), SubResource("Resource_yyd8r"), SubResource("Resource_p4ngh"), SubResource("Resource_6d42j"), SubResource("Resource_wyhut"), SubResource("Resource_wuefl"), SubResource("Resource_1yjpu")])
 
-[sub_resource type="Resource" id="Resource_wyhut"]
+[sub_resource type="Resource" id="Resource_l02v4"]
 script = ExtResource("5_3jc1m")
-choice_result = SubResource("Resource_6d42j")
+choice_result = SubResource("Resource_7exqe")
 description = "躬身道“大人若有别事，小的随叫随到”，又退回门外候立。"
 
 [resource]
 script = ExtResource("7_os75q")
 era = "747_kuangda"
-_target_tags = Array[String](["action:humiliation_class_bullying", "action:scene_fengzhao"])
-options = Array[ExtResource("1_lydkh")]([SubResource("Resource_vhyq1"), SubResource("Resource_f2y5j"), SubResource("Resource_wyhut")])
+_target_tags = Array[String](["emotion_pair:pair_despair", "TARGET_OBJECT_SWORD:cold_blade", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "action:humiliation_class_bullying", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_IDENTITY_MENZI", "VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_OBJECT_SWORD:rusty_sword", "TARGET_NPC_DUFU:thatched_grass", "action:scene_fengzhao"])
+options = Array[ExtResource("1_lydkh")]([SubResource("Resource_5toom"), SubResource("Resource_uxmni"), SubResource("Resource_l02v4")])
 uuid = "duotai_humiliation_class_bullying_gateway_fengzhao_identity_qingliu_official"
 name = "文牍之弃"
 description = "“抄。”朱笔在侧，墨迹未干。两个时辰后，你上交十二页工楷。主簿接过去，拇指拨过纸边，扫了一眼，搁在案角：“字还行。”又问：“你是哪个部的？”你答无部属。他点点头，未再开口。门外有吏员捧新卷入内，主簿唤其名姓，令“就在此处写”。你站在原地，无人示意你留，也无人示意你走。"

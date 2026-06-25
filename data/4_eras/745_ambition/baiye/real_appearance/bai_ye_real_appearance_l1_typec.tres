@@ -13,110 +13,110 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_8wl4w"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_v53gv"]
 
-[sub_resource type="Resource" id="Resource_6yllr"]
+[sub_resource type="Resource" id="Resource_qqugh"]
 script = ExtResource("3_jmwr1")
 str_props = "fatigue"
 value = -11
 
-[sub_resource type="Resource" id="Resource_ycqmf"]
+[sub_resource type="Resource" id="Resource_ch0nb"]
 script = ExtResource("3_jmwr1")
 str_props = "talent"
 value = -11
 
-[sub_resource type="Resource" id="Resource_jmwr1"]
+[sub_resource type="Resource" id="Resource_aqtdo"]
 script = ExtResource("3_jmwr1")
 str_props = "career_progress"
 value = 4
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_dn8em"]
+[sub_resource type="Resource" id="Resource_v18fd"]
 script = ExtResource("4_dn8em")
-operators = Array[ExtResource("2_ycqmf")]([SubResource("Resource_jmwr1")])
+operators = Array[ExtResource("2_ycqmf")]([SubResource("Resource_aqtdo")])
 
-[sub_resource type="Resource" id="Resource_2uxuy"]
+[sub_resource type="Resource" id="Resource_78mdk"]
 script = ExtResource("4_dn8em")
 
-[sub_resource type="Resource" id="Resource_v7ibp"]
+[sub_resource type="Resource" id="Resource_hyhxs"]
 script = ExtResource("3_jmwr1")
 str_props = "fatigue"
 value = 5
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
-[sub_resource type="Resource" id="Resource_32yy4"]
+[sub_resource type="Resource" id="Resource_ewgy6"]
 script = ExtResource("4_dn8em")
-operators = Array[ExtResource("2_ycqmf")]([SubResource("Resource_v7ibp")])
+operators = Array[ExtResource("2_ycqmf")]([SubResource("Resource_hyhxs")])
 
-[sub_resource type="Resource" id="Resource_hlede"]
+[sub_resource type="Resource" id="Resource_xxjiy"]
 script = ExtResource("5_2uxuy")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
-accepted_result = SubResource("Resource_dn8em")
-rejected_result = SubResource("Resource_32yy4")
-not_entered_result = SubResource("Resource_2uxuy")
+accepted_result = SubResource("Resource_v18fd")
+rejected_result = SubResource("Resource_ewgy6")
+not_entered_result = SubResource("Resource_78mdk")
 metadata/_custom_type_script = "uid://4seqlwtem2i3"
 
-[sub_resource type="Resource" id="Resource_t5p03"]
+[sub_resource type="Resource" id="Resource_d1boa"]
 script = ExtResource("6_v7ibp")
-poem_taste = SubResource("Resource_hlede")
+poem_taste = SubResource("Resource_xxjiy")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_dhjkb"]
+[sub_resource type="Resource" id="Resource_lp18d"]
 script = ExtResource("3_jmwr1")
 str_props = "career_progress"
 value = 3
 
-[sub_resource type="Resource" id="Resource_8wl4w"]
+[sub_resource type="Resource" id="Resource_ry0f7"]
 script = ExtResource("4_dn8em")
-operators = Array[ExtResource("2_ycqmf")]([SubResource("Resource_6yllr"), SubResource("Resource_ycqmf"), SubResource("Resource_t5p03"), SubResource("Resource_dhjkb")])
+operators = Array[ExtResource("2_ycqmf")]([SubResource("Resource_qqugh"), SubResource("Resource_ch0nb"), SubResource("Resource_d1boa"), SubResource("Resource_lp18d")])
 
-[sub_resource type="Resource" id="Resource_v53gv"]
+[sub_resource type="Resource" id="Resource_djmnl"]
 script = ExtResource("7_32yy4")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
 
-[sub_resource type="Resource" id="Resource_qqugh"]
+[sub_resource type="Resource" id="Resource_rn4l1"]
 script = ExtResource("8_hlede")
-choice_result = SubResource("Resource_8wl4w")
-requirement = SubResource("Resource_v53gv")
+choice_result = SubResource("Resource_ry0f7")
+requirement = SubResource("Resource_djmnl")
 description = "接过批注研墨重写"
 
-[sub_resource type="Resource" id="Resource_ch0nb"]
+[sub_resource type="Resource" id="Resource_4knt5"]
 script = ExtResource("3_jmwr1")
 str_props = "career_progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_aqtdo"]
+[sub_resource type="Resource" id="Resource_lu4ee"]
 script = ExtResource("4_dn8em")
-operators = Array[ExtResource("2_ycqmf")]([SubResource("Resource_ch0nb")])
+operators = Array[ExtResource("2_ycqmf")]([SubResource("Resource_4knt5")])
 
-[sub_resource type="Resource" id="Resource_v18fd"]
+[sub_resource type="Resource" id="Resource_25dx4"]
 script = ExtResource("8_hlede")
-choice_result = SubResource("Resource_aqtdo")
+choice_result = SubResource("Resource_lu4ee")
 description = "拂袖而去"
 
-[sub_resource type="Resource" id="Resource_78mdk"]
+[sub_resource type="Resource" id="Resource_v7cto"]
 script = ExtResource("10_dhjkb")
 property = "career_progress"
 value = 70
 operator = 1
 
-[sub_resource type="Resource" id="Resource_hyhxs"]
+[sub_resource type="Resource" id="Resource_u2lim"]
 script = ExtResource("10_dhjkb")
 property = "career_progress"
 value = 100
 
-[sub_resource type="Resource" id="Resource_ewgy6"]
+[sub_resource type="Resource" id="Resource_h4405"]
 script = ExtResource("11_8wl4w")
-operators = Array[ExtResource("9_t5p03")]([SubResource("Resource_78mdk"), SubResource("Resource_hyhxs")])
+operators = Array[ExtResource("9_t5p03")]([SubResource("Resource_v7cto"), SubResource("Resource_u2lim")])
 
 [resource]
 script = ExtResource("12_v53gv")
-requirement = SubResource("Resource_ewgy6")
+requirement = SubResource("Resource_h4405")
 era = "745_ambition"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_6yllr")]([SubResource("Resource_qqugh"), SubResource("Resource_v18fd")])
+options = Array[ExtResource("1_6yllr")]([SubResource("Resource_rn4l1"), SubResource("Resource_25dx4")])
 uuid = "bai_ye_real_appearance_l1_typec"
 name = "红笔批注之下"
 description = "改.你研墨重写,删去锋芒.他看后点头,又提起笔,将你的署名轻轻划去,在旁添上代拟二字.诗稿变得四平八稳,墨迹未干的朱红像一道伤口."

@@ -11,92 +11,92 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_i0xcy"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_sqfej"]
 
-[sub_resource type="Resource" id="Resource_qsnth"]
+[sub_resource type="Resource" id="Resource_nitpy"]
 script = ExtResource("3_ymqli")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_o7yaw"]
+[sub_resource type="Resource" id="Resource_k7owq"]
 script = ExtResource("3_ymqli")
 str_props = "fatigue"
 value = -3
 
-[sub_resource type="Resource" id="Resource_ymqli"]
+[sub_resource type="Resource" id="Resource_kuokq"]
 script = ExtResource("3_ymqli")
 str_props = "burnout"
 value = 3
 
-[sub_resource type="Resource" id="Resource_ha4lv"]
+[sub_resource type="Resource" id="Resource_6kbfp"]
 script = ExtResource("3_ymqli")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_svasu"]
+[sub_resource type="Resource" id="Resource_jyqjc"]
 script = ExtResource("3_ymqli")
 str_props = "money"
 value = -18
 
-[sub_resource type="Resource" id="Resource_480c2"]
+[sub_resource type="Resource" id="Resource_85ndo"]
 script = ExtResource("4_ha4lv")
 value = -10
 
-[sub_resource type="Resource" id="Resource_v1e3v"]
+[sub_resource type="Resource" id="Resource_rofn2"]
 script = ExtResource("3_ymqli")
 str_props = "burnout"
 value = 8
 
-[sub_resource type="Resource" id="Resource_tx6ys"]
+[sub_resource type="Resource" id="Resource_kmf2a"]
 script = ExtResource("3_ymqli")
 str_props = "fatigue"
 value = 5
 
-[sub_resource type="Resource" id="Resource_i0xcy"]
+[sub_resource type="Resource" id="Resource_rs5k3"]
 script = ExtResource("5_svasu")
-operators = Array[ExtResource("2_o7yaw")]([SubResource("Resource_qsnth"), SubResource("Resource_o7yaw"), SubResource("Resource_ymqli"), SubResource("Resource_ha4lv"), SubResource("Resource_svasu"), SubResource("Resource_480c2"), SubResource("Resource_v1e3v"), SubResource("Resource_tx6ys")])
+operators = Array[ExtResource("2_o7yaw")]([SubResource("Resource_nitpy"), SubResource("Resource_k7owq"), SubResource("Resource_kuokq"), SubResource("Resource_6kbfp"), SubResource("Resource_jyqjc"), SubResource("Resource_85ndo"), SubResource("Resource_rofn2"), SubResource("Resource_kmf2a")])
 
-[sub_resource type="Resource" id="Resource_sqfej"]
+[sub_resource type="Resource" id="Resource_dx8ul"]
 script = ExtResource("6_480c2")
-choice_result = SubResource("Resource_i0xcy")
+choice_result = SubResource("Resource_rs5k3")
 description = "指尖在筹身木纹的断茬处停了片刻，然后拿过来。"
 
-[sub_resource type="Resource" id="Resource_nitpy"]
+[sub_resource type="Resource" id="Resource_re1i6"]
 script = ExtResource("8_tx6ys")
 property = "burnout"
 value = 50
 operator = 1
 
-[sub_resource type="Resource" id="Resource_k7owq"]
+[sub_resource type="Resource" id="Resource_wj85i"]
 script = ExtResource("8_tx6ys")
 property = "money"
 value = 10
 operator = 1
 
-[sub_resource type="Resource" id="Resource_kuokq"]
+[sub_resource type="Resource" id="Resource_gic05"]
 script = ExtResource("8_tx6ys")
 property = "money"
 value = 50
 
-[sub_resource type="Resource" id="Resource_6kbfp"]
+[sub_resource type="Resource" id="Resource_tff1u"]
 script = ExtResource("8_tx6ys")
 property = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_jyqjc"]
+[sub_resource type="Resource" id="Resource_1tqhb"]
 script = ExtResource("8_tx6ys")
 property = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_85ndo"]
+[sub_resource type="Resource" id="Resource_tce67"]
 script = ExtResource("9_i0xcy")
-operators = Array[ExtResource("7_v1e3v")]([SubResource("Resource_nitpy"), SubResource("Resource_k7owq"), SubResource("Resource_kuokq"), SubResource("Resource_6kbfp"), SubResource("Resource_jyqjc")])
+operators = Array[ExtResource("7_v1e3v")]([SubResource("Resource_re1i6"), SubResource("Resource_wj85i"), SubResource("Resource_gic05"), SubResource("Resource_tff1u"), SubResource("Resource_1tqhb")])
 
 [resource]
 script = ExtResource("10_sqfej")
-requirement = SubResource("Resource_85ndo")
+requirement = SubResource("Resource_tce67")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
-options = Array[ExtResource("1_qsnth")]([SubResource("Resource_sqfej")])
+options = Array[ExtResource("1_qsnth")]([SubResource("Resource_dx8ul")])
 uuid = "qingliu_jiaolv_illusion_control"
 name = "鞋底泥"
 description = "“上一个和你鞋底有一样泥的人，现在已不穿这双靴了。他拿了我一枚木筹，那天起，他的靴底再没沾过寺后泥土。”他从怀里摸出一枚拇指长的旧木筹，递到离你一尺远的地方，没有催促，只是让它悬在那里。"

@@ -10,58 +10,59 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="8_o4biu"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_0qcfr"]
 
-[sub_resource type="Resource" id="Resource_cih0q"]
+[sub_resource type="Resource" id="Resource_hgctf"]
 script = ExtResource("3_1nlcq")
 str_props = "health"
 value = 3
 
-[sub_resource type="Resource" id="Resource_oekto"]
+[sub_resource type="Resource" id="Resource_d1gbs"]
 script = ExtResource("3_1nlcq")
 str_props = "INSPIRATION"
 value = -10
 
-[sub_resource type="Resource" id="Resource_1nlcq"]
+[sub_resource type="Resource" id="Resource_18o0t"]
 script = ExtResource("3_1nlcq")
 str_props = "BURNOUT"
 value = 10
 
-[sub_resource type="Resource" id="Resource_qsihi"]
+[sub_resource type="Resource" id="Resource_ksnce"]
 script = ExtResource("3_1nlcq")
 str_props = "BURNOUT"
 value = 3
 
-[sub_resource type="Resource" id="Resource_iy3tp"]
+[sub_resource type="Resource" id="Resource_63b0y"]
 script = ExtResource("4_qsihi")
 value = 5
 
-[sub_resource type="Resource" id="Resource_qj14e"]
+[sub_resource type="Resource" id="Resource_b1jro"]
 script = ExtResource("3_1nlcq")
 str_props = "fatigue"
 value = 8
 
-[sub_resource type="Resource" id="Resource_xyppd"]
+[sub_resource type="Resource" id="Resource_wkwaj"]
 script = ExtResource("3_1nlcq")
 str_props = "BURNOUT"
 value = 5
 
-[sub_resource type="Resource" id="Resource_o4biu"]
+[sub_resource type="Resource" id="Resource_knrft"]
 script = ExtResource("4_qsihi")
 value = 5
 
-[sub_resource type="Resource" id="Resource_0qcfr"]
+[sub_resource type="Resource" id="Resource_lc3qc"]
 script = ExtResource("5_iy3tp")
+_trait_key = 64
 str_traits = "disease_zhanwang_mania"
 
-[sub_resource type="Resource" id="Resource_hgctf"]
+[sub_resource type="Resource" id="Resource_8052l"]
 script = ExtResource("6_qj14e")
-operators = Array[ExtResource("2_oekto")]([SubResource("Resource_cih0q"), SubResource("Resource_oekto"), SubResource("Resource_1nlcq"), SubResource("Resource_qsihi"), SubResource("Resource_iy3tp"), SubResource("Resource_qj14e"), SubResource("Resource_xyppd"), SubResource("Resource_o4biu"), SubResource("Resource_0qcfr")])
+operators = Array[ExtResource("2_oekto")]([SubResource("Resource_hgctf"), SubResource("Resource_d1gbs"), SubResource("Resource_18o0t"), SubResource("Resource_ksnce"), SubResource("Resource_63b0y"), SubResource("Resource_b1jro"), SubResource("Resource_wkwaj"), SubResource("Resource_knrft"), SubResource("Resource_lc3qc")])
 
-[sub_resource type="Resource" id="Resource_d1gbs"]
+[sub_resource type="Resource" id="Resource_36epg"]
 script = ExtResource("7_xyppd")
-choice_result = SubResource("Resource_hgctf")
+choice_result = SubResource("Resource_8052l")
 description = "笔杆的尾部轻扣在砚沿。墨滴洒在纸上，恰好隐去了第一个字。"
 
-[sub_resource type="Resource" id="Resource_18o0t"]
+[sub_resource type="Resource" id="Resource_7cc7b"]
 script = ExtResource("8_o4biu")
 property = "BURNOUT"
 value = 70
@@ -69,10 +70,10 @@ operator = 1
 
 [resource]
 script = ExtResource("9_0qcfr")
-requirement = SubResource("Resource_18o0t")
+requirement = SubResource("Resource_7cc7b")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:duzhuo"])
-options = Array[ExtResource("1_cih0q")]([SubResource("Resource_d1gbs")])
+options = Array[ExtResource("1_cih0q")]([SubResource("Resource_36epg")])
 uuid = "qingliu_daoxin_posui_frozen_imagery"
 name = "秋夜三字"
 description = "纸上的三个字不像是从笔端生发的。它们更像是早就刻在那里——一笔一画都指向过去的某个时辰，与此刻再无瓜葛。墨在砚台里守着，稠得泛不出光。烛火跳了一下，影子从墙上滑过，沿着书案的边缘，歪了。"
