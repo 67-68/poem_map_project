@@ -440,6 +440,21 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 
 
 # ════════════════════════════════════════════════════════════
+# 时间成本查询
+# ════════════════════════════════════════════════════════════
+
+## 从 action.action_results 中提取 TimeOperator 的 day 消耗。
+## 返回 int，无 TimeOperator 时返回 0。
+static func get_action_day_cost(action: Action) -> int:
+	if not action or not action.action_results:
+		return 0
+	for op in action.action_results:
+		if op is TimeOperator:
+			return max(0, int(op.day))
+	return 0
+
+
+# ════════════════════════════════════════════════════════════
 # Generator 消费（统一入口）
 # ════════════════════════════════════════════════════════════
 
