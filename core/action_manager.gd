@@ -22,13 +22,13 @@ func reserve_action(action_id: String) -> bool:
 	# 1. 检查席位是否已满
 	if _reserved_action_ids.size() >= MAX_PICK_COUNT:
 		Logging.err("[ActionManager] 预留席位已满 (%d/%d)，预定失败: %s" % [MAX_PICK_COUNT, MAX_PICK_COUNT, action_id])
-		Logging.err("ActionManager: 预留席位已满，预定失败")
+		push_error("预留席位已满")
 		return false
 	
 	# 2. 检查是否重复预定
 	if action_id in _reserved_action_ids:
 		Logging.err("[ActionManager] action 已被重复预定: %s" % action_id)
-		Logging.err("ActionManager: 重复预定 action: %s" % action_id)
+		push_error("重复预定")
 		return false
 	
 	_reserved_action_ids.append(action_id)
@@ -376,6 +376,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 		if _reserved_action_ids.size() > available_pool.size():
 			Logging.err("[ActionManager] 预留数量 (%d) 超过当前可用行动数量 (%d)，无法抽取" % [_reserved_action_ids.size(), available_pool.size()])
 			Logging.err("ActionManager: 预留数量超过当前可用行动数量")
+			push_error("超过当前可用行动数量")
 			clear_reservations()
 			return selected_actions
 		
@@ -389,6 +390,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 			else:
 				Logging.err("[ActionManager] 预留 action %s 不在当前可用池中！" % reserved_id)
 				Logging.err("ActionManager: 预留 action 不在当前可用池: %s" % reserved_id)
+				push_error("不在当前可用池")
 				# 继续处理其他预留，但这个跳过
 	
 	# --- Phase 2: 随机填充剩余席位 ---

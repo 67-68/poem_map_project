@@ -143,6 +143,7 @@ func test_get_leverage_keys_returns_empty_for_unknown_target():
 func test_clear_on_empty_target_does_not_error():
 	"""对没有数据的 target 做 clear_leverage 不应报错"""
 	RelationFlagManager.clear_leverage("TARGET_NPC_HUSHANG")
+	assert_false(RelationFlagManager.has_leverage("TARGET_NPC_HUSHANG"), "空 target clear 后应仍无 leverage")
 
 
 # ════════════════════════════════════════════════════════════

@@ -627,6 +627,14 @@ func resolve(key: String, class_filter: String = "", silent: bool = false):
 			if _check_class_filter(res, class_filter):
 				return res
 
+	# ── 策略 4: random_events 平铺搜索 ──
+	for bucket_key in random_events:
+		var bucket = random_events[bucket_key] as Dictionary
+		if bucket.has(key):
+			var res = bucket[key]
+			if _check_class_filter(res, class_filter):
+				return res
+
 	if not silent:
 		Logging.warn("resolve: key '%s' 未找到" % key)
 	return null

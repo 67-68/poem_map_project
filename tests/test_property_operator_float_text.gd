@@ -76,7 +76,7 @@ func test_get_change_perception_text_large_loss():
 func test_get_change_perception_text_zero():
 	"""delta=0 → 无文本"""
 	var text = _test_property.get_change_perception_text(0)
-	assert_eq(text, "精力充沛", "delta=0 → fallback 到 staged_perception 的 '精力充沛'")
+	assert_eq(text, "成熟", "delta=0 → fallback 到 staged_perception（val=50, stage_val=40→'成熟'）")
 
 
 # ════════════════════════════════════════════════════════════

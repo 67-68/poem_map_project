@@ -170,7 +170,7 @@ func _gui_input(event: InputEvent) -> void:
 		# delta.y: 正值=向下滚动内容, 负值=向上
 		# pan_sensitivity 阻尼系数：0.35 默认值提供足够阻力，避免触控板飞得太快
 		target_scroll = clamp(target_scroll + event.delta.y * scroll_speed * pan_sensitivity, 0.0, max_scroll)
-		Logging.debug("SmoothScrollContainer[%s]: PAN_GESTURE delta=%.2f pan_sens=%.2f target %.1f -> %.1f sv=%.1f max=%.1f" % [name, event.delta.y, pan_sensitivity, prev_target, target_scroll, scroll_vertical, max_scroll])
+		# Logging.debug("SmoothScrollContainer[%s]: PAN_GESTURE delta=%.2f pan_sens=%.2f target %.1f -> %.1f sv=%.1f max=%.1f" % [name, event.delta.y, pan_sensitivity, prev_target, target_scroll, scroll_vertical, max_scroll])
 		# 强制同步 sv 到 target，避免原生 ScrollContainer 和 lerp 之间打架（lag back 根因）
 		scroll_vertical = target_scroll
 		accept_event()

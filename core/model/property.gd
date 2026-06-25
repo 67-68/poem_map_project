@@ -10,21 +10,23 @@ class_name Property extends GameEntity
 ## 在 .tres 中配置，格式: { min_delta, max_delta, gain_text, loss_text }
 ## 未配置时 fallback 到 get_staged_perception_text()
 @export var change_perceptions: Array[PropChangePerceptionData] = []
-var default_staged_perception: Array[PropStagedPerceptionData]
+var default_staged_perception: Array[PropStagedPerceptionData] = _init_default_staged_perception()
 
-func _ready():
+static func _init_default_staged_perception() -> Array[PropStagedPerceptionData]:
+	var arr: Array[PropStagedPerceptionData] = []
 	var p1 = PropStagedPerceptionData.new()
 	p1.stage_val = 0; p1.perception_text = "初始状态"
-	default_staged_perception.append(p1)
+	arr.append(p1)
 	var p2 = PropStagedPerceptionData.new()
 	p2.stage_val = 20; p2.perception_text = "成长中"
-	default_staged_perception.append(p2)
+	arr.append(p2)
 	var p3 = PropStagedPerceptionData.new()
 	p3.stage_val = 40; p3.perception_text = "成熟"
-	default_staged_perception.append(p3)
+	arr.append(p3)
 	var p4 = PropStagedPerceptionData.new()
 	p4.stage_val = 60; p4.perception_text = "GoodGood"
-	default_staged_perception.append(p4)
+	arr.append(p4)
+	return arr
 
 ## 返回当前数值对应的阶段感知文本（最高匹配档位）
 ## 例如 stage_val=[0,25,50,75], val=60 → 返回 stage_val=50 的文本
