@@ -1,4 +1,9 @@
 # [unreleased]
+
+那个完全没有错误的git提交是错的. 我发现我打开了搜索框筛选了东西
+太整蛊了, 搞了一个晚上 + 一个早上的注册表之类的方法尝试不要全部import, 最后发现项目体积和资源全部import差不多, 因为最后还是使用了直接打包assets文件夹
+sometimes simpler is better, 总有可以优化的资源空间
+
 ## Added
 - **NarrativeOverlay 动画策略系统** — 纸带入场动画支持从底部滑入
   - [`model/enumerates.gd`](model/enumerates.gd) — 新增 `enum ANIMATION_STRATEGY { DEFAULT, SLIDE_FROM_BOTTOM }`

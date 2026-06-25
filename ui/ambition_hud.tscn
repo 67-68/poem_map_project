@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bclflf5hxj5r4"]
 
-[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="1_3ftxo"]
+[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.png" id="1_3ftxo"]
 [ext_resource type="Script" uid="uid://dqj61x3f61w8q" path="res://ui/ambition_hud.gd" id="2_u8j85"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="3_hj3uc"]
 

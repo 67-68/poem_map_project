@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cy2dg1dthfmt5" path="res://world/time_control_panel.gd" id="1_25hr5"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_v2d34"]
-[ext_resource type="Texture2D" uid="uid://l280xbxc3ixw" path="res://assets/candle_main.PNG" id="5_wxhbx"]
+[ext_resource type="Texture2D" uid="uid://l280xbxc3ixw" path="res://assets/candle_main.png" id="5_wxhbx"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
 
 [node name="Margin" type="MarginContainer" unique_id=1416243622]

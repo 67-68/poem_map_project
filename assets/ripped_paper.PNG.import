@@ -3,21 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmv24lnitef8m"
-path="res://.godot/imported/ripped_paper.PNG-a072ec350cd2a4c451808ab8902dcc21.ctex"
+path="res://.godot/imported/ripped_paper.png-72fc04d02f99625d10a022044064f29d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ripped_paper.PNG"
-dest_files=["res://.godot/imported/ripped_paper.PNG-a072ec350cd2a4c451808ab8902dcc21.ctex"]
+source_file="res://assets/ripped_paper.png"
+dest_files=["res://.godot/imported/ripped_paper.png-72fc04d02f99625d10a022044064f29d.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.2
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

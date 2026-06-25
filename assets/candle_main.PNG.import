@@ -3,21 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://l280xbxc3ixw"
-path="res://.godot/imported/candle_main.PNG-4257e11588cec2b6f0e8ec20461a904d.ctex"
+path="res://.godot/imported/candle_main.png-149f13c1c68fd9a3dce55206d95d13d4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/candle_main.PNG"
-dest_files=["res://.godot/imported/candle_main.PNG-4257e11588cec2b6f0e8ec20461a904d.ctex"]
+source_file="res://assets/candle_main.png"
+dest_files=["res://.godot/imported/candle_main.png-149f13c1c68fd9a3dce55206d95d13d4.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.2
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

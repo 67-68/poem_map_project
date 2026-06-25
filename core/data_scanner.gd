@@ -56,16 +56,26 @@ static func scan(
 	else:
 		Logging.warn("DataScanner: 无法打开根目录: " + start_path)
 
-	# 第二级：DirAccess 返回 0 文件 → 降级到预构建索引
-	if result.scanned_file_count == 0:
-		Logging.warn("DataScanner: DirAccess 返回 0 文件，降级到预构建索引 %s" % _FILE_INDEX_PATH)
-		var fallback_result = _scan_from_index(start_path, delim)
-		if fallback_result.scanned_file_count > 0:
-			result = fallback_result
-			Logging.info("DataScanner: 预构建索引扫描完成，共扫描 %d 个文件，加载 %d 个条目，检测到 %d 个冲突，%d 个 Base" % [
-				result.scanned_file_count, result.pool.size(), result.duplicates.size(), result.bases.size()])
-		else:
-			Logging.err("DataScanner: 预构建索引也未找到任何文件！")
+	# 第二级：比较 DirAccess 结果与预构建索引，索引文件数更多则用索引
+	var index_file = FileAccess.open(_FILE_INDEX_PATH, FileAccess.READ)
+	if index_file:
+		var json_text = index_file.get_as_text()
+		index_file.close()
+		var json = JSON.new()
+		var parse_err = json.parse(json_text)
+		if parse_err == OK:
+			var index_data = json.get_data()
+			if index_data is Dictionary and index_data.has("files"):
+				var index_file_count = index_data["files"].size()
+				if result.scanned_file_count < index_file_count:
+					Logging.warn("DataScanner: DirAccess 扫到 %d 个文件，索引有 %d 个文件，降级到索引" % [result.scanned_file_count, index_file_count])
+					var fallback_result = _scan_from_index(start_path, delim)
+					if fallback_result.scanned_file_count > 0:
+						result = fallback_result
+						Logging.info("DataScanner: 预构建索引扫描完成，共扫描 %d 个文件，加载 %d 个条目，检测到 %d 个冲突，%d 个 Base" % [
+							result.scanned_file_count, result.pool.size(), result.duplicates.size(), result.bases.size()])
+					else:
+						Logging.err("DataScanner: 预构建索引也未找到任何文件！")
 
 	return result
 

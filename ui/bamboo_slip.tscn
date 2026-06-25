@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cx57ph8pl3dvb"]
 
-[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="1_1hadd"]
+[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.png" id="1_1hadd"]
 [ext_resource type="Script" uid="uid://cr2wv5nf47qbx" path="res://ui/bamboo_slip.gd" id="1_7368h"]
 [ext_resource type="Texture2D" uid="uid://b63ucyjoe7xeh" path="res://assets/red_chain.png" id="2_7368h"]
 

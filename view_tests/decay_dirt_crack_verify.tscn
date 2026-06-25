@@ -2,7 +2,7 @@
 
 [ext_resource type="Material" uid="uid://dfekcubir8ej4" path="res://shaders/decay_shader_material.tres" id="2_nwypk"]
 [ext_resource type="Script" uid="uid://bef68btx77uia" path="res://view_tests/decay_dirt_crack_verify.gd" id="2_script"]
-[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="3_nwypk"]
+[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.png" id="3_nwypk"]
 
 [node name="DecayVerify" type="Control" unique_id=1692913301]
 layout_mode = 3
