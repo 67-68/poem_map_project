@@ -583,3 +583,136 @@ i.current_level = 1
 | `TARGET_NPC_*` | `TARGET_` | 对象面 — NPC |
 | `TARGET_FACTION_MILITARY` | `TARGET_` | 对象面 — 势力 |
 | `TARGET_PLACE_JADESTEP` | `TARGET_` | 对象面 — 地点 |
+
+---
+
+## 10. POEM_TYPE 正交化管道乘数矩阵 (Channel Multiplier Matrix)
+
+> **状态：** 架构契约
+> **上级依赖：** 本文档第 3 节（木桶效应 + 虚伪反噬）
+> **关联模型：** [`PoemCraftingCalculator`](../../core/poem_crafting_calculator.gd)、[`enumerates.gd`](../../model/enumerates.gd)
+
+### 10.1 问题诊断
+
+V3 意象坍缩引擎解决了「意象的底色由什么决定」的问题，但它没有解决另一个正交维度：**诗写给谁看？**
+
+当前 `enum POEM_TYPE` 将六种诗词类型平铺在一个枚举里：
+
+```
+GAN_YE (干谒) | YING_ZHI (应制) | DENG_GAO (登高) | HUAI_GU (怀古) | JI_LV (羇旅) | SHAN_SHUI (山水)
+```
+
+这在架构上是致命的——前两者是**功利性社交接口 (Secular API)**，后四者是**情绪性广播 (Broadcast API)**。它们的目标对象、评价标准和叙事后果完全不在一个维度上。把它们塞进同一个平铺枚举，就像在数据库设计时把"用户年龄"和"用户密码"设成同一种数据类型。
+
+### 10.2 设计决策：Option B — 正交乘数矩阵
+
+| 方案 | 描述 | 反悔成本 | 结论 |
+|---|---|---|---|
+| **A（强耦合状态机）** | 每种诗词类型自带独立的计算逻辑 | 极高 — 6 套结算逻辑，每加一种新类型就爆炸 | ❌ 拒绝 |
+| **B（正交乘数矩阵 — 选中）** | 诗的原始数值只由 V3 Tier 系统决定，`POEM_TYPE` 作为上下文的**乘数/过滤器** | 低 — 只需维护一个 2×3 矩阵 | ✅ 采用 |
+
+**核心原则（约束的悖论）：** `POEM_TYPE` 降级，它不再是诗的本质，而是诗的**发布管道 (Publishing Channel)**。就像同一段文字发在奏折上（应制）和题在墙壁上（登高）——文字本身的价值不变，但读者不同，后果天差地别。
+
+### 10.3 管道分类
+
+#### 功利管道 (Secular Channels)
+
+| 包含 | 目标对象 | 接口契约 |
+|---|---|---|
+| `GAN_YE` (干谒) | 权贵 / 上级 | 极度吃 Tier 1 的世俗值 |
+| `YING_ZHI` (应制) | 皇帝 / 朝廷 | 对齐权力意志 |
+
+| 反模式 | 叙事后果 |
+|---|---|
+| Tier 2（诗史/沉重）传入功利管道 | 💀 **政治自杀**。指着老板鼻子骂街，负面世俗值放大 3 倍 |
+| Tier 3（绝唱/狂客）传入功利管道 | 跨频道装逼。就像"职场面试时当场朗诵出师表"，世俗值归零，但可能触发特殊 Trait |
+
+#### 情绪管道 (Broadcast Channels)
+
+| 包含 | 目标对象 | 接口契约 |
+|---|---|---|
+| `DENG_GAO` (登高) | 历史 / 天地 | 极度吃 Tier 2 和 Tier 3 的千古值 |
+| `HUAI_GU` (怀古) | 历史 / 前人 | 对齐文学史 |
+| `JI_LV` (羇旅) | 自我 / 旅途 | 对齐内心境界 |
+| `SHAN_SHUI` (山水) | 自然 / 宇宙 | 对齐精神高度 |
+
+| 反模式 | 叙事后果 |
+|---|---|
+| Tier 1（世俗/污染）传入情绪管道 | 🤣 **无病呻吟的废纸**。对着高山流水拍马屁，大自然不会给你发工资——世俗值 = 0，千古值 = 0 |
+
+### 10.4 底层收益公式
+
+$$\text{Yield}_{final} = \text{Yield}_{base\_tier} \times \mathcal{M}_{channel}$$
+
+其中：
+
+- $\text{Yield}_{base\_tier}$ 由 V3 木桶效应 + 虚伪反噬决定（本文档第 3 节）
+- $\mathcal{M}_{channel}$ 为以下管道乘数矩阵：
+
+| Channel Group | Tier | `history_mult` | `secular_mult` | 叙事含义 |
+|---|---|---|---|---|
+| `SECULAR` | 1 | 0.0 | **1.5** | 马屁拍对了地方，世俗收益放大 1.5 倍 |
+| `SECULAR` | 2 | 1.0 | **3.0** | 💀 政治自杀！负面世俗值被放大 3 倍！写《三吏三别》给皇帝看 |
+| `SECULAR` | 3 | 1.0 | 0.0 | 跨频道装逼，世俗无收益。狂客不伺候权贵 |
+| `BROADCAST` | 1 | 0.0 | 0.0 | 🤣 对着空气拍马屁，产出纯纯的工业垃圾 |
+| `BROADCAST` | 2 | **1.2** | 0.0 | 沉重意象符合登高怀古的基调，千古值放大 1.2 倍 |
+| `BROADCAST` | 3 | **1.5** | 0.0 | 绝唱 + 情绪管道 = 大唐文学巅峰，千古值放大 1.5 倍 |
+
+### 10.5 动态 Trait 标签覆盖
+
+管道乘数不仅影响数值，还影响叙事标签（覆盖 V3 第 3 节中 `min_tier` 决定的默认 Trait）：
+
+| 触发条件 | 默认 Trait（来自 V3） | 覆盖后 Trait |
+|---|---|---|
+| `BROADCAST` + Tier 1 | `[浊流颂圣之作]` | `[无病呻吟的废纸]` |
+| `SECULAR` + Tier 2 | `[刺世之剑]` | `[触怒龙颜的死书]` |
+| 其他组合 | — | 保持默认 Trait 不变 |
+
+### 10.6 代码注入点
+
+在 [`PoemCraftingCalculator.calculate_poem_grade()`](../../core/poem_crafting_calculator.gd) 中的注入位置：
+
+```
+[木桶效应计算 min_tier] → [虚伪反噬校验] → [基础产出生成] → ★管道乘数叠加★ → [PoemResult 构造]
+```
+
+核心逻辑伪代码：
+
+```
+# 管道乘数矩阵常量（仅 2×3=6 条规则，非穷举）
+const CHANNEL_MATRIX = {
+    "SECULAR": {
+        1: {"history_mult": 0.0, "secular_mult": 1.5},
+        2: {"history_mult": 1.0, "secular_mult": 3.0},
+        3: {"history_mult": 1.0, "secular_mult": 0.0}
+    },
+    "BROADCAST": {
+        1: {"history_mult": 0.0, "secular_mult": 0.0},
+        2: {"history_mult": 1.2, "secular_mult": 0.0},
+        3: {"history_mult": 1.5, "secular_mult": 0.0}
+    }
+}
+
+# 路由分发（不是穷举 if-else，是二分路由）
+var channel_group = "SECULAR" if poem_type in [POEM_TYPE.GAN_YE, POEM_TYPE.YING_ZHI] else "BROADCAST"
+var multipliers = CHANNEL_MATRIX[channel_group][min_tier]
+
+final_history = base_history * multipliers["history_mult"]
+final_secular = base_secular * multipliers["secular_mult"]
+```
+
+> **架构亮点：** 不是 3×6=18 条穷举分支，而是 2×3=6 条正交规则。管道分组（2 组）× Tier（3 级）完全解耦。新增诗词类型只需决定它属于 `SECULAR` 还是 `BROADCAST`，无需修改矩阵。
+
+### 10.7 实施任务列表
+
+```
+诗词类型正交化重构:
+    - [ ] 重构 Enum 定义: 在 core 层面将 6 个 POEM_TYPE 隐式划分为 SECULAR (功利) 和 BROADCAST (情绪) 两大类 @context(Code) @tags(架构)
+    - [ ] 注入乘数矩阵: 更新 calculate_poem_grade 函数，接收 poem_type 参数并应用 CHANNEL_MATRIX 进行浮点乘算 @context(Code) @tags(核心逻辑)
+    - [ ] UI 层透传: 修改 UI 的诗词创作面板，确保玩家在选意象【之前】必须先锁定 POEM_TYPE（契约即自由，先选定靶子再开枪） @context(UI)
+    - [ ] 补齐事件层兜底: 确保社交系统的 "赠诗" (Action) 强制走 SECULAR 路由，"独酌/游历" 强制走 BROADCAST 路由 @context(Data)
+```
+
+### 10.8 开放问题
+
+> **「拒写」机制的缺失：** 当玩家选了【应制】（皇帝命令），但他背包里只有被污染的 Tier 1 意象和高洁的 Tier 3 意象时——他没有 Tier 1 的「马屁素材」，用 Tier 3 则世俗值归零、浪费一首绝唱。是否提供「强行交白卷/拒写」机制来逃避政治自杀？这涉及事件系统的 `Action` 取消回调，需要进一步设计。

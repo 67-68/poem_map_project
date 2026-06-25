@@ -426,3 +426,28 @@ static func _is_constant_key(text: String) -> bool:
 			return false
 	
 	return true
+
+# ── HTML5 降级：从预构建 _file_index.json 读取文件清单 ──
+# 桌面端 DirAccess 正常工作，HTML5 Web 导出中 DirAccess 严重残缺。
+# 此函数供 DataScanner / AudioManager 等需要扫描目录的模块统一复用。
+# 返回 PackedStringArray，索引不存在或解析失败返回空数组。
+static func get_files_from_index(index_path: String) -> PackedStringArray:
+	if not FileAccess.file_exists(index_path):
+		return PackedStringArray()
+	var f = FileAccess.open(index_path, FileAccess.READ)
+	if not f:
+		return PackedStringArray()
+	var text = f.get_as_text()
+	f.close()
+	var json = JSON.new()
+	if json.parse(text) != OK:
+		return PackedStringArray()
+	var data = json.get_data()
+	if not data is Dictionary or not data.has("files"):
+		return PackedStringArray()
+	var files: Array = data["files"]
+	var result := PackedStringArray()
+	result.resize(files.size())
+	for i in files.size():
+		result[i] = str(files[i])
+	return result

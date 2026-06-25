@@ -302,8 +302,10 @@ func trigger_cinematic_post_blur(duration: float = 3.0) -> void:
 
 	# 手动设置尺寸（CanvasLayer 中 anchors 可能不生效）
 	var set_overlay_size := func():
-		var vp_size := get_viewport().get_visible_rect().size
-		overlay.size = vp_size
+		var vp := get_viewport()
+		if not vp or not is_instance_valid(overlay):
+			return
+		overlay.size = vp.get_visible_rect().size
 		overlay.position = Vector2.ZERO
 	set_overlay_size.call()
 	get_tree().root.size_changed.connect(set_overlay_size, CONNECT_ONE_SHOT)

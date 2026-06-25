@@ -57,63 +57,30 @@ static func scan(
 		Logging.warn("DataScanner: 无法打开根目录: " + start_path)
 
 	# 第二级：比较 DirAccess 结果与预构建索引，索引文件数更多则用索引
-	var index_file = FileAccess.open(_FILE_INDEX_PATH, FileAccess.READ)
-	if index_file:
-		var json_text = index_file.get_as_text()
-		index_file.close()
-		var json = JSON.new()
-		var parse_err = json.parse(json_text)
-		if parse_err == OK:
-			var index_data = json.get_data()
-			if index_data is Dictionary and index_data.has("files"):
-				var index_file_count = index_data["files"].size()
-				if result.scanned_file_count < index_file_count:
-					Logging.warn("DataScanner: DirAccess 扫到 %d 个文件，索引有 %d 个文件，降级到索引" % [result.scanned_file_count, index_file_count])
-					var fallback_result = _scan_from_index(start_path, delim)
-					if fallback_result.scanned_file_count > 0:
-						result = fallback_result
-						Logging.info("DataScanner: 预构建索引扫描完成，共扫描 %d 个文件，加载 %d 个条目，检测到 %d 个冲突，%d 个 Base" % [
-							result.scanned_file_count, result.pool.size(), result.duplicates.size(), result.bases.size()])
-					else:
-						Logging.err("DataScanner: 预构建索引也未找到任何文件！")
+	var index_files := Util.get_files_from_index(_FILE_INDEX_PATH)
+	if index_files.size() > result.scanned_file_count:
+		Logging.warn("DataScanner: DirAccess 扫到 %d 个文件，索引有 %d 个文件，降级到索引" % [result.scanned_file_count, index_files.size()])
+		var fallback_result = _scan_from_index(start_path, delim)
+		if fallback_result.scanned_file_count > 0:
+			result = fallback_result
+			Logging.info("DataScanner: 预构建索引扫描完成，共扫描 %d 个文件，加载 %d 个条目，检测到 %d 个冲突，%d 个 Base" % [
+				result.scanned_file_count, result.pool.size(), result.duplicates.size(), result.bases.size()])
+		else:
+			Logging.err("DataScanner: 预构建索引也未找到任何文件！")
 
 	return result
 
 
 ## 从预构建 JSON 索引加载（HTML5 降级路径）
-## 索引格式：{ "files": ["1_core_rules/properties/ruler_stat.tres", ...] }
 static func _scan_from_index(
 	start_path: String,
 	delim: String
 ) -> LoadResult:
 	var result = LoadResult.new()
 
-	if not FileAccess.file_exists(_FILE_INDEX_PATH):
-		Logging.err("DataScanner: 预构建索引文件不存在: " + _FILE_INDEX_PATH)
-		return result
-
-	var index_file = FileAccess.open(_FILE_INDEX_PATH, FileAccess.READ)
-	if not index_file:
-		Logging.err("DataScanner: 无法打开预构建索引文件: " + _FILE_INDEX_PATH)
-		return result
-
-	var raw = index_file.get_as_text()
-	index_file.close()
-
-	var json = JSON.new()
-	var parse_err = json.parse(raw)
-	if parse_err != OK:
-		Logging.err("DataScanner: 预构建索引 JSON 解析失败: " + _FILE_INDEX_PATH)
-		return result
-
-	var data = json.get_data()
-	if not data is Dictionary or not data.has("files"):
-		Logging.err("DataScanner: 预构建索引格式异常，缺少 'files' 字段")
-		return result
-
-	var files: Array = data.get("files", [])
+	var files: PackedStringArray = Util.get_files_from_index(_FILE_INDEX_PATH)
 	if files.is_empty():
-		Logging.warn("DataScanner: 预构建索引中 'files' 为空数组")
+		Logging.warn("DataScanner: 预构建索引为空或不可用")
 		return result
 
 	Logging.info("DataScanner: 预构建索引包含 %d 个文件路径" % files.size())

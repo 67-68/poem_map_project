@@ -255,7 +255,7 @@ elif file_name.ends_with(".csv"):
 
 ### 1. Simple is better 🤷
 
-折腾了一个晚上的「最小化 ext_resource 锚点」、preload 注入、class_registry autoload……最后发现 **直接把 assets 和 data 全打包进去的体积跟精准筛选差不多**。总有优化的空间，但第一版先跑起来比优雅更重要。
+折腾了一个晚上的「最小化 ext_resource 锚点」、preload 注入、class_registry autoload……最后发现方案还是得全部打包进去. 压根没有那么多需要筛选的资源。
 
 > 「自由即是无序，有序即是自由。」—— 你给了 DirAccess 在 HTML5 下「自由」扫描文件系统的权利，结果它只给你扫出 2 个 CSV 🤣。老老实实建个 JSON 索引把约束做死，它才能稳定工作。
 

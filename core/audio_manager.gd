@@ -134,54 +134,115 @@ func play_sfx(stream: AudioStream, pitch_randomness: float = 0.1, volume_db: flo
 # 扫描 assets/sounds/ 下的所有一级子目录，每个子目录名 = 类别名
 # 把 .ogg / .wav / .mp3 预加载到分类缓存
 func _load_sfx_categories() -> void:
+	var INDEX_PATH = SFX_ROOT.path_join("_file_index.json")
+
+	# 第一级：DirAccess 扫描（桌面端 / HTML5 都先试）
+	var dir_count := _try_load_sfx_via_diraccess()
+	Logging.info("%s: DirAccess 加载了 %d 个音效类别" % [LOG_TAG, _sfx_category_cache.size()])
+
+	# 第二级：比较索引，索引文件数更多则用索引降级
+	var index_files := Util.get_files_from_index(INDEX_PATH)
+	# 统计当前所有类别的总文件数
+	var total_loaded := 0
+	for streams in _sfx_category_cache.values():
+		total_loaded += (streams as Array).size()
+
+	if index_files.size() > total_loaded:
+		Logging.warn("%s: DirAccess 仅加载 %d 个音效文件，索引有 %d 个，降级到索引" % [LOG_TAG, total_loaded, index_files.size()])
+		_sfx_category_cache.clear()
+		_try_load_sfx_via_index(index_files)
+
+	Logging.info("%s: 音效加载完成，共 %d 个类别" % [LOG_TAG, _sfx_category_cache.size()])
+
+
+# DirAccess 扫描子目录，返回加载的类别数
+func _try_load_sfx_via_diraccess() -> int:
 	var root_dir = DirAccess.open(SFX_ROOT)
 	if not root_dir:
 		Logging.warn("%s: 音效目录不存在 [%s]" % [LOG_TAG, SFX_ROOT])
-		return
-	
+		return 0
+
 	root_dir.list_dir_begin()
 	var dir_name = root_dir.get_next()
 	while dir_name != "":
-		# 跳过 .import 文件和普通文件，只进子目录
 		if dir_name.begins_with(".") or dir_name.ends_with(".import"):
 			dir_name = root_dir.get_next()
 			continue
 		if not root_dir.current_is_dir():
 			dir_name = root_dir.get_next()
 			continue
-		
-		# 进入子目录 = 一个类别
+
 		var category = dir_name
-		var cat_dir = DirAccess.open(SFX_ROOT.path_join(category))
-		if not cat_dir:
-			dir_name = root_dir.get_next()
-			continue
-		
-		var streams: Array[AudioStream] = []
+		_load_sfx_category(category)
+
+		dir_name = root_dir.get_next()
+	root_dir.list_dir_end()
+	return _sfx_category_cache.size()
+
+
+# 从 JSON 索引加载（HTML5 降级路径）
+func _try_load_sfx_via_index(index_files: PackedStringArray) -> void:
+	var category_map: Dictionary = {}  # String -> Array[String]
+	for path in index_files:
+		var slash_idx = path.find("/")
+		if slash_idx <= 0:
+			continue  # 根级文件（如 royal_music.mp3），跳过类别加载
+		var category = path.substr(0, slash_idx)
+		if not category_map.has(category):
+			category_map[category] = []
+		(category_map[category] as Array).append(path)
+
+	for category in category_map:
+		_load_sfx_category(category)
+
+
+# 加载单个类别（DirAccess 和索引路径共用）
+# 策略：DirAccess 优先；若 DirAccess 成功但 load() 全返回 null（HTML5 常见），
+#       自动降级到索引路径逐个 load()
+func _load_sfx_category(category: String) -> void:
+	var streams: Array[AudioStream] = []
+	var loaded_via_diraccess := false
+
+	var cat_dir = DirAccess.open(SFX_ROOT.path_join(category))
+	if cat_dir:
 		cat_dir.list_dir_begin()
 		var file_name = cat_dir.get_next()
 		while file_name != "":
 			if file_name.begins_with(".") or file_name.ends_with(".import"):
 				file_name = cat_dir.get_next()
 				continue
-			# 只加载支持的音效格式
 			var ext = file_name.get_extension().to_lower()
 			if ext in ["ogg", "wav", "mp3"]:
 				var full_path = SFX_ROOT.path_join(category).path_join(file_name)
 				var stream = load(full_path)
 				if stream:
 					streams.append(stream)
+				else:
+					Logging.debug("%s: load() 返回 null: %s" % [LOG_TAG, full_path])
 			file_name = cat_dir.get_next()
 		cat_dir.list_dir_end()
-		
-		if not streams.is_empty():
-			_sfx_category_cache[category] = streams
-			Logging.info("%s: 已加载类别 [%s] → %d 个音效" % [LOG_TAG, category, streams.size()])
-		else:
-			Logging.info("%s: 类别 [%s] 为空，跳过" % [LOG_TAG, category])
-		
-		dir_name = root_dir.get_next()
-	root_dir.list_dir_end()
+		loaded_via_diraccess = not streams.is_empty()
+
+	# DirAccess 失败或 load() 全部返回 null → 降级到索引路径
+	if streams.is_empty():
+		var index_files := Util.get_files_from_index(SFX_ROOT.path_join("_file_index.json"))
+		for path in index_files:
+			if path.begins_with(category + "/"):
+				var ext = path.get_extension().to_lower()
+				if ext in ["ogg", "wav", "mp3"]:
+					var full_path = SFX_ROOT.path_join(path)
+					var stream = load(full_path)
+					if stream:
+						streams.append(stream)
+					else:
+						Logging.debug("%s: load() 返回 null（索引路径）: %s" % [LOG_TAG, full_path])
+
+	if not streams.is_empty():
+		_sfx_category_cache[category] = streams
+		var via_label := "DirAccess" if loaded_via_diraccess else "索引"
+		Logging.info("%s: 已加载类别 [%s] → %d 个音效 (via %s)" % [LOG_TAG, category, streams.size(), via_label])
+	else:
+		Logging.info("%s: 类别 [%s] 为空，跳过" % [LOG_TAG, category])
 
 
 # 从指定类别中随机选一个音效播放
