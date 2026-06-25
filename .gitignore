@@ -8,3 +8,5 @@ qdrant_storage/
 
 # 已经废弃对应API Key
 roo-code-settings.json
+.DS_Store
+build/*
