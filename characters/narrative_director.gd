@@ -112,8 +112,10 @@ func _on_pop_event(transition_text: String = ""):
 
 		# pop_event 不在此调用 _process_next() — 由 on_option_selected() guard 分支负责
 		# 将栈顶父事件的 processed 重置为 false，等待 guard 唤醒 _process_next()
+		# 同时标记 is_pop_regression=true，下游渲染层据此区分"pop 回归"与"循环重入"
 		if _event_stack.size() > 0:
 			_event_stack[0]["processed"] = false
+			_event_stack[0]["is_pop_regression"] = true
 
 
 func _on_clear_scheduled_events():
@@ -139,6 +141,7 @@ func _on_pop_to_event(event_key: String):
 			var target_entry = _event_stack.pop_front()
 			if target_entry.has("data"):
 				target_entry["processed"] = false
+				target_entry["is_pop_regression"] = true
 			_event_stack.push_front(target_entry)
 			Logging.info("pop_to_event: 已弹出 %d 个条目，目标事件 '%s' 保留在栈顶" % [i, event_key])
 			_process_next()

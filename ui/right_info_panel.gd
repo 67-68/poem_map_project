@@ -22,13 +22,17 @@ const CN_NAME_MAP: Dictionary = {
 @onready var _write_poem_btn: Button = $Panel/V/WritePoemContainer/WritePoemBtn
 
 func _ready() -> void:
-	# ── 写诗按钮初始化（UI only，暂不接逻辑）──
+	# ── 琢句按钮：点击打开/关闭诗词创建界面 ──
+	if _write_poem_btn == null:
+		Logging.err("RightInfoPanel: _write_poem_btn is NULL — PackedScene 'action_button.tscn' instantiation may have failed inside right_info_panel.tscn. Skipping WritePoemBtn setup.")
+		return
 	var title_label: Label = _write_poem_btn.get_node("Panel/HBoxContainer/VBoxContainer/Title")
 	var context_label: Label = _write_poem_btn.get_node("Panel/HBoxContainer/VBoxContainer/Outcome")
 	var icon_rect: TextureRect = _write_poem_btn.get_node("Panel/HBoxContainer/TextureRect")
 	title_label.text = "琢句"
 	context_label.text = "铺陈笔墨，直抒胸臆。"
 	icon_rect.texture = load("res://assets/stamps/chuangzuo_stamp.png")
+	_write_poem_btn.pressed.connect(func(): EventBus.poem_start_clicked.emit())
 
 	# ── 风闻刷新 ──
 	_refresh_rumors()

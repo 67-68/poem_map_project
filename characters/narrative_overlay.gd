@@ -114,6 +114,11 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	current_event_data = data
 	var entry_id := str(data.get_instance_id())
 
+	# 🆕 从 entry 中读取 is_pop_regression 标记（由 NarrativeDirector._on_pop_event 写入）
+	# 区分 "pop 回归父事件" 与 "循环重入的旧事件"（Bug 2 修复）
+	var is_pop_regression: bool = entry.get("is_pop_regression", false)
+	Logging.info("_on_event_ready_to_play: event='%s' from_stack=%s is_pop_regression=%s" % [data.name, from_stack, is_pop_regression])
+
 	# ── 背景交换判断（Overlay 决策，不是 Director）──
 	if _needs_background_swap(data):
 		# 通过回调注入清空条目 + 应用新纹理
@@ -126,7 +131,7 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 				_apply_ui_decl_background(data)
 		)
 		# ⭐ 背景交换完成后统一渲染事件内容 + 设置 auto-advance
-		_render_event_content(data, all_options, context, from_stack, entry_id)
+		_render_event_content(data, all_options, context, from_stack, entry_id, is_pop_regression)
 	else:
 		# ── 动画策略路由 ──
 		if data.ui_decl and data.ui_decl.animation_strategy == ENUMS.ANIMATION_STRATEGY.SLIDE_FROM_BOTTOM:
@@ -136,7 +141,7 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 		_apply_ui_decl_background(data)
 
 		# ⭐ 统一的事件内容渲染 + auto-advance 设置
-		_render_event_content(data, all_options, context, from_stack, entry_id)
+		_render_event_content(data, all_options, context, from_stack, entry_id, is_pop_regression)
 
 		# ── 公共尾逻辑 ──
 	event_ui.register_scroll_for_input_manager()
@@ -152,11 +157,16 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 ## 渲染事件内容并设置 auto-advance Timer
 ## 在 _on_event_ready_to_play 的 if/else 两个分支中统一调用，
 ## 确保 background_swap 路径和正常路径都不遗漏。
-func _render_event_content(data: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String) -> void:
+## @param is_pop_regression: 来自 Director 的 pop 回归标记，替代不精确的 has_entry() 判断
+func _render_event_content(data: BaseEvent, all_options: Array, context: Dictionary, from_stack: bool, entry_id: String, is_pop_regression: bool = false) -> void:
 	# ── 分支：pop 回归路径 vs 新事件路径 ──
 	# pop 回归的父事件在纸带上已存在旧条目（含 "即决" 烙印），
 	# 底部追加仅选项的新条目，不重复渲染 title/content/example
-	if event_ui.has_entry(entry_id):
+	# 🆕 is_pop_regression + has_entry 双重判断：
+	#    - 单独 has_entry() 无法区分 "pop 回归" 与 "循环重入"（Bug 2 根源）
+	#    - 单独 is_pop_regression 在 pop_to_event 未处理事件的边缘情况下可能误判
+	#    - 两者同时满足才走 pop 回归路径
+	if is_pop_regression and event_ui.has_entry(entry_id):
 		# === pop 回归路径：底部追加纯选项条目 ===
 		Logging.info("_render_event_content: pop回归路径 entry_id='%s'" % entry_id)
 		BlurManager.trigger_event_blur()

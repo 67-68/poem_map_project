@@ -600,8 +600,13 @@ func _input(event: InputEvent) -> void:
 # ═══════════════════════════════════════════════
 
 ## 在纸带上按 entry_id 查找条目
+## 🆕 反向搜索（从底部到顶部），确保 pop 回归时返回最新条目而非旧条目（Bug 1 修复）
+## 当同一 entry_id 存在多个条目时（原始条目已被 mark_chosen → pop 回归追加新条目），
+## 正向查找会错误返回已 chosen 的旧条目，导致新条目无法被标记为 chosen。
 func _find_entry(entry_id: String) -> Control:
-	for child in _tape_content.get_children():
+	var children := _tape_content.get_children()
+	for i in range(children.size() - 1, -1, -1):
+		var child = children[i]
 		if child.has_meta("entry_id") and child.get_meta("entry_id") == entry_id:
 			return child
 	return null

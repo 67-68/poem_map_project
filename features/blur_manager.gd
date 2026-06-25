@@ -35,19 +35,19 @@ var _picker_blur_tween: Tween = null
 var _picker_blur_located: bool = false
 
 # ── 缓动参数 ─────────────────────────────────────────
-const MAP_BLUR_IN_AMOUNT: float = 3.0
+const MAP_BLUR_IN_AMOUNT: float = 5.0
 const MAP_BLUR_OUT_AMOUNT: float = 0.0
 const MAP_DARKEN_IN_AMOUNT: float = 0.5
 const MAP_DARKEN_OUT_AMOUNT: float = 0.0
 const MAP_BLUR_IN_DURATION: float = 1.0
 const MAP_BLUR_OUT_DURATION: float = 0.8
 
-const PICKER_BLUR_AMOUNT: float = 3.5
+const PICKER_BLUR_AMOUNT: float = 6.0
 const PICKER_DARKEN_AMOUNT: float = 0.5
 const PICKER_BLUR_DURATION: float = 0.5
 
 # ── Cinematic 过场后模糊 ──────────────────────────────
-const CINEMATIC_POST_BLUR_AMOUNT: float = 5.0
+const CINEMATIC_POST_BLUR_AMOUNT: float = 8.0
 const CINEMATIC_POST_DARKEN_AMOUNT: float = 0.0
 const CINEMATIC_POST_FADE_IN: float = 0.8
 const CINEMATIC_POST_FADE_OUT: float = 0.8
