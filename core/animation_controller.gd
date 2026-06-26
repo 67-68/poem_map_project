@@ -21,6 +21,11 @@
 #
 # 叠加共存：material 与 custom_effects (RichTextEffect) 互不干扰。
 extends Node
+const _BaseEvent = preload("res://model/event.gd")
+const _CinematicOverlay = preload("res://ui/cinematic_overlay.gd")
+const _EventBtn = preload("res://characters/event_btn.gd")
+const _NarrativeOverlay = preload("res://characters/narrative_overlay.gd")
+const _OptionBtns = preload("res://ui/option_btns.gd")
 
 # ── 简单映射：uuid → ShaderMaterial（仅挂载到 ContentLabel）──
 @export var shader_mappings: Dictionary = {}

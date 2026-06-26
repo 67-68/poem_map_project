@@ -1,4 +1,15 @@
 extends Node
+const _Action = preload("res://core/model/action.gd")
+const _ActionTagFilter = preload("res://core/model/action_tag_filter.gd")
+const _BaseEvent = preload("res://model/event.gd")
+const _CooldownFilter = preload("res://core/model/cooldown_filter.gd")
+const _EraOperator = preload("res://core/operators/era_operator.gd")
+const _EventTicket = preload("res://core/model/event_ticket.gd")
+const _ImaginaryTag = preload("res://core/model/imaginary.gd")
+const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
+const _RequirementFilter = preload("res://core/model/requirement_filter.gd")
+const _SocialActionResolver = preload("res://core/social_action_resolver.gd")
+const _TagManager = preload("res://core/tag_manager.gd")
 
 @export var current_event_pool: Array[EventTicket] = []
 ## 🆕 过滤器链：前置函数式过滤器 → 意向匹配 → CD 冷却检查

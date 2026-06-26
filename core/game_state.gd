@@ -1,4 +1,13 @@
 extends Node
+const _ChatBubble = preload("res://model/chat_bubble.gd")
+const _EraOperator = preload("res://core/operators/era_operator.gd")
+const _FactionMapRenderer = preload("res://core/faction_map_renderer.gd")
+const _FocusedChat = preload("res://model/focused_chat.gd")
+const _ManualBuffer = preload("res://core/manual_buffer.gd")
+const _NarrativeOverlay = preload("res://characters/narrative_overlay.gd")
+const _PoemData = preload("res://characters/poem_data.gd")
+const _PoetData = preload("res://characters/poet_data.gd")
+const _PopupQueue = preload("res://core/stack_manager.gd")
 
 ## 🆕 游戏结束状态锁。当 system_operator 触发 game_over 时设为 true，
 ## 用于阻止后续事件继续触发/推送。

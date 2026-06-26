@@ -116,10 +116,10 @@ static func _lint_results_column(results_str: String, uuid: String) -> void:
 # ── Archetype JSON 加载 ────────────────────────────────────
 # 从 tools/data/event_archetypes.json 加载指定 archetype 的定义。
 # 返回 Dictionary 或空字典（如果文件/archetype 不存在）。
-# 结果被 parse_random_event_row() 消费，翻译 DSL → Resources 存入 RandomEvent。
+# 公开方法，供 RandomEvent.on_enter() 运行时动态加载 archetype DSL 定义。
 static var _event_archetypes_cache: Dictionary = {}
 
-static func _load_event_archetype(archetype_id: String) -> Dictionary:
+static func load_event_archetype(archetype_id: String) -> Dictionary:
     if archetype_id.is_empty():
         return {}
     
@@ -612,33 +612,12 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
     # 🆕 era 字段：从 context DSL 提取，标记事件所属时代
     event.era = context_data.era
 
-    # 🆕 Archetype DSL 翻译：从 context 提取 archetype 标识符，加载 JSON 翻译 DSL → Resources
+    # 🆕 Archetype 标签：.tres 只持久化 archetype_id 字符串。
+    # universal_requirement/result/era 在运行时由 RandomEvent.on_enter() 动态加载。
     var archetype_id = context_data.get("archetype", "")
     if not archetype_id.is_empty():
-        var archetype_data = _load_event_archetype(archetype_id)
-        if not archetype_data.is_empty():
-            event.archetype_id = archetype_id
-            Logging.info("DSLParser: archetype '%s' applied to event uuid=%s" % [archetype_id, uuid])
-
-            # 翻译 universal_requirement DSL → BaseRequirements
-            var archetype_req_str = archetype_data.get("universal_requirement", "")
-            if not archetype_req_str.is_empty():
-                event.archetype_universal_requirement = parse_requirements(archetype_req_str)
-
-            # 翻译 universal_result DSL → ChoiceResult
-            var archetype_result_str = archetype_data.get("universal_result", "")
-            if not archetype_result_str.is_empty():
-                event.archetype_universal_result = parse_choice_result(archetype_result_str)
-
-            # 提取 archetype era（若 event 本身 era 为空则兜底）
-            var archetype_era = archetype_data.get("era", "")
-            if not archetype_era.is_empty():
-                event.archetype_era = archetype_era
-                if event.era.is_empty():
-                    event.era = archetype_era
-                    Logging.info("DSLParser: archetype '%s' era fallback applied: %s" % [archetype_id, archetype_era])
-        else:
-            Logging.warn("DSLParser: archetype '%s' not found in event_archetypes.json for event uuid=%s" % [archetype_id, uuid])
+        event.archetype_id = archetype_id
+        Logging.info("DSLParser: archetype '%s' tagged to event uuid=%s" % [archetype_id, uuid])
 
     # 解析触发条件
     var requirements_str = row.get('requirements')

@@ -1,4 +1,15 @@
 extends Node
+const _AmbitionData = preload("res://core/model/ambition_config.gd")
+const _BaseOperator = preload("res://core/model/base_operator.gd")
+const _DeferredLockActionOperator = preload("res://core/operators/deferred_lock_action_operator.gd")
+const _FatigueManager = preload("res://core/fatigue_manager.gd")
+const _Flag = preload("res://core/model/flag.gd")
+const _ImaginaryTag = preload("res://core/model/imaginary.gd")
+const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
+const _SourceOfTruth = preload("res://core/source_of_truth.gd")
+const _TempFlagOperator = preload("res://core/operators/temp_flag_operator.gd")
+const _TierDeterminer = preload("res://core/tier_determiner.gd")
+const _TimeOperator = preload("res://core/model/time_operator.gd")
 
 @export var player_name: String = "杜甫"
 @export var traits: Array[String] = [] # trait key string
@@ -78,23 +89,56 @@ func init_flags():
 		Logging.info('init_flags: flag %s set to %s from SourceOfTruth' % [flag_id, str(flag_val)])
 
 func init_imaginaries():
-	"""从 SourceOfTruth 加载意象初始等级到 Database.imaginaries 中的 ImaginaryTag"""
+	"""从 SourceOfTruth 加载意象初始等级和 basic_imaginaries 到 Database.imaginaries 中的 ImaginaryTag"""
+	# —— 阶段 1：初始等级 ——
 	var imaginary_data = SourceOfTruth.debug_dashboard_state.get("imaginaries", {})
-	if imaginary_data.is_empty():
-		Logging.info('init_imaginaries: no imaginary data in SourceOfTruth, skipping')
+	if not imaginary_data.is_empty():
+		for uuid in imaginary_data:
+			var level = imaginary_data[uuid] as int
+			if level <= 0:
+				Logging.info('init_imaginaries: imaginary %s level <= 0 (%d), skipping' % [uuid, level])
+				continue
+			var imaginary = Database.get_imaginary(uuid) as ImaginaryTag
+			if not imaginary:
+				Logging.warn('init_imaginaries: imaginary %s not found in Database.imaginaries, skipping' % uuid)
+				continue
+			imaginary.current_level = level
+			Logging.info('init_imaginaries: set imaginary %s (%s) to level %d' % [uuid, imaginary.name, level])
+	else:
+		Logging.info('init_imaginaries: no imaginary data in SourceOfTruth, skipping level init')
+
+	# —— 阶段 2：basic_imaginaries（详细意象蓝图） ——
+	var basic_data = SourceOfTruth.debug_dashboard_state.get("basic_imaginaries", [])
+	if basic_data.is_empty():
+		Logging.info('init_imaginaries: no basic_imaginaries data in SourceOfTruth, skipping')
 		return
 
-	for uuid in imaginary_data:
-		var level = imaginary_data[uuid] as int
-		if level <= 0:
-			Logging.info('init_imaginaries: imaginary %s level <= 0 (%d), skipping' % [uuid, level])
+	for entry in basic_data:
+		var blueprint_id = entry.get("blueprint_id", "") as String
+		if blueprint_id.is_empty():
+			Logging.warn('init_imaginaries: basic_imaginaries entry missing blueprint_id, skipping')
 			continue
-		var imaginary = Database.get_imaginary(uuid) as ImaginaryTag
+
+		# 从 4 段式 tag 提取中间两段：TARGET_ACTOR_DUFU_STH → ACTOR:DUFU
+		var segments = blueprint_id.split("_")
+		if segments.size() < 3:
+			Logging.warn("init_imaginaries: blueprint_id '%s' 段数不足 (%d)，跳过" % [blueprint_id, segments.size()])
+			continue
+
+		var imaginary_key = (segments[1] + ":" + segments[2]).to_lower()
+		var imaginary = Database.get_imaginary(imaginary_key) as ImaginaryTag
 		if not imaginary:
-			Logging.warn('init_imaginaries: imaginary %s not found in Database.imaginaries, skipping' % uuid)
+			Logging.warn("init_imaginaries: basic_imaginaries blueprint '%s' 未找到 ImaginaryTag '%s'，跳过" % [blueprint_id, imaginary_key])
 			continue
-		imaginary.current_level = level
-		Logging.info('init_imaginaries: set imaginary %s (%s) to level %d' % [uuid, imaginary.name, level])
+
+		# 构造并追加 basic_imaginary 条目（同 _on_request_add_imaginary 格式）
+		var new_entry = {
+			"blueprint_id": blueprint_id,
+			"contexts": entry.get("contexts", []),
+			"tier": entry.get("tier", 1),
+		}
+		imaginary.basic_imaginaries.append(new_entry)
+		Logging.info("init_imaginaries: blueprint '%s' 已预载入意象 '%s' (%s)" % [blueprint_id, imaginary_key, imaginary.name])
 
 func init_emotions():
 	"""从 SourceOfTruth 加载初始情绪值到 PlayerState"""

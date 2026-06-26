@@ -1,4 +1,23 @@
 extends Node
+const _Action = preload("res://core/model/action.gd")
+const _BaseEvent = preload("res://model/event.gd")
+const _BaseOption = preload("res://model/event/base_option.gd")
+const _DataHelper = preload("res://core/data_helper.gd")
+const _DataScanner = preload("res://core/data_scanner.gd")
+const _Decision = preload("res://core/model/decision.gd")
+const _Disease = preload("res://core/model/disease.gd")
+const _Era = preload("res://core/model/era.gd")
+const _FocusedChat = preload("res://model/focused_chat.gd")
+const _GameEntity = preload("res://core/game_entity.gd")
+const _GlitchPreprocessor = preload("res://shaders/glitch_preprocessor.gd")
+const _HistoryEvent = preload("res://core/model/history_event.gd")
+const _LegendaryPoem = preload("res://core/model/legendary_poem.gd")
+const _NPCDocument = preload("res://model/npc_document.gd")
+const _NpcBatchCheckOperator = preload("res://core/operators/npc_batch_check_operator.gd")
+const _PoetLifePoint = preload("res://characters/poet_life_point.gd")
+const _RandomEvent = preload("res://model/random_event.gd")
+const _SceneAction = preload("res://core/model/scene_action.gd")
+const _Trait = preload("res://core/model/trait.gd")
 
 ## 🚨 DEPRECATED: MAIN_TAG_TO_BASES 已废弃。
 ## 现在 random_events 按事件的 trigger_tags 自动索引，不再依赖硬编码映射。

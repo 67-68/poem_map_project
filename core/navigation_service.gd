@@ -3,6 +3,8 @@
 # NavigationService - 逻辑层
 # ----------------------------------------------------------------
 extends Node
+const _AdjacencyManager = preload("res://core/adjacency_manager.gd")
+const _DebugUtils = preload("res://core/debug_util.gd")
 
 
 @export var debug_find_orphan_id: bool = false:

@@ -1,4 +1,5 @@
 extends Node
+const _StyleData = preload("res://core/model/style_data.gd")
 ## 视觉风格管理器 (Autoload) — 属性驱动 shader + StyleBox 策略引擎
 ##
 ## 模式: 单容器 / 策略组（多容器同时切换）

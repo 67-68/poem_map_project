@@ -1,5 +1,8 @@
 @tool
 extends Node
+const _Era = preload("res://core/model/era.gd")
+const _NarrativeOverlay = preload("res://characters/narrative_overlay.gd")
+const _SceneAction = preload("res://core/model/scene_action.gd")
 enum AREA_TAGS { # 包括地区特性和地区本身?
     AREA_HORSE_WEALTH,
     AREA_EXCESSIVE_OFFICIAL,

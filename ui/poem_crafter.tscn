@@ -21,6 +21,8 @@ content_margin_bottom = 15.0
 texture = ExtResource("3_36lce")
 modulate_color = Color(0.07005369, 0.06743416, 0.09324034, 1)
 
+[sub_resource type="ButtonGroup" id="ButtonGroup_otk17"]
+
 [node name="ShadowBox" type="PanelContainer" unique_id=1214157939]
 custom_minimum_size = Vector2(320, 500)
 anchors_preset = -1
@@ -100,6 +102,7 @@ alignment = 1
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
+button_group = SubResource("ButtonGroup_otk17")
 text = "山水"
 
 [node name="Button" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=736597084]
@@ -107,30 +110,35 @@ layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_pressed = true
+button_group = SubResource("ButtonGroup_otk17")
 text = "山水"
 
 [node name="Button3" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=318625611]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
+button_group = SubResource("ButtonGroup_otk17")
 text = "山水"
 
 [node name="Button4" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1211118108]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
+button_group = SubResource("ButtonGroup_otk17")
 text = "山水"
 
 [node name="Button5" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=47690329]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
+button_group = SubResource("ButtonGroup_otk17")
 text = "山水"
 
 [node name="Button6" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1207844765]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
+button_group = SubResource("ButtonGroup_otk17")
 text = "山水"
 
 [node name="Control" type="Control" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=889605264]

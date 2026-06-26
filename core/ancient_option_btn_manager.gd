@@ -1,4 +1,5 @@
 extends Node
+const _EventBtn = preload("res://characters/event_btn.gd")
 
 ## 古风选项按钮管理器（Autoload）
 ##

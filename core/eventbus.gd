@@ -1,4 +1,14 @@
 extends Node
+const _AnimationObject = preload("res://model/animation_object.gd")
+const _Decision = preload("res://core/model/decision.gd")
+const _DecisionScroll = preload("res://ui/decision_scroll.gd")
+const _FloatingText = preload("res://world/floating_text.gd")
+const _NarrativeOverlay = preload("res://characters/narrative_overlay.gd")
+const _SceneAction = preload("res://core/model/scene_action.gd")
+const _SceneActionScroll = preload("res://ui/scene_action_scroll.gd")
+const _SimpleToast = preload("res://world/simple_toast.gd")
+const _SystemOperator = preload("res://core/operators/system_operator.gd")
+const _TombstoneScreen = preload("res://ui/tomb_stone_screen.gd")
 
 signal user_click_map(data: Variant)
 

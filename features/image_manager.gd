@@ -1,4 +1,6 @@
 extends Node
+const _ImageHandle = preload("res://features/image_handle.gd")
+const _TextureResLoader = preload("res://core/texture_resource_loader.gd")
 ## 全局图像管理 Autoload
 ##
 ## 用法:

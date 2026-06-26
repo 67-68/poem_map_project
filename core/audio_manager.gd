@@ -1,5 +1,6 @@
 # AudioManager.gd (完整版)
 extends Node
+const _Util = preload("res://core/util.gd")
 
 const LOG_TAG := "AudioManager"
 

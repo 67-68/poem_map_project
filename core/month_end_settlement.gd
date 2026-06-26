@@ -1,4 +1,10 @@
 extends Node
+const _BaseEvent = preload("res://model/event.gd")
+const _BaseOption = preload("res://model/event/base_option.gd")
+const _ChoiceResult = preload("res://model/choice_result.gd")
+const _EventOption = preload("res://model/event/event_option.gd")
+const _NarrativeOverlay = preload("res://characters/narrative_overlay.gd")
+const _PopEventOperator = preload("res://core/operators/pop_event_operator.gd")
 
 # ── 属性显示顺序（11个属性） ──────────────────────
 const PROP_DISPLAY_ORDER: Array[int] = [

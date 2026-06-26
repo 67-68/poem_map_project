@@ -1,4 +1,5 @@
 extends Node
+const _HoverInfoPopup = preload("res://ui/hover_info_popup.gd")
 
 ## P社式 Hover 延迟弹出管理器（Autoload）v2.0
 ##

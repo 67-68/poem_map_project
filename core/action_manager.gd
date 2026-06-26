@@ -1,4 +1,13 @@
 extends Node
+const _Action = preload("res://core/model/action.gd")
+const _CooldownFilter = preload("res://core/model/cooldown_filter.gd")
+const _Era = preload("res://core/model/era.gd")
+const _FocusActionOperator = preload("res://core/operators/focus_action_operator.gd")
+const _Generator = preload("res://core/model/generator.gd")
+const _SceneAction = preload("res://core/model/scene_action.gd")
+const _SceneActionPanel = preload("res://ui/action_button.gd")
+const _SurvivalManager = preload("res://core/survival_manager.gd")
+const _TimeOperator = preload("res://core/model/time_operator.gd")
 
 const MAX_PICK_COUNT: int = 6
 
