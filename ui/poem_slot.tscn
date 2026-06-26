@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dhm3awu3pacwl"]
+[gd_scene format=3 uid="uid://dhm3awu3pacwl"]
 
 [ext_resource type="Script" uid="uid://ch41nm04yop2p" path="res://ui/poem_slot.gd" id="1_854lj"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="2_sfx"]
@@ -7,30 +7,41 @@
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_bottom = 2
 
-[node name="PoemSlot" type="PanelContainer"]
-custom_minimum_size = Vector2(50, 50)
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="PoemSlot" type="PanelContainer" unique_id=1447276282]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -74.5
+offset_top = -20.0
+offset_right = 74.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_sdswg")
 script = ExtResource("1_854lj")
 
-[node name="UISoundComponent" type="Node" parent="."]
+[node name="UISoundComponent" type="Node" parent="." unique_id=164375360]
 script = ExtResource("2_sfx")
 click_category = "book_impact"
 hover_category = "book_flip"
 custom_click_signal = "slot_clicked"
 
-[node name="C" type="CenterContainer" parent="."]
+[node name="C" type="CenterContainer" parent="." unique_id=920287868]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="C"]
+[node name="RichTextLabel" type="RichTextLabel" parent="C" unique_id=426462346]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 mouse_filter = 1
+theme_type_variation = &"FrozenNarrativeText"
+theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
-text = "这是一段测试文字(8)"
+text = "意象"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
-visible_characters = 8
-visible_ratio = 0.72727275
+horizontal_alignment = 1
+visible_characters = 4
+visible_ratio = 2.0

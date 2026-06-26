@@ -1,106 +1,143 @@
-extends HBoxContainer
+extends PanelContainer
 
 var selected_imaginaries: Array[ImagenaryItem] = []
 
-# Called when the node enters the scene tree for the first time.
+# ──────────────────────────────────────────────
+# SubViewport 动态内容 — preload 缓存
+# ──────────────────────────────────────────────
+const _ABSTRACT_CONCEPT_SCENE := preload("res://ui/poem_uis/abstract_concept.tscn")
+const _DETAIL_IMAGINARY_SCENE := preload("res://ui/poem_uis/detail_imaginary.tscn")
+
 func _ready() -> void:
 	Logging.info('PoemCrafter: initializing poem crafter')
-	setup_imagenaries()
-	# 监听 imaginary_changed，但只在意象数量变化时才重建
+
+	# 监听意象变化 — 重建 SubViewport 动态节点
 	EventBus.imaginary_changed.connect(on_imaginary_changed)
-	var children = $InputImagPanel/H.get_children()
+
+	# 连接 PoemSlot 的点击信号
+	var children = $Panel/VBoxContainer/InputImagPanel/H.get_children()
 	Logging.info('PoemCrafter: connecting slot_clicked signals for %d children' % children.size())
 	for c in children:
-		c.slot_clicked.connect(on_slot_clicked)
+		if c.has_signal("slot_clicked"):
+			c.slot_clicked.connect(on_slot_clicked)
 
-func on_imaginary_changed():
-	# 检查意象数量是否变化，只有数量变化才重建
-	var current_count = $ImagenaryScroll/HFlowContainer.get_children().size()
-	var new_count = 0
+	# 延迟重建 SubViewport（等 layout 完成 viewport.size 可用）
+	call_deferred("_rebuild_subviewport")
+
+# ──────────────────────────────────────────────
+# 事件监听
+# ──────────────────────────────────────────────
+
+func on_imaginary_changed() -> void:
+	Logging.info('PoemCrafter: imaginary_changed signaled, rebuilding subviewport')
+	_rebuild_subviewport()
+
+# ──────────────────────────────────────────────
+# SubViewport 排布算法
+# 从 Database 拉取所有活跃 ImaginaryTag，用径向布局
+# 安放 AbstractConcept，每个挂 N 个 OrbitDetail 子节点
+# ──────────────────────────────────────────────
+
+func _rebuild_subviewport() -> void:
+	var viewport := _get_subviewport()
+	if not viewport:
+		Logging.warn('PoemCrafter: SubViewport not found, skipping rebuild')
+		return
+
+	# 1. 清除旧动态节点
+	for child in viewport.get_children():
+		child.queue_free()
+
+	# 2. 收集活跃意象
+	var active: Array[ImaginaryTag] = []
 	for ima in Database.get_imaginaries_all().values():
 		if ima.basic_imaginaries.size() > 0:
-			new_count += 1
+			active.append(ima)
 
-	if current_count != new_count:
-		Logging.info('PoemCrafter: imaginary count changed from %d to %d, rebuilding' % [current_count, new_count])
-		setup_imagenaries()
-	else:
-		Logging.info('PoemCrafter: imaginary count unchanged, skipping rebuild (let items update themselves)')
+	var N := active.size()
+	Logging.info('PoemCrafter: rebuilding subviewport with %d active imaginaries' % N)
 
-func setup_imagenaries():
-	Logging.info('PoemCrafter: setting up imaginaries')
+	if N == 0:
+		return
 
-	# 清空选中的意象（因为 UI 即将被销毁）
-	for item in selected_imaginaries:
-		if is_instance_valid(item):
-			item.show()
-	selected_imaginaries.clear()
-	render_slots()
+	var vsize := viewport.size
+	if vsize.x <= 0 or vsize.y <= 0:
+		Logging.warn('PoemCrafter: viewport size zero, retrying deferred')
+		call_deferred("_rebuild_subviewport")
+		return
 
-	var existing_children = $ImagenaryScroll/HFlowContainer.get_children()
-	Logging.info('PoemCrafter: clearing %d existing children' % existing_children.size())
-	for c in existing_children:
-		c.queue_free()
-	var active_imaginaries = 0
-	for ima in Database.get_imaginaries_all().values():
-			if ima.basic_imaginaries.size() > 0:
-				active_imaginaries += 1
-				Logging.info('PoemCrafter: creating item for imaginary with %d basic imaginaries' % ima.basic_imaginaries.size())
-				var item = preload("res://ui/imaginery_item.tscn").instantiate()
-				item.init(ima)
-				item.imagenery_item_clicked.connect(on_item_clicked)
-				item.comprehend_requested.connect(func(it: ImagenaryItem):
-					var success = ImaginaryComprehender.comprehend_category(it.imaginary_tag.uuid)
-					if success:
-						setup_imagenaries()
-				)
+	var center := vsize / 2.0
+	var concept_radius := 150.0
 
-				$ImagenaryScroll/HFlowContainer.add_child(item)
-	Logging.info('PoemCrafter: setup complete, created %d items' % active_imaginaries)
+	for i in N:
+		var ima := active[i]
+		Logging.info('PoemCrafter: placing abstract concept "%s" (%d fragments)' % [ima.name, ima.basic_imaginaries.size()])
 
-func render_slots():
+		# 3. 创建抽象概念节点
+		var concept := _ABSTRACT_CONCEPT_SCENE.instantiate()
+		concept.concept_name = ima.name
+
+		if N == 1:
+			concept.position = center
+		else:
+			var angle := (2.0 * PI * i) / N - PI / 2.0  # 从顶部开始
+			concept.position = center + Vector2(cos(angle), sin(angle)) * concept_radius
+
+		viewport.add_child(concept)
+
+		# 4. 创建详细意象轨道节点
+		var fragments := ima.basic_imaginaries
+		var M := fragments.size()
+		for j in M:
+			var detail := _DETAIL_IMAGINARY_SCENE.instantiate() as OrbitDetail
+			detail.center_target = concept
+			detail.semi_major_axis = 60.0 + j * 30.0
+			detail.semi_minor_axis = 40.0 + j * 20.0
+			detail.phase_offset = (2.0 * PI * j) / M
+			detail.orbit_speed = 0.5 + randf() * 0.5  # 微小速度差异避免锁步
+
+			# 拼装 detail 展示文本
+			var contexts: Array = fragments[j].get("contexts", [])
+			var display_text: String
+			if contexts.size() > 0:
+				display_text = str(contexts[0])
+			else:
+				display_text = "…"
+			detail.set_detail_text(display_text)
+
+			viewport.add_child(detail)
+
+	Logging.info('PoemCrafter: subviewport rebuild complete')
+
+func _get_subviewport() -> SubViewport:
+	return $Panel/VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport as SubViewport
+
+# ──────────────────────────────────────────────
+# 槽位渲染 — 不变
+# ──────────────────────────────────────────────
+
+func render_slots() -> void:
 	Logging.info('PoemCrafter: rendering slots, selected count: %d' % selected_imaginaries.size())
-	var slots = $InputImagPanel/H.get_children()
+	var slots := $Panel/VBoxContainer/InputImagPanel/H.get_children()
 
-	# 渲染所有槽位
 	for i in range(slots.size()):
-		var slot = slots[i] as PoemSlot
+		var slot := slots[i] as PoemSlot
 		slot.remove_theme_stylebox_override("panel")
 		if i < selected_imaginaries.size():
-			# 有意象的槽位
-			var item = selected_imaginaries[i]
+			var item := selected_imaginaries[i]
 			slot.apply_style(item.current_style)
 			slot.apply_text(item.get_text())
 		else:
-			# 空槽位
 			slot.apply_text('没有灵感...')
 
-func refresh_image():
-	var level = selected_imaginaries.size()
-	Logging.info('PoemCrafter: refreshing image for level %d' % level)
-	var tex: Texture2D = null
-	match level:
-		0:
-			tex = TextureResLoader.get_background("bg_poem_creation_1")
-			Logging.info('PoemCrafter: loading background 1 for level 0')
-		1:
-			tex = TextureResLoader.get_background("bg_poem_creation_2")
-			Logging.info('PoemCrafter: loading background 2 for level 1')
-		2:
-			tex = TextureResLoader.get_background("bg_poem_creation_3")
-			Logging.info('PoemCrafter: loading background 3 for level 2')
-		3:
-			tex = TextureResLoader.get_background("bg_study_quiet")
-			Logging.info('PoemCrafter: loading background for level 3')
-		_:
-			Logging.warn('PoemCrafter: unknown level %d' % level)
+# ──────────────────────────────────────────────
+# 交互逻辑 — 不变（点击添加意象逻辑暂不动）
+# ──────────────────────────────────────────────
 
-	$InputImagPanel/MarginContainer/TextureRect.texture = tex
-
-func on_item_clicked(imaginary_item: ImagenaryItem):
+func on_item_clicked(imaginary_item: ImagenaryItem) -> void:
 	Logging.info('PoemCrafter: item clicked, selected count: %d' % selected_imaginaries.size())
 	if selected_imaginaries.size() >= 3:
-		Logging.info('stop user from adding the fourth imagenary tag')
+		Logging.info('PoemCrafter: stop user from adding the fourth imagenary tag')
 		return
 
 	Logging.info('PoemCrafter: adding imaginary_item to array and hiding it')
@@ -109,41 +146,36 @@ func on_item_clicked(imaginary_item: ImagenaryItem):
 	render_slots()
 
 	if selected_imaginaries.size() == 3:
-			Logging.info('PoemCrafter: reached max level, calculating poem')
-			var imas: Array[ImaginaryTag] = []
-			for item in selected_imaginaries:
-				imas.append(item.imaginary_tag)
-			Logging.info('PoemCrafter: calculating poem from %d imaginaries' % imas.size())
-			var result = PoemCraftingCalculator.calculate_poem_grade(imas)
-			var text = PoemCraftingCalculator.translate(result.operators)
-			$InputImagPanel/Button.tooltip_text = text
-			$InputImagPanel/RichTextLabel.text = text
-			Logging.info('PoemCrafter: poem text set: %s' % text)
+		Logging.info('PoemCrafter: reached max level, calculating poem')
+		var imas: Array[ImaginaryTag] = []
+		for item in selected_imaginaries:
+			imas.append(item.imaginary_tag)
+		Logging.info('PoemCrafter: calculating poem from %d imaginaries' % imas.size())
+		var result := PoemCraftingCalculator.calculate_poem_grade(imas)
+		var text := PoemCraftingCalculator.translate(result.operators)
+		$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = text
+		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
+		Logging.info('PoemCrafter: poem text set: %s' % text)
 
-	refresh_image()
-
-func on_slot_clicked(slot: PoemSlot):
+func on_slot_clicked(slot: PoemSlot) -> void:
 	Logging.info('PoemCrafter: slot clicked, selected count: %d' % selected_imaginaries.size())
-	var slots = $InputImagPanel/H.get_children()
-	var slot_index = slots.find(slot)
+	var slots := $Panel/VBoxContainer/InputImagPanel/H.get_children()
+	var slot_index := slots.find(slot)
 
 	if slot_index == -1 or slot_index >= selected_imaginaries.size():
 		Logging.warn('PoemCrafter: slot clicked but no item occupying at index %d' % slot_index)
 		return
 
 	Logging.info('PoemCrafter: removing item at index %d from array' % slot_index)
-	var item = selected_imaginaries[slot_index]
+	var item := selected_imaginaries[slot_index]
 	selected_imaginaries.remove_at(slot_index)
 	item.show()
 	render_slots()
 	Logging.info('PoemCrafter: slot cleared, new selected count: %d' % selected_imaginaries.size())
 
-	refresh_image()
-
 func _on_button_pressed() -> void:
-	#breakpoint
 	if selected_imaginaries.size() != 3:
-		Logging.warn('selected count not 3, cannot craft poem')
+		Logging.warn('PoemCrafter: selected count not 3, cannot craft poem')
 		return
 	Logging.info('PoemCrafter: button pressed, crafting poem')
 	var imas: Array[ImaginaryTag] = []
@@ -151,22 +183,20 @@ func _on_button_pressed() -> void:
 		imas.append(item.imaginary_tag)
 	Logging.info('PoemCrafter: collecting %d imaginaries for crafting' % imas.size())
 
-	# 新：调用诗词评价引擎
-	var result = PoemCraftingCalculator.calculate_poem_grade(imas)
+	# 调用诗词评价引擎
+	var result := PoemCraftingCalculator.calculate_poem_grade(imas)
 	Logging.info('PoemCrafter: poem grade calculated, %d operators' % result.operators.size())
 
 	# 执行结算算子
 	result.operate()
 
-	# 新：阅后即焚 — 删除投入的概念
+	# 阅后即焚 — 删除投入的概念
 	ImaginaryComprehender.consume_concepts(imas)
 
-	#breakpoint
 	Logging.info('PoemCrafter: scanning for poem events')
 
 	for i in imas:
 		for entry in i.basic_imaginaries:
-			# 🔧 标准化标签：确保三段式标签转换为四段式
 			var blueprint_id = entry.get("blueprint_id", "")
 			if not blueprint_id.is_empty():
 				PlayerState.current_action_tags.append(blueprint_id)
@@ -180,3 +210,6 @@ func _on_button_pressed() -> void:
 		item.show()
 	selected_imaginaries.clear()
 	render_slots()
+
+	# 重建 SubViewport（consumed 后碎片数量变化）
+	_rebuild_subviewport()

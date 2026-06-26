@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cvumgi4mpjoyy"]
+
+[ext_resource type="Script" path="res://ui/poem_uis/detail_imaginary.gd" id="1_script"]
+
+[node name="DetailImaginary" type="Node2D" unique_id=1664011341]
+script = ExtResource("1_script")
+
+[node name="Label" type="Label" parent="." unique_id=845482198]
+offset_right = 99.0
+offset_bottom = 30.0
+text = ""
