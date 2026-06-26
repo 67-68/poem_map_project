@@ -55,12 +55,6 @@ func decay(prop_enum, threshold, decay_val):
     else:
         append_prop(prop_enum, -current_val)
 
-func _decay_volatile_emotions():
-    pass
-
-func _process_fatigue_accumulation():
-    pass
-
 func aggregate_trait_effect():
     for t in PlayerState.get_traits():
         var trait_ = Database.get_trait(t)
@@ -81,6 +75,14 @@ func operate_state_transistors():
     for s in Database.get_state_transistors_all():
         var trans = Database.get_state_transistors_all()[s]
         trans.transition()
+    
+    var prog = PlayerState.get_stat_val(ENUMS.PROPS.PROGRESS)
+    if prog >= 100:
+        if PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_FENGYING): EventBus.request_event_key.emit("kuangda_2_to_3")
+        else: EventBus.request_event_key.emit("kuangda_1_to_2")
+    elif prog <= 0:
+        if PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_KUANGKE): EventBus.request_event_key.emit("kuangda_3_to_2")
+        else: EventBus.request_event_key.emit("kuangda_2_to_1")
 
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）
 func _process_single_xun_settlement():
@@ -89,27 +91,19 @@ func _process_single_xun_settlement():
     # 在任何增减发生之前，先让状态之间互相发生化学反应。
     # 状态自身存在的持续负面衍生
     # 让属性自己不变，影响其他属性和operator之类的
-    _process_health_checks()
     aggregate_trait_effect()
     
     # 第二阶段：生存基础扣除 (Upkeep & Economy)
     # 外部环境对玩家的无情压迫。
     _cost_survival()
     
-    # 第三阶段：溢出清算与异化 (Threshold Detonation) —— 你最关注的一步
-    # 结算所有的长期代价，进行不可逆的惩罚。
-    # 让属性 < 100
-    _process_fatigue_accumulation()
-    
     # 3.5: 濒危警告音效
     _update_heartbeat_sfx()
-    
     death_judgement()
     
     # 第四阶段：衰减与重置 (Decay, Reset & GC)
     # 打完巴掌给个甜枣，系统内存回收。
     # 属性 90 -> 50
-    _decay_volatile_emotions()
     #breakpoint
     operate_state_transistors()
     
@@ -118,9 +112,6 @@ func _process_single_xun_settlement():
     
     # 5. 通知 UI 刷新
     EventBus.emit_signal("xun_settlement_completed")
-
-func _process_health_checks():
-    pass
 
 func _update_heartbeat_sfx() -> void:
     """根据健康值启动/停止心跳循环音效。"""
