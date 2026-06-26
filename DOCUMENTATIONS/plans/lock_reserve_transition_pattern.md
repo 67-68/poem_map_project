@@ -135,37 +135,49 @@ BlockActionOperator.operate()
 | 参数 | 类型 | 说明 |
 |------|------|------|
 | `action_types` | `Array[ENUMS.ACTION_TYPE]` | 聚焦的行动枚举值列表 |
-| `xun_duration` | `int` | 持续旬数，-1 = 无限期 |
+| `click_count` | `int` | 聚焦持续点击次数，到期后自动解除并刷新行动列表 |
 
-**语义**：Focus = Lock(指定) + Block(其余全部)。聚光灯只打在指定 actions 上，其余全部关闭。
+**语义**：Focus = Lock(指定) + Block(其余全部)，按**点击次数**（非旬）计。点击 N 次聚焦 action 后自动释放。
 
 **operate() 流程：**
 
 ```
 FocusActionOperator.operate()
-  ├── 1. 计算 others = ENUMS.ACTION_TYPE.values() - focus_set
-  ├── 2. Block 所有 others（先 block）
-  │     └── ActionManager.block_action(at, xun_duration) for each other
-  ├── 3. Lock 所有 focus（后 lock，冲突解除 step 2 的 block）
-  │     └── ActionManager.lock_action(at, xun_duration) for each focus
-  ├── 4. 收集 locked SceneAction → EventBus.selected_actions_change.emit()
-  └── 5. EventBus.locked_actions_selected.emit()   按钮闪光
+  └── ActionManager.start_focus_session(action_types, click_count)
+        ├── 1. Block 所有非聚焦 action（先 block，-1 无限期）
+        ├── 2. Lock 所有聚焦 action（后 lock，冲突解除）
+        ├── 3. 记录 _focus_action_ids + _focus_click_remaining
+        ├── 4. 发射 selected_actions_change
+        └── 5. 发射 locked_actions_selected（按钮闪光）
 ```
 
-**为什么先 Block 再 Lock？** `ActionManager` 的冲突解决是 **后调用者赢**。先 Block 全部、再 Lock 指定，确保焦点 actions 最终处于 locked 状态。
+**点击后递减（由 [`action_button.gd`](../ui/action_button.gd) 驱动）：**
+
+```
+action_button.gd::_on_button_pressed()
+  └── ActionManager.on_focus_action_clicked()
+        ├── _focus_click_remaining -= 1
+        └── 如果归零 → _end_focus_session()
+              ├── unlock_action() for each focus
+              ├── unblock_action() for each other
+              ├── _focus_action_ids.clear()
+              └── EventBus.request_refresh_action_panel.emit()  ← 刷新行动列表
+```
 
 **效果**：
 - 聚焦的行动**必定出现在6格行动面板中**，其他行动全部被阻塞
 - UI 锁定：ActionMap 禁用非聚焦按钮，聚焦按钮闪光
-- 持续时间由 `xun_duration` 控制，到期自动解除
+- 点击 `click_count` 次聚焦 action 后自动解除 lock/block 并刷新 UI
 
 **与 LockActionsOperator 的关键区别：**
 
 | 维度 | LockActionsOperator | FocusActionOperator |
 |------|-------------------|---------------------|
+| 计数方式 | 旬（xun） | **点击次数** |
 | 非指定 action | 照常随机抽取 | **全部 Block** |
 | 底层操作 | 仅 Lock | Block(others) + Lock(focus) |
-| 适用场景 | 强制某行动出现（其他照常） | 聚光灯模式（只有这些可选） |
+| 解除触发 | process_xun_tick() 递减 | 每次点击自动递减 → 归零释放 |
+| 适用场景 | 限时强制出现 | 聚光灯模式（限制执行次数） |
 
 ---
 
@@ -385,8 +397,8 @@ BlockActionOperator (受伤事件)
 │   │   ├── 只锁定指定行动，其他照常？
 │   │   │   └── LockActionsOperator
 │   │   │
-│   │   └── 锁定指定行动 + 阻塞其余全部（聚光灯）？
-│   │       └── FocusActionOperator
+│   │   └── 锁定指定行动 + 阻塞其余全部（聚光灯），按点击次数释放？
+│   │       └── FocusActionOperator（click_count）
 │   │
 │   └── 只需要确保本回合出现在6格中，不锁UI？
 │       └── 待实现 ReserveActionOperator

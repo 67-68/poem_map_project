@@ -24,7 +24,11 @@ const PROP_SHORT_NAMES: Dictionary = {
 var _last_snapshot: Dictionary = {}
 
 @export var _left_panel_path: NodePath
-var _left_panel: Node
+var _left_panel: Node:
+	get():
+		if not _left_panel:
+			get_left_panel()
+		return _left_panel
 
 func _ready() -> void:
 	Logging.info("[MonthEndSettlement] 月末结算系统就绪，连接 on_month_tick")
@@ -37,11 +41,15 @@ func _ready() -> void:
 		PlayerState.player_stat_changed.connect(_on_stat_changed_for_color)
 
 	# 解析 _left_panel
+	get_left_panel()
+	Logging.info("[MonthEndSettlement] _left_panel 解析结果：%s" % (_left_panel != null))
+
+func get_left_panel():
+	Logging.info('month end settlement: trying to get left panel')
 	if not _left_panel_path.is_empty():
 		_left_panel = get_node(_left_panel_path)
 	else:
-		_left_panel = get_tree().root.get_node("Main/UI/LeftPlayerPanel")
-	Logging.info("[MonthEndSettlement] _left_panel 解析结果：%s" % (_left_panel != null))
+		_left_panel = get_tree().root.get_node("Main/UI/Margin/HBox/LeftPanel")
 
 func _on_month_tick() -> void:
 	# 月初刷新时清空所有属性颜色覆盖
@@ -96,7 +104,7 @@ func _on_stat_changed_for_color(stat_name: String) -> void:
 	var snapshot: int = _get_snapshot_value_for_stat(stat_name)
 
 	if current > snapshot:
-		_left_panel.set_prop_label_color(stat_name, Color("#d6d2d2"))
+		_left_panel.set_prop_label_color(stat_name, Color("#79B08D"))
 		Logging.info("[MonthEndSettlement] %s 增长染色 (current=%d, snapshot=%d)" % [stat_name, current, snapshot])
 	elif current < snapshot:
 		_left_panel.set_prop_label_color(stat_name, Color("#C92B2A"))

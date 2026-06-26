@@ -11,6 +11,10 @@ var _locked_in_actions: Dictionary = {}
 ## 持久化阻塞（多旬生效），key=action_id, val=剩余旬数（-1=无限）
 var _blocked_actions: Dictionary = {}
 
+## Focus session 状态（点击计数制，非旬制）
+var _focus_action_ids: Array[String] = []
+var _focus_click_remaining: int = 0
+
 
 # ════════════════════════════════════════════════════════════
 # 即时预留（每回合，抽取后清空）
@@ -471,3 +475,106 @@ func consume_generator(action: Action) -> void:
 		lock_action(action_type as int, 1)
 		action.generator = null
 		Logging.info("[ActionManager] generator '%s' 已耗尽，action 锁定 1 旬，generator 已清空" % gen_name)
+
+
+# ════════════════════════════════════════════════════════════
+# Focus Session（点击计数制 — 针对 FocusActionOperator）
+# ════════════════════════════════════════════════════════════
+
+## 启动 focus session：block 非 focus + lock focus，持续 click_count 次点击。
+## 由 FocusActionOperator.operate() 调用。
+## 返回 true 表示成功。
+func start_focus_session(focus_types: Array, click_count: int) -> bool:
+	if focus_types.is_empty() or click_count <= 0:
+		Logging.err("[ActionManager] start_focus_session: 参数无效 (focus=%d, click=%d)" % [focus_types.size(), click_count])
+		return false
+
+	# ── 1. 计算非聚焦集合 ──
+	var focus_ids: Array[String] = []
+	for at in focus_types:
+		var id := action_type_to_id(at)
+		if not id.is_empty() and id not in focus_ids:
+			focus_ids.append(id)
+
+	var other_ids: Array[String] = []
+	for i in ENUMS.ACTION_TYPE.values():
+		var id := action_type_to_id(i)
+		if id not in focus_ids:
+			other_ids.append(id)
+
+	# ── 2. Block 所有非聚焦（先 block） ──
+	for oid in other_ids:
+		var at: ENUMS.ACTION_TYPE = ENUMS.ACTION_TYPE[oid.to_upper()] as ENUMS.ACTION_TYPE
+		block_action(at, -1)  # 无限期 block，由 focus session 结束时清理
+
+	# ── 3. Lock 所有聚焦（后 lock，冲突解除） ──
+	for fid in focus_ids:
+		var at: ENUMS.ACTION_TYPE = ENUMS.ACTION_TYPE[fid.to_upper()] as ENUMS.ACTION_TYPE
+		lock_action(at, -1)  # 无限期 lock，由 focus session 结束时清理
+
+	# ── 4. 记录 session 状态 ──
+	_focus_action_ids = focus_ids.duplicate()
+	_focus_click_remaining = click_count
+
+	# ── 5. 发射 UI 信号 ──
+	var selected_actions: Array[SceneAction] = []
+	for action_id in focus_ids:
+		var action := Database.get_action(action_id) as SceneAction
+		if action:
+			selected_actions.append(action)
+	if selected_actions.size() > 0:
+		EventBus.selected_actions_change.emit(selected_actions)
+	EventBus.locked_actions_selected.emit(selected_actions)
+
+	Logging.info("[ActionManager] 🔦 Focus session 启动: focus=%s, others blocked=%d, click_remaining=%d" % [", ".join(focus_ids), other_ids.size(), click_count])
+	return true
+
+
+## 每次行动点击后调用（由 action_button.gd 触发）。
+## 递减计数器，归零时自动释放 focus session。
+func on_focus_action_clicked() -> void:
+	if _focus_click_remaining <= 0:
+		return
+
+	_focus_click_remaining -= 1
+	Logging.info("[ActionManager] 🔦 Focus session click: remaining=%d" % _focus_click_remaining)
+
+	if _focus_click_remaining <= 0:
+		_end_focus_session()
+
+
+## 强制结束 focus session（也可被新 session 覆盖调用）。
+func _end_focus_session() -> void:
+	if _focus_action_ids.is_empty():
+		return
+
+	# ── 解锁所有 focus actions ──
+	for fid in _focus_action_ids:
+		var at: ENUMS.ACTION_TYPE = ENUMS.ACTION_TYPE[fid.to_upper()] as ENUMS.ACTION_TYPE
+		unlock_action(at)
+
+	# ── 解阻塞所有非 focus actions ──
+	for i in ENUMS.ACTION_TYPE.values():
+		var id := action_type_to_id(i)
+		if id not in _focus_action_ids:
+			unblock_action(i)
+
+	Logging.info("[ActionManager] 🔓 Focus session 结束，已释放 %d 个 focus + 恢复其余 action" % _focus_action_ids.size())
+
+	_focus_action_ids.clear()
+	_focus_click_remaining = 0
+
+	# ── 刷新 UI ──
+	EventBus.request_refresh_action_panel.emit()
+
+
+## 查询当前是否处于 focus session 中。
+func is_in_focus_session() -> bool:
+	return _focus_click_remaining > 0
+
+
+## 获取当前 focus session 剩余点击次数（-1 表示不在 session 中）。
+func get_focus_click_remaining() -> int:
+	if _focus_click_remaining <= 0:
+		return -1
+	return _focus_click_remaining

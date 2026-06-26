@@ -179,6 +179,9 @@ func _on_button_pressed() -> void:
 	if action.action_results:
 		for r in action.action_results: r.operate()
 	
+	# ── Focus session 点击计数 hook ──
+	ActionManager.on_focus_action_clicked()
+	
 	# ── Generator 消费（统一入口）──
 	var had_generator := action.generator != null
 	ActionManager.consume_generator(action)
