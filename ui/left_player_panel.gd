@@ -32,6 +32,10 @@ const MAX_EMOTION_VALUE: int = 100
 
 # emotion_key → RichTextLabel 查找表
 var _emotion_labels: Dictionary = {}
+# prop_key(String) → Label 映射
+var _prop_label_map: Dictionary = {}
+# 当前活跃的颜色覆盖（prop_key → Color），用于 rebuild 后重染色
+var _prop_color_overrides: Dictionary = {}
 
 # 侧滑动画
 var _original_pos_x: float
@@ -174,6 +178,8 @@ func _rebuild_prop_grid() -> void:
 	if not Database:
 		Logging.err("LeftPlayerPanel: Database autoload not ready in _rebuild_prop_grid, skipping")
 		return
+	# 清空映射表（子节点即将被清空）
+	_prop_label_map.clear()
 	# 清空占位子节点
 	for child in _prop_grid.get_children():
 		child.queue_free()
@@ -184,11 +190,18 @@ func _rebuild_prop_grid() -> void:
 	
 	for prop_key in props:
 		var prop: Property = props[prop_key]
+		if prop.not_show_on_left:
+			Logging.info("LeftPlayerPanel: skip prop '%s' (not_show_on_left)" % prop_key)
+			continue
 		var label := Label.new()
 		label.theme_type_variation = &"DefaultText"
 		label.text = "「%s」：%s" % [prop.get_display_name(), prop.get_staged_perception_text()]
 		_prop_grid.add_child(label)
+		_prop_label_map[prop_key] = label
 		Logging.info("LeftPlayerPanel: added prop label: %s" % label.text)
+	
+	# 重建后恢复已设置的颜色覆盖
+	_reapply_color_overrides()
 
 func _refresh_prop_grid() -> void:
 	if not Database:
@@ -197,21 +210,76 @@ func _refresh_prop_grid() -> void:
 	var props: Dictionary = Database.get_properties_all()
 	var children := _prop_grid.get_children()
 	
+	# 计算可见属性数量（排除 not_show_on_left）
+	var visible_count := 0
+	for prop_key in props:
+		var prop: Property = props[prop_key]
+		if not prop.not_show_on_left:
+			visible_count += 1
+	
 	# 如果子节点数量变了，重建
-	if children.size() != props.size():
-		Logging.info("LeftPlayerPanel: PropGrid count changed (%d→%d), rebuilding" % [children.size(), props.size()])
+	if children.size() != visible_count:
+		Logging.info("LeftPlayerPanel: PropGrid count changed (%d→%d), rebuilding" % [children.size(), visible_count])
 		_rebuild_prop_grid()
 		return
 	
 	var idx := 0
 	for prop_key in props:
 		var prop: Property = props[prop_key]
+		if prop.not_show_on_left:
+			continue
 		var label: Label = children[idx]
 		var new_text := "「%s」：%s" % [prop.get_display_name(), prop.get_staged_perception_text()]
 		if label.text != new_text:
 			label.text = new_text
 			Logging.info("LeftPlayerPanel: updated prop label: %s" % new_text)
 		idx += 1
+
+# ── Prop Label 颜色管理 API ─────────────────────────────
+
+## 返回左侧面板当前显示的属性 key 列表（排除 not_show_on_left）
+func get_displayed_prop_keys() -> Array[String]:
+	var keys: Array[String] = []
+	if not Database:
+		Logging.err("LeftPlayerPanel: Database autoload not ready in get_displayed_prop_keys")
+		return keys
+	var props: Dictionary = Database.get_properties_all()
+	for prop_key in props:
+		var prop: Property = props[prop_key]
+		if not prop.not_show_on_left:
+			keys.append(prop_key)
+	return keys
+
+## 为指定属性的 label 设置字体颜色覆盖
+func set_prop_label_color(prop_key: String, color: Color) -> void:
+	if _prop_label_map.has(prop_key):
+		var label: Label = _prop_label_map[prop_key]
+		label.add_theme_color_override("font_color", color)
+		_prop_color_overrides[prop_key] = color
+	else:
+		Logging.info("LeftPlayerPanel: set_prop_label_color: label not found for key '%s'" % prop_key)
+
+## 重置指定属性的 label 颜色为默认
+func reset_prop_label_color(prop_key: String) -> void:
+	if _prop_label_map.has(prop_key):
+		var label: Label = _prop_label_map[prop_key]
+		label.remove_theme_color_override("font_color")
+	_prop_color_overrides.erase(prop_key)
+
+## 重置所有属性 label 的颜色为默认
+func reset_all_prop_colors() -> void:
+	for prop_key in _prop_label_map:
+		var label: Label = _prop_label_map[prop_key]
+		label.remove_theme_color_override("font_color")
+	_prop_color_overrides.clear()
+
+## 私有方法：rebuild 后重新应用已存储的颜色覆盖
+func _reapply_color_overrides() -> void:
+	for prop_key in _prop_color_overrides:
+		if _prop_label_map.has(prop_key):
+			var label: Label = _prop_label_map[prop_key]
+			var color: Color = _prop_color_overrides[prop_key]
+			label.add_theme_color_override("font_color", color)
 
 # ── TraitGrid 构建 ───────────────────────────────────────
 

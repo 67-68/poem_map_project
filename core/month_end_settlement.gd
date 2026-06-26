@@ -23,13 +23,31 @@ const PROP_SHORT_NAMES: Dictionary = {
 # ── 上月末11属性快照 ──────────────────────────────
 var _last_snapshot: Dictionary = {}
 
+@export var _left_panel_path: NodePath
+var _left_panel: Node
+
 func _ready() -> void:
 	Logging.info("[MonthEndSettlement] 月末结算系统就绪，连接 on_month_tick")
 	if not TimeService.on_month_tick.is_connected(_on_month_tick):
 		TimeService.on_month_tick.connect(_on_month_tick)
 	_last_snapshot = _capture_current()
 
+	# 连接 player_stat_changed 信号用于属性变化颜色覆盖
+	if not PlayerState.player_stat_changed.is_connected(_on_stat_changed_for_color):
+		PlayerState.player_stat_changed.connect(_on_stat_changed_for_color)
+
+	# 解析 _left_panel
+	if not _left_panel_path.is_empty():
+		_left_panel = get_node(_left_panel_path)
+	else:
+		_left_panel = get_tree().root.get_node("Main/UI/LeftPlayerPanel")
+	Logging.info("[MonthEndSettlement] _left_panel 解析结果：%s" % (_left_panel != null))
+
 func _on_month_tick() -> void:
+	# 月初刷新时清空所有属性颜色覆盖
+	if _left_panel != null:
+		_left_panel.reset_all_prop_colors()
+
 	Logging.info("[MonthEndSettlement] on_month_tick 触发")
 
 	# 1. 获取当前11属性值
@@ -53,6 +71,39 @@ func _on_month_tick() -> void:
 
 	# 6. 保存本月快照（作为下次比较的基准）
 	_last_snapshot = current
+
+# ── 根据 stat_name 查找快照中对应属性的值 ──────────
+func _get_snapshot_value_for_stat(stat_name: String) -> int:
+	for prop in PROP_DISPLAY_ORDER:
+		var prop_str: String = ENUMS.to_prop_str(prop)
+		if prop_str == stat_name:
+			return _last_snapshot.get(prop, 0)
+	return 0
+
+# ── player_stat_changed 回调：属性变化时实时染色 ──
+func _on_stat_changed_for_color(stat_name: String) -> void:
+	if _last_snapshot.is_empty():
+		return  # 首月不染色
+
+	if _left_panel == null:
+		return
+
+	var displayed_keys: Array = _left_panel.get_displayed_prop_keys()
+	if not stat_name in displayed_keys:
+		return
+
+	var current: int = PlayerState.get_stat_val(stat_name)
+	var snapshot: int = _get_snapshot_value_for_stat(stat_name)
+
+	if current > snapshot:
+		_left_panel.set_prop_label_color(stat_name, Color("#d6d2d2"))
+		Logging.info("[MonthEndSettlement] %s 增长染色 (current=%d, snapshot=%d)" % [stat_name, current, snapshot])
+	elif current < snapshot:
+		_left_panel.set_prop_label_color(stat_name, Color("#C92B2A"))
+		Logging.info("[MonthEndSettlement] %s 衰减染色 (current=%d, snapshot=%d)" % [stat_name, current, snapshot])
+	else:
+		_left_panel.reset_prop_label_color(stat_name)
+		Logging.info("[MonthEndSettlement] %s 恢复默认色 (current=%d, snapshot=%d)" % [stat_name, current, snapshot])
 
 func _capture_current() -> Dictionary:
 	var snap := {}
