@@ -41,7 +41,21 @@ func _get_property_list() -> Array:
 
 
 @export var weight: float = 10.0
-@export var requirement: BaseRequirements
+# _raw_requirement: .tres 反序列化写入的目标字段。
+# 通过 requirement getter 懒合并 archetype universal_requirement 后对外暴露。
+var _raw_requirement: BaseRequirements
+var _archetype_requirement_merged: bool = false
+
+@export var requirement: BaseRequirements:
+    get:
+        if _archetype_requirement_merged or archetype_id.is_empty():
+            return _raw_requirement
+        _merge_archetype_requirement()
+        return _raw_requirement
+    set(value):
+        _raw_requirement = value
+        _archetype_requirement_merged = false
+
 # era 字段标记该事件所属的时代（如 "745_ambition"）。
 # 空字符串（默认值）表示该事件对所有时代可用。
 # 非空时，只有在 GameState.current_era 匹配时才会参与抽取。
@@ -50,21 +64,152 @@ func _get_property_list() -> Array:
 # ── Archetype（事件类型）系统 ──────────────────────────
 # archetype_id: 事件类型标识符（如 "baiye"），对应 tools/data/event_archetypes.json 中的 key。
 # 空字符串表示该事件无类型标签。
+# .tres 中只持久化此标签；universal_requirement/result/era 在运行时从 JSON 动态加载。
 @export var archetype_id: String = ""
-# archetype_universal_requirement: 从 archetype JSON 翻译后的 BaseRequirements。
-# 在 init() 阶段与 event 自身的 requirement 合并（AND 逻辑）。
-@export var archetype_universal_requirement: BaseRequirements
-# archetype_universal_result: 从 archetype JSON 翻译后的 ChoiceResult。
-# 在 on_enter() 阶段追加到 on_enter_result 末尾。
-@export var archetype_universal_result: ChoiceResult
-# archetype_era: 从 archetype JSON 提取的 era 字段，若 event 本身 era 为空则以此兜底。
-@export var archetype_era: String = ""
 
 # on_enter_result（原名 event_result）已提升到 BaseEvent.on_enter_result
 # 保留注释以提示迁移，不再在此处 @export
 
 # 从 context DSL 解析出的自定义参数，init 时通过 merge_context 合并入 context
 var custom_context_params: Dictionary = {}
+
+# ── Archetype 运行时缓存 ──────────────────────────
+# 缓存已翻译的 archetype requirement / result / era，避免每个事件重复调用 DSLParser
+# 缓存 key 为事件的 archetype_id（叶子节点），value 包含整条继承链合并后的结果
+static var _archetype_req_cache: Dictionary = {}
+static var _archetype_result_cache: Dictionary = {}
+static var _archetype_era_cache: Dictionary = {}
+
+# ── Archetype 继承链工具 ──────────────────────────
+# 从 archetype_id 出发沿 parent 链向上遍历，返回 [id, parent_id, grandparent_id, ...]
+# 携带 visited set 防止循环引用。空 parent 或无 parent 字段视为链终止。
+static func _get_archetype_chain(archetype_id: String) -> Array[String]:
+    if archetype_id.is_empty():
+        return [] as Array[String]
+    var chain: Array[String] = [archetype_id]
+    var visited: Dictionary = {}
+    visited[archetype_id] = true
+    var current_id: String = archetype_id
+    while true:
+        var data := DSLParser.load_event_archetype(current_id)
+        if data.is_empty():
+            break
+        var parent_id: String = data.get("parent", "")
+        if parent_id.is_empty():
+            break
+        if visited.has(parent_id):
+            Logging.warn("RandomEvent: archetype 循环引用检测: '%s' -> '%s'，继承链截断" % [current_id, parent_id])
+            break
+        visited[parent_id] = true
+        chain.append(parent_id)
+        current_id = parent_id
+    return chain
+
+func _get_archetype_requirement() -> BaseRequirements:
+    if archetype_id.is_empty():
+        return null
+    if _archetype_req_cache.has(archetype_id):
+        return _archetype_req_cache[archetype_id]
+    
+    var chain := _get_archetype_chain(archetype_id)
+    var merged: BaseRequirements = null
+    
+    for aid in chain:
+        var data := DSLParser.load_event_archetype(aid)
+        if data.is_empty():
+            continue
+        var req_str: String = data.get("universal_requirement", "")
+        if req_str.is_empty():
+            continue
+        var req := DSLParser.parse_requirements(req_str)
+        if not req:
+            continue
+        if not merged:
+            merged = req
+        else:
+            var combined := ComplexRequirements.new()
+            combined.operators = [merged, req]
+            combined.current_operator = REQ_OPERATOR.LOGIC.AND
+            merged = combined
+    
+    _archetype_req_cache[archetype_id] = merged
+    if merged:
+        Logging.debug("RandomEvent: archetype '%s' requirement (chain: %s) translated (%d top-level operators)" % [archetype_id, ",".join(chain), _operator_count(merged)])
+    return merged
+
+func _get_archetype_result() -> ChoiceResult:
+    if archetype_id.is_empty():
+        return null
+    if _archetype_result_cache.has(archetype_id):
+        return _archetype_result_cache[archetype_id]
+    
+    var chain := _get_archetype_chain(archetype_id)
+    var merged_result: ChoiceResult = null
+    
+    for aid in chain:
+        var data := DSLParser.load_event_archetype(aid)
+        if data.is_empty():
+            continue
+        var result_str: String = data.get("universal_result", "")
+        if result_str.is_empty():
+            continue
+        var result := DSLParser.parse_choice_result(result_str)
+        if not result or result.operators.is_empty():
+            continue
+        if not merged_result:
+            merged_result = ChoiceResult.new()
+            merged_result.operators = [] as Array[BaseOperator]
+        # 子（chain 前部）在前，父在后；与 on_enter 中 append_array 顺序一致
+        merged_result.operators.append_array(result.operators)
+    
+    _archetype_result_cache[archetype_id] = merged_result
+    if merged_result:
+        Logging.debug("RandomEvent: archetype '%s' result (chain: %s) translated (%d operators)" % [archetype_id, ",".join(chain), merged_result.operators.size()])
+    return merged_result
+
+func _get_archetype_era() -> String:
+    if archetype_id.is_empty():
+        return ""
+    if _archetype_era_cache.has(archetype_id):
+        return _archetype_era_cache[archetype_id]
+    
+    var chain := _get_archetype_chain(archetype_id)
+    for aid in chain:
+        var data := DSLParser.load_event_archetype(aid)
+        if data.is_empty():
+            continue
+        var era_val: String = data.get("era", "")
+        if not era_val.is_empty():
+            _archetype_era_cache[archetype_id] = era_val
+            Logging.debug("RandomEvent: archetype '%s' era resolved from chain '%s' -> '%s'" % [archetype_id, aid, era_val])
+            return era_val
+    
+    _archetype_era_cache[archetype_id] = ""
+    return ""
+
+func _merge_archetype_requirement() -> void:
+    if _archetype_requirement_merged:
+        return
+    _archetype_requirement_merged = true
+    
+    var archetype_req := _get_archetype_requirement()
+    if not archetype_req:
+        return
+    
+    if not _raw_requirement:
+        _raw_requirement = archetype_req
+        Logging.info("RandomEvent: archetype '%s' requirement set as sole requirement for event '%s'" % [archetype_id, name])
+    else:
+        var merged := ComplexRequirements.new()
+        merged.operators = [_raw_requirement, archetype_req]
+        merged.current_operator = REQ_OPERATOR.LOGIC.AND
+        _raw_requirement = merged
+        Logging.info("RandomEvent: archetype '%s' requirement merged (AND) for event '%s'" % [archetype_id, name])
+
+static func _operator_count(req: BaseRequirements) -> int:
+    if req is ComplexRequirements:
+        return (req as ComplexRequirements).operators.size()
+    return 1 if req else 0
 
 # ──────────────────────────────────────────────
 # on_enter — 舞台置景
@@ -73,7 +218,8 @@ var custom_context_params: Dictionary = {}
 #
 # 执行顺序：
 #   1. custom_context_params merge → context 注入 CSV/DSL 参数
-#   2. super.on_enter() → event_result.init() + event_result.operate()
+#   2. archetype 运行时翻译 → 追加 universal_result operators
+#   3. super.on_enter() → event_result.init() + event_result.operate()
 #
 # 这确保 event_result 中的 operator 可以读取到 custom_context_params 注入的字段。
 # ──────────────────────────────────────────────
@@ -83,14 +229,22 @@ func on_enter(context: Dictionary) -> void:
     if not custom_context_params.is_empty():
         Util.merge_context(context, custom_context_params)
     
-    # ── Archetype 追加：将 archetype 的 universal_result 合并到 on_enter_result ──
-    if archetype_universal_result and not archetype_universal_result.operators.is_empty():
-        Logging.info("RandomEvent.on_enter: appending archetype '%s' universal_result (%d operators) to event '%s'" % [archetype_id, archetype_universal_result.operators.size(), name])
-        # on_enter_result 可能为空（没有 CSV on_enter 列），创建空 ChoiceResult 兜底
-        if not on_enter_result:
-            on_enter_result = ChoiceResult.new()
-            on_enter_result.operators = [] as Array[BaseOperator]
-        on_enter_result.operators.append_array(archetype_universal_result.operators)
+    # ── Archetype 运行时注入：从 JSON 动态翻译 universal_result 并追加 ──
+    if not archetype_id.is_empty():
+        var archetype_result := _get_archetype_result()
+        if archetype_result and not archetype_result.operators.is_empty():
+            Logging.info("RandomEvent.on_enter: archetype '%s' universal_result (%d operators) appended to event '%s'" % [archetype_id, archetype_result.operators.size(), name])
+            if not on_enter_result:
+                on_enter_result = ChoiceResult.new()
+                on_enter_result.operators = [] as Array[BaseOperator]
+            on_enter_result.operators.append_array(archetype_result.operators)
+        
+        # ── Archetype era 兜底：若 event 自身 era 为空则用 archetype era ──
+        if era.is_empty():
+            var archetype_era := _get_archetype_era()
+            if not archetype_era.is_empty():
+                era = archetype_era
+                Logging.info("RandomEvent.on_enter: archetype '%s' era fallback applied: %s" % [archetype_id, archetype_era])
     
     # 执行事件级结果（舞台置景）
     super.on_enter(context)

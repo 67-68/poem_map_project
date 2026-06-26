@@ -1,9 +1,17 @@
 {
-  "_comment": "事件类型（Archetype）定义。DSL 存储在此 JSON 中，翻译后的结果存储在 .tres 的 RandomEvent 上。",
+  "_comment": "事件类型（Archetype）定义。DSL 存储在此 JSON 中。支持 parent 继承链：子 archetype 会合并父的 requirement(result)era。",
   "baiye": {
     "name": "拜谒",
+    "parent": "",
     "universal_requirement": "prop_gt(name=progress; val=70)|prop_lt(name=progress; val=100)",
     "universal_result": "prop_add(name=progress; val=5)",
+    "era": ""
+  },
+  "kuangke_baiye": {
+    "name": "狂客拜谒",
+    "parent": "baiye",
+    "universal_requirement": "",
+    "universal_result": "prop_add(name=talent; val=2)",
     "era": ""
   }
 }
