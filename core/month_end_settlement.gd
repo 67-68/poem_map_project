@@ -104,7 +104,7 @@ func _delta_to_bbcode(prop_enum: int, delta: int) -> String:
 
 # ── 获取年号+季节文本 ────────────────────────────
 func _get_era_season_text() -> String:
-	var day_of_year: int = TimeService._last_total_days % 360
+	var day_of_year: int = TimeService._total_days_elapsed % 360
 	var season_index: int = day_of_year / 90          # 0春 1夏 2秋 3冬
 	var month_in_season: int = (day_of_year % 90) / 30  # 0孟 1仲 2季
 
@@ -113,7 +113,7 @@ func _get_era_season_text() -> String:
 
 	var season_str: String = month_prefix[month_in_season] + season_names[season_index]
 
-	var year_int: int = int(TimeService._last_total_days / 360)
+	var year_int: int = int(TimeService._total_days_elapsed / 360)
 	var era_text := TimeService.get_era_text(year_int)
 
 	return "%s·%s 结" % [era_text, season_str]

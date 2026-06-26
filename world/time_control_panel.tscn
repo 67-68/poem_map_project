@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cy2dg1dthfmt5" path="res://world/time_control_panel.gd" id="1_25hr5"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_v2d34"]
+[ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="4_25hr5"]
 [ext_resource type="Texture2D" uid="uid://l280xbxc3ixw" path="res://assets/candle_main.png" id="5_wxhbx"]
 
 [node name="Margin" type="MarginContainer" unique_id=1416243622]
@@ -20,6 +21,10 @@ grow_vertical = 2
 size_flags_vertical = 4
 script = ExtResource("1_25hr5")
 
+[node name="UISoundComponent" type="Node" parent="." unique_id=1392533238]
+script = ExtResource("4_25hr5")
+click_category = "bell_impact"
+
 [node name="HBox" type="VBoxContainer" parent="." unique_id=75601818]
 layout_mode = 2
 size_flags_vertical = 0
@@ -35,6 +40,13 @@ text = "天宝十四载"
 [node name="HBox2" type="HBoxContainer" parent="HBox" unique_id=1329272013]
 layout_mode = 2
 size_flags_horizontal = 4
+
+[node name="LinkButton" type="LinkButton" parent="HBox/HBox2" unique_id=1971569426]
+process_mode = 3
+layout_mode = 2
+theme = ExtResource("2_v2d34")
+theme_type_variation = &"ButtonTheme"
+text = "跳过"
 
 [node name="TimeLeft" type="Label" parent="HBox/HBox2" unique_id=988730346]
 layout_mode = 2
@@ -69,3 +81,5 @@ size_flags_vertical = 4
 texture = ExtResource("5_wxhbx")
 expand_mode = 1
 stretch_mode = 4
+
+[connection signal="pressed" from="HBox/HBox2/LinkButton" to="." method="_on_link_button_pressed"]

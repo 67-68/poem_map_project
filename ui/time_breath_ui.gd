@@ -10,7 +10,7 @@ func get_season_text():
     #breakpoint
     if TimeService.current_day_of_year == null:
         return "季节更替"
-    var season_index = (TimeService._last_total_days / 90) % 4
+    var season_index = (TimeService._total_days_elapsed / 90) % 4
     match season_index:
         0:
             return "万物复苏"

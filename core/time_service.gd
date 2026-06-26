@@ -6,15 +6,6 @@ signal on_month_tick()
 signal on_season_tick()
 signal on_year_tick()
 
-@export var _speed: float = 1
-
-@export var speed: float:
-	set(val):
-		_speed = val
-		EventBus.speed_changed.emit(val)
-	get():
-		return _speed
-
 var time_start := false
 
 # 年号词典：[起始年份, 结束年份, 年号名称, 使用"年"还是"载"]
@@ -99,11 +90,12 @@ var master_timeline: Array[Dictionary] = []
 # 2. 待办清单 (Active Queue)：动态消耗，会被清空和重建
 var event_queue: Array[Dictionary] = []
 
-# 在 TimeService 顶部记录上一次运算时的总天数
-var _last_total_days: int = 0
-# 不是今年的所有天！！！是过去时间的所有天
+# 整数真理之源：累计经过的总天数（不再从浮点 year 反推，杜绝截断吞天）
+var _total_days_elapsed: int = 0
+# tick 检查点：上一次 emit 时间信号时已经处理到的天数
+var _tick_checkpoint: int = 0
 
-var current_day_of_year :int = 0 
+var current_day_of_year :int = 0
 var current_xun := "上旬"
 var current_day := 1
 const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
@@ -116,7 +108,8 @@ func _ready() -> void:
 		Logging.info("Xun tick: %s" % current_xun))
 	RelationFlagManager.tick_all_cooldowns()
 	GameState.year = GameState.start_year
-	_last_total_days = int(GameState.year * DAYS_PER_YEAR)
+	_total_days_elapsed = int(GameState.year * DAYS_PER_YEAR)
+	_tick_checkpoint = _total_days_elapsed
 	Logging.info("TimeService._ready: GameState.year set to %f, event_queue has %d items" % [GameState.year, event_queue.size()])
 	if event_queue.size() > 0:
 		Logging.info("  queue items: %s" % event_queue.map(func(e): return "{name:%s time:%f}" % [e.get("name","?"), e.time]))
@@ -130,10 +123,6 @@ func _process(delta: float) -> void:
 		Logging.err("time_service: GameState autoload not ready in _process, skipping frame")
 		return
 
-	# 1. 浮点时间匀速流逝 (保留你原有的半即时逻辑)
-	GameState.year += speed * delta / DAYS_PER_YEAR
-	EventBus.year_changed.emit(GameState.year)
-
 	# 2. 检查浮点数队列 (你原有的逻辑)
 	while not event_queue.is_empty() and GameState.year >= event_queue[0].time:
 		var event = event_queue.pop_front()
@@ -144,21 +133,9 @@ func _process(delta: float) -> void:
 
 	_emit_time_events()
 	# current_day / current_day_of_year 在 _emit_time_events() 之后更新，
-	# 确保与 _last_total_days 同步（避免帧滞后显示上一帧的旧值）
-	current_day = TimeService._last_total_days % 10
-	current_day_of_year = TimeService._last_total_days % DAYS_PER_YEAR
-	
-func speed_up():
-	if speed != 4:
-		speed += 1
-	else:
-		Logging.warn('speed can not be higher than 4')
-
-func slow_down():
-	if not speed == 1:
-		speed -= 1
-	else:
-		Logging.warn('speed can not be lower than 1')
+	# 确保与 _total_days_elapsed 同步（避免帧滞后显示上一帧的旧值）
+	current_day = _total_days_elapsed % 10
+	current_day_of_year = _total_days_elapsed % DAYS_PER_YEAR
 
 
 # --- 注册接口 ---
@@ -195,7 +172,8 @@ func jump_to(new_year: float):
 	Logging.info("Time jumped to: %s" % new_year)
 	GameState.year = new_year
 	# 💀 极度重要：同步底层天数缓存，防止 _process 醒来后疯狂补帧！
-	_last_total_days = int(GameState.year * DAYS_PER_YEAR) 
+	_total_days_elapsed = int(GameState.year * DAYS_PER_YEAR)
+	_tick_checkpoint = _total_days_elapsed
 	
 	EventBus.year_changed.emit(GameState.year)
 	GameState.ratio_time = clampf(remap(GameState.year, GameState.start_year, GameState.end_year, 0, 1), 0.0, 1.0)
@@ -211,7 +189,8 @@ func jump_to_clean(new_year: float):
 	Logging.info("Clean jump to: %s — event queue wiped, nothing will fire" % new_year)
 	GameState.year = new_year
 	# 💀 极度重要：同步底层天数缓存，防止 _process 醒来后疯狂补帧！
-	_last_total_days = int(GameState.year * DAYS_PER_YEAR)
+	_total_days_elapsed = int(GameState.year * DAYS_PER_YEAR)
+	_tick_checkpoint = _total_days_elapsed
 
 	EventBus.year_changed.emit(GameState.year)
 	GameState.ratio_time = clampf(remap(GameState.year, GameState.start_year, GameState.end_year, 0, 1), 0.0, 1.0)
@@ -221,24 +200,27 @@ func jump_to_clean(new_year: float):
 	Logging.info("Clean jump: event queue cleared, %d events in master timeline preserved" % master_timeline.size())
 
 
-# --- 修改 2：重写 advance_time，复用 _process 的发报逻辑！ ---
+# --- 修改 2：整数驱动时间推进，GameState.year 变为派生值 ---
 func advance_time(days_to_add: int):
-	Logging.info("时间开始跃迁，推进 %d 天..." % days_to_add)
+	Logging.info("[time] 时间跃迁，推进 %d 天..." % days_to_add)
 	
-	# 1. 极其务实：直接改浮点年份
-	GameState.year += days_to_add / float(DAYS_PER_YEAR)
+	# 1. 真理之源：整数加法，绝不使用浮点
+	_total_days_elapsed += days_to_add
+	
+	# 2. GameState.year 从整数天数派生
+	GameState.year = _total_days_elapsed / float(DAYS_PER_YEAR)
 	EventBus.year_changed.emit(GameState.year)
 	GameState.ratio_time = clampf(remap(GameState.year, GameState.start_year, GameState.end_year, 0, 1), 0.0, 1.0)
 	
-	# 2. 模拟 _process 里的天数跨越来发信号 (复用代码，拒绝复制粘贴！)
+	# 3. 发射所有跨越的时间信号
 	_emit_time_events()
 
 func _emit_time_events():
-	var current_total_days = int(GameState.year * DAYS_PER_YEAR)
-	if current_total_days > _last_total_days:
-		var days_passed = current_total_days - _last_total_days
+	# 从整数真理之源计算需要发射的天
+	if _total_days_elapsed > _tick_checkpoint:
+		var days_passed = _total_days_elapsed - _tick_checkpoint
 		for i in range(days_passed):
-			var simulation_day = _last_total_days + i + 1
+			var simulation_day = _tick_checkpoint + i + 1
 			var day_of_month = (simulation_day % 30)
 			
 			if day_of_month == 9 or day_of_month == 19 or day_of_month == 29:
@@ -256,7 +238,7 @@ func _emit_time_events():
 				on_year_tick.emit()
 				
 		# 💀 极度重要：完事后必须对齐标记！
-		_last_total_days = current_total_days 
+		_tick_checkpoint = _total_days_elapsed
 	
 	# 3. 检查是否有队列事件被越过！
 	_check_event_queue()
@@ -277,7 +259,6 @@ func play():
 	set_process(true) # 开启 _process
 	resume_world()
 	time_start = true
-	EventBus.speed_changed.emit(speed)
 
 func pause():
 	set_process(false)
@@ -340,6 +321,21 @@ func _check_event_queue():
 		if event.callback.is_valid():
 			Logging.info("触发历史待办事件！设定时间: %f" % event.time)
 			event.callback.call()
+
+## 返回从当前天数到下一个 xun 边界 (day 9/19/29) 所需的天数。
+## 当前已在边界上时返回 10（走到下一个）。在 29 时额外处理，返回 10 而非 0。
+func get_days_to_next_xun() -> int:
+	var day_of_month: int = _total_days_elapsed % 30
+	if day_of_month < 9:
+		return 9 - day_of_month
+	elif day_of_month < 19:
+		return 19 - day_of_month
+	elif day_of_month < 29:
+		return 29 - day_of_month
+	else:
+		# day >= 29: 走到下个月的 day 9
+		return 39 - day_of_month  # 例: day 29 → 10天
+
 
 func get_xun_text(day: int) -> String:
 	"""

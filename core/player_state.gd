@@ -210,6 +210,10 @@ func append_stat(stat_name, data) -> bool:
 	var new_val: int = stat.val + amount_to_change
 	stat.set_val(new_val)
 	player_stat_changed.emit(stat_name)
+
+	if stat_name == "time" and new_val == 0:
+		TimeService.advance_time(1)
+
 	return true
 
 func get_stat_val(stat_name):
