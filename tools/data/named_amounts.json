@@ -1,0 +1,33 @@
+{
+	"_comment": "DSL Named Amount 全局符号表 — Python (dsl_parser.py / operator_translator.py) 和 Godot (named_dsl_parser.gd) 双端共享。",
+	"_usage": "DSL 写法: prop_add(name=money; val=big_amount_money)。符号名在解析时被替换为对应数值，然后正常走 Scale 乘法。",
+	"_naming_rule": "{magnitude}_{domain} 格式，如 big_amount_money, severe_health_loss",
+
+	"tiny_amount_money": 2,
+	"small_amount_money": 5,
+	"medium_amount_money": 10,
+	"big_amount_money": 30,
+	"huge_amount_money": 70,
+
+	"tiny_health_buff": 3,
+	"small_health_buff": 5,
+	"medium_health_buff": 10,
+	"large_health_buff": 15,
+
+	"minor_health_loss": -3,
+	"mild_health_loss": -5,
+	"severe_health_loss": -10,
+
+	"tiny_literary_fame": 3,
+	"small_literary_fame": 5,
+	"medium_literary_fame": 8,
+
+	"tiny_progress": 1,
+	"small_progress": 3,
+	"medium_progress": 5,
+
+	"small_emotion_delta": 5,
+	"medium_emotion_delta": 10,
+	"large_emotion_delta": 15,
+	"huge_emotion_delta": 20
+}

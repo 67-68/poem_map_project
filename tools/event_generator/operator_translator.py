@@ -9,6 +9,7 @@ Operator → Prompt 语义翻译层 — Python 侧实现。
 
 import json
 import re
+from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -122,6 +123,33 @@ class OperatorSemanticTranslator:
     构造时加载 4 个 JSON 数据源（均从 Godot 端导出）。
     """
 
+    _named_amounts: dict = {}
+
+    @classmethod
+    def _load_named_amounts(cls) -> dict:
+        """惰性加载全局 named_amounts.json"""
+        if cls._named_amounts:
+            return cls._named_amounts
+        amounts_path = Path(__file__).resolve().parent.parent / 'data' / 'named_amounts.json'
+        with open(amounts_path, 'r', encoding='utf-8') as f:
+            raw = json.load(f)
+        cls._named_amounts = {k: v for k, v in raw.items() if not k.startswith('_')}
+        return cls._named_amounts
+
+    @classmethod
+    def _resolve_val(cls, val_str: str) -> int:
+        """解析 val 参数：先查 named amount 符号表，再尝试 int 转换。"""
+        if not val_str or not val_str.strip():
+            return 0
+        val_str = val_str.strip()
+        amounts = cls._load_named_amounts()
+        if val_str in amounts:
+            return amounts[val_str]
+        try:
+            return int(val_str)
+        except ValueError:
+            return 0
+
     def __init__(
         self,
         properties_path: str,
@@ -158,11 +186,11 @@ class OperatorSemanticTranslator:
 
             # ── 属性类 ──
             if func == 'prop_add':
-                delta = int(val_str) if val_str else 0
+                delta = OperatorSemanticTranslator._resolve_val(val_str)
                 anchor = self.translate_prop_add(name, delta)
                 anchor_set.props.append(anchor)
             elif func == 'prop_sub':
-                delta = int(val_str) if val_str else 0
+                delta = OperatorSemanticTranslator._resolve_val(val_str)
                 # prop_sub → 将 delta 取负
                 anchor = self.translate_prop_add(name, -delta)
                 anchor_set.props.append(anchor)
@@ -173,11 +201,11 @@ class OperatorSemanticTranslator:
 
             # ── 情绪类 ──
             elif func == 'emo_add':
-                delta = int(val_str) if val_str else 0
+                delta = OperatorSemanticTranslator._resolve_val(val_str)
                 anchor = self.translate_emo_add(name, delta)
                 anchor_set.emotions.append(anchor)
             elif func == 'emo_sub':
-                delta = int(val_str) if val_str else 0
+                delta = OperatorSemanticTranslator._resolve_val(val_str)
                 anchor = self.translate_emo_add(name, -delta)
                 anchor_set.emotions.append(anchor)
             elif func == 'emo_set':

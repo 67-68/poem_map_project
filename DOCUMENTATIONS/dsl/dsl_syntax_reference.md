@@ -73,7 +73,8 @@ random(val=80; success=prop_add(name=money; val=100)|flag_bool_set(name=flag_que
 |------|---------|------|
 | `val=50` | int | 纯数字 |
 | `val=3.14` | float | 带小数点 |
-| `name=money` | String | 非数字/布尔 → 自动字符串 |
+| `val=big_amount_money` | int (Named Amount) | **命名数值符号**，从 `tools/data/named_amounts.json` 查表解析 |
+| `name=money` | String | 非数字/布尔/命名数值 → 自动字符串 |
 | `val=true`, `val=false` | bool | 布尔关键字 |
 | `name=@initiator_flag` | DynamicRef | **@ 前缀：动态上下文引用**，运行时从 context 解析 |
 | `name="张三"` | String | 双引号强制字符串（可选，边缘情况用） |
@@ -81,6 +82,8 @@ random(val=80; success=prop_add(name=money; val=100)|flag_bool_set(name=flag_que
 > 💡 **推荐写法**：字符串值不要加引号，如 `name=money` 而非 `name="money"`
 >
 > 💡 **动态引用**：使用 `@` 前缀表示该值是一个 **context 变量指针**，在 `init()` 阶段从当前 context 字典中查找对应 key。当前仅 flag 系操作符的 `name` 参数支持此语法。
+>
+> 💡 **Named Amount（命名数值）**：`val` 参数支持使用语义别名替代魔法数字。例如 `val=big_amount_money` 会被查表解析为 `30`。符号表定义在 `tools/data/named_amounts.json`，Python 管道和 Godot 运行时双端生效。命名规范：`{magnitude}_{domain}`（如 `big_amount_money`, `severe_health_loss`）。
 
 ### 多表达式组合
 

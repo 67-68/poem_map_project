@@ -191,6 +191,35 @@ static func _parse_single_param(param_str: String, params: Dictionary) -> void:
 # 解析值为正确的类型（字符串/整数/浮点数/布尔值/动态引用/数组）
 # 类型推断优先级：@动态引用 > [数组] > "双引号字符串" > 布尔值 > 整数 > 浮点数 > 裸字符串
 # 裸字符串（无引号）是标准用法，不产生任何 WARN
+# ─── Named Amount 符号表 ───
+static var _named_amounts_cache: Dictionary = {}
+
+static func _load_named_amounts() -> Dictionary:
+	if not _named_amounts_cache.is_empty():
+		return _named_amounts_cache
+	var path := "res://tools/data/named_amounts.json"
+	if not FileAccess.file_exists(path):
+		Logging.warn("NamedDSLParser: named_amounts.json 不存在: %s" % path)
+		return _named_amounts_cache
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		Logging.err("NamedDSLParser: 无法打开 named_amounts.json")
+		return _named_amounts_cache
+	var raw := file.get_as_text()
+	file.close()
+	var json := JSON.new()
+	var err := json.parse(raw)
+	if err != OK:
+		Logging.err("NamedDSLParser: named_amounts.json 解析失败: %s" % json.get_error_message())
+		return _named_amounts_cache
+	var data = json.get_data()
+	if data is Dictionary:
+		for key in data:
+			if not key.begins_with("_"):
+				_named_amounts_cache[key] = data[key]
+	Logging.info("NamedDSLParser: 加载 named_amounts.json 完成，共 %d 个条目" % _named_amounts_cache.size())
+	return _named_amounts_cache
+
 static func _parse_value(val_str: String) -> Variant:
 	val_str = val_str.strip_edges()
 	
@@ -247,6 +276,14 @@ static func _parse_value(val_str: String) -> Variant:
 	# 浮点数
 	if val_str.is_valid_float():
 		return val_str.to_float()
+	
+	# 🆕 Named Amount 符号表查表：在 fallback 裸字符串之前先解析
+	# 例如 val=big_amount_money → 查 named_amounts.json → 返回 30
+	var amounts := _load_named_amounts()
+	if amounts.has(val_str):
+		var resolved = amounts[val_str]
+		Logging.info("NamedDSLParser: named amount '%s' → %s" % [val_str, str(resolved)])
+		return resolved
 	
 	# fallback: 裸字符串（无引号）— 正确的 DSL 语法，直接返回
 	return val_str

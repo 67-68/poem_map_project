@@ -30,6 +30,8 @@ from tools.event_generator.dsl_parser import (
     _split_dsl_expressions,
     scale_dsl_operator,
     scale_all_operators,
+    _resolve_named_amount,
+    _load_named_amounts,
 )
 from tools.event_generator.llm_client import (
     LLMClient,
@@ -192,6 +194,40 @@ class TestScaleDslOperator(unittest.TestCase):
         """没有 val 参数的 DSL 保持不变"""
         result = scale_dsl_operator("prop_set(name=test)", 5)
         self.assertEqual(result, "prop_set(name=test)")
+
+
+
+    # ── Named Amount 测试 ──
+
+    def test_named_amount_big_money(self):
+        """val=big_amount_money 应解析为 30"""
+        result = scale_dsl_operator('prop_add(name=money; val=big_amount_money)', 1)
+        self.assertEqual(result, 'prop_add(name=money; val=30)')
+
+    def test_named_amount_with_scale(self):
+        """val=big_amount_money * scale=2 → 60"""
+        result = scale_dsl_operator('prop_add(name=money; val=big_amount_money)', 2)
+        self.assertEqual(result, 'prop_add(name=money; val=60)')
+
+    def test_named_amount_medium_health(self):
+        """val=medium_health_buff → 10"""
+        result = scale_dsl_operator('prop_add(name=health; val=medium_health_buff)', 1)
+        self.assertEqual(result, 'prop_add(name=health; val=10)')
+
+    def test_named_amount_negative_severe_health(self):
+        """val=severe_health_loss → -10"""
+        result = scale_dsl_operator('prop_add(name=health; val=severe_health_loss)', 1)
+        self.assertEqual(result, 'prop_add(name=health; val=-10)')
+
+    def test_named_amount_unknown_raises(self):
+        """未知 named amount 报错（不被符号表覆盖的非数值字符串）"""
+        with self.assertRaises(ValueError):
+            scale_dsl_operator('prop_add(name=money; val=nonexistent_amount_xyz)', 1)
+
+    def test_named_amount_emo(self):
+        """val=small_emotion_delta 在 emo_add 中生效"""
+        result = scale_dsl_operator('emo_add(name=SORROW; val=small_emotion_delta)', 1)
+        self.assertEqual(result, 'emo_add(name=SORROW; val=5)')
 
 
 # ════════════════════════════════════════════════════════════════

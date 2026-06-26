@@ -5,7 +5,11 @@ DSL 缩放器 — 纯函数模块，无外部项目依赖。
   SCALABLE_OPS, KNOWN_NON_PROP_OPS
   scale_dsl_operator, _parse_dsl_args, _parse_dsl_value
   scale_all_operators, _split_dsl_expressions
+  _load_named_amounts, _resolve_named_amount
 """
+
+import json
+from pathlib import Path
 
 SCALABLE_OPS = {"prop_add", "prop_sub", "prop_set", "emo_add", "emo_sub"}
 KNOWN_NON_PROP_OPS = {
@@ -18,6 +22,36 @@ KNOWN_NON_PROP_OPS = {
     "leverage_add",               # 🆕 把柄获取操作符（非缩放，不可缩放的 narratival 操作）
     "info",                       # 🆕 信息演示操作符（非缩放，直接 emit toast）
 }
+
+# ── Named Amount 符号表 ──
+
+_NAMED_AMOUNTS_CACHE: dict = None
+
+
+def _load_named_amounts() -> dict:
+    """加载全局 named amounts 符号表（惰性缓存）。"""
+    global _NAMED_AMOUNTS_CACHE
+    if _NAMED_AMOUNTS_CACHE is not None:
+        return _NAMED_AMOUNTS_CACHE
+    amounts_path = Path(__file__).resolve().parent.parent / "data" / "named_amounts.json"
+    with open(amounts_path, "r", encoding="utf-8") as f:
+        _NAMED_AMOUNTS_CACHE = json.load(f)
+    # 去掉元数据 key
+    _NAMED_AMOUNTS_CACHE = {
+        k: v for k, v in _NAMED_AMOUNTS_CACHE.items()
+        if not k.startswith("_")
+    }
+    return _NAMED_AMOUNTS_CACHE
+
+
+def _resolve_named_amount(val_raw) -> int:
+    """如果 val_raw 是 named amount 符号，返回对应数值；否则返回 None。"""
+    if not isinstance(val_raw, str):
+        return None
+    amounts = _load_named_amounts()
+    return amounts.get(val_raw)
+
+
 
 
 def scale_dsl_operator(dsl: str, scale: int) -> str:
@@ -46,10 +80,18 @@ def scale_dsl_operator(dsl: str, scale: int) -> str:
     args = _parse_dsl_args(args_str)
 
     if "val" in args:
-        try:
-            original_val = int(args["val"])
-        except (ValueError, TypeError):
-            raise ValueError(f"DSL 'val' 参数不是整数: {args['val']} (in: {dsl})")
+        # 解析 named amount 符号 → 数值
+        raw_val = args["val"]
+        resolved = _resolve_named_amount(raw_val)
+        if resolved is not None:
+            original_val = resolved
+        else:
+            try:
+                original_val = int(raw_val)
+            except (ValueError, TypeError):
+                raise ValueError(
+                    f"DSL 'val' 参数无法解析为数值或 named amount: '{raw_val}' (in: {dsl})"
+                )
         scaled = original_val * scale
         # 🚨 强制 round() 到最接近整数 — Godot 侧 get_int_param() 做 to_int() 截断，
         # 且属性系统值必须为整数。使用 round() 而非 int() 避免 IEEE 754 浮点精度损失，
