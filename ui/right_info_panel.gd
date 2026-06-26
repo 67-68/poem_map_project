@@ -34,6 +34,11 @@ func _ready() -> void:
 	icon_rect.texture = load("res://assets/stamps/chuangzuo_stamp.png")
 	_write_poem_btn.pressed.connect(func(): EventBus.poem_start_clicked.emit())
 
+	# ── Focus session 时隐藏写诗按钮 ──
+	EventBus.focus_session_changed.connect(func(active: bool):
+		_write_poem_btn.visible = not active
+	)
+
 	# ── 风闻刷新 ──
 	_refresh_rumors()
 	TimeService.on_month_tick.connect(_refresh_rumors)

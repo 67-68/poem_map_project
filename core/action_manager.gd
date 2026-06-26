@@ -128,6 +128,28 @@ func unblock_action(action_type: ENUMS.ACTION_TYPE) -> void:
 	Logging.info("[ActionManager] 解阻塞 action: %s" % action_id)
 
 
+## 按 action_id 字符串阻塞（用于不映射到 ENUMS.ACTION_TYPE 的 special action）。
+## xun_duration: -1 = 无限期，>0 = 持续 N 旬
+func block_action_by_id(action_id: String, xun_duration: int = -1) -> void:
+	if action_id.is_empty():
+		return
+	# 冲突解决：如果已被 locked，移除 locked
+	if _locked_in_actions.has(action_id):
+		_locked_in_actions.erase(action_id)
+		Logging.info("[ActionManager] block_action_by_id 冲突解除 locked: %s" % action_id)
+	_blocked_actions[action_id] = xun_duration
+	unreserve_action(action_id)
+	Logging.info("[ActionManager] 阻塞 action (by id): %s (持续 %d 旬)" % [action_id, xun_duration])
+
+
+## 按 action_id 字符串解阻塞。
+func unblock_action_by_id(action_id: String) -> void:
+	if action_id.is_empty():
+		return
+	_blocked_actions.erase(action_id)
+	Logging.info("[ActionManager] 解阻塞 action (by id): %s" % action_id)
+
+
 func is_action_locked(action_type: ENUMS.ACTION_TYPE) -> bool:
 	var action_id := action_type_to_id(action_type)
 	return _locked_in_actions.has(action_id)
@@ -489,34 +511,37 @@ func start_focus_session(focus_types: Array, click_count: int) -> bool:
 		Logging.err("[ActionManager] start_focus_session: 参数无效 (focus=%d, click=%d)" % [focus_types.size(), click_count])
 		return false
 
-	# ── 1. 计算非聚焦集合 ──
+	# ── 1. 计算聚焦 action_id 集合 ──
 	var focus_ids: Array[String] = []
 	for at in focus_types:
 		var id := action_type_to_id(at)
 		if not id.is_empty() and id not in focus_ids:
 			focus_ids.append(id)
 
+	# ── 2. 计算非聚焦集合（遍历 Database 实际 action 池，而不是仅 ENUMS.ACTION_TYPE）──
+	# 这样 special action（如 DeepSeek）也能被 block。
+	var all_action_ids := Database.get_actions_all().keys()
 	var other_ids: Array[String] = []
-	for i in ENUMS.ACTION_TYPE.values():
-		var id := action_type_to_id(i)
-		if id not in focus_ids:
-			other_ids.append(id)
+	for a_id in all_action_ids:
+		if a_id not in focus_ids and a_id not in other_ids:
+			# 跳过已被 block 的 action（避免重复操作）
+			if not _blocked_actions.has(a_id):
+				other_ids.append(a_id)
 
-	# ── 2. Block 所有非聚焦（先 block） ──
+	# ── 3. Block 所有非聚焦（先 block，用 by_id 方法覆盖 special actions）──
 	for oid in other_ids:
-		var at: ENUMS.ACTION_TYPE = ENUMS.ACTION_TYPE[oid.to_upper()] as ENUMS.ACTION_TYPE
-		block_action(at, -1)  # 无限期 block，由 focus session 结束时清理
+		block_action_by_id(oid, -1)
 
-	# ── 3. Lock 所有聚焦（后 lock，冲突解除） ──
+	# ── 4. Lock 所有聚焦（后 lock，冲突解除 step 3 的 block）──
 	for fid in focus_ids:
 		var at: ENUMS.ACTION_TYPE = ENUMS.ACTION_TYPE[fid.to_upper()] as ENUMS.ACTION_TYPE
-		lock_action(at, -1)  # 无限期 lock，由 focus session 结束时清理
+		lock_action(at, -1)
 
-	# ── 4. 记录 session 状态 ──
+	# ── 5. 记录 session 状态（用 all_action_ids 快照，结束时可准确恢复）──
 	_focus_action_ids = focus_ids.duplicate()
 	_focus_click_remaining = click_count
 
-	# ── 5. 发射 UI 信号 ──
+	# ── 6. 发射 UI 信号 ──
 	var selected_actions: Array[SceneAction] = []
 	for action_id in focus_ids:
 		var action := Database.get_action(action_id) as SceneAction
@@ -526,7 +551,10 @@ func start_focus_session(focus_types: Array, click_count: int) -> bool:
 		EventBus.selected_actions_change.emit(selected_actions)
 	EventBus.locked_actions_selected.emit(selected_actions)
 
-	Logging.info("[ActionManager] 🔦 Focus session 启动: focus=%s, others blocked=%d, click_remaining=%d" % [", ".join(focus_ids), other_ids.size(), click_count])
+	# ── 7. 通知 UI 进入 focus 模式（隐藏写诗按钮等）──
+	EventBus.focus_session_changed.emit(true)
+
+	Logging.info("[ActionManager] 🔦 Focus session 启动: focus=%s, others blocked(from pool)=%d, click_remaining=%d" % [", ".join(focus_ids), other_ids.size(), click_count])
 	return true
 
 
@@ -553,16 +581,19 @@ func _end_focus_session() -> void:
 		var at: ENUMS.ACTION_TYPE = ENUMS.ACTION_TYPE[fid.to_upper()] as ENUMS.ACTION_TYPE
 		unlock_action(at)
 
-	# ── 解阻塞所有非 focus actions ──
-	for i in ENUMS.ACTION_TYPE.values():
-		var id := action_type_to_id(i)
-		if id not in _focus_action_ids:
-			unblock_action(i)
+	# ── 解阻塞所有 action（包括 special actions，用 by_id 覆盖完整 action 池）──
+	var all_action_ids := Database.get_actions_all().keys()
+	for a_id in all_action_ids:
+		if a_id not in _focus_action_ids and _blocked_actions.has(a_id):
+			unblock_action_by_id(a_id)
 
 	Logging.info("[ActionManager] 🔓 Focus session 结束，已释放 %d 个 focus + 恢复其余 action" % _focus_action_ids.size())
 
 	_focus_action_ids.clear()
 	_focus_click_remaining = 0
+
+	# ── 通知 UI 退出 focus 模式（恢复写诗按钮等）──
+	EventBus.focus_session_changed.emit(false)
 
 	# ── 刷新 UI ──
 	EventBus.request_refresh_action_panel.emit()

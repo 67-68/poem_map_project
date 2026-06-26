@@ -64,6 +64,9 @@ signal selected_actions_change(actions: Array)
 signal locked_actions_selected(actions: Array)
 ## 请求 SceneActionScroll 刷新行动面板（事件链结束后恢复 UI 状态）
 signal request_refresh_action_panel()
+## Focus session 状态变更（true=进入聚焦模式，false=退出）
+## 用于 right_info_panel 等 UI 组件隐藏/显示非行动元素（如写诗按钮）
+signal focus_session_changed(active: bool)
 signal avaialble_decision_change(decision)
 
 ## 任意 Decision 被点击时触发，用于 DecisionScroll 即时刷新
