@@ -326,11 +326,10 @@ func get_available_scene_actions() -> Dictionary:
 						continue
 				
 				# 4b. 白名单（accepted_actions）
-				# null → 全部允许（不拦截）
-				# []   → 全部禁止（拦截一切）
-				# [...] → 白名单（仅列表中的放行）
+				# null / [] → 全部允许（不启用白名单限制）
+				# [...]     → 仅列表中指定的 action 放行
 				var accepted = era_res.accepted_actions
-				if accepted != null:
+				if accepted != null and not accepted.is_empty():
 					if action_type < 0 or not accepted.has(action_type):
 						Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 不在时代白名单 (era=%s)" % [action_npc_label, a_id, GameState.current_era])
 						num_intercepted += 1

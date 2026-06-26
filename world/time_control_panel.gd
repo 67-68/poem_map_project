@@ -55,6 +55,9 @@ func _ready():
 		if prop_name == "time":
 			_refresh_time_left()
 	)
+	PlayerState.player_stat_changed.connect(func(prop_name: String):
+		time_texture.modulate = Color.WHITE.lerp(Color.DARK_RED, float(TimeService.current_day) / 10.0)
+	)
 	_refresh_time_left()
 
 func _refresh_time_left() -> void:
@@ -71,9 +74,6 @@ func _on_year_changed(current_float_year: float):
 	
 	# 2. 查表计算大唐年号 (氛围，沉浸感)
 	label_era.text = TimeService.get_era_text(current_year)
-
-func _process(_delta):
-	time_texture.modulate = Color.WHITE.lerp(Color.DARK_RED, float(TimeService.current_day) / 10.0)
 
 ## 点击一次推进到下一个 xun 边界（例：day 3 → day 9；day 12 → day 19）。
 ## 不再递归；每次点击执行一次精准跳跃。

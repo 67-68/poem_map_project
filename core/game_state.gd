@@ -19,7 +19,7 @@ var year: float
 var current_era: String = "":
 	set(val):
 		current_era = val
-		PlayerState.set_stat_val(ENUMS.PROGRESS,0)
+		PlayerState.set_stat_val(ENUMS.PROPS.PROGRESS,0)
 		Logging.info('current era change to' % val)
 	
 var ratio_time: float = 0

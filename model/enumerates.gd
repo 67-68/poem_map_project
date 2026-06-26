@@ -255,6 +255,8 @@ static func action_tag_to_action_type(tag: int) -> int:
             return ACTION_TYPE.FENG_ZHAO
         ACTION_TAGS.ACTION_MAIN_DUZHUO:
             return ACTION_TYPE.DU_ZHUO
+        ACTION_TAGS.ACTION_SPECIAL_GANLU:
+            return ACTION_TYPE.GAN_LU
         _:
             return -1
 
