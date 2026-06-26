@@ -7,6 +7,7 @@ func _ready() -> void:
 	var csv_files = [
 		"res://data/4_eras/747_kuangda/_duotai_humiliation_events.csv",
 		"res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.csv",
+		"res://data/4_eras/745_ambition/baiye/real_appearance/_bai_ye_real_appearance_events.csv",
 	]
 	
 	for csv_path in csv_files:

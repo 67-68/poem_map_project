@@ -46,6 +46,20 @@ func _get_property_list() -> Array:
 # 空字符串（默认值）表示该事件对所有时代可用。
 # 非空时，只有在 GameState.current_era 匹配时才会参与抽取。
 @export var era: String = ""
+
+# ── Archetype（事件类型）系统 ──────────────────────────
+# archetype_id: 事件类型标识符（如 "baiye"），对应 tools/data/event_archetypes.json 中的 key。
+# 空字符串表示该事件无类型标签。
+@export var archetype_id: String = ""
+# archetype_universal_requirement: 从 archetype JSON 翻译后的 BaseRequirements。
+# 在 init() 阶段与 event 自身的 requirement 合并（AND 逻辑）。
+@export var archetype_universal_requirement: BaseRequirements
+# archetype_universal_result: 从 archetype JSON 翻译后的 ChoiceResult。
+# 在 on_enter() 阶段追加到 on_enter_result 末尾。
+@export var archetype_universal_result: ChoiceResult
+# archetype_era: 从 archetype JSON 提取的 era 字段，若 event 本身 era 为空则以此兜底。
+@export var archetype_era: String = ""
+
 # on_enter_result（原名 event_result）已提升到 BaseEvent.on_enter_result
 # 保留注释以提示迁移，不再在此处 @export
 
@@ -68,6 +82,15 @@ func on_enter(context: Dictionary) -> void:
     # 必须在 event_result 之前执行，因为 operator 可能依赖这些参数
     if not custom_context_params.is_empty():
         Util.merge_context(context, custom_context_params)
+    
+    # ── Archetype 追加：将 archetype 的 universal_result 合并到 on_enter_result ──
+    if archetype_universal_result and not archetype_universal_result.operators.is_empty():
+        Logging.info("RandomEvent.on_enter: appending archetype '%s' universal_result (%d operators) to event '%s'" % [archetype_id, archetype_universal_result.operators.size(), name])
+        # on_enter_result 可能为空（没有 CSV on_enter 列），创建空 ChoiceResult 兜底
+        if not on_enter_result:
+            on_enter_result = ChoiceResult.new()
+            on_enter_result.operators = [] as Array[BaseOperator]
+        on_enter_result.operators.append_array(archetype_universal_result.operators)
     
     # 执行事件级结果（舞台置景）
     super.on_enter(context)

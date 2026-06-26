@@ -1,0 +1,9 @@
+{
+  "_comment": "事件类型（Archetype）定义。DSL 存储在此 JSON 中，翻译后的结果存储在 .tres 的 RandomEvent 上。",
+  "baiye": {
+    "name": "拜谒",
+    "universal_requirement": "prop_gt(name=progress; val=70)|prop_lt(name=progress; val=100)",
+    "universal_result": "prop_add(name=progress; val=5)",
+    "era": ""
+  }
+}

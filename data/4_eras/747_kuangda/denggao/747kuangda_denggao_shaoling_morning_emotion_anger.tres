@@ -1,152 +1,152 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://nx33ei1iyrol"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_yqn6x"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ynihp"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_5dovv"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_cygge"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_iou1s"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_t8gq8"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_3r7a1"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_ds3d8"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_jxevs"]
-[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="10_de5ax"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_br83l"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_0kjce"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_yqn6x"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_ynihp"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_5dovv"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="4_cygge"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_iou1s"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_t8gq8"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_3r7a1"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_ds3d8"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_jxevs"]
+[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="10_de5ax"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_br83l"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="12_0kjce"]
+
+[sub_resource type="Resource" id="Resource_yqn6x"]
+script = ExtResource("3_5dovv")
+value = 5
+
+[sub_resource type="Resource" id="Resource_ynihp"]
+script = ExtResource("4_cygge")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_5dovv"]
+script = ExtResource("4_cygge")
+str_props = "health"
+value = -32
+
+[sub_resource type="Resource" id="Resource_cygge"]
+script = ExtResource("4_cygge")
+str_props = "health"
+value = -16
+
+[sub_resource type="Resource" id="Resource_iou1s"]
+script = ExtResource("3_5dovv")
+value = 10
+
+[sub_resource type="Resource" id="Resource_t8gq8"]
+script = ExtResource("5_iou1s")
+imagery_name = "ENV_SOCIETY_FAMINE:starving_bone"
+
+[sub_resource type="Resource" id="Resource_3r7a1"]
+script = ExtResource("6_t8gq8")
+operators = Array[ExtResource("2_ynihp")]([SubResource("Resource_yqn6x"), SubResource("Resource_ynihp"), SubResource("Resource_5dovv"), SubResource("Resource_cygge"), SubResource("Resource_iou1s"), SubResource("Resource_t8gq8")])
+
+[sub_resource type="Resource" id="Resource_ds3d8"]
+script = ExtResource("7_3r7a1")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_jxevs"]
+script = ExtResource("8_ds3d8")
+choice_result = SubResource("Resource_3r7a1")
+requirement = SubResource("Resource_ds3d8")
+description = "衣袖被风灌满，你冲着长安方向吐出一口带土的唾沫。"
+
+[sub_resource type="Resource" id="Resource_de5ax"]
+script = ExtResource("3_5dovv")
+value = 5
+
+[sub_resource type="Resource" id="Resource_br83l"]
+script = ExtResource("4_cygge")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_0kjce"]
+script = ExtResource("4_cygge")
+str_props = "health"
+value = -16
 
 [sub_resource type="Resource" id="Resource_dusts"]
 script = ExtResource("3_5dovv")
 value = 5
 
 [sub_resource type="Resource" id="Resource_nsa8w"]
-script = ExtResource("4_cygge")
-str_props = "health"
-value = 10
+script = ExtResource("6_t8gq8")
+operators = Array[ExtResource("2_ynihp")]([SubResource("Resource_de5ax"), SubResource("Resource_br83l"), SubResource("Resource_0kjce"), SubResource("Resource_dusts")])
 
 [sub_resource type="Resource" id="Resource_ef3fn"]
-script = ExtResource("4_cygge")
-str_props = "health"
-value = -32
+script = ExtResource("8_ds3d8")
+choice_result = SubResource("Resource_nsa8w")
+description = "蹲下身，捡起一块干裂的土坷垃，在手里捏碎。"
 
 [sub_resource type="Resource" id="Resource_sibw7"]
-script = ExtResource("4_cygge")
-str_props = "health"
-value = -16
+script = ExtResource("3_5dovv")
+value = 5
 
 [sub_resource type="Resource" id="Resource_qc1dc"]
-script = ExtResource("3_5dovv")
+script = ExtResource("4_cygge")
+str_props = "health"
 value = 10
 
 [sub_resource type="Resource" id="Resource_kxldp"]
-script = ExtResource("5_iou1s")
-imagery_name = "ENV_SOCIETY_FAMINE:starving_bone"
-
-[sub_resource type="Resource" id="Resource_irs5a"]
-script = ExtResource("6_t8gq8")
-operators = Array[ExtResource("2_ynihp")]([SubResource("Resource_dusts"), SubResource("Resource_nsa8w"), SubResource("Resource_ef3fn"), SubResource("Resource_sibw7"), SubResource("Resource_qc1dc"), SubResource("Resource_kxldp")])
-
-[sub_resource type="Resource" id="Resource_m85hb"]
-script = ExtResource("7_3r7a1")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_yitwp"]
-script = ExtResource("8_ds3d8")
-choice_result = SubResource("Resource_irs5a")
-requirement = SubResource("Resource_m85hb")
-description = "衣袖被风灌满，你冲着长安方向吐出一口带土的唾沫。"
-
-[sub_resource type="Resource" id="Resource_e76k2"]
-script = ExtResource("3_5dovv")
-value = 5
-
-[sub_resource type="Resource" id="Resource_aebme"]
-script = ExtResource("4_cygge")
-str_props = "health"
-value = 10
-
-[sub_resource type="Resource" id="Resource_ie2xk"]
-script = ExtResource("4_cygge")
-str_props = "health"
-value = -16
-
-[sub_resource type="Resource" id="Resource_kdhrr"]
-script = ExtResource("3_5dovv")
-value = 5
-
-[sub_resource type="Resource" id="Resource_l8ah1"]
-script = ExtResource("6_t8gq8")
-operators = Array[ExtResource("2_ynihp")]([SubResource("Resource_e76k2"), SubResource("Resource_aebme"), SubResource("Resource_ie2xk"), SubResource("Resource_kdhrr")])
-
-[sub_resource type="Resource" id="Resource_2l2c8"]
-script = ExtResource("8_ds3d8")
-choice_result = SubResource("Resource_l8ah1")
-description = "蹲下身，捡起一块干裂的土坷垃，在手里捏碎。"
-
-[sub_resource type="Resource" id="Resource_v3vnw"]
-script = ExtResource("3_5dovv")
-value = 5
-
-[sub_resource type="Resource" id="Resource_0uvec"]
-script = ExtResource("4_cygge")
-str_props = "health"
-value = 10
-
-[sub_resource type="Resource" id="Resource_mxmvt"]
 script = ExtResource("3_5dovv")
 value = 21
 
-[sub_resource type="Resource" id="Resource_1yuag"]
+[sub_resource type="Resource" id="Resource_irs5a"]
 script = ExtResource("3_5dovv")
 value = 10
 
-[sub_resource type="Resource" id="Resource_tnvtu"]
+[sub_resource type="Resource" id="Resource_m85hb"]
 script = ExtResource("4_cygge")
 str_props = "health"
 value = 10
 
-[sub_resource type="Resource" id="Resource_ji2wd"]
+[sub_resource type="Resource" id="Resource_yitwp"]
 script = ExtResource("4_cygge")
 str_props = "health"
 value = 5
 
-[sub_resource type="Resource" id="Resource_evh0d"]
+[sub_resource type="Resource" id="Resource_e76k2"]
 script = ExtResource("5_iou1s")
 imagery_name = "ENV_SOCIETY_FAMINE:starving_bone"
 
-[sub_resource type="Resource" id="Resource_r2pfi"]
+[sub_resource type="Resource" id="Resource_aebme"]
 script = ExtResource("6_t8gq8")
-operators = Array[ExtResource("2_ynihp")]([SubResource("Resource_v3vnw"), SubResource("Resource_0uvec"), SubResource("Resource_mxmvt"), SubResource("Resource_1yuag"), SubResource("Resource_tnvtu"), SubResource("Resource_ji2wd"), SubResource("Resource_evh0d")])
+operators = Array[ExtResource("2_ynihp")]([SubResource("Resource_sibw7"), SubResource("Resource_qc1dc"), SubResource("Resource_kxldp"), SubResource("Resource_irs5a"), SubResource("Resource_m85hb"), SubResource("Resource_yitwp"), SubResource("Resource_e76k2")])
 
-[sub_resource type="Resource" id="Resource_y7n5r"]
+[sub_resource type="Resource" id="Resource_ie2xk"]
 script = ExtResource("7_3r7a1")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_4pcrl"]
+[sub_resource type="Resource" id="Resource_kdhrr"]
 script = ExtResource("8_ds3d8")
-choice_result = SubResource("Resource_r2pfi")
-requirement = SubResource("Resource_y7n5r")
+choice_result = SubResource("Resource_aebme")
+requirement = SubResource("Resource_ie2xk")
 description = "弯腰，把被风吹歪的衣襟整了整，继续盯着远方。"
 
-[sub_resource type="Resource" id="Resource_n1itn"]
+[sub_resource type="Resource" id="Resource_l8ah1"]
 script = ExtResource("10_de5ax")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_lc5ie"]
+[sub_resource type="Resource" id="Resource_2l2c8"]
 script = ExtResource("10_de5ax")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_ee7p1"]
+[sub_resource type="Resource" id="Resource_v3vnw"]
 script = ExtResource("11_br83l")
-operators = Array[ExtResource("9_jxevs")]([SubResource("Resource_n1itn"), SubResource("Resource_lc5ie")])
+operators = Array[ExtResource("9_jxevs")]([SubResource("Resource_l8ah1"), SubResource("Resource_2l2c8")])
 
 [resource]
 script = ExtResource("12_0kjce")
-requirement = SubResource("Resource_ee7p1")
+requirement = SubResource("Resource_v3vnw")
 era = "747_kuangda"
 _target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "ENV_SOCIETY_FAMINE:starving_bone", "VIBE_THEME_HISTORY:ruined_wall", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_shaoling_morning", "emotion_pair:pair_anger", "TARGET_FACTION_MILITARY:torn_flag", "ENV_SOCIETY_WAR:blood_stain"])
-options = Array[ExtResource("1_yqn6x")]([SubResource("Resource_yitwp"), SubResource("Resource_2l2c8"), SubResource("Resource_4pcrl")])
+options = Array[ExtResource("1_yqn6x")]([SubResource("Resource_jxevs"), SubResource("Resource_ef3fn"), SubResource("Resource_kdhrr")])
 uuid = "747kuangda_denggao_shaoling_morning_emotion_anger"
 name = "野风卷怒"
 description = "少陵原的晨风裹着土腥味扑面而来。远处长安城的炊烟在晨光中稀疏地升起——东边是曲江池畔的朱门烟囱，西边是贫民窟的冷灶。你站在原上，看着风把老农翻出的干土吹散，又看着远方那些豪宅在晨曦中熠熠生辉。脚跟下的土路干裂，每一步都带起一片扬尘。"

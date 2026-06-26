@@ -363,6 +363,13 @@ class EventPipelineConfig(BaseModel):
     # 生成事件时会自动注入 CSV context 列的 era=<value>，供 Godot 端路由使用。
     era: str = ""
 
+    # 🆕 archetype 标识：事件类型标签（如 "baiye"）
+    # 对应 tools/data/event_archetypes.json 中的 key。
+    # 生成事件时会自动注入 CSV context 列的 archetype=<value>，
+    # Godot 端解析后翻译为 BaseRequirements + ChoiceResult 存入 RandomEvent。
+    # 空字符串表示该事件无类型标签。
+    archetype_id: str = ""
+
     # AI Prompt 组件
     background_context: str = ""
     ai_persona: str = ""

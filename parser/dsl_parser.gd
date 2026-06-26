@@ -113,6 +113,46 @@ static func _lint_results_column(results_str: String, uuid: String) -> void:
         if _REQUIREMENT_ONLY_FUNCS.find(func_name) != -1:
             Logging.err("[Linter] 事件 '%s' 的 results 列包含了 requirement 函数 '%s'，请将其迁移到 requirements 列 💀" % [uuid, clean_expr])
 
+# ── Archetype JSON 加载 ────────────────────────────────────
+# 从 tools/data/event_archetypes.json 加载指定 archetype 的定义。
+# 返回 Dictionary 或空字典（如果文件/archetype 不存在）。
+# 结果被 parse_random_event_row() 消费，翻译 DSL → Resources 存入 RandomEvent。
+static var _event_archetypes_cache: Dictionary = {}
+
+static func _load_event_archetype(archetype_id: String) -> Dictionary:
+    if archetype_id.is_empty():
+        return {}
+    
+    # 懒加载 JSON 文件
+    if _event_archetypes_cache.is_empty():
+        var path := "res://tools/data/event_archetypes.json"
+        if not FileAccess.file_exists(path):
+            Logging.warn("DSLParser: event_archetypes.json 不存在: %s" % path)
+            return {}
+        var file := FileAccess.open(path, FileAccess.READ)
+        if file == null:
+            Logging.err("DSLParser: 无法打开 event_archetypes.json: %s" % path)
+            return {}
+        var raw := file.get_as_text()
+        file.close()
+        var json := JSON.new()
+        var err := json.parse(raw)
+        if err != OK:
+            Logging.err("DSLParser: event_archetypes.json JSON 解析失败: %s" % json.get_error_message())
+            return {}
+        var data = json.get_data()
+        if data is Dictionary:
+            for key in data:
+                if not key.begins_with("_"):
+                    _event_archetypes_cache[key] = data[key]
+        Logging.info("DSLParser: 加载 event_archetypes.json，共 %d 个 archetype" % _event_archetypes_cache.size())
+    
+    if _event_archetypes_cache.has(archetype_id):
+        return _event_archetypes_cache[archetype_id]
+    
+    Logging.warn("DSLParser: archetype '%s' 未在 event_archetypes.json 中找到" % archetype_id)
+    return {}
+
 # 解析 context DSL 字段
 # 语法格式（用 | 分隔字段，分层符号避免歧义）：
 #   trigger_tags=[tagA:sub:cat:attr/tagB:sub:cat:attr]|weight=15.5|background=bg_rural_poor|customKey=customValue
@@ -133,6 +173,7 @@ static func parse_context(context_str: String) -> Dictionary:
         "background": "",
         "store_to": "",  # 🆕 store_to 路由指令：指定 .tres 输出目录的 key
         "era": "",       # 🆕 era 字段：标记该事件所属的时代（如 "745_ambition"），空=全时代可用
+        "archetype": "", # 🆕 archetype 字段：事件类型标识符（如 "baiye"），对应 tools/data/event_archetypes.json
         "custom_params": {}
     }
     
@@ -203,6 +244,12 @@ static func parse_context(context_str: String) -> Dictionary:
                 # 空字符串（默认值）表示对所有时代可用
                 # 非空时，只在 GameState.current_era 匹配时参与抽取
                 result.era = value
+            
+            "archetype":
+                # 🆕 archetype 字段：事件类型标识符（如 "baiye"）
+                # 对应 tools/data/event_archetypes.json 中的 key
+                # 空字符串（默认值）表示该事件无类型标签
+                result.archetype = value
             
             _:
                 # 自定义模板参数
@@ -564,6 +611,34 @@ static func parse_random_event(row: Dictionary) -> RandomEvent:
 
     # 🆕 era 字段：从 context DSL 提取，标记事件所属时代
     event.era = context_data.era
+
+    # 🆕 Archetype DSL 翻译：从 context 提取 archetype 标识符，加载 JSON 翻译 DSL → Resources
+    var archetype_id = context_data.get("archetype", "")
+    if not archetype_id.is_empty():
+        var archetype_data = _load_event_archetype(archetype_id)
+        if not archetype_data.is_empty():
+            event.archetype_id = archetype_id
+            Logging.info("DSLParser: archetype '%s' applied to event uuid=%s" % [archetype_id, uuid])
+
+            # 翻译 universal_requirement DSL → BaseRequirements
+            var archetype_req_str = archetype_data.get("universal_requirement", "")
+            if not archetype_req_str.is_empty():
+                event.archetype_universal_requirement = parse_requirements(archetype_req_str)
+
+            # 翻译 universal_result DSL → ChoiceResult
+            var archetype_result_str = archetype_data.get("universal_result", "")
+            if not archetype_result_str.is_empty():
+                event.archetype_universal_result = parse_choice_result(archetype_result_str)
+
+            # 提取 archetype era（若 event 本身 era 为空则兜底）
+            var archetype_era = archetype_data.get("era", "")
+            if not archetype_era.is_empty():
+                event.archetype_era = archetype_era
+                if event.era.is_empty():
+                    event.era = archetype_era
+                    Logging.info("DSLParser: archetype '%s' era fallback applied: %s" % [archetype_id, archetype_era])
+        else:
+            Logging.warn("DSLParser: archetype '%s' not found in event_archetypes.json for event uuid=%s" % [archetype_id, uuid])
 
     # 解析触发条件
     var requirements_str = row.get('requirements')

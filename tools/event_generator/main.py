@@ -566,6 +566,8 @@ def _print_generation_result(result: GenerationResult, cfg: EventPipelineConfig)
     context = f"trigger_tags={tags_expr}|weight=10"
     if cfg.era:
         context += f"|era={cfg.era}"
+    if cfg.archetype_id:
+        context += f"|archetype={cfg.archetype_id}"
     if r.context_extras:
         for k, v in r.context_extras.items():
             if v:
@@ -597,6 +599,7 @@ def _write_result_to_csv(result: GenerationResult, writer, cfg: EventPipelineCon
         tags=r.tags_to_use, requirement=cfg.universal_requirement or "",
         context_extras=r.context_extras or None,
         era=cfg.era,
+        archetype_id=cfg.archetype_id or "",
     )
     for opt in r.option_rows:
         write_option_row(writer, opt.text, opt.dsl, requirement=opt.requirement)

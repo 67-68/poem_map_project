@@ -233,5 +233,6 @@
   "universal_tags": [
     "action:main:baiye"
   ],
-  "universal_result": "prop_add(name=progress; val=5)"
+  "universal_result": "prop_add(name=progress; val=5)",
+  "archetype_id": "baiye"
 }

@@ -1,12 +1,46 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cwb8rmwqd5ww8"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_lydkh"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_4o0om"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_68pwg"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_w181s"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_3jc1m"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="6_cfpq1"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_os75q"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_lydkh"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_4o0om"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_68pwg"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_w181s"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="5_3jc1m"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="6_cfpq1"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_os75q"]
+
+[sub_resource type="Resource" id="Resource_lydkh"]
+script = ExtResource("3_68pwg")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_4o0om"]
+script = ExtResource("3_68pwg")
+str_props = "health"
+value = -9
+
+[sub_resource type="Resource" id="Resource_68pwg"]
+script = ExtResource("3_68pwg")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_w181s"]
+script = ExtResource("3_68pwg")
+str_props = "progress"
+value = 2
+
+[sub_resource type="Resource" id="Resource_3jc1m"]
+script = ExtResource("3_68pwg")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_cfpq1"]
+script = ExtResource("4_w181s")
+operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_lydkh"), SubResource("Resource_4o0om"), SubResource("Resource_68pwg"), SubResource("Resource_w181s"), SubResource("Resource_3jc1m")])
+
+[sub_resource type="Resource" id="Resource_os75q"]
+script = ExtResource("5_3jc1m")
+choice_result = SubResource("Resource_cfpq1")
+description = "将抄笔搁回笔架，转身步出值房，不看任何人一眼。"
 
 [sub_resource type="Resource" id="Resource_vhyq1"]
 script = ExtResource("3_68pwg")
@@ -26,11 +60,11 @@ value = -3
 [sub_resource type="Resource" id="Resource_qt5vw"]
 script = ExtResource("3_68pwg")
 str_props = "progress"
-value = 2
+value = 1
 
 [sub_resource type="Resource" id="Resource_hb1hf"]
 script = ExtResource("3_68pwg")
-str_props = "health"
+str_props = "money"
 value = -3
 
 [sub_resource type="Resource" id="Resource_e7laq"]
@@ -40,7 +74,7 @@ operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_vhyq1"), SubRes
 [sub_resource type="Resource" id="Resource_5toom"]
 script = ExtResource("5_3jc1m")
 choice_result = SubResource("Resource_e7laq")
-description = "将抄笔搁回笔架，转身步出值房，不看任何人一眼。"
+description = "略顿首，将公文归位，低声道“告退”，自行离去。"
 
 [sub_resource type="Resource" id="Resource_kjuyd"]
 script = ExtResource("3_68pwg")
@@ -60,70 +94,36 @@ value = -3
 [sub_resource type="Resource" id="Resource_n5jhd"]
 script = ExtResource("3_68pwg")
 str_props = "progress"
-value = 1
+value = -1
 
 [sub_resource type="Resource" id="Resource_tpvmh"]
 script = ExtResource("3_68pwg")
 str_props = "money"
-value = -3
-
-[sub_resource type="Resource" id="Resource_ov4kk"]
-script = ExtResource("4_w181s")
-operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_kjuyd"), SubResource("Resource_4ykhf"), SubResource("Resource_f2y5j"), SubResource("Resource_n5jhd"), SubResource("Resource_tpvmh")])
-
-[sub_resource type="Resource" id="Resource_yxo4u"]
-script = ExtResource("5_3jc1m")
-choice_result = SubResource("Resource_ov4kk")
-description = "略顿首，将公文归位，低声道“告退”，自行离去。"
-
-[sub_resource type="Resource" id="Resource_uxmni"]
-script = ExtResource("3_68pwg")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_aa2uh"]
-script = ExtResource("3_68pwg")
-str_props = "health"
-value = -9
-
-[sub_resource type="Resource" id="Resource_yyd8r"]
-script = ExtResource("3_68pwg")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_p4ngh"]
-script = ExtResource("3_68pwg")
-str_props = "progress"
-value = -1
-
-[sub_resource type="Resource" id="Resource_6d42j"]
-script = ExtResource("3_68pwg")
-str_props = "money"
 value = 6
 
-[sub_resource type="Resource" id="Resource_wyhut"]
+[sub_resource type="Resource" id="Resource_ov4kk"]
 script = ExtResource("3_68pwg")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_wuefl"]
+[sub_resource type="Resource" id="Resource_yxo4u"]
 script = ExtResource("6_cfpq1")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_1yjpu"]
+[sub_resource type="Resource" id="Resource_uxmni"]
 script = ExtResource("4_w181s")
-operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_uxmni"), SubResource("Resource_aa2uh"), SubResource("Resource_yyd8r"), SubResource("Resource_p4ngh"), SubResource("Resource_6d42j"), SubResource("Resource_wyhut"), SubResource("Resource_wuefl")])
+operators = Array[ExtResource("2_4o0om")]([SubResource("Resource_kjuyd"), SubResource("Resource_4ykhf"), SubResource("Resource_f2y5j"), SubResource("Resource_n5jhd"), SubResource("Resource_tpvmh"), SubResource("Resource_ov4kk"), SubResource("Resource_yxo4u")])
 
-[sub_resource type="Resource" id="Resource_7exqe"]
+[sub_resource type="Resource" id="Resource_aa2uh"]
 script = ExtResource("5_3jc1m")
-choice_result = SubResource("Resource_1yjpu")
+choice_result = SubResource("Resource_uxmni")
 description = "躬身道“大人若有别事，小的随叫随到”，又退回门外候立。"
 
 [resource]
 script = ExtResource("7_os75q")
 era = "747_kuangda"
 _target_tags = Array[String](["emotion_pair:pair_despair", "TARGET_OBJECT_SWORD:cold_blade", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "action:humiliation_class_bullying", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_IDENTITY_MENZI", "VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_OBJECT_SWORD:rusty_sword", "TARGET_NPC_DUFU:thatched_grass", "action:scene_fengzhao"])
-options = Array[ExtResource("1_lydkh")]([SubResource("Resource_5toom"), SubResource("Resource_yxo4u"), SubResource("Resource_7exqe")])
+options = Array[ExtResource("1_lydkh")]([SubResource("Resource_os75q"), SubResource("Resource_5toom"), SubResource("Resource_aa2uh")])
 uuid = "duotai_humiliation_class_bullying_gateway_fengzhao_identity_qingliu_official"
 name = "文牍之弃"
 description = "“抄。”朱笔在侧，墨迹未干。两个时辰后，你上交十二页工楷。主簿接过去，拇指拨过纸边，扫了一眼，搁在案角：“字还行。”又问：“你是哪个部的？”你答无部属。他点点头，未再开口。门外有吏员捧新卷入内，主簿唤其名姓，令“就在此处写”。你站在原地，无人示意你留，也无人示意你走。"
