@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
 [ext_resource type="Script" uid="uid://dv28khs0ehggj" path="res://ui/time_breath_ui.gd" id="24_htxhm"]
 [ext_resource type="PackedScene" uid="uid://1h1wvymxjj15" path="res://controller.tscn" id="24_jq2sk"]
-[ext_resource type="PackedScene" uid="uid://ci5u7rtqn6kan" path="res://ui/tomb_stone_screen.tscn" id="24_seu75"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="25_4k2k6"]
 [ext_resource type="Script" uid="uid://cgm5optu1xcgx" path="res://debuggers/linter_debugger_container.gd" id="27_xuqvo"]
 [ext_resource type="Script" uid="uid://dgg4voth1dy5y" path="res://debuggers/event_action_tag_linter.gd" id="28_qsp4k"]
@@ -25,9 +24,9 @@
 [ext_resource type="PackedScene" uid="uid://cua5pcl2s75q" path="res://ui/cinematic_overlay.tscn" id="35_cinematic"]
 [ext_resource type="Script" uid="uid://kfq72j60w3b8" path="res://core/fatigue_manager.gd" id="36_fatigue"]
 [ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="37_ambition"]
-[ext_resource type="Script" uid="uid://b74k1mainp82nw" path="res://main.gd" id="38_main"]
-[ext_resource type="Script" path="res://core/input_manager.gd" id="39_inputmgr"]
-[ext_resource type="PackedScene" path="res://ui/system_menu.tscn" id="40_sysmenu"]
+[ext_resource type="Script" uid="uid://bfm8lbvd4s6rw" path="res://main.gd" id="38_main"]
+[ext_resource type="Script" uid="uid://m3y6l6yi3con" path="res://core/input_manager.gd" id="39_inputmgr"]
+[ext_resource type="PackedScene" uid="uid://cd6hwp2pe4b41" path="res://ui/system_menu.tscn" id="40_sysmenu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsp4k"]
 shader = ExtResource("3_xuqvo")
@@ -60,18 +59,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PickerBlurLayer" type="CanvasLayer" parent="." unique_id=5294839211]
+[node name="PickerBlurLayer" type="CanvasLayer" parent="." unique_id=999871915]
 layer = 50
 
-[node name="PickerBlurOverlay" type="ColorRect" parent="PickerBlurLayer" unique_id=6738291044]
-material = SubResource("ShaderMaterial_pickerblur")
+[node name="PickerBlurOverlay" type="ColorRect" parent="PickerBlurLayer" unique_id=-1851643548]
 visible = false
-mouse_filter = 2
+material = SubResource("ShaderMaterial_pickerblur")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1984579798]
 script = ExtResource("3_2cqfq")
@@ -80,7 +79,6 @@ script = ExtResource("3_2cqfq")
 visible = false
 
 [node name="Margin" type="MarginContainer" parent="UI" unique_id=1914085020]
-mouse_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -93,7 +91,6 @@ theme_override_constants/margin_bottom = 10
 
 [node name="HBox" type="HBoxContainer" parent="UI/Margin" unique_id=152554922]
 layout_mode = 2
-mouse_filter = 1
 theme_override_constants/separation = 30
 
 [node name="LeftPanel" parent="UI/Margin/HBox" unique_id=1345405692 instance=ExtResource("22_0odxb")]
@@ -101,8 +98,8 @@ layout_mode = 2
 
 [node name="Control" type="Control" parent="UI/Margin/HBox" unique_id=1350421192]
 layout_mode = 2
-mouse_filter = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="RightPanel" parent="UI/Margin/HBox" unique_id=604963217 instance=ExtResource("23_lswn8")]
 custom_minimum_size = Vector2(350, 450)
@@ -116,7 +113,6 @@ offset_left = 281.0
 offset_top = 72.0
 offset_right = 615.51245
 offset_bottom = 272.0
-
 
 [node name="TimeBreathUI" type="CanvasLayer" parent="UI" unique_id=389675700]
 script = ExtResource("24_htxhm")
@@ -139,10 +135,8 @@ text = "test time change"
 
 [node name="PoemCreation" parent="UI" unique_id=1490017236 instance=ExtResource("29_facbu")]
 process_mode = 3
-
 offset_right = 132.0
 offset_bottom = 132.0
-grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SocialWallPanel" parent="UI" unique_id=1780260616 instance=ExtResource("33_0cp0l")]
@@ -190,7 +184,7 @@ metadata/_custom_type_script = "uid://dinmvxb5j0il4"
 [node name="FatigueManager" type="Node" parent="CoreSystems" unique_id=1878531520]
 script = ExtResource("36_fatigue")
 
-[node name="InputManager" type="Node" parent="CoreSystems" unique_id=8910111213]
+[node name="InputManager" type="Node" parent="CoreSystems" unique_id=320176621]
 script = ExtResource("39_inputmgr")
 
 [node name="CinematicOverlay" parent="." unique_id=1377896074 instance=ExtResource("35_cinematic")]

@@ -19,7 +19,7 @@
   "universal_tags": [
     "duotai_humiliation"
   ],
-  "universal_requirement": "emo_gt(name=AMBITION; val=50),emo_lt(name=AMBITION; val=100)",
+  "universal_requirement": "emo_gt(name=ambition; val=50),emo_lt(name=ambition; val=100)",
   "universal_result": "prop_add(name=health; val=-3)",
   "universal_option_requirement": "",
   "word_count_min": 40,
@@ -54,7 +54,7 @@
         "desc": "疲惫——我撑不住了但还是得撑"
       },
       "branch_B": {
-        "emotion": "AMBITION",
+        "emotion": "ambition",
         "desc": "野心——这点屈辱算什么，我还能忍"
       },
       "fallback": {

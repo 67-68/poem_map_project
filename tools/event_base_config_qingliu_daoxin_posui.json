@@ -179,7 +179,7 @@
           "tags": [
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_add(name=health; val=5) | emo_add(name=AMBITION; val=5) | prop_add(name=money; val=3) | emo_add(name=ANGER; val=15)",
+          "operator_dsl": "prop_add(name=health; val=5) | emo_add(name=ambition; val=5) | prop_add(name=money; val=3) | emo_add(name=ANGER; val=15)",
           "option_results": {},
           "scale": 1.0,
           "stored_to": "747_kuangda.baiye"

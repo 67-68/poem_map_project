@@ -30,7 +30,7 @@
   "universal_tags": [
     "qingliu_jiaolv"
   ],
-  "universal_requirement": "prop_lt(name=health; val=50) | prop_gt(name=money; val=10) | prop_lt(name=money; val=50) | emo_gt(name=AMBITION; val=30) | emo_lt(name=AMBITION; val=100)",
+  "universal_requirement": "prop_lt(name=health; val=50) | prop_gt(name=money; val=10) | prop_lt(name=money; val=50) | emo_gt(name=ambition; val=30) | emo_lt(name=ambition; val=100)",
   "universal_result": "prop_add(name=health; val=-3)|prop_add(name=money; val=5)",
   "universal_option_requirement": "",
   "word_count_min": 60,

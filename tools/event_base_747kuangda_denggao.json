@@ -19,7 +19,7 @@
   "universal_tags": [
     "denggao"
   ],
-  "universal_requirement": "emo_gt(name=AMBITION; val=30)|emo_lt(name=AMBITION; val=100)",
+  "universal_requirement": "emo_gt(name=ambition; val=30)|emo_lt(name=ambition; val=100)",
   "universal_result": "prop_add(name=health; val=10)",
   "universal_option_requirement": "",
   "word_count_min": 30,
@@ -59,7 +59,7 @@
         "desc": "静谧——登高望远，心如止水"
       },
       "branch_B": {
-        "emotion": "AMBITION",
+        "emotion": "ambition",
         "desc": "野心——看得越远，想要的越多"
       },
       "fallback": {
@@ -97,7 +97,7 @@
     },
     "pair_ambition": {
       "branch_A": {
-        "emotion": "AMBITION",
+        "emotion": "ambition",
         "desc": "野心——站在高处，更想往更高处去"
       },
       "branch_B": {
@@ -163,7 +163,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内，写杜甫以低旷达姿态回应眼前的处境。\n低旷达的行为契约：把自己变成对方需要的形状。动力的来源在外不在内——对方的身份、对方的视线、对方的语气，决定了你的身体怎么摆。\n回应必须是「向外适配」——先读对方的需求，再调整自己。可以是一句话、一个动作、一次沉默。\n{dynamic_blacklist}",
       "text": "（[低旷达动作]）",
-      "result": "emo_add(name=AMBITION; val=20)|emo_add(name=ANGER; val=10)|prop_add(name=health; val=10)|prop_add(name=health; val=5)",
+      "result": "emo_add(name=ambition; val=20)|emo_add(name=ANGER; val=10)|prop_add(name=health; val=10)|prop_add(name=health; val=5)",
       "fixed": false,
       "accept_influence": [
         "emotion"
@@ -516,7 +516,7 @@
           "name": "野心 — 站在高处，更想往更高处去",
           "description": "登高让你更清楚地看见了权力的格局——那边的朱门、那边的衙署、那边的新科进士们。站在这不算高的地方，你只想去更高的地方。登高是为了看清下一步往哪里爬。",
           "scale": 1.1,
-          "operator_dsl": "emo_add(name=AMBITION; val=5)",
+          "operator_dsl": "emo_add(name=ambition; val=5)",
           "tags": [
             "emotion_pair:pair_ambition",
             "TARGET_FACTION_ROYAL:jade_step",

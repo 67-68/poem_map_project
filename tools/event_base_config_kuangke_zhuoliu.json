@@ -63,7 +63,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内写一个纯粹的【钻营/算计】动作——执行它，不压制它。\n\n特征：一个具身的一次性资源套利动作——在人际空间中进行一次试探性的交易评估或筹码移动。方向池（每次随机选择，不得在同一事件中重复同一方向）：信息扫描型（目光、听力或空间站位上的主动探测）、资源移动型（财物、名帖、信件的推出或收回）、关系绑定型（对某人发出一个试探性的信号——一个眼色、一次举杯、一个靠近）。动作是完整的、有终点的、不被打断的。\n\n钻营的本质是精于算计：用资源开路、掂量筹码、盘算人脉。这个动作的急切感应该让读者觉得「他真以为自己能撬开这扇门」。\n\n【绝对禁止】\n- 禁止写计算后发现为零继而放弃的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写泄气姿态：眼神暗下去、垂下眼、收回目光",
       "text": "（暗中观察寻求可趁之机）",
-      "result": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+      "result": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=ambition; val=10)",
       "fixed": false,
       "plugins": {
         "failed_hint": {
@@ -100,7 +100,7 @@
           "operator_dsl": "prop_sub(name=money; val=10) | prop_add(name=health; val=10) | prop_add(name=health; val=10)",
           "option_results": {
             "opt_fengying": "prop_add(name=progress; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
-            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=ambition; val=10)",
             "opt_kuangke": "prop_add(name=progress; val=3) | prop_sub(name=health; val=3) | emo_add(name=ARROGANCE; val=20) | imagery_add(name=VIBE_AESTHETIC_ELEGANT:ink_stone) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_speech_pricing\")"
           },
           "scale": 0.95,
@@ -116,7 +116,7 @@
           "operator_dsl": "prop_sub(name=health; val=8) | prop_add(name=health; val=5)",
           "option_results": {
             "opt_fengying": "prop_add(name=progress; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
-            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=ambition; val=10)",
             "opt_kuangke": "prop_add(name=progress; val=3) | prop_sub(name=health; val=3) | prop_sub(name=health; val=14) | prop_sub(name=health; val=8) | prop_add(name=health; val=10) | emo_add(name=ARROGANCE; val=15) | imagery_add(name=TARGET_OBJECT_SWORD:cold_blade)"
           },
           "scale": 1.05,
@@ -132,7 +132,7 @@
           "operator_dsl": "prop_sub(name=money; val=10) | prop_add(name=health; val=5) | emo_add(name=ANGER; val=8)",
           "option_results": {
             "opt_fengying": "prop_add(name=progress; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
-            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=ambition; val=10)",
             "opt_kuangke": "prop_add(name=progress; val=3) | prop_sub(name=health; val=3) | prop_sub(name=money; val=20) | prop_add(name=health; val=10) | emo_add(name=ANGER; val=15) | emo_add(name=ARROGANCE; val=10) | imagery_add(name=ENV_NATURE_NIGHTMOON:cold_moon)"
           },
           "scale": 1.0,
@@ -148,7 +148,7 @@
           "operator_dsl": "prop_sub(name=progress; val=8) | prop_sub(name=progress; val=5)",
           "option_results": {
             "opt_fengying": "prop_add(name=progress; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
-            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=ambition; val=10)",
             "opt_kuangke": "prop_add(name=progress; val=3) | prop_sub(name=health; val=3) | prop_sub(name=progress; val=15) | prop_sub(name=progress; val=10) | prop_add(name=literary_fame; val=5) | emo_add(name=ARROGANCE; val=20) | imagery_add(name=ACTION_TRAVEL_BOAT:lone_sail) | leverage_add(target_tag=\"TARGET_IDENTITY_ZHUOLIU_OFFICIAL\"; key=\"zhuoliu_textual_trap\")"
           },
           "scale": 1.05,
@@ -164,7 +164,7 @@
           "operator_dsl": "prop_sub(name=money; val=8) | prop_sub(name=health; val=3) | prop_add(name=health; val=3)",
           "option_results": {
             "opt_fengying": "prop_add(name=progress; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
-            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=ambition; val=10)",
             "opt_kuangke": "prop_add(name=progress; val=3) | prop_sub(name=health; val=3) | prop_sub(name=money; val=15) | prop_sub(name=health; val=5) | prop_add(name=health; val=5) | emo_add(name=TRANQUILITY; val=15) | emo_sub(name=ARROGANCE; val=5) | imagery_add(name=VIBE_PHILOSOPHY_ZEN:temple_bell)"
           },
           "scale": 1.0,
@@ -180,7 +180,7 @@
           "operator_dsl": "prop_sub(name=health; val=8) | prop_add(name=health; val=5)",
           "option_results": {
             "opt_fengying": "prop_add(name=progress; val=1) | prop_sub(name=money; val=3) | emo_add(name=SORROW; val=10)",
-            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+            "opt_zuanying": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=ambition; val=10)",
             "opt_kuangke": "prop_add(name=progress; val=3) | prop_sub(name=health; val=3) | prop_sub(name=health; val=14) | prop_sub(name=health; val=10) | prop_add(name=health; val=10) | emo_add(name=ARROGANCE; val=25) | emo_add(name=SORROW; val=15) | imagery_add(name=ENV_NATURE_SNOWSTORM:lone_snow)"
           },
           "scale": 1.1,

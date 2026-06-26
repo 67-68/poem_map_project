@@ -12,64 +12,64 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_5vqh5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_dkivx"]
 
-[sub_resource type="Resource" id="Resource_tsc2o"]
+[sub_resource type="Resource" id="Resource_4ub0d"]
 script = ExtResource("3_rimqk")
 str_props = "literary_fame"
 value = 3
 
-[sub_resource type="Resource" id="Resource_m4ksf"]
+[sub_resource type="Resource" id="Resource_f4odi"]
 script = ExtResource("3_rimqk")
 str_props = "health"
 value = -20
 
-[sub_resource type="Resource" id="Resource_rimqk"]
+[sub_resource type="Resource" id="Resource_skcsj"]
 script = ExtResource("3_rimqk")
 str_props = "health"
 value = -20
 
-[sub_resource type="Resource" id="Resource_qchgq"]
+[sub_resource type="Resource" id="Resource_5jbuu"]
 script = ExtResource("4_qchgq")
 value = 10
 
-[sub_resource type="Resource" id="Resource_u2nrj"]
+[sub_resource type="Resource" id="Resource_dpyaw"]
 script = ExtResource("5_u2nrj")
-operators = Array[ExtResource("2_m4ksf")]([SubResource("Resource_tsc2o"), SubResource("Resource_m4ksf"), SubResource("Resource_rimqk"), SubResource("Resource_qchgq")])
+operators = Array[ExtResource("2_m4ksf")]([SubResource("Resource_4ub0d"), SubResource("Resource_f4odi"), SubResource("Resource_skcsj"), SubResource("Resource_5jbuu")])
 
-[sub_resource type="Resource" id="Resource_c1b3m"]
+[sub_resource type="Resource" id="Resource_2bpoe"]
 script = ExtResource("6_c1b3m")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_xr1mh"]
+[sub_resource type="Resource" id="Resource_wionv"]
 script = ExtResource("7_xr1mh")
-choice_result = SubResource("Resource_u2nrj")
-requirement = SubResource("Resource_c1b3m")
+choice_result = SubResource("Resource_dpyaw")
+requirement = SubResource("Resource_2bpoe")
 description = "你摔碗，我摔碗。河西怎么走——他问的是河西怎么走。"
 
-[sub_resource type="Resource" id="Resource_3y2qx"]
+[sub_resource type="Resource" id="Resource_e4qh8"]
 script = ExtResource("6_c1b3m")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_6ivuq"]
+[sub_resource type="Resource" id="Resource_ist86"]
 script = ExtResource("9_6ivuq")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_5vqh5"]
+[sub_resource type="Resource" id="Resource_4s6h0"]
 script = ExtResource("9_6ivuq")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_dkivx"]
+[sub_resource type="Resource" id="Resource_lhqba"]
 script = ExtResource("10_5vqh5")
-operators = Array[ExtResource("8_3y2qx")]([SubResource("Resource_3y2qx"), SubResource("Resource_6ivuq"), SubResource("Resource_5vqh5")])
+operators = Array[ExtResource("8_3y2qx")]([SubResource("Resource_e4qh8"), SubResource("Resource_ist86"), SubResource("Resource_4s6h0")])
 
 [resource]
 script = ExtResource("11_dkivx")
-requirement = SubResource("Resource_dkivx")
+requirement = SubResource("Resource_lhqba")
 era = "747_kuangda"
 _target_tags = Array[String](["VIBE_THEME_MARTIAL:giant_roc", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ACTOR_EMOTION_ANGER", "emotion_pair:pair_anger", "action:main:fangshi"])
-options = Array[ExtResource("1_tsc2o")]([SubResource("Resource_xr1mh")])
+options = Array[ExtResource("1_tsc2o")]([SubResource("Resource_wionv")])
 uuid = "kuangke_qingliu_gaoshi_emotion_anger_identity_qingliu_official"
 name = "三碗酒后摔碗"
 description = "下杜城西的小酒肆，高适灌下第三碗浊酒，碗底往桌上一顿，酒水溅出来洒了半张桌。「今日在朱雀街碰见兵部的书吏，」他声音压得极低，「他问我河西怎么走——他娘的兵部书吏，问一个幕府参谋河西怎么走。」说完笑得浑身发抖，笑容里有火。"

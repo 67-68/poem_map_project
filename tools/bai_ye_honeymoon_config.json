@@ -109,7 +109,7 @@
     }
   ],
   "universal_requirement": "prop_lt(name=progress; val=70)",
-  "universal_result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=progress; val=10)",
+  "universal_result": "prop_add(name=progress; val=10)",
   "word_count_min": 80,
   "word_count_max": 200,
   "max_retries": 3,

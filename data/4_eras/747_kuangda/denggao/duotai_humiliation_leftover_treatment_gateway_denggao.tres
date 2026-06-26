@@ -8,40 +8,6 @@
 [ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="6_8y6h6"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_6dr7s"]
 
-[sub_resource type="Resource" id="Resource_dc1a8"]
-script = ExtResource("3_duc1m")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_twbvn"]
-script = ExtResource("3_duc1m")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_duc1m"]
-script = ExtResource("3_duc1m")
-str_props = "progress"
-value = 2
-
-[sub_resource type="Resource" id="Resource_emg8e"]
-script = ExtResource("3_duc1m")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_ccpxq"]
-script = ExtResource("4_emg8e")
-operators = Array[ExtResource("2_twbvn")]([SubResource("Resource_dc1a8"), SubResource("Resource_twbvn"), SubResource("Resource_duc1m"), SubResource("Resource_emg8e")])
-
-[sub_resource type="Resource" id="Resource_8y6h6"]
-script = ExtResource("5_ccpxq")
-choice_result = SubResource("Resource_ccpxq")
-description = "不碰碗筷，掷一文钱于案，转身没入巷中暮色。"
-
-[sub_resource type="Resource" id="Resource_6dr7s"]
-script = ExtResource("3_duc1m")
-str_props = "health"
-value = -3
-
 [sub_resource type="Resource" id="Resource_yqnym"]
 script = ExtResource("3_duc1m")
 str_props = "health"
@@ -49,26 +15,27 @@ value = -3
 
 [sub_resource type="Resource" id="Resource_f5sgt"]
 script = ExtResource("3_duc1m")
-str_props = "progress"
-value = 1
+str_props = "health"
+value = -3
 
 [sub_resource type="Resource" id="Resource_u2o8i"]
 script = ExtResource("3_duc1m")
-str_props = "money"
-value = -3
+str_props = "progress"
+value = 2
 
 [sub_resource type="Resource" id="Resource_51qwf"]
-script = ExtResource("6_8y6h6")
-imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+script = ExtResource("3_duc1m")
+str_props = "health"
+value = -3
 
 [sub_resource type="Resource" id="Resource_bsaq6"]
 script = ExtResource("4_emg8e")
-operators = Array[ExtResource("2_twbvn")]([SubResource("Resource_6dr7s"), SubResource("Resource_yqnym"), SubResource("Resource_f5sgt"), SubResource("Resource_u2o8i"), SubResource("Resource_51qwf")])
+operators = Array[ExtResource("2_twbvn")]([SubResource("Resource_yqnym"), SubResource("Resource_f5sgt"), SubResource("Resource_u2o8i"), SubResource("Resource_51qwf")])
 
 [sub_resource type="Resource" id="Resource_fts80"]
 script = ExtResource("5_ccpxq")
 choice_result = SubResource("Resource_bsaq6")
-description = "低头吃完最后一口，数出铜钱搁在桌上，起身拱手。"
+description = "不碰碗筷，掷一文钱于案，转身没入巷中暮色。"
 
 [sub_resource type="Resource" id="Resource_523br"]
 script = ExtResource("3_duc1m")
@@ -83,17 +50,16 @@ value = -3
 [sub_resource type="Resource" id="Resource_a2a6v"]
 script = ExtResource("3_duc1m")
 str_props = "progress"
-value = -1
+value = 1
 
 [sub_resource type="Resource" id="Resource_s0wpf"]
 script = ExtResource("3_duc1m")
 str_props = "money"
-value = 4
+value = -3
 
 [sub_resource type="Resource" id="Resource_yk71i"]
-script = ExtResource("3_duc1m")
-str_props = "health"
-value = -2
+script = ExtResource("6_8y6h6")
+imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
 
 [sub_resource type="Resource" id="Resource_lufad"]
 script = ExtResource("4_emg8e")
@@ -102,13 +68,47 @@ operators = Array[ExtResource("2_twbvn")]([SubResource("Resource_523br"), SubRes
 [sub_resource type="Resource" id="Resource_q0lgu"]
 script = ExtResource("5_ccpxq")
 choice_result = SubResource("Resource_lufad")
+description = "低头吃完最后一口，数出铜钱搁在桌上，起身拱手。"
+
+[sub_resource type="Resource" id="Resource_wvohn"]
+script = ExtResource("3_duc1m")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_nn0oo"]
+script = ExtResource("3_duc1m")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_7lm2p"]
+script = ExtResource("3_duc1m")
+str_props = "progress"
+value = -1
+
+[sub_resource type="Resource" id="Resource_230n7"]
+script = ExtResource("3_duc1m")
+str_props = "money"
+value = 4
+
+[sub_resource type="Resource" id="Resource_k6asn"]
+script = ExtResource("3_duc1m")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_7skfe"]
+script = ExtResource("4_emg8e")
+operators = Array[ExtResource("2_twbvn")]([SubResource("Resource_wvohn"), SubResource("Resource_nn0oo"), SubResource("Resource_7lm2p"), SubResource("Resource_230n7"), SubResource("Resource_k6asn")])
+
+[sub_resource type="Resource" id="Resource_mav4c"]
+script = ExtResource("5_ccpxq")
+choice_result = SubResource("Resource_7skfe")
 description = "连声道谢，掏钱时指尖微颤，称“叨扰兄台了”。"
 
 [resource]
 script = ExtResource("7_6dr7s")
 era = "747_kuangda"
 _target_tags = Array[String](["emotion_pair:pair_survival", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "action:humiliation_leftover_treatment", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao"])
-options = Array[ExtResource("1_dc1a8")]([SubResource("Resource_8y6h6"), SubResource("Resource_fts80"), SubResource("Resource_q0lgu")])
+options = Array[ExtResource("1_dc1a8")]([SubResource("Resource_fts80"), SubResource("Resource_q0lgu"), SubResource("Resource_mav4c")])
 uuid = "duotai_humiliation_leftover_treatment_gateway_denggao"
 name = "登高归途的面钱"
 description = "暮色中与旧友登乐游原归来，经坊间面摊。友要两碗热汤面，食毕起身，将一串铜钱搁在自家碗边，只付一碗。摊主目光随友人手中余钱移开。杜甫面前那碗面汤已凉，油花凝在碗沿，无人催促，亦无人说话。"

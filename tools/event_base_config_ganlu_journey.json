@@ -67,7 +67,7 @@
         "desc": "悲戚——这世界不该是这样的"
       },
       "branch_B": {
-        "emotion": "AMBITION",
+        "emotion": "ambition",
         "desc": "野心——我改变不了这些，先活下来"
       },
       "fallback": {

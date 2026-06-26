@@ -13,149 +13,149 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_jety8"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_5eocx"]
 
-[sub_resource type="Resource" id="Resource_ypbqo"]
+[sub_resource type="Resource" id="Resource_rcr62"]
 script = ExtResource("3_gjx2x")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_w5aux"]
+[sub_resource type="Resource" id="Resource_sxgyo"]
 script = ExtResource("3_gjx2x")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_gjx2x"]
+[sub_resource type="Resource" id="Resource_0c0om"]
 script = ExtResource("3_gjx2x")
 str_props = "literary_fame"
 value = 3
 
-[sub_resource type="Resource" id="Resource_t4tcu"]
+[sub_resource type="Resource" id="Resource_mdc0k"]
 script = ExtResource("3_gjx2x")
 str_props = "progress"
 value = 3
 
-[sub_resource type="Resource" id="Resource_a8m1y"]
+[sub_resource type="Resource" id="Resource_kjvdh"]
 script = ExtResource("4_t4tcu")
 value = 10
 
-[sub_resource type="Resource" id="Resource_mjqwf"]
+[sub_resource type="Resource" id="Resource_e7cah"]
 script = ExtResource("5_a8m1y")
-operators = Array[ExtResource("2_w5aux")]([SubResource("Resource_ypbqo"), SubResource("Resource_w5aux"), SubResource("Resource_gjx2x"), SubResource("Resource_t4tcu"), SubResource("Resource_a8m1y")])
+operators = Array[ExtResource("2_w5aux")]([SubResource("Resource_rcr62"), SubResource("Resource_sxgyo"), SubResource("Resource_0c0om"), SubResource("Resource_mdc0k"), SubResource("Resource_kjvdh")])
 
-[sub_resource type="Resource" id="Resource_24ele"]
+[sub_resource type="Resource" id="Resource_jqwge"]
 script = ExtResource("6_mjqwf")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_g2y6f"]
+[sub_resource type="Resource" id="Resource_f86an"]
 script = ExtResource("7_24ele")
-choice_result = SubResource("Resource_mjqwf")
-requirement = SubResource("Resource_24ele")
+choice_result = SubResource("Resource_e7cah")
+requirement = SubResource("Resource_jqwge")
 description = "砚台推过桌心，墨汁泼上那张素笺。"
 
-[sub_resource type="Resource" id="Resource_1e32i"]
+[sub_resource type="Resource" id="Resource_g1mnb"]
 script = ExtResource("3_gjx2x")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_rfuav"]
+[sub_resource type="Resource" id="Resource_k1b60"]
 script = ExtResource("3_gjx2x")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_jety8"]
+[sub_resource type="Resource" id="Resource_f4hav"]
 script = ExtResource("3_gjx2x")
 str_props = "literary_fame"
 value = 3
 
-[sub_resource type="Resource" id="Resource_5eocx"]
+[sub_resource type="Resource" id="Resource_lj4qa"]
 script = ExtResource("3_gjx2x")
 str_props = "progress"
 value = -2
 
-[sub_resource type="Resource" id="Resource_rcr62"]
+[sub_resource type="Resource" id="Resource_bbw5w"]
 script = ExtResource("4_t4tcu")
 value = 10
 
-[sub_resource type="Resource" id="Resource_sxgyo"]
+[sub_resource type="Resource" id="Resource_cf8ih"]
 script = ExtResource("5_a8m1y")
-operators = Array[ExtResource("2_w5aux")]([SubResource("Resource_1e32i"), SubResource("Resource_rfuav"), SubResource("Resource_jety8"), SubResource("Resource_5eocx"), SubResource("Resource_rcr62")])
+operators = Array[ExtResource("2_w5aux")]([SubResource("Resource_g1mnb"), SubResource("Resource_k1b60"), SubResource("Resource_f4hav"), SubResource("Resource_lj4qa"), SubResource("Resource_bbw5w")])
 
-[sub_resource type="Resource" id="Resource_0c0om"]
+[sub_resource type="Resource" id="Resource_2peds"]
 script = ExtResource("6_mjqwf")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_mdc0k"]
+[sub_resource type="Resource" id="Resource_fstbd"]
 script = ExtResource("7_24ele")
-choice_result = SubResource("Resource_sxgyo")
-requirement = SubResource("Resource_0c0om")
+choice_result = SubResource("Resource_cf8ih")
+requirement = SubResource("Resource_2peds")
 description = "问了一句：隔壁背书的那篇，可是来年应试的篇目？"
 
-[sub_resource type="Resource" id="Resource_kjvdh"]
+[sub_resource type="Resource" id="Resource_4g2a1"]
 script = ExtResource("3_gjx2x")
 str_props = "money"
 value = -3
 
-[sub_resource type="Resource" id="Resource_e7cah"]
+[sub_resource type="Resource" id="Resource_rj4gd"]
 script = ExtResource("3_gjx2x")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_jqwge"]
+[sub_resource type="Resource" id="Resource_wxcbb"]
 script = ExtResource("3_gjx2x")
 str_props = "literary_fame"
 value = 3
 
-[sub_resource type="Resource" id="Resource_f86an"]
+[sub_resource type="Resource" id="Resource_ig75c"]
 script = ExtResource("3_gjx2x")
 str_props = "money"
 value = 6
 
-[sub_resource type="Resource" id="Resource_g1mnb"]
+[sub_resource type="Resource" id="Resource_s0g4a"]
 script = ExtResource("3_gjx2x")
 str_props = "health"
 value = 8
 
-[sub_resource type="Resource" id="Resource_k1b60"]
+[sub_resource type="Resource" id="Resource_sk1x2"]
 script = ExtResource("4_t4tcu")
 value = 8
 
-[sub_resource type="Resource" id="Resource_f4hav"]
+[sub_resource type="Resource" id="Resource_oarq4"]
 script = ExtResource("5_a8m1y")
-operators = Array[ExtResource("2_w5aux")]([SubResource("Resource_kjvdh"), SubResource("Resource_e7cah"), SubResource("Resource_jqwge"), SubResource("Resource_f86an"), SubResource("Resource_g1mnb"), SubResource("Resource_k1b60")])
+operators = Array[ExtResource("2_w5aux")]([SubResource("Resource_4g2a1"), SubResource("Resource_rj4gd"), SubResource("Resource_wxcbb"), SubResource("Resource_ig75c"), SubResource("Resource_s0g4a"), SubResource("Resource_sk1x2")])
 
-[sub_resource type="Resource" id="Resource_lj4qa"]
+[sub_resource type="Resource" id="Resource_1v15q"]
 script = ExtResource("7_24ele")
-choice_result = SubResource("Resource_f4hav")
+choice_result = SubResource("Resource_oarq4")
 description = "把素笺在桌面铺平，提笔蘸了最后一点墨。"
 
-[sub_resource type="Resource" id="Resource_bbw5w"]
+[sub_resource type="Resource" id="Resource_nfuke"]
 script = ExtResource("9_1e32i")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_cf8ih"]
+[sub_resource type="Resource" id="Resource_vap6h"]
 script = ExtResource("10_rfuav")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_2peds"]
+[sub_resource type="Resource" id="Resource_813ya"]
 script = ExtResource("10_rfuav")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_fstbd"]
+[sub_resource type="Resource" id="Resource_qrkel"]
 script = ExtResource("11_jety8")
-operators = Array[ExtResource("8_g2y6f")]([SubResource("Resource_bbw5w"), SubResource("Resource_cf8ih"), SubResource("Resource_2peds")])
+operators = Array[ExtResource("8_g2y6f")]([SubResource("Resource_nfuke"), SubResource("Resource_vap6h"), SubResource("Resource_813ya")])
 
 [resource]
 script = ExtResource("12_5eocx")
-requirement = SubResource("Resource_fstbd")
+requirement = SubResource("Resource_qrkel")
 era = "747_kuangda"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:fangshi"])
-options = Array[ExtResource("1_ypbqo")]([SubResource("Resource_g2y6f"), SubResource("Resource_mdc0k"), SubResource("Resource_lj4qa")])
+options = Array[ExtResource("1_ypbqo")]([SubResource("Resource_f86an"), SubResource("Resource_fstbd"), SubResource("Resource_1v15q")])
 uuid = "zhuoliu_fengying_discounted_ink"
 name = "贱价润笔"
 description = "「祭文，润笔两贯。」比市价少了八贯。他用的不是商量的语气，是提醒——去年你替他外甥润色过的那篇行状，至今没付过一字润金。"

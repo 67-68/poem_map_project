@@ -30,7 +30,7 @@
   "universal_tags": [
     "qingliu_fengying"
   ],
-  "universal_requirement": "trait_has(name=kuangda_fengying) | emo_gt(name=AMBITION; val=30) | emo_lt(name=AMBITION; val=100)",
+  "universal_requirement": "trait_has(name=kuangda_fengying) | emo_gt(name=ambition; val=30) | emo_lt(name=ambition; val=100)",
   "universal_result": "prop_add(name=health; val=-3)|prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 60,
@@ -63,7 +63,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内写一个纯粹的【钻营冲动】动作——执行它，不压制它。\n\n特征：目光在人群中快速扫寻熟人、向某位大人递眼色、从袖中摸出银两准备打点、侧身往暗处试探门路。动作是完整的、有终点的、不被打断的。\n\n钻营的本质是精于计算：想用资源开路、掂量筹码、盘算人脉。这个动作的急切感应该让读者觉得「他真以为自己能撬开这扇门」。\n\n【绝对禁止】\n- 禁止写计算后发现为零继而放弃的过程（那是 failed_hint 的工作）\n- 禁止出现「但/却/然而/最终/终是/还是」等转折词\n- 禁止写泄气姿态：眼神暗下去、垂下眼、收回目光、无果\n- 禁止写犹豫或自我怀疑\n\n【正确示例 — 纯冲动，无压制】\n- 「目光迅速扫过席间，锁定东首那位穿绛紫袍的大人。」\n- 「从袖中摸出两枚开元通宝，指甲在钱沿上刮了两下。」\n【错误示例 — 已在自我压制（此乃 failed_hint 之职）】\n- 「目光扫过人群，旋即收回」\n- 「眼神暗下去，没有熟人」",
       "text": "（目光四顾寻路，无果）",
-      "result": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=AMBITION; val=10)",
+      "result": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=2) | emo_add(name=ambition; val=10)",
       "fixed": false,
       "plugins": {
         "failed_hint": {

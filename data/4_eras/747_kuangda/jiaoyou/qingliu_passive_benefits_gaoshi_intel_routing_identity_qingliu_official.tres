@@ -12,125 +12,125 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_3gpe5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_vh55h"]
 
-[sub_resource type="Resource" id="Resource_vudty"]
+[sub_resource type="Resource" id="Resource_u12ti"]
 script = ExtResource("3_md8yb")
 str_props = "MONEY"
 value = 15
 
-[sub_resource type="Resource" id="Resource_rm37g"]
+[sub_resource type="Resource" id="Resource_t6lfq"]
 script = ExtResource("3_md8yb")
 str_props = "literary_fame"
 value = 3
 
-[sub_resource type="Resource" id="Resource_md8yb"]
+[sub_resource type="Resource" id="Resource_mt4e2"]
 script = ExtResource("3_md8yb")
 str_props = "health"
 value = -20
 
-[sub_resource type="Resource" id="Resource_5ct2f"]
+[sub_resource type="Resource" id="Resource_6emwo"]
 script = ExtResource("4_5ct2f")
 value = 10
 
-[sub_resource type="Resource" id="Resource_tsi7c"]
+[sub_resource type="Resource" id="Resource_nkqw0"]
 script = ExtResource("5_tsi7c")
-operators = Array[ExtResource("2_rm37g")]([SubResource("Resource_vudty"), SubResource("Resource_rm37g"), SubResource("Resource_md8yb"), SubResource("Resource_5ct2f")])
+operators = Array[ExtResource("2_rm37g")]([SubResource("Resource_u12ti"), SubResource("Resource_t6lfq"), SubResource("Resource_mt4e2"), SubResource("Resource_6emwo")])
 
-[sub_resource type="Resource" id="Resource_pjoc1"]
+[sub_resource type="Resource" id="Resource_io4ol"]
 script = ExtResource("6_pjoc1")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_5k533"]
+[sub_resource type="Resource" id="Resource_trbtl"]
 script = ExtResource("7_5k533")
-choice_result = SubResource("Resource_tsi7c")
-requirement = SubResource("Resource_pjoc1")
+choice_result = SubResource("Resource_nkqw0")
+requirement = SubResource("Resource_io4ol")
 description = "杜甫端碗饮尽，也不道谢，只说：正好练笔。碗底叩在桌上的声响干脆利落。"
 
-[sub_resource type="Resource" id="Resource_0j72m"]
+[sub_resource type="Resource" id="Resource_hw01s"]
 script = ExtResource("3_md8yb")
 str_props = "MONEY"
 value = 15
 
-[sub_resource type="Resource" id="Resource_un0n1"]
+[sub_resource type="Resource" id="Resource_x15p4"]
 script = ExtResource("3_md8yb")
 str_props = "literary_fame"
 value = 3
 
-[sub_resource type="Resource" id="Resource_3gpe5"]
+[sub_resource type="Resource" id="Resource_euy2j"]
 script = ExtResource("3_md8yb")
 str_props = "health"
 value = 15
 
-[sub_resource type="Resource" id="Resource_vh55h"]
+[sub_resource type="Resource" id="Resource_7eimf"]
 script = ExtResource("4_5ct2f")
 value = 10
 
-[sub_resource type="Resource" id="Resource_u12ti"]
+[sub_resource type="Resource" id="Resource_2owx0"]
 script = ExtResource("5_tsi7c")
-operators = Array[ExtResource("2_rm37g")]([SubResource("Resource_0j72m"), SubResource("Resource_un0n1"), SubResource("Resource_3gpe5"), SubResource("Resource_vh55h")])
+operators = Array[ExtResource("2_rm37g")]([SubResource("Resource_hw01s"), SubResource("Resource_x15p4"), SubResource("Resource_euy2j"), SubResource("Resource_7eimf")])
 
-[sub_resource type="Resource" id="Resource_t6lfq"]
+[sub_resource type="Resource" id="Resource_ukebq"]
 script = ExtResource("7_5k533")
-choice_result = SubResource("Resource_u12ti")
+choice_result = SubResource("Resource_2owx0")
 description = "杜甫看着晃动的酒碗，手指在桌沿停了一瞬，才说：知道了。"
 
-[sub_resource type="Resource" id="Resource_mt4e2"]
+[sub_resource type="Resource" id="Resource_pskpe"]
 script = ExtResource("3_md8yb")
 str_props = "MONEY"
 value = 15
 
-[sub_resource type="Resource" id="Resource_6emwo"]
+[sub_resource type="Resource" id="Resource_je8k4"]
 script = ExtResource("3_md8yb")
 str_props = "literary_fame"
 value = 3
 
-[sub_resource type="Resource" id="Resource_nkqw0"]
+[sub_resource type="Resource" id="Resource_u3kqi"]
 script = ExtResource("4_5ct2f")
 value = 15
 
-[sub_resource type="Resource" id="Resource_io4ol"]
+[sub_resource type="Resource" id="Resource_ubyvq"]
 script = ExtResource("3_md8yb")
 str_props = "health"
 value = 15
 
-[sub_resource type="Resource" id="Resource_trbtl"]
+[sub_resource type="Resource" id="Resource_h0s1p"]
 script = ExtResource("4_5ct2f")
 value = 5
 
-[sub_resource type="Resource" id="Resource_hw01s"]
+[sub_resource type="Resource" id="Resource_812oe"]
 script = ExtResource("5_tsi7c")
-operators = Array[ExtResource("2_rm37g")]([SubResource("Resource_mt4e2"), SubResource("Resource_6emwo"), SubResource("Resource_nkqw0"), SubResource("Resource_io4ol"), SubResource("Resource_trbtl")])
+operators = Array[ExtResource("2_rm37g")]([SubResource("Resource_pskpe"), SubResource("Resource_je8k4"), SubResource("Resource_u3kqi"), SubResource("Resource_ubyvq"), SubResource("Resource_h0s1p")])
 
-[sub_resource type="Resource" id="Resource_x15p4"]
+[sub_resource type="Resource" id="Resource_ic7d6"]
 script = ExtResource("6_pjoc1")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_euy2j"]
+[sub_resource type="Resource" id="Resource_w778t"]
 script = ExtResource("7_5k533")
-choice_result = SubResource("Resource_hw01s")
-requirement = SubResource("Resource_x15p4")
+choice_result = SubResource("Resource_812oe")
+requirement = SubResource("Resource_ic7d6")
 description = "杜甫点头记下，随后问起王员外的交游——他最近跟谁走得近？"
 
-[sub_resource type="Resource" id="Resource_7eimf"]
+[sub_resource type="Resource" id="Resource_g5lco"]
 script = ExtResource("9_un0n1")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_2owx0"]
+[sub_resource type="Resource" id="Resource_22n74"]
 script = ExtResource("9_un0n1")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_ukebq"]
+[sub_resource type="Resource" id="Resource_rloa0"]
 script = ExtResource("10_3gpe5")
-operators = Array[ExtResource("8_0j72m")]([SubResource("Resource_7eimf"), SubResource("Resource_2owx0")])
+operators = Array[ExtResource("8_0j72m")]([SubResource("Resource_g5lco"), SubResource("Resource_22n74")])
 
 [resource]
 script = ExtResource("11_vh55h")
-requirement = SubResource("Resource_ukebq")
+requirement = SubResource("Resource_rloa0")
 era = "747_kuangda"
 _target_tags = Array[String](["VIBE_THEME_MARTIAL:giant_roc", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "VIBE_THEME_MARTIAL:giant_roc", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_survival", "action:main:jiaoyou"])
-options = Array[ExtResource("1_vudty")]([SubResource("Resource_5k533"), SubResource("Resource_t6lfq"), SubResource("Resource_euy2j")])
+options = Array[ExtResource("1_vudty")]([SubResource("Resource_trbtl"), SubResource("Resource_ukebq"), SubResource("Resource_w778t")])
 uuid = "qingliu_passive_benefits_gaoshi_intel_routing_identity_qingliu_official"
 name = "夏夜的线报"
 description = "夏夜，城南一家胡人开的酒肆里，高适喝到第三碗时忽然把碗往桌上一推。他说城西的王员外最近手头松，家中老太太要立碑，四处托人寻像样的碑文。说完便起身去结账，走到门口又回头补了一句——只说是我偶然提起，别的话没有。酒碗在木桌上晃了晃，稳住了。"

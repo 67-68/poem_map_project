@@ -13,118 +13,118 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_0vgr0"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_06f6c"]
 
-[sub_resource type="Resource" id="Resource_hxh2w"]
-script = ExtResource("3_ikoi8")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_lmvx0"]
-script = ExtResource("3_ikoi8")
-str_props = "health"
-value = -22
-
-[sub_resource type="Resource" id="Resource_ikoi8"]
-script = ExtResource("4_jpcmd")
-value = 11
-
-[sub_resource type="Resource" id="Resource_jpcmd"]
-script = ExtResource("5_31xn8")
-imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
-
-[sub_resource type="Resource" id="Resource_31xn8"]
-script = ExtResource("6_fj67b")
-operators = Array[ExtResource("2_lmvx0")]([SubResource("Resource_hxh2w"), SubResource("Resource_lmvx0"), SubResource("Resource_ikoi8"), SubResource("Resource_jpcmd")])
-
-[sub_resource type="Resource" id="Resource_fj67b"]
-script = ExtResource("7_n7cdd")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_n7cdd"]
-script = ExtResource("8_54ji6")
-choice_result = SubResource("Resource_31xn8")
-requirement = SubResource("Resource_fj67b")
-description = "跪坐沙地前以枯枝描深“李太白”于三字之下，完成后起身便走。"
-
-[sub_resource type="Resource" id="Resource_54ji6"]
-script = ExtResource("3_ikoi8")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_xbckp"]
-script = ExtResource("3_ikoi8")
-str_props = "health"
-value = 16
-
-[sub_resource type="Resource" id="Resource_3m0u2"]
-script = ExtResource("4_jpcmd")
-value = 11
-
-[sub_resource type="Resource" id="Resource_0vgr0"]
-script = ExtResource("6_fj67b")
-operators = Array[ExtResource("2_lmvx0")]([SubResource("Resource_54ji6"), SubResource("Resource_xbckp"), SubResource("Resource_3m0u2")])
-
-[sub_resource type="Resource" id="Resource_06f6c"]
-script = ExtResource("8_54ji6")
-choice_result = SubResource("Resource_0vgr0")
-description = "盯着字迹直到日影偏移，用袖子抹平那片沙地，字迹消失后离去。"
-
 [sub_resource type="Resource" id="Resource_pongt"]
 script = ExtResource("3_ikoi8")
 str_props = "literary_fame"
 value = 3
 
 [sub_resource type="Resource" id="Resource_qnar6"]
-script = ExtResource("4_jpcmd")
-value = 16
+script = ExtResource("3_ikoi8")
+str_props = "health"
+value = -22
 
 [sub_resource type="Resource" id="Resource_rsx3h"]
+script = ExtResource("4_jpcmd")
+value = 11
+
+[sub_resource type="Resource" id="Resource_1ypm4"]
+script = ExtResource("5_31xn8")
+imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
+
+[sub_resource type="Resource" id="Resource_88fl8"]
+script = ExtResource("6_fj67b")
+operators = Array[ExtResource("2_lmvx0")]([SubResource("Resource_pongt"), SubResource("Resource_qnar6"), SubResource("Resource_rsx3h"), SubResource("Resource_1ypm4")])
+
+[sub_resource type="Resource" id="Resource_v60um"]
+script = ExtResource("7_n7cdd")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_1k2lr"]
+script = ExtResource("8_54ji6")
+choice_result = SubResource("Resource_88fl8")
+requirement = SubResource("Resource_v60um")
+description = "跪坐沙地前以枯枝描深“李太白”于三字之下，完成后起身便走。"
+
+[sub_resource type="Resource" id="Resource_sqgwl"]
+script = ExtResource("3_ikoi8")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_1lhxs"]
 script = ExtResource("3_ikoi8")
 str_props = "health"
 value = 16
 
-[sub_resource type="Resource" id="Resource_1ypm4"]
+[sub_resource type="Resource" id="Resource_prc80"]
+script = ExtResource("4_jpcmd")
+value = 11
+
+[sub_resource type="Resource" id="Resource_yykx0"]
+script = ExtResource("6_fj67b")
+operators = Array[ExtResource("2_lmvx0")]([SubResource("Resource_sqgwl"), SubResource("Resource_1lhxs"), SubResource("Resource_prc80")])
+
+[sub_resource type="Resource" id="Resource_mjlts"]
+script = ExtResource("8_54ji6")
+choice_result = SubResource("Resource_yykx0")
+description = "盯着字迹直到日影偏移，用袖子抹平那片沙地，字迹消失后离去。"
+
+[sub_resource type="Resource" id="Resource_kdqm5"]
+script = ExtResource("3_ikoi8")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_20dfi"]
+script = ExtResource("4_jpcmd")
+value = 16
+
+[sub_resource type="Resource" id="Resource_mcqh0"]
+script = ExtResource("3_ikoi8")
+str_props = "health"
+value = 16
+
+[sub_resource type="Resource" id="Resource_7hw7f"]
 script = ExtResource("4_jpcmd")
 value = 6
 
-[sub_resource type="Resource" id="Resource_88fl8"]
+[sub_resource type="Resource" id="Resource_kpum6"]
 script = ExtResource("5_31xn8")
 imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
 
-[sub_resource type="Resource" id="Resource_v60um"]
+[sub_resource type="Resource" id="Resource_jld78"]
 script = ExtResource("6_fj67b")
-operators = Array[ExtResource("2_lmvx0")]([SubResource("Resource_pongt"), SubResource("Resource_qnar6"), SubResource("Resource_rsx3h"), SubResource("Resource_1ypm4"), SubResource("Resource_88fl8")])
+operators = Array[ExtResource("2_lmvx0")]([SubResource("Resource_kdqm5"), SubResource("Resource_20dfi"), SubResource("Resource_mcqh0"), SubResource("Resource_7hw7f"), SubResource("Resource_kpum6")])
 
-[sub_resource type="Resource" id="Resource_1k2lr"]
+[sub_resource type="Resource" id="Resource_77bq3"]
 script = ExtResource("7_n7cdd")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_sqgwl"]
+[sub_resource type="Resource" id="Resource_xe26g"]
 script = ExtResource("8_54ji6")
-choice_result = SubResource("Resource_v60um")
-requirement = SubResource("Resource_1k2lr")
+choice_result = SubResource("Resource_jld78")
+requirement = SubResource("Resource_77bq3")
 description = "等那人走后对身旁的人说“太白过此竟未相访”，让对方把话传出去。"
 
-[sub_resource type="Resource" id="Resource_1lhxs"]
+[sub_resource type="Resource" id="Resource_i8d0d"]
 script = ExtResource("10_3m0u2")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_prc80"]
+[sub_resource type="Resource" id="Resource_icx6h"]
 script = ExtResource("10_3m0u2")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_yykx0"]
+[sub_resource type="Resource" id="Resource_xxvbf"]
 script = ExtResource("11_0vgr0")
-operators = Array[ExtResource("9_xbckp")]([SubResource("Resource_1lhxs"), SubResource("Resource_prc80")])
+operators = Array[ExtResource("9_xbckp")]([SubResource("Resource_i8d0d"), SubResource("Resource_icx6h")])
 
 [resource]
 script = ExtResource("12_06f6c")
-requirement = SubResource("Resource_yykx0")
+requirement = SubResource("Resource_xxvbf")
 era = "747_kuangda"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility", "action:main:fangshi"])
-options = Array[ExtResource("1_hxh2w")]([SubResource("Resource_n7cdd"), SubResource("Resource_06f6c"), SubResource("Resource_sqgwl")])
+options = Array[ExtResource("1_hxh2w")]([SubResource("Resource_1k2lr"), SubResource("Resource_mjlts"), SubResource("Resource_xe26g")])
 uuid = "qingliu_passive_benefits_libai_spiritual_anchor_identity_qingliu_owner"
 name = "沙上剑书"
 description = "天宝十三载秋，李白过下杜城。他醉了，没叩你的门。后来有人在渭水边的沙地上看见一行字——是用剑尖划出的“杜子美”三字，歪斜潦草，旁边散落着马蹄印，延伸向潼关方向。那人来告诉你时，沙上的字迹已被风吹浅了一半。"

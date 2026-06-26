@@ -121,7 +121,7 @@
           ],
           "operator_dsl": "prop_sub(name=health; val=3)",
           "option_results": {
-            "opt_zize_bear": "emo_add(name=SORROW; val=15) | prop_add(name=health; val=15) | prop_add(name=health; val=5) | emo_sub(name=AMBITION; val=10)"
+            "opt_zize_bear": "emo_add(name=SORROW; val=15) | prop_add(name=health; val=15) | prop_add(name=health; val=5) | emo_sub(name=ambition; val=10)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.jiaoyou"
@@ -137,7 +137,7 @@
           ],
           "operator_dsl": "prop_sub(name=health; val=2)",
           "option_results": {
-            "opt_zize_bear": "emo_sub(name=ARROGANCE; val=20) | emo_sub(name=AMBITION; val=20) | emo_sub(name=TRANQUILITY; val=20) | emo_add(name=SORROW; val=10) | prop_add(name=health; val=8)"
+            "opt_zize_bear": "emo_sub(name=ARROGANCE; val=20) | emo_sub(name=ambition; val=20) | emo_sub(name=TRANQUILITY; val=20) | emo_add(name=SORROW; val=10) | prop_add(name=health; val=8)"
           },
           "scale": 1.0,
           "stored_to": "747_kuangda.fangshi"

@@ -14,179 +14,179 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="12_k27jp"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="13_llkma"]
 
-[sub_resource type="Resource" id="Resource_mr3en"]
-script = ExtResource("3_5toay")
-str_props = "money"
-value = -5
-
-[sub_resource type="Resource" id="Resource_8sgbu"]
-script = ExtResource("3_5toay")
-str_props = "health"
-value = -5
-
-[sub_resource type="Resource" id="Resource_5toay"]
-script = ExtResource("3_5toay")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_xi0w7"]
-script = ExtResource("3_5toay")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_vaw4c"]
-script = ExtResource("3_5toay")
-str_props = "progress"
-value = 3
-
-[sub_resource type="Resource" id="Resource_b068f"]
-script = ExtResource("4_xi0w7")
-value = 10
-
-[sub_resource type="Resource" id="Resource_thamj"]
-script = ExtResource("5_vaw4c")
-target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
-leverage_key = "zhuoliu_accounting_fraud"
-
-[sub_resource type="Resource" id="Resource_nxp1d"]
-script = ExtResource("6_b068f")
-operators = Array[ExtResource("2_8sgbu")]([SubResource("Resource_mr3en"), SubResource("Resource_8sgbu"), SubResource("Resource_5toay"), SubResource("Resource_xi0w7"), SubResource("Resource_vaw4c"), SubResource("Resource_b068f"), SubResource("Resource_thamj")])
-
-[sub_resource type="Resource" id="Resource_1qiek"]
-script = ExtResource("7_thamj")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_lvb7r"]
-script = ExtResource("8_nxp1d")
-choice_result = SubResource("Resource_nxp1d")
-requirement = SubResource("Resource_1qiek")
-description = "指间的笔砸在账册上，墨迹横过四页的数字。"
-
-[sub_resource type="Resource" id="Resource_jql1c"]
-script = ExtResource("3_5toay")
-str_props = "money"
-value = -5
-
-[sub_resource type="Resource" id="Resource_k27jp"]
-script = ExtResource("3_5toay")
-str_props = "health"
-value = -5
-
-[sub_resource type="Resource" id="Resource_llkma"]
-script = ExtResource("3_5toay")
-str_props = "health"
-value = -3
-
 [sub_resource type="Resource" id="Resource_d45ag"]
 script = ExtResource("3_5toay")
-str_props = "literary_fame"
-value = 3
+str_props = "money"
+value = -5
 
 [sub_resource type="Resource" id="Resource_028rg"]
 script = ExtResource("3_5toay")
-str_props = "progress"
-value = -2
+str_props = "health"
+value = -5
 
 [sub_resource type="Resource" id="Resource_ob8ap"]
+script = ExtResource("3_5toay")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_4240y"]
+script = ExtResource("3_5toay")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_bsqkp"]
+script = ExtResource("3_5toay")
+str_props = "progress"
+value = 3
+
+[sub_resource type="Resource" id="Resource_02xda"]
 script = ExtResource("4_xi0w7")
 value = 10
 
-[sub_resource type="Resource" id="Resource_4240y"]
+[sub_resource type="Resource" id="Resource_uty5h"]
 script = ExtResource("5_vaw4c")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_accounting_fraud"
 
-[sub_resource type="Resource" id="Resource_bsqkp"]
+[sub_resource type="Resource" id="Resource_gjnk7"]
 script = ExtResource("6_b068f")
-operators = Array[ExtResource("2_8sgbu")]([SubResource("Resource_jql1c"), SubResource("Resource_k27jp"), SubResource("Resource_llkma"), SubResource("Resource_d45ag"), SubResource("Resource_028rg"), SubResource("Resource_ob8ap"), SubResource("Resource_4240y")])
+operators = Array[ExtResource("2_8sgbu")]([SubResource("Resource_d45ag"), SubResource("Resource_028rg"), SubResource("Resource_ob8ap"), SubResource("Resource_4240y"), SubResource("Resource_bsqkp"), SubResource("Resource_02xda"), SubResource("Resource_uty5h")])
 
-[sub_resource type="Resource" id="Resource_02xda"]
+[sub_resource type="Resource" id="Resource_vvnys"]
 script = ExtResource("7_thamj")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_uty5h"]
-script = ExtResource("8_nxp1d")
-choice_result = SubResource("Resource_bsqkp")
-requirement = SubResource("Resource_02xda")
-description = "把缺角的端砚推到桌心，让砚底刻的“贞”字朝向他。"
-
-[sub_resource type="Resource" id="Resource_gjnk7"]
-script = ExtResource("3_5toay")
-str_props = "money"
-value = -5
-
-[sub_resource type="Resource" id="Resource_vvnys"]
-script = ExtResource("3_5toay")
-str_props = "health"
-value = -5
-
 [sub_resource type="Resource" id="Resource_an15d"]
-script = ExtResource("3_5toay")
-str_props = "health"
-value = -3
+script = ExtResource("8_nxp1d")
+choice_result = SubResource("Resource_gjnk7")
+requirement = SubResource("Resource_vvnys")
+description = "指间的笔砸在账册上，墨迹横过四页的数字。"
 
 [sub_resource type="Resource" id="Resource_ebvbe"]
 script = ExtResource("3_5toay")
-str_props = "literary_fame"
-value = 3
+str_props = "money"
+value = -5
 
 [sub_resource type="Resource" id="Resource_w32hu"]
 script = ExtResource("3_5toay")
-str_props = "money"
-value = 8
+str_props = "health"
+value = -5
 
 [sub_resource type="Resource" id="Resource_5qxww"]
 script = ExtResource("3_5toay")
 str_props = "health"
-value = 5
+value = -3
 
 [sub_resource type="Resource" id="Resource_3pmwh"]
+script = ExtResource("3_5toay")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_tx00h"]
+script = ExtResource("3_5toay")
+str_props = "progress"
+value = -2
+
+[sub_resource type="Resource" id="Resource_tpkgj"]
 script = ExtResource("4_xi0w7")
 value = 10
 
-[sub_resource type="Resource" id="Resource_tx00h"]
+[sub_resource type="Resource" id="Resource_34e1k"]
 script = ExtResource("5_vaw4c")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_accounting_fraud"
 
-[sub_resource type="Resource" id="Resource_tpkgj"]
+[sub_resource type="Resource" id="Resource_ounjc"]
 script = ExtResource("6_b068f")
-operators = Array[ExtResource("2_8sgbu")]([SubResource("Resource_gjnk7"), SubResource("Resource_vvnys"), SubResource("Resource_an15d"), SubResource("Resource_ebvbe"), SubResource("Resource_w32hu"), SubResource("Resource_5qxww"), SubResource("Resource_3pmwh"), SubResource("Resource_tx00h")])
+operators = Array[ExtResource("2_8sgbu")]([SubResource("Resource_ebvbe"), SubResource("Resource_w32hu"), SubResource("Resource_5qxww"), SubResource("Resource_3pmwh"), SubResource("Resource_tx00h"), SubResource("Resource_tpkgj"), SubResource("Resource_34e1k")])
 
-[sub_resource type="Resource" id="Resource_34e1k"]
+[sub_resource type="Resource" id="Resource_td0h0"]
+script = ExtResource("7_thamj")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_pbkdv"]
 script = ExtResource("8_nxp1d")
-choice_result = SubResource("Resource_tpkgj")
+choice_result = SubResource("Resource_ounjc")
+requirement = SubResource("Resource_td0h0")
+description = "把缺角的端砚推到桌心，让砚底刻的“贞”字朝向他。"
+
+[sub_resource type="Resource" id="Resource_7tqx0"]
+script = ExtResource("3_5toay")
+str_props = "money"
+value = -5
+
+[sub_resource type="Resource" id="Resource_xoe3g"]
+script = ExtResource("3_5toay")
+str_props = "health"
+value = -5
+
+[sub_resource type="Resource" id="Resource_3t4sg"]
+script = ExtResource("3_5toay")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_014pf"]
+script = ExtResource("3_5toay")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_oyj6b"]
+script = ExtResource("3_5toay")
+str_props = "money"
+value = 8
+
+[sub_resource type="Resource" id="Resource_wjjeb"]
+script = ExtResource("3_5toay")
+str_props = "health"
+value = 5
+
+[sub_resource type="Resource" id="Resource_qfkyw"]
+script = ExtResource("4_xi0w7")
+value = 10
+
+[sub_resource type="Resource" id="Resource_i7ajo"]
+script = ExtResource("5_vaw4c")
+target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
+leverage_key = "zhuoliu_accounting_fraud"
+
+[sub_resource type="Resource" id="Resource_nan0j"]
+script = ExtResource("6_b068f")
+operators = Array[ExtResource("2_8sgbu")]([SubResource("Resource_7tqx0"), SubResource("Resource_xoe3g"), SubResource("Resource_3t4sg"), SubResource("Resource_014pf"), SubResource("Resource_oyj6b"), SubResource("Resource_wjjeb"), SubResource("Resource_qfkyw"), SubResource("Resource_i7ajo")])
+
+[sub_resource type="Resource" id="Resource_qasou"]
+script = ExtResource("8_nxp1d")
+choice_result = SubResource("Resource_nan0j")
 description = "翻开第七页，直接开始重新核算两页的总数。"
 
-[sub_resource type="Resource" id="Resource_ounjc"]
+[sub_resource type="Resource" id="Resource_cmega"]
 script = ExtResource("10_lvb7r")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_td0h0"]
+[sub_resource type="Resource" id="Resource_po7e6"]
 script = ExtResource("11_jql1c")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_pbkdv"]
+[sub_resource type="Resource" id="Resource_8vgw1"]
 script = ExtResource("11_jql1c")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_7tqx0"]
+[sub_resource type="Resource" id="Resource_3dntl"]
 script = ExtResource("12_k27jp")
-operators = Array[ExtResource("9_1qiek")]([SubResource("Resource_ounjc"), SubResource("Resource_td0h0"), SubResource("Resource_pbkdv")])
+operators = Array[ExtResource("9_1qiek")]([SubResource("Resource_cmega"), SubResource("Resource_po7e6"), SubResource("Resource_8vgw1")])
 
 [resource]
 script = ExtResource("13_llkma")
-requirement = SubResource("Resource_7tqx0")
+requirement = SubResource("Resource_3dntl")
 era = "747_kuangda"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_FACTION_ROYAL:jade_step", "action:main:fangshi"])
-options = Array[ExtResource("1_mr3en")]([SubResource("Resource_lvb7r"), SubResource("Resource_uty5h"), SubResource("Resource_34e1k")])
+options = Array[ExtResource("1_mr3en")]([SubResource("Resource_an15d"), SubResource("Resource_pbkdv"), SubResource("Resource_qasou")])
 uuid = "zhuoliu_fengying_ledger_gap"
 name = "旧账上的墨点"
 description = "巡按的笑声透过屏风传过来——他们在聊长安新到的阳羡茶，语气松散得像聊自家园子的杏花。张主簿推过一摞账册，翻到第四页，笔杆点了点那个数字。“跟第七页对不上吧。”他说这话时没看你，语气像在吩咐一个知道规矩的人。你知道他为什么这么跟你说话——上次帮他整理那些说不清来源的租契时，你问过一句“总数要不要盘”，他用同样的笔杆在同样的位置点了两下。那个墨点还在。"

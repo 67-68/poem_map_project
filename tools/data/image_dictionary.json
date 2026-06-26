@@ -21,7 +21,7 @@
     "id": "ENV_SOCIETY_WAR:beacon_fire",
     "name": "烽火",
     "description": "边塞告急的烽烟，国家的紧急动员，激起热血与愤怒，也暗示战乱的破坏力",
-    "affinities": {"ANGER": 90, "AMBITION": 70, "ARROGANCE": 50}
+    "affinities": {"ANGER": 90, "ambition": 70, "ARROGANCE": 50}
   },
   "ENV_SOCIETY_WAR:blood_stain": {
     "id": "ENV_SOCIETY_WAR:blood_stain",
@@ -63,19 +63,19 @@
     "id": "VIBE_AESTHETIC_SENSUAL:red_sleeve",
     "name": "红袖",
     "description": "红袖添香、歌舞升平，盛唐的声色繁华。既可表风流倜傥的狂傲，也暗藏声色误国的警示",
-    "affinities": {"ARROGANCE": 85, "AMBITION": 75, "TRANQUILITY": 40}
+    "affinities": {"ARROGANCE": 85, "ambition": 75, "TRANQUILITY": 40}
   },
   "VIBE_AESTHETIC_ELEGANT:ink_stone": {
     "id": "VIBE_AESTHETIC_ELEGANT:ink_stone",
     "name": "古砚",
     "description": "笔墨纸砚中的文人风骨。书斋中的沉静与内省，代表士人的学识底蕴和文化传承",
-    "affinities": {"TRANQUILITY": 80, "AMBITION": 60, "ARROGANCE": 40}
+    "affinities": {"TRANQUILITY": 80, "ambition": 60, "ARROGANCE": 40}
   },
   "VIBE_THEME_MARTIAL:border_flag": {
     "id": "VIBE_THEME_MARTIAL:border_flag",
     "name": "塞旗",
     "description": "大漠孤烟直，边塞军旗猎猎。代表军旅豪情与建功立业的渴望，亦暗含战争残酷",
-    "affinities": {"ARROGANCE": 80, "ANGER": 70, "AMBITION": 60}
+    "affinities": {"ARROGANCE": 80, "ANGER": 70, "ambition": 60}
   },
   "ACTION_TRAVEL_BOAT:lone_sail": {
     "id": "ACTION_TRAVEL_BOAT:lone_sail",
@@ -117,7 +117,7 @@
     "id": "TARGET_OBJECT_SWORD:cold_blade",
     "name": "寒锋",
     "description": "赵客缦胡缨，吴钩霜雪明。锋刃凛冽的利剑，代表侠客的凌厉与决绝，快意恩仇的锐气",
-    "affinities": {"ANGER": 90, "ARROGANCE": 85, "AMBITION": 60}
+    "affinities": {"ANGER": 90, "ARROGANCE": 85, "ambition": 60}
   },
   "TARGET_OBJECT_GUQIN:broken_string": {
     "id": "TARGET_OBJECT_GUQIN:broken_string",
@@ -135,7 +135,7 @@
     "id": "TARGET_NPC_LIBAI:wine_gourd",
     "name": "酒葫芦",
     "description": "李白斗酒诗百篇，酒葫芦是谪仙人的标志。代表不拘礼法、天马行空的狂放与才华",
-    "affinities": {"ARROGANCE": 95, "TRANQUILITY": 60, "AMBITION": 40}
+    "affinities": {"ARROGANCE": 95, "TRANQUILITY": 60, "ambition": 40}
   },
   "TARGET_NPC_DUFU:thatched_grass": {
     "id": "TARGET_NPC_DUFU:thatched_grass",
@@ -147,19 +147,19 @@
     "id": "ENV_POLITICS_PROSPER:cloud_and_sun",
     "name": "云日",
     "description": "总为浮云能蔽日，长安不见使人愁。象征靠近皇权、盛世气象，也暗含君臣遇合的政治隐喻",
-    "affinities": {"AMBITION": 85, "ARROGANCE": 60, "TRANQUILITY": 50}
+    "affinities": {"ambition": 85, "ARROGANCE": 60, "TRANQUILITY": 50}
   },
   "TARGET_FACTION_ROYAL:jade_step": {
     "id": "TARGET_FACTION_ROYAL:jade_step",
     "name": "玉阶",
     "description": "玉阶生白露，夜久侵罗袜。宫中的白玉台阶，代表朝堂、权力中枢，升迁之路的终极目标",
-    "affinities": {"AMBITION": 90, "ARROGANCE": 70, "TRANQUILITY": 40}
+    "affinities": {"ambition": 90, "ARROGANCE": 70, "TRANQUILITY": 40}
   },
   "TARGET_OBJECT_SWORD:giant_roc": {
     "id": "TARGET_OBJECT_SWORD:giant_roc",
     "name": "大鹏",
     "description": "大鹏一日同风起，扶摇直上九万里。李白最爱的意象，代表不甘平庸、一飞冲天的少年壮志",
-    "affinities": {"AMBITION": 95, "ARROGANCE": 85, "TRANQUILITY": 50}
+    "affinities": {"ambition": 95, "ARROGANCE": 85, "TRANQUILITY": 50}
   },
   "TARGET_OBJECT_SWORD:broken_halberd": {
     "id": "TARGET_OBJECT_SWORD:broken_halberd",

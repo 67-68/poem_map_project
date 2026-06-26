@@ -12,87 +12,34 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_834bv"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_tvqgt"]
 
-[sub_resource type="Resource" id="Resource_ev2yd"]
-script = ExtResource("3_a1o02")
-str_props = "health"
-value = 13
-
-[sub_resource type="Resource" id="Resource_vdjdw"]
-script = ExtResource("3_a1o02")
-str_props = "health"
-value = -6
-
-[sub_resource type="Resource" id="Resource_a1o02"]
-script = ExtResource("3_a1o02")
-str_props = "money"
-value = -6
-
-[sub_resource type="Resource" id="Resource_klxxx"]
-script = ExtResource("3_a1o02")
-str_props = "HEALTH"
-value = -16
-
-[sub_resource type="Resource" id="Resource_6t7lc"]
-script = ExtResource("4_klxxx")
-value = 22
-
-[sub_resource type="Resource" id="Resource_bkl3u"]
-script = ExtResource("3_a1o02")
-str_props = "health"
-value = 11
-
-[sub_resource type="Resource" id="Resource_lm100"]
-script = ExtResource("5_6t7lc")
-target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
-leverage_key = "zhuoliu_epitaph_coercion"
-
-[sub_resource type="Resource" id="Resource_dnpcu"]
-script = ExtResource("6_bkl3u")
-operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_ev2yd"), SubResource("Resource_vdjdw"), SubResource("Resource_a1o02"), SubResource("Resource_klxxx"), SubResource("Resource_6t7lc"), SubResource("Resource_bkl3u"), SubResource("Resource_lm100")])
-
-[sub_resource type="Resource" id="Resource_vr8dt"]
-script = ExtResource("7_lm100")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_834bv"]
-script = ExtResource("8_dnpcu")
-choice_result = SubResource("Resource_dnpcu")
-requirement = SubResource("Resource_vr8dt")
-description = "杜甫起身，将膝边那张纸连带碎银一起从冻土上拨开，从两人之间走过。"
-
-[sub_resource type="Resource" id="Resource_tvqgt"]
-script = ExtResource("3_a1o02")
-str_props = "health"
-value = 13
-
 [sub_resource type="Resource" id="Resource_0d2tn"]
 script = ExtResource("3_a1o02")
 str_props = "health"
-value = -6
+value = 13
 
 [sub_resource type="Resource" id="Resource_m7vws"]
 script = ExtResource("3_a1o02")
-str_props = "money"
+str_props = "health"
 value = -6
 
 [sub_resource type="Resource" id="Resource_42rft"]
 script = ExtResource("3_a1o02")
-str_props = "MONEY"
-value = 22
+str_props = "money"
+value = -6
 
 [sub_resource type="Resource" id="Resource_5votn"]
 script = ExtResource("3_a1o02")
-str_props = "LITERARY_FAME"
-value = -6
+str_props = "HEALTH"
+value = -16
 
 [sub_resource type="Resource" id="Resource_t10p1"]
-script = ExtResource("3_a1o02")
-str_props = "health"
-value = 16
-
-[sub_resource type="Resource" id="Resource_tua4w"]
 script = ExtResource("4_klxxx")
 value = 22
+
+[sub_resource type="Resource" id="Resource_tua4w"]
+script = ExtResource("3_a1o02")
+str_props = "health"
+value = 11
 
 [sub_resource type="Resource" id="Resource_468jq"]
 script = ExtResource("5_6t7lc")
@@ -101,17 +48,17 @@ leverage_key = "zhuoliu_epitaph_coercion"
 
 [sub_resource type="Resource" id="Resource_e2g7p"]
 script = ExtResource("6_bkl3u")
-operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_tvqgt"), SubResource("Resource_0d2tn"), SubResource("Resource_m7vws"), SubResource("Resource_42rft"), SubResource("Resource_5votn"), SubResource("Resource_t10p1"), SubResource("Resource_tua4w"), SubResource("Resource_468jq")])
+operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_0d2tn"), SubResource("Resource_m7vws"), SubResource("Resource_42rft"), SubResource("Resource_5votn"), SubResource("Resource_t10p1"), SubResource("Resource_tua4w"), SubResource("Resource_468jq")])
 
 [sub_resource type="Resource" id="Resource_wosln"]
 script = ExtResource("7_lm100")
-trait_name = "kuangda_fengying"
+trait_name = "kuangda_kuangke"
 
 [sub_resource type="Resource" id="Resource_npp5q"]
 script = ExtResource("8_dnpcu")
 choice_result = SubResource("Resource_e2g7p")
 requirement = SubResource("Resource_wosln")
-description = "杜甫伸手按住被风掀动的纸角，从怀中摸出笔，在冻土上润了润墨。"
+description = "杜甫起身，将膝边那张纸连带碎银一起从冻土上拨开，从两人之间走过。"
 
 [sub_resource type="Resource" id="Resource_f75af"]
 script = ExtResource("3_a1o02")
@@ -131,58 +78,111 @@ value = -6
 [sub_resource type="Resource" id="Resource_is1rh"]
 script = ExtResource("3_a1o02")
 str_props = "MONEY"
-value = 16
+value = 22
 
 [sub_resource type="Resource" id="Resource_n24i1"]
 script = ExtResource("3_a1o02")
-str_props = "health"
-value = 11
+str_props = "LITERARY_FAME"
+value = -6
 
 [sub_resource type="Resource" id="Resource_8lm1g"]
-script = ExtResource("4_klxxx")
+script = ExtResource("3_a1o02")
+str_props = "health"
 value = 16
 
 [sub_resource type="Resource" id="Resource_qs15m"]
+script = ExtResource("4_klxxx")
+value = 22
+
+[sub_resource type="Resource" id="Resource_g26gd"]
 script = ExtResource("5_6t7lc")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_epitaph_coercion"
 
-[sub_resource type="Resource" id="Resource_g26gd"]
-script = ExtResource("6_bkl3u")
-operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_f75af"), SubResource("Resource_1v4uo"), SubResource("Resource_6a67k"), SubResource("Resource_is1rh"), SubResource("Resource_n24i1"), SubResource("Resource_8lm1g"), SubResource("Resource_qs15m")])
-
 [sub_resource type="Resource" id="Resource_xtxut"]
-script = ExtResource("7_lm100")
-trait_name = "kuangda_zuanying"
+script = ExtResource("6_bkl3u")
+operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_f75af"), SubResource("Resource_1v4uo"), SubResource("Resource_6a67k"), SubResource("Resource_is1rh"), SubResource("Resource_n24i1"), SubResource("Resource_8lm1g"), SubResource("Resource_qs15m"), SubResource("Resource_g26gd")])
 
 [sub_resource type="Resource" id="Resource_lds55"]
-script = ExtResource("8_dnpcu")
-choice_result = SubResource("Resource_g26gd")
-requirement = SubResource("Resource_xtxut")
-description = "杜甫没碰那张纸，只问了一句：“碑刻成之后，拓片能带回长安一卷么？”"
-
-[sub_resource type="Resource" id="Resource_jy70a"]
-script = ExtResource("7_lm100")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_dih8u"]
 script = ExtResource("7_lm100")
 trait_name = "kuangda_fengying"
 
+[sub_resource type="Resource" id="Resource_jy70a"]
+script = ExtResource("8_dnpcu")
+choice_result = SubResource("Resource_xtxut")
+requirement = SubResource("Resource_lds55")
+description = "杜甫伸手按住被风掀动的纸角，从怀中摸出笔，在冻土上润了润墨。"
+
+[sub_resource type="Resource" id="Resource_dih8u"]
+script = ExtResource("3_a1o02")
+str_props = "health"
+value = 13
+
 [sub_resource type="Resource" id="Resource_aefh3"]
+script = ExtResource("3_a1o02")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_doukx"]
+script = ExtResource("3_a1o02")
+str_props = "money"
+value = -6
+
+[sub_resource type="Resource" id="Resource_eyd6d"]
+script = ExtResource("3_a1o02")
+str_props = "MONEY"
+value = 16
+
+[sub_resource type="Resource" id="Resource_wrcre"]
+script = ExtResource("3_a1o02")
+str_props = "health"
+value = 11
+
+[sub_resource type="Resource" id="Resource_vrq71"]
+script = ExtResource("4_klxxx")
+value = 16
+
+[sub_resource type="Resource" id="Resource_tld8r"]
+script = ExtResource("5_6t7lc")
+target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
+leverage_key = "zhuoliu_epitaph_coercion"
+
+[sub_resource type="Resource" id="Resource_8ec34"]
+script = ExtResource("6_bkl3u")
+operators = Array[ExtResource("2_vdjdw")]([SubResource("Resource_dih8u"), SubResource("Resource_aefh3"), SubResource("Resource_doukx"), SubResource("Resource_eyd6d"), SubResource("Resource_wrcre"), SubResource("Resource_vrq71"), SubResource("Resource_tld8r")])
+
+[sub_resource type="Resource" id="Resource_3lblx"]
 script = ExtResource("7_lm100")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_doukx"]
+[sub_resource type="Resource" id="Resource_urbdh"]
+script = ExtResource("8_dnpcu")
+choice_result = SubResource("Resource_8ec34")
+requirement = SubResource("Resource_3lblx")
+description = "杜甫没碰那张纸，只问了一句：“碑刻成之后，拓片能带回长安一卷么？”"
+
+[sub_resource type="Resource" id="Resource_137y8"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_ncqup"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_fengying"
+
+[sub_resource type="Resource" id="Resource_fqp5d"]
+script = ExtResource("7_lm100")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_t3owp"]
 script = ExtResource("10_834bv")
-operators = Array[ExtResource("9_vr8dt")]([SubResource("Resource_jy70a"), SubResource("Resource_dih8u"), SubResource("Resource_aefh3")])
+operators = Array[ExtResource("9_vr8dt")]([SubResource("Resource_137y8"), SubResource("Resource_ncqup"), SubResource("Resource_fqp5d")])
 
 [resource]
 script = ExtResource("11_tvqgt")
-requirement = SubResource("Resource_doukx")
+requirement = SubResource("Resource_t3owp")
 era = "747_kuangda"
 _target_tags = Array[String](["TARGET_OBJECT_SWORD:cold_blade", "VIBE_THEME_MARTIAL:giant_roc", "action:main:baiye", "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"])
-options = Array[ExtResource("1_ev2yd")]([SubResource("Resource_834bv"), SubResource("Resource_npp5q"), SubResource("Resource_lds55")])
+options = Array[ExtResource("1_ev2yd")]([SubResource("Resource_npp5q"), SubResource("Resource_jy70a"), SubResource("Resource_urbdh")])
 uuid = "zhuoliu_lieqi_ghostwriter_blood_identity_zhuoliu_official"
 name = "碑记与刀环"
 description = "坊墙下的风是从北边灌进来的。年老的那个挡在你面前，离你三步，刚好占住你唯一能起身的方向。年轻的站在你身后，你听见他的手指一下一下拨着刀环，铁碰铁，不高不低，像在敲一种不需要旋律的拍子。年老的那个没有催，他把那个名字又说了一遍，放慢了说，像在教一个孩童认字。然后他从袖中取出一卷纸，展开——是空白的，只在上方端正地压了一方朱砂印。他将纸放在你膝边的冻土上，压了一小块碎银在纸角。风把纸边掀起一点，又落下。"

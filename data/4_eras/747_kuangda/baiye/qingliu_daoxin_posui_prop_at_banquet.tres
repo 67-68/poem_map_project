@@ -9,63 +9,63 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_ag6u5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_j5vjm"]
 
-[sub_resource type="Resource" id="Resource_gbne2"]
+[sub_resource type="Resource" id="Resource_wtgqh"]
 script = ExtResource("3_hafv8")
 str_props = "health"
 value = 5
 
-[sub_resource type="Resource" id="Resource_aeoxp"]
+[sub_resource type="Resource" id="Resource_q87f6"]
 script = ExtResource("4_o6qws")
 value = 5
 
-[sub_resource type="Resource" id="Resource_hafv8"]
+[sub_resource type="Resource" id="Resource_33gq7"]
 script = ExtResource("3_hafv8")
 str_props = "money"
 value = 3
 
-[sub_resource type="Resource" id="Resource_o6qws"]
+[sub_resource type="Resource" id="Resource_p7inm"]
 script = ExtResource("4_o6qws")
 value = 15
 
-[sub_resource type="Resource" id="Resource_apx6u"]
+[sub_resource type="Resource" id="Resource_qu63f"]
 script = ExtResource("3_hafv8")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_664p5"]
+[sub_resource type="Resource" id="Resource_we3s5"]
 script = ExtResource("3_hafv8")
 str_props = "health"
 value = 8
 
-[sub_resource type="Resource" id="Resource_ag6u5"]
+[sub_resource type="Resource" id="Resource_udllm"]
 script = ExtResource("3_hafv8")
 str_props = "health"
 value = 5
 
-[sub_resource type="Resource" id="Resource_j5vjm"]
+[sub_resource type="Resource" id="Resource_uhlk4"]
 script = ExtResource("4_o6qws")
 value = 5
 
-[sub_resource type="Resource" id="Resource_wtgqh"]
+[sub_resource type="Resource" id="Resource_1jtv2"]
 script = ExtResource("5_apx6u")
-operators = Array[ExtResource("2_aeoxp")]([SubResource("Resource_gbne2"), SubResource("Resource_aeoxp"), SubResource("Resource_hafv8"), SubResource("Resource_o6qws"), SubResource("Resource_apx6u"), SubResource("Resource_664p5"), SubResource("Resource_ag6u5"), SubResource("Resource_j5vjm")])
+operators = Array[ExtResource("2_aeoxp")]([SubResource("Resource_wtgqh"), SubResource("Resource_q87f6"), SubResource("Resource_33gq7"), SubResource("Resource_p7inm"), SubResource("Resource_qu63f"), SubResource("Resource_we3s5"), SubResource("Resource_udllm"), SubResource("Resource_uhlk4")])
 
-[sub_resource type="Resource" id="Resource_q87f6"]
+[sub_resource type="Resource" id="Resource_u2omx"]
 script = ExtResource("6_664p5")
-choice_result = SubResource("Resource_wtgqh")
+choice_result = SubResource("Resource_1jtv2")
 description = "把手收回膝上，目光落在对面的空席。那边暗着。"
 
-[sub_resource type="Resource" id="Resource_33gq7"]
+[sub_resource type="Resource" id="Resource_1a0g1"]
 script = ExtResource("7_ag6u5")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("8_j5vjm")
-requirement = SubResource("Resource_33gq7")
+requirement = SubResource("Resource_1a0g1")
 era = "747_kuangda"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_gbne2")]([SubResource("Resource_q87f6")])
+options = Array[ExtResource("1_gbne2")]([SubResource("Resource_u2omx")])
 uuid = "qingliu_daoxin_posui_prop_at_banquet"
 name = "偏席"
 description = "宴设在东庭，灯火把主桌围出一团暖光。你的坐席靠西墙，旁边是两名抱琴的乐师。席上的食案比主桌窄了一掌，筷箸横在碗沿。你数了数，少一副。主桌有人在劝酒，笑声叠着笑声。左边的乐师低头调弦，咚的一声闷响停在第三根弦上。你面前的案面有一道旧渍，深褐色的，渗在木纹里。那只多出来的酒杯搁在你右手边，杯口朝下，底上印着半个指痕。你把它翻过来，又翻回去。"

@@ -9,59 +9,59 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_yhwcn"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_xa5k4"]
 
-[sub_resource type="Resource" id="Resource_oecmb"]
+[sub_resource type="Resource" id="Resource_btumf"]
 script = ExtResource("3_chkyi")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_7tjgj"]
+[sub_resource type="Resource" id="Resource_vyays"]
 script = ExtResource("3_chkyi")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_chkyi"]
+[sub_resource type="Resource" id="Resource_n4tut"]
 script = ExtResource("3_chkyi")
 str_props = "talent"
 value = 2
 
-[sub_resource type="Resource" id="Resource_v4hsp"]
+[sub_resource type="Resource" id="Resource_0omtq"]
 script = ExtResource("4_v4hsp")
 value = 15
 
-[sub_resource type="Resource" id="Resource_i10c8"]
+[sub_resource type="Resource" id="Resource_5rrfv"]
 script = ExtResource("3_chkyi")
 str_props = "health"
 value = 15
 
-[sub_resource type="Resource" id="Resource_egpa8"]
+[sub_resource type="Resource" id="Resource_fy33m"]
 script = ExtResource("3_chkyi")
 str_props = "health"
 value = 5
 
-[sub_resource type="Resource" id="Resource_yhwcn"]
+[sub_resource type="Resource" id="Resource_5iqgp"]
 script = ExtResource("4_v4hsp")
 value = -10
 
-[sub_resource type="Resource" id="Resource_xa5k4"]
+[sub_resource type="Resource" id="Resource_a666c"]
 script = ExtResource("5_i10c8")
-operators = Array[ExtResource("2_7tjgj")]([SubResource("Resource_oecmb"), SubResource("Resource_7tjgj"), SubResource("Resource_chkyi"), SubResource("Resource_v4hsp"), SubResource("Resource_i10c8"), SubResource("Resource_egpa8"), SubResource("Resource_yhwcn")])
+operators = Array[ExtResource("2_7tjgj")]([SubResource("Resource_btumf"), SubResource("Resource_vyays"), SubResource("Resource_n4tut"), SubResource("Resource_0omtq"), SubResource("Resource_5rrfv"), SubResource("Resource_fy33m"), SubResource("Resource_5iqgp")])
 
-[sub_resource type="Resource" id="Resource_btumf"]
+[sub_resource type="Resource" id="Resource_w50iw"]
 script = ExtResource("6_egpa8")
-choice_result = SubResource("Resource_xa5k4")
+choice_result = SubResource("Resource_a666c")
 description = "顿了顿。把下巴搁在最上面那本书的封皮上，朝坊门另一头走。"
 
-[sub_resource type="Resource" id="Resource_vyays"]
+[sub_resource type="Resource" id="Resource_2pnab"]
 script = ExtResource("7_yhwcn")
 property = "health"
 value = 40
 
 [resource]
 script = ExtResource("8_xa5k4")
-requirement = SubResource("Resource_vyays")
+requirement = SubResource("Resource_2pnab")
 era = "747_kuangda"
 _target_tags = Array[String](["ACTION_SOCIAL_PARTING:willow_branch", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:jiaoyou"])
-options = Array[ExtResource("1_oecmb")]([SubResource("Resource_btumf")])
+options = Array[ExtResource("1_oecmb")]([SubResource("Resource_w50iw")])
 uuid = "zize_old_friend"
 name = "书堆的重量"
 description = "牛车停在坊门口，车板上的干草簌簌往下掉碎屑。他把书一本一本往你怀里堆，你往后趔趄了小半步——他没看你是否站稳。转身去解缰绳，手指快得像在赶什么东西追上他之前。琴搁在书堆最上面，弦上还绷着昨夜的潮气。你喉咙滚了一下。想说「我也走」——那四个字已经抵在舌根。但你咽回去了。齿关合上时发出一声轻响，像咬碎了一小块脆骨。牛车动了。车轮碾过水沟边沿，琴弦被震出一声闷响——短促，低哑，像被谁从底下踩了一脚。你抱着那摞书站在坊门口。车的影子拉细，缩进春明门方向的灰尘里。"

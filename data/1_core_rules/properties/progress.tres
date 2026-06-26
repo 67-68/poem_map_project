@@ -52,6 +52,7 @@ perception_text = "权倾朝野"
 [resource]
 script = ExtResource("1_xeosg")
 hard_max = 99
+not_show_on_left = true
 staged_perceptions = Array[ExtResource("2_6wq60")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("3_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3")])
 uuid = "progress"

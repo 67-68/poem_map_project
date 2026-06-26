@@ -9,77 +9,39 @@
 [ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="7_io8mn"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_ij2rj"]
 
-[sub_resource type="Resource" id="Resource_2stxw"]
+[sub_resource type="Resource" id="Resource_5a5mx"]
 script = ExtResource("3_vir0b")
 str_props = "health"
 value = -6
 
-[sub_resource type="Resource" id="Resource_s1857"]
+[sub_resource type="Resource" id="Resource_2ba41"]
 script = ExtResource("3_vir0b")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_vir0b"]
+[sub_resource type="Resource" id="Resource_brj62"]
 script = ExtResource("3_vir0b")
 str_props = "progress"
 value = 2
 
-[sub_resource type="Resource" id="Resource_pfs3l"]
-script = ExtResource("3_vir0b")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_5oatp"]
-script = ExtResource("4_pfs3l")
-target_tag = "TARGET_IDENTITY_VENDOR"
-leverage_key = "vendor_cheap_labor"
-
-[sub_resource type="Resource" id="Resource_lacen"]
-script = ExtResource("5_5oatp")
-operators = Array[ExtResource("2_s1857")]([SubResource("Resource_2stxw"), SubResource("Resource_s1857"), SubResource("Resource_vir0b"), SubResource("Resource_pfs3l"), SubResource("Resource_5oatp")])
-
-[sub_resource type="Resource" id="Resource_io8mn"]
-script = ExtResource("6_lacen")
-choice_result = SubResource("Resource_lacen")
-description = "将诗稿放回案上，端起残酒饮尽，起身离席。"
-
-[sub_resource type="Resource" id="Resource_ij2rj"]
-script = ExtResource("3_vir0b")
-str_props = "health"
-value = -6
-
-[sub_resource type="Resource" id="Resource_5a5mx"]
-script = ExtResource("3_vir0b")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_2ba41"]
-script = ExtResource("3_vir0b")
-str_props = "progress"
-value = 1
-
-[sub_resource type="Resource" id="Resource_brj62"]
-script = ExtResource("3_vir0b")
-str_props = "money"
-value = -3
-
 [sub_resource type="Resource" id="Resource_lj35a"]
-script = ExtResource("4_pfs3l")
-target_tag = "TARGET_IDENTITY_VENDOR"
-leverage_key = "vendor_cheap_labor"
+script = ExtResource("3_vir0b")
+str_props = "health"
+value = -3
 
 [sub_resource type="Resource" id="Resource_iku0h"]
-script = ExtResource("7_io8mn")
-imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+script = ExtResource("4_pfs3l")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
 
 [sub_resource type="Resource" id="Resource_l41j1"]
 script = ExtResource("5_5oatp")
-operators = Array[ExtResource("2_s1857")]([SubResource("Resource_ij2rj"), SubResource("Resource_5a5mx"), SubResource("Resource_2ba41"), SubResource("Resource_brj62"), SubResource("Resource_lj35a"), SubResource("Resource_iku0h")])
+operators = Array[ExtResource("2_s1857")]([SubResource("Resource_5a5mx"), SubResource("Resource_2ba41"), SubResource("Resource_brj62"), SubResource("Resource_lj35a"), SubResource("Resource_iku0h")])
 
 [sub_resource type="Resource" id="Resource_a4prl"]
 script = ExtResource("6_lacen")
 choice_result = SubResource("Resource_l41j1")
-description = "应声坐下，研墨展卷，俯首逐字抄录。笔尖沙沙作响。"
+description = "将诗稿放回案上，端起残酒饮尽，起身离席。"
 
 [sub_resource type="Resource" id="Resource_jqyrp"]
 script = ExtResource("3_vir0b")
@@ -94,41 +56,79 @@ value = -3
 [sub_resource type="Resource" id="Resource_q8nab"]
 script = ExtResource("3_vir0b")
 str_props = "progress"
-value = -1
+value = 1
 
 [sub_resource type="Resource" id="Resource_pjhri"]
 script = ExtResource("3_vir0b")
 str_props = "money"
-value = 6
+value = -3
 
 [sub_resource type="Resource" id="Resource_kcabm"]
-script = ExtResource("3_vir0b")
-str_props = "health"
-value = -2
-
-[sub_resource type="Resource" id="Resource_hqdcw"]
 script = ExtResource("4_pfs3l")
 target_tag = "TARGET_IDENTITY_VENDOR"
 leverage_key = "vendor_cheap_labor"
 
+[sub_resource type="Resource" id="Resource_hqdcw"]
+script = ExtResource("7_io8mn")
+imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+
 [sub_resource type="Resource" id="Resource_3r506"]
+script = ExtResource("5_5oatp")
+operators = Array[ExtResource("2_s1857")]([SubResource("Resource_jqyrp"), SubResource("Resource_cyfsr"), SubResource("Resource_q8nab"), SubResource("Resource_pjhri"), SubResource("Resource_kcabm"), SubResource("Resource_hqdcw")])
+
+[sub_resource type="Resource" id="Resource_u5pfp"]
+script = ExtResource("6_lacen")
+choice_result = SubResource("Resource_3r506")
+description = "应声坐下，研墨展卷，俯首逐字抄录。笔尖沙沙作响。"
+
+[sub_resource type="Resource" id="Resource_0to6d"]
+script = ExtResource("3_vir0b")
+str_props = "health"
+value = -6
+
+[sub_resource type="Resource" id="Resource_4udrg"]
+script = ExtResource("3_vir0b")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_olmug"]
+script = ExtResource("3_vir0b")
+str_props = "progress"
+value = -1
+
+[sub_resource type="Resource" id="Resource_bk6rd"]
+script = ExtResource("3_vir0b")
+str_props = "money"
+value = 6
+
+[sub_resource type="Resource" id="Resource_rmexp"]
+script = ExtResource("3_vir0b")
+str_props = "health"
+value = -2
+
+[sub_resource type="Resource" id="Resource_d5g1o"]
+script = ExtResource("4_pfs3l")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_kppfe"]
 script = ExtResource("7_io8mn")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_u5pfp"]
+[sub_resource type="Resource" id="Resource_vlx4j"]
 script = ExtResource("5_5oatp")
-operators = Array[ExtResource("2_s1857")]([SubResource("Resource_jqyrp"), SubResource("Resource_cyfsr"), SubResource("Resource_q8nab"), SubResource("Resource_pjhri"), SubResource("Resource_kcabm"), SubResource("Resource_hqdcw"), SubResource("Resource_3r506")])
+operators = Array[ExtResource("2_s1857")]([SubResource("Resource_0to6d"), SubResource("Resource_4udrg"), SubResource("Resource_olmug"), SubResource("Resource_bk6rd"), SubResource("Resource_rmexp"), SubResource("Resource_d5g1o"), SubResource("Resource_kppfe")])
 
-[sub_resource type="Resource" id="Resource_0to6d"]
+[sub_resource type="Resource" id="Resource_uwxyq"]
 script = ExtResource("6_lacen")
-choice_result = SubResource("Resource_u5pfp")
+choice_result = SubResource("Resource_vlx4j")
 description = "躬身赔笑，问主人可需再加个序。随即铺纸研磨，笔不停挥。"
 
 [resource]
 script = ExtResource("8_ij2rj")
 era = "747_kuangda"
 _target_tags = Array[String](["emotion_pair:pair_survival", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "ACTION_TRAVEL_BOAT:broken_oar", "action:humiliation_cheap_labor", "TARGET_IDENTITY_VENDOR", "VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ACTION_SOCIAL_PARTING:willow_branch", "action:scene_jiaoyou"])
-options = Array[ExtResource("1_2stxw")]([SubResource("Resource_io8mn"), SubResource("Resource_a4prl"), SubResource("Resource_0to6d")])
+options = Array[ExtResource("1_2stxw")]([SubResource("Resource_a4prl"), SubResource("Resource_u5pfp"), SubResource("Resource_uwxyq")])
 uuid = "duotai_humiliation_cheap_labor_gateway_jiaoyou_identity_vendor"
 name = "抄诗之辱"
 description = "“子美你留一下，帮我把今天这些唱和的诗整理成册子。你字好，抄完放书房就行。”其他客人打着饱嗝下楼，满桌残羹未撤。"

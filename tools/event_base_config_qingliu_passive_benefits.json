@@ -39,7 +39,7 @@
   "universal_tags": [
     "qingliu_aid"
   ],
-  "universal_requirement": "emo_gt(name=AMBITION; val=30)|emo_lt(name=AMBITION; val=100)",
+  "universal_requirement": "emo_gt(name=ambition; val=30)|emo_lt(name=ambition; val=100)",
   "universal_result": "prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 40,
@@ -65,7 +65,7 @@
         "desc": "旷达——我们是平等的知音，坦然接受"
       },
       "branch_B": {
-        "emotion": "AMBITION",
+        "emotion": "ambition",
         "desc": "野心——这是一个可以攀附的跳板"
       },
       "fallback": {
@@ -79,7 +79,7 @@
         "desc": "愤懑——凭什么，我偏要活下去"
       },
       "branch_B": {
-        "emotion": "AMBITION",
+        "emotion": "ambition",
         "desc": "野心——这点不够，我还要更多"
       },
       "fallback": {
@@ -127,7 +127,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内写一个简短的动作描述——玩家以低旷达状态回应清流朋友的援助。\n\n钻营回应原则：\n1. 行为模式：嘴上说着感激的话，但眼神、停顿、或完成接受后立刻转移话题的节奏——暴露了这感激只是表面功夫。\n2. 可观察的算计信号：接受帮助后立刻谈论自己的困境或需求（暗示还不够）、将对方的名声或关系用作自己的社交资本、或把收到的实物转手处置掉。这些是「可观察的行为」，不是心理描写。\n3. 【绝对禁止】直接出卖朋友、背叛恩人。钻营是算计和利用，不是背刺。不写「出卖」「背叛」「告密」等词。\n4. 【反面教材】「多谢仁兄，不知仁兄可认识某某大人？」（赤裸裸的攀附，太低劣）——算计应当是微妙的、克制的、甚至让观察者都不确定这究竟是算计还是真诚。",
       "text": "（满脸堆笑，目光却越过对方望向别处）",
-      "result": "emo_add(name=AMBITION; val=15)|prop_add(name=health; val=15)|emo_add(name=SORROW; val=5)",
+      "result": "emo_add(name=ambition; val=15)|prop_add(name=health; val=15)|emo_add(name=SORROW; val=5)",
       "fixed": false,
       "accept_influence": [
         "qingliu_benefit_type"

@@ -12,64 +12,64 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_e6gro"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_sa0jl"]
 
-[sub_resource type="Resource" id="Resource_01ouk"]
+[sub_resource type="Resource" id="Resource_2ap6r"]
 script = ExtResource("3_6ullp")
 str_props = "literary_fame"
 value = 3
 
-[sub_resource type="Resource" id="Resource_82u7d"]
+[sub_resource type="Resource" id="Resource_eyd51"]
 script = ExtResource("3_6ullp")
 str_props = "health"
 value = -20
 
-[sub_resource type="Resource" id="Resource_6ullp"]
+[sub_resource type="Resource" id="Resource_da5ji"]
 script = ExtResource("3_6ullp")
 str_props = "health"
 value = -20
 
-[sub_resource type="Resource" id="Resource_2yt4s"]
+[sub_resource type="Resource" id="Resource_d4vnh"]
 script = ExtResource("4_2yt4s")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ckxfs"]
+[sub_resource type="Resource" id="Resource_74eh8"]
 script = ExtResource("5_ckxfs")
-operators = Array[ExtResource("2_82u7d")]([SubResource("Resource_01ouk"), SubResource("Resource_82u7d"), SubResource("Resource_6ullp"), SubResource("Resource_2yt4s")])
+operators = Array[ExtResource("2_82u7d")]([SubResource("Resource_2ap6r"), SubResource("Resource_eyd51"), SubResource("Resource_da5ji"), SubResource("Resource_d4vnh")])
 
-[sub_resource type="Resource" id="Resource_tcdch"]
+[sub_resource type="Resource" id="Resource_n1mdh"]
 script = ExtResource("6_tcdch")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_6xrml"]
+[sub_resource type="Resource" id="Resource_5o4gi"]
 script = ExtResource("7_6xrml")
-choice_result = SubResource("Resource_ckxfs")
-requirement = SubResource("Resource_tcdch")
+choice_result = SubResource("Resource_74eh8")
+requirement = SubResource("Resource_n1mdh")
 description = "你捡起纸，啐口唾沫在砚台上，提笔改掉他第三联的韵脚。"
 
-[sub_resource type="Resource" id="Resource_7lq6b"]
+[sub_resource type="Resource" id="Resource_hgwcn"]
 script = ExtResource("6_tcdch")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_3w3gx"]
+[sub_resource type="Resource" id="Resource_bv1sw"]
 script = ExtResource("9_3w3gx")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_e6gro"]
+[sub_resource type="Resource" id="Resource_ktlbb"]
 script = ExtResource("9_3w3gx")
-volatile_stat = "AMBITION"
+volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_sa0jl"]
+[sub_resource type="Resource" id="Resource_0jhl4"]
 script = ExtResource("10_e6gro")
-operators = Array[ExtResource("8_7lq6b")]([SubResource("Resource_7lq6b"), SubResource("Resource_3w3gx"), SubResource("Resource_e6gro")])
+operators = Array[ExtResource("8_7lq6b")]([SubResource("Resource_hgwcn"), SubResource("Resource_bv1sw"), SubResource("Resource_ktlbb")])
 
 [resource]
 script = ExtResource("11_sa0jl")
-requirement = SubResource("Resource_sa0jl")
+requirement = SubResource("Resource_0jhl4")
 era = "747_kuangda"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "ACTOR_EMOTION_ARROGANCE", "emotion_pair:pair_arrogance", "action:main:jiaoyou"])
-options = Array[ExtResource("1_01ouk")]([SubResource("Resource_6xrml")])
+options = Array[ExtResource("1_01ouk")]([SubResource("Resource_5o4gi")])
 uuid = "kuangke_qingliu_libai_emotion_arrogance_identity_qingliu_owner"
 name = "纸与仇"
 description = "黄昏时分，李白蹲在下杜城陋室的矮墙头上，像只鹞子。他从怀里掏出一卷纸扔下来，墨迹张牙舞爪，像是写的时候笔跟纸有仇。「前两天写的，第三联总觉得不够劲。」纸卷散开在泥地上，黄昏的光把那些潦草的字迹压得很低。屋里没有点灯。"

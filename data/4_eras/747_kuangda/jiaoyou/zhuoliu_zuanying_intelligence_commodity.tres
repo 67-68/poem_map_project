@@ -10,156 +10,156 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="8_4tsgw"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_3rar6"]
 
-[sub_resource type="Resource" id="Resource_fajgr"]
-script = ExtResource("3_ag3qu")
-str_props = "health"
-value = 6
-
-[sub_resource type="Resource" id="Resource_ccb6t"]
-script = ExtResource("4_dj8pu")
-value = 6
-
-[sub_resource type="Resource" id="Resource_ag3qu"]
-script = ExtResource("3_ag3qu")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_dj8pu"]
-script = ExtResource("3_ag3qu")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_nxmje"]
-script = ExtResource("3_ag3qu")
-str_props = "progress"
-value = 3
-
-[sub_resource type="Resource" id="Resource_owk7t"]
-script = ExtResource("3_ag3qu")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_pb5sp"]
-script = ExtResource("4_dj8pu")
-value = 11
-
-[sub_resource type="Resource" id="Resource_4tsgw"]
-script = ExtResource("5_nxmje")
-operators = Array[ExtResource("2_ccb6t")]([SubResource("Resource_fajgr"), SubResource("Resource_ccb6t"), SubResource("Resource_ag3qu"), SubResource("Resource_dj8pu"), SubResource("Resource_nxmje"), SubResource("Resource_owk7t"), SubResource("Resource_pb5sp")])
-
-[sub_resource type="Resource" id="Resource_3rar6"]
-script = ExtResource("6_owk7t")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
 [sub_resource type="Resource" id="Resource_t7luo"]
-script = ExtResource("7_pb5sp")
-choice_result = SubResource("Resource_4tsgw")
-requirement = SubResource("Resource_3rar6")
-description = "拂袖将茶碗扫落，纸条在湿痕里裂成两半。"
+script = ExtResource("3_ag3qu")
+str_props = "health"
+value = 6
 
 [sub_resource type="Resource" id="Resource_54edx"]
-script = ExtResource("3_ag3qu")
-str_props = "health"
+script = ExtResource("4_dj8pu")
 value = 6
 
 [sub_resource type="Resource" id="Resource_ram40"]
-script = ExtResource("4_dj8pu")
-value = 6
-
-[sub_resource type="Resource" id="Resource_6uuno"]
 script = ExtResource("3_ag3qu")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_bvgu1"]
+[sub_resource type="Resource" id="Resource_6uuno"]
 script = ExtResource("3_ag3qu")
 str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_bvgu1"]
+script = ExtResource("3_ag3qu")
+str_props = "progress"
 value = 3
 
 [sub_resource type="Resource" id="Resource_wu02j"]
 script = ExtResource("3_ag3qu")
-str_props = "progress"
-value = 1
-
-[sub_resource type="Resource" id="Resource_hs62a"]
-script = ExtResource("3_ag3qu")
-str_props = "money"
+str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_bxinf"]
+[sub_resource type="Resource" id="Resource_hs62a"]
 script = ExtResource("4_dj8pu")
 value = 11
 
-[sub_resource type="Resource" id="Resource_kgd41"]
+[sub_resource type="Resource" id="Resource_bxinf"]
 script = ExtResource("5_nxmje")
-operators = Array[ExtResource("2_ccb6t")]([SubResource("Resource_54edx"), SubResource("Resource_ram40"), SubResource("Resource_6uuno"), SubResource("Resource_bvgu1"), SubResource("Resource_wu02j"), SubResource("Resource_hs62a"), SubResource("Resource_bxinf")])
+operators = Array[ExtResource("2_ccb6t")]([SubResource("Resource_t7luo"), SubResource("Resource_54edx"), SubResource("Resource_ram40"), SubResource("Resource_6uuno"), SubResource("Resource_bvgu1"), SubResource("Resource_wu02j"), SubResource("Resource_hs62a")])
 
-[sub_resource type="Resource" id="Resource_jbiyl"]
+[sub_resource type="Resource" id="Resource_kgd41"]
 script = ExtResource("6_owk7t")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_r30li"]
+[sub_resource type="Resource" id="Resource_jbiyl"]
 script = ExtResource("7_pb5sp")
-choice_result = SubResource("Resource_kgd41")
-requirement = SubResource("Resource_jbiyl")
-description = "双手接过那张报价单，脸上堆出笑容，腰已弯下三分。"
+choice_result = SubResource("Resource_bxinf")
+requirement = SubResource("Resource_kgd41")
+description = "拂袖将茶碗扫落，纸条在湿痕里裂成两半。"
 
-[sub_resource type="Resource" id="Resource_lywtj"]
+[sub_resource type="Resource" id="Resource_r30li"]
 script = ExtResource("3_ag3qu")
 str_props = "health"
 value = 6
 
-[sub_resource type="Resource" id="Resource_bqg3n"]
+[sub_resource type="Resource" id="Resource_lywtj"]
 script = ExtResource("4_dj8pu")
 value = 6
 
-[sub_resource type="Resource" id="Resource_olhgl"]
+[sub_resource type="Resource" id="Resource_bqg3n"]
 script = ExtResource("3_ag3qu")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_0htp8"]
+[sub_resource type="Resource" id="Resource_olhgl"]
 script = ExtResource("3_ag3qu")
 str_props = "literary_fame"
 value = 3
 
+[sub_resource type="Resource" id="Resource_0htp8"]
+script = ExtResource("3_ag3qu")
+str_props = "progress"
+value = 1
+
 [sub_resource type="Resource" id="Resource_qwva2"]
 script = ExtResource("3_ag3qu")
 str_props = "money"
-value = 16
+value = -3
 
 [sub_resource type="Resource" id="Resource_r3ppu"]
+script = ExtResource("4_dj8pu")
+value = 11
+
+[sub_resource type="Resource" id="Resource_r2hwk"]
+script = ExtResource("5_nxmje")
+operators = Array[ExtResource("2_ccb6t")]([SubResource("Resource_r30li"), SubResource("Resource_lywtj"), SubResource("Resource_bqg3n"), SubResource("Resource_olhgl"), SubResource("Resource_0htp8"), SubResource("Resource_qwva2"), SubResource("Resource_r3ppu")])
+
+[sub_resource type="Resource" id="Resource_uxohd"]
+script = ExtResource("6_owk7t")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_oajoy"]
+script = ExtResource("7_pb5sp")
+choice_result = SubResource("Resource_r2hwk")
+requirement = SubResource("Resource_uxohd")
+description = "双手接过那张报价单，脸上堆出笑容，腰已弯下三分。"
+
+[sub_resource type="Resource" id="Resource_6ov3l"]
 script = ExtResource("3_ag3qu")
 str_props = "health"
 value = 6
 
-[sub_resource type="Resource" id="Resource_r2hwk"]
+[sub_resource type="Resource" id="Resource_jgx27"]
+script = ExtResource("4_dj8pu")
+value = 6
+
+[sub_resource type="Resource" id="Resource_dagsc"]
+script = ExtResource("3_ag3qu")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_srils"]
+script = ExtResource("3_ag3qu")
+str_props = "literary_fame"
+value = 3
+
+[sub_resource type="Resource" id="Resource_w0cpt"]
+script = ExtResource("3_ag3qu")
+str_props = "money"
+value = 16
+
+[sub_resource type="Resource" id="Resource_cfyo5"]
+script = ExtResource("3_ag3qu")
+str_props = "health"
+value = 6
+
+[sub_resource type="Resource" id="Resource_uddve"]
 script = ExtResource("4_dj8pu")
 value = 11
 
-[sub_resource type="Resource" id="Resource_uxohd"]
+[sub_resource type="Resource" id="Resource_jkboj"]
 script = ExtResource("5_nxmje")
-operators = Array[ExtResource("2_ccb6t")]([SubResource("Resource_lywtj"), SubResource("Resource_bqg3n"), SubResource("Resource_olhgl"), SubResource("Resource_0htp8"), SubResource("Resource_qwva2"), SubResource("Resource_r3ppu"), SubResource("Resource_r2hwk")])
+operators = Array[ExtResource("2_ccb6t")]([SubResource("Resource_6ov3l"), SubResource("Resource_jgx27"), SubResource("Resource_dagsc"), SubResource("Resource_srils"), SubResource("Resource_w0cpt"), SubResource("Resource_cfyo5"), SubResource("Resource_uddve")])
 
-[sub_resource type="Resource" id="Resource_oajoy"]
+[sub_resource type="Resource" id="Resource_n16j0"]
 script = ExtResource("7_pb5sp")
-choice_result = SubResource("Resource_uxohd")
+choice_result = SubResource("Resource_jkboj")
 description = "指尖压住纸条一角，不翻也不推，只问他要的这个名字，市价几何。"
 
-[sub_resource type="Resource" id="Resource_6ov3l"]
+[sub_resource type="Resource" id="Resource_twrva"]
 script = ExtResource("8_4tsgw")
 trait_name = "kuangda_zuanying"
 
 [resource]
 script = ExtResource("9_3rar6")
-requirement = SubResource("Resource_6ov3l")
+requirement = SubResource("Resource_twrva")
 era = "747_kuangda"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:medicine_stall", "ENV_NATURE_NIGHTMOON:dry_lips", "action:main:jiaoyou"])
-options = Array[ExtResource("1_fajgr")]([SubResource("Resource_t7luo"), SubResource("Resource_r30li"), SubResource("Resource_oajoy")])
+options = Array[ExtResource("1_fajgr")]([SubResource("Resource_jbiyl"), SubResource("Resource_oajoy"), SubResource("Resource_n16j0")])
 uuid = "zhuoliu_zuanying_intelligence_commodity"
 name = "茶案上的价码"
 description = "东市茶肆二楼临窗的位置，一个绸缎商把一张纸条推过案面。纸上只写着一个官员的名字，墨迹已干。他将茶碗搁在纸条旁边，碗底在纸上压出一圈湿痕。“上次你在盐商老张那儿‘问’的事，我听说过。”目光越过碗沿，不紧不慢地看着你，“我不是来为难你的。我也是来做生意的。”窗外楼下，东市的骡马队正在卸货，鞭子抽在青石板上的声响传上来。绸缎商从袖口又抽出一张叠好的纸，“这是价钱。你看看。”"

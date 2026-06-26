@@ -8,40 +8,6 @@
 [ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="6_sf3mk"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_8qmei"]
 
-[sub_resource type="Resource" id="Resource_357ri"]
-script = ExtResource("3_n76ke")
-str_props = "money"
-value = -2
-
-[sub_resource type="Resource" id="Resource_qk0f5"]
-script = ExtResource("3_n76ke")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_n76ke"]
-script = ExtResource("3_n76ke")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_gjlvd"]
-script = ExtResource("3_n76ke")
-str_props = "progress"
-value = 2
-
-[sub_resource type="Resource" id="Resource_5vgu5"]
-script = ExtResource("3_n76ke")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_sf3mk"]
-script = ExtResource("4_gjlvd")
-operators = Array[ExtResource("2_qk0f5")]([SubResource("Resource_357ri"), SubResource("Resource_qk0f5"), SubResource("Resource_n76ke"), SubResource("Resource_gjlvd"), SubResource("Resource_5vgu5")])
-
-[sub_resource type="Resource" id="Resource_8qmei"]
-script = ExtResource("5_5vgu5")
-choice_result = SubResource("Resource_sf3mk")
-description = "从袖中取出一文钱压在碗底，起身推门走入夜色。"
-
 [sub_resource type="Resource" id="Resource_n8ayg"]
 script = ExtResource("3_n76ke")
 str_props = "money"
@@ -60,30 +26,31 @@ value = -3
 [sub_resource type="Resource" id="Resource_4roqf"]
 script = ExtResource("3_n76ke")
 str_props = "progress"
-value = 1
+value = 2
 
 [sub_resource type="Resource" id="Resource_1sb6t"]
 script = ExtResource("3_n76ke")
-str_props = "money"
+str_props = "health"
 value = -3
 
 [sub_resource type="Resource" id="Resource_kabfd"]
-script = ExtResource("6_sf3mk")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+script = ExtResource("4_gjlvd")
+operators = Array[ExtResource("2_qk0f5")]([SubResource("Resource_n8ayg"), SubResource("Resource_m25mo"), SubResource("Resource_ni7o7"), SubResource("Resource_4roqf"), SubResource("Resource_1sb6t")])
 
 [sub_resource type="Resource" id="Resource_gf8sa"]
-script = ExtResource("4_gjlvd")
-operators = Array[ExtResource("2_qk0f5")]([SubResource("Resource_n8ayg"), SubResource("Resource_m25mo"), SubResource("Resource_ni7o7"), SubResource("Resource_4roqf"), SubResource("Resource_1sb6t"), SubResource("Resource_kabfd")])
+script = ExtResource("5_5vgu5")
+choice_result = SubResource("Resource_kabfd")
+description = "从袖中取出一文钱压在碗底，起身推门走入夜色。"
 
 [sub_resource type="Resource" id="Resource_3myw3"]
-script = ExtResource("5_5vgu5")
-choice_result = SubResource("Resource_gf8sa")
-description = "对店家拱手，斟满空碗，一饮而尽后搁下铜钱离去。"
-
-[sub_resource type="Resource" id="Resource_vaysb"]
 script = ExtResource("3_n76ke")
 str_props = "money"
 value = -2
+
+[sub_resource type="Resource" id="Resource_vaysb"]
+script = ExtResource("3_n76ke")
+str_props = "health"
+value = -3
 
 [sub_resource type="Resource" id="Resource_tgdd0"]
 script = ExtResource("3_n76ke")
@@ -92,38 +59,71 @@ value = -3
 
 [sub_resource type="Resource" id="Resource_mk1k7"]
 script = ExtResource("3_n76ke")
+str_props = "progress"
+value = 1
+
+[sub_resource type="Resource" id="Resource_70efy"]
+script = ExtResource("3_n76ke")
+str_props = "money"
+value = -3
+
+[sub_resource type="Resource" id="Resource_2aqr4"]
+script = ExtResource("6_sf3mk")
+imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+
+[sub_resource type="Resource" id="Resource_tyamn"]
+script = ExtResource("4_gjlvd")
+operators = Array[ExtResource("2_qk0f5")]([SubResource("Resource_3myw3"), SubResource("Resource_vaysb"), SubResource("Resource_tgdd0"), SubResource("Resource_mk1k7"), SubResource("Resource_70efy"), SubResource("Resource_2aqr4")])
+
+[sub_resource type="Resource" id="Resource_h3yad"]
+script = ExtResource("5_5vgu5")
+choice_result = SubResource("Resource_tyamn")
+description = "对店家拱手，斟满空碗，一饮而尽后搁下铜钱离去。"
+
+[sub_resource type="Resource" id="Resource_mq1gs"]
+script = ExtResource("3_n76ke")
+str_props = "money"
+value = -2
+
+[sub_resource type="Resource" id="Resource_2qb7f"]
+script = ExtResource("3_n76ke")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_70efy"]
+[sub_resource type="Resource" id="Resource_rwela"]
+script = ExtResource("3_n76ke")
+str_props = "health"
+value = -3
+
+[sub_resource type="Resource" id="Resource_5hxan"]
 script = ExtResource("3_n76ke")
 str_props = "progress"
 value = -1
 
-[sub_resource type="Resource" id="Resource_2aqr4"]
+[sub_resource type="Resource" id="Resource_5np22"]
 script = ExtResource("3_n76ke")
 str_props = "money"
 value = 4
 
-[sub_resource type="Resource" id="Resource_tyamn"]
+[sub_resource type="Resource" id="Resource_dq0ny"]
 script = ExtResource("3_n76ke")
 str_props = "health"
 value = -2
 
-[sub_resource type="Resource" id="Resource_h3yad"]
+[sub_resource type="Resource" id="Resource_kcnhb"]
 script = ExtResource("4_gjlvd")
-operators = Array[ExtResource("2_qk0f5")]([SubResource("Resource_vaysb"), SubResource("Resource_tgdd0"), SubResource("Resource_mk1k7"), SubResource("Resource_70efy"), SubResource("Resource_2aqr4"), SubResource("Resource_tyamn")])
+operators = Array[ExtResource("2_qk0f5")]([SubResource("Resource_mq1gs"), SubResource("Resource_2qb7f"), SubResource("Resource_rwela"), SubResource("Resource_5hxan"), SubResource("Resource_5np22"), SubResource("Resource_dq0ny")])
 
-[sub_resource type="Resource" id="Resource_mq1gs"]
+[sub_resource type="Resource" id="Resource_8xrse"]
 script = ExtResource("5_5vgu5")
-choice_result = SubResource("Resource_h3yad")
+choice_result = SubResource("Resource_kcnhb")
 description = "向店家欠身道：“烦请代谢那位客官，杜某改日必往拜访。”"
 
 [resource]
 script = ExtResource("7_8qmei")
 era = "747_kuangda"
 _target_tags = Array[String](["emotion_pair:pair_survival", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "ACTION_SOCIAL_PARTING:willow_branch", "action:humiliation_hidden_charity", "TARGET_IDENTITY_VENDOR", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_ENTERTAIN_DRINK:empty_cup", "action:scene_duzhuo"])
-options = Array[ExtResource("1_357ri")]([SubResource("Resource_8qmei"), SubResource("Resource_3myw3"), SubResource("Resource_mq1gs")])
+options = Array[ExtResource("1_357ri")]([SubResource("Resource_gf8sa"), SubResource("Resource_h3yad"), SubResource("Resource_8xrse")])
 uuid = "duotai_humiliation_hidden_charity_gateway_duzhuo_identity_vendor"
 name = "无名酒账"
 description = "“那位客官说读过您的诗，这壶是他多要的。”酒壶搁在桌角，人已不见踪影。杜甫的视线落在壶沿未干的酒渍上，停了片刻。"
