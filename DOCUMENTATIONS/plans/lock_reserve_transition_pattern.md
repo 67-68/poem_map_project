@@ -6,7 +6,7 @@
 
 反之，有些场景需要"阻塞"某个行动，让它**暂时不可用**（比如角色受伤后不能练武），等到条件满足后再恢复。
 
-本系统提供了两对互斥的操作符（Operator）来管理行动的出现/隐藏逻辑。
+本系统提供了两对互斥的操作符（Operator）来管理行动的出现/隐藏逻辑，以及一个便捷的组合操作符（FocusActionOperator）。
 
 ---
 
@@ -129,6 +129,43 @@ BlockActionOperator.operate()
 ```
 
 **效果**：阻塞后的行动在阻塞期间**绝对不会出现在可用列表中**。
+
+#### [`FocusActionOperator`](../core/operators/focus_action_operator.gd) — 聚焦行动（Lock + Block 语义糖）
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `action_types` | `Array[ENUMS.ACTION_TYPE]` | 聚焦的行动枚举值列表 |
+| `xun_duration` | `int` | 持续旬数，-1 = 无限期 |
+
+**语义**：Focus = Lock(指定) + Block(其余全部)。聚光灯只打在指定 actions 上，其余全部关闭。
+
+**operate() 流程：**
+
+```
+FocusActionOperator.operate()
+  ├── 1. 计算 others = ENUMS.ACTION_TYPE.values() - focus_set
+  ├── 2. Block 所有 others（先 block）
+  │     └── ActionManager.block_action(at, xun_duration) for each other
+  ├── 3. Lock 所有 focus（后 lock，冲突解除 step 2 的 block）
+  │     └── ActionManager.lock_action(at, xun_duration) for each focus
+  ├── 4. 收集 locked SceneAction → EventBus.selected_actions_change.emit()
+  └── 5. EventBus.locked_actions_selected.emit()   按钮闪光
+```
+
+**为什么先 Block 再 Lock？** `ActionManager` 的冲突解决是 **后调用者赢**。先 Block 全部、再 Lock 指定，确保焦点 actions 最终处于 locked 状态。
+
+**效果**：
+- 聚焦的行动**必定出现在6格行动面板中**，其他行动全部被阻塞
+- UI 锁定：ActionMap 禁用非聚焦按钮，聚焦按钮闪光
+- 持续时间由 `xun_duration` 控制，到期自动解除
+
+**与 LockActionsOperator 的关键区别：**
+
+| 维度 | LockActionsOperator | FocusActionOperator |
+|------|-------------------|---------------------|
+| 非指定 action | 照常随机抽取 | **全部 Block** |
+| 底层操作 | 仅 Lock | Block(others) + Lock(focus) |
+| 适用场景 | 强制某行动出现（其他照常） | 聚光灯模式（只有这些可选） |
 
 ---
 
@@ -345,7 +382,11 @@ BlockActionOperator (受伤事件)
 │
 ├── 需要强制行动出现？
 │   ├── 需要 UI 锁定（其他按钮禁用）+ 跨回合持久？
-│   │   └── LockActionsOperator
+│   │   ├── 只锁定指定行动，其他照常？
+│   │   │   └── LockActionsOperator
+│   │   │
+│   │   └── 锁定指定行动 + 阻塞其余全部（聚光灯）？
+│   │       └── FocusActionOperator
 │   │
 │   └── 只需要确保本回合出现在6格中，不锁UI？
 │       └── 待实现 ReserveActionOperator
@@ -407,6 +448,7 @@ Panel │  6格全满     │  1锁定+5随机│  1锁定+5随机│  正常6�
 |------|------|
 | [`core/action_manager.gd`](../core/action_manager.gd) | 核心数据结构和 lock/block/reserve/unlock/unblock 逻辑 |
 | [`core/operators/lock_actions_operator.gd`](../core/operators/lock_actions_operator.gd) | LockActionsOperator — 锁定行动 + UI 锁定 |
+| [`core/operators/focus_action_operator.gd`](../core/operators/focus_action_operator.gd) | FocusActionOperator — 聚焦行动（Lock + Block 语义糖） |
 | [`core/operators/block_action_operator.gd`](../core/operators/block_action_operator.gd) | BlockActionOperator — 阻塞行动 |
 | [`core/operators/refresh_action_panel_operator.gd`](../core/operators/refresh_action_panel_operator.gd) | RefreshActionPanelOperator — UI 刷新 |
 | `core/operators/reserve_action_operator.gd` | ReserveActionOperator — **待实现** |
