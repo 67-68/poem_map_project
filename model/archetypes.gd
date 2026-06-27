@@ -1,3 +1,5 @@
+## 情绪/叙事 Archetype 系统（非事件库 Archetype）
+## 定义六种叙事基调及其情绪效果。事件库 Archetype 见 tools/data/event_archetypes.json
 class_name Archetypes extends RefCounted
 enum ARCHETYPE {
 	RECKLESS,       # 狂放 / 纵酒 / 藐视权威

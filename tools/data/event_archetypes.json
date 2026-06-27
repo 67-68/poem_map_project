@@ -3,8 +3,36 @@
   "baiye": {
     "name": "拜谒",
     "parent": "",
-    "universal_requirement": "prop_gt(name=progress; val=70)|prop_lt(name=progress; val=100)",
-    "universal_result": "prop_add(name=progress; val=5)",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=m_money_cost)|prop_add(name=progress; val=m_progress)",
+    "era": ""
+  },
+  "fangshi": {
+    "name": "坊市",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_add(name=health; val=m_health_loss)|prop_add(name=money; val=l_money_gain)",
+    "era": ""
+  },
+  "denggao": {
+    "name": "登高",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_add(name=health; val=l_health_buff)",
+    "era": ""
+  },
+  "duzhuo": {
+    "name": "独酌",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_add(name=health; val=s_health_loss)|prop_sub(name=money; val=s_money_cost)|all_emo_sub(val=mid_emo_val)",
+    "era": ""
+  },
+  "jiaoyou": {
+    "name": "交游",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=literary_fame; val=small_literary_fame)",
     "era": ""
   },
   "kuangke_baiye": {

@@ -90,6 +90,8 @@ const FUNC_IMAGINARY_SET_LEVEL := "imaginary_set_level"      # 🆕 设置两段
 const FUNC_PLAY_TRANSITION := "play_transition"
 const FUNC_LEVERAGE_ADD := "leverage_add"
 const FUNC_INFO := "info"
+const FUNC_ALL_EMO_SUB := "all_emo_sub"
+const FUNC_ADD_SOCIAL_CREDIT := "add_social_credit"
 
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
@@ -163,6 +165,9 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_PLAY_TRANSITION] = func(p, r): return _exec_play_transition_op(p, r)
 	cd[FUNC_LEVERAGE_ADD] = func(p, r): return _exec_leverage_add_op(p, r)
 	cd[FUNC_INFO] = func(p, r): return _exec_info_op(p, r)
+	# ── New Archetype Operators ──
+	cd[FUNC_ALL_EMO_SUB] = func(p, r): return _exec_all_emo_sub_op(p, r)
+	cd[FUNC_ADD_SOCIAL_CREDIT] = func(p, r): return _exec_add_social_credit_op(p, r)
 	# ── Image Operators ──
 	cd[FUNC_IMAGE_PRESENT] = func(p, r): return _exec_image_present_op(p, r)
 	cd[FUNC_IMAGE_SLIDE] = func(p, r): return _exec_image_slide_op(p, r)
@@ -1240,4 +1245,39 @@ static func _exec_info_op(parsed: NamedDSLParser.ParseResult, raw: String) -> In
 	var op = InfoDemoOperator.new()
 	op.info = msg
 	Logging.info("info operator 创建成功: msg=%s" % msg)
+	return op
+
+
+# ─── all_emo_sub ───────────────────────────────────────
+
+# DSL 语法: all_emo_sub(val=mid_emo_val)
+# 对所有情绪执行 reduce_to_lowest_zero 操作，减去指定值。
+# 解析为 AllEmoSubOperator
+static func _exec_all_emo_sub_op(parsed: NamedDSLParser.ParseResult, raw: String) -> BaseOperator:
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	if val == 0:
+		Logging.err("all_emo_sub 缺少 val 参数: %s" % raw)
+		return null
+
+	var op := AllEmoSubOperator.new()
+	op.value = val
+	Logging.info("all_emo_sub operator 创建成功: val=%d" % val)
+	return op
+
+
+# ─── add_social_credit ─────────────────────────────────
+
+# DSL 语法: add_social_credit(val=10)
+# 社交系统暂未实装，当前代理到 literary_fame 并发出警告。
+static func _exec_add_social_credit_op(parsed: NamedDSLParser.ParseResult, raw: String) -> BaseOperator:
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	if val == 0:
+		Logging.err("add_social_credit 缺少 val 参数: %s" % raw)
+		return null
+
+	Logging.warn("add_social_credit: 社交系统目前没有装，目前只有 literary_fame 的效果 (%s)" % raw)
+
+	var op := PropertyOperator.new()
+	op.str_props = "literary_fame"
+	op.value = val
 	return op

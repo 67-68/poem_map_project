@@ -1,4 +1,3 @@
-@tool
 class_name PropertyOperator extends BaseOperator
 
 @export var _property: ENUMS.PROPS = -1
@@ -16,12 +15,23 @@ var property := '':
 @export var context_key_for_multiplication: String = "property_multiplication"
 
 func init(_context: Dictionary) -> Dictionary:
+    # 动态解析 str_props -> _property enum（优先使用 str 属性）
+    if not str_props.is_empty():
+        var found := false
+        for i in ENUMS.PROPS.size():
+            if ENUMS.PROPS.keys()[i].to_lower() == str_props.to_lower():
+                _property = i
+                found = true
+                break
+        if not found:
+            Logging.warn("PropertyOperator.init: str_props '%s' 无法解析为 PROPS 枚举" % str_props)
+
     if _context.has(context_key_for_multiplication):
         var ctx_val = _context[context_key_for_multiplication]
         if typeof(ctx_val) in [TYPE_FLOAT, TYPE_INT]:
             var original_value = value
             value = int(float(value) * float(ctx_val))
-            Logging.debug("PropertyOperator: Multiplying value %d by context[%s]=%.2f → %d" % [original_value, context_key_for_multiplication, float(ctx_val), value])
+            Logging.debug("PropertyOperator: Multiplying value %d by context[%s]=%.2f -> %d" % [original_value, context_key_for_multiplication, float(ctx_val), value])
         else:
             Logging.warn("PropertyOperator: context[%s] has unexpected type %s, skipping multiplication" % [context_key_for_multiplication, typeof(ctx_val)])
     else:
@@ -31,8 +41,6 @@ func init(_context: Dictionary) -> Dictionary:
 func operate():
     Logging.debug("PropertyOperator.operate: property=%s, value=%d" % [property, value])
     PlayerState.append_stat(property, value)
-    
-    # ── 飘字反馈：属性变化后 emit 模糊文本 ──
     _emit_float_text(value)
 
 func _emit_float_text(delta: int) -> void:
@@ -49,8 +57,6 @@ func _emit_float_text(delta: int) -> void:
     if perception_text.is_empty():
         Logging.debug("PropertyOperator._emit_float_text: perception_text is empty, skip")
         return
-    
-    # FloatingText 现在使用 Control 自动定位到屏幕顶部居中
     Logging.debug("PropertyOperator._emit_float_text: emitting request_float_text('%s')" % perception_text)
     EventBus.request_float_text.emit(perception_text)
 

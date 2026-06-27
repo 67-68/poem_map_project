@@ -29,5 +29,21 @@
 	"small_emotion_delta": 5,
 	"medium_emotion_delta": 10,
 	"large_emotion_delta": 15,
-	"huge_emotion_delta": 20
+	"huge_emotion_delta": 20,
+
+	"_comment_matrix": "S/M/L 行动级刻度 — 与 action_resource_matrix 矩阵对齐 (2026.6.27)",
+
+	"s_health_loss": -15,
+	"m_health_loss": -30,
+	"s_health_buff": 15,
+	"l_health_buff": 50,
+
+	"s_money_cost": 20,
+	"m_money_cost": 50,
+	"l_money_gain": 100,
+
+	"s_progress": 1,
+	"m_progress": 5,
+
+	"mid_emo_val": 10
 }
