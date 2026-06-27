@@ -1,4 +1,3 @@
-const _FloatingText = preload("res://world/floating_text.gd")
 class_name PoolManager extends Node
 
 var _pool: Array[FloatingText] = []

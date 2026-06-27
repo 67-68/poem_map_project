@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://c45m34soj5yo5"
+
+[deps]
+
+files=["res://data/1_core_rules/disease/_disease_events.uuid.translation", "res://data/1_core_rules/disease/_disease_events.context.translation", "res://data/1_core_rules/disease/_disease_events.requirements.translation", "res://data/1_core_rules/disease/_disease_events.title.translation", "res://data/1_core_rules/disease/_disease_events.description.translation", "res://data/1_core_rules/disease/_disease_events.results.translation"]
+
+source_file="res://data/1_core_rules/disease/_disease_events.csv"
+dest_files=["res://data/1_core_rules/disease/_disease_events.uuid.translation", "res://data/1_core_rules/disease/_disease_events.context.translation", "res://data/1_core_rules/disease/_disease_events.requirements.translation", "res://data/1_core_rules/disease/_disease_events.title.translation", "res://data/1_core_rules/disease/_disease_events.description.translation", "res://data/1_core_rules/disease/_disease_events.results.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

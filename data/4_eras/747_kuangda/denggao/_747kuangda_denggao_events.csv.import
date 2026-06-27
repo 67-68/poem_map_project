@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bxy0ru6bh0bc3"
+
+[deps]
+
+files=["res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.uuid.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.context.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.requirements.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.title.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.description.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.results.translation"]
+
+source_file="res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.csv"
+dest_files=["res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.uuid.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.context.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.requirements.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.title.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.description.translation", "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.results.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
