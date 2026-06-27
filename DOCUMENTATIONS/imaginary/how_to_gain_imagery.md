@@ -37,8 +37,8 @@ func get_active_imaginary_count() -> int:
     return count
 ```
 
-**参考实现：** <ref_file file="/Users/lennon/Projects/poem_map_project/tests/imaginary_label.gd" lines="8-17" />
+**参考实现：** <ref_file file="/Users/a67_68/projects/dufu_simulator/tests/imaginary_label.gd" lines="8-17" />
 
-**数据结构：** <ref_file file="/Users/lennon/Projects/poem_map_project/core/model/imaginary.gd" lines="14" />
+**数据结构：** <ref_file file="/Users/a67_68/projects/dufu_simulator/core/model/imaginary.gd" lines="14" />
 
 简单来说：`basic_imaginaries.size()`就是该imaginary获得的总次数，遍历求和就是全局总数 🎭

@@ -7,34 +7,34 @@
 ## 🔄 实际生命周期流程
 
 ### 1. **设置点**（注入标签）
-- **执行Action时**（<<ref_file file="/Users/lennon/Projects/poem_map_project/ui/scene_action_panel.gd" line="21" />）：
+- **执行Action时**（<<ref_file file="/Users/a67_68/projects/dufu_simulator/ui/scene_action_panel.gd" line="21" />）：
   ```gdscript
   PlayerState.current_action_tags.append_array(action.action_tags)
   EventManager.scan_events(0)
   ```
-- **时间流逝时**（<<ref_file file="/Users/lennon/Projects/poem_map_project/core/model/time_operator.gd" lines="13-16" />）：
+- **时间流逝时**（<<ref_file file="/Users/a67_68/projects/dufu_simulator/core/model/time_operator.gd" lines="13-16" />）：
   ```gdscript
   PlayerState.current_action_tags = source_tags
   TimeService.advance_time(int(day))
   PlayerState.current_action_tags.clear()
   ```
-- **死亡判定时**（<<ref_file file="/Users/lennon/Projects/poem_map_project/core/survival_manager.gd" line="26" />）：
+- **死亡判定时**（<<ref_file file="/Users/a67_68/projects/dufu_simulator/core/survival_manager.gd" line="26" />）：
   ```gdscript
   PlayerState.current_action_tags.append('actor:health:death:general')
   EventManager.scan_death_events()
   ```
-- **制作诗词时**（<<ref_file file="/Users/lennon/Projects/poem_map_project/ui/poem_crafter.gd" line="127" />）：
+- **制作诗词时**（<<ref_file file="/Users/a67_68/projects/dufu_simulator/ui/poem_crafter.gd" line="127" />）：
   ```gdscript
   PlayerState.current_action_tags.append(tag)
   EventManager.scan_poem_events(imas)
   ```
 
 ### 2. **清除点**（释放标签）
-- **事件扫描Filter后**（<<ref_file file="/Users/lennon/Projects/poem_map_project/core/model/action_tag_filter.gd" line="43" />）：
+- **事件扫描Filter后**（<<ref_file file="/Users/a67_68/projects/dufu_simulator/core/model/action_tag_filter.gd" line="43" />）：
   ```gdscript
   PlayerState.current_action_tags.clear()
   ```
-- **时间操作完成后**（<<ref_file file="/Users/lennon/Projects/poem_map_project/core/model/time_operator.gd" line="16" />）：
+- **时间操作完成后**（<<ref_file file="/Users/a67_68/projects/dufu_simulator/core/model/time_operator.gd" line="16" />）：
   ```gdscript
   PlayerState.current_action_tags.clear()
   ```
@@ -44,7 +44,7 @@
 
 ## ⚠️ 潜在风险
 
-**关键问题**：`current_action_tags`被声明为`@export var`（<<ref_file file="/Users/lennon/Projects/poem_map_project/core/player_state.gd" line="11" />）：
+**关键问题**：`current_action_tags`被声明为`@export var`（<<ref_file file="/Users/a67_68/projects/dufu_simulator/core/player_state.gd" line="11" />）：
 
 ```gdscript
 @export var current_action_tags: Array[String] = []

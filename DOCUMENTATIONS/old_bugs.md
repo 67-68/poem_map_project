@@ -72,11 +72,11 @@ Scene Action的`action_tags`和Random Event的`target_tags`之间存在标签格
    - `survival_manager.gd` - 已是四段式，无需修改
 
 ### 修复文件
-- <ref_file file="/Users/lennon/Projects/poem_map_project/ui/scene_action_panel.gd" />
-- <ref_file file="/Users/lennon/Projects/poem_map_project/core/model/action_tag_filter.gd" />
-- <ref_file file="/Users/lennon/Projects/poem_map_project/core/model/time_operator.gd" />
-- <ref_file file="/Users/lennon/Projects/poem_map_project/ui/poem_crafter.gd" />
-- <ref_file file="/Users/lennon/Projects/poem_map_project/core/survival_manager.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/ui/scene_action_panel.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/core/model/action_tag_filter.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/core/model/time_operator.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/ui/poem_crafter.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/core/survival_manager.gd" />
 
 ## 2026-05-24: 枚举重构后RandomEvent数据文件未同步导致tag值超出范围
 
@@ -102,9 +102,9 @@ Scene Action的`action_tags`和Random Event的`target_tags`之间存在标签格
 3. 验证修复后运行event_action_tag_linter确保没有遗留的无效标签
 
 ### 修复文件
-- <ref_file file="/Users/lennon/Projects/poem_map_project/data/tres_random_event/normal_bai_ye.tres" />
-- <ref_file file="/Users/lennon/Projects/poem_map_project/model/enumerates.gd" />
-- <ref_file file="/Users/lennon/Projects/poem_map_project/model/random_event.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/data/tres_random_event/normal_bai_ye.tres" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/model/enumerates.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/model/random_event.gd" />
 
 
 ### 2025.05.25
@@ -152,9 +152,9 @@ Scene Action的`action_tags`和Random Event的`target_tags`之间存在标签格
    - 移除转换失败时的警告，因为动态trait只使用字符串是正常情况
 
 ### 修复文件
-- <ref_file file="/Users/lennon/Projects/poem_map_project/model/enumerates.gd" />
-- <ref_file file="/Users/lennon/Projects/poem_map_project/core/model/trait_operator.gd" />
-- <ref_file file="/Users/lennon/Projects/poem_map_project/parser/micro_dsl_parser.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/model/enumerates.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/core/model/trait_operator.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/parser/micro_dsl_parser.gd" />
 
 ## 2026-05-27: GameEntity._init 缺少默认参数 + MapMarker._init 断开了 super 链
 
@@ -264,7 +264,7 @@ CSV 中 `>option` 行指定 `template=urn:event_option:poem_giving_option` 时�
 2. 不要仅依赖 Inspector 的显示来判断数据完整性
 
 ### 修复文件
-- <ref_file file="/Users/lennon/Projects/poem_map_project/parser/dsl_parser.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/parser/dsl_parser.gd" />
 
 ### 关键教训
 1. **`resource_local_to_scene = true` 的 Resource 慎用 `duplicate()`** — 返回的对象属性访问行为异常
@@ -301,7 +301,7 @@ CSV 中 `>option` 行指定 `template=urn:event_option:poem_giving_option` 时�
 3. **CSV option 行的 uuid 列**是有副作用的 — 虽然 option UUID 有业务含义（引用），但它会污染基于文本解析的 registry 生成逻辑。
 
 ### 修复文件
-- <ref_file file="/Users/lennon/Projects/poem_map_project/resources_registry_creator.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/resources_registry_creator.gd" />
 
 ## 2026-05-28: MenuStartOperator 参数遮蔽成员变量导致 context 丢失
 
@@ -347,7 +347,7 @@ func operate():
 4. **移除断点**：去掉 `breakpoint`
 
 ### 修复文件
-- <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/menu_start_operator.gd" />
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/core/operators/menu_start_operator.gd" />
 
 ## 2026-05-29: Godot 4 导入缓存导致脚本修改不生效
 
@@ -402,10 +402,10 @@ rm -rf <project_root>/.godot/
 4. **对比「编辑器内显示的代码」和「实际运行的代码」** — 如果编辑器显示正确但行为不对，大概率是缓存问题
 
 ### 相关文件
-- <ref_file file="/Users/lennon/Projects/poem_map_project/parser/dsl_parser.gd" /> （代码正确，被缓存的旧版本坑了）
-- <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/trait_choose_operator.gd" /> （受影响的 operator）
-- <ref_file file="/Users/lennon/Projects/poem_map_project/core/operators/flag_operator.gd" /> （`taste_owner_relation_flag` 没传过来导致 flag_id 为空）
-- <ref_file file="/Users/lennon/Projects/poem_map_project/core/csv_cloud_loader.gd" /> （新增的清缓存按钮）
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/parser/dsl_parser.gd" /> （代码正确，被缓存的旧版本坑了）
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/core/operators/trait_choose_operator.gd" /> （受影响的 operator）
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/core/operators/flag_operator.gd" /> （`taste_owner_relation_flag` 没传过来导致 flag_id 为空）
+- <ref_file file="/Users/a67_68/projects/dufu_simulator/core/csv_cloud_loader.gd" /> （新增的清缓存按钮）
 
 ## 2026-05-30: ItemProvider 依赖上游 context 传递，事件链从中道切入导致列表为空
 

@@ -1,14 +1,16 @@
 
 FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
-# 安装基础脏活工具和 Python 环境
+# 安装基础脏活工具、Python 环境以及全局系统依赖
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
         wget unzip \
         python3 python3-pip python3-venv \
+        ripgrep libfontconfig1 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --no-cache-dir uv --break-system-packages
+
 
 # 定义 Godot 版本 (修改为你实际使用的版本)
 ARG GODOT_VERSION="4.6.3"

@@ -99,7 +99,7 @@ process_next_job()
             "command": "/home/vscode/mcp_venv/bin/mcp",
             "args": [
                 "run",
-                "/Users/lennon/Projects/poem_map_project/godot_mcp.py"
+                "/Users/a67_68/projects/dufu_simulator/godot_mcp.py"
             ],
             "disabled": false,
             "autoApprove": []
@@ -111,7 +111,7 @@ process_next_job()
 ### [`godot_mcp.py`](../godot_mcp.py) 关键常量
 
 ```python
-WORKSPACE_DIR = "/Users/lennon/Projects/poem_map_project"
+WORKSPACE_DIR = "/Users/a67_68/projects/dufu_simulator"
 ```
 
 ---
@@ -181,7 +181,7 @@ semantic_code_search(query="事件系统的三层铁幕契约是什么？")
             "command": "/home/vscode/mcp_venv/bin/mcp",
             "args": [
                 "run",
-                "/Users/lennon/Projects/poem_map_project/godot_rag_bridge.py"
+                "/Users/a67_68/projects/dufu_simulator/godot_rag_bridge.py"
             ],
             "disabled": false,
             "autoApprove": [],
@@ -227,7 +227,7 @@ semantic_code_search("查询文本")
 
 - Dockerfile 里设了 `WORKDIR /workspace`
 - 但 [`devcontainer.json`](../.devcontainer/devcontainer.json) 的 `workspaceMount` 把项目挂载到了**宿主机同路径** (`target=${localWorkspaceFolder}`)
-- 结果容器内的 `/workspace/` 是**空目录**，项目实际在 `/Users/lennon/Projects/poem_map_project`
+- 结果容器内的 `/workspace/` 是**空目录**，项目实际在 `/Users/a67_68/projects/dufu_simulator`
 
 **解决**: 将 `.roo/mcp.json` 和 `godot_mcp.py` 中的所有路径改为实际工作区路径。
 

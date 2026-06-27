@@ -1,10 +1,10 @@
 {
 	"mcpServers": {
 		"godot-tool": {
-			"command": "/Users/lennon/Projects/poem_map_project/.venv/bin/mcp",
+			"command": "/Users/a67_68/projects/dufu_simulator/.venv/bin/mcp",
 			"args": [
 				"run",
-				"/Users/lennon/Projects/poem_map_project/godot_mcp.py"
+				"/Users/a67_68/projects/dufu_simulator/godot_mcp.py"
 			],
 			"disabled": false,
 			"autoApprove": [],
@@ -14,10 +14,10 @@
 			]
 		},
 		"godot-runtime-probe": {
-			"command": "/Users/lennon/Projects/poem_map_project/.venv/bin/mcp",
+			"command": "/Users/a67_68/projects/dufu_simulator/.venv/bin/mcp",
 			"args": [
 				"run",
-				"/Users/lennon/Projects/poem_map_project/godot_probe_mcp.py"
+				"/Users/a67_68/projects/dufu_simulator/godot_probe_mcp.py"
 			],
 			"disabled": false,
 			"autoApprove": [],

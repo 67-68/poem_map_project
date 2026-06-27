@@ -9,7 +9,7 @@
   4. 组合总数符合预期
 
 用法:
-    cd /Users/lennon/Projects/poem_map_project
+    cd /Users/a67_68/projects/dufu_simulator
     .venv/bin/python tools/test_identity_expansion.py
 """
 

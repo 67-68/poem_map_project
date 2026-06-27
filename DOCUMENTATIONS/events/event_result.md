@@ -41,4 +41,4 @@ choice_result.operators.append(event_op)
 
 **反悔成本**：极低，删除 operator 即可
 
-**实际应用情况**：已广泛使用，见 <ref_file file="/Users/lennon/Projects/poem_map_project/data/tres_decisions/update_to_rank8_official.tres" />
+**实际应用情况**：已广泛使用，见 <ref_file file="/Users/a67_68/projects/dufu_simulator/data/tres_decisions/update_to_rank8_official.tres" />

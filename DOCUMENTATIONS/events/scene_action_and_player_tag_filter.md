@@ -4,7 +4,7 @@
 
 ## 1. Scene Action与地区标签匹配（Location-based）
 
-**匹配逻辑**（在<<ref_file file="/Users/lennon/Projects/poem_map_project/core/action_manager.gd" lines="29-40" />）：
+**匹配逻辑**（在<<ref_file file="/Users/a67_68/projects/dufu_simulator/core/action_manager.gd" lines="29-40" />）：
 
 ```gdscript
 # 检查标签匹配
@@ -27,7 +27,7 @@ if a.area_tags and not a.area_tags.is_empty():
 
 ## 2. 玩家标签与事件匹配（Action-based）
 
-**匹配逻辑**（在<<ref_file file="/Users/lennon/Projects/poem_map_project/core/model/action_tag_filter.gd" lines="15-45" />）：
+**匹配逻辑**（在<<ref_file file="/Users/a67_68/projects/dufu_simulator/core/model/action_tag_filter.gd" lines="15-45" />）：
 
 ```gdscript
 # 1. 没有标签的全局事件永远放行

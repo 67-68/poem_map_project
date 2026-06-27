@@ -25,28 +25,28 @@ ImaginaryManager (意象管理器)
 
 ### 关键节点详解 📋
 
-**1. 时间触发** (<ref_file file="/Users/lennon/Projects/poem_map_project/core/time_service.gd" lines="112-116" />)
+**1. 时间触发** (<ref_file file="/Users/a67_68/projects/dufu_simulator/core/time_service.gd" lines="112-116" />)
 - `TimeService._process()` 每帧更新游戏时间
 - 每旬（10天）触发 `on_xun_tick` 信号
 - EventManager监听此信号启动事件扫描
 
-**2. 事件扫描** (<ref_file file="/Users/lennon/Projects/poem_map_project/core/event_manager.gd" lines="18-35" />)
+**2. 事件扫描** (<ref_file file="/Users/a67_68/projects/dufu_simulator/core/event_manager.gd" lines="18-35" />)
 - 从Database获取候选事件池
 - 创建EventTicket包装事件
 - 应用filters过滤（RequirementFilter + ActionTagFilter）
 - 使用权重算法抽取事件
 
-**3. 权重抽取** (<ref_file file="/Users/lennon/Projects/poem_map_project/core/event_manager.gd" lines="115-152" />)
+**3. 权重抽取** (<ref_file file="/Users/a67_68/projects/dufu_simulator/core/event_manager.gd" lines="115-152" />)
 - 工业级"无事发生"算法：设置null_weight作为空转权重
 - 随机抽取，可能返回null（无事发生）
 - 支持fallback_event_uuid作为兜底事件
 
-**4. 事件展示** (<ref_file file="/Users/lennon/Projects/poem_map_project/characters/narrative_overlay.gd" lines="56-78" />)
+**4. 事件展示** (<ref_file file="/Users/a67_68/projects/dufu_simulator/characters/narrative_overlay.gd" lines="56-78" />)
 - NarrativeOverlay监听request_event_key
 - 从Database获取事件数据
 - 暂停世界，显示UI，播放动画
 
-**5. 后果执行** (<ref_file file="/Users/lennon/Projects/poem_map_project/core/consequence_executer.gd" lines="3-7" />)
+**5. 后果执行** (<ref_file file="/Users/a67_68/projects/dufu_simulator/core/consequence_executer.gd" lines="3-7" />)
 - 用户选择后，ConsequenceExecuter执行ChoiceResult
 - ChoiceResult包含多个BaseOperator
 - 每个Operator执行具体逻辑（修改属性、添加trait等）
