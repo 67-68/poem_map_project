@@ -195,6 +195,73 @@ func _exit_map_only() -> void:
 	)
 
 
+	Logging.info("Main: _exit_map_only 动画完成")
+
+
+# ═══════════════════════════════════════════════
+# 公共 API — 面板滑出/滑入（供 PoemCreationPage 调用）
+# ═══════════════════════════════════════════════
+
+## 左右面板向外滑出（复用纯地图模式的滑动动画）。
+## 不改变 _is_map_only 状态，不隐藏其他 UI。
+func slide_panels_out() -> void:
+	Logging.info("Main: slide_panels_out 开始")
+	_kill_all_tweens()
+	_record_positions()
+
+	_tween_exit = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween_exit.set_parallel(true)
+
+	var left_width := _left_panel.size.x
+	_tween_exit.tween_property(_left_panel, "position:x", _left_original_x - left_width - 50.0, SLIDE_DURATION) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_tween_exit.tween_property(_left_panel, "modulate:a", 0.0, FADE_DURATION) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	var right_width := _right_panel.size.x
+	_tween_exit.tween_property(_right_panel, "position:x", _right_original_x + right_width + 50.0, SLIDE_DURATION) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_tween_exit.tween_property(_right_panel, "modulate:a", 0.0, FADE_DURATION) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	_tween_exit.chain().tween_callback(func():
+		_left_panel.visible = false
+		_right_panel.visible = false
+		Logging.info("Main: slide_panels_out 动画完成")
+	)
+
+
+## 左右面板从外侧滑回原位。
+func slide_panels_in() -> void:
+	Logging.info("Main: slide_panels_in 开始")
+	_kill_all_tweens()
+
+	_left_panel.visible = true
+	_right_panel.visible = true
+
+	var left_width := _left_panel.size.x
+	var right_width := _right_panel.size.x
+
+	_tween_enter = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween_enter.set_parallel(true)
+
+	_tween_enter.tween_property(_left_panel, "position:x", _left_original_x, SLIDE_DURATION) \
+		.from(_left_original_x - left_width - 50.0) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_tween_enter.tween_property(_left_panel, "modulate:a", 1.0, FADE_DURATION) \
+		.from(0.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	_tween_enter.tween_property(_right_panel, "position:x", _right_original_x, SLIDE_DURATION) \
+		.from(_right_original_x + right_width + 50.0) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_tween_enter.tween_property(_right_panel, "modulate:a", 1.0, FADE_DURATION) \
+		.from(0.0).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	_tween_enter.chain().tween_callback(func():
+		Logging.info("Main: slide_panels_in 动画完成")
+	)
+
+
 # ═══════════════════════════════════════════════
 # Tab 键盘 toggle（由 InputManager 触发）
 # ═══════════════════════════════════════════════
@@ -208,9 +275,10 @@ func _on_toggle_map_only() -> void:
 		_enter_map_only()
 
 
-# ═══════════════════════════════════════════════
+
+# ======================================================
 # 可见性保存/恢复/隐藏
-# ═══════════════════════════════════════════════
+# ======================================================
 
 func _save_visibility():
 	_other_ui_nodes = [
@@ -236,14 +304,11 @@ func _restore_visibility() -> void:
 	Logging.info("Main: 恢复其他 UI 可见性完成")
 
 
-# ═══════════════════════════════════════════════
+# ======================================================
 # 工具
-# ═══════════════════════════════════════════════
+# ======================================================
 
 func _register_ambient_profiles() -> void:
-	# ── 755_backhome: 两层环境音 ──
-	# Layer 0: Void — 连续低频底噪（low_wind）
-	# Layer 1: Attack — 随机狂风尖啸（harsh_wind，25-30秒间隔）
 	const LOW_WIND = preload("res://assets/sounds/755_backhome/low_wind.ogg")
 	const HARSH_WIND = preload("res://assets/sounds/755_backhome/harsh_wind.ogg")
 
@@ -251,24 +316,22 @@ func _register_ambient_profiles() -> void:
 		{
 			"streams": [LOW_WIND],
 			"volume_db": 0.0,
-			"replay_gap": 0.0,       # 连续循环
+			"replay_gap": 0.0,
 		},
 		{
 			"streams": [HARSH_WIND],
 			"volume_db": -8.0,
-			"replay_gap": 25.0,      # 随机间隔 25~30 秒
+			"replay_gap": 25.0,
 			"replay_gap_max": 30.0,
 		},
 	])
-	Logging.info("Main: 已注册 ambient profile → 755_backhome (low_wind: 0dB连续 + harsh_wind: -8dB, 25-30s间隔)")
+	Logging.info("Main: 已注册 ambient profile → 755_backhome")
 
 
-## 游戏结束：写入死因到 GameState，切换场景到独立墓碑屏幕
 func _on_game_over(death_hint: String) -> void:
-	Logging.info("Main: 游戏结束 signal 收到，death_hint=\"%s\"，切换到独立墓碑场景" % death_hint)
+	Logging.info("Main: 游戏结束 signal 收到，切换到独立墓碑场景")
 	_kill_all_tweens()
 	GameState.death_cause = death_hint
-	# 延迟一帧切换场景，确保当前帧的所有 Tween 回调/协程安全退出
 	call_deferred("_do_change_to_tombstone")
 
 

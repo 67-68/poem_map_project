@@ -213,3 +213,34 @@ func _on_button_pressed() -> void:
 
 	# 重建 SubViewport（consumed 后碎片数量变化）
 	_rebuild_subviewport()
+
+
+# ======================================================
+# 浮现/退出动画（供 PoemCreationPage 调用）
+# ======================================================
+
+## 卷轴浮入：modulate 0→1 + 微上浮
+func show_with_animation() -> void:
+	var original_mod := modulate
+	var original_pos := position
+	modulate = Color(1, 1, 1, 0)
+	position = original_pos + Vector2(0, 15)
+	show()
+
+	var tw := create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.set_parallel(true)
+	tw.tween_property(self, "modulate", original_mod, 0.4)
+	tw.tween_property(self, "position", original_pos, 0.4)
+	await tw.finished
+	Logging.info("PoemCrafter: show_with_animation 完成")
+
+
+## 卷轴淡出
+func hide_with_animation() -> void:
+	var tw := create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.set_parallel(true)
+	tw.tween_property(self, "modulate:a", 0.0, 0.3)
+	tw.tween_property(self, "position:y", position.y + 10, 0.3)
+	await tw.finished
+	hide()
+	Logging.info("PoemCrafter: hide_with_animation 完成")

@@ -1,4 +1,4 @@
-## 高斯模糊管理器 — 可复用的模糊效果控制器
+## 高斯模糊管理器 --- 可复用的模糊效果控制器
 ##
 ## 提供三种模糊模式：
 ##   1. 事件模糊:   在 MapLayer(-1) 和 UI(1) 之间插入 CanvasLayer(0)，模糊地图
@@ -14,27 +14,27 @@
 ##     Cinematic 在最顶层（layer=100）。二者可同时存在互不干扰。
 ##
 ## 用法：
-##   BlurManager.trigger_event_blur()    — 事件触发，模糊地图
-##   BlurManager.return_to_hub()         — 纸带清空，清除地图模糊
-##   BlurManager.show_picker_blur()      — Picker 展示，Layer 50 毛玻璃渐入
-##   BlurManager.hide_picker_blur()      — Picker 完成，Layer 50 毛玻璃渐出
+##   BlurManager.trigger_event_blur()    --- 事件触发，模糊地图
+##   BlurManager.return_to_hub()         --- 纸带清空，清除地图模糊
+##   BlurManager.show_picker_blur()      --- Picker 展示，Layer 50 毛玻璃渐入
+##   BlurManager.hide_picker_blur()      --- Picker 完成，Layer 50 毛玻璃渐出
 
 extends Node
 
 const LOG_TAG := "BlurManager"
 
-# ── 事件模糊：独立 CanvasLayer (layer=0)，夹在 Map 和 UI 之间 ──
+# --- 事件模糊：独立 CanvasLayer (layer=0)，夹在 Map 和 UI 之间 ---
 var _event_blur_canvas_layer: CanvasLayer = null
 var _event_blur_overlay: ColorRect = null
 var _event_blur_mat: ShaderMaterial = null
 var _event_blur_tween: Tween = null
 
-# ── Picker 模糊（main.tscn 预建的 PickerBlurLayer (layer=50) → PickerBlurOverlay）
+# --- Picker 模糊（main.tscn 预建的 PickerBlurLayer (layer=50) → PickerBlurOverlay）
 var _picker_blur_overlay: ColorRect = null
 var _picker_blur_tween: Tween = null
 var _picker_blur_located: bool = false
 
-# ── 缓动参数 ─────────────────────────────────────────
+# --- 缓动参数 ----------------------------------------
 const MAP_BLUR_IN_AMOUNT: float = 5.0
 const MAP_BLUR_OUT_AMOUNT: float = 0.0
 const MAP_DARKEN_IN_AMOUNT: float = 0.5
@@ -46,21 +46,31 @@ const PICKER_BLUR_AMOUNT: float = 6.0
 const PICKER_DARKEN_AMOUNT: float = 0.5
 const PICKER_BLUR_DURATION: float = 0.5
 
-# ── Cinematic 过场后模糊 ──────────────────────────────
+# --- Cinematic 过场后模糊 -----------------------------
 const CINEMATIC_POST_BLUR_AMOUNT: float = 8.0
 const CINEMATIC_POST_DARKEN_AMOUNT: float = 0.0
 const CINEMATIC_POST_FADE_IN: float = 0.8
 const CINEMATIC_POST_FADE_OUT: float = 0.8
 
-# ── CanvasLayer 层级 ──────────────────────────────────
+# --- 持久式 Cinematic 模糊（layer=100，用于诗词创建等长驻场景）
+var _cinematic_blur_canvas_layer: CanvasLayer = null
+var _cinematic_blur_overlay: ColorRect = null
+var _cinematic_blur_mat: ShaderMaterial = null
+var _cinematic_blur_tween: Tween = null
+
+# --- CanvasLayer 层级 ---------------------------------
 # MapLayer=-1, EventBlur=0, UI=1, PickerBlur=50, TapeLayer=100, Cinematic=100
 const EVENT_BLUR_LAYER: int = 0
 const CINEMATIC_LAYER: int = 100
 
+# --- 持久式 Cinematic 模糊参数 ------------------------
+const CINEMATIC_BLUR_AMOUNT: float = 6.0
+const CINEMATIC_BLUR_DARKEN: float = 0.5
+const CINEMATIC_BLUR_DURATION: float = 0.5
 
-# ═══════════════════════════════════════════════
+# ======================================================
 # 生命周期
-# ═══════════════════════════════════════════════
+# ======================================================
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -76,9 +86,9 @@ func _deferred_init() -> void:
 	])
 
 
-# ═══════════════════════════════════════════════
+# ======================================================
 # 事件模糊 CanvasLayer（layer=0，Map 之上 UI 之下）
-# ═══════════════════════════════════════════════
+# ======================================================
 
 func _ensure_event_blur_layer() -> bool:
 	if _event_blur_canvas_layer and is_instance_valid(_event_blur_canvas_layer):
@@ -116,7 +126,7 @@ func _ensure_event_blur_layer() -> bool:
 	Logging.info("%s: EventBlurLayer 创建完成, layer=%d, size=%s" % [
 		LOG_TAG,
 		_event_blur_canvas_layer.layer,
-		_event_blur_overlay.size,
+		str(_event_blur_overlay.size),
 	])
 	return true
 
@@ -124,112 +134,80 @@ func _ensure_event_blur_layer() -> bool:
 func _set_event_blur_fullscreen() -> void:
 	if not _event_blur_overlay or not is_instance_valid(_event_blur_overlay):
 		return
-	var vp_size := get_viewport().get_visible_rect().size
+	var vp := get_viewport()
+	if not vp:
+		return
+	_event_blur_overlay.size = vp.get_visible_rect().size
 	_event_blur_overlay.position = Vector2.ZERO
-	_event_blur_overlay.size = vp_size
 
 
-func _kill_event_blur_tween() -> void:
-	if _event_blur_tween and _event_blur_tween.is_valid():
-		_event_blur_tween.kill()
-	_event_blur_tween = null
+# ======================================================
+# 公共 API — 事件模糊（layer=0，长驻，不自动销毁）
+# ======================================================
 
-
-# ═══════════════════════════════════════════════
-# 公共 API — 事件模糊
-# ═══════════════════════════════════════════════
-
-## 事件触发：模糊地图 + 压暗（idempotent）
-## BlurOverlay 在 layer=0，只覆盖 MapLayer(-1)，不遮挡 UI(1) 的左右面板
+## 模糊地图（layer=0），UI 层（layer=1）之上的内容不受影响
 func trigger_event_blur() -> void:
 	if not _ensure_event_blur_layer():
 		return
 
-	_kill_event_blur_tween()
-
-	Logging.info("%s: 触发事件模糊 (blur=%.1f darken=%.1f, layer=%d)" % [
-		LOG_TAG, MAP_BLUR_IN_AMOUNT, MAP_DARKEN_IN_AMOUNT, EVENT_BLUR_LAYER,
-	])
+	if _event_blur_tween and _event_blur_tween.is_valid():
+		_event_blur_tween.kill()
 
 	_event_blur_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_event_blur_tween.set_parallel(true)
 	_event_blur_tween.tween_property(_event_blur_mat, "shader_parameter/blur_amount", MAP_BLUR_IN_AMOUNT, MAP_BLUR_IN_DURATION)
 	_event_blur_tween.tween_property(_event_blur_mat, "shader_parameter/darken_amount", MAP_DARKEN_IN_AMOUNT, MAP_BLUR_IN_DURATION)
+	_event_blur_tween.tween_property(_event_blur_overlay, "modulate:a", 1.0, MAP_BLUR_IN_DURATION)
+	Logging.info("%s: 事件模糊已触发（layer=%d, blur=%.1f darken=%.1f duration=%.1fs）" % [
+		LOG_TAG, EVENT_BLUR_LAYER, MAP_BLUR_IN_AMOUNT, MAP_DARKEN_IN_AMOUNT, MAP_BLUR_IN_DURATION,
+	])
 
 
-## 纸带清空：清除地图模糊，销毁事件模糊层
 func return_to_hub() -> void:
-	if not _event_blur_canvas_layer or not is_instance_valid(_event_blur_canvas_layer):
+	if not _ensure_event_blur_layer():
 		return
 
-	_kill_event_blur_tween()
-
-	Logging.info("%s: 清除事件模糊" % LOG_TAG)
+	if _event_blur_tween and _event_blur_tween.is_valid():
+		_event_blur_tween.kill()
 
 	_event_blur_tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_event_blur_tween.set_parallel(true)
 	_event_blur_tween.tween_property(_event_blur_mat, "shader_parameter/blur_amount", MAP_BLUR_OUT_AMOUNT, MAP_BLUR_OUT_DURATION)
 	_event_blur_tween.tween_property(_event_blur_mat, "shader_parameter/darken_amount", MAP_DARKEN_OUT_AMOUNT, MAP_BLUR_OUT_DURATION)
-	_event_blur_tween.finished.connect(_destroy_event_blur_layer, CONNECT_ONE_SHOT)
+	_event_blur_tween.tween_property(_event_blur_overlay, "modulate:a", 0.0, MAP_BLUR_OUT_DURATION)
+	Logging.info("%s: 事件模糊已清除" % LOG_TAG)
 
 
-func _destroy_event_blur_layer() -> void:
-	if _event_blur_canvas_layer and is_instance_valid(_event_blur_canvas_layer):
-		if get_tree() and get_tree().root.size_changed.is_connected(_set_event_blur_fullscreen):
-			get_tree().root.size_changed.disconnect(_set_event_blur_fullscreen)
-		_event_blur_canvas_layer.queue_free()
-		Logging.info("%s: EventBlurLayer 已销毁" % LOG_TAG)
-	_event_blur_canvas_layer = null
-	_event_blur_overlay = null
-	_event_blur_mat = null
-	_event_blur_tween = null
-
-
-# ═══════════════════════════════════════════════
-# 懒加载：Picker 模糊（main.tscn 预建节点）
-# ═══════════════════════════════════════════════
+# ======================================================
+# Picker 模糊 CanvasLayer（layer=50，复用 main.tscn 预建节点）
+# ======================================================
 
 func _ensure_picker_blur_overlay() -> bool:
 	if _picker_blur_overlay and is_instance_valid(_picker_blur_overlay):
 		return true
-	if _picker_blur_located and not (_picker_blur_overlay and is_instance_valid(_picker_blur_overlay)):
-		Logging.info("%s: PickerBlurOverlay 已失效，重新定位" % LOG_TAG)
-		_picker_blur_located = false
-		_picker_blur_overlay = null
-
 	if _picker_blur_located:
 		return false
 
-	_picker_blur_located = true
-
-	var main := _find_main_node()
-	if not main:
-		Logging.err("%s: 找不到 Main 节点，Picker 模糊不可用" % LOG_TAG)
+	var picker_blur_layer := get_tree().root.get_node("Main/PickerBlurLayer") as CanvasLayer
+	if not picker_blur_layer:
+		Logging.warn("%s: PickerBlurLayer not found in Main" % LOG_TAG)
+		_picker_blur_located = true
 		return false
 
-	_picker_blur_overlay = main.find_child("PickerBlurOverlay", true, false) as ColorRect
+	_picker_blur_overlay = picker_blur_layer.get_node("PickerBlurOverlay") as ColorRect
 	if not _picker_blur_overlay:
-		Logging.err("%s: 找不到 PickerBlurOverlay 节点" % LOG_TAG)
+		Logging.warn("%s: PickerBlurOverlay not found in PickerBlurLayer" % LOG_TAG)
+		_picker_blur_located = true
 		return false
 
-	Logging.info("%s: PickerBlurOverlay 定位成功" % LOG_TAG)
+	_picker_blur_located = true
+	Logging.info("%s: Picker blur overlay located" % LOG_TAG)
 	return true
 
 
-func _find_main_node() -> Node:
-	var root := get_tree().root
-	var main := root.get_node_or_null("Main") as Node
-	if main:
-		return main
-	for child in root.get_children():
-		if child.name.begins_with("main"):
-			return child
-	return null
-
-
-# ═══════════════════════════════════════════════
+# ======================================================
 # 公共 API — Picker 模糊
-# ═══════════════════════════════════════════════
+# ======================================================
 
 func show_picker_blur() -> void:
 	if not _ensure_picker_blur_overlay():
@@ -263,14 +241,107 @@ func hide_picker_blur() -> void:
 	Logging.info("%s: Picker 模糊已清除" % LOG_TAG)
 
 
-# ═══════════════════════════════════════════════
-# 公共 API — Cinematic 过场后模糊（layer=100）
-# ═══════════════════════════════════════════════
+# ======================================================
+# 公共 API — 持久式 Cinematic 全屏模糊（layer=100）
+# ======================================================
+
+## 创建并展示持久式全屏模糊 CanvasLayer（layer=100）。
+## 与 picker blur 模式相同：渐入，不会自动销毁。
+## 需配合 hide_cinematic_blur() 手动隐藏。
+##
+## 警告：与 trigger_cinematic_post_blur() 共用 layer=100，不可同时存在。
+func show_cinematic_blur() -> void:
+	Logging.info("%s: show_cinematic_blur 开始" % LOG_TAG)
+
+	if _cinematic_blur_canvas_layer and is_instance_valid(_cinematic_blur_canvas_layer):
+		Logging.info("%s: show_cinematic_blur: 已有模糊层，重新触发渐入" % LOG_TAG)
+		_cinematic_blur_overlay.show()
+		if _cinematic_blur_tween and _cinematic_blur_tween.is_valid():
+			_cinematic_blur_tween.kill()
+		_cinematic_blur_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		_cinematic_blur_tween.set_parallel(true)
+		_cinematic_blur_tween.tween_property(_cinematic_blur_mat, "shader_parameter/blur_amount", CINEMATIC_BLUR_AMOUNT, CINEMATIC_BLUR_DURATION)
+		_cinematic_blur_tween.tween_property(_cinematic_blur_mat, "shader_parameter/darken_amount", CINEMATIC_BLUR_DARKEN, CINEMATIC_BLUR_DURATION)
+		Logging.info("%s: show_cinematic_blur: 复用已有模糊层" % LOG_TAG)
+		return
+
+	# 首次创建
+	var shader := load("res://shaders/blur_bg.gdshader") as Shader
+	if not shader:
+		Logging.err("%s: 无法加载 blur_bg.gdshader" % LOG_TAG)
+		return
+
+	_cinematic_blur_mat = ShaderMaterial.new()
+	_cinematic_blur_mat.shader = shader
+	_cinematic_blur_mat.set("shader_parameter/blur_amount", 0.0)
+	_cinematic_blur_mat.set("shader_parameter/darken_amount", 0.0)
+
+	_cinematic_blur_canvas_layer = CanvasLayer.new()
+	_cinematic_blur_canvas_layer.name = "CinematicBlurLayer"
+	_cinematic_blur_canvas_layer.layer = CINEMATIC_LAYER
+
+	_cinematic_blur_overlay = ColorRect.new()
+	_cinematic_blur_overlay.name = "CinematicBlurOverlay"
+	_cinematic_blur_overlay.material = _cinematic_blur_mat
+	_cinematic_blur_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	_cinematic_blur_canvas_layer.add_child(_cinematic_blur_overlay)
+	get_tree().root.add_child(_cinematic_blur_canvas_layer)
+
+	# 手动设置尺寸
+	var set_size := func():
+		var vp := get_viewport()
+		if not vp or not is_instance_valid(_cinematic_blur_overlay):
+			return
+		_cinematic_blur_overlay.size = vp.get_visible_rect().size
+		_cinematic_blur_overlay.position = Vector2.ZERO
+	set_size.call()
+	get_tree().root.size_changed.connect(set_size, CONNECT_ONE_SHOT)
+
+	_cinematic_blur_overlay.show()
+	_cinematic_blur_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_cinematic_blur_tween.set_parallel(true)
+	_cinematic_blur_tween.tween_property(_cinematic_blur_mat, "shader_parameter/blur_amount", CINEMATIC_BLUR_AMOUNT, CINEMATIC_BLUR_DURATION)
+	_cinematic_blur_tween.tween_property(_cinematic_blur_mat, "shader_parameter/darken_amount", CINEMATIC_BLUR_DARKEN, CINEMATIC_BLUR_DURATION)
+	Logging.info("%s: Cinematic 全屏模糊已展示（layer=%d, blur=%.1f darken=%.1f duration=%.1fs）" % [
+		LOG_TAG, CINEMATIC_LAYER, CINEMATIC_BLUR_AMOUNT, CINEMATIC_BLUR_DARKEN, CINEMATIC_BLUR_DURATION,
+	])
+
+
+func hide_cinematic_blur() -> void:
+	if not _cinematic_blur_canvas_layer or not is_instance_valid(_cinematic_blur_canvas_layer):
+		Logging.warn("%s: hide_cinematic_blur: 没有活跃的模糊层" % LOG_TAG)
+		return
+
+	if _cinematic_blur_tween and _cinematic_blur_tween.is_valid():
+		_cinematic_blur_tween.kill()
+
+	_cinematic_blur_tween = create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_cinematic_blur_tween.set_parallel(true)
+	_cinematic_blur_tween.tween_property(_cinematic_blur_mat, "shader_parameter/blur_amount", 0.0, CINEMATIC_BLUR_DURATION)
+	_cinematic_blur_tween.tween_property(_cinematic_blur_mat, "shader_parameter/darken_amount", 0.0, CINEMATIC_BLUR_DURATION)
+	_cinematic_blur_tween.finished.connect(_cleanup_cinematic_blur, CONNECT_ONE_SHOT)
+	Logging.info("%s: Cinematic 全屏模糊渐出中" % LOG_TAG)
+
+
+func _cleanup_cinematic_blur() -> void:
+	Logging.info("%s: 清理 Cinematic 模糊层" % LOG_TAG)
+	if _cinematic_blur_canvas_layer and is_instance_valid(_cinematic_blur_canvas_layer):
+		_cinematic_blur_canvas_layer.queue_free()
+	_cinematic_blur_canvas_layer = null
+	_cinematic_blur_overlay = null
+	_cinematic_blur_mat = null
+	_cinematic_blur_tween = null
+
+
+# ======================================================
+# 公共 API — Cinematic 过场后模糊（layer=100，自毁式）
+# ======================================================
 
 ## Cinematic 播放结束后，创建独立的顶层 CanvasLayer（layer=100），覆盖一切。
 ## 与事件模糊（layer=0）互不干扰，各自独立创建/销毁。
 ##
-## 模糊在 `fade_in` 秒内渐入，保持 `duration` 秒后渐出并销毁。
+## 模糊在 fade_in 秒内渐入，保持 duration 秒后渐出并销毁。
 ## 期间阻塞调用方（await）。
 ##
 ## 参数:
@@ -300,7 +371,7 @@ func trigger_cinematic_post_blur(duration: float = 3.0) -> void:
 	canvas_layer.add_child(overlay)
 	get_tree().root.add_child(canvas_layer)
 
-	# 手动设置尺寸（CanvasLayer 中 anchors 可能不生效）
+	# 手动设置尺寸
 	var set_overlay_size := func():
 		var vp := get_viewport()
 		if not vp or not is_instance_valid(overlay):
