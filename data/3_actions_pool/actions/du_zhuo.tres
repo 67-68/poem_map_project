@@ -3,21 +3,8 @@
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_gt11a"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3angc"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_hnu0c"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_x07my"]
-[ext_resource type="Texture2D" uid="uid://b7i6dfa3luki4" path="res://assets/stamps/duzhuo_stamp.png" id="4_uxtbm"]
+[ext_resource type="Texture2D" uid="uid://bbm1tg4n66cpr" path="res://assets/stamps/duzhuo_stamp.png" id="4_uxtbm"]
 [ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="5_timeop"]
-
-[sub_resource type="Resource" id="Resource_lpic5"]
-script = ExtResource("3_x07my")
-_property = 4
-value = 5
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_rs55l"]
-script = ExtResource("3_x07my")
-_property = 3
-value = 3
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_time"]
 script = ExtResource("5_timeop")
@@ -28,10 +15,10 @@ metadata/_custom_type_script = "uid://khw2s6fgrkem"
 script = ExtResource("3_hnu0c")
 _main_tag = 34
 _action_tags = Array[int]([1, 0, 2, 3, 5, 8, 10, 12, 17, 34])
-action_results = Array[ExtResource("2_3angc")]([SubResource("Resource_lpic5"), SubResource("Resource_rs55l"), SubResource("Resource_time")])
+action_results = Array[ExtResource("2_3angc")]([SubResource("Resource_time")])
+lock_narrative = "酒壶已空，心绪难平，独坐无趣"
 uuid = "du_zhuo"
 name = "闲居"
 description = "闭门谢客，借酒避世。"
 icon = ExtResource("4_uxtbm")
-lock_narrative = "酒壶已空，心绪难平，独坐无趣"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

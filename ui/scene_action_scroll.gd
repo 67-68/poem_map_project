@@ -49,6 +49,7 @@ func refresh():
 		children[i].update_action(all_visible_actions[i])
 		# 更新锁定状态
 		if all_visible_actions[i].uuid in _locked_action_ids:
+			Logging.info("[SceneActionScroll] 🔒 set_locked: action=%s, reason='%s'" % [all_visible_actions[i].uuid, all_visible_actions[i].dynamic_failed_hint])
 			children[i].set_locked(all_visible_actions[i].dynamic_failed_hint)
 		else:
 			children[i].set_unlocked()
@@ -62,6 +63,7 @@ func refresh():
 		var card = preload("res://ui/action_button.tscn").instantiate()
 		card.initialize(all_visible_actions[i])
 		if all_visible_actions[i].uuid in _locked_action_ids:
+			Logging.info("[SceneActionScroll] 🔒 set_locked(new): action=%s, reason='%s'" % [all_visible_actions[i].uuid, all_visible_actions[i].dynamic_failed_hint])
 			card.set_locked(all_visible_actions[i].dynamic_failed_hint)
 		$V.add_child(card)
 

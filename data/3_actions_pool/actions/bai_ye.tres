@@ -2,21 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_hkffg"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_f652d"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_f652d"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_yiapa"]
 [ext_resource type="Texture2D" uid="uid://bokcmb0kkcpu4" path="res://assets/stamps/baiye_stamp.png" id="4_yiapa"]
 [ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="5_timeop"]
-
-[sub_resource type="Resource" id="Resource_yiapa"]
-script = ExtResource("3_f652d")
-value = 5
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_wlhiu"]
-script = ExtResource("3_f652d")
-_property = 3
-value = -10
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_time"]
 script = ExtResource("5_timeop")
@@ -27,11 +15,11 @@ metadata/_custom_type_script = "uid://khw2s6fgrkem"
 script = ExtResource("3_yiapa")
 _main_tag = 29
 _action_tags = Array[int]([4, 9, 10, 14, 29])
-action_results = Array[ExtResource("2_f652d")]([SubResource("Resource_yiapa"), SubResource("Resource_wlhiu"), SubResource("Resource_time")])
+action_results = Array[ExtResource("2_f652d")]([SubResource("Resource_time")])
 fallback_event_uuid = "event_cooldown_wall"
+lock_narrative = "朱门深锁，投刺无门，今日不是拜谒的好日子"
 uuid = "bai_ye"
 name = "拜谒"
 description = "投刺候见，叩响朱门"
 icon = ExtResource("4_yiapa")
-lock_narrative = "朱门深锁，投刺无门，今日不是拜谒的好日子"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

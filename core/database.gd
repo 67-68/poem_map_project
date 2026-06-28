@@ -1,5 +1,6 @@
 extends Node
 const _Action = preload("res://core/model/action.gd")
+const _ActionArchetype = preload("res://core/model/action_archetype.gd")
 const _BaseEvent = preload("res://model/event.gd")
 const _BaseOption = preload("res://model/event/base_option.gd")
 const _DataHelper = preload("res://core/data_helper.gd")
@@ -63,6 +64,7 @@ var legendary_poems: Dictionary
 var normal_poem_events: Dictionary
 
 var flags: Dictionary
+var action_archetypes: Dictionary = {}  # 🆕 key=archetype_key, val=ActionArchetype
 
 var life_path_points: Dictionary
 
@@ -468,6 +470,9 @@ func get_msger(uuid: String):
 
 func get_era(uuid: String):
 	return eras.get(uuid)
+
+func get_archetype(key: String):
+	return action_archetypes.get(key)
 
 func get_tag(uuid: String):
 	return tags.get(uuid)

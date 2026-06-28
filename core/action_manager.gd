@@ -1,13 +1,17 @@
 extends Node
 const _Action = preload("res://core/model/action.gd")
+const _ActionArchetype = preload("res://core/model/action_archetype.gd")
 const _CooldownFilter = preload("res://core/model/cooldown_filter.gd")
 const _Era = preload("res://core/model/era.gd")
 const _FocusActionOperator = preload("res://core/operators/focus_action_operator.gd")
 const _Generator = preload("res://core/model/generator.gd")
+const _MicroDSLParser = preload("res://parser/micro_dsl_parser.gd")
 const _SceneAction = preload("res://core/model/scene_action.gd")
 const _SceneActionPanel = preload("res://ui/action_button.gd")
+const _NamedDSLParser = preload("res://parser/named_dsl_parser.gd")
 const _SurvivalManager = preload("res://core/survival_manager.gd")
 const _TimeOperator = preload("res://core/model/time_operator.gd")
+const _PropertyOperator = preload("res://core/model/property_operator.gd")
 
 const MAX_PICK_COUNT: int = 6
 
@@ -30,7 +34,6 @@ var _selected_action_ids: Dictionary = {}
 
 ## 🆕 缓存 event_archetypes.json 中的 failed_hints 字段
 ## 结构: { archetype_key: { prop_name: narrative_text } }
-var _archetype_failed_hints: Dictionary = {}
 
 ## 🆕 是否已连接 player_stat_changed 信号（防重连）
 var _stat_signal_connected: bool = false
@@ -75,26 +78,28 @@ func clear_reservations() -> void:
 # 🆕 行动锁定评估系统（纯函数 + 缓存 + 信号监听）
 # ════════════════════════════════════════════════════════════
 
-## 加载 event_archetypes.json 中的 failed_hints 缓存。
-## 格式: { "baiye": { "money": "叙事...", "health": "..." } }
+## 将 event_archetypes.json 加载到 Database.action_archetypes 中。
+## 每项转为 ActionArchetype Resource，以 archetype key 索引。
 func _init_archetype_cache() -> void:
+	if not Database.action_archetypes.is_empty():
+		return
 	var file := FileAccess.open("res://tools/data/event_archetypes.json", FileAccess.READ)
 	if not file:
-		Logging.warn("[ActionManager] 无法读取 event_archetypes.json，A类失败提示将降级使用 requirement.get_failed_hint()")
+		Logging.warn("[ActionManager] 无法读取 event_archetypes.json")
 		return
 	var json_str := file.get_as_text()
 	file.close()
 	var json := JSON.new()
 	var parse_err := json.parse(json_str)
 	if parse_err != OK:
-		Logging.err("[ActionManager] event_archetypes.json 解析失败: %s" % json.get_error_message())
+		Logging.err("[ActionManager] event_archetypes.json 解析失败: " + json.get_error_message())
 		return
 	var data: Dictionary = json.data
-	_archetype_failed_hints = {}
 	for archetype_key in data:
-		if data[archetype_key] is Dictionary and data[archetype_key].has("failed_hints"):
-			_archetype_failed_hints[archetype_key] = data[archetype_key]["failed_hints"].duplicate()
-	Logging.info("[ActionManager] 已加载 %d 个 archetype 的 failed_hints" % _archetype_failed_hints.size())
+		if data[archetype_key] is Dictionary:
+			var entry: Dictionary = data[archetype_key]
+			Database.action_archetypes[archetype_key] = ActionArchetype.from_json(entry)
+	Logging.info("[ActionManager] 已加载 %d 个 action archetype" % Database.action_archetypes.size())
 
 
 ## 根据 action 的 _main_tag 查找对应的 archetype key。
@@ -111,21 +116,37 @@ func _get_archetype_key(action: Action) -> String:
 	return type_name.to_lower().replace("_", "")
 
 
-## 根据 action 和失败属性名称查找 archetype 中的叙事文本。
-## 降级链: archetype.failed_hints[prop] → requirement.get_failed_hint() → ""
+## 从 Database 加载的 ActionArchetype 中获取失败叙事文本。
 func _get_archetype_failed_hint(action: Action, prop_name: String) -> String:
 	var key := _get_archetype_key(action)
 	if key.is_empty():
 		return ""
-	if not _archetype_failed_hints.has(key):
+	var archetype: ActionArchetype = Database.action_archetypes.get(key)
+	if not archetype:
 		return ""
-	var hints: Dictionary = _archetype_failed_hints[key]
-	return hints.get(prop_name, "")
+	return archetype.failed_hints.get(prop_name, "")
 
 
-## 🆕 纯函数：判断 action 在当前 era 中是否被允许显示。
-## 如果 era 没有设置黑白名单（null/[]），返回 true。
-static func is_action_era_allowed(action: Action) -> bool:
+## 🆕 解析 archetype 的 universal_result DSL，提取属性消耗并创建临时 PropertyOperator。
+## universal_result 格式: "prop_sub(name=money; val=m_money_cost)|prop_add(name=health; val=m_health_loss)"
+## 返回 Array[PropertyOperator]，每个代表一个属性消耗。
+func _parse_archetype_costs(action: Action) -> Array:
+	var costs: Array = []
+	var key := _get_archetype_key(action)
+	if key.is_empty():
+		return costs
+	
+	var archetype: ActionArchetype = Database.action_archetypes.get(key)
+	if not archetype:
+		return costs
+	for op in archetype.operators:
+		costs.append(op)
+	
+	return costs
+
+
+
+func is_action_era_allowed(action: Action) -> bool:
 	if GameState.current_era.is_empty():
 		return true
 	var era_res = Database.eras.get(GameState.current_era)
@@ -160,29 +181,30 @@ func check_action_validity(action: Action) -> Dictionary:
 		result.valid = false
 		return result
 	
-	# 0. 通过 action_results 中的 PropertyOperator 动态生成限制条件并检查
-	if action.action_results:
-		for op in action.action_results:
-			if op is PropertyOperator:
-				var prop_op := op as PropertyOperator
-				var req := prop_op.convert_prop_limit_requirement()
-				if req != null and not req.compare(PlayerState):
-					result.valid = false
-					var hint := req.get_failed_hint()
-					if hint.is_empty():
-						hint = req.describe_requirement()
-					if hint.is_empty():
-						hint = "条件未满足"
-					result.reasons.append(hint)
-					
-					var prop_name := prop_op.property
-					if not prop_name.is_empty():
-						result.prop_name = prop_name
-						var archetype_hint := _get_archetype_failed_hint(action, prop_name)
-						if not archetype_hint.is_empty():
-							result.reasons[-1] = archetype_hint
-					# 只报告第一个失败的限制
-					return result
+	# 1. 从 archetype universal_result 解析属性消耗并检查
+	var costs := _parse_archetype_costs(action)
+	for temp_op in costs:
+		if not temp_op is PropertyOperator:
+			continue
+		var req: PropertyRequirement = temp_op.convert_prop_limit_requirement()
+		if req != null and not req.compare(PlayerState):
+			result.valid = false
+			var hint: String = req.get_failed_hint()
+			if hint.is_empty():
+				hint = req.describe_requirement()
+			if hint.is_empty():
+				hint = "条件未满足"
+			result.reasons.append(hint)
+			
+			var prop_name: String = temp_op.property
+			if not prop_name.is_empty():
+				result.prop_name = prop_name
+				var archetype_hint := _get_archetype_failed_hint(action, prop_name)
+				if not archetype_hint.is_empty():
+					Logging.info("[ActionManager] ✅ archetype hint 命中: action=%s, prop=%s, hint='%s'" % [action.uuid, prop_name, archetype_hint])
+					result.reasons[-1] = archetype_hint
+			# 只报告第一个失败的限制
+			return result
 	
 	# 2. 检查时间消耗（集成时间锁定）
 	var cost := get_action_day_cost(action)
@@ -254,6 +276,7 @@ func reevaluate_all_locks() -> void:
 				for reason in validity.reasons:
 					a.append_failed_hint(reason)
 				changed = true
+				Logging.info("[ActionManager] 🔄 reevaluate 已中签 A类: action=%s, hint='%s'" % [a_id, a.dynamic_failed_hint])
 		else:
 			# 未中签：永远灰化（B类叙事 + 可能的A类原因）
 			a.clear_failed_hint()
@@ -265,6 +288,9 @@ func reevaluate_all_locks() -> void:
 				for reason in validity.reasons:
 					a.append_failed_hint(reason)
 			changed = true
+			Logging.info("[ActionManager] 🔄 reevaluate 未中签: action=%s, B='%s', A='%s', final_hint='%s'" % [
+				a_id, a.lock_narrative, ", ".join(validity.reasons) if not validity.valid else "", a.dynamic_failed_hint
+			])
 	
 	if changed:
 		EventBus.request_refresh_action_locks.emit()
@@ -276,9 +302,12 @@ func reevaluate_all_locks() -> void:
 ## player_stat_changed 信号回调。
 func _on_player_stat_changed(prop_name: String) -> void:
 	# 只对影响 action 可用性的属性变化做反应
-	if prop_name in ["time"]:
+	# 白名单: time / money / health / literary_fame / talent 都能影响 action 可用性
+	if prop_name in ["time", "money", "health", "literary_fame", "talent"]:
 		Logging.info("[ActionManager] 关键属性 %s 变动，触发锁定重评估" % prop_name)
 		reevaluate_all_locks()
+	else:
+		Logging.debug("[ActionManager] 属性 %s 变动，不在 action 重评估白名单中，跳过" % prop_name)
 
 
 # ════════════════════════════════════════════════════════════
@@ -472,7 +501,7 @@ func get_available_scene_actions() -> Dictionary:
 	Logging.info("[ActionManager] ═══ 开始获取可用场景动作 ═══")
 	
 	# ── 确保 archetype 缓存已加载 ──
-	if _archetype_failed_hints.is_empty():
+	if Database.action_archetypes.is_empty():
 		_init_archetype_cache()
 	
 	# ── Phase 0 前置通报：当前锁定/阻塞状态 ──
@@ -682,6 +711,24 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 				a.append_failed_hint(a.lock_narrative)
 			# 同时追加 B类通用文本
 			a.append_failed_hint("此路不通，换个主意吧")
+	
+	# ── 🆕 Phase 3.5: 非池 action 恢复 A 类 hint ──
+	# 被 get_available_scene_actions 排除的 action 在 Phase 0 中被清空 hint，
+	# 需要重新检查 validity 并补回 A 类叙事文本。
+	for a_id in Database.get_actions_all():
+		if a_id in action_pool:
+			continue
+		if _blocked_actions.has(a_id):
+			continue
+		var a = Database.get_action(a_id)
+		if not a:
+			continue
+		var validity := check_action_validity(a)
+		if not validity.valid and validity.reasons.size() > 0:
+			a.clear_failed_hint()
+			for reason in validity.reasons:
+				a.append_failed_hint(reason)
+			Logging.info("[ActionManager] 🏷️ 非池 action hint 恢复: id=%s, reasons='%s'" % [a_id, ", ".join(validity.reasons)])
 	
 	# 🆕 抽取结果汇总
 	var reserved_count := 0
