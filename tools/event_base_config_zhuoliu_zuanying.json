@@ -35,7 +35,7 @@
     "zhuoliu_zuanying"
   ],
   "universal_requirement": "trait_has(name=kuangda_zuanying)",
-  "universal_result": "prop_add(name=health; val=-3)|prop_add(name=literary_fame; val=3)",
+  "universal_result": "prop_sub(name=health; val=-3)|prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 60,
   "word_count_max": 250,
@@ -82,7 +82,7 @@
       "id": "opt_zuanying",
       "prompt": "用30字以内写一个简短的动作描述——玩家以【钻营】状态回应。这是唯一可选的路径。动作特征是：【权衡算计、寻找利益交换点、用手头的信息或资源开价。不卑不亢但也不清高——像商人在讨价还价】。\n\n钻营行为特征：不硬顶也不讨好。评估对方的筹码，掂量自己的底牌，寻找一个可以成交的平衡点。执行时像一个精明的账房——每一个动作都是在计算投入产出比，不带多余的情绪波动。",
       "text": "（权衡片刻，开出价码）",
-      "result": "prop_add(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=3) | emo_add(name=ambition; val=10)",
+      "result": "prop_sub(name=progress; val=-2) | prop_add(name=money; val=5) | prop_sub(name=health; val=3) | emo_add(name=ambition; val=10)",
       "fixed": false,
       "plugins": {},
       "requirement": ""

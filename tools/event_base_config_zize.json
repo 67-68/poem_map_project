@@ -24,7 +24,7 @@
     "zize"
   ],
   "universal_requirement": "prop_lt(name=health; val=40)",
-  "universal_result": "prop_add(name=health; val=-5)|prop_add(name=talent; val=2)",
+  "universal_result": "prop_sub(name=health; val=-5)|prop_add(name=talent; val=2)",
   "universal_option_requirement": "",
   "word_count_min": 60,
   "word_count_max": 250,

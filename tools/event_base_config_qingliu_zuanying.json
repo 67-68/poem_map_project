@@ -35,7 +35,7 @@
     "qingliu_zuanying"
   ],
   "universal_requirement": "trait_has(name=kuangda_zuanying)",
-  "universal_result": "prop_add(name=health; val=-3)|prop_add(name=literary_fame; val=3)",
+  "universal_result": "prop_sub(name=health; val=-3)|prop_add(name=literary_fame; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 60,
   "word_count_max": 250,

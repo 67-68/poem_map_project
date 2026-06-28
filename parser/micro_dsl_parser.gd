@@ -126,8 +126,8 @@ static func _ensure_dispatch() -> void:
 	
 	# ── Consequence Operators ──
 	var cd = _consequence_dispatch
-	cd[FUNC_PROP_ADD] = func(p, r): return _exec_prop_op(p, r, 1)
-	cd[FUNC_PROP_SUB] = func(p, r): return _exec_prop_op(p, r, -1)
+	cd[FUNC_PROP_ADD] = func(p, r): return _exec_prop_op_add(p, r)
+	cd[FUNC_PROP_SUB] = func(p, r): return _exec_prop_op_sub(p, r)
 	cd[FUNC_PROP_SET] = func(p, r): return _exec_prop_op_set(p, r)
 	cd[FUNC_TRAIT_ADD] = func(p, r): return _exec_trait_op(p, r, REQ_OPERATOR.CRUD.ADD)
 	cd[FUNC_TRAIT_REMOVE] = func(p, r): return _exec_trait_op(p, r, REQ_OPERATOR.CRUD.REMOVE)
@@ -403,14 +403,29 @@ static func _exec_flag_req_int(parsed: NamedDSLParser.ParseResult, raw: String, 
 # 内部处理器（后果操作符）
 # ═══════════════════════════════════════════════════════════
 
-# Property Operator: add / sub
-static func _exec_prop_op(parsed: NamedDSLParser.ParseResult, raw: String, sign: int) -> PropertyOperator:
+# Property Operator: add — 强制正数（val ≥ 0），若为负则自动翻转
+static func _exec_prop_op_add(parsed: NamedDSLParser.ParseResult, raw: String) -> PropertyOperator:
 	var name = NamedDSLParser.get_str_param(parsed, "name")
 	var val = NamedDSLParser.get_int_param(parsed, "val")
 	if name.is_empty():
-		Logging.err("prop_add/sub 缺少 name 参数: %s" % raw)
+		Logging.err("prop_add 缺少 name 参数: %s" % raw)
 		return null
-	return _create_property_operator(name, val * sign)
+	if val < 0:
+		Logging.warn("prop_add 的值应为正数，收到负数 %d，已自动纠正: %s" % [val, raw])
+		val = -val
+	return _create_property_operator(name, val)
+
+# Property Operator: sub — 强制负数（val ≤ 0），若为正则自动翻转
+static func _exec_prop_op_sub(parsed: NamedDSLParser.ParseResult, raw: String) -> PropertyOperator:
+	var name = NamedDSLParser.get_str_param(parsed, "name")
+	var val = NamedDSLParser.get_int_param(parsed, "val")
+	if name.is_empty():
+		Logging.err("prop_sub 缺少 name 参数: %s" % raw)
+		return null
+	if val > 0:
+		Logging.warn("prop_sub 的值应为负数，收到正数 %d，已自动纠正: %s" % [val, raw])
+		val = -val
+	return _create_property_operator(name, val)
 
 # Property Operator: set
 static func _exec_prop_op_set(parsed: NamedDSLParser.ParseResult, raw: String) -> PropertyOperator:

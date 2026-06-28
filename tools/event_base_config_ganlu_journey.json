@@ -24,7 +24,7 @@
     "ganlu_journey"
   ],
   "universal_requirement": "",
-  "universal_result": "prop_add(name=health; val=-5)|prop_add(name=progress; val=3)",
+  "universal_result": "prop_sub(name=health; val=-5)|prop_add(name=progress; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 40,
   "word_count_max": 250,

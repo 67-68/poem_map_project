@@ -44,7 +44,7 @@ func render_entropy_death(cause_text: String) -> void:
 	else:
 		bbcode += "[color=#cccccc]观测记录：[/color]\n"
 		for evt in TimeService.get_master_timeline():
-			bbcode += "[color=#999999] - %s 你干了 %s: %s [/color]\n" % [evt.time, evt.name, evt.ui_decl.epitaph_text if evt.ui_decl else ""]
+			bbcode += "[color=#999999] - %s 你干了 %s [/color]\n" % [evt.time, evt.name]
 			
 		bbcode += "\n[center][color=#555555]...然而这些世俗的挣扎，终将被时间彻底风化...[/color][/center]\n\n"
 	

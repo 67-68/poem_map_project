@@ -5,6 +5,7 @@ class_name Property extends GameEntity
 @export var hard_max: int = -1       # 硬上限，-1 = 无限制；append_stat/set_stat_val 会 clamp 到此值
 @export var soft_max: int = -1       # 软上限，-1 = 无限制；供 SurvivalManager 参考何时触发减少/溢出
 @export var decay_threshold: int = -1  # 衰减阈值，-1 = 无衰减；SurvivalManager.decay() 使用的阈值
+@export var lowest: int = 0          # 🆕 最低允许值，用于 convert_prop_limit_requirement() 中判断消耗是否越界
 @export var not_show_on_left: bool = false  # true 时不显示在左侧玩家面板的 PropGrid 中
 @export var staged_perceptions: Array[PropStagedPerceptionData] = []
 ## 变化量 → 模糊文本映射（用于飘字系统，避免暴露裸数值）

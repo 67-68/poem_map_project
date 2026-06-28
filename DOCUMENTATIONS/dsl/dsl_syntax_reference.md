@@ -161,8 +161,8 @@ flag_bool_has(name=flag_visited_palace)|prop_gt(name=money; val=100)
 
 | 函数 | 参数 | 说明 | 示例 |
 |------|------|------|------|
-| `prop_add` | name; val | 属性增加 | `prop_add(name=prestige; val=50)` |
-| `prop_sub` | name; val | 属性减少 | `prop_sub(name=money; val=100)` |
+| `prop_add` | name; val | 属性增加（val 必须为正数） | `prop_add(name=prestige; val=50)` |
+| `prop_sub` | name; val | 属性减少（val 必须为负数） | `prop_sub(name=money; val=-100)` |
 | `prop_set` | name; val | 属性设置 | `prop_set(name=money; val=500)` |
 
 ### 3.2 特性操作符

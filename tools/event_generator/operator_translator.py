@@ -187,12 +187,17 @@ class OperatorSemanticTranslator:
             # ── 属性类 ──
             if func == 'prop_add':
                 delta = OperatorSemanticTranslator._resolve_val(val_str)
+                # prop_add 强制正数，若为负则翻转
+                if delta < 0:
+                    delta = -delta
                 anchor = self.translate_prop_add(name, delta)
                 anchor_set.props.append(anchor)
             elif func == 'prop_sub':
                 delta = OperatorSemanticTranslator._resolve_val(val_str)
-                # prop_sub → 将 delta 取负
-                anchor = self.translate_prop_add(name, -delta)
+                # prop_sub 强制负数，若为正则翻转（不再手动取负）
+                if delta > 0:
+                    delta = -delta
+                anchor = self.translate_prop_add(name, delta)
                 anchor_set.props.append(anchor)
             elif func == 'prop_set':
                 # prop_set: delta 未知 → 特殊文案

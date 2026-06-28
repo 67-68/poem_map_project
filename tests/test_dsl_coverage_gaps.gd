@@ -110,7 +110,7 @@ func test_p0_random_operator_basic():
 func test_p0_random_operator_with_fail():
 	"""random(val=N, success=op, fail=op) 应解析成功/失败两个分支"""
 	var op = MicroDSLParser.parse_operator(
-		'random(val=60; success=trait_add(name=brave); fail=prop_add(name="reputation"; val=-5))'
+		'random(val=60; success=trait_add(name=brave); fail=prop_sub(name="reputation"; val=-5))'
 	)
 	assert_not_null(op, "random 不应返回 null")
 	assert_true(op is RandomOperator, "应为 RandomOperator")
@@ -639,7 +639,7 @@ func test_p3_parse_state_transistor_with_dsl_fields():
 		"uuid": "transistor_02",
 		"target_resource": "urn:flag:score_flag",
 		"requirement": "prop_gt(name=money; val=50)",
-		"operators": "prop_add(name=money; val=-50)|trait_add(name=spent_money)"
+		"operators": "prop_sub(name=money; val=-50)|trait_add(name=spent_money)"
 	}
 	var transistor = DSLParser.parse_state_transistor(row)
 	assert_not_null(transistor, "state_transistor 不应为 null")

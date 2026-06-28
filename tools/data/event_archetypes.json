@@ -16,7 +16,7 @@
     "name": "坊市",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_add(name=health; val=m_health_cost)|prop_add(name=money; val=l_money_gain)",
+    "universal_result": "prop_sub(name=health; val=m_health_cost)|prop_add(name=money; val=l_money_gain)",
     "era": "",
     "failed_hints": {
       "money": "身无分文，连摆摊的木板都租不起，只能隔着人潮望一眼",
@@ -39,7 +39,7 @@
     "name": "独酌",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_add(name=health; val=s_health_cost)|prop_sub(name=money; val=s_money_cost)|all_emo_sub(val=m_emotion_loss)",
+    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_sub(name=money; val=s_money_cost)|all_emo_sub(val=m_emotion_loss)",
     "era": "",
     "failed_hints": {
       "money": "囊中空空如也，连一壶浊酒都买不起，只能就着秋风咂咂嘴",
