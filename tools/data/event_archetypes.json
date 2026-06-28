@@ -58,17 +58,5 @@
       "health": "面带病容，见了故友只怕惹人担忧，还是不去为好",
       "time": "坊门将闭，这时候出门，怕是赶不回来了"
     }
-  },
-  "kuangke_baiye": {
-    "name": "狂客拜谒",
-    "parent": "baiye",
-    "universal_requirement": "",
-    "universal_result": "prop_add(name=talent; val=2)",
-    "era": "",
-    "failed_hints": {
-      "money": "囊中羞涩，连投刺的门包都凑不齐，朱门前的石狮子都仿佛在嘲笑他",
-      "health": "老板看你面黄肌瘦，干活无力，不要你了",
-      "time": "今日天色已晚，朱门早已紧闭，连门房都不屑出来应门"
-    }
   }
 }

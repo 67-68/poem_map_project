@@ -160,33 +160,29 @@ func check_action_validity(action: Action) -> Dictionary:
 		result.valid = false
 		return result
 	
-	# 0. 检查是否被 blocked（被 blocked 的 action 完全不显示，不由本系统处理）
-	# 调用方应在调用前已过滤 blocked
-	
-	# 1. 检查需求（Requirements）
-	if action.aciton_requirements:
-		for req in action.aciton_requirements:
-			if not req.compare(PlayerState):
-				result.valid = false
-				# 尝试从需求本身获取失败提示
-				var hint := req.get_failed_hint()
-				if hint.is_empty():
-					hint = req.describe_requirement()
-				if hint.is_empty():
-					hint = "条件未满足"
-				result.reasons.append(hint)
-				
-				# 尝试从 archetype 获取叙事文本（用属性名查找）
-				if req is PropertyRequirement:
-					var prop_name = req.property
+	# 0. 通过 action_results 中的 PropertyOperator 动态生成限制条件并检查
+	if action.action_results:
+		for op in action.action_results:
+			if op is PropertyOperator:
+				var prop_op := op as PropertyOperator
+				var req := prop_op.convert_prop_limit_requirement()
+				if req != null and not req.compare(PlayerState):
+					result.valid = false
+					var hint := req.get_failed_hint()
+					if hint.is_empty():
+						hint = req.describe_requirement()
+					if hint.is_empty():
+						hint = "条件未满足"
+					result.reasons.append(hint)
+					
+					var prop_name := prop_op.property
 					if not prop_name.is_empty():
 						result.prop_name = prop_name
 						var archetype_hint := _get_archetype_failed_hint(action, prop_name)
 						if not archetype_hint.is_empty():
-							# archetype 叙事文本替换掉描述文本
 							result.reasons[-1] = archetype_hint
-				# 只报告第一个失败的需求
-				break
+					# 只报告第一个失败的限制
+					return result
 	
 	# 2. 检查时间消耗（集成时间锁定）
 	var cost := get_action_day_cost(action)
@@ -196,10 +192,9 @@ func check_action_validity(action: Action) -> Dictionary:
 			result.valid = false
 			var time_hint := _get_archetype_failed_hint(action, "time")
 			if time_hint.is_empty():
-				time_hint = "这个行动需要 %d 天，时间不足" % cost
+				time_hint = "这个行动需要 " + str(cost) + " 天，时间不足"
 			result.reasons.append(time_hint)
 			result.prop_name = "time"
-			# 时间不足是硬性条件，不继续检查其他
 			return result
 	
 	return result
