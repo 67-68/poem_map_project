@@ -11,3 +11,4 @@ roo-code-settings.json
 .DS_Store
 build/*
 build/
+*.translation
