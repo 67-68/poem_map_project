@@ -24,6 +24,17 @@ var _blocked_actions: Dictionary = {}
 var _focus_action_ids: Array[String] = []
 var _focus_click_remaining: int = 0
 
+## 🆕 本轮已抽中的 action ID 集合（key=action_id, val=true）。
+## 属性变动重评估时，已中签的 action 保留此标记，未中签的永远灰化。
+var _selected_action_ids: Dictionary = {}
+
+## 🆕 缓存 event_archetypes.json 中的 failed_hints 字段
+## 结构: { archetype_key: { prop_name: narrative_text } }
+var _archetype_failed_hints: Dictionary = {}
+
+## 🆕 是否已连接 player_stat_changed 信号（防重连）
+var _stat_signal_connected: bool = false
+
 
 # ════════════════════════════════════════════════════════════
 # 即时预留（每回合，抽取后清空）
@@ -58,6 +69,194 @@ func unreserve_action(action_id: String) -> void:
 ## 清除所有预定（每次抽取后自动调用）
 func clear_reservations() -> void:
 	_reserved_action_ids.clear()
+
+
+# ════════════════════════════════════════════════════════════
+# 🆕 行动锁定评估系统（纯函数 + 缓存 + 信号监听）
+# ════════════════════════════════════════════════════════════
+
+## 加载 event_archetypes.json 中的 failed_hints 缓存。
+## 格式: { "baiye": { "money": "叙事...", "health": "..." } }
+func _init_archetype_cache() -> void:
+	var file := FileAccess.open("res://tools/data/event_archetypes.json", FileAccess.READ)
+	if not file:
+		Logging.warn("[ActionManager] 无法读取 event_archetypes.json，A类失败提示将降级使用 requirement.get_failed_hint()")
+		return
+	var json_str := file.get_as_text()
+	file.close()
+	var json := JSON.new()
+	var parse_err := json.parse(json_str)
+	if parse_err != OK:
+		Logging.err("[ActionManager] event_archetypes.json 解析失败: %s" % json.get_error_message())
+		return
+	var data: Dictionary = json.data
+	_archetype_failed_hints = {}
+	for archetype_key in data:
+		if data[archetype_key] is Dictionary and data[archetype_key].has("failed_hints"):
+			_archetype_failed_hints[archetype_key] = data[archetype_key]["failed_hints"].duplicate()
+	Logging.info("[ActionManager] 已加载 %d 个 archetype 的 failed_hints" % _archetype_failed_hints.size())
+
+
+## 根据 action 的 _main_tag 查找对应的 archetype key。
+## 例如 _main_tag=29(ACTION_MAIN_BAIYE) → action_tag_to_action_type(29)=0(BAI_YE) → "baiye"
+func _get_archetype_key(action: Action) -> String:
+	if not action is SceneAction:
+		return ""
+	var scene_action := action as SceneAction
+	var main_tag_val := scene_action._main_tag
+	var action_type := ENUMS.action_tag_to_action_type(main_tag_val)
+	if action_type < 0:
+		return ""
+	var type_name := ENUMS.ACTION_TYPE.keys()[action_type]
+	return type_name.to_lower().replace("_", "")
+
+
+## 根据 action 和失败属性名称查找 archetype 中的叙事文本。
+## 降级链: archetype.failed_hints[prop] → requirement.get_failed_hint() → ""
+func _get_archetype_failed_hint(action: Action, prop_name: String) -> String:
+	var key := _get_archetype_key(action)
+	if key.is_empty():
+		return ""
+	if not _archetype_failed_hints.has(key):
+		return ""
+	var hints: Dictionary = _archetype_failed_hints[key]
+	return hints.get(prop_name, "")
+
+
+## 🎯 纯函数：检查单个 action 在当前玩家状态下是否满足全部条件。
+## 返回: { valid: bool, reasons: Array[String], prop_name: String }
+## reasons 中每条是独立的失败原因文本（A类），最终会换行拼接到 dynamic_failed_hint。
+## 可复用于抽取阶段和属性变动后的重评估。
+func check_action_validity(action: Action) -> Dictionary:
+	var result := { "valid": true, "reasons": [], "prop_name": "" }
+	if not action:
+		result.valid = false
+		return result
+	
+	# 0. 检查是否被 blocked（被 blocked 的 action 完全不显示，不由本系统处理）
+	# 调用方应在调用前已过滤 blocked
+	
+	# 1. 检查需求（Requirements）
+	if action.aciton_requirements:
+		for req in action.aciton_requirements:
+			if not req.compare(PlayerState):
+				result.valid = false
+				# 尝试从需求本身获取失败提示
+				var hint := req.get_failed_hint()
+				if hint.is_empty():
+					hint = req.describe_requirement()
+				if hint.is_empty():
+					hint = "条件未满足"
+				result.reasons.append(hint)
+				
+				# 尝试从 archetype 获取叙事文本（用属性名查找）
+				if req is PropertyRequirement:
+					var prop_name := req.property
+					if not prop_name.is_empty():
+						result.prop_name = prop_name
+						var archetype_hint := _get_archetype_failed_hint(action, prop_name)
+						if not archetype_hint.is_empty():
+							# archetype 叙事文本替换掉描述文本
+							result.reasons[-1] = archetype_hint
+				# 只报告第一个失败的需求
+				break
+	
+	# 2. 检查时间消耗（集成时间锁定）
+	var cost := get_action_day_cost(action)
+	if cost > 0:
+		var current_time := int(PlayerState.get_stat_val("time"))
+		if current_time < cost:
+			result.valid = false
+			var time_hint := _get_archetype_failed_hint(action, "time")
+			if time_hint.is_empty():
+				time_hint = "这个行动需要 %d 天，时间不足" % cost
+			result.reasons.append(time_hint)
+			result.prop_name = "time"
+			# 时间不足是硬性条件，不继续检查其他
+			return result
+	
+	return result
+
+
+## 连接 PlayerState.player_stat_changed 信号。
+func connect_to_player_state() -> void:
+	if _stat_signal_connected:
+		return
+	if PlayerState.has_signal("player_stat_changed"):
+		if not PlayerState.player_stat_changed.is_connected(_on_player_stat_changed):
+			PlayerState.player_stat_changed.connect(_on_player_stat_changed)
+			_stat_signal_connected = true
+			Logging.info("[ActionManager] 已连接 player_stat_changed 信号")
+
+
+## 断开 PlayerState.player_stat_changed 信号。
+func disconnect_from_player_state() -> void:
+	if not _stat_signal_connected:
+		return
+	if PlayerState.has_signal("player_stat_changed"):
+		if PlayerState.player_stat_changed.is_connected(_on_player_stat_changed):
+			PlayerState.player_stat_changed.disconnect(_on_player_stat_changed)
+	_stat_signal_connected = false
+
+
+## 属性变动时重新评估所有 action 的锁定状态。
+## 原则：
+## - 已中签的 action：条件满足→启用，条件不满足→A类灰化
+## - 未中签的 action：永远灰化（B类叙事），不管条件是否满足
+## - 不重新随机抽取（保留 _selected_action_ids）
+func reevaluate_all_locks() -> void:
+	Logging.info("[ActionManager] ═══ 属性变动重评估启动 ═══")
+	
+	var all_actions := Database.get_actions_all()
+	var changed := false
+	
+	for a_id in all_actions:
+		var a = Database.get_action(a_id)
+		if not a:
+			continue
+		
+		# 跳过被 blocked 的 action
+		if _blocked_actions.has(a_id):
+			continue
+		
+		var validity := check_action_validity(a)
+		
+		if _selected_action_ids.has(a_id) and _selected_action_ids[a_id]:
+			# 已中签：条件满足则启用，否则A类灰化
+			if validity.valid:
+				if not a.dynamic_failed_hint.is_empty():
+					a.clear_failed_hint()
+					changed = true
+			else:
+				a.clear_failed_hint()
+				for reason in validity.reasons:
+					a.append_failed_hint(reason)
+				changed = true
+		else:
+			# 未中签：永远灰化（B类叙事 + 可能的A类原因）
+			a.clear_failed_hint()
+			# 先加 B 类叙事
+			if not a.lock_narrative.is_empty():
+				a.append_failed_hint(a.lock_narrative)
+			# 再加 A 类原因（如果有）
+			if not validity.valid and validity.reasons.size() > 0:
+				for reason in validity.reasons:
+					a.append_failed_hint(reason)
+			changed = true
+	
+	if changed:
+		EventBus.request_refresh_action_locks.emit()
+		Logging.info("[ActionManager] ═══ 属性变动重评估完成，已发送刷新信号 ═══")
+	else:
+		Logging.info("[ActionManager] ═══ 属性变动重评估完成，无变化 ═══")
+
+
+## player_stat_changed 信号回调。
+func _on_player_stat_changed(prop_name: String) -> void:
+	# 只对影响 action 可用性的属性变化做反应
+	if prop_name in ["time"]:
+		Logging.info("[ActionManager] 关键属性 %s 变动，触发锁定重评估" % prop_name)
+		reevaluate_all_locks()
 
 
 # ════════════════════════════════════════════════════════════
@@ -249,7 +448,11 @@ func process_xun_tick() -> void:
 func get_available_scene_actions() -> Dictionary:
 	#breakpoint
 	Logging.info("[ActionManager] ═══ 开始获取可用场景动作 ═══")
-
+	
+	# ── 确保 archetype 缓存已加载 ──
+	if _archetype_failed_hints.is_empty():
+		_init_archetype_cache()
+	
 	# ── Phase 0 前置通报：当前锁定/阻塞状态 ──
 	if _locked_in_actions.size() > 0:
 		var locked_list: Array[String] = []
@@ -263,7 +466,10 @@ func get_available_scene_actions() -> Dictionary:
 			var rem = _blocked_actions[bid]
 			blocked_list.append("%s(%s旬)" % [bid, "∞" if rem == -1 else str(rem)])
 		Logging.info("[ActionManager] 🚫 当前持久阻塞 (%d): %s" % [_blocked_actions.size(), ", ".join(blocked_list)])
-
+	
+	# ── Phase 0.5: 清空上轮 selected_ids ──
+	_selected_action_ids.clear()
+	
 	# ── Phase 0: _locked_in 驱动自动预留 ──
 	for action_id in _locked_in_actions:
 		var ok := reserve_action(action_id)
@@ -276,10 +482,10 @@ func get_available_scene_actions() -> Dictionary:
 		if action_id in _reserved_action_ids:
 			_reserved_action_ids.erase(action_id)
 			Logging.info("[ActionManager] _blocked 过滤，移除预留: %s" % action_id)
-
+	
 	if _reserved_action_ids.size() > 0:
 		Logging.info("[ActionManager] 📌 本回合预留席位 (%d/%d): %s" % [_reserved_action_ids.size(), MAX_PICK_COUNT, ", ".join(_reserved_action_ids)])
-
+	
 	var actions := {}
 	var num_with_npc := 0   # 「有人」计数器
 	var num_solo := 0       # 「无人」计数器
@@ -294,7 +500,10 @@ func get_available_scene_actions() -> Dictionary:
 		Logging.err("当前位置幽灵化: %s" % PlayerState.current_location)
 		return actions
 	Logging.info("[ActionManager] 当前位置: %s, area_tags: %s" % [PlayerState.current_location, str(loc.area_tags)])
-
+	
+	# 连接 player_stat_changed 信号（仅连接一次）
+	connect_to_player_state()
+	
 	for a_id in all_actions:
 		var a = Database.get_action(a_id)
 		var is_valid = true # 🤓☝️ 设立拦截签证！
@@ -316,14 +525,12 @@ func get_available_scene_actions() -> Dictionary:
 			num_intercepted += 1
 			continue
 		
-		# 1. 检查硬性需求 (Requirements)
-		if a.aciton_requirements:
-			for req in a.aciton_requirements:
-				if not req.compare(PlayerState):
-					is_valid = false # 签证拒签！
-					Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 需求未满足 → %s" % [action_npc_label, a_id, req.describe_requirement()])
-					break # 💀 打断内层循环，直接判死刑
-					
+		# 1. 检查硬性需求 (Requirements) — 使用 check_action_validity 复用
+		var validity := check_action_validity(a)
+		if not validity.valid:
+			is_valid = false
+			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: %s" % [action_npc_label, a_id, ", ".join(validity.reasons)])
+		
 		if not is_valid:
 			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 不满足需求条件" % [action_npc_label, a_id])
 			num_intercepted += 1
@@ -369,7 +576,7 @@ func get_available_scene_actions() -> Dictionary:
 						Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 不在时代白名单 (era=%s)" % [action_npc_label, a_id, GameState.current_era])
 						num_intercepted += 1
 						continue
-
+	
 		# 3. 活到最后的才是合法动作
 		var locked_mark := " 🔒" if _locked_in_actions.has(a_id) else ""
 		Logging.info("[ActionManager] ✅ 装载 [%s] %s%s" % [action_npc_label, a_id, locked_mark])
@@ -398,11 +605,22 @@ func get_total_weight_power2(actions: Dictionary) -> float:
 		total_weight += pow(actions[action_id], 2)
 	return total_weight
 
+## 🎲 抽取行动并标记中签/未中签状态。
+## 改造后：除了返回选中的 actions，还会：
+## 1. 记录中签的 action_id 到 _selected_action_ids
+## 2. 为未中签的合法 action 设置 B类锁定叙事文本
+## 3. 为所有 action 清空 dynamic_failed_hint 后重建
 func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT) -> Array[SceneAction]:
 	var selected_actions: Array[SceneAction] = []
 	var available_pool = action_pool.duplicate() # 复制一份，避免污染原池
 	
 	Logging.info("[ActionManager] 🎲 开始抽取行动 (目标%d个, 池中%d, 预留%d)" % [pick_count, action_pool.size(), _reserved_action_ids.size()])
+	
+	# --- Phase 0: 清空所有 action 的 dynamic_failed_hint ---
+	for a_id in Database.get_actions_all():
+		var a = Database.get_action(a_id)
+		if a:
+			a.clear_failed_hint()
 	
 	# --- Phase 1: 处理预留席位 ---
 	if _reserved_action_ids.size() > 0:
@@ -444,6 +662,25 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 				available_pool.erase(action_id) # 拿走，不放回！
 				Logging.info("[ActionManager] 🎲 随机抽取: %s" % action_id)
 				break # 必须 break，进入下一轮抽取
+	
+	# --- Phase 3: 标记中签/未中签 ---
+	# 已中签的记录到 _selected_action_ids
+	_selected_action_ids.clear()
+	for sa in selected_actions:
+		_selected_action_ids[sa.uuid] = true
+	
+	# 未中签的合法 action → B类锁定
+	for a_id in action_pool:
+		if a_id in _selected_action_ids:
+			continue
+		if _blocked_actions.has(a_id):
+			continue
+		var a = Database.get_action(a_id)
+		if a:
+			if not a.lock_narrative.is_empty():
+				a.append_failed_hint(a.lock_narrative)
+			# 同时追加 B类通用文本
+			a.append_failed_hint("此路不通，换个主意吧")
 	
 	# 🆕 抽取结果汇总
 	var reserved_count := 0

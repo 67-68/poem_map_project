@@ -6,6 +6,9 @@ class_name SceneActionPanel extends Button
 ## 锁定闪光 Tween 引用（用于清除旧闪光）
 var _flash_tween: Tween = null
 
+## 🆕 当前是否处于灰化锁定状态
+var _is_locked: bool = false
+
 # ── Hover 底色（枯墨暗红，极淡，只有交互时才显形）──
 const HOVER_BG_COLOR: Color = Color(0.22, 0.05, 0.02, 0.10)
 var _hover_style: StyleBoxFlat
@@ -51,10 +54,22 @@ func initialize(action_: Action = null):
 	# ── Hover Popup（Alt 双层揭示）──
 	if not action.description.is_empty() or not action.action_results.is_empty() or not action.aciton_requirements.is_empty():
 		_register_hover_popup()
-	
-	# ── 时间不足锁定 ──
-	PlayerState.player_stat_changed.connect(_on_time_changed)
-	_refresh_time_lock()
+
+
+## 🆕 设置为灰化锁定态
+func set_locked(reason: String) -> void:
+	_is_locked = true
+	modulate = Color(0.4, 0.4, 0.4, 0.6)
+	mouse_filter = Control.MOUSE_FILTER_STOP  # 仍然接收 hover
+	tooltip_text = reason if not reason.is_empty() else "暂时无法执行此行动"
+
+
+## 🆕 解除灰化锁定态
+func set_unlocked() -> void:
+	_is_locked = false
+	modulate = Color.WHITE
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	tooltip_text = ""
 
 
 ## 差分更新：只刷 UI 文本/图标，不重建信号 & HoverPopup（已注册的 popup 绑定不变）
@@ -69,34 +84,6 @@ func update_action(new_action: Action) -> void:
 		texture.visible = true
 	else:
 		texture.visible = false
-	
-	# ── 时间不足锁定 ──
-	_refresh_time_lock()
-
-
-# ════════════════════════════════════════════════════════════
-# 时间锁定
-# ════════════════════════════════════════════════════════════
-
-## 根据当前 time 属性与行动消耗天数，锁定/解锁按钮
-func _refresh_time_lock() -> void:
-	var cost := ActionManager.get_action_day_cost(action)
-	if cost <= 0:
-		return
-	var current_time := int(PlayerState.get_stat_val("time"))
-	if current_time < cost:
-		disabled = true
-		tooltip_text = "这个行动需要 %d 天，时间不足" % cost
-		Logging.info("SceneActionPanel: 时间不足锁定 action=%s (需要%d天, 剩余%d天)" % [action.uuid if action else "NULL", cost, current_time])
-	else:
-		disabled = false
-		tooltip_text = ""
-
-
-## 监听 time 属性变化，实时刷新锁定状态
-func _on_time_changed(prop_name: String) -> void:
-	if prop_name == "time":
-		_refresh_time_lock()
 
 
 ## 监听锁定行动信号，匹配当前 action 时触发呼吸闪光
@@ -126,7 +113,10 @@ func _register_hover_popup() -> void:
 	var popup := HoverInfoPopup.new()
 	
 	# 叙事层（默认可见）
-	popup.set_narrative_text(action.description if not action.description.is_empty() else "（无叙述）")
+	var narrative := action.description if not action.description.is_empty() else "（无叙述）"
+	if _is_locked and not action.dynamic_failed_hint.is_empty():
+		narrative = "[color=#cc6666]🔒 %s[/color]\n\n%s" % [action.dynamic_failed_hint, narrative]
+	popup.set_narrative_text(narrative)
 	
 	# 向量层（Alt 按下可见）
 	var vector_lines: Array[String] = []
@@ -156,6 +146,13 @@ func _on_mouse_exited() -> void:
 	self.add_theme_stylebox_override("normal", _normal_style)
 
 func _on_button_pressed() -> void:
+	# 🆕 前置检查：锁定态 → 弹出 toast，不执行
+	if _is_locked:
+		var reason := action.dynamic_failed_hint if not action.dynamic_failed_hint.is_empty() else "暂时无法执行此行动"
+		EventBus.request_toast.emit(reason, 1)
+		Logging.info("SceneActionPanel: 锁定态点击被拦截 action=%s reason=%s" % [action.uuid if action else "NULL", reason])
+		return
+	
 	#breakpoint
 	Logging.info("SceneActionPanel: BUTTON_PRESSED name=%s type=%s action_results=%d generator=%s" % [
 		action.name if action else "NULL",

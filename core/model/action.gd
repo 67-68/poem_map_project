@@ -7,7 +7,7 @@ class_name Action extends GameEntity
 
 @export var _action_tags: Array[ENUMS.ACTION_TAGS] = [] # 这些action tag 用来筛选当前场景下可用的event
 var action_tags: Array[String]:
-	get: 
+	get:
 		var result: Array[String] = []
 		for tag in _action_tags:
 			result.append(ENUMS.to_action_str(tag))
@@ -34,3 +34,27 @@ var generator: Generator = null
 ## 🆕 兜底事件 UUID：当过滤器链全部过滤后池空时触发此事件
 ## 例如 "event_baiye_cooldown_wall"（拜谒被拒叙事）
 @export var fallback_event_uuid: String = ""
+
+## 🆕 运行时动态失败提示文本（每轮重建），用于 UI 灰化按钮的 tooltip 显示。
+## A类（需求不满足）和 B类（未中签）的原因会换行拼接在此字段中。
+var dynamic_failed_hint: String = ""
+
+## 🆕 静态配置的叙事文本：当 action 在随机抽取中未被选中（B类锁定）时，
+## 此文本会被追加到 dynamic_failed_hint 中作为锁定理由。
+## 在 .tres 文件中手动填写，如「今日门庭冷落，车马稀疏…」。
+@export var lock_narrative: String = ""
+
+## 🆕 追加一段失败提示文本到 dynamic_failed_hint。
+## 多条原因用换行分隔。
+func append_failed_hint(text: String) -> void:
+	if text.is_empty():
+		return
+	if dynamic_failed_hint.is_empty():
+		dynamic_failed_hint = text
+	else:
+		dynamic_failed_hint += "\n" + text
+
+## 🆕 清空 dynamic_failed_hint。
+## 每轮开始前或重新评估锁定状态前调用。
+func clear_failed_hint() -> void:
+	dynamic_failed_hint = ""

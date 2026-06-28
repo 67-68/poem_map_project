@@ -33,4 +33,5 @@ uuid = "du_zhuo"
 name = "闲居"
 description = "闭门谢客，借酒避世。"
 icon = ExtResource("4_uxtbm")
+lock_narrative = "酒壶已空，心绪难平，独坐无趣"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

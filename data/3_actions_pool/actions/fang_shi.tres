@@ -28,4 +28,5 @@ uuid = "fang_shi"
 name = "集市"
 description = "脱下长衫"
 icon = ExtResource("4_qsksc")
+lock_narrative = "市井喧闹，却与他无关，口袋里一文不名"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

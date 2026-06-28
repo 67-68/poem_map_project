@@ -34,4 +34,5 @@ uuid = "deng_gao"
 name = "登高"
 description = "遣兴楼台，暂忘浮生。"
 icon = ExtResource("4_b6lfb")
+lock_narrative = "望尽天涯路，却无登高之心"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

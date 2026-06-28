@@ -28,4 +28,5 @@ name = "交游朋友"
 description = "交游"
 icon = ExtResource("4_ob7iq")
 fallback_event_uuid = "event_cooldown_wall"
+lock_narrative = "故人已散，新知难觅，独坐空斋"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

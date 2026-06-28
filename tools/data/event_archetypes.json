@@ -4,42 +4,71 @@
     "name": "拜谒",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=money; val=m_money_cost)|prop_add(name=progress; val=m_progress)",
-    "era": ""
+    "universal_result": "prop_sub(name=money; val=m_money_cost)|prop_add(name=progress; val=m_progress_gain)",
+    "era": "",
+    "failed_hints": {
+      "money": "囊中羞涩，连投刺的门包都凑不齐，朱门前的石狮子都仿佛在嘲笑他",
+      "health": "老板看你面黄肌瘦，干活无力，不要你了",
+      "time": "今日天色已晚，朱门早已紧闭，连门房都不屑出来应门"
+    }
   },
   "fangshi": {
     "name": "坊市",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_add(name=health; val=m_health_loss)|prop_add(name=money; val=l_money_gain)",
-    "era": ""
+    "universal_result": "prop_add(name=health; val=m_health_cost)|prop_add(name=money; val=l_money_gain)",
+    "era": "",
+    "failed_hints": {
+      "money": "身无分文，连摆摊的木板都租不起，只能隔着人潮望一眼",
+      "health": "病骨支离，连在集市里走一圈的力气都没有",
+      "time": "市集早已散去，只有几个醉汉在空地上歪歪扭扭地走"
+    }
   },
   "denggao": {
     "name": "登高",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_add(name=health; val=l_health_buff)",
-    "era": ""
+    "universal_result": "prop_add(name=health; val=l_health_recovery)",
+    "era": "",
+    "failed_hints": {
+      "health": "双腿如灌了铅，连门前的小坡都爬不上去，更别说登高了",
+      "time": "暮色已合，山路难行，贸然登山只怕坠入深谷无人知晓"
+    }
   },
   "duzhuo": {
     "name": "独酌",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_add(name=health; val=s_health_loss)|prop_sub(name=money; val=s_money_cost)|all_emo_sub(val=mid_emo_val)",
-    "era": ""
+    "universal_result": "prop_add(name=health; val=s_health_cost)|prop_sub(name=money; val=s_money_cost)|all_emo_sub(val=m_emotion_loss)",
+    "era": "",
+    "failed_hints": {
+      "money": "囊中空空如也，连一壶浊酒都买不起，只能就着秋风咂咂嘴",
+      "health": "大夫说再喝就要去见阎王了，手抖得连酒杯都握不稳",
+      "time": "天色已晚，酒肆早已打烊，只有风在街角呜呜地吹"
+    }
   },
   "jiaoyou": {
     "name": "交游",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=literary_fame; val=small_literary_fame)",
-    "era": ""
+    "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=literary_fame; val=5)",
+    "era": "",
+    "failed_hints": {
+      "money": "一身破旧衣裳，如何登得上别人的门庭？连见客的小厮都要嫌弃",
+      "health": "面带病容，见了故友只怕惹人担忧，还是不去为好",
+      "time": "坊门将闭，这时候出门，怕是赶不回来了"
+    }
   },
   "kuangke_baiye": {
     "name": "狂客拜谒",
     "parent": "baiye",
     "universal_requirement": "",
     "universal_result": "prop_add(name=talent; val=2)",
-    "era": ""
+    "era": "",
+    "failed_hints": {
+      "money": "囊中羞涩，连投刺的门包都凑不齐，朱门前的石狮子都仿佛在嘲笑他",
+      "health": "老板看你面黄肌瘦，干活无力，不要你了",
+      "time": "今日天色已晚，朱门早已紧闭，连门房都不屑出来应门"
+    }
   }
 }
