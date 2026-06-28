@@ -200,24 +200,24 @@ class TestScaleDslOperator(unittest.TestCase):
     # ── Named Amount 测试 ──
 
     def test_named_amount_big_money(self):
-        """val=big_amount_money 应解析为 30"""
-        result = scale_dsl_operator('prop_add(name=money; val=big_amount_money)', 1)
+        """val=m_money_gain 应解析为 30"""
+        result = scale_dsl_operator('prop_add(name=money; val=m_money_gain)', 1)
         self.assertEqual(result, 'prop_add(name=money; val=30)')
 
     def test_named_amount_with_scale(self):
-        """val=big_amount_money * scale=2 → 60"""
-        result = scale_dsl_operator('prop_add(name=money; val=big_amount_money)', 2)
+        """val=m_money_gain * scale=2 → 60"""
+        result = scale_dsl_operator('prop_add(name=money; val=m_money_gain)', 2)
         self.assertEqual(result, 'prop_add(name=money; val=60)')
 
     def test_named_amount_medium_health(self):
-        """val=medium_health_buff → 10"""
-        result = scale_dsl_operator('prop_add(name=health; val=medium_health_buff)', 1)
-        self.assertEqual(result, 'prop_add(name=health; val=10)')
+        """val=l_health_recovery → 50"""
+        result = scale_dsl_operator('prop_add(name=health; val=l_health_recovery)', 1)
+        self.assertEqual(result, 'prop_add(name=health; val=50)')
 
     def test_named_amount_negative_severe_health(self):
-        """val=severe_health_loss → -10"""
-        result = scale_dsl_operator('prop_add(name=health; val=severe_health_loss)', 1)
-        self.assertEqual(result, 'prop_add(name=health; val=-10)')
+        """val=m_health_cost → -30"""
+        result = scale_dsl_operator('prop_add(name=health; val=m_health_cost)', 1)
+        self.assertEqual(result, 'prop_add(name=health; val=-30)')
 
     def test_named_amount_unknown_raises(self):
         """未知 named amount 报错（不被符号表覆盖的非数值字符串）"""
@@ -225,9 +225,9 @@ class TestScaleDslOperator(unittest.TestCase):
             scale_dsl_operator('prop_add(name=money; val=nonexistent_amount_xyz)', 1)
 
     def test_named_amount_emo(self):
-        """val=small_emotion_delta 在 emo_add 中生效"""
-        result = scale_dsl_operator('emo_add(name=SORROW; val=small_emotion_delta)', 1)
-        self.assertEqual(result, 'emo_add(name=SORROW; val=5)')
+        """val=m_emotion_loss 在 emo_add 中生效"""
+        result = scale_dsl_operator('emo_add(name=SORROW; val=m_emotion_loss)', 1)
+        self.assertEqual(result, 'emo_add(name=SORROW; val=-10)')
 
 
 # ════════════════════════════════════════════════════════════════
