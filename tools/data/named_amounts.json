@@ -1,49 +1,36 @@
 {
-	"_comment": "DSL Named Amount 全局符号表 — Python (dsl_parser.py / operator_translator.py) 和 Godot (named_dsl_parser.gd) 双端共享。",
-	"_usage": "DSL 写法: prop_add(name=money; val=big_amount_money)。符号名在解析时被替换为对应数值，然后正常走 Scale 乘法。",
-	"_naming_rule": "{magnitude}_{domain} 格式，如 big_amount_money, severe_health_loss",
+  "_comment_1": "=== 🚰 第一部分：大唐行动汇率表 (Action Deltas) ===",
+  "_comment_1_desc": "用于所有事件的增加/扣除。只能使用 S/M/L/XL 刻度。",
 
-	"tiny_amount_money": 2,
-	"small_amount_money": 5,
-	"medium_amount_money": 10,
-	"big_amount_money": 30,
-	"huge_amount_money": 70,
+  "s_money_gain": 15,
+  "m_money_gain": 30,
+  "l_money_gain": 50,
 
-	"tiny_health_buff": 3,
-	"small_health_buff": 5,
-	"medium_health_buff": 10,
-	"large_health_buff": 15,
+  "s_money_cost": -15,
+  "m_money_cost": -30,
+  "l_money_cost": -50,
 
-	"minor_health_loss": -3,
-	"mild_health_loss": -5,
-	"severe_health_loss": -10,
+  "s_health_cost": -15,
+  "m_health_cost": -30,
+  "l_health_recovery": 50,
 
-	"tiny_literary_fame": 3,
-	"small_literary_fame": 5,
-	"medium_literary_fame": 8,
+  "s_progress_gain": 3,
+  "m_progress_gain": 6,
+  "l_progress_gain": 10,
 
-	"tiny_progress": 1,
-	"small_progress": 3,
-	"medium_progress": 5,
+  "m_emotion_loss": -10,
 
-	"small_emotion_delta": 5,
-	"medium_emotion_delta": 10,
-	"large_emotion_delta": 15,
-	"huge_emotion_delta": 20,
 
-	"_comment_matrix": "S/M/L 行动级刻度 — 与 action_resource_matrix 矩阵对齐 (2026.6.27)",
+  "_comment_2": "=== 🛁 第二部分：大唐阶级状态线 (State Thresholds) ===",
+  "_comment_2_desc": "用于 Requirement 判定，或触发疾病/破产 Trait 的水位线。绝不使用 S/M/L。",
 
-	"s_health_loss": -15,
-	"m_health_loss": -30,
-	"s_health_buff": 15,
-	"l_health_buff": 50,
+  "health_dying_threshold": 15,
+  "health_exhausted_threshold": 30,
 
-	"s_money_cost": 20,
-	"m_money_cost": 50,
-	"l_money_gain": 100,
+  "money_poverty_line": 20,
+  "money_middle_class_threshold": 200,
+  "money_wealthy_threshold": 1000,
 
-	"s_progress": 1,
-	"m_progress": 5,
-
-	"mid_emo_val": 10
+  "progress_tier1_threshold": 30,
+  "progress_tier2_threshold": 60
 }

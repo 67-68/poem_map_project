@@ -107,7 +107,7 @@ func _get_archetype_key(action: Action) -> String:
 	var action_type := ENUMS.action_tag_to_action_type(main_tag_val)
 	if action_type < 0:
 		return ""
-	var type_name := ENUMS.ACTION_TYPE.keys()[action_type]
+	var type_name = ENUMS.ACTION_TYPE.keys()[action_type]
 	return type_name.to_lower().replace("_", "")
 
 
@@ -151,7 +151,7 @@ func check_action_validity(action: Action) -> Dictionary:
 				
 				# 尝试从 archetype 获取叙事文本（用属性名查找）
 				if req is PropertyRequirement:
-					var prop_name := req.property
+					var prop_name = req.property
 					if not prop_name.is_empty():
 						result.prop_name = prop_name
 						var archetype_hint := _get_archetype_failed_hint(action, prop_name)

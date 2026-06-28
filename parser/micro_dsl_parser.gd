@@ -1250,7 +1250,7 @@ static func _exec_info_op(parsed: NamedDSLParser.ParseResult, raw: String) -> In
 
 # ─── all_emo_sub ───────────────────────────────────────
 
-# DSL 语法: all_emo_sub(val=mid_emo_val)
+# DSL 语法: all_emo_sub(val=m_emotion_loss)
 # 对所有情绪执行 reduce_to_lowest_zero 操作，减去指定值。
 # 解析为 AllEmoSubOperator
 static func _exec_all_emo_sub_op(parsed: NamedDSLParser.ParseResult, raw: String) -> BaseOperator:

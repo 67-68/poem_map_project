@@ -278,7 +278,7 @@ static func _parse_value(val_str: String) -> Variant:
 		return val_str.to_float()
 	
 	# 🆕 Named Amount 符号表查表：在 fallback 裸字符串之前先解析
-	# 例如 val=big_amount_money → 查 named_amounts.json → 返回 30
+	# 例如 val=m_money_gain → 查 named_amounts.json → 返回 30
 	var amounts := _load_named_amounts()
 	if amounts.has(val_str):
 		var resolved = amounts[val_str]
