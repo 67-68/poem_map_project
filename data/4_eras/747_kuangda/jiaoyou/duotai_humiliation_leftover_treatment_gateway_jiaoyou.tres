@@ -1,60 +1,60 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://o8kkoryh3t4b"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_cjiax"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_w7wdo"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="4_kbm30"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="5_0uy30"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="6_2exvi"]
-[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="6_cjiax"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="7_r3j5d"]
-
-[sub_resource type="Resource" id="Resource_cjiax"]
-script = ExtResource("4_kbm30")
-
-[sub_resource type="Resource" id="Resource_w7wdo"]
-script = ExtResource("5_0uy30")
-description = "搁笔于案，转身步入夜色。"
-
-[sub_resource type="Resource" id="Resource_u6qj5"]
-script = ExtResource("6_2exvi")
-imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
-
-[sub_resource type="Resource" id="Resource_kbm30"]
-script = ExtResource("4_kbm30")
-operators = Array[ExtResource("2_w7wdo")]([SubResource("Resource_u6qj5")])
-
-[sub_resource type="Resource" id="Resource_0uy30"]
-script = ExtResource("5_0uy30")
-choice_result = SubResource("Resource_kbm30")
-description = "拱手称谢，将碎银收入囊中。"
-
-[sub_resource type="Resource" id="Resource_2exvi"]
-script = ExtResource("6_2exvi")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
-
-[sub_resource type="Resource" id="Resource_r3j5d"]
-script = ExtResource("4_kbm30")
-operators = Array[ExtResource("2_w7wdo")]([SubResource("Resource_2exvi")])
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_cjiax"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="2_w7wdo"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="3_u6qj5"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_kbm30"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_0uy30"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_2exvi"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_r3j5d"]
 
 [sub_resource type="Resource" id="Resource_0hltk"]
-script = ExtResource("5_0uy30")
-choice_result = SubResource("Resource_r3j5d")
-description = "躬身接过银两，笑答：“谢员外赏，愿再效劳。”"
+script = ExtResource("2_w7wdo")
 
 [sub_resource type="Resource" id="Resource_8lh4d"]
-script = ExtResource("6_cjiax")
+script = ExtResource("4_kbm30")
+description = "搁笔于案，转身步入夜色。"
+
+[sub_resource type="Resource" id="Resource_tg7lu"]
+script = ExtResource("5_0uy30")
+imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+
+[sub_resource type="Resource" id="Resource_3bya6"]
+script = ExtResource("2_w7wdo")
+operators = Array[ExtResource("1_cjiax")]([SubResource("Resource_tg7lu")])
+
+[sub_resource type="Resource" id="Resource_wd4tf"]
+script = ExtResource("4_kbm30")
+choice_result = SubResource("Resource_3bya6")
+description = "拱手称谢，将碎银收入囊中。"
+
+[sub_resource type="Resource" id="Resource_h7f65"]
+script = ExtResource("5_0uy30")
+imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+
+[sub_resource type="Resource" id="Resource_6xewe"]
+script = ExtResource("2_w7wdo")
+operators = Array[ExtResource("1_cjiax")]([SubResource("Resource_h7f65")])
+
+[sub_resource type="Resource" id="Resource_ka27n"]
+script = ExtResource("4_kbm30")
+choice_result = SubResource("Resource_6xewe")
+description = "躬身接过银两，笑答：“谢员外赏，愿再效劳。”"
+
+[sub_resource type="Resource" id="Resource_85yab"]
+script = ExtResource("6_2exvi")
 volatile_stat = "ambition"
 value = 50
 operator = 1
 
 [resource]
 script = ExtResource("7_r3j5d")
-requirement = SubResource("Resource_8lh4d")
+requirement = SubResource("Resource_85yab")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["emotion_pair:pair_survival", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "action:humiliation_leftover_treatment", "VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ACTION_SOCIAL_PARTING:willow_branch", "action:scene_jiaoyou"])
-options = Array[ExtResource("1_cjiax")]([SubResource("Resource_w7wdo"), SubResource("Resource_0uy30"), SubResource("Resource_0hltk")])
-on_enter_result = SubResource("Resource_cjiax")
+options = Array[ExtResource("3_u6qj5")]([SubResource("Resource_8lh4d"), SubResource("Resource_wd4tf"), SubResource("Resource_ka27n")])
+on_enter_result = SubResource("Resource_0hltk")
 uuid = "duotai_humiliation_leftover_treatment_gateway_jiaoyou"
 name = "emo_lt(name=ambition; val=100)"
 description = "碎银换墓志"

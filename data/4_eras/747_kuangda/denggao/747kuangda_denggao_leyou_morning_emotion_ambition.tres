@@ -1,112 +1,112 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dw3vpyqp2mp2u"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_tguje"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_qv7su"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_g3gx7"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_da4ut"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="6_pbxht"]
-[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_dh22t"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_rkoo0"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_bw61e"]
-[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="10_et4d5"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_7qywa"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="12_ypoqd"]
-
-[sub_resource type="Resource" id="Resource_pao8x"]
-script = ExtResource("3_g3gx7")
-value = 6
-
-[sub_resource type="Resource" id="Resource_tguje"]
-script = ExtResource("3_g3gx7")
-value = 11
-
-[sub_resource type="Resource" id="Resource_qv7su"]
-script = ExtResource("5_da4ut")
-imagery_name = "ENV_POLITICS_PROSPER:cloud_and_sun"
-
-[sub_resource type="Resource" id="Resource_g3gx7"]
-script = ExtResource("6_pbxht")
-operators = Array[ExtResource("2_qv7su")]([SubResource("Resource_pao8x"), SubResource("Resource_tguje"), SubResource("Resource_qv7su")])
-
-[sub_resource type="Resource" id="Resource_fpo6c"]
-script = ExtResource("7_dh22t")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_da4ut"]
-script = ExtResource("8_rkoo0")
-choice_result = SubResource("Resource_g3gx7")
-requirement = SubResource("Resource_fpo6c")
-description = "“雾太厚，看不清方向。”话毕，你转身望向终南山。"
-
-[sub_resource type="Resource" id="Resource_pbxht"]
-script = ExtResource("3_g3gx7")
-value = 6
-
-[sub_resource type="Resource" id="Resource_dh22t"]
-script = ExtResource("3_g3gx7")
-value = 6
-
-[sub_resource type="Resource" id="Resource_rkoo0"]
-script = ExtResource("6_pbxht")
-operators = Array[ExtResource("2_qv7su")]([SubResource("Resource_pbxht"), SubResource("Resource_dh22t")])
-
-[sub_resource type="Resource" id="Resource_bw61e"]
-script = ExtResource("8_rkoo0")
-choice_result = SubResource("Resource_rkoo0")
-description = "你点头“嗯”一声，抬手将石栏上露水抹去，目光未离城中。"
-
-[sub_resource type="Resource" id="Resource_et4d5"]
-script = ExtResource("3_g3gx7")
-value = 6
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_pao8x"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_tguje"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_qv7su"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_g3gx7"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_fpo6c"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_da4ut"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_pbxht"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_dh22t"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="9_rkoo0"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_bw61e"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_et4d5"]
 
 [sub_resource type="Resource" id="Resource_7qywa"]
-script = ExtResource("3_g3gx7")
-value = 22
+script = ExtResource("3_qv7su")
+value = 6
 
 [sub_resource type="Resource" id="Resource_ypoqd"]
-script = ExtResource("3_g3gx7")
+script = ExtResource("3_qv7su")
 value = 11
 
 [sub_resource type="Resource" id="Resource_decio"]
-script = ExtResource("5_da4ut")
-imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+script = ExtResource("4_g3gx7")
+imagery_name = "ENV_POLITICS_PROSPER:cloud_and_sun"
 
 [sub_resource type="Resource" id="Resource_ew8qj"]
-script = ExtResource("6_pbxht")
-operators = Array[ExtResource("2_qv7su")]([SubResource("Resource_et4d5"), SubResource("Resource_7qywa"), SubResource("Resource_ypoqd"), SubResource("Resource_decio")])
+script = ExtResource("5_fpo6c")
+operators = Array[ExtResource("2_tguje")]([SubResource("Resource_7qywa"), SubResource("Resource_ypoqd"), SubResource("Resource_decio")])
 
 [sub_resource type="Resource" id="Resource_n8ndq"]
-script = ExtResource("7_dh22t")
-trait_name = "kuangda_zuanying"
+script = ExtResource("6_da4ut")
+trait_name = "kuangda_kuangke"
 
 [sub_resource type="Resource" id="Resource_sk05x"]
-script = ExtResource("8_rkoo0")
+script = ExtResource("7_pbxht")
 choice_result = SubResource("Resource_ew8qj")
 requirement = SubResource("Resource_n8ndq")
-description = "你拱手：“大人见教。”身子微侧，让出半个身位。"
+description = "“雾太厚，看不清方向。”话毕，你转身望向终南山。"
 
 [sub_resource type="Resource" id="Resource_r6ums"]
-script = ExtResource("10_et4d5")
+script = ExtResource("3_qv7su")
+value = 6
+
+[sub_resource type="Resource" id="Resource_bn31h"]
+script = ExtResource("3_qv7su")
+value = 6
+
+[sub_resource type="Resource" id="Resource_3y6ne"]
+script = ExtResource("5_fpo6c")
+operators = Array[ExtResource("2_tguje")]([SubResource("Resource_r6ums"), SubResource("Resource_bn31h")])
+
+[sub_resource type="Resource" id="Resource_nnwra"]
+script = ExtResource("7_pbxht")
+choice_result = SubResource("Resource_3y6ne")
+description = "你点头“嗯”一声，抬手将石栏上露水抹去，目光未离城中。"
+
+[sub_resource type="Resource" id="Resource_voqbw"]
+script = ExtResource("3_qv7su")
+value = 6
+
+[sub_resource type="Resource" id="Resource_v2t2s"]
+script = ExtResource("3_qv7su")
+value = 22
+
+[sub_resource type="Resource" id="Resource_3moam"]
+script = ExtResource("3_qv7su")
+value = 11
+
+[sub_resource type="Resource" id="Resource_igfmg"]
+script = ExtResource("4_g3gx7")
+imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+
+[sub_resource type="Resource" id="Resource_5ix1u"]
+script = ExtResource("5_fpo6c")
+operators = Array[ExtResource("2_tguje")]([SubResource("Resource_voqbw"), SubResource("Resource_v2t2s"), SubResource("Resource_3moam"), SubResource("Resource_igfmg")])
+
+[sub_resource type="Resource" id="Resource_tiedi"]
+script = ExtResource("6_da4ut")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_eq2j2"]
+script = ExtResource("7_pbxht")
+choice_result = SubResource("Resource_5ix1u")
+requirement = SubResource("Resource_tiedi")
+description = "你拱手：“大人见教。”身子微侧，让出半个身位。"
+
+[sub_resource type="Resource" id="Resource_gwtd8"]
+script = ExtResource("9_rkoo0")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_bn31h"]
-script = ExtResource("10_et4d5")
+[sub_resource type="Resource" id="Resource_jwnwo"]
+script = ExtResource("9_rkoo0")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_3y6ne"]
-script = ExtResource("11_7qywa")
-operators = Array[ExtResource("9_bw61e")]([SubResource("Resource_r6ums"), SubResource("Resource_bn31h")])
+[sub_resource type="Resource" id="Resource_gfg8y"]
+script = ExtResource("10_bw61e")
+operators = Array[ExtResource("8_dh22t")]([SubResource("Resource_gwtd8"), SubResource("Resource_jwnwo")])
 
 [resource]
-script = ExtResource("12_ypoqd")
-requirement = SubResource("Resource_3y6ne")
+script = ExtResource("11_et4d5")
+requirement = SubResource("Resource_gfg8y")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["ENV_POLITICS_PROSPER:cloud_and_sun", "ENV_NATURE_SNOWSTORM:lone_snow", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_leyou_morning", "emotion_pair:pair_ambition", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc"])
-options = Array[ExtResource("1_tguje")]([SubResource("Resource_da4ut"), SubResource("Resource_bw61e"), SubResource("Resource_sk05x")])
+options = Array[ExtResource("1_pao8x")]([SubResource("Resource_sk05x"), SubResource("Resource_nnwra"), SubResource("Resource_eq2j2")])
 uuid = "747kuangda_denggao_leyou_morning_emotion_ambition"
 name = "雾中朱门"
 description = "西南角的中书省、东侧礼部衙署、右相府邸的飞檐，手指在石栏上描出轮廓。早市叫卖声断断续续，风卷起你衣角。"

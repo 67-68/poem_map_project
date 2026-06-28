@@ -1,13 +1,13 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://wuu2o4w377me"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_bynbl"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_rbye3"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_uhddx"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="4_ckqa0"]
-[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="5_3ksyh"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_rjj3y"]
-[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_j7hmd"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="8_shq5c"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bynbl"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_rbye3"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_uhddx"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_ckqa0"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="5_3ksyh"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_rjj3y"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_j7hmd"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_shq5c"]
 
 [sub_resource type="Resource" id="Resource_pk67d"]
 script = ExtResource("3_uhddx")

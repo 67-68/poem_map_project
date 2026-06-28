@@ -1,38 +1,38 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://5g8vj4ahtrnk"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_3ljic"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_cih0q"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_1nlcq"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="5_qsihi"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_iy3tp"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="7_qj14e"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="8_xyppd"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_7ak2p"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3ljic"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_cih0q"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_oekto"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_1nlcq"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_qsihi"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_iy3tp"]
 
-[sub_resource type="Resource" id="Resource_7ak2p"]
-script = ExtResource("4_1nlcq")
+[sub_resource type="Resource" id="Resource_qj14e"]
+script = ExtResource("3_cih0q")
 value = 5
 
-[sub_resource type="Resource" id="Resource_3ljic"]
-script = ExtResource("5_qsihi")
-operators = Array[ExtResource("2_cih0q")]([SubResource("Resource_7ak2p")])
+[sub_resource type="Resource" id="Resource_xyppd"]
+script = ExtResource("4_oekto")
+operators = Array[ExtResource("2_3ljic")]([SubResource("Resource_qj14e")])
 
-[sub_resource type="Resource" id="Resource_cih0q"]
-script = ExtResource("6_iy3tp")
-choice_result = SubResource("Resource_3ljic")
+[sub_resource type="Resource" id="Resource_o4biu"]
+script = ExtResource("5_1nlcq")
+choice_result = SubResource("Resource_xyppd")
 description = "笔杆的尾部轻扣在砚沿。墨滴洒在纸上，恰好隐去了第一个字。"
 
-[sub_resource type="Resource" id="Resource_oekto"]
-script = ExtResource("7_qj14e")
+[sub_resource type="Resource" id="Resource_0qcfr"]
+script = ExtResource("6_qsihi")
 property = "health"
 value = 30
 
 [resource]
-script = ExtResource("8_xyppd")
-requirement = SubResource("Resource_oekto")
+script = ExtResource("7_iy3tp")
+requirement = SubResource("Resource_0qcfr")
 era = "747_kuangda"
 archetype_id = "duzhuo"
 _target_tags = Array[String](["action:main:duzhuo"])
-options = Array[ExtResource("1_3ljic")]([SubResource("Resource_cih0q")])
+options = Array[ExtResource("1_7ak2p")]([SubResource("Resource_o4biu")])
 uuid = "qingliu_daoxin_posui_frozen_imagery"
 name = "秋夜三字"
 description = "纸上的三个字不像是从笔端生发的。它们更像是早就刻在那里——一笔一画都指向过去的某个时辰，与此刻再无瓜葛。墨在砚台里守着，稠得泛不出光。烛火跳了一下，影子从墙上滑过，沿着书案的边缘，歪了。"

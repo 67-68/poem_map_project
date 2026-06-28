@@ -1,26 +1,39 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://djjutt5k3vlh8"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_k2t3v"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_bn3w2"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="8_arscf"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="9_w00bt"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_hdcyo"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_oa3f4"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_k2t3v"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_qdoh1"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_rjd3j"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_bltie"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_lqewk"]
 
-[sub_resource type="Resource" id="Resource_05kyv"]
-script = ExtResource("7_bn3w2")
+[sub_resource type="Resource" id="Resource_e10f2"]
+script = ExtResource("3_k2t3v")
+str_props = "progress"
+value = 10
+
+[sub_resource type="Resource" id="Resource_bn3w2"]
+script = ExtResource("4_qdoh1")
+operators = Array[ExtResource("2_oa3f4")]([SubResource("Resource_e10f2")])
+
+[sub_resource type="Resource" id="Resource_arscf"]
+script = ExtResource("5_rjd3j")
+choice_result = SubResource("Resource_bn3w2")
 description = "立在帘侧继续候着，不动声色"
 
-[sub_resource type="Resource" id="Resource_2pmen"]
-script = ExtResource("8_arscf")
+[sub_resource type="Resource" id="Resource_w00bt"]
+script = ExtResource("6_bltie")
 property = "progress"
 value = 70
 
 [resource]
-script = ExtResource("9_w00bt")
-requirement = SubResource("Resource_2pmen")
+script = ExtResource("7_lqewk")
+requirement = SubResource("Resource_w00bt")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_k2t3v")]([SubResource("Resource_05kyv")])
+options = Array[ExtResource("1_hdcyo")]([SubResource("Resource_arscf")])
 uuid = "bai_ye_honeymoon_l1_typeb_m0"
 name = "衙门口的风雪"
 description = "“尚书大人昨日议贡举事至深夜，今日恐未得闲。”说着用火箸拨了拨炉中炭，火星一溅即灭。他在炉边坐下，自斟一盏茶，翻册页时不急不缓，偶尔抬眼看窗外天色。你立在门帘旁，冷风从帘隙灌入，足底渐麻。清客翻完一卷册子，又另取一卷来读，像是忘了你还在。"

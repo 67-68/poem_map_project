@@ -1,0 +1,94 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cd5ck0ru2lfgg"]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_2p10l"]
+[ext_resource type="Script" uid="uid://bj2nv77uffcp7" path="res://core/operators/context_fetch_operators.gd" id="2_76ncv"]
+[ext_resource type="Script" uid="uid://cwprsg78wnilm" path="res://core/operators/npc_batch_check_operator.gd" id="3_5inot"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_4jr05"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="5_lwkl5"]
+[ext_resource type="Script" uid="uid://bsss76ega4clt" path="res://core/operators/imaginary_level_reward_operator.gd" id="6_1t2lb"]
+[ext_resource type="Script" uid="uid://c3wrp6pt5lams" path="res://core/requirements/imaginary_level_requirement.gd" id="7_821d1"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_21nwc"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="9_vsvd3"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="10_7nnxl"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_wovth"]
+
+[sub_resource type="Resource" id="Resource_7k4v4"]
+script = ExtResource("2_76ncv")
+fetched_key = "feihualing_chosen_word"
+datasource_name = "imaginaries"
+prop_from_result = "name"
+key_stored_context = "keyword"
+
+[sub_resource type="Resource" id="Resource_wyk80"]
+script = ExtResource("2_76ncv")
+fetched_key = "feihualing_chosen_word"
+datasource_name = "imaginaries"
+prop_from_result = "description"
+key_stored_context = "imaginary_desc"
+
+[sub_resource type="Resource" id="Resource_mcr6r"]
+script = ExtResource("3_5inot")
+participants_key = "guests"
+target_context_key = "npc_report"
+check_prop = "TALENT"
+text_template = "FEIHUALING"
+
+[sub_resource type="Resource" id="Resource_pidff"]
+script = ExtResource("4_4jr05")
+operators = Array[ExtResource("1_2p10l")]([SubResource("Resource_7k4v4"), SubResource("Resource_wyk80"), SubResource("Resource_mcr6r")])
+
+[sub_resource type="Resource" id="Resource_yhv3r"]
+script = ExtResource("6_1t2lb")
+
+[sub_resource type="Resource" id="Resource_h717p"]
+script = ExtResource("4_4jr05")
+operators = Array[ExtResource("1_2p10l")]([SubResource("Resource_yhv3r")])
+
+[sub_resource type="Resource" id="Resource_6wrun"]
+script = ExtResource("7_821d1")
+check_any = true
+
+[sub_resource type="Resource" id="Resource_6xal5"]
+script = ExtResource("8_21nwc")
+choice_result = SubResource("Resource_h717p")
+requirement = SubResource("Resource_6wrun")
+description = "妙语连珠"
+
+[sub_resource type="Resource" id="Resource_8gx8l"]
+script = ExtResource("9_vsvd3")
+
+[sub_resource type="Resource" id="Resource_5lnsq"]
+script = ExtResource("4_4jr05")
+operators = Array[ExtResource("1_2p10l")]([SubResource("Resource_8gx8l")])
+
+[sub_resource type="Resource" id="Resource_bywkm"]
+script = ExtResource("10_7nnxl")
+property = "inspiration"
+value = 19
+operator = 1
+
+[sub_resource type="Resource" id="Resource_vpdbj"]
+script = ExtResource("8_21nwc")
+choice_result = SubResource("Resource_5lnsq")
+requirement = SubResource("Resource_bywkm")
+description = "灵感硬接"
+
+[sub_resource type="Resource" id="Resource_ivi5x"]
+script = ExtResource("9_vsvd3")
+
+[sub_resource type="Resource" id="Resource_qy1jv"]
+script = ExtResource("4_4jr05")
+operators = Array[ExtResource("1_2p10l")]([SubResource("Resource_ivi5x")])
+
+[sub_resource type="Resource" id="Resource_12r3d"]
+script = ExtResource("8_21nwc")
+choice_result = SubResource("Resource_qy1jv")
+description = "自罚三杯"
+
+[resource]
+script = ExtResource("11_wovth")
+options = Array[ExtResource("5_lwkl5")]([SubResource("Resource_6xal5"), SubResource("Resource_vpdbj"), SubResource("Resource_12r3d")])
+on_enter_result = SubResource("Resource_pidff")
+uuid = "feihualing_other_done"
+name = "飞花令"
+description = "你选择了以「{@keyword}」为题吟咏。[br][br]{@imaginary_desc}[br][br]{@npc_report}"

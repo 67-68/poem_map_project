@@ -1,120 +1,120 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b1vvqbmuay4nm"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_rn4bw"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_a4auw"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_shohq"]
-[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="5_bma4b"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="6_y7y8f"]
-[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_7ogps"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_k7it6"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_5xnlu"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_vkax7"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="11_bp5mc"]
-
-[sub_resource type="Resource" id="Resource_7ev1b"]
-script = ExtResource("3_shohq")
-value = 16
-
-[sub_resource type="Resource" id="Resource_rn4bw"]
-script = ExtResource("3_shohq")
-value = 19
-
-[sub_resource type="Resource" id="Resource_a4auw"]
-script = ExtResource("5_bma4b")
-target_tag = "TARGET_IDENTITY_QUANGUI"
-leverage_key = "quangui_paper_ash"
-
-[sub_resource type="Resource" id="Resource_shohq"]
-script = ExtResource("6_y7y8f")
-operators = Array[ExtResource("2_a4auw")]([SubResource("Resource_7ev1b"), SubResource("Resource_rn4bw"), SubResource("Resource_a4auw")])
-
-[sub_resource type="Resource" id="Resource_u2e02"]
-script = ExtResource("7_7ogps")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_bma4b"]
-script = ExtResource("8_k7it6")
-choice_result = SubResource("Resource_shohq")
-requirement = SubResource("Resource_u2e02")
-description = "“纸灰未冷，不写贺诗。”说完阖上眼，不再看门槛外的任何方向。"
-
-[sub_resource type="Resource" id="Resource_y7y8f"]
-script = ExtResource("3_shohq")
-value = 16
-
-[sub_resource type="Resource" id="Resource_7ogps"]
-script = ExtResource("3_shohq")
-value = 21
-
-[sub_resource type="Resource" id="Resource_k7it6"]
-script = ExtResource("5_bma4b")
-target_tag = "TARGET_IDENTITY_QUANGUI"
-leverage_key = "quangui_paper_ash"
-
-[sub_resource type="Resource" id="Resource_5xnlu"]
-script = ExtResource("6_y7y8f")
-operators = Array[ExtResource("2_a4auw")]([SubResource("Resource_y7y8f"), SubResource("Resource_7ogps"), SubResource("Resource_k7it6")])
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_7ev1b"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_rn4bw"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_a4auw"]
+[ext_resource type="Script" uid="uid://cam8c3etv60ba" path="res://core/operators/leverage_add_operator.gd" id="4_shohq"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_u2e02"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_bma4b"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_y7y8f"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_7ogps"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_k7it6"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_5xnlu"]
 
 [sub_resource type="Resource" id="Resource_vkax7"]
-script = ExtResource("7_7ogps")
-trait_name = "kuangda_fengying"
+script = ExtResource("3_a4auw")
+value = 16
 
 [sub_resource type="Resource" id="Resource_bp5mc"]
-script = ExtResource("8_k7it6")
-choice_result = SubResource("Resource_5xnlu")
-requirement = SubResource("Resource_vkax7")
-description = "跪着的膝盖未移动，手已从袖中摸出那截用剩下的秃笔，在蒲团旁铺平了纸。"
+script = ExtResource("3_a4auw")
+value = 19
 
 [sub_resource type="Resource" id="Resource_pf5lf"]
-script = ExtResource("3_shohq")
-value = 16
-
-[sub_resource type="Resource" id="Resource_xpd4c"]
-script = ExtResource("3_shohq")
-value = 16
-
-[sub_resource type="Resource" id="Resource_oxd0n"]
-script = ExtResource("5_bma4b")
+script = ExtResource("4_shohq")
 target_tag = "TARGET_IDENTITY_QUANGUI"
 leverage_key = "quangui_paper_ash"
 
-[sub_resource type="Resource" id="Resource_0olq1"]
-script = ExtResource("6_y7y8f")
-operators = Array[ExtResource("2_a4auw")]([SubResource("Resource_pf5lf"), SubResource("Resource_xpd4c"), SubResource("Resource_oxd0n")])
+[sub_resource type="Resource" id="Resource_xpd4c"]
+script = ExtResource("5_u2e02")
+operators = Array[ExtResource("2_rn4bw")]([SubResource("Resource_vkax7"), SubResource("Resource_bp5mc"), SubResource("Resource_pf5lf")])
 
-[sub_resource type="Resource" id="Resource_4r6ci"]
-script = ExtResource("7_7ogps")
-trait_name = "kuangda_zuanying"
-
-[sub_resource type="Resource" id="Resource_aysy0"]
-script = ExtResource("8_k7it6")
-choice_result = SubResource("Resource_0olq1")
-requirement = SubResource("Resource_4r6ci")
-description = "“昨夜的纸灰还热着。何处贺诗——是给谁贺？”"
-
-[sub_resource type="Resource" id="Resource_c0pdf"]
-script = ExtResource("7_7ogps")
+[sub_resource type="Resource" id="Resource_oxd0n"]
+script = ExtResource("6_bma4b")
 trait_name = "kuangda_kuangke"
 
+[sub_resource type="Resource" id="Resource_0olq1"]
+script = ExtResource("7_y7y8f")
+choice_result = SubResource("Resource_xpd4c")
+requirement = SubResource("Resource_oxd0n")
+description = "“纸灰未冷，不写贺诗。”说完阖上眼，不再看门槛外的任何方向。"
+
+[sub_resource type="Resource" id="Resource_4r6ci"]
+script = ExtResource("3_a4auw")
+value = 16
+
+[sub_resource type="Resource" id="Resource_aysy0"]
+script = ExtResource("3_a4auw")
+value = 21
+
+[sub_resource type="Resource" id="Resource_c0pdf"]
+script = ExtResource("4_shohq")
+target_tag = "TARGET_IDENTITY_QUANGUI"
+leverage_key = "quangui_paper_ash"
+
 [sub_resource type="Resource" id="Resource_dwkmc"]
-script = ExtResource("7_7ogps")
-trait_name = "kuangda_fengying"
+script = ExtResource("5_u2e02")
+operators = Array[ExtResource("2_rn4bw")]([SubResource("Resource_4r6ci"), SubResource("Resource_aysy0"), SubResource("Resource_c0pdf")])
 
 [sub_resource type="Resource" id="Resource_b6lv4"]
-script = ExtResource("7_7ogps")
-trait_name = "kuangda_zuanying"
+script = ExtResource("6_bma4b")
+trait_name = "kuangda_fengying"
 
 [sub_resource type="Resource" id="Resource_6d5j1"]
-script = ExtResource("10_vkax7")
-operators = Array[ExtResource("9_5xnlu")]([SubResource("Resource_c0pdf"), SubResource("Resource_dwkmc"), SubResource("Resource_b6lv4")])
+script = ExtResource("7_y7y8f")
+choice_result = SubResource("Resource_dwkmc")
+requirement = SubResource("Resource_b6lv4")
+description = "跪着的膝盖未移动，手已从袖中摸出那截用剩下的秃笔，在蒲团旁铺平了纸。"
+
+[sub_resource type="Resource" id="Resource_fdi6j"]
+script = ExtResource("3_a4auw")
+value = 16
+
+[sub_resource type="Resource" id="Resource_dma4r"]
+script = ExtResource("3_a4auw")
+value = 16
+
+[sub_resource type="Resource" id="Resource_wek85"]
+script = ExtResource("4_shohq")
+target_tag = "TARGET_IDENTITY_QUANGUI"
+leverage_key = "quangui_paper_ash"
+
+[sub_resource type="Resource" id="Resource_806nc"]
+script = ExtResource("5_u2e02")
+operators = Array[ExtResource("2_rn4bw")]([SubResource("Resource_fdi6j"), SubResource("Resource_dma4r"), SubResource("Resource_wek85")])
+
+[sub_resource type="Resource" id="Resource_aa807"]
+script = ExtResource("6_bma4b")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_kp8ug"]
+script = ExtResource("7_y7y8f")
+choice_result = SubResource("Resource_806nc")
+requirement = SubResource("Resource_aa807")
+description = "“昨夜的纸灰还热着。何处贺诗——是给谁贺？”"
+
+[sub_resource type="Resource" id="Resource_nsoyr"]
+script = ExtResource("6_bma4b")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_kx4y3"]
+script = ExtResource("6_bma4b")
+trait_name = "kuangda_fengying"
+
+[sub_resource type="Resource" id="Resource_t0c25"]
+script = ExtResource("6_bma4b")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_5xrir"]
+script = ExtResource("9_k7it6")
+operators = Array[ExtResource("8_7ogps")]([SubResource("Resource_nsoyr"), SubResource("Resource_kx4y3"), SubResource("Resource_t0c25")])
 
 [resource]
-script = ExtResource("11_bp5mc")
-requirement = SubResource("Resource_6d5j1")
+script = ExtResource("10_5xnlu")
+requirement = SubResource("Resource_5xrir")
 era = "747_kuangda"
 archetype_id = "duzhuo"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:duzhuo", "TARGET_IDENTITY_QUANGUI"])
-options = Array[ExtResource("1_rn4bw")]([SubResource("Resource_bma4b"), SubResource("Resource_bp5mc"), SubResource("Resource_aysy0")])
+options = Array[ExtResource("1_7ev1b")]([SubResource("Resource_0olq1"), SubResource("Resource_6d5j1"), SubResource("Resource_kp8ug")])
 uuid = "zhuoliu_lieqi_hijacked_grief_identity_quangui"
 name = "纸灰未冷"
 description = "纸灰飞进眼睛时门被推开了。不是风吹的。那人停在门槛外，停了好一会儿——你跪在蒲团上，他站在门槛外，中间隔着昨夜烧尽的纸灰和今日尚未烧的纸钱。他不进来。庙里的寒气从地面往上漫，他站在门外仅一步远的地方，靴跟在石阶上轻轻磕了两下。“杜先生，就一句——今日午时，一首贺诗，老地方，要喜庆。”他没进来，只把话搁在门槛外，踩着你昨夜烧的纸灰转身走了。你回头时只看见他背影。靴跟上沾着黑色残烬。庙外他的马打了个响鼻，声音在空荡荡的大殿里弹了三个来回才落定。"

@@ -1,26 +1,39 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bktjjeo1mvlgd"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_t135t"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_l04o2"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="8_rabi6"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="9_j82k8"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_6nf53"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_oalhf"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_t135t"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_s7pf7"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_b7tog"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_in45x"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_qvowh"]
 
-[sub_resource type="Resource" id="Resource_u336q"]
-script = ExtResource("7_l04o2")
+[sub_resource type="Resource" id="Resource_q7rjh"]
+script = ExtResource("3_t135t")
+str_props = "progress"
+value = 10
+
+[sub_resource type="Resource" id="Resource_l04o2"]
+script = ExtResource("4_s7pf7")
+operators = Array[ExtResource("2_oalhf")]([SubResource("Resource_q7rjh")])
+
+[sub_resource type="Resource" id="Resource_rabi6"]
+script = ExtResource("5_b7tog")
+choice_result = SubResource("Resource_l04o2")
 description = "应允权贵，承诺三日内献上吴绫一匹"
 
-[sub_resource type="Resource" id="Resource_0ygxi"]
-script = ExtResource("8_rabi6")
+[sub_resource type="Resource" id="Resource_j82k8"]
+script = ExtResource("6_in45x")
 property = "progress"
 value = 70
 
 [resource]
-script = ExtResource("9_j82k8")
-requirement = SubResource("Resource_0ygxi")
+script = ExtResource("7_qvowh")
+requirement = SubResource("Resource_j82k8")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_t135t")]([SubResource("Resource_u336q")])
+options = Array[ExtResource("1_6nf53")]([SubResource("Resource_rabi6")])
 uuid = "bai_ye_honeymoon_l2_typea_m0"
 name = "含笑索帛"
 description = "“近日圣上欲为贵妃娘娘新制霓裳，颁旨命各府进献锦帛。本王府中尚缺一匹上等吴绫，听闻你与江南织造有些渊源？”话音未落，侍从已捧出一卷空白礼单，铺在案上。权贵目光落在礼单上，指尖轻叩案面，含笑不语。玩家明白，这是一笔“孝敬上官”的贡品，须自掏腰包补上。"

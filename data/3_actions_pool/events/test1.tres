@@ -1,64 +1,58 @@
 [gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bawp6h68osl2u"]
 
-[ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="1_a5n7c"]
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_625dn"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_g5g7l"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_ewxma"]
-[ext_resource type="Script" uid="uid://dp5gqdkppjq17" path="res://core/model/trait_operator.gd" id="5_i2fm3"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_fwciv"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_bbdhn"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_161c5"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_kmwa6"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="10_nvxix"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_guc5n"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_4liak"]
+[ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="1_0t6un"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_a5n7c"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_625dn"]
+[ext_resource type="Script" uid="uid://dp5gqdkppjq17" path="res://core/model/trait_operator.gd" id="4_g5g7l"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_ewxma"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_i2fm3"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_fwciv"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_bbdhn"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="9_161c5"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_kmwa6"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_nvxix"]
 
-[sub_resource type="Resource" id="Resource_b6nec"]
-script = ExtResource("4_ewxma")
-str_props = "money"
-value = -100
-
-[sub_resource type="Resource" id="Resource_6jw50"]
-script = ExtResource("5_i2fm3")
+[sub_resource type="Resource" id="Resource_guc5n"]
+script = ExtResource("4_g5g7l")
 _trait_key = 28
 str_traits = "corrupt"
 
-[sub_resource type="Resource" id="Resource_xv1gv"]
-script = ExtResource("6_fwciv")
-operators = Array[ExtResource("3_g5g7l")]([SubResource("Resource_b6nec"), SubResource("Resource_6jw50")])
+[sub_resource type="Resource" id="Resource_4liak"]
+script = ExtResource("5_ewxma")
+operators = Array[ExtResource("3_625dn")]([SubResource("Resource_guc5n")])
 
-[sub_resource type="Resource" id="Resource_uuhtg"]
-script = ExtResource("7_bbdhn")
+[sub_resource type="Resource" id="Resource_b6nec"]
+script = ExtResource("6_i2fm3")
 property = "money"
 value = 100
 operator = 1
 
-[sub_resource type="Resource" id="Resource_67rr3"]
-script = ExtResource("8_161c5")
-choice_result = SubResource("Resource_xv1gv")
-requirement = SubResource("Resource_uuhtg")
+[sub_resource type="Resource" id="Resource_6jw50"]
+script = ExtResource("7_fwciv")
+choice_result = SubResource("Resource_4liak")
+requirement = SubResource("Resource_b6nec")
 
-[sub_resource type="Resource" id="Resource_bh4ny"]
-script = ExtResource("7_bbdhn")
+[sub_resource type="Resource" id="Resource_xv1gv"]
+script = ExtResource("6_i2fm3")
 property = "money"
 value = 50
 operator = 1
 
-[sub_resource type="Resource" id="Resource_7cvit"]
-script = ExtResource("10_nvxix")
+[sub_resource type="Resource" id="Resource_uuhtg"]
+script = ExtResource("9_161c5")
 trait_name = "official"
 
-[sub_resource type="Resource" id="Resource_7qr6w"]
-script = ExtResource("11_guc5n")
-operators = Array[ExtResource("9_kmwa6")]([SubResource("Resource_bh4ny"), SubResource("Resource_7cvit")])
+[sub_resource type="Resource" id="Resource_67rr3"]
+script = ExtResource("10_kmwa6")
+operators = Array[ExtResource("8_bbdhn")]([SubResource("Resource_xv1gv"), SubResource("Resource_uuhtg")])
 
 [resource]
-script = ExtResource("12_4liak")
+script = ExtResource("11_nvxix")
 weight = 15.5
-requirement = SubResource("Resource_7qr6w")
+requirement = SubResource("Resource_67rr3")
 _target_tags = Array[String](["actor:status:temporary:drunk", "city:econ:level:prosperous", "action:intent:study:poetry"])
-options = Array[ExtResource("2_625dn")]([SubResource("Resource_67rr3")])
+options = Array[ExtResource("2_a5n7c")]([SubResource("Resource_6jw50")])
 uuid = "test1"
 name = "长安酒馆奇遇"
 description = "你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。"
-icon = ExtResource("1_a5n7c")
+icon = ExtResource("1_0t6un")

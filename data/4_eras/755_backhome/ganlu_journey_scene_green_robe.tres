@@ -1,23 +1,23 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://con18mq5w6uh"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_0m0u6"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="5_4brw5"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="6_f6amg"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_6kfev"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="2_unt03"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="3_xpqga"]
 
-[sub_resource type="Resource" id="Resource_6kfev"]
-script = ExtResource("5_4brw5")
+[sub_resource type="Resource" id="Resource_0m0u6"]
+script = ExtResource("2_unt03")
 description = "解下官凭举到驿丞眼前，挡住他打算回话"
 
-[sub_resource type="Resource" id="Resource_unt03"]
-script = ExtResource("5_4brw5")
+[sub_resource type="Resource" id="Resource_feyed"]
+script = ExtResource("2_unt03")
 description = "攥紧领口，转身把官凭收进袖中"
 
 [resource]
-script = ExtResource("6_f6amg")
+script = ExtResource("3_xpqga")
 era = "755_backhome"
 archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu"])
-options = Array[ExtResource("1_0m0u6")]([SubResource("Resource_6kfev"), SubResource("Resource_unt03")])
+options = Array[ExtResource("1_6kfev")]([SubResource("Resource_0m0u6"), SubResource("Resource_feyed")])
 uuid = "ganlu_journey_scene_green_robe"
 name = "绿袍结冰"
 description = "下摆先湿透，从腰际往下，青色缓缓浸成墨绿。冰晶在纤维间长出，先是一层薄霜，再是细针，把经纬撑开，裂出细响。裤子膝盖处板结成壳，每迈一步，面料摺叠处发出纸张揉碎般的声音。他低头看了一眼——前襟也硬了，贴在胸口，呼吸时扯不动。"

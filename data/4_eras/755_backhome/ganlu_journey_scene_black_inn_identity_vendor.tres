@@ -1,40 +1,40 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://d3i1h7vu0wylu"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_05btn"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_bsdky"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_rr3vh"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_0k3x6"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="6_ootlx"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_hovj1"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="8_tphc8"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rc3qb"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_05btn"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_bsdky"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_bemxs"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_rr3vh"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_0k3x6"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ootlx"]
 
-[sub_resource type="Resource" id="Resource_rc3qb"]
-script = ExtResource("4_rr3vh")
+[sub_resource type="Resource" id="Resource_hovj1"]
+script = ExtResource("3_bsdky")
 value = 10
 
-[sub_resource type="Resource" id="Resource_05btn"]
-script = ExtResource("5_0k3x6")
+[sub_resource type="Resource" id="Resource_tphc8"]
+script = ExtResource("4_bemxs")
 imagery_name = "SOCIETY:famine"
 
-[sub_resource type="Resource" id="Resource_bsdky"]
-script = ExtResource("6_ootlx")
-operators = Array[ExtResource("2_bsdky")]([SubResource("Resource_rc3qb"), SubResource("Resource_05btn")])
+[sub_resource type="Resource" id="Resource_u12ew"]
+script = ExtResource("5_rr3vh")
+operators = Array[ExtResource("2_05btn")]([SubResource("Resource_hovj1"), SubResource("Resource_tphc8")])
 
-[sub_resource type="Resource" id="Resource_bemxs"]
-script = ExtResource("7_hovj1")
-choice_result = SubResource("Resource_bsdky")
+[sub_resource type="Resource" id="Resource_t6qef"]
+script = ExtResource("6_0k3x6")
+choice_result = SubResource("Resource_u12ew")
 description = "将官凭压在麦袋上，说“赊账”"
 
-[sub_resource type="Resource" id="Resource_rr3vh"]
-script = ExtResource("7_hovj1")
+[sub_resource type="Resource" id="Resource_0aun7"]
+script = ExtResource("6_0k3x6")
 description = "将铜板复数回袖中，转身出门"
 
 [resource]
-script = ExtResource("8_tphc8")
+script = ExtResource("7_ootlx")
 era = "755_backhome"
 archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_SOCIETY_FAMINE:starving_bone", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu", "TARGET_IDENTITY_VENDOR"])
-options = Array[ExtResource("1_05btn")]([SubResource("Resource_bemxs"), SubResource("Resource_rr3vh")])
+options = Array[ExtResource("1_rc3qb")]([SubResource("Resource_t6qef"), SubResource("Resource_0aun7")])
 uuid = "ganlu_journey_scene_black_inn_identity_vendor"
 name = "三斗麦子"
 description = "“一斗一百二十文。”杜甫袖中手指将铜板数了三遍——全数掏出，不够。他站着没动，墙缝里的雪沫飘进来，落在颈窝里化成水。店家往火里添了根柴：“过了这村，下个店更贵。”袖中铜板硌着指节。"

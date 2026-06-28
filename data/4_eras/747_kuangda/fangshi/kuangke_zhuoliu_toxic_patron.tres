@@ -1,87 +1,87 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bnll35whgx61l"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_olxa1"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_gm4co"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_k5pdg"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="5_rwsar"]
-[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="6_m35jg"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_uvasx"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="8_spth1"]
-[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="9_2rnbx"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="10_2ppg2"]
-
-[sub_resource type="Resource" id="Resource_gaglg"]
-script = ExtResource("4_k5pdg")
-value = 10
-
-[sub_resource type="Resource" id="Resource_olxa1"]
-script = ExtResource("5_rwsar")
-operators = Array[ExtResource("2_gm4co")]([SubResource("Resource_gaglg")])
-
-[sub_resource type="Resource" id="Resource_gm4co"]
-script = ExtResource("6_m35jg")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_e460r"]
-script = ExtResource("7_uvasx")
-choice_result = SubResource("Resource_olxa1")
-requirement = SubResource("Resource_gm4co")
-description = "端起茶盏，说出他想听的那两句评语。"
-
-[sub_resource type="Resource" id="Resource_k5pdg"]
-script = ExtResource("4_k5pdg")
-value = 10
-
-[sub_resource type="Resource" id="Resource_rwsar"]
-script = ExtResource("5_rwsar")
-operators = Array[ExtResource("2_gm4co")]([SubResource("Resource_k5pdg")])
-
-[sub_resource type="Resource" id="Resource_m35jg"]
-script = ExtResource("6_m35jg")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_uvasx"]
-script = ExtResource("7_uvasx")
-choice_result = SubResource("Resource_rwsar")
-requirement = SubResource("Resource_m35jg")
-description = "先从画轴落款处辨认藏家来历，再开口询价。"
-
-[sub_resource type="Resource" id="Resource_spth1"]
-script = ExtResource("4_k5pdg")
-value = 15
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_gaglg"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_olxa1"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_gm4co"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_e460r"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="5_k5pdg"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_rwsar"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="7_m35jg"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="8_uvasx"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_spth1"]
 
 [sub_resource type="Resource" id="Resource_2rnbx"]
-script = ExtResource("4_k5pdg")
-value = -5
+script = ExtResource("3_gm4co")
+value = 10
 
 [sub_resource type="Resource" id="Resource_2ppg2"]
-script = ExtResource("8_spth1")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+script = ExtResource("4_e460r")
+operators = Array[ExtResource("2_olxa1")]([SubResource("Resource_2rnbx")])
 
 [sub_resource type="Resource" id="Resource_31d8i"]
-script = ExtResource("5_rwsar")
-operators = Array[ExtResource("2_gm4co")]([SubResource("Resource_spth1"), SubResource("Resource_2rnbx"), SubResource("Resource_2ppg2")])
+script = ExtResource("5_k5pdg")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
 
 [sub_resource type="Resource" id="Resource_g8kpo"]
-script = ExtResource("7_uvasx")
-choice_result = SubResource("Resource_31d8i")
-description = "看也不看那幅画，起身朝门外走去。"
+script = ExtResource("6_rwsar")
+choice_result = SubResource("Resource_2ppg2")
+requirement = SubResource("Resource_31d8i")
+description = "端起茶盏，说出他想听的那两句评语。"
 
 [sub_resource type="Resource" id="Resource_wcq0u"]
-script = ExtResource("9_2rnbx")
+script = ExtResource("3_gm4co")
+value = 10
+
+[sub_resource type="Resource" id="Resource_r6tgl"]
+script = ExtResource("4_e460r")
+operators = Array[ExtResource("2_olxa1")]([SubResource("Resource_wcq0u")])
+
+[sub_resource type="Resource" id="Resource_1lkl8"]
+script = ExtResource("5_k5pdg")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_1p8ys"]
+script = ExtResource("6_rwsar")
+choice_result = SubResource("Resource_r6tgl")
+requirement = SubResource("Resource_1lkl8")
+description = "先从画轴落款处辨认藏家来历，再开口询价。"
+
+[sub_resource type="Resource" id="Resource_wymhf"]
+script = ExtResource("3_gm4co")
+value = 15
+
+[sub_resource type="Resource" id="Resource_l1yin"]
+script = ExtResource("3_gm4co")
+value = -5
+
+[sub_resource type="Resource" id="Resource_drcm5"]
+script = ExtResource("7_m35jg")
+imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+
+[sub_resource type="Resource" id="Resource_887hp"]
+script = ExtResource("4_e460r")
+operators = Array[ExtResource("2_olxa1")]([SubResource("Resource_wymhf"), SubResource("Resource_l1yin"), SubResource("Resource_drcm5")])
+
+[sub_resource type="Resource" id="Resource_lvbbj"]
+script = ExtResource("6_rwsar")
+choice_result = SubResource("Resource_887hp")
+description = "看也不看那幅画，起身朝门外走去。"
+
+[sub_resource type="Resource" id="Resource_km5oj"]
+script = ExtResource("8_uvasx")
 trait_name = "kuangda_kuangke"
 
 [resource]
-script = ExtResource("10_2ppg2")
-requirement = SubResource("Resource_wcq0u")
+script = ExtResource("9_spth1")
+requirement = SubResource("Resource_km5oj")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "action:main:fangshi"])
-options = Array[ExtResource("1_olxa1")]([SubResource("Resource_e460r"), SubResource("Resource_uvasx"), SubResource("Resource_g8kpo")])
+options = Array[ExtResource("1_gaglg")]([SubResource("Resource_g8kpo"), SubResource("Resource_1p8ys"), SubResource("Resource_lvbbj")])
 uuid = "kuangke_zhuoliu_toxic_patron"
 name = "画为饵"
 description = "“吴道子真迹。主上说，先生是长安城里少数不用钱能砸动的人。”他顿了顿，“所以不用钱——用画。先生点评两句，就带走。”茶盏在他右手边冒着热气，你的那盏搁在茶几左侧，隔着一张空椅子。"

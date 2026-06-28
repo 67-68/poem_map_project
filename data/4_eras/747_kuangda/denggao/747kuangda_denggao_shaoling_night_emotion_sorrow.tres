@@ -1,112 +1,112 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://vl0gydfv8pkl"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_8eb3n"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_h7sbg"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_f1j2f"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_yntrh"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="6_ubmqc"]
-[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_e6iv1"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_5ocin"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_44om7"]
-[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="10_blwok"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_tqpbi"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="12_gxudw"]
-
-[sub_resource type="Resource" id="Resource_jlmcx"]
-script = ExtResource("3_f1j2f")
-value = 5
-
-[sub_resource type="Resource" id="Resource_8eb3n"]
-script = ExtResource("3_f1j2f")
-value = 10
-
-[sub_resource type="Resource" id="Resource_h7sbg"]
-script = ExtResource("5_yntrh")
-imagery_name = "VIBE_THEME_MACABRE:ghost_fire"
-
-[sub_resource type="Resource" id="Resource_f1j2f"]
-script = ExtResource("6_ubmqc")
-operators = Array[ExtResource("2_h7sbg")]([SubResource("Resource_jlmcx"), SubResource("Resource_8eb3n"), SubResource("Resource_h7sbg")])
-
-[sub_resource type="Resource" id="Resource_h3fc4"]
-script = ExtResource("7_e6iv1")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_yntrh"]
-script = ExtResource("8_5ocin")
-choice_result = SubResource("Resource_f1j2f")
-requirement = SubResource("Resource_h3fc4")
-description = "对着人影方向喊一句：“此路不通，你换条道走。”然后径自绕开。"
-
-[sub_resource type="Resource" id="Resource_ubmqc"]
-script = ExtResource("3_f1j2f")
-value = 5
-
-[sub_resource type="Resource" id="Resource_e6iv1"]
-script = ExtResource("3_f1j2f")
-value = 5
-
-[sub_resource type="Resource" id="Resource_5ocin"]
-script = ExtResource("6_ubmqc")
-operators = Array[ExtResource("2_h7sbg")]([SubResource("Resource_ubmqc"), SubResource("Resource_e6iv1")])
-
-[sub_resource type="Resource" id="Resource_44om7"]
-script = ExtResource("8_5ocin")
-choice_result = SubResource("Resource_5ocin")
-description = "松开腰间的手，转身背对长安城，看远处终南山影。"
-
-[sub_resource type="Resource" id="Resource_blwok"]
-script = ExtResource("3_f1j2f")
-value = 5
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_jlmcx"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_8eb3n"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_h7sbg"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_f1j2f"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_h3fc4"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_yntrh"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_ubmqc"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_e6iv1"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="9_5ocin"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_44om7"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_blwok"]
 
 [sub_resource type="Resource" id="Resource_tqpbi"]
-script = ExtResource("3_f1j2f")
-value = 20
+script = ExtResource("3_h7sbg")
+value = 5
 
 [sub_resource type="Resource" id="Resource_gxudw"]
-script = ExtResource("3_f1j2f")
+script = ExtResource("3_h7sbg")
 value = 10
 
 [sub_resource type="Resource" id="Resource_c1ueo"]
-script = ExtResource("5_yntrh")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+script = ExtResource("4_f1j2f")
+imagery_name = "VIBE_THEME_MACABRE:ghost_fire"
 
 [sub_resource type="Resource" id="Resource_3f12s"]
-script = ExtResource("6_ubmqc")
-operators = Array[ExtResource("2_h7sbg")]([SubResource("Resource_blwok"), SubResource("Resource_tqpbi"), SubResource("Resource_gxudw"), SubResource("Resource_c1ueo")])
+script = ExtResource("5_h3fc4")
+operators = Array[ExtResource("2_8eb3n")]([SubResource("Resource_tqpbi"), SubResource("Resource_gxudw"), SubResource("Resource_c1ueo")])
 
 [sub_resource type="Resource" id="Resource_v6xvs"]
-script = ExtResource("7_e6iv1")
-trait_name = "kuangda_zuanying"
+script = ExtResource("6_yntrh")
+trait_name = "kuangda_kuangke"
 
 [sub_resource type="Resource" id="Resource_ms1u1"]
-script = ExtResource("8_5ocin")
+script = ExtResource("7_ubmqc")
 choice_result = SubResource("Resource_3f12s")
 requirement = SubResource("Resource_v6xvs")
-description = "对着人影方向拱手：“兄台也是夜行之人？同路可作伴？”"
+description = "对着人影方向喊一句：“此路不通，你换条道走。”然后径自绕开。"
 
 [sub_resource type="Resource" id="Resource_l4v0w"]
-script = ExtResource("10_blwok")
+script = ExtResource("3_h7sbg")
+value = 5
+
+[sub_resource type="Resource" id="Resource_xywbf"]
+script = ExtResource("3_h7sbg")
+value = 5
+
+[sub_resource type="Resource" id="Resource_t3v1v"]
+script = ExtResource("5_h3fc4")
+operators = Array[ExtResource("2_8eb3n")]([SubResource("Resource_l4v0w"), SubResource("Resource_xywbf")])
+
+[sub_resource type="Resource" id="Resource_w6821"]
+script = ExtResource("7_ubmqc")
+choice_result = SubResource("Resource_t3v1v")
+description = "松开腰间的手，转身背对长安城，看远处终南山影。"
+
+[sub_resource type="Resource" id="Resource_jfyul"]
+script = ExtResource("3_h7sbg")
+value = 5
+
+[sub_resource type="Resource" id="Resource_m1ces"]
+script = ExtResource("3_h7sbg")
+value = 20
+
+[sub_resource type="Resource" id="Resource_dxi70"]
+script = ExtResource("3_h7sbg")
+value = 10
+
+[sub_resource type="Resource" id="Resource_tdfa4"]
+script = ExtResource("4_f1j2f")
+imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+
+[sub_resource type="Resource" id="Resource_su013"]
+script = ExtResource("5_h3fc4")
+operators = Array[ExtResource("2_8eb3n")]([SubResource("Resource_jfyul"), SubResource("Resource_m1ces"), SubResource("Resource_dxi70"), SubResource("Resource_tdfa4")])
+
+[sub_resource type="Resource" id="Resource_ttmgw"]
+script = ExtResource("6_yntrh")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_2ne75"]
+script = ExtResource("7_ubmqc")
+choice_result = SubResource("Resource_su013")
+requirement = SubResource("Resource_ttmgw")
+description = "对着人影方向拱手：“兄台也是夜行之人？同路可作伴？”"
+
+[sub_resource type="Resource" id="Resource_87bnw"]
+script = ExtResource("9_5ocin")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_xywbf"]
-script = ExtResource("10_blwok")
+[sub_resource type="Resource" id="Resource_tkc78"]
+script = ExtResource("9_5ocin")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_t3v1v"]
-script = ExtResource("11_tqpbi")
-operators = Array[ExtResource("9_44om7")]([SubResource("Resource_l4v0w"), SubResource("Resource_xywbf")])
+[sub_resource type="Resource" id="Resource_h80w1"]
+script = ExtResource("10_44om7")
+operators = Array[ExtResource("8_e6iv1")]([SubResource("Resource_87bnw"), SubResource("Resource_tkc78")])
 
 [resource]
-script = ExtResource("12_gxudw")
-requirement = SubResource("Resource_t3v1v")
+script = ExtResource("11_blwok")
+requirement = SubResource("Resource_h80w1")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_THEME_MACABRE:ghost_fire", "ENV_NATURE_NIGHTMOON:cold_moon", "ENV_NATURE_AUTUMNWIND:falling_leaf", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_shaoling_night", "emotion_pair:pair_sorrow", "VIBE_THEME_HISTORY:ruined_wall", "ENV_NATURE_AUTUMNWIND:falling_leaf"])
-options = Array[ExtResource("1_8eb3n")]([SubResource("Resource_yntrh"), SubResource("Resource_44om7"), SubResource("Resource_ms1u1")])
+options = Array[ExtResource("1_jlmcx")]([SubResource("Resource_ms1u1"), SubResource("Resource_w6821"), SubResource("Resource_2ne75")])
 uuid = "747kuangda_denggao_shaoling_night_emotion_sorrow"
 name = "少陵原夜独行"
 description = "“是问路的。”狗先跑了。杜甫调转方向，脚下碎石压出声音。登上原顶时长安城灯火在远处铺开，每一盏都亮着。一点凉意落在鼻尖——要下雨了。"

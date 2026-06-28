@@ -1,96 +1,96 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cibfwli15mp18"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_eq3wv"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_24kf4"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_2kuct"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="5_d4wpj"]
-[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="6_i64ht"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_o311e"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="8_bduot"]
-[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="9_sn5ft"]
-[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="10_bdsia"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_416yb"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="12_y1c46"]
-
-[sub_resource type="Resource" id="Resource_t32x4"]
-script = ExtResource("4_2kuct")
-value = 10
-
-[sub_resource type="Resource" id="Resource_eq3wv"]
-script = ExtResource("5_d4wpj")
-operators = Array[ExtResource("2_24kf4")]([SubResource("Resource_t32x4")])
-
-[sub_resource type="Resource" id="Resource_24kf4"]
-script = ExtResource("6_i64ht")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_f6pp4"]
-script = ExtResource("7_o311e")
-choice_result = SubResource("Resource_eq3wv")
-requirement = SubResource("Resource_24kf4")
-description = "转身就走，袖风扫落她掌心那枚铜钱。"
-
-[sub_resource type="Resource" id="Resource_2kuct"]
-script = ExtResource("4_2kuct")
-value = 10
-
-[sub_resource type="Resource" id="Resource_d4wpj"]
-script = ExtResource("5_d4wpj")
-operators = Array[ExtResource("2_24kf4")]([SubResource("Resource_2kuct")])
-
-[sub_resource type="Resource" id="Resource_i64ht"]
-script = ExtResource("6_i64ht")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_o311e"]
-script = ExtResource("7_o311e")
-choice_result = SubResource("Resource_d4wpj")
-requirement = SubResource("Resource_i64ht")
-description = "从袖中摸出最后半贯铜钱，往她手里塞。"
-
-[sub_resource type="Resource" id="Resource_bduot"]
-script = ExtResource("4_2kuct")
-value = 8
-
-[sub_resource type="Resource" id="Resource_sn5ft"]
-script = ExtResource("5_d4wpj")
-operators = Array[ExtResource("2_24kf4")]([SubResource("Resource_bduot")])
-
-[sub_resource type="Resource" id="Resource_bdsia"]
-script = ExtResource("7_o311e")
-choice_result = SubResource("Resource_sn5ft")
-description = "走到小杌子边坐下，铺纸、研墨、提笔。"
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_t32x4"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_eq3wv"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_24kf4"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_f6pp4"]
+[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="5_2kuct"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_d4wpj"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="7_i64ht"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="8_o311e"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="9_bduot"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_sn5ft"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_bdsia"]
 
 [sub_resource type="Resource" id="Resource_416yb"]
-script = ExtResource("9_sn5ft")
-trait_name = "kuangda_fengying"
+script = ExtResource("3_24kf4")
+value = 10
 
 [sub_resource type="Resource" id="Resource_y1c46"]
-script = ExtResource("10_bdsia")
+script = ExtResource("4_f6pp4")
+operators = Array[ExtResource("2_eq3wv")]([SubResource("Resource_416yb")])
+
+[sub_resource type="Resource" id="Resource_w000j"]
+script = ExtResource("5_2kuct")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_vuopw"]
+script = ExtResource("6_d4wpj")
+choice_result = SubResource("Resource_y1c46")
+requirement = SubResource("Resource_w000j")
+description = "转身就走，袖风扫落她掌心那枚铜钱。"
+
+[sub_resource type="Resource" id="Resource_c0nke"]
+script = ExtResource("3_24kf4")
+value = 10
+
+[sub_resource type="Resource" id="Resource_c02wm"]
+script = ExtResource("4_f6pp4")
+operators = Array[ExtResource("2_eq3wv")]([SubResource("Resource_c0nke")])
+
+[sub_resource type="Resource" id="Resource_rkxh6"]
+script = ExtResource("5_2kuct")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_n3828"]
+script = ExtResource("6_d4wpj")
+choice_result = SubResource("Resource_c02wm")
+requirement = SubResource("Resource_rkxh6")
+description = "从袖中摸出最后半贯铜钱，往她手里塞。"
+
+[sub_resource type="Resource" id="Resource_p6318"]
+script = ExtResource("3_24kf4")
+value = 8
+
+[sub_resource type="Resource" id="Resource_nl1ns"]
+script = ExtResource("4_f6pp4")
+operators = Array[ExtResource("2_eq3wv")]([SubResource("Resource_p6318")])
+
+[sub_resource type="Resource" id="Resource_q65p2"]
+script = ExtResource("6_d4wpj")
+choice_result = SubResource("Resource_nl1ns")
+description = "走到小杌子边坐下，铺纸、研墨、提笔。"
+
+[sub_resource type="Resource" id="Resource_3m8n2"]
+script = ExtResource("8_o311e")
+trait_name = "kuangda_fengying"
+
+[sub_resource type="Resource" id="Resource_iag3n"]
+script = ExtResource("9_bduot")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_w000j"]
-script = ExtResource("10_bdsia")
+[sub_resource type="Resource" id="Resource_5eroc"]
+script = ExtResource("9_bduot")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_vuopw"]
-script = ExtResource("11_416yb")
-operators = Array[ExtResource("8_bduot")]([SubResource("Resource_416yb"), SubResource("Resource_y1c46"), SubResource("Resource_w000j")])
+[sub_resource type="Resource" id="Resource_ecidh"]
+script = ExtResource("10_sn5ft")
+operators = Array[ExtResource("7_i64ht")]([SubResource("Resource_3m8n2"), SubResource("Resource_iag3n"), SubResource("Resource_5eroc")])
 
 [resource]
-script = ExtResource("12_y1c46")
-requirement = SubResource("Resource_vuopw")
+script = ExtResource("11_bdsia")
+requirement = SubResource("Resource_ecidh")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:main:jiaoyou"])
-options = Array[ExtResource("1_eq3wv")]([SubResource("Resource_f6pp4"), SubResource("Resource_o311e"), SubResource("Resource_bdsia")])
+options = Array[ExtResource("1_t32x4")]([SubResource("Resource_vuopw"), SubResource("Resource_n3828"), SubResource("Resource_q65p2")])
 uuid = "qingliu_fengying_pingkangfang"
 name = "平康坊闭门羹"
 description = "“哟，杜先生又来了。”那个“又”字咬得轻，但很准。楼上的丝竹声灌下来，她侧身挡着门，下巴朝坊墙边的小杌子一抬：“写首艳词，写好了让你进去。”语气像在吩咐一个熟客——一个不用客气的熟客。"

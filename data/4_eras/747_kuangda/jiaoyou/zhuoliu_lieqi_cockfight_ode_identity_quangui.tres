@@ -1,108 +1,108 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://whxxejo06314"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_ahsqg"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_xsikm"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_yxl7d"]
-[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="5_y11uv"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="6_dful3"]
-[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_ui3co"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_lvnwx"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_xwmjm"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_5wpx8"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="11_l0grx"]
-
-[sub_resource type="Resource" id="Resource_chkam"]
-script = ExtResource("4_yxl7d")
-value = 15
-
-[sub_resource type="Resource" id="Resource_ahsqg"]
-script = ExtResource("5_y11uv")
-target_tag = "TARGET_IDENTITY_QUANGUI"
-leverage_key = "quangui_cockfight_gambling"
-
-[sub_resource type="Resource" id="Resource_xsikm"]
-script = ExtResource("6_dful3")
-operators = Array[ExtResource("2_xsikm")]([SubResource("Resource_chkam"), SubResource("Resource_ahsqg")])
-
-[sub_resource type="Resource" id="Resource_iw0n7"]
-script = ExtResource("7_ui3co")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_yxl7d"]
-script = ExtResource("8_lvnwx")
-choice_result = SubResource("Resource_xsikm")
-requirement = SubResource("Resource_iw0n7")
-description = "他抽回被攥住的胳膊，转身朝门外走，脚步在门槛前停下，没有回头。"
-
-[sub_resource type="Resource" id="Resource_y11uv"]
-script = ExtResource("4_yxl7d")
-value = 12
-
-[sub_resource type="Resource" id="Resource_dful3"]
-script = ExtResource("5_y11uv")
-target_tag = "TARGET_IDENTITY_QUANGUI"
-leverage_key = "quangui_cockfight_gambling"
-
-[sub_resource type="Resource" id="Resource_ui3co"]
-script = ExtResource("6_dful3")
-operators = Array[ExtResource("2_xsikm")]([SubResource("Resource_y11uv"), SubResource("Resource_dful3")])
-
-[sub_resource type="Resource" id="Resource_lvnwx"]
-script = ExtResource("7_ui3co")
-trait_name = "kuangda_fengying"
-
-[sub_resource type="Resource" id="Resource_xwmjm"]
-script = ExtResource("8_lvnwx")
-choice_result = SubResource("Resource_ui3co")
-requirement = SubResource("Resource_lvnwx")
-description = "他走向毡垫，跪下时膝盖压住一根鸡毛，铺纸研墨的手没有抖。"
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_chkam"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ahsqg"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_xsikm"]
+[ext_resource type="Script" uid="uid://cam8c3etv60ba" path="res://core/operators/leverage_add_operator.gd" id="4_iw0n7"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_yxl7d"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_y11uv"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_dful3"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_ui3co"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_lvnwx"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_xwmjm"]
 
 [sub_resource type="Resource" id="Resource_5wpx8"]
-script = ExtResource("4_yxl7d")
-value = 12
+script = ExtResource("3_xsikm")
+value = 15
 
 [sub_resource type="Resource" id="Resource_l0grx"]
-script = ExtResource("5_y11uv")
+script = ExtResource("4_iw0n7")
 target_tag = "TARGET_IDENTITY_QUANGUI"
 leverage_key = "quangui_cockfight_gambling"
 
 [sub_resource type="Resource" id="Resource_5nu53"]
-script = ExtResource("6_dful3")
-operators = Array[ExtResource("2_xsikm")]([SubResource("Resource_5wpx8"), SubResource("Resource_l0grx")])
+script = ExtResource("5_yxl7d")
+operators = Array[ExtResource("2_ahsqg")]([SubResource("Resource_5wpx8"), SubResource("Resource_l0grx")])
 
 [sub_resource type="Resource" id="Resource_8yr0p"]
-script = ExtResource("7_ui3co")
-trait_name = "kuangda_zuanying"
-
-[sub_resource type="Resource" id="Resource_0cpxx"]
-script = ExtResource("8_lvnwx")
-choice_result = SubResource("Resource_5nu53")
-requirement = SubResource("Resource_8yr0p")
-description = "他朝毡垫走了两步，停住，转过身看着胖子的侧脸，没有坐下的意思。"
-
-[sub_resource type="Resource" id="Resource_e20v8"]
-script = ExtResource("7_ui3co")
+script = ExtResource("6_y11uv")
 trait_name = "kuangda_kuangke"
 
+[sub_resource type="Resource" id="Resource_0cpxx"]
+script = ExtResource("7_dful3")
+choice_result = SubResource("Resource_5nu53")
+requirement = SubResource("Resource_8yr0p")
+description = "他抽回被攥住的胳膊，转身朝门外走，脚步在门槛前停下，没有回头。"
+
+[sub_resource type="Resource" id="Resource_e20v8"]
+script = ExtResource("3_xsikm")
+value = 12
+
 [sub_resource type="Resource" id="Resource_64hg0"]
-script = ExtResource("7_ui3co")
-trait_name = "kuangda_fengying"
+script = ExtResource("4_iw0n7")
+target_tag = "TARGET_IDENTITY_QUANGUI"
+leverage_key = "quangui_cockfight_gambling"
 
 [sub_resource type="Resource" id="Resource_g8e2l"]
-script = ExtResource("7_ui3co")
-trait_name = "kuangda_zuanying"
+script = ExtResource("5_yxl7d")
+operators = Array[ExtResource("2_ahsqg")]([SubResource("Resource_e20v8"), SubResource("Resource_64hg0")])
 
 [sub_resource type="Resource" id="Resource_mcs0k"]
-script = ExtResource("10_5wpx8")
-operators = Array[ExtResource("9_xwmjm")]([SubResource("Resource_e20v8"), SubResource("Resource_64hg0"), SubResource("Resource_g8e2l")])
+script = ExtResource("6_y11uv")
+trait_name = "kuangda_fengying"
+
+[sub_resource type="Resource" id="Resource_wdwgw"]
+script = ExtResource("7_dful3")
+choice_result = SubResource("Resource_g8e2l")
+requirement = SubResource("Resource_mcs0k")
+description = "他走向毡垫，跪下时膝盖压住一根鸡毛，铺纸研墨的手没有抖。"
+
+[sub_resource type="Resource" id="Resource_qvsen"]
+script = ExtResource("3_xsikm")
+value = 12
+
+[sub_resource type="Resource" id="Resource_sjo5f"]
+script = ExtResource("4_iw0n7")
+target_tag = "TARGET_IDENTITY_QUANGUI"
+leverage_key = "quangui_cockfight_gambling"
+
+[sub_resource type="Resource" id="Resource_iisw3"]
+script = ExtResource("5_yxl7d")
+operators = Array[ExtResource("2_ahsqg")]([SubResource("Resource_qvsen"), SubResource("Resource_sjo5f")])
+
+[sub_resource type="Resource" id="Resource_0hcdt"]
+script = ExtResource("6_y11uv")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_7ts4s"]
+script = ExtResource("7_dful3")
+choice_result = SubResource("Resource_iisw3")
+requirement = SubResource("Resource_0hcdt")
+description = "他朝毡垫走了两步，停住，转过身看着胖子的侧脸，没有坐下的意思。"
+
+[sub_resource type="Resource" id="Resource_ij1gs"]
+script = ExtResource("6_y11uv")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_18vls"]
+script = ExtResource("6_y11uv")
+trait_name = "kuangda_fengying"
+
+[sub_resource type="Resource" id="Resource_sbrvs"]
+script = ExtResource("6_y11uv")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_ptqbh"]
+script = ExtResource("9_lvnwx")
+operators = Array[ExtResource("8_ui3co")]([SubResource("Resource_ij1gs"), SubResource("Resource_18vls"), SubResource("Resource_sbrvs")])
 
 [resource]
-script = ExtResource("11_l0grx")
-requirement = SubResource("Resource_mcs0k")
+script = ExtResource("10_xwmjm")
+requirement = SubResource("Resource_ptqbh")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "ACTION_ENTERTAIN_DRINK:empty_cup", "action:main:jiaoyou", "TARGET_IDENTITY_QUANGUI"])
-options = Array[ExtResource("1_ahsqg")]([SubResource("Resource_yxl7d"), SubResource("Resource_xwmjm"), SubResource("Resource_0cpxx")])
+options = Array[ExtResource("1_chkam")]([SubResource("Resource_0cpxx"), SubResource("Resource_wdwgw"), SubResource("Resource_7ts4s")])
 uuid = "zhuoliu_lieqi_cockfight_ode_identity_quangui"
 name = "斗鸡坊的诗价"
 description = "脂粉味和荔枝的甜腻混在一起，把空气搅成黏稠的浆。紫袍胖子靠在锦垫上，三根手指捏着剥好的荔枝，汁水沿指缝往下走，滴在袍子上洇出深色的印。一个家丁的手不知什么时候扣住了你的肘弯，指节收紧时你听见自己袖口的布料发出绷紧的声响。胖子没转头。他用下巴朝角落指了一下——地上铺着一张毡垫，垫子上几根鸡毛粘在干涸的湿痕边缘。“杜审言的孙子？正好。”他把荔枝核吐在歌伎递来的银盘里，“我这鸡刚赢三场，缺一首压轴的。你坐那写。”歌伎中的一个用扇子掩了嘴，眼睛从你脸上扫到毡垫上那摊湿痕，扇子后面有气音漏出来。"

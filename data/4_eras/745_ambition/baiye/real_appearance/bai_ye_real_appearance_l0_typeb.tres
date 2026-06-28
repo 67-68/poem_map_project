@@ -1,55 +1,55 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://du6q1eubkkpoj"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_hmdf4"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_ar7qr"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="4_0tbj7"]
-[ext_resource type="Script" path="res://core/requirements/poem_requirement.gd" id="7_alo5o"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_ps011"]
-[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_iibli"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="10_lfn16"]
-[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_w128b"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="12_72tsn"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_5dogf"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="2_784ew"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="3_723o6"]
+[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="4_hmdf4"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_ar7qr"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="6_1nj18"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="7_0tbj7"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="8_kv2y2"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_6pq2a"]
 
-[sub_resource type="Resource" id="Resource_5dogf"]
-script = ExtResource("4_0tbj7")
+[sub_resource type="Resource" id="Resource_alo5o"]
+script = ExtResource("2_784ew")
 
-[sub_resource type="Resource" id="Resource_784ew"]
-script = ExtResource("7_alo5o")
+[sub_resource type="Resource" id="Resource_ps011"]
+script = ExtResource("4_hmdf4")
 accepted_poem_types = Array[int]([0])
 lowest_poem_level = 1
 
-[sub_resource type="Resource" id="Resource_723o6"]
-script = ExtResource("8_ps011")
-requirement = SubResource("Resource_784ew")
+[sub_resource type="Resource" id="Resource_iibli"]
+script = ExtResource("5_ar7qr")
+requirement = SubResource("Resource_ps011")
 description = "从怀中取出一张纸"
 
-[sub_resource type="Resource" id="Resource_hmdf4"]
-script = ExtResource("8_ps011")
+[sub_resource type="Resource" id="Resource_lfn16"]
+script = ExtResource("5_ar7qr")
 description = "拂袖而去"
 
-[sub_resource type="Resource" id="Resource_ar7qr"]
-script = ExtResource("10_lfn16")
+[sub_resource type="Resource" id="Resource_w128b"]
+script = ExtResource("7_0tbj7")
 property = "progress"
 value = 70
 operator = 1
 
-[sub_resource type="Resource" id="Resource_1nj18"]
-script = ExtResource("10_lfn16")
+[sub_resource type="Resource" id="Resource_72tsn"]
+script = ExtResource("7_0tbj7")
 property = "progress"
 value = 100
 
-[sub_resource type="Resource" id="Resource_0tbj7"]
-script = ExtResource("11_w128b")
-operators = Array[ExtResource("9_iibli")]([SubResource("Resource_ar7qr"), SubResource("Resource_1nj18")])
+[sub_resource type="Resource" id="Resource_vla3a"]
+script = ExtResource("8_kv2y2")
+operators = Array[ExtResource("6_1nj18")]([SubResource("Resource_w128b"), SubResource("Resource_72tsn")])
 
 [resource]
-script = ExtResource("12_72tsn")
-requirement = SubResource("Resource_0tbj7")
+script = ExtResource("9_6pq2a")
+requirement = SubResource("Resource_vla3a")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_hmdf4")]([SubResource("Resource_723o6"), SubResource("Resource_hmdf4")])
-on_enter_result = SubResource("Resource_5dogf")
+options = Array[ExtResource("3_723o6")]([SubResource("Resource_iibli"), SubResource("Resource_lfn16")])
+on_enter_result = SubResource("Resource_alo5o")
 uuid = "bai_ye_real_appearance_l0_typeb"
 name = "袖手冷眼索礼"
 description = "今日天热,我家老爷不见客.你若有兴头,留张纸在此,回头我替你烧了——当给灶王爷添点柴火.他伸出两指"

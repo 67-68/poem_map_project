@@ -1,26 +1,39 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bs1a4smy0u15m"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_oaewc"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_3kk4p"]
-[ext_resource type="Script" path="res://core/property_requirement.gd" id="8_5aqc2"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="9_hkifm"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_wcegx"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_sasof"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_oaewc"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_y8i20"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_wobgx"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_ohrqt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_wolbo"]
 
-[sub_resource type="Resource" id="Resource_mjjtf"]
-script = ExtResource("7_3kk4p")
+[sub_resource type="Resource" id="Resource_gkd6e"]
+script = ExtResource("3_oaewc")
+str_props = "progress"
+value = 10
+
+[sub_resource type="Resource" id="Resource_3kk4p"]
+script = ExtResource("4_y8i20")
+operators = Array[ExtResource("2_sasof")]([SubResource("Resource_gkd6e")])
+
+[sub_resource type="Resource" id="Resource_5aqc2"]
+script = ExtResource("5_wobgx")
+choice_result = SubResource("Resource_3kk4p")
 description = "玩家拱手道谢，继续立在廊下等候"
 
-[sub_resource type="Resource" id="Resource_flgqo"]
-script = ExtResource("8_5aqc2")
+[sub_resource type="Resource" id="Resource_hkifm"]
+script = ExtResource("6_ohrqt")
 property = "progress"
 value = 70
 
 [resource]
-script = ExtResource("9_hkifm")
-requirement = SubResource("Resource_flgqo")
+script = ExtResource("7_wolbo")
+requirement = SubResource("Resource_hkifm")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_oaewc")]([SubResource("Resource_mjjtf")])
+options = Array[ExtResource("1_wcegx")]([SubResource("Resource_5aqc2")])
 uuid = "bai_ye_honeymoon_l1_typeb_m2"
 name = "寒阶侍立"
 description = "“新进士果然勤勉，这般冷天还来拜谒，老夫甚是感佩。只是郎中今日公务繁忙，恐无暇接见。不如明日再来，老夫替你递个话。”言罢转身回屋，玩家听见屋内炭火噼啪，夹着茶盏轻碰声。"

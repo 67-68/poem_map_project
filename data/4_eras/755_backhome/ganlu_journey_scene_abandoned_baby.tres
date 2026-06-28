@@ -1,44 +1,44 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b265hee5x3rwy"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_mrxjf"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_i7glx"]
-[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_8b14u"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_8sll1"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="6_gy7yn"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_x2g23"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="8_w4eam"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_ryau7"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_mrxjf"]
+[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="3_i7glx"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_hvlr3"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_8b14u"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_8sll1"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_gy7yn"]
 
-[sub_resource type="Resource" id="Resource_ryau7"]
-script = ExtResource("4_8b14u")
+[sub_resource type="Resource" id="Resource_x2g23"]
+script = ExtResource("3_i7glx")
 value = 21
 
-[sub_resource type="Resource" id="Resource_mrxjf"]
-script = ExtResource("5_8sll1")
+[sub_resource type="Resource" id="Resource_w4eam"]
+script = ExtResource("4_hvlr3")
 imagery_name = "EMOTION:despair"
 
-[sub_resource type="Resource" id="Resource_i7glx"]
-script = ExtResource("5_8sll1")
+[sub_resource type="Resource" id="Resource_uvy53"]
+script = ExtResource("4_hvlr3")
 imagery_name = "ENVIRONMENT:snow"
 
-[sub_resource type="Resource" id="Resource_hvlr3"]
-script = ExtResource("6_gy7yn")
-operators = Array[ExtResource("2_i7glx")]([SubResource("Resource_ryau7"), SubResource("Resource_mrxjf"), SubResource("Resource_i7glx")])
+[sub_resource type="Resource" id="Resource_nvo2b"]
+script = ExtResource("5_8b14u")
+operators = Array[ExtResource("2_mrxjf")]([SubResource("Resource_x2g23"), SubResource("Resource_w4eam"), SubResource("Resource_uvy53")])
 
-[sub_resource type="Resource" id="Resource_8b14u"]
-script = ExtResource("7_x2g23")
-choice_result = SubResource("Resource_hvlr3")
+[sub_resource type="Resource" id="Resource_bku06"]
+script = ExtResource("6_8sll1")
+choice_result = SubResource("Resource_nvo2b")
 description = "脱下半臂，裹起婴孩，继续前行"
 
-[sub_resource type="Resource" id="Resource_8sll1"]
-script = ExtResource("7_x2g23")
+[sub_resource type="Resource" id="Resource_r1m5q"]
+script = ExtResource("6_8sll1")
 description = "将雪重新拢上，起身赶路"
 
 [resource]
-script = ExtResource("8_w4eam")
+script = ExtResource("7_gy7yn")
 era = "755_backhome"
 archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu"])
-options = Array[ExtResource("1_mrxjf")]([SubResource("Resource_8b14u"), SubResource("Resource_8sll1")])
+options = Array[ExtResource("1_ryau7")]([SubResource("Resource_bku06"), SubResource("Resource_r1m5q")])
 uuid = "ganlu_journey_scene_abandoned_baby"
 name = "雪中婴骸"
 description = "风雪中，道旁雪堆有一处隆起，颜色异于周遭——泛着青灰。他蹲下，手扒开覆雪，指节触到冰硬的织物。雪粒簌簌落下，露出蜷缩的脚趾，比指甲盖还小，皮肤已是冻透的青紫色。婴儿侧卧，姿态如睡，雪落在眼睑上，不化。风声灌耳，除此之外，再无声息。他蹲在原地，手指停在半空，新雪渐渐覆上他刚扒开的坑沿。"

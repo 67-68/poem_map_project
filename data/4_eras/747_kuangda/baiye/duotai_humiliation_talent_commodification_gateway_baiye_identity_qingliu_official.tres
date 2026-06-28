@@ -1,60 +1,60 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://n1j4xx6gvsj6"]
 
-[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_igb0b"]
-[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_650j8"]
-[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="4_hws8g"]
-[ext_resource type="Script" path="res://model/choice_result.gd" id="5_fmq2n"]
-[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="6_igb0b"]
-[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_ln62p"]
-[ext_resource type="Script" path="res://model/random_event.gd" id="7_1b5ys"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_igb0b"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="2_650j8"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="3_fc42r"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="4_hws8g"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_fmq2n"]
+[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_ln62p"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_1b5ys"]
 
-[sub_resource type="Resource" id="Resource_igb0b"]
-script = ExtResource("5_fmq2n")
+[sub_resource type="Resource" id="Resource_as828"]
+script = ExtResource("2_650j8")
 
-[sub_resource type="Resource" id="Resource_650j8"]
+[sub_resource type="Resource" id="Resource_h4l1j"]
 script = ExtResource("4_hws8g")
 imagery_name = "TARGET_FACTION_ROYAL:jade_step"
 
-[sub_resource type="Resource" id="Resource_fc42r"]
-script = ExtResource("5_fmq2n")
-operators = Array[ExtResource("2_650j8")]([SubResource("Resource_650j8")])
+[sub_resource type="Resource" id="Resource_sqt8n"]
+script = ExtResource("2_650j8")
+operators = Array[ExtResource("1_igb0b")]([SubResource("Resource_h4l1j")])
 
-[sub_resource type="Resource" id="Resource_hws8g"]
-script = ExtResource("6_ln62p")
-choice_result = SubResource("Resource_fc42r")
+[sub_resource type="Resource" id="Resource_vh442"]
+script = ExtResource("5_fmq2n")
+choice_result = SubResource("Resource_sqt8n")
 description = "你站着未动，看了一眼茶碗，转身便走。"
 
-[sub_resource type="Resource" id="Resource_fmq2n"]
-script = ExtResource("6_ln62p")
+[sub_resource type="Resource" id="Resource_vvw2b"]
+script = ExtResource("5_fmq2n")
 description = "你默然坐下，提笔写一首五绝，搁笔而去。"
 
-[sub_resource type="Resource" id="Resource_ln62p"]
+[sub_resource type="Resource" id="Resource_fsc3u"]
 script = ExtResource("4_hws8g")
 imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
 
-[sub_resource type="Resource" id="Resource_1b5ys"]
-script = ExtResource("5_fmq2n")
-operators = Array[ExtResource("2_650j8")]([SubResource("Resource_ln62p")])
+[sub_resource type="Resource" id="Resource_a5gv8"]
+script = ExtResource("2_650j8")
+operators = Array[ExtResource("1_igb0b")]([SubResource("Resource_fsc3u")])
 
-[sub_resource type="Resource" id="Resource_as828"]
-script = ExtResource("6_ln62p")
-choice_result = SubResource("Resource_1b5ys")
+[sub_resource type="Resource" id="Resource_dg5su"]
+script = ExtResource("5_fmq2n")
+choice_result = SubResource("Resource_a5gv8")
 description = "“献丑了。”——你写了两首，问门子可需另为一首。"
 
-[sub_resource type="Resource" id="Resource_h4l1j"]
-script = ExtResource("6_igb0b")
+[sub_resource type="Resource" id="Resource_xxw4v"]
+script = ExtResource("6_ln62p")
 volatile_stat = "ambition"
 value = 50
 operator = 1
 
 [resource]
 script = ExtResource("7_1b5ys")
-requirement = SubResource("Resource_h4l1j")
+requirement = SubResource("Resource_xxw4v")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["emotion_pair:pair_rebellion", "TARGET_NPC_DUFU:thatched_grass", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_talent_commodification", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_NPC_ZHENGQIAN", "TARGET_FACTION_ROYAL:jade_step", "TARGET_NPC_DUFU:thatched_grass", "ENV_NATURE_NIGHTMOON:cold_moon", "action:scene_baiye"])
-options = Array[ExtResource("1_igb0b")]([SubResource("Resource_hws8g"), SubResource("Resource_fmq2n"), SubResource("Resource_as828")])
-on_enter_result = SubResource("Resource_igb0b")
+options = Array[ExtResource("3_fc42r")]([SubResource("Resource_vh442"), SubResource("Resource_vvw2b"), SubResource("Resource_dg5su")])
+on_enter_result = SubResource("Resource_as828")
 uuid = "duotai_humiliation_talent_commodification_gateway_baiye_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "茶凉诗契"
