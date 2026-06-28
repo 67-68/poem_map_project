@@ -16,11 +16,19 @@ class_name UIDecl extends Resource
 #   - 字段语义与 BaseEvent 上同名字段完全等价（如迁移则直接引用此对象）
 
 # ── 显示速度枚举（纯数据标记） ──────────────────────────
-# 与 BaseEvent.DisplaySpeed 保持同步：
-#   FAST=0:  瞬间填充所有 UI 元素（默认，适用日常/随机事件）
-#   SLOW=1:  打字机逐阶段显示（适用 story_arcs 线性剧本）
-#   SLOWEST=2: 更慢的打字机速度
-@export var display_speed: int = 0
+# FAST=0:  瞬间填充所有 UI 元素（默认，适用日常/随机事件）
+# SLOW=1:  打字机逐阶段显示（适用 story_arcs 线性剧本）
+# SLOWEST=2: 更慢的打字机速度
+enum DisplaySpeed { FAST = 0, SLOW = 1, SLOWEST = 2 }
+
+@export var display_speed: int = DisplaySpeed.FAST
+
+# ── 自动推进超时（秒）───────────────────────────────────
+# 0 选项 + lasting_time > 0 → 展示后自动关闭
+# 1 选项 + lasting_time > 0 → 自动选择该选项
+# lasting_time == 0 → 退化为现有行为（手动选择/跳过）
+# 在 BaseEvent.init() 中：context 有 lasting_time key → 覆盖此值
+@export var lasting_time: float = 0.0
 
 # ── 背景音乐 ────────────────────────────────────────────
 @export var audio: AudioStream = null

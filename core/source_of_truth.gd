@@ -71,6 +71,16 @@ static var debug_dashboard_state = {
             "contexts": ["winter", "exile"],
             "tier": 1,
         },
+        {
+            "blueprint_id": "TARGET_ENVIRONMENT_SNOW_2",
+            "contexts": ["winter", "exile"],
+            "tier": 1,
+        },
+        {
+            "blueprint_id": "TARGET_ENVIRONMENT_SNOW_3",
+            "contexts": ["winter", "exile"],
+            "tier": 1,
+        },
     ],
 
     "flags": {

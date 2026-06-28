@@ -101,15 +101,16 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 
 	# 防御性检查：0 选项 + lasting_time=0 → 跳过
 	if _has_no_displayable_option(all_options):
-		if data.lasting_time <= 0.0:
+		var _lt0: float = data.ui_decl.lasting_time if data.ui_decl else 0.0
+		if _lt0 <= 0.0:
 			Logging.err("_on_event_ready_to_play: 事件 '%s' 所有选项文本为空且 lasting_time=0，跳过" % data.name)
 			director.on_option_selected(null, "[跳过]")
 			return
-		Logging.info("_on_event_ready_to_play: 事件 '%s' 0 选项但 lasting_time=%.1f > 0" % [data.name, data.lasting_time])
+		Logging.info("_on_event_ready_to_play: 事件 '%s' 0 选项但 lasting_time=%.1f > 0" % [data.name, _lt0])
 
 	EventBus.event_shown.emit(data)
-	if data.epitaph_text:
-		TimeService.register_to_master_timeline(data.time, data.name, data.epitaph_text)
+	if data.ui_decl and data.ui_decl.epitaph_text:
+		TimeService.register_to_master_timeline(data.time, data.name, data.ui_decl.epitaph_text)
 
 	current_event_data = data
 	var entry_id := str(data.get_instance_id())
@@ -166,6 +167,8 @@ func _render_event_content(data: BaseEvent, all_options: Array, context: Diction
 	#    - 单独 has_entry() 无法区分 "pop 回归" 与 "循环重入"（Bug 2 根源）
 	#    - 单独 is_pop_regression 在 pop_to_event 未处理事件的边缘情况下可能误判
 	#    - 两者同时满足才走 pop 回归路径
+	var _lt: float = data.ui_decl.lasting_time if data.ui_decl else 0.0
+	var _ds: int = data.ui_decl.display_speed if data.ui_decl else 0
 	if is_pop_regression and event_ui.has_entry(entry_id):
 		# === pop 回归路径：底部追加纯选项条目 ===
 		Logging.info("_render_event_content: pop回归路径 entry_id='%s'" % entry_id)
@@ -173,8 +176,8 @@ func _render_event_content(data: BaseEvent, all_options: Array, context: Diction
 		event_ui.clear_all_dim()
 		event_ui.append_pop_regression_entry(data, all_options, entry_id)
 		event_ui.scroll_to_bottom()
-		if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
-			_start_auto_advance(data.lasting_time, all_options, entry_id)
+		if _lt > 0.0 and _count_displayable_options(all_options) <= 1:
+			_start_auto_advance(_lt, all_options, entry_id)
 	else:
 		# === 新事件路径 ===
 		Logging.info("_render_event_content: 新事件路径 entry_id='%s' from_stack=%s" % [entry_id, from_stack])
@@ -189,23 +192,23 @@ func _render_event_content(data: BaseEvent, all_options: Array, context: Diction
 			event_ui.append_settlement_entry(data, context)
 		else:
 			BlurManager.trigger_event_blur()
-			match data.display_speed:
-				BaseEvent.DisplaySpeed.SLOW:
+			match _ds:
+				UIDecl.DisplaySpeed.SLOW:
 					event_ui.display_slow(data, all_options, context, from_stack, entry_id, EventUI.SLOW_SPEED)
-					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+					if _lt > 0.0 and _count_displayable_options(all_options) <= 1:
 						event_ui.display_complete.connect(func():
-							_start_auto_advance(data.lasting_time, all_options, entry_id)
+							_start_auto_advance(_lt, all_options, entry_id)
 						, CONNECT_ONE_SHOT)
-				BaseEvent.DisplaySpeed.SLOWEST:
+				UIDecl.DisplaySpeed.SLOWEST:
 					event_ui.display_slow(data, all_options, context, from_stack, entry_id, EventUI.SLOWEST_SPEED)
-					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
+					if _lt > 0.0 and _count_displayable_options(all_options) <= 1:
 						event_ui.display_complete.connect(func():
-							_start_auto_advance(data.lasting_time, all_options, entry_id)
+							_start_auto_advance(_lt, all_options, entry_id)
 						, CONNECT_ONE_SHOT)
 				_:
 					event_ui.append_event_entry(data, all_options, context, from_stack, entry_id)
-					if data.lasting_time > 0.0 and _count_displayable_options(all_options) <= 1:
-						_start_auto_advance(data.lasting_time, all_options, entry_id)
+					if _lt > 0.0 and _count_displayable_options(all_options) <= 1:
+						_start_auto_advance(_lt, all_options, entry_id)
 
 
 # ═══════════════════════════════════════════════════

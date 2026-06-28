@@ -75,10 +75,10 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 	# 填充内容
 	title_label.text = event.name
 	content_label.text = Util.tr_and_resolve(event.description, context, event)
-	if event.example.is_empty():
+	if not event.ui_decl or event.ui_decl.example.is_empty():
 		example_label.hide()
 	else:
-		example_label.text = event.example
+		example_label.text = event.ui_decl.example
 
 	# ── UIDecl 颜色应用 ──
 	_apply_ui_decl_colors(event, title_label, content_label)
@@ -413,9 +413,9 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 	Logging.debug("EventUI.display_slow: Phase 2 — Description 完成")
 
 	# Step 4: Phase 3 — Example（可选）
-	if not event.example.is_empty():
+	if event.ui_decl and not event.ui_decl.example.is_empty():
 		Logging.debug("EventUI.display_slow: Phase 3 — Example 打字机开始")
-		await _typewrite_phase(example_label, event.example, type_speed)
+		await _typewrite_phase(example_label, event.ui_decl.example, type_speed)
 		scroll_to_bottom()
 		Logging.debug("EventUI.display_slow: Phase 3 — Example 完成")
 	else:
