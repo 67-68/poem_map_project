@@ -30,6 +30,18 @@ static func comprehend_category(category_id: String) -> bool:
 	return true
 
 
+## 非破坏性检查：是否满足合并前提条件（碎片 >= 2 且未合并过）
+static func can_merge_category(category_id: String) -> bool:
+	var ima = Database.get_imaginary(category_id) as ImaginaryTag
+	if not ima:
+		return false
+	if ima.basic_imaginaries.size() < ImaginaryTag.l2_threshold:
+		return false
+	if ima.current_tier != 0:
+		return false
+	return true
+
+
 ## 合并坍缩：保留碎片副本到 merged 字段，提升等级 + 赋予 tier
 ## 门槛: basic_imaginaries.size() >= 2，且未合并过 (current_tier == 0)
 ## 返回 true 表示合并成功

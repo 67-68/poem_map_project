@@ -12,8 +12,11 @@ extends Node2D
 @export var phase_offset: float = 0.0       ## 初始相位角 (φ)
 
 var _orbit_time: float = 0.0
+var _sucking: bool = false  ## 正在执行吸入动画
 
 func _process(delta: float) -> void:
+	if _sucking:
+		return
 	if not center_target or not is_instance_valid(center_target):
 		return
 
@@ -25,6 +28,19 @@ func _process(delta: float) -> void:
 	var offset_y = semi_minor_axis * sin(_orbit_time + phase_offset)
 
 	global_position = center_target.global_position + Vector2(offset_x, offset_y)
+
+
+## 吸入动画：飞向中心 → 缩小 → 淡出
+func play_suck_animation() -> void:
+	_sucking = true
+	var tw := create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	tw.set_parallel(true)
+	tw.tween_property(self, "position", Vector2.ZERO, 0.35)
+	tw.tween_property(self, "scale", Vector2.ZERO, 0.35)
+	tw.tween_property(self, "modulate:a", 0.0, 0.3)
+	await tw.finished
+	queue_free()
+
 
 ## 设置 Label 文本（用于显示详细意象）
 func set_detail_text(text: String) -> void:

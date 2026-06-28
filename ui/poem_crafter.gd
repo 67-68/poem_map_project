@@ -141,9 +141,14 @@ func _rebuild_subviewport() -> void:
 		concept.concept_name = ima.name
 		concept.imaginary_tag = ima
 
-		# 连接交互信号（保留作为 fallback）
+		# 连接交互信号
 		concept.concept_selected.connect(on_concept_selected)
 		concept.concept_merge_requested.connect(on_concept_merge_requested)
+		concept.merge_animation_finished.connect(on_merge_animation_finished)
+
+		# 合并态概念：直接设置 tier 颜色
+		if ima.current_tier > 0:
+			concept.modulate = AbstractConcept.TIER_COLORS.get(ima.current_tier, Color.WHITE)
 
 		if N == 1:
 			concept.position = center
@@ -153,7 +158,8 @@ func _rebuild_subviewport() -> void:
 
 		viewport.add_child(concept)
 
-		# 创建 OrbitDetail 节点（仅当有未合并碎片时）
+		# 创建 OrbitDetail 节点（作为 concept 的子节点，便于吸入动画）
+		# 仅当有未合并碎片时创建
 		var fragments := ima.basic_imaginaries
 		var M := fragments.size()
 		for j in M:
@@ -168,7 +174,11 @@ func _rebuild_subviewport() -> void:
 			var display_text: String = str(contexts[0]) if contexts.size() > 0 else "..."
 			detail.set_detail_text(display_text)
 
-			viewport.add_child(detail)
+			concept.add_child(detail)
+
+		# 碎片 >= 2 时启动合并就绪闪烁
+		if M >= 2 and ima.current_tier == 0:
+			concept.call_deferred("start_merge_ready_blink")
 
 	Logging.info('PoemCrafter: subviewport rebuild complete')
 
@@ -265,11 +275,48 @@ func on_concept_merge_requested(ima: ImaginaryTag) -> void:
 		Logging.warn('PoemCrafter: concept already selected, cannot merge')
 		return
 
-	var success := ImaginaryComprehender.merge_category(ima.uuid)
-	if not success:
-		Logging.warn('PoemCrafter: merge failed for concept: %s' % ima.name)
+	# 非破坏性检查: 是否满足合并前提
+	if not ImaginaryComprehender.can_merge_category(ima.uuid):
+		Logging.warn('PoemCrafter: merge precondition failed for: %s' % ima.name)
 		return
 
+	# 计算合并后的 tier（不修改 ImaginaryTag，仅用于动画颜色）
+	var target_tier = 999
+	for frag in ima.basic_imaginaries:
+		target_tier = mini(target_tier, frag.get("tier", 1))
+
+	# 找对应 AbstractConcept 节点
+	var concept := _find_concept_for_tag(ima)
+	if not concept:
+		Logging.warn('PoemCrafter: concept node not found for: %s, falling back to direct merge' % ima.name)
+		_direct_merge(ima)
+		return
+
+	# 播放合并动画，传入目标 tier 供颜色使用
+	concept.play_merge_animation(target_tier)
+
+
+func _find_concept_for_tag(ima: ImaginaryTag) -> AbstractConcept:
+	var viewport := _get_subviewport()
+	if not viewport:
+		return null
+	for child in viewport.get_children():
+		if child is AbstractConcept and child.imaginary_tag == ima:
+			return child
+	return null
+
+
+func _direct_merge(ima: ImaginaryTag) -> void:
+	ImaginaryComprehender.merge_category(ima.uuid)
+	EventBus.imaginary_changed.emit()
+	_rebuild_subviewport()
+
+
+func on_merge_animation_finished(ima: ImaginaryTag) -> void:
+	Logging.info('PoemCrafter: merge animation finished for: %s' % ima.name)
+
+	# 正式执行数据合并
+	ImaginaryComprehender.merge_category(ima.uuid)
 	EventBus.imaginary_changed.emit()
 	_rebuild_subviewport()
 
