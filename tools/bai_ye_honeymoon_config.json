@@ -110,7 +110,7 @@
   ],
   "universal_requirement": "prop_lt(name=progress; val=70)",
   "universal_result": "prop_add(name=progress; val=10)",
-  "word_count_min": 80,
+  "word_count_min": 40,
   "word_count_max": 200,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
