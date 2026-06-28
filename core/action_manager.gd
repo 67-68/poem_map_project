@@ -123,6 +123,33 @@ func _get_archetype_failed_hint(action: Action, prop_name: String) -> String:
 	return hints.get(prop_name, "")
 
 
+## 🆕 纯函数：判断 action 在当前 era 中是否被允许显示。
+## 如果 era 没有设置黑白名单（null/[]），返回 true。
+static func is_action_era_allowed(action: Action) -> bool:
+	if GameState.current_era.is_empty():
+		return true
+	var era_res = Database.eras.get(GameState.current_era)
+	if not era_res:
+		return true
+	
+	var main_tag_val = action.get("_main_tag") if action is SceneAction else -1
+	var action_type = ENUMS.action_tag_to_action_type(main_tag_val)
+	
+	# 黑名单优先（rejected_actions）
+	var rejected = era_res.rejected_actions
+	if rejected != null and not rejected.is_empty():
+		if action_type >= 0 and rejected.has(action_type):
+			return false
+	
+	# 白名单（accepted_actions）
+	var accepted = era_res.accepted_actions
+	if accepted != null and not accepted.is_empty():
+		if action_type < 0 or not accepted.has(action_type):
+			return false
+	
+	return true
+
+
 ## 🎯 纯函数：检查单个 action 在当前玩家状态下是否满足全部条件。
 ## 返回: { valid: bool, reasons: Array[String], prop_name: String }
 ## reasons 中每条是独立的失败原因文本（A类），最终会换行拼接到 dynamic_failed_hint。
@@ -550,32 +577,11 @@ func get_available_scene_actions() -> Dictionary:
 				num_intercepted += 1
 				continue # 没有交集，直接滚蛋
 				
-		# 4. Era 合法性检查（三层语义）
-		if not GameState.current_era.is_empty():
-			var era_res = Database.eras.get(GameState.current_era)
-			if era_res:
-				var main_tag_val = a.get("_main_tag") if a is SceneAction else -1
-				var action_type = ENUMS.action_tag_to_action_type(main_tag_val)
-				
-				# 4a. 黑名单优先（rejected_actions）
-				# null / [] → 不拦截
-				# [...] → 拦截列表中指定的所有 action_type
-				var rejected = era_res.rejected_actions
-				if rejected != null and not rejected.is_empty():
-					if action_type >= 0 and rejected.has(action_type):
-						Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 时代黑名单 (era=%s)" % [action_npc_label, a_id, GameState.current_era])
-						num_intercepted += 1
-						continue
-				
-				# 4b. 白名单（accepted_actions）
-				# null / [] → 全部允许（不启用白名单限制）
-				# [...]     → 仅列表中指定的 action 放行
-				var accepted = era_res.accepted_actions
-				if accepted != null and not accepted.is_empty():
-					if action_type < 0 or not accepted.has(action_type):
-						Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 不在时代白名单 (era=%s)" % [action_npc_label, a_id, GameState.current_era])
-						num_intercepted += 1
-						continue
+		# 4. Era 合法性检查（复用 is_action_era_allowed）
+		if not is_action_era_allowed(a):
+			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: Era不允许 (era=%s)" % [action_npc_label, a_id, GameState.current_era])
+			num_intercepted += 1
+			continue
 	
 		# 3. 活到最后的才是合法动作
 		var locked_mark := " 🔒" if _locked_in_actions.has(a_id) else ""

@@ -23,8 +23,12 @@ func refresh():
 		if a_id in ActionManager._selected_action_ids:
 			continue
 		var a = Database.get_action(a_id) as SceneAction
-		if a:
-			locked_actions.append(a)
+		if not a:
+			continue
+		# 🆕 Era 不允许的 action 完全不展示
+		if not ActionManager.is_action_era_allowed(a):
+			continue
+		locked_actions.append(a)
 	
 	# 构建完整按钮列表：选中 + 锁定
 	var all_visible_actions: Array[SceneAction] = []
@@ -93,7 +97,7 @@ func _refresh_locks_only() -> void:
 func _ready():
 	super._ready()
 	refresh()
-	TimeService.on_month_tick.connect(refresh)
+	TimeService.on_xun_tick.connect(refresh)
 	EventBus.request_refresh_action_panel.connect(refresh)
 	# 🆕 监听锁定状态增量刷新
 	EventBus.request_refresh_action_locks.connect(_refresh_locks_only)
