@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" path="res://ui/poem_uis/abstract_concept.gd" id="1_script"]
 
+[sub_resource type="RectangleShape2D" id="Rect"]
+size = Vector2(80, 30)
+
 [node name="AbstractConcept" type="Area2D" unique_id=257193833]
 script = ExtResource("1_script")
 
@@ -10,3 +13,7 @@ offset_right = 40.0
 offset_bottom = 30.0
 theme_type_variation = &"FrozenTitleText"
 text = ""
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(20, 15)
+shape = SubResource("Rect")
