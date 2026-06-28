@@ -58,7 +58,8 @@ func test_narrative_scenarios(map):
 		var ev := BaseEvent.new()
 		ev.name = "石壕吏"
 		ev.description = "暮投石壕村，有吏夜捉人。老翁逾墙走，老妇出门看。"
-		ev.example = "758年 陕州"
+		ev.ui_decl = UIDecl.new()
+		ev.ui_decl.example = "758年 陕州"
 
 		var opt := EventOption.new()
 		opt.description = "在墙角默默记录"
@@ -74,7 +75,8 @@ func test_narrative_scenarios(map):
 		var ev := BaseEvent.new()
 		ev.name = "安史之乱"
 		ev.description = "渔阳鼙鼓动地来，惊破霓裳羽衣曲。安禄山在范阳起兵，直指洛阳。"
-		ev.example = "755年 范阳"
+		ev.ui_decl = UIDecl.new()
+		ev.ui_decl.example = "755年 范阳"
 
 		var opt := EventOption.new()
 		opt.description = "我知道了"
@@ -90,7 +92,8 @@ func test_narrative_scenarios(map):
 		var ev := BaseEvent.new()
 		ev.name = "马嵬坡之变"
 		ev.description = "六军不发无奈何，宛转蛾眉马前死。禁军要求处死杨贵妃，否则拒绝开拔。"
-		ev.example = "756年 马嵬驿"
+		ev.ui_decl = UIDecl.new()
+		ev.ui_decl.example = "756年 马嵬驿"
 
 		var opt1 := EventOption.new()
 		opt1.description = "赐死杨玉环"
@@ -110,7 +113,8 @@ func test_narrative_scenarios(map):
 		var ev := BaseEvent.new()
 		ev.name = "收复长安"
 		ev.description = "剑外忽传收蓟北，初闻涕泪满衣裳。官军已收复京师！"
-		ev.example = "757年 长安"
+		ev.ui_decl = UIDecl.new()
+		ev.ui_decl.example = "757年 长安"
 
 		var opt := EventOption.new()
 		opt.description = "漫卷诗书喜欲狂"

@@ -87,6 +87,7 @@ layout_mode = 2
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Panel/VBoxContainer/HBoxContainer" unique_id=947996467]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 0
 
 [node name="SubViewport" type="SubViewport" parent="Panel/VBoxContainer/HBoxContainer/SubViewportContainer" unique_id=1112073782]
 disable_3d = true
