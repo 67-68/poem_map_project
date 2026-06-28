@@ -70,9 +70,21 @@ choice_result = SubResource("Resource_hk02i")
 requirement = SubResource("Resource_x3pvl")
 description = "呈上诗稿"
 
+[sub_resource type="Resource" id="Resource_y0mxb"]
+script = ExtResource("4_0e0pk")
+_property = 4
+str_props = "s_progress_gain"
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_hu1gx"]
+script = ExtResource("2_3dyr7")
+operators = Array[ExtResource("1_npxa1")]([SubResource("Resource_y0mxb")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
 [sub_resource type="Resource" id="Resource_0w2bm"]
 script = ExtResource("8_jf45p")
-description = "拂袖而去"
+choice_result = SubResource("Resource_hu1gx")
+description = "只是恭维"
 
 [sub_resource type="Resource" id="Resource_3rhxy"]
 script = ExtResource("10_qyy55")
@@ -97,6 +109,6 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("3_1ub2h")]([SubResource("Resource_atsab"), SubResource("Resource_0w2bm")])
 on_enter_result = SubResource("Resource_l555t")
-uuid = "bai_ye_real_appearance_l2_typec"
+uuid = "bai_ye_real_appearance_placeholder"
 name = "冷茶与残稿"
 description = "诗尚可,把名字抹了,改日送与刘参军.又转头向你笑道:赐坐,赏你一壶茶.侍从端来一壶冷茶"
