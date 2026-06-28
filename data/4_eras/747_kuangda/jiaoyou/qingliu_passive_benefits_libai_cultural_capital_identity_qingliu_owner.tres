@@ -1,130 +1,100 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://de45ujrl4ge10"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_1peop"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_dgcdr"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_tx11o"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_k0pes"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="5_lmsqc"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_v6qg4"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_dc4a3"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_fmte3"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_3wewd"]
-[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="10_66dht"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_7s7wa"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_i3vc1"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_1peop"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_dgcdr"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_k0pes"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="5_lmsqc"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_v6qg4"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_dc4a3"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_fmte3"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_3wewd"]
+[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="10_66dht"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="11_7s7wa"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="12_i3vc1"]
 
-[sub_resource type="Resource" id="Resource_wkuku"]
-script = ExtResource("3_tx11o")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_o8p6v"]
-script = ExtResource("3_tx11o")
-str_props = "health"
-value = -20
-
-[sub_resource type="Resource" id="Resource_7u0h6"]
+[sub_resource type="Resource" id="Resource_751wi"]
 script = ExtResource("4_k0pes")
 value = 10
 
-[sub_resource type="Resource" id="Resource_murls"]
+[sub_resource type="Resource" id="Resource_1peop"]
 script = ExtResource("5_lmsqc")
 imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
 
-[sub_resource type="Resource" id="Resource_eua43"]
+[sub_resource type="Resource" id="Resource_dgcdr"]
 script = ExtResource("6_v6qg4")
-operators = Array[ExtResource("2_dgcdr")]([SubResource("Resource_wkuku"), SubResource("Resource_o8p6v"), SubResource("Resource_7u0h6"), SubResource("Resource_murls")])
+operators = Array[ExtResource("2_dgcdr")]([SubResource("Resource_751wi"), SubResource("Resource_1peop")])
 
-[sub_resource type="Resource" id="Resource_2l2gw"]
+[sub_resource type="Resource" id="Resource_tx11o"]
 script = ExtResource("7_dc4a3")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_3xaii"]
+[sub_resource type="Resource" id="Resource_k0pes"]
 script = ExtResource("8_fmte3")
-choice_result = SubResource("Resource_eua43")
-requirement = SubResource("Resource_2l2gw")
+choice_result = SubResource("Resource_dgcdr")
+requirement = SubResource("Resource_tx11o")
 description = "取案上残墨，在太白诗旁草草题了两个字：收到。"
 
-[sub_resource type="Resource" id="Resource_p3h2c"]
-script = ExtResource("3_tx11o")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_n4yva"]
-script = ExtResource("3_tx11o")
-str_props = "health"
-value = 15
-
-[sub_resource type="Resource" id="Resource_sj1os"]
+[sub_resource type="Resource" id="Resource_lmsqc"]
 script = ExtResource("4_k0pes")
 value = 10
 
-[sub_resource type="Resource" id="Resource_inmou"]
+[sub_resource type="Resource" id="Resource_v6qg4"]
 script = ExtResource("6_v6qg4")
-operators = Array[ExtResource("2_dgcdr")]([SubResource("Resource_p3h2c"), SubResource("Resource_n4yva"), SubResource("Resource_sj1os")])
+operators = Array[ExtResource("2_dgcdr")]([SubResource("Resource_lmsqc")])
 
-[sub_resource type="Resource" id="Resource_xsxfp"]
+[sub_resource type="Resource" id="Resource_dc4a3"]
 script = ExtResource("8_fmte3")
-choice_result = SubResource("Resource_inmou")
+choice_result = SubResource("Resource_v6qg4")
 description = "对着那行「独立苍茫」垂目良久，转身时袖口蹭了一笔墨痕。"
 
-[sub_resource type="Resource" id="Resource_uaxau"]
-script = ExtResource("3_tx11o")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_pq68e"]
+[sub_resource type="Resource" id="Resource_fmte3"]
 script = ExtResource("4_k0pes")
 value = 15
 
-[sub_resource type="Resource" id="Resource_btv88"]
-script = ExtResource("3_tx11o")
-str_props = "health"
-value = 15
-
-[sub_resource type="Resource" id="Resource_p6wml"]
+[sub_resource type="Resource" id="Resource_3wewd"]
 script = ExtResource("4_k0pes")
 value = 5
 
-[sub_resource type="Resource" id="Resource_tke4h"]
+[sub_resource type="Resource" id="Resource_66dht"]
 script = ExtResource("5_lmsqc")
 imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
 
-[sub_resource type="Resource" id="Resource_lad5h"]
+[sub_resource type="Resource" id="Resource_7s7wa"]
 script = ExtResource("6_v6qg4")
-operators = Array[ExtResource("2_dgcdr")]([SubResource("Resource_uaxau"), SubResource("Resource_pq68e"), SubResource("Resource_btv88"), SubResource("Resource_p6wml"), SubResource("Resource_tke4h")])
+operators = Array[ExtResource("2_dgcdr")]([SubResource("Resource_fmte3"), SubResource("Resource_3wewd"), SubResource("Resource_66dht")])
 
-[sub_resource type="Resource" id="Resource_ar82n"]
+[sub_resource type="Resource" id="Resource_i3vc1"]
 script = ExtResource("7_dc4a3")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_64q5i"]
+[sub_resource type="Resource" id="Resource_wkuku"]
 script = ExtResource("8_fmte3")
-choice_result = SubResource("Resource_lad5h")
-requirement = SubResource("Resource_ar82n")
+choice_result = SubResource("Resource_7s7wa")
+requirement = SubResource("Resource_i3vc1")
 description = "朝围观文士拱手：「太白兄盛情难却。列位若有雅集，子美愿携此诗同往。」"
 
-[sub_resource type="Resource" id="Resource_l66rv"]
+[sub_resource type="Resource" id="Resource_o8p6v"]
 script = ExtResource("10_66dht")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_afeml"]
+[sub_resource type="Resource" id="Resource_7u0h6"]
 script = ExtResource("10_66dht")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_i6kv0"]
+[sub_resource type="Resource" id="Resource_murls"]
 script = ExtResource("11_7s7wa")
-operators = Array[ExtResource("9_3wewd")]([SubResource("Resource_l66rv"), SubResource("Resource_afeml")])
+operators = Array[ExtResource("9_3wewd")]([SubResource("Resource_o8p6v"), SubResource("Resource_7u0h6")])
 
 [resource]
 script = ExtResource("12_i3vc1")
-requirement = SubResource("Resource_i6kv0")
+requirement = SubResource("Resource_murls")
 era = "747_kuangda"
+archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "ACTION_ENTERTAIN_DRINK:empty_cup", "emotion_pair:pair_tranquility", "action:main:jiaoyou"])
-options = Array[ExtResource("1_1peop")]([SubResource("Resource_3xaii"), SubResource("Resource_xsxfp"), SubResource("Resource_64q5i")])
+options = Array[ExtResource("1_1peop")]([SubResource("Resource_k0pes"), SubResource("Resource_dc4a3"), SubResource("Resource_wkuku")])
 uuid = "qingliu_passive_benefits_libai_cultural_capital_identity_qingliu_owner"
 name = "壁上龙蛇迹未干"
 description = "「杜二先生，这诗是写给你的！方才李太白就在这儿，说什么'寄问杜陵老'。」壁上的句子确有「独立苍茫」四字，像是隔空递过来的一杯酒。"

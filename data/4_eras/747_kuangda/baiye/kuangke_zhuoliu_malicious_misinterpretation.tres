@@ -1,199 +1,89 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://etd32vc2sd4w"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_50i87"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_affki"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_lt27p"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_f6tvw"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_6vdlt"]
-[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="6_wabe2"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_pfs5e"]
-[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="8_lf25o"]
-[ext_resource type="Script" uid="uid://cam8c3etv60ba" path="res://core/operators/leverage_add_operator.gd" id="9_xdghl"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="10_qc62b"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_llusm"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_50i87"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_affki"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_f6tvw"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_6vdlt"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="6_wabe2"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_pfs5e"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="8_lf25o"]
+[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="9_xdghl"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="10_qc62b"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="11_llusm"]
 
-[sub_resource type="Resource" id="Resource_cktn3"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -8
-
-[sub_resource type="Resource" id="Resource_4c6ls"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -5
-
-[sub_resource type="Resource" id="Resource_twscs"]
-script = ExtResource("3_lt27p")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_tmibn"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = 2
-
-[sub_resource type="Resource" id="Resource_s64c8"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = 1
-
-[sub_resource type="Resource" id="Resource_xkoxy"]
-script = ExtResource("3_lt27p")
-str_props = "money"
-value = -3
-
-[sub_resource type="Resource" id="Resource_w1y7u"]
+[sub_resource type="Resource" id="Resource_58n1e"]
 script = ExtResource("4_f6tvw")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ydw6h"]
+[sub_resource type="Resource" id="Resource_50i87"]
 script = ExtResource("5_6vdlt")
-operators = Array[ExtResource("2_affki")]([SubResource("Resource_cktn3"), SubResource("Resource_4c6ls"), SubResource("Resource_twscs"), SubResource("Resource_tmibn"), SubResource("Resource_s64c8"), SubResource("Resource_xkoxy"), SubResource("Resource_w1y7u")])
+operators = Array[ExtResource("2_affki")]([SubResource("Resource_58n1e")])
 
-[sub_resource type="Resource" id="Resource_yla63"]
+[sub_resource type="Resource" id="Resource_affki"]
 script = ExtResource("6_wabe2")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_0ls3e"]
+[sub_resource type="Resource" id="Resource_lt27p"]
 script = ExtResource("7_pfs5e")
-choice_result = SubResource("Resource_ydw6h")
-requirement = SubResource("Resource_yla63")
+choice_result = SubResource("Resource_50i87")
+requirement = SubResource("Resource_affki")
 description = "他双膝触地，额头压上那卷诗的竹筒边缘。"
 
-[sub_resource type="Resource" id="Resource_jdgxj"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -8
-
-[sub_resource type="Resource" id="Resource_jmpro"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -5
-
-[sub_resource type="Resource" id="Resource_3ofls"]
-script = ExtResource("3_lt27p")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_7muga"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = 2
-
-[sub_resource type="Resource" id="Resource_mvv7x"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -2
-
-[sub_resource type="Resource" id="Resource_nvkj5"]
-script = ExtResource("3_lt27p")
-str_props = "money"
-value = 5
-
-[sub_resource type="Resource" id="Resource_rd8me"]
-script = ExtResource("3_lt27p")
-str_props = "health"
-value = -2
-
-[sub_resource type="Resource" id="Resource_8ackn"]
+[sub_resource type="Resource" id="Resource_f6tvw"]
 script = ExtResource("4_f6tvw")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ewoje"]
+[sub_resource type="Resource" id="Resource_6vdlt"]
 script = ExtResource("5_6vdlt")
-operators = Array[ExtResource("2_affki")]([SubResource("Resource_jdgxj"), SubResource("Resource_jmpro"), SubResource("Resource_3ofls"), SubResource("Resource_7muga"), SubResource("Resource_mvv7x"), SubResource("Resource_nvkj5"), SubResource("Resource_rd8me"), SubResource("Resource_8ackn")])
+operators = Array[ExtResource("2_affki")]([SubResource("Resource_f6tvw")])
 
-[sub_resource type="Resource" id="Resource_bjtpr"]
+[sub_resource type="Resource" id="Resource_wabe2"]
 script = ExtResource("6_wabe2")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_4f2q2"]
+[sub_resource type="Resource" id="Resource_pfs5e"]
 script = ExtResource("7_pfs5e")
-choice_result = SubResource("Resource_ewoje")
-requirement = SubResource("Resource_bjtpr")
+choice_result = SubResource("Resource_6vdlt")
+requirement = SubResource("Resource_wabe2")
 description = "他从袖中摸出半块玉佩，推过桌面，停在酒壶与诗卷之间。"
 
-[sub_resource type="Resource" id="Resource_67tbx"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -8
-
-[sub_resource type="Resource" id="Resource_np2lp"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -5
-
-[sub_resource type="Resource" id="Resource_tesnw"]
-script = ExtResource("3_lt27p")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_0xpp1"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = 2
-
-[sub_resource type="Resource" id="Resource_l8ka2"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = 3
-
-[sub_resource type="Resource" id="Resource_fx8d1"]
-script = ExtResource("3_lt27p")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_cnq2g"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -16
-
-[sub_resource type="Resource" id="Resource_c706m"]
-script = ExtResource("3_lt27p")
-str_props = "progress"
-value = -10
-
-[sub_resource type="Resource" id="Resource_0bp2x"]
-script = ExtResource("3_lt27p")
-str_props = "literary_fame"
-value = 5
-
-[sub_resource type="Resource" id="Resource_go40p"]
+[sub_resource type="Resource" id="Resource_lf25o"]
 script = ExtResource("4_f6tvw")
 value = 21
 
-[sub_resource type="Resource" id="Resource_g5khw"]
+[sub_resource type="Resource" id="Resource_xdghl"]
 script = ExtResource("8_lf25o")
 imagery_name = "ACTION_TRAVEL_BOAT:lone_sail"
 
-[sub_resource type="Resource" id="Resource_k4d0a"]
+[sub_resource type="Resource" id="Resource_qc62b"]
 script = ExtResource("9_xdghl")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_textual_trap"
 
-[sub_resource type="Resource" id="Resource_7ayok"]
+[sub_resource type="Resource" id="Resource_llusm"]
 script = ExtResource("5_6vdlt")
-operators = Array[ExtResource("2_affki")]([SubResource("Resource_67tbx"), SubResource("Resource_np2lp"), SubResource("Resource_tesnw"), SubResource("Resource_0xpp1"), SubResource("Resource_l8ka2"), SubResource("Resource_fx8d1"), SubResource("Resource_cnq2g"), SubResource("Resource_c706m"), SubResource("Resource_0bp2x"), SubResource("Resource_go40p"), SubResource("Resource_g5khw"), SubResource("Resource_k4d0a")])
+operators = Array[ExtResource("2_affki")]([SubResource("Resource_lf25o"), SubResource("Resource_xdghl"), SubResource("Resource_qc62b")])
 
-[sub_resource type="Resource" id="Resource_ki52h"]
+[sub_resource type="Resource" id="Resource_cktn3"]
 script = ExtResource("7_pfs5e")
-choice_result = SubResource("Resource_7ayok")
+choice_result = SubResource("Resource_llusm")
 description = "他伸手取过那壶没人斟的酒，自己斟满，一饮而尽。"
 
-[sub_resource type="Resource" id="Resource_7j6w3"]
+[sub_resource type="Resource" id="Resource_4c6ls"]
 script = ExtResource("10_qc62b")
 trait_name = "kuangda_kuangke"
 
 [resource]
 script = ExtResource("11_llusm")
-requirement = SubResource("Resource_7j6w3")
+requirement = SubResource("Resource_4c6ls")
 era = "747_kuangda"
+archetype_id = "baiye"
 _target_tags = Array[String](["ACTION_TRAVEL_BOAT:lone_sail", "action:main:baiye"])
-options = Array[ExtResource("1_50i87")]([SubResource("Resource_0ls3e"), SubResource("Resource_4f2q2"), SubResource("Resource_ki52h")])
+options = Array[ExtResource("1_50i87")]([SubResource("Resource_lt27p"), SubResource("Resource_pfs5e"), SubResource("Resource_cktn3")])
 uuid = "kuangke_zhuoliu_malicious_misinterpretation"
 name = "浊流设宴，诗成铁证"
 description = "“野老墙低还似旧。”他停下来，看着你对旁边的人笑了一声：“这墙低，说的是谁家的墙？”旁边的人没答话。他把竹筒搁回案上，手指在“墙低”二字上敲了三下。站在你身后的随从把门帘放了下来。"

@@ -1,75 +1,60 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://gkcep3ouo0jn"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_j40sy"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_47h8v"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_26evb"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_ydu07"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_nte7k"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_adc1a"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_w58an"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_xp2wt"]
-[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="9_uvbno"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_1l5ve"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_sap1f"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_j40sy"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_47h8v"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_ydu07"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_nte7k"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="6_adc1a"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_w58an"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="8_xp2wt"]
+[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="9_uvbno"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_1l5ve"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="11_sap1f"]
 
-[sub_resource type="Resource" id="Resource_w1msn"]
-script = ExtResource("3_26evb")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_u4rlt"]
-script = ExtResource("3_26evb")
-str_props = "health"
-value = -20
-
-[sub_resource type="Resource" id="Resource_dcctu"]
-script = ExtResource("3_26evb")
-str_props = "health"
-value = -20
-
-[sub_resource type="Resource" id="Resource_cdokg"]
+[sub_resource type="Resource" id="Resource_yqw4x"]
 script = ExtResource("4_ydu07")
 value = 10
 
-[sub_resource type="Resource" id="Resource_2u3tv"]
+[sub_resource type="Resource" id="Resource_j40sy"]
 script = ExtResource("5_nte7k")
-operators = Array[ExtResource("2_47h8v")]([SubResource("Resource_w1msn"), SubResource("Resource_u4rlt"), SubResource("Resource_dcctu"), SubResource("Resource_cdokg")])
+operators = Array[ExtResource("2_47h8v")]([SubResource("Resource_yqw4x")])
 
-[sub_resource type="Resource" id="Resource_2pux3"]
+[sub_resource type="Resource" id="Resource_47h8v"]
 script = ExtResource("6_adc1a")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_6nohv"]
+[sub_resource type="Resource" id="Resource_26evb"]
 script = ExtResource("7_w58an")
-choice_result = SubResource("Resource_2u3tv")
-requirement = SubResource("Resource_2pux3")
+choice_result = SubResource("Resource_j40sy")
+requirement = SubResource("Resource_47h8v")
 description = "将红叶轻搁王维琴尾，压住未落的弦音。"
 
-[sub_resource type="Resource" id="Resource_s5jy1"]
+[sub_resource type="Resource" id="Resource_ydu07"]
 script = ExtResource("6_adc1a")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_futnr"]
+[sub_resource type="Resource" id="Resource_nte7k"]
 script = ExtResource("9_uvbno")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_qnbx5"]
+[sub_resource type="Resource" id="Resource_adc1a"]
 script = ExtResource("9_uvbno")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_epwea"]
+[sub_resource type="Resource" id="Resource_w58an"]
 script = ExtResource("10_1l5ve")
-operators = Array[ExtResource("8_xp2wt")]([SubResource("Resource_s5jy1"), SubResource("Resource_futnr"), SubResource("Resource_qnbx5")])
+operators = Array[ExtResource("8_xp2wt")]([SubResource("Resource_ydu07"), SubResource("Resource_nte7k"), SubResource("Resource_adc1a")])
 
 [resource]
 script = ExtResource("11_sap1f")
-requirement = SubResource("Resource_epwea")
+requirement = SubResource("Resource_w58an")
 era = "747_kuangda"
+archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_IDENTITY_ZHUOLIU_OFFICIAL", "ACTOR_EMOTION_TRANQUILITY", "emotion_pair:pair_tranquility", "action:main:jiaoyou"])
-options = Array[ExtResource("1_j40sy")]([SubResource("Resource_6nohv")])
+options = Array[ExtResource("1_j40sy")]([SubResource("Resource_26evb")])
 uuid = "kuangke_qingliu_wangwei_emotion_tranquility_identity_zhuoliu_official"
 name = "山色刚好时"
 description = "“坐下吧，山色刚好。”面前的蒲团像是特意为你备下的，矮几上的茶还冒着热气。你未接话，只是走过去，将方才山道上拾得的一片红叶轻轻放在琴尾，正压住那根还在微微颤动的弦。"

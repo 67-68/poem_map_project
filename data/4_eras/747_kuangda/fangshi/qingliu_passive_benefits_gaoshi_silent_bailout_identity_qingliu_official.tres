@@ -1,136 +1,91 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bj7ex4631gapq"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_xij4q"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ri0h6"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_nfine"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_abaxm"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_pauq7"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_nwr7r"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_0qic0"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="8_3l6jw"]
-[ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="9_7fdtf"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_sjtqo"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_q1424"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_xij4q"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_ri0h6"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_abaxm"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_pauq7"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="6_nwr7r"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_0qic0"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="8_3l6jw"]
+[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="9_7fdtf"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_sjtqo"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="11_q1424"]
 
-[sub_resource type="Resource" id="Resource_6u6pt"]
-script = ExtResource("3_nfine")
-str_props = "MONEY"
-value = 8
-
-[sub_resource type="Resource" id="Resource_nhe1u"]
-script = ExtResource("3_nfine")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_pgoa3"]
-script = ExtResource("3_nfine")
-str_props = "health"
-value = -20
-
-[sub_resource type="Resource" id="Resource_4r1gt"]
+[sub_resource type="Resource" id="Resource_68o8f"]
 script = ExtResource("4_abaxm")
 value = 10
 
-[sub_resource type="Resource" id="Resource_74jyw"]
+[sub_resource type="Resource" id="Resource_xij4q"]
 script = ExtResource("5_pauq7")
-operators = Array[ExtResource("2_ri0h6")]([SubResource("Resource_6u6pt"), SubResource("Resource_nhe1u"), SubResource("Resource_pgoa3"), SubResource("Resource_4r1gt")])
+operators = Array[ExtResource("2_ri0h6")]([SubResource("Resource_68o8f")])
 
-[sub_resource type="Resource" id="Resource_74nny"]
+[sub_resource type="Resource" id="Resource_ri0h6"]
 script = ExtResource("6_nwr7r")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_1eunc"]
+[sub_resource type="Resource" id="Resource_nfine"]
 script = ExtResource("7_0qic0")
-choice_result = SubResource("Resource_74jyw")
-requirement = SubResource("Resource_74nny")
+choice_result = SubResource("Resource_xij4q")
+requirement = SubResource("Resource_ri0h6")
 description = "裹紧袄子，朝那个背影喊了一句：“达夫，下次错买双靴子。”"
 
-[sub_resource type="Resource" id="Resource_wuw7w"]
-script = ExtResource("3_nfine")
-str_props = "MONEY"
-value = 8
-
-[sub_resource type="Resource" id="Resource_clrhr"]
-script = ExtResource("3_nfine")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_4fjgf"]
-script = ExtResource("3_nfine")
-str_props = "health"
-value = 15
-
-[sub_resource type="Resource" id="Resource_26fld"]
+[sub_resource type="Resource" id="Resource_abaxm"]
 script = ExtResource("4_abaxm")
 value = 10
 
-[sub_resource type="Resource" id="Resource_d6774"]
+[sub_resource type="Resource" id="Resource_pauq7"]
 script = ExtResource("5_pauq7")
-operators = Array[ExtResource("2_ri0h6")]([SubResource("Resource_wuw7w"), SubResource("Resource_clrhr"), SubResource("Resource_4fjgf"), SubResource("Resource_26fld")])
+operators = Array[ExtResource("2_ri0h6")]([SubResource("Resource_abaxm")])
 
-[sub_resource type="Resource" id="Resource_jaoai"]
+[sub_resource type="Resource" id="Resource_nwr7r"]
 script = ExtResource("7_0qic0")
-choice_result = SubResource("Resource_d6774")
+choice_result = SubResource("Resource_pauq7")
 description = "你低头抻了抻过长的袖口，沉默了许久，才转身进屋去生火。"
 
-[sub_resource type="Resource" id="Resource_wpjh3"]
-script = ExtResource("3_nfine")
-str_props = "MONEY"
-value = 8
-
-[sub_resource type="Resource" id="Resource_dmk0m"]
-script = ExtResource("3_nfine")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_fh8v4"]
+[sub_resource type="Resource" id="Resource_0qic0"]
 script = ExtResource("4_abaxm")
 value = 15
 
-[sub_resource type="Resource" id="Resource_1vg4l"]
-script = ExtResource("3_nfine")
-str_props = "health"
-value = 15
-
-[sub_resource type="Resource" id="Resource_im3o2"]
+[sub_resource type="Resource" id="Resource_3l6jw"]
 script = ExtResource("4_abaxm")
 value = 5
 
-[sub_resource type="Resource" id="Resource_i6ep1"]
+[sub_resource type="Resource" id="Resource_7fdtf"]
 script = ExtResource("5_pauq7")
-operators = Array[ExtResource("2_ri0h6")]([SubResource("Resource_wpjh3"), SubResource("Resource_dmk0m"), SubResource("Resource_fh8v4"), SubResource("Resource_1vg4l"), SubResource("Resource_im3o2")])
+operators = Array[ExtResource("2_ri0h6")]([SubResource("Resource_0qic0"), SubResource("Resource_3l6jw")])
 
-[sub_resource type="Resource" id="Resource_xowdr"]
+[sub_resource type="Resource" id="Resource_sjtqo"]
 script = ExtResource("6_nwr7r")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_toe1j"]
+[sub_resource type="Resource" id="Resource_q1424"]
 script = ExtResource("7_0qic0")
-choice_result = SubResource("Resource_i6ep1")
-requirement = SubResource("Resource_xowdr")
+choice_result = SubResource("Resource_7fdtf")
+requirement = SubResource("Resource_sjtqo")
 description = "你摩挲着袄子上的针脚，自言自语：“这是军中的物件……可结实了。”"
 
-[sub_resource type="Resource" id="Resource_uyb4m"]
+[sub_resource type="Resource" id="Resource_6u6pt"]
 script = ExtResource("9_7fdtf")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_ctmfh"]
+[sub_resource type="Resource" id="Resource_nhe1u"]
 script = ExtResource("9_7fdtf")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_x1fhr"]
+[sub_resource type="Resource" id="Resource_pgoa3"]
 script = ExtResource("10_sjtqo")
-operators = Array[ExtResource("8_3l6jw")]([SubResource("Resource_uyb4m"), SubResource("Resource_ctmfh")])
+operators = Array[ExtResource("8_3l6jw")]([SubResource("Resource_6u6pt"), SubResource("Resource_nhe1u")])
 
 [resource]
 script = ExtResource("11_q1424")
-requirement = SubResource("Resource_x1fhr")
+requirement = SubResource("Resource_pgoa3")
 era = "747_kuangda"
+archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_THEME_MARTIAL:giant_roc", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "emotion_pair:pair_tranquility", "action:main:fangshi"])
-options = Array[ExtResource("1_xij4q")]([SubResource("Resource_1eunc"), SubResource("Resource_jaoai"), SubResource("Resource_toe1j")])
+options = Array[ExtResource("1_xij4q")]([SubResource("Resource_nfine"), SubResource("Resource_nwr7r"), SubResource("Resource_q1424")])
 uuid = "qingliu_passive_benefits_gaoshi_silent_bailout_identity_qingliu_official"
 name = "错买的冬衣"
 description = "高适从河西回长安述职，路过下杜城时在街口截住你。他拎着一件羊皮袄子，说是给军中袍泽带的，结果尺码错了退不了——“你试试，穿不上我就扔了。”袄子大了一号，裹在你瘦削的身板上，正够塞进一件旧棉衣。他说完便走，头也不回。你站在巷口，手里攥着这张羊皮，风灌不进去了。"

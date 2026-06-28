@@ -1,168 +1,78 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dwrdtf1j58crw"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_ti1vi"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3a7sg"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_tak8j"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_28s31"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_atq60"]
-[ext_resource type="Script" uid="uid://cywa1b61mapth" path="res://core/requirements/flag_requirement.gd" id="6_p354r"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_tr2nn"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="8_htqgl"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_dmpyr"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_ti1vi"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_3a7sg"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_28s31"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="5_atq60"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="6_p354r"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_tr2nn"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="8_htqgl"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="9_dmpyr"]
 
-[sub_resource type="Resource" id="Resource_fpxei"]
-script = ExtResource("3_tak8j")
-str_props = "money"
-value = 8
-
-[sub_resource type="Resource" id="Resource_wxvxp"]
-script = ExtResource("3_tak8j")
-str_props = "health"
-value = 5
-
-[sub_resource type="Resource" id="Resource_q02xp"]
-script = ExtResource("3_tak8j")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_x4aw5"]
-script = ExtResource("3_tak8j")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_rlgct"]
-script = ExtResource("3_tak8j")
-str_props = "progress"
-value = 3
-
-[sub_resource type="Resource" id="Resource_5i3jo"]
-script = ExtResource("3_tak8j")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_xcckg"]
+[sub_resource type="Resource" id="Resource_qatjp"]
 script = ExtResource("4_28s31")
 value = 10
 
-[sub_resource type="Resource" id="Resource_2embh"]
+[sub_resource type="Resource" id="Resource_ti1vi"]
 script = ExtResource("5_atq60")
-operators = Array[ExtResource("2_3a7sg")]([SubResource("Resource_fpxei"), SubResource("Resource_wxvxp"), SubResource("Resource_q02xp"), SubResource("Resource_x4aw5"), SubResource("Resource_rlgct"), SubResource("Resource_5i3jo"), SubResource("Resource_xcckg")])
+operators = Array[ExtResource("2_3a7sg")]([SubResource("Resource_qatjp")])
 
-[sub_resource type="Resource" id="Resource_mg0gf"]
+[sub_resource type="Resource" id="Resource_3a7sg"]
 script = ExtResource("6_p354r")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_fjefd"]
+[sub_resource type="Resource" id="Resource_tak8j"]
 script = ExtResource("7_tr2nn")
-choice_result = SubResource("Resource_2embh")
-requirement = SubResource("Resource_mg0gf")
+choice_result = SubResource("Resource_ti1vi")
+requirement = SubResource("Resource_3a7sg")
 description = "掷杯在地，拂袖间掀翻案上酒盏。"
 
-[sub_resource type="Resource" id="Resource_fb6o4"]
-script = ExtResource("3_tak8j")
-str_props = "money"
-value = 8
-
-[sub_resource type="Resource" id="Resource_ie8ff"]
-script = ExtResource("3_tak8j")
-str_props = "health"
-value = 5
-
-[sub_resource type="Resource" id="Resource_bfpfb"]
-script = ExtResource("3_tak8j")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_dh2di"]
-script = ExtResource("3_tak8j")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_5us52"]
-script = ExtResource("3_tak8j")
-str_props = "progress"
-value = 1
-
-[sub_resource type="Resource" id="Resource_15e6v"]
-script = ExtResource("3_tak8j")
-str_props = "money"
-value = -3
-
-[sub_resource type="Resource" id="Resource_iojwv"]
+[sub_resource type="Resource" id="Resource_28s31"]
 script = ExtResource("4_28s31")
 value = 10
 
-[sub_resource type="Resource" id="Resource_r1aqr"]
+[sub_resource type="Resource" id="Resource_atq60"]
 script = ExtResource("5_atq60")
-operators = Array[ExtResource("2_3a7sg")]([SubResource("Resource_fb6o4"), SubResource("Resource_ie8ff"), SubResource("Resource_bfpfb"), SubResource("Resource_dh2di"), SubResource("Resource_5us52"), SubResource("Resource_15e6v"), SubResource("Resource_iojwv")])
+operators = Array[ExtResource("2_3a7sg")]([SubResource("Resource_28s31")])
 
-[sub_resource type="Resource" id="Resource_e0jkt"]
+[sub_resource type="Resource" id="Resource_p354r"]
 script = ExtResource("6_p354r")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_psu86"]
+[sub_resource type="Resource" id="Resource_tr2nn"]
 script = ExtResource("7_tr2nn")
-choice_result = SubResource("Resource_r1aqr")
-requirement = SubResource("Resource_e0jkt")
+choice_result = SubResource("Resource_atq60")
+requirement = SubResource("Resource_p354r")
 description = "堆出笑容，双手捧起酒壶为对方斟满。"
 
-[sub_resource type="Resource" id="Resource_ohyfg"]
-script = ExtResource("3_tak8j")
-str_props = "money"
-value = 8
-
-[sub_resource type="Resource" id="Resource_hmsrq"]
-script = ExtResource("3_tak8j")
-str_props = "health"
-value = 5
-
-[sub_resource type="Resource" id="Resource_aw0cj"]
-script = ExtResource("3_tak8j")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_yv0sw"]
-script = ExtResource("3_tak8j")
-str_props = "literary_fame"
-value = 3
-
-[sub_resource type="Resource" id="Resource_1d6nl"]
-script = ExtResource("3_tak8j")
-str_props = "money"
-value = 12
-
-[sub_resource type="Resource" id="Resource_b81cs"]
-script = ExtResource("3_tak8j")
-str_props = "health"
-value = 8
-
-[sub_resource type="Resource" id="Resource_87ik0"]
+[sub_resource type="Resource" id="Resource_htqgl"]
 script = ExtResource("4_28s31")
 value = 10
 
-[sub_resource type="Resource" id="Resource_aguhl"]
+[sub_resource type="Resource" id="Resource_dmpyr"]
 script = ExtResource("5_atq60")
-operators = Array[ExtResource("2_3a7sg")]([SubResource("Resource_ohyfg"), SubResource("Resource_hmsrq"), SubResource("Resource_aw0cj"), SubResource("Resource_yv0sw"), SubResource("Resource_1d6nl"), SubResource("Resource_b81cs"), SubResource("Resource_87ik0")])
+operators = Array[ExtResource("2_3a7sg")]([SubResource("Resource_htqgl")])
 
-[sub_resource type="Resource" id="Resource_u06u4"]
+[sub_resource type="Resource" id="Resource_fpxei"]
 script = ExtResource("7_tr2nn")
-choice_result = SubResource("Resource_aguhl")
+choice_result = SubResource("Resource_dmpyr")
 description = "沉默片刻，问他那位同僚手里有什么可以交换。"
 
-[sub_resource type="Resource" id="Resource_iwbj7"]
+[sub_resource type="Resource" id="Resource_wxvxp"]
 script = ExtResource("8_htqgl")
 trait_name = "kuangda_zuanying"
 
 [resource]
 script = ExtResource("9_dmpyr")
-requirement = SubResource("Resource_iwbj7")
+requirement = SubResource("Resource_wxvxp")
 era = "747_kuangda"
+archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "VIBE_AESTHETIC_ELEGANT:giant_roc", "action:main:jiaoyou"])
-options = Array[ExtResource("1_ti1vi")]([SubResource("Resource_fjefd"), SubResource("Resource_psu86"), SubResource("Resource_u06u4")])
+options = Array[ExtResource("1_ti1vi")]([SubResource("Resource_tak8j"), SubResource("Resource_tr2nn"), SubResource("Resource_fpxei")])
 uuid = "zhuoliu_zuanying_dinner_party_broker"
 name = "酒宴上的旧账"
 description = "“子美兄，我有个同僚想见户部的人。价钱好说。”说这话时他的眼睛没看你，看的是你身后那扇门——门后是今日宴席上所有正在交易的秘密。他笃定你还在这张桌上。"

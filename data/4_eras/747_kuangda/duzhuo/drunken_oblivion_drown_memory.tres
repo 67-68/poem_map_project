@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_bp7fb"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_mqv85"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_j7uc6"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_yjf2y"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="5_qy5bm"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="6_ikfkd"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="7_1asr0"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="8_yw4f3"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="9_4kskw"]
+
+[sub_resource type="Resource" id="Resource_nrui7"]
+script = ExtResource("3_j7uc6")
+value = 10
+
+[sub_resource type="Resource" id="Resource_p88wl"]
+script = ExtResource("4_yjf2y")
+operators = Array[ExtResource("2_mqv85")]([SubResource("Resource_nrui7")])
+
+[sub_resource type="Resource" id="Resource_yuano"]
+script = ExtResource("5_qy5bm")
+choice_result = SubResource("Resource_p88wl")
+description = "仰头饮尽最后一碗。碗底朝天，一滴不剩。"
+
+[sub_resource type="Resource" id="Resource_ofvo6"]
+script = ExtResource("7_1asr0")
+property = "health"
+value = 40
+operator = 1
+
+[sub_resource type="Resource" id="Resource_7qxr3"]
+script = ExtResource("7_1asr0")
+property = "money"
+value = 15
+operator = 1
+
+[sub_resource type="Resource" id="Resource_kg0po"]
+script = ExtResource("8_yw4f3")
+operators = Array[ExtResource("6_ikfkd")]([SubResource("Resource_ofvo6"), SubResource("Resource_7qxr3")])
+
+[resource]
+script = ExtResource("9_4kskw")
+weight = 15.0
+requirement = SubResource("Resource_kg0po")
+era = "747_kuangda"
+archetype_id = "duzhuo"
+_target_tags = Array[String](["action:main:duzhuo"])
+options = Array[ExtResource("1_bp7fb")]([SubResource("Resource_yuano")])
+uuid = "drunken_oblivion_drown_memory"
+name = "买醉忘忧"
+description = "酒旗在风里拍得猎猎作响。你推开那扇半掩的门，酒保看你一眼便不再说话——他认得这种眼神。你要了最烈的那种，不是品，是灌。每一口下去，昨日在权贵门前的记忆就淡一分。酒坛见底时，昨夜那张谄媚的嘴脸终于开始模糊——像墨迹在水里散开。你不记得付了多少钱，只记得走出门时，长安的月光刺得眼睛发酸。"

@@ -1,84 +1,26 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://djjutt5k3vlh8"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_k2t3v"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_qdoh1"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_rjd3j"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_bltie"]
-[ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="5_lqewk"]
-[ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="6_e10f2"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_bn3w2"]
-[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="8_arscf"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_w00bt"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_k2t3v"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_bn3w2"]
+[ext_resource type="Script" path="res://core/property_requirement.gd" id="8_arscf"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="9_w00bt"]
 
-[sub_resource type="Resource" id="Resource_tnqlj"]
-script = ExtResource("3_rjd3j")
-str_props = "health"
-value = -6
-
-[sub_resource type="Resource" id="Resource_isk4b"]
-script = ExtResource("3_rjd3j")
-str_props = "progress"
-value = 4
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_bil64"]
-script = ExtResource("4_bltie")
-operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_isk4b")])
-
-[sub_resource type="Resource" id="Resource_7dwpm"]
-script = ExtResource("4_bltie")
-
-[sub_resource type="Resource" id="Resource_7th2j"]
-script = ExtResource("3_rjd3j")
-str_props = "health"
-value = 5
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_c4en7"]
-script = ExtResource("4_bltie")
-operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_7th2j")])
-
-[sub_resource type="Resource" id="Resource_4wosw"]
-script = ExtResource("5_lqewk")
-uuid = "poem_type_choose_zhuoliu_taste"
-_accepted_poem_types = Array[int]([0])
-lowest_poem_level = 1
-accepted_result = SubResource("Resource_bil64")
-rejected_result = SubResource("Resource_c4en7")
-not_entered_result = SubResource("Resource_7dwpm")
-metadata/_custom_type_script = "uid://4seqlwtem2i3"
-
-[sub_resource type="Resource" id="Resource_tmhl1"]
-script = ExtResource("6_e10f2")
-poem_taste = SubResource("Resource_4wosw")
-key_to_get_poem_taste = ""
-metadata/_custom_type_script = "uid://w6wvp8tdisfu"
-
-[sub_resource type="Resource" id="Resource_ycjy7"]
-script = ExtResource("3_rjd3j")
-str_props = "progress"
-value = 11
-
-[sub_resource type="Resource" id="Resource_p2d52"]
-script = ExtResource("4_bltie")
-operators = Array[ExtResource("2_qdoh1")]([SubResource("Resource_tnqlj"), SubResource("Resource_tmhl1"), SubResource("Resource_ycjy7")])
-
-[sub_resource type="Resource" id="Resource_o0enw"]
+[sub_resource type="Resource" id="Resource_05kyv"]
 script = ExtResource("7_bn3w2")
-choice_result = SubResource("Resource_p2d52")
 description = "立在帘侧继续候着，不动声色"
 
-[sub_resource type="Resource" id="Resource_ne0ab"]
+[sub_resource type="Resource" id="Resource_2pmen"]
 script = ExtResource("8_arscf")
 property = "progress"
 value = 70
 
 [resource]
 script = ExtResource("9_w00bt")
-requirement = SubResource("Resource_ne0ab")
+requirement = SubResource("Resource_2pmen")
 era = "745_ambition"
+archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_k2t3v")]([SubResource("Resource_o0enw")])
+options = Array[ExtResource("1_k2t3v")]([SubResource("Resource_05kyv")])
 uuid = "bai_ye_honeymoon_l1_typeb_m0"
 name = "衙门口的风雪"
 description = "“尚书大人昨日议贡举事至深夜，今日恐未得闲。”说着用火箸拨了拨炉中炭，火星一溅即灭。他在炉边坐下，自斟一盏茶，翻册页时不急不缓，偶尔抬眼看窗外天色。你立在门帘旁，冷风从帘隙灌入，足底渐麻。清客翻完一卷册子，又另取一卷来读，像是忘了你还在。"

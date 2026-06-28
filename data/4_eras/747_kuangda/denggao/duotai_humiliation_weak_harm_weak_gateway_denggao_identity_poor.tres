@@ -2,113 +2,50 @@
 
 [ext_resource type="Script" path="res://model/event/base_option.gd" id="1_efrkn"]
 [ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_vy2eg"]
-[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_g55wp"]
 [ext_resource type="Script" path="res://model/choice_result.gd" id="4_i6cnr"]
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="5_31i6f"]
 [ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="6_a2mrk"]
+[ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="6_efrkn"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="7_20o1w"]
 
-[sub_resource type="Resource" id="Resource_efrkn"]
-script = ExtResource("3_g55wp")
-str_props = "health"
-value = -3
-
 [sub_resource type="Resource" id="Resource_vy2eg"]
-script = ExtResource("3_g55wp")
-str_props = "health"
-value = -3
+script = ExtResource("4_i6cnr")
 
 [sub_resource type="Resource" id="Resource_g55wp"]
-script = ExtResource("3_g55wp")
-str_props = "progress"
-value = 2
-
-[sub_resource type="Resource" id="Resource_i6cnr"]
-script = ExtResource("3_g55wp")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_31i6f"]
-script = ExtResource("4_i6cnr")
-operators = Array[ExtResource("2_vy2eg")]([SubResource("Resource_efrkn"), SubResource("Resource_vy2eg"), SubResource("Resource_g55wp"), SubResource("Resource_i6cnr")])
-
-[sub_resource type="Resource" id="Resource_a2mrk"]
 script = ExtResource("5_31i6f")
-choice_result = SubResource("Resource_31i6f")
 description = "掉头走开，不看那人的字画，也不看那人。"
 
-[sub_resource type="Resource" id="Resource_20o1w"]
-script = ExtResource("3_g55wp")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_jk2ka"]
-script = ExtResource("3_g55wp")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_vj1w4"]
-script = ExtResource("3_g55wp")
-str_props = "progress"
-value = 1
-
-[sub_resource type="Resource" id="Resource_jbndd"]
-script = ExtResource("3_g55wp")
-str_props = "money"
-value = -3
-
-[sub_resource type="Resource" id="Resource_tywqa"]
-script = ExtResource("4_i6cnr")
-operators = Array[ExtResource("2_vy2eg")]([SubResource("Resource_20o1w"), SubResource("Resource_jk2ka"), SubResource("Resource_vj1w4"), SubResource("Resource_jbndd")])
-
-[sub_resource type="Resource" id="Resource_evlul"]
+[sub_resource type="Resource" id="Resource_i6cnr"]
 script = ExtResource("5_31i6f")
-choice_result = SubResource("Resource_tywqa")
 description = "苦笑一下，退到旁边垛口，背风而立。"
 
-[sub_resource type="Resource" id="Resource_33vgx"]
-script = ExtResource("3_g55wp")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_if87u"]
-script = ExtResource("3_g55wp")
-str_props = "health"
-value = -3
-
-[sub_resource type="Resource" id="Resource_3jvyx"]
-script = ExtResource("3_g55wp")
-str_props = "progress"
-value = -1
-
-[sub_resource type="Resource" id="Resource_bidm7"]
-script = ExtResource("3_g55wp")
-str_props = "money"
-value = 4
-
-[sub_resource type="Resource" id="Resource_78y3v"]
-script = ExtResource("3_g55wp")
-str_props = "health"
-value = -2
-
-[sub_resource type="Resource" id="Resource_ueqv0"]
+[sub_resource type="Resource" id="Resource_31i6f"]
 script = ExtResource("6_a2mrk")
 imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
 
-[sub_resource type="Resource" id="Resource_3ppoy"]
+[sub_resource type="Resource" id="Resource_a2mrk"]
 script = ExtResource("4_i6cnr")
-operators = Array[ExtResource("2_vy2eg")]([SubResource("Resource_33vgx"), SubResource("Resource_if87u"), SubResource("Resource_3jvyx"), SubResource("Resource_bidm7"), SubResource("Resource_78y3v"), SubResource("Resource_ueqv0")])
+operators = Array[ExtResource("2_vy2eg")]([SubResource("Resource_31i6f")])
 
-[sub_resource type="Resource" id="Resource_e8wqe"]
+[sub_resource type="Resource" id="Resource_20o1w"]
 script = ExtResource("5_31i6f")
-choice_result = SubResource("Resource_3ppoy")
+choice_result = SubResource("Resource_a2mrk")
 description = "上前拱手：“兄台莫怕，某只是来吹风的。”语气卑微。"
+
+[sub_resource type="Resource" id="Resource_jk2ka"]
+script = ExtResource("6_efrkn")
+volatile_stat = "ambition"
+value = 50
+operator = 1
 
 [resource]
 script = ExtResource("7_20o1w")
+requirement = SubResource("Resource_jk2ka")
 era = "747_kuangda"
+archetype_id = "denggao"
 _target_tags = Array[String](["emotion_pair:pair_despair", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_weak_harm_weak", "TARGET_IDENTITY_POOR", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao"])
-options = Array[ExtResource("1_efrkn")]([SubResource("Resource_a2mrk"), SubResource("Resource_evlul"), SubResource("Resource_e8wqe")])
+options = Array[ExtResource("1_efrkn")]([SubResource("Resource_g55wp"), SubResource("Resource_i6cnr"), SubResource("Resource_20o1w")])
+on_enter_result = SubResource("Resource_vy2eg")
 uuid = "duotai_humiliation_weak_harm_weak_gateway_denggao_identity_poor"
-name = "城楼卖字者相疑"
-description = "杜登上城西乐游原，见一布衣人踞石栏最佳处，身前摆字画数轴。那人见杜走近，未及对视，迅速俯身收卷字画，手法急促，轴端磕在石栏上发出闷响。他抬眼瞥杜一眼，眼神警惕。风从终南山吹过来，吹得松散的画纸哗哗作响。那人不再看杜，只是低头用绳捆紧画轴。杜站在三步外，两人之间只有风声。"
+name = "emo_lt(name=ambition; val=100)"
+description = "城楼卖字者相疑"

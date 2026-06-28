@@ -1,198 +1,108 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cuta0yvalc304"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
 
-[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_vguop"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_aslsy"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_audyq"]
-[ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="4_7l51h"]
-[ext_resource type="Script" uid="uid://cam8c3etv60ba" path="res://core/operators/leverage_add_operator.gd" id="5_n2eys"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_q6u6x"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_sqnoi"]
-[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="8_klmqn"]
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="9_3smy0"]
-[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_vakna"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_egcsr"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_vguop"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_aslsy"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="4_7l51h"]
+[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="5_n2eys"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_q6u6x"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_sqnoi"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="8_klmqn"]
+[ext_resource type="Script" path="res://core/model/base_requirement.gd" id="9_3smy0"]
+[ext_resource type="Script" path="res://core/model/multiple_requiremenets.gd" id="10_vakna"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="11_egcsr"]
 
-[sub_resource type="Resource" id="Resource_kac4t"]
-script = ExtResource("3_audyq")
-str_props = "MONEY"
-value = -2
-
-[sub_resource type="Resource" id="Resource_s3uji"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = 8
-
-[sub_resource type="Resource" id="Resource_h6ce6"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = -5
-
-[sub_resource type="Resource" id="Resource_cqfic"]
-script = ExtResource("3_audyq")
-str_props = "money"
-value = -5
-
-[sub_resource type="Resource" id="Resource_vkejt"]
-script = ExtResource("3_audyq")
-str_props = "HEALTH"
-value = -8
-
-[sub_resource type="Resource" id="Resource_sdajn"]
+[sub_resource type="Resource" id="Resource_b3wus"]
 script = ExtResource("4_7l51h")
 value = 16
 
-[sub_resource type="Resource" id="Resource_suhwh"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = 5
-
-[sub_resource type="Resource" id="Resource_2xjmi"]
+[sub_resource type="Resource" id="Resource_vguop"]
 script = ExtResource("5_n2eys")
 target_tag = "TARGET_IDENTITY_QUANGUI"
 leverage_key = "quangui_swill_gamble"
 
-[sub_resource type="Resource" id="Resource_qstos"]
+[sub_resource type="Resource" id="Resource_aslsy"]
 script = ExtResource("6_q6u6x")
-operators = Array[ExtResource("2_aslsy")]([SubResource("Resource_kac4t"), SubResource("Resource_s3uji"), SubResource("Resource_h6ce6"), SubResource("Resource_cqfic"), SubResource("Resource_vkejt"), SubResource("Resource_sdajn"), SubResource("Resource_suhwh"), SubResource("Resource_2xjmi")])
+operators = Array[ExtResource("2_aslsy")]([SubResource("Resource_b3wus"), SubResource("Resource_vguop")])
 
-[sub_resource type="Resource" id="Resource_rmio6"]
+[sub_resource type="Resource" id="Resource_audyq"]
 script = ExtResource("7_sqnoi")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_rxfga"]
+[sub_resource type="Resource" id="Resource_7l51h"]
 script = ExtResource("8_klmqn")
-choice_result = SubResource("Resource_qstos")
-requirement = SubResource("Resource_rmio6")
+choice_result = SubResource("Resource_aslsy")
+requirement = SubResource("Resource_audyq")
 description = "他端起碗，没有喝——松手。碗碎，泔水飞溅。他推门便走。"
 
-[sub_resource type="Resource" id="Resource_ip77g"]
-script = ExtResource("3_audyq")
-str_props = "MONEY"
-value = -2
-
-[sub_resource type="Resource" id="Resource_etx6n"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = 8
-
-[sub_resource type="Resource" id="Resource_8sky6"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = -5
-
-[sub_resource type="Resource" id="Resource_rdk2y"]
-script = ExtResource("3_audyq")
-str_props = "money"
-value = -5
-
-[sub_resource type="Resource" id="Resource_q2gop"]
-script = ExtResource("3_audyq")
-str_props = "MONEY"
-value = 16
-
-[sub_resource type="Resource" id="Resource_tlc5f"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = 16
-
-[sub_resource type="Resource" id="Resource_kholu"]
+[sub_resource type="Resource" id="Resource_n2eys"]
 script = ExtResource("4_7l51h")
 value = 19
 
-[sub_resource type="Resource" id="Resource_hctkd"]
+[sub_resource type="Resource" id="Resource_q6u6x"]
 script = ExtResource("5_n2eys")
 target_tag = "TARGET_IDENTITY_QUANGUI"
 leverage_key = "quangui_swill_gamble"
 
-[sub_resource type="Resource" id="Resource_274jw"]
+[sub_resource type="Resource" id="Resource_sqnoi"]
 script = ExtResource("6_q6u6x")
-operators = Array[ExtResource("2_aslsy")]([SubResource("Resource_ip77g"), SubResource("Resource_etx6n"), SubResource("Resource_8sky6"), SubResource("Resource_rdk2y"), SubResource("Resource_q2gop"), SubResource("Resource_tlc5f"), SubResource("Resource_kholu"), SubResource("Resource_hctkd")])
+operators = Array[ExtResource("2_aslsy")]([SubResource("Resource_n2eys"), SubResource("Resource_q6u6x")])
 
-[sub_resource type="Resource" id="Resource_lhghd"]
+[sub_resource type="Resource" id="Resource_klmqn"]
 script = ExtResource("7_sqnoi")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_i33wn"]
+[sub_resource type="Resource" id="Resource_3smy0"]
 script = ExtResource("8_klmqn")
-choice_result = SubResource("Resource_274jw")
-requirement = SubResource("Resource_lhghd")
+choice_result = SubResource("Resource_sqnoi")
+requirement = SubResource("Resource_klmqn")
 description = "不等对方说完，他已经走到矮几前展开那张纸，提笔蘸墨。"
 
-[sub_resource type="Resource" id="Resource_jldxb"]
-script = ExtResource("3_audyq")
-str_props = "MONEY"
-value = -2
-
-[sub_resource type="Resource" id="Resource_12n4e"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = 8
-
-[sub_resource type="Resource" id="Resource_vat7h"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = -5
-
-[sub_resource type="Resource" id="Resource_brblu"]
-script = ExtResource("3_audyq")
-str_props = "money"
-value = -5
-
-[sub_resource type="Resource" id="Resource_53w56"]
-script = ExtResource("3_audyq")
-str_props = "MONEY"
-value = 10
-
-[sub_resource type="Resource" id="Resource_fw0sl"]
-script = ExtResource("3_audyq")
-str_props = "health"
-value = 10
-
-[sub_resource type="Resource" id="Resource_urqnt"]
+[sub_resource type="Resource" id="Resource_vakna"]
 script = ExtResource("4_7l51h")
 value = 16
 
-[sub_resource type="Resource" id="Resource_msamf"]
+[sub_resource type="Resource" id="Resource_egcsr"]
 script = ExtResource("5_n2eys")
 target_tag = "TARGET_IDENTITY_QUANGUI"
 leverage_key = "quangui_swill_gamble"
 
-[sub_resource type="Resource" id="Resource_8rmyj"]
+[sub_resource type="Resource" id="Resource_kac4t"]
 script = ExtResource("6_q6u6x")
-operators = Array[ExtResource("2_aslsy")]([SubResource("Resource_jldxb"), SubResource("Resource_12n4e"), SubResource("Resource_vat7h"), SubResource("Resource_brblu"), SubResource("Resource_53w56"), SubResource("Resource_fw0sl"), SubResource("Resource_urqnt"), SubResource("Resource_msamf")])
+operators = Array[ExtResource("2_aslsy")]([SubResource("Resource_vakna"), SubResource("Resource_egcsr")])
 
-[sub_resource type="Resource" id="Resource_g8gyp"]
+[sub_resource type="Resource" id="Resource_s3uji"]
 script = ExtResource("7_sqnoi")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_efrwo"]
+[sub_resource type="Resource" id="Resource_h6ce6"]
 script = ExtResource("8_klmqn")
-choice_result = SubResource("Resource_8rmyj")
-requirement = SubResource("Resource_g8gyp")
+choice_result = SubResource("Resource_kac4t")
+requirement = SubResource("Resource_s3uji")
 description = "“大人说的举荐信，落款是哪位府君的印？”"
 
-[sub_resource type="Resource" id="Resource_q6hq3"]
+[sub_resource type="Resource" id="Resource_cqfic"]
 script = ExtResource("7_sqnoi")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_b3q8x"]
+[sub_resource type="Resource" id="Resource_vkejt"]
 script = ExtResource("7_sqnoi")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_qdgej"]
+[sub_resource type="Resource" id="Resource_sdajn"]
 script = ExtResource("7_sqnoi")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_nuah8"]
+[sub_resource type="Resource" id="Resource_suhwh"]
 script = ExtResource("10_vakna")
-operators = Array[ExtResource("9_3smy0")]([SubResource("Resource_q6hq3"), SubResource("Resource_b3q8x"), SubResource("Resource_qdgej")])
+operators = Array[ExtResource("9_3smy0")]([SubResource("Resource_cqfic"), SubResource("Resource_vkejt"), SubResource("Resource_sdajn")])
 
 [resource]
 script = ExtResource("11_egcsr")
-requirement = SubResource("Resource_nuah8")
+requirement = SubResource("Resource_suhwh")
 era = "747_kuangda"
+archetype_id = "jiaoyou"
 _target_tags = Array[String](["ACTION_ENTERTAIN_DRINK:empty_cup", "TARGET_FACTION_ROYAL:jade_step", "action:main:jiaoyou", "TARGET_IDENTITY_QUANGUI"])
-options = Array[ExtResource("1_vguop")]([SubResource("Resource_rxfga"), SubResource("Resource_i33wn"), SubResource("Resource_efrwo")])
+options = Array[ExtResource("1_vguop")]([SubResource("Resource_7l51h"), SubResource("Resource_3smy0"), SubResource("Resource_h6ce6")])
 uuid = "zhuoliu_lieqi_swill_gambit_identity_quangui"
 name = "泔水赌局"
 description = "馊水的气味比酒先到。你进门的时候就已经闻到了。一个浊流大员斜靠在胡床上，没站起来，只用筷子指了指墙边矮几上的两样东西——金锭和一张纸。“你只有一炷香的时间。”他的筷子在空中画了个圈，最后指回他自己面前的粗陶碗，“一炷香之内，金子归你或者举荐信归你。然后——”他咂了咂嘴，“然后你喝这个。”筷子上沾着的油星滴进了泔水里。"
