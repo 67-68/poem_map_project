@@ -69,10 +69,11 @@
           "tags": [
             "action:main:duzhuo"
           ],
-          "operator_dsl": "prop_add(name=health; val=3) | prop_add(name=health; val=10)",
+          "operator_dsl": "",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.duzhuo"
+          "stored_to": "747_kuangda.duzhuo",
+          "archetype_id": "duzhuo"
         },
         {
           "id": "subconscious_prosody",
@@ -81,10 +82,11 @@
           "tags": [
             "action:main:duzhuo"
           ],
-          "operator_dsl": "prop_add(name=progress; val=-5) | prop_add(name=health; val=10) | emo_add(name=SORROW; val=5)",
+          "operator_dsl": "emo_add(name=SORROW; val=5)",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.duzhuo"
+          "stored_to": "747_kuangda.duzhuo",
+          "archetype_id": "duzhuo"
         },
         {
           "id": "nonexistent_companion",
@@ -93,10 +95,11 @@
           "tags": [
             "action:main:duzhuo"
           ],
-          "operator_dsl": "prop_add(name=progress; val=-5) | emo_add(name=SORROW; val=8) | emo_sub(name=ARROGANCE; val=15)",
+          "operator_dsl": "emo_add(name=SORROW; val=8)|emo_sub(name=ARROGANCE; val=15)",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.duzhuo"
+          "stored_to": "747_kuangda.duzhuo",
+          "archetype_id": "duzhuo"
         },
         {
           "id": "poverty_as_aesthetic",
@@ -105,10 +108,11 @@
           "tags": [
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=health; val=5) | prop_add(name=LITERARY_FAME; val=3)",
+          "operator_dsl": "",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "porter_forbidden",
@@ -118,10 +122,11 @@
             "action:main:fangshi",
             "TARGET_IDENTITY_MENZI"
           ],
-          "operator_dsl": "prop_sub(name=health; val=3) | prop_add(name=health; val=8) | emo_add(name=ANGER; val=10) | prop_add(name=progress; val=-3)",
+          "operator_dsl": "emo_add(name=ANGER; val=10)",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi"
+          "stored_to": "747_kuangda.fangshi",
+          "archetype_id": "fangshi"
         },
         {
           "id": "echo_chamber_losers",
@@ -131,10 +136,11 @@
             "action:main:fangshi",
             "TARGET_IDENTITY_QINGKE"
           ],
-          "operator_dsl": "prop_sub(name=health; val=5) | emo_add(name=SORROW; val=10) | prop_add(name=progress; val=-3)",
+          "operator_dsl": "emo_add(name=SORROW; val=10)",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi"
+          "stored_to": "747_kuangda.fangshi",
+          "archetype_id": "fangshi"
         },
         {
           "id": "empty_endorsement",
@@ -143,10 +149,11 @@
           "tags": [
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_add(name=health; val=5) | prop_add(name=LITERARY_FAME; val=5) | prop_add(name=health; val=10) | emo_add(name=SORROW; val=8)",
+          "operator_dsl": "emo_add(name=SORROW; val=8)",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.baiye"
+          "stored_to": "747_kuangda.baiye",
+          "archetype_id": "baiye"
         },
         {
           "id": "asymmetric_sunk_cost",
@@ -155,10 +162,11 @@
           "tags": [
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=money; val=8) | prop_sub(name=health; val=3) | emo_add(name=ANGER; val=10)",
+          "operator_dsl": "emo_add(name=ANGER; val=10)",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "connection_reset",
@@ -167,10 +175,11 @@
           "tags": [
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_add(name=health; val=10) | emo_add(name=SORROW; val=8) | prop_add(name=progress; val=-5)",
+          "operator_dsl": "emo_add(name=SORROW; val=8)",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "prop_at_banquet",
@@ -179,10 +188,11 @@
           "tags": [
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_add(name=health; val=5) | emo_add(name=ambition; val=5) | prop_add(name=money; val=3) | emo_add(name=ANGER; val=15)",
+          "operator_dsl": "emo_add(name=ambition; val=5)|emo_add(name=ANGER; val=15)",
           "option_results": {},
           "scale": 1.0,
-          "stored_to": "747_kuangda.baiye"
+          "stored_to": "747_kuangda.baiye",
+          "archetype_id": "baiye"
         }
       ]
     }

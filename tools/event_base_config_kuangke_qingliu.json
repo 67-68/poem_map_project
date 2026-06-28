@@ -147,7 +147,8 @@
             [
               "identity_qingliu_owner"
             ]
-          ]
+          ],
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "WANGWEI",
@@ -166,7 +167,8 @@
             [
               "identity_zhuoliu_official"
             ]
-          ]
+          ],
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "ZHENGQIAN",
@@ -185,7 +187,8 @@
             [
               "identity_qingliu_official"
             ]
-          ]
+          ],
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "GAOSHI",
@@ -222,7 +225,8 @@
           ],
           "operator_dsl": "",
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "emotion_tranquility",
@@ -234,7 +238,8 @@
           ],
           "operator_dsl": "",
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "emotion_anger",
@@ -246,7 +251,8 @@
           ],
           "operator_dsl": "",
           "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi"
+          "stored_to": "747_kuangda.fangshi",
+          "archetype_id": "fangshi"
         },
         {
           "id": "emotion_sorrow",
@@ -258,7 +264,8 @@
           ],
           "operator_dsl": "",
           "scale": 1.0,
-          "stored_to": "747_kuangda.denggao"
+          "stored_to": "747_kuangda.denggao",
+          "archetype_id": "denggao"
         }
       ]
     }

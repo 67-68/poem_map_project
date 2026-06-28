@@ -240,7 +240,8 @@
           ],
           "operator_dsl": "",
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "halo_protection",
@@ -251,9 +252,10 @@
             "emotion_pair:pair_tranquility",
             "action:main:baiye"
           ],
-          "operator_dsl": "prop_add(name=MONEY; val=5)",
+          "operator_dsl": "",
           "scale": 1.0,
-          "stored_to": "747_kuangda.baiye"
+          "stored_to": "747_kuangda.baiye",
+          "archetype_id": "baiye"
         },
         {
           "id": "solidarity_wretched",
@@ -264,9 +266,10 @@
             "emotion_pair:pair_survival",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_add(name=HEALTH; val=10)",
+          "operator_dsl": "",
           "scale": 1.2,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "silent_bailout",
@@ -277,9 +280,10 @@
             "emotion_pair:pair_tranquility",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_add(name=MONEY; val=8)",
+          "operator_dsl": "",
           "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi"
+          "stored_to": "747_kuangda.fangshi",
+          "archetype_id": "fangshi"
         },
         {
           "id": "spiritual_anchor",
@@ -292,7 +296,8 @@
           ],
           "operator_dsl": "",
           "scale": 1.1,
-          "stored_to": "747_kuangda.fangshi"
+          "stored_to": "747_kuangda.fangshi",
+          "archetype_id": "fangshi"
         },
         {
           "id": "intel_routing",
@@ -303,9 +308,10 @@
             "emotion_pair:pair_survival",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_add(name=MONEY; val=15)",
+          "operator_dsl": "",
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou"
+          "stored_to": "747_kuangda.jiaoyou",
+          "archetype_id": "jiaoyou"
         }
       ]
     }

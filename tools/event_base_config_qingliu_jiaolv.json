@@ -73,7 +73,7 @@
             "action:main:fangshi",
             "TARGET_IDENTITY_MENZI"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=health; val=3)",
+          "operator_dsl": "",
           "option_results": {
             "opt_jiaolv": "prop_sub(name=money; val=20) | prop_sub(name=health; val=5) | emo_add(name=SORROW; val=8) | prop_add(name=health; val=8)"
           },
@@ -106,7 +106,8 @@
                 "reason": "禁止「推了半寸」这类NPC推物件的动作——同一个沉默的物理威胁已在多个事件中复用"
               }
             ]
-          }
+          },
+          "archetype_id": "fangshi"
         },
         {
           "id": "fomo_scam",
@@ -117,7 +118,7 @@
             "TARGET_NPC_DUFU:thatched_grass",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=health; val=3)",
+          "operator_dsl": "",
           "option_results": {
             "opt_jiaolv": "prop_sub(name=money; val=25) | emo_add(name=ANGER; val=10) | prop_add(name=health; val=5)"
           },
@@ -150,7 +151,8 @@
                 "reason": "禁止NPC在交易后追加语言确认——让沉默取代一切语言"
               }
             ]
-          }
+          },
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "illusion_control",
@@ -161,7 +163,7 @@
             "ENV_NATURE_SNOWSTORM:lone_snow",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=health; val=3)",
+          "operator_dsl": "",
           "option_results": {
             "opt_jiaolv": "prop_sub(name=money; val=18) | emo_sub(name=SORROW; val=10) | prop_add(name=health; val=8) | prop_add(name=health; val=5)"
           },
@@ -194,7 +196,8 @@
                 "reason": "禁止以「镜中映脸」作为场景收束——这是沙盒种子中的标志性画面"
               }
             ]
-          }
+          },
+          "archetype_id": "fangshi"
         },
         {
           "id": "doomsday_binge",
@@ -206,7 +209,7 @@
             "action:main:duzhuo",
             "TARGET_IDENTITY_VENDOR"
           ],
-          "operator_dsl": "prop_sub(name=money; val=3) | prop_sub(name=health; val=3)",
+          "operator_dsl": "",
           "option_results": {
             "opt_jiaolv": "prop_sub(name=money; val=15) | emo_add(name=SORROW; val=15) | prop_sub(name=health; val=8)"
           },
@@ -249,7 +252,8 @@
             [
               "identity_vendor"
             ]
-          ]
+          ],
+          "archetype_id": "duzhuo"
         }
       ]
     }

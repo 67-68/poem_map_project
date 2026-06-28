@@ -159,7 +159,7 @@
           "name": "才华物化 — 诗在权贵眼中只是交易筹码",
           "description": "杜甫的诗被当作等价物——换一顿饭、一件旧衣、一个引荐机会。才华本身不被尊重，被看作一种可以讨价还价的商品。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=poem_power; val=1)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_rebellion",
             "TARGET_NPC_DUFU:thatched_grass",
@@ -208,7 +208,7 @@
           "name": "审美强暴 — 被迫按别人的标准糟蹋自己的作品",
           "description": "权贵或富商要求杜甫按他们的趣味修改诗作——把含蓄改成直白、把沉郁改成喜庆、把讽喻改成颂圣。不改就不付钱，不改就不给引荐。",
           "scale": 1.05,
-          "operator_dsl": "prop_sub(name=poem_power; val=1)|prop_sub(name=health; val=2)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_rebellion",
             "TARGET_NPC_DUFU:thatched_grass",
@@ -251,7 +251,7 @@
           "name": "残羹冷炙 — 接受施舍式的报酬，被当作打发叫花子",
           "description": "杜甫付出了劳动——写诗、作文、抄录——换来的报酬却是一种羞辱：几文铜钱、一壶劣酒、一件破旧冬衣。不是不给钱，是给得让你觉得自己只值这个价。",
           "scale": 1.1,
-          "operator_dsl": "prop_sub(name=health; val=5)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_survival",
             "ENV_NATURE_NIGHTMOON:cold_moon",
@@ -293,7 +293,7 @@
           "name": "廉价劳力 — 才华不值钱，体力才值钱",
           "description": "作为士人却被当作普通劳力使用——不是让你写诗作文，而是让你抄录文书、整理书卷、跑腿送信。你的才华不被看见，你被当作一个识字很多的苦力。",
           "scale": 1.15,
-          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=health; val=10)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_survival",
             "VIBE_THEME_HISTORY:ruined_wall",
@@ -346,7 +346,7 @@
           "name": "阶级霸凌 — 权力的日常践踏",
           "description": "不是因为做错了什么，仅仅因为身份低微就被当众羞辱——被要求让路、被呵斥退下、被当作不存在。这不是交易，是纯粹的权力展示。",
           "scale": 1.2,
-          "operator_dsl": "prop_sub(name=health; val=8)|prop_sub(name=health; val=5)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_despair",
             "TARGET_OBJECT_SWORD:cold_blade",
@@ -395,7 +395,7 @@
           "name": "同侪落差 — 看着不如你的人爬到了你头上",
           "description": "曾经同窗共读的朋友、一起参加科举的同侪，如今有人当上了官、有人入了权贵幕府、有人靠关系拿到了肥差。而杜甫还是那个杜甫——住的更破了、衣服更旧了、希望更渺茫了。",
           "scale": 1.1,
-          "operator_dsl": "prop_sub(name=health; val=10)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_despair",
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
@@ -443,7 +443,7 @@
           "name": "弱者相害 — 底层之间的相互倾轧",
           "description": "比权贵的压迫更令人窒息的，是同样处于底层的人之间的相互伤害——门子刁难来投奔的更穷的亲戚、邻里因为一捆柴火争执、同行文人为了一个机会相互诋毁。弱者没有向上的通道，只能向下挤压更弱的人。",
           "scale": 1.05,
-          "operator_dsl": "prop_sub(name=health; val=3)|prop_sub(name=health; val=5)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_despair",
             "VIBE_THEME_HISTORY:ruined_wall",
@@ -490,7 +490,7 @@
           "name": "隐秘的施舍 — 善意比恶意更难承受",
           "description": "比羞辱更难面对的是善意——有人出于同情暗中帮助杜甫，但这份帮助本身就在不断提醒杜甫：你是一个需要被同情的人。朋友故意输棋留下银钱、亲戚在年节礼盒里多塞了东西、陌生人多给了几个铜板说「不用找了」。善意本身成了最大的屈辱。",
           "scale": 1.0,
-          "operator_dsl": "prop_add(name=money; val=10)|prop_sub(name=health; val=5)",
+          "operator_dsl": "",
           "tags": [
             "emotion_pair:pair_survival",
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
@@ -545,7 +545,7 @@
           "name": "坊市 — 长安东西市的日常交易与偶遇",
           "description": "长安东西两市及坊间街巷。这里是商品交易的空间，也是各阶层混杂的唯一场所。杜甫在这里买菜、沽酒、碰见熟人、遭遇市井纠纷。",
           "scale": 1.0,
-          "operator_dsl": "prop_sub(name=money; val=3)",
+          "operator_dsl": "",
           "stored_to": "747_kuangda.fangshi",
           "tags": [
             "ENV_NATURE_NIGHTMOON:cold_moon",
@@ -557,14 +557,15 @@
             "demand_context": "发生在长安东西市或坊间街巷。空间特征是嘈杂、拥挤、各色人等混杂。气味复杂——菜市、香料、马粪、炊烟。时间是白天居多。",
             "action_style": "动作发生在人群中。玩家要侧身让路、要避开马车、要在摊贩的吆喝声中提高音量说话。动作要体现庶民阶层的身体经验。",
             "resolution_style": "场景在熙攘中结束——人群继续流动，摊贩继续吆喝，杜甫继续走他的路。长安不会为任何人的悲欢停下。"
-          }
+          },
+          "archetype_id": "fangshi"
         },
         {
           "id": "gateway_jiaoyou",
           "name": "交游 — 文人圈子的社交场",
           "description": "文人雅集、酒宴、诗会、友人家中。表面上是风雅聚会，实际上充满了阶层攀比、资源交换和人际博弈。",
           "scale": 1.1,
-          "operator_dsl": "prop_sub(name=health; val=5)",
+          "operator_dsl": "",
           "stored_to": "747_kuangda.jiaoyou",
           "tags": [
             "VIBE_PHILOSOPHY_ZEN:temple_bell",
@@ -576,14 +577,15 @@
             "demand_context": "在某人宅邸或酒楼的雅间。桌上摆着酒菜，周围是谈笑风生的文人。有人在高谈阔论政治，有人在低声交换资源信息。杜甫的旧衣和沉默在这一桌人中显得格外突兀。",
             "action_style": "动作要体现社交场中的微妙身体语言——端杯、搁筷、起身敬酒时的犹豫、被冷落时假装欣赏墙上的字画。",
             "resolution_style": "聚会散场时众人在门口作别。有人乘车离去，有人相约下一场，杜甫独自走入夜色。"
-          }
+          },
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "gateway_baiye",
           "name": "拜谒 — 权贵门前的等待与求见",
           "description": "登门拜访权贵或官员，请求引荐或资助。这是一个典型的上下级权力空间——从门房到正堂，每一道门槛都在提醒你来这里不是做客，是求人。",
           "scale": 1.2,
-          "operator_dsl": "prop_sub(name=health; val=5)|prop_sub(name=money; val=5)",
+          "operator_dsl": "",
           "stored_to": "747_kuangda.baiye",
           "tags": [
             "TARGET_FACTION_ROYAL:jade_step",
@@ -595,14 +597,15 @@
             "demand_context": "在权贵宅邸门外或厅堂。空间是压抑的——高大的门楣、沉默的家奴、漫长得令人不安的等待。玩家可能在门房里坐着冷板凳，听着里面传来觥筹交错的笑声。",
             "action_style": "等待是拜谒的核心动作——站着等、坐着等、在冷风里等。玩家能做的只有等待和被传唤。动作要突出被动性——捧着名帖、整理衣冠、在听到脚步声时站起来。",
             "resolution_style": "被接见或被拒绝。被接见可能是三言两语打发，被拒绝可能是门子出来说一声「老爷今日不便」。结局总是狼藉的——玩家收拾名帖，转身离开。"
-          }
+          },
+          "archetype_id": "baiye"
         },
         {
           "id": "gateway_duzhuo",
           "name": "独酌 — 酒肆中的独饮与旁观",
           "description": "杜甫独自在小酒馆饮酒。这是一个微醺的旁观者视角——看邻桌的喧哗、听窗外的市声、想自己的心事。独酌是最私密也最脆弱的空间。",
           "scale": 0.9,
-          "operator_dsl": "prop_sub(name=money; val=2)|prop_sub(name=health; val=3)",
+          "operator_dsl": "",
           "stored_to": "747_kuangda.duzhuo",
           "tags": [
             "ENV_NATURE_NIGHTMOON:cold_moon",
@@ -614,14 +617,15 @@
             "demand_context": "在长安西市附近的小酒肆。昏暗的油灯、粗糙的木桌、劣质的酒。邻桌可能有醉汉喧哗、可能有胡姬弹唱、可能有商人在谈生意。杜甫坐在角落，一碗浊酒喝很久。",
             "action_style": "动作缓慢而零碎——端起碗抿一口、放下、望着窗外出神、在桌上无意识地划字。重点不是动作本身，是动作之间的停顿。",
             "resolution_style": "酒尽人散。杜甫放下酒钱起身离开，走入夜色。或者被某个事件打断——邻桌的争吵、突然来访的熟人、店家的逐客。"
-          }
+          },
+          "archetype_id": "duzhuo"
         },
         {
           "id": "gateway_denggao",
           "name": "登高 — 城楼/土丘上的远眺与沉思",
           "description": "杜甫独自登上长安城郊的某处高地——乐游原、曲江池畔的土坡、或某座废弃的城楼。登高是唐诗中最经典的母题之一——视野开阔了，心事也变得更重了。",
           "scale": 0.85,
-          "operator_dsl": "prop_sub(name=health; val=3)",
+          "operator_dsl": "",
           "stored_to": "747_kuangda.denggao",
           "tags": [
             "ENV_NATURE_NIGHTMOON:cold_moon",
@@ -633,14 +637,15 @@
             "demand_context": "在长安城郊的高处。向下看是鳞次栉比的屋顶、远处是终南山的轮廓、风很大。登高者面对的往往不是风景，是自己无处安放的心事。可能与另一人同行，但多是登高后分开。",
             "action_style": "动作是静态的——站立、眺望、被风吹动衣角。如果有同行者，对话也是断断续续的，被风声打断。",
             "resolution_style": "日落风冷，起身下山。或者和同行者在暮色中分别，各自走向不同的方向。"
-          }
+          },
+          "archetype_id": "denggao"
         },
         {
           "id": "gateway_fengzhao",
           "name": "奉召 — 被叫去应付差事",
           "description": "被官府或权贵临时叫去应付某项差事——写公文、应制作文、陪席应酬。这不是正式的任命，而是一次性的、带有临时征调性质的劳务。奉召是一种「半强迫」的义务——不去不行，去了也没钱。",
           "scale": 1.15,
-          "operator_dsl": "prop_sub(name=health; val=3)|prop_sub(name=health; val=8)",
+          "operator_dsl": "",
           "stored_to": "747_kuangda.fengzhao",
           "tags": [
             "VIBE_AESTHETIC_ELEGANT:ink_stone",
@@ -652,7 +657,8 @@
             "demand_context": "衙署或某个临时办公场所。空间是官僚化的——案牍、公文、穿梭的胥吏、沉默的上级。玩家被叫来是因为「你这方面擅长」，但不会因为擅长而得到尊重。",
             "action_style": "动作是功能性的一一研墨、执笔、呈文、领命退出。玩家的身体不属于自己，属于这件差事。",
             "resolution_style": "差事完成后离开。可能得到一句「辛苦了」，也可能连这句话都没有——门外的下一个等候者已经进来了。"
-          }
+          },
+          "archetype_id": "fengzhao"
         }
       ]
     }

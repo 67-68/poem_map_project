@@ -102,7 +102,7 @@
             "TARGET_FACTION_ROYAL:jade_step",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=health; val=3) | emo_add(name=SORROW; val=5)",
+          "operator_dsl": "emo_add(name=SORROW; val=5)",
           "option_results": {
             "opt_zuanying": "prop_add(name=money; val=8) | prop_add(name=health; val=5) | prop_sub(name=LITERARY_FAME; val=2) | emo_add(name=ambition; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_class_discrimination\")"
           },
@@ -128,7 +128,8 @@
               }
             ],
             "action_style": "清流的审查不是当面对质——是你从环境细节中嗅出来的：他的沉默比上一轮更长了一点，他给你斟茶时茶壶嘴偏了半寸，他介绍你给新客时少说了一个头衔。钻营者的反应不是你一言我一语的交锋——是他一个人在用目光飞快地计算：谁在场？谁可能已经说了什么？现在说哪句话成本最小？"
-          }
+          },
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "pawned_artifact",
@@ -138,7 +139,7 @@
             "TARGET_OBJECT_SWORD:medicine_stall",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=3) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=8)",
+          "operator_dsl": "emo_add(name=SORROW; val=8)",
           "option_results": {
             "opt_zuanying": "prop_sub(name=money; val=10) | prop_add(name=health; val=8) | prop_add(name=health; val=8) | emo_add(name=SORROW; val=15)"
           },
@@ -164,7 +165,8 @@
               }
             ],
             "action_style": "清流的来访不是突然的——他先派人送了口信、或托人带了一个看似无关的小物件、或选了一个你无法拒绝的时间（比如你刚求他办一件事之后）。他进门后先寒暄，甚至夸你的屋子打理得好，然后在不经意间转向那件东西——语气不是质问，是「忽然想起」。你的反应不是惊慌——是身体先于脑子做出了一个停顿，然后你的目光开始计算屋里还有什么东西与这个谎言有关。"
-          }
+          },
+          "archetype_id": "fangshi"
         },
         {
           "id": "ghostwriter_collision",
@@ -175,7 +177,7 @@
             "action:main:jiaoyou",
             "TARGET_IDENTITY_QUANGUI"
           ],
-          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=8)",
+          "operator_dsl": "emo_add(name=SORROW; val=8)",
           "option_results": {
             "opt_zuanying": "prop_add(name=health; val=10) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_ghostwriter_scandal\")"
           },
@@ -206,7 +208,8 @@
             [
               "identity_quangui"
             ]
-          ]
+          ],
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "skimmed_charity",
@@ -216,7 +219,7 @@
             "VIBE_PHILOSOPHY_ZEN:medicine_stall",
             "action:main:fangshi"
           ],
-          "operator_dsl": "prop_sub(name=money; val=5) | prop_add(name=health; val=3) | emo_add(name=SORROW; val=10)",
+          "operator_dsl": "emo_add(name=SORROW; val=10)",
           "option_results": {
             "opt_zuanying": "prop_add(name=money; val=3) | prop_add(name=health; val=5) | prop_add(name=health; val=3) | flag_bool_set(name=flag_moral_debt_qingliu; val=true) | emo_add(name=SORROW; val=12)"
           },
@@ -242,7 +245,8 @@
               }
             ],
             "action_style": "审计的节奏不是对抗——是清流问了一些看似无关的问题：粥棚那天来了多少人？米是从哪家铺子买的？你上次去是什么时候？每个问题你都听得懂问的是什么，但你不知道他已经知道了多少。叙事应呈现这种信息不对称下的计算——你说出的每个字都在掂量：他知道多少？这句话会不会和另一句话撞上？"
-          }
+          },
+          "archetype_id": "fangshi"
         },
         {
           "id": "double_agent_slip",
@@ -253,7 +257,7 @@
             "action:main:jiaoyou",
             "TARGET_IDENTITY_QUANGUI"
           ],
-          "operator_dsl": "prop_add(name=health; val=8) | emo_add(name=SORROW; val=10)",
+          "operator_dsl": "emo_add(name=SORROW; val=10)",
           "option_results": {
             "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=health; val=10) | prop_add(name=health; val=8) | emo_add(name=SORROW; val=10)"
           },
@@ -284,7 +288,8 @@
             [
               "identity_quangui"
             ]
-          ]
+          ],
+          "archetype_id": "jiaoyou"
         },
         {
           "id": "triple_dipped_suffering",
@@ -294,7 +299,7 @@
             "TARGET_NPC_DUFU:jade_step",
             "action:main:jiaoyou"
           ],
-          "operator_dsl": "prop_sub(name=LITERARY_FAME; val=5) | prop_add(name=health; val=3) | emo_add(name=SORROW; val=10)",
+          "operator_dsl": "emo_add(name=SORROW; val=10)",
           "option_results": {
             "opt_zuanying": "prop_add(name=money; val=15) | prop_add(name=health; val=8) | prop_add(name=health; val=5) | prop_sub(name=health; val=3) | emo_add(name=SORROW; val=15)"
           },
@@ -320,7 +325,8 @@
               }
             ],
             "action_style": "暴露的节奏是递进的——先是一个人不经意的关心（「你最近还好吧？」），第二个人附和（「是啊，上次听说你……嗯？」），第三个人还没开口但手已经在翻信匣。三个人提供的信息在空气中拼合，像碎瓷片自动对上了纹路。叙事应从零散对话逐渐收束为沉默。"
-          }
+          },
+          "archetype_id": "jiaoyou"
         }
       ]
     }

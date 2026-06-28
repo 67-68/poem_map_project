@@ -117,5 +117,6 @@
   "output_dir": "data/4_eras/745_ambition/baiye/honey_moon",
   "universal_tags": [
     "action:main:baiye"
-  ]
+  ],
+  "archetype_id": "baiye"
 }

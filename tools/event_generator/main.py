@@ -246,6 +246,12 @@ def generate_one_event(
         if combo.value.stored_to:
             stored_to = combo.value.stored_to
             break
+    # 找 archetype_id：先搜维度值级，fallback 到 config 级
+    archetype_id = cfg.archetype_id or ""
+    for combo in current_combos:
+        if combo.value.archetype_id:
+            archetype_id = combo.value.archetype_id
+            break
 
     # ── 构建初始 user_prompt ──
     user_prompt = build_user_prompt(
@@ -337,6 +343,11 @@ def generate_one_event(
                 if context_extras is None:
                     context_extras = {}
                 context_extras["store_to"] = stored_to
+            # 将 archetype_id 注入 context_extras
+            if archetype_id:
+                if context_extras is None:
+                    context_extras = {}
+                context_extras["archetype"] = archetype_id
 
             # ── 收集 tags ──
             all_tags: list[str] = []
@@ -566,8 +577,6 @@ def _print_generation_result(result: GenerationResult, cfg: EventPipelineConfig)
     context = f"trigger_tags={tags_expr}|weight=10"
     if cfg.era:
         context += f"|era={cfg.era}"
-    if cfg.archetype_id:
-        context += f"|archetype={cfg.archetype_id}"
     if r.context_extras:
         for k, v in r.context_extras.items():
             if v:
@@ -599,7 +608,7 @@ def _write_result_to_csv(result: GenerationResult, writer, cfg: EventPipelineCon
         tags=r.tags_to_use, requirement=cfg.universal_requirement or "",
         context_extras=r.context_extras or None,
         era=cfg.era,
-        archetype_id=cfg.archetype_id or "",
+        archetype_id="",
     )
     for opt in r.option_rows:
         write_option_row(writer, opt.text, opt.dsl, requirement=opt.requirement)
@@ -681,6 +690,12 @@ def reassembly_one_event(
         if combo.value.stored_to:
             stored_to = combo.value.stored_to
             break
+    # 找 archetype_id：先搜维度值级，fallback 到 config 级
+    archetype_id = cfg.archetype_id or ""
+    for combo in current_combos:
+        if combo.value.archetype_id:
+            archetype_id = combo.value.archetype_id
+            break
 
     # ── 从 snapshot 构建 parsed dict（替代 LLM 响应）──
     options_dict: dict[str, str] = {}
@@ -721,6 +736,11 @@ def reassembly_one_event(
         if context_extras is None:
             context_extras = {}
         context_extras["store_to"] = stored_to
+    # 将 archetype_id 注入 context_extras
+    if archetype_id:
+        if context_extras is None:
+            context_extras = {}
+        context_extras["archetype"] = archetype_id
 
     # ── 收集 tags ──
     all_tags: list[str] = []

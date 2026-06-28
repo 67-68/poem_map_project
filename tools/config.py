@@ -298,6 +298,7 @@ class PipelineDimensionValue(BaseModel):
     virtual_dimension_ids: list[list[str]] = []
     tags: list[str] = []
     stored_to: str = ""
+    archetype_id: str = ""
     narrative_constraint: Optional[NarrativeConstraint] = None
 
 

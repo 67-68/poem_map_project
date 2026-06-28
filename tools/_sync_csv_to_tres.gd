@@ -5,9 +5,28 @@ func _ready() -> void:
 	Logging.info("===== CSV -> TRES Sync Started =====")
 	
 	var csv_files = [
+		# 747_kuangda 时代
 		"res://data/4_eras/747_kuangda/_duotai_humiliation_events.csv",
+		"res://data/4_eras/747_kuangda/_kuangke_qingliu_events.csv",
+		"res://data/4_eras/747_kuangda/_kuangke_zhuoliu_events.csv",
+		"res://data/4_eras/747_kuangda/_qingliu_daoxin_posui_events.csv",
+		"res://data/4_eras/747_kuangda/_qingliu_fengying_events.csv",
+		"res://data/4_eras/747_kuangda/_qingliu_jiaolv_events.csv",
+		"res://data/4_eras/747_kuangda/_qingliu_passive_benefits_events.csv",
+		"res://data/4_eras/747_kuangda/_qingliu_zuanying_events.csv",
+		"res://data/4_eras/747_kuangda/_zhuoliu_fengying_events.csv",
+		"res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.csv",
+		"res://data/4_eras/747_kuangda/_zhuoliu_zuanying_events.csv",
+		"res://data/4_eras/747_kuangda/_zize_events.csv",
+		"res://data/4_eras/747_kuangda/_drunken_oblivion_events.csv",
+		"res://data/4_eras/747_kuangda/_political_purge_events.csv",
 		"res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.csv",
+		# 745_ambition 时代
+		"res://data/4_eras/745_ambition/baiye/honey_moon/_bai_ye_honeymoon_events.csv",
 		"res://data/4_eras/745_ambition/baiye/real_appearance/_bai_ye_real_appearance_events.csv",
+		"res://data/4_eras/745_ambition/_scene_imagery_library_events.csv",
+		# 755_backhome
+		"res://data/4_eras/755_backhome/_ganlu_journey_events.csv",
 	]
 	
 	for csv_path in csv_files:

@@ -2,17 +2,35 @@
   "id": "scene_imagery_library",
   "name": "场景-意象获取",
   "era": "745_ambition",
-  "plugins": ["imagery_acquisition"],
+  "plugins": [
+    "imagery_acquisition"
+  ],
   "background_context": "大唐天宝年间，长安城。你是一个野心勃勃的士人，无时无刻不在寻找向上爬的机会。在你眼中，长安城不是诗意盎然的盛世画卷——它是权力金字塔的实体化。每一个场景在你看来都是权力结构的切片：朱门是壁垒，台阶是等级，远山是你够不到的天际线。你在不同的场景中经历着不同的心境，但底层逻辑从来不变：你看到的永远是——权力在哪里？我怎么才能爬上去？",
   "ai_persona": "你是一位冷眼解剖权力符号的叙事设计师。你的文风像一把钝刀——不锋利，但每一刀都拉得生疼。你笔下的主角是一个彻底被权力欲驱动的官迷：看朱门想到的是门槛高度，看台阶想到的是品级差距，看宴席想到的是座次排列。你从不写主角的心理活动——永远只用三种物理切片来暗示他极度的权力饥渴：\n1. 感官的越界（触觉/视觉的僭越）：紧盯着不该看的东西，身体做出僭越的微动作。\n2. 生理的压抑（痛感与紧绷）：渴望但得不到时，身体的硬直、握拳、屏息、指节发白。\n3. 视角的扭曲（眼中只有权力）：忽略周遭正常的人和景，视线死死锚定在代表权力的实体上。\n你坚信：意象不是诗意的顿悟——它是权力的图腾被角色在某个瞬间窥见时，身体做出的本能反应。\n\n## 场景类型通用约束（作用于所有同类型场景）\n- [fengzhao_trigger] 奉召场景：主角在权力核心的边缘等待。动作限制在'等候者'身份允许的被动响应域内——不能主动上前、搭话、移动或改变自身处境。身体的紧绷程度与等待时长/距离成正比。\n- [denggao_trigger] 登高场景：高度差带来的权力幻觉。主角的身体被'俯瞰的快感'和'落回地面的恐惧'撕裂——前倾想吞下去，后仰意识到够不着。禁止任何游客式的抒情姿态（拥抱夕阳/吟诗/打坐）。\n- [duzhuo_trigger] 独处场景：主角独处时被权力符号意外刺痛。独处时的身体比公共场合更诚实——不该紧绷的时候紧绷，不该警惕的时候警惕。禁止主角在独处中享受安宁或陷入感伤。\n- [jiaoyou_trigger] 交际场景：主角在社交场合中冷眼旁观权力的暗流。表面参与但身体保持待机状态——从不真正投入氛围，始终在收集权力情报。禁止主角享受社交或展示享受的表情。\n- [fangshi_trigger] 谋生场景：主角被体力劳动/卑微职业侵蚀士人身份。每一处酸痛、每一点污渍都在换算'这值不值'。主角的动作是谋生者的身体本能，不是文人的优雅姿态。禁止任何田园诗式的劳动美化。",
   "prompt_features": [
-    {"id": "stateless_narrative", "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"},
-    {"id": "scene_focus", "text": "重点描写场景的环境氛围，让场景本身传递情绪，而不是通过角色的内心独白。"},
-    {"id": "forbid_inner_monologue", "text": "禁止使用'你感到''你想起了''你意识到'等心理动词作为叙事桥梁。"},
-    {"id": "power_metaphor_lens", "text": "主角眼中万物都是权力符号：朱门=壁垒，台阶=等级，远山=够不到的天际线。每个物理细节都必须能找到它在权力坐标系中的位置。"}
+    {
+      "id": "stateless_narrative",
+      "text": "使用无状态叙事，不要引用玩家过去的具体经历，每次事件都当作第一次发生。"
+    },
+    {
+      "id": "scene_focus",
+      "text": "重点描写场景的环境氛围，让场景本身传递情绪，而不是通过角色的内心独白。"
+    },
+    {
+      "id": "forbid_inner_monologue",
+      "text": "禁止使用'你感到''你想起了''你意识到'等心理动词作为叙事桥梁。"
+    },
+    {
+      "id": "power_metaphor_lens",
+      "text": "主角眼中万物都是权力符号：朱门=壁垒，台阶=等级，远山=够不到的天际线。每个物理细节都必须能找到它在权力坐标系中的位置。"
+    }
   ],
   "option_features": [
-    {"id": "option_accept_scene", "text": "（冷眼旁观）", "fixed": true}
+    {
+      "id": "option_accept_scene",
+      "text": "（冷眼旁观）",
+      "fixed": true
+    }
   ],
   "dimensions": [
     {
@@ -25,8 +43,15 @@
           "name": "待漏院听更",
           "description": "大明宫外的破晓，凌晨寒风，百官按品级站在院外等候早朝。宫门紧闭，铜钉在晨曦中泛着冷光",
           "stored_to": "745_ambition.fengzhao",
-          "tags": ["action:main:fengzhao", "TARGET_PLACE_JADESTEP_DAILOU", "ENV_POLITICS_CLOUD_DAILOU"],
-          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:fengzhao",
+            "TARGET_PLACE_JADESTEP_DAILOU",
+            "ENV_POLITICS_CLOUD_DAILOU"
+          ],
+          "linked_value_ids": [
+            "imagery_jade_step",
+            "imagery_cloud_and_sun"
+          ],
           "narrative_constraint": {
             "type": "fengzhao_trigger",
             "demand_context": "",
@@ -39,8 +64,15 @@
           "name": "集贤院修书",
           "description": "皇家图书馆，书架通天，典籍堆中埋首。窗外偶尔有紫袍官员经过，脚步声在回廊中回荡",
           "stored_to": "745_ambition.fengzhao",
-          "tags": ["action:main:fengzhao", "TARGET_PLACE_JADESTEP_JIXIAN", "ENV_POLITICS_CLOUD_JIXIAN"],
-          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:fengzhao",
+            "TARGET_PLACE_JADESTEP_JIXIAN",
+            "ENV_POLITICS_CLOUD_JIXIAN"
+          ],
+          "linked_value_ids": [
+            "imagery_jade_step",
+            "imagery_cloud_and_sun"
+          ],
           "narrative_constraint": {
             "type": "fengzhao_trigger",
             "demand_context": "",
@@ -53,8 +85,15 @@
           "name": "华清池扈从",
           "description": "温泉外苑，水汽氤氲中隐约可见权贵身影。你在外围守卫，听着里面的丝竹管弦和欢笑声",
           "stored_to": "745_ambition.fengzhao",
-          "tags": ["action:main:fengzhao", "TARGET_PLACE_JADESTEP_HUAQING", "ENV_POLITICS_CLOUD_HUAQING"],
-          "linked_value_ids": ["imagery_jade_step", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:fengzhao",
+            "TARGET_PLACE_JADESTEP_HUAQING",
+            "ENV_POLITICS_CLOUD_HUAQING"
+          ],
+          "linked_value_ids": [
+            "imagery_jade_step",
+            "imagery_cloud_and_sun"
+          ],
           "narrative_constraint": {
             "type": "fengzhao_trigger",
             "demand_context": "",
@@ -67,8 +106,15 @@
           "name": "终南山绝顶",
           "description": "山风呼啸，云海翻腾。站在绝顶俯瞰，长安城如棋盘般渺小，天地间只剩风声和自己的心跳",
           "stored_to": "745_ambition.denggao",
-          "tags": ["action:main:denggao", "TARGET_MYTH_GIANTROC_ZHONGNAN", "ENV_POLITICS_CLOUD_ZHONGNAN"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:denggao",
+            "TARGET_MYTH_GIANTROC_ZHONGNAN",
+            "ENV_POLITICS_CLOUD_ZHONGNAN"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc",
+            "imagery_cloud_and_sun"
+          ],
           "narrative_constraint": {
             "type": "denggao_trigger",
             "demand_context": "",
@@ -81,8 +127,15 @@
           "name": "乐游原残阳",
           "description": "汉代荒冢上，夕阳如血。长安城在暮色中渐次亮起灯火，苍茫天地间独你一人伫立",
           "stored_to": "745_ambition.denggao",
-          "tags": ["action:main:denggao", "TARGET_MYTH_GIANTROC_LEYOU", "ENV_POLITICS_CLOUD_LEYOU"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:denggao",
+            "TARGET_MYTH_GIANTROC_LEYOU",
+            "ENV_POLITICS_CLOUD_LEYOU"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc",
+            "imagery_cloud_and_sun"
+          ],
           "narrative_constraint": {
             "type": "denggao_trigger",
             "demand_context": "",
@@ -95,8 +148,15 @@
           "name": "慈恩寺大雁塔",
           "description": "塔顶俯瞰长安，坊市如棋格。暮鼓声中，归鸦绕塔，红尘在脚下喧嚣却遥远",
           "stored_to": "745_ambition.denggao",
-          "tags": ["action:main:denggao", "TARGET_MYTH_GIANTROC_DAYAN", "ENV_POLITICS_CLOUD_DAYAN"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:denggao",
+            "TARGET_MYTH_GIANTROC_DAYAN",
+            "ENV_POLITICS_CLOUD_DAYAN"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc",
+            "imagery_cloud_and_sun"
+          ],
           "narrative_constraint": {
             "type": "denggao_trigger",
             "demand_context": "",
@@ -109,8 +169,13 @@
           "name": "破败客舍寒夜",
           "description": "油灯如豆，破窗外寒风呜咽。桌上残酒冷炙，墙壁缝隙可见邻家炊烟，更显己身孤寂",
           "stored_to": "745_ambition.duzhuo",
-          "tags": ["action:main:duzhuo", "TARGET_MYTH_GIANTROC_KESHE"],
-          "linked_value_ids": ["imagery_giant_roc"],
+          "tags": [
+            "action:main:duzhuo",
+            "TARGET_MYTH_GIANTROC_KESHE"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc"
+          ],
           "narrative_constraint": {
             "type": "duzhuo_trigger",
             "demand_context": "",
@@ -123,8 +188,13 @@
           "name": "繁华酒肆暗角",
           "description": "西市酒肆人声鼎沸，胡姬旋舞。你坐在暗角，冷眼旁观醉生梦死的众生相",
           "stored_to": "745_ambition.duzhuo",
-          "tags": ["action:main:duzhuo", "TARGET_MYTH_GIANTROC_JIUSI"],
-          "linked_value_ids": ["imagery_giant_roc"],
+          "tags": [
+            "action:main:duzhuo",
+            "TARGET_MYTH_GIANTROC_JIUSI"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc"
+          ],
           "narrative_constraint": {
             "type": "duzhuo_trigger",
             "demand_context": "",
@@ -137,8 +207,13 @@
           "name": "灞桥风雪酒亭",
           "description": "大雪纷飞中灞桥横跨渭水，酒亭茅檐低垂。送别的行人折柳相赠，离歌在风雪中若隐若现",
           "stored_to": "745_ambition.duzhuo",
-          "tags": ["action:main:duzhuo", "TARGET_MYTH_GIANTROC_BAQIAO"],
-          "linked_value_ids": ["imagery_giant_roc"],
+          "tags": [
+            "action:main:duzhuo",
+            "TARGET_MYTH_GIANTROC_BAQIAO"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc"
+          ],
           "narrative_constraint": {
             "type": "duzhuo_trigger",
             "demand_context": "",
@@ -151,8 +226,15 @@
           "name": "曲江池流觞亭",
           "description": "水边诗会，曲水流觞。文人墨客吟诗作对，酒杯顺水漂流至你面前",
           "stored_to": "745_ambition.jiaoyou",
-          "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_QUJIANG", "ENV_POLITICS_CLOUD_QUJIANG"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:jiaoyou",
+            "TARGET_MYTH_GIANTROC_QUJIANG",
+            "ENV_POLITICS_CLOUD_QUJIANG"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc",
+            "imagery_cloud_and_sun"
+          ],
           "operator_dsl": "prop_add(name=money; val=15)",
           "narrative_constraint": {
             "type": "jiaoyou_trigger",
@@ -166,8 +248,15 @@
           "name": "权贵宅邸外院",
           "description": "高门大院外，你站在偏院等候。院内丝竹声声，但你的席位在外院冷案上，连残羹都轮不到",
           "stored_to": "745_ambition.jiaoyou",
-          "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_ZHAIDI", "ENV_POLITICS_CLOUD_ZHAIDI"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:jiaoyou",
+            "TARGET_MYTH_GIANTROC_ZHAIDI",
+            "ENV_POLITICS_CLOUD_ZHAIDI"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc",
+            "imagery_cloud_and_sun"
+          ],
           "operator_dsl": "prop_add(name=money; val=15)",
           "narrative_constraint": {
             "type": "jiaoyou_trigger",
@@ -181,8 +270,15 @@
           "name": "胡姬酒肆狂欢",
           "description": "三教九流汇聚的酒肆，胡姬的琵琶声如珠落玉盘。有人在角落里痛哭，有人在桌上起舞",
           "stored_to": "745_ambition.jiaoyou",
-          "tags": ["action:main:jiaoyou", "TARGET_MYTH_GIANTROC_HUJI", "ENV_POLITICS_CLOUD_HUJI"],
-          "linked_value_ids": ["imagery_giant_roc", "imagery_cloud_and_sun"],
+          "tags": [
+            "action:main:jiaoyou",
+            "TARGET_MYTH_GIANTROC_HUJI",
+            "ENV_POLITICS_CLOUD_HUJI"
+          ],
+          "linked_value_ids": [
+            "imagery_giant_roc",
+            "imagery_cloud_and_sun"
+          ],
           "operator_dsl": "prop_add(name=money; val=15)",
           "narrative_constraint": {
             "type": "jiaoyou_trigger",
@@ -196,8 +292,14 @@
           "name": "东市卖药",
           "description": "长安东市药市，人流熙攘。你的草药摊夹在胡商和走贩之间，你缩着肩膀蹲在地上，面前摆着几捆自己采的药材。偶尔有穿绸缎的人经过，瞥一眼你的摊位就皱着眉头走开了",
           "stored_to": "745_ambition.fangshi",
-          "tags": ["action:main:fangshi", "TARGET_OBJECT_MEDICINE_DONGSHI", "ENV_SOCIETY_FAMINE"],
-          "linked_value_ids": ["imagery_medicine_stall"],
+          "tags": [
+            "action:main:fangshi",
+            "TARGET_OBJECT_MEDICINE_DONGSHI",
+            "ENV_SOCIETY_FAMINE"
+          ],
+          "linked_value_ids": [
+            "imagery_medicine_stall"
+          ],
           "operator_dsl": "prop_add(name=money; val=25)",
           "narrative_constraint": {
             "type": "fangshi_trigger",
@@ -211,8 +313,14 @@
           "name": "文英阁鬻文",
           "description": "西市书坊阁楼，几个落魄文人挤在一张破案上替人写墓志铭、贺寿词。笔墨纸砚的劣质墨臭混着楼下酒肆的油烟味。主顾扔过来一袋钱，随手翻了翻写好的文章，撇了撇嘴",
           "stored_to": "745_ambition.fangshi",
-          "tags": ["action:main:fangshi", "TARGET_OBJECT_INK_WENYING", "ENV_SOCIETY_FAMINE"],
-          "linked_value_ids": ["imagery_ink_for_sale"],
+          "tags": [
+            "action:main:fangshi",
+            "TARGET_OBJECT_INK_WENYING",
+            "ENV_SOCIETY_FAMINE"
+          ],
+          "linked_value_ids": [
+            "imagery_ink_for_sale"
+          ],
           "operator_dsl": "prop_add(name=money; val=25)",
           "narrative_constraint": {
             "type": "fangshi_trigger",
@@ -226,8 +334,14 @@
           "name": "南苑种药",
           "description": "长安城南荒地上你开了一小片药圃，蹲在地里拔草时腰直不起来。偶尔有骑马的人从田埂上经过，马蹄扬起的土撒了你一身。你抬头看看那人远去的背影，又把头低下去继续拔草",
           "stored_to": "745_ambition.fangshi",
-          "tags": ["action:main:fangshi", "TARGET_OBJECT_MEDICINE_NANYUAN", "ENV_SOCIETY_FAMINE"],
-          "linked_value_ids": ["imagery_medicine_stall"],
+          "tags": [
+            "action:main:fangshi",
+            "TARGET_OBJECT_MEDICINE_NANYUAN",
+            "ENV_SOCIETY_FAMINE"
+          ],
+          "linked_value_ids": [
+            "imagery_medicine_stall"
+          ],
           "operator_dsl": "prop_add(name=money; val=25)",
           "narrative_constraint": {
             "type": "fangshi_trigger",
@@ -241,8 +355,14 @@
           "name": "朱门干谒",
           "description": "达官贵人的宅邸门外，你和其他几个等候接见的人挤在门房里。门房的眼神比冬天的风还冷。你手里攥着一卷诗稿作为'见面礼'，纸卷已被手心的汗浸软了",
           "stored_to": "745_ambition.fangshi",
-          "tags": ["action:main:fangshi", "TARGET_PLACE_JADESTEP_FUMEN", "ENV_SOCIETY_FAMINE"],
-          "linked_value_ids": ["imagery_dry_lips"],
+          "tags": [
+            "action:main:fangshi",
+            "TARGET_PLACE_JADESTEP_FUMEN",
+            "ENV_SOCIETY_FAMINE"
+          ],
+          "linked_value_ids": [
+            "imagery_dry_lips"
+          ],
           "narrative_constraint": {
             "type": "fangshi_trigger",
             "demand_context": "",
@@ -253,11 +373,14 @@
       ]
     }
   ],
-  "universal_tags": ["scene_imagery"],
+  "universal_tags": [
+    "scene_imagery"
+  ],
   "word_count_min": 40,
   "word_count_max": 200,
   "max_retries": 3,
   "api_model": "deepseek-reasoner",
   "output_dir": "data/4_eras/745_ambition",
-  "final_directive": "【核心指令】禁止使用'你感到''你想起了''你意识到''你明白了''你觉得'等心理动词作叙事桥梁。禁止替主角总结感悟或解释意象的含义。意象不是被'获得'的——它只是在场景的某个瞬间被'看见'。三种物理切片（感官越界、生理压抑、视角扭曲）必须至少出现一种。"
+  "final_directive": "【核心指令】禁止使用'你感到''你想起了''你意识到''你明白了''你觉得'等心理动词作叙事桥梁。禁止替主角总结感悟或解释意象的含义。意象不是被'获得'的——它只是在场景的某个瞬间被'看见'。三种物理切片（感官越界、生理压抑、视角扭曲）必须至少出现一种。",
+  "archetype_id": "baiye"
 }
