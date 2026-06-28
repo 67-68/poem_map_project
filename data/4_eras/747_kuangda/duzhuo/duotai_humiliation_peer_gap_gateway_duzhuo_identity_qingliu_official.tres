@@ -8,31 +8,31 @@
 [ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="6_n3eiy"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="7_mgshj"]
 
-[sub_resource type="Resource" id="Resource_1spjt"]
+[sub_resource type="Resource" id="Resource_n3eiy"]
 script = ExtResource("4_ghig0")
 
-[sub_resource type="Resource" id="Resource_1w8gd"]
+[sub_resource type="Resource" id="Resource_1spjt"]
 script = ExtResource("5_essl5")
 description = "放下酒钱，转身走入长安的夜色，不问姓名"
 
-[sub_resource type="Resource" id="Resource_ghig0"]
+[sub_resource type="Resource" id="Resource_1w8gd"]
 script = ExtResource("5_essl5")
 description = "低头苦笑，举碗向邻桌遥遥虚敬，又自顾斟满饮尽"
 
-[sub_resource type="Resource" id="Resource_essl5"]
+[sub_resource type="Resource" id="Resource_ghig0"]
 script = ExtResource("6_7h52x")
 imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
 
-[sub_resource type="Resource" id="Resource_7h52x"]
+[sub_resource type="Resource" id="Resource_essl5"]
 script = ExtResource("4_ghig0")
-operators = Array[ExtResource("2_1spjt")]([SubResource("Resource_essl5")])
+operators = Array[ExtResource("2_1spjt")]([SubResource("Resource_ghig0")])
 
-[sub_resource type="Resource" id="Resource_mgshj"]
+[sub_resource type="Resource" id="Resource_7h52x"]
 script = ExtResource("5_essl5")
-choice_result = SubResource("Resource_7h52x")
+choice_result = SubResource("Resource_essl5")
 description = "俯身向邻桌微笑拱手，道「郑兄文章，学生曾读过几篇，着实佩服」"
 
-[sub_resource type="Resource" id="Resource_qqeqx"]
+[sub_resource type="Resource" id="Resource_mgshj"]
 script = ExtResource("6_n3eiy")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_mgshj")
-requirement = SubResource("Resource_qqeqx")
+requirement = SubResource("Resource_mgshj")
 era = "747_kuangda"
 archetype_id = "duzhuo"
 _target_tags = Array[String](["emotion_pair:pair_despair", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_peer_gap", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_ENTERTAIN_DRINK:empty_cup", "action:scene_duzhuo"])
-options = Array[ExtResource("1_n3eiy")]([SubResource("Resource_1w8gd"), SubResource("Resource_ghig0"), SubResource("Resource_mgshj")])
-on_enter_result = SubResource("Resource_1spjt")
+options = Array[ExtResource("1_n3eiy")]([SubResource("Resource_1spjt"), SubResource("Resource_1w8gd"), SubResource("Resource_7h52x")])
+on_enter_result = SubResource("Resource_n3eiy")
 uuid = "duotai_humiliation_peer_gap_gateway_duzhuo_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "酒肆偶闻故旧高中"

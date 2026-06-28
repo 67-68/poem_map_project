@@ -8,40 +8,40 @@
 [ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="6_sducy"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="7_qbpmc"]
 
-[sub_resource type="Resource" id="Resource_kfhev"]
+[sub_resource type="Resource" id="Resource_70ba3"]
 script = ExtResource("4_rqyn3")
 
-[sub_resource type="Resource" id="Resource_tc8yl"]
+[sub_resource type="Resource" id="Resource_kfhev"]
 script = ExtResource("5_st23a")
 description = "看了一眼铜钱，转身走进西市的人流。"
 
-[sub_resource type="Resource" id="Resource_rqyn3"]
+[sub_resource type="Resource" id="Resource_tc8yl"]
 script = ExtResource("6_sducy")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_st23a"]
+[sub_resource type="Resource" id="Resource_rqyn3"]
 script = ExtResource("4_rqyn3")
-operators = Array[ExtResource("2_kfhev")]([SubResource("Resource_rqyn3")])
+operators = Array[ExtResource("2_kfhev")]([SubResource("Resource_tc8yl")])
 
-[sub_resource type="Resource" id="Resource_sducy"]
+[sub_resource type="Resource" id="Resource_st23a"]
 script = ExtResource("5_st23a")
-choice_result = SubResource("Resource_st23a")
+choice_result = SubResource("Resource_rqyn3")
 description = "说了声多谢，用袖口拂去铜钱上的灰尘，收入怀中。"
 
-[sub_resource type="Resource" id="Resource_qbpmc"]
+[sub_resource type="Resource" id="Resource_sducy"]
 script = ExtResource("6_sducy")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_gnck0"]
+[sub_resource type="Resource" id="Resource_qbpmc"]
 script = ExtResource("4_rqyn3")
-operators = Array[ExtResource("2_kfhev")]([SubResource("Resource_qbpmc")])
+operators = Array[ExtResource("2_kfhev")]([SubResource("Resource_sducy")])
 
-[sub_resource type="Resource" id="Resource_2gr2l"]
+[sub_resource type="Resource" id="Resource_gnck0"]
 script = ExtResource("5_st23a")
-choice_result = SubResource("Resource_gnck0")
+choice_result = SubResource("Resource_qbpmc")
 description = "拱手道谢，说承蒙娘子照顾，以后有活还望记着小的。"
 
-[sub_resource type="Resource" id="Resource_k00rq"]
+[sub_resource type="Resource" id="Resource_2gr2l"]
 script = ExtResource("6_70ba3")
 volatile_stat = "ambition"
 value = 50
@@ -49,12 +49,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_qbpmc")
-requirement = SubResource("Resource_k00rq")
+requirement = SubResource("Resource_2gr2l")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["emotion_pair:pair_survival", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "action:humiliation_leftover_treatment", "ENV_NATURE_NIGHTMOON:cold_moon", "TARGET_NPC_DUFU:thatched_grass", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:scene_fangshi"])
-options = Array[ExtResource("1_70ba3")]([SubResource("Resource_tc8yl"), SubResource("Resource_sducy"), SubResource("Resource_2gr2l")])
-on_enter_result = SubResource("Resource_kfhev")
+options = Array[ExtResource("1_70ba3")]([SubResource("Resource_kfhev"), SubResource("Resource_st23a"), SubResource("Resource_gnck0")])
+on_enter_result = SubResource("Resource_70ba3")
 uuid = "duotai_humiliation_leftover_treatment_gateway_fangshi"
 name = "emo_lt(name=ambition; val=100)"
 description = "三文钱的润笔"

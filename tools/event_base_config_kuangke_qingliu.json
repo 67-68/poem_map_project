@@ -142,13 +142,11 @@
             "emotion_arrogance",
             "emotion_tranquility"
           ],
-          "stored_to": "747_kuangda.jiaoyou",
           "virtual_dimension_ids": [
             [
               "identity_qingliu_owner"
             ]
-          ],
-          "archetype_id": "jiaoyou"
+          ]
         },
         {
           "id": "WANGWEI",
@@ -162,13 +160,11 @@
             "emotion_tranquility",
             "emotion_sorrow"
           ],
-          "stored_to": "747_kuangda.jiaoyou",
           "virtual_dimension_ids": [
             [
               "identity_zhuoliu_official"
             ]
-          ],
-          "archetype_id": "jiaoyou"
+          ]
         },
         {
           "id": "ZHENGQIAN",
@@ -182,13 +178,11 @@
             "emotion_anger",
             "emotion_sorrow"
           ],
-          "stored_to": "747_kuangda.jiaoyou",
           "virtual_dimension_ids": [
             [
               "identity_qingliu_official"
             ]
-          ],
-          "archetype_id": "jiaoyou"
+          ]
         },
         {
           "id": "GAOSHI",
@@ -224,9 +218,7 @@
             "action:main:jiaoyou"
           ],
           "operator_dsl": "",
-          "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
-          "archetype_id": "jiaoyou"
+          "scale": 1.0
         },
         {
           "id": "emotion_tranquility",
@@ -237,37 +229,10 @@
             "action:main:jiaoyou"
           ],
           "operator_dsl": "",
-          "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
-          "archetype_id": "jiaoyou"
-        },
-        {
-          "id": "emotion_anger",
-          "name": "愤懑共鸣",
-          "tags": [
-            "ACTOR_EMOTION_ANGER",
-            "emotion_pair:pair_anger",
-            "action:main:fangshi"
-          ],
-          "operator_dsl": "",
-          "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi",
-          "archetype_id": "fangshi"
-        },
-        {
-          "id": "emotion_sorrow",
-          "name": "悲戚共鸣",
-          "tags": [
-            "ACTOR_EMOTION_SORROW",
-            "emotion_pair:pair_sorrow",
-            "action:main:denggao"
-          ],
-          "operator_dsl": "",
-          "scale": 1.0,
-          "stored_to": "747_kuangda.denggao",
-          "archetype_id": "denggao"
+          "scale": 1.0
         }
       ]
     }
-  ]
+  ],
+  "archetype_id": "jiaoyou"
 }

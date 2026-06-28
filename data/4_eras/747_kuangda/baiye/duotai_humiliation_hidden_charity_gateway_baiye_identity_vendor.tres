@@ -8,40 +8,40 @@
 [ext_resource type="Script" path="res://core/requirements/emotion_requirement.gd" id="6_tb36p"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="7_kq2wm"]
 
-[sub_resource type="Resource" id="Resource_tsn4n"]
+[sub_resource type="Resource" id="Resource_tb36p"]
 script = ExtResource("4_4rrxt")
 
-[sub_resource type="Resource" id="Resource_6oagx"]
+[sub_resource type="Resource" id="Resource_tsn4n"]
 script = ExtResource("5_2onkx")
 description = "你将纸条抽出，看也不看，递还给门子。“不必了。”"
 
-[sub_resource type="Resource" id="Resource_4rrxt"]
+[sub_resource type="Resource" id="Resource_6oagx"]
 script = ExtResource("6_q4lu3")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_2onkx"]
+[sub_resource type="Resource" id="Resource_4rrxt"]
 script = ExtResource("4_4rrxt")
-operators = Array[ExtResource("2_tsn4n")]([SubResource("Resource_4rrxt")])
+operators = Array[ExtResource("2_tsn4n")]([SubResource("Resource_6oagx")])
 
-[sub_resource type="Resource" id="Resource_q4lu3"]
+[sub_resource type="Resource" id="Resource_2onkx"]
 script = ExtResource("5_2onkx")
-choice_result = SubResource("Resource_2onkx")
+choice_result = SubResource("Resource_4rrxt")
 description = "你折叠纸条，收好诗稿，朝门房方向拱了拱手。"
 
-[sub_resource type="Resource" id="Resource_kq2wm"]
+[sub_resource type="Resource" id="Resource_q4lu3"]
 script = ExtResource("6_q4lu3")
 imagery_name = "TARGET_FACTION_ROYAL:jade_step"
 
-[sub_resource type="Resource" id="Resource_fu4dr"]
+[sub_resource type="Resource" id="Resource_kq2wm"]
 script = ExtResource("4_4rrxt")
-operators = Array[ExtResource("2_tsn4n")]([SubResource("Resource_kq2wm")])
+operators = Array[ExtResource("2_tsn4n")]([SubResource("Resource_q4lu3")])
 
-[sub_resource type="Resource" id="Resource_kjtaq"]
+[sub_resource type="Resource" id="Resource_fu4dr"]
 script = ExtResource("5_2onkx")
-choice_result = SubResource("Resource_fu4dr")
+choice_result = SubResource("Resource_kq2wm")
 description = "你收好纸条，低声对门子说：“敢问……方才厅上哪位宾客？”"
 
-[sub_resource type="Resource" id="Resource_1up43"]
+[sub_resource type="Resource" id="Resource_kjtaq"]
 script = ExtResource("6_tb36p")
 volatile_stat = "ambition"
 value = 50
@@ -49,12 +49,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_kq2wm")
-requirement = SubResource("Resource_1up43")
+requirement = SubResource("Resource_kjtaq")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["emotion_pair:pair_survival", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "ACTION_SOCIAL_PARTING:willow_branch", "action:humiliation_hidden_charity", "TARGET_IDENTITY_VENDOR", "TARGET_FACTION_ROYAL:jade_step", "TARGET_NPC_DUFU:thatched_grass", "ENV_NATURE_NIGHTMOON:cold_moon", "action:scene_baiye"])
-options = Array[ExtResource("1_tb36p")]([SubResource("Resource_6oagx"), SubResource("Resource_q4lu3"), SubResource("Resource_kjtaq")])
-on_enter_result = SubResource("Resource_tsn4n")
+options = Array[ExtResource("1_tb36p")]([SubResource("Resource_tsn4n"), SubResource("Resource_2onkx"), SubResource("Resource_fu4dr")])
+on_enter_result = SubResource("Resource_tb36p")
 uuid = "duotai_humiliation_hidden_charity_gateway_baiye_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
 description = "门缝里的纸条"

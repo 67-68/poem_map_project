@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_3hh53"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_hjkov"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_gdn0a"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_ywn5h"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="5_ery1c"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_cox3q"]
+[ext_resource type="Script" path="res://core/operators/leverage_add_operator.gd" id="7_sm4uj"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="8_2py0u"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="9_gfpbm"]
+
+[sub_resource type="Resource" id="Resource_n1wbq"]
+script = ExtResource("3_gdn0a")
+value = 8
+
+[sub_resource type="Resource" id="Resource_6hw4f"]
+script = ExtResource("3_gdn0a")
+value = 10
+
+[sub_resource type="Resource" id="Resource_aju8a"]
+script = ExtResource("4_ywn5h")
+operators = Array[ExtResource("2_hjkov")]([SubResource("Resource_n1wbq"), SubResource("Resource_6hw4f")])
+
+[sub_resource type="Resource" id="Resource_2wpgd"]
+script = ExtResource("5_ery1c")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_llpuk"]
+script = ExtResource("6_cox3q")
+choice_result = SubResource("Resource_aju8a")
+requirement = SubResource("Resource_2wpgd")
+description = "抄起案上的酒壶砸向那两张并置的诗笺——但酒壶在手中转了半圈，只倒了一杯，自己喝了。"
+
+[sub_resource type="Resource" id="Resource_wi8ly"]
+script = ExtResource("3_gdn0a")
+value = 8
+
+[sub_resource type="Resource" id="Resource_uomad"]
+script = ExtResource("3_gdn0a")
+value = 10
+
+[sub_resource type="Resource" id="Resource_p6p7j"]
+script = ExtResource("4_ywn5h")
+operators = Array[ExtResource("2_hjkov")]([SubResource("Resource_wi8ly"), SubResource("Resource_uomad")])
+
+[sub_resource type="Resource" id="Resource_06saw"]
+script = ExtResource("5_ery1c")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_sxxec"]
+script = ExtResource("6_cox3q")
+choice_result = SubResource("Resource_p6p7j")
+requirement = SubResource("Resource_06saw")
+description = "从席上滑跪下去，额头抵在两种笔迹交叠的诗笺上——但膝盖锁死在袍摆里，站不起来。"
+
+[sub_resource type="Resource" id="Resource_3envu"]
+script = ExtResource("3_gdn0a")
+value = 8
+
+[sub_resource type="Resource" id="Resource_t2ot6"]
+script = ExtResource("3_gdn0a")
+value = 15
+
+[sub_resource type="Resource" id="Resource_s7s27"]
+script = ExtResource("7_sm4uj")
+target_tag = "TARGET_IDENTITY_QINGLIU_OFFICIAL"
+leverage_key = "qingliu_ghostwriter_scandal"
+
+[sub_resource type="Resource" id="Resource_83laa"]
+script = ExtResource("4_ywn5h")
+operators = Array[ExtResource("2_hjkov")]([SubResource("Resource_3envu"), SubResource("Resource_t2ot6"), SubResource("Resource_s7s27")])
+
+[sub_resource type="Resource" id="Resource_1rd60"]
+script = ExtResource("6_cox3q")
+choice_result = SubResource("Resource_83laa")
+description = "欠身拿起两张诗笺端详，顺着韵脚往下比对，评了一句“第三字若用去声会更稳”，把话题转向用典。"
+
+[sub_resource type="Resource" id="Resource_s1ajl"]
+script = ExtResource("8_2py0u")
+trait_name = "kuangda_zuanying"
+
+[resource]
+script = ExtResource("9_gfpbm")
+requirement = SubResource("Resource_s1ajl")
+era = "747_kuangda"
+archetype_id = "jiaoyou"
+_target_tags = Array[String](["ACTION_ENTERTAIN_DRINK:cloud_and_sun", "TARGET_NPC_DUFU:ink_for_sale", "action:main:jiaoyou", "TARGET_IDENTITY_QUANGUI"])
+options = Array[ExtResource("1_3hh53")]([SubResource("Resource_llpuk"), SubResource("Resource_sxxec"), SubResource("Resource_1rd60")])
+uuid = "qingliu_zuanying_ghostwriter_collision_identity_quangui"
+name = "韵脚撞车"
+description = "“近日坊间传抄的，说是某公子新作，你们品品这句——‘孤舟系在楚云根’。”你握着酒杯的手指未动。王参军接过去看了看，却从自己行囊里翻出另一卷残稿：“巧了，去年子美送我的干谒诗里，也有一联‘独木横于湘水湄’。这押韵的路数，倒是如出一辙。”他把两张诗笺并排放在案上，笔画不清，但韵脚的骨架——仄起平收、第五字必用入声——两首诗像同一只手在打拍子。陈明府的眼睛眯了起来，转向你看了一眼，什么也没问。他在等。"

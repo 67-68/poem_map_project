@@ -21,3 +21,5 @@ signal tier_changed(new_tier: int)
 @export var l3_threshold := 4 # 需要四个意象来达到l3
 
 const l2_threshold := 2
+
+@export var merged: Array = []

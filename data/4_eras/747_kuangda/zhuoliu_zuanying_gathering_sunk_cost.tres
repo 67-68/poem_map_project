@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_bmbeu"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_4gvt1"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_78lny"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_stx82"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="5_05ty2"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_w3fdj"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_5yke8"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="8_i07l2"]
+
+[sub_resource type="Resource" id="Resource_g03hl"]
+script = ExtResource("3_78lny")
+value = 10
+
+[sub_resource type="Resource" id="Resource_ag5ms"]
+script = ExtResource("4_stx82")
+operators = Array[ExtResource("2_4gvt1")]([SubResource("Resource_g03hl")])
+
+[sub_resource type="Resource" id="Resource_jxh8p"]
+script = ExtResource("5_05ty2")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_tex0o"]
+script = ExtResource("6_w3fdj")
+choice_result = SubResource("Resource_ag5ms")
+requirement = SubResource("Resource_jxh8p")
+description = "名帖往地上一掷，转身踩着新靴踏出廊去。"
+
+[sub_resource type="Resource" id="Resource_f10p7"]
+script = ExtResource("3_78lny")
+value = 10
+
+[sub_resource type="Resource" id="Resource_72dbi"]
+script = ExtResource("4_stx82")
+operators = Array[ExtResource("2_4gvt1")]([SubResource("Resource_f10p7")])
+
+[sub_resource type="Resource" id="Resource_2qxyj"]
+script = ExtResource("5_05ty2")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_egji3"]
+script = ExtResource("6_w3fdj")
+choice_result = SubResource("Resource_72dbi")
+requirement = SubResource("Resource_2qxyj")
+description = "腰一弯，笑容堆满脸，双手将名帖捧过头顶。"
+
+[sub_resource type="Resource" id="Resource_k3yuy"]
+script = ExtResource("3_78lny")
+value = 13
+
+[sub_resource type="Resource" id="Resource_auvny"]
+script = ExtResource("4_stx82")
+operators = Array[ExtResource("2_4gvt1")]([SubResource("Resource_k3yuy")])
+
+[sub_resource type="Resource" id="Resource_nxi8b"]
+script = ExtResource("6_w3fdj")
+choice_result = SubResource("Resource_auvny")
+description = "掂了掂袖中另一条消息，走向厅侧等他的管事。"
+
+[sub_resource type="Resource" id="Resource_wxuyg"]
+script = ExtResource("7_5yke8")
+trait_name = "kuangda_zuanying"
+
+[resource]
+script = ExtResource("8_i07l2")
+requirement = SubResource("Resource_wxuyg")
+era = "747_kuangda"
+archetype_id = "jiaoyou"
+_target_tags = Array[String](["ACTION_ENTERTAIN_DRINK:cloud_and_sun", "TARGET_NPC_DUFU:ink_for_sale", "action:main:jiaoyou"])
+options = Array[ExtResource("1_bmbeu")]([SubResource("Resource_tex0o"), SubResource("Resource_egji3"), SubResource("Resource_nxi8b")])
+uuid = "zhuoliu_zuanying_gathering_sunk_cost"
+name = "旧债新袍"
+description = "“客人又来了。”他说完就走了，托盘在肘边晃了一下，映出灯影——那块漆掉了一块，露出旧木，上次你见它时还没掉。"

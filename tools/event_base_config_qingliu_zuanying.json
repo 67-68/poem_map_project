@@ -107,7 +107,6 @@
             "opt_zuanying": "prop_add(name=money; val=8) | prop_add(name=health; val=5) | prop_sub(name=LITERARY_FAME; val=2) | emo_add(name=ambition; val=10) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_class_discrimination\")"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
           "narrative_constraint": {
             "demand_context": "这是信用审计，不是随机困境。核心矛盾：你把清流雅集的准入资格私下卖给了商人——你不是在社交，你是在经营人脉变现。现在清流主人察觉到了某种不对。\n\n物质痕迹方向（择一，不重复）：商人身上某个不属于这个圈子的细节（衣着料子、用词习惯、对某件雅物的无知）、一张你私下传递的席位名单、一封被退回的雅集请柬。\n\n禁止：把暴露机制写成「商人自曝身份」——暴露必须是清流主人观察到的、推断出的，而非商人自己说出来的。禁止钻石营者当场就找到完美说辞——他的第一个反应必须是计算，而非辩解。",
             "negative_examples": [
@@ -128,45 +127,7 @@
               }
             ],
             "action_style": "清流的审查不是当面对质——是你从环境细节中嗅出来的：他的沉默比上一轮更长了一点，他给你斟茶时茶壶嘴偏了半寸，他介绍你给新客时少说了一个头衔。钻营者的反应不是你一言我一语的交锋——是他一个人在用目光飞快地计算：谁在场？谁可能已经说了什么？现在说哪句话成本最小？"
-          },
-          "archetype_id": "jiaoyou"
-        },
-        {
-          "id": "pawned_artifact",
-          "name": "被典当的信物",
-          "tags": [
-            "VIBE_PHILOSOPHY_ZEN:dry_lips",
-            "TARGET_OBJECT_SWORD:medicine_stall",
-            "action:main:fangshi"
-          ],
-          "operator_dsl": "emo_add(name=SORROW; val=8)",
-          "option_results": {
-            "opt_zuanying": "prop_sub(name=money; val=10) | prop_add(name=health; val=8) | prop_add(name=health; val=8) | emo_add(name=SORROW; val=15)"
-          },
-          "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi",
-          "narrative_constraint": {
-            "demand_context": "这是信用审计，不是随机困境。核心矛盾：你把清流朋友赠你的信物私下典当换钱了——那件东西是情谊的物证，不是你名下的财产。现在原主来「看一眼」。\n\n物质痕迹方向（择一，不重复）：空了的锦匣、当票存根的一角从书页间露出、你书架上那件东西原本的位置现在放了一件替代品、你手上多了不该有的银两去向不明的痕迹。\n\n禁止：把信物写成诗稿或书籍——信物必须是不可复制的实体（玉、砚、刀、印章、旧衣、故人手书），是那一件，不是那一类。禁止让原主直接索还——清流不说「还给我」，他说「想看看你养得怎么样」。禁止钻营者当场认错——他可以沉默、可以转移话题、可以给出一个替代品，但不能说「我卖了」。",
-            "negative_examples": [
-              {
-                "field": "artifact_type",
-                "bad": "那卷你赠我的诗稿……",
-                "reason": "诗稿可以重抄，信物不可复制。信物必须是孤品实体：玉、砚、刀、印章、旧衣、故人手书。不是那一类，是那一件。"
-              },
-              {
-                "field": "qingliu_demand_style",
-                "bad": "那件东西，该还给我了吧",
-                "reason": "清流不会直接索还。他们用道德压力而非权利主张。正确句式：'那方砚台……养得可好？'/'上次见你那枚印章，想来已养出包浆了'"
-              },
-              {
-                "field": "player_response",
-                "bad": "实不相瞒，我已将它典当换了银两",
-                "reason": "钻营者不会承认。他只会沉默三秒然后说那件东西'借给某人了'或'送回老家了'。谎言的质量不重要——重要的是他绝不认错。"
-              }
-            ],
-            "action_style": "清流的来访不是突然的——他先派人送了口信、或托人带了一个看似无关的小物件、或选了一个你无法拒绝的时间（比如你刚求他办一件事之后）。他进门后先寒暄，甚至夸你的屋子打理得好，然后在不经意间转向那件东西——语气不是质问，是「忽然想起」。你的反应不是惊慌——是身体先于脑子做出了一个停顿，然后你的目光开始计算屋里还有什么东西与这个谎言有关。"
-          },
-          "archetype_id": "fangshi"
+          }
         },
         {
           "id": "ghostwriter_collision",
@@ -182,7 +143,6 @@
             "opt_zuanying": "prop_add(name=health; val=10) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=15) | leverage_add(target_tag=\"TARGET_IDENTITY_QINGLIU_OFFICIAL\"; key=\"qingliu_ghostwriter_scandal\")"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
           "narrative_constraint": {
             "demand_context": "这是信用审计，不是随机困境。核心矛盾：你私下替权贵子弟代笔写诗换取报酬，现在你的诗同时出现在两个署名下——原作者和买主在同一场合撞上了。\n\n物质痕迹方向（择一，不重复）：两首不同署名但押韵习惯完全一致的诗被并置、有人发现某句意象在你之前的干谒诗中出现过、买主无意中说漏了「这首诗花了我XX两」、你在席间被要求鉴定一首诗——那首诗就是你自己写的。\n\n禁止：把暴露方式写成「有人认出笔迹」——诗是传抄的，不存在笔迹鉴定，只能靠风格/意象/用典习惯暴露。禁止钻营者当场翻脸否认——他可以沉默、可以用「巧合」搪塞、可以转而评点诗的技巧，但不能愤怒。禁止清流 NPC 当众宣布「你是代笔」。清流的审查方式是：把两首诗并排放下，等你解释。",
             "negative_examples": [
@@ -208,45 +168,7 @@
             [
               "identity_quangui"
             ]
-          ],
-          "archetype_id": "jiaoyou"
-        },
-        {
-          "id": "skimmed_charity",
-          "name": "被截流的赈济",
-          "tags": [
-            "ENV_NATURE_SNOWSTORM:cloud_and_sun",
-            "VIBE_PHILOSOPHY_ZEN:medicine_stall",
-            "action:main:fangshi"
-          ],
-          "operator_dsl": "emo_add(name=SORROW; val=10)",
-          "option_results": {
-            "opt_zuanying": "prop_add(name=money; val=3) | prop_add(name=health; val=5) | prop_add(name=health; val=3) | flag_bool_set(name=flag_moral_debt_qingliu; val=true) | emo_add(name=SORROW; val=12)"
-          },
-          "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi",
-          "narrative_constraint": {
-            "demand_context": "这是信用审计，不是随机困境。核心矛盾：你替清流圈子经手一笔赈济善款/物资，实际发放的量与上报的量之间存在一个可被目测的缺口——你截流了一部分。现在清流来对账。\n\n物质痕迹方向（择一，不重复）：一张米铺的对账单上数字与你的账本差了两石、受赈名单上多出了几个不存在的人名、你房中多了一件与赈款数额巧合匹配的新物件（不是奢侈品——可能是一床新棉被、一双新靴子，但来得不是时候）、有人记得你上次离开粥棚时提着一个本不该有的袋子。\n\n禁止：把清流的审计写成带着账本当面质问——清流不带账本，他先看实物，再看你的眼睛。禁止让受助者直接指认「你偷了粮食」——受助者不敢这么说，他们只说事实：那天你几点来的、带了什么、带走什么。禁止钻营者当场补上亏空——他如果有钱补就不会截流。他只能用新的谎言解释缺口。",
-            "negative_examples": [
-              {
-                "field": "audit_method",
-                "bad": "清流把账本摔在桌上，指着其中一行：这数不对",
-                "reason": "清流不带账本。审计先从实物开始——他先去看粮仓、数粥桶、或者先去粥棚站一站。数字留在最后。"
-              },
-              {
-                "field": "witness_testimony",
-                "bad": "一个老妇指着你：就是你！你拿走了我们半袋米！",
-                "reason": "受助者不敢直接控诉经手人。他们只说观察到的事实——说时间和路线，不说结论。结论由清流听完之后自己得出。"
-              },
-              {
-                "field": "player_response",
-                "bad": "你从袖中掏出银子：差多少，我补",
-                "reason": "钻营者若有钱补上，当初就不会截流。他只能解释说物资'在路上''存在别处''被替换成了另一批'——谎言是他唯一的通货。"
-              }
-            ],
-            "action_style": "审计的节奏不是对抗——是清流问了一些看似无关的问题：粥棚那天来了多少人？米是从哪家铺子买的？你上次去是什么时候？每个问题你都听得懂问的是什么，但你不知道他已经知道了多少。叙事应呈现这种信息不对称下的计算——你说出的每个字都在掂量：他知道多少？这句话会不会和另一句话撞上？"
-          },
-          "archetype_id": "fangshi"
+          ]
         },
         {
           "id": "double_agent_slip",
@@ -262,7 +184,6 @@
             "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=health; val=10) | prop_add(name=health; val=8) | emo_add(name=SORROW; val=10)"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
           "narrative_constraint": {
             "demand_context": "这是信用审计，不是随机困境。核心矛盾：你同时在清流圈和权贵圈活动，把清流圈的密议内容泄给了权贵圈换好处。现在一条消息从清流圈漏出去后精准地出现在了政敌的奏折里——清流在查泄露源。\n\n物质痕迹方向（择一，不重复）：你那封没有署名但书法习惯暴露的拜帖在清流圈被传阅嘲笑、有人回忆起那次密议时你中途离席的时长、一个两边都不站的中立者说了一句无意的话让你暴露了身份重叠、你在权贵圈用的自称与你在清流圈用的自称不同——被同一人先后听见。\n\n禁止：把暴露写成「有人亲眼看见你去权贵府上」——这是长安，没人跟踪你。暴露必须通过信息本身的传播路径推出，或通过你在两个圈子的言行不一致暴露。禁止清流直接指控「你是内奸」——清流说的是「最近圈子里不太干净」「有人嘴不严」。禁止钻营者愤怒否认——他只能把话题引向别人：'会不会是XX那天也在场？'",
             "negative_examples": [
@@ -288,8 +209,7 @@
             [
               "identity_quangui"
             ]
-          ],
-          "archetype_id": "jiaoyou"
+          ]
         },
         {
           "id": "triple_dipped_suffering",
@@ -304,7 +224,6 @@
             "opt_zuanying": "prop_add(name=money; val=15) | prop_add(name=health; val=8) | prop_add(name=health; val=5) | prop_sub(name=health; val=3) | emo_add(name=SORROW; val=15)"
           },
           "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
           "narrative_constraint": {
             "demand_context": "这是信用审计，不是随机困境。核心矛盾：你把同一份苦难卖给了多个买主——同一首诗/同一封求助信发给了三位以上的清流资助人，每人都以为自己是唯一的恩主。现在他们凑到了一起。\n\n物质痕迹方向（择一，不重复）：三张一模一样内容的诗笺在同一张桌上排成一排、三个人给的救助数额不一样但对上了数——有人给了十两有人给了五两有人只给了两石米、三个收件人在不同时间收到但落款日期是同一个、其中一人无意中说「他上个月就说孩子病了」另一人皱眉「他上个月跟我说的是老母病重」。\n\n禁止：把暴露写成三人同时拿出诗笺对质——这个场景太舞台化。暴露必须是递进的：一个人提起→另一个人表示也收到→第三个人开始翻自己的信笺匣子。禁止钻营者用「记错了」搪塞——记错一次可以，记错三次不是借口。他必须给出一个新的、更精密的解释。禁止清流集体暴怒——清流不集体行动。他们各自沉默。沉默比愤怒更可怕。",
             "negative_examples": [
@@ -325,10 +244,10 @@
               }
             ],
             "action_style": "暴露的节奏是递进的——先是一个人不经意的关心（「你最近还好吧？」），第二个人附和（「是啊，上次听说你……嗯？」），第三个人还没开口但手已经在翻信匣。三个人提供的信息在空气中拼合，像碎瓷片自动对上了纹路。叙事应从零散对话逐渐收束为沉默。"
-          },
-          "archetype_id": "jiaoyou"
+          }
         }
       ]
     }
-  ]
+  ],
+  "archetype_id": "jiaoyou"
 }

@@ -106,9 +106,7 @@
           "option_results": {
             "opt_zuanying": "prop_add(name=money; val=12) | prop_add(name=health; val=8) | emo_add(name=ambition; val=10)"
           },
-          "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
-          "archetype_id": "jiaoyou"
+          "scale": 1.0
         },
         {
           "id": "gathering_sunk_cost",
@@ -122,9 +120,7 @@
           "option_results": {
             "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=health; val=10) | emo_add(name=ANGER; val=12)"
           },
-          "scale": 1.05,
-          "stored_to": "747_kuangda.jiaoyou",
-          "archetype_id": "jiaoyou"
+          "scale": 1.05
         },
         {
           "id": "intelligence_commodity",
@@ -138,59 +134,10 @@
           "option_results": {
             "opt_zuanying": "prop_add(name=money; val=15) | prop_add(name=health; val=5) | emo_add(name=SORROW; val=10)"
           },
-          "scale": 1.1,
-          "stored_to": "747_kuangda.jiaoyou",
-          "archetype_id": "jiaoyou"
-        },
-        {
-          "id": "ghostwriter_confront",
-          "name": "捉刀对峙",
-          "tags": [
-            "VIBE_AESTHETIC_ELEGANT:giant_roc",
-            "TARGET_NPC_DUFU:jade_step",
-            "action:main:baiye"
-          ],
-          "operator_dsl": "",
-          "option_results": {
-            "opt_zuanying": "prop_add(name=LITERARY_FAME; val=3) | prop_add(name=health; val=12) | emo_add(name=ANGER; val=15)"
-          },
-          "scale": 1.05,
-          "stored_to": "747_kuangda.baiye",
-          "archetype_id": "baiye"
-        },
-        {
-          "id": "poverty_persona",
-          "name": "贫寒人设经营",
-          "tags": [
-            "TARGET_OBJECT_SWORD:medicine_stall",
-            "ENV_NATURE_SNOWSTORM:cloud_and_sun",
-            "action:main:fangshi"
-          ],
-          "operator_dsl": "",
-          "option_results": {
-            "opt_zuanying": "prop_sub(name=money; val=3) | prop_add(name=health; val=5) | prop_add(name=LITERARY_FAME; val=2) | emo_add(name=SORROW; val=8)"
-          },
-          "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi",
-          "archetype_id": "fangshi"
-        },
-        {
-          "id": "endorsement_request",
-          "name": "拜谒背书",
-          "tags": [
-            "VIBE_PHILOSOPHY_ZEN:dry_lips",
-            "TARGET_FACTION_ROYAL:ink_for_sale",
-            "action:main:fangshi"
-          ],
-          "operator_dsl": "emo_add(name=SORROW; val=8)",
-          "option_results": {
-            "opt_zuanying": "prop_sub(name=LITERARY_FAME; val=3) | prop_sub(name=health; val=5) | emo_add(name=SORROW; val=12)"
-          },
-          "scale": 1.1,
-          "stored_to": "747_kuangda.fangshi",
-          "archetype_id": "fangshi"
+          "scale": 1.1
         }
       ]
     }
-  ]
+  ],
+  "archetype_id": "jiaoyou"
 }

@@ -9,60 +9,60 @@
 [ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="7_uewe1"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="8_s0otw"]
 
-[sub_resource type="Resource" id="Resource_cqhqe"]
+[sub_resource type="Resource" id="Resource_5br6m"]
 script = ExtResource("5_t2syp")
+
+[sub_resource type="Resource" id="Resource_cqhqe"]
+script = ExtResource("4_u21rg")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
 
 [sub_resource type="Resource" id="Resource_8mq22"]
-script = ExtResource("4_u21rg")
-target_tag = "TARGET_IDENTITY_VENDOR"
-leverage_key = "vendor_cheap_labor"
+script = ExtResource("5_t2syp")
+operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_cqhqe")])
 
 [sub_resource type="Resource" id="Resource_u21rg"]
-script = ExtResource("5_t2syp")
-operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_8mq22")])
-
-[sub_resource type="Resource" id="Resource_t2syp"]
 script = ExtResource("6_afx1v")
-choice_result = SubResource("Resource_u21rg")
+choice_result = SubResource("Resource_8mq22")
 description = "未接掸子，跨过地上卷册，径直步出房门。"
 
-[sub_resource type="Resource" id="Resource_afx1v"]
+[sub_resource type="Resource" id="Resource_t2syp"]
 script = ExtResource("4_u21rg")
 target_tag = "TARGET_IDENTITY_VENDOR"
 leverage_key = "vendor_cheap_labor"
 
-[sub_resource type="Resource" id="Resource_uewe1"]
+[sub_resource type="Resource" id="Resource_afx1v"]
 script = ExtResource("7_uewe1")
 imagery_name = "TARGET_NPC_DUFU:thatched_grass"
 
-[sub_resource type="Resource" id="Resource_s0otw"]
+[sub_resource type="Resource" id="Resource_uewe1"]
 script = ExtResource("5_t2syp")
-operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_afx1v"), SubResource("Resource_uewe1")])
+operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_t2syp"), SubResource("Resource_afx1v")])
 
-[sub_resource type="Resource" id="Resource_ux8ny"]
+[sub_resource type="Resource" id="Resource_s0otw"]
 script = ExtResource("6_afx1v")
-choice_result = SubResource("Resource_s0otw")
+choice_result = SubResource("Resource_uewe1")
 description = "接过掸子，拂净桌面，开始逐册检视年份。"
 
-[sub_resource type="Resource" id="Resource_v0kwm"]
+[sub_resource type="Resource" id="Resource_ux8ny"]
 script = ExtResource("4_u21rg")
 target_tag = "TARGET_IDENTITY_VENDOR"
 leverage_key = "vendor_cheap_labor"
 
-[sub_resource type="Resource" id="Resource_j1qqw"]
+[sub_resource type="Resource" id="Resource_v0kwm"]
 script = ExtResource("7_uewe1")
 imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
 
-[sub_resource type="Resource" id="Resource_wqw32"]
+[sub_resource type="Resource" id="Resource_j1qqw"]
 script = ExtResource("5_t2syp")
-operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_v0kwm"), SubResource("Resource_j1qqw")])
+operators = Array[ExtResource("2_cqhqe")]([SubResource("Resource_ux8ny"), SubResource("Resource_v0kwm")])
 
-[sub_resource type="Resource" id="Resource_gpotj"]
+[sub_resource type="Resource" id="Resource_wqw32"]
 script = ExtResource("6_afx1v")
-choice_result = SubResource("Resource_wqw32")
+choice_result = SubResource("Resource_j1qqw")
 description = "接过掸子，连连躬身，又问签条是否需备墨重写。"
 
-[sub_resource type="Resource" id="Resource_l7de0"]
+[sub_resource type="Resource" id="Resource_gpotj"]
 script = ExtResource("7_5br6m")
 volatile_stat = "ambition"
 value = 50
@@ -70,12 +70,12 @@ operator = 1
 
 [resource]
 script = ExtResource("8_s0otw")
-requirement = SubResource("Resource_l7de0")
+requirement = SubResource("Resource_gpotj")
 era = "747_kuangda"
 archetype_id = "fengzhao"
 _target_tags = Array[String](["emotion_pair:pair_survival", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "ACTION_TRAVEL_BOAT:broken_oar", "action:humiliation_cheap_labor", "TARGET_IDENTITY_VENDOR", "VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_OBJECT_SWORD:rusty_sword", "TARGET_NPC_DUFU:thatched_grass", "action:scene_fengzhao"])
-options = Array[ExtResource("1_5br6m")]([SubResource("Resource_t2syp"), SubResource("Resource_ux8ny"), SubResource("Resource_gpotj")])
-on_enter_result = SubResource("Resource_cqhqe")
+options = Array[ExtResource("1_5br6m")]([SubResource("Resource_u21rg"), SubResource("Resource_s0otw"), SubResource("Resource_wqw32")])
+on_enter_result = SubResource("Resource_5br6m")
 uuid = "duotai_humiliation_cheap_labor_gateway_fengzhao_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
 description = "积年案牍"

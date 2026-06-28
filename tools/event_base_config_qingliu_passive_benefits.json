@@ -231,47 +231,6 @@
       "description": "清流朋友能提供的六种不同形式的援助。注意：清流自己也没钱，所以这些援助不涉及金钱（没有 MONEY operator_dsl）。每种援助都有独特的意象标签和 emotion_pair 绑定。",
       "values": [
         {
-          "id": "cultural_capital",
-          "name": "名声变现 — 太白的墨宝",
-          "tags": [
-            "ACTION_ENTERTAIN_DRINK:empty_cup",
-            "emotion_pair:pair_tranquility",
-            "action:main:jiaoyou"
-          ],
-          "operator_dsl": "",
-          "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
-          "archetype_id": "jiaoyou"
-        },
-        {
-          "id": "halo_protection",
-          "name": "降维庇护 — 右丞的车驾",
-          "tags": [
-            "TARGET_FACTION_ROYAL:jade_step",
-            "VIBE_PHILOSOPHY_ZEN:temple_bell",
-            "emotion_pair:pair_tranquility",
-            "action:main:baiye"
-          ],
-          "operator_dsl": "",
-          "scale": 1.0,
-          "stored_to": "747_kuangda.baiye",
-          "archetype_id": "baiye"
-        },
-        {
-          "id": "solidarity_wretched",
-          "name": "底层的抱团 — 郑虔的破衣",
-          "tags": [
-            "ENV_SOCIETY_FAMINE:starving_bone",
-            "ENV_NATURE_SNOWSTORM:lone_snow",
-            "emotion_pair:pair_survival",
-            "action:main:jiaoyou"
-          ],
-          "operator_dsl": "",
-          "scale": 1.2,
-          "stored_to": "747_kuangda.jiaoyou",
-          "archetype_id": "jiaoyou"
-        },
-        {
           "id": "silent_bailout",
           "name": "无言的解围 — 错买的冬衣",
           "tags": [
@@ -281,9 +240,7 @@
             "action:main:fangshi"
           ],
           "operator_dsl": "",
-          "scale": 1.0,
-          "stored_to": "747_kuangda.fangshi",
-          "archetype_id": "fangshi"
+          "scale": 1.0
         },
         {
           "id": "spiritual_anchor",
@@ -295,25 +252,10 @@
             "action:main:fangshi"
           ],
           "operator_dsl": "",
-          "scale": 1.1,
-          "stored_to": "747_kuangda.fangshi",
-          "archetype_id": "fangshi"
-        },
-        {
-          "id": "intel_routing",
-          "name": "资源的情报 — 隐秘的润笔",
-          "tags": [
-            "VIBE_THEME_MARTIAL:giant_roc",
-            "VIBE_PHILOSOPHY_ZEN:temple_bell",
-            "emotion_pair:pair_survival",
-            "action:main:jiaoyou"
-          ],
-          "operator_dsl": "",
-          "scale": 1.0,
-          "stored_to": "747_kuangda.jiaoyou",
-          "archetype_id": "jiaoyou"
+          "scale": 1.1
         }
       ]
     }
-  ]
+  ],
+  "archetype_id": "fangshi"
 }

@@ -1,0 +1,90 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_v285q"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_i7w5x"]
+[ext_resource type="Script" path="res://core/operators/emotion_operator.gd" id="3_y3lfd"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_2o58j"]
+[ext_resource type="Script" path="res://core/requirements/flag_requirement.gd" id="5_cgjwe"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="6_pv4h6"]
+[ext_resource type="Script" path="res://core/requirements/trait_requirement.gd" id="7_pqyty"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="8_p2jd4"]
+
+[sub_resource type="Resource" id="Resource_x0rkt"]
+script = ExtResource("3_y3lfd")
+value = 6
+
+[sub_resource type="Resource" id="Resource_vqcuw"]
+script = ExtResource("3_y3lfd")
+value = 11
+
+[sub_resource type="Resource" id="Resource_w5vva"]
+script = ExtResource("4_2o58j")
+operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_x0rkt"), SubResource("Resource_vqcuw")])
+
+[sub_resource type="Resource" id="Resource_slsjq"]
+script = ExtResource("5_cgjwe")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_jm8kp"]
+script = ExtResource("6_pv4h6")
+choice_result = SubResource("Resource_w5vva")
+requirement = SubResource("Resource_slsjq")
+description = "拂袖将茶碗扫落，纸条在湿痕里裂成两半。"
+
+[sub_resource type="Resource" id="Resource_t7vc8"]
+script = ExtResource("3_y3lfd")
+value = 6
+
+[sub_resource type="Resource" id="Resource_w1uae"]
+script = ExtResource("3_y3lfd")
+value = 11
+
+[sub_resource type="Resource" id="Resource_hkvq6"]
+script = ExtResource("4_2o58j")
+operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_t7vc8"), SubResource("Resource_w1uae")])
+
+[sub_resource type="Resource" id="Resource_bwcc7"]
+script = ExtResource("5_cgjwe")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_cfhsj"]
+script = ExtResource("6_pv4h6")
+choice_result = SubResource("Resource_hkvq6")
+requirement = SubResource("Resource_bwcc7")
+description = "双手接过那张报价单，脸上堆出笑容，腰已弯下三分。"
+
+[sub_resource type="Resource" id="Resource_ojw4i"]
+script = ExtResource("3_y3lfd")
+value = 6
+
+[sub_resource type="Resource" id="Resource_pmm1u"]
+script = ExtResource("3_y3lfd")
+value = 11
+
+[sub_resource type="Resource" id="Resource_rrxlj"]
+script = ExtResource("4_2o58j")
+operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_ojw4i"), SubResource("Resource_pmm1u")])
+
+[sub_resource type="Resource" id="Resource_wuiar"]
+script = ExtResource("6_pv4h6")
+choice_result = SubResource("Resource_rrxlj")
+description = "指尖压住纸条一角，不翻也不推，只问他要的这个名字，市价几何。"
+
+[sub_resource type="Resource" id="Resource_ygrro"]
+script = ExtResource("7_pqyty")
+trait_name = "kuangda_zuanying"
+
+[resource]
+script = ExtResource("8_p2jd4")
+requirement = SubResource("Resource_ygrro")
+era = "747_kuangda"
+archetype_id = "jiaoyou"
+_target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:medicine_stall", "ENV_NATURE_NIGHTMOON:dry_lips", "action:main:jiaoyou"])
+options = Array[ExtResource("1_v285q")]([SubResource("Resource_jm8kp"), SubResource("Resource_cfhsj"), SubResource("Resource_wuiar")])
+uuid = "zhuoliu_zuanying_intelligence_commodity"
+name = "茶案上的价码"
+description = "东市茶肆二楼临窗的位置，一个绸缎商把一张纸条推过案面。纸上只写着一个官员的名字，墨迹已干。他将茶碗搁在纸条旁边，碗底在纸上压出一圈湿痕。“上次你在盐商老张那儿‘问’的事，我听说过。”目光越过碗沿，不紧不慢地看着你，“我不是来为难你的。我也是来做生意的。”窗外楼下，东市的骡马队正在卸货，鞭子抽在青石板上的声响传上来。绸缎商从袖口又抽出一张叠好的纸，“这是价钱。你看看。”"
