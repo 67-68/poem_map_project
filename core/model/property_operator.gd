@@ -67,11 +67,53 @@ func describe_preview() -> String:
     if not prop:
         return ""
     var cn_name = prop.get_display_name() if not prop.name.is_empty() else property
-    var arrow = "↑" if value > 0 else "↓"
-    var perception_text = prop.get_change_perception_text(value)
-    if perception_text.is_empty():
-        return "%s%s" % [cn_name, arrow]
-    return "%s%s：%s" % [cn_name, arrow, perception_text]
+    var arrow_char = "↑" if value > 0 else "↓"
+    var arrow_count = _get_arrow_count(property, value)
+    var arrows = ""
+    for i in arrow_count:
+        arrows += arrow_char
+    return "%s %s" % [cn_name, arrows]
+
+## 查 named_amounts.json 找最近 S/M/L 档位，返回箭头数量（1-3）
+## 无匹配时返回 1（纯方向箭头）
+static func _get_arrow_count(prop_name: String, delta: int) -> int:
+    var amounts = NamedDSLParser._load_named_amounts()
+    if amounts.is_empty():
+        return 1
+
+    var abs_val = abs(delta)
+    var is_positive = delta > 0
+    var prop_lower = prop_name.to_lower()
+
+    # 过滤同号且包含 property 名的条目，记录绝对值
+    var candidates: Array[Dictionary] = []
+    for key in amounts:
+        var entry_val = amounts[key]
+        if (is_positive and entry_val > 0) or (not is_positive and entry_val < 0):
+            if key.contains(prop_lower):
+                candidates.append({"key": key, "abs": abs(entry_val)})
+
+    if candidates.is_empty():
+        return 1
+
+    # 找绝对值最接近的
+    var best_abs = candidates[0]["abs"]
+    var best_key = candidates[0]["key"]
+    var min_diff = abs(abs_val - best_abs)
+    for c in candidates:
+        var diff = abs(abs_val - c["abs"])
+        if diff < min_diff:
+            min_diff = diff
+            best_abs = c["abs"]
+            best_key = c["key"]
+
+    # 从 key 前缀判断 S/M/L
+    if best_key.begins_with("l_"):
+        return 3
+    elif best_key.begins_with("m_"):
+        return 2
+    else:  # s_ or anything else
+        return 1
 
 func get_referenced_flags() -> Array:
     return []

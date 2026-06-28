@@ -134,7 +134,7 @@ func _register_hover_popup() -> void:
 				vector_lines.append("• " + desc)
 	popup.set_vector_text("\n".join(vector_lines))
 	
-	HoverPopupManager.register(self, popup, 0.5, 0.15)
+	HoverPopupManager.register(self, popup, 0.2, 0.15)
 
 
 func _on_mouse_entered() -> void:

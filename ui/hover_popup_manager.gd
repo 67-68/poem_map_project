@@ -22,7 +22,7 @@ class HoverBinding:
 
 	var trigger: Control
 	var popup: Control
-	var delay: float = 0.5          # 悬停多久后弹出
+	var delay: float = 0.2          # 悬停多久后弹出
 	var hide_grace: float = 0.15    # 离开热区后容忍多久隐藏
 	var show_timer: Timer
 	var hide_timer: Timer
@@ -223,7 +223,7 @@ func _ready() -> void:
 ## 注册一对 trigger ↔ popup
 ## delay: 悬停延迟（秒），默认 0.5
 ## hide_grace: 离开宽容时间（秒），默认 0.15
-func register(trigger: Control, popup: Control, delay: float = 0.5, hide_grace: float = 0.15) -> void:
+func register(trigger: Control, popup: Control, delay: float = 0.2, hide_grace: float = 0.15) -> void:
 	if _bindings.has(trigger):
 		Logging.warn("HoverPopupManager: trigger already registered, unregistering first")
 		unregister(trigger)
@@ -411,8 +411,11 @@ func _on_hide_timer_timeout(trigger: Control) -> void:
 
 # ── 定位 ─────────────────────────────────────────────────
 
-## 将 popup 定位到鼠标指针位置，clamp 到屏幕内
+## 将 popup 定位到鼠标指针位置，智能四象限定位避免被遮挡
 ## top_level = true 时 popup.position 直接对齐屏幕坐标，无需矩阵变换
+## 优先级：右下 → 右上 → 左下 → 左上
+const POPUP_PADDING: float = 12.0
+
 func _position_popup_at_mouse(binding: HoverBinding) -> void:
 	var popup = binding.popup
 	var viewport := get_viewport()
@@ -429,20 +432,43 @@ func _position_popup_at_mouse(binding: HoverBinding) -> void:
 	if popup_size.x <= 0: popup_size.x = 320
 	if popup_size.y <= 0: popup_size.y = 200
 
-	# 目标位置：鼠标右下方（偏移 10px，避免挡住 trigger）
-	var target_x = mouse_pos.x + 10
-	var target_y = mouse_pos.y + 10
+	# 四象限候选位置（优先级：右下 → 右上 → 左下 → 左上）
+	var candidates := [
+		# 1. 右下
+		{ "x": mouse_pos.x + POPUP_PADDING, "y": mouse_pos.y + POPUP_PADDING,
+		  "right": mouse_pos.x + POPUP_PADDING + popup_size.x, "bottom": mouse_pos.y + POPUP_PADDING + popup_size.y,
+		  "pref": 4 },
+		# 2. 右上
+		{ "x": mouse_pos.x + POPUP_PADDING, "y": mouse_pos.y - popup_size.y - POPUP_PADDING,
+		  "right": mouse_pos.x + POPUP_PADDING + popup_size.x, "bottom": mouse_pos.y - POPUP_PADDING,
+		  "pref": 3 },
+		# 3. 左下
+		{ "x": mouse_pos.x - popup_size.x - POPUP_PADDING, "y": mouse_pos.y + POPUP_PADDING,
+		  "right": mouse_pos.x - POPUP_PADDING, "bottom": mouse_pos.y + POPUP_PADDING + popup_size.y,
+		  "pref": 2 },
+		# 4. 左上
+		{ "x": mouse_pos.x - popup_size.x - POPUP_PADDING, "y": mouse_pos.y - popup_size.y - POPUP_PADDING,
+		  "right": mouse_pos.x - POPUP_PADDING, "bottom": mouse_pos.y - POPUP_PADDING,
+		  "pref": 1 },
+	]
 
-	# clamp 屏幕边界
-	target_y = max(0.0, target_y)
-	if target_x + popup_size.x > viewport_size.x:
-		target_x = mouse_pos.x - popup_size.x - 10
-	if target_y + popup_size.y > viewport_size.y:
-		target_y = mouse_pos.y - popup_size.y - 10
-	target_x = max(0.0, target_x)
+	var best = null
+	for c in candidates:
+		# 检查是否完全在屏幕内
+		if c["x"] >= 0 and c["y"] >= 0 and c["right"] <= viewport_size.x and c["bottom"] <= viewport_size.y:
+			best = c
+			break
 
-	popup.position = Vector2(target_x, target_y)
-	Logging.debug("HoverPopupManager: positioned popup at (%d, %d)" % [target_x, target_y])
+	# 如果没有候选完全在屏幕内，fallback：按优先级选，然后 clamp
+	if best == null:
+		for c in candidates:
+			var tx = clamp(c["x"], 0.0, viewport_size.x - popup_size.x)
+			var ty = clamp(c["y"], 0.0, viewport_size.y - popup_size.y)
+			best = { "x": tx, "y": ty, "pref": c["pref"] }
+			break
+
+	popup.position = Vector2(best["x"], best["y"])
+	Logging.debug("HoverPopupManager: positioned popup at (%d, %d) (pref=%d, size=%s)" % [best["x"], best["y"], best["pref"], popup_size])
 
 # ── 越权拦截 ─────────────────────────────────────────────
 

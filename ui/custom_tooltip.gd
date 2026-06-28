@@ -1,33 +1,36 @@
-## 双层 CustomTooltip - Alt Reveal 工具提示
+## 统一 Hover 信息面板 — 叙事 + 分隔线 + 向量预览
 ##
-## 默认显示叙事层文本（锁定原因/内心挣扎）。
-## 按住 Alt 键时切换为向量层文本（operator 预览 + requirement 摘要）
-## 释放 Alt 键后恢复叙事层。
+## 上半部分显示叙事文本（action.description / 锁定原因）。
+## 下半部分显示向量预览（属性增减箭头 + 前提摘要）。
+## 两段同时可见，由 HoverInfoPopup 或 EventBtn._make_custom_tooltip 注入文本。
 ##
-## 由 EventBtn._make_custom_tooltip() 实例化并注入文本。
+## 由 EventBtn._make_custom_tooltip() 和 SceneActionPanel._register_hover_popup() 创建并注入文本。
 extends PanelContainer
 
-## 叙事层标签（默认可见，Alt 按下时半透明）
+## 叙事层标签
 var narrative_label: RichTextLabel
-## 向量层标签（默认隐藏，Alt 按下时可见）
+## 向量层标签（含 S/M/L 箭头）
 var vector_label: RichTextLabel
-
-## 叙事层半透明 alpha（Alt 按下时）
-const NARRATIVE_FADE_ALPHA: float = 0.3
-## 叙事层全透明度的 tween 持续时间（秒）
-const FADE_DURATION: float = 0.15
+## 分隔线
+var separator: HSeparator
+## 外部容器
+var _vbox: VBoxContainer
 
 var _narrative_text: String = ""
 var _vector_text: String = ""
-var _alt_pressed: bool = false
+var _has_vector_data: bool = false
 
 func _init():
-	# 确保工具提示在所有暂停状态下都能工作
 	process_mode = PROCESS_MODE_ALWAYS
 	mouse_filter = MOUSE_FILTER_IGNORE
 	size_flags_horizontal = SIZE_SHRINK_CENTER
 
 func _ready() -> void:
+	# ── 外层 VBox ──
+	_vbox = VBoxContainer.new()
+	_vbox.name = "VBox"
+	add_child(_vbox)
+
 	# ── 叙事层 RichTextLabel ──
 	narrative_label = RichTextLabel.new()
 	narrative_label.name = "NarrativeLabel"
@@ -36,7 +39,14 @@ func _ready() -> void:
 	narrative_label.custom_minimum_size = Vector2(280, 0)
 	narrative_label.fit_content = true
 	narrative_label.mouse_filter = MOUSE_FILTER_IGNORE
-	add_child(narrative_label)
+	_vbox.add_child(narrative_label)
+
+	# ── 分隔线（默认隐藏，有向量数据时再显示）──
+	separator = HSeparator.new()
+	separator.name = "Separator"
+	separator.mouse_filter = MOUSE_FILTER_IGNORE
+	separator.visible = false
+	_vbox.add_child(separator)
 
 	# ── 向量层 RichTextLabel ──
 	vector_label = RichTextLabel.new()
@@ -47,40 +57,30 @@ func _ready() -> void:
 	vector_label.fit_content = true
 	vector_label.mouse_filter = MOUSE_FILTER_IGNORE
 	vector_label.visible = false
-	add_child(vector_label)
+	_vbox.add_child(vector_label)
 
 	# ── 应用文本 ──
 	if not _narrative_text.is_empty():
 		narrative_label.text = _narrative_text
 	if not _vector_text.is_empty():
 		vector_label.text = _vector_text
-
-
-func _process(_delta: float) -> void:
-	# 每帧检测 Alt 键状态
-	var alt_down = Input.is_key_pressed(KEY_ALT)
-	if alt_down == _alt_pressed:
-		return  # 状态未变化
-
-	_alt_pressed = alt_down
-	if alt_down:
-		# Alt 按下：叙事层褪色，向量层可见
-		narrative_label.modulate.a = NARRATIVE_FADE_ALPHA
+		_has_vector_data = true
+		separator.visible = true
 		vector_label.visible = true
-	else:
-		# Alt 松开：叙事层恢复，向量层隐藏
-		narrative_label.modulate.a = 1.0
-		vector_label.visible = false
 
 
-## 设置叙事层文本（锁定原因/内心挣扎）
+## 设置叙事层文本（行动描述 / 锁定原因）
 func set_narrative_text(text: String) -> void:
 	_narrative_text = text
 	if narrative_label:
 		narrative_label.text = text
 
-## 设置向量层文本（operator 预览 + requirement 摘要）
+## 设置向量层文本（属性增减箭头 + 前提摘要）
 func set_vector_text(text: String) -> void:
 	_vector_text = text
+	_has_vector_data = not text.is_empty()
 	if vector_label:
 		vector_label.text = text
+		vector_label.visible = _has_vector_data
+	if separator:
+		separator.visible = _has_vector_data

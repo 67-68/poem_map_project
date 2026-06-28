@@ -88,7 +88,7 @@ func _ready() -> void:
 		if ambition_hud:
 			Logging.info("LeftPlayerPanel: resolved ambition_hud by path fallback")
 	if ambition_hud:
-		HoverPopupManager.register(_ambition_btn, ambition_hud, 0.5, 0.15)
+		HoverPopupManager.register(_ambition_btn, ambition_hud, 0.2, 0.15)
 		Logging.info("LeftPlayerPanel: registered ambition_hud with HoverPopupManager")
 	else:
 		Logging.warn("LeftPlayerPanel: ambition_hud is null, hover popup disabled")

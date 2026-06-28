@@ -1,16 +1,16 @@
 @tool
 class_name HoverInfoPopup extends PanelContainer
 
-## Hover 信息浮层 — 包裹 CustomTooltip，支持 Alt 双层揭示
+## Hover 信息浮层 — 包裹 CustomTooltip，统一显示叙事文本 + 分隔线 + 向量预览
 ##
-## 叙事层（默认）：action.description — NarrativeText type variation（墨青色）
-## 向量层（Alt）：describe_preview() + describe_requirement() — DefaultText type variation（深灰）
+## 叙事层：action.description（上半部分）
+## 向量层：describe_preview() 箭头格式 + describe_requirement()（下半部分，分隔线后）
 ##
 ## 使用方式：
 ##   var popup = HoverInfoPopup.new()
 ##   popup.set_narrative_text(action.description)
 ##   popup.set_vector_text(vector_str)
-##   HoverPopupManager.register(source_node, popup, 0.5, 0.15)
+##   HoverPopupManager.register(source_node, popup, 0.2, 0.15)
 
 
 func _init() -> void:
@@ -24,14 +24,14 @@ func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-## 设置叙事层文本（默认可见，墨青色 NarrativeText）
+## 设置叙事层文本（行动描述 / 锁定原因，统一显示）
 func set_narrative_text(text: String) -> void:
 	var ct := _get_ct()
 	if ct:
 		ct.set_narrative_text(text)
 
 
-## 设置向量层文本（Alt 按下时可见，深灰色 DefaultText）
+## 设置向量层文本（属性增减箭头 + 前提摘要，分隔线后统一显示）
 func set_vector_text(text: String) -> void:
 	var ct := _get_ct()
 	if ct:
