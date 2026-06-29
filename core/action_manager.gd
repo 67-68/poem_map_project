@@ -300,8 +300,8 @@ func begin_action_batch() -> void:
 func end_action_batch() -> void:
 	_suppress_reevaluate = false
 	reevaluate_all_locks()
-	# 🆕 强制刷新 action 面板（兜底 on_xun_tick → refresh() 信号可能失效的情况）
-	EventBus.request_refresh_action_panel.emit()
+	# 不再触发全量 refresh() — 全量刷新仅由 on_xun_tick 负责
+	# 锁定态增量更新由 reevaluate_all_locks() → _refresh_locks_only() 处理
 
 
 ## player_stat_changed 信号回调。

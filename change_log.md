@@ -1,5 +1,11 @@
 # [unreleased]
 
+## Fixed
+- **行动按钮 TOCTOU Bug** — 点击"拜谒"触发"独酌"事件的时序错误
+  - [`core/action_manager.gd`](core/action_manager.gd:300) — 删除 `end_action_batch()` 中的 `request_refresh_action_panel.emit()`，全量按钮重建仅由 `on_xun_tick` 触发；锁定态增量更新由 `reevaluate_all_locks()` → `_refresh_locks_only()` 处理
+  - [`ui/action_button.gd`](ui/action_button.gd:156) — `_on_button_pressed()` 在 `end_action_batch()` 之前快照 action 元数据（main_tag、fallback、generator、action_tags），事件扫描使用快照而非 `self.action`，防御 `refresh() → update_action()` 覆盖 `self.action`
+  - 根因：`SceneActionScroll.refresh()` 调用 `update_action()` 在按钮自己的信号 handler 栈帧内替换了 `self.action`，导致后续代码读到错误的 action 引用（拜谒 → 独酌）
+
 ## Changed
 - **属性矩阵大清理** — 属性从 12+6 缩减至 6 个核心属性
   - [`model/enumerates.gd`](model/enumerates.gd) — `PROPS` 枚举重构：只保留 `MONEY`, `HEALTH`, `TIME`, `LITERARY_FAME`, `PROGRESS`, `TALENT`

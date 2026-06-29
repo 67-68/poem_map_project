@@ -35,7 +35,7 @@ var _guaranteed_events: Array[Dictionary] = []
 
 func _ready():
     Logging.info("[EventManager] EventManager initialized")
-    TimeService.on_xun_tick.connect(scan_events)
+    # TimeService.on_xun_tick.connect(scan_events)
     Logging.info("[EventManager] Connected to TimeService.on_xun_tick")
     guarantee_next.connect(_on_guarantee_next)
 

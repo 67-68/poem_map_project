@@ -173,17 +173,32 @@ func _on_button_pressed() -> void:
 		action.record_click()
 		Logging.info("SceneActionPanel: Decision '%s' click %d/%d" % [action.name, action._times_clicked, action.allowed_count])
 	
+	# 🆕 快照：在 begin_action_batch 之前锁定 action 元数据
+	# r.operate() 中的 TimeOperator 可能触发 xun 推进 → on_xun_tick → refresh()
+	# → update_action() 覆盖 self.action，必须在任何副作用发生前快照
+	var _snap_is_scene := action is SceneAction
+	var _snap_main_tag := ""
+	var _snap_fallback := ""
+	var _snap_tags: Array[String] = []
+	var _snap_generator = action.generator
+	if _snap_is_scene:
+		var sa := action as SceneAction
+		_snap_main_tag = sa.main_tag
+		_snap_fallback = sa.fallback_event_uuid
+		_snap_tags = sa.action_tags.duplicate()
+	
 	# 🆕 批量模式：抑制属性变动期间的 reevaluate，全部 results 执行完后统一评估
 	ActionManager.begin_action_batch()
 	if action.action_results:
 		for r in action.action_results: r.operate()
+	
 	ActionManager.end_action_batch()
 	
 	# ── Focus session 点击计数 hook ──
 	ActionManager.on_focus_action_clicked()
 	
 	# ── Generator 消费（统一入口）──
-	var had_generator := action.generator != null
+	var had_generator := _snap_generator != null
 	ActionManager.consume_generator(action)
 	
 	# ── Decision 点击后触发 UI 即时刷新 ──
@@ -195,14 +210,12 @@ func _on_button_pressed() -> void:
 	if had_generator:
 		return
 	
-	# 🚀 革新后：不再需要标准化，前缀匹配自动忽略第4级
-	# SceneAction 有 main_tag 用于事件扫描；Decision 无此字段，跳过
-	if action is SceneAction:
-		var scene_action := action as SceneAction
-		for tag in scene_action.action_tags:
+	# 🚀 使用快照数据进行事件扫描（防止 self.action 在 refresh() 中被覆盖）
+	if _snap_is_scene:
+		for tag in _snap_tags:
 			PlayerState.current_action_tags.append(tag)
 		var context = {
-			'main_tag': scene_action.main_tag,
-			'fallback_event_uuid': scene_action.fallback_event_uuid,
+			'main_tag': _snap_main_tag,
+			'fallback_event_uuid': _snap_fallback,
 		}
 		EventManager.scan_events(0, context)

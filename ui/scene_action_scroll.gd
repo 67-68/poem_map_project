@@ -8,6 +8,7 @@ func refresh():
 	提供最多六个选中 + 其余灰化锁定展示
 	算法：权重加和，
 	"""
+	#breakpoint
 	Logging.debug("[SceneActionScroll] refresh() 被调用")
 	var available_actions = ActionManager.get_available_scene_actions()
 	var selected_actions = ActionManager.pick_top_actions(available_actions)
