@@ -40,6 +40,8 @@ func init(_context: Dictionary) -> Dictionary:
 func operate():
 	Logging.debug("PropertyOperator.operate: property=" + property + ", value=" + str(value))
 	PlayerState.append_stat(property, value)
+	# 触发属性变化音效（AudioManager 统一管理 0.4s 防重叠间隔）
+	AudioManager.play_property_sound(property, value)
 	_emit_float_text(value)
 
 func _emit_float_text(delta: int) -> void:
@@ -66,12 +68,15 @@ func describe_preview() -> String:
 	if not prop:
 		return ""
 	var cn_name = prop.get_display_name() if not prop.name.is_empty() else property
-	var arrow_char = "+" if value > 0 else "-"
+	var arrow_char = "↑" if value > 0 else "↓"
 	var arrow_count = _get_arrow_count(property, value)
 	var arrows = ""
 	for i in arrow_count:
 		arrows += arrow_char
-	return cn_name + " " + arrows
+	var perception_text = prop.get_change_perception_text(value)
+	if perception_text.is_empty():
+		return cn_name + " " + arrows
+	return cn_name + " " + arrows + "：" + perception_text
 
 static func _get_arrow_count(prop_name: String, delta: int) -> int:
 	var amounts = NamedDSLParser._load_named_amounts()

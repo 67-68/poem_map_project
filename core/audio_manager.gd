@@ -1,6 +1,7 @@
 # AudioManager.gd (完整版)
 extends Node
 const _Util = preload("res://core/util.gd")
+const _PropertySoundMapper = preload("res://core/property_sound_mapper.gd")
 
 const LOG_TAG := "AudioManager"
 
@@ -9,6 +10,11 @@ const LOG_TAG := "AudioManager"
 # 每个子目录名 = 类别名，例如: "click" → [AudioStream, AudioStream, ...]
 var _sfx_category_cache: Dictionary = {}
 const SFX_ROOT: String = "res://assets/sounds"
+
+# ── 属性音效播放间隔控制 ──
+# 连续属性变化时，两次播放至少间隔 0.4s，避免音效同时盖过
+const PROPERTY_SOUND_COOLDOWN: float = 0.4
+var _last_property_sound_time: float = 0.0
 
 # BGM 轨道
 var _bgm_track_1: AudioStreamPlayer
@@ -266,8 +272,6 @@ func play_sfx_category(category: String, pitch_randomness: float = 0.1, volume_d
 	var stream = streams[randi() % streams.size()]
 	play_sfx(stream, pitch_randomness, volume_db)
 	return true
-
-
 # 获取类别缓存（暴露给外部调试用）
 func get_sfx_category(category: String) -> Array[AudioStream]:
 	return _sfx_category_cache.get(category, [])
@@ -276,6 +280,43 @@ func get_sfx_category(category: String) -> Array[AudioStream]:
 func get_all_sfx_categories() -> Array[String]:
 	return _sfx_category_cache.keys()
 
+
+# ---------------------------------------------------------
+# 属性变化音效 (Property Sound Effects)
+# ---------------------------------------------------------
+## 播放属性变化音效，带 0.4s 防重叠间隔
+## 由 PropertyOperator 等 DSL 操作符在属性变化后调用
+func play_property_sound(prop_name: String, delta: int) -> void:
+	if delta == 0 or prop_name.is_empty():
+		return
+
+	# ── 0.4s 防重叠间隔 ──
+	# 连续属性变化时，若上次播放不足 0.4s 前，跳过本次播放
+	var now := Time.get_ticks_msec() / 1000.0
+	if now - _last_property_sound_time < PROPERTY_SOUND_COOLDOWN:
+		Logging.debug("%s: 属性音效被防重叠间隔跳过: prop=%s, delta=%d" % [LOG_TAG, prop_name, delta])
+		return
+
+	var stream := _PropertySoundMapper.get_property_sound(prop_name, delta)
+	if stream:
+		play_sfx(stream)
+		_last_property_sound_time = now
+
+
+## 播放意象升级音效，带 0.4s 防重叠间隔
+func play_imaginary_sound(level: int) -> void:
+	if level < 1 or level > 3:
+		return
+
+	var now := Time.get_ticks_msec() / 1000.0
+	if now - _last_property_sound_time < PROPERTY_SOUND_COOLDOWN:
+		Logging.debug("%s: 意象音效被防重叠间隔跳过: level=%d" % [LOG_TAG, level])
+		return
+
+	var stream := _PropertySoundMapper.get_imaginary_sound(level)
+	if stream:
+		play_sfx(stream)
+		_last_property_sound_time = now
 
 func play_sfx_loop(category: String, pitch_randomness: float = 0.0, volume_db: float = 0.0) -> bool:
 	"""从类别随机选一个音效，用独立循环播放器无限循环。返回是否成功。"""

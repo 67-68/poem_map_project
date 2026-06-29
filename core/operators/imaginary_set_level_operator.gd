@@ -33,3 +33,7 @@ func operate():
 	var old_level = ima.current_level
 	ima.current_level = target_level
 	Logging.info("ImaginarySetLevelOperator.operate: 意象 '%s' 等级从 %d 设置为 %d" % [imaginary_name, old_level, target_level])
+
+	# 等级提升时播放意象升级音效（AudioManager 统一管理 0.4s 防重叠间隔）
+	if target_level > old_level:
+		AudioManager.play_imaginary_sound(target_level)

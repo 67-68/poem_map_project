@@ -229,17 +229,8 @@ func on_enter(context: Dictionary) -> void:
     if not custom_context_params.is_empty():
         Util.merge_context(context, custom_context_params)
     
-    # ── Archetype 运行时注入：从 JSON 动态翻译 universal_result 并追加 ──
+    # ── Archetype era 兜底：若 event 自身 era 为空则用 archetype era ──
     if not archetype_id.is_empty():
-        var archetype_result := _get_archetype_result()
-        if archetype_result and not archetype_result.operators.is_empty():
-            Logging.info("RandomEvent.on_enter: archetype '%s' universal_result (%d operators) appended to event '%s'" % [archetype_id, archetype_result.operators.size(), name])
-            if not on_enter_result:
-                on_enter_result = ChoiceResult.new()
-                on_enter_result.operators = [] as Array[BaseOperator]
-            on_enter_result.operators.append_array(archetype_result.operators)
-        
-        # ── Archetype era 兜底：若 event 自身 era 为空则用 archetype era ──
         if era.is_empty():
             var archetype_era := _get_archetype_era()
             if not archetype_era.is_empty():
@@ -252,8 +243,29 @@ func on_enter(context: Dictionary) -> void:
 
 func init(context: Dictionary) -> Array:
     # on_enter 已在 super.init() → BaseEvent.init() 中调用，
-    # 所有前置逻辑（custom_context_params merge + event_result）已在 on_enter 中完成。
+    # 所有前置逻辑（custom_context_params merge）已在 on_enter 中完成。
     var all_options = super.init(context)
+    
+    # ── Archetype 运行时注入：universal_result → per-option choice_result ──
+    if not archetype_id.is_empty():
+        var archetype_result := _get_archetype_result()
+        if archetype_result and not archetype_result.operators.is_empty():
+            Logging.info("RandomEvent.init: archetype '%s' universal_result (%d operators) injected into each of %d option(s) for event '%s'" % [archetype_id, archetype_result.operators.size(), all_options.size(), name])
+            for opt in all_options:
+                if opt == null:
+                    continue
+                if not "choice_result" in opt:
+                    continue
+                var cr: ChoiceResult = opt.choice_result
+                if not cr:
+                    cr = ChoiceResult.new()
+                    cr.operators = [] as Array[BaseOperator]
+                # 深拷贝 operator 避免多选项共享同一引用
+                for op in archetype_result.operators:
+                    cr.operators.append(op.duplicate())
+                opt.choice_result = cr
+                cr.init(context)
+    
     return all_options
 
 # 会被使用time operator中的source tag匹配. 由于无法集合两个enum那就单独写再集合
