@@ -9,6 +9,18 @@ const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
 const _RequirementFilter = preload("res://core/model/requirement_filter.gd")
 const _SocialActionResolver = preload("res://core/social_action_resolver.gd")
 const _TagManager = preload("res://core/tag_manager.gd")
+const _RandomEvent = preload("res://model/random_event.gd")
+
+## 硬编码 fallback 映射：archetype → fallback event uuid
+const FALLBACK_MAP: Dictionary = {
+	"baiye": "baiye_fallback",
+	"denggao": "denggao_fallback",
+	"duzhuo": "duzhuo_fallback",
+	"fangshi": "fangshi_fallback",
+	"jiaoyou": "jiaoyou_fallback",
+}
+## 通用兜底 fallback（当 main_tag 无法匹配任何 archetype 时使用）
+const GENERIC_FALLBACK: String = "event_cooldown_wall"
 
 @export var current_event_pool: Array[EventTicket] = []
 ## 过滤器链：前置函数式过滤器 → 意向匹配
@@ -30,6 +42,23 @@ func _ready():
 func _on_guarantee_next(event_key: String, main_tag: String) -> void:
     _guaranteed_events.push_back({"event_key": event_key, "main_tag": main_tag})
     Logging.info("[EventManager] Guaranteed next event (FIFO push): " + event_key + " (main_tag: '" + main_tag + "') queue_size=" + str(_guaranteed_events.size()))
+
+## 从 main_tag 推导硬编码 fallback event uuid。
+## main_tag 形如 "action:main:baiye" → 提取 "baiye" → 查 FALLBACK_MAP → "baiye_fallback"
+## 如果 main_tag 为空或无法匹配 archetype，返回 GENERIC_FALLBACK。
+func _resolve_hardcoded_fallback(main_tag: String) -> String:
+    var result: String = GENERIC_FALLBACK
+    if not main_tag.is_empty():
+        # 提取 archetype: "action:main:baiye" → "baiye"
+        var archetype: String = main_tag
+        if main_tag.begins_with("action:"):
+            archetype = main_tag.substr(main_tag.rfind(":") + 1)
+        if FALLBACK_MAP.has(archetype):
+            result = FALLBACK_MAP[archetype]
+    
+    Logging.info("[EventManager] _resolve_hardcoded_fallback: main_tag='%s' → '%s'" % [main_tag, result])
+    return result
+
 
 func _create_ticket(event: BaseEvent) -> EventTicket:
     var ticket = EventTicket.new()
@@ -204,7 +233,13 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
         if fallback_event_uuid != "":
             Logging.info("[EventManager] Event pool is empty, using fallback: " + fallback_event_uuid)
             return fallback_event_uuid
-        Logging.info("[EventManager] Event pool is empty, returning null")
+        # 🆕 无 context fallback 时，使用硬编码 fallback
+        var hardcoded_fallback = _resolve_hardcoded_fallback(context.get('main_tag', ''))
+        var fb_event = Database.resolve(hardcoded_fallback)
+        if fb_event is _RandomEvent:
+            Logging.info("[EventManager] Event pool is empty, using hardcoded fallback: " + hardcoded_fallback)
+            return hardcoded_fallback
+        Logging.warn("[EventManager] Event pool is empty, hardcoded fallback '" + hardcoded_fallback + "' not found, returning null")
         return null
 
     var total_weight := 0.0
@@ -236,8 +271,13 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
     if fallback_event_uuid != "":
         Logging.info("[EventManager] Roll fell in null weight range, using fallback event: " + fallback_event_uuid)
         return fallback_event_uuid
-    else:
-        Logging.info("[EventManager] Roll fell in null weight range, no event triggered")
-        return null
+    # 🆕 无 context fallback 时，使用硬编码 fallback
+    var hardcoded_fallback = _resolve_hardcoded_fallback(context.get('main_tag', ''))
+    var fb_event = Database.resolve(hardcoded_fallback)
+    if fb_event is _RandomEvent:
+        Logging.info("[EventManager] Roll fell in null weight range, using hardcoded fallback: " + hardcoded_fallback)
+        return hardcoded_fallback
+    Logging.warn("[EventManager] Roll fell in null weight range, hardcoded fallback '" + hardcoded_fallback + "' not found, returning null")
+    return null
 
 

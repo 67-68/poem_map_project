@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bftpom8oqovnx"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_7twmu"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_1xwmw"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_o4tpl"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_thmqf"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_65fr3"]
+
+[sub_resource type="Resource" id="Resource_axncj"]
+script = ExtResource("3_o4tpl")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_mfw3a"]
+script = ExtResource("4_thmqf")
+choice_result = SubResource("Resource_axncj")
+description = "baiye_fallback"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_65fr3")
+weight = 0.0
+archetype_id = "duzhuo"
+options = Array[ExtResource("1_7twmu")]([SubResource("Resource_mfw3a")])
+uuid = "duzhuo_fallback"
+name = "duzhuo_fallback"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

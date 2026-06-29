@@ -87,6 +87,6 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("3_1ub2h")]([SubResource("Resource_atsab"), SubResource("Resource_0w2bm")])
 on_enter_result = SubResource("Resource_l555t")
-uuid = "bai_ye_real_appearance_placeholder"
+uuid = "bai_ye_real_appearance_fallback"
 name = "冷茶与残稿"
 description = "诗尚可,把名字抹了,改日送与刘参军.又转头向你笑道:赐坐,赏你一壶茶.侍从端来一壶冷茶"
