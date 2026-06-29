@@ -24,8 +24,13 @@ static func comprehend_category(category_id: String) -> bool:
 	ima.basic_imaginaries.clear()
 
 	# 写入坍缩结果
+	var old_level = ima.current_level
 	ima.current_tier = final_tier
 	ima.current_level = final_level
+
+	if final_level != old_level:
+		Logging.info("ImaginaryComprehender.comprehend_category: '%s' level 变化 %d→%d，发射信号" % [category_id, old_level, final_level])
+		EventBus.imaginary_changed.emit()
 
 	return true
 
@@ -79,8 +84,13 @@ static func merge_category(category_id: String) -> bool:
 	ima.basic_imaginaries.clear()
 
 	# 写入坍缩结果
+	var old_level = ima.current_level
 	ima.current_tier = final_tier
 	ima.current_level = final_level
+
+	if final_level != old_level:
+		Logging.info("ImaginaryComprehender.merge_category: '%s' level 变化 %d→%d，发射信号" % [category_id, old_level, final_level])
+		EventBus.imaginary_changed.emit()
 
 	Logging.info("ImaginaryComprehender.merge_category: '%s' 合并成功 (tier=%d, level=%d, fragments=%d)" %
 		[category_id, final_tier, final_level, ima.merged.size()])

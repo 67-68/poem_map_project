@@ -9,6 +9,11 @@ var selected_imaginaries: Array[ImaginaryTag] = []
 const _ABSTRACT_CONCEPT_SCENE := preload("res://ui/poem_uis/abstract_concept.tscn")
 const _DETAIL_IMAGINARY_SCENE := preload("res://ui/poem_uis/detail_imaginary.tscn")
 
+## 当前 hover 的 AbstractConcept（用于 hover 高亮）
+var _hovered_concept: AbstractConcept = null
+## 每个 AbstractConcept 的原始 modulate（hover 恢复用）
+var _concept_original_modulates: Dictionary = {}  # AbstractConcept → Color
+
 func _ready() -> void:
 	Logging.info('PoemCrafter: initializing poem crafter')
 
@@ -22,7 +27,7 @@ func _ready() -> void:
 		if c.has_signal("slot_clicked"):
 			c.slot_clicked.connect(on_slot_clicked)
 
-	# 连接 SubViewportContainer gui_input 检测 SubViewport 内部点击
+	# 连接 SubViewportContainer gui_input 检测 SubViewport 内部点击 / hover
 	var svp_container := $Panel/VBoxContainer/HBoxContainer/SubViewportContainer
 	svp_container.gui_input.connect(_on_subviewport_gui_input)
 	Logging.info('PoemCrafter: connected subviewport gui_input')
@@ -32,10 +37,16 @@ func _ready() -> void:
 
 
 # ──────────────────────────────────────────────
-# SubViewport 点击检测 — 物理空间拾取
+# SubViewport 输入检测 — 物理空间拾取（点击 + hover）
 # ──────────────────────────────────────────────
 
 func _on_subviewport_gui_input(event: InputEvent) -> void:
+	# ── 鼠标移动 → hover 检测 ──
+	if event is InputEventMouseMotion:
+		_update_hover(event.position)
+		return
+
+	# ── 鼠标点击 → 音效 + 动作 ──
 	if not (event is InputEventMouseButton) or not event.pressed:
 		return
 
@@ -78,13 +89,65 @@ func _on_subviewport_gui_input(event: InputEvent) -> void:
 			Logging.info('PoemCrafter: AbstractConcept hit=%s btn=%d' % [collider.concept_name, event.button_index])
 			match event.button_index:
 				MOUSE_BUTTON_LEFT:
+					AudioManager.play_sfx_category("leather")
 					on_concept_selected(collider.imaginary_tag)
 					return
 				MOUSE_BUTTON_RIGHT:
+					AudioManager.play_sfx_category("stone_throw_in_lake")
 					on_concept_merge_requested(collider.imaginary_tag)
 					return
 
 	Logging.info('PoemCrafter: no AbstractConcept at click position')
+
+
+## 根据鼠标位置更新 hover 状态
+func _update_hover(mouse_pos: Vector2) -> void:
+	var viewport := _get_subviewport()
+	if not viewport:
+		return
+
+	var local_pos = viewport.canvas_transform.affine_inverse() * mouse_pos
+	if local_pos.x < 0 or local_pos.y < 0 or local_pos.x > viewport.size.x or local_pos.y > viewport.size.y:
+		_clear_hover()
+		return
+
+	var space_state := viewport.world_2d.direct_space_state
+	if not space_state:
+		return
+
+	var query := PhysicsPointQueryParameters2D.new()
+	query.position = local_pos
+	query.collide_with_areas = true
+	query.collision_mask = 1
+
+	var results := space_state.intersect_point(query)
+	for r in results:
+		var collider := r.get("collider") as Node
+		if collider is AbstractConcept:
+			if _hovered_concept != collider:
+				_clear_hover()
+				_hovered_concept = collider
+				_apply_hover_enter(collider)
+			return
+
+	# 鼠标不在任何 concept 上
+	_clear_hover()
+
+
+func _apply_hover_enter(concept: AbstractConcept) -> void:
+	var hover_color := concept.modulate.lerp(Color.WHITE, 0.25)
+	var tw := create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(concept, "modulate", hover_color, 0.12)
+
+
+func _clear_hover() -> void:
+	if not _hovered_concept:
+		return
+	var concept := _hovered_concept
+	_hovered_concept = null
+	var original_color: Color = _concept_original_modulates.get(concept, concept.modulate)
+	var tw := create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(concept, "modulate", original_color, 0.15)
 
 
 # ──────────────────────────────────────────────
@@ -105,7 +168,9 @@ func _rebuild_subviewport() -> void:
 		Logging.warn('PoemCrafter: SubViewport not found, skipping rebuild')
 		return
 
-	# 清除旧动态节点
+	# 清除旧动态节点及 hover 状态
+	_clear_hover()
+	_concept_original_modulates.clear()
 	for child in viewport.get_children():
 		child.queue_free()
 
@@ -157,6 +222,7 @@ func _rebuild_subviewport() -> void:
 			concept.position = center + Vector2(cos(angle), sin(angle)) * concept_radius
 
 		viewport.add_child(concept)
+		_concept_original_modulates[concept] = concept.modulate
 
 		# 创建 OrbitDetail 节点（作为 concept 的子节点，便于吸入动画）
 		# 仅当有未合并碎片时创建

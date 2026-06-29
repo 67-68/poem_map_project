@@ -2,6 +2,7 @@
 extends Node
 const _Util = preload("res://core/util.gd")
 const _PropertySoundMapper = preload("res://core/property_sound_mapper.gd")
+const _ImaginarySoundListener = preload("res://core/imaginary_sound_listener.gd")
 
 const LOG_TAG := "AudioManager"
 
@@ -52,6 +53,9 @@ func _ready():
 	
 	# 4. 扫描 assets/sounds/ 子目录，预加载分类音效
 	_load_sfx_categories()
+
+	# 5. 初始化意象音效监听器（独立节点，解耦 Operator 与 AudioManager）
+	_initialize_imaginary_sound_listener()
 
 # ── _process: 被动 BGM 互斥监控 ──
 func _process(_delta: float) -> void:
@@ -334,6 +338,14 @@ func play_imaginary_sound(level: int) -> void:
 		Logging.debug("%s: 意象音效延迟 %.2fs 播放: level=%d" % [LOG_TAG, delay, level])
 		await get_tree().create_timer(delay).timeout
 		play_sfx(stream)
+
+
+## 初始化意象音效监听器（独立节点，解耦 Operator 与 AudioManager 的直接调用）
+func _initialize_imaginary_sound_listener() -> void:
+	var listener := _ImaginarySoundListener.new()
+	listener.name = "ImaginarySoundListener"
+	add_child(listener)
+	Logging.info("%s: ImaginarySoundListener 已实例化并添加到场景树" % LOG_TAG)
 
 func play_sfx_loop(category: String, pitch_randomness: float = 0.0, volume_db: float = 0.0) -> bool:
 	"""从类别随机选一个音效，用独立循环播放器无限循环。返回是否成功。"""

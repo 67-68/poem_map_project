@@ -36,15 +36,36 @@ func _ready() -> void:
 	_original_modulate = modulate
 	_apply_label()
 	input_event.connect(_on_input_event)
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if not (event is InputEventMouseButton) or not event.pressed:
 		return
 	match event.button_index:
 		MOUSE_BUTTON_LEFT:
+			AudioManager.play_sfx_category("leather")
 			concept_selected.emit(imaginary_tag)
 		MOUSE_BUTTON_RIGHT:
+			AudioManager.play_sfx_category("stone_throw_in_lake")
 			concept_merge_requested.emit(imaginary_tag)
+
+
+## Hover 时略微变白
+func _on_mouse_entered() -> void:
+	var hover_color := modulate.lerp(Color.WHITE, 0.25)
+	if _blink_tween and _blink_tween.is_valid():
+		_blink_tween.kill()
+		_blink_tween = null
+	var tw := create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(self, "modulate", hover_color, 0.12)
+
+func _on_mouse_exited() -> void:
+	var target_color := _original_modulate
+	if _blink_tween and _blink_tween.is_valid():
+		return
+	var tw := create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(self, "modulate", target_color, 0.15)
 
 func _apply_label() -> void:
 	var label := get_node_or_null("Label") as Label
@@ -99,6 +120,7 @@ func play_merge_animation(target_tier: int = 0) -> void:
 		var tw := create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 		tw.tween_property(self, "modulate", target_color, 0.5)
 		await tw.finished
+		_original_modulate = target_color
 
 	emit_signal("merge_animation_finished", imaginary_tag)
 

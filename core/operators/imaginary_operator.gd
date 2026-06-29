@@ -15,9 +15,12 @@ func operate():
         'upgrade_1':
             if not ima.current_level == 3:
                 ima.current_level += 1
-                # 播放意象升级音效（AudioManager 统一管理 0.4s 防重叠间隔）
-                AudioManager.play_imaginary_sound(ima.current_level)
+                Logging.info('imagery operator: %s upgraded to level %d' % [imaginary_name, ima.current_level])
+                EventBus.imaginary_changed.emit()
         'downgrade_1':
-            if not ima.current_level == 0: ima.current_level -= 1
+            if not ima.current_level == 0:
+                ima.current_level -= 1
+                Logging.info('imagery operator: %s downgraded to level %d' % [imaginary_name, ima.current_level])
+                EventBus.imaginary_changed.emit()
         _:
             Logging.err('imagery operator: unknown operation: %s' % operation)
