@@ -106,17 +106,6 @@ func scan_poem_events(imaginaries: Array[ImaginaryConcept]):
     for i in imaginaries:
         imas[i.uuid] = i
 
-    for p in Database.get_legendary_poems_all().values():
-        if Database.get_legendary_poems_all().is_empty():
-            Logging.err('the legendary poems is somehow contain nothing! this will cause error!!')
-        var created = true
-        for d in p.imagenary_demand:
-            if not (d.imagenary_name in imas and imas[d.imagenary_name].current_level >= d.level):
-                created = false
-                break
-        if created:
-            return p
-        
     var tags = []
     for i in imaginaries:
         for detail_imag in ImaginaryComprehender.get_imaginaries_for_concept(i.uuid):

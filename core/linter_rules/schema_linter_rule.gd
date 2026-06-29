@@ -80,11 +80,6 @@ func execute(event_data: Node) -> void:
 	else:
 		Logging.info("✓ imaginaries 加载成功 (包含 %d 个想象)" % event_data.imaginaries.size())
 	
-	# 验证legendary_poems
-	if event_data.legendary_poems.is_empty():
-		add_error("legendary_poems 为空")
-	else:
-		Logging.info("✓ legendary_poems 加载成功 (包含 %d 个传奇诗词)" % event_data.legendary_poems.size())
 	
 	# 验证normal_poem_events
 	if event_data.normal_poem_events.is_empty():

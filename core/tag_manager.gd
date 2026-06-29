@@ -6,7 +6,7 @@ static func get_tag(tag_id: String) -> Tag: # 解析tag_id获取tag对象，如�
     return Database.get_tag(tag_id)
 
 # 已废弃：废除字符串冒号分割协议，直接使用强类型引用
-# static func get_imaginary_from_tag(tag: String) -> ImaginaryTag:
+# static func get_imaginary_from_tag(tag: String) -> ImaginaryConcept:
 #     var parts = tag.split(":")
 #     if parts.size() < 4:
 #         Logging.err('tag have less than 4 parts: %s' % tag)

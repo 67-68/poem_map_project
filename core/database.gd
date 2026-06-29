@@ -12,7 +12,6 @@ const _FocusedChat = preload("res://model/focused_chat.gd")
 const _GameEntity = preload("res://core/game_entity.gd")
 const _GlitchPreprocessor = preload("res://shaders/glitch_preprocessor.gd")
 const _HistoryEvent = preload("res://core/model/history_event.gd")
-const _LegendaryPoem = preload("res://core/model/legendary_poem.gd")
 const _NPCDocument = preload("res://model/npc_document.gd")
 const _NpcBatchCheckOperator = preload("res://core/operators/npc_batch_check_operator.gd")
 const _PoetLifePoint = preload("res://characters/poet_life_point.gd")
@@ -57,10 +56,10 @@ var actions: Dictionary
 var decisions: Dictionary
 var decided_events: Dictionary
 var imaginaries: Dictionary
+var imaginaries_detail: Dictionary = {}
 var feihualing_imageries: Dictionary
 var tags: Dictionary
 
-var legendary_poems: Dictionary
 var normal_poem_events: Dictionary
 
 var flags: Dictionary
@@ -160,7 +159,7 @@ func _init() -> void:
 	decided_events = {}
 	focused_chat_data = {}
 	history_events = {}
-	legendary_poems = {}
+	imaginaries_detail = {}
 
 	# normal_poem_events / end_random_events 是 RandomEvent 的语义子视图，
 	# 由数据所在目录定义语义范畴，不是独立类型，因此在 RandomEvent 分支中按 base_key 填充。
@@ -203,15 +202,13 @@ func _init() -> void:
 				decided_events[uuid] = res
 			elif res is FocusedChat:
 				focused_chat_data[uuid] = res
-			elif res is LegendaryPoem:
-				legendary_poems[uuid] = res
 			elif res is Era:
 				eras[uuid] = res
 
 	Logging.info("Database: random_events 已按 pool_tag 索引，%d 个池" % random_events.size())
 	Logging.info("Database: _events_by_era 已构建，%d 个时代" % _events_by_era.size())
 	Logging.info("Database: history_events=%d, decided_events=%d, focused_chat_data=%d" % [history_events.size(), decided_events.size(), focused_chat_data.size()])
-	Logging.info("Database: legendary_poems=%d, normal_poem_events=%d, end_random_events=%d" % [legendary_poems.size(), normal_poem_events.size(), end_random_events.size()])
+	Logging.info("Database: normal_poem_events=%d, end_random_events=%d" % [normal_poem_events.size(), end_random_events.size()])
 	Logging.info("Database: actions=%d, decisions=%d" % [actions.size(), decisions.size()])
 
 	# 飞花令意象库：从主意象字典中筛选环境类意象
@@ -310,12 +307,9 @@ func wash_positions(items: Dictionary, mesh_size, use_position_uuid: bool = fals
 
 
 func get_active_imaginaries() -> Dictionary:
-	var active_imaginaries = {}
-	for imaginary_uuid in imaginaries:
-		var imaginary = imaginaries[imaginary_uuid]
-		if imaginary.basic_imaginaries.size() > 0:
-			active_imaginaries[imaginary_uuid] = imaginary
-	return active_imaginaries
+	## 返回当前活跃的 ImaginaryConcept（由 ImaginaryComprehender 动态推导）
+	## 活跃 = 已有 Imaginary 引用该 concept 的 detail_imaginaries
+	return ImaginaryComprehender.get_active_concepts()
 
 
 ## 查询 NPC 的指定属性值。
@@ -366,7 +360,6 @@ func get_all_events_iterator() -> Dictionary:
 	all_events.merge(ambitions)
 	all_events.merge(decided_events)
 	all_events.merge(imaginaries)
-	all_events.merge(legendary_poems)
 	all_events.merge(normal_poem_events)
 	return all_events
 
@@ -492,9 +485,6 @@ func get_history_event(uuid: String):
 func get_normal_poem_event(uuid: String):
 	return normal_poem_events.get(uuid)
 
-func get_legendary_poem(uuid: String):
-	return legendary_poems.get(uuid)
-
 func get_end_random_event(uuid: String):
 	return end_random_events.get(uuid)
 
@@ -521,6 +511,12 @@ func get_flags_all() -> Dictionary:
 func get_imaginaries_all() -> Dictionary:
 	return imaginaries
 
+func get_imaginary_detail(uuid: String):
+	return imaginaries_detail.get(uuid)
+
+func get_imaginaries_detail_all() -> Dictionary:
+	return imaginaries_detail
+
 func get_focused_chats_all() -> Dictionary:
 	return focused_chat_data
 
@@ -532,9 +528,6 @@ func get_history_events_all() -> Dictionary:
 
 func get_normal_poem_events_all() -> Dictionary:
 	return normal_poem_events
-
-func get_legendary_poems_all() -> Dictionary:
-	return legendary_poems
 
 func get_end_random_events_all() -> Dictionary:
 	return end_random_events

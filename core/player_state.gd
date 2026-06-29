@@ -4,7 +4,7 @@ const _BaseOperator = preload("res://core/model/base_operator.gd")
 const _DeferredLockActionOperator = preload("res://core/operators/deferred_lock_action_operator.gd")
 const _FatigueManager = preload("res://core/fatigue_manager.gd")
 const _Flag = preload("res://core/model/flag.gd")
-const _ImaginaryTag = preload("res://core/model/imaginary.gd")
+const _ImaginaryConcept = preload("res://core/model/imaginary_concept.gd")
 const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
 const _SourceOfTruth = preload("res://core/source_of_truth.gd")
 const _TempFlagOperator = preload("res://core/operators/temp_flag_operator.gd")
@@ -89,8 +89,8 @@ func init_flags():
 		Logging.info('init_flags: flag %s set to %s from SourceOfTruth' % [flag_id, str(flag_val)])
 
 func init_imaginaries():
-	"""从 SourceOfTruth 加载意象初始等级和 basic_imaginaries 到 Database.imaginaries 中的 ImaginaryTag"""
-	# —— 阶段 1：初始等级 ——
+	"""从 SourceOfTruth 加载意象初始等级和详细碎片到 Database"""
+	# —— 阶段 1：ImaginaryConcept 初始等级 ——
 	var imaginary_data = SourceOfTruth.debug_dashboard_state.get("imaginaries", {})
 	if not imaginary_data.is_empty():
 		for uuid in imaginary_data:
@@ -98,7 +98,7 @@ func init_imaginaries():
 			if level <= 0:
 				Logging.info('init_imaginaries: imaginary %s level <= 0 (%d), skipping' % [uuid, level])
 				continue
-			var imaginary = Database.get_imaginary(uuid) as ImaginaryTag
+			var imaginary = Database.get_imaginary(uuid) as ImaginaryConcept
 			if not imaginary:
 				Logging.warn('init_imaginaries: imaginary %s not found in Database.imaginaries, skipping' % uuid)
 				continue
@@ -107,7 +107,7 @@ func init_imaginaries():
 	else:
 		Logging.info('init_imaginaries: no imaginary data in SourceOfTruth, skipping level init')
 
-	# —— 阶段 2：basic_imaginaries（详细意象蓝图） ——
+	# —— 阶段 2：详细碎片（Imaginary） ——
 	var basic_data = SourceOfTruth.debug_dashboard_state.get("basic_imaginaries", [])
 	if basic_data.is_empty():
 		Logging.info('init_imaginaries: no basic_imaginaries data in SourceOfTruth, skipping')
@@ -119,26 +119,32 @@ func init_imaginaries():
 			Logging.warn('init_imaginaries: basic_imaginaries entry missing blueprint_id, skipping')
 			continue
 
-		# 从 4 段式 tag 提取中间两段：TARGET_ACTOR_DUFU_STH → ACTOR:DUFU
-		var segments = blueprint_id.split("_")
-		if segments.size() < 3:
+		# 四段式 tag (A:B:C:D)，末段 = Imaginary uuid
+		var segments = blueprint_id.split(":")
+		if segments.size() < 4:
 			Logging.warn("init_imaginaries: blueprint_id '%s' 段数不足 (%d)，跳过" % [blueprint_id, segments.size()])
 			continue
 
-		var imaginary_key = (segments[1] + ":" + segments[2]).to_lower()
-		var imaginary = Database.get_imaginary(imaginary_key) as ImaginaryTag
-		if not imaginary:
-			Logging.warn("init_imaginaries: basic_imaginaries blueprint '%s' 未找到 ImaginaryTag '%s'，跳过" % [blueprint_id, imaginary_key])
-			continue
+		var imaginary_uuid = segments[3].to_lower()
+		var concept_key = segments[1].to_lower() + ":" + segments[2].to_lower()
 
-		# 构造并追加 basic_imaginary 条目（同 _on_request_add_imaginary 格式）
-		var new_entry = {
-			"blueprint_id": blueprint_id,
-			"contexts": entry.get("contexts", []),
-			"tier": entry.get("tier", 1),
-		}
-		imaginary.basic_imaginaries.append(new_entry)
-		Logging.info("init_imaginaries: blueprint '%s' 已预载入意象 '%s' (%s)" % [blueprint_id, imaginary_key, imaginary.name])
+		# 找到或创建 Imaginary
+		var imaginary = Database.get_imaginary_detail(imaginary_uuid)
+		if not imaginary:
+			imaginary = Imaginary.new()
+			imaginary.uuid = imaginary_uuid
+			imaginary.name = segments[3]
+			Database.imaginaries_detail[imaginary_uuid] = imaginary
+			Logging.info("init_imaginaries: 新建 Imaginary '%s'" % imaginary_uuid)
+
+		imaginary.detail_imaginaries.append(blueprint_id)
+
+		# 验证 ImaginaryConcept 存在
+		var concept = Database.get_imaginary(concept_key)
+		if not concept:
+			Logging.warn("init_imaginaries: ImaginaryConcept '%s' 未找到 (blueprint='%s')" % [concept_key, blueprint_id])
+		else:
+			Logging.info("init_imaginaries: blueprint '%s' → Imaginary '%s' → Concept '%s'" % [blueprint_id, imaginary_uuid, concept_key])
 
 func init_emotions():
 	"""从 SourceOfTruth 加载初始情绪值到 PlayerState"""
@@ -172,36 +178,42 @@ func _connect_imaginary_signals():
 
 
 func _on_request_add_imaginary(tag: String):
-	"""处理意象获取请求：解析 4 段式 tag，用中间两段匹配 Database.imaginaries 的 key，完整 tag 作为 blueprint_id 存入"""
+	"""处理意象获取请求：解析 4 段式 tag (A:B:C:D)，写入 Imaginary 对象，动态关联 ImaginaryConcept"""
 	if tag.is_empty():
 		Logging.err("PlayerState._on_request_add_imaginary: tag 为空")
 		return
 
-	# 解析 4 段式 tag，提取中间两段作为 ImaginaryTag 的 key
-	# 例如 TARGET_MYTH_GIANTROC_DAYAN → 中间两段 MYTH:GIANTROC
-	var segments = tag.split("_")
-	if segments.size() < 3:
-		Logging.err("PlayerState._on_request_add_imaginary: tag '%s' 段数不足 (%d)，需要至少 3 段" % [tag, segments.size()])
+	# 解析 4 段式 tag (例: ENV:NATURE:AUTUMN:changanleaf)
+	var segments = tag.split(":")
+	if segments.size() < 4:
+		Logging.err("PlayerState._on_request_add_imaginary: tag '%s' 段数不足 (%d)，需要 4 段 (A:B:C:D)" % [tag, segments.size()])
 		return
 
-	var imaginary_key = segments[1] + ":" + segments[2]
-	# 注册表/资源文件中的 key 使用小写（如 myth:giantroc），tag 段是大写（如 MYTH:GIANTROC）
-	var imaginary = Database.get_imaginary(imaginary_key.to_lower()) as ImaginaryTag
+	# 末段 = Imaginary 的唯一标识 (如 changanleaf)
+	var imaginary_uuid = segments[3].to_lower()
+	# 中间两段 = ImaginaryConcept 的 key (如 nature:autumn)
+	var concept_key = segments[1].to_lower() + ":" + segments[2].to_lower()
+
+	# ── 找到或创建 Imaginary（详细碎片） ──
+	var imaginary = Database.get_imaginary_detail(imaginary_uuid)
 	if not imaginary:
-		Logging.err("PlayerState._on_request_add_imaginary: 从中间两段 '%s' 未找到对应的 ImaginaryTag（tag='%s'）" % [imaginary_key, tag])
-		return
+		imaginary = Imaginary.new()
+		imaginary.uuid = imaginary_uuid
+		imaginary.name = segments[3]  # 末段作为展示名
+		Database.imaginaries_detail[imaginary_uuid] = imaginary
+		Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s'" % imaginary_uuid)
 
-	# 每次都添加新条目（允许重复），完整 4 段 tag 作为 blueprint_id
-	var tier = TierDeterminer.determine_tier()
-	var new_entry = {
-		"blueprint_id": tag,
-		"contexts": [],
-		"tier": tier
-	}
-	imaginary.basic_imaginaries.append(new_entry)
-	var count = imaginary.basic_imaginaries.size()
-	Logging.info("PlayerState._on_request_add_imaginary: blueprint '%s' 已存入意象 '%s' (%s) (第 %d 条)，当前总量: %d" %
-		[tag, imaginary_key, imaginary.name, count, count])
+	# 添加四段式 tag 到 detail_imaginaries（允许重复表示多次获取）
+	imaginary.detail_imaginaries.append(tag)
+	Logging.info("PlayerState._on_request_add_imaginary: tag '%s' 已存入 Imaginary '%s' (detail_count=%d)" %
+		[tag, imaginary_uuid, imaginary.detail_imaginaries.size()])
+
+	# ── 确保对应的 ImaginaryConcept 存在 ──
+	var concept = Database.get_imaginary(concept_key)
+	if not concept:
+		Logging.info("PlayerState._on_request_add_imaginary: ImaginaryConcept '%s' 尚未注册，跳过" % concept_key)
+	else:
+		Logging.info("PlayerState._on_request_add_imaginary: 关联到 ImaginaryConcept '%s'" % concept_key)
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()

@@ -31,7 +31,6 @@ enum URN_TYPE {
 	TAG,                # tags — 标签
 	FLAG,               # flags — 标记
 	LIFE_PATH_POINT,    # life_path_points — 人生轨迹点
-	LEGENDARY_POEM,     # legendary_poems — 传奇诗词
 	NORMAL_POEM_EVENT,  # normal_poem_events — 普通诗词事件
 	CITY,               # cities（内部合并用）
 	EVENT_OPTION,       # event_options — 事件选项（.tres 资源）

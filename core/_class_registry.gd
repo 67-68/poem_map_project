@@ -30,7 +30,6 @@ var __reg_EventTicket: EventTicket = null
 var __reg_Flag: Flag = null
 var __reg_HistoryEvent: HistoryEvent = null
 var __reg_ImaginaryConcept: ImaginaryConcept = null
-var __reg_LegendaryPoem: LegendaryPoem = null
 var __reg_RequirementFilter: RequirementFilter = null
 var __reg_SceneAction: SceneAction = null
 var __reg_StyleData: StyleData = null
