@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_npxa1"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="2_3dyr7"]
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="3_1ub2h"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="4_0e0pk"]
 [ext_resource type="Script" uid="uid://4seqlwtem2i3" path="res://core/model/poem_taste.gd" id="5_qbaw7"]
 [ext_resource type="Script" uid="uid://w6wvp8tdisfu" path="res://core/operators/trait_choose_operator.gd" id="6_stbcp"]
 [ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="7_t08qo"]
@@ -16,28 +15,8 @@
 [sub_resource type="Resource" id="Resource_l555t"]
 script = ExtResource("2_3dyr7")
 
-[sub_resource type="Resource" id="Resource_2bht6"]
-script = ExtResource("4_0e0pk")
-str_props = "progress"
-value = 4
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_u0m2s"]
-script = ExtResource("2_3dyr7")
-operators = Array[ExtResource("1_npxa1")]([SubResource("Resource_2bht6")])
-
 [sub_resource type="Resource" id="Resource_f7cri"]
 script = ExtResource("2_3dyr7")
-
-[sub_resource type="Resource" id="Resource_myymk"]
-script = ExtResource("4_0e0pk")
-str_props = "health"
-value = 5
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_qogfe"]
-script = ExtResource("2_3dyr7")
-operators = Array[ExtResource("1_npxa1")]([SubResource("Resource_myymk")])
 
 [sub_resource type="Resource" id="Resource_umywf"]
 script = ExtResource("5_qbaw7")
@@ -55,9 +34,7 @@ poem_taste = SubResource("Resource_umywf")
 key_to_get_poem_taste = ""
 metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 
-[sub_resource type="Resource" id="Resource_hk02i"]
-script = ExtResource("2_3dyr7")
-operators = Array[ExtResource("1_npxa1")]([SubResource("Resource_a7qw4")])
+])
 
 [sub_resource type="Resource" id="Resource_x3pvl"]
 script = ExtResource("7_t08qo")
@@ -69,17 +46,6 @@ script = ExtResource("8_jf45p")
 choice_result = SubResource("Resource_hk02i")
 requirement = SubResource("Resource_x3pvl")
 description = "呈上诗稿"
-
-[sub_resource type="Resource" id="Resource_y0mxb"]
-script = ExtResource("4_0e0pk")
-_property = 4
-str_props = "s_progress_gain"
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_hu1gx"]
-script = ExtResource("2_3dyr7")
-operators = Array[ExtResource("1_npxa1")]([SubResource("Resource_y0mxb")])
-metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_0w2bm"]
 script = ExtResource("8_jf45p")
@@ -100,6 +66,18 @@ value = 100
 [sub_resource type="Resource" id="Resource_jf1we"]
 script = ExtResource("11_a2d1g")
 operators = Array[ExtResource("9_ui314")]([SubResource("Resource_3rhxy"), SubResource("Resource_c7k30")])
+
+[sub_resource type="Resource" id="Resource_hk02i"]
+script = ExtResource("2_3dyr7")
+
+[sub_resource type="Resource" id="Resource_hu1gx"]
+script = ExtResource("2_3dyr7")
+
+[sub_resource type="Resource" id="Resource_qogfe"]
+script = ExtResource("2_3dyr7")
+
+[sub_resource type="Resource" id="Resource_u0m2s"]
+script = ExtResource("2_3dyr7")
 
 [resource]
 script = ExtResource("12_a2x2b")

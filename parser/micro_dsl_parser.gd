@@ -1283,16 +1283,13 @@ static func _exec_all_emo_sub_op(parsed: NamedDSLParser.ParseResult, raw: String
 # ─── add_social_credit ─────────────────────────────────
 
 # DSL 语法: add_social_credit(val=10)
-# 社交系统暂未实装，当前代理到 literary_fame 并发出警告。
+# 社交系统暂未实装，直接警告并跳过（不创建代理 operator）。
+# 等社交系统上线后再实现真实逻辑。
 static func _exec_add_social_credit_op(parsed: NamedDSLParser.ParseResult, raw: String) -> BaseOperator:
 	var val = NamedDSLParser.get_int_param(parsed, "val")
 	if val == 0:
 		Logging.err("add_social_credit 缺少 val 参数: %s" % raw)
 		return null
 
-	Logging.warn("add_social_credit: 社交系统目前没有装，目前只有 literary_fame 的效果 (%s)" % raw)
-
-	var op := PropertyOperator.new()
-	op.str_props = "literary_fame"
-	op.value = val
-	return op
+	Logging.warn("add_social_credit: 社交系统未实装，跳过此操作 (%s)" % raw)
+	return null

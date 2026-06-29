@@ -2,20 +2,10 @@
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_jayqr"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ctcox"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_jhr2k"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_qy0j0"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_g0w71"]
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_tudxq"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_otjc8"]
-
-[sub_resource type="Resource" id="Resource_t5eyy"]
-script = ExtResource("3_jhr2k")
-str_props = "progress"
-value = 10
-
-[sub_resource type="Resource" id="Resource_xf4dj"]
-script = ExtResource("4_qy0j0")
-operators = Array[ExtResource("2_ctcox")]([SubResource("Resource_t5eyy")])
 
 [sub_resource type="Resource" id="Resource_gpsh5"]
 script = ExtResource("5_g0w71")
@@ -26,6 +16,9 @@ description = "赔笑再唤，将名帖轻放于门槛上"
 script = ExtResource("6_tudxq")
 property = "progress"
 value = 70
+
+[sub_resource type="Resource" id="Resource_xf4dj"]
+script = ExtResource("4_qy0j0")
 
 [resource]
 script = ExtResource("7_otjc8")
