@@ -18,7 +18,7 @@ func operate():
 		Logging.err("[FocusActionOperator] click_count 无效: %d，至少需要 1 次" % click_count)
 		return
 
-	var ok := ActionManager.start_focus_session(action_types, click_count)
+	var ok := ActionManager.get_focus_controller().start_focus(action_types, click_count)
 	if not ok:
 		Logging.err("[FocusActionOperator] 启动 focus session 失败")
 		return

@@ -195,7 +195,7 @@ func _on_button_pressed() -> void:
 	ActionManager.end_action_batch()
 	
 	# ── Focus session 点击计数 hook ──
-	ActionManager.on_focus_action_clicked()
+	ActionManager.get_focus_controller().notify_click()
 	
 	# ── Generator 消费（统一入口）──
 	var had_generator := _snap_generator != null

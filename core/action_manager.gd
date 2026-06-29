@@ -2,7 +2,8 @@ extends Node
 const _Action = preload("res://core/model/action.gd")
 const _ActionArchetype = preload("res://core/model/action_archetype.gd")
 const _Era = preload("res://core/model/era.gd")
-const _FocusActionOperator = preload("res://core/operators/focus_action_operator.gd")
+const _ActionFocusController = preload("res://core/action_focus_controller.gd")
+const _ActionSelector = preload("res://core/action_selector.gd")
 const _Generator = preload("res://core/model/generator.gd")
 const _MicroDSLParser = preload("res://parser/micro_dsl_parser.gd")
 const _SceneAction = preload("res://core/model/scene_action.gd")
@@ -23,10 +24,6 @@ var _locked_in_actions: Dictionary = {}
 ## 持久化阻塞（多旬生效），key=action_id, val=剩余旬数（-1=无限）
 var _blocked_actions: Dictionary = {}
 
-## Focus session 状态（点击计数制，非旬制）
-var _focus_action_ids: Array[String] = []
-var _focus_click_remaining: int = 0
-
 ## 🆕 本轮已抽中的 action ID 集合（key=action_id, val=true）。
 ## 属性变动重评估时，已中签的 action 保留此标记，未中签的永远灰化。
 var _selected_action_ids: Dictionary = {}
@@ -39,6 +36,32 @@ var _stat_signal_connected: bool = false
 
 ## 🆕 批量模式守卫：行动执行期间抑制 reevaluate，全部 results 执行完后统一评估。
 var _suppress_reevaluate: bool = false
+
+## Focus session 控制器（不污染 _blocked_actions / _locked_in_actions）
+var _focus_controller: _ActionFocusController
+
+
+func _ready() -> void:
+	_focus_controller = _ActionFocusController.new()
+	_init_archetype_cache()
+	connect_to_player_state()
+
+
+# ════════════════════════════════════════════════════════════
+# Focus Session 查询（实际控制由 ActionFocusController 接管）
+# ════════════════════════════════════════════════════════════
+
+## 返回 focus 控制器引用。供 operator 和 button 调用时获取/通知。
+func get_focus_controller() -> _ActionFocusController:
+	return _focus_controller
+
+## 查询当前是否处于 focus session 中。
+func is_in_focus_session() -> bool:
+	return _focus_controller.is_active()
+
+## 获取当前 focus session 剩余点击次数（-1 表示不在 session 中）。
+func get_focus_click_remaining() -> int:
+	return _focus_controller.get_focus_click_remaining()
 
 
 # ════════════════════════════════════════════════════════════
@@ -510,10 +533,6 @@ func get_available_scene_actions() -> Dictionary:
 	#breakpoint
 	Logging.info("[ActionManager] ═══ 开始获取可用场景动作 ═══")
 	
-	# ── 确保 archetype 缓存已加载 ──
-	if Database.action_archetypes.is_empty():
-		_init_archetype_cache()
-	
 	# ── Phase 0 前置通报：当前锁定/阻塞状态 ──
 	if _locked_in_actions.size() > 0:
 		var locked_list: Array[String] = []
@@ -528,21 +547,18 @@ func get_available_scene_actions() -> Dictionary:
 			blocked_list.append("%s(%s旬)" % [bid, "∞" if rem == -1 else str(rem)])
 		Logging.info("[ActionManager] 🚫 当前持久阻塞 (%d): %s" % [_blocked_actions.size(), ", ".join(blocked_list)])
 	
-	# ── Phase 0.5: 清空上轮 selected_ids ──
-	_selected_action_ids.clear()
-	
 	# ── Phase 0: _locked_in 驱动自动预留 ──
 	for action_id in _locked_in_actions:
 		var ok := reserve_action(action_id)
 		if ok:
 			Logging.info("[ActionManager] _locked_in 触发自动预留: %s" % action_id)
 	
-	# ── Phase 0.5: _blocked 过滤 ──
-	# 如果被 blocked 的 action 被误预留了，清掉
-	for action_id in _blocked_actions:
-		if action_id in _reserved_action_ids:
-			_reserved_action_ids.erase(action_id)
-			Logging.info("[ActionManager] _blocked 过滤，移除预留: %s" % action_id)
+	# 🆕 Phase 0.25: focus 驱动自动预留（不污染 _locked_in_actions）
+	if _focus_controller.is_active():
+		for fid in _focus_controller.get_focus_ids():
+			if not fid in _reserved_action_ids:
+				_reserved_action_ids.append(fid)
+				Logging.info("[ActionManager] focus 触发自动预留: %s" % fid)
 	
 	if _reserved_action_ids.size() > 0:
 		Logging.info("[ActionManager] 📌 本回合预留席位 (%d/%d): %s" % [_reserved_action_ids.size(), MAX_PICK_COUNT, ", ".join(_reserved_action_ids)])
@@ -560,15 +576,23 @@ func get_available_scene_actions() -> Dictionary:
 		return actions
 	Logging.info("[ActionManager] 当前位置: %s, area_tags: %s" % [PlayerState.current_location, str(loc.area_tags)])
 	
-	# 连接 player_stat_changed 信号（仅连接一次）
-	connect_to_player_state()
+	# ── Phase 0.5: 阻塞过滤（含持久阻塞 + focus 阻塞覆盖）──
+	var _effective_blocked: Dictionary = _blocked_actions.duplicate()
+	if _focus_controller.is_active():
+		for bid in _focus_controller.get_block_override_ids(all_actions.keys()):
+			_effective_blocked[bid] = -1
 	
+	for action_id in _effective_blocked:
+		if action_id in _reserved_action_ids:
+			_reserved_action_ids.erase(action_id)
+			Logging.info("[ActionManager] 阻塞过滤，移除预留: %s" % action_id)
+
 	for a_id in all_actions:
 		var a = Database.get_action(a_id)
 		var is_valid = true # 🤓☝️ 设立拦截签证！
 		
-		# 0. 检查是否被 blocked
-		if _blocked_actions.has(a_id):
+		# 0. 检查是否被 blocked（含 focus override）
+		if _effective_blocked.has(a_id):
 			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: 被阻塞" % [a_id])
 			num_intercepted += 1
 			continue
@@ -622,11 +646,6 @@ func append_counter(counter: Dictionary, item_name: String, _item) -> Dictionary
 		counter[item_name] = 1
 	return counter
 
-func get_total_weight_power2(actions: Dictionary) -> float:
-	var total_weight = 0.0
-	for action_id in actions:
-		total_weight += pow(actions[action_id], 2)
-	return total_weight
 
 ## 🎲 抽取行动并标记中签/未中签状态。
 ## 改造后：除了返回选中的 actions，还会：
@@ -634,63 +653,27 @@ func get_total_weight_power2(actions: Dictionary) -> float:
 ## 2. 为未中签的合法 action 设置 B类锁定叙事文本
 ## 3. 为所有 action 清空 dynamic_failed_hint 后重建
 func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT) -> Array[SceneAction]:
-	var selected_actions: Array[SceneAction] = []
-	var available_pool = action_pool.duplicate() # 复制一份，避免污染原池
-	
 	Logging.info("[ActionManager] 🎲 开始抽取行动 (目标%d个, 池中%d, 预留%d)" % [pick_count, action_pool.size(), _reserved_action_ids.size()])
 	
-	# --- Phase 0: 清空所有 action 的 dynamic_failed_hint ---
+	# --- Phase 0: 清空所有 action 的 dynamic_failed_hint（准备重新标记） ---
 	for a_id in Database.get_actions_all():
 		var a = Database.get_action(a_id)
 		if a:
 			a.clear_failed_hint()
 	
-	# --- Phase 1: 处理预留席位 ---
-	if _reserved_action_ids.size() > 0:
-		# 校验：预留数量不能超过可用池大小
-		if _reserved_action_ids.size() > available_pool.size():
-			Logging.err("[ActionManager] 预留数量 (%d) 超过当前可用行动数量 (%d)，无法抽取" % [_reserved_action_ids.size(), available_pool.size()])
-			Logging.err("ActionManager: 预留数量超过当前可用行动数量")
-			push_error("超过当前可用行动数量")
-			clear_reservations()
-			return selected_actions
-		
-		for reserved_id in _reserved_action_ids:
-			if selected_actions.size() >= pick_count:
-				break
-			if available_pool.has(reserved_id):
-				selected_actions.append(Database.get_action(reserved_id) as SceneAction)
-				available_pool.erase(reserved_id)
-				Logging.info("[ActionManager] 🎯 预留抽取: %s" % reserved_id)
-			else:
-				Logging.err("[ActionManager] 预留 action %s 不在当前可用池中！" % reserved_id)
-				Logging.err("ActionManager: 预留 action 不在当前可用池: %s" % reserved_id)
-				push_error("不在当前可用池")
-				# 继续处理其他预留，但这个跳过
+	# --- 校验：预留数量不能超过可用池大小 ---
+	if _reserved_action_ids.size() > action_pool.size():
+		Logging.err("[ActionManager] 预留数量 (%d) 超过当前可用行动数量 (%d)，无法抽取" % [_reserved_action_ids.size(), action_pool.size()])
+		push_error("超过当前可用行动数量")
+		clear_reservations()
+		return []
 	
-	# --- Phase 2: 随机填充剩余席位 ---
-	var remaining_slots = pick_count - selected_actions.size()
-	while selected_actions.size() < pick_count and available_pool.size() > 0:
-		var total_weight = get_total_weight_power2(available_pool)
-		
-		# 2. 转动命运的轮盘
-		var roll = randf_range(0.0, total_weight)
-		var cursor = 0.0
-		
-		# 3. 寻找中奖者
-		for action_id in available_pool:
-			cursor += pow(available_pool[action_id], 2)
-			if roll <= cursor:
-				selected_actions.append(Database.get_action(action_id) as SceneAction)
-				available_pool.erase(action_id) # 拿走，不放回！
-				Logging.info("[ActionManager] 🎲 随机抽取: %s" % action_id)
-				break # 必须 break，进入下一轮抽取
+	# --- 委托 ActionSelector 执行抽卡逻辑 ---
+	var result := _ActionSelector.select(action_pool, _reserved_action_ids, pick_count)
+	var selected_actions := result.selected_actions
 	
-	# --- Phase 3: 标记中签/未中签 ---
-	# 已中签的记录到 _selected_action_ids
-	_selected_action_ids.clear()
-	for sa in selected_actions:
-		_selected_action_ids[sa.uuid] = true
+	# --- Phase 3: 标记中签 ---
+	_selected_action_ids = result.selected_ids.duplicate()
 	
 	# 未中签的合法 action → B类锁定
 	for a_id in action_pool:
@@ -702,12 +685,9 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 		if a:
 			if not a.lock_narrative.is_empty():
 				a.append_failed_hint(a.lock_narrative)
-			# 同时追加 B类通用文本
 			a.append_failed_hint("此路不通，换个主意吧")
 	
-	# ── 🆕 Phase 3.5: 非池 action 恢复 A 类 hint ──
-	# 被 get_available_scene_actions 排除的 action 在 Phase 0 中被清空 hint，
-	# 需要重新检查 validity 并补回 A 类叙事文本。
+	# ── Phase 3.5: 非池 action 恢复 A 类 hint ──
 	for a_id in Database.get_actions_all():
 		if a_id in action_pool:
 			continue
@@ -723,20 +703,12 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 				a.append_failed_hint(reason)
 			Logging.info("[ActionManager] 🏷️ 非池 action hint 恢复: id=%s, reasons='%s'" % [a_id, ", ".join(validity.reasons)])
 	
-	# 🆕 抽取结果汇总
-	var reserved_count := 0
-	var random_count := 0
-	if _reserved_action_ids.size() > 0:
-		reserved_count = min(_reserved_action_ids.size(), selected_actions.size())
-	random_count = selected_actions.size() - reserved_count
-	
+	# 抽取结果汇总
 	var names: Array[String] = []
 	for sa in selected_actions:
 		names.append(sa.uuid)
+	Logging.info("[ActionManager] ═══ 本轮抽取结果: 共%d个 | 🔒预留%d | 🎲随机%d → %s ═══" % [selected_actions.size(), result.reserved_count, result.random_count, ", ".join(names)])
 	
-	Logging.info("[ActionManager] ═══ 本轮抽取结果: 共%d个 | 🔒预留%d | 🎲随机%d → %s ═══" % [selected_actions.size(), reserved_count, random_count, ", ".join(names)])
-	
-	# 抽取完成后自动清除预留，避免跨回合污染
 	clear_reservations()
 	return selected_actions
 
@@ -776,113 +748,3 @@ func consume_generator(action: Action) -> void:
 		Logging.info("[ActionManager] generator '%s' 已耗尽，action 锁定 1 旬，generator 已清空" % gen_name)
 
 
-# ════════════════════════════════════════════════════════════
-# Focus Session（点击计数制 — 针对 FocusActionOperator）
-# ════════════════════════════════════════════════════════════
-
-## 启动 focus session：block 非 focus + lock focus，持续 click_count 次点击。
-## 由 FocusActionOperator.operate() 调用。
-## 返回 true 表示成功。
-func start_focus_session(focus_types: Array, click_count: int) -> bool:
-	if focus_types.is_empty() or click_count <= 0:
-		Logging.err("[ActionManager] start_focus_session: 参数无效 (focus=%d, click=%d)" % [focus_types.size(), click_count])
-		return false
-
-	# ── 1. 计算聚焦 action_id 集合 ──
-	var focus_ids: Array[String] = []
-	for at in focus_types:
-		var id := action_type_to_id(at)
-		if not id.is_empty() and id not in focus_ids:
-			focus_ids.append(id)
-
-	# ── 2. 计算非聚焦集合（遍历 Database 实际 action 池，而不是仅 ENUMS.ACTION_TYPE）──
-	# 这样 special action（如 DeepSeek）也能被 block。
-	var all_action_ids := Database.get_actions_all().keys()
-	var other_ids: Array[String] = []
-	for a_id in all_action_ids:
-		if a_id not in focus_ids and a_id not in other_ids:
-			# 跳过已被 block 的 action（避免重复操作）
-			if not _blocked_actions.has(a_id):
-				other_ids.append(a_id)
-
-	# ── 3. Block 所有非聚焦（先 block，用 by_id 方法覆盖 special actions）──
-	for oid in other_ids:
-		block_action_by_id(oid, -1)
-
-	# ── 4. Lock 所有聚焦（后 lock，冲突解除 step 3 的 block）──
-	for fid in focus_ids:
-		var at: ENUMS.ACTION_TYPE = ENUMS.ACTION_TYPE[fid.to_upper()] as ENUMS.ACTION_TYPE
-		lock_action(at, -1)
-
-	# ── 5. 记录 session 状态（用 all_action_ids 快照，结束时可准确恢复）──
-	_focus_action_ids = focus_ids.duplicate()
-	_focus_click_remaining = click_count
-
-	# ── 6. 发射 UI 信号 ──
-	var selected_actions: Array[SceneAction] = []
-	for action_id in focus_ids:
-		var action := Database.get_action(action_id) as SceneAction
-		if action:
-			selected_actions.append(action)
-	if selected_actions.size() > 0:
-		EventBus.selected_actions_change.emit(selected_actions)
-	EventBus.locked_actions_selected.emit(selected_actions)
-
-	# ── 7. 通知 UI 进入 focus 模式（隐藏写诗按钮等）──
-	EventBus.focus_session_changed.emit(true)
-
-	Logging.info("[ActionManager] 🔦 Focus session 启动: focus=%s, others blocked(from pool)=%d, click_remaining=%d" % [", ".join(focus_ids), other_ids.size(), click_count])
-	return true
-
-
-## 每次行动点击后调用（由 action_button.gd 触发）。
-## 递减计数器，归零时自动释放 focus session。
-func on_focus_action_clicked() -> void:
-	if _focus_click_remaining <= 0:
-		return
-
-	_focus_click_remaining -= 1
-	Logging.info("[ActionManager] 🔦 Focus session click: remaining=%d" % _focus_click_remaining)
-
-	if _focus_click_remaining <= 0:
-		_end_focus_session()
-
-
-## 强制结束 focus session（也可被新 session 覆盖调用）。
-func _end_focus_session() -> void:
-	if _focus_action_ids.is_empty():
-		return
-
-	# ── 解锁所有 focus actions ──
-	for fid in _focus_action_ids:
-		var at: ENUMS.ACTION_TYPE = ENUMS.ACTION_TYPE[fid.to_upper()] as ENUMS.ACTION_TYPE
-		unlock_action(at)
-
-	# ── 解阻塞所有 action（包括 special actions，用 by_id 覆盖完整 action 池）──
-	var all_action_ids := Database.get_actions_all().keys()
-	for a_id in all_action_ids:
-		if a_id not in _focus_action_ids and _blocked_actions.has(a_id):
-			unblock_action_by_id(a_id)
-
-	Logging.info("[ActionManager] 🔓 Focus session 结束，已释放 %d 个 focus + 恢复其余 action" % _focus_action_ids.size())
-
-	_focus_action_ids.clear()
-	_focus_click_remaining = 0
-
-	# ── 通知 UI 退出 focus 模式（恢复写诗按钮等）──
-	EventBus.focus_session_changed.emit(false)
-
-	# ── 刷新 UI ──
-	EventBus.request_refresh_action_panel.emit()
-
-
-## 查询当前是否处于 focus session 中。
-func is_in_focus_session() -> bool:
-	return _focus_click_remaining > 0
-
-
-## 获取当前 focus session 剩余点击次数（-1 表示不在 session 中）。
-func get_focus_click_remaining() -> int:
-	if _focus_click_remaining <= 0:
-		return -1
-	return _focus_click_remaining
