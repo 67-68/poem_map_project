@@ -106,7 +106,6 @@ func _ready() -> void:
 	)
 	on_xun_tick.connect(func():
 		Logging.info("Xun tick: %s" % current_xun))
-	RelationFlagManager.tick_all_cooldowns()
 	GameState.year = GameState.start_year
 	_total_days_elapsed = int(GameState.year * DAYS_PER_YEAR)
 	_tick_checkpoint = _total_days_elapsed

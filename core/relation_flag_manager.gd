@@ -370,76 +370,6 @@ static func get_and_reset_favor_multiplier() -> float:
 
 
 # ═══════════════════════════════════════════════════════════
-# 冷却 (Cooldown) — int 标量，每旬消耗 1 点
-# ═══════════════════════════════════════════════════════════
-#
-# 目标标签命名：flag_gen_cd_{TARGET_TAG}
-# 例如 flag_gen_cd_qingliu, flag_gen_cd_wangwei
-#
-# set_cooldown：设置 cd 值为 xun（冷却持续 N 旬）
-# is_on_cooldown：检查 cd 是否存在且 > 0
-# tick_all_cooldowns：旬末回调，所有 cd 值 -1，归零清除
-
-const FLAG_PREFIX_COOLDOWN: String = "flag_gen_cd_"
-
-## 构建 cd flag_id
-static func _build_cd_flag_id(target_tag: String) -> String:
-	return FLAG_PREFIX_COOLDOWN + target_tag
-
-## 设置目标的冷却旬数
-static func set_cooldown(target_tag: String, xun: int) -> void:
-	var flag_id = _build_cd_flag_id(target_tag)
-	_ensure_virtual_flag(flag_id, VIRTUAL_FLAG_TYPE_FAVOR)  # reuse 'int' type
-	PlayerState.set_flag(flag_id, xun, VIRTUAL_FLAG_TYPE_FAVOR)
-	Logging.info("RelationFlagManager: cooldown set %s → %d xun (flag=%s)" % [target_tag, xun, flag_id])
-
-## 检查目标是否在冷却中（flag 存在且值 > 0）
-static func is_on_cooldown(target_tag: String) -> bool:
-	var flag_id = _build_cd_flag_id(target_tag)
-	if not PlayerState.has_flag(flag_id):
-		return false
-	var val = PlayerState.get_flag(flag_id)
-	if val is int and val > 0:
-		Logging.info("RelationFlagManager: cooldown active for %s (flag=%s, remaining=%d)" % [target_tag, flag_id, val])
-		return true
-	return false
-
-## 获取剩余冷却旬数（0 表示无冷却）
-static func get_cooldown_remaining(target_tag: String) -> int:
-	var flag_id = _build_cd_flag_id(target_tag)
-	if not PlayerState.has_flag(flag_id):
-		return 0
-	var val = PlayerState.get_flag(flag_id)
-	if val is int:
-		return val
-	return 0
-
-## 旬末回调：遍历所有 flag_gen_cd_* flag，值 -1，归零则删除
-static func tick_all_cooldowns() -> void:
-	Logging.info("RelationFlagManager: tick_all_cooldowns — scanning for cd flags")
-	var flags_to_remove: Array[String] = []
-	var flags_to_decrement: Array[String] = []
-
-	# PlayerState 的 flags 是 Dictionary: flag_id → value
-	for flag_id in PlayerState.flags.keys():
-		if not flag_id.begins_with(FLAG_PREFIX_COOLDOWN):
-			continue
-		var val = PlayerState.get_flag(flag_id)
-		if val is int:
-			var new_val = val - 1
-			if new_val <= 0:
-				flags_to_remove.append(flag_id)
-				Logging.info("RelationFlagManager: cooldown expired, removing %s" % flag_id)
-			else:
-				flags_to_decrement.append(flag_id)
-				PlayerState.set_flag(flag_id, new_val, VIRTUAL_FLAG_TYPE_FAVOR)
-				Logging.info("RelationFlagManager: cooldown decrement %s → %d" % [flag_id, new_val])
-
-	for flag_id in flags_to_remove:
-		PlayerState.remove_flag(flag_id)
-
-
-# ═══════════════════════════════════════════════════════════
 # 聚合查询 — 一次性获取所有目标的关系数据
 # ═══════════════════════════════════════════════════════════
 
@@ -449,8 +379,7 @@ static func tick_all_cooldowns() -> void:
 ##                 来源: ENUMS.RELATION_TARGET.keys() → to_lower()
 ## @return Dictionary: {target_tag: {leverage_keys: Array[String],
 ##                                    help: int,
-##                                    favor: int,
-##                                    on_cooldown: bool}}
+##                                    favor: int}}
 ## 无数据的目标返回空列表 / 0 / 默认值，不报错。
 static func get_all_relations(targets: Array[String]) -> Dictionary:
 	var result: Dictionary = {}
@@ -459,7 +388,6 @@ static func get_all_relations(targets: Array[String]) -> Dictionary:
 			leverage_keys = get_leverage_keys(target_tag),
 			help = get_help(target_tag),
 			favor = get_favor(target_tag),
-			on_cooldown = is_on_cooldown(target_tag),
 		}
 	Logging.info("RelationFlagManager: get_all_relations queried %d targets" % targets.size())
 	return result

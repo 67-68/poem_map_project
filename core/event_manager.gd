@@ -2,7 +2,6 @@ extends Node
 const _Action = preload("res://core/model/action.gd")
 const _ActionTagFilter = preload("res://core/model/action_tag_filter.gd")
 const _BaseEvent = preload("res://model/event.gd")
-const _CooldownFilter = preload("res://core/model/cooldown_filter.gd")
 const _EraOperator = preload("res://core/operators/era_operator.gd")
 const _EventTicket = preload("res://core/model/event_ticket.gd")
 const _ImaginaryTag = preload("res://core/model/imaginary.gd")
@@ -12,8 +11,8 @@ const _SocialActionResolver = preload("res://core/social_action_resolver.gd")
 const _TagManager = preload("res://core/tag_manager.gd")
 
 @export var current_event_pool: Array[EventTicket] = []
-## 🆕 过滤器链：前置函数式过滤器 → 意向匹配 → CD 冷却检查
-var filters: Array[Callable] = [RequirementFilter.filter, ActionTagFilter.filter, CooldownFilter.filter]
+## 过滤器链：前置函数式过滤器 → 意向匹配
+var filters: Array[Callable] = [RequirementFilter.filter, ActionTagFilter.filter]
 
 ## 外部通过此信号注入一个事件 key，下一次抽取强制命中该事件（单次消费）
 ## 新增 main_tag 参数：非空时仅在对应的 main_tag 抽奖中生效；空字符串为通用保证。
@@ -191,8 +190,6 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
             for ticket in current_event_pool:
                 if ticket.event_uuid == g_key:
                     Logging.info("[EventManager] 🎯 Guaranteed event (" + g_tag + ") (FIFO): " + g_key)
-                    # 🆕 自动设置冷却
-                    _set_cooldown_for_drawn_event(context)
                     return g_key
             Logging.warn("[EventManager] Guaranteed event '" + g_key + "' not in pool after filters, popping and continuing")
             continue  # pop happened above, try next
@@ -233,8 +230,6 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
         Logging.info("[EventManager] Checking event '" + ticket.event_uuid + "', accumulated weight: " + str(current_accumulated))
         if roll <= current_accumulated:
             Logging.info("[EventManager] Event selected: " + ticket.event_uuid)
-            # 🆕 自动设置冷却
-            _set_cooldown_for_drawn_event(context)
             return ticket.event_uuid
             
     # 如果 roll 出来的数字落在了 null_weight 的区间里，说明抽中了"无事发生"
@@ -246,17 +241,3 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
         return null
 
 
-## 事件被抽取后自动设置冷却
-## 从 context.main_tag 推导 CD 目标标签，调用 RelationFlagManager.set_cooldown
-func _set_cooldown_for_drawn_event(context: Dictionary) -> void:
-    var main_tag: String = context.get('main_tag', '')
-    if main_tag.is_empty():
-        return
-    
-    var target_tag := CooldownFilter._derive_cooldown_target(main_tag)
-    if target_tag.is_empty():
-        Logging.info("[EventManager] main_tag '%s' 无对应 CD 目标，跳过冷却设置" % main_tag)
-        return
-    
-    RelationFlagManager.set_cooldown(target_tag, 3)
-    Logging.info("[EventManager] 🧊 设置冷却: flag_gen_cd_%s = 3旬" % target_tag)
