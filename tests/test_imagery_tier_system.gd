@@ -10,16 +10,12 @@ extends GutTest
 # ════════════════════════════════════════════════════════════
 
 func before_each():
-	# 清理 traits
 	PlayerState.traits.clear()
-	# 清理 emotions
 	PlayerState.emotions.clear()
-	# 清理 properties (burnout 等 stat 存在 Database.properties 中)
 	Database.properties.clear()
-	# 清理 flags
 	PlayerState.flags.clear()
-	# 清理 Database.imaginaries
 	Database.imaginaries.clear()
+	Database.imaginaries_detail.clear()
 
 
 # ════════════════════════════════════════════════════════════
@@ -129,19 +125,25 @@ func test_tier2_priority_over_tier1():
 
 
 # ════════════════════════════════════════════════════════════
-# B. ImaginaryComprehender.comprehend_category() 测试
+# B. ImaginaryComprehender.merge_category() 测试 (V2 API)
 # ════════════════════════════════════════════════════════════
 
-func test_comprehend_insufficient_fragments():
-	"""碎片不足 l2_threshold → 返回 false"""
-	var ima = _make_imaginary("test_cat")
-	ima.basic_imaginaries.append(_make_fragment("frag1", 3))
-	# l2_threshold = 2，但只有 1 个碎片
-	Database.imaginaries["test_cat"] = ima
+func _make_detail_imaginary(uuid: String, tag: String) -> Imaginary:
+	var im = Imaginary.new()
+	im.uuid = uuid
+	var tags: Array[String] = [tag]
+	im.detail_imaginaries = tags
+	return im
 
-	var success = ImaginaryComprehender.comprehend_category("test_cat")
-	assert_false(success, "碎片不足时应返回 false")
-	assert_eq(ima.basic_imaginaries.size(), 1, "碎片不应被清空")
+
+func test_comprehend_insufficient_fragments():
+	"""碎片不足 l2_threshold(2) → 返回 false"""
+	var concept = _make_imaginary("nature:autumn")
+	Database.imaginaries["nature:autumn"] = concept
+	Database.imaginaries_detail["a"] = _make_detail_imaginary("a", "ENV:NATURE:AUTUMN:leaf")
+
+	var success = ImaginaryComprehender.comprehend_category("nature:autumn")
+	assert_false(success, "1 个 Imaginary < l2_threshold → 应返回 false")
 
 
 func test_comprehend_nonexistent_category():
@@ -151,64 +153,74 @@ func test_comprehend_nonexistent_category():
 
 
 func test_comprehend_ink_contamination_min_tier():
-	"""墨水污染定律：final_tier = min(所有碎片 tier)"""
-	var ima = _make_imaginary("test_cat")
-	ima.basic_imaginaries.append(_make_fragment("frag1", 3))  # Tier 3
-	ima.basic_imaginaries.append(_make_fragment("frag2", 2))  # Tier 2 ← 污染
-	ima.basic_imaginaries.append(_make_fragment("frag3", 1))  # Tier 1 ← 最低
-	Database.imaginaries["test_cat"] = ima
+	"""合并坍缩：未预配置 tier 时默认设为 1"""
+	var concept = _make_imaginary("nature:autumn")
+	Database.imaginaries["nature:autumn"] = concept
+	Database.imaginaries_detail["a"] = _make_detail_imaginary("a", "ENV:NATURE:AUTUMN:leaf")
+	Database.imaginaries_detail["b"] = _make_detail_imaginary("b", "ENV:NATURE:AUTUMN:wind")
 
-	var success = ImaginaryComprehender.comprehend_category("test_cat")
+	var success = ImaginaryComprehender.comprehend_category("nature:autumn")
 	assert_true(success, "坍缩应成功")
-	assert_eq(ima.current_tier, 1, "墨水污染：final_tier = min(3,2,1) = 1")
+	assert_eq(concept.current_tier, 1, "merge_category 默认 tier=1")
+	assert_eq(concept.current_level, 2)
 
 
 func test_comprehend_all_tier3():
-	"""全部碎片 Tier 3 → final_tier = 3"""
-	var ima = _make_imaginary("test_cat")
-	ima.basic_imaginaries.append(_make_fragment("frag1", 3))
-	ima.basic_imaginaries.append(_make_fragment("frag2", 3))
-	Database.imaginaries["test_cat"] = ima
+	"""已合并的 concept（tier!=0）拒绝重复合并"""
+	var concept = _make_imaginary("nature:autumn")
+	Database.imaginaries["nature:autumn"] = concept
+	Database.imaginaries_detail["a"] = _make_detail_imaginary("a", "ENV:NATURE:AUTUMN:leaf")
+	Database.imaginaries_detail["b"] = _make_detail_imaginary("b", "ENV:NATURE:AUTUMN:wind")
 
-	var success = ImaginaryComprehender.comprehend_category("test_cat")
-	assert_true(success)
-	assert_eq(ima.current_tier, 3)
+	# 第一次合并成功
+	var ok1 = ImaginaryComprehender.comprehend_category("nature:autumn")
+	assert_true(ok1, "首次合并应成功")
+	assert_ne(concept.current_tier, 0, "合并后 tier != 0")
+
+	# 重新补充 Imaginaries，再次尝试合并
+	Database.imaginaries_detail["c"] = _make_detail_imaginary("c", "ENV:NATURE:AUTUMN:rain")
+	Database.imaginaries_detail["d"] = _make_detail_imaginary("d", "ENV:NATURE:AUTUMN:snow")
+
+	var ok2 = ImaginaryComprehender.comprehend_category("nature:autumn")
+	assert_false(ok2, "已合并的 concept 应拒绝重复合并")
 
 
 func test_comprehend_level_clamp():
-	"""level = clamp(fragments.size(), 0, 2)"""
-	var ima = _make_imaginary("test_cat")
-	ima.basic_imaginaries.append(_make_fragment("f1", 3))
-	ima.basic_imaginaries.append(_make_fragment("f2", 3))
-	ima.basic_imaginaries.append(_make_fragment("f3", 3))  # 3 个碎片 → level = 2
-	Database.imaginaries["test_cat"] = ima
+	"""level = clamp(imaginary_count, 0, 2)"""
+	var concept = _make_imaginary("nature:autumn")
+	Database.imaginaries["nature:autumn"] = concept
+	Database.imaginaries_detail["a"] = _make_detail_imaginary("a", "ENV:NATURE:AUTUMN:leaf")
+	Database.imaginaries_detail["b"] = _make_detail_imaginary("b", "ENV:NATURE:AUTUMN:wind")
+	Database.imaginaries_detail["c"] = _make_detail_imaginary("c", "ENV:NATURE:AUTUMN:rain")
 
-	var success = ImaginaryComprehender.comprehend_category("test_cat")
+	var success = ImaginaryComprehender.comprehend_category("nature:autumn")
 	assert_true(success)
-	assert_eq(ima.current_level, 2, "3 个碎片应 clamp 到 level 2")
+	assert_eq(concept.current_level, 2, "3 个 Imaginary → level clamp 到 2")
 
 
 func test_comprehend_level_exactly_1():
-	"""2 个碎片 → level = 2"""
-	var ima = _make_imaginary("test_cat")
-	ima.basic_imaginaries.append(_make_fragment("f1", 2))
-	ima.basic_imaginaries.append(_make_fragment("f2", 2))
-	Database.imaginaries["test_cat"] = ima
+	"""2 个 Imaginary → level = 2"""
+	var concept = _make_imaginary("nature:autumn")
+	Database.imaginaries["nature:autumn"] = concept
+	Database.imaginaries_detail["a"] = _make_detail_imaginary("a", "ENV:NATURE:AUTUMN:leaf")
+	Database.imaginaries_detail["b"] = _make_detail_imaginary("b", "ENV:NATURE:AUTUMN:wind")
 
-	var success = ImaginaryComprehender.comprehend_category("test_cat")
+	var success = ImaginaryComprehender.comprehend_category("nature:autumn")
 	assert_true(success)
-	assert_eq(ima.current_level, 2)
+	assert_eq(concept.current_level, 2, "2 个 Imaginary → level=2")
 
 
 func test_comprehend_clears_fragments():
-	"""坍缩后 basic_imaginaries 必须清空"""
-	var ima = _make_imaginary("test_cat")
-	ima.basic_imaginaries.append(_make_fragment("f1", 3))
-	ima.basic_imaginaries.append(_make_fragment("f2", 3))
-	Database.imaginaries["test_cat"] = ima
+	"""坍缩后 detail_imaginaries 对应的 Imaginary 应从 Database 中删除"""
+	var concept = _make_imaginary("nature:autumn")
+	Database.imaginaries["nature:autumn"] = concept
+	Database.imaginaries_detail["a"] = _make_detail_imaginary("a", "ENV:NATURE:AUTUMN:leaf")
+	Database.imaginaries_detail["b"] = _make_detail_imaginary("b", "ENV:NATURE:AUTUMN:wind")
 
-	ImaginaryComprehender.comprehend_category("test_cat")
-	assert_eq(ima.basic_imaginaries.size(), 0, "坍缩后碎片应被清空")
+	assert_true(Database.imaginaries_detail.has("a"), "合并前应存在")
+	ImaginaryComprehender.comprehend_category("nature:autumn")
+	assert_false(Database.imaginaries_detail.has("a"), "合并后 a 被消耗")
+	assert_false(Database.imaginaries_detail.has("b"), "合并后 b 被消耗")
 
 
 # ════════════════════════════════════════════════════════════
@@ -299,14 +311,15 @@ func test_bucket_effect_lowest_tier_wins():
 
 
 func test_hypocrisy_zuanying_tier3():
-	"""IAM=zuanying 且 min_tier=3 → 虚伪反噬，返回空 result (仅 trait operator)"""
+	"""IAM=zuanying + min_tier=3 → 虚伪反噬，passed=false, fail_reason='tier'"""
 	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_ZUANYING)
 
 	var concepts = _make_tiered_concepts([3, 3])
 	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
 
-	assert_eq(result.operators.size(), 1, "虚伪反噬应只产生 1 个算子")
-	assert_true(result.operators[0] is TraitOperator, "应为 TraitOperator")
+	assert_false(result.passed, "虚伪反噬应导致未通过")
+	assert_eq(result.fail_reason, "tier")
+	assert_eq(result.penalty_text, "[虚伪的拼凑者]")
 
 
 func test_hypocrisy_not_triggered_without_zuanying():
@@ -469,9 +482,6 @@ func _make_imaginary(uuid: String) -> ImaginaryConcept:
 	var ima = ImaginaryConcept.new()
 	ima.uuid = uuid
 	return ima
-
-func _make_fragment(blueprint_id: String, tier: int) -> Dictionary:
-	return {"blueprint_id": blueprint_id, "contexts": [], "tier": tier}
 
 func _make_tiered_concepts(tiers: Array) -> Array[ImaginaryConcept]:
 	var result: Array[ImaginaryConcept] = []
