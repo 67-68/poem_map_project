@@ -531,186 +531,115 @@ func process_xun_tick() -> void:
 
 func get_available_scene_actions() -> Dictionary:
 	#breakpoint
-	Logging.info("[ActionManager] ═══ 开始获取可用场景动作 ═══")
+	Logging.info("[ActionManager] ═══ 开始获取候选池 ═══")
 	
-	# ── Phase 0 前置通报：当前锁定/阻塞状态 ──
-	if _locked_in_actions.size() > 0:
-		var locked_list: Array[String] = []
-		for lid in _locked_in_actions:
-			var rem = _locked_in_actions[lid]
-			locked_list.append("%s(%s旬)" % [lid, "∞" if rem == -1 else str(rem)])
-		Logging.info("[ActionManager] 🔒 当前持久锁定 (%d): %s" % [_locked_in_actions.size(), ", ".join(locked_list)])
-	if _blocked_actions.size() > 0:
-		var blocked_list: Array[String] = []
-		for bid in _blocked_actions:
-			var rem = _blocked_actions[bid]
-			blocked_list.append("%s(%s旬)" % [bid, "∞" if rem == -1 else str(rem)])
-		Logging.info("[ActionManager] 🚫 当前持久阻塞 (%d): %s" % [_blocked_actions.size(), ", ".join(blocked_list)])
-	
-	# ── Phase 0: _locked_in 驱动自动预留 ──
+	# 自动预留
 	for action_id in _locked_in_actions:
 		var ok := reserve_action(action_id)
 		if ok:
 			Logging.info("[ActionManager] _locked_in 触发自动预留: %s" % action_id)
-	
-	# 🆕 Phase 0.25: focus 驱动自动预留（不污染 _locked_in_actions）
 	if _focus_controller.is_active():
 		for fid in _focus_controller.get_focus_ids():
 			if not fid in _reserved_action_ids:
 				_reserved_action_ids.append(fid)
 				Logging.info("[ActionManager] focus 触发自动预留: %s" % fid)
-	
 	if _reserved_action_ids.size() > 0:
 		Logging.info("[ActionManager] 📌 本回合预留席位 (%d/%d): %s" % [_reserved_action_ids.size(), MAX_PICK_COUNT, ", ".join(_reserved_action_ids)])
 	
-	var actions := {}
-	var num_intercepted := 0 # 被拦截计数器
-	
+	# 构建有效阻塞集（持久阻塞 + focus override）
 	var all_actions := Database.get_actions_all()
-	Logging.info("[ActionManager] 总动作池大小: %d，blocked: %d，locked: %d" % [all_actions.size(), _blocked_actions.size(), _locked_in_actions.size()])
-	
-	# 统一去 base_prov 里拿位置数据
-	var loc = Database.get_province(PlayerState.current_location)
-	if not loc:
-		Logging.err("当前位置幽灵化: %s" % PlayerState.current_location)
-		return actions
-	Logging.info("[ActionManager] 当前位置: %s, area_tags: %s" % [PlayerState.current_location, str(loc.area_tags)])
-	
-	# ── Phase 0.5: 阻塞过滤（含持久阻塞 + focus 阻塞覆盖）──
 	var _effective_blocked: Dictionary = _blocked_actions.duplicate()
 	if _focus_controller.is_active():
 		for bid in _focus_controller.get_block_override_ids(all_actions.keys()):
 			_effective_blocked[bid] = -1
-	
 	for action_id in _effective_blocked:
 		if action_id in _reserved_action_ids:
 			_reserved_action_ids.erase(action_id)
-			Logging.info("[ActionManager] 阻塞过滤，移除预留: %s" % action_id)
-
+	
+	# 候选池 = 所有未阻塞 action（权重统一 1）
+	var actions := {}
 	for a_id in all_actions:
-		var a = Database.get_action(a_id)
-		var is_valid = true # 🤓☝️ 设立拦截签证！
-		
-		# 0. 检查是否被 blocked（含 focus override）
 		if _effective_blocked.has(a_id):
-			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: 被阻塞" % [a_id])
-			num_intercepted += 1
 			continue
-		
-		# 1. 检查硬性需求 (Requirements) — 使用 check_action_validity 复用
-		var validity := check_action_validity(a)
-		if not validity.valid:
-			is_valid = false
-			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: %s" % [a_id, ", ".join(validity.reasons)])
-		
-		if not is_valid:
-			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: 不满足需求条件" % [a_id])
-			num_intercepted += 1
-			continue # 这个 continue 才会跳过外层的 a_id！
-			
-		# 2. 检查标签匹配 (Tags)
-		if a.area_tags and not a.area_tags.is_empty():
-			var tag_matched = false
-			if loc.area_tags:
-				for tag in loc.area_tags:
-					if tag in a.area_tags:
-						tag_matched = true
-						break
-						
-			if not tag_matched:
-				Logging.info("[ActionManager] 🚫 拦截 %s — 原因: 标签不匹配 (loc=%s, action=%s)" % [a_id, str(loc.area_tags), str(a.area_tags)])
-				num_intercepted += 1
-				continue # 没有交集，直接滚蛋
-				
-		# 4. Era 合法性检查（复用 is_action_era_allowed）
-		if not is_action_era_allowed(a):
-			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: Era不允许 (era=%s)" % [a_id, GameState.current_era])
-			num_intercepted += 1
-			continue
+		actions[a_id] = 1
 	
-		# 3. 活到最后的才是合法动作
-		var locked_mark := " 🔒" if _locked_in_actions.has(a_id) else ""
-		Logging.info("[ActionManager] ✅ 装载 %s%s" % [a_id, locked_mark])
-		append_counter(actions, a_id, a)
-	
-	# 🆕 最终汇总
-	var unlocked_count := actions.size() - _locked_in_actions.size()
-	Logging.info("[ActionManager] ═══ 可用池汇总: 总合法=%d | 🔒已锁定=%d | 🔓未锁定=%d | 🚫拦截=%d ═══" % [actions.size(), _locked_in_actions.size(), max(0, unlocked_count), num_intercepted])
+	Logging.info("[ActionManager] 候选池: 总计=%d | 🚫阻塞=%d ═══" % [actions.size(), _effective_blocked.size()])
 	return actions
 
 
-func append_counter(counter: Dictionary, item_name: String, _item) -> Dictionary:
-	if counter.has(item_name):
-		counter[item_name] += 1
-	else:
-		counter[item_name] = 1
-	return counter
-
-
-## 🎲 抽取行动并标记中签/未中签状态。
-## 改造后：除了返回选中的 actions，还会：
-## 1. 记录中签的 action_id 到 _selected_action_ids
-## 2. 为未中签的合法 action 设置 B类锁定叙事文本
-## 3. 为所有 action 清空 dynamic_failed_hint 后重建
+## 🎲 从候选池中抽取 pick_count 个 action。
+## 只做抽取 + 记录 selected_ids，不管理 hint/hidden 标志位。
+## 由 SceneActionScroll 在 refresh() 后统一调用 apply_visibility_flags()。
 func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT) -> Array[SceneAction]:
-	Logging.info("[ActionManager] 🎲 开始抽取行动 (目标%d个, 池中%d, 预留%d)" % [pick_count, action_pool.size(), _reserved_action_ids.size()])
+	Logging.info("[ActionManager] 🎲 开始抽取 (目标%d个, 池中%d, 预留%d)" % [pick_count, action_pool.size(), _reserved_action_ids.size()])
 	
-	# --- Phase 0: 清空所有 action 的 dynamic_failed_hint（准备重新标记） ---
-	for a_id in Database.get_actions_all():
-		var a = Database.get_action(a_id)
-		if a:
-			a.clear_failed_hint()
-	
-	# --- 校验：预留数量不能超过可用池大小 ---
 	if _reserved_action_ids.size() > action_pool.size():
-		Logging.err("[ActionManager] 预留数量 (%d) 超过当前可用行动数量 (%d)，无法抽取" % [_reserved_action_ids.size(), action_pool.size()])
+		Logging.err("[ActionManager] 预留数量 (%d) 超过候选池 (%d)" % [_reserved_action_ids.size(), action_pool.size()])
 		push_error("超过当前可用行动数量")
 		clear_reservations()
 		return []
 	
-	# --- 委托 ActionSelector 执行抽卡逻辑 ---
 	var result := _ActionSelector.select(action_pool, _reserved_action_ids, pick_count)
-	var selected_actions := result.selected_actions
-	
-	# --- Phase 3: 标记中签 ---
 	_selected_action_ids = result.selected_ids.duplicate()
 	
-	# 未中签的合法 action → B类锁定
-	for a_id in action_pool:
-		if a_id in _selected_action_ids:
+	var names: Array[String] = []
+	for sa in result.selected_actions:
+		names.append(sa.uuid)
+	Logging.info("[ActionManager] ═══ 本轮抽取: 共%d个 | 🔒预留%d | 🎲随机%d → %s ═══" % [result.selected_actions.size(), result.reserved_count, result.random_count, ", ".join(names)])
+	
+	clear_reservations()
+	return result.selected_actions
+
+
+## 集中设置所有 action 的 _is_hidden 和 dynamic_failed_hint 标志位。
+## 由 SceneActionScroll 在 refresh() 中 pick 完成后调用。
+## 三阶段：
+## Phase 1: 清空标志位 (已在 pick_top_actions 中通过 clear_failed_hint 完成)
+## Phase 2: HIDE — _is_hidden (era 不匹配 / blocked)
+## Phase 3: LOCK — dynamic_failed_hint (属性不满足 / 未中签)
+func apply_visibility_flags() -> void:
+	Logging.info("[ActionManager] ═══ 开始设置可见性标志 ═══")
+	
+	# Phase 2: HIDE — 硬性拦截
+	for a_id in Database.get_actions_all():
+		var a := Database.get_action(a_id) as Action
+		if not a:
 			continue
+		a.clear_failed_hint()  # 重置 _is_hidden + dynamic_failed_hint
+		
 		if _blocked_actions.has(a_id):
+			a._is_hidden = true
+			Logging.info("[ActionManager] 🔇 隐藏 %s — 原因: 被阻塞" % a_id)
+		elif not is_action_era_allowed(a):
+			a._is_hidden = true
+			Logging.info("[ActionManager] 🔇 隐藏 %s — 原因: Era不允许" % a_id)
+		elif _focus_controller.is_active() and a_id not in _focus_controller.get_focus_ids():
+			a._is_hidden = true
+			Logging.info("[ActionManager] 🔇 隐藏 %s — 原因: Focus session 外" % a_id)
+	
+	# Phase 3: LOCK — 软性灰化（仅对 visible 的 action）
+	for a_id in Database.get_actions_all():
+		var a := Database.get_action(a_id) as Action
+		if not a or a._is_hidden:
 			continue
-		var a = Database.get_action(a_id)
-		if a:
+		
+		if a_id in _selected_action_ids:
+			# 已中签 → 检查属性需求
+			var v := check_action_validity(a)
+			if not v.valid and v.reasons.size() > 0:
+				for reason in v.reasons:
+					a.append_failed_hint(reason)
+				Logging.info("[ActionManager] 🔒 中签但锁定 %s — %s" % [a_id, ", ".join(v.reasons)])
+		else:
+			# 未中签 → B类 + A类
 			if not a.lock_narrative.is_empty():
 				a.append_failed_hint(a.lock_narrative)
 			a.append_failed_hint("此路不通，换个主意吧")
-	
-	# ── Phase 3.5: 非池 action 恢复 A 类 hint ──
-	for a_id in Database.get_actions_all():
-		if a_id in action_pool:
-			continue
-		if _blocked_actions.has(a_id):
-			continue
-		var a = Database.get_action(a_id)
-		if not a:
-			continue
-		var validity := check_action_validity(a)
-		if not validity.valid and validity.reasons.size() > 0:
-			a.clear_failed_hint()
-			for reason in validity.reasons:
-				a.append_failed_hint(reason)
-			Logging.info("[ActionManager] 🏷️ 非池 action hint 恢复: id=%s, reasons='%s'" % [a_id, ", ".join(validity.reasons)])
-	
-	# 抽取结果汇总
-	var names: Array[String] = []
-	for sa in selected_actions:
-		names.append(sa.uuid)
-	Logging.info("[ActionManager] ═══ 本轮抽取结果: 共%d个 | 🔒预留%d | 🎲随机%d → %s ═══" % [selected_actions.size(), result.reserved_count, result.random_count, ", ".join(names)])
-	
-	clear_reservations()
-	return selected_actions
+			var v := check_action_validity(a)
+			if not v.valid and v.reasons.size() > 0:
+				for reason in v.reasons:
+					a.append_failed_hint(reason)
+			Logging.info("[ActionManager] 🔒 未中签锁定 %s" % a_id)
 
 
 # ════════════════════════════════════════════════════════════
@@ -746,5 +675,3 @@ func consume_generator(action: Action) -> void:
 		lock_action(action_type as int, 1)
 		action.generator = null
 		Logging.info("[ActionManager] generator '%s' 已耗尽，action 锁定 1 旬，generator 已清空" % gen_name)
-
-

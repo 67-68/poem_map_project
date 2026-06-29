@@ -4,70 +4,56 @@ var _locked_action_ids: Array[String] = []  # 当前灰化显示的 action ID �
 
 func refresh():
 	"""
-	刷新scene action（差分更新）
-	提供最多六个选中 + 其余灰化锁定展示
-	算法：权重加和，
+	三阶段管道刷新 scene action：
+	1. pick_top_actions — 从全池抽选
+	2. apply_visibility_flags — 设隐藏/锁定标志位
+	3. 按标志位渲染（_is_hidden 跳过，dynamic_failed_hint 决定亮/灰）
 	"""
-	#breakpoint
 	Logging.debug("[SceneActionScroll] refresh() 被调用")
-	var available_actions = ActionManager.get_available_scene_actions()
-	var selected_actions = ActionManager.pick_top_actions(available_actions)
-	Logging.info("SceneActionScroll" + "Selected actions: " + str(selected_actions))
+	
+	# Phase 1: 抽取
+	var pool = ActionManager.get_available_scene_actions()
+	var selected_actions = ActionManager.pick_top_actions(pool)
 	EventBus.selected_actions_change.emit(selected_actions)
 	
-	# 获取全部 action（含合法但未中签的）
-	var all_action_ids := Database.get_actions_all().keys()
-	var locked_actions: Array[SceneAction] = []
+	# Phase 2+3: 设置隐藏/锁定标志位
+	ActionManager.apply_visibility_flags()
 	
-	for a_id in all_action_ids:
-		if ActionManager._blocked_actions.has(a_id):
-			continue
-		if a_id in ActionManager._selected_action_ids:
-			continue
-		var a = Database.get_action(a_id) as SceneAction
-		if not a:
-			continue
-		# 🆕 Era 不允许的 action 完全不展示
-		if not ActionManager.is_action_era_allowed(a):
-			continue
-		locked_actions.append(a)
-	
-	# 构建完整按钮列表：选中 + 锁定
+	# 按标志位构建显示列表
 	var all_visible_actions: Array[SceneAction] = []
-	all_visible_actions.append_array(selected_actions)
-	all_visible_actions.append_array(locked_actions)
+	var _new_locked_ids: Array[String] = []
 	
-	# 记录锁定 action 的 ID 列表
-	_locked_action_ids.clear()
-	for la in locked_actions:
-		_locked_action_ids.append(la.uuid)
+	for a_id in Database.get_actions_all():
+		var a = Database.get_action(a_id) as SceneAction
+		if not a or a._is_hidden:
+			continue
+		all_visible_actions.append(a)
+		if a_id not in ActionManager._selected_action_ids:
+			_new_locked_ids.append(a.uuid)
 	
+	# 差分更新
 	var children = $V.get_children()
 	var target_count = all_visible_actions.size()
 	var current_count = children.size()
 	
-	# 1. 更新已有按钮（取 min）
 	for i in range(min(current_count, target_count)):
 		children[i].update_action(all_visible_actions[i])
-		# 更新锁定状态
-		if all_visible_actions[i].uuid in _locked_action_ids:
-			Logging.info("[SceneActionScroll] 🔒 set_locked: action=%s, reason='%s'" % [all_visible_actions[i].uuid, all_visible_actions[i].dynamic_failed_hint])
+		if all_visible_actions[i].uuid in _new_locked_ids or not all_visible_actions[i].dynamic_failed_hint.is_empty():
 			children[i].set_locked(all_visible_actions[i].dynamic_failed_hint)
 		else:
 			children[i].set_unlocked()
 	
-	# 2. 多余的销毁
 	for i in range(target_count, current_count):
 		children[i].queue_free()
 	
-	# 3. 不足的新建
 	for i in range(current_count, target_count):
 		var card = preload("res://ui/action_button.tscn").instantiate()
 		card.initialize(all_visible_actions[i])
-		if all_visible_actions[i].uuid in _locked_action_ids:
-			Logging.info("[SceneActionScroll] 🔒 set_locked(new): action=%s, reason='%s'" % [all_visible_actions[i].uuid, all_visible_actions[i].dynamic_failed_hint])
+		if all_visible_actions[i].uuid in _new_locked_ids or not all_visible_actions[i].dynamic_failed_hint.is_empty():
 			card.set_locked(all_visible_actions[i].dynamic_failed_hint)
 		$V.add_child(card)
+	
+	_locked_action_ids = _new_locked_ids
 
 
 ## 增量刷新：只更新已有按钮的锁定状态，不新建/销毁。

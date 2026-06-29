@@ -35,6 +35,10 @@ var generator: Generator = null
 ## 例如 "event_baiye_cooldown_wall"（拜谒被拒叙事）
 @export var fallback_event_uuid: String = ""
 
+## 🆕 运行时标志：true = 完全不显示在行动面板中（硬拦截：era/阻塞）
+## 优先级高于 dynamic_failed_hint。每轮调用 clear_failed_hint() 时自动重置。
+var _is_hidden: bool = false
+
 ## 🆕 运行时动态失败提示文本（每轮重建），用于 UI 灰化按钮的 tooltip 显示。
 ## A类（需求不满足）和 B类（未中签）的原因会换行拼接在此字段中。
 var dynamic_failed_hint: String = ""
@@ -54,7 +58,8 @@ func append_failed_hint(text: String) -> void:
 	else:
 		dynamic_failed_hint += "\n" + text
 
-## 🆕 清空 dynamic_failed_hint。
+## 🆕 清空 dynamic_failed_hint 并重置 _is_hidden。
 ## 每轮开始前或重新评估锁定状态前调用。
 func clear_failed_hint() -> void:
 	dynamic_failed_hint = ""
+	_is_hidden = false

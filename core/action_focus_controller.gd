@@ -83,7 +83,7 @@ func get_focus_ids() -> Array[String]:
 
 ## 返回在 focus session 期间应被阻塞的 action ID 列表（= 所有非聚焦 action）。
 ## 由 ActionManager 在 get_available_scene_actions 中调用。
-func get_block_override_ids(all_action_ids: Array[String]) -> Array[String]:
+func get_block_override_ids(all_action_ids: Array) -> Array:
 	if not is_active():
 		return []
 	var blocked: Array[String] = []
