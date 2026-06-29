@@ -1,7 +1,6 @@
 extends Node
 const _Action = preload("res://core/model/action.gd")
 const _ActionArchetype = preload("res://core/model/action_archetype.gd")
-const _CooldownFilter = preload("res://core/model/cooldown_filter.gd")
 const _Era = preload("res://core/model/era.gd")
 const _FocusActionOperator = preload("res://core/operators/focus_action_operator.gd")
 const _Generator = preload("res://core/model/generator.gd")
@@ -549,8 +548,6 @@ func get_available_scene_actions() -> Dictionary:
 		Logging.info("[ActionManager] 📌 本回合预留席位 (%d/%d): %s" % [_reserved_action_ids.size(), MAX_PICK_COUNT, ", ".join(_reserved_action_ids)])
 	
 	var actions := {}
-	var num_with_npc := 0   # 「有人」计数器
-	var num_solo := 0       # 「无人」计数器
 	var num_intercepted := 0 # 被拦截计数器
 	
 	var all_actions := Database.get_actions_all()
@@ -570,20 +567,9 @@ func get_available_scene_actions() -> Dictionary:
 		var a = Database.get_action(a_id)
 		var is_valid = true # 🤓☝️ 设立拦截签证！
 		
-		# 🆕 判定「有人」/「无人」（基于 CD 目标推导）
-		var action_npc_label := "无人"
-		if a is SceneAction:
-			var main_tag_str: String = a.main_tag if a.main_tag else ""
-			if not main_tag_str.is_empty():
-				var cd_target := CooldownFilter._derive_cooldown_target(main_tag_str)
-				if not cd_target.is_empty():
-					action_npc_label = "有人→%s" % cd_target
-				else:
-					action_npc_label = "无人"
-		
 		# 0. 检查是否被 blocked
 		if _blocked_actions.has(a_id):
-			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 被阻塞" % [action_npc_label, a_id])
+			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: 被阻塞" % [a_id])
 			num_intercepted += 1
 			continue
 		
@@ -591,10 +577,10 @@ func get_available_scene_actions() -> Dictionary:
 		var validity := check_action_validity(a)
 		if not validity.valid:
 			is_valid = false
-			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: %s" % [action_npc_label, a_id, ", ".join(validity.reasons)])
+			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: %s" % [a_id, ", ".join(validity.reasons)])
 		
 		if not is_valid:
-			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 不满足需求条件" % [action_npc_label, a_id])
+			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: 不满足需求条件" % [a_id])
 			num_intercepted += 1
 			continue # 这个 continue 才会跳过外层的 a_id！
 			
@@ -608,28 +594,24 @@ func get_available_scene_actions() -> Dictionary:
 						break
 						
 			if not tag_matched:
-				Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: 标签不匹配 (loc=%s, action=%s)" % [action_npc_label, a_id, str(loc.area_tags), str(a.area_tags)])
+				Logging.info("[ActionManager] 🚫 拦截 %s — 原因: 标签不匹配 (loc=%s, action=%s)" % [a_id, str(loc.area_tags), str(a.area_tags)])
 				num_intercepted += 1
 				continue # 没有交集，直接滚蛋
 				
 		# 4. Era 合法性检查（复用 is_action_era_allowed）
 		if not is_action_era_allowed(a):
-			Logging.info("[ActionManager] 🚫 拦截 [%s] %s — 原因: Era不允许 (era=%s)" % [action_npc_label, a_id, GameState.current_era])
+			Logging.info("[ActionManager] 🚫 拦截 %s — 原因: Era不允许 (era=%s)" % [a_id, GameState.current_era])
 			num_intercepted += 1
 			continue
 	
 		# 3. 活到最后的才是合法动作
 		var locked_mark := " 🔒" if _locked_in_actions.has(a_id) else ""
-		Logging.info("[ActionManager] ✅ 装载 [%s] %s%s" % [action_npc_label, a_id, locked_mark])
+		Logging.info("[ActionManager] ✅ 装载 %s%s" % [a_id, locked_mark])
 		append_counter(actions, a_id, a)
-		if action_npc_label.begins_with("有人"):
-			num_with_npc += 1
-		else:
-			num_solo += 1
 	
 	# 🆕 最终汇总
 	var unlocked_count := actions.size() - _locked_in_actions.size()
-	Logging.info("[ActionManager] ═══ 可用池汇总: 总合法=%d | 👤有人=%d | 🚶无人=%d | 🔒已锁定=%d | 🔓未锁定=%d | 🚫拦截=%d ═══" % [actions.size(), num_with_npc, num_solo, _locked_in_actions.size(), max(0, unlocked_count), num_intercepted])
+	Logging.info("[ActionManager] ═══ 可用池汇总: 总合法=%d | 🔒已锁定=%d | 🔓未锁定=%d | 🚫拦截=%d ═══" % [actions.size(), _locked_in_actions.size(), max(0, unlocked_count), num_intercepted])
 	return actions
 
 
@@ -748,21 +730,11 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 		reserved_count = min(_reserved_action_ids.size(), selected_actions.size())
 	random_count = selected_actions.size() - reserved_count
 	
-	var npc_count := 0
-	var solo_count := 0
 	var names: Array[String] = []
 	for sa in selected_actions:
 		names.append(sa.uuid)
-		if sa is SceneAction:
-			var main_tag_str: String = sa.main_tag if sa.main_tag else ""
-			if not main_tag_str.is_empty():
-				var cd_target := CooldownFilter._derive_cooldown_target(main_tag_str)
-				if cd_target.is_empty():
-					solo_count += 1
-				else:
-					npc_count += 1
 	
-	Logging.info("[ActionManager] ═══ 本轮抽取结果: 共%d个 | 🔒预留%d | 🎲随机%d | 👤有人%d | 🚶无人%d → %s ═══" % [selected_actions.size(), reserved_count, random_count, npc_count, solo_count, ", ".join(names)])
+	Logging.info("[ActionManager] ═══ 本轮抽取结果: 共%d个 | 🔒预留%d | 🎲随机%d → %s ═══" % [selected_actions.size(), reserved_count, random_count, ", ".join(names)])
 	
 	# 抽取完成后自动清除预留，避免跨回合污染
 	clear_reservations()

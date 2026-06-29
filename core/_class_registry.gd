@@ -23,7 +23,6 @@ var __reg_AmbitionData: AmbitionData = null
 var __reg_BaseEvent: BaseEvent = null
 var __reg_BaseOperator: BaseOperator = null
 var __reg_BaseOption: BaseOption = null
-var __reg_CooldownFilter: CooldownFilter = null
 var __reg_Decision: Decision = null
 var __reg_Disease: Disease = null
 var __reg_Era: Era = null
