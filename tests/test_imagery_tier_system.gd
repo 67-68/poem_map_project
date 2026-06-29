@@ -465,18 +465,18 @@ func test_legacy_no_poem_type_unchanged():
 # 辅助方法
 # ════════════════════════════════════════════════════════════
 
-func _make_imaginary(uuid: String) -> ImaginaryTag:
-	var ima = ImaginaryTag.new()
+func _make_imaginary(uuid: String) -> ImaginaryConcept:
+	var ima = ImaginaryConcept.new()
 	ima.uuid = uuid
 	return ima
 
 func _make_fragment(blueprint_id: String, tier: int) -> Dictionary:
 	return {"blueprint_id": blueprint_id, "contexts": [], "tier": tier}
 
-func _make_tiered_concepts(tiers: Array) -> Array[ImaginaryTag]:
-	var result: Array[ImaginaryTag] = []
+func _make_tiered_concepts(tiers: Array) -> Array[ImaginaryConcept]:
+	var result: Array[ImaginaryConcept] = []
 	for t in tiers:
-		var ima = ImaginaryTag.new()
+		var ima = ImaginaryConcept.new()
 		ima.uuid = "concept_tier%d_%d" % [t, randi()]
 		ima.current_tier = t
 		ima.current_level = 2

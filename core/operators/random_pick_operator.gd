@@ -6,7 +6,7 @@ class_name RandomPickOperator extends BaseOperator
 @export var datasource_name: String = ""
 
 ## 从每个结果对象中提取的字段名
-## 例如 ImaginaryTag 取 "uuid"
+## 例如 ImaginaryConcept 取 "uuid"
 @export var prop_from_result: String = ""
 
 ## 选取结果存入 Context 的 Key（类型为 Array[String]）

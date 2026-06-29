@@ -44,7 +44,7 @@ func _on_imaginary_changed() -> void:
 	var level_increases: Array[Dictionary] = []
 	
 	for uuid in all_imaginaries:
-		var ima = all_imaginaries[uuid] as ImaginaryTag
+		var ima = all_imaginaries[uuid] as ImaginaryConcept
 		if not ima:
 			continue
 		
@@ -83,7 +83,7 @@ func _refresh_snapshot() -> void:
 	
 	var all_imaginaries = Database.get_imaginaries_all()
 	for uuid in all_imaginaries:
-		var ima = all_imaginaries[uuid] as ImaginaryTag
+		var ima = all_imaginaries[uuid] as ImaginaryConcept
 		if ima and not ima.name.is_empty():
 			_level_snapshot[ima.name] = ima.current_level
 	

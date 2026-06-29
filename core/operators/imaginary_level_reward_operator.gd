@@ -13,7 +13,7 @@ func operate():
 	Logging.debug("ImaginaryLevelRewardOperator: Starting operate()")
 	var data = []
 	for uuid in Database.get_imaginaries_all():
-		var imaginary = Database.get_imaginaries_all()[uuid] as ImaginaryTag
+		var imaginary = Database.get_imaginaries_all()[uuid] as ImaginaryConcept
 		if not imaginary:
 			continue
 		if imaginary.current_level < 1:

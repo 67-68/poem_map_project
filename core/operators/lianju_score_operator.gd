@@ -9,7 +9,7 @@ class_name LianjuScoreOperator extends BaseOperator
 ## 评分完成后 push 到的事件 key，展示评分结果
 @export var result_event_key: String = "lianju_result"
 
-var _picked_imaginary: ImaginaryTag = null
+var _picked_imaginary: ImaginaryConcept = null
 var _final_score: int = 0
 var _picked_name: String = ""
 var _had_emotion_match: bool = false
@@ -18,9 +18,9 @@ var _had_emotion_match: bool = false
 func operate():
 	Logging.info("LianjuScoreOperator: Starting operate() — opening picker for player's imaginaries")
 
-	var data: Array[ImaginaryTag] = []
+	var data: Array[ImaginaryConcept] = []
 	for uuid in Database.get_imaginaries_all():
-		var imaginary = Database.get_imaginary(uuid) as ImaginaryTag
+		var imaginary = Database.get_imaginary(uuid) as ImaginaryConcept
 		if not imaginary:
 			continue
 		if imaginary.current_level < 1:
@@ -47,9 +47,9 @@ func _on_imaginary_picked(imaginary_picked):
 		_apply_score()
 		return
 
-	_picked_imaginary = imaginary_picked as ImaginaryTag
+	_picked_imaginary = imaginary_picked as ImaginaryConcept
 	if not _picked_imaginary:
-		Logging.err("LianjuScoreOperator: Picked item is not an ImaginaryTag!")
+		Logging.err("LianjuScoreOperator: Picked item is not an ImaginaryConcept!")
 		_final_score = 0
 		_picked_name = ""
 		_apply_score()

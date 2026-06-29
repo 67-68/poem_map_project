@@ -4,7 +4,7 @@ const _ActionTagFilter = preload("res://core/model/action_tag_filter.gd")
 const _BaseEvent = preload("res://model/event.gd")
 const _EraOperator = preload("res://core/operators/era_operator.gd")
 const _EventTicket = preload("res://core/model/event_ticket.gd")
-const _ImaginaryTag = preload("res://core/model/imaginary.gd")
+const _ImaginaryConcept = preload("res://core/model/imaginary_concept.gd")
 const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
 const _RequirementFilter = preload("res://core/model/requirement_filter.gd")
 const _SocialActionResolver = preload("res://core/social_action_resolver.gd")
@@ -97,7 +97,7 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
         initial_tickets.append(_create_ticket(e))
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight, fallback_uuid, context)
 
-func scan_poem_events(imaginaries: Array[ImaginaryTag]):
+func scan_poem_events(imaginaries: Array[ImaginaryConcept]):
     if GameState.is_game_over:
         Logging.info("[EventManager] scan_poem_events: GameState.is_game_over is true, skipping")
         return
@@ -119,10 +119,10 @@ func scan_poem_events(imaginaries: Array[ImaginaryTag]):
         
     var tags = []
     for i in imaginaries:
-        for entry in i.basic_imaginaries:
-            var blueprint_id = entry.get("blueprint_id", "")
-            if not blueprint_id.is_empty():
-                tags.append(blueprint_id)
+        for detail_imag in ImaginaryComprehender.get_imaginaries_for_concept(i.uuid):
+            for tag in detail_imag.detail_imaginaries:
+                if not tag.is_empty():
+                    tags.append(tag)
     
     # create tickets
     var tickets: Array[EventTicket] = []

@@ -25,7 +25,7 @@ func operate():
 		Logging.err("ImaginarySetLevelOperator.operate: target_level=%d 超出范围 [0, 2]，跳过" % target_level)
 		return
 
-	var ima = Database.get_imaginary(imaginary_name) as ImaginaryTag
+	var ima = Database.get_imaginary(imaginary_name) as ImaginaryConcept
 	if not ima:
 		Logging.err("ImaginarySetLevelOperator.operate: 在 Database.imaginaries 中未找到意象 '%s'" % imaginary_name)
 		return
