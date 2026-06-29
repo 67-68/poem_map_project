@@ -11,12 +11,18 @@
   "l_money_cost": -50,
 
   "s_health_cost": -15,
+  "s_health_recovery": 15,
   "m_health_cost": -30,
+  "m_health_recovery": 30,
+  "l_health_cost": -50,
   "l_health_recovery": 50,
 
   "s_progress_gain": 3,
+  "s_progress_cost": -3,
   "m_progress_gain": 6,
+  "m_progress_cost": -6,
   "l_progress_gain": 10,
+  "l_progress_cost": -10,
 
   "m_emotion_loss": -10,
 

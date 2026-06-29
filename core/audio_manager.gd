@@ -284,49 +284,66 @@ func get_all_sfx_categories() -> Array[String]:
 # ---------------------------------------------------------
 # 属性变化音效 (Property Sound Effects)
 # ---------------------------------------------------------
-## 播放属性变化音效，带 0.4s 防重叠间隔
+## 播放属性变化音效，带 0.4s 排队间隔
 ## 由 PropertyOperator 等 DSL 操作符在属性变化后调用
+## 若前一个音效刚播放，则自动延迟到 >= 0.4s 后播放
 func play_property_sound(prop_name: String, delta: int) -> void:
 	if delta == 0 or prop_name.is_empty():
 		return
 
-	# ── 0.4s 防重叠间隔 ──
-	# 连续属性变化时，若上次播放不足 0.4s 前，跳过本次播放
-	var now := Time.get_ticks_msec() / 1000.0
-	if now - _last_property_sound_time < PROPERTY_SOUND_COOLDOWN:
-		Logging.debug("%s: 属性音效被防重叠间隔跳过: prop=%s, delta=%d" % [LOG_TAG, prop_name, delta])
-		return
+	# ── 0.4s 排队间隔 ──
+	# 计算从当前时刻起，需要等多久才能凑足距上次播放 >= 0.4s
+	var now: float = Time.get_ticks_msec() / 1000.0
+	var target_time: float = max(_last_property_sound_time + PROPERTY_SOUND_COOLDOWN, now)
+	var delay: float = target_time - now
 
 	var stream := _PropertySoundMapper.get_property_sound(prop_name, delta)
-	if stream:
+	if not stream:
+		return
+
+	if delay <= 0.0:
+		# 间隔已满足，立即播放
 		play_sfx(stream)
 		_last_property_sound_time = now
+	else:
+		# 间隔不足，延迟到 target_time 播放
+		_last_property_sound_time = target_time
+		Logging.debug("%s: 属性音效延迟 %.2fs 播放: prop=%s, delta=%d" % [LOG_TAG, delay, prop_name, delta])
+		await get_tree().create_timer(delay).timeout
+		play_sfx(stream)
 
 
-## 播放意象升级音效，带 0.4s 防重叠间隔
+## 播放意象升级音效，带 0.4s 排队间隔
 func play_imaginary_sound(level: int) -> void:
 	if level < 1 or level > 3:
 		return
 
-	var now := Time.get_ticks_msec() / 1000.0
-	if now - _last_property_sound_time < PROPERTY_SOUND_COOLDOWN:
-		Logging.debug("%s: 意象音效被防重叠间隔跳过: level=%d" % [LOG_TAG, level])
-		return
+	var now: float = Time.get_ticks_msec() / 1000.0
+	var target_time: float = max(_last_property_sound_time + PROPERTY_SOUND_COOLDOWN, now)
+	var delay: float = target_time - now
 
 	var stream := _PropertySoundMapper.get_imaginary_sound(level)
-	if stream:
+	if not stream:
+		return
+
+	if delay <= 0.0:
 		play_sfx(stream)
 		_last_property_sound_time = now
+	else:
+		_last_property_sound_time = target_time
+		Logging.debug("%s: 意象音效延迟 %.2fs 播放: level=%d" % [LOG_TAG, delay, level])
+		await get_tree().create_timer(delay).timeout
+		play_sfx(stream)
 
 func play_sfx_loop(category: String, pitch_randomness: float = 0.0, volume_db: float = 0.0) -> bool:
 	"""从类别随机选一个音效，用独立循环播放器无限循环。返回是否成功。"""
 	if category.is_empty():
 		return false
 	if not _loop_player:
-		Logging.warn("%s: _loop_player 未初始化" % LOG_TAG)
+		Logging.warn("[sfx: loop] %s: _loop_player 未初始化" % LOG_TAG)
 		return false
 	if not _sfx_category_cache.has(category):
-		Logging.warn("%s: 未找到音效类别 [%s]，无法循环" % [LOG_TAG, category])
+		Logging.warn("[sfx: loop] %s: 未找到音效类别 [%s]，无法循环" % [LOG_TAG, category])
 		return false
 	
 	var streams = _sfx_category_cache[category] as Array[AudioStream]
