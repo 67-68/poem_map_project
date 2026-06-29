@@ -39,8 +39,17 @@
     "leather/handleSmallLeather.ogg",
     "leather/handleSmallLeather2.ogg",
     "book_flip/bookFlip1.ogg",
-    "book_flip/bookFlip2.ogg"
+    "book_flip/bookFlip2.ogg",
+    "property/health_gain.wav",
+    "property/health_loss.wav",
+    "property/imaginary_gain_t1.ogg",
+    "property/imaginary_gain_t2.ogg",
+    "property/imaginary_gain_t3.ogg",
+    "property/l_money_gain.ogg",
+    "property/m_money_gain.wav",
+    "property/progress_gain.wav",
+    "property/s_money_gain.wav"
   ],
-  "generated_at": "2026-06-25T07:17:50.376006+00:00",
-  "total": 40
+  "generated_at": "2026-06-29T03:22:30.000000+00:00",
+  "total": 49
 }

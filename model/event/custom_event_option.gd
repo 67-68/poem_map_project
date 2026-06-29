@@ -23,7 +23,7 @@ func upgrade_random_imagery():
 	
 	# 随机选择一个imagery
 	var random_imaginary = active_imaginaries.keys()[randi() % active_imaginaries.size()]
-	description = '将要升级Imaginary: %s' % random_imaginary.name
+	description = '将要升级Imaginary: %s' % random_imaginary
 	var operator = ImaginaryOperator.new()
 	operator.imaginary_name = random_imaginary
 	operator.operation = "upgrade_1"
