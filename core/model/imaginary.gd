@@ -1,25 +1,14 @@
-class_name ImaginaryTag extends GameEntity
+class_name Imaginary extends GameEntity
 
-# uuid: 一个标签的领域，类似social:wealth
-# name: 展示
-# description: 展示
+## 详细意象碎片 — 玩家在事件中获取的具体意象实体
+## uuid: 碎片的唯一标识，如 "changanleaf"
+## name: 展示名，如 "长安落叶"
 
-signal level_changed(new_level: int)
-signal tier_changed(new_tier: int)
+## 该碎片所属的四段式 Tag 列表
+## 例: ["ENV:NATURE:AUTUMN:changanleaf", "VIBE:THEME:MACABRE:changanleaf"]
+@export var detail_imaginaries: Array[String] = []
 
-@export var current_level := 0: # 0-2
-	set(value):
-		if current_level != value:
-			current_level = value
-			level_changed.emit(value)
-@export var current_tier := 0: # 1-3 (Tier 1/2/3), 0 = 未坍缩/未分配
-	set(value):
-		if current_tier != value:
-			current_tier = value
-			tier_changed.emit(value)
-@export var basic_imaginaries: Array[Dictionary] = [] # 存储结构化数据: [{ "blueprint_id": String, "contexts": Array[String] }]
-@export var l3_threshold := 4 # 需要四个意象来达到l3
-
-const l2_threshold := 2
-
-@export var merged: Array = []
+## 每个四段式 Tag 对应的感知描述文本
+## key: 四段式 Tag (如 "ENV:NATURE:AUTUMN:changanleaf")
+## value: 感知描述 (如 "秋风萧瑟，落叶满长安")
+@export var perceptions: Dictionary = {}

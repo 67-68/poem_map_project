@@ -1,7 +1,12 @@
 extends PanelContainer
 
-## 当前选中用于创作诗词的 ImaginaryTag（最多 3 个）
-var selected_imaginaries: Array[ImaginaryTag] = []
+## 诗词创作面板 — V4: 动态推导 + POEM_TYPE + 双层校验 + 拒写
+
+## 当前选中用于创作诗词的 ImaginaryConcept（最多 3 个）
+var selected_imaginaries: Array[ImaginaryConcept] = []
+
+## 当前选中的诗词类型（-1 = 未选择）
+var selected_poem_type: int = -1
 
 # ──────────────────────────────────────────────
 # SubViewport 动态内容 — preload 缓存
@@ -14,10 +19,10 @@ var _hovered_concept: AbstractConcept = null
 ## 每个 AbstractConcept 的原始 modulate（hover 恢复用）
 var _concept_original_modulates: Dictionary = {}  # AbstractConcept → Color
 
-func _ready() -> void:
-	Logging.info('PoemCrafter: initializing poem crafter')
 
-	# 监听意象变化 — 重建 SubViewport 动态节点
+func _ready() -> void:
+	Logging.info('PoemCrafter: initializing poem crafter V4')
+
 	EventBus.imaginary_changed.connect(on_imaginary_changed)
 
 	# 连接 PoemSlot 的点击信号
@@ -27,26 +32,57 @@ func _ready() -> void:
 		if c.has_signal("slot_clicked"):
 			c.slot_clicked.connect(on_slot_clicked)
 
-	# 连接 SubViewportContainer gui_input 检测 SubViewport 内部点击 / hover
+	# 连接 SubViewportContainer gui_input
 	var svp_container := $Panel/VBoxContainer/HBoxContainer/SubViewportContainer
 	svp_container.gui_input.connect(_on_subviewport_gui_input)
-	Logging.info('PoemCrafter: connected subviewport gui_input')
 
-	# 延迟重建 SubViewport（等 layout 完成 viewport.size 可用）
+	# 连接 POEM_TYPE toggle buttons
+	_connect_poem_type_buttons()
+
+	# "开始创作"按钮 — 由 tscn 的 _on_button_pressed() 命名约定自动连接
+	# "撕毁卷轴"按钮 — 位于 $Panel/Button，手动连接
+	var tear_btn := $Panel/Button
+	if tear_btn:
+		tear_btn.pressed.connect(_on_tear_scroll_pressed)
+
 	call_deferred("_rebuild_subviewport")
 
 
 # ──────────────────────────────────────────────
-# SubViewport 输入检测 — 物理空间拾取（点击 + hover）
+# POEM_TYPE Toggle Buttons
+# ──────────────────────────────────────────────
+
+func _connect_poem_type_buttons() -> void:
+	var type_vbox := $Panel/VBoxContainer/HBoxContainer/VBoxContainer
+	var type_buttons := type_vbox.get_children()
+	var labels := ["干谒", "应制", "登高", "怀古", "羇旅", "山水"]
+	for i in range(min(type_buttons.size(), labels.size())):
+		var btn = type_buttons[i]
+		if btn is Button:
+			btn.text = labels[i]
+			btn.toggled.connect(_on_poem_type_toggled.bind(i))
+
+	# 默认选中第一个
+	if type_buttons.size() > 0 and type_buttons[0] is Button:
+		type_buttons[0].button_pressed = true
+		selected_poem_type = 0
+
+
+func _on_poem_type_toggled(button_pressed: bool, type_idx: int) -> void:
+	if button_pressed:
+		selected_poem_type = type_idx
+		Logging.info('PoemCrafter: POEM_TYPE selected = %d (%s)' % [type_idx, ENUMS.POEM_TYPE.keys()[type_idx]])
+
+
+# ──────────────────────────────────────────────
+# SubViewport 输入检测
 # ──────────────────────────────────────────────
 
 func _on_subviewport_gui_input(event: InputEvent) -> void:
-	# ── 鼠标移动 → hover 检测 ──
 	if event is InputEventMouseMotion:
 		_update_hover(event.position)
 		return
 
-	# ── 鼠标点击 → 音效 + 动作 ──
 	if not (event is InputEventMouseButton) or not event.pressed:
 		return
 
@@ -57,18 +93,13 @@ func _on_subviewport_gui_input(event: InputEvent) -> void:
 		Logging.warn('PoemCrafter: no subviewport for click')
 		return
 
-	# 转换到 SubViewport 局部坐标
 	var local_pos = viewport.canvas_transform.affine_inverse() * event.position
-	Logging.info('PoemCrafter: local pos=%s viewport.size=%s' % [local_pos, viewport.size])
 
-	# 无效位置跳过
 	if local_pos.x < 0 or local_pos.y < 0 or local_pos.x > viewport.size.x or local_pos.y > viewport.size.y:
-		Logging.info('PoemCrafter: click outside viewport bounds')
 		return
 
 	var space_state := viewport.world_2d.direct_space_state
 	if not space_state:
-		Logging.warn('PoemCrafter: no space_state available')
 		return
 
 	var query := PhysicsPointQueryParameters2D.new()
@@ -77,16 +108,13 @@ func _on_subviewport_gui_input(event: InputEvent) -> void:
 	query.collision_mask = 1
 
 	var results := space_state.intersect_point(query)
-	Logging.info('PoemCrafter: intersect_point results=%d' % results.size())
 
 	for r in results:
 		var collider := r.get("collider") as Node
 		if not collider:
 			continue
-		Logging.info('PoemCrafter: hit node=%s class=%s' % [collider.name, collider.get_class()])
 
 		if collider is AbstractConcept:
-			Logging.info('PoemCrafter: AbstractConcept hit=%s btn=%d' % [collider.concept_name, event.button_index])
 			match event.button_index:
 				MOUSE_BUTTON_LEFT:
 					AudioManager.play_sfx_category("leather")
@@ -100,7 +128,6 @@ func _on_subviewport_gui_input(event: InputEvent) -> void:
 	Logging.info('PoemCrafter: no AbstractConcept at click position')
 
 
-## 根据鼠标位置更新 hover 状态
 func _update_hover(mouse_pos: Vector2) -> void:
 	var viewport := _get_subviewport()
 	if not viewport:
@@ -130,7 +157,6 @@ func _update_hover(mouse_pos: Vector2) -> void:
 				_apply_hover_enter(collider)
 			return
 
-	# 鼠标不在任何 concept 上
 	_clear_hover()
 
 
@@ -158,8 +184,9 @@ func on_imaginary_changed() -> void:
 	Logging.info('PoemCrafter: imaginary_changed signaled, rebuilding subviewport')
 	_rebuild_subviewport()
 
+
 # ──────────────────────────────────────────────
-# SubViewport 排布算法
+# SubViewport 排布算法 — V4 动态推导版
 # ──────────────────────────────────────────────
 
 func _rebuild_subviewport() -> void:
@@ -168,25 +195,10 @@ func _rebuild_subviewport() -> void:
 		Logging.warn('PoemCrafter: SubViewport not found, skipping rebuild')
 		return
 
-	# 清除旧动态节点及 hover 状态
 	_clear_hover()
 	_concept_original_modulates.clear()
 	for child in viewport.get_children():
 		child.queue_free()
-
-	# 收集活跃意象：有碎片 OR 已合并（显示合并态）
-	var active: Array[ImaginaryTag] = []
-	for ima in Database.get_imaginaries_all().values():
-		if selected_imaginaries.has(ima):
-			continue
-		if ima.basic_imaginaries.size() == 0 and ima.current_tier == 0:
-			continue
-		active.append(ima)
-
-	var N := active.size()
-	Logging.info('PoemCrafter: rebuilding subviewport with %d active imaginaries' % N)
-	if N == 0:
-		return
 
 	var vsize := viewport.size
 	if vsize.x <= 0 or vsize.y <= 0:
@@ -194,131 +206,100 @@ func _rebuild_subviewport() -> void:
 		call_deferred("_rebuild_subviewport")
 		return
 
+	# 从 ImaginaryComprehender 获取活跃的 concepts
+	var active = ImaginaryComprehender.get_active_concepts()
+	var concept_list: Array[ImaginaryConcept] = []
+	for key in active:
+		var c = active[key]
+		if c is ImaginaryConcept and not selected_imaginaries.has(c):
+			concept_list.append(c)
+
+	var N := concept_list.size()
+	Logging.info('PoemCrafter: rebuilding subviewport with %d active concepts' % N)
+	if N == 0:
+		return
+
 	var center := vsize / 2.0
 	var concept_radius := 150.0
 
 	for i in N:
-		var ima := active[i]
-		Logging.info('PoemCrafter: placing abstract concept "%s" (fragments=%d, tier=%d, level=%d)' %
-			[ima.name, ima.basic_imaginaries.size(), ima.current_tier, ima.current_level])
+		var concept := concept_list[i]
+		var concept_key = concept.uuid
+		var detail_imaginaries = ImaginaryComprehender.get_imaginaries_for_concept(concept_key)
+		var fragment_count = detail_imaginaries.size()
 
-		var concept := _ABSTRACT_CONCEPT_SCENE.instantiate()
-		concept.concept_name = ima.name
-		concept.imaginary_tag = ima
+		Logging.info('PoemCrafter: placing concept "%s" (key=%s, fragments=%d, tier=%d, level=%d)' %
+			[concept.name, concept_key, fragment_count, concept.current_tier, concept.current_level])
 
-		# 连接交互信号
-		concept.concept_selected.connect(on_concept_selected)
-		concept.concept_merge_requested.connect(on_concept_merge_requested)
-		concept.merge_animation_finished.connect(on_merge_animation_finished)
+		var node := _ABSTRACT_CONCEPT_SCENE.instantiate() as AbstractConcept
+		node.concept_name = concept.name
+		node.imaginary_tag = concept
 
-		# 合并态概念：直接设置 tier 颜色
-		if ima.current_tier > 0:
-			concept.modulate = AbstractConcept.TIER_COLORS.get(ima.current_tier, Color.WHITE)
+		node.concept_selected.connect(on_concept_selected)
+		node.concept_merge_requested.connect(on_concept_merge_requested)
+		node.merge_animation_finished.connect(on_merge_animation_finished)
+
+		# 已合并态：直接设置 tier 颜色
+		if concept.current_tier > 0:
+			node.modulate = AbstractConcept.TIER_COLORS.get(concept.current_tier, Color.WHITE)
 
 		if N == 1:
-			concept.position = center
+			node.position = center
 		else:
 			var angle := (2.0 * PI * i) / N - PI / 2.0
-			concept.position = center + Vector2(cos(angle), sin(angle)) * concept_radius
+			node.position = center + Vector2(cos(angle), sin(angle)) * concept_radius
 
-		viewport.add_child(concept)
-		_concept_original_modulates[concept] = concept.modulate
+		viewport.add_child(node)
+		_concept_original_modulates[node] = node.modulate
 
-		# 创建 OrbitDetail 节点（作为 concept 的子节点，便于吸入动画）
-		# 仅当有未合并碎片时创建
-		var fragments := ima.basic_imaginaries
-		var M := fragments.size()
-		for j in M:
+		# 创建 OrbitDetail 节点 — 从动态推导的 Imaginary 列表
+		for j in range(detail_imaginaries.size()):
+			var imag = detail_imaginaries[j] as Imaginary
+			if not imag:
+				continue
+
 			var detail := _DETAIL_IMAGINARY_SCENE.instantiate() as OrbitDetail
-			detail.center_target = concept
+			detail.center_target = node
 			detail.semi_major_axis = 60.0 + j * 30.0
 			detail.semi_minor_axis = 40.0 + j * 20.0
-			detail.phase_offset = (2.0 * PI * j) / M
+			detail.phase_offset = (2.0 * PI * j) / max(detail_imaginaries.size(), 1)
 			detail.orbit_speed = 0.5 + randf() * 0.5
 
-			var contexts: Array = fragments[j].get("contexts", [])
-			var display_text: String = str(contexts[0]) if contexts.size() > 0 else "..."
+			# 第一行：perception 文本，第二行：Imaginary name（暗红小字）
+			var display_text := ""
+			for tag in imag.detail_imaginaries:
+				var perception = imag.perceptions.get(tag, "")
+				if not perception.is_empty():
+					display_text = perception
+					break
+			if display_text.is_empty():
+				display_text = imag.name
+
+			display_text += "\n[color=darkred][font_size=10]%s[/font_size][/color]" % imag.name
 			detail.set_detail_text(display_text)
 
-			concept.add_child(detail)
+			node.add_child(detail)
 
 		# 碎片 >= 2 时启动合并就绪闪烁
-		if M >= 2 and ima.current_tier == 0:
-			concept.call_deferred("start_merge_ready_blink")
+		if fragment_count >= ImaginaryConcept.l2_threshold and concept.current_tier == 0:
+			node.call_deferred("start_merge_ready_blink")
 
 	Logging.info('PoemCrafter: subviewport rebuild complete')
 
 
-func _get_subviewport() -> SubViewport:
-	return $Panel/VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport as SubViewport
-
-
 # ──────────────────────────────────────────────
-# 槽位渲染
+# Concept 选择 / 合并
 # ──────────────────────────────────────────────
 
-func render_slots() -> void:
-	Logging.info('PoemCrafter: rendering slots, selected count: %d' % selected_imaginaries.size())
-	var slots := $Panel/VBoxContainer/InputImagPanel/H.get_children()
+func on_concept_selected(ima: ImaginaryConcept) -> void:
+	Logging.info('PoemCrafter: concept selected: %s' % ima.name)
 
-	for i in range(slots.size()):
-		var slot := slots[i] as PoemSlot
-		slot.remove_theme_stylebox_override("panel")
-		if i < selected_imaginaries.size():
-			var ima := selected_imaginaries[i]
-			var style := _build_style_from_tag(ima)
-			slot.apply_style(style)
-			slot.apply_text(ima.name)
-		else:
-			slot.apply_text('没有灵感...')
-
-
-func _build_style_from_tag(ima: ImaginaryTag) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0, 0, 0, 0.4)
-
-	var tier := ima.current_tier
-	var level := ima.current_level
-
-	match level:
-		1:
-			style.border_width_bottom = 1
-			style.border_color = Color(0.5, 0.5, 0.5, 0.5)
-		2:
-			style.set_border_width_all(1)
-			style.border_color = Color.WHITE
-		3:
-			style.set_border_width_all(1)
-			style.border_color = Color.RED
-			style.shadow_color = Color(1.0, 0.0, 0.0, 0.6)
-			style.shadow_size = 8
-
-	match tier:
-		3:
-			style.border_color = Color.GOLD
-			style.shadow_color = Color.GOLD
-			style.shadow_size = 6
-		2:
-			style.border_color = Color.SLATE_GRAY
-			style.shadow_color = Color(0.2, 0.2, 0.2, 0.6)
-			style.shadow_size = 4
-		1:
-			style.border_color = Color(0.3, 0.4, 0.2, 0.7)
-			style.shadow_color = Color(0.1, 0.15, 0.05, 0.5)
-			style.shadow_size = 2
-
-	return style
-
-
-# ──────────────────────────────────────────────
-# 交互逻辑
-# ──────────────────────────────────────────────
-
-func on_concept_selected(ima: ImaginaryTag) -> void:
-	Logging.info('PoemCrafter: concept selected: %s, selected count: %d' % [ima.name, selected_imaginaries.size()])
+	if selected_imaginaries.has(ima):
+		Logging.warn('PoemCrafter: concept already selected')
+		return
 
 	if selected_imaginaries.size() >= 3:
-		Logging.info('PoemCrafter: stop user from adding the fourth imaginary tag')
+		Logging.info('PoemCrafter: max 3 concepts reached')
 		return
 
 	selected_imaginaries.append(ima)
@@ -326,43 +307,37 @@ func on_concept_selected(ima: ImaginaryTag) -> void:
 	_rebuild_subviewport()
 
 	if selected_imaginaries.size() == 3:
-		Logging.info('PoemCrafter: reached max level, calculating poem')
-		var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries)
-		var text := PoemCraftingCalculator.translate(result.operators)
-		$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = text
-		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
-		Logging.info('PoemCrafter: poem text set: %s' % text)
+		Logging.info('PoemCrafter: 3 concepts selected, previewing grade')
+		var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, selected_poem_type)
+		if result.passed:
+			var text := PoemCraftingCalculator.translate(result.operators)
+			$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = text
+			$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
+		else:
+			$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
 
 
-func on_concept_merge_requested(ima: ImaginaryTag) -> void:
+func on_concept_merge_requested(ima: ImaginaryConcept) -> void:
 	Logging.info('PoemCrafter: merge requested for concept: %s' % ima.name)
 
 	if selected_imaginaries.has(ima):
 		Logging.warn('PoemCrafter: concept already selected, cannot merge')
 		return
 
-	# 非破坏性检查: 是否满足合并前提
-	if not ImaginaryComprehender.can_merge_category(ima.uuid):
-		Logging.warn('PoemCrafter: merge precondition failed for: %s' % ima.name)
+	if not ImaginaryComprehender.can_merge(ima.uuid):
+		Logging.warn('PoemCrafter: merge precondition failed for: %s (need ≥2 fragments)' % ima.name)
 		return
 
-	# 计算合并后的 tier（不修改 ImaginaryTag，仅用于动画颜色）
-	var target_tier = 999
-	for frag in ima.basic_imaginaries:
-		target_tier = mini(target_tier, frag.get("tier", 1))
-
-	# 找对应 AbstractConcept 节点
 	var concept := _find_concept_for_tag(ima)
 	if not concept:
-		Logging.warn('PoemCrafter: concept node not found for: %s, falling back to direct merge' % ima.name)
+		Logging.info('PoemCrafter: concept node not found, direct merge')
 		_direct_merge(ima)
 		return
 
-	# 播放合并动画，传入目标 tier 供颜色使用
-	concept.play_merge_animation(target_tier)
+	concept.play_merge_animation(1)
 
 
-func _find_concept_for_tag(ima: ImaginaryTag) -> AbstractConcept:
+func _find_concept_for_tag(ima: ImaginaryConcept) -> AbstractConcept:
 	var viewport := _get_subviewport()
 	if not viewport:
 		return null
@@ -372,31 +347,25 @@ func _find_concept_for_tag(ima: ImaginaryTag) -> AbstractConcept:
 	return null
 
 
-func _direct_merge(ima: ImaginaryTag) -> void:
+func _direct_merge(ima: ImaginaryConcept) -> void:
 	ImaginaryComprehender.merge_category(ima.uuid)
 	EventBus.imaginary_changed.emit()
 	_rebuild_subviewport()
 
 
-func on_merge_animation_finished(ima: ImaginaryTag) -> void:
+func on_merge_animation_finished(ima: ImaginaryConcept) -> void:
 	Logging.info('PoemCrafter: merge animation finished for: %s' % ima.name)
-
-	# 正式执行数据合并
-	ImaginaryComprehender.merge_category(ima.uuid)
-	EventBus.imaginary_changed.emit()
-	_rebuild_subviewport()
+	_direct_merge(ima)
 
 
 func on_slot_clicked(slot: PoemSlot) -> void:
-	Logging.info('PoemCrafter: slot clicked, selected count: %d' % selected_imaginaries.size())
 	var slots := $Panel/VBoxContainer/InputImagPanel/H.get_children()
 	var slot_index := slots.find(slot)
 
 	if slot_index == -1 or slot_index >= selected_imaginaries.size():
-		Logging.warn('PoemCrafter: slot clicked but no tag occupying at index %d' % slot_index)
 		return
 
-	Logging.info('PoemCrafter: removing tag at index %d' % slot_index)
+	Logging.info('PoemCrafter: removing concept at slot %d' % slot_index)
 	selected_imaginaries.remove_at(slot_index)
 	render_slots()
 
@@ -405,40 +374,109 @@ func on_slot_clicked(slot: PoemSlot) -> void:
 		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "代价是..."
 
 	_rebuild_subviewport()
-	Logging.info('PoemCrafter: slot cleared, new selected count: %d' % selected_imaginaries.size())
 
+
+# ──────────────────────────────────────────────
+# 诗词创作
+# ──────────────────────────────────────────────
 
 func _on_button_pressed() -> void:
 	if selected_imaginaries.size() != 3:
-		Logging.warn('PoemCrafter: selected count not 3, cannot craft poem')
+		Logging.warn('PoemCrafter: need exactly 3 concepts, have %d' % selected_imaginaries.size())
 		return
-	Logging.info('PoemCrafter: button pressed, crafting poem')
 
-	var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries)
-	Logging.info('PoemCrafter: poem grade calculated, %d operators' % result.operators.size())
+	Logging.info('PoemCrafter: crafting poem with poem_type=%d' % selected_poem_type)
+
+	var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, selected_poem_type)
+	Logging.info('PoemCrafter: grade calculated, passed=%s, secular=%f, literary=%f' %
+		[result.passed, result.secular_value, result.literary_value])
+
+	if not result.passed:
+		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
+		Logging.info('PoemCrafter: poem creation failed, reason=%s' % result.fail_reason)
+		if result.fail_reason == "fragment":
+			# 惩罚但不消耗意象
+			return
+		return
 
 	result.operate()
+
+	# 创建 Poem trait 并注册
+	var poem = Poem.new("POEM", ENUMS.POEM_TYPE.keys()[selected_poem_type], result.poem_level, result.secular_value, result.literary_value)
+	poem.uuid = "crafted_poem_%s_%d" % [ENUMS.POEM_TYPE.keys()[selected_poem_type], Time.get_unix_time_from_system()]
+	poem.name = "《%s》" % ENUMS.POEM_TYPE.keys()[selected_poem_type]
+	poem.specific_topic = ENUMS.POEM_TYPE.keys()[selected_poem_type]
+
+	# 注册到 Database（内存态）以便 PlayerState.add_trait 能通过 Database.get_trait 找到
+	Database.traits[poem.uuid] = poem
+	PlayerState.add_trait(poem.uuid)
+	Logging.info('PoemCrafter: Poem trait created and added: %s' % poem.uuid)
+
+	# 消耗 concepts
 	ImaginaryComprehender.consume_concepts(selected_imaginaries)
 
+	# 扫描诗词事件
 	Logging.info('PoemCrafter: scanning for poem events')
 	for ima in selected_imaginaries:
-		for entry in ima.basic_imaginaries:
-			var blueprint_id = entry.get("blueprint_id", "")
-			if not blueprint_id.is_empty():
-				PlayerState.current_action_tags.append(blueprint_id)
+		for detail_imag in ImaginaryComprehender.get_imaginaries_for_concept(ima.uuid):
+			for tag in detail_imag.detail_imaginaries:
+				if not tag.is_empty():
+					PlayerState.current_action_tags.append(tag)
 
 	EventManager.scan_poem_events(selected_imaginaries)
-	Logging.info('PoemCrafter: poem crafting complete')
 
-	Logging.info('PoemCrafter: clearing selected imaginaries')
+	# 推送诗词揭示事件
+	var ctx = {
+		"poem_secular": result.secular_value,
+		"poem_literary": result.literary_value,
+		"poem_type": poem.specific_topic,
+		"poem_level": result.poem_level,
+	}
+	EventBus.push_event.emit("poem_reveal", ctx)
+	Logging.info('PoemCrafter: poem reveal event pushed')
+
 	selected_imaginaries.clear()
 	render_slots()
 	_rebuild_subviewport()
 
 
-# ======================================================
+# ──────────────────────────────────────────────
+# 拒写机制
+# ──────────────────────────────────────────────
+
+func _on_tear_scroll_pressed() -> void:
+	Logging.info('PoemCrafter: 撕毁卷轴 — 拒写')
+
+	var amounts = NamedDSLParser._load_named_amounts()
+	var loss = amounts.get("s_literary_fame_loss", -10)
+	PlayerState.append_stat("literary_fame", loss)
+	Logging.info('PoemCrafter: 扣除 literary_fame %d' % loss)
+
+	EventBus.poem_cancel.emit()
+
+
+# ──────────────────────────────────────────────
+# 辅助
+# ──────────────────────────────────────────────
+
+func _get_subviewport() -> SubViewport:
+	return $Panel/VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport as SubViewport
+
+
+func render_slots() -> void:
+	var slots := $Panel/VBoxContainer/InputImagPanel/H.get_children()
+	for i in range(slots.size()):
+		if slots[i] is PoemSlot:
+			var slot := slots[i] as PoemSlot
+			if i < selected_imaginaries.size():
+				slot.set_tag(selected_imaginaries[i])
+			else:
+				slot.clear()
+
+
+# ──────────────────────────────────────────────
 # 浮现/退出动画
-# ======================================================
+# ──────────────────────────────────────────────
 
 func show_with_animation() -> void:
 	var original_mod := modulate

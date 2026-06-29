@@ -59,12 +59,12 @@ static var debug_dashboard_state = {
         "environment:snow": 1,
     },
 
-    # 详细意象蓝图（basic_imaginaries）— 直接预填入 ImaginaryTag.basic_imaginaries
-    # 每条是一个 Dict，格式同 PlayerState._on_request_add_imaginary 创建的结构：
-    #   blueprint_id: 4 段式 tag（TARGET_ACTOR_DUFU_STH）
-    #   contexts:     上下文标签列表
-    #   tier:         品级（1/2/3）
-    # 中间两段 ACTOR:DUFU（lowercase）用于匹配 ImainaryTag.uuid
+    # 详细碎片初始数据 — 预填入 Database.imaginaries_detail (Imaginary 对象)
+    # 每条是一个 Dict：
+    #   blueprint_id: 4 段式 tag（ENV:NATURE:AUTUMN:changanleaf），用 : 分隔
+    #   contexts:     上下文标签列表（保留兼容）
+    #   tier:         品级（1/2/3）（保留兼容）
+    # 末段 = Imaginary.uuid，中间两段 = ImaginaryConcept key
     "basic_imaginaries": [
         {
             "blueprint_id": "TARGET_ENVIRONMENT_SNOW_WANDER",
@@ -170,10 +170,6 @@ static var urn_resource_config: Dictionary = {
     "life_path_point": {
         "data_dir": "res://data/2_characters/life_path_points/",
         "db_field": "life_path_points",
-    },
-    "legendary_poem": {
-        "data_dir": "res://data/2_characters/poems/",
-        "db_field": "legendary_poems",
     },
     "normal_poem_event": {
         "data_dir": "res://data/3_actions_pool/write_poem/",

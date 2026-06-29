@@ -1,7 +1,7 @@
 class_name AbstractConcept
 extends Area2D
 
-## 抽象概念节点 — SubViewport 中表示一个 ImaginaryTag 大概念
+## 抽象概念节点 — SubViewport 中表示一个 ImaginaryConcept 大概念
 ## 每一个 AbstractConcept 是一个轨道圆心，DetailImaginary 绕其旋转
 ## 左键：提交意象给诗词创作；右键：合并坍缩碎片
 
@@ -13,15 +13,15 @@ const TIER_COLORS := {
 }
 const MERGE_READY_COLOR := Color(1.0, 0.9, 0.5, 1.0)  # 暖金闪烁
 
-## 关联的 ImaginaryTag
-var imaginary_tag: ImaginaryTag
+## 关联的 ImaginaryConcept
+var imaginary_tag: ImaginaryConcept
 
 ## 左键点击信号 — 提交意象
-signal concept_selected(imaginary_tag: ImaginaryTag)
+signal concept_selected(imaginary_tag: ImaginaryConcept)
 ## 右键点击信号 — 请求合并
-signal concept_merge_requested(imaginary_tag: ImaginaryTag)
+signal concept_merge_requested(imaginary_tag: ImaginaryConcept)
 ## 合并动画完成信号
-signal merge_animation_finished(imaginary_tag: ImaginaryTag)
+signal merge_animation_finished(imaginary_tag: ImaginaryConcept)
 
 var _blink_tween: Tween = null
 var _original_modulate: Color
@@ -98,7 +98,7 @@ func _stop_blink() -> void:
 # ──────────────────────────────────────────────
 
 ## 播放合并动画：吸入碎片 → 色彩过渡到目标 tier
-## target_tier: 合并后的目标 tier（不修改 ImaginaryTag，仅用于颜色）
+## target_tier: 合并后的目标 tier（不修改 ImaginaryConcept，仅用于颜色）
 ## 调用方 await 此方法，或连接 merge_animation_finished 信号
 func play_merge_animation(target_tier: int = 0) -> void:
 	stop_merge_ready_blink()
