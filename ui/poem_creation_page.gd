@@ -33,6 +33,10 @@ func _ready() -> void:
 		else:
 			hide_page()
 	)
+	EventBus.poem_cancel.connect(func():
+		if expand:
+			hide_page()
+	)
 
 
 func show_page() -> void:

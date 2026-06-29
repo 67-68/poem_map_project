@@ -105,7 +105,7 @@ layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "山水"
+text = "干谒"
 
 [node name="Button" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=736597084]
 layout_mode = 2
@@ -113,28 +113,28 @@ theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "山水"
+text = "应制"
 
 [node name="Button3" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=318625611]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "山水"
+text = "登高"
 
 [node name="Button4" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1211118108]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "山水"
+text = "怀古"
 
 [node name="Button5" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=47690329]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "山水"
+text = "羇旅"
 
 [node name="Button6" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1207844765]
 layout_mode = 2

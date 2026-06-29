@@ -101,3 +101,131 @@ ImaginaryComprehender            PoemCrafter
 | 2 | 膨胀后的层级分隔符用 `_` 还是 `:`？ | ✅ **`:`** — 与五维宪法 Tag 内部标准分隔符一致 |
 | 3 | 惩罚文案是否根据当前 IAM（狂客/钻营/逢迎）有不同 flavor？ | ❓ 待定 — A: 统一文案 / B: 分 IAM 定制 |
 | 4 | `merged` 字段存储原始四段式还是膨胀后的 Set？ | ❓ 待定 — A: 原始四段式 / B: 膨胀后 Set |
+
+
+-----
+
+Poem trait 动态注册方式：B) 通过 Database 内存态注册，走统一管道（未来 PoemTypeChooseOperator 等可复用）
+secular_value / literary_value 如何获取：我不明白你什么意思，这是赋予给诗词的，应该直接在诗词创建的时候算出来给到诗词的数据模型
+关于poem 的获取：我改主意了，使用一个专门的事件 + 动态插值 + 打字机慢放
+
+关于model 层
+1. ImaginaryTag, 删除basic imaginaries, 同时不需要任何其他属性增加
+2. _rebuild_subviewport 同样展示对应的abstract concept + detail imaginaries, 但是对于detail imaginary, 修改第一行展示 Imaginary 相对于这个抽象概念来说的"方面“，比如说AbstractConcept = ENV_NATURE_AUTUMN, 同时Imaginary (name = "长安落叶, uuid = 'changanleaf)的"detail_imaginaries"字段的列表中，包括一个字段叫做ENV_NATURE_AUTUMN_changanleaf, 那么就去imaginary 数据模型的"perceptions 字典获取 key = "ENV_NATURE_AUTUMN_changanleaf"对应的str val 作为展示，然后在第二行展示暗红色小字“长安落叶”
+3. 新加入Imaginary 数据模型，修改当前的Imaginary 文件名字为ImaginaryConcept, 类名字同样修改为这个(实际上是ImaginaryTag)
+4. ImaginaryComprehender 动态获取当前所有的Imaginary, 把他们的detail_imaginaries展开为一个集合（里面包括这些四段detail imaginary 的abstract concept，然后找出这些集合所包含的共同abstract concept，对他们求交集
+如果找到有一个abstract concept 超过两个集合存在（也就是有超过两个detailed imaginary），就去具体检索detailed imaginary 的数量，然后作为数据展示
+也就是说，没有具体对于detail imaginary 的存储，他们是动态推倒出来的，这些数据也是poem crafter 的数据源
+merged 字段：存原始四段式
+惩罚文案：先统一文案
+
+# 对话记录
+
+## 最终架构方案 — 诗词创作 V4
+
+### 数据模型全景
+
+```
+┌─────────────────────────────────────────────────┐
+│              Database 双层存储                      │
+├─────────────────────────────────────────────────┤
+│                                                  │
+│  imaginaries: Dict[String, ImaginaryConcept]     │
+│  ├─ "env:nature:autumn" → { name:"秋意", tier:2 }│
+│  ├─ "vibe:theme:macabre" → { name:"鬼氛", tier:1 }│
+│  └─ ...                                          │
+│                                                  │
+│  imaginaries_detail: Dict[String, Imaginary]     │
+│  ├─ "changanleaf" → {                             │
+│  │    name:"长安落叶",                              │
+│  │    detail_imaginaries: [                       │
+│  │      "ENV:NATURE:AUTUMN:changanleaf",          │
+│  │      "VIBE:THEME:MACABRE:changanleaf"          │
+│  │    ],                                          │
+│  │    perceptions: {                              │
+│  │      "ENV:NATURE:AUTUMN:changanleaf":          │
+│  │        "秋风萧瑟，落叶满长安"                     │
+│  │    }                                           │
+│  │  }                                             │
+│  └─ ...                                          │
+└─────────────────────────────────────────────────┘
+```
+
+### ImaginaryComprehender 动态推导流程
+
+```mermaid
+flowchart TD
+    A["获取所有 Imaginary (Database.imaginaries_detail)"] --> B["遍历每个 Imaginary.detail_imaginaries"]
+    B --> C["提取每条四段Tag的 abstract concept<br/>例: ENV:NATURE:AUTUMN:changanleaf → NATURE:AUTUMN"]
+    C --> D["构建映射: abstract_concept → Set[Imaginary]"]
+    D --> E{"某 abstract_concept<br/>被 ≥2 个 Imaginary 引用?"}
+    E -->|是| F["该 ImaginaryConcept 可合并/已积累"]
+    E -->|否| G["该 ImaginaryConcept 无积累"]
+    F --> H["count = Imaginaries.size() → level<br/>min(tier) → current_tier"]
+    
+    style F fill:#4ecdc4,color:#fff
+    style G fill:#888,color:#fff
+```
+
+**关键洞察：** 不再有显式的"碎片计数"。ImaginaryConcept 的 level/tier 由 ImaginaryComprehender **每次调用时动态计算**——遍历玩家拥有的所有 Imaginary，看它们引用了哪些 abstract concept，被多少 Imaginary 引用。
+
+### PoemCrafter UI 数据展示
+
+```
+┌──────────────────────────────────────┐
+│         SubViewport                   │
+│                                       │
+│   ● AbstractConcept: "秋意"           │
+│     └─ OrbitDetail:                   │
+│        第一行: "秋风萧瑟，落叶满长安"    │  ← Imaginary.perceptions[4-seg-tag]
+│        第二行: 长安落叶 (暗红小字)       │  ← Imaginary.name
+│                                       │
+│   ● AbstractConcept: "鬼氛"           │
+│     └─ OrbitDetail:                   │
+│        第一行: "乱葬岗上磷火幽幽..."     │
+│        第二行: 鬼火 (暗红小字)          │
+└──────────────────────────────────────┘
+```
+
+每个 AbstractConcept 的 OrbitDetail 节点来自 ImaginaryComprehender 的动态推导——所有 `detail_imaginaries` 中包含该 concept 的 Imaginary。
+
+### 诗词揭示事件（替代静默 add_trait）
+
+```
+[创作成功]
+  │
+  ├─→ PoemCraftingCalculator 返回 PoemCraftingResult
+  │     ├─ secular_value: 45.0
+  │     ├─ literary_value: 60.0
+  │     ├─ poem_type: "GAN_YE"
+  │     └─ tier: 2
+  │
+  ├─→ 构造上下文 context:
+  │     { poem_secular: 45, poem_literary: 60, poem_type: "干谒", poem_tier: 2 }
+  │
+  └─→ push_event("poem_reveal", context)
+        └─→ 事件描述: "你以「{@poem_type}」为题，沉吟良久...[打字机慢放]"
+        └─→ on_enter: context_fetch 将 poem 数据注入 display
+        └─→ 选项: "将此诗收入囊中" → add_trait(poem) + pop_event
+```
+
+---
+
+### ⚠️ 一个需要确认的架构问题
+
+动态推导模型有一个隐含约束：**如果 Imaginary 的 `detail_imaginaries` 只引用了一个 abstract concept，那它不会被计入任何 ImaginaryConcept 的"积累"中**（因为你的规则是"超过两个集合存在"即 ≥2 个 Imaginary 引用同一个 concept）。
+
+这意味着：
+- 玩家获得孤立的 Imaginary（如只有一个 `ENV:NATURE:AUTUMN:changanleaf`）时，在 ImaginaryComprehender 看来 concept "NATURE:AUTUMN" 的引用计数为 1，不满足 ≥2 的合并门槛
+- 玩家需要再获得另一个也引用 "NATURE:AUTUMN" 的 Imaginary（如 `ENV:NATURE:AUTUMN:beijingleaf`）才能触发合并
+
+**这个理解对吗？还是说单个 Imaginary 也应该在 PoemCrafter 中可见（即使未合并）？**
+
+---
+
+方案确认后我按 Phase 分批委派 Code 模式执行。
+
+补充：在PoemCrafter 右键collapase 了一个abstract concept 之后，需要消耗所使用的 imaginary，同时刷新页面
+poem 不使用 tier ，使用level
+单个 Imaginary 也应该在 PoemCrafter 中可见, 但无法合并
+揭示事件普通即可

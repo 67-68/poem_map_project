@@ -1,0 +1,23 @@
+{
+  "id": "745_jiaoyou",
+  "name": "野心交游事件库",
+  "era": "745_ambition",
+  "draw_strategies": "IMAGINARY_WEIGHTED_RANDOM",
+  "reset_on_empty": true,
+  "generation_configs": {
+    "background_context": "",
+    "ai_persona": "",
+    "prompt_features": [],
+    "dimensions": [],
+    "universal_requirement": [],
+    "plugins": [],
+    "word_count_min": 40,
+    "word_count_max": 200,
+    "max_retries": 3,
+    "api_model": "deepseek-reasoner",
+    "output_dir": "data/4_eras/745_ambition/jiaoyou/",
+    "universal_tags": ["action:main:jiaoyou"],
+    "universal_result": "",
+    "archetype_id": "jiaoyou"
+  }
+}
