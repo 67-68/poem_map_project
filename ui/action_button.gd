@@ -173,8 +173,11 @@ func _on_button_pressed() -> void:
 		action.record_click()
 		Logging.info("SceneActionPanel: Decision '%s' click %d/%d" % [action.name, action._times_clicked, action.allowed_count])
 	
+	# 🆕 批量模式：抑制属性变动期间的 reevaluate，全部 results 执行完后统一评估
+	ActionManager.begin_action_batch()
 	if action.action_results:
 		for r in action.action_results: r.operate()
+	ActionManager.end_action_batch()
 	
 	# ── Focus session 点击计数 hook ──
 	ActionManager.on_focus_action_clicked()

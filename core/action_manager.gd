@@ -38,6 +38,9 @@ var _selected_action_ids: Dictionary = {}
 ## 🆕 是否已连接 player_stat_changed 信号（防重连）
 var _stat_signal_connected: bool = false
 
+## 🆕 批量模式守卫：行动执行期间抑制 reevaluate，全部 results 执行完后统一评估。
+var _suppress_reevaluate: bool = false
+
 
 # ════════════════════════════════════════════════════════════
 # 即时预留（每回合，抽取后清空）
@@ -243,10 +246,10 @@ func disconnect_from_player_state() -> void:
 	_stat_signal_connected = false
 
 
-## 属性变动时重新评估所有 action 的锁定状态。
+## 属性变动时重新评估已中签 action 的锁定状态。
 ## 原则：
 ## - 已中签的 action：条件满足→启用，条件不满足→A类灰化
-## - 未中签的 action：永远灰化（B类叙事），不管条件是否满足
+## - 未中签的 action：跳过（B类叙事由 pick_top_actions() 统一管理）
 ## - 不重新随机抽取（保留 _selected_action_ids）
 func reevaluate_all_locks() -> void:
 	Logging.info("[ActionManager] ═══ 属性变动重评估启动 ═══")
@@ -277,20 +280,9 @@ func reevaluate_all_locks() -> void:
 					a.append_failed_hint(reason)
 				changed = true
 				Logging.info("[ActionManager] 🔄 reevaluate 已中签 A类: action=%s, hint='%s'" % [a_id, a.dynamic_failed_hint])
-		else:
-			# 未中签：永远灰化（B类叙事 + 可能的A类原因）
-			a.clear_failed_hint()
-			# 先加 B 类叙事
-			if not a.lock_narrative.is_empty():
-				a.append_failed_hint(a.lock_narrative)
-			# 再加 A 类原因（如果有）
-			if not validity.valid and validity.reasons.size() > 0:
-				for reason in validity.reasons:
-					a.append_failed_hint(reason)
-			changed = true
-			Logging.info("[ActionManager] 🔄 reevaluate 未中签: action=%s, B='%s', A='%s', final_hint='%s'" % [
-				a_id, a.lock_narrative, ", ".join(validity.reasons) if not validity.valid else "", a.dynamic_failed_hint
-			])
+		# 🆕 未中签：跳过。B类叙事由 pick_top_actions() 统一设置，
+		# reevaluate_all_locks 只负责已中签的 A类条件检查。
+		# 不 touch dynamic_failed_hint，避免覆盖 pick_top_actions 的结果。
 	
 	if changed:
 		EventBus.request_refresh_action_locks.emit()
@@ -299,8 +291,27 @@ func reevaluate_all_locks() -> void:
 		Logging.info("[ActionManager] ═══ 属性变动重评估完成，无变化 ═══")
 
 
+## 🆕 开始批量模式：行动执行期间抑制 reevaluate。
+## 在 action_results.operate() 循环之前调用。
+func begin_action_batch() -> void:
+	_suppress_reevaluate = true
+
+## 🆕 结束批量模式：解除抑制并统一执行一次 reevaluate。
+## 在 action_results.operate() 循环之后调用。
+func end_action_batch() -> void:
+	_suppress_reevaluate = false
+	reevaluate_all_locks()
+	# 🆕 强制刷新 action 面板（兜底 on_xun_tick → refresh() 信号可能失效的情况）
+	EventBus.request_refresh_action_panel.emit()
+
+
 ## player_stat_changed 信号回调。
 func _on_player_stat_changed(prop_name: String) -> void:
+	# 🆕 批量模式下抑制重评估，由 end_action_batch 统一处理
+	if _suppress_reevaluate:
+		Logging.debug("[ActionManager] 批量模式，抑制 reevaluate: %s" % prop_name)
+		return
+	
 	# 只对影响 action 可用性的属性变化做反应
 	# 白名单: time / money / health / literary_fame / talent 都能影响 action 可用性
 	if prop_name in ["time", "money", "health", "literary_fame", "talent"]:

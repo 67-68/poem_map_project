@@ -15,9 +15,12 @@ func operate():
 		Logging.info('restore time to 10')
 		return
 	var actual_day: int = max(0, int(day))
+	
+	# 先消耗 time stat，再推进日历。
+	Logging.info('TimeOperator: 消耗 %d 天, 再推进日历' % actual_day)
 	var ok: bool = PlayerState.append_stat("_time", -actual_day)
 	if not ok:
 		Logging.err('TimeOperator: 消耗 %d 天失败，PlayerState.append_stat("_time", %d) returned false，日历不推进' % [actual_day, -actual_day])
 		return
 	TimeService.advance_time(actual_day)
-	Logging.info('TimeOperator: 消耗 %d 天，调用 TimeService.advance_time(%d)' % [actual_day, actual_day])
+	Logging.info('TimeOperator: 消耗 %d 天完成，已推进日历' % actual_day)
