@@ -130,8 +130,8 @@ func death_judgement():
 	- flag_near_death_count < 3：自增计数器 + 强制续命 HEALTH=1
 	- flag_near_death_count >= 3：走死亡结算流程
 	"""
-	if GameState.current_era == "755_backhome":
-		if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) <= 0:
+	if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) <= 0:
+		if GameState.current_era == "755_backhome":
 			var count = PlayerState.get_flag("flag_near_death_count")
 			breakpoint
 			if count < 3:
@@ -144,9 +144,10 @@ func death_judgement():
 				AudioManager.stop_sfx_loop()
 				PlayerState.current_action_tags.append('actor:health:death:general')
 				EventManager.scan_death_events()
-	AudioManager.stop_sfx_loop()
-	PlayerState.current_action_tags.append('actor:health:death:general')
-	EventManager.scan_death_events()
+		else:
+			AudioManager.stop_sfx_loop()
+			PlayerState.current_action_tags.append('actor:health:death:general')
+			EventManager.scan_death_events()
 
 func _ready():
 	TimeService.on_xun_tick.connect(_process_single_xun_settlement)
