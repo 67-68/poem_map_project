@@ -109,7 +109,7 @@ class OptionFeature(TextFeature):
     id:     选项唯一标识，也是 AI 输出字段名
     prompt: AI 指令，告诉 AI 为这个选项生成什么文本
     text:   固定文本（fixed=True）/ AI指令兜底（prompt为空时的 AI 指令）
-    result: 选项级结果 DSL，如 "prop_sub(name=career_progress; val=2)"
+    result: 选项级结果 DSL，如 "prop_sub(name=progress; val=2)"
     requirement: 选项级需求 DSL，如 'poem_has(type=GAN_YE; min_level=1)'
     fixed:  True=固定文本（跳过 AI 生成），False=AI 生成
     accept_influence: 接受的维度影响白名单（dimension ID 列表）。
@@ -403,7 +403,7 @@ class EventPipelineConfig(BaseModel):
     # 使用 prop_add/prop_sub/prop_set 等属性操作 DSL，
     # 多个表达式用 | 分隔（Layer 0 OR 逻辑），
     # 最终会和维度缩放后的 DSL 合并。
-    # 例如: "prop_add(name=career_progress; val=1)"
+    # 例如: "prop_add(name=progress; val=1)"
     universal_result: str = ""
 
     # 通用选项 requirement（CSV option 行的 requirements 列）

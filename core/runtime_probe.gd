@@ -265,7 +265,7 @@ func _serialize_game_state() -> String:
 	var stats := {}
 	var prop_names := ["OFFICIAL_PRESTIGE", "LITERARY_FAME", "TALENT", "MONEY",
 		"HEALTH", "FATIGUE", "BURNOUT", "DRUNK", "SICK",
-		"INSPIRATION", "CAREER_PROGRESS"]
+		"INSPIRATION", "progress"]
 	for prop_name in prop_names:
 		var val = ps.get_stat_val(prop_name)
 		stats[prop_name.to_lower()] = val

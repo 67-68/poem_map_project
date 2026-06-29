@@ -9,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_fvsi3"]
 script = ExtResource("3_cfi6b")
-property = "career_progress"
+property = "progress"
 value = 69
 operator = 1
 

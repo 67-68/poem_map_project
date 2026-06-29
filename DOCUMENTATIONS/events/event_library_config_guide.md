@@ -88,7 +88,7 @@
   // ── 通用全局配置 ──
   "universal_tags": ["scene_imagery"],
   "universal_requirement": "prop_gt(name=ambition;val=0)",
-  "universal_result": "prop_add(name=career_progress; val=1)",
+  "universal_result": "prop_add(name=progress; val=1)",
   "universal_option_requirement": "poem_has(type=GAN_YE; min_level=1; failed_hint=\"{failed_hint}\")",
 
   // ── 生成参数 ──
@@ -516,7 +516,7 @@ const STORE_TO_PATH_MAP: Dictionary = {
       "id": "option_accept",              // 选项唯一 ID
       "text": "接受请求",                  // 固定文本（fixed=true 时使用）
       "prompt": "生成接受请求的选项文本",   // AI 生成指引
-      "result": "prop_add(name=career_progress; val=1)",  // 选项结果 DSL
+      "result": "prop_add(name=progress; val=1)",  // 选项结果 DSL
       "requirement": "poem_has(type=GAN_YE; min_level=1)", // 选项需求 DSL
       "fixed": false                       // true=固定文本，跳过 AI 生成
     }

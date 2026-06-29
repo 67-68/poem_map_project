@@ -258,8 +258,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:05:39] [WARN] UISoundComponent: 父节点 [TimeControlPanel] 没有可识别的点击信号，请手动设置 custom_click_signal
 [12:05:39] [INFO] SmoothScrollContainer[DecisioinScr]: _ready scroll_vertical=0.0 max=100 page=0
 [12:05:39] [ERROR] do not find stat official_prestige
-[12:05:39] [ERROR] do not find stat career_progress
-[12:05:39] [ERROR] do not find stat career_progress
+[12:05:39] [ERROR] do not find stat progress
+[12:05:39] [ERROR] do not find stat progress
 [12:05:39] [INFO] SmoothScrollContainer[SceneActionScr]: _ready scroll_vertical=0.0 max=100 page=0
 [12:05:39] [INFO] [ActionManager] ═══ 开始获取可用场景动作 ═══
 [12:05:39] [INFO] NamedDSLParser: 加载 named_amounts.json 完成，共 26 个条目
@@ -609,13 +609,13 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:05:47] [INFO] AmbitionHUD: Searching for perception with stage_id: stage0
 [12:05:47] [INFO] AmbitionHUD: Found perception for stage: stage0
 [12:05:47] [INFO] AmbitionHUD: Initial perception text set: 「状态」长安布衣。相府的门房连正眼都不会看你。长安城的名利场里，查无此人。
-[12:05:47] [ERROR] AmbitionHUD: tracked property 'career_progress' not found in Database
+[12:05:47] [ERROR] AmbitionHUD: tracked property 'progress' not found in Database
 [12:05:47] [WARN] AmbitionHUD: No tracked property to display progress
 [12:05:47] [INFO] AmbitionHUD: Static content loading complete
 [12:05:47] [INFO] AmbitionHUD: Stat changed signal received, prop: 
 [12:05:47] [INFO] ambition hud received stat changed signal
-[12:05:47] [ERROR] do not find stat career_progress
-[12:05:47] [ERROR] do not find stat career_progress
+[12:05:47] [ERROR] do not find stat progress
+[12:05:47] [ERROR] do not find stat progress
 [12:05:47] [INFO] ChoiceResult.operate: operator[3] = Resource
 [12:05:47] [INFO] PopEventOperator: Popping event from stack, transition_text=''
 [12:05:47] [INFO] pop_event: 弹出栈事件 - 中年寻志
@@ -674,13 +674,13 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:05:48] [INFO] TimeOperator: 先推进日历 3 天, 再消耗 time stat
 [12:05:48] [INFO] [time] 时间跃迁，推进 3 天...
 [12:05:48] [ERROR] do not find stat official_prestige
-[12:05:48] [ERROR] do not find stat career_progress
-[12:05:48] [ERROR] do not find stat career_progress
+[12:05:48] [ERROR] do not find stat progress
+[12:05:48] [ERROR] do not find stat progress
 [12:05:48] [INFO] change stat time by -3
 [12:05:48] [INFO] AmbitionHUD: Stat changed signal received, prop: time
 [12:05:48] [INFO] ambition hud received stat changed signal
-[12:05:48] [ERROR] do not find stat career_progress
-[12:05:48] [ERROR] do not find stat career_progress
+[12:05:48] [ERROR] do not find stat progress
+[12:05:48] [ERROR] do not find stat progress
 [12:05:48] [DEBUG] [ActionManager] 批量模式，抑制 reevaluate: time
 [12:05:48] [INFO] TimeOperator: 消耗 3 天完成, time stat 已更新
 [12:05:48] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
@@ -823,8 +823,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:05:49] [INFO] change stat progress by -20
 [12:05:49] [INFO] AmbitionHUD: Stat changed signal received, prop: progress
 [12:05:49] [INFO] ambition hud received stat changed signal
-[12:05:49] [ERROR] do not find stat career_progress
-[12:05:49] [ERROR] do not find stat career_progress
+[12:05:49] [ERROR] do not find stat progress
+[12:05:49] [ERROR] do not find stat progress
 [12:05:49] [DEBUG] [ActionManager] 属性 progress 变动，不在 action 重评估白名单中，跳过
 [12:05:49] [WARN] PropertyOperator: string property not set, use enum property
 [12:05:49] [DEBUG] PropertySoundMapper: 未找到匹配音效: prop=progress, delta=-20
@@ -882,13 +882,13 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:05:56] [INFO] TimeOperator: 先推进日历 3 天, 再消耗 time stat
 [12:05:56] [INFO] [time] 时间跃迁，推进 3 天...
 [12:05:56] [ERROR] do not find stat official_prestige
-[12:05:56] [ERROR] do not find stat career_progress
-[12:05:56] [ERROR] do not find stat career_progress
+[12:05:56] [ERROR] do not find stat progress
+[12:05:56] [ERROR] do not find stat progress
 [12:05:56] [INFO] change stat time by -3
 [12:05:56] [INFO] AmbitionHUD: Stat changed signal received, prop: time
 [12:05:56] [INFO] ambition hud received stat changed signal
-[12:05:56] [ERROR] do not find stat career_progress
-[12:05:56] [ERROR] do not find stat career_progress
+[12:05:56] [ERROR] do not find stat progress
+[12:05:56] [ERROR] do not find stat progress
 [12:05:56] [DEBUG] [ActionManager] 批量模式，抑制 reevaluate: time
 [12:05:56] [INFO] TimeOperator: 消耗 3 天完成, time stat 已更新
 [12:05:56] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
@@ -970,8 +970,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:06:00] [INFO] TimeOperator: 先推进日历 3 天, 再消耗 time stat
 [12:06:00] [INFO] [time] 时间跃迁，推进 3 天...
 [12:06:00] [ERROR] do not find stat official_prestige
-[12:06:00] [ERROR] do not find stat career_progress
-[12:06:00] [ERROR] do not find stat career_progress
+[12:06:00] [ERROR] do not find stat progress
+[12:06:00] [ERROR] do not find stat progress
 [12:06:00] [INFO] Xun tick: 上旬
 [12:06:00] [INFO] [EventManager] Starting event scan
 [12:06:00] [INFO] get_random_events: no main tag provided, returning all events
@@ -1384,8 +1384,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:06:05] [INFO] [MonthEndSettlement] money 衰减染色 (current=30, snapshot=50)
 [12:06:05] [INFO] AmbitionHUD: Stat changed signal received, prop: money
 [12:06:05] [INFO] ambition hud received stat changed signal
-[12:06:05] [ERROR] do not find stat career_progress
-[12:06:05] [ERROR] do not find stat career_progress
+[12:06:05] [ERROR] do not find stat progress
+[12:06:05] [ERROR] do not find stat progress
 [12:06:05] [INFO] [ActionManager] 关键属性 money 变动，触发锁定重评估
 [12:06:05] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
 [12:06:05] [INFO] [ActionManager] ═══ 属性变动重评估完成，无变化 ═══
@@ -1403,8 +1403,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:06:05] [INFO] [MonthEndSettlement] literary_fame 增长染色 (current=55, snapshot=50)
 [12:06:05] [INFO] AmbitionHUD: Stat changed signal received, prop: literary_fame
 [12:06:05] [INFO] ambition hud received stat changed signal
-[12:06:05] [ERROR] do not find stat career_progress
-[12:06:05] [ERROR] do not find stat career_progress
+[12:06:05] [ERROR] do not find stat progress
+[12:06:05] [ERROR] do not find stat progress
 [12:06:05] [INFO] [ActionManager] 关键属性 literary_fame 变动，触发锁定重评估
 [12:06:05] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
 [12:06:05] [INFO] [ActionManager] ═══ 属性变动重评估完成，无变化 ═══
@@ -1669,13 +1669,13 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:06:42] [INFO] TimeOperator: 先推进日历 4 天, 再消耗 time stat
 [12:06:42] [INFO] [time] 时间跃迁，推进 4 天...
 [12:06:42] [ERROR] do not find stat official_prestige
-[12:06:42] [ERROR] do not find stat career_progress
-[12:06:42] [ERROR] do not find stat career_progress
+[12:06:42] [ERROR] do not find stat progress
+[12:06:42] [ERROR] do not find stat progress
 [12:06:42] [INFO] change stat time by -4
 [12:06:42] [INFO] AmbitionHUD: Stat changed signal received, prop: time
 [12:06:42] [INFO] ambition hud received stat changed signal
-[12:06:42] [ERROR] do not find stat career_progress
-[12:06:42] [ERROR] do not find stat career_progress
+[12:06:42] [ERROR] do not find stat progress
+[12:06:42] [ERROR] do not find stat progress
 [12:06:42] [DEBUG] [ActionManager] 批量模式，抑制 reevaluate: time
 [12:06:42] [INFO] TimeOperator: 消耗 4 天完成, time stat 已更新
 [12:06:42] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
@@ -1803,8 +1803,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:06:47] [INFO] [MonthEndSettlement] health 衰减染色 (current=70, snapshot=100)
 [12:06:47] [INFO] AmbitionHUD: Stat changed signal received, prop: health
 [12:06:47] [INFO] ambition hud received stat changed signal
-[12:06:47] [ERROR] do not find stat career_progress
-[12:06:47] [ERROR] do not find stat career_progress
+[12:06:47] [ERROR] do not find stat progress
+[12:06:47] [ERROR] do not find stat progress
 [12:06:47] [INFO] MaobiShake: health=70 > 50, no shake
 [12:06:47] [INFO] [ActionManager] 关键属性 health 变动，触发锁定重评估
 [12:06:47] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
@@ -1826,8 +1826,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:06:47] [INFO] [MonthEndSettlement] money 增长染色 (current=80, snapshot=50)
 [12:06:47] [INFO] AmbitionHUD: Stat changed signal received, prop: money
 [12:06:47] [INFO] ambition hud received stat changed signal
-[12:06:47] [ERROR] do not find stat career_progress
-[12:06:47] [ERROR] do not find stat career_progress
+[12:06:47] [ERROR] do not find stat progress
+[12:06:47] [ERROR] do not find stat progress
 [12:06:47] [INFO] [ActionManager] 关键属性 money 变动，触发锁定重评估
 [12:06:47] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
 [12:06:47] [INFO] [ActionManager] 🔄 reevaluate 已中签 A类: action=fang_shi, hint='市集早已散去，只有几个醉汉在空地上歪歪扭扭地走'
@@ -1872,13 +1872,13 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:06:54] [INFO] TimeOperator: 先推进日历 2 天, 再消耗 time stat
 [12:06:54] [INFO] [time] 时间跃迁，推进 2 天...
 [12:06:54] [ERROR] do not find stat official_prestige
-[12:06:54] [ERROR] do not find stat career_progress
-[12:06:54] [ERROR] do not find stat career_progress
+[12:06:54] [ERROR] do not find stat progress
+[12:06:54] [ERROR] do not find stat progress
 [12:06:54] [INFO] change stat time by -2
 [12:06:54] [INFO] AmbitionHUD: Stat changed signal received, prop: time
 [12:06:54] [INFO] ambition hud received stat changed signal
-[12:06:54] [ERROR] do not find stat career_progress
-[12:06:54] [ERROR] do not find stat career_progress
+[12:06:54] [ERROR] do not find stat progress
+[12:06:54] [ERROR] do not find stat progress
 [12:06:54] [DEBUG] [ActionManager] 批量模式，抑制 reevaluate: time
 [12:06:54] [INFO] TimeOperator: 消耗 2 天完成, time stat 已更新
 [12:06:54] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
@@ -1993,18 +1993,18 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:06:59] [INFO] TimeOperator: 先推进日历 1 天, 再消耗 time stat
 [12:06:59] [INFO] [time] 时间跃迁，推进 1 天...
 [12:06:59] [ERROR] do not find stat official_prestige
-[12:06:59] [ERROR] do not find stat career_progress
-[12:06:59] [ERROR] do not find stat career_progress
+[12:06:59] [ERROR] do not find stat progress
+[12:06:59] [ERROR] do not find stat progress
 [12:06:59] [INFO] change stat time by -1
 [12:06:59] [INFO] AmbitionHUD: Stat changed signal received, prop: time
 [12:06:59] [INFO] ambition hud received stat changed signal
-[12:06:59] [ERROR] do not find stat career_progress
-[12:06:59] [ERROR] do not find stat career_progress
+[12:06:59] [ERROR] do not find stat progress
+[12:06:59] [ERROR] do not find stat progress
 [12:06:59] [DEBUG] [ActionManager] 批量模式，抑制 reevaluate: time
 [12:06:59] [INFO] [time] 时间跃迁，推进 1 天...
 [12:06:59] [ERROR] do not find stat official_prestige
-[12:06:59] [ERROR] do not find stat career_progress
-[12:06:59] [ERROR] do not find stat career_progress
+[12:06:59] [ERROR] do not find stat progress
+[12:06:59] [ERROR] do not find stat progress
 [12:06:59] [INFO] TimeOperator: 消耗 1 天完成, time stat 已更新
 [12:06:59] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
 [12:06:59] [INFO] [ActionManager] 🔄 reevaluate 已中签 A类: action=fang_shi, hint='市集早已散去，只有几个醉汉在空地上歪歪扭扭地走'
@@ -2134,8 +2134,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:07:06] [INFO] [MonthEndSettlement] health 衰减染色 (current=55, snapshot=100)
 [12:07:06] [INFO] AmbitionHUD: Stat changed signal received, prop: health
 [12:07:06] [INFO] ambition hud received stat changed signal
-[12:07:06] [ERROR] do not find stat career_progress
-[12:07:06] [ERROR] do not find stat career_progress
+[12:07:06] [ERROR] do not find stat progress
+[12:07:06] [ERROR] do not find stat progress
 [12:07:06] [INFO] MaobiShake: health=55 > 50, no shake
 [12:07:06] [INFO] [ActionManager] 关键属性 health 变动，触发锁定重评估
 [12:07:06] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
@@ -2160,8 +2160,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:07:06] [INFO] [MonthEndSettlement] money 增长染色 (current=65, snapshot=50)
 [12:07:06] [INFO] AmbitionHUD: Stat changed signal received, prop: money
 [12:07:06] [INFO] ambition hud received stat changed signal
-[12:07:06] [ERROR] do not find stat career_progress
-[12:07:06] [ERROR] do not find stat career_progress
+[12:07:06] [ERROR] do not find stat progress
+[12:07:06] [ERROR] do not find stat progress
 [12:07:06] [INFO] [ActionManager] 关键属性 money 变动，触发锁定重评估
 [12:07:06] [INFO] [ActionManager] ═══ 属性变动重评估启动 ═══
 [12:07:06] [INFO] [ActionManager] 🔄 reevaluate 已中签 A类: action=fang_shi, hint='市集早已散去，只有几个醉汉在空地上歪歪扭扭地走'
@@ -2325,8 +2325,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:07:14] [INFO] [time] jump 2 days to next xun
 [12:07:14] [INFO] [time] 时间跃迁，推进 2 天...
 [12:07:14] [ERROR] do not find stat official_prestige
-[12:07:14] [ERROR] do not find stat career_progress
-[12:07:14] [ERROR] do not find stat career_progress
+[12:07:14] [ERROR] do not find stat progress
+[12:07:14] [ERROR] do not find stat progress
 [12:07:14] [INFO] Xun tick: 中旬
 [12:07:14] [INFO] [EventManager] Starting event scan
 [12:07:14] [INFO] get_random_events: no main tag provided, returning all events
@@ -2687,8 +2687,8 @@ Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M5 (Apple9)
 [12:07:17] [INFO] [time] jump 10 days to next xun
 [12:07:17] [INFO] [time] 时间跃迁，推进 10 天...
 [12:07:17] [ERROR] do not find stat official_prestige
-[12:07:17] [ERROR] do not find stat career_progress
-[12:07:17] [ERROR] do not find stat career_progress
+[12:07:17] [ERROR] do not find stat progress
+[12:07:17] [ERROR] do not find stat progress
 [12:07:17] [INFO] Xun tick: 下旬
 [12:07:17] [INFO] [EventManager] Starting event scan
 [12:07:17] [INFO] get_random_events: no main tag provided, returning all events

@@ -3,9 +3,9 @@
 ## Changed
 - **属性矩阵大清理** — 属性从 12+6 缩减至 6 个核心属性
   - [`model/enumerates.gd`](model/enumerates.gd) — `PROPS` 枚举重构：只保留 `MONEY`, `HEALTH`, `TIME`, `LITERARY_FAME`, `PROGRESS`, `TALENT`
-  - [`core/player_state.gd`](core/player_state.gd) — `init_props()` 适配新枚举，`TIME` 初始化为 10（每旬重置），`PROGRESS` 从 `resources.career_progress` 映射
+  - [`core/player_state.gd`](core/player_state.gd) — `init_props()` 适配新枚举，`TIME` 初始化为 10（每旬重置），`PROGRESS` 从 `resources.progress` 映射
   - **新增 `TIME` 属性**：每旬自动重置为 10，代表玩家可支配的时间资源
-  - **废弃属性映射**：`fatigue`/`burnout`/`sick` → 并入 `health`；`career_progress`/`official_prestige` → 合并为 `progress`；`ambition`/`inspiration`/`drunk` → 删除
+  - **废弃属性映射**：`fatigue`/`burnout`/`sick` → 并入 `health`；`progress`/`official_prestige` → 合并为 `progress`；`ambition`/`inspiration`/`drunk` → 删除
   - 代码层 12 个文件适配：所有 `player_state.gd`、`survival_manager.gd`、`month_end_settlement.gd`、`consequence_executer.gd` 等文件中的 `change_stat`/`get_stat_val` 调用全部迁移到新属性名
   - 16 个 Config JSON（`tools/event_base_config_*.json`）中 177 处 `operator_dsl`/`result` 属性引用全部替换
   - 16 个 CSV（`data/4_eras/747_kuangda/` 下各事件库）全量 reassembly 重生成

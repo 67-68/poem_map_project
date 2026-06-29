@@ -22,7 +22,7 @@
 		],
 		"name": "burnout"
 	},
-	"career_progress": {
+	"progress": {
 		"change_perceptions": [
 			{
 				"gain": "仕途小进",
@@ -43,7 +43,7 @@
 				"min_delta": 31
 			}
 		],
-		"name": "career_progress"
+		"name": "progress"
 	},
 	"drunk": {
 		"change_perceptions": [

@@ -133,7 +133,7 @@ graph TB
       "drunk": 0,
       "sick": 0,
       "inspiration": 30,
-      "career_progress": 10,
+      "progress": 10,
       "official_prestige": 40
     },
     "traits": [

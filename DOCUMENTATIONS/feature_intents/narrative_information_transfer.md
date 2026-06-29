@@ -130,7 +130,7 @@ class NarrativeConstraint(BaseModel):
 {
   "id": "option_accept",
   "prompt": "用20字以内描述玩家回应的动作（递上某物/呈上名帖/献上包裹）",
-  "result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=career_progress; val=3)",
+  "result": "use_template(urn=event_option:poem_type_choose_zhuoliu) | prop_add(name=progress; val=3)",
   "requirement": "poem_has(type=GAN_YE; min_level=1; failed_hint=\"{failed_hint}\")",
   "narrative_constraint": {
     "type": "blind_box_transaction",

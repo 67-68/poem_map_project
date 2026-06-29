@@ -4,7 +4,7 @@
 
 PROPS 系统是玩家的核心属性系统，用于存储和管理玩家的持久状态。与情绪（EMOTION）系统的临时性不同，PROPS 代表玩家的长期属性，如财富、健康、声望等。
 
-> **2025-06 大清理**：属性从 12+6 缩减至 6 个核心属性，废弃 fatigue/burnout/sick（并入 health）、career_progress/official_prestige（合并为 progress）、ambition/inspiration/drunk（删除），新增 TIME（每旬重置 10）。
+> **2025-06 大清理**：属性从 12+6 缩减至 6 个核心属性，废弃 fatigue/burnout/sick（并入 health）、progress/official_prestige（合并为 progress）、ambition/inspiration/drunk（删除），新增 TIME（每旬重置 10）。
 
 ## 核心概念
 
@@ -18,7 +18,7 @@ enum PROPS {
     HEALTH,         # 健康（吸收 fatigue/burnout/sick 语义）
     TIME,           # 时间（每旬重置为 10，代表可支配时间资源）
     LITERARY_FAME,  # 文学声望
-    PROGRESS,       # 仕途进度（合并 career_progress + official_prestige）
+    PROGRESS,       # 仕途进度（合并 progress + official_prestige）
     TALENT          # 才华
 }
 ```
@@ -50,7 +50,7 @@ func init_props():
     append_stat(ENUMS.PROPS.HEALTH, resources.health)
     append_stat(ENUMS.PROPS.LITERARY_FAME, resources.literary_fame)
     append_stat(ENUMS.PROPS.TALENT, resources.talent)
-    append_stat(ENUMS.PROPS.PROGRESS, resources.career_progress)
+    append_stat(ENUMS.PROPS.PROGRESS, resources.progress)
     append_stat(ENUMS.PROPS.TIME, 10)
 ```
 
@@ -65,7 +65,7 @@ func init_props():
    ↓
 3. append_stat() 为每个枚举属性设置初始值
    - TIME 硬编码初始化为 10（每旬由 month_end_settlement 重置）
-   - PROGRESS 从 resources.career_progress 读取（兼容旧字段名）
+   - PROGRESS 从 resources.progress 读取（兼容旧字段名）
    ↓
 4. 游戏运行时通过 change_stat/get_stat_val 操作属性
 ```
@@ -102,7 +102,7 @@ model/enumerates.gd              # PROPS 枚举定义（6 个属性）
 | `HEALTH` | `health` + `fatigue` + `burnout` + `sick` | 健康统一吸收疲劳、倦怠、疾病语义 |
 | `LITERARY_FAME` | `literary_fame` | 无变化 |
 | `TALENT` | `talent` | 无变化 |
-| `PROGRESS` | `career_progress` + `official_prestige` | 仕途进度合并官职声望 |
+| `PROGRESS` | `progress` + `official_prestige` | 仕途进度合并官职声望 |
 | `TIME` | **新增** | 每旬重置为 10，代表可支配时间资源 |
 
 ### 已删除的属性
@@ -239,7 +239,7 @@ func get_staged_perception_text() -> String:
 
 1. **命名一致性**：枚举名使用大写下划线（`LITERARY_FAME`），字符串键使用小写下划线（`literary_fame`）
 2. **TIME 重置**：每旬由 month_end_settlement 自动重置为 10，不要在事件中手动修改 TIME
-3. **PROGRESS 兼容**：`init_props()` 从 `resources.career_progress` 读取初始值，保持 SourceOfTruth 字段名兼容
+3. **PROGRESS 兼容**：`init_props()` 从 `resources.progress` 读取初始值，保持 SourceOfTruth 字段名兼容
 4. **初始化时机**：属性在 PlayerState._ready() 时设置初始值
 5. **性能考虑**：属性变更会触发信号，频繁变更可能影响性能
 6. **数据持久化**：Property 资源中的 val 值在运行时修改，需要考虑存档机制

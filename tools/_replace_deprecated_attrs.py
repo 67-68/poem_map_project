@@ -49,12 +49,12 @@ def replace_in_string(s):
     if n:
         changes.append(f"burnout/BURNOUT→health: {n}")
 
-    # career_progress → progress
+    # progress → progress
     s, n = re.subn(
-        r'prop_(add|sub)\(name=career_progress;\s*val=(-?\d+)\)',
+        r'prop_(add|sub)\(name=progress;\s*val=(-?\d+)\)',
         r'prop_\1(name=progress; val=\2)', s)
     if n:
-        changes.append(f"career_progress→progress: {n}")
+        changes.append(f"progress→progress: {n}")
 
     # official_prestige → progress
     s, n = re.subn(
@@ -197,7 +197,7 @@ def _has_changes(fp):
         # Check for any remaining deprecated patterns
         patterns = [
             r'prop_(add|sub)\(name=(fatigue|FATIGUE|burnout|BURNOUT)',
-            r'prop_(add|sub)\(name=career_progress',
+            r'prop_(add|sub)\(name=progress',
             r'prop_(add|sub)\(name=official_prestige',
             r'prop_add\(name=(sick|SICK)',
             r'flag_int_(append|sub)\(name=kuangda',

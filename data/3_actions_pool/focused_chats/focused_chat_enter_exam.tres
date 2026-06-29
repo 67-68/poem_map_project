@@ -23,7 +23,7 @@ metadata/_custom_type_script = "uid://dtw3kde1u305k"
 
 [sub_resource type="Resource" id="Resource_eplko"]
 script = ExtResource("6_2j76i")
-image_id = "career_progress_bar"
+image_id = "progress_bar"
 target_position = "bottom_center"
 metadata/_custom_type_script = "uid://cv0qhsyosi7fj"
 

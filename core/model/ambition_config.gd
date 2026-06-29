@@ -16,8 +16,8 @@ class_name AmbitionData extends GameEntity
 # 类似 {stage1: aaa, stage2: bbb, stage3:ccc}
 @export var ambition_traits: Array[String] = [] # 这里存储字符串，实际上从总trait数据库查找内容
 
-# 用于在 HUD 中显示进度条的属性名（如 "career_progress"）
-@export var tracked_property: String = "career_progress"
+# 用于在 HUD 中显示进度条的属性名（如 "progress"）
+@export var tracked_property: String = "progress"
 
 # deadline (display only; execution logic removed)
 @export var deadline: float = 907.0

@@ -13,7 +13,7 @@
 
 [sub_resource type="Resource" id="Resource_hixgn"]
 script = ExtResource("2_06hn4")
-image_id = "career_progress_bar"
+image_id = "progress_bar"
 metadata/_custom_type_script = "uid://c65vlkthmq8ip"
 
 [sub_resource type="Resource" id="Resource_2d5uh"]

@@ -177,10 +177,10 @@ graph TD
 
 | 风险 | 概率 | 应对 |
 |------|------|------|
-| TypeA 上调到 30 导致初期惩罚过重 | 低 | 蜜月期 universal_requirement 已限定 career_progress < 70，初期属性充裕 |
+| TypeA 上调到 30 导致初期惩罚过重 | 低 | 蜜月期 universal_requirement 已限定 progress < 70，初期属性充裕 |
 | ANGER 情绪引入影响其他情绪系统交互 | 中 | ANGER 是已有枚举值，emo_add 是标准 DSL 操作符，影响范围可控 |
 | 重生成的事件 AI 叙事质量下降 | 低 | 维度描述不变，仅 operator 变，AI 叙事逻辑不依赖 operator |
-| `universal_result` 中的 `prop_add(name=career_progress; val=10)` 被 scale 放大 | 中 | `_build_option_dsl` 中 `universal_result` 也会被 `combined_scale` 缩放。L2+M1 时 career_progress 从 10 → 14.375。**此为设计意图**：见更高层的官、被更恶意对待，仕途推进理应更多。但需在文档中明确标注。 |
+| `universal_result` 中的 `prop_add(name=progress; val=10)` 被 scale 放大 | 中 | `_build_option_dsl` 中 `universal_result` 也会被 `combined_scale` 缩放。L2+M1 时 progress 从 10 → 14.375。**此为设计意图**：见更高层的官、被更恶意对待，仕途推进理应更多。但需在文档中明确标注。 |
 
 > **回滚方案：** `git checkout` 原 config.json，重新生成一次即可。反悔成本极低。
 
