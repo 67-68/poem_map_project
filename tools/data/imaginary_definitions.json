@@ -1,0 +1,46 @@
+{
+  "buyi": {
+    "uuid": "buyi",
+    "name": "布衣",
+    "detail_imaginaries": [
+      "ACTOR:FINANCE:BROKE:buyi",
+      "ACTOR:HEALTH:EXHAUSTED:buyi",
+      "VIBE:AESTHETIC:ELEGANT:buyi"
+    ],
+    "perceptions": {
+      "ACTOR:FINANCE:BROKE:buyi": "囊中羞涩",
+      "ACTOR:HEALTH:EXHAUSTED:buyi": "风霜满面",
+      "VIBE:AESTHETIC:ELEGANT:buyi": "素朴风骨"
+    }
+  },
+  "qianli": {
+    "uuid": "qianli",
+    "name": "骐骥",
+    "detail_imaginaries": [
+      "TARGET:MYTH:ANIMAL:qianli",
+      "ACTOR:EMOTION:AMBITION:qianli",
+      "VIBE:THEME:MARTIAL:qianli"
+    ],
+    "perceptions": {
+      "TARGET:MYTH:ANIMAL:qianli": "伏枥长鸣",
+      "ACTOR:EMOTION:AMBITION:qianli": "志在千里",
+      "VIBE:THEME:MARTIAL:qianli": "铁蹄踏霜"
+    }
+  },
+  "cangsheng": {
+    "uuid": "cangsheng",
+    "name": "苍生",
+    "detail_imaginaries": [
+      "ENV:SOCIETY:FAMINE:cangsheng",
+      "ENV:SOCIETY:WAR:cangsheng",
+      "ACTOR:EMOTION:SORROW:cangsheng",
+      "VIBE:THEME:HISTORY:cangsheng"
+    ],
+    "perceptions": {
+      "ENV:SOCIETY:FAMINE:cangsheng": "饿殍载道",
+      "ENV:SOCIETY:WAR:cangsheng": "烽火连天",
+      "ACTOR:EMOTION:SORROW:cangsheng": "穷年忧黎",
+      "VIBE:THEME:HISTORY:cangsheng": "兴亡皆苦"
+    }
+  }
+}

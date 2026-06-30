@@ -70,3 +70,65 @@ static func collect_player_tags(imaginaries_detail: Dictionary) -> Array[String]
 	for key in all_tags:
 		result.append(key)
 	return result
+
+
+## 单条 Imaginary 的 detail_imaginaries 与 required_fragments 匹配
+## 取该 Imaginary 所有 detail_imaginary 中最高的一条权重
+static func _match_single_imaginary(imag: Imaginary, required_fragments: Array[String]) -> int:
+	if not imag:
+		return 0
+	var best := 0
+	for tag in imag.detail_imaginaries:
+		var expanded := expand(tag)
+		var tag_set: Dictionary = {}
+		for t in expanded:
+			tag_set[t] = true
+
+		for req in required_fragments:
+			var req_expanded := expand(req)
+			for i in range(req_expanded.size() - 1, -1, -1):
+				if tag_set.has(req_expanded[i]):
+					var level := i + 1
+					if level == 4:
+						best = max(best, EXACT_WEIGHT)
+					else:
+						best = max(best, PARTIAL_WEIGHT)
+					break
+	return best
+
+
+## 按概念分组匹配：诗词的每个 required_fragment 在玩家选中的 3 个 concept 的全量 Imaginary 池中找最高分，累加
+## concepts: 选中的 ImaginaryConcept 数组
+## required_fragments: 诗词需要的四段式 Tag 列表
+static func match_concepts(concepts: Array, required_fragments: Array[String]) -> int:
+	# 构建玩家池：3 个 concept 下所有 Imaginary 的 expanded_tags 并集（去重）
+	var pool_set: Dictionary = {}
+	var pool_imaginaries: Array[Imaginary] = []
+	for concept in concepts:
+		if not (concept is ImaginaryConcept):
+			continue
+		for imag in ImaginaryComprehender.get_imaginaries_for_concept(concept.uuid):
+			if not pool_imaginaries.has(imag):
+				pool_imaginaries.append(imag)
+			for tag in imag.detail_imaginaries:
+				var expanded := expand(tag)
+				for t in expanded:
+					pool_set[t] = true
+
+	# 对诗词的每个 required_fragment，在池子中找最高匹配
+	var total_weight := 0
+	for req in required_fragments:
+		var best := 0
+		var req_expanded := expand(req)
+		# 从最精确层级向下找
+		for i in range(req_expanded.size() - 1, -1, -1):
+			if pool_set.has(req_expanded[i]):
+				var level := i + 1
+				if level == 4:
+					best = EXACT_WEIGHT
+				else:
+					best = PARTIAL_WEIGHT
+				break
+		total_weight += best
+
+	return total_weight

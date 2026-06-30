@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ImaginaryTag" load_steps=2 format=3 uid="uid://finbrokec7x2"]
+
+[ext_resource type="Script" uid="uid://dk86isxs4lamx" path="res://core/model/imaginary.gd" id="1_fbrk0"]
+
+[resource]
+script = ExtResource("1_fbrk0")
+uuid = "finance:broke"
+name = "穷困潦倒"
+metadata/_custom_type_script = "uid://dk86isxs4lamx"

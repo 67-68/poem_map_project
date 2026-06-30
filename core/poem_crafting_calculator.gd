@@ -95,8 +95,7 @@ static func calculate_poem_grade(concepts: Array, poem_type: int = -1, required_
 
 	# ── 第二层：FragmentMatcher（如果提供了 required_fragments）──
 	if not required_fragments.is_empty():
-		var player_tags = FragmentMatcher.collect_player_tags(Database.imaginaries_detail)
-		var weight = FragmentMatcher.match(player_tags, required_fragments)
+		var weight = FragmentMatcher.match_concepts(concepts, required_fragments)
 		if weight < FragmentMatcher.THRESHOLD:
 			result.passed = false
 			result.fail_reason = "fragment"

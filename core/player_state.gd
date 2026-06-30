@@ -33,6 +33,10 @@ var last_event: Dictionary = {}
 # TempFlagOperator 会在这里注册反向清理算子
 var session_deferred_cleanups: Array[BaseOperator] = []
 
+## Imaginary 定义表，从 tools/data/imaginary_definitions.json 加载
+## key: uuid (如 "buyi"), value: Dictionary(name, detail_imaginaries, perceptions)
+var _imaginary_defs: Dictionary = {}
+
 signal ambition_changed(ambition)
 signal player_stat_changed(prop_name)
 signal location_changed(location)
@@ -164,12 +168,28 @@ func _ready():
 	init_traits()
 	init_flags()
 	init_imaginaries()
+	_load_imaginary_definitions()
 	_connect_imaginary_signals()
 	
 	current_location = 'yong_zhou'
 
 
 # ─── 意象获取信号处理 ─────────────────────────────────────────
+
+func _load_imaginary_definitions():
+	"""从 tools/data/imaginary_definitions.json 加载意象定义表"""
+	var file = FileAccess.open("res://tools/data/imaginary_definitions.json", FileAccess.READ)
+	if not file:
+		Logging.warn("PlayerState._load_imaginary_definitions: 无法打开 imaginary_definitions.json，将使用降级行为")
+		return
+	var content = file.get_as_text()
+	file.close()
+	var parsed = JSON.parse_string(content)
+	if parsed == null or typeof(parsed) != TYPE_DICTIONARY:
+		Logging.warn("PlayerState._load_imaginary_definitions: JSON 解析失败，将使用降级行为")
+		return
+	_imaginary_defs = parsed
+	Logging.info("PlayerState._load_imaginary_definitions: 成功加载 %d 条意象定义" % _imaginary_defs.size())
 
 func _connect_imaginary_signals():
 	"""连接 EventBus.request_add_imaginary 信号"""
@@ -199,9 +219,15 @@ func _on_request_add_imaginary(tag: String):
 	if not imaginary:
 		imaginary = Imaginary.new()
 		imaginary.uuid = imaginary_uuid
-		imaginary.name = segments[3]  # 末段作为展示名
+		# 从定义文件查找友好名称
+		var def_data = _imaginary_defs.get(imaginary_uuid, {})
+		imaginary.name = def_data.get("name", segments[3])
+		# 首次创建时填充 perceptions
+		if def_data.has("perceptions"):
+			imaginary.perceptions = def_data["perceptions"]
+			Logging.info("PlayerState._on_request_add_imaginary: 从定义文件填充 %d 条 perception" % imaginary.perceptions.size())
 		Database.imaginaries_detail[imaginary_uuid] = imaginary
-		Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s'" % imaginary_uuid)
+		Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s)" % [imaginary_uuid, imaginary.name])
 
 	# 添加四段式 tag 到 detail_imaginaries（允许重复表示多次获取）
 	imaginary.detail_imaginaries.append(tag)
