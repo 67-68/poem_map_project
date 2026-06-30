@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_dn6d1"]
+[ext_resource type="Script" path="res://core/model/trait_operator.gd" id="2_wp7l4"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="3_hyn3h"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="4_xomyp"]
+[ext_resource type="Script" path="res://core/model/poem_taste.gd" id="5_8halt"]
+[ext_resource type="Script" path="res://core/operators/trait_choose_operator.gd" id="6_e735n"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="7_komiy"]
+
+[sub_resource type="Resource" id="Resource_qonwd"]
+script = ExtResource("2_wp7l4")
+_trait_key = 1
+str_traits = "poem_gan_ye_1"
+
+[sub_resource type="Resource" id="Resource_u6y5v"]
+script = ExtResource("3_hyn3h")
+operators = Array[ExtResource("1_dn6d1")]([SubResource("Resource_qonwd")])
+
+[sub_resource type="Resource" id="Resource_5isg2"]
+script = ExtResource("4_xomyp")
+choice_result = SubResource("Resource_u6y5v")
+description = "获得诗词: 干谒诗 Lv1"
+
+[sub_resource type="Resource" id="Resource_x1tif"]
+script = ExtResource("3_hyn3h")
+
+[sub_resource type="Resource" id="Resource_lttx3"]
+script = ExtResource("3_hyn3h")
+
+[sub_resource type="Resource" id="Resource_7xebs"]
+script = ExtResource("3_hyn3h")
+
+[sub_resource type="Resource" id="Resource_e6x1y"]
+script = ExtResource("5_8halt")
+accepted_result = SubResource("Resource_x1tif")
+rejected_result = SubResource("Resource_7xebs")
+not_entered_result = SubResource("Resource_lttx3")
+
+[sub_resource type="Resource" id="Resource_8hih1"]
+script = ExtResource("6_e735n")
+poem_taste = SubResource("Resource_e6x1y")
+
+[sub_resource type="Resource" id="Resource_ci4a5"]
+script = ExtResource("3_hyn3h")
+operators = Array[ExtResource("1_dn6d1")]([SubResource("Resource_8hih1")])
+
+[sub_resource type="Resource" id="Resource_50fph"]
+script = ExtResource("4_xomyp")
+choice_result = SubResource("Resource_ci4a5")
+description = "使用 PoemTypeChooseOperator 选择诗词"
+
+[resource]
+script = ExtResource("7_komiy")
+weight = 100.0
+archetype_id = "jiaoyou"
+options = [SubResource("Resource_5isg2"), SubResource("Resource_50fph")]
+uuid = "test_s5_poem_choose"
+name = "test_s5_poem_choose"

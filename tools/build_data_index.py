@@ -43,6 +43,10 @@ def main():
             elif ext == ".csv":
                 if fname.startswith("_"):
                     continue
+            # .json：仅收录 eb_ 前缀的 EventBase 配置文件
+            elif ext == ".json":
+                if not fname.startswith("eb_"):
+                    continue
             else:
                 continue
 
