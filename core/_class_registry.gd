@@ -57,7 +57,6 @@ var __reg_TextureResLoader: TextureResLoader = null
 var __reg_TierDeterminer: TierDeterminer = null
 
 # characters/ — 角色数据
-var __reg_PoemData: PoemData = null
 var __reg_PoetData: PoetData = null
 var __reg_PoetLifePoint: PoetLifePoint = null
 

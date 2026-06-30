@@ -29,7 +29,6 @@ const _Trait = preload("res://core/model/trait.gd")
 var index_image: Image
 
 var poet_data: Dictionary
-var poem_data: Dictionary
 var factions: Dictionary
 var base_province: Dictionary
 var territories: Dictionary
@@ -140,7 +139,6 @@ func _init() -> void:
 
 	# ── 2_characters ──
 	poet_data = r.bases.get("2_characters.poets", {})
-	poem_data = {}  # 原始文件已丢失，保持空字典避免 crash
 	npc_document = r.bases.get("2_characters.npc_docs", {})
 	poem_taste = r.bases.get("2_characters.poem_tastes", {})
 	life_path_points = r.bases.get("2_characters.life_path_points", {})
@@ -254,12 +252,6 @@ func _merge_cities() -> void:
 
 
 func _build_life_path_points_from_poems() -> void:
-	for d in poem_data:
-		var data = poem_data[d].to_life_path_point_data()
-		var poem_point = PoetLifePoint.new(data)
-		poem_point.uuid = 'poem_%s' % d
-		life_path_points[poem_point.uuid] = poem_point
-
 	for d in poet_data:
 		poet_data[d].path_point_keys = DataHelper.find_all_values_by_membership(
 			life_path_points, 'owner_uuids', d, 'uuid'
@@ -272,10 +264,6 @@ func _register_events_with_time_service() -> void:
 		Logging.info("Registering event '%s' with target_year=%f" % [d.name if d.has_method("get_name") else d.uuid, d.target_year])
 		# ⚠️ 使用 pop_specific.bind(d) 而非 pop_item，确保每个事件触发时弹出自己而非 items[0]
 		TimeService.register(d.target_year, GameState.event_buffer.pop_specific.bind(d), d.name, d.ui_decl.epitaph_text if d.ui_decl else "", true, d)
-	for d in poem_data.values():
-		TimeService.register(d.year, GameState.poem_buffer.pop_item, d.name, '', true, d)
-
-
 func _register_chat_with_time_service() -> void:
 	if chat_bubble_data:
 		for d in chat_bubble_data.values() + focused_chat_data.values():
@@ -286,7 +274,6 @@ func _register_chat_with_time_service() -> void:
 
 func load_actual_positions(mesh_size) -> void:
 	wash_positions(base_province, mesh_size)
-	wash_positions(poem_data, mesh_size, true)
 	wash_positions(life_path_points, mesh_size, true)
 
 
@@ -443,9 +430,6 @@ func get_npc_document(uuid: String):
 func get_state_transistor(uuid: String):
 	return state_transistors.get(uuid)
 
-func get_poem(uuid: String):
-	return poem_data.get(uuid)
-
 func get_poet(uuid: String):
 	return poet_data.get(uuid)
 
@@ -534,9 +518,6 @@ func get_end_random_events_all() -> Dictionary:
 
 func get_random_events_all() -> Dictionary:
 	return random_events
-
-func get_poem_data_all() -> Dictionary:
-	return poem_data
 
 func get_poet_data_all() -> Dictionary:
 	return poet_data

@@ -19,7 +19,7 @@ func add_poem(poem: PoetData):
 		play_poem_animation()
 
 
-func add_poems(poems_: Array[PoemData]):
+func add_poems(poems_: Array):
 	poems.append_array(poems_)
 	if not is_playing:
 		play_poem_animation()
@@ -31,7 +31,7 @@ func play_poem_animation():
 	play('poem_created')
 	
 
-func _apply_poem_data(_poem_data: PoemData):
+func _apply_poem_data(_poem_data):
 	"""
 	把poem data设置到view中
 	"""

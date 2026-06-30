@@ -34,8 +34,6 @@ func build_up_cache(repositories, dataclass_to_build): # repositories: 0,1,2 poe
     """
     for base_model in dataclass_to_build:
         var repo = repositories.get(0)
-        if base_model is PoemData:
-            repo = repositories[0]
         if base_model is PoetData:
             repo = repositories[1]
         if base_model is PoetLifePoint:

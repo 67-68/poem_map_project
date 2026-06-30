@@ -10,7 +10,6 @@ class_name URN
 
 enum URN_TYPE {
 	POET,               # poet_data — 诗人数据
-	POEM,               # poem_data — 诗词数据
 	POEM_TASTE,         # poem_taste — 诗歌品味配置
 	FACTION,            # factions — 势力
 	PROVINCE,           # base_province — 基础省份（CSV）

@@ -5,7 +5,6 @@ const _FactionMapRenderer = preload("res://core/faction_map_renderer.gd")
 const _FocusedChat = preload("res://model/focused_chat.gd")
 const _ManualBuffer = preload("res://core/manual_buffer.gd")
 const _NarrativeOverlay = preload("res://characters/narrative_overlay.gd")
-const _PoemData = preload("res://characters/poem_data.gd")
 const _PoetData = preload("res://characters/poet_data.gd")
 const _PopupQueue = preload("res://core/stack_manager.gd")
 
@@ -71,14 +70,6 @@ func init_buffers() -> void:
 			Database.get_history_events_all().values()
 		)
 
-	poem_stack_manager = PopupQueue.new(
-		_apply_poem_data,
-		EventBus.poem_animation_finished
-	)
-	poem_buffer = ManualBuffer.new(
-		poem_stack_manager.add_item,
-		Database.get_poem_data_all().values()
-	)
 
 	chat_buffer = ManualBuffer.new(
 		func(item):
@@ -94,11 +85,6 @@ func init_buffers() -> void:
 			Database.get_chat_bubbles_all().values() + Database.get_focused_chats_all().values()
 		)
 
-
-static func _apply_poem_data(_poem_data: PoemData) -> void:
-	#var poet_data_ = Database.poet_data[_poem_data.owner_uuids[0]]
-	#EventBus.request_apply_poem.emit(_poem_data, poet_data_)
-	pass
 
 func test_change_literary_fame(num: int) -> void:
 	PlayerState.append_stat("literary_fame", num)

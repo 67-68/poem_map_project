@@ -103,10 +103,6 @@ static var urn_resource_config: Dictionary = {
         "data_dir": "res://data/2_characters/poets/",
         "db_field": "poet_data",
     },
-    "poem": {
-        "data_dir": "res://data/2_characters/poems/",
-        "db_field": "poem_data",
-    },
     "poem_taste": {
         "data_dir": "res://data/2_characters/poem_tastes/",
         "db_field": "poem_taste",
