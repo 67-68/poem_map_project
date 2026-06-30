@@ -1,0 +1,18 @@
+{
+  "_comment": "诗词世俗/文学价值的阶段感知映射 (poem stage perception)",
+  "_desc": "阈值按绝对值从高到低匹配，首个 abs(value) >= threshold 的条目生效。负值使用 loss_text，正值使用 gain_text。",
+
+  "secular_perceptions": [
+    {"threshold": 80, "gain_text": "权贵争相结交，长安一夜之间传遍你的名字", "loss_text": "触怒天颜，恐有性命之忧"},
+    {"threshold": 30, "gain_text": "名利双收，仕途一片光明", "loss_text": "颇有损于仕途，权贵侧目而视"},
+    {"threshold": 10, "gain_text": "小有回报，勉强可以度日", "loss_text": "仕途略有波折"},
+    {"threshold": 1,  "gain_text": "微薄报酬，聊胜于无", "loss_text": "微有不适"}
+  ],
+
+  "literary_perceptions": [
+    {"threshold": 50, "gain_text": "千古绝唱，当与李杜齐名", "loss_text": ""},
+    {"threshold": 25, "gain_text": "文采斐然，可传后世", "loss_text": ""},
+    {"threshold": 10, "gain_text": "可圈可点，略有亮点", "loss_text": ""},
+    {"threshold": 1,  "gain_text": "略有文采，平淡寻常", "loss_text": ""}
+  ]
+}

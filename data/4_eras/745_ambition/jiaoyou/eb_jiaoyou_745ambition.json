@@ -2,7 +2,7 @@
   "id": "745_jiaoyou",
   "name": "野心交游事件库",
   "era": "745_ambition",
-  "draw_strategies": "IMAGINARY_WEIGHTED_RANDOM",
+  "draw_strategies": "LOWEST_POSSIBLE_IMAGINARY",
   "reset_on_empty": true,
   "generation_configs": {
     "background_context": "",

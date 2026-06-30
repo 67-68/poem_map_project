@@ -19,6 +19,19 @@ var _hovered_concept: AbstractConcept = null
 ## 每个 AbstractConcept 的原始 modulate（hover 恢复用）
 var _concept_original_modulates: Dictionary = {}  # AbstractConcept → Color
 
+## Camera2D 引用（用于 WASD 平移 SubViewport 视角）
+var _camera: Camera2D = null
+
+## WASD 相机移动速度（px/s）
+const CAMERA_SPEED := 300.0
+
+## 品级名称映射（来自 imagery_tier_synthesis_poem_engine.md 第 1.2 节）
+const TIER_NAMES := {
+	1: "世俗",
+	2: "诗史",
+	3: "绝唱"
+}
+
 
 func _ready() -> void:
 	Logging.info('PoemCrafter: initializing poem crafter V4')
@@ -46,6 +59,7 @@ func _ready() -> void:
 		tear_btn.pressed.connect(_on_tear_scroll_pressed)
 
 	call_deferred("_rebuild_subviewport")
+	call_deferred("_init_camera")
 
 
 # ──────────────────────────────────────────────
@@ -310,7 +324,7 @@ func on_concept_selected(ima: ImaginaryConcept) -> void:
 		Logging.info('PoemCrafter: 3 concepts selected, previewing grade')
 		var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, selected_poem_type)
 		if result.passed:
-			var text := PoemCraftingCalculator.translate(result.operators)
+			var text := _build_barrel_preview(result)
 			$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = text
 			$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
 		else:
@@ -440,6 +454,147 @@ func _on_button_pressed() -> void:
 	_rebuild_subviewport()
 
 
+
+# ──────────────────────────────────────────────
+# Camera2D 初始化和 WASD 移动
+# ──────────────────────────────────────────────
+
+func _init_camera() -> void:
+	var vp := _get_subviewport()
+	if not vp:
+		Logging.warn("PoemCrafter: _init_camera — SubViewport not found")
+		return
+	_camera = vp.get_node_or_null("Camera2D") as Camera2D
+	if _camera:
+		_camera.position = vp.size / 2.0
+		Logging.info("PoemCrafter: Camera2D initialized at %s" % _camera.position)
+	else:
+		Logging.warn("PoemCrafter: Camera2D node not found in SubViewport")
+
+
+func _process(delta: float) -> void:
+	if not visible or not _camera:
+		return
+	
+	var dir := Vector2.ZERO
+	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+		dir.y -= 1
+	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+		dir.y += 1
+	if Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+		dir.x -= 1
+	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+		dir.x += 1
+	
+	if dir == Vector2.ZERO:
+		return
+	
+	var vp := _get_subviewport()
+	if not vp:
+		return
+	var vsize := vp.size
+	var move := dir.normalized() * CAMERA_SPEED * delta
+	_camera.position += move
+	
+	# 边界限制：允许偏离中心 ±vsize
+	var center := vsize / 2.0
+	_camera.position.x = clampf(_camera.position.x, center.x - vsize.x, center.x + vsize.x)
+	_camera.position.y = clampf(_camera.position.y, center.y - vsize.y, center.y + vsize.y)
+
+
+# ──────────────────────────────────────────────
+# 木桶效应预览
+# ──────────────────────────────────────────────
+
+## 找出所有 tier == min_tier 的概念（木桶的短板）
+func _find_weakest_concepts(min_tier: int) -> Array[ImaginaryConcept]:
+	var weakest: Array[ImaginaryConcept] = []
+	for c in selected_imaginaries:
+		if c.current_tier == min_tier:
+			weakest.append(c)
+	return weakest
+
+
+## 生成木桶效应 + 收益组合的人类可读预览文本
+func _build_barrel_preview(result: PoemCraftingCalculator.PoemCraftingResult) -> String:
+	var lines: Array[String] = []
+	
+	var tier_name = TIER_NAMES.get(result.min_tier, "未知")
+	lines.append("[color=gold]品级 T%d · %s[/color]" % [result.min_tier, tier_name])
+	
+	var weakest = _find_weakest_concepts(result.min_tier)
+	var higher: Array[ImaginaryConcept] = []
+	for c in selected_imaginaries:
+		if c.current_tier > result.min_tier:
+			higher.append(c)
+	
+	if not higher.is_empty():
+		var weak_names = "、".join(weakest.map(func(c): return "「%s」" % c.name))
+		var high_names = "、".join(higher.map(func(c): return "「%s」" % c.name))
+		lines.append("%s 的格调被 %s 拖累，%s 蒙尘降格" % [high_names, weak_names, high_names])
+	
+	# 世俗/文学价值 stage perception（复用 property 的 change_perceptions 配置）
+	var secular_text := _get_value_perception("secular", result.secular_value)
+	var literary_text := _get_value_perception("literary", result.literary_value)
+	
+	if not secular_text.is_empty():
+		lines.append("[color=#daa520]世俗影响：%s[/color]" % secular_text)
+	if not literary_text.is_empty():
+		lines.append("[color=#87ceeb]文学价值：%s[/color]" % literary_text)
+	
+	var op_text := PoemCraftingCalculator.translate(result.operators)
+	if not op_text.is_empty():
+		lines.append("")
+		lines.append(op_text)
+	
+	return "\n".join(lines)
+
+
+## 获取属性变更量的 stage perception 文本（复用 property 的 change_perceptions 配置）
+## 诗词价值感知 JSON 缓存
+static var _poem_perceptions_cache: Dictionary = {}
+
+## 加载诗词价值感知 JSON 配置（data/1_core_rules/poem_value_perceptions.json）
+static func _load_poem_perceptions() -> Dictionary:
+	if not _poem_perceptions_cache.is_empty():
+		return _poem_perceptions_cache
+	var path := "res://data/1_core_rules/poem_value_perceptions.json"
+	if not FileAccess.file_exists(path):
+		Logging.warn("PoemCrafter: poem_value_perceptions.json 不存在: %s" % path)
+		return {}
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		Logging.err("PoemCrafter: 无法打开 poem_value_perceptions.json")
+		return {}
+	var raw := file.get_as_text()
+	file.close()
+	var json := JSON.new()
+	var err := json.parse(raw)
+	if err != OK:
+		Logging.err("PoemCrafter: poem_value_perceptions.json 解析失败")
+		return {}
+	_poem_perceptions_cache = json.get_data()
+	return _poem_perceptions_cache
+
+
+## 根据诗词价值获取 stage perception 文本
+## category: "secular" → 世俗影响, "literary" → 文学价值
+func _get_value_perception(category: String, value: float) -> String:
+	if value == 0:
+		return ""
+	var data := _load_poem_perceptions()
+	var key := category + "_perceptions"
+	var perceptions: Array = data.get(key, [])
+	if perceptions.is_empty():
+		return ""
+	var abs_val: float = abs(value)
+	var is_gain := value > 0
+	# 从高到低遍历，首个 abs_val >= threshold 的条目生效
+	for p in perceptions:
+		var threshold: int = p.get("threshold", 0)
+		if abs_val >= threshold:
+			return p.get("gain_text" if is_gain else "loss_text", "")
+	return ""
 # ──────────────────────────────────────────────
 # 拒写机制
 # ──────────────────────────────────────────────

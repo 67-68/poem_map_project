@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Poem" load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://cr88qxtsjl4ry" path="res://core/model/poem.gd" id="1_zheng"]
+
+[resource]
+script = ExtResource("1_zheng")
+uuid = "poem_recipe_zheng_jianyi"
+name = "敬赠郑谏议十韵"
+description = "饥寒 + 明主：谏议底色，穷年忧黎"
+topic = "POEM"
+specific_topic = "GAN_YE"
+poem_level = 0
+required_fragments = Array[String](["ACTOR:HEALTH:EXHAUSTED:buyi", "VIBE:THEME:MARTIAL:qianli", "ACTOR:EMOTION:SORROW:cangsheng"])
