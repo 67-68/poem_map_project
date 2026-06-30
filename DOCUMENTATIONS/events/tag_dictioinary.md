@@ -287,6 +287,7 @@
 | `OBJECT` | `guqin` | 古琴 |
 | | `sword` | 剑 |
 | | `wine` | 酒 |
+| |  `mountain` | 山
 | `MYTH` | `giantroc` | 🆕 大鹏（图腾，象征个人狂傲与一飞冲天） ⚠️ DEPRECATED — 后续迁移至 MYTH:ANIMAL |
 | | `animal` | 🆕 神兽图腾（骐骥/大鹏等神话动物的抽象容器） |
 | `PLACE` | `jadestep` | 🆕 玉阶（政治地标，象征权力中枢与阶级跃升） |
@@ -320,6 +321,7 @@
 - `TARGET_MYTH_GIANTROC`  🆕
 - `TARGET_MYTH_ANIMAL`  🆕
 - `TARGET_PLACE_JADESTEP`  🆕
+- TARGET_OBJECT_MOUNTAIN_taishan
 
 ---
 
