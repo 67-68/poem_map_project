@@ -96,55 +96,59 @@ func test_scenario_1_merge_overlap():
 func test_scenario_2_three_partial_exact_threshold():
 	Logging.info(SEP)
 	Logging.info("[场景2] 开始: 3 个 partial match → 恰好 30 权重")
+	Logging.info("[场景2] match_concepts 按 required_fragments 条目累加，不是按 concept 数")
 	Logging.info(SEP)
 
-	# 诗词要求: A:B:C:D (具体用 ENV:NATURE:AUTUMN:changanleaf)
-	var required: Array[String] = ["ENV:NATURE:AUTUMN:changanleaf"]
+	# 诗词要求 3 个不同 fragment，都共享 ENV:NATURE:AUTUMN 前缀
+	# 第四段用池中不存在的 uuid，确保只有同类匹配（10），没有精确匹配（20）
+	# 池中有: beijingleaf, luoyangleaf, nanjingleaf
+	# required 用: changanleaf, dongjingleaf, xianleaf → 都不在池中
+	var required: Array[String] = [
+		"ENV:NATURE:AUTUMN:changanleaf",
+		"ENV:NATURE:AUTUMN:dongjingleaf",
+		"ENV:NATURE:AUTUMN:xianleaf"
+	]
 
-	# 3 个概念, 每个有 2 个 detail, 其中一个 partial match (A:B:C:E)
-	# 概念 1: finance:broke, tier=1, level=2
+	# 3 个概念, 池中确保存在 ENV:NATURE:AUTUMN 前缀
 	var c1 = _make_concept("finance:broke", 1, 2)
 	Database.imaginaries_detail["img_c1a"] = _make_imaginary("img_c1a", [
 		"ACTOR:FINANCE:BROKE:img_c1a",
-		"ENV:NATURE:AUTUMN:beijingleaf"    # ← partial match (同类)
+		"ENV:NATURE:AUTUMN:beijingleaf"    # ← 池中有 ENV:NATURE:AUTUMN
 	])
 	Database.imaginaries_detail["img_c1b"] = _make_imaginary("img_c1b", [
 		"ACTOR:FINANCE:BROKE:img_c1b",
 		"VIBE:AESTHETIC:ELEGANT:img_c1b"
 	])
-	Logging.info("[场景2] 概念1 finance:broke: ENV:NATURE:AUTUMN:beijingleaf (同类=10)")
+	Logging.info("[场景2] 概念1 finance:broke: 注入 ENV:NATURE:AUTUMN:beijingleaf")
 
-	# 概念 2: health:exhausted, tier=1, level=2
 	var c2 = _make_concept("health:exhausted", 1, 2)
 	Database.imaginaries_detail["img_c2a"] = _make_imaginary("img_c2a", [
 		"ACTOR:HEALTH:EXHAUSTED:img_c2a",
-		"ENV:NATURE:AUTUMN:luoyangleaf"    # ← partial match
+		"ENV:NATURE:AUTUMN:luoyangleaf"    # ← 池中有 ENV:NATURE:AUTUMN
 	])
 	Database.imaginaries_detail["img_c2b"] = _make_imaginary("img_c2b", [
 		"ACTOR:HEALTH:EXHAUSTED:img_c2b",
 		"VIBE:THEME:MARTIAL:img_c2b"
 	])
-	Logging.info("[场景2] 概念2 health:exhausted: ENV:NATURE:AUTUMN:luoyangleaf (同类=10)")
+	Logging.info("[场景2] 概念2 health:exhausted: 注入 ENV:NATURE:AUTUMN:luoyangleaf")
 
-	# 概念 3: society:famine, tier=1, level=2
 	var c3 = _make_concept("society:famine", 1, 2)
 	Database.imaginaries_detail["img_c3a"] = _make_imaginary("img_c3a", [
 		"ENV:SOCIETY:FAMINE:img_c3a",
-		"ENV:NATURE:AUTUMN:nanjingleaf"    # ← partial match
+		"ENV:NATURE:AUTUMN:nanjingleaf"    # ← 池中有 ENV:NATURE:AUTUMN
 	])
 	Database.imaginaries_detail["img_c3b"] = _make_imaginary("img_c3b", [
 		"ENV:SOCIETY:FAMINE:img_c3b",
 		"ACTOR:EMOTION:SORROW:img_c3b"
 	])
-	Logging.info("[场景2] 概念3 society:famine: ENV:NATURE:AUTUMN:nanjingleaf (同类=10)")
+	Logging.info("[场景2] 概念3 society:famine: 注入 ENV:NATURE:AUTUMN:nanjingleaf")
 
-	# 执行匹配
+	# 匹配：3 条 required × 同类 10 = 30
 	var weight = FragmentMatcher.match_concepts([c1, c2, c3], required)
-	Logging.info("[场景2] FragmentMatcher 匹配结果: weight=%d (threshold=%d)" % [weight, FragmentMatcher.THRESHOLD])
+	Logging.info("[场景2] FragmentMatcher: %d 条 required × 同类 10 = weight=%d (threshold=%d)" % [required.size(), weight, FragmentMatcher.THRESHOLD])
 
-	assert_eq(weight, 30, "3 个同类=10 合计 30, 刚好过线")
+	assert_eq(weight, 30, "3 required × 同类 10 = 30, 刚好过线")
 
-	# 验证 PoemCraftingCalculator
 	var result = PoemCraftingCalculator.calculate_poem_grade([c1, c2, c3], -1, required)
 	Logging.info("[场景2] PoemCraftingCalculator: passed=%s, weight=%d" % [result.passed, weight])
 	assert_true(result.passed, "权重 30 >= 阈值 30 → 通过")
@@ -162,12 +166,13 @@ func test_scenario_2_three_partial_exact_threshold():
 func test_scenario_3_no_match_rejected():
 	Logging.info(SEP)
 	Logging.info("[场景3] 开始: 3 个 category 无法匹配 → 拒绝创作")
+	Logging.info("[场景3] 使用 ACTION:TRAVEL:CLIMB 作为 required → 池中无 ACTION 域 → weight=0")
 	Logging.info(SEP)
 
-	# 诗词要求 ENV:NATURE:AUTUMN:changanleaf
-	var required: Array[String] = ["ENV:NATURE:AUTUMN:changanleaf"]
+	# 诗词要求 ACTION:TRAVEL:CLIMB:hiking（池中无 ACTION 域的任何条目）
+	var required: Array[String] = ["ACTION:TRAVEL:CLIMB:hiking"]
 
-	# 3 个概念, 全部不匹配
+	# 3 个概念, 全部使用 ACTOR/VIBE/ENV/TARGET 域，绝无 ACTION 域
 	var c1 = _make_concept("health:drunk", 1, 2)
 	Database.imaginaries_detail["img_d1a"] = _make_imaginary("img_d1a", [
 		"ACTOR:HEALTH:DRUNK:img_d1a",
@@ -177,7 +182,7 @@ func test_scenario_3_no_match_rejected():
 		"ACTOR:HEALTH:DRUNK:img_d1b",
 		"ACTOR:EMOTION:ARROGANCE:img_d1b"
 	])
-	Logging.info("[场景3] 概念1 health:drunk: 碎片与 ENV:NATURE:AUTUMN 无关")
+	Logging.info("[场景3] 概念1 health:drunk: ACTOR/VIBE 域，无 ACTION")
 
 	var c2 = _make_concept("emotion:ambition", 1, 2)
 	Database.imaginaries_detail["img_d2a"] = _make_imaginary("img_d2a", [
@@ -188,7 +193,7 @@ func test_scenario_3_no_match_rejected():
 		"ACTOR:EMOTION:AMBITION:img_d2b",
 		"VIBE:THEME:MARTIAL:img_d2b"
 	])
-	Logging.info("[场景3] 概念2 emotion:ambition: 碎片与 ENV:NATURE:AUTUMN 无关")
+	Logging.info("[场景3] 概念2 emotion:ambition: ACTOR/TARGET/VIBE 域，无 ACTION")
 
 	var c3 = _make_concept("society:war", 1, 2)
 	Database.imaginaries_detail["img_d3a"] = _make_imaginary("img_d3a", [
@@ -199,11 +204,11 @@ func test_scenario_3_no_match_rejected():
 		"ENV:SOCIETY:WAR:img_d3b",
 		"ACTOR:EMOTION:ANGER:img_d3b"
 	])
-	Logging.info("[场景3] 概念3 society:war: 碎片与 ENV:NATURE:AUTUMN 无关")
+	Logging.info("[场景3] 概念3 society:war: ENV/VIBE/ACTOR 域，无 ACTION")
 
 	var weight = FragmentMatcher.match_concepts([c1, c2, c3], required)
-	Logging.info("[场景3] FragmentMatcher: weight=%d (threshold=%d)" % [weight, FragmentMatcher.THRESHOLD])
-	assert_eq(weight, 0, "完全不匹配 → weight=0")
+	Logging.info("[场景3] FragmentMatcher: weight=%d (threshold=%d) — 池中无 ACTION 域" % [weight, FragmentMatcher.THRESHOLD])
+	assert_eq(weight, 0, "池中无 ACTION 域 → weight=0")
 
 	var result = PoemCraftingCalculator.calculate_poem_grade([c1, c2, c3], -1, required)
 	Logging.info("[场景3] PoemCraftingCalculator: passed=%s, fail_reason='%s'" % [result.passed, result.fail_reason])
@@ -217,18 +222,23 @@ func test_scenario_3_no_match_rejected():
 
 # ════════════════════════════════════════════════════════════
 # 场景 4: 2 partial + 1 无匹配 → 拒绝创作 + 报错
-# 诗词要求 A:B:C:D, 2 个有 partial match (10+10=20), 1 个无匹配
-# 合计 20 < 30 → 拒绝
+# 诗词要求 2 条不同 fragment, 2 条被 partial match, 1 条无匹配
+# 合计 10+10+0=20 < 30 → 拒绝
 # ════════════════════════════════════════════════════════════
 
 func test_scenario_4_two_partial_one_none_rejected():
 	Logging.info(SEP)
 	Logging.info("[场景4] 开始: 2 partial match (20) + 1 无匹配 → 拒绝")
+	Logging.info("[场景4] 2 条 required → 2 条 partial 10 + 1 条无匹配 0 = 20")
 	Logging.info(SEP)
 
-	var required: Array[String] = ["ENV:NATURE:AUTUMN:changanleaf"]
+	# 诗词要求 2 条不同 fragment, 且都不与池中条目精确重合
+	var required: Array[String] = [
+		"ENV:NATURE:AUTUMN:changanleaf",   # 第3段 AUTUMN 池中存在 → 10
+		"ENV:NATURE:AUTUMN:nanjingleaf",   # 第3段 AUTUMN 池中存在 → 10
+	]
 
-	# 概念 1: 有 partial match
+	# 概念 1: 有 partial match (ENV:NATURE:AUTUMN:beijingleaf)
 	var c1 = _make_concept("finance:broke", 1, 2)
 	Database.imaginaries_detail["img_e1a"] = _make_imaginary("img_e1a", [
 		"ACTOR:FINANCE:BROKE:img_e1a",
@@ -238,9 +248,9 @@ func test_scenario_4_two_partial_one_none_rejected():
 		"ACTOR:FINANCE:BROKE:img_e1b",
 		"ACTOR:HEALTH:EXHAUSTED:img_e1b"
 	])
-	Logging.info("[场景4] 概念1 finance:broke: 有 partial (10)")
+	Logging.info("[场景4] 概念1 finance:broke: ENV:NATURE:AUTUMN:beijingleaf (同类=10)")
 
-	# 概念 2: 有 partial match
+	# 概念 2: 有 partial match (ENV:NATURE:AUTUMN:luoyangleaf)
 	var c2 = _make_concept("health:exhausted", 1, 2)
 	Database.imaginaries_detail["img_e2a"] = _make_imaginary("img_e2a", [
 		"ACTOR:HEALTH:EXHAUSTED:img_e2a",
@@ -250,9 +260,9 @@ func test_scenario_4_two_partial_one_none_rejected():
 		"ACTOR:HEALTH:EXHAUSTED:img_e2b",
 		"VIBE:THEME:MARTIAL:img_e2b"
 	])
-	Logging.info("[场景4] 概念2 health:exhausted: 有 partial (10)")
+	Logging.info("[场景4] 概念2 health:exhausted: ENV:NATURE:AUTUMN:luoyangleaf (同类=10)")
 
-	# 概念 3: 完全无匹配
+	# 概念 3: 完全无 ENV:NATURE 前缀（只有 ACTOR/VIBE/ENV:SOCIETY）
 	var c3 = _make_concept("emotion:sorrow", 1, 2)
 	Database.imaginaries_detail["img_e3a"] = _make_imaginary("img_e3a", [
 		"ACTOR:EMOTION:SORROW:img_e3a",
@@ -260,13 +270,13 @@ func test_scenario_4_two_partial_one_none_rejected():
 	])
 	Database.imaginaries_detail["img_e3b"] = _make_imaginary("img_e3b", [
 		"ACTOR:EMOTION:SORROW:img_e3b",
-		"ENV:SOCIETY:FAMINE:img_e3b"
+		"ENV:SOCIETY:FAMINE:img_e3b"      # ENV:SOCIETY ≠ ENV:NATURE → 不匹配
 	])
-	Logging.info("[场景4] 概念3 emotion:sorrow: 无匹配 (0)")
+	Logging.info("[场景4] 概念3 emotion:sorrow: 无 ENV:NATURE 前缀 → 无匹配 (0)")
 
 	var weight = FragmentMatcher.match_concepts([c1, c2, c3], required)
-	Logging.info("[场景4] FragmentMatcher: weight=%d (10+10+0=20, threshold=%d)" % [weight, FragmentMatcher.THRESHOLD])
-	assert_eq(weight, 20, "2 个同类 → 20")
+	Logging.info("[场景4] FragmentMatcher: %d 条 required × 同类 10 = %d (threshold=%d)" % [required.size(), weight, FragmentMatcher.THRESHOLD])
+	assert_eq(weight, 20, "2×10=20, <30 → 应拒绝")
 
 	var result = PoemCraftingCalculator.calculate_poem_grade([c1, c2, c3], -1, required)
 	Logging.info("[场景4] PoemCraftingCalculator: passed=%s, fail_reason='%s', penalty='%s'" % [result.passed, result.fail_reason, result.penalty_text])
