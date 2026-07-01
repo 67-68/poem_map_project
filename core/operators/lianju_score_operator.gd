@@ -1,9 +1,11 @@
 @tool
 class_name LianjuScoreOperator extends BaseOperator
 
-@export var l3_base_score: int = 30
-@export var l2_base_score: int = 20
-@export var l1_base_score: int = 10
+## V6: 联句评分算子 — 基于 tier 而非已删除的 level
+## T2 基础分
+@export var t2_base_score: int = 20
+## T1 基础分 (等于 0)
+@export var t1_base_score: int = 0
 @export var emotion_match_percent: int = 150
 
 ## 评分完成后 push 到的事件 key，展示评分结果
@@ -16,14 +18,14 @@ var _had_emotion_match: bool = false
 
 
 func operate():
-	Logging.info("LianjuScoreOperator: Starting operate() — opening picker for player's imaginaries")
+	Logging.info("LianjuScoreOperator: Starting operate() — opening picker for player's imaginaries (tier-based)")
 
 	var data: Array[ImaginaryConcept] = []
 	for uuid in Database.get_imaginaries_all():
 		var imaginary = Database.get_imaginary(uuid) as ImaginaryConcept
 		if not imaginary:
 			continue
-		if imaginary.current_level < 1:
+		if imaginary.current_tier < 1:
 			continue
 		data.append(imaginary)
 
@@ -56,23 +58,21 @@ func _on_imaginary_picked(imaginary_picked):
 		return
 
 	var uuid = _picked_imaginary.uuid
-	var level = _picked_imaginary.current_level
+	var tier = _picked_imaginary.current_tier
 	_picked_name = _picked_imaginary.name
-	Logging.info("LianjuScoreOperator: Player picked imaginary '%s' (name='%s', level=%d)" % [uuid, _picked_name, level])
+	Logging.info("LianjuScoreOperator: Player picked imaginary '%s' (name='%s', tier=%d)" % [uuid, _picked_name, tier])
 
 	var base_score: int
-	match level:
-		3:
-			base_score = l3_base_score
+	match tier:
 		2:
-			base_score = l2_base_score
+			base_score = t2_base_score
 		1:
-			base_score = l1_base_score
+			base_score = t1_base_score
 		_:
-			Logging.warn("LianjuScoreOperator: unknown level %d, using L1 base" % level)
-			base_score = l1_base_score
+			Logging.warn("LianjuScoreOperator: unknown tier %d, using T1 base" % tier)
+			base_score = t1_base_score
 
-	Logging.info("LianjuScoreOperator: base score = %d (level=%d)" % [base_score, level])
+	Logging.info("LianjuScoreOperator: base score = %d (tier=%d)" % [base_score, tier])
 
 	var multiplier := 100
 	var dominant_emotion := _get_dominant_emotion()
@@ -122,11 +122,11 @@ func _apply_score():
 
 	# 根据分数计算评语
 	var evaluation: String
-	if _final_score >= 40:
+	if _final_score >= 30:
 		evaluation = "妙绝！此句浑然天成，四座皆惊！"
-	elif _final_score >= 25:
+	elif _final_score >= 15:
 		evaluation = "佳句！宾客纷纷点头赞许。"
-	elif _final_score >= 10:
+	elif _final_score >= 5:
 		evaluation = "尚可，中规中矩。"
 	else:
 		evaluation = "你的对句平淡无奇…"
@@ -139,7 +139,7 @@ func _apply_score():
 		"lianju_evaluation": evaluation,
 	}
 	if _picked_imaginary:
-		ctx["lianju_picked_level"] = _picked_imaginary.current_level
+		ctx["lianju_picked_tier"] = _picked_imaginary.current_tier
 
 	if not result_event_key.is_empty():
 		Logging.info("LianjuScoreOperator: pushing result event '%s'" % result_event_key)

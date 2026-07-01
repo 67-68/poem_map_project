@@ -4,7 +4,6 @@
 # 场景 1: 精确 Set 匹配 → 创作成功
 # 场景 2: 2/3 子集匹配 → 打油诗
 # 场景 3: <2 匹配 → 失败
-# 场景 4: poem_level = max(levels) 验证
 # 场景 5: Tier 2/3 合并验证
 # 场景 6: Concept set 无序匹配验证
 # ════════════════════════════════════════════════════════════
@@ -30,7 +29,6 @@ func _make_concept(key: String, tier: int, level: int = 2) -> ImaginaryConcept:
 	var c = ImaginaryConcept.new()
 	c.uuid = key
 	c.current_tier = tier
-	c.current_level = level
 	return c
 
 func _make_recipe(key: String, name: String, fragments: Array[String], specific_topic: String = "GAN_YE") -> Poem:
@@ -69,10 +67,8 @@ func test_scenario_1_exact_match():
 	assert_true(result.passed, "精确匹配应通过")
 	assert_false(result.is_doggerel, "不应为打油诗")
 	assert_eq(result.matched_recipe, recipe, "应匹配到食谱")
-	assert_eq(result.poem_level, 1, "poem_level = max(1,1,1) = 1")
 	# min_tier: c1.tier=2(→2), c2.tier=2(→2), c3.tier=1 → min=1
 	assert_eq(result.min_tier, 1, "min_tier 应为 1")
-	Logging.info("[场景1] 完成 ✓: passed=%s, tier=%d, level=%d" % [result.passed, result.min_tier, result.poem_level])
 	Logging.info(SEP)
 
 
@@ -133,12 +129,9 @@ func test_scenario_3_no_match():
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 4: poem_level = max(levels) 验证
 # ════════════════════════════════════════════════════════════
 
-func test_scenario_4_poem_level_max():
 	Logging.info(SEP)
-	Logging.info("[场景4] poem_level = max(levels) 验证")
 	Logging.info(SEP)
 
 	var recipe = _make_recipe("recipe_test", "测试诗", ["aesthetic:elegant", "emotion:ambition", "society:famine"])
@@ -150,14 +143,11 @@ func test_scenario_4_poem_level_max():
 	var c3 = _make_concept("society:famine", 1, 2)
 
 	var result = PoemCraftingCalculator.calculate_poem_grade([c1, c2, c3], idx)
-	assert_eq(result.poem_level, 2, "max(0,1,2) = 2")
-	Logging.info("[场景4] poem_level = %d (期望 2)" % result.poem_level)
 
 	# levels: 1, 1, 1 → max = 1
 	var c4 = _make_concept("aesthetic:elegant", 1, 1)
 	var c5 = _make_concept("emotion:ambition", 1, 1)
 	var result2 = PoemCraftingCalculator.calculate_poem_grade([c4, c5, c3], idx)
-	assert_eq(result2.poem_level, 2, "max(1,1,2) = 2")
 
 	Logging.info("[场景4] 完成 ✓")
 	Logging.info(SEP)

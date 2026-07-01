@@ -40,7 +40,6 @@ operators = Array[ExtResource("1_baseop")]([])
 script = ExtResource("6_pt")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])  ; GAN_YE（干谒诗）
-lowest_poem_level = 1
 accepted_result = SubResource("Resource_acc_cr")
 rejected_result = SubResource("Resource_rej_cr")
 not_entered_result = SubResource("Resource_not_cr")

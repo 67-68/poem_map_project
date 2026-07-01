@@ -15,17 +15,15 @@ func init(context: Dictionary):
 	return context
 
 func upgrade_random_imagery():
-	#breakpoint
+	# V6: level 系统已删除，改为 talent 增益
 	var active_imaginaries = Database.get_active_imaginaries()
 	if not active_imaginaries:
 		description = '怎么连imagery都没有啊。浪费了这一次的机会'
 		return
 	
-	# 随机选择一个imagery
 	var random_imaginary = active_imaginaries.keys()[randi() % active_imaginaries.size()]
-	description = '将要升级Imaginary: %s' % random_imaginary
-	var operator = ImaginaryOperator.new()
-	operator.imaginary_name = random_imaginary
-	operator.operation = "upgrade_1"
+	description = '获得 talen: %s 的感悟' % random_imaginary
 	choice_result = ChoiceResult.new()
-	choice_result.operators.append(operator)
+	choice_result.operators.append(
+		OperatorFactory.create_property_operator("talent", 5)
+	)

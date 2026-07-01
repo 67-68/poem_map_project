@@ -21,4 +21,4 @@ script = ExtResource("5_pr")
 options = Array[ExtResource("1_pr")]([SubResource("Resource_pr_option")])
 uuid = "poem_reveal"
 name = "诗词新成"
-description = "你展开卷轴，墨迹未干。一首「{@poem_type}」诗已然落成。\n世俗之誉：{@poem_secular}  文学之名：{@poem_literary}  品级：第{@poem_level}等"
+description = "你展开卷轴，墨迹未干。一首「{@poem_type}」诗已然落成。\n世俗之誉：{@poem_secular}  文学之名：{@poem_literary}  文学之名：{@poem_literary}"

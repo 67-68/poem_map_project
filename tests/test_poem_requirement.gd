@@ -41,7 +41,6 @@ func test_poem_has_parsing_with_array_types():
 	assert_true(parsed is PoemRequirement, "解析结果应为 PoemRequirement 类型")
 	var req = parsed as PoemRequirement
 	assert_eq(req.accepted_poem_types.size(), 2, "应解析出 2 个诗词类型")
-	assert_eq(req.lowest_poem_level, 2, "最低等级应为 2")
 
 
 func test_poem_has_parsing_single_type():
@@ -52,7 +51,6 @@ func test_poem_has_parsing_single_type():
 	assert_not_null(parsed, "poem_has 解析结果不应为 null")
 	var req = parsed as PoemRequirement
 	assert_eq(req.accepted_poem_types.size(), 1, "应解析出 1 个诗词类型")
-	assert_eq(req.lowest_poem_level, 1, "最低等级应为 1")
 
 
 func test_poem_has_parsing_no_type():
@@ -63,7 +61,6 @@ func test_poem_has_parsing_no_type():
 	assert_not_null(parsed, "poem_has 解析结果不应为 null")
 	var req = parsed as PoemRequirement
 	assert_true(req.accepted_poem_types.is_empty(), "type 为空数组")
-	assert_eq(req.lowest_poem_level, 1, "最低等级应为 1")
 
 
 func test_poem_has_parsing_default_min_level():
@@ -73,7 +70,6 @@ func test_poem_has_parsing_default_min_level():
 	
 	assert_not_null(parsed, "poem_has 解析结果不应为 null")
 	var req = parsed as PoemRequirement
-	assert_eq(req.lowest_poem_level, 0, "默认最低等级应为 0")
 
 
 # ════════════════════════════════════════════════════════════

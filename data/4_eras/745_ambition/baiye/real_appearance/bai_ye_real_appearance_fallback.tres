@@ -22,7 +22,6 @@ script = ExtResource("2_3dyr7")
 script = ExtResource("5_qbaw7")
 uuid = "poem_type_choose_zhuoliu_taste"
 _accepted_poem_types = Array[int]([0])
-lowest_poem_level = 1
 accepted_result = SubResource("Resource_u0m2s")
 rejected_result = SubResource("Resource_qogfe")
 not_entered_result = SubResource("Resource_f7cri")
@@ -39,7 +38,6 @@ metadata/_custom_type_script = "uid://w6wvp8tdisfu"
 [sub_resource type="Resource" id="Resource_x3pvl"]
 script = ExtResource("7_t08qo")
 accepted_poem_types = Array[int]([0])
-lowest_poem_level = 1
 
 [sub_resource type="Resource" id="Resource_atsab"]
 script = ExtResource("8_jf45p")

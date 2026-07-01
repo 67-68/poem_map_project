@@ -24,7 +24,6 @@ func _setup_imaginary_concept(key: String, tier: int = 0, level: int = 0) -> Ima
 	concept.uuid = key
 	if tier > 0:
 		concept.current_tier = tier
-	concept.current_level = level
 	Database.imaginaries[key] = concept
 	return concept
 
@@ -144,7 +143,6 @@ func test_merge_category_success_sets_level():
 
 	var ok = ImaginaryComprehender.merge_category("nature:autumn")
 	assert_true(ok, "合并应成功")
-	assert_eq(concept.current_level, 2, "2 个 Imaginary → level=2")
 
 
 func test_merge_category_sets_tier_default():
@@ -223,7 +221,6 @@ func test_merge_category_level_clamp_at_2():
 
 	var ok = ImaginaryComprehender.merge_category("nature:autumn")
 	assert_true(ok)
-	assert_eq(concept.current_level, 2, "4 个 Imaginary → level clamp 到 2")
 
 func test_comprehend_category_alias():
 	"""comprehend_category 是 merge_category 的旧别名"""
@@ -255,9 +252,7 @@ func test_consume_concepts_resets_tier_and_level():
 
 	# 运行时状态应重置
 	assert_eq(c1.current_tier, 0, "tier 应重置为 0")
-	assert_eq(c1.current_level, 0, "level 应重置为 0")
 	assert_eq(c2.current_tier, 0, "tier 应重置为 0")
-	assert_eq(c2.current_level, 0, "level 应重置为 0")
 
 
 func test_consume_concepts_removes_imaginary_fragments():
@@ -289,7 +284,6 @@ func test_consume_concepts_handles_non_concept_entries():
 	assert_true(Database.imaginaries.has("nature:autumn"), "静态定义应保留")
 	# tier/level 应重置
 	assert_eq(c1.current_tier, 0, "tier 应重置为 0")
-	assert_eq(c1.current_level, 0, "level 应重置为 0")
 
 
 func test_consume_concepts_empty_array():

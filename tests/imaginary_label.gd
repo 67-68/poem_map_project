@@ -17,4 +17,3 @@ func update_label() -> void:
 			continue
 		var fragments = ImaginaryComprehender.get_imaginaries_for_concept(concept_key)
 		var frag_count = fragments.size() if fragments else 0
-		text += '- %s (key=%s): level %d, tier %d, fragments %d\n' % [concept.name, concept_key, concept.current_level, concept.current_tier, frag_count]

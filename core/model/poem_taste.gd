@@ -8,7 +8,6 @@ var accepted_poem_types: Array:
     get():
         return _accepted_poem_types.map(func(t: ENUMS.POEM_TYPE): return ENUMS.POEM_TYPE.keys()[t])
 
-@export var lowest_poem_level := 0
 @export var accepted_result: ChoiceResult = ChoiceResult.new()
 @export var rejected_result: ChoiceResult = ChoiceResult.new()
 @export var not_entered_result: ChoiceResult = ChoiceResult.new()

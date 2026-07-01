@@ -86,7 +86,6 @@ const FUNC_NPC_BATCH_CHECK := "npc_batch_check"
 const FUNC_IMAGINARY_HAS_LEVEL := "imaginary_has_level"
 const FUNC_IMAGINARY_LEVEL_REWARD := "imaginary_level_reward"
 const FUNC_IMAGERY_ADD := "imagery_add"                      # 🆕 意象获取操作符
-const FUNC_IMAGINARY_SET_LEVEL := "imaginary_set_level"      # 🆕 设置两段意象等级
 const FUNC_PLAY_TRANSITION := "play_transition"
 const FUNC_LEVERAGE_ADD := "leverage_add"
 const FUNC_INFO := "info"
@@ -121,7 +120,6 @@ static func _ensure_dispatch() -> void:
 	rd[FUNC_FLAG_INT_LT] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.LESS_THAN)
 	rd[FUNC_FLAG_INT_EQ] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.EQUAL)
 	rd[FUNC_FLAG_INT_NE] = func(p, r): return _exec_flag_req_int(p, r, REQ_OPERATOR.COMPARE.NOT_EQUAL)
-	rd[FUNC_IMAGINARY_HAS_LEVEL] = func(p, r): return _exec_imaginary_has_level_req(p, r)
 	rd[FUNC_POEM_HAS] = func(p, r): return _exec_poem_req(p, r)
 	
 	# ── Consequence Operators ──
@@ -161,7 +159,6 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_NPC_BATCH_CHECK] = func(p, r): return _exec_npc_batch_check_op(p, r)
 	cd[FUNC_IMAGINARY_LEVEL_REWARD] = func(p, r): return _exec_imaginary_level_reward_op(p, r)
 	cd[FUNC_IMAGERY_ADD] = func(p, r): return _exec_imagery_add_op(p, r)
-	cd[FUNC_IMAGINARY_SET_LEVEL] = func(p, r): return _exec_imaginary_set_level_op(p, r)
 	cd[FUNC_PLAY_TRANSITION] = func(p, r): return _exec_play_transition_op(p, r)
 	cd[FUNC_LEVERAGE_ADD] = func(p, r): return _exec_leverage_add_op(p, r)
 	cd[FUNC_INFO] = func(p, r): return _exec_info_op(p, r)
@@ -973,21 +970,6 @@ static func _exec_npc_batch_check_op(parsed: NamedDSLParser.ParseResult, raw: St
 	return op
 
 
-# ─── imaginary_has_level ─────────────────────────────────────────
-
-# DSL 语法: imaginary_has_level(min_level=1)
-# 返回 ImaginaryLevelRequirement（存在性检查模式）
-static func _exec_imaginary_has_level_req(parsed: NamedDSLParser.ParseResult, raw: String) -> ImaginaryLevelRequirement:
-	var min_level = NamedDSLParser.get_int_param(parsed, "min_level", 1)
-
-	var req = ImaginaryLevelRequirement.new()
-	req.min_level = min_level
-	req.check_any = true
-
-	Logging.info("imaginary_has_level requirement 创建成功: min_level=%d (check_any)" % min_level)
-	return req
-
-
 # ─── poem_has ────────────────────────────────────────────────────
 
 # DSL 语法: poem_has(type=[GAN_YE/YING_ZHI] ; min_level=2)
@@ -1013,7 +995,6 @@ static func _exec_poem_req(parsed: NamedDSLParser.ParseResult, raw: String) -> P
 					break
 
 	# 解析 min_level 参数
-	req.lowest_poem_level = NamedDSLParser.get_int_param(parsed, "min_level", 0)
 
 	# 解析可选的 failed_hint 参数（由插件动态生成，通过模板替换注入）
 	# 格式: poem_has(type=GAN_YE; min_level=1; failed_hint="去写首干谒诗再来")
@@ -1021,7 +1002,6 @@ static func _exec_poem_req(parsed: NamedDSLParser.ParseResult, raw: String) -> P
 	if not fh.is_empty():
 		req.failed_hint = fh
 
-	Logging.info("poem_has requirement 创建成功: types=%s, min_level=%d, failed_hint=%s" % [str(req.accepted_poem_types), req.lowest_poem_level, req.failed_hint])
 	return req
 
 
@@ -1055,26 +1035,6 @@ static func _exec_imagery_add_op(parsed: NamedDSLParser.ParseResult, raw: String
 	var op = ImageryAcquisitionOperator.new()
 	op.imagery_name = name
 	Logging.info("imagery_add operator 创建成功: name=%s" % name)
-	return op
-
-
-# ─── imaginary_set_level ─────────────────────────────────────
-
-# DSL 语法: imaginary_set_level(name=emotion:ambition, level=2)
-# 返回 ImaginarySetLevelOperator（直接设置指定意象的 current_level）
-static func _exec_imaginary_set_level_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ImaginarySetLevelOperator:
-	var name = NamedDSLParser.get_str_param(parsed, "name")
-	if name.is_empty():
-		Logging.err("imaginary_set_level 缺少 name 参数: %s" % raw)
-		return null
-	var level = NamedDSLParser.get_int_param(parsed, "level", 0)
-	if level < 0 or level > 2:
-		Logging.err("imaginary_set_level level=%d 超出范围 [0, 2]: %s" % [level, raw])
-		return null
-	var op = ImaginarySetLevelOperator.new()
-	op.imaginary_name = name
-	op.target_level = level
-	Logging.info("imaginary_set_level operator 创建成功: name=%s, level=%d" % [name, level])
 	return op
 
 

@@ -9,5 +9,4 @@ name = "风雪夜归人"
 description = "寒月孤雪落叶：羁旅登高，天地苍茫"
 topic = "POEM"
 specific_topic = "DENG_GAO"
-poem_level = 1
 required_fragments = Array[String](["environment:moon", "environment:snow", "environment:wind"])

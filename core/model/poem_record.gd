@@ -11,9 +11,6 @@ class_name PoemRecord extends Resource
 ## 使用情境描述（如"呈于皇帝御览""题于长安酒肆墙壁"），空则不显示
 @export var usage_context: String = ""
 
-## 诗词等级 (0-2)
-@export var poem_level: int = 0
-
 ## 世俗值
 @export var secular_value: float = 0.0
 

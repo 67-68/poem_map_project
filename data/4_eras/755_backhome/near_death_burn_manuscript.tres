@@ -44,7 +44,6 @@ operators = Array[ExtResource("2_baseop")]([SubResource("Resource_health10"), Su
 script = ExtResource("6_poemtaste")
 uuid = "poem_taste_near_death_burn"
 _accepted_poem_types = Array[int]([0, 1, 2, 3, 4, 5])
-lowest_poem_level = 1
 accepted_result = SubResource("Resource_accepted_cr")
 rejected_result = SubResource("Resource_rejected_cr")
 not_entered_result = SubResource("Resource_not_entered_cr")

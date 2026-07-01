@@ -93,25 +93,8 @@ func init_flags():
 		Logging.info('init_flags: flag %s set to %s from SourceOfTruth' % [flag_id, str(flag_val)])
 
 func init_imaginaries():
-	"""从 SourceOfTruth 加载意象初始等级和详细碎片到 Database"""
-	# —— 阶段 1：ImaginaryConcept 初始等级 ——
-	var imaginary_data = SourceOfTruth.debug_dashboard_state.get("imaginaries", {})
-	if not imaginary_data.is_empty():
-		for uuid in imaginary_data:
-			var level = imaginary_data[uuid] as int
-			if level <= 0:
-				Logging.info('init_imaginaries: imaginary %s level <= 0 (%d), skipping' % [uuid, level])
-				continue
-			var imaginary = Database.get_imaginary(uuid) as ImaginaryConcept
-			if not imaginary:
-				Logging.warn('init_imaginaries: imaginary %s not found in Database.imaginaries, skipping' % uuid)
-				continue
-			imaginary.current_level = level
-			Logging.info('init_imaginaries: set imaginary %s (%s) to level %d' % [uuid, imaginary.name, level])
-	else:
-		Logging.info('init_imaginaries: no imaginary data in SourceOfTruth, skipping level init')
-
-	# —— 阶段 2：详细碎片（Imaginary） ——
+	"""从 SourceOfTruth 加载 Imaginary 详细碎片到 Database (V6: level 系统已删除)"""
+	# —— 加载详细碎片（Imaginary） ——
 	var basic_data = SourceOfTruth.debug_dashboard_state.get("basic_imaginaries", [])
 	if basic_data.is_empty():
 		Logging.info('init_imaginaries: no basic_imaginaries data in SourceOfTruth, skipping')
@@ -185,28 +168,32 @@ func _connect_imaginary_signals():
 
 
 func _on_request_add_imaginary(tag: String):
-	"""处理意象获取请求：tag 是简单名（如 "snow", "drunk"），查定义文件获取 concepts"""
+	"""处理意象获取请求：V6 重复 Imaginary → talent +3"""
 	if tag.is_empty():
 		Logging.err("PlayerState._on_request_add_imaginary: tag 为空")
 		return
 
 	var imaginary_uuid = tag.to_lower()
 
-	# ── 找到或创建 Imaginary（详细碎片） ──
-	var imaginary = Database.get_imaginary_detail(imaginary_uuid)
-	if not imaginary:
-		imaginary = Imaginary.new()
-		imaginary.uuid = imaginary_uuid
-		# 从定义文件查找 {name, concepts}
-		var def_data = _imaginary_defs.get(imaginary_uuid, {})
-		imaginary.name = def_data.get("name", tag)
-		var raw_concepts = def_data.get("concepts", [])
-		var concepts_arr: Array[String] = []
-		for c in raw_concepts:
-			concepts_arr.append(str(c))
-		imaginary.concepts = concepts_arr
-		Database.imaginaries_detail[imaginary_uuid] = imaginary
-		Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, concepts=%s)" % [imaginary_uuid, imaginary.name, str(concepts_arr)])
+	# ── 重复检测：已有该 Imaginary → 转 talent ──
+	if Database.imaginaries_detail.has(imaginary_uuid):
+		append_stat("talent", 3)
+		Logging.info("PlayerState._on_request_add_imaginary: 重复 Imaginary '%s' → talent +3" % imaginary_uuid)
+		EventBus.imaginary_changed.emit()
+		return
+
+	# ── 新建 Imaginary（详细碎片） ──
+	var imaginary = Imaginary.new()
+	imaginary.uuid = imaginary_uuid
+	var def_data = _imaginary_defs.get(imaginary_uuid, {})
+	imaginary.name = def_data.get("name", tag)
+	var raw_concepts = def_data.get("concepts", [])
+	var concepts_arr: Array[String] = []
+	for c in raw_concepts:
+		concepts_arr.append(str(c))
+	imaginary.concepts = concepts_arr
+	Database.imaginaries_detail[imaginary_uuid] = imaginary
+	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, concepts=%s)" % [imaginary_uuid, imaginary.name, str(concepts_arr)])
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()

@@ -73,16 +73,12 @@ func _on_trait_picked(trait_picked):
         return
     Logging.debug('PoemTypeChooseOperator: Trait picked - %s' % trait_picked.uuid)
 
-    # 使用 Poem 的 poem_level 字段，不再解析 UUID
+    # V6: poem_level 已删除，仅按 poem_type 匹配
     var trait_topic = trait_picked.topic
     var poem_type = trait_picked.specific_topic
-    var level: int = trait_picked.poem_level
-    Logging.debug('PoemTypeChooseOperator: topic=%s, poem_type=%s, level=%d' % [trait_topic, poem_type, level])
+    Logging.debug('PoemTypeChooseOperator: topic=%s, poem_type=%s' % [trait_topic, poem_type])
 
-    if level < poem_taste.lowest_poem_level:
-        Logging.debug('PoemTypeChooseOperator: Level %s below threshold %s, executing rejected_result' % [level, poem_taste.lowest_poem_level])
-        poem_taste.rejected_result.operate()
-    elif poem_type in poem_taste.accepted_poem_types:
+    if poem_type in poem_taste.accepted_poem_types:
         Logging.debug('PoemTypeChooseOperator: Type %s in accepted_poem_types, executing accepted_result' % poem_type)
         poem_taste.accepted_result.operate()
     else:

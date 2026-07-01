@@ -164,7 +164,6 @@ func test_comprehend_ink_contamination_min_tier():
 	var success = ImaginaryComprehender.comprehend_category("nature:autumn")
 	assert_true(success, "坍缩应成功")
 	assert_eq(concept.current_tier, 1, "merge_category 默认 tier=1")
-	assert_eq(concept.current_level, 2)
 
 
 func test_comprehend_all_tier3():
@@ -197,7 +196,6 @@ func test_comprehend_level_clamp():
 
 	var success = ImaginaryComprehender.comprehend_category("nature:autumn")
 	assert_true(success)
-	assert_eq(concept.current_level, 2, "3 个 Imaginary → level clamp 到 2")
 
 
 func test_comprehend_level_exactly_1():
@@ -209,7 +207,6 @@ func test_comprehend_level_exactly_1():
 
 	var success = ImaginaryComprehender.comprehend_category("nature:autumn")
 	assert_true(success)
-	assert_eq(concept.current_level, 2, "2 个 Imaginary → level=2")
 
 
 func test_comprehend_clears_fragments():
@@ -235,11 +232,9 @@ func test_consume_concepts_resets_state_not_definition():
 	var c1 = ImaginaryConcept.new()
 	c1.uuid = "c1"
 	c1.current_tier = 2
-	c1.current_level = 2
 	var c2 = ImaginaryConcept.new()
 	c2.uuid = "c2"
 	c2.current_tier = 1
-	c2.current_level = 1
 	Database.imaginaries["c1"] = c1
 	Database.imaginaries["c2"] = c2
 
@@ -253,9 +248,7 @@ func test_consume_concepts_resets_state_not_definition():
 
 	# 但运行时状态应重置
 	assert_eq(c1.current_tier, 0, "c1 tier 应重置为 0")
-	assert_eq(c1.current_level, 0, "c1 level 应重置为 0")
 	assert_eq(c2.current_tier, 0, "c2 tier 应重置为 0")
-	assert_eq(c2.current_level, 0, "c2 level 应重置为 0")
 
 
 # ════════════════════════════════════════════════════════════
@@ -505,6 +498,5 @@ func _make_tiered_concepts(tiers: Array) -> Array[ImaginaryConcept]:
 		var ima = ImaginaryConcept.new()
 		ima.uuid = "concept_tier%d_%d" % [t, randi()]
 		ima.current_tier = t
-		ima.current_level = 2
 		result.append(ima)
 	return result

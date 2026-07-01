@@ -1,12 +1,17 @@
 class_name PoemCraftingCalculator extends Node
 
-## 诗词评价引擎 V5 — 精确 Set 匹配 + Tier 合并 + 打油诗
+## 诗词评价引擎 V6 — 精确 Set 匹配 + Tier 木桶效应 + 无 Level
 ##
 ## Layer 1: FragmentMatcher 精确集合匹配（两段式 concept uuid）
-## Layer 2: Tier 木桶效应（Tier 2/3 已合并，仅 Tier 1 和 Tier 2）
+## Layer 2: Tier 木桶效应（Tier 1/2）
 ## 管道乘数：自动从匹配食谱的 specific_topic 获取
+##
+## V6 变更: level 系统已删除，收益公式中的 level 因子写死为 2
 
-## 管道乘数矩阵（Tier 2/3 合并后仅 Tier 1 和 Tier 2）
+## Level 写死常量（原为 max(3个concept的current_level)，现已删除 level 系统）
+const LEVEL_OVERRIDE := 2
+
+## 管道乘数矩阵
 const CHANNEL_MATRIX = {
 	"SECULAR": {
 		1: {"history_mult": 0.0, "secular_mult": 1.5},
@@ -32,12 +37,11 @@ class PoemCraftingResult:
 	var operators: Array = []          ## 通过/打油诗时的收益算子列表
 	var secular_value: float = 0.0     ## 世俗收益
 	var literary_value: float = 0.0    ## 文学收益
-	var poem_level: int = 0            ## 诗词等级 (0-2) = max(三个Concept.level)
-	var min_tier: int = 0              ## 木桶最低 tier (1 或 2)
+	var min_tier: int = 1              ## 木桶最低 tier (1 或 2)
 	var matched_recipe: Poem = null    ## 匹配到的食谱（精确匹配时非 null）
 
 
-## 主入口：诗词评价引擎 V5
+## 主入口：诗词评价引擎 V6
 ## concepts: 选中的 ImaginaryConcept 数组（必须 3 个）
 ## recipe_index: Database.recipe_index — {sorted_key → Poem recipe}
 static func calculate_poem_grade(concepts: Array, recipe_index: Dictionary) -> PoemCraftingResult:
@@ -90,42 +94,31 @@ static func calculate_poem_grade(concepts: Array, recipe_index: Dictionary) -> P
 
 	# ── Layer 2: Tier 木桶效应 + 收益计算 ──
 	var min_tier = 999
-	var max_level = 0
 	for c in concepts:
 		if not (c is ImaginaryConcept):
 			continue
 		if c.current_tier > 0:
 			min_tier = mini(min_tier, c.current_tier)
-		max_level = maxi(max_level, c.current_level)
 
-	# Tier >= 2 统一为 Tier 2（合并 Tier 2 和 Tier 3）
 	if min_tier >= 2:
 		min_tier = 2
 
 	if min_tier == 999:
 		min_tier = 1
 	result.min_tier = min_tier
-	result.poem_level = max_level
 
-	Logging.info("PoemCraftingCalculator: min_tier=%d, poem_level=%d (max of levels)" % [min_tier, max_level])
+	Logging.info("PoemCraftingCalculator: min_tier=%d, level=OVERRIDE(%d)" % [min_tier, LEVEL_OVERRIDE])
 
-	# ── 健康消耗 ──
-	var health_cost = _calculate_health_cost(concepts)
-	if health_cost > 0:
-		result.operators.append(
-			OperatorFactory.create_property_operator("health", -health_cost)
-		)
-
-	# ── 收益公式 ──
+	# ── 收益公式（level 写死）──
 	var base_history := 0.0
 	var base_secular := 0.0
 
 	match min_tier:
 		1:
-			base_secular = max_level * 10.0
+			base_secular = LEVEL_OVERRIDE * 10.0
 		2:
-			base_history = max_level * 20.0
-			base_secular = max_level * (-20.0)
+			base_history = LEVEL_OVERRIDE * 20.0
+			base_secular = LEVEL_OVERRIDE * (-20.0)
 
 	# ── 管道乘数（从匹配食谱的 specific_topic 获取）──
 	var recipe = result.matched_recipe
@@ -172,23 +165,6 @@ static func _find_2of3_match(concept_uuids: Array[String], recipe_index: Diction
 				return recipe
 
 	return null
-
-
-## 健康消耗计算
-static func _calculate_health_cost(concepts: Array) -> float:
-	var level_factor = 0.5 if _has_high_level(concepts) else 0.2
-	var base_health = 0.0
-	for c in concepts:
-		if c and c is ImaginaryConcept:
-			base_health += c.current_level * level_factor
-	return base_health
-
-
-static func _has_high_level(concepts: Array) -> bool:
-	for c in concepts:
-		if c and c is ImaginaryConcept and c.current_level == 2:
-			return true
-	return false
 
 
 ## 翻译 operators 为人类可读的预览文本

@@ -42,7 +42,6 @@ operators = Array[ExtResource("1_3atxg")]([SubResource("Resource_mss5m")])
 script = ExtResource("5_ni0pd")
 uuid = "zhuoliu_basic_taste"
 _accepted_poem_types = Array[int]([0, 1])
-lowest_poem_level = 1
 accepted_result = SubResource("Resource_mslcc")
 rejected_result = SubResource("Resource_8yl31")
 not_entered_result = SubResource("Resource_5ahdn")

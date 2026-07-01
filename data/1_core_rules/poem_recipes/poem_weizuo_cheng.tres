@@ -9,5 +9,4 @@ name = "奉赠韦左丞丈二十二韵"
 description = "求职诗的巅峰：骑驴十三载(羁旅) + 骅骝作骨(骐骥) + 致君尧舜上(尧舜)"
 topic = "POEM"
 specific_topic = "GAN_YE"
-poem_level = 2
 required_fragments = Array[String](["finance:broke", "myth:animal", "theme:history"])

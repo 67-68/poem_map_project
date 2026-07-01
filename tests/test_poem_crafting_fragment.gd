@@ -20,7 +20,6 @@ func _make_concept(key: String, tier: int, level: int = 2) -> ImaginaryConcept:
 	var c = ImaginaryConcept.new()
 	c.uuid = key
 	c.current_tier = tier
-	c.current_level = level
 	return c
 
 func _make_recipe(key: String, fragments: Array[String]) -> Poem:

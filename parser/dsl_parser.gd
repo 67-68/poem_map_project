@@ -32,8 +32,6 @@ const _REQUIREMENT_ONLY_FUNCS: Array[String] = [
     "flag_str_is", "flag_str_not",
     "flag_int_gt", "flag_int_lt", "flag_int_eq", "flag_int_ne",
     "poem_has",
-    "imaginary_has_level",
-    "imaginary_set_level",
     "imagery_add",
     "imaginary_level_reward",
 ]

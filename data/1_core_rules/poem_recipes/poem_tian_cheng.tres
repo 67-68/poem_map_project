@@ -9,5 +9,4 @@ name = "赠献纳使起居田舍人澄"
 description = "干将未省钝 + 主将收才子：献赋求荐，含蓄自尊"
 topic = "POEM"
 specific_topic = "GAN_YE"
-poem_level = 1
 required_fragments = Array[String](["aesthetic:elegant", "emotion:ambition", "society:famine"])

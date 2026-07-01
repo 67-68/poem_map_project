@@ -179,7 +179,6 @@ func _generate_scenario_5() -> void:
 	choose_op.key_to_get_poem_taste = "poem_taste"
 	choose_op.property_multiplication = 1.0
 	choose_op.poem_taste = PoemTaste.new()
-	choose_op.poem_taste.lowest_poem_level = 0
 	choose_op.poem_taste.accepted_poem_types = ["GAN_YE", "DENG_GAO", "SHAN_SHUI", "YING_ZHI", "HUAI_GU", "JI_LV"]
 	choose_poem_result.operators = [choose_op] as Array[BaseOperator]
 

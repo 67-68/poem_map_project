@@ -70,7 +70,6 @@ operators = Array[ExtResource("1_ry2h2")]([SubResource("Resource_mss5m"), SubRes
 script = ExtResource("5_g14i1")
 uuid = "libai_taste"
 _accepted_poem_types = Array[int]([2, 3, 4, 5])
-lowest_poem_level = 1
 accepted_result = SubResource("Resource_mslcc")
 rejected_result = SubResource("Resource_8yl31")
 not_entered_result = SubResource("Resource_5ahdn")

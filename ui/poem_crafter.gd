@@ -219,8 +219,8 @@ func _rebuild_subviewport() -> void:
 		var detail_imaginaries = ImaginaryComprehender.get_imaginaries_for_concept(concept_key)
 		var fragment_count = detail_imaginaries.size()
 
-		Logging.info('PoemCrafter: placing concept "%s" (key=%s, fragments=%d, tier=%d, level=%d)' %
-			[concept.name, concept_key, fragment_count, concept.current_tier, concept.current_level])
+		Logging.info('PoemCrafter: placing concept "%s" (key=%s, fragments=%d, tier=%d)' %
+			[concept.name, concept_key, fragment_count, concept.current_tier])
 
 		var node := _ABSTRACT_CONCEPT_SCENE.instantiate() as AbstractConcept
 		node.concept_name = concept.name
@@ -258,9 +258,9 @@ func _rebuild_subviewport() -> void:
 			orbit.set_detail_text(frag_imag.name)
 			node.add_child(orbit)
 
-		# 显示总碎片数 + Level
+		# 显示总碎片数
 		var info_label := Label.new()
-		info_label.text = "碎片: %d | Lv.%d" % [fragment_count, concept.current_level]
+		info_label.text = "碎片: %d" % fragment_count
 		info_label.add_theme_font_size_override("font_size", 10)
 		info_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 1.0))
 		info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -407,7 +407,7 @@ func _on_button_pressed() -> void:
 	# 创建 Poem trait 并注册
 	var recipe = result.matched_recipe
 	var poem_type_str = recipe.specific_topic if recipe else "GAN_YE"
-	var poem = Poem.new("POEM", poem_type_str, result.poem_level, result.secular_value, result.literary_value)
+	var poem = Poem.new("POEM", poem_type_str, result.secular_value, result.literary_value)
 	poem.uuid = "crafted_poem_%s_%d" % [poem_type_str, Time.get_unix_time_from_system()]
 	poem.name = recipe.name if recipe else "《%s》" % poem_type_str
 	poem.specific_topic = poem_type_str
@@ -421,7 +421,6 @@ func _on_button_pressed() -> void:
 		"poem_secular": result.secular_value,
 		"poem_literary": result.literary_value,
 		"poem_type": poem.specific_topic,
-		"poem_level": result.poem_level,
 	}
 	EventBus.push_event.emit("poem_reveal", ctx)
 	Logging.info('PoemCrafter: poem reveal event pushed')
@@ -482,11 +481,9 @@ func _preview_match() -> void:
 
 ## 无食谱匹配时，基于 Tier+Level 给出叙事化估评
 func _build_tier_estimate() -> String:
-	var max_level := 0
 	var min_tier := 999
 	for c in selected_imaginaries:
 		if c is ImaginaryConcept:
-			max_level = maxi(max_level, c.current_level)
 			if c.current_tier > 0:
 				min_tier = mini(min_tier, c.current_tier)
 	if min_tier >= 2:
@@ -499,7 +496,7 @@ func _build_tier_estimate() -> String:
 	lines.append("[color=#aaa]你将这三者放在一处，有些疑惑——[/color]")
 	lines.append("[color=#ccc]它们真的能凑成一首诗么？[/color]")
 	lines.append("")
-	lines.append("[color=#888]品级约 T%d · %s | 等阶 Lv.%d[/color]" % [min_tier, tier_name, max_level])
+	lines.append("[color=#888]品级约 T%d · %s[/color]" % [min_tier, tier_name])
 	return "\n".join(lines)
 
 
