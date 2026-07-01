@@ -23,9 +23,17 @@ extends Control
 
 var expand := false
 var _page_tween: Tween = null
+var _original_offsets: Dictionary = {}
 
 
 func _ready() -> void:
+	## 保存原始 offset，防止 hide_page 动画污染永久属性后无法恢复
+	_original_offsets = {
+		"left": offset_left,
+		"top": offset_top,
+		"right": offset_right,
+		"bottom": offset_bottom,
+	}
 	hide()
 	EventBus.poem_start_clicked.connect(func():
 		if not expand:
@@ -61,7 +69,13 @@ func show_page() -> void:
 	BlurManager.hide_cinematic_blur()
 	BlurManager.trigger_event_blur()
 
-	# 4. 展示页面
+	# 4. 展示页面 — 先恢复原始 offset（防止上次 hide_page 的 size tween 污染）
+	if not _original_offsets.is_empty():
+		offset_left = _original_offsets.get("left", offset_left)
+		offset_top = _original_offsets.get("top", offset_top)
+		offset_right = _original_offsets.get("right", offset_right)
+		offset_bottom = _original_offsets.get("bottom", offset_bottom)
+		Logging.debug("PoemCreationPage: restored original offsets: %s" % _original_offsets)
 	show()
 	_page_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await _page_tween.finished

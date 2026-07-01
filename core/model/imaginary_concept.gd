@@ -20,7 +20,7 @@ signal tier_changed(new_tier: int)
 
 @export var l3_threshold := 4 # 需要四个意象来达到 l3
 
-const l2_threshold := 2
+const l2_threshold := 1
 
 ## 合并坍缩后保留的原始四段式 Tag 备份
 @export var merged: Array = []

@@ -7,11 +7,14 @@ func _ready() -> void:
 
 func update_label() -> void:
 	text = 'imaginaries: \n'
-	#for i_name in Database.imaginaries:
-		#var i: ImaginaryConcept = Database.imaginaries[i_name]
-		#if i.basic_imaginaries.size() > 0:
-			#text += '- %s: %s imas, level %s' % [i.name, i.basic_imaginaries.size(), i.current_level]
-			#for entry in i.basic_imaginaries:
-				#var blueprint_id = entry.get("blueprint_id", "")
-				#var contexts = entry.get("contexts", [])
-				#text += '\n- blueprint: %s, contexts: %s' % [blueprint_id, str(contexts)]
+	var active = ImaginaryComprehender.get_active_concepts()
+	if active.is_empty():
+		text += '  (none)'
+		return
+	for concept_key in active:
+		var concept: ImaginaryConcept = active[concept_key]
+		if not concept:
+			continue
+		var fragments = ImaginaryComprehender.get_imaginaries_for_concept(concept_key)
+		var frag_count = fragments.size() if fragments else 0
+		text += '- %s (key=%s): level %d, tier %d, fragments %d\n' % [concept.name, concept_key, concept.current_level, concept.current_tier, frag_count]

@@ -6,8 +6,7 @@ extends Node
 ##
 ## 用法: 将此脚本附加到任意场景 Node，在编辑器中运行场景。
 
-const OUTPUT_DIR := "res://tests/data/poem_events/"
-
+const OUTPUT_DIR := "res://data/tests/poem_events/"
 
 const SEP = "============================================================"
 
@@ -56,13 +55,14 @@ func _make_chained_event(event_uuid: String, archetype: String, desc: String,
 	for i in range(imagery_tags.size()):
 		var tag = imagery_tags[i]
 		var choice_result = ChoiceResult.new()
-		choice_result.operators = [_make_imagery_op(tag)]
+		choice_result.operators = [_make_imagery_op(tag)] as Array[BaseOperator]
 
 		var option = EventOption.new()
 		option.description = "获得意象: %s" % tag
 		option.choice_result = choice_result
 		options.append(option)
 
+	options as Array[BaseOption]
 	event.options = options
 	return event
 
@@ -193,7 +193,7 @@ func _generate_scenario_5() -> void:
 	# 选项 1: 先给玩家一首测试诗词 trait
 	var give_poem_result = ChoiceResult.new()
 	var give_poem_op = OperatorFactory.create_trait_operator("poem_gan_ye_1")
-	give_poem_result.operators = [give_poem_op]
+	give_poem_result.operators = [give_poem_op] as Array[BaseOperator]
 
 	var give_poem_opt = EventOption.new()
 	give_poem_opt.description = "获得诗词: 干谒诗 Lv1"
@@ -208,7 +208,7 @@ func _generate_scenario_5() -> void:
 	choose_op.poem_taste = PoemTaste.new()
 	choose_op.poem_taste.lowest_poem_level = 0
 	choose_op.poem_taste.accepted_poem_types = ["GAN_YE", "DENG_GAO", "SHAN_SHUI", "YING_ZHI", "HUAI_GU", "JI_LV"]
-	choose_poem_result.operators = [choose_op]
+	choose_poem_result.operators = [choose_op] as Array[BaseOperator]
 
 	var choose_poem_opt = EventOption.new()
 	choose_poem_opt.description = "使用 PoemTypeChooseOperator 选择诗词"
