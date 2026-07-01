@@ -19,12 +19,10 @@ func compare(player_state) -> bool:
 		if not trait_data:
 			Logging.warn("PoemRequirement: trait '%s' not found in Database" % str(t))
 			continue
-		if trait_data.topic != "POEM":
+		if not (trait_data is Poem):
 			continue
 
-		# 从 UUID 末尾提取等级（与 trait_choose_operator._on_trait_picked 逻辑一致）
-		var level_str = trait_data.uuid.split("_")[-1]
-		var level = level_str.to_int()
+		var level: int = trait_data.poem_level
 		Logging.debug("PoemRequirement: checking trait '%s' topic=%s specific=%s level=%d" % [
 			trait_data.uuid, trait_data.topic, trait_data.specific_topic, level
 		])

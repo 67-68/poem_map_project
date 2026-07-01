@@ -20,7 +20,7 @@ const _TimeOperator = preload("res://core/model/time_operator.gd")
 	 	# 省份uuid
 @export var ambition: AmbitionData
 @export var current_action_tags: Array[String] = []
-@export var created_poems: Array[String]
+@export var created_poems: Array  ## 存储 Poem 对象，供墓碑等终局结算使用
 var emotions: Dictionary = {}
 var flags: Dictionary = {}  # flag_id -> value (str/int/bool)
 

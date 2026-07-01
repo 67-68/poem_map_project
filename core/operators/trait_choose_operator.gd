@@ -52,11 +52,11 @@ func operate():
         if not trait_:
             Logging.err('PoemTypeChooseOperator: can not found trait %s' % t)
             continue
-        # 🤓☝️ 只展示诗词类 trait（topic == "POEM"），排除社交/主线路线等
-        if trait_.topic != "POEM":
-            Logging.debug('PoemTypeChooseOperator: Skipping non-POEM trait %s (topic=%s)' % [t, trait_.topic])
+        # 🤓☝️ 只展示诗词类 trait（is Poem），排除社交/主线路线等
+        if not (trait_ is Poem):
+            Logging.debug('PoemTypeChooseOperator: Skipping non-Poem trait %s' % t)
             continue
-        Logging.debug('PoemTypeChooseOperator: Found POEM trait %s' % t)
+        Logging.debug('PoemTypeChooseOperator: Found Poem trait %s' % t)
         data.append(trait_)
 
     # 🏗️ 不再直接 await end_picking，改为推入事件栈顶
@@ -73,12 +73,10 @@ func _on_trait_picked(trait_picked):
         return
     Logging.debug('PoemTypeChooseOperator: Trait picked - %s' % trait_picked.uuid)
 
-    # 使用 trait 的 topic/specific_topic 字段，不再解析 UUID
+    # 使用 Poem 的 poem_level 字段，不再解析 UUID
     var trait_topic = trait_picked.topic
     var poem_type = trait_picked.specific_topic
-    # 从 UUID 末尾提取等级（命名约定：poem_gan_ye_1 → 1）
-    var level_str = trait_picked.uuid.split('_')[-1]
-    var level = level_str.to_int()
+    var level: int = trait_picked.poem_level
     Logging.debug('PoemTypeChooseOperator: topic=%s, poem_type=%s, level=%d' % [trait_topic, poem_type, level])
 
     if level < poem_taste.lowest_poem_level:

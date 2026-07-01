@@ -29,10 +29,6 @@ static var debug_dashboard_state = {
         # _rumor/_close/_core/_enemy
         "LIBAI": 'relation_libai_rumor',
 
-        # 诗词
-        "POEM_BAIYE": 'poem_gan_ye_3', # 不要大写, 会出问题
-        "POEM_BAIY": 'poem_gan_ye_2', # 不要大写, 会出问题
-        'POEM_shanshui': 'poem_deng_gao_1'
     },
     
     # 维度 4：资源池 (The Expendables) - 核心六属性

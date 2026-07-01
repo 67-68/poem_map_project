@@ -52,7 +52,11 @@ func _ready() -> void:
 	# 连接 POEM_TYPE toggle buttons
 	_connect_poem_type_buttons()
 
-	# "开始创作"按钮 — 由 tscn 的 _on_button_pressed() 命名约定自动连接
+	# "开始创作"按钮 — 手动连接（节点已重命名为 CraftBtn 以避免与 POEM TYPE toggle 重名冲突）
+	var craft_btn := $Panel/VBoxContainer/InputImagPanel/CraftBtn
+	if craft_btn:
+		craft_btn.pressed.connect(_on_button_pressed)
+		Logging.info('PoemCrafter: CraftBtn.pressed signal connected')
 	# "撕毁卷轴"按钮 — 位于 $Panel/Button，手动连接
 	var tear_btn := $Panel/Button
 	if tear_btn:
@@ -410,7 +414,10 @@ func _on_button_pressed() -> void:
 			return
 		return
 
-	result.operate()
+	# 执行 operators（PoemCraftingResult 是纯数据类，不含 operate()）
+	for op in result.operators:
+		if op and op.has_method("operate"):
+			op.operate()
 
 	# 创建 Poem trait 并注册
 	var poem = Poem.new("POEM", ENUMS.POEM_TYPE.keys()[selected_poem_type], result.poem_level, result.secular_value, result.literary_value)
@@ -421,7 +428,8 @@ func _on_button_pressed() -> void:
 	# 注册到 Database（内存态）以便 PlayerState.add_trait 能通过 Database.get_trait 找到
 	Database.traits[poem.uuid] = poem
 	PlayerState.add_trait(poem.uuid)
-	Logging.info('PoemCrafter: Poem trait created and added: %s' % poem.uuid)
+	PlayerState.created_poems.append(poem)
+	Logging.info('PoemCrafter: Poem trait created and added: %s, created_poems count: %d' % [poem.uuid, PlayerState.created_poems.size()])
 
 	# 消耗 concepts
 	ImaginaryComprehender.consume_concepts(selected_imaginaries)
