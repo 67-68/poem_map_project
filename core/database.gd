@@ -145,6 +145,12 @@ func _init() -> void:
 		if d is Disease and "uuid" in d:
 			traits[d.get("uuid")] = d
 
+	# poem recipe（Poem extends Trait）从独立目录合并
+	var raw_poems = r.bases.get("1_core_rules.poem_recipes", {})
+	for p in raw_poems.values():
+		if p is Poem and "uuid" in p:
+			traits[p.get("uuid")] = p
+
 	tags = {}  # tags 不再使用
 
 	# ── 2_characters ──

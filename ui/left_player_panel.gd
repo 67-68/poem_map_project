@@ -78,6 +78,11 @@ func _ready() -> void:
 		PlayerState.emotion_changed.connect(_refresh_emotions)
 		Logging.info("LeftPlayerPanel: connected to PlayerState.emotion_changed")
 	
+	# ── 信号连接：trait 增减时重建 TraitGrid ──
+	if not EventBus.on_trait_change.is_connected(_rebuild_trait_grid):
+		EventBus.on_trait_change.connect(_rebuild_trait_grid)
+		Logging.info("LeftPlayerPanel: connected to EventBus.on_trait_change")
+	
 	# 初始化情绪显示
 	_refresh_emotions()
 	
@@ -295,15 +300,23 @@ func _rebuild_trait_grid() -> void:
 	
 	for trait_key in trait_keys:
 		var trait_data: Trait = Database.get_trait(trait_key)
-		if not trait_data:
-			Logging.warn("LeftPlayerPanel: trait key '%s' not found in Database" % trait_key)
-			continue
 		
 		# 使用 TraitDemonstrator（阳刻印章 + 名称）
 		var demonstrator = preload("res://ui/trait_demonstrator.tscn").instantiate()
 		_trait_grid.add_child(demonstrator)
-		demonstrator.set_trait(trait_data)
-		Logging.info("LeftPlayerPanel: added trait demonstrator: %s" % trait_data.name)
+		
+		if not trait_data:
+			# 未在 Database.traits 注册的软 trait（如 poem_recipe_*），
+			# 尝试通过 Database.resolve() 查找对应资源获取展示名
+			var resolved = Database.resolve(trait_key)
+			var display_name: String = trait_key
+			if resolved and "name" in resolved:
+				display_name = resolved.name
+			Logging.info("LeftPlayerPanel: trait key '%s' not in Database.traits, fallback display as '%s'" % [trait_key, display_name])
+			demonstrator.set_trait_fallback(trait_key, display_name)
+		else:
+			demonstrator.set_trait(trait_data)
+			Logging.info("LeftPlayerPanel: added trait demonstrator: %s" % trait_data.name)
 
 func _refresh_trait_grid() -> void:
 	var trait_keys: Array = PlayerState.traits

@@ -235,7 +235,7 @@ func append_stat(stat_name, data) -> bool:
 	for t_name in traits:
 		var t = Database.get_trait(t_name)
 		if not t:
-			Logging.err('do not find trait %s' % t_name)
+			Logging.warn('do not find trait %s in Database, skipping buffer calc' % t_name)
 			continue
 		if t.buffer_to_prop and t.buffer_to_prop.has_operator(stat_name):
 			amount_to_change = t.buffer_to_prop.match_and_multiply(stat_name, amount_to_change)

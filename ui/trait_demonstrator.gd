@@ -28,3 +28,23 @@ func set_trait(trait_data: Trait) -> void:
 		Logging.err("TraitDemonstrator: $TraitNameLabel 为 null，检查节点路径")
 
 	Logging.info("TraitDemonstrator: 展示特质 '%s'，印章字='%s'" % [trait_data.name, char_to_show])
+
+## 兼容未在 Database.traits 注册的软 trait（如 poem_recipe_*）
+## trait_key: 原始 key（如 "poem_recipe_tian_cheng"）
+## display_name: 展示用名称
+func set_trait_fallback(trait_key: String, display_name: String) -> void:
+	var char_to_show: String = display_name[0] if not display_name.is_empty() else "?"
+
+	var stamp_label := $YangKe/MarginContainer/Label as Label
+	if stamp_label:
+		stamp_label.text = char_to_show
+	else:
+		Logging.err("TraitDemonstrator: $YangKe/MarginContainer/Label 为 null，检查节点路径")
+
+	var name_label := $TraitNameLabel as Label
+	if name_label:
+		name_label.text = display_name
+	else:
+		Logging.err("TraitDemonstrator: $TraitNameLabel 为 null，检查节点路径")
+
+	Logging.info("TraitDemonstrator: 展示软特质 '%s' → '%s'，印章字='%s'" % [trait_key, display_name, char_to_show])
