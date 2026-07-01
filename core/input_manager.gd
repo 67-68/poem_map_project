@@ -75,8 +75,14 @@ func _input(event: InputEvent) -> void:
 	elif kc == KEY_PAGEDOWN:
 		_on_page_down()
 		get_viewport().set_input_as_handled()
+	elif kc == Key.KEY_F1 and (event.meta_pressed or event.ctrl_pressed):
+		_on_f1()
+		get_viewport().set_input_as_handled()
+	elif kc == Key.KEY_F2 and (event.meta_pressed or event.ctrl_pressed):
+		_on_f2()
+		get_viewport().set_input_as_handled()
 	else:
-		Logging.debug("InputManager._input: 未匹配任何快捷键 keycode=%d" % kc)
+		Logging.debug("InputManager._input: 未匹配任何快捷键 keycode=%d (Key.KEY_F1=%d Key.KEY_F2=%d)" % [kc, Key.KEY_F1, Key.KEY_F2])
 
 
 # ═══════════════════════════════════════════════
@@ -145,6 +151,20 @@ func _toggle_system_menu(open: bool) -> void:
 func _on_tab() -> void:
 	Logging.info("InputManager: Tab → toggle 纯地图模式")
 	EventBus.request_toggle_map_only.emit()
+
+
+# ═══════════════════════════════════════════════
+# F1 / F2 — Debug 工具快捷键
+# ═══════════════════════════════════════════════
+
+func _on_f1() -> void:
+	Logging.info("InputManager: Cmd+F1 → toggle Debug Overlay")
+	EventBus.request_toggle_debug_overlay.emit()
+
+
+func _on_f2() -> void:
+	Logging.info("InputManager: Cmd+F2 → toggle Debug Controller")
+	EventBus.request_toggle_debug_controller.emit()
 
 
 # ═══════════════════════════════════════════════

@@ -12,7 +12,7 @@ func update_label() -> void:
 		text += '  (none)'
 		return
 	for concept_key in active:
-		var concept: ImaginaryConcept = active[concept_key]
+		var concept = active[concept_key] as ImaginaryConcept
 		if not concept:
 			continue
 		var fragments = ImaginaryComprehender.get_imaginaries_for_concept(concept_key)

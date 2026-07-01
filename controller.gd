@@ -3,13 +3,16 @@ extends Control
 
 func _ready() -> void:
 	visible = false
+	if not EventBus.has_signal("request_toggle_debug_controller"):
+		Logging.err("Controller: EventBus 缺少 signal request_toggle_debug_controller")
+		return
+	EventBus.request_toggle_debug_controller.connect(_on_toggle_debug_controller)
 
-func _input(event: InputEvent):
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_F2 and (event.meta_pressed or event.ctrl_pressed):
-			visible = not visible
-			if visible:
-				$Controller.grab_focus()
+
+func _on_toggle_debug_controller() -> void:
+	visible = not visible
+	if visible:
+		$Controller.grab_focus()
 
 func _on_text_submitted(new_text: String) -> void:
 	if new_text.split('\n').size() > 1:
