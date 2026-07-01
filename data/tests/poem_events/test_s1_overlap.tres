@@ -6,62 +6,36 @@
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="4_gq0p4"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="5_1wxk6"]
 
-[sub_resource type="Resource" id="Resource_waoo1"]
+[sub_resource type="Resource" id="Resource_m55cj"]
 script = ExtResource("2_dyxvx")
-imagery_name = "ACTOR:FINANCE:BROKE:imag_a"
+imagery_name = "buyi"
 
-[sub_resource type="Resource" id="Resource_7polv"]
+[sub_resource type="Resource" id="Resource_8xonl"]
 script = ExtResource("3_veji3")
-operators = Array[ExtResource("1_3u8yn")]([SubResource("Resource_waoo1")])
+operators = Array[ExtResource("1_3u8yn")]([SubResource("Resource_m55cj")])
 
-[sub_resource type="Resource" id="Resource_5onq3"]
+[sub_resource type="Resource" id="Resource_65olf"]
 script = ExtResource("4_gq0p4")
-choice_result = SubResource("Resource_7polv")
-description = "获得意象: ACTOR:FINANCE:BROKE:imag_a"
+choice_result = SubResource("Resource_8xonl")
+description = "获得意象: buyi"
 
-[sub_resource type="Resource" id="Resource_c5mtr"]
+[sub_resource type="Resource" id="Resource_ue1cy"]
 script = ExtResource("2_dyxvx")
-imagery_name = "ACTOR:HEALTH:EXHAUSTED:imag_a"
+imagery_name = "qianli"
 
-[sub_resource type="Resource" id="Resource_wwkb5"]
+[sub_resource type="Resource" id="Resource_3h0aj"]
 script = ExtResource("3_veji3")
-operators = Array[ExtResource("1_3u8yn")]([SubResource("Resource_c5mtr")])
+operators = Array[ExtResource("1_3u8yn")]([SubResource("Resource_ue1cy")])
 
-[sub_resource type="Resource" id="Resource_xt3m6"]
+[sub_resource type="Resource" id="Resource_nl6k5"]
 script = ExtResource("4_gq0p4")
-choice_result = SubResource("Resource_wwkb5")
-description = "获得意象: ACTOR:HEALTH:EXHAUSTED:imag_a"
-
-[sub_resource type="Resource" id="Resource_oqumk"]
-script = ExtResource("2_dyxvx")
-imagery_name = "ACTOR:FINANCE:BROKE:imag_b"
-
-[sub_resource type="Resource" id="Resource_7xypu"]
-script = ExtResource("3_veji3")
-operators = Array[ExtResource("1_3u8yn")]([SubResource("Resource_oqumk")])
-
-[sub_resource type="Resource" id="Resource_sfu02"]
-script = ExtResource("4_gq0p4")
-choice_result = SubResource("Resource_7xypu")
-description = "获得意象: ACTOR:FINANCE:BROKE:imag_b"
-
-[sub_resource type="Resource" id="Resource_u2ami"]
-script = ExtResource("2_dyxvx")
-imagery_name = "VIBE:AESTHETIC:ELEGANT:imag_b"
-
-[sub_resource type="Resource" id="Resource_t86f8"]
-script = ExtResource("3_veji3")
-operators = Array[ExtResource("1_3u8yn")]([SubResource("Resource_u2ami")])
-
-[sub_resource type="Resource" id="Resource_r5iyx"]
-script = ExtResource("4_gq0p4")
-choice_result = SubResource("Resource_t86f8")
-description = "获得意象: VIBE:AESTHETIC:ELEGANT:imag_b"
+choice_result = SubResource("Resource_3h0aj")
+description = "获得意象: qianli"
 
 [resource]
 script = ExtResource("5_1wxk6")
 weight = 100.0
 archetype_id = "jiaoyou"
-options = [SubResource("Resource_5onq3"), SubResource("Resource_xt3m6"), SubResource("Resource_sfu02"), SubResource("Resource_r5iyx")]
+options = [SubResource("Resource_65olf"), SubResource("Resource_nl6k5")]
 uuid = "test_s1_imaginary_overlap"
 name = "test_s1_imaginary_overlap"

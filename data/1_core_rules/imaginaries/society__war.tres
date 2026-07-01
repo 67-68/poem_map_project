@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="ImaginaryTag" format=3 uid="uid://societywr2q4"]
+[gd_resource type="Resource" script_class="ImaginaryConcept" format=3 uid="uid://societywr2q4"]
 
-[ext_resource type="Script" uid="uid://dk86isxs4lamx" path="res://core/model/imaginary.gd" id="1_swar4"]
+[ext_resource type="Script" uid="uid://d1lvovneguq7s" path="res://core/model/imaginary_concept.gd" id="1_swar4"]
 
 [resource]
 script = ExtResource("1_swar4")
 uuid = "society:war"
 name = "战乱"
-metadata/_custom_type_script = "uid://dk86isxs4lamx"
+metadata/_custom_type_script = "uid://d1lvovneguq7s"

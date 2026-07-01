@@ -6,127 +6,127 @@
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="4_0fcy2"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="5_dy31b"]
 
-[sub_resource type="Resource" id="Resource_c7kja"]
+[sub_resource type="Resource" id="Resource_cy0pe"]
 script = ExtResource("2_70atu")
-imagery_name = "VIBE:AESTHETIC:SENSUAL:test_t1_a"
+imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_d2bou"]
+[sub_resource type="Resource" id="Resource_n4o8r"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_c7kja")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_cy0pe")])
 
-[sub_resource type="Resource" id="Resource_cg2g6"]
+[sub_resource type="Resource" id="Resource_somxp"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_d2bou")
-description = "获得意象: VIBE:AESTHETIC:SENSUAL:test_t1_a"
+choice_result = SubResource("Resource_n4o8r")
+description = "获得意象: ink_stone"
 
-[sub_resource type="Resource" id="Resource_yu03y"]
+[sub_resource type="Resource" id="Resource_1ds5r"]
 script = ExtResource("2_70atu")
-imagery_name = "ACTION_ENTERTAIN_DRINK:test_t1_b"
+imagery_name = "empty_cup"
 
-[sub_resource type="Resource" id="Resource_nj4mj"]
+[sub_resource type="Resource" id="Resource_j15ci"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_yu03y")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_1ds5r")])
 
-[sub_resource type="Resource" id="Resource_bxvsc"]
+[sub_resource type="Resource" id="Resource_wfpnu"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_nj4mj")
-description = "获得意象: ACTION_ENTERTAIN_DRINK:test_t1_b"
+choice_result = SubResource("Resource_j15ci")
+description = "获得意象: empty_cup"
 
-[sub_resource type="Resource" id="Resource_3wl1o"]
+[sub_resource type="Resource" id="Resource_gftwv"]
 script = ExtResource("2_70atu")
-imagery_name = "ACTION_SOCIAL_PARTING:test_t1_c"
+imagery_name = "willow_branch"
 
-[sub_resource type="Resource" id="Resource_hlf7i"]
+[sub_resource type="Resource" id="Resource_uwvi8"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_3wl1o")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_gftwv")])
 
-[sub_resource type="Resource" id="Resource_6enko"]
+[sub_resource type="Resource" id="Resource_rns3p"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_hlf7i")
-description = "获得意象: ACTION_SOCIAL_PARTING:test_t1_c"
+choice_result = SubResource("Resource_uwvi8")
+description = "获得意象: willow_branch"
 
-[sub_resource type="Resource" id="Resource_xj43v"]
+[sub_resource type="Resource" id="Resource_wruv7"]
 script = ExtResource("2_70atu")
-imagery_name = "ENV_SOCIETY_WAR:test_t2_a"
+imagery_name = "starving_bone"
 
-[sub_resource type="Resource" id="Resource_g7i5x"]
+[sub_resource type="Resource" id="Resource_r0mfe"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_xj43v")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_wruv7")])
 
-[sub_resource type="Resource" id="Resource_q8xat"]
+[sub_resource type="Resource" id="Resource_rrtm6"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_g7i5x")
-description = "获得意象: ENV_SOCIETY_WAR:test_t2_a"
+choice_result = SubResource("Resource_r0mfe")
+description = "获得意象: starving_bone"
 
-[sub_resource type="Resource" id="Resource_1g8j1"]
+[sub_resource type="Resource" id="Resource_im56h"]
 script = ExtResource("2_70atu")
-imagery_name = "ENV_SOCIETY_FAMINE:test_t2_b"
+imagery_name = "ruined_wall"
 
-[sub_resource type="Resource" id="Resource_y8win"]
+[sub_resource type="Resource" id="Resource_612xs"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_1g8j1")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_im56h")])
 
-[sub_resource type="Resource" id="Resource_byvib"]
+[sub_resource type="Resource" id="Resource_g2k3h"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_y8win")
-description = "获得意象: ENV_SOCIETY_FAMINE:test_t2_b"
+choice_result = SubResource("Resource_612xs")
+description = "获得意象: ruined_wall"
 
-[sub_resource type="Resource" id="Resource_o7o46"]
+[sub_resource type="Resource" id="Resource_edu2s"]
 script = ExtResource("2_70atu")
-imagery_name = "VIBE_THEME_HISTORY:test_t2_c"
+imagery_name = "ghost_fire"
 
-[sub_resource type="Resource" id="Resource_hx3n5"]
+[sub_resource type="Resource" id="Resource_r0a00"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_o7o46")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_edu2s")])
 
-[sub_resource type="Resource" id="Resource_i4vc5"]
+[sub_resource type="Resource" id="Resource_yhg65"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_hx3n5")
-description = "获得意象: VIBE_THEME_HISTORY:test_t2_c"
+choice_result = SubResource("Resource_r0a00")
+description = "获得意象: ghost_fire"
 
-[sub_resource type="Resource" id="Resource_arl4w"]
+[sub_resource type="Resource" id="Resource_wle6k"]
 script = ExtResource("2_70atu")
-imagery_name = "ENV_NATURE_NIGHTMOON:test_t3_a"
+imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_srrhs"]
+[sub_resource type="Resource" id="Resource_n4lux"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_arl4w")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_wle6k")])
 
-[sub_resource type="Resource" id="Resource_frvda"]
+[sub_resource type="Resource" id="Resource_aqtkd"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_srrhs")
-description = "获得意象: ENV_NATURE_NIGHTMOON:test_t3_a"
+choice_result = SubResource("Resource_n4lux")
+description = "获得意象: cold_moon"
 
-[sub_resource type="Resource" id="Resource_y3nj4"]
+[sub_resource type="Resource" id="Resource_3ik6x"]
 script = ExtResource("2_70atu")
-imagery_name = "ENV_NATURE_SNOWSTORM:test_t3_b"
+imagery_name = "lone_snow"
 
-[sub_resource type="Resource" id="Resource_k87fd"]
+[sub_resource type="Resource" id="Resource_tdyom"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_y3nj4")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_3ik6x")])
 
-[sub_resource type="Resource" id="Resource_l8gcx"]
+[sub_resource type="Resource" id="Resource_uk1aq"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_k87fd")
-description = "获得意象: ENV_NATURE_SNOWSTORM:test_t3_b"
+choice_result = SubResource("Resource_tdyom")
+description = "获得意象: lone_snow"
 
-[sub_resource type="Resource" id="Resource_el22v"]
+[sub_resource type="Resource" id="Resource_vuton"]
 script = ExtResource("2_70atu")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:test_t3_c"
+imagery_name = "temple_bell"
 
-[sub_resource type="Resource" id="Resource_pqeas"]
+[sub_resource type="Resource" id="Resource_jejks"]
 script = ExtResource("3_10jxk")
-operators = Array[ExtResource("1_7byci")]([SubResource("Resource_el22v")])
+operators = Array[ExtResource("1_7byci")]([SubResource("Resource_vuton")])
 
-[sub_resource type="Resource" id="Resource_c8wba"]
+[sub_resource type="Resource" id="Resource_oa281"]
 script = ExtResource("4_0fcy2")
-choice_result = SubResource("Resource_pqeas")
-description = "获得意象: VIBE_PHILOSOPHY_ZEN:test_t3_c"
+choice_result = SubResource("Resource_jejks")
+description = "获得意象: temple_bell"
 
 [resource]
 script = ExtResource("5_dy31b")
 weight = 100.0
 archetype_id = "denggao"
-options = [SubResource("Resource_cg2g6"), SubResource("Resource_bxvsc"), SubResource("Resource_6enko"), SubResource("Resource_q8xat"), SubResource("Resource_byvib"), SubResource("Resource_i4vc5"), SubResource("Resource_frvda"), SubResource("Resource_l8gcx"), SubResource("Resource_c8wba")]
+options = [SubResource("Resource_somxp"), SubResource("Resource_wfpnu"), SubResource("Resource_rns3p"), SubResource("Resource_rrtm6"), SubResource("Resource_g2k3h"), SubResource("Resource_yhg65"), SubResource("Resource_aqtkd"), SubResource("Resource_uk1aq"), SubResource("Resource_oa281")]
 uuid = "test_s6_tier_pipeline"
 name = "test_s6_tier_pipeline"

@@ -6,88 +6,49 @@
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="4_cqk1s"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="5_661wd"]
 
-[sub_resource type="Resource" id="Resource_o8fsp"]
+[sub_resource type="Resource" id="Resource_yiaqp"]
 script = ExtResource("2_u8omc")
-imagery_name = "ENV:NATURE:AUTUMN:beijingleaf"
+imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_ssseg"]
+[sub_resource type="Resource" id="Resource_m61kc"]
 script = ExtResource("3_rm42h")
-operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_o8fsp")])
+operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_yiaqp")])
 
-[sub_resource type="Resource" id="Resource_fipco"]
+[sub_resource type="Resource" id="Resource_sigp8"]
 script = ExtResource("4_cqk1s")
-choice_result = SubResource("Resource_ssseg")
-description = "获得意象: ENV:NATURE:AUTUMN:beijingleaf"
+choice_result = SubResource("Resource_m61kc")
+description = "获得意象: cold_moon"
 
-[sub_resource type="Resource" id="Resource_n6pdc"]
+[sub_resource type="Resource" id="Resource_wemv2"]
 script = ExtResource("2_u8omc")
-imagery_name = "ENV:NATURE:AUTUMN:luoyangleaf"
+imagery_name = "lone_snow"
 
-[sub_resource type="Resource" id="Resource_c4obf"]
+[sub_resource type="Resource" id="Resource_h28ro"]
 script = ExtResource("3_rm42h")
-operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_n6pdc")])
+operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_wemv2")])
 
-[sub_resource type="Resource" id="Resource_okaal"]
+[sub_resource type="Resource" id="Resource_6u0gx"]
 script = ExtResource("4_cqk1s")
-choice_result = SubResource("Resource_c4obf")
-description = "获得意象: ENV:NATURE:AUTUMN:luoyangleaf"
+choice_result = SubResource("Resource_h28ro")
+description = "获得意象: lone_snow"
 
-[sub_resource type="Resource" id="Resource_27uu8"]
+[sub_resource type="Resource" id="Resource_4vu1q"]
 script = ExtResource("2_u8omc")
-imagery_name = "ENV:NATURE:AUTUMN:nanjingleaf"
+imagery_name = "falling_leaf"
 
-[sub_resource type="Resource" id="Resource_ld6t4"]
+[sub_resource type="Resource" id="Resource_qkb2t"]
 script = ExtResource("3_rm42h")
-operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_27uu8")])
+operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_4vu1q")])
 
-[sub_resource type="Resource" id="Resource_37tu0"]
+[sub_resource type="Resource" id="Resource_n4fnm"]
 script = ExtResource("4_cqk1s")
-choice_result = SubResource("Resource_ld6t4")
-description = "获得意象: ENV:NATURE:AUTUMN:nanjingleaf"
-
-[sub_resource type="Resource" id="Resource_8tinj"]
-script = ExtResource("2_u8omc")
-imagery_name = "ACTOR:FINANCE:BROKE:img_s2a"
-
-[sub_resource type="Resource" id="Resource_rf0xn"]
-script = ExtResource("3_rm42h")
-operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_8tinj")])
-
-[sub_resource type="Resource" id="Resource_dilv5"]
-script = ExtResource("4_cqk1s")
-choice_result = SubResource("Resource_rf0xn")
-description = "获得意象: ACTOR:FINANCE:BROKE:img_s2a"
-
-[sub_resource type="Resource" id="Resource_rxlj3"]
-script = ExtResource("2_u8omc")
-imagery_name = "ACTOR:HEALTH:EXHAUSTED:img_s2b"
-
-[sub_resource type="Resource" id="Resource_uw21q"]
-script = ExtResource("3_rm42h")
-operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_rxlj3")])
-
-[sub_resource type="Resource" id="Resource_6uh48"]
-script = ExtResource("4_cqk1s")
-choice_result = SubResource("Resource_uw21q")
-description = "获得意象: ACTOR:HEALTH:EXHAUSTED:img_s2b"
-
-[sub_resource type="Resource" id="Resource_wr7ua"]
-script = ExtResource("2_u8omc")
-imagery_name = "ENV:SOCIETY:FAMINE:img_s2c"
-
-[sub_resource type="Resource" id="Resource_8j5fr"]
-script = ExtResource("3_rm42h")
-operators = Array[ExtResource("1_0gfyu")]([SubResource("Resource_wr7ua")])
-
-[sub_resource type="Resource" id="Resource_lko70"]
-script = ExtResource("4_cqk1s")
-choice_result = SubResource("Resource_8j5fr")
-description = "获得意象: ENV:SOCIETY:FAMINE:img_s2c"
+choice_result = SubResource("Resource_qkb2t")
+description = "获得意象: falling_leaf"
 
 [resource]
 script = ExtResource("5_661wd")
 weight = 100.0
 archetype_id = "denggao"
-options = [SubResource("Resource_fipco"), SubResource("Resource_okaal"), SubResource("Resource_37tu0"), SubResource("Resource_dilv5"), SubResource("Resource_6uh48"), SubResource("Resource_lko70")]
+options = [SubResource("Resource_sigp8"), SubResource("Resource_6u0gx"), SubResource("Resource_n4fnm")]
 uuid = "test_s2_partial_threshold"
 name = "test_s2_partial_threshold"

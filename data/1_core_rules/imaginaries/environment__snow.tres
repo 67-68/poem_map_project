@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="ImaginaryTag" format=3 uid="uid://t6vaqig4s7p0"]
+[gd_resource type="Resource" script_class="ImaginaryConcept" format=3 uid="uid://t6vaqig4s7p0"]
 
-[ext_resource type="Script" uid="uid://dk86isxs4lamx" path="res://core/model/imaginary.gd" id="1_6fl8j"]
+[ext_resource type="Script" uid="uid://d1lvovneguq7s" path="res://core/model/imaginary_concept.gd" id="1_6fl8j"]
 
 [resource]
 script = ExtResource("1_6fl8j")
 uuid = "environment:snow"
 name = "雪"
-metadata/_custom_type_script = "uid://dk86isxs4lamx"
+metadata/_custom_type_script = "uid://d1lvovneguq7s"

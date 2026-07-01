@@ -13,6 +13,7 @@ var selected_poem_type: int = -1
 # ──────────────────────────────────────────────
 const _ABSTRACT_CONCEPT_SCENE := preload("res://ui/poem_uis/abstract_concept.tscn")
 
+const _DETAIL_IMAGINARY_SCENE := preload("res://ui/poem_uis/detail_imaginary.tscn")
 ## 当前 hover 的 AbstractConcept（用于 hover 高亮）
 var _hovered_concept: AbstractConcept = null
 ## 每个 AbstractConcept 的原始 modulate（hover 恢复用）
@@ -126,12 +127,15 @@ func _on_subviewport_gui_input(event: InputEvent) -> void:
 		var collider := r.get("collider") as Node
 		if not collider:
 			continue
-
 		if collider is AbstractConcept:
+			var frags = ImaginaryComprehender.get_imaginaries_for_concept(collider.imaginary_tag.uuid)
 			match event.button_index:
 				MOUSE_BUTTON_LEFT:
 					AudioManager.play_sfx_category("leather")
-					on_concept_selected(collider.imaginary_tag)
+					if frags.size() == 1:
+						on_concept_merge_requested(collider.imaginary_tag)
+					else:
+						on_concept_selected(collider.imaginary_tag)
 					return
 				MOUSE_BUTTON_RIGHT:
 					AudioManager.play_sfx_category("stone_throw_in_lake")
@@ -265,14 +269,27 @@ func _rebuild_subviewport() -> void:
 		viewport.add_child(node)
 		_concept_original_modulates[node] = node.modulate
 
-		# 用简单 Label 显示概念名 + 关联碎片数量（简化自 OrbitDetail 轨道）
-		var detail_label := Label.new()
-		detail_label.text = "%s (碎片: %d | Lv.%d)" % [concept.name, fragment_count, concept.current_level]
-		detail_label.add_theme_font_size_override("font_size", 12)
-		detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		detail_label.position = Vector2(-40, 40)
-		detail_label.size = Vector2(80, 20)
-		node.add_child(detail_label)
+		# 为每个关联的 Imaginary 创建轨道碎片（OrbitDetail）
+		for j in range(detail_imaginaries.size()):
+			var frag_imag: Imaginary = detail_imaginaries[j]
+			var orbit := _DETAIL_IMAGINARY_SCENE.instantiate() as OrbitDetail
+			orbit.center_target = node
+			orbit.semi_major_axis = 60.0 + j * 5.0
+			orbit.semi_minor_axis = 45.0 + j * 3.0
+			orbit.orbit_speed = 0.8 + j * 0.15
+			orbit.phase_offset = j * PI / 3.0
+			orbit.set_detail_text(frag_imag.name)
+			node.add_child(orbit)
+
+		# 显示总碎片数 + Level
+		var info_label := Label.new()
+		info_label.text = "碎片: %d | Lv.%d" % [fragment_count, concept.current_level]
+		info_label.add_theme_font_size_override("font_size", 10)
+		info_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 1.0))
+		info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		info_label.position = Vector2(-40, 40)
+		info_label.size = Vector2(80, 16)
+		node.add_child(info_label)
 
 		# 碎片 >= 2 时启动合并就绪闪烁
 		if fragment_count >= ImaginaryConcept.l2_threshold and concept.current_tier == 0:
@@ -319,7 +336,7 @@ func on_concept_merge_requested(ima: ImaginaryConcept) -> void:
 		return
 
 	if not ImaginaryComprehender.can_merge(ima.uuid):
-		Logging.warn('PoemCrafter: merge precondition failed for: %s (need ≥2 fragments)' % ima.name)
+		Logging.warn('PoemCrafter: merge precondition failed for: %s (need ≥1 fragment)' % ima.name)
 		return
 
 	var concept := _find_concept_for_tag(ima)
@@ -604,9 +621,11 @@ func render_slots() -> void:
 		if slots[i] is PoemSlot:
 			var slot := slots[i] as PoemSlot
 			if i < selected_imaginaries.size():
-				slot.set_tag(selected_imaginaries[i])
+				slot.apply_text(selected_imaginaries[i].name)
+				slot.item_occupying = selected_imaginaries[i]
 			else:
-				slot.clear()
+				slot.apply_text("")
+				slot.item_occupying = null
 
 
 # ──────────────────────────────────────────────

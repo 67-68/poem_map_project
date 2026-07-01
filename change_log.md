@@ -1,6 +1,13 @@
 # [unreleased]
 
 ## Fixed
+
+- **意象系统 .tres 脚本引用错误** — 32 个 ImaginaryConcept 资源文件引用错误的脚本
+  - data/1_core_rules/imaginaries/*.tres — 批量修正 uid/script_class/path 从 imaginary.gd → imaginary_concept.gd
+  - 根因：Phase 2 将 imaginary.gd 的 class_name 从 ImaginaryTag 改为 Imaginary，但 .tres 仍引用旧脚本，导致 Database.imaginaries 存储 Imaginary 而非 ImaginaryConcept，PoemCrafter 显示 0 个活跃概念
+- **单意象左键=右键合并** — PoemCrafter 中 fragment_count==1 时左键直接触发合并
+  - ui/poem_crafter.gd — _rebuild_subviewport() 中 fragment_count==1 时 concept_selected 信号连接至 on_concept_merge_requested
+  - ui/poem_crafter.gd — 修正误导警告 "need ≥2 fragments" → "need ≥1 fragment"（l2_threshold=1 始终允许单碎片合并）
 - **行动按钮 TOCTOU Bug** — 点击"拜谒"触发"独酌"事件的时序错误
   - [`core/action_manager.gd`](core/action_manager.gd:300) — 删除 `end_action_batch()` 中的 `request_refresh_action_panel.emit()`，全量按钮重建仅由 `on_xun_tick` 触发；锁定态增量更新由 `reevaluate_all_locks()` → `_refresh_locks_only()` 处理
   - [`ui/action_button.gd`](ui/action_button.gd:156) — `_on_button_pressed()` 在 `end_action_batch()` 之前快照 action 元数据（main_tag、fallback、generator、action_tags），事件扫描使用快照而非 `self.action`，防御 `refresh() → update_action()` 覆盖 `self.action`

@@ -6,88 +6,88 @@
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="4_1j1iy"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="5_o7vqu"]
 
-[sub_resource type="Resource" id="Resource_mcwnv"]
+[sub_resource type="Resource" id="Resource_86qf6"]
 script = ExtResource("2_2jtui")
-imagery_name = "ACTOR:HEALTH:DRUNK:img_s3a"
+imagery_name = "drunk"
 
-[sub_resource type="Resource" id="Resource_lgqu6"]
+[sub_resource type="Resource" id="Resource_hclbs"]
 script = ExtResource("3_j2lto")
-operators = Array[ExtResource("1_iake3")]([SubResource("Resource_mcwnv")])
+operators = Array[ExtResource("1_iake3")]([SubResource("Resource_86qf6")])
 
-[sub_resource type="Resource" id="Resource_dx3bx"]
+[sub_resource type="Resource" id="Resource_7kxcj"]
 script = ExtResource("4_1j1iy")
-choice_result = SubResource("Resource_lgqu6")
-description = "获得意象: ACTOR:HEALTH:DRUNK:img_s3a"
+choice_result = SubResource("Resource_hclbs")
+description = "获得意象: drunk"
 
-[sub_resource type="Resource" id="Resource_nscoo"]
+[sub_resource type="Resource" id="Resource_cwmv3"]
 script = ExtResource("2_2jtui")
-imagery_name = "VIBE:AESTHETIC:SENSUAL:img_s3b"
+imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_f0dhi"]
+[sub_resource type="Resource" id="Resource_3nqec"]
 script = ExtResource("3_j2lto")
-operators = Array[ExtResource("1_iake3")]([SubResource("Resource_nscoo")])
+operators = Array[ExtResource("1_iake3")]([SubResource("Resource_cwmv3")])
 
-[sub_resource type="Resource" id="Resource_126fa"]
+[sub_resource type="Resource" id="Resource_pwqnh"]
 script = ExtResource("4_1j1iy")
-choice_result = SubResource("Resource_f0dhi")
-description = "获得意象: VIBE:AESTHETIC:SENSUAL:img_s3b"
+choice_result = SubResource("Resource_3nqec")
+description = "获得意象: ink_stone"
 
-[sub_resource type="Resource" id="Resource_tgm4d"]
+[sub_resource type="Resource" id="Resource_a0dtr"]
 script = ExtResource("2_2jtui")
-imagery_name = "ACTOR:EMOTION:AMBITION:img_s3c"
+imagery_name = "qianli"
 
-[sub_resource type="Resource" id="Resource_fk4u2"]
+[sub_resource type="Resource" id="Resource_4r16n"]
 script = ExtResource("3_j2lto")
-operators = Array[ExtResource("1_iake3")]([SubResource("Resource_tgm4d")])
+operators = Array[ExtResource("1_iake3")]([SubResource("Resource_a0dtr")])
 
-[sub_resource type="Resource" id="Resource_s5xkh"]
+[sub_resource type="Resource" id="Resource_7dosq"]
 script = ExtResource("4_1j1iy")
-choice_result = SubResource("Resource_fk4u2")
-description = "获得意象: ACTOR:EMOTION:AMBITION:img_s3c"
+choice_result = SubResource("Resource_4r16n")
+description = "获得意象: qianli"
 
-[sub_resource type="Resource" id="Resource_k6r1k"]
+[sub_resource type="Resource" id="Resource_ipuax"]
 script = ExtResource("2_2jtui")
-imagery_name = "TARGET:MYTH:ANIMAL:img_s3d"
+imagery_name = "empty_cup"
 
-[sub_resource type="Resource" id="Resource_c1jh1"]
+[sub_resource type="Resource" id="Resource_5y05p"]
 script = ExtResource("3_j2lto")
-operators = Array[ExtResource("1_iake3")]([SubResource("Resource_k6r1k")])
+operators = Array[ExtResource("1_iake3")]([SubResource("Resource_ipuax")])
 
-[sub_resource type="Resource" id="Resource_jdyfd"]
+[sub_resource type="Resource" id="Resource_6uj3w"]
 script = ExtResource("4_1j1iy")
-choice_result = SubResource("Resource_c1jh1")
-description = "获得意象: TARGET:MYTH:ANIMAL:img_s3d"
+choice_result = SubResource("Resource_5y05p")
+description = "获得意象: empty_cup"
 
-[sub_resource type="Resource" id="Resource_oc2vf"]
+[sub_resource type="Resource" id="Resource_y5oxa"]
 script = ExtResource("2_2jtui")
-imagery_name = "VIBE:THEME:MARTIAL:img_s3e"
+imagery_name = "cold_blade"
 
-[sub_resource type="Resource" id="Resource_6ceqs"]
+[sub_resource type="Resource" id="Resource_bcw3m"]
 script = ExtResource("3_j2lto")
-operators = Array[ExtResource("1_iake3")]([SubResource("Resource_oc2vf")])
+operators = Array[ExtResource("1_iake3")]([SubResource("Resource_y5oxa")])
 
-[sub_resource type="Resource" id="Resource_p381i"]
+[sub_resource type="Resource" id="Resource_yqcer"]
 script = ExtResource("4_1j1iy")
-choice_result = SubResource("Resource_6ceqs")
-description = "获得意象: VIBE:THEME:MARTIAL:img_s3e"
+choice_result = SubResource("Resource_bcw3m")
+description = "获得意象: cold_blade"
 
-[sub_resource type="Resource" id="Resource_m87rr"]
+[sub_resource type="Resource" id="Resource_knwep"]
 script = ExtResource("2_2jtui")
-imagery_name = "ENV:SOCIETY:WAR:img_s3f"
+imagery_name = "starving_bone"
 
-[sub_resource type="Resource" id="Resource_e1kge"]
+[sub_resource type="Resource" id="Resource_rkxfj"]
 script = ExtResource("3_j2lto")
-operators = Array[ExtResource("1_iake3")]([SubResource("Resource_m87rr")])
+operators = Array[ExtResource("1_iake3")]([SubResource("Resource_knwep")])
 
-[sub_resource type="Resource" id="Resource_n5sda"]
+[sub_resource type="Resource" id="Resource_tqfrs"]
 script = ExtResource("4_1j1iy")
-choice_result = SubResource("Resource_e1kge")
-description = "获得意象: ENV:SOCIETY:WAR:img_s3f"
+choice_result = SubResource("Resource_rkxfj")
+description = "获得意象: starving_bone"
 
 [resource]
 script = ExtResource("5_o7vqu")
 weight = 100.0
 archetype_id = "baiye"
-options = [SubResource("Resource_dx3bx"), SubResource("Resource_126fa"), SubResource("Resource_s5xkh"), SubResource("Resource_jdyfd"), SubResource("Resource_p381i"), SubResource("Resource_n5sda")]
+options = [SubResource("Resource_7kxcj"), SubResource("Resource_pwqnh"), SubResource("Resource_7dosq"), SubResource("Resource_6uj3w"), SubResource("Resource_yqcer"), SubResource("Resource_tqfrs")]
 uuid = "test_s3_no_match"
 name = "test_s3_no_match"

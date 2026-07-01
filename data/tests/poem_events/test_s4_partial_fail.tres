@@ -6,88 +6,49 @@
 [ext_resource type="Script" path="res://model/event/event_option.gd" id="4_vri5g"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="5_1hkid"]
 
-[sub_resource type="Resource" id="Resource_e7ew5"]
+[sub_resource type="Resource" id="Resource_ythgr"]
 script = ExtResource("2_gu3vr")
-imagery_name = "ENV:NATURE:AUTUMN:beijingleaf"
+imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_5grq2"]
+[sub_resource type="Resource" id="Resource_52we1"]
 script = ExtResource("3_72bgx")
-operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_e7ew5")])
+operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_ythgr")])
 
-[sub_resource type="Resource" id="Resource_ouqfp"]
+[sub_resource type="Resource" id="Resource_ox1ot"]
 script = ExtResource("4_vri5g")
-choice_result = SubResource("Resource_5grq2")
-description = "获得意象: ENV:NATURE:AUTUMN:beijingleaf"
+choice_result = SubResource("Resource_52we1")
+description = "获得意象: cold_moon"
 
-[sub_resource type="Resource" id="Resource_ra7gr"]
+[sub_resource type="Resource" id="Resource_fydci"]
 script = ExtResource("2_gu3vr")
-imagery_name = "ENV:NATURE:AUTUMN:luoyangleaf"
+imagery_name = "lone_snow"
 
-[sub_resource type="Resource" id="Resource_dt5rm"]
+[sub_resource type="Resource" id="Resource_sc4wb"]
 script = ExtResource("3_72bgx")
-operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_ra7gr")])
+operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_fydci")])
 
-[sub_resource type="Resource" id="Resource_4doso"]
+[sub_resource type="Resource" id="Resource_55n5o"]
 script = ExtResource("4_vri5g")
-choice_result = SubResource("Resource_dt5rm")
-description = "获得意象: ENV:NATURE:AUTUMN:luoyangleaf"
+choice_result = SubResource("Resource_sc4wb")
+description = "获得意象: lone_snow"
 
-[sub_resource type="Resource" id="Resource_gee06"]
+[sub_resource type="Resource" id="Resource_v88ql"]
 script = ExtResource("2_gu3vr")
-imagery_name = "ACTOR:HEALTH:DRUNK:img_s4a"
+imagery_name = "drunk"
 
-[sub_resource type="Resource" id="Resource_atymv"]
+[sub_resource type="Resource" id="Resource_qqjmg"]
 script = ExtResource("3_72bgx")
-operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_gee06")])
+operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_v88ql")])
 
-[sub_resource type="Resource" id="Resource_c6fnc"]
+[sub_resource type="Resource" id="Resource_qorj1"]
 script = ExtResource("4_vri5g")
-choice_result = SubResource("Resource_atymv")
-description = "获得意象: ACTOR:HEALTH:DRUNK:img_s4a"
-
-[sub_resource type="Resource" id="Resource_o62x5"]
-script = ExtResource("2_gu3vr")
-imagery_name = "ACTOR:FINANCE:BROKE:img_s4b"
-
-[sub_resource type="Resource" id="Resource_565ff"]
-script = ExtResource("3_72bgx")
-operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_o62x5")])
-
-[sub_resource type="Resource" id="Resource_88ftb"]
-script = ExtResource("4_vri5g")
-choice_result = SubResource("Resource_565ff")
-description = "获得意象: ACTOR:FINANCE:BROKE:img_s4b"
-
-[sub_resource type="Resource" id="Resource_56luj"]
-script = ExtResource("2_gu3vr")
-imagery_name = "ACTOR:HEALTH:EXHAUSTED:img_s4c"
-
-[sub_resource type="Resource" id="Resource_17oa1"]
-script = ExtResource("3_72bgx")
-operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_56luj")])
-
-[sub_resource type="Resource" id="Resource_uynpi"]
-script = ExtResource("4_vri5g")
-choice_result = SubResource("Resource_17oa1")
-description = "获得意象: ACTOR:HEALTH:EXHAUSTED:img_s4c"
-
-[sub_resource type="Resource" id="Resource_58tal"]
-script = ExtResource("2_gu3vr")
-imagery_name = "ACTOR:EMOTION:SORROW:img_s4d"
-
-[sub_resource type="Resource" id="Resource_2sv1p"]
-script = ExtResource("3_72bgx")
-operators = Array[ExtResource("1_drbwp")]([SubResource("Resource_58tal")])
-
-[sub_resource type="Resource" id="Resource_s1lh4"]
-script = ExtResource("4_vri5g")
-choice_result = SubResource("Resource_2sv1p")
-description = "获得意象: ACTOR:EMOTION:SORROW:img_s4d"
+choice_result = SubResource("Resource_qqjmg")
+description = "获得意象: drunk"
 
 [resource]
 script = ExtResource("5_1hkid")
 weight = 100.0
 archetype_id = "fangshi"
-options = [SubResource("Resource_ouqfp"), SubResource("Resource_4doso"), SubResource("Resource_c6fnc"), SubResource("Resource_88ftb"), SubResource("Resource_uynpi"), SubResource("Resource_s1lh4")]
+options = [SubResource("Resource_ox1ot"), SubResource("Resource_55n5o"), SubResource("Resource_qorj1")]
 uuid = "test_s4_partial_fail"
 name = "test_s4_partial_fail"

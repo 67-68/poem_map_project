@@ -28,7 +28,7 @@ static func _derive_concept_groups() -> Dictionary:
 	return groups
 
 
-## 获取所有活跃的 ImaginaryConcept（至少被 1 个 Imaginary 引用）
+## 获取所有活跃的 ImaginaryConcept（被 Imaginary 引用 或 已合并 tier>0）
 static func get_active_concepts() -> Dictionary:
 	var active: Dictionary = {}
 	var groups = _derive_concept_groups()
@@ -38,6 +38,14 @@ static func get_active_concepts() -> Dictionary:
 		if not concept:
 			continue
 		active[concept_key] = concept
+
+	# 也纳入已合并但无碎片的概念（tier > 0）
+	for uuid in Database.imaginaries:
+		var concept = Database.imaginaries[uuid] as ImaginaryConcept
+		if not concept or concept.current_tier <= 0:
+			continue
+		if not active.has(uuid):
+			active[uuid] = concept
 
 	return active
 

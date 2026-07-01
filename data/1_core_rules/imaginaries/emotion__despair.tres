@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="ImaginaryTag" load_steps=2 format=3 uid="uid://8d0hpswstqvc"]
+[gd_resource type="Resource" script_class="ImaginaryConcept" load_steps=2 format=3 uid="uid://8d0hpswstqvc"]
 
-[ext_resource type="Script" uid="uid://dk86isxs4lamx" path="res://core/model/imaginary.gd" id="1_xk2ym"]
+[ext_resource type="Script" uid="uid://d1lvovneguq7s" path="res://core/model/imaginary_concept.gd" id="1_xk2ym"]
 
 [resource]
 script = ExtResource("1_xk2ym")
 uuid = "emotion:despair"
 name = "绝望"
-metadata/_custom_type_script = "uid://dk86isxs4lamx"
+metadata/_custom_type_script = "uid://d1lvovneguq7s"

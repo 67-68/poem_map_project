@@ -8,52 +8,52 @@
 [ext_resource type="Script" path="res://core/operators/trait_choose_operator.gd" id="6_e735n"]
 [ext_resource type="Script" path="res://model/random_event.gd" id="7_komiy"]
 
-[sub_resource type="Resource" id="Resource_qonwd"]
+[sub_resource type="Resource" id="Resource_r0dn7"]
 script = ExtResource("2_wp7l4")
 _trait_key = 1
 str_traits = "poem_gan_ye_1"
 
-[sub_resource type="Resource" id="Resource_u6y5v"]
+[sub_resource type="Resource" id="Resource_jx7g1"]
 script = ExtResource("3_hyn3h")
-operators = Array[ExtResource("1_dn6d1")]([SubResource("Resource_qonwd")])
+operators = Array[ExtResource("1_dn6d1")]([SubResource("Resource_r0dn7")])
 
-[sub_resource type="Resource" id="Resource_5isg2"]
+[sub_resource type="Resource" id="Resource_vfumy"]
 script = ExtResource("4_xomyp")
-choice_result = SubResource("Resource_u6y5v")
+choice_result = SubResource("Resource_jx7g1")
 description = "获得诗词: 干谒诗 Lv1"
 
-[sub_resource type="Resource" id="Resource_x1tif"]
+[sub_resource type="Resource" id="Resource_umj5u"]
 script = ExtResource("3_hyn3h")
 
-[sub_resource type="Resource" id="Resource_lttx3"]
+[sub_resource type="Resource" id="Resource_vjse4"]
 script = ExtResource("3_hyn3h")
 
-[sub_resource type="Resource" id="Resource_7xebs"]
+[sub_resource type="Resource" id="Resource_u4vpi"]
 script = ExtResource("3_hyn3h")
 
-[sub_resource type="Resource" id="Resource_e6x1y"]
+[sub_resource type="Resource" id="Resource_4bto0"]
 script = ExtResource("5_8halt")
-accepted_result = SubResource("Resource_x1tif")
-rejected_result = SubResource("Resource_7xebs")
-not_entered_result = SubResource("Resource_lttx3")
+accepted_result = SubResource("Resource_umj5u")
+rejected_result = SubResource("Resource_u4vpi")
+not_entered_result = SubResource("Resource_vjse4")
 
-[sub_resource type="Resource" id="Resource_8hih1"]
+[sub_resource type="Resource" id="Resource_oilt0"]
 script = ExtResource("6_e735n")
-poem_taste = SubResource("Resource_e6x1y")
+poem_taste = SubResource("Resource_4bto0")
 
-[sub_resource type="Resource" id="Resource_ci4a5"]
+[sub_resource type="Resource" id="Resource_4qehp"]
 script = ExtResource("3_hyn3h")
-operators = Array[ExtResource("1_dn6d1")]([SubResource("Resource_8hih1")])
+operators = Array[ExtResource("1_dn6d1")]([SubResource("Resource_oilt0")])
 
-[sub_resource type="Resource" id="Resource_50fph"]
+[sub_resource type="Resource" id="Resource_ge35h"]
 script = ExtResource("4_xomyp")
-choice_result = SubResource("Resource_ci4a5")
+choice_result = SubResource("Resource_4qehp")
 description = "使用 PoemTypeChooseOperator 选择诗词"
 
 [resource]
 script = ExtResource("7_komiy")
 weight = 100.0
 archetype_id = "jiaoyou"
-options = [SubResource("Resource_5isg2"), SubResource("Resource_50fph")]
+options = [SubResource("Resource_vfumy"), SubResource("Resource_ge35h")]
 uuid = "test_s5_poem_choose"
 name = "test_s5_poem_choose"
