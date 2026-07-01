@@ -122,7 +122,10 @@ func init_imaginaries():
 		if name.is_empty():
 			Logging.warn('init_imaginaries: basic_imaginaries entry missing name, skipping')
 			continue
-		var concepts_list = entry.get("concepts", [])
+		var raw_concepts = entry.get("concepts", [])
+		var concepts_arr: Array[String] = []
+		for c in raw_concepts:
+			concepts_arr.append(str(c))
 
 		var imaginary_uuid = name.to_lower()
 		var imaginary = Database.get_imaginary_detail(imaginary_uuid)
@@ -130,9 +133,9 @@ func init_imaginaries():
 			imaginary = Imaginary.new()
 			imaginary.uuid = imaginary_uuid
 			imaginary.name = name
-			imaginary.concepts = concepts_list
+			imaginary.concepts = concepts_arr
 			Database.imaginaries_detail[imaginary_uuid] = imaginary
-			Logging.info("init_imaginaries: 新建 Imaginary '%s' (concepts=%s)" % [imaginary_uuid, str(concepts_list)])
+			Logging.info("init_imaginaries: 新建 Imaginary '%s' (concepts=%s)" % [imaginary_uuid, str(concepts_arr)])
 
 func init_emotions():
 	"""从 SourceOfTruth 加载初始情绪值到 PlayerState"""
@@ -197,9 +200,13 @@ func _on_request_add_imaginary(tag: String):
 		# 从定义文件查找 {name, concepts}
 		var def_data = _imaginary_defs.get(imaginary_uuid, {})
 		imaginary.name = def_data.get("name", tag)
-		imaginary.concepts = def_data.get("concepts", [])
+		var raw_concepts = def_data.get("concepts", [])
+		var concepts_arr: Array[String] = []
+		for c in raw_concepts:
+			concepts_arr.append(str(c))
+		imaginary.concepts = concepts_arr
 		Database.imaginaries_detail[imaginary_uuid] = imaginary
-		Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, concepts=%s)" % [imaginary_uuid, imaginary.name, str(imaginary.concepts)])
+		Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, concepts=%s)" % [imaginary_uuid, imaginary.name, str(concepts_arr)])
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()
