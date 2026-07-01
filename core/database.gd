@@ -8,6 +8,7 @@ const _DataScanner = preload("res://core/data_scanner.gd")
 const _Decision = preload("res://core/model/decision.gd")
 const _Disease = preload("res://core/model/disease.gd")
 const _Era = preload("res://core/model/era.gd")
+const _EventBase = preload("res://core/model/event_base.gd")
 const _FocusedChat = preload("res://model/focused_chat.gd")
 const _GameEntity = preload("res://core/game_entity.gd")
 const _GlitchPreprocessor = preload("res://shaders/glitch_preprocessor.gd")
@@ -79,6 +80,12 @@ var state_transistors: Dictionary
 # - event_bases: 按顶层 base 分表 { "base_name": { "uuid": Resource } }，支持 eventbase.event_id 语法
 var event_base_pool: Dictionary = {}
 var event_bases: Dictionary = {}
+
+# 🆕 EventBase 注册表与反向索引
+# event_bases_registry: { base_uuid → EventBase }
+# event_to_base_index:  { event_uuid → base_uuid }  用于 O(1) 查询某事件属于哪个 EventBase
+var event_bases_registry: Dictionary = {}
+var event_to_base_index: Dictionary = {}
 
 # ════════════════════════════════════════════════════════════════
 # 统一数据访问基础设施
@@ -219,6 +226,8 @@ func _init() -> void:
 	# ── 🆕 event_base：从 DataScanner 直接获取 ──
 	event_base_pool = r.pool
 	event_bases = r.bases
+	# 🆕 构建 EventBase 注册表与反向索引
+	_build_event_base_index()
 	if r.duplicates.size() > 0:
 		Logging.err("DataScanner: 检测到 %d 个 ID 冲突，请检查日志" % r.duplicates.size())
 	Logging.info("Database: event_bases 已加载 %d 个 Base: %s" % [event_bases.size(), str(event_bases.keys())])
@@ -554,6 +563,54 @@ func get_npc_document_all() -> Dictionary:
 
 func get_event_base_pool_all() -> Dictionary:
 	return event_base_pool
+
+## 获取所有 EventBase 注册表
+func get_all_event_bases() -> Dictionary:
+	return event_bases_registry
+
+## 获取指定 EventBase
+func get_event_base(base_uuid: String):
+	return event_bases_registry.get(base_uuid)
+
+## 获取某事件所属的 EventBase，无则返回 null
+func get_event_base_for_event(event_uuid: String):
+	var base_uuid: String = event_to_base_index.get(event_uuid, "")
+	if base_uuid.is_empty():
+		return null
+	return event_bases_registry.get(base_uuid)
+
+## 构建 EventBase 注册表与 event→base 反向索引
+## 从 event_base_pool 中提取所有 EventBase 实例，填写 event_bases_registry 和 event_to_base_index
+func _build_event_base_index() -> void:
+	event_bases_registry.clear()
+	event_to_base_index.clear()
+
+	for full_id in event_base_pool:
+		var res = event_base_pool[full_id]
+		if not (res is _EventBase):
+			continue
+		var base = res as _EventBase
+		var base_uuid = base.uuid
+		if base_uuid.is_empty():
+			Logging.warn("Database._build_event_base_index: EventBase 缺少 uuid，跳过 (full_id=%s)" % full_id)
+			continue
+
+		if event_bases_registry.has(base_uuid):
+			Logging.warn("Database._build_event_base_index: EventBase uuid 冲突 '%s'，跳过 (full_id=%s)" % [base_uuid, full_id])
+			continue
+
+		event_bases_registry[base_uuid] = base
+		Logging.info("Database._build_event_base_index: 注册 EventBase '%s' (events=%d, strategy=%s, era=%s)" % [base_uuid, base.events.size(), base.draw_strategies, base.era])
+
+		# 构建 event→base 反向索引
+		for event_uuid in base.events:
+			if event_uuid.is_empty():
+				continue
+			if event_to_base_index.has(event_uuid):
+				Logging.warn("Database._build_event_base_index: event '%s' 已属于 base '%s'，被 '%s' 覆盖" % [event_uuid, event_to_base_index[event_uuid], base_uuid])
+			event_to_base_index[event_uuid] = base_uuid
+
+	Logging.info("Database._build_event_base_index: 完成，%d 个 EventBase，%d 条 event→base 索引" % [event_bases_registry.size(), event_to_base_index.size()])
 
 
 # ════════════════════════════════════════════════════════════════

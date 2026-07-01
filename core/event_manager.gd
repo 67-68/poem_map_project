@@ -3,6 +3,7 @@ const _Action = preload("res://core/model/action.gd")
 const _ActionTagFilter = preload("res://core/model/action_tag_filter.gd")
 const _BaseEvent = preload("res://model/event.gd")
 const _EraOperator = preload("res://core/operators/era_operator.gd")
+const _EventBase = preload("res://core/model/event_base.gd")
 const _EventTicket = preload("res://core/model/event_ticket.gd")
 const _ImaginaryConcept = preload("res://core/model/imaginary_concept.gd")
 const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
@@ -32,6 +33,10 @@ signal guarantee_next(event_key: String, main_tag: String)
 
 ## 存储被保证的事件 key 队列（FIFO），抽取后 pop_front
 var _guaranteed_events: Array[Dictionary] = []
+
+# 🆕 EventBase AVERAGE 策略黑名单（会话级）
+# key: base_uuid, value: Array[String] — 该 base 中已被封禁的事件 uuid 列表
+var _event_base_blacklist: Dictionary = {}
 
 func _ready():
     Logging.info("[EventManager] EventManager initialized")
@@ -95,6 +100,9 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
 
     for e in events_to_scan.values():
         initial_tickets.append(_create_ticket(e))
+    # 🆕 EventBase 管道：era 过滤 + AVERAGE 黑名单/权重再分配
+    initial_tickets = _filter_tickets_by_event_bases(initial_tickets, context)
+    _apply_event_base_blacklist(initial_tickets)
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight, fallback_uuid, context)
 
 func scan_poem_events(imaginaries: Array[ImaginaryConcept]):
@@ -122,6 +130,9 @@ func scan_poem_events(imaginaries: Array[ImaginaryConcept]):
                 if TagManager.prefix_match(target_tag, t):
                     tickets.append(_create_ticket(e))
     #breakpoint
+    # 🆕 EventBase 管道：era 过滤 + AVERAGE 黑名单/权重再分配
+    tickets = _filter_tickets_by_event_bases(tickets, {})
+    _apply_event_base_blacklist(tickets)
     scan_events_from_tickets(tickets, 0.0, 'da_you_shi', {})
 
 
@@ -169,8 +180,12 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
     # 开始命运抽奖
     var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid, context)
     if return_only:
+        if ev_name:
+            _mark_event_base_triggered(ev_name)
         return ev_name if ev_name else ""
     if ev_name:
+        # 🆕 标记触发：维护 AVERAGE 黑名单
+        _mark_event_base_triggered(ev_name)
         var ev = Database.resolve(ev_name, "BaseEvent", true)
         if ev:
             context = SocialActionResolver.enrich_context(ev, ev_name, context)
@@ -268,5 +283,132 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
         return hardcoded_fallback
     Logging.warn("[EventManager] Roll fell in null weight range, hardcoded fallback '" + hardcoded_fallback + "' not found, returning null")
     return null
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 EventBase 管道方法
+# ════════════════════════════════════════════════════════════════
+
+## Era 过滤：移除 era 不匹配的 EventBase 所包含的所有事件 ticket
+func _filter_tickets_by_event_bases(tickets: Array[EventTicket], context: Dictionary) -> Array[EventTicket]:
+    var current_era = context.get('era', GameState.current_era)
+    if current_era.is_empty():
+        Logging.info("[EventManager] _filter_tickets_by_event_bases: current_era is empty, skipping era filter")
+        return tickets
+
+    var all_bases = Database.get_all_event_bases()
+    if all_bases.is_empty():
+        Logging.info("[EventManager] _filter_tickets_by_event_bases: no EventBases registered, skipping")
+        return tickets
+
+    # 收集需要排除的 event uuid 集合
+    var excluded_events: Array[String] = []
+    for base_uuid in all_bases:
+        var base: EventBase = all_bases[base_uuid]
+        if base.era.is_empty():
+            continue
+        if base.era != current_era:
+            Logging.info("[EventManager] _filter_tickets_by_event_bases: era 不匹配，排除 base '%s' (base.era='%s', current='%s')，移除 %d 个事件" % [base_uuid, base.era, current_era, base.events.size()])
+            for ev_uuid in base.events:
+                excluded_events.append(ev_uuid)
+
+    if excluded_events.is_empty():
+        return tickets
+
+    var filtered: Array[EventTicket] = []
+    var removed_count := 0
+    for ticket in tickets:
+        if ticket.event_uuid in excluded_events:
+            Logging.info("[EventManager] _filter_tickets_by_event_bases: 移除 ticket '%s'（base era 不匹配）" % ticket.event_uuid)
+            removed_count += 1
+        else:
+            filtered.append(ticket)
+
+    Logging.info("[EventManager] _filter_tickets_by_event_bases: 过滤完成，移除 %d 个 ticket，剩余 %d" % [removed_count, filtered.size()])
+    return filtered
+
+
+## AVERAGE 黑名单 + 权重再分配
+func _apply_event_base_blacklist(tickets: Array[EventTicket]) -> void:
+    var all_bases = Database.get_all_event_bases()
+    if all_bases.is_empty():
+        return
+
+    for base_uuid in all_bases:
+        var base: EventBase = all_bases[base_uuid]
+        if base.draw_strategies != "AVERAGE":
+            continue
+        if base.events.is_empty():
+            continue
+
+        var blacklist: Array = _event_base_blacklist.get(base_uuid, [])
+
+        # 收集该 base 在 tickets 中的 ticket
+        var all_base_tickets: Array[EventTicket] = []
+        var banned_tickets: Array[EventTicket] = []
+        var active_tickets: Array[EventTicket] = []
+
+        for ticket in tickets:
+            var ticket_base = Database.get_event_base_for_event(ticket.event_uuid)
+            if ticket_base == null or ticket_base.uuid != base_uuid:
+                continue
+            all_base_tickets.append(ticket)
+            if ticket.event_uuid in blacklist:
+                banned_tickets.append(ticket)
+            else:
+                active_tickets.append(ticket)
+
+        if all_base_tickets.is_empty():
+            continue
+
+        # 全封禁 → 移除所有
+        if active_tickets.is_empty():
+            Logging.info("[EventManager] _apply_event_base_blacklist: base '%s' 所有 %d 个事件均在黑名单，全部移除" % [base_uuid, all_base_tickets.size()])
+            for t in all_base_tickets:
+                tickets.erase(t)
+            continue
+
+        # 无封禁 → 不变
+        if banned_tickets.is_empty():
+            Logging.info("[EventManager] _apply_event_base_blacklist: base '%s' 无封禁事件" % base_uuid)
+            continue
+
+        # 部分封禁 → 移除封禁 ticket，权重再分配
+        var banned_total_weight := 0.0
+        for t in banned_tickets:
+            banned_total_weight += t.weight
+            tickets.erase(t)
+
+        var weight_per_active: float = 0.0
+        if active_tickets.size() > 0:
+            weight_per_active = banned_total_weight / float(active_tickets.size())
+            for t in active_tickets:
+                t.weight += weight_per_active
+
+        Logging.info("[EventManager] _apply_event_base_blacklist: base '%s' 移除 %d 个封禁 ticket（权重=%.1f），权重分配给 %d 个活跃 ticket（各+%.1f）" % [base_uuid, banned_tickets.size(), banned_total_weight, active_tickets.size(), weight_per_active])
+
+
+## 标记事件已触发：若事件属于 AVERAGE 策略的 EventBase，加入黑名单
+func _mark_event_base_triggered(event_uuid: String) -> void:
+    if event_uuid.is_empty():
+        return
+
+    var base = Database.get_event_base_for_event(event_uuid)
+    if base == null:
+        return
+
+    if base.draw_strategies != "AVERAGE":
+        return
+
+    if not _event_base_blacklist.has(base.uuid):
+        _event_base_blacklist[base.uuid] = []
+    var blacklist: Array = _event_base_blacklist[base.uuid]
+    if event_uuid not in blacklist:
+        blacklist.append(event_uuid)
+        Logging.info("[EventManager] _mark_event_base_triggered: '%s' 加入 base '%s' 黑名单（%d/%d）" % [event_uuid, base.uuid, blacklist.size(), base.events.size()])
+
+    if base.reset_on_empty and blacklist.size() >= base.events.size():
+        _event_base_blacklist.erase(base.uuid)
+        Logging.info("[EventManager] _mark_event_base_triggered: base '%s' 全部 %d 个事件已触发，reset_on_empty=true，清空黑名单" % [base.uuid, base.events.size()])
 
 

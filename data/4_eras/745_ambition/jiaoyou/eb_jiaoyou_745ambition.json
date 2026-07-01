@@ -2,8 +2,9 @@
   "id": "745_jiaoyou",
   "name": "野心交游事件库",
   "era": "745_ambition",
-  "draw_strategies": "LOWEST_POSSIBLE_IMAGINARY",
+  "draw_strategies": "AVERAGE",
   "reset_on_empty": true,
+  "events": [],
   "generation_configs": {
     "background_context": "",
     "ai_persona": "",

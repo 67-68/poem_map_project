@@ -20,6 +20,9 @@ class_name DataScanner extends RefCounted
 # CSV 模型类预加载
 const Territory = preload("res://world/province_resource.gd")
 
+# EventBase 模型类预加载（解析 eb_*.json）
+const EventBase = preload("res://core/model/event_base.gd")
+
 # HTML5 降级：预构建文件清单路径
 const _FILE_INDEX_PATH := "res://data/_file_index.json"
 
@@ -121,6 +124,10 @@ static func _scan_from_index(
 				continue
 			result.scanned_file_count += 1
 			_load_csv(file_path, current_ns, result, top_level_base, file_name)
+		elif file_name.ends_with(".json") and file_name.begins_with("eb_"):
+			# ── eb_*.json：EventBase 配置文件 ──
+			result.scanned_file_count += 1
+			_load_event_base_json(file_path, current_ns, result, top_level_base)
 		else:
 			Logging.warn("DataScanner: 索引中跳过未知类型文件: " + rel_path)
 
@@ -173,6 +180,11 @@ static func _scan_dir(
 			# ── CSV 文件：通过 DataLoader 加载 ──
 			result.scanned_file_count += 1
 			_load_csv(full_path, current_ns, result, top_level_base, entry_name)
+
+		elif entry_name.ends_with(".json") and entry_name.begins_with("eb_"):
+			# ── eb_*.json：EventBase 配置文件 ──
+			result.scanned_file_count += 1
+			_load_event_base_json(full_path, current_ns, result, top_level_base)
 
 		entry_name = dir.get_next()
 
@@ -289,6 +301,79 @@ static func _load_csv(
 			continue
 		result.pool[full_id] = item
 		Logging.info("DataScanner: CSV 写入 pool [%s] <- %s" % [full_id, file_path])
+
+
+static func _load_event_base_json(
+	file_path: String,
+	current_ns: String,
+	result: LoadResult,
+	top_level_base: String
+) -> void:
+	"""加载 eb_*.json 文件为 EventBase Resource"""
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	if not file:
+		Logging.err("DataScanner: 无法打开 JSON 文件: " + file_path)
+		return
+
+	var raw_text = file.get_as_text()
+	file.close()
+
+	var json = JSON.new()
+	var parse_err = json.parse(raw_text)
+	if parse_err != OK:
+		Logging.err("DataScanner: JSON 解析失败: %s (错误: %s)" % [file_path, json.get_error_message()])
+		return
+
+	var data = json.get_data()
+	if not data is Dictionary:
+		Logging.err("DataScanner: JSON 根节点不是字典: " + file_path)
+		return
+
+	var event_base = EventBase.new()
+
+	# 提取字段（JSON 用 "id"，映射到 uuid）
+	event_base.uuid = str(data.get("id", ""))
+	event_base.name = str(data.get("name", ""))
+	event_base.era = str(data.get("era", ""))
+	event_base.draw_strategies = str(data.get("draw_strategies", ""))
+
+	# reset_on_empty: JSON 中是 bool
+	if data.has("reset_on_empty"):
+		event_base.reset_on_empty = bool(data["reset_on_empty"])
+
+	# events: JSON 数组 → Array[String]
+	if data.has("events"):
+		var raw_events: Array = data["events"]
+		var ev_arr: Array[String] = []
+		for ev in raw_events:
+			ev_arr.append(str(ev))
+		event_base.events = ev_arr
+
+	# generation_configs: 原始 JSON，不解析
+	if data.has("generation_configs") and data["generation_configs"] is Dictionary:
+		event_base.generation_configs = data["generation_configs"]
+
+	var uuid = event_base.uuid
+	if uuid.is_empty():
+		Logging.warn("DataScanner: eb_*.json 缺少 'id' 字段: " + file_path)
+		return
+
+	var full_id = current_ns + uuid
+
+	# ── 全局池冲突检测 ──
+	if result.pool.has(full_id):
+		Logging.err("DataScanner: EventBase ID 冲突！full_id='%s' 已存在（文件: %s）" % [full_id, file_path])
+		result.duplicates.append(full_id)
+		return
+
+	result.pool[full_id] = event_base
+	Logging.info("DataScanner: 加载 EventBase [%s] <- %s (events=%d, strategy=%s)" % [full_id, file_path, event_base.events.size(), event_base.draw_strategies])
+
+	# ── 按完整相对路径分表 ──
+	if top_level_base != "":
+		if not result.bases.has(top_level_base):
+			result.bases[top_level_base] = {}
+		result.bases[top_level_base][uuid] = event_base
 
 
 static func _extract_uuid(resource: Resource) -> String:

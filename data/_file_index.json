@@ -7,6 +7,12 @@
     "tests/auto_advance/test_manual_1opt.tres",
     "tests/auto_advance/test_multi_2opt.tres",
     "tests/overlay_anim/test_overlay_anim_slide_out_back.tres",
+    "tests/poem_events/test_s1_overlap.tres",
+    "tests/poem_events/test_s2_partial.tres",
+    "tests/poem_events/test_s3_no_match.tres",
+    "tests/poem_events/test_s4_partial_fail.tres",
+    "tests/poem_events/test_s5_poem_choose.tres",
+    "tests/poem_events/test_s6_tiers.tres",
     "4_eras/755_backhome/755_backhome.tres",
     "4_eras/755_backhome/backhome_ambition.tres",
     "4_eras/755_backhome/gan_lu.tres",
@@ -559,6 +565,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-06-30T12:12:08.104110+00:00",
-  "total": 558
+  "generated_at": "2026-06-30T13:07:20.952445+00:00",
+  "total": 564
 }
