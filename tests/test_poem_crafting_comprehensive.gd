@@ -302,6 +302,7 @@ func test_scenario_5_poem_choose_removes_trait():
 	var poem = Poem.new("POEM", "GAN_YE", 1, 100.0, 50.0)
 	poem.uuid = "test_poem_gan_ye_1"
 	poem.name = "测试干谒诗"
+	Database.traits[poem.uuid] = poem  # 注册到 Database 内存态，与 poem_crafter.gd 一致
 	PlayerState.add_trait("test_poem_gan_ye_1")
 	Logging.info("[场景5] 已添加诗词 trait: test_poem_gan_ye_1 (GAN_YE, level=1)")
 

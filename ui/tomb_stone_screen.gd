@@ -52,8 +52,11 @@ func render_entropy_death(cause_text: String) -> void:
 	if PlayerState.created_poems.is_empty():
 		bbcode += "[center][font_size=40][color=#555555]（绝笔无言，泯然众人）[/color][/font_size][/center]\n"
 	else:
-		for poem_key in PlayerState.created_poems:
-			Logging.err('tombstone: poem_key=%s — PoemData 已移除，无法渲染诗词墓碑' % poem_key)
+		for poem in PlayerState.created_poems:
+			if poem and poem is Poem:
+				bbcode += "[center][font_size=28][color=#daa520]《%s》[/color][/font_size][/center]\n" % poem.name
+			else:
+				Logging.err('tombstone: invalid poem entry in created_poems')
 	# 3. 物理灌注！
 	monolith_text.text = bbcode
 

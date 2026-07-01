@@ -123,13 +123,13 @@ enum PROVINCES {
 enum TRAITS {
     WANDERING_WITHOUT_LIVING_PLACE,
     
-    # 第一等级诗词 — 单下划线分隔，topic/type/level 三层语义
-    POEM_GAN_YE_1,
-    POEM_YING_ZHI_1,
-    POEM_DENG_GAO_1,
-    POEM_HUAI_GU_1,
-    POEM_JI_LV_1,
-    POEM_SHAN_SHUI_1,
+    # ── 诗词枚举已移除，占位保留整数值稳定性 ──
+    _RESERVED_01,
+    _RESERVED_02,
+    _RESERVED_03,
+    _RESERVED_04,
+    _RESERVED_05,
+    _RESERVED_06,
 
     # 主线行动等级标签
     MAIN_BAIYE_1,
@@ -183,19 +183,19 @@ enum TRAITS {
     JOYFUL,
     RESPECTED,
 
-    POEM_GAN_YE_2,
-    POEM_YING_ZHI_2,
-    POEM_DENG_GAO_2,
-    POEM_HUAI_GU_2,
-    POEM_JI_LV_2,
-    POEM_SHAN_SHUI_2,
+    _RESERVED_07,
+    _RESERVED_08,
+    _RESERVED_09,
+    _RESERVED_10,
+    _RESERVED_11,
+    _RESERVED_12,
 
-    POEM_GAN_YE_3,
-    POEM_YING_ZHI_3,
-    POEM_DENG_GAO_3,
-    POEM_HUAI_GU_3,
-    POEM_JI_LV_3,
-    POEM_SHAN_SHUI_3,
+    _RESERVED_13,
+    _RESERVED_14,
+    _RESERVED_15,
+    _RESERVED_16,
+    _RESERVED_17,
+    _RESERVED_18,
 
     KUANGDA_KUANGKE,
     KUANGDA_FENGYING,
