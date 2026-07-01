@@ -6,6 +6,11 @@ class_name BaseEvent extends GameEntity
 # 用于 NarrativeOverlay 的路由拦截器判断显示模式
 @export var _namespace: String = ""
 
+## 🔒 每个 choice_result 的原始（TRES）operators 快照。
+## key = choice_result.get_instance_id()，value = original operators 深拷贝。
+## 每次 init() 时恢复到此快照，保证子类追加 operator 时不会累加。
+var _base_operators_snapshot: Dictionary = {}
+
 @export var options: Array[BaseOption] = []
 @export var provider: BaseProvider
 
@@ -185,9 +190,17 @@ func init(context: Dictionary) -> Array:
 			if extra_options.size() > 0:
 				all_options.append_array(extra_options)
 	
-	# Phase 3: 所有选项统一初始化
+	# Phase 3: 所有选项统一初始化（幂等守卫：先恢复 choice_result operators）
 	for o in all_options:
 		if o:
+			if "choice_result" in o and o.choice_result != null:
+				var cr = o.choice_result
+				var cr_id = cr.get_instance_id()
+				if not _base_operators_snapshot.has(cr_id):
+					_base_operators_snapshot[cr_id] = cr.operators.duplicate(true)
+				cr.operators.clear()
+				for base_op in _base_operators_snapshot[cr_id]:
+					cr.operators.append(base_op.duplicate())
 			o.init(context)
 	
 	# 返回合并后的全量选项数组

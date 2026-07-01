@@ -259,11 +259,12 @@ func init(context: Dictionary) -> Array:
                 var cr: ChoiceResult = opt.choice_result
                 if not cr:
                     cr = ChoiceResult.new()
-                    cr.operators = [] as Array[BaseOperator]
-                # 深拷贝 operator 避免多选项共享同一引用
+                    opt.choice_result = cr
+                
+                # 追加 archetype operators（深拷贝避免多选项共享同一引用）
                 for op in archetype_result.operators:
                     cr.operators.append(op.duplicate())
-                opt.choice_result = cr
+                
                 cr.init(context)
     
     return all_options
