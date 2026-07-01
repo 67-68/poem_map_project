@@ -197,11 +197,12 @@ func is_action_era_allowed(action: Action) -> bool:
 
 
 ## 🎯 纯函数：检查单个 action 在当前玩家状态下是否满足全部条件。
-## 返回: { valid: bool, reasons: Array[String], prop_name: String }
+## 返回: { valid: bool, reasons: Array[String], prop_name: String, valid_hint: String }
 ## reasons 中每条是独立的失败原因文本（A类），最终会换行拼接到 dynamic_failed_hint。
+## valid_hint 在 valid=true 时设置，包含精确数值的成功提示。
 ## 可复用于抽取阶段和属性变动后的重评估。
 func check_action_validity(action: Action) -> Dictionary:
-	var result := { "valid": true, "reasons": [], "prop_name": "" }
+	var result := { "valid": true, "reasons": [], "prop_name": "", "valid_hint": "" }
 	if not action:
 		result.valid = false
 		return result
@@ -214,21 +215,27 @@ func check_action_validity(action: Action) -> Dictionary:
 		var req: PropertyRequirement = temp_op.convert_prop_limit_requirement()
 		if req != null and not req.compare(PlayerState):
 			result.valid = false
-			var hint: String = req.get_failed_hint()
-			if hint.is_empty():
-				hint = req.describe_requirement()
-			if hint.is_empty():
-				hint = "条件未满足"
-			result.reasons.append(hint)
 			
 			var prop_name: String = temp_op.property
-			if not prop_name.is_empty():
-				result.prop_name = prop_name
-				var archetype_hint := _get_archetype_failed_hint(action, prop_name)
-				if not archetype_hint.is_empty():
-					Logging.info("[ActionManager] ✅ archetype hint 命中: action=%s, prop=%s, hint='%s'" % [action.uuid, prop_name, archetype_hint])
-					result.reasons[-1] = archetype_hint
-			# 只报告第一个失败的限制
+			result.prop_name = prop_name
+			
+			# 构建精确数值行："「金钱」不足，当前42，需要20"
+			var current_val = PlayerState.get_stat_val(prop_name)
+			var prop_display_name = prop_name
+			var prop_data = Database.get_property(prop_name)
+			if prop_data:
+				prop_display_name = prop_data.get_display_name()
+			var needed := req.value
+			var precise_line := "「%s」不足，当前%d，需要%d" % [prop_display_name, current_val, needed]
+			
+			# 追加 archetype 叙事文本（不再覆盖，改为换行拼接）
+			var archetype_hint := _get_archetype_failed_hint(action, prop_name)
+			if not archetype_hint.is_empty():
+				result.reasons.append(precise_line + "\n" + archetype_hint)
+				Logging.info("[ActionManager] ✅ archetype hint 追加: action=%s, prop=%s" % [action.uuid, prop_name])
+			else:
+				result.reasons.append(precise_line)
+			
 			return result
 	
 	# 2. 检查时间消耗（集成时间锁定）
@@ -237,12 +244,37 @@ func check_action_validity(action: Action) -> Dictionary:
 		var current_time := int(PlayerState.get_stat_val("time"))
 		if current_time < cost:
 			result.valid = false
-			var time_hint := _get_archetype_failed_hint(action, "time")
-			if time_hint.is_empty():
-				time_hint = "这个行动需要 " + str(cost) + " 天，时间不足"
-			result.reasons.append(time_hint)
+			# 精确数值行："时间剩余5天，但这项行动需要10天"
+			var precise_line := "时间剩余%d天，但这项行动需要%d天" % [current_time, cost]
+			var archetype_hint := _get_archetype_failed_hint(action, "time")
+			if not archetype_hint.is_empty():
+				result.reasons.append(precise_line + "\n" + archetype_hint)
+			else:
+				result.reasons.append(precise_line)
 			result.prop_name = "time"
 			return result
+	
+	# 3. 有效 action：构建成功提示（只展示消耗属性，不展示产出属性）
+	var valid_parts: Array[String] = []
+	if cost > 0:
+		var current_time := int(PlayerState.get_stat_val("time"))
+		valid_parts.append("时间充足（剩余%d天，需要%d天）" % [current_time, cost])
+	for temp_op in costs:
+		if not temp_op is PropertyOperator:
+			continue
+		# 只展示 prop_sub（消耗为负），跳过 prop_add（产出为正）
+		if temp_op.value >= 0:
+			continue
+		var prop_name = temp_op.property
+		var current_val = int(PlayerState.get_stat_val(prop_name))
+		var prop_data = Database.get_property(prop_name)
+		var display_name = prop_data.get_display_name() if prop_data else prop_name
+		valid_parts.append("「%s」充足（当前%d）" % [display_name, current_val])
+	if valid_parts.is_empty():
+		result.valid_hint = "条件满足"
+	else:
+		valid_parts.append("条件满足")
+		result.valid_hint = "\n".join(valid_parts)
 	
 	return result
 
@@ -291,13 +323,13 @@ func reevaluate_all_locks() -> void:
 		var validity := check_action_validity(a)
 		
 		if _selected_action_ids.has(a_id) and _selected_action_ids[a_id]:
-			# 已中签：条件满足则启用，否则A类灰化
+			# 已中签：条件满足则启用（写入 success_hint），否则A类灰化
+			a.clear_failed_hint()
 			if validity.valid:
-				if not a.dynamic_failed_hint.is_empty():
-					a.clear_failed_hint()
-					changed = true
+				if validity.get("valid_hint", ""):
+					a.success_hint = validity.valid_hint
+				changed = true
 			else:
-				a.clear_failed_hint()
 				for reason in validity.reasons:
 					a.append_failed_hint(reason)
 				changed = true
@@ -630,6 +662,8 @@ func apply_visibility_flags() -> void:
 				for reason in v.reasons:
 					a.append_failed_hint(reason)
 				Logging.info("[ActionManager] 🔒 中签但锁定 %s — %s" % [a_id, ", ".join(v.reasons)])
+			elif v.get("valid_hint", ""):
+				a.success_hint = v.valid_hint
 		else:
 			# 未中签 → B类 + A类
 			if not a.lock_narrative.is_empty():

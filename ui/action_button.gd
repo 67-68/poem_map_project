@@ -70,12 +70,12 @@ func set_locked(reason: String) -> void:
 	tooltip_text = reason if not reason.is_empty() else "暂时无法执行此行动"
 
 
-## 🆕 解除灰化锁定态
+## 🆕 解除灰化锁定态，同时从 action.success_hint 设置 tooltip（如有）
 func set_unlocked() -> void:
 	_is_locked = false
 	modulate = Color.WHITE
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	tooltip_text = ""
+	tooltip_text = action.success_hint if action and not action.success_hint.is_empty() else ""
 
 
 ## 差分更新：只刷 UI 文本/图标，不重建信号 & HoverPopup（已注册的 popup 绑定不变）

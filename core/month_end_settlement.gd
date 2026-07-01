@@ -156,6 +156,7 @@ func _delta_to_circles(delta: int) -> String:
 func _delta_to_bbcode(prop_enum: int, delta: int) -> String:
 	var short_name: String = PROP_SHORT_NAMES.get(prop_enum, "?")
 	var circles: String = _delta_to_circles(delta)
+	var delta_str: String = ("%+d" % delta) if delta != 0 else " 0"
 
 	var color: String
 	if delta > 0:
@@ -165,7 +166,7 @@ func _delta_to_bbcode(prop_enum: int, delta: int) -> String:
 	else:
 		color = "gray"
 
-	return "[%s] [color=%s]%s[/color]" % [short_name, color, circles]
+	return "[%s] %s [color=%s]%s[/color]" % [short_name, delta_str, color, circles]
 
 # ── 获取年号+季节文本 ────────────────────────────
 func _get_era_season_text() -> String:

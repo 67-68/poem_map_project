@@ -73,9 +73,12 @@ func _ready() -> void:
 		else:
 			Logging.info("LeftPlayerPanel: emotion label '%s' ready, visible=%s" % [emo_key, str(_emotion_labels[emo_key].visible)])
 	
-	# ── 信号连接：旬 tick + 情绪实时变化 ──
+	# ── 信号连接：旬 tick + 属性实时变化 + 情绪实时变化 ──
 	TimeService.on_xun_tick.connect(_on_stat_changed)
 	Logging.info("LeftPlayerPanel: connected to TimeService.on_xun_tick")
+	if not PlayerState.player_stat_changed.is_connected(_on_any_stat_changed):
+		PlayerState.player_stat_changed.connect(_on_any_stat_changed)
+		Logging.info("LeftPlayerPanel: connected to PlayerState.player_stat_changed")
 	if not PlayerState.emotion_changed.is_connected(_refresh_emotions):
 		PlayerState.emotion_changed.connect(_refresh_emotions)
 		Logging.info("LeftPlayerPanel: connected to PlayerState.emotion_changed")
@@ -131,6 +134,12 @@ func _on_stat_changed() -> void:
 	_refresh_trait_grid()
 	_update_ambition_text()
 	_refresh_emotions()
+
+## 属性实时变动 → 增量刷新 PropGrid + 野心进度
+## 由 PlayerState.player_stat_changed 触发，每次属性变化立即刷新
+func _on_any_stat_changed(_prop_name: String = "") -> void:
+	_refresh_prop_grid()
+	_refresh_ambition_progress_label()
 
 func _update_ambition_text() -> void:
 	if PlayerState.ambition:

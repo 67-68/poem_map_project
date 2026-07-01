@@ -109,14 +109,15 @@ func _init_option(data: BaseOption):
 	# ── 统一验证管线 ──
 	# 无论是 Requirement（属性不够、flag 未设置）还是 NarrativeLock（叙事锁定），
 	# 都通过 requirement.compare() 统一判断。不再单独处理 is_disabled 分支。
-	if data.requirement:
-		var pass_prop = data.requirement.compare(PlayerState)
+	var req = data.requirement if 'requirement' in data else null
+	if req:
+		var pass_prop = req.compare(PlayerState)
 		if pass_prop == null:
 			Logging.err('some property can not be found in state')
 			return
 		if not pass_prop:
 			# 禁用按钮但允许点击查看原因（点击后变灰 + Toast 提示）
-			tooltip_text = data.requirement.get_failed_hint()
+			tooltip_text = req.get_failed_hint()
 			pressed.connect(disable_btn)
 			return
 	
