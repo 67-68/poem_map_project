@@ -105,37 +105,6 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
     _apply_event_base_blacklist(initial_tickets)
     scan_events_from_tickets(initial_tickets, nothing_multiplication_weight, fallback_uuid, context)
 
-func scan_poem_events(imaginaries: Array[ImaginaryConcept]):
-    if GameState.is_game_over:
-        Logging.info("[EventManager] scan_poem_events: GameState.is_game_over is true, skipping")
-        return
-    #breakpoint
-    var imas = {}
-    for i in imaginaries:
-        imas[i.uuid] = i
-
-    var tags = []
-    for i in imaginaries:
-        for detail_imag in ImaginaryComprehender.get_imaginaries_for_concept(i.uuid):
-            for tag in detail_imag.concepts:
-                if not tag.is_empty():
-                    tags.append(tag)
-    
-    # create tickets
-    var tickets: Array[EventTicket] = []
-    for t in tags:
-        for e in Database.get_normal_poem_events_all().values():
-            for target_tag in e.target_tags:
-                # 直接字符串相等匹配
-                if target_tag == t:
-                    tickets.append(_create_ticket(e))
-    #breakpoint
-    # 🆕 EventBase 管道：era 过滤 + AVERAGE 黑名单/权重再分配
-    tickets = _filter_tickets_by_event_bases(tickets, {})
-    _apply_event_base_blacklist(tickets)
-    scan_events_from_tickets(tickets, 0.0, 'da_you_shi', {})
-
-
 func scan_death_events():
     """
     在结局之后使用，扫描死亡/失败/结束事件

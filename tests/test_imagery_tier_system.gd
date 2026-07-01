@@ -228,20 +228,34 @@ func test_comprehend_clears_fragments():
 # ════════════════════════════════════════════════════════════
 # C. ImaginaryComprehender.consume_concepts() 测试
 # ════════════════════════════════════════════════════════════
+# ⚠️ consume_concepts 现在只重置运行时状态，不删除静态定义
 
-func test_consume_concepts_removes_from_database():
-	"""consume_concepts 应从 Database.imaginaries 中删除概念"""
-	var c1 = _make_imaginary("c1")
-	var c2 = _make_imaginary("c2")
+func test_consume_concepts_resets_state_not_definition():
+	"""consume_concepts 应重置 tier/level，但不删除静态定义"""
+	var c1 = ImaginaryConcept.new()
+	c1.uuid = "c1"
+	c1.current_tier = 2
+	c1.current_level = 2
+	var c2 = ImaginaryConcept.new()
+	c2.uuid = "c2"
+	c2.current_tier = 1
+	c2.current_level = 1
 	Database.imaginaries["c1"] = c1
 	Database.imaginaries["c2"] = c2
 
-	assert_true(Database.imaginaries.has("c1"), "删除前 c1 应存在")
+	assert_true(Database.imaginaries.has("c1"), "消耗前 c1 应存在")
 
 	ImaginaryComprehender.consume_concepts([c1, c2])
 
-	assert_false(Database.imaginaries.has("c1"), "c1 应被删除")
-	assert_false(Database.imaginaries.has("c2"), "c2 应被删除")
+	# 静态定义应保留
+	assert_true(Database.imaginaries.has("c1"), "c1 静态定义应保留")
+	assert_true(Database.imaginaries.has("c2"), "c2 静态定义应保留")
+
+	# 但运行时状态应重置
+	assert_eq(c1.current_tier, 0, "c1 tier 应重置为 0")
+	assert_eq(c1.current_level, 0, "c1 level 应重置为 0")
+	assert_eq(c2.current_tier, 0, "c2 tier 应重置为 0")
+	assert_eq(c2.current_level, 0, "c2 level 应重置为 0")
 
 
 # ════════════════════════════════════════════════════════════

@@ -388,6 +388,7 @@ func _on_button_pressed() -> void:
 		selected_imaginaries.clear()
 		render_slots()
 		_rebuild_subviewport()
+		EventBus.request_float_text.emit("🪶 意象未全，凑成一首打油诗", {"color": Color(0.976, 0.792, 0.141)})
 		return
 
 	# ── 失败（消耗意象，但不产出诗词）──
@@ -415,20 +416,7 @@ func _on_button_pressed() -> void:
 	PlayerState.created_poems.append(poem)
 	Logging.info('PoemCrafter: Poem created and added to created_poems: %s (%s)' % [poem.uuid, poem.name])
 
-	# 消耗 concepts
-	ImaginaryComprehender.consume_concepts(selected_imaginaries)
-
-	# 扫描诗词事件
-	Logging.info('PoemCrafter: scanning for poem events')
-	for ima in selected_imaginaries:
-		for detail_imag in ImaginaryComprehender.get_imaginaries_for_concept(ima.uuid):
-			for concept_key in detail_imag.concepts:
-				if not concept_key.is_empty():
-					PlayerState.current_action_tags.append(concept_key)
-
-	EventManager.scan_poem_events(selected_imaginaries)
-
-	# 推送诗词揭示事件
+	# 推送诗词揭示事件（不扫描普通诗词事件，直接展示创作结果）
 	var ctx = {
 		"poem_secular": result.secular_value,
 		"poem_literary": result.literary_value,
@@ -438,15 +426,24 @@ func _on_button_pressed() -> void:
 	EventBus.push_event.emit("poem_reveal", ctx)
 	Logging.info('PoemCrafter: poem reveal event pushed')
 
+	# 消耗 concepts（放在事件扫描之后，因为扫描需要读取 fragments）
+	ImaginaryComprehender.consume_concepts(selected_imaginaries)
+
 	selected_imaginaries.clear()
 	render_slots()
 	_rebuild_subviewport()
 
 
 ## 检查是否已有未使用的诗词（上限检查）
+## 同时检查旧 trait 管道和新 created_poems 管道（pending poem_refactor_detrait）
 func _has_unused_poem() -> bool:
 	for entry in PlayerState.created_poems:
 		if entry is Poem and entry.topic == "POEM":
+			return true
+	for trait_uuid in PlayerState.traits:
+		var t = Database.get_trait(trait_uuid)
+		if t != null and t is Poem and t.topic == "POEM" and t.uuid.begins_with("poem_recipe_"):
+			Logging.info('PoemCrafter: 检测到已有诗词 trait: %s (%s)' % [t.name, t.uuid])
 			return true
 	return false
 

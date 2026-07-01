@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="1_mcqax"]
+[ext_resource type="Script" path="res://core/operators/imagery_acquisition_operator.gd" id="2_ltg12"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="3_srgqw"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="4_5vm7a"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="5_bm34f"]
+
+[sub_resource type="Resource" id="Resource_niqsj"]
+script = ExtResource("2_ltg12")
+imagery_name = "cold_moon"
+
+[sub_resource type="Resource" id="Resource_vu52k"]
+script = ExtResource("3_srgqw")
+operators = Array[ExtResource("1_mcqax")]([SubResource("Resource_niqsj")])
+
+[sub_resource type="Resource" id="Resource_8as8c"]
+script = ExtResource("4_5vm7a")
+choice_result = SubResource("Resource_vu52k")
+description = "获得意象: cold_moon"
+
+[sub_resource type="Resource" id="Resource_r4glq"]
+script = ExtResource("2_ltg12")
+imagery_name = "lone_snow"
+
+[sub_resource type="Resource" id="Resource_03cqw"]
+script = ExtResource("3_srgqw")
+operators = Array[ExtResource("1_mcqax")]([SubResource("Resource_r4glq")])
+
+[sub_resource type="Resource" id="Resource_tvhxw"]
+script = ExtResource("4_5vm7a")
+choice_result = SubResource("Resource_03cqw")
+description = "获得意象: lone_snow"
+
+[sub_resource type="Resource" id="Resource_ukyhk"]
+script = ExtResource("2_ltg12")
+imagery_name = "falling_leaf"
+
+[sub_resource type="Resource" id="Resource_sudaf"]
+script = ExtResource("3_srgqw")
+operators = Array[ExtResource("1_mcqax")]([SubResource("Resource_ukyhk")])
+
+[sub_resource type="Resource" id="Resource_q758a"]
+script = ExtResource("4_5vm7a")
+choice_result = SubResource("Resource_sudaf")
+description = "获得意象: falling_leaf"
+
+[resource]
+script = ExtResource("5_bm34f")
+weight = 100.0
+archetype_id = "denggao"
+options = [SubResource("Resource_8as8c"), SubResource("Resource_tvhxw"), SubResource("Resource_q758a")]
+uuid = "test_s2_exact_match"
+name = "test_s2_exact_match"

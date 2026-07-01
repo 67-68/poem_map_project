@@ -238,15 +238,46 @@ func test_comprehend_category_alias():
 # ════════════════════════════════════════════════════════════
 # D. consume_concepts() 阅后即焚测试
 # ════════════════════════════════════════════════════════════
+# ⚠️ 注意：consume_concepts 只删除 Imaginary 碎片（imaginaries_detail）
+#    并重置 concept 的运行时状态，但不删除静态定义（Database.imaginaries）
 
-func test_consume_concepts_removes_from_imaginaries():
+func test_consume_concepts_resets_tier_and_level():
+	"""消耗后 concept 应保留在 Database.imaginaries 中，但 tier/level 重置为 0"""
 	var c1 = _setup_imaginary_concept("nature:autumn", 2, 2)
 	var c2 = _setup_imaginary_concept("theme:macabre", 1, 1)
 
-	assert_true(Database.imaginaries.has("nature:autumn"), "删除前应存在")
+	assert_true(Database.imaginaries.has("nature:autumn"), "消耗前应存在")
 	ImaginaryComprehender.consume_concepts([c1, c2])
-	assert_false(Database.imaginaries.has("nature:autumn"), "c1 应被删除")
-	assert_false(Database.imaginaries.has("theme:macabre"), "c2 应被删除")
+
+	# 静态定义不应被删除
+	assert_true(Database.imaginaries.has("nature:autumn"), "静态定义应保留")
+	assert_true(Database.imaginaries.has("theme:macabre"), "静态定义应保留")
+
+	# 运行时状态应重置
+	assert_eq(c1.current_tier, 0, "tier 应重置为 0")
+	assert_eq(c1.current_level, 0, "level 应重置为 0")
+	assert_eq(c2.current_tier, 0, "tier 应重置为 0")
+	assert_eq(c2.current_level, 0, "level 应重置为 0")
+
+
+func test_consume_concepts_removes_imaginary_fragments():
+	"""消耗时应删除 imaginaries_detail 中引用该 concept 的碎片"""
+	var c1 = _setup_imaginary_concept("nature:autumn", 2, 2)
+
+	# 模拟玩家拥有的碎片
+	var imag1 = _make_imaginary("falling_leaf", ["nature:autumn"])
+	var imag2 = _make_imaginary("cold_moon", ["nature:moon"])
+	Database.imaginaries_detail["falling_leaf"] = imag1
+	Database.imaginaries_detail["cold_moon"] = imag2
+
+	ImaginaryComprehender.consume_concepts([c1])
+
+	# 引用该概念的碎片应被删除
+	assert_false(Database.imaginaries_detail.has("falling_leaf"),
+		"引用 nature:autumn 的碎片应被删除")
+	# 不引用该概念的碎片应保留
+	assert_true(Database.imaginaries_detail.has("cold_moon"),
+		"不引用被消耗概念的碎片应保留")
 
 
 func test_consume_concepts_handles_non_concept_entries():
@@ -254,7 +285,11 @@ func test_consume_concepts_handles_non_concept_entries():
 	var c1 = _setup_imaginary_concept("nature:autumn", 2, 2)
 	var not_concept = {}
 	ImaginaryComprehender.consume_concepts([c1, not_concept])
-	assert_false(Database.imaginaries.has("nature:autumn"), "c1 应被删除")
+	# 静态定义应保留
+	assert_true(Database.imaginaries.has("nature:autumn"), "静态定义应保留")
+	# tier/level 应重置
+	assert_eq(c1.current_tier, 0, "tier 应重置为 0")
+	assert_eq(c1.current_level, 0, "level 应重置为 0")
 
 
 func test_consume_concepts_empty_array():

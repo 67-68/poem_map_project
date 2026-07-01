@@ -1,18 +1,16 @@
 @tool
 extends Node
 
-## 诗词创作测试事件生成器
+## 诗词创作测试事件生成器 V5
 ## 在 Godot 编辑器中运行此脚本，生成测试用 .tres 事件文件到 tests/data/poem_events/
-##
-## 用法: 将此脚本附加到任意场景 Node，在编辑器中运行场景。
 
 const OUTPUT_DIR := "res://data/tests/poem_events/"
-
 const SEP = "============================================================"
+
 
 func _ready() -> void:
 	Logging.info(SEP)
-	Logging.info("诗词创作测试事件生成器 启动")
+	Logging.info("诗词创作测试事件生成器 V5 启动")
 	Logging.info(SEP)
 
 	DirAccess.make_dir_recursive_absolute(OUTPUT_DIR)
@@ -23,6 +21,7 @@ func _ready() -> void:
 	_generate_scenario_4()
 	_generate_scenario_5()
 	_generate_scenario_6()
+	_generate_scenario_7()
 
 	Logging.info("全部测试事件生成完毕，输出目录: %s" % OUTPUT_DIR)
 
@@ -67,20 +66,8 @@ func _make_chained_event(event_uuid: String, archetype: String, desc: String,
 	return event
 
 
-func _make_poem_trait(uuid: String, specific_topic: String, level: int,
-		secular: float, literary: float, required_frags: Array[String]) -> Poem:
-	var poem = Poem.new("POEM", specific_topic, level, secular, literary)
-	poem.uuid = uuid
-	poem.name = uuid
-	poem.required_fragments = required_frags
-	return poem
-
-
 # ════════════════════════════════════════════════════════════
-# 场景 1: Imaginary 重叠 → merge 验证
-# Imaginary A: ACTOR:FINANCE:BROKE:imag_a + ACTOR:HEALTH:EXHAUSTED:imag_a
-# Imaginary B: ACTOR:FINANCE:BROKE:imag_b + VIBE:AESTHETIC:ELEGANT:imag_b
-# → finance:broke 有 2 个 Imaginary → 可合并
+# 场景 1: Imaginary 重叠 → merge 验证 (V5 不变)
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_1() -> void:
@@ -99,34 +86,33 @@ func _generate_scenario_1() -> void:
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 2: 精确 Set 匹配 — 概念集合完全命中食谱（V5）
-# 诗词食谱需要 {aesthetic:elegant, emotion:ambition, society:famine}
-# 用 3 个对应的 concept 做精确 Set 匹配
+# 场景 2: 精确 Set 匹配 → 命中「风雪夜归人」食谱（V5）
+# 食谱 required_fragments: {environment:moon, environment:snow, environment:wind}
+# cold_moon→environment:moon, lone_snow→environment:snow, falling_leaf→environment:wind
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_2() -> void:
-	Logging.info("[场景2] 生成精确 Set 匹配事件 (V5)")
+	Logging.info("[场景2] 生成精确 Set 匹配事件 (V5: 风雪夜归人)")
 
 	var event = _make_chained_event(
-		"test_s2_partial_threshold",
+		"test_s2_exact_match",
 		"denggao",
-		"[测试] 场景2: 获取精确匹配食谱的 Imaginary（aesthetic:elegant, emotion:ambition, society:famine）",
+		"[测试] 场景2: 获取「风雪夜归人」食谱的 Imaginary",
 		[
 			"cold_moon",
 			"lone_snow",
 			"falling_leaf",
 		]
 	)
-	_save_event(event, "test_s2_partial.tres")
+	_save_event(event, "test_s2_exact_match.tres")
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 3: 无法匹配 → 拒绝创作（V5: <2 概念命中任何食谱）
-# 所有意象与现有食谱 {aesthetic:elegant, emotion:ambition, society:famine} 无关
+# 场景 3: 无法匹配 → 消耗意象无产出（V5: <2 概念命中任何食谱）
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_3() -> void:
-	Logging.info("[场景3] 生成无匹配 → 拒绝创作事件 (V5)")
+	Logging.info("[场景3] 生成无匹配 → 消耗并失败事件 (V5)")
 
 	var event = _make_chained_event(
 		"test_s3_no_match",
@@ -145,35 +131,32 @@ func _generate_scenario_3() -> void:
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 4: 2/3 子集命中 → 打油诗（V5 新行为）
-# 冷月 + 孤雪 命中食谱 {cold_moon, lone_snow, *}，drunk 无关
-# V4 中此场景为失败，V5 中改为打油诗（+5 literary_fame）
+# 场景 4: 精确 Set 匹配 — 也命中「风雪夜归人」食谱（V5: 原 partial_fail 改为精确匹配）
+# 三个 concept {environment:moon, environment:snow, environment:wind} → 风雪夜归人
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_4() -> void:
-	Logging.info("[场景4] 生成 2/3 打油诗事件 (V5)")
+	Logging.info("[场景4] 生成精确匹配事件 (V5: 风雪夜归人 — 原 partial_fail 迁移)")
 
 	var event = _make_chained_event(
-		"test_s4_partial_fail",
+		"test_s4_exact_match",
 		"fangshi",
-		"[测试] 场景4: 获取 2/3 匹配 → 打油诗",
+		"[测试] 场景4: 获取「风雪夜归人」食谱的 Imaginary",
 		[
 			"cold_moon",
 			"lone_snow",
-			"drunk",
+			"falling_leaf",
 		]
 	)
-	_save_event(event, "test_s4_partial_fail.tres")
+	_save_event(event, "test_s4_exact_match.tres")
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 5: PoemTypeChooseOperator → 诗词选择与消耗（V5）
-# 先给玩家 poem_recipe_tian_cheng，再通过 PoemTypeChooseOperator 选择使用
-# V5: 诗词不再走 Trait 管道（pending poem_refactor_detrait）
+# 场景 5: PoemTypeChooseOperator — 诗词选择与消耗（V5 待 poem_refactor_detrait）
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_5() -> void:
-	Logging.info("[场景5] 生成 PoemTypeChooseOperator 删除测试事件")
+	Logging.info("[场景5] 生成 PoemTypeChooseOperator 选择测试事件 (V5)")
 
 	var event = RandomEvent.new()
 	event.uuid = "test_s5_poem_choose"
@@ -195,7 +178,6 @@ func _generate_scenario_5() -> void:
 	var choose_op = PoemTypeChooseOperator.new()
 	choose_op.key_to_get_poem_taste = "poem_taste"
 	choose_op.property_multiplication = 1.0
-	# 配置 PoemTaste：接受所有诗词类型
 	choose_op.poem_taste = PoemTaste.new()
 	choose_op.poem_taste.lowest_poem_level = 0
 	choose_op.poem_taste.accepted_poem_types = ["GAN_YE", "DENG_GAO", "SHAN_SHUI", "YING_ZHI", "HUAI_GU", "JI_LV"]
@@ -211,25 +193,19 @@ func _generate_scenario_5() -> void:
 
 # ════════════════════════════════════════════════════════════
 # 场景 6: Tier 1/2 管道乘数（V5: Tier 2/3 已合并）
-# 提供完整意象池，让玩家能创作不同 tier 的诗词
-# V5: Tier ≥ 2 统一为 Tier 2，Tier 3 概念被 clamp 到 2
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_6() -> void:
 	Logging.info("[场景6] 生成 Tier 1/2 管道乘数测试事件 (V5)")
-	# V5: Tier 2/3 合并，仅 Tier 1 和 Tier 2
-	# 提供完整的意象池，让玩家能创作不同 tier 的诗词
 
 	var event = _make_chained_event(
 		"test_s6_tier_pipeline",
 		"denggao",
 		"[测试] 场景6: 获取 Tier 1/2 的 Imaginary 素材（V5: Tier 2/3 已合并）",
 		[
-			# Tier 1 意象素材（世俗）
 			"ink_stone",
 			"empty_cup",
 			"willow_branch",
-			# Tier 2 意象素材（诗史, 原 Tier 2+3 合并）
 			"starving_bone",
 			"ruined_wall",
 			"ghost_fire",
@@ -239,3 +215,26 @@ func _generate_scenario_6() -> void:
 		]
 	)
 	_save_event(event, "test_s6_tiers.tres")
+
+
+# ════════════════════════════════════════════════════════════
+# 场景 7: 打油诗（V5 新增）
+# 给 2 个命中「风雪夜归人」的 concept + 1 个无关 concept
+# cold_moon→environment:moon（命中）, lone_snow→environment:snow（命中）
+# drunk→health:drunk（无关）→ 2/3 → 打油诗
+# ════════════════════════════════════════════════════════════
+
+func _generate_scenario_7() -> void:
+	Logging.info("[场景7] 生成打油诗事件 (V5)")
+
+	var event = _make_chained_event(
+		"test_s7_doggerel",
+		"fangshi",
+		"[测试] 场景7: 2/3 命中 → 打油诗",
+		[
+			"cold_moon",
+			"lone_snow",
+			"drunk",
+		]
+	)
+	_save_event(event, "test_s7_doggerel.tres")

@@ -126,8 +126,26 @@ static func can_merge_category(category_id: String) -> bool:
 	return can_merge(category_id)
 
 
-## 阅后即焚：诗词创作后删除投入的概念
+## 阅后即焚：诗词创作后消耗投入的概念
+## 删除玩家已收集的 Imaginary 碎片（imaginaries_detail），
+## 重置 ImaginaryConcept 的运行时状态（tier/level/merged），
+## 但保留静态定义（Database.imaginaries）不被删除。
 static func consume_concepts(concepts: Array):
 	for c in concepts:
-		if c and c is ImaginaryConcept:
-			Database.imaginaries.erase(c.uuid)
+		if not (c and c is ImaginaryConcept):
+			continue
+		var concept = c as ImaginaryConcept
+
+		# 1. 删除所有引用该概念的 Imaginary 碎片
+		var to_erase: Array[String] = []
+		for imag_key in Database.imaginaries_detail:
+			var imag = Database.imaginaries_detail[imag_key]
+			if imag is Imaginary and concept.uuid in imag.concepts:
+				to_erase.append(imag_key)
+		for key in to_erase:
+			Database.imaginaries_detail.erase(key)
+
+		# 2. 重置概念运行时状态（保留静态定义不被删除）
+		concept.current_tier = 0
+		concept.current_level = 0
+		concept.merged = []
