@@ -87,6 +87,9 @@ var event_bases: Dictionary = {}
 var event_bases_registry: Dictionary = {}
 var event_to_base_index: Dictionary = {}
 
+# 诗词食谱索引 — { "sorted_concept_key" → Poem recipe }
+var recipe_index: Dictionary = {}
+
 # ════════════════════════════════════════════════════════════════
 # 统一数据访问基础设施
 # ════════════════════════════════════════════════════════════════
@@ -235,6 +238,7 @@ func _init() -> void:
 	_merge_cities()
 	_build_life_path_points_from_poems()
 	_build_unified_index()
+	_build_recipe_index()
 
 	# ── 编译期预处理：对所有事件的文本字段注入 BBCode 默认参数 ──
 	_preprocess_all_entities()
@@ -747,6 +751,24 @@ func _build_unified_index() -> void:
 	var pool_size = _raw_data_pool.size()
 	var class_count = _index_by_class.size()
 	Logging.info("Database: 统一索引构建完成: 池内 %d 条目, %d 个类已索引" % [pool_size, class_count])
+
+
+func _build_recipe_index() -> void:
+	"""构建诗词食谱索引 — { sorted_concept_key → Poem recipe }"""
+	recipe_index.clear()
+	var all_poems = get_all_of_class("Poem")
+	for res in all_poems:
+		if not (res is Poem):
+			continue
+		if not res.uuid.begins_with("poem_recipe_"):
+			continue
+		if res.required_fragments.is_empty():
+			Logging.warn("Database: recipe '%s' has empty required_fragments, skipping" % res.uuid)
+			continue
+		var key = FragmentMatcher.build_key(res.required_fragments)
+		recipe_index[key] = res
+		Logging.info("Database: recipe_index[%s] = %s (%s)" % [key, res.name, res.uuid])
+	Logging.info("Database: recipe_index 构建完成，%d 个食谱" % recipe_index.size())
 
 
 func _preprocess_all_entities() -> void:

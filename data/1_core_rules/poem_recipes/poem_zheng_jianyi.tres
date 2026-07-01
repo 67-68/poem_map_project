@@ -10,4 +10,4 @@ description = "饥寒 + 明主：谏议底色，穷年忧黎"
 topic = "POEM"
 specific_topic = "GAN_YE"
 poem_level = 0
-required_fragments = Array[String](["ACTOR:HEALTH:EXHAUSTED:buyi", "VIBE:THEME:MARTIAL:qianli", "ACTOR:EMOTION:SORROW:cangsheng"])
+required_fragments = Array[String](["health:exhausted", "theme:martial", "emotion:sorrow"])

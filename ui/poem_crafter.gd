@@ -1,12 +1,9 @@
 extends PanelContainer
 
-## 诗词创作面板 — V4: 动态推导 + POEM_TYPE + 双层校验 + 拒写
-
+## 诗词创作面板 — V5: 精确 Set 匹配 + Tier 合并 + 打油诗
+##
 ## 当前选中用于创作诗词的 ImaginaryConcept（最多 3 个）
 var selected_imaginaries: Array[ImaginaryConcept] = []
-
-## 当前选中的诗词类型（-1 = 未选择）
-var selected_poem_type: int = -1
 
 # ──────────────────────────────────────────────
 # SubViewport 动态内容 — preload 缓存
@@ -25,16 +22,15 @@ var _camera: Camera2D = null
 ## WASD 相机移动速度（px/s）
 const CAMERA_SPEED := 300.0
 
-## 品级名称映射（来自 imagery_tier_synthesis_poem_engine.md 第 1.2 节）
+## 品级名称映射（Tier 2/3 合并后仅 Tier 1 和 Tier 2）
 const TIER_NAMES := {
 	1: "世俗",
-	2: "诗史",
-	3: "绝唱"
+	2: "诗史"
 }
 
 
 func _ready() -> void:
-	Logging.info('PoemCrafter: initializing poem crafter V4')
+	Logging.info('PoemCrafter: initializing poem crafter V5')
 
 	EventBus.imaginary_changed.connect(on_imaginary_changed)
 
@@ -49,14 +45,10 @@ func _ready() -> void:
 	var svp_container := $Panel/VBoxContainer/HBoxContainer/SubViewportContainer
 	svp_container.gui_input.connect(_on_subviewport_gui_input)
 
-	# 连接 POEM_TYPE toggle buttons
-	_connect_poem_type_buttons()
+	# V5: poem_type 按钮不再连接逻辑（全类型盲搜），保留纯展示
+	# _connect_poem_type_buttons() — 已移除
 
-	# "开始创作"按钮 — 手动连接（节点已重命名为 CraftBtn 以避免与 POEM TYPE toggle 重名冲突）
-	var craft_btn := $Panel/VBoxContainer/InputImagPanel/CraftBtn
-	if craft_btn:
-		craft_btn.pressed.connect(_on_button_pressed)
-		Logging.info('PoemCrafter: CraftBtn.pressed signal connected')
+	# "开始创作"按钮 — 由 tscn 的 _on_button_pressed() 命名约定自动连接
 	# "撕毁卷轴"按钮 — 位于 $Panel/Button，手动连接
 	var tear_btn := $Panel/Button
 	if tear_btn:
@@ -64,32 +56,6 @@ func _ready() -> void:
 
 	call_deferred("_rebuild_subviewport")
 	call_deferred("_init_camera")
-
-
-# ──────────────────────────────────────────────
-# POEM_TYPE Toggle Buttons
-# ──────────────────────────────────────────────
-
-func _connect_poem_type_buttons() -> void:
-	var type_vbox := $Panel/VBoxContainer/HBoxContainer/VBoxContainer
-	var type_buttons := type_vbox.get_children()
-	var labels := ["干谒", "应制", "登高", "怀古", "羇旅", "山水"]
-	for i in range(min(type_buttons.size(), labels.size())):
-		var btn = type_buttons[i]
-		if btn is Button:
-			btn.text = labels[i]
-			btn.toggled.connect(_on_poem_type_toggled.bind(i))
-
-	# 默认选中第一个
-	if type_buttons.size() > 0 and type_buttons[0] is Button:
-		type_buttons[0].button_pressed = true
-		selected_poem_type = 0
-
-
-func _on_poem_type_toggled(button_pressed: bool, type_idx: int) -> void:
-	if button_pressed:
-		selected_poem_type = type_idx
-		Logging.info('PoemCrafter: POEM_TYPE selected = %d (%s)' % [type_idx, ENUMS.POEM_TYPE.keys()[type_idx]])
 
 
 # ──────────────────────────────────────────────
@@ -207,7 +173,7 @@ func on_imaginary_changed() -> void:
 
 
 # ──────────────────────────────────────────────
-# SubViewport 排布算法 — V4 动态推导版
+# SubViewport 排布算法 — V5 动态推导版
 # ──────────────────────────────────────────────
 
 func _rebuild_subviewport() -> void:
@@ -260,9 +226,12 @@ func _rebuild_subviewport() -> void:
 		node.concept_merge_requested.connect(on_concept_merge_requested)
 		node.merge_animation_finished.connect(on_merge_animation_finished)
 
-		# 已合并态：直接设置 tier 颜色
-		if concept.current_tier > 0:
-			node.modulate = AbstractConcept.TIER_COLORS.get(concept.current_tier, Color.WHITE)
+		# V5: Tier >= 2 统一为 Tier 2 颜色
+		var display_tier = concept.current_tier
+		if display_tier >= 2:
+			display_tier = 2
+		if display_tier > 0:
+			node.modulate = AbstractConcept.TIER_COLORS.get(display_tier, Color.WHITE)
 
 		if N == 1:
 			node.position = center
@@ -322,14 +291,8 @@ func on_concept_selected(ima: ImaginaryConcept) -> void:
 	_rebuild_subviewport()
 
 	if selected_imaginaries.size() == 3:
-		Logging.info('PoemCrafter: 3 concepts selected, previewing grade')
-		var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, selected_poem_type)
-		if result.passed:
-			var text := _build_barrel_preview(result)
-			$Panel/VBoxContainer/InputImagPanel/CraftBtn.tooltip_text = text
-			$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
-		else:
-			$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
+		Logging.info('PoemCrafter: 3 concepts selected, previewing match')
+		_preview_match()
 
 
 func on_concept_merge_requested(ima: ImaginaryConcept) -> void:
@@ -385,14 +348,14 @@ func on_slot_clicked(slot: PoemSlot) -> void:
 	render_slots()
 
 	if selected_imaginaries.size() < 3:
-		$Panel/VBoxContainer/InputImagPanel/CraftBtn.tooltip_text = ""
+		$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = ""
 		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "代价是..."
 
 	_rebuild_subviewport()
 
 
 # ──────────────────────────────────────────────
-# 诗词创作
+# 诗词创作 V5
 # ──────────────────────────────────────────────
 
 func _on_button_pressed() -> void:
@@ -400,36 +363,49 @@ func _on_button_pressed() -> void:
 		Logging.warn('PoemCrafter: need exactly 3 concepts, have %d' % selected_imaginaries.size())
 		return
 
-	Logging.info('PoemCrafter: crafting poem with poem_type=%d' % selected_poem_type)
+	# V5: 上限检查 — 移至按钮点击时
+	if _has_unused_poem():
+		Logging.warn('PoemCrafter: 已有未使用的诗词，拒绝创作')
+		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "已有诗作，先将其送出或题壁后再来。"
+		return
 
-	var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, selected_poem_type)
-	Logging.info('PoemCrafter: grade calculated, passed=%s, secular=%f, literary=%f' %
-		[result.passed, result.secular_value, result.literary_value])
+	Logging.info('PoemCrafter: crafting poem V5 — full blind search')
 
+	var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, Database.recipe_index)
+	Logging.info('PoemCrafter: grade calculated, passed=%s, is_doggerel=%s, secular=%f, literary=%f' %
+		[result.passed, result.is_doggerel, result.secular_value, result.literary_value])
+
+	# ── 打油诗 ──
+	if result.is_doggerel:
+		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
+		Logging.info('PoemCrafter: 打油诗 — literary_fame +%.0f' % result.literary_value)
+		_apply_operators(result.operators)
+		ImaginaryComprehender.consume_concepts(selected_imaginaries)
+		selected_imaginaries.clear()
+		render_slots()
+		_rebuild_subviewport()
+		return
+
+	# ── 失败 ──
 	if not result.passed:
 		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
 		Logging.info('PoemCrafter: poem creation failed, reason=%s' % result.fail_reason)
-		if result.fail_reason == "fragment":
-			# 惩罚但不消耗意象
-			return
 		return
 
-	# 执行 operators（PoemCraftingResult 是纯数据类，不含 operate()）
-	for op in result.operators:
-		if op and op.has_method("operate"):
-			op.operate()
+	# ── 精确匹配成功 ──
+	_apply_operators(result.operators)
 
 	# 创建 Poem trait 并注册
-	var poem = Poem.new("POEM", ENUMS.POEM_TYPE.keys()[selected_poem_type], result.poem_level, result.secular_value, result.literary_value)
-	poem.uuid = "crafted_poem_%s_%d" % [ENUMS.POEM_TYPE.keys()[selected_poem_type], Time.get_unix_time_from_system()]
-	poem.name = "《%s》" % ENUMS.POEM_TYPE.keys()[selected_poem_type]
-	poem.specific_topic = ENUMS.POEM_TYPE.keys()[selected_poem_type]
+	var recipe = result.matched_recipe
+	var poem_type_str = recipe.specific_topic if recipe else "GAN_YE"
+	var poem = Poem.new("POEM", poem_type_str, result.poem_level, result.secular_value, result.literary_value)
+	poem.uuid = "crafted_poem_%s_%d" % [poem_type_str, Time.get_unix_time_from_system()]
+	poem.name = recipe.name if recipe else "《%s》" % poem_type_str
+	poem.specific_topic = poem_type_str
 
-	# 注册到 Database（内存态）以便 PlayerState.add_trait 能通过 Database.get_trait 找到
-	Database.traits[poem.uuid] = poem
-	PlayerState.add_trait(poem.uuid)
+	# V5: 使用 created_poems 而非 trait 管道
 	PlayerState.created_poems.append(poem)
-	Logging.info('PoemCrafter: Poem trait created and added: %s, created_poems count: %d' % [poem.uuid, PlayerState.created_poems.size()])
+	Logging.info('PoemCrafter: Poem created and added to created_poems: %s (%s)' % [poem.uuid, poem.name])
 
 	# 消耗 concepts
 	ImaginaryComprehender.consume_concepts(selected_imaginaries)
@@ -458,6 +434,156 @@ func _on_button_pressed() -> void:
 	render_slots()
 	_rebuild_subviewport()
 
+
+## 检查是否已有未使用的诗词（上限检查）
+func _has_unused_poem() -> bool:
+	for entry in PlayerState.created_poems:
+		if entry is Poem and entry.topic == "POEM":
+			return true
+	return false
+
+
+## 应用算子列表
+func _apply_operators(ops: Array) -> void:
+	for op in ops:
+		if op and op.has_method("execute"):
+			op.execute()
+		elif op and op.has_method("operate"):
+			op.operate()
+
+
+# ──────────────────────────────────────────────
+# V5 匹配预览
+# ──────────────────────────────────────────────
+
+func _preview_match() -> void:
+	var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, Database.recipe_index)
+
+	if result.is_doggerel:
+		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "[color=#f9ca24]🪶 打油诗[/color]\n意象未全，literary_fame +5"
+		return
+
+	if not result.passed:
+		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
+		return
+
+	# 精确匹配 → 显示品级预览
+	var text := _build_barrel_preview(result)
+	$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = text
+	$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
+
+
+## 找出所有 tier == min_tier 的概念（木桶的短板）
+func _find_weakest_concepts(min_tier: int) -> Array[ImaginaryConcept]:
+	var weakest: Array[ImaginaryConcept] = []
+	for c in selected_imaginaries:
+		var display_tier = c.current_tier
+		if display_tier >= 2:
+			display_tier = 2
+		if display_tier == min_tier:
+			weakest.append(c)
+	return weakest
+
+
+## 生成木桶效应 + 收益组合的人类可读预览文本
+func _build_barrel_preview(result: PoemCraftingCalculator.PoemCraftingResult) -> String:
+	var lines: Array[String] = []
+
+	var tier_name = TIER_NAMES.get(result.min_tier, "未知")
+	var recipe_name = result.matched_recipe.name if result.matched_recipe else "未知"
+	lines.append("[color=gold]品级 T%d · %s[/color]" % [result.min_tier, tier_name])
+	lines.append("[color=#ccc]食谱: %s[/color]" % recipe_name)
+
+	var weakest = _find_weakest_concepts(result.min_tier)
+	var higher: Array[ImaginaryConcept] = []
+	for c in selected_imaginaries:
+		var display_tier = c.current_tier
+		if display_tier >= 2:
+			display_tier = 2
+		if display_tier > result.min_tier:
+			higher.append(c)
+
+	if not higher.is_empty():
+		var weak_names = "、".join(weakest.map(func(c): return "「%s」" % c.name))
+		var high_names = "、".join(higher.map(func(c): return "「%s」" % c.name))
+		lines.append("%s 的格调被 %s 拖累，%s 蒙尘降格" % [high_names, weak_names, high_names])
+
+	# 世俗/文学价值 stage perception
+	var secular_text := _get_value_perception("secular", result.secular_value)
+	var literary_text := _get_value_perception("literary", result.literary_value)
+
+	if not secular_text.is_empty():
+		lines.append("[color=#daa520]世俗影响：%s[/color]" % secular_text)
+	if not literary_text.is_empty():
+		lines.append("[color=#87ceeb]文学价值：%s[/color]" % literary_text)
+
+	var op_text := PoemCraftingCalculator.translate(result.operators)
+	if not op_text.is_empty():
+		lines.append("")
+		lines.append(op_text)
+
+	return "\n".join(lines)
+
+
+## 获取属性变更量的 stage perception 文本（复用 property 的 change_perceptions 配置）
+## 诗词价值感知 JSON 缓存
+static var _poem_perceptions_cache: Dictionary = {}
+
+## 加载诗词价值感知 JSON 配置（data/1_core_rules/poem_value_perceptions.json）
+static func _load_poem_perceptions() -> Dictionary:
+	if not _poem_perceptions_cache.is_empty():
+		return _poem_perceptions_cache
+	var path := "res://data/1_core_rules/poem_value_perceptions.json"
+	if not FileAccess.file_exists(path):
+		Logging.warn("PoemCrafter: poem_value_perceptions.json 不存在: %s" % path)
+		return {}
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		Logging.err("PoemCrafter: 无法打开 poem_value_perceptions.json")
+		return {}
+	var raw := file.get_as_text()
+	file.close()
+	var json := JSON.new()
+	var err := json.parse(raw)
+	if err != OK:
+		Logging.err("PoemCrafter: poem_value_perceptions.json 解析失败")
+		return {}
+	_poem_perceptions_cache = json.get_data()
+	return _poem_perceptions_cache
+
+
+## 根据诗词价值获取 stage perception 文本
+## category: "secular" → 世俗影响, "literary" → 文学价值
+func _get_value_perception(category: String, value: float) -> String:
+	if value == 0:
+		return ""
+	var data := _load_poem_perceptions()
+	var key := category + "_perceptions"
+	var perceptions: Array = data.get(key, [])
+	if perceptions.is_empty():
+		return ""
+	var abs_val: float = abs(value)
+	var is_gain := value > 0
+	for p in perceptions:
+		var threshold: int = p.get("threshold", 0)
+		if abs_val >= threshold:
+			return p.get("gain_text" if is_gain else "loss_text", "")
+	return ""
+
+
+# ──────────────────────────────────────────────
+# 拒写机制
+# ──────────────────────────────────────────────
+
+func _on_tear_scroll_pressed() -> void:
+	Logging.info('PoemCrafter: 撕毁卷轴 — 拒写')
+
+	var amounts = NamedDSLParser._load_named_amounts()
+	var loss = amounts.get("s_literary_fame_loss", -10)
+	PlayerState.append_stat("literary_fame", loss)
+	Logging.info('PoemCrafter: 扣除 literary_fame %d' % loss)
+
+	EventBus.poem_cancel.emit()
 
 
 # ──────────────────────────────────────────────
@@ -501,118 +627,9 @@ func _process(delta: float) -> void:
 	var move := dir.normalized() * CAMERA_SPEED * delta
 	_camera.position += move
 	
-	# 边界限制：允许偏离中心 ±vsize
 	var center := vsize / 2.0
 	_camera.position.x = clampf(_camera.position.x, center.x - vsize.x, center.x + vsize.x)
 	_camera.position.y = clampf(_camera.position.y, center.y - vsize.y, center.y + vsize.y)
-
-
-# ──────────────────────────────────────────────
-# 木桶效应预览
-# ──────────────────────────────────────────────
-
-## 找出所有 tier == min_tier 的概念（木桶的短板）
-func _find_weakest_concepts(min_tier: int) -> Array[ImaginaryConcept]:
-	var weakest: Array[ImaginaryConcept] = []
-	for c in selected_imaginaries:
-		if c.current_tier == min_tier:
-			weakest.append(c)
-	return weakest
-
-
-## 生成木桶效应 + 收益组合的人类可读预览文本
-func _build_barrel_preview(result: PoemCraftingCalculator.PoemCraftingResult) -> String:
-	var lines: Array[String] = []
-	
-	var tier_name = TIER_NAMES.get(result.min_tier, "未知")
-	lines.append("[color=gold]品级 T%d · %s[/color]" % [result.min_tier, tier_name])
-	
-	var weakest = _find_weakest_concepts(result.min_tier)
-	var higher: Array[ImaginaryConcept] = []
-	for c in selected_imaginaries:
-		if c.current_tier > result.min_tier:
-			higher.append(c)
-	
-	if not higher.is_empty():
-		var weak_names = "、".join(weakest.map(func(c): return "「%s」" % c.name))
-		var high_names = "、".join(higher.map(func(c): return "「%s」" % c.name))
-		lines.append("%s 的格调被 %s 拖累，%s 蒙尘降格" % [high_names, weak_names, high_names])
-	
-	# 世俗/文学价值 stage perception（复用 property 的 change_perceptions 配置）
-	var secular_text := _get_value_perception("secular", result.secular_value)
-	var literary_text := _get_value_perception("literary", result.literary_value)
-	
-	if not secular_text.is_empty():
-		lines.append("[color=#daa520]世俗影响：%s[/color]" % secular_text)
-	if not literary_text.is_empty():
-		lines.append("[color=#87ceeb]文学价值：%s[/color]" % literary_text)
-	
-	var op_text := PoemCraftingCalculator.translate(result.operators)
-	if not op_text.is_empty():
-		lines.append("")
-		lines.append(op_text)
-	
-	return "\n".join(lines)
-
-
-## 获取属性变更量的 stage perception 文本（复用 property 的 change_perceptions 配置）
-## 诗词价值感知 JSON 缓存
-static var _poem_perceptions_cache: Dictionary = {}
-
-## 加载诗词价值感知 JSON 配置（data/1_core_rules/poem_value_perceptions.json）
-static func _load_poem_perceptions() -> Dictionary:
-	if not _poem_perceptions_cache.is_empty():
-		return _poem_perceptions_cache
-	var path := "res://data/1_core_rules/poem_value_perceptions.json"
-	if not FileAccess.file_exists(path):
-		Logging.warn("PoemCrafter: poem_value_perceptions.json 不存在: %s" % path)
-		return {}
-	var file := FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		Logging.err("PoemCrafter: 无法打开 poem_value_perceptions.json")
-		return {}
-	var raw := file.get_as_text()
-	file.close()
-	var json := JSON.new()
-	var err := json.parse(raw)
-	if err != OK:
-		Logging.err("PoemCrafter: poem_value_perceptions.json 解析失败")
-		return {}
-	_poem_perceptions_cache = json.get_data()
-	return _poem_perceptions_cache
-
-
-## 根据诗词价值获取 stage perception 文本
-## category: "secular" → 世俗影响, "literary" → 文学价值
-func _get_value_perception(category: String, value: float) -> String:
-	if value == 0:
-		return ""
-	var data := _load_poem_perceptions()
-	var key := category + "_perceptions"
-	var perceptions: Array = data.get(key, [])
-	if perceptions.is_empty():
-		return ""
-	var abs_val: float = abs(value)
-	var is_gain := value > 0
-	# 从高到低遍历，首个 abs_val >= threshold 的条目生效
-	for p in perceptions:
-		var threshold: int = p.get("threshold", 0)
-		if abs_val >= threshold:
-			return p.get("gain_text" if is_gain else "loss_text", "")
-	return ""
-# ──────────────────────────────────────────────
-# 拒写机制
-# ──────────────────────────────────────────────
-
-func _on_tear_scroll_pressed() -> void:
-	Logging.info('PoemCrafter: 撕毁卷轴 — 拒写')
-
-	var amounts = NamedDSLParser._load_named_amounts()
-	var loss = amounts.get("s_literary_fame_loss", -10)
-	PlayerState.append_stat("literary_fame", loss)
-	Logging.info('PoemCrafter: 扣除 literary_fame %d' % loss)
-
-	EventBus.poem_cancel.emit()
 
 
 # ──────────────────────────────────────────────

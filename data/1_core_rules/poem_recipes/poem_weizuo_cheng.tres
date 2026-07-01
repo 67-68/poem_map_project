@@ -10,4 +10,4 @@ description = "求职诗的巅峰：骑驴十三载(羁旅) + 骅骝作骨(骐�
 topic = "POEM"
 specific_topic = "GAN_YE"
 poem_level = 2
-required_fragments = Array[String](["ACTOR:FINANCE:BROKE:buyi", "TARGET:MYTH:ANIMAL:qianli", "VIBE:THEME:HISTORY:cangsheng"])
+required_fragments = Array[String](["finance:broke", "myth:animal", "theme:history"])

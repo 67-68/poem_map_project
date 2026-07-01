@@ -12,10 +12,11 @@ signal tier_changed(new_tier: int)
 		if current_level != value:
 			current_level = value
 			level_changed.emit(value)
-@export var current_tier := 0: # 1-3 (Tier 1/2/3), 0 = 未坍缩/未分配
-	set(value):
-		if current_tier != value:
-			current_tier = value
+@export var current_tier := 0: # 1-2 (Tier 1/2), 0 = 未坍缩/未分配 (V5: Tier 2/3 合并)
+		set(value):
+			var clamped = clampi(value, 0, 2)
+			if current_tier != clamped:
+				current_tier = clamped
 			tier_changed.emit(value)
 
 @export var l3_threshold := 4 # 需要四个意象来达到 l3

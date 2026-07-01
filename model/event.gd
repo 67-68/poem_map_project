@@ -83,112 +83,112 @@ class_name BaseEvent extends GameEntity
 # 但必须调用 super.on_enter(context) 以确保事件级结果被执行。
 # ──────────────────────────────────────────────
 func on_enter(context: Dictionary) -> void:
-    if on_enter_result:
-        on_enter_result.init(context)
-        on_enter_result.operate()
-        Logging.info("BaseEvent.on_enter: on_enter_result executed for event '%s'" % name)
+	if on_enter_result:
+		on_enter_result.init(context)
+		on_enter_result.operate()
+		Logging.info("BaseEvent.on_enter: on_enter_result executed for event '%s'" % name)
 
 
 func check_interruption(context: Dictionary) -> void:
-    """
-    按优先级执行前置中断序列（first-match-wins）。
-    
-    遍历 steps：
-    - requirement 通过 ✅ → 执行 operator（push/pop 替代事件），然后 break
-    - requirement 失败 ❌ → 跳过，尝试下一步
-    
-    首个通过的 step 胜出并结束检查。全部失败则无操作。
-    该方法不阻断事件本身触发。
-    """
-    if not pre_event_interrupter_sequence:
-        Logging.debug('do not found pre_event_interrupter_sequence')
-        return
-    Logging.debug('check_interruption: %d steps in sequence' % pre_event_interrupter_sequence.size())
+	"""
+	按优先级执行前置中断序列（first-match-wins）。
+	
+	遍历 steps：
+	- requirement 通过 ✅ → 执行 operator（push/pop 替代事件），然后 break
+	- requirement 失败 ❌ → 跳过，尝试下一步
+	
+	首个通过的 step 胜出并结束检查。全部失败则无操作。
+	该方法不阻断事件本身触发。
+	"""
+	if not pre_event_interrupter_sequence:
+		Logging.debug('do not found pre_event_interrupter_sequence')
+		return
+	Logging.debug('check_interruption: %d steps in sequence' % pre_event_interrupter_sequence.size())
 
-    for i in range(pre_event_interrupter_sequence.size()):
-        var step: ConditionalOperator = pre_event_interrupter_sequence[i]
-        if not step:
-            Logging.warn('check_interruption: found null step at index %d, skipping' % i)
-            continue
+	for i in range(pre_event_interrupter_sequence.size()):
+		var step: ConditionalOperator = pre_event_interrupter_sequence[i]
+		if not step:
+			Logging.warn('check_interruption: found null step at index %d, skipping' % i)
+			continue
 
-        # 1. init 阶段：让 condition 和 success operators 从 context 解析参数
-        if step.condition:
-            step.condition.init(context)
-        for op in step.condition_success_result:
-            if op:
-                op.init(context)
+		# 1. init 阶段：让 condition 和 success operators 从 context 解析参数
+		if step.condition:
+			step.condition.init(context)
+		for op in step.condition_success_result:
+			if op:
+				op.init(context)
 
-        # 2. 检查 condition —— 守卫逻辑
-        var passed: bool = true
-        if step.condition:
-            passed = step.condition.compare(PlayerState)
+		# 2. 检查 condition —— 守卫逻辑
+		var passed: bool = true
+		if step.condition:
+			passed = step.condition.compare(PlayerState)
 
-        if not passed:
-            Logging.debug('check_interruption: step %d condition failed, trying next step' % i)
-            continue
+		if not passed:
+			Logging.debug('check_interruption: step %d condition failed, trying next step' % i)
+			continue
 
-        # 3. condition 通过 → 执行 success operators（push/pop event），然后结束
-        Logging.debug('check_interruption: step %d passed, executing %d operators and breaking' % [i, step.condition_success_result.size()])
-        for op in step.condition_success_result:
-            if op:
-                op.operate()
-            else:
-                Logging.warn('check_interruption: step %d contains null operator in success_result' % i)
+		# 3. condition 通过 → 执行 success operators（push/pop event），然后结束
+		Logging.debug('check_interruption: step %d passed, executing %d operators and breaking' % [i, step.condition_success_result.size()])
+		for op in step.condition_success_result:
+			if op:
+				op.operate()
+			else:
+				Logging.warn('check_interruption: step %d contains null operator in success_result' % i)
 
-        Logging.debug('check_interruption: resolved at step %d, sequence done' % i)
-        return  # first-match-wins
+		Logging.debug('check_interruption: resolved at step %d, sequence done' % i)
+		return  # first-match-wins
 
-    Logging.debug('check_interruption: no step passed, no interruption triggered')
+	Logging.debug('check_interruption: no step passed, no interruption triggered')
 
 
 func init(context: Dictionary) -> Array:
-    # Phase 0: on_enter — 舞台置景，构建绝对上下文
-    on_enter(context)
-    
-    # Phase 0.25: lasting_time — 自动推进超时（context 显式传入才覆盖 ui_decl 中的 @export 值）
-    if context.has("lasting_time"):
-        if not ui_decl:
-            ui_decl = UIDecl.new()
-        ui_decl.lasting_time = context.get("lasting_time", 0.0)
-    var _lt = ui_decl.lasting_time if ui_decl else 0.0
-    Logging.debug("BaseEvent.init: lasting_time=%s for event '%s'" % [_lt, name])
-    
-    # Phase 0.5: 疾病选项劫持 — 扫描玩家是否拥有带 hijack_provider 的 Disease trait
-    var hijack_prov: BaseProvider = null
-    for t_key in PlayerState.get_traits():
-        var t = Database.get_trait(t_key)
-        if t is Disease and t.hijack_provider:
-            hijack_prov = t.hijack_provider
-            Logging.info('[BaseEvent] Disease hijack active: ' + t_key + ' hijacking event: ' + name)
-            break
-    
-    var all_options: Array[BaseOption] = options.duplicate()
-    
-    if hijack_prov:
-        # ── 劫持路径：疾病 provider 接管 ──
-        # 1. hijack_provider.init 修改 context + 给原生选项增加额外消耗
-        context = hijack_prov.init(context)
-        # 2. hijack_provider.provide 产出狂症选项
-        var crazy_options: Array = hijack_prov.provide(context)
-        if crazy_options.size() > 0:
-            all_options.insert(0, crazy_options[0])  # 插到最前面
-        # 3. 跳过原始 provider（被劫持）
-    else:
-        # ── 正常路径：原始 provider ──
-        # Phase 1: provider.init 修改 context
-        if provider:
-            context = provider.init(context)
-        
-        # Phase 2: provider.provide 产出额外选项
-        if provider:
-            var extra_options: Array = provider.provide(context)
-            if extra_options.size() > 0:
-                all_options.append_array(extra_options)
-    
-    # Phase 3: 所有选项统一初始化
-    for o in all_options:
-        if o:
-            o.init(context)
-    
-    # 返回合并后的全量选项数组
-    return all_options
+	# Phase 0: on_enter — 舞台置景，构建绝对上下文
+	on_enter(context)
+	
+	# Phase 0.25: lasting_time — 自动推进超时（context 显式传入才覆盖 ui_decl 中的 @export 值）
+	if context.has("lasting_time"):
+		if not ui_decl:
+			ui_decl = UIDecl.new()
+		ui_decl.lasting_time = context.get("lasting_time", 0.0)
+	var _lt = ui_decl.lasting_time if ui_decl else 0.0
+	Logging.debug("BaseEvent.init: lasting_time=%s for event '%s'" % [_lt, name])
+	
+	# Phase 0.5: 疾病选项劫持 — 扫描玩家是否拥有带 hijack_provider 的 Disease trait
+	var hijack_prov: BaseProvider = null
+	for t_key in PlayerState.get_traits():
+		var t = Database.get_trait(t_key)
+		if t is Disease and t.hijack_provider:
+			hijack_prov = t.hijack_provider
+			Logging.info('[BaseEvent] Disease hijack active: ' + t_key + ' hijacking event: ' + name)
+			break
+	
+	var all_options: Array[BaseOption] = options.duplicate()
+	
+	if hijack_prov:
+		# ── 劫持路径：疾病 provider 接管 ──
+		# 1. hijack_provider.init 修改 context + 给原生选项增加额外消耗
+		context = hijack_prov.init(context)
+		# 2. hijack_provider.provide 产出狂症选项
+		var crazy_options: Array = hijack_prov.provide(context)
+		if crazy_options.size() > 0:
+			all_options.insert(0, crazy_options[0])  # 插到最前面
+		# 3. 跳过原始 provider（被劫持）
+	else:
+		# ── 正常路径：原始 provider ──
+		# Phase 1: provider.init 修改 context
+		if provider:
+			context = provider.init(context)
+		
+		# Phase 2: provider.provide 产出额外选项
+		if provider:
+			var extra_options: Array = provider.provide(context)
+			if extra_options.size() > 0:
+				all_options.append_array(extra_options)
+	
+	# Phase 3: 所有选项统一初始化
+	for o in all_options:
+		if o:
+			o.init(context)
+	
+	# 返回合并后的全量选项数组
+	return all_options
