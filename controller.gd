@@ -1,18 +1,17 @@
 extends Control
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	visible = false
 
 func _input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
-		# Cmd+D (Mac) or Ctrl+D (Windows/Linux)
 		if event.keycode == KEY_F2 and (event.meta_pressed or event.ctrl_pressed):
 			visible = not visible
+			if visible:
+				$Controller.grab_focus()
 
 func _on_text_submitted(new_text: String) -> void:
-	#breakpoint
 	if new_text.split('\n').size() > 1:
 		var texts = new_text.split('\n')
 		for t in texts:
@@ -23,7 +22,7 @@ func _on_text_submitted(new_text: String) -> void:
 func parse(new_text):
 	var parts = new_text.split(' ')
 	Logging.info('try to execute %s' % new_text)
-	if not parts[1]: return
+	if parts.size() < 2 or not parts[1]: return
 	match parts[1]:
 		'send_signal':
 			var sig = EventBus.has_signal(parts[2])

@@ -1,7 +1,7 @@
 class_name ChoiceResult extends Resource
 
 # target uuid 使用event operator
-@export var operators: Array[BaseOperator] = []
+@export var operators: Array[BaseOperator]	 = []
 
 func operate():
 	"""
