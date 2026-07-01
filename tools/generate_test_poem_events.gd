@@ -181,13 +181,9 @@ func _generate_scenario_5() -> void:
 	event.archetype_id = "jiaoyou"
 	event.weight = 100.0
 
-	# 选项 1: 先给玩家一首测试诗词 trait（动态创建 Poem 替代已删除的 poem_gan_ye_1.tres）
+	# 选项 1: 先给玩家一首真实配方诗词（poem_recipe_tian_cheng）
 	var give_poem_result = ChoiceResult.new()
-	var test_poem = Poem.new("POEM", "GAN_YE", 1, 100.0, 50.0)
-	test_poem.uuid = "test_poem_gan_ye_1"
-	test_poem.name = "测试干谒诗"
-	Database.traits[test_poem.uuid] = test_poem
-	var give_poem_op = OperatorFactory.create_trait_operator(test_poem.uuid)
+	var give_poem_op = OperatorFactory.create_trait_operator("poem_recipe_tian_cheng")
 	give_poem_result.operators = [give_poem_op] as Array[BaseOperator]
 
 	var give_poem_opt = EventOption.new()

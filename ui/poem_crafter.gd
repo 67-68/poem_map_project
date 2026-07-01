@@ -326,7 +326,7 @@ func on_concept_selected(ima: ImaginaryConcept) -> void:
 		var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, selected_poem_type)
 		if result.passed:
 			var text := _build_barrel_preview(result)
-			$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = text
+			$Panel/VBoxContainer/InputImagPanel/CraftBtn.tooltip_text = text
 			$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
 		else:
 			$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
@@ -385,7 +385,7 @@ func on_slot_clicked(slot: PoemSlot) -> void:
 	render_slots()
 
 	if selected_imaginaries.size() < 3:
-		$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = ""
+		$Panel/VBoxContainer/InputImagPanel/CraftBtn.tooltip_text = ""
 		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "代价是..."
 
 	_rebuild_subviewport()
