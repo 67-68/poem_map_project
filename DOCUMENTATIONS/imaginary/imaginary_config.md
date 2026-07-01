@@ -1,3 +1,6 @@
+> ⚠️ **本文件已废弃 (2026-07-01)** — 意象系统已全面简化。权威文档请参见 [`plans/imagery_simplification_refactor.md`](../../plans/imagery_simplification_refactor.md)
+> 五维宪法 Tag 系统、四段式字符串解析、`detail_imaginaries`、`perceptions` 字段均已删除。
+
 This is used for each event, after they done judge whether if should give a imagenary
 
 // 局部掉落池配置切片 (纯数据，零硬编码逻辑)

@@ -39,7 +39,7 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
 		# 3. 🚀 革新匹配：前缀匹配（短 tag 做前缀，匹配长 tag）
 		for tag in current_tags:
 			for target_tag in e.target_tags:
-				if TagManager.prefix_match(tag, target_tag):
+				if tag == target_tag:
 					if new_events.has(ticket.event_uuid):
 						# 多个 tag 命中，继续追加原始权重
 						new_events[ticket.event_uuid].weight += ticket.original_weight * 3

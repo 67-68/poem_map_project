@@ -492,14 +492,6 @@ class EventPipelineConfig(BaseModel):
     )
 
 
-class ImageryItem(BaseModel):
-    """意象实体：28个意象的情绪亲缘度映射。"""
-    id: str = ""                    # "ENV_NATURE_NIGHTMOON:cold_moon"
-    name: str = ""                  # "寒月"
-    description: str = ""           # 意象的文学内涵介绍，供 AI Prompt 使用
-    affinities: dict[str, int] = {} # {"TRANQUILITY": 90, "SORROW": 80, ...}
-
-
 # ════════════════════════════════════════════════════════════════
 # 内置示例配置（拜谒 - 蜜月期）
 # ════════════════════════════════════════════════════════════════

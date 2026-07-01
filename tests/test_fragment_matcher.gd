@@ -1,5 +1,8 @@
+# TODO: 需要根据新的意象系统重写测试 (Imagery Simplification Refactor 2026-07-01)
+# FragmentMatcher.expand() 和 match() 已删除（Phase 3: Tag 匹配删除）
+# TagManager.prefix_match() 已删除
 # ════════════════════════════════════════════════════════════
-# FragmentMatcher 单元测试
+# FragmentMatcher 单元测试 [已过时]
 # 覆盖：expand() / match() / collect_player_tags()
 # ════════════════════════════════════════════════════════════
 extends GutTest
@@ -22,7 +25,7 @@ func _expand_all(tags: Array) -> Array[String]:
 func _make_imaginary(uuid: String, tags: Array[String]) -> Imaginary:
 	var imag = Imaginary.new()
 	imag.uuid = uuid
-	imag.detail_imaginaries = tags
+	imag.concepts = tags
 	return imag
 
 

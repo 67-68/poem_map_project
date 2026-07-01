@@ -91,10 +91,8 @@ func _generate_scenario_1() -> void:
 		"jiaoyou",
 		"[测试] 场景1: 获取两个重叠 Imaginary",
 		[
-			"ACTOR:FINANCE:BROKE:imag_a",
-			"ACTOR:HEALTH:EXHAUSTED:imag_a",
-			"ACTOR:FINANCE:BROKE:imag_b",
-			"VIBE:AESTHETIC:ELEGANT:imag_b",
+			"buyi",
+			"qianli",
 		]
 	)
 	_save_event(event, "test_s1_overlap.tres")
@@ -112,15 +110,11 @@ func _generate_scenario_2() -> void:
 	var event = _make_chained_event(
 		"test_s2_partial_threshold",
 		"denggao",
-		"[测试] 场景2: 获取 3 个 partial match Imaginary",
+		"[测试] 场景2: 获取 environment 相关概念的 Imaginary",
 		[
-			"ENV:NATURE:AUTUMN:beijingleaf",   # partial match 10
-			"ENV:NATURE:AUTUMN:luoyangleaf",   # partial match 10
-			"ENV:NATURE:AUTUMN:nanjingleaf",   # partial match 10
-			# 赠送一些填充概念，确保 3 个都有关联
-			"ACTOR:FINANCE:BROKE:img_s2a",
-			"ACTOR:HEALTH:EXHAUSTED:img_s2b",
-			"ENV:SOCIETY:FAMINE:img_s2c",
+			"cold_moon",
+			"lone_snow",
+			"falling_leaf",
 		]
 	)
 	_save_event(event, "test_s2_partial.tres")
@@ -138,14 +132,14 @@ func _generate_scenario_3() -> void:
 	var event = _make_chained_event(
 		"test_s3_no_match",
 		"baiye",
-		"[测试] 场景3: 获取不相干的 Imaginary",
+		"[测试] 场景3: 获取各种不相干的 Imaginary",
 		[
-			"ACTOR:HEALTH:DRUNK:img_s3a",
-			"VIBE:AESTHETIC:SENSUAL:img_s3b",
-			"ACTOR:EMOTION:AMBITION:img_s3c",
-			"TARGET:MYTH:ANIMAL:img_s3d",
-			"VIBE:THEME:MARTIAL:img_s3e",
-			"ENV:SOCIETY:WAR:img_s3f",
+			"drunk",
+			"ink_stone",
+			"qianli",
+			"empty_cup",
+			"cold_blade",
+			"starving_bone",
 		]
 	)
 	_save_event(event, "test_s3_no_match.tres")
@@ -163,14 +157,11 @@ func _generate_scenario_4() -> void:
 	var event = _make_chained_event(
 		"test_s4_partial_fail",
 		"fangshi",
-		"[测试] 场景4: 获取 2 partial + 1 无关 Imaginary",
+		"[测试] 场景4: 获取部分匹配 + 无关 Imaginary",
 		[
-			"ENV:NATURE:AUTUMN:beijingleaf",   # partial 10
-			"ENV:NATURE:AUTUMN:luoyangleaf",   # partial 10
-			"ACTOR:HEALTH:DRUNK:img_s4a",      # 无匹配
-			"ACTOR:FINANCE:BROKE:img_s4b",
-			"ACTOR:HEALTH:EXHAUSTED:img_s4c",
-			"ACTOR:EMOTION:SORROW:img_s4d",
+			"cold_moon",
+			"lone_snow",
+			"drunk",
 		]
 	)
 	_save_event(event, "test_s4_partial_fail.tres")
@@ -235,17 +226,17 @@ func _generate_scenario_6() -> void:
 		"[测试] 场景6: 获取不同 Tier 的 Imaginary 素材",
 		[
 			# Tier 1 意象素材 (世俗: 红袖/空盏/折柳)
-			"VIBE:AESTHETIC:SENSUAL:test_t1_a",
-			"ACTION_ENTERTAIN_DRINK:test_t1_b",
-			"ACTION_SOCIAL_PARTING:test_t1_c",
+			"ink_stone",
+			"empty_cup",
+			"willow_branch",
 			# Tier 2 意象素材 (沉重: 烽火/饿殍/残垣)
-			"ENV_SOCIETY_WAR:test_t2_a",
-			"ENV_SOCIETY_FAMINE:test_t2_b",
-			"VIBE_THEME_HISTORY:test_t2_c",
+			"starving_bone",
+			"ruined_wall",
+			"ghost_fire",
 			# Tier 3 意象素材 (高洁: 寒月/孤雪/晨钟)
-			"ENV_NATURE_NIGHTMOON:test_t3_a",
-			"ENV_NATURE_SNOWSTORM:test_t3_b",
-			"VIBE_PHILOSOPHY_ZEN:test_t3_c",
+			"cold_moon",
+			"lone_snow",
+			"temple_bell",
 		]
 	)
 	_save_event(event, "test_s6_tiers.tres")

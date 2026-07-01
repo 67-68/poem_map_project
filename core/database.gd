@@ -304,7 +304,7 @@ func wash_positions(items: Dictionary, mesh_size, use_position_uuid: bool = fals
 
 func get_active_imaginaries() -> Dictionary:
 	## 返回当前活跃的 ImaginaryConcept（由 ImaginaryComprehender 动态推导）
-	## 活跃 = 已有 Imaginary 引用该 concept 的 detail_imaginaries
+	## 活跃 = 已有 Imaginary 引用该 concept 的 concepts
 	return ImaginaryComprehender.get_active_concepts()
 
 

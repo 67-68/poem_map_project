@@ -12,7 +12,6 @@ var selected_poem_type: int = -1
 # SubViewport 动态内容 — preload 缓存
 # ──────────────────────────────────────────────
 const _ABSTRACT_CONCEPT_SCENE := preload("res://ui/poem_uis/abstract_concept.tscn")
-const _DETAIL_IMAGINARY_SCENE := preload("res://ui/poem_uis/detail_imaginary.tscn")
 
 ## 当前 hover 的 AbstractConcept（用于 hover 高亮）
 var _hovered_concept: AbstractConcept = null
@@ -266,33 +265,14 @@ func _rebuild_subviewport() -> void:
 		viewport.add_child(node)
 		_concept_original_modulates[node] = node.modulate
 
-		# 创建 OrbitDetail 节点 — 从动态推导的 Imaginary 列表
-		for j in range(detail_imaginaries.size()):
-			var imag = detail_imaginaries[j] as Imaginary
-			if not imag:
-				continue
-
-			var detail := _DETAIL_IMAGINARY_SCENE.instantiate() as OrbitDetail
-			detail.center_target = node
-			detail.semi_major_axis = 60.0 + j * 30.0
-			detail.semi_minor_axis = 40.0 + j * 20.0
-			detail.phase_offset = (2.0 * PI * j) / max(detail_imaginaries.size(), 1)
-			detail.orbit_speed = 0.5 + randf() * 0.5
-
-			# 第一行：perception 文本，第二行：Imaginary name（暗红小字）
-			var display_text := ""
-			for tag in imag.detail_imaginaries:
-				var perception = imag.perceptions.get(tag, "")
-				if not perception.is_empty():
-					display_text = perception
-					break
-			if display_text.is_empty():
-				display_text = imag.name
-
-			display_text += "\n[color=darkred][font_size=10]%s[/font_size][/color]" % imag.name
-			detail.set_detail_text(display_text)
-
-			node.add_child(detail)
+		# 用简单 Label 显示概念名 + 关联碎片数量（简化自 OrbitDetail 轨道）
+		var detail_label := Label.new()
+		detail_label.text = "%s (碎片: %d | Lv.%d)" % [concept.name, fragment_count, concept.current_level]
+		detail_label.add_theme_font_size_override("font_size", 12)
+		detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		detail_label.position = Vector2(-40, 40)
+		detail_label.size = Vector2(80, 20)
+		node.add_child(detail_label)
 
 		# 碎片 >= 2 时启动合并就绪闪烁
 		if fragment_count >= ImaginaryConcept.l2_threshold and concept.current_tier == 0:
@@ -433,9 +413,9 @@ func _on_button_pressed() -> void:
 	Logging.info('PoemCrafter: scanning for poem events')
 	for ima in selected_imaginaries:
 		for detail_imag in ImaginaryComprehender.get_imaginaries_for_concept(ima.uuid):
-			for tag in detail_imag.detail_imaginaries:
-				if not tag.is_empty():
-					PlayerState.current_action_tags.append(tag)
+			for concept_key in detail_imag.concepts:
+				if not concept_key.is_empty():
+					PlayerState.current_action_tags.append(concept_key)
 
 	EventManager.scan_poem_events(selected_imaginaries)
 

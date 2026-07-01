@@ -2,8 +2,8 @@ class_name ImaginaryComprehender extends RefCounted
 
 ## 意象感悟引擎 — 动态交叉推导 + 合并坍缩
 ##
-## 核心原理：不再在 ImaginaryConcept 上存储碎片，而是遍历玩家拥有的所有 Imaginary，
-## 从它们的 detail_imaginaries 字段中动态推导出哪些 abstract concept 被多少碎片引用。
+## 核心原理：遍历玩家拥有的所有 Imaginary，
+## 从它们的 concepts 字段中动态推导出哪些 abstract concept 被多少碎片引用。
 ##
 ## 合并门槛：≥2 个 Imaginary 引用同一 abstract concept → 可合并
 ## 可见门槛：≥1 个 Imaginary 引用 → 在 PoemCrafter 中可见（但不可合并）
@@ -17,12 +17,8 @@ static func _derive_concept_groups() -> Dictionary:
 	for imag in Database.imaginaries_detail.values():
 		if not (imag is Imaginary):
 			continue
-		for tag in imag.detail_imaginaries:
-			var segments = tag.split(":")
-			if segments.size() < 4:
-				continue
-			# 中间两段 = abstract concept key (如 nature:autumn)
-			var concept_key = segments[1].to_lower() + ":" + segments[2].to_lower()
+		for concept_key in imag.concepts:
+			concept_key = concept_key.to_lower()
 			if not groups.has(concept_key):
 				groups[concept_key] = []
 			var group: Array = groups[concept_key]
@@ -80,16 +76,12 @@ static func merge_category(concept_key: String) -> bool:
 			[concept_key, concept.current_tier])
 		return false
 
-	# 收集所有四段式 tag 作为 merged 备份
+	# 收集匹配该 concept_key 的所有 concept 作为 merged 备份
 	var merged_tags: Array[String] = []
 	for imag in imaginaries:
-		for tag in imag.detail_imaginaries:
-			var segments = tag.split(":")
-			if segments.size() < 4:
-				continue
-			var ck = segments[1].to_lower() + ":" + segments[2].to_lower()
-			if ck == concept_key:
-				merged_tags.append(tag)
+		for ck in imag.concepts:
+			if ck.to_lower() == concept_key:
+				merged_tags.append(ck)
 
 	# 计算 level（clamp 到 0-2）
 	var final_level = mini(imaginaries.size(), 2)

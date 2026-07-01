@@ -1,3 +1,6 @@
+> ⚠️ **本文件已废弃 (2026-07-01)** — 意象系统已全面简化。权威文档请参见 [`plans/imagery_simplification_refactor.md`](../../plans/imagery_simplification_refactor.md)
+> 五维宪法 Tag 系统、四段式字符串解析、`detail_imaginaries`、`perceptions` 字段均已删除。
+
 # 情绪获取系统 (Emotion Acquisition System)
 
 ## 概述

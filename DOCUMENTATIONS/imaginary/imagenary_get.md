@@ -1,3 +1,6 @@
+> ⚠️ **本文件已废弃 (2026-07-01)** — 意象系统已全面简化。权威文档请参见 [`plans/imagery_simplification_refactor.md`](../../plans/imagery_simplification_refactor.md)
+> 五维宪法 Tag 系统、四段式字符串解析、`detail_imaginaries`、`perceptions` 字段均已删除。
+
 ## 🎯 主要获取方式：通过随机事件
 
 当系统触发一个 **RandomEvent** 类型的事件时，会自动获得对应的 imagenary：

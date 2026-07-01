@@ -1,3 +1,6 @@
+# TODO: 需要根据新的意象系统重写测试 (Imagery Simplification Refactor 2026-07-01)
+# _derive_concept_groups 已从四段式 Tag 解析改为直接读 Imaginary.concepts
+# 测试中四段式 tag 如 "ENV:NATURE:AUTUMN:leaf" 需改为 concept key 如 "environment:snow"
 # ════════════════════════════════════════════════════════════
 # ImaginaryComprehender V2 单元测试 (重构后)
 # 覆盖：_derive_concept_groups / can_merge / merge_category / consume_concepts
@@ -13,7 +16,7 @@ func before_each():
 func _make_imaginary(uuid: String, tags: Array[String]) -> Imaginary:
 	var imag = Imaginary.new()
 	imag.uuid = uuid
-	imag.detail_imaginaries = tags
+	imag.concepts = tags
 	return imag
 
 func _setup_imaginary_concept(key: String, tier: int = 0, level: int = 0) -> ImaginaryConcept:

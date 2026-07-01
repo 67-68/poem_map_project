@@ -17,12 +17,6 @@ from tools.config import DimensionCombo, EventPipelineConfig, OptionFeature
 if TYPE_CHECKING:
     from tools.plugin_base import EventPromptPlugin
 
-# 运行时导入 ImageryItem（避免类型检查时的循环依赖）
-try:
-    from tools.config import ImageryItem
-except ImportError:
-    ImageryItem = None  # type: ignore
-
 # ── Operator → Prompt 语义翻译器（单例懒加载） ──
 _translator_instance = None
 
@@ -43,7 +37,6 @@ def get_translator() -> Optional[object]:
         os.path.join(data_dir, 'semantic_properties.json'),
         os.path.join(data_dir, 'semantic_traits.json'),
         os.path.join(data_dir, 'semantic_emotions.json'),
-        os.path.join(data_dir, 'image_dictionary.json'),
     ]
     for fpath in required_files:
         if not os.path.isfile(fpath):
@@ -98,7 +91,6 @@ def build_user_prompt(
     option_word_count_max: Optional[int] = None,
     plugins: Optional[list["EventPromptPlugin"]] = None,
     sandbox_keywords_block: Optional[str] = None,
-    selected_image: Optional["ImageryItem"] = None,
 ) -> str:
     """组装 User Prompt（包含当前维度组合信息）。
 
@@ -282,15 +274,5 @@ description: <你的描述>""")
     # ── 沙盒关键词注入 ──
     if sandbox_keywords_block and sandbox_keywords_block.strip():
         lines.append(sandbox_keywords_block)
-
-    # ── 🆕 意象约束注入 ──
-    if selected_image is not None:
-        lines.append(f"""
-## 🎯 意象约束
-本事件的叙事必须体现以下意象的气质，但不要直接提及意象名称：
-- 意象：{selected_image.name}
-- 内涵：{selected_image.description}
-
-请在场景描写中自然地融入该意象的视觉/听觉/触觉细节。""")
 
     return "\n".join(lines)

@@ -34,7 +34,7 @@ var last_event: Dictionary = {}
 var session_deferred_cleanups: Array[BaseOperator] = []
 
 ## Imaginary 定义表，从 tools/data/imaginary_definitions.json 加载
-## key: uuid (如 "buyi"), value: Dictionary(name, detail_imaginaries, perceptions)
+## key: uuid (如 "snow"), value: Dictionary(name, concepts)
 var _imaginary_defs: Dictionary = {}
 
 signal ambition_changed(ambition)
@@ -118,37 +118,21 @@ func init_imaginaries():
 		return
 
 	for entry in basic_data:
-		var blueprint_id = entry.get("blueprint_id", "") as String
-		if blueprint_id.is_empty():
-			Logging.warn('init_imaginaries: basic_imaginaries entry missing blueprint_id, skipping')
+		var name = entry.get("name", "") as String
+		if name.is_empty():
+			Logging.warn('init_imaginaries: basic_imaginaries entry missing name, skipping')
 			continue
+		var concepts_list = entry.get("concepts", [])
 
-		# 四段式 tag (A:B:C:D)，末段 = Imaginary uuid
-		var segments = blueprint_id.split(":")
-		if segments.size() < 4:
-			Logging.warn("init_imaginaries: blueprint_id '%s' 段数不足 (%d)，跳过" % [blueprint_id, segments.size()])
-			continue
-
-		var imaginary_uuid = segments[3].to_lower()
-		var concept_key = segments[1].to_lower() + ":" + segments[2].to_lower()
-
-		# 找到或创建 Imaginary
+		var imaginary_uuid = name.to_lower()
 		var imaginary = Database.get_imaginary_detail(imaginary_uuid)
 		if not imaginary:
 			imaginary = Imaginary.new()
 			imaginary.uuid = imaginary_uuid
-			imaginary.name = segments[3]
+			imaginary.name = name
+			imaginary.concepts = concepts_list
 			Database.imaginaries_detail[imaginary_uuid] = imaginary
-			Logging.info("init_imaginaries: 新建 Imaginary '%s'" % imaginary_uuid)
-
-		imaginary.detail_imaginaries.append(blueprint_id)
-
-		# 验证 ImaginaryConcept 存在
-		var concept = Database.get_imaginary(concept_key)
-		if not concept:
-			Logging.warn("init_imaginaries: ImaginaryConcept '%s' 未找到 (blueprint='%s')" % [concept_key, blueprint_id])
-		else:
-			Logging.info("init_imaginaries: blueprint '%s' → Imaginary '%s' → Concept '%s'" % [blueprint_id, imaginary_uuid, concept_key])
+			Logging.info("init_imaginaries: 新建 Imaginary '%s' (concepts=%s)" % [imaginary_uuid, str(concepts_list)])
 
 func init_emotions():
 	"""从 SourceOfTruth 加载初始情绪值到 PlayerState"""
@@ -198,48 +182,24 @@ func _connect_imaginary_signals():
 
 
 func _on_request_add_imaginary(tag: String):
-	"""处理意象获取请求：解析 4 段式 tag (A:B:C:D)，写入 Imaginary 对象，动态关联 ImaginaryConcept"""
+	"""处理意象获取请求：tag 是简单名（如 "snow", "drunk"），查定义文件获取 concepts"""
 	if tag.is_empty():
 		Logging.err("PlayerState._on_request_add_imaginary: tag 为空")
 		return
 
-	# 解析 4 段式 tag (例: ENV:NATURE:AUTUMN:changanleaf)
-	var segments = tag.split(":")
-	if segments.size() < 4:
-		Logging.err("PlayerState._on_request_add_imaginary: tag '%s' 段数不足 (%d)，需要 4 段 (A:B:C:D)" % [tag, segments.size()])
-		return
-
-	# 末段 = Imaginary 的唯一标识 (如 changanleaf)
-	var imaginary_uuid = segments[3].to_lower()
-	# 中间两段 = ImaginaryConcept 的 key (如 nature:autumn)
-	var concept_key = segments[1].to_lower() + ":" + segments[2].to_lower()
+	var imaginary_uuid = tag.to_lower()
 
 	# ── 找到或创建 Imaginary（详细碎片） ──
 	var imaginary = Database.get_imaginary_detail(imaginary_uuid)
 	if not imaginary:
 		imaginary = Imaginary.new()
 		imaginary.uuid = imaginary_uuid
-		# 从定义文件查找友好名称
+		# 从定义文件查找 {name, concepts}
 		var def_data = _imaginary_defs.get(imaginary_uuid, {})
-		imaginary.name = def_data.get("name", segments[3])
-		# 首次创建时填充 perceptions
-		if def_data.has("perceptions"):
-			imaginary.perceptions = def_data["perceptions"]
-			Logging.info("PlayerState._on_request_add_imaginary: 从定义文件填充 %d 条 perception" % imaginary.perceptions.size())
+		imaginary.name = def_data.get("name", tag)
+		imaginary.concepts = def_data.get("concepts", [])
 		Database.imaginaries_detail[imaginary_uuid] = imaginary
-		Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s)" % [imaginary_uuid, imaginary.name])
-
-	# 添加四段式 tag 到 detail_imaginaries（允许重复表示多次获取）
-	imaginary.detail_imaginaries.append(tag)
-	Logging.info("PlayerState._on_request_add_imaginary: tag '%s' 已存入 Imaginary '%s' (detail_count=%d)" %
-		[tag, imaginary_uuid, imaginary.detail_imaginaries.size()])
-
-	# ── 确保对应的 ImaginaryConcept 存在 ──
-	var concept = Database.get_imaginary(concept_key)
-	if not concept:
-		Logging.info("PlayerState._on_request_add_imaginary: ImaginaryConcept '%s' 尚未注册，跳过" % concept_key)
-	else:
-		Logging.info("PlayerState._on_request_add_imaginary: 关联到 ImaginaryConcept '%s'" % concept_key)
+		Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, concepts=%s)" % [imaginary_uuid, imaginary.name, str(imaginary.concepts)])
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()

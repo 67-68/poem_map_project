@@ -103,15 +103,23 @@ func _stop_blink() -> void:
 func play_merge_animation(target_tier: int = 0) -> void:
 	stop_merge_ready_blink()
 
-	# Phase 1: 吸入所有子节点中的 OrbitDetail
-	var details: Array[OrbitDetail] = []
+	# Phase 1: 吸入所有子节点（Label 或 OrbitDetail）
+	var details: Array[Node] = []
 	for child in get_children():
 		if child is OrbitDetail:
+			details.append(child)
+		elif child is Label:
 			details.append(child)
 
 	if details.size() > 0:
 		for d in details:
-			d.play_suck_animation()
+			if d is OrbitDetail:
+				d.play_suck_animation()
+			else:
+				# Label 淡出
+				var tw := create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+				tw.tween_property(d, "modulate:a", 0.0, 0.3)
+				tw.tween_property(d, "scale", Vector2.ZERO, 0.3)
 		await get_tree().create_timer(0.4).timeout
 
 	# Phase 2: 色彩过渡到 tier 颜色

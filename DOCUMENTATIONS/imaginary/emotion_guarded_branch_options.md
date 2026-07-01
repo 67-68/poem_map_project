@@ -1,3 +1,6 @@
+> ⚠️ **本文件已废弃 (2026-07-01)** — 意象系统已全面简化。权威文档请参见 [`plans/imagery_simplification_refactor.md`](../../plans/imagery_simplification_refactor.md)
+> 五维宪法 Tag 系统、四段式字符串解析、`detail_imaginaries`、`perceptions` 字段均已删除。
+
 # 情绪守卫的多分支选项设计模式
 
 > ⚠️ **此文档的意象掉落逻辑已被 V2 架构升级。**

@@ -1,10 +1,9 @@
 @tool
 class_name ScanAndPushOperator extends BaseOperator
 
-## 要匹配的 tag 前缀列表（4 段式标签，如 ["scene:tavern:gambling:high", "npc:rogue:encounter:random"]）
-## 使用 TagManager.prefix_match() 与事件 target_tags 做方向无关的前缀匹配
+## 要匹配的 tag 列表
 ## 这些 tags 会被设置到 PlayerState.current_action_tags，
-## 由 ActionTagFilter.filter() 通过前缀匹配筛选事件
+## 由 ActionTagFilter.filter() 通过字符串相等匹配筛选事件
 @export var tags: PackedStringArray = PackedStringArray()
 
 ## 无事发生权重倍数（同 EventManager.scan_events 的 nothing_multiplication_weight）

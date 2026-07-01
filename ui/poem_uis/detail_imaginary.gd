@@ -1,8 +1,11 @@
+# TODO: 此类已在 Imagery Simplification Refactor (2026-07-01) 中简化。
+# OrbitDetail 不再从 PoemCrafter 创建；改为使用简单 Label。
+# 保留此类仅为向后兼容 abstract_concept.gd 中的合并吸入动画。
 class_name OrbitDetail
 extends Node2D
 
-## 椭圆轨道节点 — 围绕一个 AbstractConcept（Area2D）做椭圆轨道运动
-## 使用绝对坐标重载策略，拒绝浮点误差累积 🤓☝️
+## [已简化] 椭圆轨道节点
+## 不再展示 perception 文本；仅保留轨道运动和 set_detail_text(name)
 
 @export_group("Orbit Parameters")
 @export var center_target: Node2D      ## 绕行的圆心目标（通常是 AbstractConcept）

@@ -1,46 +1,110 @@
 {
   "buyi": {
-    "uuid": "buyi",
     "name": "布衣",
-    "detail_imaginaries": [
-      "ACTOR:FINANCE:BROKE:buyi",
-      "ACTOR:HEALTH:EXHAUSTED:buyi",
-      "VIBE:AESTHETIC:ELEGANT:buyi"
-    ],
-    "perceptions": {
-      "ACTOR:FINANCE:BROKE:buyi": "囊中羞涩",
-      "ACTOR:HEALTH:EXHAUSTED:buyi": "风霜满面",
-      "VIBE:AESTHETIC:ELEGANT:buyi": "素朴风骨"
-    }
+    "concepts": ["finance:broke", "health:exhausted", "aesthetic:elegant"]
   },
   "qianli": {
-    "uuid": "qianli",
     "name": "骐骥",
-    "detail_imaginaries": [
-      "TARGET:MYTH:ANIMAL:qianli",
-      "ACTOR:EMOTION:AMBITION:qianli",
-      "VIBE:THEME:MARTIAL:qianli"
-    ],
-    "perceptions": {
-      "TARGET:MYTH:ANIMAL:qianli": "伏枥长鸣",
-      "ACTOR:EMOTION:AMBITION:qianli": "志在千里",
-      "VIBE:THEME:MARTIAL:qianli": "铁蹄踏霜"
-    }
+    "concepts": ["myth:animal", "emotion:ambition", "theme:martial"]
   },
   "cangsheng": {
-    "uuid": "cangsheng",
     "name": "苍生",
-    "detail_imaginaries": [
-      "ENV:SOCIETY:FAMINE:cangsheng",
-      "ENV:SOCIETY:WAR:cangsheng",
-      "ACTOR:EMOTION:SORROW:cangsheng",
-      "VIBE:THEME:HISTORY:cangsheng"
-    ],
-    "perceptions": {
-      "ENV:SOCIETY:FAMINE:cangsheng": "饿殍载道",
-      "ENV:SOCIETY:WAR:cangsheng": "烽火连天",
-      "ACTOR:EMOTION:SORROW:cangsheng": "穷年忧黎",
-      "VIBE:THEME:HISTORY:cangsheng": "兴亡皆苦"
-    }
+    "concepts": ["society:famine", "society:war", "emotion:sorrow", "theme:history"]
+  },
+  "famine": {
+    "name": "饥荒",
+    "concepts": ["society:famine"]
+  },
+  "snow": {
+    "name": "孤雪",
+    "concepts": ["environment:snow"]
+  },
+  "drunk": {
+    "name": "醉意",
+    "concepts": ["health:drunk"]
+  },
+  "exile": {
+    "name": "流亡",
+    "concepts": ["travel:exile"]
+  },
+  "corrupt": {
+    "name": "贪腐",
+    "concepts": ["court:corrupt"]
+  },
+  "despair": {
+    "name": "绝望",
+    "concepts": ["emotion:despair"]
+  },
+  "ink_stone": {
+    "name": "古砚",
+    "concepts": ["aesthetic:elegant"]
+  },
+  "cold_moon": {
+    "name": "寒月",
+    "concepts": ["environment:moon"]
+  },
+  "temple_bell": {
+    "name": "晨钟",
+    "concepts": ["emotion:tranquility"]
+  },
+  "jade_step": {
+    "name": "玉阶",
+    "concepts": ["place:jadestep"]
+  },
+  "empty_cup": {
+    "name": "空盏",
+    "concepts": ["health:drunk"]
+  },
+  "wind": {
+    "name": "寒风",
+    "concepts": ["environment:wind"]
+  },
+  "willow_branch": {
+    "name": "折柳",
+    "concepts": ["travel:parting"]
+  },
+  "thatched_grass": {
+    "name": "茅草",
+    "concepts": ["emotion:sorrow"]
+  },
+  "high_tower": {
+    "name": "危楼",
+    "concepts": ["travel:exile"]
+  },
+  "cloud_and_sun": {
+    "name": "云日",
+    "concepts": ["politics:cloud"]
+  },
+  "lone_snow": {
+    "name": "孤雪",
+    "concepts": ["environment:snow"]
+  },
+  "falling_leaf": {
+    "name": "落木",
+    "concepts": ["environment:wind"]
+  },
+  "ghost_fire": {
+    "name": "鬼火",
+    "concepts": ["theme:history"]
+  },
+  "ruined_wall": {
+    "name": "残垣",
+    "concepts": ["theme:history"]
+  },
+  "starving_bone": {
+    "name": "饿殍",
+    "concepts": ["society:famine"]
+  },
+  "cold_blade": {
+    "name": "寒锋",
+    "concepts": ["theme:martial"]
+  },
+  "lone_sail": {
+    "name": "孤帆",
+    "concepts": ["travel:exile"]
+  },
+  "wine_gourd": {
+    "name": "酒葫芦",
+    "concepts": ["health:drunk"]
   }
 }

@@ -45,23 +45,14 @@ class TraitAnchor:
 
 
 @dataclass
-class ImageryAnchor:
-    """意象语义锚点。"""
-    tag: str                # "ENV_NATURE_SNOWSTORM:lone_snow"
-    name: str               # "孤雪"
-    description: str        # "独钓寒江雪的孤绝意象..."
-
-
-@dataclass
 class SemanticAnchorSet:
     """一次 translate() 调用产生的完整语义锚点集合。"""
     props: list[PropAnchor] = field(default_factory=list)
     emotions: list[EmotionAnchor] = field(default_factory=list)
     traits: list[TraitAnchor] = field(default_factory=list)
-    imageries: list[ImageryAnchor] = field(default_factory=list)
 
     def is_empty(self) -> bool:
-        return not (self.props or self.emotions or self.traits or self.imageries)
+        return not (self.props or self.emotions or self.traits)
 
 
 # ════════════════════════════════════════════════════════════════
@@ -155,7 +146,6 @@ class OperatorSemanticTranslator:
         properties_path: str,
         traits_path: str,
         emotions_path: str,
-        imageries_path: str,
     ):
         with open(properties_path, 'r', encoding='utf-8') as f:
             self._properties: dict = json.load(f)
@@ -163,15 +153,13 @@ class OperatorSemanticTranslator:
             self._traits: dict = json.load(f)
         with open(emotions_path, 'r', encoding='utf-8') as f:
             self._emotions: dict = json.load(f)
-        with open(imageries_path, 'r', encoding='utf-8') as f:
-            self._imageries: dict = json.load(f)
 
     # ── 主入口 ──
 
     def translate(self, dsl_string: str) -> SemanticAnchorSet:
         """
         输入: "prop_add(name=talent; val=5) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=VIBE_PHILOSOPHY_ZEN:temple_bell)"
-        输出: SemanticAnchorSet(props=[...], emotions=[...], traits=[...], imageries=[...])
+        输出: SemanticAnchorSet(props=[...], emotions=[...], traits=[...])
         """
         anchor_set = SemanticAnchorSet()
         expressions = _parse_dsl(dsl_string)
@@ -224,11 +212,6 @@ class OperatorSemanticTranslator:
             elif func == 'trait_remove':
                 anchor = self.translate_trait_remove(name)
                 anchor_set.traits.append(anchor)
-
-            # ── 意象类 ──
-            elif func == 'imagery_add':
-                anchor = self.translate_imagery_add(name)
-                anchor_set.imageries.append(anchor)
 
         return anchor_set
 
@@ -367,25 +350,6 @@ class OperatorSemanticTranslator:
             human_name=f'失去 {human_name}',
         )
 
-    # ── 意象翻译 ──
-
-    def translate_imagery_add(self, tag: str) -> ImageryAnchor:
-        """查 image_dictionary.json → 返回 name + description。"""
-        image_data = self._imageries.get(tag)
-        if image_data:
-            return ImageryAnchor(
-                tag=tag,
-                name=image_data.get('name', tag),
-                description=image_data.get('description', ''),
-            )
-        # fallback: 用 tag 的短名
-        short_name = tag.split(':')[-1] if ':' in tag else tag
-        return ImageryAnchor(
-            tag=tag,
-            name=short_name,
-            description='',
-        )
-
     # ── Prompt 格式化 ──
 
     def to_prompt_fragment(
@@ -433,10 +397,5 @@ class OperatorSemanticTranslator:
         # 特质
         for t in anchor_set.traits:
             lines.append(f'- 🏷️ 特质：{t.human_name}')
-
-        # 意象
-        for im in anchor_set.imageries:
-            desc_part = f' — {im.description}' if im.description else ''
-            lines.append(f'- 🎨 意象：{im.name}{desc_part}')
 
         return '\n'.join(lines)

@@ -33,7 +33,6 @@ from tools.config import (
     load_config_from_json,
     EventPipelineConfig,
     DimensionCombo,
-    ImageryItem,
     OptionFeature,
 )
 from tools.plugin_base import (
@@ -53,7 +52,6 @@ from tools.event_generator.state_managers import SandboxManager
 from tools.plugin_base import PLUGIN_REGISTRY
 from tools.event_generator.dimensions import expand_combinations, _make_combos
 from tools.event_generator.dsl_parser import scale_all_operators
-from tools.event_generator.scorer import extract_image_pool, is_valid_combination, pick_best_image
 
 import json
 
@@ -93,7 +91,6 @@ class GenerationResult:
     context_extras: dict[str, str] | None = None
     tags_to_use: list[str] = field(default_factory=list)
     stored_to: str = ""
-    selected_image_item: ImageryItem | None = None
 
     # ── 选项 ──
     option_rows: list[OptionRow] = field(default_factory=list)
@@ -152,49 +149,6 @@ def _build_plugin_context_extras(
 # 意象正交剪枝/打分辅助函数
 # ════════════════════════════════════════════════════════════════
 
-def _select_imagery_for_combo(
-    current_combos: list[DimensionCombo],
-    cfg: EventPipelineConfig,
-    image_dict: dict[str, ImageryItem],
-    scene_dim_id: str | None,
-    emotion_dim_id: str | None,
-) -> ImageryItem | None:
-    """
-    意象正交剪枝/打分：extract → validate → pick → return ImageryItem or None。
-
-    如果 apply_dimension_imagery 为 False，或任一步骤失败，返回 None。
-    """
-    if not cfg.apply_dimension_imagery:
-        return None
-    if scene_dim_id is None or emotion_dim_id is None:
-        return None
-
-    # Step 1: 提取意象池
-    image_pool = extract_image_pool(current_combos, scene_dim_id)
-    if not image_pool:
-        return None
-
-    # Step 2: 场景×情绪剪枝
-    if not is_valid_combination(current_combos, scene_dim_id, emotion_dim_id):
-        return None
-
-    # Step 3: 从 combos 中提取目标情绪 ID
-    target_emotion: str | None = None
-    for combo in current_combos:
-        if combo.dimension.id == emotion_dim_id:
-            target_emotion = combo.value.id
-            break
-    if target_emotion is None:
-        return None
-
-    # Step 4: 按情绪亲缘度打分选择最佳意象
-    image_id = pick_best_image(image_pool, target_emotion, image_dict)
-    if image_id is None:
-        return None
-
-    return image_dict[image_id]
-
-
 # ════════════════════════════════════════════════════════════════
 # 核心管线 — 生成一个事件
 # ════════════════════════════════════════════════════════════════
@@ -211,9 +165,6 @@ def generate_one_event(
     llm: LLMClient,
     sandbox: SandboxManager | None,
     plugins: list[EventPromptPlugin],
-    image_dict: dict[str, ImageryItem],
-    scene_dim_id: str | None,
-    emotion_dim_id: str | None,
     is_trial: bool = False,
 ) -> GenerationResult:
     """为一个维度组合生成一个完整事件。
@@ -240,7 +191,6 @@ def generate_one_event(
 
     # ── 提前计算不依赖 LLM 响应的属性 ──
     sandbox_block = sandbox.get_prompt_block(current_combos) if sandbox is not None else ""
-    selected_image_item = _select_imagery_for_combo(current_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
     stored_to = ""
     for combo in current_combos:
         if combo.value.stored_to:
@@ -259,8 +209,7 @@ def generate_one_event(
         word_count_min=current_min, word_count_max=current_max,
         option_word_count_max=current_option_max,
         plugins=plugins,
-        sandbox_keywords_block=sandbox_block,
-        selected_image=selected_image_item,
+        sandbox_keywords_block=sandbox_block
     )
 
     # ── API 调用循环（重试 + 自适应收缩） ──
@@ -282,7 +231,6 @@ def generate_one_event(
                 scale_parts=scale_parts, combos=current_combos,
                 values_tuple=values_tuple,
                 stored_to=stored_to,
-                selected_image_item=selected_image_item,
             )
 
         parsed = parse_llm_response(response)
@@ -329,7 +277,6 @@ def generate_one_event(
                     values_tuple=values_tuple, parsed=parsed,
                     raw_response=response,
                     stored_to=stored_to,
-                    selected_image_item=selected_image_item,
                 )
 
             # ── Hook 3: 插件 context 富化 ──
@@ -377,11 +324,6 @@ def generate_one_event(
                         universal_result=cfg.universal_result or "",
                     )
 
-                    # 🆕 管线直连：意象注入
-                    if selected_image_item:
-                        imagery_dsl = f"imagery_add(name={selected_image_item.id})"
-                        opt_dsl = f"{opt_dsl} | {imagery_dsl}" if opt_dsl else imagery_dsl
-
                     # ── Hook 4: 插件选项结果 DSL 扩展 ──
                     for plugin in plugins:
                         try:
@@ -412,9 +354,6 @@ def generate_one_event(
             else:
                 # 无 option_features 时：回退到默认选项
                 default_dsl = scaled_dsl
-                if selected_image_item:
-                    imagery_dsl = f"imagery_add(name={selected_image_item.id})"
-                    default_dsl = f"{default_dsl} | {imagery_dsl}" if default_dsl else imagery_dsl
                 default_req = _build_option_requirement(
                     OptionFeature(id="default"),
                     failed_hint_val,
@@ -438,7 +377,6 @@ def generate_one_event(
                 context_extras=context_extras,
                 tags_to_use=tags_to_use,
                 stored_to=stored_to,
-                selected_image_item=selected_image_item,
                 option_rows=option_rows,
             )
         else:
@@ -468,8 +406,7 @@ def generate_one_event(
                         word_count_min=current_min, word_count_max=current_max,
                         option_word_count_max=current_option_max,
                         plugins=plugins,
-                        sandbox_keywords_block=sandbox_block,
-                        selected_image=selected_image_item,
+                        sandbox_keywords_block=sandbox_block
                     )
                 continue
             print(f"  ⏭️ 跳过（已达最大重试次数）")
@@ -480,7 +417,6 @@ def generate_one_event(
                 values_tuple=values_tuple, parsed=parsed,
                 raw_response=response,
                 stored_to=stored_to,
-                selected_image_item=selected_image_item,
             )
 
     # 不应到达此处
@@ -490,7 +426,6 @@ def generate_one_event(
         scale_parts=scale_parts, combos=current_combos,
         values_tuple=values_tuple,
         stored_to=stored_to,
-        selected_image_item=selected_image_item,
     )
 
 
@@ -524,10 +459,6 @@ def _print_generation_result(result: GenerationResult, cfg: EventPipelineConfig)
     print("-" * 40)
     print(r.raw_response)
     print("-" * 40)
-
-    # ── 选中意象 ──
-    if r.selected_image_item:
-        print(f"  🖼️  选中意象: {r.selected_image_item.name}")
 
     # ── 🆕 动态展开 parsed 所有字段 ──
     print(f"\n🔍 Parsed Result:")
@@ -657,9 +588,6 @@ def reassembly_one_event(
     # sandbox 保留签名兼容但不使用（reassembly 不调 LLM，无 prompt 构建）
     sandbox: SandboxManager | None = None,
     plugins: list[EventPromptPlugin] | None = None,
-    image_dict: dict[str, ImageryItem] | None = None,
-    scene_dim_id: str | None = None,
-    emotion_dim_id: str | None = None,
 ) -> GenerationResult:
     """🔧 Reassembly 核心：不调 LLM，从旧 CSV snapshot 直接构建 GenerationResult。
 
@@ -668,7 +596,6 @@ def reassembly_one_event(
     后半段（DSL 缩放、意象注入、plugin hooks、option 组装）完全复用原逻辑。
     """
     plugins = plugins or []
-    image_dict = image_dict or {}
 
     # ── 计算标识符（同 generate_one_event）──
     combined_scale = 1.0
@@ -682,9 +609,6 @@ def reassembly_one_event(
     current_combos = _make_combos(cfg.dimensions, values_tuple)
 
     # ── 提前计算不依赖 LLM 响应的属性（同 generate_one_event）──
-    selected_image_item = _select_imagery_for_combo(
-        current_combos, cfg, image_dict, scene_dim_id, emotion_dim_id,
-    )
     stored_to = ""
     for combo in current_combos:
         if combo.value.stored_to:
@@ -724,7 +648,6 @@ def reassembly_one_event(
             scale_parts=scale_parts, combos=current_combos,
             values_tuple=values_tuple, parsed=parsed,
             stored_to=stored_to,
-            selected_image_item=selected_image_item,
         )
 
     # ── Hook 3: 插件 context 富化 ──
@@ -768,9 +691,6 @@ def reassembly_one_event(
                 current_combos, choice,
                 universal_result=cfg.universal_result or "",
             )
-            if selected_image_item:
-                imagery_dsl = f"imagery_add(name={selected_image_item.id})"
-                opt_dsl = f"{opt_dsl} | {imagery_dsl}" if opt_dsl else imagery_dsl
 
             # Hook 4: 插件选项结果 DSL 扩展
             for plugin in plugins:
@@ -799,9 +719,6 @@ def reassembly_one_event(
             ))
     else:
         default_dsl = scaled_dsl
-        if selected_image_item:
-            imagery_dsl = f"imagery_add(name={selected_image_item.id})"
-            default_dsl = f"{default_dsl} | {imagery_dsl}" if default_dsl else imagery_dsl
         option_rows.append(OptionRow(
             choice_id="default",
             text="（确认）",
@@ -819,7 +736,6 @@ def reassembly_one_event(
         context_extras=context_extras,
         tags_to_use=tags_to_use,
         stored_to=stored_to,
-        selected_image_item=selected_image_item,
         option_rows=option_rows,
     )
 
@@ -858,24 +774,6 @@ def _run_reassembly_entry(entry_key: str, entry: dict) -> None:
 
     # 1. 加载 config
     cfg = load_config_from_json(str(config_path))
-
-    # 2. 加载意象字典
-    image_dict: dict[str, ImageryItem] = {}
-    if cfg.apply_dimension_imagery:
-        image_dict_path = _project_root / "data" / "image_dictionary.json"
-        if image_dict_path.exists():
-            raw = json.loads(image_dict_path.read_text(encoding="utf-8"))
-            for k, v in raw.items():
-                image_dict[k] = ImageryItem(**v)
-
-    # 3. 推导场景/情绪维度 ID
-    scene_dim_id: str | None = None
-    emotion_dim_id: str | None = None
-    for dim in cfg.dimensions:
-        if dim.id == "scene":
-            scene_dim_id = dim.id
-        elif dim.id == "emotion":
-            emotion_dim_id = dim.id
 
     # 4. 加载插件
     plugins: list[EventPromptPlugin] = []
@@ -935,9 +833,6 @@ def _run_reassembly_entry(entry_key: str, entry: dict) -> None:
             result = reassembly_one_event(
                 values_tuple, cfg, snapshot,
                 plugins=plugins,
-                image_dict=image_dict,
-                scene_dim_id=scene_dim_id,
-                emotion_dim_id=emotion_dim_id,
             )
 
             if result.status == "success":
@@ -993,9 +888,6 @@ def run_trial_mode(
     llm: LLMClient,
     sandbox: SandboxManager | None,
     plugins: list[EventPromptPlugin],
-    image_dict: dict[str, ImageryItem],
-    scene_dim_id: str | None,
-    emotion_dim_id: str | None,
     args,
 ) -> None:
     """🧪 试运行：调 1 次 API，动态打印所有中间产物，不保存 CSV。"""
@@ -1010,7 +902,6 @@ def run_trial_mode(
 
     result = generate_one_event(
         values_tuple, cfg, system_prompt, llm, sandbox, plugins,
-        image_dict, scene_dim_id, emotion_dim_id,
         is_trial=True,
     )
 
@@ -1040,9 +931,6 @@ def run_production_mode(
     llm: LLMClient,
     sandbox: SandboxManager | None,
     plugins: list[EventPromptPlugin],
-    image_dict: dict[str, ImageryItem],
-    scene_dim_id: str | None,
-    emotion_dim_id: str | None,
     output_path: str,
     complete: bool = False,
     preserved_rows: list[list[str]] | None = None,
@@ -1105,14 +993,11 @@ def run_production_mode(
 
             result = generate_one_event(
                 values_tuple, cfg, system_prompt, llm, sandbox, plugins,
-                image_dict, scene_dim_id, emotion_dim_id,
             )
 
             if result.status == "success":
                 print(f"{result.uuid}")
                 print(f"  Scale: {'×'.join(result.scale_parts)} = {result.combined_scale}")
-                if result.selected_image_item:
-                    print(f"  🖼️  选中意象: {result.selected_image_item.name}")
                 print(f"  ✅ title: {result.parsed.get('title', '')}")
                 desc_preview = result.parsed.get('description', '')[:60] + "..." if len(result.parsed.get('description', '')) > 60 else result.parsed.get('description', '')
                 print(f"     desc: {desc_preview}")
@@ -1184,25 +1069,6 @@ def main():
         cfg = default_config()
 
     print(f"📖 配置: {cfg.name}")
-
-    # ── 🆕 加载意象字典（情绪-意象正交） ──
-    image_dict: dict[str, ImageryItem] = {}
-    if cfg.apply_dimension_imagery:
-        image_dict_path = Path(__file__).resolve().parent.parent / "data" / "image_dictionary.json"
-        if image_dict_path.exists():
-            raw = json.loads(image_dict_path.read_text(encoding="utf-8"))
-            for k, v in raw.items():
-                image_dict[k] = ImageryItem(**v)
-            print(f"🖼️  意象字典已加载: {len(image_dict)} 条")
-
-    # ── 从配置中推导场景/情绪维度 ID（用于意象正交） ──
-    scene_dim_id: str | None = None
-    emotion_dim_id: str | None = None
-    for dim in cfg.dimensions:
-        if dim.id == "scene":
-            scene_dim_id = dim.id
-        elif dim.id == "emotion":
-            emotion_dim_id = dim.id
 
     # ── 解析插件 ──
     plugins: list[EventPromptPlugin] = []
@@ -1315,14 +1181,10 @@ def main():
         first_values = combinations[0]
         first_combos = _make_combos(cfg.dimensions, first_values)
         sandbox_block = ""
-        selected_image_item = _select_imagery_for_combo(first_combos, cfg, image_dict, scene_dim_id, emotion_dim_id)
-        if selected_image_item:
-            print(f"  🖼️  选中意象: {selected_image_item.name}")
         user_prompt = build_user_prompt(
             first_combos, cfg,
             plugins=plugins,
-            sandbox_keywords_block=sandbox_block,
-            selected_image=selected_image_item,
+            sandbox_keywords_block=sandbox_block
         )
         print(f"\n📋 示例 User Prompt ({len(user_prompt)} chars):")
         print("-" * 40)
@@ -1334,8 +1196,7 @@ def main():
     # ── 路由到对应模式 ──
     if args.trial:
         run_trial_mode(
-            combinations, cfg, system_prompt, llm, sandbox, plugins,
-            image_dict, scene_dim_id, emotion_dim_id, args,
+            combinations, cfg, system_prompt, llm, sandbox, plugins, args,
         )
     elif args.complete_uuids:
         # --complete-uuids 模式：只重跑指定 UUID 的事件，保留其余行
@@ -1386,16 +1247,14 @@ def main():
 
         combinations = target_combinations
         run_production_mode(
-            combinations, cfg, system_prompt, llm, sandbox, plugins,
-            image_dict, scene_dim_id, emotion_dim_id, output_path,
+            combinations, cfg, system_prompt, llm, sandbox, plugins, output_path,
             complete=args.complete,
             preserved_rows=preserved_rows,
             regenerate_uuids=target_uuids,
         )
     else:
         run_production_mode(
-            combinations, cfg, system_prompt, llm, sandbox, plugins,
-            image_dict, scene_dim_id, emotion_dim_id, output_path,
+            combinations, cfg, system_prompt, llm, sandbox, plugins, output_path,
             complete=args.complete,
         )
 

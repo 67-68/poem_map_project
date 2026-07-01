@@ -117,7 +117,7 @@ func scan_poem_events(imaginaries: Array[ImaginaryConcept]):
     var tags = []
     for i in imaginaries:
         for detail_imag in ImaginaryComprehender.get_imaginaries_for_concept(i.uuid):
-            for tag in detail_imag.detail_imaginaries:
+            for tag in detail_imag.concepts:
                 if not tag.is_empty():
                     tags.append(tag)
     
@@ -126,8 +126,8 @@ func scan_poem_events(imaginaries: Array[ImaginaryConcept]):
     for t in tags:
         for e in Database.get_normal_poem_events_all().values():
             for target_tag in e.target_tags:
-                # 🚀 革新匹配：前缀匹配（短 tag 做前缀，匹配长 tag）
-                if TagManager.prefix_match(target_tag, t):
+                # 直接字符串相等匹配
+                if target_tag == t:
                     tickets.append(_create_ticket(e))
     #breakpoint
     # 🆕 EventBase 管道：era 过滤 + AVERAGE 黑名单/权重再分配

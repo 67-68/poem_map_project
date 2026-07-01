@@ -1,3 +1,5 @@
+# TODO: 需要根据新的意象系统重写测试 (Imagery Simplification Refactor 2026-07-01)
+# detail_imaginaries 已改为 concepts; TagManager.prefix_match() 已删除
 # ════════════════════════════════════════════════════════════
 # 意象阶级·合成坍缩·诗词评价引擎 单元测试
 # 覆盖：TierDeterminer / ImaginaryComprehender / PoemCraftingCalculator
@@ -132,7 +134,7 @@ func _make_detail_imaginary(uuid: String, tag: String) -> Imaginary:
 	var im = Imaginary.new()
 	im.uuid = uuid
 	var tags: Array[String] = [tag]
-	im.detail_imaginaries = tags
+	im.concepts = tags
 	return im
 
 
@@ -211,7 +213,7 @@ func test_comprehend_level_exactly_1():
 
 
 func test_comprehend_clears_fragments():
-	"""坍缩后 detail_imaginaries 对应的 Imaginary 应从 Database 中删除"""
+	"""坍缩后 concepts 对应的 Imaginary 应从 Database 中删除"""
 	var concept = _make_imaginary("nature:autumn")
 	Database.imaginaries["nature:autumn"] = concept
 	Database.imaginaries_detail["a"] = _make_detail_imaginary("a", "ENV:NATURE:AUTUMN:leaf")

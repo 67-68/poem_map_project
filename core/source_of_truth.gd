@@ -66,21 +66,9 @@ static var debug_dashboard_state = {
     #   tier:         品级（1/2/3）（保留兼容）
     # 末段 = Imaginary.uuid，中间两段 = ImaginaryConcept key
     "basic_imaginaries": [
-        {
-            "blueprint_id": "TARGET_ENVIRONMENT_SNOW_WANDER",
-            "contexts": ["winter", "exile"],
-            "tier": 1,
-        },
-        {
-            "blueprint_id": "TARGET_ENVIRONMENT_SNOW_2",
-            "contexts": ["winter", "exile"],
-            "tier": 1,
-        },
-        {
-            "blueprint_id": "TARGET_ENVIRONMENT_SNOW_3",
-            "contexts": ["winter", "exile"],
-            "tier": 1,
-        },
+        {"name": "孤雪", "concepts": ["environment:snow"]},
+        {"name": "寒风", "concepts": ["environment:wind"]},
+        {"name": "独行", "concepts": ["travel:exile"]},
     ],
 
     "flags": {
