@@ -47,6 +47,8 @@ var dynamic_failed_hint: String = ""
 ## 此文本会被追加到 dynamic_failed_hint 中作为锁定理由。
 ## 在 .tres 文件中手动填写，如「今日门庭冷落，车马稀疏…」。
 @export var lock_narrative: String = ""
+@export var sub_actions: Dictionary = {} # 子行动的 UUID 列表，key=uuid, value=name
+# eg. sub actions = {"actor:libai": "找李白痛饮"}
 
 ## 🆕 追加一段失败提示文本到 dynamic_failed_hint。
 ## 多条原因用换行分隔。

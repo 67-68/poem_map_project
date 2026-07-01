@@ -24,7 +24,7 @@ func describe_requirement() -> String:
 	var perception = prop.get_staged_perception_at_threshold(value)
 	if perception.is_empty() or perception == "未知状态":
 		return ""
-	return "需要「%s」" % perception
+	return "需要「%d(%s)」" % [value, perception]
 
 func get_referenced_flags() -> Array:
 	return []

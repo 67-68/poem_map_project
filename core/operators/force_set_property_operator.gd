@@ -19,7 +19,7 @@ func describe_preview() -> String:
 		return ""
 	var cn_name = prop.get_display_name() if not prop.name.is_empty() else property
 	var target_perception = prop.get_staged_perception_at_threshold(value)
-	return "%s → %s" % [cn_name, target_perception]
+	return "%s → %d(%s)" % [cn_name, value, target_perception]
 
 func operate() -> void:
 	PlayerState.force_set_stat_val(property, value)

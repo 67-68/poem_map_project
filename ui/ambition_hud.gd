@@ -107,10 +107,10 @@ func _update_progress() -> void:
 	if _tracked_prop.staged_perceptions.size() > 0:
 		var perception_text = _tracked_prop.get_staged_perception_text()
 		Logging.info("AmbitionHUD: dots='%s' + perception='%s'" % [dots_text, perception_text])
-		progress_dots_label.text = dots_text + "  " + perception_text
+		progress_dots_label.text = "%d(%s)  %s" % [_tracked_prop.val, perception_text, dots_text]
 	else:
 		Logging.info("AmbitionHUD: dots='%s' (no staged_perceptions)" % dots_text)
-		progress_dots_label.text = dots_text
+		progress_dots_label.text = "%d  %s" % [_tracked_prop.val, dots_text]
 
 
 ## 将 val / max_val 映射为 5 档 Unicode 圆点：

@@ -1,167 +1,173 @@
 {
-  "id": "emotion_imagery_v2_semantic_test",
-  "name": "语义锚点 V2 示范 — 情绪-意象正交生成",
-  "era": "745_ambition",
-
-  "semantic_anchors": {
-    "enabled": true,
-    "_note": "启用后，operator_translator 会将 option_features[].operator_dsl 和 dimensions[].values[].operator_dsl 翻译为语义锚点注入 Prompt"
-  },
-
-  "emotion_registry": {
-    "_note": "本地情绪覆盖。未在此定义的 emotion 将 fallback 到全局 semantic_emotions.json",
-    "TRANQUILITY": {
-      "cn_name": "旷达",
-      "description": "超脱物外的淡然与通透，在盛唐语境下是一种主动的选择而非无奈的妥协"
-    },
-    "SORROW": {
-      "cn_name": "悲悯",
-      "description": "对世事无常的哀悯与感伤，盛唐文人特有的'以悲为美'审美情结"
-    },
-    "ARROGANCE": {
-      "cn_name": "狂傲",
-      "description": "目空一切的桀骜与张扬，盛唐气象在个人身上的极致投射"
-    }
-  },
-
-  "apply_dimension_imagery": true,
-  "background_context": "大唐天宝年间，长安城。一个野心勃勃的士人游走于不同场景之间，在权力的缝隙中寻找向上的机会。",
-  "ai_persona": "你是一位擅长意象与情绪融合的叙事设计师，善于通过场景细节传递角色心境。你的文字克制、冷峻，不写心理独白，只写可见的动作与环境。",
-
-  "dimensions": [
-    {
-      "id": "scene",
-      "name": "场景模板",
-      "values": [
-        {
-          "id": "scene_temple",
-          "name": "古刹",
-          "description": "深山中的千年古刹，青苔覆石阶，铜钟悬梁，香火氤氲中透着肃穆与寂寥",
-          "operator_dsl": "imagery_add(name=VIBE_PHILOSOPHY_ZEN:temple_bell) | imagery_add(name=VIBE_PHILOSOPHY_ZEN:incense_ash)",
-          "tags": ["VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_PHILOSOPHY_ZEN:incense_ash", "ENV_NATURE_SNOWSTORM:lone_snow"]
-        },
-        {
-          "id": "scene_battlefield",
-          "name": "边塞",
-          "description": "荒凉的古战场，残阳如血，断戟沉沙，风中隐约传来铁马兵戈的回响",
-          "operator_dsl": "imagery_add(name=ENV_SOCIETY_WAR:beacon_fire) | imagery_add(name=ENV_SOCIETY_WAR:blood_stain) | imagery_add(name=ENV_SOCIETY_FAMINE:starving_bone) | imagery_add(name=TARGET_FACTION_MILITARY:torn_flag)",
-          "tags": ["ENV_SOCIETY_WAR:beacon_fire", "ENV_SOCIETY_WAR:blood_stain", "ENV_SOCIETY_FAMINE:starving_bone", "TARGET_FACTION_MILITARY:torn_flag"]
-        },
-        {
-          "id": "scene_banquet",
-          "name": "夜宴",
-          "description": "灯火通明的盛大夜宴，觥筹交错间红袖招展，墨香与酒香混杂在暖融的空气里",
-          "operator_dsl": "imagery_add(name=VIBE_AESTHETIC_SENSUAL:red_sleeve) | imagery_add(name=ACTION_ENTERTAIN_DRINK:empty_cup) | imagery_add(name=VIBE_AESTHETIC_ELEGANT:ink_stone)",
-          "tags": ["VIBE_AESTHETIC_SENSUAL:red_sleeve", "ACTION_ENTERTAIN_DRINK:empty_cup", "VIBE_AESTHETIC_ELEGANT:ink_stone"]
-        }
-      ]
-    },
-    {
-      "id": "emotion",
-      "name": "单情绪",
-      "values": [
-        {
-          "id": "TRANQUILITY",
-          "name": "旷达",
-          "description": "超脱物外的淡然与通透",
-          "operator_dsl": "emo_add(name=TRANQUILITY; val=10)"
-        },
-        {
-          "id": "SORROW",
-          "name": "悲悯",
-          "description": "对世事无常的哀悯与感伤",
-          "operator_dsl": "emo_add(name=SORROW; val=10)"
-        },
-        {
-          "id": "ARROGANCE",
-          "name": "狂傲",
-          "description": "目空一切的桀骜与张扬",
-          "operator_dsl": "emo_add(name=ARROGANCE; val=10)"
-        }
-      ]
-    }
-  ],
-
-  "option_features": [
-    {
-      "id": "option_A",
-      "text": "沉浸其中",
-      "prompt": "你完全沉浸在当下的氛围中，让场景的气息渗透进骨髓。感受它，成为它。",
-      "fixed": false,
-      "operator_dsl": "prop_add(name=talent; val=3) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=VIBE_PHILOSOPHY_ZEN:temple_bell)",
-      "narrative_constraint": {
-        "type": "immersion",
-        "demand_context": "角色被场景的声、光、气味全面包裹。不是思考，而是感受。",
-        "action_style": "动作是缓慢的、被动的——闭眼、深呼吸、手指无意识地触碰材质（石阶、墙面、酒盏）。与环境的边界模糊。",
-        "resolution_style": "睁开眼时世界似乎多了一层柔光。身体比进来时轻了一些。",
-        "negative_examples": [
-          {
-            "field": "action_style",
-            "bad": "你心潮澎湃，感慨万千",
-            "reason": "沉浸不是激动。不能写心理活动，不能写感慨"
-          }
-        ]
-      }
-    },
-    {
-      "id": "option_B",
-      "text": "冷眼旁观",
-      "prompt": "你退后一步，用观察者的目光审视眼前的一切——人的表情、物的位置、空气的流向。",
-      "fixed": false,
-      "operator_dsl": "prop_add(name=money; val=20) | emo_add(name=SORROW; val=5) | trait_add(name=corrupt)",
-      "narrative_constraint": {
-        "type": "observation",
-        "demand_context": "场景中的细节被放大——某人袖口的磨损、杯沿的口脂印、风把香灰吹出弧线。旁观带来了洞察，也带来了疏离。",
-        "action_style": "动作是克制的——靠在柱子上、拇指摩挲杯沿、目光缓慢扫过。与场景互动极少，保持物理距离。",
-        "resolution_style": "收回目光时嘴唇动了动——不是要说，是咽下了什么。",
-        "negative_examples": [
-          {
-            "field": "action_style",
-            "bad": "你冷笑着看这一切，心里满是不屑",
-            "reason": "冷眼旁观是抽离的观察，不是轻蔑。不能写心理活动（'不屑'）"
-          }
-        ]
-      }
-    },
-    {
-      "id": "option_C",
-      "text": "匆匆离去",
-      "prompt": "你转身离开——不是因为怕，是因为留下来也没有意义。脚步很快，但背是直的。",
-      "fixed": false,
-      "operator_dsl": "prop_add(name=fatigue; val=8) | emo_add(name=ANGER; val=5)",
-      "narrative_constraint": {
-        "type": "evasion",
-        "demand_context": "离开是主动的选择，不是败退。走得快但不停，方向明确。身后的场景在视野边缘迅速缩小。",
-        "action_style": "动作是果断的——转身没有犹豫、袖子甩出弧线、步伐节奏稳定。不回头。",
-        "resolution_style": "走到足够远的地方才停下来喘了一口气。膝盖很酸。",
-        "negative_examples": [
-          {
-            "field": "action_style",
-            "bad": "你落荒而逃，头也不回地跑了",
-            "reason": "匆匆离去是体面的撤退，不是狼狈的逃跑。不能写成滑稽的喜剧场景"
-          }
-        ]
-      }
-    }
-  ],
-
-  "word_count_min": 60,
-  "word_count_max": 120,
-  "option_word_count_max": 30,
-  "output_dir": "data/generated_events/",
-
-  "_test_notes": {
-    "what_this_demonstrates": [
-      "semantic_anchors.enabled 开关",
-      "emotion_registry 本地覆盖全局 fallback（ARROGANCE 的描述来自本地，ANGER 不在本地将 fallback 到 semantic_emotions.json）",
-      "dimension values 的 operator_dsl（场景触发 imagery_add，情绪触发 emo_add）",
-      "option_features 的 operator_dsl（选项的综合后果：属性+情绪+特质+意象）",
-      "narrative_constraint 与语义锚点的协同——约束告诉 LLM '怎么写'，锚点告诉 LLM '写什么结果'"
-    ],
-    "expected_translator_behavior": {
-      "option_A": "operator_translator 应产出：talent+3 属性锚点、TRANQUILITY+10 情绪锚点（使用本地 emotion_registry）、晨钟意象锚点",
-      "option_B": "operator_translator 应产出：money+20 属性锚点（查 money.tres change_perceptions → delta 16-20 → '一笔不小的进项'）、SORROW+5 情绪锚点、corrupt 特质锚点",
-      "option_C": "operator_translator 应产出：fatigue+8 属性锚点（查 fatigue.tres change_perceptions → delta 1-15 → '稍感疲惫'）、ANGER+5 情绪锚点（不在 emotion_registry 中 → fallback 全局 semantic_emotions.json）"
-    }
-  }
+	"id": "emotion_imagery_v2_semantic_test",
+	"name": "语义锚点 V2 示范 — 情绪-意象正交生成",
+	"era": "745_ambition",
+	"semantic_anchors": {
+		"enabled": true,
+		"_note": "启用后，operator_translator 会将 option_features[].operator_dsl 和 dimensions[].values[].operator_dsl 翻译为语义锚点注入 Prompt"
+	},
+	"emotion_registry": {
+		"_note": "本地情绪覆盖。未在此定义的 emotion 将 fallback 到全局 semantic_emotions.json",
+		"TRANQUILITY": {
+			"cn_name": "旷达",
+			"description": "超脱物外的淡然与通透，在盛唐语境下是一种主动的选择而非无奈的妥协"
+		},
+		"SORROW": {
+			"cn_name": "悲悯",
+			"description": "对世事无常的哀悯与感伤，盛唐文人特有的'以悲为美'审美情结"
+		},
+		"ARROGANCE": {
+			"cn_name": "狂傲",
+			"description": "目空一切的桀骜与张扬，盛唐气象在个人身上的极致投射"
+		}
+	},
+	"apply_dimension_imagery": true,
+	"background_context": "大唐天宝年间，长安城。一个野心勃勃的士人游走于不同场景之间，在权力的缝隙中寻找向上的机会。",
+	"ai_persona": "你是一位擅长意象与情绪融合的叙事设计师，善于通过场景细节传递角色心境。你的文字克制、冷峻，不写心理独白，只写可见的动作与环境。",
+	"dimensions": [
+		{
+			"id": "scene",
+			"name": "场景模板",
+			"values": [
+				{
+					"id": "scene_temple",
+					"name": "古刹",
+					"description": "深山中的千年古刹，青苔覆石阶，铜钟悬梁，香火氤氲中透着肃穆与寂寥",
+					"operator_dsl": "imagery_add(name=VIBE_PHILOSOPHY_ZEN:temple_bell) | imagery_add(name=VIBE_PHILOSOPHY_ZEN:incense_ash)",
+					"tags": [
+						"VIBE_PHILOSOPHY_ZEN:temple_bell",
+						"VIBE_PHILOSOPHY_ZEN:incense_ash",
+						"ENV_NATURE_SNOWSTORM:lone_snow"
+					]
+				},
+				{
+					"id": "scene_battlefield",
+					"name": "边塞",
+					"description": "荒凉的古战场，残阳如血，断戟沉沙，风中隐约传来铁马兵戈的回响",
+					"operator_dsl": "imagery_add(name=ENV_SOCIETY_WAR:beacon_fire) | imagery_add(name=ENV_SOCIETY_WAR:blood_stain) | imagery_add(name=ENV_SOCIETY_FAMINE:starving_bone) | imagery_add(name=TARGET_FACTION_MILITARY:torn_flag)",
+					"tags": [
+						"ENV_SOCIETY_WAR:beacon_fire",
+						"ENV_SOCIETY_WAR:blood_stain",
+						"ENV_SOCIETY_FAMINE:starving_bone",
+						"TARGET_FACTION_MILITARY:torn_flag"
+					]
+				},
+				{
+					"id": "scene_banquet",
+					"name": "夜宴",
+					"description": "灯火通明的盛大夜宴，觥筹交错间红袖招展，墨香与酒香混杂在暖融的空气里",
+					"operator_dsl": "imagery_add(name=VIBE_AESTHETIC_SENSUAL:red_sleeve) | imagery_add(name=ACTION_ENTERTAIN_DRINK:empty_cup) | imagery_add(name=VIBE_AESTHETIC_ELEGANT:ink_stone)",
+					"tags": [
+						"VIBE_AESTHETIC_SENSUAL:red_sleeve",
+						"ACTION_ENTERTAIN_DRINK:empty_cup",
+						"VIBE_AESTHETIC_ELEGANT:ink_stone"
+					]
+				}
+			]
+		},
+		{
+			"id": "emotion",
+			"name": "单情绪",
+			"values": [
+				{
+					"id": "TRANQUILITY",
+					"name": "旷达",
+					"description": "超脱物外的淡然与通透",
+					"operator_dsl": "emo_add(name=TRANQUILITY; val=10)"
+				},
+				{
+					"id": "SORROW",
+					"name": "悲悯",
+					"description": "对世事无常的哀悯与感伤",
+					"operator_dsl": "emo_add(name=SORROW; val=10)"
+				},
+				{
+					"id": "ARROGANCE",
+					"name": "狂傲",
+					"description": "目空一切的桀骜与张扬",
+					"operator_dsl": "emo_add(name=ARROGANCE; val=10)"
+				}
+			]
+		}
+	],
+	"option_features": [
+		{
+			"id": "option_A",
+			"text": "沉浸其中",
+			"prompt": "你完全沉浸在当下的氛围中，让场景的气息渗透进骨髓。感受它，成为它。",
+			"fixed": false,
+			"operator_dsl": "prop_add(name=talent; val=3) | emo_add(name=TRANQUILITY; val=10) | imagery_add(name=VIBE_PHILOSOPHY_ZEN:temple_bell)",
+			"narrative_constraint": {
+				"type": "immersion",
+				"demand_context": "角色被场景的声、光、气味全面包裹。不是思考，而是感受。",
+				"action_style": "动作是缓慢的、被动的——闭眼、深呼吸、手指无意识地触碰材质（石阶、墙面、酒盏）。与环境的边界模糊。",
+				"resolution_style": "睁开眼时世界似乎多了一层柔光。身体比进来时轻了一些。",
+				"negative_examples": [
+					{
+						"field": "action_style",
+						"bad": "你心潮澎湃，感慨万千",
+						"reason": "沉浸不是激动。不能写心理活动，不能写感慨"
+					}
+				]
+			}
+		},
+		{
+			"id": "option_B",
+			"text": "冷眼旁观",
+			"prompt": "你退后一步，用观察者的目光审视眼前的一切——人的表情、物的位置、空气的流向。",
+			"fixed": false,
+			"operator_dsl": "prop_add(name=money; val=20) | emo_add(name=SORROW; val=5) | trait_add(name=corrupt)",
+			"narrative_constraint": {
+				"type": "observation",
+				"demand_context": "场景中的细节被放大——某人袖口的磨损、杯沿的口脂印、风把香灰吹出弧线。旁观带来了洞察，也带来了疏离。",
+				"action_style": "动作是克制的——靠在柱子上、拇指摩挲杯沿、目光缓慢扫过。与场景互动极少，保持物理距离。",
+				"resolution_style": "收回目光时嘴唇动了动——不是要说，是咽下了什么。",
+				"negative_examples": [
+					{
+						"field": "action_style",
+						"bad": "你冷笑着看这一切，心里满是不屑",
+						"reason": "冷眼旁观是抽离的观察，不是轻蔑。不能写心理活动（'不屑'）"
+					}
+				]
+			}
+		},
+		{
+			"id": "option_C",
+			"text": "匆匆离去",
+			"prompt": "你转身离开——不是因为怕，是因为留下来也没有意义。脚步很快，但背是直的。",
+			"fixed": false,
+			"operator_dsl": "prop_add(name=fatigue; val=8) | emo_add(name=ANGER; val=5)",
+			"narrative_constraint": {
+				"type": "evasion",
+				"demand_context": "离开是主动的选择，不是败退。走得快但不停，方向明确。身后的场景在视野边缘迅速缩小。",
+				"action_style": "动作是果断的——转身没有犹豫、袖子甩出弧线、步伐节奏稳定。不回头。",
+				"resolution_style": "走到足够远的地方才停下来喘了一口气。膝盖很酸。",
+				"negative_examples": [
+					{
+						"field": "action_style",
+						"bad": "你落荒而逃，头也不回地跑了",
+						"reason": "匆匆离去是体面的撤退，不是狼狈的逃跑。不能写成滑稽的喜剧场景"
+					}
+				]
+			}
+		}
+	],
+	"word_count_min": 60.0,
+	"word_count_max": 120.0,
+	"option_word_count_max": 30.0,
+	"output_dir": "data/generated_events/",
+	"_test_notes": {
+		"what_this_demonstrates": [
+			"semantic_anchors.enabled 开关",
+			"emotion_registry 本地覆盖全局 fallback（ARROGANCE 的描述来自本地，ANGER 不在本地将 fallback 到 semantic_emotions.json）",
+			"dimension values 的 operator_dsl（场景触发 imagery_add，情绪触发 emo_add）",
+			"option_features 的 operator_dsl（选项的综合后果：属性+情绪+特质+意象）",
+			"narrative_constraint 与语义锚点的协同——约束告诉 LLM '怎么写'，锚点告诉 LLM '写什么结果'"
+		],
+		"expected_translator_behavior": {
+			"option_A": "operator_translator 应产出：talent+3 属性锚点、TRANQUILITY+10 情绪锚点（使用本地 emotion_registry）、晨钟意象锚点",
+			"option_B": "operator_translator 应产出：money+20 属性锚点（查 money.tres change_perceptions → delta 16-20 → '一笔不小的进项'）、SORROW+5 情绪锚点、corrupt 特质锚点",
+			"option_C": "operator_translator 应产出：fatigue+8 属性锚点（查 fatigue.tres change_perceptions → delta 1-15 → '稍感疲惫'）、ANGER+5 情绪锚点（不在 emotion_registry 中 → fallback 全局 semantic_emotions.json）"
+		}
+	}
 }

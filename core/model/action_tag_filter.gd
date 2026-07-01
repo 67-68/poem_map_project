@@ -4,6 +4,7 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
 	var new_events = {}
 	var current_tags = PlayerState.current_action_tags
 	var main_tag = _context.get('main_tag', '')
+	var tag_match_mode: String = _context.get('tag_match_mode', 'any')
 
 	# 前缀匹配：用 main_tag 找对应桶（如 action:main:baiye:general 匹配 action:main:baiye）
 	var matched_bucket: Dictionary = {}
@@ -25,8 +26,12 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
 			Logging.err("[ActionTagFilter] Event not found: " + ticket.event_uuid)
 			continue
 
-		# 1. 天地法则：没有标签的全局事件，永远放行！
+		# 1. 天地法则：没有标签的全局事件
 		if not e.target_tags or e.target_tags.is_empty():
+			if tag_match_mode == 'all':
+				# AND 模式下，全局事件无标签 → 不满足双 tag 要求，跳过
+				Logging.info("[ActionTagFilter] AND mode: event '%s' has no target_tags, skipping" % ticket.event_uuid)
+				continue
 			new_events[ticket.event_uuid] = ticket
 			Logging.warn('放行没有标签的全局事件')
 			continue
@@ -36,7 +41,23 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
 			Logging.warn("检查自己是不是又忘记给玩家加current tags了！！！又筛选掉了")
 			continue
 
-		# 3. 🚀 革新匹配：前缀匹配（短 tag 做前缀，匹配长 tag）
+		if tag_match_mode == 'all':
+			# ── AND 模式：所有 current_tags 必须全部在事件的 target_tags 中 ──
+			var all_match := true
+			for required_tag in current_tags:
+				if not e.target_tags.has(required_tag):
+					all_match = false
+					break
+			if all_match:
+				if new_events.has(ticket.event_uuid):
+					new_events[ticket.event_uuid].weight += ticket.original_weight * 3
+				else:
+					new_events[ticket.event_uuid] = ticket
+					new_events[ticket.event_uuid].weight *= 9
+				Logging.info("[ActionTagFilter] AND mode: event '%s' 匹配全部 required_tags: %s" % [ticket.event_uuid, str(current_tags)])
+			continue  # AND 模式下跳过下方的 OR 匹配
+
+		# 3. 🚀 革新匹配：前缀匹配（短 tag 做前缀，匹配长 tag） — OR 模式
 		for tag in current_tags:
 			for target_tag in e.target_tags:
 				if tag == target_tag:

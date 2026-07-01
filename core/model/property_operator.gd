@@ -75,8 +75,8 @@ func describe_preview() -> String:
 		arrows += arrow_char
 	var perception_text = prop.get_change_perception_text(value)
 	if perception_text.is_empty():
-		return cn_name + " " + arrows
-	return cn_name + " " + arrows + "：" + perception_text
+		return "%s %s：%+d" % [cn_name, arrows, value]
+	return "%s %s：%+d(%s)" % [cn_name, arrows, value, perception_text]
 
 static func _get_arrow_count(prop_name: String, delta: int) -> int:
 	var amounts = NamedDSLParser._load_named_amounts()

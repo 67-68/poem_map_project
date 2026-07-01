@@ -36,6 +36,8 @@ var _emotion_labels: Dictionary = {}
 var _prop_label_map: Dictionary = {}
 # 当前活跃的颜色覆盖（prop_key → Color），用于 rebuild 后重染色
 var _prop_color_overrides: Dictionary = {}
+# 野心追踪属性进度 Label（动态创建在 Ambition 按钮下方）
+var _ambition_progress_label: Label = null
 
 # 侧滑动画
 var _original_pos_x: float
@@ -98,8 +100,17 @@ func _ready() -> void:
 	else:
 		Logging.warn("LeftPlayerPanel: ambition_hud is null, hover popup disabled")
 	
-	# 野心按钮文本
+	# 野心按钮文本 + 动态创建进度 Label
 	_update_ambition_text()
+	_create_ambition_progress_label()
+	
+	# 监听属性变动 → 刷新野心进度
+	if not PlayerState.player_stat_changed.is_connected(_on_ambition_stat_changed):
+		PlayerState.player_stat_changed.connect(_on_ambition_stat_changed)
+	
+	# 监听野心变更 → 重建进度 Label（tracked_property 可能变化）
+	if not PlayerState.ambition_changed.is_connected(_on_ambition_changed):
+		PlayerState.ambition_changed.connect(_on_ambition_changed)
 	
 	# 侧滑动画
 	_original_pos_x = position.x
@@ -128,6 +139,54 @@ func _update_ambition_text() -> void:
 	else:
 		_ambition_btn.text = "【野心】暂无"
 		Logging.info("LeftPlayerPanel: no ambition data")
+	_refresh_ambition_progress_label()
+
+func _create_ambition_progress_label() -> void:
+	if _ambition_progress_label:
+		return
+	_ambition_progress_label = Label.new()
+	_ambition_progress_label.name = "AmbitionProgressLabel"
+	_ambition_progress_label.theme_type_variation = &"DefaultText"
+	_ambition_progress_label.add_theme_font_size_override(&"font_size", 12)
+	_ambition_progress_label.add_theme_color_override(&"font_color", Color(0.5, 0.45, 0.35))
+	var parent_vbox := _ambition_btn.get_parent()
+	if parent_vbox:
+		parent_vbox.add_child(_ambition_progress_label)
+		parent_vbox.move_child(_ambition_progress_label, _ambition_btn.get_index() + 1)
+		Logging.info("LeftPlayerPanel: ambition progress label created")
+	_refresh_ambition_progress_label()
+
+func _refresh_ambition_progress_label() -> void:
+	if not _ambition_progress_label:
+		return
+	var ambition = PlayerState.ambition
+	if not ambition or ambition.tracked_property.is_empty():
+		_ambition_progress_label.hide()
+		return
+	var tracked_prop = Database.get_property(ambition.tracked_property)
+	if not tracked_prop:
+		_ambition_progress_label.hide()
+		Logging.warn("LeftPlayerPanel: tracked property '%s' not found" % ambition.tracked_property)
+		return
+	var cn_name = tracked_prop.get_display_name()
+	var val = tracked_prop.val
+	var perception = tracked_prop.get_staged_perception_text()
+	_ambition_progress_label.text = "进度「%s」：%d(%s)" % [cn_name, val, perception]
+	_ambition_progress_label.show()
+
+func _on_ambition_stat_changed(prop_name: String) -> void:
+	var ambition = PlayerState.ambition
+	if not ambition or ambition.tracked_property.is_empty():
+		return
+	if prop_name == ambition.tracked_property:
+		_refresh_ambition_progress_label()
+
+func _on_ambition_changed(_new_ambition) -> void:
+	# tracked_property 可能变化，重建 label
+	if _ambition_progress_label:
+		_ambition_progress_label.queue_free()
+		_ambition_progress_label = null
+	_create_ambition_progress_label()
 
 # ── 情绪刷新（字即是心 BBCode 方案）────────────────────
 
@@ -171,9 +230,9 @@ func _refresh_emotions(_unused: String = "") -> void:
 			has_shake = true
 		
 		if has_shake:
-			label.text = "[color=%s][font_size=%d][shake rate=20.0 level=5 connected=1]%s：%s[/shake][/font_size][/color]" % [color_str, font_size, cn_name, desc]
+			label.text = "[color=%s][font_size=%d][shake rate=20.0 level=5 connected=1]%s：%d(%s)[/shake][/font_size][/color]" % [color_str, font_size, cn_name, value, desc]
 		else:
-			label.text = "[color=%s][font_size=%d]%s：%s[/font_size][/color]" % [color_str, font_size, cn_name, desc]
+			label.text = "[color=%s][font_size=%d]%s：%d(%s)[/font_size][/color]" % [color_str, font_size, cn_name, value, desc]
 		
 		Logging.info("LeftPlayerPanel: _refresh_emotions: %s value=%d -> '%s'" % [cn_name, value, desc])
 
@@ -200,7 +259,7 @@ func _rebuild_prop_grid() -> void:
 			continue
 		var label := Label.new()
 		label.theme_type_variation = &"DefaultText"
-		label.text = "「%s」：%s" % [prop.get_display_name(), prop.get_staged_perception_text()]
+		label.text = "「%s」：%d(%s)" % [prop.get_display_name(), prop.val, prop.get_staged_perception_text()]
 		_prop_grid.add_child(label)
 		_prop_label_map[prop_key] = label
 		Logging.info("LeftPlayerPanel: added prop label: %s" % label.text)
@@ -234,7 +293,7 @@ func _refresh_prop_grid() -> void:
 		if prop.not_show_on_left:
 			continue
 		var label: Label = children[idx]
-		var new_text := "「%s」：%s" % [prop.get_display_name(), prop.get_staged_perception_text()]
+		var new_text := "「%s」：%d(%s)" % [prop.get_display_name(), prop.val, prop.get_staged_perception_text()]
 		if label.text != new_text:
 			label.text = new_text
 			Logging.info("LeftPlayerPanel: updated prop label: %s" % new_text)

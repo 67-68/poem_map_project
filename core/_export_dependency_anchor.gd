@@ -165,7 +165,6 @@ const __preload_156 = preload("res://model/choice_result.gd")  # ChoiceResult
 const __preload_157 = preload("res://model/event.gd")  # BaseEvent
 const __preload_158 = preload("res://model/event/base_option.gd")  # BaseOption
 const __preload_159 = preload("res://model/event/complex_event_option.gd")  # ComplexEventOption
-const __preload_160 = preload("res://model/event/custom_event_option.gd")  # CustomEventOption
 const __preload_161 = preload("res://model/event/event_option.gd")  # EventOption
 const __preload_162 = preload("res://model/event/property_option.gd")  # PropertyOption
 const __preload_163 = preload("res://model/faction.gd")  # Faction

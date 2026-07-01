@@ -109,9 +109,6 @@ func _init_option(data: BaseOption):
 	# ── 统一验证管线 ──
 	# 无论是 Requirement（属性不够、flag 未设置）还是 NarrativeLock（叙事锁定），
 	# 都通过 requirement.compare() 统一判断。不再单独处理 is_disabled 分支。
-	if data is CustomEventOption:
-		breakpoint
-		return
 	if data.requirement:
 		var pass_prop = data.requirement.compare(PlayerState)
 		if pass_prop == null:

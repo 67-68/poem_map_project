@@ -9,6 +9,12 @@ var _flash_tween: Tween = null
 ## 🆕 当前是否处于灰化锁定状态
 var _is_locked: bool = false
 
+# ── Sub-action 挂起数据（picker 回调中使用） ────────────
+var _pending_sub_action_main_tag: String = ""
+var _pending_sub_action_fallback: String = ""
+var _pending_sub_action_tags: Array[String] = []
+var _pending_sub_action_results: Array = []
+
 # ── Hover 底色（枯墨暗红，极淡，只有交互时才显形）──
 const HOVER_BG_COLOR: Color = Color(0.22, 0.05, 0.02, 0.10)
 var _hover_style: StyleBoxFlat
@@ -187,6 +193,27 @@ func _on_button_pressed() -> void:
 		_snap_fallback = sa.fallback_event_uuid
 		_snap_tags = sa.action_tags.duplicate()
 	
+	# 🆕 Sub-action 检测：存在 sub_actions 时弹出 Picker，选择后再执行 operators + scan
+	# generator 存在时跳过 sub-action（generator 已预定了事件链）
+	if _snap_is_scene and _snap_generator == null and action.sub_actions and not action.sub_actions.is_empty():
+		# 挂起元数据，供 _on_sub_action_picked 回调使用
+		_pending_sub_action_main_tag = _snap_main_tag
+		_pending_sub_action_fallback = _snap_fallback
+		_pending_sub_action_tags = _snap_tags.duplicate()
+		_pending_sub_action_results = action.action_results.duplicate() if action.action_results else []
+		
+		var picker_data: Array[GameEntity] = []
+		for sub_uuid in action.sub_actions:
+			var sub_name: String = action.sub_actions[sub_uuid]
+			var entity := GameEntity.new({"uuid": sub_uuid, "name": sub_name})
+			# 每个选项携带父行动的 main_tag（为未来多行动混合 picker 做准备）
+			entity.set_meta("parent_main_tag", _snap_main_tag)
+			picker_data.append(entity)
+		
+		Logging.info("SceneActionPanel: sub_actions 检测到 %d 个子行动，弹出 Picker" % picker_data.size())
+		EventBus.push_picker.emit(picker_data, _on_sub_action_picked, null)
+		return
+	
 	# 🆕 批量模式：抑制属性变动期间的 reevaluate，全部 results 执行完后统一评估
 	ActionManager.begin_action_batch()
 	if action.action_results:
@@ -219,3 +246,43 @@ func _on_button_pressed() -> void:
 			'fallback_event_uuid': _snap_fallback,
 		}
 		EventManager.scan_events(0, context)
+
+
+# ── Sub-action Picker 回调 ──────────────────────────────────
+
+## 玩家从 sub-action picker 中选择一个子行动后回调。
+## @param entity: 被选中的子行动 GameEntity（含 uuid=sub_uuid, name=显示名）
+func _on_sub_action_picked(entity) -> void:
+	var sub_uuid: String = entity.uuid if entity is GameEntity else ""
+	if sub_uuid.is_empty():
+		Logging.err("_on_sub_action_picked: entity.uuid is empty, aborting")
+		return
+	
+	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
+	
+	# 1. 执行父行动的 operators（挂起数据）
+	ActionManager.begin_action_batch()
+	for r in _pending_sub_action_results:
+		r.operate()
+	ActionManager.end_action_batch()
+	
+	ActionManager.get_focus_controller().notify_click()
+	
+	# 2. 将 sub-action uuid + 父行动 tags 追加到 current_action_tags
+	PlayerState.current_action_tags.append(sub_uuid)
+	for tag in _pending_sub_action_tags:
+		PlayerState.current_action_tags.append(tag)
+	
+	# 3. AND 模式事件扫描：事件必须同时匹配 sub_uuid 和父 main_tag
+	var context = {
+		'main_tag': _pending_sub_action_main_tag,
+		'fallback_event_uuid': _pending_sub_action_fallback,
+		'tag_match_mode': 'all',
+	}
+	EventManager.scan_events(0, context)
+	
+	# 清理挂起数据
+	_pending_sub_action_main_tag = ""
+	_pending_sub_action_fallback = ""
+	_pending_sub_action_tags.clear()
+	_pending_sub_action_results.clear()

@@ -40,11 +40,11 @@ func describe_preview() -> String:
 	var arrow = "↑" if value > 0 else "↓"
 	match mode:
 		'reduce_to_lowest_zero':
-			return "%s↓" % [cn_name]
+			return "%s↓(%d)" % [cn_name, value]
 		'set':
-			return "%s →" % [cn_name]
+			return "%s → %d" % [cn_name, value]
 		_:
-			return "%s%s" % [cn_name, arrow]
+			return "%s%s(%+d)" % [cn_name, arrow, value]
 
 func operate():
 	# 先处理 archetype 效果

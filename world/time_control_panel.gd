@@ -62,7 +62,7 @@ func _ready():
 
 func _refresh_time_left() -> void:
 	var time_val: int = int(PlayerState.get_stat_val("time"))
-	label_time_left.text = format_time_dots(time_val)
+	label_time_left.text = "%d(%s)" % [time_val, format_time_dots(time_val)]
 
 func _on_year_changed(current_float_year: float):
 	var current_year = int(floor(current_float_year))
