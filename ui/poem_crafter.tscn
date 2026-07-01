@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dhm3awu3pacwl" path="res://ui/poem_slot.tscn" id="3_o11fd"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="4_sfx"]
 [ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="5_o11fd"]
+[ext_resource type="PackedScene" uid="uid://djh76cnmg2a5c" path="res://ui/poem_demand.tscn" id="6_nl13t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rixq6"]
 border_width_left = 1
@@ -111,28 +112,17 @@ render_target_update_mode = 4
 [node name="Camera2D" type="Camera2D" parent="Panel/VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport" unique_id=268796607]
 anchor_mode = 0
 
-[node name="SmoothScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer/HBoxContainer" unique_id=697089361]
+[node name="PoemDemands" type="ScrollContainer" parent="Panel/VBoxContainer/HBoxContainer" unique_id=697089361]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 script = ExtResource("5_o11fd")
 metadata/_custom_type_script = "uid://y5gl8aohf1ll"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/SmoothScrollContainer" unique_id=895419980]
+[node name="V" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/PoemDemands" unique_id=895419980]
 layout_mode = 2
 
-[node name="PoemDemand" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/SmoothScrollContainer/VBoxContainer" unique_id=1177788908]
+[node name="PoemDemand" parent="Panel/VBoxContainer/HBoxContainer/PoemDemands/V" unique_id=719516563 instance=ExtResource("6_nl13t")]
 layout_mode = 2
-
-[node name="Title" type="Label" parent="Panel/VBoxContainer/HBoxContainer/SmoothScrollContainer/VBoxContainer/PoemDemand" unique_id=857474607]
-layout_mode = 2
-theme_type_variation = &"FrozenTitleText"
-text = "自京附奉先县诵咏五百字"
-
-[node name="ImaginaryDemand" type="Label" parent="Panel/VBoxContainer/HBoxContainer/SmoothScrollContainer/VBoxContainer/PoemDemand" unique_id=1771738709]
-layout_mode = 2
-theme_type_variation = &"DefaultText"
-theme_override_colors/font_color = Color(0.9769085, 0.8854819, 0.888225, 1)
-text = "骊山权贵 + 幼子饿殍 + 自觉荒谬"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer" unique_id=305003387]
 layout_mode = 2
