@@ -12,12 +12,6 @@ class_name Poem extends Trait
 ## 诗词配方所需的 Fragment 列表，FragmentMatcher 用于校验意象组合
 @export var required_fragments: Array[String] = []
 
-## 诗词背景类型（旧 PoemData.Poem_BG，迁移至此）
-enum PoemBG {
-	BOOK,
-	NIGHT
-}
-
 ## 诗词稀缺度等级（旧 PoemData.Poem_Grade，迁移至此）
 enum PoemGrade {
 	SHIYI,      ## 拾遗

@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="StampConfig" format=3 uid="uid://w7qfra8f60it"]
-
-[ext_resource type="Script" uid="uid://bmhda6n6ryumm" path="res://model/stamp_config_entry.gd" id="1_o0opb"]
-[ext_resource type="Script" uid="uid://upr00g57m7vy" path="res://model/stamp_config.gd" id="1_p32fo"]
-
-[resource]
-script = ExtResource("1_p32fo")
-metadata/_custom_type_script = "uid://upr00g57m7vy"
