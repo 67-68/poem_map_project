@@ -46,9 +46,13 @@ func _ready() -> void:
 	svp_container.gui_input.connect(_on_subviewport_gui_input)
 
 	# V5: poem_type 按钮不再连接逻辑（全类型盲搜），保留纯展示
-	# _connect_poem_type_buttons() — 已移除
 
-	# "开始创作"按钮 — 由 tscn 的 _on_button_pressed() 命名约定自动连接
+	# "开始创作"按钮 — 手动连接（按钮已重命名为 CraftBtn，不再依赖命名约定）
+	var craft_btn := $Panel/VBoxContainer/InputImagPanel/CraftBtn
+	if craft_btn:
+		craft_btn.pressed.connect(_on_button_pressed)
+		Logging.info('PoemCrafter: CraftBtn.pressed 手动连接成功')
+
 	# "撕毁卷轴"按钮 — 位于 $Panel/Button，手动连接
 	var tear_btn := $Panel/Button
 	if tear_btn:
@@ -386,10 +390,14 @@ func _on_button_pressed() -> void:
 		_rebuild_subviewport()
 		return
 
-	# ── 失败 ──
+	# ── 失败（消耗意象，但不产出诗词）──
 	if not result.passed:
-		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
-		Logging.info('PoemCrafter: poem creation failed, reason=%s' % result.fail_reason)
+		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "[color=#aaa]你沉吟良久，终究觉得这些意象散落四处，凑不成章。[/color]\n[color=#888]不如再寻些贴合的意象来…[/color]"
+		Logging.info('PoemCrafter: poem creation failed, reason=%s — consuming concepts' % result.fail_reason)
+		ImaginaryComprehender.consume_concepts(selected_imaginaries)
+		selected_imaginaries.clear()
+		render_slots()
+		_rebuild_subviewport()
 		return
 
 	# ── 精确匹配成功 ──
@@ -463,14 +471,39 @@ func _preview_match() -> void:
 		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "[color=#f9ca24]🪶 打油诗[/color]\n意象未全，literary_fame +5"
 		return
 
-	if not result.passed:
-		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = result.penalty_text
+	if result.passed:
+		# 精确匹配 → 显示品级预览
+		var text := _build_barrel_preview(result)
+		$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = text
+		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
 		return
 
-	# 精确匹配 → 显示品级预览
-	var text := _build_barrel_preview(result)
-	$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = text
-	$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = text
+	# 无匹配 → 显示 Tier/Level 估计，而非直接报失败
+	var estimate := _build_tier_estimate()
+	$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = estimate
+
+
+## 无食谱匹配时，基于 Tier+Level 给出叙事化估评
+func _build_tier_estimate() -> String:
+	var max_level := 0
+	var min_tier := 999
+	for c in selected_imaginaries:
+		if c is ImaginaryConcept:
+			max_level = maxi(max_level, c.current_level)
+			if c.current_tier > 0:
+				min_tier = mini(min_tier, c.current_tier)
+	if min_tier >= 2:
+		min_tier = 2
+	if min_tier == 999:
+		min_tier = 1
+
+	var tier_name = TIER_NAMES.get(min_tier, "未知")
+	var lines: Array[String] = []
+	lines.append("[color=#aaa]你将这三者放在一处，有些疑惑——[/color]")
+	lines.append("[color=#ccc]它们真的能凑成一首诗么？[/color]")
+	lines.append("")
+	lines.append("[color=#888]品级约 T%d · %s | 等阶 Lv.%d[/color]" % [min_tier, tier_name, max_level])
+	return "\n".join(lines)
 
 
 ## 找出所有 tier == min_tier 的概念（木桶的短板）

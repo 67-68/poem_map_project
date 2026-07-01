@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://c3qk57rwm7q84"]
+[gd_scene format=3 uid="uid://c3qk57rwm7q84"]
 
 [ext_resource type="Script" uid="uid://3c0hw3bupjy7" path="res://view_tests/view_test.gd" id="1_pfr0j"]
-[ext_resource type="Script" uid="uid://dy8r1cqfnr7sm" path="res://view_tests/vtest_golden_shine.gd" id="2_pfr0j"]
+[ext_resource type="Script" uid="uid://cu64fbn8slj3v" path="res://view_tests/vtest_golden_shine.gd" id="2_pfr0j"]
+[ext_resource type="Script" uid="uid://c2ibodvtmp8yq" path="res://tools/generate_test_poem_events.gd" id="3_62ryi"]
 
-[node name="DebugView" type="Control"]
+[node name="DebugView" type="Control" unique_id=1491696959]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -11,16 +12,17 @@ offset_bottom = 40.0
 script = ExtResource("1_pfr0j")
 debug_script = ExtResource("2_pfr0j")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1925919936]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("3_62ryi")
 
-[node name="ViewTestBtnContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="ViewTestBtnContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=2044224206]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.2
 
-[node name="ViewGallery" type="HFlowContainer" parent="HBoxContainer"]
+[node name="ViewGallery" type="HFlowContainer" parent="HBoxContainer" unique_id=1687919705]
 layout_mode = 2
 size_flags_horizontal = 3

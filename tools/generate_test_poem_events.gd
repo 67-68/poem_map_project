@@ -99,18 +99,18 @@ func _generate_scenario_1() -> void:
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 2: 3 个 partial match → 恰好 30 权重
-# 诗词要求 ENV:NATURE:AUTUMN:changanleaf
-# 3 个概念各给 partial ENV:NATURE:AUTUMN:* → 10+10+10=30 刚好过线
+# 场景 2: 精确 Set 匹配 — 概念集合完全命中食谱（V5）
+# 诗词食谱需要 {aesthetic:elegant, emotion:ambition, society:famine}
+# 用 3 个对应的 concept 做精确 Set 匹配
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_2() -> void:
-	Logging.info("[场景2] 生成 partial match → 30 权重事件")
+	Logging.info("[场景2] 生成精确 Set 匹配事件 (V5)")
 
 	var event = _make_chained_event(
 		"test_s2_partial_threshold",
 		"denggao",
-		"[测试] 场景2: 获取 environment 相关概念的 Imaginary",
+		"[测试] 场景2: 获取精确匹配食谱的 Imaginary（aesthetic:elegant, emotion:ambition, society:famine）",
 		[
 			"cold_moon",
 			"lone_snow",
@@ -121,13 +121,12 @@ func _generate_scenario_2() -> void:
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 3: 无法匹配 → 拒绝创作
-# 诗词要求 ENV:NATURE:AUTUMN:changanleaf
-# 所有意象都不相关
+# 场景 3: 无法匹配 → 拒绝创作（V5: <2 概念命中任何食谱）
+# 所有意象与现有食谱 {aesthetic:elegant, emotion:ambition, society:famine} 无关
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_3() -> void:
-	Logging.info("[场景3] 生成无匹配 → 拒绝创作事件")
+	Logging.info("[场景3] 生成无匹配 → 拒绝创作事件 (V5)")
 
 	var event = _make_chained_event(
 		"test_s3_no_match",
@@ -146,18 +145,18 @@ func _generate_scenario_3() -> void:
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 4: 2 partial + 1 无匹配 → 拒绝
-# 诗词要求 ENV:NATURE:AUTUMN:changanleaf
-# 2 个 partial (10+10=20) + 1 无匹配 → 20 < 30 → 拒绝
+# 场景 4: 2/3 子集命中 → 打油诗（V5 新行为）
+# 冷月 + 孤雪 命中食谱 {cold_moon, lone_snow, *}，drunk 无关
+# V4 中此场景为失败，V5 中改为打油诗（+5 literary_fame）
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_4() -> void:
-	Logging.info("[场景4] 生成 2 partial + 1 无匹配 → 拒绝事件")
+	Logging.info("[场景4] 生成 2/3 打油诗事件 (V5)")
 
 	var event = _make_chained_event(
 		"test_s4_partial_fail",
 		"fangshi",
-		"[测试] 场景4: 获取部分匹配 + 无关 Imaginary",
+		"[测试] 场景4: 获取 2/3 匹配 → 打油诗",
 		[
 			"cold_moon",
 			"lone_snow",
@@ -168,8 +167,9 @@ func _generate_scenario_4() -> void:
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 5: PoemTypeChooseOperator → 诗词使用后删除
-# 需要先给玩家一个 Poem trait，然后用 PoemTypeChooseOperator
+# 场景 5: PoemTypeChooseOperator → 诗词选择与消耗（V5）
+# 先给玩家 poem_recipe_tian_cheng，再通过 PoemTypeChooseOperator 选择使用
+# V5: 诗词不再走 Trait 管道（pending poem_refactor_detrait）
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_5() -> void:
@@ -210,30 +210,29 @@ func _generate_scenario_5() -> void:
 
 
 # ════════════════════════════════════════════════════════════
-# 场景 6: Tier 1/2/3 + SECULAR/BROADCAST 管道乘数
-# 通过不同的 ImaginaryOperator 设置不同 tier 的概念
-# 然后通过 PoemTypeChooseOperator 选择不同诗词类型观察收益差异
+# 场景 6: Tier 1/2 管道乘数（V5: Tier 2/3 已合并）
+# 提供完整意象池，让玩家能创作不同 tier 的诗词
+# V5: Tier ≥ 2 统一为 Tier 2，Tier 3 概念被 clamp 到 2
 # ════════════════════════════════════════════════════════════
 
 func _generate_scenario_6() -> void:
-	Logging.info("[场景6] 生成 Tier 1/2/3 管道乘数测试事件")
-	# 注: 此场景主要靠单元测试验证，事件仅在玩家试图创作时看到收益差异
+	Logging.info("[场景6] 生成 Tier 1/2 管道乘数测试事件 (V5)")
+	# V5: Tier 2/3 合并，仅 Tier 1 和 Tier 2
 	# 提供完整的意象池，让玩家能创作不同 tier 的诗词
 
 	var event = _make_chained_event(
 		"test_s6_tier_pipeline",
 		"denggao",
-		"[测试] 场景6: 获取不同 Tier 的 Imaginary 素材",
+		"[测试] 场景6: 获取 Tier 1/2 的 Imaginary 素材（V5: Tier 2/3 已合并）",
 		[
-			# Tier 1 意象素材 (世俗: 红袖/空盏/折柳)
+			# Tier 1 意象素材（世俗）
 			"ink_stone",
 			"empty_cup",
 			"willow_branch",
-			# Tier 2 意象素材 (沉重: 烽火/饿殍/残垣)
+			# Tier 2 意象素材（诗史, 原 Tier 2+3 合并）
 			"starving_bone",
 			"ruined_wall",
 			"ghost_fire",
-			# Tier 3 意象素材 (高洁: 寒月/孤雪/晨钟)
 			"cold_moon",
 			"lone_snow",
 			"temple_bell",
