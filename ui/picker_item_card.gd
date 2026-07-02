@@ -42,7 +42,35 @@ func _apply_data(entity_data: GameEntity) -> void:
 	else:
 		icon_rect.hide()
 
+	# Register hover popup for operator previews
+	_register_hover_popup()
+
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		clicked.emit(entity)
+
+
+func _register_hover_popup() -> void:
+	var ops: Array = entity.get_meta("operators", []) if entity else []
+	if ops.is_empty():
+		return
+
+	var vector_lines: Array[String] = []
+	for op in ops:
+		if op and op.has_method("describe_preview"):
+			var desc = op.describe_preview()
+			if not desc.is_empty():
+				vector_lines.append("• " + desc)
+	var vector_text = "\n".join(vector_lines)
+	if vector_text.is_empty():
+		return
+
+	var narrative = entity.name if entity else ""
+	if entity and not entity.description.is_empty():
+		narrative = narrative + "\n" + entity.description
+
+	var popup = HoverInfoPopup.new()
+	popup.set_narrative_text(narrative)
+	popup.set_vector_text(vector_text)
+	HoverPopupManager.register(self, popup, 0.2, 0.15)
