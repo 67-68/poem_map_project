@@ -6,6 +6,8 @@ var parent: String = ""
 var universal_requirement: String = ""
 var universal_result: String = ""
 var era: String = ""
+var action_uuid: String = ""
+var state: String = ""
 var failed_hints: Dictionary = {}
 
 ## 预解析的 PropertyOperator 列表（从 universal_result DSL 解析而来）
@@ -19,6 +21,8 @@ static func from_json(data: Dictionary) -> ActionArchetype:
 	arch.universal_requirement = data.get("universal_requirement", "")
 	arch.universal_result = data.get("universal_result", "")
 	arch.era = data.get("era", "")
+	arch.action_uuid = data.get("action_uuid", "")
+	arch.state = data.get("state", "")
 	var hints = data.get("failed_hints", {})
 	if hints is Dictionary:
 		arch.failed_hints = hints.duplicate()
