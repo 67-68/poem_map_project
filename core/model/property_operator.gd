@@ -1,3 +1,4 @@
+@tool
 class_name PropertyOperator extends BaseOperator
 
 @export var _property: ENUMS.PROPS = -1
@@ -12,6 +13,10 @@ var property := '':
 @export var str_props: String = ""
 @export var value: int = 0
 @export var context_key_for_multiplication: String = "property_multiplication"
+@export_enum(
+	'extra_large','large', 'medium', 'small'
+) var ranked_value: String = ""
+@export var rank_negative: bool = false
 
 func init(_context: Dictionary) -> Dictionary:
 	# dynamic parse str_props -> _property enum
@@ -24,6 +29,40 @@ func init(_context: Dictionary) -> Dictionary:
 				break
 		if not found:
 			Logging.warn("PropertyOperator.init: str_props cannot resolve to PROPS enum: " + str_props)
+
+	# ranked_value → named_amounts (优先级高于 value, 完全忽略 value 原值)
+	if not ranked_value.is_empty():
+		var amounts = NamedDSLParser._load_named_amounts()
+		var prefix := ""
+		match ranked_value:
+			"small":
+				prefix = "s_"
+			"medium":
+				prefix = "m_"
+			"large":
+				prefix = "l_"
+			"extra_large":
+				prefix = "xl_"
+			_:
+				Logging.err("PropertyOperator.init: unknown ranked_value: " + ranked_value)
+		if not prefix.is_empty():
+			var prop_lower := property.to_lower()
+			var found := false
+			for key in amounts:
+				if key.begins_with(prefix) and prop_lower in key:
+					var entry_val = amounts[key]
+					if not rank_negative and entry_val > 0:
+						value = entry_val
+						found = true
+						Logging.debug("PropertyOperator.init: ranked_value resolved " + ranked_value + " -> " + key + " = " + str(value))
+						break
+					elif rank_negative and entry_val < 0:
+						value = entry_val
+						found = true
+						Logging.debug("PropertyOperator.init: ranked_value resolved " + ranked_value + " -> " + key + " = " + str(value))
+						break
+			if not found:
+				Logging.err("PropertyOperator.init: no matching named_amount for ranked_value=" + ranked_value + ", property=" + prop_lower + ", negative=" + str(rank_negative))
 
 	if _context.has(context_key_for_multiplication):
 		var ctx_val = _context[context_key_for_multiplication]
