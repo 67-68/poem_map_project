@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_mfw3a"]
 script = ExtResource("4_wi56a")
 choice_result = SubResource("Resource_axncj")
-description = "baiye_fallback"
+description = "市井无声\n坊间寂寥，商贩稀疏，偶有过客也是行色匆匆。无甚可看之处，不如归去翻翻书卷。"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "fangshi"
 options = Array[ExtResource("1_cot85")]([SubResource("Resource_mfw3a")])
 uuid = "fangshi_fallback"
-name = "fangshi_fallback"
+name = "坊市萧索"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

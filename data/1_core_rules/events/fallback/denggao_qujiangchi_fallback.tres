@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b8m4f6nq3p2k"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rsjn3"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cufm3"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_wicd3"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_gsl3"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_qskf3"]
+
+[sub_resource type="Resource" id="Resource_xncj3"]
+script = ExtResource("3_wicd3")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_fwa3"]
+script = ExtResource("4_gsl3")
+choice_result = SubResource("Resource_xncj3")
+description = "泥泞
+曲江池畔连日阴雨，小径泥泞不堪，靴子陷进去拔不出来。远望烟柳朦胧，却无路可寻。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_qskf3")
+weight = 0.0
+archetype_id = "qujiangchi_success"
+options = Array[ExtResource("1_rsjn3")]([SubResource("Resource_fwa3")])
+uuid = "denggao_qujiangchi_fallback"
+name = "曲江阻行"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

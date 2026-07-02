@@ -18,6 +18,7 @@ _action_tags = Array[int]([1, 10, 13, 32])
 action_results = Array[ExtResource("2_i5atp")]([SubResource("Resource_time")])
 fallback_event_uuid = "fangshi_fallback"
 lock_narrative = "市井喧闹，却与他无关，口袋里一文不名"
+sub_actions = Array[String](["fangshi_maizi", "fangshi_shiyao", "fangshi_banzhuan", "fangshi_fgmaizi"])
 uuid = "fang_shi"
 name = "集市"
 description = "脱下长衫"

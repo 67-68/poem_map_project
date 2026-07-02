@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://c2h5kfn4q3d7"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rsjn2"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cufm2"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_wicd2"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_gsl2"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_qskf2"]
+
+[sub_resource type="Resource" id="Resource_xncj2"]
+script = ExtResource("3_wicd2")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_fwa2"]
+script = ExtResource("4_gsl2")
+choice_result = SubResource("Resource_xncj2")
+description = "失足\n登至半途，脚下碎石松动，一个趔趄险些跌倒。虽无大碍，却也失了兴致，只得悻悻下山。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_qskf2")
+weight = 0.0
+archetype_id = "leyouyuan_failure"
+options = Array[ExtResource("1_rsjn2")]([SubResource("Resource_fwa2")])
+uuid = "denggao_leyouyuan_failed_fallback"
+name = "登高失足"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

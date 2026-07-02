@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://l4y5z6a7b8c9"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rsjn12"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cufm12"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_wicd12"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_gsl12"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_qskf12"]
+
+[sub_resource type="Resource" id="Resource_xncj12"]
+script = ExtResource("3_wicd12")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_fwa12"]
+script = ExtResource("4_gsl12")
+choice_result = SubResource("Resource_xncj12")
+description = "试药\n掌柜的递来一碗新配的汤药，说是大补之方。你喝下去只觉得腹中翻腾，冷汗涔涔，半天缓不过气来——这药怕是配错了。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_qskf12")
+weight = 0.0
+archetype_id = "shiyao_failure"
+options = Array[ExtResource("1_rsjn12")]([SubResource("Resource_fwa12")])
+uuid = "fangshi_shiyao_failed_fallback"
+name = "药不对症"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

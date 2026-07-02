@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://c63u6oskg6dtg"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_oaimr"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_d8qi5"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="3_2ln2h"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="3_gbkep"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_sdkv6"]
+
+[sub_resource type="Resource" id="Resource_sdkv6"]
+script = ExtResource("3_2ln2h")
+event_key = "fangshi_maizi_failed_fallback"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[sub_resource type="Resource" id="Resource_2ln2h"]
+script = ExtResource("4_sdkv6")
+operators = Array[ExtResource("2_d8qi5")]([SubResource("Resource_sdkv6")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[resource]
+script = ExtResource("3_gbkep")
+_action_tags = Array[int]([32, 39])
+fallback_event_uuid = "fangshi_maizi_fallback"
+possibility = "m_success_rate"
+failed_result = SubResource("Resource_2ln2h")
+uuid = "fangshi_maizi"
+name = "坊市 · 卖字"
+description = "卖字"
+metadata/_custom_type_script = "uid://ccs67ljham38a"

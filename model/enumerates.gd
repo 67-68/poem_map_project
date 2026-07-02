@@ -9,37 +9,9 @@ enum AREA_TAGS { # 包括地区特性和地区本身?
 }
 
 enum ACTION_TAGS { 
-    # NOW use 4-part tag format: {category}_{subcategory}_{type}_{specific}
-    # Example: "action_travel_parting_withLiBai"
-    #使用_来代替标签的:符号
-    ACTOR_HEALTH_SICK_GENERAL, # 病痛/衰老# 
-    ACTOR_HEALTH_DRUNK_GENERAL, # 宿醉/狂歌
-    ACTOR_WEALTH_BROKE_GENERAL, # 穷困潦倒
-    ACTOR_EMOTION_DESPAIR_GENERAL, # 极度郁结
-    ACTOR_EMOTION_AMBITION_GENERAL, # 功名壮志
-    
-    SOCIAL_NATURE_AUTUMN_GENERAL, # 秋风/落叶/肃杀
-    SOCIAL_NATURE_SPRING_GENERAL, # 春江/花月/复苏
-    SOCIAL_FAMINE_STARVING_GENERAL, # 饿殍/流民
-    SOCIAL_WAR_RUIN_GENERAL, # 废墟/烽火/白骨
-    SOCIAL_COURT_PROSPER_GENERAL, # 极乐/奢靡/胡旋
-    SOCIAL_COURT_CORRUPT_GENERAL, # 倾轧/权臣/谗言
-    
-    ACTION_TRAVEL_PARTING_GENERAL, # 霸桥送别/孤帆
-    ACTION_TRAVEL_EXILE_GENERAL, # 贬谪/蜀道/风雪
-    ACTION_RELATION_FRIEND_GENERAL, # 知音/夜雨对床
-    ACTION_RELATION_PATRON_GENERAL, # 权贵/朱门
-    
-    INTEL_VIBE_ZEN_GENERAL, # 空山/古刹/禅意
-    INTEL_VIBE_TAO_GENERAL, # 求仙/丹药/狂傲
-    INTEL_VIBE_HISTORY_GENERAL, # 废垒/夕阳/沧桑
-
-    ACTION_MAIN_BAIYE_GENERAL, # 基本的六种标签。每个行动都需要有对应的标签，每个对应的"主线任务事件"也需要有
-    ACTION_MAIN_JIAOYOU_GENERAL, # 交游 instead of 送别
-    ACTION_MAIN_DENGGAO_GENERAL,
-    ACTION_MAIN_FANGSHI_GENERAL,
-    ACTION_MAIN_FENGZHAO_GENERAL,
-    ACTION_MAIN_DUZHUO_GENERAL,
+    # 删除所有的四段 tag，使用 24 个占位符号
+    AB, AC, AD, AE, AF, AG, AH, AI, AJ, AK, AL, ALTJ,
+    BA, BB, BC, BD, BE, BF, BG, BH, BI, BJ, BK, BL,
 
     # 死亡
     ACTOR_HEALTH_DEATH_GENERAL,
@@ -47,10 +19,7 @@ enum ACTION_TAGS {
     # 灵感特殊行动
     ACTION_SPECIAL_DEEPSEEK_GENERAL, # organize thuought
 
-    # 娱乐/宴饮表演类
-    ACTION_ENTERTAIN_ELEGANT_GENERAL, # 风雅/琴棋书画
-    ACTION_ENTERTAIN_SENSUAL_GENERAL, # 绮靡/酒色歌舞
-    ACTION_ENTERTAIN_MARTIAL_GENERAL, # 雄健/剑舞武艺
+    A,B,C,
 
     # 3 段式枚举值（用于 bucket 路由和数据层，不含 :general 后缀）
     # 放在末尾避免移位破坏已有 .tres 文件中的整数值
@@ -62,6 +31,16 @@ enum ACTION_TAGS {
     ACTION_MAIN_DUZHUO,
     ACTION_SPECIAL_DEEPSEEK,
     ACTION_SPECIAL_GANLU,
+
+    ACTION_FANGSHI_BANZHUAN,
+    ACTION_FANGSHI_SHIYAO, # 试药
+    ACTION_FANGSHI_MAIZI,
+    ACTION_FANGSHI_FGMAIZI, # 风骨卖字
+
+    ACTION_DENGGAO_QUJIANGCHI, # 曲江池
+    ACTION_DENGGAO_LEYOUYUAN, # 乐游原
+    ACTION_DENGGAO_SHAOLINGYUAN, # 少陵原
+    
 }
 
 enum PROPS {

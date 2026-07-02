@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://h0d1e2f3g4h5"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rsjn8"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cufm8"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_wicd8"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_gsl8"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_qskf8"]
+
+[sub_resource type="Resource" id="Resource_xncj8"]
+script = ExtResource("3_wicd8")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_fwa8"]
+script = ExtResource("4_gsl8")
+choice_result = SubResource("Resource_xncj8")
+description = "白忙\n搬了半日砖，累得腰酸背痛。到黄昏找工头结账，他却皱眉道：「今日主家没给钱，改日再来。」一句改日，不知又是何日。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_qskf8")
+weight = 0.0
+archetype_id = "banzhuan_success"
+options = Array[ExtResource("1_rsjn8")]([SubResource("Resource_fwa8")])
+uuid = "fangshi_banzhuan_failed_fallback"
+name = "白忙一场"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

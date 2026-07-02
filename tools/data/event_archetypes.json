@@ -59,8 +59,8 @@
       "time": "坊门将闭，这时候出门，怕是赶不回来了"
     }
   },
-  "banzhuan": {
-    "name": "搬砖",
+  "banzhuan_success": {
+    "name": "搬砖·成",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=m_health_cost)|prop_add(name=money; val=l_money_gain)",

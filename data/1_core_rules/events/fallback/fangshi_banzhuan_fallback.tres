@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://g4y5z6a7b8c9"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rsjn7"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cufm7"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_wicd7"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_gsl7"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_qskf7"]
+
+[sub_resource type="Resource" id="Resource_xncj7"]
+script = ExtResource("3_wicd7")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_fwa7"]
+script = ExtResource("4_gsl7")
+choice_result = SubResource("Resource_xncj7")
+description = "闲工\n今日市口冷清，工头蹲在墙根打盹，见人便摆手：「今日没活计，明日赶早。」白跑一趟，只得折返。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_qskf7")
+weight = 0.0
+archetype_id = "banzhuan_success"
+options = Array[ExtResource("1_rsjn7")]([SubResource("Resource_fwa7")])
+uuid = "fangshi_banzhuan_fallback"
+name = "无工可做"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

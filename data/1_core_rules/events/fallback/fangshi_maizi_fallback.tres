@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://i6j7k8l9m0n1"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rsjn9"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cufm9"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_wicd9"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_gsl9"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_qskf9"]
+
+[sub_resource type="Resource" id="Resource_xncj9"]
+script = ExtResource("3_wicd9")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_fwa9"]
+script = ExtResource("4_gsl9")
+choice_result = SubResource("Resource_xncj9")
+description = "无人识\n铺开宣纸，研墨挥毫，写了三两幅字挂在摊前。路过的多是贩夫走卒，无人识得草隶行楷，瞥一眼便走了。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_qskf9")
+weight = 0.0
+archetype_id = "maizi_failure"
+options = Array[ExtResource("1_rsjn9")]([SubResource("Resource_fwa9")])
+uuid = "fangshi_maizi_fallback"
+name = "字画无市"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

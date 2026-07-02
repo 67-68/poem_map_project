@@ -1,10 +1,12 @@
 {
   "_comment_1": "=== 🚰 第一部分：大唐行动汇率表 (Action Deltas) ===",
   "_comment_1_desc": "用于所有事件的增加/扣除。只能使用 S/M/L/XL 刻度。",
+  "_comment_3": "TODO: 下面的l_heath recovery 应该被替换，格式不工整, loss and cost 应该统一",
 
   "s_money_gain": 15,
   "m_money_gain": 30,
   "l_money_gain": 50,
+  "xl_money_gain": 80,
 
   "s_money_cost": -15,
   "m_money_cost": -30,
@@ -23,6 +25,24 @@
   "m_progress_cost": -6,
   "l_progress_gain": 10,
   "l_progress_cost": -10,
+
+  "s_talent_gain": 2,
+  "s_talent_cost": -2,
+  "m_talent_gain": 5,
+  "m_talent_cost": -5,
+  "l_talent_gain": 8,
+  "l_talent_cost": -8,
+
+  "s_fame_gain": 2,
+  "s_fame_cost": -2,
+  "m_fame_gain": 5,
+  "m_fame_cost": -5,
+  "l_fame_gain": 8,
+  "l_fame_cost": -8,
+
+  "s_success_rate": 50,
+  "m_success_rate": 80,
+  "l_success_rate": 100,
 
   "m_emotion_loss": -10,
 
