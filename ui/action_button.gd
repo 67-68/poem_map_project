@@ -222,6 +222,14 @@ func _on_button_pressed() -> void:
 			var entity := GameEntity.new({"uuid": sub_action.uuid, "name": sub_action.name})
 			# 每个选项携带父行动的 main_tag（为未来多行动混合 picker 做准备）
 			entity.set_meta("parent_main_tag", _snap_main_tag)
+
+			# 附加 Archetype 中的 operators（用于 picker 显示）
+			var archetype = _find_archetype_for_action(sub_action.uuid)
+			if archetype:
+				entity.set_meta("operators", archetype.operators)
+			else:
+				entity.set_meta("operators", [])
+
 			picker_data.append(entity)
 		
 		Logging.info("SceneActionPanel: sub_actions 检测到 %d 个子行动，弹出 Picker" % picker_data.size())
@@ -300,3 +308,10 @@ func _on_sub_action_picked(entity) -> void:
 	_pending_sub_action_fallback = ""
 	_pending_sub_action_tags.clear()
 	_pending_sub_action_results.clear()
+
+# ── Archetype 查找（为 picker 提供 operators）───────────
+func _find_archetype_for_action(action_uuid: String):
+	for arch in Database.action_archetypes.values():
+		if arch is ActionArchetype and arch.action_uuid == action_uuid:
+			return arch
+	return null

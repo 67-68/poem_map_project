@@ -2,6 +2,7 @@
   "_comment": "事件类型（Archetype）定义。DSL 存储在此 JSON 中。支持 parent 继承链：子 archetype 会合并父的 requirement(result)era。",
   "baiye": {
     "name": "拜谒",
+    "action_uuid": "action_baiye",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=money; val=m_money_cost)|prop_add(name=progress; val=m_progress_gain)",
@@ -14,6 +15,7 @@
   },
   "fangshi": {
     "name": "坊市",
+    "action_uuid": "action_fangshi",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=m_health_cost)|prop_add(name=money; val=l_money_gain)",
@@ -26,6 +28,7 @@
   },
   "denggao": {
     "name": "登高",
+    "action_uuid": "action_denggao",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_add(name=health; val=l_health_recovery)",
@@ -37,6 +40,7 @@
   },
   "duzhuo": {
     "name": "独酌",
+    "action_uuid": "action_duzhuo",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_sub(name=money; val=s_money_cost)|all_emo_sub(val=m_emotion_loss)",
@@ -49,6 +53,7 @@
   },
   "jiaoyou": {
     "name": "交游",
+    "action_uuid": "action_jiaoyou",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=literary_fame; val=5)",
@@ -61,6 +66,8 @@
   },
   "banzhuan_success": {
     "name": "搬砖·成",
+    "action_uuid": "action_banzhuan",
+    "state": "success",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=m_health_cost)|prop_add(name=money; val=l_money_gain)",
@@ -72,6 +79,8 @@
   },
   "shiyao_success": {
     "name": "以身试药·成",
+    "action_uuid": "action_shiyao",
+    "state": "success",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=xl_money_gain)",
@@ -80,6 +89,8 @@
   },
   "shiyao_failure": {
     "name": "以身试药·败",
+    "action_uuid": "action_shiyao",
+    "state": "failure",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=m_health_cost)|trait_add(name=poisoned)|prop_add(name=talent; val=m_talent_gain)",
@@ -88,6 +99,8 @@
   },
   "maizi_success": {
     "name": "卖字·成",
+    "action_uuid": "action_maizi",
+    "state": "success",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_sub(name=literary_fame; val=m_fame_cost)|prop_add(name=money; val=l_money_gain)",
@@ -99,6 +112,8 @@
   },
   "maizi_failure": {
     "name": "卖字·败",
+    "action_uuid": "action_maizi",
+    "state": "failure",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=l_money_gain)|prop_sub(name=literary_fame; val=l_fame_cost)",
@@ -107,6 +122,8 @@
   },
   "fgmaizi_success": {
     "name": "风骨卖字·成",
+    "action_uuid": "action_fgmaizi",
+    "state": "success",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=l_money_gain)|prop_add(name=literary_fame; val=m_fame_gain)",
@@ -115,6 +132,8 @@
   },
   "fgmaizi_failure": {
     "name": "风骨卖字·败",
+    "action_uuid": "action_fgmaizi",
+    "state": "failure",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=s_money_gain)|prop_add(name=literary_fame; val=s_fame_gain)",
@@ -123,6 +142,8 @@
   },
   "qujiangchi_success": {
     "name": "曲江池·成",
+    "action_uuid": "action_qujiangchi",
+    "state": "success",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_add(name=health; val=m_health_recovery)",
@@ -131,6 +152,8 @@
   },
   "leyouyuan_success": {
     "name": "乐游原·成",
+    "action_uuid": "action_leyouyuan",
+    "state": "success",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_add(name=health; val=l_health_recovery)",
@@ -139,6 +162,8 @@
   },
   "leyouyuan_failure": {
     "name": "乐游原·败",
+    "action_uuid": "action_leyouyuan",
+    "state": "failure",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_add(name=health; val=15)|trait_add(name=sprained_ankle)",
@@ -147,6 +172,8 @@
   },
   "shaolingyuan_success": {
     "name": "少陵原·成",
+    "action_uuid": "action_shaolingyuan",
+    "state": "success",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_add(name=health; val=m_health_recovery)|prop_add(name=talent; val=m_talent_gain)",
@@ -155,6 +182,8 @@
   },
   "shaolingyuan_failure": {
     "name": "少陵原·败",
+    "action_uuid": "action_shaolingyuan",
+    "state": "failure",
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=talent; val=s_talent_cost)",
