@@ -51,8 +51,13 @@ var success_hint: String = ""
 ## 此文本会被追加到 dynamic_failed_hint 中作为锁定理由。
 ## 在 .tres 文件中手动填写，如「今日门庭冷落，车马稀疏…」。
 @export var lock_narrative: String = ""
-@export var sub_actions: Dictionary = {} # 子行动的 UUID 列表，key=uuid, value=name
-# eg. sub actions = {"actor:libai": "找李白痛饮"}
+
+## 🆕 子行动列表：每个元素是一个真实的 Action 资源。
+## 点击带 sub_actions 的 Action 时，先弹出 Picker 让玩家选择子行动，
+## 选中后将 sub_action.uuid 作为 tag 参与 AND 模式事件扫描。
+@export var sub_actions: Array[Action] = []
+@export var possibility: int = 100 # 0~100，随机抽取时的中签概率。0=永远不触发，100=必定触发。
+@export var failed_result: ChoiceResult = ChoiceResult.new()
 
 ## 🆕 追加一段失败提示文本到 dynamic_failed_hint。
 ## 多条原因用换行分隔。

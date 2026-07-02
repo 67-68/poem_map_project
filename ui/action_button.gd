@@ -193,6 +193,14 @@ func _on_button_pressed() -> void:
 		_snap_fallback = sa.fallback_event_uuid
 		_snap_tags = sa.action_tags.duplicate()
 	
+	# 🆕 possibility 抽奖：generator > possibility（有 generator 时跳过抽奖）
+	if _snap_generator == null and action.possibility < 100:
+		var roll: int = randi() % 101
+		if roll > action.possibility:
+			Logging.info("SceneActionPanel: possibility 未中签 (roll=%d, possibility=%d)，执行 failed_result" % [roll, action.possibility])
+			action.failed_result.operate()
+			return
+	
 	# 🆕 Sub-action 检测：存在 sub_actions 时弹出 Picker，选择后再执行 operators + scan
 	# generator 存在时跳过 sub-action（generator 已预定了事件链）
 	if _snap_is_scene and _snap_generator == null and action.sub_actions and not action.sub_actions.is_empty():
@@ -203,9 +211,11 @@ func _on_button_pressed() -> void:
 		_pending_sub_action_results = action.action_results.duplicate() if action.action_results else []
 		
 		var picker_data: Array[GameEntity] = []
-		for sub_uuid in action.sub_actions:
-			var sub_name: String = action.sub_actions[sub_uuid]
-			var entity := GameEntity.new({"uuid": sub_uuid, "name": sub_name})
+		for sub_action in action.sub_actions:
+			if not sub_action:
+				Logging.warn("SceneActionPanel: sub_actions 包含 null Action，跳过")
+				continue
+			var entity := GameEntity.new({"uuid": sub_action.uuid, "name": sub_action.name})
 			# 每个选项携带父行动的 main_tag（为未来多行动混合 picker 做准备）
 			entity.set_meta("parent_main_tag", _snap_main_tag)
 			picker_data.append(entity)

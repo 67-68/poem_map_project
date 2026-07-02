@@ -29,6 +29,11 @@ func init(context: Dictionary) -> Dictionary:
 			op.init(context)
 	return context
 
+## Fluent builder: 追加一个 operator 并返回 self（用于 @export 默认值链式构造）
+func append(op: BaseOperator) -> ChoiceResult:
+	operators.append(op)
+	return self
+
 ## 聚合所有 operator 的 describe_preview() 文本，过滤空字符串
 func format_preview() -> Array[String]:
 	var lines: Array[String] = []
