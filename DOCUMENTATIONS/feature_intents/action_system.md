@@ -65,7 +65,7 @@
 ## 设计意图
 
 ### Sub-Action 系统
-- Action 可携带 `sub_actions: Array[Action]`（真实的 Action 资源数组）
+- Action 可携带 `sub_actions: Array[String]`（Action UUID 字符串数组，运行时通过 `Database.get_action(uuid)` 解析为 Action 资源）
 - 点击带 sub_actions 的 Action 时，先弹出 Picker 让玩家选择子行动
 - 每个 picker 选项携带父 Action 的 main_tag 元数据（为未来多行动混合选择做铺垫）
 - 选中后：执行父 Action 的 operators → 以 AND 模式进行事件扫描（事件必须同时匹配 sub-action uuid 和父 action main_tag）

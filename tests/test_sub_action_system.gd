@@ -2,7 +2,7 @@
 # Sub-action 系统测试
 # ================================================================
 # 覆盖场景：
-#   - Action.sub_actions 数据模型（Array[Action]）
+#   - Action.sub_actions 数据模型（Array[String] UUID）
 #   - Picker 数据构建（GameEntity）
 #   - SceneAction 继承 sub_actions
 #   - possibility + failed_result 逻辑
@@ -21,20 +21,12 @@ func test_sub_actions_init() -> void:
 
 
 func test_sub_actions_set_values() -> void:
-	"""可以填入 Action 资源数组"""
+	"""可以填入 UUID 字符串数组"""
 	var a := SceneAction.new()
-	var sub1 := SceneAction.new()
-	sub1.uuid = "actor:libai"
-	sub1.name = "找李白痛饮"
-	var sub2 := SceneAction.new()
-	sub2.uuid = "actor:dufu"
-	sub2.name = "与杜甫唱和"
-	a.sub_actions = [sub1, sub2]
+	a.sub_actions = ["actor:libai", "actor:dufu"]
 	assert_eq(a.sub_actions.size(), 2, "sub_actions 应有 2 个条目")
-	assert_eq(a.sub_actions[0].uuid, "actor:libai")
-	assert_eq(a.sub_actions[0].name, "找李白痛饮")
-	assert_eq(a.sub_actions[1].uuid, "actor:dufu")
-	assert_eq(a.sub_actions[1].name, "与杜甫唱和")
+	assert_eq(a.sub_actions[0], "actor:libai")
+	assert_eq(a.sub_actions[1], "actor:dufu")
 
 
 # ════════════════════════════════════════════════════════════
@@ -43,21 +35,15 @@ func test_sub_actions_set_values() -> void:
 
 func test_picker_data_construction() -> void:
 	"""
-	遍历 sub_actions 构建 GameEntity 数组。
+	从 UUID 字符串数组构建 GameEntity 数组。
 	每个实体必备：uuid, name, meta("parent_main_tag")
 	"""
-	var sub1 := SceneAction.new()
-	sub1.uuid = "actor:libai"
-	sub1.name = "找李白痛饮"
-	var sub2 := SceneAction.new()
-	sub2.uuid = "actor:dufu"
-	sub2.name = "与杜甫唱和"
-	var sub_actions: Array[Action] = [sub1, sub2]
+	var sub_uuids: Array[String] = ["actor:libai", "actor:dufu"]
 	var parent_main_tag := "action:main:jiaoyou"
 
 	var picker_data: Array[GameEntity] = []
-	for sub_action in sub_actions:
-		var entity := GameEntity.new({"uuid": sub_action.uuid, "name": sub_action.name})
+	for sub_uuid in sub_uuids:
+		var entity := GameEntity.new({"uuid": sub_uuid, "name": sub_uuid})
 		entity.set_meta("parent_main_tag", parent_main_tag)
 		picker_data.append(entity)
 
@@ -71,26 +57,20 @@ func test_picker_data_construction() -> void:
 			break
 
 	assert_not_null(libai_entity, "应能找到 actor:libai 实体")
-	assert_eq(libai_entity.name, "找李白痛饮", "name 应与 sub_action.name 一致")
+	assert_eq(libai_entity.name, "actor:libai", "name 应与 sub_uuid 一致")
 	assert_eq(libai_entity.get_meta("parent_main_tag"), parent_main_tag, "meta parent_main_tag 应正确携带")
 
 
 func test_picker_data_duplicate_main_tag() -> void:
 	"""
-	多个 sub-action 选项各自携带相同的 parent_main_tag。
+	多个 sub-action UUID 各自携带相同的 parent_main_tag。
 	（未来多行动混合 picker 时每个选项的 parent_main_tag 可能不同）
 	"""
-	var sub1 := SceneAction.new()
-	sub1.uuid = "actor:libai"
-	sub1.name = "找李白痛饮"
-	var sub2 := SceneAction.new()
-	sub2.uuid = "actor:dufu"
-	sub2.name = "与杜甫唱和"
-	var sub_actions: Array[Action] = [sub1, sub2]
+	var sub_uuids: Array[String] = ["actor:libai", "actor:dufu"]
 
 	var entities: Array[GameEntity] = []
-	for sub_action in sub_actions:
-		var e := GameEntity.new({"uuid": sub_action.uuid, "name": sub_action.name})
+	for sub_uuid in sub_uuids:
+		var e := GameEntity.new({"uuid": sub_uuid, "name": sub_uuid})
 		e.set_meta("parent_main_tag", "action:main:jiaoyou")
 		entities.append(e)
 
@@ -126,16 +106,18 @@ func test_tag_combination() -> void:
 # ════════════════════════════════════════════════════════════
 
 func test_possibility_default() -> void:
-	"""possibility 默认应为 100（必定触发）"""
+	"""possibility 默认应为 l_success_rate（=100，必定触发）"""
 	var a := SceneAction.new()
-	assert_eq(a.possibility, 100, "新建 Action 的 possibility 默认为 100")
+	assert_eq(a.possibility, "l_success_rate", "新建 Action 的 possibility archetype 默认为 l_success_rate")
+	assert_eq(a.get_possibility_int(), 100, "新建 Action 的 possibility 解析值应为 100")
 
 
 func test_possibility_set() -> void:
-	"""可以设置 possibility 值"""
+	"""可以设置 possibility archetype"""
 	var a := SceneAction.new()
-	a.possibility = 60
-	assert_eq(a.possibility, 60, "possibility 应可设为 60")
+	a.possibility = "m_success_rate"
+	assert_eq(a.possibility, "m_success_rate", "possibility archetype 应可设为 m_success_rate")
+	assert_eq(a.get_possibility_int(), 80, "m_success_rate 解析值应为 80")
 
 
 # ════════════════════════════════════════════════════════════

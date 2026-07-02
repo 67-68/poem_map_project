@@ -52,12 +52,29 @@ var success_hint: String = ""
 ## 在 .tres 文件中手动填写，如「今日门庭冷落，车马稀疏…」。
 @export var lock_narrative: String = ""
 
-## 🆕 子行动列表：每个元素是一个真实的 Action 资源。
+## 🆕 子行动 UUID 列表：每个元素是一个 Action 的 uuid 字符串。
+## 运行时通过 Database.get_action(uuid) 解析为 Action 资源。
 ## 点击带 sub_actions 的 Action 时，先弹出 Picker 让玩家选择子行动，
-## 选中后将 sub_action.uuid 作为 tag 参与 AND 模式事件扫描。
-@export var sub_actions: Array[Action] = []
-@export var possibility: int = 100 # 0~100，随机抽取时的中签概率。0=永远不触发，100=必定触发。
+## 选中后将选中的 uuid 作为 tag 参与 AND 模式事件扫描。
+@export var sub_actions: Array[String] = []
+## 🆕 中签概率 archetype（来自 tools/data/named_amounts.json）。
+## 可选值: s_success_rate=50, m_success_rate=80, l_success_rate=100。
+## 使用 get_possibility_int() 获取解析后的 int 值。
+@export_enum(
+	's_success_rate',
+	'm_success_rate',
+	'l_success_rate'
+) var possibility: String = "l_success_rate"
 @export var failed_result: ChoiceResult = ChoiceResult.new()
+
+## 🆕 解析 possibility archetype 为 int（0-100）。
+## 查表 tools/data/named_amounts.json，未知 key 时 fallback 到 100。
+func get_possibility_int() -> int:
+	var amounts = NamedDSLParser._load_named_amounts()
+	if amounts.has(possibility):
+		return amounts[possibility] as int
+	Logging.err("Action: unknown possibility archetype '%s', fallback to 100" % possibility)
+	return 100
 
 ## 🆕 追加一段失败提示文本到 dynamic_failed_hint。
 ## 多条原因用换行分隔。
