@@ -23,6 +23,10 @@ class_name AmbitionData extends GameEntity
 @export var deadline: float = 907.0
 @export var deadline_warning: String = ''
 
+## 野心持续的总旬数。从激活开始，每旬递减，归零则野心过期。
+## 0 = 不启用倒计时（无过期）。
+@export var deadline_xun: int = 0
+
 func get_stage_perception() -> String:
 	if current_stage < 0 or current_stage >= staged_perceptions.size():
 		Logging.err("AmbitionConfig: current_stage %d out of bounds [0, %d] for ambition %s" % [current_stage, staged_perceptions.size() - 1, name])

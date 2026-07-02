@@ -112,6 +112,9 @@ func _process_single_xun_settlement():
 	
 	# 5. 通知 UI 刷新
 	EventBus.emit_signal("xun_settlement_completed")
+	
+	# 6. 延期扣除生活费（快照之后执行，确保计入下月 delta）
+	call_deferred("_post_xun_money_deduct")
 
 func _update_heartbeat_sfx() -> void:
 	"""根据健康值启动/停止心跳循环音效。"""
@@ -148,6 +151,10 @@ func death_judgement():
 			AudioManager.stop_sfx_loop()
 			PlayerState.current_action_tags.append('actor:health:death:general')
 			EventManager.scan_death_events()
+
+func _post_xun_money_deduct():
+	PlayerState.append_stat(ENUMS.PROPS.MONEY, -30)
+	Logging.info('[SurvivalManager] 旬末扣除 30 money（快照之后执行，计入下月 delta）')
 
 func _ready():
 	TimeService.on_xun_tick.connect(_process_single_xun_settlement)

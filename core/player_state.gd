@@ -19,6 +19,8 @@ const _TimeOperator = preload("res://core/model/time_operator.gd")
 		location_changed.emit(val)
 	 	# 省份uuid
 @export var ambition: AmbitionData
+## 野心被激活时的累计总天数（用于计算剩余旬数）。-1 = 未激活。
+var _ambition_start_total_days: int = -1
 @export var current_action_tags: Array[String] = []
 @export var created_poems: Array  ## 存储 Poem 对象，供墓碑等终局结算使用
 var emotions: Dictionary = {}
@@ -516,6 +518,9 @@ func set_ambition(ambition_key):
 		add_trait(t)
 	# 同步写入 emotions 字典，让 get_stat_val() 的 emotion 适配器能找到它
 	emotions["ambition"] = 1.0
+	# 记录野心激活时的累计天数，用于计算剩余旬数
+	_ambition_start_total_days = TimeService._total_days_elapsed
+	Logging.info("PlayerState: ambition '%s' activated at total_days=%d, deadline_xun=%d" % [ambition.name, _ambition_start_total_days, ambition.deadline_xun])
 	ambition_changed.emit(ambition)
 
 func clear_ambition():
@@ -524,7 +529,20 @@ func clear_ambition():
 			remove_trait(t)
 	ambition = null
 	emotions.erase("ambition")
+	_ambition_start_total_days = -1
 	ambition_changed.emit(null)
+
+## 返回当前野心还剩余多少旬。无野心或未启用倒计时返回 -1。
+func get_ambition_remaining_xun() -> int:
+	if not ambition or ambition.deadline_xun <= 0:
+		return -1
+	if _ambition_start_total_days < 0:
+		return -1
+	var current_days: int = TimeService._total_days_elapsed
+	var elapsed_xun: int = (current_days - _ambition_start_total_days) / 10
+	var remaining := ambition.deadline_xun - elapsed_xun
+	# 底限钳制：不返回负数（过期后外显逻辑自行处理）
+	return maxi(remaining, 0)
 
 func get_location():
 	var loc = Database.get_territory(current_location)

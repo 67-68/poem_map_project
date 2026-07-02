@@ -75,6 +75,37 @@ text_direction = 1
 script = ExtResource("6_sfx")
 click_category = "book_impact"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=586950016]
+layout_mode = 2
+
+[node name="AmbitionProgressBar" type="ProgressBar" parent="Panel/VBox/ScrollContainer/V/HBoxContainer" unique_id=218237168]
+custom_minimum_size = Vector2(140, 18)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 1
+max_value = 30.0
+value = 30.0
+show_percentage = false
+
+[node name="AmbitionDeadline" type="Label" parent="Panel/VBox/ScrollContainer/V/HBoxContainer/AmbitionProgressBar" unique_id=218237167]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -47.0
+offset_top = -8.5
+offset_right = 47.0
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.54509807, 0.14509805, 0, 1)
+theme_override_font_sizes/font_size = 11
+text = "距离大考还剩: -- 旬"
+horizontal_alignment = 1
+
 [node name="HSep2" type="HSeparator" parent="Panel/VBox/ScrollContainer/V" unique_id=894122215]
 layout_mode = 2
 

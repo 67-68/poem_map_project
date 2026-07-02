@@ -56,6 +56,7 @@ staged_requirements = Array[ExtResource("7_8wcjv")]([SubResource("Resource_r8ywo
 staged_perceptions = Array[ExtResource("6_ivce5")]([SubResource("Resource_uhya7"), SubResource("Resource_62cbg"), SubResource("Resource_fb1kn")])
 deadline = 747.0
 deadline_warning = "天宝六载秋科举，若叩不开这扇门，你的一身才华，终将沦为盛世的笑柄。"
+deadline_xun = 30
 uuid = "dufu_ambition"
 name = "致君尧舜上"
 description = "你想齐家治国平天下，而这需要以跃入体制为前提。带着半生心血的行卷，你站到了长安的朱门之外。权贵的手指缝里，漏下的是天下士子的命运。"

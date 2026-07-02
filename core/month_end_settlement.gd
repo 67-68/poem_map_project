@@ -46,6 +46,10 @@ func _ready() -> void:
 	if not PlayerState.player_stat_changed.is_connected(_on_stat_changed_for_color):
 		PlayerState.player_stat_changed.connect(_on_stat_changed_for_color)
 
+	# 每旬清空染色（比月初清空粒度更细）
+	if not TimeService.on_xun_tick.is_connected(_on_xun_color_reset):
+		TimeService.on_xun_tick.connect(_on_xun_color_reset)
+
 	# 解析 _left_panel
 	get_left_panel()
 	Logging.info("[MonthEndSettlement] _left_panel 解析结果：%s" % (_left_panel != null))
@@ -85,6 +89,13 @@ func _on_month_tick() -> void:
 
 	# 6. 保存本月快照（作为下次比较的基准）
 	_last_snapshot = current
+
+# ── 每旬初清空染色 ────────────────────────────────
+func _on_xun_color_reset() -> void:
+	"""每旬结算开始时清空所有属性颜色覆盖，使染色仅反映当旬变化。"""
+	if _left_panel != null:
+		_left_panel.reset_all_prop_colors()
+	Logging.info("[MonthEndSettlement] 旬初已清空所有属性颜色覆盖")
 
 # ── 根据 stat_name 查找快照中对应属性的值 ──────────
 func _get_snapshot_value_for_stat(stat_name: String) -> int:
