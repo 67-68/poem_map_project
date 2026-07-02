@@ -12,3 +12,4 @@ roo-code-settings.json
 build/*
 build/
 *.translation
+.aider*
