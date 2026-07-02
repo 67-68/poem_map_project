@@ -37,7 +37,10 @@ var _stat_signal_connected: bool = false
 ## 🆕 批量模式守卫：行动执行期间抑制 reevaluate，全部 results 执行完后统一评估。
 var _suppress_reevaluate: bool = false
 
-## Focus session 控制器（不污染 _blocked_actions / _locked_in_actions）
+## 🆕 缓存所有作为 sub_action 出现的 action uuid 集合（key=uuid, value=true）
+var _all_sub_action_ids: Dictionary = {}
+
+## 🆕 Focus session 控制器（不污染 _blocked_actions / _locked_in_actions）
 var _focus_controller: _ActionFocusController
 
 
@@ -125,6 +128,16 @@ func _init_archetype_cache() -> void:
 			var entry: Dictionary = data[archetype_key]
 			Database.action_archetypes[archetype_key] = ActionArchetype.from_json(entry)
 	Logging.info("[ActionManager] 已加载 %d 个 action archetype" % Database.action_archetypes.size())
+
+
+## 🆕 遍历所有 action，收集其 sub_actions 字段中的 uuid，存入 _all_sub_action_ids 字典。
+func _collect_sub_action_ids() -> void:
+	_all_sub_action_ids.clear()
+	for a_id in Database.get_actions_all():
+		var a = Database.get_action(a_id) as Action
+		if a and not a.sub_actions.is_empty():
+			for sub_id in a.sub_actions:
+				_all_sub_action_ids[sub_id] = true
 
 
 ## 根据 action 的 _main_tag 查找对应的 archetype key。
@@ -563,6 +576,17 @@ func process_xun_tick() -> void:
 
 func get_available_scene_actions() -> Dictionary:
 	#breakpoint
+	_collect_sub_action_ids()
+	
+	# 移除预留中的子 actions
+	var to_remove := []
+	for rid in _reserved_action_ids:
+		if _all_sub_action_ids.has(rid):
+			to_remove.append(rid)
+	for rid in to_remove:
+		_reserved_action_ids.erase(rid)
+		Logging.info("[ActionManager] 预留 action 是子 action，已移除: %s" % rid)
+	
 	Logging.info("[ActionManager] ═══ 开始获取候选池 ═══")
 	
 	# 自动预留
@@ -592,6 +616,8 @@ func get_available_scene_actions() -> Dictionary:
 	var actions := {}
 	for a_id in all_actions:
 		if _effective_blocked.has(a_id):
+			continue
+		if _all_sub_action_ids.has(a_id):
 			continue
 		actions[a_id] = 1
 	
@@ -630,6 +656,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 ## Phase 2: HIDE — _is_hidden (era 不匹配 / blocked)
 ## Phase 3: LOCK — dynamic_failed_hint (属性不满足 / 未中签)
 func apply_visibility_flags() -> void:
+	_collect_sub_action_ids()
 	Logging.info("[ActionManager] ═══ 开始设置可见性标志 ═══")
 	
 	# Phase 2: HIDE — 硬性拦截
@@ -642,6 +669,9 @@ func apply_visibility_flags() -> void:
 		if _blocked_actions.has(a_id):
 			a._is_hidden = true
 			Logging.info("[ActionManager] 🔇 隐藏 %s — 原因: 被阻塞" % a_id)
+		elif _all_sub_action_ids.has(a_id):
+			a._is_hidden = true
+			Logging.info("[ActionManager] 🔇 隐藏 %s — 原因: 是子 action" % a_id)
 		elif not is_action_era_allowed(a):
 			a._is_hidden = true
 			Logging.info("[ActionManager] 🔇 隐藏 %s — 原因: Era不允许" % a_id)
