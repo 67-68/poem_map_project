@@ -22,6 +22,6 @@ _action_tags = Array[int]([32, 40])
 fallback_event_uuid = "fangshi_fgmaizi_fallback"
 failed_result = SubResource("Resource_2ln2h")
 uuid = "fangshi_fgmaizi"
-name = "坊市 · 卖字"
+name = "坊市 · 清高卖字"
 description = "aura farming"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

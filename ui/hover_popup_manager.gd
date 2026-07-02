@@ -62,7 +62,7 @@ class HoverBinding:
 			])
 			return false
 
-		Logging.debug("HoverPopupManager: trigger=%s %s → %s" % [
+		Logging.info("HoverPopupManager: trigger=%s %s → %s" % [
 			trigger.name, State.keys()[state], State.keys()[new_state]
 		])
 
@@ -75,7 +75,7 @@ class HoverBinding:
 	func force_to_idle() -> void:
 		if state == State.IDLE:
 			return
-		Logging.debug("HoverPopupManager: force_to_idle trigger=%s from %s" % [
+		Logging.info("HoverPopupManager: force_to_idle trigger=%s from %s" % [
 			trigger.name, State.keys()[state]
 		])
 		_exit_state(state)
@@ -104,7 +104,7 @@ class HoverBinding:
 			State.SHOWING:
 				if is_instance_valid(popup):
 					popup.visible = false
-					Logging.debug("HoverPopupManager: hiding popup=%s (exit SHOWING)" % popup.name)
+					Logging.info("HoverPopupManager: hiding popup=%s (exit SHOWING)" % popup.name)
 			State.HIDE_PENDING:
 				if hide_timer and is_instance_valid(hide_timer):
 					hide_timer.stop()
@@ -124,7 +124,7 @@ class HoverBinding:
 			State.DELAYING:
 				if show_timer and is_instance_valid(show_timer):
 					show_timer.start(delay)
-					Logging.debug("HoverPopupManager: DELAYING trigger=%s, show_timer=%.2fs" % [trigger.name, delay])
+					Logging.info("HoverPopupManager: DELAYING trigger=%s, show_timer=%.2fs" % [trigger.name, delay])
 				else:
 					Logging.err("HoverPopupManager: DELAYING but show_timer invalid for trigger=%s" % trigger.name)
 
@@ -136,14 +136,14 @@ class HoverBinding:
 				_manager._position_popup_at_mouse(self)
 				popup.z_index = 100
 				popup.visible = true
-				Logging.debug("HoverPopupManager: showing popup=%s at position %s, size=%s, z_index=%d" % [
+				Logging.info("HoverPopupManager: showing popup=%s at position %s, size=%s, z_index=%d" % [
 					popup.name, popup.position, popup.size, popup.z_index
 				])
 
 			State.HIDE_PENDING:
 				if hide_timer and is_instance_valid(hide_timer):
 					hide_timer.start(hide_grace)
-					Logging.debug("HoverPopupManager: HIDE_PENDING trigger=%s, hide_timer=%.2fs" % [trigger.name, hide_grace])
+					Logging.info("HoverPopupManager: HIDE_PENDING trigger=%s, hide_timer=%.2fs" % [trigger.name, hide_grace])
 				else:
 					Logging.err("HoverPopupManager: HIDE_PENDING but hide_timer invalid for trigger=%s" % trigger.name)
 
@@ -201,7 +201,7 @@ class HoverBinding:
 
 		match state:
 			State.DELAYING:
-				Logging.debug("HoverPopupManager: pre-show cancel for trigger=%s" % trigger.name)
+				Logging.info("HoverPopupManager: pre-show cancel for trigger=%s" % trigger.name)
 				transition_to(State.IDLE)
 			State.SHOWING:
 				transition_to(State.HIDE_PENDING)
@@ -212,10 +212,16 @@ class HoverBinding:
 
 var _current_active: HoverBinding = null
 var _bindings: Dictionary = {}  # trigger → HoverBinding
+var _tooltip_layer: CanvasLayer
 
 # ── 生命周期 ─────────────────────────────────────────────
 
 func _ready() -> void:
+	process_mode = PROCESS_MODE_ALWAYS
+	_tooltip_layer = CanvasLayer.new()
+	_tooltip_layer.name = "TooltipLayer"
+	_tooltip_layer.layer = 200
+	add_child(_tooltip_layer)
 	Logging.info("HoverPopupManager: initialized (v2 — top_level rendering, autonomous state machine)")
 
 # ── 公开 API ─────────────────────────────────────────────
@@ -269,20 +275,19 @@ func register(trigger: Control, popup: Control, delay: float = 0.2, hide_grace: 
 	#   导致刚注册的 binding 被立刻销毁。top_level 不需要变更父节点。
 	# ⚠️ 孤儿节点（HoverInfoPopup.new()）直接 add_child，无 tree_exiting 风险。
 	if not popup.get_parent():
-		add_child(popup)
-	popup.top_level = true
+		_tooltip_layer.add_child(popup)
 	popup.visible = false
 
 	_bindings[trigger] = binding
 	binding.state = HoverBinding.State.IDLE
-	Logging.debug("HoverPopupManager: registered trigger=%s popup=%s delay=%.2f hide_grace=%.2f" % [trigger.name, popup.name, delay, hide_grace])
+	Logging.info("HoverPopupManager: registered trigger=%s popup=%s delay=%.2f hide_grace=%.2f" % [trigger.name, popup.name, delay, hide_grace])
 
 ## 取消注册
 func unregister(trigger: Control) -> void:
 	if not _bindings.has(trigger):
 		return
 	var binding: HoverBinding = _bindings[trigger]
-	Logging.debug("HoverPopupManager: unregistering trigger=%s" % trigger.name)
+	Logging.info("HoverPopupManager: unregistering trigger=%s" % trigger.name)
 
 	# 如果正好是当前活跃的，强制隐藏
 	if _current_active == binding:
@@ -389,22 +394,22 @@ func _sync_current_active(binding: HoverBinding) -> void:
 
 func _on_show_timer_timeout(trigger: Control) -> void:
 	if not is_instance_valid(trigger):
-		Logging.debug("HoverPopupManager: show_timer timeout but trigger freed, skip")
+		Logging.info("HoverPopupManager: show_timer timeout but trigger freed, skip")
 		return
 	var binding: HoverBinding = _bindings.get(trigger)
 	if not binding:
-		Logging.debug("HoverPopupManager: show_timer timeout but binding gone for trigger=%s" % trigger.name)
+		Logging.info("HoverPopupManager: show_timer timeout but binding gone for trigger=%s" % trigger.name)
 		return
 	binding.on_show_timer_timeout()
 	_sync_current_active(binding)
 
 func _on_hide_timer_timeout(trigger: Control) -> void:
 	if not is_instance_valid(trigger):
-		Logging.debug("HoverPopupManager: hide_timer timeout but trigger freed, skip")
+		Logging.info("HoverPopupManager: hide_timer timeout but trigger freed, skip")
 		return
 	var binding: HoverBinding = _bindings.get(trigger)
 	if not binding:
-		Logging.debug("HoverPopupManager: hide_timer timeout but binding gone for trigger=%s" % trigger.name)
+		Logging.info("HoverPopupManager: hide_timer timeout but binding gone for trigger=%s" % trigger.name)
 		return
 	binding.on_hide_timer_timeout()
 	_sync_current_active(binding)
@@ -468,7 +473,7 @@ func _position_popup_at_mouse(binding: HoverBinding) -> void:
 			break
 
 	popup.position = Vector2(best["x"], best["y"])
-	Logging.debug("HoverPopupManager: positioned popup at (%d, %d) (pref=%d, size=%s)" % [best["x"], best["y"], best["pref"], popup_size])
+	Logging.info("HoverPopupManager: positioned popup at (%d, %d) (pref=%d, size=%s)" % [best["x"], best["y"], best["pref"], popup_size])
 
 # ── 越权拦截 ─────────────────────────────────────────────
 
@@ -482,7 +487,7 @@ func _on_popup_visibility_changed(trigger: Control) -> void:
 		return
 	if popup.visible and _current_active != null and _current_active != binding:
 		var active_name: String = _current_active.trigger.name if is_instance_valid(_current_active.trigger) else "<Freed_Zombie>"
-		Logging.debug("HoverPopupManager: popup '%s' shown while '%s' is active, forcing hide" % [popup.name, active_name])
+		Logging.info("HoverPopupManager: popup '%s' shown while '%s' is active, forcing hide" % [popup.name, active_name])
 		popup.visible = false
 
 # ── 自动收尸 ─────────────────────────────────────────────
@@ -496,8 +501,8 @@ func _on_popup_dying(trigger_ref: Variant) -> void:
 	# ⚠️ trigger 参数为 weakref — tree_exiting 时原 trigger 可能已 freed
 	var trigger = trigger_ref.get_ref() if trigger_ref else null
 	if not trigger or not is_instance_valid(trigger):
-		Logging.debug("HoverPopupManager: popup dying but trigger already freed, skip cleanup")
+		Logging.info("HoverPopupManager: popup dying but trigger already freed, skip cleanup")
 		return
-	Logging.debug("HoverPopupManager: popup for trigger=%s tree_exiting" % trigger.name)
+	Logging.info("HoverPopupManager: popup for trigger=%s tree_exiting" % trigger.name)
 	if _bindings.has(trigger):
 		unregister(trigger)

@@ -36,7 +36,7 @@ func _ready() -> void:
 	narrative_label.name = "NarrativeLabel"
 	narrative_label.bbcode_enabled = true
 	narrative_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	narrative_label.custom_minimum_size = Vector2(280, 0)
+	narrative_label.custom_minimum_size = Vector2(280, 20)
 	narrative_label.fit_content = true
 	narrative_label.mouse_filter = MOUSE_FILTER_IGNORE
 	_vbox.add_child(narrative_label)
@@ -53,7 +53,7 @@ func _ready() -> void:
 	vector_label.name = "VectorLabel"
 	vector_label.bbcode_enabled = true
 	vector_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	vector_label.custom_minimum_size = Vector2(280, 0)
+	vector_label.custom_minimum_size = Vector2(280, 20)
 	vector_label.fit_content = true
 	vector_label.mouse_filter = MOUSE_FILTER_IGNORE
 	vector_label.visible = false

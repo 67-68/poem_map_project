@@ -200,7 +200,6 @@
 [ext_resource type="Script" path="res://ui/focus_chat_tape_entry.gd" id="res_197"]
 [ext_resource type="Script" path="res://ui/hover_info_popup.gd" id="res_198"]
 [ext_resource type="Script" path="res://ui/option_btns.gd" id="res_200"]
-[ext_resource type="Script" path="res://ui/picker_item_card.gd" id="res_201"]
 [ext_resource type="Script" path="res://ui/picker_tape_attachment.gd" id="res_202"]
 [ext_resource type="Script" path="res://ui/poem_slot.gd" id="res_203"]
 [ext_resource type="Script" path="res://ui/scene_action_scroll.gd" id="res_204"]

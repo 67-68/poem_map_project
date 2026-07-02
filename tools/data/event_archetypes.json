@@ -66,7 +66,7 @@
   },
   "banzhuan_success": {
     "name": "搬砖·成",
-    "action_uuid": "action_banzhuan",
+    "action_uuid": "fangshi_banzhuan",
     "state": "success",
     "parent": "",
     "universal_requirement": "",
@@ -79,7 +79,7 @@
   },
   "shiyao_success": {
     "name": "以身试药·成",
-    "action_uuid": "action_shiyao",
+    "action_uuid": "fangshi_shiyao",
     "state": "success",
     "parent": "",
     "universal_requirement": "",
@@ -89,7 +89,7 @@
   },
   "shiyao_failure": {
     "name": "以身试药·败",
-    "action_uuid": "action_shiyao",
+    "action_uuid": "fangshi_shiyao",
     "state": "failure",
     "parent": "",
     "universal_requirement": "",
@@ -99,7 +99,7 @@
   },
   "maizi_success": {
     "name": "卖字·成",
-    "action_uuid": "action_maizi",
+    "action_uuid": "fangshi_maizi",
     "state": "success",
     "parent": "",
     "universal_requirement": "",
@@ -112,7 +112,7 @@
   },
   "maizi_failure": {
     "name": "卖字·败",
-    "action_uuid": "action_maizi",
+    "action_uuid": "fangshi_maizi",
     "state": "failure",
     "parent": "",
     "universal_requirement": "",
@@ -122,7 +122,7 @@
   },
   "fgmaizi_success": {
     "name": "风骨卖字·成",
-    "action_uuid": "action_fgmaizi",
+    "action_uuid": "fangshi_fgmaizi",
     "state": "success",
     "parent": "",
     "universal_requirement": "",
@@ -132,7 +132,7 @@
   },
   "fgmaizi_failure": {
     "name": "风骨卖字·败",
-    "action_uuid": "action_fgmaizi",
+    "action_uuid": "fangshi_fgmaizi",
     "state": "failure",
     "parent": "",
     "universal_requirement": "",
@@ -142,7 +142,7 @@
   },
   "qujiangchi_success": {
     "name": "曲江池·成",
-    "action_uuid": "action_qujiangchi",
+    "action_uuid": "denggao_qujiangchi",
     "state": "success",
     "parent": "",
     "universal_requirement": "",
@@ -152,7 +152,7 @@
   },
   "leyouyuan_success": {
     "name": "乐游原·成",
-    "action_uuid": "action_leyouyuan",
+    "action_uuid": "denggao_leyouyuan",
     "state": "success",
     "parent": "",
     "universal_requirement": "",
@@ -162,7 +162,7 @@
   },
   "leyouyuan_failure": {
     "name": "乐游原·败",
-    "action_uuid": "action_leyouyuan",
+    "action_uuid": "denggao_leyouyuan",
     "state": "failure",
     "parent": "",
     "universal_requirement": "",
@@ -172,7 +172,7 @@
   },
   "shaolingyuan_success": {
     "name": "少陵原·成",
-    "action_uuid": "action_shaolingyuan",
+    "action_uuid": "denggao_shaolingyuan",
     "state": "success",
     "parent": "",
     "universal_requirement": "",
@@ -182,7 +182,7 @@
   },
   "shaolingyuan_failure": {
     "name": "少陵原·败",
-    "action_uuid": "action_shaolingyuan",
+    "action_uuid": "denggao_shaolingyuan",
     "state": "failure",
     "parent": "",
     "universal_requirement": "",

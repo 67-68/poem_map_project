@@ -14,13 +14,11 @@ class_name HoverInfoPopup extends PanelContainer
 
 
 func _init() -> void:
-	# 程序化创建 CustomTooltip 子节点
-	# CustomTooltip 是纯 .gd 类（无 class_name），extends PanelContainer
 	var ct_script = preload("res://ui/custom_tooltip.gd")
 	var ct := PanelContainer.new()
 	ct.set_script(ct_script)
 	ct.name = "CustomTooltip"
-	add_child(ct, false, INTERNAL_MODE_BACK)
+	add_child(ct)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 

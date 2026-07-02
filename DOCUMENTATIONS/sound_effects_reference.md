@@ -59,7 +59,6 @@
 | [`main_menu.tscn`](main_menu.tscn:65) | Setting Button hover | TSCN |
 | [`characters/event_btn.gd`](characters/event_btn.gd:31) | EventBtn hover | 代码注入 |
 | [`picker_item.tscn`](picker_item.tscn:27) | PickerItem hover | TSCN |
-| [`ui/picker_item_card.tscn`](ui/picker_item_card.tscn:20) | PickerItemCard hover | TSCN |
 | [`ui/imaginery_item.tscn`](ui/imaginery_item.tscn:19) | ImagineryItem hover | TSCN |
 | [`ui/poem_slot.tscn`](ui/poem_slot.tscn:20) | PoemSlot hover | TSCN |
 
@@ -80,7 +79,6 @@
 | 文件 | 挂载节点 | 注入方式 |
 |------|---------|---------|
 | [`picker_item.tscn`](picker_item.tscn:26) | PickerItem | TSCN |
-| [`ui/picker_item_card.tscn`](ui/picker_item_card.tscn:19) | PickerItemCard | TSCN |
 | [`ui/settlement_tape_entry.gd`](ui/settlement_tape_entry.gd:108) | 结算纸带确认按钮 | 代码注入 |
 | [`ui/picker_tape_attachment.gd`](ui/picker_tape_attachment.gd:69) | PickerTapeAttachment 动画完成回调 | 直接调用 `AudioManager.play_sfx_category()` |
 

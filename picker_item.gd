@@ -20,6 +20,8 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	_label.theme_type_variation = &"DefaultText"
+	mouse_entered.connect(_on_mouse_entered_picker)
+	mouse_exited.connect(_on_mouse_exited_picker)
 	if _pending_data:
 		_apply_data(_pending_data)
 		_pending_data = null
@@ -50,11 +52,23 @@ func _gui_input(event: InputEvent) -> void:
 		clicked.emit(entity)
 
 
+func _on_mouse_entered_picker() -> void:
+	Logging.info("PickerItem._on_mouse_entered_picker: mouse entered, entity='%s'" % (entity.name if entity else "null"))
+
+
+func _on_mouse_exited_picker() -> void:
+	Logging.info("PickerItem._on_mouse_exited_picker: mouse exited, entity='%s'" % (entity.name if entity else "null"))
+
+
 func _register_hover_popup() -> void:
+	Logging.info("PickerItem._register_hover_popup: 开始注册 hover popup, entity='%s'" % (entity.name if entity else "null"))
 	if not entity:
+		Logging.warn("PickerItem._register_hover_popup: entity 为空，跳过注册")
 		return
 	var ops: Array = entity.get_meta("operators", [])
+	Logging.info("PickerItem._register_hover_popup: 获取到 %d 个 operators" % ops.size())
 	if ops.is_empty():
+		Logging.info("PickerItem._register_hover_popup: operators 为空，跳过注册")
 		return
 
 	var vector_lines: Array[String] = []
@@ -63,15 +77,23 @@ func _register_hover_popup() -> void:
 			var desc = op.describe_preview()
 			if not desc.is_empty():
 				vector_lines.append("• " + desc)
+		else:
+			Logging.warn("PickerItem._register_hover_popup: operator 无效或无 describe_preview 方法, op=%s" % str(op))
 	var vector_text = "\n".join(vector_lines)
+	Logging.info("PickerItem._register_hover_popup: 生成 vector_text, 共 %d 行" % vector_lines.size())
 	if vector_text.is_empty():
+		Logging.info("PickerItem._register_hover_popup: vector_text 为空，跳过注册")
 		return
 
 	var narrative = entity.name
 	if not entity.description.is_empty():
 		narrative += "\n" + entity.description
+		Logging.info("PickerItem._register_hover_popup: 附加 description 到 narrative")
 
 	var popup = _HoverInfoPopup.new()
 	popup.set_narrative_text(narrative)
 	popup.set_vector_text(vector_text)
+	popup.custom_minimum_size = Vector2(280, 80)
+	popup.size = Vector2(280, 80)
 	HoverPopupManager.register(self, popup, 0.2, 0.15)
+	Logging.info("PickerItem._register_hover_popup: hover popup 注册完成, entity='%s'" % entity.name)
