@@ -77,25 +77,22 @@ func _register_hover_popup() -> void:
 		vector_lines.append(sub_action_preview)
 		Logging.info("PickerItem._register_hover_popup: sub_action_preview 非空，跳过 archetype operators 独立展示")
 	else:
-		for op in ops:
-			if op and op.has_method("describe_preview"):
-				var desc = op.describe_preview()
-				if not desc.is_empty():
-					vector_lines.append("• " + desc)
-			else:
-				Logging.warn("PickerItem._register_hover_popup: operator 无效或无 describe_preview 方法, op=%s" % str(op))
-	var vector_text = "\n".join(vector_lines)
+		var op_lines := ActionHintBuilder.build_operator_preview(ops)
+		vector_lines.append_array(op_lines)
+		Logging.info("PickerItem._register_hover_popup: ActionHintBuilder 生成 %d 行 operator 描述" % op_lines.size())
+	
+	var vector_text := "\n".join(vector_lines)
 	Logging.info("PickerItem._register_hover_popup: 生成 vector_text, 共 %d 行" % vector_lines.size())
 	if vector_text.is_empty():
 		Logging.info("PickerItem._register_hover_popup: vector_text 为空，跳过注册")
 		return
 
-	var narrative = entity.name
+	var narrative := entity.name
 	if not entity.description.is_empty():
 		narrative += "\n" + entity.description
 		Logging.info("PickerItem._register_hover_popup: 附加 description 到 narrative")
 
-	var popup = _HoverInfoPopup.new()
+	var popup := _HoverInfoPopup.new()
 	popup.set_narrative_text(narrative)
 	popup.set_vector_text(vector_text)
 	popup.custom_minimum_size = Vector2(280, 80)

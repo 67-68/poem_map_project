@@ -97,3 +97,30 @@
   - `[失败效果]`: 遍历 `failed_result.operators` 的 `describe_preview()`，空则 fallback「后果难料…」
 - 预览文本通过 `entity.set_meta("sub_action_preview", ...)` 从 `action_button` 传给 `picker_item`
 - `picker_item._register_hover_popup()` 将预览前置插入 `vector_lines`，后接 archetype operators 描述
+
+## ActionHintBuilder — 行动提示文本统一构建器
+
+静态工具类 `core/action_hint_builder.gd`，将所有 Action hover 提示文本的格式化逻辑集中到一处，消除重复。
+
+### 设计意图
+
+- **单一真相源**：所有 `describe_preview()` 遍历、operator 格式化、叙事层/向量层聚合均由此类负责，UI 控件（action_button、picker_item）仅调用接口，不自行拼写文本。
+- **两套接口覆盖两种场景**：主行动 hover（`build_action_hint` 输入一个 Action）和子行动 picker hover（`build_sub_action_preview` 输入 success/fail archetype operators）。
+- **合并 tooltip 与 popup**：原生 `tooltip_text` 被彻底移除，锁定原因、success_hint 全部进入 HoverPopupManager 的富文本 popup。叙事层统一展示 `[🔒 原因]\n\n[描述]` 或 `[success_hint]\n\n[描述]`。
+- **动态刷新**：`set_locked`/`set_unlocked` 触发 HoverPopup 注销+重建，hover 时永远拿到最新状态。
+
+### 接口
+
+| 方法 | 输入 | 输出 | 用途 |
+|------|------|------|------|
+| `build_action_hint(action, is_locked)` | Action + 锁定标志 | `{narrative, vector}` | 主行动按钮 hover popup |
+| `build_operator_preview(operators)` | Array[BaseOperator] | Array[String] | 单列 operator 转 "• {desc}" 行 |
+| `build_choice_result_preview(result)` | ChoiceResult | Array[String] | ChoiceResult 解包后委托 build_operator_preview |
+| `build_sub_action_preview(action, success_ops, fail_ops)` | Action + archetype operators | String | 子行动 picker tooltip 专用格式 |
+
+### 文件
+
+- `core/action_hint_builder.gd` — 静态构建器（本模块）
+- `ui/action_button.gd` — 消费方：主按钮 hover popup、sub-action picker 预览
+- `ui/picker_item.gd` — 消费方：picker 项 hover popup
+- `ui/hover_popup_manager.gd` — 统一显示管道（替代原生 tooltip_text）

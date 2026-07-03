@@ -67,15 +67,15 @@ func set_locked(reason: String) -> void:
 	_is_locked = true
 	modulate = Color(0.4, 0.4, 0.4, 0.6)
 	mouse_filter = Control.MOUSE_FILTER_STOP  # 仍然接收 hover
-	tooltip_text = reason if not reason.is_empty() else "暂时无法执行此行动"
+	_refresh_hover_popup()
 
 
-## 🆕 解除灰化锁定态，同时从 action.success_hint 设置 tooltip（如有）
+## 🆕 解除灰化锁定态
 func set_unlocked() -> void:
 	_is_locked = false
 	modulate = Color.WHITE
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	tooltip_text = action.success_hint if action and not action.success_hint.is_empty() else ""
+	_refresh_hover_popup()
 
 
 ## 差分更新：只刷 UI 文本/图标，不重建信号 & HoverPopup（已注册的 popup 绑定不变）
@@ -114,38 +114,30 @@ func _start_flash() -> void:
 	_flash_tween.tween_property(self, "modulate", Color.WHITE, 0.4)
 
 
-## 创建 HoverInfoPopup，注入叙事文本 + 向量文本，注册到 HoverPopupManager
+## 创建/重建 HoverInfoPopup，注入叙事文本 + 向量文本，注册到 HoverPopupManager
 func _register_hover_popup() -> void:
+	if not action:
+		Logging.warn("SceneActionPanel._register_hover_popup: action is null, skip")
+		return
+	
+	var hint: Dictionary = ActionHintBuilder.build_action_hint(action, _is_locked)
+	
 	var popup := HoverInfoPopup.new()
-	
-	# 叙事层（默认可见）
-	var narrative := action.description if not action.description.is_empty() else "（无叙述）"
-	if _is_locked and not action.dynamic_failed_hint.is_empty():
-		narrative = "[color=#cc6666]🔒 %s[/color]\n\n%s" % [action.dynamic_failed_hint, narrative]
-	popup.set_narrative_text(narrative)
-	
-	# 向量层（Alt 按下可见）
-	var vector_lines: Array[String] = []
-	# 🆕 前置插入预览（概率 + 成功效果 + 失败效果）
-	var arch = Database.get_archetype_by_uuid(action.uuid)
-	var preview := _build_sub_action_preview(action, arch.operators if arch else [])
-	if not preview.is_empty():
-		vector_lines.append(preview)
-	if not action.aciton_requirements.is_empty():
-		vector_lines.append("[color=gray][font_size=13]━━━ 前提 ━━━[/font_size][/color]")
-		for req in action.aciton_requirements:
-			var desc = req.describe_requirement()
-			if not desc.is_empty():
-				vector_lines.append("• " + desc)
-	if not action.action_results.is_empty():
-		vector_lines.append("[color=gray][font_size=13]━━━ 结果 ━━━[/font_size][/color]")
-		for op in action.action_results:
-			var desc = op.describe_preview()
-			if not desc.is_empty():
-				vector_lines.append("• " + desc)
-	popup.set_vector_text("\n".join(vector_lines))
+	popup.set_narrative_text(hint["narrative"])
+	popup.set_vector_text(hint["vector"])
 	
 	HoverPopupManager.register(self, popup, 0.2, 0.15)
+	Logging.info("SceneActionPanel._register_hover_popup: done for '%s'" % action.name)
+
+
+## 注销旧 popup 并重建（用于 set_locked / set_unlocked 后刷新 hover 内容）
+func _refresh_hover_popup() -> void:
+	if not action:
+		Logging.warn("SceneActionPanel._refresh_hover_popup: action is null, skip")
+		return
+	HoverPopupManager.unregister(self)
+	_register_hover_popup()
+	Logging.info("SceneActionPanel._refresh_hover_popup: refreshed for '%s'" % action.name)
 
 
 func _on_mouse_entered() -> void:
@@ -308,11 +300,13 @@ func _on_button_pressed() -> void:
 ## @param entity: 被选中的子行动 GameEntity（含 uuid=sub_uuid, name=显示名）
 func _on_sub_action_picked(entity) -> void:
 	var sub_uuid: String = entity.uuid if entity is GameEntity else ""
+	Logging.info("[DEBUG sub_act] ENTER sub_uuid=%s entity_name=%s" % [sub_uuid, entity.name if entity else "NULL"])
 	if sub_uuid.is_empty():
 		Logging.err("_on_sub_action_picked: entity.uuid is empty, aborting")
 		return
 	
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
+	Logging.info("[DEBUG sub_act] _pending_sub_action_results count=%d" % _pending_sub_action_results.size())
 	
 	# 🆕 查找子 action，使用其 tags 和 fallback（而非父 action 的）
 	var sub_action: Action = Database.get_action(sub_uuid) as Action
@@ -332,11 +326,44 @@ func _on_sub_action_picked(entity) -> void:
 			# 所有 action_tags 进 current_action_tags，由 ActionTagFilter AND 模式过滤
 			sub_main_tag = ""
 		Logging.info("SceneActionPanel: sub-action '%s' tags=%s, fallback='%s', main_tag='%s'" % [sub_uuid, str(sub_tags), sub_fallback, sub_main_tag])
+		
+		var raw_possibility: String = sub_action.possibility
+		var resolved_possibility: int = sub_action.get_possibility_int()
+		Logging.info("[DEBUG sub_act] raw_possibility='%s' resolved=%d will_roll=%s" % [raw_possibility, resolved_possibility, str(resolved_possibility < 100)])
 	else:
 		Logging.warn("SceneActionPanel: sub-action '%s' not found in Database, falling back to parent data" % sub_uuid)
 		sub_main_tag = _pending_sub_action_main_tag
 		sub_fallback = _pending_sub_action_fallback
 		sub_tags = _pending_sub_action_tags.duplicate()
+		Logging.info("[DEBUG sub_act] sub_action NOT FOUND in Database!")
+	
+	# 🆕 Sub-action possibility 投骰（与父 action _on_button_pressed 逻辑一致）
+	var _sub_failed: bool = false
+	if sub_action and sub_action.get_possibility_int() < 100:
+		var roll: int = randi() % 101
+		var threshold: int = sub_action.get_possibility_int()
+		Logging.info("[DEBUG sub_act] ROLLING: roll=%d threshold=%d" % [roll, threshold])
+		if roll > threshold:
+			Logging.info("SceneActionPanel: sub-action '%s' possibility FAIL (roll=%d > threshold=%d)" % [sub_action.name, roll, threshold])
+			Logging.info("[DEBUG sub_act] calling failed_result.operate()…")
+			sub_action.failed_result.operate()
+			Logging.info("[DEBUG sub_act] failed_result.operate() DONE")
+			_sub_failed = true
+		else:
+			Logging.info("SceneActionPanel: sub-action '%s' possibility PASS (roll=%d <= threshold=%d)" % [sub_action.name, roll, threshold])
+			if sub_action.action_results and not sub_action.action_results.is_empty():
+				for r in sub_action.action_results:
+					r.operate()
+				Logging.info("SceneActionPanel: sub-action '%s' executed action_results (%d ops)" % [sub_action.name, sub_action.action_results.size()])
+			else:
+				Logging.info("[DEBUG sub_act] PASS but no action_results to execute")
+	else:
+		if not sub_action:
+			Logging.info("[DEBUG sub_act] SKIP roll: sub_action is null")
+		else:
+			Logging.info("[DEBUG sub_act] SKIP roll: get_possibility_int()=%d >= 100" % sub_action.get_possibility_int())
+	
+	Logging.info("[DEBUG sub_act] _sub_failed=%s — about to exec parent ops + scan" % str(_sub_failed))
 	
 	# 1. 执行父行动的 operators（挂起数据）
 	ActionManager.begin_action_batch()
@@ -361,89 +388,27 @@ func _on_sub_action_picked(entity) -> void:
 		PlayerState.current_action_tags.append(tag)
 	
 	# 3. AND 模式事件扫描：使用子 action 的 main_tag 和 fallback
-	var context = {
-		'main_tag': sub_main_tag,
-		'fallback_event_uuid': sub_fallback,
-		'tag_match_mode': 'all',
-	}
-	EventManager.scan_events(0, context)
+	if not _sub_failed:
+		Logging.info("[DEBUG sub_act] CALLING scan_events — main_tag='%s' fallback='%s'" % [sub_main_tag, sub_fallback])
+		var context = {
+			'main_tag': sub_main_tag,
+			'fallback_event_uuid': sub_fallback,
+			'tag_match_mode': 'all',
+		}
+		EventManager.scan_events(0, context)
+	else:
+		Logging.info("[DEBUG sub_act] SKIP scan_events — failed_result already pushed event")
+		Logging.info("SceneActionPanel: sub-action '%s' failed, skipping scan_events (failed_result already pushed event)" % sub_action.name)
 	
 	# 清理挂起数据
 	_pending_sub_action_main_tag = ""
 	_pending_sub_action_fallback = ""
 	_pending_sub_action_tags.clear()
 	_pending_sub_action_results.clear()
+	Logging.info("[DEBUG sub_act] EXIT — cleanup done")
 
 # ── Sub-Action Preview 构建 ─────────────────────────────
 
-## 为 sub-action picker tooltip 构建预览文本。
-## 格式: [预览]\n概率: {n}%成功，\n[成功效果]:\n• {desc}\n[失败效果]:\n• {desc}
-## 数据源优先级：success_ops → action.action_results → fallback；fail_ops → failed_result.operators → fallback
+## 委托到 ActionHintBuilder.build_sub_action_preview
 func _build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = []) -> String:
-	var lines: Array[String] = []
-	lines.append("[预览]")
-
-	# ── 概率行 ──
-	var prob := sub_action.get_possibility_int()
-	lines.append("概率: %d%%成功，" % prob)
-	Logging.info("_build_sub_action_preview: sub_action='%s' possibility=%d" % [sub_action.name, prob])
-
-	# ── 成功效果 ──
-	var success_descs: Array[String] = []
-	# 优先级 1: 外部传入的 archetype success_ops
-	if not success_ops.is_empty():
-		for op in success_ops:
-			if op and op.has_method("describe_preview"):
-				var desc = op.describe_preview()
-				if not desc.is_empty():
-					success_descs.append("• " + desc)
-		Logging.info("_build_sub_action_preview: sub_action='%s' 使用 archetype success_ops (%d ops → %d descs)" % [sub_action.name, success_ops.size(), success_descs.size()])
-	# 优先级 2: action.action_results（.tres 级别 operators）
-	elif sub_action.action_results and not sub_action.action_results.is_empty():
-		for op in sub_action.action_results:
-			if op and op.has_method("describe_preview"):
-				var desc := op.describe_preview()
-				if not desc.is_empty():
-					success_descs.append("• " + desc)
-		Logging.info("_build_sub_action_preview: sub_action='%s' 使用 action_results (%d ops → %d descs)" % [sub_action.name, sub_action.action_results.size(), success_descs.size()])
-
-	if success_descs.is_empty():
-		lines.append("[成功效果]: 成败未卜…")
-		Logging.info("_build_sub_action_preview: sub_action='%s' success 无有效 operator，使用 fallback" % sub_action.name)
-	else:
-		lines.append("[成功效果]:")
-		for d in success_descs:
-			lines.append(d)
-		Logging.info("_build_sub_action_preview: sub_action='%s' success preview: %d lines" % [sub_action.name, success_descs.size()])
-
-	# ── 失败效果 ──
-	var fail_descs: Array[String] = []
-	# 优先级 1: 外部传入的 archetype fail_ops
-	if not fail_ops.is_empty():
-		for op in fail_ops:
-			if op and op.has_method("describe_preview"):
-				var desc = op.describe_preview()
-				if not desc.is_empty():
-					fail_descs.append("• " + desc)
-		Logging.info("_build_sub_action_preview: sub_action='%s' 使用 archetype fail_ops (%d ops → %d descs)" % [sub_action.name, fail_ops.size(), fail_descs.size()])
-	# 优先级 2: action.failed_result.operators（.tres 级别 operators）
-	else:
-		var failed_result: ChoiceResult = sub_action.failed_result
-		if failed_result and failed_result.operators and not failed_result.operators.is_empty():
-			for op in failed_result.operators:
-				if op and op.has_method("describe_preview"):
-					var desc := op.describe_preview()
-					if not desc.is_empty():
-						fail_descs.append("• " + desc)
-			Logging.info("_build_sub_action_preview: sub_action='%s' 使用 failed_result.operators (%d ops → %d descs)" % [sub_action.name, failed_result.operators.size(), fail_descs.size()])
-
-	if fail_descs.is_empty():
-		lines.append("[失败效果]: 后果难料…")
-		Logging.info("_build_sub_action_preview: sub_action='%s' fail 无有效 operator，使用 fallback" % sub_action.name)
-	else:
-		lines.append("[失败效果]:")
-		for d in fail_descs:
-			lines.append(d)
-		Logging.info("_build_sub_action_preview: sub_action='%s' fail preview: %d lines" % [sub_action.name, fail_descs.size()])
-
-	return "\n".join(lines)
+	return ActionHintBuilder.build_sub_action_preview(sub_action, success_ops, fail_ops)
