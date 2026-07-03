@@ -6,8 +6,6 @@ class_name PickerItem extends PanelContainer
 ##   - clicked(entity) 信号 — 点击回调
 ##   - entity 属性          — 读取当前绑定的 GameEntity
 
-const _HoverInfoPopup = preload("res://ui/hover_info_popup.gd")
-
 signal clicked(entity: GameEntity)
 
 var entity: GameEntity = null
@@ -61,7 +59,7 @@ func _on_mouse_exited_picker() -> void:
 
 
 func _register_hover_popup() -> void:
-	Logging.info("PickerItem._register_hover_popup: 开始注册 hover popup, entity='%s'" % (entity.name if entity else "null"))
+	Logging.info("PickerItem._register_hover_popup: 开始注册 hover (BELOW_OVERLAY), entity='%s'" % (entity.name if entity else "null"))
 	if not entity:
 		Logging.warn("PickerItem._register_hover_popup: entity 为空，跳过注册")
 		return
@@ -71,8 +69,6 @@ func _register_hover_popup() -> void:
 
 	var vector_lines: Array[String] = []
 
-	# 🆕 前置插入 sub_action_preview（如果存在）
-	# 若 preview 非空，已包含完整成功/失败效果，不再重复展示 archetype operators
 	if not sub_action_preview.is_empty():
 		vector_lines.append(sub_action_preview)
 		Logging.info("PickerItem._register_hover_popup: sub_action_preview 非空，跳过 archetype operators 独立展示")
@@ -92,10 +88,5 @@ func _register_hover_popup() -> void:
 		narrative += "\n" + entity.description
 		Logging.info("PickerItem._register_hover_popup: 附加 description 到 narrative")
 
-	var popup := _HoverInfoPopup.new()
-	popup.set_narrative_text(narrative)
-	popup.set_vector_text(vector_text)
-	popup.custom_minimum_size = Vector2(280, 80)
-	popup.size = Vector2(280, 80)
-	HoverPopupManager.register(self, popup, 0.2, 0.15)
-	Logging.info("PickerItem._register_hover_popup: hover popup 注册完成, entity='%s'" % entity.name)
+	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text}, 0.2, 0.15, HoverPopupManager.FlowType.BELOW_OVERLAY)
+	Logging.info("PickerItem._register_hover_popup: hover 注册完成 (BELOW_OVERLAY), entity='%s'" % entity.name)

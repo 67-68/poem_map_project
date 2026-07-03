@@ -114,7 +114,7 @@ func _start_flash() -> void:
 	_flash_tween.tween_property(self, "modulate", Color.WHITE, 0.4)
 
 
-## 创建/重建 HoverInfoPopup，注入叙事文本 + 向量文本，注册到 HoverPopupManager
+## 创建/重建 hover 数据，注入叙事文本 + 向量文本，注册到 HoverPopupManager（SLIDE_FROM_RIGHT 流）
 func _register_hover_popup() -> void:
 	if not action:
 		Logging.warn("SceneActionPanel._register_hover_popup: action is null, skip")
@@ -122,12 +122,8 @@ func _register_hover_popup() -> void:
 	
 	var hint: Dictionary = ActionHintBuilder.build_action_hint(action, _is_locked)
 	
-	var popup := HoverInfoPopup.new()
-	popup.set_narrative_text(hint["narrative"])
-	popup.set_vector_text(hint["vector"])
-	
-	HoverPopupManager.register(self, popup, 0.2, 0.15)
-	Logging.info("SceneActionPanel._register_hover_popup: done for '%s'" % action.name)
+	HoverPopupManager.register(self, {"narrative": hint["narrative"], "vector": hint["vector"]}, 0.2, 1.0, HoverPopupManager.FlowType.SLIDE_FROM_RIGHT)
+	Logging.info("SceneActionPanel._register_hover_popup: done for '%s' (SLIDE_FROM_RIGHT)" % action.name)
 
 
 ## 注销旧 popup 并重建（用于 set_locked / set_unlocked 后刷新 hover 内容）
@@ -149,6 +145,9 @@ func _on_mouse_exited() -> void:
 	self.add_theme_stylebox_override("normal", _normal_style)
 
 func _on_button_pressed() -> void:
+	# 🆕 行动开始时 dismiss 所有 hover
+	HoverPopupManager.dismiss_all()
+
 	# 🆕 前置检查：锁定态 → 弹出 toast，不执行
 	if _is_locked:
 		var reason := action.dynamic_failed_hint if not action.dynamic_failed_hint.is_empty() else "暂时无法执行此行动"

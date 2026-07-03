@@ -39,6 +39,9 @@ func _on_card_clicked(card: PickerItem) -> void:
 		return
 	_selected = true
 
+	# 🆕 选择后 dismiss 所有 hover
+	HoverPopupManager.dismiss_all()
+
 	# 选中 Tween: 选中放大 + 金色边框
 	var selected_tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	selected_tween.tween_property(card, "scale", Vector2(1.1, 1.1), 0.3)

@@ -309,6 +309,67 @@ func _on_slide_back_finished() -> void:
 
 
 # ═══════════════════════════════════════════════════════════════════
+# 9. play_slide_in_from_right() — Hover 流：从屏幕右侧滑入
+# ═══════════════════════════════════════════════════════════════════
+
+## HoverDisplayFlow SLIDE_FROM_RIGHT 的 enter 动画。
+## 将 shadow_box 从屏幕右侧外滑入到 _tape_target_y 位置。
+## 同时 tape_container alpha 从 0→1。
+## ⚠️ 动画期间不修改 _tape_initialized — 由调用方管理状态。
+func play_slide_in_from_right(duration: float = 0.3) -> void:
+	if _tween:
+		_tween.kill()
+
+	var viewport_w := get_tree().root.get_visible_rect().size.x
+
+	if _tape_target_y == 0.0:
+		_tape_target_y = shadow_box.position.y
+
+	# 物理重置：shadow_box 埋到屏幕右侧外
+	shadow_box.position.x = viewport_w + 100.0
+	shadow_box.position.y = _tape_target_y
+	tape_container.modulate.a = 0.0
+
+	shadow_box.show()
+	tape_container.show()
+
+	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween.set_parallel(true)
+	# 水平滑动：从右侧外 → 0（恢复到 tscn 的 anchor 计算位置）
+	_tween.tween_property(shadow_box, "position:x", 0.0, duration) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_tween.tween_property(tape_container, "modulate:a", 1.0, duration * 0.6) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	Logging.info("TapeVisualizer.play_slide_in_from_right: duration=%.2f" % duration)
+
+
+# ═══════════════════════════════════════════════════════════════════
+# 10. play_slide_to_right() — Hover 流：滑出到屏幕右侧
+# ═══════════════════════════════════════════════════════════════════
+
+## HoverDisplayFlow SLIDE_FROM_RIGHT 的 exit 动画。
+## 将 shadow_box 从当前位置滑出到屏幕右侧外 + 淡出。
+func play_slide_to_right(duration: float = 0.3) -> void:
+	if _tween:
+		_tween.kill()
+
+	var viewport_w := get_tree().root.get_visible_rect().size.x
+	var slide_out_target: float = viewport_w + 100.0
+
+	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_tween.set_parallel(true)
+	_tween.tween_property(shadow_box, "position:x", slide_out_target, duration) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	_tween.tween_property(tape_container, "modulate:a", 0.0, duration * 0.6) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_tween.tween_callback(func():
+		shadow_box.visible = false
+		Logging.info("TapeVisualizer.play_slide_to_right: 动画完成，shadow_box 隐藏")
+	)
+
+	Logging.info("TapeVisualizer.play_slide_to_right: duration=%.2f" % duration)
+# ═══════════════════════════════════════════════════════════════════
 # 私有递归方法
 # ═══════════════════════════════════════════════════════════════════
 

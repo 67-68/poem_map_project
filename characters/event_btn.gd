@@ -92,6 +92,51 @@ func _on_hover_exit() -> void:
 	_hover_tween.set_trans(Tween.TRANS_CUBIC)
 	_hover_tween.tween_property(_underline, "scale", Vector2(0.0, 1.0), HOVER_SHRINK_DURATION)
 
+## 构建 hover 数据并注册到 HoverPopupManager（BELOW_OVERLAY 流）
+## 替代旧 Godot 原生 _make_custom_tooltip。
+func _register_event_btn_hover() -> void:
+	if not option:
+		Logging.info("EventBtn._register_event_btn_hover: option 为空，跳过")
+		return
+
+	# 叙事层：按钮文本即选项描述
+	var narrative: String = text if not text.is_empty() else "选项"
+
+	# 向量层
+	var vector_lines: Array[String] = []
+	
+	# (A) Requirement 摘要（前提条件）
+	if 'requirement' in option and option.requirement \
+		and option.requirement.has_method('describe_requirement'):
+		var req_text = option.requirement.describe_requirement()
+		if not req_text.is_empty():
+			vector_lines.append("[前提]")
+			vector_lines.append(req_text)
+	
+	# (B) Operator 预览
+	var operator_lines: Array[String] = []
+	if 'choice_result' in option and option.choice_result:
+		operator_lines = option.choice_result.format_preview()
+	
+	if operator_lines.is_empty():
+		if not vector_lines.is_empty():
+			vector_lines.append("")
+			vector_lines.append("[影响]")
+		vector_lines.append("你想知道什么发生了")
+	else:
+		if not vector_lines.is_empty():
+			vector_lines.append("")
+		vector_lines.append("[影响]")
+		vector_lines.append_array(operator_lines)
+	
+	var vector_text := "\n".join(vector_lines)
+	if vector_text.is_empty():
+		Logging.info("EventBtn._register_event_btn_hover: vector_text 为空，跳过注册")
+		return
+
+	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text}, 0.2, 0.15, HoverPopupManager.FlowType.BELOW_OVERLAY)
+	Logging.info("EventBtn._register_event_btn_hover: 注册完成 (BELOW_OVERLAY), text='%s'" % text)
+
 func _init_option(data: BaseOption):
 	"""初始化选项数据"""
 	option = data
@@ -107,8 +152,6 @@ func _init_option(data: BaseOption):
 	# custom_minimum_size 已经在场景中设置了，不需要重复设置
 	
 	# ── 统一验证管线 ──
-	# 无论是 Requirement（属性不够、flag 未设置）还是 NarrativeLock（叙事锁定），
-	# 都通过 requirement.compare() 统一判断。不再单独处理 is_disabled 分支。
 	var req = data.requirement if 'requirement' in data else null
 	if req:
 		var pass_prop = req.compare(PlayerState)
@@ -123,6 +166,7 @@ func _init_option(data: BaseOption):
 	
 	# 通过验证 → 正常触发
 	_register_to_manager(data)
+	_register_event_btn_hover()  # 🆕 BELOW_OVERLAY hover 注册
 	pressed.connect(confirmed)
 
 ## 生成注册 key 并注册到 AncientOptionBtnManager

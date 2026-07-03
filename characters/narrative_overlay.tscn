@@ -32,6 +32,19 @@ modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nuqx"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sshou"]
+load_path = "res://.godot/imported/宣纸.jpeg-4145ef729b8544b232cb03c2e8733341.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tb7k1"]
+texture = SubResource("CompressedTexture2D_sshou")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_7xb00"]
+
 [node name="NarrativeOverlay" type="PanelContainer" unique_id=467584234]
 custom_minimum_size = Vector2(320, 450)
 anchors_preset = 8
@@ -117,3 +130,29 @@ script = ExtResource("5_smooth")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="HoverContainer" type="PanelContainer" parent="." unique_id=497946658]
+z_index = 100
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxTexture_tb7k1")
+
+[node name="V" type="VBoxContainer" parent="HoverContainer" unique_id=1320109393]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="HoverContainer/V" unique_id=751446402]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/separator = SubResource("StyleBoxLine_7xb00")
+
+[node name="Label" type="Label" parent="HoverContainer/V" unique_id=1655239264]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"TitleText"
+text = "效果"
+
+[node name="HoverLabel" type="Label" parent="HoverContainer/V" unique_id=2132663129]
+layout_mode = 2
+size_flags_vertical = 0
+theme_type_variation = &"DefaultText"

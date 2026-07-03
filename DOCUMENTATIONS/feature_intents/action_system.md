@@ -122,15 +122,51 @@
 - 预览文本通过 `entity.set_meta("sub_action_preview", ...)` 从 `action_button` 传给 `picker_item`
 - `picker_item._register_hover_popup()` 将预览前置插入 `vector_lines`，后接 archetype operators 描述
 
+## HoverDisplayFlow — 统一 Hover 显示架构（v3.0）
+
+`ui/hover_popup_manager.gd` 不再使用浮动 Popup，改用三种可插拔 FlowType 委托 `NarrativeOverlay` 面板呈现 hover 信息。
+
+### FlowType 枚举
+
+| FlowType | 触发场景 | Enter 动画 | Exit 动画 | 承载 UI |
+|----------|---------|-----------|----------|---------|
+| `SLIDE_FROM_RIGHT` | Action 按钮 hover | `TapeVisualizer.play_slide_in_from_right(0.3s)` → 整个 NarrativeOverlay 从右侧滑入 | 1s 后或行动开始时 `play_slide_to_right(0.3s)` 滑出 | `NarrativeOverlay.hover_container/hover_label` |
+| `BELOW_OVERLAY` | Picker/EventBtn hover | `hover_container` 显形显示 | 0.15s 后或选项选择后 `hide_hover_text()` | `NarrativeOverlay.hover_container/hover_label` |
+| `POPUP_LEGACY` | Ambition HUD | 原有浮动 popup（CanvasLayer 四象限定位） | `popup.visible = false` | `CanvasLayer + Control` |
+
+### 架构
+
+- `hover_popup_manager.gd`: `HoverBinding` 状态机不变，`SHOWING/IDLE` entry/exit 委托 `HoverDisplayDelegate` 子类
+- 委托子类：`SlideFromRightDelegate` / `BelowOverlayDelegate` / `PopupLegacyDelegate`
+- `narrative_overlay.gd`: 暴露 `show_hover_text(narrative, vector)` / `hide_hover_text()` 接口，操作 `HoverContainer`（tscn 内置 `HSeparator` + `Label`）
+- `tape_visualizer.gd`: `play_slide_in_from_right(duration)` / `play_slide_to_right(duration)`
+- 竞态：`SceneActionPanel._on_button_pressed()` / `NarrativeOverlay._on_event_ready_to_play()` / `PickerTapeAttachment._on_card_clicked()` 均调用 `HoverPopupManager.dismiss_all()`
+
+### 消费方注册方式
+
+```gdscript
+# SLIDE_FROM_RIGHT — action hover
+HoverPopupManager.register(self, {"narrative": hint["narrative"], "vector": hint["vector"]},
+    0.2, 1.0, HoverPopupManager.FlowType.SLIDE_FROM_RIGHT)
+
+# BELOW_OVERLAY — picker/event hover
+HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text},
+    0.2, 0.15, HoverPopupManager.FlowType.BELOW_OVERLAY)
+
+# POPUP_LEGACY — ambition hover (行为不变)
+HoverPopupManager.register(_ambition_btn, ambition_hud, 0.2, 0.15,
+    HoverPopupManager.FlowType.POPUP_LEGACY)
+```
+
 ## ActionHintBuilder — 行动提示文本统一构建器
 
 静态工具类 `core/action_hint_builder.gd`，将所有 Action hover 提示文本的格式化逻辑集中到一处，消除重复。
 
 ### 设计意图
 
-- **单一真相源**：所有 `describe_preview()` 遍历、operator 格式化、叙事层/向量层聚合均由此类负责，UI 控件（action_button、picker_item）仅调用接口，不自行拼写文本。
+- **单一真相源**：所有 `describe_preview()` 遍历、operator 格式化、叙事层/向量层聚合均由此类负责，UI 控件（action_button、picker_item、event_btn）仅调用接口，不自行拼写文本。
 - **两套接口覆盖两种场景**：主行动 hover（`build_action_hint` 输入一个 Action）和子行动 picker hover（`build_sub_action_preview` 输入 success/fail archetype operators）。
-- **合并 tooltip 与 popup**：原生 `tooltip_text` 被彻底移除，锁定原因、success_hint 全部进入 HoverPopupManager 的富文本 popup。叙事层统一展示 `[🔒 原因]\n\n[描述]` 或 `[success_hint]\n\n[描述]`。
+- **统一 hover 显示管道**：所有 hover 文本（锁定原因、success_hint、operator 预览）均通过 HoverPopupManager + NarrativeOverlay HoverContainer 呈现，不再使用原生 tooltip_text 或独立浮动 popup。
 - **动态刷新**：`set_locked`/`set_unlocked` 触发 HoverPopup 注销+重建，hover 时永远拿到最新状态。
 
 ### 接口
@@ -145,6 +181,9 @@
 ### 文件
 
 - `core/action_hint_builder.gd` — 静态构建器（本模块）
-- `ui/action_button.gd` — 消费方：主按钮 hover popup、sub-action picker 预览
-- `ui/picker_item.gd` — 消费方：picker 项 hover popup
-- `ui/hover_popup_manager.gd` — 统一显示管道（替代原生 tooltip_text）
+- `ui/action_button.gd` — 消费方：主按钮 hover（SLIDE_FROM_RIGHT）、sub-action picker 预览
+- `picker_item.gd` — 消费方：picker 项 hover（BELOW_OVERLAY）
+- `characters/event_btn.gd` — 消费方：事件选项 hover（BELOW_OVERLAY）
+- `ui/hover_popup_manager.gd` — 统一显示管道（v3.0 FlowType 架构）
+- `characters/narrative_overlay.gd` — hover 文本渲染（HoverContainer/HoverLabel）
+- `characters/tape_visualizer.gd` — 右侧滑入/滑出动画

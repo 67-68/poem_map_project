@@ -25,6 +25,9 @@ class_name NarrativeOverlay extends PanelContainer
 @onready var event_ui = $TapeContainer/EventHistory
 @onready var _interrupt_button: Button = $InterruptButton/Button
 @onready var tape_container: PanelContainer = $TapeContainer
+@onready var hover_container: PanelContainer = $HoverContainer
+@onready var hover_label: Label = $HoverContainer/V/HoverLabel
+@onready var hover_separator: HSeparator = $HoverContainer/V/HSeparator
 
 # ── Overlay 本地状态（仅 UI 相关）────────────────────
 var current_event_data: BaseEvent
@@ -43,6 +46,9 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	process_mode = Node.PROCESS_MODE_ALWAYS
+
+	# ── HoverContainer 初始隐藏 ──
+	hover_container.visible = false
 
 	# ── 配置 TapeVisualizer 的 export 引用（动态注入，避免 tscn 硬编码 uid）──
 	visualizer.shadow_box = self               # NarrativeOverlay 自身即外层容器
@@ -90,8 +96,9 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
-	# ── 进入事件状态，解除 auto-advance 封锁 ──
+	# ── 进入事件状态，解除 auto-advance 封锁，dismiss 所有 hover ──
 	_auto_advance_blocked = false
+	HoverPopupManager.dismiss_all()
 
 	var data: BaseEvent = entry.get("data")
 	var context: Dictionary = entry.get("context", {})
@@ -369,6 +376,8 @@ func _on_hide_requested() -> void:
 	# 🚨 隐藏纸带时取消 auto-advance（防止在 hide 动画期间触发）
 	_cancel_auto_advance()
 	_auto_advance_blocked = true
+	# 🆕 隐藏纸带时同时清除 hover 文本
+	hide_hover_text()
 
 	# 🚨 如果 overlay 动画正在进行中，延迟 hide 到动画完成后执行
 	if _overlay_anim_in_progress:
@@ -599,3 +608,27 @@ func _bind_frost_strategy() -> void:
 	StyleManager.bind(data)
 	# frost 仅在事件触发时由 StyleStrategyOperator 激活，默认不挂载 shader
 	Logging.info("NarrativeOverlay: frost 策略已注册 → tape_container (等待事件激活)")
+
+# ── HoverDisplayFlow 对外接口 ──────────────────────────
+
+## 显示 hover 文本到 HoverContainer。
+## SLIDE_FROM_RIGHT / BELOW_OVERLAY 两个 Delegate 均通过此接口设置内容。
+## narrative + vector 以 RichTextLabel BBCode 格式拼接显示。
+func show_hover_text(narrative: String, vector: String) -> void:
+	var text_parts: Array[String] = []
+	if not narrative.is_empty():
+		text_parts.append(narrative)
+	if not vector.is_empty():
+		if not text_parts.is_empty():
+			text_parts.append("")  # 空行分隔
+		text_parts.append(vector)
+	hover_label.text = "\n".join(text_parts)
+	hover_separator.visible = not vector.is_empty()
+	hover_container.visible = true
+	Logging.info("NarrativeOverlay.show_hover_text: narrative=%d chars, vector=%d chars" % [narrative.length(), vector.length()])
+
+## 隐藏 HoverContainer
+func hide_hover_text() -> void:
+	hover_container.visible = false
+	hover_label.text = ""
+	Logging.info("NarrativeOverlay.hide_hover_text: HoverContainer hidden")
