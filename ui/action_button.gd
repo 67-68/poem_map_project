@@ -58,7 +58,7 @@ func initialize(action_: Action = null):
 	mouse_exited.connect(_on_mouse_exited)
 	
 	# ── Hover Popup（Alt 双层揭示）──
-	if not action.description.is_empty() or not action.action_results.is_empty() or not action.aciton_requirements.is_empty():
+	if not action.description.is_empty() or not action.action_results.is_empty() or not action.aciton_requirements.is_empty() or action.get_possibility_int() < 100 or (action.failed_result and not action.failed_result.operators.is_empty()):
 		_register_hover_popup()
 
 
@@ -126,6 +126,11 @@ func _register_hover_popup() -> void:
 	
 	# 向量层（Alt 按下可见）
 	var vector_lines: Array[String] = []
+	# 🆕 前置插入预览（概率 + 成功效果 + 失败效果）
+	var arch = _find_archetype_for_action(action.uuid)
+	var preview := _build_sub_action_preview(action, arch.operators if arch else [])
+	if not preview.is_empty():
+		vector_lines.append(preview)
 	if not action.aciton_requirements.is_empty():
 		vector_lines.append("[color=gray][font_size=13]━━━ 前提 ━━━[/font_size][/color]")
 		for req in action.aciton_requirements:
@@ -225,10 +230,34 @@ func _on_button_pressed() -> void:
 
 			# 附加 Archetype 中的 operators（用于 picker 显示）
 			var archetype = _find_archetype_for_action(sub_action.uuid)
+			var success_ops: Array = []
+			var fail_ops: Array = []
 			if archetype:
+				success_ops = archetype.operators
 				entity.set_meta("operators", archetype.operators)
 			else:
 				entity.set_meta("operators", [])
+
+			# 🆕 查找 failure variant archetype
+			var fail_uuid := ""
+			if archetype and archetype.action_uuid.ends_with("_success"):
+				fail_uuid = archetype.action_uuid.replace("_success", "_failure")
+			else:
+				fail_uuid = sub_action.uuid + "_failure"
+			var fail_archetype = _find_archetype_for_action(fail_uuid)
+			if fail_archetype:
+				fail_ops = fail_archetype.operators
+				Logging.info("SceneActionPanel: failure archetype found for '%s' → '%s' (%d ops)" % [sub_action.uuid, fail_uuid, fail_ops.size()])
+			else:
+				Logging.info("SceneActionPanel: no failure archetype for '%s' (tried '%s')" % [sub_action.uuid, fail_uuid])
+
+			# 🆕 构建 sub-action 预览文本（概率 + 成功效果 + 失败效果）
+			if sub_action:
+				var preview := _build_sub_action_preview(sub_action, success_ops, fail_ops)
+				entity.set_meta("sub_action_preview", preview)
+				Logging.info("SceneActionPanel: sub_action_preview built for '%s' (%d chars)" % [sub_action.name, preview.length()])
+			else:
+				entity.set_meta("sub_action_preview", "")
 
 			picker_data.append(entity)
 		
@@ -240,6 +269,14 @@ func _on_button_pressed() -> void:
 	ActionManager.begin_action_batch()
 	if action.action_results:
 		for r in action.action_results: r.operate()
+	
+	# sprained_ankle：主行动执行后额外扣除 1 天（仅对有 TimeOperator 的行动生效）
+	if PlayerState.has_trait("sprained_ankle") and action.action_results:
+		for r in action.action_results:
+			if r is TimeOperator and int(r.day) > 0:
+				PlayerState.append_stat("time", -1)
+				Logging.info('[SceneActionPanel] sprained_ankle 额外扣除 1 天 (base_time=%d, total=%d)' % [int(r.day), int(r.day) + 1])
+				break
 	
 	ActionManager.end_action_batch()
 	
@@ -282,23 +319,56 @@ func _on_sub_action_picked(entity) -> void:
 	
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
 	
+	# 🆕 查找子 action，使用其 tags 和 fallback（而非父 action 的）
+	var sub_action: Action = Database.get_action(sub_uuid) as Action
+	var sub_main_tag: String = ""
+	var sub_fallback: String = ""
+	var sub_tags: Array[String] = []
+	
+	if sub_action:
+		sub_fallback = sub_action.fallback_event_uuid
+		sub_tags = sub_action.action_tags.duplicate()
+		
+		if sub_action is SceneAction:
+			# SceneAction：使用其 _main_tag 作为事件桶 key
+			sub_main_tag = (sub_action as SceneAction).main_tag
+		else:
+			# 普通 Action：无单一 main_tag，传空串走全量桶
+			# 所有 action_tags 进 current_action_tags，由 ActionTagFilter AND 模式过滤
+			sub_main_tag = ""
+		Logging.info("SceneActionPanel: sub-action '%s' tags=%s, fallback='%s', main_tag='%s'" % [sub_uuid, str(sub_tags), sub_fallback, sub_main_tag])
+	else:
+		Logging.warn("SceneActionPanel: sub-action '%s' not found in Database, falling back to parent data" % sub_uuid)
+		sub_main_tag = _pending_sub_action_main_tag
+		sub_fallback = _pending_sub_action_fallback
+		sub_tags = _pending_sub_action_tags.duplicate()
+	
 	# 1. 执行父行动的 operators（挂起数据）
 	ActionManager.begin_action_batch()
 	for r in _pending_sub_action_results:
 		r.operate()
+	
+	# sprained_ankle：子行动执行后额外扣除 1 天（仅对有 TimeOperator 的父行动生效）
+	if PlayerState.has_trait("sprained_ankle") and _pending_sub_action_results:
+		for r in _pending_sub_action_results:
+			if r is TimeOperator and int(r.day) > 0:
+				PlayerState.append_stat("time", -1)
+				Logging.info('[SceneActionPanel] sprained_ankle 额外扣除 1 天 (sub-action, base_time=%d, total=%d)' % [int(r.day), int(r.day) + 1])
+				break
+	
 	ActionManager.end_action_batch()
 	
 	ActionManager.get_focus_controller().notify_click()
 	
-	# 2. 将 sub-action uuid + 父行动 tags 追加到 current_action_tags
+	# 2. 将 sub-action uuid + 子 action 的 tags 追加到 current_action_tags
 	PlayerState.current_action_tags.append(sub_uuid)
-	for tag in _pending_sub_action_tags:
+	for tag in sub_tags:
 		PlayerState.current_action_tags.append(tag)
 	
-	# 3. AND 模式事件扫描：事件必须同时匹配 sub_uuid 和父 main_tag
+	# 3. AND 模式事件扫描：使用子 action 的 main_tag 和 fallback
 	var context = {
-		'main_tag': _pending_sub_action_main_tag,
-		'fallback_event_uuid': _pending_sub_action_fallback,
+		'main_tag': sub_main_tag,
+		'fallback_event_uuid': sub_fallback,
 		'tag_match_mode': 'all',
 	}
 	EventManager.scan_events(0, context)
@@ -315,3 +385,78 @@ func _find_archetype_for_action(action_uuid: String):
 		if arch is ActionArchetype and arch.action_uuid == action_uuid:
 			return arch
 	return null
+
+
+# ── Sub-Action Preview 构建 ─────────────────────────────
+
+## 为 sub-action picker tooltip 构建预览文本。
+## 格式: [预览]\n概率: {n}%成功，\n[成功效果]:\n• {desc}\n[失败效果]:\n• {desc}
+## 数据源优先级：success_ops → action.action_results → fallback；fail_ops → failed_result.operators → fallback
+func _build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = []) -> String:
+	var lines: Array[String] = []
+	lines.append("[预览]")
+
+	# ── 概率行 ──
+	var prob := sub_action.get_possibility_int()
+	lines.append("概率: %d%%成功，" % prob)
+	Logging.info("_build_sub_action_preview: sub_action='%s' possibility=%d" % [sub_action.name, prob])
+
+	# ── 成功效果 ──
+	var success_descs: Array[String] = []
+	# 优先级 1: 外部传入的 archetype success_ops
+	if not success_ops.is_empty():
+		for op in success_ops:
+			if op and op.has_method("describe_preview"):
+				var desc = op.describe_preview()
+				if not desc.is_empty():
+					success_descs.append("• " + desc)
+		Logging.info("_build_sub_action_preview: sub_action='%s' 使用 archetype success_ops (%d ops → %d descs)" % [sub_action.name, success_ops.size(), success_descs.size()])
+	# 优先级 2: action.action_results（.tres 级别 operators）
+	elif sub_action.action_results and not sub_action.action_results.is_empty():
+		for op in sub_action.action_results:
+			if op and op.has_method("describe_preview"):
+				var desc := op.describe_preview()
+				if not desc.is_empty():
+					success_descs.append("• " + desc)
+		Logging.info("_build_sub_action_preview: sub_action='%s' 使用 action_results (%d ops → %d descs)" % [sub_action.name, sub_action.action_results.size(), success_descs.size()])
+
+	if success_descs.is_empty():
+		lines.append("[成功效果]: 成败未卜…")
+		Logging.info("_build_sub_action_preview: sub_action='%s' success 无有效 operator，使用 fallback" % sub_action.name)
+	else:
+		lines.append("[成功效果]:")
+		for d in success_descs:
+			lines.append(d)
+		Logging.info("_build_sub_action_preview: sub_action='%s' success preview: %d lines" % [sub_action.name, success_descs.size()])
+
+	# ── 失败效果 ──
+	var fail_descs: Array[String] = []
+	# 优先级 1: 外部传入的 archetype fail_ops
+	if not fail_ops.is_empty():
+		for op in fail_ops:
+			if op and op.has_method("describe_preview"):
+				var desc = op.describe_preview()
+				if not desc.is_empty():
+					fail_descs.append("• " + desc)
+		Logging.info("_build_sub_action_preview: sub_action='%s' 使用 archetype fail_ops (%d ops → %d descs)" % [sub_action.name, fail_ops.size(), fail_descs.size()])
+	# 优先级 2: action.failed_result.operators（.tres 级别 operators）
+	else:
+		var failed_result: ChoiceResult = sub_action.failed_result
+		if failed_result and failed_result.operators and not failed_result.operators.is_empty():
+			for op in failed_result.operators:
+				if op and op.has_method("describe_preview"):
+					var desc := op.describe_preview()
+					if not desc.is_empty():
+						fail_descs.append("• " + desc)
+			Logging.info("_build_sub_action_preview: sub_action='%s' 使用 failed_result.operators (%d ops → %d descs)" % [sub_action.name, failed_result.operators.size(), fail_descs.size()])
+
+	if fail_descs.is_empty():
+		lines.append("[失败效果]: 后果难料…")
+		Logging.info("_build_sub_action_preview: sub_action='%s' fail 无有效 operator，使用 fallback" % sub_action.name)
+	else:
+		lines.append("[失败效果]:")
+		for d in fail_descs:
+			lines.append(d)
+		Logging.info("_build_sub_action_preview: sub_action='%s' fail preview: %d lines" % [sub_action.name, fail_descs.size()])
+
+	return "\n".join(lines)

@@ -24,7 +24,7 @@
 
 ### 约束
 
-- `poisoned` trait 仅在 shiyao_failure 的 DSL 中以 `trait_add(name=poisoned)` 占位，尚未创建对应的 Disease 资源。需后续在 TRAITS 枚举中注册并创建 Disease 配置。
+- `poisoned` trait 已在 `model/enumerates.gd` TRAITS 枚举中注册，并在 `data/1_core_rules/traits/_traits.csv` 中配置（prop_sub health 15/旬，2旬到期自动移除）。
 - 所有新 archetype 的 `era: ""`（无时代限制）、`universal_requirement: ""`（成本在 result 中以 prop_sub 表达）。
 
 ## 登高子行动 Archetype（曲江池 / 乐游原 / 少陵原）
@@ -50,7 +50,7 @@
 
 ### 约束
 
-- `sprained_ankle` trait 在 DSL 中以 `trait_add(name=sprained_ankle)` 占位，未在 TRAITS 枚举中注册，需后续实际使用时补登。
+- `sprained_ankle` trait 已在 `model/enumerates.gd` TRAITS 枚举中注册，并在 `data/1_core_rules/traits/_traits.csv` 中配置（行动时间 +1，2旬到期自动移除）。
 - 所有新 archetype 的 `era: ""`（无时代限制）、`universal_requirement: ""`（成本在对应 .tres 的 action_results 中以 sub 类 operator 表达）。
 
 ## 相关文件
@@ -67,9 +67,12 @@
 ### Sub-Action 系统
 - Action 可携带 `sub_actions: Array[String]`（Action UUID 字符串数组，运行时通过 `Database.get_action(uuid)` 解析为 Action 资源）
 - 点击带 sub_actions 的 Action 时，先弹出 Picker 让玩家选择子行动
-- 每个 picker 选项携带父 Action 的 main_tag 元数据（为未来多行动混合选择做铺垫）
-- 选中后：执行父 Action 的 operators → 以 AND 模式进行事件扫描（事件必须同时匹配 sub-action uuid 和父 action main_tag）
-- Picker 在 operators 之前弹出（方案1），sub-action 选择影响后续效果
+- 选中后：执行父 Action 的 operators → 以 AND 模式进行事件扫描
+- **事件匹配使用子 action 的 tags 和 fallback**，而非父 action：
+  - 子 action 是 SceneAction：用其 `main_tag` 作为事件桶 key，`action_tags` 进 `current_action_tags`
+  - 子 action 是普通 Action：`main_tag` 传空串（全量桶），所有 `action_tags` 进 `current_action_tags`，靠 ActionTagFilter AND 模式做多 tag 交集过滤
+  - `fallback_event_uuid` 始终取自子 action
+- Picker 在 operators 之前弹出，sub-action 选择影响后续事件匹配
 
 ### Possibility 抽奖系统
 - Action 可携带 `possibility: String`（archetype，来自 `tools/data/named_amounts.json`，默认 `"l_success_rate"`=100%）
@@ -86,3 +89,11 @@
 ### Tag 匹配模式
 - 默认 OR 模式：`current_action_tags` 中任一 tag 命中事件 `target_tags` 即通过
 - Sub-action 触发 AND 模式（`context['tag_match_mode'] = 'all'`）：所有 `current_action_tags` 必须全部在事件 `target_tags` 中
+
+### Sub-Action Picker Tooltip 预览
+- 当玩家 hover 子行动 Picker 项时，tooltip 向量层顶部显示预览文本（由 `action_button._build_sub_action_preview()` 构建）：
+  - `概率: {n}%成功，`
+  - `[成功效果]`: 遍历 `action_results` 的 `describe_preview()`，空则 fallback「成败未卜…」
+  - `[失败效果]`: 遍历 `failed_result.operators` 的 `describe_preview()`，空则 fallback「后果难料…」
+- 预览文本通过 `entity.set_meta("sub_action_preview", ...)` 从 `action_button` 传给 `picker_item`
+- `picker_item._register_hover_popup()` 将预览前置插入 `vector_lines`，后接 archetype operators 描述

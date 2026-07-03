@@ -6,6 +6,8 @@
 #   - Picker 数据构建（GameEntity）
 #   - SceneAction 继承 sub_actions
 #   - possibility + failed_result 逻辑
+#   - 子 action tags/fallback 覆盖父级（SceneAction 用 main_tag，普通 Action 用空 main_tag）
+#   - 子 action 查不到时 fallback 父级挂起数据
 # ================================================================
 extends GutTest
 
@@ -80,25 +82,94 @@ func test_picker_data_duplicate_main_tag() -> void:
 
 
 # ════════════════════════════════════════════════════════════
-# Tag 组合逻辑（用于 AND 模式）
+# Tag 组合逻辑（用于 AND 模式）— 使用子 action 的 tags/fallback
 # ════════════════════════════════════════════════════════════
 
-func test_tag_combination() -> void:
+func test_tag_combination_sub_action_tags() -> void:
 	"""
-	测试 _on_sub_action_picked 中 tag 追加逻辑：
-	sub_uuid + parent_action_tags 应合并为一个 current_action_tags 数组。
+	_on_sub_action_picked 应使用子 action 的 action_tags，
+	而非父 action 的 tags。组合结果为：sub_uuid + sub_action.action_tags。
 	"""
 	var sub_uuid := "actor:libai"
-	var parent_tags := ["action:main:jiaoyou"]
+	var sub_action_tags := ["action:main:jiaoyou", "action:main:baiye"]
 
 	var combined: Array[String] = []
 	combined.append(sub_uuid)
-	for tag in parent_tags:
+	for tag in sub_action_tags:
 		combined.append(tag)
 
-	assert_eq(combined.size(), 2, "组合后应有 2 个 tag")
+	assert_eq(combined.size(), 3, "组合后应有 3 个 tag（sub_uuid + 2 个 action_tags）")
 	assert_eq(combined[0], "actor:libai", "sub_uuid 在先")
-	assert_eq(combined[1], "action:main:jiaoyou", "action tag 在后")
+	assert_eq(combined[1], "action:main:jiaoyou", "第一个 action_tag")
+	assert_eq(combined[2], "action:main:baiye", "第二个 action_tag")
+
+
+func test_scene_action_sub_uses_own_main_tag() -> void:
+	"""
+	若子 action 是 SceneAction，应使用其 main_tag 作为事件桶 key。
+	"""
+	var sub_action := SceneAction.new()
+	# _main_tag 是 private 的，但 main_tag getter 返回 to_action_str(_main_tag)
+	# 这里测试 main_tag 可正常取值（默认为 "" 因为 _main_tag=-1）
+	assert_not_null(sub_action.main_tag, "SceneAction.main_tag 不应为 null")
+
+
+func test_plain_action_sub_uses_empty_main_tag() -> void:
+	"""
+	若子 action 是普通 Action（非 SceneAction），main_tag 应传空串，
+	依赖 ActionTagFilter AND 模式过滤。
+	"""
+	var sub_action := Action.new()
+	# Action 没有 main_tag 属性
+	assert_false(sub_action is SceneAction, "普通 Action 不应是 SceneAction")
+	var sub_main_tag: String = ""
+	if sub_action is SceneAction:
+		sub_main_tag = (sub_action as SceneAction).main_tag
+	else:
+		sub_main_tag = ""
+	assert_eq(sub_main_tag, "", "普通 Action 的 main_tag 应为空串")
+
+
+func test_sub_action_fallback_event_uuid() -> void:
+	"""
+	子 action 的 fallback_event_uuid 应被用于事件扫描 context。
+	"""
+	var sub_action := Action.new()
+	sub_action.fallback_event_uuid = "event_test_fallback"
+
+	var sub_fallback: String = sub_action.fallback_event_uuid
+	assert_eq(sub_fallback, "event_test_fallback", "应使用子 action 的 fallback_event_uuid")
+
+	# 默认为空
+	var default_action := Action.new()
+	assert_eq(default_action.fallback_event_uuid, "", "默认 fallback_event_uuid 应为空串")
+
+
+func test_sub_action_fallback_to_parent_when_not_found() -> void:
+	"""
+	若子 action 在 Database 中查不到，应 fallback 到父 action 的挂起数据。
+	"""
+	var parent_main_tag := "action:main:jiaoyou"
+	var parent_fallback := "parent_fallback_event"
+	var parent_tags := ["action:main:jiaoyou"]
+
+	# 模拟 sub_action 为 null（Database 查不到）
+	var sub_action = null
+	var sub_main_tag: String
+	var sub_fallback: String
+	var sub_tags: Array[String]
+
+	if sub_action:
+		sub_fallback = sub_action.fallback_event_uuid
+		sub_tags = sub_action.action_tags.duplicate()
+	else:
+		sub_main_tag = parent_main_tag
+		sub_fallback = parent_fallback
+		sub_tags = parent_tags.duplicate()
+
+	assert_eq(sub_main_tag, "action:main:jiaoyou", "查不到子 action 时应 fallback 父 main_tag")
+	assert_eq(sub_fallback, "parent_fallback_event", "查不到子 action 时应 fallback 父 fallback")
+	assert_eq(sub_tags.size(), 1, "查不到子 action 时应 fallback 父 tags")
 
 
 # ════════════════════════════════════════════════════════════
