@@ -13,8 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fwa3"]
 script = ExtResource("4_gsl3")
 choice_result = SubResource("Resource_xncj3")
-description = "泥泞
-曲江池畔连日阴雨，小径泥泞不堪，靴子陷进去拔不出来。远望烟柳朦胧，却无路可寻。"
+description = "游春\n曲江池畔春色正浓，烟柳画桥，游人如织。你沿池漫步，看碧波荡漾，听莺啼燕语，心神为之一畅。"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -23,5 +22,5 @@ weight = 0.0
 archetype_id = "qujiangchi_success"
 options = Array[ExtResource("1_rsjn3")]([SubResource("Resource_fwa3")])
 uuid = "denggao_qujiangchi_fallback"
-name = "曲江阻行"
+name = "曲江游春"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"
