@@ -127,7 +127,7 @@ func _register_hover_popup() -> void:
 	# 向量层（Alt 按下可见）
 	var vector_lines: Array[String] = []
 	# 🆕 前置插入预览（概率 + 成功效果 + 失败效果）
-	var arch = _find_archetype_for_action(action.uuid)
+	var arch = Database.get_archetype_by_uuid(action.uuid)
 	var preview := _build_sub_action_preview(action, arch.operators if arch else [])
 	if not preview.is_empty():
 		vector_lines.append(preview)
@@ -229,7 +229,7 @@ func _on_button_pressed() -> void:
 			entity.set_meta("parent_main_tag", _snap_main_tag)
 
 			# 附加 Archetype 中的 operators（用于 picker 显示）
-			var archetype = _find_archetype_for_action(sub_action.uuid)
+			var archetype = Database.get_archetype_by_uuid(sub_action.uuid, "success")
 			var success_ops: Array = []
 			var fail_ops: Array = []
 			if archetype:
@@ -238,18 +238,13 @@ func _on_button_pressed() -> void:
 			else:
 				entity.set_meta("operators", [])
 
-			# 🆕 查找 failure variant archetype
-			var fail_uuid := ""
-			if archetype and archetype.action_uuid.ends_with("_success"):
-				fail_uuid = archetype.action_uuid.replace("_success", "_failure")
-			else:
-				fail_uuid = sub_action.uuid + "_failure"
-			var fail_archetype = _find_archetype_for_action(fail_uuid)
+			# 🆕 查找 failure variant archetype（按 action_uuid + state="failure" 精确匹配）
+			var fail_archetype = Database.get_archetype_by_uuid(sub_action.uuid, "failure")
 			if fail_archetype:
 				fail_ops = fail_archetype.operators
-				Logging.info("SceneActionPanel: failure archetype found for '%s' → '%s' (%d ops)" % [sub_action.uuid, fail_uuid, fail_ops.size()])
+				Logging.info("SceneActionPanel: failure archetype found for '%s' (%d ops)" % [sub_action.uuid, fail_ops.size()])
 			else:
-				Logging.info("SceneActionPanel: no failure archetype for '%s' (tried '%s')" % [sub_action.uuid, fail_uuid])
+				Logging.info("SceneActionPanel: no failure archetype for '%s'" % sub_action.uuid)
 
 			# 🆕 构建 sub-action 预览文本（概率 + 成功效果 + 失败效果）
 			if sub_action:
@@ -378,14 +373,6 @@ func _on_sub_action_picked(entity) -> void:
 	_pending_sub_action_fallback = ""
 	_pending_sub_action_tags.clear()
 	_pending_sub_action_results.clear()
-
-# ── Archetype 查找（为 picker 提供 operators）───────────
-func _find_archetype_for_action(action_uuid: String):
-	for arch in Database.action_archetypes.values():
-		if arch is ActionArchetype and arch.action_uuid == action_uuid:
-			return arch
-	return null
-
 
 # ── Sub-Action Preview 构建 ─────────────────────────────
 

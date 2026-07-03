@@ -470,6 +470,15 @@ func get_era(uuid: String):
 func get_archetype(key: String):
 	return action_archetypes.get(key)
 
+## 按 action_uuid + state 查找 archetype。state="" 时返回首个匹配的 archetype（兼容旧行为）。
+## state="success"/"failure" 时精确匹配 state 字段。
+func get_archetype_by_uuid(action_uuid: String, state: String = "") -> ActionArchetype:
+	for arch in action_archetypes.values():
+		if arch.action_uuid == action_uuid:
+			if state.is_empty() or arch.state == state:
+				return arch
+	return null
+
 func get_tag(uuid: String):
 	return tags.get(uuid)
 
