@@ -20,6 +20,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 script = ExtResource("5_faks8")
 _action_tags = Array[int]([32, 40])
 fallback_event_uuid = "fangshi_fgmaizi_fallback"
+possibility = "s_success_rate"
 failed_result = SubResource("Resource_2ln2h")
 uuid = "fangshi_fgmaizi"
 name = "坊市 · 清高卖字"

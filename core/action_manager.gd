@@ -251,14 +251,15 @@ func check_action_validity(action: Action) -> Dictionary:
 			
 			return result
 	
-	# 2. 检查时间消耗（集成时间锁定）
+	# 2. 检查时间消耗（集成时间锁定 + sprained_ankle）
 	var cost := get_action_day_cost(action)
 	if cost > 0:
 		var current_time := int(PlayerState.get_stat_val("time"))
+		var cost_text := _format_time_cost_with_sprained_ankle(cost)
 		if current_time < cost:
 			result.valid = false
-			# 精确数值行："时间剩余5天，但这项行动需要10天"
-			var precise_line := "时间剩余%d天，但这项行动需要%d天" % [current_time, cost]
+			# 精确数值行："时间剩余5天，但这项行动需要5(4+1, 由于『崴脚』)天"
+			var precise_line := "时间剩余%d天，但这项行动需要%s天" % [current_time, cost_text]
 			var archetype_hint := _get_archetype_failed_hint(action, "time")
 			if not archetype_hint.is_empty():
 				result.reasons.append(precise_line + "\n" + archetype_hint)
@@ -271,7 +272,8 @@ func check_action_validity(action: Action) -> Dictionary:
 	var valid_parts: Array[String] = []
 	if cost > 0:
 		var current_time := int(PlayerState.get_stat_val("time"))
-		valid_parts.append("时间充足（剩余%d天，需要%d天）" % [current_time, cost])
+		var cost_text := _format_time_cost_with_sprained_ankle(cost)
+		valid_parts.append("时间充足（剩余%d天，需要%s天）" % [current_time, cost_text])
 	for temp_op in costs:
 		if not temp_op is PropertyOperator:
 			continue
@@ -710,15 +712,29 @@ func apply_visibility_flags() -> void:
 # 时间成本查询
 # ════════════════════════════════════════════════════════════
 
-## 从 action.action_results 中提取 TimeOperator 的 day 消耗。
+## 从 action.action_results 中提取 TimeOperator 的 day 消耗（含 sprained_ankle +1）。
 ## 返回 int，无 TimeOperator 时返回 0。
 static func get_action_day_cost(action: Action) -> int:
 	if not action or not action.action_results:
 		return 0
 	for op in action.action_results:
 		if op is TimeOperator:
-			return max(0, int(op.day))
+			var base_cost = max(0, int(op.day))
+			if PlayerState.has_trait("sprained_ankle") and base_cost > 0:
+				Logging.info('[ActionManager] get_action_day_cost: sprained_ankle +1 (base=%d → total=%d)' % [base_cost, base_cost + 1])
+				return base_cost + 1
+			return base_cost
 	return 0
+
+
+## 格式化时间消耗文本，包含 sprained_ankle 提示。
+## 例如：base=4, sprained_ankle → "5(4+1, 由于『崴脚』)"
+## 无 sprained_ankle → "4"
+static func _format_time_cost_with_sprained_ankle(cost: int) -> String:
+	if PlayerState.has_trait("sprained_ankle") and cost > 1:
+		var base := cost - 1
+		return "%d(%d+1, 由于『崴脚』)" % [cost, base]
+	return str(cost)
 
 
 # ════════════════════════════════════════════════════════════

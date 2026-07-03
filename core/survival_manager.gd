@@ -55,6 +55,9 @@ func decay(prop_enum, threshold, decay_val):
 	else:
 		append_prop(prop_enum, -current_val)
 
+const TEMP_DEBUFF_DURATION_XUN: int = 2
+const TEMP_DEBUFFS: Array[String] = ["poisoned", "sprained_ankle"]
+
 func aggregate_trait_effect():
 	for t in PlayerState.get_traits():
 		var trait_ = Database.get_trait(t)
@@ -70,6 +73,11 @@ func aggregate_trait_effect():
 				Logging.info('[SurvivalManager] Disease progression: ' + t + ' → ' + trait_.progression_target)
 				PlayerState.remove_trait(t)
 				PlayerState.add_trait(trait_.progression_target)
+		
+		# 临时 debuff 2 旬到期自动移除（硬编码阶段，未来抽象为 Trait max_duration 钩子）
+		if t in TEMP_DEBUFFS and trait_.lasting_xun >= TEMP_DEBUFF_DURATION_XUN:
+			Logging.info('[SurvivalManager] Temp debuff expired: %s (lasting_xun=%d)' % [t, trait_.lasting_xun])
+			PlayerState.remove_trait(t)
 
 func operate_state_transistors():
 	for s in Database.get_state_transistors_all():

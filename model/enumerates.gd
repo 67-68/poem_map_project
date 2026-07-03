@@ -185,6 +185,10 @@ enum TRAITS {
     DISEASE_FEILAO_CHRONIC,
     DISEASE_SHIYI_DEPRESSION,
     DISEASE_ZHANWANG_MANIA,
+
+    # 临时负面 Trait（2 旬到期，hardcoded in aggregate_trait_effect）
+    POISONED,
+    SPRAINED_ANKLE,
 }
 
 enum POEM_TYPE {

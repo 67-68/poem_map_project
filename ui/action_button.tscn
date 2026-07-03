@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://bokcmb0kkcpu4" path="res://assets/stamps/baiye_stamp.png" id="3_sm4xu"]
 
 [node name="ActionButton" type="Button" unique_id=1937966478]
-clip_contents = true
 custom_minimum_size = Vector2(250, 65)
+clip_contents = true
 offset_right = 100.0
 offset_bottom = 44.0
 size_flags_vertical = 3
