@@ -13,14 +13,14 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fwa11"]
 script = ExtResource("4_gsl11")
 choice_result = SubResource("Resource_xncj11")
-description = "歇业\n药铺的门板半掩着，掌柜的坐在柜台后打瞌睡。问今日可有什么新药试服？他眼皮也不抬：「今日不进药，也没人试，客官明日再来吧。」"
+description = "试药\n掌柜的递来一碗新配的汤药，说是补气血的方子。你仰头喝下，药性平和，倒无不适。掌柜满意地点点头，从柜下摸出几枚铜钱递来。"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_qskf11")
 weight = 0.0
-archetype_id = "shiyao_failure"
+archetype_id = "shiyao_success"
 options = Array[ExtResource("1_rsjn11")]([SubResource("Resource_fwa11")])
 uuid = "fangshi_shiyao_fallback"
-name = "药铺打烊"
+name = "试药换钱"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

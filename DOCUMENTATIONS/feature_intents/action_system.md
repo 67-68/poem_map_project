@@ -75,16 +75,40 @@
 - Picker 在 operators 之前弹出，sub-action 选择影响后续事件匹配
 
 ### Possibility 抽奖系统
-- Action 可携带 `possibility: String`（archetype，来自 `tools/data/named_amounts.json`，默认 `"l_success_rate"`=100%）
-- 点击 Action 时，在 sub-action Picker 弹出 **之前** 进行抽奖
+- Action（含父 action 和 sub-action）可携带 `possibility: String`（archetype，来自 `tools/data/named_amounts.json`，默认 `"l_success_rate"`=100%）
+- **父 action 抽奖**：点击 Action 时，在 sub-action Picker 弹出 **之前** 进行抽奖。`randi() % 101 > get_possibility_int()` 时执行 `failed_result.operate()` 并 return
+- **Sub-action 抽奖**：玩家从 Picker 中选择子行动后，在 [`_on_sub_action_picked()`](ui/action_button.gd) 中对子 action 独立投骰：
+  - `get_possibility_int() >= 100`：跳过投骰，确定性成功
+  - `roll > threshold`：执行 `sub_action.failed_result.operate()`（含 PushEventOperator 推送失败事件），设置 `_sub_failed = true`
+  - `roll <= threshold`：执行 `sub_action.action_results`（如存在）
+  - 失败时 **跳过** `EventManager.scan_events()`，因为 `failed_result` 中的 PushEventOperator 已推送事件
+  - 成功时正常调用 `scan_events()`，匹配不到事件时触发 sub-action 的 `fallback_event_uuid`
 - `generator > possibility`：有 active generator 时跳过抽奖
-- 抽奖失败（`randi() % 101 > get_possibility_int()`）：执行 `failed_result.operate()` 并 return，不执行 operators / scan
 - 可用 archetype：`s_success_rate=50` / `m_success_rate=80` / `l_success_rate=100`
 
 ### failed_result
 - `failed_result: ChoiceResult` — 抽奖未中签时的兜底结果
 - 默认值为空 ChoiceResult（无操作）
 - 可通过编辑器配置为 PushEventOperator 等，用于触发失败叙事
+
+### Fallback 事件（scan_events 池空时的兜底叙事）
+- `fallback_event_uuid` 指向 `data/1_core_rules/events/fallback/` 下的事件 — 当事件扫描池空时触发
+- **语义约定**：fallback 事件代表"一次正常但无特殊事件发生的行动"，**不是**"失败/无人问津"。应使用 success archetype（有收益），叙事基调为平和/成功
+- Sub-action 成功路径（PASS）调用 `scan_events()`，若池空则 fallback 承担叙事
+- Sub-action 失败路径（FAIL）由 `failed_result.operate()` 中的 PushEventOperator 直接推送 `_failed_fallback` 事件，不经过 scan_events
+- 当前 fallback 事件及对应 archetype：
+
+| Fallback UUID | Archetype | 叙事基调 |
+|---|---|---|
+| `fangshi_maizi_fallback` | `maizi_success` | 正常卖字交易 |
+| `fangshi_shiyao_fallback` | `shiyao_success` | 正常试药换钱 |
+| `fangshi_fgmaizi_fallback` | `fgmaizi_success` | 正常风骨卖字 |
+| `fangshi_banzhuan_fallback` | `banzhuan_success` | 正常搬砖（确定性） |
+| `denggao_qujiangchi_fallback` | `qujiangchi_success` | 正常登曲江池 |
+| `denggao_leyouyuan_fallback` | `leyouyuan_success` | 正常登乐游原 |
+| `denggao_shaolingyuan_fallback` | `shaolingyuan_success` | 正常登少陵原 |
+
+- 对应的失败叙事在 `_failed_fallback` 变体中（如 `fangshi_maizi_failed_fallback`），由 possibility 失败路径的 PushEventOperator 直接推送
 
 ### Tag 匹配模式
 - 默认 OR 模式：`current_action_tags` 中任一 tag 命中事件 `target_tags` 即通过

@@ -306,7 +306,6 @@ func _on_sub_action_picked(entity) -> void:
 		return
 	
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
-	Logging.info("[DEBUG sub_act] _pending_sub_action_results count=%d" % _pending_sub_action_results.size())
 	
 	# 🆕 查找子 action，使用其 tags 和 fallback（而非父 action 的）
 	var sub_action: Action = Database.get_action(sub_uuid) as Action
@@ -326,28 +325,21 @@ func _on_sub_action_picked(entity) -> void:
 			# 所有 action_tags 进 current_action_tags，由 ActionTagFilter AND 模式过滤
 			sub_main_tag = ""
 		Logging.info("SceneActionPanel: sub-action '%s' tags=%s, fallback='%s', main_tag='%s'" % [sub_uuid, str(sub_tags), sub_fallback, sub_main_tag])
-		
-		var raw_possibility: String = sub_action.possibility
-		var resolved_possibility: int = sub_action.get_possibility_int()
-		Logging.info("[DEBUG sub_act] raw_possibility='%s' resolved=%d will_roll=%s" % [raw_possibility, resolved_possibility, str(resolved_possibility < 100)])
 	else:
 		Logging.warn("SceneActionPanel: sub-action '%s' not found in Database, falling back to parent data" % sub_uuid)
 		sub_main_tag = _pending_sub_action_main_tag
 		sub_fallback = _pending_sub_action_fallback
 		sub_tags = _pending_sub_action_tags.duplicate()
-		Logging.info("[DEBUG sub_act] sub_action NOT FOUND in Database!")
 	
 	# 🆕 Sub-action possibility 投骰（与父 action _on_button_pressed 逻辑一致）
+	# possibility < 100 时投骰判定成功/失败；possibility = 100 时确定性成功
 	var _sub_failed: bool = false
 	if sub_action and sub_action.get_possibility_int() < 100:
 		var roll: int = randi() % 101
 		var threshold: int = sub_action.get_possibility_int()
-		Logging.info("[DEBUG sub_act] ROLLING: roll=%d threshold=%d" % [roll, threshold])
 		if roll > threshold:
 			Logging.info("SceneActionPanel: sub-action '%s' possibility FAIL (roll=%d > threshold=%d)" % [sub_action.name, roll, threshold])
-			Logging.info("[DEBUG sub_act] calling failed_result.operate()…")
 			sub_action.failed_result.operate()
-			Logging.info("[DEBUG sub_act] failed_result.operate() DONE")
 			_sub_failed = true
 		else:
 			Logging.info("SceneActionPanel: sub-action '%s' possibility PASS (roll=%d <= threshold=%d)" % [sub_action.name, roll, threshold])
@@ -355,15 +347,6 @@ func _on_sub_action_picked(entity) -> void:
 				for r in sub_action.action_results:
 					r.operate()
 				Logging.info("SceneActionPanel: sub-action '%s' executed action_results (%d ops)" % [sub_action.name, sub_action.action_results.size()])
-			else:
-				Logging.info("[DEBUG sub_act] PASS but no action_results to execute")
-	else:
-		if not sub_action:
-			Logging.info("[DEBUG sub_act] SKIP roll: sub_action is null")
-		else:
-			Logging.info("[DEBUG sub_act] SKIP roll: get_possibility_int()=%d >= 100" % sub_action.get_possibility_int())
-	
-	Logging.info("[DEBUG sub_act] _sub_failed=%s — about to exec parent ops + scan" % str(_sub_failed))
 	
 	# 1. 执行父行动的 operators（挂起数据）
 	ActionManager.begin_action_batch()
@@ -388,8 +371,9 @@ func _on_sub_action_picked(entity) -> void:
 		PlayerState.current_action_tags.append(tag)
 	
 	# 3. AND 模式事件扫描：使用子 action 的 main_tag 和 fallback
+	# 🆕 注意：possibility 失败时 failed_result.operate() 已通过 PushEventOperator 推送事件，
+	# 因此需要跳过 scan_events 以避免双重事件推送。
 	if not _sub_failed:
-		Logging.info("[DEBUG sub_act] CALLING scan_events — main_tag='%s' fallback='%s'" % [sub_main_tag, sub_fallback])
 		var context = {
 			'main_tag': sub_main_tag,
 			'fallback_event_uuid': sub_fallback,
@@ -397,7 +381,6 @@ func _on_sub_action_picked(entity) -> void:
 		}
 		EventManager.scan_events(0, context)
 	else:
-		Logging.info("[DEBUG sub_act] SKIP scan_events — failed_result already pushed event")
 		Logging.info("SceneActionPanel: sub-action '%s' failed, skipping scan_events (failed_result already pushed event)" % sub_action.name)
 	
 	# 清理挂起数据
@@ -405,7 +388,6 @@ func _on_sub_action_picked(entity) -> void:
 	_pending_sub_action_fallback = ""
 	_pending_sub_action_tags.clear()
 	_pending_sub_action_results.clear()
-	Logging.info("[DEBUG sub_act] EXIT — cleanup done")
 
 # ── Sub-Action Preview 构建 ─────────────────────────────
 
