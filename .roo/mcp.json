@@ -1,0 +1,32 @@
+{
+	"mcpServers": {
+		"godot-tool": {
+			"command": "/Users/a67_68/projects/dufu_simulator/.venv/bin/mcp",
+			"args": [
+				"run",
+				"/Users/a67_68/projects/dufu_simulator/godot_mcp.py"
+			],
+			"disabled": false,
+			"autoApprove": [],
+			"alwaysAllow": [
+				"run_godot_script",
+				"run_godot_scene"
+			]
+		},
+		"godot-runtime-probe": {
+			"command": "/Users/a67_68/projects/dufu_simulator/.venv/bin/mcp",
+			"args": [
+				"run",
+				"/Users/a67_68/projects/dufu_simulator/godot_probe_mcp.py"
+			],
+			"disabled": false,
+			"autoApprove": [],
+			"alwaysAllow": [
+				"get_live_scene_tree",
+				"get_event_system",
+				"get_live_logs",
+				"get_game_state"
+			]
+		}
+	}
+}
