@@ -151,7 +151,6 @@ visible = false
 script = ExtResource("34_d2t1y")
 
 [node name="Controller" parent="UI" unique_id=1054828129 instance=ExtResource("24_jq2sk")]
-visible = true
 
 [node name="TapeLayer" type="CanvasLayer" parent="." unique_id=2047123948]
 layer = 100

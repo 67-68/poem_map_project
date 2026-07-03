@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Property" load_steps=12 format=3 uid="uid://0bcuq1atm5bs"]
+[gd_resource type="Resource" script_class="Property" format=3 uid="uid://0bcuq1atm5bs"]
 
 [ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_l3cyt"]
 [ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="2_cp"]
@@ -27,7 +27,6 @@ loss_text = "命悬一线"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("3_sp")
-stage_val = 0
 perception_text = "奄奄一息"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
@@ -52,11 +51,9 @@ perception_text = "百病不侵"
 
 [resource]
 script = ExtResource("1_l3cyt")
+hard_max = 100
+staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
+change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3")])
 uuid = "health"
 name = "health"
-hard_max = -1
-soft_max = -1
-decay_threshold = -1
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"
-change_perceptions = [SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3")]
-staged_perceptions = [SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")]
