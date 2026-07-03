@@ -66,19 +66,24 @@ func _register_hover_popup() -> void:
 		Logging.warn("PickerItem._register_hover_popup: entity 为空，跳过注册")
 		return
 	var ops: Array = entity.get_meta("operators", [])
-	Logging.info("PickerItem._register_hover_popup: 获取到 %d 个 operators" % ops.size())
-	if ops.is_empty():
-		Logging.info("PickerItem._register_hover_popup: operators 为空，跳过注册")
-		return
+	var sub_action_preview: String = entity.get_meta("sub_action_preview", "")
+	Logging.info("PickerItem._register_hover_popup: 获取到 %d 个 operators, sub_action_preview='%s'" % [ops.size(), "yes(%d chars)" % sub_action_preview.length() if not sub_action_preview.is_empty() else "no"])
 
 	var vector_lines: Array[String] = []
-	for op in ops:
-		if op and op.has_method("describe_preview"):
-			var desc = op.describe_preview()
-			if not desc.is_empty():
-				vector_lines.append("• " + desc)
-		else:
-			Logging.warn("PickerItem._register_hover_popup: operator 无效或无 describe_preview 方法, op=%s" % str(op))
+
+	# 🆕 前置插入 sub_action_preview（如果存在）
+	# 若 preview 非空，已包含完整成功/失败效果，不再重复展示 archetype operators
+	if not sub_action_preview.is_empty():
+		vector_lines.append(sub_action_preview)
+		Logging.info("PickerItem._register_hover_popup: sub_action_preview 非空，跳过 archetype operators 独立展示")
+	else:
+		for op in ops:
+			if op and op.has_method("describe_preview"):
+				var desc = op.describe_preview()
+				if not desc.is_empty():
+					vector_lines.append("• " + desc)
+			else:
+				Logging.warn("PickerItem._register_hover_popup: operator 无效或无 describe_preview 方法, op=%s" % str(op))
 	var vector_text = "\n".join(vector_lines)
 	Logging.info("PickerItem._register_hover_popup: 生成 vector_text, 共 %d 行" % vector_lines.size())
 	if vector_text.is_empty():
