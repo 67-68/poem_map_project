@@ -31,9 +31,11 @@ signal event_display_ended()
 @onready var _interrupt_button: Button = $InterruptButton/Button
 @onready var tape_container: PanelContainer = $TapeContainer
 @onready var hover_container: PanelContainer = $TapeContainer/VBox/HoverContainer
-@onready var hover_label: RichTextLabel = $TapeContainer/VBox/HoverContainer/V/HoverLabel
-@onready var hover_separator: HSeparator = $TapeContainer/VBox/HoverContainer/V/HSeparator
-@onready var hover_title: Label = $TapeContainer/VBox/HoverContainer/V/Label
+@onready var hover_label: RichTextLabel = $TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V/HoverLabel
+@onready var hover_separator: HSeparator = $TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V/HSeparator
+@onready var hover_title: Label = $TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V/Label
+@onready var time_left_rect: TextureRect = $TapeContainer/VBox/HoverContainer/TimeLeft
+@onready var time_label: Label = $TapeContainer/VBox/HoverContainer/TimeLeft/TimeLabel
 
 # ── Overlay 本地状态（仅 UI 相关）────────────────────
 var current_event_data: BaseEvent
@@ -54,6 +56,10 @@ var _daily_snapshot_title: String = "独白"
 var _hover_snapshot_text: String = ""
 var _hover_snapshot_sep: bool = false
 var _hover_snapshot_title: String = ""
+# ── hover 倒计时（TimeLeft 动画）──
+var _time_left_original_modulate: Color
+var _hover_countdown_timer: Timer = null
+var _hover_countdown_tween: Tween = null
 
 # ═══════════════════════════════════════════════════
 # _ready() — 信号接线
@@ -64,8 +70,17 @@ func _ready() -> void:
 		return
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-	# ── HoverContainer 永久可见占位 + 初次刷新日常面板 ──
+	# ── HoverContainer 永久可见占位 + mouse 事件接收 + 初次刷新日常面板 ──
 	hover_container.visible = true
+	hover_container.mouse_filter = Control.MOUSE_FILTER_STOP
+	# 存 TimeLeft 原始 modulate 快照
+	_time_left_original_modulate = time_left_rect.self_modulate
+	time_left_rect.visible = false
+	# 子控件全部 IGNORE，防止吃掉 mouse 事件
+	_set_hover_children_mouse_ignore(hover_container)
+	# 🆕 hover_container 的鼠标事件代理到 HoverPopupManager（延长 hover 时间）
+	hover_container.mouse_entered.connect(_on_hover_container_mouse_entered)
+	hover_container.mouse_exited.connect(_on_hover_container_mouse_exited)
 	refresh_daily_panel()
 
 	# ── 配置 TapeVisualizer 的 export 引用（动态注入，避免 tscn 硬编码 uid）──
@@ -696,6 +711,7 @@ func show_hover_text(narrative: String, vector: String) -> void:
 
 ## 隐藏 hover 内容：恢复日常面板快照 + 检查延迟刷新
 func hide_hover_text() -> void:
+	_cancel_hover_countdown()
 	_restore_hover_snapshot()
 	_is_hover_displaying = false
 	# 🆕 hover 期间有等待的刷新请求，现在执行
@@ -800,3 +816,87 @@ func _deferred_daily_refresh() -> void:
 	_daily_refresh_queued = false
 	Logging.info("NarrativeOverlay._deferred_daily_refresh: executing")
 	refresh_daily_panel()
+
+# 🆕 代理 hover_container 的鼠标事件到 HoverPopupManager
+# 鼠标进入 hover_container = 等同于还悬浮在原按钮上
+func _on_hover_container_mouse_entered() -> void:
+	Logging.info("NarrativeOverlay._on_hover_container_mouse_entered: proxy to HoverPopupManager")
+	HoverPopupManager._on_proxy_enter()
+
+# 鼠标离开 hover_container = 等同于离开原按钮
+func _on_hover_container_mouse_exited() -> void:
+	Logging.info("NarrativeOverlay._on_hover_container_mouse_exited: proxy to HoverPopupManager")
+	HoverPopupManager._on_proxy_exit()
+
+# 🆕 递归设置所有子控件 mouse_filter = IGNORE（不包含自身）
+# 保留 SmoothScrollContainer 的 scroll/drag 能力（PASS）
+func _set_hover_children_mouse_ignore(node: Control) -> void:
+	for child in node.get_children():
+		if child == node:
+			continue
+		if not child is Control:
+			continue
+		# SmoothScrollContainer 需要 PASS 来接收滚动/拖拽事件，其子控件仍设为 IGNORE
+		if child is SmoothScrollContainer:
+			child.mouse_filter = Control.MOUSE_FILTER_PASS
+			# 递归设置 SmoothScrollContainer 的子控件
+			for grandchild in (child as Control).get_children():
+				if grandchild is Control:
+					grandchild.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		else:
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# 继续递归（对所有 Control 子节点）
+		_set_hover_children_mouse_ignore(child)
+
+# ═══════════════════════════════════════════════════
+# 🆕 Hover 倒计时 UI（TimeLeft + TimeLabel）
+# ═══════════════════════════════════════════════════
+
+const HOVER_GRACE: float = 0.75
+const COUNTDOWN_INTERVAL: float = 0.25
+const COUNTDOWN_TARGET_COLOR: Color = Color("#CDB89B")
+
+## 启动倒计时：TimeLeft visible + Tween modulate + Timer 更新 label
+func _start_hover_countdown() -> void:
+	_cancel_hover_countdown()
+	# 重置 TimeLeft 到快照颜色
+	time_left_rect.self_modulate = _time_left_original_modulate
+	time_left_rect.visible = true
+	time_label.text = "%.2f" % HOVER_GRACE
+	# Tween：从快照颜色 → COUNTDOWN_TARGET_COLOR
+	if _hover_countdown_tween:
+		_hover_countdown_tween.kill()
+	_hover_countdown_tween = create_tween()
+	_hover_countdown_tween.tween_property(time_left_rect, "self_modulate", COUNTDOWN_TARGET_COLOR, HOVER_GRACE)
+	# Timer：每 0.25s 更新 label
+	_hover_countdown_timer = Timer.new()
+	_hover_countdown_timer.wait_time = COUNTDOWN_INTERVAL
+	_hover_countdown_timer.one_shot = false
+	_hover_countdown_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_hover_countdown_timer)
+	_hover_countdown_timer.timeout.connect(_on_countdown_tick)
+	_hover_countdown_timer.start()
+	Logging.info("NarrativeOverlay._start_hover_countdown: grace=%.2fs" % HOVER_GRACE)
+
+func _on_countdown_tick() -> void:
+	if not _hover_countdown_timer:
+		return
+	# Timer.wait_time=0.25, time_left 递减 → 累积 elapsed
+	var elapsed: float = HOVER_GRACE - _hover_countdown_timer.time_left
+	if elapsed < 0.0:
+		elapsed = 0.0
+	var remaining: float = max(HOVER_GRACE - elapsed, 0.0)
+	time_label.text = "%.2f" % remaining
+	if remaining <= 0.01:
+		_cancel_hover_countdown()
+
+## 取消倒计时：隐藏 TimeLeft + 停止 Timer + 杀 Tween
+func _cancel_hover_countdown() -> void:
+	time_left_rect.visible = false
+	if _hover_countdown_timer:
+		_hover_countdown_timer.queue_free()
+		_hover_countdown_timer = null
+	if _hover_countdown_tween:
+		_hover_countdown_tween.kill()
+		_hover_countdown_tween = null
+	Logging.info("NarrativeOverlay._cancel_hover_countdown: cancelled")

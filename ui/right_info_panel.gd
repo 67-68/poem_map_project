@@ -20,6 +20,7 @@ const CN_NAME_MAP: Dictionary = {
 
 @onready var _info_grid: GridContainer = $Panel/V/InfoGrid
 @onready var _write_poem_btn: Button = $Panel/V/WritePoemContainer/WritePoemBtn
+@onready var _skip_btn: LinkButton = $Panel/V/TimeControlPanel/HBox/HBox2/LinkButton
 
 func _ready() -> void:
 	# ── 琢句按钮：点击打开/关闭诗词创建界面 ──
@@ -38,6 +39,9 @@ func _ready() -> void:
 	EventBus.focus_session_changed.connect(func(active: bool):
 		_write_poem_btn.visible = not active
 	)
+
+	# 🆕 事件活跃时禁用跳过按钮，事件结束后恢复
+	_connect_event_lock_skip_btn()
 
 	# ── 风闻刷新 ──
 	_refresh_rumors()
@@ -118,3 +122,29 @@ func _refresh_rumors() -> void:
 		_info_grid.add_child(label)
 
 	Logging.info("RightInfoPanel: 风闻刷新完成，已渲染 %d 条" % _info_grid.get_child_count())
+
+## 🆕 懒连接 NarrativeOverlay 信号，控制跳过按钮
+func _connect_event_lock_skip_btn() -> void:
+	var tree := get_tree()
+	if not tree or not tree.root:
+		call_deferred("_connect_event_lock_skip_btn")
+		return
+	var main_node := tree.root.get_node_or_null("Main")
+	if not main_node:
+		call_deferred("_connect_event_lock_skip_btn")
+		return
+	var overlay := main_node.get_node_or_null("TapeLayer/NarrativeOverlay")
+	if not overlay:
+		call_deferred("_connect_event_lock_skip_btn")
+		return
+	if overlay.has_signal("event_display_started") and not overlay.event_display_started.is_connected(_on_event_lock_skip):
+		overlay.event_display_started.connect(_on_event_lock_skip.bind(true))
+	if overlay.has_signal("event_display_ended") and not overlay.event_display_ended.is_connected(_on_event_lock_skip):
+		overlay.event_display_ended.connect(_on_event_lock_skip.bind(false))
+	Logging.info("RightInfoPanel: connected skip_btn to event_display signals")
+
+func _on_event_lock_skip(active: bool) -> void:
+	if not _skip_btn:
+		return
+	_skip_btn.disabled = active
+	Logging.info("RightInfoPanel: skip_btn disabled=%s" % str(active))

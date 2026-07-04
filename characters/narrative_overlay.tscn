@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bpngqavs0hbir" path="res://characters/tape_visualizer.gd" id="4_tb7k1"]
 [ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="5_smooth"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
+[ext_resource type="Texture2D" uid="uid://bf8yoa100nf57" path="res://assets/profile/yang_ke.png" id="9_tb7k1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nuqx"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -142,21 +143,53 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_tb7k1")
 
-[node name="V" type="VBoxContainer" parent="TapeContainer/VBox/HoverContainer" unique_id=1320109393]
+[node name="TimeLeft" type="TextureRect" parent="TapeContainer/VBox/HoverContainer" unique_id=1349144250]
+self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture = ExtResource("9_tb7k1")
 
-[node name="HSeparator" type="HSeparator" parent="TapeContainer/VBox/HoverContainer/V" unique_id=751446402]
+[node name="TimeLabel" type="Label" parent="TapeContainer/VBox/HoverContainer/TimeLeft" unique_id=1458403471]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -15.0
+offset_right = 20.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"DefaultText"
+text = "0.5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="TapeContainer/VBox/HoverContainer" unique_id=1743516383]
+layout_mode = 2
+script = ExtResource("5_smooth")
+metadata/_custom_type_script = "uid://y5gl8aohf1ll"
+
+[node name="V" type="VBoxContainer" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer" unique_id=1320109393]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V" unique_id=751446402]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_7xb00")
 
-[node name="Label" type="Label" parent="TapeContainer/VBox/HoverContainer/V" unique_id=1655239264]
+[node name="Label" type="Label" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V" unique_id=1655239264]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"TitleText"
 text = "效果"
 
-[node name="HoverLabel" type="RichTextLabel" parent="TapeContainer/VBox/HoverContainer/V" unique_id=636252671]
+[node name="HoverLabel" type="RichTextLabel" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V" unique_id=636252671]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"NarrativeText"

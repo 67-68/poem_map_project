@@ -308,8 +308,8 @@ class HoverBinding:
 				if show_timer and is_instance_valid(show_timer):
 					show_timer.stop()
 			State.SHOWING:
-				if delegate:
-					delegate.on_exit(self)
+				# 🔧 不再在这里调 delegate.on_exit — UI 动画延迟到真正 IDLE 时执行
+				pass
 			State.HIDE_PENDING:
 				if hide_timer and is_instance_valid(hide_timer):
 					hide_timer.stop()
@@ -318,6 +318,11 @@ class HoverBinding:
 	func _enter_state(new_state: State) -> void:
 		match new_state:
 			State.IDLE:
+				# 🆕 IDLE → 取消倒计时
+				_manager._on_state_idle()
+				# UI 退出：真正变为 IDLE 时才执行（hide_grace 延迟后）
+				if delegate:
+					delegate.on_exit(self)
 				# 安全网：停止所有计时器
 				if show_timer and is_instance_valid(show_timer):
 					show_timer.stop()
@@ -334,12 +339,16 @@ class HoverBinding:
 					Logging.err("HoverPopupManager: DELAYING but show_timer invalid for trigger=%s" % trigger.name)
 
 			State.SHOWING:
+				# 🆕 回到 SHOWING → 取消倒计时（如果是从 HIDE_PENDING 回来）
+				_manager._on_state_show()
 				if delegate:
 					delegate.on_enter(self)
 				else:
 					Logging.err("HoverPopupManager: SHOWING but delegate is null for trigger=%s" % trigger.name)
 
 			State.HIDE_PENDING:
+				# 🆕 进入 HIDE_PENDING → 启动倒计时 UI
+				_manager._on_state_hide_pending()
 				if hide_timer and is_instance_valid(hide_timer):
 					hide_timer.start(hide_grace)
 					Logging.info("HoverPopupManager: HIDE_PENDING trigger=%s, hide_timer=%.2fs" % [trigger.name, hide_grace])
@@ -446,6 +455,23 @@ func _get_narrative_overlay() -> Node:
 	else:
 		Logging.info("HoverPopupManager._get_narrative_overlay: NarrativeOverlay not found at Main/TapeLayer/NarrativeOverlay")
 	return overlay
+
+# ── 🆕 状态机 → NarrativeOverlay 倒计时转发 ──────────
+
+func _on_state_hide_pending() -> void:
+	var overlay := _get_narrative_overlay()
+	if overlay and overlay.has_method("_start_hover_countdown"):
+		overlay._start_hover_countdown()
+
+func _on_state_show() -> void:
+	var overlay := _get_narrative_overlay()
+	if overlay and overlay.has_method("_cancel_hover_countdown"):
+		overlay._cancel_hover_countdown()
+
+func _on_state_idle() -> void:
+	var overlay := _get_narrative_overlay()
+	if overlay and overlay.has_method("_cancel_hover_countdown"):
+		overlay._cancel_hover_countdown()
 
 # ── 公开 API ─────────────────────────────────────────────
 
@@ -734,3 +760,15 @@ func _on_popup_dying(trigger_ref: Variant) -> void:
 	Logging.info("HoverPopupManager: popup for trigger=%s tree_exiting" % trigger.name)
 	if _bindings.has(trigger):
 		unregister(trigger)
+
+# ── 🆕 外部代理入口（由 NarrativeOverlay.hover_container 调用）──
+
+## 鼠标进入 hover_container → 等同于还在原 trigger 上方
+func _on_proxy_enter() -> void:
+	if _current_active != null:
+		_current_active.on_mouse_enter_popup()
+
+## 鼠标离开 hover_container → 等同于离开原 trigger 热区
+func _on_proxy_exit() -> void:
+	if _current_active != null:
+		_current_active.on_mouse_exit_popup()

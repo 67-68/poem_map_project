@@ -88,5 +88,5 @@ func _register_hover_popup() -> void:
 		narrative += "\n" + entity.description
 		Logging.info("PickerItem._register_hover_popup: 附加 description 到 narrative")
 
-	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text}, 0.2, 0.15, HoverPopupManager.FlowType.BELOW_OVERLAY)
+	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text}, 0.2, 0.75, HoverPopupManager.FlowType.BELOW_OVERLAY)
 	Logging.info("PickerItem._register_hover_popup: hover 注册完成 (BELOW_OVERLAY), entity='%s'" % entity.name)

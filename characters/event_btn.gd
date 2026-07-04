@@ -134,7 +134,7 @@ func _register_event_btn_hover() -> void:
 		Logging.info("EventBtn._register_event_btn_hover: vector_text 为空，跳过注册")
 		return
 
-	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text}, 0.2, 0.15, HoverPopupManager.FlowType.BELOW_OVERLAY)
+	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text}, 0.2, 0.75, HoverPopupManager.FlowType.BELOW_OVERLAY)
 	Logging.info("EventBtn._register_event_btn_hover: 注册完成 (BELOW_OVERLAY), text='%s'" % text)
 
 func _init_option(data: BaseOption):

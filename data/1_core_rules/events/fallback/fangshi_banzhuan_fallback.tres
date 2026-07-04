@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://g4y5z6a7b8c9"]
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://g4y506a7b8da"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_rsjn7"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_cufm7"]
@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fwa7"]
 script = ExtResource("4_gsl7")
 choice_result = SubResource("Resource_xncj7")
-description = "搬砖\n今日市口热闹，工头见你膀大腰圆，招手便唤：「来得好！正缺人手。」你扛了几趟砖石，虽汗流浃背，倒也挣得几文铜钱。"
+description = "诺"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -23,4 +23,5 @@ archetype_id = "banzhuan_success"
 options = Array[ExtResource("1_rsjn7")]([SubResource("Resource_fwa7")])
 uuid = "fangshi_banzhuan_fallback"
 name = "搬砖糊口"
+description = "搬砖今日市口热闹，工头见你膀大腰圆，招手便唤：「来得好！正缺人手。」你扛了几趟砖石，虽汗流浃背，倒也挣得几文铜钱。"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"
