@@ -854,12 +854,9 @@ func test_p0_temp_flag_with_regular_operators_in_consequence():
 
 
 
-func test_p0_imaginary_set_level_operator():
 func test_p0_imaginary_set_level_missing_name():
 	"""imaginary_set_level 缺少 name 应返回 null"""
 	var op = MicroDSLParser.parse_operator("imaginary_set_level(level=1)")
 	assert_null(op, "imaginary_set_level 缺少 name 应返回 null")
 
 
-func test_p0_imaginary_set_level_level_out_of_range():
-func test_p0_imaginary_set_level_in_consequence():

@@ -23,7 +23,7 @@ func _make_concept(key: String, tier: int, level: int = 2) -> ImaginaryConcept:
 	return c
 
 func _make_recipe(key: String, fragments: Array[String]) -> Poem:
-	var p = Poem.new("POEM", "GAN_YE", 0, 0.0, 0.0)
+	var p = Poem.new("POEM", "GAN_YE", 0.0, 0.0)
 	p.uuid = key
 	p.name = key
 	p.required_fragments = fragments

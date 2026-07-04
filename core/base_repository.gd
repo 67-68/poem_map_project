@@ -11,9 +11,8 @@ func _init(data: Array[GameEntity]):
 
 func get_by_id(uuid: String):
     var data_ = _data
-    Logging.info(data_)
-    Logging.info(_data)
-    return data_.get(uuid,null)
+    Logging.info("get_by_id: looking up uuid=%s, data_size=%d" % [uuid, data_.size()])
+    return data_.get(uuid, null)
 
 func get_all():
     return _data

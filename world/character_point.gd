@@ -111,7 +111,7 @@ func _create_path() -> void:
 	path = Curve2D.new()
 	time_position_curve = Curve.new()
 	for point in datamodel.path_point_keys:
-		Logging.info(datamodel.path_point_keys)
+		Logging.info("path_point_keys count: %d" % datamodel.path_point_keys.size())
 		path.add_point(Database.get_life_path_point(point).position)
 	var path_ratio: float
 	var total_path = path.get_baked_length()

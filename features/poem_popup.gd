@@ -2,7 +2,6 @@ extends Control
 
 var tw: Tween
 
-@export var stamp_config := preload('res://assets/stamp_config.tres')
 @onready var book_panel = $BookPanel
 @onready var title_label = $BookPanel/MarginContainer/HBox/VBox/TitleLabel
 @onready var content_label = $BookPanel/MarginContainer/HBox/VBox/ContentLabel
@@ -15,7 +14,7 @@ func on_apply_poem(data,poet_data):
 	content_label.text = data.example
 	title_label.text = data.name
 	
-	if data.background == Poem.PoemBG.BOOK:
+	if false:
 		pass
 
 	var juanzhou_bg = preload('res://assets/poem_background_juanzhou.tres')
@@ -71,7 +70,6 @@ func create_animation():
 	#tw.tween_property(rarity_stamp,'scale',Vector2(1,1),0.7)
 	
 	await tw.finished
-	AudioManager.play_sfx(preload("res://assets/sounds/stamp_sound.wav"))
 
 	end_animation()
 	

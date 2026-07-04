@@ -128,14 +128,6 @@ func test_scenario_3_no_match():
 	Logging.info(SEP)
 
 
-# ════════════════════════════════════════════════════════════
-# ════════════════════════════════════════════════════════════
-
-	Logging.info(SEP)
-	Logging.info(SEP)
-
-	var recipe = _make_recipe("recipe_test", "测试诗", ["aesthetic:elegant", "emotion:ambition", "society:famine"])
-	var idx = _build_index([recipe])
 
 	# levels: 0, 1, 2 → max = 2
 	var c1 = _make_concept("aesthetic:elegant", 1, 0)

@@ -258,7 +258,7 @@ func test_consume_concepts_resets_state_not_definition():
 func test_poem_tier1_produces_money():
 	"""Tier 1 配方 → 台阁体，产出 money"""
 	var concepts = _make_tiered_concepts([1, 1])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	assert_not_null(result)
 	var has_money = false
@@ -272,7 +272,7 @@ func test_poem_tier1_produces_money():
 func test_poem_tier2_produces_fame_and_negative_money():
 	"""Tier 2 配方 → 诗史，产出 literary_fame + 贬为 negative money"""
 	var concepts = _make_tiered_concepts([2, 2])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	var has_fame = false
 	var has_negative_money = false
@@ -292,7 +292,7 @@ func test_poem_tier2_produces_fame_and_negative_money():
 func test_poem_tier3_produces_fame():
 	"""Tier 3 配方 → 绝唱，产出 literary_fame"""
 	var concepts = _make_tiered_concepts([3, 3])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	var has_fame = false
 	for op in result.operators:
@@ -305,7 +305,7 @@ func test_poem_tier3_produces_fame():
 func test_bucket_effect_lowest_tier_wins():
 	"""木桶效应：混合 [3,2,1] → min_tier=1 → 按 Tier 1 配方"""
 	var concepts = _make_tiered_concepts([3, 2, 1])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	# Tier 1 配方产出 money
 	var has_money = false
@@ -324,7 +324,7 @@ func test_hypocrisy_zuanying_tier3():
 	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_ZUANYING)
 
 	var concepts = _make_tiered_concepts([3, 3])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	assert_false(result.passed, "虚伪反噬应导致未通过")
 	assert_eq(result.fail_reason, "tier")
@@ -337,7 +337,7 @@ func test_hypocrisy_not_triggered_without_zuanying():
 	PlayerState.add_trait(ENUMS.TRAITS.KUANGDA_KUANGKE)
 
 	var concepts = _make_tiered_concepts([3, 3])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	for op in result.operators:
 		assert_false(op is TraitOperator, "kuangke 不应触发虚伪反噬")
@@ -346,7 +346,7 @@ func test_hypocrisy_not_triggered_without_zuanying():
 func test_health_cost_present():
 	"""所有配方都有健康消耗"""
 	var concepts = _make_tiered_concepts([3, 3])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	var has_health = false
 	for op in result.operators:
@@ -369,11 +369,11 @@ func test_tier2_increments_flag_poem_tier2_count():
 	var concepts = _make_tiered_concepts([2, 2])
 
 	# 第一次
-	PoemCraftingCalculator.calculate_poem_grade(concepts)
+	PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 	assert_eq(PlayerState.get_flag("flag_poem_tier2_count"), 1, "第一次 Tier 2 诗后 count=1")
 
 	# 第二次
-	PoemCraftingCalculator.calculate_poem_grade(concepts)
+	PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 	assert_eq(PlayerState.get_flag("flag_poem_tier2_count"), 2, "第二次 Tier 2 诗后 count=2")
 
 
@@ -384,7 +384,7 @@ func test_tier2_increments_flag_poem_tier2_count():
 func test_channel_broadcast_tier1_zero_output():
 	"""BROADCAST + Tier 1 → 工业垃圾，secular=0, history=0"""
 	var concepts = _make_tiered_concepts([1, 1])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.DENG_GAO)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	# BROADCAST Tier 1: 两个乘数都是 0，不应有 money/literary_fame 产出
 	var has_reward_op = false
@@ -401,7 +401,7 @@ func test_channel_broadcast_tier1_zero_output():
 func test_channel_broadcast_tier2_fame_boost():
 	"""BROADCAST + Tier 2 → literary_fame * 1.2, money 惩罚清零"""
 	var concepts = _make_tiered_concepts([2, 2])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.HUAI_GU)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	var has_fame = false
 	var has_negative_money = false
@@ -417,7 +417,7 @@ func test_channel_broadcast_tier2_fame_boost():
 func test_channel_broadcast_tier3_fame_max():
 	"""BROADCAST + Tier 3 → literary_fame * 1.5"""
 	var concepts = _make_tiered_concepts([3, 3])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.SHAN_SHUI)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	var has_fame = false
 	for op in result.operators:
@@ -429,7 +429,7 @@ func test_channel_broadcast_tier3_fame_max():
 func test_channel_secular_tier1_money_boost():
 	"""SECULAR + Tier 1 → money * 1.5"""
 	var concepts = _make_tiered_concepts([1, 1])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.GAN_YE)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	var has_money = false
 	for op in result.operators:
@@ -441,7 +441,7 @@ func test_channel_secular_tier1_money_boost():
 func test_channel_secular_tier2_political_suicide():
 	"""SECULAR + Tier 2 → 政治自杀，负 money * 3 + [触怒龙颜的死书]"""
 	var concepts = _make_tiered_concepts([2, 2])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.YING_ZHI)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	var has_negative_money = false
 	var has_death_trait = false
@@ -457,7 +457,7 @@ func test_channel_secular_tier2_political_suicide():
 func test_channel_secular_tier3_no_secular():
 	"""SECULAR + Tier 3 → history 保持, secular=0（狂客不伺候权贵）"""
 	var concepts = _make_tiered_concepts([3, 3])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, ENUMS.POEM_TYPE.GAN_YE)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	var has_money = false
 	var has_fame = false
@@ -473,7 +473,7 @@ func test_channel_secular_tier3_no_secular():
 func test_legacy_no_poem_type_unchanged():
 	"""不传 poem_type → legacy 行为不变"""
 	var concepts = _make_tiered_concepts([1, 1])
-	var result = PoemCraftingCalculator.calculate_poem_grade(concepts)
+	var result = PoemCraftingCalculator.calculate_poem_grade(concepts, {})
 
 	# legacy Tier 1: 应有 money 产出
 	var has_money = false
