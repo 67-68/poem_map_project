@@ -53,6 +53,60 @@ static func _check_repeated(action: Action) -> bool:
 	return PlayerState.is_action_repeated(tags)
 
 
+## 🆕 从 event_archetypes.json 加载 archetype 的 PropertyOperator 并生成定性预览行。
+## 不展示具体数值，只描述方向："健康 将会增加" / "金钱 将会消耗"。
+## @param action: 目标 Action（需为 SceneAction 才能查找 archetype key）
+## @param is_repeated: 是否为重复行动（影响后缀文本）
+## @return Array[String] — "• {display_name} 将会{增加/消耗}[(重复行动, ...)]"
+static func _build_archetype_qualitative_preview(action: Action, is_repeated: bool) -> Array[String]:
+	var lines: Array[String] = []
+	if not action or not action is SceneAction:
+		Logging.info("ActionHintBuilder._build_archetype_qualitative_preview: action 非 SceneAction, 跳过")
+		return lines
+	
+	var scene_action := action as SceneAction
+	var main_tag_val := scene_action._main_tag
+	var action_type := ENUMS.action_tag_to_action_type(main_tag_val)
+	if action_type < 0:
+		Logging.info("ActionHintBuilder._build_archetype_qualitative_preview: main_tag 无法映射到 action_type, 跳过")
+		return lines
+	var type_name = ENUMS.ACTION_TYPE.keys()[action_type]
+	var archetype_key = type_name.to_lower().replace("_", "")
+	
+	var archetype = Database.action_archetypes.get(archetype_key)
+	if not archetype:
+		Logging.info("ActionHintBuilder._build_archetype_qualitative_preview: 未找到 archetype key='%s', 跳过" % archetype_key)
+		return lines
+	
+	var ops: Array = archetype.operators
+	if ops.is_empty():
+		Logging.info("ActionHintBuilder._build_archetype_qualitative_preview: archetype '%s' operators 为空" % archetype_key)
+		return lines
+	
+	for op in ops:
+		if not op is PropertyOperator:
+			continue
+		var pop := op as PropertyOperator
+		if pop.value == 0 or pop.property.is_empty():
+			continue
+		var prop = Database.get_property(pop.property)
+		var display_name = prop.get_display_name() if prop and not prop.name.is_empty() else pop.property
+		
+		if is_repeated:
+			if pop.value > 0:
+				lines.append("• %s 将会增加（重复行动，效果减少20%%）" % display_name)
+			else:
+				lines.append("• %s 将会消耗（重复行动，消耗增加20%%）" % display_name)
+		else:
+			if pop.value > 0:
+				lines.append("• %s 将会增加" % display_name)
+			else:
+				lines.append("• %s 将会消耗" % display_name)
+	
+	Logging.info("ActionHintBuilder._build_archetype_qualitative_preview: archetype '%s' → %d 定性行 (is_repeated=%s)" % [archetype_key, lines.size(), str(is_repeated)])
+	return lines
+
+
 # ── 接口 1：Action → {narrative, vector} ──────────────────
 
 ## 为行动按钮的主 hover popup 构建叙事层 + 向量层文本。
@@ -64,6 +118,13 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 		Logging.err("ActionHintBuilder.build_action_hint: action is null")
 		return { "narrative": "（无数据）", "vector": "" }
 	
+	# 🆕 重复行动检测：计算一次，复用于叙事层和向量层
+	var _is_repeated := _check_repeated(action)
+	var _saved_is_repeated: bool = PlayerState._is_repeated_action
+	PlayerState._is_repeated_action = _is_repeated
+	if _is_repeated:
+		Logging.info("ActionHintBuilder.build_action_hint: 重复行动 preview 激活 for '%s'" % action.name)
+	
 	# ── 叙事层 ──
 	var narrative: String = action.description if not action.description.is_empty() else "（无叙述）"
 	
@@ -74,14 +135,13 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 		narrative = "[color=#66cc66]✓ %s[/color]\n\n%s" % [action.success_hint, narrative]
 		Logging.info("ActionHintBuilder.build_action_hint: unlocked with success_hint for '%s'" % action.name)
 	
+	# 🆕 重复行动警告（叙事层）：非锁定态时前置颜色警告
+	if _is_repeated and not is_locked:
+		narrative = "[color=#ccaa44]⚠ 重复行动 — 收益减少20%%，消耗增加20%%[/color]\n\n" + narrative
+		Logging.info("ActionHintBuilder.build_action_hint: 重复行动警告追加到叙事层 for '%s'" % action.name)
+	
 	# ── 向量层 ──
 	var vector_lines: Array[String] = []
-	
-	# 🆕 重复行动检测：临时设置 _is_repeated_action 以便 describe_preview 展示调整值
-	var _saved_is_repeated: bool = PlayerState._is_repeated_action
-	PlayerState._is_repeated_action = _check_repeated(action)
-	if PlayerState._is_repeated_action:
-		Logging.info("ActionHintBuilder.build_action_hint: 重复行动 preview 激活 for '%s'" % action.name)
 	
 	# 概率行（非 100% 时显示）
 	var prob: int = action.get_possibility_int()
@@ -105,12 +165,19 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 				vector_lines.append("• " + desc)
 		Logging.info("ActionHintBuilder.build_action_hint: %d requirements for '%s'" % [action.aciton_requirements.size(), action.name])
 	
-	# 成功结果
+	# 成功结果 — 优先级: action_results > archetype 定性预览
 	if not action.action_results.is_empty():
 		vector_lines.append("[color=gray][font_size=13]━━━ 结果 ━━━[/font_size][/color]")
 		var success_lines := build_operator_preview(action.action_results)
 		vector_lines.append_array(success_lines)
 		Logging.info("ActionHintBuilder.build_action_hint: %d action_results → %d lines for '%s'" % [action.action_results.size(), success_lines.size(), action.name])
+	else:
+		# 🆕 Fallback: 从 event_archetypes.json 加载 archetype PropertyOperator 生成定性预览
+		var archetype_lines := _build_archetype_qualitative_preview(action, _is_repeated)
+		if not archetype_lines.is_empty():
+			vector_lines.append("[color=gray][font_size=13]━━━ 结果 ━━━[/font_size][/color]")
+			vector_lines.append_array(archetype_lines)
+			Logging.info("ActionHintBuilder.build_action_hint: archetype 定性预览 %d lines for '%s'" % [archetype_lines.size(), action.name])
 	
 	# 失败结果（如有）
 	if action.failed_result and not action.failed_result.operators.is_empty():
@@ -149,10 +216,15 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' possibility=%d" % [sub_action.name, prob])
 	
 	# 🆕 重复行动检测：临时设置 _is_repeated_action 以便 describe_preview 展示调整值
+	var _is_repeated := _check_repeated(sub_action)
 	var _saved_is_repeated: bool = PlayerState._is_repeated_action
-	PlayerState._is_repeated_action = _check_repeated(sub_action)
-	if PlayerState._is_repeated_action:
+	PlayerState._is_repeated_action = _is_repeated
+	if _is_repeated:
 		Logging.info("ActionHintBuilder.build_sub_action_preview: 重复行动 preview 激活 for '%s'" % sub_action.name)
+	
+	# 🆕 重复行动警告（picker 预览）
+	if _is_repeated:
+		lines.append("[color=#ccaa44]⚠ 重复行动 — 收益减少20%%，消耗增加20%%[/color]")
 	
 	# ── 成功效果 ──
 	var success_descs: Array[String] = []
