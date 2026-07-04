@@ -53,22 +53,9 @@ func _get_decay_threshold(prop_enum) -> int:
 	return 25
 
 func _cost_survival():
-	#breakpoint
-	if PlayerState.has_trait(ENUMS.TRAITS.WANDERING_WITHOUT_LIVING_PLACE):
-		PlayerState.append_stat(ENUMS.PROPS.MONEY, -2)
-		if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) < 0:
-			OperatorFactory.create_event_operator('event_money_lower_0_wandering').operate()
-		var cap: int = get_current_ap_cap()
-		Logging.info('[SurvivalManager] _cost_survival: wandering, refreshing _time to %d' % cap)
-		var ok: bool = PlayerState.set_stat_val("_time", cap)
-		if not ok:
-			Logging.err('[SurvivalManager] _cost_survival: set_stat_val("_time", %d) failed (wandering)' % cap)
-		return
 	var money_ok: bool = PlayerState.append_stat(ENUMS.PROPS.MONEY, -5)
 	if not money_ok:
 		Logging.err('[SurvivalManager] _cost_survival: append_stat MONEY failed')
-	if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) < 0:
-		OperatorFactory.create_event_operator('event_money_lower_0').operate()
 	var cap: int = get_current_ap_cap()
 	Logging.info('[SurvivalManager] _cost_survival: refreshing _time to %d' % cap)
 	var ok: bool = PlayerState.set_stat_val("_time", cap)

@@ -1,6 +1,5 @@
 extends MarginContainer
 
-const TOTAL_DAYS: int = 10
 const TOTAL_SLOTS: int = 5
 
 @onready var label_era: Label = $HBox/Label_Era
@@ -17,14 +16,18 @@ const TOTAL_SLOTS: int = 5
 ## 将剩余天数格式化为 5 字符的圆点串。
 ## ● = 2天, ◐ = 1天, ○ = 0天
 ## 防御性兜底: time_val 不在 [0, total_days] 时返回全白圆。
-static func format_time_dots(time_val: int, total_days: int = 10, total_slots: int = 5) -> String:
+static func format_time_dots(time_val: int, total_days: int, display_slots: int = -1) -> String:
 	if time_val < 0 or time_val > total_days:
-		Logging.err('[time] 当前天数为 %s, 为什么这个会出现?' % time_val)
+		Logging.err('[time] 当前天数为 %d, total_days=%d, 为什么这个会出现?' % [time_val, total_days])
 		return 'NaN'
+	
+	# 动态计算槽数：每 2 天一个槽，向上取整
+	if display_slots < 0:
+		display_slots = ceili(float(total_days) / 2.0)
 	
 	var black: int = time_val / 2
 	var half: int = time_val % 2
-	var white: int = total_slots - black - half
+	var white: int = display_slots - black - half
 	
 	var parts: Array[String] = []
 	for _i in range(black):
@@ -62,7 +65,8 @@ func _ready():
 
 func _refresh_time_left() -> void:
 	var time_val: int = int(PlayerState.get_stat_val("time"))
-	label_time_left.text = "%d(%s)" % [time_val, format_time_dots(time_val)]
+	var total_days: int = SurvivalManager.get_current_ap_cap()
+	label_time_left.text = "%d(%s)" % [time_val, format_time_dots(time_val, total_days)]
 
 func _on_year_changed(current_float_year: float):
 	var current_year = int(floor(current_float_year))

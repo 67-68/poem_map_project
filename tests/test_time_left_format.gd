@@ -16,47 +16,47 @@ const TimePanelScript = preload("res://world/time_control_panel.gd")
 # ════════════════════════════════════════════════════════════
 
 func test_format_10_days():
-	var result = TimePanelScript.format_time_dots(10)
+	var result = TimePanelScript.format_time_dots(10, 10)
 	assert_eq(result, "●●●●●", "10天 → ●●●●●")
 
 func test_format_9_days():
-	var result = TimePanelScript.format_time_dots(9)
+	var result = TimePanelScript.format_time_dots(9, 10)
 	assert_eq(result, "●●●●◐", "9天 → ●●●●◐")
 
 func test_format_8_days():
-	var result = TimePanelScript.format_time_dots(8)
+	var result = TimePanelScript.format_time_dots(8, 10)
 	assert_eq(result, "●●●●○", "8天 → ●●●●○")
 
 func test_format_7_days():
-	var result = TimePanelScript.format_time_dots(7)
+	var result = TimePanelScript.format_time_dots(7, 10)
 	assert_eq(result, "●●●◐○", "7天 → ●●●◐○")
 
 func test_format_6_days():
-	var result = TimePanelScript.format_time_dots(6)
+	var result = TimePanelScript.format_time_dots(6, 10)
 	assert_eq(result, "●●●○○", "6天 → ●●●○○")
 
 func test_format_5_days():
-	var result = TimePanelScript.format_time_dots(5)
+	var result = TimePanelScript.format_time_dots(5, 10)
 	assert_eq(result, "●●◐○○", "5天 → ●●◐○○")
 
 func test_format_4_days():
-	var result = TimePanelScript.format_time_dots(4)
+	var result = TimePanelScript.format_time_dots(4, 10)
 	assert_eq(result, "●●○○○", "4天 → ●●○○○")
 
 func test_format_3_days():
-	var result = TimePanelScript.format_time_dots(3)
+	var result = TimePanelScript.format_time_dots(3, 10)
 	assert_eq(result, "●◐○○○", "3天 → ●◐○○○")
 
 func test_format_2_days():
-	var result = TimePanelScript.format_time_dots(2)
+	var result = TimePanelScript.format_time_dots(2, 10)
 	assert_eq(result, "●○○○○", "2天 → ●○○○○")
 
 func test_format_1_day():
-	var result = TimePanelScript.format_time_dots(1)
+	var result = TimePanelScript.format_time_dots(1, 10)
 	assert_eq(result, "◐○○○○", "1天 → ◐○○○○")
 
 func test_format_0_days():
-	var result = TimePanelScript.format_time_dots(0)
+	var result = TimePanelScript.format_time_dots(0, 10)
 	assert_eq(result, "○○○○○", "0天 → ○○○○○")
 
 
@@ -65,16 +65,16 @@ func test_format_0_days():
 # ════════════════════════════════════════════════════════════
 
 func test_format_negative_returns_white():
-	var result = TimePanelScript.format_time_dots(-1)
-	assert_eq(result, "○○○○○", "-1 → 全白兜底")
+	var result = TimePanelScript.format_time_dots(-1, 10)
+	assert_eq(result, "NaN", "-1 → NaN")
 
 func test_format_overflow_returns_white():
-	var result = TimePanelScript.format_time_dots(11)
-	assert_eq(result, "○○○○○", "11 > 10 → 全白兜底")
+	var result = TimePanelScript.format_time_dots(11, 10)
+	assert_eq(result, "NaN", "11 > 10 → NaN")
 
 func test_format_overflow_returns_white_15():
-	var result = TimePanelScript.format_time_dots(15)
-	assert_eq(result, "○○○○○", "15 → 全白兜底")
+	var result = TimePanelScript.format_time_dots(15, 10)
+	assert_eq(result, "NaN", "15 → NaN")
 
 
 # ════════════════════════════════════════════════════════════

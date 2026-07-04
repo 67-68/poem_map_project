@@ -122,7 +122,7 @@ func _connect_event_lock_signals() -> void:
 
 ## 🆕 事件开始时：锁定所有行动按钮，提示"请先完成当前事件再选择"
 func _lock_all_for_event() -> void:
-	Logging.info("SceneActionScroll._lock_all_for_event: 锁定所有行动")
+	Logging.info("[DIAG] SceneActionScroll._lock_all_for_event: 锁定所有行动")
 	const EVENT_LOCK_REASON: String = "请先完成当前事件再选择"
 	var children = $V.get_children()
 	for child in children:
@@ -133,9 +133,9 @@ func _lock_all_for_event() -> void:
 			continue
 		# 临时覆盖 dynamic_failed_hint 并锁住
 		panel.set_locked(EVENT_LOCK_REASON)
-	Logging.info("SceneActionScroll._lock_all_for_event: 已锁定 %d 个行动" % children.size())
+	Logging.info("[DIAG] SceneActionScroll._lock_all_for_event: 已锁定 %d 个行动" % children.size())
 
 ## 🆕 事件结束时：恢复行动按钮的正常锁定状态（触发 refresh）
 func _unlock_all_from_event() -> void:
-	Logging.info("SceneActionScroll._unlock_all_from_event: 恢复行动状态")
+	Logging.info("[DIAG] SceneActionScroll._unlock_all_from_event: 恢复行动状态")
 	refresh()
