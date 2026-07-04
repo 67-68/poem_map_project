@@ -56,3 +56,5 @@ disease_dongshang_necrosis,冻疮坏死,DISEASE,CHRONIC,,,,
 near_death_mind_broken,心智破损,,,,,,
 poisoned,中毒,DISEASE,,,,prop_sub(name=health; val=15),,
 sprained_ankle,崴脚,,,,,,,
+exhaustion_initial,疲态初显,,,,,,,疲
+terminal_illness,病入膏肓,,,,,,,病

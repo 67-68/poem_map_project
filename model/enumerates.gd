@@ -100,7 +100,7 @@ enum PROVINCES {
 }
 
 enum TRAITS {
-    WANDERING_WITHOUT_LIVING_PLACE,
+    _RESERVED_00,
     
     # ── 诗词枚举已移除，占位保留整数值稳定性 ──
     _RESERVED_01,
@@ -189,6 +189,10 @@ enum TRAITS {
     # 临时负面 Trait（2 旬到期，hardcoded in aggregate_trait_effect）
     POISONED,
     SPRAINED_ANKLE,
+
+    # 健康→AP 阶梯特质（health ≤ 30 → 5AP / < 60 → 8AP，由 SurvivalManager 自动增删）
+    EXHAUSTION_INITIAL,
+    TERMINAL_ILLNESS,
 }
 
 enum POEM_TYPE {

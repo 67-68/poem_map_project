@@ -6,6 +6,28 @@ class_name SurvivalManager extends Node
 
 const HEARTBEAT_HEALTH_THRESHOLD: int = 20
 
+# ─── 健康→AP 阶梯配置（唯一真相源） ──────────────────────────
+# 按 health_max 升序排列，遍历顺序从最严重到最轻微。
+# 外部消费方（action_hint_builder / time_control_panel）通过静态查询接口获取数据，
+# 严禁各自硬编码 trait 名或数值。
+const HEALTH_AP_TIERS: Array[Dictionary] = [
+	{
+		health_max = 30,       # ≤30
+		ap_cap = 5,
+		trait_enum = ENUMS.TRAITS.TERMINAL_ILLNESS,
+		hint_text = "每旬仅 5 天可用（病入膏肓）",
+		hint_color = "#cc6666",
+	},
+	{
+		health_max = 59,       # ≤59（即 <60）
+		ap_cap = 8,
+		trait_enum = ENUMS.TRAITS.EXHAUSTION_INITIAL,
+		hint_text = "每旬仅 8 天可用（疲态初显）",
+		hint_color = "#ccaa66",
+	},
+]
+const DEFAULT_AP_CAP: int = 10
+
 func get_prop(data): return PlayerState.get_stat_val(data)
 func append_prop(data,val):PlayerState.append_stat(data,val)
 func set_prop(data,val):PlayerState.set_stat_val(data,val)
@@ -36,16 +58,78 @@ func _cost_survival():
 		PlayerState.append_stat(ENUMS.PROPS.MONEY, -2)
 		if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) < 0:
 			OperatorFactory.create_event_operator('event_money_lower_0_wandering').operate()
+		var cap: int = get_current_ap_cap()
+		Logging.info('[SurvivalManager] _cost_survival: wandering, refreshing _time to %d' % cap)
+		var ok: bool = PlayerState.set_stat_val("_time", cap)
+		if not ok:
+			Logging.err('[SurvivalManager] _cost_survival: set_stat_val("_time", %d) failed (wandering)' % cap)
 		return
 	var money_ok: bool = PlayerState.append_stat(ENUMS.PROPS.MONEY, -5)
 	if not money_ok:
 		Logging.err('[SurvivalManager] _cost_survival: append_stat MONEY failed')
 	if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) < 0:
 		OperatorFactory.create_event_operator('event_money_lower_0').operate()
-	Logging.info('[SurvivalManager] _cost_survival: attempting refresh_time via TimeOperator')
-	var to = TimeOperator.new()
-	to.refresh_time = true
-	to.operate()
+	var cap: int = get_current_ap_cap()
+	Logging.info('[SurvivalManager] _cost_survival: refreshing _time to %d' % cap)
+	var ok: bool = PlayerState.set_stat_val("_time", cap)
+	if not ok:
+		Logging.err('[SurvivalManager] _cost_survival: set_stat_val("_time", %d) failed' % cap)
+
+# ─── 健康→AP 查询接口（静态，供外部消费方调用） ──────────────
+
+## 返回当前健康对应的 AP 上限
+static func get_current_ap_cap() -> int:
+	var health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
+	for tier in HEALTH_AP_TIERS:
+		if health <= tier.health_max:
+			Logging.info('[SurvivalManager] get_current_ap_cap: health=%d ≤ %d → ap_cap=%d' % [health, tier.health_max, tier.ap_cap])
+			return tier.ap_cap
+	Logging.info('[SurvivalManager] get_current_ap_cap: health=%d → default=%d' % [health, DEFAULT_AP_CAP])
+	return DEFAULT_AP_CAP
+
+## 返回当前激活的 AP 削减提示文本，无削减时返回 ""
+static func get_active_ap_hint() -> String:
+	var health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
+	for tier in HEALTH_AP_TIERS:
+		if health <= tier.health_max:
+			return tier.hint_text
+	return ""
+
+## 返回当前激活的 AP 削减提示颜色，无削减时返回 ""
+static func get_active_ap_hint_color() -> String:
+	var health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
+	for tier in HEALTH_AP_TIERS:
+		if health <= tier.health_max:
+			return tier.hint_color
+	return ""
+
+# ─── 健康→Trait 同步 ────────────────────────────────────────
+
+## 根据当前健康值自动增减 HEALTH_AP_TIERS 中配置的 trait。
+## 必须在 aggregate_trait_effect() 之后、_cost_survival() 之前调用，
+## 确保 trait 持续效果（如中毒扣血）已生效后再判定 AP 等级。
+func _sync_health_ap_traits():
+	var health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
+	Logging.info('[SurvivalManager] _sync_health_ap_traits: health=%d' % health)
+	
+	var matched_trait: String = ""
+	for tier in HEALTH_AP_TIERS:
+		var trait_str := ENUMS.to_traits_str(tier.trait_enum)
+		if health <= tier.health_max:
+			matched_trait = trait_str
+			if not PlayerState.has_trait(trait_str):
+				PlayerState.add_trait(trait_str)
+				Logging.info('[SurvivalManager] _sync_health_ap_traits: health=%d ≤ %d → add_trait(%s)' % [health, tier.health_max, trait_str])
+			else:
+				Logging.info('[SurvivalManager] _sync_health_ap_traits: health=%d ≤ %d → trait(%s) already present' % [health, tier.health_max, trait_str])
+			break
+	
+	# 移除所有未匹配的 HEALTH_AP_TIERS trait
+	for tier in HEALTH_AP_TIERS:
+		var trait_str := ENUMS.to_traits_str(tier.trait_enum)
+		if trait_str != matched_trait and PlayerState.has_trait(trait_str):
+			PlayerState.remove_trait(trait_str)
+			Logging.info('[SurvivalManager] _sync_health_ap_traits: health=%d, no longer match → remove_trait(%s)' % [health, trait_str])
 
 func decay(prop_enum, threshold, decay_val):
 	var current_val = get_prop(prop_enum)
@@ -100,6 +184,9 @@ func _process_single_xun_settlement():
 	# 状态自身存在的持续负面衍生
 	# 让属性自己不变，影响其他属性和operator之类的
 	aggregate_trait_effect()
+	
+	# 1.5: 健康→AP 阶梯同步（必须在 aggregate 之后，确保 trait 持续效果已生效）
+	_sync_health_ap_traits()
 	
 	# 第二阶段：生存基础扣除 (Upkeep & Economy)
 	# 外部环境对玩家的无情压迫。
@@ -163,6 +250,9 @@ func death_judgement():
 func _post_xun_money_deduct():
 	PlayerState.append_stat(ENUMS.PROPS.MONEY, -30)
 	Logging.info('[SurvivalManager] 旬末扣除 30 money（快照之后执行，计入下月 delta）')
+	if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) < 0:
+		Logging.info('[SurvivalManager] 旬末结算后 money<0，触发流落街头事件')
+		OperatorFactory.create_event_operator('event_money_lower_0_innkeeper').operate()
 
 func _ready():
 	TimeService.on_xun_tick.connect(_process_single_xun_settlement)

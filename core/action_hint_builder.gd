@@ -69,6 +69,13 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 		vector_lines.append("[color=gray][font_size=13]概率: %d%%[/font_size][/color]" % prob)
 		Logging.info("ActionHintBuilder.build_action_hint: possibility=%d for '%s'" % [prob, action.name])
 	
+	# 健康→AP 削减提示（通过 SurvivalManager 配置驱动，无削减时不显示）
+	var ap_hint := SurvivalManager.get_active_ap_hint()
+	if not ap_hint.is_empty():
+		var ap_hint_color := SurvivalManager.get_active_ap_hint_color()
+		vector_lines.append("[color=%s][font_size=13]%s[/font_size][/color]" % [ap_hint_color, ap_hint])
+		Logging.info("ActionHintBuilder.build_action_hint: AP hint='%s' for '%s'" % [ap_hint, action.name])
+	
 	# 前提
 	if not action.aciton_requirements.is_empty():
 		vector_lines.append("[color=gray][font_size=13]━━━ 前提 ━━━[/font_size][/color]")
