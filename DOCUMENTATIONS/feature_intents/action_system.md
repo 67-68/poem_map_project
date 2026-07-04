@@ -187,3 +187,44 @@ HoverPopupManager.register(_ambition_btn, ambition_hud, 0.2, 0.15,
 - `ui/hover_popup_manager.gd` — 统一显示管道（v3.0 FlowType 架构）
 - `characters/narrative_overlay.gd` — hover 文本渲染（HoverContainer/HoverLabel）
 - `characters/tape_visualizer.gd` — 右侧滑入/滑出动画
+
+## 重复行动疲惫系统（Repeated Action Fatigue）
+
+### 设计意图
+
+连续两次执行同一类型的行动时，第二次行动会受到 20% 的效益惩罚：
+- 获得属性（val > 0）：减少 20%（×0.8）
+- 消耗属性（val < 0）：增加 20%（×1.2）
+
+这促使玩家在重复行动与切换行动之间做策略抉择。
+
+### 状态模型
+
+- `PlayerState.last_action_tags: Array[String]` — 持久状态，存上一次执行完成的 action 的识别 tag 集合
+- `PlayerState._is_repeated_action: bool` — 瞬态快照，仅在当前 action 的 operators 执行期间有效
+- `PlayerState.is_action_repeated(tags) -> bool` — 纯函数，检查给定 tags 是否与 last_action_tags 有交集
+
+### 识别 Tag 匹配规则
+
+- SceneAction：识别 tags = [main_tag] + action_tags
+- 普通 Action：识别 tags = action_tags
+- 交集匹配：当前 tags 集合 ∩ last_action_tags 非空 ⇒ 重复行动
+
+### 生命周期
+
+1. **Hover Preview 阶段**：`ActionHintBuilder` 读取 `last_action_tags`，临时设置 `_is_repeated_action` 调用 `describe_preview()`，展示调整后数值如「金钱 ↑↑↑：+40（原+50，重复行动-20%）」
+2. **执行前**：`action_button._on_button_pressed()` / `_on_sub_action_picked()` 调用 `is_action_repeated()` 设置瞬态 `_is_repeated_action`
+3. **执行中**：`PropertyOperator.operate()` 读 `_is_repeated_action` 决定是否乘倍率
+4. **执行后**：更新 `last_action_tags` 为当前 action 的识别 tags
+
+### Sub-action 两阶段处理
+
+- Picker 选择：父 action 的 operators 未执行，不更新 `last_action_tags`
+- `_on_sub_action_picked()`：在父+子 operators 执行前计算 `_is_repeated_action`（使用子 action 的识别 tags），执行后更新 `last_action_tags`
+
+### 相关文件
+
+- `core/player_state.gd` — `last_action_tags` + `_is_repeated_action` + `is_action_repeated()`
+- `core/model/property_operator.gd` — `operate()` 倍率应用 + `describe_preview()` 调整后展示
+- `core/action_hint_builder.gd` — `_check_repeated()` + hover preview 时临时设 `_is_repeated_action`
+- `ui/action_button.gd` — `_on_button_pressed()` / `_on_sub_action_picked()` 中快照计算 + tags 更新

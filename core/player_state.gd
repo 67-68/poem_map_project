@@ -26,6 +26,15 @@ var _ambition_start_total_days: int = -1
 var emotions: Dictionary = {}
 var flags: Dictionary = {}  # flag_id -> value (str/int/bool)
 
+## 🆕 重复行动疲惫系统：记录上一个被执行完成的 action 的 tag 集合
+## 用于在下次执行同类型 action 时施加 20% 效益惩罚。
+@export var last_action_tags: Array[String] = []
+
+## 🆕 瞬态快照：当前正在执行的 action 是否与上次重复。
+## 在 operators 执行前由 action_button 设置，PropertyOperator 读取。
+## 仅在单次 operate 生命周期内有效。
+var _is_repeated_action: bool = false
+
 ## 当前正在处理的事件上下文
 ## 由事件处理管道在处理事件前设置，包含 target_tag 等社交上下文信息。
 ## RelationFlagManager 的 favor 倍率系统依赖此字段判断社交目标。
@@ -52,6 +61,20 @@ signal before_emotion_change(emo_name: String, delta: int)
 ## 在 append_stat() 中 trait 倍率计算之后、实际写入 stat.val 之前发射。
 ## RelationFlagManager 监听此信号，根据好感度对属性变化量施加社交倍率。
 signal before_property_change(prop_name: String, delta: int)
+
+## 🆕 重复行动疲惫系统：检查给定 tag 集合是否与 last_action_tags 有交集。
+## 纯函数，无副作用 — 供 ActionHintBuilder (hover preview) 和 action_button (执行前快照) 共用。
+## @param tags: 当前 action 的 tag 列表（SceneAction 用 [main_tag]，普通 Action 用 action_tags）
+## @return true 表示当前 action 与上次执行的 action 类型相同
+func is_action_repeated(tags: Array[String]) -> bool:
+	if last_action_tags.is_empty() or tags.is_empty():
+		return false
+	for tag in tags:
+		if tag in last_action_tags:
+			Logging.info("PlayerState.is_action_repeated: tag '%s' 命中 last_action_tags=%s → 重复行动" % [tag, str(last_action_tags)])
+			return true
+	Logging.info("PlayerState.is_action_repeated: tags=%s 与 last_action_tags=%s 无交集 → 非重复" % [str(tags), str(last_action_tags)])
+	return false
 
 var _init_props_retry_count: int = 0
 const MAX_INIT_PROPS_RETRY: int = 5

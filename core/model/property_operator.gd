@@ -77,11 +77,22 @@ func init(_context: Dictionary) -> Dictionary:
 	return _context
 
 func operate():
-	Logging.debug("PropertyOperator.operate: property=" + property + ", value=" + str(value))
-	PlayerState.append_stat(property, value)
+	Logging.debug("PropertyOperator.operate: property=" + property + ", value=" + str(value) + ", _is_repeated_action=" + str(PlayerState._is_repeated_action))
+	
+	# 🆕 重复行动疲惫：对属性变动施加 20% 惩罚
+	# 正收益（val>0）*0.8 = 减少 20% 获得
+	# 负消耗（val<0）*1.2 = 增加 20% 消耗
+	var adjusted_value: int = value
+	if PlayerState._is_repeated_action and value != 0:
+		if value > 0:
+			adjusted_value = int(float(value) * 0.8)
+		else:
+			adjusted_value = int(float(value) * 1.2)
+		Logging.info("PropertyOperator.operate: 重复行动惩罚 applied, %d → %d (×%.1f)" % [value, adjusted_value, (0.8 if value > 0 else 1.2)])
+	PlayerState.append_stat(property, adjusted_value)
 	# 触发属性变化音效（AudioManager 统一管理 0.4s 防重叠间隔）
-	AudioManager.play_property_sound(property, value)
-	_emit_float_text(value)
+	AudioManager.play_property_sound(property, adjusted_value)
+	_emit_float_text(adjusted_value)
 
 func _emit_float_text(delta: int) -> void:
 	Logging.debug("PropertyOperator._emit_float_text: property=" + property + ", delta=" + str(delta))
@@ -112,10 +123,31 @@ func describe_preview() -> String:
 	var arrows = ""
 	for i in arrow_count:
 		arrows += arrow_char
+	var display_value: int = value
+	
+	# 🆕 重复行动疲惫：预览文本展示调整后数值
+	if PlayerState._is_repeated_action:
+		if value > 0:
+			display_value = int(float(value) * 0.8)
+		else:
+			display_value = int(float(value) * 1.2)
+	
 	var perception_text = prop.get_change_perception_text(value)
-	if perception_text.is_empty():
-		return "%s %s：%+d" % [cn_name, arrows, value]
-	return "%s %s：%+d(%s)" % [cn_name, arrows, value, perception_text]
+	var base_str: String
+	
+	if PlayerState._is_repeated_action and display_value != value:
+		if perception_text.is_empty():
+			base_str = "%s %s：%+d（原%+d，重复行动%s%d%%）" % [cn_name, arrows, display_value, value, ("+" if value < 0 else "-"), 20]
+		else:
+			base_str = "%s %s：%+d（原%+d%s，重复行动%s%d%%）" % [cn_name, arrows, display_value, value, "(%s)" % perception_text, ("+" if value < 0 else "-"), 20]
+		Logging.info("PropertyOperator.describe_preview: 重复行动 preview, %+d→%+d for '%s'" % [value, display_value, property])
+	else:
+		if perception_text.is_empty():
+			base_str = "%s %s：%+d" % [cn_name, arrows, value]
+		else:
+			base_str = "%s %s：%+d(%s)" % [cn_name, arrows, value, perception_text]
+	
+	return base_str
 
 static func _get_arrow_count(prop_name: String, delta: int) -> int:
 	var amounts = NamedDSLParser._load_named_amounts()

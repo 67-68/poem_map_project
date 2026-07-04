@@ -39,6 +39,20 @@ static func build_choice_result_preview(result: ChoiceResult) -> Array[String]:
 	return build_operator_preview(result.operators)
 
 
+## 🆕 计算当前 action 的识别 tags 并用 is_action_repeated 检查是否重复。
+## SceneAction 用 main_tag + action_tags；普通 Action 用 action_tags。
+static func _check_repeated(action: Action) -> bool:
+	if not action:
+		return false
+	var tags: Array[String] = []
+	if action is SceneAction:
+		var sa := action as SceneAction
+		if not sa.main_tag.is_empty():
+			tags.append(sa.main_tag)
+	tags.append_array(action.action_tags)
+	return PlayerState.is_action_repeated(tags)
+
+
 # ── 接口 1：Action → {narrative, vector} ──────────────────
 
 ## 为行动按钮的主 hover popup 构建叙事层 + 向量层文本。
@@ -62,6 +76,12 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 	
 	# ── 向量层 ──
 	var vector_lines: Array[String] = []
+	
+	# 🆕 重复行动检测：临时设置 _is_repeated_action 以便 describe_preview 展示调整值
+	var _saved_is_repeated: bool = PlayerState._is_repeated_action
+	PlayerState._is_repeated_action = _check_repeated(action)
+	if PlayerState._is_repeated_action:
+		Logging.info("ActionHintBuilder.build_action_hint: 重复行动 preview 激活 for '%s'" % action.name)
 	
 	# 概率行（非 100% 时显示）
 	var prob: int = action.get_possibility_int()
@@ -99,6 +119,9 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 		vector_lines.append_array(fail_lines)
 		Logging.info("ActionHintBuilder.build_action_hint: %d failed_result ops → %d lines for '%s'" % [action.failed_result.operators.size(), fail_lines.size(), action.name])
 	
+	# 🆕 恢复 _is_repeated_action 原始值
+	PlayerState._is_repeated_action = _saved_is_repeated
+	
 	var vector_text: String = "\n".join(vector_lines)
 	
 	Logging.info("ActionHintBuilder.build_action_hint: done for '%s', narrative=%d chars, vector=%d chars" % [action.name, narrative.length(), vector_text.length()])
@@ -124,6 +147,12 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	var prob: int = sub_action.get_possibility_int()
 	lines.append("概率: %d%%成功，" % prob)
 	Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' possibility=%d" % [sub_action.name, prob])
+	
+	# 🆕 重复行动检测：临时设置 _is_repeated_action 以便 describe_preview 展示调整值
+	var _saved_is_repeated: bool = PlayerState._is_repeated_action
+	PlayerState._is_repeated_action = _check_repeated(sub_action)
+	if PlayerState._is_repeated_action:
+		Logging.info("ActionHintBuilder.build_sub_action_preview: 重复行动 preview 激活 for '%s'" % sub_action.name)
 	
 	# ── 成功效果 ──
 	var success_descs: Array[String] = []
@@ -166,5 +195,8 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 		for d in fail_descs:
 			lines.append(d)
 		Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' fail preview: %d lines" % [sub_action.name, fail_descs.size()])
+	
+	# 🆕 恢复 _is_repeated_action 原始值
+	PlayerState._is_repeated_action = _saved_is_repeated
 	
 	return "\n".join(lines)

@@ -251,6 +251,14 @@ func _on_button_pressed() -> void:
 		EventBus.push_picker.emit(picker_data, _on_sub_action_picked, null)
 		return
 	
+	# 🆕 重复行动检测：对比当前 action 的识别 tags 与 last_action_tags
+	var _identifying_tags: Array[String] = []
+	if _snap_is_scene and not _snap_main_tag.is_empty():
+		_identifying_tags.append(_snap_main_tag)
+	_identifying_tags.append_array(_snap_tags)
+	PlayerState._is_repeated_action = PlayerState.is_action_repeated(_identifying_tags)
+	Logging.info("SceneActionPanel: _is_repeated_action=%s for identifying_tags=%s" % [str(PlayerState._is_repeated_action), str(_identifying_tags)])
+	
 	# 🆕 批量模式：抑制属性变动期间的 reevaluate，全部 results 执行完后统一评估
 	ActionManager.begin_action_batch()
 	if action.action_results:
@@ -280,6 +288,8 @@ func _on_button_pressed() -> void:
 	# ⛔ generator 存在时 block 随机事件查找
 	# generator 内部通过 PushEventOperator 自行推送事件
 	if had_generator:
+		PlayerState.last_action_tags = _snap_tags.duplicate()
+		Logging.info("SceneActionPanel: generator 路径，更新 last_action_tags=%s" % str(PlayerState.last_action_tags))
 		return
 	
 	# 🚀 使用快照数据进行事件扫描（防止 self.action 在 refresh() 中被覆盖）
@@ -291,6 +301,10 @@ func _on_button_pressed() -> void:
 			'fallback_event_uuid': _snap_fallback,
 		}
 		EventManager.scan_events(0, context)
+	
+	# 🆕 重复行动疲惫：执行完毕后更新 last_action_tags（含 sub-action 路径对应 _on_sub_action_picked 中更新）
+	PlayerState.last_action_tags = _identifying_tags.duplicate()
+	Logging.info("SceneActionPanel: 非 sub-action 路径，更新 last_action_tags=%s" % str(PlayerState.last_action_tags))
 
 
 # ── Sub-action Picker 回调 ──────────────────────────────────
@@ -329,6 +343,14 @@ func _on_sub_action_picked(entity) -> void:
 		sub_main_tag = _pending_sub_action_main_tag
 		sub_fallback = _pending_sub_action_fallback
 		sub_tags = _pending_sub_action_tags.duplicate()
+	
+	# 🆕 重复行动检测：使用子 action 的识别 tags 对比 last_action_tags
+	var _sub_identifying_tags: Array[String] = []
+	if not sub_main_tag.is_empty():
+		_sub_identifying_tags.append(sub_main_tag)
+	_sub_identifying_tags.append_array(sub_tags)
+	PlayerState._is_repeated_action = PlayerState.is_action_repeated(_sub_identifying_tags)
+	Logging.info("SceneActionPanel._on_sub_action_picked: _is_repeated_action=%s for sub tags=%s" % [str(PlayerState._is_repeated_action), str(_sub_identifying_tags)])
 	
 	# 🆕 Sub-action possibility 投骰（与父 action _on_button_pressed 逻辑一致）
 	# possibility < 100 时投骰判定成功/失败；possibility = 100 时确定性成功
@@ -381,6 +403,10 @@ func _on_sub_action_picked(entity) -> void:
 		EventManager.scan_events(0, context)
 	else:
 		Logging.info("SceneActionPanel: sub-action '%s' failed, skipping scan_events (failed_result already pushed event)" % sub_action.name)
+	
+	# 🆕 重复行动疲惫：子 action 执行完毕后更新 last_action_tags
+	PlayerState.last_action_tags = _sub_identifying_tags.duplicate()
+	Logging.info("SceneActionPanel._on_sub_action_picked: 更新 last_action_tags=%s" % str(PlayerState.last_action_tags))
 	
 	# 清理挂起数据
 	_pending_sub_action_main_tag = ""
