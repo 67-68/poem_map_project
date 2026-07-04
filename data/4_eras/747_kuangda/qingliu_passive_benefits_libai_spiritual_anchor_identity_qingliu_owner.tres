@@ -18,7 +18,7 @@ value = 11
 
 [sub_resource type="Resource" id="Resource_h0v6u"]
 script = ExtResource("4_8helo")
-imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
+imagery_name = "wine_gourd"
 
 [sub_resource type="Resource" id="Resource_5jme8"]
 script = ExtResource("5_hoc5g")
@@ -57,7 +57,7 @@ value = 6
 
 [sub_resource type="Resource" id="Resource_8heks"]
 script = ExtResource("4_8helo")
-imagery_name = "TARGET_NPC_LIBAI:wine_gourd"
+imagery_name = "wine_gourd"
 
 [sub_resource type="Resource" id="Resource_4qy2q"]
 script = ExtResource("5_hoc5g")

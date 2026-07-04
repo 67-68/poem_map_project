@@ -22,7 +22,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_6aglh"]
 script = ExtResource("4_kux3k")
-imagery_name = "ENV_SOCIETY_FAMINE:starving_bone"
+imagery_name = "starving_bone"
 
 [sub_resource type="Resource" id="Resource_2n3sj"]
 script = ExtResource("5_2st42")
@@ -69,7 +69,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_djgmh"]
 script = ExtResource("4_kux3k")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_63lhq"]
 script = ExtResource("5_2st42")

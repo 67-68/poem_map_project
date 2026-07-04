@@ -33,7 +33,7 @@ leverage_key = "vendor_cheap_labor"
 
 [sub_resource type="Resource" id="Resource_oi30v"]
 script = ExtResource("6_6krpw")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_er81h"]
 script = ExtResource("2_x0uiw")
@@ -51,7 +51,7 @@ leverage_key = "vendor_cheap_labor"
 
 [sub_resource type="Resource" id="Resource_rbpwq"]
 script = ExtResource("6_6krpw")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_itlgt"]
 script = ExtResource("2_x0uiw")

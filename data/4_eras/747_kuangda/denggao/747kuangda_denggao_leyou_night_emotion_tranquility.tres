@@ -22,7 +22,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_dkdtm"]
 script = ExtResource("4_dt4x8")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_etd6b"]
 script = ExtResource("5_y334p")

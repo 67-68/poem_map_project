@@ -22,7 +22,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_pyw71"]
 script = ExtResource("4_jt02r")
-imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+imagery_name = "high_tower"
 
 [sub_resource type="Resource" id="Resource_jh611"]
 script = ExtResource("5_ucy3y")
@@ -69,7 +69,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_7fqd8"]
 script = ExtResource("4_jt02r")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_en1le"]
 script = ExtResource("5_ucy3y")

@@ -13,7 +13,7 @@ script = ExtResource("2_xs6s4")
 
 [sub_resource type="Resource" id="Resource_f2r36"]
 script = ExtResource("4_fpkx8")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_e7fft"]
 script = ExtResource("2_xs6s4")
@@ -30,7 +30,7 @@ description = "你微点头，拿起笔，恭书祝寿绝句，双手奉上。"
 
 [sub_resource type="Resource" id="Resource_dbykw"]
 script = ExtResource("4_fpkx8")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+imagery_name = "temple_bell"
 
 [sub_resource type="Resource" id="Resource_r13kt"]
 script = ExtResource("2_xs6s4")

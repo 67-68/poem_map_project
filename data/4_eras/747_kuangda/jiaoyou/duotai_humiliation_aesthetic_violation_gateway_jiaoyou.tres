@@ -13,7 +13,7 @@ script = ExtResource("2_xpe67")
 
 [sub_resource type="Resource" id="Resource_p7dpk"]
 script = ExtResource("4_1kri5")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_risgr"]
 script = ExtResource("2_xpe67")
@@ -30,7 +30,7 @@ description = "点头应允，提笔抹去原句，依言改作“双燕衔泥�
 
 [sub_resource type="Resource" id="Resource_h35ss"]
 script = ExtResource("4_1kri5")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+imagery_name = "temple_bell"
 
 [sub_resource type="Resource" id="Resource_4oauu"]
 script = ExtResource("2_xpe67")

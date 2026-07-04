@@ -21,7 +21,7 @@ description = "你苦笑一声，紧了紧空瘪的干粮袋，迈步离开。"
 
 [sub_resource type="Resource" id="Resource_mdpgv"]
 script = ExtResource("5_viu0u")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_d248d"]
 script = ExtResource("2_c22bf")

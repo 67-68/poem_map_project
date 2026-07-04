@@ -33,7 +33,7 @@ leverage_key = "vendor_cheap_labor"
 
 [sub_resource type="Resource" id="Resource_l41j1"]
 script = ExtResource("6_lacen")
-imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+imagery_name = "willow_branch"
 
 [sub_resource type="Resource" id="Resource_a4prl"]
 script = ExtResource("2_s1857")
@@ -51,7 +51,7 @@ leverage_key = "vendor_cheap_labor"
 
 [sub_resource type="Resource" id="Resource_q8nab"]
 script = ExtResource("6_lacen")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_pjhri"]
 script = ExtResource("2_s1857")

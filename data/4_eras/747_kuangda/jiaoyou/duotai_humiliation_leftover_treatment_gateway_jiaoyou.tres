@@ -17,7 +17,7 @@ description = "搁笔于案，转身步入夜色。"
 
 [sub_resource type="Resource" id="Resource_tg7lu"]
 script = ExtResource("5_0uy30")
-imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+imagery_name = "willow_branch"
 
 [sub_resource type="Resource" id="Resource_3bya6"]
 script = ExtResource("2_w7wdo")
@@ -30,7 +30,7 @@ description = "拱手称谢，将碎银收入囊中。"
 
 [sub_resource type="Resource" id="Resource_h7f65"]
 script = ExtResource("5_0uy30")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_6xewe"]
 script = ExtResource("2_w7wdo")

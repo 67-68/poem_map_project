@@ -21,7 +21,7 @@ description = "低头苦笑，举碗向邻桌遥遥虚敬，又自顾斟满饮�
 
 [sub_resource type="Resource" id="Resource_ykl6c"]
 script = ExtResource("5_essl5")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_2k2ue"]
 script = ExtResource("2_1spjt")

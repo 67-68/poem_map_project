@@ -13,7 +13,7 @@ script = ExtResource("2_icy3v")
 
 [sub_resource type="Resource" id="Resource_xua6s"]
 script = ExtResource("4_a44wt")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_fdtfp"]
 script = ExtResource("2_icy3v")
@@ -30,7 +30,7 @@ description = "接过笔，划去原句，写下“户户有余粮”。"
 
 [sub_resource type="Resource" id="Resource_vbfdc"]
 script = ExtResource("4_a44wt")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_a7yxj"]
 script = ExtResource("2_icy3v")

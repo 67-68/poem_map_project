@@ -22,7 +22,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_lceff"]
 script = ExtResource("4_vycei")
-imagery_name = "ENV_POLITICS_PROSPER:cloud_and_sun"
+imagery_name = "cloud_and_sun"
 
 [sub_resource type="Resource" id="Resource_54vrn"]
 script = ExtResource("5_oletu")
@@ -69,7 +69,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_l72nh"]
 script = ExtResource("4_vycei")
-imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+imagery_name = "high_tower"
 
 [sub_resource type="Resource" id="Resource_u62vj"]
 script = ExtResource("5_oletu")

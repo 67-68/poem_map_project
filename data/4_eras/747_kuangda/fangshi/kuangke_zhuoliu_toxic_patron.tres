@@ -60,7 +60,7 @@ value = -5
 
 [sub_resource type="Resource" id="Resource_drcm5"]
 script = ExtResource("7_m35jg")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+imagery_name = "temple_bell"
 
 [sub_resource type="Resource" id="Resource_887hp"]
 script = ExtResource("4_e460r")

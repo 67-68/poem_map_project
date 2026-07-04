@@ -22,7 +22,7 @@ value = 11
 
 [sub_resource type="Resource" id="Resource_vwmnu"]
 script = ExtResource("4_lyax8")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_5dc0j"]
 script = ExtResource("5_y8y4e")
@@ -69,7 +69,7 @@ value = 11
 
 [sub_resource type="Resource" id="Resource_ykqla"]
 script = ExtResource("4_lyax8")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_r5tin"]
 script = ExtResource("5_y8y4e")

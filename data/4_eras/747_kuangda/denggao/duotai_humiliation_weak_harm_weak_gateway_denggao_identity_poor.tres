@@ -21,7 +21,7 @@ description = "苦笑一下，退到旁边垛口，背风而立。"
 
 [sub_resource type="Resource" id="Resource_tywqa"]
 script = ExtResource("5_31i6f")
-imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+imagery_name = "high_tower"
 
 [sub_resource type="Resource" id="Resource_evlul"]
 script = ExtResource("2_vy2eg")

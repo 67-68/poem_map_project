@@ -36,7 +36,7 @@ value = 5
 
 [sub_resource type="Resource" id="Resource_fnwaf"]
 script = ExtResource("7_4ixkl")
-imagery_name = "ENV_NATURE_SNOWSTORM:lone_snow"
+imagery_name = "lone_snow"
 
 [sub_resource type="Resource" id="Resource_n28mv"]
 script = ExtResource("4_vjm3j")
@@ -57,7 +57,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_2nv7n"]
 script = ExtResource("7_4ixkl")
-imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+imagery_name = "high_tower"
 
 [sub_resource type="Resource" id="Resource_otuvy"]
 script = ExtResource("4_vjm3j")

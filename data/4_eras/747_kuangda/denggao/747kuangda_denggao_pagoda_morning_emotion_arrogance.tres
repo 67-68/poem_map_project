@@ -22,7 +22,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_3irgp"]
 script = ExtResource("4_u2iy1")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_3v4tv"]
 script = ExtResource("5_eod1s")
@@ -69,7 +69,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_ixehq"]
 script = ExtResource("4_u2iy1")
-imagery_name = "ACTION_TRAVEL_CLIMB:high_tower"
+imagery_name = "high_tower"
 
 [sub_resource type="Resource" id="Resource_3d6br"]
 script = ExtResource("5_eod1s")

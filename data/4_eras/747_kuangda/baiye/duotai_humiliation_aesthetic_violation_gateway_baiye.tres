@@ -13,7 +13,7 @@ script = ExtResource("2_xnnsl")
 
 [sub_resource type="Resource" id="Resource_rcjmr"]
 script = ExtResource("4_jt6xl")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_fognw"]
 script = ExtResource("2_xnnsl")
@@ -30,7 +30,7 @@ description = "坐下，蘸墨，将划去的句子改作吉祥贺语。"
 
 [sub_resource type="Resource" id="Resource_ybwkw"]
 script = ExtResource("4_jt6xl")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_g0fj2"]
 script = ExtResource("2_xnnsl")

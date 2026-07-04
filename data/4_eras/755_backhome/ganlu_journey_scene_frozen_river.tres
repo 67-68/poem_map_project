@@ -19,11 +19,11 @@ value = 5
 
 [sub_resource type="Resource" id="Resource_tewb0"]
 script = ExtResource("5_6kqew")
-imagery_name = "ENVIRONMENT:snow"
+imagery_name = "snow"
 
 [sub_resource type="Resource" id="Resource_8f83y"]
 script = ExtResource("5_6kqew")
-imagery_name = "ENVIRONMENT:wind"
+imagery_name = "wind"
 
 [sub_resource type="Resource" id="Resource_67r78"]
 script = ExtResource("6_642xf")

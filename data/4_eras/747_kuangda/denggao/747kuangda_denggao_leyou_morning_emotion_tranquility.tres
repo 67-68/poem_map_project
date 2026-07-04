@@ -22,7 +22,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_wq126"]
 script = ExtResource("4_kio3x")
-imagery_name = "ENV_NATURE_SNOWSTORM:lone_snow"
+imagery_name = "lone_snow"
 
 [sub_resource type="Resource" id="Resource_v7udn"]
 script = ExtResource("5_sllna")
@@ -69,7 +69,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_urlx4"]
 script = ExtResource("4_kio3x")
-imagery_name = "ENV_POLITICS_PROSPER:cloud_and_sun"
+imagery_name = "cloud_and_sun"
 
 [sub_resource type="Resource" id="Resource_qe0le"]
 script = ExtResource("5_sllna")

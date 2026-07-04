@@ -21,7 +21,7 @@ description = "略顿首，将公文归位，低声道“告退”，自行离�
 
 [sub_resource type="Resource" id="Resource_qt5vw"]
 script = ExtResource("5_3jc1m")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_hb1hf"]
 script = ExtResource("2_4o0om")

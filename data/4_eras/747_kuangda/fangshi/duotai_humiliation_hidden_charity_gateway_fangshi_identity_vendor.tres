@@ -17,7 +17,7 @@ description = "将饼放回铺板，转身没入人流，未发一言。"
 
 [sub_resource type="Resource" id="Resource_euwnt"]
 script = ExtResource("5_c5iug")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_4gki7"]
 script = ExtResource("2_yuqt5")
@@ -30,7 +30,7 @@ description = "接过饼，低首道声谢，咬了一口，目光落在街石�
 
 [sub_resource type="Resource" id="Resource_uyvnv"]
 script = ExtResource("5_c5iug")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_ftrae"]
 script = ExtResource("2_yuqt5")

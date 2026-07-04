@@ -1,17 +1,16 @@
-[gd_resource type="Resource" script_class="Trait" format=3]
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://dcbi03q0dyri4"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_propop"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_og5ni"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_wmb25"]
 
-[sub_resource type="Resource" id="Resource_poisoned_health"]
-script = ExtResource("3_propop")
+[sub_resource type="Resource" id="Resource_mamqa"]
+script = ExtResource("2_wmb25")
 str_props = "health"
 value = -15
 
 [resource]
-script = ExtResource("1_trait")
-trait_effect_operations = Array[ExtResource("2_baseop")]([SubResource("Resource_poisoned_health")])
+script = ExtResource("1_og5ni")
+topic = "DISEASE"
+trait_effect_operations = Array[ExtResource("2_wmb25")]([SubResource("Resource_mamqa")])
 uuid = "poisoned"
 name = "中毒"
-description = "面色青灰，指尖发黑，腹中翻涌不止。每旬流失15点生命。"

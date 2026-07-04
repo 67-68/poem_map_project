@@ -21,7 +21,7 @@ description = "退到偏廊坐下，将湿了的袖口拧干，垂首等待。"
 
 [sub_resource type="Resource" id="Resource_b8p78"]
 script = ExtResource("5_8e0p6")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_eqmyf"]
 script = ExtResource("2_say8a")

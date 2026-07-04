@@ -14,7 +14,7 @@ value = 11
 
 [sub_resource type="Resource" id="Resource_7qy4u"]
 script = ExtResource("4_bdmlb")
-imagery_name = "HEALTH:drunk"
+imagery_name = "drunk"
 
 [sub_resource type="Resource" id="Resource_kb5t2"]
 script = ExtResource("5_fj6fv")

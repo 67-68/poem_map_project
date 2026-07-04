@@ -17,7 +17,7 @@ description = "不碰铜钱，不发一言，转身步出偏厅。"
 
 [sub_resource type="Resource" id="Resource_8s6j4"]
 script = ExtResource("5_w3w7x")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_exanl"]
 script = ExtResource("2_s47y6")
@@ -30,7 +30,7 @@ description = "拱手道谢，将三文钱纳入袖中，退出厅门。"
 
 [sub_resource type="Resource" id="Resource_6k2rw"]
 script = ExtResource("5_w3w7x")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_nrw3y"]
 script = ExtResource("2_s47y6")

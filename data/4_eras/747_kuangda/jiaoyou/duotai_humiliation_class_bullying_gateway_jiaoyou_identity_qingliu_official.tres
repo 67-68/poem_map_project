@@ -21,7 +21,7 @@ description = "你自斟残酒仰尽，将杯倒扣案上，对主人微微颔�
 
 [sub_resource type="Resource" id="Resource_6m36q"]
 script = ExtResource("5_wnabp")
-imagery_name = "ACTION_SOCIAL_PARTING:willow_branch"
+imagery_name = "willow_branch"
 
 [sub_resource type="Resource" id="Resource_pkumt"]
 script = ExtResource("2_puyve")

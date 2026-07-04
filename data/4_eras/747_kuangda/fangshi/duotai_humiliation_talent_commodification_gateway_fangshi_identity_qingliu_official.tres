@@ -13,7 +13,7 @@ script = ExtResource("2_46xlu")
 
 [sub_resource type="Resource" id="Resource_qtcn6"]
 script = ExtResource("4_rf3hn")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_gs65g"]
 script = ExtResource("2_46xlu")
@@ -30,7 +30,7 @@ description = "怔了半瞬，提笔蘸墨，低头写了几行。"
 
 [sub_resource type="Resource" id="Resource_7q8um"]
 script = ExtResource("4_rf3hn")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_kdvf4"]
 script = ExtResource("2_46xlu")

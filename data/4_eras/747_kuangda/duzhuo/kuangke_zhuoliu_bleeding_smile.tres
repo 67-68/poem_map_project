@@ -60,7 +60,7 @@ value = 16
 
 [sub_resource type="Resource" id="Resource_le0or"]
 script = ExtResource("7_fhcyp")
-imagery_name = "ENV_NATURE_SNOWSTORM:lone_snow"
+imagery_name = "lone_snow"
 
 [sub_resource type="Resource" id="Resource_ho5xm"]
 script = ExtResource("4_ly7jf")

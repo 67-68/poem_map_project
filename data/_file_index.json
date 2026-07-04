@@ -492,8 +492,7 @@
     "3_actions_pool/decided_events/demonstrate_poem_to_people.tres",
     "3_actions_pool/decided_events/end_of_exam.tres",
     "3_actions_pool/decided_events/event_ambition_start.tres",
-    "3_actions_pool/decided_events/event_money_lower_0.tres",
-    "3_actions_pool/decided_events/event_money_lower_0_wandering.tres",
+    "3_actions_pool/decided_events/event_money_lower_0_innkeeper.tres",
     "3_actions_pool/actions/bai_ye.tres",
     "3_actions_pool/actions/deng_gao.tres",
     "3_actions_pool/actions/du_zhuo.tres",
@@ -577,6 +576,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-03T11:13:03.190205+00:00",
-  "total": 576
+  "generated_at": "2026-07-04T10:38:47.471585+00:00",
+  "total": 575
 }

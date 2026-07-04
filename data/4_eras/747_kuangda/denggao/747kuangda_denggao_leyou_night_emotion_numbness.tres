@@ -36,7 +36,7 @@ value = 5
 
 [sub_resource type="Resource" id="Resource_2ocp4"]
 script = ExtResource("7_tjqvh")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_0omm4"]
 script = ExtResource("4_lgv2y")
@@ -57,7 +57,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_bxbbp"]
 script = ExtResource("7_tjqvh")
-imagery_name = "ENV_NATURE_AUTUMNWIND:falling_leaf"
+imagery_name = "falling_leaf"
 
 [sub_resource type="Resource" id="Resource_wf7g2"]
 script = ExtResource("4_lgv2y")

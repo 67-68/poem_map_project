@@ -33,7 +33,7 @@ leverage_key = "vendor_cheap_labor"
 
 [sub_resource type="Resource" id="Resource_dlh3p"]
 script = ExtResource("6_erobb")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_jl7kp"]
 script = ExtResource("2_pgx2l")
@@ -51,7 +51,7 @@ leverage_key = "vendor_cheap_labor"
 
 [sub_resource type="Resource" id="Resource_tt8l0"]
 script = ExtResource("6_erobb")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_3dqhj"]
 script = ExtResource("2_pgx2l")

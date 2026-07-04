@@ -22,7 +22,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_u0r7v"]
 script = ExtResource("4_6rnr4")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+imagery_name = "temple_bell"
 
 [sub_resource type="Resource" id="Resource_ppb8n"]
 script = ExtResource("5_uvrtd")
@@ -69,7 +69,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_rljgj"]
 script = ExtResource("4_6rnr4")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_kvms7"]
 script = ExtResource("5_uvrtd")

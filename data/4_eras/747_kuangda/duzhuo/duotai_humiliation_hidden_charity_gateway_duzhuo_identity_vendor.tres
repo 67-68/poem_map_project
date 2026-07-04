@@ -17,7 +17,7 @@ description = "从袖中取出一文钱压在碗底，起身推门走入夜色�
 
 [sub_resource type="Resource" id="Resource_ni7o7"]
 script = ExtResource("5_5vgu5")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_4roqf"]
 script = ExtResource("2_qk0f5")

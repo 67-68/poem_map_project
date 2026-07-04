@@ -17,7 +17,7 @@ description = "你将纸条抽出，看也不看，递还给门子。“不必�
 
 [sub_resource type="Resource" id="Resource_1up43"]
 script = ExtResource("5_2onkx")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_0yeyl"]
 script = ExtResource("2_tsn4n")
@@ -30,7 +30,7 @@ description = "你折叠纸条，收好诗稿，朝门房方向拱了拱手。"
 
 [sub_resource type="Resource" id="Resource_1dk3d"]
 script = ExtResource("5_2onkx")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_1mcix"]
 script = ExtResource("2_tsn4n")

@@ -14,7 +14,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_asxrp"]
 script = ExtResource("4_are5d")
-imagery_name = "COURT:corrupt"
+imagery_name = "corrupt"
 
 [sub_resource type="Resource" id="Resource_eixbt"]
 script = ExtResource("5_e0v75")

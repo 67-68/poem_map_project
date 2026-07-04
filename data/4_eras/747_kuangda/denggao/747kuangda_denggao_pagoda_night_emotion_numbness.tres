@@ -36,7 +36,7 @@ value = 5
 
 [sub_resource type="Resource" id="Resource_gmp7k"]
 script = ExtResource("7_3voap")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_718k7"]
 script = ExtResource("4_c63xe")
@@ -57,7 +57,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_jn0y5"]
 script = ExtResource("7_3voap")
-imagery_name = "VIBE_THEME_HISTORY:ruined_wall"
+imagery_name = "ruined_wall"
 
 [sub_resource type="Resource" id="Resource_0e45s"]
 script = ExtResource("4_c63xe")

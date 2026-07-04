@@ -17,7 +17,7 @@ description = "看了一眼铜钱，转身走进西市的人流。"
 
 [sub_resource type="Resource" id="Resource_k00rq"]
 script = ExtResource("5_st23a")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_diqjl"]
 script = ExtResource("2_kfhev")
@@ -30,7 +30,7 @@ description = "说了声多谢，用袖口拂去铜钱上的灰尘，收入怀�
 
 [sub_resource type="Resource" id="Resource_fql7e"]
 script = ExtResource("5_st23a")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_nbsqu"]
 script = ExtResource("2_kfhev")

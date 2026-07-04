@@ -13,7 +13,7 @@ script = ExtResource("2_650j8")
 
 [sub_resource type="Resource" id="Resource_h4l1j"]
 script = ExtResource("4_hws8g")
-imagery_name = "TARGET_FACTION_ROYAL:jade_step"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_sqt8n"]
 script = ExtResource("2_650j8")
@@ -30,7 +30,7 @@ description = "你默然坐下，提笔写一首五绝，搁笔而去。"
 
 [sub_resource type="Resource" id="Resource_fsc3u"]
 script = ExtResource("4_hws8g")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_a5gv8"]
 script = ExtResource("2_650j8")

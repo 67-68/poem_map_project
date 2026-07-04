@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="Trait" format=3]
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://dj4yr50hdrqg6"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_lm0p0"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_a8jsv"]
 
 [resource]
-script = ExtResource("1_trait")
+script = ExtResource("1_lm0p0")
 uuid = "sprained_ankle"
 name = "崴脚"
-description = "脚踝肿如馒头，每一步都钻心地疼。行动消耗+1天。"

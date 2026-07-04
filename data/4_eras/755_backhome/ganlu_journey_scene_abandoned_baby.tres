@@ -14,11 +14,11 @@ value = 21
 
 [sub_resource type="Resource" id="Resource_w4eam"]
 script = ExtResource("4_hvlr3")
-imagery_name = "EMOTION:despair"
+imagery_name = "despair"
 
 [sub_resource type="Resource" id="Resource_uvy53"]
 script = ExtResource("4_hvlr3")
-imagery_name = "ENVIRONMENT:snow"
+imagery_name = "snow"
 
 [sub_resource type="Resource" id="Resource_nvo2b"]
 script = ExtResource("5_8b14u")

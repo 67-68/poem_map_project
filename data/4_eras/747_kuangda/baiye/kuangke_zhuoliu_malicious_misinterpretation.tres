@@ -57,7 +57,7 @@ value = 21
 
 [sub_resource type="Resource" id="Resource_ydw6h"]
 script = ExtResource("7_wabe2")
-imagery_name = "ACTION_TRAVEL_BOAT:lone_sail"
+imagery_name = "lone_sail"
 
 [sub_resource type="Resource" id="Resource_yla63"]
 script = ExtResource("8_pfs5e")

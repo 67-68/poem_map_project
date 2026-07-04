@@ -18,7 +18,7 @@ value = 11
 
 [sub_resource type="Resource" id="Resource_sdew2"]
 script = ExtResource("4_kfnjr")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_kjjtq"]
 script = ExtResource("5_x3ar0")
@@ -40,7 +40,7 @@ value = 11
 
 [sub_resource type="Resource" id="Resource_o1ifs"]
 script = ExtResource("4_kfnjr")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_ravaw"]
 script = ExtResource("5_x3ar0")

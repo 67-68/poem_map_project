@@ -22,7 +22,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_dusts"]
 script = ExtResource("4_5dovv")
-imagery_name = "ENV_SOCIETY_FAMINE:starving_bone"
+imagery_name = "starving_bone"
 
 [sub_resource type="Resource" id="Resource_nsa8w"]
 script = ExtResource("5_cygge")
@@ -69,7 +69,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_ie2xk"]
 script = ExtResource("4_5dovv")
-imagery_name = "ENV_SOCIETY_FAMINE:starving_bone"
+imagery_name = "starving_bone"
 
 [sub_resource type="Resource" id="Resource_kdhrr"]
 script = ExtResource("5_cygge")

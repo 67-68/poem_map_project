@@ -18,7 +18,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_uf8po"]
 script = ExtResource("4_c5pa3")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_rerj1"]
 script = ExtResource("5_4pgf8")
@@ -57,7 +57,7 @@ value = 5
 
 [sub_resource type="Resource" id="Resource_w1wpl"]
 script = ExtResource("4_c5pa3")
-imagery_name = "VIBE_AESTHETIC_ELEGANT:ink_stone"
+imagery_name = "ink_stone"
 
 [sub_resource type="Resource" id="Resource_4mwc5"]
 script = ExtResource("5_4pgf8")

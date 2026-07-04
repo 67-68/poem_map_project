@@ -56,7 +56,7 @@ value = 16
 
 [sub_resource type="Resource" id="Resource_oh6ml"]
 script = ExtResource("7_h75yf")
-imagery_name = "TARGET_OBJECT_SWORD:cold_blade"
+imagery_name = "cold_blade"
 
 [sub_resource type="Resource" id="Resource_3l4ba"]
 script = ExtResource("4_y5ime")

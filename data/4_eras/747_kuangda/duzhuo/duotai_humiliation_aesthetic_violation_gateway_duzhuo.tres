@@ -13,7 +13,7 @@ script = ExtResource("2_m06uk")
 
 [sub_resource type="Resource" id="Resource_egvki"]
 script = ExtResource("4_t8s6j")
-imagery_name = "ACTION_ENTERTAIN_DRINK:empty_cup"
+imagery_name = "empty_cup"
 
 [sub_resource type="Resource" id="Resource_bdjtf"]
 script = ExtResource("2_m06uk")
@@ -30,7 +30,7 @@ description = "勉强提笔，按他说的改成“江流映日红”。"
 
 [sub_resource type="Resource" id="Resource_a3jjo"]
 script = ExtResource("4_t8s6j")
-imagery_name = "VIBE_PHILOSOPHY_ZEN:temple_bell"
+imagery_name = "temple_bell"
 
 [sub_resource type="Resource" id="Resource_kads7"]
 script = ExtResource("2_m06uk")

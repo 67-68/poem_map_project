@@ -21,7 +21,7 @@ description = "你拱手还礼，端起凉茶饮尽，将名帖留在桌上，�
 
 [sub_resource type="Resource" id="Resource_fpeyc"]
 script = ExtResource("5_wi66f")
-imagery_name = "TARGET_NPC_DUFU:thatched_grass"
+imagery_name = "thatched_grass"
 
 [sub_resource type="Resource" id="Resource_h81wl"]
 script = ExtResource("2_5b4qv")

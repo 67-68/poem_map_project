@@ -36,7 +36,7 @@ value = 5
 
 [sub_resource type="Resource" id="Resource_oyh71"]
 script = ExtResource("7_a20rc")
-imagery_name = "ENV_NATURE_NIGHTMOON:cold_moon"
+imagery_name = "cold_moon"
 
 [sub_resource type="Resource" id="Resource_asif1"]
 script = ExtResource("4_i17lh")
@@ -57,7 +57,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_tn287"]
 script = ExtResource("7_a20rc")
-imagery_name = "VIBE_THEME_MACABRE:ghost_fire"
+imagery_name = "ghost_fire"
 
 [sub_resource type="Resource" id="Resource_5tpde"]
 script = ExtResource("4_i17lh")
