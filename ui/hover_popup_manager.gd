@@ -29,14 +29,31 @@ class HoverDisplayDelegate:
 	func on_exit(_binding) -> void:
 		pass
 
-## 从右侧滑入 NarrativeOverlay，显示 hover 文本
+## 从右侧滑入 NarrativeOverlay，显示 hover 文本。
+## 🔒 动画锁：slide-in 期间阻止 mouse_exit 触发 slide-out，等动画播完再处理排队的 exit。
+##    slide-out 同理：播放期间阻止 slide-in 重入，等动画播完。
 class SlideFromRightDelegate extends HoverDisplayDelegate:
 	var _manager_ref: WeakRef
+	var _animating: bool = false          # 动画进行中，阻止重入
+	var _pending_exit: bool = false       # 动画期间收到 exit 请求，排队等动画完成后执行
+	var _pending_exit_binding = null      # 排队时的 binding 引用
 
 	func _init(manager: Node) -> void:
 		_manager_ref = weakref(manager)
 
 	func on_enter(binding) -> void:
+		# 🔒 动画锁：slide-out 动画进行中，忽略 enter（等它播完）
+		if _animating:
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: on_enter ignored, animating (pending_exit=%s)" % str(_pending_exit))
+			# 取消排队 exit — 用户回来了
+			_pending_exit = false
+			_pending_exit_binding = null
+			return
+		# 已经在显示状态，忽略重复 enter
+		if not _pending_exit:
+			# 面板正在可见位置，忽略同 binding 的二次 enter
+			pass
+
 		var mgr = _manager_ref.get_ref()
 		if not mgr:
 			return
@@ -50,22 +67,60 @@ class SlideFromRightDelegate extends HoverDisplayDelegate:
 		overlay.show_hover_text(narrative, vector)
 		var visualizer = overlay.get_node_or_null("TapeVisualizer")
 		if visualizer and visualizer.has_method("play_slide_in_from_right"):
+			_animating = true
 			visualizer.play_slide_in_from_right(0.3)
-			Logging.info("HoverPopupManager.SlideFromRightDelegate: slide_in_from_right started")
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: slide_in_from_right started, animating=true")
+			# 等待动画完成后清除锁
+			await _wait_for_anim(visualizer)
+			_animating = false
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: slide_in finished, animating=false, pending_exit=%s" % str(_pending_exit))
+			# 动画完成后，如果有排队的 exit，执行它
+			if _pending_exit:
+				_pending_exit = false
+				_exec_slide_out(overlay)
 		else:
 			Logging.err("HoverPopupManager.SlideFromRightDelegate: TapeVisualizer not found or missing method")
 
-	func on_exit(binding) -> void:
+	func on_exit(_binding) -> void:
+		# 🔒 动画锁：slide-in 动画进行中，排队 exit
+		if _animating:
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: on_exit queued, animating")
+			_pending_exit = true
+			return
 		var mgr = _manager_ref.get_ref()
 		if not mgr:
 			return
 		var overlay = mgr._get_narrative_overlay()
 		if not overlay:
 			return
+		_exec_slide_out(overlay)
+
+	## 实际执行 slide-out 动画
+	func _exec_slide_out(overlay: Node) -> void:
 		var visualizer = overlay.get_node_or_null("TapeVisualizer")
 		if visualizer and visualizer.has_method("play_slide_to_right"):
+			_animating = true
 			visualizer.play_slide_to_right(0.3)
-			Logging.info("HoverPopupManager.SlideFromRightDelegate: slide_to_right started")
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: slide_to_right started, animating=true")
+			await _wait_for_anim(visualizer)
+			_animating = false
+			# 🆕 动画完成后：隐藏 hover 文本容器
+			if overlay.has_method("hide_hover_text"):
+				overlay.hide_hover_text()
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: slide_out finished, animating=false, hover hidden")
+		else:
+			Logging.err("HoverPopupManager.SlideFromRightDelegate: TapeVisualizer not found for slide_out")
+
+	## 等待 tape_visualizer 的 _tween 完成（轮询，简单可靠）
+	func _wait_for_anim(visualizer: Node) -> void:
+		var tree := Engine.get_main_loop() as SceneTree
+		if not tree:
+			return
+		# 最坏等 5 秒防止永久卡死
+		for _i in range(100):
+			await tree.process_frame
+			if not visualizer._tween or not visualizer._tween.is_valid() or not visualizer._tween.is_running():
+				break
 
 ## 在 NarrativeOverlay 底部淡入 hover 文本
 class BelowOverlayDelegate extends HoverDisplayDelegate:

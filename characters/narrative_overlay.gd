@@ -1,5 +1,8 @@
 class_name NarrativeOverlay extends PanelContainer
 
+## 事件显示开始时发射（供 HoverPopupManager 等外部系统监听）
+signal event_display_started()
+
 # 纸带模式（极乐迪斯科式）：NarrativeOverlay 不再是一次性弹窗，
 # 而是持续的追加式事件纸带。纸带全空时才 hide()。
 #
@@ -99,6 +102,14 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	# ── 进入事件状态，解除 auto-advance 封锁，dismiss 所有 hover ──
 	_auto_advance_blocked = false
 	HoverPopupManager.dismiss_all()
+
+	# 🆕 事件开始时：恢复 overlay 快照位置 + 显示 tape + 清 hover 面板
+	visualizer.restore_snapshot()
+	show()
+	hide_hover_text()
+
+	# 🆕 发射事件显示开始信号
+	event_display_started.emit()
 
 	var data: BaseEvent = entry.get("data")
 	var context: Dictionary = entry.get("context", {})

@@ -122,7 +122,7 @@ func _register_hover_popup() -> void:
 	
 	var hint: Dictionary = ActionHintBuilder.build_action_hint(action, _is_locked)
 	
-	HoverPopupManager.register(self, {"narrative": hint["narrative"], "vector": hint["vector"]}, 0.2, 1.0, HoverPopupManager.FlowType.SLIDE_FROM_RIGHT)
+	HoverPopupManager.register(self, {"narrative": hint["narrative"], "vector": hint["vector"]}, 0.4, 1.0, HoverPopupManager.FlowType.SLIDE_FROM_RIGHT)
 	Logging.info("SceneActionPanel._register_hover_popup: done for '%s' (SLIDE_FROM_RIGHT)" % action.name)
 
 

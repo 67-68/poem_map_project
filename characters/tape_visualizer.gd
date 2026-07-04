@@ -37,7 +37,11 @@ const DIM_HISTORY_INK_COLOR: Color = Color(0.75, 0.62, 0.42, 0.35)
 
 var _tween: Tween
 var _tape_initialized: bool = false
+var _tape_target_x: float = 0.0
 var _tape_target_y: float = 0.0
+var _snapshot_x: float = 0.0   # 初始化时的自然位置快照
+var _snapshot_y: float = 0.0
+var _snapshot_size: Vector2 = Vector2.ZERO  # 初始化时的 size 快照
 
 # ═══════════════════════════════════════════════════════════════════
 # 1. play_show_tape() — 纸带从屏幕顶部外滑入
@@ -54,8 +58,10 @@ func play_show_tape() -> void:
 		_tween.kill()
 
 	# 延迟记录 shadow_box 的静止位置（第一次调用时布局必定完成）
-	if _tape_target_y == 0.0:
+	if _tape_target_x == 0.0 and _tape_target_y == 0.0:
+		_tape_target_x = shadow_box.position.x
 		_tape_target_y = shadow_box.position.y
+		_store_snapshot()
 
 	var viewport_height := get_tree().root.get_visible_rect().size.y
 
@@ -109,8 +115,10 @@ func play_show_tape_from_bottom() -> void:
 		_tween.kill()
 
 	# 延迟记录 shadow_box 的静止位置（第一次调用时布局必定完成）
-	if _tape_target_y == 0.0:
+	if _tape_target_x == 0.0 and _tape_target_y == 0.0:
+		_tape_target_x = shadow_box.position.x
 		_tape_target_y = shadow_box.position.y
+		_store_snapshot()
 
 	var viewport_height := get_tree().root.get_visible_rect().size.y
 
@@ -313,7 +321,7 @@ func _on_slide_back_finished() -> void:
 # ═══════════════════════════════════════════════════════════════════
 
 ## HoverDisplayFlow SLIDE_FROM_RIGHT 的 enter 动画。
-## 将 shadow_box 从屏幕右侧外滑入到 _tape_target_y 位置。
+## 将 shadow_box 从屏幕右侧外滑入到自然位置（_tape_target_x, _tape_target_y）。
 ## 同时 tape_container alpha 从 0→1。
 ## ⚠️ 动画期间不修改 _tape_initialized — 由调用方管理状态。
 func play_slide_in_from_right(duration: float = 0.3) -> void:
@@ -322,7 +330,9 @@ func play_slide_in_from_right(duration: float = 0.3) -> void:
 
 	var viewport_w := get_tree().root.get_visible_rect().size.x
 
-	if _tape_target_y == 0.0:
+	# 首次调用时记录自然位置（anchor + offset 计算后的位置）
+	if _tape_target_x == 0.0 and _tape_target_y == 0.0:
+		_tape_target_x = shadow_box.position.x
 		_tape_target_y = shadow_box.position.y
 
 	# 物理重置：shadow_box 埋到屏幕右侧外
@@ -335,13 +345,13 @@ func play_slide_in_from_right(duration: float = 0.3) -> void:
 
 	_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	_tween.set_parallel(true)
-	# 水平滑动：从右侧外 → 0（恢复到 tscn 的 anchor 计算位置）
-	_tween.tween_property(shadow_box, "position:x", 0.0, duration) \
+	# 水平滑动：从右侧外 → _tape_target_x（NarrativeOverlay 的自然位置）
+	_tween.tween_property(shadow_box, "position:x", _tape_target_x, duration) \
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_tween.tween_property(tape_container, "modulate:a", 1.0, duration * 0.6) \
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-	Logging.info("TapeVisualizer.play_slide_in_from_right: duration=%.2f" % duration)
+	Logging.info("TapeVisualizer.play_slide_in_from_right: duration=%.2f target_x=%.1f target_y=%.1f" % [duration, _tape_target_x, _tape_target_y])
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -401,3 +411,33 @@ func _undim_text_nodes_recursive(node: Node) -> int:
 		else:
 			count += _undim_text_nodes_recursive(child_node)
 	return count
+
+
+# ═══════════════════════════════════════════════════════════════════
+# 11. 快照机制 — 初始化时存位置+size，事件开始时恢复
+# ═══════════════════════════════════════════════════════════════════
+
+## 存储 shadow_box 的初始自然位置和 size 为快照
+## 在 play_show_tape / play_show_tape_from_bottom 首次调用时自动触发
+func _store_snapshot() -> void:
+	_snapshot_x = shadow_box.position.x
+	_snapshot_y = shadow_box.position.y
+	_snapshot_size = shadow_box.size
+	Logging.info("TapeVisualizer._store_snapshot: pos=(%.1f, %.1f) size=%s" % [_snapshot_x, _snapshot_y, _snapshot_size])
+
+## 恢复 shadow_box 到快照位置 + 显示 tape + 重置 size
+## 由 NarrativeOverlay._on_event_ready_to_play 调用
+func restore_snapshot() -> void:
+	if _snapshot_x == 0.0 and _snapshot_y == 0.0:
+		Logging.info("TapeVisualizer.restore_snapshot: 快照尚未初始化，跳过")
+		return
+	if _tween:
+		_tween.kill()
+	shadow_box.position = Vector2(_snapshot_x, _snapshot_y)
+	shadow_box.size = _snapshot_size
+	_tape_target_x = _snapshot_x
+	_tape_target_y = _snapshot_y
+	shadow_box.show()
+	tape_container.show()
+	tape_container.modulate.a = 1.0
+	Logging.info("TapeVisualizer.restore_snapshot: 已恢复 pos=(%.1f, %.1f) size=%s" % [_snapshot_x, _snapshot_y, _snapshot_size])
