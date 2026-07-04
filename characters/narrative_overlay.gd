@@ -148,11 +148,15 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	# 🆕 通知 HoverPopupManager：事件活跃中，hover 无需动画直接显示
 	HoverPopupManager.set_event_active(true)
 
+	Logging.info("[DIAG] _on_event_ready_to_play: ⏰ 即将发射 event_display_started (锁定行动按钮)")
 	# 🆕 发射事件显示开始信号
 	event_display_started.emit()
+	Logging.info("[DIAG] _on_event_ready_to_play: ✅ event_display_started 已发射")
 
 	var data: BaseEvent = entry.get("data")
 	var context: Dictionary = entry.get("context", {})
+	
+	Logging.info("[DIAG] _on_event_ready_to_play: data=%s context=%s" % [data.name if data else "NULL", str(context.keys())])
 
 	# ── 事件入场装配（从原 apply_narrative 迁出）──
 	var all_options: Array = data.init(context)
@@ -161,8 +165,10 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	if _has_no_displayable_option(all_options):
 		var _lt0: float = data.ui_decl.lasting_time if data.ui_decl else 0.0
 		if _lt0 <= 0.0:
-			Logging.err("_on_event_ready_to_play: 事件 '%s' 所有选项文本为空且 lasting_time=0，跳过" % data.name)
+			Logging.err("[DIAG] _on_event_ready_to_play: 事件 '%s' 所有选项文本为空且 lasting_time=0，跳过（即将调用 on_option_selected）" % data.name)
+			Logging.info("[DIAG] _on_event_ready_to_play: 调用 director.on_option_selected 前 _is_active=%s" % director._is_active)
 			director.on_option_selected(null, "[跳过]")
+			Logging.info("[DIAG] _on_event_ready_to_play: 调用 director.on_option_selected 后 _is_active=%s" % director._is_active)
 			return
 		Logging.info("_on_event_ready_to_play: 事件 '%s' 0 选项但 lasting_time=%.1f > 0" % [data.name, _lt0])
 
@@ -339,6 +345,12 @@ func _on_picker_ready(entry: Dictionary) -> void:
 	HoverPopupManager.set_event_active(true)
 	event_display_started.emit()
 
+	# 🐛 修复：恢复快照位置 + 显示自身 + 播放纸带入场动画
+	# 缺少 show() 和 restore_snapshot() 会导致纸带在 hover SLIDE_FROM_RIGHT 动画
+	# 将 shadow_box.position.x 移到屏幕外后，play_show_tape() 不重置 x 坐标，
+	# 纸带技术性 visible 但定位在屏幕右侧外，玩家看不到。
+	visualizer.restore_snapshot()
+	show()
 	visualizer.play_show_tape()
 	BlurManager.show_picker_blur()
 
@@ -376,6 +388,10 @@ func _on_cinematic_ready(entry: Dictionary) -> void:
 	# 🆕 Cinematic 也视为事件活跃，锁定右侧行动栏
 	HoverPopupManager.set_event_active(true)
 	event_display_started.emit()
+
+	# 🐛 修复：同 Picker 路径，恢复快照位置 + 显示自身
+	visualizer.restore_snapshot()
+	show()
 
 	var texts: Array[String] = []
 	var raw_texts = entry.get("texts", [])
@@ -446,6 +462,8 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_hide_requested() -> void:
+	Logging.info("[DIAG] _on_hide_requested: 被调用")
+	
 	# 🚨 隐藏纸带时取消 auto-advance（防止在 hide 动画期间触发）
 	_cancel_auto_advance()
 	_auto_advance_blocked = true
@@ -454,7 +472,9 @@ func _on_hide_requested() -> void:
 
 	# 🆕 通知 HoverPopupManager：事件结束，恢复动画模式
 	HoverPopupManager.set_event_active(false)
+	Logging.info("[DIAG] _on_hide_requested: ⏰ 即将发射 event_display_ended (解锁行动按钮)")
 	event_display_ended.emit()
+	Logging.info("[DIAG] _on_hide_requested: ✅ event_display_ended 已发射")
 
 	# 🚨 如果 overlay 动画正在进行中，延迟 hide 到动画完成后执行
 	if _overlay_anim_in_progress:

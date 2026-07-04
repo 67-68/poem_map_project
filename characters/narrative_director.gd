@@ -164,10 +164,13 @@ func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null):
 		"ui_constructor": ui_constructor,
 	}
 	_event_stack.push_front(entry)
-	Logging.info("Picker 已推入栈顶，%d 个选项" % data.size())
+	Logging.info("[DIAG] _on_push_picker: Picker 已推入栈顶，%d 个选项，_is_active=%s，stack.size=%d" % [data.size(), _is_active, _event_stack.size()])
 
 	if not _is_active:
+		Logging.info("[DIAG] _on_push_picker: _is_active=false，即将调用 _process_next")
 		_process_next()
+	else:
+		Logging.info("[DIAG] _on_push_picker: _is_active=true，跳过 _process_next（picker 悬挂在栈中）")
 
 
 func _on_push_focused_chat(data: Variant, context: Dictionary = {}):
@@ -238,7 +241,9 @@ func _on_request_event_key(key: String, context):
 # ═══════════════════════════════════════════════
 
 func _process_next():
+	Logging.info("[DIAG] _process_next: _is_active=%s, stack.size=%d, queue.size=%d" % [_is_active, _event_stack.size(), _event_queue.size()])
 	if _is_active:
+		Logging.info("[DIAG] _process_next: _is_active=true, 跳过处理")
 		return
 
 	if not _active_animations.is_empty():
@@ -371,7 +376,8 @@ func _resume_world():
 # ═══════════════════════════════════════════════
 
 func on_option_selected(choice, choice_text: String = ""):
-	Logging.info("NarrativeDirector.on_option_selected: choice_text='%s'" % choice_text)
+	Logging.info("[DIAG] on_option_selected: choice_text='%s', _is_active=%s, stack.size=%d" % [choice_text, _is_active, _event_stack.size()])
+	Logging.info("[DIAG] on_option_selected: 即将执行 ConsequenceExecuter.execute_result(%s)" % str(choice))
 
 	EventBus.event_confirmed.emit()
 	event_confirmed_out.emit()
@@ -379,6 +385,7 @@ func on_option_selected(choice, choice_text: String = ""):
 	var _completed_data: BaseEvent = _current_event_data
 
 	await ConsequenceExecuter.execute_result(choice)
+	Logging.info("[DIAG] on_option_selected: ✅ ConsequenceExecuter.execute_result 完成")
 
 	# 守卫：处理 execute_result 期间可能激活的栈条目
 	if _event_stack.size() > 0 and _event_stack[0].get("processed", false):
@@ -395,12 +402,14 @@ func on_option_selected(choice, choice_text: String = ""):
 		else:
 			# 栈顶是 pop 回归后的父事件 (BaseEvent, processed=true)
 			# 不弹出！重置 processed=false，让 _process_next 重新处理
-			Logging.info("on_option_selected: 检测到 pop 回归父事件，重置 processed 标记")
+			Logging.info("[DIAG] on_option_selected: 检测到 pop 回归父事件，重置 processed 标记")
 			_event_stack[0]["processed"] = false
 
+	Logging.info("[DIAG] on_option_selected: ⏰ 将 _is_active 设回 false（原=%s），调用 _resume_world + _process_next" % _is_active)
 	_is_active = false
 	_resume_world()
 	_process_next()
+	Logging.info("[DIAG] on_option_selected: 完成")
 
 
 func on_interrupt_pressed():

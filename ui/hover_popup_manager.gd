@@ -125,6 +125,15 @@ class SlideFromRightDelegate extends HoverDisplayDelegate:
 
 	## 实际执行 slide-out 动画
 	func _exec_slide_out(overlay: Node) -> void:
+		# 🐛 修复：如果事件已激活（Picker/Cinematic/Event 已开始），跳过 slide-out
+		# 否则 Picker 刚调用 play_show_tape() 放好纸带，slide-out 会把它移到右侧外并隐藏
+		if HoverPopupManager._is_event_active:
+			_animating = false
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: 事件活跃中，跳过延迟 slide-out (pending_exit from previous hover)")
+			if overlay.has_method("hide_hover_text"):
+				overlay.hide_hover_text()
+			return
+		
 		var visualizer = overlay.get_node_or_null("TapeVisualizer")
 		if visualizer and visualizer.has_method("play_slide_to_right"):
 			_animating = true
