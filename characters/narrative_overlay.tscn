@@ -152,7 +152,9 @@ size_flags_vertical = 0
 theme_type_variation = &"TitleText"
 text = "效果"
 
-[node name="HoverLabel" type="Label" parent="HoverContainer/V" unique_id=2132663129]
+[node name="HoverLabel" type="RichTextLabel" parent="HoverContainer/V" unique_id=636252671]
 layout_mode = 2
 size_flags_vertical = 0
-theme_type_variation = &"DefaultText"
+theme_type_variation = &"NarrativeText"
+bbcode_enabled = true
+fit_content = true

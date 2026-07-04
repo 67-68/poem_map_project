@@ -12,14 +12,28 @@ const _HoverInfoPopup = preload("res://ui/hover_info_popup.gd")
 ##
 ## 三种显示流 (FlowType):
 ##   POPUP_LEGACY     — 原有浮动 popup（ambition_hud 等）
-##   SLIDE_FROM_RIGHT — NarrativeOverlay 从右侧滑入（action 按钮 hover）
+##   SLIDE_FROM_RIGHT — NarrativeOverlay 从右侧滑入（action 按钮 hover）; 事件活跃时降级为直接显示（同 BELOW_OVERLAY）
 ##   BELOW_OVERLAY    — hover_container 淡入在纸带下方（picker/event 选项 hover）
+##
+## 事件锁:
+##   set_event_active(true)  → SLIDE_FROM_RIGHT 降级为直接显示（无滑动动画）
+##   set_event_active(false) → 恢复滑动动画
 
 # ── 显示流枚举 ─────────────────────────────────────────
 
 enum FlowType { POPUP_LEGACY, SLIDE_FROM_RIGHT, BELOW_OVERLAY }
 
 # ── 显示委托抽象基类 ───────────────────────────────────
+
+## 🆕 事件活跃标志 — 由 NarrativeOverlay 设置
+static var _is_event_active: bool = false
+
+## 设置事件活跃状态（由 NarrativeOverlay 调用）
+## true  → SLIDE_FROM_RIGHT 降级为直接显示（无动画），hover 文本加前缀"请先完成当前事件"
+## false → 恢复滑动动画，移除前缀
+static func set_event_active(active: bool) -> void:
+	_is_event_active = active
+	Logging.info("HoverPopupManager.set_event_active: %s" % str(active))
 
 class HoverDisplayDelegate:
 	## 进入 SHOWING 状态时调用
@@ -32,6 +46,7 @@ class HoverDisplayDelegate:
 ## 从右侧滑入 NarrativeOverlay，显示 hover 文本。
 ## 🔒 动画锁：slide-in 期间阻止 mouse_exit 触发 slide-out，等动画播完再处理排队的 exit。
 ##    slide-out 同理：播放期间阻止 slide-in 重入，等动画播完。
+## 🆕 事件活跃时降级为直接显示（同 BELOW_OVERLAY），无滑动动画。
 class SlideFromRightDelegate extends HoverDisplayDelegate:
 	var _manager_ref: WeakRef
 	var _animating: bool = false          # 动画进行中，阻止重入
@@ -49,10 +64,6 @@ class SlideFromRightDelegate extends HoverDisplayDelegate:
 			_pending_exit = false
 			_pending_exit_binding = null
 			return
-		# 已经在显示状态，忽略重复 enter
-		if not _pending_exit:
-			# 面板正在可见位置，忽略同 binding 的二次 enter
-			pass
 
 		var mgr = _manager_ref.get_ref()
 		if not mgr:
@@ -64,6 +75,14 @@ class SlideFromRightDelegate extends HoverDisplayDelegate:
 		var text_data: Dictionary = binding.delegate_data if binding.delegate_data is Dictionary else {}
 		var narrative: String = text_data.get("narrative", "")
 		var vector: String = text_data.get("vector", "")
+
+		# 🆕 事件活跃时：前缀"请先完成当前事件再选择"，直接显示（不滑动）
+		if HoverPopupManager._is_event_active:
+			narrative = "[color=#cc6666]⚠ 请先完成当前事件再选择[/color]\n\n" + narrative
+			overlay.show_hover_text(narrative, vector)
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: event active → direct display (no animation)")
+			return
+
 		overlay.show_hover_text(narrative, vector)
 		var visualizer = overlay.get_node_or_null("TapeVisualizer")
 		if visualizer and visualizer.has_method("play_slide_in_from_right"):
@@ -86,6 +105,15 @@ class SlideFromRightDelegate extends HoverDisplayDelegate:
 		if _animating:
 			Logging.info("HoverPopupManager.SlideFromRightDelegate: on_exit queued, animating")
 			_pending_exit = true
+			return
+		# 🆕 事件活跃时：直接隐藏，无 slide-out 动画
+		if HoverPopupManager._is_event_active:
+			var mgr = _manager_ref.get_ref()
+			if mgr:
+				var overlay = mgr._get_narrative_overlay()
+				if overlay and overlay.has_method("hide_hover_text"):
+					overlay.hide_hover_text()
+			Logging.info("HoverPopupManager.SlideFromRightDelegate: event active exit → direct hide")
 			return
 		var mgr = _manager_ref.get_ref()
 		if not mgr:

@@ -91,3 +91,51 @@ func _ready():
 	EventBus.request_refresh_action_panel.connect(refresh)
 	# 🆕 监听锁定状态增量刷新
 	EventBus.request_refresh_action_locks.connect(_refresh_locks_only)
+
+	# 🆕 事件锁：监听 NarrativeOverlay 的事件开始/结束信号
+	_connect_event_lock_signals()
+
+
+## 🆕 懒连接 NarrativeOverlay 的事件锁信号
+func _connect_event_lock_signals() -> void:
+	var tree := get_tree()
+	if not tree or not tree.root:
+		Logging.warn("SceneActionScroll._connect_event_lock_signals: tree not ready, retrying deferred")
+		call_deferred("_connect_event_lock_signals")
+		return
+	var main_node := tree.root.get_node_or_null("Main")
+	if not main_node:
+		Logging.warn("SceneActionScroll._connect_event_lock_signals: Main node not found, retrying deferred")
+		call_deferred("_connect_event_lock_signals")
+		return
+	var overlay := main_node.get_node_or_null("TapeLayer/NarrativeOverlay")
+	if not overlay:
+		Logging.warn("SceneActionScroll._connect_event_lock_signals: NarrativeOverlay not found, retrying deferred")
+		call_deferred("_connect_event_lock_signals")
+		return
+	if overlay.has_signal("event_display_started") and not overlay.event_display_started.is_connected(_lock_all_for_event):
+		overlay.event_display_started.connect(_lock_all_for_event)
+		Logging.info("SceneActionScroll: connected to NarrativeOverlay.event_display_started")
+	if overlay.has_signal("event_display_ended") and not overlay.event_display_ended.is_connected(_unlock_all_from_event):
+		overlay.event_display_ended.connect(_unlock_all_from_event)
+		Logging.info("SceneActionScroll: connected to NarrativeOverlay.event_display_ended")
+
+## 🆕 事件开始时：锁定所有行动按钮，提示"请先完成当前事件再选择"
+func _lock_all_for_event() -> void:
+	Logging.info("SceneActionScroll._lock_all_for_event: 锁定所有行动")
+	const EVENT_LOCK_REASON: String = "请先完成当前事件再选择"
+	var children = $V.get_children()
+	for child in children:
+		if not child is SceneActionPanel:
+			continue
+		var panel := child as SceneActionPanel
+		if not panel.action:
+			continue
+		# 临时覆盖 dynamic_failed_hint 并锁住
+		panel.set_locked(EVENT_LOCK_REASON)
+	Logging.info("SceneActionScroll._lock_all_for_event: 已锁定 %d 个行动" % children.size())
+
+## 🆕 事件结束时：恢复行动按钮的正常锁定状态（触发 refresh）
+func _unlock_all_from_event() -> void:
+	Logging.info("SceneActionScroll._unlock_all_from_event: 恢复行动状态")
+	refresh()

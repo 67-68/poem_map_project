@@ -2,6 +2,8 @@ class_name NarrativeOverlay extends PanelContainer
 
 ## 事件显示开始时发射（供 HoverPopupManager 等外部系统监听）
 signal event_display_started()
+## 事件显示结束（纸带隐藏）时发射
+signal event_display_ended()
 
 # 纸带模式（极乐迪斯科式）：NarrativeOverlay 不再是一次性弹窗，
 # 而是持续的追加式事件纸带。纸带全空时才 hide()。
@@ -29,7 +31,7 @@ signal event_display_started()
 @onready var _interrupt_button: Button = $InterruptButton/Button
 @onready var tape_container: PanelContainer = $TapeContainer
 @onready var hover_container: PanelContainer = $HoverContainer
-@onready var hover_label: Label = $HoverContainer/V/HoverLabel
+@onready var hover_label: RichTextLabel = $HoverContainer/V/HoverLabel
 @onready var hover_separator: HSeparator = $HoverContainer/V/HSeparator
 
 # ── Overlay 本地状态（仅 UI 相关）────────────────────
@@ -107,6 +109,9 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	visualizer.restore_snapshot()
 	show()
 	hide_hover_text()
+
+	# 🆕 通知 HoverPopupManager：事件活跃中，hover 无需动画直接显示
+	HoverPopupManager.set_event_active(true)
 
 	# 🆕 发射事件显示开始信号
 	event_display_started.emit()
@@ -389,6 +394,10 @@ func _on_hide_requested() -> void:
 	_auto_advance_blocked = true
 	# 🆕 隐藏纸带时同时清除 hover 文本
 	hide_hover_text()
+
+	# 🆕 通知 HoverPopupManager：事件结束，恢复动画模式
+	HoverPopupManager.set_event_active(false)
+	event_display_ended.emit()
 
 	# 🚨 如果 overlay 动画正在进行中，延迟 hide 到动画完成后执行
 	if _overlay_anim_in_progress:
