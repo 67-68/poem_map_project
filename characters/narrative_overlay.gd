@@ -33,6 +33,7 @@ signal event_display_ended()
 @onready var hover_container: PanelContainer = $TapeContainer/VBox/HoverContainer
 @onready var hover_label: RichTextLabel = $TapeContainer/VBox/HoverContainer/V/HoverLabel
 @onready var hover_separator: HSeparator = $TapeContainer/VBox/HoverContainer/V/HSeparator
+@onready var hover_title: Label = $TapeContainer/VBox/HoverContainer/V/Label
 
 # ── Overlay 本地状态（仅 UI 相关）────────────────────
 var current_event_data: BaseEvent
@@ -42,8 +43,17 @@ var _default_background_texture: Texture2D  # tscn 中 tape_container 的初始�
 var _overlay_anim_in_progress: bool = false  # overlay 动画进行中，阻止 tape_needs_hide
 var _deferred_hide_pending: bool = false     # 动画期间收到 hide 请求，动画完成后执行
 var _auto_advance_blocked: bool = false      # 非事件状态下阻止 _start_auto_advance（cinematic/picker/focuschat 等）
-var _hover_snapshot_text: String = ""        # hover label 快照文本
-var _hover_snapshot_sep: bool = false        # hover separator 快照状态
+var _is_hover_displaying: bool = false       # 🆕 当前是否正在显示 hover 内容
+var _daily_refresh_pending: bool = false     # 🆕 hover 期间收到刷新请求，hover 结束后执行
+var _daily_refresh_queued: bool = false      # 🆕 call_deferred 防抖令牌
+# ── 日常面板快照（与 hover 快照独立）──
+var _daily_snapshot_text: String = ""
+var _daily_snapshot_sep: bool = false
+var _daily_snapshot_title: String = "独白"
+# ── hover 快照（用于 show/hide_hover_text）──
+var _hover_snapshot_text: String = ""
+var _hover_snapshot_sep: bool = false
+var _hover_snapshot_title: String = ""
 
 # ═══════════════════════════════════════════════════
 # _ready() — 信号接线
@@ -54,9 +64,9 @@ func _ready() -> void:
 		return
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-	# ── HoverContainer 永久可见占位 + 存初始快照 ──
+	# ── HoverContainer 永久可见占位 + 初次刷新日常面板 ──
 	hover_container.visible = true
-	_store_hover_snapshot()
+	refresh_daily_panel()
 
 	# ── 配置 TapeVisualizer 的 export 引用（动态注入，避免 tscn 硬编码 uid）──
 	visualizer.shadow_box = self               # NarrativeOverlay 自身即外层容器
@@ -96,6 +106,14 @@ func _ready() -> void:
 	# ── TapeVisualizer → 动画完成回调 ──
 	visualizer.overlay_animation_finished.connect(_on_overlay_animation_completed)
 
+	# 🆕 日常面板刷新：属性/特质/flag 变动时更新
+	if not EventBus.on_trait_change.is_connected(_on_daily_refresh_signal):
+		EventBus.on_trait_change.connect(_on_daily_refresh_signal)
+	if not EventBus.imaginary_changed.is_connected(_on_daily_refresh_signal):
+		EventBus.imaginary_changed.connect(_on_daily_refresh_signal)
+	if not EventBus.on_flag_change.is_connected(_on_daily_refresh_signal):
+		EventBus.on_flag_change.connect(_on_daily_refresh_signal)
+
 	Logging.info("NarrativeOverlay._ready: 信号接线完成")
 
 
@@ -108,10 +126,9 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	_auto_advance_blocked = false
 	HoverPopupManager.dismiss_all()
 
-	# 🆕 事件开始时：恢复 overlay 快照位置 + 显示 tape + 清 hover 面板
+	# 🆕 事件开始时：恢复 overlay 快照位置 + 显示 tape（HoverContainer 保持 daily 内容）
 	visualizer.restore_snapshot()
 	show()
-	hide_hover_text()
 
 	# 🆕 通知 HoverPopupManager：事件活跃中，hover 无需动画直接显示
 	HoverPopupManager.set_event_active(true)
@@ -303,6 +320,10 @@ func _on_picker_ready(entry: Dictionary) -> void:
 	_cancel_auto_advance()
 	_auto_advance_blocked = true
 
+	# 🆕 Picker 也视为事件活跃，锁定右侧行动栏
+	HoverPopupManager.set_event_active(true)
+	event_display_started.emit()
+
 	visualizer.play_show_tape()
 	BlurManager.show_picker_blur()
 
@@ -321,6 +342,9 @@ func _on_picker_ready(entry: Dictionary) -> void:
 func _on_picker_item_selected(entity, entry: Dictionary) -> void:
 	BlurManager.hide_picker_blur()
 	visualizer.undim_history_ink()
+	# 🆕 Picker 选择完成，解锁行动栏
+	HoverPopupManager.set_event_active(false)
+	event_display_ended.emit()
 	director.on_picker_item_selected(entity)
 	Logging.info("NarrativeOverlay._on_picker_item_selected: entity=%s" % str(entity))
 
@@ -333,6 +357,10 @@ func _on_cinematic_ready(entry: Dictionary) -> void:
 	# 🚨 进入 Cinematic 状态：取消任何残留的 auto-advance Timer，阻止 display_complete 二次启动
 	_cancel_auto_advance()
 	_auto_advance_blocked = true
+
+	# 🆕 Cinematic 也视为事件活跃，锁定右侧行动栏
+	HoverPopupManager.set_event_active(true)
+	event_display_started.emit()
 
 	var texts: Array[String] = []
 	var raw_texts = entry.get("texts", [])
@@ -357,6 +385,10 @@ func _on_cinematic_ready(entry: Dictionary) -> void:
 			summary = "⚡ " + first
 	event_ui.append_stub("cinematic", summary)
 
+	# 🆕 Cinematic 完成，解锁行动栏
+	HoverPopupManager.set_event_active(false)
+	event_display_ended.emit()
+
 	director.on_cinematic_finished()
 	Logging.info("NarrativeOverlay._on_cinematic_ready: Cinematic 完成")
 
@@ -369,6 +401,10 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 	# 🚨 进入 FocusChat 状态：取消任何残留的 auto-advance Timer，阻止 display_complete 二次启动
 	_cancel_auto_advance()
 	_auto_advance_blocked = true
+
+	# 🆕 FocusChat 也视为事件活跃，锁定右侧行动栏
+	HoverPopupManager.set_event_active(true)
+	event_display_started.emit()
 
 	visualizer.play_show_tape()
 
@@ -383,6 +419,9 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 	var chat_entry = event_ui.append_focus_chat_entry(data, context)
 	chat_entry.dialogue_finished.connect(func(result):
 		Logging.info("NarrativeOverlay._on_focused_chat_ready: 对话完成")
+		# 🆕 FocusChat 完成，解锁行动栏
+		HoverPopupManager.set_event_active(false)
+		event_display_ended.emit()
 		director.on_focused_chat_finished(result)
 	, CONNECT_ONE_SHOT)
 
@@ -636,10 +675,13 @@ func _bind_frost_strategy() -> void:
 
 ## 显示 hover 文本到 HoverContainer。
 ## SLIDE_FROM_RIGHT / BELOW_OVERLAY 两个 Delegate 均通过此接口设置内容。
-## 显示 hover 文本时的操作：存快照 → 设新内容。
-## narrative + vector 以 RichTextLabel BBCode 格式拼接显示。
+## 操作：存当前日常面板快照 → 设 hover 内容 → 标记 _is_hover_displaying。
 func show_hover_text(narrative: String, vector: String) -> void:
-	_store_hover_snapshot()
+	# 🔒 只在首次进入 hover 时存快照（避免连续 hover 污染 daily 快照）
+	if not _is_hover_displaying:
+		_store_hover_snapshot()
+	_is_hover_displaying = true
+	hover_title.text = "效果"
 	var text_parts: Array[String] = []
 	if not narrative.is_empty():
 		text_parts.append(narrative)
@@ -652,19 +694,109 @@ func show_hover_text(narrative: String, vector: String) -> void:
 
 	Logging.info("NarrativeOverlay.show_hover_text: narrative=%d chars, vector=%d chars" % [narrative.length(), vector.length()])
 
-## 隐藏 hover 内容时的操作：恢复快照（永久占位，不隐藏容器）
+## 隐藏 hover 内容：恢复日常面板快照 + 检查延迟刷新
 func hide_hover_text() -> void:
 	_restore_hover_snapshot()
-	Logging.info("NarrativeOverlay.hide_hover_text: snapshot restored")
+	_is_hover_displaying = false
+	# 🆕 hover 期间有等待的刷新请求，现在执行
+	if _daily_refresh_pending:
+		_daily_refresh_pending = false
+		Logging.info("NarrativeOverlay.hide_hover_text: executing pending daily refresh")
+		refresh_daily_panel()
+	Logging.info("NarrativeOverlay.hide_hover_text: snapshot restored, is_hover_displaying=false")
 
-## 保存当前 hover label 文本和 separator 状态为快照
+## 保存当前 hover label/separator/title 为快照（用于 hover 覆盖前）
 func _store_hover_snapshot() -> void:
 	_hover_snapshot_text = hover_label.text
 	_hover_snapshot_sep = hover_separator.visible
-	Logging.info("NarrativeOverlay._store_hover_snapshot: text='%s' sep=%s" % [_hover_snapshot_text, str(_hover_snapshot_sep)])
+	_hover_snapshot_title = hover_title.text
+	Logging.info("NarrativeOverlay._store_hover_snapshot: title='%s' text='%s' sep=%s" % [_hover_snapshot_title, _hover_snapshot_text, str(_hover_snapshot_sep)])
 
-## 恢复 hover label 和 separator 到快照状态
+## 恢复 hover label/separator/title 到快照状态
 func _restore_hover_snapshot() -> void:
 	hover_label.text = _hover_snapshot_text
 	hover_separator.visible = _hover_snapshot_sep
-	Logging.info("NarrativeOverlay._restore_hover_snapshot: text='%s' sep=%s" % [_hover_snapshot_text, str(_hover_snapshot_sep)])
+	hover_title.text = _hover_snapshot_title
+	Logging.info("NarrativeOverlay._restore_hover_snapshot: title='%s' text='%s' sep=%s" % [_hover_snapshot_title, _hover_snapshot_text, str(_hover_snapshot_sep)])
+
+# ═══════════════════════════════════════════════════
+# 🆕 日常效果面板（与 HoverDisplayFlow 共享 HoverContainer UI）
+# ═══════════════════════════════════════════════════
+
+## 刷新日常面板内容：收集 survival goal + 潜意识碎碎念 → 写入 HoverContainer
+func refresh_daily_panel() -> void:
+	# 如果正在 hover 显示中，延迟到 hover 结束后刷新
+	if _is_hover_displaying:
+		Logging.info("NarrativeOverlay.refresh_daily_panel: hover displaying, deferring")
+		_daily_refresh_pending = true
+		return
+	var parts: Array[String] = []
+	var goal_text := _check_survival_goal()
+	if not goal_text.is_empty():
+		parts.append(goal_text)
+	var murmur_text := _subconscious_murmur()
+	if not murmur_text.is_empty():
+		parts.append(murmur_text)
+	var combined: String
+	if parts.is_empty():
+		combined = _random_fallback_murmur()
+	else:
+		combined = "\n\n".join(parts)
+	# 写日常面板快照（供 hover 结束后恢复）
+	_daily_snapshot_text = combined
+	_daily_snapshot_sep = true
+	_daily_snapshot_title = "独白"
+	# 应用到 UI
+	hover_title.text = "独白"
+	hover_separator.visible = true
+	hover_label.text = combined
+	Logging.info("NarrativeOverlay.refresh_daily_panel: combined=%d chars" % combined.length())
+
+## 1. 检查宏观目标 + 倒计时：钱是否够每旬 cost
+## 不足时返回杜甫口吻的一句话，否则返回 ""
+func _check_survival_goal() -> String:
+	var current_money := PlayerState.get_stat_val(ENUMS.PROPS.MONEY) as int
+	if current_money >= 0:
+		return ""
+	var needed = abs(current_money)
+	if current_money > -5:
+		return "囊中已近空空，再过一旬怕是揭不开锅了…"
+	elif current_money <= -30:
+		return "债台高筑，负债%d钱…这日子何时是个头？" % needed
+	else:
+		return "手头缺了%d钱，下一旬的生计还没着落。" % needed
+
+## 2. 潜意识碎碎念：检查中毒 / 崴脚
+## 有 debuff 时返回杜甫口吻的一句话，否则返回 ""
+func _subconscious_murmur() -> String:
+	if PlayerState.has_trait("poisoned"):
+		return "腹中隐隐作痛，这毒物怕不是那日试药留下的…"
+	if PlayerState.has_trait("sprained_ankle"):
+		return "脚踝还在隐隐发疼，走路得慢些。"
+	return ""
+
+## 两个函数均无内容时的 fallback：硬编码 5 句杜甫独白，随机挑一句
+const FALLBACK_MURMURS: Array[String] = [
+	"人生如寄，山河万里，何处是归程？",
+	"致君尧舜上，再使风俗淳。",
+	"安得广厦千万间，大庇天下寒士俱欢颜。",
+	"白日放歌须纵酒，青春作伴好还乡。",
+	"朱门酒肉臭，路有冻死骨。",
+]
+
+func _random_fallback_murmur() -> String:
+	var idx: int = randi() % FALLBACK_MURMURS.size()
+	return FALLBACK_MURMURS[idx]
+
+## 🆕 信号回调：属性/特质/flag 变动时请求刷新日常面板
+## 使用 call_deferred + guard 防止同帧内信号爆发导致 stack overflow
+func _on_daily_refresh_signal() -> void:
+	if _daily_refresh_queued:
+		return
+	_daily_refresh_queued = true
+	call_deferred("_deferred_daily_refresh")
+
+func _deferred_daily_refresh() -> void:
+	_daily_refresh_queued = false
+	Logging.info("NarrativeOverlay._deferred_daily_refresh: executing")
+	refresh_daily_panel()

@@ -382,7 +382,6 @@ func has_trait(trait_name):
 			Logging.err('do not find trait %s' % trait_name)
 			return
 		trait_name = int_trait
-	EventBus.on_trait_change.emit()
 	return traits.has(trait_name)
 
 func remove_trait(trait_name):
