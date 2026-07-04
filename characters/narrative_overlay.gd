@@ -42,6 +42,7 @@ var _default_background_texture: Texture2D  # tscn 中 tape_container 的初始�
 var _overlay_anim_in_progress: bool = false  # overlay 动画进行中，阻止 tape_needs_hide
 var _deferred_hide_pending: bool = false     # 动画期间收到 hide 请求，动画完成后执行
 var _auto_advance_blocked: bool = false      # 非事件状态下阻止 _start_auto_advance（cinematic/picker/focuschat 等）
+var _hover_spacer: Control = null            # hover 显示时塞入 tape 底部的占位 spacer（≥2条目时）
 
 # ═══════════════════════════════════════════════════
 # _ready() — 信号接线
@@ -645,10 +646,40 @@ func show_hover_text(narrative: String, vector: String) -> void:
 	hover_label.text = "\n".join(text_parts)
 	hover_separator.visible = not vector.is_empty()
 	hover_container.visible = true
+
+	# 🆕 tape 有 ≥2 条目时，底部塞 spacer 防遮挡，然后滚动到底
+	_insert_hover_spacer()
 	Logging.info("NarrativeOverlay.show_hover_text: narrative=%d chars, vector=%d chars" % [narrative.length(), vector.length()])
 
 ## 隐藏 HoverContainer
 func hide_hover_text() -> void:
 	hover_container.visible = false
 	hover_label.text = ""
+	_remove_hover_spacer()
 	Logging.info("NarrativeOverlay.hide_hover_text: HoverContainer hidden")
+
+## 🆕 若 tape 有 ≥2 子条目，在底部插入一个与 hover_container 同高的透明占位
+func _insert_hover_spacer() -> void:
+	var tape = event_ui._tape_content if event_ui else null
+	if not tape:
+		return
+	if tape.get_child_count() < 2:
+		return
+	_remove_hover_spacer()  # 防止重复
+	var h: float = hover_container.custom_minimum_size.y
+	if h <= 0:
+		h = 200.0  # tscn 默认值
+	_hover_spacer = Control.new()
+	_hover_spacer.name = "HoverSpacer"
+	_hover_spacer.custom_minimum_size = Vector2(0, h + 50.0)
+	_hover_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tape.add_child(_hover_spacer)
+	event_ui.scroll_to_bottom()
+	Logging.info("NarrativeOverlay._insert_hover_spacer: spacer min_height=%.1f, scroll_to_bottom" % h)
+
+## 🆕 移除 hover spacer
+func _remove_hover_spacer() -> void:
+	if _hover_spacer and is_instance_valid(_hover_spacer):
+		_hover_spacer.queue_free()
+		_hover_spacer = null
+		Logging.info("NarrativeOverlay._remove_hover_spacer: spacer removed")

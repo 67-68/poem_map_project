@@ -87,7 +87,7 @@ class SlideFromRightDelegate extends HoverDisplayDelegate:
 		var visualizer = overlay.get_node_or_null("TapeVisualizer")
 		if visualizer and visualizer.has_method("play_slide_in_from_right"):
 			_animating = true
-			visualizer.play_slide_in_from_right(0.3)
+			visualizer.play_slide_in_from_right(0.1)
 			Logging.info("HoverPopupManager.SlideFromRightDelegate: slide_in_from_right started, animating=true")
 			# 等待动画完成后清除锁
 			await _wait_for_anim(visualizer)
@@ -128,7 +128,7 @@ class SlideFromRightDelegate extends HoverDisplayDelegate:
 		var visualizer = overlay.get_node_or_null("TapeVisualizer")
 		if visualizer and visualizer.has_method("play_slide_to_right"):
 			_animating = true
-			visualizer.play_slide_to_right(0.3)
+			visualizer.play_slide_to_right(0.1)
 			Logging.info("HoverPopupManager.SlideFromRightDelegate: slide_to_right started, animating=true")
 			await _wait_for_anim(visualizer)
 			_animating = false

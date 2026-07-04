@@ -202,46 +202,8 @@ func double_check() -> bool:
 		return false
 	else: return true
 
-# ── 自定义工具提示（统一显示叙事 + 向量预览）──
+# ── 自定义工具提示（已废弃，改用 BELOW_OVERLAY）──
 
-func _make_custom_tooltip(for_text: String) -> Object:
-	"""
-	重写 Godot 的 _make_custom_tooltip 方法。
-	返回自定义 CustomTooltip 控件，统一显示叙事文本 + 向量预览。
-	"""
-	var tooltip = preload("res://ui/custom_tooltip.gd").new()
-	
-	# 先构建向量层文本
-	var vector_lines: Array[String] = []
-	
-	# (A) Requirement 摘要（前提条件）
-	if option and 'requirement' in option and option.requirement \
-		and option.requirement.has_method('describe_requirement'):
-		var req_text = option.requirement.describe_requirement()
-		if not req_text.is_empty():
-			vector_lines.append("[前提]")
-			vector_lines.append(req_text)
-	
-	# (B) Operator 预览（向量变化）
-	var operator_lines: Array[String] = []
-	if option and 'choice_result' in option and option.choice_result:
-		operator_lines = option.choice_result.format_preview()
-	
-	if operator_lines.is_empty():
-		if not vector_lines.is_empty():
-			vector_lines.append("")
-			vector_lines.append("[影响]")
-		vector_lines.append("你想知道什么发生了")
-	else:
-		if not vector_lines.is_empty():
-			vector_lines.append("")  # 空行分隔前提和向量
-		vector_lines.append("[影响]")
-		vector_lines.append_array(operator_lines)
-	
-	tooltip.set_vector_text("\n".join(vector_lines))
-	
-	# 叙事层：纯文本，无 Alt 提示
-	tooltip.set_narrative_text(for_text)
-	
-	_cached_tooltip = tooltip
-	return tooltip
+## 🚫 禁用 Godot 原生 tooltip，防止与 BELOW_OVERLAY hover 同时出现。
+func _make_custom_tooltip(_for_text: String) -> Object:
+	return Control.new()
