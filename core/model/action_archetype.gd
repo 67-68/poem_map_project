@@ -27,12 +27,13 @@ static func from_json(data: Dictionary) -> ActionArchetype:
 	if hints is Dictionary:
 		arch.failed_hints = hints.duplicate()
 	
-	# 预解析 universal_result DSL
+	# 预解析 universal_result DSL → 保留 PropertyOperator / TraitOperator / TimeOperator
+	# （供 sub-action picker 预览使用）
 	var dsl: String = arch.universal_result
 	if not dsl.is_empty():
 		var parsed = MicroDSLParser.parse_consequence_operators(dsl)
 		for op in parsed:
-			if op is PropertyOperator:
+			if op is PropertyOperator or op is TraitOperator or op is TimeOperator:
 				arch.operators.append(op)
 	
 	return arch

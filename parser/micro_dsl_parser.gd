@@ -58,6 +58,8 @@ const FUNC_FLAG_INT_REDUCE_IF_ABOVE := "flag_int_reduce_if_above"
 const FUNC_TEMP_FLAG_BOOL_SET := "temp_flag_bool_set"
 const FUNC_TEMP_FLAG_STR_SET := "temp_flag_str_set"
 const FUNC_TEMP_FLAG_STR_APPEND := "temp_flag_str_append"
+const FUNC_TIME_ADD := "time_add"
+
 const FUNC_TEMP_FLAG_INT_SET := "temp_flag_int_set"
 const FUNC_TEMP_FLAG_INT_APPEND := "temp_flag_int_append"
 const FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE := "temp_flag_int_reduce_if_above"
@@ -145,6 +147,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_TEMP_FLAG_INT_SET] = func(p, r): return _create_temp_flag_operator_int_set(p, r)
 	cd[FUNC_TEMP_FLAG_INT_APPEND] = func(p, r): return _create_temp_flag_operator_int_append(p, r)
 	cd[FUNC_TEMP_FLAG_INT_REDUCE_IF_ABOVE] = func(p, r): return _create_temp_flag_operator_int_reduce_if_above(p, r)
+	cd[FUNC_TIME_ADD] = func(p, r): return _exec_time_add_op(p, r)
 	cd[FUNC_SCAN_AND_PUSH] = func(p, r): return _exec_scan_and_push_op(p, r)
 	cd[FUNC_PUSH_EVENT] = func(p, r): return _exec_push_event_op(p, r)
 	cd[FUNC_CONTEXT_KEY_PUSH_EVENT] = func(p, r): return _exec_context_key_push_event_op(p, r)
@@ -443,6 +446,16 @@ static func _exec_trait_op(parsed: NamedDSLParser.ParseResult, raw: String, oper
 		Logging.err("trait_add/remove 缺少 name 参数: %s" % raw)
 		return null
 	return _create_trait_operator(name, operation)
+
+# Time Operator: add（追加时间消耗）
+static func _exec_time_add_op(parsed: NamedDSLParser.ParseResult, raw: String) -> TimeOperator:
+	var day = NamedDSLParser.get_int_param(parsed, "day")
+	if day <= 0:
+		Logging.warn("time_add 的 day 应为正数，收到 %d: %s" % [day, raw])
+		day = max(1, day)
+	var op = TimeOperator.new()
+	op.day = float(day)
+	return op
 
 # Emotion Operator: add / sub（带 abs 保护）
 static func _exec_emo_op(parsed: NamedDSLParser.ParseResult, raw: String, sign: int) -> EmotionOperator:

@@ -8,10 +8,14 @@
   "l_money_gain": 50,
   "xl_money_gain": 80,
 
+  "xs_money_cost": -5,
+  "xs_money_gain": 5,
   "s_money_cost": -15,
   "m_money_cost": -30,
   "l_money_cost": -50,
 
+  "xs_health_cost": -5,
+  "xs_health_gain": 5,
   "s_health_cost": -15,
   "s_health_recovery": 15,
   "m_health_cost": -30,

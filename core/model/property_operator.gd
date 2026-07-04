@@ -14,7 +14,7 @@ var property := '':
 @export var value: int = 0
 @export var context_key_for_multiplication: String = "property_multiplication"
 @export_enum(
-	'extra_large','large', 'medium', 'small'
+	'extra_small', 'extra_large','large', 'medium', 'small'
 ) var ranked_value: String = ""
 @export var rank_negative: bool = false
 
@@ -35,6 +35,8 @@ func init(_context: Dictionary) -> Dictionary:
 		var amounts = NamedDSLParser._load_named_amounts()
 		var prefix := ""
 		match ranked_value:
+			"extra_small":
+				prefix = "xs_"
 			"small":
 				prefix = "s_"
 			"medium":

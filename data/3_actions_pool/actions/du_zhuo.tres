@@ -17,6 +17,7 @@ _main_tag = 34
 _action_tags = Array[int]([1, 0, 2, 3, 5, 8, 10, 12, 17, 34])
 action_results = Array[ExtResource("2_3angc")]([SubResource("Resource_time")])
 lock_narrative = "酒壶已空，心绪难平，独坐无趣"
+sub_actions = Array[String](["duzhuo_heyaojiu", "duzhuo_xiaozhuo"])
 uuid = "du_zhuo"
 name = "闲居"
 description = "闭门谢客，借酒避世。"

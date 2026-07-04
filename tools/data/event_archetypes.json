@@ -189,5 +189,25 @@
     "universal_result": "prop_sub(name=talent; val=s_talent_cost)",
     "era": "",
     "failed_hints": {}
+  },
+  "heyaojiu_success": {
+    "name": "喝药酒·成",
+    "action_uuid": "duzhuo_heyaojiu",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "time_add(day=1)|prop_sub(name=money; val=s_money_cost)|trait_remove(name=poisoned)|prop_add(name=health; val=xs_health_gain)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "xiaozhuo_success": {
+    "name": "小酌一口·成",
+    "action_uuid": "duzhuo_xiaozhuo",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xs_money_cost)|prop_add(name=health; val=xs_health_gain)",
+    "era": "",
+    "failed_hints": {}
   }
 }

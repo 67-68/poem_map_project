@@ -84,24 +84,31 @@ static func _build_archetype_qualitative_preview(action: Action, is_repeated: bo
 		return lines
 	
 	for op in ops:
-		if not op is PropertyOperator:
-			continue
-		var pop := op as PropertyOperator
-		if pop.value == 0 or pop.property.is_empty():
-			continue
-		var prop = Database.get_property(pop.property)
-		var display_name = prop.get_display_name() if prop and not prop.name.is_empty() else pop.property
-		
-		if is_repeated:
-			if pop.value > 0:
-				lines.append("• %s 将会增加（重复行动，效果减少20%%）" % display_name)
+		if op is PropertyOperator:
+			var pop := op as PropertyOperator
+			if pop.value == 0 or pop.property.is_empty():
+				continue
+			var prop = Database.get_property(pop.property)
+			var display_name = prop.get_display_name() if prop and not prop.name.is_empty() else pop.property
+			
+			if is_repeated:
+				if pop.value > 0:
+					lines.append("• %s 将会增加（重复行动，效果减少20%%）" % display_name)
+				else:
+					lines.append("• %s 将会消耗（重复行动，消耗增加20%%）" % display_name)
 			else:
-				lines.append("• %s 将会消耗（重复行动，消耗增加20%%）" % display_name)
-		else:
-			if pop.value > 0:
-				lines.append("• %s 将会增加" % display_name)
+				if pop.value > 0:
+					lines.append("• %s 将会增加" % display_name)
+				else:
+					lines.append("• %s 将会消耗" % display_name)
+		elif op is TimeOperator:
+			var top := op as TimeOperator
+			if top.refresh_time or top.day <= 0:
+				continue
+			if is_repeated:
+				lines.append("• 额外耗时 %d 天（重复行动，消耗增加20%%）" % int(top.day))
 			else:
-				lines.append("• %s 将会消耗" % display_name)
+				lines.append("• 额外耗时 %d 天" % int(top.day))
 	
 	Logging.info("ActionHintBuilder._build_archetype_qualitative_preview: archetype '%s' → %d 定性行 (is_repeated=%s)" % [archetype_key, lines.size(), str(is_repeated)])
 	return lines

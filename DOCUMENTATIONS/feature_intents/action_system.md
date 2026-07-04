@@ -53,6 +53,42 @@
 - `sprained_ankle` trait 已在 `model/enumerates.gd` TRAITS 枚举中注册，并在 `data/1_core_rules/traits/_traits.csv` 中配置（行动时间 +1，2旬到期自动移除）。
 - 所有新 archetype 的 `era: ""`（无时代限制）、`universal_requirement: ""`（成本在对应 .tres 的 action_results 中以 sub 类 operator 表达）。
 
+## 独酌子行动（喝药酒 / 小酌一口）
+
+这两个子行动挂载在 `data/3_actions_pool/actions/du_zhuo.tres` 下，定义在 `data/3_actions_pool/actions/du_zhuo/` 目录中。
+
+### 设计意图
+
+- 与坊市/登高子行动同模式：先选「闲居」→ 弹出 Picker → 选喝药酒或小酌一口。
+- 均为确定性行动（`l_success_rate=100%`），不拆 success/failure variant。
+- 属性变化通过 archetype DSL 定义在 `tools/data/event_archetypes.json` 中，由 `RandomEvent.init()` 在事件进入时注入每个 option 的 `choice_result`。
+- 喝药酒的额外时间消耗通过子 action `action_results` 中的 `TimeOperator(day=1)` 表达。
+
+### Archetype DSL
+
+| Archetype | universal_result |
+|-----------|-----------------|
+| `heyaojiu_success` | `time_add(day=1)\|prop_sub(name=money; val=xs_money_cost)\|trait_remove(name=poisoned)\|prop_add(name=health; val=xs_health_gain)` |
+| `xiaozhuo_success` | `prop_sub(name=money; val=xs_money_cost)\|prop_add(name=health; val=xs_health_gain)` |
+
+### 数值映射（来自 named_amounts.json）
+
+| 子行动 | 金钱 | 健康 |
+|--------|------|------|
+| 喝药酒 | `s_money_cost` = -15 | `xs_health_gain` = +5 |
+| 小酌一口 | `xs_money_cost` = -5 | `xs_health_gain` = +5 |
+
+### 约束
+
+- `poisoned` trait 已在 `model/enumerates.gd` TRAITS 枚举中注册为 `POISONED`（index 189）。
+- 新增枚举 `ACTION_DUZHUO_HEYAOJIU`（index 44）和 `ACTION_DUZHUO_XIAOZHUO`（index 45）。
+- `PropertyOperator.ranked_value` 新增 `extra_small` 选项（用于非 DSL 场景）。
+- 父行动 `action_results`（TimeOperator day=1）在 picker 选择后优先执行。
+- 喝药酒的额外 1 天消耗通过 archetype DSL `time_add(day=1)` 在事件渲染时生效，两个子 action 的 `action_results` 均为空。
+- `TimeOperator` 新增 `describe_preview()` 方法（返回「时间消耗 N 天」），`ActionHintBuilder._build_archetype_qualitative_preview()` 新增对 `TimeOperator` 的处理，使 archetype 预览也展示额外时间消耗。
+- `micro_dsl_parser.gd` 新增 `time_add(day=N)` DSL 指令支持，解析为 `TimeOperator`。
+- Fallback 事件 `archetype_id` 指向 `heyaojiu_success` / `xiaozhuo_success`。
+
 ## 相关文件
 - `core/model/action.gd` — Action 数据模型（含 sub_actions / possibility / failed_result 字段）
 - `core/model/scene_action.gd` — SceneAction（含 main_tag）
@@ -107,6 +143,8 @@
 | `denggao_qujiangchi_fallback` | `qujiangchi_success` | 正常登曲江池 |
 | `denggao_leyouyuan_fallback` | `leyouyuan_success` | 正常登乐游原 |
 | `denggao_shaolingyuan_fallback` | `shaolingyuan_success` | 正常登少陵原 |
+| `duzhuo_heyaojiu_fallback` | — | 正常喝药酒祛毒 |
+| `duzhuo_xiaozhuo_fallback` | — | 正常小酌怡情 |
 
 - 对应的失败叙事在 `_failed_fallback` 变体中（如 `fangshi_maizi_failed_fallback`），由 possibility 失败路径的 PushEventOperator 直接推送
 

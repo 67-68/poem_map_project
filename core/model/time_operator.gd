@@ -24,3 +24,10 @@ func operate():
 		return
 	TimeService.advance_time(actual_day)
 	Logging.info('TimeOperator: 消耗 %d 天完成，已推进日历' % actual_day)
+
+func describe_preview() -> String:
+	if refresh_time:
+		return ""
+	if day <= 0:
+		return ""
+	return "时间消耗 %d 天" % int(day)

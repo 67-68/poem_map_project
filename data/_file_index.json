@@ -322,6 +322,7 @@
     "1_core_rules/relations/event_threaten_zuanying.tres",
     "1_core_rules/traits/disease_dongshang_frostbite.tres",
     "1_core_rules/traits/disease_dongshang_necrosis.tres",
+    "1_core_rules/traits/exhaustion_initial.tres",
     "1_core_rules/traits/kuangda_fengying.tres",
     "1_core_rules/traits/kuangda_kuangke.tres",
     "1_core_rules/traits/kuangda_zuanying.tres",
@@ -398,6 +399,7 @@
     "1_core_rules/traits/relation_zhengqian_rumor.tres",
     "1_core_rules/traits/reserve_baiye.tres",
     "1_core_rules/traits/sprained_ankle.tres",
+    "1_core_rules/traits/terminal_illness.tres",
     "1_core_rules/traits/test_coder_debug.tres",
     "1_core_rules/imaginaries/aesthetic__elegant.tres",
     "1_core_rules/imaginaries/court__corrupt.tres",
@@ -452,6 +454,10 @@
     "1_core_rules/events/fallback/denggao_shaolingyuan_failed_fallback.tres",
     "1_core_rules/events/fallback/denggao_shaolingyuan_fallback.tres",
     "1_core_rules/events/fallback/duzhuo_fallback.tres",
+    "1_core_rules/events/fallback/duzhuo_heyaojiu_failed_fallback.tres",
+    "1_core_rules/events/fallback/duzhuo_heyaojiu_fallback.tres",
+    "1_core_rules/events/fallback/duzhuo_xiaozhuo_failed_fallback.tres",
+    "1_core_rules/events/fallback/duzhuo_xiaozhuo_fallback.tres",
     "1_core_rules/events/fallback/event_cooldown_wall.tres",
     "1_core_rules/events/fallback/fangshi_banzhuan_failed_fallback.tres",
     "1_core_rules/events/fallback/fangshi_banzhuan_fallback.tres",
@@ -503,6 +509,8 @@
     "3_actions_pool/actions/fang_shi/fangshi_fgmaizi.tres",
     "3_actions_pool/actions/fang_shi/fangshi_maizi.tres",
     "3_actions_pool/actions/fang_shi/fangshi_shiyao.tres",
+    "3_actions_pool/actions/du_zhuo/duzhuo_heyaojiu.tres",
+    "3_actions_pool/actions/du_zhuo/duzhuo_xiaozhuo.tres",
     "3_actions_pool/actions/deng_gao/denggao_leyouyuan.tres",
     "3_actions_pool/actions/deng_gao/denggao_qujiangchi.tres",
     "3_actions_pool/actions/deng_gao/denggao_shaolingyuan.tres",
@@ -576,6 +584,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-04T10:38:47.471585+00:00",
-  "total": 575
+  "generated_at": "2026-07-04T13:03:25.008323+00:00",
+  "total": 583
 }
