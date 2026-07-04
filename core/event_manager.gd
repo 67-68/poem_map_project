@@ -107,19 +107,20 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
 
 func scan_death_events():
     """
-    在结局之后使用，扫描死亡/失败/结束事件
+    在结局之后使用，扫描死亡/失败/结束事件。
+    跳过 guarantee_next FIFO 队列 — 人都死了，别排队了。
     """
     if GameState.is_game_over:
         Logging.info("[EventManager] scan_death_events: GameState.is_game_over is true, skipping")
         return
-    Logging.info("[EventManager] Starting death event scan")
+    Logging.info("[EventManager] Starting death event scan (skip_guarantees)")
     var initial_tickets: Array[EventTicket] = []
     for e in Database.get_end_random_events_all().values():
         initial_tickets.append(_create_ticket(e))
     #breakpoint
-    scan_events_from_tickets(initial_tickets, 0.0, '', {})
+    scan_events_from_tickets(initial_tickets, 0.0, '', {}, false, true)
 
-func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", context: Dictionary = {}, return_only: bool = false):
+func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", context: Dictionary = {}, return_only: bool = false, skip_guarantees: bool = false):
     """
     从给定的事件票据池中扫描事件的核心逻辑
 
@@ -147,7 +148,7 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
     Logging.info("[EventManager] Event pool populated with " + str(current_event_pool.size()) + " eligible events")
     
     # 开始命运抽奖
-    var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid, context)
+    var ev_name = roll_events(nothing_multiplication_weight, fallback_event_uuid, context, skip_guarantees)
     if return_only:
         if ev_name:
             _mark_event_base_triggered(ev_name)
@@ -164,42 +165,46 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
         Logging.info("[EventManager] 这次抽取事件，岁月静好")
     
 
-func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", context: Dictionary = {}):
-    Logging.info("[EventManager] Starting event roll")
+func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", context: Dictionary = {}, skip_guarantees: bool = false):
+    Logging.info("[EventManager] Starting event roll (skip_guarantees=%s)" % skip_guarantees)
 
     # ── 优先检查 guarantee_next FIFO 队列 ──
     # 必须在 pool 空检查之前，因为无 main_tag 的 guarantee 可以旁路 pool
-    while _guaranteed_events.size() > 0:
-        var entry = _guaranteed_events[0]  # peek front
-        var g_key = entry.event_key
-        var g_tag = entry.main_tag
-        var current_main_tag = context.get('main_tag', '')
+    # death scan 等场景跳过 guarantees — 人要死了别排队了
+    if not skip_guarantees:
+        while _guaranteed_events.size() > 0:
+            var entry = _guaranteed_events[0]  # peek front
+            var g_key = entry.event_key
+            var g_tag = entry.main_tag
+            var current_main_tag = context.get('main_tag', '')
 
-        # 分支 A: 无 main_tag → 通用保证，直接旁路所有 filter
-        if g_tag.is_empty():
-            _guaranteed_events.pop_front()
-            var item = Database.resolve(g_key)
-            if item is BaseEvent:
-                Logging.info("[EventManager] 🎯 Guaranteed (no tag) event (FIFO): " + g_key)
-                return g_key
-            else:
-                Logging.warn("[EventManager] Guaranteed (no tag) key '" + g_key + "' not found or not a BaseEvent, popping and continuing")
+            # 分支 A: 无 main_tag → 通用保证，直接旁路所有 filter
+            if g_tag.is_empty():
+                _guaranteed_events.pop_front()
+                var item = Database.resolve(g_key)
+                if item is BaseEvent:
+                    Logging.info("[EventManager] 🎯 Guaranteed (no tag) event (FIFO): " + g_key)
+                    return g_key
+                else:
+                    Logging.warn("[EventManager] Guaranteed (no tag) key '" + g_key + "' not found or not a BaseEvent, popping and continuing")
+                    continue  # pop happened above, try next
+
+            # 分支 B: 带 main_tag → 检查是否匹配当前抽奖的 main_tag
+            elif g_tag == current_main_tag:
+                _guaranteed_events.pop_front()
+                for ticket in current_event_pool:
+                    if ticket.event_uuid == g_key:
+                        Logging.info("[EventManager] 🎯 Guaranteed event (" + g_tag + ") (FIFO): " + g_key)
+                        return g_key
+                Logging.warn("[EventManager] Guaranteed event '" + g_key + "' not in pool after filters, popping and continuing")
                 continue  # pop happened above, try next
 
-        # 分支 B: 带 main_tag → 检查是否匹配当前抽奖的 main_tag
-        elif g_tag == current_main_tag:
-            _guaranteed_events.pop_front()
-            for ticket in current_event_pool:
-                if ticket.event_uuid == g_key:
-                    Logging.info("[EventManager] 🎯 Guaranteed event (" + g_tag + ") (FIFO): " + g_key)
-                    return g_key
-            Logging.warn("[EventManager] Guaranteed event '" + g_key + "' not in pool after filters, popping and continuing")
-            continue  # pop happened above, try next
-
-        # 分支 C: main_tag 不匹配 → 保留 guarantee 供后续抽奖使用，不再继续遍历
-        else:
-            Logging.warn("[EventManager] Guarantee main_tag '" + g_tag + "' != current main_tag '" + current_main_tag + "', preserving for later draw")
-            break  # 跳出 while，进入正常抽奖
+            # 分支 C: main_tag 不匹配 → 保留 guarantee 供后续抽奖使用，不再继续遍历
+            else:
+                Logging.warn("[EventManager] Guarantee main_tag '" + g_tag + "' != current main_tag '" + current_main_tag + "', preserving for later draw")
+                break  # 跳出 while，进入正常抽奖
+    else:
+        Logging.info("[EventManager] roll_events: skipping guarantee queue (death/dev scan)")
 
     # ── 正常轮盘抽取 ──
     if current_event_pool.is_empty():

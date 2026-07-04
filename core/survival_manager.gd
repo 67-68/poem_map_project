@@ -19,7 +19,7 @@ const HEALTH_AP_TIERS: Array[Dictionary] = [
 		hint_color = "#cc6666",
 	},
 	{
-		health_max = 59,       # ≤59（即 <60）
+		health_max = 60,       # ≤60
 		ap_cap = 8,
 		trait_enum = ENUMS.TRAITS.EXHAUSTION_INITIAL,
 		hint_text = "每旬仅 8 天可用（疲态初显）",
@@ -237,9 +237,17 @@ func death_judgement():
 func _post_xun_money_deduct():
 	PlayerState.append_stat(ENUMS.PROPS.MONEY, -30)
 	Logging.info('[SurvivalManager] 旬末扣除 30 money（快照之后执行，计入下月 delta）')
-	if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) < 0:
+	if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) <= 0:
 		Logging.info('[SurvivalManager] 旬末结算后 money<0，触发流落街头事件')
 		OperatorFactory.create_event_operator('event_money_lower_0_innkeeper').operate()
 
 func _ready():
 	TimeService.on_xun_tick.connect(_process_single_xun_settlement)
+	# 实时监听健康变化，立即同步 AP trait 并判定死亡（不等下一旬）
+	PlayerState.player_stat_changed.connect(func(prop_name: String):
+		if prop_name == ENUMS.to_prop_str(ENUMS.PROPS.HEALTH):
+			var health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
+			Logging.info('[SurvivalManager] health changed to %d, immediate sync + death check' % health)
+			_sync_health_ap_traits()
+			death_judgement()
+	)
