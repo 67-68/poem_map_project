@@ -107,13 +107,17 @@ custom_minimum_size = Vector2(420, 640)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_sshou")
 
-[node name="EventHistory" type="PanelContainer" parent="TapeContainer" unique_id=1937522382]
+[node name="VBox" type="VBoxContainer" parent="TapeContainer" unique_id=1930616949]
+layout_mode = 2
+
+[node name="EventHistory" type="PanelContainer" parent="TapeContainer/VBox" unique_id=1937522382]
 z_index = 120
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_2nuqx")
 script = ExtResource("4_1hjkf")
 
-[node name="Margin" type="MarginContainer" parent="TapeContainer/EventHistory" unique_id=328263658]
+[node name="Margin" type="MarginContainer" parent="TapeContainer/VBox/EventHistory" unique_id=328263658]
 layout_mode = 2
 theme = ExtResource("4_2nuqx")
 theme_override_constants/margin_left = 50
@@ -121,38 +125,38 @@ theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 20
 
-[node name="ScrollContainer" type="ScrollContainer" parent="TapeContainer/EventHistory/Margin" unique_id=1870292442]
+[node name="ScrollContainer" type="ScrollContainer" parent="TapeContainer/VBox/EventHistory/Margin" unique_id=1870292442]
 layout_mode = 2
 horizontal_scroll_mode = 0
 script = ExtResource("5_smooth")
 
-[node name="VBox_TapeContent" type="VBoxContainer" parent="TapeContainer/EventHistory/Margin/ScrollContainer" unique_id=104575616]
+[node name="VBox_TapeContent" type="VBoxContainer" parent="TapeContainer/VBox/EventHistory/Margin/ScrollContainer" unique_id=104575616]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HoverContainer" type="PanelContainer" parent="." unique_id=497946658]
+[node name="HoverContainer" type="PanelContainer" parent="TapeContainer/VBox" unique_id=497946658]
 z_index = 100
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_styles/panel = SubResource("StyleBoxTexture_tb7k1")
 
-[node name="V" type="VBoxContainer" parent="HoverContainer" unique_id=1320109393]
+[node name="V" type="VBoxContainer" parent="TapeContainer/VBox/HoverContainer" unique_id=1320109393]
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="HoverContainer/V" unique_id=751446402]
+[node name="HSeparator" type="HSeparator" parent="TapeContainer/VBox/HoverContainer/V" unique_id=751446402]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_7xb00")
 
-[node name="Label" type="Label" parent="HoverContainer/V" unique_id=1655239264]
+[node name="Label" type="Label" parent="TapeContainer/VBox/HoverContainer/V" unique_id=1655239264]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"TitleText"
 text = "效果"
 
-[node name="HoverLabel" type="RichTextLabel" parent="HoverContainer/V" unique_id=636252671]
+[node name="HoverLabel" type="RichTextLabel" parent="TapeContainer/VBox/HoverContainer/V" unique_id=636252671]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"NarrativeText"

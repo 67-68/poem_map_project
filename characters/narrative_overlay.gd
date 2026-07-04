@@ -27,12 +27,12 @@ signal event_display_ended()
 @onready var director: NarrativeDirector = $NarrativeDirector
 @onready var visualizer: TapeVisualizer = $TapeVisualizer
 # 🚨 event_ui 不写类型注解：class_name EventUI 在 parse 时尚未注册
-@onready var event_ui = $TapeContainer/EventHistory
+@onready var event_ui = $TapeContainer/VBox/EventHistory
 @onready var _interrupt_button: Button = $InterruptButton/Button
 @onready var tape_container: PanelContainer = $TapeContainer
-@onready var hover_container: PanelContainer = $HoverContainer
-@onready var hover_label: RichTextLabel = $HoverContainer/V/HoverLabel
-@onready var hover_separator: HSeparator = $HoverContainer/V/HSeparator
+@onready var hover_container: PanelContainer = $TapeContainer/VBox/HoverContainer
+@onready var hover_label: RichTextLabel = $TapeContainer/VBox/HoverContainer/V/HoverLabel
+@onready var hover_separator: HSeparator = $TapeContainer/VBox/HoverContainer/V/HSeparator
 
 # ── Overlay 本地状态（仅 UI 相关）────────────────────
 var current_event_data: BaseEvent
@@ -42,7 +42,8 @@ var _default_background_texture: Texture2D  # tscn 中 tape_container 的初始�
 var _overlay_anim_in_progress: bool = false  # overlay 动画进行中，阻止 tape_needs_hide
 var _deferred_hide_pending: bool = false     # 动画期间收到 hide 请求，动画完成后执行
 var _auto_advance_blocked: bool = false      # 非事件状态下阻止 _start_auto_advance（cinematic/picker/focuschat 等）
-var _hover_spacer: Control = null            # hover 显示时塞入 tape 底部的占位 spacer（≥2条目时）
+var _hover_snapshot_text: String = ""        # hover label 快照文本
+var _hover_snapshot_sep: bool = false        # hover separator 快照状态
 
 # ═══════════════════════════════════════════════════
 # _ready() — 信号接线
@@ -53,8 +54,9 @@ func _ready() -> void:
 		return
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-	# ── HoverContainer 初始隐藏 ──
-	hover_container.visible = false
+	# ── HoverContainer 永久可见占位 + 存初始快照 ──
+	hover_container.visible = true
+	_store_hover_snapshot()
 
 	# ── 配置 TapeVisualizer 的 export 引用（动态注入，避免 tscn 硬编码 uid）──
 	visualizer.shadow_box = self               # NarrativeOverlay 自身即外层容器
@@ -634,8 +636,10 @@ func _bind_frost_strategy() -> void:
 
 ## 显示 hover 文本到 HoverContainer。
 ## SLIDE_FROM_RIGHT / BELOW_OVERLAY 两个 Delegate 均通过此接口设置内容。
+## 显示 hover 文本时的操作：存快照 → 设新内容。
 ## narrative + vector 以 RichTextLabel BBCode 格式拼接显示。
 func show_hover_text(narrative: String, vector: String) -> void:
+	_store_hover_snapshot()
 	var text_parts: Array[String] = []
 	if not narrative.is_empty():
 		text_parts.append(narrative)
@@ -645,41 +649,22 @@ func show_hover_text(narrative: String, vector: String) -> void:
 		text_parts.append(vector)
 	hover_label.text = "\n".join(text_parts)
 	hover_separator.visible = not vector.is_empty()
-	hover_container.visible = true
 
-	# 🆕 tape 有 ≥2 条目时，底部塞 spacer 防遮挡，然后滚动到底
-	_insert_hover_spacer()
 	Logging.info("NarrativeOverlay.show_hover_text: narrative=%d chars, vector=%d chars" % [narrative.length(), vector.length()])
 
-## 隐藏 HoverContainer
+## 隐藏 hover 内容时的操作：恢复快照（永久占位，不隐藏容器）
 func hide_hover_text() -> void:
-	hover_container.visible = false
-	hover_label.text = ""
-	_remove_hover_spacer()
-	Logging.info("NarrativeOverlay.hide_hover_text: HoverContainer hidden")
+	_restore_hover_snapshot()
+	Logging.info("NarrativeOverlay.hide_hover_text: snapshot restored")
 
-## 🆕 若 tape 有 ≥2 子条目，在底部插入一个与 hover_container 同高的透明占位
-func _insert_hover_spacer() -> void:
-	var tape = event_ui._tape_content if event_ui else null
-	if not tape:
-		return
-	if tape.get_child_count() < 2:
-		return
-	_remove_hover_spacer()  # 防止重复
-	var h: float = hover_container.custom_minimum_size.y
-	if h <= 0:
-		h = 200.0  # tscn 默认值
-	_hover_spacer = Control.new()
-	_hover_spacer.name = "HoverSpacer"
-	_hover_spacer.custom_minimum_size = Vector2(0, h + 50.0)
-	_hover_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tape.add_child(_hover_spacer)
-	event_ui.scroll_to_bottom()
-	Logging.info("NarrativeOverlay._insert_hover_spacer: spacer min_height=%.1f, scroll_to_bottom" % h)
+## 保存当前 hover label 文本和 separator 状态为快照
+func _store_hover_snapshot() -> void:
+	_hover_snapshot_text = hover_label.text
+	_hover_snapshot_sep = hover_separator.visible
+	Logging.info("NarrativeOverlay._store_hover_snapshot: text='%s' sep=%s" % [_hover_snapshot_text, str(_hover_snapshot_sep)])
 
-## 🆕 移除 hover spacer
-func _remove_hover_spacer() -> void:
-	if _hover_spacer and is_instance_valid(_hover_spacer):
-		_hover_spacer.queue_free()
-		_hover_spacer = null
-		Logging.info("NarrativeOverlay._remove_hover_spacer: spacer removed")
+## 恢复 hover label 和 separator 到快照状态
+func _restore_hover_snapshot() -> void:
+	hover_label.text = _hover_snapshot_text
+	hover_separator.visible = _hover_snapshot_sep
+	Logging.info("NarrativeOverlay._restore_hover_snapshot: text='%s' sep=%s" % [_hover_snapshot_text, str(_hover_snapshot_sep)])
