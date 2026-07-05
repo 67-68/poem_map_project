@@ -92,7 +92,7 @@ const FUNC_LEVERAGE_ADD := "leverage_add"
 const FUNC_INFO := "info"
 const FUNC_ALL_EMO_SUB := "all_emo_sub"
 const FUNC_ADD_SOCIAL_CREDIT := "add_social_credit"
-
+const FUNC_ROLL_IMAGINARY := "roll_imaginary"
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
 # func_name → handler(parsed: ParseResult, raw: String) -> Variant
@@ -167,6 +167,7 @@ static func _ensure_dispatch() -> void:
 	# ── New Archetype Operators ──
 	cd[FUNC_ALL_EMO_SUB] = func(p, r): return _exec_all_emo_sub_op(p, r)
 	cd[FUNC_ADD_SOCIAL_CREDIT] = func(p, r): return _exec_add_social_credit_op(p, r)
+	cd[FUNC_ROLL_IMAGINARY] = func(p, r): return _exec_roll_imaginary_op(p, r)
 	# ── Image Operators ──
 	cd[FUNC_IMAGE_PRESENT] = func(p, r): return _exec_image_present_op(p, r)
 	cd[FUNC_IMAGE_SLIDE] = func(p, r): return _exec_image_slide_op(p, r)
@@ -1034,8 +1035,24 @@ static func _exec_imaginary_level_reward_op(parsed: NamedDSLParser.ParseResult, 
 	Logging.info("imaginary_level_reward operator 创建成功: l3_fame=%d, l2_fame=%d, l1_fame=%d" % [l3_fame, l2_fame, l1_fame])
 	return op
 
+# ─── roll_imaginary ─────────────────────────────────────────
+
+# DSL 语法: roll_imaginary(level=2)
+# 返回 RollImaginaryOperator（init 时从定义库随机选对应等级意象，operate 时加入玩家）
+static func _exec_roll_imaginary_op(parsed: NamedDSLParser.ParseResult, raw: String) -> RollImaginaryOperator:
+	var level = NamedDSLParser.get_int_param(parsed, "level", 1)
+	if level < 1 or level > 3:
+		Logging.warn("roll_imaginary level=%d 超出 1-3 范围，钳制为 1: %s" % [level, raw])
+		level = 1
+
+	var op = RollImaginaryOperator.new()
+	op.level = level
+	Logging.info("roll_imaginary operator 创建成功: level=%d" % level)
+	return op
+
 
 # ─── imagery_add ────────────────────────────────────────────────
+
 
 # DSL 语法: imagery_add(name=ENV_POLITICS_CLOUD_LEYOU)
 # 返回 ImageryAcquisitionOperator（广播 EventBus.request_add_imaginary）

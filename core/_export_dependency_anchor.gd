@@ -101,6 +101,7 @@ const __preload_090 = preload("res://core/operators/image_shatter_operator.gd") 
 const __preload_091 = preload("res://core/operators/image_slide_operator.gd")  # ImageSlideOperator
 const __preload_092 = preload("res://core/operators/imagery_acquisition_operator.gd")  # ImageryAcquisitionOperator
 const __preload_093 = preload("res://core/operators/imaginary_level_reward_operator.gd")  # ImaginaryLevelRewardOperator
+const __preload_094 = preload("res://core/operators/roll_imaginary_operator.gd")  # RollImaginaryOperator
 const __preload_096 = preload("res://core/operators/info_demo_operator.gd")  # InfoDemoOperator
 const __preload_097 = preload("res://core/operators/leverage_add_operator.gd")  # LeverageAddOperator
 const __preload_098 = preload("res://core/operators/lianju_score_operator.gd")  # LianjuScoreOperator
