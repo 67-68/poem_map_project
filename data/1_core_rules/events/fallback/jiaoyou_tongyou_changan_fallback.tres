@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "与友人并辔行过长安街市，朱雀大街两侧的槐树投下斑驳的影子。行至东市附近，偶然得见{imaginary_gain_hint}。友人勒马笑道：「此乃吉兆。」你心中亦有所感，将这景象默默记在了心里。"
+description = "与友人并辔行过长安街市，朱雀大街两侧的槐树投下斑驳的影子。行至东市附近，偶然得见{@imaginary_gain_hint}。友人勒马笑道：「此乃吉兆。」你心中亦有所感，将这景象默默记在了心里。"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
