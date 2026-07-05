@@ -354,7 +354,7 @@ func scroll_to_bottom() -> void:
 	await get_tree().process_frame
 	var v_scroll := _scroll.get_v_scroll_bar()
 	if v_scroll:
-		var max_scroll := max(0.0, v_scroll.max_value - v_scroll.page)
+		var max_scroll = max(0.0, v_scroll.max_value - v_scroll.page)
 		v_scroll.value = max_scroll
 		_scroll.target_scroll = max_scroll
 		Logging.debug("EventUI.scroll_to_bottom: 已滚动到底部 (value=%.1f target=%.1f)" % [v_scroll.value, _scroll.target_scroll])
@@ -378,7 +378,8 @@ func scroll_to_entry(entry_id: String) -> void:
 				target_y += child.size.y + _tape_content.get_theme_constant("separation")
 
 		v_scroll.value = target_y
-		Logging.debug("EventUI.scroll_to_entry: 已滚动到 entry_id='%s' (y=%.1f)" % [entry_id, target_y])
+		_scroll.target_scroll = target_y
+		Logging.debug("EventUI.scroll_to_entry: 已滚动到 entry_id='%s' (y=%.1f target=%.1f)" % [entry_id, target_y, _scroll.target_scroll])
 
 
 # ═══════════════════════════════════════════════
