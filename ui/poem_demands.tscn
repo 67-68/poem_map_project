@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dnoq8ennn5blk"]
+
+[ext_resource type="Script" uid="uid://bpkviwn8rp5un" path="res://ui/poem_demands.gd" id="1_hgn7r"]
+[ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="2_fs5dn"]
+[ext_resource type="PackedScene" uid="uid://djh76cnmg2a5c" path="res://ui/poem_demand.tscn" id="3_20tqd"]
+
+[node name="PanelContainer" type="PanelContainer" unique_id=1445318241]
+script = ExtResource("1_hgn7r")
+
+[node name="PoemDemands" type="ScrollContainer" parent="." unique_id=1320685266]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+script = ExtResource("2_fs5dn")
+metadata/_custom_type_script = "uid://y5gl8aohf1ll"
+
+[node name="V" type="VBoxContainer" parent="PoemDemands" unique_id=1004174898]
+layout_mode = 2
+
+[node name="PoemDemand" parent="PoemDemands/V" unique_id=719516563 instance=ExtResource("3_20tqd")]
+layout_mode = 2

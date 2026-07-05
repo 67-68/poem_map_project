@@ -4,8 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="3_36lce"]
 [ext_resource type="PackedScene" uid="uid://dhm3awu3pacwl" path="res://ui/poem_slot.tscn" id="3_o11fd"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="4_sfx"]
-[ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="5_o11fd"]
-[ext_resource type="PackedScene" uid="uid://djh76cnmg2a5c" path="res://ui/poem_demand.tscn" id="6_nl13t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rixq6"]
 border_width_left = 1
@@ -55,126 +53,65 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_nkd15")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1070128734]
-layout_mode = 2
-
-[node name="InputImagPanel" type="VBoxContainer" parent="Panel/VBoxContainer" unique_id=531798169]
+[node name="InputImagPanel" type="VBoxContainer" parent="Panel" unique_id=531798169]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 32
 
-[node name="H" type="HBoxContainer" parent="Panel/VBoxContainer/InputImagPanel" unique_id=1122163985]
+[node name="H" type="HBoxContainer" parent="Panel/InputImagPanel" unique_id=1122163985]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="PoemSlot" parent="Panel/VBoxContainer/InputImagPanel/H" unique_id=1206392433 instance=ExtResource("3_o11fd")]
+[node name="PoemSlot" parent="Panel/InputImagPanel/H" unique_id=1206392433 instance=ExtResource("3_o11fd")]
 layout_mode = 2
 
-[node name="PoemSlot2" parent="Panel/VBoxContainer/InputImagPanel/H" unique_id=1586651438 instance=ExtResource("3_o11fd")]
+[node name="PoemSlot2" parent="Panel/InputImagPanel/H" unique_id=1586651438 instance=ExtResource("3_o11fd")]
 layout_mode = 2
 
-[node name="PoemSlot3" parent="Panel/VBoxContainer/InputImagPanel/H" unique_id=958388417 instance=ExtResource("3_o11fd")]
+[node name="PoemSlot3" parent="Panel/InputImagPanel/H" unique_id=958388417 instance=ExtResource("3_o11fd")]
 layout_mode = 2
 
-[node name="CraftBtn" type="LinkButton" parent="Panel/VBoxContainer/InputImagPanel" unique_id=1695117411]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_type_variation = &"ButtonTheme"
-text = "开始创作"
-
-[node name="UISoundComponent" type="Node" parent="Panel/VBoxContainer/InputImagPanel/CraftBtn" unique_id=418807036]
-script = ExtResource("4_sfx")
-click_category = "book_impact"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/VBoxContainer/InputImagPanel" unique_id=1350550608]
-layout_mode = 2
-theme_type_variation = &"NarrativeText"
-text = "代价是..."
-fit_content = true
-scroll_active = false
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1892804064]
-layout_mode = 2
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Panel/VBoxContainer/HBoxContainer" unique_id=947996467]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 0
-
-[node name="SubViewport" type="SubViewport" parent="Panel/VBoxContainer/HBoxContainer/SubViewportContainer" unique_id=1112073782]
-disable_3d = true
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(400, 400)
-render_target_update_mode = 4
-
-[node name="Camera2D" type="Camera2D" parent="Panel/VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport" unique_id=268796607]
-anchor_mode = 0
-
-[node name="PoemDemands" type="ScrollContainer" parent="Panel/VBoxContainer/HBoxContainer" unique_id=697089361]
-custom_minimum_size = Vector2(350, 0)
-layout_mode = 2
-script = ExtResource("5_o11fd")
-metadata/_custom_type_script = "uid://y5gl8aohf1ll"
-
-[node name="V" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer/PoemDemands" unique_id=895419980]
-layout_mode = 2
-
-[node name="PoemDemand" parent="Panel/VBoxContainer/HBoxContainer/PoemDemands/V" unique_id=719516563 instance=ExtResource("6_nl13t")]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer" unique_id=305003387]
+[node name="VBoxContainer2" type="HBoxContainer" parent="Panel/InputImagPanel" unique_id=847022550]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Button2" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=997301390]
+[node name="Button2" type="Button" parent="Panel/InputImagPanel/VBoxContainer2" unique_id=997301390]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "干谒"
+text = "登高抒怀"
 
-[node name="Button" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=736597084]
+[node name="Button" type="Button" parent="Panel/InputImagPanel/VBoxContainer2" unique_id=736597084]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "应制"
+text = "干谒权贵"
 
-[node name="Button3" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=318625611]
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/InputImagPanel" unique_id=1350550608]
 layout_mode = 2
-theme_type_variation = &"ToggleButtonTheme"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_otk17")
-text = "登高"
+theme_type_variation = &"FrozenInnerThoughtText"
+text = "代价是..."
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
 
-[node name="Button4" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1211118108]
+[node name="CraftBtn" type="LinkButton" parent="Panel/InputImagPanel" unique_id=1695117411]
 layout_mode = 2
-theme_type_variation = &"ToggleButtonTheme"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_otk17")
-text = "怀古"
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_type_variation = &"ButtonTheme"
+theme_override_colors/font_color = Color(0.5591598, 0.8274052, 1, 1)
+text = "开始创作"
 
-[node name="Button5" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=47690329]
-layout_mode = 2
-theme_type_variation = &"ToggleButtonTheme"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_otk17")
-text = "羇旅"
-
-[node name="Button6" type="Button" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1207844765]
-layout_mode = 2
-theme_type_variation = &"ToggleButtonTheme"
-toggle_mode = true
-button_group = SubResource("ButtonGroup_otk17")
-text = "山水"
-
-[node name="Control" type="Control" parent="Panel/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=889605264]
-layout_mode = 2
+[node name="UISoundComponent" type="Node" parent="Panel/InputImagPanel/CraftBtn" unique_id=418807036]
+script = ExtResource("4_sfx")
+click_category = "book_impact"
 
 [node name="Button" type="Button" parent="Panel" unique_id=80726385]
 layout_mode = 2
