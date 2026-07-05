@@ -108,7 +108,7 @@ Keep your `query` in natural language, describing the mechanic or logic you are 
 
 # 问题速查
 1. dsl分隔符: dsl的第一层抽象层级使用|, 第二层使用;, 第三层使用/。 具体查阅@DOCUMENTATIONS/dsl/dsl_csv_structure_guide.md
-2. 意象分类。四段 tag 和两段 tag 合并。意象本身存储一个字段，包含一堆的两段 tag。四段和两段的 tag 是旧时代的设计，应该去除。**你不需要对于字符串做任何处理，把它当作完整的部分就行**。poem的tier2，3 合并，目前只有 1，2 tier。Poem 和意象的level 属性砍掉了
+2. 意象系统进行了大重构，目前只有意象和诗词两层
 3. 这个项目采用python数据生成管道来负责生成csv数据(使用dsl), 入口在@tools/generate_orthogonal_events.py 使用@core/csv_cloud_loader.gd 来存储csv文件的位置并翻译他们到tres事件文件
 4. MCP不管用可能是之前的僵尸进程卡住了
 5. get_live_logs MCP可能会获取到初始界面的内容，这个时候没有真实的Map和实际游戏的东西
@@ -122,11 +122,10 @@ python tools/toggle_export_fix.py add      # 添加 Logging 到 [autoload]
 python tools/toggle_export_fix.py remove   # 从 [autoload] 移除 Logging
 
 9. 使用 .venv/bin/python build/server.py测试
-10. 需要使用chrome来进行测试, user之前使用的vivaldi出于安全策略会杀掉thread
+10. dsl数据最好使用archetype(str对应数值), 而不是直接使用数值 @tools/data/named_amounts.json
 11. 如果看起来没有错误, 那么可能是因为潜在的循环导入导致的
 12. 修改tscn之后需要reload项目 同时使用shift cmd r reload浏览器缓存
 13. 如果资源加载错误, 那么检查_file_index 并尝试使用 build_file_index刷新
 在清除了狗屎注册表之后由于web export的需要又开始使用这个了
 15. python 环境使用 .venv/bin/python 而不是python3
-16. dsl数据最好使用archetype(str对应数值), 而不是直接使用数值 @tools/data/named_amounts.json
-17. DSL的语法: prop_add只能配套正数（如果使用named_amount就是size_sthname_gain），prop_sub vice versa
+16. DSL的语法: prop_add只能配套正数（如果使用named_amount就是size_sthname_gain），prop_sub vice versa

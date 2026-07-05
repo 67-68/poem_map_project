@@ -1,93 +1,150 @@
 extends PanelContainer
 
-## 诗词创作面板 — V7: 扁平化意象系统，简单列表选择
+## 诗词创作面板 — V8: 动态 Slot + 模式切换 + C(N,3) 组合枚举
 ##
-## V7 变更: ImaginaryConcept 已删除。selected_imaginaries 改为 Array[Imaginary]。
-## 删除 SubViewport/AbstractConcept/OrbitDetail/合并坍缩/Tier/打油诗。
-## 用户从已拥有的 Imaginary 列表中点击选择 3 个，然后创作。
+## V8 变更:
+##   - PoemSlot 变为纯展示，不再可点击选择
+##   - 从 Database.imaginaries_detail 自动获取所有 Imaginary 作为创作素材
+##   - dynamically 创建 PoemSlot，超过 max_imaginary_managable 随机截断 + "过多…" 占位
+##   - Toggle 按钮（登高抒怀/干谒权贵）决定 mode，覆盖 channel 乘数
+##   - 删除 ImaginaryList / selected_imaginaries 手动选择逻辑
+##   - Calculator 内部枚举 C(N,3) 组合匹配食谱
 
-## 当前选中用于创作诗词的 Imaginary（最多 3 个）
-var selected_imaginaries: Array[Imaginary] = []
+## 当前选中的 toggle mode: "deng_gao" | "gan_ye"
+var current_mode: String = "gan_ye"
 
-## Imaginary 列表容器节点路径
-const IMAGINARY_LIST_PATH := "Panel/VBoxContainer/HBoxContainer/ImaginaryList"
+## Slot 容器路径
+const SLOTS_PARENT_PATH := "Panel/InputImagPanel/H"
+
+## PoemSlot packed scene
+const POEM_SLOT_SCENE := preload("res://ui/poem_slot.tscn")
 
 
 func _ready() -> void:
-	Logging.info('PoemCrafter: initializing poem crafter V7')
+	Logging.info('PoemCrafter: initializing poem crafter V8')
 
 	EventBus.imaginary_changed.connect(on_imaginary_changed)
 
-	# 连接 PoemSlot 的点击信号
-	var children = $Panel/VBoxContainer/InputImagPanel/H.get_children()
-	Logging.info('PoemCrafter: connecting slot_clicked signals for %d children' % children.size())
-	for c in children:
-		if c.has_signal("slot_clicked"):
-			c.slot_clicked.connect(on_slot_clicked)
-
 	# "开始创作"按钮
-	var craft_btn := $Panel/VBoxContainer/InputImagPanel/CraftBtn
+	var craft_btn := $Panel/InputImagPanel/CraftBtn
 	if craft_btn:
 		craft_btn.pressed.connect(_on_button_pressed)
-		Logging.info('PoemCrafter: CraftBtn.pressed 手动连接成功')
+		Logging.info('PoemCrafter: CraftBtn.pressed 连接成功')
 
 	# "撕毁卷轴"按钮
 	var tear_btn := $Panel/Button
 	if tear_btn:
 		tear_btn.pressed.connect(_on_tear_scroll_pressed)
 
-	call_deferred("_rebuild_imaginary_list")
+	# Toggle 按钮：监听 button_group 变更
+	_connect_toggle_signals()
+
+	call_deferred("_rebuild_slots")
 
 
 # ──────────────────────────────────────────────
-# Imaginary 列表构建
+# Toggle 模式管理
 # ──────────────────────────────────────────────
 
-func _rebuild_imaginary_list() -> void:
-	var list_container := get_node_or_null(IMAGINARY_LIST_PATH)
-	if not list_container:
-		Logging.warn('PoemCrafter: ImaginaryList container not found at %s' % IMAGINARY_LIST_PATH)
+func _connect_toggle_signals() -> void:
+	var btn_deng_gao := $Panel/InputImagPanel/VBoxContainer2/Button2
+	var btn_gan_ye := $Panel/InputImagPanel/VBoxContainer2/Button
+
+	if btn_deng_gao:
+		btn_deng_gao.toggled.connect(_on_toggle_deng_gao)
+		Logging.info('PoemCrafter: 登高抒怀 toggle 连接成功')
+	if btn_gan_ye:
+		btn_gan_ye.toggled.connect(_on_toggle_gan_ye)
+		Logging.info('PoemCrafter: 干谒权贵 toggle 连接成功')
+
+	# 初始化 mode：读取当前 button_group 中被按下的按钮
+	if btn_gan_ye and btn_gan_ye.button_pressed:
+		current_mode = "gan_ye"
+	elif btn_deng_gao and btn_deng_gao.button_pressed:
+		current_mode = "deng_gao"
+	Logging.info('PoemCrafter: initial mode = %s' % current_mode)
+
+
+func _on_toggle_deng_gao(pressed: bool) -> void:
+	if pressed:
+		current_mode = "deng_gao"
+		Logging.info('PoemCrafter: mode → deng_gao (BROADCAST 管道)')
+		_preview_current()
+
+
+func _on_toggle_gan_ye(pressed: bool) -> void:
+	if pressed:
+		current_mode = "gan_ye"
+		Logging.info('PoemCrafter: mode → gan_ye (SECULAR 管道)')
+		_preview_current()
+
+
+# ──────────────────────────────────────────────
+# Slot 动态构建
+# ──────────────────────────────────────────────
+
+func _rebuild_slots() -> void:
+	var h_container := get_node_or_null(SLOTS_PARENT_PATH)
+	if not h_container:
+		Logging.err('PoemCrafter: Slot 容器 %s 不存在' % SLOTS_PARENT_PATH)
 		return
 
-	# 清空
-	for child in list_container.get_children():
+	# 清空旧 Slot
+	for child in h_container.get_children():
 		child.queue_free()
 
-	var imaginaries: Array[Imaginary] = []
+	var all_imaginaries: Array[Imaginary] = []
 	for imag in Database.imaginaries_detail.values():
-		if imag is Imaginary and not selected_imaginaries.has(imag):
-			imaginaries.append(imag)
+		if imag is Imaginary:
+			all_imaginaries.append(imag)
 
-	Logging.info('PoemCrafter: building imaginary list with %d available (total=%d)' % [imaginaries.size(), Database.imaginaries_detail.size()])
+	Logging.info('PoemCrafter: _rebuild_slots — 总 Imaginary 数: %d' % all_imaginaries.size())
 
-	for imag in imaginaries:
-		var btn := Button.new()
-		btn.text = imag.name
-		btn.custom_minimum_size = Vector2(120, 36)
-		btn.pressed.connect(_on_imaginary_button_pressed.bind(imag))
-		list_container.add_child(btn)
-
-	if imaginaries.is_empty():
+	if all_imaginaries.is_empty():
 		var label := Label.new()
-		label.text = "暂无可用意象"
+		label.text = "暂无意象"
 		label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
-		list_container.add_child(label)
-
-
-func _on_imaginary_button_pressed(imag: Imaginary) -> void:
-	Logging.info('PoemCrafter: imaginary button pressed: %s' % imag.name)
-
-	if selected_imaginaries.size() >= 3:
-		Logging.info('PoemCrafter: max 3 imaginaries reached')
+		h_container.add_child(label)
 		return
 
-	selected_imaginaries.append(imag)
-	render_slots()
-	_rebuild_imaginary_list()
+	var max_visible: int = PlayerState.max_imaginary_managable
+	var display_list: Array[Imaginary] = []
+	var has_overflow: bool = false
 
-	if selected_imaginaries.size() == 3:
-		Logging.info('PoemCrafter: 3 imaginaries selected, previewing match')
-		_preview_match()
+	if all_imaginaries.size() <= max_visible:
+		display_list = all_imaginaries
+		Logging.info('PoemCrafter: 全部展示 %d 个 Imaginary' % display_list.size())
+	else:
+		# 随机截断
+		all_imaginaries.shuffle()
+		for i in range(max_visible):
+			display_list.append(all_imaginaries[i])
+		has_overflow = true
+		Logging.info('PoemCrafter: 随机截断 %d/%d 个 Imaginary，溢出=%s' % [max_visible, all_imaginaries.size(), has_overflow])
+
+	# 创建 PoemSlot
+	for imag in display_list:
+		var slot := _create_slot(imag.name, false)
+		slot.item_occupying = imag
+		h_container.add_child(slot)
+
+	# 溢出 Slot
+	if has_overflow:
+		var overflow_slot := _create_slot("过多…", true)
+		overflow_slot.item_occupying = null
+		h_container.add_child(overflow_slot)
+		Logging.info('PoemCrafter: 添加溢出 Slot "过多…"')
+
+	# 自动预览
+	_preview_current()
+
+
+func _create_slot(text: String, greyed: bool) -> PoemSlot:
+	var slot: PoemSlot = POEM_SLOT_SCENE.instantiate()
+	slot.apply_text(text)
+	if greyed:
+		slot.set_greyed(true)
+	return slot
 
 
 # ──────────────────────────────────────────────
@@ -95,76 +152,55 @@ func _on_imaginary_button_pressed(imag: Imaginary) -> void:
 # ──────────────────────────────────────────────
 
 func on_imaginary_changed() -> void:
-	Logging.info('PoemCrafter: imaginary_changed signaled, rebuilding list')
-	_rebuild_imaginary_list()
+	Logging.info('PoemCrafter: imaginary_changed 信号，重建 Slot')
+	_rebuild_slots()
 
 
 # ──────────────────────────────────────────────
-# Slot 管理
+# 获取当前所有有效 Imaginary（排除溢出占位）
 # ──────────────────────────────────────────────
 
-func on_slot_clicked(slot: PoemSlot) -> void:
-	var slots := $Panel/VBoxContainer/InputImagPanel/H.get_children()
-	var slot_index := slots.find(slot)
-
-	if slot_index == -1 or slot_index >= selected_imaginaries.size():
-		return
-
-	Logging.info('PoemCrafter: removing imaginary at slot %d' % slot_index)
-	selected_imaginaries.remove_at(slot_index)
-	render_slots()
-
-	if selected_imaginaries.size() < 3:
-		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "代价是..."
-
-	_rebuild_imaginary_list()
-
-
-func render_slots() -> void:
-	var slots := $Panel/VBoxContainer/InputImagPanel/H.get_children()
-	for i in range(slots.size()):
-		if slots[i] is PoemSlot:
-			var slot := slots[i] as PoemSlot
-			if i < selected_imaginaries.size():
-				slot.apply_text(selected_imaginaries[i].name)
-				slot.item_occupying = selected_imaginaries[i]
-			else:
-				slot.apply_text("")
-				slot.item_occupying = null
+func _get_all_valid_imaginaries() -> Array[Imaginary]:
+	var all: Array[Imaginary] = []
+	for imag in Database.imaginaries_detail.values():
+		if imag is Imaginary:
+			all.append(imag)
+	return all
 
 
 # ──────────────────────────────────────────────
-# 诗词创作 V7
+# 诗词创作 V8
 # ──────────────────────────────────────────────
 
 func _on_button_pressed() -> void:
-	if selected_imaginaries.size() != 3:
-		Logging.warn('PoemCrafter: need exactly 3 imaginaries, have %d' % selected_imaginaries.size())
+	var all_imaginaries := _get_all_valid_imaginaries()
+
+	if all_imaginaries.size() < 3:
+		Logging.warn('PoemCrafter: 需要至少 3 个 Imaginary，当前 %d' % all_imaginaries.size())
+		$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]意象不足，至少需要三个意象方能成诗。[/color]"
 		return
 
 	# 上限检查
 	if _has_unused_poem():
 		Logging.warn('PoemCrafter: 已有未使用的诗词，拒绝创作')
-		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "已有诗作，先将其送出或题壁后再来。"
+		$Panel/InputImagPanel/RichTextLabel.text = "已有诗作，先将其送出或题壁后再来。"
 		return
 
-	Logging.info('PoemCrafter: crafting poem V7 — exact imaginary uuid match')
+	Logging.info('PoemCrafter: crafting poem V8 — %d imaginaries, mode=%s' % [all_imaginaries.size(), current_mode])
 
-	var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, Database.recipe_index)
-	Logging.info('PoemCrafter: grade calculated, passed=%s, secular=%f, literary=%f' %
-		[result.passed, result.secular_value, result.literary_value])
+	var result := PoemCraftingCalculator.calculate_poem_grade(all_imaginaries, Database.recipe_index, current_mode)
+	Logging.info('PoemCrafter: grade calculated, passed=%s, combos=%d, secular=%f, literary=%f' %
+		[result.passed, result.tried_combinations, result.secular_value, result.literary_value])
 
-	# ── 失败（消耗 3 个 Imaginary）──
+	# ── 失败（消耗匹配的 3 个 Imaginary，无匹配则不消耗）──
 	if not result.passed:
-		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "[color=#aaa]你沉吟良久，终究觉得这些意象散落四处，凑不成章。[/color]\n[color=#888]不如再寻些贴合的意象来…[/color]"
-		Logging.info('PoemCrafter: poem creation failed, reason=%s — consuming imaginaries' % result.fail_reason)
-		ImaginaryComprehender.consume_imaginaries(selected_imaginaries)
-		selected_imaginaries.clear()
-		render_slots()
-		_rebuild_imaginary_list()
+		$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]你沉吟良久，终究觉得这些意象散落四处，凑不成章。[/color]\n[color=#888]不如再寻些贴合的意象来…[/color]"
+		Logging.info('PoemCrafter: poem creation failed, reason=%s, combos tried=%d' % [result.fail_reason, result.tried_combinations])
+		# 不消耗 — 无匹配时保留所有 Imaginary
+		_rebuild_slots()
 		return
 
-	# ── 精确匹配成功 ──
+	# ── 匹配成功 ──
 	_apply_operators(result.operators)
 
 	var recipe = result.matched_recipe
@@ -185,11 +221,22 @@ func _on_button_pressed() -> void:
 	EventBus.push_event.emit("poem_reveal", ctx)
 	Logging.info('PoemCrafter: poem reveal event pushed')
 
-	ImaginaryComprehender.consume_imaginaries(selected_imaginaries)
+	# 仅消耗匹配命中的 3 个 Imaginary
+	_consume_matched_imaginaries(result.matched_imaginary_uuids)
 
-	selected_imaginaries.clear()
-	render_slots()
-	_rebuild_imaginary_list()
+	_rebuild_slots()
+
+
+func _consume_matched_imaginaries(uuids: Array[String]) -> void:
+	Logging.info('PoemCrafter: 消耗命中的 3 个 Imaginary: %s' % str(uuids))
+	for uuid in uuids:
+		var key = uuid.to_lower()
+		if Database.imaginaries_detail.has(key):
+			Database.imaginaries_detail.erase(key)
+			Logging.info('PoemCrafter: 消耗 Imaginary "%s"' % key)
+		else:
+			Logging.warn('PoemCrafter: 尝试消耗不存在的 Imaginary "%s"' % key)
+	Logging.info('PoemCrafter: 消耗完成，剩余 %d 个 Imaginary' % Database.imaginaries_detail.size())
 
 
 func _has_unused_poem() -> bool:
@@ -213,11 +260,16 @@ func _apply_operators(ops: Array) -> void:
 
 
 # ──────────────────────────────────────────────
-# V7 匹配预览
+# V8 匹配预览（使用当前所有 Imaginary + current_mode）
 # ──────────────────────────────────────────────
 
-func _preview_match() -> void:
-	var result := PoemCraftingCalculator.calculate_poem_grade(selected_imaginaries, Database.recipe_index)
+func _preview_current() -> void:
+	var all_imaginaries := _get_all_valid_imaginaries()
+	if all_imaginaries.size() < 3:
+		$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]意象不足，至少需要三个意象方能成诗。[/color]"
+		return
+
+	var result := PoemCraftingCalculator.calculate_poem_grade(all_imaginaries, Database.recipe_index, current_mode)
 
 	if result.passed:
 		var recipe_name = result.matched_recipe.name if result.matched_recipe else "未知"
@@ -235,11 +287,10 @@ func _preview_match() -> void:
 			lines.append("")
 			lines.append(op_text)
 
-		$Panel/VBoxContainer/InputImagPanel/Button.tooltip_text = "\n".join(lines)
-		$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "\n".join(lines)
+		$Panel/InputImagPanel/RichTextLabel.text = "\n".join(lines)
 		return
 
-	$Panel/VBoxContainer/InputImagPanel/RichTextLabel.text = "[color=#aaa]你将这三者放在一处，有些疑惑——它们真的能凑成一首诗么？[/color]"
+	$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]你将这%s个意象放在一处，有些疑惑——它们真的能凑成一首诗么？[/color]" % all_imaginaries.size()
 
 
 # ──────────────────────────────────────────────

@@ -1,7 +1,7 @@
 @tool
 class_name ImaginaryLevelRewardOperator extends BaseOperator
 
-## V6: 意象 Tier 名望奖励 — 基于 current_tier 而非已删除的 current_level
+## V7: 意象名望奖励 — ImaginaryConcept 已删除，遍历 imaginaries_detail 中的 Imaginary
 ## T1 奖励 (世俗)
 @export var t1_fame: int = 0
 ## T2 奖励 (诗史)
@@ -9,15 +9,11 @@ class_name ImaginaryLevelRewardOperator extends BaseOperator
 
 
 func operate():
-	Logging.debug("ImaginaryLevelRewardOperator: Starting operate() — tier-based reward")
-	var data = []
-	for uuid in Database.get_imaginaries_all():
-		var imaginary = Database.get_imaginaries_all()[uuid] as ImaginaryConcept
-		if not imaginary:
-			continue
-		if imaginary.current_tier < 1:
-			continue
-		data.append(imaginary)
+	Logging.debug("ImaginaryLevelRewardOperator: Starting operate() — V7 Imaginary picker")
+	var data: Array[Imaginary] = []
+	for imag in Database.imaginaries_detail.values():
+		if imag is Imaginary:
+			data.append(imag)
 
 	Logging.debug("ImaginaryLevelRewardOperator: Found %d available imaginaries" % data.size())
 
@@ -34,15 +30,7 @@ func _on_imaginary_picked(imaginary_picked):
 		return
 
 	var uuid = imaginary_picked.uuid
-	var tier = imaginary_picked.current_tier
-	Logging.info("ImaginaryLevelRewardOperator: Imaginary picked - '%s' (tier=%d)" % [uuid, tier])
+	Logging.info("ImaginaryLevelRewardOperator: Imaginary picked - '%s' (V7: 固定 T1 奖励)" % uuid)
 
-	match tier:
-		2:
-			PlayerState.append_stat("literary_fame", t2_fame)
-			Logging.info("ImaginaryLevelRewardOperator: T2 reward applied: fame=%d" % t2_fame)
-		1:
-			PlayerState.append_stat("literary_fame", t1_fame)
-			Logging.info("ImaginaryLevelRewardOperator: T1 reward applied: fame=%d" % t1_fame)
-		_:
-			Logging.warn("ImaginaryLevelRewardOperator: unknown tier %d, no reward applied" % tier)
+	PlayerState.append_stat("literary_fame", t1_fame)
+	Logging.info("ImaginaryLevelRewardOperator: T1 reward applied: fame=%d" % t1_fame)

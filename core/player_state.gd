@@ -12,6 +12,8 @@ const _TimeOperator = preload("res://core/model/time_operator.gd")
 
 @export var player_name: String = "杜甫"
 @export var traits: Array[String] = [] # trait key string
+## V8: 诗词面板上可展示的 Imaginary 数量上限（超过部分随机截断 + 溢出占位 Slot）
+@export var max_imaginary_managable: int = 3
 @export var current_location: String = 'yong_zhou':
 	set(val):
 		current_location = val

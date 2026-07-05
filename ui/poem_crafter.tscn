@@ -63,15 +63,6 @@ theme_override_constants/separation = 32
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="PoemSlot" parent="Panel/InputImagPanel/H" unique_id=1206392433 instance=ExtResource("3_o11fd")]
-layout_mode = 2
-
-[node name="PoemSlot2" parent="Panel/InputImagPanel/H" unique_id=1586651438 instance=ExtResource("3_o11fd")]
-layout_mode = 2
-
-[node name="PoemSlot3" parent="Panel/InputImagPanel/H" unique_id=958388417 instance=ExtResource("3_o11fd")]
-layout_mode = 2
-
 [node name="VBoxContainer2" type="HBoxContainer" parent="Panel/InputImagPanel" unique_id=847022550]
 layout_mode = 2
 size_flags_vertical = 4
