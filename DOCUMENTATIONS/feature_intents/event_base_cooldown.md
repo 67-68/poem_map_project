@@ -6,7 +6,7 @@
 
 ## 意图摘要（<200字）
 
-为事件系统引入 EventBase 分组层。每个 EventBase 包含一组事件 + 抽取策略（AVERAGE），由 `eb_*.json` 配置。EventManager 抽取前先过滤 EventBase（era 不匹配则整组移除），AVERAGE 策略采用黑名单机制：抽中后加入封禁列表，同一 base 内将封禁事件权重再分配给未封禁事件，保持 base 总权重恒定。全封禁时整体移除，reset_on_empty 时清空黑名单。
+为事件系统引入 EventBase 分组层。每个 EventBase 包含一组事件 + 抽取策略（AVERAGE），由 `eb_*.json` 配置。EventManager 抽取前先过滤 EventBase（era 不匹配则整组移除 / event_base 正向筛选），AVERAGE 策略采用黑名单机制：抽中后加入封禁列表，同一 base 内将封禁事件权重再分配给未封禁事件，保持 base 总权重恒定。全封禁时整体移除，reset_on_empty 时清空黑名单。
 
 ---
 
@@ -14,6 +14,7 @@
 
 - **EventBase 分组**：事件按 base 分组（如"野心交游事件库"），JSON 显式声明 `events` 数组
 - **Era 过滤**：EventBase 声明所属 era，抽取时 era 不匹配则整组排除
+- **🆕 EventBase 正向筛选**：通过 `context['event_base']` 指定目标 EventBase uuid，仅保留属于该 base 的事件，其余全部移除。此时 Era 过滤和 log 检查均跳过，由 base 自身语义负责范围约束
 - **AVERAGE 策略（黑名单 + 权重再分配）**：
   1. 抽中某 base 的事件 → 该事件加入此 base 的黑名单
   2. 下一次抽取前：黑名单事件从池中移除，其权重按比例再分配给同 base 剩余事件
@@ -83,7 +84,13 @@
     └─ eb_*.json 无 events 数组或为空
         → 创建 EventBase，events 为空（不参与索引）
 
-[EventManager 抽取 — Era 过滤]
+[EventManager 抽取 — 正向筛选 (context['event_base'] 非空)]
+    │
+    ├─ 仅保留 event_to_base_index[event_uuid] == target_base 的 ticket
+    ├─ 其余 ticket 全部移除
+    └─ 跳过 Era 过滤逻辑（base 自身语义已约束范围）
+
+[EventManager 抽取 — Era 过滤 (context['event_base'] 为空，原有逻辑)]
     │
     ├─ base.era 为空 → 全时代，保留
     ├─ base.era == current_era → 匹配，保留

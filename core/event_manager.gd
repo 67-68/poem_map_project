@@ -262,8 +262,31 @@ func roll_events(nothing_multiplication_weight = 10.0, fallback_event_uuid: Stri
 # 🆕 EventBase 管道方法
 # ════════════════════════════════════════════════════════════════
 
-## Era 过滤：移除 era 不匹配的 EventBase 所包含的所有事件 ticket
+## EventBase 管道：正向筛选 + Era 负向排除
+## - context['event_base'] 非空 → 正向筛选，仅保留属于指定 EventBase 的 ticket
+## - context['event_base'] 为空 → 原有 Era 负向排除逻辑
 func _filter_tickets_by_event_bases(tickets: Array[EventTicket], context: Dictionary) -> Array[EventTicket]:
+    var target_base: String = context.get('event_base', '')
+
+    # ── 分支 A: 正向筛选模式 —— 仅保留属于指定 EventBase 的事件 ──
+    if not target_base.is_empty():
+        Logging.info("[EventManager] _filter_tickets_by_event_bases: 正向筛选模式, event_base='%s'" % target_base)
+        var filtered: Array[EventTicket] = []
+        var kept_count := 0
+        var removed_count := 0
+        for ticket in tickets:
+            var base = Database.get_event_base_for_event(ticket.event_uuid)
+            if base != null and base.uuid == target_base:
+                filtered.append(ticket)
+                kept_count += 1
+                Logging.info("[EventManager] _filter_tickets_by_event_bases: 保留 ticket '%s'（属于 base '%s'）" % [ticket.event_uuid, target_base])
+            else:
+                removed_count += 1
+                Logging.info("[EventManager] _filter_tickets_by_event_bases: 移除 ticket '%s'（不属于 base '%s'）" % [ticket.event_uuid, target_base])
+        Logging.info("[EventManager] _filter_tickets_by_event_bases: 正向筛选完成，保留 %d 个 ticket，移除 %d" % [kept_count, removed_count])
+        return filtered
+
+    # ── 分支 B: 原有 Era 负向排除逻辑 ──
     var current_era = context.get('era', GameState.current_era)
     if current_era.is_empty():
         Logging.info("[EventManager] _filter_tickets_by_event_bases: current_era is empty, skipping era filter")
