@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="ImaginaryConcept" load_steps=2 format=3 uid="uid://dwce0wgqdl0k2"]
-
-[ext_resource type="Script" uid="uid://d1lvovneguq7s" path="res://core/model/imaginary_concept.gd" id="1_t04ok"]
-
-[resource]
-script = ExtResource("1_t04ok")
-uuid = "travel:exile"
-name = "背井离乡意象"
-metadata/_custom_type_script = "uid://d1lvovneguq7s"

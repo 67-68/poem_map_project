@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="ImaginaryConcept" format=3 uid="uid://esorrowt5v6"]
-
-[ext_resource type="Script" uid="uid://d1lvovneguq7s" path="res://core/model/imaginary_concept.gd" id="1_esrw5"]
-
-[resource]
-script = ExtResource("1_esrw5")
-uuid = "emotion:sorrow"
-name = "愁苦"
-metadata/_custom_type_script = "uid://d1lvovneguq7s"

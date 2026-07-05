@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="ImaginaryConcept" format=3 uid="uid://c5u8smjv0ef7j"]
-
-[ext_resource type="Script" uid="uid://d1lvovneguq7s" path="res://core/model/imaginary_concept.gd" id="1_6fl8j"]
-
-[resource]
-script = ExtResource("1_6fl8j")
-uuid = "environment:moon"
-name = "月"
-metadata/_custom_type_script = "uid://d1lvovneguq7s"

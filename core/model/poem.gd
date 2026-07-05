@@ -1,4 +1,5 @@
 class_name Poem extends Trait
+## V7: ImaginaryConcept 已删除；required_fragments 存储 imaginary uuid 列表
 
 ## 诗词数据模型 — 继承 Trait，复用 topic="POEM" + specific_topic=POEM_TYPE 体系
 ## 由 PoemCraftingCalculator 在创作成功后动态创建

@@ -85,7 +85,6 @@ const FUNC_CONTEXT_FETCH := "context_fetch"
 const FUNC_NPC_BATCH_CHECK := "npc_batch_check"
 
 # Custom operators — 飞花令玩家应答
-const FUNC_IMAGINARY_HAS_LEVEL := "imaginary_has_level"
 const FUNC_IMAGINARY_LEVEL_REWARD := "imaginary_level_reward"
 const FUNC_IMAGERY_ADD := "imagery_add"                      # 🆕 意象获取操作符
 const FUNC_PLAY_TRANSITION := "play_transition"

@@ -127,7 +127,6 @@ func _init() -> void:
 	event_options = r.bases.get("1_core_rules.event_options", {})
 	state_transistors = r.bases.get("1_core_rules.state_transistors", {})
 	ambitions = r.bases.get("1_core_rules.ambitions", {})
-	imaginaries = r.bases.get("1_core_rules.imaginaries", {})
 	properties = r.bases.get("1_core_rules.properties", {})
 	base_province = r.bases.get("1_core_rules.base_province", {})
 	territories = r.bases.get("1_core_rules.territories", {})
@@ -225,12 +224,13 @@ func _init() -> void:
 	Logging.info("Database: normal_poem_events=%d, end_random_events=%d" % [normal_poem_events.size(), end_random_events.size()])
 	Logging.info("Database: actions=%d, decisions=%d" % [actions.size(), decisions.size()])
 
-	# 飞花令意象库：从主意象字典中筛选环境类意象
+	# 飞花令意象库：V7 从 imaginaries_detail 构建（不再依赖 environment: 前缀筛选）
 	feihualing_imageries = {}
-	for uuid in imaginaries:
-		if uuid.begins_with("environment:"):
-			feihualing_imageries[uuid] = imaginaries[uuid]
-	Logging.info("Database: feihualing_imageries loaded with %d entries" % feihualing_imageries.size())
+	for uuid in imaginaries_detail:
+		var imag = imaginaries_detail[uuid]
+		if imag is Imaginary:
+			feihualing_imageries[uuid] = imag
+	Logging.info("Database: feihualing_imageries loaded with %d entries from imaginaries_detail" % feihualing_imageries.size())
 
 	# ── 🆕 event_base：从 DataScanner 直接获取 ──
 	event_base_pool = r.pool
@@ -426,7 +426,8 @@ func get_flag(uuid: String):
 	return flags.get(uuid)
 
 func get_imaginary(uuid: String):
-	return imaginaries.get(uuid)
+	## V7: 从 imaginaries_detail 获取 Imaginary（原 imaginaries 字典已删除）
+	return get_imaginary_detail(uuid)
 
 func get_action(uuid: String):
 	return actions.get(uuid)
@@ -521,7 +522,8 @@ func get_flags_all() -> Dictionary:
 	return flags
 
 func get_imaginaries_all() -> Dictionary:
-	return imaginaries
+	## V7: 返回 imaginaries_detail 中的 Imaginary 条目
+	return imaginaries_detail
 
 func get_imaginary_detail(uuid: String):
 	return imaginaries_detail.get(uuid)

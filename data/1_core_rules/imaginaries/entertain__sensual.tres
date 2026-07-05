@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="ImaginaryConcept" load_steps=2 format=3]
-
-[ext_resource type="Script" uid="uid://d1lvovneguq7s" path="res://core/model/imaginary_concept.gd" id="1_sensual"]
-
-[resource]
-script = ExtResource("1_sensual")
-uuid = "entertain:sensual"
-name = "绮靡"

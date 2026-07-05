@@ -1,29 +1,27 @@
 class_name AbstractConcept
 extends Area2D
 
-## 抽象概念节点 — SubViewport 中表示一个 ImaginaryConcept 大概念
-## 每一个 AbstractConcept 是一个轨道圆心，DetailImaginary 绕其旋转
-## 左键：提交意象给诗词创作；右键：合并坍缩碎片
+## 抽象概念节点 — SubViewport 中表示一个可选意象的可视化节点
+##
+## V7 变更: 解除 ImaginaryConcept 强绑定，改为可配置的 data 对象。
+## 调用方设置 display_name + data，信号携带 data。
+## 不再有合并/坍缩/merge_animation/Tier 相关逻辑。
 
-## Tier 色彩常量
+## Tier 色彩常量（保留用于可配置颜色）
 const TIER_COLORS := {
-	1: Color(0.3, 0.3, 0.25, 1.0),    # T1 世俗污染 — 灰暗铜臭
-	2: Color(0.45, 0.15, 0.1, 1.0),   # T2 沉重诗史 — 暗红铁锈
-	3: Color(0.7, 0.85, 1.0, 1.0),    # T3 高洁绝唱 — 霜白青蓝
+	1: Color(0.3, 0.3, 0.25, 1.0),
+	2: Color(0.45, 0.15, 0.1, 1.0),
+	3: Color(0.7, 0.85, 1.0, 1.0),
 }
-const MERGE_READY_COLOR := Color(1.0, 0.9, 0.5, 1.0)  # 暖金闪烁
 
-## 关联的 ImaginaryConcept
-var imaginary_tag: ImaginaryConcept
+## 关联的数据对象（可以是 Imaginary 或其他任意对象）
+var data: Variant = null
 
-## 左键点击信号 — 提交意象
-signal concept_selected(imaginary_tag: ImaginaryConcept)
-## 右键点击信号 — 请求合并
-signal concept_merge_requested(imaginary_tag: ImaginaryConcept)
-## 合并动画完成信号
-signal merge_animation_finished(imaginary_tag: ImaginaryConcept)
+## 左键点击信号 — 提交
+signal concept_selected(data: Variant)
+## 右键点击信号 — 备选操作
+signal concept_alternate(data: Variant)
 
-var _blink_tween: Tween = null
 var _original_modulate: Color
 
 @export var concept_name: String = "":
@@ -32,6 +30,7 @@ var _original_modulate: Color
 		if is_inside_tree():
 			_apply_label()
 
+
 func _ready() -> void:
 	_original_modulate = modulate
 	_apply_label()
@@ -39,33 +38,29 @@ func _ready() -> void:
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
+
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if not (event is InputEventMouseButton) or not event.pressed:
 		return
 	match event.button_index:
 		MOUSE_BUTTON_LEFT:
 			AudioManager.play_sfx_category("leather")
-			concept_selected.emit(imaginary_tag)
+			concept_selected.emit(data)
 		MOUSE_BUTTON_RIGHT:
 			AudioManager.play_sfx_category("stone_throw_in_lake")
-			concept_merge_requested.emit(imaginary_tag)
+			concept_alternate.emit(data)
 
 
-## Hover 时略微变白
 func _on_mouse_entered() -> void:
 	var hover_color := modulate.lerp(Color.WHITE, 0.25)
-	if _blink_tween and _blink_tween.is_valid():
-		_blink_tween.kill()
-		_blink_tween = null
 	var tw := create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	tw.tween_property(self, "modulate", hover_color, 0.12)
 
+
 func _on_mouse_exited() -> void:
-	var target_color := _original_modulate
-	if _blink_tween and _blink_tween.is_valid():
-		return
 	var tw := create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	tw.tween_property(self, "modulate", target_color, 0.15)
+	tw.tween_property(self, "modulate", _original_modulate, 0.15)
+
 
 func _apply_label() -> void:
 	var label := get_node_or_null("Label") as Label
@@ -73,64 +68,6 @@ func _apply_label() -> void:
 		Logging.warn("AbstractConcept: Label child not found")
 		return
 	label.text = concept_name
-
-# ──────────────────────────────────────────────
-# 合并就绪闪烁
-# ──────────────────────────────────────────────
-
-func start_merge_ready_blink() -> void:
-	_stop_blink()
-	_blink_tween = create_tween().set_loops().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
-	_blink_tween.tween_property(self, "modulate", MERGE_READY_COLOR, 0.6)
-	_blink_tween.tween_property(self, "modulate", _original_modulate, 0.6)
-
-func stop_merge_ready_blink() -> void:
-	_stop_blink()
-
-func _stop_blink() -> void:
-	if _blink_tween and _blink_tween.is_valid():
-		_blink_tween.kill()
-		_blink_tween = null
-	modulate = _original_modulate
-
-# ──────────────────────────────────────────────
-# 合并坍缩动画（异步）
-# ──────────────────────────────────────────────
-
-## 播放合并动画：吸入碎片 → 色彩过渡到目标 tier
-## target_tier: 合并后的目标 tier（不修改 ImaginaryConcept，仅用于颜色）
-## 调用方 await 此方法，或连接 merge_animation_finished 信号
-func play_merge_animation(target_tier: int = 0) -> void:
-	stop_merge_ready_blink()
-
-	# Phase 1: 吸入所有子节点（Label 或 OrbitDetail）
-	var details: Array[Node] = []
-	for child in get_children():
-		if child is OrbitDetail:
-			details.append(child)
-		elif child is Label:
-			details.append(child)
-
-	if details.size() > 0:
-		for d in details:
-			if d is OrbitDetail:
-				d.play_suck_animation()
-			else:
-				# Label 淡出
-				var tw := create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-				tw.tween_property(d, "modulate:a", 0.0, 0.3)
-				tw.tween_property(d, "scale", Vector2.ZERO, 0.3)
-		await get_tree().create_timer(0.4).timeout
-
-	# Phase 2: 色彩过渡到 tier 颜色
-	if target_tier > 0:
-		var target_color = TIER_COLORS.get(target_tier, _original_modulate)
-		var tw := create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-		tw.tween_property(self, "modulate", target_color, 0.5)
-		await tw.finished
-		_original_modulate = target_color
-
-	emit_signal("merge_animation_finished", imaginary_tag)
 
 
 ## 根据 tier 获取对应的颜色

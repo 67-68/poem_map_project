@@ -4,7 +4,6 @@ const _BaseOperator = preload("res://core/model/base_operator.gd")
 const _DeferredLockActionOperator = preload("res://core/operators/deferred_lock_action_operator.gd")
 const _FatigueManager = preload("res://core/fatigue_manager.gd")
 const _Flag = preload("res://core/model/flag.gd")
-const _ImaginaryConcept = preload("res://core/model/imaginary_concept.gd")
 const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
 const _SourceOfTruth = preload("res://core/source_of_truth.gd")
 const _TempFlagOperator = preload("res://core/operators/temp_flag_operator.gd")
@@ -45,7 +44,7 @@ var last_event: Dictionary = {}
 var session_deferred_cleanups: Array[BaseOperator] = []
 
 ## Imaginary 定义表，从 tools/data/imaginary_definitions.json 加载
-## key: uuid (如 "snow"), value: Dictionary(name, concepts)
+## key: uuid (如 "snow"), value: Dictionary(name)
 var _imaginary_defs: Dictionary = {}
 
 signal ambition_changed(ambition)
@@ -118,8 +117,7 @@ func init_flags():
 		Logging.info('init_flags: flag %s set to %s from SourceOfTruth' % [flag_id, str(flag_val)])
 
 func init_imaginaries():
-	"""从 SourceOfTruth 加载 Imaginary 详细碎片到 Database (V6: level 系统已删除)"""
-	# —— 加载详细碎片（Imaginary） ——
+	"""从 SourceOfTruth 加载 Imaginary 到 Database (V7: ImaginaryConcept 已删除，concepts 字段已删除)"""
 	var basic_data = SourceOfTruth.debug_dashboard_state.get("basic_imaginaries", [])
 	if basic_data.is_empty():
 		Logging.info('init_imaginaries: no basic_imaginaries data in SourceOfTruth, skipping')
@@ -130,10 +128,6 @@ func init_imaginaries():
 		if name.is_empty():
 			Logging.warn('init_imaginaries: basic_imaginaries entry missing name, skipping')
 			continue
-		var raw_concepts = entry.get("concepts", [])
-		var concepts_arr: Array[String] = []
-		for c in raw_concepts:
-			concepts_arr.append(str(c))
 
 		var imaginary_uuid = name.to_lower()
 		var imaginary = Database.get_imaginary_detail(imaginary_uuid)
@@ -141,9 +135,8 @@ func init_imaginaries():
 			imaginary = Imaginary.new()
 			imaginary.uuid = imaginary_uuid
 			imaginary.name = name
-			imaginary.concepts = concepts_arr
 			Database.imaginaries_detail[imaginary_uuid] = imaginary
-			Logging.info("init_imaginaries: 新建 Imaginary '%s' (concepts=%s)" % [imaginary_uuid, str(concepts_arr)])
+			Logging.info("init_imaginaries: 新建 Imaginary '%s'" % imaginary_uuid)
 
 func init_emotions():
 	"""从 SourceOfTruth 加载初始情绪值到 PlayerState"""
@@ -193,7 +186,7 @@ func _connect_imaginary_signals():
 
 
 func _on_request_add_imaginary(tag: String):
-	"""处理意象获取请求：V6 重复 Imaginary → talent +3"""
+	"""处理意象获取请求：V7 重复 Imaginary → talent +3"""
 	if tag.is_empty():
 		Logging.err("PlayerState._on_request_add_imaginary: tag 为空")
 		return
@@ -207,18 +200,13 @@ func _on_request_add_imaginary(tag: String):
 		EventBus.imaginary_changed.emit()
 		return
 
-	# ── 新建 Imaginary（详细碎片） ──
+	# ── 新建 Imaginary ──
 	var imaginary = Imaginary.new()
 	imaginary.uuid = imaginary_uuid
 	var def_data = _imaginary_defs.get(imaginary_uuid, {})
 	imaginary.name = def_data.get("name", tag)
-	var raw_concepts = def_data.get("concepts", [])
-	var concepts_arr: Array[String] = []
-	for c in raw_concepts:
-		concepts_arr.append(str(c))
-	imaginary.concepts = concepts_arr
 	Database.imaginaries_detail[imaginary_uuid] = imaginary
-	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, concepts=%s)" % [imaginary_uuid, imaginary.name, str(concepts_arr)])
+	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s)" % [imaginary_uuid, imaginary.name])
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()

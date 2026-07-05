@@ -1,35 +1,30 @@
 @tool
 class_name LianjuScoreOperator extends BaseOperator
 
-## V6: 联句评分算子 — 基于 tier 而非已删除的 level
-## T2 基础分
-@export var t2_base_score: int = 20
-## T1 基础分 (等于 0)
-@export var t1_base_score: int = 0
+## V7: 联句评分算子 — ImaginaryConcept 已删除，改为基于 Imaginary 列表
+## 简化评分：所有 Imaginary 基础分 20（原 T2），emotion 匹配 ×150%
+
+@export var base_score: int = 20
 @export var emotion_match_percent: int = 150
 
-## 评分完成后 push 到的事件 key，展示评分结果
+## 评分完成后 push 到的事件 key
 @export var result_event_key: String = "lianju_result"
 
-var _picked_imaginary: ImaginaryConcept = null
+var _picked_imaginary: Imaginary = null
 var _final_score: int = 0
 var _picked_name: String = ""
 var _had_emotion_match: bool = false
 
 
 func operate():
-	Logging.info("LianjuScoreOperator: Starting operate() — opening picker for player's imaginaries (tier-based)")
+	Logging.info("LianjuScoreOperator V7: Starting operate() — opening picker for player's imaginaries")
 
-	var data: Array[ImaginaryConcept] = []
-	for uuid in Database.get_imaginaries_all():
-		var imaginary = Database.get_imaginary(uuid) as ImaginaryConcept
-		if not imaginary:
-			continue
-		if imaginary.current_tier < 1:
-			continue
-		data.append(imaginary)
+	var data: Array[Imaginary] = []
+	for imag in Database.imaginaries_detail.values():
+		if imag is Imaginary:
+			data.append(imag)
 
-	Logging.info("LianjuScoreOperator: Found %d available imaginaries for player" % data.size())
+	Logging.info("LianjuScoreOperator: Found %d available imaginaries" % data.size())
 
 	if data.is_empty():
 		Logging.warn("LianjuScoreOperator: No imaginaries available, score = 0")
@@ -49,30 +44,17 @@ func _on_imaginary_picked(imaginary_picked):
 		_apply_score()
 		return
 
-	_picked_imaginary = imaginary_picked as ImaginaryConcept
+	_picked_imaginary = imaginary_picked as Imaginary
 	if not _picked_imaginary:
-		Logging.err("LianjuScoreOperator: Picked item is not an ImaginaryConcept!")
+		Logging.err("LianjuScoreOperator: Picked item is not an Imaginary!")
 		_final_score = 0
 		_picked_name = ""
 		_apply_score()
 		return
 
 	var uuid = _picked_imaginary.uuid
-	var tier = _picked_imaginary.current_tier
 	_picked_name = _picked_imaginary.name
-	Logging.info("LianjuScoreOperator: Player picked imaginary '%s' (name='%s', tier=%d)" % [uuid, _picked_name, tier])
-
-	var base_score: int
-	match tier:
-		2:
-			base_score = t2_base_score
-		1:
-			base_score = t1_base_score
-		_:
-			Logging.warn("LianjuScoreOperator: unknown tier %d, using T1 base" % tier)
-			base_score = t1_base_score
-
-	Logging.info("LianjuScoreOperator: base score = %d (tier=%d)" % [base_score, tier])
+	Logging.info("LianjuScoreOperator: Player picked imaginary '%s' (name='%s')" % [uuid, _picked_name])
 
 	var multiplier := 100
 	var dominant_emotion := _get_dominant_emotion()
@@ -120,7 +102,6 @@ func _apply_score():
 
 	EventBus.lianju_score_calculated.emit(_final_score)
 
-	# 根据分数计算评语
 	var evaluation: String
 	if _final_score >= 30:
 		evaluation = "妙绝！此句浑然天成，四座皆惊！"
@@ -138,8 +119,6 @@ func _apply_score():
 		"lianju_emotion_match": _had_emotion_match,
 		"lianju_evaluation": evaluation,
 	}
-	if _picked_imaginary:
-		ctx["lianju_picked_tier"] = _picked_imaginary.current_tier
 
 	if not result_event_key.is_empty():
 		Logging.info("LianjuScoreOperator: pushing result event '%s'" % result_event_key)

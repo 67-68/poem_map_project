@@ -1,12 +1,14 @@
 # 意象/诗词等级系统删除 — 功能意图
 
-**状态**: 🔴 执行中（2026.07.01）
+**状态**: ✅ 已完成（2026.07.01）— 被 V7 ImaginaryConcept 全量删除取代
 
 ---
 
 ## 意图摘要（<200字）
 
 删除 `ImaginaryConcept.current_level` 和 `Poem.poem_level` 字段及所有依赖逻辑。诗词收益公式中 level 因子写死为 2。重复收集同一 Imaginary 碎片时转为 `talent` 属性增益（+3）。Collapse 合并门槛降为 1 个碎片即可，从 N 个碎片中随机抽取 1 个消耗，其余保留。`current_tier` 保留（仅 1/2，无 0）。删除 `ImaginaryLevelRequirement`、`ImaginaryOperator`、`ImaginarySetLevelOperator`。
+
+> ⚠️ 本任务已被后续的 V7「意象系统扁平化」重构完全取代。V7 更进一步删除了 ImaginaryConcept 类本身和 Tier 系统。详见 [`poem_crafter.md`](DOCUMENTATIONS/feature_intents/poem_crafter.md)。
 
 ---
 

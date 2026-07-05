@@ -50,17 +50,11 @@ static var debug_dashboard_state = {
 	},
 
 	"imaginaries": {
-		# imaginary UUID -> 初始等级
-		#"emotion:ambition": 2,
-		"environment:snow": 1,
+		# imaginary UUID → 初始等级（保留兼容）
 	},
 
 	# 详细碎片初始数据 — 预填入 Database.imaginaries_detail (Imaginary 对象)
-	# 每条是一个 Dict：
-	#   blueprint_id: 4 段式 tag（ENV:NATURE:AUTUMN:changanleaf），用 : 分隔
-	#   contexts:     上下文标签列表（保留兼容）
-	#   tier:         品级（1/2/3）（保留兼容）
-	# 末段 = Imaginary.uuid，中间两段 = ImaginaryConcept key
+	# V7: ImaginaryConcept 已删除，concepts 字段已删除
 
 	"flags": {
 		#"flag_relation_with_libai":30

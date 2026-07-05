@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="ImaginaryConcept" format=3 uid="uid://tmartial01a2"]
-
-[ext_resource type="Script" uid="uid://d1lvovneguq7s" path="res://core/model/imaginary_concept.gd" id="1_tmar7"]
-
-[resource]
-script = ExtResource("1_tmar7")
-uuid = "theme:martial"
-name = "雄健"
-metadata/_custom_type_script = "uid://d1lvovneguq7s"

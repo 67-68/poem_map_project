@@ -34,7 +34,7 @@ random_event,feihualing_start,,,飞花令,宴席上有人提议玩飞花令，�
 >option,feihualing_start_begin,,,来就来！,,,push_event(event_key=feihualing_choose_word),,,
 random_event,feihualing_choose_word,,,选择意象,你要吟咏什么主题？,random_pick(datasource_name="feihualing_imageries"; prop_from_result="uuid"; key_stored_context="feihualing_words"; select_count=4),,,"item_provider(list_key=""feihualing_words"", display_datasource=""imaginaries"", display_prop=""name"", text_template=""以「{item}」为题"", target_event_key=""feihualing_other_done"", payload_key=""feihualing_chosen_word"", use_push_event=true)",
 random_event,feihualing_other_done,,,飞花令,你选择了以「{@keyword}」为题吟咏。[br][br]{@imaginary_desc}[br][br]{@npc_report},context_fetch(fetched_key="feihualing_chosen_word"; datasource_name="imaginaries"; prop_from_result="name"; key_stored_context="keyword")| context_fetch(fetched_key="feihualing_chosen_word"; datasource_name="imaginaries"; prop_from_result="description"; key_stored_context="imaginary_desc")| npc_batch_check(participants_key="guests"; target_context_key="npc_report"; check_prop="TALENT"; text_template="FEIHUALING"),,,,
->option,feihualing_other_done_imaginary,,imaginary_has_level(min_level=1),妙语连珠,妙语连珠,,imaginary_level_reward(l3_fame=50;l2_fame=20;l1_fame=0),,,
+>option,feihualing_other_done_imaginary,,,妙语连珠,妙语连珠,,imaginary_level_reward(l3_fame=50;l2_fame=20;l1_fame=0),,,
 >option,feihualing_other_done_inspiration,,prop_gt(name=inspiration;val=19),灵感硬接,灵感硬接,,pop_event(),,,
 >option,feihualing_other_done_penalty,,,自罚三杯,自罚三杯,,pop_event(),,,
 random_event,request_libai_changhe,,,李白唱和,李白醉眼朦胧地举杯向你走来："好酒好诗，来，与我唱和一首！",,,,,

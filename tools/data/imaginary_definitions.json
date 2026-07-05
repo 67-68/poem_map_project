@@ -1,110 +1,83 @@
 {
   "buyi": {
-    "name": "布衣",
-    "concepts": ["finance:broke", "health:exhausted", "aesthetic:elegant"]
+    "name": "布衣"
   },
   "qianli": {
-    "name": "骐骥",
-    "concepts": ["myth:animal", "emotion:ambition", "theme:martial"]
+    "name": "骐骥"
   },
   "cangsheng": {
-    "name": "苍生",
-    "concepts": ["society:famine", "society:war", "emotion:sorrow", "theme:history"]
+    "name": "苍生"
   },
   "famine": {
-    "name": "饥荒",
-    "concepts": ["society:famine"]
+    "name": "饥荒"
   },
   "snow": {
-    "name": "孤雪",
-    "concepts": ["environment:snow"]
+    "name": "孤雪"
   },
   "drunk": {
-    "name": "醉意",
-    "concepts": ["health:drunk"]
+    "name": "醉意"
   },
   "exile": {
-    "name": "流亡",
-    "concepts": ["travel:exile"]
+    "name": "流亡"
   },
   "corrupt": {
-    "name": "贪腐",
-    "concepts": ["court:corrupt"]
+    "name": "贪腐"
   },
   "despair": {
-    "name": "绝望",
-    "concepts": ["emotion:despair"]
+    "name": "绝望"
   },
   "ink_stone": {
-    "name": "古砚",
-    "concepts": ["aesthetic:elegant"]
+    "name": "古砚"
   },
   "cold_moon": {
-    "name": "寒月",
-    "concepts": ["environment:moon"]
+    "name": "寒月"
   },
   "temple_bell": {
-    "name": "晨钟",
-    "concepts": ["emotion:tranquility"]
+    "name": "晨钟"
   },
   "jade_step": {
-    "name": "玉阶",
-    "concepts": ["place:jadestep"]
+    "name": "玉阶"
   },
   "empty_cup": {
-    "name": "空盏",
-    "concepts": ["health:drunk"]
+    "name": "空盏"
   },
   "wind": {
-    "name": "寒风",
-    "concepts": ["environment:wind"]
+    "name": "寒风"
   },
   "willow_branch": {
-    "name": "折柳",
-    "concepts": ["travel:parting"]
+    "name": "折柳"
   },
   "thatched_grass": {
-    "name": "茅草",
-    "concepts": ["emotion:sorrow"]
+    "name": "茅草"
   },
   "high_tower": {
-    "name": "危楼",
-    "concepts": ["travel:exile"]
+    "name": "危楼"
   },
   "cloud_and_sun": {
-    "name": "云日",
-    "concepts": ["politics:cloud"]
+    "name": "云日"
   },
   "lone_snow": {
-    "name": "孤雪",
-    "concepts": ["environment:snow"]
+    "name": "孤雪"
   },
   "falling_leaf": {
-    "name": "落木",
-    "concepts": ["environment:wind"]
+    "name": "落木"
   },
   "ghost_fire": {
-    "name": "鬼火",
-    "concepts": ["theme:history"]
+    "name": "鬼火"
   },
   "ruined_wall": {
-    "name": "残垣",
-    "concepts": ["theme:history"]
+    "name": "残垣"
   },
   "starving_bone": {
-    "name": "饿殍",
-    "concepts": ["society:famine"]
+    "name": "饿殍"
   },
   "cold_blade": {
-    "name": "寒锋",
-    "concepts": ["theme:martial"]
+    "name": "寒锋"
   },
   "lone_sail": {
-    "name": "孤帆",
-    "concepts": ["travel:exile"]
+    "name": "孤帆"
   },
   "wine_gourd": {
-    "name": "酒葫芦",
-    "concepts": ["health:drunk"]
+    "name": "酒葫芦"
   }
 }
