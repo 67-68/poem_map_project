@@ -39,6 +39,16 @@ CSV results: roll_imaginary(level=N)
 |------|------|------|
 | `get_hint` | `String` | 获取时的外部描写提示，自包含，不依赖上下文。eg. "一件粗麻布衣，缝补痕迹历历可见" |
 
+### describe_preview() 覆盖
+
+在 hover 预览阶段（`ActionHintBuilder`），通过多态调用展示预览文本：
+
+- `level=1` → `"随机获得一个等级1的意象"`
+- `level=2` → `"随机获得一个等级2的意象"`
+- `level=3` → `"随机获得一个等级3的意象"`
+
+> 注意：此时 `init()` 未执行，随机尚未发生，无法显示具体意象名。执行后通过 `operate()` 内 `show_hint()` 做 toast 通知具体获得的内容。
+
 ### imaginary_definitions.json 新增字段
 
 每条意象增加：

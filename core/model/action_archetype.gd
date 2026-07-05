@@ -33,7 +33,7 @@ static func from_json(data: Dictionary) -> ActionArchetype:
 	if not dsl.is_empty():
 		var parsed = MicroDSLParser.parse_consequence_operators(dsl)
 		for op in parsed:
-			if op is PropertyOperator or op is TraitOperator or op is TimeOperator:
+			if op is PropertyOperator or op is TraitOperator or op is TimeOperator or op is RollImaginaryOperator:
 				arch.operators.append(op)
 	
 	return arch

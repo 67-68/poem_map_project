@@ -235,14 +235,15 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	
 	# ── 成功效果 ──
 	var success_descs: Array[String] = []
-	# 优先级 1: 外部传入的 archetype success_ops
+	# 合并两个数据源：archetype + .tres action_results（不再互斥）
 	if not success_ops.is_empty():
-		success_descs = build_operator_preview(success_ops)
-		Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' 使用 archetype success_ops (%d ops → %d descs)" % [sub_action.name, success_ops.size(), success_descs.size()])
-	# 优先级 2: action.action_results（.tres 级别 operators）
-	elif sub_action.action_results and not sub_action.action_results.is_empty():
-		success_descs = build_operator_preview(sub_action.action_results)
-		Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' 使用 action_results (%d ops → %d descs)" % [sub_action.name, sub_action.action_results.size(), success_descs.size()])
+		success_descs.append_array(build_operator_preview(success_ops))
+		Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' archetype success_ops (%d ops) → 已合并" % [sub_action.name, success_ops.size()])
+	if sub_action.action_results and not sub_action.action_results.is_empty():
+		var tres_lines := build_operator_preview(sub_action.action_results)
+		if not tres_lines.is_empty():
+			success_descs.append_array(tres_lines)
+			Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' .tres action_results (%d ops → %d descs) → 已合并" % [sub_action.name, sub_action.action_results.size(), tres_lines.size()])
 	
 	if success_descs.is_empty():
 		lines.append("[成功效果]: 成败未卜…")
@@ -255,16 +256,16 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	
 	# ── 失败效果 ──
 	var fail_descs: Array[String] = []
-	# 优先级 1: 外部传入的 archetype fail_ops
+	# 合并两个数据源：archetype fail_ops + .tres failed_result.operators（不再互斥）
 	if not fail_ops.is_empty():
-		fail_descs = build_operator_preview(fail_ops)
-		Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' 使用 archetype fail_ops (%d ops → %d descs)" % [sub_action.name, fail_ops.size(), fail_descs.size()])
-	# 优先级 2: action.failed_result.operators（.tres 级别 operators）
-	else:
-		var failed_result: ChoiceResult = sub_action.failed_result
-		if failed_result and failed_result.operators and not failed_result.operators.is_empty():
-			fail_descs = build_operator_preview(failed_result.operators)
-			Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' 使用 failed_result.operators (%d ops → %d descs)" % [sub_action.name, failed_result.operators.size(), fail_descs.size()])
+		fail_descs.append_array(build_operator_preview(fail_ops))
+		Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' archetype fail_ops (%d ops) → 已合并" % [sub_action.name, fail_ops.size()])
+	var failed_result: ChoiceResult = sub_action.failed_result
+	if failed_result and failed_result.operators and not failed_result.operators.is_empty():
+		var tres_fail_lines := build_operator_preview(failed_result.operators)
+		if not tres_fail_lines.is_empty():
+			fail_descs.append_array(tres_fail_lines)
+			Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' .tres failed_result (%d ops → %d descs) → 已合并" % [sub_action.name, failed_result.operators.size(), tres_fail_lines.size()])
 	
 	if fail_descs.is_empty():
 		lines.append("[失败效果]: 后果难料…")

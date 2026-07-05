@@ -71,6 +71,13 @@ func init(_context: Dictionary) -> Dictionary:
 	return _context
 
 
+## describe_preview() — 供 ActionHintBuilder 多态调用，显示在 hover 预览的「结果」区
+func describe_preview() -> String:
+	if level <= 0:
+		return "随机获得一个意象"
+	return "随机获得一个等级%d的意象" % level
+
+
 func operate():
 	Logging.info("RollImaginaryOperator.operate: 开始执行，picked_uuid='%s', level=%d" % [_picked_uuid, level])
 
@@ -137,7 +144,7 @@ static func _get_player_state():
 	## 获取 PlayerState 实例
 	var tree := Engine.get_main_loop()
 	if tree and tree is SceneTree:
-		var root := tree.root
+		var root = tree.root
 		if root:
 			return root.get_node_or_null("Game/PlayerState")
 	return null
