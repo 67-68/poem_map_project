@@ -19,6 +19,37 @@ const SLOTS_PARENT_PATH := "Panel/InputImagPanel/H"
 ## PoemSlot packed scene
 const POEM_SLOT_SCENE := preload("res://ui/poem_slot.tscn")
 
+## ──────────────────────────────────────────────
+## V9.1: 预览锁定缓存（路线 B：预览即锁定，创作仅确认）
+## ──────────────────────────────────────────────
+
+## 预览时锁定的计算结果 — 切换 mode 不重置，仅意象变更时重建
+var _cached_result: PoemCraftingCalculator.PoemCraftingResult = null
+var _cached_final_level: int = 1
+var _cached_upgrade_succeeded: bool = false
+
+## 缓存预览时选中渲染的文本，保证切换 mode 时前两行不变
+var _cached_line1_text: String = ""
+var _cached_line2_text: String = ""
+
+## ──────────────────────────────────────────────
+## 文学化评价常量字典
+## ──────────────────────────────────────────────
+
+## 意象丰瘠评价 — 按 base_level (1=平庸, 2=佳作, 3=绝唱)
+const LITERARY_IMAGERY_TEXTS := {
+	1: ["意象贫瘠，恐成陈词滥调", "意象单薄，难成气候", "寥寥数象，勉强成篇"],
+	2: ["意象尚可，颇有章法", "意象初具，犹待点睛", "意象得体，渐入佳境"],
+	3: ["意象丰沛，气韵生动", "意象纵横，吞吐大荒", "万象在旁，呼之欲出"],
+}
+
+## 灵感手感评价 — 按 upgrade_probability 档位: 0=低(<0.33), 1=中(0.33~0.66), 2=高(≥0.66)
+const LITERARY_INSPIRATION_TEXTS := {
+	0: ["文思枯涩，全凭基本功", "手感生涩，勉力为之", "思绪凝滞，步步为营"],
+	1: ["文思渐涌，偶得佳句", "似有灵光，若即若离", "心手渐畅，暗藏机锋"],
+	2: ["灵感涌动，如有神助", "才思泉涌，下笔如飞", "灵光乍现，妙手偶得"],
+}
+
 
 func _ready() -> void:
 	Logging.info('PoemCrafter: initializing poem crafter V8')
@@ -68,15 +99,35 @@ func _connect_toggle_signals() -> void:
 func _on_toggle_deng_gao(pressed: bool) -> void:
 	if pressed:
 		current_mode = "deng_gao"
-		Logging.info('PoemCrafter: mode → deng_gao (BROADCAST 管道)')
-		_preview_current()
+		Logging.info('PoemCrafter(V9.1): mode → deng_gao（仅刷新第三行，不重算）')
+		_refresh_mode_display_only()
 
 
 func _on_toggle_gan_ye(pressed: bool) -> void:
 	if pressed:
 		current_mode = "gan_ye"
-		Logging.info('PoemCrafter: mode → gan_ye (SECULAR 管道)')
-		_preview_current()
+		Logging.info('PoemCrafter(V9.1): mode → gan_ye（仅刷新第三行，不重算）')
+		_refresh_mode_display_only()
+
+
+## 仅刷新 RichTextLabel 的第三行（精力方向），前两行复用缓存的文本，不重算/不重随机
+func _refresh_mode_display_only() -> void:
+	if _cached_result == null:
+		Logging.info('PoemCrafter(V9.1): _refresh_mode_display_only — 无缓存，跳过')
+		return
+
+	# 行1/行2 复用 _preview_current 时缓存的文本，行3 按 current_mode 更新
+	var lines: Array[String] = []
+	lines.append("[color=#daa520]%s[/color]" % _cached_line1_text)
+	lines.append("[color=#87ceeb]%s[/color]" % _cached_line2_text)
+
+	if current_mode == "gan_ye":
+		lines.append("[color=#ddd]此诗的精力将倾注于世俗功名之上[/color]")
+	else:
+		lines.append("[color=#ddd]此诗的精力将倾注于千古文章之上[/color]")
+
+	$Panel/InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
+	Logging.info('PoemCrafter(V9.1): _refresh_mode_display_only — 第三行已更新, mode=%s, line1=%s' % [current_mode, _cached_line1_text])
 
 
 # ──────────────────────────────────────────────
@@ -169,99 +220,95 @@ func _get_all_valid_imaginaries() -> Array[Imaginary]:
 
 
 # ──────────────────────────────────────────────
-# 诗词创作 V9
+# 诗词创作 V9.1 — 路线 B：预览锁定，创作仅确认执行
 # ──────────────────────────────────────────────
 
 func _on_button_pressed() -> void:
-	var all_imaginaries := _get_all_valid_imaginaries()
+	Logging.info('PoemCrafter(V9.1): _on_button_pressed — 用户确认创作')
 
-	# ── 1. 纯函数计算 ──
-	var max_manageable: int = PlayerState.max_imaginary_managable
-	var result := PoemCraftingCalculator.calculate_poem_grade(all_imaginaries, current_mode, max_manageable)
-	Logging.info('PoemCrafter(V9): calculate_poem_grade — passed=%s, fail_reason=%s, score=%d, base_level=%d, upgrade_prob=%.3f, secular=%.1f, literary=%.1f' %
-		[result.passed, result.fail_reason, result.score, result.base_level, result.upgrade_probability, result.secular_value, result.literary_value])
-
-	# ── 2. insufficient 校验 ──
-	if not result.passed:
-		if result.fail_reason == "insufficient":
-			Logging.warn('PoemCrafter(V9): 意象不足 — 当前 %d, 需要至少 %d' % [all_imaginaries.size(), max_manageable])
-			$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]意象不足，至少需要%d个意象方能成诗。[/color]" % max_manageable
-		else:
-			Logging.err('PoemCrafter(V9): 未知错误 — fail_reason=%s' % result.fail_reason)
-			$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题，稍后再试吧。[/color]"
-		return
-
-	# ── 3. 已有诗作上限检查 ──
+	# ── 1. 已有诗作上限检查 ──
 	if _has_unused_poem():
-		Logging.warn('PoemCrafter(V9): 已有未使用的诗词，拒绝创作')
+		Logging.warn('PoemCrafter(V9.1): 已有未使用的诗词，拒绝创作')
 		$Panel/InputImagPanel/RichTextLabel.text = "已有诗作，先将其送出或题壁后再来。"
 		return
 
-	Logging.info('PoemCrafter(V9): crafting poem — %d imaginaries, mode=%s, score=%d' % [all_imaginaries.size(), current_mode, result.score])
+	# ── 2. 缓存必须存在（预览阶段已锁定结果） ──
+	if _cached_result == null:
+		Logging.err('PoemCrafter(V9.1): 缓存缺失 — 预览未完成或已过期，阻断创作')
+		$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题，稍后再试吧。[/color]"
+		return
 
-	# ── 4. 概率升级抽奖（调用方执行 randf，纯函数仅输出概率）──
-	var final_level: int = result.base_level
-	var upgrade_succeeded: bool = false
-	if final_level < 3 and result.upgrade_probability > 0.0:
-		var roll: float = randf()
-		if roll < result.upgrade_probability:
-			final_level += 1
-			upgrade_succeeded = true
-			Logging.info('PoemCrafter(V9): 概率升级成功！roll=%.3f < prob=%.3f → level=%d (%s)' % [roll, result.upgrade_probability, final_level, PoemCraftingCalculator.get_level_display_name(final_level)])
-		else:
-			Logging.info('PoemCrafter(V9): 概率升级失败 roll=%.3f >= prob=%.3f → level=%d (%s)' % [roll, result.upgrade_probability, final_level, PoemCraftingCalculator.get_level_display_name(final_level)])
-	else:
-		Logging.info('PoemCrafter(V9): 无需升级 — base_level=%d (%s), upgrade_prob=%.3f' % [final_level, PoemCraftingCalculator.get_level_display_name(final_level), result.upgrade_probability])
+	var final_level: int = _cached_final_level
+	var upgrade_succeeded: bool = _cached_upgrade_succeeded
+	Logging.info('PoemCrafter(V9.1): 从缓存读取 — final_level=%d (%s), upgrade=%s' % [final_level, PoemCraftingCalculator.get_level_display_name(final_level), upgrade_succeeded])
 
-	# ── 5. 创建 Poem 对象 ──
+	# ── 3. Mode → secular/literary 硬赋值（current_mode 在点击时可能已切换，以此为准） ──
+	var mode_values = PoemCraftingCalculator.MODE_VALUE_MAP.get(current_mode, {"secular": 0.0, "literary": 0.0})
+	var secular_value: float = mode_values["secular"]
+	var literary_value: float = mode_values["literary"]
+	Logging.info('PoemCrafter(V9.1): mode=%s → secular=%.1f, literary=%.1f' % [current_mode, secular_value, literary_value])
+
+	# ── 4. 创建 Poem 对象 ──
 	var level_display_name := PoemCraftingCalculator.get_level_display_name(final_level)
-	var poem = Poem.new("POEM", level_display_name, result.secular_value, result.literary_value)
+	var poem = Poem.new("POEM", level_display_name, secular_value, literary_value)
 	poem.uuid = "crafted_poem_l%d_%d" % [final_level, Time.get_unix_time_from_system()]
 	poem.name = "《%s》" % level_display_name
 	poem.level = final_level
 	poem.specific_topic = level_display_name
-	Logging.info('PoemCrafter(V9): Poem created — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
+	Logging.info('PoemCrafter(V9.1): Poem created — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
 
 	PlayerState.created_poems.append(poem)
-	Logging.info('PoemCrafter(V9): Poem added to created_poems')
+	Logging.info('PoemCrafter(V9.1): Poem added to created_poems')
 
-	# ── 6. 算子生成并执行 ──
+	# ── 5. 算子生成并执行 ──
 	var operators: Array = []
-	if result.secular_value != 0.0:
-		operators.append(OperatorFactory.create_property_operator("money", result.secular_value))
-		Logging.info('PoemCrafter(V9): 生成 money 算子: %.1f' % result.secular_value)
-	if result.literary_value != 0.0:
-		operators.append(OperatorFactory.create_property_operator("literary_fame", result.literary_value))
-		Logging.info('PoemCrafter(V9): 生成 literary_fame 算子: %.1f' % result.literary_value)
+	if secular_value != 0.0:
+		operators.append(OperatorFactory.create_property_operator("money", secular_value))
+		Logging.info('PoemCrafter(V9.1): 生成 money 算子: %.1f' % secular_value)
+	if literary_value != 0.0:
+		operators.append(OperatorFactory.create_property_operator("literary_fame", literary_value))
+		Logging.info('PoemCrafter(V9.1): 生成 literary_fame 算子: %.1f' % literary_value)
 	_apply_operators(operators)
-	Logging.info('PoemCrafter(V9): 算子执行完成 — %d 个算子' % operators.size())
+	Logging.info('PoemCrafter(V9.1): 算子执行完成 — %d 个算子' % operators.size())
 
-	# ── 7. 消耗所有参与计算的 Imaginary ──
+	# ── 6. 消耗所有参与计算的 Imaginary ──
 	_consume_all_imaginaries()
 
-	# ── 8. 从对应等级的 EventBase 抽取事件 ──
+	# ── 7. 从对应等级的 EventBase 抽取事件 ──
 	var event_base_uuid := PoemCraftingCalculator.get_event_base_for_level(final_level)
 	var ctx := {
-		"poem_secular": result.secular_value,
-		"poem_literary": result.literary_value,
+		"poem_secular": secular_value,
+		"poem_literary": literary_value,
 		"poem_level": final_level,
 		"poem_level_name": level_display_name,
 	}
-	Logging.info('PoemCrafter(V9): 从 EventBase 抽事件 — base=%s, ctx=%s' % [event_base_uuid, str(ctx)])
+	Logging.info('PoemCrafter(V9.1): 从 EventBase 抽事件 — base=%s, ctx=%s' % [event_base_uuid, str(ctx)])
 
 	var event_manager = get_node_or_null("/root/EventManager")
 	if event_manager and event_manager.has_method("draw_from_event_base"):
 		var selected_uuid = event_manager.draw_from_event_base(event_base_uuid, ctx)
 		if selected_uuid.is_empty():
-			Logging.err('PoemCrafter(V9): EventBase 抽取失败，降级使用 push_event "poem_reveal"')
+			Logging.err('PoemCrafter(V9.1): EventBase 抽取失败，降级使用 push_event "poem_reveal"')
 			EventBus.push_event.emit("poem_reveal", ctx)
 		else:
-			Logging.info('PoemCrafter(V9): EventBase 抽取成功 — selected=%s' % selected_uuid)
+			Logging.info('PoemCrafter(V9.1): EventBase 抽取成功 — selected=%s' % selected_uuid)
 	else:
-		Logging.err('PoemCrafter(V9): EventManager 或 draw_from_event_base 不存在，降级使用 push_event "poem_reveal"')
+		Logging.err('PoemCrafter(V9.1): EventManager 或 draw_from_event_base 不存在，降级使用 push_event "poem_reveal"')
 		EventBus.push_event.emit("poem_reveal", ctx)
 
+	# ── 8. 清除缓存并重建 Slot ──
+	_clear_cached_result()
 	_rebuild_slots()
+
+
+## 清除预览缓存（创作完成后 / insufficient 后调用）
+func _clear_cached_result() -> void:
+	_cached_result = null
+	_cached_final_level = 1
+	_cached_upgrade_succeeded = false
+	_cached_line1_text = ""
+	_cached_line2_text = ""
+	Logging.info('PoemCrafter(V9.1): 缓存已清除')
 
 
 func _consume_matched_imaginaries(uuids: Array[String]) -> void:
@@ -306,43 +353,87 @@ func _apply_operators(ops: Array) -> void:
 
 
 # ──────────────────────────────────────────────
-# V9 匹配预览（使用当前所有 Imaginary + current_mode）
+# V9.1 文学化预览（路线 B：预览即锁定，创作仅确认）
 # ──────────────────────────────────────────────
 
 func _preview_current() -> void:
 	var all_imaginaries := _get_all_valid_imaginaries()
 	var max_manageable: int = PlayerState.max_imaginary_managable
-	
+
+	Logging.info('PoemCrafter(V9.1): _preview_current — 意象数=%d, mode=%s' % [all_imaginaries.size(), current_mode])
+
+	# ── 1. 纯函数计算 ──
 	var result := PoemCraftingCalculator.calculate_poem_grade(all_imaginaries, current_mode, max_manageable)
 
-	# ── insufficient ──
+	# ── 2. insufficient ──
 	if not result.passed:
 		if result.fail_reason == "insufficient":
 			$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]意象不足，至少需要%d个意象方能成诗。[/color]" % max_manageable
+			Logging.info('PoemCrafter(V9.1): _preview_current — insufficient, 清除缓存')
 		else:
 			$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题…[/color]"
+			Logging.err('PoemCrafter(V9.1): _preview_current — 未知错误 fail_reason=%s' % result.fail_reason)
+		_cached_result = null
+		_cached_final_level = 1
+		_cached_upgrade_succeeded = false
 		return
 
-	# ── 成功：展示评分预览 ──
-	var base_level_name := PoemCraftingCalculator.get_level_display_name(result.base_level)
-	var upgrade_pct := int(result.upgrade_probability * 100)
-	var mode_label := "干谒权贵" if current_mode == "gan_ye" else "登高抒怀"
-	
-	var lines: Array[String] = []
-	lines.append("[color=#daa520]模式: %s[/color]" % mode_label)
-	lines.append("[color=white]意象数: %d | 总分: %d[/color]" % [all_imaginaries.size(), result.score])
-	lines.append("[color=#87ceeb]基础评级: %s[/color]" % base_level_name)
-	
-	if result.base_level < 3 and result.upgrade_probability > 0.0:
-		var next_level_name := PoemCraftingCalculator.get_level_display_name(result.base_level + 1)
-		lines.append("[color=gold]晋升 %s 概率: %d%%[/color]" % [next_level_name, upgrade_pct])
-	
-	if result.secular_value != 0.0:
-		lines.append("[color=#daa520]世俗影响: %.0f[/color]" % result.secular_value)
-	if result.literary_value != 0.0:
-		lines.append("[color=#87ceeb]文学影响: %.0f[/color]" % result.literary_value)
+	# ── 3. 掷骰子锁定结果（路线 B：预览即锁定） ──
+	_cached_result = result
+	_cached_final_level = result.base_level
+	_cached_upgrade_succeeded = false
 
-	$Panel/InputImagPanel/RichTextLabel.text = "\n".join(lines)
+	if _cached_final_level < 3 and result.upgrade_probability > 0.0:
+		var roll: float = randf()
+		if roll < result.upgrade_probability:
+			_cached_final_level += 1
+			_cached_upgrade_succeeded = true
+			Logging.info('PoemCrafter(V9.1): 预览锁定 — 升级成功！roll=%.3f < prob=%.3f → final_level=%d (%s)' % [roll, result.upgrade_probability, _cached_final_level, PoemCraftingCalculator.get_level_display_name(_cached_final_level)])
+		else:
+			Logging.info('PoemCrafter(V9.1): 预览锁定 — 升级失败 roll=%.3f >= prob=%.3f → final_level=%d (%s)' % [roll, result.upgrade_probability, _cached_final_level, PoemCraftingCalculator.get_level_display_name(_cached_final_level)])
+	else:
+		Logging.info('PoemCrafter(V9.1): 预览锁定 — 无需升级 base_level=%d (%s), prob=%.3f' % [_cached_final_level, PoemCraftingCalculator.get_level_display_name(_cached_final_level), result.upgrade_probability])
+
+	# ── 4. 构建三行文学评价（缓存选中的文本，切换 mode 时复用） ──
+	var lines: Array[String] = []
+
+	# 行 1: 意象丰瘠（#daa520 暗金）— 基于 base_level
+	_cached_line1_text = _pick_random_from_pool(LITERARY_IMAGERY_TEXTS.get(result.base_level, ["意象平平"]))
+	lines.append("[color=#daa520]%s[/color]" % _cached_line1_text)
+
+	# 行 2: 灵感手感（#87ceeb 天蓝）— 基于 upgrade_probability 三档 / 绝唱特殊文本
+	if result.base_level >= 3:
+		# 绝唱：固定特殊文本
+		_cached_line2_text = "已达化境，随心所欲"
+	else:
+		var prob: float = result.upgrade_probability
+		var tier: int = 0
+		if prob >= 0.66:
+			tier = 2
+		elif prob >= 0.33:
+			tier = 1
+		else:
+			tier = 0
+		_cached_line2_text = _pick_random_from_pool(LITERARY_INSPIRATION_TEXTS.get(tier, ["文思平平"]))
+		if _cached_upgrade_succeeded:
+			_cached_line2_text += "——竟有神来之笔！"
+	lines.append("[color=#87ceeb]%s[/color]" % _cached_line2_text)
+
+	# 行 3: 精力方向（white）— 基于 current_mode
+	if current_mode == "gan_ye":
+		lines.append("[color=#ddd]此诗的精力将倾注于世俗功名之上[/color]")
+	else:
+		lines.append("[color=#ddd]此诗的精力将倾注于千古文章之上[/color]")
+
+	$Panel/InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
+	Logging.info('PoemCrafter(V9.1): _preview_current — 渲染完成, final_level=%d, upgrade=%s, line1=%s' % [_cached_final_level, _cached_upgrade_succeeded, _cached_line1_text])
+
+
+## 从常量池中随机选一条文本（使用 randi 保证预览评价的微妙变化）
+func _pick_random_from_pool(pool: Array) -> String:
+	if pool.is_empty():
+		return "意象平平"
+	return pool[randi() % pool.size()]
 
 
 # ──────────────────────────────────────────────
