@@ -53,3 +53,31 @@
 - MonthEndSettlement 监听 player_stat_changed
 - 比较当前值 vs 月度快照，增长绿 / 衰减红 / 无变化恢复默认
 - 每旬初由 _on_xun_color_reset() 清空，不再依赖月初清空
+
+### 月末结算 UI 状态机
+
+月末结算事件通过 `EventBus.push_event(is_settlement=true)` 推入纸带栈顶，
+使用专用 [`SettlementTapeEntry`](ui/settlement_tape_entry.gd) 组件渲染。
+
+**状态转换：**
+
+```
+[awaiting_choice] ──点击"合上考评"──▶ [chosen]
+       │                                    │
+       │ emit option_selected(PopEvent)       │ 追加「既决：合上考评」烙印
+       │ NarrativeOverlay → EventUI.mark_chosen
+       │                                    │
+       ▼                                    ▼
+  _confirm_btn.pressed (CONNECT_ONE_SHOT)  按钮隐藏 + 信号不可再触发
+  NarrativeOverlay._is_settlement=true     BlurManager.hide_picker_blur()
+       │                                    _is_settlement = false
+       ▼
+  Director.on_option_selected → PopEventOperator.pop_to_event()
+```
+
+**关键约束：**
+
+- `SettlementTapeEntry` 自主管理 UI 状态转换（[`mark_chosen()`](ui/settlement_tape_entry.gd:152)），不依赖 [`EventUI.mark_chosen()`](characters/event_ui.gd:241) 中硬编码的 `MarginContainer/VBox` 节点路径
+- [`EventUI.mark_chosen()`](characters/event_ui.gd:249-260) 检测 `entry_type == "settlement"` 后委托给 `entry.mark_chosen(choice_text)` 处理
+- `_confirm_btn.pressed` 使用 `CONNECT_ONE_SHOT` 纵深防御，即使 mark_chosen 未覆盖仍无法二次触发
+- 第一次点击 → 按钮变烙印 + PopEventOperator 弹出结算事件 → 纸带回归上层事件

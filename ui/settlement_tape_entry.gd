@@ -113,7 +113,7 @@ func _construct_layout() -> void:
 
 func _connect_signals() -> void:
 	if _confirm_btn:
-		_confirm_btn.pressed.connect(_on_confirm_pressed)
+		_confirm_btn.pressed.connect(_on_confirm_pressed, CONNECT_ONE_SHOT)
 
 
 func populate(event: BaseEvent) -> void:
@@ -146,3 +146,46 @@ func _on_confirm_pressed() -> void:
 	var result := ChoiceResult.new()
 	result.operators = [PopEventOperator.new()]
 	option_selected.emit(result, "合上考评")
+
+
+## 将按钮区域替换为「既决：xxx」文本烙印（复用 EventUI 既有样式）
+func mark_chosen(choice_text: String) -> void:
+	Logging.info("SettlementTapeEntry.mark_chosen: choice='%s'" % choice_text)
+
+	# 1. 隐藏整个 OptionBtns 容器（_confirm_btn 在其中）
+	var option_btns := get_node_or_null("VBox_Layout/OptionBtns")
+	if option_btns:
+		option_btns.hide()
+
+	# 2. 创建「既决：xxx」文本烙印
+	var chosen_lbl := Label.new()
+	chosen_lbl.name = "ChoiceLabel"
+	chosen_lbl.text = "「 既决：%s 」" % choice_text
+	chosen_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	chosen_lbl.add_theme_color_override("font_color", Color(0.55, 0.10, 0.10))
+	chosen_lbl.add_theme_font_size_override("font_size", 14)
+
+	# 极淡麻纸底色 + 微弱红色下划线
+	var bg_style := StyleBoxFlat.new()
+	bg_style.bg_color = Color(0.96, 0.93, 0.86, 0.20)
+	bg_style.border_width_left = 0
+	bg_style.border_width_right = 0
+	bg_style.border_width_top = 0
+	bg_style.border_width_bottom = 1
+	bg_style.border_color = Color(0.55, 0.10, 0.10, 0.25)
+	chosen_lbl.add_theme_stylebox_override("normal", bg_style)
+
+	# Margined wrapper
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 20)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	margin.add_child(chosen_lbl)
+
+	var vbox := get_node_or_null("VBox_Layout")
+	if vbox:
+		vbox.add_child(margin)
+	else:
+		add_child(margin)
+
+	Logging.info("SettlementTapeEntry.mark_chosen: 烙印已追加")

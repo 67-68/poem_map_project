@@ -142,6 +142,7 @@ func append_settlement_entry(event: BaseEvent, context: Dictionary) -> void:
 	entry.set_meta("entry_type", "settlement")
 
 	entry.populate(event)
+	entry.set_meta("state", "awaiting_choice")
 	entry.option_selected.connect(func(choice_result, choice_text):
 		option_selected.emit(choice_result, choice_text)
 	)
@@ -243,6 +244,19 @@ func mark_chosen(entry_id: String, choice_text: String) -> void:
 	var entry := _find_entry(entry_id)
 	if not entry:
 		Logging.err("EventUI.mark_chosen: 未找到 entry_id='%s'" % entry_id)
+		return
+
+	# ── 结算条目：委托给 SettlementTapeEntry 自治处理 ──
+	var entry_type: String = entry.get_meta("entry_type", "")
+	if entry_type == "settlement":
+		Logging.info("EventUI.mark_chosen: 结算条目，委托给 SettlementTapeEntry.mark_chosen()")
+		if entry.has_method("mark_chosen"):
+			entry.mark_chosen(choice_text)
+			entry.set_meta("state", "chosen")
+		else:
+			Logging.err("EventUI.mark_chosen: 结算条目缺少 mark_chosen 方法")
+		if _active_entry_id == entry_id:
+			_active_entry_id = ""
 		return
 
 	var state: String = entry.get_meta("state", "")
