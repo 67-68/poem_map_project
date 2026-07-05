@@ -16,6 +16,10 @@ var current_mode: String = "gan_ye"
 ## Slot 容器路径
 const SLOTS_PARENT_PATH := "Panel/InputImagPanel/H"
 
+## 浮动灵感容器（复用 tscn 中已有的 Control 节点）
+const FLOATING_CONTAINER_PATH := "Control"
+var _floating_container: Control = null
+
 ## PoemSlot packed scene
 const POEM_SLOT_SCENE := preload("res://ui/poem_slot.tscn")
 
@@ -72,6 +76,13 @@ func _ready() -> void:
 
 	# Toggle 按钮：监听 button_group 变更
 	_connect_toggle_signals()
+
+	# 缓存浮动灵感容器
+	_floating_container = get_node_or_null(FLOATING_CONTAINER_PATH)
+	if _floating_container:
+		Logging.info('PoemCrafter: cached floating container at %s' % FLOATING_CONTAINER_PATH)
+	else:
+		Logging.warn('PoemCrafter: floating container %s 不存在' % FLOATING_CONTAINER_PATH)
 
 	call_deferred("_rebuild_slots")
 
@@ -195,6 +206,9 @@ func _rebuild_slots() -> void:
 
 	# 自动预览
 	_preview_current()
+
+	# 浮动灵感标签
+	_rebuild_floating_labels()
 
 
 func _create_slot(text: String, greyed: bool) -> PoemSlot:
@@ -555,6 +569,9 @@ func show_with_animation() -> void:
 
 
 func hide_with_animation() -> void:
+	# 先清理浮动灵感标签
+	_cleanup_floating_labels()
+
 	var tw := create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.set_parallel(true)
 	tw.tween_property(self, "modulate:a", 0.0, 0.3)
@@ -562,3 +579,49 @@ func hide_with_animation() -> void:
 	await tw.finished
 	hide()
 	Logging.info("PoemCrafter: hide_with_animation 完成")
+
+
+# ──────────────────────────────────────────────
+# 浮动灵感标签管理
+# ──────────────────────────────────────────────
+
+## 重建浮动灵感标签（与 HBox Slots 并行，纯氛围层）
+func _rebuild_floating_labels() -> void:
+	_cleanup_floating_labels()
+
+	if not _floating_container:
+		Logging.warn('PoemCrafter: _floating_container 不存在，跳过浮动标签重建')
+		return
+
+	var all_imaginaries := _get_all_valid_imaginaries()
+	if all_imaginaries.is_empty():
+		Logging.info('PoemCrafter: 无意象，跳过浮动标签重建')
+		return
+
+	for imag in all_imaginaries:
+		var label := FloatingImaginaryLabel.new()
+		label.setup(imag.name, imag.level)
+		_floating_container.add_child(label)
+
+	Logging.info('PoemCrafter: 创建 %d 个浮动灵感标签' % all_imaginaries.size())
+
+
+## 清理所有浮动灵感标签
+func _cleanup_floating_labels() -> void:
+	if not _floating_container:
+		return
+
+	var count := 0
+	for child in _floating_container.get_children():
+		if child is FloatingImaginaryLabel:
+			child.stop_and_cleanup()
+			count += 1
+		# 保留"wasd移动" Label（非 FloatingImaginaryLabel 的都不删）
+		# 只移除 FloatingImaginaryLabel 实例
+	for child in _floating_container.get_children():
+		if child is FloatingImaginaryLabel:
+			_floating_container.remove_child(child)
+			child.queue_free()
+
+	if count > 0:
+		Logging.info('PoemCrafter: 清理 %d 个浮动灵感标签' % count)

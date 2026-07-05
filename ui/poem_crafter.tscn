@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://d28jgf66xnd51" path="res://ui/poem_crafter.gd" id="1_otk17"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="3_36lce"]
-[ext_resource type="PackedScene" uid="uid://dhm3awu3pacwl" path="res://ui/poem_slot.tscn" id="3_o11fd"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="4_sfx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rixq6"]
@@ -34,6 +33,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_rixq6")
 script = ExtResource("1_otk17")
 
 [node name="Control" type="Control" parent="." unique_id=783040939]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Control" unique_id=927036892]
@@ -54,9 +58,9 @@ size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_nkd15")
 
 [node name="InputImagPanel" type="VBoxContainer" parent="Panel" unique_id=531798169]
-custom_minimum_size = Vector2(0, 100)
+custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 theme_override_constants/separation = 32
 
 [node name="H" type="HBoxContainer" parent="Panel/InputImagPanel" unique_id=1122163985]

@@ -178,3 +178,55 @@ flowchart TD
 | [`data/1_core_rules/events/fallback/poem_level_1_fallback.tres`](data/1_core_rules/events/fallback/poem_level_1_fallback.tres) | **新建** — 平庸匿名诗 |
 | [`data/1_core_rules/events/fallback/poem_level_2_fallback.tres`](data/1_core_rules/events/fallback/poem_level_2_fallback.tres) | **新建** — 佳作匿名诗 |
 | [`data/1_core_rules/events/fallback/poem_level_3_fallback.tres`](data/1_core_rules/events/fallback/poem_level_3_fallback.tres) | **新建** — 绝唱匿名诗 |
+
+---
+
+## 浮动灵感氛围层 (Floating Imaginary Labels)
+
+### 概述
+
+所有当前持有的 Imaginary 作为抽象概念在创作面板背景中随机漂移，纯展示、不可交互。与 HBox Slot 并列存在，互不影响。
+
+### 视觉规格
+
+| 等级 | 透明度范围 | 视觉效果 |
+|:----:|----------|---------|
+| L1 | 0.25 ~ 0.35 | 半透明，若隐若现 |
+| L2 | 0.65 ~ 0.75 | 正常清晰 |
+| L3 | 0.90 ~ 1.00 | 微光感 |
+
+字体大小在 22~28 之间随机微调，增加自然感。
+
+### 位置约束
+
+- 中轴线左右各 150px 是禁区（总计 300px），标签不进入 — 保证中间内容区不被遮挡。
+- 屏幕边缘留白 20px。
+- 每个标签随机分配到左侧 (`x ∈ [20, mid-150]`) 或右侧 (`x ∈ [mid+150, vw-20]`)。
+- 初始位置随机，之后持续用 Tween (SINE, EASE_IN_OUT) 在同侧范围内漂移，每段 3~6 秒，到达后重新选点，无限循环。
+
+### 生命周期
+
+| 事件 | 行为 |
+|------|------|
+| slot 重建 (`imaginary_changed`) | `_rebuild_floating_labels()` — 先 `stop_and_cleanup()` 全部旧标签再新建 |
+| 页面关闭 (`hide_with_animation`) | `_cleanup_floating_labels()` — 停 Tween + queue_free |
+| 创作完成 (意象清空) | 触发 `imaginary_changed` → 自动重建，结果为空 |
+
+### 数据流
+
+```
+imaginary_changed
+  └→ _rebuild_slots()
+       ├→ 重建 HBox Slots (不改)
+       └→ _rebuild_floating_labels()
+            ├→ _cleanup_floating_labels()
+            └→ 为每个 Imaginary new FloatingImaginaryLabel → setup(name, level)
+```
+
+### 更改文件
+
+| 文件 | 改动 |
+|------|------|
+| [`ui/floating_imaginary_label.gd`](ui/floating_imaginary_label.gd) | **新建** — 漂浮标签组件，Tween 漂移 + 等级视觉 + 禁区约束 |
+| [`ui/poem_crafter.tscn`](ui/poem_crafter.tscn:35) | **修改** — 已有 Control 节点 anchors 设为 full_rect（铺满 ShadowBox） |
+| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | **修改** — 新增 `_floating_container` 缓存、`_rebuild_floating_labels()`、`_cleanup_floating_labels()`；`hide_with_animation` 加清理调用 |
