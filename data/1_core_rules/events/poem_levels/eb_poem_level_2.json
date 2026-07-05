@@ -1,0 +1,9 @@
+{
+  "id": "poem_level_2",
+  "name": "佳作诗词事件库",
+  "era": "",
+  "draw_strategies": "AVERAGE",
+  "reset_on_empty": true,
+  "events": ["poem_level_2_fallback"],
+  "generation_configs": {}
+}

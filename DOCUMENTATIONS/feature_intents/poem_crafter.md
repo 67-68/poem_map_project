@@ -1,73 +1,90 @@
-# 诗词意象匹配 — 功能意图
+# 诗词评分创作 — 功能意图
 
-**状态**: 🔴 执行中（V8: 动态 Slot + 模式切换 + C(N,3) 组合枚举）
+**状态**: 🔴 执行中（V9: 纯函数评分制 + 三级事件库抽奖）
 
 ---
 
 ## 意图摘要（<200字）
 
-PoemSlot 变为纯展示控件，不再可点击。面板动态创建 Slot，超过 `max_imaginary_managable`（默认 3）时随机截断 +「过多…」灰色占位 Slot。Toggle 按钮（登高抒怀/干谒权贵）决定 `current_mode`，覆盖管道乘数。创作时自动使用所有拥有的 Imaginary，Calculator 内部枚举 C(N,3) 组合匹配食谱。成功时仅消耗命中的 3 个 Imaginary，失败不消耗。
+砍掉 V8 的 C(N,3) 食谱枚举。诗词创作改为线性评分制：根据 Imaginary 数量与等级打分，超出 `max_imaginary_managable` 的额外 Imaginary 每个扣 5 分。评分定基础等级（平庸/佳作/绝唱），再按比例概率升级。mode 硬赋值 secular/literary 值（干谒→64/0，登高→0/48）。从三个等级的 EventBase 事件库抽选具体诗词事件展示。所有参与计算的 Imaginary 全量消耗。
 
 ---
 
 ## 核心玩法
 
-### 匹配流程（V8）
+### 评分算法（V9）
 
 ```
-玩家打开诗词面板
-        │
-        ├─ 自动从 Database.imaginaries_detail 获取所有 Imaginary
-        ├─ 动态创建 PoemSlot（超过 max_imaginary_managable 随机截断 + 溢出 Slot）
-        ├─ Toggle 选择 mode: 登高抒怀(deng_gao) | 干谒权贵(gan_ye)
-        │
-        └─ 点击「开始创作」
-                │
-                ▼
-    ┌──────────────────────────────────────┐
-    │  自动全选所有拥有的 Imaginary           │
-    │  N = imaginaries_detail.size()        │
-    └──────────────────────────────────────┘
-                │
-                ▼
-    ┌──────────────────────────────────────┐
-    │  PoemCraftingCalculator               │
-    │  C(N,3) 枚举所有 3-组合               │
-    │  任一命中食谱 → 匹配成功               │
-    │  全未命中 → 失败（不消耗）              │
-    └──────────────────────────────────────┘
-                │
-         ┌───────┴───────┐
-         ▼               ▼
-     匹配成功          无匹配
-         │               │
-         ▼               ▼
-  按 mode 覆盖 channel   ❌ 失败
-  secular/literary 算子   不消耗 Imaginary
-  仅消耗命中的 3 个
+score = Σ(每个 Imaginary 的贡献)
+
+对每个 Imaginary（index 从 0 开始）:
+  index < max_manageable  →  + (imaginary.level × 5)
+  index >= max_manageable →  -5（溢出惩罚）
 ```
 
-### mode → Channel 映射
+**如果 `imaginaries.size() < max_manageable`** → 计算函数返回错误，PoemCrafter 阻断创作。
 
-| Toggle | mode | channel | secular_mult | history_mult | 效果 |
-|--------|------|---------|-------------|-------------|------|
-| 登高抒怀 | `deng_gao` | BROADCAST | ×0 | ×1.2 | money=0, literary_fame=48 |
-| 干谒权贵 | `gan_ye` | SECULAR | ×1.5 | ×1.0 | money=30, literary_fame=40 |
+### 等级阈值
 
-### Dynamic Slot 规则
+| 等级 | score 范围 | 显示文本 | `Poem.level` |
+|------|-----------|---------|-------------|
+| 平庸 | < 25 | 平庸 | 1 |
+| 佳作 | 25 ≤ score < 50 | 佳作 | 2 |
+| 绝唱 | ≥ 50 | 绝唱 | 3 |
 
-- 上限 `PlayerState.max_imaginary_managable`（默认 3）
-- 刷新时全量重建（`imaginary_changed` 信号触发）
-- 随机截断：shuffle 后取前 N 个
-- 溢出时追加灰色「过多…」Slot（不可用，纯视觉提示）
-- PoemSlot `mouse_filter = MOUSE_FILTER_IGNORE`，不可交互
+### 概率升级
 
-### 更改文件
+纯函数仅输出 `upgrade_probability`，`randf()` 由 PoemCrafter 执行：
+
+```
+base_level < 3 时:
+  upgrade_probability = (score - current_threshold) / (next_threshold - current_threshold)
+  其中 current_threshold = (base_level - 1) × 25, next_threshold = base_level × 25
+```
+
+例：score=40 → base_level=2 (佳作), upgrade_probability=(40-25)/(50-25)=0.60 → 60% 概率升绝唱。
+
+### mode → 值硬赋值
+
+| Mode | secular_value | literary_value |
+|------|:------------:|:-------------:|
+| `gan_ye` (干谒权贵) | 64 | 0 |
+| `deng_gao` (登高抒怀) | 0 | 48 |
+
+### 纯函数契约
+
+[`PoemCraftingCalculator.calculate_poem_grade`](core/poem_crafting_calculator.gd:1) 是**无状态、幂等纯函数**：
+
+- 禁止 `randf()` / `Database` / `PlayerState` / `Time` 调用
+- `max_manageable` 由调用方显式传入
+- 仅输出计算值，不执行副作用
+
+### 三级事件库
+
+诗词展示事件从对应等级的 EventBase 抽取：
+
+| EventBase | 等级 | fallback 事件 |
+|-----------|------|--------------|
+| `poem_level_1` | 平庸 | `poem_level_1_fallback` |
+| `poem_level_2` | 佳作 | `poem_level_2_fallback` |
+| `poem_level_3` | 绝唱 | `poem_level_3_fallback` |
+
+### 意象消耗
+
+创作成功后**消耗所有参与计算的 Imaginary**（全量清空 `Database.imaginaries_detail`）。
+
+---
+
+## 更改文件
 
 | 文件 | 改动 |
 |------|------|
-| [`ui/poem_slot.gd`](ui/poem_slot.gd:1) | 移除 `slot_clicked` 信号和 gui_input；新增 `set_greyed()`；mouse_filter=IGNORE |
-| [`core/player_state.gd`](core/player_state.gd:15) | 新增 `max_imaginary_managable: int = 3` |
-| [`core/poem_crafting_calculator.gd`](core/poem_crafting_calculator.gd:1) | 移除 size≠3 硬限制；新增 `mode` 参数；C(N,3) 枚举；新增 `MODE_CHANNEL_MAP` |
-| [`ui/poem_crafter.tscn`](ui/poem_crafter.tscn:1) | 删除固定 3 个 PoemSlot 子节点 |
-| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | 修复路径（去掉 VBoxContainer 冗余）；动态 `_rebuild_slots`；toggle mode 管理；`_consume_matched_imaginaries` 精确消耗 |
+| [`core/poem_crafting_calculator.gd`](core/poem_crafting_calculator.gd:1) | **重写** — 纯函数评分 + 等级分 + 升级概率计算 |
+| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | **修改** — `_on_button_pressed` + `_preview_current` 适配 V9 |
+| [`core/event_manager.gd`](core/event_manager.gd:1) | **新增方法** — `draw_from_event_base` 从指定 EventBase 抽事件 |
+| [`data/1_core_rules/events/poem_levels/eb_poem_level_1.json`](data/1_core_rules/events/poem_levels/eb_poem_level_1.json) | **新建** — 平庸事件库 |
+| [`data/1_core_rules/events/poem_levels/eb_poem_level_2.json`](data/1_core_rules/events/poem_levels/eb_poem_level_2.json) | **新建** — 佳作事件库 |
+| [`data/1_core_rules/events/poem_levels/eb_poem_level_3.json`](data/1_core_rules/events/poem_levels/eb_poem_level_3.json) | **新建** — 绝唱事件库 |
+| [`data/1_core_rules/events/fallback/poem_level_1_fallback.tres`](data/1_core_rules/events/fallback/poem_level_1_fallback.tres) | **新建** — 平庸匿名诗 |
+| [`data/1_core_rules/events/fallback/poem_level_2_fallback.tres`](data/1_core_rules/events/fallback/poem_level_2_fallback.tres) | **新建** — 佳作匿名诗 |
+| [`data/1_core_rules/events/fallback/poem_level_3_fallback.tres`](data/1_core_rules/events/fallback/poem_level_3_fallback.tres) | **新建** — 绝唱匿名诗 |

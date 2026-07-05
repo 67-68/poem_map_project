@@ -1,145 +1,192 @@
-class_name PoemCraftingCalculator extends Node
+class_name PoemCraftingCalculator extends RefCounted
 
-## 诗词评价引擎 V8 — C(N,3) 组合枚举 + mode 覆盖 channel
+## 诗词评分引擎 V9 — 纯函数，无状态，幂等
 ##
-## V8 变更: 移除固定 3 个的限制。传入 N 个 Imaginary，内部枚举所有 3-组合匹配食谱。
-## 新增 mode 参数（"deng_gao" / "gan_ye"），覆盖 recipe 的 channel 乘数。
+## V9 变更:
+##   - 砍掉 C(N,3) 食谱枚举，替换为基于 Imaginary 数量和等级的线性评分
+##   - 纯函数契约：禁止 randf() / Database / PlayerState / Time 调用
+##   - max_manageable 由调用方从 PlayerState 读取后显式传入
+##   - 随机性（概率升级抽奖）分离到调用方执行
+##   - 管道乘数 CHANNEL_MATRIX 砍掉，mode 直接硬赋值 secular/literary
 
-## 收益基数常量
-const BASE_SECULAR := 20.0
-const BASE_HISTORY := 40.0
+## 等级阈值
+const LEVEL_1_THRESHOLD := 25   ## 平庸 < 25
+const LEVEL_2_THRESHOLD := 50   ## 佳作 ≥ 25, < 50
+## 绝唱 ≥ 50
 
-## 管道乘数矩阵
-const CHANNEL_MATRIX = {
-	"SECULAR": {"history_mult": 1.0, "secular_mult": 1.5},
-	"BROADCAST": {"history_mult": 1.2, "secular_mult": 0.0}
+## 每题等级基础分步长
+const LEVEL_SCORE_STEP := 25
+
+## 超出 max_manageable 时每个溢出的惩罚分
+const OVERFLOW_PENALTY := -5
+
+## Imaginary.level → 评分倍率
+const LEVEL_SCORE_MAP := {
+	1: 5,
+	2: 10,
+	3: 15,
 }
 
-## mode → channel 覆盖映射（按钮直接决定管道）
-const MODE_CHANNEL_MAP := {
-	"deng_gao": "BROADCAST",  ## 登高抒怀 → 文学价值为主
-	"gan_ye": "SECULAR",      ## 干谒权贵 → 世俗价值为主
+## mode → secular/literary 硬赋值
+const MODE_VALUE_MAP := {
+	"gan_ye":   {"secular": 64.0, "literary": 0.0},
+	"deng_gao": {"secular": 0.0,  "literary": 48.0},
 }
 
-const PENALTY_TEXT := "意象散乱，强行拼凑。你在这堆废纸中枯坐了一夜，一无所获。"
+const POEM_LEVEL_NAMES := {
+	1: "平庸",
+	2: "佳作",
+	3: "绝唱",
+}
 
 
-## 诗词创作结果
+## ──────────────────────────────────────────────
+## 诗词创作结果 V9
+## ──────────────────────────────────────────────
+
 class PoemCraftingResult:
-	var passed: bool = false
-	var fail_reason: String = ""           ## "no_match" | "too_few"
-	var penalty_text: String = ""          ## 失败提示文案
-	var operators: Array = []              ## 通过时的收益算子列表
-	var secular_value: float = 0.0
-	var literary_value: float = 0.0
-	var matched_recipe: Poem = null        ## 匹配到的食谱（通过时非 null）
-	var matched_imaginary_uuids: Array[String] = []  ## V8: 命中的 3 个 imaginary uuid
-	var tried_combinations: int = 0        ## V8: 枚举的组合数（调试用）
+	var passed: bool = false          ## false = 错误（如意象不足）
+	var fail_reason: String = ""      ## "insufficient" | ""
+	var score: int = 0                ## 原始分数（可负）
+	var base_level: int = 1           ## 基础等级 (1-3)
+	var upgrade_probability: float = 0.0  ## 升级概率 [0.0, 1.0)，纯计算结果
+	var secular_value: float = 0.0    ## mode 硬赋值
+	var literary_value: float = 0.0   ## mode 硬赋值
 
 
-## 主入口：诗词评价引擎 V8
-## imaginaries: 所有拥有的 Imaginary 数组（不限 3 个）
-## recipe_index: Database.recipe_index — {sorted_key → Poem recipe}
-## mode: "deng_gao" | "gan_ye" — 覆盖 channel 乘数
-static func calculate_poem_grade(imaginaries: Array, recipe_index: Dictionary, mode: String = "") -> PoemCraftingResult:
-	var result = PoemCraftingResult.new()
+## ──────────────────────────────────────────────
+## 主入口：纯函数诗词评分引擎 V9
+##
+## @param imaginaries:  所有参与计算的 Imaginary 数组
+## @param mode:         "gan_ye" | "deng_gao"
+## @param max_manageable: 意象管理上限，由调用方从 PlayerState.max_imaginary_managable 读取后传入
+## @return PoemCraftingResult
+## ──────────────────────────────────────────────
 
-	if imaginaries.size() < 3:
+static func calculate_poem_grade(
+	imaginaries: Array,
+	mode: String,
+	max_manageable: int = 3
+) -> PoemCraftingResult:
+	var result := PoemCraftingResult.new()
+	
+	# ── 1. 前置校验：意象数量不足 ──
+	if imaginaries.size() < max_manageable:
 		result.passed = false
-		result.fail_reason = "too_few"
-		result.penalty_text = PENALTY_TEXT
-		Logging.warn("PoemCraftingCalculator: 需要至少 3 个 Imaginary，实际 %d" % imaginaries.size())
+		result.fail_reason = "insufficient"
+		Logging.warn("PoemCraftingCalculator(V9): 意象不足 — 当前 %d, 需要至少 %d" % [imaginaries.size(), max_manageable])
 		return result
-
-	# ── 提取所有 valid Imaginary 的 uuid ──
-	var uuids: Array[String] = []
-	for imag in imaginaries:
-		if imag is Imaginary and not imag.uuid.is_empty():
-			uuids.append(imag.uuid.to_lower())
-
-	if uuids.size() < 3:
-		result.passed = false
-		result.fail_reason = "too_few"
-		result.penalty_text = PENALTY_TEXT
-		Logging.warn("PoemCraftingCalculator: valid imaginary uuids < 3: %d" % uuids.size())
-		return result
-
-	# ── C(N,3) 枚举所有 3-组合 ──
-	var n := uuids.size()
-	var combo_count := 0
-	for i in range(n - 2):
-		for j in range(i + 1, n - 1):
-			for k in range(j + 1, n):
-				combo_count += 1
-				var triplet: Array[String] = [uuids[i], uuids[j], uuids[k]]
-				var lookup_key = FragmentMatcher.build_key(triplet)
-				Logging.debug("PoemCraftingCalculator: combo #%d key=%s" % [combo_count, lookup_key])
-
-				if recipe_index.has(lookup_key):
-					result.matched_recipe = recipe_index[lookup_key]
-					result.matched_imaginary_uuids = triplet
-					Logging.info("PoemCraftingCalculator: 组合 #%d 命中食谱 %s (key=%s)" % [combo_count, result.matched_recipe.name, lookup_key])
-					break
-			if result.matched_recipe != null:
-				break
-		if result.matched_recipe != null:
-			break
-
-	result.tried_combinations = combo_count
-
-	if result.matched_recipe == null:
-		Logging.info("PoemCraftingCalculator: 枚举 %d 种组合，无匹配" % combo_count)
-		result.passed = false
-		result.fail_reason = "no_match"
-		result.penalty_text = PENALTY_TEXT
-		return result
-
-	# ── 收益公式 ──
-	var base_history := BASE_HISTORY
-	var base_secular := BASE_SECULAR
-
-	# V8: mode 覆盖 channel（优先级高于 recipe.specific_topic）
-	var channel_group := ""
-	if not mode.is_empty() and MODE_CHANNEL_MAP.has(mode):
-		channel_group = MODE_CHANNEL_MAP[mode]
-		Logging.info("PoemCraftingCalculator: mode '%s' → channel '%s' (overridden)" % [mode, channel_group])
-	else:
-		# 降级：从 recipe 的 specific_topic 推导 channel
-		var recipe = result.matched_recipe
-		if recipe and not recipe.specific_topic.is_empty():
-			var poem_type = ENUMS.POEM_TYPE.get(recipe.specific_topic)
-			if poem_type != null:
-				channel_group = ENUMS.get_poem_type_channel(poem_type)
-				Logging.info("PoemCraftingCalculator: recipe topic '%s' → channel '%s'" % [recipe.specific_topic, channel_group])
-
-	if not channel_group.is_empty():
-		var multipliers = CHANNEL_MATRIX.get(channel_group, {"history_mult": 1.0, "secular_mult": 1.0})
-		base_history *= multipliers["history_mult"]
-		base_secular *= multipliers["secular_mult"]
-		Logging.info("PoemCraftingCalculator: channel=%s, multipliers=%s → secular=%f, literary=%f" % [channel_group, multipliers, base_secular, base_history])
-
-	result.secular_value = base_secular
-	result.literary_value = base_history
-
-	# ── 算子生成（仅非零值）──
-	if base_secular != 0:
-		result.operators.append(OperatorFactory.create_property_operator("money", base_secular))
-	if base_history != 0:
-		result.operators.append(OperatorFactory.create_property_operator("literary_fame", base_history))
-
+	
+	# ── 2. 评分计算 ──
+	var score := 0
+	var within_limit_count := 0
+	var overflow_count := 0
+	
+	for i in range(imaginaries.size()):
+		var imag = imaginaries[i]
+		if not imag is Imaginary:
+			Logging.warn("PoemCraftingCalculator(V9): 跳过非 Imaginary 元素 at index %d" % i)
+			continue
+		
+		if i < max_manageable:
+			var level_bonus := _get_level_score(imag.level)
+			score += level_bonus
+			within_limit_count += 1
+			Logging.debug("PoemCraftingCalculator(V9): index=%d uuid=%s level=%d → +%d" % [i, imag.uuid, imag.level, level_bonus])
+		else:
+			score += OVERFLOW_PENALTY
+			overflow_count += 1
+			Logging.debug("PoemCraftingCalculator(V9): index=%d uuid=%s level=%d → %d (溢出惩罚)" % [i, imag.uuid, imag.level, OVERFLOW_PENALTY])
+	
+	result.score = score
+	Logging.info("PoemCraftingCalculator(V9): 评分完成 — score=%d, within=%d, overflow=%d, total=%d" % [score, within_limit_count, overflow_count, imaginaries.size()])
+	
+	# ── 3. 确定基础等级 ──
+	result.base_level = _score_to_base_level(score)
+	Logging.info("PoemCraftingCalculator(V9): base_level=%d (%s)" % [result.base_level, POEM_LEVEL_NAMES.get(result.base_level, "未知")])
+	
+	# ── 4. 计算升级概率 ──
+	result.upgrade_probability = _calculate_upgrade_probability(score, result.base_level)
+	Logging.info("PoemCraftingCalculator(V9): upgrade_probability=%.3f" % result.upgrade_probability)
+	
+	# ── 5. Mode → secular/literary 硬赋值 ──
+	var mode_values = MODE_VALUE_MAP.get(mode, {"secular": 0.0, "literary": 0.0})
+	result.secular_value = mode_values["secular"]
+	result.literary_value = mode_values["literary"]
+	Logging.info("PoemCraftingCalculator(V9): mode='%s' → secular=%.1f, literary=%.1f" % [mode, result.secular_value, result.literary_value])
+	
 	result.passed = true
-	Logging.info("PoemCraftingCalculator: 创作成功 — secular=%f, literary=%f, recipe=%s, imag=%s" %
-		[base_secular, base_history, result.matched_recipe.name, str(result.matched_imaginary_uuids)])
 	return result
 
 
-## 翻译 operators 为人类可读的预览文本
-static func translate(ops: Array) -> String:
-	var lines: Array[String] = []
-	for op in ops:
-		if not op:
-			continue
-		var text = op.describe_preview()
-		if not text.is_empty():
-			lines.append(text)
-	return "\n".join(lines)
+## ──────────────────────────────────────────────
+## 纯函数：score → base_level
+## ──────────────────────────────────────────────
+
+static func _score_to_base_level(score: int) -> int:
+	if score >= LEVEL_2_THRESHOLD:
+		return 3   # 绝唱
+	elif score >= LEVEL_1_THRESHOLD:
+		return 2   # 佳作
+	else:
+		return 1   # 平庸
+
+
+## ──────────────────────────────────────────────
+## 纯函数：计算升级概率 [0.0, 1.0)
+##
+## 仅在 base_level < 3 时计算：
+##   upgrade_probability = (score - current_threshold) / (next_threshold - current_threshold)
+##
+## 边界：
+##   - score >= LEVEL_2_THRESHOLD (已是绝唱) → 0.0
+##   - score < 0 → 钳制 base_level=1, upgrade_probability=0.0
+##   - 公式结果钳制在 [0.0, 1.0)
+## ──────────────────────────────────────────────
+
+static func _calculate_upgrade_probability(score: int, base_level: int) -> float:
+	if base_level >= 3:
+		# 已是绝唱，无升级空间
+		return 0.0
+	
+	if score <= 0:
+		# 分数 ≤ 0 时钳制
+		return 0.0
+	
+	var current_threshold: int = (base_level - 1) * LEVEL_SCORE_STEP  # 0 或 25
+	var next_threshold: int = base_level * LEVEL_SCORE_STEP            # 25 或 50
+	var threshold_range: int = next_threshold - current_threshold      # 25
+	
+	if threshold_range <= 0:
+		Logging.err("PoemCraftingCalculator(V9): _calculate_upgrade_probability 除零 — base_level=%d, current=%d, next=%d" % [base_level, current_threshold, next_threshold])
+		return 0.0
+	
+	var progress: float = float(score - current_threshold) / float(threshold_range)
+	progress = clampf(progress, 0.0, 0.999)  # [0.0, 1.0)，永远不为 1.0
+	
+	Logging.debug("PoemCraftingCalculator(V9): progress=(%d-%d)/%d=%.3f" % [score, current_threshold, threshold_range, progress])
+	return progress
+
+
+## ──────────────────────────────────────────────
+## 纯函数：Imaginary.level → 评分值
+## ──────────────────────────────────────────────
+
+static func _get_level_score(level: int) -> int:
+	return LEVEL_SCORE_MAP.get(level, 5)
+
+
+## ──────────────────────────────────────────────
+## 工具：base_level → 显示名称
+## ──────────────────────────────────────────────
+
+static func get_level_display_name(level: int) -> String:
+	return POEM_LEVEL_NAMES.get(level, "未知")
+
+
+## ──────────────────────────────────────────────
+## 工具：base_level → EventBase uuid
+## ──────────────────────────────────────────────
+
+static func get_event_base_for_level(level: int) -> String:
+	return "poem_level_%d" % level

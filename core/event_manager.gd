@@ -408,3 +408,83 @@ func _mark_event_base_triggered(event_uuid: String) -> void:
         Logging.info("[EventManager] _mark_event_base_triggered: base '%s' 全部 %d 个事件已触发，reset_on_empty=true，清空黑名单" % [base.uuid, base.events.size()])
 
 
+# ════════════════════════════════════════════════════════════════
+# 🆕 V9: 诗词等级事件库直接抽取
+# ════════════════════════════════════════════════════════════════
+
+## 从指定 EventBase 直接抽取一个事件，返回 event_uuid。
+## 不走 tag-based bucket 扫描管道，直接构建 tickets 并加权随机抽取。
+##
+## @param base_uuid: EventBase uuid，如 "poem_level_1"
+## @param context:   上下文字典（传递给 request_event_key）
+## @return 选中的 event_uuid，如果 base 不存在或无事件则返回空字符串
+func draw_from_event_base(base_uuid: String, context: Dictionary = {}) -> String:
+    Logging.info("[EventManager] draw_from_event_base: base_uuid='%s'" % base_uuid)
+    
+    if base_uuid.is_empty():
+        Logging.err("[EventManager] draw_from_event_base: base_uuid 为空")
+        return ""
+    
+    var base = Database.get_event_base(base_uuid)
+    if base == null:
+        Logging.err("[EventManager] draw_from_event_base: EventBase '%s' 不存在" % base_uuid)
+        return ""
+    
+    if base.events.is_empty():
+        Logging.warn("[EventManager] draw_from_event_base: EventBase '%s' events 为空" % base_uuid)
+        return ""
+    
+    # 构建 tickets：从 base.events 逐个 resolve 事件实例
+    var tickets: Array[EventTicket] = []
+    for event_uuid in base.events:
+        var ev = Database.resolve(event_uuid)
+        if ev == null or not ev is BaseEvent:
+            Logging.warn("[EventManager] draw_from_event_base: 事件 '%s' 不存在或不是 BaseEvent，跳过" % event_uuid)
+            continue
+        tickets.append(_create_ticket(ev as BaseEvent))
+    
+    if tickets.is_empty():
+        Logging.warn("[EventManager] draw_from_event_base: EventBase '%s' 中无可解析的事件" % base_uuid)
+        return ""
+    
+    # AVERAGE 黑名单过滤 + 权重再分配
+    _apply_event_base_blacklist(tickets)
+    
+    if tickets.is_empty():
+        Logging.warn("[EventManager] draw_from_event_base: EventBase '%s' 所有事件均被封禁" % base_uuid)
+        return ""
+    
+    # 加权随机抽取
+    var total_weight := 0.0
+    for ticket in tickets:
+        total_weight += ticket.weight
+        Logging.info("[EventManager] draw_from_event_base: ticket '%s' weight=%.1f" % [ticket.event_uuid, ticket.weight])
+    
+    var roll: float = randf() * total_weight
+    var accumulated := 0.0
+    var selected_uuid := ""
+    
+    for ticket in tickets:
+        accumulated += ticket.weight
+        if roll <= accumulated:
+            selected_uuid = ticket.event_uuid
+            break
+    
+    if selected_uuid.is_empty():
+        # 兜底：取最后一张 ticket
+        selected_uuid = tickets[tickets.size() - 1].event_uuid
+        Logging.warn("[EventManager] draw_from_event_base: 加权抽取未命中，兜底选最后一张: %s" % selected_uuid)
+    
+    Logging.info("[EventManager] draw_from_event_base: 选中事件 '%s' (base='%s', roll=%.1f, total_weight=%.1f)" % [selected_uuid, base_uuid, roll, total_weight])
+    
+    # 标记触发 + 发射事件
+    _mark_event_base_triggered(selected_uuid)
+    var ev = Database.resolve(selected_uuid, "BaseEvent", true)
+    if ev:
+        context = SocialActionResolver.enrich_context(ev, selected_uuid, context)
+    EventBus.request_event_key.emit(selected_uuid, context)
+    Logging.info("[EventManager] 命运降临（诗词事件库）: " + selected_uuid)
+    
+    return selected_uuid
+
+
