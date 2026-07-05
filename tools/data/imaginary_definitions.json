@@ -1,83 +1,137 @@
 {
   "buyi": {
-    "name": "布衣"
+    "name": "布衣",
+    "level": 1,
+    "get_hint": "一件粗麻布衣，缝补痕迹历历可见"
   },
   "qianli": {
-    "name": "骐骥"
+    "name": "骐骥",
+    "level": 1,
+    "get_hint": "一匹瘦骨嶙峋的老马，眼中却仍有千里之志"
   },
   "cangsheng": {
-    "name": "苍生"
+    "name": "苍生",
+    "level": 1,
+    "get_hint": "田间佝偻的农人，脊背被赋税压弯"
   },
   "famine": {
-    "name": "饥荒"
+    "name": "饥荒",
+    "level": 1,
+    "get_hint": "路旁饿殍横陈，野狗争食残骸"
   },
   "snow": {
-    "name": "孤雪"
+    "name": "孤雪",
+    "level": 1,
+    "get_hint": "一片孤零零的雪花，落在掌心便化了"
   },
   "drunk": {
-    "name": "醉意"
+    "name": "醉意",
+    "level": 1,
+    "get_hint": "酒坛倾倒，琥珀色的液体浸湿了衣袖"
   },
   "exile": {
-    "name": "流亡"
+    "name": "流亡",
+    "level": 1,
+    "get_hint": "一个衣衫褴褛的身影，在暮色中踽踽独行"
   },
   "corrupt": {
-    "name": "贪腐"
+    "name": "贪腐",
+    "level": 1,
+    "get_hint": "锦袍官吏袖中滑出一锭白花花的纹银"
   },
   "despair": {
-    "name": "绝望"
+    "name": "绝望",
+    "level": 1,
+    "get_hint": "枯井无波，连投石问路的勇气都已消散"
   },
   "ink_stone": {
-    "name": "古砚"
+    "name": "古砚",
+    "level": 1,
+    "get_hint": "一方古砚，墨痕已干涸开裂"
   },
   "cold_moon": {
-    "name": "寒月"
+    "name": "寒月",
+    "level": 1,
+    "get_hint": "一轮冷月悬于枯枝之上，洒下如霜清辉"
   },
   "temple_bell": {
-    "name": "晨钟"
+    "name": "晨钟",
+    "level": 1,
+    "get_hint": "远处寺庙传来一声钟响，惊起寒鸦数点"
   },
   "jade_step": {
-    "name": "玉阶"
+    "name": "玉阶",
+    "level": 1,
+    "get_hint": "宫门前的玉阶冰凉如霜，不见故人影"
   },
   "empty_cup": {
-    "name": "空盏"
+    "name": "空盏",
+    "level": 1,
+    "get_hint": "一只空了的酒盏，杯底残留着半片月光"
   },
   "wind": {
-    "name": "寒风"
+    "name": "寒风",
+    "level": 1,
+    "get_hint": "一阵刺骨寒风穿堂而过，吹得烛火摇摇欲灭"
   },
   "willow_branch": {
-    "name": "折柳"
+    "name": "折柳",
+    "level": 1,
+    "get_hint": "一枝折下的柳条，叶已枯黄卷曲"
   },
   "thatched_grass": {
-    "name": "茅草"
+    "name": "茅草",
+    "level": 1,
+    "get_hint": "屋顶的茅草被风吹得簌簌作响"
   },
   "high_tower": {
-    "name": "危楼"
+    "name": "危楼",
+    "level": 1,
+    "get_hint": "一座高楼孤悬百尺，星辰仿佛伸手可摘"
   },
   "cloud_and_sun": {
-    "name": "云日"
+    "name": "云日",
+    "level": 1,
+    "get_hint": "云层倏然散开，日光倾泻如金"
   },
   "lone_snow": {
-    "name": "孤雪"
+    "name": "孤雪",
+    "level": 1,
+    "get_hint": "天地间唯有一片孤雪，无声飘落"
   },
   "falling_leaf": {
-    "name": "落木"
+    "name": "落木",
+    "level": 1,
+    "get_hint": "无边落木萧萧而下，铺满了荒径"
   },
   "ghost_fire": {
-    "name": "鬼火"
+    "name": "鬼火",
+    "level": 1,
+    "get_hint": "荒野间几点磷火明灭不定，似有人语低回"
   },
   "ruined_wall": {
-    "name": "残垣"
+    "name": "残垣",
+    "level": 1,
+    "get_hint": "一堵残墙，藤蔓爬满了裂隙"
   },
   "starving_bone": {
-    "name": "饿殍"
+    "name": "饿殍",
+    "level": 1,
+    "get_hint": "一具枯骨半掩在黄土中，指节仍紧抓着泥土"
   },
   "cold_blade": {
-    "name": "寒锋"
+    "name": "寒锋",
+    "level": 1,
+    "get_hint": "一柄出鞘的剑，锋刃映着冷冷寒光"
   },
   "lone_sail": {
-    "name": "孤帆"
+    "name": "孤帆",
+    "level": 1,
+    "get_hint": "江面上一点孤帆渐行渐远，消失在天际"
   },
   "wine_gourd": {
-    "name": "酒葫芦"
+    "name": "酒葫芦",
+    "level": 1,
+    "get_hint": "一只旧酒葫芦，腰间磨得油亮发黑"
   }
 }

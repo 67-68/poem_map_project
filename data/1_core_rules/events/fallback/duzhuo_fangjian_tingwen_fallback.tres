@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dfangjianfb1"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_evopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_randomev"]
+
+[sub_resource type="Resource" id="Resource_empty_cr"]
+script = ExtResource("3_cr")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_evopt")
+choice_result = SubResource("Resource_empty_cr")
+description = "酒肆角落，一桌客人压低了声音在谈——{imaginary_gain_hint}。你端着杯，装作看窗外的雨，耳朵却一字不漏地收着。说者无心，听者有意，这倒是意外所得。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_randomev")
+weight = 0.0
+archetype_id = "fangjian_tingwen_success"
+options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
+uuid = "duzhuo_fangjian_tingwen_fallback"
+name = "偶得奇闻"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

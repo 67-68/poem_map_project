@@ -44,6 +44,7 @@
   "l_fame_gain": 8,
   "l_fame_cost": -8,
 
+  "xs_success_rate": 30,
   "s_success_rate": 50,
   "m_success_rate": 80,
   "l_success_rate": 100,

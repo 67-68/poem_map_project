@@ -244,28 +244,40 @@ func on_enter(context: Dictionary) -> void:
 func init(context: Dictionary) -> Array:
     # on_enter 已在 super.init() → BaseEvent.init() 中调用，
     # 所有前置逻辑（custom_context_params merge）已在 on_enter 中完成。
-    var all_options = super.init(context)
     
-    # ── Archetype 运行时注入：universal_result → per-option choice_result ──
+    # ── 🆕 预初始化 archetype operators（duplicate 后 init）：在 description 渲染之前将 context 字段（如 imaginary_gain_hint）注入 context ──
+    # 注意：必须用 duplicate() 避免污染静态缓存 _archetype_result_cache
+    var _preinit_ops: Array[BaseOperator] = []
     if not archetype_id.is_empty():
         var archetype_result := _get_archetype_result()
         if archetype_result and not archetype_result.operators.is_empty():
-            Logging.info("RandomEvent.init: archetype '%s' universal_result (%d operators) injected into each of %d option(s) for event '%s'" % [archetype_id, archetype_result.operators.size(), all_options.size(), name])
-            for opt in all_options:
-                if opt == null:
-                    continue
-                if not "choice_result" in opt:
-                    continue
-                var cr: ChoiceResult = opt.choice_result
-                if not cr:
-                    cr = ChoiceResult.new()
-                    opt.choice_result = cr
-                
-                # 追加 archetype operators（深拷贝避免多选项共享同一引用）
-                for op in archetype_result.operators:
-                    cr.operators.append(op.duplicate())
-                
-                cr.init(context)
+            Logging.info("RandomEvent.init: archetype '%s' pre-init universal_result (%d operators) into context for event '%s'" % [archetype_id, archetype_result.operators.size(), name])
+            for op in archetype_result.operators:
+                var dup = op.duplicate()
+                Logging.info("RandomEvent.init: pre-init operator %s (duplicated)" % dup.get_class())
+                dup.init(context)
+                _preinit_ops.append(dup)
+    
+    var all_options = super.init(context)
+    
+    # ── Archetype 运行时注入：universal_result → per-option choice_result ──
+    if not archetype_id.is_empty() and not _preinit_ops.is_empty():
+        Logging.info("RandomEvent.init: archetype '%s' universal_result (%d pre-inited operators) injected into each of %d option(s) for event '%s'" % [archetype_id, _preinit_ops.size(), all_options.size(), name])
+        for opt in all_options:
+            if opt == null:
+                continue
+            if not "choice_result" in opt:
+                continue
+            var cr: ChoiceResult = opt.choice_result
+            if not cr:
+                cr = ChoiceResult.new()
+                opt.choice_result = cr
+            
+            # 追加 pre-inited operators（深拷贝确保 per-option 独立）
+            for op in _preinit_ops:
+                cr.operators.append(op.duplicate())
+            
+            cr.init(context)
     
     return all_options
 

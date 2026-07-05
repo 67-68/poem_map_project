@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://dtongyouchaqw84"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_req"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_action"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="7_pushevent"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="8_cr"]
+
+[sub_resource type="Resource" id="Resource_failed_push"]
+script = ExtResource("7_pushevent")
+event_key = "jiaoyou_tongyou_changan_failed_fallback"
+metadata/_custom_type_script = "uid://cxfcnsval1p54"
+
+[sub_resource type="Resource" id="Resource_failed_result"]
+script = ExtResource("8_cr")
+operators = Array[ExtResource("2_baseop")]([SubResource("Resource_failed_push")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[resource]
+script = ExtResource("6_action")
+_action_tags = Array[int]([30, 32])
+action_results = Array[ExtResource("2_baseop")]([])
+fallback_event_uuid = "jiaoyou_tongyou_changan_fallback"
+possibility = "s_success_rate"
+failed_result = SubResource("Resource_failed_result")
+uuid = "jiaoyou_tongyou_changan"
+name = "同游长安"
+description = "与友人结伴，遍览长安风物"
+metadata/_custom_type_script = "uid://ccs67ljham38a"

@@ -176,7 +176,7 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_add(name=health; val=m_health_recovery)|prop_add(name=talent; val=m_talent_gain)",
+    "universal_result": "prop_add(name=health; val=m_health_recovery)|prop_add(name=talent; val=m_talent_gain)|roll_imaginary(level=3)",
     "era": "",
     "failed_hints": {}
   },
@@ -187,6 +187,46 @@
     "parent": "",
     "universal_requirement": "",
     "universal_result": "prop_sub(name=talent; val=s_talent_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "fangjian_tingwen_success": {
+    "name": "坊间听闻·成",
+    "action_uuid": "duzhuo_fangjian_tingwen",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xs_money_cost)|roll_imaginary(level=1)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "fangjian_tingwen_failure": {
+    "name": "坊间听闻·败",
+    "action_uuid": "duzhuo_fangjian_tingwen",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xs_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "tongyou_changan_success": {
+    "name": "同游长安·成",
+    "action_uuid": "jiaoyou_tongyou_changan",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=literary_fame; val=5)|roll_imaginary(level=2)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "tongyou_changan_failure": {
+    "name": "同游长安·败",
+    "action_uuid": "jiaoyou_tongyou_changan",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)",
     "era": "",
     "failed_hints": {}
   },

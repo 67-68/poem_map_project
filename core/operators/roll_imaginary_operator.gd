@@ -24,6 +24,9 @@ var _picked_hint: String = ""
 
 
 func init(_context: Dictionary) -> Dictionary:
+	if not _picked_uuid.is_empty():
+		Logging.info("RollImaginaryOperator.init: 已初始化 uuid='%s'，跳过重新选取" % _picked_uuid)
+		return _context
 	Logging.info("RollImaginaryOperator.init: 开始随机选取 level=%d 的意象" % level)
 
 	# ── 1. 加载意象定义表 ──

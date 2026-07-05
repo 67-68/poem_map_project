@@ -5,6 +5,9 @@ class_name Imaginary extends GameEntity
 
 @export var level: int = 1 # 1,2,3
 
+## 获取时的外部描写提示，自包含，不依赖上下文。
+## eg. "一件粗麻布衣，缝补痕迹历历可见"
+@export var get_hint: String = ""
 ## 意象获得的累计天数（用于计算持续时间，统一 2 旬=20 天后到期）
 ## -1 表示未设置（降级兼容旧存档）
 @export var created_at_day: int = -1
