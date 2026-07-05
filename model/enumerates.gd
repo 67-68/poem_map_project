@@ -195,6 +195,10 @@ enum TRAITS {
     # 健康→AP 阶梯特质（health ≤ 30 → 5AP / < 60 → 8AP，由 SurvivalManager 自动增删）
     EXHAUSTION_INITIAL,
     TERMINAL_ILLNESS,
+    
+    # Imaginary 到期转化疾病（Lv2→风寒 Lv3→呕心沥血）
+    DISEASE_FENGHAN_IMAGINARY,
+    DISEASE_OUXINLIXUE,
 }
 
 enum POEM_TYPE {

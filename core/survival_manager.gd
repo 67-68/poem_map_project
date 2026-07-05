@@ -28,6 +28,10 @@ const HEALTH_AP_TIERS: Array[Dictionary] = [
 ]
 const DEFAULT_AP_CAP: int = 10
 
+# ─── Imaginary 生命周期常量 ──────────────────────────────────
+## 所有等级意象统一保持 2 旬（20 天）
+const IMAGINARY_DURATION_DAYS: int = 20
+
 func get_prop(data): return PlayerState.get_stat_val(data)
 func append_prop(data,val):PlayerState.append_stat(data,val)
 func set_prop(data,val):PlayerState.set_stat_val(data,val)
@@ -64,15 +68,49 @@ func _cost_survival():
 
 # ─── 健康→AP 查询接口（静态，供外部消费方调用） ──────────────
 
-## 返回当前健康对应的 AP 上限
+## 返回当前健康对应的 AP 上限（含 Imaginary + 疾病惩罚）
 static func get_current_ap_cap() -> int:
 	var health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
+	var base_ap: int = DEFAULT_AP_CAP
 	for tier in HEALTH_AP_TIERS:
 		if health <= tier.health_max:
+			base_ap = tier.ap_cap
 			Logging.info('[SurvivalManager] get_current_ap_cap: health=%d ≤ %d → ap_cap=%d' % [health, tier.health_max, tier.ap_cap])
-			return tier.ap_cap
-	Logging.info('[SurvivalManager] get_current_ap_cap: health=%d → default=%d' % [health, DEFAULT_AP_CAP])
-	return DEFAULT_AP_CAP
+			break
+		else:
+			Logging.info('[SurvivalManager] get_current_ap_cap: health=%d → default=%d' % [health, DEFAULT_AP_CAP])
+	
+	# 🆕 Lv3 Imaginary 持有期惩罚：每持有 1 个 Lv3 意象，AP 上限 -1
+	var lv3_count := _count_active_lv3_imaginaries()
+	base_ap -= lv3_count
+	if lv3_count > 0:
+		Logging.info('[SurvivalManager] get_current_ap_cap: %d 个 Lv3 Imaginary → AP %d' % [lv3_count, base_ap])
+	
+	# 🆕 呕心沥血：永久 AP 上限 -2
+	if PlayerState.has_trait("disease_ouxinlixue"):
+		base_ap -= 2
+		Logging.info('[SurvivalManager] get_current_ap_cap: 呕心沥血 → AP -2 → %d' % base_ap)
+	
+	# 底限钳制：AP 不能降到 1 以下
+	var final_ap := maxi(base_ap, 1)
+	Logging.info('[SurvivalManager] get_current_ap_cap: 最终 AP = %d' % final_ap)
+	return final_ap
+
+## 🆕 统计当前持有中且尚未过期的 Lv3 Imaginary 数量
+static func _count_active_lv3_imaginaries() -> int:
+	var count := 0
+	var current_day: int = TimeService._total_days_elapsed
+	for uuid in Database.imaginaries_detail:
+		var imag = Database.imaginaries_detail[uuid]
+		if imag is Imaginary and imag.level == 3:
+			if imag.created_at_day < 0:
+				# 旧存档降级：无创建时间，视为有效并警告
+				Logging.warn('[SurvivalManager] _count_active_lv3_imaginaries: Imaginary "%s" 缺少 created_at_day，降级视为有效' % uuid)
+				count += 1
+			elif (current_day - imag.created_at_day) < IMAGINARY_DURATION_DAYS:
+				count += 1
+	Logging.info('[SurvivalManager] _count_active_lv3_imaginaries: 当前 %d 个活跃 Lv3 Imaginary' % count)
+	return count
 
 ## 返回当前激活的 AP 削减提示文本，无削减时返回 ""
 static func get_active_ap_hint() -> String:
@@ -144,11 +182,83 @@ func aggregate_trait_effect():
 				Logging.info('[SurvivalManager] Disease progression: ' + t + ' → ' + trait_.progression_target)
 				PlayerState.remove_trait(t)
 				PlayerState.add_trait(trait_.progression_target)
-		
 		# 临时 debuff 2 旬到期自动移除（硬编码阶段，未来抽象为 Trait max_duration 钩子）
 		if t in TEMP_DEBUFFS and trait_.lasting_xun >= TEMP_DEBUFF_DURATION_XUN:
 			Logging.info('[SurvivalManager] Temp debuff expired: %s (lasting_xun=%d)' % [t, trait_.lasting_xun])
 			PlayerState.remove_trait(t)
+
+# ─── Imaginary 生命周期结算 ──────────────────────────────────
+## 在 aggregate_trait_effect() 之后、_sync_health_ap_traits() 之前执行。
+## 处理：Lv2 Imaginary 每旬 -5 健康、2 旬到期转化与删除、Lv3 2 旬到期转化。
+## 防叠层：通过 flag_has_fenghan_imaginary / flag_has_ouxin_imaginary 确保疾病只触发一次。
+func _process_imaginary_effects() -> void:
+	var current_day: int = TimeService._total_days_elapsed
+	var to_delete: Array[String] = []  # 到期需要删除的 Imaginary UUID
+	var has_changed := false
+	
+	Logging.info('[SurvivalManager] _process_imaginary_effects: 开始扫描 %d 个 Imaginary' % Database.imaginaries_detail.size())
+	
+	for uuid in Database.imaginaries_detail:
+		var imag = Database.imaginaries_detail[uuid]
+		if not imag is Imaginary:
+			continue
+		
+		var days_alive := -1
+		if imag.created_at_day < 0:
+			# 旧存档降级：没有创建时间，不处理生命周期
+			Logging.warn('[SurvivalManager] _process_imaginary_effects: Imaginary "%s" (Lv%d) 缺少 created_at_day，跳过生命周期处理' % [uuid, imag.level])
+			continue
+		
+		days_alive = current_day - imag.created_at_day
+		var expired := days_alive >= IMAGINARY_DURATION_DAYS
+		
+		match imag.level:
+			1:
+				# Lv1: 无副作用，到期直接删除
+				if expired:
+					Logging.info('[SurvivalManager] _process_imaginary_effects: Lv1 Imaginary "%s" 到期（%d 天），删除' % [uuid, days_alive])
+					to_delete.append(uuid)
+					has_changed = true
+					
+			2:
+				# Lv2: 每旬扣 5 健康
+				Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 每旬扣 5 健康（%d 天）' % [uuid, days_alive])
+				PlayerState.append_stat(ENUMS.PROPS.HEALTH, -5)
+				has_changed = true
+				
+				if expired:
+					# 到期转化：检查 flag 防叠层
+					if not PlayerState.has_flag("flag_has_fenghan_imaginary"):
+						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 到期 → 转化为 风寒' % uuid)
+						PlayerState.add_trait("disease_fenghan_imaginary")
+						PlayerState.set_flag("flag_has_fenghan_imaginary", true, "bool")
+					else:
+						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 到期，风寒已存在，跳过转化' % uuid)
+					to_delete.append(uuid)
+					
+			3:
+				# Lv3: 持有期副作用在 get_current_ap_cap() 中处理
+				if expired:
+					if not PlayerState.has_flag("flag_has_ouxin_imaginary"):
+						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv3 Imaginary "%s" 到期 → 转化为 呕心沥血' % uuid)
+						PlayerState.add_trait("disease_ouxinlixue")
+						PlayerState.set_flag("flag_has_ouxin_imaginary", true, "bool")
+					else:
+						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv3 Imaginary "%s" 到期，呕心沥血已存在，跳过转化' % uuid)
+					to_delete.append(uuid)
+					has_changed = true
+	
+	# ── 清理到期的 Imaginary ──
+	for del_uuid in to_delete:
+		Database.imaginaries_detail.erase(del_uuid)
+		Logging.info('[SurvivalManager] _process_imaginary_effects: 已删除 Imaginary "%s"' % del_uuid)
+	
+	if has_changed:
+		EventBus.imaginary_changed.emit()
+		Logging.info('[SurvivalManager] _process_imaginary_effects: 结算完成，删除了 %d 个 Imaginary' % to_delete.size())
+	else:
+		Logging.info('[SurvivalManager] _process_imaginary_effects: 无变化')
+
 
 func operate_state_transistors():
 	for s in Database.get_state_transistors_all():
@@ -171,6 +281,11 @@ func _process_single_xun_settlement():
 	# 状态自身存在的持续负面衍生
 	# 让属性自己不变，影响其他属性和operator之类的
 	aggregate_trait_effect()
+	
+	# 1.3: Imaginary 生命周期结算（Lv2 每旬扣血 + 到期转化与删除）
+	# 必须在 aggregate 之后（呕心沥血 trait_effect_operations 已在 aggregate 中执行扣血）
+	# 必须在 _sync_health_ap_traits 之前（Lv2 扣血后健康可能变化）
+	_process_imaginary_effects()
 	
 	# 1.5: 健康→AP 阶梯同步（必须在 aggregate 之后，确保 trait 持续效果已生效）
 	_sync_health_ap_traits()

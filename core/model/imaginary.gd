@@ -4,3 +4,7 @@ class_name Imaginary extends GameEntity
 ## name: 展示名，如 "孤雪"
 
 @export var level: int = 1 # 1,2,3
+
+## 意象获得的累计天数（用于计算持续时间，统一 2 旬=20 天后到期）
+## -1 表示未设置（降级兼容旧存档）
+@export var created_at_day: int = -1

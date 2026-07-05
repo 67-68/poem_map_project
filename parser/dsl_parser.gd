@@ -1013,6 +1013,11 @@ static func parse_trait(row: Dictionary) -> Trait:
         if property_ops.size() != all_ops.size():
             Logging.info("Warning: trait %s: %d non-PropertyOperator entries in trait_effect_operations were filtered out" % [trait_id, all_ops.size() - property_ops.size()])
 
+    # 解析 display_char（印章展示字）
+    var display_char_str = row.get('display_char', '')
+    if not display_char_str.is_empty():
+        trait_.display_char = display_char_str
+
     Logging.info("Trait解析成功: %s (topic=%s)" % [trait_id, trait_.topic])
     return trait_
 

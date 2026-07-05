@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Trait" format=3]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
+[ext_resource type="Script" uid="uid://cwotf742e2n0f" path="res://core/model/multiply_operator.gd" id="2_mul"]
+[ext_resource type="Script" uid="uid://potskta4ums3" path="res://core/model/dict_multiply_operator.gd" id="3_dict"]
+
+[sub_resource type="Resource" id="MulOp_health"]
+script = ExtResource("2_mul")
+key = "health"
+value = 1.5
+operator = 1
+
+[sub_resource type="Resource" id="DictOp_buffer"]
+script = ExtResource("3_dict")
+operators = Array[ExtResource("2_mul")]([SubResource("MulOp_health")])
+
+[resource]
+script = ExtResource("1_trait")
+buffer_to_prop = SubResource("DictOp_buffer")
+topic = "DISEASE"
+display_char = "寒"
+uuid = "disease_fenghan_imaginary"
+name = "风寒"
+description = "意象耗尽，风寒入骨。健康流失速度倍增。"

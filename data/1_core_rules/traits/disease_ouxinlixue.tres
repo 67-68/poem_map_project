@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Trait" format=3]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_prop"]
+
+[sub_resource type="Resource" id="PropOp_health"]
+script = ExtResource("2_prop")
+str_props = "health"
+value = -5
+
+[resource]
+script = ExtResource("1_trait")
+topic = "DISEASE"
+trait_effect_operations = Array[ExtResource("2_prop")]([SubResource("PropOp_health")])
+display_char = "血"
+uuid = "disease_ouxinlixue"
+name = "呕心沥血"
+description = "意象耗尽，心神俱损。每旬流失生命，行动上限永久削减。"
