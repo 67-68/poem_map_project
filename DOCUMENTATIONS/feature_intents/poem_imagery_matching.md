@@ -171,8 +171,10 @@ key 构建方式：将 `required_fragments` 数组排序后以 `|` 拼接。
 | [`core/model/poem.gd`](core/model/poem.gd:1) | **修改** | required_fragments 语义改为两段式 concept uuid |
 | [`core/imaginary_comprehender.gd`](core/imaginary_comprehender.gd:1) | **修改** | current_tier 上限从 3 降为 2 |
 | [`data/1_core_rules/poem_recipes/*.tres`](data/1_core_rules/poem_recipes/poem_tian_cheng.tres:1) | **修改** | required_fragments 从四段式改为两段式 concept uuid |
-| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | **修改** | 断开 poem_type 按钮逻辑；调用新接口；打油诗渲染；上限检查移至按钮点击；V5.1: `_populate_poem_demands()` 遍历 recipe_index，实例化 `poem_demand.tscn` 并填充 recipe.name + concept 中文名 |
-| [`ui/poem_crafter.tscn`](ui/poem_crafter.tscn:1) | **修改** | poem_type 按钮改为纯展示（移除 toggle 逻辑）；`SmoothScrollContainer` → `PoemDemands` 节点并实例化 `poem_demand.tscn` |
+| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | **修改** | 断开 poem_type 按钮逻辑；调用新接口；打油诗渲染；上限检查移至按钮点击 |
+| [`ui/poem_crafter.tscn`](ui/poem_crafter.tscn:1) | **修改** | poem_type 按钮改为纯展示（移除 toggle 逻辑）；PoemDemands 节点实例化 `poem_demands.tscn` 独立场景 |
+| [`ui/poem_demands.gd`](ui/poem_demands.gd:1) | **新增** | 独立场景脚本，`_ready()` 中 call_deferred 自填充，遍历 `Database.recipe_index` 实例化 `poem_demand.tscn` 并填充 Title + ImaginaryDemand |
+| [`ui/poem_demands.tscn`](ui/poem_demands.tscn:1) | **新增** | 独立场景，包含 SmoothScrollContainer＞V＞poem_demand 默认实例 |
 | [`ui/poem_demand.tscn`](ui/poem_demand.tscn:1) | **新增** | 单独的 PoemDemand 场景模板（Title + ImaginaryDemand Label） |
 | [`tests/test_poem_crafting_comprehensive.gd`](tests/test_poem_crafting_comprehensive.gd:1) | **修改** | 适配新匹配逻辑 |
 | [`tests/test_poem_crafting_fragment.gd`](tests/test_poem_crafting_fragment.gd:1) | **修改** | 适配新 FragmentMatcher 接口 |
