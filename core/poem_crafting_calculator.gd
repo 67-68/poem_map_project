@@ -190,3 +190,51 @@ static func get_level_display_name(level: int) -> String:
 
 static func get_event_base_for_level(level: int) -> String:
 	return "poem_level_%d" % level
+
+
+## ──────────────────────────────────────────────
+## 纯函数：score → 创作代价 operators (V9.2)
+##
+## @param score: 诗词评分
+## @return Array — TimeOperator(天数) + PropertyOperator(健康消耗, 仅 health_cost > 0 时)
+##
+## 公式：
+##   days       = max(1, floor(score / 5))
+##   health_cost = floor(score * 2 / 3)，仅 health_cost > 0 时创建 PropertyOperator
+##
+## 纯函数契约：仅创建 operator 对象，不执行 operate()。
+## 调用方负责通过 ActionHintBuilder 展示预览，并在确认创作后执行 operator.operate()。
+## ──────────────────────────────────────────────
+
+const COST_DAYS_DIVISOR := 5        ## score / 5 = 天数
+const COST_DAYS_MINIMUM := 1        ## 最低保底 1 天
+const COST_HEALTH_NUMERATOR := 2    ## 健康消耗分子
+const COST_HEALTH_DENOMINATOR := 3  ## 健康消耗分母
+
+static func calculate_crafting_cost(score: int) -> Array:
+	var operators: Array = []
+	
+	# ── 1. 时间代价：floor(score / 5) 天，最低保底 1 天 ──
+	var days: int = maxi(COST_DAYS_MINIMUM, floori(float(score) / float(COST_DAYS_DIVISOR)))
+	Logging.info("PoemCraftingCalculator(V9.2): calculate_crafting_cost — score=%d → days=%d" % [score, days])
+	
+	var time_op := TimeOperator.new()
+	time_op.day = float(days)
+	time_op.refresh_time = false
+	operators.append(time_op)
+	
+	# ── 2. 健康代价：floor(score * 2/3)，仅 >0 时创建 ──
+	var health_cost: int = floori(float(score) * float(COST_HEALTH_NUMERATOR) / float(COST_HEALTH_DENOMINATOR))
+	Logging.info("PoemCraftingCalculator(V9.2): calculate_crafting_cost — score=%d → health_cost=%d" % [score, health_cost])
+	
+	if health_cost > 0:
+		var health_op := PropertyOperator.new()
+		health_op.property = "health"
+		health_op.value = -health_cost
+		operators.append(health_op)
+		Logging.info("PoemCraftingCalculator(V9.2): calculate_crafting_cost — 健康消耗 %d, 已创建 PropertyOperator" % health_cost)
+	else:
+		Logging.info("PoemCraftingCalculator(V9.2): calculate_crafting_cost — health_cost <= 0, 跳过健康消耗")
+	
+	Logging.info("PoemCraftingCalculator(V9.2): calculate_crafting_cost — 返回 %d 个 operators" % operators.size())
+	return operators

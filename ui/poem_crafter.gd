@@ -32,6 +32,9 @@ var _cached_upgrade_succeeded: bool = false
 var _cached_line1_text: String = ""
 var _cached_line2_text: String = ""
 
+## V9.2: 缓存创作代价 operators（切换 mode 时复用，代价与 mode 无关）
+var _cached_cost_operators: Array = []
+
 ## ──────────────────────────────────────────────
 ## 文学化评价常量字典
 ## ──────────────────────────────────────────────
@@ -111,9 +114,10 @@ func _on_toggle_gan_ye(pressed: bool) -> void:
 
 
 ## 仅刷新 RichTextLabel 的第三行（精力方向），前两行复用缓存的文本，不重算/不重随机
+## V9.2: 代价行也复用缓存，代价与 mode 无关
 func _refresh_mode_display_only() -> void:
 	if _cached_result == null:
-		Logging.info('PoemCrafter(V9.1): _refresh_mode_display_only — 无缓存，跳过')
+		Logging.info('PoemCrafter(V9.2): _refresh_mode_display_only — 无缓存，跳过')
 		return
 
 	# 行1/行2 复用 _preview_current 时缓存的文本，行3 按 current_mode 更新
@@ -126,8 +130,11 @@ func _refresh_mode_display_only() -> void:
 	else:
 		lines.append("[color=#ddd]此诗的精力将倾注于千古文章之上[/color]")
 
+	# V9.2: 代价预览（从缓存 operators 重建，代价与 mode 无关）
+	lines.append_array(_build_cost_preview_lines())
+
 	$Panel/InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
-	Logging.info('PoemCrafter(V9.1): _refresh_mode_display_only — 第三行已更新, mode=%s, line1=%s' % [current_mode, _cached_line1_text])
+	Logging.info('PoemCrafter(V9.2): _refresh_mode_display_only — 已更新, mode=%s, line1=%s' % [current_mode, _cached_line1_text])
 
 
 # ──────────────────────────────────────────────
@@ -255,12 +262,19 @@ func _on_button_pressed() -> void:
 	poem.name = "《%s》" % level_display_name
 	poem.level = final_level
 	poem.specific_topic = level_display_name
-	Logging.info('PoemCrafter(V9.1): Poem created — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
+	Logging.info('PoemCrafter(V9.2): Poem created — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
 
 	PlayerState.created_poems.append(poem)
-	Logging.info('PoemCrafter(V9.1): Poem added to created_poems')
+	Logging.info('PoemCrafter(V9.2): Poem added to created_poems')
 
-	# ── 5. 算子生成并执行 ──
+	# ── 5. 先执行创作代价（天数 + 健康消耗）──
+	if not _cached_cost_operators.is_empty():
+		Logging.info('PoemCrafter(V9.2): 执行创作代价 — %d 个 operators' % _cached_cost_operators.size())
+		_apply_operators(_cached_cost_operators)
+	else:
+		Logging.warn('PoemCrafter(V9.2): _cached_cost_operators 为空，跳过代价执行')
+	
+	# ── 6. 收益算子生成并执行 ──
 	var operators: Array = []
 	if secular_value != 0.0:
 		operators.append(OperatorFactory.create_property_operator("money", secular_value))
@@ -269,12 +283,12 @@ func _on_button_pressed() -> void:
 		operators.append(OperatorFactory.create_property_operator("literary_fame", literary_value))
 		Logging.info('PoemCrafter(V9.1): 生成 literary_fame 算子: %.1f' % literary_value)
 	_apply_operators(operators)
-	Logging.info('PoemCrafter(V9.1): 算子执行完成 — %d 个算子' % operators.size())
+	Logging.info('PoemCrafter(V9.2): 收益算子执行完成 — %d 个算子' % operators.size())
 
-	# ── 6. 消耗所有参与计算的 Imaginary ──
+	# ── 7. 消耗所有参与计算的 Imaginary ──
 	_consume_all_imaginaries()
 
-	# ── 7. 从对应等级的 EventBase 抽取事件 ──
+	# ── 8. 从对应等级的 EventBase 抽取事件 ──
 	var event_base_uuid := PoemCraftingCalculator.get_event_base_for_level(final_level)
 	var ctx := {
 		"poem_secular": secular_value,
@@ -296,7 +310,7 @@ func _on_button_pressed() -> void:
 		Logging.err('PoemCrafter(V9.1): EventManager 或 draw_from_event_base 不存在，降级使用 push_event "poem_reveal"')
 		EventBus.push_event.emit("poem_reveal", ctx)
 
-	# ── 8. 清除缓存并重建 Slot ──
+	# ── 9. 清除缓存并重建 Slot ──
 	_clear_cached_result()
 	_rebuild_slots()
 
@@ -308,7 +322,8 @@ func _clear_cached_result() -> void:
 	_cached_upgrade_succeeded = false
 	_cached_line1_text = ""
 	_cached_line2_text = ""
-	Logging.info('PoemCrafter(V9.1): 缓存已清除')
+	_cached_cost_operators.clear()
+	Logging.info('PoemCrafter(V9.2): 缓存已清除（含 cost operators）')
 
 
 func _consume_matched_imaginaries(uuids: Array[String]) -> void:
@@ -425,8 +440,12 @@ func _preview_current() -> void:
 	else:
 		lines.append("[color=#ddd]此诗的精力将倾注于千古文章之上[/color]")
 
+	# ── V9.2: 创作代价预览 ──
+	_cached_cost_operators = PoemCraftingCalculator.calculate_crafting_cost(result.score)
+	lines.append_array(_build_cost_preview_lines())
+
 	$Panel/InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
-	Logging.info('PoemCrafter(V9.1): _preview_current — 渲染完成, final_level=%d, upgrade=%s, line1=%s' % [_cached_final_level, _cached_upgrade_succeeded, _cached_line1_text])
+	Logging.info('PoemCrafter(V9.2): _preview_current — 渲染完成, final_level=%d, upgrade=%s, line1=%s, cost_ops=%d' % [_cached_final_level, _cached_upgrade_succeeded, _cached_line1_text, _cached_cost_operators.size()])
 
 
 ## 从常量池中随机选一条文本（使用 randi 保证预览评价的微妙变化）
@@ -434,6 +453,26 @@ func _pick_random_from_pool(pool: Array) -> String:
 	if pool.is_empty():
 		return "意象平平"
 	return pool[randi() % pool.size()]
+
+
+## V9.2: 从缓存 cost operators 构建代价预览行（委托给 ActionHintBuilder）
+func _build_cost_preview_lines() -> Array[String]:
+	var lines: Array[String] = []
+	if _cached_cost_operators.is_empty():
+		Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — cost operators 为空，跳过")
+		return lines
+	
+	var previews: Array[String] = ActionHintBuilder.build_operator_preview(_cached_cost_operators)
+	if previews.is_empty():
+		Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — ActionHintBuilder 返回空预览")
+		return lines
+	
+	# 分隔线 + 代价行
+	lines.append("[color=#cc6666][font_size=13]━━━ 创作代价 ━━━[/font_size][/color]")
+	for p in previews:
+		lines.append("[color=#cc6666]%s[/color]" % p)
+	Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — %d 行" % previews.size())
+	return lines
 
 
 # ──────────────────────────────────────────────

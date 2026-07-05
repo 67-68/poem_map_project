@@ -1,6 +1,6 @@
 # 诗词评分创作 — 功能意图
 
-**状态**: 🟢 已验证（V9.1: 预览锁定 + 文学化三行评价）
+**状态**: 🟢 已验证（V9.2: 创作代价 + 预览锁定 + 文学化评价）
 
 ---
 
@@ -8,9 +8,10 @@
 
 砍掉 V8 的 C(N,3) 食谱枚举。诗词创作改为线性评分制：根据 Imaginary 数量与等级打分，超出 `max_imaginary_managable` 的额外 Imaginary 每个扣 5 分。评分定基础等级（平庸/佳作/绝唱），再按比例概率升级。mode 硬赋值 secular/literary 值（干谒→64/0，登高→0/48）。所有参与计算的 Imaginary 全量消耗。
 
-**V9.1 新增**：预览时直接掷骰子锁定结果，用户点创作只是确认执行。展示从技术数值变为三行文学化评价——意象丰瘠、灵感手感、精力方向。
+**V9.2 新增**：创作消耗时间与健康的代价系统。分数越高创作越久、越伤身。代价通过 TimeOperator + PropertyOperator 执行，与 ActionHintBuilder 统一展示。
 
 ---
+
 
 ## 核心玩法
 
@@ -74,6 +75,21 @@ base_level < 3 时:
 ### 意象消耗
 
 创作成功后**消耗所有参与计算的 Imaginary**（全量清空 `Database.imaginaries_detail`）。
+
+### 创作代价（V9.2）
+
+创作不是零成本的——诗词越精妙，耗费的时间与精力越大：
+
+| 代价项 | 公式 | 说明 |
+|--------|------|------|
+| 创作天数 | `max(1, floor(score / 5))` | 每 5 分需 1 天，最低保底 1 天 |
+| 健康消耗 | `floor(score × 2/3)` | 仅 health_cost > 0 时生效 |
+
+示例：score=27 → 5 天 + 18 健康；score=15 → 3 天 + 10 健康；score=5 → 1 天 + 3 健康。
+
+代价通过 `PoemCraftingCalculator.calculate_crafting_cost(score)` 纯函数生成 `TimeOperator` + `PropertyOperator` 数组。预览时缓存 operators 并通过 `ActionHintBuilder.build_operator_preview()` 展示；确认创作后先执行代价再执行收益。
+
+代价与 mode 无关，切换 toggle 时代价预览不变。
 
 ---
 
@@ -153,8 +169,8 @@ flowchart TD
 
 | 文件 | 改动 |
 |------|------|
-| [`core/poem_crafting_calculator.gd`](core/poem_crafting_calculator.gd:1) | **重写** (V9) — 纯函数评分 + 等级分 + 升级概率计算 |
-| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | **修改** (V9.1) — `_preview_current` 预览锁定 + 文学化三行评价；`_on_button_pressed` 精简为确认执行；Toggle 回调仅刷新第三行 |
+| [`core/poem_crafting_calculator.gd`](core/poem_crafting_calculator.gd:1) | **重写** (V9) — 纯函数评分 + 等级分 + 升级概率计算；**V9.2 新增** `calculate_crafting_cost(score)` 纯函数 |
+| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | **修改** (V9.2) — `_preview_current` 预览锁定 + 文学化三行评价 + 代价预览；`_on_button_pressed` 先代价后收益；Toggle 回调复用代价预览；`_build_cost_preview_lines()` 新增 |
 | [`core/event_manager.gd`](core/event_manager.gd:1) | **新增方法** — `draw_from_event_base` 从指定 EventBase 抽事件 |
 | [`data/1_core_rules/events/poem_levels/eb_poem_level_1.json`](data/1_core_rules/events/poem_levels/eb_poem_level_1.json) | **新建** — 平庸事件库 |
 | [`data/1_core_rules/events/poem_levels/eb_poem_level_2.json`](data/1_core_rules/events/poem_levels/eb_poem_level_2.json) | **新建** — 佳作事件库 |
