@@ -276,6 +276,13 @@ func operate_state_transistors():
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）
 func _process_single_xun_settlement():
 	#breakpoint
+	
+	# 🆕 批量模式包裹：旬结算期间金钱/时间/健康可能变化多次，
+	# ActionManager._on_player_stat_changed 会触发 reevaluate_all_locks，
+	# 导致 UI 在结算中期被反复刷新。begin_action_batch 抑制中间刷新，
+	# 结算完成后统一执行一次 reevaluate。
+	ActionManager.begin_action_batch()
+	
 	# 第一阶段：跨状态感染 (Cross-Pollination)
 	# 在任何增减发生之前，先让状态之间互相发生化学反应。
 	# 状态自身存在的持续负面衍生
@@ -307,10 +314,14 @@ func _process_single_xun_settlement():
 	# 4.5: Lock/Block 到期清理
 	ActionManager.process_xun_tick()
 	
+	# 🆕 结算完毕，统一执行一次锁定重评估，解除批量模式
+	ActionManager.end_action_batch()
+	
 	# 5. 通知 UI 刷新
 	EventBus.emit_signal("xun_settlement_completed")
 	
 	# 6. 延期扣除生活费（快照之后执行，确保计入下月 delta）
+	# ⚠️ 这个 deferred 调用在批量模式结束后才执行，会独立触发一次 reevaluate
 	call_deferred("_post_xun_money_deduct")
 
 func _update_heartbeat_sfx() -> void:

@@ -2,6 +2,10 @@ class_name SceneActionScroll extends SmoothScrollContainer
 
 var _locked_action_ids: Array[String] = []  # 当前灰化显示的 action ID 列表
 
+## 缓存每个面板的锁状态，实现增量 diff：只有状态真正变化时才调用 set_locked/set_unlocked
+## key: panel instance_id(str), value: { "locked": bool, "reason": String }
+var _panel_lock_cache: Dictionary = {}
+
 func refresh():
 	"""
 	三阶段管道刷新 scene action：
@@ -10,6 +14,9 @@ func refresh():
 	3. 按标志位渲染（_is_hidden 跳过，dynamic_failed_hint 决定亮/灰）
 	"""
 	Logging.debug("[SceneActionScroll] refresh() 被调用")
+	
+	# 全量刷新意味着按钮数据全部变化，清空增量 diff 缓存
+	_panel_lock_cache.clear()
 	
 	# Phase 1: 抽取
 	var pool = ActionManager.get_available_scene_actions()
@@ -58,9 +65,14 @@ func refresh():
 
 ## 增量刷新：只更新已有按钮的锁定状态，不新建/销毁。
 ## 由 request_refresh_action_locks 信号触发。
+##
+## 性能关键路径：使用 _panel_lock_cache 做差分更新，
+## 只有锁定状态实际变化时才调用 set_locked/set_unlocked，
+## 避免无意义的 HoverPopupManager unregister/register 风暴。
 func _refresh_locks_only() -> void:
-	Logging.info("SceneActionScroll: 增量刷新锁定状态")
+	Logging.debug("SceneActionScroll: 增量刷新锁定状态")
 	var children = $V.get_children()
+	var changed_count := 0
 	for child in children:
 		if not child is SceneActionPanel:
 			continue
@@ -69,18 +81,38 @@ func _refresh_locks_only() -> void:
 			continue
 		var a_id := panel.action.uuid
 		
+		# 确定目标锁定状态
+		var should_lock := false
+		var lock_reason := ""
+		
 		if a_id in _locked_action_ids:
-			# 未中签 action → 始终灰化（B类叙事 + 可能的A类原因）
-			panel.set_locked(panel.action.dynamic_failed_hint)
+			should_lock = true
+			lock_reason = panel.action.dynamic_failed_hint
 		elif not ActionManager._selected_action_ids.has(a_id):
-			# 不在 selected 列表也不在 locked 列表 → 新出现的 action，可能需求变满足
-			panel.set_locked(panel.action.dynamic_failed_hint)
+			should_lock = true
+			lock_reason = panel.action.dynamic_failed_hint
 		else:
-			# 已中签 action → 根据动态失败提示判断
 			if panel.action.dynamic_failed_hint.is_empty():
-				panel.set_unlocked()
+				should_lock = false
 			else:
-				panel.set_locked(panel.action.dynamic_failed_hint)
+				should_lock = true
+				lock_reason = panel.action.dynamic_failed_hint
+		
+		# diff：只在状态变化时操作
+		var panel_key := str(panel.get_instance_id())
+		var cached = _panel_lock_cache.get(panel_key, {})
+		var cached_locked: bool = cached.get("locked", not should_lock)  # 用反值确保首次必定触发
+		
+		if should_lock != cached_locked:
+			changed_count += 1
+			if should_lock:
+				panel.set_locked(lock_reason)
+			else:
+				panel.set_unlocked()
+			_panel_lock_cache[panel_key] = {"locked": should_lock, "reason": lock_reason}
+	
+	if changed_count > 0:
+		Logging.info("SceneActionScroll: 增量刷新完成，实际锁定态变化 %d 个按钮" % changed_count)
 
 
 # 刷新场景化行动

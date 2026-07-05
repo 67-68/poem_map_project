@@ -43,11 +43,23 @@ var _all_sub_action_ids: Dictionary = {}
 ## 🆕 Focus session 控制器（不污染 _blocked_actions / _locked_in_actions）
 var _focus_controller: _ActionFocusController
 
+## 🆕 属性变动 debounce：同帧/相邻帧内的多次 stat change 只触发一次 reevaluate_all_locks
+const STAT_DEBOUNCE_MS: float = 0.1  # 100ms 合并窗口
+var _stat_debounce_timer: Timer = null
+var _stat_debounce_pending: bool = false
+
 
 func _ready() -> void:
 	_focus_controller = _ActionFocusController.new()
 	_init_archetype_cache()
 	connect_to_player_state()
+	
+	# 🆕 创建 debounce timer，one-shot 模式，同帧内多次 stat change 合并为一次 reevaluate
+	_stat_debounce_timer = Timer.new()
+	_stat_debounce_timer.one_shot = true
+	_stat_debounce_timer.wait_time = STAT_DEBOUNCE_MS
+	_stat_debounce_timer.timeout.connect(_on_stat_debounce_timeout)
+	add_child(_stat_debounce_timer)
 
 
 # ════════════════════════════════════════════════════════════
@@ -379,6 +391,8 @@ func end_action_batch() -> void:
 
 
 ## player_stat_changed 信号回调。
+## 🆕 使用 debounce 合并：100ms 内的多次 stat change 只触发一次 reevaluate_all_locks。
+## 批量模式（_suppress_reevaluate）优先级高于 debounce — 批量期间直接跳过。
 func _on_player_stat_changed(prop_name: String) -> void:
 	# 🆕 批量模式下抑制重评估，由 end_action_batch 统一处理
 	if _suppress_reevaluate:
@@ -388,10 +402,19 @@ func _on_player_stat_changed(prop_name: String) -> void:
 	# 只对影响 action 可用性的属性变化做反应
 	# 白名单: time / money / health / literary_fame / talent 都能影响 action 可用性
 	if prop_name in ["time", "money", "health", "literary_fame", "talent"]:
-		Logging.info("[ActionManager] 关键属性 %s 变动，触发锁定重评估" % prop_name)
-		reevaluate_all_locks()
+		Logging.info("[ActionManager] 关键属性 %s 变动，debounce 窗口启动 (%.0fms)" % [prop_name, STAT_DEBOUNCE_MS * 1000])
+		_stat_debounce_pending = true
+		_stat_debounce_timer.start(STAT_DEBOUNCE_MS)
 	else:
 		Logging.debug("[ActionManager] 属性 %s 变动，不在 action 重评估白名单中，跳过" % prop_name)
+
+
+## 🆕 debounce 定时器回调：窗口期结束后统一执行一次 reevaluate
+func _on_stat_debounce_timeout() -> void:
+	if _stat_debounce_pending:
+		_stat_debounce_pending = false
+		Logging.info("[ActionManager] debounce 窗口结束，统一执行锁定重评估")
+		reevaluate_all_locks()
 
 
 # ════════════════════════════════════════════════════════════
