@@ -133,5 +133,55 @@
     "name": "酒葫芦",
     "level": 1,
     "get_hint": "一只旧酒葫芦，腰间磨得油亮发黑"
+  },
+  "broken_stele": {
+    "name": "断碑",
+    "level": 2,
+    "get_hint": "一方断裂的石碑，残存的刻字被青苔覆去大半"
+  },
+  "beacon_fire": {
+    "name": "烽火",
+    "level": 2,
+    "get_hint": "远处山头升起一道狼烟，如墨笔在青天划下焦痕"
+  },
+  "returning_geese": {
+    "name": "归雁",
+    "level": 2,
+    "get_hint": "一行归雁掠过长空，鸣声嘹唳似在唤人还乡"
+  },
+  "setting_sun": {
+    "name": "残阳",
+    "level": 2,
+    "get_hint": "血色的残阳悬在地平线上，将万物浸入暮色"
+  },
+  "lone_boat": {
+    "name": "孤舟",
+    "level": 2,
+    "get_hint": "一叶扁舟泊在寒江之上，船头一盏孤灯明灭不定"
+  },
+  "old_garden": {
+    "name": "故园",
+    "level": 2,
+    "get_hint": "荒草掩径，断井颓垣间犹能辨出昔日花圃的轮廓"
+  },
+  "great_void": {
+    "name": "太虚",
+    "level": 3,
+    "get_hint": "苍穹如盖，星斗罗列其间，天地间仿佛只剩下你一人"
+  },
+  "vast_sea": {
+    "name": "沧海",
+    "level": 3,
+    "get_hint": "万里沧波翻涌，日月若出其中，星汉灿烂若出其里"
+  },
+  "blue_annals": {
+    "name": "青史",
+    "level": 3,
+    "get_hint": "一页页竹简在眼前展开，上面写满了兴亡成败的名字"
+  },
+  "long_river": {
+    "name": "长河",
+    "level": 3,
+    "get_hint": "大河东去不舍昼夜，淘尽多少英雄，卷走多少悲欢"
   }
 }

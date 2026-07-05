@@ -354,8 +354,10 @@ func scroll_to_bottom() -> void:
 	await get_tree().process_frame
 	var v_scroll := _scroll.get_v_scroll_bar()
 	if v_scroll:
-		v_scroll.value = v_scroll.max_value
-		Logging.debug("EventUI.scroll_to_bottom: 已滚动到底部")
+		var max_scroll := max(0.0, v_scroll.max_value - v_scroll.page)
+		v_scroll.value = max_scroll
+		_scroll.target_scroll = max_scroll
+		Logging.debug("EventUI.scroll_to_bottom: 已滚动到底部 (value=%.1f target=%.1f)" % [v_scroll.value, _scroll.target_scroll])
 
 
 ## 滚动到指定 entry_id 的条目位置

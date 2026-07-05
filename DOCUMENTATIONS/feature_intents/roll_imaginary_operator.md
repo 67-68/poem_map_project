@@ -52,7 +52,7 @@ CSV results: roll_imaginary(level=N)
 ### imaginary_definitions.json 新增字段
 
 每条意象增加：
-- `level` (int): 意象等级，当前全部为 1
+- `level` (int): 意象等级，1/2/3
 - `get_hint` (str): 自包含的外部描写
 
 ## 状态转换

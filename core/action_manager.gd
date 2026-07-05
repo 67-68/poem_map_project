@@ -221,9 +221,13 @@ func check_action_validity(action: Action) -> Dictionary:
 		return result
 	
 	# 1. 从 archetype universal_result 解析属性消耗并检查
+	# 🆕 跳过正数值（prop_add/收益型），只检查负数值（prop_sub/消耗型）
+	# 收益超过 hard_max 不应该锁定行动，最多浪费溢出部分
 	var costs := _parse_archetype_costs(action)
 	for temp_op in costs:
 		if not temp_op is PropertyOperator:
+			continue
+		if temp_op.value >= 0:
 			continue
 		var req: PropertyRequirement = temp_op.convert_prop_limit_requirement()
 		if req != null and not req.compare(PlayerState):
