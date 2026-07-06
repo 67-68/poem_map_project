@@ -215,6 +215,18 @@ func _on_button_pressed() -> void:
 			if not sub_action:
 				Logging.warn("SceneActionPanel: sub_actions 中 UUID '%s' 无法解析为 Action，跳过" % sub_uuid)
 				continue
+			
+			# 🆕 检查 sub-action 的 aciton_requirements，不满足则跳过此选项
+			if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
+				var reqs_met := true
+				for req in sub_action.aciton_requirements:
+					if not req.compare(PlayerState):
+						Logging.info("SceneActionPanel: sub-action '%s' requirement '%s' not met, hiding from picker" % [sub_action.uuid, req.get_script().resource_path if req.get_script() else "unknown"])
+						reqs_met = false
+						break
+				if not reqs_met:
+					continue
+			
 			var entity := GameEntity.new({"uuid": sub_action.uuid, "name": sub_action.name})
 			# 每个选项携带父行动的 main_tag（为未来多行动混合 picker 做准备）
 			entity.set_meta("parent_main_tag", _snap_main_tag)
@@ -312,10 +324,24 @@ func _on_button_pressed() -> void:
 ## 玩家从 sub-action picker 中选择一个子行动后回调。
 ## @param entity: 被选中的子行动 GameEntity（含 uuid=sub_uuid, name=显示名）
 func _on_sub_action_picked(entity) -> void:
+	# 🆕 空选择（picker 取消）：清理挂起数据后直接返回，不执行任何业务逻辑
+	if entity == null:
+		Logging.info("_on_sub_action_picked: entity is null（玩家拒绝回答），清理 pending 数据")
+		_pending_sub_action_main_tag = ""
+		_pending_sub_action_fallback = ""
+		_pending_sub_action_tags.clear()
+		_pending_sub_action_results.clear()
+		return
+
 	var sub_uuid: String = entity.uuid if entity is GameEntity else ""
 	Logging.info("[DEBUG sub_act] ENTER sub_uuid=%s entity_name=%s" % [sub_uuid, entity.name if entity else "NULL"])
 	if sub_uuid.is_empty():
 		Logging.err("_on_sub_action_picked: entity.uuid is empty, aborting")
+		# 同样清理 pending 数据，防止残留
+		_pending_sub_action_main_tag = ""
+		_pending_sub_action_fallback = ""
+		_pending_sub_action_tags.clear()
+		_pending_sub_action_results.clear()
 		return
 	
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])

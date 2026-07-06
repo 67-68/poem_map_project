@@ -465,6 +465,33 @@ func on_picker_item_selected(entity):
 	_process_next()
 
 
+## 玩家点击「不回答」—— 视为空选择，callback 传 null，由各 operator 自行处理
+func on_picker_cancelled(entry: Dictionary):
+	if _event_stack.size() == 0:
+		Logging.warn("on_picker_cancelled: 栈为空，没有 picker 条目")
+		return
+
+	# 守卫：确保栈顶仍是我们期望的 entry（防止并发竞态）
+	var top_entry = _event_stack[0]
+	if top_entry.get("type") != "picker":
+		Logging.warn("on_picker_cancelled: 栈顶不是 picker（type=%s），跳过弹出" % top_entry.get("type", "?"))
+		return
+
+	_event_stack.pop_front()
+	Logging.info("on_picker_cancelled: Picker 已从栈中弹出（玩家拒绝回答）")
+
+	var callback: Callable = entry.get("on_selected", Callable())
+	if callback.is_valid():
+		Logging.info("on_picker_cancelled: 调用 callback(null)，由 operator 自行处理空选择")
+		callback.call(null)
+	else:
+		Logging.warn("on_picker_cancelled: on_selected callback 无效，跳过")
+
+	_resume_world()
+	_is_active = false
+	_process_next()
+
+
 func on_focused_chat_finished(result):
 	_event_stack.pop_front()
 	Logging.info("FocusChat 已从栈中弹出")

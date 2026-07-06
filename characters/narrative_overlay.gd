@@ -363,6 +363,9 @@ func _on_picker_ready(entry: Dictionary) -> void:
 	attachment.item_selected.connect(func(e):
 		_on_picker_item_selected(e, entry)
 	, CONNECT_ONE_SHOT)
+	attachment.cancelled.connect(func():
+		_on_picker_cancelled(entry)
+	, CONNECT_ONE_SHOT)
 	visualizer.dim_history_ink(attachment)
 
 
@@ -374,6 +377,17 @@ func _on_picker_item_selected(entity, entry: Dictionary) -> void:
 	event_display_ended.emit()
 	director.on_picker_item_selected(entity)
 	Logging.info("NarrativeOverlay._on_picker_item_selected: entity=%s" % str(entity))
+
+
+## 玩家点击「不回答」—— 视为空选择，UI 清理后转发 director
+func _on_picker_cancelled(entry: Dictionary) -> void:
+	Logging.info("NarrativeOverlay._on_picker_cancelled: 玩家拒绝回答，清理 picker UI")
+	BlurManager.hide_picker_blur()
+	visualizer.undim_history_ink()
+	# 解锁行动栏
+	HoverPopupManager.set_event_active(false)
+	event_display_ended.emit()
+	director.on_picker_cancelled(entry)
 
 
 # ═══════════════════════════════════════════════════

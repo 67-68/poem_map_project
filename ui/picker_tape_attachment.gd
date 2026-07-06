@@ -1,5 +1,9 @@
 class_name PickerTapeAttachment extends VBoxContainer
 ## 呈堂物证 — 纸带内嵌选择网格（木牍/令牌），选后定格
+##
+## 层级适配：
+##   item_selected 信号 — 玩家选择一张卡牌
+##   cancelled 信号    — 玩家点击「不回答」LinkButton，视为空选择
 
 signal item_selected(entity: GameEntity)
 signal cancelled()
@@ -10,7 +14,15 @@ var _selected: bool = false
 var _item_card_scene: PackedScene = preload("res://picker_item.tscn")
 
 @onready var grid: GridContainer = $Grid
-@onready var header: Label = $Header
+@onready var header: Label = $HBox/Header
+@onready var _cancel_btn: LinkButton = $HBox/LinkButton
+
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+	_cancel_btn.pressed.connect(_on_cancel_pressed)
+	Logging.info("PickerTapeAttachment._ready: 已连接「不回答」LinkButton")
 
 
 func initialize(data: Array, ui_constructor: Callable = Callable()) -> void:
@@ -77,3 +89,35 @@ func _on_card_clicked(card: PickerItem) -> void:
 	# 延迟发射信号（让动画播完）
 	await get_tree().create_timer(0.4, true, true).timeout
 	item_selected.emit(selected_entity)
+
+
+## 玩家点击「不回答」—— 视为空选择，所有卡牌统一变灰并 emit cancelled
+func _on_cancel_pressed() -> void:
+	if _selected:
+		Logging.info("PickerTapeAttachment._on_cancel_pressed: 已选择，忽略重复点击")
+		return
+	_selected = true
+	Logging.info("PickerTapeAttachment._on_cancel_pressed: 玩家拒绝回答，全部卡牌变灰")
+
+	# dismiss 所有 hover
+	HoverPopupManager.dismiss_all()
+
+	# 「不回答」按钮自身变灰
+	_cancel_btn.modulate = Color(0.4, 0.4, 0.4, 0.5)
+
+	# 所有卡牌统一变灰 + 缩小
+	for child in grid.get_children():
+		var card := child as PickerItem
+		if not card:
+			continue
+		var tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tween.tween_property(card, "scale", Vector2(0.85, 0.85), 0.25)
+		tween.parallel().tween_property(card, "modulate", Color(0.5, 0.5, 0.5, 0.6), 0.25)
+
+	# 拒绝音效（轻量纸张音）
+	AudioManager.play_sfx_category("book_flip")
+
+	# 延迟发射信号（让动画播完）
+	await get_tree().create_timer(0.3, true, true).timeout
+	Logging.info("PickerTapeAttachment._on_cancel_pressed: 发射 cancelled 信号")
+	cancelled.emit()
