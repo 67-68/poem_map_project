@@ -8,32 +8,32 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_2q1k1"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_8h44w"]
 
-[sub_resource type="Resource" id="Resource_tckxm"]
+[sub_resource type="Resource" id="Resource_pnxh5"]
 script = ExtResource("3_2wdpi")
 str_props = "progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_pyp5e"]
+[sub_resource type="Resource" id="Resource_pcvhy"]
 script = ExtResource("4_ulnmn")
-operators = Array[ExtResource("2_pcvhy")]([SubResource("Resource_tckxm")])
+operators = Array[ExtResource("2_pcvhy")]([SubResource("Resource_pnxh5")])
 
-[sub_resource type="Resource" id="Resource_6seyt"]
+[sub_resource type="Resource" id="Resource_2wdpi"]
 script = ExtResource("5_squ55")
-choice_result = SubResource("Resource_pyp5e")
+choice_result = SubResource("Resource_pcvhy")
 description = "抱病坐下，研墨提笔开始誊写。"
 
-[sub_resource type="Resource" id="Resource_fskpm"]
+[sub_resource type="Resource" id="Resource_ulnmn"]
 script = ExtResource("6_2q1k1")
 property = "progress"
 value = 70
 
 [resource]
 script = ExtResource("7_8h44w")
-requirement = SubResource("Resource_fskpm")
+requirement = SubResource("Resource_ulnmn")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_pnxh5")]([SubResource("Resource_6seyt")])
+options = Array[ExtResource("1_pnxh5")]([SubResource("Resource_2wdpi")])
 uuid = "bai_ye_honeymoon_l2_typeb_m0"
 name = "病榻誊文"
 description = "“本官明日需向宰相交呈十年来漕运账册，你既来拜谒，便帮本官誊清百页。灯油已备，写完自来见我。”言罢掩门而去。玩家坐于冰冷木榻，墨香与霉味交织，执笔时手微颤——连日赶考已染风寒，此刻额上冷汗涔涔，却不敢停笔。"

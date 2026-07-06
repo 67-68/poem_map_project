@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_nrv3t"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_kikgj"]
 
-[sub_resource type="Resource" id="Resource_pkb0i"]
+[sub_resource type="Resource" id="Resource_kbv26"]
 script = ExtResource("3_go483")
 value = 26
 
-[sub_resource type="Resource" id="Resource_6cbo0"]
+[sub_resource type="Resource" id="Resource_nf262"]
 script = ExtResource("4_gfsdf")
-operators = Array[ExtResource("2_nf262")]([SubResource("Resource_pkb0i")])
+operators = Array[ExtResource("2_nf262")]([SubResource("Resource_kbv26")])
 
-[sub_resource type="Resource" id="Resource_eh37t"]
+[sub_resource type="Resource" id="Resource_go483"]
 script = ExtResource("5_j7euh")
-choice_result = SubResource("Resource_6cbo0")
+choice_result = SubResource("Resource_nf262")
 description = "站住。袖口往下坠了一坠。继续往米铺走。"
 
-[sub_resource type="Resource" id="Resource_elyrj"]
+[sub_resource type="Resource" id="Resource_gfsdf"]
 script = ExtResource("6_nrv3t")
 property = "health"
 value = 40
 
 [resource]
 script = ExtResource("7_kikgj")
-requirement = SubResource("Resource_elyrj")
+requirement = SubResource("Resource_gfsdf")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_NPC_DUFU:thatched_grass", "action:main:fangshi"])
-options = Array[ExtResource("1_kbv26")]([SubResource("Resource_eh37t")])
+options = Array[ExtResource("1_kbv26")]([SubResource("Resource_go483")])
 uuid = "zize_pawn_jade"
 name = "帕子叠好"
 description = "一道老裂痕从云纹中间贯过去，朝奉把它在窗口的光下翻了翻放回柜台。“死当？”你说是。他报的数刚好够付欠了半月的房租和三斗米。你没有还价。帕子在指间叠成方块时，原先包玉的凹处还带着一点余温，四角被玉佩压出的棱硌进掌心。麻绳从栅栏那边推过来，铜钱在绳上沉甸甸地响了一声。你松开帕子，把铜钱拨进袖口——手腕内侧那块被玉焐了十年的皮肉现在贴上了冰凉的方孔。"

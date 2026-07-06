@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://c15poc5dktjvw"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_1jtab"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_kqtbe"]
+
+[sub_resource type="Resource" id="Resource_tjij5"]
+script = ExtResource("2_kqtbe")
+str_props = "health"
+value = -15
+
+[resource]
+script = ExtResource("1_1jtab")
+topic = "DISEASE"
+trait_effect_operations = Array[ExtResource("2_kqtbe")]([SubResource("Resource_tjij5")])
+time_penalty = 1
+uuid = "severe_injury"
+name = "重伤"

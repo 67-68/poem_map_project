@@ -8,48 +8,48 @@
 [ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="6_imqxb"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_utal6"]
 
-[sub_resource type="Resource" id="Resource_20lln"]
+[sub_resource type="Resource" id="Resource_0vku7"]
 script = ExtResource("3_y7i0j")
 str_props = "money"
 value = -5
 
-[sub_resource type="Resource" id="Resource_tbv3n"]
+[sub_resource type="Resource" id="Resource_rp5a6"]
 script = ExtResource("3_y7i0j")
 str_props = "health"
 value = 5
 
-[sub_resource type="Resource" id="Resource_djxyl"]
+[sub_resource type="Resource" id="Resource_y7i0j"]
 script = ExtResource("4_kbsyx")
-operators = Array[ExtResource("2_rp5a6")]([SubResource("Resource_20lln"), SubResource("Resource_tbv3n")])
+operators = Array[ExtResource("2_rp5a6")]([SubResource("Resource_0vku7"), SubResource("Resource_rp5a6")])
 
-[sub_resource type="Resource" id="Resource_2c0ix"]
+[sub_resource type="Resource" id="Resource_kbsyx"]
 script = ExtResource("5_u4k44")
-choice_result = SubResource("Resource_djxyl")
+choice_result = SubResource("Resource_y7i0j")
 description = "称二两肉来补补"
 
-[sub_resource type="Resource" id="Resource_xegl2"]
+[sub_resource type="Resource" id="Resource_u4k44"]
 script = ExtResource("6_imqxb")
 value = 8
 
-[sub_resource type="Resource" id="Resource_245cb"]
+[sub_resource type="Resource" id="Resource_imqxb"]
 script = ExtResource("3_y7i0j")
 str_props = "health"
 value = -3
 
-[sub_resource type="Resource" id="Resource_bl5oi"]
+[sub_resource type="Resource" id="Resource_utal6"]
 script = ExtResource("4_kbsyx")
-operators = Array[ExtResource("2_rp5a6")]([SubResource("Resource_xegl2"), SubResource("Resource_245cb")])
+operators = Array[ExtResource("2_rp5a6")]([SubResource("Resource_u4k44"), SubResource("Resource_imqxb")])
 
-[sub_resource type="Resource" id="Resource_qage4"]
+[sub_resource type="Resource" id="Resource_20lln"]
 script = ExtResource("5_u4k44")
-choice_result = SubResource("Resource_bl5oi")
+choice_result = SubResource("Resource_utal6")
 description = "镜前呆立良久，黯然离去"
 
 [resource]
 script = ExtResource("7_utal6")
 era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickChronic"])
-options = Array[ExtResource("1_0vku7")]([SubResource("Resource_2c0ix"), SubResource("Resource_qage4")])
+options = Array[ExtResource("1_0vku7")]([SubResource("Resource_kbsyx"), SubResource("Resource_20lln")])
 uuid = "event_disease_feilao_wasting"
 name = "消瘦"
 description = "你路过铜镜时瞥了一眼，愣住了。镜中那人颧骨高耸，眼窝深陷，衣袍空荡荡地挂在身上。你记得自己曾经不是这样的——曾经的面如冠玉呢？曾经的意气风发呢？"

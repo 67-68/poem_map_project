@@ -6,10 +6,10 @@ uid="uid://cgmel466nmmhy"
 
 [deps]
 
-files=["res://data/1_core_rules/state_transistors/_state_transistor.target.translation", "res://data/1_core_rules/state_transistors/_state_transistor.transist.translation", "res://data/1_core_rules/state_transistors/_state_transistor.current.translation", "res://data/1_core_rules/state_transistors/_state_transistor.triggered.translation", "res://data/1_core_rules/state_transistors/_state_transistor.requirement.translation", "res://data/1_core_rules/state_transistors/_state_transistor.operators.translation"]
+files=["res://data/1_core_rules/state_transistors/_state_transistor.triggered.translation", "res://data/1_core_rules/state_transistors/_state_transistor.requirement.translation", "res://data/1_core_rules/state_transistors/_state_transistor.operators.translation"]
 
 source_file="res://data/1_core_rules/state_transistors/_state_transistor.csv"
-dest_files=["res://data/1_core_rules/state_transistors/_state_transistor.target.translation", "res://data/1_core_rules/state_transistors/_state_transistor.transist.translation", "res://data/1_core_rules/state_transistors/_state_transistor.current.translation", "res://data/1_core_rules/state_transistors/_state_transistor.triggered.translation", "res://data/1_core_rules/state_transistors/_state_transistor.requirement.translation", "res://data/1_core_rules/state_transistors/_state_transistor.operators.translation"]
+dest_files=["res://data/1_core_rules/state_transistors/_state_transistor.triggered.translation", "res://data/1_core_rules/state_transistors/_state_transistor.requirement.translation", "res://data/1_core_rules/state_transistors/_state_transistor.operators.translation"]
 
 [params]
 

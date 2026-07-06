@@ -12,85 +12,85 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_5a2re"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_hv3i2"]
 
-[sub_resource type="Resource" id="Resource_l1r52"]
+[sub_resource type="Resource" id="Resource_70f5i"]
 script = ExtResource("3_lfnbm")
 value = 10
 
-[sub_resource type="Resource" id="Resource_k20xj"]
+[sub_resource type="Resource" id="Resource_gbyqw"]
 script = ExtResource("4_haurb")
-operators = Array[ExtResource("2_gbyqw")]([SubResource("Resource_l1r52")])
+operators = Array[ExtResource("2_gbyqw")]([SubResource("Resource_70f5i")])
 
-[sub_resource type="Resource" id="Resource_57a0s"]
+[sub_resource type="Resource" id="Resource_lfnbm"]
 script = ExtResource("5_2oc22")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_5lldq"]
+[sub_resource type="Resource" id="Resource_haurb"]
 script = ExtResource("6_86hxd")
-choice_result = SubResource("Resource_k20xj")
-requirement = SubResource("Resource_57a0s")
+choice_result = SubResource("Resource_gbyqw")
+requirement = SubResource("Resource_lfnbm")
 description = "将凉了的菜碟往桌心一推，起身走向门口。"
 
-[sub_resource type="Resource" id="Resource_24d5n"]
+[sub_resource type="Resource" id="Resource_2oc22"]
 script = ExtResource("3_lfnbm")
 value = 10
 
-[sub_resource type="Resource" id="Resource_0itws"]
+[sub_resource type="Resource" id="Resource_86hxd"]
 script = ExtResource("4_haurb")
-operators = Array[ExtResource("2_gbyqw")]([SubResource("Resource_24d5n")])
+operators = Array[ExtResource("2_gbyqw")]([SubResource("Resource_2oc22")])
 
-[sub_resource type="Resource" id="Resource_qdbvh"]
+[sub_resource type="Resource" id="Resource_gfff4"]
 script = ExtResource("5_2oc22")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_rae6m"]
+[sub_resource type="Resource" id="Resource_u7u12"]
 script = ExtResource("6_86hxd")
-choice_result = SubResource("Resource_0itws")
-requirement = SubResource("Resource_qdbvh")
+choice_result = SubResource("Resource_86hxd")
+requirement = SubResource("Resource_gfff4")
 description = "借着起身让菜的空隙，把自己的酒盏挪到薛三郎余光能及的位置。"
 
-[sub_resource type="Resource" id="Resource_sjxub"]
+[sub_resource type="Resource" id="Resource_w1lv1"]
 script = ExtResource("3_lfnbm")
 value = 8
 
-[sub_resource type="Resource" id="Resource_p647b"]
+[sub_resource type="Resource" id="Resource_5a2re"]
 script = ExtResource("4_haurb")
-operators = Array[ExtResource("2_gbyqw")]([SubResource("Resource_sjxub")])
+operators = Array[ExtResource("2_gbyqw")]([SubResource("Resource_w1lv1")])
 
-[sub_resource type="Resource" id="Resource_iy6vy"]
+[sub_resource type="Resource" id="Resource_hv3i2"]
 script = ExtResource("6_86hxd")
-choice_result = SubResource("Resource_p647b")
+choice_result = SubResource("Resource_5a2re")
 description = "将凉菜碟端到面前，筷子夹起最上面那片，像往常一样咽下去。"
 
-[sub_resource type="Resource" id="Resource_s47qg"]
+[sub_resource type="Resource" id="Resource_l1r52"]
 script = ExtResource("8_u7u12")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_6r2n5"]
+[sub_resource type="Resource" id="Resource_k20xj"]
 script = ExtResource("9_w1lv1")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_6dnws"]
+[sub_resource type="Resource" id="Resource_57a0s"]
 script = ExtResource("9_w1lv1")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_48akk"]
+[sub_resource type="Resource" id="Resource_5lldq"]
 script = ExtResource("10_5a2re")
-operators = Array[ExtResource("7_gfff4")]([SubResource("Resource_s47qg"), SubResource("Resource_6r2n5"), SubResource("Resource_6dnws")])
+operators = Array[ExtResource("7_gfff4")]([SubResource("Resource_l1r52"), SubResource("Resource_k20xj"), SubResource("Resource_57a0s")])
 
 [resource]
 script = ExtResource("11_hv3i2")
-requirement = SubResource("Resource_48akk")
+requirement = SubResource("Resource_5lldq")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "ACTION_ENTERTAIN_DRINK:empty_cup", "action:main:jiaoyou"])
-options = Array[ExtResource("1_70f5i")]([SubResource("Resource_5lldq"), SubResource("Resource_rae6m"), SubResource("Resource_iy6vy")])
+options = Array[ExtResource("1_70f5i")]([SubResource("Resource_haurb"), SubResource("Resource_u7u12"), SubResource("Resource_hv3i2")])
 uuid = "zhuoliu_fengying_silent_table"
 name = "二两碎银换来的陪坐"
 description = "门帘掀开半幅，薛家管事站在槛外没进来。他将二两碎银搁在桌上——纸包摊开，糙纸上还粘着昨夜的油渍。“明晚有个小宴，请先生来添点文气。”你到的时候发现座位在最下手，离门最近，离炉子最远。离你最近的那道菜端上来时就已经凉了。薛三郎坐在上首，跟身旁的人聊着你上次替他润色的那篇碑文——他不记得你叫什么，他叫你“上次那个人”。"

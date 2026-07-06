@@ -11,50 +11,50 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_7faa7"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_8vkk3"]
 
-[sub_resource type="Resource" id="Resource_5pvlp"]
+[sub_resource type="Resource" id="Resource_ul84i"]
 script = ExtResource("3_1yfum")
 value = 10
 
-[sub_resource type="Resource" id="Resource_xk85a"]
+[sub_resource type="Resource" id="Resource_0o7ye"]
 script = ExtResource("4_1h3sn")
-operators = Array[ExtResource("2_0o7ye")]([SubResource("Resource_5pvlp")])
+operators = Array[ExtResource("2_0o7ye")]([SubResource("Resource_ul84i")])
 
-[sub_resource type="Resource" id="Resource_v5if7"]
+[sub_resource type="Resource" id="Resource_1yfum"]
 script = ExtResource("5_7ke23")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_skgg8"]
+[sub_resource type="Resource" id="Resource_1h3sn"]
 script = ExtResource("6_742ys")
-choice_result = SubResource("Resource_xk85a")
-requirement = SubResource("Resource_v5if7")
+choice_result = SubResource("Resource_0o7ye")
+requirement = SubResource("Resource_1yfum")
 description = "你捡起纸，啐口唾沫在砚台上，提笔改掉他第三联的韵脚。"
 
-[sub_resource type="Resource" id="Resource_me83i"]
+[sub_resource type="Resource" id="Resource_7ke23"]
 script = ExtResource("5_7ke23")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_wb4qq"]
+[sub_resource type="Resource" id="Resource_742ys"]
 script = ExtResource("8_hr8my")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_f2hhm"]
+[sub_resource type="Resource" id="Resource_m45bt"]
 script = ExtResource("8_hr8my")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_qnq1i"]
+[sub_resource type="Resource" id="Resource_hr8my"]
 script = ExtResource("9_7faa7")
-operators = Array[ExtResource("7_m45bt")]([SubResource("Resource_me83i"), SubResource("Resource_wb4qq"), SubResource("Resource_f2hhm")])
+operators = Array[ExtResource("7_m45bt")]([SubResource("Resource_7ke23"), SubResource("Resource_742ys"), SubResource("Resource_m45bt")])
 
 [resource]
 script = ExtResource("10_8vkk3")
-requirement = SubResource("Resource_qnq1i")
+requirement = SubResource("Resource_hr8my")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "ACTOR_EMOTION_ARROGANCE", "emotion_pair:pair_arrogance", "action:main:jiaoyou"])
-options = Array[ExtResource("1_ul84i")]([SubResource("Resource_skgg8")])
+options = Array[ExtResource("1_ul84i")]([SubResource("Resource_1h3sn")])
 uuid = "kuangke_qingliu_libai_emotion_arrogance_identity_qingliu_owner"
 name = "纸与仇"
 description = "黄昏时分，李白蹲在下杜城陋室的矮墙头上，像只鹞子。他从怀里掏出一卷纸扔下来，墨迹张牙舞爪，像是写的时候笔跟纸有仇。「前两天写的，第三联总觉得不够劲。」纸卷散开在泥地上，黄昏的光把那些潦草的字迹压得很低。屋里没有点灯。"

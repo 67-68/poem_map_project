@@ -8,32 +8,32 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_uxm7o"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_5qcw7"]
 
-[sub_resource type="Resource" id="Resource_fbhvb"]
+[sub_resource type="Resource" id="Resource_6weew"]
 script = ExtResource("3_woh3a")
 str_props = "progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_ksc1m"]
+[sub_resource type="Resource" id="Resource_h7xj1"]
 script = ExtResource("4_8h1p1")
-operators = Array[ExtResource("2_h7xj1")]([SubResource("Resource_fbhvb")])
+operators = Array[ExtResource("2_h7xj1")]([SubResource("Resource_6weew")])
 
-[sub_resource type="Resource" id="Resource_lsqon"]
+[sub_resource type="Resource" id="Resource_woh3a"]
 script = ExtResource("5_w0dpa")
-choice_result = SubResource("Resource_ksc1m")
+choice_result = SubResource("Resource_h7xj1")
 description = "忍气吞声，继续伏案抄写，直到他说停"
 
-[sub_resource type="Resource" id="Resource_josd2"]
+[sub_resource type="Resource" id="Resource_8h1p1"]
 script = ExtResource("6_uxm7o")
 property = "progress"
 value = 70
 
 [resource]
 script = ExtResource("7_5qcw7")
-requirement = SubResource("Resource_josd2")
+requirement = SubResource("Resource_8h1p1")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_6weew")]([SubResource("Resource_lsqon")])
+options = Array[ExtResource("1_6weew")]([SubResource("Resource_woh3a")])
 uuid = "bai_ye_honeymoon_l1_typeb_m1"
 name = "抄档候见"
 description = "玩家持帖至吏部衙门拜谒，清客王主事接过名帖，说侍郎大人最喜考校新进，命你入偏厅抄录百卷天宝初年官员考课旧档。王主事抱着手炉坐在案前，漫不经心翻着册子，不时指出你抄漏的批注。你从巳时抄到未时，手臂酸麻，咳嗽不止。王主事始终未放你离开，只说你抄完这卷便去通报。待你抄至八十三卷，咳得握不住笔时，王主事才起身说今日侍郎大人早已出府，明日再来吧。"

@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_sf3mk"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_8qmei"]
 
-[sub_resource type="Resource" id="Resource_n8ayg"]
+[sub_resource type="Resource" id="Resource_357ri"]
 script = ExtResource("2_qk0f5")
 
-[sub_resource type="Resource" id="Resource_m25mo"]
+[sub_resource type="Resource" id="Resource_qk0f5"]
 script = ExtResource("4_gjlvd")
 description = "从袖中取出一文钱压在碗底，起身推门走入夜色。"
 
-[sub_resource type="Resource" id="Resource_ni7o7"]
+[sub_resource type="Resource" id="Resource_n76ke"]
 script = ExtResource("5_5vgu5")
 imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_4roqf"]
+[sub_resource type="Resource" id="Resource_gjlvd"]
 script = ExtResource("2_qk0f5")
-operators = Array[ExtResource("1_357ri")]([SubResource("Resource_ni7o7")])
+operators = Array[ExtResource("1_357ri")]([SubResource("Resource_n76ke")])
 
-[sub_resource type="Resource" id="Resource_1sb6t"]
+[sub_resource type="Resource" id="Resource_5vgu5"]
 script = ExtResource("4_gjlvd")
-choice_result = SubResource("Resource_4roqf")
+choice_result = SubResource("Resource_gjlvd")
 description = "对店家拱手，斟满空碗，一饮而尽后搁下铜钱离去。"
 
-[sub_resource type="Resource" id="Resource_kabfd"]
+[sub_resource type="Resource" id="Resource_sf3mk"]
 script = ExtResource("4_gjlvd")
 description = "向店家欠身道：“烦请代谢那位客官，杜某改日必往拜访。”"
 
-[sub_resource type="Resource" id="Resource_gf8sa"]
+[sub_resource type="Resource" id="Resource_8qmei"]
 script = ExtResource("6_sf3mk")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_8qmei")
-requirement = SubResource("Resource_gf8sa")
+requirement = SubResource("Resource_8qmei")
 era = "747_kuangda"
 archetype_id = "duzhuo"
 _target_tags = Array[String](["emotion_pair:pair_survival", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "ACTION_SOCIAL_PARTING:willow_branch", "action:humiliation_hidden_charity", "TARGET_IDENTITY_VENDOR", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_ENTERTAIN_DRINK:empty_cup", "action:scene_duzhuo"])
-options = Array[ExtResource("3_n76ke")]([SubResource("Resource_m25mo"), SubResource("Resource_1sb6t"), SubResource("Resource_kabfd")])
-on_enter_result = SubResource("Resource_n8ayg")
+options = Array[ExtResource("3_n76ke")]([SubResource("Resource_qk0f5"), SubResource("Resource_5vgu5"), SubResource("Resource_sf3mk")])
+on_enter_result = SubResource("Resource_357ri")
 uuid = "duotai_humiliation_hidden_charity_gateway_duzhuo_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
 description = "无名酒账"

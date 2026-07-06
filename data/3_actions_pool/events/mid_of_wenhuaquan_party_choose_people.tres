@@ -8,18 +8,18 @@
 [ext_resource type="Script" uid="uid://lnvpvefpsar1" path="res://core/model/item_provider.gd" id="6_g036t"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_hflg8"]
 
-[sub_resource type="Resource" id="Resource_fb860"]
+[sub_resource type="Resource" id="Resource_21hv6"]
 script = ExtResource("3_c4n7t")
 
-[sub_resource type="Resource" id="Resource_bq86i"]
+[sub_resource type="Resource" id="Resource_fenru"]
 script = ExtResource("4_xpblt")
-operators = Array[ExtResource("2_fenru")]([SubResource("Resource_fb860")])
+operators = Array[ExtResource("2_fenru")]([SubResource("Resource_21hv6")])
 
-[sub_resource type="Resource" id="Resource_0osye"]
+[sub_resource type="Resource" id="Resource_c4n7t"]
 script = ExtResource("5_dfwe4")
-choice_result = SubResource("Resource_bq86i")
+choice_result = SubResource("Resource_fenru")
 
-[sub_resource type="Resource" id="Resource_wlc3n"]
+[sub_resource type="Resource" id="Resource_xpblt"]
 script = ExtResource("6_g036t")
 list_key = "guests"
 text_template = "走向 {item}"
@@ -29,8 +29,8 @@ use_push_event = true
 
 [resource]
 script = ExtResource("7_hflg8")
-options = Array[ExtResource("1_21hv6")]([SubResource("Resource_0osye")])
-provider = SubResource("Resource_wlc3n")
+options = Array[ExtResource("1_21hv6")]([SubResource("Resource_c4n7t")])
+provider = SubResource("Resource_xpblt")
 uuid = "mid_of_wenhuaquan_party_choose_people"
 name = "要选谁呢？"
 description = "商务还是运动？"

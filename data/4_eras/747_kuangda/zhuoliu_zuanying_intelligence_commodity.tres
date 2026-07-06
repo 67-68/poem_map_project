@@ -9,82 +9,82 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_pqyty"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_p2jd4"]
 
-[sub_resource type="Resource" id="Resource_x0rkt"]
+[sub_resource type="Resource" id="Resource_v285q"]
 script = ExtResource("3_y3lfd")
 value = 6
 
-[sub_resource type="Resource" id="Resource_vqcuw"]
+[sub_resource type="Resource" id="Resource_i7w5x"]
 script = ExtResource("3_y3lfd")
 value = 11
 
-[sub_resource type="Resource" id="Resource_w5vva"]
+[sub_resource type="Resource" id="Resource_y3lfd"]
 script = ExtResource("4_2o58j")
-operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_x0rkt"), SubResource("Resource_vqcuw")])
+operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_v285q"), SubResource("Resource_i7w5x")])
 
-[sub_resource type="Resource" id="Resource_slsjq"]
+[sub_resource type="Resource" id="Resource_2o58j"]
 script = ExtResource("5_cgjwe")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_jm8kp"]
+[sub_resource type="Resource" id="Resource_cgjwe"]
 script = ExtResource("6_pv4h6")
-choice_result = SubResource("Resource_w5vva")
-requirement = SubResource("Resource_slsjq")
+choice_result = SubResource("Resource_y3lfd")
+requirement = SubResource("Resource_2o58j")
 description = "拂袖将茶碗扫落，纸条在湿痕里裂成两半。"
 
-[sub_resource type="Resource" id="Resource_t7vc8"]
+[sub_resource type="Resource" id="Resource_pv4h6"]
 script = ExtResource("3_y3lfd")
 value = 6
 
-[sub_resource type="Resource" id="Resource_w1uae"]
+[sub_resource type="Resource" id="Resource_pqyty"]
 script = ExtResource("3_y3lfd")
 value = 11
 
-[sub_resource type="Resource" id="Resource_hkvq6"]
+[sub_resource type="Resource" id="Resource_p2jd4"]
 script = ExtResource("4_2o58j")
-operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_t7vc8"), SubResource("Resource_w1uae")])
+operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_pv4h6"), SubResource("Resource_pqyty")])
 
-[sub_resource type="Resource" id="Resource_bwcc7"]
+[sub_resource type="Resource" id="Resource_x0rkt"]
 script = ExtResource("5_cgjwe")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_cfhsj"]
+[sub_resource type="Resource" id="Resource_vqcuw"]
 script = ExtResource("6_pv4h6")
-choice_result = SubResource("Resource_hkvq6")
-requirement = SubResource("Resource_bwcc7")
+choice_result = SubResource("Resource_p2jd4")
+requirement = SubResource("Resource_x0rkt")
 description = "双手接过那张报价单，脸上堆出笑容，腰已弯下三分。"
 
-[sub_resource type="Resource" id="Resource_ojw4i"]
+[sub_resource type="Resource" id="Resource_w5vva"]
 script = ExtResource("3_y3lfd")
 value = 6
 
-[sub_resource type="Resource" id="Resource_pmm1u"]
+[sub_resource type="Resource" id="Resource_slsjq"]
 script = ExtResource("3_y3lfd")
 value = 11
 
-[sub_resource type="Resource" id="Resource_rrxlj"]
+[sub_resource type="Resource" id="Resource_jm8kp"]
 script = ExtResource("4_2o58j")
-operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_ojw4i"), SubResource("Resource_pmm1u")])
+operators = Array[ExtResource("2_i7w5x")]([SubResource("Resource_w5vva"), SubResource("Resource_slsjq")])
 
-[sub_resource type="Resource" id="Resource_wuiar"]
+[sub_resource type="Resource" id="Resource_t7vc8"]
 script = ExtResource("6_pv4h6")
-choice_result = SubResource("Resource_rrxlj")
+choice_result = SubResource("Resource_jm8kp")
 description = "指尖压住纸条一角，不翻也不推，只问他要的这个名字，市价几何。"
 
-[sub_resource type="Resource" id="Resource_ygrro"]
+[sub_resource type="Resource" id="Resource_w1uae"]
 script = ExtResource("7_pqyty")
 trait_name = "kuangda_zuanying"
 
 [resource]
 script = ExtResource("8_p2jd4")
-requirement = SubResource("Resource_ygrro")
+requirement = SubResource("Resource_w1uae")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:medicine_stall", "ENV_NATURE_NIGHTMOON:dry_lips", "action:main:jiaoyou"])
-options = Array[ExtResource("1_v285q")]([SubResource("Resource_jm8kp"), SubResource("Resource_cfhsj"), SubResource("Resource_wuiar")])
+options = Array[ExtResource("1_v285q")]([SubResource("Resource_cgjwe"), SubResource("Resource_vqcuw"), SubResource("Resource_t7vc8")])
 uuid = "zhuoliu_zuanying_intelligence_commodity"
 name = "茶案上的价码"
 description = "东市茶肆二楼临窗的位置，一个绸缎商把一张纸条推过案面。纸上只写着一个官员的名字，墨迹已干。他将茶碗搁在纸条旁边，碗底在纸上压出一圈湿痕。“上次你在盐商老张那儿‘问’的事，我听说过。”目光越过碗沿，不紧不慢地看着你，“我不是来为难你的。我也是来做生意的。”窗外楼下，东市的骡马队正在卸货，鞭子抽在青石板上的声响传上来。绸缎商从袖口又抽出一张叠好的纸，“这是价钱。你看看。”"

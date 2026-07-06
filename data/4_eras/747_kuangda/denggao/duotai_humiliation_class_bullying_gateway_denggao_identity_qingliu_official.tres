@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_go8i6"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_diftv"]
 
-[sub_resource type="Resource" id="Resource_boumy"]
+[sub_resource type="Resource" id="Resource_qxkxy"]
 script = ExtResource("2_k10yh")
 
-[sub_resource type="Resource" id="Resource_4w1o1"]
+[sub_resource type="Resource" id="Resource_k10yh"]
 script = ExtResource("4_xcmq2")
 description = "杜甫未应答，转身望向远处的终南山。片刻后，缓步走下城楼。"
 
-[sub_resource type="Resource" id="Resource_2o5m7"]
+[sub_resource type="Resource" id="Resource_v3gnw"]
 script = ExtResource("4_xcmq2")
 description = "杜甫点头，收起袖中文稿，退至城墙东侧转角，将主位让出。"
 
-[sub_resource type="Resource" id="Resource_wk1il"]
+[sub_resource type="Resource" id="Resource_xcmq2"]
 script = ExtResource("5_dty50")
 imagery_name = "high_tower"
 
-[sub_resource type="Resource" id="Resource_mx4up"]
+[sub_resource type="Resource" id="Resource_dty50"]
 script = ExtResource("2_k10yh")
-operators = Array[ExtResource("1_qxkxy")]([SubResource("Resource_wk1il")])
+operators = Array[ExtResource("1_qxkxy")]([SubResource("Resource_xcmq2")])
 
-[sub_resource type="Resource" id="Resource_t3yd7"]
+[sub_resource type="Resource" id="Resource_go8i6"]
 script = ExtResource("4_xcmq2")
-choice_result = SubResource("Resource_mx4up")
+choice_result = SubResource("Resource_dty50")
 description = "杜甫躬身致歉，一面退至墙角，一面替随从按住被风吹起的席角。"
 
-[sub_resource type="Resource" id="Resource_xlg7t"]
+[sub_resource type="Resource" id="Resource_diftv"]
 script = ExtResource("6_go8i6")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_diftv")
-requirement = SubResource("Resource_xlg7t")
+requirement = SubResource("Resource_diftv")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["emotion_pair:pair_despair", "TARGET_OBJECT_SWORD:cold_blade", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "action:humiliation_class_bullying", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_IDENTITY_MENZI", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao"])
-options = Array[ExtResource("3_v3gnw")]([SubResource("Resource_4w1o1"), SubResource("Resource_2o5m7"), SubResource("Resource_t3yd7")])
-on_enter_result = SubResource("Resource_boumy")
+options = Array[ExtResource("3_v3gnw")]([SubResource("Resource_k10yh"), SubResource("Resource_v3gnw"), SubResource("Resource_go8i6")])
+on_enter_result = SubResource("Resource_qxkxy")
 uuid = "duotai_humiliation_class_bullying_gateway_denggao_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "城楼上的段落"

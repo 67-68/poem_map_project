@@ -9,60 +9,60 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="7_io8mn"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_ij2rj"]
 
-[sub_resource type="Resource" id="Resource_5a5mx"]
+[sub_resource type="Resource" id="Resource_2stxw"]
 script = ExtResource("2_s1857")
 
-[sub_resource type="Resource" id="Resource_2ba41"]
+[sub_resource type="Resource" id="Resource_s1857"]
 script = ExtResource("4_pfs3l")
 target_tag = "TARGET_IDENTITY_VENDOR"
 leverage_key = "vendor_cheap_labor"
 
+[sub_resource type="Resource" id="Resource_vir0b"]
+script = ExtResource("2_s1857")
+operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_s1857")])
+
+[sub_resource type="Resource" id="Resource_pfs3l"]
+script = ExtResource("5_5oatp")
+choice_result = SubResource("Resource_vir0b")
+description = "将诗稿放回案上，端起残酒饮尽，起身离席。"
+
+[sub_resource type="Resource" id="Resource_5oatp"]
+script = ExtResource("4_pfs3l")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_lacen"]
+script = ExtResource("6_lacen")
+imagery_name = "willow_branch"
+
+[sub_resource type="Resource" id="Resource_io8mn"]
+script = ExtResource("2_s1857")
+operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_5oatp"), SubResource("Resource_lacen")])
+
+[sub_resource type="Resource" id="Resource_ij2rj"]
+script = ExtResource("5_5oatp")
+choice_result = SubResource("Resource_io8mn")
+description = "应声坐下，研墨展卷，俯首逐字抄录。笔尖沙沙作响。"
+
+[sub_resource type="Resource" id="Resource_5a5mx"]
+script = ExtResource("4_pfs3l")
+target_tag = "TARGET_IDENTITY_VENDOR"
+leverage_key = "vendor_cheap_labor"
+
+[sub_resource type="Resource" id="Resource_2ba41"]
+script = ExtResource("6_lacen")
+imagery_name = "ink_stone"
+
 [sub_resource type="Resource" id="Resource_brj62"]
 script = ExtResource("2_s1857")
-operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_2ba41")])
+operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_5a5mx"), SubResource("Resource_2ba41")])
 
 [sub_resource type="Resource" id="Resource_lj35a"]
 script = ExtResource("5_5oatp")
 choice_result = SubResource("Resource_brj62")
-description = "将诗稿放回案上，端起残酒饮尽，起身离席。"
-
-[sub_resource type="Resource" id="Resource_iku0h"]
-script = ExtResource("4_pfs3l")
-target_tag = "TARGET_IDENTITY_VENDOR"
-leverage_key = "vendor_cheap_labor"
-
-[sub_resource type="Resource" id="Resource_l41j1"]
-script = ExtResource("6_lacen")
-imagery_name = "willow_branch"
-
-[sub_resource type="Resource" id="Resource_a4prl"]
-script = ExtResource("2_s1857")
-operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_iku0h"), SubResource("Resource_l41j1")])
-
-[sub_resource type="Resource" id="Resource_jqyrp"]
-script = ExtResource("5_5oatp")
-choice_result = SubResource("Resource_a4prl")
-description = "应声坐下，研墨展卷，俯首逐字抄录。笔尖沙沙作响。"
-
-[sub_resource type="Resource" id="Resource_cyfsr"]
-script = ExtResource("4_pfs3l")
-target_tag = "TARGET_IDENTITY_VENDOR"
-leverage_key = "vendor_cheap_labor"
-
-[sub_resource type="Resource" id="Resource_q8nab"]
-script = ExtResource("6_lacen")
-imagery_name = "ink_stone"
-
-[sub_resource type="Resource" id="Resource_pjhri"]
-script = ExtResource("2_s1857")
-operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_cyfsr"), SubResource("Resource_q8nab")])
-
-[sub_resource type="Resource" id="Resource_kcabm"]
-script = ExtResource("5_5oatp")
-choice_result = SubResource("Resource_pjhri")
 description = "躬身赔笑，问主人可需再加个序。随即铺纸研磨，笔不停挥。"
 
-[sub_resource type="Resource" id="Resource_hqdcw"]
+[sub_resource type="Resource" id="Resource_iku0h"]
 script = ExtResource("7_io8mn")
 volatile_stat = "ambition"
 value = 50
@@ -70,12 +70,12 @@ operator = 1
 
 [resource]
 script = ExtResource("8_ij2rj")
-requirement = SubResource("Resource_hqdcw")
+requirement = SubResource("Resource_iku0h")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["emotion_pair:pair_survival", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "ACTION_TRAVEL_BOAT:broken_oar", "action:humiliation_cheap_labor", "TARGET_IDENTITY_VENDOR", "VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ACTION_SOCIAL_PARTING:willow_branch", "action:scene_jiaoyou"])
-options = Array[ExtResource("3_vir0b")]([SubResource("Resource_lj35a"), SubResource("Resource_jqyrp"), SubResource("Resource_kcabm")])
-on_enter_result = SubResource("Resource_5a5mx")
+options = Array[ExtResource("3_vir0b")]([SubResource("Resource_pfs3l"), SubResource("Resource_ij2rj"), SubResource("Resource_lj35a")])
+on_enter_result = SubResource("Resource_2stxw")
 uuid = "duotai_humiliation_cheap_labor_gateway_jiaoyou_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
 description = "抄诗之辱"

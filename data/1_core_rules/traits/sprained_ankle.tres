@@ -5,5 +5,6 @@
 
 [resource]
 script = ExtResource("1_lm0p0")
+time_penalty = 1
 uuid = "sprained_ankle"
 name = "崴脚"

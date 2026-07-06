@@ -10,74 +10,74 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="8_xlnba"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_qojdf"]
 
-[sub_resource type="Resource" id="Resource_6bbg3"]
+[sub_resource type="Resource" id="Resource_nuacu"]
 script = ExtResource("3_ijm3l")
 value = 10
 
-[sub_resource type="Resource" id="Resource_wnpyh"]
+[sub_resource type="Resource" id="Resource_rew6i"]
 script = ExtResource("4_y5ime")
-operators = Array[ExtResource("2_rew6i")]([SubResource("Resource_6bbg3")])
+operators = Array[ExtResource("2_rew6i")]([SubResource("Resource_nuacu")])
 
-[sub_resource type="Resource" id="Resource_gnq7w"]
+[sub_resource type="Resource" id="Resource_ijm3l"]
 script = ExtResource("5_1j0vs")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_mdpan"]
+[sub_resource type="Resource" id="Resource_y5ime"]
 script = ExtResource("6_vq8pb")
-choice_result = SubResource("Resource_wnpyh")
-requirement = SubResource("Resource_gnq7w")
+choice_result = SubResource("Resource_rew6i")
+requirement = SubResource("Resource_ijm3l")
 description = "双膝落上石砖，额头触及桌脚阴影。"
 
-[sub_resource type="Resource" id="Resource_51s0p"]
+[sub_resource type="Resource" id="Resource_1j0vs"]
 script = ExtResource("3_ijm3l")
 value = 10
 
-[sub_resource type="Resource" id="Resource_v4ooh"]
+[sub_resource type="Resource" id="Resource_vq8pb"]
 script = ExtResource("4_y5ime")
-operators = Array[ExtResource("2_rew6i")]([SubResource("Resource_51s0p")])
+operators = Array[ExtResource("2_rew6i")]([SubResource("Resource_1j0vs")])
 
-[sub_resource type="Resource" id="Resource_mmda4"]
+[sub_resource type="Resource" id="Resource_h75yf"]
 script = ExtResource("5_1j0vs")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_e65pj"]
+[sub_resource type="Resource" id="Resource_xlnba"]
 script = ExtResource("6_vq8pb")
-choice_result = SubResource("Resource_v4ooh")
-requirement = SubResource("Resource_mmda4")
+choice_result = SubResource("Resource_vq8pb")
+requirement = SubResource("Resource_h75yf")
 description = "从袖中摸出名帖推过桌面，帖上夹着一张坊州故吏的便条。"
 
-[sub_resource type="Resource" id="Resource_0hqcp"]
+[sub_resource type="Resource" id="Resource_qojdf"]
 script = ExtResource("3_ijm3l")
 value = 16
 
-[sub_resource type="Resource" id="Resource_oh6ml"]
+[sub_resource type="Resource" id="Resource_6bbg3"]
 script = ExtResource("7_h75yf")
 imagery_name = "cold_blade"
 
-[sub_resource type="Resource" id="Resource_3l4ba"]
+[sub_resource type="Resource" id="Resource_wnpyh"]
 script = ExtResource("4_y5ime")
-operators = Array[ExtResource("2_rew6i")]([SubResource("Resource_0hqcp"), SubResource("Resource_oh6ml")])
+operators = Array[ExtResource("2_rew6i")]([SubResource("Resource_qojdf"), SubResource("Resource_6bbg3")])
 
-[sub_resource type="Resource" id="Resource_2xjy6"]
+[sub_resource type="Resource" id="Resource_gnq7w"]
 script = ExtResource("6_vq8pb")
-choice_result = SubResource("Resource_3l4ba")
+choice_result = SubResource("Resource_wnpyh")
 description = "把保释条子撕成四片搁回桌面，转身往牢房里走。"
 
-[sub_resource type="Resource" id="Resource_svaja"]
+[sub_resource type="Resource" id="Resource_mdpan"]
 script = ExtResource("8_xlnba")
 trait_name = "kuangda_kuangke"
 
 [resource]
 script = ExtResource("9_qojdf")
-requirement = SubResource("Resource_svaja")
+requirement = SubResource("Resource_mdpan")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_OBJECT_SWORD:cold_blade", "action:main:jiaoyou"])
-options = Array[ExtResource("1_nuacu")]([SubResource("Resource_mdpan"), SubResource("Resource_e65pj"), SubResource("Resource_2xjy6")])
+options = Array[ExtResource("1_nuacu")]([SubResource("Resource_y5ime"), SubResource("Resource_xlnba"), SubResource("Resource_gnq7w")])
 uuid = "kuangke_zhuoliu_pride_ransom"
 name = "保释金"
 description = "牢房外的过道里，一张瘸腿木桌横在日光和阴影的分界线上。书吏坐在阴影里写字，你站在日光下等。他翻到你的名籍时笔停了——“杜子美？”食指在册页上点住那个名字，抬头看你一眼。眼角先皱，嘴角后牵。他把保释条子从桌面上推过来，那页纸在瘸腿桌的倾斜里自己滑到你手边。“八贯。”拇指在金额上捻了捻，像在搓一张当票的边角。“上面说了，要是你再当堂骂一句，就十二贯。要是写进诗里，再加两贯。”他说这些话时笔已经回到纸上写下一行了，声音压得平平的，像跟一只被栓住的狗报食价。"

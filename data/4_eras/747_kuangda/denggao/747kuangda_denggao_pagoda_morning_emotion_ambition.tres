@@ -12,9 +12,56 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_ajare"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_uof3p"]
 
-[sub_resource type="Resource" id="Resource_7028c"]
+[sub_resource type="Resource" id="Resource_60fb0"]
 script = ExtResource("3_ql8vu")
 value = 6
+
+[sub_resource type="Resource" id="Resource_lx06s"]
+script = ExtResource("3_ql8vu")
+value = 11
+
+[sub_resource type="Resource" id="Resource_ql8vu"]
+script = ExtResource("4_lyax8")
+imagery_name = "jade_step"
+
+[sub_resource type="Resource" id="Resource_lyax8"]
+script = ExtResource("5_y8y4e")
+operators = Array[ExtResource("2_lx06s")]([SubResource("Resource_60fb0"), SubResource("Resource_lx06s"), SubResource("Resource_ql8vu")])
+
+[sub_resource type="Resource" id="Resource_y8y4e"]
+script = ExtResource("6_gepwe")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_gepwe"]
+script = ExtResource("7_oju4n")
+choice_result = SubResource("Resource_lyax8")
+requirement = SubResource("Resource_y8y4e")
+description = "转身向塔下吟诗者，从袖中抽出一卷旧纸，迎风展开。"
+
+[sub_resource type="Resource" id="Resource_oju4n"]
+script = ExtResource("3_ql8vu")
+value = 6
+
+[sub_resource type="Resource" id="Resource_fwyyj"]
+script = ExtResource("3_ql8vu")
+value = 6
+
+[sub_resource type="Resource" id="Resource_iosbk"]
+script = ExtResource("5_y8y4e")
+operators = Array[ExtResource("2_lx06s")]([SubResource("Resource_oju4n"), SubResource("Resource_fwyyj")])
+
+[sub_resource type="Resource" id="Resource_ajare"]
+script = ExtResource("7_oju4n")
+choice_result = SubResource("Resource_iosbk")
+description = "收回视线，在阶上蹲下，食指轻划青苔表面，起身拍手。"
+
+[sub_resource type="Resource" id="Resource_uof3p"]
+script = ExtResource("3_ql8vu")
+value = 6
+
+[sub_resource type="Resource" id="Resource_7028c"]
+script = ExtResource("3_ql8vu")
+value = 22
 
 [sub_resource type="Resource" id="Resource_a1dci"]
 script = ExtResource("3_ql8vu")
@@ -26,87 +73,40 @@ imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_5dc0j"]
 script = ExtResource("5_y8y4e")
-operators = Array[ExtResource("2_lx06s")]([SubResource("Resource_7028c"), SubResource("Resource_a1dci"), SubResource("Resource_vwmnu")])
+operators = Array[ExtResource("2_lx06s")]([SubResource("Resource_uof3p"), SubResource("Resource_7028c"), SubResource("Resource_a1dci"), SubResource("Resource_vwmnu")])
 
 [sub_resource type="Resource" id="Resource_8333f"]
 script = ExtResource("6_gepwe")
-trait_name = "kuangda_kuangke"
+trait_name = "kuangda_zuanying"
 
 [sub_resource type="Resource" id="Resource_c0551"]
 script = ExtResource("7_oju4n")
 choice_result = SubResource("Resource_5dc0j")
 requirement = SubResource("Resource_8333f")
-description = "转身向塔下吟诗者，从袖中抽出一卷旧纸，迎风展开。"
-
-[sub_resource type="Resource" id="Resource_hfb12"]
-script = ExtResource("3_ql8vu")
-value = 6
-
-[sub_resource type="Resource" id="Resource_e21mg"]
-script = ExtResource("3_ql8vu")
-value = 6
-
-[sub_resource type="Resource" id="Resource_q7am7"]
-script = ExtResource("5_y8y4e")
-operators = Array[ExtResource("2_lx06s")]([SubResource("Resource_hfb12"), SubResource("Resource_e21mg")])
-
-[sub_resource type="Resource" id="Resource_3jsrx"]
-script = ExtResource("7_oju4n")
-choice_result = SubResource("Resource_q7am7")
-description = "收回视线，在阶上蹲下，食指轻划青苔表面，起身拍手。"
-
-[sub_resource type="Resource" id="Resource_dmwnm"]
-script = ExtResource("3_ql8vu")
-value = 6
-
-[sub_resource type="Resource" id="Resource_cbm3w"]
-script = ExtResource("3_ql8vu")
-value = 22
-
-[sub_resource type="Resource" id="Resource_14t2a"]
-script = ExtResource("3_ql8vu")
-value = 11
-
-[sub_resource type="Resource" id="Resource_ykqla"]
-script = ExtResource("4_lyax8")
-imagery_name = "jade_step"
-
-[sub_resource type="Resource" id="Resource_r5tin"]
-script = ExtResource("5_y8y4e")
-operators = Array[ExtResource("2_lx06s")]([SubResource("Resource_dmwnm"), SubResource("Resource_cbm3w"), SubResource("Resource_14t2a"), SubResource("Resource_ykqla")])
-
-[sub_resource type="Resource" id="Resource_x1xmv"]
-script = ExtResource("6_gepwe")
-trait_name = "kuangda_zuanying"
-
-[sub_resource type="Resource" id="Resource_p4axr"]
-script = ExtResource("7_oju4n")
-choice_result = SubResource("Resource_r5tin")
-requirement = SubResource("Resource_x1xmv")
 description = "整了整衣襟，向最近一群进士走近两步，抱拳低首。"
 
-[sub_resource type="Resource" id="Resource_ugb2r"]
+[sub_resource type="Resource" id="Resource_hfb12"]
 script = ExtResource("9_iosbk")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_02q6c"]
+[sub_resource type="Resource" id="Resource_e21mg"]
 script = ExtResource("9_iosbk")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_gbs83"]
+[sub_resource type="Resource" id="Resource_q7am7"]
 script = ExtResource("10_ajare")
-operators = Array[ExtResource("8_fwyyj")]([SubResource("Resource_ugb2r"), SubResource("Resource_02q6c")])
+operators = Array[ExtResource("8_fwyyj")]([SubResource("Resource_hfb12"), SubResource("Resource_e21mg")])
 
 [resource]
 script = ExtResource("11_uof3p")
-requirement = SubResource("Resource_gbs83")
+requirement = SubResource("Resource_q7am7")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_pagoda_morning", "emotion_pair:pair_ambition", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc"])
-options = Array[ExtResource("1_60fb0")]([SubResource("Resource_c0551"), SubResource("Resource_3jsrx"), SubResource("Resource_p4axr")])
+options = Array[ExtResource("1_60fb0")]([SubResource("Resource_gepwe"), SubResource("Resource_ajare"), SubResource("Resource_c0551")])
 uuid = "747kuangda_denggao_pagoda_morning_emotion_ambition"
 name = "塔砖裂纹与青苔"
 description = "卯时，慈恩寺钟声震荡塔檐。塔基石板湿滑，晨露反光。塔下广场上，新科进士们倚栏吟诗，佩玉相碰，有人高声念诵新题。杜甫立在塔阶旁，右手扶住第一块塔砖，指腹沿着砖面一道裂纹从左划到右。视线越过人群，锁定远处朱门与衙署的轮廓。阶上青苔在晨光中泛着暗绿。钟声歇时，他换了一只脚承重，手指仍停在裂纹尽头。"

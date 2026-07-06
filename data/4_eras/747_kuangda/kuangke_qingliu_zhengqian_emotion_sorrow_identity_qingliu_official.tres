@@ -11,50 +11,50 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_c7evj"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_gth6r"]
 
-[sub_resource type="Resource" id="Resource_p43xd"]
+[sub_resource type="Resource" id="Resource_yqd3f"]
 script = ExtResource("3_wdmhu")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ojbul"]
+[sub_resource type="Resource" id="Resource_07hmq"]
 script = ExtResource("4_bvgq2")
-operators = Array[ExtResource("2_07hmq")]([SubResource("Resource_p43xd")])
+operators = Array[ExtResource("2_07hmq")]([SubResource("Resource_yqd3f")])
 
-[sub_resource type="Resource" id="Resource_vo48u"]
+[sub_resource type="Resource" id="Resource_wdmhu"]
 script = ExtResource("5_b2hw3")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_my71h"]
+[sub_resource type="Resource" id="Resource_bvgq2"]
 script = ExtResource("6_sclc0")
-choice_result = SubResource("Resource_ojbul")
-requirement = SubResource("Resource_vo48u")
+choice_result = SubResource("Resource_07hmq")
+requirement = SubResource("Resource_wdmhu")
 description = "杜甫什么也不说，把脚边还没烧的废卷纸一张张递给郑虔。火又续上了。"
 
-[sub_resource type="Resource" id="Resource_qwmr7"]
+[sub_resource type="Resource" id="Resource_b2hw3"]
 script = ExtResource("5_b2hw3")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_pwgt7"]
+[sub_resource type="Resource" id="Resource_sclc0"]
 script = ExtResource("8_10okb")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_ecf40"]
+[sub_resource type="Resource" id="Resource_jm3w2"]
 script = ExtResource("8_10okb")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_2bhh4"]
+[sub_resource type="Resource" id="Resource_10okb"]
 script = ExtResource("9_c7evj")
-operators = Array[ExtResource("7_jm3w2")]([SubResource("Resource_qwmr7"), SubResource("Resource_pwgt7"), SubResource("Resource_ecf40")])
+operators = Array[ExtResource("7_jm3w2")]([SubResource("Resource_b2hw3"), SubResource("Resource_sclc0"), SubResource("Resource_jm3w2")])
 
 [resource]
 script = ExtResource("10_gth6r")
-requirement = SubResource("Resource_2bhh4")
+requirement = SubResource("Resource_10okb")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ACTOR_EMOTION_SORROW", "emotion_pair:pair_sorrow", "action:main:denggao"])
-options = Array[ExtResource("1_yqd3f")]([SubResource("Resource_my71h")])
+options = Array[ExtResource("1_yqd3f")]([SubResource("Resource_bvgq2")])
 uuid = "kuangke_qingliu_zhengqian_emotion_sorrow_identity_qingliu_official"
 name = "纸灰落定"
 description = "「以前觉得教书是天下最好的事，可以教人识字，教人读诗。现在觉得，教他们识字干什么呢？识了字也还是穷。」火盆里的纸灰薄薄地积了一层，他不再往里添纸，就那么坐着。"
