@@ -129,3 +129,9 @@ python tools/toggle_export_fix.py remove   # 从 [autoload] 移除 Logging
 在清除了狗屎注册表之后由于web export的需要又开始使用这个了
 15. python 环境使用 .venv/bin/python 而不是python3
 16. DSL的语法: prop_add只能配套正数（如果使用named_amount就是size_sthname_gain），prop_sub vice versa
+17. 如果有大文件，参考这个案例：
+"我分别在不同的地方放了是三个巨大的二进制字体文件
+一个应该是点了make unique
+另一个应该是新创建了一个theme 文件
+最后一个是在GlobalTheme 中新建了Fontile 而不是load resource
+"

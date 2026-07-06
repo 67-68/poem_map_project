@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c2m0tcydkhvro"]
 
 [ext_resource type="Script" uid="uid://dywj8x8aisr5k" path="res://ui/action_button.gd" id="1_vmy6r"]
+[ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="2_sl2ex"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="2_vmy6r"]
 [ext_resource type="Texture2D" uid="uid://bokcmb0kkcpu4" path="res://assets/stamps/baiye_stamp.png" id="3_sm4xu"]
 
@@ -13,6 +14,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 theme = ExtResource("2_vmy6r")
 theme_type_variation = &"ButtonTheme"
+theme_override_fonts/font = ExtResource("2_sl2ex")
 script = ExtResource("1_vmy6r")
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=447718159]
@@ -59,5 +61,6 @@ layout_mode = 2
 mouse_filter = 1
 theme = ExtResource("2_vmy6r")
 theme_type_variation = &"DefaultText"
+theme_override_fonts/font = ExtResource("2_sl2ex")
 text = "颍川，王维召开了盛大宴会"
 vertical_alignment = 2
