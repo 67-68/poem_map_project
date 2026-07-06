@@ -217,28 +217,76 @@ func _on_button_pressed() -> void:
 				Logging.warn("SceneActionPanel: sub_actions 中 UUID '%s' 无法解析为 Action，跳过" % sub_uuid)
 				continue
 			
-			# 🆕 检查 sub-action 的 aciton_requirements，不满足则跳过此选项
-			if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
-				var reqs_met := true
-				for req in sub_action.aciton_requirements:
-					if not req.compare(PlayerState):
-						Logging.info("SceneActionPanel: sub-action '%s' requirement '%s' not met, hiding from picker" % [sub_action.uuid, req.get_script().resource_path if req.get_script() else "unknown"])
-						reqs_met = false
-						break
-				if not reqs_met:
-					continue
+			# ═══════════════════════════════════════════════
+			# 🆕 Phase 1: HIDE 检查 — 不满足即完全隐藏
+			#   TraitRequirement / PoemRequirement / FlagRequirement / NarrativeLockRequirement
+			#   + operator 级 viability（ConsumeRandomLeverage / PoemReward）
+			# ═══════════════════════════════════════════════
+			var _should_hide := false
 			
-			# 🆕 时间检查：子行动时间不够时跳过此选项
+			if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
+				for req in sub_action.aciton_requirements:
+					if req is TraitRequirement or req is PoemRequirement or req is FlagRequirement or req is NarrativeLockRequirement:
+						if not req.compare(PlayerState):
+							Logging.info("SceneActionPanel: sub-action '%s' HIDE — requirement type='%s' not met" % [sub_action.uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown"])
+							_should_hide = true
+							break
+			
+			# 🆕 检查 action_results 中的 operator 级 viability
+			if not _should_hide and sub_action.action_results and not sub_action.action_results.is_empty():
+				for op in sub_action.action_results:
+					if op is ConsumeRandomLeverageOperator:
+						if not ConsumeRandomLeverageOperator.is_viable():
+							Logging.info("SceneActionPanel: sub-action '%s' HIDE — ConsumeRandomLeverageOperator.is_viable()=false" % sub_action.uuid)
+							_should_hide = true
+							break
+					elif op is PoemRewardOperator:
+						if not PoemRewardOperator.is_viable():
+							Logging.info("SceneActionPanel: sub-action '%s' HIDE — PoemRewardOperator.is_viable()=false" % sub_action.uuid)
+							_should_hide = true
+							break
+			
+			if _should_hide:
+				Logging.info("SceneActionPanel: sub-action '%s' 完全隐藏，不进入 picker" % sub_action.uuid)
+				continue
+			
+			# ═══════════════════════════════════════════════
+			# 🆕 Phase 2: GRAY 检查 — 不满足时灰化（可见但锁定）
+			#   PropertyRequirement / EmotionRequirement / PropRangeRequirement / 时间
+			# ═══════════════════════════════════════════════
+			var _gray_reasons: Array[String] = []
+			
+			if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
+				for req in sub_action.aciton_requirements:
+					if req is PropertyRequirement or req is EmotionRequirement or req is PropRangeRequirement:
+						if not req.compare(PlayerState):
+							var desc := req.describe_requirement() if req.has_method("describe_requirement") else ""
+							var reason := desc if not desc.is_empty() else "属性不满足"
+							_gray_reasons.append(reason)
+							Logging.info("SceneActionPanel: sub-action '%s' GRAY — requirement type='%s' not met: '%s'" % [sub_action.uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown", reason])
+			
+			# 🆕 时间检查：不足时灰化（而非隐藏）
 			var sub_cost := ActionManager.get_action_day_cost(sub_action, action.day_consumed)
 			if sub_cost > 0:
 				var current_time := int(PlayerState.get_stat_val("time"))
 				if current_time < sub_cost:
-					Logging.info("SceneActionPanel: sub-action '%s' 时间不足 (need=%d, have=%d), 从 picker 中隐藏" % [sub_action.uuid, sub_cost, current_time])
-					continue
+					var cost_detail := ActionManager.format_time_detail(action.day_consumed)
+					var time_reason := "时间不足（剩余%d天，需要%s）" % [current_time, cost_detail]
+					_gray_reasons.append(time_reason)
+					Logging.info("SceneActionPanel: sub-action '%s' GRAY — %s" % [sub_action.uuid, time_reason])
 			
+			# ═══════════════════════════════════════════════
+			# 构建 entity（锁定/正常通用）
+			# ═══════════════════════════════════════════════
 			var entity := GameEntity.new({"uuid": sub_action.uuid, "name": sub_action.name})
 			# 每个选项携带父行动的 main_tag（为未来多行动混合 picker 做准备）
 			entity.set_meta("parent_main_tag", _snap_main_tag)
+			
+			if not _gray_reasons.is_empty():
+				var joined_reason := "条件不满足：" + "、".join(_gray_reasons)
+				entity.set_meta("_is_locked", true)
+				entity.set_meta("_locked_reason", joined_reason)
+				Logging.info("SceneActionPanel: sub-action '%s' 标记为灰化锁定, reason='%s'" % [sub_action.uuid, joined_reason])
 
 			# 附加 Archetype 中的 operators（用于 picker 显示）
 			var archetype = Database.get_archetype_by_uuid(sub_action.uuid, "success")

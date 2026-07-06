@@ -40,11 +40,61 @@
   - `⏱ 耗时 2天` — 时间充足时
   - `[color=#cc6666]⏱ 耗时 2天 — 时间不足（剩余1天）[/color]` — 时间不够时
 
-### Picker 时间拦截
+### Picker 双轨制拦截（灰化 vs 隐藏）
 
-- 子行动在 picker 构建时 (`_on_button_pressed`) 通过 `ActionManager.get_action_day_cost(sub_action, parent.day_consumed)` 检查时间。
-- 当前时间 < 子行动所需天数 → 该子行动**不进入 picker**（完全隐藏）。
-- 主按钮仅在 `check_action_validity()` 返回无效时灰化（最小天数也不够时拦截）。
+子行动 Picker 构建时（[`ui/action_button.gd`](ui/action_button.gd) `_on_button_pressed`），对每个 sub-action 执行两阶段检查：
+
+#### Phase 1: HIDE（完全隐藏）
+
+以下类型的 `aciton_requirements` 不满足时，该子行动**完全不出现在 Picker 中**（无法当场改善的条件）：
+
+| Requirement / Operator | 判定依据 |
+|------------------------|---------|
+| `TraitRequirement` | 玩家是否有某个 trait（二态，无法当场获得） |
+| `PoemRequirement` | 玩家是否有符合条件的 Poem trait |
+| `FlagRequirement` | 内部叙事锁标志位 |
+| `NarrativeLockRequirement` | 叙事级硬锁（永远返回 false） |
+| `ConsumeRandomLeverageOperator` | `is_viable()` — 是否有任何把柄可用 |
+| `PoemRewardOperator` | `is_viable()` — 是否有任何 Poem trait 可用 |
+
+#### Phase 2: GRAY（灰化锁定）
+
+以下条件不满足时，子行动**保留在 Picker 中但灰化**（可见但不可选择，点击时弹出 toast 告知原因）：
+
+| 条件类型 | 灰化原因示例 |
+|----------|------------|
+| `PropertyRequirement` | 「条件不满足：需要「50(富裕)」」 |
+| `EmotionRequirement` | 「条件不满足：需要情绪: 狂傲(≥30)」 |
+| `PropRangeRequirement` | 「条件不满足：需要「200(小康)」」 |
+| 时间消耗 | 「条件不满足：时间不足（剩余2天，需要5天）」 |
+
+#### 灰化视觉效果
+
+- `PickerItem` 新增 `_is_locked` / `_locked_reason` 字段和 `set_locked()` / `set_unlocked()` 方法
+- 灰化态：`modulate = Color(0.4, 0.4, 0.4, 0.6)`，hover 叙事层前置 `🔒 {原因}`
+- 点击灰化卡片时通过 [`PickerItem._gui_input`](picker_item.gd) 拦截，发射 `EventBus.request_toast` 告知原因，不发射 `clicked` 信号
+- 锁定原因由 `action_button` 在构建 picker 数据时注入 entity meta（`_is_locked` / `_locked_reason`），`PickerItem._apply_data()` 自动读取并应用
+
+#### 主按钮拦截
+
+- 主按钮仍通过 `check_action_validity()` 返回无效时灰化（最小天数也不够时拦截）。
+- 主按钮灰化由 `SceneActionPanel.set_locked()` + `_is_locked` 控制，与 PickerItem 的机制独立但视觉一致。
+
+### Operator 静态 Viability 检查
+
+| Operator | 方法 | 判定逻辑 |
+|----------|------|---------|
+| `ConsumeRandomLeverageOperator` | `static func is_viable() -> bool` | 遍历所有 `ENUMS.RELATION_TARGET`，调用 `RelationFlagManager.has_leverage()` |
+| `PoemRewardOperator` | `static func is_viable() -> bool` | 遍历 `PlayerState.get_traits()`，检查是否存在 `Poem` 实例 |
+
+这两个方法在 `operate()` 中也复用，作为防御层：即使 requirement 漏配，operator 执行时也不会报错。
+
+### 相关文件
+
+- [`picker_item.gd`](picker_item.gd) — 灰化锁定 UI 机制（`_is_locked` / `set_locked` / `set_unlocked` / toast 拦截）
+- [`ui/action_button.gd`](ui/action_button.gd) — 双轨制构建逻辑（Phase 1 HIDE / Phase 2 GRAY）
+- [`core/operators/consume_random_leverage_operator.gd`](core/operators/consume_random_leverage_operator.gd) — `static is_viable()`
+- [`core/operators/poem_reward_operator.gd`](core/operators/poem_reward_operator.gd) — `static is_viable()`
 
 ---
 
@@ -121,20 +171,29 @@
 ### 设计意图
 
 - 与坊市/交游子行动同模式：先选拜谒 → 弹出 Picker → 选具体拜谒方式。
-- 均为确定性行动（`l_success_rate=100%`），不拆 success/failure variant。
-- **要挟**：利用 ConsumeRandomLeverageOperator 从所有 RELATION_TARGET 中随机消费一个把柄，获得大钱。
+- **要挟**：利用 ConsumeRandomLeverageOperator 从所有 RELATION_TARGET 中随机消费一个把柄，获得大钱。**60% 成功率**（`ms_success_rate`），40% 失败时把柄照常消耗并获重伤 trait。
 - **携诗拜谒**：复用 PoemRewardOperator（baiye 模式），选诗换 progress。额外金钱成本放 archetype `universal_result`。
 - **广发行卷**：消耗巨额钱，解锁社交节点（UnlockSocialNodePlaceholderOperator 占位）。
-- **普通拜谒**：消耗小钱 + 1天，推进人物剧情（AdvancePlotPlaceholderOperator 占位）。
+- **普通拜谒**：消耗小钱 + 1天，随机人物好感 +10（AdvancePlotPlaceholderOperator）。
 
 ### 数值映射（来自 named_amounts.json）
 
-| Archetype | 消耗 | 收益 |
-|-----------|------|------|
-| baiye_threaten_success | 随机一个把柄 | l_money_gain(+50) → ConsumeRandomLeverageOperator |
-| baiye_poem_visit_success | m_money_cost(-30) | progress → PoemRewardOperator(baiye) |
-| baiye_mass_distribution_success | xxl_money_cost(-150) | 解锁社交节点（占位） |
-| baiye_normal_success | s_money_cost(-15) + 1天 | 推进剧情（占位） |
+| Archetype | 状态 | 消耗 | 收益 |
+|-----------|------|------|------|
+| baiye_threaten_success | 成功(60%) | 随机一个把柄 | l_money_gain(+50) → ConsumeRandomLeverageOperator |
+| baiye_threaten_failure | 失败(40%) | 随机一个把柄 | severe_injury trait |
+| baiye_poem_visit_success | 成功(100%) | m_money_cost(-30) | progress → PoemRewardOperator(baiye) |
+| baiye_mass_distribution_success | 成功(100%) | xxl_money_cost(-150) | 解锁社交节点（占位） |
+| baiye_normal_success | 成功(100%) | s_money_cost(-15) + 1天 | 随机人物好感 +10 |
+
+### 重伤 Trait（severe_injury）效果
+
+| 效果 | 机制 |
+|------|------|
+| 每旬 health -15 | CSV `trait_effect_operations: prop_sub(name=health; val=15)` |
+| 所有行动 AP +1 | CSV `time_penalty: 1`（由 get_active_time_penalties 聚合） |
+| 远游/登高额外 +5 AP | action_manager.gd 硬编码 |
+| 3 旬自动移除 | survival_manager.gd SEVERE_INJURY_DURATION_XUN=3 |
 
 ### 相关文件
 - `data/3_actions_pool/actions/bai_ye/baiye_threaten.tres` — sub-action「要挟」
