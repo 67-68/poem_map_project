@@ -17,7 +17,7 @@ dest_files=["res://.godot/imported/bg_study_quiet.png-545b584d8695b0bd362c7195bc
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.41
+compress/lossy_quality=0.3
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

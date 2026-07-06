@@ -17,7 +17,7 @@ dest_files=["res://.godot/imported/bg_rural_poor.png-36d7c26f0072ab13494be0f46f0
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.5
+compress/lossy_quality=0.25
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

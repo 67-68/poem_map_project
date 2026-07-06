@@ -17,7 +17,7 @@ dest_files=["res://.godot/imported/bg_court_dark.png-334b68ebcd36a664b55f8c0dd28
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.5
+compress/lossy_quality=0.25
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

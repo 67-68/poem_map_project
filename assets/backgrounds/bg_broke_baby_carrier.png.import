@@ -17,7 +17,7 @@ dest_files=["res://.godot/imported/bg_broke_baby_carrier.png-96c30d1a126abd66f60
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.5
+compress/lossy_quality=0.25
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

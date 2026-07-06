@@ -17,7 +17,7 @@ dest_files=["res://.godot/imported/bg_villiage_outside.png-bbdbd363cc6cd873b673e
 
 compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.41
+compress/lossy_quality=0.3
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
