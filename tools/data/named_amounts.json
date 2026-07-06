@@ -58,9 +58,6 @@
 
   "m_emotion_loss": -10,
 
-  "s_literary_fame_loss": -10,
-
-
   "_comment_2": "=== 🛁 第二部分：大唐阶级状态线 (State Thresholds) ===",
   "_comment_2_desc": "用于 Requirement 判定，或触发疾病/破产 Trait 的水位线。绝不使用 S/M/L。",
 

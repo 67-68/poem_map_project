@@ -4,15 +4,17 @@ class_name Trait extends GameEntity
 @export var buffer_to_prop: DictMultiplyOperator
 @export var buffer_to_region: DictMultiplyOperator
 @export var display_char: String = ""  # 阳刻印章展示字，为空时取 name[0]
+# 人物关系状态（RELATION）已废弃，迁移至 RelationFlagManager person_state str flag；
+# _relate_to 字段保留但仅用于非 RELATION trait 的 NPC 关联
 @export_enum(
-    'RELATION', 'POEM', 'MAIN_ROUTE', 'DISEASE', 'MENTAL_ILLNESS'
+    'POEM', 'MAIN_ROUTE', 'DISEASE', 'MENTAL_ILLNESS'
 ) var topic: String
 
+# 诗词类型复用此字段；HEARD/GOOD/CORE/HATE 已随 RELATION topic 废弃
 @export_enum(
-    'HATE', 'HEARD', 'GOOD', 'CORE',
     'GAN_YE', 'YING_ZHI', 'DENG_GAO', 'HUAI_GU', 'JI_LV', 'SHAN_SHUI',
     'ACUTE', 'CHRONIC', 'DEPRESSION', 'MANIA'
-) var specific_topic: String # 为了社交系统准备；诗词类型也复用此字段
+) var specific_topic: String
 
 @export var _relate_to: ENUMS.RELATION_TARGET = -1
 var relate_to: String:

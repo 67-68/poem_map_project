@@ -480,7 +480,7 @@ func _on_tear_scroll_pressed() -> void:
 	Logging.info('PoemCrafter: 撕毁卷轴 — 拒写')
 
 	var amounts = NamedDSLParser._load_named_amounts()
-	var loss = amounts.get("s_literary_fame_loss", -10)
+	var loss = amounts.get("s_fame_cost", -10)
 	PlayerState.append_stat("literary_fame", loss)
 	Logging.info('PoemCrafter: 扣除 literary_fame %d' % loss)
 

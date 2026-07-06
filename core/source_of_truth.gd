@@ -25,9 +25,8 @@ static var debug_dashboard_state = {
 		"FANGSHI": "main_fangshi_1",
 		"JIAOYOU": "main_jiaoyou_1",  # 这些key其实没用，因为不需要分辨，全部塞进去trait就行了
 		
-		# 社交
-		# _rumor/_close/_core/_enemy
-		"LIBAI": 'relation_libai_rumor',
+		# 社交 — person_state 已迁移至 RelationFlagManager.person_state str flag
+		# 不再使用 trait（如 relation_libai_rumor）表示人物关系状态
 
 	},
 	

@@ -37,6 +37,12 @@ class_name RelationFlagManager extends RefCounted
 #     懒初始化：首次 get_favor() 时若 flag 不存在则自动注册并设为默认值。
 #     flag_gen_favor_{TARGET_TAG}
 #
+#   person_state (人物状态):
+#     玩家与某个目标的相识程度，两态状态机：not_meet → know_about。
+#     flag 只能存储 PERSON_STATE dict 中定义的 str 值，不可存 int/enum。
+#     懒初始化：首次 get_person_state() 时若 flag 不存在则自动注册为 "not_meet"。
+#     flag_gen_person_state_{TARGET_TAG}
+#
 # ── 使用示例 ──
 #
 #   # 添加把柄
@@ -49,12 +55,18 @@ class_name RelationFlagManager extends RefCounted
 #   var result = RelationFlagManager.try_use_leverage("TARGET_IDENTITY_QUANGUI")
 #   # → {consumed: true, leverage_key: "quangui_corruption", event_id: "event_threaten_quangui_corruption"}
 #
+#   # 人物状态
+#   RelationFlagManager.set_person_state("libai", RelationFlagManager.PERSON_STATE.KNOW_ABOUT)
+#   if RelationFlagManager.is_person_state("libai", RelationFlagManager.PERSON_STATE.KNOW_ABOUT):
+#       print("已认识李白")
+#
 # ═══════════════════════════════════════════════════════════
 
 # ── 常量：flag_id 前缀 ──
-const FLAG_PREFIX_LEVERAGE: String = "flag_gen_leverage_"
-const FLAG_PREFIX_HELP:      String = "flag_gen_help_"
-const FLAG_PREFIX_FAVOR:     String = "flag_gen_favor_"
+const FLAG_PREFIX_LEVERAGE:     String = "flag_gen_leverage_"
+const FLAG_PREFIX_HELP:         String = "flag_gen_help_"
+const FLAG_PREFIX_FAVOR:        String = "flag_gen_favor_"
+const FLAG_PREFIX_PERSON_STATE: String = "flag_gen_person_state_"
 
 # ── 常量：event_id 前缀 ──
 const EVENT_PREFIX_THREATEN: String = "event_threaten_"
@@ -64,12 +76,25 @@ const EVENT_PREFIX_HELP:     String = "event_help_"
 # leverage 使用 str 类型（JSON 数组编码）
 # help 使用 int 类型（累加计数器）
 # favor 使用 int 类型（好感度数）
-const VIRTUAL_FLAG_TYPE_LEVERAGE: String = "str"
-const VIRTUAL_FLAG_TYPE_HELP:     String = "int"
-const VIRTUAL_FLAG_TYPE_FAVOR:    String = "int"
+# person_state 使用 str 类型（not_meet / know_about）
+const VIRTUAL_FLAG_TYPE_LEVERAGE:     String = "str"
+const VIRTUAL_FLAG_TYPE_HELP:         String = "int"
+const VIRTUAL_FLAG_TYPE_FAVOR:        String = "int"
+const VIRTUAL_FLAG_TYPE_PERSON_STATE: String = "str"
 
 ## 好感度默认值（中性起点）
 const DEFAULT_FAVOR: int = 30
+
+# ── Dict 模拟 Enum：人物状态（仅允许存入 str，不可使用 int/enum）──
+## 两态状态机：not_meet → know_about，未来可扩展 good_terms / close / hostile。
+## 使用时通过 PERSON_STATE.NOT_MEET / PERSON_STATE.KNOW_ABOUT 引用。
+const PERSON_STATE = {
+	"NOT_MEET":   "not_meet",
+	"KNOW_ABOUT": "know_about",
+}
+
+## person_state 默认值
+const DEFAULT_PERSON_STATE: String = "not_meet"
 
 
 # ═══════════════════════════════════════════════════════════
@@ -293,6 +318,104 @@ static func clear_favor(target_tag: String) -> void:
 
 
 # ═══════════════════════════════════════════════════════════
+# 人物状态 (Person State) — str flag，Dict 模拟 Enum
+# ═══════════════════════════════════════════════════════════
+#
+# 两态状态机：
+#   not_meet ──(引入事件触发)──→ know_about
+#
+# 底层存储为 str flag，值只能是 PERSON_STATE dict 中定义的字符串。
+# 外部调用必须传递 PERSON_STATE dict 的值（如 PERSON_STATE.KNOW_ABOUT），
+# 不可手写裸字符串字面量。
+#
+# flag_id 约定：flag_gen_person_state_{TARGET_TAG}
+# ═══════════════════════════════════════════════════════════
+
+## 内部：校验 state 值是否在 PERSON_STATE dict 的合法值列表中
+static func _is_valid_person_state(state: String) -> bool:
+	for valid_state in PERSON_STATE.values():
+		if state == valid_state:
+			return true
+	return false
+
+## 内部：获取或初始化 person_state flag
+##
+## 若 flag 已存在 → 直接返回其 str 值
+## 若 flag 不存在 → 注册虚拟 flag 并写入 DEFAULT_PERSON_STATE
+static func _get_or_init_person_state(target_tag: String) -> String:
+	var flag_id = _build_flag_id(FLAG_PREFIX_PERSON_STATE, target_tag)
+	if PlayerState.has_flag(flag_id):
+		var raw = PlayerState.get_flag(flag_id)
+		if raw is String and not raw.is_empty():
+			if _is_valid_person_state(raw):
+				return raw
+			else:
+				Logging.err("RelationFlagManager: person_state 读取到非法值 '%s' for %s (flag=%s)，回退到默认值" % [raw, target_tag, flag_id])
+		else:
+			Logging.err("RelationFlagManager: person_state 读取到非 str/空值 for %s (flag=%s)，回退到默认值" % [target_tag, flag_id])
+	# 懒初始化：注册并写入默认值
+	_ensure_virtual_flag(flag_id, VIRTUAL_FLAG_TYPE_PERSON_STATE)
+	PlayerState.set_flag(flag_id, DEFAULT_PERSON_STATE, VIRTUAL_FLAG_TYPE_PERSON_STATE)
+	Logging.info("RelationFlagManager: person_state initialized for %s (flag=%s, default=%s)" % [target_tag, flag_id, DEFAULT_PERSON_STATE])
+	return DEFAULT_PERSON_STATE
+
+## 获取目标当前的人物状态
+##
+## 若从未访问过该目标，自动初始化为 "not_meet"。
+## 返回 PERSON_STATE 中的 str 值（如 "not_meet" / "know_about"）。
+static func get_person_state(target_tag: String) -> String:
+	return _get_or_init_person_state(target_tag)
+
+## 显式设置目标的人物状态
+##
+## @param state: 必须是 PERSON_STATE dict 值，如 PERSON_STATE.KNOW_ABOUT。
+##               传入非法值时打 err 并拒绝写入。
+static func set_person_state(target_tag: String, state: String) -> void:
+	if not _is_valid_person_state(state):
+		Logging.err("RelationFlagManager: set_person_state 收到非法 state='%s' for %s，拒绝写入。合法值: %s" % [state, target_tag, str(PERSON_STATE.values())])
+		return
+	var flag_id = _build_flag_id(FLAG_PREFIX_PERSON_STATE, target_tag)
+	_ensure_virtual_flag(flag_id, VIRTUAL_FLAG_TYPE_PERSON_STATE)
+	PlayerState.set_flag(flag_id, state, VIRTUAL_FLAG_TYPE_PERSON_STATE)
+	Logging.info("RelationFlagManager: person_state set to '%s' for %s (flag=%s)" % [state, target_tag, flag_id])
+
+## 便捷判断：目标当前状态是否等于指定值
+##
+## @param state: PERSON_STATE 值，如 PERSON_STATE.KNOW_ABOUT
+static func is_person_state(target_tag: String, state: String) -> bool:
+	var current = get_person_state(target_tag)
+	var result = (current == state)
+	if not result:
+		Logging.info("RelationFlagManager: is_person_state(%s, %s) → false (current=%s)" % [target_tag, state, current])
+	return result
+
+## 获取所有已认识（状态 ≥ know_about）的目标列表
+##
+## 遍历所有 RELATION_TARGET，返回 person_state 为 know_about 的 target。
+## 供 UI（如关系一览面板）调用。
+static func get_known_targets() -> Array[String]:
+	var known: Array[String] = []
+	for target_enum_value in ENUMS.RELATION_TARGET.values():
+		var target_tag := ENUMS.to_relation_str(target_enum_value)
+		if not target_tag.is_empty() and get_person_state(target_tag) == PERSON_STATE.KNOW_ABOUT:
+			known.append(target_tag)
+	Logging.info("RelationFlagManager: get_known_targets → %d known out of %d total" % [known.size(), ENUMS.RELATION_TARGET.size()])
+	return known
+
+## 检查目标是否已初始化过 person_state flag（不触发懒初始化）
+static func has_person_state_flag(target_tag: String) -> bool:
+	var flag_id = _build_flag_id(FLAG_PREFIX_PERSON_STATE, target_tag)
+	return PlayerState.has_flag(flag_id)
+
+## 清除目标的 person_state flag（重置为未初始化状态）
+## 下次 get_person_state() 将重新懒初始化到 DEFAULT_PERSON_STATE
+static func clear_person_state(target_tag: String) -> void:
+	var flag_id = _build_flag_id(FLAG_PREFIX_PERSON_STATE, target_tag)
+	PlayerState.remove_flag(flag_id)
+	Logging.info("RelationFlagManager: person_state cleared for %s (flag=%s)" % [target_tag, flag_id])
+
+
+# ═══════════════════════════════════════════════════════════
 # 好感度社交倍率系统 — 信号钩子驱动的属性修正
 # ═══════════════════════════════════════════════════════════
 #
@@ -379,7 +502,8 @@ static func get_and_reset_favor_multiplier() -> float:
 ##                 来源: ENUMS.RELATION_TARGET.keys() → to_lower()
 ## @return Dictionary: {target_tag: {leverage_keys: Array[String],
 ##                                    help: int,
-##                                    favor: int}}
+##                                    favor: int,
+##                                    person_state: String}}
 ## 无数据的目标返回空列表 / 0 / 默认值，不报错。
 static func get_all_relations(targets: Array[String]) -> Dictionary:
 	var result: Dictionary = {}
@@ -388,6 +512,7 @@ static func get_all_relations(targets: Array[String]) -> Dictionary:
 			leverage_keys = get_leverage_keys(target_tag),
 			help = get_help(target_tag),
 			favor = get_favor(target_tag),
+			person_state = get_person_state(target_tag),
 		}
 	Logging.info("RelationFlagManager: get_all_relations queried %d targets" % targets.size())
 	return result
