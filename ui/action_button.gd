@@ -250,9 +250,20 @@ func _on_button_pressed() -> void:
 				Logging.info("SceneActionPanel: sub-action '%s' 完全隐藏，不进入 picker" % sub_action.uuid)
 				continue
 			
+			# 🆕 先查找 archetype（success/failure），供 Phase 2 成本检查 + picker 显示复用
+			var archetype = Database.get_archetype_by_uuid(sub_action.uuid, "success")
+			var success_ops: Array = []
+			if archetype:
+				success_ops = archetype.operators
+			var fail_archetype = Database.get_archetype_by_uuid(sub_action.uuid, "failure")
+			var fail_ops: Array = []
+			if fail_archetype:
+				fail_ops = fail_archetype.operators
+			
 			# ═══════════════════════════════════════════════
 			# 🆕 Phase 2: GRAY 检查 — 不满足时灰化（可见但锁定）
 			#   PropertyRequirement / EmotionRequirement / PropRangeRequirement / 时间
+			#   + 🆕 Archetype 属性消耗自动检测
 			# ═══════════════════════════════════════════════
 			var _gray_reasons: Array[String] = []
 			
@@ -264,6 +275,13 @@ func _on_button_pressed() -> void:
 							var reason := desc if not desc.is_empty() else "属性不满足"
 							_gray_reasons.append(reason)
 							Logging.info("SceneActionPanel: sub-action '%s' GRAY — requirement type='%s' not met: '%s'" % [sub_action.uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown", reason])
+			
+			# 🆕 Archetype 属性消耗自动检查：通过 success archetype 的 PropertyOperator 检测属性是否足够
+			var arch_cost_reasons := ActionManager.check_archetype_property_costs(success_ops)
+			if not arch_cost_reasons.is_empty():
+				for r in arch_cost_reasons:
+					_gray_reasons.append(r)
+				Logging.info("SceneActionPanel: sub-action '%s' GRAY — archetype cost check: %s" % [sub_action.uuid, str(arch_cost_reasons)])
 			
 			# 🆕 时间检查：不足时灰化（而非隐藏）
 			var sub_cost := ActionManager.get_action_day_cost(sub_action, action.day_consumed)
@@ -281,27 +299,17 @@ func _on_button_pressed() -> void:
 			var entity := GameEntity.new({"uuid": sub_action.uuid, "name": sub_action.name})
 			# 每个选项携带父行动的 main_tag（为未来多行动混合 picker 做准备）
 			entity.set_meta("parent_main_tag", _snap_main_tag)
+			# 附加 Archetype 中的 operators（用于 picker 显示）
+			entity.set_meta("operators", success_ops)
 			
 			if not _gray_reasons.is_empty():
 				var joined_reason := "条件不满足：" + "、".join(_gray_reasons)
 				entity.set_meta("_is_locked", true)
 				entity.set_meta("_locked_reason", joined_reason)
 				Logging.info("SceneActionPanel: sub-action '%s' 标记为灰化锁定, reason='%s'" % [sub_action.uuid, joined_reason])
-
-			# 附加 Archetype 中的 operators（用于 picker 显示）
-			var archetype = Database.get_archetype_by_uuid(sub_action.uuid, "success")
-			var success_ops: Array = []
-			var fail_ops: Array = []
-			if archetype:
-				success_ops = archetype.operators
-				entity.set_meta("operators", archetype.operators)
-			else:
-				entity.set_meta("operators", [])
-
-			# 🆕 查找 failure variant archetype（按 action_uuid + state="failure" 精确匹配）
-			var fail_archetype = Database.get_archetype_by_uuid(sub_action.uuid, "failure")
+			
+			# 🆕 日志：failure archetype 查找结果（已在上方查找并缓存）
 			if fail_archetype:
-				fail_ops = fail_archetype.operators
 				Logging.info("SceneActionPanel: failure archetype found for '%s' (%d ops)" % [sub_action.uuid, fail_ops.size()])
 			else:
 				Logging.info("SceneActionPanel: no failure archetype for '%s'" % sub_action.uuid)

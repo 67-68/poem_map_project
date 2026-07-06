@@ -51,6 +51,10 @@ enum ACTION_TAGS {
     ACTION_BAIYE_POEM_VISIT,         # 拜谒·携诗
     ACTION_BAIYE_MASS_DISTRIBUTION,  # 拜谒·广发行卷
     ACTION_BAIYE_NORMAL,             # 拜谒·普通
+
+    ACTION_JIAOYOU_TAVERN_GACHA,     # 交游·坊间买醉
+    ACTION_JIAOYOU_LEVERAGE_FARM,    # 交游·暗巷刺探
+    ACTION_JIAOYOU_INTRO_GACHA,      # 交游·赴宴雅集
 }
 
 enum PROPS {

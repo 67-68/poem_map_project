@@ -194,6 +194,36 @@ func _parse_archetype_costs(action: Action) -> Array:
 	return costs
 
 
+## 🆕 静态方法：检查一组 operators 中的属性消耗是否会让玩家属性跌破下限。
+## 适用于主行动（archetype operators）和子行动（success/fail archetype operators）。
+## @param operators: Array[BaseOperator] — 来自 archetype 的 operators
+## @return Array[String] — 失败原因列表（空数组表示全部可通过）
+static func check_archetype_property_costs(operators: Array) -> Array[String]:
+	var reasons: Array[String] = []
+	if operators.is_empty():
+		return reasons
+	
+	for op in operators:
+		if not op is _PropertyOperator:
+			continue
+		var pop := op as _PropertyOperator
+		if pop.value >= 0:
+			continue  # 只检查消耗（负值），收益不拦截
+		var req: PropertyRequirement = pop.convert_prop_limit_requirement()
+		if req != null and not req.compare(PlayerState):
+			var prop_name: String = pop.property
+			var current_val = PlayerState.get_stat_val(prop_name)
+			var prop_data = Database.get_property(prop_name)
+			var prop_display_name = prop_data.get_display_name() if prop_data else prop_name
+			var needed := req.value
+			var precise_line := "「%s」不足，当前%d，需要%d" % [prop_display_name, current_val, needed]
+			reasons.append(precise_line)
+			Logging.info("[ActionManager] check_archetype_property_costs: prop=%s current=%d needed=%d → GRAY" % [prop_name, current_val, needed])
+	
+	Logging.info("[ActionManager] check_archetype_property_costs: %d operators → %d reasons" % [operators.size(), reasons.size()])
+	return reasons
+
+
 
 func is_action_era_allowed(action: Action) -> bool:
 	if GameState.current_era.is_empty():
@@ -232,39 +262,19 @@ func check_action_validity(action: Action) -> Dictionary:
 		return result
 	
 	# 1. 从 archetype universal_result 解析属性消耗并检查
-	# 🆕 跳过正数值（prop_add/收益型），只检查负数值（prop_sub/消耗型）
-	# 收益超过 hard_max 不应该锁定行动，最多浪费溢出部分
+	# 🆕 委托给 static check_archetype_property_costs 统一处理
 	var costs := _parse_archetype_costs(action)
-	for temp_op in costs:
-		if not temp_op is PropertyOperator:
-			continue
-		if temp_op.value >= 0:
-			continue
-		var req: PropertyRequirement = temp_op.convert_prop_limit_requirement()
-		if req != null and not req.compare(PlayerState):
-			result.valid = false
-			
-			var prop_name: String = temp_op.property
-			result.prop_name = prop_name
-			
-			# 构建精确数值行："「金钱」不足，当前42，需要20"
-			var current_val = PlayerState.get_stat_val(prop_name)
-			var prop_display_name = prop_name
-			var prop_data = Database.get_property(prop_name)
-			if prop_data:
-				prop_display_name = prop_data.get_display_name()
-			var needed := req.value
-			var precise_line := "「%s」不足，当前%d，需要%d" % [prop_display_name, current_val, needed]
-			
-			# 追加 archetype 叙事文本（不再覆盖，改为换行拼接）
-			var archetype_hint := _get_archetype_failed_hint(action, prop_name)
-			if not archetype_hint.is_empty():
-				result.reasons.append(precise_line + "\n" + archetype_hint)
-				Logging.info("[ActionManager] ✅ archetype hint 追加: action=%s, prop=%s" % [action.uuid, prop_name])
-			else:
-				result.reasons.append(precise_line)
-			
-			return result
+	var cost_reasons := check_archetype_property_costs(costs)
+	if not cost_reasons.is_empty():
+		for reason in cost_reasons:
+			result.reasons.append(reason)
+		result.valid = false
+		# 提取第一个 prop_name 用于提示
+		for temp_op in costs:
+			if temp_op is PropertyOperator and temp_op.value < 0:
+				result.prop_name = temp_op.property
+				break
+		return result
 	
 	# 2. 检查时间消耗（使用 day_consumed + trait 惩罚）
 	var cost := get_action_day_cost(action)

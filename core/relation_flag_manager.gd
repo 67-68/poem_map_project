@@ -67,6 +67,7 @@ const FLAG_PREFIX_LEVERAGE:     String = "flag_gen_leverage_"
 const FLAG_PREFIX_HELP:         String = "flag_gen_help_"
 const FLAG_PREFIX_FAVOR:        String = "flag_gen_favor_"
 const FLAG_PREFIX_PERSON_STATE: String = "flag_gen_person_state_"
+const FLAG_PREFIX_INTRO:        String = "flag_gen_intro_"
 
 # ── 常量：event_id 前缀 ──
 const EVENT_PREFIX_THREATEN: String = "event_threaten_"
@@ -77,10 +78,29 @@ const EVENT_PREFIX_HELP:     String = "event_help_"
 # help 使用 int 类型（累加计数器）
 # favor 使用 int 类型（好感度数）
 # person_state 使用 str 类型（not_meet / know_about）
+# intro 使用 str 类型（JSON 数组编码，对标 leverage）
 const VIRTUAL_FLAG_TYPE_LEVERAGE:     String = "str"
 const VIRTUAL_FLAG_TYPE_HELP:         String = "int"
 const VIRTUAL_FLAG_TYPE_FAVOR:        String = "int"
 const VIRTUAL_FLAG_TYPE_PERSON_STATE: String = "str"
+const VIRTUAL_FLAG_TYPE_INTRO:        String = "str"
+
+# ── 常量：RELATION_TARGET 社会阶层分级 ──
+## T1 市井，T2 文人，T3 权贵。用于 set_random_person_state 等 Operator 筛选。
+const RELATION_TARGET_TIER = {
+	"hushang": 1,
+	"gaoshi": 2,
+	"wangwei": 2,
+	"zhengqian": 2,
+	"qingliu": 2,
+	"libai": 3,
+	"lilinfu": 3,
+	"jiwen": 3,
+	"youxiangfu": 3,
+	"waiqi": 3,
+	"yangguozhong": 3,
+	"guoguofuren": 3,
+}
 
 ## 好感度默认值（中性起点）
 const DEFAULT_FAVOR: int = 30
@@ -493,6 +513,74 @@ static func get_and_reset_favor_multiplier() -> float:
 
 
 # ═══════════════════════════════════════════════════════════
+# 引荐信 (Intro) — list[str] JSON 编码存储（对标 leverage）
+# ═══════════════════════════════════════════════════════════
+
+## 内部：从 PlayerState 读取 intro list
+static func _get_intro_list(target_tag: String) -> Array:
+	var flag_id = _build_flag_id(FLAG_PREFIX_INTRO, target_tag)
+	if PlayerState.has_flag(flag_id):
+		var raw = PlayerState.get_flag(flag_id)
+		if raw is String and not raw.is_empty():
+			var parsed = JSON.parse_string(raw)
+			if parsed is Array:
+				return parsed
+		else:
+			Logging.err("RelationFlagManager: _get_intro_list 读取到非 str 类型数据，flag=%s, raw=%s" % [flag_id, str(raw)])
+	return []
+
+## 内部：将 intro list 写入 PlayerState
+static func _set_intro_list(target_tag: String, list: Array) -> void:
+	var flag_id = _build_flag_id(FLAG_PREFIX_INTRO, target_tag)
+	_ensure_virtual_flag(flag_id, VIRTUAL_FLAG_TYPE_INTRO)
+	var json_str = JSON.stringify(list)
+	PlayerState.set_flag(flag_id, json_str, VIRTUAL_FLAG_TYPE_INTRO)
+	Logging.info("RelationFlagManager: intro list set for %s (flag=%s) -> %s" % [target_tag, flag_id, json_str])
+
+## 为目标追加一条引荐信 key
+static func add_intro(target_tag: String, intro_key: String) -> void:
+	var list = _get_intro_list(target_tag)
+	if intro_key in list:
+		Logging.info("RelationFlagManager: intro key '%s' already exists for %s, skip duplicate" % [intro_key, target_tag])
+		return
+	list.append(intro_key)
+	_set_intro_list(target_tag, list)
+	Logging.info("RelationFlagManager: intro +'%s' for %s (flag=flag_gen_intro_%s)" % [intro_key, target_tag, target_tag])
+
+## 获取目标当前的所有引荐信 key
+static func get_intro_keys(target_tag: String) -> Array:
+	return _get_intro_list(target_tag)
+
+## 检查目标是否有引荐信
+static func has_intro(target_tag: String) -> bool:
+	var list = _get_intro_list(target_tag)
+	return not list.is_empty()
+
+## 按 key 精确匹配并移除一条引荐信
+## 返回 true 表示成功消费，false 表示未找到
+static func consume_intro(target_tag: String, intro_key: String) -> bool:
+	var list = _get_intro_list(target_tag)
+	if list.is_empty():
+		Logging.info("RelationFlagManager: consume_intro failed — no intro for %s" % target_tag)
+		return false
+	
+	var idx = list.find(intro_key)
+	if idx == -1:
+		Logging.info("RelationFlagManager: consume_intro failed — key '%s' not found in %s" % [intro_key, target_tag])
+		return false
+	
+	list.remove_at(idx)
+	_set_intro_list(target_tag, list)
+	Logging.info("RelationFlagManager: consume_intro '%s' from %s, remaining=%d" % [intro_key, target_tag, list.size()])
+	return true
+
+## 清除目标的所有引荐信
+static func clear_intro(target_tag: String) -> void:
+	_set_intro_list(target_tag, [])
+	Logging.info("RelationFlagManager: intro cleared for %s" % target_tag)
+
+
+# ═══════════════════════════════════════════════════════════
 # 聚合查询 — 一次性获取所有目标的关系数据
 # ═══════════════════════════════════════════════════════════
 
@@ -510,6 +598,7 @@ static func get_all_relations(targets: Array[String]) -> Dictionary:
 	for target_tag in targets:
 		result[target_tag] = {
 			leverage_keys = get_leverage_keys(target_tag),
+			intro_keys = get_intro_keys(target_tag),
 			help = get_help(target_tag),
 			favor = get_favor(target_tag),
 			person_state = get_person_state(target_tag),

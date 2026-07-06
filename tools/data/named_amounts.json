@@ -51,6 +51,7 @@
   "l_literary_fame_gain": 8,
 
   "xs_success_rate": 30,
+  "xxs_success_rate": 20,
   "s_success_rate": 50,
   "ms_success_rate": 60,
   "m_success_rate": 80,

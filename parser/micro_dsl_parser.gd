@@ -89,6 +89,9 @@ const FUNC_IMAGINARY_LEVEL_REWARD := "imaginary_level_reward"
 const FUNC_IMAGERY_ADD := "imagery_add"                      # 🆕 意象获取操作符
 const FUNC_PLAY_TRANSITION := "play_transition"
 const FUNC_LEVERAGE_ADD := "leverage_add"
+const FUNC_SET_RANDOM_PERSON_STATE := "set_random_person_state"
+const FUNC_ADD_RANDOM_LEVERAGE := "add_random_leverage"
+const FUNC_ADD_RANDOM_INTRO := "add_random_intro"
 const FUNC_INFO := "info"
 const FUNC_ALL_EMO_SUB := "all_emo_sub"
 const FUNC_ADD_SOCIAL_CREDIT := "add_social_credit"
@@ -174,6 +177,10 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_CONSUME_RANDOM_LEVERAGE] = func(p, r): return _exec_consume_random_leverage_op(p, r)
 	cd[FUNC_UNLOCK_SOCIAL_NODE] = func(p, r): return _exec_unlock_social_node_op(p, r)
 	cd[FUNC_ADVANCE_PLOT] = func(p, r): return _exec_advance_plot_op(p, r)
+	# ── Social Maneuver Operators ──
+	cd[FUNC_SET_RANDOM_PERSON_STATE] = func(p, r): return _exec_set_random_person_state_op(p, r)
+	cd[FUNC_ADD_RANDOM_LEVERAGE] = func(p, r): return _exec_add_random_leverage_op(p, r)
+	cd[FUNC_ADD_RANDOM_INTRO] = func(p, r): return _exec_add_random_intro_op(p, r)
 	# ── Image Operators ──
 	cd[FUNC_IMAGE_PRESENT] = func(p, r): return _exec_image_present_op(p, r)
 	cd[FUNC_IMAGE_SLIDE] = func(p, r): return _exec_image_slide_op(p, r)
@@ -1317,4 +1324,36 @@ static func _exec_unlock_social_node_op(parsed: NamedDSLParser.ParseResult, raw:
 static func _exec_advance_plot_op(parsed: NamedDSLParser.ParseResult, raw: String) -> AdvancePlotPlaceholderOperator:
 	var op := AdvancePlotPlaceholderOperator.new()
 	Logging.info("MicroDSLParser: _exec_advance_plot_op — raw: %s" % raw)
+	return op
+
+
+# ─── set_random_person_state ──────────────────────────
+
+# DSL 语法: set_random_person_state(tier=1; state=know_about)
+# 随机选一个指定 tier 的 not_meet 目标，设置其 person_state。
+static func _exec_set_random_person_state_op(parsed: NamedDSLParser.ParseResult, raw: String) -> SetRandomPersonStateOperator:
+	var op := SetRandomPersonStateOperator.new()
+	op.tier = NamedDSLParser.get_int_param(parsed, "tier", 1)
+	op.state = NamedDSLParser.get_str_param(parsed, "state", "")
+	Logging.info("MicroDSLParser: _exec_set_random_person_state_op — tier=%d state=%s raw=%s" % [op.tier, op.state, raw])
+	return op
+
+
+# ─── add_random_leverage ──────────────────────────────
+
+# DSL 语法: add_random_leverage()
+# 无参数 — 从所有 RELATION_TARGET 中随机选一个，随机加一条把柄。
+static func _exec_add_random_leverage_op(parsed: NamedDSLParser.ParseResult, raw: String) -> AddRandomLeverageOperator:
+	var op := AddRandomLeverageOperator.new()
+	Logging.info("MicroDSLParser: _exec_add_random_leverage_op — raw: %s" % raw)
+	return op
+
+
+# ─── add_random_intro ─────────────────────────────────
+
+# DSL 语法: add_random_intro()
+# 无参数 — 从所有 RELATION_TARGET 中随机选一个，添加引荐信。
+static func _exec_add_random_intro_op(parsed: NamedDSLParser.ParseResult, raw: String) -> AddRandomIntroOperator:
+	var op := AddRandomIntroOperator.new()
+	Logging.info("MicroDSLParser: _exec_add_random_intro_op — raw: %s" % raw)
 	return op

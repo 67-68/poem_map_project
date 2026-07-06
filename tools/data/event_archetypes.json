@@ -323,5 +323,87 @@
     "universal_result": "trait_add(name=severe_injury)",
     "era": "",
     "failed_hints": {}
+  },
+  "tavern_gacha_success": {
+    "name": "坊间买醉·成",
+    "action_uuid": "jiaoyou_tavern_gacha",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)|set_random_person_state(tier=1; state=know_about)",
+    "era": "",
+    "failed_hints": {
+      "money": "连一壶浊酒都赊不来，店家见你进门便摆手：客官，今日客满…",
+      "time": "天色已晚，坊市酒肆纷纷收摊，只有冷风在街角呜咽"
+    }
+  },
+  "tavern_gacha_failure": {
+    "name": "坊间买醉·败",
+    "action_uuid": "jiaoyou_tavern_gacha",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "连一壶浊酒都赊不来，店家见你进门便摆手：客官，今日客满…",
+      "time": "天色已晚，坊市酒肆纷纷收摊，只有冷风在街角呜咽"
+    }
+  },
+  "leverage_farm_success": {
+    "name": "暗巷刺探·成",
+    "action_uuid": "jiaoyou_leverage_farm",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=m_money_cost)|add_random_leverage()",
+    "era": "",
+    "failed_hints": {
+      "money": "打探消息需要上下打点，囊中空空，连茶馆的小厮都不愿多看你一眼",
+      "health": "病体难支，哪里还有精力去暗巷蹲守消息",
+      "time": "夜深了，暗巷里空无一人，连更夫的梆子声都远去了"
+    }
+  },
+  "leverage_farm_failure": {
+    "name": "暗巷刺探·败",
+    "action_uuid": "jiaoyou_leverage_farm",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=m_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "打探消息需要上下打点，囊中空空，连茶馆的小厮都不愿多看你一眼",
+      "health": "病体难支，哪里还有精力去暗巷蹲守消息",
+      "time": "夜深了，暗巷里空无一人，连更夫的梆子声都远去了"
+    }
+  },
+  "intro_gacha_success": {
+    "name": "赴宴雅集·成",
+    "action_uuid": "jiaoyou_intro_gacha",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xl_money_cost)|add_random_intro()",
+    "era": "",
+    "failed_hints": {
+      "money": "雅集需厚礼相赠、华服赴会，囊中羞涩者连门槛都迈不过去",
+      "health": "抱病赴宴，只怕席间失礼，反倒惹人耻笑",
+      "time": "宴席已散，朱门紧闭，只有残烛在风中摇曳"
+    }
+  },
+  "intro_gacha_failure": {
+    "name": "赴宴雅集·败",
+    "action_uuid": "jiaoyou_intro_gacha",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xl_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "雅集需厚礼相赠、华服赴会，囊中羞涩者连门槛都迈不过去",
+      "health": "抱病赴宴，只怕席间失礼，反倒惹人耻笑",
+      "time": "宴席已散，朱门紧闭，只有残烛在风中摇曳"
+    }
   }
 }

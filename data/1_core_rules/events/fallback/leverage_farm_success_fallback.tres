@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dleverfschas01"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_evopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_randomev"]
+
+[sub_resource type="Resource" id="Resource_empty_cr"]
+script = ExtResource("3_cr")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_evopt")
+choice_result = SubResource("Resource_empty_cr")
+description = "你在暗巷的阴影中蹲守了半夜，终于等到了那个低语。一个裹着斗篷的身影匆匆走过，从怀中滑落了一封蜡封的信笺。你不动声色地拾起，借着月光匆匆一瞥——竟是不得了的东西。嘴角泛起一丝不易察觉的微笑，你将信笺仔细收好，悄无声息地消失在了黑暗中。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_randomev")
+weight = 0.0
+archetype_id = "leverage_farm_success"
+options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
+uuid = "leverage_farm_success_fallback"
+name = "暗巷拾遗"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"
