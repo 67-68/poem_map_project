@@ -1,10 +1,9 @@
 @tool
 class_name ConsumeRandomLeverageOperator extends BaseOperator
 
-## 消耗随机一个把柄（从所有 RELATION_TARGET 中随机选），获得大钱。
-## 若无任何把柄，打 err 并静默返回（行动系统应自动隐藏此选项）。
-
-@export var money_size: String = "large"  ## named_amounts 档位 key
+## 消耗随机一个把柄（从所有 RELATION_TARGET 中随机选）。
+## 金钱/惩罚等收益由 archetype DSL 控制，此 operator 仅负责把柄消耗。
+## 若无任何把柄，打 err 并静默返回。
 
 
 ## 🆕 静态可行性检查：当前是否有任何可用把柄。
@@ -43,23 +42,14 @@ func operate():
 
 	Logging.info("[ConsumeRandomLeverageOperator] 随机选中目标=%s, 消耗把柄='%s'" % [target_tag, leverage_key])
 
-	# 3. 消费把柄
+	# 3. 消费把柄（金钱由 archetype DSL prop_add 控制）
 	var consumed: bool = RelationFlagManager.consume_leverage(target_tag, leverage_key)
 	if not consumed:
 		Logging.err("[ConsumeRandomLeverageOperator] consume_leverage 失败: target=%s, key=%s" % [target_tag, leverage_key])
 		return
 
-	# 4. 获得金钱
-	var prop_op := PropertyOperator.new()
-	prop_op.property = "money"
-	prop_op.ranked_value = money_size
-	prop_op.init({})
-	Logging.info("[ConsumeRandomLeverageOperator] 获得金钱: ranked_value=%s, resolved=%d" % [money_size, prop_op.value])
-	prop_op.operate()
-
-	# 5. Show hint
-	show_hint("以「%s」要挟%s，换得银钱" % [leverage_key, target_tag])
+	Logging.info("[ConsumeRandomLeverageOperator] 把柄已消耗: target=%s, key=%s" % [target_tag, leverage_key])
 
 
 func describe_preview() -> String:
-	return "消耗随机一个把柄，换取大量金钱"
+	return "消耗随机一个把柄"

@@ -5,11 +5,6 @@
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="3_action"]
 [ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_pushevent"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_cr"]
-[ext_resource type="Script" uid="uid://csnd0b1q3o7vf" path="res://core/operators/consume_random_leverage_operator.gd" id="6_leverage_op"]
-
-[sub_resource type="Resource" id="Resource_leverage_op"]
-script = ExtResource("6_leverage_op")
-money_size = "large"
 
 [sub_resource type="Resource" id="Resource_failed_push"]
 script = ExtResource("4_pushevent")
@@ -24,7 +19,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [resource]
 script = ExtResource("3_action")
 _action_tags = Array[int]([48, 29])
-action_results = Array[ExtResource("2_baseop")]([SubResource("Resource_leverage_op")])
+action_results = Array[ExtResource("2_baseop")]([])
 aciton_requirements = Array[ExtResource("1_req")]([])
 fallback_event_uuid = "baiye_threaten_fallback"
 possibility = "ms_success_rate"

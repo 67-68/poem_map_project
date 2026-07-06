@@ -276,7 +276,7 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "",
+    "universal_result": "consume_random_leverage|prop_add(name=money; val=l_money_gain)",
     "era": "",
     "failed_hints": {}
   },
@@ -320,7 +320,7 @@
     "state": "failure",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "trait_add(name=severe_injury)",
+    "universal_result": "consume_random_leverage|trait_add(name=severe_injury)",
     "era": "",
     "failed_hints": {}
   },

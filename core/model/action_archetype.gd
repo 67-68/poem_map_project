@@ -35,5 +35,7 @@ static func from_json(data: Dictionary) -> ActionArchetype:
 		for op in parsed:
 			if op is PropertyOperator or op is TraitOperator or op is TimeOperator or op is RollImaginaryOperator:
 				arch.operators.append(op)
+			elif op is SetRandomPersonStateOperator or op is AddRandomLeverageOperator or op is AddRandomIntroOperator:
+				arch.operators.append(op)
 	
 	return arch
