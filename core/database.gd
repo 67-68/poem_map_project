@@ -223,6 +223,11 @@ func _init() -> void:
 	Logging.info("Database: history_events=%d, decided_events=%d, focused_chat_data=%d" % [history_events.size(), decided_events.size(), focused_chat_data.size()])
 	Logging.info("Database: normal_poem_events=%d, end_random_events=%d" % [normal_poem_events.size(), end_random_events.size()])
 	Logging.info("Database: actions=%d, decisions=%d" % [actions.size(), decisions.size()])
+	# 诊断日志：验证 bai_ye 子行动是否已注册到 actions 字典
+	Logging.info("Database: baiye sub-actions in actions dict: threaten=%s normal=%s mass_distribution=%s poem_visit=%s" % [
+		str(actions.has("baiye_threaten")), str(actions.has("baiye_normal")),
+		str(actions.has("baiye_mass_distribution")), str(actions.has("baiye_poem_visit"))
+	])
 
 	# 飞花令意象库：V7 从 imaginaries_detail 构建（不再依赖 environment: 前缀筛选）
 	feihualing_imageries = {}

@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="2_action"]
+[ext_resource type="Script" uid="uid://wkg4t5ovrvhc" path="res://core/operators/advance_plot_placeholder_operator.gd" id="3_plot_op"]
 
 [sub_resource type="Resource" id="Resource_plot_op"]
-script = load("res://core/operators/advance_plot_placeholder_operator.gd")
+script = ExtResource("3_plot_op")
 
 [resource]
 script = ExtResource("2_action")
