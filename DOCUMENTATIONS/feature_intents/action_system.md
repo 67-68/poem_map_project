@@ -27,6 +27,45 @@
 - `poisoned` trait 已在 `model/enumerates.gd` TRAITS 枚举中注册，并在 `data/1_core_rules/traits/_traits.csv` 中配置（prop_sub health 15/旬，2旬到期自动移除）。
 - 所有新 archetype 的 `era: ""`（无时代限制）、`universal_requirement: ""`（成本在 result 中以 prop_sub 表达）。
 
+## 交游子行动：宣读诗词
+
+挂载在 `action_jiaoyou`（交游）下，使用 PoemRewardOperator（fame 模式）弹出诗词选择，以诗换名声。
+
+### 设计意图
+
+- 成本 `prop_sub(literary_fame, m_fame_cost=-5)` 放在 archetype `universal_result`，所有匹配事件 + fallback 统一引用同一 archetype 确保路径完整。
+- `action_results` 仅放 PoemRewardOperator（异步 picker），不重复扣成本。
+- `aciton_requirements` 挂 `PoemRequirement(accepted_poem_types=[])`：无诗词时从 Picker 中隐藏。
+
+| Archetype | 消耗 | 收益（由 PoemRewardOperator 产出）|
+|-----------|------|------|
+| recite_poem_success | literary_fame -5（m_fame_cost）| literary_fame（L1→少量 L2→中等 L3→大量，概率升级）|
+
+### 相关文件
+- `data/3_actions_pool/actions/jiao_you/jiaoyou_recite_poem.tres` — sub-action 定义
+- `data/1_core_rules/events/fallback/jiaoyou_recite_poem_fallback.tres` — fallback「席间诵读」
+- `data/1_core_rules/events/fallback/jiaoyou_recite_poem_failed_fallback.tres` — 失败 fallback（占位，100% 不触发）
+
+## 坊市子行动：卖诗
+
+挂载在 `action_fangshi`（坊市）下，使用 PoemRewardOperator（money 模式）弹出诗词选择，将诗卖与平康坊歌女传唱换钱。
+
+### 设计意图
+
+- 与宣读诗词同模式：成本在 archetype `universal_result`，收益由 PoemRewardOperator 产出。
+- **money 模式升一级**：L1→中等 L2→大量 L3→巨额（而非基础版的 L1→少量 L2→中等 L3→大量）。
+- 语义修正：卖诗是卖给平康坊，让歌女传唱，非随便卖字。
+
+| Archetype | 消耗 | 收益 |
+|-----------|------|------|
+| sell_poem_success | literary_fame -5（m_fame_cost）| money（L1→中等 L2→大量 L3→巨额，概率升级）|
+
+### 相关文件
+- `data/3_actions_pool/actions/fang_shi/fangshi_sell_poem.tres` — sub-action 定义
+- `data/1_core_rules/events/fallback/fangshi_sell_poem_fallback.tres` — fallback「歌女传唱」
+- `data/1_core_rules/events/fallback/fangshi_sell_poem_failed_fallback.tres` — 失败 fallback（占位）
+- `core/operators/poem_reward_operator.gd` — V10.1 新增 money 升一级、extra_large SIZE_DISPLAY、describe_preview()
+
 ## 登高子行动 Archetype（曲江池 / 乐游原 / 少陵原）
 
 这三个子行动挂载在 `action_denggao`（登高/远游）下，定义在 [`tools/data/event_archetypes.json`](tools/data/event_archetypes.json) 中。
@@ -145,6 +184,8 @@
 | `denggao_shaolingyuan_fallback` | `shaolingyuan_success` | 正常登少陵原 |
 | `duzhuo_heyaojiu_fallback` | — | 正常喝药酒祛毒 |
 | `duzhuo_xiaozhuo_fallback` | — | 正常小酌怡情 |
+| `jiaoyou_recite_poem_fallback` | `recite_poem_success` | 席间诵读，以诗换名 |
+| `fangshi_sell_poem_fallback` | `sell_poem_success` | 歌女传唱，以诗换钱 |
 
 - 对应的失败叙事在 `_failed_fallback` 变体中（如 `fangshi_maizi_failed_fallback`），由 possibility 失败路径的 PushEventOperator 直接推送
 

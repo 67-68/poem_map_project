@@ -249,5 +249,25 @@
     "universal_result": "prop_sub(name=money; val=xs_money_cost)|prop_add(name=health; val=xs_health_gain)",
     "era": "",
     "failed_hints": {}
+  },
+  "recite_poem_success": {
+    "name": "宣读诗词·成",
+    "action_uuid": "jiaoyou_recite_poem",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=literary_fame; val=m_fame_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "sell_poem_success": {
+    "name": "卖诗·成",
+    "action_uuid": "fangshi_sell_poem",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=literary_fame; val=m_fame_cost)",
+    "era": "",
+    "failed_hints": {}
   }
 }

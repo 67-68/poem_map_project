@@ -43,6 +43,9 @@ enum ACTION_TAGS {
     
     ACTION_DUZHUO_HEYAOJIU, # 喝药酒
     ACTION_DUZHUO_XIAOZHUO, # 小酌一口
+
+    ACTION_JIAOYOU_RECITE_POEM, # 交游·宣读诗词
+    ACTION_FANGSHI_SELL_POEM, # 坊市·卖诗
 }
 
 enum PROPS {
