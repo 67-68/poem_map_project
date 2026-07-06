@@ -23,4 +23,4 @@ archetype_id = "write_poem"
 options = Array[ExtResource("1_opt")]([SubResource("Resource_l1_option")])
 uuid = "poem_level_1_fallback"
 name = "平庸之诗"
-description = "你展开卷轴，墨迹未干。这是一首平平无奇的诗，自我安慰尚可，赠人则略显寒酸。\n世俗之誉：{@poem_secular}  文学之名：{@poem_literary}"
+description = "你展开卷轴，墨迹未干。这是一首平平无奇的诗，自我安慰尚可，赠人则略显寒酸。"

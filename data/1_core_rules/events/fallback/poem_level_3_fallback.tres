@@ -23,4 +23,4 @@ archetype_id = "write_poem"
 options = Array[ExtResource("1_opt")]([SubResource("Resource_l3_option")])
 uuid = "poem_level_3_fallback"
 name = "绝唱之诗"
-description = "你展开卷轴，墨迹未干。这是一首泣鬼惊神的绝唱！字字珠玑，力透纸背，必将千古流传。\n世俗之誉：{@poem_secular}  文学之名：{@poem_literary}"
+description = "你展开卷轴，墨迹未干。这是一首泣鬼惊神的绝唱！字字珠玑，力透纸背，必将千古流传。"

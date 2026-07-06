@@ -1,13 +1,12 @@
 class_name PoemCraftingCalculator extends RefCounted
 
-## 诗词评分引擎 V9 — 纯函数，无状态，幂等
+## 诗词评分引擎 V10 — 纯函数，无状态，幂等
 ##
-## V9 变更:
-##   - 砍掉 C(N,3) 食谱枚举，替换为基于 Imaginary 数量和等级的线性评分
-##   - 纯函数契约：禁止 randf() / Database / PlayerState / Time 调用
-##   - max_manageable 由调用方从 PlayerState 读取后显式传入
-##   - 随机性（概率升级抽奖）分离到调用方执行
-##   - 管道乘数 CHANNEL_MATRIX 砍掉，mode 直接硬赋值 secular/literary
+## V10 变更:
+##   - 删除 PoemCraftingResult.secular_value / literary_value 及 MODE_VALUE_MAP
+##   - 诗词价值不再创作时固化，改由 PoemRewardOperator 消费时动态产出
+##   - _calculate_upgrade_probability 改为公开静态方法 calculate_upgrade_probability
+##   - 新增 calculate_level_upgrade_probability(level) 供 PoemRewardOperator 复用
 
 ## 等级阈值
 const LEVEL_1_THRESHOLD := 25   ## 平庸 < 25
@@ -27,21 +26,22 @@ const LEVEL_SCORE_MAP := {
 	3: 15,
 }
 
-## mode → secular/literary 硬赋值
-const MODE_VALUE_MAP := {
-	"gan_ye":   {"secular": 64.0, "literary": 0.0},
-	"deng_gao": {"secular": 0.0,  "literary": 48.0},
-}
-
 const POEM_LEVEL_NAMES := {
 	1: "平庸",
 	2: "佳作",
 	3: "绝唱",
 }
 
+## level → 段位中位分数（用于消费时升级概率计算）
+const LEVEL_MEDIAN_SCORE := {
+	1: 12,
+	2: 37,
+	3: -1,  # 绝唱无升级空间
+}
+
 
 ## ──────────────────────────────────────────────
-## 诗词创作结果 V9
+## 诗词创作结果 V10
 ## ──────────────────────────────────────────────
 
 class PoemCraftingResult:
@@ -50,15 +50,13 @@ class PoemCraftingResult:
 	var score: int = 0                ## 原始分数（可负）
 	var base_level: int = 1           ## 基础等级 (1-3)
 	var upgrade_probability: float = 0.0  ## 升级概率 [0.0, 1.0)，纯计算结果
-	var secular_value: float = 0.0    ## mode 硬赋值
-	var literary_value: float = 0.0   ## mode 硬赋值
 
 
 ## ──────────────────────────────────────────────
-## 主入口：纯函数诗词评分引擎 V9
+## 主入口：纯函数诗词评分引擎 V10
 ##
 ## @param imaginaries:  所有参与计算的 Imaginary 数组
-## @param mode:         "gan_ye" | "deng_gao"
+## @param mode:         "gan_ye" | "deng_gao"（仅用于提示，不再产出 value）
 ## @param max_manageable: 意象管理上限，由调用方从 PlayerState.max_imaginary_managable 读取后传入
 ## @return PoemCraftingResult
 ## ──────────────────────────────────────────────
@@ -74,7 +72,7 @@ static func calculate_poem_grade(
 	if imaginaries.size() < max_manageable:
 		result.passed = false
 		result.fail_reason = "insufficient"
-		Logging.warn("PoemCraftingCalculator(V9): 意象不足 — 当前 %d, 需要至少 %d" % [imaginaries.size(), max_manageable])
+		Logging.warn("PoemCraftingCalculator(V10): 意象不足 — 当前 %d, 需要至少 %d" % [imaginaries.size(), max_manageable])
 		return result
 	
 	# ── 2. 评分计算 ──
@@ -85,35 +83,29 @@ static func calculate_poem_grade(
 	for i in range(imaginaries.size()):
 		var imag = imaginaries[i]
 		if not imag is Imaginary:
-			Logging.warn("PoemCraftingCalculator(V9): 跳过非 Imaginary 元素 at index %d" % i)
+			Logging.warn("PoemCraftingCalculator(V10): 跳过非 Imaginary 元素 at index %d" % i)
 			continue
 		
 		if i < max_manageable:
 			var level_bonus := _get_level_score(imag.level)
 			score += level_bonus
 			within_limit_count += 1
-			Logging.debug("PoemCraftingCalculator(V9): index=%d uuid=%s level=%d → +%d" % [i, imag.uuid, imag.level, level_bonus])
+			Logging.debug("PoemCraftingCalculator(V10): index=%d uuid=%s level=%d → +%d" % [i, imag.uuid, imag.level, level_bonus])
 		else:
 			score += OVERFLOW_PENALTY
 			overflow_count += 1
-			Logging.debug("PoemCraftingCalculator(V9): index=%d uuid=%s level=%d → %d (溢出惩罚)" % [i, imag.uuid, imag.level, OVERFLOW_PENALTY])
+			Logging.debug("PoemCraftingCalculator(V10): index=%d uuid=%s level=%d → %d (溢出惩罚)" % [i, imag.uuid, imag.level, OVERFLOW_PENALTY])
 	
 	result.score = score
-	Logging.info("PoemCraftingCalculator(V9): 评分完成 — score=%d, within=%d, overflow=%d, total=%d" % [score, within_limit_count, overflow_count, imaginaries.size()])
+	Logging.info("PoemCraftingCalculator(V10): 评分完成 — score=%d, within=%d, overflow=%d, total=%d" % [score, within_limit_count, overflow_count, imaginaries.size()])
 	
 	# ── 3. 确定基础等级 ──
 	result.base_level = _score_to_base_level(score)
-	Logging.info("PoemCraftingCalculator(V9): base_level=%d (%s)" % [result.base_level, POEM_LEVEL_NAMES.get(result.base_level, "未知")])
+	Logging.info("PoemCraftingCalculator(V10): base_level=%d (%s)" % [result.base_level, POEM_LEVEL_NAMES.get(result.base_level, "未知")])
 	
 	# ── 4. 计算升级概率 ──
-	result.upgrade_probability = _calculate_upgrade_probability(score, result.base_level)
-	Logging.info("PoemCraftingCalculator(V9): upgrade_probability=%.3f" % result.upgrade_probability)
-	
-	# ── 5. Mode → secular/literary 硬赋值 ──
-	var mode_values = MODE_VALUE_MAP.get(mode, {"secular": 0.0, "literary": 0.0})
-	result.secular_value = mode_values["secular"]
-	result.literary_value = mode_values["literary"]
-	Logging.info("PoemCraftingCalculator(V9): mode='%s' → secular=%.1f, literary=%.1f" % [mode, result.secular_value, result.literary_value])
+	result.upgrade_probability = calculate_upgrade_probability(score, result.base_level)
+	Logging.info("PoemCraftingCalculator(V10): upgrade_probability=%.3f" % result.upgrade_probability)
 	
 	result.passed = true
 	return result
@@ -133,18 +125,24 @@ static func _score_to_base_level(score: int) -> int:
 
 
 ## ──────────────────────────────────────────────
-## 纯函数：计算升级概率 [0.0, 1.0)
+## 公开纯函数：计算升级概率 [0.0, 1.0)
 ##
 ## 仅在 base_level < 3 时计算：
 ##   upgrade_probability = (score - current_threshold) / (next_threshold - current_threshold)
+##
+## @param score:      诗词评分
+## @param base_level: 基础等级 (1-3)
+## @return 升级概率 [0.0, 1.0)
 ##
 ## 边界：
 ##   - score >= LEVEL_2_THRESHOLD (已是绝唱) → 0.0
 ##   - score < 0 → 钳制 base_level=1, upgrade_probability=0.0
 ##   - 公式结果钳制在 [0.0, 1.0)
+##
+## 同时供 PoemCraftingCalculator（创作时）和 PoemRewardOperator（消费时）复用。
 ## ──────────────────────────────────────────────
 
-static func _calculate_upgrade_probability(score: int, base_level: int) -> float:
+static func calculate_upgrade_probability(score: int, base_level: int) -> float:
 	if base_level >= 3:
 		# 已是绝唱，无升级空间
 		return 0.0
@@ -158,14 +156,33 @@ static func _calculate_upgrade_probability(score: int, base_level: int) -> float
 	var threshold_range: int = next_threshold - current_threshold      # 25
 	
 	if threshold_range <= 0:
-		Logging.err("PoemCraftingCalculator(V9): _calculate_upgrade_probability 除零 — base_level=%d, current=%d, next=%d" % [base_level, current_threshold, next_threshold])
+		Logging.err("PoemCraftingCalculator(V10): calculate_upgrade_probability 除零 — base_level=%d, current=%d, next=%d" % [base_level, current_threshold, next_threshold])
 		return 0.0
 	
 	var progress: float = float(score - current_threshold) / float(threshold_range)
 	progress = clampf(progress, 0.0, 0.999)  # [0.0, 1.0)，永远不为 1.0
 	
-	Logging.debug("PoemCraftingCalculator(V9): progress=(%d-%d)/%d=%.3f" % [score, current_threshold, threshold_range, progress])
+	Logging.debug("PoemCraftingCalculator(V10): progress=(%d-%d)/%d=%.3f" % [score, current_threshold, threshold_range, progress])
 	return progress
+
+
+## ──────────────────────────────────────────────
+## 纯函数：Poem.level → 升级概率 [0.0, 1.0)
+##
+## 使用该等级的段位中位分数插值计算升级概率。
+## 供 PoemRewardOperator 在消费诗词时调用。
+##
+## @param level: Poem 等级 (1-3)
+## @return 升级概率 [0.0, 1.0)
+## ──────────────────────────────────────────────
+
+static func calculate_level_upgrade_probability(level: int) -> float:
+	var median_score: int = LEVEL_MEDIAN_SCORE.get(level, -1)
+	if median_score < 0:
+		Logging.debug("PoemCraftingCalculator(V10): calculate_level_upgrade_probability — level=%d 无升级空间" % level)
+		return 0.0
+	Logging.debug("PoemCraftingCalculator(V10): calculate_level_upgrade_probability — level=%d, median_score=%d" % [level, median_score])
+	return calculate_upgrade_probability(median_score, level)
 
 
 ## ──────────────────────────────────────────────

@@ -33,11 +33,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_rixq6")
 script = ExtResource("1_otk17")
 
 [node name="Control" type="Control" parent="." unique_id=783040939]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Control" unique_id=927036892]
@@ -91,6 +86,7 @@ text = "干谒权贵"
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel/InputImagPanel" unique_id=1350550608]
 layout_mode = 2
 theme_type_variation = &"FrozenInnerThoughtText"
+bbcode_enabled = true
 text = "代价是..."
 fit_content = true
 scroll_active = false

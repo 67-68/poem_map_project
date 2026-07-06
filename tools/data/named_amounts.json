@@ -44,6 +44,10 @@
   "l_fame_gain": 8,
   "l_fame_cost": -8,
 
+  "s_literary_fame_gain": 2,
+  "m_literary_fame_gain": 5,
+  "l_literary_fame_gain": 8,
+
   "xs_success_rate": 30,
   "s_success_rate": 50,
   "m_success_rate": 80,

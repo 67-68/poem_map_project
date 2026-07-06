@@ -263,54 +263,37 @@ func _on_button_pressed() -> void:
 	var upgrade_succeeded: bool = _cached_upgrade_succeeded
 	Logging.info('PoemCrafter(V9.1): 从缓存读取 — final_level=%d (%s), upgrade=%s' % [final_level, PoemCraftingCalculator.get_level_display_name(final_level), upgrade_succeeded])
 
-	# ── 3. Mode → secular/literary 硬赋值（current_mode 在点击时可能已切换，以此为准） ──
-	var mode_values = PoemCraftingCalculator.MODE_VALUE_MAP.get(current_mode, {"secular": 0.0, "literary": 0.0})
-	var secular_value: float = mode_values["secular"]
-	var literary_value: float = mode_values["literary"]
-	Logging.info('PoemCrafter(V9.1): mode=%s → secular=%.1f, literary=%.1f' % [current_mode, secular_value, literary_value])
-
-	# ── 4. 创建 Poem 对象 ──
+	# ── 3. 创建 Poem 对象（V10: 不再绑定 secular/literary value，价值由 PoemRewardOperator 消费时决定） ──
 	var level_display_name := PoemCraftingCalculator.get_level_display_name(final_level)
-	var poem = Poem.new("POEM", level_display_name, secular_value, literary_value)
+	var poem = Poem.new("POEM", level_display_name)
 	poem.uuid = "crafted_poem_l%d_%d" % [final_level, Time.get_unix_time_from_system()]
 	poem.name = "《%s》" % level_display_name
 	poem.level = final_level
 	poem.specific_topic = level_display_name
-	Logging.info('PoemCrafter(V9.2): Poem created — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
+	Logging.info('PoemCrafter(V10): Poem created — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
 
 	PlayerState.created_poems.append(poem)
-	Logging.info('PoemCrafter(V9.2): Poem added to created_poems')
+	Logging.info('PoemCrafter(V10): Poem added to created_poems')
 
-	# ── 5. 先执行创作代价（天数 + 健康消耗）──
+	# ── 4. 先执行创作代价（天数 + 健康消耗）──
 	if not _cached_cost_operators.is_empty():
-		Logging.info('PoemCrafter(V9.2): 执行创作代价 — %d 个 operators' % _cached_cost_operators.size())
+		Logging.info('PoemCrafter(V10): 执行创作代价 — %d 个 operators' % _cached_cost_operators.size())
 		_apply_operators(_cached_cost_operators)
 	else:
-		Logging.warn('PoemCrafter(V9.2): _cached_cost_operators 为空，跳过代价执行')
+		Logging.warn('PoemCrafter(V10): _cached_cost_operators 为空，跳过代价执行')
 	
-	# ── 6. 收益算子生成并执行 ──
-	var operators: Array = []
-	if secular_value != 0.0:
-		operators.append(OperatorFactory.create_property_operator("money", secular_value))
-		Logging.info('PoemCrafter(V9.1): 生成 money 算子: %.1f' % secular_value)
-	if literary_value != 0.0:
-		operators.append(OperatorFactory.create_property_operator("literary_fame", literary_value))
-		Logging.info('PoemCrafter(V9.1): 生成 literary_fame 算子: %.1f' % literary_value)
-	_apply_operators(operators)
-	Logging.info('PoemCrafter(V9.2): 收益算子执行完成 — %d 个算子' % operators.size())
+	# ── 5. V10: 收益算子已删除 — 诗词价值不再创作时立即获得，改由 PoemRewardOperator 消费时产出
 
-	# ── 7. 消耗所有参与计算的 Imaginary ──
+	# ── 6. 消耗所有参与计算的 Imaginary ──
 	_consume_all_imaginaries()
 
-	# ── 8. 从对应等级的 EventBase 抽取事件 ──
+	# ── 7. 从对应等级的 EventBase 抽取事件 ──
 	var event_base_uuid := PoemCraftingCalculator.get_event_base_for_level(final_level)
 	var ctx := {
-		"poem_secular": secular_value,
-		"poem_literary": literary_value,
 		"poem_level": final_level,
 		"poem_level_name": level_display_name,
 	}
-	Logging.info('PoemCrafter(V9.1): 从 EventBase 抽事件 — base=%s, ctx=%s' % [event_base_uuid, str(ctx)])
+	Logging.info('PoemCrafter(V10): 从 EventBase 抽事件 — base=%s, ctx=%s' % [event_base_uuid, str(ctx)])
 
 	var event_manager = get_node_or_null("/root/EventManager")
 	if event_manager and event_manager.has_method("draw_from_event_base"):
