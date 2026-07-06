@@ -314,7 +314,11 @@ func _serialize_game_state() -> String:
 				"time_span": gs.time_span,
 				"start_year": gs.start_year,
 				"end_year": gs.end_year,
-			}
+				"current_era": gs.current_era,
+				"is_game_over": gs.is_game_over,
+				"total_days_elapsed": GameSave.data.total_days_elapsed,
+			},
+			"imaginaries_count": Database.imaginaries_detail.size(),
 		}
 	}
 	return JSON.stringify(result)

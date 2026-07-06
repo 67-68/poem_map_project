@@ -82,7 +82,7 @@ func _resolve_tracked_property() -> void:
 	if not _tracked_prop:
 		Logging.err("AmbitionHUD: tracked property '%s' not found in Database" % ambition.tracked_property)
 	else:
-		Logging.info("AmbitionHUD: Resolved tracked property '%s' (soft_max=%d, val=%d)" % [ambition.tracked_property, _tracked_prop.soft_max, _tracked_prop.val])
+		Logging.info("AmbitionHUD: Resolved tracked property '%s' (soft_max=%d, val=%d)" % [ambition.tracked_property, _tracked_prop.soft_max, PlayerState.get_stat_val(ambition.tracked_property)])
 
 func _update_progress() -> void:
 	"""将 tracked_property 连续值映射为 Unicode 古典圆点：●●●◐○ + 文学化文本"""
@@ -91,7 +91,7 @@ func _update_progress() -> void:
 		Logging.warn("AmbitionHUD: No tracked property to display progress")
 		return
 	
-	var val = _tracked_prop.val
+	var val: int = PlayerState.get_stat_val(ambition.tracked_property)
 	# soft_max 优先；若未配置（默认 -1）则回退到 hard_max
 	var max_val: int = _tracked_prop.soft_max if _tracked_prop.soft_max > 0 else _tracked_prop.hard_max
 	
@@ -107,10 +107,10 @@ func _update_progress() -> void:
 	if _tracked_prop.staged_perceptions.size() > 0:
 		var perception_text = _tracked_prop.get_staged_perception_text()
 		Logging.info("AmbitionHUD: dots='%s' + perception='%s'" % [dots_text, perception_text])
-		progress_dots_label.text = "%d(%s)  %s" % [_tracked_prop.val, perception_text, dots_text]
+		progress_dots_label.text = "%d(%s)  %s" % [val, perception_text, dots_text]
 	else:
 		Logging.info("AmbitionHUD: dots='%s' (no staged_perceptions)" % dots_text)
-		progress_dots_label.text = "%d  %s" % [_tracked_prop.val, dots_text]
+		progress_dots_label.text = "%d  %s" % [val, dots_text]
 
 
 ## 将 val / max_val 映射为 5 档 Unicode 圆点：

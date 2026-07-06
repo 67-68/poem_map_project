@@ -14,5 +14,5 @@ func _process(delta: float) -> void:
 		return
 	text = base_text
 	for s in Database.get_properties_all():
-		text += "%s: %s\n" % [s, Database.get_property(s).val]
+		text += "%s: %s\n" % [s, PlayerState.get_stat_val(s)]
 		text += 'stage-percep: %s\n' % Database.get_property(s).get_staged_perception_text()

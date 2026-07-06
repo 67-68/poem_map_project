@@ -56,7 +56,12 @@ var actions: Dictionary
 var decisions: Dictionary
 var decided_events: Dictionary
 var imaginaries: Dictionary
-var imaginaries_detail: Dictionary = {}
+var imaginaries_detail: Dictionary:
+	get: return GameSave.data.imaginaries_detail
+	set(val):
+		GameSave.data.imaginaries_detail.clear()
+		for k in val:
+			GameSave.data.imaginaries_detail[k] = val[k]
 var feihualing_imageries: Dictionary
 var tags: Dictionary
 

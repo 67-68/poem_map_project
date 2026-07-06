@@ -91,9 +91,13 @@ var master_timeline: Array[Dictionary] = []
 var event_queue: Array[Dictionary] = []
 
 # 整数真理之源：累计经过的总天数（不再从浮点 year 反推，杜绝截断吞天）
-var _total_days_elapsed: int = 0
+var _total_days_elapsed: int:
+	get: return GameSave.data.total_days_elapsed
+	set(val): GameSave.data.total_days_elapsed = val
 # tick 检查点：上一次 emit 时间信号时已经处理到的天数
-var _tick_checkpoint: int = 0
+var _tick_checkpoint: int:
+	get: return GameSave.data.tick_checkpoint
+	set(val): GameSave.data.tick_checkpoint = val
 
 var current_day_of_year :int = 0
 var current_xun := "上旬"

@@ -8,30 +8,47 @@ const _NarrativeOverlay = preload("res://characters/narrative_overlay.gd")
 const _PoetData = preload("res://characters/poet_data.gd")
 const _PopupQueue = preload("res://core/stack_manager.gd")
 
-## 🆕 游戏结束状态锁。当 system_operator 触发 game_over 时设为 true，
-## 用于阻止后续事件继续触发/推送。
-var is_game_over: bool = false
+# ════════════════════════════════════════════════════════════════
+# 持久化状态 — 代理到 GameSave.data
+# ════════════════════════════════════════════════════════════════
 
-## 🆕 死亡原因文本。由 main.gd 在接收到 show_tombstone_screen 信号后写入，
-## 供 tomb_stone_screen.tscn（独立场景）在 _ready() 中跨场景读取。
-var death_cause: String = ""
+var is_game_over: bool:
+	get: return GameSave.data.is_game_over
+	set(val): GameSave.data.is_game_over = val
 
-var start_year := 745.0
-var end_year := 755.9
-var time_span := end_year - start_year
+var death_cause: String:
+	get: return GameSave.data.death_cause
+	set(val): GameSave.data.death_cause = val
 
-var year: float
-## 当前时代标识（如 "ambition", "decline"）。
-## 空字符串表示无时代限制（所有 era="" 通用事件可用）。
-## 由 EraOperator 控制切换，用于 EventManager 事件池 era 过滤。
-var current_era: String = "":
+## year — 由 TimeService 驱动写入
+var year: float:
+	get: return GameSave.data.year
+	set(val): GameSave.data.year = val
+
+## current_era — setter 需清零 progress 并记日志
+var current_era: String:
+	get: return GameSave.data.current_era
 	set(val):
-		current_era = val
-		PlayerState.set_stat_val(ENUMS.PROPS.PROGRESS,0)
-		Logging.info('current era change to' % val)
-	
-var ratio_time: float = 0
-var mood: float = 0.5
+		GameSave.data.current_era = val
+		PlayerState.set_stat_val(ENUMS.PROPS.PROGRESS, 0)
+		Logging.info('current era changed to: %s' % val)
+
+var ratio_time: float:
+	get: return GameSave.data.ratio_time
+	set(val): GameSave.data.ratio_time = val
+
+var mood: float:
+	get: return GameSave.data.mood
+	set(val): GameSave.data.mood = val
+
+
+# ════════════════════════════════════════════════════════════════
+# 常量 / 非持久化字段（保持原样）
+# ════════════════════════════════════════════════════════════════
+
+const start_year := 745.0
+const end_year := 755.9
+var time_span := end_year - start_year
 
 var sad_color: Color = Color.DARK_BLUE
 var happy_color: Color = Color.LIGHT_YELLOW
@@ -45,6 +62,7 @@ var color_2_province: Dictionary
 var map: Node2D
 var faction_renderer: FactionMapRenderer
 
+# buffer（含 Callable，不可序列化）
 var poem_stack_manager: PopupQueue
 var poem_buffer: ManualBuffer
 var event_popup_queue: PopupQueue
@@ -70,10 +88,8 @@ func init_buffers() -> void:
 			Database.get_history_events_all().values()
 		)
 
-
 	chat_buffer = ManualBuffer.new(
 		func(item):
-			# FocusedChat 走 NarrativeOverlay 栈系统，ChatBubble 走 PopupQueue
 			if item is FocusedChat:
 				EventBus.push_focused_chat.emit(item, {})
 			else:

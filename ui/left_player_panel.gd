@@ -182,7 +182,7 @@ func _refresh_ambition_progress_label() -> void:
 		Logging.warn("LeftPlayerPanel: tracked property '%s' not found" % ambition.tracked_property)
 		return
 	var cn_name = tracked_prop.get_display_name()
-	var val = tracked_prop.val
+	var val: int = PlayerState.get_stat_val(ambition.tracked_property)
 	var perception = tracked_prop.get_staged_perception_text()
 	_ambition_progress_label.text = "进度「%s」：%d(%s)" % [cn_name, val, perception]
 	_ambition_progress_label.show()
@@ -321,7 +321,7 @@ func _rebuild_prop_grid() -> void:
 			continue
 		var label := Label.new()
 		label.theme_type_variation = &"DefaultText"
-		label.text = "「%s」：%d(%s)" % [prop.get_display_name(), prop.val, prop.get_staged_perception_text()]
+		label.text = "「%s」：%d(%s)" % [prop.get_display_name(), PlayerState.get_stat_val(prop_key), prop.get_staged_perception_text()]
 		_prop_grid.add_child(label)
 		_prop_label_map[prop_key] = label
 		Logging.info("LeftPlayerPanel: added prop label: %s" % label.text)
@@ -355,7 +355,7 @@ func _refresh_prop_grid() -> void:
 		if prop.not_show_on_left:
 			continue
 		var label: Label = children[idx]
-		var new_text := "「%s」：%d(%s)" % [prop.get_display_name(), prop.val, prop.get_staged_perception_text()]
+		var new_text := "「%s」：%d(%s)" % [prop.get_display_name(), PlayerState.get_stat_val(prop_key), prop.get_staged_perception_text()]
 		if label.text != new_text:
 			label.text = new_text
 			Logging.info("LeftPlayerPanel: updated prop label: %s" % new_text)
