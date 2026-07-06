@@ -15,10 +15,17 @@ class_name PoemRewardOperator extends BaseOperator
 @export_enum("money", "fame", "baiye") var mode: String = "money"
 @export var show_hint_on_reward: bool = true
 
-const LEVEL_TO_SIZE := {
+## V10.1: money 模式升一级 — 1→medium, 2→large, 3→extra_large
+const LEVEL_TO_SIZE_BASE := {
 	1: "small",
 	2: "medium",
 	3: "large",
+}
+
+const LEVEL_TO_SIZE_MONEY := {
+	1: "medium",
+	2: "large",
+	3: "extra_large",
 }
 
 const MODE_TO_PROP := {
@@ -31,6 +38,7 @@ const SIZE_DISPLAY := {
 	"small": "少量",
 	"medium": "中等",
 	"large": "大量",
+	"extra_large": "巨额",
 }
 
 const MODE_DISPLAY := {
@@ -95,9 +103,13 @@ func _on_poem_picked(poem_picked):
 	else:
 		Logging.info('PoemRewardOperator: level=%d 无升级空间' % base_level)
 
-	# ── 3. level → size ──
-	var size_key: String = LEVEL_TO_SIZE.get(effective_level, "small")
-	Logging.info('PoemRewardOperator: effective_level=%d → size=%s' % [effective_level, size_key])
+	# ── 3. level → size（money 模式升一级: 1→medium, 2→large, 3→extra_large）──
+	var size_key: String
+	if mode == "money":
+		size_key = LEVEL_TO_SIZE_MONEY.get(effective_level, "medium")
+	else:
+		size_key = LEVEL_TO_SIZE_BASE.get(effective_level, "small")
+	Logging.info('PoemRewardOperator: effective_level=%d → size=%s (mode=%s)' % [effective_level, size_key, mode])
 
 	# ── 4. mode → property 名称 ──
 	var prop_name: String = MODE_TO_PROP.get(mode, "money")
@@ -126,3 +138,21 @@ func _on_poem_picked(poem_picked):
 		if upgrade_succeeded:
 			hint += "（灵感迸发！）"
 		show_hint(hint)
+
+
+func describe_preview() -> String:
+	var prop_name: String = MODE_TO_PROP.get(mode, "money")
+	var prop_display: String = MODE_DISPLAY.get(mode, prop_name)
+	var size_hint := ""
+	match mode:
+		"money":
+			size_hint = "（平庸→中等 佳作→大量 绝唱→巨额）"
+		"fame":
+			size_hint = "（平庸→少量 佳作→中等 绝唱→大量）"
+		"baiye":
+			size_hint = "（平庸→少量 佳作→中等 绝唱→大量）"
+		_:
+			size_hint = "（平庸→少量 佳作→中等 绝唱→大量）"
+	var text: String = "选择一首诗词换取%s%s" % [prop_display, size_hint]
+	Logging.debug('PoemRewardOperator.describe_preview: mode=%s → "%s"' % [mode, text])
+	return text

@@ -58,6 +58,25 @@ randf() 掷骰子由 PoemRewardOperator 的 `_on_poem_picked` 执行，不在纯
    i. show_hint 展示收益文本（如 "《佳作》换得中等金钱（灵感迸发！）"）
 ```
 
+### describe_preview() — Hover 预览文本
+
+[`describe_preview()`](core/operators/poem_reward_operator.gd:143) 为 ActionHintBuilder 提供人类可读预览，三种模式产出不同文本：
+
+| Mode | 预览文本 |
+|------|---------|
+| `money` | `选择一首诗词换取金钱（平庸→中等 佳作→大量 绝唱→巨额）` |
+| `fame` | `选择一首诗词换取文学声望（平庸→少量 佳作→中等 绝唱→大量）` |
+| `baiye` | `选择一首诗词换取仕途进度（平庸→少量 佳作→中等 绝唱→大量）` |
+
+> 注意：money 模式升一级（V10.1）：L1→medium, L2→large, L3→extra_large；fame/baiye 使用基础映射（L1→small, L2→medium, L3→large）。
+
+### ActionHintBuilder 集成
+
+PoemRewardOperator 通过两条路径进入 hint 系统：
+
+1. **主路径**：[`build_operator_preview()`](core/action_hint_builder.gd:16) 遍历 action_results/archetype operators，多态调用 `describe_preview()` — PoemRewardOperator 的预览文本直接进入「结果」区
+2. **Fallback 路径**：[`_build_archetype_qualitative_preview()`](core/action_hint_builder.gd:86) 当 action_results 为空时从 archetype 生成定性预览，已覆盖 PropertyOperator / TimeOperator / PoemRewardOperator
+
 ---
 
 ## 与其他模块的关系
@@ -87,7 +106,8 @@ PoemRewardOperator.operate()
 
 | 文件 | 改动 |
 |------|------|
-| [`core/operators/poem_reward_operator.gd`](core/operators/poem_reward_operator.gd) | **新建** — 完整 operator |
+| [`core/operators/poem_reward_operator.gd`](core/operators/poem_reward_operator.gd) | **新建** — 完整 operator；V10.2 修正 describe_preview() 等级名称（L1→平庸）并显式 baiye 分支 |
+| [`core/action_hint_builder.gd`](core/action_hint_builder.gd) | **修改** — V10.2 `_build_archetype_qualitative_preview()` 新增 PoemRewardOperator 处理分支 |
 | [`core/poem_crafting_calculator.gd`](core/poem_crafting_calculator.gd) | **修改** — `_calculate_upgrade_probability` → 公开 `calculate_upgrade_probability`；新增 `calculate_level_upgrade_probability(level)`；删除 `MODE_VALUE_MAP` / `PoemCraftingResult.secular_value` / `literary_value` |
 | [`core/model/poem.gd`](core/model/poem.gd) | **修改** — 删除 `secular_value` / `literary_value` 字段；简化 `_init` |
 | [`core/model/poem_record.gd`](core/model/poem_record.gd) | **修改** — 删除 `secular_value` / `literary_value` 字段 |

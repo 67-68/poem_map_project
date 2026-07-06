@@ -109,6 +109,10 @@ static func _build_archetype_qualitative_preview(action: Action, is_repeated: bo
 				lines.append("• 额外耗时 %d 天（重复行动，消耗增加20%%）" % int(top.day))
 			else:
 				lines.append("• 额外耗时 %d 天" % int(top.day))
+		elif op is PoemRewardOperator:
+			var desc := op.describe_preview()
+			if not desc.is_empty():
+				lines.append("• " + desc)
 	
 	Logging.info("ActionHintBuilder._build_archetype_qualitative_preview: archetype '%s' → %d 定性行 (is_repeated=%s)" % [archetype_key, lines.size(), str(is_repeated)])
 	return lines
