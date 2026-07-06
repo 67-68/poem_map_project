@@ -4,18 +4,13 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_1nf2l"]
 [ext_resource type="Texture2D" uid="uid://d2fkera73a5dj" path="res://assets/stamps/denggao_stamp.png" id="4_b6lfb"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="5_ebpm8"]
-[ext_resource type="Script" uid="uid://khw2s6fgrkem" path="res://core/model/time_operator.gd" id="6_timeop"]
-
-[sub_resource type="Resource" id="Resource_time"]
-script = ExtResource("6_timeop")
-day = 5.0
-metadata/_custom_type_script = "uid://khw2s6fgrkem"
 
 [resource]
 script = ExtResource("5_ebpm8")
 _main_tag = 31
 _action_tags = Array[int]([1, 4, 5, 9, 12, 13, 15, 16, 17, 31])
-action_results = Array[ExtResource("2_1nf2l")]([SubResource("Resource_time")])
+day_consumed = 5.0
+action_results = Array[ExtResource("2_1nf2l")]([])
 fallback_event_uuid = "denggao_fallback"
 lock_narrative = "望尽天涯路，却无登高之心"
 sub_actions = Array[String](["denggao_qujiangchi", "denggao_leyouyuan", "denggao_shaolingyuan"])

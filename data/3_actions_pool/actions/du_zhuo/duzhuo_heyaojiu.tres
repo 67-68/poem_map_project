@@ -19,6 +19,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [resource]
 script = ExtResource("6_action")
 _action_tags = Array[int]([34, 44])
+day_consumed = 2.0
 fallback_event_uuid = "duzhuo_heyaojiu_fallback"
 failed_result = SubResource("Resource_failed_result")
 uuid = "duzhuo_heyaojiu"

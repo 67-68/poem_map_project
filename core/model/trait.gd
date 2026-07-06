@@ -22,6 +22,11 @@ var relate_to: String:
 # 内生的效果：自己进化和持续的影响
 @export var trait_effect_operations: Array[PropertyOperator] = []
 
+## 此 trait 对每次行动附加的额外天数惩罚。
+## 例如 sprained_ankle=1 时每次行动多扣 1 天。
+## 运行时由 PlayerState.get_active_time_penalties() 聚合所有活跃 trait 的惩罚。
+@export var time_penalty: int = 0
+
 func operate_continuous_effect():
     for op in trait_effect_operations:
         op.operate()

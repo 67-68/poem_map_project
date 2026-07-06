@@ -236,7 +236,7 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "time_add(day=1)|prop_sub(name=money; val=s_money_cost)|trait_remove(name=poisoned)|prop_add(name=health; val=xs_health_gain)",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)|trait_remove(name=poisoned)|prop_add(name=health; val=xs_health_gain)",
     "era": "",
     "failed_hints": {}
   },

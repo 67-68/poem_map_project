@@ -1,5 +1,53 @@
 # Action System (行动系统)
 
+## 时间消耗系统（day_consumed）
+
+### 设计意图
+
+- Action 不再通过 `action_results` 嵌入 `TimeOperator` 来表达时间消耗，改用独立字段 `day_consumed: float`。
+- 子行动若不填 `day_consumed`（=0），自动继承父行动的 `day_consumed`。若填了正数值，则覆盖父行动。
+- 时间消耗计算 = `base_day + sum(trait.time_penalty)`，trait 通过 `PlayerState.get_active_time_penalties()` 统一聚合。
+- `sprained_ankle`（崴脚）的 `time_penalty=1` 在 `data/1_core_rules/traits/_traits.csv` 中配置，不再有 if 硬编码判断。
+
+### 相关文件
+
+- `core/model/action.gd` — `day_consumed` 字段
+- `core/model/trait.gd` — `time_penalty` 字段
+- `core/player_state.gd` — `get_active_time_penalties()`
+- `core/action_manager.gd` — `get_action_day_cost()` / `effective_day_consumed()` / `format_time_detail()`
+- `core/action_hint_builder.gd` — 时间行展示（time span / 精确天数 + 时间不足提示）
+- `ui/action_button.gd` — 执行时调用 `get_action_day_cost()` 扣除时间
+- `parser/dsl_parser.gd` — `parse_trait()` 解析 `time_penalty` 列
+
+### 各行动 day_consumed 映射
+
+| 父行动 | day_consumed | 子行动 | day_consumed |
+|--------|-------------|--------|-------------|
+| bai_ye | 3 | (无) | — |
+| deng_gao | 5 | qujiangchi / leyouyuan / shaolingyuan | 0（继承5）|
+| du_zhuo | 1 | heyaojiu | **2**（父1+额外1）|
+| | | xiaozhuo / fangjian_tingwen | 0（继承1）|
+| fang_shi | 4 | 全部 5 个子行动 | 0（继承4）|
+| jiao_you | 2 | tongyou_changan / recite_poem | 0（继承2）|
+| feng_zhao | 0 | — | — |
+
+### ActionHintBuilder 时间展示
+
+- **主按钮 hover**（`build_action_hint`）：
+  - 无子行动：`⏱ 耗时 3天（+1, 由于 崴脚）`
+  - 有子行动（span）：`⏱ 耗时 1天 ～ 2天`（展示子行动 effective_day 的 min/max）
+- **子行动 picker hover**（`build_sub_action_preview`）：
+  - `⏱ 耗时 2天` — 时间充足时
+  - `[color=#cc6666]⏱ 耗时 2天 — 时间不足（剩余1天）[/color]` — 时间不够时
+
+### Picker 时间拦截
+
+- 子行动在 picker 构建时 (`_on_button_pressed`) 通过 `ActionManager.get_action_day_cost(sub_action, parent.day_consumed)` 检查时间。
+- 当前时间 < 子行动所需天数 → 该子行动**不进入 picker**（完全隐藏）。
+- 主按钮仅在 `check_action_validity()` 返回无效时灰化（最小天数也不够时拦截）。
+
+---
+
 ## 坊市子行动 Archetype（搬砖 / 以身试药 / 卖字 / 风骨卖字）
 
 这四个行动是 `action_fangshi`（坊市）的 sub_actions，定义在 [`tools/data/event_archetypes.json`](tools/data/event_archetypes.json) 中。
@@ -89,8 +137,8 @@
 
 ### 约束
 
-- `sprained_ankle` trait 已在 `model/enumerates.gd` TRAITS 枚举中注册，并在 `data/1_core_rules/traits/_traits.csv` 中配置（行动时间 +1，2旬到期自动移除）。
-- 所有新 archetype 的 `era: ""`（无时代限制）、`universal_requirement: ""`（成本在对应 .tres 的 action_results 中以 sub 类 operator 表达）。
+- `sprained_ankle` trait 已在 `model/enumerates.gd` TRAITS 枚举中注册，并在 `data/1_core_rules/traits/_traits.csv` 中配置（`time_penalty=1`，每次行动额外多耗 1 天，2 旬到期自动移除）。
+- 所有新 archetype 的 `era: ""`（无时代限制）、`universal_requirement: ""`（成本在 archetype universal_result 中以 prop_sub 表达）。
 
 ## 独酌子行动（喝药酒 / 小酌一口）
 
@@ -101,37 +149,34 @@
 - 与坊市/登高子行动同模式：先选「闲居」→ 弹出 Picker → 选喝药酒或小酌一口。
 - 均为确定性行动（`l_success_rate=100%`），不拆 success/failure variant。
 - 属性变化通过 archetype DSL 定义在 `tools/data/event_archetypes.json` 中，由 `RandomEvent.init()` 在事件进入时注入每个 option 的 `choice_result`。
-- 喝药酒的额外时间消耗通过子 action `action_results` 中的 `TimeOperator(day=1)` 表达。
+- 时间消耗通过 Action `day_consumed` 字段统一控制：父行动 1 天，喝药酒 2 天（父1+额外1），小酌/坊间听闻继承父行动 1 天。
 
 ### Archetype DSL
 
 | Archetype | universal_result |
 |-----------|-----------------|
-| `heyaojiu_success` | `time_add(day=1)\|prop_sub(name=money; val=xs_money_cost)\|trait_remove(name=poisoned)\|prop_add(name=health; val=xs_health_gain)` |
-| `xiaozhuo_success` | `prop_sub(name=money; val=xs_money_cost)\|prop_add(name=health; val=xs_health_gain)` |
+| `heyaojiu_success` | `prop_sub(name=money; val=xs_money_cost)|trait_remove(name=poisoned)|prop_add(name=health; val=xs_health_gain)` |
+| `xiaozhuo_success` | `prop_sub(name=money; val=xs_money_cost)|prop_add(name=health; val=xs_health_gain)` |
 
 ### 数值映射（来自 named_amounts.json）
 
-| 子行动 | 金钱 | 健康 |
-|--------|------|------|
-| 喝药酒 | `s_money_cost` = -15 | `xs_health_gain` = +5 |
-| 小酌一口 | `xs_money_cost` = -5 | `xs_health_gain` = +5 |
+| 子行动 | day_consumed | 金钱 | 健康 |
+|--------|-------------|------|------|
+| 喝药酒 | 2（父1+额外1）| `s_money_cost` = -15 | `xs_health_gain` = +5 |
+| 小酌一口 | 0（继承父1）| `xs_money_cost` = -5 | `xs_health_gain` = +5 |
 
 ### 约束
 
 - `poisoned` trait 已在 `model/enumerates.gd` TRAITS 枚举中注册为 `POISONED`（index 189）。
 - 新增枚举 `ACTION_DUZHUO_HEYAOJIU`（index 44）和 `ACTION_DUZHUO_XIAOZHUO`（index 45）。
 - `PropertyOperator.ranked_value` 新增 `extra_small` 选项（用于非 DSL 场景）。
-- 父行动 `action_results`（TimeOperator day=1）在 picker 选择后优先执行。
-- 喝药酒的额外 1 天消耗通过 archetype DSL `time_add(day=1)` 在事件渲染时生效，两个子 action 的 `action_results` 均为空。
-- `TimeOperator` 新增 `describe_preview()` 方法（返回「时间消耗 N 天」），`ActionHintBuilder._build_archetype_qualitative_preview()` 新增对 `TimeOperator` 的处理，使 archetype 预览也展示额外时间消耗。
-- `micro_dsl_parser.gd` 新增 `time_add(day=N)` DSL 指令支持，解析为 `TimeOperator`。
 - Fallback 事件 `archetype_id` 指向 `heyaojiu_success` / `xiaozhuo_success`。
+- `micro_dsl_parser.gd` 中 `time_add(day=N)` DSL 指令保留用于事件渲染路径（非 action 直接触发）。
 
 ## 相关文件
-- `core/model/action.gd` — Action 数据模型（含 sub_actions / possibility / failed_result 字段）
+- `core/model/action.gd` — Action 数据模型（含 sub_actions / possibility / failed_result / day_consumed 字段）
 - `core/model/scene_action.gd` — SceneAction（含 main_tag）
-- `ui/action_button.gd` — 行动按钮 UI 与点击处理
+- `ui/action_button.gd` — 行动按钮 UI 与点击处理 + 时间消耗
 - `core/model/action_tag_filter.gd` — 事件标签过滤器
 - `core/event_manager.gd` — 事件扫描与抽奖
 - `characters/narrative_overlay.gd` — 叙事纸带渲染（含 Picker 呈堂）
@@ -196,6 +241,7 @@
 ### Sub-Action Picker Tooltip 预览
 - 当玩家 hover 子行动 Picker 项时，tooltip 向量层顶部显示预览文本（由 `action_button._build_sub_action_preview()` 构建）：
   - `概率: {n}%成功，`
+  - `⏱ 耗时 {n}天` — 时间充足 / `[color=#cc6666]⏱ 耗时 {n}天 — 时间不足[/color]`
   - `[成功效果]`: 遍历 `action_results` 的 `describe_preview()`，空则 fallback「成败未卜…」
   - `[失败效果]`: 遍历 `failed_result.operators` 的 `describe_preview()`，空则 fallback「后果难料…」
 - 预览文本通过 `entity.set_meta("sub_action_preview", ...)` 从 `action_button` 传给 `picker_item`
@@ -243,19 +289,19 @@ HoverPopupManager.register(_ambition_btn, ambition_hud, 0.2, 0.15,
 
 ### 设计意图
 
-- **单一真相源**：所有 `describe_preview()` 遍历、operator 格式化、叙事层/向量层聚合均由此类负责，UI 控件（action_button、picker_item、event_btn）仅调用接口，不自行拼写文本。
-- **两套接口覆盖两种场景**：主行动 hover（`build_action_hint` 输入一个 Action）和子行动 picker hover（`build_sub_action_preview` 输入 success/fail archetype operators）。
-- **统一 hover 显示管道**：所有 hover 文本（锁定原因、success_hint、operator 预览）均通过 HoverPopupManager + NarrativeOverlay HoverContainer 呈现，不再使用原生 tooltip_text 或独立浮动 popup。
+- **单一真相源**：所有 `describe_preview()` 遍历、operator 格式化、叙事层/向量层聚合、时间消耗行均由此类负责，UI 控件（action_button、picker_item、event_btn）仅调用接口，不自行拼写文本。
+- **两套接口覆盖两种场景**：主行动 hover（`build_action_hint` 输入一个 Action）和子行动 picker hover（`build_sub_action_preview` 输入 success/fail archetype operators + parent_day_consumed）。
+- **统一 hover 显示管道**：所有 hover 文本（锁定原因、success_hint、operator 预览、时间行）均通过 HoverPopupManager + NarrativeOverlay HoverContainer 呈现，不再使用原生 tooltip_text 或独立浮动 popup。
 - **动态刷新**：`set_locked`/`set_unlocked` 触发 HoverPopup 注销+重建，hover 时永远拿到最新状态。
 
 ### 接口
 
 | 方法 | 输入 | 输出 | 用途 |
 |------|------|------|------|
-| `build_action_hint(action, is_locked)` | Action + 锁定标志 | `{narrative, vector}` | 主行动按钮 hover popup |
+| `build_action_hint(action, is_locked)` | Action + 锁定标志 | `{narrative, vector}` | 主行动按钮 hover popup（含 time span） |
 | `build_operator_preview(operators)` | Array[BaseOperator] | Array[String] | 单列 operator 转 "• {desc}" 行 |
 | `build_choice_result_preview(result)` | ChoiceResult | Array[String] | ChoiceResult 解包后委托 build_operator_preview |
-| `build_sub_action_preview(action, success_ops, fail_ops)` | Action + archetype operators | String | 子行动 picker tooltip 专用格式 |
+| `build_sub_action_preview(action, success_ops, fail_ops, parent_day_consumed)` | Action + archetype operators + 父 day_consumed | String | 子行动 picker tooltip（含时间行 + 时间不足提示） |
 
 ### 文件
 

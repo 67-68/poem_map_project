@@ -10,7 +10,6 @@ const _SceneAction = preload("res://core/model/scene_action.gd")
 const _SceneActionPanel = preload("res://ui/action_button.gd")
 const _NamedDSLParser = preload("res://parser/named_dsl_parser.gd")
 const _SurvivalManager = preload("res://core/survival_manager.gd")
-const _TimeOperator = preload("res://core/model/time_operator.gd")
 const _PropertyOperator = preload("res://core/model/property_operator.gd")
 
 const MAX_PICK_COUNT: int = 6
@@ -267,15 +266,14 @@ func check_action_validity(action: Action) -> Dictionary:
 			
 			return result
 	
-	# 2. 检查时间消耗（集成时间锁定 + sprained_ankle）
+	# 2. 检查时间消耗（使用 day_consumed + trait 惩罚）
 	var cost := get_action_day_cost(action)
 	if cost > 0:
 		var current_time := int(PlayerState.get_stat_val("time"))
-		var cost_text := _format_time_cost_with_sprained_ankle(cost)
+		var cost_detail := format_time_detail(action.day_consumed)
 		if current_time < cost:
 			result.valid = false
-			# 精确数值行："时间剩余5天，但这项行动需要5(4+1, 由于『崴脚』)天"
-			var precise_line := "时间剩余%d天，但这项行动需要%s天" % [current_time, cost_text]
+			var precise_line := "时间剩余%d天，但这项行动需要%s" % [current_time, cost_detail]
 			var archetype_hint := _get_archetype_failed_hint(action, "time")
 			if not archetype_hint.is_empty():
 				result.reasons.append(precise_line + "\n" + archetype_hint)
@@ -288,8 +286,8 @@ func check_action_validity(action: Action) -> Dictionary:
 	var valid_parts: Array[String] = []
 	if cost > 0:
 		var current_time := int(PlayerState.get_stat_val("time"))
-		var cost_text := _format_time_cost_with_sprained_ankle(cost)
-		valid_parts.append("时间充足（剩余%d天，需要%s天）" % [current_time, cost_text])
+		var cost_detail := format_time_detail(action.day_consumed)
+		valid_parts.append("时间充足（剩余%d天，需要%s）" % [current_time, cost_detail])
 	for temp_op in costs:
 		if not temp_op is PropertyOperator:
 			continue
@@ -739,29 +737,60 @@ func apply_visibility_flags() -> void:
 # 时间成本查询
 # ════════════════════════════════════════════════════════════
 
-## 从 action.action_results 中提取 TimeOperator 的 day 消耗（含 sprained_ankle +1）。
-## 返回 int，无 TimeOperator 时返回 0。
-static func get_action_day_cost(action: Action) -> int:
-	if not action or not action.action_results:
+## 计算子行动的有效天数：若子行动声明了 day_consumed（>0）则用它，否则继承父行动。
+## @param action: 子行动
+## @param parent_day: 父行动的 day_consumed
+static func effective_day_consumed(action: Action, parent_day: float) -> float:
+	if not action:
+		Logging.warn("[ActionManager] effective_day_consumed: action is null, returning parent_day=%f" % parent_day)
+		return parent_day
+	if action.day_consumed > 0:
+		Logging.info("[ActionManager] effective_day_consumed: sub '%s' override day_consumed=%f" % [action.uuid, action.day_consumed])
+		return action.day_consumed
+	Logging.info("[ActionManager] effective_day_consumed: sub '%s' inherits parent_day=%f" % [action.uuid, parent_day])
+	return parent_day
+
+
+## 获取行动的最终时间消耗（基础天数 + 所有活跃 trait 的时间惩罚）。
+## 返回 int。无消耗时返回 0。
+## @param parent_day: 若 >= 0 则为子行动模式，使用 effective_day_consumed 计算基础天数
+static func get_action_day_cost(action: Action, parent_day: float = -1.0) -> int:
+	if not action:
 		return 0
-	for op in action.action_results:
-		if op is TimeOperator:
-			var base_cost = max(0, int(op.day))
-			if PlayerState.has_trait("sprained_ankle") and base_cost > 0:
-				Logging.info('[ActionManager] get_action_day_cost: sprained_ankle +1 (base=%d → total=%d)' % [base_cost, base_cost + 1])
-				return base_cost + 1
-			return base_cost
-	return 0
+	
+	var base := 0.0
+	if parent_day >= 0.0:
+		base = effective_day_consumed(action, parent_day)
+	else:
+		base = action.day_consumed
+	
+	if base <= 0:
+		return 0
+	
+	var total := int(base)
+	var penalties := PlayerState.get_active_time_penalties()
+	for penalty_days in penalties.values():
+		total += penalty_days
+	Logging.info("[ActionManager] get_action_day_cost: base=%d, penalties=%s → total=%d" % [int(base), str(penalties), total])
+	return total
 
 
-## 格式化时间消耗文本，包含 sprained_ankle 提示。
-## 例如：base=4, sprained_ankle → "5(4+1, 由于『崴脚』)"
-## 无 sprained_ankle → "4"
-static func _format_time_cost_with_sprained_ankle(cost: int) -> String:
-	if PlayerState.has_trait("sprained_ankle") and cost > 1:
-		var base := cost - 1
-		return "%d(%d+1, 由于『崴脚』)" % [cost, base]
-	return str(cost)
+## 格式化时间消耗的详细文本，包含各 trait 惩罚的标注。
+## 例如：base=4, 崴脚+1 → "5天（+1, 由于 崴脚）"
+## 无惩罚时 → "5天"
+static func format_time_detail(base_days: float) -> String:
+	var total := int(base_days)
+	var penalties := PlayerState.get_active_time_penalties()
+	var extra := 0
+	var penalty_names: Array[String] = []
+	for name in penalties:
+		var d := penalties[name] as int
+		extra += d
+		penalty_names.append(name)
+	total += extra
+	if penalty_names.is_empty():
+		return "%d天" % total
+	return "%d天（+%d, 由于 %s）" % [total, extra, "，".join(penalty_names)]
 
 
 # ════════════════════════════════════════════════════════════

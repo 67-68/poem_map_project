@@ -13,6 +13,8 @@
   "s_money_cost": -15,
   "m_money_cost": -30,
   "l_money_cost": -50,
+  "xl_money_cost": -80,
+  "xxl_money_cost": -150,
 
   "xs_health_cost": -5,
   "xs_health_gain": 5,

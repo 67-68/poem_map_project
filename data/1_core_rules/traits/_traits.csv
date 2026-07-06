@@ -1,4 +1,4 @@
-trait_id,trait_name,topic,specific_topic,relate_to,lasting_xun,trait_effect_operations,trait_endogenous_operations,display_char
+trait_id,trait_name,topic,specific_topic,relate_to,lasting_xun,trait_effect_operations,trait_endogenous_operations,display_char,time_penalty
 relation_lilinfu_rumor,听闻李灵甫,RELATION,HEARD,lilinfu,,,
 relation_lilinfu_close,关系好李灵甫,RELATION,GOOD,lilinfu,,,
 relation_lilinfu_core,核心李灵甫,RELATION,CORE,lilinfu,,,
@@ -55,6 +55,6 @@ disease_dongshang_frostbite,冻伤初起,DISEASE,ACUTE,,,,
 disease_dongshang_necrosis,冻疮坏死,DISEASE,CHRONIC,,,,
 near_death_mind_broken,心智破损,,,,,,
 poisoned,中毒,DISEASE,,,,prop_sub(name=health; val=15),,
-sprained_ankle,崴脚,,,,,,,
+sprained_ankle,崴脚,,,,,,,,1
 exhaustion_initial,疲态初显,,,,,,,疲
 terminal_illness,病入膏肓,,,,,,,病

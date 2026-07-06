@@ -102,6 +102,9 @@ static func _build_archetype_qualitative_preview(action: Action, is_repeated: bo
 				else:
 					lines.append("• %s 将会消耗" % display_name)
 		elif op is TimeOperator:
+			# 若 action 已通过 day_consumed 声明时间消耗，跳过 archetype 中的 TimeOperator（避免重复）
+			if action.day_consumed > 0:
+				continue
 			var top := op as TimeOperator
 			if top.refresh_time or top.day <= 0:
 				continue
@@ -110,7 +113,7 @@ static func _build_archetype_qualitative_preview(action: Action, is_repeated: bo
 			else:
 				lines.append("• 额外耗时 %d 天" % int(top.day))
 		elif op is PoemRewardOperator:
-			var desc := op.describe_preview()
+			var desc = op.describe_preview()
 			if not desc.is_empty():
 				lines.append("• " + desc)
 	
@@ -167,6 +170,33 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 		vector_lines.append("[color=%s][font_size=13]%s[/font_size][/color]" % [ap_hint_color, ap_hint])
 		Logging.info("ActionHintBuilder.build_action_hint: AP hint='%s' for '%s'" % [ap_hint, action.name])
 	
+	# 🆕 时间消耗行（有子行动时显示 span，无子行动时显示单一值）
+	if action.day_consumed > 0:
+		var has_subs := action.sub_actions and not action.sub_actions.is_empty()
+		if has_subs:
+			var min_day := action.day_consumed
+			var max_day := action.day_consumed
+			for sub_uuid in action.sub_actions:
+				if sub_uuid.is_empty():
+					continue
+				var sub := Database.get_action(sub_uuid) as Action
+				if not sub:
+					continue
+				var eff := sub.day_consumed if sub.day_consumed > 0 else action.day_consumed
+				min_day = min(min_day, eff)
+				max_day = max(max_day, eff)
+			var min_detail := ActionManager.format_time_detail(min_day)
+			var max_detail := ActionManager.format_time_detail(max_day)
+			if min_day >= max_day - 0.01:
+				vector_lines.append("[color=gray][font_size=13]⏱ 耗时 %s[/font_size][/color]" % min_detail)
+			else:
+				vector_lines.append("[color=gray][font_size=13]⏱ 耗时 %s ～ %s[/font_size][/color]" % [min_detail, max_detail])
+			Logging.info("ActionHintBuilder.build_action_hint: time span for '%s' min=%f max=%f" % [action.name, min_day, max_day])
+		else:
+			var cost_detail := ActionManager.format_time_detail(action.day_consumed)
+			vector_lines.append("[color=gray][font_size=13]⏱ 耗时 %s[/font_size][/color]" % cost_detail)
+			Logging.info("ActionHintBuilder.build_action_hint: time cost for '%s' day_consumed=%f" % [action.name, action.day_consumed])
+	
 	# 前提
 	if not action.aciton_requirements.is_empty():
 		vector_lines.append("[color=gray][font_size=13]━━━ 前提 ━━━[/font_size][/color]")
@@ -209,11 +239,15 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 # ── 接口 2（子行动专用）：Action + archetype operators → 预览字符串 ──
 
 ## 为 sub-action picker tooltip 构建预览文本。
-## 格式: [预览]\n概率: {n}%成功，\n[成功效果]:\n• {desc}\n[失败效果]:\n• {desc}
+## 格式: [预览]\n概率: {n}%成功，\n耗时: ...\n[成功效果]:\n• {desc}\n[失败效果]:\n• {desc}
 ## 数据源优先级：
 ##   success_ops → action.action_results → fallback「成败未卜…」
 ##   fail_ops    → action.failed_result.operators → fallback「后果难料…」
-static func build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = []) -> String:
+## @param sub_action: 子行动 Action 资源
+## @param success_ops: archetype 的成功运算符
+## @param fail_ops: archetype 的失败运算符
+## @param parent_day_consumed: 父行动的 day_consumed（用于子行动继承）
+static func build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0) -> String:
 	if not sub_action:
 		Logging.err("ActionHintBuilder.build_sub_action_preview: sub_action is null")
 		return ""
@@ -236,6 +270,19 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	# 🆕 重复行动警告（picker 预览）
 	if _is_repeated:
 		lines.append("[color=#ccaa44]⚠ 重复行动 — 收益减少20%%，消耗增加20%%[/color]")
+	
+	# ── 时间消耗行（复用 ActionManager.effective_day_consumed + format_time_detail）──
+	var eff_day := ActionManager.effective_day_consumed(sub_action, parent_day_consumed)
+	if eff_day > 0:
+		var cost_detail := ActionManager.format_time_detail(eff_day)
+		var cost_total := ActionManager.get_action_day_cost(sub_action, parent_day_consumed)
+		var current_time := int(PlayerState.get_stat_val("time"))
+		if current_time < cost_total:
+			lines.append("[color=#cc6666]⏱ 耗时 %s — 时间不足（剩余%d天）[/color]" % [cost_detail, current_time])
+			Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' 时间不足 (need=%d, have=%d)" % [sub_action.name, cost_total, current_time])
+		else:
+			lines.append("⏱ 耗时 %s" % cost_detail)
+			Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' time ok (need=%d, have=%d)" % [sub_action.name, cost_total, current_time])
 	
 	# ── 成功效果 ──
 	var success_descs: Array[String] = []

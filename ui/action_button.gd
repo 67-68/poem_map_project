@@ -14,6 +14,7 @@ var _pending_sub_action_main_tag: String = ""
 var _pending_sub_action_fallback: String = ""
 var _pending_sub_action_tags: Array[String] = []
 var _pending_sub_action_results: Array = []
+var _pending_parent_day_consumed: float = 0.0
 
 # ── Hover 底色（枯墨暗红，极淡，只有交互时才显形）──
 const HOVER_BG_COLOR: Color = Color(0.22, 0.05, 0.02, 0.10)
@@ -176,13 +177,12 @@ func _on_button_pressed() -> void:
 		Logging.info("SceneActionPanel: Decision '%s' click %d/%d" % [action.name, action._times_clicked, action.allowed_count])
 	
 	# 🆕 快照：在 begin_action_batch 之前锁定 action 元数据
-	# r.operate() 中的 TimeOperator 可能触发 xun 推进 → on_xun_tick → refresh()
-	# → update_action() 覆盖 self.action，必须在任何副作用发生前快照
 	var _snap_is_scene := action is SceneAction
 	var _snap_main_tag := ""
 	var _snap_fallback := ""
 	var _snap_tags: Array[String] = []
 	var _snap_generator = action.generator
+	var _snap_day_consumed: float = action.day_consumed
 	if _snap_is_scene:
 		var sa := action as SceneAction
 		_snap_main_tag = sa.main_tag
@@ -205,6 +205,7 @@ func _on_button_pressed() -> void:
 		_pending_sub_action_fallback = _snap_fallback
 		_pending_sub_action_tags = _snap_tags.duplicate()
 		_pending_sub_action_results = action.action_results.duplicate() if action.action_results else []
+		_pending_parent_day_consumed = action.day_consumed
 		
 		var picker_data: Array[GameEntity] = []
 		for sub_uuid in action.sub_actions:
@@ -225,6 +226,14 @@ func _on_button_pressed() -> void:
 						reqs_met = false
 						break
 				if not reqs_met:
+					continue
+			
+			# 🆕 时间检查：子行动时间不够时跳过此选项
+			var sub_cost := ActionManager.get_action_day_cost(sub_action, action.day_consumed)
+			if sub_cost > 0:
+				var current_time := int(PlayerState.get_stat_val("time"))
+				if current_time < sub_cost:
+					Logging.info("SceneActionPanel: sub-action '%s' 时间不足 (need=%d, have=%d), 从 picker 中隐藏" % [sub_action.uuid, sub_cost, current_time])
 					continue
 			
 			var entity := GameEntity.new({"uuid": sub_action.uuid, "name": sub_action.name})
@@ -249,9 +258,9 @@ func _on_button_pressed() -> void:
 			else:
 				Logging.info("SceneActionPanel: no failure archetype for '%s'" % sub_action.uuid)
 
-			# 🆕 构建 sub-action 预览文本（概率 + 成功效果 + 失败效果）
+			# 🆕 构建 sub-action 预览文本（概率 + 成功效果 + 失败效果 + 时间行）
 			if sub_action:
-				var preview := _build_sub_action_preview(sub_action, success_ops, fail_ops)
+				var preview := _build_sub_action_preview(sub_action, success_ops, fail_ops, action.day_consumed)
 				entity.set_meta("sub_action_preview", preview)
 				Logging.info("SceneActionPanel: sub_action_preview built for '%s' (%d chars)" % [sub_action.name, preview.length()])
 			else:
@@ -271,18 +280,21 @@ func _on_button_pressed() -> void:
 	PlayerState._is_repeated_action = PlayerState.is_action_repeated(_identifying_tags)
 	Logging.info("SceneActionPanel: _is_repeated_action=%s for identifying_tags=%s" % [str(PlayerState._is_repeated_action), str(_identifying_tags)])
 	
-	# 🆕 批量模式：抑制属性变动期间的 reevaluate，全部 results 执行完后统一评估
+	# 🆕 批量模式：抑制属性变动期间的 reevaluate
 	ActionManager.begin_action_batch()
-	if action.action_results:
-		for r in action.action_results: r.operate()
 	
-	# sprained_ankle：主行动执行后额外扣除 1 天（仅对有 TimeOperator 的行动生效）
-	if PlayerState.has_trait("sprained_ankle") and action.action_results:
+	# 执行 action_results 中的非时间 operator
+	if action.action_results:
 		for r in action.action_results:
-			if r is TimeOperator and int(r.day) > 0:
-				PlayerState.append_stat("time", -1)
-				Logging.info('[SceneActionPanel] sprained_ankle 额外扣除 1 天 (base_time=%d, total=%d)' % [int(r.day), int(r.day) + 1])
-				break
+			r.operate()
+	
+	# 🆕 时间消耗：通过 day_consumed + trait 惩罚统一扣除（替代原 sprained_ankle 硬编码）
+	if _snap_day_consumed > 0:
+		var total_cost := ActionManager.get_action_day_cost(action)
+		if total_cost > 0:
+			PlayerState.append_stat("_time", -total_cost)
+			TimeService.advance_time(total_cost)
+			Logging.info("[SceneActionPanel] day_consumed=%f, total_cost=%d, 已扣除并推进日历" % [_snap_day_consumed, total_cost])
 	
 	ActionManager.end_action_batch()
 	
@@ -314,7 +326,7 @@ func _on_button_pressed() -> void:
 		}
 		EventManager.scan_events(0, context)
 	
-	# 🆕 重复行动疲惫：执行完毕后更新 last_action_tags（含 sub-action 路径对应 _on_sub_action_picked 中更新）
+	# 🆕 重复行动疲惫：执行完毕后更新 last_action_tags
 	PlayerState.last_action_tags = _identifying_tags.duplicate()
 	Logging.info("SceneActionPanel: 非 sub-action 路径，更新 last_action_tags=%s" % str(PlayerState.last_action_tags))
 
@@ -331,6 +343,7 @@ func _on_sub_action_picked(entity) -> void:
 		_pending_sub_action_fallback = ""
 		_pending_sub_action_tags.clear()
 		_pending_sub_action_results.clear()
+		_pending_parent_day_consumed = 0.0
 		return
 
 	var sub_uuid: String = entity.uuid if entity is GameEntity else ""
@@ -342,6 +355,7 @@ func _on_sub_action_picked(entity) -> void:
 		_pending_sub_action_fallback = ""
 		_pending_sub_action_tags.clear()
 		_pending_sub_action_results.clear()
+		_pending_parent_day_consumed = 0.0
 		return
 	
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
@@ -395,29 +409,29 @@ func _on_sub_action_picked(entity) -> void:
 					r.operate()
 				Logging.info("SceneActionPanel: sub-action '%s' executed action_results (%d ops)" % [sub_action.name, sub_action.action_results.size()])
 	
-	# 1. 执行父行动的 operators（挂起数据）
 	ActionManager.begin_action_batch()
+	
+	# 1. 执行父行动的 operators（挂起数据，不含 TimeOperator）
 	for r in _pending_sub_action_results:
 		r.operate()
 	
-	# sprained_ankle：子行动执行后额外扣除 1 天（仅对有 TimeOperator 的父行动生效）
-	if PlayerState.has_trait("sprained_ankle") and _pending_sub_action_results:
-		for r in _pending_sub_action_results:
-			if r is TimeOperator and int(r.day) > 0:
-				PlayerState.append_stat("time", -1)
-				Logging.info('[SceneActionPanel] sprained_ankle 额外扣除 1 天 (sub-action, base_time=%d, total=%d)' % [int(r.day), int(r.day) + 1])
-				break
+	# 2. 🆕 时间消耗：基于 effective_day_consumed + trait 惩罚统一扣除
+	var total_cost := ActionManager.get_action_day_cost(sub_action, _pending_parent_day_consumed)
+	if total_cost > 0:
+		PlayerState.append_stat("_time", -total_cost)
+		TimeService.advance_time(total_cost)
+		Logging.info("[SceneActionPanel] sub-action '%s' day_consumed=%f, total_cost=%d, 已扣除并推进日历" % [sub_action.name if sub_action else "NULL", ActionManager.effective_day_consumed(sub_action, _pending_parent_day_consumed), total_cost])
 	
 	ActionManager.end_action_batch()
 	
 	ActionManager.get_focus_controller().notify_click()
 	
-	# 2. 将 sub-action uuid + 子 action 的 tags 追加到 current_action_tags
+	# 3. 将 sub-action uuid + 子 action 的 tags 追加到 current_action_tags
 	PlayerState.current_action_tags.append(sub_uuid)
 	for tag in sub_tags:
 		PlayerState.current_action_tags.append(tag)
 	
-	# 3. AND 模式事件扫描：使用子 action 的 main_tag 和 fallback
+	# 4. AND 模式事件扫描：使用子 action 的 main_tag 和 fallback
 	# 🆕 注意：possibility 失败时 failed_result.operate() 已通过 PushEventOperator 推送事件，
 	# 因此需要跳过 scan_events 以避免双重事件推送。
 	if not _sub_failed:
@@ -439,9 +453,10 @@ func _on_sub_action_picked(entity) -> void:
 	_pending_sub_action_fallback = ""
 	_pending_sub_action_tags.clear()
 	_pending_sub_action_results.clear()
+	_pending_parent_day_consumed = 0.0
 
 # ── Sub-Action Preview 构建 ─────────────────────────────
 
-## 委托到 ActionHintBuilder.build_sub_action_preview
-func _build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = []) -> String:
-	return ActionHintBuilder.build_sub_action_preview(sub_action, success_ops, fail_ops)
+## 委托到 ActionHintBuilder.build_sub_action_preview（传递 parent_day_consumed）
+func _build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0) -> String:
+	return ActionHintBuilder.build_sub_action_preview(sub_action, success_ops, fail_ops, parent_day_consumed)

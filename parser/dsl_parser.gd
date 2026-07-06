@@ -1018,7 +1018,12 @@ static func parse_trait(row: Dictionary) -> Trait:
     if not display_char_str.is_empty():
         trait_.display_char = display_char_str
 
-    Logging.info("Trait解析成功: %s (topic=%s)" % [trait_id, trait_.topic])
+    # 解析 time_penalty（每次行动额外消耗天数）
+    var time_penalty_str = row.get('time_penalty', '')
+    if not time_penalty_str.is_empty():
+        trait_.time_penalty = time_penalty_str.to_int()
+
+    Logging.info("Trait解析成功: %s (topic=%s, time_penalty=%d)" % [trait_id, trait_.topic, trait_.time_penalty])
     return trait_
 
 static func validate_trait(trait_: Trait) -> bool:

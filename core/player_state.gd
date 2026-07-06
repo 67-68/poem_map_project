@@ -8,7 +8,6 @@ const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
 const _SourceOfTruth = preload("res://core/source_of_truth.gd")
 const _TempFlagOperator = preload("res://core/operators/temp_flag_operator.gd")
 const _TierDeterminer = preload("res://core/tier_determiner.gd")
-const _TimeOperator = preload("res://core/model/time_operator.gd")
 
 @export var player_name: String = "杜甫"
 @export var traits: Array[String] = [] # trait key string
@@ -414,6 +413,17 @@ func remove_trait(trait_name):
 
 func get_traits():
 	return traits
+
+## 聚合所有活跃 trait 的时间惩罚，返回 {display_name: penalty_days}。
+## 用于 UI 展示（如 "崴脚 +1, 虚弱 +2"）和时间消耗计算。
+func get_active_time_penalties() -> Dictionary:
+	var result := {}
+	for trait_key in traits:
+		var trait_res = Database.get_trait(trait_key)
+		if trait_res and trait_res is Trait and trait_res.time_penalty > 0:
+			result[trait_res.name] = trait_res.time_penalty
+	Logging.info("[PlayerState] get_active_time_penalties: %d active penalties → %s" % [result.size(), str(result)])
+	return result
 
 # ─── Flag ────────────────────────────────────────────────────────────
 func _validate_flag_type(flag_id: String) -> String:

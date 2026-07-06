@@ -1,28 +1,44 @@
 [gd_scene format=3 uid="uid://ckkfn80c71m5e"]
 
-[ext_resource type="Script" uid="uid://cit0en6nhqp7v" path="res://ui/picker_tape_attachment.gd" id="1_qvtpk"]
+[ext_resource type="Script" uid="uid://bgsnvv4jq3saw" path="res://ui/picker_tape_attachment.gd" id="1_qvtpk"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="2_26bj5"]
+[ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="3_n0g0n"]
 
-[node name="PickerTapeAttachment" type="VBoxContainer"]
-layout_mode = 2
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
+
+[node name="PickerTapeAttachment" type="VBoxContainer" unique_id=168027257]
 size_flags_horizontal = 3
 script = ExtResource("1_qvtpk")
 
-[node name="Header" type="Label" parent="."]
+[node name="HBox" type="HBoxContainer" parent="." unique_id=1451981715]
 layout_mode = 2
+
+[node name="Header" type="Label" parent="HBox" unique_id=326498467]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.42, 0.31, 1)
 theme_override_fonts/font = ExtResource("2_26bj5")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.55, 0.42, 0.31, 1)
 text = "【呈堂物证】"
 horizontal_alignment = 1
 
-[node name="Grid" type="GridContainer" parent="."]
+[node name="LinkButton" type="LinkButton" parent="HBox" unique_id=131069460]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme = ExtResource("3_n0g0n")
+theme_override_colors/font_color = Color(0.7071239, 0.66651803, 0.6636292, 1)
+theme_override_fonts/font = ExtResource("2_26bj5")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
+text = "不回答"
+
+[node name="Grid" type="GridContainer" parent="." unique_id=594138019]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 3
 
-[node name="Spacer" type="Control" parent="."]
-layout_mode = 2
+[node name="Spacer" type="Control" parent="." unique_id=328006090]
 custom_minimum_size = Vector2(0, 12)
+layout_mode = 2

@@ -52,6 +52,10 @@ var success_hint: String = ""
 ## 在 .tres 文件中手动填写，如「今日门庭冷落，车马稀疏…」。
 @export var lock_narrative: String = ""
 
+## 行动消耗天数（替代原 TimeOperator 在 action_results 中的嵌入）。
+## 0 = 不消耗时间。子行动若未设置（=0），自动继承父行动的 day_consumed。
+@export var day_consumed: float = 0.0
+
 ## 🆕 子行动 UUID 列表：每个元素是一个 Action 的 uuid 字符串。
 ## 运行时通过 Database.get_action(uuid) 解析为 Action 资源。
 ## 点击带 sub_actions 的 Action 时，先弹出 Picker 让玩家选择子行动，
