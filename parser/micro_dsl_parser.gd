@@ -93,6 +93,9 @@ const FUNC_INFO := "info"
 const FUNC_ALL_EMO_SUB := "all_emo_sub"
 const FUNC_ADD_SOCIAL_CREDIT := "add_social_credit"
 const FUNC_ROLL_IMAGINARY := "roll_imaginary"
+const FUNC_CONSUME_RANDOM_LEVERAGE := "consume_random_leverage"
+const FUNC_UNLOCK_SOCIAL_NODE := "unlock_social_node"
+const FUNC_ADVANCE_PLOT := "advance_plot"
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
 # func_name → handler(parsed: ParseResult, raw: String) -> Variant
@@ -168,6 +171,9 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_ALL_EMO_SUB] = func(p, r): return _exec_all_emo_sub_op(p, r)
 	cd[FUNC_ADD_SOCIAL_CREDIT] = func(p, r): return _exec_add_social_credit_op(p, r)
 	cd[FUNC_ROLL_IMAGINARY] = func(p, r): return _exec_roll_imaginary_op(p, r)
+	cd[FUNC_CONSUME_RANDOM_LEVERAGE] = func(p, r): return _exec_consume_random_leverage_op(p, r)
+	cd[FUNC_UNLOCK_SOCIAL_NODE] = func(p, r): return _exec_unlock_social_node_op(p, r)
+	cd[FUNC_ADVANCE_PLOT] = func(p, r): return _exec_advance_plot_op(p, r)
 	# ── Image Operators ──
 	cd[FUNC_IMAGE_PRESENT] = func(p, r): return _exec_image_present_op(p, r)
 	cd[FUNC_IMAGE_SLIDE] = func(p, r): return _exec_image_slide_op(p, r)
@@ -1282,3 +1288,33 @@ static func _exec_add_social_credit_op(parsed: NamedDSLParser.ParseResult, raw: 
 
 	Logging.warn("add_social_credit: 社交系统未实装，跳过此操作 (%s)" % raw)
 	return null
+
+
+# ─── consume_random_leverage ──────────────────────────
+
+# DSL 语法: consume_random_leverage
+# 无参数 — 从所有 RELATION_TARGET 中随机选一个有把柄的消费，获得金钱。
+static func _exec_consume_random_leverage_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ConsumeRandomLeverageOperator:
+	var op := ConsumeRandomLeverageOperator.new()
+	Logging.info("MicroDSLParser: _exec_consume_random_leverage_op — raw: %s" % raw)
+	return op
+
+
+# ─── unlock_social_node ───────────────────────────────
+
+# DSL 语法: unlock_social_node
+# 占位操作符 — 解锁社交节点（待实装）。
+static func _exec_unlock_social_node_op(parsed: NamedDSLParser.ParseResult, raw: String) -> UnlockSocialNodePlaceholderOperator:
+	var op := UnlockSocialNodePlaceholderOperator.new()
+	Logging.info("MicroDSLParser: _exec_unlock_social_node_op — raw: %s" % raw)
+	return op
+
+
+# ─── advance_plot ─────────────────────────────────────
+
+# DSL 语法: advance_plot
+# 占位操作符 — 推进人物剧情（待实装）。
+static func _exec_advance_plot_op(parsed: NamedDSLParser.ParseResult, raw: String) -> AdvancePlotPlaceholderOperator:
+	var op := AdvancePlotPlaceholderOperator.new()
+	Logging.info("MicroDSLParser: _exec_advance_plot_op — raw: %s" % raw)
+	return op

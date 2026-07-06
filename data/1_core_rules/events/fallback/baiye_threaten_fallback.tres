@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_evopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_randomev"]
+
+[sub_resource type="Resource" id="Resource_empty_cr"]
+script = ExtResource("3_cr")
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_evopt")
+choice_result = SubResource("Resource_empty_cr")
+description = "一封密信递入门房，对方的脸色从倨傲变成惶惑。三日后，银两如数送至。那扇朱门，如今见你远远绕道而行。"
+
+[resource]
+script = ExtResource("5_randomev")
+weight = 0.0
+archetype_id = "baiye_threaten_success"
+options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
+uuid = "baiye_threaten_fallback"
+name = "密信要挟"

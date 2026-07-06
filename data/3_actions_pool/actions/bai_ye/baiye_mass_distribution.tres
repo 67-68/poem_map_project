@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="2_action"]
+
+[sub_resource type="Resource" id="Resource_unlock_op"]
+script = load("res://core/operators/unlock_social_node_placeholder_operator.gd")
+
+[resource]
+script = ExtResource("2_action")
+_action_tags = Array[int]([50, 29])
+action_results = Array[ExtResource("1_baseop")]([SubResource("Resource_unlock_op")])
+aciton_requirements = Array[ExtResource("1_baseop")]([])
+fallback_event_uuid = "baiye_mass_distribution_fallback"
+possibility = "l_success_rate"
+uuid = "baiye_mass_distribution"
+name = "广发行卷"
+description = "广发诗文行卷，以期一遇伯乐"

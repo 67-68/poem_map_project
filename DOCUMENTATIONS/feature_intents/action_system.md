@@ -114,6 +114,41 @@
 - `data/1_core_rules/events/fallback/fangshi_sell_poem_failed_fallback.tres` — 失败 fallback（占位）
 - `core/operators/poem_reward_operator.gd` — V10.1 新增 money 升一级、extra_large SIZE_DISPLAY、describe_preview()
 
+## 拜谒子行动（要挟 / 携诗拜谒 / 广发行卷 / 普通拜谒）
+
+这四个子行动挂载在 `action_baiye`（拜谒）下，定义在 [`tools/data/event_archetypes.json`](tools/data/event_archetypes.json) 中。
+
+### 设计意图
+
+- 与坊市/交游子行动同模式：先选拜谒 → 弹出 Picker → 选具体拜谒方式。
+- 均为确定性行动（`l_success_rate=100%`），不拆 success/failure variant。
+- **要挟**：利用 ConsumeRandomLeverageOperator 从所有 RELATION_TARGET 中随机消费一个把柄，获得大钱。
+- **携诗拜谒**：复用 PoemRewardOperator（baiye 模式），选诗换 progress。额外金钱成本放 archetype `universal_result`。
+- **广发行卷**：消耗巨额钱，解锁社交节点（UnlockSocialNodePlaceholderOperator 占位）。
+- **普通拜谒**：消耗小钱 + 1天，推进人物剧情（AdvancePlotPlaceholderOperator 占位）。
+
+### 数值映射（来自 named_amounts.json）
+
+| Archetype | 消耗 | 收益 |
+|-----------|------|------|
+| baiye_threaten_success | 随机一个把柄 | l_money_gain(+50) → ConsumeRandomLeverageOperator |
+| baiye_poem_visit_success | m_money_cost(-30) | progress → PoemRewardOperator(baiye) |
+| baiye_mass_distribution_success | xxl_money_cost(-150) | 解锁社交节点（占位） |
+| baiye_normal_success | s_money_cost(-15) + 1天 | 推进剧情（占位） |
+
+### 相关文件
+- `data/3_actions_pool/actions/bai_ye/baiye_threaten.tres` — sub-action「要挟」
+- `data/3_actions_pool/actions/bai_ye/baiye_poem_visit.tres` — sub-action「携诗拜谒」
+- `data/3_actions_pool/actions/bai_ye/baiye_mass_distribution.tres` — sub-action「广发行卷」
+- `data/3_actions_pool/actions/bai_ye/baiye_normal.tres` — sub-action「普通拜谒」
+- `data/1_core_rules/events/fallback/baiye_threaten_fallback.tres` — fallback「密信要挟」
+- `data/1_core_rules/events/fallback/baiye_poem_visit_fallback.tres` — fallback「携诗叩门」
+- `data/1_core_rules/events/fallback/baiye_mass_distribution_fallback.tres` — fallback「泥牛入海」
+- `data/1_core_rules/events/fallback/baiye_normal_fallback.tres` — fallback「无处投刺」
+- `core/operators/consume_random_leverage_operator.gd` — 消耗随机把柄
+- `core/operators/advance_plot_placeholder_operator.gd` — 推进剧情（占位）
+- `core/operators/unlock_social_node_placeholder_operator.gd` — 解锁社交节点（占位）
+
 ## 登高子行动 Archetype（曲江池 / 乐游原 / 少陵原）
 
 这三个子行动挂载在 `action_denggao`（登高/远游）下，定义在 [`tools/data/event_archetypes.json`](tools/data/event_archetypes.json) 中。
@@ -231,6 +266,10 @@
 | `duzhuo_xiaozhuo_fallback` | — | 正常小酌怡情 |
 | `jiaoyou_recite_poem_fallback` | `recite_poem_success` | 席间诵读，以诗换名 |
 | `fangshi_sell_poem_fallback` | `sell_poem_success` | 歌女传唱，以诗换钱 |
+| `baiye_threaten_fallback` | `baiye_threaten_success` | 密信要挟，换得银钱 |
+| `baiye_poem_visit_fallback` | `baiye_poem_visit_success` | 携诗叩门，主家展卷 |
+| `baiye_mass_distribution_fallback` | `baiye_mass_distribution_success` | 行卷如泥牛入海 |
+| `baiye_normal_fallback` | `baiye_normal_success` | 无处投刺，坐等一日 |
 
 - 对应的失败叙事在 `_failed_fallback` 变体中（如 `fangshi_maizi_failed_fallback`），由 possibility 失败路径的 PushEventOperator 直接推送
 

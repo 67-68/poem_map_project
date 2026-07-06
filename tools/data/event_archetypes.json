@@ -269,5 +269,59 @@
     "universal_result": "prop_sub(name=literary_fame; val=m_fame_cost)",
     "era": "",
     "failed_hints": {}
+  },
+  "baiye_threaten_success": {
+    "name": "要挟·成",
+    "action_uuid": "baiye_threaten",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "",
+    "era": "",
+    "failed_hints": {}
+  },
+  "baiye_poem_visit_success": {
+    "name": "携诗拜谒·成",
+    "action_uuid": "baiye_poem_visit",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=m_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "baiye_mass_distribution_success": {
+    "name": "广发行卷·成",
+    "action_uuid": "baiye_mass_distribution",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xxl_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "行卷如泥牛入海，投出数十份，竟无一人回音。连门房都不愿收你的帖子了"
+    }
+  },
+  "baiye_normal_success": {
+    "name": "普通拜谒·成",
+    "action_uuid": "baiye_normal",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "站在朱门外的十字街口，竟不知该往哪条巷子投刺。长安城中最不缺的就是候见者"
+    }
+  },
+  "baiye_threaten_failure": {
+    "name": "要挟·败",
+    "action_uuid": "baiye_threaten",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "trait_add(name=severe_injury)",
+    "era": "",
+    "failed_hints": {}
   }
 }

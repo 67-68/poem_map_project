@@ -48,8 +48,26 @@ const MODE_DISPLAY := {
 }
 
 
+## 🆕 静态可行性检查：当前是否有任何 Poem trait 可用。
+## 用于 sub-action picker 构建阶段决定隐藏/显示。
+static func is_viable() -> bool:
+	for t in PlayerState.get_traits():
+		var trait_ = Database.get_trait(t)
+		if not trait_:
+			continue
+		if trait_ is Poem:
+			Logging.info('[PoemRewardOperator] is_viable: 发现 Poem trait %s' % t)
+			return true
+	Logging.info('[PoemRewardOperator] is_viable: 没有任何 Poem trait 可用')
+	return false
+
+
 func operate():
 	Logging.debug('PoemRewardOperator: Starting operate() — mode=%s' % mode)
+	if not is_viable():
+		Logging.warn('PoemRewardOperator: No Poem traits available, nothing to show')
+		return
+
 	var data = []
 	for t in PlayerState.get_traits():
 		var trait_ = Database.get_trait(t)
@@ -61,10 +79,6 @@ func operate():
 			continue
 		Logging.debug('PoemRewardOperator: Found Poem trait %s (level=%d)' % [t, trait_.level])
 		data.append(trait_)
-
-	if data.is_empty():
-		Logging.warn('PoemRewardOperator: No Poem traits available, nothing to show')
-		return
 
 	Logging.debug('PoemRewardOperator: Pushing picker to stack with %d poem traits' % data.size())
 	EventBus.push_picker.emit(data, _on_poem_picked, null)

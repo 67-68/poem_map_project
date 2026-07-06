@@ -13,6 +13,7 @@ day_consumed = 3.0
 action_results = Array[ExtResource("2_f652d")]([])
 fallback_event_uuid = "baiye_fallback"
 lock_narrative = "朱门深锁，投刺无门，今日不是拜谒的好日子"
+sub_actions = Array[String](["baiye_threaten", "baiye_poem_visit", "baiye_mass_distribution", "baiye_normal"])
 uuid = "bai_ye"
 name = "拜谒"
 description = "投刺候见，叩响朱门"

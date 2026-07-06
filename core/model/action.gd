@@ -66,6 +66,7 @@ var success_hint: String = ""
 ## 使用 get_possibility_int() 获取解析后的 int 值。
 @export_enum(
 	's_success_rate',
+	'ms_success_rate',
 	'm_success_rate',
 	'l_success_rate'
 ) var possibility: String = "l_success_rate"

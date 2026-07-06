@@ -46,6 +46,11 @@ enum ACTION_TAGS {
 
     ACTION_JIAOYOU_RECITE_POEM, # 交游·宣读诗词
     ACTION_FANGSHI_SELL_POEM, # 坊市·卖诗
+
+    ACTION_BAIYE_THREATEN,           # 拜谒·要挟
+    ACTION_BAIYE_POEM_VISIT,         # 拜谒·携诗
+    ACTION_BAIYE_MASS_DISTRIBUTION,  # 拜谒·广发行卷
+    ACTION_BAIYE_NORMAL,             # 拜谒·普通
 }
 
 enum PROPS {
@@ -191,9 +196,10 @@ enum TRAITS {
     DISEASE_SHIYI_DEPRESSION,
     DISEASE_ZHANWANG_MANIA,
 
-    # 临时负面 Trait（2 旬到期，hardcoded in aggregate_trait_effect）
+    # 临时负面 Trait（硬编码过期，poisoned=2旬 severe_injury=3旬）
     POISONED,
     SPRAINED_ANKLE,
+    SEVERE_INJURY,
 
     # 健康→AP 阶梯特质（health ≤ 30 → 5AP / < 60 → 8AP，由 SurvivalManager 自动增删）
     EXHAUSTION_INITIAL,
