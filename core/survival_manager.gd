@@ -166,6 +166,7 @@ func decay(prop_enum, threshold, decay_val):
 
 const TEMP_DEBUFF_DURATION_XUN: int = 2
 const TEMP_DEBUFFS: Array[String] = ["poisoned", "sprained_ankle"]
+const SEVERE_INJURY_DURATION_XUN: int = 3  ## 重伤独立 3 旬过期
 
 func aggregate_trait_effect():
 	for t in PlayerState.get_traits():
@@ -182,9 +183,13 @@ func aggregate_trait_effect():
 				Logging.info('[SurvivalManager] Disease progression: ' + t + ' → ' + trait_.progression_target)
 				PlayerState.remove_trait(t)
 				PlayerState.add_trait(trait_.progression_target)
-		# 临时 debuff 2 旬到期自动移除（硬编码阶段，未来抽象为 Trait max_duration 钩子）
+		# 临时 debuff 到期自动移除
 		if t in TEMP_DEBUFFS and trait_.lasting_xun >= TEMP_DEBUFF_DURATION_XUN:
 			Logging.info('[SurvivalManager] Temp debuff expired: %s (lasting_xun=%d)' % [t, trait_.lasting_xun])
+			PlayerState.remove_trait(t)
+		# 重伤独立 3 旬过期
+		if t == "severe_injury" and trait_.lasting_xun >= SEVERE_INJURY_DURATION_XUN:
+			Logging.info('[SurvivalManager] Severe injury expired: %s (lasting_xun=%d)' % [t, trait_.lasting_xun])
 			PlayerState.remove_trait(t)
 
 # ─── Imaginary 生命周期结算 ──────────────────────────────────

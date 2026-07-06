@@ -771,6 +771,21 @@ static func get_action_day_cost(action: Action, parent_day: float = -1.0) -> int
 	var penalties := PlayerState.get_active_time_penalties()
 	for penalty_days in penalties.values():
 		total += penalty_days
+	
+	# severe_injury 硬编码：远游/登高 +5 AP
+	if PlayerState.has_trait("severe_injury"):
+		var is_denggao := false
+		if action is SceneAction:
+			is_denggao = "denggao" in action.main_tag.to_lower()
+		if not is_denggao:
+			for tag in action.action_tags:
+				if "denggao" in tag.to_lower():
+					is_denggao = true
+					break
+		if is_denggao:
+			total += 5
+			Logging.info("[ActionManager] severe_injury 远游惩罚: +5, total=%d" % total)
+	
 	Logging.info("[ActionManager] get_action_day_cost: base=%d, penalties=%s → total=%d" % [int(base), str(penalties), total])
 	return total
 

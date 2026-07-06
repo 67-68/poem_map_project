@@ -52,6 +52,7 @@
 
   "xs_success_rate": 30,
   "s_success_rate": 50,
+  "ms_success_rate": 60,
   "m_success_rate": 80,
   "l_success_rate": 100,
 

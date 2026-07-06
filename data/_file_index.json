@@ -418,6 +418,7 @@
     "1_core_rules/events/fallback/baiye_mass_distribution_fallback.tres",
     "1_core_rules/events/fallback/baiye_normal_fallback.tres",
     "1_core_rules/events/fallback/baiye_poem_visit_fallback.tres",
+    "1_core_rules/events/fallback/baiye_threaten_failed_fallback.tres",
     "1_core_rules/events/fallback/baiye_threaten_fallback.tres",
     "1_core_rules/events/fallback/da_you_shi.tres",
     "1_core_rules/events/fallback/denggao_fallback.tres",
@@ -580,6 +581,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-06T07:37:02.490265+00:00",
-  "total": 579
+  "generated_at": "2026-07-06T07:49:39.173412+00:00",
+  "total": 580
 }
