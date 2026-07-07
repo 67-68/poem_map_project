@@ -4,6 +4,7 @@ extends HBoxContainer
 
 ## 注入 Trait 数据，驱动印章内文字和名称显示
 ## display_char 优先级：trait_data.display_char > trait_data.name[0]
+## 🆕 Imaginary 分支：印章取 name[0]，颜色按等级区分（L1灰/L2白/L3金）
 ## 注意：不使用 @onready，因为 set_trait 可能在 add_child（_ready）之前调用
 func set_trait(trait_data: Trait) -> void:
 	if not trait_data:
@@ -18,6 +19,19 @@ func set_trait(trait_data: Trait) -> void:
 	var stamp_label := $YangKe/MarginContainer/Label as Label
 	if stamp_label:
 		stamp_label.text = char_to_show
+		
+		# 🆕 Imaginary 等级颜色：L1灰 / L2白 / L3金
+		if trait_data is Imaginary:
+			var imag := trait_data as Imaginary
+			match imag.level:
+				1: stamp_label.add_theme_color_override("font_color", Color(0.55, 0.55, 0.55))  # 灰色
+				2: stamp_label.add_theme_color_override("font_color", Color(0.95, 0.95, 0.90))  # 白色
+				3: stamp_label.add_theme_color_override("font_color", Color(0.90, 0.75, 0.30))  # 金色
+				_: stamp_label.add_theme_color_override("font_color", Color(0.55, 0.55, 0.55))
+			Logging.info("TraitDemonstrator: Imaginary 印章 Lv%d 颜色已设置" % imag.level)
+		else:
+			# 普通 Trait：清除颜色覆盖使用默认
+			stamp_label.remove_theme_color_override("font_color")
 	else:
 		Logging.err("TraitDemonstrator: $YangKe/MarginContainer/Label 为 null，检查节点路径")
 

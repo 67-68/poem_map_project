@@ -90,6 +90,11 @@ func _ready() -> void:
 		EventBus.on_trait_change.connect(_rebuild_trait_grid)
 		Logging.info("LeftPlayerPanel: connected to EventBus.on_trait_change")
 	
+	# 🆕 信号连接：Imaginary 增减时也重建 TraitGrid
+	if not EventBus.imaginary_changed.is_connected(_rebuild_trait_grid):
+		EventBus.imaginary_changed.connect(_rebuild_trait_grid)
+		Logging.info("LeftPlayerPanel: connected to EventBus.imaginary_changed")
+	
 	# 初始化情绪显示
 	_refresh_emotions()
 	
@@ -438,18 +443,33 @@ func _rebuild_trait_grid() -> void:
 		else:
 			demonstrator.set_trait(trait_data)
 			Logging.info("LeftPlayerPanel: added trait demonstrator: %s" % trait_data.name)
+	
+	# 🆕 遍历 Database.imaginaries_detail，为每个 Imaginary 也实例化 TraitDemonstrator
+	var imag_count := 0
+	for imag_uuid in Database.imaginaries_detail:
+		var imag = Database.imaginaries_detail[imag_uuid]
+		if not imag is Imaginary:
+			continue
+		var demonstrator = preload("res://ui/trait_demonstrator.tscn").instantiate()
+		_trait_grid.add_child(demonstrator)
+		demonstrator.set_trait(imag as Trait)
+		imag_count += 1
+		Logging.info("LeftPlayerPanel: added Imaginary demonstrator: %s (Lv%d)" % [imag.name, imag.level])
+	Logging.info("LeftPlayerPanel: TraitGrid complete — %d traits + %d imaginaries" % [trait_keys.size(), imag_count])
 
 func _refresh_trait_grid() -> void:
 	var trait_keys: Array = PlayerState.traits
 	var children := _trait_grid.get_children()
 	
-	# 不依赖 children.size() 比较（queue_free 异步导致不准），直接重建
-	if children.size() != trait_keys.size():
-		Logging.info("LeftPlayerPanel: TraitGrid count changed (%d→%d), rebuilding" % [children.size(), trait_keys.size()])
+	# 🆕 需要重建的条件：trait 数量变化 OR imaginary 数量变化
+	var imag_count := Database.imaginaries_detail.size()
+	var expected_total := trait_keys.size() + imag_count
+	
+	if children.size() != expected_total:
+		Logging.info("LeftPlayerPanel: TraitGrid count changed (children=%d, traits=%d, imaginaries=%d), rebuilding" % [children.size(), trait_keys.size(), imag_count])
 		_rebuild_trait_grid()
 		return
 	# 暂时不做逐字刷新（trait 变更更常见的触发路径是 add/remove，届时重建即可）
-	# 如果未来需要逐字刷新，可以在这里实现
 
 # ── 侧滑动画（保留不动）─────────────────────────────────
 

@@ -51,6 +51,8 @@ var relate_to: String:
 ## 替代原 if has_trait("poisoned")/("sprained_ankle") 硬编码。
 @export var narrative_murmur: String = ""
 
+@export var hover_narrative: String = ""
+
 func operate_continuous_effect():
 	for op in trait_effect_operations:
 		op.operate()

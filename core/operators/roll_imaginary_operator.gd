@@ -10,8 +10,9 @@ class_name RollImaginaryOperator extends BaseOperator
 ##
 ## operate() 阶段:
 ##   1. 检查重复（已有该 Imaginary → talent +3）
-##   2. 否则创建 Imaginary(level=level) 写入 Database.imaginaries_detail
-##   3. 发射 EventBus.imaginary_changed 通知 UI 刷新
+##   2. 否则创建 Imaginary(level=level, duration_xun=2) 写入 Database.imaginaries_detail
+##   3. Lv2 注入 trait_effect_operations: health -5
+##   4. 发射 EventBus.imaginary_changed 通知 UI 刷新
 
 ## 目标意象等级（1/2/3）
 @export var level: int = 1
@@ -104,10 +105,18 @@ func operate():
 	imaginary.name = str(def_data.get("name", _picked_uuid))
 	imaginary.level = level
 	imaginary.get_hint = _picked_hint
-	imaginary.created_at_day = TimeService._total_days_elapsed
+	imaginary.duration_xun = 2  # 所有等级统一 2 旬后到期删除
+
+	# 🆕 Lv2: 持有期每旬 -5 健康（走 trait_effect_operations）
+	if level == 2:
+		var hp_op := PropertyOperator.new()
+		hp_op.property = "health"
+		hp_op.value = -5
+		imaginary.trait_effect_operations.append(hp_op)
+		Logging.info("RollImaginaryOperator.operate: Lv2 Imaginary '%s' → trait_effect_operations: health -5" % _picked_uuid)
 
 	Database.imaginaries_detail[_picked_uuid] = imaginary
-	Logging.info("RollImaginaryOperator.operate: 新建 Imaginary '%s' (name=%s, level=%d, created_at_day=%d)" % [_picked_uuid, imaginary.name, imaginary.level, imaginary.created_at_day])
+	Logging.info("RollImaginaryOperator.operate: 新建 Imaginary '%s' (name=%s, level=%d, duration_xun=2)" % [_picked_uuid, imaginary.name, imaginary.level])
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()

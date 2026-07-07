@@ -331,3 +331,185 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	PlayerState._is_repeated_action = _saved_is_repeated
 	
 	return "\n".join(lines)
+
+
+# ── 接口 3（Trait 专用）：Trait → hint 文本 ──
+
+## 为 TraitDemonstrator 的 hover tooltip 构建完整 hint 文本。
+## 包含：name → description → 效果清单 → 持续时间 → hover_narrative。
+## 🆕 Imaginary 分支：显示 level/get_hint/trait_effect_operations，不显示 buffer/prop/时间惩罚/持续区。
+## @param trait_data: 目标 Trait 资源（或 Imaginary，因为 Imaginary extends Trait）
+## @return 格式化后的 BBCode 字符串，无有效信息时返回 ""
+static func build_trait_hint(trait_data: Trait) -> String:
+	if not trait_data:
+		Logging.err("ActionHintBuilder.build_trait_hint: trait_data is null")
+		return ""
+	
+	var lines: Array[String] = []
+	
+	# ── 名称行 ──
+	var display_name := trait_data.name if not trait_data.name.is_empty() else "（未知道）"
+	lines.append("【%s】" % display_name)
+	Logging.info("ActionHintBuilder.build_trait_hint: trait='%s', is_imaginary=%s" % [display_name, str(trait_data is Imaginary)])
+	
+	# 🆕 Imaginary 分支：仅显示等级 / get_hint / trait_effect_operations
+	if trait_data is Imaginary:
+		var imag := trait_data as Imaginary
+		# 等级
+		var level_label := "Lv%d 意象" % imag.level
+		lines.append("[color=#66cc66]%s[/color]" % level_label)
+		Logging.info("ActionHintBuilder.build_trait_hint: Imaginary level=%d" % imag.level)
+		
+		# get_hint（获取时的叙事文本）
+		if not imag.get_hint.is_empty():
+			lines.append("")
+			lines.append(imag.get_hint)
+			Logging.info("ActionHintBuilder.build_trait_hint: Imaginary get_hint present (%d chars)" % imag.get_hint.length())
+		
+		# trait_effect_operations（如 Lv2: health -5）
+		if not trait_data.trait_effect_operations.is_empty():
+			lines.append("")
+			lines.append("[color=gray][font_size=13]━━━ 效果 ━━━[/font_size][/color]")
+			for op in trait_data.trait_effect_operations:
+				if not op:
+					continue
+				var desc: String = op.describe_preview() if op.has_method("describe_preview") else ""
+				if not desc.is_empty():
+					lines.append("• 每旬：%s" % desc)
+			Logging.info("ActionHintBuilder.build_trait_hint: Imaginary trait_effect_operations → %d lines" % trait_data.trait_effect_operations.size())
+		else:
+			lines.append("")
+			lines.append("（持有期无副作用）")
+		
+		var result := "\n".join(lines)
+		Logging.info("ActionHintBuilder.build_trait_hint: done for Imaginary '%s', result=%d chars" % [display_name, result.length()])
+		return result
+	
+	# ── 以下为普通 Trait 的完整逻辑 ──
+	
+	# ── 描述行 ──
+	if not trait_data.description.is_empty():
+		lines.append(trait_data.description)
+		Logging.info("ActionHintBuilder.build_trait_hint: description present (%d chars)" % trait_data.description.length())
+	
+	# ── 效果区 ──
+	var effect_lines: Array[String] = []
+	
+	# 1. trait_effect_operations（每旬结算）
+	if not trait_data.trait_effect_operations.is_empty():
+		for op in trait_data.trait_effect_operations:
+			if not op:
+				continue
+			var desc: String = op.describe_preview() if op.has_method("describe_preview") else ""
+			if not desc.is_empty():
+				effect_lines.append("• 每旬：%s" % desc)
+		Logging.info("ActionHintBuilder.build_trait_hint: trait_effect_operations → %d effect lines" % effect_lines.size())
+	
+	# 2. buffer_to_prop（属性倍率修正）
+	if trait_data.buffer_to_prop and not trait_data.buffer_to_prop.operators.is_empty():
+		for mul_op in trait_data.buffer_to_prop.operators:
+			if not mul_op or mul_op.key.is_empty():
+				continue
+			var prop_display := _get_prop_display_name(mul_op.key)
+			var mode_str := _mul_operator_mode_string(mul_op.operator)
+			effect_lines.append("• %s %s ×%.1f" % [prop_display, mode_str, mul_op.value])
+		Logging.info("ActionHintBuilder.build_trait_hint: buffer_to_prop → %d ops" % trait_data.buffer_to_prop.operators.size())
+	
+	# 3. buffer_to_region（区域倍率修正）
+	if trait_data.buffer_to_region and not trait_data.buffer_to_region.operators.is_empty():
+		for mul_op in trait_data.buffer_to_region.operators:
+			if not mul_op or mul_op.key.is_empty():
+				continue
+			var prop_display := _get_prop_display_name(mul_op.key)
+			var mode_str := _mul_operator_mode_string(mul_op.operator)
+			effect_lines.append("• %s（区域）%s ×%.1f" % [prop_display, mode_str, mul_op.value])
+		Logging.info("ActionHintBuilder.build_trait_hint: buffer_to_region → %d ops" % trait_data.buffer_to_region.operators.size())
+	
+	# 4. time_penalty（全局行动天数惩罚）
+	if trait_data.time_penalty > 0:
+		effect_lines.append("• 所有行动 +%d天" % trait_data.time_penalty)
+		Logging.info("ActionHintBuilder.build_trait_hint: time_penalty=+%d" % trait_data.time_penalty)
+	
+	# 5. conditional_time_penalties（条件天数惩罚）
+	if not trait_data.conditional_time_penalties.is_empty():
+		for ctp in trait_data.conditional_time_penalties:
+			if not ctp or ctp.penalty_days <= 0:
+				continue
+			if ctp.add_to_all:
+				var desc_suffix := "（%s）" % ctp.description if not ctp.description.is_empty() else ""
+				effect_lines.append("• 所有行动：+%d天%s" % [ctp.penalty_days, desc_suffix])
+			else:
+				var label := ctp.description if not ctp.description.is_empty() else ctp.action_tag_match
+				effect_lines.append("• %s：+%d天" % [label, ctp.penalty_days])
+		Logging.info("ActionHintBuilder.build_trait_hint: conditional_time_penalties → %d entries" % trait_data.conditional_time_penalties.size())
+	
+	# 6. ap_penalty（AP 上限削减）
+	if trait_data.ap_penalty != 0:
+		effect_lines.append("• 行动力上限 %+d" % trait_data.ap_penalty)
+		Logging.info("ActionHintBuilder.build_trait_hint: ap_penalty=%+d" % trait_data.ap_penalty)
+	
+	# 效果区输出
+	lines.append("[color=gray][font_size=13]━━━ 效果 ━━━[/font_size][/color]")
+	if effect_lines.is_empty():
+		lines.append("（无特殊效果）")
+		Logging.info("ActionHintBuilder.build_trait_hint: 无任何活跃效果字段")
+	else:
+		lines.append_array(effect_lines)
+		Logging.info("ActionHintBuilder.build_trait_hint: 效果区 %d lines" % effect_lines.size())
+	
+	# ── 持续区 ──
+	if trait_data.duration_xun > 0:
+		lines.append("[color=gray][font_size=13]━━━ 持续 ━━━[/font_size][/color]")
+		var already := trait_data.lasting_xun
+		var remaining = max(0, trait_data.duration_xun - already)
+		if not trait_data.expiry_trait.is_empty():
+			var expiry_name := _get_trait_display_name(trait_data.expiry_trait)
+			lines.append("• %d旬后转化为「%s」（已持续%d旬）" % [remaining, expiry_name, already])
+			Logging.info("ActionHintBuilder.build_trait_hint: duration=%d, expiry_trait='%s', lasting=%d" % [trait_data.duration_xun, trait_data.expiry_trait, trait_data.lasting_xun])
+		else:
+			lines.append("• %d旬后自动移除（已持续%d旬）" % [remaining, already])
+			Logging.info("ActionHintBuilder.build_trait_hint: duration=%d, no expiry, lasting=%d" % [trait_data.duration_xun, trait_data.lasting_xun])
+	
+	# ── hover_narrative（获取途径等硬编码叙事文本，末尾）──
+	if not trait_data.hover_narrative.is_empty():
+		lines.append("")
+		lines.append(trait_data.hover_narrative)
+		Logging.info("ActionHintBuilder.build_trait_hint: hover_narrative present (%d chars)" % trait_data.hover_narrative.length())
+	
+	var result := "\n".join(lines)
+	Logging.info("ActionHintBuilder.build_trait_hint: done for '%s', result=%d chars, %d lines" % [display_name, result.length(), lines.size()])
+	return result
+
+
+# ── 辅助函数（Trait Hint 专用）──
+
+## MultiplyOperator.operator 枚举 → 中文展示文本
+static func _mul_operator_mode_string(op_enum: int) -> String:
+	match op_enum:
+		MultiplyOperator.MUL_OPERATOR.POSITIVE_ONLY:
+			return "正面效果"
+		MultiplyOperator.MUL_OPERATOR.NEGATIVE_ONLY:
+			return "负面效果"
+		MultiplyOperator.MUL_OPERATOR.BOTH:
+			return "所有变动"
+		_:
+			Logging.warn("ActionHintBuilder._mul_operator_mode_string: 未知 op_enum=%d" % op_enum)
+			return "变动"
+
+
+## prop key → display_name，复用 Database.get_property().get_display_name()
+static func _get_prop_display_name(prop_key: String) -> String:
+	var prop = Database.get_property(prop_key)
+	if prop:
+		var dn = prop.get_display_name()
+		if not dn.is_empty():
+			return dn
+	return prop_key
+
+
+## trait_uuid → display_name，复用 Database.get_trait
+static func _get_trait_display_name(trait_uuid: String) -> String:
+	var t = Database.get_trait(trait_uuid)
+	if t and not t.name.is_empty():
+		return t.name
+	return trait_uuid

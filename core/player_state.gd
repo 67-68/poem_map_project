@@ -169,9 +169,9 @@ func init_imaginaries():
 			imaginary = Imaginary.new()
 			imaginary.uuid = imaginary_uuid
 			imaginary.name = name
-			imaginary.created_at_day = TimeService._total_days_elapsed
+			imaginary.duration_xun = 2
 			Database.imaginaries_detail[imaginary_uuid] = imaginary
-			Logging.info("init_imaginaries: 新建 Imaginary '%s' (created_at_day=%d)" % [imaginary_uuid, imaginary.created_at_day])
+			Logging.info("init_imaginaries: 新建 Imaginary '%s' (duration_xun=2)" % imaginary_uuid)
 
 func init_emotions():
 	var emotion_data = SourceOfTruth.debug_dashboard_state.get("emotions", {})
@@ -236,9 +236,9 @@ func _on_request_add_imaginary(tag: String):
 	imaginary.uuid = imaginary_uuid
 	var def_data = _imaginary_defs.get(imaginary_uuid, {})
 	imaginary.name = def_data.get("name", tag)
-	imaginary.created_at_day = TimeService._total_days_elapsed
+	imaginary.duration_xun = 2
 	Database.imaginaries_detail[imaginary_uuid] = imaginary
-	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, created_at_day=%d)" % [imaginary_uuid, imaginary.name, imaginary.created_at_day])
+	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, duration_xun=2)" % [imaginary_uuid, imaginary.name])
 
 	EventBus.imaginary_changed.emit()
 

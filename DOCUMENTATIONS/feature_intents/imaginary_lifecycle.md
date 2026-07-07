@@ -1,80 +1,94 @@
-# Imaginary 生命周期系统
+# Imaginary 生命周期系统 (V9: 继承 Trait 统一到期系统)
 
 ## 文件
-- `core/model/imaginary.gd` — Imaginary 模型（新增 `created_at_day` 字段）
-- `core/player_state.gd` — 创建 Imaginary 时设置 `created_at_day`
-- `core/survival_manager.gd` — 管线扩展 `_process_imaginary_effects()`，AP 公式修改
-- `model/enumerates.gd` — `DISEASE_FENGHAN_IMAGINARY`、`DISEASE_OUXINLIXUE` 枚举
-- `data/1_core_rules/traits/disease_fenghan_imaginary.tres` — 风寒 Trait
-- `data/1_core_rules/traits/disease_ouxinlixue.tres` — 呕心沥血 Trait
+- `core/model/imaginary.gd` — Imaginary extends Trait（V9 重构）
+- `core/model/trait.gd` — Trait 基类（duration_xun/lasting_xun/trait_effect_operations）
+- `core/model/property_operator.gd` — PropertyOperator（Lv2 扣血用）
+- `core/operators/roll_imaginary_operator.gd` — 创建 Imaginary 时设 duration_xun=2，Lv2 注入 trait_effect_operations
+- `core/player_state.gd` — `_on_request_add_imaginary()` / `init_imaginaries()` 设置 duration_xun=2
+- `core/survival_manager.gd` — `_process_imaginary_effects()` 统一使用 lasting_xun/duration_xun
+- `core/action_hint_builder.gd` — `build_trait_hint()` Imaginary 分支
+- `ui/left_player_panel.gd` — `_rebuild_trait_grid()` 遍历 `Database.imaginaries_detail`
+- `ui/trait_demonstrator.gd` — `set_trait()` 检测 `is Imaginary`，印章按等级着色
+- `tools/data/imaginary_definitions.json` — 意象定义库（name/level/get_hint）
 
 ## 核心机制
 
-所有等级 Imaginary 统一保持 **2 旬（20 天）**，到期后按等级触发不同后果。
+### 继承链 (V9)
+
+```
+Resource → GameEntity → Trait → Imaginary
+```
+
+Imaginary 继承 Trait 的全部字段，共享统一的到期系统（`duration_xun` + `lasting_xun`）。
+
+### 字段对比
+
+| 字段 | V7/V8 | V9 | 说明 |
+|------|-------|-----|------|
+| `expiry_trait` | `@export var` | 继承自 Trait | 不再用于 Imaginary（到期统一删除） |
+| `expiry_flag` | `@export var` | **删除** | 冗余（`add_trait()` 自动去重） |
+| `created_at_day` | `@export var` | **删除** | 替换为 `duration_xun=2` + `lasting_xun` |
+| `level_effect_health` | `@export var` | **删除** | 替换为 `trait_effect_operations` |
+| `level` | `@export var` | 保留 | |
+| `get_hint` | `@export var` | 保留 | |
+| `duration_xun` | 无 | 继承=2 | Trait 基类字段 |
+| `lasting_xun` | 无 | 继承=0 | Trait 基类字段 |
+| `trait_effect_operations` | 无 | Lv2: `[health -5]` | Trait 基类字段 |
 
 ### 状态转换
 
 ```
 Lv1 Imaginary
-  → 2旬后: 直接删除（无副作用）
+  → 创建时: duration_xun=2, lasting_xun=0
+  → 每旬: lasting_xun += 1（无副作用）
+  → 2旬后: lasting_xun >= 2 → 直接删除
 
 Lv2 Imaginary
-  → 持有期: 每旬 health -5
-  → 2旬后:
-      ├─ flag_has_fenghan_imaginary == false → 添加 Trait: 风寒，设 flag=true，删除 Imaginary
-      └─ flag_has_fenghan_imaginary == true  → 跳过转化，删除 Imaginary
+  → 创建时: duration_xun=2, lasting_xun=0, trait_effect_operations=[health -5]
+  → 每旬: lasting_xun += 1 → operate_continuous_effect() 执行 health -5
+  → 2旬后: lasting_xun >= 2 → 直接删除
 
 Lv3 Imaginary
-  → 持有期: 每持有 1 个 AP 上限 -1（在 get_current_ap_cap() 中实现）
-  → 2旬后:
-      ├─ flag_has_ouxin_imaginary == false → 添加 Trait: 呕心沥血，设 flag=true，删除 Imaginary
-      └─ flag_has_ouxin_imaginary == true  → 跳过转化，删除 Imaginary
+  → 创建时: duration_xun=2, lasting_xun=0
+  → 持有期: 每持有 1 个 AP 上限 -1（在 `get_current_ap_cap()` 中实现）
+  → 每旬: lasting_xun += 1（无 trait_effect_operations）
+  → 2旬后: lasting_xun >= 2 → 直接删除
 ```
 
-### 两个疾病 Trait
-
-| Trait | uuid | 效果 | 实现方式 |
-|-------|------|------|---------|
-| 风寒 | `disease_fenghan_imaginary` | 所有 health 流失 ×1.5（仅负面） | `buffer_to_prop: health=1.5, NEGATIVE_ONLY` |
-| 呕心沥血 | `disease_ouxinlixue` | 每旬 -5 健康 + AP 上限 -2 | `trait_effect_operations` + `get_current_ap_cap()` |
-
-### AP 公式
+### AP 公式（不变）
 
 ```
 AP = max(健康阶梯AP - count(lv3_imaginaries) - (呕心沥血 ? 2 : 0), 1)
 ```
 
-**健康阶梯AP**：
-- health ≤ 30 → 5
-- health ≤ 60 → 8
-- health > 60 → 10
+- Lv3 计数改用 `lasting_xun < duration_xun` 判断活跃状态（不再依赖 `created_at_day`）
 
-### 防叠层
+### 防叠层（已删除）
 
-通过两个 bool flag 确保同一疾病只生效一次：
-- `flag_has_fenghan_imaginary` — Lv2→风寒 已转化
-- `flag_has_ouxin_imaginary` — Lv3→呕心沥血 已转化
+V8 的 `expiry_flag` 防叠层机制已删除。`PlayerState.add_trait()` 内部对同一 traits 去重（`if not traits.has(trait_name)`），同一疾病不会重复添加，无需额外 flag。
 
-## 管线位置
-
-在 `_process_single_xun_settlement()` 中插入在 1.3 位置：
+## 管线位置（不变）
 
 ```
 1.   aggregate_trait_effect()          ← trait 持续效果（含呕心沥血扣血）
-1.3  _process_imaginary_effects()      ← 🆕 Lv2每旬扣血 + 到期删除与转化
+1.3  _process_imaginary_effects()      ← lasting_xun 递增 + Lv2 operate_continuous_effect + 到期删除
 1.5  _sync_health_ap_traits()          ← 健康→AP 同步
-2.   _cost_survival()                  ← AP 刷新（使用新公式含 Lv3 + 呕心沥血惩罚）
+2.   _cost_survival()                  ← AP 刷新
 ```
 
-顺序逻辑：
-- Lv2 扣血在 1.3，在 AP 同步（1.5）之前 → 健康变化反映到 AP
-- 呕心沥血扣血在 1（aggregate_trait_effect）→ 满足「颜色快照后结算」
-- Lv3 AP 惩罚在 2（_cost_survival 中调用 get_current_ap_cap）→ 实时计算
+## UI：左侧面板混排
+
+Imaginary 与 Trait 混排在同一 `TraitGrid` 中：
+
+- 印章取 `name[0]`，颜色按等级：L1 灰 / L2 白 / L3 金
+- Hover 提示通过 `ActionHintBuilder.build_trait_hint()` 的 `is Imaginary` 分支生成：
+  - 显示：名称 / 等级 / get_hint / trait_effect_operations
+  - 不显示：buffer_to_prop / buffer_to_region / time_penalty / 持续区 / hover_narrative
 
 ## 旧存档兼容
 
-- `created_at_day < 0` 的 Imaginary：跳过生命周期处理，降级警告
-- `_count_active_lv3_imaginaries()` 中旧 Lv3 视为有效并警告
+无 `created_at_day` 字段，无特殊兼容需求。新存档的 Imaginary 默认为 `duration_xun=2, lasting_xun=0`。
 
 ## DSL 分隔符
 
