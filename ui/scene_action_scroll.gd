@@ -6,22 +6,29 @@ var _locked_action_ids: Array[String] = []  # 当前灰化显示的 action ID �
 ## key: panel instance_id(str), value: { "locked": bool, "reason": String }
 var _panel_lock_cache: Dictionary = {}
 
-func refresh():
+func refresh(repick: bool = true):
 	"""
 	三阶段管道刷新 scene action：
-	1. pick_top_actions — 从全池抽选
+	1. pick_top_actions — 从全池抽选（仅 repick=true 时，默认每旬初）
 	2. apply_visibility_flags — 设隐藏/锁定标志位
 	3. 按标志位渲染（_is_hidden 跳过，dynamic_failed_hint 决定亮/灰）
+	
+	repick=false 用于事件结束/Focus结束等场景：保留现有 _selected_action_ids，
+	仅重建 UI 布局和刷新灰化状态，不重新随机抽签。
 	"""
-	Logging.debug("[SceneActionScroll] refresh() 被调用")
+	Logging.info("[SceneActionScroll] refresh(repick=%s) 被调用" % repick)
 	
 	# 全量刷新意味着按钮数据全部变化，清空增量 diff 缓存
 	_panel_lock_cache.clear()
 	
-	# Phase 1: 抽取
+	# Phase 1: 抽取（仅 repick=true 时重抽）
 	var pool = ActionManager.get_available_scene_actions()
-	var selected_actions = ActionManager.pick_top_actions(pool)
-	EventBus.selected_actions_change.emit(selected_actions)
+	if repick:
+		var selected_actions = ActionManager.pick_top_actions(pool)
+		EventBus.selected_actions_change.emit(selected_actions)
+		Logging.info("[SceneActionScroll] refresh: repick=true, 已重新抽签（%d 个中签）" % selected_actions.size())
+	else:
+		Logging.info("[SceneActionScroll] refresh: repick=false, 保留现有 _selected_action_ids（%d 个中签）" % ActionManager._selected_action_ids.size())
 	
 	# Phase 2+3: 设置隐藏/锁定标志位
 	ActionManager.apply_visibility_flags()
@@ -119,8 +126,8 @@ func _refresh_locks_only() -> void:
 func _ready():
 	super._ready()
 	refresh()
-	TimeService.on_xun_tick.connect(refresh)
-	EventBus.request_refresh_action_panel.connect(refresh)
+	TimeService.on_xun_tick.connect(refresh)  # 旬初：repick=true（默认），重新抽签
+	EventBus.request_refresh_action_panel.connect(func(): refresh(false))  # 事件结束/Focus结束：repick=false，不重抽
 	# 🆕 监听锁定状态增量刷新
 	EventBus.request_refresh_action_locks.connect(_refresh_locks_only)
 
@@ -167,7 +174,7 @@ func _lock_all_for_event() -> void:
 		panel.set_locked(EVENT_LOCK_REASON)
 	Logging.info("[DIAG] SceneActionScroll._lock_all_for_event: 已锁定 %d 个行动" % children.size())
 
-## 🆕 事件结束时：恢复行动按钮的正常锁定状态（触发 refresh）
+## 🆕 事件结束时：恢复行动按钮的正常锁定状态（repick=false，不重抽）
 func _unlock_all_from_event() -> void:
-	Logging.info("[DIAG] SceneActionScroll._unlock_all_from_event: 恢复行动状态")
-	refresh()
+	Logging.info("[DIAG] SceneActionScroll._unlock_all_from_event: 恢复行动状态（不重抽）")
+	refresh(false)
