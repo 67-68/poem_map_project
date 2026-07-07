@@ -21,7 +21,7 @@ const _HoverInfoPopup = preload("res://ui/hover_info_popup.gd")
 
 # ── 显示流枚举 ─────────────────────────────────────────
 
-enum FlowType { POPUP_LEGACY, SLIDE_FROM_RIGHT, BELOW_OVERLAY }
+enum FlowType { POPUP_LEGACY, SLIDE_FROM_RIGHT, BELOW_OVERLAY, SLIDE_FROM_LEFT }
 
 # ── 显示委托抽象基类 ───────────────────────────────────
 
@@ -189,6 +189,110 @@ class BelowOverlayDelegate extends HoverDisplayDelegate:
 			overlay.hide_hover_text()
 			Logging.info("HoverPopupManager.BelowOverlayDelegate: hover text hidden")
 
+## 从左侧滑入 NarrativeOverlay，显示 hover 文本（TraitDemonstrator 专用）。
+## 与 SlideFromRightDelegate 对称，但方向从左→右。
+## 🔒 动画锁：slide-in 期间阻止 mouse_exit 触发 slide-out，等动画播完再处理排队的 exit。
+##    slide-out 同理：播放期间阻止 slide-in 重入，等动画播完。
+## 🆕 事件活跃时降级为直接显示（同 BELOW_OVERLAY），无滑动动画。
+class SlideFromLeftDelegate extends HoverDisplayDelegate:
+	var _manager_ref: WeakRef
+	var _animating: bool = false
+	var _pending_exit: bool = false
+	var _pending_exit_binding = null
+
+	func _init(manager: Node) -> void:
+		_manager_ref = weakref(manager)
+
+	func on_enter(binding) -> void:
+		if _animating:
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: on_enter ignored, animating (pending_exit=%s)" % str(_pending_exit))
+			_pending_exit = false
+			_pending_exit_binding = null
+			return
+
+		var mgr = _manager_ref.get_ref()
+		if not mgr:
+			return
+		var overlay = mgr._get_narrative_overlay()
+		if not overlay:
+			Logging.err("HoverPopupManager.SlideFromLeftDelegate: NarrativeOverlay not found")
+			return
+		var text_data: Dictionary = binding.delegate_data if binding.delegate_data is Dictionary else {}
+		var narrative: String = text_data.get("narrative", "")
+		var vector: String = text_data.get("vector", "")
+
+		if HoverPopupManager._is_event_active:
+			narrative = "[color=#cc6666]⚠ 请先完成当前事件再选择[/color]\n\n" + narrative
+			overlay.show_hover_text(narrative, vector)
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: event active → direct display (no animation)")
+			return
+
+		overlay.show_hover_text(narrative, vector)
+		var visualizer = overlay.get_node_or_null("TapeVisualizer")
+		if visualizer and visualizer.has_method("play_slide_in_from_left"):
+			_animating = true
+			visualizer.play_slide_in_from_left(0.1)
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: slide_in_from_left started, animating=true")
+			await _wait_for_anim(visualizer)
+			_animating = false
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: slide_in finished, animating=false, pending_exit=%s" % str(_pending_exit))
+			if _pending_exit:
+				_pending_exit = false
+				_exec_slide_out(overlay)
+		else:
+			Logging.err("HoverPopupManager.SlideFromLeftDelegate: TapeVisualizer not found or missing method")
+
+	func on_exit(_binding) -> void:
+		if _animating:
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: on_exit queued, animating")
+			_pending_exit = true
+			return
+		if HoverPopupManager._is_event_active:
+			var mgr = _manager_ref.get_ref()
+			if mgr:
+				var overlay = mgr._get_narrative_overlay()
+				if overlay and overlay.has_method("hide_hover_text"):
+					overlay.hide_hover_text()
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: event active exit → direct hide")
+			return
+		var mgr = _manager_ref.get_ref()
+		if not mgr:
+			return
+		var overlay = mgr._get_narrative_overlay()
+		if not overlay:
+			return
+		_exec_slide_out(overlay)
+
+	func _exec_slide_out(overlay: Node) -> void:
+		if HoverPopupManager._is_event_active:
+			_animating = false
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: 事件活跃中，跳过延迟 slide-out")
+			if overlay.has_method("hide_hover_text"):
+				overlay.hide_hover_text()
+			return
+
+		var visualizer = overlay.get_node_or_null("TapeVisualizer")
+		if visualizer and visualizer.has_method("play_slide_to_left"):
+			_animating = true
+			visualizer.play_slide_to_left(0.1)
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: slide_to_left started, animating=true")
+			await _wait_for_anim(visualizer)
+			_animating = false
+			if overlay.has_method("hide_hover_text"):
+				overlay.hide_hover_text()
+			Logging.info("HoverPopupManager.SlideFromLeftDelegate: slide_out finished, animating=false, hover hidden")
+		else:
+			Logging.err("HoverPopupManager.SlideFromLeftDelegate: TapeVisualizer not found for slide_out")
+
+	func _wait_for_anim(visualizer: Node) -> void:
+		var tree := Engine.get_main_loop() as SceneTree
+		if not tree:
+			return
+		for _i in range(100):
+			await tree.process_frame
+			if not visualizer._tween or not visualizer._tween.is_valid() or not visualizer._tween.is_running():
+				break
+
 ## 原有浮动 popup（行为不变）
 class PopupLegacyDelegate extends HoverDisplayDelegate:
 	var _manager_ref: WeakRef
@@ -266,6 +370,10 @@ class HoverBinding:
 				delegate_data = p_data  # Dictionary
 				delegate = BelowOverlayDelegate.new(p_manager)
 				Logging.info("HoverPopupManager.HoverBinding: BELOW_OVERLAY trigger=%s" % trigger.name)
+			FlowType.SLIDE_FROM_LEFT:
+				delegate_data = p_data  # Dictionary
+				delegate = SlideFromLeftDelegate.new(p_manager)
+				Logging.info("HoverPopupManager.HoverBinding: SLIDE_FROM_LEFT trigger=%s" % trigger.name)
 
 	## ── 状态转移入口 ─────────────────────────────────
 	func transition_to(new_state: State) -> bool:
