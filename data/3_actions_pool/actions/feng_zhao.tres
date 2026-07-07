@@ -22,5 +22,5 @@ name = "奉召"
 description = "写诗"
 icon = ExtResource("4_rbxy6")
 fallback_event_uuid = "event_cooldown_wall"
-lock_narrative = "江郎才尽，笔端凝滞，写不出半个字"
+lock_narrative = "文思枯涩，笔端如坠千钧，纸上空无一字"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"
