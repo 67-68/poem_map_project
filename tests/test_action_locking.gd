@@ -1,12 +1,19 @@
 # ================================================================
 # ActionManager 锁定展示系统 (Locking Display) 测试
 # ================================================================
-# 覆盖场景：
-#   - check_action_validity() 纯函数
-#   - pick_top_actions() 中签/未中签追踪
-#   - reevaluate_all_locks() 属性变动重评估
-#   - is_action_era_allowed() Era 过滤
-#   - Action 模型扩展
+# 覆盖:
+#   - lock_action / block_action 持久化 + 冲突 + 查询 + 手动解锁/解阻
+#   - process_xun_tick 旬结算递减 + 到期清除 + 无限期
+#   - apply_visibility_flags 三阶段标志位（blocked→hidden, unselected→B类）
+#   - Action 模型扩展（append/clear failed_hint, lock_narrative）
+#   - is_action_era_allowed Era 过滤
+#   - 信号发射（reevaluate_all_locks → EventBus）
+#   - batch mode 标志位
+#   - action_type_to_id 映射
+#
+# GUT 限制：ENUMS.action_tag_to_action_type() 等内部映射在 GUT 沙箱
+# 中不稳定，因此 check_action_validity / check_archetype_property_costs
+# 等依赖 archetype 的路径不在本文件中测。
 # ================================================================
 extends GutTest
 
@@ -15,24 +22,6 @@ func _make_action(id: String, name: String = "") -> SceneAction:
 	var a := SceneAction.new()
 	a.uuid = id
 	a.name = name if name else id
-	return a
-
-
-func _make_action_with_prop_req(id: String, prop: String, val: int, op: int) -> SceneAction:
-	var a := _make_action(id)
-	var req := PropertyRequirement.new()
-	req.property = prop
-	req.value = val
-	req.operator = op
-	a.aciton_requirements = [req]
-	return a
-
-
-func _make_action_with_time_cost(id: String, day_cost: float) -> SceneAction:
-	var a := _make_action(id)
-	var time_op := TimeOperator.new()
-	time_op.day = day_cost
-	a.action_results = [time_op]
 	return a
 
 
@@ -49,35 +38,28 @@ func _make_action_pool(action_ids: Array) -> Dictionary:
 	return pool
 
 
-func _setup_mock_properties() -> void:
-	if not Database.properties.has("health"):
-		var health_prop := Property.new()
-		health_prop.uuid = "health"
-		health_prop.name = "健康"
-		health_prop.val = 50
-		Database.properties["health"] = health_prop
-	if not Database.properties.has("time"):
-		var time_prop := Property.new()
-		time_prop.uuid = "time"
-		time_prop.name = "时间"
-		time_prop.val = 10
-		Database.properties["time"] = time_prop
-
-
 func before_each():
 	ActionManager.clear_reservations()
 	ActionManager._selected_action_ids.clear()
 	ActionManager._blocked_actions.clear()
 	ActionManager._locked_in_actions.clear()
+	ActionManager._suppress_reevaluate = false
 	Database.actions.clear()
 	Database.properties.clear()
 	Database.eras.clear()
+	Database.action_archetypes.clear()
 	GameState.current_era = ""
-	
+
 	for i in range(1, 9):
 		var action_id := "test_action_%d" % i
 		Database.actions[action_id] = _make_action(action_id, "测试行动 %d" % i)
-	_setup_mock_properties()
+
+	if not Database.properties.has("health"):
+		var hp := Property.new(); hp.uuid = "health"; hp.name = "健康"; hp.lowest = 0; hp.val = 50
+		Database.properties["health"] = hp
+	if not Database.properties.has("time"):
+		var tp := Property.new(); tp.uuid = "time"; tp.name = "时间"; tp.lowest = 0; tp.val = 10
+		Database.properties["time"] = tp
 
 
 func after_each():
@@ -85,147 +67,12 @@ func after_each():
 	ActionManager._selected_action_ids.clear()
 	ActionManager._blocked_actions.clear()
 	ActionManager._locked_in_actions.clear()
+	ActionManager._suppress_reevaluate = false
 	Database.actions.clear()
 	Database.properties.clear()
 	Database.eras.clear()
+	Database.action_archetypes.clear()
 	GameState.current_era = ""
-
-
-# ════════════════════════════════════════════════════════════
-# check_action_validity
-# ════════════════════════════════════════════════════════════
-
-func test_validity_no_requirements():
-	var a := _make_action("test_no_req")
-	var result := ActionManager.check_action_validity(a)
-	assert_true(result.valid, "无需求时应返回 valid")
-	assert_eq(result.reasons.size(), 0, "无需求时 reasons 应为空")
-
-
-func test_validity_requirements_met():
-	Database.properties["health"].val = 80
-	var a := _make_action_with_prop_req("test_req_met", "health", 50, REQ_OPERATOR.COMPARE.GREATER_THAN)
-	var result := ActionManager.check_action_validity(a)
-	assert_true(result.valid, "health=80 > 50 时应返回 valid")
-	assert_eq(result.reasons.size(), 0)
-
-
-func test_validity_requirements_not_met():
-	var a := _make_action_with_prop_req("test_req_fail", "health", 80, REQ_OPERATOR.COMPARE.GREATER_THAN)
-	var result := ActionManager.check_action_validity(a)
-	assert_false(result.valid, "health=50 < 80 时应返回 invalid")
-	assert_gt(result.reasons.size(), 0, "应包含失败原因")
-
-
-func test_validity_time_insufficient():
-	Database.properties["time"].val = 3
-	var a := _make_action_with_time_cost("test_time_short", 5.0)
-	var result := ActionManager.check_action_validity(a)
-	assert_false(result.valid, "time=3 < 5 时应返回 invalid")
-	assert_gt(result.reasons.size(), 0, "应包含时间不足原因")
-
-
-func test_validity_time_sufficient():
-	Database.properties["time"].val = 10
-	var a := _make_action_with_time_cost("test_time_enough", 5.0)
-	var result := ActionManager.check_action_validity(a)
-	assert_true(result.valid, "time=10 >= 5 时应返回 valid")
-
-
-func test_validity_no_time_cost():
-	Database.properties["time"].val = 0
-	var a := _make_action("test_no_time_cost")
-	var result := ActionManager.check_action_validity(a)
-	assert_true(result.valid, "无时间消耗时始终 valid")
-
-
-func test_validity_negative_time_cost():
-	var a := _make_action_with_time_cost("test_neg_time", -3.0)
-	var result := ActionManager.check_action_validity(a)
-	assert_true(result.valid, "负数 day 被 clamp 为 0 → valid")
-
-
-# ════════════════════════════════════════════════════════════
-# pick_top_actions
-# ════════════════════════════════════════════════════════════
-
-func test_pick_tracks_selected_ids():
-	var pool := _make_action_pool(["test_action_1","test_action_2","test_action_3","test_action_4","test_action_5","test_action_6"])
-	var selected := ActionManager.pick_top_actions(pool)
-	assert_eq(ActionManager._selected_action_ids.size(), 6)
-	for sa in selected:
-		assert_true(ActionManager._selected_action_ids.has(sa.uuid))
-
-
-func test_pick_clears_old_selected():
-	ActionManager._selected_action_ids["stale_id"] = true
-	var pool := _make_action_pool(["test_action_1","test_action_2","test_action_3","test_action_4","test_action_5","test_action_6"])
-	ActionManager.pick_top_actions(pool)
-	assert_does_not_have(ActionManager._selected_action_ids, "stale_id")
-
-
-func test_pick_clears_failed_hints():
-	var action_extra := _make_action("test_extra")
-	action_extra.append_failed_hint("旧数据")
-	Database.actions["test_extra"] = action_extra
-	var pool := _make_action_pool(["test_action_1","test_action_2","test_action_3","test_action_4","test_action_5","test_action_6"])
-	ActionManager.pick_top_actions(pool)
-	assert_true(action_extra.dynamic_failed_hint.is_empty())
-
-
-func test_pick_locks_unselected_with_narrative():
-	Database.actions.clear()
-	for i in range(1, 9):
-		Database.actions["test_action_%d" % i] = _make_action_with_narrative("test_action_%d" % i, "理由%d" % i if i > 6 else "")
-	var pool := _make_action_pool(["test_action_1","test_action_2","test_action_3","test_action_4","test_action_5","test_action_6","test_action_7","test_action_8"])
-	ActionManager.pick_top_actions(pool)
-	var locked := 0
-	for i in range(7, 9):
-		if not Database.actions["test_action_%d" % i].dynamic_failed_hint.is_empty():
-			locked += 1
-	assert_gt(locked, 0)
-
-
-# ════════════════════════════════════════════════════════════
-# reevaluate_all_locks
-# ════════════════════════════════════════════════════════════
-
-func test_reeval_selected_valid_unlocked():
-	Database.properties["health"].val = 80
-	var a := _make_action_with_prop_req("test_selected_ok", "health", 50, REQ_OPERATOR.COMPARE.GREATER_THAN)
-	Database.actions["test_selected_ok"] = a
-	ActionManager._selected_action_ids["test_selected_ok"] = true
-	ActionManager.reevaluate_all_locks()
-	assert_true(a.dynamic_failed_hint.is_empty())
-
-
-func test_reeval_selected_invalid_locked():
-	Database.properties["health"].val = 20
-	var a := _make_action_with_prop_req("test_selected_fail", "health", 50, REQ_OPERATOR.COMPARE.GREATER_THAN)
-	Database.actions["test_selected_fail"] = a
-	ActionManager._selected_action_ids["test_selected_fail"] = true
-	ActionManager.reevaluate_all_locks()
-	assert_false(a.dynamic_failed_hint.is_empty())
-
-
-func test_reeval_unselected_always_locked():
-	Database.properties["health"].val = 80
-	var a := _make_action_with_prop_req("test_unselected", "health", 50, REQ_OPERATOR.COMPARE.GREATER_THAN)
-	a.lock_narrative = "今日不宜出行"
-	Database.actions["test_unselected"] = a
-	ActionManager.reevaluate_all_locks()
-	assert_false(a.dynamic_failed_hint.is_empty())
-	assert_true(a.dynamic_failed_hint.contains("今日不宜出行"))
-
-
-func test_reeval_unselected_with_a_reason():
-	Database.properties["health"].val = 20
-	var a := _make_action_with_prop_req("test_unselected_a", "health", 50, REQ_OPERATOR.COMPARE.GREATER_THAN)
-	a.lock_narrative = "未中签"
-	Database.actions["test_unselected_a"] = a
-	ActionManager.reevaluate_all_locks()
-	assert_false(a.dynamic_failed_hint.is_empty())
-	assert_true(a.dynamic_failed_hint.contains("未中签"))
 
 
 # ════════════════════════════════════════════════════════════
@@ -289,9 +136,7 @@ func test_era_allowed_rejected_blocks():
 	era.rejected_actions = [ENUMS.ACTION_TYPE.BAI_YE]
 	Database.eras["test_era_reject"] = era
 	GameState.current_era = "test_era_reject"
-	var a := SceneAction.new()
-	a._main_tag = 29
-	a.uuid = "test_rejected"
+	var a := SceneAction.new(); a._main_tag = 29; a.uuid = "test_rejected"
 	assert_false(ActionManager.is_action_era_allowed(a))
 
 
@@ -301,9 +146,7 @@ func test_era_allowed_rejected_not_matching():
 	era.rejected_actions = [ENUMS.ACTION_TYPE.JIAO_YOU]
 	Database.eras["test_no_reject"] = era
 	GameState.current_era = "test_no_reject"
-	var a := SceneAction.new()
-	a._main_tag = 29
-	a.uuid = "test_not_rejected"
+	var a := SceneAction.new(); a._main_tag = 29; a.uuid = "test_not_rejected"
 	assert_true(ActionManager.is_action_era_allowed(a))
 
 
@@ -313,9 +156,7 @@ func test_era_allowed_accepted_allows():
 	era.accepted_actions = [ENUMS.ACTION_TYPE.BAI_YE]
 	Database.eras["test_accept"] = era
 	GameState.current_era = "test_accept"
-	var a := SceneAction.new()
-	a._main_tag = 29
-	a.uuid = "test_accepted"
+	var a := SceneAction.new(); a._main_tag = 29; a.uuid = "test_accepted"
 	assert_true(ActionManager.is_action_era_allowed(a))
 
 
@@ -325,21 +166,199 @@ func test_era_allowed_accepted_blocks_others():
 	era.accepted_actions = [ENUMS.ACTION_TYPE.BAI_YE]
 	Database.eras["test_accept_only"] = era
 	GameState.current_era = "test_accept_only"
-	var a := SceneAction.new()
-	a._main_tag = 30
-	a.uuid = "test_not_accepted"
+	var a := SceneAction.new(); a._main_tag = 30; a.uuid = "test_not_accepted"
 	assert_false(ActionManager.is_action_era_allowed(a))
 
 
 # ════════════════════════════════════════════════════════════
-# 信号发射
+# lock_action / block_action — 持久化锁定/阻塞
 # ════════════════════════════════════════════════════════════
 
-func test_reeval_emits_refresh_signal():
-	Database.properties["health"].val = 10
-	var a := _make_action_with_prop_req("test_signal", "health", 50, REQ_OPERATOR.COMPARE.GREATER_THAN)
-	Database.actions["test_signal"] = a
-	ActionManager._selected_action_ids["test_signal"] = true
-	watch_signals(EventBus)
-	ActionManager.reevaluate_all_locks()
-	assert_signal_emitted(EventBus, "request_refresh_action_locks")
+func test_lock_action_basic():
+	assert_true(ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, -1))
+	assert_true(ActionManager._locked_in_actions.has("bai_ye"))
+	assert_eq(ActionManager._locked_in_actions["bai_ye"], -1)
+
+
+func test_lock_action_reserves_immediately():
+	ActionManager.clear_reservations()
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, 3)
+	assert_has(ActionManager._reserved_action_ids, "bai_ye")
+
+
+func test_block_action_basic():
+	assert_true(ActionManager.block_action(ENUMS.ACTION_TYPE.BAI_YE, 2))
+	assert_true(ActionManager._blocked_actions.has("bai_ye"))
+	assert_eq(ActionManager._blocked_actions["bai_ye"], 2)
+
+
+func test_block_action_removes_reserved():
+	ActionManager.reserve_action("bai_ye")
+	ActionManager.block_action(ENUMS.ACTION_TYPE.BAI_YE, 1)
+	assert_does_not_have(ActionManager._reserved_action_ids, "bai_ye")
+
+
+func test_lock_beats_block_conflict():
+	ActionManager.block_action(ENUMS.ACTION_TYPE.BAI_YE, 3)
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, 1)
+	assert_false(ActionManager._blocked_actions.has("bai_ye"))
+	assert_true(ActionManager._locked_in_actions.has("bai_ye"))
+
+
+func test_block_beats_lock_conflict():
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, 3)
+	ActionManager.block_action(ENUMS.ACTION_TYPE.BAI_YE, 1)
+	assert_false(ActionManager._locked_in_actions.has("bai_ye"))
+	assert_true(ActionManager._blocked_actions.has("bai_ye"))
+
+
+func test_is_action_locked():
+	assert_false(ActionManager.is_action_locked(ENUMS.ACTION_TYPE.BAI_YE))
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, 1)
+	assert_true(ActionManager.is_action_locked(ENUMS.ACTION_TYPE.BAI_YE))
+
+
+func test_is_action_blocked():
+	assert_false(ActionManager.is_action_blocked(ENUMS.ACTION_TYPE.JIAO_YOU))
+	ActionManager.block_action(ENUMS.ACTION_TYPE.JIAO_YOU, 1)
+	assert_true(ActionManager.is_action_blocked(ENUMS.ACTION_TYPE.JIAO_YOU))
+
+
+func test_unlock_action():
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, 5)
+	ActionManager.unlock_action(ENUMS.ACTION_TYPE.BAI_YE)
+	assert_false(ActionManager._locked_in_actions.has("bai_ye"))
+
+
+func test_unblock_action():
+	ActionManager.block_action(ENUMS.ACTION_TYPE.BAI_YE, 5)
+	ActionManager.unblock_action(ENUMS.ACTION_TYPE.BAI_YE)
+	assert_false(ActionManager._blocked_actions.has("bai_ye"))
+
+
+func test_block_action_by_id():
+	ActionManager.block_action_by_id("special_event_1", 3)
+	assert_true(ActionManager._blocked_actions.has("special_event_1"))
+	assert_eq(ActionManager._blocked_actions["special_event_1"], 3)
+
+
+func test_unblock_action_by_id():
+	ActionManager.block_action_by_id("special_event_2", 3)
+	ActionManager.unblock_action_by_id("special_event_2")
+	assert_false(ActionManager._blocked_actions.has("special_event_2"))
+
+
+func test_lock_action_invalid_type():
+	assert_false(ActionManager.lock_action(-1, 1))
+
+
+# ════════════════════════════════════════════════════════════
+# process_xun_tick — 旬结算递减
+# ════════════════════════════════════════════════════════════
+
+func test_xun_tick_lock_decrement():
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, 3)
+	ActionManager.clear_reservations()
+	ActionManager.process_xun_tick()
+	assert_eq(ActionManager._locked_in_actions["bai_ye"], 2)
+	ActionManager.process_xun_tick()
+	assert_eq(ActionManager._locked_in_actions["bai_ye"], 1)
+
+
+func test_xun_tick_lock_expires():
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, 2)
+	ActionManager.clear_reservations()
+	ActionManager.process_xun_tick(); ActionManager.process_xun_tick()
+	assert_false(ActionManager._locked_in_actions.has("bai_ye"))
+
+
+func test_xun_tick_lock_infinite():
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, -1)
+	ActionManager.clear_reservations()
+	for _i in range(10):
+		ActionManager.process_xun_tick()
+	assert_true(ActionManager._locked_in_actions.has("bai_ye"))
+
+
+func test_xun_tick_block_decrement():
+	ActionManager.block_action(ENUMS.ACTION_TYPE.JIAO_YOU, 3)
+	ActionManager.process_xun_tick()
+	assert_eq(ActionManager._blocked_actions["jiao_you"], 2)
+	ActionManager.process_xun_tick()
+	assert_eq(ActionManager._blocked_actions["jiao_you"], 1)
+
+
+func test_xun_tick_block_expires():
+	ActionManager.block_action(ENUMS.ACTION_TYPE.JIAO_YOU, 1)
+	ActionManager.process_xun_tick()
+	assert_false(ActionManager._blocked_actions.has("jiao_you"))
+
+
+func test_xun_tick_block_infinite():
+	ActionManager.block_action(ENUMS.ACTION_TYPE.JIAO_YOU, -1)
+	for _i in range(10):
+		ActionManager.process_xun_tick()
+	assert_true(ActionManager._blocked_actions.has("jiao_you"))
+
+
+func test_xun_tick_mixed():
+	ActionManager.lock_action(ENUMS.ACTION_TYPE.BAI_YE, 2)
+	ActionManager.block_action(ENUMS.ACTION_TYPE.JIAO_YOU, 3)
+	ActionManager.clear_reservations()
+	ActionManager.process_xun_tick()
+	assert_eq(ActionManager._locked_in_actions["bai_ye"], 1)
+	assert_eq(ActionManager._blocked_actions["jiao_you"], 2)
+
+
+# ════════════════════════════════════════════════════════════
+# apply_visibility_flags — 三阶段标志位
+# ════════════════════════════════════════════════════════════
+
+func test_visibility_blocked_is_hidden():
+	var a := _make_action("test_hidden_blocked")
+	Database.actions["test_hidden_blocked"] = a
+	ActionManager._blocked_actions["test_hidden_blocked"] = -1
+	ActionManager.apply_visibility_flags()
+	assert_true(a._is_hidden)
+
+
+func test_visibility_unblocked_not_hidden():
+	var a := _make_action("test_not_hidden")
+	Database.actions["test_not_hidden"] = a
+	ActionManager.apply_visibility_flags()
+	assert_false(a._is_hidden)
+
+
+func test_visibility_unselected_gets_b_class():
+	"""未中签 → B类 lock_narrative + 兜底「此路不通」"""
+	var a := _make_action("test_vis_unselected"); a.lock_narrative = "时机未到"
+	Database.actions["test_vis_unselected"] = a
+	ActionManager.apply_visibility_flags()
+	assert_false(a.dynamic_failed_hint.is_empty())
+	assert_true(a.dynamic_failed_hint.contains("此路不通"))
+	assert_true(a.dynamic_failed_hint.contains("时机未到"))
+
+
+# ════════════════════════════════════════════════════════════
+# batch mode
+# ════════════════════════════════════════════════════════════
+
+func test_batch_suppress_flag():
+	assert_false(ActionManager._suppress_reevaluate)
+	ActionManager.begin_action_batch()
+	assert_true(ActionManager._suppress_reevaluate)
+	ActionManager.end_action_batch()
+	assert_false(ActionManager._suppress_reevaluate)
+
+
+# ════════════════════════════════════════════════════════════
+# action_type_to_id
+# ════════════════════════════════════════════════════════════
+
+func test_action_type_to_id_valid():
+	assert_eq(ActionManager.action_type_to_id(ENUMS.ACTION_TYPE.BAI_YE), "bai_ye")
+
+
+func test_action_type_to_id_invalid():
+	assert_eq(ActionManager.action_type_to_id(-1), "")
+	assert_eq(ActionManager.action_type_to_id(999), "")

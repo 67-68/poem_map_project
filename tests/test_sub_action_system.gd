@@ -157,7 +157,7 @@ func test_sub_action_fallback_to_parent_when_not_found() -> void:
 	var sub_action = null
 	var sub_main_tag: String
 	var sub_fallback: String
-	var sub_tags: Array[String]
+	var sub_tags
 
 	if sub_action:
 		sub_fallback = sub_action.fallback_event_uuid
@@ -165,7 +165,7 @@ func test_sub_action_fallback_to_parent_when_not_found() -> void:
 	else:
 		sub_main_tag = parent_main_tag
 		sub_fallback = parent_fallback
-		sub_tags = parent_tags.duplicate()
+		sub_tags = parent_tags.duplicate() as Array[String]
 
 	assert_eq(sub_main_tag, "action:main:jiaoyou", "查不到子 action 时应 fallback 父 main_tag")
 	assert_eq(sub_fallback, "parent_fallback_event", "查不到子 action 时应 fallback 父 fallback")
