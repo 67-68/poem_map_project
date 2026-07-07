@@ -275,6 +275,12 @@ func _on_button_pressed() -> void:
 	PlayerState.created_poems.append(poem)
 	Logging.info('PoemCrafter(V10): Poem added to created_poems')
 
+	# 🆕 V10 fix: 注册 Poem 到 PlayerState.traits + Database.traits
+	# 使左侧 trait 面板可显示，且 PoemRewardOperator.is_viable() 可查询
+	PlayerState.add_trait(poem.uuid)
+	Database.traits[poem.uuid] = poem
+	Logging.info('PoemCrafter(V10): Poem registered to traits system — uuid=%s' % poem.uuid)
+
 	# ── 4. 先执行创作代价（天数 + 健康消耗）──
 	if not _cached_cost_operators.is_empty():
 		Logging.info('PoemCrafter(V10): 执行创作代价 — %d 个 operators' % _cached_cost_operators.size())
@@ -345,14 +351,19 @@ func _consume_all_imaginaries() -> void:
 
 
 func _has_unused_poem() -> bool:
+	# V10: 优先检查 created_poems（直接遍历 Poem 对象，O(n)）
 	for entry in PlayerState.created_poems:
 		if entry is Poem and entry.topic == "POEM":
+			Logging.info('PoemCrafter: 检测到已有诗词 in created_poems: %s' % entry.uuid)
 			return true
+	# V10: 再检查 PlayerState.traits 中的 Poem（通过 Database.traits 解析）
+	# uuid 前缀已从 poem_recipe_ 改为 crafted_poem_，使用通用 is Poem 检查更健壮
 	for trait_uuid in PlayerState.traits:
 		var t = Database.get_trait(trait_uuid)
-		if t != null and t is Poem and t.topic == "POEM" and t.uuid.begins_with("poem_recipe_"):
+		if t != null and t is Poem and t.topic == "POEM":
 			Logging.info('PoemCrafter: 检测到已有诗词 trait: %s (%s)' % [t.name, t.uuid])
 			return true
+	Logging.info('PoemCrafter: 未检测到任何未使用诗词')
 	return false
 
 

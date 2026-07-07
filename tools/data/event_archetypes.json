@@ -286,7 +286,7 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=money; val=m_money_cost)",
+    "universal_result": "prop_sub(name=money; val=m_money_cost)|prop_add(name=progress; val=l_progress_gain)",
     "era": "",
     "failed_hints": {}
   },

@@ -52,6 +52,13 @@ static var debug_dashboard_state = {
 		# imaginary UUID → 初始等级（保留兼容）
 	},
 
+	# 开局初始意象 — init_imaginaries() 从此读取
+	"basic_imaginaries": [
+		{"name": "布衣"},
+		{"name": "古砚"},
+		{"name": "骐骥"},
+	],
+
 	# 详细碎片初始数据 — 预填入 Database.imaginaries_detail (Imaginary 对象)
 	# V7: ImaginaryConcept 已删除，concepts 字段已删除
 

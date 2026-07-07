@@ -141,8 +141,13 @@ func _on_poem_picked(poem_picked):
 	Logging.info('PoemRewardOperator: Reward applied — %s += %d (from Poem level=%d, effective=%d, upgrade=%s)' % [prop_name, prop_op.value, base_level, effective_level, upgrade_succeeded])
 
 	# ── 7. 消耗诗词 ──
+	# V10 fix: 完整清理三个存储位置
 	PlayerState.remove_trait(poem.uuid)
-	Logging.info('PoemRewardOperator: 诗词已被消耗: %s' % poem.uuid)
+	Database.traits.erase(poem.uuid)
+	var idx := PlayerState.created_poems.find(poem)
+	if idx != -1:
+		PlayerState.created_poems.remove_at(idx)
+	Logging.info('PoemRewardOperator: 诗词已被消耗: %s (traits=%d, created_poems=%d, db_traits=%d)' % [poem.uuid, PlayerState.traits.size(), PlayerState.created_poems.size(), Database.traits.size()])
 
 	# ── 8. Show hint ──
 	if show_hint_on_reward:
