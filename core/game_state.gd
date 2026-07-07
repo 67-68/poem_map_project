@@ -37,6 +37,10 @@ var ratio_time: float:
 	get: return GameSave.data.ratio_time
 	set(val): GameSave.data.ratio_time = val
 
+var event_counter: int:
+	get: return GameSave.data.event_counter
+	set(val): GameSave.data.event_counter = val
+
 var mood: float:
 	get: return GameSave.data.mood
 	set(val): GameSave.data.mood = val

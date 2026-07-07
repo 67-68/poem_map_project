@@ -141,6 +141,10 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	_auto_advance_blocked = false
 	HoverPopupManager.dismiss_all()
 
+	# 🆕 每次事件显示时递增 event_counter（PlotController 用于剧情推进判断）
+	GameState.event_counter += 1
+	Logging.info("[DIAG] _on_event_ready_to_play: event_counter=%d" % GameState.event_counter)
+
 	# 🆕 事件开始时：恢复 overlay 快照位置 + 显示 tape（HoverContainer 保持 daily 内容）
 	visualizer.restore_snapshot()
 	show()
@@ -819,10 +823,11 @@ func _check_survival_goal() -> String:
 ## 2. 潜意识碎碎念：检查中毒 / 崴脚
 ## 有 debuff 时返回杜甫口吻的一句话，否则返回 ""
 func _subconscious_murmur() -> String:
-	if PlayerState.has_trait("poisoned"):
-		return "腹中隐隐作痛，这毒物怕不是那日试药留下的…"
-	if PlayerState.has_trait("sprained_ankle"):
-		return "脚踝还在隐隐发疼，走路得慢些。"
+	for t_name in PlayerState.traits:
+		var t = Database.get_trait(t_name)
+		if t and not t.narrative_murmur.is_empty():
+			Logging.info("[NarrativeOverlay] _subconscious_murmur: 使用 trait '%s' 的 narrative_murmur" % t_name)
+			return t.narrative_murmur
 	return ""
 
 ## 两个函数均无内容时的 fallback：硬编码 5 句杜甫独白，随机挑一句

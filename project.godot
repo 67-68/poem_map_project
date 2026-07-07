@@ -45,6 +45,7 @@ AncientOptionBtnManager="*res://core/ancient_option_btn_manager.gd"
 MonthEndSettlement="*res://core/month_end_settlement.gd"
 StyleManager="*res://features/style_manager.gd"
 AnimationController="*res://core/animation_controller.gd"
+PlotController="*res://core/plot_controller.gd"
 
 [debug]
 

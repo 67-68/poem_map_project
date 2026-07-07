@@ -304,6 +304,7 @@
     "1_core_rules/flags/trig_dist_indifferent_wind.tres",
     "1_core_rules/flags/trig_dist_lishan.tres",
     "1_core_rules/flags/trig_dist_outside_city.tres",
+    "1_core_rules/plot/plot_prompt_user_action.tres",
     "1_core_rules/event_options/poem_giving_option.tres",
     "1_core_rules/event_options/poem_type_choose_youxiangfu.tres",
     "1_core_rules/event_options/poem_type_choose_zhuoliu.tres",
@@ -542,6 +543,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-06T11:16:56.137398+00:00",
-  "total": 541
+  "generated_at": "2026-07-07T06:38:51.336681+00:00",
+  "total": 542
 }
