@@ -43,8 +43,8 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 [resource]
 script = ExtResource("1_govja")
 on_enter_event = "event_disease_shiyi_diagnosis"
-progression_target = "disease_zhanwang_mania"
-progression_xun = 6
+duration_xun = 6
+expiry_trait = "disease_zhanwang_mania"
 buffer_to_prop = SubResource("Resource_wlxnd")
 topic = "MENTAL_ILLNESS"
 specific_topic = "DEPRESSION"

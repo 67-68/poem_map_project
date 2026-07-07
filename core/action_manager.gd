@@ -782,19 +782,29 @@ static func get_action_day_cost(action: Action, parent_day: float = -1.0) -> int
 	for penalty_days in penalties.values():
 		total += penalty_days
 	
-	# severe_injury 硬编码：远游/登高 +5 AP
-	if PlayerState.has_trait("severe_injury"):
-		var is_denggao := false
-		if action is SceneAction:
-			is_denggao = "denggao" in action.main_tag.to_lower()
-		if not is_denggao:
-			for tag in action.action_tags:
-				if "denggao" in tag.to_lower():
-					is_denggao = true
-					break
-		if is_denggao:
-			total += 5
-			Logging.info("[ActionManager] severe_injury 远游惩罚: +5, total=%d" % total)
+	# 🆕 conditional_time_penalties 数据驱动：遍历所有 trait 的条件惩罚
+	for t_name in PlayerState.traits:
+		var t_data = Database.get_trait(t_name)
+		if not t_data or t_data.conditional_time_penalties.is_empty():
+			continue
+		for ctp in t_data.conditional_time_penalties:
+			var matched := false
+			if ctp.add_to_all:
+				matched = true
+			elif not ctp.action_tag_match.is_empty():
+				# 检查 main_tag（SceneAction）
+				if action is SceneAction:
+					if ctp.action_tag_match in (action as SceneAction).main_tag.to_lower():
+						matched = true
+				# 检查 action_tags
+				if not matched:
+					for tag in action.action_tags:
+						if ctp.action_tag_match in tag.to_lower():
+							matched = true
+							break
+			if matched:
+				total += ctp.penalty_days
+				Logging.info("[ActionManager] conditional_time_penalty: trait=%s tag=%s days=+%d desc=%s total=%d" % [t_name, ctp.action_tag_match, ctp.penalty_days, ctp.description, total])
 	
 	Logging.info("[ActionManager] get_action_day_cost: base=%d, penalties=%s → total=%d" % [int(base), str(penalties), total])
 	return total

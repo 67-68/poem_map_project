@@ -1023,7 +1023,50 @@ static func parse_trait(row: Dictionary) -> Trait:
     if not time_penalty_str.is_empty():
         trait_.time_penalty = time_penalty_str.to_int()
 
-    Logging.info("Trait解析成功: %s (topic=%s, time_penalty=%d)" % [trait_id, trait_.topic, trait_.time_penalty])
+    # ─── 🆕 数据驱动字段解析 ───────────────────────────────
+
+    # duration_xun（到期旬数，0=永久）
+    var duration_str = row.get('duration_xun', '')
+    if not duration_str.is_empty():
+        trait_.duration_xun = duration_str.to_int()
+
+    # expiry_trait（到期后替换的 trait UUID）
+    var expiry_str = row.get('expiry_trait', '')
+    if not expiry_str.is_empty():
+        trait_.expiry_trait = expiry_str
+
+    # conditional_time_penalty（条件化时间惩罚 DSL）
+    # 格式: action_tag_match/penalty_days/description/add_to_all
+    # 多个用 | 分隔，add_to_all 为 "true" 表示所有行动
+    var ctp_str = row.get('conditional_time_penalty', '')
+    if not ctp_str.is_empty():
+        var entries = ctp_str.split('|', false)
+        for entry in entries:
+            var parts = entry.split('/', false)
+            if parts.size() < 2:
+                Logging.warn("parse_trait: conditional_time_penalty 格式错误: %s" % entry)
+                continue
+            var ctp = ConditionalTimePenalty.new()
+            ctp.action_tag_match = parts[0].strip_edges()
+            ctp.penalty_days = parts[1].strip_edges().to_int()
+            if parts.size() >= 3:
+                ctp.description = parts[2].strip_edges()
+            if parts.size() >= 4:
+                ctp.add_to_all = parts[3].strip_edges().to_lower() == "true"
+            trait_.conditional_time_penalties.append(ctp)
+            Logging.info("parse_trait: %s conditional_time_penalty: tag=%s days=%d desc=%s add_to_all=%s" % [trait_id, ctp.action_tag_match, ctp.penalty_days, ctp.description, str(ctp.add_to_all)])
+
+    # narrative_murmur（潜意识碎碎念）
+    var murmur_str = row.get('narrative_murmur', '')
+    if not murmur_str.is_empty():
+        trait_.narrative_murmur = murmur_str
+
+    # ap_penalty（永久 AP 上限削减）
+    var ap_penalty_str = row.get('ap_penalty', '')
+    if not ap_penalty_str.is_empty():
+        trait_.ap_penalty = ap_penalty_str.to_int()
+
+    Logging.info("Trait解析成功: %s (topic=%s, time_penalty=%d, duration_xun=%d, ap_penalty=%d)" % [trait_id, trait_.topic, trait_.time_penalty, trait_.duration_xun, trait_.ap_penalty])
     return trait_
 
 static func validate_trait(trait_: Trait) -> bool:

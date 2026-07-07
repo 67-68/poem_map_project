@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_govja")
 on_enter_event = "event_disease_fenghan_diagnosis"
-progression_target = "disease_feilao_chronic"
-progression_xun = 6
+duration_xun = 6
+expiry_trait = "disease_feilao_chronic"
 topic = "DISEASE"
 specific_topic = "ACUTE"
 uuid = "disease_fenghan_acute"

@@ -31,8 +31,6 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 [resource]
 script = ExtResource("1_govja")
 on_enter_event = "event_disease_fenghan_diagnosis"
-progression_target = "disease_feilao_chronic"
-progression_xun = 6
 buffer_to_prop = SubResource("Resource_wlxnd")
 topic = "DISEASE"
 specific_topic = "CHRONIC"

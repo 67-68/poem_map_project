@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_govja")
 on_enter_event = "event_disease_dongshang_diagnosis"
-progression_target = "disease_dongshang_necrosis"
-progression_xun = 3
+duration_xun = 3
+expiry_trait = "disease_dongshang_necrosis"
 topic = "DISEASE"
 specific_topic = "ACUTE"
 uuid = "disease_dongshang_frostbite"

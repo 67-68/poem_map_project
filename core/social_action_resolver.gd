@@ -7,13 +7,6 @@ class_name SocialActionResolver extends RefCounted
 # （威胁/交好按钮所需的事件 ID）
 # ═══════════════════════════════════════════════════════════
 
-const KUANGDA_STATE_MAP = {
-	"kuangda_kuangke": "kuangke",
-	"kuangda_fengying": "fengying",
-	"kuangda_zuanying": "zuanying"
-}
-
-
 # ── 唯一入口 ─────────────────────────────────────────────
 
 static func enrich_context(ev: BaseEvent, ev_name: String, context: Dictionary) -> Dictionary:
@@ -90,10 +83,7 @@ static func _derive_relation_target(main_tag: String) -> String:
 # ── 旷达状态检测 ─────────────────────────────────────────
 
 static func _get_kuangda_state() -> String:
-	for trait_key in KUANGDA_STATE_MAP:
-		if PlayerState.has_trait(trait_key):
-			return KUANGDA_STATE_MAP[trait_key]
-	return ""
+	return KuangdaState.current()
 
 
 # ── 威胁事件 ID 三级匹配 ─────────────────────────────────

@@ -86,10 +86,16 @@ static func get_current_ap_cap() -> int:
 	if lv3_count > 0:
 		Logging.info('[SurvivalManager] get_current_ap_cap: %d 个 Lv3 Imaginary → AP %d' % [lv3_count, base_ap])
 	
-	# 🆕 呕心沥血：永久 AP 上限 -2
-	if PlayerState.has_trait("disease_ouxinlixue"):
-		base_ap -= 2
-		Logging.info('[SurvivalManager] get_current_ap_cap: 呕心沥血 → AP -2 → %d' % base_ap)
+	# 🆕 trait.ap_penalty 聚合：遍历所有活跃 trait 的 ap_penalty 并扣除
+	var ap_penalty_total := 0
+	for t_name in PlayerState.traits:
+		var t_data = Database.get_trait(t_name)
+		if t_data and t_data.ap_penalty != 0:
+			ap_penalty_total += t_data.ap_penalty
+			Logging.info('[SurvivalManager] get_current_ap_cap: trait "%s" ap_penalty=%d → 累计=%d' % [t_name, t_data.ap_penalty, ap_penalty_total])
+	if ap_penalty_total != 0:
+		base_ap += ap_penalty_total  # ap_penalty 为负数，直接加 = 扣除
+		Logging.info('[SurvivalManager] get_current_ap_cap: 总 ap_penalty=%d → AP=%d' % [ap_penalty_total, base_ap])
 	
 	# 底限钳制：AP 不能降到 1 以下
 	var final_ap := maxi(base_ap, 1)
@@ -164,33 +170,24 @@ func decay(prop_enum, threshold, decay_val):
 	else:
 		append_prop(prop_enum, -current_val)
 
-const TEMP_DEBUFF_DURATION_XUN: int = 2
-const TEMP_DEBUFFS: Array[String] = ["poisoned", "sprained_ankle"]
-const SEVERE_INJURY_DURATION_XUN: int = 3  ## 重伤独立 3 旬过期
-
+## 🆕 统一到期逻辑：所有 trait 走 duration_xun + expiry_trait。
+## 替代原 TEMP_DEBUFFS / SEVERE_INJURY_DURATION_XUN / Disease.progression 三套硬编码。
 func aggregate_trait_effect():
 	for t in PlayerState.get_traits():
 		var trait_ = Database.get_trait(t)
 		if not trait_:
-			Logging.warn('为什么player state中存在的triat在database没有？？')
+			Logging.warn('为什么player state中存在的trait在database没有？？')
 			continue
 		trait_.lasting_xun += 1
 		trait_.operate_continuous_effect()
 		
-		# 疾病进展检查：如果 trait 是 Disease 且有 progression_target
-		if trait_ is Disease and not trait_.progression_target.is_empty():
-			if trait_.lasting_xun >= trait_.progression_xun:
-				Logging.info('[SurvivalManager] Disease progression: ' + t + ' → ' + trait_.progression_target)
-				PlayerState.remove_trait(t)
-				PlayerState.add_trait(trait_.progression_target)
-		# 临时 debuff 到期自动移除
-		if t in TEMP_DEBUFFS and trait_.lasting_xun >= TEMP_DEBUFF_DURATION_XUN:
-			Logging.info('[SurvivalManager] Temp debuff expired: %s (lasting_xun=%d)' % [t, trait_.lasting_xun])
+		# 🆕 统一到期逻辑：duration_xun > 0 时自动移除/替换
+		if trait_.duration_xun > 0 and trait_.lasting_xun >= trait_.duration_xun:
+			Logging.info('[SurvivalManager] Trait expired: %s (lasting_xun=%d, duration_xun=%d)' % [t, trait_.lasting_xun, trait_.duration_xun])
 			PlayerState.remove_trait(t)
-		# 重伤独立 3 旬过期
-		if t == "severe_injury" and trait_.lasting_xun >= SEVERE_INJURY_DURATION_XUN:
-			Logging.info('[SurvivalManager] Severe injury expired: %s (lasting_xun=%d)' % [t, trait_.lasting_xun])
-			PlayerState.remove_trait(t)
+			if not trait_.expiry_trait.is_empty():
+				Logging.info('[SurvivalManager] Trait %s → 替换为 %s' % [t, trait_.expiry_trait])
+				PlayerState.add_trait(trait_.expiry_trait)
 
 # ─── Imaginary 生命周期结算 ──────────────────────────────────
 ## 在 aggregate_trait_effect() 之后、_sync_health_ap_traits() 之前执行。
@@ -226,32 +223,45 @@ func _process_imaginary_effects() -> void:
 					has_changed = true
 					
 			2:
-				# Lv2: 每旬扣 5 健康
-				Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 每旬扣 5 健康（%d 天）' % [uuid, days_alive])
-				PlayerState.append_stat(ENUMS.PROPS.HEALTH, -5)
-				has_changed = true
-				
-				if expired:
-					# 到期转化：检查 flag 防叠层
-					if not PlayerState.has_flag("flag_has_fenghan_imaginary"):
-						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 到期 → 转化为 风寒' % uuid)
-						PlayerState.add_trait("disease_fenghan_imaginary")
-						PlayerState.set_flag("flag_has_fenghan_imaginary", true, "bool")
+					# Lv2: 持有期扣血（使用 imag.level_effect_health，默认 -5）
+					var hp_effect = imag.level_effect_health
+					if hp_effect < 0:
+						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 每旬扣 %d 健康（%d 天）' % [uuid, hp_effect, days_alive])
+						PlayerState.append_stat(ENUMS.PROPS.HEALTH, hp_effect)
+						has_changed = true
 					else:
-						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 到期，风寒已存在，跳过转化' % uuid)
-					to_delete.append(uuid)
+						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" level_effect_health=%d, 跳过扣血（%d 天）' % [uuid, hp_effect, days_alive])
 					
+					if expired and not imag.expiry_trait.is_empty():
+						# 到期转化：检查 flag 防叠层（使用 imag 自身字段）
+						if imag.expiry_flag.is_empty() or not PlayerState.has_flag(imag.expiry_flag):
+							Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 到期 → 转化为 %s' % [uuid, imag.expiry_trait])
+							PlayerState.add_trait(imag.expiry_trait)
+							if not imag.expiry_flag.is_empty():
+								PlayerState.set_flag(imag.expiry_flag, true, "bool")
+						else:
+							Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 到期，flag(%s) 已存在，跳过转化' % [uuid, imag.expiry_flag])
+						to_delete.append(uuid)
+					elif expired:
+						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv2 Imaginary "%s" 到期，无 expiry_trait，直接删除' % uuid)
+						to_delete.append(uuid)
+						
 			3:
-				# Lv3: 持有期副作用在 get_current_ap_cap() 中处理
-				if expired:
-					if not PlayerState.has_flag("flag_has_ouxin_imaginary"):
-						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv3 Imaginary "%s" 到期 → 转化为 呕心沥血' % uuid)
-						PlayerState.add_trait("disease_ouxinlixue")
-						PlayerState.set_flag("flag_has_ouxin_imaginary", true, "bool")
-					else:
-						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv3 Imaginary "%s" 到期，呕心沥血已存在，跳过转化' % uuid)
-					to_delete.append(uuid)
-					has_changed = true
+					# Lv3: 持有期副作用在 get_current_ap_cap() 中处理
+					if expired and not imag.expiry_trait.is_empty():
+						if imag.expiry_flag.is_empty() or not PlayerState.has_flag(imag.expiry_flag):
+							Logging.info('[SurvivalManager] _process_imaginary_effects: Lv3 Imaginary "%s" 到期 → 转化为 %s' % [uuid, imag.expiry_trait])
+							PlayerState.add_trait(imag.expiry_trait)
+							if not imag.expiry_flag.is_empty():
+								PlayerState.set_flag(imag.expiry_flag, true, "bool")
+						else:
+							Logging.info('[SurvivalManager] _process_imaginary_effects: Lv3 Imaginary "%s" 到期，flag(%s) 已存在，跳过转化' % [uuid, imag.expiry_flag])
+						to_delete.append(uuid)
+						has_changed = true
+					elif expired:
+						Logging.info('[SurvivalManager] _process_imaginary_effects: Lv3 Imaginary "%s" 到期，无 expiry_trait，直接删除' % uuid)
+						to_delete.append(uuid)
+						has_changed = true
 	
 	# ── 清理到期的 Imaginary ──
 	for del_uuid in to_delete:
@@ -272,10 +282,10 @@ func operate_state_transistors():
 	
 	var prog = PlayerState.get_stat_val(ENUMS.PROPS.PROGRESS)
 	if prog >= 100:
-		if PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_FENGYING): EventBus.request_event_key.emit("kuangda_2_to_3")
+		if KuangdaState.current() == "fengying": EventBus.request_event_key.emit("kuangda_2_to_3")
 		else: EventBus.request_event_key.emit("kuangda_1_to_2")
 	elif prog <= 0:
-		if PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_KUANGKE): EventBus.request_event_key.emit("kuangda_3_to_2")
+		if KuangdaState.current() == "kuangke": EventBus.request_event_key.emit("kuangda_3_to_2")
 		else: EventBus.request_event_key.emit("kuangda_2_to_1")
 
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）

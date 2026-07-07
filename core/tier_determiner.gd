@@ -12,14 +12,8 @@ const SORROW_THRESHOLD := 30
 const AMBITION_THRESHOLD := 25
 # ── Tier 判定 ──────────────────────────────────────────
 static func determine_tier() -> int:
-	# Step 1: 判断当前 IAM（用 int 枚举，走 PlayerState.has_trait 内部 to_traits_str 转换）
-	var iam := ""
-	if PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_KUANGKE):
-		iam = "kuangke"
-	elif PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_ZUANYING):
-		iam = "zuanying"
-	elif PlayerState.has_trait(ENUMS.TRAITS.KUANGDA_FENGYING):
-		iam = "fengying"
+	# Step 1: 判断当前 IAM（通过 KuangdaState 统一查询）
+	var iam := KuangdaState.current()
 
 	# Step 2: 读取情绪值
 	var tranquility: int = PlayerState.get_emotion(ENUMS.EMOTION.TRANQUILITY)

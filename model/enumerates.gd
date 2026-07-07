@@ -200,7 +200,7 @@ enum TRAITS {
     DISEASE_SHIYI_DEPRESSION,
     DISEASE_ZHANWANG_MANIA,
 
-    # 临时负面 Trait（硬编码过期，poisoned=2旬 severe_injury=3旬）
+    # 临时负面 Trait — 到期由 Trait.duration_xun + expiry_trait 数据驱动，不再硬编码
     POISONED,
     SPRAINED_ANKLE,
     SEVERE_INJURY,

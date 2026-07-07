@@ -11,3 +11,17 @@ class_name Imaginary extends GameEntity
 ## 意象获得的累计天数（用于计算持续时间，统一 2 旬=20 天后到期）
 ## -1 表示未设置（降级兼容旧存档）
 @export var created_at_day: int = -1
+
+# ─── 🆕 数据驱动到期字段 ────────────────────────────────
+
+## 到期后添加的 trait UUID。空 = 到期直接删除，不转化。
+## 替代原 _process_imaginary_effects() 中硬编码的 "disease_fenghan_imaginary" / "disease_ouxinlixue"。
+@export var expiry_trait: String = ""
+
+## 防叠层 flag 名。非空时检查该 flag，避免同一 Imaginary 等级重复转化。
+## 替代原 "flag_has_fenghan_imaginary" / "flag_has_ouxin_imaginary" 硬编码。
+@export var expiry_flag: String = ""
+
+## 持有期每旬扣除的健康值。仅 Lv2 使用（-5），其他等级为 0。
+## 替代原 match imag.level 中的硬编码 health -5。
+@export var level_effect_health: int = 0

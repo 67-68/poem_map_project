@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://cplotpromptuseract"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bo"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_prop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_eo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_re"]
+[ext_resource type="Script" uid="uid://bs881r2io48fq" path="res://model/ui_decl.gd" id="7_ui"]
+
+[sub_resource type="Resource" id="Resource_add_money"]
+script = ExtResource("3_prop")
+str_props = "money"
+value = 30
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_cr_take_money"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("2_baseop")]([SubResource("Resource_add_money")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt_take_money"]
+script = ExtResource("5_eo")
+choice_result = SubResource("Resource_cr_take_money")
+description = "收下银钱，谢过同乡"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_ui_decl"]
+script = ExtResource("7_ui")
+lasting_time = 0.0
+metadata/_custom_type_script = "uid://bs881r2io48fq"
+
+[resource]
+script = ExtResource("6_re")
+options = Array[ExtResource("1_bo")]([SubResource("Resource_opt_take_money")])
+ui_decl = SubResource("Resource_ui_decl")
+uuid = "plot_prompt_user_action"
+name = "同乡来访"
+description = "同乡老张风尘仆仆地找到你，从怀里掏出一个灰布包裹塞进你手中。\n\n「这是三十钱，乡里凑的。子美啊，你到长安也有些时日了，怎么还不去拜谒？这都第三旬了，再不去可就晚了！」\n\n他说完，重重拍了拍你的肩，转身消失在街巷尽头。\n\n（天意旁白：是时候了，点击右下角「拜谒」行动，叩响仕途的第一扇门。）"
+metadata/_custom_type_script = "uid://qhuu117ngmbk"

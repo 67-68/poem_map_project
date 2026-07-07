@@ -1,13 +1,13 @@
-trait_id,trait_name,topic,specific_topic,relate_to,lasting_xun,trait_effect_operations,trait_endogenous_operations,display_char,time_penalty
-lilinfu_student,右相门生,,,,,,
-kuangda_kuangke,狂客,,,,,,
-kuangda_fengying,逢迎,,,,,,
-kuangda_zuanying,钻营,,,,,,
-disease_dongshang_frostbite,冻伤初起,DISEASE,ACUTE,,,,
-disease_dongshang_necrosis,冻疮坏死,DISEASE,CHRONIC,,,,
-near_death_mind_broken,心智破损,,,,,,
-poisoned,中毒,DISEASE,,,,prop_sub(name=health; val=15),,
-sprained_ankle,崴脚,,,,,,,,1
-severe_injury,重伤,DISEASE,,,,prop_sub(name=health; val=15),,,1
-exhaustion_initial,疲态初显,,,,,,,疲
-terminal_illness,病入膏肓,,,,,,,病
+trait_id,trait_name,topic,specific_topic,relate_to,lasting_xun,trait_effect_operations,trait_endogenous_operations,display_char,time_penalty,duration_xun,expiry_trait,conditional_time_penalty,narrative_murmur,ap_penalty
+lilinfu_student,右相门生,,,,,,,,,,,,
+kuangda_kuangke,狂客,,,,,,,,,,,,
+kuangda_fengying,逢迎,,,,,,,,,,,,
+kuangda_zuanying,钻营,,,,,,,,,,,,
+disease_dongshang_frostbite,冻伤初起,DISEASE,ACUTE,,,,,,3,disease_dongshang_necrosis,,,
+disease_dongshang_necrosis,冻疮坏死,DISEASE,CHRONIC,,,,,,,,,,
+near_death_mind_broken,心智破损,,,,,,,,,,,,
+poisoned,中毒,DISEASE,,,prop_sub(name=health; val=15),,,,2,,,腹中隐隐作痛，这毒物怕不是那日试药留下的…,
+sprained_ankle,崴脚,,,,,,,,1,2,,,脚踝还在隐隐发疼，走路得慢些。,
+severe_injury,重伤,DISEASE,,,prop_sub(name=health; val=15),,,1,3,,/1/重伤行动不便/true|denggao/5/重伤登高/false,,
+exhaustion_initial,疲态初显,,,,,,,,,,,,,,
+terminal_illness,病入膏肓,,,,,,,,,,,,,,
