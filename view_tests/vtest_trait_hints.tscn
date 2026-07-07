@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/dump_trait_hints.gd" id="1_dump"]
+
+[node name="TraitDumpRunner" type="Node"]
+script = ExtResource("1_dump")

@@ -352,13 +352,16 @@ static func build_trait_hint(trait_data: Trait) -> String:
 	lines.append("【%s】" % display_name)
 	Logging.info("ActionHintBuilder.build_trait_hint: trait='%s', is_imaginary=%s" % [display_name, str(trait_data is Imaginary)])
 	
-	# 🆕 Imaginary 分支：仅显示等级 / get_hint / trait_effect_operations
+	# 🆕 Imaginary 分支：显示等级 / get_hint / description / trait_effect_operations / duration / hover_narrative
 	if trait_data is Imaginary:
 		var imag := trait_data as Imaginary
-		# 等级
+		
+		# 等级 + description（如果有）
 		var level_label := "Lv%d 意象" % imag.level
+		if not trait_data.description.is_empty():
+			level_label += " — %s" % trait_data.description
 		lines.append("[color=#66cc66]%s[/color]" % level_label)
-		Logging.info("ActionHintBuilder.build_trait_hint: Imaginary level=%d" % imag.level)
+		Logging.info("ActionHintBuilder.build_trait_hint: Imaginary level=%d, has_desc=%s" % [imag.level, str(not trait_data.description.is_empty())])
 		
 		# get_hint（获取时的叙事文本）
 		if not imag.get_hint.is_empty():
@@ -366,10 +369,10 @@ static func build_trait_hint(trait_data: Trait) -> String:
 			lines.append(imag.get_hint)
 			Logging.info("ActionHintBuilder.build_trait_hint: Imaginary get_hint present (%d chars)" % imag.get_hint.length())
 		
-		# trait_effect_operations（如 Lv2: health -5）
+		# 效果区
+		lines.append("")
+		lines.append("[color=gray][font_size=13]━━━ 效果 ━━━[/font_size][/color]")
 		if not trait_data.trait_effect_operations.is_empty():
-			lines.append("")
-			lines.append("[color=gray][font_size=13]━━━ 效果 ━━━[/font_size][/color]")
 			for op in trait_data.trait_effect_operations:
 				if not op:
 					continue
@@ -378,8 +381,27 @@ static func build_trait_hint(trait_data: Trait) -> String:
 					lines.append("• 每旬：%s" % desc)
 			Logging.info("ActionHintBuilder.build_trait_hint: Imaginary trait_effect_operations → %d lines" % trait_data.trait_effect_operations.size())
 		else:
-			lines.append("")
 			lines.append("（持有期无副作用）")
+			Logging.info("ActionHintBuilder.build_trait_hint: Imaginary 无 trait_effect_operations")
+		
+		# 持续时间（统一走 Trait 的 duration_xun 逻辑）
+		if trait_data.duration_xun > 0:
+			lines.append("")
+			lines.append("[color=gray][font_size=13]━━━ 持续 ━━━[/font_size][/color]")
+			var already := trait_data.lasting_xun
+			var remaining: int = max(0, trait_data.duration_xun - already)
+			if not trait_data.expiry_trait.is_empty():
+				var expiry_name := _get_trait_display_name(trait_data.expiry_trait)
+				lines.append("• %d旬后转化为「%s」（已持续%d旬）" % [remaining, expiry_name, already])
+			else:
+				lines.append("• %d旬后自动移除（已持续%d旬）" % [remaining, already])
+			Logging.info("ActionHintBuilder.build_trait_hint: Imaginary duration=%d, lasting=%d" % [trait_data.duration_xun, already])
+		
+		# hover_narrative（获取途径等）
+		if not trait_data.hover_narrative.is_empty():
+			lines.append("")
+			lines.append(trait_data.hover_narrative)
+			Logging.info("ActionHintBuilder.build_trait_hint: Imaginary hover_narrative present (%d chars)" % trait_data.hover_narrative.length())
 		
 		var result := "\n".join(lines)
 		Logging.info("ActionHintBuilder.build_trait_hint: done for Imaginary '%s', result=%d chars" % [display_name, result.length()])
@@ -461,7 +483,7 @@ static func build_trait_hint(trait_data: Trait) -> String:
 	if trait_data.duration_xun > 0:
 		lines.append("[color=gray][font_size=13]━━━ 持续 ━━━[/font_size][/color]")
 		var already := trait_data.lasting_xun
-		var remaining = max(0, trait_data.duration_xun - already)
+		var remaining: int = max(0, trait_data.duration_xun - already)
 		if not trait_data.expiry_trait.is_empty():
 			var expiry_name := _get_trait_display_name(trait_data.expiry_trait)
 			lines.append("• %d旬后转化为「%s」（已持续%d旬）" % [remaining, expiry_name, already])

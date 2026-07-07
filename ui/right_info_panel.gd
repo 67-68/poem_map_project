@@ -18,7 +18,7 @@ const CN_NAME_MAP: Dictionary = {
 	"guoguofuren": "虢国夫人",
 }
 
-@onready var _info_grid: GridContainer = $Panel/V/InfoGrid
+@onready var _info_grid: VBoxContainer = $Panel/V/InfoGrid
 @onready var _write_poem_btn: Button = $Panel/V/WritePoemContainer/WritePoemBtn
 @onready var _skip_btn: LinkButton = $Panel/V/TimeControlPanel/HBox/HBox2/LinkButton
 
