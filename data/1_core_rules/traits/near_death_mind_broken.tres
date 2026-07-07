@@ -1,9 +1,10 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://b0flres87wloe"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_d4vx1"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_0r4h0"]
+[ext_resource type="Script" uid="uid://dberqktmglsse" path="res://core/model/conditional_time_penalty.gd" id="1_0r4h0"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="2_67i45"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_s4ft0"]
 
 [resource]
-script = ExtResource("1_d4vx1")
+script = ExtResource("2_67i45")
 uuid = "near_death_mind_broken"
 name = "心智破损"

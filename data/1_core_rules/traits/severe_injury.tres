@@ -2,16 +2,31 @@
 
 [ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_1jtab"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_kqtbe"]
+[ext_resource type="Script" uid="uid://dberqktmglsse" path="res://core/model/conditional_time_penalty.gd" id="3_ctp"]
 
-[sub_resource type="Resource" id="Resource_tjij5"]
+[sub_resource type="Resource" id="PropOp_health"]
 script = ExtResource("2_kqtbe")
 str_props = "health"
 value = -15
 
+[sub_resource type="Resource" id="CTP_all"]
+script = ExtResource("3_ctp")
+penalty_days = 1
+add_to_all = true
+description = "重伤行动不便"
+
+[sub_resource type="Resource" id="CTP_denggao"]
+script = ExtResource("3_ctp")
+action_tag_match = "denggao"
+penalty_days = 5
+description = "重伤登高"
+
 [resource]
 script = ExtResource("1_1jtab")
 topic = "DISEASE"
-trait_effect_operations = Array[ExtResource("2_kqtbe")]([SubResource("Resource_tjij5")])
+trait_effect_operations = Array[ExtResource("2_kqtbe")]([SubResource("PropOp_health")])
 time_penalty = 1
+duration_xun = 3
+conditional_time_penalties = Array[ExtResource("3_ctp")]([SubResource("CTP_all"), SubResource("CTP_denggao")])
 uuid = "severe_injury"
 name = "重伤"

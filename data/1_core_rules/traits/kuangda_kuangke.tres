@@ -1,9 +1,10 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://s5l47mob7qq8"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_p5tah"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_3hywj"]
+[ext_resource type="Script" uid="uid://dberqktmglsse" path="res://core/model/conditional_time_penalty.gd" id="1_3hywj"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="2_eo6e3"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_d3vg3"]
 
 [resource]
-script = ExtResource("1_p5tah")
+script = ExtResource("2_eo6e3")
 uuid = "kuangda_kuangke"
 name = "狂客"

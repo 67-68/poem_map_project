@@ -1,9 +1,10 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://ckpexvy4nwco2"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_pymic"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_6b5m8"]
+[ext_resource type="Script" uid="uid://dberqktmglsse" path="res://core/model/conditional_time_penalty.gd" id="1_6b5m8"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="2_e2rll"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_803xl"]
 
 [resource]
-script = ExtResource("1_pymic")
+script = ExtResource("2_e2rll")
 uuid = "kuangda_zuanying"
 name = "钻营"

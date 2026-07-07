@@ -24,9 +24,9 @@ logger = logging.getLogger("Godot_Probe_MCP")
 
 # ==========================================
 # 基础设施坐标
-# MCP 运行在 Docker 容器内，通过 host.docker.internal 访问宿主机
+# MCP 直接连接本机 Godot RuntimeProbe
 # ==========================================
-GODOT_PROBE_BASE = "http://host.docker.internal:6066"
+GODOT_PROBE_BASE = "http://127.0.0.1:6066"
 REQUEST_TIMEOUT = 10  # 秒
 # 人类可读输出文件路径（供终端直接 cat 查看）
 HUMAN_OUTPUT_FILE = "/tmp/godot_probe_output.txt"

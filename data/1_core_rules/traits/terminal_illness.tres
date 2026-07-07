@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://caq3ibsa4lin3"]
 
+[ext_resource type="Script" uid="uid://dberqktmglsse" path="res://core/model/conditional_time_penalty.gd" id="1_nnebb"]
 [ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_vw5nc"]
 [ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_nnebb"]
 
 [resource]
 script = ExtResource("1_vw5nc")
-display_char = "病"
 uuid = "terminal_illness"
 name = "病入膏肓"
