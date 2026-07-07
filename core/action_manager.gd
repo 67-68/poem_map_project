@@ -284,11 +284,7 @@ func check_action_validity(action: Action) -> Dictionary:
 		if current_time < cost:
 			result.valid = false
 			var precise_line := "时间剩余%d天，但这项行动需要%s" % [current_time, cost_detail]
-			var archetype_hint := _get_archetype_failed_hint(action, "time")
-			if not archetype_hint.is_empty():
-				result.reasons.append(precise_line + "\n" + archetype_hint)
-			else:
-				result.reasons.append(precise_line)
+			result.reasons.append(precise_line)
 			result.prop_name = "time"
 			return result
 	
