@@ -7,6 +7,7 @@
   "m_money_gain": 30,
   "l_money_gain": 50,
   "xl_money_gain": 80,
+  "xxl_money_gain": 150,
 
   "xs_money_cost": -5,
   "xs_money_gain": 5,

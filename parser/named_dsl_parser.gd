@@ -69,6 +69,19 @@ static func parse_single(expr: String) -> ParseResult:
 		Logging.err("NamedDSLParser: 空表达式")
 		return null
 	
+	# 🆕 无括号表达式：纯函数名 = 无参调用（如 consume_random_leverage）
+	# 只接受合法的标识符名（字母/数字/下划线，不能以数字开头）
+	if not expr.contains("("):
+		var regex := RegEx.new()
+		regex.compile("^[a-zA-Z_][a-zA-Z0-9_]*$")
+		if regex.search(expr):
+			var result := ParseResult.new()
+			result.func_name = expr
+			result.params = {}
+			return result
+		Logging.err("NamedDSLParser: 不是合法的无参函数名: %s" % expr)
+		return null
+	
 	# 匹配 func_name(...) 模式
 	var paren_open = expr.find("(")
 	var paren_close = expr.rfind(")")

@@ -224,33 +224,9 @@ func _on_button_pressed() -> void:
 			# ═══════════════════════════════════════════════
 			var _should_hide := false
 			
-			if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
-				for req in sub_action.aciton_requirements:
-					if req is TraitRequirement or req is PoemRequirement or req is FlagRequirement or req is NarrativeLockRequirement:
-						if not req.compare(PlayerState):
-							Logging.info("SceneActionPanel: sub-action '%s' HIDE — requirement type='%s' not met" % [sub_action.uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown"])
-							_should_hide = true
-							break
-			
-			# 🆕 检查 action_results 中的 operator 级 viability
-			if not _should_hide and sub_action.action_results and not sub_action.action_results.is_empty():
-				for op in sub_action.action_results:
-					if op is ConsumeRandomLeverageOperator:
-						if not ConsumeRandomLeverageOperator.is_viable():
-							Logging.info("SceneActionPanel: sub-action '%s' HIDE — ConsumeRandomLeverageOperator.is_viable()=false" % sub_action.uuid)
-							_should_hide = true
-							break
-					elif op is PoemRewardOperator:
-						if not PoemRewardOperator.is_viable():
-							Logging.info("SceneActionPanel: sub-action '%s' HIDE — PoemRewardOperator.is_viable()=false" % sub_action.uuid)
-							_should_hide = true
-							break
-			
-			if _should_hide:
-				Logging.info("SceneActionPanel: sub-action '%s' 完全隐藏，不进入 picker" % sub_action.uuid)
-				continue
-			
-			# 🆕 先查找 archetype（success/failure），供 Phase 2 成本检查 + picker 显示复用
+			# 🆕 先查找 archetype（success/failure），用于 viability 检查 + Phase 2 + picker 显示
+			#   注意：必须放在 viability 检查之前，因为 baiye_threaten 等子行动的
+			#   ConsumeRandomLeverageOperator 仅存在于 archetype DSL 中，不在 .tres 的 action_results 里
 			var archetype = Database.get_archetype_by_uuid(sub_action.uuid, "success")
 			var success_ops: Array = []
 			if archetype:
@@ -259,6 +235,38 @@ func _on_button_pressed() -> void:
 			var fail_ops: Array = []
 			if fail_archetype:
 				fail_ops = fail_archetype.operators
+			
+			if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
+				for req in sub_action.aciton_requirements:
+					if req is TraitRequirement or req is PoemRequirement or req is FlagRequirement or req is NarrativeLockRequirement:
+						if not req.compare(PlayerState):
+							Logging.info("SceneActionPanel: sub-action '%s' HIDE — requirement type='%s' not met" % [sub_action.uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown"])
+							_should_hide = true
+							break
+			
+			# 🆕 检查三源合并的 operator 级 viability（action_results + archetype success_ops + fail_ops）
+			if not _should_hide:
+				var _viability_ops: Array = []
+				if sub_action.action_results:
+					_viability_ops.append_array(sub_action.action_results)
+				_viability_ops.append_array(success_ops)
+				_viability_ops.append_array(fail_ops)
+				Logging.info("SceneActionPanel: sub-action '%s' viability check — %d ops (action_results=%d + success_ops=%d + fail_ops=%d)" % [sub_action.uuid, _viability_ops.size(), sub_action.action_results.size() if sub_action.action_results else 0, success_ops.size(), fail_ops.size()])
+				for op in _viability_ops:
+					if op is ConsumeRandomLeverageOperator:
+						if not ConsumeRandomLeverageOperator.is_viable():
+							Logging.info("SceneActionPanel: sub-action '%s' HIDE — ConsumeRandomLeverageOperator.is_viable()=false (archetype op, 当前无任何把柄)" % sub_action.uuid)
+							_should_hide = true
+							break
+					elif op is PoemRewardOperator:
+						if not PoemRewardOperator.is_viable():
+							Logging.info("SceneActionPanel: sub-action '%s' HIDE — PoemRewardOperator.is_viable()=false (archetype op)" % sub_action.uuid)
+							_should_hide = true
+							break
+			
+			if _should_hide:
+				Logging.info("SceneActionPanel: sub-action '%s' 完全隐藏，不进入 picker" % sub_action.uuid)
+				continue
 			
 			# ═══════════════════════════════════════════════
 			# 🆕 Phase 2: GRAY 检查 — 不满足时灰化（可见但锁定）

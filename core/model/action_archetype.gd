@@ -37,5 +37,8 @@ static func from_json(data: Dictionary) -> ActionArchetype:
 				arch.operators.append(op)
 			elif op is SetRandomPersonStateOperator or op is AddRandomLeverageOperator or op is AddRandomIntroOperator:
 				arch.operators.append(op)
+			elif op is ConsumeRandomLeverageOperator or op is PoemRewardOperator:
+				# 🆕 这些 operator 用于 sub-action picker 的 viability 检查（is_viable）
+				arch.operators.append(op)
 	
 	return arch
