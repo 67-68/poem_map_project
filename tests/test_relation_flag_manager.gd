@@ -4,7 +4,7 @@
 # 覆盖：leverage (add/get_keys/has/consume/try_use)、help (add/get/has/clear)、
 #       cross-target 隔离、event_id 约定推导、NPC + IDENTITY 双目标
 #
-# Leverage 存储变更: v2 — list[str] JSON 编码 (str flag)
+# 存储变更: v3 — NPCDocument 属性驱动（不再使用 PlayerState flag）
 # ================================================================
 extends GutTest
 
@@ -14,14 +14,22 @@ extends GutTest
 # ════════════════════════════════════════════════════════════
 
 func before_each():
-	PlayerState.flags.clear()
-	# 清理测试残留的虚拟 flag
-	var residuals = []
-	for f_id in Database.flags:
-		if f_id.begins_with("flag_gen_leverage_") or f_id.begins_with("flag_gen_help_"):
-			residuals.append(f_id)
-	for f_id in residuals:
-		Database.flags.erase(f_id)
+	# 清理动态创建的 NPCDocument 条目（测试用例间隔离）
+	var to_remove: Array[String] = []
+	for doc_id in Database.npc_document:
+		to_remove.append(doc_id)
+	for doc_id in to_remove:
+		Database.npc_document.erase(doc_id)
+	# 重置已有 .tres 的 NPCDocument 属性
+	var docs = Database.get_npc_document_all()
+	for target_tag in docs:
+		var doc = docs[target_tag]
+		if doc:
+			doc.leverage_keys.clear()
+			doc.help_count = 0
+			doc.favor = RelationFlagManager.DEFAULT_FAVOR
+			doc.person_state = RelationFlagManager.DEFAULT_PERSON_STATE
+			doc.intro_keys.clear()
 
 
 # ════════════════════════════════════════════════════════════
@@ -197,7 +205,7 @@ func test_help_cross_target_isolation():
 
 
 func test_leverage_and_help_independent():
-	"""leverage 和 help 是两组独立的 flag，互不影响"""
+	"""leverage 和 help 是 NPCDocument 的两组独立属性，互不影响"""
 	RelationFlagManager.add_leverage("TARGET_NPC_LIBAI", "libai_secret")
 	RelationFlagManager.add_help("TARGET_NPC_LIBAI", 3)
 	assert_true(RelationFlagManager.has_leverage("TARGET_NPC_LIBAI"))

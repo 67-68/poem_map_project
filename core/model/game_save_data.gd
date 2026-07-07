@@ -83,6 +83,15 @@ var tick_checkpoint: int = 0
 # ════════════════════════════════════════════════════════════════
 var event_counter: int = 0
 
+# ════════════════════════════════════════════════════════════════
+# NPC 关系数据 — NPCDocument 运行时属性的持久化快照
+# key: target_tag (如 "libai", "hushang"), value: Dictionary
+#   { "leverage_keys": [...], "help_count": 0, "favor": 30,
+#     "person_state": "not_meet", "intro_keys": [...] }
+# save 时从 NPCDocument 实例快照，load 时恢复到 NPCDocument 实例。
+# ════════════════════════════════════════════════════════════════
+var npc_relations: Dictionary = {}
+
 
 # ════════════════════════════════════════════════════════════════
 # 序列化 / 反序列化
@@ -92,6 +101,8 @@ var event_counter: int = 0
 ## 注意：created_poems 和 imaginaries_detail 包含 Resource，不做深度序列化，
 ## 仅保留 uuid 列表用于存档标识（后续 save/load 系统完善后可扩展）。
 func to_dict() -> Dictionary:
+	# 从 NPCDocument 实例快照当前关系数据
+	_snapshot_npc_relations()
 	var d := {
 		"properties": _copy_dict(properties),
 		"emotions": _copy_dict(emotions),
@@ -105,6 +116,7 @@ func to_dict() -> Dictionary:
 		"last_action_tags": last_action_tags.duplicate(),
 		"created_poem_uuids": _extract_uuids(created_poems),
 		"imaginary_uuids": imaginaries_detail.keys(),
+		"npc_relations": _copy_dict(npc_relations),
 		"year": year,
 		"current_era": current_era,
 		"is_game_over": is_game_over,
@@ -133,6 +145,8 @@ func from_dict(d: Dictionary) -> void:
 	current_action_tags = _safe_array_str(d, "current_action_tags")
 	last_action_tags = _safe_array_str(d, "last_action_tags")
 	# created_poems / imaginaries_detail 需要外部注入，from_dict 不处理 Resource
+	npc_relations = _safe_dict(d, "npc_relations")
+	# NPC 关系数据恢复到 NPCDocument 实例（调用方需在 Database 就绪后调用 restore_npc_relations_to_documents()）
 	year = d.get("year", 745.0)
 	current_era = d.get("current_era", "")
 	is_game_over = d.get("is_game_over", false)
@@ -179,3 +193,44 @@ func _extract_uuids(arr: Array) -> Array:
 		if item is Resource and "uuid" in item:
 			out.append(item.uuid)
 	return out
+
+
+# ════════════════════════════════════════════════════════════════
+# NPC 关系数据持久化桥接
+# ════════════════════════════════════════════════════════════════
+
+## 将 npc_relations 快照数据推回到 NPCDocument 实例。
+## 应在 Database 加载完成后调用（存档加载流程中）。
+func restore_npc_relations_to_documents() -> void:
+	if npc_relations.is_empty():
+		Logging.info("GameSaveData: npc_relations 为空，跳过 NPCDocument 关系恢复")
+		return
+	var docs: Dictionary = Database.get_npc_document_all()
+	for target_tag in npc_relations:
+		var data: Dictionary = npc_relations[target_tag]
+		var doc = docs.get(target_tag)
+		if doc == null:
+			Logging.info("GameSaveData: NPCDocument '%s' 不存在，跳过关系恢复（数据仍保留在 npc_relations 中）" % target_tag)
+			continue
+		doc.leverage_keys = data.get("leverage_keys", [])
+		doc.help_count = data.get("help_count", 0)
+		doc.favor = data.get("favor", 30)
+		doc.person_state = data.get("person_state", "not_meet")
+		doc.intro_keys = data.get("intro_keys", [])
+		Logging.info("GameSaveData: 恢复 '%s' 关系数据 → favor=%d, help=%d, leverage=%d, intro=%d, state=%s" % [target_tag, doc.favor, doc.help_count, doc.leverage_keys.size(), doc.intro_keys.size(), doc.person_state])
+
+## 从所有已加载的 NPCDocument 实例快照关系数据到 npc_relations。
+func _snapshot_npc_relations() -> void:
+	var docs: Dictionary = Database.get_npc_document_all()
+	for target_tag in docs:
+		var doc = docs[target_tag]
+		if doc == null:
+			continue
+		npc_relations[target_tag] = {
+			"leverage_keys": doc.leverage_keys.duplicate(),
+			"help_count": doc.help_count,
+			"favor": doc.favor,
+			"person_state": doc.person_state,
+			"intro_keys": doc.intro_keys.duplicate(),
+		}
+	Logging.info("GameSaveData: _snapshot_npc_relations 快照 %d 个目标" % npc_relations.size())
