@@ -1,6 +1,8 @@
 @tool
 class_name RelationFlagManager extends RefCounted
 
+const _NPCDocument = preload("res://model/npc_document.gd")
+
 # ═══════════════════════════════════════════════════════════
 # RelationFlagManager — 泛型关系管理器（NPCDocument 属性驱动）
 #
@@ -111,11 +113,11 @@ static func _get_or_create_npc_doc(target_tag: String) -> NPCDocument:
 	doc.name = target_tag
 	doc.taste_id = ""
 	doc.prop = {}
-	doc.leverage_keys = []
+	doc.leverage_keys = [] as Array[String]
 	doc.help_count = 0
 	doc.favor = DEFAULT_FAVOR
 	doc.person_state = DEFAULT_PERSON_STATE
-	doc.intro_keys = []
+	doc.intro_keys = [] as Array[String]
 	Database.npc_document[target_tag] = doc
 	Logging.info("RelationFlagManager: 动态创建 NPCDocument for '%s'（无对应 .tres 文件）" % target_tag)
 	return doc
