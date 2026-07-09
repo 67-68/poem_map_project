@@ -469,5 +469,36 @@
       "health": "抱病设宴，只怕席间失礼，反倒惹人耻笑",
       "time": "宴席已散，朱门紧闭，只有残烛在风中摇曳"
     }
+  },
+
+  "zhuliu_xishi_success": {
+    "name": "驻留西市·成",
+    "action_uuid": "zhu_liu_xishi",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "set_stay_place(place=xishi)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "zhuliu_pingkangfang_success": {
+    "name": "驻留平康坊·成",
+    "action_uuid": "zhu_liu_pingkangfang",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "set_stay_place(place=pingkangfang)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "zhuliu_huangcheng_success": {
+    "name": "驻留皇城·成",
+    "action_uuid": "zhu_liu_huangcheng",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "set_stay_place(place=huangcheng)",
+    "era": "",
+    "failed_hints": {}
   }
 }

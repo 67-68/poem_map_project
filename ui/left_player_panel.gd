@@ -20,6 +20,7 @@ const MAX_EMOTION_VALUE: int = 100
 
 # ── 节点引用 ─────────────────────────────────────────────
 @onready var _name_label: Label = $"Panel/VBox/ScrollContainer/V/NameLabel"
+@onready var _place_label: Label = $"Panel/VBox/ScrollContainer/V/PlaceLabel"
 @onready var _ambition_btn: LinkButton = $"Panel/VBox/ScrollContainer/V/Ambition"
 @onready var _prop_grid: GridContainer = $"Panel/VBox/ScrollContainer/V/PropGrid"
 @onready var _trait_grid: GridContainer = $"Panel/VBox/ScrollContainer/V/TraitGrid"
@@ -56,6 +57,12 @@ func _ready() -> void:
 	# 静态数据
 	_name_label.text = PlayerState.player_name
 	Logging.info("LeftPlayerPanel: player_name=%s" % PlayerState.player_name)
+	
+	# ── 驻留地点 PlaceLabel ──
+	_refresh_place_label()
+	if not PlayerState.stay_place_changed.is_connected(_refresh_place_label):
+		PlayerState.stay_place_changed.connect(_refresh_place_label)
+		Logging.info("LeftPlayerPanel: connected to stay_place_changed")
 	
 	# 动态填充 PropGrid / TraitGrid
 	_rebuild_prop_grid()
@@ -133,6 +140,15 @@ func _ready() -> void:
 			show_panel()
 	)
 	Logging.info("LeftPlayerPanel: _ready complete")
+
+# ── 驻留地点 PlaceLabel ─────────────────────────────────
+
+func _refresh_place_label() -> void:
+	if not _place_label:
+		return
+	var cn := ENUMS.place_to_cn(PlayerState.stay_place)
+	_place_label.text = "驻留 · %s" % cn
+	Logging.info("LeftPlayerPanel: PlaceLabel updated to '%s'" % _place_label.text)
 
 # ── 动态数据刷新 ────────────────────────────────────────
 
