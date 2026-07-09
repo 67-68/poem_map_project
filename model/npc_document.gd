@@ -14,6 +14,12 @@ class_name NPCDocument extends Resource
 ##   }
 @export var prop: Dictionary = {}
 
+## NPC 偏好出现的地点列表，值为 CHANGAN_PLACES 的 str key。
+## 可选值： "xishi" / "pingkangfang" / "huangcheng"
+## 空数组 = 不匹配任何地点（不会被 PickNpcByPlaceOperator 选中）。
+## 示例： ["pingkangfang", "huangcheng"]
+@export var preferred_places: Array[String] = []
+
 # ═══════════════════════════════════════════════════════════
 # 关系数据 — 原 RelationFlagManager 虚拟 flag 迁移
 # 这些属性替代了 flag_gen_{category}_{TARGET_TAG} 的 flag 机制。

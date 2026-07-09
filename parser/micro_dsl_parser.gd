@@ -100,6 +100,7 @@ const FUNC_CONSUME_RANDOM_LEVERAGE := "consume_random_leverage"
 const FUNC_UNLOCK_SOCIAL_NODE := "unlock_social_node"
 const FUNC_ADVANCE_PLOT := "advance_plot"
 const FUNC_SET_STAY_PLACE := "set_stay_place"
+const FUNC_PICK_NPC_BY_PLACE := "pick_npc_by_place"
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
 # func_name → handler(parsed: ParseResult, raw: String) -> Variant
@@ -184,6 +185,8 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_SET_RANDOM_PERSON_STATE] = func(p, r): return _exec_set_random_person_state_op(p, r)
 	cd[FUNC_ADD_RANDOM_LEVERAGE] = func(p, r): return _exec_add_random_leverage_op(p, r)
 	cd[FUNC_ADD_RANDOM_INTRO] = func(p, r): return _exec_add_random_intro_op(p, r)
+	# ── 🆕 地点匹配 NPC Picker ──
+	cd[FUNC_PICK_NPC_BY_PLACE] = func(p, r): return _exec_pick_npc_by_place_op(p, r)
 	# ── Image Operators ──
 	cd[FUNC_IMAGE_PRESENT] = func(p, r): return _exec_image_present_op(p, r)
 	cd[FUNC_IMAGE_SLIDE] = func(p, r): return _exec_image_slide_op(p, r)
@@ -1373,4 +1376,16 @@ static func _exec_set_stay_place_op(parsed: NamedDSLParser.ParseResult, raw: Str
 	var op := SetStayPlaceOperator.new()
 	op.place = place
 	Logging.info("MicroDSLParser: _exec_set_stay_place_op — place=%s raw=%s" % [place, raw])
+	return op
+
+
+# ─── pick_npc_by_place ───────────────────────────────────
+
+# DSL 语法: pick_npc_by_place(key=npc_target; state=know_about)
+# 根据当前玩家驻留地点随机选择匹配的 NPC，存入 context。
+static func _exec_pick_npc_by_place_op(parsed: NamedDSLParser.ParseResult, raw: String) -> PickNpcByPlaceOperator:
+	var op := PickNpcByPlaceOperator.new()
+	op.key_stored_context = NamedDSLParser.get_str_param(parsed, "key", "npc_target")
+	op.state = NamedDSLParser.get_str_param(parsed, "state", "")
+	Logging.info("MicroDSLParser: _exec_pick_npc_by_place_op — key=%s state=%s raw=%s" % [op.key_stored_context, op.state, raw])
 	return op

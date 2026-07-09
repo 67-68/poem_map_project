@@ -7,6 +7,7 @@ script = ExtResource("1_udmdi")
 taste_id = ""
 name = "郑虔"
 uuid = "zhengqian"
+preferred_places = Array[String](["pingkangfang"])
 prop = {
 "TALENT": 70
 }
