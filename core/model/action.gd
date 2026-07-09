@@ -5,6 +5,26 @@ class_name Action extends GameEntity
 # name: use parent
 # description: use parent
 
+## 子行动所需地点（仅 Picker 内校验，主行动按钮不校验）。
+## -1 = 无地点要求（任何地点/出游登高均可用）。
+## CHANGAN_PLACES 映射：0=XISHI 1=PINGKANGFANG 2=HUANGCHENG。
+@export var _required_place: ENUMS.CHANGAN_PLACES = -1
+var required_place: int:
+	get:
+		return _required_place if _required_place is int else -1
+
+## required_place 的中文名（给 hint / toast 展示用）
+func get_required_place_name() -> String:
+	match _required_place:
+		ENUMS.CHANGAN_PLACES.XISHI:
+			return "西市"
+		ENUMS.CHANGAN_PLACES.PINGKANGFANG:
+			return "平康坊"
+		ENUMS.CHANGAN_PLACES.HUANGCHENG:
+			return "皇城"
+		_:
+			return ""
+
 @export var _action_tags: Array[ENUMS.ACTION_TAGS] = [] # 这些action tag 用来筛选当前场景下可用的event
 var action_tags: Array[String]:
 	get:

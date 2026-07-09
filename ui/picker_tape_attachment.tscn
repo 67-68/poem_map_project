@@ -32,6 +32,13 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
 text = "不回答"
 
+[node name="CheckBox" type="CheckBox" parent="HBox" unique_id=1821039094]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7058824, 0.6666667, 0.6627451, 1)
+theme_override_fonts/font = ExtResource("2_26bj5")
+theme_override_font_sizes/font_size = 14
+text = "显示异地行动"
+
 [node name="Grid" type="GridContainer" parent="." unique_id=594138019]
 layout_mode = 2
 size_flags_horizontal = 3

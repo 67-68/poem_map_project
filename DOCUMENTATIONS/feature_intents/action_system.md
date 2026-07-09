@@ -510,3 +510,165 @@ ActionManager._deferring_actions (运行时状态)
 - `ui/action_button.gd` — `_on_button_pressed` defer 分支 + `set_deferring`/`set_defer_failing` 视觉
 - `ui/scene_action_scroll.gd` — `refresh`/`_refresh_locks_only` defer 状态渲染
 - `core/action_hint_builder.gd` — hover 展示 defer 剩余旬数 + 每旬消耗 + 资源不足警告
+
+---
+
+## 驻留行动系统（驻留 / Zhuliu）
+
+### 设计意图
+
+「驻留」是一个独立的父行动（非任何已有行动的子行动），让玩家在长安三个区域（西市/平康坊/皇城）之间切换自己的驻留地点。驻留本身不产生任何消耗（仅消耗 1 天时间），不投骰（100% 成功），是 100% 确定性的行动。驻留地点的改变会触发的叙事通过 archetype + fallback 事件完成。
+
+### 数据模型
+
+| 字段 | 说明 |
+|------|------|
+| `GameSave.data.stay_place` | 持久化 String key：`"xishi"` / `"pingkangfang"` / `"huangcheng"` |
+| `PlayerState.stay_place` | getter/setter 代理到 GameSave.data，发射 `stay_place_changed` 信号 |
+| `ENUMS.place_to_cn(s)` | String key → 中文名 |
+| `ENUMS.from_place_str(s)` | String key → `CHANGAN_PLACES` 枚举 |
+
+### Operator
+
+- [`core/operators/set_stay_place_operator.gd`](core/operators/set_stay_place_operator.gd) — `SetStayPlaceOperator`，继承 `BaseOperator`
+  - `@export var place: String` — 目标地点 key
+  - `operate()` → `PlayerState.stay_place = place`
+
+### DSL 语法
+
+```
+set_stay_place(place=xishi)
+set_stay_place(place=pingkangfang)
+set_stay_place(place=huangcheng)
+```
+
+### Archetype
+
+| Archetype | universal_result |
+|-----------|-----------------|
+| `zhuliu_xishi_success` | `set_stay_place(place=xishi)` |
+| `zhuliu_pingkangfang_success` | `set_stay_place(place=pingkangfang)` |
+| `zhuliu_huangcheng_success` | `set_stay_place(place=huangcheng)` |
+
+### 行动树
+
+```
+zhu_liu (SceneAction, main_tag=ACTION_MAIN_ZHUILIU, day=1, icon=zhuliu_stamp.png)
+├── zhu_liu_xishi (Action, fallback=zhu_liu_xishi_fallback)
+├── zhu_liu_pingkangfang (Action, fallback=zhu_liu_pingkangfang_fallback)
+└── zhu_liu_huangcheng (Action, fallback=zhu_liu_huangcheng_fallback)
+```
+
+### UI
+
+- `LeftPlayerPanel` 的 `PlaceLabel` 监听 `stay_place_changed`，显示 `"驻留 · 西市"` / `"驻留 · 平康坊"` / `"驻留 · 皇城"`
+- 右侧行动按钮的 description 保持静态文本
+
+### 相关文件
+
+- [`core/operators/set_stay_place_operator.gd`](core/operators/set_stay_place_operator.gd) — Operator
+- [`core/player_state.gd`](core/player_state.gd) — `stay_place` property + signal
+- [`core/model/game_save_data.gd`](core/model/game_save_data.gd) — 持久化字段
+- [`model/enumerates.gd`](model/enumerates.gd) — 枚举 + 转换方法
+- [`parser/micro_dsl_parser.gd`](parser/micro_dsl_parser.gd) — DSL 注册
+- [`tools/data/event_archetypes.json`](tools/data/event_archetypes.json) — archetype 定义
+- [`data/3_actions_pool/actions/zhu_liu.tres`](data/3_actions_pool/actions/zhu_liu.tres) — 父行动
+- `data/3_actions_pool/actions/zhu_liu/` — 3 个子行动
+- `data/1_core_rules/events/fallback/` — 3 个 fallback 事件
+- [`ui/left_player_panel.gd`](ui/left_player_panel.gd) — PlaceLabel 刷新
+
+---
+
+## Sub-Action 地点过滤系统 (Place-Based Filtering)
+
+### 设计意图
+
+长安三层地点（[`CHANGAN_PLACES`](model/enumerates.gd#L70-L74)）限制子行动可用性：
+- **西市 (XISHI)**：底层/地下 — 搬砖、试药、卖字、暗巷刺探、喝药酒
+- **平康坊 (PINGKANGFANG)**：中层社交 — 卖诗、宣读诗词、坊间买醉、赴宴雅集、举办宴席
+- **皇城 (HUANGCHENG)**：顶层权贵 — 全部拜谒子行动（要挟/携诗/行卷/普通）
+- 出游登高（曲江池/乐游原/少陵原）、小酌一口 → 无地点要求，哪里都可用
+
+### 地点 → 子行动映射
+
+| 子行动 | `_required_place` | 理由 |
+|--------|:--:|------|
+| 搬砖 (banzhuan) | 西市 | 底层苦力 |
+| 试药 (shiyao) | 西市 | 暗巷地下神医 |
+| 卖字 (maizi) | 西市 | 底层卖字 |
+| 风骨卖字 (fgmaizi) | 西市 | 底层卖字 |
+| 暗巷刺探 (leverage_farm) | 西市 | 暗巷=S级底层 |
+| 喝药酒 (heyaojiu) | 西市 | 底层独酌 |
+| 卖诗 (sell_poem) | 平康坊 | 歌女传唱 |
+| 宣读诗词 (recite_poem) | 平康坊 | 席间诵读 |
+| 坊间买醉 (tavern_gacha) | 平康坊 | 交游酒楼 |
+| 赴宴雅集 (intro_gacha) | 平康坊 | 上层社交 |
+| 举办宴席 (hold_feast) | 平康坊 | 社交宴会 |
+| 要挟 (threaten) | 皇城 | 拜谒权贵+把柄 |
+| 携诗拜谒 (poem_visit) | 皇城 | 携诗叩门 |
+| 广发行卷 (mass_distribution) | 皇城 | 行卷投递 |
+| 普通拜谒 (normal) | 皇城 | 普通拜谒 |
+| 曲江池/乐游原/少陵原 | — | 出游不限 |
+| 小酌一口 (xiaozhuo) | — | 居家行为 |
+
+### 数据模型
+
+- [`Action._required_place`](core/model/action.gd) — `@export var _required_place: ENUMS.CHANGAN_PLACES = -1`，`-1` 表示无地点要求
+- [`Action.get_required_place_name()`](core/model/action.gd) — 返回中文地点名（"西市"/"平康坊"/"皇城"/""）
+- `PlayerState.stay_place` — 玩家当前所在长安地点
+
+### 过滤与显示流程
+
+```
+action_button 构建 picker data
+  └─ sub_action.required_place >= 0 && != PlayerState.stay_place
+       └─ entity.set_meta("_place_mismatch", true)
+       └─ entity.set_meta("_required_place_name", "皇城")
+       └─ entity.set_meta("_required_place", enum_value)
+  → push_picker → PickerTapeAttachment.initialize
+       └─ 遍历 entity，检测 _place_mismatch：
+            ├─ has mismatch → 显示 CheckBox「显示异地行动」+ 默认隐藏异地 item
+            └─ no mismatch → 隐藏 CheckBox
+```
+
+### CheckBox 行为
+
+- 仅存在 ≥1 个 `_place_mismatch` 的 item 时显示
+- 默认不勾选 → 异地 item `visible = false`
+- 勾选后 → 异地 item `visible = true`，`modulate = Color(0.6, 0.7, 1.0, 0.9)` 淡蓝色
+- 异地 item 不走灰化锁定（`_is_locked` 始终 false），可正常点击
+
+### 异地点击处理
+
+- [`action_button._on_sub_action_picked`](ui/action_button.gd) 检测 `entity.get_meta("_place_mismatch")`：
+  - `TimeService.advance_time(1)` — 消耗 1 天前往目标地点
+  - `PlayerState.stay_place = _req_place` — 切换当前地点
+  - 之后继续正常 sub-action 执行流程（possibility 投骰 → operators → scan_events）
+
+### Hint 提示
+
+- [`ActionHintBuilder.build_sub_action_preview`](core/action_hint_builder.gd) 在子行动 hover 预览中追加：
+  - `📍 自动消耗1天前往{皇城/西市/平康坊}`（淡蓝色 `[color=#88aaff]`）
+
+### 信号链路
+
+```
+EventBus.push_picker(data, on_selected, ui_constructor, on_filter_toggled)
+  → NarrativeDirector._on_push_picker → entry["on_filter_toggled"]
+  → NarrativeOverlay._on_picker_ready → event_ui.append_picker_attachment(..., on_filter_toggled)
+  → EventUI.append_picker_attachment → attachment.initialize(data, ui_constructor, on_filter_toggled)
+  → PickerTapeAttachment._on_filter_checkbox_toggled (内部遍历染色) + callback.call(toggled_on)
+```
+
+### 相关文件
+
+- [`core/model/action.gd`](core/model/action.gd) — `_required_place` 字段 + `get_required_place_name()`
+- [`core/player_state.gd`](core/player_state.gd) — `stay_place` 玩家当前位置
+- [`ui/action_button.gd`](ui/action_button.gd) — picker 构建地点校验 + `_on_sub_action_picked` 异地处理
+- [`ui/picker_tape_attachment.gd`](ui/picker_tape_attachment.gd) — CheckBox 过滤/染色 + 回调注入
+- [`ui/picker_tape_attachment.tscn`](ui/picker_tape_attachment.tscn) — CheckBox 节点「显示异地行动」
+- [`core/action_hint_builder.gd`](core/action_hint_builder.gd) — `📍 自动消耗1天前往某地` 提示行
+- [`core/eventbus.gd`](core/eventbus.gd) — `push_picker` 信号新增 `on_filter_toggled` 参数
+- [`characters/narrative_director.gd`](characters/narrative_director.gd) — 路由 `on_filter_toggled`
+- [`characters/narrative_overlay.gd`](characters/narrative_overlay.gd) — 传递 `on_filter_toggled`
+- [`characters/event_ui.gd`](characters/event_ui.gd) — `append_picker_attachment` 透传

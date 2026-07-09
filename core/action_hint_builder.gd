@@ -325,6 +325,15 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	if _is_repeated:
 		lines.append("[color=#ccaa44]⚠ 重复行动 — 收益减少20%%，消耗增加20%%[/color]")
 	
+	# 🆕 异地行动提示（需要在 picker 中开启「显示异地行动」才能看到此 sub-action）
+	var _place_name: String = sub_action.get_required_place_name()
+	if not _place_name.is_empty():
+		var _cur_place: int = ENUMS.from_place_str(PlayerState.stay_place)
+		var _req_place: int = sub_action.required_place
+		if _cur_place >= 0 and _req_place != _cur_place:
+			lines.append("[color=#88aaff][font_size=13]📍 自动消耗1天前往%s[/font_size][/color]" % _place_name)
+			Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' 异地行动提示 → %s" % [sub_action.name, _place_name])
+	
 	# ── 时间消耗行（复用 ActionManager.effective_day_consumed + format_time_detail）──
 	var eff_day := ActionManager.effective_day_consumed(sub_action, parent_day_consumed)
 	if eff_day > 0:

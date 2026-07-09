@@ -156,12 +156,13 @@ func _event_identity_matches(ev: BaseEvent, event_key: String) -> bool:
 	return false
 
 
-func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null):
+func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null, on_filter_toggled: Callable = Callable()):
 	var entry := {
 		"type": "picker",
 		"data": data,
 		"on_selected": on_selected,
 		"ui_constructor": ui_constructor,
+		"on_filter_toggled": on_filter_toggled,
 	}
 	_event_stack.push_front(entry)
 	Logging.info("[DIAG] _on_push_picker: Picker 已推入栈顶，%d 个选项，_is_active=%s，stack.size=%d" % [data.size(), _is_active, _event_stack.size()])

@@ -33,7 +33,7 @@ func operate():
 		_apply_score()
 		return
 
-	EventBus.push_picker.emit(data, _on_imaginary_picked, null)
+	EventBus.push_picker.emit(data, _on_imaginary_picked, null, Callable())
 
 
 func _on_imaginary_picked(imaginary_picked):

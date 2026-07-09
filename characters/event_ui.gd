@@ -194,12 +194,12 @@ func _start_focus_chat(entry: FocusChatTapeEntry, data: FocusedChat, context: Di
 
 ## 追加 Picker 呈堂物证到纸带 — 木牍/令牌网格，选后定格
 ## 返回 PickerTapeAttachment 实例，供 NarrativeOverlay 连接 item_selected 信号
-func append_picker_attachment(data: Array, ui_constructor: Callable = Callable()) -> PickerTapeAttachment:
+func append_picker_attachment(data: Array, ui_constructor: Callable = Callable(), on_filter_toggled: Callable = Callable()) -> PickerTapeAttachment:
 	Logging.info("EventUI.append_picker_attachment: items=%d" % data.size())
 
 	var attachment := preload("res://ui/picker_tape_attachment.tscn").instantiate()
 	_tape_content.add_child(attachment)
-	attachment.initialize(data, ui_constructor)
+	attachment.initialize(data, ui_constructor, on_filter_toggled)
 
 	call_deferred("scroll_to_bottom")
 

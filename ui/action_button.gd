@@ -18,6 +18,9 @@ var _pending_sub_action_fallback: String = ""
 var _pending_sub_action_tags: Array[String] = []
 var _pending_sub_action_results: Array = []
 var _pending_parent_day_consumed: float = 0.0
+## 🆕 地点过滤 CheckBox 回调：由 PickerTapeAttachment 在 toggle 时调用
+## (toggled_on: bool) → void
+var _pending_on_checkbox_toggled: Callable = Callable()
 
 # ── Hover 底色（枯墨暗红，极淡，只有交互时才显形）──
 const HOVER_BG_COLOR: Color = Color(0.22, 0.05, 0.02, 0.10)
@@ -354,7 +357,25 @@ func _on_button_pressed() -> void:
 			# 附加 Archetype 中的 operators（用于 picker 显示）
 			entity.set_meta("operators", success_ops)
 			
-			if not _gray_reasons.is_empty():
+			# 🆕 地点校验：sub_action 有 required_place 且不匹配当前 stay_place
+			var _place_mismatch := false
+			var _req_place: int = sub_action.required_place
+			if _req_place >= 0:
+				var _cur_place: int = ENUMS.from_place_str(PlayerState.stay_place)
+				if _cur_place >= 0 and _req_place != _cur_place:
+					_place_mismatch = true
+					var _place_name := sub_action.get_required_place_name()
+					entity.set_meta("_place_mismatch", true)
+					entity.set_meta("_required_place_name", _place_name)
+					entity.set_meta("_required_place", _req_place)
+					Logging.info("SceneActionPanel: sub-action '%s' PLACE_MISMATCH — requires %s (enum=%d), current=%d" % [sub_action.uuid, _place_name, _req_place, _cur_place])
+				elif _cur_place < 0:
+					Logging.info("SceneActionPanel: sub-action '%s' has required_place=%d but stay_place 未设置，跳过地点过滤" % [sub_action.uuid, _req_place])
+			elif _req_place < 0:
+				entity.set_meta("_place_mismatch", false)
+			
+			# 地点不匹配时不走灰化锁定，让 Picker 过滤/染色处理
+			if not _place_mismatch and not _gray_reasons.is_empty():
 				var joined_reason := "条件不满足：" + "、".join(_gray_reasons)
 				entity.set_meta("_is_locked", true)
 				entity.set_meta("_locked_reason", joined_reason)
@@ -377,7 +398,9 @@ func _on_button_pressed() -> void:
 			picker_data.append(entity)
 		
 		Logging.info("SceneActionPanel: sub_actions 检测到 %d 个子行动，弹出 Picker" % picker_data.size())
-		EventBus.push_picker.emit(picker_data, _on_sub_action_picked, null)
+		# 🆕 注入 CheckBox toggle 回调，供 PickerTapeAttachment 调用
+		_pending_on_checkbox_toggled = _on_picker_checkbox_toggled
+		EventBus.push_picker.emit(picker_data, _on_sub_action_picked, null, _pending_on_checkbox_toggled)
 		return
 	
 	# 🆕 重复行动检测：对比当前 action 的识别 tags 与 last_action_tags
@@ -453,7 +476,6 @@ func _on_sub_action_picked(entity) -> void:
 		_pending_sub_action_results.clear()
 		_pending_parent_day_consumed = 0.0
 		return
-
 	var sub_uuid: String = entity.uuid if entity is GameEntity else ""
 	Logging.info("[DEBUG sub_act] ENTER sub_uuid=%s entity_name=%s" % [sub_uuid, entity.name if entity else "NULL"])
 	if sub_uuid.is_empty():
@@ -465,9 +487,19 @@ func _on_sub_action_picked(entity) -> void:
 		_pending_sub_action_results.clear()
 		_pending_parent_day_consumed = 0.0
 		return
-	
+
+	# 🆕 异地行动：自动消耗 1 天 + 切换 stay_place
+	if entity is GameEntity and entity.get_meta("_place_mismatch", false):
+		var _req_place: int = entity.get_meta("_required_place", -1)
+		var _place_name: String = entity.get_meta("_required_place_name", "")
+		Logging.info("SceneActionPanel: sub-action '%s' 异地行动 — 消耗 1 天前往 %s (enum=%d)" % [sub_uuid, _place_name, _req_place])
+		TimeService.advance_time(1)
+		PlayerState.stay_place = ENUMS.to_place_str(_req_place as ENUMS.CHANGAN_PLACES)
+		Logging.info("SceneActionPanel: stay_place 已更新为 %s (%d)" % [_place_name, _req_place])
+
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
-	
+
+		
 	# 🆕 查找子 action，使用其 tags 和 fallback（而非父 action 的）
 	var sub_action: Action = Database.get_action(sub_uuid) as Action
 	var sub_main_tag: String = ""
@@ -568,3 +600,13 @@ func _on_sub_action_picked(entity) -> void:
 ## 委托到 ActionHintBuilder.build_sub_action_preview（传递 parent_day_consumed）
 func _build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0) -> String:
 	return ActionHintBuilder.build_sub_action_preview(sub_action, success_ops, fail_ops, parent_day_consumed)
+
+
+## 🆕 PickerTapeAttachment CheckBox toggle 回调。
+## 遍历 picker 中所有 item，根据 _place_mismatch meta 控制可见性和染色。
+## 由 PickerTapeAttachment 在 toggle 时通过 _pending_on_checkbox_toggled 调用。
+func _on_picker_checkbox_toggled(toggled_on: bool) -> void:
+	Logging.info("SceneActionPanel._on_picker_checkbox_toggled: toggled_on=%s" % str(toggled_on))
+	# 从 EventBus 信号无法直接拿到 PickerTapeAttachment 引用，
+	# 实际遍历由 PickerTapeAttachment 内部完成，此回调为预留钩子。
+	Logging.info("SceneActionPanel._on_picker_checkbox_toggled: 委托给 PickerTapeAttachment 内部过滤逻辑")

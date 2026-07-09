@@ -361,9 +361,11 @@ func _on_picker_ready(entry: Dictionary) -> void:
 	var data: Array = entry.get("data", [])
 	var ui_constructor_raw = entry.get("ui_constructor")
 	var ui_constructor: Callable = ui_constructor_raw if ui_constructor_raw != null else Callable()
+	var on_filter_toggled_raw = entry.get("on_filter_toggled")
+	var on_filter_toggled: Callable = on_filter_toggled_raw if on_filter_toggled_raw != null else Callable()
 
 	Logging.info("NarrativeOverlay._on_picker_ready: %d 个选项" % data.size())
-	var attachment = event_ui.append_picker_attachment(data, ui_constructor)
+	var attachment = event_ui.append_picker_attachment(data, ui_constructor, on_filter_toggled)
 	attachment.item_selected.connect(func(e):
 		_on_picker_item_selected(e, entry)
 	, CONNECT_ONE_SHOT)

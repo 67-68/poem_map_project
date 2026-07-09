@@ -81,7 +81,7 @@ func operate():
 		data.append(trait_)
 
 	Logging.debug('PoemRewardOperator: Pushing picker to stack with %d poem traits' % data.size())
-	EventBus.push_picker.emit(data, _on_poem_picked, null)
+	EventBus.push_picker.emit(data, _on_poem_picked, null, Callable())
 
 
 func _on_poem_picked(poem_picked):

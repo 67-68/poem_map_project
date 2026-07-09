@@ -21,7 +21,7 @@ func operate():
 		Logging.warn("ImaginaryLevelRewardOperator: No imaginaries available, nothing to show")
 		return
 
-	EventBus.push_picker.emit(data, _on_imaginary_picked, null)
+	EventBus.push_picker.emit(data, _on_imaginary_picked, null, Callable())
 
 
 func _on_imaginary_picked(imaginary_picked):
