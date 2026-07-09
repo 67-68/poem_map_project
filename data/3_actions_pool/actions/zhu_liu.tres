@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="SceneAction" format=3]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_gt11a"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3angc"]
+[ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_hnu0c"]
+[ext_resource type="Texture2D" path="res://assets/stamps/zhuliu_stamp.png" id="4_uxtbm"]
+
+[resource]
+script = ExtResource("3_hnu0c")
+_main_tag = 56
+_action_tags = Array[int]([56])
+day_consumed = 1.0
+action_results = Array[ExtResource("2_3angc")]([])
+lock_narrative = "四方扰扰，竟无一处可安心驻足"
+sub_actions = Array[String](["zhu_liu_xishi", "zhu_liu_pingkangfang", "zhu_liu_huangcheng"])
+uuid = "zhu_liu"
+name = "驻留"
+description = "择一地面北而栖，静观长安风云。"
+icon = ExtResource("4_uxtbm")
+metadata/_custom_type_script = "uid://crewiibqgbs2f"

@@ -56,6 +56,11 @@ enum ACTION_TAGS {
     ACTION_JIAOYOU_LEVERAGE_FARM,    # 交游·暗巷刺探
     ACTION_JIAOYOU_INTRO_GACHA,      # 交游·赴宴雅集
     ACTION_JIAOYOU_HOLD_FEAST,       # 交游·举办宴席
+
+    ACTION_MAIN_ZHUILIU,             # 驻留（父）
+    ACTION_ZHUILIU_XISHI,            # 驻留·西市
+    ACTION_ZHUILIU_PINGKANGFANG,     # 驻留·平康坊
+    ACTION_ZHUILIU_HUANGCHENG,       # 驻留·皇城
 }
 
 enum PROPS {
@@ -342,6 +347,34 @@ static func to_relation_str(item) -> String:
         return name.to_lower()
     Logging.err("Invalid province tag: " + str(item))
     return "default_storable_item"
+
+# ── 驻留地点 (CHANGAN_PLACES) 转换方法 ──────────────────────
+# GameSaveData 存 String key，运行时转换到中文/枚举
+const PLACE_STR_MAP: Dictionary = {
+ CHANGAN_PLACES.XISHI: "xishi",
+ CHANGAN_PLACES.PINGKANGFANG: "pingkangfang",
+ CHANGAN_PLACES.HUANGCHENG: "huangcheng",
+}
+const PLACE_CN_MAP: Dictionary = {
+ "xishi": "西市",
+ "pingkangfang": "平康坊",
+ "huangcheng": "皇城",
+}
+
+## CHANGAN_PLACES 枚举 → String key（用于 GameSave 持久化）
+static func to_place_str(place: CHANGAN_PLACES) -> String:
+ return PLACE_STR_MAP.get(place, "xishi")
+
+## String key → CHANGAN_PLACES 枚举
+static func from_place_str(s: String) -> CHANGAN_PLACES:
+ match s:
+  "pingkangfang": return CHANGAN_PLACES.PINGKANGFANG
+  "huangcheng": return CHANGAN_PLACES.HUANGCHENG
+ return CHANGAN_PLACES.XISHI
+
+## String key → 中文名
+static func place_to_cn(s: String) -> String:
+ return PLACE_CN_MAP.get(s, "西市")
 
 # ── 图片位置枚举 (UV 坐标 0.0~1.0) ─────────────────────────
 enum IMAGE_POS {

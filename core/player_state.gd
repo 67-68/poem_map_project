@@ -91,8 +91,17 @@ signal emotion_changed(stat_name)
 signal before_emotion_change(emo_name: String, delta: int)
 signal before_property_change(prop_name: String, delta: int)
 
-@export var stay_place: ENUMS.CHANGAN_PLACES = 
-# TODO: add in game save data
+## 当前驻留地点，存储为 String key（xishi / pingkangfang / huangcheng）
+## 持久化到 GameSave.data.stay_place
+var stay_place: String:
+	get: return GameSave.data.stay_place
+	set(val):
+		if val.is_empty():
+			val = "xishi"
+		GameSave.data.stay_place = val
+		stay_place_changed.emit(val)
+
+signal stay_place_changed(place_str: String)
 
 # ════════════════════════════════════════════════════════════════
 # 重复行动疲惫系统

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_req"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_action"]
+
+[resource]
+script = ExtResource("6_action")
+_action_tags = Array[int]([59])
+action_results = Array[ExtResource("2_baseop")]([])
+fallback_event_uuid = "zhu_liu_huangcheng_fallback"
+uuid = "zhu_liu_huangcheng"
+name = "驻留皇城"
+description = "皇城巍峨，朱门深锁，王侯将相在此角逐"
+metadata/_custom_type_script = "uid://ccs67ljham38a"
