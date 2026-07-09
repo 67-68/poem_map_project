@@ -405,5 +405,69 @@
       "health": "抱病赴宴，只怕席间失礼，反倒惹人耻笑",
       "time": "宴席已散，朱门紧闭，只有残烛在风中摇曳"
     }
+  },
+  "jiaoyou_intro_gacha_defer_resource": {
+    "name": "谋求引荐·每旬消耗",
+    "action_uuid": "jiaoyou_intro_gacha",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=l_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "baiye_normal_defer_resource": {
+    "name": "结纳权贵·每旬消耗",
+    "action_uuid": "baiye_normal",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=m_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "jiaoyou_tavern_gacha_defer_resource": {
+    "name": "酒馆打探·每旬消耗",
+    "action_uuid": "jiaoyou_tavern_gacha",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "jiaoyou_hold_feast_defer_resource": {
+    "name": "举办宴席·每旬消耗",
+    "action_uuid": "jiaoyou_hold_feast",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xl_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+  "jiaoyou_hold_feast_success": {
+    "name": "举办宴席·成",
+    "action_uuid": "jiaoyou_hold_feast",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xl_money_cost)|add_random_intro()",
+    "era": "",
+    "failed_hints": {
+      "money": "宴席需厚礼相赠、华服赴会，囊中羞涩者连门槛都迈不过去",
+      "health": "抱病设宴，只怕席间失礼，反倒惹人耻笑",
+      "time": "宴席已散，朱门紧闭，只有残烛在风中摇曳"
+    }
+  },
+  "jiaoyou_hold_feast_failure": {
+    "name": "举办宴席·败",
+    "action_uuid": "jiaoyou_hold_feast",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xl_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "宴席需厚礼相赠、华服赴会，囊中羞涩者连门槛都迈不过去",
+      "health": "抱病设宴，只怕席间失礼，反倒惹人耻笑",
+      "time": "宴席已散，朱门紧闭，只有残烛在风中摇曳"
+    }
   }
 }

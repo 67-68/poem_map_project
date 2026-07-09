@@ -55,6 +55,7 @@ enum ACTION_TAGS {
     ACTION_JIAOYOU_TAVERN_GACHA,     # 交游·坊间买醉
     ACTION_JIAOYOU_LEVERAGE_FARM,    # 交游·暗巷刺探
     ACTION_JIAOYOU_INTRO_GACHA,      # 交游·赴宴雅集
+    ACTION_JIAOYOU_HOLD_FEAST,       # 交游·举办宴席
 }
 
 enum PROPS {

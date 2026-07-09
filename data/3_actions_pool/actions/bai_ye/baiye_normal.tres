@@ -3,15 +3,24 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="2_action"]
 [ext_resource type="Script" uid="uid://wkg4t5ovrvhc" path="res://core/operators/advance_plot_placeholder_operator.gd" id="3_plot_op"]
+[ext_resource type="Script" uid="uid://c7k0q0ynf1k4i" path="res://model/defer_config.gd" id="4_defercfg"]
 
 [sub_resource type="Resource" id="Resource_plot_op"]
 script = ExtResource("3_plot_op")
+
+[sub_resource type="Resource" id="Resource_defer_config"]
+script = ExtResource("4_defercfg")
+xun_defered = "m_xun_cost"
+used_resource_archetype = "baiye_normal_defer_resource"
+ap_cost = "l_ap_cost"
+metadata/_custom_type_script = "uid://c7k0q0ynf1k4i"
 
 [resource]
 script = ExtResource("2_action")
 _action_tags = Array[int]([51, 29])
 action_results = Array[ExtResource("1_baseop")]([SubResource("Resource_plot_op")])
 aciton_requirements = Array[ExtResource("1_baseop")]([])
+defer_config = SubResource("Resource_defer_config")
 fallback_event_uuid = "baiye_normal_fallback"
 possibility = "l_success_rate"
 day_consumed = 1.0

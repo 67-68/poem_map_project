@@ -1,5 +1,18 @@
 # [unreleased]
 
+## Added
+
+- **Sub-Action Defer 配置** — 4 个社交 sub-action 接入 DeferConfig（每旬扣钱+AP）
+  - [`jiaoyou_intro_gacha.tres`](data/3_actions_pool/actions/jiao_you/jiaoyou_intro_gacha.tres:1) — 新增 defer_config（l_xun=6旬 + jiaoyou_intro_gacha_defer_resource + m_ap）
+  - [`baiye_normal.tres`](data/3_actions_pool/actions/bai_ye/baiye_normal.tres:1) — 新增 defer_config（m_xun=4旬 + baiye_normal_defer_resource + l_ap）
+  - [`jiaoyou_tavern_gacha.tres`](data/3_actions_pool/actions/jiao_you/jiaoyou_tavern_gacha.tres:1) — 新增 defer_config（s_xun=2旬 + jiaoyou_tavern_gacha_defer_resource + l_ap）
+  - [`jiaoyou_hold_feast.tres`](data/3_actions_pool/actions/jiao_you/jiaoyou_hold_feast.tres:1) — **新建 sub-action**「举办宴席」，defer_config（s_xun=2旬 + jiaoyou_hold_feast_defer_resource + s_ap）
+  - [`event_archetypes.json`](tools/data/event_archetypes.json:410) — 新增 6 个 archetype（4 个 defer_resource + 2 个 hold_feast 业务）
+  - [`hold_feast_success_fallback.tres`](data/1_core_rules/events/fallback/hold_feast_success_fallback.tres:1) — fallback「宴上知遇」
+  - [`hold_feast_failure_fallback.tres`](data/1_core_rules/events/fallback/hold_feast_failure_fallback.tres:1) — fallback「宴散人空」
+  - [`jiao_you.tres`](data/3_actions_pool/actions/jiao_you.tres:16) — sub_actions 追加「jiaoyou_hold_feast」
+  - [`enumerates.gd`](model/enumerates.gd:57) — 新增 `ACTION_JIAOYOU_HOLD_FEAST` 枚举值
+
 我感觉有点好玩了
 
 ## Fixed

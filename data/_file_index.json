@@ -400,6 +400,8 @@
     "1_core_rules/events/fallback/fangshi_sell_poem_fallback.tres",
     "1_core_rules/events/fallback/fangshi_shiyao_failed_fallback.tres",
     "1_core_rules/events/fallback/fangshi_shiyao_fallback.tres",
+    "1_core_rules/events/fallback/hold_feast_failure_fallback.tres",
+    "1_core_rules/events/fallback/hold_feast_success_fallback.tres",
     "1_core_rules/events/fallback/intro_gacha_failure_fallback.tres",
     "1_core_rules/events/fallback/intro_gacha_success_fallback.tres",
     "1_core_rules/events/fallback/jiaoyou_fallback.tres",
@@ -465,6 +467,7 @@
     "3_actions_pool/actions/deng_gao/denggao_qujiangchi.tres",
     "3_actions_pool/actions/deng_gao/denggao_shaolingyuan.tres",
     "3_actions_pool/actions/jiao_you/intro_gacha.tres",
+    "3_actions_pool/actions/jiao_you/jiaoyou_hold_feast.tres",
     "3_actions_pool/actions/jiao_you/jiaoyou_recite_poem.tres",
     "3_actions_pool/actions/jiao_you/jiaoyou_tongyou_changan.tres",
     "3_actions_pool/actions/jiao_you/leverage_farm.tres",
@@ -543,6 +546,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-07T07:39:11.165185+00:00",
-  "total": 542
+  "generated_at": "2026-07-09T06:19:36.256776+00:00",
+  "total": 545
 }

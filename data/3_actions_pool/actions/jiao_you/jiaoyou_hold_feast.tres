@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Action" format=3 uid="uid://dintrogacha01"]
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://dholdfeast01"]
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_req"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
@@ -9,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_failed_push"]
 script = ExtResource("4_pushevent")
-event_key = "intro_gacha_failure_fallback"
+event_key = "hold_feast_failure_fallback"
 metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_failed_result"]
@@ -19,20 +19,20 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_defer_config"]
 script = ExtResource("6_defercfg")
-xun_defered = "l_xun_cost"
-used_resource_archetype = "jiaoyou_intro_gacha_defer_resource"
-ap_cost = "m_ap_cost"
+xun_defered = "s_xun_cost"
+used_resource_archetype = "jiaoyou_hold_feast_defer_resource"
+ap_cost = "s_ap_cost"
 metadata/_custom_type_script = "uid://c7k0q0ynf1k4i"
 
 [resource]
 script = ExtResource("3_action")
-_action_tags = Array[int]([30, 54])
+_action_tags = Array[int]([30, 55])
 action_results = Array[ExtResource("2_baseop")]([])
 defer_config = SubResource("Resource_defer_config")
-fallback_event_uuid = "intro_gacha_success_fallback"
+fallback_event_uuid = "hold_feast_success_fallback"
 possibility = "m_success_rate"
 failed_result = SubResource("Resource_failed_result")
-uuid = "jiaoyou_intro_gacha"
-name = "赴宴雅集"
-description = "出席权贵宴席，广结人脉，或可获得引荐之机"
+uuid = "jiaoyou_hold_feast"
+name = "举办宴席"
+description = "设宴款待各路宾客，或可获得引荐之机"
 metadata/_custom_type_script = "uid://ccs67ljham38a"
