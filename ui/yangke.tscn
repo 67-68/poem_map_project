@@ -1,9 +1,0 @@
-[gd_scene format=3 uid="uid://cm5dt444d50qt"]
-
-[ext_resource type="Texture2D" uid="uid://djedkgjbgiiyq" path="res://assets/profile/test.png" id="1_hf12v"]
-
-[node name="Yangke" type="TextureRect" unique_id=2040927224]
-custom_minimum_size = Vector2(50, 50)
-texture = ExtResource("1_hf12v")
-expand_mode = 1
-stretch_mode = 4
