@@ -91,6 +91,8 @@ signal emotion_changed(stat_name)
 signal before_emotion_change(emo_name: String, delta: int)
 signal before_property_change(prop_name: String, delta: int)
 
+@export var stay_place: ENUMS.CHANGAN_PLACES = 
+# TODO: add in game save data
 
 # ════════════════════════════════════════════════════════════════
 # 重复行动疲惫系统
