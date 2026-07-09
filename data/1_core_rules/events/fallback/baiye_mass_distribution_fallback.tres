@@ -12,7 +12,7 @@ script = ExtResource("3_cr")
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "行卷如泥牛入海。投出数十份，竟无一人回音。你在客舍的烛光下又誊了一份，笔尖顿了顿，终究还是封好了。"
+description = "你的行卷辗转递到了{@npc_name}手中。这位大人翻阅了片刻，虽未当场表态，却也没有随手丢弃——而是将你的诗文收进了案头的卷宗里。你瞧在眼中，心中燃起一线希望。"
 
 [resource]
 script = ExtResource("5_randomev")

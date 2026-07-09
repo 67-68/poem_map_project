@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "你在暗巷的阴影中蹲守了半夜，终于等到了那个低语。一个裹着斗篷的身影匆匆走过，从怀中滑落了一封蜡封的信笺。你不动声色地拾起，借着月光匆匆一瞥——竟是不得了的东西。嘴角泛起一丝不易察觉的微笑，你将信笺仔细收好，悄无声息地消失在了黑暗中。"
+description = "你在暗巷的阴影中蹲守了半夜，终于等到了那个低语。一个裹着斗篷的身影匆匆走过，从怀中滑落了一封蜡封的信笺。借着月光匆匆一瞥——竟是{@npc_name}的把柄。你嘴角泛起一丝微笑，将信笺仔细收好，悄无声息地消失在了黑暗中。"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]

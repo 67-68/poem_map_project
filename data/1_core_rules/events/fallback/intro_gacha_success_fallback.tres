@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "朱门之内，灯火辉煌。觥筹交错间，你与在座的一位贵客相谈甚欢。此人正是朝中颇有分量的人物，对你的才学很是赏识。宴罢人散，他执手道别时，从袖中取出一封亲笔书信递于你手：「持此信去见某公，他必给你三分薄面。」你郑重收好，心中暗喜——今夜不负此行。"
+description = "雅集之上，墨香与酒香交融。你注意到人群中有一人独坐一角，气度不凡——上前攀谈方知是{@npc_name}。此人虽名声不显，言谈间却见地独到，令你暗自折服。"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]

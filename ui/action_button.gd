@@ -457,9 +457,14 @@ func _on_button_pressed() -> void:
 	if _snap_is_scene:
 		for tag in _snap_tags:
 			PlayerState.current_action_tags.append(tag)
+		
+		# 从 current_action_tags 提取 NPC tag → NPC 中文名，注入 scan context
+		var npc_name := _extract_npc_name_from_tags(PlayerState.current_action_tags)
+		
 		var context = {
 			'main_tag': _snap_main_tag,
 			'fallback_event_uuid': _snap_fallback,
+			'npc_name': npc_name,
 		}
 		EventManager.scan_events(0, context)
 	
@@ -588,10 +593,13 @@ func _on_sub_action_picked(entity) -> void:
 	# 🆕 注意：possibility 失败时 failed_result.operate() 已通过 PushEventOperator 推送事件，
 	# 因此需要跳过 scan_events 以避免双重事件推送。
 	if not _sub_failed:
+		# 从 current_action_tags 提取 NPC tag → NPC 中文名，注入 scan context
+		var npc_name := _extract_npc_name_from_tags(PlayerState.current_action_tags)
 		var context = {
 			'main_tag': sub_main_tag,
 			'fallback_event_uuid': sub_fallback,
 			'tag_match_mode': 'all',
+			'npc_name': npc_name,
 		}
 		EventManager.scan_events(0, context)
 	else:
@@ -620,3 +628,22 @@ func _build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail
 ## 由 PickerTapeAttachment 在 toggle 时通过 _pending_on_checkbox_toggled 调用。
 func _on_picker_checkbox_toggled(toggled_on: bool) -> void:
 	Logging.info("SceneActionPanel._on_picker_checkbox_toggled: toggled_on=%s" % str(toggled_on))
+
+
+## 🆕 从 current_action_tags 中提取 NPC 中文名（供 fallback 事件插值使用）。
+## 查找格式为 "actor:npc:X" 的 tag，提取 X，从 Database 查 NPCDocument.name。
+## 找不到时返回空字符串。
+func _extract_npc_name_from_tags(tags: Array) -> String:
+	for tag in tags:
+		if tag.begins_with("actor:npc:"):
+			var npc_tag = tag.trim_prefix("actor:npc:")
+			if npc_tag.is_empty():
+				continue
+			var doc = Database.get_npc_document(npc_tag)
+			if doc != null and not doc.name.is_empty():
+				Logging.info("SceneActionPanel._extract_npc_name_from_tags: '%s' → '%s'" % [npc_tag, doc.name])
+				return doc.name
+			else:
+				Logging.debug("SceneActionPanel._extract_npc_name_from_tags: '%s' 无中文名，回退到 tag" % npc_tag)
+				return npc_tag
+	return ""

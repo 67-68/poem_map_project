@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "朱门之内，灯火辉煌。宴席之上座中皆是消息灵通之辈，你与几位客人攀谈甚欢，虽无特定目标，却也收获了不少长安城里的动向。至少，这顿酒钱没有白花。"
+description = "朱门之内，灯火辉煌。你与{@npc_name}相谈甚欢，从他的言谈中你感受到此人虽素未谋面，却在长安城中颇有根基。宴罢，{@npc_name}从袖中取出一封亲笔书信递给你，以作引荐之资。"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
