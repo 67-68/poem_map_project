@@ -361,7 +361,7 @@ func _on_button_pressed() -> void:
 			var _place_mismatch := false
 			var _req_place: String = sub_action.required_place
 			if not _req_place.is_empty():
-				var _cur_place_str := _stay_place_to_str(PlayerState.stay_place)
+				var _cur_place_str := PlayerState.stay_place
 				if not _cur_place_str.is_empty() and _req_place != _cur_place_str:
 					_place_mismatch = true
 					var _place_name := sub_action.get_required_place_name()
@@ -494,7 +494,7 @@ func _on_sub_action_picked(entity) -> void:
 		var _place_name: String = entity.get_meta("_required_place_name", "")
 		Logging.info("SceneActionPanel: sub-action '%s' 异地行动 — 消耗 1 天前往 %s" % [sub_uuid, _place_name])
 		TimeService.advance_time(1)
-		PlayerState.stay_place = _str_to_stay_place(_req_place)
+		PlayerState.stay_place = _req_place
 		Logging.info("SceneActionPanel: stay_place 已更新为 %s" % _place_name)
 
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
@@ -607,29 +607,3 @@ func _build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail
 ## 由 PickerTapeAttachment 在 toggle 时通过 _pending_on_checkbox_toggled 调用。
 func _on_picker_checkbox_toggled(toggled_on: bool) -> void:
 	Logging.info("SceneActionPanel._on_picker_checkbox_toggled: toggled_on=%s" % str(toggled_on))
-
-
-## 🆕 ENUMS.CHANGAN_PLACES → "xishi" / "pingkangfang" / "huangcheng"
-static func _stay_place_to_str(place_enum) -> String:
-	match place_enum:
-		ENUMS.CHANGAN_PLACES.XISHI:
-			return "xishi"
-		ENUMS.CHANGAN_PLACES.PINGKANGFANG:
-			return "pingkangfang"
-		ENUMS.CHANGAN_PLACES.HUANGCHENG:
-			return "huangcheng"
-		_:
-			return ""
-
-
-## 🆕 "xishi" / "pingkangfang" / "huangcheng" → ENUMS.CHANGAN_PLACES
-static func _str_to_stay_place(place_str: String) -> ENUMS.CHANGAN_PLACES:
-	match place_str:
-		"xishi":
-			return ENUMS.CHANGAN_PLACES.XISHI
-		"pingkangfang":
-			return ENUMS.CHANGAN_PLACES.PINGKANGFANG
-		"huangcheng":
-			return ENUMS.CHANGAN_PLACES.HUANGCHENG
-		_:
-			return -1 as ENUMS.CHANGAN_PLACES
