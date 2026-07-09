@@ -1,11 +1,3 @@
-# ================================================================
-# RelationFlagManager 测试
-# ================================================================
-# 覆盖：leverage (add/get_keys/has/consume/try_use)、help (add/get/has/clear)、
-#       cross-target 隔离、event_id 约定推导、NPC + IDENTITY 双目标
-#
-# 存储变更: v3 — NPCDocument 属性驱动（不再使用 PlayerState flag）
-# ================================================================
 extends GutTest
 
 
@@ -27,7 +19,6 @@ func before_each():
 		if doc:
 			doc.leverage_keys.clear()
 			doc.help_count = 0
-			doc.favor = RelationFlagManager.DEFAULT_FAVOR
 			doc.person_state = RelationFlagManager.DEFAULT_PERSON_STATE
 			doc.intro_keys.clear()
 
@@ -243,3 +234,215 @@ func test_get_help_event_id_identity():
 	"""身份 target 的帮助事件 ID 符合约定"""
 	var eid = RelationFlagManager.get_help_event_id("TARGET_IDENTITY_QINGLIU_OWNER")
 	assert_eq(eid, "event_help_TARGET_IDENTITY_QINGLIU_OWNER")
+
+
+# ════════════════════════════════════════════════════════════
+# Person State — 四态状态机 (NEW)
+# ════════════════════════════════════════════════════════════
+
+func test_person_state_default_is_not_meet():
+	"""全新 target 默认 person_state 应为 not_meet"""
+	var tag = "TARGET_NEW_NOBODY"
+	assert_eq(RelationFlagManager.get_person_state(tag), RelationFlagManager.PERSON_STATE.NOT_MEET)
+
+
+func test_person_state_set_and_get():
+	"""set_person_state → get_person_state 往返一致"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.KNOW_ABOUT)
+	assert_eq(RelationFlagManager.get_person_state(tag), "know_about")
+
+
+func test_person_state_is_check():
+	"""is_person_state 应在匹配时返回 true"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.INNER_CIRCLE)
+	assert_true(RelationFlagManager.is_person_state(tag, RelationFlagManager.PERSON_STATE.INNER_CIRCLE))
+	assert_false(RelationFlagManager.is_person_state(tag, RelationFlagManager.PERSON_STATE.BLOOD_OATH))
+
+
+func test_person_state_invalid_value_rejected():
+	"""非法 person_state 值应被拒写"""
+	var tag = "TARGET_NPC_LIBAI"
+	# 先设为合法值确认写入成功
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.KNOW_ABOUT)
+	assert_eq(RelationFlagManager.get_person_state(tag), "know_about")
+	# 非法值拒绝写入，状态应保持 know_about
+	RelationFlagManager.set_person_state(tag, "best_friends_forever")
+	assert_eq(RelationFlagManager.get_person_state(tag), "know_about", "非法值不应覆盖已有状态")
+
+
+func test_person_state_clear():
+	"""clear_person_state 应重置为默认值"""
+	var tag = "TARGET_NPC_GAOSHI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.BLOOD_OATH)
+	RelationFlagManager.clear_person_state(tag)
+	assert_eq(RelationFlagManager.get_person_state(tag), RelationFlagManager.DEFAULT_PERSON_STATE)
+
+
+# ════════════════════════════════════════════════════════════
+# get_next_person_state — 自动推算下一级
+# ════════════════════════════════════════════════════════════
+
+func test_get_next_from_not_meet():
+	"""T0 → 下一级应为 T1 know_about"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.NOT_MEET)
+	assert_eq(RelationFlagManager.get_next_person_state(tag), "know_about")
+
+
+func test_get_next_from_know_about():
+	"""T1 → 下一级应为 T2 inner_circle"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.KNOW_ABOUT)
+	assert_eq(RelationFlagManager.get_next_person_state(tag), "inner_circle")
+
+
+func test_get_next_from_inner_circle():
+	"""T2 → 下一级应为 T3 blood_oath"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.INNER_CIRCLE)
+	assert_eq(RelationFlagManager.get_next_person_state(tag), "blood_oath")
+
+
+func test_get_next_from_blood_oath():
+	"""T3 已是最高级，get_next 应返回空字符串"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.BLOOD_OATH)
+	assert_eq(RelationFlagManager.get_next_person_state(tag), "")
+
+
+# ════════════════════════════════════════════════════════════
+# upgrade_person_state — 自动升级到下一级
+# ════════════════════════════════════════════════════════════
+
+func test_upgrade_t0_to_t1():
+	"""T0 upgrade → T1"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.NOT_MEET)
+	var ok = RelationFlagManager.upgrade_person_state(tag)
+	assert_true(ok)
+	assert_eq(RelationFlagManager.get_person_state(tag), "know_about")
+
+
+func test_upgrade_t1_to_t2():
+	"""T1 upgrade → T2"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.KNOW_ABOUT)
+	var ok = RelationFlagManager.upgrade_person_state(tag)
+	assert_true(ok)
+	assert_eq(RelationFlagManager.get_person_state(tag), "inner_circle")
+
+
+func test_upgrade_t2_to_t3():
+	"""T2 upgrade → T3"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.INNER_CIRCLE)
+	var ok = RelationFlagManager.upgrade_person_state(tag)
+	assert_true(ok)
+	assert_eq(RelationFlagManager.get_person_state(tag), "blood_oath")
+
+
+func test_upgrade_t3_noop():
+	"""T3 upgrade 应返回 false，状态不变"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.BLOOD_OATH)
+	var ok = RelationFlagManager.upgrade_person_state(tag)
+	assert_false(ok)
+	assert_eq(RelationFlagManager.get_person_state(tag), "blood_oath", "T3 升级应无变化")
+
+
+func test_upgrade_cross_target_isolation():
+	"""不同 target 的 person_state 升级互不影响"""
+	var tag_a = "TARGET_NPC_LIBAI"
+	var tag_b = "TARGET_NPC_GAOSHI"
+	RelationFlagManager.set_person_state(tag_a, RelationFlagManager.PERSON_STATE.NOT_MEET)
+	RelationFlagManager.set_person_state(tag_b, RelationFlagManager.PERSON_STATE.KNOW_ABOUT)
+
+	RelationFlagManager.upgrade_person_state(tag_a)
+	assert_eq(RelationFlagManager.get_person_state(tag_a), "know_about")
+	assert_eq(RelationFlagManager.get_person_state(tag_b), "know_about", "tag_b 不应被影响")
+
+
+# ════════════════════════════════════════════════════════════
+# get_tier_multiplier — 离散 4 态乘法表
+# ════════════════════════════════════════════════════════════
+
+func test_tier_multiplier_not_meet():
+	"""T0 倍率应为 0.0（无交互）"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.NOT_MEET)
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier(tag, true), 0.0, 0.001)
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier(tag, false), 0.0, 0.001)
+
+
+func test_tier_multiplier_know_about():
+	"""T1 倍率应为 1.0（公平交易）"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.KNOW_ABOUT)
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier(tag, true), 1.0, 0.001)
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier(tag, false), 1.0, 0.001)
+
+
+func test_tier_multiplier_inner_circle_good():
+	"""T2 好属性倍率应为 1.5"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.INNER_CIRCLE)
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier(tag, true), 1.5, 0.001)
+
+
+func test_tier_multiplier_inner_circle_bad():
+	"""T2 坏属性倍率应为 0.67"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.INNER_CIRCLE)
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier(tag, false), 0.67, 0.001)
+
+
+func test_tier_multiplier_blood_oath_good():
+	"""T3 好属性倍率应为 2.5"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.BLOOD_OATH)
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier(tag, true), 2.5, 0.001)
+
+
+func test_tier_multiplier_blood_oath_bad():
+	"""T3 坏属性倍率应为 0.4"""
+	var tag = "TARGET_NPC_LIBAI"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.BLOOD_OATH)
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier(tag, false), 0.4, 0.001)
+
+
+func test_tier_multiplier_empty_tag():
+	"""空 target_tag 应返回 1.0"""
+	assert_almost_eq(RelationFlagManager.get_tier_multiplier("", true), 1.0, 0.001)
+
+
+# ════════════════════════════════════════════════════════════
+# get_known_targets — 兼容四态（≥T1 都算认识）
+# ════════════════════════════════════════════════════════════
+
+func test_known_targets_includes_all_tiers_above_not_meet():
+	"""T1/T2/T3 都应被 get_known_targets 返回，T0 not_meet 不应被返回"""
+	# ENUMS.RELATION_TARGET 通过 to_relation_str() 转为小写 target_tag（如 LIBAI → "libai"）
+	# "libai" 是 RELATION_TARGET 中 LIBAI 的 to_relation_str() 结果
+	var tag = "libai"
+	RelationFlagManager.set_person_state(tag, RelationFlagManager.PERSON_STATE.INNER_CIRCLE)
+	var known = RelationFlagManager.get_known_targets()
+	assert_gt(known.size(), 0, "至少应有一个 known target")
+	assert_true(known.has(tag), "libai (T2) 应在 known 列表中")
+
+
+# ════════════════════════════════════════════════════════════
+# get_all_relations — 无 favor 字段
+# ════════════════════════════════════════════════════════════
+
+func test_get_all_relations_no_favor():
+	"""get_all_relations 不应再包含 favor 字段"""
+	var rels = RelationFlagManager.get_all_relations(["libai"])
+	assert_true(rels.has("libai"))
+	var data = rels["libai"]
+	assert_false(data.has("favor"), "get_all_relations 不应再包含 favor")
+	assert_true(data.has("person_state"))
+	assert_true(data.has("leverage_keys"))
+	assert_true(data.has("intro_keys"))
+	assert_true(data.has("help"))

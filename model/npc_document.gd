@@ -28,11 +28,7 @@ class_name NPCDocument extends Resource
 ## 原 flag: flag_gen_help_{TARGET_TAG}
 @export var help_count: int = 0
 
-## 好感度 — 玩家对该目标的好感度数值，默认 30（中性起点）
-## 原 flag: flag_gen_favor_{TARGET_TAG}
-@export var favor: int = 30
-
-## 人物相识状态 — 两态状态机：not_meet → know_about
+## 人物相识状态 — 四态状态机：not_meet → know_about → inner_circle → blood_oath
 ## 原 flag: flag_gen_person_state_{TARGET_TAG}
 @export var person_state: String = "not_meet"
 

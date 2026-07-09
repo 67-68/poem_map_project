@@ -28,12 +28,13 @@ const _NPCDocument = preload("res://model/npc_document.gd")
 #     NPCDocument.help_count: int
 #     event_help_{TARGET_TAG}
 #
-#   favor (好感度):
-#     玩家与某个目标（NPC/身份/势力）的好感度数值。
-#     NPCDocument.favor: int，默认值 30（中性起点）。
-#
-#   person_state (人物状态):
-#     玩家与某个目标的相识程度，两态状态机：not_meet → know_about。
+#   person_state (人物状态 / 关系层级):
+#     玩家与某个目标的关系层级，四态线性状态机：
+#       T0 not_meet ──→ T1 know_about ──→ T2 inner_circle ──→ T3 blood_oath
+#     每级跃迁规则由外部 Operator/Action/Event 判责，
+#     RelationFlagManager 只提供数据层原子函数：
+#       upgrade_person_state(target_tag) — 自动升级到下一级
+#       get_next_person_state(target_tag) — 查询下一级目标状态
 #     NPCDocument.person_state: String
 #
 #   intro (引荐信):
@@ -52,10 +53,9 @@ const _NPCDocument = preload("res://model/npc_document.gd")
 #   var result = RelationFlagManager.try_use_leverage("TARGET_IDENTITY_QUANGUI")
 #   # → {consumed: true, leverage_key: "quangui_corruption", event_id: "event_threaten_quangui_corruption"}
 #
-#   # 人物状态
-#   RelationFlagManager.set_person_state("libai", RelationFlagManager.PERSON_STATE.KNOW_ABOUT)
-#   if RelationFlagManager.is_person_state("libai", RelationFlagManager.PERSON_STATE.KNOW_ABOUT):
-#       print("已认识李白")
+#   # 人物状态 / 关系层级升级
+#   RelationFlagManager.upgrade_person_state("libai")  # T0→T1 或 T1→T2 或 T2→T3，自动查下一级
+#   var next = RelationFlagManager.get_next_person_state("libai")  # 查询下一级
 #
 # ═══════════════════════════════════════════════════════════
 
@@ -80,19 +80,34 @@ const RELATION_TARGET_TIER = {
 	"guoguofuren": 3,
 }
 
-## 好感度默认值（中性起点）
-const DEFAULT_FAVOR: int = 30
-
-# ── Dict 模拟 Enum：人物状态（仅允许存入 str，不可使用 int/enum）──
-## 两态状态机：not_meet → know_about，未来可扩展 good_terms / close / hostile。
-## 使用时通过 PERSON_STATE.NOT_MEET / PERSON_STATE.KNOW_ABOUT 引用。
+# ── Dict 模拟 Enum：人物状态 / 关系层级（仅允许存入 str，不可使用 int/enum）──
+## 四态线性状态机：
+##   T0: not_meet    — 听闻/迷雾，节点不可直接交互
+##   T1: know_about  — 泛泛之交/脸熟，节点解锁，基础资源置换
+##   T2: inner_circle — 入幕之宾/核心圈，产出「势」和政治情报
+##   T3: blood_oath  — 生死之交/政治死党，无视规则以势碾敌
+## 使用时通过 PERSON_STATE.NOT_MEET / .KNOW_ABOUT / .INNER_CIRCLE / .BLOOD_OATH 引用。
 const PERSON_STATE = {
-	"NOT_MEET":   "not_meet",
-	"KNOW_ABOUT": "know_about",
+	"NOT_MEET":     "not_meet",
+	"KNOW_ABOUT":   "know_about",
+	"INNER_CIRCLE": "inner_circle",
+	"BLOOD_OATH":   "blood_oath",
 }
 
 ## person_state 默认值
 const DEFAULT_PERSON_STATE: String = "not_meet"
+
+## person_state 层级序列表 — 用于 upgrade_person_state 推算下一级
+const _PERSON_STATE_ORDER: Array[String] = ["not_meet", "know_about", "inner_circle", "blood_oath"]
+
+# ── 离散 tier 倍率表（替代旧好感度连续倍率） ──
+## 用于 get_tier_multiplier()，is_good=true 时取好属性列，false 时取坏属性列
+const _TIER_MULTIPLIER_TABLE = {
+	"not_meet":     {good = 0.0,  bad = 0.0},   # 无交互，不触发
+	"know_about":   {good = 1.0,  bad = 1.0},   # 泛泛之交，公平交易
+	"inner_circle": {good = 1.5,  bad = 0.67},  # 自己人，收益放大
+	"blood_oath":   {good = 2.5,  bad = 0.4},   # 死党，一荣俱荣
+}
 
 
 # ═══════════════════════════════════════════════════════════
@@ -115,7 +130,6 @@ static func _get_or_create_npc_doc(target_tag: String) -> NPCDocument:
 	doc.prop = {}
 	doc.leverage_keys = [] as Array[String]
 	doc.help_count = 0
-	doc.favor = DEFAULT_FAVOR
 	doc.person_state = DEFAULT_PERSON_STATE
 	doc.intro_keys = [] as Array[String]
 	Database.npc_document[target_tag] = doc
@@ -242,49 +256,16 @@ static func get_help_event_id(target_tag: String) -> String:
 
 
 # ═══════════════════════════════════════════════════════════
-# 好感度 (Favor) — NPCDocument.favor，默认 30
-# ═══════════════════════════════════════════════════════════
-
-## 获取目标当前的好感度
-##
-## 若 NPCDocument 不存在则动态创建（默认 favor=30）。
-## 返回 int 值，无上下界约束。
-static func get_favor(target_tag: String) -> int:
-	var doc = _get_or_create_npc_doc(target_tag)
-	return doc.favor
-
-## 显式设置目标的好感度
-static func set_favor(target_tag: String, value: int) -> void:
-	var doc = _get_or_create_npc_doc(target_tag)
-	doc.favor = value
-	Logging.info("RelationFlagManager: favor set to %d for %s" % [value, target_tag])
-
-## 调整目标的好感度（支持负数减好感）
-static func add_favor(target_tag: String, delta: int) -> void:
-	var doc = _get_or_create_npc_doc(target_tag)
-	var old_val = doc.favor
-	doc.favor += delta
-	Logging.info("RelationFlagManager: favor %+d → %d for %s (was %d)" % [delta, doc.favor, target_tag, old_val])
-
-## 检查目标是否已存在 NPCDocument（不触发动态创建）
-##
-## 返回 true 表示该目标有对应的 NPCDocument（.tres 或运行时动态创建的）。
-static func has_favor_flag(target_tag: String) -> bool:
-	return Database.get_npc_document(target_tag) != null
-
-## 清除目标的好感度（重置为默认值）
-static func clear_favor(target_tag: String) -> void:
-	var doc = _get_or_create_npc_doc(target_tag)
-	doc.favor = DEFAULT_FAVOR
-	Logging.info("RelationFlagManager: favor reset to default %d for %s" % [DEFAULT_FAVOR, target_tag])
-
-
-# ═══════════════════════════════════════════════════════════
 # 人物状态 (Person State) — NPCDocument.person_state
 # ═══════════════════════════════════════════════════════════
 #
-# 两态状态机：
-#   not_meet ──(引入事件触发)──→ know_about
+# 四态线性状态机：
+#   T0: not_meet ──(打探/引荐)──→ T1: know_about ──(3旬熬)──→ T2: inner_circle ──(献祭)──→ T3: blood_oath
+#
+# 每级跃迁条件由外部 Operator/Action/Event 判责，
+# RelationFlagManager 只提供数据层原子操作：
+#   upgrade_person_state(target_tag) — 自动查找并升级到下一级
+#   get_next_person_state(target_tag) — 查询下一级目标状态
 #
 # 底层存储为 NPCDocument.person_state: String。
 # 外部调用必须传递 PERSON_STATE dict 的值（如 PERSON_STATE.KNOW_ABOUT），
@@ -335,15 +316,19 @@ static func is_person_state(target_tag: String, state: String) -> bool:
 		Logging.info("RelationFlagManager: is_person_state(%s, %s) → false (current=%s)" % [target_tag, state, current])
 	return result
 
-## 获取所有已认识（状态 ≥ know_about）的目标列表
+## 获取所有已认识（状态 ≥ T1 know_about）的目标列表
 ##
-## 遍历所有 RELATION_TARGET，返回 person_state 为 know_about 的 target。
+## 遍历所有 RELATION_TARGET，返回 person_state 不是 not_meet 的 target。
+## 即 T1(know_about) / T2(inner_circle) / T3(blood_oath) 都算"已认识"。
 ## 供 UI（如关系一览面板）调用。
 static func get_known_targets() -> Array[String]:
 	var known: Array[String] = []
 	for target_enum_value in ENUMS.RELATION_TARGET.values():
 		var target_tag := ENUMS.to_relation_str(target_enum_value)
-		if not target_tag.is_empty() and get_person_state(target_tag) == PERSON_STATE.KNOW_ABOUT:
+		if target_tag.is_empty():
+			continue
+		var state = get_person_state(target_tag)
+		if state != PERSON_STATE.NOT_MEET and state != "":
 			known.append(target_tag)
 	Logging.info("RelationFlagManager: get_known_targets → %d known out of %d total" % [known.size(), ENUMS.RELATION_TARGET.size()])
 	return known
@@ -360,21 +345,22 @@ static func clear_person_state(target_tag: String) -> void:
 
 
 # ═══════════════════════════════════════════════════════════
-# 好感度社交倍率系统 — 信号钩子驱动的属性修正
+# 关系层级 (Tier) 倍率系统 — 离散 4 态乘法表（替代旧好感度连续倍率）
 # ═══════════════════════════════════════════════════════════
 #
 # 架构概要：
-#   PlayerState.append_stat() 在属性变更前发射 before_property_change 信号，
-#   RelationFlagManager 监听此信号，根据 PlayerState.last_event.target_tag
-#   查询当前好感度，计算社交倍率，存入静态变量。
-#   append_stat() 在信号返回后读取此倍率，修正属性变化量。
+#   PlayerState.append_stat() 在属性变更后调用 get_tier_multiplier()，
+#   根据当前事件 target_tag 的 person_state (T0-T3) 返回离散倍率。
+#   不再使用 before_property_change 信号钩子。
 #
 # 好属性（玩家希望增加的）：
 #   literary_fame, progress, talent, money, health
 #
-# 倍率规则：
-#   高好感度 → 好属性倍率 >1.0（更多收益），坏属性倍率 <1.0（更少代价）
-#   低好感度 → 好属性倍率 <1.0（更少收益），坏属性倍率 >1.0（更多代价）
+# 倍率规则（_TIER_MULTIPLIER_TABLE 常量已在上方定义）：
+#   T0(not_meet):    无交互，倍率 0.0（不触发）
+#   T1(know_about):  公平交易，倍率 1.0
+#   T2(inner_circle): 自己人，好属性 1.5x / 坏属性 0.67x
+#   T3(blood_oath):  死党，好属性 2.5x / 坏属性 0.4x
 # ═══════════════════════════════════════════════════════════
 
 ## 硬编码的"好属性"对照表（key 为 Database.prop 的 uuid/name）
@@ -389,51 +375,56 @@ const GOOD_PROPS: Dictionary = {
 ## 硬编码的"坏属性"对照表
 const BAD_PROPS: Dictionary = {}
 
-## 由信号处理器写入、append_stat 读取并重置的社交倍率
-static var _current_favor_multiplier: float = 1.0
-
-## 连接 PlayerState 的 before_property_change 信号
-static func connect_to_player_state(player: PlayerState) -> void:
-	player.before_property_change.connect(_on_before_property_change)
-	Logging.info("RelationFlagManager: connected to PlayerState.before_property_change")
-
-## 信号处理器：在属性即将变更时计算好感度社交倍率
-static func _on_before_property_change(prop_name: String, delta: int) -> void:
-	var target_tag = PlayerState.last_event.get("target_tag", "")
+## 获取 target 当前 tier 对应的属性倍率。
+##
+##   is_good=true  → 取 _TIER_MULTIPLIER_TABLE[tier].good
+##   is_good=false → 取 _TIER_MULTIPLIER_TABLE[tier].bad
+##   target_tag 为空或 state 不在表中 → 返回 1.0
+static func get_tier_multiplier(target_tag: String, is_good: bool) -> float:
 	if target_tag.is_empty():
-		_current_favor_multiplier = 1.0
-		return
+		return 1.0
+	var state = get_person_state(target_tag)
+	var tier_data = _TIER_MULTIPLIER_TABLE.get(state, {})
+	if tier_data.is_empty():
+		Logging.info("RelationFlagManager: get_tier_multiplier — unknown state '%s' for %s, return 1.0" % [state, target_tag])
+		return 1.0
+	var multiplier = tier_data.good if is_good else tier_data.bad
+	Logging.info("RelationFlagManager: get_tier_multiplier(%s, state=%s, is_good=%s) → %.2f" % [target_tag, state, is_good, multiplier])
+	return multiplier
 
-	# 只对已知的好/坏属性施加倍率
-	var is_good = GOOD_PROPS.has(prop_name)
-	var is_bad = BAD_PROPS.has(prop_name)
-	if not is_good and not is_bad:
-		_current_favor_multiplier = 1.0
-		return
 
-	var favor = get_favor(target_tag)
-	_current_favor_multiplier = _calculate_favor_multiplier(favor, is_good)
-	Logging.info("RelationFlagManager: favor=%d, prop=%s, is_good=%s, multiplier=%.2f" % [favor, prop_name, is_good, _current_favor_multiplier])
+# ═══════════════════════════════════════════════════════════
+# 关系层级升级 — 线性自动推进
+# ═══════════════════════════════════════════════════════════
 
-## 根据好感度计算社交倍率
+## 返回 target 当前状态下可跃迁到的下一级 person_state。
 ##
-##   DEFAULT_FAVOR=30 → ratio=1.0（中性）
-##   favor=60 → ratio=2.0（高好感，好属性 2x，坏属性 0.5x）
-##   favor=10 → ratio≈0.33（低好感，好属性 0.33x，坏属性 3x）
-static func _calculate_favor_multiplier(favor: int, is_good: bool) -> float:
-	var ratio = float(favor) / float(DEFAULT_FAVOR)
-	if is_good:
-		return clampf(ratio, 0.2, 3.0)
-	else:
-		return clampf(1.0 / ratio, 0.2, 3.0)
+##   线性链表: not_meet → know_about → inner_circle → blood_oath → ""
+##   若已是 T3 (blood_oath) 则返回空字符串。
+static func get_next_person_state(target_tag: String) -> String:
+	var current = get_person_state(target_tag)
+	var idx = _PERSON_STATE_ORDER.find(current)
+	if idx == -1 or idx >= _PERSON_STATE_ORDER.size() - 1:
+		Logging.info("RelationFlagManager: get_next_person_state(%s) — current='%s' 已是最高级或无下一级" % [target_tag, current])
+		return ""
+	var next_state = _PERSON_STATE_ORDER[idx + 1]
+	Logging.info("RelationFlagManager: get_next_person_state(%s) — current='%s' → next='%s'" % [target_tag, current, next_state])
+	return next_state
 
-## 消费者模式：获取当前倍率并重置为 1.0
+## 升级 target 的 person_state 到下一级。
 ##
-## 由 PlayerState.append_stat() 在 before_property_change 信号发射后调用。
-static func get_and_reset_favor_multiplier() -> float:
-	var m = _current_favor_multiplier
-	_current_favor_multiplier = 1.0
-	return m
+##   自动调用 get_next_person_state() 推算目标状态，执行替换。
+##   返回 true 表示升级成功，false 表示已是最高级或状态异常。
+##
+##   外部调用方负责判责（金钱/物品/Title 检查），本函数只做数据操作。
+static func upgrade_person_state(target_tag: String) -> bool:
+	var next_state = get_next_person_state(target_tag)
+	if next_state.is_empty():
+		Logging.info("RelationFlagManager: upgrade_person_state(%s) — 已是最高级，无法再升级" % target_tag)
+		return false
+	set_person_state(target_tag, next_state)
+	Logging.info("RelationFlagManager: upgrade_person_state(%s) — 升级完成 → '%s'" % [target_tag, next_state])
+	return true
 
 
 # ═══════════════════════════════════════════════════════════
@@ -493,7 +484,6 @@ static func clear_intro(target_tag: String) -> void:
 ##                 来源: ENUMS.RELATION_TARGET.keys() → to_lower()
 ## @return Dictionary: {target_tag: {leverage_keys: Array[String],
 ##                                    help: int,
-##                                    favor: int,
 ##                                    person_state: String,
 ##                                    intro_keys: Array[String]}}
 ## 无数据的目标返回空列表 / 0 / 默认值，不报错。
@@ -504,7 +494,6 @@ static func get_all_relations(targets: Array[String]) -> Dictionary:
 			leverage_keys = get_leverage_keys(target_tag),
 			intro_keys = get_intro_keys(target_tag),
 			help = get_help(target_tag),
-			favor = get_favor(target_tag),
 			person_state = get_person_state(target_tag),
 		}
 	Logging.info("RelationFlagManager: get_all_relations queried %d targets" % targets.size())

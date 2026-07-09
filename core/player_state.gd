@@ -280,12 +280,16 @@ func append_stat(stat_name, data) -> bool:
 		if t.buffer_to_region and t.buffer_to_region.has_operator(current_location):
 			amount_to_change = t.buffer_to_region.match_and_multiply(current_location, amount_to_change)
 
-	# RelationFlagManager 好感倍率
+	# RelationFlagManager 关系层级倍率（离散4态，直接查询不依赖信号钩子）
+	var target_tag = last_event.get("target_tag", "")
+	var is_good = RelationFlagManager.GOOD_PROPS.has(stat_name) or not RelationFlagManager.BAD_PROPS.has(stat_name)
+	if not target_tag.is_empty() and (RelationFlagManager.GOOD_PROPS.has(stat_name) or RelationFlagManager.BAD_PROPS.has(stat_name)):
+		var tier_multiplier = RelationFlagManager.get_tier_multiplier(target_tag, is_good)
+		if tier_multiplier != 1.0:
+			amount_to_change = int(amount_to_change * tier_multiplier)
+			Logging.info("change stat %s: tier multiplier applied (*%.2f) → %d" % [stat_name, tier_multiplier, amount_to_change])
+
 	before_property_change.emit(stat_name, amount_to_change)
-	var favor_multiplier = RelationFlagManager.get_and_reset_favor_multiplier()
-	if favor_multiplier != 1.0:
-		amount_to_change = int(amount_to_change * favor_multiplier)
-		Logging.info("change stat %s: favor multiplier applied (*%.2f) → %d" % [stat_name, favor_multiplier, amount_to_change])
 
 	# FatigueManager 疲劳倍率
 	var fatigue_multiplier = FatigueManager.get_and_reset_fatigue_multiplier()

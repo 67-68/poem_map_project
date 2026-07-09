@@ -86,7 +86,7 @@ var event_counter: int = 0
 # ════════════════════════════════════════════════════════════════
 # NPC 关系数据 — NPCDocument 运行时属性的持久化快照
 # key: target_tag (如 "libai", "hushang"), value: Dictionary
-#   { "leverage_keys": [...], "help_count": 0, "favor": 30,
+#   { "leverage_keys": [...], "help_count": 0,
 #     "person_state": "not_meet", "intro_keys": [...] }
 # save 时从 NPCDocument 实例快照，load 时恢复到 NPCDocument 实例。
 # ════════════════════════════════════════════════════════════════
@@ -214,10 +214,9 @@ func restore_npc_relations_to_documents() -> void:
 			continue
 		doc.leverage_keys = data.get("leverage_keys", [])
 		doc.help_count = data.get("help_count", 0)
-		doc.favor = data.get("favor", 30)
 		doc.person_state = data.get("person_state", "not_meet")
 		doc.intro_keys = data.get("intro_keys", [])
-		Logging.info("GameSaveData: 恢复 '%s' 关系数据 → favor=%d, help=%d, leverage=%d, intro=%d, state=%s" % [target_tag, doc.favor, doc.help_count, doc.leverage_keys.size(), doc.intro_keys.size(), doc.person_state])
+		Logging.info("GameSaveData: 恢复 '%s' 关系数据 → help=%d, leverage=%d, intro=%d, state=%s" % [target_tag, doc.help_count, doc.leverage_keys.size(), doc.intro_keys.size(), doc.person_state])
 
 ## 从所有已加载的 NPCDocument 实例快照关系数据到 npc_relations。
 func _snapshot_npc_relations() -> void:
@@ -229,7 +228,6 @@ func _snapshot_npc_relations() -> void:
 		npc_relations[target_tag] = {
 			"leverage_keys": doc.leverage_keys.duplicate(),
 			"help_count": doc.help_count,
-			"favor": doc.favor,
 			"person_state": doc.person_state,
 			"intro_keys": doc.intro_keys.duplicate(),
 		}
