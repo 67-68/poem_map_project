@@ -20,6 +20,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 script = ExtResource("3_action")
 _action_tags = Array[int]([30, 53])
 action_results = Array[ExtResource("2_baseop")]([])
+archetype_uuid = "jiaoyou_leverage_farm_success"
 fallback_event_uuid = "leverage_farm_success_fallback"
 possibility = "s_success_rate"
 failed_result = SubResource("Resource_failed_result")

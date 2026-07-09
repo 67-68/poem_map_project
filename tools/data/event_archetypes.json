@@ -500,5 +500,143 @@
     "universal_result": "set_stay_place(place=huangcheng)",
     "era": "",
     "failed_hints": {}
+  },
+
+  "jiaoyou_hold_feast_success": {
+    "name": "宴席·成",
+    "action_uuid": "jiaoyou_hold_feast",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "pick_npc(mode=by_place; places=pingkangfang; state=inner_circle; state_compare=gte; key=host_npc; social_tag=social:intro)|pick_npc(mode=related; source_key=host_npc; state=not_meet; key=letter_target)|add_random_intro(target_key=letter_target)|prop_sub(name=money; val=xl_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "囊中羞涩，连置办一桌席面的银钱都凑不齐"
+    }
+  },
+  "jiaoyou_hold_feast_failure": {
+    "name": "宴席·败",
+    "action_uuid": "jiaoyou_hold_feast",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xl_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+
+  "baiye_normal_success": {
+    "name": "普通拜谒·成",
+    "action_uuid": "baiye_normal",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "pick_npc(mode=by_place; key=npc_target; social_tag=social:upgrade)|person_state(mode=upgrade; target_key=npc_target)|prop_sub(name=money; val=m_money_cost)|prop_add(name=progress; val=s_progress_gain)",
+    "era": "",
+    "failed_hints": {
+      "money": "囊中羞涩，连投刺的门包都凑不齐"
+    }
+  },
+  "baiye_normal_failure": {
+    "name": "普通拜谒·败",
+    "action_uuid": "baiye_normal",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=m_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+
+  "jiaoyou_intro_gacha_success": {
+    "name": "雅集·成",
+    "action_uuid": "jiaoyou_intro_gacha",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "pick_npc(mode=by_place; places=pingkangfang,huangcheng; state=uncharted; key=npc_target; social_tag=social:acquaint)|person_state(mode=set; state=not_meet; target_key=npc_target)|prop_sub(name=money; val=xl_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "你的盘缠不够承租雅集的席位了"
+    }
+  },
+  "jiaoyou_intro_gacha_failure": {
+    "name": "雅集·败",
+    "action_uuid": "jiaoyou_intro_gacha",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=xl_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+
+  "jiaoyou_leverage_farm_success": {
+    "name": "暗巷刺探·成",
+    "action_uuid": "jiaoyou_leverage_farm",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "pick_npc(mode=random; key=npc_target; social_tag=social:leverage)|add_random_leverage(target_key=npc_target)|prop_sub(name=money; val=m_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "暗巷中的眼线要价不菲，你连买消息的铜钱都掏不出来"
+    }
+  },
+  "jiaoyou_leverage_farm_failure": {
+    "name": "暗巷刺探·败",
+    "action_uuid": "jiaoyou_leverage_farm",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=m_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+
+  "jiaoyou_tongyou_changan_success": {
+    "name": "同游长安·成",
+    "action_uuid": "jiaoyou_tongyou_changan",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "pick_npc(mode=random; key=npc_target; social_tag=social:acquaint)|prop_sub(name=money; val=s_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "囊中空空如也，连和友人喝碗茶的钱都拿不出"
+    }
+  },
+  "jiaoyou_tongyou_changan_failure": {
+    "name": "同游长安·败",
+    "action_uuid": "jiaoyou_tongyou_changan",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)",
+    "era": "",
+    "failed_hints": {}
+  },
+
+  "baiye_mass_distribution_success": {
+    "name": "广发行卷·成",
+    "action_uuid": "baiye_mass_distribution",
+    "state": "success",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "pick_npc(mode=random; state=uncharted; key=npc_target; social_tag=social:baiye)|person_state(mode=set; state=not_meet; target_key=npc_target)|prop_sub(name=money; val=l_money_cost)",
+    "era": "",
+    "failed_hints": {
+      "money": "连印制行卷的纸张都买不起了，还谈什么广发行卷"
+    }
+  },
+  "baiye_mass_distribution_failure": {
+    "name": "广发行卷·败",
+    "action_uuid": "baiye_mass_distribution",
+    "state": "failure",
+    "parent": "",
+    "universal_requirement": "",
+    "universal_result": "prop_sub(name=money; val=l_money_cost)",
+    "era": "",
+    "failed_hints": {}
   }
 }

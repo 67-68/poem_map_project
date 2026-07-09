@@ -69,6 +69,11 @@ var success_hint: String = ""
 ## 在 .tres 文件中手动填写，如「今日门庭冷落，车马稀疏…」。
 @export var lock_narrative: String = ""
 
+## 🆕 行动 Archetype UUID — 指向 tools/data/event_archetypes.json 中的 key。
+## 运行时自动合并 archetype.universal_result 的 operators 到 action_results 一起执行。
+## 空字符串 = 不合并。
+@export var archetype_uuid: String = ""
+
 ## 行动消耗天数（替代原 TimeOperator 在 action_results 中的嵌入）。
 ## 0 = 不消耗时间。子行动若未设置（=0），自动继承父行动的 day_consumed。
 @export var day_consumed: float = 0.0
@@ -90,9 +95,6 @@ var success_hint: String = ""
 @export var failed_result: ChoiceResult = ChoiceResult.new()
 
 @export var defer_config: DeferConfig = DeferConfig.new()
-
-var dynamic_tags = []
-# 动态加入的tag，需要把这个也纳入考量
 
 ## 🆕 解析 possibility archetype 为 int（0-100）。
 ## 查表 tools/data/named_amounts.json，未知 key 时 fallback 到 100。
@@ -119,3 +121,19 @@ func clear_failed_hint() -> void:
 	dynamic_failed_hint = ""
 	success_hint = ""
 	_is_hidden = false
+
+## 🆕 获取 archetype 的 operators（代替 action_results）。
+## 如果 archetype_uuid 非空，返回对应 archetype 预解析的 operator 数组。
+## .tres 的 action_results 字段保留为空，所有 operator 通过此方法间接加载。
+func get_all_action_results() -> Array:
+	if archetype_uuid.is_empty():
+		Logging.warn("Action.get_all_action_results: '%s' 的 archetype_uuid 为空" % uuid)
+		return []
+	
+	var arch = Database.get_archetype_by_uuid(archetype_uuid, "success")
+	if arch == null or arch.operators.is_empty():
+		Logging.warn("Action.get_all_action_results: archetype '%s' 未找到或 operators 为空" % archetype_uuid)
+		return []
+	
+	Logging.info("Action.get_all_action_results: '%s' → archetype '%s' 返回 %d 个 operator" % [uuid, archetype_uuid, arch.operators.size()])
+	return arch.operators.duplicate(true)

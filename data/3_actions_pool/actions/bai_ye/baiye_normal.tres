@@ -18,12 +18,13 @@ metadata/_custom_type_script = "uid://c7k0q0ynf1k4i"
 [resource]
 script = ExtResource("2_action")
 _action_tags = Array[int]([51, 29])
-action_results = Array[ExtResource("1_baseop")]([SubResource("Resource_plot_op")])
+action_results = Array[ExtResource("1_baseop")]([])
 aciton_requirements = Array[ExtResource("1_baseop")]([])
 defer_config = SubResource("Resource_defer_config")
 fallback_event_uuid = "baiye_normal_fallback"
 possibility = "l_success_rate"
 day_consumed = 1.0
+archetype_uuid = "baiye_normal_success"
 uuid = "baiye_normal"
 name = "普通拜谒"
 required_place = "huangcheng"

@@ -414,10 +414,16 @@ func _on_button_pressed() -> void:
 	# 🆕 批量模式：抑制属性变动期间的 reevaluate
 	ActionManager.begin_action_batch()
 	
-	# 执行 action_results 中的非时间 operator
-	if action.action_results:
-		for r in action.action_results:
-			r.operate()
+	# 执行合并后的 action_results + archetype operators（带 init 链）
+	var _all_action_ops = action.get_all_action_results() if action.has_method("get_all_action_results") else action.action_results
+	if _all_action_ops and not _all_action_ops.is_empty():
+		var _act_ctx: Dictionary = {}
+		for r in _all_action_ops:
+			if r and r.has_method("init"):
+				_act_ctx = r.init(_act_ctx)
+		for r in _all_action_ops:
+			if r:
+				r.operate()
 	
 	# 🆕 时间消耗：通过 day_consumed + trait 惩罚统一扣除（替代原 sprained_ankle 硬编码）
 	if _snap_day_consumed > 0:
@@ -544,10 +550,17 @@ func _on_sub_action_picked(entity) -> void:
 			_sub_failed = true
 		else:
 			Logging.info("SceneActionPanel: sub-action '%s' possibility PASS (roll=%d <= threshold=%d)" % [sub_action.name, roll, threshold])
-			if sub_action.action_results and not sub_action.action_results.is_empty():
-				for r in sub_action.action_results:
-					r.operate()
-				Logging.info("SceneActionPanel: sub-action '%s' executed action_results (%d ops)" % [sub_action.name, sub_action.action_results.size()])
+			# 使用合并后的 action_results + archetype operators
+			var _sub_ops = sub_action.get_all_action_results() if sub_action.has_method("get_all_action_results") else sub_action.action_results
+			if _sub_ops and not _sub_ops.is_empty():
+				var _sub_ctx: Dictionary = {}
+				for r in _sub_ops:
+					if r and r.has_method("init"):
+						_sub_ctx = r.init(_sub_ctx)
+				for r in _sub_ops:
+					if r:
+						r.operate()
+				Logging.info("SceneActionPanel: sub-action '%s' executed merged action_results (%d ops)" % [sub_action.name, _sub_ops.size()])
 	
 	ActionManager.begin_action_batch()
 	

@@ -101,6 +101,8 @@ const FUNC_UNLOCK_SOCIAL_NODE := "unlock_social_node"
 const FUNC_ADVANCE_PLOT := "advance_plot"
 const FUNC_SET_STAY_PLACE := "set_stay_place"
 const FUNC_PICK_NPC_BY_PLACE := "pick_npc_by_place"
+const FUNC_PICK_NPC := "pick_npc"
+const FUNC_PERSON_STATE := "person_state"
 # ─────────────────────────────────────────────────────────────
 # 中央调度注册表
 # func_name → handler(parsed: ParseResult, raw: String) -> Variant
@@ -187,6 +189,9 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_ADD_RANDOM_INTRO] = func(p, r): return _exec_add_random_intro_op(p, r)
 	# ── 🆕 地点匹配 NPC Picker ──
 	cd[FUNC_PICK_NPC_BY_PLACE] = func(p, r): return _exec_pick_npc_by_place_op(p, r)
+	# ── 🆕 统一 NPC 选择器 + 人物状态操作 ──
+	cd[FUNC_PICK_NPC] = func(p, r): return _exec_pick_npc_op(p, r)
+	cd[FUNC_PERSON_STATE] = func(p, r): return _exec_person_state_op(p, r)
 	# ── Image Operators ──
 	cd[FUNC_IMAGE_PRESENT] = func(p, r): return _exec_image_present_op(p, r)
 	cd[FUNC_IMAGE_SLIDE] = func(p, r): return _exec_image_slide_op(p, r)
@@ -1388,4 +1393,38 @@ static func _exec_pick_npc_by_place_op(parsed: NamedDSLParser.ParseResult, raw: 
 	op.key_stored_context = NamedDSLParser.get_str_param(parsed, "key", "npc_target")
 	op.state = NamedDSLParser.get_str_param(parsed, "state", "")
 	Logging.info("MicroDSLParser: _exec_pick_npc_by_place_op — key=%s state=%s raw=%s" % [op.key_stored_context, op.state, raw])
+	return op
+
+
+# ─── pick_npc（统一 NPC 选择器）──────────────────────────
+
+# DSL 语法:
+#   pick_npc(mode=by_place; key=npc_target; places=pingkangfang,huangcheng; state=uncharted; social_tag=social:acquaint)
+#   pick_npc(mode=random; key=npc_target; state=uncharted; social_tag=social:leverage)
+#   pick_npc(mode=related; source_key=host_npc; state=not_meet; key=letter_target)
+static func _exec_pick_npc_op(parsed: NamedDSLParser.ParseResult, raw: String) -> PickNpcOperator:
+	var op := PickNpcOperator.new()
+	op.mode = NamedDSLParser.get_str_param(parsed, "mode", "by_place")
+	op.key_stored_context = NamedDSLParser.get_str_param(parsed, "key", "npc_target")
+	op.places = NamedDSLParser.get_str_param(parsed, "places", "")
+	op.state = NamedDSLParser.get_str_param(parsed, "state", "")
+	op.state_compare = NamedDSLParser.get_str_param(parsed, "state_compare", "eq")
+	op.source_key = NamedDSLParser.get_str_param(parsed, "source_key", "")
+	op.social_tag = NamedDSLParser.get_str_param(parsed, "social_tag", "")
+	Logging.info("MicroDSLParser: _exec_pick_npc_op — mode=%s key=%s places=%s state=%s compare=%s source=%s social=%s raw=%s" % [
+		op.mode, op.key_stored_context, op.places, op.state, op.state_compare, op.source_key, op.social_tag, raw])
+	return op
+
+
+# ─── person_state（统一人物状态操作）─────────────────────
+
+# DSL 语法:
+#   person_state(mode=set; state=not_meet; target_key=npc_target)
+#   person_state(mode=upgrade; target_key=npc_target)
+static func _exec_person_state_op(parsed: NamedDSLParser.ParseResult, raw: String) -> PersonStateOperator:
+	var op := PersonStateOperator.new()
+	op.mode = NamedDSLParser.get_str_param(parsed, "mode", "set")
+	op.state = NamedDSLParser.get_str_param(parsed, "state", "")
+	op.target_key = NamedDSLParser.get_str_param(parsed, "target_key", "npc_target")
+	Logging.info("MicroDSLParser: _exec_person_state_op — mode=%s state=%s target_key=%s raw=%s" % [op.mode, op.state, op.target_key, raw])
 	return op

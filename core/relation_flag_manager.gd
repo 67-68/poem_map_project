@@ -81,13 +81,15 @@ const RELATION_TARGET_TIER = {
 }
 
 # ── Dict 模拟 Enum：人物状态 / 关系层级（仅允许存入 str，不可使用 int/enum）──
-## 四态线性状态机：
-##   T0: not_meet    — 听闻/迷雾，节点不可直接交互
-##   T1: know_about  — 泛泛之交/脸熟，节点解锁，基础资源置换
-##   T2: inner_circle — 入幕之宾/核心圈，产出「势」和政治情报
-##   T3: blood_oath  — 生死之交/政治死党，无视规则以势碾敌
-## 使用时通过 PERSON_STATE.NOT_MEET / .KNOW_ABOUT / .INNER_CIRCLE / .BLOOD_OATH 引用。
+## 五态线性状态机：
+##   T-1: uncharted    — 玩家不知道此人存在（默认态）
+##   T0:  not_meet     — 听闻/迷雾，节点不可直接交互
+##   T1:  know_about   — 泛泛之交/脸熟，节点解锁，基础资源置换
+##   T2:  inner_circle — 入幕之宾/核心圈，产出「势」和政治情报
+##   T3:  blood_oath   — 生死之交/政治死党，无视规则以势碾敌
+## 使用时通过 PERSON_STATE.UNCHARTED / .NOT_MEET / .KNOW_ABOUT / .INNER_CIRCLE / .BLOOD_OATH 引用。
 const PERSON_STATE = {
+	"UNCHARTED":    "uncharted",
 	"NOT_MEET":     "not_meet",
 	"KNOW_ABOUT":   "know_about",
 	"INNER_CIRCLE": "inner_circle",
@@ -95,14 +97,15 @@ const PERSON_STATE = {
 }
 
 ## person_state 默认值
-const DEFAULT_PERSON_STATE: String = "not_meet"
+const DEFAULT_PERSON_STATE: String = "uncharted"
 
 ## person_state 层级序列表 — 用于 upgrade_person_state 推算下一级
-const _PERSON_STATE_ORDER: Array[String] = ["not_meet", "know_about", "inner_circle", "blood_oath"]
+const _PERSON_STATE_ORDER: Array[String] = ["uncharted", "not_meet", "know_about", "inner_circle", "blood_oath"]
 
 # ── 离散 tier 倍率表（替代旧好感度连续倍率） ──
 ## 用于 get_tier_multiplier()，is_good=true 时取好属性列，false 时取坏属性列
 const _TIER_MULTIPLIER_TABLE = {
+	"uncharted":    {good = 0.0,  bad = 0.0},   # 无交互，不触发
 	"not_meet":     {good = 0.0,  bad = 0.0},   # 无交互，不触发
 	"know_about":   {good = 1.0,  bad = 1.0},   # 泛泛之交，公平交易
 	"inner_circle": {good = 1.5,  bad = 0.67},  # 自己人，收益放大
@@ -132,6 +135,7 @@ static func _get_or_create_npc_doc(target_tag: String) -> NPCDocument:
 	doc.help_count = 0
 	doc.person_state = DEFAULT_PERSON_STATE
 	doc.intro_keys = [] as Array[String]
+	doc.relate_to = [] as Array[String]
 	Database.npc_document[target_tag] = doc
 	Logging.info("RelationFlagManager: 动态创建 NPCDocument for '%s'（无对应 .tres 文件）" % target_tag)
 	return doc

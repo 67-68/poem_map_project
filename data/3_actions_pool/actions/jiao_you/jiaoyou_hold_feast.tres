@@ -28,6 +28,7 @@ metadata/_custom_type_script = "uid://c7k0q0ynf1k4i"
 script = ExtResource("3_action")
 _action_tags = Array[int]([30, 55])
 action_results = Array[ExtResource("2_baseop")]([])
+archetype_uuid = "jiaoyou_hold_feast_success"
 defer_config = SubResource("Resource_defer_config")
 fallback_event_uuid = "hold_feast_success_fallback"
 possibility = "m_success_rate"

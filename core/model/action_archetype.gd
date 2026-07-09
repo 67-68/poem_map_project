@@ -10,7 +10,7 @@ var action_uuid: String = ""
 var state: String = ""
 var failed_hints: Dictionary = {}
 
-## 预解析的 PropertyOperator 列表（从 universal_result DSL 解析而来）
+## 预解析的 BaseOperator 列表（从 universal_result DSL 解析而来）
 var operators: Array = []
 
 ## 工厂方法：从 JSON entry 创建 ActionArchetype 并预解析 DSL
@@ -27,20 +27,14 @@ static func from_json(data: Dictionary) -> ActionArchetype:
 	if hints is Dictionary:
 		arch.failed_hints = hints.duplicate()
 	
-	# 预解析 universal_result DSL → 保留 PropertyOperator / TraitOperator / TimeOperator
-	# （供 sub-action picker 预览使用）
+	# 预解析 universal_result DSL → 保留所有有效的 BaseOperator
+	# （运行时由 Action.get_all_action_results() 消费）
 	var dsl: String = arch.universal_result
 	if not dsl.is_empty():
 		var parsed = MicroDSLParser.parse_consequence_operators(dsl)
 		for op in parsed:
-			if op is PropertyOperator or op is TraitOperator or op is TimeOperator or op is RollImaginaryOperator:
-				arch.operators.append(op)
-			elif op is SetRandomPersonStateOperator or op is AddRandomLeverageOperator or op is AddRandomIntroOperator:
-				arch.operators.append(op)
-			elif op is ConsumeRandomLeverageOperator or op is PoemRewardOperator:
-				# 🆕 这些 operator 用于 sub-action picker 的 viability 检查（is_viable）
-				arch.operators.append(op)
-			elif op is SetStayPlaceOperator:
-				arch.operators.append(op)
+			if op == null:
+				continue
+			arch.operators.append(op)
 	
 	return arch

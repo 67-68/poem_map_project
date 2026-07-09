@@ -10,10 +10,11 @@ script = ExtResource("3_unlock_op")
 [resource]
 script = ExtResource("2_action")
 _action_tags = Array[int]([50, 29])
-action_results = Array[ExtResource("1_baseop")]([SubResource("Resource_unlock_op")])
+action_results = Array[ExtResource("1_baseop")]([])
 aciton_requirements = Array[ExtResource("1_baseop")]([])
 fallback_event_uuid = "baiye_mass_distribution_fallback"
 possibility = "l_success_rate"
+archetype_uuid = "baiye_mass_distribution_success"
 uuid = "baiye_mass_distribution"
 name = "广发行卷"
 required_place = "huangcheng"
