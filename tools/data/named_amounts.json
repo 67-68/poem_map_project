@@ -58,6 +58,14 @@
   "m_success_rate": 80,
   "l_success_rate": 100,
 
+  "s_xun_cost": 2,
+  "m_xun_cost": 4,
+  "l_xun_cost": 6,
+
+  "s_ap_cost": 1,
+  "m_ap_cost": 2,
+  "l_ap_cost": 3,
+
   "m_emotion_loss": -10,
 
   "_comment_2": "=== 🛁 第二部分：大唐阶级状态线 (State Thresholds) ===",

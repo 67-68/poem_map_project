@@ -51,9 +51,18 @@ func refresh(repick: bool = true):
 	var current_count = children.size()
 	
 	for i in range(min(current_count, target_count)):
-		children[i].update_action(all_visible_actions[i])
-		if all_visible_actions[i].uuid in _new_locked_ids or not all_visible_actions[i].dynamic_failed_hint.is_empty():
-			children[i].set_locked(all_visible_actions[i].dynamic_failed_hint)
+		var action_to_render = all_visible_actions[i]
+		children[i].update_action(action_to_render)
+		
+		# 🆕 deferring 优先
+		var a_id = action_to_render.uuid
+		if ActionManager.is_deferring(a_id):
+			if ActionManager.is_defer_failing(a_id):
+				children[i].set_defer_failing()
+			else:
+				children[i].set_deferring()
+		elif a_id in _new_locked_ids or not action_to_render.dynamic_failed_hint.is_empty():
+			children[i].set_locked(action_to_render.dynamic_failed_hint)
 		else:
 			children[i].set_unlocked()
 	
@@ -61,10 +70,18 @@ func refresh(repick: bool = true):
 		children[i].queue_free()
 	
 	for i in range(current_count, target_count):
+		var action_to_render = all_visible_actions[i]
 		var card = preload("res://ui/action_button.tscn").instantiate()
-		card.initialize(all_visible_actions[i])
-		if all_visible_actions[i].uuid in _new_locked_ids or not all_visible_actions[i].dynamic_failed_hint.is_empty():
-			card.set_locked(all_visible_actions[i].dynamic_failed_hint)
+		card.initialize(action_to_render)
+		
+		var a_id = action_to_render.uuid
+		if ActionManager.is_deferring(a_id):
+			if ActionManager.is_defer_failing(a_id):
+				card.set_defer_failing()
+			else:
+				card.set_deferring()
+		elif a_id in _new_locked_ids or not action_to_render.dynamic_failed_hint.is_empty():
+			card.set_locked(action_to_render.dynamic_failed_hint)
 		$V.add_child(card)
 	
 	_locked_action_ids = _new_locked_ids
@@ -88,6 +105,20 @@ func _refresh_locks_only() -> void:
 			continue
 		var a_id := panel.action.uuid
 		
+		# 🆕 优先检查：deferring 状态（红/蓝，最高优先级）
+		var is_deferring := ActionManager.is_deferring(a_id)
+		var is_defer_failing := false
+		if is_deferring:
+			is_defer_failing = ActionManager.is_defer_failing(a_id)
+		
+		if is_deferring:
+			if is_defer_failing:
+				panel.set_defer_failing()
+			else:
+				panel.set_deferring()
+			changed_count += 1
+			continue
+		
 		# 确定目标锁定状态
 		var should_lock := false
 		var lock_reason := ""
@@ -108,7 +139,7 @@ func _refresh_locks_only() -> void:
 		# diff：只在状态变化时操作
 		var panel_key := str(panel.get_instance_id())
 		var cached = _panel_lock_cache.get(panel_key, {})
-		var cached_locked: bool = cached.get("locked", not should_lock)  # 用反值确保首次必定触发
+		var cached_locked: bool = cached.get("locked", not should_lock)
 		
 		if should_lock != cached_locked:
 			changed_count += 1

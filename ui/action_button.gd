@@ -9,6 +9,9 @@ var _flash_tween: Tween = null
 ## 🆕 当前是否处于灰化锁定状态
 var _is_locked: bool = false
 
+## 🆕 当前是否处于 deferring 状态（淡蓝或淡红）
+var _is_deferring: bool = false
+
 # ── Sub-action 挂起数据（picker 回调中使用） ────────────
 var _pending_sub_action_main_tag: String = ""
 var _pending_sub_action_fallback: String = ""
@@ -20,6 +23,10 @@ var _pending_parent_day_consumed: float = 0.0
 const HOVER_BG_COLOR: Color = Color(0.22, 0.05, 0.02, 0.10)
 var _hover_style: StyleBoxFlat
 var _normal_style: StyleBoxEmpty
+
+# ── 🆕 Defer 视觉颜色 ──
+const DEFERRING_COLOR: Color = Color(0.5, 0.6, 1.0, 0.85)      # 淡蓝 — defer 进行中
+const DEFER_FAILING_COLOR: Color = Color(1.0, 0.5, 0.5, 0.85)  # 淡红 — 资源不足
 
 @onready var title = $Panel/HBoxContainer/VBoxContainer/Title
 @onready var outcome = $Panel/HBoxContainer/VBoxContainer/Outcome
@@ -66,15 +73,38 @@ func initialize(action_: Action = null):
 ## 🆕 设置为灰化锁定态
 func set_locked(reason: String) -> void:
 	_is_locked = true
+	_is_deferring = false
 	modulate = Color(0.4, 0.4, 0.4, 0.6)
-	mouse_filter = Control.MOUSE_FILTER_STOP  # 仍然接收 hover
+	mouse_filter = Control.MOUSE_FILTER_STOP
 	_refresh_hover_popup()
 
 
 ## 🆕 解除灰化锁定态
 func set_unlocked() -> void:
 	_is_locked = false
+	_is_deferring = false
 	modulate = Color.WHITE
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	_refresh_hover_popup()
+
+
+## 🆕 设置为 deferring 状态（淡蓝色 — 进行中，可点击取消）
+func set_deferring() -> void:
+	_is_deferring = true
+	# 视觉优先级：红 > 灰 > 蓝 > 白
+	# 如果已经被灰化锁定，不覆盖
+	if _is_locked:
+		return
+	modulate = DEFERRING_COLOR
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	_refresh_hover_popup()
+
+
+## 🆕 设置为 defer 资源不足状态（淡红色 — 点击取消或等待自灭）
+func set_defer_failing() -> void:
+	_is_deferring = true
+	# 红色是最高优先级，即使灰化也能覆盖
+	modulate = DEFER_FAILING_COLOR
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_refresh_hover_popup()
 
@@ -149,11 +179,25 @@ func _on_button_pressed() -> void:
 	# 🆕 行动开始时 dismiss 所有 hover
 	HoverPopupManager.dismiss_all()
 
+	# 🆕 前置检查：deferring 态 → 取消 defer，不继续执行
+	if _is_deferring and action and ActionManager.is_deferring(action.uuid):
+		Logging.info("SceneActionPanel: deferring 态点击 → 取消 defer action=%s" % action.uuid)
+		ActionManager.cancel_defer(action.uuid)
+		EventBus.request_toast.emit("已取消等待", 1)
+		return
+
 	# 🆕 前置检查：锁定态 → 弹出 toast，不执行
 	if _is_locked:
 		var reason := action.dynamic_failed_hint if not action.dynamic_failed_hint.is_empty() else "暂时无法执行此行动"
 		EventBus.request_toast.emit(reason, 1)
 		Logging.info("SceneActionPanel: 锁定态点击被拦截 action=%s reason=%s" % [action.uuid if action else "NULL", reason])
+		return
+	
+	# 🆕 检查 defer_config：如果配置了 xun_defered，启动 defer 而不执行正常流程
+	if action and action.defer_config and not action.defer_config.xun_defered.is_empty():
+		Logging.info("SceneActionPanel: 检测到 defer_config.xun_defered='%s'，启动 defer action=%s" % [action.defer_config.xun_defered, action.uuid])
+		ActionManager.start_defer(action)
+		EventBus.request_toast.emit("开始等待（%s 旬）" % action.defer_config.xun_defered, 1)
 		return
 	
 	#breakpoint

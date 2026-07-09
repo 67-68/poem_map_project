@@ -11,6 +11,7 @@ const _SceneActionPanel = preload("res://ui/action_button.gd")
 const _NamedDSLParser = preload("res://parser/named_dsl_parser.gd")
 const _SurvivalManager = preload("res://core/survival_manager.gd")
 const _PropertyOperator = preload("res://core/model/property_operator.gd")
+const _EventManager = preload("res://core/event_manager.gd")
 
 const MAX_PICK_COUNT: int = 6
 
@@ -47,6 +48,15 @@ const STAT_DEBOUNCE_MS: float = 0.1  # 100ms 合并窗口
 var _stat_debounce_timer: Timer = null
 var _stat_debounce_pending: bool = false
 
+## 🆕 活跃 defer 状态字典（key=action_id, val=Dictionary）。
+## 结构: {
+##   "remaining_xun": int,              # 剩余旬数
+##   "used_resource_archetype": String, # Database.action_archetypes 的 key
+##   "ap_cost": String,                 # named_amounts 的 key
+##   "failed_fallback": String,         # 资源中断时推的事件 UUID
+##   "main_tag": String,               # action 的 main_tag（到期扫描用）
+## }
+var _deferring_actions: Dictionary = {}
 
 func _ready() -> void:
 	_focus_controller = _ActionFocusController.new()
@@ -355,6 +365,10 @@ func reevaluate_all_locks() -> void:
 		if _blocked_actions.has(a_id):
 			continue
 		
+		# 🆕 跳过 deferring 中的 action（其视觉状态由 defer 系统单独管理）
+		if _deferring_actions.has(a.uuid):
+			continue
+		
 		var validity := check_action_validity(a)
 		
 		if _selected_action_ids.has(a_id) and _selected_action_ids[a_id]:
@@ -530,6 +544,92 @@ func is_action_blocked(action_type: ENUMS.ACTION_TYPE) -> bool:
 	return _blocked_actions.has(action_id)
 
 
+# ════════════════════════════════════════════════════════════
+# 🆕 Defer 状态管理
+# ════════════════════════════════════════════════════════════
+
+## 查询一个 action 是否处于 deferring 状态。
+func is_deferring(action_id: String) -> bool:
+	return _deferring_actions.has(action_id)
+
+## 查询一个 deferring action 是否即将资源不足（下一旬无法支付）。
+## 实时调用 check_archetype_property_costs 做前瞻检查。
+## @return true=下一旬付不起（按钮变红），false=没问题（按钮变蓝）。
+func is_defer_failing(action_id: String) -> bool:
+	if not _deferring_actions.has(action_id):
+		return false
+	var data: Dictionary = _deferring_actions[action_id]
+	var arch_key: String = data.get("used_resource_archetype", "")
+	if arch_key.is_empty():
+		return false
+	var archetype: ActionArchetype = Database.action_archetypes.get(arch_key)
+	if not archetype or archetype.operators.is_empty():
+		return false
+	# 使用现有的 check_archetype_property_costs 做前瞻检查
+	var reasons := check_archetype_property_costs(archetype.operators)
+	return not reasons.is_empty()
+
+## 获取 defer 剩余旬数（用于 hover 展示）。
+## 不在 deferring 状态时返回 0。
+func get_defer_remaining(action_id: String) -> int:
+	if not _deferring_actions.has(action_id):
+		return 0
+	return _deferring_actions[action_id].get("remaining_xun", 0)
+
+## 激活一个 action 的 defer 状态。
+## 由 SceneActionPanel._on_button_pressed 在点击时调用。
+func start_defer(action: Action) -> void:
+	if not action:
+		Logging.err("[ActionManager] start_defer: action is null")
+		return
+	var config = action.defer_config
+	if not config:
+		Logging.err("[ActionManager] start_defer: action '%s' has no defer_config" % action.uuid)
+		return
+	if config.xun_defered.is_empty():
+		Logging.err("[ActionManager] start_defer: action '%s' defer_config.xun_defered is empty" % action.uuid)
+		return
+	
+	# 解析旬数
+	var amounts = _NamedDSLParser._load_named_amounts()
+	var total_xun: int = amounts.get(config.xun_defered, 0)
+	if total_xun <= 0:
+		Logging.err("[ActionManager] start_defer: xun_defered='%s' resolved to %d, invalid" % [config.xun_defered, total_xun])
+		return
+	
+	# 解析 ap_cost
+	var amounts_ap: int = amounts.get(config.ap_cost, 0)
+	
+	var action_id := action.uuid
+	var main_tag: String = ""
+	if action is _SceneAction:
+		main_tag = (action as _SceneAction).main_tag
+	
+	_deferring_actions[action_id] = {
+		"remaining_xun": total_xun,
+		"used_resource_archetype": config.used_resource_archetype,
+		"ap_cost": config.ap_cost,
+		"failed_fallback": config.failed_fallback,
+		"main_tag": main_tag,
+	}
+	Logging.info("[ActionManager] ✅ 激活 defer: action=%s, xun=%d, ap_cost='%s'(%d), archetype='%s', fallback='%s'" % [
+		action_id, total_xun, config.ap_cost, amounts_ap, config.used_resource_archetype, config.failed_fallback
+	])
+	
+	# 通知 UI 刷新状态
+	EventBus.request_refresh_action_locks.emit()
+
+## 手动取消一个 defer（玩家点击淡蓝/红按钮时触发）。
+## 清除 deferring 状态并刷新 UI。
+func cancel_defer(action_id: String) -> void:
+	if not _deferring_actions.has(action_id):
+		Logging.warn("[ActionManager] cancel_defer: action '%s' 不在 deferring 状态" % action_id)
+		return
+	_deferring_actions.erase(action_id)
+	Logging.info("[ActionManager] 🔵 手动取消 defer: action=%s" % action_id)
+	EventBus.request_refresh_action_locks.emit()
+
+
 ## 每旬结算时调用（由 SurvivalManager.xun_tick 驱动）。
 ## 递减 locked/blocked 计数器，到期自动清除。
 func process_xun_tick() -> void:
@@ -586,7 +686,6 @@ func process_xun_tick() -> void:
 		Logging.info("[ActionManager] 🚫 阻塞冷却递减 (%d): %s" % [decremented_blocks.size(), ", ".join(dec_block_details)])
 	if expired_blocks.size() > 0:
 		Logging.info("[ActionManager] ✅ 阻塞完全解阻 (%d): %s" % [expired_blocks.size(), ", ".join(expired_blocks)])
-	
 	# 🆕 结算后状态汇总
 	var active_locks: Array[String] = []
 	for lid in _locked_in_actions:
@@ -601,6 +700,101 @@ func process_xun_tick() -> void:
 		Logging.info("[ActionManager] ═══ 旬结算后: 🔒锁定[%s] | 🚫阻塞[%s] ═══" % [", ".join(active_locks) if active_locks.size() > 0 else "无", ", ".join(active_blocks) if active_blocks.size() > 0 else "无"])
 	else:
 		Logging.info("[ActionManager] ═══ 旬结算后: 无任何锁定/阻塞 ═══")
+	
+	# ── 🆕 Defer 处理 ──
+	Logging.info("[ActionManager] ═══ 旬结算: 处理 %d 个 deferring actions ═══" % _deferring_actions.size())
+	var expired_defers: Array[String] = []
+	var interrupted_defers: Array[String] = []
+	var amounts := _NamedDSLParser._load_named_amounts()
+	
+	for action_id in _deferring_actions:
+		var data: Dictionary = _deferring_actions[action_id]
+		
+		# ── 资源前瞻检查：不够就中断 ──
+		var arch_key: String = data.get("used_resource_archetype", "")
+		var arch: ActionArchetype = null
+		if not arch_key.is_empty():
+			arch = Database.action_archetypes.get(arch_key)
+		
+		if arch and not arch.operators.is_empty():
+			var cost_reasons := check_archetype_property_costs(arch.operators)
+			if not cost_reasons.is_empty():
+				# 资源不足 → 强制中断 defer
+				var failed_fb: String = data.get("failed_fallback", "")
+				Logging.info("[ActionManager] ❌ 资源不足，强制中断 defer: action=%s, reasons=%s, fallback='%s'" % [
+					action_id, ", ".join(cost_reasons), failed_fb
+				])
+				interrupted_defers.append(action_id)
+				
+				# 如果有兜底事件，push 它
+				if not failed_fb.is_empty():
+					var event_data = Database.resolve(failed_fb)
+					if event_data:
+						EventBus.push_event.emit(event_data)
+						Logging.info("[ActionManager] 📖 中断 defer 后推送 fallback 事件: %s" % failed_fb)
+					else:
+						Logging.warn("[ActionManager] 中断 defer: fallback 事件 '%s' 未找到" % failed_fb)
+				continue  # 跳过本旬的资源消耗和递减
+		
+		# ── 资源充足：执行消耗 ──
+		# 1. 执行 archetype.operators（扣资源）
+		if arch and not arch.operators.is_empty():
+			for op in arch.operators:
+				if op is _PropertyOperator:
+					var pop := op as _PropertyOperator
+					Logging.info("[ActionManager] 📤 defer 每旬消耗: property=%s, value=%d" % [pop.property, pop.value])
+					pop.operate()
+		
+		# 2. 扣除 ap_cost（时间）
+		var ap_key: String = data.get("ap_cost", "")
+		if not ap_key.is_empty():
+			var ap_val: int = amounts.get(ap_key, 0)
+			if ap_val != 0:
+				PlayerState.append_stat("_time", ap_val)
+				Logging.info("[ActionManager] ⏱ defer 每旬时间消耗: ap_cost='%s'(%d)" % [ap_key, ap_val])
+		
+		# ── 递减 remaining_xun ──
+		var remaining: int = data.get("remaining_xun", 1)
+		remaining -= 1
+		if remaining <= 0:
+			expired_defers.append(action_id)
+			Logging.info("[ActionManager] ✅ defer 到期完成: action=%s" % action_id)
+		else:
+			_deferring_actions[action_id]["remaining_xun"] = remaining
+			Logging.info("[ActionManager] 🔄 defer 递减: action=%s, remaining=%d" % [action_id, remaining])
+	
+	# ── 清理已到期/已中断的 defer ──
+	for action_id in expired_defers:
+		# 到期 → 使用 main_tag 做事件扫描
+		var data: Dictionary = _deferring_actions[action_id]
+		var main_tag: String = data.get("main_tag", "")
+		_deferring_actions.erase(action_id)
+		
+		if not main_tag.is_empty():
+			Logging.info("[ActionManager] 📖 defer 到期触发器: scan_events with main_tag='%s'" % main_tag)
+			var context := {
+				'main_tag': main_tag,
+				'fallback_event_uuid': "",
+				'tag_match_mode': 'all',
+			}
+			EventManager.scan_events(0, context)
+		else:
+			Logging.warn("[ActionManager] defer 到期但 main_tag 为空，无法扫描事件: action=%s" % action_id)
+	
+	for action_id in interrupted_defers:
+		_deferring_actions.erase(action_id)
+	
+	# 🆕 defer 状态通报
+	if expired_defers.size() > 0 or interrupted_defers.size() > 0 or _deferring_actions.size() > 0:
+		var remaining_strs: Array[String] = []
+		for aid in _deferring_actions:
+			remaining_strs.append("%s(%d旬)" % [aid, _deferring_actions[aid].get("remaining_xun", 0)])
+		Logging.info("[ActionManager] ═══ 旬结算 defer: ✅到期=%d | ❌中断=%d | 🔵剩余=[%s] ═══" % [
+			expired_defers.size(), interrupted_defers.size(), ", ".join(remaining_strs)
+		])
+	
+	# 发出刷新信号以便 UI 更新状态
+	EventBus.request_refresh_action_locks.emit()
 
 
 # ════════════════════════════════════════════════════════════

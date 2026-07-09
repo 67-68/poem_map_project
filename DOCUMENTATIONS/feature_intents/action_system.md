@@ -451,3 +451,62 @@ HoverPopupManager.register(_ambition_btn, ambition_hud, 0.2, 0.15,
 - `core/model/property_operator.gd` — `operate()` 倍率应用 + `describe_preview()` 调整后展示
 - `core/action_hint_builder.gd` — `_check_repeated()` + hover preview 时临时设 `_is_repeated_action`
 - `ui/action_button.gd` — `_on_button_pressed()` / `_on_sub_action_picked()` 中快照计算 + tags 更新
+
+---
+
+## DeferConfig 行动延迟系统
+
+### 设计意图
+
+让行动点击后不立即执行，而是经过 N 旬的等待（defer）过程，每旬消耗资源+时间，到期后才进行事件扫描。
+玩家可以中途取消 defer 回到正常状态。
+
+### 核心状态机
+
+```
+点击行动 → defer_config.xun_defered 非空 → start_defer → 按钮变蓝
+                                                           │
+                                                   每旬 tick ──→ 资源不足 → 中断 + push failed_fallback
+                                                           │
+                                                   到期 remaining_xun=0 → scan_events(main_tag)
+手动点击 → cancel_defer → 按钮恢复白色（回到待命）
+```
+
+### 视觉优先级（不可变）
+
+| 优先级 | 颜色 | 触发条件 | modulate |
+|--------|------|----------|----------|
+| 1 🔴 | 淡红 | deferring + is_defer_failing (资源即将不足) | `Color(1.0, 0.5, 0.5, 0.85)` |
+| 2 ⬛ | 灰 | _is_locked (非 defer 原因) | `Color(0.4, 0.4, 0.4, 0.6)` |
+| 3 🔵 | 淡蓝 | deferring + 资源充足 | `Color(0.5, 0.6, 1.0, 0.85)` |
+| 4 ⬜ | 白 | 正常 | `Color.WHITE` |
+
+- 红色态不持久存储，每次属性变动通过 `is_defer_failing()` 实时计算（调用 `check_archetype_property_costs`）
+- 点击红色/蓝色按钮均触发 `cancel_defer()` → toast "已取消等待"
+
+### 数据流
+
+```
+Action.defer_config (配置)
+  ├─ xun_defered: String           → NamedDSLParser → int 旬数
+  ├─ used_resource_archetype: String → Database.action_archetypes[key].operators → PropertyOperator 执行
+  ├─ ap_cost: String               → NamedDSLParser → int AP/时间扣减
+  └─ failed_fallback: String       → EventBus.push_event (资源中断时)
+
+ActionManager._deferring_actions (运行时状态)
+  key=action_id, val={
+    remaining_xun,           # 剩余旬数
+    used_resource_archetype, # 资源消耗 archetype key
+    ap_cost,                 # 每旬时间扣减
+    failed_fallback,         # 中断兜底事件 UUID
+    main_tag,                # 到期扫描用 main_tag
+  }
+```
+
+### 相关文件
+
+- `model/defer_config.gd` — DeferConfig 数据模型（含 failed_fallback）
+- `core/action_manager.gd` — `_deferring_actions` 管理 + `start_defer`/`cancel_defer`/`is_deferring`/`is_defer_failing`/`get_defer_remaining` + `process_xun_tick` defer 处理
+- `ui/action_button.gd` — `_on_button_pressed` defer 分支 + `set_deferring`/`set_defer_failing` 视觉
+- `ui/scene_action_scroll.gd` — `refresh`/`_refresh_locks_only` defer 状态渲染
+- `core/action_hint_builder.gd` — hover 展示 defer 剩余旬数 + 每旬消耗 + 资源不足警告

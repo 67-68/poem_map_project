@@ -163,6 +163,60 @@ static func build_action_hint(action: Action, is_locked: bool) -> Dictionary:
 		vector_lines.append("[color=gray][font_size=13]概率: %d%%[/font_size][/color]" % prob)
 		Logging.info("ActionHintBuilder.build_action_hint: possibility=%d for '%s'" % [prob, action.name])
 	
+	# 🆕 Defer 信息行
+	if action.defer_config and not action.defer_config.xun_defered.is_empty():
+		var a_id := action.uuid
+		var is_deferring := ActionManager.is_deferring(a_id)
+		var amounts = NamedDSLParser._load_named_amounts()
+		var xun_val: int = amounts.get(action.defer_config.xun_defered, 0)
+		
+		if is_deferring:
+			var remaining := ActionManager.get_defer_remaining(a_id)
+			var is_failing := ActionManager.is_defer_failing(a_id)
+			var color_tag := "color=#cc6666" if is_failing else "color=#5588ff"
+			var defer_line := "[%s][font_size=13]⏳ 等待 %d/%d 旬[/font_size][/color]" % [color_tag, remaining, xun_val]
+			vector_lines.append(defer_line)
+			
+			# 每旬消耗信息
+			var cost_parts: Array[String] = []
+			if not action.defer_config.used_resource_archetype.is_empty():
+				var arch = Database.action_archetypes.get(action.defer_config.used_resource_archetype)
+				if arch and not arch.operators.is_empty():
+					for op in arch.operators:
+						if op is PropertyOperator:
+							var pop := op as PropertyOperator
+							var prop_data = Database.get_property(pop.property)
+							var pname = prop_data.get_display_name() if prop_data else pop.property
+							cost_parts.append("%s %d" % [pname, pop.value])
+			if not action.defer_config.ap_cost.is_empty():
+				var ap_val: int = amounts.get(action.defer_config.ap_cost, 0)
+				cost_parts.append("时间 %d" % ap_val)
+			if not cost_parts.is_empty():
+				vector_lines.append("[%s][font_size=13]  每旬: %s[/font_size][/color]" % [color_tag, ", ".join(cost_parts)])
+			
+			if is_failing:
+				var fb := action.defer_config.failed_fallback
+				var fb_msg := "将有不良后果" if not fb.is_empty() else "将被迫中断"
+				vector_lines.append("[color=#cc6666][font_size=13]⚠ 资源不足，%s[/font_size][/color]" % fb_msg)
+		else:
+			# 未激活但配置了 defer — 展示将来的 defer 信息
+			vector_lines.append("[color=gray][font_size=13]⏳ 执行后等待 %d 旬[/font_size][/color]" % xun_val)
+			var cost_parts: Array[String] = []
+			if not action.defer_config.used_resource_archetype.is_empty():
+				var arch = Database.action_archetypes.get(action.defer_config.used_resource_archetype)
+				if arch and not arch.operators.is_empty():
+					for op in arch.operators:
+						if op is PropertyOperator:
+							var pop := op as PropertyOperator
+							var prop_data = Database.get_property(pop.property)
+							var pname = prop_data.get_display_name() if prop_data else pop.property
+							cost_parts.append("%s %d" % [pname, pop.value])
+			if not action.defer_config.ap_cost.is_empty():
+				var ap_val: int = amounts.get(action.defer_config.ap_cost, 0)
+				cost_parts.append("时间 %d" % ap_val)
+			if not cost_parts.is_empty():
+				vector_lines.append("[color=gray][font_size=13]  每旬: %s[/font_size][/color]" % ", ".join(cost_parts))
+	
 	# 健康→AP 削减提示（通过 SurvivalManager 配置驱动，无削减时不显示）
 	var ap_hint := SurvivalManager.get_active_ap_hint()
 	if not ap_hint.is_empty():

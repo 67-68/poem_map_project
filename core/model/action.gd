@@ -72,6 +72,11 @@ var success_hint: String = ""
 ) var possibility: String = "l_success_rate"
 @export var failed_result: ChoiceResult = ChoiceResult.new()
 
+@export var defer_config: DeferConfig = DeferConfig.new()
+
+var dynamic_tags = []
+# 动态加入的tag，需要把这个也纳入考量
+
 ## 🆕 解析 possibility archetype 为 int（0-100）。
 ## 查表 tools/data/named_amounts.json，未知 key 时 fallback 到 100。
 func get_possibility_int() -> int:
