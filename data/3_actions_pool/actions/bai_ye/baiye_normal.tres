@@ -26,4 +26,5 @@ possibility = "l_success_rate"
 day_consumed = 1.0
 uuid = "baiye_normal"
 name = "普通拜谒"
+required_place = "huangcheng"
 description = "投刺候见，无人引荐，不足为外人道"

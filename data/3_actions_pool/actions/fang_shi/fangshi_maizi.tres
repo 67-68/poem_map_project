@@ -24,5 +24,6 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_2ln2h")
 uuid = "fangshi_maizi"
 name = "坊市 · 卖字"
+required_place = "xishi"
 description = "卖字"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

@@ -359,19 +359,19 @@ func _on_button_pressed() -> void:
 			
 			# 🆕 地点校验：sub_action 有 required_place 且不匹配当前 stay_place
 			var _place_mismatch := false
-			var _req_place: int = sub_action.required_place
-			if _req_place >= 0:
-				var _cur_place: int = ENUMS.from_place_str(PlayerState.stay_place)
-				if _cur_place >= 0 and _req_place != _cur_place:
+			var _req_place: String = sub_action.required_place
+			if not _req_place.is_empty():
+				var _cur_place_str := _stay_place_to_str(PlayerState.stay_place)
+				if not _cur_place_str.is_empty() and _req_place != _cur_place_str:
 					_place_mismatch = true
 					var _place_name := sub_action.get_required_place_name()
 					entity.set_meta("_place_mismatch", true)
 					entity.set_meta("_required_place_name", _place_name)
 					entity.set_meta("_required_place", _req_place)
-					Logging.info("SceneActionPanel: sub-action '%s' PLACE_MISMATCH — requires %s (enum=%d), current=%d" % [sub_action.uuid, _place_name, _req_place, _cur_place])
-				elif _cur_place < 0:
-					Logging.info("SceneActionPanel: sub-action '%s' has required_place=%d but stay_place 未设置，跳过地点过滤" % [sub_action.uuid, _req_place])
-			elif _req_place < 0:
+					Logging.info("SceneActionPanel: sub-action '%s' PLACE_MISMATCH — requires %s (%s), current=%s" % [sub_action.uuid, _place_name, _req_place, _cur_place_str])
+				elif _cur_place_str.is_empty():
+					Logging.info("SceneActionPanel: sub-action '%s' has required_place=%s but stay_place 未设置，跳过地点过滤" % [sub_action.uuid, _req_place])
+			else:
 				entity.set_meta("_place_mismatch", false)
 			
 			# 地点不匹配时不走灰化锁定，让 Picker 过滤/染色处理
@@ -490,12 +490,12 @@ func _on_sub_action_picked(entity) -> void:
 
 	# 🆕 异地行动：自动消耗 1 天 + 切换 stay_place
 	if entity is GameEntity and entity.get_meta("_place_mismatch", false):
-		var _req_place: int = entity.get_meta("_required_place", -1)
+		var _req_place: String = entity.get_meta("_required_place", "")
 		var _place_name: String = entity.get_meta("_required_place_name", "")
-		Logging.info("SceneActionPanel: sub-action '%s' 异地行动 — 消耗 1 天前往 %s (enum=%d)" % [sub_uuid, _place_name, _req_place])
+		Logging.info("SceneActionPanel: sub-action '%s' 异地行动 — 消耗 1 天前往 %s" % [sub_uuid, _place_name])
 		TimeService.advance_time(1)
-		PlayerState.stay_place = ENUMS.to_place_str(_req_place as ENUMS.CHANGAN_PLACES)
-		Logging.info("SceneActionPanel: stay_place 已更新为 %s (%d)" % [_place_name, _req_place])
+		PlayerState.stay_place = _str_to_stay_place(_req_place)
+		Logging.info("SceneActionPanel: stay_place 已更新为 %s" % _place_name)
 
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
 
@@ -607,6 +607,29 @@ func _build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail
 ## 由 PickerTapeAttachment 在 toggle 时通过 _pending_on_checkbox_toggled 调用。
 func _on_picker_checkbox_toggled(toggled_on: bool) -> void:
 	Logging.info("SceneActionPanel._on_picker_checkbox_toggled: toggled_on=%s" % str(toggled_on))
-	# 从 EventBus 信号无法直接拿到 PickerTapeAttachment 引用，
-	# 实际遍历由 PickerTapeAttachment 内部完成，此回调为预留钩子。
-	Logging.info("SceneActionPanel._on_picker_checkbox_toggled: 委托给 PickerTapeAttachment 内部过滤逻辑")
+
+
+## 🆕 ENUMS.CHANGAN_PLACES → "xishi" / "pingkangfang" / "huangcheng"
+static func _stay_place_to_str(place_enum) -> String:
+	match place_enum:
+		ENUMS.CHANGAN_PLACES.XISHI:
+			return "xishi"
+		ENUMS.CHANGAN_PLACES.PINGKANGFANG:
+			return "pingkangfang"
+		ENUMS.CHANGAN_PLACES.HUANGCHENG:
+			return "huangcheng"
+		_:
+			return ""
+
+
+## 🆕 "xishi" / "pingkangfang" / "huangcheng" → ENUMS.CHANGAN_PLACES
+static func _str_to_stay_place(place_str: String) -> ENUMS.CHANGAN_PLACES:
+	match place_str:
+		"xishi":
+			return ENUMS.CHANGAN_PLACES.XISHI
+		"pingkangfang":
+			return ENUMS.CHANGAN_PLACES.PINGKANGFANG
+		"huangcheng":
+			return ENUMS.CHANGAN_PLACES.HUANGCHENG
+		_:
+			return -1 as ENUMS.CHANGAN_PLACES

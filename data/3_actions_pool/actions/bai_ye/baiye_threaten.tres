@@ -26,4 +26,5 @@ possibility = "ms_success_rate"
 failed_result = SubResource("Resource_failed_result")
 uuid = "baiye_threaten"
 name = "要挟"
+required_place = "huangcheng"
 description = "以把柄为筹码，换来横财"

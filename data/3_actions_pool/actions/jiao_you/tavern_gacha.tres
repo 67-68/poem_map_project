@@ -34,5 +34,6 @@ possibility = "xxs_success_rate"
 failed_result = SubResource("Resource_failed_result")
 uuid = "jiaoyou_tavern_gacha"
 name = "坊间买醉"
+required_place = "pingkangfang"
 description = "在坊间酒肆以酒会友，或可结识市井中人"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

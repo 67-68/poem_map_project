@@ -39,5 +39,6 @@ possibility = "l_success_rate"
 failed_result = SubResource("Resource_failed_result")
 uuid = "jiaoyou_recite_poem"
 name = "宣读诗词"
+required_place = "pingkangfang"
 description = "当众宣读新作，以诗换名"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

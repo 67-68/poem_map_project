@@ -23,5 +23,6 @@ fallback_event_uuid = "fangshi_banzhuan_fallback"
 failed_result = SubResource("Resource_2ln2h")
 uuid = "fangshi_banzhuan"
 name = "坊市 · 搬砖"
+required_place = "xishi"
 description = "体力活"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

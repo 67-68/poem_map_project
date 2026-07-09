@@ -613,7 +613,7 @@ zhu_liu (SceneAction, main_tag=ACTION_MAIN_ZHUILIU, day=1, icon=zhuliu_stamp.png
 
 ### 数据模型
 
-- [`Action._required_place`](core/model/action.gd) — `@export var _required_place: ENUMS.CHANGAN_PLACES = -1`，`-1` 表示无地点要求
+- [`Action.required_place`](core/model/action.gd) — `@export var required_place: String = ""`，空字符串表示无地点要求；合法值 `"xishi"` / `"pingkangfang"` / `"huangcheng"`
 - [`Action.get_required_place_name()`](core/model/action.gd) — 返回中文地点名（"西市"/"平康坊"/"皇城"/""）
 - `PlayerState.stay_place` — 玩家当前所在长安地点
 
@@ -621,10 +621,10 @@ zhu_liu (SceneAction, main_tag=ACTION_MAIN_ZHUILIU, day=1, icon=zhuliu_stamp.png
 
 ```
 action_button 构建 picker data
-  └─ sub_action.required_place >= 0 && != PlayerState.stay_place
+  └─ sub_action.required_place 非空 && != _stay_place_to_str(PlayerState.stay_place)
        └─ entity.set_meta("_place_mismatch", true)
        └─ entity.set_meta("_required_place_name", "皇城")
-       └─ entity.set_meta("_required_place", enum_value)
+       └─ entity.set_meta("_required_place", "huangcheng")
   → push_picker → PickerTapeAttachment.initialize
        └─ 遍历 entity，检测 _place_mismatch：
             ├─ has mismatch → 显示 CheckBox「显示异地行动」+ 默认隐藏异地 item
@@ -642,7 +642,7 @@ action_button 构建 picker data
 
 - [`action_button._on_sub_action_picked`](ui/action_button.gd) 检测 `entity.get_meta("_place_mismatch")`：
   - `TimeService.advance_time(1)` — 消耗 1 天前往目标地点
-  - `PlayerState.stay_place = _req_place` — 切换当前地点
+  - `PlayerState.stay_place = _str_to_stay_place(_req_place)` — 切换当前地点
   - 之后继续正常 sub-action 执行流程（possibility 投骰 → operators → scan_events）
 
 ### Hint 提示
@@ -662,7 +662,7 @@ EventBus.push_picker(data, on_selected, ui_constructor, on_filter_toggled)
 
 ### 相关文件
 
-- [`core/model/action.gd`](core/model/action.gd) — `_required_place` 字段 + `get_required_place_name()`
+- [`core/model/action.gd`](core/model/action.gd) — `required_place` 字段（String） + `get_required_place_name()`
 - [`core/player_state.gd`](core/player_state.gd) — `stay_place` 玩家当前位置
 - [`ui/action_button.gd`](ui/action_button.gd) — picker 构建地点校验 + `_on_sub_action_picked` 异地处理
 - [`ui/picker_tape_attachment.gd`](ui/picker_tape_attachment.gd) — CheckBox 过滤/染色 + 回调注入

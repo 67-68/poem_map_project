@@ -24,5 +24,6 @@ fallback_event_uuid = "duzhuo_heyaojiu_fallback"
 failed_result = SubResource("Resource_failed_result")
 uuid = "duzhuo_heyaojiu"
 name = "喝药酒"
+required_place = "xishi"
 description = "以药酒祛毒养身"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

@@ -25,5 +25,6 @@ possibility = "s_success_rate"
 failed_result = SubResource("Resource_failed_result")
 uuid = "jiaoyou_leverage_farm"
 name = "暗巷刺探"
+required_place = "xishi"
 description = "在暗巷中打探风声，或可获知他人隐秘"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

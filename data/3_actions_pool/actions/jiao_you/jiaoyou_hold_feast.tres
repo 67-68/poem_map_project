@@ -34,5 +34,6 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_failed_result")
 uuid = "jiaoyou_hold_feast"
 name = "举办宴席"
+required_place = "pingkangfang"
 description = "设宴款待各路宾客，或可获得引荐之机"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

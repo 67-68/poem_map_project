@@ -6,21 +6,18 @@ class_name Action extends GameEntity
 # description: use parent
 
 ## 子行动所需地点（仅 Picker 内校验，主行动按钮不校验）。
-## -1 = 无地点要求（任何地点/出游登高均可用）。
-## CHANGAN_PLACES 映射：0=XISHI 1=PINGKANGFANG 2=HUANGCHENG。
-@export var _required_place: ENUMS.CHANGAN_PLACES = -1
-var required_place: int:
-	get:
-		return _required_place if _required_place is int else -1
+## 空字符串 = 无地点要求（任何地点/出游登高均可用）。
+## 合法值："xishi" / "pingkangfang" / "huangcheng"。
+@export var required_place: String = ""
 
-## required_place 的中文名（给 hint / toast 展示用）
+## required_place 的中文展示名（给 hint / toast / picker 展示用）
 func get_required_place_name() -> String:
-	match _required_place:
-		ENUMS.CHANGAN_PLACES.XISHI:
+	match required_place:
+		"xishi":
 			return "西市"
-		ENUMS.CHANGAN_PLACES.PINGKANGFANG:
+		"pingkangfang":
 			return "平康坊"
-		ENUMS.CHANGAN_PLACES.HUANGCHENG:
+		"huangcheng":
 			return "皇城"
 		_:
 			return ""

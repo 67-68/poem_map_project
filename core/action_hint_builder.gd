@@ -328,9 +328,9 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	# 🆕 异地行动提示（需要在 picker 中开启「显示异地行动」才能看到此 sub-action）
 	var _place_name: String = sub_action.get_required_place_name()
 	if not _place_name.is_empty():
-		var _cur_place: int = ENUMS.from_place_str(PlayerState.stay_place)
-		var _req_place: int = sub_action.required_place
-		if _cur_place >= 0 and _req_place != _cur_place:
+		var _req_place: String = sub_action.required_place
+		var _cur_place_str := _stay_place_to_str(PlayerState.stay_place)
+		if not _cur_place_str.is_empty() and _req_place != _cur_place_str:
 			lines.append("[color=#88aaff][font_size=13]📍 自动消耗1天前往%s[/font_size][/color]" % _place_name)
 			Logging.info("ActionHintBuilder.build_sub_action_preview: sub_action='%s' 异地行动提示 → %s" % [sub_action.name, _place_name])
 	
@@ -598,3 +598,16 @@ static func _get_trait_display_name(trait_uuid: String) -> String:
 	if t and not t.name.is_empty():
 		return t.name
 	return trait_uuid
+
+
+## 🆕 ENUMS.CHANGAN_PLACES → "xishi" / "pingkangfang" / "huangcheng"
+static func _stay_place_to_str(place_enum) -> String:
+	match place_enum:
+		ENUMS.CHANGAN_PLACES.XISHI:
+			return "xishi"
+		ENUMS.CHANGAN_PLACES.PINGKANGFANG:
+			return "pingkangfang"
+		ENUMS.CHANGAN_PLACES.HUANGCHENG:
+			return "huangcheng"
+		_:
+			return ""

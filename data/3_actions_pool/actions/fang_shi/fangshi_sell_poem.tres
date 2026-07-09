@@ -39,5 +39,6 @@ possibility = "l_success_rate"
 failed_result = SubResource("Resource_failed_result")
 uuid = "fangshi_sell_poem"
 name = "卖诗"
+required_place = "pingkangfang"
 description = "将诗作卖与平康坊，让歌女传唱"
 metadata/_custom_type_script = "uid://ccs67ljham38a"

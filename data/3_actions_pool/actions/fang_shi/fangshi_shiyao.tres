@@ -24,5 +24,6 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_2ln2h")
 uuid = "fangshi_shiyao"
 name = "坊市 · 试药"
+required_place = "xishi"
 description = "当代李时珍"
 metadata/_custom_type_script = "uid://ccs67ljham38a"
