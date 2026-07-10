@@ -2,7 +2,7 @@ row_type,uuid,context,requirements,title,description,on_enter,results,interrupti
 row_type,uuid,context,requirements,title,description,on_enter,results,interruptions,provider,templa
 random_event,test1,trigger_tags=[actor:status:temporary:drunk/city:econ:level:prosperous/action:intent:study:poetry]|weight=15.5|background=bg_rural_poor,prop_gt(name=money;val=50)|trait_has(name=official),长安酒馆奇遇,你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,,,,,
 >option,test1_give_money,,prop_gt(name=money;val=100),,,,trait_add(name=corrupt),,,
-random_event,strange_poet,trigger_tags=[test1:test1:test1:test1],trait_has(name=main_jiaoyou_1),奇怪的诗人,你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,,,,,
+random_event,strange_poet,trigger_tags=[test1:test1:test1:test1],,奇怪的诗人,你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。,,,,,
 >option,strange_poet_opt,,,,上前跟他说话,,flag_bool_set(name=chain_strange_poet_1;val=true),,,
 random_event,the_man_got_power,trigger_tags=[test1:test1:test1:test1],flag_bool_has(name=chain_strange_poet_1),奇怪的诗人2,他看起来很醉,,,,,
 >option,the_man_got_power_opt,,,,担忧的打量着他,,flag_bool_replace(from=chain_strange_poet_1;to=chain_strange_poet_2),,,

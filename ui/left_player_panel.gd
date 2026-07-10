@@ -147,13 +147,36 @@ func _refresh_place_label() -> void:
 	if not _place_label:
 		return
 	var cn := ENUMS.place_to_cn(PlayerState.stay_place)
-	_place_label.text = "驻留 · %s" % cn
-	Logging.info("LeftPlayerPanel: PlaceLabel updated to '%s'" % _place_label.text)
+	var place_str: String = PlayerState.stay_place
+
+	# 收集当前地点已认识的 NPC（person_state > uncharted）
+	var known_npcs: Array[String] = []
+	var all_docs: Dictionary = Database.get_npc_document_all()
+	for target_tag: String in all_docs:
+		var doc = all_docs[target_tag]
+		if doc == null:
+			continue
+		# 只取 preferred_places 包含当前地点的 NPC
+		# NPCDocument.preferred_places 是 @export var，始终存在
+		if place_str in doc.preferred_places:
+			# 只显示玩家已知道的人（person_state != uncharted）
+			var state = RelationFlagManager.get_person_state(target_tag)
+			if state != RelationFlagManager.PERSON_STATE.UNCHARTED:
+				known_npcs.append(doc.name if not doc.name.is_empty() else target_tag)
+
+	if known_npcs.is_empty():
+		_place_label.text = "驻留 · %s" % cn
+		Logging.info("LeftPlayerPanel: PlaceLabel updated — 驻留 · %s (无已知 NPC)" % cn)
+	else:
+		var npc_str := "、".join(known_npcs)
+		_place_label.text = "驻留 · %s — %s在此" % [cn, npc_str]
+		Logging.info("LeftPlayerPanel: PlaceLabel updated — 驻留 · %s — %s在此 (%d NPC)" % [cn, npc_str, known_npcs.size()])
 
 # ── 动态数据刷新 ────────────────────────────────────────
 
 func _on_stat_changed() -> void:
 	Logging.info("LeftPlayerPanel: stat changed, refreshing")
+	_refresh_place_label()
 	_refresh_prop_grid()
 	_refresh_trait_grid()
 	_update_ambition_text()
@@ -438,9 +461,16 @@ func _rebuild_trait_grid() -> void:
 	Logging.info("LeftPlayerPanel: TraitGrid cleared")
 	
 	var trait_keys: Array = PlayerState.traits
-	Logging.info("LeftPlayerPanel: building TraitGrid with %d traits" % trait_keys.size())
+	# 防御性过滤：跳过已删除的 main_* 主线等级 trait（防止旧存档残留）
+	var filtered_keys: Array[String] = []
+	for tk in trait_keys:
+		if tk.begins_with("main_"):
+			Logging.info("LeftPlayerPanel: 跳过已弃用的主线等级 trait '%s'" % tk)
+			continue
+		filtered_keys.append(tk)
+	Logging.info("LeftPlayerPanel: building TraitGrid with %d traits (filtered from %d)" % [filtered_keys.size(), trait_keys.size()])
 	
-	for trait_key in trait_keys:
+	for trait_key in filtered_keys:
 		var trait_data: Trait = Database.get_trait(trait_key)
 		
 		# 使用 TraitDemonstrator（阳刻印章 + 名称）
@@ -477,12 +507,18 @@ func _refresh_trait_grid() -> void:
 	var trait_keys: Array = PlayerState.traits
 	var children := _trait_grid.get_children()
 	
+	# 过滤已弃用的 main_* 主线等级 trait（防止旧存档残留导致 expected_total 不匹配）
+	var filtered_count := 0
+	for tk in trait_keys:
+		if not tk.begins_with("main_"):
+			filtered_count += 1
+	
 	# 🆕 需要重建的条件：trait 数量变化 OR imaginary 数量变化
 	var imag_count := Database.imaginaries_detail.size()
-	var expected_total := trait_keys.size() + imag_count
+	var expected_total := filtered_count + imag_count
 	
 	if children.size() != expected_total:
-		Logging.info("LeftPlayerPanel: TraitGrid count changed (children=%d, traits=%d, imaginaries=%d), rebuilding" % [children.size(), trait_keys.size(), imag_count])
+		Logging.info("LeftPlayerPanel: TraitGrid count changed (children=%d, traits=%d(filtered), imaginaries=%d), rebuilding" % [children.size(), filtered_count, imag_count])
 		_rebuild_trait_grid()
 		return
 	# 暂时不做逐字刷新（trait 变更更常见的触发路径是 add/remove，届时重建即可）

@@ -25,7 +25,9 @@ var flags: Dictionary = {}
 
 # ════════════════════════════════════════════════════════════════
 # 特质 (Traits) — 原 PlayerState.traits
-# Array of trait uuid strings, e.g. ["main_baiye_1", "disease_fenghan"]
+# Array of trait uuid strings, e.g. ["disease_fenghan", "lilinfu_student"]
+# 注意：main_* 主线等级 trait（main_baiye_1 等 20 个）已在 2026-07-10 删除。
+# 左侧面板 TraitGrid 有防御性过滤，旧存档残留的 main_* uuid 不会显示。
 # ════════════════════════════════════════════════════════════════
 var traits: Array[String] = []
 

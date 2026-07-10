@@ -23,13 +23,8 @@ script = ExtResource("5_7xhml")
 choice_result = SubResource("Resource_da0go")
 description = "上前跟他说话"
 
-[sub_resource type="Resource" id="Resource_ipp21"]
-script = ExtResource("6_ulfsb")
-trait_name = "main_jiaoyou_1"
-
 [resource]
 script = ExtResource("7_b8xty")
-requirement = SubResource("Resource_ipp21")
 _target_tags = Array[String](["test1:test1:test1:test1"])
 options = Array[ExtResource("1_c0dak")]([SubResource("Resource_6e0y6")])
 uuid = "strange_poet"

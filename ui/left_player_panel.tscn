@@ -69,6 +69,7 @@ theme_type_variation = &"DefaultText"
 text = "test"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 5
 
 [node name="Ambition" type="LinkButton" parent="Panel/VBox/ScrollContainer/V" unique_id=1758074030]
 layout_mode = 2

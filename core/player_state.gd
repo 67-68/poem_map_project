@@ -150,10 +150,12 @@ func _retry_init_time():
 		call_deferred("_retry_init_time")
 
 func init_traits():
-	var action_tracks = SourceOfTruth.debug_dashboard_state.action_tracks
-	for track_name in action_tracks:
-		var trait_uuid = action_tracks[track_name]
-		add_trait(trait_uuid)
+	# ❌ 不再从 SourceOfTruth.action_tracks 注入主线等级 trait（如 main_baiye_1）
+	# 之前是为了让左侧面板显示六个初始主线等级标签，
+	# 现在需求已变为不再显示这些主线等级 trait。
+	# 枚举值 MAIN_* 保留以维持 .tres 整数值稳定性。
+	# 若需通过 trait 系统追踪主线进度，应改用 Tag/Flag 而非 enum trait。
+	Logging.info("PlayerState.init_traits: 已跳过 SourceOfTruth.action_tracks 主线等级 trait 注入")
 
 func init_flags():
 	var flag_data = SourceOfTruth.debug_dashboard_state.flags

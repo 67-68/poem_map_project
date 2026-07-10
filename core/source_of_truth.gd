@@ -16,18 +16,17 @@ static var debug_dashboard_state = {
 	},
 	
 	# 维度 3：六大 Action 的反噬状态机 (The 6-Track Corruption State)
-	# 这是你真正需要密切关注的"癌症分期"
+	# @deprecated 2026-07-10: 主线等级 trait 及对应 .tres 文件已全部删除。
+	# PlayerState.init_traits() 不再从此处读取注入 trait。
+	# 保留此 dict 是出于存档兼容性考虑（旧存档可能残留 main_* uuid 在 traits 数组中）。
+	# 左侧面板 TraitGrid 已增加 main_ 前缀防御性过滤，不会展示。
 	"action_tracks": {
-		"BAIYE": "main_baiye_1",
-		"FENGZHAO": "main_fengzhao_1",
-		"DUZHUO": "main_duzhuo_1",        # 正常
-		"DENGGAO": "main_denggao_1",      # 正常
-		"FANGSHI": "main_fangshi_1",
-		"JIAOYOU": "main_jiaoyou_1",  # 这些key其实没用，因为不需要分辨，全部塞进去trait就行了
-		
-		# 社交 — person_state 已迁移至 RelationFlagManager.person_state str flag
-		# 不再使用 trait（如 relation_libai_rumor）表示人物关系状态
-
+		"BAIYE": "",
+		"FENGZHAO": "",
+		"DUZHUO": "",
+		"DENGGAO": "",
+		"FANGSHI": "",
+		"JIAOYOU": "",
 	},
 	
 	# 维度 4：资源池 (The Expendables) - 核心六属性
