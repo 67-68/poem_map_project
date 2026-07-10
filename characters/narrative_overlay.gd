@@ -570,6 +570,8 @@ func _on_overlay_animation_requested(strategy: String, params: Dictionary) -> vo
 func _on_overlay_animation_completed() -> void:
 	Logging.info("NarrativeOverlay._on_overlay_animation_completed: 动画标记清除")
 	_overlay_anim_in_progress = false
+	# 每次动画完成后重置 shadow_box 到初始 size 和 position
+	visualizer.restore_snapshot()
 	if _deferred_hide_pending:
 		_deferred_hide_pending = false
 		Logging.info("NarrativeOverlay._on_overlay_animation_completed: 执行延迟 hide")

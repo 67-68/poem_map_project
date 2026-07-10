@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://ctja8gxdepflp" path="res://ui/simple_toast.tscn" id="12_2cqfq"]
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
 [ext_resource type="PackedScene" uid="uid://6ilphg3nn6wx" path="res://ui/debug_info.tscn" id="16_cegan"]
+[ext_resource type="Texture2D" uid="uid://drwciqjjy75wp" path="res://assets/profile/renmai.png" id="17_xuqvo"]
 [ext_resource type="PackedScene" uid="uid://bagmf63e3hmbi" path="res://ui/left_player_panel.tscn" id="22_0odxb"]
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
 [ext_resource type="Script" uid="uid://dv28khs0ehggj" path="res://ui/time_breath_ui.gd" id="24_htxhm"]
@@ -37,6 +38,30 @@ shader_parameter/darken_amount = 0.0
 shader = ExtResource("3_xuqvo")
 shader_parameter/blur_amount = 0.0
 shader_parameter/darken_amount = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
+content_margin_left = 25.0
+content_margin_top = 5.0
+content_margin_right = 25.0
+content_margin_bottom = 5.0
+bg_color = Color(0.827451, 0.7372549, 0.627451, 1)
+corner_radius_top_left = 55
+corner_radius_top_right = 55
+shadow_size = 6
+shadow_offset = Vector2(5, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8hk5g"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.70905066, 0.0018086092, 2.8878452e-07, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+shadow_size = 4
+shadow_offset = Vector2(3, 0)
 
 [node name="Main" type="Node" unique_id=1215220767]
 script = ExtResource("38_main")
@@ -151,6 +176,36 @@ visible = false
 script = ExtResource("34_d2t1y")
 
 [node name="Controller" parent="UI" unique_id=1054828129 instance=ExtResource("24_jq2sk")]
+
+[node name="HUDContainer" type="PanelContainer" parent="UI" unique_id=528868020]
+custom_minimum_size = Vector2(100, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -121.0
+offset_top = -51.0
+offset_right = 121.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7xb00")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUDContainer" unique_id=1165373001]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/HUDContainer/HBoxContainer" unique_id=49612227]
+self_modulate = Color(1, 0.003921569, 0, 1)
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_8hk5g")
+
+[node name="TextureRect" type="TextureRect" parent="UI/HUDContainer/HBoxContainer/PanelContainer" unique_id=2086769893]
+layout_mode = 2
+texture = ExtResource("17_xuqvo")
+expand_mode = 1
 
 [node name="TapeLayer" type="CanvasLayer" parent="." unique_id=2047123948]
 layer = 100

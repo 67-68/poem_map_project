@@ -143,6 +143,8 @@ func play_hide_and_show_from_bottom(on_swap: Callable = Callable()) -> void:
 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	phase2.tween_property(tape_container, "modulate:a", 1.0, 0.3) \
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# Chain: 滑入完成后重置 shadow_box 到初始 size 和 position
+	phase2.tween_callback(restore_snapshot)
 
 	Logging.info("TapeVisualizer.play_hide_and_show_from_bottom: 动画完成（上滑出→切换→底部滑入）")
 
