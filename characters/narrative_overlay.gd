@@ -4,6 +4,9 @@ class_name NarrativeOverlay extends PanelContainer
 signal event_display_started()
 ## 事件显示结束（纸带隐藏）时发射
 signal event_display_ended()
+## ActionPanel 状态切换时发射（true=IDLE 模式，false=EVENT 模式）
+## ActionPanelManager 监听此信号切换其可见性状态管理策略
+signal action_panel_state_changed(is_idle: bool)
 
 # 纸带模式（极乐迪斯科式）：NarrativeOverlay 不再是一次性弹窗，
 # 而是持续的追加式事件纸带。纸带全空时才 hide()。
@@ -36,6 +39,9 @@ signal event_display_ended()
 @onready var hover_title: Label = $TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V/Label
 @onready var time_left_rect: TextureRect = $TapeContainer/VBox/HoverContainer/TimeLeft
 @onready var time_label: Label = $TapeContainer/VBox/HoverContainer/TimeLeft/TimeLabel
+# 🆕 ActionPanel 互斥可见性管理
+@onready var action_panel: PanelContainer = $TapeContainer/VBox/ActionPanel
+@onready var action_panel_mgr: ActionPanelManager = $ActionPanelManager
 
 # ── Overlay 本地状态（仅 UI 相关）────────────────────
 var current_event_data: BaseEvent
@@ -149,10 +155,13 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	visualizer.restore_snapshot()
 	show()
 
+	# 🆕 ActionPanel ↔ EventHistory 互斥切换：事件活跃 → 隐藏 ActionPanel，显示纸带
+	_switch_to_event_mode()
+
 	# 🆕 通知 HoverPopupManager：事件活跃中，hover 无需动画直接显示
 	HoverPopupManager.set_event_active(true)
 
-	Logging.info("[DIAG] _on_event_ready_to_play: ⏰ 即将发射 event_display_started (锁定行动按钮)")
+	Logging.info("[DIAG] _on_event_ready_to_play: ⏰ 即将发射 event_display_started")
 	# 🆕 发射事件显示开始信号
 	event_display_started.emit()
 	Logging.info("[DIAG] _on_event_ready_to_play: ✅ event_display_started 已发射")
@@ -355,6 +364,9 @@ func _on_picker_ready(entry: Dictionary) -> void:
 	# 纸带技术性 visible 但定位在屏幕右侧外，玩家看不到。
 	visualizer.restore_snapshot()
 	show()
+	# 🐛 修复：Picker 需要切换到事件模式（隐藏 ActionPanel，显示 EventHistory），
+	# 否则 PickerTapeAttachment 的内容会渲染在不可见的 EventHistory 容器内。
+	_switch_to_event_mode()
 	visualizer.play_show_tape()
 	BlurManager.show_picker_blur()
 
@@ -465,6 +477,8 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 
 	# 确保父容器可见
 	show()
+	# 🐛 修复：FocusChat 同样渲染到 EventHistory 容器内，需切换到事件模式
+	_switch_to_event_mode()
 	await get_tree().process_frame
 
 	var chat_entry = event_ui.append_focus_chat_entry(data, context)
@@ -503,9 +517,12 @@ func _on_hide_requested() -> void:
 		return
 
 	BlurManager.return_to_hub()
-	event_ui.clear_all_tape()
-	visualizer.play_hide_tape()
-	Logging.info("NarrativeOverlay._on_hide_requested: 纸带已隐藏")
+
+	# 🆕 两段式动画：纸带上滑出 → 切换内部 → overlay 从底部滑入展示 ActionPanel
+	visualizer.play_hide_and_show_from_bottom(func():
+		_event_exit_cleanup_then_idle()
+	)
+	Logging.info("NarrativeOverlay._on_hide_requested: 事件结束动画已启动（上滑→切换→底部滑入）")
 
 
 # ═══════════════════════════════════════════════════
@@ -940,4 +957,39 @@ func _cancel_hover_countdown() -> void:
 	if _hover_countdown_tween:
 		_hover_countdown_tween.kill()
 		_hover_countdown_tween = null
-	Logging.info("NarrativeOverlay._cancel_hover_countdown: cancelled")
+
+# ═══════════════════════════════════════════════════
+# 🆕 ActionPanel ↔ EventHistory 互斥可见性
+# ═══════════════════════════════════════════════════
+
+## 切换到事件模式：隐藏 ActionPanel，显示 EventHistory。
+## 在 _on_event_ready_to_play 中调用。
+func _switch_to_event_mode() -> void:
+	action_panel.visible = false
+	event_ui.visible = true
+	action_panel_state_changed.emit(false)
+	Logging.info("NarrativeOverlay: 切换至事件模式（ActionPanel 隐藏）")
+
+
+## 切换到空闲模式：隐藏 EventHistory，显示 ActionPanel。
+func _switch_to_idle_mode() -> void:
+	action_panel.visible = true
+	event_ui.visible = false
+	action_panel_state_changed.emit(true)
+	Logging.info("NarrativeOverlay: 切换至空闲模式（ActionPanel 显示）")
+
+
+## 🆕 事件退出清理 + 切换到 IDLE 模式。
+## 在 play_hide_and_show_from_bottom 的 on_swap 回调中调用，
+## 执行于上滑出完成、下滑入开始之间的"幕间"阶段。
+##
+## 🐛 竞态守卫：hide 动画是 0.4s 延迟回调，期间玩家可能点击了新行动按钮
+## 导致 Director._is_active 被重新激活。此时跳过清理，避免 wipe 新 Picker 内容
+## 并覆盖 _switch_to_event_mode() 的效果。
+func _event_exit_cleanup_then_idle() -> void:
+	if director._is_active:
+		Logging.info("NarrativeOverlay._event_exit_cleanup_then_idle: Director 已有活跃事件/Picker，跳过清理（竞态守卫）")
+		return
+	event_ui.clear_all_tape()
+	_switch_to_idle_mode()
+	Logging.info("NarrativeOverlay._event_exit_cleanup_then_idle: 清理完成，等待下滑入")
