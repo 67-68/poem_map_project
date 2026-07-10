@@ -15,6 +15,6 @@ lock_narrative = "四方扰扰，竟无一处可安心驻足"
 sub_actions = Array[String](["zhu_liu_xishi", "zhu_liu_pingkangfang", "zhu_liu_huangcheng"])
 uuid = "zhu_liu"
 name = "驻留"
-description = "择一地面北而栖，静观长安风云。"
+description = "择一地面北而栖。"
 icon = ExtResource("4_uxtbm")
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

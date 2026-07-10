@@ -17,6 +17,8 @@ func operate():
             Logging.err('[EraOperator] invalid era value: "%s" — must be one of: %s' % [era, ", ".join(valid_eras)])
             return
 
+    var new_era: String = ""
+
     match mode:
         "set":
             if era.is_empty():
@@ -24,12 +26,18 @@ func operate():
                 GameState.current_era = ""
             else:
                 GameState.current_era = era
+            new_era = GameState.current_era
             Logging.info('[EraOperator] switched current_era to "%s"' % GameState.current_era)
         "clear":
             GameState.current_era = ""
+            new_era = ""
             Logging.info('[EraOperator] cleared current_era')
         _:
             Logging.err('[EraOperator] unknown mode: "%s"' % mode)
+            return
+
+    # Era 切换后发射信号，通知 ActionPanelManager 重建按钮
+    EventBus.era_changed.emit(new_era)
 
 ## 契约方法：返回该Operator引用的flag ID数组
 func get_referenced_flags() -> Array:

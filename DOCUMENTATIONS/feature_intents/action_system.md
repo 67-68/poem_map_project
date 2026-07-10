@@ -273,7 +273,8 @@
 - `ui/action_button.gd` — 行动按钮 UI 与点击处理 + 时间消耗
 - `core/model/action_tag_filter.gd` — 事件标签过滤器
 - `core/event_manager.gd` — 事件扫描与抽奖
-- `characters/narrative_overlay.gd` — 叙事纸带渲染（含 Picker 呈堂）
+- `characters/narrative_overlay.gd` — 叙事纸带渲染（含 Picker 呈堂）+ ActionPanel 互斥可见性切换
+- `ui/action_panel_manager.gd` — 🆕 行动面板管理器（替代 SceneActionScroll）：按钮构建/Era过滤/锁状态同步
 - `characters/narrative_director.gd` — 叙事状态机（管理 picker 栈）
 
 ## 设计意图

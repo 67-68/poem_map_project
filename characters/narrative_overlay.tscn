@@ -8,7 +8,8 @@
 [ext_resource type="Script" uid="uid://bpngqavs0hbir" path="res://characters/tape_visualizer.gd" id="4_tb7k1"]
 [ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="5_smooth"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
-[ext_resource type="Texture2D" uid="uid://bf8yoa100nf57" path="res://assets/profile/yang_ke.png" id="9_tb7k1"]
+[ext_resource type="Texture2D" uid="uid://c5vc2ykn2mcxe" path="res://assets/profile/yang_ke.png" id="9_tb7k1"]
+[ext_resource type="Script" uid="uid://2kvy8y0hradg" path="res://ui/action_panel_manager.gd" id="11_action_mgr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nuqx"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -31,36 +32,36 @@ shadow_size = 10
 texture = ExtResource("2_bsbx7")
 modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nuqx"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sshou"]
-load_path = "res://.godot/imported/宣纸.jpeg-4145ef729b8544b232cb03c2e8733341.ctex"
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tb7k1"]
-texture = SubResource("CompressedTexture2D_sshou")
 texture_margin_left = 15.0
 texture_margin_top = 15.0
 texture_margin_right = 15.0
 texture_margin_bottom = 15.0
 modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nuqx"]
+
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_7xb00"]
 
 [node name="NarrativeOverlay" type="PanelContainer" unique_id=467584234]
-custom_minimum_size = Vector2(320, 450)
+custom_minimum_size = Vector2(420, 600)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -214.0
-offset_top = -326.83807
-offset_right = 214.0
-offset_bottom = 326.83807
+offset_left = -221.0
+offset_top = -300.0
+offset_right = 207.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_2nuqx")
 script = ExtResource("1_htcev")
+
+[node name="ActionPanelManager" type="Node" parent="." unique_id=777000001]
+script = ExtResource("11_action_mgr")
 
 [node name="InterruptButton" type="Control" parent="." unique_id=682834335]
 layout_mode = 2
@@ -104,17 +105,36 @@ script = ExtResource("4_tb7k1")
 
 [node name="TapeContainer" type="PanelContainer" parent="." unique_id=1703748906]
 z_index = 100
-custom_minimum_size = Vector2(420, 640)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_sshou")
 
 [node name="VBox" type="VBoxContainer" parent="TapeContainer" unique_id=1930616949]
 layout_mode = 2
 
+[node name="ActionPanel" type="PanelContainer" parent="TapeContainer/VBox" unique_id=650333493]
+z_index = 100
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 10
+size_flags_stretch_ratio = 1.94
+theme_override_styles/panel = SubResource("StyleBoxTexture_tb7k1")
+
+[node name="V" type="VBoxContainer" parent="TapeContainer/VBox/ActionPanel" unique_id=576399197]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="TapeContainer/VBox/ActionPanel/V" unique_id=1593771078]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "行动"
+horizontal_alignment = 1
+
 [node name="EventHistory" type="PanelContainer" parent="TapeContainer/VBox" unique_id=1937522382]
+visible = false
 z_index = 120
+propagate_maximum_size = false
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 2.02
 theme_override_styles/panel = SubResource("StyleBoxEmpty_2nuqx")
 script = ExtResource("4_1hjkf")
 
@@ -140,7 +160,7 @@ size_flags_vertical = 3
 z_index = 100
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
-size_flags_vertical = 8
+size_flags_vertical = 10
 theme_override_styles/panel = SubResource("StyleBoxTexture_tb7k1")
 
 [node name="TimeLeft" type="TextureRect" parent="TapeContainer/VBox/HoverContainer" unique_id=1349144250]

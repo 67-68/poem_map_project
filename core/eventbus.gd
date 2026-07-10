@@ -5,7 +5,7 @@ const _DecisionScroll = preload("res://ui/decision_scroll.gd")
 const _FloatingText = preload("res://world/floating_text.gd")
 const _NarrativeOverlay = preload("res://characters/narrative_overlay.gd")
 const _SceneAction = preload("res://core/model/scene_action.gd")
-const _SceneActionScroll = preload("res://ui/scene_action_scroll.gd")
+const _ActionPanelManager = preload("res://ui/action_panel_manager.gd")
 const _SimpleToast = preload("res://world/simple_toast.gd")
 const _SystemOperator = preload("res://core/operators/system_operator.gd")
 const _TombstoneScreen = preload("res://ui/tomb_stone_screen.gd")
@@ -113,6 +113,10 @@ signal request_track_stage_animation(anim: AnimationObject)
 ## strategy: 策略枚举名（当前支持 "slide_out_and_back"）
 ## params:  策略参数字典，如 {"duration": 0.5}
 signal request_overlay_animation(strategy: String, params: Dictionary)
+
+## Era 切换时发射（由 EraOperator.operate() 在 set/clear 后发射）
+## 携带新的 era 字符串（clear 时为空字符串）
+signal era_changed(new_era: String)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

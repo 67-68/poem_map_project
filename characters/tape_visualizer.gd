@@ -94,10 +94,57 @@ func play_show_tape() -> void:
 # 2. play_hide_tape() — 纸带隐藏（全空时）
 # ═══════════════════════════════════════════════════════════════════
 
+## 标准隐藏：直接 hide（无动画）
 func play_hide_tape() -> void:
 	shadow_box.hide()
 	tape_container.hide()
 	_tape_initialized = false
+
+
+## 事件结束动画：上滑出 → 回调 → 从底部滑入（IDLE 态展示 ActionPanel）
+## @param on_swap: 在滑出完成、滑入开始之间调用的回调（切换内部状态）
+func play_hide_and_show_from_bottom(on_swap: Callable = Callable()) -> void:
+	if _tween:
+		_tween.kill()
+
+	var viewport_h := get_tree().root.get_visible_rect().size.y
+
+	if _tape_target_y == 0.0:
+		_tape_target_y = shadow_box.position.y
+
+	# Phase 1: 上滑出（0.4s）
+	var slide_out_duration := 0.4
+	var slide_out_target := -(viewport_h + 100.0)
+
+	var phase1 := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	phase1.set_parallel(true)
+	phase1.tween_property(shadow_box, "position:y", slide_out_target, slide_out_duration) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	phase1.tween_property(tape_container, "modulate:a", 0.0, slide_out_duration * 0.6) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	await phase1.finished
+
+	# 回调：切换内部状态（EventHistory→ActionPanel）
+	if on_swap.is_valid():
+		on_swap.call()
+
+	# Phase 2: 从底部滑入（0.5s）
+	shadow_box.position.y = viewport_h + 100.0
+	tape_container.modulate.a = 0.0
+	shadow_box.show()
+	tape_container.show()
+
+	_tape_initialized = false  # 让 show 重新播放完整动画
+
+	var phase2 := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	phase2.set_parallel(true)
+	phase2.tween_property(shadow_box, "position:y", _tape_target_y, 0.5) \
+		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	phase2.tween_property(tape_container, "modulate:a", 1.0, 0.3) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+	Logging.info("TapeVisualizer.play_hide_and_show_from_bottom: 动画完成（上滑出→切换→底部滑入）")
 
 
 # ═══════════════════════════════════════════════════════════════════

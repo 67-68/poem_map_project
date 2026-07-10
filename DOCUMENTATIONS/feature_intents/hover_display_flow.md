@@ -1,4 +1,4 @@
-# HoverDisplayFlow — 统一 Hover 显示 + 事件锁
+# HoverDisplayFlow — 统一 Hover 显示
 
 ## 文件
 
@@ -6,7 +6,7 @@
 - `characters/narrative_overlay.gd` — hover 文本渲染 + 事件开始/结束信号
 - `characters/tape_visualizer.gd` — 右侧滑入/滑出动画 + 快照恢复
 - `ui/action_button.gd` — SLIDE_FROM_RIGHT 消费方
-- `ui/scene_action_scroll.gd` — 事件锁（监听信号锁全量 action）
+- `ui/action_panel_manager.gd` — 🆕 行动面板管理器（按钮生命周期/锁状态同步）
 - `picker_item.gd` — BELOW_OVERLAY 消费方
 - `characters/event_btn.gd` — BELOW_OVERLAY 消费方
 - `ui/left_player_panel.gd` — POPUP_LEGACY 消费方
@@ -19,34 +19,6 @@
 | SLIDE_FROM_RIGHT | action hover | 正常：从右侧滑入(0.3s)；事件活跃：直接显示 + ⚠ 前缀 | 1s后滑出 / 行动点击滑出 / 事件活跃直接隐藏 | HoverContainer/HoverLabel |
 | BELOW_OVERLAY | picker/event hover | hover_container 直接显示 | 0.15s 后或选择后 hide_hover_text | HoverContainer/HoverLabel |
 | POPUP_LEGACY | ambition_hud | 浮动 popup | visible=false | CanvasLayer |
-
-## 事件锁机制
-
-### 状态转换
-
-```
-事件开始 (event_display_started)
-  → HoverPopupManager.set_event_active(true)
-  → SLIDE_FROM_RIGHT 降级：无动画 + 文字前缀"⚠ 请先完成当前事件再选择"
-  → SceneActionScroll._lock_all_for_event() 锁所有行动按钮
-
-事件结束 (event_display_ended)
-  → HoverPopupManager.set_event_active(false)
-  → SLIDE_FROM_RIGHT 恢复滑动动画
-  → SceneActionScroll.refresh() 恢复正常状态
-```
-
-### 信号流
-
-```
-NarrativeOverlay._on_event_ready_to_play
-  → event_display_started.emit()
-  → SceneActionScroll._lock_all_for_event()
-
-NarrativeOverlay._on_hide_requested
-  → event_display_ended.emit()
-  → SceneActionScroll._unlock_all_from_event() → refresh()
-```
 
 ## 动画锁（防颤抖）
 

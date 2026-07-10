@@ -2,13 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ojn7m81iv33i" path="res://ui/right_info_panel.gd" id="2_3crwo"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_j2cme"]
-[ext_resource type="PackedScene" uid="uid://d4k6orjo2c3h1" path="res://ui/scene_action_scroll.tscn" id="4_3crwo"]
 [ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="5_lnxk4"]
-[ext_resource type="PackedScene" uid="uid://c2m0tcydkhvro" path="res://ui/action_button.tscn" id="6_3crwo"]
-[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="6_kigl6"]
-[ext_resource type="FontFile" uid="uid://b0jq4f032woif" path="res://assets/fonts/Noto_Serif_SC/static/NotoSerifSC-Bold.ttf" id="7_83h1p"]
-[ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="8_x1xbj"]
-[ext_resource type="FontFile" uid="uid://bu472jjbmjeb3" path="res://assets/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Regular.ttf" id="9_nuu00"]
 [ext_resource type="PackedScene" uid="uid://cu1a2mhu4xv3n" path="res://ui/decision_scroll.tscn" id="10_j8k2n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3crwo"]
@@ -26,117 +20,6 @@ content_margin_right = 15.0
 content_margin_bottom = 15.0
 texture = ExtResource("2_j2cme")
 modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h77k8"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j3t25"]
-
-[sub_resource type="DPITexture" id="DPITexture_h77k8"]
-_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"#ff5d5d\" d=\"M2 1v8.586l1.293-1.293a1 1 0 0 1 1.414 0L7 10.587l2.293-2.293a1 1 0 0 1 1.414 0L13 10.586l1-1V6H9V1H2zm8 0v4h4zm-6 9.414-2 2V15h12v-2.586l-.293.293a1 1 0 0 1-1.414 0L10 10.414l-2.293 2.293a1 1 0 0 1-1.414 0L4 10.414z\"/></svg>
-"
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j3t25"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 0.365, 0.365, 1)
-draw_center = false
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_detail = 1
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iyit6"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8l8a3"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8l8a3"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_detail = 15
-
-[sub_resource type="Theme" id="Theme_kigl6"]
-resource_local_to_scene = true
-default_font = ExtResource("8_x1xbj")
-default_font_size = 20
-ButtonTheme/base_type = &"Button"
-ButtonTheme/colors/font_color = Color(0.2, 0.2, 0.2, 1)
-ButtonTheme/font_sizes/font_size = 16
-ButtonTheme/styles/normal = SubResource("StyleBoxEmpty_h77k8")
-ChaosText/base_type = &"RichTextLabel"
-ChaosText/colors/default_color = Color(0.7882353, 0.16470589, 0.16470589, 1)
-ChaosText/font_sizes/normal_font_size = 32
-ChaosText/fonts/normal_font = ExtResource("6_kigl6")
-DefaultText/base_type = &"Label"
-DefaultText/colors/font_color = Color(0.2, 0.2, 0.2, 1)
-DefaultText/font_sizes/font_size = 14
-DefaultText/fonts/font = ExtResource("8_x1xbj")
-DefaultText/styles/normal = SubResource("StyleBoxEmpty_j3t25")
-FrozenDefaultText/base_type = &"Label"
-FrozenDefaultText/colors/font_color = Color(0.5915502, 0.00066892116, 0.6739369, 1)
-FrozenDefaultText/font_sizes/font_size = 14
-FrozenDefaultText/fonts/font = ExtResource("8_x1xbj")
-FrozenInnerThoughtText/base_type = &"RichTextLabel"
-FrozenNarrativeText/base_type = &"RichTextLabel"
-FrozenNarrativeText/colors/default_color = Color(0.62763566, 0.6276353, 0.62763536, 1)
-FrozenNarrativeText/constants/line_separation = 3
-FrozenNarrativeText/fonts/normal_font = ExtResource("9_nuu00")
-FrozenTitleText/base_type = &"Label"
-FrozenTitleText/colors/font_color = Color(1, 1, 1, 1)
-FrozenTitleText/font_sizes/font_size = 28
-FrozenTitleText/fonts/font = ExtResource("7_83h1p")
-InnerThoughtText/base_type = &"RichTextLabel"
-InnerThoughtText/colors/default_color = Color(0.47843137, 0.47843137, 0.47843137, 1)
-InnerThoughtText/font_sizes/normal_font_size = 16
-InnerThoughtText/fonts/normal_font = ExtResource("9_nuu00")
-NarrativeText/base_type = &"RichTextLabel"
-NarrativeText/colors/default_color = Color(0.029539635, 0.18897739, 0.23629516, 1)
-NarrativeText/colors/font_outline_color = Color(0, 0, 0, 1)
-NarrativeText/colors/font_selected_color = Color(0, 0, 0, 1)
-NarrativeText/colors/font_shadow_color = Color(0, 0, 0, 1)
-NarrativeText/colors/selection_color = Color(0, 0, 0, 1)
-NarrativeText/colors/table_border = Color(0, 0, 0, 1)
-NarrativeText/colors/table_even_row_bg = Color(0, 0, 0, 1)
-NarrativeText/colors/table_odd_row_bg = Color(0, 0, 0, 1)
-NarrativeText/constants/line_separation = 0
-NarrativeText/constants/outline_size = 0
-NarrativeText/constants/paragraph_separation = 0
-NarrativeText/constants/shadow_offset_x = 0
-NarrativeText/constants/shadow_offset_y = 0
-NarrativeText/constants/shadow_outline_size = 0
-NarrativeText/constants/strikethrough_alpha = 0
-NarrativeText/constants/table_h_separation = 0
-NarrativeText/constants/table_v_separation = 0
-NarrativeText/constants/text_highlight_h_padding = 0
-NarrativeText/constants/text_highlight_v_padding = 0
-NarrativeText/constants/underline_alpha = 0
-NarrativeText/font_sizes/normal_font_size = 16
-NarrativeText/fonts/normal_font = ExtResource("9_nuu00")
-NarrativeText/icons/horizontal_rule = SubResource("DPITexture_h77k8")
-NarrativeText/styles/focus = SubResource("StyleBoxFlat_j3t25")
-NarrativeText/styles/normal = SubResource("StyleBoxEmpty_iyit6")
-PanelTheme/base_type = &"PanelContainer"
-PanelTheme/styles/panel = SubResource("StyleBoxEmpty_8l8a3")
-ScrollTheme/base_type = &"ScrollContainer"
-SubTitleText/base_type = &"Label"
-SubTitleText/colors/font_color = Color(0, 0, 0, 1)
-SubTitleText/font_sizes/font_size = 20
-SubTitleText/fonts/font = ExtResource("7_83h1p")
-TitleText/base_type = &"Label"
-TitleText/colors/font_color = Color(0.23232448, 2.1809247e-07, 4.2114408e-08, 1)
-TitleText/font_sizes/font_size = 28
-TitleText/fonts/font = ExtResource("7_83h1p")
-ToggleButtonTheme/base_type = &"Button"
-ToggleButtonTheme/font_sizes/font_size = 36
-ToggleButtonTheme/fonts/font = ExtResource("6_kigl6")
-ToggleButtonTheme/styles/pressed = SubResource("StyleBoxFlat_8l8a3")
-VBoxTheme/base_type = &"VBoxContainer"
-VBoxTheme/constants/separation = 0
 
 [node name="ShadowBox" type="PanelContainer" unique_id=694608092]
 custom_minimum_size = Vector2(320, 500)
@@ -253,23 +136,5 @@ theme_type_variation = &"SubTitleText"
 text = "决议"
 
 [node name="DecisioinScr" parent="Panel/V" unique_id=1783840445 instance=ExtResource("10_j8k2n")]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-
-[node name="HSeparator3" type="HSeparator" parent="Panel/V" unique_id=1637280986]
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="Panel/V" unique_id=1098974097]
-layout_mode = 2
-theme_type_variation = &"SubTitleText"
-text = "行动"
-
-[node name="WritePoemContainer" type="VBoxContainer" parent="Panel/V" unique_id=836503812]
-layout_mode = 2
-
-[node name="WritePoemBtn" parent="Panel/V/WritePoemContainer" unique_id=1937966478 instance=ExtResource("6_3crwo")]
-layout_mode = 2
-theme = SubResource("Theme_kigl6")
-
-[node name="SceneActionScr" parent="Panel/V" unique_id=507890747 instance=ExtResource("4_3crwo")]
-layout_mode = 2
-horizontal_scroll_mode = 0

@@ -6,11 +6,22 @@
 [ext_resource type="Texture2D" uid="uid://bokcmb0kkcpu4" path="res://assets/stamps/baiye_stamp.png" id="3_sm4xu"]
 
 [node name="ActionButton" type="Button" unique_id=1937966478]
-custom_minimum_size = Vector2(250, 65)
+custom_minimum_size = Vector2(250, 55)
 clip_contents = true
-offset_right = 100.0
-offset_bottom = 44.0
-size_flags_vertical = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -32.5
+offset_right = 125.0
+offset_bottom = 32.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+size_flags_horizontal = 6
+size_flags_vertical = 6
 mouse_filter = 1
 theme = ExtResource("2_vmy6r")
 theme_type_variation = &"ButtonTheme"
@@ -19,12 +30,15 @@ script = ExtResource("1_vmy6r")
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=447718159]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -5.5
-offset_right = 5.5
-offset_bottom = -11.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -113.0
+offset_top = -27.0
+offset_right = 113.0
+offset_bottom = 27.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1

@@ -1,3 +1,6 @@
+## 🚨 DEPRECATED — 逻辑已迁移至 ActionPanelManager (ui/action_panel_manager.gd)
+## 保留此文件仅用于兼容旧存档引用。
+## 新代码应使用 NarrativeOverlay.action_panel_mgr 访问行动面板管理。
 class_name SceneActionScroll extends SmoothScrollContainer
 
 var _locked_action_ids: Array[String] = []  # 当前灰化显示的 action ID 列表
