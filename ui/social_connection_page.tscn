@@ -1,0 +1,167 @@
+[gd_scene format=3 uid="uid://d323p71vdp3wn"]
+
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_qyv3s"]
+[ext_resource type="ButtonGroup" uid="uid://dgpk1t4rfkwi8" path="res://ui/social_connection_filter_group.tres" id="2_enmti"]
+[ext_resource type="Script" path="res://ui/social_connection_page.gd" id="3_script"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_enmti"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+texture = ExtResource("1_qyv3s")
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qyv3s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enmti"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="SocialConnectionPage" type="Control" unique_id=992720834]
+script = ExtResource("3_script")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1817549478]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_enmti")
+
+[node name="H" type="HBoxContainer" parent="PanelContainer" unique_id=1310597549]
+layout_mode = 2
+
+[node name="V" type="VBoxContainer" parent="PanelContainer/H" unique_id=856042535]
+layout_mode = 2
+
+[node name="Modes" type="FlowContainer" parent="PanelContainer/H/V" unique_id=1416551186]
+layout_mode = 2
+theme_override_constants/h_separation = 15
+
+[node name="Button" type="Button" parent="PanelContainer/H/V/Modes" unique_id=824362732]
+layout_mode = 2
+theme_type_variation = &"ButtonTheme"
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("2_enmti")
+text = "按地区分类"
+
+[node name="Button2" type="Button" parent="PanelContainer/H/V/Modes" unique_id=1883267227]
+layout_mode = 2
+theme_type_variation = &"ButtonTheme"
+toggle_mode = true
+button_group = ExtResource("2_enmti")
+text = "按阵营分类"
+
+[node name="Tree" type="Tree" parent="PanelContainer/H/V" unique_id=2112479787]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qyv3s")
+hide_root = true
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/H" unique_id=1446511408]
+layout_mode = 2
+
+[node name="Info" type="PanelContainer" parent="PanelContainer/H" unique_id=220723573]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_enmti")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/H/Info" unique_id=1454176476]
+layout_mode = 2
+
+[node name="Unit8" type="VBoxContainer" parent="PanelContainer/H/Info/VBoxContainer" unique_id=589427741]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit8" unique_id=1899099193]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "基本信息"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit8" unique_id=2121436069]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+text = "当前状态 + 名字 + 偏好地点"
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/H/Info/VBoxContainer/Unit8" unique_id=739746259]
+layout_mode = 2
+
+[node name="Unit2" type="VBoxContainer" parent="PanelContainer/H/Info/VBoxContainer" unique_id=1105945954]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit2" unique_id=296453703]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "关系"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit2" unique_id=2022856935]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+text = "把柄 + 推荐信"
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/H/Info/VBoxContainer/Unit2" unique_id=265369354]
+layout_mode = 2
+
+[node name="Unit5" type="VBoxContainer" parent="PanelContainer/H/Info/VBoxContainer" unique_id=770016916]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit5" unique_id=251314049]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "相关人物"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit5" unique_id=1437219299]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+text = "test"
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/H/Info/VBoxContainer/Unit5" unique_id=2125968614]
+layout_mode = 2
+
+[node name="Unit6" type="VBoxContainer" parent="PanelContainer/H/Info/VBoxContainer" unique_id=216600159]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit6" unique_id=983741078]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "已经探索的所有可用任务"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit6" unique_id=1275044903]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+text = "test"
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/H/Info/VBoxContainer/Unit6" unique_id=1906265295]
+layout_mode = 2
+
+[node name="Unit7" type="VBoxContainer" parent="PanelContainer/H/Info/VBoxContainer" unique_id=585629444]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit7" unique_id=455892033]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "可用资源转换配方"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit7" unique_id=121913037]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+text = "test"
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/H/Info/VBoxContainer/Unit7" unique_id=1899741810]
+layout_mode = 2

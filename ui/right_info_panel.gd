@@ -19,12 +19,16 @@ const CN_NAME_MAP: Dictionary = {
 }
 
 @onready var _info_grid: VBoxContainer = $Panel/V/InfoGrid
+@onready var _social_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn
 
 func _ready() -> void:
 	# ── 风闻刷新 ──
 	_refresh_rumors()
 	TimeService.on_month_tick.connect(_refresh_rumors)
 	EventBus.request_refresh_action_panel.connect(_refresh_rumors)
+
+	# ── 社交人脉按钮 ──
+	_social_btn.gui_input.connect(_on_social_btn_gui_input)
 
 ## 刷新风闻面板：遍历所有 RELATION_TARGET，查询 RelationFlagManager，
 ## 只显示有死穴（leverage）或恩义（help）的目标。
@@ -100,3 +104,13 @@ func _refresh_rumors() -> void:
 		_info_grid.add_child(label)
 
 	Logging.info("RightInfoPanel: 风闻刷新完成，已渲染 %d 条" % _info_grid.get_child_count())
+
+
+# ═══════════════════════════════════════════════════════════
+# 社交人脉按钮 — 点击弹出 SocialConnectionPage
+# ═══════════════════════════════════════════════════════════
+
+func _on_social_btn_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		Logging.info("RightInfoPanel: SocialConnectionBtn 点击 → 发射 social_connection_toggled")
+		EventBus.social_connection_toggled.emit()

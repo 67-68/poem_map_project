@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ojn7m81iv33i" path="res://ui/right_info_panel.gd" id="2_3crwo"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_j2cme"]
+[ext_resource type="Texture2D" uid="uid://drwciqjjy75wp" path="res://assets/profile/renmai.png" id="5_3crwo"]
 [ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="5_lnxk4"]
 [ext_resource type="PackedScene" uid="uid://cu1a2mhu4xv3n" path="res://ui/decision_scroll.tscn" id="10_j8k2n"]
 
@@ -20,6 +21,24 @@ content_margin_right = 15.0
 content_margin_bottom = 15.0
 texture = ExtResource("2_j2cme")
 modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+shadow_offset = Vector2(2, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lnxk4"]
+bg_color = Color(0.6784314, 0.64705884, 0.5294118, 1)
+shadow_size = 4
+shadow_offset = Vector2(3, 0)
 
 [node name="ShadowBox" type="PanelContainer" unique_id=694608092]
 custom_minimum_size = Vector2(320, 500)
@@ -138,3 +157,22 @@ text = "决议"
 [node name="DecisioinScr" parent="Panel/V" unique_id=1783840445 instance=ExtResource("10_j8k2n")]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="Panel/V" unique_id=2058041489]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7xb00")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/V/PanelContainer2" unique_id=1295835298]
+layout_mode = 2
+
+[node name="SocialConnectionBtn" type="PanelContainer" parent="Panel/V/PanelContainer2/HBoxContainer" unique_id=873214214]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_lnxk4")
+
+[node name="TextureRect" type="TextureRect" parent="Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn" unique_id=1632900340]
+layout_mode = 2
+texture = ExtResource("5_3crwo")
+expand_mode = 1
