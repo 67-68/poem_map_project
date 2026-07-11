@@ -418,8 +418,8 @@ func _on_player_stat_changed(prop_name: String) -> void:
 		return
 	
 	# 只对影响 action 可用性的属性变化做反应
-	# 白名单: time / money / health / literary_fame / talent 都能影响 action 可用性
-	if prop_name in ["time", "money", "health", "literary_fame", "talent"]:
+	# 白名单: time / money / health / prestige / talent 都能影响 action 可用性
+	if prop_name in ["time", "money", "health", "prestige", "talent", "astuteness", "composure", "inspiration", "momentum"]:
 		Logging.info("[ActionManager] 关键属性 %s 变动，debounce 窗口启动 (%.0fms)" % [prop_name, STAT_DEBOUNCE_MS * 1000])
 		_stat_debounce_pending = true
 		_stat_debounce_timer.start(STAT_DEBOUNCE_MS)

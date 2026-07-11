@@ -10,20 +10,28 @@ const _PopEventOperator = preload("res://core/operators/pop_event_operator.gd")
 const PROP_DISPLAY_ORDER: Array[int] = [
     ENUMS.PROPS.MONEY,
     ENUMS.PROPS.HEALTH,
-    ENUMS.PROPS.LITERARY_FAME,
+    ENUMS.PROPS.PRESTIGE,
     ENUMS.PROPS.TALENT,
     ENUMS.PROPS.PROGRESS,
     ENUMS.PROPS.TIME,
+    ENUMS.PROPS.ASTUTENESS,
+    ENUMS.PROPS.COMPOSURE,
+    ENUMS.PROPS.INSPIRATION,
+    ENUMS.PROPS.MOMENTUM,
 ]
 
 # ── 属性中文简称映射 ─────────────────────────────
 const PROP_SHORT_NAMES: Dictionary = {
 	ENUMS.PROPS.MONEY: "钱",
 	ENUMS.PROPS.HEALTH: "健",
-	ENUMS.PROPS.LITERARY_FAME: "名",
+	ENUMS.PROPS.PRESTIGE: "名",
 	ENUMS.PROPS.TALENT: "才",
 	ENUMS.PROPS.PROGRESS: "途",
 	ENUMS.PROPS.TIME: "时",
+	ENUMS.PROPS.ASTUTENESS: "府",
+	ENUMS.PROPS.COMPOSURE: "定",
+	ENUMS.PROPS.INSPIRATION: "兴",
+	ENUMS.PROPS.MOMENTUM: "势",
 }
 
 # ── 上月末11属性快照 ──────────────────────────────

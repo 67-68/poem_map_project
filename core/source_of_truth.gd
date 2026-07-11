@@ -33,10 +33,14 @@ static var debug_dashboard_state = {
 	"resources": {
 		"money": 45,
 		"health": 50,
-		"literary_fame": 50,
+		"prestige": 50,
 		"talent": 50,
 		"progress": 0,
 		"time": 10,
+		"astuteness": 50,
+		"composure": 50,
+		"inspiration": 50,
+		"momentum": 50,
 	},
 
 	"emotions": {

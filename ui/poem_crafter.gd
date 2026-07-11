@@ -492,8 +492,8 @@ func _on_tear_scroll_pressed() -> void:
 
 	var amounts = NamedDSLParser._load_named_amounts()
 	var loss = amounts.get("s_fame_cost", -10)
-	PlayerState.append_stat("literary_fame", loss)
-	Logging.info('PoemCrafter: 扣除 literary_fame %d' % loss)
+	PlayerState.append_stat("prestige", loss)
+	Logging.info('PoemCrafter: 扣除 prestige %d' % loss)
 
 	EventBus.poem_cancel.emit()
 

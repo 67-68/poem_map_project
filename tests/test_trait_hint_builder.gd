@@ -22,7 +22,7 @@ func before_all():
 	
 	# 1. 搭建 Database.properties（PropertyOperator.describe_preview 依赖）
 	#    health 是最常用的 prop key，几乎所有负面 trait 的 trait_effect_operations 都操作它
-	for key in ["health", "money", "literary_fame"]:
+	for key in ["health", "money", "prestige"]:
 		if not Database.properties.has(key):
 			var p := Property.new()
 			p.uuid = key

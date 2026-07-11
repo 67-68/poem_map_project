@@ -358,7 +358,7 @@ static func clear_person_state(target_tag: String) -> void:
 #   不再使用 before_property_change 信号钩子。
 #
 # 好属性（玩家希望增加的）：
-#   literary_fame, progress, talent, money, health
+#   prestige, progress, talent, money, health
 #
 # 倍率规则（_TIER_MULTIPLIER_TABLE 常量已在上方定义）：
 #   T0(not_meet):    无交互，倍率 0.0（不触发）
@@ -369,11 +369,15 @@ static func clear_person_state(target_tag: String) -> void:
 
 ## 硬编码的"好属性"对照表（key 为 Database.prop 的 uuid/name）
 const GOOD_PROPS: Dictionary = {
-	"literary_fame": true,
+	"prestige": true,
 	"progress": true,
 	"talent": true,
 	"money": true,
 	"health": true,
+	"astuteness": true,
+	"composure": true,
+	"inspiration": true,
+	"momentum": true,
 }
 
 ## 硬编码的"坏属性"对照表

@@ -28,7 +28,7 @@ description = "让友人进来，强撑着说说话"
 
 [sub_resource type="Resource" id="Resource_6o736"]
 script = ExtResource("3_wvtq7")
-str_props = "literary_fame"
+str_props = "prestige"
 value = -3
 
 [sub_resource type="Resource" id="Resource_ynxoy"]

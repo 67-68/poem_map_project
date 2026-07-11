@@ -28,7 +28,7 @@ description = "邀路人共饮"
 
 [sub_resource type="Resource" id="Resource_gwvnp"]
 script = ExtResource("3_o6fmg")
-str_props = "literary_fame"
+str_props = "prestige"
 value = 3
 
 [sub_resource type="Resource" id="Resource_ol28g"]

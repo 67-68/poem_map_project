@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="Property" load_steps=12 format=3 uid="uid://bastuteness01"]
+
+[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_ast"]
+[ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="2_cp"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="3_sp"]
+
+[sub_resource type="Resource" id="PropChangePerceptionData_1"]
+script = ExtResource("2_cp")
+min_delta = 1
+max_delta = 5
+gain_text = "心思缜密了几分"
+loss_text = "露了破绽"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_2"]
+script = ExtResource("2_cp")
+min_delta = 6
+max_delta = 20
+gain_text = "城府日深"
+loss_text = "心思被看穿"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_3"]
+script = ExtResource("2_cp")
+min_delta = 21
+max_delta = 50
+gain_text = "运筹帷幄，深藏不露"
+loss_text = "底牌暴露"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_4"]
+script = ExtResource("2_cp")
+min_delta = 51
+max_delta = 9999
+gain_text = "翻云覆雨，一手遮天"
+loss_text = "心防尽碎，再无遮掩"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_1"]
+script = ExtResource("3_sp")
+stage_val = 0
+perception_text = "心思单纯"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_2"]
+script = ExtResource("3_sp")
+stage_val = 20
+perception_text = "略有心计"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_3"]
+script = ExtResource("3_sp")
+stage_val = 50
+perception_text = "城府渐深"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_4"]
+script = ExtResource("3_sp")
+stage_val = 100
+perception_text = "深不可测"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_5"]
+script = ExtResource("3_sp")
+stage_val = 300
+perception_text = "幕后执棋"
+
+[resource]
+script = ExtResource("1_ast")
+uuid = "astuteness"
+name = "astuteness"
+hard_max = 100
+staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
+change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])
+metadata/_custom_type_script = "uid://b3m5anke7kjyi"

@@ -57,14 +57,14 @@ func test_batch_parsing():
         {
             "Event_ID": "evt_market_02",
             "Trigger_Tags": "action:study:poetry,city:econ:prosperous",
-            "requirements": "prop_gt(name=literary_fame, val=30)",
+            "requirements": "prop_gt(name=prestige, val=30)",
             "Title": "市场诗会",
             "Desc": "市场上正在举行一场诗会，许多文人墨客聚集于此。",
             "Opt_A_Text": "参与诗会",
-            "Opt_A_Req": "prop_gt(name=literary_fame, val=20)",
-            "Opt_A_Result": "prop_add(name=literary_fame, val=10), prop_sub(name=money, val=20)",
+            "Opt_A_Req": "prop_gt(name=prestige, val=20)",
+            "Opt_A_Result": "prop_add(name=prestige, val=10), prop_sub(name=money, val=20)",
             "Opt_B_Text": "默默观察",
-            "Opt_B_Result": "prop_add(name=literary_fame, val=5)"
+            "Opt_B_Result": "prop_add(name=prestige, val=5)"
         }
     ]
     
@@ -96,6 +96,6 @@ func test_dsl_formats():
     Logging.info("结果操作符数量:  %s" % [operators.size()])
     
     # 测试复合需求解析（新语法）
-    var complex_req_str = "prop_gt(name=money, val=50), prop_gt(name=literary_fame, val=30)"
+    var complex_req_str = "prop_gt(name=money, val=50), prop_gt(name=prestige, val=30)"
     var complex_req = DSLParser.parse_requirements(complex_req_str)
     Logging.info("复合需求解析:  %s" % [complex_req != null])

@@ -9,7 +9,7 @@ func _ready() -> void:
 	output.append("=== 全量 Trait + Imaginary Hint Dump ===\n")
 
 	# Database.properties 塞基本数据
-	for key in ["health", "money", "literary_fame", "talent"]:
+	for key in ["health", "money", "prestige", "talent"]:
 		if not Database.properties.has(key):
 			var p := Property.new()
 			p.uuid = key; p.name = key; p.lowest = 0; p.val = 50

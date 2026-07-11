@@ -129,9 +129,13 @@ func init_props():
 	var resources = SourceOfTruth.debug_dashboard_state.resources
 	append_stat(ENUMS.PROPS.MONEY, resources.money)
 	append_stat(ENUMS.PROPS.HEALTH, resources.health)
-	append_stat(ENUMS.PROPS.LITERARY_FAME, resources.literary_fame)
+	append_stat(ENUMS.PROPS.PRESTIGE, resources.prestige)
 	append_stat(ENUMS.PROPS.TALENT, resources.talent)
 	append_stat(ENUMS.PROPS.PROGRESS, resources.progress)
+	append_stat(ENUMS.PROPS.ASTUTENESS, resources.astuteness)
+	append_stat(ENUMS.PROPS.COMPOSURE, resources.composure)
+	append_stat(ENUMS.PROPS.INSPIRATION, resources.inspiration)
+	append_stat(ENUMS.PROPS.MOMENTUM, resources.momentum)
 	if not append_stat(ENUMS.PROPS.TIME, 10):
 		breakpoint
 		Logging.warn('init_props: TIME stat not found in Database, will retry via call_deferred')

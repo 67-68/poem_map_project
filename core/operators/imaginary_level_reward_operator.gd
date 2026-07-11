@@ -32,5 +32,5 @@ func _on_imaginary_picked(imaginary_picked):
 	var uuid = imaginary_picked.uuid
 	Logging.info("ImaginaryLevelRewardOperator: Imaginary picked - '%s' (V7: 固定 T1 奖励)" % uuid)
 
-	PlayerState.append_stat("literary_fame", t1_fame)
+	PlayerState.append_stat("prestige", t1_fame)
 	Logging.info("ImaginaryLevelRewardOperator: T1 reward applied: fame=%d" % t1_fame)

@@ -56,7 +56,7 @@
     "action_uuid": "action_jiaoyou",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=literary_fame; val=5)",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=prestige; val=5)",
     "era": "",
     "failed_hints": {
       "money": "一身破旧衣裳，如何登得上别人的门庭？连见客的小厮都要嫌弃",
@@ -103,11 +103,11 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_sub(name=literary_fame; val=m_fame_cost)|prop_add(name=money; val=l_money_gain)",
+    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_sub(name=prestige; val=m_fame_cost)|prop_add(name=money; val=l_money_gain)",
     "era": "",
     "failed_hints": {
       "health": "病体难支，连研墨的力气都没有",
-      "literary_fame": "声名未著，字画无人问津"
+      "prestige": "声名未著，字画无人问津"
     }
   },
   "maizi_failure": {
@@ -116,7 +116,7 @@
     "state": "failure",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=l_money_gain)|prop_sub(name=literary_fame; val=l_fame_cost)",
+    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=l_money_gain)|prop_sub(name=prestige; val=l_fame_cost)",
     "era": "",
     "failed_hints": {}
   },
@@ -126,7 +126,7 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=l_money_gain)|prop_add(name=literary_fame; val=m_fame_gain)",
+    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=l_money_gain)|prop_add(name=prestige; val=m_fame_gain)",
     "era": "",
     "failed_hints": {}
   },
@@ -136,7 +136,7 @@
     "state": "failure",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=s_money_gain)|prop_add(name=literary_fame; val=s_fame_gain)",
+    "universal_result": "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=s_money_gain)|prop_add(name=prestige; val=s_fame_gain)",
     "era": "",
     "failed_hints": {}
   },
@@ -216,7 +216,7 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=literary_fame; val=5)|roll_imaginary(level=2)",
+    "universal_result": "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=prestige; val=5)|roll_imaginary(level=2)",
     "era": "",
     "failed_hints": {}
   },
@@ -256,7 +256,7 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=literary_fame; val=m_fame_cost)",
+    "universal_result": "prop_sub(name=prestige; val=m_fame_cost)",
     "era": "",
     "failed_hints": {}
   },
@@ -266,7 +266,7 @@
     "state": "success",
     "parent": "",
     "universal_requirement": "",
-    "universal_result": "prop_sub(name=literary_fame; val=m_fame_cost)",
+    "universal_result": "prop_sub(name=prestige; val=m_fame_cost)",
     "era": "",
     "failed_hints": {}
   },

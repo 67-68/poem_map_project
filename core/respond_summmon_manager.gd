@@ -7,7 +7,7 @@ func _ready():
 func respond_summon():
     breakpoint
     var chance_of_summoned := 0.0
-    chance_of_summoned += PlayerState.get_stat_val('literary_fame') * 0.002
+    chance_of_summoned += PlayerState.get_stat_val('prestige') * 0.002
     chance_of_summoned += PlayerState.get_stat_val('progress') * 0.002
     if chance_of_summoned > 0.2: chance_of_summoned = 0.2
 

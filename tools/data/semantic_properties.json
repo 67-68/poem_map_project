@@ -155,7 +155,7 @@
 		],
 		"name": "inspiration"
 	},
-	"literary_fame": {
+	"prestige": {
 		"change_perceptions": [
 			{
 				"gain": "文思稍动，微名渐起",
@@ -182,7 +182,7 @@
 				"min_delta": 101
 			}
 		],
-		"name": "literary_fame"
+		"name": "prestige"
 	},
 	"money": {
 		"change_perceptions": [

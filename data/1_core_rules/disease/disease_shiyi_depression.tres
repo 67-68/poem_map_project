@@ -19,7 +19,7 @@ metadata/_custom_type_script = "uid://cwotf742e2n0f"
 
 [sub_resource type="Resource" id="Resource_yhfba"]
 script = ExtResource("1_p21v0")
-key = "literary_fame"
+key = "prestige"
 value = 0.7
 metadata/_custom_type_script = "uid://cwotf742e2n0f"
 

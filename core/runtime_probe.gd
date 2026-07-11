@@ -263,7 +263,7 @@ func _serialize_game_state() -> String:
 
 	# 收集所有属性统计值
 	var stats := {}
-	var prop_names := ["OFFICIAL_PRESTIGE", "LITERARY_FAME", "TALENT", "MONEY",
+	var prop_names := ["OFFICIAL_PRESTIGE", "PRESTIGE", "TALENT", "MONEY",
 		"HEALTH", "FATIGUE", "BURNOUT", "DRUNK", "SICK",
 		"INSPIRATION", "progress"]
 	for prop_name in prop_names:

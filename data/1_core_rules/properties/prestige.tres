@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="Property" load_steps=13 format=3 uid="uid://bfbeu8dco85xa"]
+[gd_resource type="Resource" script_class="Property" load_steps=13 format=3 uid="uid://bprestige001"]
 
-[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_ci4en"]
+[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_prs"]
 [ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="2_cp"]
 [ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="3_sp"]
 
@@ -58,9 +58,9 @@ stage_val = 1000
 perception_text = "千古流芳"
 
 [resource]
-script = ExtResource("1_ci4en")
-uuid = "literary_fame"
-name = "literary_fame"
+script = ExtResource("1_prs")
+uuid = "prestige"
+name = "prestige"
 hard_max = -1
 soft_max = -1
 decay_threshold = -1

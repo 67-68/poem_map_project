@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="Property" load_steps=12 format=3 uid="uid://binspiration1"]
+
+[ext_resource type="Script" uid="uid://b3m5anke7kjyi" path="res://core/model/property.gd" id="1_insp"]
+[ext_resource type="Script" uid="uid://blw2avi8hbawu" path="res://core/model/prop_change_perception.gd" id="2_cp"]
+[ext_resource type="Script" uid="uid://6yyjqx4eytje" path="res://core/model/prop_staged_percption.gd" id="3_sp"]
+
+[sub_resource type="Resource" id="PropChangePerceptionData_1"]
+script = ExtResource("2_cp")
+min_delta = 1
+max_delta = 5
+gain_text = "灵光微闪"
+loss_text = "灵感稍纵"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_2"]
+script = ExtResource("2_cp")
+min_delta = 6
+max_delta = 20
+gain_text = "文思如泉涌"
+loss_text = "灵感枯竭"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_3"]
+script = ExtResource("2_cp")
+min_delta = 21
+max_delta = 50
+gain_text = "诗兴勃发，不可遏制"
+loss_text = "无从下笔，心意茫然"
+
+[sub_resource type="Resource" id="PropChangePerceptionData_4"]
+script = ExtResource("2_cp")
+min_delta = 51
+max_delta = 9999
+gain_text = "如有神助，下笔千言"
+loss_text = "江郎才尽，文脉断绝"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_1"]
+script = ExtResource("3_sp")
+stage_val = 0
+perception_text = "文思枯竭"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_2"]
+script = ExtResource("3_sp")
+stage_val = 20
+perception_text = "灵光偶现"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_3"]
+script = ExtResource("3_sp")
+stage_val = 50
+perception_text = "文思涌动"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_4"]
+script = ExtResource("3_sp")
+stage_val = 100
+perception_text = "灵感迸发"
+
+[sub_resource type="Resource" id="PropStagedPerceptionData_5"]
+script = ExtResource("3_sp")
+stage_val = 300
+perception_text = "诗兴大发，下笔如有神"
+
+[resource]
+script = ExtResource("1_insp")
+uuid = "inspiration"
+name = "inspiration"
+hard_max = 100
+staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
+change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])
+metadata/_custom_type_script = "uid://b3m5anke7kjyi"

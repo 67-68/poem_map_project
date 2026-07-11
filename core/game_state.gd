@@ -106,5 +106,5 @@ func init_buffers() -> void:
 		)
 
 
-func test_change_literary_fame(num: int) -> void:
-	PlayerState.append_stat("literary_fame", num)
+func test_change_prestige(num: int) -> void:
+	PlayerState.append_stat("prestige", num)

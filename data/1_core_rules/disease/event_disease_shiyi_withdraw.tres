@@ -28,7 +28,7 @@ description = "勉强赴约"
 
 [sub_resource type="Resource" id="Resource_my2ec"]
 script = ExtResource("3_13dtj")
-str_props = "literary_fame"
+str_props = "prestige"
 value = -5
 
 [sub_resource type="Resource" id="Resource_w6e22"]

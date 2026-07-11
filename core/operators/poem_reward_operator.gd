@@ -5,7 +5,7 @@ class_name PoemRewardOperator extends BaseOperator
 ##
 ## mode 决定产出资源类型:
 ##   - money  → money（金钱）
-##   - fame   → literary_fame（文学声望）
+##   - fame   → prestige（文学声望）
 ##   - baiye  → progress（仕途进度）
 ##
 ## 诗词 level 映射到 named_amounts 档位 (1→small, 2→medium, 3→large)。
@@ -30,7 +30,7 @@ const LEVEL_TO_SIZE_MONEY := {
 
 const MODE_TO_PROP := {
 	"money": "money",
-	"fame": "literary_fame",
+	"fame": "prestige",
 	"baiye": "progress",
 }
 

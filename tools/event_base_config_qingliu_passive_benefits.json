@@ -40,7 +40,7 @@
     "qingliu_aid"
   ],
   "universal_requirement": "emo_gt(name=ambition; val=30)|emo_lt(name=ambition; val=100)",
-  "universal_result": "prop_add(name=literary_fame; val=3)",
+  "universal_result": "prop_add(name=prestige; val=3)",
   "universal_option_requirement": "",
   "word_count_min": 40,
   "word_count_max": 200,

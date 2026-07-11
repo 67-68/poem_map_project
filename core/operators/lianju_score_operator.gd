@@ -97,8 +97,8 @@ func _get_dominant_emotion() -> String:
 
 func _apply_score():
 	if _final_score > 0:
-		PlayerState.append_stat("literary_fame", _final_score)
-		Logging.info("LianjuScoreOperator: applied %d literary_fame reward" % _final_score)
+		PlayerState.append_stat("prestige", _final_score)
+		Logging.info("LianjuScoreOperator: applied %d prestige reward" % _final_score)
 
 	EventBus.lianju_score_calculated.emit(_final_score)
 

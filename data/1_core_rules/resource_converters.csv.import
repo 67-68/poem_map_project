@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://wqpcpsr467le"
+
+[deps]
+
+files=["res://data/1_core_rules/resource_converters.所属行动.translation", "res://data/1_core_rules/resource_converters.地点.translation", "res://data/1_core_rules/resource_converters.输入.translation", "res://data/1_core_rules/resource_converters.输出.translation", "res://data/1_core_rules/resource_converters.需要时间.translation", "res://data/1_core_rules/resource_converters.时间内消耗.translation", "res://data/1_core_rules/resource_converters.约束.translation", "res://data/1_core_rules/resource_converters.成功率.translation", "res://data/1_core_rules/resource_converters.失败结果.translation"]
+
+source_file="res://data/1_core_rules/resource_converters.csv"
+dest_files=["res://data/1_core_rules/resource_converters.所属行动.translation", "res://data/1_core_rules/resource_converters.地点.translation", "res://data/1_core_rules/resource_converters.输入.translation", "res://data/1_core_rules/resource_converters.输出.translation", "res://data/1_core_rules/resource_converters.需要时间.translation", "res://data/1_core_rules/resource_converters.时间内消耗.translation", "res://data/1_core_rules/resource_converters.约束.translation", "res://data/1_core_rules/resource_converters.成功率.translation", "res://data/1_core_rules/resource_converters.失败结果.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

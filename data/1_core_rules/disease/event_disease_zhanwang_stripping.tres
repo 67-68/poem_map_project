@@ -9,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_746r2"]
 script = ExtResource("3_4kaf5")
-str_props = "literary_fame"
+str_props = "prestige"
 value = 5
 
 [sub_resource type="Resource" id="Resource_5k5lm"]
@@ -28,7 +28,7 @@ description = "在市井中放歌而行"
 
 [sub_resource type="Resource" id="Resource_qy4dx"]
 script = ExtResource("3_4kaf5")
-str_props = "literary_fame"
+str_props = "prestige"
 value = -3
 
 [sub_resource type="Resource" id="Resource_m3bnu"]

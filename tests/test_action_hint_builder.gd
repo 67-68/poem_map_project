@@ -28,7 +28,7 @@ func before_each():
 	Database.properties.clear()
 	Database.action_archetypes.clear()
 	GameSave.data.properties.clear()
-	for key in ["health", "money", "literary_fame"]:
+	for key in ["health", "money", "prestige"]:
 		if not Database.properties.has(key):
 			var p := Property.new(); p.uuid = key; p.name = key; p.lowest = 0; p.val = 50
 			Database.properties[key] = p
@@ -124,7 +124,7 @@ func test_sub_preview_basic():
 
 func test_sub_preview_success_ops():
 	var sub := _make_scene_action("test_sub"); sub.possibility = "l_success_rate"
-	var r := ActionHintBuilder.build_sub_action_preview(sub, [_make_prop_op("literary_fame", 20)], [], 0.0)
+	var r := ActionHintBuilder.build_sub_action_preview(sub, [_make_prop_op("prestige", 20)], [], 0.0)
 	assert_true(r.contains("[成功效果]"))
 
 
