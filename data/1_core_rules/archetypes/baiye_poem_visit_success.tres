@@ -6,6 +6,6 @@
 script = ExtResource("1_kccig")
 uuid = "baiye_poem_visit_success"
 name = "baiye_poem_visit.success"
-universal_result = "prop_sub(name=money; val=m_money_cost)|prop_add(name=progress; val=l_progress_gain)"
+universal_result = "prop_add(name=progress; val=l_progress_gain)"
 action_uuid = "baiye_poem_visit"
 state = "success"

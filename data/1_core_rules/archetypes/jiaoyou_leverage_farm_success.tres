@@ -6,6 +6,6 @@
 script = ExtResource("1_xefsr")
 uuid = "jiaoyou_leverage_farm_success"
 name = "jiaoyou_leverage_farm.success"
-universal_result = "prop_sub(name=money; val=m_money_cost)|add_random_leverage()"
+universal_result = "add_random_leverage()"
 action_uuid = "jiaoyou_leverage_farm"
 state = "success"

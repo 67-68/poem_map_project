@@ -254,21 +254,31 @@ func _get_archetype_failed_hint(action: Action, prop_name: String) -> String:
 	return archetype.failed_hints.get(prop_name, "")
 
 
-## 🆕 解析 archetype 的 universal_result DSL，提取属性消耗并创建临时 PropertyOperator。
-## universal_result 格式: "prop_sub(name=money; val=m_money_cost)|prop_add(name=health; val=m_health_loss)"
-## 返回 Array[PropertyOperator]，每个代表一个属性消耗。
+## 🆕 解析 action 的 cost archetype（state="cost"），提取属性消耗 operators。
+## 优先使用 action.uuid + "cost" 精确查找。
+## 如果不存在，fallback 到旧的 action_type 映射方式。
 func _parse_archetype_costs(action: Action) -> Array:
 	var costs: Array = []
+	if not action:
+		return costs
+	
+	# 方式 1: 使用 action.uuid + "cost" 精确查找
+	var cost_arch = Database.get_archetype_by_uuid(action.uuid, "cost")
+	if cost_arch != null and not cost_arch.operators.is_empty():
+		Logging.info("[ActionManager] _parse_archetype_costs: uuid='%s' 找到 cost archetype (%d ops)" % [action.uuid, cost_arch.operators.size()])
+		for op in cost_arch.operators:
+			costs.append(op)
+		return costs
+	
+	# 方式 2: 旧的 action_type 映射方式（兼容没有 cost archetype 的旧 action）
 	var key := _get_archetype_key(action)
 	if key.is_empty():
 		return costs
-	
 	var archetype: ActionArchetype = Database.action_archetypes.get(key)
 	if not archetype:
 		return costs
 	for op in archetype.operators:
 		costs.append(op)
-	
 	return costs
 
 
@@ -850,6 +860,9 @@ func process_xun_tick() -> void:
 				'main_tag': main_tag,
 				'fallback_event_uuid': "",
 				'tag_match_mode': 'all',
+				# 🆕 defer 结束的事件扫描也注入 archetype_base + outcome
+				'archetype_base': action_id,
+				'outcome': 'success',
 			}
 			EventManager.scan_events(0, context)
 		else:

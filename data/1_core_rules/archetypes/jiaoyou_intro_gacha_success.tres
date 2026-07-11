@@ -6,6 +6,6 @@
 script = ExtResource("1_5voxf")
 uuid = "jiaoyou_intro_gacha_success"
 name = "jiaoyou_intro_gacha.success"
-universal_result = "prop_sub(name=money; val=xl_money_cost)|add_random_intro()"
+universal_result = "add_random_intro()"
 action_uuid = "jiaoyou_intro_gacha"
 state = "success"

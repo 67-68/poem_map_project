@@ -6,6 +6,6 @@
 script = ExtResource("1_x72kk")
 uuid = "duzhuo_heyaojiu_success"
 name = "duzhuo_heyaojiu.success"
-universal_result = "prop_sub(name=money; val=s_money_cost)|trait_remove(name=poisoned)|prop_add(name=health; val=xs_health_gain)"
+universal_result = "trait_remove(name=poisoned)|prop_add(name=health; val=xs_health_gain)"
 action_uuid = "duzhuo_heyaojiu"
 state = "success"

@@ -21,6 +21,8 @@ var _pending_parent_day_consumed: float = 0.0
 ## 🆕 地点过滤 CheckBox 回调：由 PickerTapeAttachment 在 toggle 时调用
 ## (toggled_on: bool) → void
 var _pending_on_checkbox_toggled: Callable = Callable()
+## 🆕 挂起 outcome（sub-action picker 回调使用）
+var _pending_outcome: String = "success"
 
 # ── Hover 底色（枯墨暗红，极淡，只有交互时才显形）──
 const HOVER_BG_COLOR: Color = Color(0.22, 0.05, 0.02, 0.10)
@@ -236,13 +238,30 @@ func _on_button_pressed() -> void:
 		_snap_fallback = sa.fallback_event_uuid
 		_snap_tags = sa.action_tags.duplicate()
 	
+	# 🆕 [NEW] Step 1: 投骰前执行 cost archetype（资源立即扣除）
+	# cost archetype 的 operators 在投骰前立即执行，不依赖 outcome
+	ActionManager.begin_action_batch()
+	var _cost_ops := action.get_cost_operators() if action.has_method("get_cost_operators") else []
+	if not _cost_ops.is_empty():
+		var _cost_ctx: Dictionary = {}
+		for r in _cost_ops:
+			if r and r.has_method("init"):
+				_cost_ctx = r.init(_cost_ctx)
+		for r in _cost_ops:
+			if r:
+				r.operate()
+		Logging.info("SceneActionPanel: 执行 cost archetype (%d ops) for '%s'" % [_cost_ops.size(), action.name])
+	ActionManager.end_action_batch()
+	
+	# 🆕 [NEW] Step 2: 判定 outcome（success/failure），并注入到 context
+	var _outcome: String = "success"  # 默认 success
+	
 	# 🆕 possibility 抽奖：generator > possibility（有 generator 时跳过抽奖）
 	if _snap_generator == null and action.get_possibility_int() < 100:
 		var roll: int = randi() % 101
 		if roll > action.get_possibility_int():
-			Logging.info("SceneActionPanel: possibility 未中签 (roll=%d, possibility=%s=%d)，执行 failed_result" % [roll, action.possibility, action.get_possibility_int()])
-			action.failed_result.operate()
-			return
+			_outcome = "failure"
+			Logging.info("SceneActionPanel: possibility 未中签 (roll=%d, possibility=%s=%d)，outcome=%s" % [roll, action.possibility, action.get_possibility_int(), _outcome])
 	
 	# 🆕 Sub-action 检测：存在 sub_actions 时弹出 Picker，选择后再执行 operators + scan
 	# generator 存在时跳过 sub-action（generator 已预定了事件链）
@@ -253,6 +272,7 @@ func _on_button_pressed() -> void:
 		_pending_sub_action_tags = _snap_tags.duplicate()
 		_pending_sub_action_results = action.action_results.duplicate() if action.action_results else []
 		_pending_parent_day_consumed = action.day_consumed
+		_pending_outcome = _outcome  # 🆕 传递 outcome 给 picker 回调
 		
 		var picker_data: Array[GameEntity] = []
 		for sub_uuid in action.sub_actions:
@@ -331,12 +351,14 @@ func _on_button_pressed() -> void:
 							_gray_reasons.append(reason)
 							Logging.info("SceneActionPanel: sub-action '%s' GRAY — requirement type='%s' not met: '%s'" % [sub_action.uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown", reason])
 			
-			# 🆕 Archetype 属性消耗自动检查：通过 success archetype 的 PropertyOperator 检测属性是否足够
-			var arch_cost_reasons := ActionManager.check_archetype_property_costs(success_ops)
-			if not arch_cost_reasons.is_empty():
-				for r in arch_cost_reasons:
-					_gray_reasons.append(r)
-				Logging.info("SceneActionPanel: sub-action '%s' GRAY — archetype cost check: %s" % [sub_action.uuid, str(arch_cost_reasons)])
+			# 🆕 Archetype 属性消耗自动检查：通过 cost archetype 检测属性是否足够（成本已在 action 层执行完毕）
+			var cost_arch_check = Database.get_archetype_by_uuid(sub_action.uuid, "cost")
+			if cost_arch_check and not cost_arch_check.operators.is_empty():
+				var arch_cost_reasons := ActionManager.check_archetype_property_costs(cost_arch_check.operators)
+				if not arch_cost_reasons.is_empty():
+					for r in arch_cost_reasons:
+						_gray_reasons.append(r)
+					Logging.info("SceneActionPanel: sub-action '%s' GRAY — cost archetype check: %s" % [sub_action.uuid, str(arch_cost_reasons)])
 			
 			# 🆕 时间检查：不足时灰化（而非隐藏）
 			var sub_cost := ActionManager.get_action_day_cost(sub_action, action.day_consumed)
@@ -411,19 +433,19 @@ func _on_button_pressed() -> void:
 	PlayerState._is_repeated_action = PlayerState.is_action_repeated(_identifying_tags)
 	Logging.info("SceneActionPanel: _is_repeated_action=%s for identifying_tags=%s" % [str(PlayerState._is_repeated_action), str(_identifying_tags)])
 	
-	# 🆕 批量模式：抑制属性变动期间的 reevaluate
-	ActionManager.begin_action_batch()
-	
-	# 执行合并后的 action_results + archetype operators（带 init 链）
-	var _all_action_ops = action.get_all_action_results() if action.has_method("get_all_action_results") else action.action_results
-	if _all_action_ops and not _all_action_ops.is_empty():
+	# 🆕 [NEW] Step 3: 非 sub-action 路径 — 执行 action_results（含 custom_option 注入的 operator）
+	# success/failure archetype 的 operators 不再在此执行，推迟到事件层
+	# action_results 中可能含 PoemRewardOperator 等 pre-operator，在此执行
+	var _act_ops = action.action_results if action.action_results else []
+	if not _act_ops.is_empty():
 		var _act_ctx: Dictionary = {}
-		for r in _all_action_ops:
+		for r in _act_ops:
 			if r and r.has_method("init"):
 				_act_ctx = r.init(_act_ctx)
-		for r in _all_action_ops:
+		for r in _act_ops:
 			if r:
 				r.operate()
+		Logging.info("SceneActionPanel: 执行 action_results (%d ops) for '%s'" % [_act_ops.size(), action.name])
 	
 	# 🆕 时间消耗：通过 day_consumed + trait 惩罚统一扣除（替代原 sprained_ankle 硬编码）
 	if _snap_day_consumed > 0:
@@ -432,8 +454,6 @@ func _on_button_pressed() -> void:
 			PlayerState.append_stat("_time", -total_cost)
 			TimeService.advance_time(total_cost)
 			Logging.info("[SceneActionPanel] day_consumed=%f, total_cost=%d, 已扣除并推进日历" % [_snap_day_consumed, total_cost])
-	
-	ActionManager.end_action_batch()
 	
 	# ── Focus session 点击计数 hook ──
 	ActionManager.get_focus_controller().notify_click()
@@ -465,6 +485,9 @@ func _on_button_pressed() -> void:
 			'main_tag': _snap_main_tag,
 			'fallback_event_uuid': _snap_fallback,
 			'npc_name': npc_name,
+			# 🆕 注入 archetype_base + outcome
+			'archetype_base': action.uuid,
+			'outcome': _outcome,
 		}
 		EventManager.scan_events(0, context)
 	
@@ -543,31 +566,32 @@ func _on_sub_action_picked(entity) -> void:
 	PlayerState._is_repeated_action = PlayerState.is_action_repeated(_sub_identifying_tags)
 	Logging.info("SceneActionPanel._on_sub_action_picked: _is_repeated_action=%s for sub tags=%s" % [str(PlayerState._is_repeated_action), str(_sub_identifying_tags)])
 	
-	# 🆕 Sub-action possibility 投骰（与父 action _on_button_pressed 逻辑一致）
-	# possibility < 100 时投骰判定成功/失败；possibility = 100 时确定性成功
-	var _sub_failed: bool = false
+	# 🆕 [NEW] Step 1: 投骰前执行 sub-action 的 cost archetype（资源立即扣除）
+	ActionManager.begin_action_batch()
+	var _sub_cost_ops := sub_action.get_cost_operators() if sub_action and sub_action.has_method("get_cost_operators") else []
+	if not _sub_cost_ops.is_empty():
+		var _sub_cost_ctx: Dictionary = {}
+		for r in _sub_cost_ops:
+			if r and r.has_method("init"):
+				_sub_cost_ctx = r.init(_sub_cost_ctx)
+		for r in _sub_cost_ops:
+			if r:
+				r.operate()
+		Logging.info("SceneActionPanel: sub-action '%s' 执行 cost archetype (%d ops)" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size()])
+	
+	# 🆕 [NEW] Step 2: 判定 outcome（success/failure）
+	var _sub_outcome: String = "success"
+	# 使用父 action 的 outcome（已在 _on_button_pressed 中判定）
+	# 如果父 action 为 failure，子 action 也走 failure（不会进入此回调）
+	# 如果父 action 为 success，子 action 独立投骰
 	if sub_action and sub_action.get_possibility_int() < 100:
 		var roll: int = randi() % 101
 		var threshold: int = sub_action.get_possibility_int()
 		if roll > threshold:
+			_sub_outcome = "failure"
 			Logging.info("SceneActionPanel: sub-action '%s' possibility FAIL (roll=%d > threshold=%d)" % [sub_action.name, roll, threshold])
-			sub_action.failed_result.operate()
-			_sub_failed = true
 		else:
 			Logging.info("SceneActionPanel: sub-action '%s' possibility PASS (roll=%d <= threshold=%d)" % [sub_action.name, roll, threshold])
-			# 使用合并后的 action_results + archetype operators
-			var _sub_ops = sub_action.get_all_action_results() if sub_action.has_method("get_all_action_results") else sub_action.action_results
-			if _sub_ops and not _sub_ops.is_empty():
-				var _sub_ctx: Dictionary = {}
-				for r in _sub_ops:
-					if r and r.has_method("init"):
-						_sub_ctx = r.init(_sub_ctx)
-				for r in _sub_ops:
-					if r:
-						r.operate()
-				Logging.info("SceneActionPanel: sub-action '%s' executed merged action_results (%d ops)" % [sub_action.name, _sub_ops.size()])
-	
-	ActionManager.begin_action_batch()
 	
 	# 1. 执行父行动的 operators（挂起数据，不含 TimeOperator）
 	for r in _pending_sub_action_results:
@@ -590,20 +614,19 @@ func _on_sub_action_picked(entity) -> void:
 		PlayerState.current_action_tags.append(tag)
 	
 	# 4. AND 模式事件扫描：使用子 action 的 main_tag 和 fallback
-	# 🆕 注意：possibility 失败时 failed_result.operate() 已通过 PushEventOperator 推送事件，
-	# 因此需要跳过 scan_events 以避免双重事件推送。
-	if not _sub_failed:
-		# 从 current_action_tags 提取 NPC tag → NPC 中文名，注入 scan context
-		var npc_name := _extract_npc_name_from_tags(PlayerState.current_action_tags)
-		var context = {
-			'main_tag': sub_main_tag,
-			'fallback_event_uuid': sub_fallback,
-			'tag_match_mode': 'all',
-			'npc_name': npc_name,
-		}
-		EventManager.scan_events(0, context)
-	else:
-		Logging.info("SceneActionPanel: sub-action '%s' failed, skipping scan_events (failed_result already pushed event)" % sub_action.name)
+	# 🆕 success/failure 都走 scan_events，archetype 在事件层注入
+	# 从 current_action_tags 提取 NPC tag → NPC 中文名，注入 scan context
+	var npc_name := _extract_npc_name_from_tags(PlayerState.current_action_tags)
+	var context = {
+		'main_tag': sub_main_tag,
+		'fallback_event_uuid': sub_fallback,
+		'tag_match_mode': 'all',
+		'npc_name': npc_name,
+		# 🆕 注入 sub-action 的 archetype_base + outcome
+		'archetype_base': sub_uuid,
+		'outcome': _sub_outcome,
+	}
+	EventManager.scan_events(0, context)
 	
 	# 🆕 重复行动疲惫：子 action 执行完毕后更新 last_action_tags
 	PlayerState.last_action_tags = _sub_identifying_tags.duplicate()
@@ -615,6 +638,7 @@ func _on_sub_action_picked(entity) -> void:
 	_pending_sub_action_tags.clear()
 	_pending_sub_action_results.clear()
 	_pending_parent_day_consumed = 0.0
+	_pending_outcome = "success"
 
 # ── Sub-Action Preview 构建 ─────────────────────────────
 

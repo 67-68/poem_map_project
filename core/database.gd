@@ -487,11 +487,22 @@ func get_archetype(key: String):
 ## 按 action_uuid + state 查找 archetype。state="" 时返回首个匹配的 archetype（兼容旧行为）。
 ## state="success"/"failure" 时精确匹配 state 字段。
 func get_archetype_by_uuid(action_uuid: String, state: String = "") -> ActionArchetype:
+	# 🔍 诊断：首次调用时 dump 所有 archetype
+	if not _arch_diag_dumped:
+		_arch_diag_dumped = true
+		Logging.info("Database.get_archetype_by_uuid: DIAG — action_archetypes 共 %d 个条目" % action_archetypes.size())
+		for arch in action_archetypes.values():
+			Logging.info("  archetype: uuid=%s action_uuid=%s state='%s' ops=%d" % [
+				arch.uuid, arch.action_uuid, arch.state, arch.operators.size()
+			])
+	
 	for arch in action_archetypes.values():
 		if arch.action_uuid == action_uuid:
 			if state.is_empty() or arch.state == state:
 				return arch
 	return null
+
+var _arch_diag_dumped: bool = false
 
 func get_tag(uuid: String):
 	return tags.get(uuid)

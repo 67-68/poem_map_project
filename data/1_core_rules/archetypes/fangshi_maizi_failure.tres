@@ -6,6 +6,6 @@
 script = ExtResource("1_srt6y")
 uuid = "fangshi_maizi_failure"
 name = "fangshi_maizi.failure"
-universal_result = "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=l_money_gain)|prop_sub(name=prestige; val=l_fame_cost)"
+universal_result = "prop_add(name=money; val=l_money_gain)|prop_sub(name=prestige; val=l_fame_cost)"
 action_uuid = "fangshi_maizi"
 state = "failure"

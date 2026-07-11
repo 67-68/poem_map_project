@@ -2,30 +2,40 @@
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_20oii"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_erppi"]
+[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_xslrk"]
 [ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_xslrk"]
+[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_0u8q6"]
 [ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_3lsia"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_0u8q6"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_kpuku"]
 
-[sub_resource type="Resource" id="Resource_20oii"]
+[sub_resource type="Resource" id="Resource_xslrk"]
+script = ExtResource("2_xslrk")
+
+[sub_resource type="Resource" id="Resource_3lsia"]
+script = ExtResource("4_0u8q6")
+mode = "fame"
+
+[sub_resource type="Resource" id="Resource_0u8q6"]
 script = ExtResource("3_xslrk")
 
-[sub_resource type="Resource" id="Resource_erppi"]
+[sub_resource type="Resource" id="Resource_kpuku"]
 script = ExtResource("4_3lsia")
 event_key = "jiaoyou_recite_poem_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_xslrk"]
+[sub_resource type="Resource" id="Resource_njoc6"]
 script = ExtResource("5_0u8q6")
-operators = Array[ExtResource("2_erppi")]([SubResource("Resource_erppi")])
+operators = Array[ExtResource("2_erppi")]([SubResource("Resource_kpuku")])
 
 [resource]
 script = ExtResource("6_kpuku")
 required_place = "pingkangfang"
 _action_tags = Array[int]([30, 46])
+action_results = Array[ExtResource("2_erppi")]([SubResource("Resource_3lsia")])
+aciton_requirements = Array[ExtResource("1_20oii")]([SubResource("Resource_xslrk")])
 fallback_event_uuid = "jiaoyou_recite_poem_fallback"
-archetype_uuid = "jiaoyou_recite_poem_success"
-failed_result = SubResource("Resource_xslrk")
-defer_config = SubResource("Resource_20oii")
+failed_result = SubResource("Resource_njoc6")
+defer_config = SubResource("Resource_0u8q6")
 uuid = "jiaoyou_recite_poem"
 name = "交游 · 宣读诗词"
 description = "当众宣读新作以诗换名"

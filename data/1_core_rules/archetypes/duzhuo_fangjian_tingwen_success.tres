@@ -6,6 +6,6 @@
 script = ExtResource("1_c5xms")
 uuid = "duzhuo_fangjian_tingwen_success"
 name = "duzhuo_fangjian_tingwen.success"
-universal_result = "prop_sub(name=money; val=xs_money_cost)|roll_imaginary(level=1)"
+universal_result = "roll_imaginary(level=1)"
 action_uuid = "duzhuo_fangjian_tingwen"
 state = "success"

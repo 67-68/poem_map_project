@@ -21,12 +21,28 @@ const MicroDSLParser = preload("res://parser/micro_dsl_parser.gd")
 @export var failed_hints: Dictionary = {}
 
 ## 预解析的 BaseOperator 列表（从 universal_result DSL 解析而来）
-var operators: Array = []
+## 非 @export — 序列化时丢失。通过懒解析 getter 在首次访问时重建。
+var _operators: Array = []
+var _operators_parsed: bool = false
+
+## 懒解析 getter：首次访问时从 universal_result DSL 解析
+var operators: Array:
+	get:
+		if _operators_parsed:
+			return _operators
+		_operators_parsed = true
+		var dsl_clean: String = universal_result.strip_edges()
+		if not dsl_clean.is_empty():
+			var parsed = MicroDSLParser.parse_consequence_operators(dsl_clean)
+			for op in parsed:
+				if op != null:
+					_operators.append(op)
+		return _operators
 
 ## 类型标签：cost / success / failure / defer
 var subtype: String = ""
 
-## 工厂方法：创建 ActionArchetype 并预解析 DSL
+## 工厂方法：创建 ActionArchetype 并设置 DSL（operators 懒解析）
 static func create(arch_key: String, name_str: String, act_uuid: String, arch_state: String, dsl: String, subtype_str: String) -> ActionArchetype:
 	var arch := ActionArchetype.new()
 	arch.uuid = arch_key
@@ -38,14 +54,5 @@ static func create(arch_key: String, name_str: String, act_uuid: String, arch_st
 	arch.action_uuid = act_uuid
 	arch.state = arch_state
 	arch.subtype = subtype_str
-	
-	# 预解析 universal_result DSL → 保留所有有效的 BaseOperator
-	var dsl_clean: String = dsl.strip_edges()
-	if not dsl_clean.is_empty():
-		var parsed = MicroDSLParser.parse_consequence_operators(dsl_clean)
-		for op in parsed:
-			if op == null:
-				continue
-			arch.operators.append(op)
-	
+	# operators 通过懒解析 getter 在首次访问时自动构建
 	return arch

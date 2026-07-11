@@ -6,6 +6,6 @@
 script = ExtResource("1_8h1ky")
 uuid = "baiye_normal_success"
 name = "baiye_normal.success"
-universal_result = "pick_npc(mode=by_place; key=npc_target; social_tag=social:upgrade)|person_state(mode=upgrade; target_key=npc_target)|prop_sub(name=money; val=m_money_cost)|prop_add(name=progress; val=s_progress_gain)"
+universal_result = "pick_npc(mode=by_place; key=npc_target; social_tag=social:upgrade)|person_state(mode=upgrade; target_key=npc_target)|prop_add(name=progress; val=s_progress_gain)"
 action_uuid = "baiye_normal"
 state = "success"

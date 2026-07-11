@@ -6,6 +6,6 @@
 script = ExtResource("1_o00hj")
 uuid = "baiye_threaten_failure"
 name = "baiye_threaten.failure"
-universal_result = "consume_random_leverage|trait_add(name=severe_injury)"
+universal_result = "trait_add(name=severe_injury)"
 action_uuid = "baiye_threaten"
 state = "failure"

@@ -6,6 +6,6 @@
 script = ExtResource("1_ikcdn")
 uuid = "baiye_threaten_success"
 name = "baiye_threaten.success"
-universal_result = "consume_random_leverage|prop_add(name=money; val=l_money_gain)"
+universal_result = "prop_add(name=money; val=l_money_gain)"
 action_uuid = "baiye_threaten"
 state = "success"

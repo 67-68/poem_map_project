@@ -122,18 +122,38 @@ func clear_failed_hint() -> void:
 	success_hint = ""
 	_is_hidden = false
 
-## 🆕 获取 archetype 的 operators（代替 action_results）。
-## 如果 archetype_uuid 非空，返回对应 archetype 预解析的 operator 数组。
-## .tres 的 action_results 字段保留为空，所有 operator 通过此方法间接加载。
+## 🆕 获取行动级 cost archetype 的 operators（在投骰前立即执行）。
+## 使用 state="cost" 精确查找。
+func get_cost_operators() -> Array:
+	var arch = Database.get_archetype_by_uuid(uuid, "cost")
+	if arch == null or arch.operators.is_empty():
+		Logging.info("Action.get_cost_operators: '%s' 无 cost archetype" % uuid)
+		return []
+	Logging.info("Action.get_cost_operators: '%s' → cost archetype 返回 %d 个 operator" % [uuid, arch.operators.size()])
+	return arch.operators.duplicate(true)
+
+## 🆕 获取对应 outcome 的 archetype operators（延迟到事件层注入）。
+## outcome: "success" / "failure"。
+func get_outcome_archetype_operators(outcome: String) -> Array:
+	var arch = Database.get_archetype_by_uuid(uuid, outcome)
+	if arch == null or arch.operators.is_empty():
+		Logging.info("Action.get_outcome_archetype_operators: '%s' 无 outcome='%s' archetype" % [uuid, outcome])
+		return []
+	Logging.info("Action.get_outcome_archetype_operators: '%s' → %s archetype 返回 %d 个 operator" % [uuid, outcome, arch.operators.size()])
+	return arch.operators.duplicate(true)
+
+## 🆕（兼容旧路径）获取 success archetype 的 operators。
+## 如果 action 无 archetype 体系，fallback 到 action_results。
 func get_all_action_results() -> Array:
 	if archetype_uuid.is_empty():
 		Logging.warn("Action.get_all_action_results: '%s' 的 archetype_uuid 为空" % uuid)
-		return []
+		return action_results if action_results else []
 	
-	var arch = Database.get_archetype_by_uuid(archetype_uuid, "success")
-	if arch == null or arch.operators.is_empty():
-		Logging.warn("Action.get_all_action_results: archetype '%s' 未找到或 operators 为空" % archetype_uuid)
-		return []
+	# 🆕 先尝试按 uuid + "success" 查找
+	var arch = Database.get_archetype_by_uuid(uuid, "success")
+	if arch != null and not arch.operators.is_empty():
+		Logging.info("Action.get_all_action_results: '%s' → success archetype 返回 %d 个 operator" % [uuid, arch.operators.size()])
+		return arch.operators.duplicate(true)
 	
-	Logging.info("Action.get_all_action_results: '%s' → archetype '%s' 返回 %d 个 operator" % [uuid, archetype_uuid, arch.operators.size()])
-	return arch.operators.duplicate(true)
+	Logging.warn("Action.get_all_action_results: success archetype '%s' 未找到或 operators 为空" % archetype_uuid)
+	return action_results if action_results else []

@@ -6,6 +6,6 @@
 script = ExtResource("1_m4fjx")
 uuid = "baiye_mass_distribution_success"
 name = "baiye_mass_distribution.success"
-universal_result = "pick_npc(mode=random; state=uncharted; key=npc_target; social_tag=social:baiye)|person_state(mode=set; state=not_meet; target_key=npc_target)|prop_sub(name=money; val=l_money_cost)"
+universal_result = "pick_npc(mode=random; state=uncharted; key=npc_target; social_tag=social:baiye)|person_state(mode=set; state=not_meet; target_key=npc_target)"
 action_uuid = "baiye_mass_distribution"
 state = "success"

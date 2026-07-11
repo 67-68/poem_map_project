@@ -634,7 +634,7 @@ static func build_modifier_effects_hint() -> String:
 		if effects.is_empty():
 			continue
 		
-		var display_name := prop_display_names.get(source_prop, source_prop)
+		var display_name = prop_display_names.get(source_prop, source_prop)
 		lines.append("[b]%s (%d)[/b]" % [display_name, mod_val])
 		
 		for eff in effects:

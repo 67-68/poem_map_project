@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://bbc4xnf4f6nqs"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_csxqn"]
+
+[resource]
+script = ExtResource("1_csxqn")
+uuid = "duzhuo_fangjian_tingwen_cost"
+name = "duzhuo_fangjian_tingwen.cost"
+universal_result = "prop_sub(name=money; val=xs_money_cost)"
+action_uuid = "duzhuo_fangjian_tingwen"
+state = "cost"

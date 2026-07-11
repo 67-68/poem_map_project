@@ -258,11 +258,36 @@ func init(context: Dictionary) -> Array:
                 dup.init(context)
                 _preinit_ops.append(dup)
     
+    # ── 🆕 [NEW] 从 context 读取 ActionArchetype（由 action_button 注入的 archetype_base + outcome）──
+    # 当 action 触发事件时，archetype_base = action.uuid, outcome = "success"/"failure"
+    # Database.get_archetype_by_uuid(archetype_base, outcome) 查找 ActionArchetype
+    # 将其 operators 注入到每个选项的 choice_result
+    var _action_arch_ops: Array[BaseOperator] = []
+    var archetype_base = context.get("archetype_base", "")
+    var outcome = context.get("outcome", "")
+    if not archetype_base.is_empty() and not outcome.is_empty():
+        var action_arch = Database.get_archetype_by_uuid(archetype_base, outcome)
+        if action_arch != null and not action_arch.operators.is_empty():
+            Logging.info("RandomEvent.init: context archetype_base='%s' outcome='%s' → ActionArchetype (%d operators) for event '%s'" % [archetype_base, outcome, action_arch.operators.size(), name])
+            for op in action_arch.operators:
+                var dup = op.duplicate()
+                dup.init(context)
+                _action_arch_ops.append(dup)
+        else:
+            Logging.info("RandomEvent.init: context archetype_base='%s' + outcome='%s' → 未找到对应的 ActionArchetype" % [archetype_base, outcome])
+    
     var all_options = super.init(context)
     
     # ── Archetype 运行时注入：universal_result → per-option choice_result ──
-    if not archetype_id.is_empty() and not _preinit_ops.is_empty():
-        Logging.info("RandomEvent.init: archetype '%s' universal_result (%d pre-inited operators) injected into each of %d option(s) for event '%s'" % [archetype_id, _preinit_ops.size(), all_options.size(), name])
+    # 同时注入事件自身的 archetype (RandomEvent.archetype_id) 和 ActionArchetype (archetype_base+outcome)
+    
+    # 合并两个源
+    var _all_inject_ops: Array[BaseOperator] = []
+    _all_inject_ops.append_array(_preinit_ops)
+    _all_inject_ops.append_array(_action_arch_ops)
+    
+    if not _all_inject_ops.is_empty():
+        Logging.info("RandomEvent.init: 共注入 %d operators (preinit=%d + action_arch=%d) into each of %d option(s) for event '%s'" % [_all_inject_ops.size(), _preinit_ops.size(), _action_arch_ops.size(), all_options.size(), name])
         for opt in all_options:
             if opt == null:
                 continue
@@ -273,8 +298,7 @@ func init(context: Dictionary) -> Array:
                 cr = ChoiceResult.new()
                 opt.choice_result = cr
             
-            # 追加 pre-inited operators（深拷贝确保 per-option 独立）
-            for op in _preinit_ops:
+            for op in _all_inject_ops:
                 cr.operators.append(op.duplicate())
             
             cr.init(context)

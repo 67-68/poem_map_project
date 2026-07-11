@@ -1409,7 +1409,7 @@ static func _parse_resource_converter(csv_data: Array[Dictionary]) -> Array[Reso
         var defer_arch: ActionArchetypeCls
 
         if not cost_dsl.is_empty():
-            cost_arch = ActionArchetypeCls.create("%s_cost" % uuid, "%s.cost" % uuid, uuid, "", cost_dsl, "cost")
+            cost_arch = ActionArchetypeCls.create("%s_cost" % uuid, "%s.cost" % uuid, uuid, "cost", cost_dsl, "cost")
             cost_arch.resource_path = "res://data/1_core_rules/archetypes/%s_cost.tres" % uuid
             resources.append(cost_arch)
         if not success_dsl.is_empty():
@@ -1421,7 +1421,7 @@ static func _parse_resource_converter(csv_data: Array[Dictionary]) -> Array[Reso
             failure_arch.resource_path = "res://data/1_core_rules/archetypes/%s_failure.tres" % uuid
             resources.append(failure_arch)
         if not defer_dsl.is_empty():
-            defer_arch = ActionArchetypeCls.create("%s_defer" % uuid, "%s.defer" % uuid, uuid, "", defer_dsl, "defer")
+            defer_arch = ActionArchetypeCls.create("%s_defer" % uuid, "%s.defer" % uuid, uuid, "defer", defer_dsl, "defer")
             defer_arch.resource_path = "res://data/1_core_rules/archetypes/%s_defer.tres" % uuid
             resources.append(defer_arch)
 

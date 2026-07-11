@@ -1,31 +1,40 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://dv2ah8xfw35ot"]
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_fcr60"]
+[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_j0lxg"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_wt3y4"]
 [ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_j0lxg"]
+[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_1crwu"]
 [ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_nlq4o"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_1crwu"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_im7cj"]
 
-[sub_resource type="Resource" id="Resource_fcr60"]
+[sub_resource type="Resource" id="Resource_j0lxg"]
+script = ExtResource("2_j0lxg")
+
+[sub_resource type="Resource" id="Resource_nlq4o"]
+script = ExtResource("4_1crwu")
+
+[sub_resource type="Resource" id="Resource_1crwu"]
 script = ExtResource("3_j0lxg")
 
-[sub_resource type="Resource" id="Resource_wt3y4"]
+[sub_resource type="Resource" id="Resource_im7cj"]
 script = ExtResource("4_nlq4o")
 event_key = "fangshi_sell_poem_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_j0lxg"]
+[sub_resource type="Resource" id="Resource_vafkd"]
 script = ExtResource("5_1crwu")
-operators = Array[ExtResource("2_wt3y4")]([SubResource("Resource_wt3y4")])
+operators = Array[ExtResource("2_wt3y4")]([SubResource("Resource_im7cj")])
 
 [resource]
 script = ExtResource("6_im7cj")
 required_place = "xishi"
 _action_tags = Array[int]([32, 47])
+action_results = Array[ExtResource("2_wt3y4")]([SubResource("Resource_nlq4o")])
+aciton_requirements = Array[ExtResource("1_fcr60")]([SubResource("Resource_j0lxg")])
 fallback_event_uuid = "fangshi_sell_poem_fallback"
-archetype_uuid = "fangshi_sell_poem_success"
-failed_result = SubResource("Resource_j0lxg")
-defer_config = SubResource("Resource_fcr60")
+failed_result = SubResource("Resource_vafkd")
+defer_config = SubResource("Resource_1crwu")
 uuid = "fangshi_sell_poem"
 name = "坊市 · 卖诗"
 description = "卖与平康坊歌女传唱"
