@@ -2,7 +2,7 @@
 
 ## 文件
 
-- `ui/hover_popup_manager.gd` — HoverDisplayFlow v3.0（FlowType + Delegate + 事件锁）
+- `ui/hover_popup_manager.gd` — HoverDisplayFlow v3.1（FlowType + Delegate + 事件锁 + 🆕 CROSSING 穿越宽容期）
 - `characters/narrative_overlay.gd` — hover 文本渲染 + 事件开始/结束信号
 - `characters/tape_visualizer.gd` — 右侧滑入/滑出动画 + 快照恢复
 - `ui/action_button.gd` — SLIDE_FROM_RIGHT 消费方
@@ -11,6 +11,16 @@
 - `characters/event_btn.gd` — BELOW_OVERLAY 消费方
 - `ui/left_player_panel.gd` — POPUP_LEGACY 消费方
 - `ui/picker_tape_attachment.gd` — 选择时 dismiss_all
+
+## 状态机（v3.1 新增 CROSSING）
+
+```
+IDLE → DELAYING → SHOWING → HIDE_PENDING → IDLE
+IDLE → CROSSING → DELAYING → ... (0.5s 穿越宽容期，已有活跃 SHOWING 时)
+CROSSING → IDLE (快速离开，< 0.5s 不切换 hover)
+```
+
+**CROSSING 状态**：当已有 hover 处于 SHOWING 状态时，鼠标进入另一个 trigger 不会立即抢占，而是进入 CROSSING 等待 0.5s。0.5s 内离开则静默回到 IDLE，不切换；0.5s 到期后才抢占并转入 DELAYING。A→B→C 快速穿越场景：C 进入时会覆盖 B 的 crossing_timer，B 到期后检测 `_current_active` 已不是 SHOWING 而放弃。
 
 ## 三种 FlowType
 

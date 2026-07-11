@@ -7,8 +7,10 @@ const _HoverInfoPopup = preload("res://ui/hover_info_popup.gd")
 ##   HoverPopupManager.register(my_button, popup, 0.2, 0.15, FlowType.POPUP_LEGACY)
 ##   HoverPopupManager.register(my_button, {"narrative":"...","vector":"..."}, 0.2, 1.0, FlowType.SLIDE_FROM_RIGHT)
 ##
-## 状态机（HoverBinding 自治）:
+## 状态机（HoverBinding 自治 v3.1 — 🆕 CROSSING 穿越宽容期）:
 ##   IDLE → DELAYING → SHOWING → HIDE_PENDING → IDLE
+##   IDLE → CROSSING → DELAYING → ... (0.5s 穿越宽容期，已有活跃 SHOWING 时)
+##   CROSSING → IDLE (快速离开，< 0.5s 不切换 hover)
 ##
 ## 三种显示流 (FlowType):
 ##   POPUP_LEGACY     — 原有浮动 popup（ambition_hud 等）
@@ -22,6 +24,9 @@ const _HoverInfoPopup = preload("res://ui/hover_info_popup.gd")
 # ── 显示流枚举 ─────────────────────────────────────────
 
 enum FlowType { POPUP_LEGACY, SLIDE_FROM_RIGHT, BELOW_OVERLAY, SLIDE_FROM_LEFT }
+
+## 🆕 穿越宽容期：鼠标从一个 hover 区域短暂掠过另一个区域时，不切换 hover
+const CROSSING_GRACE: float = 0.5
 
 # ── 显示委托抽象基类 ───────────────────────────────────
 
@@ -166,7 +171,7 @@ class PopupLegacyDelegate extends HoverDisplayDelegate:
 # ── 内部数据结构：自治状态机 ─────────────────────────────
 
 class HoverBinding:
-	enum State { IDLE, DELAYING, SHOWING, HIDE_PENDING }
+	enum State { IDLE, DELAYING, SHOWING, HIDE_PENDING, CROSSING }
 
 	var trigger: Control
 	var popup: Control = null          # 仅 POPUP_LEGACY 使用
@@ -177,9 +182,11 @@ class HoverBinding:
 	var delegate_data: Variant          # Dictionary{narrative,vector} 或 null
 	var show_timer: Timer
 	var hide_timer: Timer
+	var crossing_timer: Timer          # 🆕 穿越宽容期计时器
 	var trigger_hovered: bool = false
 	var popup_hovered: bool = false
 	var state: State = State.IDLE
+	var _skip_delegate_exit: bool = false  # 🆕 CROSSING→IDLE 时跳过 delegate.on_exit
 
 	# 已绑定的 Callable（用于 disconnect 时精确匹配）
 	var _bound_trigger_enter: Callable
@@ -191,6 +198,7 @@ class HoverBinding:
 	var _bound_tree_exiting_popup: Callable
 	var _bound_show_timer_timeout: Callable
 	var _bound_hide_timer_timeout: Callable
+	var _bound_crossing_timer_timeout: Callable  # 🆕
 
 	# Manager 引用（用于回调）
 	var _manager: Node
@@ -254,13 +262,15 @@ class HoverBinding:
 	func _can_transition(from_state: State, to_state: State) -> bool:
 		match from_state:
 			State.IDLE:
-				return to_state == State.DELAYING
+				return to_state == State.DELAYING or to_state == State.CROSSING
 			State.DELAYING:
 				return to_state == State.SHOWING or to_state == State.IDLE
 			State.SHOWING:
 				return to_state == State.HIDE_PENDING or to_state == State.IDLE
 			State.HIDE_PENDING:
 				return to_state == State.SHOWING or to_state == State.IDLE
+			State.CROSSING:
+				return to_state == State.DELAYING or to_state == State.IDLE
 		return false
 
 	## ── Exit Actions ────────────────────────────────
@@ -275,6 +285,11 @@ class HoverBinding:
 			State.HIDE_PENDING:
 				if hide_timer and is_instance_valid(hide_timer):
 					hide_timer.stop()
+			State.CROSSING:
+				if crossing_timer and is_instance_valid(crossing_timer):
+					crossing_timer.stop()
+				# 🐛 CROSSING 从未调用 delegate.on_enter，进入 IDLE 时跳过 delegate.on_exit
+				_skip_delegate_exit = true
 
 	## ── Entry Actions ───────────────────────────────
 	func _enter_state(new_state: State) -> void:
@@ -283,23 +298,27 @@ class HoverBinding:
 				# 🆕 IDLE → 取消倒计时
 				_manager._on_state_idle()
 				# UI 退出：真正变为 IDLE 时才执行（hide_grace 延迟后）
-				if delegate:
+				# 🐛 CROSSING 状态从未调用 delegate.on_enter，所以 CROSSING→IDLE 跳过 on_exit
+				if delegate and not _skip_delegate_exit:
 					delegate.on_exit(self)
+				_skip_delegate_exit = false
 				# 安全网：停止所有计时器
 				if show_timer and is_instance_valid(show_timer):
 					show_timer.stop()
 				if hide_timer and is_instance_valid(hide_timer):
 					hide_timer.stop()
+				if crossing_timer and is_instance_valid(crossing_timer):
+					crossing_timer.stop()
 				# 通知 Manager 清理 _current_active
 				_manager._sync_current_active(self)
-
+		
 			State.DELAYING:
 				if show_timer and is_instance_valid(show_timer):
 					show_timer.start(delay)
 					Logging.info("HoverPopupManager: DELAYING trigger=%s, show_timer=%.2fs" % [trigger.name, delay])
 				else:
 					Logging.err("HoverPopupManager: DELAYING but show_timer invalid for trigger=%s" % trigger.name)
-
+		
 			State.SHOWING:
 				# 🆕 回到 SHOWING → 取消倒计时（如果是从 HIDE_PENDING 回来）
 				_manager._on_state_show()
@@ -307,7 +326,7 @@ class HoverBinding:
 					delegate.on_enter(self)
 				else:
 					Logging.err("HoverPopupManager: SHOWING but delegate is null for trigger=%s" % trigger.name)
-
+		
 			State.HIDE_PENDING:
 				# 🆕 进入 HIDE_PENDING → 启动倒计时 UI
 				_manager._on_state_hide_pending()
@@ -316,6 +335,14 @@ class HoverBinding:
 					Logging.info("HoverPopupManager: HIDE_PENDING trigger=%s, hide_timer=%.2fs" % [trigger.name, hide_grace])
 				else:
 					Logging.err("HoverPopupManager: HIDE_PENDING but hide_timer invalid for trigger=%s" % trigger.name)
+		
+			State.CROSSING:
+				# 🆕 穿越宽容期：启动 0.5s crossing_timer，到期后如果还在 crossing 则抢占
+				if crossing_timer and is_instance_valid(crossing_timer):
+					crossing_timer.start(CROSSING_GRACE)
+					Logging.info("HoverPopupManager: CROSSING trigger=%s, crossing_timer=%.2fs" % [trigger.name, CROSSING_GRACE])
+				else:
+					Logging.err("HoverPopupManager: CROSSING but crossing_timer invalid for trigger=%s" % trigger.name)
 
 	# ── 事件处理（由 Manager 路由调用）─────────────────
 
@@ -326,12 +353,23 @@ class HoverBinding:
 
 		match state:
 			State.IDLE:
-				transition_to(State.DELAYING)
+				# 🆕 如果已有活跃 hover 在 SHOWING，进入 CROSSING 而非 DELAYING
+				if _current_active_present():
+					transition_to(State.CROSSING)
+				else:
+					transition_to(State.DELAYING)
+			State.CROSSING:
+				# 🆕 已经在 crossing 中，保持（可能之前被别的事覆盖后又回来了）
+				pass
 			State.HIDE_PENDING:
 				transition_to(State.SHOWING)
 
 	func on_mouse_exit_trigger() -> void:
 		trigger_hovered = false
+		# 🆕 CROSSING 状态下直接回 IDLE，不切换 hover
+		if state == State.CROSSING:
+			transition_to(State.IDLE)
+			return
 		_maybe_hide()
 
 	func on_mouse_enter_popup() -> void:
@@ -365,6 +403,38 @@ class HoverBinding:
 			return
 		transition_to(State.IDLE)
 
+	## 🆕 检查 _manager 的 _current_active 是否在 SHOWING 或 HIDE_PENDING
+	func _current_active_present() -> bool:
+		var active = _manager._current_active
+		if active == null or active == self:
+			return false
+		# 🐛 修复：鼠标从 A 移到 B 时，A 先 mouse_exited 进入 HIDE_PENDING，B 才 mouse_entered
+		# 所以必须也检查 HIDE_PENDING
+		return active.state == State.SHOWING or active.state == State.HIDE_PENDING
+
+	## 🆕 crossing_timer 到期 → 抢占 _current_active，转入 DELAYING
+	func _on_crossing_timer_timeout() -> void:
+		# 双检：如果已经不在 CROSSING 状态（可能被 force_to_idle 提前清理），放弃
+		if state != State.CROSSING:
+			return
+		# 双检：如果 _current_active 已经不是活跃状态（已被别的 binding 抢走），放弃
+		var active = _manager._current_active
+		if active == null or (active.state != State.SHOWING and active.state != State.HIDE_PENDING):
+			Logging.info("HoverPopupManager: crossing timeout but _current_active no longer SHOWING/HIDE_PENDING, aborting trigger=%s" % trigger.name)
+			transition_to(State.IDLE)
+			return
+		# 双检：用户可能已经离开了
+		if not trigger_hovered and not popup_hovered:
+			Logging.info("HoverPopupManager: crossing timeout but user left, aborting trigger=%s" % trigger.name)
+			transition_to(State.IDLE)
+			return
+
+		Logging.info("HoverPopupManager: crossing timeout, preempting for trigger=%s" % trigger.name)
+		# 抢占当前活跃
+		_manager._preempt_current_active(self)
+		# 转入 DELAYING（启动自身 show_timer）
+		transition_to(State.DELAYING)
+
 	func _maybe_hide() -> void:
 		if trigger_hovered or popup_hovered:
 			return
@@ -375,6 +445,9 @@ class HoverBinding:
 				transition_to(State.IDLE)
 			State.SHOWING:
 				transition_to(State.HIDE_PENDING)
+			State.CROSSING:
+				# 🆕 在 CROSSING 中离开 → 直接回 IDLE，不切换 hover
+				transition_to(State.IDLE)
 			State.IDLE, State.HIDE_PENDING:
 				pass
 
@@ -467,6 +540,14 @@ func register(trigger: Control, data: Variant, delay: float = 0.2, hide_grace: f
 	binding.hide_timer.timeout.connect(binding._bound_hide_timer_timeout)
 	add_child(binding.hide_timer)
 
+	# 🆕 穿越宽容期 Timer
+	binding.crossing_timer = Timer.new()
+	binding.crossing_timer.one_shot = true
+	binding.crossing_timer.name = "CrossingTimer"
+	binding._bound_crossing_timer_timeout = _on_crossing_timer_timeout.bind(trigger)
+	binding.crossing_timer.timeout.connect(binding._bound_crossing_timer_timeout)
+	add_child(binding.crossing_timer)
+
 	# trigger 信号绑定（所有 flow 都需要）
 	binding._bound_trigger_enter = _on_trigger_enter.bind(trigger)
 	binding._bound_trigger_exit = _on_trigger_exit.bind(trigger)
@@ -530,6 +611,11 @@ func unregister(trigger: Control) -> void:
 		binding.hide_timer.timeout.disconnect(binding._bound_hide_timer_timeout)
 		binding.hide_timer.queue_free()
 
+	# 🆕 清理 crossing_timer
+	if binding.crossing_timer and is_instance_valid(binding.crossing_timer):
+		binding.crossing_timer.timeout.disconnect(binding._bound_crossing_timer_timeout)
+		binding.crossing_timer.queue_free()
+
 	# 清理 popup（仅 POPUP_LEGACY）
 	if binding.flow_type == FlowType.POPUP_LEGACY and is_instance_valid(binding.popup):
 		binding.popup.queue_free()
@@ -560,7 +646,8 @@ func _on_trigger_enter(trigger: Control) -> void:
 
 	binding.on_mouse_enter_trigger()
 
-	if binding.state == HoverBinding.State.DELAYING:
+	# 🆕 CROSSING 状态也需要调用 _request_show（它将跳过 _current_active 的立即抢占）
+	if binding.state == HoverBinding.State.DELAYING or binding.state == HoverBinding.State.CROSSING:
 		_request_show(binding)
 
 func _on_trigger_exit(trigger: Control) -> void:
@@ -609,13 +696,35 @@ func _request_show(binding: HoverBinding) -> void:
 			# 非 legacy flow 已活跃，无需重复
 			return
 
-	# 互斥锁：抢占当前活跃的 popup
+	# 🆕 CROSSING 状态不执行立即抢占 — 等待 crossing_timer 到期后由 _on_crossing_timer_timeout 调用 _preempt_current_active
+	if binding.state == HoverBinding.State.CROSSING:
+		if _current_active == null or _current_active == binding:
+			_current_active = binding
+			return
+		# 🐛 修复：如果 _current_active 在 HIDE_PENDING（鼠标已离开 A 但还没完全消失），
+		# 必须把 A 拉回 SHOWING，否则 A 的 hide_timer 可能比 crossing_timer 先到期，
+		# 导致 _current_active 变 null，crossing 白等
+		if _current_active.state == HoverBinding.State.HIDE_PENDING:
+			_current_active.transition_to(HoverBinding.State.SHOWING)
+		# 如果 _current_active 另有其人（SHOWING），不做立即抢占
+		return
+
+	# 互斥锁：抢占当前活跃的 popup（仅 DELAYING→SHOWING 场景走到这里）
 	if _current_active != null and _current_active != binding:
 		var active_name: String = _current_active.trigger.name if is_instance_valid(_current_active.trigger) else "<Freed_Zombie>"
 		Logging.info("HoverPopupManager: preempting %s for %s" % [active_name, binding.trigger.name])
 		_current_active.force_to_idle()
 		_current_active = null
 
+	_current_active = binding
+
+
+## 🆕 由 crossing_timer 到期后调用，强制抢占当前活跃
+func _preempt_current_active(binding: HoverBinding) -> void:
+	if _current_active != null and _current_active != binding:
+		var active_name: String = _current_active.trigger.name if is_instance_valid(_current_active.trigger) else "<Freed_Zombie>"
+		Logging.info("HoverPopupManager: _preempt_current_active: preempting %s for %s" % [active_name, binding.trigger.name])
+		_current_active.force_to_idle()
 	_current_active = binding
 
 func _sync_current_active(binding: HoverBinding) -> void:
@@ -645,6 +754,18 @@ func _on_hide_timer_timeout(trigger: Control) -> void:
 		return
 	binding.on_hide_timer_timeout()
 	_sync_current_active(binding)
+
+## 🆕 crossing_timer 到期
+func _on_crossing_timer_timeout(trigger: Control) -> void:
+	if not is_instance_valid(trigger):
+		Logging.info("HoverPopupManager: crossing_timer timeout but trigger freed, skip")
+		return
+	var binding: HoverBinding = _bindings.get(trigger)
+	if not binding:
+		Logging.info("HoverPopupManager: crossing_timer timeout but binding gone for trigger=%s" % trigger.name)
+		return
+	binding._on_crossing_timer_timeout()
+	# _on_crossing_timer_timeout 内部调用了 _preempt_current_active，无需额外 _sync
 
 # ── 定位（仅 POPUP_LEGACY 使用）───────────────────────────
 
