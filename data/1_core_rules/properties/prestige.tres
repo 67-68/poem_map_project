@@ -60,7 +60,7 @@ perception_text = "千古流芳"
 [resource]
 script = ExtResource("1_prs")
 uuid = "prestige"
-name = "prestige"
+name = "望"
 hard_max = -1
 soft_max = -1
 decay_threshold = -1
