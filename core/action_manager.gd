@@ -127,28 +127,79 @@ func clear_reservations() -> void:
 # 🆕 行动锁定评估系统（纯函数 + 缓存 + 信号监听）
 # ════════════════════════════════════════════════════════════
 
-## 将 event_archetypes.json 加载到 Database.action_archetypes 中。
-## 每项转为 ActionArchetype Resource，以 archetype key 索引。
+## 🆕 从 resource_converters.csv 加载 archetypes 到 Database.action_archetypes 中。
+## 如果 csv_cloud_loader 已经注入过（非空），跳过。
+## 否则运行时 fallback：直接解析 CSV 并调用 _parse_resource_converter。
 func _init_archetype_cache() -> void:
 	if not Database.action_archetypes.is_empty():
+		Logging.info("[ActionManager] archetype 缓存已存在 (%d 个), 跳过加载" % Database.action_archetypes.size())
 		return
-	var file := FileAccess.open("res://tools/data/event_archetypes.json", FileAccess.READ)
+
+	# ── 运行时 fallback: 从 CSV 文件直接解析 ──
+	var save_path := "res://data/1_core_rules/resource_converters.csv"
+	if not FileAccess.file_exists(save_path):
+		Logging.warn("[ActionManager] resource_converters.csv 不存在: %s" % save_path)
+		return
+
+	var file := FileAccess.open(save_path, FileAccess.READ)
 	if not file:
-		Logging.warn("[ActionManager] 无法读取 event_archetypes.json")
+		Logging.warn("[ActionManager] 无法读取 resource_converters.csv")
 		return
-	var json_str := file.get_as_text()
+	var csv_str := file.get_as_text()
 	file.close()
-	var json := JSON.new()
-	var parse_err := json.parse(json_str)
-	if parse_err != OK:
-		Logging.err("[ActionManager] event_archetypes.json 解析失败: " + json.get_error_message())
+
+	var csv_lines := csv_str.split("\n")
+	if csv_lines.size() < 2:
+		Logging.err("[ActionManager] resource_converters.csv 数据不足")
 		return
-	var data: Dictionary = json.data
-	for archetype_key in data:
-		if data[archetype_key] is Dictionary:
-			var entry: Dictionary = data[archetype_key]
-			Database.action_archetypes[archetype_key] = ActionArchetype.from_json(entry)
-	Logging.info("[ActionManager] 已加载 %d 个 action archetype" % Database.action_archetypes.size())
+
+	var csv_headers := csv_lines[0].strip_edges().split(",")
+	var csv_data: Array[Dictionary] = []
+	for i in range(1, csv_lines.size()):
+		var line = csv_lines[i].strip_edges()
+		if line.is_empty():
+			continue
+		var values = _parse_csv_line_simple(line)
+		var row := {}
+		for j in range(csv_headers.size()):
+			if j < values.size():
+				var key = csv_headers[j].strip_edges()
+				var value = values[j].strip_edges()
+				if value.begins_with("\"") and value.ends_with("\""):
+					value = value.substr(1, value.length() - 2)
+				row[key] = value
+		if not row.is_empty():
+			csv_data.append(row)
+
+	# 调用 DSLParser 解析（仅注册 archetypes，不生成 Action .tres）
+	DSLParser._parse_resource_converter(csv_data)
+	Logging.info("[ActionManager] 从 CSV 运行时加载了 %d 个 action archetype" % Database.action_archetypes.size())
+
+
+## 简单 CSV 行解析（处理引号 + 括号深度）
+func _parse_csv_line_simple(line: String) -> Array[String]:
+	var result: Array[String] = []
+	var current := ""
+	var in_quotes := false
+	var paren_depth := 0
+
+	for i in range(line.length()):
+		var ch = line[i]
+		if ch == "\"":
+			in_quotes = not in_quotes
+		elif ch == "," and not in_quotes and paren_depth == 0:
+			result.append(current)
+			current = ""
+		else:
+			current += ch
+			if not in_quotes:
+				if ch == "(":
+					paren_depth += 1
+				elif ch == ")":
+					paren_depth -= 1
+
+	result.append(current)
+	return result
 
 
 ## 🆕 遍历所有 action，收集其 sub_actions 字段中的 uuid，存入 _all_sub_action_ids 字典。

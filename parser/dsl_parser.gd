@@ -111,8 +111,9 @@ static func _lint_results_column(results_str: String, uuid: String) -> void:
         if _REQUIREMENT_ONLY_FUNCS.find(func_name) != -1:
             Logging.err("[Linter] 事件 '%s' 的 results 列包含了 requirement 函数 '%s'，请将其迁移到 requirements 列 💀" % [uuid, clean_expr])
 
-# ── Archetype JSON 加载 ────────────────────────────────────
-# 从 tools/data/event_archetypes.json 加载指定 archetype 的定义。
+# ── Archetype 加载 ────────────────────────────────────
+# 🆕 优先从 Database.action_archetypes（由 resource_converters.csv 注入）查找。
+#    如果不存在，fallback 到 event_archetypes.json（旧格式，过渡期兼容）。
 # 返回 Dictionary 或空字典（如果文件/archetype 不存在）。
 # 公开方法，供 RandomEvent.on_enter() 运行时动态加载 archetype DSL 定义。
 static var _event_archetypes_cache: Dictionary = {}
@@ -121,11 +122,25 @@ static func load_event_archetype(archetype_id: String) -> Dictionary:
     if archetype_id.is_empty():
         return {}
     
-    # 懒加载 JSON 文件
+    # ── 方式 1: 从 Database.action_archetypes 查找（新路径，由 resource_converters.csv 注入）──
+    var db_arch = Database.action_archetypes.get(archetype_id)
+    if db_arch != null:
+        # 将 ActionArchetype 转为旧 JSON 兼容的 Dictionary 返回
+        return {
+            "name": db_arch.name,
+            "action_uuid": db_arch.action_uuid,
+            "state": db_arch.state,
+            "universal_requirement": db_arch.universal_requirement,
+            "universal_result": db_arch.universal_result,
+            "era": db_arch.era,
+            "failed_hints": db_arch.failed_hints,
+        }
+    
+    # ── 方式 2: Fallback 到 event_archetypes.json（旧格式，过渡期兼容）──
     if _event_archetypes_cache.is_empty():
         var path := "res://tools/data/event_archetypes.json"
         if not FileAccess.file_exists(path):
-            Logging.warn("DSLParser: event_archetypes.json 不存在: %s" % path)
+            Logging.info("DSLParser: event_archetypes.json 不存在，跳过（可能需要先同步 resource_converters.csv）")
             return {}
         var file := FileAccess.open(path, FileAccess.READ)
         if file == null:
@@ -143,12 +158,12 @@ static func load_event_archetype(archetype_id: String) -> Dictionary:
             for key in data:
                 if not key.begins_with("_"):
                     _event_archetypes_cache[key] = data[key]
-        Logging.info("DSLParser: 加载 event_archetypes.json，共 %d 个 archetype" % _event_archetypes_cache.size())
+        Logging.info("DSLParser: 加载 event_archetypes.json（旧格式），共 %d 个 archetype" % _event_archetypes_cache.size())
     
     if _event_archetypes_cache.has(archetype_id):
         return _event_archetypes_cache[archetype_id]
     
-    Logging.warn("DSLParser: archetype '%s' 未在 event_archetypes.json 中找到" % archetype_id)
+    Logging.warn("DSLParser: archetype '%s' 未在 Database 或 event_archetypes.json 中找到" % archetype_id)
     return {}
 
 # 解析 context DSL 字段
@@ -1142,7 +1157,7 @@ static func validate_state_transistor(transistor: StateTransistor) -> bool:
 
 # 批量解析CSV数据
 # random_event 类型使用下推自动机（Pushdown Automaton）解析层级结构
-# flags / trait 等扁平数据使用传统逐行解析
+# flags / trait / resource_converter 等扁平数据使用传统逐行解析
 static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "random_event") -> Array[Resource]:
     var resources: Array[Resource] = []
     
@@ -1156,6 +1171,8 @@ static func parse_csv_data(csv_data: Array[Dictionary], data_type: String = "ran
             pass
         "trait", "flag", "state_transistor":
             return _parse_flat_data(csv_data, data_type)
+        "resource_converter":
+            return _parse_resource_converter(csv_data)
         _:
             Logging.err("parse_csv_data: 未知的 data_type 字符串: '%s' 💀" % data_type)
             return []
@@ -1344,3 +1361,254 @@ static func _parse_flat_data(csv_data: Array[Dictionary], data_type: String) -> 
             resources.append(resource)
     
     return resources
+
+
+# ════════════════════════════════════════════════════════════
+# 🆕 Resource Converter CSV 解析器
+# 解析 data/1_core_rules/resource_converters.csv
+# 每一行生成 4 个 ActionArchetype + 1 个 Action .tres
+# ════════════════════════════════════════════════════════════
+
+const ActionArchetypeCls = preload("res://core/model/action_archetype.gd")
+const DeferConfigCls = preload("res://model/defer_config.gd")
+const ChoiceResultCls = preload("res://model/choice_result.gd")
+const PushEventOperatorCls = preload("res://core/operators/push_event_operator.gd")
+
+
+## 解析 resource_converter CSV 数据
+## 返回 Array[Resource]：包含 Action + ActionArchetype 资源
+## 每个 Action 保存为独立 .tres，Archetype 注入到 Database.action_archetypes
+static func _parse_resource_converter(csv_data: Array[Dictionary]) -> Array[Resource]:
+    var resources: Array[Resource] = []
+    if csv_data.is_empty():
+        Logging.warn("[resource_converter] CSV 数据为空，跳过")
+        return resources
+
+    for i in range(csv_data.size()):
+        var row = csv_data[i]
+        var uuid = str(row.get("uuid", "")).strip_edges()
+        if uuid.is_empty():
+            Logging.warn("[resource_converter] row %d: uuid 为空，跳过" % (i + 1))
+            continue
+
+        Logging.info("[resource_converter] 解析行 %d: uuid=%s" % [i + 1, uuid])
+
+        # ── 1. 解析 context 字段 ──
+        var context_str = str(row.get("context", "")).strip_edges()
+        var ctx = _parse_converter_context(context_str)
+
+        # ── 2. 创建 4 个 ActionArchetype ──
+        var cost_dsl = str(row.get("cost_dsl", "")).strip_edges()
+        var success_dsl = str(row.get("success_dsl", "")).strip_edges()
+        var failure_dsl = str(row.get("failure_dsl", "")).strip_edges()
+        var defer_dsl = str(row.get("defer_dsl", "")).strip_edges()
+
+        var cost_arch: ActionArchetypeCls
+        var success_arch: ActionArchetypeCls
+        var failure_arch: ActionArchetypeCls
+        var defer_arch: ActionArchetypeCls
+
+        if not cost_dsl.is_empty():
+            cost_arch = _create_archetype("%s_cost" % uuid, "cost_dsl", uuid, "", cost_dsl, ctx)
+            Database.action_archetypes["%s_cost" % uuid] = cost_arch
+        if not success_dsl.is_empty():
+            success_arch = _create_archetype("%s_success" % uuid, "success", uuid, "success", success_dsl, ctx)
+            Database.action_archetypes["%s_success" % uuid] = success_arch
+        if not failure_dsl.is_empty():
+            failure_arch = _create_archetype("%s_failure" % uuid, "failure", uuid, "failure", failure_dsl, ctx)
+            Database.action_archetypes["%s_failure" % uuid] = failure_arch
+        if not defer_dsl.is_empty():
+            defer_arch = _create_archetype("%s_defer" % uuid, "defer_resource", uuid, "", defer_dsl, ctx)
+            Database.action_archetypes["%s_defer" % uuid] = defer_arch
+
+        # ── 3. 构建 Action 资源 ──
+        var action = _build_action_from_row(row, ctx, cost_arch, success_arch, failure_arch, defer_arch)
+        if action:
+            resources.append(action)
+            Logging.info("[resource_converter] 生成 Action: %s" % uuid)
+        else:
+            Logging.err("[resource_converter] 生成 Action 失败: %s" % uuid)
+
+    Logging.info("[resource_converter] 解析完成，共 %d Action + %d Archetype" % [resources.size(), Database.action_archetypes.size()])
+    return resources
+
+
+## 解析 context 字段 → Dictionary
+## 格式: key1=val1|key2=val2|...
+static func _parse_converter_context(ctx_str: String) -> Dictionary:
+    var ctx := {
+        "fallback_event": "",
+        "failed_fallback": "",
+        "lock_narrative": "",
+        "defer_xun": "",
+        "ap_cost_per_xun": "",
+    }
+    if ctx_str.is_empty():
+        return ctx
+
+    var fields = ctx_str.split("|")
+    for field in fields:
+        field = field.strip_edges()
+        if field.is_empty():
+            continue
+        var eq_idx = field.find("=")
+        if eq_idx == -1:
+            Logging.warn("[resource_converter] context 字段缺少 '=': %s" % field)
+            continue
+        var key = field.substr(0, eq_idx).strip_edges()
+        var value = field.substr(eq_idx + 1).strip_edges()
+
+        match key:
+            "fallback_event":
+                ctx.fallback_event = value
+            "failed_fallback":
+                ctx.failed_fallback = value
+            "lock_narrative":
+                ctx.lock_narrative = value
+            "defer_xun":
+                ctx.defer_xun = value
+            "ap_cost_per_xun":
+                ctx.ap_cost_per_xun = value
+            _:
+                Logging.info("[resource_converter] 未知 context key: %s = %s" % [key, value])
+
+    return ctx
+
+
+## 工厂：创建 ActionArchetype
+static func _create_archetype(arch_key: String, state: String, action_uuid: String, arch_state: String, dsl: String, ctx: Dictionary) -> ActionArchetypeCls:
+    var arch := ActionArchetypeCls.new()
+    arch.name = "%s.%s" % [action_uuid, state]
+    arch.parent = ""
+    arch.universal_requirement = ""
+    arch.universal_result = dsl
+    arch.era = ""
+    arch.action_uuid = action_uuid
+    arch.state = arch_state
+
+    # 预解析 DSL → operators
+    if not dsl.is_empty():
+        var ops = MicroDSLParser.parse_consequence_operators(dsl)
+        for op in ops:
+            if op != null:
+                arch.operators.append(op)
+
+    return arch
+
+
+## 构建 Action Resource
+static func _build_action_from_row(row: Dictionary, ctx: Dictionary,
+        cost_arch, success_arch, failure_arch, defer_arch) -> Resource:
+    var action_cls = preload("res://core/model/action.gd")
+    var action: Resource = action_cls.new()
+    if not action:
+        Logging.err("[resource_converter] 无法实例化 Action 类")
+        return null
+
+    var uuid = str(row.get("uuid", "")).strip_edges()
+    var name = str(row.get("name", "")).strip_edges()
+    var required_place = str(row.get("required_place", "")).strip_edges()
+    var description = str(row.get("description", "")).strip_edges()
+    var day_consumed_str = str(row.get("day_consumed", "0")).strip_edges()
+    var possibility = str(row.get("possibility", "l_success_rate")).strip_edges()
+    var parent_action = str(row.get("parent_action", "")).strip_edges()
+    var custom_option = str(row.get("custom_option", "")).strip_edges()
+
+    action.uuid = uuid
+    action.name = name
+    action.required_place = required_place
+    action.description = description
+    action.day_consumed = day_consumed_str.to_float()
+    action.possibility = possibility
+    action.fallback_event_uuid = ctx.get("fallback_event", "")
+    action.lock_narrative = ctx.get("lock_narrative", "")
+
+    # 🆕 设置 resource_path 用于按父行动分目录保存
+    if not parent_action.is_empty():
+        action.resource_path = "res://data/3_actions_pool/actions/%s/%s.tres" % [parent_action, uuid]
+    else:
+        action.resource_path = "res://data/3_actions_pool/actions/%s.tres" % uuid
+
+    # ── action_tags ──
+    var tags_str = str(row.get("action_tags", "")).strip_edges()
+    if not tags_str.is_empty():
+        var tag_strs = tags_str.split(",")
+        var tags: Array[int] = []
+        for ts in tag_strs:
+            var t = ts.strip_edges().to_int()
+            if t >= 0:
+                tags.append(t)
+        action._action_tags = tags
+
+    # ── archetype_uuid: 指向 success archetype（兼容旧 action.gd 逻辑）──
+    if success_arch != null:
+        action.archetype_uuid = "%s_success" % uuid
+
+    # ── failed_result ──
+    var failed_fallback = ctx.get("failed_fallback", "")
+    if not failed_fallback.is_empty():
+        var cr = ChoiceResultCls.new()
+        var push_op = PushEventOperatorCls.new()
+        push_op.event_key = failed_fallback
+        cr.operators.append(push_op)
+        action.failed_result = cr
+
+    # ── defer_config ──
+    var defer_xun = ctx.get("defer_xun", "")
+    var ap_cost = ctx.get("ap_cost_per_xun", "")
+    if not defer_xun.is_empty() or not ap_cost.is_empty():
+        var dc = DeferConfigCls.new()
+        dc.xun_defered = defer_xun
+        dc.ap_cost = ap_cost
+        if defer_arch != null:
+            dc.used_resource_archetype = "%s_defer" % uuid
+        if not failed_fallback.is_empty():
+            dc.failed_fallback = failed_fallback
+        action.defer_config = dc
+
+    # ── custom_option 硬编码处理 ──
+    if not custom_option.is_empty():
+        _apply_custom_option(action, custom_option, uuid, row)
+
+    return action
+
+
+## 处理 custom_option 字段：硬编码注入特殊 operator/requirement
+static func _apply_custom_option(action: Resource, custom_option: String, uuid: String, row: Dictionary) -> void:
+    Logging.info("[resource_converter] custom_option: %s for %s" % [custom_option, uuid])
+
+    match custom_option:
+        "consume_leverage":
+            # 注入 ConsumeRandomLeverageOperator 到 action_results
+            var leverage_op_cls = preload("res://core/operators/consume_random_leverage_operator.gd")
+            var op = leverage_op_cls.new()
+            if action.action_results == null:
+                action.action_results = []
+            action.action_results.append(op)
+            Logging.info("[resource_converter] %s: 注入 ConsumeRandomLeverageOperator" % uuid)
+
+        "poem_selector:fame", "poem_selector:money", "poem_selector:baiye":
+            # 注入 PoemRewardOperator + PoemRequirement
+            var mode = custom_option.trim_prefix("poem_selector:")
+            var poem_reward_cls = preload("res://core/operators/poem_reward_operator.gd")
+            var poem_req_cls = preload("res://core/requirements/poem_requirement.gd")
+
+            var reward_op = poem_reward_cls.new()
+            reward_op.mode = mode
+            reward_op.show_hint_on_reward = true
+
+            var req = poem_req_cls.new()
+            req.accepted_poem_types = []
+
+            if action.action_results == null:
+                action.action_results = []
+            action.action_results.append(reward_op)
+
+            if action.aciton_requirements == null:
+                action.aciton_requirements = []
+            action.aciton_requirements.append(req)
+
+            Logging.info("[resource_converter] %s: 注入 PoemRewardOperator(mode=%s) + PoemRequirement" % [uuid, mode])
+
+        _:
+            Logging.warn("[resource_converter] 未知 custom_option: %s for %s" % [custom_option, uuid])

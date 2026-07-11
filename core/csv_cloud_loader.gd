@@ -63,6 +63,13 @@ const DATA_MANIFEST: Array[Dictionary] = [
         "data_type": "trait"
     },
     {
+        "name": "resource_converters",
+        "save_path": "res://data/1_core_rules/resource_converters.csv",
+        "data_type": "resource_converter",
+        "tres_output_dir": "res://data/3_actions_pool/actions/",
+        "is_generated": true,
+    },
+    {
         "name": "flags_data",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=2126665400&single=true&output=csv",
         "save_path": "res://data/1_core_rules/flags/_flags.csv",
@@ -549,7 +556,20 @@ func save_resources_to_tres(resources: Array[Resource], folder_path: String) -> 
 
         # 🆕 逐资源 store_to 路由检测
         # 如果资源是 RandomEvent 且 custom_context_params 中有 store_to，根据映射表或直接路径路由
+        # 🆕 如果资源是 Action 且有 resource_path（含子目录），直接使用 resource_path 的目录
         var actual_folder_path = folder_path
+
+        # 🆕 resource_converter: Action 资源有显式 resource_path → 按子目录保存
+        var res_path = resource.resource_path
+        if not res_path.is_empty() and res_path != "":
+            var res_dir = res_path.get_base_dir()
+            if res_dir != "." and not res_dir.is_empty():
+                actual_folder_path = res_dir + "/"
+                Logging.info("🆕 Action resource_path 路由: %s → %s" % [res_path, actual_folder_path])
+                if not DirAccess.dir_exists_absolute(actual_folder_path):
+                    DirAccess.make_dir_absolute(actual_folder_path)
+                    Logging.info("创建 Action 子目录: %s" % actual_folder_path)
+
         if resource is RandomEvent:
             var custom_params = resource.custom_context_params
             if custom_params.has("store_to"):
