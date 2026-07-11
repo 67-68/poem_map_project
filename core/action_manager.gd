@@ -12,6 +12,7 @@ const _NamedDSLParser = preload("res://parser/named_dsl_parser.gd")
 const _SurvivalManager = preload("res://core/survival_manager.gd")
 const _PropertyOperator = preload("res://core/model/property_operator.gd")
 const _EventManager = preload("res://core/event_manager.gd")
+const _ModifierConfig = preload("res://core/modifier_config.gd")
 
 const MAX_PICK_COUNT: int = 6
 
@@ -286,16 +287,22 @@ static func check_archetype_property_costs(operators: Array) -> Array[String]:
 		var pop := op as _PropertyOperator
 		if pop.value >= 0:
 			continue  # 只检查消耗（负值），收益不拦截
-		var req: PropertyRequirement = pop.convert_prop_limit_requirement()
-		if req != null and not req.compare(PlayerState):
-			var prop_name: String = pop.property
-			var current_val = PlayerState.get_stat_val(prop_name)
+		var prop_name: String = pop.property
+
+		# 🆕 使用修饰符公式预估实际消耗（与 ModifierConfig.apply_all_matching_effects 对齐）
+		var raw_need: int = -pop.value  # 转为正数（需求值）
+		var adjusted_delta: int = _ModifierConfig.apply_all_matching_effects(prop_name, -raw_need)
+		var adjusted_need: int = -adjusted_delta  # 转回正数比较
+
+		var current_val = PlayerState.get_stat_val(prop_name)
+		if current_val < adjusted_need:
 			var prop_data = Database.get_property(prop_name)
 			var prop_display_name = prop_data.get_display_name() if prop_data else prop_name
-			var needed := req.value
-			var precise_line := "「%s」不足，当前%d，需要%d" % [prop_display_name, current_val, needed]
+			var precise_line := "「%s」不足，当前%d，需要%d" % [prop_display_name, current_val, adjusted_need]
 			reasons.append(precise_line)
-			Logging.info("[ActionManager] check_archetype_property_costs: prop=%s current=%d needed=%d → GRAY" % [prop_name, current_val, needed])
+			Logging.info("[ActionManager] check_archetype_property_costs: prop=%s current=%d raw_need=%d adjusted_need=%d → GRAY" % [prop_name, current_val, raw_need, adjusted_need])
+		else:
+			Logging.info("[ActionManager] check_archetype_property_costs: prop=%s current=%d raw_need=%d adjusted_need=%d → OK" % [prop_name, current_val, raw_need, adjusted_need])
 	
 	Logging.info("[ActionManager] check_archetype_property_costs: %d operators → %d reasons" % [operators.size(), reasons.size()])
 	return reasons

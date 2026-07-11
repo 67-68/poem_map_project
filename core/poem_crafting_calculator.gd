@@ -1,12 +1,21 @@
 class_name PoemCraftingCalculator extends RefCounted
 
-## 诗词评分引擎 V10 — 纯函数，无状态，幂等
+## 诗词评分引擎 V11 — 纯函数，无状态，幂等
+##
+## V11 变更:
+##   - 才华 (talent) 属性通过 S 型阻尼公式 amplify 最终 score
 ##
 ## V10 变更:
 ##   - 删除 PoemCraftingResult.secular_value / literary_value 及 MODE_VALUE_MAP
 ##   - 诗词价值不再创作时固化，改由 PoemRewardOperator 消费时动态产出
 ##   - _calculate_upgrade_probability 改为公开静态方法 calculate_upgrade_probability
 ##   - 新增 calculate_level_upgrade_probability(level) 供 PoemRewardOperator 复用
+
+const _ModifierFormula = preload("res://core/modifier_formula.gd")
+
+## 才华→诗词评分增益 S 型阻尼参数
+const TALENT_SCORE_MAX_LIMIT: float = 0.4
+const TALENT_SCORE_HALF_POINT: float = 35.0
 
 ## 等级阈值
 const LEVEL_1_THRESHOLD := 25   ## 平庸 < 25
@@ -97,15 +106,23 @@ static func calculate_poem_grade(
 			Logging.debug("PoemCraftingCalculator(V10): index=%d uuid=%s level=%d → %d (溢出惩罚)" % [i, imag.uuid, imag.level, OVERFLOW_PENALTY])
 	
 	result.score = score
-	Logging.info("PoemCraftingCalculator(V10): 评分完成 — score=%d, within=%d, overflow=%d, total=%d" % [score, within_limit_count, overflow_count, imaginaries.size()])
+	Logging.info("PoemCraftingCalculator(V11): 评分完成 — raw_score=%d, within=%d, overflow=%d, total=%d" % [score, within_limit_count, overflow_count, imaginaries.size()])
+
+	# 🆕 V11: 才华 S 型阻尼增益诗词评分
+	var talent_val: int = PlayerState.get_stat_val("talent")
+	if talent_val > 0:
+		var amplified_score: int = _ModifierFormula.amplify(score, talent_val, TALENT_SCORE_MAX_LIMIT, TALENT_SCORE_HALF_POINT)
+		Logging.info("PoemCraftingCalculator(V11): talent=%d → raw_score=%d → amplified=%d" % [talent_val, score, amplified_score])
+		score = amplified_score
+		result.score = score
 	
 	# ── 3. 确定基础等级 ──
 	result.base_level = _score_to_base_level(score)
-	Logging.info("PoemCraftingCalculator(V10): base_level=%d (%s)" % [result.base_level, POEM_LEVEL_NAMES.get(result.base_level, "未知")])
+	Logging.info("PoemCraftingCalculator(V11): base_level=%d (%s)" % [result.base_level, POEM_LEVEL_NAMES.get(result.base_level, "未知")])
 	
 	# ── 4. 计算升级概率 ──
 	result.upgrade_probability = calculate_upgrade_probability(score, result.base_level)
-	Logging.info("PoemCraftingCalculator(V10): upgrade_probability=%.3f" % result.upgrade_probability)
+	Logging.info("PoemCraftingCalculator(V11): upgrade_probability=%.3f" % result.upgrade_probability)
 	
 	result.passed = true
 	return result

@@ -4,7 +4,13 @@ class_name SurvivalManager extends Node
 # 计划有一个月和一个旬的扣除费用
 # 但太复杂了先不做，目前只有旬的扣除费用，trait 扫描扣除也没做
 
+const _ModifierFormula = preload("res://core/modifier_formula.gd")
+
 const HEARTBEAT_HEALTH_THRESHOLD: int = 20
+
+# ─── 每旬自然衰减配置 ────────────────────────────────────────
+## 势 (momentum) 每旬基础衰减量（正值表示扣减）
+const MOMENTUM_DECAY_PER_XUN: int = 5
 
 # ─── 健康→AP 阶梯配置（唯一真相源） ──────────────────────────
 # 按 health_max 升序排列，遍历顺序从最严重到最轻微。
@@ -280,6 +286,10 @@ func _process_single_xun_settlement():
 	# 打完巴掌给个甜枣，系统内存回收。
 	# 属性 90 -> 50
 	#breakpoint
+
+	# 🆕 4.0: 属性自然衰减（势每旬-5，城府 dampen 减免）
+	_apply_prop_decay()
+
 	operate_state_transistors()
 	
 	# 4.5: Lock/Block 到期清理
@@ -330,6 +340,20 @@ func death_judgement():
 			AudioManager.stop_sfx_loop()
 			PlayerState.current_action_tags.append('actor:health:death:general')
 			EventManager.scan_death_events()
+
+# ─── 🆕 属性自然衰减（每旬结算时执行） ────────────────────────────
+## 势 (momentum) 每旬衰减 MOMENTUM_DECAY_PER_XUN。
+## 城府 (astuteness) 越高，衰减越小（走 append_stat → ModifierFormula dampen）。
+func _apply_prop_decay() -> void:
+	var current_momentum: int = PlayerState.get_stat_val(ENUMS.PROPS.MOMENTUM)
+	if current_momentum <= 0:
+		Logging.info("[SurvivalManager] _apply_prop_decay: momentum=0，跳过衰减")
+		return
+
+	Logging.info("[SurvivalManager] _apply_prop_decay: momentum=%d → 衰减 %d (经 append_stat 中的城府 dampen 修正)" % [current_momentum, MOMENTUM_DECAY_PER_XUN])
+	PlayerState.append_stat(ENUMS.PROPS.MOMENTUM, -MOMENTUM_DECAY_PER_XUN)
+	Logging.info("[SurvivalManager] _apply_prop_decay: 衰减后 momentum=%d" % PlayerState.get_stat_val(ENUMS.PROPS.MOMENTUM))
+
 
 func _post_xun_money_deduct():
 	PlayerState.append_stat(ENUMS.PROPS.MONEY, -30)

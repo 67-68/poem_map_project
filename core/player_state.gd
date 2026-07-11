@@ -7,6 +7,7 @@ const _BaseOperator = preload("res://core/model/base_operator.gd")
 const _DeferredLockActionOperator = preload("res://core/operators/deferred_lock_action_operator.gd")
 const _FatigueManager = preload("res://core/fatigue_manager.gd")
 const _Flag = preload("res://core/model/flag.gd")
+const _ModifierConfig = preload("res://core/modifier_config.gd")
 const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
 const _SourceOfTruth = preload("res://core/source_of_truth.gd")
 const _TempFlagOperator = preload("res://core/operators/temp_flag_operator.gd")
@@ -306,6 +307,10 @@ func append_stat(stat_name, data) -> bool:
 			amount_to_change = int(amount_to_change * tier_multiplier)
 			Logging.info("change stat %s: tier multiplier applied (*%.2f) → %d" % [stat_name, tier_multiplier, amount_to_change])
 
+	# 🆕 修饰符属性 S 型阻尼修正（城府/才华/定力）
+	# 在所有现有倍率修正之后、before_property_change 之前执行
+	amount_to_change = _apply_modifier_formula(stat_name, amount_to_change)
+
 	before_property_change.emit(stat_name, amount_to_change)
 
 	# FatigueManager 疲劳倍率
@@ -330,6 +335,25 @@ func append_stat(stat_name, data) -> bool:
 		TimeService.advance_time(1)
 
 	return true
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 修饰符属性公式（城府/才华/定力 — S型阻尼模型）
+# ════════════════════════════════════════════════════════════════
+
+## 遍历 ModifierConfig.MODIFIER_EFFECTS，逐条匹配合适的效果并应用公式。
+## 委托给 ModifierConfig.apply_all_matching_effects()（共享实现）。
+##
+## @param stat_name: 属性名（如 "prestige"）
+## @param raw_delta: 当前累积的变化量（已过 trait buffer + tier multiplier）
+## @return int — 修正后的变化量
+static func _apply_modifier_formula(stat_name: String, raw_delta: int) -> int:
+	return _ModifierConfig.apply_all_matching_effects(stat_name, raw_delta)
+
+
+## 🆕 公开版本：供 ActionManager.check_archetype_property_costs() 做前置预估。
+static func predict_modifier_adjusted_delta(stat_name: String, raw_delta: int) -> int:
+	return _ModifierConfig.apply_all_matching_effects(stat_name, raw_delta)
 
 
 func get_stat_val(stat_name):
