@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://dxdxohyqxlvdf"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_x72kk"]
+
+[resource]
+script = ExtResource("1_x72kk")
+uuid = "duzhuo_heyaojiu_success"
+name = "duzhuo_heyaojiu.success"
+universal_result = "prop_sub(name=money; val=s_money_cost)|trait_remove(name=poisoned)|prop_add(name=health; val=xs_health_gain)"
+action_uuid = "duzhuo_heyaojiu"
+state = "success"

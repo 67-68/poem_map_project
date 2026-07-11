@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://crmgvysq6xj4y"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_we7tw"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_bsf0j"]
+[ext_resource type="Script" uid="uid://csnd0b1q3o7vf" path="res://core/operators/consume_random_leverage_operator.gd" id="3_7xk8v"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="4_1pl8n"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="5_mfgmo"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_eqmdb"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_fernt"]
+
+[sub_resource type="Resource" id="Resource_we7tw"]
+script = ExtResource("3_7xk8v")
+
+[sub_resource type="Resource" id="Resource_bsf0j"]
+script = ExtResource("4_1pl8n")
+
+[sub_resource type="Resource" id="Resource_7xk8v"]
+script = ExtResource("5_mfgmo")
+event_key = "baiye_threaten_failed_fallback"
+
+[sub_resource type="Resource" id="Resource_1pl8n"]
+script = ExtResource("6_eqmdb")
+operators = Array[ExtResource("2_bsf0j")]([SubResource("Resource_7xk8v")])
+
+[resource]
+script = ExtResource("7_fernt")
+required_place = "huangcheng"
+_action_tags = Array[int]([48, 29])
+action_results = Array[ExtResource("2_bsf0j")]([SubResource("Resource_we7tw")])
+fallback_event_uuid = "baiye_threaten_fallback"
+archetype_uuid = "baiye_threaten_success"
+possibility = "ms_success_rate"
+failed_result = SubResource("Resource_1pl8n")
+defer_config = SubResource("Resource_bsf0j")
+uuid = "baiye_threaten"
+name = "拜谒 · 要挟"
+description = "以把柄为筹码换来横财"

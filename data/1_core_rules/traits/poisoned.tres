@@ -1,18 +1,13 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://dcbi03q0dyri4"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_og5ni"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_wmb25"]
-
-[sub_resource type="Resource" id="PropOp_health"]
-script = ExtResource("2_wmb25")
-str_props = "health"
-value = -15
+[ext_resource type="Script" uid="uid://dberqktmglsse" path="res://core/model/conditional_time_penalty.gd" id="1_wmb25"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="2_mamqa"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_56iun"]
 
 [resource]
-script = ExtResource("1_og5ni")
+script = ExtResource("2_mamqa")
 topic = "DISEASE"
-trait_effect_operations = Array[ExtResource("2_wmb25")]([SubResource("PropOp_health")])
-duration_xun = 2
-narrative_murmur = "腹中隐隐作痛，这毒物怕不是那日试药留下的…"
+lasting_xun = 15
+time_penalty = 2
 uuid = "poisoned"
 name = "中毒"

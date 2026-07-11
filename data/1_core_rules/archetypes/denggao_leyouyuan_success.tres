@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://muadmunss3aj"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_mljiu"]
+
+[resource]
+script = ExtResource("1_mljiu")
+uuid = "denggao_leyouyuan_success"
+name = "denggao_leyouyuan.success"
+universal_result = "prop_add(name=health; val=l_health_recovery)"
+action_uuid = "denggao_leyouyuan"
+state = "success"

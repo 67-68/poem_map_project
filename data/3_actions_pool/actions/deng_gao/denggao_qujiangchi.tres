@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://cgo8t7esrxw08"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_f25rr"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_tfwr7"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_okjj8"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_8l6c2"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_dj3io"]
+
+[sub_resource type="Resource" id="Resource_f25rr"]
+script = ExtResource("3_okjj8")
+
+[sub_resource type="Resource" id="Resource_tfwr7"]
+script = ExtResource("4_8l6c2")
+
+[resource]
+script = ExtResource("5_dj3io")
+_action_tags = Array[int]([31, 40])
+fallback_event_uuid = "denggao_qujiangchi_fallback"
+archetype_uuid = "denggao_qujiangchi_success"
+failed_result = SubResource("Resource_tfwr7")
+defer_config = SubResource("Resource_f25rr")
+uuid = "denggao_qujiangchi"
+name = "远游 · 曲江池"
+description = "曲江池畔遣兴"

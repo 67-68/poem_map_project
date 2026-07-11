@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://ue2at2ot1eph"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_w5o6v"]
+
+[resource]
+script = ExtResource("1_w5o6v")
+uuid = "jiaoyou_leverage_farm_failure"
+name = "jiaoyou_leverage_farm.failure"
+universal_result = "prop_sub(name=money; val=m_money_cost)"
+action_uuid = "jiaoyou_leverage_farm"
+state = "failure"

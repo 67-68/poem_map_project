@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://b44aqcxc3c2y6"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_iqmyy"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_k5agd"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_latqd"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_a77qv"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_qvxbe"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_gcccu"]
+
+[sub_resource type="Resource" id="Resource_iqmyy"]
+script = ExtResource("3_latqd")
+xun_defered = "s_xun_cost"
+used_resource_archetype = "jiaoyou_tavern_gacha_defer"
+ap_cost = "l_ap_cost"
+failed_fallback = "tavern_gacha_failure_fallback"
+
+[sub_resource type="Resource" id="Resource_k5agd"]
+script = ExtResource("4_a77qv")
+event_key = "tavern_gacha_failure_fallback"
+
+[sub_resource type="Resource" id="Resource_latqd"]
+script = ExtResource("5_qvxbe")
+operators = Array[ExtResource("2_k5agd")]([SubResource("Resource_k5agd")])
+
+[resource]
+script = ExtResource("6_gcccu")
+required_place = "pingkangfang"
+_action_tags = Array[int]([30, 52])
+fallback_event_uuid = "tavern_gacha_success_fallback"
+archetype_uuid = "jiaoyou_tavern_gacha_success"
+possibility = "xxs_success_rate"
+failed_result = SubResource("Resource_latqd")
+defer_config = SubResource("Resource_iqmyy")
+uuid = "jiaoyou_tavern_gacha"
+name = "交游 · 坊间买醉"
+description = "在坊间酒肆以酒会友结识市井中人"

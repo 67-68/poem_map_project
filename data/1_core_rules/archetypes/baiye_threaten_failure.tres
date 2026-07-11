@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://c2nyqerpiljsj"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_o00hj"]
+
+[resource]
+script = ExtResource("1_o00hj")
+uuid = "baiye_threaten_failure"
+name = "baiye_threaten.failure"
+universal_result = "consume_random_leverage|trait_add(name=severe_injury)"
+action_uuid = "baiye_threaten"
+state = "failure"

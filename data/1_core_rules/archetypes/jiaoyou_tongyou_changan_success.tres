@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://d3xxljsx5k267"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_poii0"]
+
+[resource]
+script = ExtResource("1_poii0")
+uuid = "jiaoyou_tongyou_changan_success"
+name = "jiaoyou_tongyou_changan.success"
+universal_result = "prop_sub(name=money; val=s_money_cost)|add_social_credit(val=10)|prop_add(name=prestige; val=5)|roll_imaginary(level=2)"
+action_uuid = "jiaoyou_tongyou_changan"
+state = "success"

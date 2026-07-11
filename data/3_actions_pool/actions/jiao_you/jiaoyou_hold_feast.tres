@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://cxis5y5pln0py"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_flyip"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_8y2p5"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_tsdor"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_ubegs"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_j3xrd"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_h2w0o"]
+
+[sub_resource type="Resource" id="Resource_flyip"]
+script = ExtResource("3_tsdor")
+xun_defered = "s_xun_cost"
+used_resource_archetype = "jiaoyou_hold_feast_defer"
+ap_cost = "s_ap_cost"
+failed_fallback = "hold_feast_failure_fallback"
+
+[sub_resource type="Resource" id="Resource_8y2p5"]
+script = ExtResource("4_ubegs")
+event_key = "hold_feast_failure_fallback"
+
+[sub_resource type="Resource" id="Resource_tsdor"]
+script = ExtResource("5_j3xrd")
+operators = Array[ExtResource("2_8y2p5")]([SubResource("Resource_8y2p5")])
+
+[resource]
+script = ExtResource("6_h2w0o")
+required_place = "pingkangfang"
+_action_tags = Array[int]([30, 55])
+fallback_event_uuid = "hold_feast_success_fallback"
+archetype_uuid = "jiaoyou_hold_feast_success"
+possibility = "m_success_rate"
+failed_result = SubResource("Resource_tsdor")
+defer_config = SubResource("Resource_flyip")
+uuid = "jiaoyou_hold_feast"
+name = "交游 · 举办宴席"
+description = "设宴款待各路宾客或可获得引荐之机"

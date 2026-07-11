@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://c14gtoah1w1i1"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_3ebyt"]
+
+[resource]
+script = ExtResource("1_3ebyt")
+uuid = "fangshi_sell_poem_cost"
+name = "fangshi_sell_poem.cost"
+universal_result = "prop_sub(name=prestige; val=m_fame_cost)"
+action_uuid = "fangshi_sell_poem"

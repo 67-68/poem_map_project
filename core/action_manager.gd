@@ -127,18 +127,19 @@ func clear_reservations() -> void:
 # 🆕 行动锁定评估系统（纯函数 + 缓存 + 信号监听）
 # ════════════════════════════════════════════════════════════
 
-## 🆕 从 resource_converters.csv 加载 archetypes 到 Database.action_archetypes 中。
-## 如果 csv_cloud_loader 已经注入过（非空），跳过。
-## 否则运行时 fallback：直接解析 CSV 并调用 _parse_resource_converter。
+## 🆕 初始化 ActionArchetype 缓存。
+## archetype .tres 文件由 DataScanner 自动加载到 Database（扫描 data/ 目录树）。
+## 如果 Database 中的 archetypes 为空（例如在 @tool 模式或测试环境），
+## 则尝试从 resource_converters.csv 运行时解析。
 func _init_archetype_cache() -> void:
 	if not Database.action_archetypes.is_empty():
-		Logging.info("[ActionManager] archetype 缓存已存在 (%d 个), 跳过加载" % Database.action_archetypes.size())
+		Logging.info("[ActionManager] DataScanner 已加载 %d 个 archetype, 跳过" % Database.action_archetypes.size())
 		return
 
-	# ── 运行时 fallback: 从 CSV 文件直接解析 ──
+	Logging.info("[ActionManager] Database.action_archetypes 为空，尝试从 CSV 运行时解析")
 	var save_path := "res://data/1_core_rules/resource_converters.csv"
 	if not FileAccess.file_exists(save_path):
-		Logging.warn("[ActionManager] resource_converters.csv 不存在: %s" % save_path)
+		Logging.warn("[ActionManager] resource_converters.csv 不存在，跳过")
 		return
 
 	var file := FileAccess.open(save_path, FileAccess.READ)
@@ -148,36 +149,51 @@ func _init_archetype_cache() -> void:
 	var csv_str := file.get_as_text()
 	file.close()
 
-	var csv_lines := csv_str.split("\n")
-	if csv_lines.size() < 2:
-		Logging.err("[ActionManager] resource_converters.csv 数据不足")
+	# 从 CSV 运行时解析并保存到 Database（仅此一次）
+	var csv_data := _csv_to_dicts(csv_str)
+	if csv_data.is_empty():
 		return
 
-	var csv_headers := csv_lines[0].strip_edges().split(",")
-	var csv_data: Array[Dictionary] = []
-	for i in range(1, csv_lines.size()):
-		var line = csv_lines[i].strip_edges()
+	# 调用 DSLParser 解析
+	var all_resources := DSLParser._parse_resource_converter(csv_data)
+	# 从返回的资源中提取 ActionArchetype 注册到 Database
+	var arch_count := 0
+	for res in all_resources:
+		if res is ActionArchetype:
+			var arch := res as ActionArchetype
+			if not arch.uuid.is_empty():
+				Database.action_archetypes[arch.uuid] = arch
+				arch_count += 1
+	Logging.info("[ActionManager] 运行时 fallback 加载了 %d 个 archetype" % arch_count)
+
+
+## 简单 CSV 字符串 → Array[Dictionary]
+func _csv_to_dicts(csv_str: String) -> Array[Dictionary]:
+	var lines := csv_str.split("\n")
+	if lines.size() < 2:
+		return []
+	var headers := lines[0].strip_edges().split(",")
+	var result: Array[Dictionary] = []
+	for i in range(1, lines.size()):
+		var line := lines[i].strip_edges()
 		if line.is_empty():
 			continue
-		var values = _parse_csv_line_simple(line)
+		var values := _parse_csv_line(line)
 		var row := {}
-		for j in range(csv_headers.size()):
+		for j in range(headers.size()):
 			if j < values.size():
-				var key = csv_headers[j].strip_edges()
-				var value = values[j].strip_edges()
+				var key := headers[j].strip_edges()
+				var value := values[j].strip_edges()
 				if value.begins_with("\"") and value.ends_with("\""):
 					value = value.substr(1, value.length() - 2)
 				row[key] = value
 		if not row.is_empty():
-			csv_data.append(row)
-
-	# 调用 DSLParser 解析（仅注册 archetypes，不生成 Action .tres）
-	DSLParser._parse_resource_converter(csv_data)
-	Logging.info("[ActionManager] 从 CSV 运行时加载了 %d 个 action archetype" % Database.action_archetypes.size())
+			result.append(row)
+	return result
 
 
 ## 简单 CSV 行解析（处理引号 + 括号深度）
-func _parse_csv_line_simple(line: String) -> Array[String]:
+func _parse_csv_line(line: String) -> Array[String]:
 	var result: Array[String] = []
 	var current := ""
 	var in_quotes := false

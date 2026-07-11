@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://eua4ysgae1qs"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_l8hix"]
+
+[resource]
+script = ExtResource("1_l8hix")
+uuid = "fangshi_shiyao_failure"
+name = "fangshi_shiyao.failure"
+universal_result = "prop_sub(name=health; val=m_health_cost)|trait_add(name=poisoned)|prop_add(name=talent; val=m_talent_gain)"
+action_uuid = "fangshi_shiyao"
+state = "failure"

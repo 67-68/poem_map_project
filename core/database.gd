@@ -214,6 +214,10 @@ func _init() -> void:
 				if actions.has(uuid):
 					Logging.warn("Database: Action uuid 冲突，%s 覆盖已有: %s" % [base_key, uuid])
 				actions[uuid] = res
+			elif res is ActionArchetype:
+				if action_archetypes.has(uuid):
+					Logging.warn("Database: ActionArchetype uuid 冲突，%s 覆盖已有: %s" % [base_key, uuid])
+				action_archetypes[uuid] = res
 			elif res is HistoryEvent:
 				history_events[uuid] = res
 			elif res is BaseEvent:

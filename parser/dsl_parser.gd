@@ -1376,8 +1376,8 @@ const PushEventOperatorCls = preload("res://core/operators/push_event_operator.g
 
 
 ## 解析 resource_converter CSV 数据
-## 返回 Array[Resource]：包含 Action + ActionArchetype 资源
-## 每个 Action 保存为独立 .tres，Archetype 注入到 Database.action_archetypes
+## 返回 Array[Resource]：包含 Action .tres + ActionArchetype .tres
+## ActionArchetype 会保存到 data/1_core_rules/archetypes/ 目录，运行时由 Database 加载
 static func _parse_resource_converter(csv_data: Array[Dictionary]) -> Array[Resource]:
     var resources: Array[Resource] = []
     if csv_data.is_empty():
@@ -1397,7 +1397,7 @@ static func _parse_resource_converter(csv_data: Array[Dictionary]) -> Array[Reso
         var context_str = str(row.get("context", "")).strip_edges()
         var ctx = _parse_converter_context(context_str)
 
-        # ── 2. 创建 4 个 ActionArchetype ──
+        # ── 2. 创建 4 个 ActionArchetype，加入 resources 数组 ──
         var cost_dsl = str(row.get("cost_dsl", "")).strip_edges()
         var success_dsl = str(row.get("success_dsl", "")).strip_edges()
         var failure_dsl = str(row.get("failure_dsl", "")).strip_edges()
@@ -1409,17 +1409,21 @@ static func _parse_resource_converter(csv_data: Array[Dictionary]) -> Array[Reso
         var defer_arch: ActionArchetypeCls
 
         if not cost_dsl.is_empty():
-            cost_arch = _create_archetype("%s_cost" % uuid, "cost_dsl", uuid, "", cost_dsl, ctx)
-            Database.action_archetypes["%s_cost" % uuid] = cost_arch
+            cost_arch = ActionArchetypeCls.create("%s_cost" % uuid, "%s.cost" % uuid, uuid, "", cost_dsl, "cost")
+            cost_arch.resource_path = "res://data/1_core_rules/archetypes/%s_cost.tres" % uuid
+            resources.append(cost_arch)
         if not success_dsl.is_empty():
-            success_arch = _create_archetype("%s_success" % uuid, "success", uuid, "success", success_dsl, ctx)
-            Database.action_archetypes["%s_success" % uuid] = success_arch
+            success_arch = ActionArchetypeCls.create("%s_success" % uuid, "%s.success" % uuid, uuid, "success", success_dsl, "success")
+            success_arch.resource_path = "res://data/1_core_rules/archetypes/%s_success.tres" % uuid
+            resources.append(success_arch)
         if not failure_dsl.is_empty():
-            failure_arch = _create_archetype("%s_failure" % uuid, "failure", uuid, "failure", failure_dsl, ctx)
-            Database.action_archetypes["%s_failure" % uuid] = failure_arch
+            failure_arch = ActionArchetypeCls.create("%s_failure" % uuid, "%s.failure" % uuid, uuid, "failure", failure_dsl, "failure")
+            failure_arch.resource_path = "res://data/1_core_rules/archetypes/%s_failure.tres" % uuid
+            resources.append(failure_arch)
         if not defer_dsl.is_empty():
-            defer_arch = _create_archetype("%s_defer" % uuid, "defer_resource", uuid, "", defer_dsl, ctx)
-            Database.action_archetypes["%s_defer" % uuid] = defer_arch
+            defer_arch = ActionArchetypeCls.create("%s_defer" % uuid, "%s.defer" % uuid, uuid, "", defer_dsl, "defer")
+            defer_arch.resource_path = "res://data/1_core_rules/archetypes/%s_defer.tres" % uuid
+            resources.append(defer_arch)
 
         # ── 3. 构建 Action 资源 ──
         var action = _build_action_from_row(row, ctx, cost_arch, success_arch, failure_arch, defer_arch)
@@ -1429,7 +1433,7 @@ static func _parse_resource_converter(csv_data: Array[Dictionary]) -> Array[Reso
         else:
             Logging.err("[resource_converter] 生成 Action 失败: %s" % uuid)
 
-    Logging.info("[resource_converter] 解析完成，共 %d Action + %d Archetype" % [resources.size(), Database.action_archetypes.size()])
+    Logging.info("[resource_converter] 解析完成，共 %d 个 Resource" % resources.size())
     return resources
 
 
@@ -1473,27 +1477,6 @@ static func _parse_converter_context(ctx_str: String) -> Dictionary:
                 Logging.info("[resource_converter] 未知 context key: %s = %s" % [key, value])
 
     return ctx
-
-
-## 工厂：创建 ActionArchetype
-static func _create_archetype(arch_key: String, state: String, action_uuid: String, arch_state: String, dsl: String, ctx: Dictionary) -> ActionArchetypeCls:
-    var arch := ActionArchetypeCls.new()
-    arch.name = "%s.%s" % [action_uuid, state]
-    arch.parent = ""
-    arch.universal_requirement = ""
-    arch.universal_result = dsl
-    arch.era = ""
-    arch.action_uuid = action_uuid
-    arch.state = arch_state
-
-    # 预解析 DSL → operators
-    if not dsl.is_empty():
-        var ops = MicroDSLParser.parse_consequence_operators(dsl)
-        for op in ops:
-            if op != null:
-                arch.operators.append(op)
-
-    return arch
 
 
 ## 构建 Action Resource
@@ -1598,7 +1581,7 @@ static func _apply_custom_option(action: Resource, custom_option: String, uuid: 
             reward_op.show_hint_on_reward = true
 
             var req = poem_req_cls.new()
-            req.accepted_poem_types = []
+            # accepted_poem_types 是 Array[ENUMS.POEM_TYPE]（类型化数组，默认已为空）
 
             if action.action_results == null:
                 action.action_results = []

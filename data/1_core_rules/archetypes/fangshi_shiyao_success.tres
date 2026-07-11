@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://0sd6tj8xpyeh"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_iassi"]
+
+[resource]
+script = ExtResource("1_iassi")
+uuid = "fangshi_shiyao_success"
+name = "fangshi_shiyao.success"
+universal_result = "prop_sub(name=health; val=s_health_cost)|prop_add(name=money; val=xl_money_gain)"
+action_uuid = "fangshi_shiyao"
+state = "success"

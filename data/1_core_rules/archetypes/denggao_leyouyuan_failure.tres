@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://cqo6upcax3yn8"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_d1lem"]
+
+[resource]
+script = ExtResource("1_d1lem")
+uuid = "denggao_leyouyuan_failure"
+name = "denggao_leyouyuan.failure"
+universal_result = "prop_add(name=health; val=15)|trait_add(name=sprained_ankle)"
+action_uuid = "denggao_leyouyuan"
+state = "failure"

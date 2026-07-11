@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://bn0cym3d3v4dl"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_nem3d"]
+
+[resource]
+script = ExtResource("1_nem3d")
+uuid = "jiaoyou_hold_feast_failure"
+name = "jiaoyou_hold_feast.failure"
+universal_result = "prop_sub(name=money; val=xl_money_cost)"
+action_uuid = "jiaoyou_hold_feast"
+state = "failure"

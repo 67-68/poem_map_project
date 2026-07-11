@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://blmj32v73oaqb"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_060ta"]
+
+[resource]
+script = ExtResource("1_060ta")
+uuid = "jiaoyou_hold_feast_defer"
+name = "jiaoyou_hold_feast.defer"
+universal_result = "prop_sub(name=money; val=xl_money_cost)"
+action_uuid = "jiaoyou_hold_feast"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://e0eenneykuls"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_tf7kb"]
+
+[resource]
+script = ExtResource("1_tf7kb")
+uuid = "baiye_normal_defer"
+name = "baiye_normal.defer"
+universal_result = "prop_sub(name=money; val=m_money_cost)"
+action_uuid = "baiye_normal"
