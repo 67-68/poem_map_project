@@ -37,10 +37,20 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func operate() -> void:
+	Logging.info("[DIAG] PersonStateOperator.operate: _captured_context=%s target_key='%s' mode='%s' state='%s'" % [str(_captured_context), target_key, mode, state])
 	var target_tag: String = _captured_context.get(target_key, "")
 	if target_tag.is_empty():
-		Logging.err("PersonStateOperator.operate: context[%s] 为空，无法操作" % target_key)
-		return
+		var fallback: String = ""
+		for tag in PlayerState.current_action_tags:
+			if tag.begins_with("actor:npc:"):
+				fallback = tag.trim_prefix("actor:npc:")
+				break
+		if not fallback.is_empty():
+			Logging.err("[DIAG] PersonStateOperator: npc_target 从 context 丢失！从 current_action_tags 回退为 '%s'" % fallback)
+			target_tag = fallback
+		else:
+			Logging.err("PersonStateOperator.operate: context[%s] 为空，_captured_context keys=%s，current_action_tags=%s — 无法回退" % [target_key, str(_captured_context.keys()), str(PlayerState.current_action_tags)])
+			return
 
 	match mode:
 		"set":

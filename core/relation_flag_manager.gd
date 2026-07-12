@@ -67,6 +67,7 @@ const EVENT_PREFIX_HELP:     String = "event_help_"
 ## T1 市井，T2 文人，T3 权贵。用于 set_random_person_state 等 Operator 筛选。
 const RELATION_TARGET_TIER = {
 	"hushang": 1,
+	"shenyi": 1,
 	"gaoshi": 2,
 	"wangwei": 2,
 	"zhengqian": 2,

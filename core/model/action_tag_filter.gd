@@ -42,9 +42,13 @@ static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[E
 			continue
 
 		if tag_match_mode == 'all':
-			# ── AND 模式：所有 current_tags 必须全部在事件的 target_tags 中 ──
+			# ── AND 模式：仅 required_tags（actor:npc + social:X）必须全部匹配 ──
+			#    current_tags 中其余 tag（sub_uuid 等）仅做 bucket 路由，不参与强制匹配
+			var required_tags: Array = _context.get('required_tags', current_tags)
+			if required_tags.is_empty():
+				required_tags = current_tags
 			var all_match := true
-			for required_tag in current_tags:
+			for required_tag in required_tags:
 				if not e.target_tags.has(required_tag):
 					all_match = false
 					break

@@ -73,6 +73,15 @@ theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
 text = "上旬"
 
+[node name="Label_Day" type="Label" parent="HBox/HBox2" unique_id=431041917]
+process_mode = 3
+modulate = Color(0.4392157, 0.4392157, 0.4392157, 0.4627451)
+layout_mode = 2
+theme = ExtResource("2_v2d34")
+theme_type_variation = &"DefaultText"
+theme_override_font_sizes/font_size = 10
+text = "第1天"
+
 [node name="TimeTexture" type="TextureRect" parent="HBox" unique_id=797531913]
 custom_minimum_size = Vector2(77, 77)
 layout_mode = 2

@@ -113,6 +113,8 @@ func _ready() -> void:
 	GameState.year = GameState.start_year
 	_total_days_elapsed = int(GameState.year * DAYS_PER_YEAR)
 	_tick_checkpoint = _total_days_elapsed
+	current_day = _total_days_elapsed % 10
+	current_day_of_year = _total_days_elapsed % DAYS_PER_YEAR
 	Logging.info("TimeService._ready: GameState.year set to %f, event_queue has %d items" % [GameState.year, event_queue.size()])
 	if event_queue.size() > 0:
 		Logging.info("  queue items: %s" % event_queue.map(func(e): return "{name:%s time:%f}" % [e.get("name","?"), e.time]))
@@ -217,6 +219,10 @@ func advance_time(days_to_add: int):
 	
 	# 3. 发射所有跨越的时间信号
 	_emit_time_events()
+	
+	# 4. 同步 current_day / current_day_of_year（不再等 _process 下一个帧才更新）
+	current_day = _total_days_elapsed % 10
+	current_day_of_year = _total_days_elapsed % DAYS_PER_YEAR
 
 func _emit_time_events():
 	# 从整数真理之源计算需要发射的天

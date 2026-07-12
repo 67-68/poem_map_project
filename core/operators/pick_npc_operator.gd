@@ -50,6 +50,9 @@ class_name PickNpcOperator extends BaseOperator
 ## 如 "social:acquaint"
 @export var social_tag: String = ""
 
+## 可选 — true 时跳过 NPC 可用性检查（appear_days），用于"听人说起"等场景
+@export var skip_availability: bool = false
+
 ## init 阶段捕获的 context 快照（供 operate 使用）
 var _captured_context: Dictionary = {}
 
@@ -140,7 +143,7 @@ func describe_preview() -> String:
 
 ## mode=random: 从所有 RELATION_TARGET 中随机选人
 func _pick_random() -> String:
-	return NPCSelector.select_random(state, state_compare)
+	return NPCSelector.select_random(state, state_compare, skip_availability)
 
 
 ## mode=by_place: 根据地点筛选 NPC
@@ -148,9 +151,8 @@ func _pick_by_place() -> String:
 	# 解析地点列表
 	var target_places: Array[String] = []
 	if not places.is_empty():
-		target_places = places.split(",")
-		for i in range(target_places.size()):
-			target_places[i] = target_places[i].strip_edges()
+		for s in places.split(","):
+			target_places.append(s.strip_edges())
 	else:
 		var current_place: String = PlayerState.stay_place
 		if current_place.is_empty():
@@ -158,8 +160,8 @@ func _pick_by_place() -> String:
 			return ""
 		target_places = [current_place]
 
-	Logging.info("PickNpcOperator: by_place 模式，目标地点=%s" % str(target_places))
-	return NPCSelector.select_by_place(target_places, state, state_compare)
+	Logging.info("PickNpcOperator: by_place 模式，目标地点=%s, skip_availability=%s" % [str(target_places), str(skip_availability)])
+	return NPCSelector.select_by_place(target_places, state, state_compare, skip_availability)
 
 
 ## mode=related: 从 source NPC 的 relate_to 中选人

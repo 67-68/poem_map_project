@@ -894,11 +894,11 @@ static func _resolve_resource_class_name(res: Resource) -> String:
 ## 事件在 data/3_actions_pool/ 还是 data/4_eras/ 下不影响路由 — 系统只看 tag。
 ##
 ## 匹配规则：
-##   - 匹配以 "action:" 开头的标签（如 "action:main:baiye", "action:special:deepseek"）
+##   - 返回第一个非空 tag 作为桶路由 key（不限定前缀）
 ##   - 不匹配时返回空字符串（该事件不会被加入任何随机事件池）
-##   - 一个事件应有且只有一个 action:main:xxx 标签
+##   - 每个事件取其首个 target_tag 入桶，确保唯一
 static func _extract_pool_tag(target_tags: Array) -> String:
 	for tag in target_tags:
-		if tag.begins_with("action:"):
+		if not tag.is_empty():
 			return tag
 	return ""

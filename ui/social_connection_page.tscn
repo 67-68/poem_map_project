@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_qyv3s"]
 [ext_resource type="ButtonGroup" uid="uid://dgpk1t4rfkwi8" path="res://ui/social_connection_filter_group.tres" id="2_enmti"]
 [ext_resource type="Script" uid="uid://do8dlnymnpaeh" path="res://ui/social_connection_page.gd" id="3_script"]
+[ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="4_dtsr1"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_enmti"]
 content_margin_left = 15.0
@@ -11,8 +12,6 @@ content_margin_right = 15.0
 content_margin_bottom = 15.0
 texture = ExtResource("1_qyv3s")
 modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qyv3s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enmti"]
 content_margin_left = 15.0
@@ -67,7 +66,8 @@ text = "按阵营分类"
 [node name="Tree" type="Tree" parent="PanelContainer/H/V" unique_id=2112479787]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_qyv3s")
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("4_dtsr1")
 hide_root = true
 
 [node name="VSeparator" type="VSeparator" parent="PanelContainer/H" unique_id=1446511408]

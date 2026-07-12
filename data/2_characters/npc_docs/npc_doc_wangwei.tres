@@ -4,10 +4,8 @@
 
 [resource]
 script = ExtResource("1_udmdi")
-taste_id = ""
 name = "王维"
 uuid = "wangwei"
-preferred_places = Array[String](["pingkangfang", "huangcheng"])
 prop = {
 "TALENT": 75
 }

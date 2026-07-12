@@ -136,6 +136,7 @@ func show_page() -> void:
 		offset_right = _original_offsets.get("right", offset_right)
 		offset_bottom = _original_offsets.get("bottom", offset_bottom)
 		Logging.info("SocialConnectionPage: restored original offsets: %s" % _original_offsets)
+	_rebuild_tree()
 	show()
 	_page_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await _page_tween.finished

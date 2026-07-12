@@ -575,20 +575,18 @@ func _on_sub_action_picked(entity) -> void:
 	PlayerState._is_repeated_action = PlayerState.is_action_repeated(_sub_identifying_tags)
 	Logging.info("SceneActionPanel._on_sub_action_picked: _is_repeated_action=%s for sub tags=%s" % [str(PlayerState._is_repeated_action), str(_sub_identifying_tags)])
 	
-	# 🆕 [NEW] Step 1: 投骰前执行 sub-action 的 cost archetype（资源立即扣除）
+	# 🆕 [NEW] Step 1: cost archetype — Phase A: init only（让 PickNpcOperator 选 NPC + 设 dynamic_possibility）
 	ActionManager.begin_action_batch()
 	var _sub_cost_ops := sub_action.get_cost_operators() if sub_action and sub_action.has_method("get_cost_operators") else []
+	var _sub_cost_ctx: Dictionary = {}
 	if not _sub_cost_ops.is_empty():
-		var _sub_cost_ctx: Dictionary = {}
+		_sub_cost_ctx["current_action"] = sub_action
 		for r in _sub_cost_ops:
 			if r and r.has_method("init"):
 				_sub_cost_ctx = r.init(_sub_cost_ctx)
-		for r in _sub_cost_ops:
-			if r:
-				r.operate()
-		Logging.info("SceneActionPanel: sub-action '%s' 执行 cost archetype (%d ops)" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size()])
+		Logging.info("SceneActionPanel: sub-action '%s' cost archetype init (%d ops), ctx keys=%s" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size(), str(_sub_cost_ctx.keys())])
 	
-	# 🆕 Step 2: sub-action 的 action_results.init() — 投骰前执行（让 NPC picker 有机会设 dynamic_possibility=0）
+	# 🆕 Step 2: sub-action 的 action_results.init()
 	var _sub_act_ctx: Dictionary = {}
 	if sub_action and sub_action.action_results and not sub_action.action_results.is_empty():
 		_sub_act_ctx["current_action"] = sub_action
@@ -596,7 +594,7 @@ func _on_sub_action_picked(entity) -> void:
 			if r and r.has_method("init"):
 				_sub_act_ctx = r.init(_sub_act_ctx)
 	
-	# 🆕 [NEW] Step 3: 判定 outcome（success/failure）
+	# 🆕 [NEW] Step 3: 判定 outcome（success/failure）— 此时 dynamic_possibility 已被 cost init 更新
 	var _sub_outcome: String = "success"
 	# 使用父 action 的 outcome（已在 _on_button_pressed 中判定）
 	# 如果父 action 为 failure，子 action 也走 failure（不会进入此回调）
@@ -614,42 +612,65 @@ func _on_sub_action_picked(entity) -> void:
 		else:
 			Logging.info("SceneActionPanel: sub-action '%s' possibility PASS (roll=%d <= %d)" % [sub_action.name, roll, _sub_effective_possibility])
 	
+	# 🆕 Step 4: cost archetype — Phase B: operate
+	#    成功：prop_sub + pick_npc.operate（注入 actor:npc + social tag）
+	#    失败：仅 prop_sub（扣钱），不注入 social tag
+	if not _sub_cost_ops.is_empty():
+		for r in _sub_cost_ops:
+			if r:
+				r.operate()
+		Logging.info("SceneActionPanel: sub-action '%s' cost archetype operate (%d ops) — outcome=%s tags now: %s" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size(), _sub_outcome, str(PlayerState.current_action_tags)])
+	
 	# 1. 执行父行动的 operators（挂起数据，不含 TimeOperator）
 	for r in _pending_sub_action_results:
 		r.operate()
 	
-	# 2. 🆕 时间消耗：基于 effective_day_consumed + trait 惩罚统一扣除
+	# 2. 🆕 时间消耗
 	var total_cost := ActionManager.get_action_day_cost(sub_action, _pending_parent_day_consumed)
 	if total_cost > 0:
 		PlayerState.append_stat("_time", -total_cost)
 		TimeService.advance_time(total_cost)
-		Logging.info("[SceneActionPanel] sub-action '%s' day_consumed=%f, total_cost=%d, 已扣除并推进日历" % [sub_action.name if sub_action else "NULL", ActionManager.effective_day_consumed(sub_action, _pending_parent_day_consumed), total_cost])
+		Logging.info("[SceneActionPanel] sub-action '%s' day_consumed=%f, total_cost=%d" % [sub_action.name if sub_action else "NULL", ActionManager.effective_day_consumed(sub_action, _pending_parent_day_consumed), total_cost])
 	
 	ActionManager.end_action_batch()
-	
 	ActionManager.get_focus_controller().notify_click()
 	
-	# 3. 将 sub-action uuid + 子 action 的 tags 追加到 current_action_tags
-	PlayerState.current_action_tags.append(sub_uuid)
-	for tag in sub_tags:
-		PlayerState.current_action_tags.append(tag)
+	# 3. 分支：成功 → 追加 sub tags + inject social/actor + scan；失败 → 直接走 failure fallback
+	if _sub_outcome == "success":
+		# 追加 sub_uuid + sub_tags（bucket 路由用）
+		PlayerState.current_action_tags.append(sub_uuid)
+		for tag in sub_tags:
+			PlayerState.current_action_tags.append(tag)
+		
+		# 注入 npc_target 到 context（供事件层 PersonStateOperator 使用）
+		var npc_name := _extract_npc_name_from_tags(PlayerState.current_action_tags)
+		var npc_target: String = _sub_cost_ctx.get("npc_target", "")
+		var required_tags: Array[String] = []
+		for tag in PlayerState.current_action_tags:
+			if tag.begins_with("actor:npc:") or tag.begins_with("social:"):
+				required_tags.append(tag)
+		Logging.info("SceneActionPanel: SUCCESS — sub-action tags now: %s required=%s npc_target='%s'" % [str(PlayerState.current_action_tags), str(required_tags), npc_target])
+		
+		var context = {
+			'main_tag': sub_main_tag,
+			'fallback_event_uuid': sub_fallback,
+			'tag_match_mode': 'all',
+			'required_tags': required_tags,
+			'npc_name': npc_name,
+			'npc_target': npc_target,
+			'archetype_base': sub_uuid,
+			'outcome': "success",
+		}
+		EventManager.scan_events(0, context)
+	else:
+		Logging.info("SceneActionPanel: FAILURE — 执行 sub_action.failed_result（含 PushEventOperator → failure fallback）")
+		if sub_action and sub_action.failed_result:
+			sub_action.failed_result.operate()
+		else:
+			Logging.warn("SceneActionPanel: FAILURE 但 sub_action.failed_result 为空，fallback 到 EventBus.request_event_key('%s')" % sub_fallback)
+			EventBus.request_event_key.emit(sub_fallback, {})
 	
-	# 4. AND 模式事件扫描：使用子 action 的 main_tag 和 fallback
-	# 🆕 success/failure 都走 scan_events，archetype 在事件层注入
-	# 从 current_action_tags 提取 NPC tag → NPC 中文名，注入 scan context
-	var npc_name := _extract_npc_name_from_tags(PlayerState.current_action_tags)
-	var context = {
-		'main_tag': sub_main_tag,
-		'fallback_event_uuid': sub_fallback,
-		'tag_match_mode': 'all',
-		'npc_name': npc_name,
-		# 🆕 注入 sub-action 的 archetype_base + outcome
-		'archetype_base': sub_uuid,
-		'outcome': _sub_outcome,
-	}
-	EventManager.scan_events(0, context)
-	
-	# 🆕 重复行动疲惫：子 action 执行完毕后更新 last_action_tags
+	# 🆕 重复行动疲惫
 	PlayerState.last_action_tags = _sub_identifying_tags.duplicate()
 	Logging.info("SceneActionPanel._on_sub_action_picked: 更新 last_action_tags=%s" % str(PlayerState.last_action_tags))
 	

@@ -86,13 +86,14 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
     
     #breakpoint
     Logging.info("[EventManager] Starting event scan")
-
+    Logging.info("[DIAG] EventManager.scan_events: context keys=%s npc_target='%s'" % [str(context.keys()), context.get("npc_target", "")])
+   
     var initial_tickets: Array[EventTicket] = []
     var main_tag = context.get('main_tag', '')
     # context 可主动指定 era；若未指定则使用 GameState.current_era（由 EraOperator 维护）
     var era = context.get('era', GameState.current_era)
     var events_to_scan = Database.get_random_events(main_tag, era)
-
+   
     # 🆕 从 context 读取 fallback_event_uuid（由 Action.fallback_event_uuid 传递）
     var fallback_uuid = context.get('fallback_event_uuid', '')
     Logging.info("[EventManager] scan_events: main_tag='%s', fallback_event_uuid='%s'" % [main_tag, fallback_uuid])

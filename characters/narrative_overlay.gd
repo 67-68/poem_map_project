@@ -175,7 +175,7 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	var data: BaseEvent = entry.get("data")
 	var context: Dictionary = entry.get("context", {})
 	
-	Logging.info("[DIAG] _on_event_ready_to_play: data=%s context=%s" % [data.name if data else "NULL", str(context.keys())])
+	Logging.info("[DIAG] _on_event_ready_to_play: data=%s context keys=%s npc_target='%s' archetype_base='%s' outcome='%s'" % [data.name if data else "NULL", str(context.keys()), context.get("npc_target", ""), context.get("archetype_base", ""), context.get("outcome", "")])
 
 	# ── 事件入场装配（从原 apply_narrative 迁出）──
 	var all_options: Array = data.init(context)

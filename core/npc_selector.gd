@@ -21,7 +21,7 @@ class_name NPCSelector extends RefCounted
 ## @param state: String — 可选 person_state 过滤，空串=不过滤
 ## @param state_compare: String — "eq" / "gte" / ""（不过滤）
 ## @return String — 选中 NPC 的 target_tag，空串=无候选
-static func select_by_place(target_places: Array[String], state: String = "", state_compare: String = "eq") -> String:
+static func select_by_place(target_places: Array[String], state: String = "", state_compare: String = "eq", skip_availability: bool = false) -> String:
 	if target_places.is_empty():
 		Logging.err("NPCSelector.select_by_place: target_places 为空")
 		return ""
@@ -35,13 +35,14 @@ static func select_by_place(target_places: Array[String], state: String = "", st
 		if doc == null:
 			continue
 
-		# 天数可用性检查
-		if not NPCAvailabilityManager.is_available(doc, today):
-			Logging.debug("NPCSelector: 跳过 %s（day=%d 不可用）" % [target_tag, today])
-			continue
+		# 天数可用性检查（skip_availability=true 时跳过，如"听人说起"场景）
+		if not skip_availability:
+			if not NPCAvailabilityManager.is_available(doc, today):
+				Logging.debug("NPCSelector: 跳过 %s（day=%d 不可用）" % [target_tag, today])
+				continue
 
 		# 过滤 preferred_places
-		var npc_places: Array = doc.preferred_places if doc.has("preferred_places") else []
+		var npc_places: Array = doc.preferred_places
 		if npc_places.is_empty():
 			Logging.debug("NPCSelector: 跳过 %s（preferred_places 为空）" % target_tag)
 			continue
@@ -78,7 +79,7 @@ static func select_by_place(target_places: Array[String], state: String = "", st
 ## @param state: String — 可选 person_state 过滤，空串=不过滤
 ## @param state_compare: String — "eq" / "gte" / ""（不过滤）
 ## @return String — 选中 NPC 的 target_tag，空串=无候选
-static func select_random(state: String = "", state_compare: String = "eq") -> String:
+static func select_random(state: String = "", state_compare: String = "eq", skip_availability: bool = false) -> String:
 	var today: int = TimeService.current_day
 	var candidates: Array[String] = []
 
@@ -92,9 +93,10 @@ static func select_random(state: String = "", state_compare: String = "eq") -> S
 		if doc == null:
 			Logging.debug("NPCSelector: 跳过 %s（无 NPCDocument）" % target_tag)
 			continue
-		if not NPCAvailabilityManager.is_available(doc, today):
-			Logging.debug("NPCSelector: 跳过 %s（day=%d 不可用）" % [target_tag, today])
-			continue
+		if not skip_availability:
+			if not NPCAvailabilityManager.is_available(doc, today):
+				Logging.debug("NPCSelector: 跳过 %s（day=%d 不可用）" % [target_tag, today])
+				continue
 
 		# 可选 person_state 过滤
 		if not state.is_empty():
@@ -120,7 +122,7 @@ static func select_random(state: String = "", state_compare: String = "eq") -> S
 ## @param state: String — 可选 person_state 过滤，空串=不过滤
 ## @param state_compare: String — "eq" / "gte" / ""（不过滤）
 ## @return String — 选中 NPC 的 target_tag，空串=无候选
-static func select_related(source_tag: String, state: String = "", state_compare: String = "eq") -> String:
+static func select_related(source_tag: String, state: String = "", state_compare: String = "eq", skip_availability: bool = false) -> String:
 	if source_tag.is_empty():
 		Logging.err("NPCSelector.select_related: source_tag 为空")
 		return ""
@@ -130,7 +132,7 @@ static func select_related(source_tag: String, state: String = "", state_compare
 		Logging.err("NPCSelector.select_related: 未找到 NPC document for '%s'" % source_tag)
 		return ""
 
-	var relates: Array = doc.relate_to if doc.has("relate_to") else []
+	var relates: Array = doc.relate_to
 	if relates.is_empty():
 		Logging.warn("NPCSelector.select_related: '%s' 的 relate_to 为空" % source_tag)
 		return ""
@@ -145,9 +147,10 @@ static func select_related(source_tag: String, state: String = "", state_compare
 		if candidate_doc == null:
 			Logging.debug("NPCSelector: 跳过 %s（无 NPCDocument）" % candidate_tag)
 			continue
-		if not NPCAvailabilityManager.is_available(candidate_doc, today):
-			Logging.debug("NPCSelector: 跳过 %s（day=%d 不可用）" % [candidate_tag, today])
-			continue
+		if not skip_availability:
+			if not NPCAvailabilityManager.is_available(candidate_doc, today):
+				Logging.debug("NPCSelector: 跳过 %s（day=%d 不可用）" % [candidate_tag, today])
+				continue
 
 		if state.is_empty():
 			candidates.append(candidate_tag)

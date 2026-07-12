@@ -265,12 +265,14 @@ func init(context: Dictionary) -> Array:
     var _action_arch_ops: Array[BaseOperator] = []
     var archetype_base = context.get("archetype_base", "")
     var outcome = context.get("outcome", "")
+    Logging.info("[DIAG] RandomEvent.init: context keys=%s archetype_base='%s' outcome='%s' npc_target='%s'" % [str(context.keys()), archetype_base, outcome, context.get("npc_target", "")])
     if not archetype_base.is_empty() and not outcome.is_empty():
         var action_arch = Database.get_archetype_by_uuid(archetype_base, outcome)
         if action_arch != null and not action_arch.operators.is_empty():
             Logging.info("RandomEvent.init: context archetype_base='%s' outcome='%s' → ActionArchetype (%d operators) for event '%s'" % [archetype_base, outcome, action_arch.operators.size(), name])
             for op in action_arch.operators:
                 var dup = op.duplicate()
+                Logging.info("[DIAG] RandomEvent.init: dup.init(context) for op=%s, context.npc_target='%s'" % [dup.get_class(), context.get("npc_target", "")])
                 dup.init(context)
                 _action_arch_ops.append(dup)
         else:
@@ -302,6 +304,8 @@ func init(context: Dictionary) -> Array:
                 cr.operators.append(op.duplicate())
             
             cr.init(context)
+    else:
+        Logging.warn("[DIAG] RandomEvent.init: _all_inject_ops 为空！preinit=%d action_arch=%d — person_state 不会执行" % [_preinit_ops.size(), _action_arch_ops.size()])
     
     return all_options
 

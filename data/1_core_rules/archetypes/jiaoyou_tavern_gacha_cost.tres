@@ -6,6 +6,6 @@
 script = ExtResource("1_u6fxa")
 uuid = "jiaoyou_tavern_gacha_cost"
 name = "jiaoyou_tavern_gacha.cost"
-universal_result = "prop_sub(name=money; val=s_money_cost)"
+universal_result = "prop_sub(name=money; val=s_money_cost)|pick_npc(mode=by_place; places=pingkangfang,xishi; state=uncharted; key=npc_target; social_tag=social:acquaint; skip_availability=true)"
 action_uuid = "jiaoyou_tavern_gacha"
 state = "cost"

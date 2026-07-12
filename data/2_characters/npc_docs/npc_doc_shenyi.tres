@@ -12,3 +12,4 @@ prop = {
 "TALENT": 60
 }
 relate_to = Array[String](["hushang"])
+appear_days = Array[int]([1, 2, 3, 4, 5])
