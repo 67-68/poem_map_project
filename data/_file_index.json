@@ -190,6 +190,7 @@
     "4_eras/747_kuangda/jiaoyou/zhuoliu_zuanying_intelligence_commodity.tres",
     "4_eras/747_kuangda/jiaoyou/zize_old_friend.tres",
     "4_eras/747_kuangda/shuren/acquaint_shenyi_tavern.tres",
+    "4_eras/747_kuangda/shuren/baiye_shenyi_upgrade.tres",
     "4_eras/747_kuangda/kuangda_transition/kuangda_1_to_2.tres",
     "4_eras/747_kuangda/kuangda_transition/kuangda_2_to_1.tres",
     "4_eras/747_kuangda/kuangda_transition/kuangda_2_to_3.tres",
@@ -603,6 +604,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-12T04:23:46.669736+00:00",
-  "total": 602
+  "generated_at": "2026-07-12T07:23:10.467075+00:00",
+  "total": 603
 }

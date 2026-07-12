@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bshenyibaiy01"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_opt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_op"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_evopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_revent"]
+
+[sub_resource type="Resource" id="Resource_empty_cr"]
+script = ExtResource("3_cr")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt1"]
+script = ExtResource("4_evopt")
+choice_result = SubResource("Resource_empty_cr")
+description = "拱手称谢，心中暗记此人的名号。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_revent")
+weight = 10.0
+_target_tags = Array[String](["actor:npc:shenyi", "social:upgrade"])
+options = Array[ExtResource("1_opt")]([SubResource("Resource_opt1")])
+uuid = "baiye_shenyi_upgrade"
+name = "西市医庐"
+description = "你在西市巷陌间辗转打听，终于寻到了那间不起眼的医庐。门帘半卷，药香扑鼻。神医正在院里翻晒药材，见你来访也不惊讶，只指了指檐下的竹凳让你坐。你递上名帖，他放下手中的药杵，用粗布擦了擦手，接过去看了看。「你就是他们说的那个杜甫？」他笑着斟了一碗药茶推过来，「我听过你的诗。坐，不急。」"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

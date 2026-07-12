@@ -255,7 +255,7 @@ func init(context: Dictionary) -> Array:
             for op in archetype_result.operators:
                 var dup = op.duplicate()
                 Logging.info("RandomEvent.init: pre-init operator %s (duplicated)" % dup.get_class())
-                dup.init(context)
+                context = dup.init(context)
                 _preinit_ops.append(dup)
     
     # ── 🆕 [NEW] 从 context 读取 ActionArchetype（由 action_button 注入的 archetype_base + outcome）──
@@ -273,7 +273,7 @@ func init(context: Dictionary) -> Array:
             for op in action_arch.operators:
                 var dup = op.duplicate()
                 Logging.info("[DIAG] RandomEvent.init: dup.init(context) for op=%s, context.npc_target='%s'" % [dup.get_class(), context.get("npc_target", "")])
-                dup.init(context)
+                context = dup.init(context)
                 _action_arch_ops.append(dup)
         else:
             Logging.info("RandomEvent.init: context archetype_base='%s' + outcome='%s' → 未找到对应的 ActionArchetype" % [archetype_base, outcome])
