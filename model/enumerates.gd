@@ -115,6 +115,7 @@ enum EMOTION {
 enum RELATION_TARGET {
 	LIBAI,
 	HUSHANG, # 商人
+	SHENYI, # 神医
 	LILINFU,
 	JIWEN,
 	YOUXIANGFU, # 右相府
@@ -124,7 +125,7 @@ enum RELATION_TARGET {
 	ZHENGQIAN, # 郑虔
 	WAIQI, # 外戚
 	YANGGUOZHONG,
-	GUOGUOFUREN, # 虢国夫人 
+	GUOGUOFUREN, # 虢国夫人
 }
 
 enum PROVINCES { 

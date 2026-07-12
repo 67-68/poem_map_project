@@ -56,6 +56,13 @@
        └─ 资源转换配方: 暂无数据
 ```
 
+## 关闭交互
+
+- 右上角 `X` 按钮（[`social_connection_page.tscn`](ui/social_connection_page.tscn:169) 中 `PanelContainer` 的直接子节点 `Button`）
+- 点击 X → 调用 [`hide_page()`](ui/social_connection_page.gd:139)
+- 页面打开时发射 `EventBus.narrative_tape_hide_requested`，关闭时发射 `EventBus.narrative_tape_show_requested`
+- tape 使用引用计数管理：`NarrativeOverlay._tape_hide_refcount`，多个页面同时打开时只有全部关闭后才恢复 tape 可见
+
 ## 数据来源
 
 - NPC 数据：`Database.npc_document` / `Database.get_npc_document_all()`

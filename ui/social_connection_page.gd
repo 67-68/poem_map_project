@@ -44,6 +44,7 @@ const UNKNOWN_PLACE_LABEL: String = "其他地点"
 @onready var _tree: Tree = $PanelContainer/H/V/Tree
 @onready var _btn_by_place: Button = $PanelContainer/H/V/Modes/Button
 @onready var _btn_by_tier: Button = $PanelContainer/H/V/Modes/Button2
+@onready var _btn_close: Button = $PanelContainer/Button  # 右上角 X 关闭按钮
 
 @onready var _info_basic: RichTextLabel = $PanelContainer/H/Info/VBoxContainer/Unit8/RichTextLabel
 @onready var _info_relation: RichTextLabel = $PanelContainer/H/Info/VBoxContainer/Unit2/RichTextLabel
@@ -84,6 +85,9 @@ func _ready() -> void:
 			hide_page()
 	)
 
+	# 🆕 右上角 X 按钮 → 关闭页面
+	_btn_close.pressed.connect(hide_page)
+
 	# 连接模式切换信号 —— 两个按钮共用 ButtonGroup，toggled 会在按下和释放时各触发一次
 	_btn_by_place.toggled.connect(_on_mode_changed)
 	_btn_by_tier.toggled.connect(_on_mode_changed)
@@ -105,6 +109,9 @@ func show_page() -> void:
 		return
 	expand = true
 	Logging.info("SocialConnectionPage: show_page 开始 — 全屏模糊 → 面板滑出 → 展示")
+
+	# 🆕 隐藏纸带（引用计数递增）
+	EventBus.narrative_tape_hide_requested.emit()
 
 	# 1. 全屏模糊（幕布）
 	BlurManager.show_cinematic_blur()
@@ -141,6 +148,9 @@ func hide_page() -> void:
 		return
 	expand = false
 	Logging.info("SocialConnectionPage: hide_page 开始")
+
+	# 🆕 恢复纸带（引用计数递减）
+	EventBus.narrative_tape_show_requested.emit()
 
 	# 1. 取消地图模糊
 	BlurManager.return_to_hub()

@@ -54,6 +54,8 @@ var _auto_advance_blocked: bool = false      # 非事件状态下阻止 _start_a
 var _is_hover_displaying: bool = false       # 🆕 当前是否正在显示 hover 内容
 var _daily_refresh_pending: bool = false     # 🆕 hover 期间收到刷新请求，hover 结束后执行
 var _daily_refresh_queued: bool = false      # 🆕 call_deferred 防抖令牌
+# ── Tape 隐藏模式（SocialConnectionPage / PoemCreationPage 借用纸带 UI）──
+var _tape_hide_refcount: int = 0            # 引用计数：>0 时 tape_container 隐藏
 # ── 日常面板快照（与 hover 快照独立）──
 var _daily_snapshot_text: String = ""
 var _daily_snapshot_sep: bool = false
@@ -134,6 +136,10 @@ func _ready() -> void:
 		EventBus.imaginary_changed.connect(_on_daily_refresh_signal)
 	if not EventBus.on_flag_change.is_connected(_on_daily_refresh_signal):
 		EventBus.on_flag_change.connect(_on_daily_refresh_signal)
+
+	# 🆕 Tape 隐藏模式：SocialConnectionPage / PoemCreationPage 借用纸带 UI
+	EventBus.narrative_tape_hide_requested.connect(_on_tape_hide_requested)
+	EventBus.narrative_tape_show_requested.connect(_on_tape_show_requested)
 
 	Logging.info("NarrativeOverlay._ready: 信号接线完成")
 
@@ -988,6 +994,32 @@ func _switch_to_idle_mode() -> void:
 ## 🐛 竞态守卫：hide 动画是 0.4s 延迟回调，期间玩家可能点击了新行动按钮
 ## 导致 Director._is_active 被重新激活。此时跳过清理，避免 wipe 新 Picker 内容
 ## 并覆盖 _switch_to_event_mode() 的效果。
+# ═══════════════════════════════════════════════════
+# 🆕 Tape 隐藏模式（SocialConnectionPage / PoemCreationPage 打开时隐藏纸带）
+# ═══════════════════════════════════════════════════
+
+## 页面打开时递增引用计数并隐藏根节点（连带阴影一起隐藏）
+## 引用计数确保多个页面同时打开时，只有全部关闭后才恢复显示
+func _on_tape_hide_requested() -> void:
+	_tape_hide_refcount += 1
+	Logging.info("NarrativeOverlay._on_tape_hide_requested: refcount=%d" % _tape_hide_refcount)
+	visible = false
+
+
+## 页面关闭时递减引用计数，归零时恢复根节点显示并刷新日常面板
+func _on_tape_show_requested() -> void:
+	_tape_hide_refcount = max(_tape_hide_refcount - 1, 0)
+	Logging.info("NarrativeOverlay._on_tape_show_requested: refcount=%d" % _tape_hide_refcount)
+	if _tape_hide_refcount == 0:
+		visible = true
+		refresh_daily_panel()
+		Logging.info("NarrativeOverlay._on_tape_show_requested: 根节点恢复可见，日常面板已刷新")
+
+
+# ═══════════════════════════════════════════════════
+# 🆕 ActionPanel ↔ EventHistory 互斥可见性
+# ═══════════════════════════════════════════════════
+
 func _event_exit_cleanup_then_idle() -> void:
 	if director._is_active:
 		Logging.info("NarrativeOverlay._event_exit_cleanup_then_idle: Director 已有活跃事件/Picker，跳过清理（竞态守卫）")

@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="1_qyv3s"]
 [ext_resource type="ButtonGroup" uid="uid://dgpk1t4rfkwi8" path="res://ui/social_connection_filter_group.tres" id="2_enmti"]
-[ext_resource type="Script" path="res://ui/social_connection_page.gd" id="3_script"]
+[ext_resource type="Script" uid="uid://do8dlnymnpaeh" path="res://ui/social_connection_page.gd" id="3_script"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_enmti"]
 content_margin_left = 15.0
@@ -22,13 +22,13 @@ content_margin_bottom = 15.0
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="SocialConnectionPage" type="Control" unique_id=992720834]
-script = ExtResource("3_script")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_script")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1817549478]
 layout_mode = 1
@@ -165,3 +165,10 @@ fit_content = true
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/H/Info/VBoxContainer/Unit7" unique_id=1899741810]
 layout_mode = 2
+
+[node name="Button" type="Button" parent="PanelContainer" unique_id=1089128283]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"

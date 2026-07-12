@@ -53,6 +53,9 @@ func show_page() -> void:
 	expand = true
 	Logging.info("PoemCreationPage: show_page 开始 — 全屏模糊 → 面板滑出 → 卷轴浮现")
 
+	# 🆕 隐藏纸带（引用计数递增）
+	EventBus.narrative_tape_hide_requested.emit()
+
 	# 1. 全屏模糊（幕布）
 	BlurManager.show_cinematic_blur()
 	await get_tree().create_timer(0.5).timeout
@@ -95,6 +98,9 @@ func hide_page() -> void:
 		return
 	expand = false
 	Logging.info("PoemCreationPage: hide_page 开始")
+
+	# 🆕 恢复纸带（引用计数递减）
+	EventBus.narrative_tape_show_requested.emit()
 
 	# 1. 卷轴退出
 	var crafter := %PoemCrafter

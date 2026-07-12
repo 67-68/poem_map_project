@@ -94,6 +94,12 @@ signal event_shown(event: Variant)
 signal poem_start_clicked()
 signal poem_cancel()
 signal social_connection_toggled()
+
+## 🆕 请求隐藏纸带（SocialConnectionPage / PoemCreationPage 打开时发射）
+## 引用计数：hide_requested 递增，show_requested 递减，归零才恢复纸带显示
+signal narrative_tape_hide_requested()
+## 🆕 请求显示纸带（页面关闭时发射）
+signal narrative_tape_show_requested()
 signal push_picker(data: Array, on_selected: Callable, ui_constructor, on_filter_toggled: Callable)
 signal push_cinematic(texts: Array[String], config: Dictionary)
 signal cinematic_start(texts: Array[String], config: Dictionary)

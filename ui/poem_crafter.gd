@@ -317,6 +317,9 @@ func _on_button_pressed() -> void:
 	_clear_cached_result()
 	_rebuild_slots()
 
+	# 🆕 创作完成 → 自动关闭 PoemCreationPage（触发卷轴退出动画 + 面板滑回 + tape 恢复）
+	EventBus.poem_cancel.emit()
+
 
 ## 清除预览缓存（创作完成后 / insufficient 后调用）
 func _clear_cached_result() -> void:
