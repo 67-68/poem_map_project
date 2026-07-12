@@ -57,6 +57,14 @@ func parse(new_text):
 			Logging.info('Executing DSL: %s, got %d operators' % [dsl_content, operators.size()])
 			for op in operators:
 				op.operate()
+		elif parts.size() >= 3 and parts[1] == 'set_tag':
+			# $ set_tag lilinfu — 设置 last_event["target_tag"] 用于测试派系效果
+			PlayerState.last_event["target_tag"] = parts[2]
+			Logging.info('[Controller] last_event["target_tag"] = "%s"' % parts[2])
+		elif parts.size() >= 3 and parts[1] == 'clear_tag':
+			# $ clear_tag — 清除 last_event["target_tag"]
+			PlayerState.last_event.erase("target_tag")
+			Logging.info('[Controller] last_event["target_tag"] 已清除')
 		elif parts.size() >= 3 and parts[1] == 'time':
 			# $ time <year> — 跳转到指定年份，重建事件队列
 			var target_year = float(parts[2])
@@ -70,6 +78,20 @@ func parse(new_text):
 		elif parts.size() == 2:
 			# $ event_key — 触发事件（原有逻辑）
 			EventBus.push_event.emit(parts[1], {})
+	elif new_text.begins_with("#"):
+		# 🆕 # 前缀 → GDScript 表达式求值
+		# 支持任意表达式，如: # PlayerState.set_stat_val("astuteness", 50)
+		var expr_str = new_text.substr(1).strip_edges()
+		var expression = Expression.new()
+		var err = expression.parse(expr_str, ["PlayerState", "GameState", "Database", "EventBus", "TimeService", "GameSave"])
+		if err != OK:
+			Logging.err("[Controller] 表达式解析失败: %s → %s" % [expr_str, expression.get_error_text()])
+			return
+		var result = expression.execute([PlayerState, GameState, Database, EventBus, TimeService, GameSave])
+		if expression.has_execute_failed():
+			Logging.err("[Controller] 表达式执行失败: %s → %s" % [expr_str, expression.get_error_text()])
+			return
+		Logging.info("[Controller] 表达式执行成功: %s → %s" % [expr_str, str(result)])
 	elif parts.size() == 2:
 		if GameState.has_method(parts[0]):
 			GameState.callv(parts[0],[parts[1]])

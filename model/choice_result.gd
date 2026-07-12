@@ -34,15 +34,7 @@ func append(op: BaseOperator) -> ChoiceResult:
 	operators.append(op)
 	return self
 
-## 聚合所有 operator 的 describe_preview() 文本，过滤空字符串
+## 聚合所有 operator 的预览文本，委托给 ActionHintBuilder 统一生成（含修饰符注解）
 func format_preview() -> Array[String]:
-	var lines: Array[String] = []
-	if not operators or operators.is_empty():
-		return lines
-	for op in operators:
-		if not op:
-			continue
-		var text = op.describe_preview()
-		if not text.is_empty():
-			lines.append(text)
-	return lines
+	const _HintBuilder = preload("res://core/action_hint_builder.gd")
+	return _HintBuilder.build_operator_preview(operators)

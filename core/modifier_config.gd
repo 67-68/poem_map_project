@@ -190,6 +190,84 @@ static func get_pct_for_display(source_prop: String, max_limit: float, half_poin
 	return pct
 
 
+## 🆕 给定属性名和原始 delta，返回 UI 预览注解。
+## 每条注解格式: "城府 -8" 或 "才华 +12"
+## 用于 ActionHintBuilder 在消耗/收益预览中展示修饰符的影响。
+##
+## @param prop_name: 属性名（如 "money"）
+## @param raw_delta: 原始变化量（如 -40）
+## @return Array[String] — 如 ["城府 -8"]，无匹配时返回空数组
+static func get_preview_annotations(prop_name: String, raw_delta: int) -> Array[String]:
+	if raw_delta == 0:
+		return []
+
+	var annotations: Array[String] = []
+	var delta_is_positive := raw_delta > 0
+	var delta_is_negative := raw_delta < 0
+
+	# 先确定当前 NPC 派系
+	var faction: int = -1
+	var faction_str: String = ""
+
+	# 按 source_prop 聚合每个修饰符的独立贡献
+	var per_prop: Dictionary = {}
+
+	for effect in MODIFIER_EFFECTS:
+		var target_prop: String = effect.target_prop
+		var delta_sign: String = effect.delta_sign
+		var faction_filter: String = effect.faction_filter
+		var source_prop: String = effect.source_prop
+
+		# ── 过滤 ──
+		if not target_prop.is_empty() and target_prop != prop_name:
+			continue
+		if delta_sign == "positive" and not delta_is_positive:
+			continue
+		if delta_sign == "negative" and not delta_is_negative:
+			continue
+		if not faction_filter.is_empty():
+			if faction == -1:
+				faction = get_faction_from_context()
+				faction_str = faction_to_filter(faction)
+			if faction_str != faction_filter:
+				continue
+
+		# ── 修饰符值 ──
+		var mod_val: int = get_modifier_val(source_prop)
+		if mod_val <= 0:
+			continue
+
+		# ── 独立计算该效果对 raw_delta 的影响 ──
+		var adjusted: int
+		if effect.direction == "amplify":
+			adjusted = ModifierFormula.amplify(raw_delta, mod_val, effect.max_limit, effect.half_point)
+		else:
+			adjusted = ModifierFormula.dampen(raw_delta, mod_val, effect.max_limit, effect.half_point)
+
+		var diff := adjusted - raw_delta
+		if diff == 0:
+			continue
+
+		if not per_prop.has(source_prop):
+			per_prop[source_prop] = 0
+		per_prop[source_prop] += diff
+
+	# ── 构建注解文本 ──
+	var display_names := {
+		"astuteness": "城府",
+		"talent": "才华",
+		"composure": "定力",
+	}
+
+	for sp in per_prop:
+		var d: int = per_prop[sp]
+		var name = display_names.get(sp, sp)
+		var sign = "+" if d > 0 else ""
+		annotations.append("%s %s%d" % [name, sign, d])
+
+	return annotations
+
+
 # ════════════════════════════════════════════════════════════════
 # 内部
 # ════════════════════════════════════════════════════════════════

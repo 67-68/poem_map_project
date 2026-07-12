@@ -14,6 +14,7 @@ const _ModifierConfig = preload("res://core/modifier_config.gd")
 # ── 接口 2：operator 列表 → 描述行 ────────────────────────
 
 ## 将一列 BaseOperator 转为 "• {describe_preview()}" 的字符串数组。
+## 🆕 PropertyOperator 会追加修饰符注解（如 "城府 -8"）。
 ## 自动过滤空描述和无效 operator。
 static func build_operator_preview(operators: Array) -> Array[String]:
 	var lines: Array[String] = []
@@ -25,9 +26,38 @@ static func build_operator_preview(operators: Array) -> Array[String]:
 		if not op or not op.has_method("describe_preview"):
 			Logging.warn("ActionHintBuilder.build_operator_preview: operator 无效或无 describe_preview, op=%s" % str(op))
 			continue
-		var desc: String = op.describe_preview()
-		if not desc.is_empty():
-			lines.append("• " + desc)
+		var desc: String
+
+		# 🆕 PropertyOperator: 计算修饰符调整后的最终值，注入 describe_preview
+		if op is PropertyOperator:
+			var pop := op as PropertyOperator
+			var raw_val: int = pop.value
+			var adjusted_val: int = _ModifierConfig.apply_all_matching_effects(pop.property, raw_val)
+			var delta: int = adjusted_val - raw_val
+
+			# 临时替换为调整后的值，让 describe_preview 展示最终数值
+			var saved_val: int = pop.value
+			pop.value = adjusted_val
+			desc = op.describe_preview()
+			pop.value = saved_val
+
+			if desc.is_empty():
+				continue
+
+			# 追加注解：原始值 ≠ 调整后值时
+			if delta != 0:
+				var annotations: Array[String] = _ModifierConfig.get_preview_annotations(pop.property, raw_val)
+				if not annotations.is_empty():
+					desc += " (%s)" % ", ".join(annotations)
+				else:
+					desc += " (%+d)" % delta
+				Logging.info("ActionHintBuilder.build_operator_preview: prop=%s raw=%d adjusted=%d delta=%d annotations=%s" % [pop.property, raw_val, adjusted_val, delta, str(annotations)])
+		else:
+			desc = op.describe_preview()
+			if desc.is_empty():
+				continue
+
+		lines.append("• " + desc)
 	
 	Logging.info("ActionHintBuilder.build_operator_preview: %d operators → %d lines" % [operators.size(), lines.size()])
 	return lines

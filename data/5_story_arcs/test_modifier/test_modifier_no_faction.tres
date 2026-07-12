@@ -1,0 +1,93 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_prop"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="4_cr"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="5_evopt"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="6_re"]
+
+;; ── Option A: prestige +30 — 测试城府 dampen + 才华 amplify ──
+[sub_resource type="Resource" id="Res_prop_prestige"]
+script = ExtResource("3_prop")
+_property = 2
+value = 30
+
+[sub_resource type="Resource" id="Res_cr_prestige"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_prestige")])
+
+[sub_resource type="Resource" id="Res_opt_prestige"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_cr_prestige")
+description = "A) 望+30 (城府↓望 才华↑望)"
+
+;; ── Option B: money +50 — 测试城府 amplify ──
+[sub_resource type="Resource" id="Res_prop_money_gain"]
+script = ExtResource("3_prop")
+_property = 0
+value = 50
+
+[sub_resource type="Resource" id="Res_cr_money_gain"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_money_gain")])
+
+[sub_resource type="Resource" id="Res_opt_money_gain"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_cr_money_gain")
+description = "B) 钱+50 (城府↑钱)"
+
+;; ── Option C: inspiration +15 — 测试定力 dampen ──
+[sub_resource type="Resource" id="Res_prop_inspiration"]
+script = ExtResource("3_prop")
+_property = 8
+value = 15
+
+[sub_resource type="Resource" id="Res_cr_inspiration"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_inspiration")])
+
+[sub_resource type="Resource" id="Res_opt_inspiration"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_cr_inspiration")
+description = "C) 兴+15 (定力↓兴)"
+
+;; ── Option D: health -25 — 测试定力 dampen ──
+[sub_resource type="Resource" id="Res_prop_health_sub"]
+script = ExtResource("3_prop")
+_property = 1
+value = -25
+
+[sub_resource type="Resource" id="Res_cr_health_sub"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_health_sub")])
+
+[sub_resource type="Resource" id="Res_opt_health_sub"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_cr_health_sub")
+description = "D) 健-25 (定力↓健失)"
+
+;; ── Option E: money -30 — 测试无 faction 减免 ──
+[sub_resource type="Resource" id="Res_prop_money_sub"]
+script = ExtResource("3_prop")
+_property = 0
+value = -30
+
+[sub_resource type="Resource" id="Res_cr_money_sub"]
+script = ExtResource("4_cr")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_money_sub")])
+
+[sub_resource type="Resource" id="Res_opt_money_sub"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_cr_money_sub")
+description = "E) 钱-30 (无 faction，不应减免)"
+
+[resource]
+script = ExtResource("6_re")
+era = ""
+archetype_id = ""
+_target_tags = Array[String]([])
+options = Array[ExtResource("1_baseopt")]([SubResource("Res_opt_prestige"), SubResource("Res_opt_money_gain"), SubResource("Res_opt_inspiration"), SubResource("Res_opt_health_sub"), SubResource("Res_opt_money_sub")])
+uuid = "test_modifier_no_faction"
+name = "【测试】修饰符-无派系效果"
+description = "测试城府/才华/定力对声望/金钱/兴致/健康的增减益。\n预期（假设三属性均为 50）：\nA) 望+30 → 城府↓望50% 才华↑望50% → 约+30\nB) 钱+50 → 城府↑钱30% → 约+59\nC) 兴+15 → 定力↓兴50% → 约+11\nD) 健-25 → 定力↓健失60% → 约-14\nE) 钱-30 → 无 faction → 原值 -30"
