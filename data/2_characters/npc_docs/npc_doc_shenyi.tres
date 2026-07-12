@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="NPCDocument" format=3 uid="uid://d0shenyi01npc"]
+
+[ext_resource type="Script" uid="uid://mbd5xnwsnqvh" path="res://model/npc_document.gd" id="1_udmdi"]
+
+[resource]
+script = ExtResource("1_udmdi")
+taste_id = ""
+name = "神医"
+uuid = "shenyi"
+preferred_places = Array[String](["xishi"])
+prop = {
+"TALENT": 60
+}
+relate_to = Array[String](["hushang"])

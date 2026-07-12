@@ -30,6 +30,7 @@ NPC 使用四段式 tag：**`actor:npc:{target_tag}`**
 | waiqi | `actor:npc:waiqi` |
 | yangguozhong | `actor:npc:yangguozhong` |
 | guoguofuren | `actor:npc:guoguofuren` |
+| shenyi | `actor:npc:shenyi` |
 
 ## 事件匹配机制
 
