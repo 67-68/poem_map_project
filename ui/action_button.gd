@@ -253,15 +253,30 @@ func _on_button_pressed() -> void:
 		Logging.info("SceneActionPanel: 执行 cost archetype (%d ops) for '%s'" % [_cost_ops.size(), action.name])
 	ActionManager.end_action_batch()
 	
-	# 🆕 [NEW] Step 2: 判定 outcome（success/failure），并注入到 context
+	# 🆕 [NEW] Step 2: action_results.init() — 在投骰前执行（让 PickNpcOperator 等有机会设置 dynamic_possibility）
+	# 🆕 注入 current_action 供 operator 在无候选时设 dynamic_possibility = 0
+	var _act_ctx: Dictionary = {}
+	var _act_ops = action.action_results if action.action_results else []
+	_act_ctx["current_action"] = action
+	for r in _act_ops:
+		if r and r.has_method("init"):
+			_act_ctx = r.init(_act_ctx)
+	
+	# 🆕 [NEW] Step 3: 判定 outcome（success/failure）
 	var _outcome: String = "success"  # 默认 success
 	
+	# 🆕 计算有效可能性：NPCSelector 可能已设 dynamic_possibility=0，优先使用
+	var _effective_possibility: int = action.get_possibility_int()
+	if action.dynamic_pos_set:
+		_effective_possibility = action.dynamic_possibility
+		Logging.info("SceneActionPanel: 使用 dynamic_possibility=%d（替换配置的 %d，NPC 不可用）" % [_effective_possibility, action.get_possibility_int()])
+	
 	# 🆕 possibility 抽奖：generator > possibility（有 generator 时跳过抽奖）
-	if _snap_generator == null and action.get_possibility_int() < 100:
+	if _snap_generator == null and _effective_possibility < 100:
 		var roll: int = randi() % 101
-		if roll > action.get_possibility_int():
+		if roll > _effective_possibility:
 			_outcome = "failure"
-			Logging.info("SceneActionPanel: possibility 未中签 (roll=%d, possibility=%s=%d)，outcome=%s" % [roll, action.possibility, action.get_possibility_int(), _outcome])
+			Logging.info("SceneActionPanel: possibility 未中签 (roll=%d, effective_possibility=%d)，outcome=%s" % [roll, _effective_possibility, _outcome])
 	
 	# 🆕 Sub-action 检测：存在 sub_actions 时弹出 Picker，选择后再执行 operators + scan
 	# generator 存在时跳过 sub-action（generator 已预定了事件链）
@@ -433,19 +448,14 @@ func _on_button_pressed() -> void:
 	PlayerState._is_repeated_action = PlayerState.is_action_repeated(_identifying_tags)
 	Logging.info("SceneActionPanel: _is_repeated_action=%s for identifying_tags=%s" % [str(PlayerState._is_repeated_action), str(_identifying_tags)])
 	
-	# 🆕 [NEW] Step 3: 非 sub-action 路径 — 执行 action_results（含 custom_option 注入的 operator）
+	# 🆕 Step 3: 非 sub-action 路径 — 执行 action_results.operate()（仅 operate，init 已在 Step 2 完成）
 	# success/failure archetype 的 operators 不再在此执行，推迟到事件层
-	# action_results 中可能含 PoemRewardOperator 等 pre-operator，在此执行
-	var _act_ops = action.action_results if action.action_results else []
+	# action_results 中可能含 PickNpcOperator.operate()（注入 tag）等 post-operator
 	if not _act_ops.is_empty():
-		var _act_ctx: Dictionary = {}
-		for r in _act_ops:
-			if r and r.has_method("init"):
-				_act_ctx = r.init(_act_ctx)
 		for r in _act_ops:
 			if r:
 				r.operate()
-		Logging.info("SceneActionPanel: 执行 action_results (%d ops) for '%s'" % [_act_ops.size(), action.name])
+		Logging.info("SceneActionPanel: 执行 action_results.operate() (%d ops) for '%s'" % [_act_ops.size(), action.name])
 	
 	# 🆕 时间消耗：通过 day_consumed + trait 惩罚统一扣除（替代原 sprained_ankle 硬编码）
 	if _snap_day_consumed > 0:
@@ -533,7 +543,6 @@ func _on_sub_action_picked(entity) -> void:
 
 	Logging.info("SceneActionPanel: sub-action '%s' selected (uuid=%s)" % [entity.name if entity else "NULL", sub_uuid])
 
-		
 	# 🆕 查找子 action，使用其 tags 和 fallback（而非父 action 的）
 	var sub_action: Action = Database.get_action(sub_uuid) as Action
 	var sub_main_tag: String = ""
@@ -579,19 +588,31 @@ func _on_sub_action_picked(entity) -> void:
 				r.operate()
 		Logging.info("SceneActionPanel: sub-action '%s' 执行 cost archetype (%d ops)" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size()])
 	
-	# 🆕 [NEW] Step 2: 判定 outcome（success/failure）
+	# 🆕 Step 2: sub-action 的 action_results.init() — 投骰前执行（让 NPC picker 有机会设 dynamic_possibility=0）
+	var _sub_act_ctx: Dictionary = {}
+	if sub_action and sub_action.action_results and not sub_action.action_results.is_empty():
+		_sub_act_ctx["current_action"] = sub_action
+		for r in sub_action.action_results:
+			if r and r.has_method("init"):
+				_sub_act_ctx = r.init(_sub_act_ctx)
+	
+	# 🆕 [NEW] Step 3: 判定 outcome（success/failure）
 	var _sub_outcome: String = "success"
 	# 使用父 action 的 outcome（已在 _on_button_pressed 中判定）
 	# 如果父 action 为 failure，子 action 也走 failure（不会进入此回调）
 	# 如果父 action 为 success，子 action 独立投骰
-	if sub_action and sub_action.get_possibility_int() < 100:
+	# 🆕 计算有效可能性：NPCSelector 可能已设 dynamic_possibility=0，优先使用
+	var _sub_effective_possibility: int = sub_action.get_possibility_int() if sub_action else 100
+	if sub_action and sub_action.dynamic_pos_set:
+		_sub_effective_possibility = sub_action.dynamic_possibility
+		Logging.info("SceneActionPanel: sub-action 使用 dynamic_possibility=%d（替换配置的 %d，NPC 不可用）" % [_sub_effective_possibility, sub_action.get_possibility_int()])
+	if sub_action and _sub_effective_possibility < 100:
 		var roll: int = randi() % 101
-		var threshold: int = sub_action.get_possibility_int()
-		if roll > threshold:
+		if roll > _sub_effective_possibility:
 			_sub_outcome = "failure"
-			Logging.info("SceneActionPanel: sub-action '%s' possibility FAIL (roll=%d > threshold=%d)" % [sub_action.name, roll, threshold])
+			Logging.info("SceneActionPanel: sub-action '%s' possibility FAIL (roll=%d > %d)" % [sub_action.name, roll, _sub_effective_possibility])
 		else:
-			Logging.info("SceneActionPanel: sub-action '%s' possibility PASS (roll=%d <= threshold=%d)" % [sub_action.name, roll, threshold])
+			Logging.info("SceneActionPanel: sub-action '%s' possibility PASS (roll=%d <= %d)" % [sub_action.name, roll, _sub_effective_possibility])
 	
 	# 1. 执行父行动的 operators（挂起数据，不含 TimeOperator）
 	for r in _pending_sub_action_results:

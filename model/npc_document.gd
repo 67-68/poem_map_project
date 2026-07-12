@@ -20,6 +20,11 @@ class_name NPCDocument extends Resource
 ## 示例： ["pingkangfang", "huangcheng"]
 @export var preferred_places: Array[String] = []
 
+## NPC 在一旬中出现的天数（0~9，对应 TimeService.current_day）。
+## 空数组 = 始终可用（向后兼容）。
+## 示例： [1, 4, 7] = 每旬第 2、5、8 天出现。
+@export var appear_days: Array[int] = []
+
 # ═══════════════════════════════════════════════════════════
 # 关系数据 — 原 RelationFlagManager 虚拟 flag 迁移
 # 这些属性替代了 flag_gen_{category}_{TARGET_TAG} 的 flag 机制。

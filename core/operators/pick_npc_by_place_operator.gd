@@ -44,43 +44,20 @@ func init(_context: Dictionary) -> Dictionary:
 
 	Logging.info("PickNpcByPlaceOperator.init: 当前驻留地点=%s, 目标 context key=%s" % [current_place, key_stored_context])
 
-	# 2. 收集匹配的候选人
-	var candidates: Array[String] = []
-	var all_docs: Dictionary = Database.get_npc_document_all()
+	# 🆕 委托给 NPCSelector select_by_place（含天数可用性检查）
+	var chosen: String = NPCSelector.select_by_place([current_place], state, "eq")
 
-	for target_tag: String in all_docs:
-		var doc = all_docs[target_tag]
-		if doc == null:
-			continue
-
-		# 3. 过滤 preferred_places
-		var places: Array = doc.preferred_places if doc.has("preferred_places") else []
-		if places.is_empty():
-			Logging.debug("PickNpcByPlaceOperator: 跳过 %s（preferred_places 为空）" % target_tag)
-			continue
-		if not current_place in places:
-			Logging.debug("PickNpcByPlaceOperator: 跳过 %s（preferred_places=%s，不含 %s）" % [target_tag, str(places), current_place])
-			continue
-
-		# 4. 可选：按 person_state 过滤
-		if not state.is_empty():
-			var person_state_val = RelationFlagManager.get_person_state(target_tag)
-			if person_state_val != state:
-				Logging.debug("PickNpcByPlaceOperator: 跳过 %s（person_state=%s，需要 %s）" % [target_tag, person_state_val, state])
-				continue
-
-		candidates.append(target_tag)
-		Logging.debug("PickNpcByPlaceOperator: 候选人 +%s" % target_tag)
-
-	if candidates.is_empty():
-		Logging.warn("PickNpcByPlaceOperator.init: 在地点 '%s' 无符合条件的 NPC（state 过滤=%s）" % [current_place, state if not state.is_empty() else "(无过滤)"])
+	if chosen.is_empty():
+		Logging.warn("PickNpcByPlaceOperator.init: 在地点 '%s' 无符合条件的 NPC（state=%s），设置 dynamic_possibility=0" % [current_place, state])
 		_context[key_stored_context] = ""
+		# 🆕 没有 NPC 可用时，设置 dynamic_possibility=0 让投骰必失败
+		var current_action: Action = _context.get("current_action", null) if _context.has("current_action") else null
+		if current_action != null:
+			current_action.dynamic_possibility = 0
+			Logging.info("PickNpcByPlaceOperator.init: 设置 action '%s' dynamic_possibility=0（无候选 NPC）" % current_action.uuid)
 		return _context
 
-	# 5. 随机选一个
-	candidates.shuffle()
-	var chosen: String = candidates[0]
-	Logging.info("PickNpcByPlaceOperator.init: 在地点 '%s' 随机选中 NPC=%s（候选人: %d）" % [current_place, chosen, candidates.size()])
+	Logging.info("PickNpcByPlaceOperator.init: 在地点 '%s' 随机选中 NPC=%s" % [current_place, chosen])
 
 	_context[key_stored_context] = chosen
 	return _context

@@ -92,6 +92,13 @@ var success_hint: String = ""
 	'm_success_rate',
 	'l_success_rate'
 ) var possibility: String = "l_success_rate"
+
+var dynamic_pos_set = false
+var dynamic_possibility = 0:
+	set(val):
+		dynamic_pos_set = true
+		dynamic_possibility = val
+
 @export var failed_result: ChoiceResult = ChoiceResult.new()
 
 @export var defer_config: DeferConfig = DeferConfig.new()

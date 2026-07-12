@@ -76,8 +76,13 @@ func init(_context: Dictionary) -> Dictionary:
 			return _context
 
 	if target_tag.is_empty():
-		Logging.warn("PickNpcOperator.init: 无法选中 NPC（mode=%s），context[%s] 置空" % [mode, key_stored_context])
+		Logging.warn("PickNpcOperator.init: 无法选中 NPC（mode=%s），context[%s] 置空，设置 dynamic_possibility=0" % [mode, key_stored_context])
 		_context[key_stored_context] = ""
+		# 🆕 没有 NPC 可用时，设置 dynamic_possibility=0 让投骰必失败
+		var current_action: Action = _context.get("current_action", null) if _context.has("current_action") else null
+		if current_action != null:
+			current_action.dynamic_possibility = 0
+			Logging.info("PickNpcOperator.init: 设置 action '%s' dynamic_possibility=0（无候选 NPC）" % current_action.uuid)
 		return _context
 
 	_context[key_stored_context] = target_tag
@@ -130,32 +135,12 @@ func describe_preview() -> String:
 
 
 # ═══════════════════════════════════════════════════════════
-# 三种选人模式
+# 三种选人模式 — 委托给 NPCSelector
 # ═══════════════════════════════════════════════════════════
 
 ## mode=random: 从所有 RELATION_TARGET 中随机选人
 func _pick_random() -> String:
-	var candidates: Array[String] = []
-	for target_enum_value in ENUMS.RELATION_TARGET.values():
-		var target_tag := ENUMS.to_relation_str(target_enum_value)
-		if target_tag.is_empty():
-			continue
-
-		# 可选 state 过滤
-		if not state.is_empty():
-			var current_state = RelationFlagManager.get_person_state(target_tag)
-			if not _state_matches(current_state):
-				Logging.debug("PickNpcOperator: 跳过 %s（state=%s，需要 %s）" % [target_tag, current_state, state])
-				continue
-
-		candidates.append(target_tag)
-
-	if candidates.is_empty():
-		Logging.warn("PickNpcOperator: random 模式无候选 NPC（state=%s）" % state)
-		return ""
-
-	candidates.shuffle()
-	return candidates[0]
+	return NPCSelector.select_random(state, state_compare)
 
 
 ## mode=by_place: 根据地点筛选 NPC
@@ -174,46 +159,7 @@ func _pick_by_place() -> String:
 		target_places = [current_place]
 
 	Logging.info("PickNpcOperator: by_place 模式，目标地点=%s" % str(target_places))
-
-	# 遍历所有 NPCDocument
-	var candidates: Array[String] = []
-	var all_docs: Dictionary = Database.get_npc_document_all()
-
-	for target_tag: String in all_docs:
-		var doc = all_docs[target_tag]
-		if doc == null:
-			continue
-
-		# 过滤 preferred_places
-		var npc_places: Array = doc.preferred_places if doc.has("preferred_places") else []
-		if npc_places.is_empty():
-			Logging.debug("PickNpcOperator: 跳过 %s（preferred_places 为空）" % target_tag)
-			continue
-
-		var place_match := false
-		for tp in target_places:
-			if tp in npc_places:
-				place_match = true
-				break
-		if not place_match:
-			Logging.debug("PickNpcOperator: 跳过 %s（preferred_places=%s，不含 %s）" % [target_tag, str(npc_places), str(target_places)])
-			continue
-
-		# 可选 state 过滤
-		if not state.is_empty():
-			var current_state = RelationFlagManager.get_person_state(target_tag)
-			if not _state_matches(current_state):
-				Logging.debug("PickNpcOperator: 跳过 %s（state=%s，需要 %s）" % [target_tag, current_state, state])
-				continue
-
-		candidates.append(target_tag)
-
-	if candidates.is_empty():
-		Logging.warn("PickNpcOperator: by_place 模式在 %s 无候选 NPC（state=%s）" % [str(target_places), state])
-		return ""
-
-	candidates.shuffle()
-	return candidates[0]
+	return NPCSelector.select_by_place(target_places, state, state_compare)
 
 
 ## mode=related: 从 source NPC 的 relate_to 中选人
@@ -227,47 +173,4 @@ func _pick_related(_context: Dictionary) -> String:
 		Logging.err("PickNpcOperator: related 模式，context[%s] 为空" % source_key)
 		return ""
 
-	var doc = Database.get_npc_document(source_tag)
-	if doc == null:
-		Logging.err("PickNpcOperator: related 模式，未找到 NPC document for '%s'" % source_tag)
-		return ""
-
-	var relates: Array = doc.relate_to if doc.has("relate_to") else []
-	if relates.is_empty():
-		Logging.warn("PickNpcOperator: '%s' 的 relate_to 为空" % source_tag)
-		return ""
-
-	Logging.info("PickNpcOperator: related 模式，source=%s，relate_to=%s" % [source_tag, str(relates)])
-
-	# 过滤 + 随机选
-	var candidates: Array[String] = []
-	for candidate_tag in relates:
-		if state.is_empty():
-			candidates.append(candidate_tag)
-		else:
-			var current_state = RelationFlagManager.get_person_state(candidate_tag)
-			if _state_matches(current_state):
-				candidates.append(candidate_tag)
-
-	if candidates.is_empty():
-		Logging.warn("PickNpcOperator: related 模式无候选（state=%s）" % state)
-		return ""
-
-	candidates.shuffle()
-	return candidates[0]
-
-
-## state_compare 匹配判断
-func _state_matches(current_state: String) -> bool:
-	match state_compare:
-		"gte":
-			var idx_current = _PERSON_STATE_ORDER.find(current_state)
-			var idx_target = _PERSON_STATE_ORDER.find(state)
-			if idx_current == -1 or idx_target == -1:
-				return false
-			return idx_current >= idx_target
-		"eq", _:
-			return current_state == state
-
-## 引用 PERSON_STATE_ORDER 用于 state_compare=gte
-const _PERSON_STATE_ORDER: Array[String] = ["uncharted", "not_meet", "know_about", "inner_circle", "blood_oath"]
+	return NPCSelector.select_related(source_tag, state, state_compare)

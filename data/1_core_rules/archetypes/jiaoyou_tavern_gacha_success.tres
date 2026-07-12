@@ -6,6 +6,6 @@
 script = ExtResource("1_oenn0")
 uuid = "jiaoyou_tavern_gacha_success"
 name = "jiaoyou_tavern_gacha.success"
-universal_result = "set_random_person_state(tier=1; state=know_about)"
+universal_result = "set_random_person_state(tier=1; state=not_meet)"
 action_uuid = "jiaoyou_tavern_gacha"
 state = "success"
