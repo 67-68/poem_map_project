@@ -9,8 +9,8 @@ class_name RollImaginaryOperator extends BaseOperator
 ##   2. 随机选一个，将其 get_hint 写入 context["imaginary_gain_hint"]
 ##
 ## operate() 阶段:
-##   1. 检查重复（已有该 Imaginary → talent +3）
-##   2. 否则创建 Imaginary(level=level, duration_xun=2) 写入 Database.imaginaries_detail
+##   1. 检查 uuid 冲突：已有该 Imaginary → uuid 添加数字后缀（snow → snow1）
+##   2. 创建 Imaginary(level=level, duration_xun=2) 写入 Database.imaginaries_detail
 ##   3. Lv2 注入 trait_effect_operations: health -5
 ##   4. 发射 EventBus.imaginary_changed 通知 UI 刷新
 
@@ -86,20 +86,20 @@ func operate():
 		Logging.err("RollImaginaryOperator.operate: _picked_uuid 为空，检查 init() 是否被正确调用")
 		return
 
-	# ── 重复检测：已有该 Imaginary → talent +3 ──
+	# ── 解析最终 uuid：已有该 Imaginary → 数字后缀化 ──
+	var final_uuid := _picked_uuid
 	if Database.imaginaries_detail.has(_picked_uuid):
-		var player = _get_player_state()
-		if player:
-			player.append_stat("talent", 3)
-		Logging.info("RollImaginaryOperator.operate: 重复 Imaginary '%s' → talent +3" % _picked_uuid)
-		EventBus.imaginary_changed.emit()
-		return
+		var counter := 1
+		while Database.imaginaries_detail.has(_picked_uuid + str(counter)):
+			counter += 1
+		final_uuid = _picked_uuid + str(counter)
+		Logging.info("RollImaginaryOperator.operate: 重复 Imaginary '%s' → 创建副本 uuid='%s'" % [_picked_uuid, final_uuid])
 
 	# ── 新建 Imaginary ──
 	var imaginary := Imaginary.new()
-	imaginary.uuid = _picked_uuid
+	imaginary.uuid = final_uuid
 
-	# 从定义表加载 name
+	# 从定义表加载 name（基于基础 uuid，无后缀）
 	var defs := _load_imaginary_defs()
 	var def_data: Dictionary = defs.get(_picked_uuid, {})
 	imaginary.name = str(def_data.get("name", _picked_uuid))
@@ -113,10 +113,10 @@ func operate():
 		hp_op.property = "health"
 		hp_op.value = -5
 		imaginary.trait_effect_operations.append(hp_op)
-		Logging.info("RollImaginaryOperator.operate: Lv2 Imaginary '%s' → trait_effect_operations: health -5" % _picked_uuid)
+		Logging.info("RollImaginaryOperator.operate: Lv2 Imaginary '%s' → trait_effect_operations: health -5" % final_uuid)
 
-	Database.imaginaries_detail[_picked_uuid] = imaginary
-	Logging.info("RollImaginaryOperator.operate: 新建 Imaginary '%s' (name=%s, level=%d, duration_xun=2)" % [_picked_uuid, imaginary.name, imaginary.level])
+	Database.imaginaries_detail[final_uuid] = imaginary
+	Logging.info("RollImaginaryOperator.operate: 新建 Imaginary '%s' (base=%s, name=%s, level=%d, duration_xun=2)" % [final_uuid, _picked_uuid, imaginary.name, imaginary.level])
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()

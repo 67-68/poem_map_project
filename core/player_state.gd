@@ -202,12 +202,32 @@ func init_emotions():
 		set_emotion(emo_name, emo_val)
 		Logging.info('init_emotions: set %s to %d from SourceOfTruth' % [emo_name, emo_val])
 
+func init_npc_person_states():
+	"""从 SourceOfTruth.npc_person_state_overrides 覆盖 NPC 开局 person_state"""
+	var overrides = SourceOfTruth.debug_dashboard_state.get("npc_person_state_overrides", {})
+	if overrides.is_empty():
+		Logging.info("init_npc_person_states: no overrides in SourceOfTruth, skipping")
+		return
+
+	for npc_id in overrides:
+		var target_state = overrides[npc_id] as String
+		if target_state.is_empty():
+			Logging.warn("init_npc_person_states: override for '%s' has empty state, skipping" % npc_id)
+			continue
+		var doc = Database.get_npc_document(npc_id)
+		if doc == null:
+			Logging.warn("init_npc_person_states: npc_document '%s' not found in Database, skipping" % npc_id)
+			continue
+		doc.person_state = target_state
+		Logging.info("init_npc_person_states: set '%s' person_state → '%s'" % [npc_id, target_state])
+
 func _ready():
 	init_emotions()
 	init_props()
 	init_traits()
 	init_flags()
 	init_imaginaries()
+	init_npc_person_states()
 	_load_imaginary_definitions()
 	_connect_imaginary_signals()
 	
@@ -237,26 +257,33 @@ func _connect_imaginary_signals():
 	Logging.info("PlayerState: connected request_add_imaginary signal")
 
 
+## 解析意象 uuid：去重 → 数字后缀化。
+## 例：snow 不存在 → "snow"；snow 存在 → "snow1"；snow+snow1 存在 → "snow2"
+static func _resolve_imaginary_uuid(base_name: String) -> String:
+	if not Database.imaginaries_detail.has(base_name):
+		return base_name
+	var counter := 1
+	while Database.imaginaries_detail.has(base_name + str(counter)):
+		counter += 1
+	return base_name + str(counter)
+
+
 func _on_request_add_imaginary(tag: String):
 	if tag.is_empty():
 		Logging.err("PlayerState._on_request_add_imaginary: tag 为空")
 		return
 
-	var imaginary_uuid = tag.to_lower()
-
-	if Database.imaginaries_detail.has(imaginary_uuid):
-		append_stat("talent", 3)
-		Logging.info("PlayerState._on_request_add_imaginary: 重复 Imaginary '%s' → talent +3" % imaginary_uuid)
-		EventBus.imaginary_changed.emit()
-		return
+	var base_uuid = tag.to_lower()
+	var imaginary_uuid = _resolve_imaginary_uuid(base_uuid)
 
 	var imaginary = Imaginary.new()
 	imaginary.uuid = imaginary_uuid
-	var def_data = _imaginary_defs.get(imaginary_uuid, {})
+	var def_data = _imaginary_defs.get(base_uuid, {})
 	imaginary.name = def_data.get("name", tag)
+	imaginary.level = 1  # 默认等级（ImageryAcquisitionOperator 无 level 参数）
 	imaginary.duration_xun = 2
 	Database.imaginaries_detail[imaginary_uuid] = imaginary
-	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (name=%s, duration_xun=2)" % [imaginary_uuid, imaginary.name])
+	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (base=%s, name=%s, duration_xun=2)" % [imaginary_uuid, base_uuid, imaginary.name])
 
 	EventBus.imaginary_changed.emit()
 

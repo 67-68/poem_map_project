@@ -1,11 +1,11 @@
-# Imaginary 生命周期系统 (V9: 继承 Trait 统一到期系统)
+# Imaginary 生命周期系统 (V9.1: 继承 Trait + 重复获取后缀副本)
 
 ## 文件
 - `core/model/imaginary.gd` — Imaginary extends Trait（V9 重构）
 - `core/model/trait.gd` — Trait 基类（duration_xun/lasting_xun/trait_effect_operations）
 - `core/model/property_operator.gd` — PropertyOperator（Lv2 扣血用）
-- `core/operators/roll_imaginary_operator.gd` — 创建 Imaginary 时设 duration_xun=2，Lv2 注入 trait_effect_operations
-- `core/player_state.gd` — `_on_request_add_imaginary()` / `init_imaginaries()` 设置 duration_xun=2
+- `core/operators/roll_imaginary_operator.gd` — 创建 Imaginary（含重复后缀化）
+- `core/player_state.gd` — `_on_request_add_imaginary()` / `init_imaginaries()` + `_resolve_imaginary_uuid()`
 - `core/survival_manager.gd` — `_process_imaginary_effects()` 统一使用 lasting_xun/duration_xun
 - `core/action_hint_builder.gd` — `build_trait_hint()` Imaginary 分支
 - `ui/left_player_panel.gd` — `_rebuild_trait_grid()` 遍历 `Database.imaginaries_detail`
@@ -21,6 +21,24 @@ Resource → GameEntity → Trait → Imaginary
 ```
 
 Imaginary 继承 Trait 的全部字段，共享统一的到期系统（`duration_xun` + `lasting_xun`）。
+
+### 重复获取 → 后缀副本（V9.1 新增）
+
+当玩家已持有某意象时，再次获取**不再补偿 talent+3**，改为创建带数字后缀的独立副本：
+
+| 场景 | 结果 |
+|------|------|
+| 首次获取 "snow" | uuid = "snow" |
+| 再次获取 "snow" | uuid = "snow1"（副本） |
+| 第三次获取 "snow" | uuid = "snow2" |
+
+副本属性：
+- **name**：从 `imaginary_definitions.json` 取基础名的 name（"snow1" 的展示名仍是 "孤雪"）
+- **level**：沿用新获取的入参（`RollImaginaryOperator` 的 `level`；`_on_request_add_imaginary` 默认 1）
+- **duration_xun**：统一 2
+- **get_hint**：复用基础名的 hint
+- **到期**：各自独立到期删除，不晋升
+- **数量上限**：无
 
 ### 字段对比
 
