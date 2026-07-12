@@ -5,7 +5,6 @@ class_name ActionPanelManager extends Node
 ## 1. 按硬编码优先级列表在 ActionPanel/VBox 中构建按钮
 ## 2. Era 切换时完全重建按钮（保持幂等顺序）
 ## 3. 同步 ActionManager 的抽取/锁定状态到按钮视觉
-## 4. 管理 Poem（琢句）特殊按钮的生命周期
 ##
 ## 不负责：
 ## - ActionPanel ↔ EventHistory 互斥可见性（由 NarrativeOverlay 管理）
@@ -13,11 +12,9 @@ class_name ActionPanelManager extends Node
 # ═══════════════════════════════════════════════════════
 # 硬编码按钮优先级列表（保证 Era 切换后顺序幂等）
 # ═══════════════════════════════════════════════════════
-# type: "special" → 特殊按钮（琢句），不受 Era 过滤
-#       "scene_action" → 从 Database 查找 SceneAction
-# action_id: Database.get_action() 的 key，空 = 特殊按钮
+# type: "scene_action" → 从 Database 查找 SceneAction
+# action_id: Database.get_action() 的 key
 const ACTION_PRIORITY: Array[Dictionary] = [
-	{ name = "Poem",    type = "special",      action_id = "" },
 	{ name = "Fangshi", type = "scene_action", action_id = "fang_shi" },
 	{ name = "Baiye",   type = "scene_action", action_id = "bai_ye" },
 	{ name = "Jiaoyou", type = "scene_action", action_id = "jiao_you" },
@@ -26,21 +23,13 @@ const ACTION_PRIORITY: Array[Dictionary] = [
 	{ name = "Commute", type = "scene_action", action_id = "zhu_liu" },
 ]
 
-# ── Poem 按钮常量 ──────────────────────────────────
-const POEM_TITLE: String = "琢句"
-const POEM_OUTCOME: String = "铺陈笔墨，直抒胸臆。"
-const POEM_ICON_PATH: String = "res://assets/stamps/chuangzuo_stamp.png"
-
 # ── 子节点 ─────────────────────────────────────────
 @onready var _narrative_overlay: NarrativeOverlay = get_parent() as NarrativeOverlay
 @onready var _container: VBoxContainer = _narrative_overlay.get_node("TapeContainer/VBox/ActionPanel/V")
-@onready var _poem_icon: Texture2D = load(POEM_ICON_PATH)
 
 # ── 运行时状态 ─────────────────────────────────────
 ## 缓存每个按钮的锁状态实现增量 diff
 var _panel_lock_cache: Dictionary = {}
-## Focus session 中诗按钮是否隐藏
-var _poem_hidden_by_focus: bool = false
 
 # ═══════════════════════════════════════════════════════
 # _ready
@@ -70,10 +59,6 @@ func _connect_signals() -> void:
 	if not EventBus.request_refresh_action_locks.is_connected(_on_refresh_locks_only):
 		EventBus.request_refresh_action_locks.connect(_on_refresh_locks_only)
 
-	# ── Focus session 切换 ──
-	if not EventBus.focus_session_changed.is_connected(_on_focus_changed):
-		EventBus.focus_session_changed.connect(_on_focus_changed)
-
 	# ── Era 切换 → 完全重建 ──
 	if not EventBus.era_changed.is_connected(_rebuild_all_buttons):
 		EventBus.era_changed.connect(_rebuild_all_buttons)
@@ -100,12 +85,6 @@ func _rebuild_all_buttons(_era: String = "") -> void:
 		var action_id: String = entry.get("action_id", "")
 
 		match type:
-			"special":
-				if name == "Poem":
-					_create_poem_button()
-				else:
-					Logging.warn("ActionPanelManager: 未知 special 类型 '%s'" % name)
-
 			"scene_action":
 				_create_scene_action_button(name, action_id)
 
@@ -125,29 +104,6 @@ func _clear_container() -> void:
 	for child in _container.get_children():
 		if child is SceneActionPanel:
 			child.queue_free()
-
-
-## 创建琢句特殊按钮（不受 Era 过滤）
-func _create_poem_button() -> void:
-	var btn := preload("res://ui/action_button.tscn").instantiate()
-	_container.add_child(btn)
-
-	# 🚨 使用 get_node 路径访问子节点（@onready 变量在 add_child 后尚未初始化）
-	var title_label: Label = btn.get_node("Panel/HBoxContainer/VBoxContainer/Title")
-	var outcome_label: Label = btn.get_node("Panel/HBoxContainer/VBoxContainer/Outcome")
-	var icon_rect: TextureRect = btn.get_node("Panel/HBoxContainer/TextureRect")
-	title_label.text = POEM_TITLE
-	outcome_label.text = POEM_OUTCOME
-	icon_rect.texture = _poem_icon
-	icon_rect.visible = true
-
-	# 琢句按钮点击 → 发射诗词创建信号，不走 Action 系统
-	btn.pressed.connect(func():
-		EventBus.poem_start_clicked.emit()
-	)
-
-	# 不与 Action 绑定 → hover popup 可用但无内容（与旧版一致）
-	Logging.info("ActionPanelManager: Poem 按钮已创建")
 
 
 ## 创建 SceneAction 按钮（受 Era 过滤）
@@ -194,34 +150,18 @@ func _on_refresh_locks_only() -> void:
 			continue
 		var panel := child as SceneActionPanel
 
-		# ── Poem 按钮（无 Action）特殊处理 ──
-		if not panel.action:
-			# Poem 按钮仅受 focus session 影响
-			var should_lock := _poem_hidden_by_focus
-			var panel_key := str(panel.get_instance_id())
-			var cached = _panel_lock_cache.get(panel_key, {})
-			var cached_locked: bool = cached.get("locked", not should_lock)
-
-			if should_lock != cached_locked:
-				changed_count += 1
-				if should_lock:
-					panel.set_locked("聚焦模式中")
-				else:
-					panel.set_unlocked()
-				_panel_lock_cache[panel_key] = {"locked": should_lock, "reason": "" if not should_lock else "聚焦模式中"}
-			continue
-
 		# ── SceneAction 按钮 ──
 		var a_id := panel.action.uuid
+		var deferring_id := _resolve_deferring_id(panel.action)
 
-		# 优先检查 deferring 状态
-		if ActionManager.is_deferring(a_id):
+		# 优先检查 deferring 状态（父 action 自身或其子 action 有 deferring）
+		if not deferring_id.is_empty():
 			changed_count += 1
-			if ActionManager.is_defer_failing(a_id):
+			if ActionManager.is_defer_failing(deferring_id):
 				panel.set_defer_failing()
 			else:
 				panel.set_deferring()
-			_panel_lock_cache[str(panel.get_instance_id())] = {"locked": true, "deferring": true}
+			_panel_lock_cache[str(panel.get_instance_id())] = {"locked": true, "deferring": true, "deferring_id": deferring_id}
 			continue
 
 		# 确定目标锁定状态
@@ -249,23 +189,18 @@ func _on_refresh_locks_only() -> void:
 			else:
 				panel.set_unlocked()
 			_panel_lock_cache[panel_key] = {"locked": should_lock, "reason": lock_reason}
-
 	if changed_count > 0:
 		Logging.info("ActionPanelManager: 增量刷新完成，实际锁定态变化 %d 个按钮" % changed_count)
 
 
-## Focus session 切换处理
-func _on_focus_changed(active: bool) -> void:
-	_poem_hidden_by_focus = active
 
-	# Poem 按钮在 focus 时隐藏
-	for child in _container.get_children():
-		if not child is SceneActionPanel:
-			continue
-		var panel := child as SceneActionPanel
-		if not panel.action:
-			# 这是 Poem 按钮
-			panel.visible = not active
-
-	# 非 Poem 按钮由 ActionManager 的 focus override 机制通过 _on_refresh_locks_only 同步
-	_on_refresh_locks_only()
+## 解析父 action 的 deferring 状态：若自身在 deferring → 返回自身 id；
+## 否则遍历 sub_actions，返回第一个 deferring 的子 action id。
+## 全不匹配返回空串。
+func _resolve_deferring_id(action: Action) -> String:
+	if ActionManager.is_deferring(action.uuid):
+		return action.uuid
+	for sub_uuid in action.sub_actions:
+		if ActionManager.is_deferring(sub_uuid):
+			return sub_uuid
+	return ""

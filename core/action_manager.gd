@@ -662,7 +662,7 @@ func get_defer_remaining(action_id: String) -> int:
 
 ## 激活一个 action 的 defer 状态。
 ## 由 SceneActionPanel._on_button_pressed 在点击时调用。
-func start_defer(action: Action) -> void:
+func start_defer(action: Action, npc_target: String = "") -> void:
 	if not action:
 		Logging.err("[ActionManager] start_defer: action is null")
 		return
@@ -695,6 +695,7 @@ func start_defer(action: Action) -> void:
 		"ap_cost": config.ap_cost,
 		"failed_fallback": config.failed_fallback,
 		"main_tag": main_tag,
+		"npc_target": npc_target,
 	}
 	Logging.info("[ActionManager] ✅ 激活 defer: action=%s, xun=%d, ap_cost='%s'(%d), archetype='%s', fallback='%s'" % [
 		action_id, total_xun, config.ap_cost, amounts_ap, config.used_resource_archetype, config.failed_fallback
@@ -829,13 +830,13 @@ func process_xun_tick() -> void:
 					Logging.info("[ActionManager] 📤 defer 每旬消耗: property=%s, value=%d" % [pop.property, pop.value])
 					pop.operate()
 		
-		# 2. 扣除 ap_cost（时间）
+		# 2. 扣除 ap_cost（时间）— ap_val 来自 named_amounts 是正数，用负值扣除
 		var ap_key: String = data.get("ap_cost", "")
 		if not ap_key.is_empty():
 			var ap_val: int = amounts.get(ap_key, 0)
 			if ap_val != 0:
-				PlayerState.append_stat("_time", ap_val)
-				Logging.info("[ActionManager] ⏱ defer 每旬时间消耗: ap_cost='%s'(%d)" % [ap_key, ap_val])
+				PlayerState.append_stat("_time", -ap_val)
+				Logging.info("[ActionManager] ⏱ defer 每旬时间消耗: ap_cost='%s'(%d → _time %d)" % [ap_key, ap_val, -ap_val])
 		
 		# ── 递减 remaining_xun ──
 		var remaining: int = data.get("remaining_xun", 1)
@@ -852,21 +853,37 @@ func process_xun_tick() -> void:
 		# 到期 → 使用 main_tag 做事件扫描
 		var data: Dictionary = _deferring_actions[action_id]
 		var main_tag: String = data.get("main_tag", "")
+		var npc_target: String = data.get("npc_target", "")
 		_deferring_actions.erase(action_id)
 		
 		if not main_tag.is_empty():
-			Logging.info("[ActionManager] 📖 defer 到期触发器: scan_events with main_tag='%s'" % main_tag)
+			Logging.info("[ActionManager] 📖 defer 到期触发器: scan_events with main_tag='%s' npc_target='%s'" % [main_tag, npc_target])
 			var context := {
 				'main_tag': main_tag,
 				'fallback_event_uuid': "",
 				'tag_match_mode': 'all',
-				# 🆕 defer 结束的事件扫描也注入 archetype_base + outcome
 				'archetype_base': action_id,
 				'outcome': 'success',
+				'npc_target': npc_target,
+				'npc_target_name': "",
 			}
 			EventManager.scan_events(0, context)
 		else:
-			Logging.warn("[ActionManager] defer 到期但 main_tag 为空，无法扫描事件: action=%s" % action_id)
+			# 无 main_tag 的普通 Action（如 baiye_normal）：直接推 fallback 事件 + archetype context
+			# RandomEvent.init() 会从 context 注入 archetype_base.success 的 operators（含 person_state）
+			var fallback_uuid: String = ""
+			var act = Database.get_action(action_id) as Action
+			if act:
+				fallback_uuid = act.fallback_event_uuid
+			if not fallback_uuid.is_empty():
+				Logging.info("[ActionManager] 📖 defer 到期（无main_tag）: 推 fallback 事件 '%s' + archetype_base='%s' outcome='success' npc_target='%s'" % [fallback_uuid, action_id, npc_target])
+				EventBus.request_event_key.emit(fallback_uuid, {
+					'archetype_base': action_id,
+					'outcome': 'success',
+					'npc_target': npc_target,
+				})
+			else:
+				Logging.warn("[ActionManager] defer 到期但 main_tag 为空且无 fallback_event_uuid: action=%s" % action_id)
 	
 	for action_id in interrupted_defers:
 		_deferring_actions.erase(action_id)

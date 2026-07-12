@@ -184,12 +184,20 @@ func _on_button_pressed() -> void:
 	# 🆕 行动开始时 dismiss 所有 hover
 	HoverPopupManager.dismiss_all()
 
-	# 🆕 前置检查：deferring 态 → 取消 defer，不继续执行
-	if _is_deferring and action and ActionManager.is_deferring(action.uuid):
-		Logging.info("SceneActionPanel: deferring 态点击 → 取消 defer action=%s" % action.uuid)
-		ActionManager.cancel_defer(action.uuid)
-		EventBus.request_toast.emit("已取消等待", 1)
-		return
+	# 🆕 前置检查：deferring 态 → 取消所有相关的 defer，不继续执行
+	if _is_deferring and action:
+		var defer_ids: Array[String] = []
+		if ActionManager.is_deferring(action.uuid):
+			defer_ids.append(action.uuid)
+		for sub_uuid in action.sub_actions:
+			if ActionManager.is_deferring(sub_uuid):
+				defer_ids.append(sub_uuid)
+		if not defer_ids.is_empty():
+			for d_id in defer_ids:
+				ActionManager.cancel_defer(d_id)
+				Logging.info("SceneActionPanel: deferring 态点击 → 取消 defer id=%s" % d_id)
+			EventBus.request_toast.emit("已取消等待", 1)
+			return
 
 	# 🆕 前置检查：锁定态 → 弹出 toast，不执行
 	if _is_locked:
@@ -662,6 +670,11 @@ func _on_sub_action_picked(entity) -> void:
 			'outcome': "success",
 		}
 		EventManager.scan_events(0, context)
+		
+		# 🆕 sub-action success 后启动 defer，携带 npc_target 供到期重放
+		if sub_action and sub_action.defer_config and not sub_action.defer_config.xun_defered.is_empty():
+			Logging.info("SceneActionPanel: sub-action '%s' 检测到 defer_config，启动 defer npc_target='%s'" % [sub_action.uuid, npc_target])
+			ActionManager.start_defer(sub_action, npc_target)
 	else:
 		Logging.info("SceneActionPanel: FAILURE — 执行 sub_action.failed_result（含 PushEventOperator → failure fallback）")
 		if sub_action and sub_action.failed_result:

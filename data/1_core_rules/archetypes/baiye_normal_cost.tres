@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://bfoe07l2phebm"]
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://bbyenrmlcost1"]
 
-[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_mwyu6"]
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_tbrl3"]
 
 [resource]
-script = ExtResource("1_mwyu6")
+script = ExtResource("1_tbrl3")
 uuid = "baiye_normal_cost"
 name = "baiye_normal.cost"
-universal_result = "prop_sub(name=money; val=m_money_cost)"
+universal_result = "prop_sub(name=money; val=m_money_cost)|pick_npc(mode=random; state=not_meet; key=npc_target; social_tag=social:upgrade)"
 action_uuid = "baiye_normal"
 state = "cost"

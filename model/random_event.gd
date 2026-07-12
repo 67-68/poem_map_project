@@ -269,12 +269,18 @@ func init(context: Dictionary) -> Array:
     if not archetype_base.is_empty() and not outcome.is_empty():
         var action_arch = Database.get_archetype_by_uuid(archetype_base, outcome)
         if action_arch != null and not action_arch.operators.is_empty():
-            Logging.info("RandomEvent.init: context archetype_base='%s' outcome='%s' → ActionArchetype (%d operators) for event '%s'" % [archetype_base, outcome, action_arch.operators.size(), name])
-            for op in action_arch.operators:
-                var dup = op.duplicate()
-                Logging.info("[DIAG] RandomEvent.init: dup.init(context) for op=%s, context.npc_target='%s'" % [dup.get_class(), context.get("npc_target", "")])
-                context = dup.init(context)
-                _action_arch_ops.append(dup)
+            # 检测是否与事件自身的 archetype_id 冲突（defer 到期时常见），避免重复注入
+            var _context_arch_uuid: String = "%s_%s" % [archetype_base, outcome]  # e.g. "baiye_normal_success"
+            if not archetype_id.is_empty() and _context_arch_uuid == archetype_id:
+                Logging.warn("[RandomEvent.init] ⚠ archetype_base+outcome '%s' 与事件自身 archetype_id 相同 — 跳过重复注入 (event='%s')" % [_context_arch_uuid, name])
+                _action_arch_ops = []  # 清空，preinit_ops 已包含相同 operator
+            else:
+                Logging.info("RandomEvent.init: context archetype_base='%s' outcome='%s' → ActionArchetype (%d operators) for event '%s'" % [archetype_base, outcome, action_arch.operators.size(), name])
+                for op in action_arch.operators:
+                    var dup = op.duplicate()
+                    Logging.info("[DIAG] RandomEvent.init: dup.init(context) for op=%s, context.npc_target='%s'" % [dup.get_class(), context.get("npc_target", "")])
+                    context = dup.init(context)
+                    _action_arch_ops.append(dup)
         else:
             Logging.info("RandomEvent.init: context archetype_base='%s' + outcome='%s' → 未找到对应的 ActionArchetype" % [archetype_base, outcome])
     

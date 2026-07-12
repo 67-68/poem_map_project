@@ -20,6 +20,8 @@ const CN_NAME_MAP: Dictionary = {
 
 @onready var _info_grid: VBoxContainer = $Panel/V/InfoGrid
 @onready var _social_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn
+## 写诗按钮 — 从 ActionPanelManager 迁移至此
+@onready var _poem_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/Poembtn
 
 func _ready() -> void:
 	# ── 风闻刷新 ──
@@ -29,6 +31,14 @@ func _ready() -> void:
 
 	# ── 社交人脉按钮 ──
 	_social_btn.gui_input.connect(_on_social_btn_gui_input)
+
+	# ── 写诗按钮 ──
+	_poem_btn.gui_input.connect(_on_poem_btn_gui_input)
+
+	# ── Focus session 显隐 ──
+	if EventBus.focus_session_changed.is_connected(_on_focus_changed):
+		EventBus.focus_session_changed.disconnect(_on_focus_changed)
+	EventBus.focus_session_changed.connect(_on_focus_changed)
 
 ## 刷新风闻面板：遍历所有 RELATION_TARGET，查询 RelationFlagManager，
 ## 只显示有死穴（leverage）或恩义（help）的目标。
@@ -114,3 +124,22 @@ func _on_social_btn_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Logging.info("RightInfoPanel: SocialConnectionBtn 点击 → 发射 social_connection_toggled")
 		EventBus.social_connection_toggled.emit()
+
+
+# ═══════════════════════════════════════════════════════════
+# 写诗按钮 — 点击发射 poem_start_clicked 信号
+# ═══════════════════════════════════════════════════════════
+
+func _on_poem_btn_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		Logging.info("RightInfoPanel: Poembtn 点击 → 发射 poem_start_clicked")
+		EventBus.poem_start_clicked.emit()
+
+
+# ═══════════════════════════════════════════════════════════
+# Focus session 显隐 — 聚焦时隐藏写诗按钮
+# ═══════════════════════════════════════════════════════════
+
+func _on_focus_changed(active: bool) -> void:
+	_poem_btn.visible = not active
+	Logging.info("RightInfoPanel: Focus session %s → Poembtn visible=%s" % ["active" if active else "inactive", not active])

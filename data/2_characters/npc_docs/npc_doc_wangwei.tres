@@ -9,3 +9,4 @@ uuid = "wangwei"
 prop = {
 "TALENT": 75
 }
+preferred_places = Array[String](["pingkangfang", "huangcheng"])
