@@ -52,3 +52,5 @@ class_name NPCDocument extends Resource
 ## 用于宴席推荐信等场景：从主办者的 relate_to 中随机选一个 not_meet 的人。
 ## 示例：["gaoshi", "zhengqian", "wangwei"]
 @export var relate_to: Array[String] = []
+
+@export var normal_actions: Array[String] = [] # 普通等级的action, know_about 解锁

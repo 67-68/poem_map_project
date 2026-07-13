@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ckkfn80c71m5e"]
+[gd_scene format=3 uid="uid://de5do3ap0lhdn"]
 
 [ext_resource type="Script" uid="uid://bgsnvv4jq3saw" path="res://ui/picker_tape_attachment.gd" id="1_qvtpk"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="2_26bj5"]
@@ -7,6 +7,18 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
 
 [node name="PickerTapeAttachment" type="VBoxContainer" unique_id=168027257]
+custom_minimum_size = Vector2(420, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.5
+offset_top = -168.5
+offset_right = 227.5
+offset_bottom = 168.5
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("1_qvtpk")
 
@@ -39,12 +51,37 @@ theme_override_fonts/font = ExtResource("2_26bj5")
 theme_override_font_sizes/font_size = 14
 text = "显示异地行动"
 
-[node name="Grid" type="GridContainer" parent="." unique_id=594138019]
+[node name="HSeparator" type="HSeparator" parent="." unique_id=2084923762]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1552855087]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer2" unique_id=1854823121]
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "行动"
+
+[node name="Label2" type="Label" parent="HBoxContainer2" unique_id=986400628]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_type_variation = &"SubTitleText"
+text = "人物"
+
+[node name="HSeparator2" type="HSeparator" parent="." unique_id=664319995]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=398299186]
+layout_mode = 2
+
+[node name="V" type="VBoxContainer" parent="HBoxContainer" unique_id=1407060647]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=249964190]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-columns = 3
 
 [node name="Spacer" type="Control" parent="." unique_id=328006090]
 custom_minimum_size = Vector2(0, 12)

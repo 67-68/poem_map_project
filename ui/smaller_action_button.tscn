@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://b46lyuqxhb8it"]
+
+[ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="1_d4dn7"]
+[ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="2_s8kc4"]
+[ext_resource type="Script" uid="uid://wr1rijbdowkd" path="res://ui/sub_action_button.gd" id="3_4smtb"]
+[ext_resource type="Texture2D" uid="uid://dboqossik34lv" path="res://assets/stamps/雅颂.png" id="4_d4dn7"]
+
+[node name="ActionButton" type="Button" unique_id=1937966478]
+custom_minimum_size = Vector2(160, 45)
+clip_contents = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -37.5
+offset_right = 35.0
+offset_bottom = 7.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 2
+size_flags_vertical = 6
+mouse_filter = 1
+theme = ExtResource("1_d4dn7")
+theme_type_variation = &"ButtonTheme"
+theme_override_fonts/font = ExtResource("2_s8kc4")
+script = ExtResource("3_4smtb")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=447718159]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("1_d4dn7")
+theme_type_variation = &"PanelTheme"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel" unique_id=1796637706]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer" unique_id=1269597281]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+size_flags_vertical = 0
+texture = ExtResource("4_d4dn7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer" unique_id=1850110273]
+layout_mode = 2
+theme_type_variation = &"VBoxTheme"
+
+[node name="Title" type="Label" parent="Panel/HBoxContainer/VBoxContainer" unique_id=425399385]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme = ExtResource("1_d4dn7")
+theme_type_variation = &"SubTitleText"
+theme_override_font_sizes/font_size = 16
+text = "交游 · 赴宴"
+
+[node name="Outcome" type="Label" parent="Panel/HBoxContainer/VBoxContainer" unique_id=910935909]
+layout_mode = 2
+mouse_filter = 1
+theme = ExtResource("1_d4dn7")
+theme_type_variation = &"DefaultText"
+theme_override_fonts/font = ExtResource("2_s8kc4")
+theme_override_font_sizes/font_size = 9
+text = "颍川，王维召开了盛大宴会"
+vertical_alignment = 2

@@ -151,7 +151,7 @@ func _create_scene_action_button(name: String, action_id: String) -> void:
 		Logging.info("ActionPanelManager: action '%s' (id='%s') 被 Era 过滤，跳过" % [name, action_id])
 		return
 
-	var btn := preload("res://ui/action_button.tscn").instantiate()
+	var btn := preload("res://ui/main_action_button.tscn").instantiate()
 	btn.initialize(action)
 	_container.add_child(btn)
 	Logging.info("ActionPanelManager: 按钮 '%s' (id='%s') 已创建" % [name, action_id])

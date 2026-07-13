@@ -103,6 +103,8 @@ var dynamic_possibility = 0:
 
 @export var defer_config: DeferConfig = DeferConfig.new()
 
+@export var override_action: String = ''
+
 ## 🆕 解析 possibility archetype 为 int（0-100）。
 ## 查表 tools/data/named_amounts.json，未知 key 时 fallback 到 100。
 func get_possibility_int() -> int:
