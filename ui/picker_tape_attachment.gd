@@ -34,6 +34,9 @@ var _button_group: ButtonGroup = null
 ## 右栏 NpcActionButton 引用
 var _npc_button: NpcActionButton = null
 
+## 右栏覆盖按钮列表（每次 toggle 重建，NpcActionButton 覆盖模式实例）
+var _override_buttons: Array[NpcActionButton] = []
+
 ## 左栏 SubActionButton 列表
 var _sub_buttons: Array[SubActionButton] = []
 
@@ -117,15 +120,24 @@ func initialize(data: Array, ui_constructor: Callable = Callable(), on_filter_to
 	else:
 		Logging.info("PickerTapeAttachment.initialize: 无异地 sub-action，隐藏 CheckBox")
 
+	# 🆕 默认选中第一个左栏 SubActionButton
+	if not _sub_buttons.is_empty():
+		var first_btn = _sub_buttons[0]
+		first_btn.set_pressed_no_signal(true)
+		# 触发手动选中——模拟 toggle 回调但跳过动画
+		_on_sub_button_toggled(first_btn, true, true)
+		Logging.info("PickerTapeAttachment.initialize: 默认选中第一个 sub-action '%s'" % first_btn.entity.name if first_btn.entity else "null")
 
-## 左栏 SubActionButton Toggle 回调 — 仅做选中视觉反馈
+
+## 左栏 SubActionButton Toggle 回调 — 选中更新 + 重建右栏 override 按钮
 ## 不发射 item_selected — 执行由 NpcActionButton 确认后触发
 ## 允许自由切换选择，不阻塞 toggle
-func _on_sub_button_toggled(btn: SubActionButton, pressed: bool) -> void:
+## @param skip_animation: 初始默认选中时跳过动画
+func _on_sub_button_toggled(btn: SubActionButton, pressed: bool, skip_animation: bool = false) -> void:
 	if not pressed:
 		return  # ButtonGroup.allow_unpress 时忽略 unpressed
 	
-	Logging.info("PickerTapeAttachment._on_sub_button_toggled: entity='%s' uuid='%s'（仅视觉，执行待 NpcActionButton 确认）" % [
+	Logging.info("PickerTapeAttachment._on_sub_button_toggled: entity='%s' uuid='%s'" % [
 		btn.entity.name if btn.entity else "null",
 		btn.entity.uuid if btn.entity else "null"
 	])
@@ -133,20 +145,30 @@ func _on_sub_button_toggled(btn: SubActionButton, pressed: bool) -> void:
 	# dismiss 所有 hover
 	HoverPopupManager.dismiss_all()
 	
-	# 选中动画：按钮略微放大
-	var selected_tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
-	selected_tween.tween_property(btn, "scale", Vector2(1.08, 1.08), 0.3)
+	# 默认选中（skip_animation=true）时 pressed 信号未触发，手动写入 VolatileState
+	if skip_animation and btn.entity:
+		VolatileState.action_state.selected_sub_action_uuid = btn.entity.uuid
+		VolatileState.action_state.selected_entity_place_mismatch = btn.entity.get_meta("_place_mismatch", false)
+		VolatileState.action_state.selected_entity_required_place = btn.entity.get_meta("_required_place", "")
+		VolatileState.action_state.selected_entity_required_place_name = btn.entity.get_meta("_required_place_name", "")
 	
-	# 其他按钮缩小 + 变灰
+	# 其他按钮统一变灰
 	for other in _sub_buttons:
 		if other == btn:
-			continue
-		var tween := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		tween.tween_property(other, "scale", Vector2(0.85, 0.85), 0.25)
-		tween.parallel().tween_property(other, "modulate", Color(0.5, 0.5, 0.5, 0.6), 0.25)
+			other.modulate = Color.WHITE
+		else:
+			other.modulate = Color(0.5, 0.5, 0.5, 0.6)
 	
-	# 盖印音效
-	AudioManager.play_sfx_category("stamp_impact")
+	if not skip_animation:
+		# 盖印音效
+		AudioManager.play_sfx_category("stamp_impact")
+	
+	# 🆕 更新默认按钮：标题 + SIMPLE profile 四模块
+	if btn.entity and _npc_button and is_instance_valid(_npc_button):
+		_npc_button.set_action_data(btn.entity.name if btn.entity else "", btn.entity.uuid if btn.entity else "")
+	
+	# 🆕 重建右栏 override 按钮（基于当前选中的 sub-action）
+	_rebuild_right_panel_override_buttons(btn.entity.uuid if btn.entity else "")
 	# 不发射 item_selected — 等待 NpcActionButton 确认后触发
 
 
@@ -220,3 +242,126 @@ func _apply_remote_visibility(show: bool) -> void:
 			btn.visible = false
 			btn.modulate = Color.WHITE
 			Logging.info("PickerTapeAttachment._apply_remote_visibility: 异地 item '%s' 隐藏" % btn.entity.name)
+
+
+# ════════════════════════════════════════════════════════════════════
+# 🆕 Override Action — 右栏覆盖按钮系统
+# ════════════════════════════════════════════════════════════════════
+
+## 查找 override_action 字段指向 selected_uuid 的所有 Action
+func _find_override_actions(selected_uuid: String) -> Array[Action]:
+	var result: Array[Action] = []
+	if selected_uuid.is_empty():
+		Logging.info("PickerTapeAttachment._find_override_actions: selected_uuid 为空，跳过")
+		return result
+
+	var all_actions: Dictionary = Database.get_actions_all()
+	for action_id in all_actions:
+		var action: Action = Database.get_action(action_id) as Action
+		if action == null:
+			continue
+		if action.override_action.is_empty():
+			continue
+		if action.override_action == selected_uuid:
+			result.append(action)
+			Logging.info("PickerTapeAttachment._find_override_actions: action '%s' override → '%s'" % [action.uuid, selected_uuid])
+
+	Logging.info("PickerTapeAttachment._find_override_actions: selected_uuid='%s' → 找到 %d 个覆盖行动" % [selected_uuid, result.size()])
+	return result
+
+
+## 匹配当前地点下符合条件的 NPC
+## 条件：preferred_places 含 stay_place + current_day ∈ appear_days + person_state ≠ uncharted
+func _match_npcs_in_current_place() -> Array[NPCDocument]:
+	var result: Array[NPCDocument] = []
+	var stay_place = PlayerState.stay_place
+	var current_day = TimeService.current_day
+	var all_docs: Dictionary = Database.get_npc_document_all()
+
+	Logging.info("PickerTapeAttachment._match_npcs_in_current_place: stay_place='%s' current_day=%d npc_count=%d" % [stay_place, current_day, all_docs.size()])
+
+	for target_tag in all_docs:
+		var doc: NPCDocument = all_docs[target_tag] as NPCDocument
+		if doc == null:
+			continue
+
+		# ── person_state == uncharted → 不显示 ──
+		var state := doc.person_state
+		if state.is_empty():
+			state = RelationFlagManager.DEFAULT_PERSON_STATE
+		if state == "uncharted":
+			Logging.info("PickerTapeAttachment._match_npcs_in_current_place: NPC '%s' state=uncharted → 跳过" % doc.name)
+			continue
+
+		# ── 地点匹配（空数组 = 任意地点）──
+		if not doc.preferred_places.is_empty():
+			if not doc.preferred_places.has(stay_place):
+				Logging.info("PickerTapeAttachment._match_npcs_in_current_place: NPC '%s' preferred_places=%s 不含 '%s' → 跳过" % [doc.name, str(doc.preferred_places), stay_place])
+				continue
+
+		# ── 时间窗口匹配（空数组 = 始终可用）──
+		if not doc.appear_days.is_empty():
+			if not doc.appear_days.has(current_day):
+				Logging.info("PickerTapeAttachment._match_npcs_in_current_place: NPC '%s' appear_days=%s 不含 day=%d → 跳过" % [doc.name, str(doc.appear_days), current_day])
+				continue
+
+		result.append(doc)
+		Logging.info("PickerTapeAttachment._match_npcs_in_current_place: NPC '%s' 匹配 ✅ (place=%s, day=%d, state=%s)" % [doc.name, stay_place, current_day, state])
+
+	Logging.info("PickerTapeAttachment._match_npcs_in_current_place: 共匹配 %d 个 NPC" % result.size())
+	return result
+
+
+## 重建右栏 override 按钮。
+## 在 selected_uuid 变化时调用：清空旧 override 按钮 → 查找覆盖行动 → 匹配 NPC → 逐对创建 OverrideActionButton。
+## NpcActionButton 始终保留在右栏底部不动。
+func _rebuild_right_panel_override_buttons(selected_uuid: String) -> void:
+	Logging.info("PickerTapeAttachment._rebuild_right_panel_override_buttons: selected_uuid='%s'" % selected_uuid)
+
+	# ── 1. 清空旧的 override 按钮 ──
+	for btn in _override_buttons:
+		if is_instance_valid(btn):
+			btn.queue_free()
+	_override_buttons.clear()
+
+	if selected_uuid.is_empty():
+		Logging.info("PickerTapeAttachment._rebuild_right_panel_override_buttons: selected_uuid 为空，跳过 override 创建")
+		return
+
+	# ── 2. 查找覆盖行动 ──
+	var override_actions: Array[Action] = _find_override_actions(selected_uuid)
+	if override_actions.is_empty():
+		Logging.info("PickerTapeAttachment._rebuild_right_panel_override_buttons: 无覆盖行动，右栏保留默认 NpcActionButton")
+		return
+
+	# ── 3. 匹配当前地点 NPC ──
+	var matched_npcs: Array[NPCDocument] = _match_npcs_in_current_place()
+	if matched_npcs.is_empty():
+		Logging.info("PickerTapeAttachment._rebuild_right_panel_override_buttons: 无匹配 NPC，跳过 override 创建")
+		return
+
+	# ── 4. 逐对创建覆盖按钮（NpcActionButton 覆盖模式）──
+	# NpcActionButton 默认按钮始终在右栏最底部。新创建的覆盖按钮插入到默认按钮之前。
+	var npc_button_index: int = _npc_button.get_index() if _npc_button and is_instance_valid(_npc_button) else -1
+
+	for override_action in override_actions:
+		for npc_doc in matched_npcs:
+			var btn := _npc_button_scene.instantiate() as NpcActionButton
+			btn.bind(npc_doc, override_action.uuid)
+			btn.execution_completed.connect(func(e: GameEntity):
+				Logging.info("PickerTapeAttachment: 覆盖按钮 执行完成, 发射 item_selected entity='%s'" % e.name)
+				_selected = true
+				item_selected.emit(e)
+			)
+
+			if npc_button_index >= 0:
+				_right_panel.add_child(btn)
+				_right_panel.move_child(btn, npc_button_index)
+				npc_button_index += 1
+			else:
+				_right_panel.add_child(btn)
+
+			_override_buttons.append(btn)
+			Logging.info("PickerTapeAttachment._rebuild_right_panel_override_buttons: 创建覆盖按钮 — npc='%s' action='%s'" % [npc_doc.name, override_action.name])
+
+	Logging.info("PickerTapeAttachment._rebuild_right_panel_override_buttons: 共创建 %d 个覆盖按钮" % _override_buttons.size())

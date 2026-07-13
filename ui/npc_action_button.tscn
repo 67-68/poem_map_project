@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cdy2oig6yguks"]
 
-[ext_resource type="Script" path="res://ui/npc_action_button.gd" id="1_npc"]
+[ext_resource type="Script" uid="uid://cne3h32osqeyg" path="res://ui/npc_action_button.gd" id="1_npc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8hk5g"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -11,10 +11,12 @@ border_width_bottom = 2
 border_color = Color(0, 0, 0, 1)
 
 [node name="Button" type="Button" unique_id=1556074059]
-custom_minimum_size = Vector2(0, 75)
+custom_minimum_size = Vector2(100, 75)
+offset_right = 256.0
+offset_bottom = 75.0
 size_flags_horizontal = 3
 theme_type_variation = &"FlatButton"
-theme_override_styles/normal = SubResource("StyleBoxFlat_8hk5g")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8hk5g")
 script = ExtResource("1_npc")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=75229748]
@@ -31,7 +33,7 @@ theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1916463022]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 1
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=616245205]
 layout_mode = 2
@@ -42,49 +44,74 @@ horizontal_alignment = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1573408430]
 layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 1
 alignment = 2
 
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1473795173]
+[node name="Label2" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1179952213]
 layout_mode = 2
-theme_type_variation = &"DefaultText"
-theme_override_font_sizes/font_size = 10
+size_flags_horizontal = 10
+theme_type_variation = &"NarrativeText"
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
 text = "邀请神医赴宴治疗他人"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1958344275]
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1636522523]
 layout_mode = 2
 
-[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=948827548]
+[node name="Label3" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1308748305]
 layout_mode = 2
-theme_type_variation = &"DefaultText"
-theme_override_font_sizes/font_size = 10
+size_flags_horizontal = 10
+theme_type_variation = &"NarrativeText"
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
 text = "可行性：高"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=766634195]
 layout_mode = 2
+theme_override_constants/separation = 1
 alignment = 2
 
-[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=355676076]
+[node name="Label4" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=813463460]
 layout_mode = 2
-theme_type_variation = &"DefaultText"
-theme_override_font_sizes/font_size = 10
+size_flags_horizontal = 9
+theme_type_variation = &"NarrativeText"
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
 text = "耗费：xxxx"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1799235025]
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1982560858]
 layout_mode = 2
 
-[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1780449936]
+[node name="Label5" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1244562373]
 layout_mode = 2
-theme_type_variation = &"DefaultText"
-theme_override_font_sizes/font_size = 10
+size_flags_horizontal = 9
+theme_type_variation = &"NarrativeText"
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
 text = "产出"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer" unique_id=255612005]
+[node name="Label6" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=1162219148]
 layout_mode = 2
-theme_type_variation = &"DefaultText"
-theme_override_font_sizes/font_size = 10
+theme_type_variation = &"NarrativeText"
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
 text = "风险：会趋势"
+fit_content = true
 horizontal_alignment = 2

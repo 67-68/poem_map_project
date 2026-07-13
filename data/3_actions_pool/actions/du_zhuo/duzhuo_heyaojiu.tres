@@ -27,6 +27,7 @@ archetype_uuid = "duzhuo_heyaojiu_success"
 day_consumed = 2.0
 failed_result = SubResource("Resource_6pirs")
 defer_config = SubResource("Resource_segs3")
+override_action = "duzhuo_xiaozhuo"
 uuid = "duzhuo_heyaojiu"
 name = "闲居 · 喝药酒"
 description = "以药酒祛毒养身"

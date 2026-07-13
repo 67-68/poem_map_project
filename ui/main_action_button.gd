@@ -189,9 +189,9 @@ func _on_clicked() -> void:
 				Logging.info("MainActionButton: no failure archetype for '%s'" % sub_action.uuid)
 
 			if sub_action:
-				var preview := ActionHintBuilder.build_sub_action_preview(sub_action, success_ops, fail_ops, action.day_consumed)
-				entity.set_meta("sub_action_preview", preview)
-				Logging.info("MainActionButton: sub_action_preview built for '%s' (%d chars)" % [sub_action.name, preview.length()])
+				var preview = ActionHintBuilder.build_sub_action_preview(sub_action, success_ops, fail_ops, action.day_consumed)
+				entity.set_meta("sub_action_preview", preview.vector)
+				Logging.info("MainActionButton: sub_action_preview built for '%s' (%d chars)" % [sub_action.name, preview.vector.length()])
 			else:
 				entity.set_meta("sub_action_preview", "")
 

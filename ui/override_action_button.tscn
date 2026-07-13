@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://sjukhy36d7pr"]
+
+[ext_resource type="Script" path="res://ui/override_action_button.gd" id="1_override"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_override"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[node name="OverrideActionButton" type="Button" unique_id=1043535492]
+custom_minimum_size = Vector2(0, 75)
+size_flags_horizontal = 3
+theme_type_variation = &"FlatButton"
+theme_override_styles/normal = SubResource("StyleBoxFlat_override")
+script = ExtResource("1_override")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=559768959]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=355434970]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=551259992]
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+theme_override_font_sizes/font_size = 16
+text = "行动名称"
+horizontal_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1289766759]
+layout_mode = 2
+alignment = 2
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=94319986]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_font_sizes/font_size = 10
+text = "NPC提供"
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=54118034]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=454011296]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_font_sizes/font_size = 10
+text = "可行性"
+horizontal_alignment = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=681442371]
+layout_mode = 2
+alignment = 2
+
+[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1136725716]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_font_sizes/font_size = 10
+text = "耗费"
+horizontal_alignment = 2
+
+[node name="VSeparator2" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=700242369]
+layout_mode = 2
+
+[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=195952378]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_font_sizes/font_size = 10
+text = "产出"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1887740961]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_font_sizes/font_size = 10
+text = "风险"
+horizontal_alignment = 2

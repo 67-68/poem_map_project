@@ -478,10 +478,10 @@ func _build_cost_preview_lines() -> Array[String]:
 		Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — ActionHintBuilder 返回空预览")
 		return lines
 	
-	# 分隔线 + 代价行
-	lines.append("[color=#cc6666][font_size=13]━━━ 创作代价 ━━━[/font_size][/color]")
+	# 分隔线 + 代价行（使用 BBCode 契约）
+	lines.append(BBCode.color_size("━━━ 创作代价 ━━━", BBCode.COLOR_DANGER, 13))
 	for p in previews:
-		lines.append("[color=#cc6666]%s[/color]" % p)
+		lines.append(BBCode.color(p, BBCode.COLOR_DANGER))
 	Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — %d 行" % previews.size())
 	return lines
 

@@ -4,12 +4,12 @@
 
 [resource]
 script = ExtResource("1_udmdi")
-taste_id = ""
 name = "神医"
 uuid = "shenyi"
-preferred_places = Array[String](["xishi"])
 prop = {
 "TALENT": 60
 }
-relate_to = Array[String](["hushang"])
+preferred_places = Array[String](["xishi"])
 appear_days = Array[int]([1, 2, 3, 4, 5])
+relate_to = Array[String](["hushang"])
+normal_actions = Array[String](["duzhuo_heyaojiu"])
