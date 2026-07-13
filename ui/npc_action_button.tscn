@@ -2,13 +2,21 @@
 
 [ext_resource type="Script" uid="uid://cne3h32osqeyg" path="res://ui/npc_action_button.gd" id="1_npc"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8hk5g"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w6v0i"]
+bg_color = Color(0.8666667, 0.6666667, 0.69803923, 0)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8hk5g"]
+bg_color = Color(0.8666667, 0.6666667, 0.69803923, 0.6392157)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3764706, 0, 0, 1)
 
 [node name="Button" type="Button" unique_id=1556074059]
 custom_minimum_size = Vector2(100, 75)
@@ -16,6 +24,7 @@ offset_right = 256.0
 offset_bottom = 75.0
 size_flags_horizontal = 3
 theme_type_variation = &"FlatButton"
+theme_override_styles/normal = SubResource("StyleBoxFlat_w6v0i")
 theme_override_styles/hover = SubResource("StyleBoxFlat_8hk5g")
 script = ExtResource("1_npc")
 

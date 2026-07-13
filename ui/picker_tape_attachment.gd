@@ -163,9 +163,9 @@ func _on_sub_button_toggled(btn: SubActionButton, pressed: bool, skip_animation:
 		# 盖印音效
 		AudioManager.play_sfx_category("stamp_impact")
 	
-	# 🆕 更新默认按钮：标题 + SIMPLE profile 四模块
+	# 🆕 更新默认按钮：标题 + description + SIMPLE profile 四模块 + 锁定提示
 	if btn.entity and _npc_button and is_instance_valid(_npc_button):
-		_npc_button.set_action_data(btn.entity.name if btn.entity else "", btn.entity.uuid if btn.entity else "")
+		_npc_button.set_action_data(btn.entity.name if btn.entity else "", btn.entity.uuid if btn.entity else "", btn.entity)
 	
 	# 🆕 重建右栏 override 按钮（基于当前选中的 sub-action）
 	_rebuild_right_panel_override_buttons(btn.entity.uuid if btn.entity else "")
