@@ -207,28 +207,34 @@ func test_hover_narrative_in_output():
 
 func test_hint_instance_creation():
 	assert_not_null(ActionHintBuilder.new())
+	assert_not_null(preload("res://core/hints/trait_hint_formatter.gd").new())
+	assert_not_null(preload("res://core/hints/operator_preview_formatter.gd").new())
+	assert_not_null(preload("res://core/hints/action_hint_formatter.gd").new())
 
 
 # ════════════════════════════════════════════════════════════
-# 辅助函数测试
+# 辅助函数测试（已迁移至 TraitHintFormatter）
 # ════════════════════════════════════════════════════════════
 
 func test_mul_operator_mode_string():
-	assert_eq(ActionHintBuilder._mul_operator_mode_string(MultiplyOperator.MUL_OPERATOR.POSITIVE_ONLY), "正面效果")
-	assert_eq(ActionHintBuilder._mul_operator_mode_string(MultiplyOperator.MUL_OPERATOR.NEGATIVE_ONLY), "负面效果")
-	assert_eq(ActionHintBuilder._mul_operator_mode_string(MultiplyOperator.MUL_OPERATOR.BOTH), "所有变动")
-	assert_eq(ActionHintBuilder._mul_operator_mode_string(-1), "变动")
+	var _THF = preload("res://core/hints/trait_hint_formatter.gd")
+	assert_eq(_THF._mul_operator_mode_string(MultiplyOperator.MUL_OPERATOR.POSITIVE_ONLY), "正面效果")
+	assert_eq(_THF._mul_operator_mode_string(MultiplyOperator.MUL_OPERATOR.NEGATIVE_ONLY), "负面效果")
+	assert_eq(_THF._mul_operator_mode_string(MultiplyOperator.MUL_OPERATOR.BOTH), "所有变动")
+	assert_eq(_THF._mul_operator_mode_string(-1), "变动")
 
 
 func test_get_prop_display_name():
+	var _THF = preload("res://core/hints/trait_hint_formatter.gd")
 	# health 已在 before_all 中注册到 Database.properties
-	assert_eq(ActionHintBuilder._get_prop_display_name("health"), "health")
+	assert_eq(_THF._get_prop_display_name("health"), "health")
 	# 不在数据库中的 key 原样返回
-	assert_eq(ActionHintBuilder._get_prop_display_name("nonexistent_prop"), "nonexistent_prop")
+	assert_eq(_THF._get_prop_display_name("nonexistent_prop"), "nonexistent_prop")
 
 
 func test_get_trait_display_name():
+	var _THF = preload("res://core/hints/trait_hint_formatter.gd")
 	# 不在 Database.traits 中时 fallback 返回原 uuid
-	var display := ActionHintBuilder._get_trait_display_name("disease_dongshang_necrosis")
-	assert_true(display == "disease_dongshang_necrosis" or display == "冻疮坏死", 
+	var display := _THF._get_trait_display_name("disease_dongshang_necrosis")
+	assert_true(display == "disease_dongshang_necrosis" or display == "冻疮坏死",
 		"应返回 uuid 或 display name，实际: '%s'" % display)
