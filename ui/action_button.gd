@@ -23,6 +23,8 @@ var _pending_parent_day_consumed: float = 0.0
 var _pending_on_checkbox_toggled: Callable = Callable()
 ## 🆕 挂起 outcome（sub-action picker 回调使用）
 var _pending_outcome: String = "success"
+## 🆕 是否对本次 picker 自动开启了「显示异地行动」（zhu_liu 专用，完成/取消后 pop 恢复）
+var _did_auto_enable_remote: bool = false
 
 # ── Hover 底色（枯墨暗红，极淡，只有交互时才显形）──
 const HOVER_BG_COLOR: Color = Color(0.22, 0.05, 0.02, 0.10)
@@ -183,6 +185,9 @@ func _on_mouse_exited() -> void:
 func _on_button_pressed() -> void:
 	# 🆕 行动开始时 dismiss 所有 hover
 	HoverPopupManager.dismiss_all()
+
+	# 🆕 防御：清除上次 zhu_liu picker 残留的 auto remote override
+	_pop_auto_remote_override()
 
 	# 🆕 前置检查：deferring 态 → 取消所有相关的 defer，不继续执行
 	if _is_deferring and action:
@@ -402,20 +407,15 @@ func _on_button_pressed() -> void:
 			# 附加 Archetype 中的 operators（用于 picker 显示）
 			entity.set_meta("operators", success_ops)
 			
-			# 🆕 地点校验：sub_action 有 required_place 且不匹配当前 stay_place
-			var _place_mismatch := false
-			var _req_place: String = sub_action.required_place
-			if not _req_place.is_empty():
-				var _cur_place_str := PlayerState.stay_place
-				if not _cur_place_str.is_empty() and _req_place != _cur_place_str:
-					_place_mismatch = true
-					var _place_name := sub_action.get_required_place_name()
-					entity.set_meta("_place_mismatch", true)
-					entity.set_meta("_required_place_name", _place_name)
-					entity.set_meta("_required_place", _req_place)
-					Logging.info("SceneActionPanel: sub-action '%s' PLACE_MISMATCH — requires %s (%s), current=%s" % [sub_action.uuid, _place_name, _req_place, _cur_place_str])
-				elif _cur_place_str.is_empty():
-					Logging.info("SceneActionPanel: sub-action '%s' has required_place=%s but stay_place 未设置，跳过地点过滤" % [sub_action.uuid, _req_place])
+			# 🆕 地点校验：使用 RemoteActionFilterManager 统一判断异地
+			var _place_mismatch := RemoteActionFilterManager.is_action_remote(sub_action)
+			if _place_mismatch:
+				var _place_name := sub_action.get_required_place_name()
+				var _req_place: String = sub_action.required_place
+				entity.set_meta("_place_mismatch", true)
+				entity.set_meta("_required_place_name", _place_name)
+				entity.set_meta("_required_place", _req_place)
+				Logging.info("SceneActionPanel: sub-action '%s' PLACE_MISMATCH — requires %s (%s), current=%s" % [sub_action.uuid, _place_name, _req_place, RemoteActionFilterManager.get_current_place()])
 			else:
 				entity.set_meta("_place_mismatch", false)
 			
@@ -445,6 +445,11 @@ func _on_button_pressed() -> void:
 		Logging.info("SceneActionPanel: sub_actions 检测到 %d 个子行动，弹出 Picker" % picker_data.size())
 		# 🆕 注入 CheckBox toggle 回调，供 PickerTapeAttachment 调用
 		_pending_on_checkbox_toggled = _on_picker_checkbox_toggled
+		# 🆕 驻留（zhu_liu）自动勾选「显示异地行动」：push snapshot → 完成/取消后 pop 恢复
+		if action.uuid == "zhu_liu" and not RemoteActionFilterManager.get_show_remote():
+			RemoteActionFilterManager.push_show_remote_override(true)
+			_did_auto_enable_remote = true
+			Logging.info("SceneActionPanel: 驻留 zhu_liu → 自动开启「显示异地行动」(push snapshot)")
 		EventBus.push_picker.emit(picker_data, _on_sub_action_picked, null, _pending_on_checkbox_toggled)
 		return
 	
@@ -694,6 +699,8 @@ func _on_sub_action_picked(entity) -> void:
 	_pending_sub_action_results.clear()
 	_pending_parent_day_consumed = 0.0
 	_pending_outcome = "success"
+	# 🆕 驻留自动「显示异地行动」恢复
+	_pop_auto_remote_override()
 
 # ── Sub-Action Preview 构建 ─────────────────────────────
 
@@ -726,3 +733,13 @@ func _extract_npc_name_from_tags(tags: Array) -> String:
 				Logging.debug("SceneActionPanel._extract_npc_name_from_tags: '%s' 无中文名，回退到 tag" % npc_tag)
 				return npc_tag
 	return ""
+
+
+## 🆕 弹出上一次自动开启的 remote override（zhu_liu picker 完成/取消/泄露后恢复）。
+## 幂等：仅 _did_auto_enable_remote=true 时才 pop；调用后重置标记。
+func _pop_auto_remote_override() -> void:
+	if not _did_auto_enable_remote:
+		return
+	_did_auto_enable_remote = false
+	RemoteActionFilterManager.pop_show_remote_override()
+	Logging.info("SceneActionPanel._pop_auto_remote_override: 已恢复 show_remote snapshot")

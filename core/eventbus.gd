@@ -125,6 +125,10 @@ signal request_overlay_animation(strategy: String, params: Dictionary)
 ## 携带新的 era 字符串（clear 时为空字符串）
 signal era_changed(new_era: String)
 
+## 🆕 异地行动过滤状态变更（RemoteActionFilterManager 发射）
+## true = 显示异地行动，false = 仅显示当前地点可用行动
+signal remote_actions_filter_changed(show: bool)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		user_clicked.emit(null)

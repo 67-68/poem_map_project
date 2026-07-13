@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bpngqavs0hbir" path="res://characters/tape_visualizer.gd" id="4_tb7k1"]
 [ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="5_smooth"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="6_sfx"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="7_osi0o"]
 [ext_resource type="Texture2D" uid="uid://c5vc2ykn2mcxe" path="res://assets/profile/yang_ke.png" id="9_tb7k1"]
 [ext_resource type="Script" uid="uid://2kvy8y0hradg" path="res://ui/action_panel_manager.gd" id="11_action_mgr"]
 
@@ -127,6 +128,18 @@ layout_mode = 2
 theme_type_variation = &"TitleText"
 text = "行动"
 horizontal_alignment = 1
+
+[node name="CheckBox" type="CheckBox" parent="TapeContainer/VBox/ActionPanel/V" unique_id=1382663956]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.7058824, 0.6666667, 0.6627451, 1)
+theme_override_fonts/font = ExtResource("7_osi0o")
+theme_override_font_sizes/font_size = 14
+text = "显示异地行动"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TapeContainer/VBox/ActionPanel/V" unique_id=2121651520]
+layout_mode = 2
 
 [node name="EventHistory" type="PanelContainer" parent="TapeContainer/VBox" unique_id=1937522382]
 visible = false
