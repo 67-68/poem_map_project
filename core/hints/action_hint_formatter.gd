@@ -101,6 +101,14 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 			hint.cost.append("⏱ 耗时 %s" % cost_detail)
 			Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' time ok (need=%d, have=%d)" % [sub_action.name, cost_total, current_time])
 
+	# 🆕 cost archetype operators（花钱/耗材等）→ cost 模块
+	var cost_arch = Database.get_archetype_by_uuid(sub_action.uuid, "cost")
+	if cost_arch and not cost_arch.operators.is_empty():
+		var cost_lines = _OPFormatter.build_preview(cost_arch.operators, profile)
+		if not cost_lines.is_empty():
+			hint.cost.append_array(cost_lines)
+		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' cost archetype (%d ops → %d lines) → 已合并" % [sub_action.name, cost_arch.operators.size(), cost_lines.size()])
+
 	if not hint.cost.is_empty() and hint.cost.title.is_empty():
 		hint.cost.title = "━━━ 耗费 ━━━"
 
@@ -124,17 +132,11 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		hint.output.append_array(success_descs)
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' success preview: %d lines" % [sub_action.name, success_descs.size()])
 
-	# ── 失败效果 → risk ──
+	# ── 失败效果 → risk（仅使用 failure archetype，不 fallback 到 .tres failed_result）──
 	var fail_descs: Array[String] = []
 	if not fail_ops.is_empty():
 		fail_descs.append_array(_OPFormatter.build_preview(fail_ops, profile))
-		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' archetype fail_ops (%d ops) → 已合并" % [sub_action.name, fail_ops.size()])
-	var failed_result = sub_action.failed_result
-	if failed_result and failed_result.operators and not failed_result.operators.is_empty():
-		var tres_fail_lines = _OPFormatter.build_preview(failed_result.operators, profile)
-		if not tres_fail_lines.is_empty():
-			fail_descs.append_array(tres_fail_lines)
-			Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' .tres failed_result (%d ops → %d descs) → 已合并" % [sub_action.name, failed_result.operators.size(), tres_fail_lines.size()])
+		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' archetype fail_ops (%d ops → %d lines) → 已合并" % [sub_action.name, fail_ops.size(), fail_descs.size()])
 
 	if fail_descs.is_empty():
 		hint.risk.append(_BBCode.fail_header() + " 后果难料…")

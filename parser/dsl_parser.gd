@@ -1446,6 +1446,7 @@ static func _parse_converter_context(ctx_str: String) -> Dictionary:
         "lock_narrative": "",
         "defer_xun": "",
         "ap_cost_per_xun": "",
+        "override_action": "",
     }
     if ctx_str.is_empty():
         return ctx
@@ -1473,6 +1474,8 @@ static func _parse_converter_context(ctx_str: String) -> Dictionary:
                 ctx.defer_xun = value
             "ap_cost_per_xun":
                 ctx.ap_cost_per_xun = value
+            "override_action":
+                ctx.override_action = value
             _:
                 Logging.info("[resource_converter] 未知 context key: %s = %s" % [key, value])
 
@@ -1505,6 +1508,7 @@ static func _build_action_from_row(row: Dictionary, ctx: Dictionary,
     action.possibility = possibility
     action.fallback_event_uuid = ctx.get("fallback_event", "")
     action.lock_narrative = ctx.get("lock_narrative", "")
+    action.override_action = ctx.get("override_action", "")
 
     # 🆕 设置 resource_path 用于按父行动分目录保存
     if not parent_action.is_empty():
