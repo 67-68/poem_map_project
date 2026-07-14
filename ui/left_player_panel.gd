@@ -25,17 +25,18 @@ extends PanelContainer
 @onready var _prop_composure: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel3"
 
 # ── 属性显示格式配置 ────────────────────────────────────
-# prop_label.tscn（健康/钱财）：大字号，格式「50 健」+「「奄奄一息」」
-# smaller_prop_label.tscn（其他）：小字号，格式「兴 50」+「(初露锋芒)」
+# prop_label.tscn（健康/钱财）：大字号，格式「50/100 健」+「「奄奄一息」」
+# smaller_prop_label.tscn（其他）：小字号，格式「兴 50/100」+「(初露锋芒)」
+# 所有 value 格式含两个 %d 占位符：当前值 / 上限（soft_max 与 hard_max 中较低者）
 const _PROP_FORMAT: Dictionary = {
-	"health":      { "value": "%d 健", "perception": "「%s」" },
-	"money":       { "value": "%d 文", "perception": "「%s」" },
-	"inspiration": { "value": "兴 %d", "perception": "(%s)" },
-	"momentum":    { "value": "势 %d", "perception": "(%s)" },
-	"prestige":    { "value": "望 %d", "perception": "(%s)" },
-	"talent":      { "value": "才 %d", "perception": "(%s)" },
-	"astuteness":  { "value": "府 %d", "perception": "(%s)" },
-	"composure":   { "value": "定 %d", "perception": "(%s)" },
+	"health":      { "value": "%d/%d 健", "perception": "「%s」" },
+	"money":       { "value": "%d/%d 文", "perception": "「%s」" },
+	"inspiration": { "value": "兴 %d/%d", "perception": "(%s)" },
+	"momentum":    { "value": "势 %d/%d", "perception": "(%s)" },
+	"prestige":    { "value": "望 %d/%d", "perception": "(%s)" },
+	"talent":      { "value": "才 %d/%d", "perception": "(%s)" },
+	"astuteness":  { "value": "府 %d/%d", "perception": "(%s)" },
+	"composure":   { "value": "定 %d/%d", "perception": "(%s)" },
 }
 
 # prop_key → { value_label: Label, perception_label: Label }
@@ -164,6 +165,22 @@ func _refresh_place_label() -> void:
 		_place_label.text = "驻留 · %s — %s在此" % [cn, npc_str]
 		Logging.info("LeftPlayerPanel: PlaceLabel updated — 驻留 · %s — %s在此 (%d NPC)" % [cn, npc_str, known_npcs.size()])
 
+# ── 上限计算 ────────────────────────────────────────────
+
+## 计算属性的有效上限 = min(soft_max, hard_max)，
+## 忽略 -1（无限制）。若两者均为 -1 则返回 -1 表示无上限。
+static func _get_effective_cap(prop: Property) -> int:
+	var soft := prop.soft_max
+	var hard := prop.hard_max
+	if soft < 0 and hard < 0:
+		return -1
+	elif soft < 0:
+		return hard
+	elif hard < 0:
+		return soft
+	else:
+		return mini(soft, hard)
+
 # ── 属性刷新 ────────────────────────────────────────────
 
 func _on_stat_changed() -> void:
@@ -180,6 +197,7 @@ func _on_any_stat_changed(_prop_name: String = "") -> void:
 	_refresh_ambition_progress_label()
 
 ## 刷新所有固定属性的数值和感知文本
+## 显示格式：当前值 / 上限（soft_max 与 hard_max 中较低者）
 func _refresh_all_props() -> void:
 	if not Database:
 		Logging.err("LeftPlayerPanel: Database autoload not ready in _refresh_all_props, skipping")
@@ -190,11 +208,16 @@ func _refresh_all_props() -> void:
 		var prop: Property = Database.get_property(prop_key)
 		var perception: String = prop.get_staged_perception_text() if prop else ""
 
-		var fmt: Dictionary = _PROP_FORMAT.get(prop_key, { "value": "%d", "perception": "(%s)" })
-		labels.value.text = fmt.value % val
+		var fmt: Dictionary = _PROP_FORMAT.get(prop_key, { "value": "%d/%d", "perception": "(%s)" })
+		var cap := _get_effective_cap(prop) if prop else -1
+		if cap >= 0:
+			labels.value.text = fmt.value % [val, cap]
+		else:
+			# 无上限：仅显示值，隐藏 "/上限" 部分
+			labels.value.text = fmt.value.replace("/%d", "") % val
 		labels.perception.text = fmt.perception % perception
 
-		Logging.info("LeftPlayerPanel: refresh prop '%s': val=%d, perception='%s'" % [prop_key, val, perception])
+		Logging.info("LeftPlayerPanel: refresh prop '%s': val=%d, cap=%d, perception='%s'" % [prop_key, val, cap, perception])
 
 # ── Prop Label 颜色管理 API ─────────────────────────────
 # MonthEndSettlement 等外部模块通过以下 API 控制旬初染色。

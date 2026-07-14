@@ -103,6 +103,9 @@ func set_action_data(action_name: String, action_uuid: String, entity = null) ->
 	else:
 		Logging.err("NpcActionButton.set_action_data: Database.get_action('%s') 返回 null" % action_uuid)
 
+	# 🆕 注册 hover popup（右侧按钮 hover 展示行动效果）
+	_register_hover_from_labels()
+
 
 ## ── 覆盖模式 ──
 
@@ -133,6 +136,9 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 		_set_gray_visual(true)
 	else:
 		_set_gray_visual(false)
+
+	# 🆕 注册 hover popup（右侧覆盖按钮 hover 展示行动效果）
+	_register_hover_from_labels()
 
 
 ## ════════════════════════════════════════════════════════════════
@@ -238,3 +244,39 @@ static func _set_label(label_node: RichTextLabel, text: String) -> void:
 func _set_gray_visual(gray: bool) -> void:
 	modulate = Color(0.5, 0.5, 0.5, 0.6) if gray else Color.WHITE
 	disabled = false
+
+
+## 🆕 从已填充的 label 模块提取文本，注册 hover popup（右侧按钮 hover 展示行动效果）
+func _register_hover_from_labels() -> void:
+	HoverPopupManager.unregister(self)
+
+	var parts: Array[String] = []
+	if _title_label and not _title_label.text.is_empty():
+		parts.append("[b]" + _title_label.text + "[/b]")
+	if _desc_label and not _desc_label.text.is_empty():
+		parts.append(_desc_label.text)
+	if _feas_label and not _feas_label.text.is_empty():
+		parts.append(_feas_label.text)
+	if _cost_label and not _cost_label.text.is_empty():
+		parts.append(_cost_label.text)
+	if _output_label and not _output_label.text.is_empty():
+		parts.append(_output_label.text)
+	if _risk_label and not _risk_label.text.is_empty():
+		parts.append(_risk_label.text)
+
+	if parts.is_empty():
+		Logging.info("NpcActionButton._register_hover_from_labels: 无文本内容，跳过注册")
+		return
+
+	var narrative := _title_label.text if _title_label else ""
+	var vector := "\n".join(parts)
+
+	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector}, 0.2, 0.75, HoverPopupManager.FlowType.BELOW_OVERLAY)
+	Logging.info("NpcActionButton._register_hover_from_labels: hover 注册完成 (BELOW_OVERLAY), mode=%s" % ("override" if _is_override_mode else "default"))
+
+
+## 节点从场景树移除时注销 hover 绑定
+func _exit_tree() -> void:
+	HoverPopupManager.unregister(self)
+	Logging.info("NpcActionButton._exit_tree: 已注销 hover 绑定")
+	super()

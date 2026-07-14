@@ -49,9 +49,7 @@ func bind_entity(ent: GameEntity) -> void:
 		set_locked(meta_reason)
 		Logging.info("SubActionButton.bind_entity: entity='%s' 锁定态, reason='%s'" % [entity.name, meta_reason])
 	
-	# 注册 hover popup
-	_register_hover_popup_for_entity()
-	Logging.info("SubActionButton.bind_entity: entity='%s'" % entity.name)
+	Logging.info("SubActionButton.bind_entity: entity='%s' (hover 已迁移至右栏 NpcActionButton)" % entity.name)
 
 
 func _on_clicked() -> void:
@@ -82,19 +80,15 @@ func _on_clicked() -> void:
 	Logging.info("SubActionButton._on_clicked: 写入 selected_sub_action_uuid='%s' place_mismatch=%s required_place='%s'" % [entity.uuid, str(VolatileState.action_state.selected_entity_place_mismatch), VolatileState.action_state.selected_entity_required_place_name])
 
 
-## 覆写基类 _register_hover_popup（set_locked/set_unlocked 触发时走这里）
+## 覆写基类 _register_hover_popup — hover 已迁移至右栏 NpcActionButton，此处不注册
 func _register_hover_popup() -> void:
-	_register_hover_popup_for_entity()
+	Logging.info("SubActionButton._register_hover_popup: hover 已迁移至右栏，跳过注册")
 
 
-## 覆写基类 _refresh_hover_popup（避免走基类的 action 依赖路径）
+## 覆写基类 _refresh_hover_popup — hover 已迁移至右栏 NpcActionButton，此处不注册
 func _refresh_hover_popup() -> void:
-	if not entity:
-		Logging.warn("SubActionButton._refresh_hover_popup: entity 为空，跳过")
-		return
 	HoverPopupManager.unregister(self)
-	_register_hover_popup_for_entity()
-	Logging.info("SubActionButton._refresh_hover_popup: refreshed for '%s'" % entity.name)
+	Logging.info("SubActionButton._refresh_hover_popup: hover 已迁移至右栏，仅清理旧绑定，不重新注册")
 
 
 ## 使用 entity meta 中的 operators + sub_action_preview 注册 hover popup

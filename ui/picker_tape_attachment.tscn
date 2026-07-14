@@ -62,11 +62,18 @@ layout_mode = 2
 theme_type_variation = &"SubTitleText"
 text = "行动"
 
+[node name="Label3" type="Label" parent="HBoxContainer2" unique_id=1811841069]
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.52156866)
+text = "选择行动 + 姿态以行动"
+
 [node name="Label2" type="Label" parent="HBoxContainer2" unique_id=986400628]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_type_variation = &"SubTitleText"
-text = "人物"
+text = "姿态"
 
 [node name="HSeparator2" type="HSeparator" parent="." unique_id=664319995]
 layout_mode = 2
