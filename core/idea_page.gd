@@ -145,11 +145,16 @@ func _refresh_candidate_pool() -> void:
 		# 冲突检测
 		var conflict_reason := _check_conflict(idea, unlocked)
 
+		# 即使无冲突，也显示潜在互斥关系（counter_idea 指向谁）
+		var display_reason := conflict_reason
+		if display_reason.is_empty():
+			display_reason = _describe_counter(idea)
+
 		var btn_instance := _IdeaBtn.instantiate() as IdeaBtn
 		_candidate_container.add_child(btn_instance)
 
 		var is_locked := not conflict_reason.is_empty()
-		btn_instance.set_idea(idea, is_locked, conflict_reason)
+		btn_instance.set_idea(idea, is_locked, display_reason)
 
 		if not is_locked:
 			any_available = true
@@ -161,17 +166,32 @@ func _refresh_candidate_pool() -> void:
 		_candidate_hint.text = "点击选择理念"
 
 
-func _check_conflict(idea: Idea, unlocked: Array[String]) -> String:
-	"""检查 idea 是否与已解锁理念冲突，返回冲突原因字符串（空=无冲突）"""
+func _describe_counter(idea: Idea) -> String:
+	"""描述理念的 counter_idea 关系（无冲突时显示潜在互斥）"""
 	if idea.counter_idea.is_empty():
 		return ""
+	var counter = Database.get_idea(idea.counter_idea)
+	if counter:
+		return "与「%s」互斥" % (counter.name if not counter.name.is_empty() else counter.uuid)
+	return ""
 
+
+func _check_conflict(idea: Idea, unlocked: Array[String]) -> String:
+	"""检查 idea 是否与已解锁理念冲突，返回冲突原因字符串（空=无冲突）
+	
+	双向检测：
+	  1. 候选理念的 counter_idea 指向已解锁理念（正向）
+	  2. 已解锁理念的 counter_idea 指向候选理念（反向）
+	"""
 	for unlocked_uuid in unlocked:
 		var unlocked_idea = Database.get_idea(unlocked_uuid)
-		if unlocked_idea and unlocked_idea.uuid == idea.counter_idea:
+		if not unlocked_idea:
+			continue
+		# 正向：候选的 counter_idea == 已解锁理念的 uuid
+		if not idea.counter_idea.is_empty() and unlocked_idea.uuid == idea.counter_idea:
 			return "%s：与「%s」冲突" % [unlocked_idea.name if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, idea.name if not idea.name.is_empty() else idea.uuid]
-		# 反向检测：已解锁理念的 counter_idea 指向当前候选
-		if unlocked_idea and unlocked_idea.counter_idea == idea.uuid:
+		# 反向：已解锁理念的 counter_idea == 候选理念的 uuid
+		if not unlocked_idea.counter_idea.is_empty() and unlocked_idea.counter_idea == idea.uuid:
 			return "%s：与「%s」冲突" % [unlocked_idea.name if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, idea.name if not idea.name.is_empty() else idea.uuid]
 
 	return ""
@@ -266,6 +286,15 @@ func _on_upgrade_pressed() -> void:
 	if not idea:
 		return
 
+	var is_owned := GameSave.data.current_unlock_ideas.has(idea.uuid)
+
+	# 校验冲突（获取时）：候选与已解锁互斥则拒绝
+	if not is_owned:
+		var conflict := _check_conflict(idea, GameSave.data.current_unlock_ideas)
+		if not conflict.is_empty():
+			Logging.warn("[IdeaPage] 冲突，无法获取理念 '%s'：%s" % [idea.name, conflict])
+			return
+
 	# 校验资源
 	var cost_name = idea.idea_cost_name
 	var cost_amount = idea.idea_cost_amount
@@ -274,8 +303,6 @@ func _on_upgrade_pressed() -> void:
 		Logging.warn("[IdeaPage] 资源不足：%s=%d < %d" % [cost_name, current_val, cost_amount])
 		_show_detail_for_selected()
 		return
-
-	var is_owned := GameSave.data.current_unlock_ideas.has(idea.uuid)
 
 	# 扣资源
 	PlayerState.append_stat(cost_name, -cost_amount)
