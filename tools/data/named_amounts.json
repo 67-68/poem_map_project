@@ -105,5 +105,21 @@
   "_comment_xing": "=== 🆕 兴 (inspiration) 增益档位 ===",
   "s_xing_gain": 3,
   "m_xing_gain": 6,
-  "l_xing_gain": 10
+  "l_xing_gain": 10,
+  "xl_xing_gain": 15,
+
+  "_comment_wang": "=== 🆕 望 (prestige) 超大档位 ===",
+  "xl_prestige_gain": 15,
+
+  "_comment_mod_pct": "=== 🆕 理念修饰器百分比档位 (Modifier Percentages) ===",
+  "_comment_mod_pct_desc": "用于 BuffOperator 的 efficiency/action_specific/cap_boost/relation_speed_pct。值是百分比整数（20=+20%）。",
+  "xs_mod_pct": 10,
+  "s_mod_pct": 20,
+  "m_mod_pct": 50,
+  "l_mod_pct": 80,
+
+  "_comment_tier": "=== 🆕 理念修饰器等级/旬数档位 (Modifier Tier/Xun) ===",
+  "_comment_tier_desc": "用于 npc_trade_tier 的档位步进和 relation_speed_abs 的旬数减少。",
+  "xs_tier_step": 1,
+  "xs_xun_reduction": 1
 }

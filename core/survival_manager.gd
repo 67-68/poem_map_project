@@ -283,6 +283,10 @@ func _process_single_xun_settlement():
 	# 必须在 health sync 之后（健康不影响 NPC 加成）、cost 之前（加成先于扣除）。
 	_apply_npc_inner_circle_bonus()
 	
+	# 🆕 1.9: 理念每旬被动增长（per_xun_passive）
+	# 在 NPC 加成之后、生存扣除之前执行：先给甜头再扒皮。
+	_apply_idea_per_xun_passives()
+	
 	# 第二阶段：生存基础扣除 (Upkeep & Economy)
 	# 外部环境对玩家的无情压迫。
 	_cost_survival()
@@ -440,6 +444,30 @@ func _apply_npc_inner_circle_bonus() -> void:
 		Logging.info("[SurvivalManager]   %s: 设定为 %d" % [cn_name, new_val])
 	
 	Logging.info("[SurvivalManager] _apply_npc_inner_circle_bonus: 加成完成")
+
+
+# ─── 🆕 理念每旬被动增长 ──────────────────────────────────────────
+## 查询 ModifierRegistry 中的 per_xun_passive 条目，对指定属性执行
+## 每旬增量。使用 set_stat_val 直接设值（跳过 append_stat 的倍率修正）。
+func _apply_idea_per_xun_passives() -> void:
+	var passives: Array[Dictionary] = ModifierRegistry.get_per_xun_passives()
+	if passives.is_empty():
+		Logging.debug("[SurvivalManager] _apply_idea_per_xun_passives: 无每旬被动，跳过")
+		return
+
+	Logging.info("[SurvivalManager] _apply_idea_per_xun_passives: 共 %d 条每旬被动" % passives.size())
+	for p in passives:
+		var prop_str: String = p.get("prop", "")
+		var delta: int = p.get("delta", 0)
+		if prop_str.is_empty() or delta == 0:
+			continue
+
+		var current_val: int = PlayerState.get_stat_val(prop_str)
+		var new_val: int = current_val + delta
+		PlayerState.set_stat_val(prop_str, new_val)
+		Logging.info("[SurvivalManager]   per_xun_passive: %s %+d (当前=%d, 新值=%d)" % [prop_str, delta, current_val, new_val])
+
+	Logging.info("[SurvivalManager] _apply_idea_per_xun_passives: 完成")
 
 
 # ─── 🆕 每旬基础兴获取 ─────────────────────────────────────────────

@@ -1,79 +1,163 @@
 @tool
 class_name BuffOperator extends BaseOperator
-## BuffOperator — 理念 Buff 操作器
+## BuffOperator — 理念 Buff 操作器（注册表模式）
 ##
-## 对 GameSave.data.properties 中的指定属性执行纯加法修正。
-## operate() 应用 buff，on_exit() 反转生效（移除 buff）。
+## 不再直接操作属性值。改为在 GameSave.data.active_modifiers 中
+## 注册/注销修饰器条目，由各执行管线模块查询注册表来产生实际效果。
 ##
-## 理念激活周期：
-##   IdeaPage 选择理念 → operate() 应用 buff
-##   理念过期/替换 → on_exit() 移除 buff
+## modifier_type 取值：
+##   efficiency         — 属性获取效率百分比加成 (pct)
+##   per_xun_passive    — 每旬被动增长 (abs)
+##   action_specific    — 特定行动的属性加成百分比 (pct)
+##   cap_boost          — 属性上限百分比加成 (pct)
+##   relation_speed_pct — NPC 关系需求百分比减免 (pct)
+##   relation_speed_abs — NPC 关系需求绝对旬数减少 (abs)
+##   npc_trade_tier     — NPC 交易档次步进 (abs) — TODO 集成点
+##
+## condition 是 nullable 的 BaseRequirements，用于运行时条件匹配。
+## 例如 ActionMatchRequirement(action="denggao_shaolingyuan") 要求
+## 当前 action_id 匹配时才生效。
 
-@export var prop_name: String = '' # GameSave.data.properties 内的属性名
-@export var amount: int = 1        # 永远执行 addition（正数=增益，负数=减益）
+@export var named_amount_key: String = ""       # named_amounts.json 的 key
+@export var modifier_type: String = ""           # efficiency|per_xun_passive|action_specific|cap_boost|relation_speed_pct|relation_speed_abs|npc_trade_tier
+@export var condition: BaseRequirements = null   # nullable — DSL requirement 条件
+
+## 运行时由 Idea.increase_idea_level() 注入，标识此 buff 的来源理念 UUID
+var source_uuid: String = ""
 
 
 func operate():
-    """应用 buff：对 prop_name 执行 +amount"""
-    if prop_name.is_empty():
-        Logging.err("BuffOperator.operate: prop_name 为空，跳过执行")
-        return
-    if amount == 0:
-        Logging.debug("BuffOperator.operate: amount=0，无效果，跳过")
-        return
+	"""注册修饰器：向 GameSave.data.active_modifiers 添加一条"""
+	if named_amount_key.is_empty():
+		Logging.err("BuffOperator.operate: named_amount_key 为空，跳过执行")
+		return
+	if modifier_type.is_empty():
+		Logging.err("BuffOperator.operate: modifier_type 为空，跳过执行")
+		return
+	if source_uuid.is_empty():
+		Logging.err("BuffOperator.operate: source_uuid 为空（Idea 未注入），跳过执行")
+		return
 
-    Logging.info("BuffOperator.operate: 应用 buff — prop='%s', amount=%+d" % [prop_name, amount])
-    PlayerState.append_stat(prop_name, amount)
-    Logging.info("BuffOperator.operate: buff 已应用 — prop='%s', amount=%+d" % [prop_name, amount])
+	var amounts: Dictionary = NamedDSLParser._load_named_amounts()
+	if not amounts.has(named_amount_key):
+		Logging.err("BuffOperator.operate: named_amount_key='%s' 在 named_amounts.json 中不存在，跳过" % named_amount_key)
+		return
+
+	var entry := {
+		"source": source_uuid,
+		"type": modifier_type,
+		"named_key": named_amount_key,
+		"value": amounts[named_amount_key],
+		"condition": condition.duplicate() if condition else null,
+	}
+
+	GameSave.data.active_modifiers.append(entry)
+	Logging.info("BuffOperator.operate: 注册修饰器 — source='%s', type='%s', named_key='%s', value=%s" % [source_uuid, modifier_type, named_amount_key, str(amounts[named_amount_key])])
 
 
 func on_exit(_context: Dictionary) -> Dictionary:
-    """移除 buff：对 prop_name 执行 -amount（反转生效）"""
-    if prop_name.is_empty():
-        Logging.err("BuffOperator.on_exit: prop_name 为空，跳过清理")
-        return _context
-    if amount == 0:
-        Logging.debug("BuffOperator.on_exit: amount=0，无效果，跳过")
-        return _context
+	"""注销修饰器：从 GameSave.data.active_modifiers 删除匹配本条的所有条目"""
+	if source_uuid.is_empty():
+		Logging.warn("BuffOperator.on_exit: source_uuid 为空，无法精确删除，按 modifier_type + named_key 模糊删除")
+		_remove_by_type_key(modifier_type, named_amount_key)
+		return _context
 
-    Logging.info("BuffOperator.on_exit: 移除 buff — prop='%s', amount=%+d（反转=%+d）" % [prop_name, amount, -amount])
-    PlayerState.append_stat(prop_name, -amount)
-    Logging.info("BuffOperator.on_exit: buff 已移除 — prop='%s'" % prop_name)
-    return _context
+	var removed := 0
+	var remaining: Array[Dictionary] = []
+	for entry in GameSave.data.active_modifiers:
+		if entry.get("source") == source_uuid and entry.get("type") == modifier_type and entry.get("named_key") == named_amount_key:
+			removed += 1
+			Logging.info("BuffOperator.on_exit: 注销修饰器 — source='%s', type='%s', named_key='%s'" % [source_uuid, modifier_type, named_amount_key])
+		else:
+			remaining.append(entry)
+
+	# 如果没有精确匹配，尝试模糊删除
+	if removed == 0:
+		Logging.warn("BuffOperator.on_exit: 未找到精确匹配条目 (source='%s', type='%s', named_key='%s')，尝试模糊删除" % [source_uuid, modifier_type, named_amount_key])
+		_remove_by_type_key(modifier_type, named_amount_key)
+	else:
+		GameSave.data.active_modifiers = remaining
+
+	Logging.info("BuffOperator.on_exit: 清理完成，移除了 %d 个条目，剩余 %d 个" % [removed, GameSave.data.active_modifiers.size()])
+	return _context
+
+
+func _remove_by_type_key(mod_type: String, named_key: String) -> void:
+	"""按 type+named_key 模糊删除（兜底）"""
+	var remaining: Array[Dictionary] = []
+	var removed := 0
+	for entry in GameSave.data.active_modifiers:
+		if entry.get("type") == mod_type and entry.get("named_key") == named_key:
+			removed += 1
+		else:
+			remaining.append(entry)
+	if removed > 0:
+		GameSave.data.active_modifiers = remaining
+		Logging.info("BuffOperator._remove_by_type_key: 模糊删除了 %d 个条目 (type='%s', named_key='%s')" % [removed, mod_type, named_key])
 
 
 func init(_context: Dictionary) -> Dictionary:
-    """初始化：验证 prop_name 在 Database 中是否存在"""
-    if prop_name.is_empty():
-        Logging.warn("BuffOperator.init: prop_name 为空，跳过验证")
-        return _context
-    var prop = Database.get_property(prop_name)
-    if not prop:
-        Logging.err("BuffOperator.init: prop '%s' 在 Database 中不存在，buff 可能在运行时失效" % prop_name)
-    else:
-        Logging.debug("BuffOperator.init: prop '%s' 验证通过" % prop_name)
-    return _context
+	"""初始化：验证 named_amount_key 是否存在"""
+	if named_amount_key.is_empty():
+		Logging.warn("BuffOperator.init: named_amount_key 为空，跳过验证")
+		return _context
+
+	var amounts = NamedDSLParser._load_named_amounts()
+	if not amounts.has(named_amount_key):
+		Logging.err("BuffOperator.init: named_amount_key='%s' 在 named_amounts.json 中不存在，buff 可能在运行时失效" % named_amount_key)
+	else:
+		Logging.debug("BuffOperator.init: named_amount_key='%s' 验证通过 (value=%s)" % [named_amount_key, str(amounts[named_amount_key])])
+	return _context
 
 
 func describe_preview() -> String:
-    """Alt 预览：展示 buff 效果文本"""
-    if prop_name.is_empty() or amount == 0:
-        return ""
-    var prop = Database.get_property(prop_name)
-    if not prop:
-        return "%s %+d" % [prop_name, amount]
-    var cn_name = prop.get_display_name() if not prop.name.is_empty() else prop_name
-    var arrow = "↑" if amount > 0 else "↓"
-    return "%s %s %+d" % [cn_name, arrow, amount]
+	"""Alt 预览：展示修饰器效果文本"""
+	if named_amount_key.is_empty() or modifier_type.is_empty():
+		return ""
+
+	var amounts: Dictionary = NamedDSLParser._load_named_amounts()
+	var raw_val = amounts.get(named_amount_key, 0)
+
+	var type_cn := ""
+	var display_val := ""
+	match modifier_type:
+		"efficiency":
+			type_cn = "获取效率"
+			display_val = "+%d%%" % raw_val
+		"per_xun_passive":
+			type_cn = "每旬"
+			display_val = "%+d" % raw_val
+		"action_specific":
+			type_cn = "行动加成"
+			display_val = "+%d%%" % raw_val
+		"cap_boost":
+			type_cn = "上限"
+			display_val = "+%d%%" % raw_val
+		"relation_speed_pct":
+			type_cn = "关系需求"
+			display_val = "-%d%%" % raw_val
+		"relation_speed_abs":
+			type_cn = "关系时间"
+			display_val = "-%d旬" % raw_val
+		"npc_trade_tier":
+			type_cn = "交易档次"
+			display_val = "+%d档" % raw_val
+		_:
+			return "%s %s=%s" % [modifier_type, named_amount_key, str(raw_val)]
+
+	# 如果有 condition，附加条件描述
+	var cond_text := ""
+	if condition:
+		cond_text = " (" + condition.describe_requirement() + ")"
+
+	return "%s %s%s" % [type_cn, display_val, cond_text]
 
 
 func get_referenced_props() -> Array:
-    if prop_name.is_empty():
-        return []
-    return [prop_name]
+	"""修饰器不直接引用属性，返回空"""
+	return []
 
 
 func get_demanded_props() -> Array:
-    if prop_name.is_empty():
-        return []
-    return [prop_name]
+	"""修饰器不直接依赖属性，返回空"""
+	return []

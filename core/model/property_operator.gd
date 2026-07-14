@@ -91,6 +91,17 @@ func operate():
 		else:
 			adjusted_value = int(float(value) * 1.2)
 		Logging.info("PropertyOperator.operate: 重复行动惩罚 applied, %d → %d (×%.1f)" % [value, adjusted_value, (0.8 if value > 0 else 1.2)])
+	
+	# 🆕 理念修饰器 action_specific 倍率
+	# 对正 delta 施加百分比加成（如 少陵原兴+80%）
+	var action_id: String = GameSave.data.current_action_id
+	if not action_id.is_empty() and adjusted_value > 0:
+		var action_mult := ModifierRegistry.get_action_specific_multiplier(action_id, property)
+		if action_mult != 0.0:
+			var original := adjusted_value
+			adjusted_value = int(float(adjusted_value) * (1.0 + action_mult))
+			Logging.info("PropertyOperator.operate: 理念 action_specific 倍率 +%.2f → %d (原%d, action='%s')" % [action_mult, adjusted_value, original, action_id])
+	
 	PlayerState.append_stat(property, adjusted_value)
 	# 触发属性变化音效（AudioManager 统一管理 0.4s 防重叠间隔）
 	AudioManager.play_property_sound(property, adjusted_value)

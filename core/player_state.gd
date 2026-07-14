@@ -338,6 +338,14 @@ func append_stat(stat_name, data) -> bool:
 	# 在所有现有倍率修正之后、before_property_change 之前执行
 	amount_to_change = _apply_modifier_formula(stat_name, amount_to_change)
 
+	# 🆕 理念修饰器 efficiency 倍率
+	# 对正 delta 施加百分比加成
+	var mod_efficiency := ModifierRegistry.get_efficiency_multiplier(stat_name)
+	if mod_efficiency != 0.0 and amount_to_change > 0:
+		var original = amount_to_change
+		amount_to_change = int(float(amount_to_change) * (1.0 + mod_efficiency))
+		Logging.info("change stat %s: 理念 efficiency 倍率 +%.2f → %d (原%d)" % [stat_name, mod_efficiency, amount_to_change, original])
+
 	before_property_change.emit(stat_name, amount_to_change)
 
 	# FatigueManager 疲劳倍率
@@ -349,9 +357,15 @@ func append_stat(stat_name, data) -> bool:
 	Logging.info('change stat %s by %d' % [stat_name, amount_to_change])
 	var new_val: int = current_val + amount_to_change
 	
-	# 应用 hard_max 约束
-	if prop_template.hard_max >= 0 and new_val > prop_template.hard_max:
-		new_val = prop_template.hard_max
+	# 应用 hard_max 约束（含理念 cap_boost 修正）
+	var effective_hard_max: int = prop_template.hard_max
+	if effective_hard_max >= 0:
+		var cap_boost := ModifierRegistry.get_cap_boost(stat_name)
+		if cap_boost != 0.0:
+			effective_hard_max = int(float(effective_hard_max) * (1.0 + cap_boost))
+			Logging.info("change stat %s: 理念 cap_boost +%.2f → effective_hard_max=%d (原%d)" % [stat_name, cap_boost, effective_hard_max, prop_template.hard_max])
+	if effective_hard_max >= 0 and new_val > effective_hard_max:
+		new_val = effective_hard_max
 	if new_val < 0:
 		new_val = 0
 

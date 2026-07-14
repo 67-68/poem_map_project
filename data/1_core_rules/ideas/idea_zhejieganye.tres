@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="Idea" format=3]
+
+[ext_resource type="Script" path="res://core/idea.gd" id="1"]
+[ext_resource type="Script" path="res://core/buff_operator.gd" id="2"]
+[ext_resource type="Script" path="res://core/multi_buff_operator.gd" id="3"]
+[ext_resource type="Script" path="res://core/requirements/action_match_requirement.gd" id="4"]
+
+[sub_resource type="Resource" id="Resource_cond_baiye"]
+script = ExtResource("4")
+action_id = "baiye_poem_visit"
+
+[sub_resource type="Resource" id="Resource_buff_l0"]
+script = ExtResource("2")
+named_amount_key = "s_mod_pct"
+modifier_type = "action_specific"
+condition = SubResource("Resource_cond_baiye")
+
+[sub_resource type="Resource" id="Resource_buff_l1_cap"]
+script = ExtResource("2")
+named_amount_key = "s_mod_pct"
+modifier_type = "cap_boost"
+
+[sub_resource type="Resource" id="Resource_buff_l1_passive"]
+script = ExtResource("2")
+named_amount_key = "s_talent_gain"
+modifier_type = "per_xun_passive"
+
+[sub_resource type="Resource" id="Resource_multi_l1"]
+script = ExtResource("3")
+buffs = Array[ExtResource("2")]([SubResource("Resource_buff_l1_cap"), SubResource("Resource_buff_l1_passive")])
+
+[resource]
+script = ExtResource("1")
+uuid = "idea_zhejieganye"
+name = "势：折节干谒"
+description = "隐忍待发，攀附权贵"
+idea_buffs = Array[ExtResource("2")]([SubResource("Resource_buff_l0"), SubResource("Resource_multi_l1")])
+current_idea_level = -1
+idea_demonstrations = Array[String](["提升携诗拜谒的效果 20%", "势上限提高 20%，缓慢增加定力"])
+idea_cost_name = "momentum"
+idea_cost_amount = 350
+counter_idea = "idea_caomangluotuo"

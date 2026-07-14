@@ -87,6 +87,9 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 		else:
 			Logging.info("SubActionExecutor.execute: sub-action '%s' possibility PASS (roll=%d <= %d)" % [sub_action.name, roll, _sub_effective_possibility])
 	
+	# 🆕 注入 current_action_id（供 ActionMatchRequirement 条件匹配）
+	GameSave.data.current_action_id = selected_uuid
+	
 	# ── Step 4: cost archetype — Phase B: operate ──
 	if not _sub_cost_ops.is_empty():
 		for r in _sub_cost_ops:
@@ -105,6 +108,9 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 		PlayerState.append_stat("_time", -total_cost)
 		TimeService.advance_time(total_cost)
 		Logging.info("SubActionExecutor.execute: sub-action '%s' day_consumed=%f, total_cost=%d" % [sub_action.name if sub_action else "NULL", ActionManager.effective_day_consumed(sub_action, state.pending_parent_day_consumed), total_cost])
+	
+	# 🆕 清除 current_action_id（ActionMatchRequirement 条件匹配结束）
+	GameSave.data.current_action_id = ""
 	
 	ActionManager.end_action_batch()
 	ActionManager.get_focus_controller().notify_click()

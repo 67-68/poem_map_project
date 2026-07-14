@@ -230,6 +230,37 @@ static func get_threaten_event_id(target_tag: String) -> String:
 # 帮助 / 交好 (Help) — NPCDocument.help_count
 # ═══════════════════════════════════════════════════════════
 
+## 🆕 NPC 关系升级所需的 help 次数基数（未受修饰器影响）
+## 默认: 2 次 help 可升级一级（know_about → inner_circle → blood_oath 各需 2 次）
+const DEFAULT_HELP_PER_UPGRADE: int = 2
+
+## 获取指定 NPC 升级所需的有效 help 次数（经理念修饰器修正）。
+## relation_speed_abs: 减少绝对次数（如 -1 → 2-1=1）
+## relation_speed_pct: 减少百分比次数（如 -50% → 2×0.5=1）
+static func get_help_requirement(target_tag: String) -> int:
+	var base: int = DEFAULT_HELP_PER_UPGRADE
+	var speed := ModifierRegistry.get_relation_speed(target_tag)
+	
+	if speed.abs > 0:
+		base = maxi(base - speed.abs, 1)
+		Logging.info("RelationFlagManager: get_help_requirement(%s) 理念 abs -%d → %d" % [target_tag, speed.abs, base])
+	
+	if speed.pct > 0.0:
+		base = maxi(int(float(base) * (1.0 - speed.pct)), 1)
+		Logging.info("RelationFlagManager: get_help_requirement(%s) 理念 pct -%.0f%% → %d" % [target_tag, speed.pct * 100.0, base])
+	
+	return base
+
+
+## 检查 target 是否已达到下一次升级的 help 次数要求（经理念修饰器修正）。
+static func is_help_sufficient(target_tag: String) -> bool:
+	var requirement: int = get_help_requirement(target_tag)
+	var current: int = get_help(target_tag)
+	var sufficient := current >= requirement
+	Logging.info("RelationFlagManager: is_help_sufficient(%s) help=%d, required=%d → %s" % [target_tag, current, requirement, "✅" if sufficient else "❌"])
+	return sufficient
+
+
 ## 为目标添加 N 次帮助
 static func add_help(target_tag: String, amount: int = 1) -> void:
 	var doc = _get_or_create_npc_doc(target_tag)

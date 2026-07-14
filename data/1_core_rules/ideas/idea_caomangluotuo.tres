@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="Idea" format=3]
+
+[ext_resource type="Script" path="res://core/idea.gd" id="1"]
+[ext_resource type="Script" path="res://core/buff_operator.gd" id="2"]
+[ext_resource type="Script" path="res://core/requirements/npc_tier_requirement.gd" id="3"]
+
+[sub_resource type="Resource" id="Resource_buff_l0"]
+script = ExtResource("2")
+named_amount_key = "s_mod_pct"
+modifier_type = "efficiency"
+
+[sub_resource type="Resource" id="Resource_cond_tier1"]
+script = ExtResource("3")
+tier = 1
+
+[sub_resource type="Resource" id="Resource_buff_l1"]
+script = ExtResource("2")
+named_amount_key = "xs_xun_reduction"
+modifier_type = "relation_speed_abs"
+condition = SubResource("Resource_cond_tier1")
+
+[resource]
+script = ExtResource("1")
+uuid = "idea_caomangluotuo"
+name = "势：草莽落拓"
+description = "宁与市井小民为伍"
+idea_buffs = Array[ExtResource("2")]([SubResource("Resource_buff_l0"), SubResource("Resource_buff_l1")])
+current_idea_level = -1
+idea_demonstrations = Array[String](["势获取效率提高 20%", "下层人的好感提高需要的事件减少 1 旬"])
+idea_cost_name = "momentum"
+idea_cost_amount = 300
+counter_idea = "idea_zhejieganye"

@@ -37,6 +37,21 @@ var traits: Array[String] = []
 var current_unlock_ideas: Array[String] = []
 
 # ════════════════════════════════════════════════════════════════
+# 理念修饰器注册表 — 由 BuffOperator 写入/删除
+# 每条格式: { source, type, named_key, value, condition }
+# 各执行管线（PlayerState/SurvivalManager/PropertyOperator 等）
+# 通过 ModifierRegistry 查询注册表获取实际效果倍率/增量。
+# ════════════════════════════════════════════════════════════════
+var active_modifiers: Array[Dictionary] = []
+
+# ════════════════════════════════════════════════════════════════
+# 当前行动 ID — 瞬态，不持久化
+# 在 PropertyOperator.operate() 执行期间由 ActionManager 设置，
+# 用于 ActionMatchRequirement 的条件匹配。
+# ════════════════════════════════════════════════════════════════
+var current_action_id: String = ""
+
+# ════════════════════════════════════════════════════════════════
 # 身份 / 位置
 # ════════════════════════════════════════════════════════════════
 var player_name: String = "杜甫"
@@ -117,6 +132,7 @@ func to_dict() -> Dictionary:
 		"flags": _copy_dict(flags),
 		"traits": traits.duplicate(),
 		"current_unlock_ideas": current_unlock_ideas.duplicate(),
+		"active_modifiers": _deep_copy_modifiers(active_modifiers),
 		"player_name": player_name,
 		"current_location": current_location,
 		"ambition_uuid": ambition_uuid,
@@ -149,6 +165,7 @@ func from_dict(d: Dictionary) -> void:
 	flags = _safe_dict(d, "flags")
 	traits = _safe_array_str(d, "traits")
 	current_unlock_ideas = _safe_array_str(d, "current_unlock_ideas")
+	active_modifiers = _safe_modifiers_array(d, "active_modifiers")
 	player_name = d.get("player_name", "杜甫")
 	current_location = d.get("current_location", "yong_zhou")
 	ambition_uuid = d.get("ambition_uuid", "")
@@ -244,3 +261,66 @@ func _snapshot_npc_relations() -> void:
 			"intro_keys": doc.intro_keys.duplicate(),
 		}
 	Logging.info("GameSaveData: _snapshot_npc_relations 快照 %d 个目标" % npc_relations.size())
+
+
+# ════════════════════════════════════════════════════════════════
+# 修饰器注册表序列化工具
+# ════════════════════════════════════════════════════════════════
+
+## 深度拷贝 active_modifiers 数组（用于 to_dict）
+## condition 是 Resource 对象，序列化时只保留 class 和 @export 字段
+func _deep_copy_modifiers(src: Array[Dictionary]) -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for entry in src:
+		var copy := entry.duplicate()
+		# condition 是 Resource，简单存储其 type 和关键字段
+		if entry.has("condition") and entry.condition != null:
+			var cond = entry.condition
+			if cond is ActionMatchRequirement:
+				copy["condition_type"] = "ActionMatchRequirement"
+				copy["condition_action_id"] = cond.action_id
+			elif cond is NPCFactionRequirement:
+				copy["condition_type"] = "NPCFactionRequirement"
+				copy["condition_faction"] = cond.faction
+			elif cond is NPCTierRequirement:
+				copy["condition_type"] = "NPCTierRequirement"
+				copy["condition_tier"] = cond.tier
+			copy.erase("condition")  # 不序列化 Resource 引用
+		out.append(copy)
+	return out
+
+
+## 从 dict 安全加载 active_modifiers 数组
+func _safe_modifiers_array(d: Dictionary, key: String) -> Array[Dictionary]:
+	var val = d.get(key, [])
+	if val is Array:
+		var out: Array[Dictionary] = []
+		for entry in val:
+			if entry is Dictionary:
+				var restored = entry.duplicate()
+				# 反序列化 condition
+				var cond_type: String = restored.get("condition_type", "")
+				if not cond_type.is_empty():
+					var cond: BaseRequirements = null
+					match cond_type:
+						"ActionMatchRequirement":
+							var c := ActionMatchRequirement.new()
+							c.action_id = restored.get("condition_action_id", "")
+							cond = c
+						"NPCFactionRequirement":
+							var c := NPCFactionRequirement.new()
+							c.faction = restored.get("condition_faction", "qingliu")
+							cond = c
+						"NPCTierRequirement":
+							var c := NPCTierRequirement.new()
+							c.tier = restored.get("condition_tier", 1)
+							cond = c
+					if cond:
+						restored["condition"] = cond
+					restored.erase("condition_type")
+					restored.erase("condition_action_id")
+					restored.erase("condition_faction")
+					restored.erase("condition_tier")
+				out.append(restored)
+		return out
+	return []
