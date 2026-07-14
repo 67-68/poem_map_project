@@ -6,6 +6,6 @@
 script = ExtResource("1_6qvrl")
 uuid = "zhengqian_poem_exchange_defer"
 name = "zhengqian_poem_exchange.defer"
-universal_result = "fallback_event=zhengqian_poem_exchange_fallback"
+universal_result = "fallback_event=zhengqian_poem_exchange_fallback|override_action=jiaoyou_recite_poem"
 action_uuid = "zhengqian_poem_exchange"
 state = "defer"

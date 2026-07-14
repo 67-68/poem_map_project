@@ -6,6 +6,6 @@
 script = ExtResource("1_mb5mh")
 uuid = "jiwen_leverage_exchange_defer"
 name = "jiwen_leverage_exchange.defer"
-universal_result = "fallback_event=jiwen_leverage_exchange_fallback|failed_fallback=jiwen_leverage_exchange_failed_fallback"
+universal_result = "fallback_event=jiwen_leverage_exchange_fallback|failed_fallback=jiwen_leverage_exchange_failed_fallback|override_action=baiye_threaten"
 action_uuid = "jiwen_leverage_exchange"
 state = "defer"
