@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bclflf5hxj5r4"]
 
-[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.png" id="1_3ftxo"]
+[ext_resource type="Texture2D" uid="uid://bmv24lnitef8m" path="res://assets/ripped_paper.PNG" id="1_3ftxo"]
 [ext_resource type="Script" uid="uid://dqj61x3f61w8q" path="res://ui/ambition_hud.gd" id="2_u8j85"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="3_hj3uc"]
 
@@ -55,8 +55,8 @@ text = "你想齐家治国平天下，而这需要以做官为前提。
 autowrap_mode = 3
 
 [node name="DeadlineResult" type="Label" parent="Mar/VBox" unique_id=24349763]
-clip_contents = true
 custom_minimum_size = Vector2(100, 0)
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.34664103, 0.016675765, 3.6098065e-08, 1)

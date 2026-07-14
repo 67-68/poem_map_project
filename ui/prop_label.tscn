@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bfumtrrdtv0f2"]
+
+[node name="HBoxContainer" type="HBoxContainer" unique_id=1246822294]
+size_flags_horizontal = 6
+theme_override_constants/separation = 0
+
+[node name="Label2" type="Label" parent="." unique_id=19441402]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.07683582, 0.07683582, 0.07683582, 1)
+text = "50 健"
+vertical_alignment = 2
+
+[node name="Label" type="Label" parent="." unique_id=991272602]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.31431612, 0.31431612, 0.3143161, 1)
+theme_override_font_sizes/font_size = 10
+text = "「奄奄一息」"
+vertical_alignment = 1
