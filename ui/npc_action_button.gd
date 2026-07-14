@@ -279,4 +279,3 @@ func _register_hover_from_labels() -> void:
 func _exit_tree() -> void:
 	HoverPopupManager.unregister(self)
 	Logging.info("NpcActionButton._exit_tree: 已注销 hover 绑定")
-	super()

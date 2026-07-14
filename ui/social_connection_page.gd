@@ -429,9 +429,41 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 	_info_quests.text = "暂无数据"
 	Logging.info("[SocialConnectionPage]   可用任务 — 暂无数据")
 
-	# ── Unit7: 资源转换配方（后端未就绪） ──
-	_info_recipes.text = "暂无数据"
-	Logging.info("[SocialConnectionPage]   资源转换配方 — 暂无数据")
+	# ── Unit7: 资源转换配方（使用 ActionHintBuilder 构建预览） ──
+	var recipe_parts: Array[String] = []
+	for action_uuid: String in doc.normal_actions:
+		var action: Action = Database.get_action(action_uuid) as Action
+		if action == null:
+			Logging.warn("[SocialConnectionPage] normal_actions 中的 action '%s' 未在 Database 中找到" % action_uuid)
+			continue
+
+		# 使用 ActionHintBuilder.build_action_hint 获取结构化 hint
+		var hint = ActionHintBuilder.build_action_hint(action, false)
+		if hint == null:
+			continue
+
+		# 标题行：行动名称
+		recipe_parts.append("[b]%s[/b]" % action.name)
+
+		# 叙事层（描述）
+		if not hint.narrative.is_empty():
+			recipe_parts.append("  %s" % hint.narrative)
+
+		# 产出模块（output）
+		if hint.output and not hint.output.is_empty():
+			for line: String in hint.output.lines:
+				recipe_parts.append("  %s" % line)
+
+		# 空行分隔
+		recipe_parts.append("")
+
+	var recipe_text: String
+	if recipe_parts.is_empty():
+		recipe_text = "暂无可用配方"
+	else:
+		recipe_text = "\n".join(recipe_parts).strip_edges()
+	_info_recipes.text = recipe_text
+	Logging.info("[SocialConnectionPage]   资源转换配方 — %d 条 action" % doc.normal_actions.size())
 
 
 func _clear_info() -> void:
