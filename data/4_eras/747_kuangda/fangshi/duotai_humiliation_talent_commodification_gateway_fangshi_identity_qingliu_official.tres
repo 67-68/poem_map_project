@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_4rr8a"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_raicx"]
 
-[sub_resource type="Resource" id="Resource_ipx0l"]
+[sub_resource type="Resource" id="Resource_yhb4w"]
 script = ExtResource("2_46xlu")
 
-[sub_resource type="Resource" id="Resource_46xlu"]
+[sub_resource type="Resource" id="Resource_qtcn6"]
 script = ExtResource("4_rf3hn")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_b03bk"]
+[sub_resource type="Resource" id="Resource_gs65g"]
 script = ExtResource("2_46xlu")
-operators = Array[ExtResource("1_ipx0l")]([SubResource("Resource_46xlu")])
+operators = Array[ExtResource("1_ipx0l")]([SubResource("Resource_qtcn6")])
 
-[sub_resource type="Resource" id="Resource_rf3hn"]
+[sub_resource type="Resource" id="Resource_g18hs"]
 script = ExtResource("5_fixyx")
-choice_result = SubResource("Resource_b03bk")
+choice_result = SubResource("Resource_gs65g")
 description = "目光越过纸和老板的脸，转身迈入人流。"
 
-[sub_resource type="Resource" id="Resource_fixyx"]
+[sub_resource type="Resource" id="Resource_3ds8o"]
 script = ExtResource("5_fixyx")
 description = "怔了半瞬，提笔蘸墨，低头写了几行。"
 
-[sub_resource type="Resource" id="Resource_4rr8a"]
+[sub_resource type="Resource" id="Resource_7q8um"]
 script = ExtResource("4_rf3hn")
 imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_raicx"]
+[sub_resource type="Resource" id="Resource_kdvf4"]
 script = ExtResource("2_46xlu")
-operators = Array[ExtResource("1_ipx0l")]([SubResource("Resource_4rr8a")])
+operators = Array[ExtResource("1_ipx0l")]([SubResource("Resource_7q8um")])
 
-[sub_resource type="Resource" id="Resource_yhb4w"]
+[sub_resource type="Resource" id="Resource_qehyk"]
 script = ExtResource("5_fixyx")
-choice_result = SubResource("Resource_raicx")
+choice_result = SubResource("Resource_kdvf4")
 description = "躬身拱手：“愿效劳——若嫌不足，还能再添三首。”"
 
-[sub_resource type="Resource" id="Resource_qtcn6"]
+[sub_resource type="Resource" id="Resource_e8eev"]
 script = ExtResource("6_4rr8a")
 volatile_stat = "ambition"
 value = 50
@@ -49,12 +49,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_raicx")
-requirement = SubResource("Resource_qtcn6")
+requirement = SubResource("Resource_e8eev")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["emotion_pair:pair_rebellion", "TARGET_NPC_DUFU:thatched_grass", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_talent_commodification", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_NPC_ZHENGQIAN", "ENV_NATURE_NIGHTMOON:cold_moon", "TARGET_NPC_DUFU:thatched_grass", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:scene_fangshi"])
-options = Array[ExtResource("3_b03bk")]([SubResource("Resource_rf3hn"), SubResource("Resource_fixyx"), SubResource("Resource_yhb4w")])
-on_enter_result = SubResource("Resource_ipx0l")
+options = Array[ExtResource("3_b03bk")]([SubResource("Resource_g18hs"), SubResource("Resource_3ds8o"), SubResource("Resource_qehyk")])
+on_enter_result = SubResource("Resource_yhb4w")
 uuid = "duotai_humiliation_talent_commodification_gateway_fangshi_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "纸铺前的交易"

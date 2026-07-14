@@ -182,6 +182,12 @@ static func _state_matches(current_state: String, target_state: String, compare:
 			if idx_current == -1 or idx_target == -1:
 				return false
 			return idx_current >= idx_target
+		"lt":
+			var idx_current = _PERSON_STATE_ORDER.find(current_state)
+			var idx_target = _PERSON_STATE_ORDER.find(target_state)
+			if idx_current == -1 or idx_target == -1:
+				return false
+			return idx_current < idx_target
 		"eq", _:
 			return current_state == target_state
 

@@ -7,16 +7,16 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_oejus"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_lgnxv"]
 
-[sub_resource type="Resource" id="Resource_bopgn"]
+[sub_resource type="Resource" id="Resource_1pbo4"]
 script = ExtResource("3_46r5f")
 
-[sub_resource type="Resource" id="Resource_fphug"]
+[sub_resource type="Resource" id="Resource_l5g0q"]
 script = ExtResource("4_pg4vh")
 event_key = "jiaoyou_tongyou_changan_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_46r5f"]
+[sub_resource type="Resource" id="Resource_4fogc"]
 script = ExtResource("5_oejus")
-operators = Array[ExtResource("2_fphug")]([SubResource("Resource_fphug")])
+operators = Array[ExtResource("2_fphug")]([SubResource("Resource_l5g0q")])
 
 [resource]
 script = ExtResource("6_lgnxv")
@@ -24,8 +24,8 @@ _action_tags = Array[int]([30, 32])
 fallback_event_uuid = "jiaoyou_tongyou_changan_fallback"
 archetype_uuid = "jiaoyou_tongyou_changan_success"
 possibility = "s_success_rate"
-failed_result = SubResource("Resource_46r5f")
-defer_config = SubResource("Resource_bopgn")
+failed_result = SubResource("Resource_4fogc")
+defer_config = SubResource("Resource_1pbo4")
 uuid = "jiaoyou_tongyou_changan"
 name = "交游 · 同游长安"
 description = "与友人结伴遍览长安风物"

@@ -7,20 +7,20 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_b2a0x"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_ypvuv"]
 
-[sub_resource type="Resource" id="Resource_vxmy5"]
+[sub_resource type="Resource" id="Resource_eltuc"]
 script = ExtResource("3_mbv0o")
 xun_defered = "l_xun_cost"
 used_resource_archetype = "jiaoyou_intro_gacha_defer"
 ap_cost = "m_ap_cost"
 failed_fallback = "intro_gacha_failure_fallback"
 
-[sub_resource type="Resource" id="Resource_70aud"]
+[sub_resource type="Resource" id="Resource_mm2v5"]
 script = ExtResource("4_t3srv")
 event_key = "intro_gacha_failure_fallback"
 
-[sub_resource type="Resource" id="Resource_mbv0o"]
+[sub_resource type="Resource" id="Resource_qyoep"]
 script = ExtResource("5_b2a0x")
-operators = Array[ExtResource("2_70aud")]([SubResource("Resource_70aud")])
+operators = Array[ExtResource("2_70aud")]([SubResource("Resource_mm2v5")])
 
 [resource]
 script = ExtResource("6_ypvuv")
@@ -29,8 +29,8 @@ _action_tags = Array[int]([30, 54])
 fallback_event_uuid = "intro_gacha_success_fallback"
 archetype_uuid = "jiaoyou_intro_gacha_success"
 possibility = "m_success_rate"
-failed_result = SubResource("Resource_mbv0o")
-defer_config = SubResource("Resource_vxmy5")
+failed_result = SubResource("Resource_qyoep")
+defer_config = SubResource("Resource_eltuc")
 uuid = "jiaoyou_intro_gacha"
 name = "交游 · 赴宴雅集"
 description = "出席权贵宴席广结人脉或可获得引荐之机"

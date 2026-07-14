@@ -7,16 +7,16 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_5mb5f"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_xgvvc"]
 
-[sub_resource type="Resource" id="Resource_1tqqx"]
+[sub_resource type="Resource" id="Resource_kslgw"]
 script = ExtResource("3_1d5io")
 
-[sub_resource type="Resource" id="Resource_lww7u"]
+[sub_resource type="Resource" id="Resource_y6pte"]
 script = ExtResource("4_dwh7e")
 event_key = "fangshi_shiyao_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_1d5io"]
+[sub_resource type="Resource" id="Resource_7dd4n"]
 script = ExtResource("5_5mb5f")
-operators = Array[ExtResource("2_lww7u")]([SubResource("Resource_lww7u")])
+operators = Array[ExtResource("2_lww7u")]([SubResource("Resource_y6pte")])
 
 [resource]
 script = ExtResource("6_xgvvc")
@@ -25,8 +25,8 @@ _action_tags = Array[int]([32, 38])
 fallback_event_uuid = "fangshi_shiyao_fallback"
 archetype_uuid = "fangshi_shiyao_success"
 possibility = "m_success_rate"
-failed_result = SubResource("Resource_1d5io")
-defer_config = SubResource("Resource_1tqqx")
+failed_result = SubResource("Resource_7dd4n")
+defer_config = SubResource("Resource_kslgw")
 uuid = "fangshi_shiyao"
 name = "坊市 · 试药"
 description = "当代李时珍"

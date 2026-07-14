@@ -6,10 +6,10 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_qeixw"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_h18fb"]
 
-[sub_resource type="Resource" id="Resource_uopkn"]
+[sub_resource type="Resource" id="Resource_rli35"]
 script = ExtResource("3_bknq2")
 
-[sub_resource type="Resource" id="Resource_rp0ay"]
+[sub_resource type="Resource" id="Resource_a5qgr"]
 script = ExtResource("4_qeixw")
 
 [resource]
@@ -18,8 +18,8 @@ required_place = "huangcheng"
 _action_tags = Array[int]([56, 63])
 fallback_event_uuid = "zhu_liu_huangcheng_fallback"
 archetype_uuid = "zhu_liu_huangcheng_success"
-failed_result = SubResource("Resource_rp0ay")
-defer_config = SubResource("Resource_uopkn")
+failed_result = SubResource("Resource_a5qgr")
+defer_config = SubResource("Resource_rli35")
 uuid = "zhu_liu_huangcheng"
 name = "驻留 · 皇城"
 description = "移步皇城落脚"

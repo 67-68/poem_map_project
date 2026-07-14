@@ -7,24 +7,24 @@
 [ext_resource type="Script" uid="uid://lnvpvefpsar1" path="res://core/model/item_provider.gd" id="5_qtlxx"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_fo00d"]
 
-[sub_resource type="Resource" id="Resource_f7h5e"]
+[sub_resource type="Resource" id="Resource_m70ja"]
 script = ExtResource("2_fvsg0")
 datasource_name = "feihualing_imageries"
 prop_from_result = "uuid"
 key_stored_context = "feihualing_words"
 
-[sub_resource type="Resource" id="Resource_fvsg0"]
+[sub_resource type="Resource" id="Resource_4s5hi"]
 script = ExtResource("3_0n5md")
-operators = Array[ExtResource("1_f7h5e")]([SubResource("Resource_f7h5e")])
+operators = Array[ExtResource("1_f7h5e")]([SubResource("Resource_m70ja")])
 
-[sub_resource type="Resource" id="Resource_0n5md"]
+[sub_resource type="Resource" id="Resource_f7lys"]
 script = ExtResource("5_qtlxx")
 list_key = "feihualing_words, display_datasource=imaginaries, display_prop=name, text_template=以「{item}」为题, target_event_key=feihualing_other_done, payload_key=feihualing_chosen_word, use_push_event=true"
 
 [resource]
 script = ExtResource("6_fo00d")
-provider = SubResource("Resource_0n5md")
-on_enter_result = SubResource("Resource_fvsg0")
+provider = SubResource("Resource_f7lys")
+on_enter_result = SubResource("Resource_4s5hi")
 uuid = "feihualing_choose_word"
 name = "选择意象"
 description = "你要吟咏什么主题？"

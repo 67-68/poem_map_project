@@ -9,46 +9,6 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="7_j7hmd"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_shq5c"]
 
-[sub_resource type="Resource" id="Resource_bynbl"]
-script = ExtResource("3_uhddx")
-value = 10
-
-[sub_resource type="Resource" id="Resource_rbye3"]
-script = ExtResource("4_ckqa0")
-operators = Array[ExtResource("2_rbye3")]([SubResource("Resource_bynbl")])
-
-[sub_resource type="Resource" id="Resource_uhddx"]
-script = ExtResource("5_3ksyh")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_ckqa0"]
-script = ExtResource("6_rjj3y")
-choice_result = SubResource("Resource_rbye3")
-requirement = SubResource("Resource_uhddx")
-description = "掷杯在地，拂袖间掀翻案上酒盏。"
-
-[sub_resource type="Resource" id="Resource_3ksyh"]
-script = ExtResource("3_uhddx")
-value = 10
-
-[sub_resource type="Resource" id="Resource_rjj3y"]
-script = ExtResource("4_ckqa0")
-operators = Array[ExtResource("2_rbye3")]([SubResource("Resource_3ksyh")])
-
-[sub_resource type="Resource" id="Resource_j7hmd"]
-script = ExtResource("5_3ksyh")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_shq5c"]
-script = ExtResource("6_rjj3y")
-choice_result = SubResource("Resource_rjj3y")
-requirement = SubResource("Resource_j7hmd")
-description = "堆出笑容，双手捧起酒壶为对方斟满。"
-
 [sub_resource type="Resource" id="Resource_pk67d"]
 script = ExtResource("3_uhddx")
 value = 10
@@ -58,21 +18,61 @@ script = ExtResource("4_ckqa0")
 operators = Array[ExtResource("2_rbye3")]([SubResource("Resource_pk67d")])
 
 [sub_resource type="Resource" id="Resource_p7cpl"]
-script = ExtResource("6_rjj3y")
-choice_result = SubResource("Resource_so4dm")
-description = "沉默片刻，问他那位同僚手里有什么可以交换。"
+script = ExtResource("5_3ksyh")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
 
 [sub_resource type="Resource" id="Resource_sdgoi"]
+script = ExtResource("6_rjj3y")
+choice_result = SubResource("Resource_so4dm")
+requirement = SubResource("Resource_p7cpl")
+description = "掷杯在地，拂袖间掀翻案上酒盏。"
+
+[sub_resource type="Resource" id="Resource_iym2k"]
+script = ExtResource("3_uhddx")
+value = 10
+
+[sub_resource type="Resource" id="Resource_pjdqn"]
+script = ExtResource("4_ckqa0")
+operators = Array[ExtResource("2_rbye3")]([SubResource("Resource_iym2k")])
+
+[sub_resource type="Resource" id="Resource_13loy"]
+script = ExtResource("5_3ksyh")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_ljx02"]
+script = ExtResource("6_rjj3y")
+choice_result = SubResource("Resource_pjdqn")
+requirement = SubResource("Resource_13loy")
+description = "堆出笑容，双手捧起酒壶为对方斟满。"
+
+[sub_resource type="Resource" id="Resource_s1mu4"]
+script = ExtResource("3_uhddx")
+value = 10
+
+[sub_resource type="Resource" id="Resource_qx67d"]
+script = ExtResource("4_ckqa0")
+operators = Array[ExtResource("2_rbye3")]([SubResource("Resource_s1mu4")])
+
+[sub_resource type="Resource" id="Resource_mdd8m"]
+script = ExtResource("6_rjj3y")
+choice_result = SubResource("Resource_qx67d")
+description = "沉默片刻，问他那位同僚手里有什么可以交换。"
+
+[sub_resource type="Resource" id="Resource_ubt6o"]
 script = ExtResource("7_j7hmd")
 trait_name = "kuangda_zuanying"
 
 [resource]
 script = ExtResource("8_shq5c")
-requirement = SubResource("Resource_sdgoi")
+requirement = SubResource("Resource_ubt6o")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "VIBE_AESTHETIC_ELEGANT:giant_roc", "action:main:jiaoyou"])
-options = Array[ExtResource("1_bynbl")]([SubResource("Resource_ckqa0"), SubResource("Resource_shq5c"), SubResource("Resource_p7cpl")])
+options = Array[ExtResource("1_bynbl")]([SubResource("Resource_sdgoi"), SubResource("Resource_ljx02"), SubResource("Resource_mdd8m")])
 uuid = "zhuoliu_zuanying_dinner_party_broker"
 name = "酒宴上的旧账"
 description = "“子美兄，我有个同僚想见户部的人。价钱好说。”说这话时他的眼睛没看你，看的是你身后那扇门——门后是今日宴席上所有正在交易的秘密。他笃定你还在这张桌上。"

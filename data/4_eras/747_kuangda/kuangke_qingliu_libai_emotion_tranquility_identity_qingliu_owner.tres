@@ -11,50 +11,50 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_xnang"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_h8nul"]
 
-[sub_resource type="Resource" id="Resource_m74b2"]
+[sub_resource type="Resource" id="Resource_j7fff"]
 script = ExtResource("3_v1p3y")
 value = 10
 
-[sub_resource type="Resource" id="Resource_cwlep"]
+[sub_resource type="Resource" id="Resource_dk4cc"]
 script = ExtResource("4_bjrcw")
-operators = Array[ExtResource("2_cwlep")]([SubResource("Resource_m74b2")])
+operators = Array[ExtResource("2_cwlep")]([SubResource("Resource_j7fff")])
 
-[sub_resource type="Resource" id="Resource_v1p3y"]
+[sub_resource type="Resource" id="Resource_w3132"]
 script = ExtResource("5_q3uho")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_bjrcw"]
+[sub_resource type="Resource" id="Resource_o08vt"]
 script = ExtResource("6_2hsky")
-choice_result = SubResource("Resource_cwlep")
-requirement = SubResource("Resource_v1p3y")
+choice_result = SubResource("Resource_dk4cc")
+requirement = SubResource("Resource_w3132")
 description = "你爬上土台，在李白身旁躺下，也闭上眼。"
 
-[sub_resource type="Resource" id="Resource_q3uho"]
+[sub_resource type="Resource" id="Resource_vold8"]
 script = ExtResource("5_q3uho")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_2hsky"]
+[sub_resource type="Resource" id="Resource_cf58c"]
 script = ExtResource("8_qc5me")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_kfj1x"]
+[sub_resource type="Resource" id="Resource_c4pig"]
 script = ExtResource("8_qc5me")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_qc5me"]
+[sub_resource type="Resource" id="Resource_c0ck0"]
 script = ExtResource("9_xnang")
-operators = Array[ExtResource("7_kfj1x")]([SubResource("Resource_q3uho"), SubResource("Resource_2hsky"), SubResource("Resource_kfj1x")])
+operators = Array[ExtResource("7_kfj1x")]([SubResource("Resource_vold8"), SubResource("Resource_cf58c"), SubResource("Resource_c4pig")])
 
 [resource]
 script = ExtResource("10_h8nul")
-requirement = SubResource("Resource_qc5me")
+requirement = SubResource("Resource_c0ck0")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "ACTOR_EMOTION_TRANQUILITY", "emotion_pair:pair_tranquility", "action:main:jiaoyou"])
-options = Array[ExtResource("1_m74b2")]([SubResource("Resource_bjrcw")])
+options = Array[ExtResource("1_m74b2")]([SubResource("Resource_o08vt")])
 uuid = "kuangke_qingliu_libai_emotion_tranquility_identity_qingliu_owner"
 name = "土台上的白昼星辰"
 description = "“你猜我在看什么？”没等你回答，他自己接下去：“什么都没看。就是躺着。”然后他往旁边挪了挪，让出一块干裂的黄土。土台边沿的野草被晒得卷了边，远处的蝉鸣像一根绷紧的弦。"

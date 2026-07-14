@@ -1,36 +1,36 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://n6xwd7kt0jfp"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_2tbbt"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_ntbwx"]
-[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_uuvxj"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_uuvxj"]
-[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_iugjm"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_lfd4g"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_iugjm"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_uuvxj"]
+[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_lfd4g"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_iugjm"]
+[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_5uudh"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_isuah"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_byvwp"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_ovsv8"]
 
-[sub_resource type="Resource" id="Resource_uuvxj"]
-script = ExtResource("2_uuvxj")
+[sub_resource type="Resource" id="Resource_p52te"]
+script = ExtResource("2_lfd4g")
 
-[sub_resource type="Resource" id="Resource_lfd4g"]
-script = ExtResource("4_iugjm")
+[sub_resource type="Resource" id="Resource_u3of4"]
+script = ExtResource("4_5uudh")
 mode = "baiye"
 
-[sub_resource type="Resource" id="Resource_iugjm"]
-script = ExtResource("3_uuvxj")
+[sub_resource type="Resource" id="Resource_idshl"]
+script = ExtResource("5_isuah")
 
-[sub_resource type="Resource" id="Resource_5uudh"]
-script = ExtResource("4_lfd4g")
+[sub_resource type="Resource" id="Resource_qmfga"]
+script = ExtResource("6_byvwp")
 
 [resource]
-script = ExtResource("5_iugjm")
+script = ExtResource("7_ovsv8")
 required_place = "huangcheng"
 _action_tags = Array[int]([49, 29])
-action_results = Array[ExtResource("2_ntbwx")]([SubResource("Resource_lfd4g")])
-aciton_requirements = Array[ExtResource("1_2tbbt")]([SubResource("Resource_uuvxj")])
+action_results = Array[ExtResource("3_iugjm")]([SubResource("Resource_u3of4")])
+aciton_requirements = Array[ExtResource("1_uuvxj")]([SubResource("Resource_p52te")])
 fallback_event_uuid = "baiye_poem_visit_fallback"
 archetype_uuid = "baiye_poem_visit_success"
-failed_result = SubResource("Resource_5uudh")
-defer_config = SubResource("Resource_iugjm")
+failed_result = SubResource("Resource_qmfga")
+defer_config = SubResource("Resource_idshl")
 uuid = "baiye_poem_visit"
 name = "拜谒 · 携诗拜谒"
 description = "递上新诗以才华叩响朱门"

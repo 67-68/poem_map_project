@@ -8,32 +8,32 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_vx2j2"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_xcq84"]
 
-[sub_resource type="Resource" id="Resource_7y5d7"]
+[sub_resource type="Resource" id="Resource_ksjw7"]
 script = ExtResource("3_xkc8h")
 str_props = "progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_4vy50"]
+[sub_resource type="Resource" id="Resource_epjrh"]
 script = ExtResource("4_qbi1h")
-operators = Array[ExtResource("2_4vy50")]([SubResource("Resource_7y5d7")])
+operators = Array[ExtResource("2_4vy50")]([SubResource("Resource_ksjw7")])
 
-[sub_resource type="Resource" id="Resource_xkc8h"]
+[sub_resource type="Resource" id="Resource_hsu1u"]
 script = ExtResource("5_dddts")
-choice_result = SubResource("Resource_4vy50")
+choice_result = SubResource("Resource_epjrh")
 description = "从袖中取出三贯银票，置于案上。"
 
-[sub_resource type="Resource" id="Resource_qbi1h"]
+[sub_resource type="Resource" id="Resource_4frtn"]
 script = ExtResource("6_vx2j2")
 property = "progress"
 value = 70
 
 [resource]
 script = ExtResource("7_xcq84")
-requirement = SubResource("Resource_qbi1h")
+requirement = SubResource("Resource_4frtn")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_7y5d7")]([SubResource("Resource_xkc8h")])
+options = Array[ExtResource("1_7y5d7")]([SubResource("Resource_hsu1u")])
 uuid = "bai_ye_honeymoon_l2_typea_m2"
 name = "值房例钱"
 description = "“近日本部整顿铨选簿册，凡新进士子，须按例纳‘给帖钱’三贯，方得登录。此乃衙中旧规。”语毕，他抬目看你，目光平静，指尖在案上轻叩两下。"

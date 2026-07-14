@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_scc18"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_n56md"]
 
-[sub_resource type="Resource" id="Resource_ujowf"]
+[sub_resource type="Resource" id="Resource_hwetp"]
 script = ExtResource("2_5b4qv")
 
-[sub_resource type="Resource" id="Resource_5b4qv"]
+[sub_resource type="Resource" id="Resource_nad06"]
 script = ExtResource("4_n0ck7")
 description = "你站起身，朝门外走去，檐角日影未移半步，头也不回。"
 
-[sub_resource type="Resource" id="Resource_nueiq"]
+[sub_resource type="Resource" id="Resource_nrhyx"]
 script = ExtResource("4_n0ck7")
 description = "你拱手还礼，端起凉茶饮尽，将名帖留在桌上，缓步离去。"
 
-[sub_resource type="Resource" id="Resource_n0ck7"]
+[sub_resource type="Resource" id="Resource_fpeyc"]
 script = ExtResource("5_wi66f")
 imagery_name = "thatched_grass"
 
-[sub_resource type="Resource" id="Resource_wi66f"]
+[sub_resource type="Resource" id="Resource_h81wl"]
 script = ExtResource("2_5b4qv")
-operators = Array[ExtResource("1_ujowf")]([SubResource("Resource_n0ck7")])
+operators = Array[ExtResource("1_ujowf")]([SubResource("Resource_fpeyc")])
 
-[sub_resource type="Resource" id="Resource_scc18"]
+[sub_resource type="Resource" id="Resource_eroff"]
 script = ExtResource("4_n0ck7")
-choice_result = SubResource("Resource_wi66f")
+choice_result = SubResource("Resource_h81wl")
 description = "你追上两步，躬身作揖：“郑兄提携则个，弟但求一饭之地。”"
 
-[sub_resource type="Resource" id="Resource_n56md"]
+[sub_resource type="Resource" id="Resource_mtusw"]
 script = ExtResource("6_scc18")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_n56md")
-requirement = SubResource("Resource_n56md")
+requirement = SubResource("Resource_mtusw")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["emotion_pair:pair_despair", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_peer_gap", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_FACTION_ROYAL:jade_step", "TARGET_NPC_DUFU:thatched_grass", "ENV_NATURE_NIGHTMOON:cold_moon", "action:scene_baiye"])
-options = Array[ExtResource("3_nueiq")]([SubResource("Resource_5b4qv"), SubResource("Resource_nueiq"), SubResource("Resource_scc18")])
-on_enter_result = SubResource("Resource_ujowf")
+options = Array[ExtResource("3_nueiq")]([SubResource("Resource_nad06"), SubResource("Resource_nrhyx"), SubResource("Resource_eroff")])
+on_enter_result = SubResource("Resource_hwetp")
 uuid = "duotai_humiliation_peer_gap_gateway_baiye_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "门内门外"

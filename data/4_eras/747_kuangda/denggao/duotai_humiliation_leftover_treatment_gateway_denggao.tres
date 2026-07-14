@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_8y6h6"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_6dr7s"]
 
-[sub_resource type="Resource" id="Resource_dc1a8"]
+[sub_resource type="Resource" id="Resource_yqnym"]
 script = ExtResource("2_twbvn")
 
-[sub_resource type="Resource" id="Resource_twbvn"]
+[sub_resource type="Resource" id="Resource_f5sgt"]
 script = ExtResource("4_emg8e")
 description = "不碰碗筷，掷一文钱于案，转身没入巷中暮色。"
 
-[sub_resource type="Resource" id="Resource_duc1m"]
+[sub_resource type="Resource" id="Resource_u2o8i"]
 script = ExtResource("5_ccpxq")
 imagery_name = "high_tower"
 
-[sub_resource type="Resource" id="Resource_emg8e"]
+[sub_resource type="Resource" id="Resource_51qwf"]
 script = ExtResource("2_twbvn")
-operators = Array[ExtResource("1_dc1a8")]([SubResource("Resource_duc1m")])
+operators = Array[ExtResource("1_dc1a8")]([SubResource("Resource_u2o8i")])
 
-[sub_resource type="Resource" id="Resource_ccpxq"]
+[sub_resource type="Resource" id="Resource_bsaq6"]
 script = ExtResource("4_emg8e")
-choice_result = SubResource("Resource_emg8e")
+choice_result = SubResource("Resource_51qwf")
 description = "低头吃完最后一口，数出铜钱搁在桌上，起身拱手。"
 
-[sub_resource type="Resource" id="Resource_8y6h6"]
+[sub_resource type="Resource" id="Resource_fts80"]
 script = ExtResource("4_emg8e")
 description = "连声道谢，掏钱时指尖微颤，称“叨扰兄台了”。"
 
-[sub_resource type="Resource" id="Resource_6dr7s"]
+[sub_resource type="Resource" id="Resource_523br"]
 script = ExtResource("6_8y6h6")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_6dr7s")
-requirement = SubResource("Resource_6dr7s")
+requirement = SubResource("Resource_523br")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["emotion_pair:pair_survival", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "action:humiliation_leftover_treatment", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao"])
-options = Array[ExtResource("3_duc1m")]([SubResource("Resource_twbvn"), SubResource("Resource_ccpxq"), SubResource("Resource_8y6h6")])
-on_enter_result = SubResource("Resource_dc1a8")
+options = Array[ExtResource("3_duc1m")]([SubResource("Resource_f5sgt"), SubResource("Resource_bsaq6"), SubResource("Resource_fts80")])
+on_enter_result = SubResource("Resource_yqnym")
 uuid = "duotai_humiliation_leftover_treatment_gateway_denggao"
 name = "emo_lt(name=ambition; val=100)"
 description = "登高归途的面钱"

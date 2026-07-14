@@ -7,33 +7,33 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="5_b8lp0"]
 [ext_resource type="Script" uid="uid://c7gkvf3ho6pgj" path="res://core/model/state_transistor.gd" id="6_oug2m"]
 
-[sub_resource type="Resource" id="Resource_8rt56"]
+[sub_resource type="Resource" id="Resource_1lhf0"]
 script = ExtResource("2_ykmt6")
 flag_id = "flag_near_death_rescued_1"
 type = "int"
 value = 1
 
-[sub_resource type="Resource" id="Resource_ykmt6"]
+[sub_resource type="Resource" id="Resource_mvrsw"]
 script = ExtResource("4_xsch5")
 flag_id = "flag_near_death_count"
 type = "int"
 value = 1
 operator = 2
 
-[sub_resource type="Resource" id="Resource_1ofry"]
+[sub_resource type="Resource" id="Resource_v0k6b"]
 script = ExtResource("4_xsch5")
 flag_id = "flag_near_death_rescued_1"
 type = "int"
 value = 0
 operator = 2
 
-[sub_resource type="Resource" id="Resource_xsch5"]
+[sub_resource type="Resource" id="Resource_7p2ys"]
 script = ExtResource("5_b8lp0")
-operators = Array[ExtResource("3_1ofry")]([SubResource("Resource_ykmt6"), SubResource("Resource_1ofry")])
+operators = Array[ExtResource("3_1ofry")]([SubResource("Resource_mvrsw"), SubResource("Resource_v0k6b")])
 
 [resource]
 script = ExtResource("6_oug2m")
 uuid = "near_death_burn_manuscript_trans"
 triggered_event_key = "near_death_burn_manuscript"
-requirements = SubResource("Resource_xsch5")
-operators = Array[ExtResource("1_8rt56")]([SubResource("Resource_8rt56")])
+requirements = SubResource("Resource_7p2ys")
+operators = Array[ExtResource("1_8rt56")]([SubResource("Resource_1lhf0")])

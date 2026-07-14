@@ -65,9 +65,11 @@ add_random_intro(target_key=letter_target)
 
 **action_results：**
 ```
-pick_npc(mode=by_place; key=npc_target; social_tag=social:upgrade)
+pick_npc(mode=random; state=blood_oath; state_compare=lt; key=npc_target; social_tag=social:upgrade)
 person_state(mode=upgrade; target_key=npc_target)
 ```
+
+> `state=blood_oath; state_compare=lt` 过滤：排除已是最高级（blood_oath）的 NPC，not_meet / know_about / inner_circle 均可被选中升级。
 
 ### ③ 雅集 / 新节点 (jiaoyou_intro_gacha)
 

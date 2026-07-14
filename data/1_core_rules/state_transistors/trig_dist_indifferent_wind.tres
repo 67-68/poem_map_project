@@ -8,37 +8,37 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="6_w55qk"]
 [ext_resource type="Script" uid="uid://c7gkvf3ho6pgj" path="res://core/model/state_transistor.gd" id="7_6fgqr"]
 
-[sub_resource type="Resource" id="Resource_83l0p"]
+[sub_resource type="Resource" id="Resource_bgcha"]
 script = ExtResource("2_m4nou")
 flag_id = "trig_dist_indifferent_wind"
 type = "int"
 value = 1
 
-[sub_resource type="Resource" id="Resource_m4nou"]
+[sub_resource type="Resource" id="Resource_fiskd"]
 script = ExtResource("4_plfnt")
 property = "distance"
 value = 70
 operator = 1
 
-[sub_resource type="Resource" id="Resource_pby68"]
+[sub_resource type="Resource" id="Resource_4aods"]
 script = ExtResource("4_plfnt")
 property = "distance"
 value = 80
 
-[sub_resource type="Resource" id="Resource_plfnt"]
+[sub_resource type="Resource" id="Resource_04fur"]
 script = ExtResource("5_difos")
 flag_id = "trig_dist_indifferent_wind"
 type = "int"
 value = 1
 operator = 3
 
-[sub_resource type="Resource" id="Resource_difos"]
+[sub_resource type="Resource" id="Resource_guprm"]
 script = ExtResource("6_w55qk")
-operators = Array[ExtResource("3_pby68")]([SubResource("Resource_m4nou"), SubResource("Resource_pby68"), SubResource("Resource_plfnt")])
+operators = Array[ExtResource("3_pby68")]([SubResource("Resource_fiskd"), SubResource("Resource_4aods"), SubResource("Resource_04fur")])
 
 [resource]
 script = ExtResource("7_6fgqr")
 uuid = "trig_dist_indifferent_wind"
 triggered_event_key = "backhome_indifferent_wind_1"
-requirements = SubResource("Resource_difos")
-operators = Array[ExtResource("1_83l0p")]([SubResource("Resource_83l0p")])
+requirements = SubResource("Resource_guprm")
+operators = Array[ExtResource("1_83l0p")]([SubResource("Resource_bgcha")])

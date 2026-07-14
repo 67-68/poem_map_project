@@ -7,24 +7,24 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_hp21o"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_aeagq"]
 
-[sub_resource type="Resource" id="Resource_kxw3e"]
+[sub_resource type="Resource" id="Resource_xgiop"]
 script = ExtResource("3_nj275")
 
-[sub_resource type="Resource" id="Resource_qwu5t"]
+[sub_resource type="Resource" id="Resource_cbptx"]
 script = ExtResource("4_pbfuy")
 event_key = "duzhuo_xiaozhuo_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_nj275"]
+[sub_resource type="Resource" id="Resource_gi0lc"]
 script = ExtResource("5_hp21o")
-operators = Array[ExtResource("2_qwu5t")]([SubResource("Resource_qwu5t")])
+operators = Array[ExtResource("2_qwu5t")]([SubResource("Resource_cbptx")])
 
 [resource]
 script = ExtResource("6_aeagq")
 _action_tags = Array[int]([34, 45])
 fallback_event_uuid = "duzhuo_xiaozhuo_fallback"
 archetype_uuid = "duzhuo_xiaozhuo_success"
-failed_result = SubResource("Resource_nj275")
-defer_config = SubResource("Resource_kxw3e")
+failed_result = SubResource("Resource_gi0lc")
+defer_config = SubResource("Resource_xgiop")
 uuid = "duzhuo_xiaozhuo"
 name = "闲居 · 小酌一口"
 description = "浅尝辄止微醺养生"

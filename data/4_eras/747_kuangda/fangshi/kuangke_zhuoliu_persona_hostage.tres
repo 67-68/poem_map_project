@@ -10,90 +10,90 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="8_4r6vl"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_rkupr"]
 
-[sub_resource type="Resource" id="Resource_uspa8"]
-script = ExtResource("3_af1jb")
-value = 8
-
-[sub_resource type="Resource" id="Resource_cptih"]
-script = ExtResource("3_af1jb")
-value = 10
-
-[sub_resource type="Resource" id="Resource_af1jb"]
-script = ExtResource("4_sy58r")
-operators = Array[ExtResource("2_cptih")]([SubResource("Resource_uspa8"), SubResource("Resource_cptih")])
-
-[sub_resource type="Resource" id="Resource_sy58r"]
-script = ExtResource("5_8dfxc")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_8dfxc"]
-script = ExtResource("6_rsj04")
-choice_result = SubResource("Resource_af1jb")
-requirement = SubResource("Resource_sy58r")
-description = "将信收入怀中，对仆从点头应允，随其前往。"
-
-[sub_resource type="Resource" id="Resource_rsj04"]
-script = ExtResource("3_af1jb")
-value = 8
-
-[sub_resource type="Resource" id="Resource_kpv6n"]
-script = ExtResource("3_af1jb")
-value = 10
-
-[sub_resource type="Resource" id="Resource_4r6vl"]
-script = ExtResource("4_sy58r")
-operators = Array[ExtResource("2_cptih")]([SubResource("Resource_rsj04"), SubResource("Resource_kpv6n")])
-
-[sub_resource type="Resource" id="Resource_rkupr"]
-script = ExtResource("5_8dfxc")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
 [sub_resource type="Resource" id="Resource_xecw0"]
-script = ExtResource("6_rsj04")
-choice_result = SubResource("Resource_4r6vl")
-requirement = SubResource("Resource_rkupr")
-description = "取出二十文钱塞给仆从，附耳探问座中宾客名姓。"
+script = ExtResource("3_af1jb")
+value = 8
 
 [sub_resource type="Resource" id="Resource_qeviy"]
 script = ExtResource("3_af1jb")
-value = 8
+value = 10
 
 [sub_resource type="Resource" id="Resource_4q6fq"]
-script = ExtResource("3_af1jb")
-value = 15
+script = ExtResource("4_sy58r")
+operators = Array[ExtResource("2_cptih")]([SubResource("Resource_xecw0"), SubResource("Resource_qeviy")])
 
 [sub_resource type="Resource" id="Resource_7k6vs"]
+script = ExtResource("5_8dfxc")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_2v1fs"]
+script = ExtResource("6_rsj04")
+choice_result = SubResource("Resource_4q6fq")
+requirement = SubResource("Resource_7k6vs")
+description = "将信收入怀中，对仆从点头应允，随其前往。"
+
+[sub_resource type="Resource" id="Resource_q10v4"]
+script = ExtResource("3_af1jb")
+value = 8
+
+[sub_resource type="Resource" id="Resource_ocjok"]
 script = ExtResource("3_af1jb")
 value = 10
 
-[sub_resource type="Resource" id="Resource_2v1fs"]
+[sub_resource type="Resource" id="Resource_ak3bb"]
+script = ExtResource("4_sy58r")
+operators = Array[ExtResource("2_cptih")]([SubResource("Resource_q10v4"), SubResource("Resource_ocjok")])
+
+[sub_resource type="Resource" id="Resource_ahufu"]
+script = ExtResource("5_8dfxc")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_r8cbj"]
+script = ExtResource("6_rsj04")
+choice_result = SubResource("Resource_ak3bb")
+requirement = SubResource("Resource_ahufu")
+description = "取出二十文钱塞给仆从，附耳探问座中宾客名姓。"
+
+[sub_resource type="Resource" id="Resource_aiwri"]
+script = ExtResource("3_af1jb")
+value = 8
+
+[sub_resource type="Resource" id="Resource_uxt2b"]
+script = ExtResource("3_af1jb")
+value = 15
+
+[sub_resource type="Resource" id="Resource_3hiei"]
+script = ExtResource("3_af1jb")
+value = 10
+
+[sub_resource type="Resource" id="Resource_wxxkc"]
 script = ExtResource("7_kpv6n")
 imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_q10v4"]
+[sub_resource type="Resource" id="Resource_ft0ul"]
 script = ExtResource("4_sy58r")
-operators = Array[ExtResource("2_cptih")]([SubResource("Resource_qeviy"), SubResource("Resource_4q6fq"), SubResource("Resource_7k6vs"), SubResource("Resource_2v1fs")])
+operators = Array[ExtResource("2_cptih")]([SubResource("Resource_aiwri"), SubResource("Resource_uxt2b"), SubResource("Resource_3hiei"), SubResource("Resource_wxxkc")])
 
-[sub_resource type="Resource" id="Resource_ocjok"]
+[sub_resource type="Resource" id="Resource_6i1x7"]
 script = ExtResource("6_rsj04")
-choice_result = SubResource("Resource_q10v4")
+choice_result = SubResource("Resource_ft0ul")
 description = "将信撕作两片，掷还仆从，转身入巷。"
 
-[sub_resource type="Resource" id="Resource_ak3bb"]
+[sub_resource type="Resource" id="Resource_ca62u"]
 script = ExtResource("8_4r6vl")
 trait_name = "kuangda_kuangke"
 
 [resource]
 script = ExtResource("9_rkupr")
-requirement = SubResource("Resource_ak3bb")
+requirement = SubResource("Resource_ca62u")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["ENV_NATURE_NIGHTMOON:cold_moon", "action:main:fangshi"])
-options = Array[ExtResource("1_uspa8")]([SubResource("Resource_8dfxc"), SubResource("Resource_xecw0"), SubResource("Resource_ocjok")])
+options = Array[ExtResource("1_uspa8")]([SubResource("Resource_2v1fs"), SubResource("Resource_r8cbj"), SubResource("Resource_6i1x7")])
 uuid = "kuangke_zhuoliu_persona_hostage"
 name = "赏花帖"
 description = "信在手上停了很久——不是内容多难读，而是信末那句附言印进指甲缝里。灰衣仆从站在三步外，不等回话，只是看。他的眼珠跟着你折信纸的指节从左移到右。巷口有马匹打喷嚏的声音。你把信叠回原样的时候，纸边割进食指第二个关节，没流血。"

@@ -8,39 +8,39 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_v6ear"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_egq5j"]
 
-[sub_resource type="Resource" id="Resource_q86by"]
+[sub_resource type="Resource" id="Resource_v2u64"]
 script = ExtResource("3_e2flm")
 value = 8
 
-[sub_resource type="Resource" id="Resource_3b2ji"]
+[sub_resource type="Resource" id="Resource_ch2jn"]
 script = ExtResource("3_e2flm")
 value = -15
 
-[sub_resource type="Resource" id="Resource_e2flm"]
+[sub_resource type="Resource" id="Resource_17h11"]
 script = ExtResource("3_e2flm")
 value = 5
 
-[sub_resource type="Resource" id="Resource_jy7yg"]
+[sub_resource type="Resource" id="Resource_v4dhe"]
 script = ExtResource("4_jy7yg")
-operators = Array[ExtResource("2_3b2ji")]([SubResource("Resource_q86by"), SubResource("Resource_3b2ji"), SubResource("Resource_e2flm")])
+operators = Array[ExtResource("2_3b2ji")]([SubResource("Resource_v2u64"), SubResource("Resource_ch2jn"), SubResource("Resource_17h11")])
 
-[sub_resource type="Resource" id="Resource_n7t6o"]
+[sub_resource type="Resource" id="Resource_s78vp"]
 script = ExtResource("5_n7t6o")
-choice_result = SubResource("Resource_jy7yg")
+choice_result = SubResource("Resource_v4dhe")
 description = "他将那只空杯轻轻扣在桌上，动作慢得像在摆放一件易碎的物件。"
 
-[sub_resource type="Resource" id="Resource_v6ear"]
+[sub_resource type="Resource" id="Resource_58fls"]
 script = ExtResource("6_v6ear")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("7_egq5j")
-requirement = SubResource("Resource_v6ear")
+requirement = SubResource("Resource_58fls")
 era = "747_kuangda"
 archetype_id = "duzhuo"
 _target_tags = Array[String](["action:main:duzhuo"])
-options = Array[ExtResource("1_q86by")]([SubResource("Resource_n7t6o")])
+options = Array[ExtResource("1_q86by")]([SubResource("Resource_s78vp")])
 uuid = "qingliu_daoxin_posui_nonexistent_companion"
 name = "秋夜对空饮"
 description = "酒肆的木格窗半敞着，秋夜的凉从缝隙里淌进来。桌上四只酒杯排成一列，酒液在烛光里一动不动。掌柜第三次从后堂探出头，目光扫过那张四人桌上唯一的人影。杜甫端起靠近自己的那只杯，手指在杯沿上停了一瞬。酒入喉时，对面三只杯中的液面同时晃了晃。他放下空杯起身，袍角带起了一阵风。身后，四只满杯在摇晃的烛焰下亮晶晶地排着队。门槛外，长安的街面空无一人。"

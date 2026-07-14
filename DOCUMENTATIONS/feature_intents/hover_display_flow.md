@@ -9,7 +9,7 @@
 - `ui/action_panel_manager.gd` — 🆕 行动面板管理器（按钮生命周期/锁状态同步）
 - `picker_item.gd` — BELOW_OVERLAY 消费方
 - `characters/event_btn.gd` — BELOW_OVERLAY 消费方
-- `ui/left_player_panel.gd` — POPUP_LEGACY 消费方
+- ~~`ui/left_player_panel.gd` — POPUP_LEGACY 消费方~~（已移除 ambition_hud hover，不再使用 HoverPopupManager）
 - `ui/picker_tape_attachment.gd` — 选择时 dismiss_all
 
 ## 状态机（v3.1 新增 CROSSING）

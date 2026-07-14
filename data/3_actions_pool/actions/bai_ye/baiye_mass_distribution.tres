@@ -7,16 +7,16 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_wdc3r"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_ltpm6"]
 
-[sub_resource type="Resource" id="Resource_tmv5s"]
+[sub_resource type="Resource" id="Resource_4fc8a"]
 script = ExtResource("3_ccabs")
 
-[sub_resource type="Resource" id="Resource_c24h4"]
+[sub_resource type="Resource" id="Resource_hta5d"]
 script = ExtResource("4_1m6cw")
 event_key = "baiye_mass_distribution_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_ccabs"]
+[sub_resource type="Resource" id="Resource_nj454"]
 script = ExtResource("5_wdc3r")
-operators = Array[ExtResource("2_c24h4")]([SubResource("Resource_c24h4")])
+operators = Array[ExtResource("2_c24h4")]([SubResource("Resource_hta5d")])
 
 [resource]
 script = ExtResource("6_ltpm6")
@@ -24,8 +24,8 @@ required_place = "huangcheng"
 _action_tags = Array[int]([50, 29])
 fallback_event_uuid = "baiye_mass_distribution_fallback"
 archetype_uuid = "baiye_mass_distribution_success"
-failed_result = SubResource("Resource_ccabs")
-defer_config = SubResource("Resource_tmv5s")
+failed_result = SubResource("Resource_nj454")
+defer_config = SubResource("Resource_4fc8a")
 uuid = "baiye_mass_distribution"
 name = "拜谒 · 广发行卷"
 description = "广发诗文行卷以期一遇伯乐"

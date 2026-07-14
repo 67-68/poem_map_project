@@ -12,56 +12,9 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_y6uwq"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_06jop"]
 
-[sub_resource type="Resource" id="Resource_glmlj"]
-script = ExtResource("3_wspky")
-value = 5
-
-[sub_resource type="Resource" id="Resource_25ufy"]
-script = ExtResource("3_wspky")
-value = 10
-
-[sub_resource type="Resource" id="Resource_wspky"]
-script = ExtResource("4_kio3x")
-imagery_name = "lone_snow"
-
-[sub_resource type="Resource" id="Resource_kio3x"]
-script = ExtResource("5_sllna")
-operators = Array[ExtResource("2_25ufy")]([SubResource("Resource_glmlj"), SubResource("Resource_25ufy"), SubResource("Resource_wspky")])
-
-[sub_resource type="Resource" id="Resource_sllna"]
-script = ExtResource("6_twinl")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_twinl"]
-script = ExtResource("7_8n0s1")
-choice_result = SubResource("Resource_kio3x")
-requirement = SubResource("Resource_sllna")
-description = "你抬头看远处飞过的一只孤鸟，没有回头。"
-
-[sub_resource type="Resource" id="Resource_8n0s1"]
-script = ExtResource("3_wspky")
-value = 5
-
-[sub_resource type="Resource" id="Resource_qsv1r"]
-script = ExtResource("3_wspky")
-value = 5
-
-[sub_resource type="Resource" id="Resource_1rekn"]
-script = ExtResource("5_sllna")
-operators = Array[ExtResource("2_25ufy")]([SubResource("Resource_8n0s1"), SubResource("Resource_qsv1r")])
-
-[sub_resource type="Resource" id="Resource_y6uwq"]
-script = ExtResource("7_8n0s1")
-choice_result = SubResource("Resource_1rekn")
-description = "你收回视线，继续看雾中的长安城，指尖没有离开木栏。"
-
-[sub_resource type="Resource" id="Resource_06jop"]
-script = ExtResource("3_wspky")
-value = 5
-
 [sub_resource type="Resource" id="Resource_ay18e"]
 script = ExtResource("3_wspky")
-value = 20
+value = 5
 
 [sub_resource type="Resource" id="Resource_kpxiv"]
 script = ExtResource("3_wspky")
@@ -69,44 +22,91 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_wq126"]
 script = ExtResource("4_kio3x")
-imagery_name = "cloud_and_sun"
+imagery_name = "lone_snow"
 
 [sub_resource type="Resource" id="Resource_v7udn"]
 script = ExtResource("5_sllna")
-operators = Array[ExtResource("2_25ufy")]([SubResource("Resource_06jop"), SubResource("Resource_ay18e"), SubResource("Resource_kpxiv"), SubResource("Resource_wq126")])
+operators = Array[ExtResource("2_25ufy")]([SubResource("Resource_ay18e"), SubResource("Resource_kpxiv"), SubResource("Resource_wq126")])
 
 [sub_resource type="Resource" id="Resource_yieeh"]
 script = ExtResource("6_twinl")
-trait_name = "kuangda_zuanying"
+trait_name = "kuangda_kuangke"
 
 [sub_resource type="Resource" id="Resource_o1cba"]
 script = ExtResource("7_8n0s1")
 choice_result = SubResource("Resource_v7udn")
 requirement = SubResource("Resource_yieeh")
-description = "你侧身让出一点位置，看着那人，等他先开口。"
+description = "你抬头看远处飞过的一只孤鸟，没有回头。"
 
 [sub_resource type="Resource" id="Resource_kf38e"]
+script = ExtResource("3_wspky")
+value = 5
+
+[sub_resource type="Resource" id="Resource_655vf"]
+script = ExtResource("3_wspky")
+value = 5
+
+[sub_resource type="Resource" id="Resource_vbbop"]
+script = ExtResource("5_sllna")
+operators = Array[ExtResource("2_25ufy")]([SubResource("Resource_kf38e"), SubResource("Resource_655vf")])
+
+[sub_resource type="Resource" id="Resource_vxp1d"]
+script = ExtResource("7_8n0s1")
+choice_result = SubResource("Resource_vbbop")
+description = "你收回视线，继续看雾中的长安城，指尖没有离开木栏。"
+
+[sub_resource type="Resource" id="Resource_eebss"]
+script = ExtResource("3_wspky")
+value = 5
+
+[sub_resource type="Resource" id="Resource_q84g2"]
+script = ExtResource("3_wspky")
+value = 20
+
+[sub_resource type="Resource" id="Resource_04uoa"]
+script = ExtResource("3_wspky")
+value = 10
+
+[sub_resource type="Resource" id="Resource_urlx4"]
+script = ExtResource("4_kio3x")
+imagery_name = "cloud_and_sun"
+
+[sub_resource type="Resource" id="Resource_qe0le"]
+script = ExtResource("5_sllna")
+operators = Array[ExtResource("2_25ufy")]([SubResource("Resource_eebss"), SubResource("Resource_q84g2"), SubResource("Resource_04uoa"), SubResource("Resource_urlx4")])
+
+[sub_resource type="Resource" id="Resource_4ywms"]
+script = ExtResource("6_twinl")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_vuvb5"]
+script = ExtResource("7_8n0s1")
+choice_result = SubResource("Resource_qe0le")
+requirement = SubResource("Resource_4ywms")
+description = "你侧身让出一点位置，看着那人，等他先开口。"
+
+[sub_resource type="Resource" id="Resource_inilg"]
 script = ExtResource("9_1rekn")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_655vf"]
+[sub_resource type="Resource" id="Resource_5tym4"]
 script = ExtResource("9_1rekn")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_vbbop"]
+[sub_resource type="Resource" id="Resource_w1krj"]
 script = ExtResource("10_y6uwq")
-operators = Array[ExtResource("8_qsv1r")]([SubResource("Resource_kf38e"), SubResource("Resource_655vf")])
+operators = Array[ExtResource("8_qsv1r")]([SubResource("Resource_inilg"), SubResource("Resource_5tym4")])
 
 [resource]
 script = ExtResource("11_06jop")
-requirement = SubResource("Resource_vbbop")
+requirement = SubResource("Resource_w1krj")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["ENV_POLITICS_PROSPER:cloud_and_sun", "ENV_NATURE_SNOWSTORM:lone_snow", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_leyou_morning", "emotion_pair:pair_tranquility", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_SNOWSTORM:lone_snow"])
-options = Array[ExtResource("1_glmlj")]([SubResource("Resource_twinl"), SubResource("Resource_y6uwq"), SubResource("Resource_o1cba")])
+options = Array[ExtResource("1_glmlj")]([SubResource("Resource_o1cba"), SubResource("Resource_vxp1d"), SubResource("Resource_vuvb5")])
 uuid = "747kuangda_denggao_leyou_morning_emotion_tranquility"
 name = "晨雾阑干"
 description = "乐游原上薄雾如纱，长安城的轮廓在晨光中渐渐清晰。你倚着木栏，指尖在粗糙的木质上缓缓摩挲，望着远处终南山的黛青色山脊——雾气从山腰流过，像是水墨画里的留白。早市的叫卖声和炊烟一起升上来，模糊而遥远。你站在那里，风穿过衣襟，衣角轻轻拍着膝侧。身后有脚步声——一个人登上原头，在你左手边停下，也看着同一个方向。他没有说话，你也没有动。过了很久，那个人咳嗽一声，转身下山。脚步声越来越远，终南山的雾气又合拢了。"
