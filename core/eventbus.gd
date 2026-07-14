@@ -94,6 +94,8 @@ signal event_shown(event: Variant)
 signal poem_start_clicked()
 signal poem_cancel()
 signal social_connection_toggled()
+## 理念页面 toggle — 由 RightInfoPanel.LinianBtn 发射，IdeaPage 监听
+signal idea_page_toggled()
 
 ## 🆕 请求隐藏纸带（SocialConnectionPage / PoemCreationPage 打开时发射）
 ## 引用计数：hide_requested 递增，show_requested 递减，归零才恢复纸带显示

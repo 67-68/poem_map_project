@@ -20,6 +20,7 @@ const CN_NAME_MAP: Dictionary = {
 
 @onready var _info_grid: VBoxContainer = $Panel/V/InfoGrid
 @onready var _social_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn
+@onready var _idea_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/LinianBtn
 ## 写诗按钮 — 从 ActionPanelManager 迁移至此
 @onready var _poem_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/Poembtn
 
@@ -31,6 +32,9 @@ func _ready() -> void:
 
 	# ── 社交人脉按钮 ──
 	_social_btn.gui_input.connect(_on_social_btn_gui_input)
+
+	# ── 理念按钮（右下角）──
+	_idea_btn.gui_input.connect(_on_idea_btn_gui_input)
 
 	# ── 写诗按钮 ──
 	_poem_btn.gui_input.connect(_on_poem_btn_gui_input)
@@ -124,6 +128,16 @@ func _on_social_btn_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Logging.info("RightInfoPanel: SocialConnectionBtn 点击 → 发射 social_connection_toggled")
 		EventBus.social_connection_toggled.emit()
+
+
+# ═══════════════════════════════════════════════════════════
+# 理念按钮 — 点击弹出 IdeaPage
+# ═══════════════════════════════════════════════════════════
+
+func _on_idea_btn_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		Logging.info("RightInfoPanel: LinianBtn 点击 → 发射 idea_page_toggled")
+		EventBus.idea_page_toggled.emit()
 
 
 # ═══════════════════════════════════════════════════════════

@@ -68,6 +68,27 @@
 
   "m_emotion_loss": -10,
 
+  "_comment_npc": "=== 🧑‍🤝‍🧑 第三部分：NPC inner_circle 每旬加成 (NPC Per-Xun Effects) ===",
+  "_comment_npc_desc": "s/m/l 三档刻度，用于 NPCDocument 的 shi_upper_limit/shi_addition 等字段。gain 是每旬增加值，upper_limit 是溢出减半的软上限。",
+
+  "s_momentum_gain": 2,
+  "m_momentum_gain": 5,
+  "l_momentum_gain": 8,
+  "s_momentum_upper_limit": 10,
+  "m_momentum_upper_limit": 25,
+  "l_momentum_upper_limit": 50,
+
+  "s_inspiration_gain": 2,
+  "m_inspiration_gain": 5,
+  "l_inspiration_gain": 8,
+  "s_inspiration_upper_limit": 10,
+  "m_inspiration_upper_limit": 25,
+  "l_inspiration_upper_limit": 50,
+
+  "s_prestige_upper_limit": 10,
+  "m_prestige_upper_limit": 25,
+  "l_prestige_upper_limit": 50,
+
   "_comment_2": "=== 🛁 第二部分：大唐阶级状态线 (State Thresholds) ===",
   "_comment_2_desc": "用于 Requirement 判定，或触发疾病/破产 Trait 的水位线。绝不使用 S/M/L。",
 

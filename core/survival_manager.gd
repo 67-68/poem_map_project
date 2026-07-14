@@ -5,6 +5,7 @@ class_name SurvivalManager extends Node
 # 但太复杂了先不做，目前只有旬的扣除费用，trait 扫描扣除也没做
 
 const _ModifierFormula = preload("res://core/modifier_formula.gd")
+const _NamedDSLParser = preload("res://parser/named_dsl_parser.gd")
 
 const HEARTBEAT_HEALTH_THRESHOLD: int = 20
 
@@ -274,6 +275,10 @@ func _process_single_xun_settlement():
 	# 1.5: 健康→AP 阶梯同步（必须在 aggregate 之后，确保 trait 持续效果已生效）
 	_sync_health_ap_traits()
 	
+	# 🆕 1.8: NPC inner_circle 每旬属性加成
+	# 必须在 health sync 之后（健康不影响 NPC 加成）、cost 之前（加成先于扣除）。
+	_apply_npc_inner_circle_bonus()
+	
 	# 第二阶段：生存基础扣除 (Upkeep & Economy)
 	# 外部环境对玩家的无情压迫。
 	_cost_survival()
@@ -340,6 +345,98 @@ func death_judgement():
 			AudioManager.stop_sfx_loop()
 			PlayerState.current_action_tags.append('actor:health:death:general')
 			EventManager.scan_death_events()
+
+# ─── 🆕 NPC inner_circle 每旬属性加成 ────────────────────────────
+## 遍历所有 person_state == "inner_circle" 的 NPC，累加他们的
+## shi/xing/wang 的 upper_limit 和 addition。
+##
+## 算法（方案A）：
+##   1. 累加所有 inner_circle NPC 的 upper_limit → cumulative_upper
+##   2. 累加所有 inner_circle NPC 的 addition   → cumulative_add
+##   3. stat += cumulative_add
+##   4. IF stat > cumulative_upper:
+##        overflow = stat - cumulative_upper
+##        stat = cumulative_upper + overflow * 0.5
+##
+## addition / upper_limit 字段存 named_amount key（如 "m_momentum_gain"），
+## 通过 NamedDSLParser._load_named_amounts() 解析为整数值。
+func _apply_npc_inner_circle_bonus() -> void:
+	var amounts: Dictionary = _NamedDSLParser._load_named_amounts()
+	
+	# 属性元组：[属性枚举, 字段前缀, 属性显示名]
+	var prop_configs := [
+		[ENUMS.PROPS.MOMENTUM,    "shi", "势"],
+		[ENUMS.PROPS.INSPIRATION, "xing", "兴"],
+		[ENUMS.PROPS.PRESTIGE,    "wang", "望"],
+	]
+	
+	# 收集所有 inner_circle NPC
+	var all_docs: Dictionary = Database.get_npc_document_all()
+	var inner_npcs: Array[NPCDocument] = []
+	var npc_names: Array[String] = []
+	for uuid in all_docs:
+		var doc: NPCDocument = all_docs[uuid] as NPCDocument
+		if doc and doc.person_state == "inner_circle":
+			inner_npcs.append(doc)
+			npc_names.append(doc.name if not doc.name.is_empty() else doc.uuid)
+	
+	if inner_npcs.is_empty():
+		Logging.info("[SurvivalManager] _apply_npc_inner_circle_bonus: 无 inner_circle NPC，跳过")
+		return
+	
+	Logging.info("[SurvivalManager] _apply_npc_inner_circle_bonus: 检测到 %d 个 inner_circle NPC: %s" % [inner_npcs.size(), ", ".join(npc_names)])
+	
+	for cfg in prop_configs:
+		var prop_enum: int = cfg[0]
+		var prefix: String = cfg[1]
+		var cn_name: String = cfg[2]
+		
+		var cumulative_upper: int = 0
+		var cumulative_add: int = 0
+		
+		for doc in inner_npcs:
+			# 读取 upper_limit / addition 的 named_amount key
+			# NPCDocument 的 @export 字段始终存在，默认 ""
+			var upper_key_field := prefix + "_upper_limit"
+			var add_key_field := prefix + "_addition"
+			var upper_key: String = doc.get(upper_key_field)
+			var add_key: String = doc.get(add_key_field)
+			
+			if not upper_key.is_empty():
+				var val: int = amounts.get(upper_key, 0)
+				cumulative_upper += val
+				Logging.info('[SurvivalManager]   NPC "%s" %s_upper_limit="%s"→%d' % [doc.name if not doc.name.is_empty() else doc.uuid, prefix, upper_key, val])
+			if not add_key.is_empty():
+				var val: int = amounts.get(add_key, 0)
+				cumulative_add += val
+				Logging.info('[SurvivalManager]   NPC "%s" %s_addition="%s"→%d' % [doc.name if not doc.name.is_empty() else doc.uuid, prefix, add_key, val])
+		
+		# 无加成 → 跳过
+		if cumulative_add == 0:
+			Logging.info("[SurvivalManager]   %s: 无加成，跳过" % cn_name)
+			continue
+		
+		# 获取当前值
+		var prop_str: String = ENUMS.to_prop_str(prop_enum)
+		var current_val: int = PlayerState.get_stat_val(prop_enum)
+		Logging.info("[SurvivalManager]   %s(%s): current=%d, cumulative_add=%d, cumulative_upper=%d" % [cn_name, prop_str, current_val, cumulative_add, cumulative_upper])
+		
+		# 累加
+		var new_val: int = current_val + cumulative_add
+		
+		# 动态上限：如果 upper_limit > 0 且超出，溢出减半
+		if cumulative_upper > 0 and new_val > cumulative_upper:
+			var overflow: int = new_val - cumulative_upper
+			var half_overflow: int = overflow / 2
+			new_val = cumulative_upper + half_overflow
+			Logging.info("[SurvivalManager]   %s: 超出上限 %d (溢出 %d)，减半 → %d" % [cn_name, cumulative_upper, overflow, new_val])
+		
+		# 应用值（使用 set_stat_val 直接设值，不走 tier multiplier / fatigue）
+		PlayerState.set_stat_val(prop_enum, new_val)
+		Logging.info("[SurvivalManager]   %s: 设定为 %d" % [cn_name, new_val])
+	
+	Logging.info("[SurvivalManager] _apply_npc_inner_circle_bonus: 加成完成")
+
 
 # ─── 🆕 属性自然衰减（每旬结算时执行） ────────────────────────────
 ## 势 (momentum) 每旬衰减 MOMENTUM_DECAY_PER_XUN。

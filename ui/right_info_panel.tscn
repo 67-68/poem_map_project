@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://drwciqjjy75wp" path="res://assets/profile/renmai.png" id="5_3crwo"]
 [ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="5_lnxk4"]
 [ext_resource type="Texture2D" uid="uid://bn4j0rcvlbavx" path="res://assets/stamps/chuangzuo_stamp.png" id="6_lnxk4"]
+[ext_resource type="Texture2D" uid="uid://dkp22tjkoj2gj" path="res://assets/profile/linian_stamp.png" id="6_n54d2"]
 [ext_resource type="PackedScene" uid="uid://cu1a2mhu4xv3n" path="res://ui/decision_scroll.tscn" id="10_j8k2n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3crwo"]
@@ -176,6 +177,18 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_lnxk4")
 [node name="TextureRect" type="TextureRect" parent="Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn" unique_id=1632900340]
 layout_mode = 2
 texture = ExtResource("5_3crwo")
+expand_mode = 1
+
+[node name="LinianBtn" type="PanelContainer" parent="Panel/V/PanelContainer2/HBoxContainer" unique_id=277548587]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_lnxk4")
+
+[node name="TextureRect" type="TextureRect" parent="Panel/V/PanelContainer2/HBoxContainer/LinianBtn" unique_id=1633641082]
+layout_mode = 2
+texture = ExtResource("6_n54d2")
 expand_mode = 1
 
 [node name="Poembtn" type="PanelContainer" parent="Panel/V/PanelContainer2/HBoxContainer" unique_id=411623328]

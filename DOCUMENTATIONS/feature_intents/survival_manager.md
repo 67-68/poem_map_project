@@ -9,13 +9,62 @@
 
 由 TimeService.on_xun_tick 触发 _process_single_xun_settlement()，管线顺序（不可更改）：
 1. aggregate_trait_effect() — trait 持续效果、疾病进展
+1.3. _process_imaginary_effects() — Imaginary 生命周期结算
 1.5. _sync_health_ap_traits() — 健康→AP 阶梯同步（必须在 aggregate 之后，确保中毒等扣血 trait 已生效）
+1.8. _apply_npc_inner_circle_bonus() — 🆕 NPC inner_circle 每旬属性加成（势/兴/望）
 2. _cost_survival() — 基础生存扣除（-5 money）+ AP 刷新（健康联动）
 3. _update_heartbeat_sfx() / death_judgement() — 濒死判定
 4. operate_state_transistors() — 状态转换 / 旷达切换
 5. ActionManager.process_xun_tick() — Lock/Block 到期清理
 6. EventBus.xun_settlement_completed — UI 刷新信号
 7. call_deferred("_post_xun_money_deduct") — 延迟扣除 30 money → **若 money < 0 触发 event_money_lower_0_innkeeper**
+
+## NPC inner_circle 每旬加成 (🆕 1.8)
+
+### 触发条件
+
+遍历所有 `person_state == "inner_circle"` 的 NPC，累加他们的 shi(势)/xing(兴)/wang(望) 属性加成。
+
+### 数据模型
+
+NPCDocument 有 6 个 String 字段（存 named_amount key）：
+
+| 字段 | 示例值 | 含义 |
+|------|--------|------|
+| `shi_addition` | `"m_momentum_gain"` | 每旬增加的势 |
+| `shi_upper_limit` | `"m_momentum_upper_limit"` | 势的动态软上限 |
+| `xing_addition` | `"s_inspiration_gain"` | 每旬增加的兴 |
+| `xing_upper_limit` | `"s_inspiration_upper_limit"` | 兴的动态软上限 |
+| `wang_addition` | `"s_prestige_gain"` | 每旬增加的望 |
+| `wang_upper_limit` | `"s_prestige_upper_limit"` | 望的动态软上限 |
+
+空字符串 = 该 NPC 不贡献该属性加成。
+
+### 算法（方案A — 累积 + 溢出减半）
+
+```
+for 势/兴/望:
+  cumulative_upper = Σ 所有 inner_circle NPC 的 upper_limit
+  cumulative_add   = Σ 所有 inner_circle NPC 的 addition
+  if cumulative_add == 0: continue
+  new_val = current_val + cumulative_add
+  if new_val > cumulative_upper:
+    overflow = new_val - cumulative_upper
+    new_val = cumulative_upper + overflow × 0.5
+  PlayerState.set_stat_val(prop, new_val)
+```
+
+### named_amounts 条目
+
+见 `tools/data/named_amounts.json` 第三部分 `=== 🧑‍🤝‍🧑 NPC inner_circle 每旬加成 ===`：
+
+- momentum_gain / momentum_upper_limit — s/m/l 三档
+- inspiration_gain / inspiration_upper_limit — s/m/l 三档
+- prestige_upper_limit — s/m/l 三档（prestige_gain 复用既有条目）
+
+### 管线位置
+
+在 `_sync_health_ap_traits()` 之后（确保 AP 系统已就绪）、`_cost_survival()` 之前（加成先于生存扣除）。这保证「朋友助力 → 环境侵蚀」的叙事顺序。
 
 ## 旬末没钱事件
 

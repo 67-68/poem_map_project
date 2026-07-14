@@ -54,3 +54,16 @@ class_name NPCDocument extends Resource
 @export var relate_to: Array[String] = []
 
 @export var normal_actions: Array[String] = [] # 普通等级的action, know_about 解锁
+
+# effect per xun
+@export var shi_upper_limit: String = ""
+@export var shi_addition: String = ""
+
+@export var xing_upper_limit: String = ""
+@export var xing_addition: String = ""
+
+@export var wang_upper_limit: String = ""
+@export var wang_addition: String = ""
+
+@export var overdraft_amount: int = 50 # 可以透支多少资源
+@export var overdraft_cooldown_xun: int = 0

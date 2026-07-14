@@ -11,3 +11,9 @@ prop = {
 "TALENT": 80
 }
 preferred_places = Array[String](["pingkangfang", "huangcheng"])
+shi_addition = "m_momentum_gain"
+shi_upper_limit = "m_momentum_upper_limit"
+xing_addition = "s_inspiration_gain"
+xing_upper_limit = "s_inspiration_upper_limit"
+wang_addition = "s_prestige_gain"
+wang_upper_limit = "s_prestige_upper_limit"
