@@ -442,8 +442,13 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 		if hint == null:
 			continue
 
-		# 标题行：行动名称
-		recipe_parts.append("[b]%s[/b]" % action.name)
+		# 标题行：行动名称 + 覆盖关系
+		if not action.override_action.is_empty():
+			var overridden_action: Action = Database.get_action(action.override_action) as Action
+			var overridden_name: String = overridden_action.name if overridden_action else action.override_action
+			recipe_parts.append("[b]%s[/b] （覆盖「%s」）" % [action.name, overridden_name])
+		else:
+			recipe_parts.append("[b]%s[/b]" % action.name)
 
 		# 叙事层（描述）
 		if not hint.narrative.is_empty():
