@@ -53,7 +53,7 @@ tool/fallback → ActionManager._init_archetype_cache()
 
 | 关键字 | 行为 |
 |---|---|
-| `poem_selector:fame/money/baiye` | 注入 PoemRewardOperator + PoemRequirement |
+| `poem_selector:fame/money/baiye/xing_wang` | 注入 PoemRewardOperator + PoemRequirement；`xing_wang` 双属性输出灵感+声望 |
 | `consume_leverage` | 注入 ConsumeRandomLeverageOperator |
 
 ## 相关文件

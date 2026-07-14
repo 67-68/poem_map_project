@@ -1570,7 +1570,7 @@ static func _apply_custom_option(action: Resource, custom_option: String, uuid: 
             action.action_results.append(op)
             Logging.info("[resource_converter] %s: 注入 ConsumeRandomLeverageOperator" % uuid)
 
-        "poem_selector:fame", "poem_selector:money", "poem_selector:baiye":
+        "poem_selector:fame", "poem_selector:money", "poem_selector:baiye", "poem_selector:xing_wang":
             # 注入 PoemRewardOperator + PoemRequirement
             var mode = custom_option.trim_prefix("poem_selector:")
             var poem_reward_cls = preload("res://core/operators/poem_reward_operator.gd")

@@ -74,7 +74,8 @@ static var debug_dashboard_state = {
 	# key = NPC uuid, value = 目标 person_state（如 "not_meet"）
 	# 在 PlayerState.init_npc_person_states() 中应用
 	"npc_person_state_overrides": {
-		#"shenyi": "know_about",
+		"jiwen": "know_about",
+		"zhengqian": "know_about",
 	}
 }
 

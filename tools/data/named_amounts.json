@@ -110,6 +110,7 @@
 
   "_comment_wang": "=== 🆕 望 (prestige) 超大档位 ===",
   "xl_prestige_gain": 15,
+  "xl_inspiration_gain": 15,
 
   "_comment_mod_pct": "=== 🆕 理念修饰器百分比档位 (Modifier Percentages) ===",
   "_comment_mod_pct_desc": "用于 BuffOperator 的 efficiency/action_specific/cap_boost/relation_speed_pct。值是百分比整数（20=+20%）。",

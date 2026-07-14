@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="NPCDocument" format=3 uid="uid://cq4kwjqj86npt"]
+
+[ext_resource type="Script" uid="uid://mbd5xnwsnqvh" path="res://model/npc_document.gd" id="1_udmdi"]
+
+[resource]
+script = ExtResource("1_udmdi")
+taste_id = ""
+name = "吉温"
+uuid = "jiwen"
+preferred_places = Array[String](["huangcheng"])
+prop = {
+"TALENT": 60
+}
+shi_addition = "s_momentum_gain"
+shi_upper_limit = "l_momentum_upper_limit"

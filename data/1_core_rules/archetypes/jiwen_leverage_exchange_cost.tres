@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://b8dfkrwb78v8u"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_pg3t3"]
+
+[resource]
+script = ExtResource("1_pg3t3")
+uuid = "jiwen_leverage_exchange_cost"
+name = "jiwen_leverage_exchange.cost"
+universal_result = "consume_random_leverage"
+action_uuid = "jiwen_leverage_exchange"
+state = "cost"
