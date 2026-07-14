@@ -11,50 +11,50 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_c2ccs"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_wwrwj"]
 
-[sub_resource type="Resource" id="Resource_qhdko"]
+[sub_resource type="Resource" id="Resource_8nmoo"]
 script = ExtResource("3_krpq0")
 value = 10
 
-[sub_resource type="Resource" id="Resource_5jlcw"]
+[sub_resource type="Resource" id="Resource_s8edq"]
 script = ExtResource("4_8pmah")
-operators = Array[ExtResource("2_s8edq")]([SubResource("Resource_qhdko")])
+operators = Array[ExtResource("2_s8edq")]([SubResource("Resource_8nmoo")])
 
-[sub_resource type="Resource" id="Resource_f2ym5"]
+[sub_resource type="Resource" id="Resource_krpq0"]
 script = ExtResource("5_e1lj8")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_1dv0f"]
+[sub_resource type="Resource" id="Resource_8pmah"]
 script = ExtResource("6_t4rfm")
-choice_result = SubResource("Resource_5jlcw")
-requirement = SubResource("Resource_f2ym5")
+choice_result = SubResource("Resource_s8edq")
+requirement = SubResource("Resource_krpq0")
 description = "你拿起案上那支干透了的笔，在信纸旁的空宣纸上补了几笔枯枝。"
 
-[sub_resource type="Resource" id="Resource_s4di2"]
+[sub_resource type="Resource" id="Resource_e1lj8"]
 script = ExtResource("5_e1lj8")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_ovmmi"]
+[sub_resource type="Resource" id="Resource_t4rfm"]
 script = ExtResource("8_s5c8e")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_mag6g"]
+[sub_resource type="Resource" id="Resource_avy5d"]
 script = ExtResource("8_s5c8e")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_vs5gm"]
+[sub_resource type="Resource" id="Resource_s5c8e"]
 script = ExtResource("9_c2ccs")
-operators = Array[ExtResource("7_avy5d")]([SubResource("Resource_s4di2"), SubResource("Resource_ovmmi"), SubResource("Resource_mag6g")])
+operators = Array[ExtResource("7_avy5d")]([SubResource("Resource_e1lj8"), SubResource("Resource_t4rfm"), SubResource("Resource_avy5d")])
 
 [resource]
 script = ExtResource("10_wwrwj")
-requirement = SubResource("Resource_vs5gm")
+requirement = SubResource("Resource_s5c8e")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_IDENTITY_ZHUOLIU_OFFICIAL", "ACTOR_EMOTION_SORROW", "emotion_pair:pair_sorrow", "action:main:denggao"])
-options = Array[ExtResource("1_8nmoo")]([SubResource("Resource_1dv0f")])
+options = Array[ExtResource("1_8nmoo")]([SubResource("Resource_8pmah")])
 uuid = "kuangke_qingliu_wangwei_emotion_sorrow_identity_zhuoliu_official"
 name = "回廊上，信纸起毛边了"
 description = "「裴迪说河西入冬了。」手里那张信纸的边角，被他拇指捏得微微发白。他侧身，把信搁在画案空白的宣纸上。"

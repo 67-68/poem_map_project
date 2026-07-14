@@ -12,85 +12,85 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_1kyx3"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_i2wli"]
 
-[sub_resource type="Resource" id="Resource_yc5iq"]
+[sub_resource type="Resource" id="Resource_asjl3"]
 script = ExtResource("3_3uouy")
 value = 10
 
-[sub_resource type="Resource" id="Resource_gnsff"]
+[sub_resource type="Resource" id="Resource_scee4"]
 script = ExtResource("4_hr578")
-operators = Array[ExtResource("2_scee4")]([SubResource("Resource_yc5iq")])
+operators = Array[ExtResource("2_scee4")]([SubResource("Resource_asjl3")])
 
-[sub_resource type="Resource" id="Resource_4oee1"]
+[sub_resource type="Resource" id="Resource_3uouy"]
 script = ExtResource("5_kno6i")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_8apsj"]
+[sub_resource type="Resource" id="Resource_hr578"]
 script = ExtResource("6_5dhep")
-choice_result = SubResource("Resource_gnsff")
-requirement = SubResource("Resource_4oee1")
+choice_result = SubResource("Resource_scee4")
+requirement = SubResource("Resource_3uouy")
 description = "一把抓回字画卷轴，笔和纸扫落在地，转身大步跨出当铺门槛。"
 
-[sub_resource type="Resource" id="Resource_iq8xo"]
+[sub_resource type="Resource" id="Resource_kno6i"]
 script = ExtResource("3_3uouy")
 value = 10
 
-[sub_resource type="Resource" id="Resource_1p36v"]
+[sub_resource type="Resource" id="Resource_5dhep"]
 script = ExtResource("4_hr578")
-operators = Array[ExtResource("2_scee4")]([SubResource("Resource_iq8xo")])
+operators = Array[ExtResource("2_scee4")]([SubResource("Resource_kno6i")])
 
-[sub_resource type="Resource" id="Resource_38gd6"]
+[sub_resource type="Resource" id="Resource_satgr"]
 script = ExtResource("5_kno6i")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_xalp7"]
+[sub_resource type="Resource" id="Resource_xy8uc"]
 script = ExtResource("6_5dhep")
-choice_result = SubResource("Resource_1p36v")
-requirement = SubResource("Resource_38gd6")
+choice_result = SubResource("Resource_5dhep")
+requirement = SubResource("Resource_satgr")
 description = "目光迅速扫向当铺内室门帘，从袖中摸出一枚开元通宝往柜上推去。"
 
-[sub_resource type="Resource" id="Resource_gtohx"]
+[sub_resource type="Resource" id="Resource_oglj1"]
 script = ExtResource("3_3uouy")
 value = 10
 
-[sub_resource type="Resource" id="Resource_m70g5"]
+[sub_resource type="Resource" id="Resource_1kyx3"]
 script = ExtResource("4_hr578")
-operators = Array[ExtResource("2_scee4")]([SubResource("Resource_gtohx")])
+operators = Array[ExtResource("2_scee4")]([SubResource("Resource_oglj1")])
 
-[sub_resource type="Resource" id="Resource_a0lba"]
+[sub_resource type="Resource" id="Resource_i2wli"]
 script = ExtResource("6_5dhep")
-choice_result = SubResource("Resource_m70g5")
+choice_result = SubResource("Resource_1kyx3")
 description = "沉默片晌，提起那支秃笔，在糙纸上落下一行。"
 
-[sub_resource type="Resource" id="Resource_junl5"]
+[sub_resource type="Resource" id="Resource_yc5iq"]
 script = ExtResource("8_xy8uc")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_ylwm7"]
+[sub_resource type="Resource" id="Resource_gnsff"]
 script = ExtResource("9_oglj1")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_i04yk"]
+[sub_resource type="Resource" id="Resource_4oee1"]
 script = ExtResource("9_oglj1")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_y1u8u"]
+[sub_resource type="Resource" id="Resource_8apsj"]
 script = ExtResource("10_1kyx3")
-operators = Array[ExtResource("7_satgr")]([SubResource("Resource_junl5"), SubResource("Resource_ylwm7"), SubResource("Resource_i04yk")])
+operators = Array[ExtResource("7_satgr")]([SubResource("Resource_yc5iq"), SubResource("Resource_gnsff"), SubResource("Resource_4oee1")])
 
 [resource]
 script = ExtResource("11_i2wli")
-requirement = SubResource("Resource_y1u8u")
+requirement = SubResource("Resource_8apsj")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_OBJECT_SWORD:rusty_sword", "action:main:fangshi"])
-options = Array[ExtResource("1_asjl3")]([SubResource("Resource_8apsj"), SubResource("Resource_xalp7"), SubResource("Resource_a0lba")])
+options = Array[ExtResource("1_asjl3")]([SubResource("Resource_hr578"), SubResource("Resource_xy8uc"), SubResource("Resource_i2wli")])
 uuid = "qingliu_fengying_pawnshop"
 name = "当铺题诗"
 description = "西市当铺的柜台被无数人的手肘磨得油亮。掌柜从柜台后面抬起眼皮——他认得你。去年腊月你在这当了一件旧棉袍，开春又来当了一方洮砚。此刻你的字画卷轴尚未完全展开，他那根肥厚的手指已经压在画轴上，只露出半边题款。“你这幅画嘛——”他的目光从画上扫过，像在估一堆旧衣，“比上回那件袍子好点，但也好不到哪去。”他把价压到令人发指的低位，然后推过来一张糙纸和秃笔，“顺便题首诗夸夸我这当铺，我多给你二十文。”纸已经在桌案上铺好，笔尖已经干结。"

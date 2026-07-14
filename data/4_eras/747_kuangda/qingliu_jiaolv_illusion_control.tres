@@ -11,57 +11,57 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_1wmc6"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_hw7qx"]
 
-[sub_resource type="Resource" id="Resource_fvu8j"]
+[sub_resource type="Resource" id="Resource_6x4ex"]
 script = ExtResource("3_yh5dv")
 value = -10
 
-[sub_resource type="Resource" id="Resource_cfdwk"]
+[sub_resource type="Resource" id="Resource_qx1r7"]
 script = ExtResource("4_m451l")
-operators = Array[ExtResource("2_qx1r7")]([SubResource("Resource_fvu8j")])
+operators = Array[ExtResource("2_qx1r7")]([SubResource("Resource_6x4ex")])
 
-[sub_resource type="Resource" id="Resource_ald1x"]
+[sub_resource type="Resource" id="Resource_yh5dv"]
 script = ExtResource("5_2okst")
-choice_result = SubResource("Resource_cfdwk")
+choice_result = SubResource("Resource_qx1r7")
 description = "指尖在筹身木纹的断茬处停了片刻，然后拿过来。"
 
-[sub_resource type="Resource" id="Resource_1h0x5"]
+[sub_resource type="Resource" id="Resource_m451l"]
 script = ExtResource("7_mg7pg")
 property = "health"
 value = 50
 
-[sub_resource type="Resource" id="Resource_4mbny"]
+[sub_resource type="Resource" id="Resource_2okst"]
 script = ExtResource("7_mg7pg")
 property = "money"
 value = 10
 operator = 1
 
-[sub_resource type="Resource" id="Resource_g6psy"]
+[sub_resource type="Resource" id="Resource_kuvmo"]
 script = ExtResource("7_mg7pg")
 property = "money"
 value = 50
 
-[sub_resource type="Resource" id="Resource_h2rvk"]
+[sub_resource type="Resource" id="Resource_mg7pg"]
 script = ExtResource("8_2qjae")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_ddh3x"]
+[sub_resource type="Resource" id="Resource_2qjae"]
 script = ExtResource("8_2qjae")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_mw6pi"]
+[sub_resource type="Resource" id="Resource_1wmc6"]
 script = ExtResource("9_1wmc6")
-operators = Array[ExtResource("6_kuvmo")]([SubResource("Resource_1h0x5"), SubResource("Resource_4mbny"), SubResource("Resource_g6psy"), SubResource("Resource_h2rvk"), SubResource("Resource_ddh3x")])
+operators = Array[ExtResource("6_kuvmo")]([SubResource("Resource_m451l"), SubResource("Resource_2okst"), SubResource("Resource_kuvmo"), SubResource("Resource_mg7pg"), SubResource("Resource_2qjae")])
 
 [resource]
 script = ExtResource("10_hw7qx")
-requirement = SubResource("Resource_mw6pi")
+requirement = SubResource("Resource_1wmc6")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_SNOWSTORM:lone_snow", "action:main:fangshi"])
-options = Array[ExtResource("1_6x4ex")]([SubResource("Resource_ald1x")])
+options = Array[ExtResource("1_6x4ex")]([SubResource("Resource_yh5dv")])
 uuid = "qingliu_jiaolv_illusion_control"
 name = "鞋底泥"
 description = "“上一个和你鞋底有一样泥的人，现在已不穿这双靴了。他拿了我一枚木筹，那天起，他的靴底再没沾过寺后泥土。”他从怀里摸出一枚拇指长的旧木筹，递到离你一尺远的地方，没有催促，只是让它悬在那里。"

@@ -6,6 +6,6 @@
 script = ExtResource("1_mljiu")
 uuid = "denggao_leyouyuan_success"
 name = "denggao_leyouyuan.success"
-universal_result = "prop_add(name=health; val=l_health_recovery)"
+universal_result = "prop_add(name=health; val=l_health_recovery)|prop_add(name=inspiration; val=m_xing_gain)"
 action_uuid = "denggao_leyouyuan"
 state = "success"

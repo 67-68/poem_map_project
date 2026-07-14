@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_qsihi"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_iy3tp"]
 
-[sub_resource type="Resource" id="Resource_qj14e"]
+[sub_resource type="Resource" id="Resource_7ak2p"]
 script = ExtResource("3_cih0q")
 value = 5
 
-[sub_resource type="Resource" id="Resource_xyppd"]
+[sub_resource type="Resource" id="Resource_3ljic"]
 script = ExtResource("4_oekto")
-operators = Array[ExtResource("2_3ljic")]([SubResource("Resource_qj14e")])
+operators = Array[ExtResource("2_3ljic")]([SubResource("Resource_7ak2p")])
 
-[sub_resource type="Resource" id="Resource_o4biu"]
+[sub_resource type="Resource" id="Resource_cih0q"]
 script = ExtResource("5_1nlcq")
-choice_result = SubResource("Resource_xyppd")
+choice_result = SubResource("Resource_3ljic")
 description = "笔杆的尾部轻扣在砚沿。墨滴洒在纸上，恰好隐去了第一个字。"
 
-[sub_resource type="Resource" id="Resource_0qcfr"]
+[sub_resource type="Resource" id="Resource_oekto"]
 script = ExtResource("6_qsihi")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("7_iy3tp")
-requirement = SubResource("Resource_0qcfr")
+requirement = SubResource("Resource_oekto")
 era = "747_kuangda"
 archetype_id = "duzhuo"
 _target_tags = Array[String](["action:main:duzhuo"])
-options = Array[ExtResource("1_7ak2p")]([SubResource("Resource_o4biu")])
+options = Array[ExtResource("1_7ak2p")]([SubResource("Resource_cih0q")])
 uuid = "qingliu_daoxin_posui_frozen_imagery"
 name = "秋夜三字"
 description = "纸上的三个字不像是从笔端生发的。它们更像是早就刻在那里——一笔一画都指向过去的某个时辰，与此刻再无瓜葛。墨在砚台里守着，稠得泛不出光。烛火跳了一下，影子从墙上滑过，沿着书案的边缘，歪了。"

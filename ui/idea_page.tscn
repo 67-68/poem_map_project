@@ -30,13 +30,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_enmti")
 
-[node name="Button" type="Button" parent="PanelContainer" unique_id=1089128283]
-custom_minimum_size = Vector2(25, 25)
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-text = "X"
-
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=1633392361]
 layout_mode = 2
 
@@ -125,3 +118,10 @@ text = "点击选择理念"
 
 [node name="CandidateContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer3" unique_id=791267746]
 layout_mode = 2
+
+[node name="Button" type="Button" parent="PanelContainer" unique_id=1089128283]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"

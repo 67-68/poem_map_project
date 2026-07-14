@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_juxac"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_qvvbl"]
 
-[sub_resource type="Resource" id="Resource_mu2pm"]
+[sub_resource type="Resource" id="Resource_27w3d"]
 script = ExtResource("2_puyve")
 
-[sub_resource type="Resource" id="Resource_xhi2r"]
+[sub_resource type="Resource" id="Resource_puyve"]
 script = ExtResource("4_f1il6")
 description = "你放下空杯，起身走向窗边，负手看檐下竹影，再不回头。"
 
-[sub_resource type="Resource" id="Resource_dd5s8"]
+[sub_resource type="Resource" id="Resource_vqvhd"]
 script = ExtResource("4_f1il6")
 description = "你自斟残酒仰尽，将杯倒扣案上，对主人微微颔首。"
 
-[sub_resource type="Resource" id="Resource_6m36q"]
+[sub_resource type="Resource" id="Resource_f1il6"]
 script = ExtResource("5_wnabp")
 imagery_name = "willow_branch"
 
-[sub_resource type="Resource" id="Resource_pkumt"]
+[sub_resource type="Resource" id="Resource_wnabp"]
 script = ExtResource("2_puyve")
-operators = Array[ExtResource("1_27w3d")]([SubResource("Resource_6m36q")])
+operators = Array[ExtResource("1_27w3d")]([SubResource("Resource_f1il6")])
 
-[sub_resource type="Resource" id="Resource_iuvse"]
+[sub_resource type="Resource" id="Resource_juxac"]
 script = ExtResource("4_f1il6")
-choice_result = SubResource("Resource_pkumt")
+choice_result = SubResource("Resource_wnabp")
 description = "你端起空壶，陪笑趋前：“大人兴高，待小的替大人斟满。”"
 
-[sub_resource type="Resource" id="Resource_5a14r"]
+[sub_resource type="Resource" id="Resource_qvvbl"]
 script = ExtResource("6_juxac")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_qvvbl")
-requirement = SubResource("Resource_5a14r")
+requirement = SubResource("Resource_qvvbl")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["emotion_pair:pair_despair", "TARGET_OBJECT_SWORD:cold_blade", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "action:humiliation_class_bullying", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_IDENTITY_MENZI", "VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ACTION_SOCIAL_PARTING:willow_branch", "action:scene_jiaoyou"])
-options = Array[ExtResource("3_vqvhd")]([SubResource("Resource_xhi2r"), SubResource("Resource_dd5s8"), SubResource("Resource_iuvse")])
-on_enter_result = SubResource("Resource_mu2pm")
+options = Array[ExtResource("3_vqvhd")]([SubResource("Resource_puyve"), SubResource("Resource_vqvhd"), SubResource("Resource_juxac")])
+on_enter_result = SubResource("Resource_27w3d")
 uuid = "duotai_humiliation_class_bullying_gateway_jiaoyou_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "空壶待客"

@@ -10,87 +10,87 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="8_pjo5d"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_nlpye"]
 
-[sub_resource type="Resource" id="Resource_1f86o"]
+[sub_resource type="Resource" id="Resource_q1tl1"]
 script = ExtResource("3_wedvu")
 value = 5
+
+[sub_resource type="Resource" id="Resource_ydpej"]
+script = ExtResource("3_wedvu")
+value = 10
+
+[sub_resource type="Resource" id="Resource_wedvu"]
+script = ExtResource("4_b3flw")
+operators = Array[ExtResource("2_ydpej")]([SubResource("Resource_q1tl1"), SubResource("Resource_ydpej")])
+
+[sub_resource type="Resource" id="Resource_b3flw"]
+script = ExtResource("5_4tdc1")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_4tdc1"]
+script = ExtResource("6_n56p3")
+choice_result = SubResource("Resource_wedvu")
+requirement = SubResource("Resource_b3flw")
+description = "被封锁。这个人不是那种掀桌的脾性——他计算过沉没成本。"
+
+[sub_resource type="Resource" id="Resource_n56p3"]
+script = ExtResource("3_wedvu")
+value = 5
+
+[sub_resource type="Resource" id="Resource_7px4l"]
+script = ExtResource("3_wedvu")
+value = 10
+
+[sub_resource type="Resource" id="Resource_pjo5d"]
+script = ExtResource("4_b3flw")
+operators = Array[ExtResource("2_ydpej")]([SubResource("Resource_n56p3"), SubResource("Resource_7px4l")])
+
+[sub_resource type="Resource" id="Resource_nlpye"]
+script = ExtResource("5_4tdc1")
+flag_id = "__never_unlock"
+type = "bool"
+value = true
+
+[sub_resource type="Resource" id="Resource_1f86o"]
+script = ExtResource("6_n56p3")
+choice_result = SubResource("Resource_pjo5d")
+requirement = SubResource("Resource_nlpye")
+description = "被封锁。膝盖换不来清流的宽恕，只会把亏空跪成一个笑话。"
 
 [sub_resource type="Resource" id="Resource_o3moa"]
 script = ExtResource("3_wedvu")
-value = 10
+value = 5
 
 [sub_resource type="Resource" id="Resource_4uprv"]
-script = ExtResource("4_b3flw")
-operators = Array[ExtResource("2_ydpej")]([SubResource("Resource_1f86o"), SubResource("Resource_o3moa")])
+script = ExtResource("3_wedvu")
+value = 10
 
 [sub_resource type="Resource" id="Resource_ttrrh"]
-script = ExtResource("5_4tdc1")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_v3cjh"]
-script = ExtResource("6_n56p3")
-choice_result = SubResource("Resource_4uprv")
-requirement = SubResource("Resource_ttrrh")
-description = "被封锁。这个人不是那种掀桌的脾性——他计算过沉没成本。"
-
-[sub_resource type="Resource" id="Resource_0s8cl"]
-script = ExtResource("3_wedvu")
-value = 5
-
-[sub_resource type="Resource" id="Resource_n5d2n"]
-script = ExtResource("3_wedvu")
-value = 10
-
-[sub_resource type="Resource" id="Resource_4whg7"]
-script = ExtResource("4_b3flw")
-operators = Array[ExtResource("2_ydpej")]([SubResource("Resource_0s8cl"), SubResource("Resource_n5d2n")])
-
-[sub_resource type="Resource" id="Resource_vmhcb"]
-script = ExtResource("5_4tdc1")
-flag_id = "__never_unlock"
-type = "bool"
-value = true
-
-[sub_resource type="Resource" id="Resource_5uwsx"]
-script = ExtResource("6_n56p3")
-choice_result = SubResource("Resource_4whg7")
-requirement = SubResource("Resource_vmhcb")
-description = "被封锁。膝盖换不来清流的宽恕，只会把亏空跪成一个笑话。"
-
-[sub_resource type="Resource" id="Resource_sldfc"]
-script = ExtResource("3_wedvu")
-value = 5
-
-[sub_resource type="Resource" id="Resource_jhk1u"]
-script = ExtResource("3_wedvu")
-value = 10
-
-[sub_resource type="Resource" id="Resource_puowo"]
 script = ExtResource("7_7px4l")
 target_tag = "TARGET_IDENTITY_QINGLIU_OFFICIAL"
 leverage_key = "qingliu_class_discrimination"
 
-[sub_resource type="Resource" id="Resource_p08fi"]
+[sub_resource type="Resource" id="Resource_v3cjh"]
 script = ExtResource("4_b3flw")
-operators = Array[ExtResource("2_ydpej")]([SubResource("Resource_sldfc"), SubResource("Resource_jhk1u"), SubResource("Resource_puowo")])
+operators = Array[ExtResource("2_ydpej")]([SubResource("Resource_o3moa"), SubResource("Resource_4uprv"), SubResource("Resource_ttrrh")])
 
-[sub_resource type="Resource" id="Resource_35f2a"]
+[sub_resource type="Resource" id="Resource_0s8cl"]
 script = ExtResource("6_n56p3")
-choice_result = SubResource("Resource_p08fi")
+choice_result = SubResource("Resource_v3cjh")
 description = "他重新磨墨，铺开一张空白谢柬，在第一行写下那个商人的名字。"
 
-[sub_resource type="Resource" id="Resource_vl05k"]
+[sub_resource type="Resource" id="Resource_n5d2n"]
 script = ExtResource("8_pjo5d")
 trait_name = "kuangda_zuanying"
 
 [resource]
 script = ExtResource("9_nlpye")
-requirement = SubResource("Resource_vl05k")
+requirement = SubResource("Resource_n5d2n")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:giant_roc", "TARGET_FACTION_ROYAL:jade_step", "action:main:jiaoyou"])
-options = Array[ExtResource("1_q1tl1")]([SubResource("Resource_v3cjh"), SubResource("Resource_5uwsx"), SubResource("Resource_35f2a")])
+options = Array[ExtResource("1_q1tl1")]([SubResource("Resource_4tdc1"), SubResource("Resource_1f86o"), SubResource("Resource_0s8cl")])
 uuid = "qingliu_zuanying_monetized_guest_list"
 name = "席上少了一行姓名"
 description = "雅集后第三日，一封谢柬送到。清流主人写给另一位常客的信，信中历数那日席上“尽皆佳士”，列了四个人的名字。你带了五个人来。被略掉的那个是商人——他的茧子太厚、端盏时小指翘得过了、对一幅南唐摹本说了“这纸真新”——当时只有主人皱了一下眉。现在那封谢柬摊在桌上，墨迹干透。你没有被点名指责，你只是看见那行漏掉的名字像一颗拔掉的牙。"

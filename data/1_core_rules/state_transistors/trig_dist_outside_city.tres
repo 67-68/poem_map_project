@@ -8,37 +8,37 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="6_tcbdw"]
 [ext_resource type="Script" uid="uid://c7gkvf3ho6pgj" path="res://core/model/state_transistor.gd" id="7_d45r8"]
 
-[sub_resource type="Resource" id="Resource_urece"]
+[sub_resource type="Resource" id="Resource_xhkvn"]
 script = ExtResource("2_kvcjh")
 flag_id = "trig_dist_outside_city"
 type = "int"
 value = 1
 
-[sub_resource type="Resource" id="Resource_fbm0x"]
+[sub_resource type="Resource" id="Resource_kvcjh"]
 script = ExtResource("4_kevd4")
 property = "distance"
 value = 5
 operator = 1
 
-[sub_resource type="Resource" id="Resource_cuwnk"]
+[sub_resource type="Resource" id="Resource_nb3mc"]
 script = ExtResource("4_kevd4")
 property = "distance"
 value = 10
 
-[sub_resource type="Resource" id="Resource_qx0l6"]
+[sub_resource type="Resource" id="Resource_kevd4"]
 script = ExtResource("5_4o150")
 flag_id = "trig_dist_outside_city"
 type = "int"
 value = 1
 operator = 3
 
-[sub_resource type="Resource" id="Resource_40i75"]
+[sub_resource type="Resource" id="Resource_4o150"]
 script = ExtResource("6_tcbdw")
-operators = Array[ExtResource("3_nb3mc")]([SubResource("Resource_fbm0x"), SubResource("Resource_cuwnk"), SubResource("Resource_qx0l6")])
+operators = Array[ExtResource("3_nb3mc")]([SubResource("Resource_kvcjh"), SubResource("Resource_nb3mc"), SubResource("Resource_kevd4")])
 
 [resource]
 script = ExtResource("7_d45r8")
 uuid = "trig_dist_outside_city"
 triggered_event_key = "backhome_outside_city_1"
-requirements = SubResource("Resource_40i75")
-operators = Array[ExtResource("1_xhkvn")]([SubResource("Resource_urece")])
+requirements = SubResource("Resource_4o150")
+operators = Array[ExtResource("1_xhkvn")]([SubResource("Resource_xhkvn")])

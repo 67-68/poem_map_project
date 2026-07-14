@@ -6,10 +6,10 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_3eals"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_m3yhk"]
 
-[sub_resource type="Resource" id="Resource_ak3fn"]
+[sub_resource type="Resource" id="Resource_xc4ki"]
 script = ExtResource("3_qvssw")
 
-[sub_resource type="Resource" id="Resource_p2u5r"]
+[sub_resource type="Resource" id="Resource_w3k5m"]
 script = ExtResource("4_3eals")
 
 [resource]
@@ -18,8 +18,8 @@ required_place = "xishi"
 _action_tags = Array[int]([56, 61])
 fallback_event_uuid = "zhu_liu_xishi_fallback"
 archetype_uuid = "zhu_liu_xishi_success"
-failed_result = SubResource("Resource_p2u5r")
-defer_config = SubResource("Resource_ak3fn")
+failed_result = SubResource("Resource_w3k5m")
+defer_config = SubResource("Resource_xc4ki")
 uuid = "zhu_liu_xishi"
 name = "驻留 · 西市"
 description = "移步西市落脚"

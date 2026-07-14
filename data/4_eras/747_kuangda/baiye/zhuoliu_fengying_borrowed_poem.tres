@@ -12,85 +12,85 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_xvf7o"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_uct5i"]
 
-[sub_resource type="Resource" id="Resource_1nala"]
+[sub_resource type="Resource" id="Resource_i1age"]
 script = ExtResource("3_1lveh")
 value = 13
 
-[sub_resource type="Resource" id="Resource_3lx5c"]
+[sub_resource type="Resource" id="Resource_idgx3"]
 script = ExtResource("4_m5pcc")
-operators = Array[ExtResource("2_idgx3")]([SubResource("Resource_1nala")])
+operators = Array[ExtResource("2_idgx3")]([SubResource("Resource_i1age")])
 
-[sub_resource type="Resource" id="Resource_6acg0"]
+[sub_resource type="Resource" id="Resource_1lveh"]
 script = ExtResource("5_rbx4e")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_g0xp2"]
+[sub_resource type="Resource" id="Resource_m5pcc"]
 script = ExtResource("6_1oqbp")
-choice_result = SubResource("Resource_3lx5c")
-requirement = SubResource("Resource_6acg0")
+choice_result = SubResource("Resource_idgx3")
+requirement = SubResource("Resource_1lveh")
 description = "把空杯倒扣在桌面，起身离席，椅腿刮过砖地的声音不压。"
 
-[sub_resource type="Resource" id="Resource_ioc15"]
+[sub_resource type="Resource" id="Resource_rbx4e"]
 script = ExtResource("3_1lveh")
 value = 10
 
-[sub_resource type="Resource" id="Resource_jegde"]
+[sub_resource type="Resource" id="Resource_1oqbp"]
 script = ExtResource("4_m5pcc")
-operators = Array[ExtResource("2_idgx3")]([SubResource("Resource_ioc15")])
+operators = Array[ExtResource("2_idgx3")]([SubResource("Resource_rbx4e")])
 
-[sub_resource type="Resource" id="Resource_ow325"]
+[sub_resource type="Resource" id="Resource_6rsre"]
 script = ExtResource("5_rbx4e")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_crx5x"]
+[sub_resource type="Resource" id="Resource_xcpau"]
 script = ExtResource("6_1oqbp")
-choice_result = SubResource("Resource_jegde")
-requirement = SubResource("Resource_ow325")
+choice_result = SubResource("Resource_1oqbp")
+requirement = SubResource("Resource_6rsre")
 description = "接住“指点”二字，问司马上月那卷《河岳英灵集》是否已送到集贤院。"
 
-[sub_resource type="Resource" id="Resource_r0tfx"]
+[sub_resource type="Resource" id="Resource_pdwuh"]
 script = ExtResource("3_1lveh")
 value = 13
 
-[sub_resource type="Resource" id="Resource_wpvwo"]
+[sub_resource type="Resource" id="Resource_xvf7o"]
 script = ExtResource("4_m5pcc")
-operators = Array[ExtResource("2_idgx3")]([SubResource("Resource_r0tfx")])
+operators = Array[ExtResource("2_idgx3")]([SubResource("Resource_pdwuh")])
 
-[sub_resource type="Resource" id="Resource_gd353"]
+[sub_resource type="Resource" id="Resource_uct5i"]
 script = ExtResource("6_1oqbp")
-choice_result = SubResource("Resource_wpvwo")
+choice_result = SubResource("Resource_xvf7o")
 description = "翻开自己那卷诗稿，找到第三首，把“指点”过的那两行指给旁边的人看。"
 
-[sub_resource type="Resource" id="Resource_2b31q"]
+[sub_resource type="Resource" id="Resource_1nala"]
 script = ExtResource("8_xcpau")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_p8kjr"]
+[sub_resource type="Resource" id="Resource_3lx5c"]
 script = ExtResource("9_pdwuh")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_0t627"]
+[sub_resource type="Resource" id="Resource_6acg0"]
 script = ExtResource("9_pdwuh")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_774lw"]
+[sub_resource type="Resource" id="Resource_g0xp2"]
 script = ExtResource("10_xvf7o")
-operators = Array[ExtResource("7_6rsre")]([SubResource("Resource_2b31q"), SubResource("Resource_p8kjr"), SubResource("Resource_0t627")])
+operators = Array[ExtResource("7_6rsre")]([SubResource("Resource_1nala"), SubResource("Resource_3lx5c"), SubResource("Resource_6acg0")])
 
 [resource]
 script = ExtResource("11_uct5i")
-requirement = SubResource("Resource_774lw")
+requirement = SubResource("Resource_g0xp2")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_POLITICS_PROSPER:cloud_and_sun", "action:main:baiye"])
-options = Array[ExtResource("1_i1age")]([SubResource("Resource_g0xp2"), SubResource("Resource_crx5x"), SubResource("Resource_gd353")])
+options = Array[ExtResource("1_i1age")]([SubResource("Resource_m5pcc"), SubResource("Resource_xcpau"), SubResource("Resource_uct5i")])
 uuid = "zhuoliu_fengying_borrowed_poem"
 name = "灯焰数到第四遍"
 description = "原来如此。你的酒杯空了有一阵了，没人斟。你发现自己已经在心里数第四遍他桌边那只铜灯的灯焰跳了几次。第三遍时你觉得该停了。第四遍还在数。"

@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_cfpq1"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_os75q"]
 
-[sub_resource type="Resource" id="Resource_vhyq1"]
+[sub_resource type="Resource" id="Resource_lydkh"]
 script = ExtResource("2_4o0om")
 
-[sub_resource type="Resource" id="Resource_ynppa"]
+[sub_resource type="Resource" id="Resource_4o0om"]
 script = ExtResource("4_w181s")
 description = "将抄笔搁回笔架，转身步出值房，不看任何人一眼。"
 
-[sub_resource type="Resource" id="Resource_uj3vj"]
+[sub_resource type="Resource" id="Resource_68pwg"]
 script = ExtResource("4_w181s")
 description = "略顿首，将公文归位，低声道“告退”，自行离去。"
 
-[sub_resource type="Resource" id="Resource_qt5vw"]
+[sub_resource type="Resource" id="Resource_w181s"]
 script = ExtResource("5_3jc1m")
 imagery_name = "thatched_grass"
 
-[sub_resource type="Resource" id="Resource_hb1hf"]
+[sub_resource type="Resource" id="Resource_3jc1m"]
 script = ExtResource("2_4o0om")
-operators = Array[ExtResource("1_lydkh")]([SubResource("Resource_qt5vw")])
+operators = Array[ExtResource("1_lydkh")]([SubResource("Resource_w181s")])
 
-[sub_resource type="Resource" id="Resource_e7laq"]
+[sub_resource type="Resource" id="Resource_cfpq1"]
 script = ExtResource("4_w181s")
-choice_result = SubResource("Resource_hb1hf")
+choice_result = SubResource("Resource_3jc1m")
 description = "躬身道“大人若有别事，小的随叫随到”，又退回门外候立。"
 
-[sub_resource type="Resource" id="Resource_5toom"]
+[sub_resource type="Resource" id="Resource_os75q"]
 script = ExtResource("6_cfpq1")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_os75q")
-requirement = SubResource("Resource_5toom")
+requirement = SubResource("Resource_os75q")
 era = "747_kuangda"
 archetype_id = "fengzhao"
 _target_tags = Array[String](["emotion_pair:pair_despair", "TARGET_OBJECT_SWORD:cold_blade", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "action:humiliation_class_bullying", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_IDENTITY_MENZI", "VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_OBJECT_SWORD:rusty_sword", "TARGET_NPC_DUFU:thatched_grass", "action:scene_fengzhao"])
-options = Array[ExtResource("3_68pwg")]([SubResource("Resource_ynppa"), SubResource("Resource_uj3vj"), SubResource("Resource_e7laq")])
-on_enter_result = SubResource("Resource_vhyq1")
+options = Array[ExtResource("3_68pwg")]([SubResource("Resource_4o0om"), SubResource("Resource_68pwg"), SubResource("Resource_cfpq1")])
+on_enter_result = SubResource("Resource_lydkh")
 uuid = "duotai_humiliation_class_bullying_gateway_fengzhao_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "文牍之弃"

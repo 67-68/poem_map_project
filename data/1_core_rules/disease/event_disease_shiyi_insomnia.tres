@@ -8,47 +8,47 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_p6mjl"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_0u54e"]
 
-[sub_resource type="Resource" id="Resource_xsu8o"]
+[sub_resource type="Resource" id="Resource_7akbx"]
 script = ExtResource("3_msg8b")
 value = -3
 
-[sub_resource type="Resource" id="Resource_4iqhi"]
+[sub_resource type="Resource" id="Resource_w62l2"]
 script = ExtResource("4_5wm75")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_mjp5i"]
+[sub_resource type="Resource" id="Resource_msg8b"]
 script = ExtResource("5_vtsn5")
-operators = Array[ExtResource("2_w62l2")]([SubResource("Resource_xsu8o"), SubResource("Resource_4iqhi")])
+operators = Array[ExtResource("2_w62l2")]([SubResource("Resource_7akbx"), SubResource("Resource_w62l2")])
 
-[sub_resource type="Resource" id="Resource_bf23x"]
+[sub_resource type="Resource" id="Resource_5wm75"]
 script = ExtResource("6_p6mjl")
-choice_result = SubResource("Resource_mjp5i")
+choice_result = SubResource("Resource_msg8b")
 description = "索性起来写诗"
 
-[sub_resource type="Resource" id="Resource_0bp7a"]
+[sub_resource type="Resource" id="Resource_vtsn5"]
 script = ExtResource("4_5wm75")
 str_props = "burnout"
 value = 10
 
-[sub_resource type="Resource" id="Resource_8ipgq"]
+[sub_resource type="Resource" id="Resource_p6mjl"]
 script = ExtResource("3_msg8b")
 value = 5
 
-[sub_resource type="Resource" id="Resource_uagdk"]
+[sub_resource type="Resource" id="Resource_0u54e"]
 script = ExtResource("5_vtsn5")
-operators = Array[ExtResource("2_w62l2")]([SubResource("Resource_0bp7a"), SubResource("Resource_8ipgq")])
+operators = Array[ExtResource("2_w62l2")]([SubResource("Resource_vtsn5"), SubResource("Resource_p6mjl")])
 
-[sub_resource type="Resource" id="Resource_vi0rl"]
+[sub_resource type="Resource" id="Resource_xsu8o"]
 script = ExtResource("6_p6mjl")
-choice_result = SubResource("Resource_uagdk")
+choice_result = SubResource("Resource_0u54e")
 description = "闭眼假寐，等天亮"
 
 [resource]
 script = ExtResource("7_0u54e")
 era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:depression"])
-options = Array[ExtResource("1_7akbx")]([SubResource("Resource_bf23x"), SubResource("Resource_vi0rl")])
+options = Array[ExtResource("1_7akbx")]([SubResource("Resource_5wm75"), SubResource("Resource_xsu8o")])
 uuid = "event_disease_shiyi_insomnia"
 name = "不寐"
 description = "你翻了个身，又翻了个身。床板硬得像棺材板，窗外的月光亮得刺眼。更鼓敲了三更——四更——五更了。天边泛起鱼肚白时，你依然睁着眼睛。又是一夜未眠。"

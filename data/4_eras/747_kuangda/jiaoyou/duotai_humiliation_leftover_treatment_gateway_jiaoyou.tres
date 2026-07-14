@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_2exvi"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_r3j5d"]
 
-[sub_resource type="Resource" id="Resource_0hltk"]
+[sub_resource type="Resource" id="Resource_cjiax"]
 script = ExtResource("2_w7wdo")
 
-[sub_resource type="Resource" id="Resource_8lh4d"]
+[sub_resource type="Resource" id="Resource_w7wdo"]
 script = ExtResource("4_kbm30")
 description = "搁笔于案，转身步入夜色。"
 
-[sub_resource type="Resource" id="Resource_tg7lu"]
+[sub_resource type="Resource" id="Resource_u6qj5"]
 script = ExtResource("5_0uy30")
 imagery_name = "willow_branch"
 
-[sub_resource type="Resource" id="Resource_3bya6"]
+[sub_resource type="Resource" id="Resource_kbm30"]
 script = ExtResource("2_w7wdo")
-operators = Array[ExtResource("1_cjiax")]([SubResource("Resource_tg7lu")])
+operators = Array[ExtResource("1_cjiax")]([SubResource("Resource_u6qj5")])
 
-[sub_resource type="Resource" id="Resource_wd4tf"]
+[sub_resource type="Resource" id="Resource_0uy30"]
 script = ExtResource("4_kbm30")
-choice_result = SubResource("Resource_3bya6")
+choice_result = SubResource("Resource_kbm30")
 description = "拱手称谢，将碎银收入囊中。"
 
-[sub_resource type="Resource" id="Resource_h7f65"]
+[sub_resource type="Resource" id="Resource_2exvi"]
 script = ExtResource("5_0uy30")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_6xewe"]
+[sub_resource type="Resource" id="Resource_r3j5d"]
 script = ExtResource("2_w7wdo")
-operators = Array[ExtResource("1_cjiax")]([SubResource("Resource_h7f65")])
+operators = Array[ExtResource("1_cjiax")]([SubResource("Resource_2exvi")])
 
-[sub_resource type="Resource" id="Resource_ka27n"]
+[sub_resource type="Resource" id="Resource_0hltk"]
 script = ExtResource("4_kbm30")
-choice_result = SubResource("Resource_6xewe")
+choice_result = SubResource("Resource_r3j5d")
 description = "躬身接过银两，笑答：“谢员外赏，愿再效劳。”"
 
-[sub_resource type="Resource" id="Resource_85yab"]
+[sub_resource type="Resource" id="Resource_8lh4d"]
 script = ExtResource("6_2exvi")
 volatile_stat = "ambition"
 value = 50
@@ -49,12 +49,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_r3j5d")
-requirement = SubResource("Resource_85yab")
+requirement = SubResource("Resource_8lh4d")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["emotion_pair:pair_survival", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "TARGET_NPC_DUFU:thatched_grass", "action:humiliation_leftover_treatment", "VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ACTION_SOCIAL_PARTING:willow_branch", "action:scene_jiaoyou"])
-options = Array[ExtResource("3_u6qj5")]([SubResource("Resource_8lh4d"), SubResource("Resource_wd4tf"), SubResource("Resource_ka27n")])
-on_enter_result = SubResource("Resource_0hltk")
+options = Array[ExtResource("3_u6qj5")]([SubResource("Resource_w7wdo"), SubResource("Resource_0uy30"), SubResource("Resource_0hltk")])
+on_enter_result = SubResource("Resource_cjiax")
 uuid = "duotai_humiliation_leftover_treatment_gateway_jiaoyou"
 name = "emo_lt(name=ambition; val=100)"
 description = "碎银换墓志"

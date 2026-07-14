@@ -13,90 +13,90 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_se05f"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_8jy1r"]
 
-[sub_resource type="Resource" id="Resource_bogjj"]
+[sub_resource type="Resource" id="Resource_1tvk3"]
 script = ExtResource("3_auryo")
 value = 10
 
-[sub_resource type="Resource" id="Resource_regru"]
+[sub_resource type="Resource" id="Resource_ot2cc"]
 script = ExtResource("4_q4an7")
-operators = Array[ExtResource("2_ot2cc")]([SubResource("Resource_bogjj")])
+operators = Array[ExtResource("2_ot2cc")]([SubResource("Resource_1tvk3")])
 
-[sub_resource type="Resource" id="Resource_7lcwp"]
+[sub_resource type="Resource" id="Resource_auryo"]
 script = ExtResource("5_nhrid")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_7rusb"]
+[sub_resource type="Resource" id="Resource_q4an7"]
 script = ExtResource("6_u1w6q")
-choice_result = SubResource("Resource_regru")
-requirement = SubResource("Resource_7lcwp")
+choice_result = SubResource("Resource_ot2cc")
+requirement = SubResource("Resource_auryo")
 description = "掀案而起，酒盏在席面骨碌碌滚出三尺远。"
 
-[sub_resource type="Resource" id="Resource_q8xpp"]
+[sub_resource type="Resource" id="Resource_nhrid"]
 script = ExtResource("3_auryo")
 value = 10
 
-[sub_resource type="Resource" id="Resource_6qkp7"]
+[sub_resource type="Resource" id="Resource_u1w6q"]
 script = ExtResource("4_q4an7")
-operators = Array[ExtResource("2_ot2cc")]([SubResource("Resource_q8xpp")])
+operators = Array[ExtResource("2_ot2cc")]([SubResource("Resource_nhrid")])
 
-[sub_resource type="Resource" id="Resource_eyvry"]
+[sub_resource type="Resource" id="Resource_gk3fu"]
 script = ExtResource("5_nhrid")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_d6ghs"]
+[sub_resource type="Resource" id="Resource_lnenw"]
 script = ExtResource("6_u1w6q")
-choice_result = SubResource("Resource_6qkp7")
-requirement = SubResource("Resource_eyvry")
+choice_result = SubResource("Resource_u1w6q")
+requirement = SubResource("Resource_gk3fu")
 description = "目光迅速扫向主位，搜寻那位致仕多年的郑老大人。"
 
-[sub_resource type="Resource" id="Resource_7jtw6"]
+[sub_resource type="Resource" id="Resource_1vd5y"]
 script = ExtResource("3_auryo")
 value = 6
 
-[sub_resource type="Resource" id="Resource_lu0rh"]
+[sub_resource type="Resource" id="Resource_veaau"]
 script = ExtResource("7_gk3fu")
 target_tag = "TARGET_IDENTITY_QINGLIU_OFFICIAL"
 leverage_key = "qingliu_academic_fraud"
 
-[sub_resource type="Resource" id="Resource_a02yy"]
+[sub_resource type="Resource" id="Resource_se05f"]
 script = ExtResource("4_q4an7")
-operators = Array[ExtResource("2_ot2cc")]([SubResource("Resource_7jtw6"), SubResource("Resource_lu0rh")])
+operators = Array[ExtResource("2_ot2cc")]([SubResource("Resource_1vd5y"), SubResource("Resource_veaau")])
 
-[sub_resource type="Resource" id="Resource_0xnxi"]
+[sub_resource type="Resource" id="Resource_8jy1r"]
 script = ExtResource("6_u1w6q")
-choice_result = SubResource("Resource_a02yy")
+choice_result = SubResource("Resource_se05f")
 description = "接过那支秃笔，在纸上落下第一个字。"
 
-[sub_resource type="Resource" id="Resource_icnbn"]
+[sub_resource type="Resource" id="Resource_bogjj"]
 script = ExtResource("9_1vd5y")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_k32fo"]
+[sub_resource type="Resource" id="Resource_regru"]
 script = ExtResource("10_veaau")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_5nhxt"]
+[sub_resource type="Resource" id="Resource_7lcwp"]
 script = ExtResource("10_veaau")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_b3wc7"]
+[sub_resource type="Resource" id="Resource_7rusb"]
 script = ExtResource("11_se05f")
-operators = Array[ExtResource("8_lnenw")]([SubResource("Resource_icnbn"), SubResource("Resource_k32fo"), SubResource("Resource_5nhxt")])
+operators = Array[ExtResource("8_lnenw")]([SubResource("Resource_bogjj"), SubResource("Resource_regru"), SubResource("Resource_7lcwp")])
 
 [resource]
 script = ExtResource("12_8jy1r")
-requirement = SubResource("Resource_b3wc7")
+requirement = SubResource("Resource_7rusb")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_NPC_DUFU:thatched_grass", "action:main:jiaoyou"])
-options = Array[ExtResource("1_1tvk3")]([SubResource("Resource_7rusb"), SubResource("Resource_d6ghs"), SubResource("Resource_0xnxi")])
+options = Array[ExtResource("1_1tvk3")]([SubResource("Resource_q4an7"), SubResource("Resource_lnenw"), SubResource("Resource_8jy1r")])
 uuid = "qingliu_fengying_ghostwriting"
 name = "席间纸笔"
 description = "酒过三巡，郑家公子从袖中摸出叠得齐整的纸，铺在湿漉漉的桌面上。“上回那首《秋兴》改得好，家父逢人便夸。”他替你斟满酒，推过来，“今日再劳烦一回。”席上无人抬眼——他们都记得上次雅集，你替这位公子的诗润色了整整一个时辰。现下纸笔已备好，砚台也摆在你手边。那支笔的笔锋微秃，正是你上次落在郑家的。"

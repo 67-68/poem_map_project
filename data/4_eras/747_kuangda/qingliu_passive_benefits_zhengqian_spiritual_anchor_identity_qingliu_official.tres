@@ -12,89 +12,89 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_4kd2m"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_nds1x"]
 
-[sub_resource type="Resource" id="Resource_ukexl"]
+[sub_resource type="Resource" id="Resource_am6am"]
 script = ExtResource("3_euotj")
 value = 11
 
-[sub_resource type="Resource" id="Resource_sdew2"]
+[sub_resource type="Resource" id="Resource_xaaku"]
 script = ExtResource("4_kfnjr")
 imagery_name = "thatched_grass"
 
-[sub_resource type="Resource" id="Resource_kjjtq"]
+[sub_resource type="Resource" id="Resource_euotj"]
 script = ExtResource("5_x3ar0")
-operators = Array[ExtResource("2_xaaku")]([SubResource("Resource_ukexl"), SubResource("Resource_sdew2")])
+operators = Array[ExtResource("2_xaaku")]([SubResource("Resource_am6am"), SubResource("Resource_xaaku")])
 
-[sub_resource type="Resource" id="Resource_6m77k"]
+[sub_resource type="Resource" id="Resource_kfnjr"]
 script = ExtResource("6_s1flp")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_2i0us"]
+[sub_resource type="Resource" id="Resource_x3ar0"]
 script = ExtResource("7_ouytb")
-choice_result = SubResource("Resource_kjjtq")
-requirement = SubResource("Resource_6m77k")
+choice_result = SubResource("Resource_euotj")
+requirement = SubResource("Resource_kfnjr")
 description = "就着菜市的喧嚷大声念出旧作，念到第三句时郑虔回头，两人隔着人潮笑了。"
 
-[sub_resource type="Resource" id="Resource_putnn"]
+[sub_resource type="Resource" id="Resource_s1flp"]
 script = ExtResource("3_euotj")
 value = 11
 
-[sub_resource type="Resource" id="Resource_o1ifs"]
+[sub_resource type="Resource" id="Resource_ouytb"]
 script = ExtResource("4_kfnjr")
 imagery_name = "thatched_grass"
 
-[sub_resource type="Resource" id="Resource_ravaw"]
+[sub_resource type="Resource" id="Resource_ry8qc"]
 script = ExtResource("5_x3ar0")
-operators = Array[ExtResource("2_xaaku")]([SubResource("Resource_putnn"), SubResource("Resource_o1ifs")])
+operators = Array[ExtResource("2_xaaku")]([SubResource("Resource_s1flp"), SubResource("Resource_ouytb")])
 
-[sub_resource type="Resource" id="Resource_pdpt7"]
+[sub_resource type="Resource" id="Resource_em245"]
 script = ExtResource("7_ouytb")
-choice_result = SubResource("Resource_ravaw")
+choice_result = SubResource("Resource_ry8qc")
 description = "接过时触到那片焦痕，指腹在纸缘停留了一瞬，低头默默将稿纸卷回。"
 
-[sub_resource type="Resource" id="Resource_2yo1a"]
+[sub_resource type="Resource" id="Resource_4kd2m"]
 script = ExtResource("3_euotj")
 value = 16
 
-[sub_resource type="Resource" id="Resource_n6h77"]
+[sub_resource type="Resource" id="Resource_nds1x"]
 script = ExtResource("3_euotj")
 value = 6
 
-[sub_resource type="Resource" id="Resource_7dj7g"]
+[sub_resource type="Resource" id="Resource_ukexl"]
 script = ExtResource("5_x3ar0")
-operators = Array[ExtResource("2_xaaku")]([SubResource("Resource_2yo1a"), SubResource("Resource_n6h77")])
+operators = Array[ExtResource("2_xaaku")]([SubResource("Resource_4kd2m"), SubResource("Resource_nds1x")])
 
-[sub_resource type="Resource" id="Resource_kwort"]
+[sub_resource type="Resource" id="Resource_sdew2"]
 script = ExtResource("6_s1flp")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_ybici"]
+[sub_resource type="Resource" id="Resource_kjjtq"]
 script = ExtResource("7_ouytb")
-choice_result = SubResource("Resource_7dj7g")
-requirement = SubResource("Resource_kwort")
+choice_result = SubResource("Resource_ukexl")
+requirement = SubResource("Resource_sdew2")
 description = "连声称难得郑广文眼力，随即翻开其他废纸就近请教——可还有遗珠。"
 
-[sub_resource type="Resource" id="Resource_kb2dw"]
+[sub_resource type="Resource" id="Resource_6m77k"]
 script = ExtResource("9_em245")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_o8nav"]
+[sub_resource type="Resource" id="Resource_2i0us"]
 script = ExtResource("9_em245")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_t5iq6"]
+[sub_resource type="Resource" id="Resource_putnn"]
 script = ExtResource("10_4kd2m")
-operators = Array[ExtResource("8_ry8qc")]([SubResource("Resource_kb2dw"), SubResource("Resource_o8nav")])
+operators = Array[ExtResource("8_ry8qc")]([SubResource("Resource_6m77k"), SubResource("Resource_2i0us")])
 
 [resource]
 script = ExtResource("11_nds1x")
-requirement = SubResource("Resource_t5iq6")
+requirement = SubResource("Resource_putnn")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility", "action:main:fangshi"])
-options = Array[ExtResource("1_am6am")]([SubResource("Resource_2i0us"), SubResource("Resource_pdpt7"), SubResource("Resource_ybici")])
+options = Array[ExtResource("1_am6am")]([SubResource("Resource_x3ar0"), SubResource("Resource_em245"), SubResource("Resource_kjjtq")])
 uuid = "qingliu_passive_benefits_zhengqian_spiritual_anchor_identity_qingliu_official"
 name = "菜市口旧稿"
 description = "春晨下杜城菜市口，郑虔从人潮中挤出来拦住你，从怀里掏出一卷被油渍浸透的旧稿——去岁你丢进灶膛的那卷，被他从火口抢了回来。他什么也没说，只是把那卷纸塞进你手里，转身便走。纸张边缘焦痕犹在，烟熏味混着菜市的葱韭气息。"

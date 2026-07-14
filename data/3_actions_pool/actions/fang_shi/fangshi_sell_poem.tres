@@ -9,32 +9,32 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_057ik"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="8_vogl6"]
 
-[sub_resource type="Resource" id="Resource_7e5ha"]
+[sub_resource type="Resource" id="Resource_j0lxg"]
 script = ExtResource("2_nlq4o")
 
-[sub_resource type="Resource" id="Resource_r34oh"]
+[sub_resource type="Resource" id="Resource_nlq4o"]
 script = ExtResource("4_im7cj")
 
-[sub_resource type="Resource" id="Resource_im3f5"]
+[sub_resource type="Resource" id="Resource_1crwu"]
 script = ExtResource("5_vafkd")
 
-[sub_resource type="Resource" id="Resource_io54b"]
+[sub_resource type="Resource" id="Resource_im7cj"]
 script = ExtResource("6_cfnhw")
 event_key = "fangshi_sell_poem_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_yfrdr"]
+[sub_resource type="Resource" id="Resource_vafkd"]
 script = ExtResource("7_057ik")
-operators = Array[ExtResource("3_1crwu")]([SubResource("Resource_io54b")])
+operators = Array[ExtResource("3_1crwu")]([SubResource("Resource_im7cj")])
 
 [resource]
 script = ExtResource("8_vogl6")
 required_place = "xishi"
 _action_tags = Array[int]([32, 47])
-action_results = Array[ExtResource("3_1crwu")]([SubResource("Resource_r34oh")])
-aciton_requirements = Array[ExtResource("1_j0lxg")]([SubResource("Resource_7e5ha")])
+action_results = Array[ExtResource("3_1crwu")]([SubResource("Resource_nlq4o")])
+aciton_requirements = Array[ExtResource("1_j0lxg")]([SubResource("Resource_j0lxg")])
 fallback_event_uuid = "fangshi_sell_poem_fallback"
-failed_result = SubResource("Resource_yfrdr")
-defer_config = SubResource("Resource_im3f5")
+failed_result = SubResource("Resource_vafkd")
+defer_config = SubResource("Resource_1crwu")
 uuid = "fangshi_sell_poem"
 name = "坊市 · 卖诗"
 description = "卖与平康坊歌女传唱"
