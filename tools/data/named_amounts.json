@@ -100,5 +100,10 @@
   "money_wealthy_threshold": 1000,
 
   "progress_tier1_threshold": 30,
-  "progress_tier2_threshold": 60
+  "progress_tier2_threshold": 60,
+
+  "_comment_xing": "=== 🆕 兴 (inspiration) 增益档位 ===",
+  "s_xing_gain": 3,
+  "m_xing_gain": 6,
+  "l_xing_gain": 10
 }

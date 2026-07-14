@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://dc3hxtwrx57y7"]
+
+[ext_resource type="Script" uid="uid://c4usn86y8m6h4" path="res://core/idea_page.gd" id="1_qnn58"]
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_8cqle"]
+[ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="3_8cqle"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_enmti"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+texture = ExtResource("2_8cqle")
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
+
+[node name="IdeaPage" type="Control" unique_id=992720834]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qnn58")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1817549478]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_enmti")
+
+[node name="Button" type="Button" parent="PanelContainer" unique_id=1089128283]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=1633392361]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer" unique_id=1236606371]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=164271186]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"TitleText"
+text = "当前理念"
+
+[node name="LinkButton" type="LinkButton" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=1130336776]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8cqle")
+theme_override_font_sizes/font_size = 24
+text = "空槽位"
+
+[node name="LinkButton2" type="LinkButton" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=137322]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8cqle")
+theme_override_font_sizes/font_size = 24
+text = "空槽位"
+
+[node name="LinkButton3" type="LinkButton" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=968701166]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8cqle")
+theme_override_font_sizes/font_size = 24
+text = "空槽位"
+
+[node name="LinkButton4" type="LinkButton" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=1387370443]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8cqle")
+theme_override_font_sizes/font_size = 24
+text = "空槽位"
+
+[node name="LinkButton5" type="LinkButton" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=281778585]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_8cqle")
+theme_override_font_sizes/font_size = 24
+text = "空槽位"
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/HBoxContainer" unique_id=1582713649]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/HBoxContainer" unique_id=808346587]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer2" unique_id=603048059]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "选择一个理念"
+
+[node name="EffectsContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer2" unique_id=1131787452]
+layout_mode = 2
+
+[node name="LinkButton4" type="LinkButton" parent="PanelContainer/HBoxContainer/VBoxContainer2" unique_id=869636374]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+
+[node name="VSeparator2" type="VSeparator" parent="PanelContainer/HBoxContainer" unique_id=2024317411]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="PanelContainer/HBoxContainer" unique_id=591424648]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer3" unique_id=2051099361]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "选择一个理念"
+
+[node name="Label2" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer3" unique_id=259673238]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "点击选择理念"
+
+[node name="CandidateContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer3" unique_id=791267746]
+layout_mode = 2

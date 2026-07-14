@@ -11,6 +11,7 @@
 1. aggregate_trait_effect() — trait 持续效果、疾病进展
 1.3. _process_imaginary_effects() — Imaginary 生命周期结算
 1.5. _sync_health_ap_traits() — 健康→AP 阶梯同步（必须在 aggregate 之后，确保中毒等扣血 trait 已生效）
+1.7. _apply_xun_base_inspiration() — 🆕 每旬基础兴获取（+3 inspiration，soft_max=50 溢出减半）
 1.8. _apply_npc_inner_circle_bonus() — 🆕 NPC inner_circle 每旬属性加成（势/兴/望）
 2. _cost_survival() — 基础生存扣除（-5 money）+ AP 刷新（健康联动）
 3. _update_heartbeat_sfx() / death_judgement() — 濒死判定
@@ -65,6 +66,34 @@ for 势/兴/望:
 ### 管线位置
 
 在 `_sync_health_ap_traits()` 之后（确保 AP 系统已就绪）、`_cost_survival()` 之前（加成先于生存扣除）。这保证「朋友助力 → 环境侵蚀」的叙事顺序。
+
+## 每旬基础兴获取 (🆕 1.7)
+
+### 设计意图
+
+兴（inspiration）的基础自然恢复：每旬 +3。上限逻辑与 望 完全对齐（无硬上限，纯 soft_max + 溢出减半）：
+- `inspiration.tres` 中 `hard_max = -1`, `soft_max = 50`
+- 每旬 `_apply_xun_base_inspiration()` 执行 `append_stat(INSPIRATION, +3)`，若超过 soft_max 则溢出减半
+- NPC inner_circle 的 `xing_upper_limit` 在其自己的 `_apply_npc_inner_circle_bonus()` 中叠加处理
+
+### 管线位置
+
+在 `_sync_health_ap_traits()` (1.5) 之后、`_apply_npc_inner_circle_bonus()` (1.8) 之前。
+叙事顺序：「健康状态确定 → 自身灵感微发 → 友人激发助兴 → 生存消耗」。
+
+### named_amounts 条目
+
+`tools/data/named_amounts.json` 新增：
+- `s_xing_gain = 3`
+- `m_xing_gain = 6`
+- `l_xing_gain = 10`
+
+### 登高加兴 (resource_converters.csv)
+
+三个登高行动的 success DSL 添加兴获取：
+- 曲江池 (l_success_rate, 最简单) → `s_xing_gain` (3)
+- 乐游原 (m_success_rate) → `m_xing_gain` (6)
+- 少陵原 (m_success_rate, +roll_imaginary) → `l_xing_gain` (10)
 
 ## 旬末没钱事件
 

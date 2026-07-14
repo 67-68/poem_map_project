@@ -58,7 +58,8 @@ perception_text = "诗兴大发，下笔如有神"
 
 [resource]
 script = ExtResource("1_insp")
-hard_max = 100
+hard_max = -1
+soft_max = 50
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])
 uuid = "inspiration"

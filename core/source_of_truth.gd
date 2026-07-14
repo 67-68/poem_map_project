@@ -37,7 +37,7 @@ static var debug_dashboard_state = {
 		"time": 10,
 		"astuteness": 0,
 		"composure": 0,
-		"inspiration": 0,
+		"inspiration": 100000,
 		"momentum": 0,
 		"prestige": 0,
 		"talent": 0,

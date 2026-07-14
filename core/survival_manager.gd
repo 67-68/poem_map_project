@@ -275,6 +275,10 @@ func _process_single_xun_settlement():
 	# 1.5: 健康→AP 阶梯同步（必须在 aggregate 之后，确保 trait 持续效果已生效）
 	_sync_health_ap_traits()
 	
+	# 🆕 1.7: 每旬基础兴获取（+3, soft_max=50 溢出减半）
+	# 在 NPC 加成之前执行：叙事顺序「自身灵感微发 → 友人激发助兴 → 生存消耗」
+	_apply_xun_base_inspiration()
+	
 	# 🆕 1.8: NPC inner_circle 每旬属性加成
 	# 必须在 health sync 之后（健康不影响 NPC 加成）、cost 之前（加成先于扣除）。
 	_apply_npc_inner_circle_bonus()
@@ -436,6 +440,36 @@ func _apply_npc_inner_circle_bonus() -> void:
 		Logging.info("[SurvivalManager]   %s: 设定为 %d" % [cn_name, new_val])
 	
 	Logging.info("[SurvivalManager] _apply_npc_inner_circle_bonus: 加成完成")
+
+
+# ─── 🆕 每旬基础兴获取 ─────────────────────────────────────────────
+## 每旬 +3 inspiration（s_xing_gain）。
+## 无硬上限（hard_max = -1），采用 soft_max=50 溢出减半模型（与 望 对齐）。
+## 先从 Database 读取 Property 模板获取 soft_max，使用 append_stat 修正，
+## 若超过 soft_max 则溢出部分减半。
+func _apply_xun_base_inspiration() -> void:
+	var BASE_XING_GAIN: int = 3
+	Logging.info("[SurvivalManager] _apply_xun_base_inspiration: 基础兴 +%d" % BASE_XING_GAIN)
+	
+	var current: int = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
+	var prop_template = Database.get_property("inspiration")
+	var soft_max: int = -1
+	if prop_template and prop_template.soft_max >= 0:
+		soft_max = prop_template.soft_max
+		Logging.info("[SurvivalManager]   inspiration soft_max=%d, current=%d" % [soft_max, current])
+	
+	var new_val: int = current + BASE_XING_GAIN
+	
+	# soft_max 溢出减半
+	if soft_max >= 0 and new_val > soft_max:
+		var overflow: int = new_val - soft_max
+		var half_overflow: int = overflow / 2
+		new_val = soft_max + half_overflow
+		Logging.info("[SurvivalManager]   inspiration 超出 soft_max %d (溢出 %d)，减半 → %d" % [soft_max, overflow, new_val])
+	
+	# 直接 set_stat_val（跳过 append_stat 的 trait buffer / modifier 修正，避免二次叠加）
+	PlayerState.set_stat_val(ENUMS.PROPS.INSPIRATION, new_val)
+	Logging.info("[SurvivalManager]   inspiration 设定为 %d" % new_val)
 
 
 # ─── 🆕 属性自然衰减（每旬结算时执行） ────────────────────────────

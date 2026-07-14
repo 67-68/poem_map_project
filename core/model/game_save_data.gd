@@ -32,6 +32,11 @@ var flags: Dictionary = {}
 var traits: Array[String] = []
 
 # ════════════════════════════════════════════════════════════════
+# 理念 — 玩家已解锁的理念 UUID 列表
+# ════════════════════════════════════════════════════════════════
+var current_unlock_ideas: Array[String] = []
+
+# ════════════════════════════════════════════════════════════════
 # 身份 / 位置
 # ════════════════════════════════════════════════════════════════
 var player_name: String = "杜甫"
@@ -111,6 +116,7 @@ func to_dict() -> Dictionary:
 		"emotions": _copy_dict(emotions),
 		"flags": _copy_dict(flags),
 		"traits": traits.duplicate(),
+		"current_unlock_ideas": current_unlock_ideas.duplicate(),
 		"player_name": player_name,
 		"current_location": current_location,
 		"ambition_uuid": ambition_uuid,
@@ -142,6 +148,7 @@ func from_dict(d: Dictionary) -> void:
 	emotions = _safe_dict(d, "emotions")
 	flags = _safe_dict(d, "flags")
 	traits = _safe_array_str(d, "traits")
+	current_unlock_ideas = _safe_array_str(d, "current_unlock_ideas")
 	player_name = d.get("player_name", "杜甫")
 	current_location = d.get("current_location", "yong_zhou")
 	ambition_uuid = d.get("ambition_uuid", "")

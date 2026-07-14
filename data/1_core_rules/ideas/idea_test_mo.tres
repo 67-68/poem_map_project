@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Idea" format=3]
+
+[ext_resource type="Script" path="res://core/idea.gd" id="1"]
+[ext_resource type="Script" path="res://core/buff_operator.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("2")
+prop_name = "composure"
+amount = 3
+
+[sub_resource type="Resource" id="Resource_2"]
+script = ExtResource("2")
+prop_name = "prestige"
+amount = 1
+
+[resource]
+script = ExtResource("1")
+uuid = "idea_test_mo"
+name = "默：冲淡"
+description = "万物过手不留痕——淡化情绪的起落，保持内心的恒定与宁静"
+idea_buffs = Array[ExtResource("2")]([SubResource("Resource_1"), SubResource("Resource_2")])
+current_idea_level = -1
+idea_demonstrations = Array[String](["情绪的波动幅度降低 15%", "持续保持低情绪时获得额外沉静感悟"])
+idea_cost_name = "inspiration"
+idea_cost_amount = 250
+counter_idea = "idea_test_xing"

@@ -414,6 +414,8 @@
     "1_core_rules/properties/time.tres",
     "1_core_rules/factions/TANG_CENTRAL.tres",
     "1_core_rules/factions/TUBO_KHANATE.tres",
+    "1_core_rules/ideas/idea_test_mo.tres",
+    "1_core_rules/ideas/idea_test_xing.tres",
     "1_core_rules/events/fallback/baiye_fallback.tres",
     "1_core_rules/events/fallback/baiye_mass_distribution_fallback.tres",
     "1_core_rules/events/fallback/baiye_normal_fallback.tres",
@@ -604,6 +606,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-14T06:58:14.045390+00:00",
-  "total": 603
+  "generated_at": "2026-07-14T08:08:54.693884+00:00",
+  "total": 605
 }

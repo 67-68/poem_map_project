@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="Idea" format=3]
+
+[ext_resource type="Script" path="res://core/idea.gd" id="1"]
+[ext_resource type="Script" path="res://core/buff_operator.gd" id="2"]
+
+[sub_resource type="Resource" id="Resource_1"]
+script = ExtResource("2")
+prop_name = "prestige"
+amount = 2
+
+[sub_resource type="Resource" id="Resource_2"]
+script = ExtResource("2")
+prop_name = "inspiration"
+amount = 3
+
+[sub_resource type="Resource" id="Resource_3"]
+script = ExtResource("2")
+prop_name = "talent"
+amount = 5
+
+[resource]
+script = ExtResource("1")
+uuid = "idea_test_xing"
+name = "兴：存在城府"
+description = "城府越深，兴越盛——以城府之道获取兴，步步为营"
+idea_buffs = Array[ExtResource("2")]([SubResource("Resource_1"), SubResource("Resource_2"), SubResource("Resource_3")])
+current_idea_level = -1
+idea_demonstrations = Array[String](["平时的兴获取效率提高 20%", "任何一个行动都会附带少量的兴获取，缓慢增加灵感", "兴的积蓄会让灵感也缓慢提升"])
+idea_cost_name = "inspiration"
+idea_cost_amount = 300
+counter_idea = ""

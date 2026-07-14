@@ -50,3 +50,6 @@ func describe_preview() -> String:
 
 func init(_context: Dictionary) -> Dictionary:
     return _context
+
+func on_exit(_context: Dictionary) -> Dictionary:
+    return _context

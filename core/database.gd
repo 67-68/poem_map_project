@@ -49,6 +49,7 @@ var eras: Dictionary = {}
 
 var chat_bubble_data: Dictionary
 var focused_chat_data: Dictionary
+var ideas: Dictionary
 var ambitions: Dictionary
 var traits: Dictionary
 var properties: Dictionary
@@ -135,6 +136,7 @@ func _init() -> void:
 	properties = r.bases.get("1_core_rules.properties", {})
 	base_province = r.bases.get("1_core_rules.base_province", {})
 	territories = r.bases.get("1_core_rules.territories", {})
+	ideas = r.bases.get("1_core_rules.ideas", {})
 
 	# traits 需要 uuid→t.uuid 重映射（原始代码在 DataHelper 中做此处理）
 	var raw_traits = r.bases.get("1_core_rules.traits", {})
@@ -450,6 +452,9 @@ func get_focused_chat(uuid: String):
 
 func get_chat_bubble(uuid: String):
 	return chat_bubble_data.get(uuid)
+
+func get_idea(uuid: String):
+	return ideas.get(uuid)
 
 func get_ambition(uuid: String):
 	return ambitions.get(uuid)
