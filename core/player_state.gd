@@ -100,6 +100,9 @@ var stay_place: String:
 		var _old = GameSave.data.stay_place
 		if val.is_empty():
 			val = "xishi"
+		if _old == val:
+			Logging.info("[PlayerState.stay_place] SETTER: SKIP same-value old='%s' new='%s'" % [_old, val])
+			return
 		Logging.info("[PlayerState.stay_place] SETTER: old='%s' → new='%s' (caller stack: %s)" % [_old, val, str(get_stack())])
 		GameSave.data.stay_place = val
 		stay_place_changed.emit(val)

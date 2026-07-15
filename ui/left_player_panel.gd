@@ -68,6 +68,11 @@ func _ready() -> void:
 	if not PlayerState.stay_place_changed.is_connected(_refresh_place_label):
 		PlayerState.stay_place_changed.connect(_refresh_place_label)
 		Logging.info("LeftPlayerPanel: connected to stay_place_changed")
+	# 独立探针 — 验证信号是否到达
+	if not PlayerState.stay_place_changed.is_connected(_place_changed_probe):
+		PlayerState.stay_place_changed.connect(_place_changed_probe)
+		Logging.info("LeftPlayerPanel: connected _place_changed_probe to stay_place_changed")
+	Logging.info("[PLACE_PROBE] stay_place_changed has %d connections" % PlayerState.stay_place_changed.get_connections().size())
 
 	# 构建 prop label 映射表 + 首次填充
 	_build_prop_label_map()
@@ -139,8 +144,13 @@ func _build_prop_label_map() -> void:
 
 # ── 驻留地点 PlaceLabel ─────────────────────────────────
 
+func _place_changed_probe(_place_str: String) -> void:
+	Logging.info("[PLACE_PROBE] SIGNAL RECEIVED! place='%s', stay_place='%s', _place_label=%s, is_inside_tree=%s" % [_place_str, PlayerState.stay_place, "valid" if _place_label else "NULL", str(is_inside_tree())])
+	_refresh_place_label()
+
 func _refresh_place_label() -> void:
 	if not _place_label:
+		Logging.info("[PLACE_PROBE] _refresh_place_label: _place_label is NULL, aborting")
 		return
 	var cn := ENUMS.place_to_cn(PlayerState.stay_place)
 	var place_str: String = PlayerState.stay_place
