@@ -79,7 +79,8 @@ enum PROPS {
 enum CHANGAN_PLACES {
 	XISHI,
 	PINGKANGFANG,
-	HUANGCHENG    
+	HUANGCHENG,
+	TAISHAN
 }
 
 # 【西市/暗巷】(底层/S级)： 你的黑市、地痞、地下神医都在这。消耗海量 AP，见不得光。
@@ -236,6 +237,7 @@ enum TRAITS {
 	# Imaginary 到期转化疾病（Lv2→风寒 Lv3→呕心沥血）
 	DISEASE_FENGHAN_IMAGINARY,
 	DISEASE_OUXINLIXUE,
+	STRONG_BODY,
 }
 
 enum POEM_TYPE {
@@ -362,11 +364,13 @@ const PLACE_STR_MAP: Dictionary = {
  CHANGAN_PLACES.XISHI: "xishi",
  CHANGAN_PLACES.PINGKANGFANG: "pingkangfang",
  CHANGAN_PLACES.HUANGCHENG: "huangcheng",
+ CHANGAN_PLACES.TAISHAN: "taishan",
 }
 const PLACE_CN_MAP: Dictionary = {
  "xishi": "西市",
  "pingkangfang": "平康坊",
  "huangcheng": "皇城",
+ "taishan": "泰山",
 }
 
 ## CHANGAN_PLACES 枚举 → String key（用于 GameSave 持久化）
@@ -378,6 +382,7 @@ static func from_place_str(s: String) -> CHANGAN_PLACES:
 	match s:
 		"pingkangfang": return CHANGAN_PLACES.PINGKANGFANG
 		"huangcheng": return CHANGAN_PLACES.HUANGCHENG
+		"taishan": return CHANGAN_PLACES.TAISHAN
 	return CHANGAN_PLACES.XISHI
 
 ## String key → 中文名

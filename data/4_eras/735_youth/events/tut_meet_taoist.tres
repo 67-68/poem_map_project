@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://bnyfctwg31me5"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_r7xqf"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_7dn3m"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_ol3f1"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_s3k8p"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="5_rs4l6"]
+
+[sub_resource type="Resource" id="Resource_opt1_cr"]
+script = ExtResource("3_ol3f1")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt1"]
+script = ExtResource("4_s3k8p")
+choice_result = SubResource("Resource_opt1_cr")
+description = "我来游历天下，增长见识"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_opt2_cr"]
+script = ExtResource("3_ol3f1")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt2"]
+script = ExtResource("4_s3k8p")
+choice_result = SubResource("Resource_opt2_cr")
+description = "我来寻找作诗的灵感"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_opt3_cr"]
+script = ExtResource("3_ol3f1")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt3"]
+script = ExtResource("4_s3k8p")
+choice_result = SubResource("Resource_opt3_cr")
+description = "我……我也不知道，就是觉得该来"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_rs4l6")
+options = Array[ExtResource("1_r7xqf")]([SubResource("Resource_opt1"), SubResource("Resource_opt2"), SubResource("Resource_opt3")])
+uuid = "tut_meet_taoist"
+name = "泰山脚下"
+description = "泰山巍峨，山脚下鸟语花香，溪水潺潺。你正沉醉于这天地间的灵气，忽见一位白发道士端坐于青石之上。他仙风道骨，手持拂尘，双目微阖，像是早已在此等候多时。
+
+他缓缓睁开眼，打量着你片刻，开口问道：「少年人，你为何来到这泰山？」"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_xc4ki"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_w3k5m"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_3eals"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_m3yhk"]
+
+[sub_resource type="Resource" id="Resource_p2u5r"]
+script = ExtResource("4_3eals")
+
+[resource]
+script = ExtResource("5_m3yhk")
+_action_tags = Array[int]([])
+fallback_event_uuid = "tut_chuyou_fallback"
+failed_result = SubResource("Resource_p2u5r")
+uuid = "tut_chuyou_north"
+name = "北岩望岳"
+description = "攀上北面岩壁，远眺泰山主峰"

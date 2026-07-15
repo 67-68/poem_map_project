@@ -104,6 +104,23 @@ var current_xun := "上旬"
 var current_day := 1
 const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
 
+# ── Tutorial 动态每旬天数 ──
+var _days_per_xun_override: int = -1  # -1 = 使用默认值 10
+
+## 返回当前每旬天数（tutorial 期间 2，正常 10）
+func get_days_per_xun() -> int:
+	return _days_per_xun_override if _days_per_xun_override > 0 else 10
+
+## Tutorial 专用：设置每旬天数
+func set_days_per_xun(days: int) -> void:
+	_days_per_xun_override = days
+	Logging.info("TimeService: days_per_xun override → %d" % days)
+
+## Tutorial 专用：恢复默认每旬天数
+func reset_days_per_xun() -> void:
+	_days_per_xun_override = -1
+	Logging.info("TimeService: days_per_xun override 已清除，恢复默认 10")
+
 func _ready() -> void:
 	EventBus.request_advance_time.connect(func(days):
 		advance_time(days)
@@ -113,7 +130,7 @@ func _ready() -> void:
 	GameState.year = GameState.start_year
 	_total_days_elapsed = int(GameState.year * DAYS_PER_YEAR)
 	_tick_checkpoint = _total_days_elapsed
-	current_day = _total_days_elapsed % 10
+	current_day = _total_days_elapsed % get_days_per_xun()
 	current_day_of_year = _total_days_elapsed % DAYS_PER_YEAR
 	Logging.info("TimeService._ready: GameState.year set to %f, event_queue has %d items" % [GameState.year, event_queue.size()])
 	if event_queue.size() > 0:
@@ -139,7 +156,7 @@ func _process(delta: float) -> void:
 	_emit_time_events()
 	# current_day / current_day_of_year 在 _emit_time_events() 之后更新，
 	# 确保与 _total_days_elapsed 同步（避免帧滞后显示上一帧的旧值）
-	current_day = _total_days_elapsed % 10
+	current_day = _total_days_elapsed % get_days_per_xun()
 	current_day_of_year = _total_days_elapsed % DAYS_PER_YEAR
 
 
@@ -221,7 +238,7 @@ func advance_time(days_to_add: int):
 	_emit_time_events()
 	
 	# 4. 同步 current_day / current_day_of_year（不再等 _process 下一个帧才更新）
-	current_day = _total_days_elapsed % 10
+	current_day = _total_days_elapsed % get_days_per_xun()
 	current_day_of_year = _total_days_elapsed % DAYS_PER_YEAR
 
 func _emit_time_events():
@@ -232,7 +249,8 @@ func _emit_time_events():
 			var simulation_day = _tick_checkpoint + i + 1
 			var day_of_month = (simulation_day % 30)
 			
-			if day_of_month == 9 or day_of_month == 19 or day_of_month == 29:
+			var dp_xun := get_days_per_xun()
+			if day_of_month == dp_xun - 1 or day_of_month == 2 * dp_xun - 1 or day_of_month == 3 * dp_xun - 1:
 				on_xun_tick.emit()
 				current_xun = get_xun_text(day_of_month)
 			if day_of_month == 29:
@@ -335,25 +353,31 @@ func _check_event_queue():
 ## 当前已在边界上时返回 10（走到下一个）。在 29 时额外处理，返回 10 而非 0。
 func get_days_to_next_xun() -> int:
 	var day_of_month: int = _total_days_elapsed % 30
-	if day_of_month < 9:
-		return 9 - day_of_month
-	elif day_of_month < 19:
-		return 19 - day_of_month
-	elif day_of_month < 29:
-		return 29 - day_of_month
+	var dp_xun := get_days_per_xun()
+	# xun boundaries at day (dp_xun-1), (2*dp_xun-1), (3*dp_xun-1)
+	var b1 := dp_xun - 1
+	var b2 := 2 * dp_xun - 1
+	var b3 := 3 * dp_xun - 1
+	if day_of_month < b1:
+		return b1 - day_of_month
+	elif day_of_month < b2:
+		return b2 - day_of_month
+	elif day_of_month < b3:
+		return b3 - day_of_month
 	else:
-		# day >= 29: 走到下个月的 day 9
-		return 39 - day_of_month  # 例: day 29 → 10天
+		# day >= b3: 走到下个月的 day b1
+		return (30 + b1) - day_of_month
 
 
 func get_xun_text(day: int) -> String:
-	"""
-	注意！不使用一般的计数方法
-	直接根据9，19，29判定！！！
-	"""
-	if day == 9:
+	var dp_xun := get_days_per_xun()
+	# xun boundaries at day (dp_xun-1), (2*dp_xun-1), (3*dp_xun-1)
+	var b1 := dp_xun - 1
+	var b2 := 2 * dp_xun - 1
+	var b3 := 3 * dp_xun - 1
+	if day == b2:
 		return "中旬"
-	elif day == 19:
+	elif day == b3:
 		return "下旬"
 	else:
 		return "上旬"

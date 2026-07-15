@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
 [ext_resource type="PackedScene" uid="uid://6ilphg3nn6wx" path="res://ui/debug_info.tscn" id="16_cegan"]
 [ext_resource type="PackedScene" uid="uid://d323p71vdp3wn" path="res://ui/social_connection_page.tscn" id="17_xuqvo"]
+[ext_resource type="PackedScene" uid="uid://bfevseldghfh0" path="res://ui/note_page.tscn" id="42_note"]
 [ext_resource type="PackedScene" uid="uid://bagmf63e3hmbi" path="res://ui/left_player_panel.tscn" id="22_0odxb"]
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
 [ext_resource type="Script" uid="uid://dv28khs0ehggj" path="res://ui/time_breath_ui.gd" id="24_htxhm"]
@@ -158,6 +159,9 @@ script = ExtResource("34_d2t1y")
 visible = false
 
 [node name="IdeaPage" parent="UI" unique_id=992720835 instance=ExtResource("41_idea")]
+visible = false
+
+[node name="NotePage" parent="UI" unique_id=992720836 instance=ExtResource("42_note")]
 visible = false
 
 [node name="TapeLayer" type="CanvasLayer" parent="." unique_id=2047123948]

@@ -57,6 +57,13 @@ const ANIM_DURATION: float = 0.3
 # ── 生命周期 ─────────────────────────────────────────────
 
 func _ready() -> void:
+	# ── Tutorial 可见性控制 ──
+	if PlayerState.has_flag("tutorial_completed"):
+		# 非 tutorial 模式，所有属性默认可见
+		call_deferred("_show_all_properties")
+	else:
+		# Tutorial 未完成：默认全部隐藏，由 AnimationController 逐步揭示
+		call_deferred("_hide_all_properties_tutorial")
 	Logging.info("LeftPlayerPanel: _ready start")
 
 	# 静态数据
@@ -431,6 +438,55 @@ func _refresh_trait_grid() -> void:
 	if children.size() != expected_total:
 		Logging.info("LeftPlayerPanel: TraitGrid count changed (children=%d, traits=%d(filtered), imaginaries=%d), rebuilding" % [children.size(), filtered_count, imag_count])
 		_rebuild_trait_grid()
+
+# ── Tutorial 可见性控制 API ──────────────────────────────
+
+## 设置单个属性行的可见性
+## prop_key: "health"/"money"/"inspiration"/"momentum"/"prestige"/"talent"/"astuteness"/"composure"
+func set_property_visible(prop_key: String, v: bool) -> void:
+	var labels: Dictionary = _prop_label_map.get(prop_key)
+	if labels:
+		# 找到 prop 的父 HBoxContainer，通过 _prop_label_map 反向查找
+		# 每个 labels 包含 value label 和 perception label
+		var value_label: Label = labels.get("value")
+		if value_label:
+			value_label.visible = v
+		var perception_label: Label = labels.get("perception")
+		if perception_label:
+			perception_label.visible = v
+		Logging.info("LeftPlayerPanel.set_property_visible: prop_key='%s' visible=%s" % [prop_key, v])
+
+## 设置 TraitGrid 区域的可见性
+func set_trait_grid_visible(v: bool) -> void:
+	_trait_grid.visible = v
+	Logging.info("LeftPlayerPanel.set_trait_grid_visible: visible=%s" % [v])
+
+## 非 tutorial 模式：显示所有属性 + TraitGrid
+func _show_all_properties() -> void:
+	for prop_key in _prop_label_map:
+		var labels: Dictionary = _prop_label_map[prop_key]
+		var value_label: Label = labels.get("value")
+		if value_label:
+			value_label.visible = true
+		var perception_label: Label = labels.get("perception")
+		if perception_label:
+			perception_label.visible = true
+	_trait_grid.visible = true
+	Logging.info("LeftPlayerPanel: 全部属性已设为可见（非 tutorial 模式）")
+
+## Tutorial 模式：默认隐藏所有属性 + TraitGrid
+func _hide_all_properties_tutorial() -> void:
+	for prop_key in _prop_label_map:
+		var labels: Dictionary = _prop_label_map[prop_key]
+		var value_label: Label = labels.get("value")
+		if value_label:
+			value_label.visible = false
+		var perception_label: Label = labels.get("perception")
+		if perception_label:
+			perception_label.visible = false
+	_trait_grid.visible = false
+	Logging.info("LeftPlayerPanel: 全部属性已设为隐藏（tutorial 模式，待逐步揭示）")
+
 
 # ── 侧滑动画 ────────────────────────────────────────────
 

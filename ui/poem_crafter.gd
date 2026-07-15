@@ -39,6 +39,9 @@ var _cached_line2_text: String = ""
 ## V9.2: 缓存创作代价 operators（切换 mode 时复用，代价与 mode 无关）
 var _cached_cost_operators: Array = []
 
+## 🆕 创作诗词所需灵感（兴）消耗
+const POEM_CRAFT_INSPIRATION_COST := 20
+
 ## ──────────────────────────────────────────────
 ## 文学化评价常量字典
 ## ──────────────────────────────────────────────
@@ -253,6 +256,14 @@ func _on_button_pressed() -> void:
 		$Panel/InputImagPanel/RichTextLabel.text = "已有诗作，先将其送出或题壁后再来。"
 		return
 
+	# 🆕 灵感（兴）检查：创作诗词需要至少 POEM_CRAFT_INSPIRATION_COST 兴
+	var current_inspiration: int = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
+	Logging.info('PoemCrafter(V9.1): 灵感检查 — 当前兴=%d, 需要=%d' % [current_inspiration, POEM_CRAFT_INSPIRATION_COST])
+	if current_inspiration < POEM_CRAFT_INSPIRATION_COST:
+		Logging.warn('PoemCrafter(V9.1): 灵感不足，拒绝创作 — 当前%d < 需要%d' % [current_inspiration, POEM_CRAFT_INSPIRATION_COST])
+		$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]灵感不足，至少需要 %d 兴方能创作。[/color]" % POEM_CRAFT_INSPIRATION_COST
+		return
+
 	# ── 2. 缓存必须存在（预览阶段已锁定结果） ──
 	if _cached_result == null:
 		Logging.err('PoemCrafter(V9.1): 缓存缺失 — 预览未完成或已过期，阻断创作')
@@ -280,6 +291,11 @@ func _on_button_pressed() -> void:
 	PlayerState.add_trait(poem.uuid)
 	Database.traits[poem.uuid] = poem
 	Logging.info('PoemCrafter(V10): Poem registered to traits system — uuid=%s' % poem.uuid)
+
+	# 🆕 消耗灵感（兴）：创作固定消耗 POEM_CRAFT_INSPIRATION_COST 兴
+	var insp_cost := -POEM_CRAFT_INSPIRATION_COST
+	PlayerState.append_stat(ENUMS.PROPS.INSPIRATION, insp_cost)
+	Logging.info('PoemCrafter(V10): 消耗灵感(兴) — PoEM_CRAFT_INSPIRATION_COST=%d, 当前兴=%d' % [POEM_CRAFT_INSPIRATION_COST, PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)])
 
 	# ── 4. 先执行创作代价（天数 + 健康消耗）──
 	if not _cached_cost_operators.is_empty():
@@ -467,22 +483,28 @@ func _pick_random_from_pool(pool: Array) -> String:
 
 
 ## V9.2: 从缓存 cost operators 构建代价预览行（委托给 ActionHintBuilder）
+## 🆕 额外追加灵感（兴）消耗预览
 func _build_cost_preview_lines() -> Array[String]:
 	var lines: Array[String] = []
-	if _cached_cost_operators.is_empty():
-		Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — cost operators 为空，跳过")
-		return lines
 	
-	var previews: Array[String] = ActionHintBuilder.build_operator_preview(_cached_cost_operators)
-	if previews.is_empty():
-		Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — ActionHintBuilder 返回空预览")
-		return lines
-	
-	# 分隔线 + 代价行（使用 BBCode 契约）
+	# 分隔线
 	lines.append(BBCode.color_size("━━━ 创作代价 ━━━", BBCode.COLOR_DANGER, 13))
-	for p in previews:
-		lines.append(BBCode.color(p, BBCode.COLOR_DANGER))
-	Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — %d 行" % previews.size())
+	
+	# 🆕 灵感消耗预览（始终显示）
+	var current_inspiration: int = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
+	var insp_preview: String = "消耗灵感：%d 兴" % POEM_CRAFT_INSPIRATION_COST
+	if current_inspiration < POEM_CRAFT_INSPIRATION_COST:
+		insp_preview += " [color=#ff4444]（不足）[/color]"
+	insp_preview += " [color=#888888]当前 %d[/color]" % current_inspiration
+	lines.append(BBCode.color(insp_preview, BBCode.COLOR_DANGER))
+	
+	# 时间/健康代价（来自 _cached_cost_operators）
+	if not _cached_cost_operators.is_empty():
+		var previews: Array[String] = ActionHintBuilder.build_operator_preview(_cached_cost_operators)
+		for p in previews:
+			lines.append(BBCode.color(p, BBCode.COLOR_DANGER))
+	
+	Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — 灵感消耗=%d, cost_ops=%d, 总%d行" % [POEM_CRAFT_INSPIRATION_COST, _cached_cost_operators.size(), lines.size()])
 	return lines
 
 

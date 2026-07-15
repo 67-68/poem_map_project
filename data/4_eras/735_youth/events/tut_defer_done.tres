@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bo5t2"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g5h7p"]
+[ext_resource type="Script" uid="uid://f2uxsuxcyoky" path="res://core/operators/roll_imaginary_operator.gd" id="3_r8k2n"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_x3l6q"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_v7m9w"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="6_t2b8r"]
+
+[sub_resource type="Resource" id="Resource_ri"]
+script = ExtResource("3_r8k2n")
+level = 3
+metadata/_custom_type_script = "uid://f2uxsuxcyoky"
+
+[sub_resource type="Resource" id="Resource_opt_cr"]
+script = ExtResource("4_x3l6q")
+operators = Array[ExtResource("2_g5h7p")]([SubResource("Resource_ri")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("5_v7m9w")
+choice_result = SubResource("Resource_opt_cr")
+description = "云雾散了！看，泰山！"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("6_t2b8r")
+options = Array[ExtResource("1_bo5t2")]([SubResource("Resource_opt")])
+uuid = "tut_defer_done"
+name = "云开雾散"
+description = "两旬时光匆匆而过。这一日清晨，你来到道士打坐处，见他缓缓睁开眼睛。\n\n「成了。」道士拂尘一挥。\n\n你抬头望去，笼罩山顶的浓雾正以肉眼可见的速度消散。阳光穿透云层，将泰山之巅染成一片金黄。那巍峨的山体第一次完整地展现在你面前——这就是泰山，如画，如诗。"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_base"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="2_prop"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="3_action"]
+
+[sub_resource type="Resource" id="Resource_cost"]
+script = ExtResource("2_prop")
+str_props = "money"
+value = -15
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[sub_resource type="Resource" id="Resource_gain"]
+script = ExtResource("2_prop")
+str_props = "inspiration"
+value = 40
+metadata/_custom_type_script = "uid://d25kbxawh53k4"
+
+[resource]
+script = ExtResource("3_action")
+_action_tags = Array[int]([34, 44])
+fallback_event_uuid = "duzhuo_heyaojiu_fallback"
+possibility = "l_success_rate"
+uuid = "tut_duzhuo_heyaojiu"
+name = "闲居 · 喝药酒（醒神）"
+description = "药酒提神激发文思"
+day_consumed = 1.0
+action_results = Array[ExtResource("1_base")]([SubResource("Resource_cost"), SubResource("Resource_gain")])

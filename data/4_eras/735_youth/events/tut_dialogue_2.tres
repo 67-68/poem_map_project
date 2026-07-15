@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_fh9w2"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_k7v3n"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_b5r4q"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_p8g2h"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="5_m3k6j"]
+
+[sub_resource type="Resource" id="Resource_opt_cr"]
+script = ExtResource("3_b5r4q")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_p8g2h")
+choice_result = SubResource("Resource_opt_cr")
+description = "晚辈想游历四方，见识天地广阔"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_m3k6j")
+options = Array[ExtResource("1_fh9w2")]([SubResource("Resource_opt")])
+uuid = "tut_dialogue_2"
+name = "少年意气"
+description = "道士闻言，微微颔首：「年纪轻轻便有此志，难得。」\n\n他抬头望向山间云雾，缓缓道：「这泰山虽不算天下最高，却也是个好起点。往东可望大海，往西便是中原。你若要游历，从此处出发倒也不差。」\n\n你顺着他的目光看去，山峦层叠，云海翻涌，心中不由得生出几分豪气。"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

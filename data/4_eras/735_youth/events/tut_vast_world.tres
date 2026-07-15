@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bf3q5"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g5h7p"]
+[ext_resource type="Script" uid="uid://f2uxsuxcyoky" path="res://core/operators/roll_imaginary_operator.gd" id="3_r8k2n"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_x3l6q"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_v7m9w"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="6_t2b8r"]
+
+[sub_resource type="Resource" id="Resource_ri1"]
+script = ExtResource("3_r8k2n")
+level = 3
+metadata/_custom_type_script = "uid://f2uxsuxcyoky"
+
+[sub_resource type="Resource" id="Resource_ri2"]
+script = ExtResource("3_r8k2n")
+level = 3
+metadata/_custom_type_script = "uid://f2uxsuxcyoky"
+
+[sub_resource type="Resource" id="Resource_opt_cr"]
+script = ExtResource("4_x3l6q")
+operators = Array[ExtResource("2_g5h7p")]([SubResource("Resource_ri1"), SubResource("Resource_ri2")])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("5_v7m9w")
+choice_result = SubResource("Resource_opt_cr")
+description = "好一片天地"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("6_t2b8r")
+options = Array[ExtResource("1_bf3q5")]([SubResource("Resource_opt")])
+uuid = "tut_vast_world"
+name = "天地苍茫"
+description = "道士带你绕过几条山路，眼前豁然开朗——一整片开阔的山谷，远处群山如黛，云海翻涌。风声穿过松林，带着湿润的草木气息。\n\n你站在崖边，看着脚下绵延至天际的山脉，胸中涌起一股说不清的情绪。天地如此之大，而你只是其中一粒尘埃。\n\n道士在你身旁站定，轻声道：「贫道需打坐片刻，你自去转转吧。这山间还有不少可看之处。」\n\n说罢，他寻了一块青石盘膝坐下，闭上双眼，不再言语。"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

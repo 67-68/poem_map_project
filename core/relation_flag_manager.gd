@@ -341,6 +341,7 @@ static func set_person_state(target_tag: String, state: String) -> void:
 	var doc = _get_or_create_npc_doc(target_tag)
 	doc.person_state = state
 	Logging.info("RelationFlagManager: person_state set to '%s' for %s" % [state, target_tag])
+	EventBus.on_person_state_changed.emit(target_tag, state)
 
 ## 便捷判断：目标当前状态是否等于指定值
 ##

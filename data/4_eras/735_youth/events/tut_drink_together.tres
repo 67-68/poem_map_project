@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bm3s2"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g5h7p"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_x3l6q"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_v7m9w"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="5_t2b8r"]
+
+[sub_resource type="Resource" id="Resource_opt_cr"]
+script = ExtResource("3_x3l6q")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_v7m9w")
+choice_result = SubResource("Resource_opt_cr")
+description = "与道长对饮"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_t2b8r")
+options = Array[ExtResource("1_bm3s2")]([SubResource("Resource_opt")])
+uuid = "tut_drink_together"
+name = "共饮"
+description = "你取出随身携带的酒囊，在道士面前晃了晃。\n\n道士眼睛一亮：「好小子，来泰山还带着酒？」\n\n你们二人在青石上对坐，几杯下肚，道士的话匣子渐渐打开。他讲起年轻时云游各处的见闻，讲起各处的风土人情，语气中透着几分过来人的感慨。\n\n酒酣耳热，你感觉与这道士之间的距离近了不少。"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

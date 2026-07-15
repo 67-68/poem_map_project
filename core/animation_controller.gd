@@ -192,6 +192,18 @@ func _execute_stage(stage: Dictionary, entry_id: String, uuid: String) -> void:
 			var shake_duration: float = stage.get("duration", 8.0)
 			var shake_intensity: float = stage.get("intensity", 2.0)
 			_camera_shake(shake_duration, shake_intensity)
+		"set_prop_visible":
+			_set_prop_visible(stage)
+		"set_trait_grid_visible":
+			_set_trait_grid_visible(stage)
+		"set_right_section_visible":
+			_set_right_section_visible(stage)
+		"play_sound":
+			_play_sound(stage)
+		"show_special_label":
+			_show_special_label(stage)
+		"show_panel":
+			_show_panel_target(stage)
 		_:
 			Logging.err("AnimationController._execute_stage: 未知 action='%s'" % action)
 
@@ -562,6 +574,103 @@ func _set_title_font_size(entry_id: String, font_size: int) -> void:
 		Logging.err("AnimationController._set_title_font_size: 未找到 TitleLabel (entry_id='%s')" % entry_id)
 
 
+# ═══════════════════════════════════════════════
+# Tutorial Actions — set_prop_visible / set_trait_grid_visible / set_right_section_visible / play_sound / show_special_label
+# ═══════════════════════════════════════════════
+
+## 设置左侧面板中单个属性行的可见性
+## stage.prop_key: "health"/"money"/"inspiration"/"momentum"/"prestige"/"talent"/"astuteness"/"composure"
+## stage.visible: true/false
+func _set_prop_visible(stage: Dictionary) -> void:
+	var left_panel := _get_left_panel()
+	if not left_panel:
+		Logging.err("AnimationController._set_prop_visible: 未找到 left_panel")
+		return
+	if not left_panel.has_method("set_property_visible"):
+		Logging.err("AnimationController._set_prop_visible: left_panel 没有 set_property_visible 方法")
+		return
+	var prop_key: String = stage.get("prop_key", "")
+	var visible: bool = stage.get("visible", true)
+	left_panel.set_property_visible(prop_key, visible)
+	Logging.info("AnimationController._set_prop_visible: prop_key='%s' visible=%s" % [prop_key, visible])
+
+## 设置 TraitGrid 区域的可见性
+## stage.visible: true/false
+func _set_trait_grid_visible(stage: Dictionary) -> void:
+	var left_panel := _get_left_panel()
+	if not left_panel:
+		Logging.err("AnimationController._set_trait_grid_visible: 未找到 left_panel")
+		return
+	if not left_panel.has_method("set_trait_grid_visible"):
+		Logging.err("AnimationController._set_trait_grid_visible: left_panel 没有 set_trait_grid_visible 方法")
+		return
+	var visible: bool = stage.get("visible", true)
+	left_panel.set_trait_grid_visible(visible)
+	Logging.info("AnimationController._set_trait_grid_visible: visible=%s" % [visible])
+
+## 设置右侧面板中特定区域的可见性
+## stage.section: "social_btn"/"idea_btn"/"poem_btn"
+## stage.visible: true/false
+func _set_right_section_visible(stage: Dictionary) -> void:
+	var right_panel := _get_right_panel()
+	if not right_panel:
+		Logging.err("AnimationController._set_right_section_visible: 未找到 right_panel")
+		return
+	var section: String = stage.get("section", "")
+	var visible: bool = stage.get("visible", true)
+	var section_node: Control = null
+	match section:
+		"social_btn":
+			section_node = right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn") as Control
+		"idea_btn":
+			section_node = right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/LinianBtn") as Control
+		"poem_btn":
+			section_node = right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/Poembtn") as Control
+		_:
+			Logging.err("AnimationController._set_right_section_visible: 未知 section='%s'" % section)
+			return
+	if not section_node:
+		Logging.err("AnimationController._set_right_section_visible: 未找到 section='%s' 对应的节点" % section)
+		return
+	section_node.visible = visible
+	Logging.info("AnimationController._set_right_section_visible: section='%s' visible=%s" % [section, visible])
+
+## 播放音效
+## stage.sound_path: 音效资源路径
+## stage.get("volume_db", 0.0): 音量
+func _play_sound(stage: Dictionary) -> void:
+	var sound_path: String = stage.get("sound_path", "")
+	if sound_path.is_empty():
+		Logging.err("AnimationController._play_sound: sound_path 为空")
+		return
+	var volume_db: float = stage.get("volume_db", 0.0)
+	# 使用 AudioManager 播放音效
+	if AudioManager and AudioManager.has_method("play_sfx"):
+		var stream: AudioStream = load(sound_path) as AudioStream
+		if not stream:
+			Logging.err("AnimationController._play_sound: 无法加载音效 '%s'" % sound_path)
+			return
+		AudioManager.play_sfx(stream, volume_db)
+		Logging.info("AnimationController._play_sound: 播放音效 '%s' volume=%.1f" % [sound_path, volume_db])
+	else:
+		Logging.warn("AnimationController._play_sound: AudioManager 不可用或没有 play_sfx 方法")
+
+## 显示 SpecialLabel 提示文本
+## stage.text: 要显示的文本
+func _show_special_label(stage: Dictionary) -> void:
+	var text: String = stage.get("text", "")
+	if text.is_empty():
+		Logging.err("AnimationController._show_special_label: text 为空")
+		return
+	var right_panel := _get_right_panel()
+	if not right_panel:
+		Logging.err("AnimationController._show_special_label: 未找到 right_panel")
+		return
+	# 尝试通过 EventBus 广播特殊标签提示
+	EventBus.request_toast.emit(text, 0)
+	Logging.info("AnimationController._show_special_label: 通过 request_toast 显示提示文本='%s'" % [text])
+
+
 func _get_map_background() -> CanvasItem:
 	if not GameState.map:
 		Logging.err("AnimationController._get_map_background: GameState.map 为空")
@@ -681,3 +790,28 @@ func _camera_shake_stop(shake_timer: Timer, data: Dictionary) -> void:
 	if cam and is_instance_valid(cam):
 		cam.offset = Vector2.ZERO
 	Logging.info("AnimationController._camera_shake: 震动已结束，offset 归零")
+
+
+# ═══════════════════════════════════════════════
+# show_panel — 显示面板（设置 visible=true）
+# ═══════════════════════════════════════════════
+
+func _show_panel_target(stage: Dictionary) -> void:
+	var target: String = stage.get("target", "")
+	match target:
+		"left_panel":
+			var node := _get_left_panel()
+			if node:
+				node.visible = true
+				Logging.info("AnimationController._show_panel_target: left_panel visible=true")
+			else:
+				Logging.warn("AnimationController._show_panel_target: 未找到 left_panel")
+		"right_panel":
+			var node := _get_right_panel()
+			if node:
+				node.visible = true
+				Logging.info("AnimationController._show_panel_target: right_panel visible=true")
+			else:
+				Logging.warn("AnimationController._show_panel_target: 未找到 right_panel")
+		_:
+			Logging.err("AnimationController._show_panel_target: 未知 target='%s'" % target)

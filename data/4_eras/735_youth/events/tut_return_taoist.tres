@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://bwrdkirooum6r"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bh4r2"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g5h7p"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_x3l6q"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_v7m9w"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="5_t2b8r"]
+
+[sub_resource type="Resource" id="Resource_opt1_cr"]
+script = ExtResource("3_x3l6q")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt1"]
+script = ExtResource("4_v7m9w")
+choice_result = SubResource("Resource_opt1_cr")
+description = "山顶被大雾罩着，什么也看不见"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[sub_resource type="Resource" id="Resource_opt2_cr"]
+script = ExtResource("3_x3l6q")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt2"]
+script = ExtResource("4_v7m9w")
+choice_result = SubResource("Resource_opt2_cr")
+description = "我再四处走走"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_t2b8r")
+options = Array[ExtResource("1_bh4r2")]([SubResource("Resource_opt1"), SubResource("Resource_opt2")])
+uuid = "tut_return_taoist"
+name = "再见道人"
+description = "你回到道士打坐的青石旁。他仍是那副云淡风轻的模样，但听到脚步声便已睁开眼。
+
+「回来了。」他语气平静，「看你的表情，是遇到了什么？」"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

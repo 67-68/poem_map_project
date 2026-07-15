@@ -3,24 +3,11 @@
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_qstco"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_fc71i"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_mkuuv"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_bmk4i"]
 [ext_resource type="Script" uid="uid://dn32iqeg6626h" path="res://core/model/ambition_operator.gd" id="4_bmk4i"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_o00fq"]
 [ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="5_o00fq"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_vvcmu"]
 [ext_resource type="Script" uid="uid://cdx4pe8sbamu2" path="res://core/operators/refresh_action_panel_operator.gd" id="6_refresh"]
-
-[sub_resource type="Resource" id="Resource_5mfuc"]
-script = ExtResource("3_bmk4i")
-_property = 10
-value = 5
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_o00fq"]
-script = ExtResource("3_bmk4i")
-_property = 3
-value = -15
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_vvcmu"]
 script = ExtResource("4_bmk4i")
@@ -33,11 +20,10 @@ metadata/_custom_type_script = "uid://byn0qqw1xm33f"
 
 [sub_resource type="Resource" id="Resource_refresh"]
 script = ExtResource("6_refresh")
-metadata/_custom_type_script = "res://core/operators/refresh_action_panel_operator.gd"
 
 [sub_resource type="Resource" id="Resource_bh1ae"]
 script = ExtResource("4_o00fq")
-operators = Array[ExtResource("2_mkuuv")]([SubResource("Resource_5mfuc"), SubResource("Resource_o00fq"), SubResource("Resource_vvcmu"), SubResource("Resource_4ucww"), SubResource("Resource_refresh")])
+operators = Array[ExtResource("2_mkuuv")]([SubResource("Resource_vvcmu"), SubResource("Resource_4ucww"), SubResource("Resource_refresh")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_y3v7k"]

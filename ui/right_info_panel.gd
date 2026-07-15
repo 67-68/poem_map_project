@@ -23,6 +23,10 @@ const CN_NAME_MAP: Dictionary = {
 @onready var _idea_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/LinianBtn
 ## 写诗按钮 — 从 ActionPanelManager 迁移至此
 @onready var _poem_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/Poembtn
+## 🆕 笔记按钮
+@onready var _note_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/NoteBtn
+## 特殊提示标签（SpecialLabel）
+@onready var _special_label: Label = $Control/SpecialLabel
 
 func _ready() -> void:
 	# ── 风闻刷新 ──
@@ -39,10 +43,30 @@ func _ready() -> void:
 	# ── 写诗按钮 ──
 	_poem_btn.gui_input.connect(_on_poem_btn_gui_input)
 
+	# ── 🆕 笔记按钮 ──
+	_note_btn.gui_input.connect(_on_note_btn_gui_input)
+
 	# ── Focus session 显隐 ──
 	if EventBus.focus_session_changed.is_connected(_on_focus_changed):
 		EventBus.focus_session_changed.disconnect(_on_focus_changed)
 	EventBus.focus_session_changed.connect(_on_focus_changed)
+
+	# ── SpecialLabel 动态提示 ──
+	_special_label.text = ""
+	if not EventBus.on_person_state_changed.is_connected(_on_person_state_changed):
+		EventBus.on_person_state_changed.connect(_on_person_state_changed)
+	if not EventBus.imaginary_changed.is_connected(_on_imaginary_changed):
+		EventBus.imaginary_changed.connect(_on_imaginary_changed)
+	# 监听特殊属性（望/兴/势）变化
+	if not PlayerState.player_stat_changed.is_connected(_on_special_prop_changed):
+		PlayerState.player_stat_changed.connect(_on_special_prop_changed)
+	# 点击对应按钮后清除提示
+	if not EventBus.social_connection_toggled.is_connected(_clear_special_hint):
+		EventBus.social_connection_toggled.connect(_clear_special_hint)
+	if not EventBus.poem_start_clicked.is_connected(_clear_special_hint):
+		EventBus.poem_start_clicked.connect(_clear_special_hint)
+	if not EventBus.idea_page_toggled.is_connected(_clear_special_hint):
+		EventBus.idea_page_toggled.connect(_clear_special_hint)
 
 ## 刷新风闻面板：遍历所有 RELATION_TARGET，查询 RelationFlagManager，
 ## 只显示有死穴（leverage）或恩义（help）的目标。
@@ -151,9 +175,47 @@ func _on_poem_btn_gui_input(event: InputEvent) -> void:
 
 
 # ═══════════════════════════════════════════════════════════
+# 🆕 笔记按钮 — 点击弹出 NotePage
+# ═══════════════════════════════════════════════════════════
+
+func _on_note_btn_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		Logging.info("RightInfoPanel: NoteBtn 点击 → 发射 note_page_toggled")
+		EventBus.note_page_toggled.emit()
+
+
+# ═══════════════════════════════════════════════════════════
 # Focus session 显隐 — 聚焦时隐藏写诗按钮
 # ═══════════════════════════════════════════════════════════
 
 func _on_focus_changed(active: bool) -> void:
 	_poem_btn.visible = not active
 	Logging.info("RightInfoPanel: Focus session %s → Poembtn visible=%s" % ["active" if active else "inactive", not active])
+
+
+# ═══════════════════════════════════════════════════════════
+# SpecialLabel 动态提示 — 根据游戏状态提示用户点击对应按钮
+# ═══════════════════════════════════════════════════════════
+
+## 社交关系状态改变 → 提示点击人脉按钮
+func _on_person_state_changed(_target_tag: String, _new_state: String) -> void:
+	_special_label.text = "点击人脉按钮查看社交关系"
+	Logging.info("RightInfoPanel: person_state changed → 显示社交提示")
+
+## 意象获得 → 提示点击诗词按钮
+func _on_imaginary_changed() -> void:
+	_special_label.text = "点击诗词按钮创作诗词"
+	Logging.info("RightInfoPanel: imaginary changed → 显示诗词提示")
+
+## 特殊属性（望/兴/势）变化 → 提示点击理念按钮
+const SPECIAL_PROPS: Array[String] = ["prestige", "inspiration", "momentum"]
+
+func _on_special_prop_changed(prop_name: String) -> void:
+	if prop_name in SPECIAL_PROPS:
+		_special_label.text = "点击理念按钮接受理念"
+		Logging.info("RightInfoPanel: 特殊属性 '%s' 变化 → 显示理念提示" % prop_name)
+
+## 点击任一对应按钮后清除提示
+func _clear_special_hint() -> void:
+	_special_label.text = ""
+	Logging.info("RightInfoPanel: 按钮已点击 → 清除 SpecialLabel 提示")

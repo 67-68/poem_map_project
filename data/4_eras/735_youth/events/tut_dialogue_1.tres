@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://dynljk1nhkg0k"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_cds2x"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g3h7p"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_x4k9l"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_v6n1j"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="5_t2b8w"]
+
+[sub_resource type="Resource" id="Resource_opt_cr"]
+script = ExtResource("3_x4k9l")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_v6n1j")
+choice_result = SubResource("Resource_opt_cr")
+description = "在下杜甫，此番游历是为增长见识"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_t2b8w")
+options = Array[ExtResource("1_cds2x")]([SubResource("Resource_opt")])
+uuid = "tut_dialogue_1"
+name = "山中偶遇"
+description = "道士打量了你一番，笑道：「贫道在此山修行多年，看人倒也有几分眼力。小友脚步稳健，不像寻常书生那般弱不禁风。」\n\n他拂尘轻摆，示意你坐下：「未请教大名？此番来泰山，所为何事？」"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

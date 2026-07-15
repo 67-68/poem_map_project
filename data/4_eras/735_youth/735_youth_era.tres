@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Era" format=3]
+
+[ext_resource type="Script" uid="uid://wfy01ht15lc7" path="res://core/model/era.gd" id="1_era"]
+
+[resource]
+script = ExtResource("1_era")
+uuid = "735_youth"
+name = "青年漫游"
+description = "735年，青年杜甫游历泰山"

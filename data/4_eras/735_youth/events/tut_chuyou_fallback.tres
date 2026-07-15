@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_f3s2d"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g5h7p"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_x3l6q"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_v7m9w"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="5_t2b8r"]
+
+[sub_resource type="Resource" id="Resource_opt_cr"]
+script = ExtResource("3_x3l6q")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_v7m9w")
+choice_result = SubResource("Resource_opt_cr")
+description = "继续前行"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_t2b8r")
+options = Array[ExtResource("1_f3s2d")]([SubResource("Resource_opt")])
+uuid = "tut_chuyou_fallback"
+name = "山间漫步"
+description = "你在泰山山间漫步，呼吸着新鲜空气。山风吹过，树叶沙沙作响，偶尔几声鸟鸣从远处传来。\n\n远远望去，山顶仍被那团浓雾笼罩着。不知何时才能一睹泰山真容。"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

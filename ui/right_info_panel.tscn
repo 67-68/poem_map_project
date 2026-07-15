@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="5_lnxk4"]
 [ext_resource type="Texture2D" uid="uid://bn4j0rcvlbavx" path="res://assets/stamps/chuangzuo_stamp.png" id="6_lnxk4"]
 [ext_resource type="Texture2D" uid="uid://dkp22tjkoj2gj" path="res://assets/profile/linian_stamp.png" id="6_n54d2"]
+[ext_resource type="Texture2D" uid="uid://dyf7qq1yw3fh2" path="res://assets/profile/note_stamp.png" id="8_5hubg"]
 [ext_resource type="PackedScene" uid="uid://cu1a2mhu4xv3n" path="res://ui/decision_scroll.tscn" id="10_j8k2n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3crwo"]
@@ -98,15 +99,15 @@ theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.22352941)
 text = "esc: 菜单"
 
-[node name="Label6" type="Label" parent="Control" unique_id=1222984266]
+[node name="SpecialLabel" type="Label" parent="Control" unique_id=1222984266]
 layout_mode = 0
-offset_left = 205.55994
-offset_top = 401.59998
-offset_right = 308.55994
-offset_bottom = 422.59998
+offset_left = 20.0
+offset_top = 410.0
+offset_right = 123.0
+offset_bottom = 431.0
 theme_type_variation = &"DefaultText"
-theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.22352941)
-text = "space: 时间控制"
+theme_override_colors/font_color = Color(0.36862746, 0.09019608, 0, 0.85882354)
+text = "点击人脉按钮查看社交关系"
 
 [node name="Label3" type="Label" parent="Control" unique_id=1743070652]
 layout_mode = 0
@@ -201,4 +202,16 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_lnxk4")
 [node name="TextureRect" type="TextureRect" parent="Panel/V/PanelContainer2/HBoxContainer/Poembtn" unique_id=698958564]
 layout_mode = 2
 texture = ExtResource("6_lnxk4")
+expand_mode = 1
+
+[node name="NoteBtn" type="PanelContainer" parent="Panel/V/PanelContainer2/HBoxContainer" unique_id=169675154]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_lnxk4")
+
+[node name="TextureRect" type="TextureRect" parent="Panel/V/PanelContainer2/HBoxContainer/NoteBtn" unique_id=587622179]
+layout_mode = 2
+texture = ExtResource("8_5hubg")
 expand_mode = 1

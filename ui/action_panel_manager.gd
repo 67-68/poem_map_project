@@ -23,6 +23,7 @@ const ACTION_PRIORITY: Array[Dictionary] = [
 	{ name = "Denggao", type = "scene_action", action_id = "deng_gao" },
 	{ name = "Duzhuo",  type = "scene_action", action_id = "du_zhuo" },
 	{ name = "Commute", type = "scene_action", action_id = "zhu_liu" },
+	{ name = "Chuyou",  type = "scene_action", action_id = "tut_chuyou" },
 ]
 
 # ── 子节点 ─────────────────────────────────────────

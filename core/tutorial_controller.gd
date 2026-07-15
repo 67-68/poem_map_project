@@ -1,0 +1,841 @@
+extends Node
+## TutorialController — 青年杜甫泰山引导流程线性状态机
+##
+## 通过物理可见性（按钮/属性的隐藏/显示）引导玩家逐步学习 UI。
+## Phase 1-3: event_confirmed 驱动（叙事阶段）
+## Phase 4-7: 行动系统 + 多信号驱动（探索阶段）
+##
+## 信号矩阵:
+##   event_confirmed              → Phase 1→2, 2内部3步, 3→4
+##   stay_place_changed           → Phase 4 迁移检测
+##   request_refresh_action_panel → Phase 4-5 行动执行检测
+##   on_xun_tick                  → Phase 5 defer 倒计时
+##   poems_created                → Phase 7 创作检测
+##
+## 作为 Autoload 注册，自动检测 tutorial_completed 标志。
+## 非 tutorial 模式下静默跳过，不影响正常游戏。
+
+enum Phase {
+	INIT,
+	PHASE_1_MEET,       # 道士出场 + 鸟语花香音效
+	PHASE_2_DIALOGUE,   # 对话 + 面板滑入 + 属性揭示
+	PHASE_3_TRAIT,      # trait 展示 + health +50
+	PHASE_4_EXPLORE,    # 自由探索（行动驱动）
+	PHASE_5_DEFER,      # override + defer 驱散云雾
+	PHASE_6_VISION,     # 往上看 + 最后 Lv3 意象
+	PHASE_7_POEM,       # 诗词创作 + 理念解锁
+	END
+}
+
+# ── Phase 4 子阶段 ──
+enum Phase4Step {
+	VAST_WORLD,           # tut_vast_world 展示中
+	FREE_ROAM,            # 仅交游+驻留可见，道士 not_meet
+	TAOIST_NO_RESPONSE,   # 交游→fallback 无回应
+	MOVED_AWAY,           # 驻留迁移完成 → tut_move_away 展示中
+	FOG_FOUND,            # tut_move_away 确认 → 出游(查看)解锁
+	CHUYOU_VIEWED,        # 出游查看雾 → 提示回找道士
+	BACK_AT_TAOIST,       # tut_return_taoist 展示中
+	OVERRIDE_LOCKED,      # override 可见但锁定（not_meet < know_about）
+	DRINKING,             # 交游喝酒中
+	OVERRIDE_READY,       # 关系升级 → override 解锁
+}
+
+# ── Phase 5 子阶段 ──
+enum Phase5Step {
+	OVERRIDE_CLICKED,     # 玩家点了 override → defer 开始
+	DEFERRING,            # defer 进行中
+	DEFER_INTERRUPTED,    # 玩家中断 defer
+	DEFER_DONE,           # defer 完成
+}
+
+# ── Phase 6 子阶段 ──
+enum Phase6Step {
+	DEFER_DONE_EVENT,     # tut_defer_done 展示中
+	LOOK_UP_READY,        # "往上看"可用
+	FINAL_IMAGINARY,      # 最后 Lv3 意象获取
+}
+
+# ── Phase 7 子阶段 ──
+enum Phase7Step {
+	POEM_BTN_VISIBLE,     # 写诗按钮可见
+	NO_INSPIRATION,       # tut_no_inspiration 展示中（兴=0）
+	DRINK_WINE,           # 独酌喝药酒 +40兴
+	POEM_CREATED,         # 诗词创作完成
+	POEM_REVIEWED,        # tut_poem_review 展示中
+	IDEA_UNLOCKED,        # 理念解锁
+}
+
+var _current_phase: Phase = Phase.INIT
+
+# ── 子阶段追踪 ──
+var _p4_step: Phase4Step = Phase4Step.VAST_WORLD
+var _p5_step: Phase5Step = Phase5Step.OVERRIDE_CLICKED
+var _p6_step: Phase6Step = Phase6Step.DEFER_DONE_EVENT
+var _p7_step: Phase7Step = Phase7Step.POEM_BTN_VISIBLE
+
+# ── Phase 2 对话子阶段 ──
+var _dialogue_step: int = 0
+const DIALOGUE_EVENTS: Array[String] = [
+	"tut_dialogue_1",
+	"tut_dialogue_2",
+	"tut_dialogue_3",
+]
+
+# ── 标志 ──
+var _signals_connected: bool = false
+var _poem_created: bool = false
+var _inspiration_gained: bool = false
+var _defer_started: bool = false
+var _defer_completed: bool = false
+
+# ── 道士 NPCDocument key ──
+const TAOIST_NPC_KEY := "tut_taoist"
+
+# ── Tutorial 行动白名单（按 phase 决定哪些行动可见）──
+# 这些 flag 由 ActionPanelManager / ActionManager 读取来控制按钮可见性
+const TUT_LOCK_PREFIX := "tut_lock_"
+const TUT_UNLOCK_PREFIX := "tut_unlock_"
+
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
+	# 如果 tutorial 已完成，跳过
+	if PlayerState.has_flag("tutorial_completed"):
+		Logging.info("TutorialController: tutorial_completed 标志已存在，跳过 tutorial")
+		_ensure_all_ui_visible()
+		return
+
+	# 等待 Main 场景加载后再弹窗
+	if not get_tree().node_added.is_connected(_on_node_added):
+		get_tree().node_added.connect(_on_node_added)
+		Logging.info("TutorialController: 已连接 node_added，等待 Main 场景加载")
+
+
+func _on_node_added(node: Node) -> void:
+	if node.name != "Main":
+		return
+	if get_tree().node_added.is_connected(_on_node_added):
+		get_tree().node_added.disconnect(_on_node_added)
+	Logging.info("TutorialController: Main 场景已加载，弹出教程确认 Modal")
+	call_deferred("_show_tutorial_prompt")
+
+
+# ═══════════════════════════════════════════════════════════
+# Tutorial 启动确认 Modal
+# ═══════════════════════════════════════════════════════════
+
+func _show_tutorial_prompt() -> void:
+	var tree := get_tree()
+	if not tree:
+		Logging.err("TutorialController: get_tree() 为空，兜底跳过 tutorial")
+		_skip_tutorial()
+		return
+
+	var root := tree.root
+	if not root:
+		Logging.err("TutorialController: root 为空，兜底跳过 tutorial")
+		_skip_tutorial()
+		return
+
+	var dialog := AcceptDialog.new()
+	dialog.name = "TutorialPrompt"
+	dialog.title = "泰山游历"
+	dialog.dialog_text = "昔游齐鲁，登泰山而小天下了么？\n\n你愿意随老夫重游泰山，重温那段少年心气吗？"
+	dialog.min_size = Vector2(500, 250)
+	dialog.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN
+	dialog.close_requested.connect(_on_tutorial_dialog_closed.bind(dialog))
+
+	dialog.add_button("开始引导", true, "start_tutorial")
+	dialog.add_button("跳过", false, "skip_tutorial")
+
+	if dialog.custom_action.is_connected(_on_tutorial_custom_action):
+		dialog.custom_action.disconnect(_on_tutorial_custom_action)
+	dialog.custom_action.connect(_on_tutorial_custom_action.bind(dialog))
+
+	root.add_child(dialog)
+	dialog.popup_centered()
+	Logging.info("TutorialController: 新手教程确认 Modal 已弹出")
+
+
+func _on_tutorial_dialog_closed(dialog: AcceptDialog) -> void:
+	Logging.info("TutorialController: 对话框被关闭（默认 = 跳过）")
+	_skip_tutorial()
+	if is_instance_valid(dialog):
+		dialog.queue_free()
+
+
+func _on_tutorial_custom_action(action: String, dialog: AcceptDialog) -> void:
+	Logging.info("TutorialController: 自定义按钮 '%s'" % action)
+	match action:
+		"start_tutorial":
+			_begin_tutorial()
+		"skip_tutorial":
+			_skip_tutorial()
+		_:
+			_skip_tutorial()
+	if is_instance_valid(dialog):
+		dialog.queue_free()
+
+
+func _skip_tutorial() -> void:
+	Logging.info("TutorialController: 跳过新手教程")
+	PlayerState.set_flag("tutorial_completed", true)
+	_unblock_all_actions()
+	_ensure_all_ui_visible()
+	_clear_all_tut_flags()
+
+
+func _begin_tutorial() -> void:
+	Logging.info("TutorialController: 开始新手教程")
+
+	# 设置每旬 2 天
+	TimeService.set_days_per_xun(2)
+	Logging.info("TutorialController: days_per_xun 已设置为 2")
+
+	# 阻塞所有默认 SceneAction（tutorial 期间仅显示白名单行动）
+	_block_all_default_actions()
+	# tut_chuyou 也在白名单外，初始被阻塞
+
+	# 连接信号
+	_connect_tutorial_signals()
+
+	# 注入 AnimationController timeline_scripts
+	_inject_timeline_scripts()
+
+	# 隐藏所有 UI 面板
+	_hide_all_panels()
+
+	# 设置道士初始状态：know_about（相遇时即认识）
+	_set_taoist_initial_state()
+
+	# 开始 PHASE_1
+	call_deferred("_begin_phase_1")
+
+
+# ═══════════════════════════════════════════════════════════
+# 信号连接/断开
+# ═══════════════════════════════════════════════════════════
+
+func _connect_tutorial_signals() -> void:
+	if _signals_connected:
+		return
+
+	if not EventBus.event_confirmed.is_connected(_on_event_confirmed):
+		EventBus.event_confirmed.connect(_on_event_confirmed)
+		Logging.info("TutorialController: 已连接 EventBus.event_confirmed")
+
+	if not TimeService.on_xun_tick.is_connected(_on_xun_tick):
+		TimeService.on_xun_tick.connect(_on_xun_tick)
+		Logging.info("TutorialController: 已连接 TimeService.on_xun_tick")
+
+	if not EventBus.request_refresh_action_panel.is_connected(_on_action_executed):
+		EventBus.request_refresh_action_panel.connect(_on_action_executed)
+		Logging.info("TutorialController: 已连接 EventBus.request_refresh_action_panel")
+
+	if not EventBus.poems_created.is_connected(_on_poem_created):
+		EventBus.poems_created.connect(_on_poem_created)
+		Logging.info("TutorialController: 已连接 EventBus.poems_created")
+
+	if not PlayerState.stay_place_changed.is_connected(_on_stay_place_changed):
+		PlayerState.stay_place_changed.connect(_on_stay_place_changed)
+		Logging.info("TutorialController: 已连接 PlayerState.stay_place_changed")
+
+	_signals_connected = true
+
+
+func _disconnect_tutorial_signals() -> void:
+	if not _signals_connected:
+		return
+	if EventBus.event_confirmed.is_connected(_on_event_confirmed):
+		EventBus.event_confirmed.disconnect(_on_event_confirmed)
+	if TimeService.on_xun_tick.is_connected(_on_xun_tick):
+		TimeService.on_xun_tick.disconnect(_on_xun_tick)
+	if EventBus.request_refresh_action_panel.is_connected(_on_action_executed):
+		EventBus.request_refresh_action_panel.disconnect(_on_action_executed)
+	if EventBus.poems_created.is_connected(_on_poem_created):
+		EventBus.poems_created.disconnect(_on_poem_created)
+	if PlayerState.stay_place_changed.is_connected(_on_stay_place_changed):
+		PlayerState.stay_place_changed.disconnect(_on_stay_place_changed)
+	_signals_connected = false
+	Logging.info("TutorialController: 所有信号已断开")
+
+
+# ═══════════════════════════════════════════════════════════
+# 行动可见性管理
+# ═══════════════════════════════════════════════════════════
+
+func _block_all_default_actions() -> void:
+	"""阻塞所有默认行动，由 TutorialController 按阶段逐步解锁"""
+	# 使用 ActionManager 的 block_action 阻塞所有 SceneAction
+	var all_actions := Database.get_actions_all()
+	for action_id in all_actions:
+		var action = Database.get_action(action_id)
+		if not action:
+			continue
+		# 仅阻塞 SceneAction（主行动），子行动不受影响
+		if action is SceneAction:
+			ActionManager.block_action_by_id(action_id, -1)
+			Logging.info("TutorialController: 阻塞行动 '%s'" % action_id)
+
+	Logging.info("TutorialController: 所有默认行动已阻塞")
+
+
+func _unblock_action(action_id: String) -> void:
+	"""解锁特定行动"""
+	ActionManager.unblock_action_by_id(action_id)
+	Logging.info("TutorialController: 解锁行动 '%s'" % action_id)
+
+
+func _unblock_all_actions() -> void:
+	"""解锁所有 SceneAction"""
+	var all_actions := Database.get_actions_all()
+	for action_id in all_actions:
+		var action = Database.get_action(action_id)
+		if not action:
+			continue
+		if action is SceneAction:
+			ActionManager.unblock_action_by_id(action_id)
+	Logging.info("TutorialController: 所有行动已解锁")
+
+
+func _clear_all_tut_flags() -> void:
+	"""清除所有 tutorial 相关的 flag"""
+	var tut_flags := [
+		"tut_lock_baiye", "tut_lock_denggao", "tut_lock_fangshi",
+		"tut_lock_duzhuo", "tut_lock_chuyou_subs",
+		"tut_unlock_chuyou_subs", "tut_unlock_duzhuo",
+		"tut_phase_started", "tut_fog_found",
+	]
+	for flag in tut_flags:
+		PlayerState.set_flag(flag, false)
+	Logging.info("TutorialController: 所有 tutorial flag 已清除")
+
+
+# ═══════════════════════════════════════════════════════════
+# 道士 NPC 状态管理
+# ═══════════════════════════════════════════════════════════
+
+func _set_taoist_initial_state() -> void:
+	"""设置道士初始相识状态（相遇时即为 know_about）"""
+	RelationFlagManager.set_person_state(TAOIST_NPC_KEY, "know_about")
+	Logging.info("TutorialController: 道士 person_state → know_about")
+
+
+func _set_taoist_meditating() -> void:
+	"""道士进入打坐状态（not_meet，玩家不能交互）"""
+	RelationFlagManager.set_person_state(TAOIST_NPC_KEY, "not_meet")
+	Logging.info("TutorialController: 道士 person_state → not_meet（打坐中）")
+
+
+func _set_taoist_available() -> void:
+	"""道士重新可用"""
+	RelationFlagManager.set_person_state(TAOIST_NPC_KEY, "know_about")
+	Logging.info("TutorialController: 道士 person_state → know_about（可交互）")
+
+
+# ═══════════════════════════════════════════════════════════
+# 公开 API
+# ═══════════════════════════════════════════════════════════
+
+func is_tutorial_active() -> bool:
+	return not PlayerState.has_flag("tutorial_completed") and _current_phase != Phase.END
+
+
+func get_current_phase() -> Phase:
+	return _current_phase
+
+
+# ═══════════════════════════════════════════════════════════
+# UI 面板管理
+# ═══════════════════════════════════════════════════════════
+
+func _hide_all_panels() -> void:
+	var tree := get_tree()
+	if not tree:
+		return
+	var root := tree.root
+	if not root:
+		return
+	var main_node := root.get_node_or_null("Main")
+	if not main_node:
+		return
+	var left_panel := main_node.get_node_or_null("UI/Margin/HBox/LeftPanel") as Control
+	var right_panel := main_node.get_node_or_null("UI/Margin/HBox/RightPanel") as Control
+	if left_panel:
+		left_panel.visible = false
+	if right_panel:
+		right_panel.visible = false
+	# 重置 LeftPanel 内部属性可见性
+	if left_panel and left_panel.has_method("_hide_all_properties_tutorial"):
+		left_panel._hide_all_properties_tutorial()
+	Logging.info("TutorialController: 所有 UI 面板已隐藏")
+
+
+func _ensure_all_ui_visible() -> void:
+	var left_panel = _get_left_panel()
+	if left_panel and left_panel.has_method("_show_all_properties"):
+		left_panel._show_all_properties()
+		Logging.info("TutorialController: 已调用 LeftPlayerPanel._show_all_properties()")
+	# 确保左右面板可见
+	var tree := get_tree()
+	if tree and tree.root:
+		var main_node := tree.root.get_node_or_null("Main")
+		if main_node:
+			var lp := main_node.get_node_or_null("UI/Margin/HBox/LeftPanel") as Control
+			var rp := main_node.get_node_or_null("UI/Margin/HBox/RightPanel") as Control
+			if lp:
+				lp.visible = true
+			if rp:
+				rp.visible = true
+	Logging.info("TutorialController: 非 tutorial 模式，UI 默认全部可见")
+
+
+func _get_left_panel() -> Control:
+	var tree := get_tree()
+	if not tree:
+		return null
+	var root := tree.root
+	if not root:
+		return null
+	var main_node := root.get_node_or_null("Main")
+	if not main_node:
+		return null
+	return main_node.get_node_or_null("UI/Margin/HBox/LeftPanel") as Control
+
+
+# ═══════════════════════════════════════════════════════════
+# 信号回调
+# ═══════════════════════════════════════════════════════════
+
+func _on_event_confirmed() -> void:
+	if not is_tutorial_active():
+		return
+	Logging.info("TutorialController: event_confirmed — phase=%d p4_step=%d p7_step=%d" % [
+		_current_phase, _p4_step, _p7_step
+	])
+
+	match _current_phase:
+		Phase.PHASE_1_MEET:
+			_advance_to_phase_2()
+
+		Phase.PHASE_2_DIALOGUE:
+			_advance_dialogue()
+
+		Phase.PHASE_3_TRAIT:
+			_advance_to_phase_4()
+
+		Phase.PHASE_4_EXPLORE:
+			_on_phase_4_event_confirmed()
+
+		Phase.PHASE_7_POEM:
+			_on_phase_7_event_confirmed()
+
+		_:
+			Logging.info("TutorialController: event_confirmed 在 phase=%d 无对应处理" % _current_phase)
+
+
+func _on_xun_tick() -> void:
+	if not is_tutorial_active():
+		return
+
+	if _current_phase == Phase.PHASE_5_DEFER and _defer_started:
+		Logging.info("TutorialController: xun_tick — Phase 5 defer 进行中")
+		# defer 完成检测：检查 ActionManager 中 defer 是否还在活跃
+		if not ActionManager.is_deferring("tut_chuyou"):
+			# defer 已结束（被完成或被中断）
+			_defer_started = false
+			_defer_completed = true
+			Logging.info("TutorialController: defer 已完成！→ 推送 tut_defer_done")
+			_p5_step = Phase5Step.DEFER_DONE
+			_push_tut_event("tut_defer_done")
+		return
+
+	Logging.info("TutorialController: xun_tick — phase=%d，无 defer 相关处理" % _current_phase)
+
+
+func _on_action_executed() -> void:
+	if not is_tutorial_active():
+		return
+	Logging.info("TutorialController: action_executed — phase=%d p4_step=%d" % [
+		_current_phase, _p4_step
+	])
+
+	match _current_phase:
+		Phase.PHASE_4_EXPLORE:
+			_on_phase_4_action()
+		Phase.PHASE_5_DEFER:
+			_on_phase_5_action()
+		Phase.PHASE_6_VISION:
+			_on_phase_6_action()
+		Phase.PHASE_7_POEM:
+			_on_phase_7_action()
+		_:
+			Logging.info("TutorialController: action_executed 在 phase=%d 无特殊处理" % _current_phase)
+
+
+func _on_stay_place_changed(place_str: String) -> void:
+	if not is_tutorial_active():
+		return
+	Logging.info("TutorialController: stay_place_changed → '%s' — phase=%d p4_step=%d" % [
+		place_str, _current_phase, _p4_step
+	])
+
+	# Phase 4: 玩家迁移后触发雾事件
+	if _current_phase == Phase.PHASE_4_EXPLORE and _p4_step == Phase4Step.FREE_ROAM:
+		Logging.info("TutorialController: Phase 4 检测到迁移 → 推送雾事件")
+		_p4_step = Phase4Step.MOVED_AWAY
+		PlayerState.set_flag("tut_fog_found", true)
+		_push_tut_event("tut_move_away")
+
+
+func _on_poem_created(_data: Array = []) -> void:
+	if not is_tutorial_active():
+		return
+	Logging.info("TutorialController: poems_created — phase=%d p7_step=%d" % [
+		_current_phase, _p7_step
+	])
+
+	if _current_phase == Phase.PHASE_7_POEM:
+		_poem_created = true
+		if _p7_step == Phase7Step.POEM_BTN_VISIBLE or _p7_step == Phase7Step.DRINK_WINE:
+			# 诗词创作完成 → 推评论事件
+			Logging.info("TutorialController: 诗词创作完成 → 推送 tut_poem_review")
+			_p7_step = Phase7Step.POEM_REVIEWED
+			_push_tut_event("tut_poem_review")
+
+
+# ═══════════════════════════════════════════════════════════
+# Phase 4 信号处理（自由探索阶段 — 行动驱动）
+# ═══════════════════════════════════════════════════════════
+
+func _on_phase_4_event_confirmed() -> void:
+	Logging.info("TutorialController: Phase 4 event_confirmed — step=%d" % _p4_step)
+
+	match _p4_step:
+		Phase4Step.VAST_WORLD:
+			# vast_world 确认 → 进入自由行动模式
+			Logging.info("TutorialController: vast_world 确认 → 进入自由行动模式")
+			_p4_step = Phase4Step.FREE_ROAM
+			# 道士进入打坐状态
+			_set_taoist_meditating()
+			# 仅显示交游 + 驻留
+			_unblock_action("jiao_you")
+			_unblock_action("zhu_liu")
+			Logging.info("TutorialController: FREE_ROAM — 交游+驻留已解锁")
+			# 系统提示
+			_show_special_label("道长正在打坐…先在附近转转吧。点击右侧「交游」或「驻留」按钮开始探索")
+
+		Phase4Step.FOG_FOUND:
+			# tut_move_away 确认 → 解锁出游（仅查看）
+			Logging.info("TutorialController: 雾事件确认 → 解锁出游按钮（查看模式）")
+			_p4_step = Phase4Step.CHUYOU_VIEWED
+			_unblock_action("tut_chuyou")
+			Logging.info("TutorialController: FOG_FOUND — 出游已解锁")
+			_show_special_label("山雾弥漫，看不清山顶…或许道长知道些什么？点击「出游」查看")
+
+		Phase4Step.CHUYOU_VIEWED:
+			# 出游查看后 → 提示回找道士
+			Logging.info("TutorialController: 出游查看后 → 准备回找道士")
+			_p4_step = Phase4Step.BACK_AT_TAOIST
+			_set_taoist_available()
+			_push_tut_event("tut_return_taoist")
+
+		Phase4Step.BACK_AT_TAOIST:
+			# tut_return_taoist 确认 → override 可见但锁定
+			Logging.info("TutorialController: 回找道士确认 → override 锁定态")
+			_p4_step = Phase4Step.OVERRIDE_LOCKED
+			_show_special_label("与道长关系还不够密切…试试请他喝酒？点击「交游」→「共饮」")
+			# 注意：override button 的锁定由 OverrideActionButton/NpcActionLockChecker 自动处理
+			# 因为道士 person_state=know_about，但 tut_jiaoyou_drink 在 normal_actions 中，
+			# 需要 know_about 才能用的 action 对 know_about 是解锁的
+
+		Phase4Step.OVERRIDE_LOCKED:
+				# 交游→共饮 事件确认 → 关系升级 → override 解锁
+				Logging.info("TutorialController: OVRIDE_LOCKED — 共饮事件确认，升级道士关系")
+				RelationFlagManager.upgrade_person_state(TAOIST_NPC_KEY)
+				_p4_step = Phase4Step.OVERRIDE_READY
+				_show_special_label("道长愿意帮你了！点击「交游」→ 请道长驱散云雾")
+
+		_:
+			Logging.warn("TutorialController: Phase 4 未处理的 event_confirmed step=%d" % _p4_step)
+
+
+func _on_phase_4_action() -> void:
+	Logging.info("TutorialController: Phase 4 action_executed — step=%d" % _p4_step)
+
+	if _p4_step == Phase4Step.FREE_ROAM:
+		# 玩家在 FREE_ROAM 阶段点了行动，检查是不是交游（打坐无回应）
+		# 交游的 fallback 事件在 tut_jiaoyou_drink 中配置
+		# 如果失败，走的是 fallback_event_uuid
+		Logging.info("TutorialController: Phase 4 FREE_ROAM — 行动已执行，等待事件确认或迁移")
+
+	elif _p4_step == Phase4Step.OVERRIDE_LOCKED:
+		# 玩家点了交游 → 共饮 → 关系升级 → override 解锁
+		Logging.info("TutorialController: Phase 4 OVERRIDE_LOCKED — 检测关系升级")
+		# 检查道士关系是否升级到 know_about 或更高
+		var state = RelationFlagManager.get_person_state(TAOIST_NPC_KEY)
+		if state == "know_about" or state == "inner_circle" or state == "blood_oath":
+			Logging.info("TutorialController: 道士关系已升级到 '%s' → override 解锁" % state)
+			_p4_step = Phase4Step.OVERRIDE_READY
+			_show_special_label("道长愿意帮你了！点击「交游」按钮旁的道长头像按钮，请道长驱散云雾")
+
+
+# ═══════════════════════════════════════════════════════════
+# Phase 5 信号处理（Override + Defer）
+# ═══════════════════════════════════════════════════════════
+
+func _on_phase_5_action() -> void:
+	Logging.info("TutorialController: Phase 5 action_executed — step=%d" % _p5_step)
+
+	if _p5_step == Phase5Step.OVERRIDE_CLICKED:
+		# 玩家点击了 override（驱散云雾）→ 开始 defer
+		Logging.info("TutorialController: override 被点击 → 启动 defer（2旬）")
+		_defer_started = true
+		_p5_step = Phase5Step.DEFERRING
+		# 解锁出游 4 子行动
+		PlayerState.set_flag("tut_lock_chuyou_subs", false)
+		PlayerState.set_flag("tut_unlock_chuyou_subs", true)
+		_show_special_label("道长开始做法驱散云雾，需要两旬时间…去周边转转吧！点击「出游」探索四方")
+
+	elif _p5_step == Phase5Step.DEFERRING:
+		# defer 进行中，玩家执行了出游等操作
+		Logging.info("TutorialController: Phase 5 defer 进行中，玩家执行了操作")
+		# 检查是否中断了 defer
+		if not ActionManager.is_deferring("tut_chuyou") and not _defer_completed:
+			Logging.info("TutorialController: defer 被中断！→ 推送 tut_defer_interrupt")
+			_p5_step = Phase5Step.DEFER_INTERRUPTED
+			_push_tut_event("tut_defer_interrupt")
+
+	elif _p5_step == Phase5Step.DEFER_INTERRUPTED:
+		# defer 中断事件已确认 → 重新开始 defer
+		Logging.info("TutorialController: defer 中断确认 → 重新启动 defer")
+		_defer_started = true
+		_defer_completed = false
+		_p5_step = Phase5Step.DEFERRING
+		_show_special_label("道长重新开始做法…这次别再打断了。点击「出游」探索周边")
+
+
+# ═══════════════════════════════════════════════════════════
+# Phase 6 信号处理（泰山显现）
+# ═══════════════════════════════════════════════════════════
+
+func _on_phase_6_action() -> void:
+	Logging.info("TutorialController: Phase 6 action_executed — step=%d" % _p6_step)
+
+	if _p6_step == Phase6Step.LOOK_UP_READY:
+		# 玩家点了"往上看" → 获取最后 Lv3 意象
+		Logging.info("TutorialController: 往上看 → 获得最后意象")
+		_p6_step = Phase6Step.FINAL_IMAGINARY
+		_show_special_label("泰山之巅尽收眼底！点击右下角蓝色印章，将感悟化为诗句")
+
+
+# ═══════════════════════════════════════════════════════════
+# Phase 7 信号处理（诗词创作 + 理念）
+# ═══════════════════════════════════════════════════════════
+
+func _on_phase_7_event_confirmed() -> void:
+	Logging.info("TutorialController: Phase 7 event_confirmed — step=%d" % _p7_step)
+
+	match _p7_step:
+		Phase7Step.NO_INSPIRATION:
+			# 兴不足事件确认 → 解锁独酌
+			Logging.info("TutorialController: 兴不足确认 → 解锁独酌（喝药酒）")
+			_p7_step = Phase7Step.DRINK_WINE
+			PlayerState.set_flag("tut_unlock_duzhuo", true)
+			PlayerState.set_flag("tut_lock_duzhuo", false)
+			_unblock_action("du_zhuo")
+			_show_special_label("喝点药酒提提神吧！点击「独酌」→「喝药酒」")
+
+		Phase7Step.POEM_REVIEWED:
+			# 道人评诗确认 → 解锁理念
+			Logging.info("TutorialController: 评诗确认 → 解锁理念按钮")
+			_p7_step = Phase7Step.IDEA_UNLOCKED
+			_show_special_label("道长对你的诗赞不绝口！点击右下角蓝色印章，确立你的远大志向")
+
+		Phase7Step.IDEA_UNLOCKED:
+			# 理念解锁 → END
+			Logging.info("TutorialController: 理念解锁 → 进入 END")
+			_advance_to_end()
+
+		_:
+			Logging.warn("TutorialController: Phase 7 未处理的 event_confirmed step=%d" % _p7_step)
+
+
+func _on_phase_7_action() -> void:
+	Logging.info("TutorialController: Phase 7 action_executed — step=%d" % _p7_step)
+
+	if _p7_step == Phase7Step.DRINK_WINE:
+		# 玩家喝了药酒 → 检查兴是否恢复
+		var inspiration = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
+		Logging.info("TutorialController: 喝药酒后 兴=%d" % inspiration)
+		if inspiration > 0:
+			_inspiration_gained = true
+			_show_special_label("文思如泉涌！点击右下角毛笔按钮，开始写诗吧")
+		else:
+			Logging.warn("TutorialController: 喝药酒后兴仍为0，检查 duzhuo_heyaojiu action 是否正确配置")
+
+
+# ═══════════════════════════════════════════════════════════
+# 状态机推进（Phase 级别）
+# ═══════════════════════════════════════════════════════════
+
+func _advance_to_phase_2() -> void:
+	_current_phase = Phase.PHASE_2_DIALOGUE
+	_dialogue_step = 0
+	Logging.info("TutorialController: PHASE_1_MEET → PHASE_2_DIALOGUE")
+	_push_tut_event(DIALOGUE_EVENTS[_dialogue_step])
+
+
+func _advance_dialogue() -> void:
+	_dialogue_step += 1
+	if _dialogue_step < DIALOGUE_EVENTS.size():
+		Logging.info("TutorialController: PHASE_2 step %d/%d" % [_dialogue_step + 1, DIALOGUE_EVENTS.size()])
+		_push_tut_event(DIALOGUE_EVENTS[_dialogue_step])
+	else:
+		Logging.info("TutorialController: PHASE_2_DIALOGUE → PHASE_3_TRAIT")
+		_current_phase = Phase.PHASE_3_TRAIT
+		_push_tut_event("tut_trait_demo")
+
+
+func _advance_to_phase_4() -> void:
+	Logging.info("TutorialController: PHASE_3_TRAIT → PHASE_4_EXPLORE")
+	_current_phase = Phase.PHASE_4_EXPLORE
+	_p4_step = Phase4Step.VAST_WORLD
+	_push_tut_event("tut_vast_world")
+
+
+func _advance_to_phase_5() -> void:
+	Logging.info("TutorialController: PHASE_4_EXPLORE → PHASE_5_DEFER")
+	_current_phase = Phase.PHASE_5_DEFER
+	_p5_step = Phase5Step.OVERRIDE_CLICKED
+	PlayerState.set_flag("tut_unlock_chuyou_subs", true)
+	PlayerState.set_flag("tut_lock_chuyou_subs", false)
+
+
+func _advance_to_phase_6() -> void:
+	Logging.info("TutorialController: PHASE_5_DEFER → PHASE_6_VISION")
+	_current_phase = Phase.PHASE_6_VISION
+	_p6_step = Phase6Step.DEFER_DONE_EVENT
+	_push_tut_event("tut_defer_done")
+
+	# defer 完成事件确认后 → 解锁"往上看"
+	# 这里直接设置 LOOK_UP_READY，因为 tut_defer_done 的 event_confirmed 
+	# 不经过 _on_event_confirmed（当前是 PHASE_6_VISION 但尚未有事件确认处理）
+	# 所以 deferred:
+	call_deferred("_setup_phase_6_look_up")
+
+
+func _setup_phase_6_look_up() -> void:
+	Logging.info("TutorialController: Phase 6 → 设置「往上看」可用")
+	_p6_step = Phase6Step.LOOK_UP_READY
+	_show_special_label("云雾已散！点击「出游」→ 往山顶看看")
+
+
+func _advance_to_phase_7() -> void:
+	Logging.info("TutorialController: PHASE_6_VISION → PHASE_7_POEM")
+	_current_phase = Phase.PHASE_7_POEM
+	_p7_step = Phase7Step.POEM_BTN_VISIBLE
+	_show_special_label("面对壮丽山河，何不赋诗一首？点击右下角毛笔按钮开始创作")
+	# poem_btn 在 tut_defer_done 的 timeline 中已可见
+
+
+func _advance_to_end() -> void:
+	Logging.info("TutorialController: PHASE_7_POEM → END")
+	_current_phase = Phase.END
+	_disconnect_tutorial_signals()
+	_unblock_all_actions()
+	_clear_all_tut_flags()
+	PlayerState.set_flag("tutorial_completed", true)
+	TimeService.reset_days_per_xun()
+	_push_tut_event("tut_goodbye")
+	Logging.info("TutorialController: tutorial 完成，days_per_xun 已恢复默认")
+
+
+# ═══════════════════════════════════════════════════════════
+# 各 Phase 进入逻辑
+# ═══════════════════════════════════════════════════════════
+
+func _begin_phase_1() -> void:
+	Logging.info("TutorialController: === 开始 PHASE_1_MEET ===")
+	PlayerState.set_flag("tut_phase_started", "phase_1")
+	_current_phase = Phase.PHASE_1_MEET
+	_push_tut_event("tut_meet_taoist")
+
+
+# ═══════════════════════════════════════════════════════════
+# 辅助方法
+# ═══════════════════════════════════════════════════════════
+
+func _push_tut_event(event_key: String) -> void:
+	Logging.info("TutorialController: 推送事件 '%s'" % event_key)
+	EventBus.request_event_key.emit(event_key, {
+		"tutorial": true,
+		"tutorial_phase": _current_phase,
+	})
+
+
+func _show_special_label(text: String) -> void:
+	"""通过 EventBus.request_toast 显示右下角特殊提示"""
+	Logging.info("TutorialController: SpecialLabel → '%s'" % text)
+	EventBus.request_toast.emit(text, 0)
+
+
+# ═══════════════════════════════════════════════════════════
+# AnimationController timeline_scripts 注入
+# ═══════════════════════════════════════════════════════════
+
+func _inject_timeline_scripts() -> void:
+	var scripts: Dictionary = {
+		# PHASE_1: 鸟语花香音效
+		"tut_meet_taoist": [
+			{ "delay": 0.0, "action": "play_sound", "target": "", "sound_path": "res://assets/sounds/property/imaginary_gain_t1.ogg", "volume_db": -10.0 },
+		],
+
+		# PHASE_2: 对话中渐进揭示 UI
+		# tut_dialogue_1: small talk — 展示基础面板 + social_btn
+		"tut_dialogue_1": [
+			{ "delay": 0.0, "action": "show_panel", "target": "left_panel" },
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "health", "visible": true },
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "money", "visible": true },
+			{ "delay": 0.0, "action": "show_panel", "target": "right_panel" },
+			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "social_btn", "visible": true },
+		],
+
+		# tut_dialogue_2: 继续 small talk — 展示才/府/定
+		"tut_dialogue_2": [
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "talent", "visible": true },
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "astuteness", "visible": true },
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "composure", "visible": true },
+		],
+
+		# tut_dialogue_3: trait_grid 可见（空 grid，为 Phase 3 做准备）
+		"tut_dialogue_3": [
+			{ "delay": 0.0, "action": "set_trait_grid_visible", "target": "left_panel", "visible": true },
+		],
+
+		# PHASE_3: trait 展示（仅负责属性变化，trait_grid 已在 dialogue_3 可见）
+		# tut_trait_demo 的 choice_result 执行 trait_add + prop_add，grid 自动刷新
+
+		# PHASE_6: 引导看理念按钮 + poem_btn
+		"tut_defer_done": [
+			{ "delay": 0.5, "action": "show_special_label", "target": "right_panel", "text": "云雾消散，泰山之巅显现！点击右下角毛笔按钮开始写诗" },
+			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "poem_btn", "visible": true },
+		],
+
+		# PHASE_7: 诗词创作后揭示属性 + 理念
+		"tut_poem_review": [
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "prestige", "visible": true },
+		],
+
+		"tut_idea_unlock": [
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "momentum", "visible": true },
+			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "idea_btn", "visible": true },
+		],
+	}
+
+	for uuid in scripts:
+		AnimationController.timeline_scripts[uuid] = scripts[uuid]
+	Logging.info("TutorialController: 已注入 %d 个 timeline_scripts" % scripts.size())
