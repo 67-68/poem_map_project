@@ -97,8 +97,10 @@ signal before_property_change(prop_name: String, delta: int)
 var stay_place: String:
 	get: return GameSave.data.stay_place
 	set(val):
+		var _old = GameSave.data.stay_place
 		if val.is_empty():
 			val = "xishi"
+		Logging.info("[PlayerState.stay_place] SETTER: old='%s' → new='%s' (caller stack: %s)" % [_old, val, str(get_stack())])
 		GameSave.data.stay_place = val
 		stay_place_changed.emit(val)
 

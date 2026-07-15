@@ -144,6 +144,7 @@ func _refresh_place_label() -> void:
 		return
 	var cn := ENUMS.place_to_cn(PlayerState.stay_place)
 	var place_str: String = PlayerState.stay_place
+	Logging.info("LeftPlayerPanel._refresh_place_label: [地点DEBUG] ENTER — PlayerState.stay_place='%s' (%s), GameSave.data.stay_place='%s'" % [place_str, cn, GameSave.data.stay_place])
 
 	# 收集当前地点已认识的 NPC（person_state > uncharted）
 	var known_npcs: Array[String] = []
@@ -159,11 +160,11 @@ func _refresh_place_label() -> void:
 
 	if known_npcs.is_empty():
 		_place_label.text = "驻留 · %s" % cn
-		Logging.info("LeftPlayerPanel: PlaceLabel updated — 驻留 · %s (无已知 NPC)" % cn)
+		Logging.info("LeftPlayerPanel._refresh_place_label: [地点DEBUG] PlaceLabel set → '驻留 · %s' (无已知 NPC)" % cn)
 	else:
 		var npc_str := "、".join(known_npcs)
 		_place_label.text = "驻留 · %s — %s在此" % [cn, npc_str]
-		Logging.info("LeftPlayerPanel: PlaceLabel updated — 驻留 · %s — %s在此 (%d NPC)" % [cn, npc_str, known_npcs.size()])
+		Logging.info("LeftPlayerPanel._refresh_place_label: [地点DEBUG] PlaceLabel set → '驻留 · %s — %s在此' (%d NPC)" % [cn, npc_str, known_npcs.size()])
 
 # ── 上限计算 ────────────────────────────────────────────
 

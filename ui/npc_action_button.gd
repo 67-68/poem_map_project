@@ -50,11 +50,17 @@ func _on_pressed() -> void:
 
 func _on_default_pressed() -> void:
 	var selected_uuid := VolatileState.action_state.selected_sub_action_uuid
-	Logging.info("NpcActionButton._on_default_pressed: selected_uuid='%s'" % selected_uuid)
+	Logging.info("NpcActionButton._on_default_pressed: [地点DEBUG] selected_uuid='%s', stay_place='%s', place_mismatch=%s, required_place='%s'" % [
+		selected_uuid, PlayerState.stay_place,
+		str(VolatileState.action_state.selected_entity_place_mismatch),
+		VolatileState.action_state.selected_entity_required_place
+	])
 	if selected_uuid.is_empty():
 		EventBus.request_toast.emit("请先选择一个行动", 1)
 		return
+	Logging.info("NpcActionButton._on_default_pressed: [地点DEBUG] 即将执行 SubActionExecutor, stay_place='%s'" % PlayerState.stay_place)
 	SubActionExecutor.execute(selected_uuid, VolatileState.action_state)
+	Logging.info("NpcActionButton._on_default_pressed: [地点DEBUG] SubActionExecutor 返回后 stay_place='%s'" % PlayerState.stay_place)
 	var sub_action: Action = Database.get_action(selected_uuid) as Action
 	execution_completed.emit(GameEntity.new({"uuid": selected_uuid, "name": sub_action.name if sub_action else selected_uuid}))
 
@@ -167,9 +173,9 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 ## @param lock_reason: 锁定原因文本（如 "缺银两" 等）
 func _populate_labels_from_hint(hint, locked: bool, lock_reason: String) -> void:
 	if locked:
-		_set_label(_feas_label, "可行性：不足")
-		_set_label(_cost_label, "耗费：—")
-		_set_label(_output_label, "产出：—")
+		_set_label(_feas_label, "可行：不足")
+		_set_label(_cost_label, "耗：—")
+		_set_label(_output_label, "产：—")
 		_set_label(_risk_label, "锁定：" + (lock_reason if not lock_reason.is_empty() else "条件不足"))
 		Logging.info("NpcActionButton._populate_labels_from_hint: locked mode, reason='%s'" % lock_reason)
 		return
@@ -178,19 +184,19 @@ func _populate_labels_from_hint(hint, locked: bool, lock_reason: String) -> void
 	if hint.feasibility and not hint.feasibility.lines.is_empty():
 		_set_label(_feas_label, hint.feasibility.lines[0])
 	else:
-		_set_label(_feas_label, "可行性：未知")
+		_set_label(_feas_label, "可行：未知")
 
 	# ── 耗费 ──
 	var cost_text := _module_lines_joined(hint.cost)
-	_set_label(_cost_label, "耗费：" + cost_text if not cost_text.is_empty() else "耗费：无")
+	_set_label(_cost_label, "耗：" + cost_text if not cost_text.is_empty() else "耗：无")
 
 	# ── 产出 ──
 	var output_text := _module_lines_joined(hint.output)
-	_set_label(_output_label, "产出：" + output_text if not output_text.is_empty() else "产出：无")
+	_set_label(_output_label, "产：" + output_text if not output_text.is_empty() else "产：无")
 
 	# ── 风险 ──
 	var risk_text := _module_lines_joined(hint.risk)
-	_set_label(_risk_label, "风险：" + risk_text if not risk_text.is_empty() else "风险：无")
+	_set_label(_risk_label, "险：" + risk_text if not risk_text.is_empty() else "险：")
 
 	Logging.info("NpcActionButton._populate_labels_from_hint: SIMPLE labels populated")
 

@@ -53,10 +53,11 @@ func bind_entity(ent: GameEntity) -> void:
 
 
 func _on_clicked() -> void:
-	Logging.info("SubActionButton._on_clicked: entity='%s' uuid=%s _is_locked=%s" % [
+	Logging.info("SubActionButton._on_clicked: [地点DEBUG] entity='%s' uuid=%s _is_locked=%s, current stay_place='%s'" % [
 		entity.name if entity else "null",
 		entity.uuid if entity else "null",
-		str(_is_locked)
+		str(_is_locked),
+		PlayerState.stay_place
 	])
 	
 	# ── 锁定态 → toast 不写入 ──
@@ -73,11 +74,14 @@ func _on_clicked() -> void:
 		return
 	
 	# ── 写入 VolatileState ──
+	var _mismatch = entity.get_meta("_place_mismatch", false)
+	var _req_place = entity.get_meta("_required_place", "")
+	var _req_place_name = entity.get_meta("_required_place_name", "")
 	VolatileState.action_state.selected_sub_action_uuid = entity.uuid
-	VolatileState.action_state.selected_entity_place_mismatch = entity.get_meta("_place_mismatch", false)
-	VolatileState.action_state.selected_entity_required_place = entity.get_meta("_required_place", "")
-	VolatileState.action_state.selected_entity_required_place_name = entity.get_meta("_required_place_name", "")
-	Logging.info("SubActionButton._on_clicked: 写入 selected_sub_action_uuid='%s' place_mismatch=%s required_place='%s'" % [entity.uuid, str(VolatileState.action_state.selected_entity_place_mismatch), VolatileState.action_state.selected_entity_required_place_name])
+	VolatileState.action_state.selected_entity_place_mismatch = _mismatch
+	VolatileState.action_state.selected_entity_required_place = _req_place
+	VolatileState.action_state.selected_entity_required_place_name = _req_place_name
+	Logging.info("SubActionButton._on_clicked: [地点DEBUG] 写入 VolatileState — uuid='%s' place_mismatch=%s required_place='%s'(%s), stay_place='%s'" % [entity.uuid, str(_mismatch), _req_place, _req_place_name, PlayerState.stay_place])
 
 
 ## 覆写基类 _register_hover_popup — hover 已迁移至右栏 NpcActionButton，此处不注册

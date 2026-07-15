@@ -9,8 +9,11 @@ class_name SubActionExecutor extends RefCounted
 ## 执行子行动完整管线。读取 VolatileState 中的 pending 数据，
 ## 独立完成 cost init/operate → possibility 投骰 → action_results → scan_events。
 static func execute(selected_uuid: String, state: VolatileState.VolatileActionState) -> void:
-	Logging.info("SubActionExecutor.execute: ENTER selected_uuid=%s pending_main_tag=%s pending_outcome=%s" % [
+	Logging.info("SubActionExecutor.execute: ═══ ENTER selected_uuid=%s pending_main_tag=%s pending_outcome=%s ═══" % [
 		selected_uuid, state.pending_main_tag, state.pending_outcome
+	])
+	Logging.info("SubActionExecutor.execute: [地点DEBUG] ENTER时 stay_place='%s', place_mismatch=%s, required_place='%s', required_place_name='%s'" % [
+		PlayerState.stay_place, str(state.selected_entity_place_mismatch), state.selected_entity_required_place, state.selected_entity_required_place_name
 	])
 	
 	if selected_uuid.is_empty():
@@ -20,10 +23,12 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 	
 	# ── 异地行动：执行前消耗 1 天 + 切换 stay_place ──
 	if state.selected_entity_place_mismatch and not state.selected_entity_required_place.is_empty():
-		Logging.info("SubActionExecutor.execute: 异地行动 — 消耗 1 天前往 %s" % state.selected_entity_required_place_name)
+		Logging.info("SubActionExecutor.execute: [地点DEBUG] 异地行动触发 — 消耗 1 天前往 '%s'(%s), 当前 stay_place='%s'" % [state.selected_entity_required_place_name, state.selected_entity_required_place, PlayerState.stay_place])
 		TimeService.advance_time(1)
 		PlayerState.stay_place = state.selected_entity_required_place
-		Logging.info("SubActionExecutor.execute: stay_place 已更新为 %s" % state.selected_entity_required_place_name)
+		Logging.info("SubActionExecutor.execute: [地点DEBUG] stay_place 赋值后验证: PlayerState.stay_place='%s', GameSave.data.stay_place='%s'" % [PlayerState.stay_place, GameSave.data.stay_place])
+	else:
+		Logging.info("SubActionExecutor.execute: [地点DEBUG] 非异地行动 — 不切换地点. mismatch=%s required_place='%s'" % [str(state.selected_entity_place_mismatch), state.selected_entity_required_place])
 	
 	# ── 查找子 action ──
 	var sub_action: Action = Database.get_action(selected_uuid) as Action
@@ -141,7 +146,9 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 			'archetype_base': selected_uuid,
 			'outcome': "success",
 		}
+		Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events前 stay_place='%s', context archetype_base='%s'" % [PlayerState.stay_place, selected_uuid])
 		EventManager.scan_events(0, context)
+		Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events后 stay_place='%s'" % PlayerState.stay_place)
 		
 		# sub-action success 后启动 defer
 		if sub_action and sub_action.defer_config and not sub_action.defer_config.xun_defered.is_empty():

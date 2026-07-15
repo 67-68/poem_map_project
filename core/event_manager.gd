@@ -86,6 +86,7 @@ func scan_events(nothing_multiplication_weight = 10.0, context: Dictionary = {})
     
     #breakpoint
     Logging.info("[EventManager] Starting event scan")
+    Logging.info("[EventManager] [地点DEBUG] scan_events ENTER — stay_place='%s', context main_tag='%s', fallback='%s'" % [PlayerState.stay_place, context.get('main_tag', ''), context.get('fallback_event_uuid', '')])
     Logging.info("[DIAG] EventManager.scan_events: context keys=%s npc_target='%s'" % [str(context.keys()), context.get("npc_target", "")])
    
     var initial_tickets: Array[EventTicket] = []

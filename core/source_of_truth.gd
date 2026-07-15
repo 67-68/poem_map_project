@@ -31,15 +31,14 @@ static var debug_dashboard_state = {
 	
 	# 维度 4：资源池 (The Expendables) - 核心六属性
 	"resources": {
-		# "money": 45,
-		"money": 10000,
+		"money": 45,
 		"health": 50,
 		"time": 10,
 		"astuteness": 0,
 		"composure": 0,
-		"inspiration": 100000,
-		"momentum": 100000,
-		"prestige": 100000,
+		"inspiration": 0,
+		"momentum": 0,
+		"prestige": 0,
 		"talent": 0,
 		"progress": 0,
 	},

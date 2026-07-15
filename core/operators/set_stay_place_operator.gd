@@ -24,8 +24,9 @@ func operate() -> void:
 	if place.is_empty():
 		Logging.err("SetStayPlaceOperator: place 为空，跳过执行")
 		return
+	Logging.info("SetStayPlaceOperator: [地点DEBUG] operate() ENTER — 即将设置 stay_place: 当前='%s' → 目标='%s'(%s)" % [PlayerState.stay_place, place, PLACE_CN_MAP.get(place, "?")])
 	PlayerState.stay_place = place
-	Logging.info("SetStayPlaceOperator: 设置驻留地点为 '%s'(%s)" % [place, PLACE_CN_MAP.get(place, "?")])
+	Logging.info("SetStayPlaceOperator: [地点DEBUG] operate() DONE — stay_place 已设为 '%s'(%s), 验证 PlayerState.stay_place='%s'" % [place, PLACE_CN_MAP.get(place, "?"), PlayerState.stay_place])
 
 func get_referenced_flags() -> Array:
 	return []

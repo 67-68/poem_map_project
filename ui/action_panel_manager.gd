@@ -260,5 +260,5 @@ func _on_remote_filter_changed(show: bool) -> void:
 
 ## 🆕 驻留地点变更回调 → 完全重建按钮（重新按新地点过滤）
 func _on_stay_place_changed(_place_str: String) -> void:
-	Logging.info("ActionPanelManager._on_stay_place_changed: place='%s', 触发重建" % _place_str)
+	Logging.info("ActionPanelManager._on_stay_place_changed: [地点DEBUG] place='%s', PlayerState.stay_place='%s', GameSave.data.stay_place='%s', 触发重建" % [_place_str, PlayerState.stay_place, GameSave.data.stay_place])
 	_rebuild_all_buttons()
