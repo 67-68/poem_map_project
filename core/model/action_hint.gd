@@ -16,6 +16,10 @@ var output
 var risk
 var other
 
+## 供 SIMPLE profile 使用的标签文本字典（由 ActionHintFormatter 填充）
+## 键: "feasibility", "cost", "output", "risk"
+var simple_labels: Dictionary = {}
+
 var _vector: String = ""
 var _vector_dirty: bool = true
 

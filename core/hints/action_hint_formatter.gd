@@ -83,7 +83,7 @@ static func build_action_hint(action, is_locked: bool, ctx, profile := _HintProf
 ## 为 sub-action picker tooltip 构建预览文本。
 ## 现在返回 ActionHint 结构化对象，consumer 通过 .vector 获取旧格式的完整文本。
 ## @param profile: 提示模式 — HintProfile.Profile.DEFAULT（默认）或 SIMPLE
-static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0, profile := _HintProfile.Profile.DEFAULT):
+static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0, profile := _HintProfile.Profile.DEFAULT, is_locked: bool = false, lock_reason: String = ""):
 	if not sub_action:
 		Logging.err("ActionHintFormatter.build_sub_action_preview: sub_action is null")
 		return { "narrative": "", "vector": "" }
@@ -172,6 +172,9 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		hint.risk.append(_BBCode.fail_header())
 		hint.risk.append_array(fail_descs)
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' fail preview: %d lines" % [sub_action.name, fail_descs.size()])
+
+	if profile == _HintProfile.Profile.SIMPLE:
+		_finalize_simple_labels(hint, is_locked, lock_reason)
 
 	Logging.info("ActionHintFormatter.build_sub_action_preview: done for '%s', vector=%d chars" % [sub_action.name, hint.vector.length()])
 	return hint
@@ -471,3 +474,29 @@ static func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Ar
 				lines.append("• " + desc)
 
 	return lines
+
+
+## 根据锁定状态和已有模块 lines，构建 SIMPLE 模式下的 UI 标签文本
+## 结果存入 hint.simple_labels，不影响 lines / vector 原有内容
+static func _finalize_simple_labels(hint, is_locked: bool, lock_reason: String) -> void:
+	var labels := {}
+	if is_locked:
+		labels["feasibility"] = "可行：不足"
+		labels["cost"] = "耗：—"
+		labels["output"] = "产：—"
+		labels["risk"] = "锁定：" + (lock_reason if not lock_reason.is_empty() else "条件不足")
+	else:
+		# feasibility: SIMPLE 模式下 _assemble_feasibility_module 已生成 "可行： xx"
+		var feas_line := hint.feasibility.lines[0] if not hint.feasibility.lines.is_empty() else ""
+		labels["feasibility"] = feas_line if not feas_line.is_empty() else "可行：未知"
+
+		var cost_joined := "、".join(hint.cost.lines)
+		labels["cost"] = "耗：" + cost_joined if not cost_joined.is_empty() else "耗：无"
+
+		var out_joined := "、".join(hint.output.lines)
+		labels["output"] = "产：" + out_joined if not out_joined.is_empty() else "产：无"
+
+		var risk_joined := "、".join(hint.risk.lines)
+		labels["risk"] = "险：" + risk_joined if not risk_joined.is_empty() else "险："
+
+	hint.simple_labels = labels

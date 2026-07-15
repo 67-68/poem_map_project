@@ -77,7 +77,7 @@ static func build_action_hint(action: Action, is_locked: bool, profile := _HintP
 ## 🤓☝️ 绞杀者转发：业务已正式迁移至 ActionHintFormatter
 ## 内部自动构建 HintContext，保持对 consumers 的向后兼容。
 ## @param profile: 提示模式 — HintProfile.Profile.DEFAULT（默认）或 SIMPLE
-static func build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0, profile := _HintProfile.Profile.DEFAULT):
+static func build_sub_action_preview(sub_action: Action, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0, profile := _HintProfile.Profile.DEFAULT, is_locked: bool = false, lock_reason: String = ""):
 	if not sub_action:
 		Logging.err("ActionHintBuilder.build_sub_action_preview: sub_action is null")
 		var _empty = _ActionHint.new()
@@ -91,7 +91,7 @@ static func build_sub_action_preview(sub_action: Action, success_ops: Array = []
 	var _saved_is_repeated = PlayerState._is_repeated_action
 	PlayerState._is_repeated_action = ctx.is_repeated
 	
-	var result = _ActionHintFormatter.build_sub_action_preview(sub_action, ctx, success_ops, fail_ops, parent_day_consumed, profile)
+	var result = _ActionHintFormatter.build_sub_action_preview(sub_action, ctx, success_ops, fail_ops, parent_day_consumed, profile, is_locked, lock_reason)
 	
 	# 恢复
 	PlayerState._is_repeated_action = _saved_is_repeated

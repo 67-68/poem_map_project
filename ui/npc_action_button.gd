@@ -110,7 +110,7 @@ func set_action_data(action_name: String, action_uuid: String, entity = null) ->
 	var fail_ops: Array = fail_arch.operators.duplicate(true) if fail_arch else []
 
 	# 🆕 使用 build_sub_action_preview：SIMPLE → labels, DEFAULT → hover
-	var simple_hint = _ActionHintBuilder.build_sub_action_preview(action, success_ops, fail_ops, 0.0, _HintProfile.Profile.SIMPLE)
+	var simple_hint = _ActionHintBuilder.build_sub_action_preview(action, success_ops, fail_ops, 0.0, _HintProfile.Profile.SIMPLE, is_locked, entity.get_meta("_locked_reason", "") if entity else "")
 	var default_hint = _ActionHintBuilder.build_sub_action_preview(action, success_ops, fail_ops, 0.0, _HintProfile.Profile.DEFAULT)
 
 	if is_locked:
@@ -156,7 +156,7 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 	var success_ops: Array = succ_arch.operators.duplicate(true) if succ_arch else []
 	var fail_arch = Database.get_archetype_by_uuid(override_action_uuid, "failure")
 	var fail_ops: Array = fail_arch.operators.duplicate(true) if fail_arch else []
-	var simple_hint = _ActionHintBuilder.build_sub_action_preview(override_action, success_ops, fail_ops, 0.0, _HintProfile.Profile.SIMPLE)
+	var simple_hint = _ActionHintBuilder.build_sub_action_preview(override_action, success_ops, fail_ops, 0.0, _HintProfile.Profile.SIMPLE, _is_locked, _lock_reason)
 	var default_hint = _ActionHintBuilder.build_sub_action_preview(override_action, success_ops, fail_ops, 0.0, _HintProfile.Profile.DEFAULT)
 
 	_populate_labels_from_hint(simple_hint, _is_locked, _lock_reason)
@@ -169,36 +169,15 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 ## ════════════════════════════════════════════════════════════════
 
 ## 从 ActionHint (SIMPLE profile) 提取模块行填充 label 控件。
-## @param locked: true 时展示锁定视图（可行性不足 + 锁定原因）
-## @param lock_reason: 锁定原因文本（如 "缺银两" 等）
+## @param locked: 当前未使用，保留签名兼容
+## @param lock_reason: 当前未使用，保留签名兼容
 func _populate_labels_from_hint(hint, locked: bool, lock_reason: String) -> void:
-	if locked:
-		_set_label(_feas_label, "可行：不足")
-		_set_label(_cost_label, "耗：—")
-		_set_label(_output_label, "产：—")
-		_set_label(_risk_label, "锁定：" + (lock_reason if not lock_reason.is_empty() else "条件不足"))
-		Logging.info("NpcActionButton._populate_labels_from_hint: locked mode, reason='%s'" % lock_reason)
-		return
-
-	# ── 可行性：取 feas 模块首行（若有）──
-	if hint.feasibility and not hint.feasibility.lines.is_empty():
-		_set_label(_feas_label, hint.feasibility.lines[0])
-	else:
-		_set_label(_feas_label, "可行：未知")
-
-	# ── 耗费 ──
-	var cost_text := _module_lines_joined(hint.cost)
-	_set_label(_cost_label, "耗：" + cost_text if not cost_text.is_empty() else "耗：无")
-
-	# ── 产出 ──
-	var output_text := _module_lines_joined(hint.output)
-	_set_label(_output_label, "产：" + output_text if not output_text.is_empty() else "产：无")
-
-	# ── 风险 ──
-	var risk_text := _module_lines_joined(hint.risk)
-	_set_label(_risk_label, "险：" + risk_text if not risk_text.is_empty() else "险：")
-
-	Logging.info("NpcActionButton._populate_labels_from_hint: SIMPLE labels populated")
+	var labels: Dictionary = hint.simple_labels if hint else {}
+	_set_label(_feas_label, labels.get("feasibility", "可行：?"))
+	_set_label(_cost_label, labels.get("cost", "耗：无"))
+	_set_label(_output_label, labels.get("output", "产：无"))
+	_set_label(_risk_label, labels.get("risk", "险："))
+	Logging.info("NpcActionButton._populate_labels_from_hint: labels=%s" % str(labels))
 
 
 ## 从 ActionHint (DEFAULT profile) 提取 narrative + vector 并注册到 HoverPopupManager
