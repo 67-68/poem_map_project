@@ -95,33 +95,20 @@ func _on_clicked() -> void:
 			
 			if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
 				for req in sub_action.aciton_requirements:
-					if req is TraitRequirement or req is PoemRequirement or req is FlagRequirement or req is NarrativeLockRequirement:
+					if req is TraitRequirement or req is FlagRequirement or req is NarrativeLockRequirement:
 						if not req.compare(PlayerState):
 							Logging.info("MainActionButton: sub-action '%s' HIDE — requirement type='%s' not met" % [sub_action.uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown"])
 							_should_hide = true
 							break
+					elif req is PoemRequirement:
+						# 🆕 PoemRequirement 不再 HIDE — 改为 GRAY（在 picker 中显示但标记不足）
+						Logging.info("MainActionButton: sub-action '%s' PoemRequirement not met → 注入 GRAY reason (原 HIDE)" % sub_action.uuid)
 			
-			if not _should_hide:
-				var _viability_ops: Array = []
-				if sub_action.action_results:
-					_viability_ops.append_array(sub_action.action_results)
-				_viability_ops.append_array(success_ops)
-				_viability_ops.append_array(fail_ops)
-				Logging.info("MainActionButton: sub-action '%s' viability check — %d ops (action_results=%d + success_ops=%d + fail_ops=%d)" % [sub_action.uuid, _viability_ops.size(), sub_action.action_results.size() if sub_action.action_results else 0, success_ops.size(), fail_ops.size()])
-				for op in _viability_ops:
-					if op is ConsumeRandomLeverageOperator:
-						if not ConsumeRandomLeverageOperator.is_viable():
-							Logging.info("MainActionButton: sub-action '%s' HIDE — ConsumeRandomLeverageOperator.is_viable()=false" % sub_action.uuid)
-							_should_hide = true
-							break
-					elif op is PoemRewardOperator:
-						if not PoemRewardOperator.is_viable():
-							Logging.info("MainActionButton: sub-action '%s' HIDE — PoemRewardOperator.is_viable()=false" % sub_action.uuid)
-							_should_hide = true
-							break
+			# 🆕 删除特殊资源 viability HIDE（ConsumeRandomLeverage / PoemReward 不再隐藏）
+			# 改为在 picker 中用普通/特殊按钮过滤可见性
 			
 			if _should_hide:
-				Logging.info("MainActionButton: sub-action '%s' 完全隐藏，不进入 picker" % sub_action.uuid)
+				Logging.info("MainActionButton: sub-action '%s' 完全隐藏（门槛要求不满足），不进入 picker" % sub_action.uuid)
 				continue
 			
 			# Phase 2: GRAY 检查
@@ -129,7 +116,7 @@ func _on_clicked() -> void:
 			
 			if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
 				for req in sub_action.aciton_requirements:
-					if req is PropertyRequirement or req is EmotionRequirement or req is PropRangeRequirement:
+					if req is PropertyRequirement or req is EmotionRequirement or req is PropRangeRequirement or req is PoemRequirement:
 						if not req.compare(PlayerState):
 							var desc := req.describe_requirement() if req.has_method("describe_requirement") else ""
 							var reason := desc if not desc.is_empty() else "属性不满足"
@@ -164,6 +151,9 @@ func _on_clicked() -> void:
 				entity.set_meta("_action_icon", sub_action.icon)
 			entity.set_meta("parent_main_tag", _snap_main_tag)
 			entity.set_meta("operators", success_ops)
+
+			# 🆕 判定是否"特殊"行动（cost archetype 含非 PropertyOperator）
+			entity.set_meta("_is_special", _is_special_sub_action(sub_action))
 			
 			# 地点校验
 			var _place_mismatch := RemoteActionFilterManager.is_action_remote(sub_action)
@@ -205,7 +195,7 @@ func _on_clicked() -> void:
 			RemoteActionFilterManager.push_show_remote_override(true)
 			VolatileState.action_state.did_auto_enable_remote = true
 			Logging.info("MainActionButton: 驻留 zhu_liu → 自动开启「显示异地行动」(push snapshot)")
-		EventBus.push_picker.emit(picker_data, _on_sub_action_picked, null, VolatileState.action_state.pending_on_checkbox_toggled)
+		EventBus.push_sub_action_picker.emit(picker_data, _on_sub_action_picked, null, VolatileState.action_state.pending_on_checkbox_toggled)
 		return
 	
 	# ── 重复行动检测 ──
@@ -298,3 +288,31 @@ func _pop_auto_remote_override() -> void:
 	VolatileState.action_state.did_auto_enable_remote = false
 	RemoteActionFilterManager.pop_show_remote_override()
 	Logging.info("MainActionButton._pop_auto_remote_override: 已恢复 show_remote snapshot")
+
+
+## 🆕 判定 sub_action 是否为"特殊"行动。
+## 规则（满足任一即特殊）：
+##   1. cost archetype 中存在非 PropertyOperator 的 operator
+##   2. aciton_requirements 中有 PoemRequirement（消耗诗词）
+## 不满足任一 → 普通。
+func _is_special_sub_action(sub_action: Action) -> bool:
+	if not sub_action:
+		return false
+
+	# ── 条件 1: cost archetype 含非 PropertyOperator ──
+	var cost_arch = Database.get_archetype_by_uuid(sub_action.uuid, "cost")
+	if cost_arch != null and not cost_arch.operators.is_empty():
+		for op in cost_arch.operators:
+			if not op is PropertyOperator:
+				Logging.info("MainActionButton._is_special_sub_action: '%s' cost archetype 含非 PropertyOperator (%s) → 特殊" % [sub_action.name, op.get_class() if op else "null"])
+				return true
+
+	# ── 条件 2: 含 PoemRequirement（消耗诗词算特殊资源）──
+	if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
+		for req in sub_action.aciton_requirements:
+			if req is PoemRequirement:
+				Logging.info("MainActionButton._is_special_sub_action: '%s' 含 PoemRequirement → 特殊" % sub_action.name)
+				return true
+
+	Logging.info("MainActionButton._is_special_sub_action: '%s' 无特殊条件 → 普通" % sub_action.name)
+	return false

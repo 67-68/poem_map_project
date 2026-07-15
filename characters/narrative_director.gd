@@ -7,7 +7,8 @@ class_name NarrativeDirector extends Node
 signal tape_needs_show()
 signal tape_needs_hide()
 signal event_ready_to_play(entry: Dictionary, from_stack: bool)
-signal picker_ready(entry: Dictionary)
+signal sub_action_picker_ready(entry: Dictionary)
+signal item_picker_ready(entry: Dictionary)
 signal cinematic_ready(entry: Dictionary)
 signal focused_chat_ready(entry: Dictionary)
 signal interrupt_available(event_key: String, context: Dictionary, btn_text: String, btn_color: Color)
@@ -47,7 +48,8 @@ func _ready() -> void:
 	EventBus.pop_event.connect(_on_pop_event)
 	EventBus.pop_to_event.connect(_on_pop_to_event)
 	EventBus.clear_scheduled_events.connect(_on_clear_scheduled_events)
-	EventBus.push_picker.connect(_on_push_picker)
+	EventBus.push_sub_action_picker.connect(_on_push_sub_action_picker)
+	EventBus.push_item_picker.connect(_on_push_item_picker)
 	EventBus.push_cinematic.connect(_on_push_cinematic)
 	EventBus.push_focused_chat.connect(_on_push_focused_chat)
 	EventBus.request_event.connect(_on_request_event)
@@ -132,7 +134,7 @@ func _on_pop_to_event(event_key: String):
 		var entry = _event_stack[i]
 		if not entry.has("data"):
 			continue
-		if entry.get("type") == "picker" or entry.get("type") == "cinematic" or entry.get("type") == "focused_chat":
+		if entry.get("type") in ["sub_action_picker", "item_picker", "cinematic", "focused_chat"]:
 			continue
 		var ev: BaseEvent = entry.get("data")
 		if _event_identity_matches(ev, event_key):
@@ -156,22 +158,38 @@ func _event_identity_matches(ev: BaseEvent, event_key: String) -> bool:
 	return false
 
 
-func _on_push_picker(data: Array, on_selected: Callable, ui_constructor = null, on_filter_toggled: Callable = Callable()):
+func _on_push_sub_action_picker(data: Array, on_selected: Callable, ui_constructor = null, on_filter_toggled: Callable = Callable()):
 	var entry := {
-		"type": "picker",
+		"type": "sub_action_picker",
 		"data": data,
 		"on_selected": on_selected,
 		"ui_constructor": ui_constructor,
 		"on_filter_toggled": on_filter_toggled,
 	}
 	_event_stack.push_front(entry)
-	Logging.info("[DIAG] _on_push_picker: Picker 已推入栈顶，%d 个选项，_is_active=%s，stack.size=%d" % [data.size(), _is_active, _event_stack.size()])
+	Logging.info("[DIAG] _on_push_sub_action_picker: SubActionPicker 已推入栈顶，%d 个选项，_is_active=%s，stack.size=%d" % [data.size(), _is_active, _event_stack.size()])
 
 	if not _is_active:
-		Logging.info("[DIAG] _on_push_picker: _is_active=false，即将调用 _process_next")
+		Logging.info("[DIAG] _on_push_sub_action_picker: _is_active=false，即将调用 _process_next")
 		_process_next()
 	else:
-		Logging.info("[DIAG] _on_push_picker: _is_active=true，跳过 _process_next（picker 悬挂在栈中）")
+		Logging.info("[DIAG] _on_push_sub_action_picker: _is_active=true，跳过 _process_next（picker 悬挂在栈中）")
+
+
+func _on_push_item_picker(data: Array, on_selected: Callable):
+	var entry := {
+		"type": "item_picker",
+		"data": data,
+		"on_selected": on_selected,
+	}
+	_event_stack.push_front(entry)
+	Logging.info("[DIAG] _on_push_item_picker: ItemPicker 已推入栈顶，%d 个选项，_is_active=%s，stack.size=%d" % [data.size(), _is_active, _event_stack.size()])
+
+	if not _is_active:
+		Logging.info("[DIAG] _on_push_item_picker: _is_active=false，即将调用 _process_next")
+		_process_next()
+	else:
+		Logging.info("[DIAG] _on_push_item_picker: _is_active=true，跳过 _process_next（picker 悬挂在栈中）")
 
 
 func _on_push_focused_chat(data: Variant, context: Dictionary = {}):
@@ -256,11 +274,18 @@ func _process_next():
 	if _event_stack.size() > 0:
 		var entry = _event_stack[0]
 
-		if entry is Dictionary and entry.get("type") == "picker":
-			Logging.info("_process_next: 处理栈顶 Picker")
+		if entry is Dictionary and entry.get("type") == "sub_action_picker":
+			Logging.info("_process_next: 处理栈顶 SubActionPicker")
 			_is_active = true
 			_pause_world()
-			picker_ready.emit(entry)
+			sub_action_picker_ready.emit(entry)
+			return
+
+		if entry is Dictionary and entry.get("type") == "item_picker":
+			Logging.info("_process_next: 处理栈顶 ItemPicker")
+			_is_active = true
+			_pause_world()
+			item_picker_ready.emit(entry)
 			return
 
 		if entry is Dictionary and entry.get("type") == "cinematic":
@@ -396,7 +421,7 @@ func on_option_selected(choice, choice_text: String = ""):
 		if guard_entry.get("data") == _completed_data:
 			_event_stack.pop_front()
 			Logging.info("on_option_selected: 自动弹出已完成的栈事件 '%s'" % _completed_data.name)
-		elif entry_type in ["focused_chat", "picker", "cinematic"]:
+		elif entry_type in ["focused_chat", "sub_action_picker", "item_picker", "cinematic"]:
 			Logging.info("on_option_selected: 栈顶条目已处理（type='%s'），跳过 _is_active 重置" % entry_type)
 			_resume_world()
 			return
@@ -449,13 +474,25 @@ func on_interrupt_pressed():
 	_process_next()
 
 
-func on_picker_item_selected(entity):
+func on_picker_item_selected(entity, entry: Dictionary = {}):
 	if _event_stack.size() == 0:
 		Logging.warn("on_picker_item_selected: 栈为空，没有 picker 条目")
 		return
 
-	var entry = _event_stack.pop_front()
-	Logging.info("Picker 已从栈中弹出，选择了: %s" % str(entity))
+	# 如果传入了 entry，精确查找并弹出对应条目；否则弹 front（兼容旧调用）
+	if entry.is_empty():
+		var popped = _event_stack.pop_front()
+		Logging.info("on_picker_item_selected: 盲弹 front — Picker 已从栈中弹出，选择了: %s" % str(entity))
+		entry = popped
+	else:
+		var idx := _event_stack.find(entry)
+		if idx == -1:
+			Logging.warn("on_picker_item_selected: 传入的 entry 不在栈中，盲弹 front 作为 fallback")
+			var popped = _event_stack.pop_front()
+			entry = popped
+		else:
+			_event_stack.remove_at(idx)
+			Logging.info("on_picker_item_selected: 精确弹出栈中条目 (idx=%d)，选择了: %s" % [idx, str(entity)])
 
 	var callback: Callable = entry.get("on_selected", Callable())
 	if callback.is_valid():
@@ -474,7 +511,7 @@ func on_picker_cancelled(entry: Dictionary):
 
 	# 守卫：确保栈顶仍是我们期望的 entry（防止并发竞态）
 	var top_entry = _event_stack[0]
-	if top_entry.get("type") != "picker":
+	if top_entry.get("type") not in ["sub_action_picker", "item_picker"]:
 		Logging.warn("on_picker_cancelled: 栈顶不是 picker（type=%s），跳过弹出" % top_entry.get("type", "?"))
 		return
 

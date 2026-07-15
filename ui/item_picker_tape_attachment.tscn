@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://dkmq7w6vw2v5p"]
+
+[ext_resource type="Script" path="res://ui/item_picker_tape_attachment.gd" id="1_qvtpk"]
+[ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="2_26bj5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
+
+[node name="ItemPickerTapeAttachment" type="VBoxContainer"]
+custom_minimum_size = Vector2(420, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.5
+offset_top = -168.5
+offset_right = 227.5
+offset_bottom = 168.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_qvtpk")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="HBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.42, 0.31, 1)
+theme_override_fonts/font = ExtResource("2_26bj5")
+theme_override_font_sizes/font_size = 18
+text = "【选择物品】"
+horizontal_alignment = 1
+
+[node name="LinkButton" type="LinkButton" parent="HBox"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.7071239, 0.66651803, 0.6636292, 1)
+theme_override_fonts/font = ExtResource("2_26bj5")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
+text = "不回答"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="HintLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.42, 0.31, 1)
+text = "请选择一项"
+horizontal_alignment = 1
+
+[node name="ListPanel" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Spacer" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="ConfirmButton" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "确认"

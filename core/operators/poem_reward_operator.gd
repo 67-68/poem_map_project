@@ -72,98 +72,57 @@ static func is_viable() -> bool:
 
 func operate():
 	Logging.debug('PoemRewardOperator: Starting operate() — mode=%s' % mode)
-	if not is_viable():
-		Logging.warn('PoemRewardOperator: No Poem traits available, nothing to show')
-		return
 
-	var data = []
-	for t in PlayerState.get_traits():
-		var trait_ = Database.get_trait(t)
-		if not trait_:
-			Logging.err('PoemRewardOperator: can not found trait %s' % t)
-			continue
-		if not (trait_ is Poem):
-			Logging.debug('PoemRewardOperator: Skipping non-Poem trait %s' % t)
-			continue
-		Logging.debug('PoemRewardOperator: Found Poem trait %s (level=%d)' % [t, trait_.level])
-		data.append(trait_)
-
-	Logging.debug('PoemRewardOperator: Pushing picker to stack with %d poem traits' % data.size())
-	EventBus.push_picker.emit(data, _on_poem_picked, null, Callable())
-
-
-func _on_poem_picked(poem_picked):
-	#breakpoint
-	if not poem_picked:
-		Logging.warn('PoemRewardOperator: No poem picked, skipping reward')
-		return
-
-	var poem = poem_picked as Poem
+	# 随机选取一首诗词
+	var poem: Poem = _pick_random_poem()
 	if not poem:
-		Logging.err('PoemRewardOperator: picked item is not a Poem')
+		Logging.warn('PoemRewardOperator: No Poem traits available, nothing to do')
 		return
 
-	Logging.info('PoemRewardOperator: Poem picked — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
+	Logging.info('PoemRewardOperator: Random poem picked — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
 
 	# ── 1. 计算升级概率 ──
 	var base_level: int = poem.level
 	var upgrade_prob: float = PoemCraftingCalculator.calculate_level_upgrade_probability(base_level)
-	Logging.info('PoemRewardOperator: base_level=%d, upgrade_probability=%.3f' % [base_level, upgrade_prob])
 
 	# ── 2. 掷骰子 ──
 	var effective_level: int = base_level
 	var upgrade_succeeded: bool = false
 	if upgrade_prob > 0.0:
 		var roll: float = randf()
-		Logging.info('PoemRewardOperator: randf()=%.3f vs upgrade_prob=%.3f' % [roll, upgrade_prob])
 		if roll < upgrade_prob:
 			effective_level = mini(base_level + 1, 3)
 			upgrade_succeeded = true
 			Logging.info('PoemRewardOperator: 升级成功！%d → %d' % [base_level, effective_level])
-		else:
-			Logging.info('PoemRewardOperator: 升级失败，保持 level=%d' % base_level)
-	else:
-		Logging.info('PoemRewardOperator: level=%d 无升级空间' % base_level)
 
 	# ── 3. npc_trade_tier 等级提升（V11: xing_wang 模式） ──
 	if mode == "xing_wang":
 		var trade_boost: int = ModifierRegistry.get_npc_trade_tier_boost("zhengqian")
 		if trade_boost > 0:
-			var original_level := effective_level
 			effective_level = mini(effective_level + trade_boost, 3)
-			Logging.info('PoemRewardOperator: npc_trade_tier boost=%d → effective_level %d → %d' % [trade_boost, original_level, effective_level])
 
-	# ── 4. level → size（money/xing_wang 模式高一档: 1→medium, 2→large, 3→extra_large）──
+	# ── 4. level → size ──
 	var size_key: String
 	if mode == "money" or mode == "xing_wang":
 		size_key = LEVEL_TO_SIZE_MONEY.get(effective_level, "medium")
 	else:
 		size_key = LEVEL_TO_SIZE_BASE.get(effective_level, "small")
-	Logging.info('PoemRewardOperator: effective_level=%d → size=%s (mode=%s)' % [effective_level, size_key, mode])
 
 	# ── 5. 执行收益 ──
 	if mode == "xing_wang":
-		# V11: 双属性输出 — 灵感(兴) + 声望(望)
 		for prop_name in XING_WANG_PROPS:
 			var prop_op := PropertyOperator.new()
 			prop_op.property = prop_name
 			prop_op.ranked_value = size_key
 			prop_op.init({})
-			Logging.info('PoemRewardOperator: xing_wang reward — property=%s, ranked_value=%s, resolved_value=%d' % [prop_name, size_key, prop_op.value])
 			prop_op.operate()
 	else:
-		# 原有单属性输出
 		var prop_name: String = MODE_TO_PROP.get(mode, "money")
-		Logging.info('PoemRewardOperator: mode=%s → property=%s' % [mode, prop_name])
-
 		var prop_op := PropertyOperator.new()
 		prop_op.property = prop_name
 		prop_op.ranked_value = size_key
-		prop_op.init({})  # 触发 ranked_value → value 解析
-		Logging.info('PoemRewardOperator: PropertyOperator created — property=%s, ranked_value=%s, resolved_value=%d' % [prop_name, size_key, prop_op.value])
-
+		prop_op.init({})
 		prop_op.operate()
-		Logging.info('PoemRewardOperator: Reward applied — %s += %d (from Poem level=%d, effective=%d, upgrade=%s)' % [prop_name, prop_op.value, base_level, effective_level, upgrade_succeeded])
 
 	# ── 6. 消耗诗词 ──
 	PlayerState.remove_trait(poem.uuid)
@@ -171,7 +130,6 @@ func _on_poem_picked(poem_picked):
 	var idx := PlayerState.created_poems.find(poem)
 	if idx != -1:
 		PlayerState.created_poems.remove_at(idx)
-	Logging.info('PoemRewardOperator: 诗词已被消耗: %s (traits=%d, created_poems=%d, db_traits=%d)' % [poem.uuid, PlayerState.traits.size(), PlayerState.created_poems.size(), Database.traits.size()])
 
 	# ── 7. Show hint ──
 	if show_hint_on_reward:
@@ -188,6 +146,22 @@ func _on_poem_picked(poem_picked):
 			if upgrade_succeeded:
 				hint += "（灵感迸发！）"
 			show_hint(hint)
+
+
+## 从 PlayerState 中随机选取一首诗词
+static func _pick_random_poem() -> Poem:
+	var poems: Array[Poem] = []
+	for t in PlayerState.get_traits():
+		var trait_ = Database.get_trait(t)
+		if not trait_:
+			continue
+		if trait_ is Poem:
+			poems.append(trait_)
+
+	if poems.is_empty():
+		return null
+
+	return poems[randi() % poems.size()]
 
 
 func describe_preview() -> String:

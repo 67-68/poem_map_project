@@ -5,7 +5,7 @@ extends Node
 ## 每次新 action 树启动时覆盖写入，执行完毕后 clear()。
 ##
 ## 消费方：
-##   MainActionButton → 写入 pending_* + push_picker
+##   MainActionButton → 写入 pending_* + push_sub_action_picker
 ##   SubActionButton → 写入 selected_sub_action_uuid（Toggle）
 ##   NpcActionButton → 读取 selected_sub_action_uuid + pending_* → SubActionExecutor.execute()
 ##   SubActionExecutor → 执行完毕后 clear()

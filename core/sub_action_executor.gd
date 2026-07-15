@@ -121,12 +121,18 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 	ActionManager.get_focus_controller().notify_click()
 	
 	# ── Step 7: 分支 — 成功 / 失败 ──
+	var _action_pushed_to_stack := false  # action_results 是否自主推了栈条目（如 ItemPicker）
 	if _sub_outcome == "success":
 		# ── Step 7a: 执行 sub-action action_results.operate() ──
 		if sub_action and sub_action.action_results and not sub_action.action_results.is_empty():
 			Logging.info("SubActionExecutor.execute: 执行 sub-action action_results.operate() (%d ops) for '%s'" % [sub_action.action_results.size(), sub_action.name])
 			for r in sub_action.action_results:
 				if r:
+					# 🐛 修复：检测会自主推栈的 operator（PoemTypeChooseOperator 等）
+					# 此类 operator 的 operate() 会自行 push_item_picker 到栈，
+					# 后续 scan_events 会再推 fallback 事件，造成双推栈冲突
+					if r is PoemTypeChooseOperator or r is ImaginaryLevelRewardOperator or r is LianjuScoreOperator:
+						_action_pushed_to_stack = true
 					r.operate()
 		
 		# 追加 sub_uuid + sub_tags（bucket 路由用）
@@ -134,7 +140,7 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 		for tag in sub_tags:
 			PlayerState.current_action_tags.append(tag)
 		
-		# 注入 npc_target 到 context
+		# 注入 npc_target 到 context（在 if/else 外部使用）
 		var npc_name := _extract_npc_name_from_tags(PlayerState.current_action_tags)
 		var npc_target: String = _sub_cost_ctx.get("npc_target", state.npc_target)
 		var required_tags: Array[String] = []
@@ -143,19 +149,24 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 				required_tags.append(tag)
 		Logging.info("SubActionExecutor.execute: SUCCESS — sub-action tags now: %s required=%s npc_target='%s'" % [str(PlayerState.current_action_tags), str(required_tags), npc_target])
 		
-		var context = {
-			'main_tag': sub_main_tag,
-			'fallback_event_uuid': sub_fallback,
-			'tag_match_mode': 'all',
-			'required_tags': required_tags,
-			'npc_name': npc_name,
-			'npc_target': npc_target,
-			'archetype_base': selected_uuid,
-			'outcome': "success",
-		}
-		Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events前 stay_place='%s', context archetype_base='%s'" % [PlayerState.stay_place, selected_uuid])
-		EventManager.scan_events(0, context)
-		Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events后 stay_place='%s'" % PlayerState.stay_place)
+		# 🐛 修复：如果 action_results 中有 operator 自主推了栈（如 ItemPicker），跳过 scan_events
+		# 避免双推栈冲突：operator 推的栈条目 和 scan_events 推的 fallback 事件互相打架
+		if _action_pushed_to_stack:
+			Logging.info("SubActionExecutor.execute: action_results 包含自主推栈 operator，跳过 scan_events（防止双推栈冲突）")
+		else:
+			var context = {
+				'main_tag': sub_main_tag,
+				'fallback_event_uuid': sub_fallback,
+				'tag_match_mode': 'all',
+				'required_tags': required_tags,
+				'npc_name': npc_name,
+				'npc_target': npc_target,
+				'archetype_base': selected_uuid,
+				'outcome': "success",
+			}
+			Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events前 stay_place='%s', context archetype_base='%s'" % [PlayerState.stay_place, selected_uuid])
+			EventManager.scan_events(0, context)
+			Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events后 stay_place='%s'" % PlayerState.stay_place)
 		
 		# sub-action success 后启动 defer
 		if sub_action and sub_action.defer_config and not sub_action.defer_config.xun_defered.is_empty():

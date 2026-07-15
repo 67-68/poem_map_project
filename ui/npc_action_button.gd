@@ -143,12 +143,29 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 		else:
 			_desc_label.text = action_name
 
+	# ── 锁定判定 1: NPC 相识度 ──
 	_is_locked = NpcActionLockChecker.is_locked(override_action_uuid, npc_doc)
 	if _is_locked:
 		_lock_reason = NpcActionLockChecker.get_lock_reason(override_action_uuid, npc_doc)
 		_set_gray_visual(true)
+		# 不再继续检查后续条件（NPC 相识度不足已锁定）
 	else:
-		_set_gray_visual(false)
+		# ── 锁定判定 2: Action requirements（PoemRequirement / TraitRequirement 等）──
+		if override_action and override_action.aciton_requirements and not override_action.aciton_requirements.is_empty():
+			for req in override_action.aciton_requirements:
+				if req is PoemRequirement or req is TraitRequirement:
+					if not req.compare(PlayerState):
+						_is_locked = true
+						if req is PoemRequirement:
+							_lock_reason = "需要诗词才能执行此行动"
+						elif req is TraitRequirement:
+							var desc := req.describe_requirement() if req.has_method("describe_requirement") else "条件不满足"
+							_lock_reason = desc
+						_set_gray_visual(true)
+						Logging.info("NpcActionButton.bind: override '%s' — requirement type='%s' not met → locked, reason='%s'" % [action_name, req.get_script().resource_path.get_file() if req.get_script() else "unknown", _lock_reason])
+						break
+		if not _is_locked:
+			_set_gray_visual(false)
 
 	# 🆕 使用 build_sub_action_preview：SIMPLE → labels, DEFAULT → hover
 	# cost 由 ActionHintFormatter 内部自动收集

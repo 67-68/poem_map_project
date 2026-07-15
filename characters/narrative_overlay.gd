@@ -111,7 +111,8 @@ func _ready() -> void:
 	director.tape_needs_show.connect(visualizer.play_show_tape)
 	director.tape_needs_hide.connect(_on_hide_requested)
 	director.event_ready_to_play.connect(_on_event_ready_to_play)
-	director.picker_ready.connect(_on_picker_ready)
+	director.sub_action_picker_ready.connect(_on_sub_action_picker_ready)
+	director.item_picker_ready.connect(_on_item_picker_ready)
 	director.cinematic_ready.connect(_on_cinematic_ready)
 	director.focused_chat_ready.connect(_on_focused_chat_ready)
 	director.interrupt_available.connect(_on_interrupt_available)
@@ -352,10 +353,10 @@ func _on_interrupt_button_pressed() -> void:
 
 
 # ═══════════════════════════════════════════════════
-# Picker 就绪处理
+# SubAction Picker / Item Picker 就绪处理
 # ═══════════════════════════════════════════════════
 
-func _on_picker_ready(entry: Dictionary) -> void:
+func _on_sub_action_picker_ready(entry: Dictionary) -> void:
 	# 🚨 进入 Picker 状态：取消任何残留的 auto-advance Timer，阻止 display_complete 二次启动
 	_cancel_auto_advance()
 	_auto_advance_blocked = true
@@ -364,14 +365,8 @@ func _on_picker_ready(entry: Dictionary) -> void:
 	HoverPopupManager.set_event_active(true)
 	event_display_started.emit()
 
-	# 🐛 修复：恢复快照位置 + 显示自身 + 播放纸带入场动画
-	# 缺少 show() 和 restore_snapshot() 会导致纸带在 hover SLIDE_FROM_RIGHT 动画
-	# 将 shadow_box.position.x 移到屏幕外后，play_show_tape() 不重置 x 坐标，
-	# 纸带技术性 visible 但定位在屏幕右侧外，玩家看不到。
 	visualizer.restore_snapshot()
 	show()
-	# 🐛 修复：Picker 需要切换到事件模式（隐藏 ActionPanel，显示 EventHistory），
-	# 否则 PickerTapeAttachment 的内容会渲染在不可见的 EventHistory 容器内。
 	_switch_to_event_mode()
 	visualizer.play_show_tape()
 	BlurManager.show_picker_blur()
@@ -382,13 +377,53 @@ func _on_picker_ready(entry: Dictionary) -> void:
 	var on_filter_toggled_raw = entry.get("on_filter_toggled")
 	var on_filter_toggled: Callable = on_filter_toggled_raw if on_filter_toggled_raw != null else Callable()
 
-	Logging.info("NarrativeOverlay._on_picker_ready: %d 个选项" % data.size())
-	var attachment = event_ui.append_picker_attachment(data, ui_constructor, on_filter_toggled)
+	Logging.info("NarrativeOverlay._on_sub_action_picker_ready: %d 个选项" % data.size())
+	var attachment = event_ui.append_sub_action_picker_attachment(data, ui_constructor, on_filter_toggled)
 	attachment.item_selected.connect(func(e):
 		_on_picker_item_selected(e, entry)
 	, CONNECT_ONE_SHOT)
 	attachment.cancelled.connect(func():
 		_on_picker_cancelled(entry)
+	, CONNECT_ONE_SHOT)
+	visualizer.dim_history_ink(attachment)
+
+
+func _on_item_picker_ready(entry: Dictionary) -> void:
+	# 🚨 进入 ItemPicker 状态
+	_cancel_auto_advance()
+	_auto_advance_blocked = true
+
+	HoverPopupManager.set_event_active(true)
+	event_display_started.emit()
+
+	visualizer.restore_snapshot()
+	show()
+	_switch_to_event_mode()
+	visualizer.play_show_tape()
+	BlurManager.show_picker_blur()
+
+	var data: Array = entry.get("data", [])
+	var on_selected_raw = entry.get("on_selected")
+	var on_selected: Callable = on_selected_raw if on_selected_raw != null else Callable()
+
+	Logging.info("NarrativeOverlay._on_item_picker_ready: %d 个选项" % data.size())
+	var attachment = event_ui.append_item_picker_attachment(data)
+	attachment.item_selected.connect(func(item):
+		BlurManager.hide_picker_blur()
+		visualizer.undim_history_ink()
+		HoverPopupManager.set_event_active(false)
+		event_display_ended.emit()
+		# item_picker 的 item_selected：传入当前 entry 精确弹栈
+		director.on_picker_item_selected(item, entry)
+		Logging.info("NarrativeOverlay._on_item_picker_ready: item_selected entity=%s entry type=%s" % [str(item), entry.get("type", "?")])
+	, CONNECT_ONE_SHOT)
+	attachment.cancelled.connect(func():
+		Logging.info("NarrativeOverlay._on_item_picker_cancelled: 玩家拒绝选择 item picker")
+		BlurManager.hide_picker_blur()
+		visualizer.undim_history_ink()
+		HoverPopupManager.set_event_active(false)
+		event_display_ended.emit()
+		director.on_picker_cancelled(entry)
 	, CONNECT_ONE_SHOT)
 	visualizer.dim_history_ink(attachment)
 
@@ -399,7 +434,8 @@ func _on_picker_item_selected(entity, entry: Dictionary) -> void:
 	# 🆕 Picker 选择完成，解锁行动栏
 	HoverPopupManager.set_event_active(false)
 	event_display_ended.emit()
-	director.on_picker_item_selected(entity)
+	# 传入 entry 让 director 精确弹栈（不是盲弹 pop_front）
+	director.on_picker_item_selected(entity, entry)
 	Logging.info("NarrativeOverlay._on_picker_item_selected: entity=%s" % str(entity))
 
 

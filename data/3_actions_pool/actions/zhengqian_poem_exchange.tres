@@ -2,18 +2,12 @@
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_ullu7"]
 [ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_m68nq"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_fboxd"]
-[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_ebfve"]
 [ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_fea7v"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_48hw7"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_6pdal"]
 
 [sub_resource type="Resource" id="Resource_wxt5h"]
 script = ExtResource("2_m68nq")
-
-[sub_resource type="Resource" id="Resource_r62dj"]
-script = ExtResource("4_ebfve")
-mode = "xing_wang"
 
 [sub_resource type="Resource" id="Resource_rrs2a"]
 script = ExtResource("5_fea7v")
@@ -25,7 +19,6 @@ script = ExtResource("6_48hw7")
 script = ExtResource("7_6pdal")
 required_place = "pingkangfang"
 _action_tags = Array[int]([30, 32])
-action_results = Array[ExtResource("3_fboxd")]([SubResource("Resource_r62dj")])
 aciton_requirements = Array[ExtResource("1_ullu7")]([SubResource("Resource_wxt5h")])
 fallback_event_uuid = "zhengqian_poem_exchange_fallback"
 failed_result = SubResource("Resource_cf8ag")

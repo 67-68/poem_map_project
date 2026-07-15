@@ -62,7 +62,7 @@ func operate():
     # 🏗️ 不再直接 await end_picking，改为推入事件栈顶
     # 这样 Picker 受 _is_active 保护，不会被栈上新事件覆盖
     Logging.debug('PoemTypeChooseOperator: Pushing picker to stack with %d poem traits' % data.size())
-    EventBus.push_picker.emit(data, _on_trait_picked, null, Callable())
+    EventBus.push_item_picker.emit(data, _on_trait_picked)
 
 
 func _on_trait_picked(trait_picked):

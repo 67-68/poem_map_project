@@ -192,14 +192,28 @@ func _start_focus_chat(entry: FocusChatTapeEntry, data: FocusedChat, context: Di
 	scroll_to_bottom()
 
 
-## 追加 Picker 呈堂物证到纸带 — 木牍/令牌网格，选后定格
-## 返回 PickerTapeAttachment 实例，供 NarrativeOverlay 连接 item_selected 信号
-func append_picker_attachment(data: Array, ui_constructor: Callable = Callable(), on_filter_toggled: Callable = Callable()) -> PickerTapeAttachment:
-	Logging.info("EventUI.append_picker_attachment: items=%d" % data.size())
+## 追加 SubActionPicker 呈堂物证到纸带 — 木牍/令牌网格（双栏选择+执行按钮）
+## 返回 SubActionPickerTapeAttachment 实例，供 NarrativeOverlay 连接 item_selected 信号
+func append_sub_action_picker_attachment(data: Array, ui_constructor: Callable = Callable(), on_filter_toggled: Callable = Callable()) -> SubActionPickerTapeAttachment:
+	Logging.info("EventUI.append_sub_action_picker_attachment: items=%d" % data.size())
 
 	var attachment := preload("res://ui/picker_tape_attachment.tscn").instantiate()
 	_tape_content.add_child(attachment)
 	attachment.initialize(data, ui_constructor, on_filter_toggled)
+
+	call_deferred("scroll_to_bottom")
+
+	return attachment
+
+
+## 追加 ItemPicker 品物选择器到纸带 — 简易物品卡片列表
+## 返回 ItemPickerTapeAttachment 实例，供 NarrativeOverlay 连接 item_selected 信号
+func append_item_picker_attachment(data: Array) -> ItemPickerTapeAttachment:
+	Logging.info("EventUI.append_item_picker_attachment: items=%d" % data.size())
+
+	var attachment := preload("res://ui/item_picker_tape_attachment.tscn").instantiate()
+	_tape_content.add_child(attachment)
+	attachment.initialize(data)
 
 	call_deferred("scroll_to_bottom")
 

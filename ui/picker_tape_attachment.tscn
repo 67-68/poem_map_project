@@ -3,10 +3,11 @@
 [ext_resource type="Script" uid="uid://bgsnvv4jq3saw" path="res://ui/picker_tape_attachment.gd" id="1_qvtpk"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="2_26bj5"]
 [ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="3_n0g0n"]
+[ext_resource type="ButtonGroup" uid="uid://cjvx7la6dcro2" path="res://ui/sub_action_picker_resource_group.tres" id="4_rtv0q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
 
-[node name="PickerTapeAttachment" type="VBoxContainer" unique_id=168027257]
+[node name="SubActionPickerTapeAttachment" type="VBoxContainer" unique_id=168027257]
 custom_minimum_size = Vector2(420, 0)
 anchors_preset = 8
 anchor_left = 0.5
@@ -50,6 +51,32 @@ theme_override_colors/font_color = Color(0.7058824, 0.6666667, 0.6627451, 1)
 theme_override_fonts/font = ExtResource("2_26bj5")
 theme_override_font_sizes/font_size = 14
 text = "显示异地行动"
+
+[node name="LinkButton2" type="LinkButton" parent="HBox" unique_id=782826471]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme = ExtResource("3_n0g0n")
+theme_override_colors/font_color = Color(0.7071239, 0.66651803, 0.6636292, 1)
+theme_override_fonts/font = ExtResource("2_26bj5")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
+toggle_mode = true
+button_group = ExtResource("4_rtv0q")
+text = "普通"
+
+[node name="LinkButton3" type="LinkButton" parent="HBox" unique_id=2027900441]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme = ExtResource("3_n0g0n")
+theme_override_colors/font_color = Color(0.7071239, 0.66651803, 0.6636292, 1)
+theme_override_fonts/font = ExtResource("2_26bj5")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
+toggle_mode = true
+button_group = ExtResource("4_rtv0q")
+text = "特殊"
 
 [node name="HSeparator" type="HSeparator" parent="." unique_id=2084923762]
 layout_mode = 2
