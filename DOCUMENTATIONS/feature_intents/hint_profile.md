@@ -54,10 +54,78 @@ flowchart LR
 | 异地行动提示 | `📍 自动消耗1天前往%s` | `赴%s` | 新增 `simple_place_hint()` in bbcode.gd，action_hint_formatter 按 profile 分流 |
 | 其他 Operator (60+) | 不出现 | 不出现 | simple 不做显示 |
 
+## SIMPLE profile 标签生成（Simple Labels）
+
+SIMPLE profile 的标签文本（显示在 `NpcActionButton` 的四行标签上）不再使用 `•` 和 `、`，改为**空格分割**。
+
+### 数据流
+
+```mermaid
+flowchart TD
+    S1["SimpleOperatorPreviewFormatter<br/>lines.append(desc)"]
+    S2["_build_simple_archetype_preview<br/>lines.append('健康↑↑')"]
+    S3["BBCode 直接行<br/>time_cost_line / simple_place_hint"]
+
+    S1 --> M2
+    S3 --> M1
+    S2 --> M2
+
+    subgraph Module["ActionHintModule"]
+        M1["hint.cost.lines"]
+        M2["hint.output.lines"]
+        M3["hint.risk.lines"]
+        M4["hint.feasibility.lines"]
+    end
+
+    subgraph BBCode["BBCode SIMPLE 方法"]
+        B1["simple_cost_label(lines)"]
+        B2["simple_output_label(lines)"]
+        B3["simple_risk_label(lines)"]
+        B4["simple_feasibility_label(text)"]
+        B5["simple_lock_label(reason)"]
+    end
+
+    subgraph Dict["simple_labels Dict"]
+        D1["feasibility / cost / output / risk"]
+    end
+
+    subgraph UI["NpcActionButton"]
+        U1["RichTextLabel.text = ..."]
+    end
+
+    M1 --> B1
+    M2 --> B2
+    M3 --> B3
+    M4 --> B4
+    B1 --> D1
+    B2 --> D1
+    B3 --> D1
+    B4 --> D1
+    B5 --> D1
+    D1 --> U1
+```
+
+### BBCode 方法（`ui/utils/bbcode.gd`）
+
+| 方法 | 输入 | 输出示例 |
+|------|------|---------|
+| `simple_feasibility_label(text)` | 裸标签（如 `"渺茫"`） | `可行：渺茫` |
+| `simple_cost_label(lines)` | `["⏱3天", "赴洛阳"]` | `耗：⏱3天 赴洛阳` |
+| `simple_output_label(lines)` | `["健康↑", "金钱↑↑"]` | `产：健康↑ 金钱↑↑` |
+| `simple_risk_label(lines)` | `["后果难料…"]` | `险：后果难料…` |
+| `simple_lock_label(reason)` | `"条件不足"` | `锁定：条件不足`（红色） |
+
+### 关键约定
+
+1. **无 `•` 前缀** — `SimpleOperatorPreviewFormatter.build_simple_preview()` 和 `_build_simple_archetype_preview()` 不再输出 `"• " + desc`，只输出裸 desc
+2. **空格分割** — 多行通过 `" ".join()` 拼接，而不是 `"、".join()`
+3. **BBCode 集中管理** — 所有标签的前缀（`可行：`/`耗：`/`产：`/`险：`/`锁定：`）收敛在 `bbcode.gd`，不散落在 formatter
+4. **锁定态** — 自动展示红色 `"锁定：条件不足"`，不读取模块 lines
+
 ## Archetype 定性预览（_build_archetype_qualitative_preview）
 
 - DEFAULT: `• 健康 将会增加` / `• 健康 将会消耗（重复行动，效果减少20%）`
-- SIMPLE: `• 健康↑` / `• 健康↓（重复）`
+- SIMPLE: `健康↑` / `健康↓（重复）`（无 `•` 前缀）
 
 ## 使用示例
 
@@ -78,8 +146,9 @@ var lines = ActionHintBuilder.build_operator_preview(ops, HintProfile.Profile.SI
 ## 相关文件
 
 - `core/hints/hint_profile.gd` — 枚举定义
-- `core/hints/simple_operator_preview_formatter.gd` — 简化描述实现
+- `core/hints/simple_operator_preview_formatter.gd` — 简化描述实现（无 `•` 前缀）
 - `core/hints/operator_preview_formatter.gd` — profile 分流路由
-- `core/hints/action_hint_formatter.gd` — 组装函数 + profile 透传
+- `core/hints/action_hint_formatter.gd` — 组装函数 + profile 透传；`_build_simple_labels` 替代 `_finalize_simple_labels`
+- `ui/utils/bbcode.gd` — SIMPLE 标签格式化的唯一真相源
 - `core/action_hint_builder.gd` — 外部接口代理层
 - `tests/test_action_hint_builder.gd` — 测试（含 SIMPLE profile 用例）

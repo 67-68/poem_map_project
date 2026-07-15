@@ -189,3 +189,37 @@ static func imaginary_level(level: int, description: String) -> String:
 ## 修饰符属性标题行（粗体）
 static func mod_prop_header(display_name: String, val: int) -> String:
 	return bold("%s (%d)" % [display_name, val])
+
+
+# ════════════════════════════════════════════════════════════════
+# SIMPLE profile 标签方法 — 无 • / 无 、前缀，空格分割
+# ════════════════════════════════════════════════════════════════
+
+## SIMPLE profile: 可行性标签 — "可行：渺茫"
+## @param text: 裸标签文本（如 "渺茫"、"不足"、"未知"）
+static func simple_feasibility_label(text: String) -> String:
+	return "可行：" + text if not text.is_empty() else "可行：未知"
+
+
+## SIMPLE profile: 消耗标签 — "耗：⏱3天 赴洛阳"
+static func simple_cost_label(lines: Array[String]) -> String:
+	var joined = " ".join(lines)
+	return "耗：" + joined if not joined.is_empty() else "耗：无"
+
+
+## SIMPLE profile: 产出标签 — "产：健康↑ 金钱↑↑"
+static func simple_output_label(lines: Array[String]) -> String:
+	var joined = " ".join(lines)
+	return "产：" + joined if not joined.is_empty() else "产：无"
+
+
+## SIMPLE profile: 风险标签 — "险：后果难料…"
+static func simple_risk_label(lines: Array[String]) -> String:
+	var joined = " ".join(lines)
+	return "险：" + joined if not joined.is_empty() else "险："
+
+
+## SIMPLE profile: 锁定标签 — 红色 "锁定：条件不足"
+static func simple_lock_label(reason: String) -> String:
+	var text = "锁定：" + reason if not reason.is_empty() else "锁定：条件不足"
+	return color(text, COLOR_DANGER)

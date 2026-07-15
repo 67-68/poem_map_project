@@ -18,7 +18,7 @@ const _PropertyOperator = preload("res://core/model/property_operator.gd")
 # 公开接口
 # ════════════════════════════════════════════════════════════════
 
-## 将一列 BaseOperator 转为简单版 "• {desc}" 字符串数组。
+## 将一列 BaseOperator 转为简单版 "{desc}" 字符串数组（无 • 前缀）。
 static func build_simple_preview(operators: Array) -> Array[String]:
 	var lines: Array[String] = []
 	if operators.is_empty():
@@ -30,7 +30,7 @@ static func build_simple_preview(operators: Array) -> Array[String]:
 		var desc := _simple_desc_for(op)
 		if desc.is_empty():
 			continue
-		lines.append("• " + desc)
+		lines.append(desc)
 
 	Logging.info("SimpleOperatorPreviewFormatter.build_simple_preview: %d operators → %d lines" % [operators.size(), lines.size()])
 	return lines

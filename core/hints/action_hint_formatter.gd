@@ -92,9 +92,23 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 	hint.narrative = _BBCode.preview_header()
 
 	var prob: int = sub_action.get_possibility_int()
-	hint.feasibility.title = "━━━ 可行性 ━━━"
-	hint.feasibility.append(_BBCode.sub_prob_line(prob))
-	Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' possibility=%d" % [sub_action.name, prob])
+	if profile == _HintProfile.Profile.SIMPLE:
+		# SIMPLE: 存裸标签文本，供 _build_simple_labels 使用
+		var best_level := ""
+		var best_distance := 999999
+		for level in _SIMPLE_FEASIBILITY_VALUES:
+			var val = _SIMPLE_FEASIBILITY_VALUES[level]
+			var dist = absi(prob - val)
+			if dist < best_distance or (dist == best_distance and level < best_level):
+				best_distance = dist
+				best_level = level
+		var label = _SIMPLE_FEASIBILITY_TEXT.get(best_level, "未知")
+		hint.feasibility.append(label)
+		Logging.info("ActionHintFormatter.build_sub_action_preview(SIMPLE): sub_action='%s' prob=%d → %s" % [sub_action.name, prob, label])
+	else:
+		hint.feasibility.title = "━━━ 可行性 ━━━"
+		hint.feasibility.append(_BBCode.sub_prob_line(prob))
+		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' possibility=%d" % [sub_action.name, prob])
 
 	var _is_repeated = ctx.is_repeated
 
@@ -150,12 +164,18 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 			Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' .tres action_results (%d ops → %d descs) → 已合并" % [sub_action.name, sub_action.action_results.size(), tres_lines.size()])
 
 	if success_descs.is_empty():
-		hint.output.append(_BBCode.success_header() + " 成败未卜…")
+		if profile == _HintProfile.Profile.SIMPLE:
+			hint.output.append("成败未卜")
+		else:
+			hint.output.append(_BBCode.success_header() + " 成败未卜…")
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' success 无有效 operator，使用 fallback" % sub_action.name)
 	else:
-		hint.output.title = "━━━ 产出 ━━━"
-		hint.output.append(_BBCode.success_header())
-		hint.output.append_array(success_descs)
+		if profile == _HintProfile.Profile.SIMPLE:
+			hint.output.append_array(success_descs)
+		else:
+			hint.output.title = "━━━ 产出 ━━━"
+			hint.output.append(_BBCode.success_header())
+			hint.output.append_array(success_descs)
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' success preview: %d lines" % [sub_action.name, success_descs.size()])
 
 	# ── 失败效果 → risk（仅使用 failure archetype，不 fallback 到 .tres failed_result）──
@@ -165,16 +185,22 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' archetype fail_ops (%d ops → %d lines) → 已合并" % [sub_action.name, fail_ops.size(), fail_descs.size()])
 
 	if fail_descs.is_empty():
-		hint.risk.append(_BBCode.fail_header() + " 后果难料…")
+		if profile == _HintProfile.Profile.SIMPLE:
+			hint.risk.append("后果难料")
+		else:
+			hint.risk.append(_BBCode.fail_header() + " 后果难料…")
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' fail 无有效 operator，使用 fallback" % sub_action.name)
 	else:
-		hint.risk.title = "━━━ 风险 ━━━"
-		hint.risk.append(_BBCode.fail_header())
-		hint.risk.append_array(fail_descs)
+		if profile == _HintProfile.Profile.SIMPLE:
+			hint.risk.append_array(fail_descs)
+		else:
+			hint.risk.title = "━━━ 风险 ━━━"
+			hint.risk.append(_BBCode.fail_header())
+			hint.risk.append_array(fail_descs)
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' fail preview: %d lines" % [sub_action.name, fail_descs.size()])
 
 	if profile == _HintProfile.Profile.SIMPLE:
-		_finalize_simple_labels(hint, is_locked, lock_reason)
+		_build_simple_labels(hint, is_locked, lock_reason)
 
 	Logging.info("ActionHintFormatter.build_sub_action_preview: done for '%s', vector=%d chars" % [sub_action.name, hint.vector.length()])
 	return hint
@@ -201,8 +227,8 @@ static func _assemble_feasibility_module(action, feas_mod, profile) -> void:
 		if not best_level.is_empty():
 			var label = _SIMPLE_FEASIBILITY_TEXT.get(best_level, "")
 			if not label.is_empty():
-				# Set title only once for the module
-				feas_mod.append("可行： %s" % label)
+				# Store raw label word; BBCode.simple_feasibility_label will add "可行：" prefix
+				feas_mod.append(label)
 				Logging.info("ActionHintFormatter._assemble_feasibility_module(SIMPLE): prob=%d → %s (%s)" % [prob, best_level, label])
 		return
 
@@ -434,7 +460,7 @@ static func _build_archetype_qualitative_preview(action, is_repeated: bool, prof
 
 ## SIMPLE profile 的 archetype 定性预览简化版
 ## 在 default 的 _build_archetype_qualitative_preview 基础上通过委托
-## SimpleOperatorPreviewFormatter 获取简化描述行
+## SimpleOperatorPreviewFormatter 获取简化描述行（无 • 前缀）。
 static func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Array[String]:
 	var lines: Array[String] = []
 	for op in ops:
@@ -452,13 +478,13 @@ static func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Ar
 				arrows += arrow_char
 
 			if is_repeated:
-				lines.append("• %s%s（重复)" % [display_name, arrows])
+				lines.append("%s%s（重复）" % [display_name, arrows])
 			else:
-				lines.append("• %s%s" % [display_name, arrows])
+				lines.append("%s%s" % [display_name, arrows])
 		elif op is TimeOperator:
 			if op.refresh_time or op.day <= 0:
 				continue
-			lines.append("• ⏱%d天" % int(op.day))
+			lines.append("⏱%d天" % int(op.day))
 		elif op is PoemRewardOperator:
 			var desc = ""
 			match op.mode:
@@ -471,32 +497,26 @@ static func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Ar
 				_:
 					desc = "卖诗"
 			if not desc.is_empty():
-				lines.append("• " + desc)
+				lines.append(desc)
 
 	return lines
 
 
-## 根据锁定状态和已有模块 lines，构建 SIMPLE 模式下的 UI 标签文本
-## 结果存入 hint.simple_labels，不影响 lines / vector 原有内容
-static func _finalize_simple_labels(hint, is_locked: bool, lock_reason: String) -> void:
+## 使用 BBCode 方法替代原来带 • / 、的 _finalize_simple_labels
+## SIMPLE 模式标签：空格分割，无 • 无 、
+static func _build_simple_labels(hint, is_locked: bool, lock_reason: String) -> void:
 	var labels := {}
 	if is_locked:
-		labels["feasibility"] = "可行：不足"
-		labels["cost"] = "耗：—"
-		labels["output"] = "产：—"
-		labels["risk"] = "锁定：" + (lock_reason if not lock_reason.is_empty() else "条件不足")
+		labels["feasibility"] = _BBCode.simple_feasibility_label("不足")
+		labels["cost"] = _BBCode.simple_cost_label([])
+		labels["output"] = _BBCode.simple_output_label([])
+		labels["risk"] = _BBCode.simple_lock_label(lock_reason)
 	else:
-		# feasibility: SIMPLE 模式下 _assemble_feasibility_module 已生成 "可行： xx"
-		var feas_line := hint.feasibility.lines[0] if not hint.feasibility.lines.is_empty() else ""
-		labels["feasibility"] = feas_line if not feas_line.is_empty() else "可行：未知"
+		var feas_line = hint.feasibility.lines[0] if not hint.feasibility.lines.is_empty() else ""
+		labels["feasibility"] = _BBCode.simple_feasibility_label(feas_line if not feas_line.is_empty() else "未知")
 
-		var cost_joined := "、".join(hint.cost.lines)
-		labels["cost"] = "耗：" + cost_joined if not cost_joined.is_empty() else "耗：无"
-
-		var out_joined := "、".join(hint.output.lines)
-		labels["output"] = "产：" + out_joined if not out_joined.is_empty() else "产：无"
-
-		var risk_joined := "、".join(hint.risk.lines)
-		labels["risk"] = "险：" + risk_joined if not risk_joined.is_empty() else "险："
+		labels["cost"] = _BBCode.simple_cost_label(hint.cost.lines)
+		labels["output"] = _BBCode.simple_output_label(hint.output.lines)
+		labels["risk"] = _BBCode.simple_risk_label(hint.risk.lines)
 
 	hint.simple_labels = labels

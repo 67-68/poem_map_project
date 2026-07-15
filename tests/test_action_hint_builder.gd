@@ -159,7 +159,7 @@ func test_operator_simple_preview_property():
 	var op = _make_prop_op("health", 30)
 	var lines = ActionHintBuilder.build_operator_preview([op], _HintProfile.Profile.SIMPLE)
 	assert_gt(lines.size(), 0, "SIMPLE: property operator should produce a line")
-	assert_true(lines[0].begins_with("• "), "Should start with bullet")
+	assert_false(lines[0].begins_with("•"), "Should NOT start with bullet (removed)")
 	assert_true(lines[0].contains("↑"), "Should contain arrow(s)")
 	assert_false(lines[0].contains("+30"), "Should NOT contain raw number")
 
