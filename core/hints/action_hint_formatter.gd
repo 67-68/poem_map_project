@@ -199,9 +199,7 @@ static func _assemble_feasibility_module(action, feas_mod, profile) -> void:
 			var label = _SIMPLE_FEASIBILITY_TEXT.get(best_level, "")
 			if not label.is_empty():
 				# Set title only once for the module
-				if feas_mod.title.is_empty():
-					feas_mod.title = "━━━ 可行性 ━━━"
-				feas_mod.append("成功率 %s" % label)
+				feas_mod.append("可行： %s" % label)
 				Logging.info("ActionHintFormatter._assemble_feasibility_module(SIMPLE): prob=%d → %s (%s)" % [prob, best_level, label])
 		return
 
