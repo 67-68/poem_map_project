@@ -79,14 +79,18 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 	if _is_repeated:
 		hint.feasibility.append(_BBCode.repeated_warning())
 
-	# 🆕 异地行动提示 → cost
+	# 🆕 异地行动提示 → cost（SIMPLE profile 使用简版「赴%s」）
 	var _place_name = sub_action.get_required_place_name()
 	if not _place_name.is_empty():
 		var _req_place = sub_action.required_place
 		var _cur_place_str = ctx.stay_place
 		if not _cur_place_str.is_empty() and _req_place != _cur_place_str:
-			hint.cost.append(_BBCode.place_hint(_place_name))
-			Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' 异地行动提示 → %s" % [sub_action.name, _place_name])
+			if profile == _HintProfile.Profile.SIMPLE:
+				hint.cost.append(_BBCode.simple_place_hint(_place_name))
+				Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' 异地行动提示(SIMPLE) → 赴%s" % [sub_action.name, _place_name])
+			else:
+				hint.cost.append(_BBCode.place_hint(_place_name))
+				Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' 异地行动提示 → %s" % [sub_action.name, _place_name])
 
 	# ── 时间消耗行 → cost ──
 	var eff_day = ActionManager.effective_day_consumed(sub_action, parent_day_consumed)

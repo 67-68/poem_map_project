@@ -51,6 +51,7 @@ flowchart LR
 | `PoemRewardOperator` (money) | `选择一首诗词换取金钱（平庸→中等…）` | `卖诗` | mode→短标签 |
 | `PoemRewardOperator` (fame) | — | `以诗换名` | mode→短标签 |
 | `PoemRewardOperator` (baiye) | — | `携诗拜谒` | mode→短标签 |
+| 异地行动提示 | `📍 自动消耗1天前往%s` | `赴%s` | 新增 `simple_place_hint()` in bbcode.gd，action_hint_formatter 按 profile 分流 |
 | 其他 Operator (60+) | 不出现 | 不出现 | simple 不做显示 |
 
 ## Archetype 定性预览（_build_archetype_qualitative_preview）

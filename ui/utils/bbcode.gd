@@ -148,6 +148,11 @@ static func place_hint(place_name: String) -> String:
 	return color_size("📍 自动消耗1天前往%s" % place_name, COLOR_PLACE, 13)
 
 
+## SIMPLE profile 异地行动提示 — place 色，简版「赴%s」
+static func simple_place_hint(place_name: String) -> String:
+	return color_size("赴%s" % place_name, COLOR_PLACE, 13)
+
+
 ## 时间不足行
 static func time_insufficient(cost_detail: String, remaining_days: int) -> String:
 	return color("⏱ 耗时 %s — 时间不足（剩余%d天）" % [cost_detail, remaining_days], COLOR_DANGER)
