@@ -17,6 +17,28 @@ const _HintProfile = preload("res://core/hints/hint_profile.gd")
 
 
 # ════════════════════════════════════════════════════════════════
+# SIMPLE profile feasibility mapping: level prefix -> named_amount value
+const _SIMPLE_FEASIBILITY_VALUES: Dictionary = {
+	"xxs": 20,
+	"xs":  30,
+	"s":   50,
+	"ms":  60,
+	"m":   80,
+	"l":  100,
+}
+
+# SIMPLE profile feasibility labels (2-character Chinese)
+const _SIMPLE_FEASIBILITY_TEXT: Dictionary = {
+	"xxs": "渺茫",
+	"xs":  "微小",
+	"s":   "半",
+	"ms":  "多半",
+	"m":   "很高",
+	"l":   "必然",
+}
+
+
+# ════════════════════════════════════════════════════════════════
 # 公开接口
 # ════════════════════════════════════════════════════════════════
 
@@ -49,7 +71,7 @@ static func build_action_hint(action, is_locked: bool, ctx, profile := _HintProf
 		Logging.info("ActionHintFormatter.build_action_hint: 重复行动警告追加到叙事层 for '%s'" % action.name)
 
 	# ── 模块组装（extracted，profile 透传）──
-	_assemble_feasibility_module(action, hint.feasibility)
+	_assemble_feasibility_module(action, hint.feasibility, profile)      # 🆕 pass profile
 	_assemble_cost_module(action, ctx, hint.cost, profile)
 	_assemble_output_module(action, _is_repeated, hint.output, profile)
 	_assemble_risk_module(action, hint.risk, profile)
@@ -159,8 +181,31 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 # Extracted 模块组装函数（building_action_hint 专用）
 # ════════════════════════════════════════════════════════════════
 
-static func _assemble_feasibility_module(action, feas_mod) -> void:
+static func _assemble_feasibility_module(action, feas_mod, profile) -> void:
 	var prob: int = action.get_possibility_int()
+
+	if profile == _HintProfile.Profile.SIMPLE:
+		# Find the closest named amount level to prob
+		var best_level := ""
+		var best_distance := 999999
+		for level in _SIMPLE_FEASIBILITY_VALUES:
+			var val = _SIMPLE_FEASIBILITY_VALUES[level]
+			var dist = absi(prob - val)
+			if dist < best_distance or (dist == best_distance and level < best_level):
+				best_distance = dist
+				best_level = level
+
+		if not best_level.is_empty():
+			var label = _SIMPLE_FEASIBILITY_TEXT.get(best_level, "")
+			if not label.is_empty():
+				# Set title only once for the module
+				if feas_mod.title.is_empty():
+					feas_mod.title = "━━━ 可行性 ━━━"
+				feas_mod.append("成功率 %s" % label)
+				Logging.info("ActionHintFormatter._assemble_feasibility_module(SIMPLE): prob=%d → %s (%s)" % [prob, best_level, label])
+		return
+
+	# DEFAULT profile – original logic unchanged
 	if prob < 100:
 		feas_mod.title = "━━━ 可行性 ━━━"
 		feas_mod.append("概率: %d%%" % prob)
