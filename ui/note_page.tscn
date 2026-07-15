@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://bfevseldghfh0"]
+
+[ext_resource type="Script" uid="uid://bud5jm8iw6k03" path="res://ui/note_page.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_o78gb"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_enmti"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+texture = ExtResource("2_o78gb")
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enmti"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="NotePage" type="Control" unique_id=992720834]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1817549478]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_enmti")
+
+[node name="H" type="HBoxContainer" parent="PanelContainer" unique_id=1310597549]
+layout_mode = 2
+
+[node name="V" type="VBoxContainer" parent="PanelContainer/H" unique_id=856042535]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/H" unique_id=1446511408]
+layout_mode = 2
+
+[node name="Info" type="PanelContainer" parent="PanelContainer/H" unique_id=220723573]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_enmti")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/H/Info" unique_id=1454176476]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="PanelContainer" unique_id=1089128283]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
