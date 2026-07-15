@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_lyfg5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_wy8vx"]
 
-[sub_resource type="Resource" id="Resource_7vu0m"]
+[sub_resource type="Resource" id="Resource_hqd8w"]
 script = ExtResource("2_xpe67")
 
-[sub_resource type="Resource" id="Resource_xpe67"]
+[sub_resource type="Resource" id="Resource_p7dpk"]
 script = ExtResource("4_1kri5")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_q5p5t"]
+[sub_resource type="Resource" id="Resource_risgr"]
 script = ExtResource("2_xpe67")
-operators = Array[ExtResource("1_7vu0m")]([SubResource("Resource_xpe67")])
+operators = Array[ExtResource("1_7vu0m")]([SubResource("Resource_p7dpk")])
 
-[sub_resource type="Resource" id="Resource_1kri5"]
+[sub_resource type="Resource" id="Resource_vfvtn"]
 script = ExtResource("5_1j2bw")
-choice_result = SubResource("Resource_q5p5t")
+choice_result = SubResource("Resource_risgr")
 description = "搁下笔，将诗稿卷入袖中，起身径自走向院门。"
 
-[sub_resource type="Resource" id="Resource_1j2bw"]
+[sub_resource type="Resource" id="Resource_3ac8o"]
 script = ExtResource("5_1j2bw")
 description = "点头应允，提笔抹去原句，依言改作“双燕衔泥暖”。"
 
-[sub_resource type="Resource" id="Resource_lyfg5"]
+[sub_resource type="Resource" id="Resource_h35ss"]
 script = ExtResource("4_1kri5")
 imagery_name = "temple_bell"
 
-[sub_resource type="Resource" id="Resource_wy8vx"]
+[sub_resource type="Resource" id="Resource_4oauu"]
 script = ExtResource("2_xpe67")
-operators = Array[ExtResource("1_7vu0m")]([SubResource("Resource_lyfg5")])
+operators = Array[ExtResource("1_7vu0m")]([SubResource("Resource_h35ss")])
 
-[sub_resource type="Resource" id="Resource_hqd8w"]
+[sub_resource type="Resource" id="Resource_d8muv"]
 script = ExtResource("5_1j2bw")
-choice_result = SubResource("Resource_wy8vx")
+choice_result = SubResource("Resource_4oauu")
 description = "躬身笑问：“韦公高见，还有何处可润色？愿听教诲。”"
 
-[sub_resource type="Resource" id="Resource_p7dpk"]
+[sub_resource type="Resource" id="Resource_xrcvo"]
 script = ExtResource("6_lyfg5")
 volatile_stat = "ambition"
 value = 50
@@ -49,12 +49,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_wy8vx")
-requirement = SubResource("Resource_p7dpk")
+requirement = SubResource("Resource_xrcvo")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["emotion_pair:pair_rebellion", "TARGET_NPC_DUFU:thatched_grass", "ACTION_SOCIAL_PARTING:willow_branch", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:humiliation_aesthetic_violation", "TARGET_IDENTITY_QINGKE", "VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ACTION_SOCIAL_PARTING:willow_branch", "action:scene_jiaoyou"])
-options = Array[ExtResource("3_q5p5t")]([SubResource("Resource_1kri5"), SubResource("Resource_1j2bw"), SubResource("Resource_hqd8w")])
-on_enter_result = SubResource("Resource_7vu0m")
+options = Array[ExtResource("3_q5p5t")]([SubResource("Resource_vfvtn"), SubResource("Resource_3ac8o"), SubResource("Resource_d8muv")])
+on_enter_result = SubResource("Resource_hqd8w")
 uuid = "duotai_humiliation_aesthetic_violation_gateway_jiaoyou"
 name = "emo_lt(name=ambition; val=100)"
 description = "雅集改稿令"

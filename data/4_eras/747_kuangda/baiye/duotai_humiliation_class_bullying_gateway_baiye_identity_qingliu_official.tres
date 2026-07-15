@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_lmp52"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_abb2b"]
 
-[sub_resource type="Resource" id="Resource_q3bsm"]
+[sub_resource type="Resource" id="Resource_bn4nv"]
 script = ExtResource("2_say8a")
 
-[sub_resource type="Resource" id="Resource_say8a"]
+[sub_resource type="Resource" id="Resource_40jf6"]
 script = ExtResource("4_vkvn8")
 description = "转身将名帖留在原地，不看门子，步出大门。"
 
-[sub_resource type="Resource" id="Resource_bs3bb"]
+[sub_resource type="Resource" id="Resource_4eilo"]
 script = ExtResource("4_vkvn8")
 description = "退到偏廊坐下，将湿了的袖口拧干，垂首等待。"
 
-[sub_resource type="Resource" id="Resource_vkvn8"]
+[sub_resource type="Resource" id="Resource_b8p78"]
 script = ExtResource("5_8e0p6")
 imagery_name = "thatched_grass"
 
-[sub_resource type="Resource" id="Resource_8e0p6"]
+[sub_resource type="Resource" id="Resource_eqmyf"]
 script = ExtResource("2_say8a")
-operators = Array[ExtResource("1_q3bsm")]([SubResource("Resource_vkvn8")])
+operators = Array[ExtResource("1_q3bsm")]([SubResource("Resource_b8p78")])
 
-[sub_resource type="Resource" id="Resource_lmp52"]
+[sub_resource type="Resource" id="Resource_a1rkt"]
 script = ExtResource("4_vkvn8")
-choice_result = SubResource("Resource_8e0p6")
+choice_result = SubResource("Resource_eqmyf")
 description = "赔笑凑近门子，低声道「大人辛苦，小的有劳通传。」"
 
-[sub_resource type="Resource" id="Resource_abb2b"]
+[sub_resource type="Resource" id="Resource_hkxk5"]
 script = ExtResource("6_lmp52")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_abb2b")
-requirement = SubResource("Resource_abb2b")
+requirement = SubResource("Resource_hkxk5")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["emotion_pair:pair_despair", "TARGET_OBJECT_SWORD:cold_blade", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "action:humiliation_class_bullying", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_IDENTITY_MENZI", "TARGET_FACTION_ROYAL:jade_step", "TARGET_NPC_DUFU:thatched_grass", "ENV_NATURE_NIGHTMOON:cold_moon", "action:scene_baiye"])
-options = Array[ExtResource("3_bs3bb")]([SubResource("Resource_say8a"), SubResource("Resource_bs3bb"), SubResource("Resource_lmp52")])
-on_enter_result = SubResource("Resource_q3bsm")
+options = Array[ExtResource("3_bs3bb")]([SubResource("Resource_40jf6"), SubResource("Resource_4eilo"), SubResource("Resource_a1rkt")])
+on_enter_result = SubResource("Resource_bn4nv")
 uuid = "duotai_humiliation_class_bullying_gateway_baiye_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "门房冷眼"

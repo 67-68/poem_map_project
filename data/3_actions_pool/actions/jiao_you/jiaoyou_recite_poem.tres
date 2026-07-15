@@ -9,33 +9,33 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_gsqjn"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="8_1knwk"]
 
-[sub_resource type="Resource" id="Resource_xslrk"]
+[sub_resource type="Resource" id="Resource_maae0"]
 script = ExtResource("2_3lsia")
 
-[sub_resource type="Resource" id="Resource_3lsia"]
+[sub_resource type="Resource" id="Resource_khncg"]
 script = ExtResource("4_kpuku")
 mode = "fame"
 
-[sub_resource type="Resource" id="Resource_0u8q6"]
+[sub_resource type="Resource" id="Resource_3lh7e"]
 script = ExtResource("5_njoc6")
 
-[sub_resource type="Resource" id="Resource_kpuku"]
+[sub_resource type="Resource" id="Resource_iyubg"]
 script = ExtResource("6_bjf5p")
 event_key = "jiaoyou_recite_poem_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_njoc6"]
+[sub_resource type="Resource" id="Resource_jo6cf"]
 script = ExtResource("7_gsqjn")
-operators = Array[ExtResource("3_0u8q6")]([SubResource("Resource_kpuku")])
+operators = Array[ExtResource("3_0u8q6")]([SubResource("Resource_iyubg")])
 
 [resource]
 script = ExtResource("8_1knwk")
 required_place = "pingkangfang"
 _action_tags = Array[int]([30, 46])
-action_results = Array[ExtResource("3_0u8q6")]([SubResource("Resource_3lsia")])
-aciton_requirements = Array[ExtResource("1_xslrk")]([SubResource("Resource_xslrk")])
+action_results = Array[ExtResource("3_0u8q6")]([SubResource("Resource_khncg")])
+aciton_requirements = Array[ExtResource("1_xslrk")]([SubResource("Resource_maae0")])
 fallback_event_uuid = "jiaoyou_recite_poem_fallback"
-failed_result = SubResource("Resource_njoc6")
-defer_config = SubResource("Resource_0u8q6")
+failed_result = SubResource("Resource_jo6cf")
+defer_config = SubResource("Resource_3lh7e")
 uuid = "jiaoyou_recite_poem"
 name = "交游 · 宣读诗词"
 description = "当众宣读新作以诗换名"

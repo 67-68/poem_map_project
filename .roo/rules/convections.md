@@ -6,7 +6,7 @@ CRITICAL: 任何模式下都必须严格遵守以下底层物理边界：
 2. **执行环境**：绝对禁止在宿主机（Mac）环境执行命令。所有终端操作必须确认在 Docker 容器内运行。
 3. **语言版本死锁**：
    - Python **3.10+**
-   - Godot **4.6.3**
+   - Godot **4.6.3**: 在Applications/Godot.app/Contents/MacOS/Godot
    - 严禁引入其他版本或混用版本。
    - python 直接使用 **python3** 执行，.venv/bin/python 是错误的路径
 4. 如果需要对git做提交，把命令给用户。**不要想着尝试**删除或者回溯git版本

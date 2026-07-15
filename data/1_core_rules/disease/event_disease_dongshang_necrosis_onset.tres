@@ -8,46 +8,46 @@
 [ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="6_08ibv"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_umsg3"]
 
-[sub_resource type="Resource" id="Resource_tyut7"]
+[sub_resource type="Resource" id="Resource_n2mgw"]
 script = ExtResource("3_46wxo")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_ijcjj"]
+[sub_resource type="Resource" id="Resource_626j2"]
 script = ExtResource("3_46wxo")
 str_props = "sick"
 value = 3
 
-[sub_resource type="Resource" id="Resource_46wxo"]
+[sub_resource type="Resource" id="Resource_5hk3d"]
 script = ExtResource("3_46wxo")
 str_props = "money"
 value = -2
 
-[sub_resource type="Resource" id="Resource_a6bay"]
+[sub_resource type="Resource" id="Resource_a2uv2"]
 script = ExtResource("4_a6bay")
-operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_tyut7"), SubResource("Resource_ijcjj"), SubResource("Resource_46wxo")])
+operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_n2mgw"), SubResource("Resource_626j2"), SubResource("Resource_5hk3d")])
 
-[sub_resource type="Resource" id="Resource_sa4fj"]
+[sub_resource type="Resource" id="Resource_0f5yr"]
 script = ExtResource("5_sa4fj")
-choice_result = SubResource("Resource_a6bay")
+choice_result = SubResource("Resource_a2uv2")
 description = "割去坏死指头"
 
-[sub_resource type="Resource" id="Resource_08ibv"]
+[sub_resource type="Resource" id="Resource_l57j6"]
 script = ExtResource("3_46wxo")
 str_props = "sick"
 value = 8
 
-[sub_resource type="Resource" id="Resource_umsg3"]
+[sub_resource type="Resource" id="Resource_l1o6h"]
 script = ExtResource("6_08ibv")
 value = 5
 
-[sub_resource type="Resource" id="Resource_n2mgw"]
+[sub_resource type="Resource" id="Resource_6jhl2"]
 script = ExtResource("4_a6bay")
-operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_08ibv"), SubResource("Resource_umsg3")])
+operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_l57j6"), SubResource("Resource_l1o6h")])
 
-[sub_resource type="Resource" id="Resource_626j2"]
+[sub_resource type="Resource" id="Resource_b7oge"]
 script = ExtResource("5_sa4fj")
-choice_result = SubResource("Resource_n2mgw")
+choice_result = SubResource("Resource_6jhl2")
 description = "裹以破布"
 
 [resource]
@@ -55,7 +55,7 @@ script = ExtResource("7_umsg3")
 weight = 100.0
 era = "1_core_rules"
 _target_tags = Array[String](["actor:health:coldNecrosis"])
-options = Array[ExtResource("1_tyut7")]([SubResource("Resource_sa4fj"), SubResource("Resource_626j2")])
+options = Array[ExtResource("1_tyut7")]([SubResource("Resource_0f5yr"), SubResource("Resource_b7oge")])
 uuid = "event_disease_dongshang_necrosis_onset"
 name = "指骨坏死"
 description = "第七天了。你醒来的时候发现右手食指的指甲盖整个翻了起来——不是磕碰的，是冻死的。指甲底下的肉变成了黑色。不是紫黑，是焦黑，像烧过的木柴那种黑。你碰了碰，不疼。不疼才可怕。\\n\\n你把手指举到眼前。指尖那截已经分辨不出原来的肤色，皮肉像腊肉一样硬，关节完全锁死。你知道那根手指已经死了。它挂在你的手上，但已经不是你的了。再过几天——也许是明天——它会从指节上脱落，留下一截白森森的骨头。这就是冻疮走到尽头的样子。\\n\\n你看着自己的手。十根手指。还剩九根是活的。"

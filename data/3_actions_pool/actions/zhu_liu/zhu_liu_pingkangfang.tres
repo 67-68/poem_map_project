@@ -6,10 +6,10 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_nhdwc"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_s0yeo"]
 
-[sub_resource type="Resource" id="Resource_mglqa"]
+[sub_resource type="Resource" id="Resource_alyqf"]
 script = ExtResource("3_e74nn")
 
-[sub_resource type="Resource" id="Resource_yuc0i"]
+[sub_resource type="Resource" id="Resource_cafc4"]
 script = ExtResource("4_nhdwc")
 
 [resource]
@@ -18,8 +18,8 @@ required_place = "pingkangfang"
 _action_tags = Array[int]([56, 62])
 fallback_event_uuid = "zhu_liu_pingkangfang_fallback"
 archetype_uuid = "zhu_liu_pingkangfang_success"
-failed_result = SubResource("Resource_yuc0i")
-defer_config = SubResource("Resource_mglqa")
+failed_result = SubResource("Resource_cafc4")
+defer_config = SubResource("Resource_alyqf")
 uuid = "zhu_liu_pingkangfang"
 name = "驻留 · 平康坊"
 description = "移步平康坊落脚"

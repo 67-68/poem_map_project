@@ -8,32 +8,32 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_kems5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_8p11k"]
 
-[sub_resource type="Resource" id="Resource_m8c0l"]
+[sub_resource type="Resource" id="Resource_x17fj"]
 script = ExtResource("3_eggxx")
 str_props = "progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_xds0a"]
+[sub_resource type="Resource" id="Resource_a7hei"]
 script = ExtResource("4_je7sm")
-operators = Array[ExtResource("2_xds0a")]([SubResource("Resource_m8c0l")])
+operators = Array[ExtResource("2_xds0a")]([SubResource("Resource_x17fj")])
 
-[sub_resource type="Resource" id="Resource_eggxx"]
+[sub_resource type="Resource" id="Resource_h3y6d"]
 script = ExtResource("5_on73n")
-choice_result = SubResource("Resource_xds0a")
+choice_result = SubResource("Resource_a7hei")
 description = "奉上银钱，求门子通融"
 
-[sub_resource type="Resource" id="Resource_je7sm"]
+[sub_resource type="Resource" id="Resource_is4cl"]
 script = ExtResource("6_kems5")
 property = "progress"
 value = 70
 
 [resource]
 script = ExtResource("7_8p11k")
-requirement = SubResource("Resource_je7sm")
+requirement = SubResource("Resource_is4cl")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_m8c0l")]([SubResource("Resource_eggxx")])
+options = Array[ExtResource("1_m8c0l")]([SubResource("Resource_h3y6d")])
 uuid = "bai_ye_honeymoon_l0_typea_m0"
 name = "门前索礼"
 description = "“可有引荐礼？”声音尖锐，引得街边闲人侧目。你递上名刺，他并不接，只冷冷道：“府上规矩，无礼不得入。”说完便转身与另一仆役低语，不时瞥你两眼，显然是在等人识趣。你摸出几串铜钱，他这才慢悠悠接过，侧身让开一条缝：“请罢，莫误了时辰。”"

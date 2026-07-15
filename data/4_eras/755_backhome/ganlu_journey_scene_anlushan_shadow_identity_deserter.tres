@@ -8,24 +8,24 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_82v7j"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_7mkve"]
 
-[sub_resource type="Resource" id="Resource_btbjy"]
+[sub_resource type="Resource" id="Resource_h73nd"]
 script = ExtResource("3_l0tm7")
 value = 10
 
-[sub_resource type="Resource" id="Resource_6kkdm"]
+[sub_resource type="Resource" id="Resource_asxrp"]
 script = ExtResource("4_are5d")
 imagery_name = "corrupt"
 
-[sub_resource type="Resource" id="Resource_l0tm7"]
+[sub_resource type="Resource" id="Resource_eixbt"]
 script = ExtResource("5_e0v75")
-operators = Array[ExtResource("2_6kkdm")]([SubResource("Resource_btbjy"), SubResource("Resource_6kkdm")])
+operators = Array[ExtResource("2_6kkdm")]([SubResource("Resource_h73nd"), SubResource("Resource_asxrp")])
 
-[sub_resource type="Resource" id="Resource_are5d"]
+[sub_resource type="Resource" id="Resource_cs3y6"]
 script = ExtResource("6_82v7j")
-choice_result = SubResource("Resource_l0tm7")
+choice_result = SubResource("Resource_eixbt")
 description = "杜甫上前一步，低声道：“立住。”手按向腰间官凭。"
 
-[sub_resource type="Resource" id="Resource_e0v75"]
+[sub_resource type="Resource" id="Resource_shq5s"]
 script = ExtResource("6_82v7j")
 description = "杜甫嘴皮动了动，看着空囊慢慢蹲下，把结冰的褡裢抖了抖。"
 
@@ -34,7 +34,7 @@ script = ExtResource("7_7mkve")
 era = "755_backhome"
 archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_SOCIETY_WAR", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu", "TARGET_IDENTITY_DESERTER"])
-options = Array[ExtResource("1_btbjy")]([SubResource("Resource_are5d"), SubResource("Resource_e0v75")])
+options = Array[ExtResource("1_btbjy")]([SubResource("Resource_cs3y6"), SubResource("Resource_shq5s")])
 uuid = "ganlu_journey_scene_anlushan_shadow_identity_deserter"
 name = "范阳客取粮"
 description = "三个汉子从路旁枯柳后转出，口音夹着胡音，像融雪渗进冻土。其中一人瞥了杜甫的绿袍一眼，伸手从他怀里掏出干粮袋，动作如同从自家灶台取物；另一人嘟囔了句“这天还得走两日”，第三人不言语，只把袋口扎紧往怀里一塞。三人擦肩过去，雪地上留下踩实的脚印和一只空瘪的布囊。"

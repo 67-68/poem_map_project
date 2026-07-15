@@ -12,56 +12,9 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_5eg7r"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_6ksp5"]
 
-[sub_resource type="Resource" id="Resource_2q47i"]
-script = ExtResource("3_i7xda")
-value = 5
-
-[sub_resource type="Resource" id="Resource_dlxmu"]
-script = ExtResource("3_i7xda")
-value = 10
-
-[sub_resource type="Resource" id="Resource_i7xda"]
-script = ExtResource("4_jt02r")
-imagery_name = "high_tower"
-
-[sub_resource type="Resource" id="Resource_jt02r"]
-script = ExtResource("5_ucy3y")
-operators = Array[ExtResource("2_dlxmu")]([SubResource("Resource_2q47i"), SubResource("Resource_dlxmu"), SubResource("Resource_i7xda")])
-
-[sub_resource type="Resource" id="Resource_ucy3y"]
-script = ExtResource("6_x0gka")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_x0gka"]
-script = ExtResource("7_hx360")
-choice_result = SubResource("Resource_jt02r")
-requirement = SubResource("Resource_ucy3y")
-description = "“这满城灯火，倒是替天省了蜡烛。”"
-
-[sub_resource type="Resource" id="Resource_hx360"]
-script = ExtResource("3_i7xda")
-value = 5
-
-[sub_resource type="Resource" id="Resource_wc35a"]
-script = ExtResource("3_i7xda")
-value = 5
-
-[sub_resource type="Resource" id="Resource_jm7ha"]
-script = ExtResource("5_ucy3y")
-operators = Array[ExtResource("2_dlxmu")]([SubResource("Resource_hx360"), SubResource("Resource_wc35a")])
-
-[sub_resource type="Resource" id="Resource_5eg7r"]
-script = ExtResource("7_hx360")
-choice_result = SubResource("Resource_jm7ha")
-description = "伸手接住那片凉意，转身往原下走。"
-
-[sub_resource type="Resource" id="Resource_6ksp5"]
-script = ExtResource("3_i7xda")
-value = 5
-
 [sub_resource type="Resource" id="Resource_b1jwx"]
 script = ExtResource("3_i7xda")
-value = 20
+value = 5
 
 [sub_resource type="Resource" id="Resource_uyc11"]
 script = ExtResource("3_i7xda")
@@ -69,44 +22,91 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_pyw71"]
 script = ExtResource("4_jt02r")
-imagery_name = "cold_moon"
+imagery_name = "high_tower"
 
 [sub_resource type="Resource" id="Resource_jh611"]
 script = ExtResource("5_ucy3y")
-operators = Array[ExtResource("2_dlxmu")]([SubResource("Resource_6ksp5"), SubResource("Resource_b1jwx"), SubResource("Resource_uyc11"), SubResource("Resource_pyw71")])
+operators = Array[ExtResource("2_dlxmu")]([SubResource("Resource_b1jwx"), SubResource("Resource_uyc11"), SubResource("Resource_pyw71")])
 
 [sub_resource type="Resource" id="Resource_oo1m1"]
 script = ExtResource("6_x0gka")
-trait_name = "kuangda_zuanying"
+trait_name = "kuangda_kuangke"
 
 [sub_resource type="Resource" id="Resource_ufvlf"]
 script = ExtResource("7_hx360")
 choice_result = SubResource("Resource_jh611")
 requirement = SubResource("Resource_oo1m1")
-description = "望灯火出神片刻，低声自语：“不知哪一盏，能为我留门。”"
+description = "“这满城灯火，倒是替天省了蜡烛。”"
 
 [sub_resource type="Resource" id="Resource_80ra3"]
+script = ExtResource("3_i7xda")
+value = 5
+
+[sub_resource type="Resource" id="Resource_p0pgl"]
+script = ExtResource("3_i7xda")
+value = 5
+
+[sub_resource type="Resource" id="Resource_cyccr"]
+script = ExtResource("5_ucy3y")
+operators = Array[ExtResource("2_dlxmu")]([SubResource("Resource_80ra3"), SubResource("Resource_p0pgl")])
+
+[sub_resource type="Resource" id="Resource_dc8fi"]
+script = ExtResource("7_hx360")
+choice_result = SubResource("Resource_cyccr")
+description = "伸手接住那片凉意，转身往原下走。"
+
+[sub_resource type="Resource" id="Resource_navpt"]
+script = ExtResource("3_i7xda")
+value = 5
+
+[sub_resource type="Resource" id="Resource_dsyy7"]
+script = ExtResource("3_i7xda")
+value = 20
+
+[sub_resource type="Resource" id="Resource_h4c8l"]
+script = ExtResource("3_i7xda")
+value = 10
+
+[sub_resource type="Resource" id="Resource_7fqd8"]
+script = ExtResource("4_jt02r")
+imagery_name = "cold_moon"
+
+[sub_resource type="Resource" id="Resource_en1le"]
+script = ExtResource("5_ucy3y")
+operators = Array[ExtResource("2_dlxmu")]([SubResource("Resource_navpt"), SubResource("Resource_dsyy7"), SubResource("Resource_h4c8l"), SubResource("Resource_7fqd8")])
+
+[sub_resource type="Resource" id="Resource_epefh"]
+script = ExtResource("6_x0gka")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_8ldfr"]
+script = ExtResource("7_hx360")
+choice_result = SubResource("Resource_en1le")
+requirement = SubResource("Resource_epefh")
+description = "望灯火出神片刻，低声自语：“不知哪一盏，能为我留门。”"
+
+[sub_resource type="Resource" id="Resource_uxaef"]
 script = ExtResource("9_jm7ha")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_p0pgl"]
+[sub_resource type="Resource" id="Resource_54a4l"]
 script = ExtResource("9_jm7ha")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_cyccr"]
+[sub_resource type="Resource" id="Resource_ccb80"]
 script = ExtResource("10_5eg7r")
-operators = Array[ExtResource("8_wc35a")]([SubResource("Resource_80ra3"), SubResource("Resource_p0pgl")])
+operators = Array[ExtResource("8_wc35a")]([SubResource("Resource_uxaef"), SubResource("Resource_54a4l")])
 
 [resource]
 script = ExtResource("11_6ksp5")
-requirement = SubResource("Resource_cyccr")
+requirement = SubResource("Resource_ccb80")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["ENV_NATURE_NIGHTMOON:cold_moon", "ENV_NATURE_AUTUMNWIND:falling_leaf", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_leyou_night", "emotion_pair:pair_sorrow", "VIBE_THEME_HISTORY:ruined_wall", "ENV_NATURE_AUTUMNWIND:falling_leaf"])
-options = Array[ExtResource("1_2q47i")]([SubResource("Resource_x0gka"), SubResource("Resource_5eg7r"), SubResource("Resource_ufvlf")])
+options = Array[ExtResource("1_2q47i")]([SubResource("Resource_ufvlf"), SubResource("Resource_dc8fi"), SubResource("Resource_8ldfr")])
 uuid = "747kuangda_denggao_leyou_night_emotion_sorrow"
 name = "灯火如星照孤影"
 description = "乐游原上，晚风萧瑟。你立于原畔，望着脚下长安城万千灯火如繁星落地。远处传来模糊的人声与笛音，夜风将它们揉碎，送到你耳中时已辨不清悲喜。你站了很久，衣袍被风灌满，身体却越来越重。不是累了，是沉了。转身下山时，有露水般凉的东西落在你手背上。"

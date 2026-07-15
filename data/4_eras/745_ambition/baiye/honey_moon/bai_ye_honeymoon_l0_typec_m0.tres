@@ -8,32 +8,32 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_0orvn"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_8h12l"]
 
-[sub_resource type="Resource" id="Resource_546lf"]
+[sub_resource type="Resource" id="Resource_xo6wo"]
 script = ExtResource("3_jyero")
 str_props = "progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_dcbrm"]
+[sub_resource type="Resource" id="Resource_0kb5h"]
 script = ExtResource("4_8rol7")
-operators = Array[ExtResource("2_dcbrm")]([SubResource("Resource_546lf")])
+operators = Array[ExtResource("2_dcbrm")]([SubResource("Resource_xo6wo")])
 
-[sub_resource type="Resource" id="Resource_jyero"]
+[sub_resource type="Resource" id="Resource_xgl27"]
 script = ExtResource("5_dh3qy")
-choice_result = SubResource("Resource_dcbrm")
+choice_result = SubResource("Resource_0kb5h")
 description = "退到墙根阴凉处，耐心等候"
 
-[sub_resource type="Resource" id="Resource_8rol7"]
+[sub_resource type="Resource" id="Resource_f2itb"]
 script = ExtResource("6_0orvn")
 property = "progress"
 value = 70
 
 [resource]
 script = ExtResource("7_8h12l")
-requirement = SubResource("Resource_8rol7")
+requirement = SubResource("Resource_f2itb")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_546lf")]([SubResource("Resource_jyero")])
+options = Array[ExtResource("1_546lf")]([SubResource("Resource_xgl27")])
 uuid = "bai_ye_honeymoon_l0_typec_m0"
 name = "门檐影斜"
 description = "右相府午门紧闭。你上前自报家门，门子倚着门框，目光越过你，投向巷口一顶青呢官轿。你要通报？他缓缓掸了掸衣袖上并不存在的灰，说相爷正在用午膳，你且候着。日头爬过墙头，将你的影子一寸寸烤短。门子转身与另一个仆役低声说笑，笑声断断续续，间或回头看你一眼，仿佛在等什么有趣的事发生。他们的声音不大不小，恰好能让你听见——也不知是哪个穷措大，也配来见相爷。你站在石阶下，进退不得。"

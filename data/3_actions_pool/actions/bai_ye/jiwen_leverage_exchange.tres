@@ -1,37 +1,37 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://bqwsmjnw3houj"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_jbkx3"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_fsmp6"]
-[ext_resource type="Script" uid="uid://csnd0b1q3o7vf" path="res://core/operators/consume_random_leverage_operator.gd" id="3_3t18v"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_cgnxe"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_3t18v"]
-[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="5_8vodj"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_d8c84"]
-
-[sub_resource type="Resource" id="Resource_ksyos"]
-script = ExtResource("3_3t18v")
-
-[sub_resource type="Resource" id="Resource_xsjof"]
-script = ExtResource("3_cgnxe")
-
-[sub_resource type="Resource" id="Resource_25ss7"]
-script = ExtResource("5_8vodj")
-event_key = "jiwen_leverage_exchange_failed_fallback"
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_cgnxe"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3t18v"]
+[ext_resource type="Script" uid="uid://csnd0b1q3o7vf" path="res://core/operators/consume_random_leverage_operator.gd" id="3_d8c84"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="4_8vodj"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="5_ksyos"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_xsjof"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_25ss7"]
 
 [sub_resource type="Resource" id="Resource_6hcg6"]
-script = ExtResource("4_3t18v")
-operators = Array[ExtResource("2_fsmp6")]([SubResource("Resource_25ss7")])
+script = ExtResource("3_d8c84")
+
+[sub_resource type="Resource" id="Resource_mwpil"]
+script = ExtResource("4_8vodj")
+
+[sub_resource type="Resource" id="Resource_1t3l4"]
+script = ExtResource("5_ksyos")
+event_key = "jiwen_leverage_exchange_failed_fallback"
+
+[sub_resource type="Resource" id="Resource_i1ynm"]
+script = ExtResource("6_xsjof")
+operators = Array[ExtResource("2_3t18v")]([SubResource("Resource_1t3l4")])
 
 [resource]
-script = ExtResource("5_d8c84")
+script = ExtResource("7_25ss7")
 required_place = "huangcheng"
 _action_tags = Array[int]([48, 29])
-action_results = Array[ExtResource("2_fsmp6")]([SubResource("Resource_ksyos")])
+action_results = Array[ExtResource("2_3t18v")]([SubResource("Resource_6hcg6")])
 fallback_event_uuid = "jiwen_leverage_exchange_fallback"
 archetype_uuid = "jiwen_leverage_exchange_success"
 possibility = "ms_success_rate"
-failed_result = SubResource("Resource_6hcg6")
-defer_config = SubResource("Resource_xsjof")
+failed_result = SubResource("Resource_i1ynm")
+defer_config = SubResource("Resource_mwpil")
 override_action = "baiye_threaten"
 uuid = "jiwen_leverage_exchange"
 name = "吉温 · 把柄换势"

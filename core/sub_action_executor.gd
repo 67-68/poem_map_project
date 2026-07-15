@@ -122,6 +122,13 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 	
 	# ── Step 7: 分支 — 成功 / 失败 ──
 	if _sub_outcome == "success":
+		# ── Step 7a: 执行 sub-action action_results.operate() ──
+		if sub_action and sub_action.action_results and not sub_action.action_results.is_empty():
+			Logging.info("SubActionExecutor.execute: 执行 sub-action action_results.operate() (%d ops) for '%s'" % [sub_action.action_results.size(), sub_action.name])
+			for r in sub_action.action_results:
+				if r:
+					r.operate()
+		
 		# 追加 sub_uuid + sub_tags（bucket 路由用）
 		PlayerState.current_action_tags.append(selected_uuid)
 		for tag in sub_tags:

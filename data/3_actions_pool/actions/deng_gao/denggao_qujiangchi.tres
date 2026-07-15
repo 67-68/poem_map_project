@@ -6,10 +6,10 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_8l6c2"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_dj3io"]
 
-[sub_resource type="Resource" id="Resource_f25rr"]
+[sub_resource type="Resource" id="Resource_tm8aw"]
 script = ExtResource("3_okjj8")
 
-[sub_resource type="Resource" id="Resource_tfwr7"]
+[sub_resource type="Resource" id="Resource_win54"]
 script = ExtResource("4_8l6c2")
 
 [resource]
@@ -17,8 +17,8 @@ script = ExtResource("5_dj3io")
 _action_tags = Array[int]([31, 40])
 fallback_event_uuid = "denggao_qujiangchi_fallback"
 archetype_uuid = "denggao_qujiangchi_success"
-failed_result = SubResource("Resource_tfwr7")
-defer_config = SubResource("Resource_f25rr")
+failed_result = SubResource("Resource_win54")
+defer_config = SubResource("Resource_tm8aw")
 uuid = "denggao_qujiangchi"
 name = "远游 · 曲江池"
 description = "曲江池畔遣兴"

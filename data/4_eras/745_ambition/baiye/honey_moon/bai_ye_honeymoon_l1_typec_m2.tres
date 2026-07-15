@@ -8,32 +8,32 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_v3yhv"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_qhvwh"]
 
-[sub_resource type="Resource" id="Resource_mg5ta"]
+[sub_resource type="Resource" id="Resource_04lil"]
 script = ExtResource("3_57o4u")
 str_props = "progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_tfx6q"]
+[sub_resource type="Resource" id="Resource_8q51i"]
 script = ExtResource("4_tqtgp")
-operators = Array[ExtResource("2_tfx6q")]([SubResource("Resource_mg5ta")])
+operators = Array[ExtResource("2_tfx6q")]([SubResource("Resource_04lil")])
 
-[sub_resource type="Resource" id="Resource_57o4u"]
+[sub_resource type="Resource" id="Resource_gegwo"]
 script = ExtResource("5_fmqxq")
-choice_result = SubResource("Resource_tfx6q")
+choice_result = SubResource("Resource_8q51i")
 description = "躬身告退，将诗文揣入怀中"
 
-[sub_resource type="Resource" id="Resource_tqtgp"]
+[sub_resource type="Resource" id="Resource_qpq2m"]
 script = ExtResource("6_v3yhv")
 property = "progress"
 value = 70
 
 [resource]
 script = ExtResource("7_qhvwh")
-requirement = SubResource("Resource_tqtgp")
+requirement = SubResource("Resource_qpq2m")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_mg5ta")]([SubResource("Resource_57o4u")])
+options = Array[ExtResource("1_mg5ta")]([SubResource("Resource_gegwo")])
 uuid = "bai_ye_honeymoon_l1_typec_m2"
 name = "文章受斥"
 description = "“这文章虽通顺，却少了几分刚健之气，倒有几分脂粉闺阁之态。”他顿了顿，将茶盏不轻不重地搁下，“写文章如同做人，你这般文风，怕是不合府上规矩。拿去重写，写到我满意了再来吧。”说完便低头整理文书，不再看你。"

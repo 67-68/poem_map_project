@@ -12,56 +12,9 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_jxevs"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_de5ax"]
 
-[sub_resource type="Resource" id="Resource_rk3d5"]
-script = ExtResource("3_ynihp")
-value = 5
-
-[sub_resource type="Resource" id="Resource_yqn6x"]
-script = ExtResource("3_ynihp")
-value = 10
-
-[sub_resource type="Resource" id="Resource_ynihp"]
-script = ExtResource("4_5dovv")
-imagery_name = "starving_bone"
-
-[sub_resource type="Resource" id="Resource_5dovv"]
-script = ExtResource("5_cygge")
-operators = Array[ExtResource("2_yqn6x")]([SubResource("Resource_rk3d5"), SubResource("Resource_yqn6x"), SubResource("Resource_ynihp")])
-
-[sub_resource type="Resource" id="Resource_cygge"]
-script = ExtResource("6_iou1s")
-trait_name = "kuangda_kuangke"
-
-[sub_resource type="Resource" id="Resource_iou1s"]
-script = ExtResource("7_t8gq8")
-choice_result = SubResource("Resource_5dovv")
-requirement = SubResource("Resource_cygge")
-description = "衣袖被风灌满，你冲着长安方向吐出一口带土的唾沫。"
-
-[sub_resource type="Resource" id="Resource_t8gq8"]
-script = ExtResource("3_ynihp")
-value = 5
-
-[sub_resource type="Resource" id="Resource_3r7a1"]
-script = ExtResource("3_ynihp")
-value = 5
-
-[sub_resource type="Resource" id="Resource_ds3d8"]
-script = ExtResource("5_cygge")
-operators = Array[ExtResource("2_yqn6x")]([SubResource("Resource_t8gq8"), SubResource("Resource_3r7a1")])
-
-[sub_resource type="Resource" id="Resource_jxevs"]
-script = ExtResource("7_t8gq8")
-choice_result = SubResource("Resource_ds3d8")
-description = "蹲下身，捡起一块干裂的土坷垃，在手里捏碎。"
-
-[sub_resource type="Resource" id="Resource_de5ax"]
-script = ExtResource("3_ynihp")
-value = 5
-
 [sub_resource type="Resource" id="Resource_br83l"]
 script = ExtResource("3_ynihp")
-value = 21
+value = 5
 
 [sub_resource type="Resource" id="Resource_0kjce"]
 script = ExtResource("3_ynihp")
@@ -73,40 +26,87 @@ imagery_name = "starving_bone"
 
 [sub_resource type="Resource" id="Resource_nsa8w"]
 script = ExtResource("5_cygge")
-operators = Array[ExtResource("2_yqn6x")]([SubResource("Resource_de5ax"), SubResource("Resource_br83l"), SubResource("Resource_0kjce"), SubResource("Resource_dusts")])
+operators = Array[ExtResource("2_yqn6x")]([SubResource("Resource_br83l"), SubResource("Resource_0kjce"), SubResource("Resource_dusts")])
 
 [sub_resource type="Resource" id="Resource_ef3fn"]
 script = ExtResource("6_iou1s")
-trait_name = "kuangda_zuanying"
+trait_name = "kuangda_kuangke"
 
 [sub_resource type="Resource" id="Resource_sibw7"]
 script = ExtResource("7_t8gq8")
 choice_result = SubResource("Resource_nsa8w")
 requirement = SubResource("Resource_ef3fn")
-description = "弯腰，把被风吹歪的衣襟整了整，继续盯着远方。"
+description = "衣袖被风灌满，你冲着长安方向吐出一口带土的唾沫。"
 
 [sub_resource type="Resource" id="Resource_qc1dc"]
+script = ExtResource("3_ynihp")
+value = 5
+
+[sub_resource type="Resource" id="Resource_kxldp"]
+script = ExtResource("3_ynihp")
+value = 5
+
+[sub_resource type="Resource" id="Resource_irs5a"]
+script = ExtResource("5_cygge")
+operators = Array[ExtResource("2_yqn6x")]([SubResource("Resource_qc1dc"), SubResource("Resource_kxldp")])
+
+[sub_resource type="Resource" id="Resource_m85hb"]
+script = ExtResource("7_t8gq8")
+choice_result = SubResource("Resource_irs5a")
+description = "蹲下身，捡起一块干裂的土坷垃，在手里捏碎。"
+
+[sub_resource type="Resource" id="Resource_yitwp"]
+script = ExtResource("3_ynihp")
+value = 5
+
+[sub_resource type="Resource" id="Resource_e76k2"]
+script = ExtResource("3_ynihp")
+value = 21
+
+[sub_resource type="Resource" id="Resource_aebme"]
+script = ExtResource("3_ynihp")
+value = 10
+
+[sub_resource type="Resource" id="Resource_ie2xk"]
+script = ExtResource("4_5dovv")
+imagery_name = "starving_bone"
+
+[sub_resource type="Resource" id="Resource_kdhrr"]
+script = ExtResource("5_cygge")
+operators = Array[ExtResource("2_yqn6x")]([SubResource("Resource_yitwp"), SubResource("Resource_e76k2"), SubResource("Resource_aebme"), SubResource("Resource_ie2xk")])
+
+[sub_resource type="Resource" id="Resource_l8ah1"]
+script = ExtResource("6_iou1s")
+trait_name = "kuangda_zuanying"
+
+[sub_resource type="Resource" id="Resource_2l2c8"]
+script = ExtResource("7_t8gq8")
+choice_result = SubResource("Resource_kdhrr")
+requirement = SubResource("Resource_l8ah1")
+description = "弯腰，把被风吹歪的衣襟整了整，继续盯着远方。"
+
+[sub_resource type="Resource" id="Resource_v3vnw"]
 script = ExtResource("9_ds3d8")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_kxldp"]
+[sub_resource type="Resource" id="Resource_0uvec"]
 script = ExtResource("9_ds3d8")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_irs5a"]
+[sub_resource type="Resource" id="Resource_mxmvt"]
 script = ExtResource("10_jxevs")
-operators = Array[ExtResource("8_3r7a1")]([SubResource("Resource_qc1dc"), SubResource("Resource_kxldp")])
+operators = Array[ExtResource("8_3r7a1")]([SubResource("Resource_v3vnw"), SubResource("Resource_0uvec")])
 
 [resource]
 script = ExtResource("11_de5ax")
-requirement = SubResource("Resource_irs5a")
+requirement = SubResource("Resource_mxmvt")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "ENV_SOCIETY_FAMINE:starving_bone", "VIBE_THEME_HISTORY:ruined_wall", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_shaoling_morning", "emotion_pair:pair_anger", "TARGET_FACTION_MILITARY:torn_flag", "ENV_SOCIETY_WAR:blood_stain"])
-options = Array[ExtResource("1_rk3d5")]([SubResource("Resource_iou1s"), SubResource("Resource_jxevs"), SubResource("Resource_sibw7")])
+options = Array[ExtResource("1_rk3d5")]([SubResource("Resource_sibw7"), SubResource("Resource_m85hb"), SubResource("Resource_2l2c8")])
 uuid = "747kuangda_denggao_shaoling_morning_emotion_anger"
 name = "野风卷怒"
 description = "少陵原的晨风裹着土腥味扑面而来。远处长安城的炊烟在晨光中稀疏地升起——东边是曲江池畔的朱门烟囱，西边是贫民窟的冷灶。你站在原上，看着风把老农翻出的干土吹散，又看着远方那些豪宅在晨曦中熠熠生辉。脚跟下的土路干裂，每一步都带起一片扬尘。"

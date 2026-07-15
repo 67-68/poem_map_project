@@ -11,50 +11,50 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_ojkoo"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_75qum"]
 
-[sub_resource type="Resource" id="Resource_nc1bx"]
+[sub_resource type="Resource" id="Resource_ldsu6"]
 script = ExtResource("3_x2378")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ct3dg"]
+[sub_resource type="Resource" id="Resource_xak65"]
 script = ExtResource("4_id1r8")
-operators = Array[ExtResource("2_ct3dg")]([SubResource("Resource_nc1bx")])
+operators = Array[ExtResource("2_ct3dg")]([SubResource("Resource_ldsu6")])
 
-[sub_resource type="Resource" id="Resource_x2378"]
+[sub_resource type="Resource" id="Resource_yh1p7"]
 script = ExtResource("5_gplj2")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_id1r8"]
+[sub_resource type="Resource" id="Resource_vfsms"]
 script = ExtResource("6_t37vy")
-choice_result = SubResource("Resource_ct3dg")
-requirement = SubResource("Resource_x2378")
+choice_result = SubResource("Resource_xak65")
+requirement = SubResource("Resource_yh1p7")
 description = "你接过纸卷看也不看，一脚把井台上的碎砚台踢进井里：「听个响。」"
 
-[sub_resource type="Resource" id="Resource_gplj2"]
+[sub_resource type="Resource" id="Resource_g25v6"]
 script = ExtResource("5_gplj2")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_t37vy"]
+[sub_resource type="Resource" id="Resource_nfh2c"]
 script = ExtResource("8_ir4tx")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_8y1dl"]
+[sub_resource type="Resource" id="Resource_skpyc"]
 script = ExtResource("8_ir4tx")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_ir4tx"]
+[sub_resource type="Resource" id="Resource_cdbmg"]
 script = ExtResource("9_ojkoo")
-operators = Array[ExtResource("7_8y1dl")]([SubResource("Resource_gplj2"), SubResource("Resource_t37vy"), SubResource("Resource_8y1dl")])
+operators = Array[ExtResource("7_8y1dl")]([SubResource("Resource_g25v6"), SubResource("Resource_nfh2c"), SubResource("Resource_skpyc")])
 
 [resource]
 script = ExtResource("10_75qum")
-requirement = SubResource("Resource_ir4tx")
+requirement = SubResource("Resource_cdbmg")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ACTOR_EMOTION_ANGER", "emotion_pair:pair_anger", "action:main:fangshi"])
-options = Array[ExtResource("1_nc1bx")]([SubResource("Resource_id1r8")])
+options = Array[ExtResource("1_nc1bx")]([SubResource("Resource_vfsms")])
 uuid = "kuangke_qingliu_zhengqian_emotion_anger_identity_qingliu_official"
 name = "井台上的愤懑"
 description = "广文馆后院，郑虔把一摞学生默写的诗卷摔在井台上，井绳晃了两晃。碎纸从捆扎处崩开，散了一地。「错别字比对的还多——有个学生把『烽火』写成了『峰火』，我怎么教的？」他用拇指和中指掐着鼻梁，掌根压住眼睛，把一卷皱巴巴的纸往你怀里塞，「你看看，你自己看。」纸上的墨迹洇了水，字都鼓着毛边。郑虔的手腕在抖。"

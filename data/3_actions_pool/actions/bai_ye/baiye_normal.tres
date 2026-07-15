@@ -6,13 +6,13 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_6fo3e"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_n5eqn"]
 
-[sub_resource type="Resource" id="Resource_oqqvr"]
+[sub_resource type="Resource" id="Resource_6eu1m"]
 script = ExtResource("3_mld2s")
 xun_defered = "m_xun_cost"
 used_resource_archetype = "baiye_normal_defer"
 ap_cost = "l_ap_cost"
 
-[sub_resource type="Resource" id="Resource_yoqw0"]
+[sub_resource type="Resource" id="Resource_tqtth"]
 script = ExtResource("4_6fo3e")
 
 [resource]
@@ -22,8 +22,8 @@ _action_tags = Array[int]([51, 29])
 fallback_event_uuid = "baiye_normal_fallback"
 archetype_uuid = "baiye_normal_success"
 day_consumed = 1.0
-failed_result = SubResource("Resource_yoqw0")
-defer_config = SubResource("Resource_oqqvr")
+failed_result = SubResource("Resource_tqtth")
+defer_config = SubResource("Resource_6eu1m")
 uuid = "baiye_normal"
 name = "拜谒 · 普通拜谒"
 description = "投刺候见无人引荐不足为外人道"
