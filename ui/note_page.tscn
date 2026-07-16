@@ -40,7 +40,21 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_enmti")
 layout_mode = 2
 
 [node name="V" type="VBoxContainer" parent="PanelContainer/H" unique_id=856042535]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
+
+[node name="NoteAmount" type="Label" parent="PanelContainer/H/V" unique_id=1649831818]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "已触发 0/0 篇笔记"
+
+[node name="NoteListScroll" type="ScrollContainer" parent="PanelContainer/H/V" unique_id=1615802348]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NoteListContainer" type="VBoxContainer" parent="PanelContainer/H/V/NoteListScroll" unique_id=1615802347]
+layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="VSeparator" type="VSeparator" parent="PanelContainer/H" unique_id=1446511408]
 layout_mode = 2
@@ -50,8 +64,60 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_enmti")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/H/Info" unique_id=1454176476]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/H/Info" unique_id=501665714]
 layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/H/Info/HBoxContainer" unique_id=1454176476]
+layout_mode = 2
+
+[node name="DemonTitle" type="Label" parent="PanelContainer/H/Info/HBoxContainer/VBoxContainer" unique_id=1873538749]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "坊市-出游循环"
+autowrap_mode = 3
+
+[node name="DemonPoem" type="Label" parent="PanelContainer/H/Info/HBoxContainer/VBoxContainer" unique_id=1517928788]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "朝扣富儿门，暮随肥马尘。残杯与冷炙，到处潜悲辛。"
+autowrap_mode = 3
+
+[node name="DemonDescription" type="Label" parent="PanelContainer/H/Info/HBoxContainer/VBoxContainer" unique_id=1547797412]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "清晨去敲富豪的大门，傍晚随在达官贵人的马后吃尘土；吃的是别人的残羹冷炙，到处偷偷吞咽着悲伤与痛苦。
+即使如此的下贱，但仍然吃不上饭。"
+autowrap_mode = 3
+
+[node name="NoteTitle" type="Label" parent="PanelContainer/H/Info/HBoxContainer/VBoxContainer" unique_id=1822759735]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "注："
+autowrap_mode = 3
+
+[node name="NoteNarrative" type="RichTextLabel" parent="PanelContainer/H/Info/HBoxContainer/VBoxContainer" unique_id=712319745]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+text = "昔年泰山清狂，不知薪米之贵；今入长安，方知出卖体力之迫切也。"
+fit_content = true
+
+[node name="NoteLogical" type="RichTextLabel" parent="PanelContainer/H/Info/HBoxContainer/VBoxContainer" unique_id=439799182]
+layout_mode = 2
+theme_type_variation = &"InnerThoughtText"
+text = "去坊市出卖体力之后去出游可以有效获取额外的资源。"
+fit_content = true
+
+[node name="Placeholder" type="Label" parent="PanelContainer/H/Info/HBoxContainer/VBoxContainer" unique_id=389153583]
+visible = false
+custom_minimum_size = Vector2(470, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "暂无可查看的笔记"
+autowrap_mode = 3
 
 [node name="Button" type="Button" parent="PanelContainer" unique_id=1089128283]
 custom_minimum_size = Vector2(25, 25)

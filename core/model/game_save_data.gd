@@ -115,6 +115,11 @@ var event_counter: int = 0
 # ════════════════════════════════════════════════════════════════
 var npc_relations: Dictionary = {}
 
+# ════════════════════════════════════════════════════════════════
+# 笔记 — 已触发的笔记 UUID 列表（NoteManager 管理）
+# ════════════════════════════════════════════════════════════════
+var triggered_note_uuids: Array[String] = []
+
 
 # ════════════════════════════════════════════════════════════════
 # 序列化 / 反序列化
@@ -142,6 +147,7 @@ func to_dict() -> Dictionary:
 		"created_poem_uuids": _extract_uuids(created_poems),
 		"imaginary_uuids": imaginaries_detail.keys(),
 		"npc_relations": _copy_dict(npc_relations),
+		"triggered_note_uuids": triggered_note_uuids.duplicate(),
 		"year": year,
 		"current_era": current_era,
 		"is_game_over": is_game_over,
@@ -174,6 +180,7 @@ func from_dict(d: Dictionary) -> void:
 	last_action_tags = _safe_array_str(d, "last_action_tags")
 	# created_poems / imaginaries_detail 需要外部注入，from_dict 不处理 Resource
 	npc_relations = _safe_dict(d, "npc_relations")
+	triggered_note_uuids = _safe_array_str(d, "triggered_note_uuids")
 	# NPC 关系数据恢复到 NPCDocument 实例（调用方需在 Database 就绪后调用 restore_npc_relations_to_documents()）
 	year = d.get("year", 745.0)
 	current_era = d.get("current_era", "")

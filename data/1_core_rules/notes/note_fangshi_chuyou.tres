@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Note" format=3 uid="uid://note_fangshi_chuyou"]
+
+[ext_resource type="Script" uid="uid://bf1jik0b5p75b" path="res://core/note.gd" id="1_note"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="2_prop_req"]
+
+[sub_resource type="Resource" id="SubReq"]
+script = ExtResource("2_prop_req")
+property = "money"
+value = 20
+operator = 0
+
+[resource]
+script = ExtResource("1_note")
+uuid = "note_fangshi_chuyou"
+name = "坊市-出游循环"
+description = "朝扣富儿门，暮随肥马尘。残杯与冷炙，到处潜悲辛。"
+description_explanation = "清晨去敲富豪的大门，傍晚随在达官贵人的马后吃尘土；吃的是别人的残羹冷炙，到处偷偷吞咽着悲伤与痛苦。即使如此的下贱，但仍然吃不上饭。"
+note_narrative = "昔年泰山清狂，不知薪米之贵；今入长安，方知出卖体力之迫切也。"
+note_explanation = "去坊市出卖体力之后去出游可以有效获取额外的资源。"
+triggered = false
+requirement = SubResource("SubReq")

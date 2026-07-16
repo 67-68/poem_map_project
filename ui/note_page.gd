@@ -1,13 +1,30 @@
 extends Control
 class_name NotePage
 
-## NotePage — 笔记/便签总览页（骨架）
+## NotePage — 笔记/便签总览页
 ##
-## 全屏覆盖页面，当前为骨架状态，内容后续填充。
-## 动画逻辑 1:1 镜像 SocialConnectionPage / IdeaPage。
+## 全屏覆盖页面，左侧显示已触发的笔记列表（按钮），右侧展示选中笔记的详情。
+## 打开时自动选中第一个已触发笔记；若无笔记则右侧显示「待触发」占位。
 
-# ── Onready 节点引用 ──
+# ═══════════════════════════════════════════════════════════
+# Onready 节点引用
+# ═══════════════════════════════════════════════════════════
+
 @onready var _btn_close: Button = $PanelContainer/Button
+
+# 左侧
+@onready var _note_list_container: VBoxContainer = $PanelContainer/H/V/NoteListScroll/NoteListContainer
+@onready var _note_amount_label: Label = $PanelContainer/H/V/NoteAmount
+
+# 右侧 — 详情面板（直接映射 Note 字段）
+@onready var _demon_title: Label = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/DemonTitle
+@onready var _demon_poem: Label = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/DemonPoem
+@onready var _demon_description: Label = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/DemonDescription
+@onready var _note_title: Label = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/NoteTitle
+@onready var _note_narrative: RichTextLabel = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/NoteNarrative
+@onready var _note_logical: RichTextLabel = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/NoteLogical
+@onready var _placeholder: Label = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/Placeholder
+
 
 # ═══════════════════════════════════════════════════════════
 # 页面开关状态 + 动画
@@ -16,7 +33,6 @@ class_name NotePage
 var expand := false
 var _page_tween: Tween = null
 var _original_offsets: Dictionary = {}
-
 
 # ═══════════════════════════════════════════════════════════
 # 生命周期
@@ -48,6 +64,99 @@ func _ready() -> void:
 
 
 # ═══════════════════════════════════════════════════════════
+# 数据刷新
+# ═══════════════════════════════════════════════════════════
+
+func refresh_list() -> void:
+	"""刷新左侧笔记列表 + 更新 NoteAmount"""
+	var triggered: Array[Note] = NoteManager.get_triggered_notes()
+
+	# 更新数量标签
+	var total: int = NoteManager.get_total_count()
+	var triggered_count: int = triggered.size()
+	_note_amount_label.text = "已触发 %d/%d 篇笔记" % [triggered_count, total]
+
+	# 清空旧的按钮列表
+	for child in _note_list_container.get_children():
+		child.queue_free()
+
+	if triggered.is_empty():
+		# 无已触发笔记 → 右侧显示待触发占位
+		_show_placeholder()
+		return
+
+	# 为每个已触发 Note 创建按钮
+	for i in range(triggered.size()):
+		var note: Note = triggered[i]
+		var btn := Button.new()
+		btn.theme_type_variation = &"ButtonTheme"
+		btn.text = note.name if not note.name.is_empty() else note.uuid
+		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		# 存储 uuid 到 metadata
+		btn.set_meta("note_uuid", note.uuid)
+		btn.pressed.connect(_on_note_btn_pressed.bind(note.uuid))
+		_note_list_container.add_child(btn)
+
+	# 自动选中第一个
+	_show_note_detail(triggered[0])
+
+
+# ═══════════════════════════════════════════════════════════
+# 笔记选中
+# ═══════════════════════════════════════════════════════════
+
+func _on_note_btn_pressed(note_uuid: String) -> void:
+	"""左侧笔记按钮点击 → 右侧展示详情"""
+	var note: Note = NoteManager.get_note(note_uuid)
+	if note == null:
+		Logging.warn("[NotePage] 选中笔记但未找到: uuid=%s" % note_uuid)
+		return
+	_show_note_detail(note)
+
+
+func _show_note_detail(note: Note) -> void:
+	"""填充右侧详情面板"""
+	# 隐藏占位，显示详情
+	_placeholder.visible = false
+	_demon_title.visible = true
+	_demon_poem.visible = true
+	_demon_description.visible = true
+	_note_title.visible = true
+	_note_narrative.visible = true
+	_note_logical.visible = true
+
+	# Note.name → DemonTitle
+	_demon_title.text = note.name if not note.name.is_empty() else "（未命名笔记）"
+
+	# Note.description → DemonPoem（诗词片段）
+	_demon_poem.text = note.description if not note.description.is_empty() else ""
+
+	# Note.description_explanation → DemonDescription（白话解释）
+	_demon_description.text = note.description_explanation if not note.description_explanation.is_empty() else ""
+
+	# Note.note_narrative → NoteNarrative（叙事文本）
+	_note_narrative.text = note.note_narrative if not note.note_narrative.is_empty() else ""
+
+	# Note.note_explanation → NoteLogical（机制解释）
+	_note_logical.text = note.note_explanation if not note.note_explanation.is_empty() else ""
+
+	Logging.info("[NotePage] 展示笔记: uuid=%s, name='%s'" % [note.uuid, note.name])
+
+
+func _show_placeholder() -> void:
+	"""无已触发笔记时显示待触发占位"""
+	_demon_title.visible = false
+	_demon_poem.visible = false
+	_demon_description.visible = false
+	_note_title.visible = false
+	_note_narrative.visible = false
+	_note_logical.visible = false
+	_placeholder.visible = true
+	_placeholder.text = "暂无可查看的笔记"
+	Logging.info("[NotePage] 无已触发笔记，显示待触发占位")
+
+
+# ═══════════════════════════════════════════════════════════
 # 页面动画 — show / hide（镜像 SocialConnectionPage / IdeaPage）
 # ═══════════════════════════════════════════════════════════
 
@@ -56,6 +165,9 @@ func show_page() -> void:
 		return
 	expand = true
 	Logging.info("NotePage: show_page 开始 — 全屏模糊 → 面板滑出 → 展示")
+
+	# 打开时刷新数据
+	refresh_list()
 
 	# 隐藏纸带（引用计数递增）
 	EventBus.narrative_tape_hide_requested.emit()
