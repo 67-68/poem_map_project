@@ -290,7 +290,7 @@ func _on_request_add_imaginary(tag: String):
 	imaginary.uuid = imaginary_uuid
 	var def_data = _imaginary_defs.get(base_uuid, {})
 	imaginary.name = def_data.get("name", tag)
-	imaginary.level = 1  # 默认等级（ImageryAcquisitionOperator 无 level 参数）
+	imaginary.level = def_data.get("level", 1)  # 从定义库读取实际等级，fallback Lv1
 	imaginary.duration_xun = 2
 	Database.imaginaries_detail[imaginary_uuid] = imaginary
 	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (base=%s, name=%s, duration_xun=2)" % [imaginary_uuid, base_uuid, imaginary.name])

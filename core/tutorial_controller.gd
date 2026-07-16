@@ -845,7 +845,10 @@ func _advance_to_phase_7() -> void:
 	_p7_step = Phase7Step.POEM_BTN_VISIBLE
 	_set_whitelist([])
 	_set_sub_whitelist([])
-	Logging.info("TutorialController: [P7] p7_step=POEM_BTN_VISIBLE, 白名单=[]（全禁，等待兴不足后解锁独酌）")
+	# 🆕 强制归零兴 — 生存系统每旬 +3 兴会在教程前期累积
+	# 不清零则 PoemCrafter 检查通过，跳过 tut_no_inspiration 分支
+	PlayerState.force_set_stat_val("inspiration", 0)
+	Logging.info("TutorialController: [P7] 兴已归零，白名单=[]（全禁，等待 tut_no_inspiration 后解锁独酌）")
 	_show_special_label("面对壮丽山河，何不赋诗一首？点击右下角毛笔按钮开始创作")
 
 
