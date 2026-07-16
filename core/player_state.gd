@@ -8,6 +8,8 @@ const _DeferredLockActionOperator = preload("res://core/operators/deferred_lock_
 const _FatigueManager = preload("res://core/fatigue_manager.gd")
 const _Flag = preload("res://core/model/flag.gd")
 const _ModifierConfig = preload("res://core/modifier_config.gd")
+const _ModifierPropRegistrar = preload("res://core/modifier_prop_registrar.gd")
+const _ModifierRegistry = preload("res://core/modifier_registry.gd")
 const _RelationFlagManager = preload("res://core/relation_flag_manager.gd")
 const _SourceOfTruth = preload("res://core/source_of_truth.gd")
 const _TempFlagOperator = preload("res://core/operators/temp_flag_operator.gd")
@@ -236,6 +238,9 @@ func _ready():
 	_load_imaginary_definitions()
 	_connect_imaginary_signals()
 	
+	# 🆕 修饰符属性注册表初始化（城府/才华/定力 S型阻尼 → active_modifiers）
+	_ModifierPropRegistrar.initialize()
+	
 	current_location = 'yong_zhou'
 
 
@@ -387,19 +392,19 @@ func append_stat(stat_name, data) -> bool:
 # 🆕 修饰符属性公式（城府/才华/定力 — S型阻尼模型）
 # ════════════════════════════════════════════════════════════════
 
-## 遍历 ModifierConfig.MODIFIER_EFFECTS，逐条匹配合适的效果并应用公式。
-## 委托给 ModifierConfig.apply_all_matching_effects()（共享实现）。
+## 🆕 重写：委托给 ModifierRegistry.get_modifier_prop_adjusted_delta()，
+## 统一走 active_modifiers 注册表查询（由 ModifierPropRegistrar 注册）。
 ##
 ## @param stat_name: 属性名（如 "prestige"）
 ## @param raw_delta: 当前累积的变化量（已过 trait buffer + tier multiplier）
 ## @return int — 修正后的变化量
 static func _apply_modifier_formula(stat_name: String, raw_delta: int) -> int:
-	return _ModifierConfig.apply_all_matching_effects(stat_name, raw_delta)
+	return _ModifierRegistry.get_modifier_prop_adjusted_delta(stat_name, raw_delta)
 
 
 ## 🆕 公开版本：供 ActionManager.check_archetype_property_costs() 做前置预估。
 static func predict_modifier_adjusted_delta(stat_name: String, raw_delta: int) -> int:
-	return _ModifierConfig.apply_all_matching_effects(stat_name, raw_delta)
+	return _ModifierRegistry.get_modifier_prop_adjusted_delta(stat_name, raw_delta)
 
 
 func get_stat_val(stat_name):

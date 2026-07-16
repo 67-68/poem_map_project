@@ -13,6 +13,7 @@ extends RefCounted
 ##       HintProfile, SimpleOperatorPreviewFormatter
 
 const _ModifierConfig = preload("res://core/modifier_config.gd")
+const _ModifierRegistry = preload("res://core/modifier_registry.gd")
 const _HintProfile = preload("res://core/hints/hint_profile.gd")
 const _SimpleFormatter = preload("res://core/hints/simple_operator_preview_formatter.gd")
 
@@ -45,7 +46,7 @@ static func build_preview(operators: Array, profile := _HintProfile.Profile.DEFA
 		if op is PropertyOperator:
 			var pop = op as PropertyOperator
 			var raw_val: int = pop.value
-			var adjusted_val: int = _ModifierConfig.apply_all_matching_effects(pop.property, raw_val)
+			var adjusted_val: int = _ModifierRegistry.get_modifier_prop_adjusted_delta(pop.property, raw_val)
 			var delta: int = adjusted_val - raw_val
 
 			# 临时替换为调整后的值，让 describe_preview 展示最终数值

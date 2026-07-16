@@ -53,9 +53,11 @@ layout_mode = 2
 
 [node name="PropLabel" parent="Panel/VBox/HBoxContainer" unique_id=1246822294 instance=ExtResource("3_kxi5c")]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="PropLabel2" parent="Panel/VBox/HBoxContainer" unique_id=1335805975 instance=ExtResource("3_kxi5c")]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBox" unique_id=1184716942]
 layout_mode = 2
@@ -137,12 +139,15 @@ layout_mode = 2
 
 [node name="SmallerPropLabel" parent="Panel/VBox/ScrollContainer/V/HBoxContainer" unique_id=627612534 instance=ExtResource("4_a0q7c")]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="SmallerPropLabel2" parent="Panel/VBox/ScrollContainer/V/HBoxContainer" unique_id=1498850154 instance=ExtResource("4_a0q7c")]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="SmallerPropLabel3" parent="Panel/VBox/ScrollContainer/V/HBoxContainer" unique_id=78401317 instance=ExtResource("4_a0q7c")]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="HSep3" type="HSeparator" parent="Panel/VBox/ScrollContainer/V" unique_id=2024317451]
 layout_mode = 2
@@ -157,12 +162,15 @@ layout_mode = 2
 
 [node name="SmallerPropLabel" parent="Panel/VBox/ScrollContainer/V/HBoxContainer2" unique_id=1609417574 instance=ExtResource("4_a0q7c")]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="SmallerPropLabel2" parent="Panel/VBox/ScrollContainer/V/HBoxContainer2" unique_id=541488467 instance=ExtResource("4_a0q7c")]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="SmallerPropLabel3" parent="Panel/VBox/ScrollContainer/V/HBoxContainer2" unique_id=1952811184 instance=ExtResource("4_a0q7c")]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="MaobiContainer" type="PanelContainer" parent="Panel/VBox" unique_id=479986917]
 custom_minimum_size = Vector2(40, 40)

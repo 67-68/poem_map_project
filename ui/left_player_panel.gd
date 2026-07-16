@@ -24,14 +24,15 @@ extends PanelContainer
 @onready var _decoration_hbox: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2"
 
 # ── 固定属性 Label 节点（对应 tscn 预制体实例）─────────
-@onready var _prop_health: HBoxContainer = $"Panel/VBox/HBoxContainer/PropLabel"
-@onready var _prop_money: HBoxContainer = $"Panel/VBox/HBoxContainer/PropLabel2"
-@onready var _prop_inspiration: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel"
-@onready var _prop_momentum: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel2"
-@onready var _prop_prestige: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel3"
-@onready var _prop_talent: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel"
-@onready var _prop_astuteness: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel2"
-@onready var _prop_composure: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel3"
+# 🆕 tscn 根节点为 PanelContainer（内嵌 HBoxContainer），适配解包到内层
+@onready var _prop_health: PanelContainer = $"Panel/VBox/HBoxContainer/PropLabel"
+@onready var _prop_money: PanelContainer = $"Panel/VBox/HBoxContainer/PropLabel2"
+@onready var _prop_inspiration: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel"
+@onready var _prop_momentum: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel2"
+@onready var _prop_prestige: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel3"
+@onready var _prop_talent: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel"
+@onready var _prop_astuteness: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel2"
+@onready var _prop_composure: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel3"
 
 # ── 属性显示格式配置 ────────────────────────────────────
 # prop_label.tscn（健康/钱财）：大字号，格式「50/100 健」+「「奄奄一息」」
@@ -138,11 +139,20 @@ func _ready() -> void:
 
 # ── 属性 Label 映射表构建 ───────────────────────────────
 
-## 从 HBoxContainer 中提取第 0 个子节点（值 Label）和第 1 个子节点（感知 Label）
-static func _extract_labels(container: HBoxContainer) -> Dictionary:
+## 🆕 适配 tscn 根节点为 PanelContainer 的结构：
+## PanelContainer → HBoxContainer → [Label2(value), Label(perception)]
+static func _extract_labels(panel: PanelContainer) -> Dictionary:
+	var inner_box := panel.get_child(0) as HBoxContainer
+	if not inner_box:
+		Logging.err("LeftPlayerPanel._extract_labels: panel '%s' 的第一个子节点不是 HBoxContainer，返回空 dict" % panel.name)
+		return {}
+	var value_label := inner_box.get_child(0) as Label
+	var perception_label := inner_box.get_child(1) as Label
+	if not value_label or not perception_label:
+		Logging.err("LeftPlayerPanel._extract_labels: panel '%s' 内层 HBoxContainer 缺少 Label 子节点 (value=%s, perception=%s)" % [panel.name, "ok" if value_label else "NULL", "ok" if perception_label else "NULL"])
 	return {
-		"value": container.get_child(0) as Label,
-		"perception": container.get_child(1) as Label,
+		"value": value_label,
+		"perception": perception_label,
 	}
 
 func _build_prop_label_map() -> void:

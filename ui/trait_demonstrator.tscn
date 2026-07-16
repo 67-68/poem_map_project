@@ -1,17 +1,33 @@
 [gd_scene format=3 uid="uid://dth2yy4tl8m8q"]
 
-[ext_resource type="Script" uid="uid://dt338vb6jcj68" path="res://ui/trait_demonstrator.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://12nirlu58pgm" path="res://ui/yang_ke.tscn" id="1_1llxn"]
+[ext_resource type="Script" uid="uid://dt338vb6jcj68" path="res://ui/trait_demonstrator.gd" id="1_script"]
 
-[node name="HBoxContainer" type="HBoxContainer" unique_id=972899098]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o1n17"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[node name="PanelContainer" type="PanelContainer" unique_id=1730481365]
+offset_left = 81.0
+offset_right = 81.0
+offset_bottom = 25.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_o1n17")
 script = ExtResource("1_script")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=972899098]
+layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="YangKe" parent="." unique_id=2030771061 instance=ExtResource("1_1llxn")]
+[node name="YangKe" parent="HBoxContainer" unique_id=2030771061 instance=ExtResource("1_1llxn")]
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="TraitNameLabel" type="Label" parent="." unique_id=2142609938]
+[node name="TraitNameLabel" type="Label" parent="HBoxContainer" unique_id=2142609938]
 layout_mode = 2
 theme_type_variation = &"DefaultText"
 text = "身心俱疲"

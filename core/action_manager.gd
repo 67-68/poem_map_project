@@ -13,6 +13,7 @@ const _SurvivalManager = preload("res://core/survival_manager.gd")
 const _PropertyOperator = preload("res://core/model/property_operator.gd")
 const _EventManager = preload("res://core/event_manager.gd")
 const _ModifierConfig = preload("res://core/modifier_config.gd")
+const _ModifierRegistry = preload("res://core/modifier_registry.gd")
 
 const MAX_PICK_COUNT: int = 6
 
@@ -302,9 +303,9 @@ static func check_archetype_property_costs(operators: Array) -> Array[String]:
 			continue  # 只检查消耗（负值），收益不拦截
 		var prop_name: String = pop.property
 
-		# 🆕 使用修饰符公式预估实际消耗（与 ModifierConfig.apply_all_matching_effects 对齐）
+		# 🆕 使用修饰符公式预估实际消耗（委托 ModifierRegistry 统一注册表查询）
 		var raw_need: int = -pop.value  # 转为正数（需求值）
-		var adjusted_delta: int = _ModifierConfig.apply_all_matching_effects(prop_name, -raw_need)
+		var adjusted_delta: int = _ModifierRegistry.get_modifier_prop_adjusted_delta(prop_name, -raw_need)
 		var adjusted_need: int = -adjusted_delta  # 转回正数比较
 
 		var current_val = PlayerState.get_stat_val(prop_name)

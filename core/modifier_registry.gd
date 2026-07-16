@@ -1,8 +1,9 @@
 class_name ModifierRegistry extends RefCounted
-## ModifierRegistry — 理念修饰器注册表查询门面
+## ModifierRegistry — 统一修饰器注册表查询门面
 ##
 ## 所有执行管线模块通过本类查询 GameSave.data.active_modifiers 注册表，
-## 获取理念 buff 的修正效果。不直接读写注册表（由 BuffOperator 负责）。
+## 获取理念 buff + 修饰符属性（城府/才华/定力 S 型阻尼）的修正效果。
+## 不直接读写注册表（由 BuffOperator / ModifierPropRegistrar 负责）。
 ##
 ## 查询方法命名规范：
 ##   get_<type>_<target>() — 返回给定上下文下的修饰值
@@ -14,6 +15,8 @@ class_name ModifierRegistry extends RefCounted
 ##     返回 int 绝对值，调用方直接加/减
 
 const _NamedDSLParser = preload("res://parser/named_dsl_parser.gd")
+const _ModifierFormula = preload("res://core/modifier_formula.gd")
+const _ModifierConfig = preload("res://core/modifier_config.gd")
 
 
 # ════════════════════════════════════════════════════════════════
@@ -174,6 +177,85 @@ static func get_npc_trade_tier_boost(faction: String) -> int:
 	if total != 0:
 		Logging.info("ModifierRegistry.npc_trade_tier: faction='%s' → 总档位提升 %d" % [faction, total])
 	return total
+
+
+# ════════════════════════════════════════════════════════════════
+# modifier_prop_effect — 修饰符属性 S 型阻尼（城府/才华/定力）
+# ════════════════════════════════════════════════════════════════
+
+## 🆕 从 active_modifiers 查询 type="modifier_prop_effect" 的条目，
+## 对给定属性的 raw_delta 应用链式 amplify/dampen 修正。
+##
+## 替代了旧 ModifierConfig.apply_all_matching_effects()，
+## 统一走注册表查询入口。
+##
+## @param stat_name: 属性名（如 "prestige"）
+## @param raw_delta: 当前累积的变化量
+## @return int — 修正后的变化量
+static func get_modifier_prop_adjusted_delta(stat_name: String, raw_delta: int) -> int:
+	if raw_delta == 0:
+		Logging.debug("[ModifierRegistry] get_modifier_prop_adjusted_delta: raw_delta=0 → no-op")
+		return 0
+
+	var adjusted: int = raw_delta
+	var delta_is_positive: bool = raw_delta > 0
+	var delta_is_negative: bool = raw_delta < 0
+
+	# 🆕 faction 上下文懒加载（仅在有 faction_filter 条目时解析）
+	var faction: int = -1
+	var faction_str: String = ""
+
+	var entry_count := 0
+	for entry in GameSave.data.active_modifiers:
+		if entry.get("type") != "modifier_prop_effect":
+			continue
+
+		var target_prop: String = entry.get("target_prop", "")
+		var delta_sign: String = entry.get("delta_sign", "")
+		var faction_filter: String = entry.get("faction_filter", "")
+		var direction: String = entry.get("direction", "")
+		var mod_val: int = entry.get("mod_val", 0)
+		var max_limit: float = entry.get("max_limit", 0.0)
+		var half_point: float = entry.get("half_point", 0.0)
+
+		# ── 1. target_prop 过滤 ──
+		if not target_prop.is_empty() and target_prop != stat_name:
+			continue
+
+		# ── 2. delta_sign 过滤 ──
+		if delta_sign == "positive" and not delta_is_positive:
+			continue
+		if delta_sign == "negative" and not delta_is_negative:
+			continue
+
+		# ── 3. faction_filter 过滤 ──
+		if not faction_filter.is_empty():
+			if faction == -1:
+				faction = _ModifierConfig.get_faction_from_context()
+				faction_str = _ModifierConfig.faction_to_filter(faction)
+			if faction_str != faction_filter:
+				Logging.debug("[ModifierRegistry] get_modifier_prop_adjusted_delta: entry source='%s' faction_filter=%s but current=%s → skip" % [entry.get("source", "?"), faction_filter, faction_str])
+				continue
+
+		# ── 4. mod_val ≤ 0 跳过 ──
+		if mod_val <= 0:
+			continue
+
+		# ── 5. 应用公式 ──
+		entry_count += 1
+		if direction == "amplify":
+			adjusted = _ModifierFormula.amplify(adjusted, mod_val, max_limit, half_point)
+		else:
+			adjusted = _ModifierFormula.dampen(adjusted, mod_val, max_limit, half_point)
+
+		Logging.info("[ModifierRegistry] get_modifier_prop_adjusted_delta: entry source='%s' target='%s' dir=%s mod_val=%d → raw=%d adjusted=%d" % [entry.get("source", "?"), target_prop, direction, mod_val, raw_delta, adjusted])
+
+	if entry_count == 0:
+		Logging.debug("[ModifierRegistry] get_modifier_prop_adjusted_delta: stat='%s' raw_delta=%d → no matching modifier_prop_effect entries found" % [stat_name, raw_delta])
+	elif adjusted != raw_delta:
+		Logging.info("[ModifierRegistry] get_modifier_prop_adjusted_delta: stat='%s' raw_delta=%d → final=%d (%d entries applied)" % [stat_name, raw_delta, adjusted, entry_count])
+
+	return adjusted
 
 
 # ════════════════════════════════════════════════════════════════
