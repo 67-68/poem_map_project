@@ -59,65 +59,15 @@ script = ExtResource("2_3crwo")
 z_index = 5
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Control" unique_id=145484989]
-layout_mode = 0
-offset_left = 205.55994
-offset_top = 359.59998
-offset_right = 314.55994
-offset_bottom = 380.59998
-theme_type_variation = &"DefaultText"
-theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.22352941)
-text = "右键/Tab: 观全局"
-
-[node name="Label2" type="Label" parent="Control" unique_id=1364130829]
-layout_mode = 0
-offset_left = 205.55994
-offset_top = 380.59998
-offset_right = 284.55994
-offset_bottom = 401.59998
-theme_type_variation = &"DefaultText"
-theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.22352941)
-text = "任意: 返回"
-
-[node name="Label4" type="Label" parent="Control" unique_id=1284396043]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 360.0
-offset_right = 198.0
-offset_bottom = 381.0
-theme_type_variation = &"DefaultText"
-theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.22352941)
-text = "鼠标：拖动纸张"
-
-[node name="Label5" type="Label" parent="Control" unique_id=605425566]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 380.0
-offset_right = 198.0
-offset_bottom = 401.0
-theme_type_variation = &"DefaultText"
-theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.22352941)
-text = "esc: 菜单"
-
 [node name="SpecialLabel" type="Label" parent="Control" unique_id=1222984266]
 layout_mode = 0
 offset_left = 20.0
-offset_top = 410.0
-offset_right = 123.0
-offset_bottom = 431.0
+offset_top = 550.0
+offset_right = 188.0
+offset_bottom = 571.0
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.36862746, 0.09019608, 0, 0.85882354)
 text = "点击人脉按钮查看社交关系"
-
-[node name="Label3" type="Label" parent="Control" unique_id=1743070652]
-layout_mode = 0
-offset_left = 100.0
-offset_top = 340.0
-offset_right = 209.0
-offset_bottom = 361.0
-theme_type_variation = &"DefaultText"
-theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.22352941)
-text = "悬浮选项上: 提示"
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=1085748511]
 layout_mode = 2

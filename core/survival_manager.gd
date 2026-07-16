@@ -64,6 +64,12 @@ func _get_decay_threshold(prop_enum) -> int:
 	return 25
 
 func _cost_survival():
+	# 🆕 Tutorial 期间跳过每旬扣钱，仅刷新 AP
+	if TutorialController.is_tutorial_active():
+		var cap: int = get_current_ap_cap()
+		Logging.info('[SurvivalManager] _cost_survival: tutorial 模式，跳过扣钱，刷新 _time 到 %d' % cap)
+		PlayerState.set_stat_val("_time", cap)
+		return
 	var money_ok: bool = PlayerState.append_stat(ENUMS.PROPS.MONEY, -5)
 	if not money_ok:
 		Logging.err('[SurvivalManager] _cost_survival: append_stat MONEY failed')
@@ -515,6 +521,10 @@ func _apply_prop_decay() -> void:
 
 
 func _post_xun_money_deduct():
+	# 🆕 Tutorial 期间跳过
+	if TutorialController.is_tutorial_active():
+		Logging.info('[SurvivalManager] _post_xun_money_deduct: tutorial 模式，跳过扣钱')
+		return
 	PlayerState.append_stat(ENUMS.PROPS.MONEY, -30)
 	Logging.info('[SurvivalManager] 旬末扣除 30 money（快照之后执行，计入下月 delta）')
 	if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) <= 0:

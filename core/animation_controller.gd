@@ -198,6 +198,10 @@ func _execute_stage(stage: Dictionary, entry_id: String, uuid: String) -> void:
 			_set_trait_grid_visible(stage)
 		"set_right_section_visible":
 			_set_right_section_visible(stage)
+		"set_left_section_visible":
+			_set_left_section_visible(stage)
+		"set_hover_enabled":
+			_set_hover_enabled(stage)
 		"play_sound":
 			_play_sound(stage)
 		"show_special_label":
@@ -618,21 +622,48 @@ func _set_right_section_visible(stage: Dictionary) -> void:
 		return
 	var section: String = stage.get("section", "")
 	var visible: bool = stage.get("visible", true)
-	var section_node: Control = null
 	match section:
 		"social_btn":
-			section_node = right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn") as Control
+			var section_node := right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn") as Control
+			if section_node:
+				section_node.visible = visible
+			else:
+				Logging.err("AnimationController._set_right_section_visible: 未找到 social_btn")
 		"idea_btn":
-			section_node = right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/LinianBtn") as Control
+			var section_node := right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/LinianBtn") as Control
+			if section_node:
+				section_node.visible = visible
+			else:
+				Logging.err("AnimationController._set_right_section_visible: 未找到 idea_btn")
 		"poem_btn":
-			section_node = right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/Poembtn") as Control
+			var section_node := right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/Poembtn") as Control
+			if section_node:
+				section_node.visible = visible
+			else:
+				Logging.err("AnimationController._set_right_section_visible: 未找到 poem_btn")
+		"time_panel":
+			if right_panel.has_method("set_time_panel_visible"):
+				right_panel.set_time_panel_visible(visible)
+			else:
+				Logging.err("AnimationController._set_right_section_visible: right_panel 没有 set_time_panel_visible 方法")
+		"rumors_section":
+			if right_panel.has_method("set_rumors_section_visible"):
+				right_panel.set_rumors_section_visible(visible)
+			else:
+				Logging.err("AnimationController._set_right_section_visible: right_panel 没有 set_rumors_section_visible 方法")
+		"decisions_section":
+			if right_panel.has_method("set_decisions_section_visible"):
+				right_panel.set_decisions_section_visible(visible)
+			else:
+				Logging.err("AnimationController._set_right_section_visible: right_panel 没有 set_decisions_section_visible 方法")
+		"bottom_btn_bar":
+			if right_panel.has_method("set_bottom_btn_bar_visible"):
+				right_panel.set_bottom_btn_bar_visible(visible)
+			else:
+				Logging.err("AnimationController._set_right_section_visible: right_panel 没有 set_bottom_btn_bar_visible 方法")
 		_:
 			Logging.err("AnimationController._set_right_section_visible: 未知 section='%s'" % section)
 			return
-	if not section_node:
-		Logging.err("AnimationController._set_right_section_visible: 未找到 section='%s' 对应的节点" % section)
-		return
-	section_node.visible = visible
 	Logging.info("AnimationController._set_right_section_visible: section='%s' visible=%s" % [section, visible])
 
 ## 播放音效
@@ -815,3 +846,57 @@ func _show_panel_target(stage: Dictionary) -> void:
 				Logging.warn("AnimationController._show_panel_target: 未找到 right_panel")
 		_:
 			Logging.err("AnimationController._show_panel_target: 未知 target='%s'" % target)
+
+
+# ═══════════════════════════════════════════════
+# set_left_section_visible — 左侧面板区域级可见性控制
+# ═══════════════════════════════════════════════
+
+func _set_left_section_visible(stage: Dictionary) -> void:
+	var target: String = stage.get("target", "")
+	var visible: bool = stage.get("visible", true)
+	var left_panel := _get_left_panel()
+	if not left_panel:
+		Logging.err("AnimationController._set_left_section_visible: 未找到 left_panel")
+		return
+
+	match target:
+		"name":
+			if left_panel.has_method("set_name_visible"):
+				left_panel.set_name_visible(visible)
+			else:
+				Logging.err("AnimationController._set_left_section_visible: left_panel 没有 set_name_visible 方法")
+		"place":
+			if left_panel.has_method("set_place_visible"):
+				left_panel.set_place_visible(visible)
+			else:
+				Logging.err("AnimationController._set_left_section_visible: left_panel 没有 set_place_visible 方法")
+		"identity":
+			if left_panel.has_method("set_identity_visible"):
+				left_panel.set_identity_visible(visible)
+			else:
+				Logging.err("AnimationController._set_left_section_visible: left_panel 没有 set_identity_visible 方法")
+		"ambition_section":
+			if left_panel.has_method("set_ambition_section_visible"):
+				left_panel.set_ambition_section_visible(visible)
+			else:
+				Logging.err("AnimationController._set_left_section_visible: left_panel 没有 set_ambition_section_visible 方法")
+		"bottom_decoration":
+			if left_panel.has_method("set_bottom_decoration_visible"):
+				left_panel.set_bottom_decoration_visible(visible)
+			else:
+				Logging.err("AnimationController._set_left_section_visible: left_panel 没有 set_bottom_decoration_visible 方法")
+		_:
+			Logging.err("AnimationController._set_left_section_visible: 未知 target='%s'" % target)
+
+	Logging.info("AnimationController._set_left_section_visible: target='%s' visible=%s" % [target, visible])
+
+
+# ═══════════════════════════════════════════════
+# set_hover_enabled — 全局 hover 开关
+# ═══════════════════════════════════════════════
+
+func _set_hover_enabled(stage: Dictionary) -> void:
+	var enabled: bool = stage.get("enabled", true)
+	HoverPopupManager.set_hover_enabled(enabled)
+	Logging.info("AnimationController._set_hover_enabled: enabled=%s" % enabled)

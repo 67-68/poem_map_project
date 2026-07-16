@@ -57,9 +57,9 @@ static var debug_dashboard_state = {
 
 	# 开局初始意象 — init_imaginaries() 从此读取
 	"basic_imaginaries": [
-		{"name": "布衣"},
-		{"name": "古砚"},
-		{"name": "骐骥"},
+		# {"name": "布衣"},
+		# {"name": "古砚"},
+		# {"name": "骐骥"},
 	],
 
 	# 详细碎片初始数据 — 预填入 Database.imaginaries_detail (Imaginary 对象)

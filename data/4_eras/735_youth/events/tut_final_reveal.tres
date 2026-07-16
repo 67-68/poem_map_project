@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g5h7p"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_x4k9l"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_v6n1j"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="5_t2b8w"]
+
+[sub_resource type="Resource" id="Resource_opt_cr"]
+script = ExtResource("3_x4k9l")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_v6n1j")
+choice_result = SubResource("Resource_opt_cr")
+description = "下山去了"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_t2b8w")
+options = Array[ExtResource("1_bopt")]([SubResource("Resource_opt")])
+uuid = "tut_final_reveal"
+name = "豁然开朗"
+description = "你站在山巅，回望这一路——从山脚遇道士，到山腰得指点，再到此刻俯瞰万山。\n\n风从四面八方吹来，你忽然感觉自己不再只是那个初出茅庐的书生了。泰山的灵秀之气仿佛渗入了你的骨血，那些不曾想过的才华、那些深藏的城府、那份与生俱来的定力，都在这一刻变得清晰起来。\n\n再看这天地，你有了新的感悟——朝堂的风声、人间的恩怨、那些暗流涌动的关系网，都隐隐浮现。\n\n泰山之行，不虚此行。\n\n[size=13][color=#888888]系统提示：新的界面元素已解锁。右下角的按钮可查看人脉、理念、诗词等功能[/color][/size]"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

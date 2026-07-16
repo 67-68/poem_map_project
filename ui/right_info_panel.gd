@@ -27,6 +27,14 @@ const CN_NAME_MAP: Dictionary = {
 @onready var _note_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/NoteBtn
 ## 特殊提示标签（SpecialLabel）
 @onready var _special_label: Label = $Control/SpecialLabel
+## 🆕 Tutorial 可见性控制用节点引用
+@onready var _time_panel: Control = $Panel/V/TimeControlPanel
+@onready var _rumors_title_label: Label = $"Panel/V/Label"
+@onready var _rumors_sep: HSeparator = $Panel/V/HSeparator
+@onready var _decisions_title_label: Label = $"Panel/V/Label3"
+@onready var _decisions_sep: HSeparator = $Panel/V/HSeparator2
+@onready var _decisions_scroll: Control = $Panel/V/DecisioinScr
+@onready var _bottom_btn_bar: PanelContainer = $Panel/V/PanelContainer2
 
 func _ready() -> void:
 	# ── 风闻刷新 ──
@@ -67,6 +75,10 @@ func _ready() -> void:
 		EventBus.poem_start_clicked.connect(_clear_special_hint)
 	if not EventBus.idea_page_toggled.is_connected(_clear_special_hint):
 		EventBus.idea_page_toggled.connect(_clear_special_hint)
+
+	# ── 🆕 Tutorial 模式：默认隐藏非时间面板区域 ──
+	if not PlayerState.has_flag("tutorial_completed"):
+		call_deferred("_hide_for_tutorial")
 
 ## 刷新风闻面板：遍历所有 RELATION_TARGET，查询 RelationFlagManager，
 ## 只显示有死穴（leverage）或恩义（help）的目标。
@@ -219,3 +231,48 @@ func _on_special_prop_changed(prop_name: String) -> void:
 func _clear_special_hint() -> void:
 	_special_label.text = ""
 	Logging.info("RightInfoPanel: 按钮已点击 → 清除 SpecialLabel 提示")
+
+
+# ═══════════════════════════════════════════════════════════
+# 🆕 Tutorial 可见性控制 API
+# ═══════════════════════════════════════════════════════════
+
+## Tutorial 模式：默认隐藏时间面板以外的所有区域
+func _hide_for_tutorial() -> void:
+	# 隐藏风闻区域
+	_rumors_title_label.visible = false
+	_info_grid.visible = false
+	_rumors_sep.visible = false
+	# 隐藏决议区域
+	_decisions_title_label.visible = false
+	_decisions_sep.visible = false
+	_decisions_scroll.visible = false
+	# 隐藏底部按钮栏（social/idea/poem/note）
+	_bottom_btn_bar.visible = false
+	# 隐藏时间面板（将由 AnimationController 在合适时机展示）
+	_time_panel.visible = false
+	Logging.info("RightInfoPanel: tutorial 模式，非时间区域已隐藏")
+
+## 设置时间面板可见性
+func set_time_panel_visible(v: bool) -> void:
+	_time_panel.visible = v
+	Logging.info("RightInfoPanel.set_time_panel_visible: %s" % v)
+
+## 设置风闻区域可见性（"风闻" Label + InfoGrid + HSeparator）
+func set_rumors_section_visible(v: bool) -> void:
+	_rumors_title_label.visible = v
+	_info_grid.visible = v
+	_rumors_sep.visible = v
+	Logging.info("RightInfoPanel.set_rumors_section_visible: %s" % v)
+
+## 设置决议区域可见性（"决议" Label + DecisionScroll + HSeparator）
+func set_decisions_section_visible(v: bool) -> void:
+	_decisions_title_label.visible = v
+	_decisions_sep.visible = v
+	_decisions_scroll.visible = v
+	Logging.info("RightInfoPanel.set_decisions_section_visible: %s" % v)
+
+## 设置底部按钮栏可见性（social/idea/poem/note 四个按钮容器）
+func set_bottom_btn_bar_visible(v: bool) -> void:
+	_bottom_btn_bar.visible = v
+	Logging.info("RightInfoPanel.set_bottom_btn_bar_visible: %s" % v)

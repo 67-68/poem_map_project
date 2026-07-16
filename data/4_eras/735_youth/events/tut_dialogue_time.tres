@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_g5h7p"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_x4k9l"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_v6n1j"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="5_t2b8w"]
+
+[sub_resource type="Resource" id="Resource_opt_cr"]
+script = ExtResource("3_x4k9l")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_v6n1j")
+choice_result = SubResource("Resource_opt_cr")
+description = "晚辈生于大唐开元十五年，今年该是二十有六了"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_t2b8w")
+options = Array[ExtResource("1_bopt")]([SubResource("Resource_opt")])
+uuid = "tut_dialogue_time"
+name = "岁月如梭"
+description = "道士捻须一笑：「贫道久居山中，对年月已不甚在意。小友可知今夕是何年？」\n\n他望向远处天际，目光似乎穿透了云层：「修道之人不计春秋，但你这读书人，须得心中有数。何时赶考、何时进京，都是要紧事。」\n\n他伸手指向山外：「记着时日，莫负光阴。」"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

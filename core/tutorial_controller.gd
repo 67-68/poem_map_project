@@ -64,6 +64,7 @@ enum Phase7Step {
 	POEM_CREATED,         # 诗词创作完成
 	POEM_REVIEWED,        # tut_poem_review 展示中
 	IDEA_UNLOCKED,        # 理念解锁
+	FINAL_REVEAL_DONE,    # 🆕 tut_final_reveal 已确认 → END
 }
 
 var _current_phase: Phase = Phase.INIT
@@ -78,8 +79,10 @@ var _p7_step: Phase7Step = Phase7Step.POEM_BTN_VISIBLE
 var _dialogue_step: int = 0
 const DIALOGUE_EVENTS: Array[String] = [
 	"tut_dialogue_1",
+	"tut_dialogue_time",
 	"tut_dialogue_2",
 	"tut_dialogue_3",
+	"tut_dialogue_4",
 ]
 
 # ── 标志 ──
@@ -194,6 +197,19 @@ func _begin_tutorial() -> void:
 	# 设置每旬 2 天
 	TimeService.set_days_per_xun(2)
 	Logging.info("TutorialController: days_per_xun 已设置为 2")
+
+	# 🆕 设置健康/钱为满值（tutorial 结束后切换回 source_of_truth 值）
+	var health_prop = Database.get_property("health")
+	var money_prop = Database.get_property("money")
+	var health_max: int = health_prop.soft_max if health_prop and health_prop.soft_max > 0 else 100
+	var money_max: int = money_prop.soft_max if money_prop and money_prop.soft_max > 0 else 200
+	PlayerState.force_set_stat_val("health", health_max)
+	PlayerState.force_set_stat_val("money", money_max)
+	Logging.info("TutorialController: 健康=%d 钱财=%d（满值开局）" % [health_max, money_max])
+
+	# 🆕 禁用 hover（由 tut_dialogue_4 事件启用）
+	HoverPopupManager.set_hover_enabled(false)
+	Logging.info("TutorialController: hover 已禁用")
 
 	# 阻塞所有默认 SceneAction（tutorial 期间仅显示白名单行动）
 	_block_all_default_actions()
@@ -390,6 +406,15 @@ func _ensure_all_ui_visible() -> void:
 				lp.visible = true
 			if rp:
 				rp.visible = true
+				# 🆕 恢复 right_panel 内部被 _hide_for_tutorial 隐藏的元素
+				if rp.has_method("set_time_panel_visible"):
+					rp.set_time_panel_visible(true)
+				if rp.has_method("set_rumors_section_visible"):
+					rp.set_rumors_section_visible(true)
+				if rp.has_method("set_decisions_section_visible"):
+					rp.set_decisions_section_visible(true)
+				if rp.has_method("set_bottom_btn_bar_visible"):
+					rp.set_bottom_btn_bar_visible(true)
 	Logging.info("TutorialController: 非 tutorial 模式，UI 默认全部可见")
 
 
@@ -656,8 +681,14 @@ func _on_phase_7_event_confirmed() -> void:
 			_show_special_label("道长对你的诗赞不绝口！点击右下角蓝色印章，确立你的远大志向")
 
 		Phase7Step.IDEA_UNLOCKED:
-			# 理念解锁 → END
-			Logging.info("TutorialController: 理念解锁 → 进入 END")
+			# 理念解锁 → 🆕 先推 final_reveal 事件（揭示最后 UI）
+			Logging.info("TutorialController: 理念解锁 → 推送 tut_final_reveal")
+			_p7_step = Phase7Step.FINAL_REVEAL_DONE
+			_push_tut_event("tut_final_reveal")
+
+		Phase7Step.FINAL_REVEAL_DONE:
+			# 🆕 tut_final_reveal 确认 → 进入 END
+			Logging.info("TutorialController: final_reveal 确认 → 进入 END")
 			_advance_to_end()
 
 		_:
@@ -750,6 +781,19 @@ func _advance_to_end() -> void:
 	_clear_all_tut_flags()
 	PlayerState.set_flag("tutorial_completed", true)
 	TimeService.reset_days_per_xun()
+
+	# 🆕 恢复 source_of_truth 属性值
+	var sot_resources: Dictionary = SourceOfTruth.debug_dashboard_state.get("resources", {})
+	var sot_health: int = sot_resources.get("health", 50)
+	var sot_money: int = sot_resources.get("money", 45)
+	PlayerState.force_set_stat_val("health", sot_health)
+	PlayerState.force_set_stat_val("money", sot_money)
+	Logging.info("TutorialController: 恢复 source_of_truth 属性 — health=%d money=%d" % [sot_health, sot_money])
+
+	# 🆕 恢复 hover
+	HoverPopupManager.set_hover_enabled(true)
+	Logging.info("TutorialController: hover 已恢复")
+
 	_push_tut_event("tut_goodbye")
 	Logging.info("TutorialController: tutorial 完成，days_per_xun 已恢复默认")
 
@@ -789,50 +833,67 @@ func _show_special_label(text: String) -> void:
 
 func _inject_timeline_scripts() -> void:
 	var scripts: Dictionary = {
-		# PHASE_1: 鸟语花香音效
+		# PHASE_1: 鸟语花香音效（无UI变化）
 		"tut_meet_taoist": [
 			{ "delay": 0.0, "action": "play_sound", "target": "", "sound_path": "res://assets/sounds/property/imaginary_gain_t1.ogg", "volume_db": -10.0 },
 		],
 
-		# PHASE_2: 对话中渐进揭示 UI
-		# tut_dialogue_1: small talk — 展示基础面板 + social_btn
+		# PHASE_2 Step 1: 道士问大名 → 展示名字+地点+身份
 		"tut_dialogue_1": [
 			{ "delay": 0.0, "action": "show_panel", "target": "left_panel" },
+			{ "delay": 0.0, "action": "set_left_section_visible", "target": "name", "visible": true },
+			{ "delay": 0.0, "action": "set_left_section_visible", "target": "place", "visible": true },
+			{ "delay": 0.0, "action": "set_left_section_visible", "target": "identity", "visible": true },
+		],
+
+		# PHASE_2 Step 2: 🆕 道士问时间 → 展示时间面板
+		"tut_dialogue_time": [
+			{ "delay": 0.0, "action": "show_panel", "target": "right_panel" },
+			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "time_panel", "visible": true },
+		],
+
+		# PHASE_2 Step 3: 谈身板 → 展示健康+钱财（满值）
+		"tut_dialogue_2": [
 			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "health", "visible": true },
 			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "money", "visible": true },
-			{ "delay": 0.0, "action": "show_panel", "target": "right_panel" },
-			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "social_btn", "visible": true },
 		],
 
-		# tut_dialogue_2: 继续 small talk — 展示才/府/定
-		"tut_dialogue_2": [
-			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "talent", "visible": true },
-			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "astuteness", "visible": true },
-			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "composure", "visible": true },
-		],
-
-		# tut_dialogue_3: trait_grid 可见（空 grid，为 Phase 3 做准备）
+		# PHASE_2 Step 4: 谈政略 → 展示政略主权区（兴/势/望）
 		"tut_dialogue_3": [
-			{ "delay": 0.0, "action": "set_trait_grid_visible", "target": "left_panel", "visible": true },
+			{ "delay": 0.0, "action": "set_left_section_visible", "target": "ambition_section", "visible": true },
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "inspiration", "visible": true },
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "momentum", "visible": true },
+			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "prestige", "visible": true },
 		],
 
-		# PHASE_3: trait 展示（仅负责属性变化，trait_grid 已在 dialogue_3 可见）
-		# tut_trait_demo 的 choice_result 执行 trait_add + prop_add，grid 自动刷新
+		# PHASE_2 Step 5: 🆕 建议强身 → 展示 TraitGrid + 启用 hover
+		"tut_dialogue_4": [
+			{ "delay": 0.0, "action": "set_trait_grid_visible", "target": "left_panel", "visible": true },
+			{ "delay": 0.0, "action": "set_hover_enabled", "target": "", "enabled": true },
+		],
 
-		# PHASE_6: 引导看理念按钮 + poem_btn
+		# PHASE_6: 云开雾散 → poem_btn 可见
 		"tut_defer_done": [
 			{ "delay": 0.5, "action": "show_special_label", "target": "right_panel", "text": "云雾消散，泰山之巅显现！点击右下角毛笔按钮开始写诗" },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "poem_btn", "visible": true },
 		],
 
-		# PHASE_7: 诗词创作后揭示属性 + 理念
+		# PHASE_7a: 诗词创作后 → 名望行可见
 		"tut_poem_review": [
 			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "prestige", "visible": true },
 		],
 
+		# PHASE_7b: 理念解锁 → idea_btn 可见
 		"tut_idea_unlock": [
-			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "momentum", "visible": true },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "idea_btn", "visible": true },
+		],
+
+		# 🆕 最后揭示：风闻 + 决议 + 底层修饰 + 底部按钮栏
+		"tut_final_reveal": [
+			{ "delay": 0.0, "action": "set_left_section_visible", "target": "bottom_decoration", "visible": true },
+			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "rumors_section", "visible": true },
+			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "decisions_section", "visible": true },
+			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "bottom_btn_bar", "visible": true },
 		],
 	}
 

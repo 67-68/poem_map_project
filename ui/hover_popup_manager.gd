@@ -33,12 +33,21 @@ const CROSSING_GRACE: float = 0.5
 ## 🆕 事件活跃标志 — 由 NarrativeOverlay 设置
 static var _is_event_active: bool = false
 
+## 🆕 Tutorial hover 全局禁用开关 — 由 AnimationController 设置
+static var _hover_disabled: bool = false
+
 ## 设置事件活跃状态（由 NarrativeOverlay 调用）
 ## true  → SLIDE_FROM_RIGHT 降级为直接显示（无动画），hover 文本加前缀"请先完成当前事件"
 ## false → 恢复滑动动画，移除前缀
 static func set_event_active(active: bool) -> void:
 	_is_event_active = active
 	Logging.info("HoverPopupManager.set_event_active: %s" % str(active))
+
+## 🆕 Tutorial 全局 hover 开关
+## enabled=false → 所有 hover 不响应（_request_show 直接返回）
+static func set_hover_enabled(enabled: bool) -> void:
+	_hover_disabled = not enabled
+	Logging.info("HoverPopupManager.set_hover_enabled: %s (disabled=%s)" % [str(enabled), str(_hover_disabled)])
 
 class HoverDisplayDelegate:
 	## 进入 SHOWING 状态时调用
@@ -676,6 +685,9 @@ func _on_popup_exit(trigger: Control) -> void:
 # ── 核心逻辑：全局互斥锁 ─────────────────────────────────
 
 func _request_show(binding: HoverBinding) -> void:
+	# 🆕 Tutorial hover 全局禁用
+	if _hover_disabled:
+		return
 	# 🩺 僵尸检测：_current_active 可能引用了已释放的 popup
 	if _current_active != null:
 		var zombie: bool = false

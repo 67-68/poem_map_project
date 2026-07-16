@@ -13,6 +13,15 @@ extends PanelContainer
 @onready var _trait_grid: GridContainer = $"Panel/VBox/ScrollContainer/V/TraitGrid"
 @onready var _ambition_deadline_label: Label = $"Panel/VBox/ScrollContainer/V/AmbitionProgressBar/AmbitionDeadline"
 @onready var _ambition_progress_bar: ProgressBar = $"Panel/VBox/ScrollContainer/V/AmbitionProgressBar"
+@onready var _identity_label: Label = $"Panel/VBox/ScrollContainer/V/Label"
+@onready var _trait_title_label: Label = $"Panel/VBox/ScrollContainer/V/Prop2"
+@onready var _trait_sep: HSeparator = $"Panel/VBox/ScrollContainer/V/HSep2"
+@onready var _ambition_sep: HSeparator = $"Panel/VBox/ScrollContainer/V/HSep5"
+@onready var _ambition_title_label: Label = $"Panel/VBox/ScrollContainer/V/Prop"
+@onready var _ambition_hbox: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer"
+@onready var _decoration_sep: HSeparator = $"Panel/VBox/ScrollContainer/V/HSep3"
+@onready var _decoration_title_label: Label = $"Panel/VBox/ScrollContainer/V/Label2"
+@onready var _decoration_hbox: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2"
 
 # ── 固定属性 Label 节点（对应 tscn 预制体实例）─────────
 @onready var _prop_health: HBoxContainer = $"Panel/VBox/HBoxContainer/PropLabel"
@@ -461,7 +470,7 @@ func set_trait_grid_visible(v: bool) -> void:
 	_trait_grid.visible = v
 	Logging.info("LeftPlayerPanel.set_trait_grid_visible: visible=%s" % [v])
 
-## 非 tutorial 模式：显示所有属性 + TraitGrid
+## 非 tutorial 模式：显示所有属性 + TraitGrid + 所有区域
 func _show_all_properties() -> void:
 	for prop_key in _prop_label_map:
 		var labels: Dictionary = _prop_label_map[prop_key]
@@ -472,6 +481,21 @@ func _show_all_properties() -> void:
 		if perception_label:
 			perception_label.visible = true
 	_trait_grid.visible = true
+	# 名字、地点、身份
+	_name_label.visible = true
+	_place_label.visible = true
+	_identity_label.visible = true
+	# 特质区域
+	_trait_title_label.visible = true
+	_trait_sep.visible = true
+	# 政略主权区域
+	_ambition_sep.visible = true
+	_ambition_title_label.visible = true
+	_ambition_hbox.visible = true
+	# 底层修饰区域
+	_decoration_sep.visible = true
+	_decoration_title_label.visible = true
+	_decoration_hbox.visible = true
 	Logging.info("LeftPlayerPanel: 全部属性已设为可见（非 tutorial 模式）")
 
 ## Tutorial 模式：默认隐藏所有属性 + TraitGrid
@@ -485,7 +509,51 @@ func _hide_all_properties_tutorial() -> void:
 		if perception_label:
 			perception_label.visible = false
 	_trait_grid.visible = false
+	# 🆕 隐藏名字、地点、身份
+	_name_label.visible = false
+	_place_label.visible = false
+	_identity_label.visible = false
+	# 🆕 隐藏特质区域
+	_trait_title_label.visible = false
+	_trait_sep.visible = false
+	# 🆕 隐藏政略主权区域
+	_ambition_sep.visible = false
+	_ambition_title_label.visible = false
+	_ambition_hbox.visible = false
+	# 🆕 隐藏底层修饰区域
+	_decoration_sep.visible = false
+	_decoration_title_label.visible = false
+	_decoration_hbox.visible = false
 	Logging.info("LeftPlayerPanel: 全部属性已设为隐藏（tutorial 模式，待逐步揭示）")
+
+## 设置名字 Label 可见性
+func set_name_visible(v: bool) -> void:
+	_name_label.visible = v
+	Logging.info("LeftPlayerPanel.set_name_visible: %s" % v)
+
+## 设置地点 Label 可见性
+func set_place_visible(v: bool) -> void:
+	_place_label.visible = v
+	Logging.info("LeftPlayerPanel.set_place_visible: %s" % v)
+
+## 设置身份 Label 可见性（"京兆府·举子"）
+func set_identity_visible(v: bool) -> void:
+	_identity_label.visible = v
+	Logging.info("LeftPlayerPanel.set_identity_visible: %s" % v)
+
+## 设置政略主权区域可见性（HSep5 + Label"政略主权" + HBoxContainer(兴/势/望)）
+func set_ambition_section_visible(v: bool) -> void:
+	_ambition_sep.visible = v
+	_ambition_title_label.visible = v
+	_ambition_hbox.visible = v
+	Logging.info("LeftPlayerPanel.set_ambition_section_visible: %s" % v)
+
+## 设置底层修饰区域可见性（HSep3 + Label2"底层修饰" + HBoxContainer2(才/府/定)）
+func set_bottom_decoration_visible(v: bool) -> void:
+	_decoration_sep.visible = v
+	_decoration_title_label.visible = v
+	_decoration_hbox.visible = v
+	Logging.info("LeftPlayerPanel.set_bottom_decoration_visible: %s" % v)
 
 
 # ── 侧滑动画 ────────────────────────────────────────────
