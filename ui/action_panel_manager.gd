@@ -61,9 +61,13 @@ func _connect_signals() -> void:
 	if TimeService.has_signal("on_xun_tick") and not TimeService.on_xun_tick.is_connected(_on_xun_tick):
 		TimeService.on_xun_tick.connect(_on_xun_tick)
 
-	# ── 事件链结束 / Focus 结束恢复 ──
+	# ── 非事件路径 UI 恢复（白名单变化 / 聚焦退出 / 预留 / DSL） ──
 	if not EventBus.request_refresh_action_panel.is_connected(_on_refresh_panel):
 		EventBus.request_refresh_action_panel.connect(_on_refresh_panel)
+
+	# ── 事件确认后 UI 恢复（仅刷新锁状态，不重建） ──
+	if not EventBus.event_confirmed.is_connected(_on_event_confirmed):
+		EventBus.event_confirmed.connect(_on_event_confirmed)
 
 	# ── 属性变动增量更新锁 ──
 	if not EventBus.request_refresh_action_locks.is_connected(_on_refresh_locks_only):
@@ -171,7 +175,13 @@ func _on_xun_tick() -> void:
 	Logging.info("ActionPanelManager: 旬初触发全量刷新")
 	_rebuild_all_buttons()
 
-## 事件链 / Focus 结束回调：保留抽取结果，仅刷新锁定态
+## 事件确认后回调：仅刷新锁定态（不重建，不重抽）。
+## 行动执行后的属性变更需要通过此回调同步到面板灰化/解锁状态。
+func _on_event_confirmed(_unused = null) -> void:
+	Logging.debug("ActionPanelManager: event_confirmed → 增量刷新锁定态")
+	_on_refresh_locks_only()
+
+## 非事件路径 UI 恢复（白名单变化 / 聚焦退出 / 预留 / DSL）：保留抽取结果，仅刷新锁定态
 ## 🆕 Tutorial 白名单模式下强制重建（否则白名单变化不生效）
 func _on_refresh_panel() -> void:
 	var whitelist := ActionManager.get_tutorial_whitelist()

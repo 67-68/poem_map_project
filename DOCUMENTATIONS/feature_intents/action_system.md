@@ -673,3 +673,33 @@ EventBus.push_picker(data, on_selected, ui_constructor, on_filter_toggled)
 - [`characters/narrative_director.gd`](characters/narrative_director.gd) — 路由 `on_filter_toggled`
 - [`characters/narrative_overlay.gd`](characters/narrative_overlay.gd) — 传递 `on_filter_toggled`
 - [`characters/event_ui.gd`](characters/event_ui.gd) — `append_picker_attachment` 透传
+
+---
+
+## 面板刷新信号分工（v3.1 — 2025-07-16）
+
+### 问题背景
+
+`request_refresh_action_panel` 曾身兼两职：既在非事件路径（白名单变化/聚焦退出/预留/DSL）被 emit，
+也被消费方误用作「行动完成了」的探测器。实际上行动执行完成后 **没有任何代码 emit 它**，
+tutorial 的 `_on_action_executed` 全靠白名单变化的副作用碰巧触发。
+
+### 信号分工
+
+| 信号 | 职责 | emit 时机 | listen 方 |
+|------|------|----------|----------|
+| `request_refresh_action_panel` | 非事件路径 UI 同步 | 白名单变化、聚焦退出、预留行动、DSL `RefreshActionPanelOperator` | `action_panel_manager._on_refresh_panel`、`right_info_panel._refresh_rumors`、`tutorial._on_state_check` |
+| `event_confirmed` | 事件路径 UI 恢复 + 阶段推进 | `narrative_director.on_option_selected()` / `on_interrupt_pressed()` | `action_panel_manager._on_event_confirmed`（仅调 `_on_refresh_locks_only`）、`tutorial._on_event_confirmed`（阶段推进，**独占**）、`game_state.event_popup_queue` |
+| `request_refresh_action_locks` | 属性变动增量更新 | `action_manager.reevaluate_all_locks()` | `action_panel_manager._on_refresh_locks_only` |
+
+### 消费方行为
+
+- **`action_panel_manager`**：`event_confirmed` → 仅 `_on_refresh_locks_only()`（不重建按钮，旬初才是全重建时机）；`request_refresh_action_panel` → 保留原逻辑（tutorial 白名单非空时全重建，否则仅锁刷新）
+- **`tutorial_controller`**：`_on_event_confirmed` 独占 `event_confirmed` 做阶段推进；`_on_state_check`（原 `_on_action_executed`）仅监听 `request_refresh_action_panel` 做非事件路径状态检测。⚠️ **`_on_state_check` 不可同时监听 `event_confirmed`**，否则同一帧内 `_on_event_confirmed` 推进状态后被 `_on_state_check` 误判导致白名单/事件双重触发
+- **`right_info_panel`**：仅监听 `request_refresh_action_panel` — 谣言刷新月级频率足够，不必每次事件确认都刷
+
+### 相关文件
+
+- [`core/eventbus.gd`](core/eventbus.gd) — 信号定义 + 注释
+- [`ui/action_panel_manager.gd`](ui/action_panel_manager.gd) — `_connect_signals()` + `_on_event_confirmed()`
+- [`core/tutorial_controller.gd`](core/tutorial_controller.gd) — `_connect_tutorial_signals()` / `_disconnect_tutorial_signals()` / `_on_state_check()`

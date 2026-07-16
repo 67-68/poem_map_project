@@ -74,7 +74,8 @@ signal selected_actions_change(actions: Array)
 ## 锁定行动被选中时广播，携带被锁定的 SceneAction 数组
 ## ActionMap 监听此信号对按钮施加闪光效果
 signal locked_actions_selected(actions: Array)
-## 请求 SceneActionScroll 刷新行动面板（事件链结束后恢复 UI 状态）
+## 非事件路径请求刷新行动面板（白名单变化 / 聚焦退出 / 预留行动 / DSL 显式刷新）
+## ⚠️ 不涵盖事件确认后的 UI 恢复 — 那由 event_confirmed 信号处理
 signal request_refresh_action_panel()
 ## 🆕 请求刷新 action 锁定状态（不重新抽取，仅更新灰化/解锁状态）
 ## 由 ActionManager.reevaluate_all_locks() 在属性变动时发射。

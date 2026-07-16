@@ -6,9 +6,9 @@ extends Node
 ## Phase 4-7: 行动系统 + 多信号驱动（探索阶段）
 ##
 ## 信号矩阵:
-##   event_confirmed              → Phase 1→2, 2内部, 2→4
+##   event_confirmed              → Phase 1→2, 2内部, 2→4, Phase 4-7 阶段推进（_on_event_confirmed 独占）
 ##   stay_place_changed           → Phase 4 迁移检测
-##   request_refresh_action_panel → Phase 4-5 行动执行检测
+##   request_refresh_action_panel → Phase 4-7 非事件路径状态检查（_on_state_check，白名单变化等）
 ##   on_xun_tick                  → Phase 5 defer 倒计时
 ##   poems_created                → Phase 7 创作检测
 ##
@@ -89,8 +89,12 @@ var _inspiration_gained: bool = false
 var _defer_started: bool = false
 var _defer_completed: bool = false
 ## 🆕 刚进入 Phase 5 时跳过首次 _on_phase_5_action 的中断检测
-## （_set_sub_whitelist 会触发 request_refresh_action_panel，此时 defer 尚未被 SubActionExecutor 启动）
+## （_set_sub_whitelist → request_refresh_action_panel → _on_state_check → _on_phase_5_action，
+##  此时 defer 尚未被 SubActionExecutor 启动；event_confirmed 同理在过渡事件期间不应触发检测）
 var _just_entered_phase_5: bool = false
+## 🆕 刚推进到 LOOK_UP_READY 时跳过紧随的 event_confirmed（tut_defer_done 的 choice_result
+##  后果（如 set_stay_place）会在同帧内再次 emit event_confirmed，误触发「往上看确认」）
+var _just_entered_lookup_ready: bool = false
 
 # ── 道士 NPCDocument key ──
 const TAOIST_NPC_KEY := "tut_taoist"
@@ -256,9 +260,13 @@ func _connect_tutorial_signals() -> void:
 		TimeService.on_xun_tick.connect(_on_xun_tick)
 		Logging.info("TutorialController: 已连接 TimeService.on_xun_tick")
 
-	if not EventBus.request_refresh_action_panel.is_connected(_on_action_executed):
-		EventBus.request_refresh_action_panel.connect(_on_action_executed)
-		Logging.info("TutorialController: 已连接 EventBus.request_refresh_action_panel")
+	# ── request_refresh_action_panel: 非事件路径 UI 状态检查 ──
+	# 白名单变化 / 聚焦退出 / 预留行动 / DSL 显式刷新 等触发
+	# ⚠️ event_confirmed 由 _on_event_confirmed 独占处理，不可同时连 _on_state_check
+	# 否则会导致同一帧内 _on_event_confirmed 推进状态后 _on_state_check 误判当前 step
+	if not EventBus.request_refresh_action_panel.is_connected(_on_state_check):
+		EventBus.request_refresh_action_panel.connect(_on_state_check)
+		Logging.info("TutorialController: 已连接 EventBus.request_refresh_action_panel -> _on_state_check")
 
 	if not EventBus.poems_created.is_connected(_on_poem_created):
 		EventBus.poems_created.connect(_on_poem_created)
@@ -282,8 +290,8 @@ func _disconnect_tutorial_signals() -> void:
 		EventBus.event_confirmed.disconnect(_on_event_confirmed)
 	if TimeService.on_xun_tick.is_connected(_on_xun_tick):
 		TimeService.on_xun_tick.disconnect(_on_xun_tick)
-	if EventBus.request_refresh_action_panel.is_connected(_on_action_executed):
-		EventBus.request_refresh_action_panel.disconnect(_on_action_executed)
+	if EventBus.request_refresh_action_panel.is_connected(_on_state_check):
+		EventBus.request_refresh_action_panel.disconnect(_on_state_check)
 	if EventBus.poems_created.is_connected(_on_poem_created):
 		EventBus.poems_created.disconnect(_on_poem_created)
 	if PlayerState.stay_place_changed.is_connected(_on_stay_place_changed):
@@ -513,13 +521,12 @@ func _on_xun_tick() -> void:
 	])
 
 
-func _on_action_executed() -> void:
+func _on_state_check(_unused = null) -> void:
 	if not is_tutorial_active():
 		return
-	Logging.info("TutorialController: action_executed — phase=%d p4_step=%d" % [
+	Logging.info("TutorialController: state_check — phase=%d p4_step=%d" % [
 		_current_phase, _p4_step
 	])
-	breakpoint
 
 	match _current_phase:
 		Phase.PHASE_4_EXPLORE:
@@ -531,7 +538,7 @@ func _on_action_executed() -> void:
 		Phase.PHASE_7_POEM:
 			_on_phase_7_action()
 		_:
-			Logging.info("TutorialController: action_executed 在 phase=%d 无特殊处理" % _current_phase)
+			Logging.info("TutorialController: state_check 在 phase=%d 无特殊处理" % _current_phase)
 
 
 func _on_stay_place_changed(place_str: String) -> void:
@@ -627,7 +634,7 @@ func _on_phase_4_event_confirmed() -> void:
 
 
 func _on_phase_4_action() -> void:
-	Logging.info("TutorialController: Phase 4 action_executed — step=%d" % _p4_step)
+	Logging.info("TutorialController: Phase 4 state_check — step=%d" % _p4_step)
 
 	if _p4_step == Phase4Step.FREE_ROAM:
 		# 玩家在 FREE_ROAM 阶段点了行动，检查是不是交游（打坐无回应）
@@ -652,13 +659,13 @@ func _on_phase_4_action() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _on_phase_5_action() -> void:
-	Logging.info("TutorialController: Phase 5 action_executed — step=%d, _just_entered=%s" % [_p5_step, str(_just_entered_phase_5)])
+	Logging.info("TutorialController: Phase 5 state_check — step=%d, _just_entered=%s" % [_p5_step, str(_just_entered_phase_5)])
 
 	if _just_entered_phase_5:
-		# 🆕 刚进入 Phase 5，_set_sub_whitelist 触发了 request_refresh_action_panel
-		# 此时 defer 可能尚未被 SubActionExecutor 启动，跳过中断检测
+		# 🆕 刚进入 Phase 5，_set_sub_whitelist 触发 request_refresh_action_panel → _on_state_check
+		# 此时 defer 尚未被 SubActionExecutor 启动，跳过中断检测
 		_just_entered_phase_5 = false
-		Logging.info("TutorialController: Phase 5 刚进入，跳过首次 action_executed 中断检测")
+		Logging.info("TutorialController: Phase 5 刚进入，跳过首次 state_check 检测")
 		return
 		
 	elif _p5_step == Phase5Step.DEFER_INTERRUPTED:
@@ -683,14 +690,7 @@ func _on_phase_5_event_confirmed() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _on_phase_6_action() -> void:
-	Logging.info("TutorialController: Phase 6 action_executed — step=%d" % _p6_step)
-	breakpoint
-	if _p6_step == Phase6Step.LOOK_UP_READY:
-		# 玩家点了"往上看" → 获取最后 Lv3 意象
-		Logging.info("TutorialController: 往上看 → 获得最后意象")
-		_p6_step = Phase6Step.FINAL_IMAGINARY
-		_show_special_label("泰山之巅尽收眼底！点击右下角蓝色印章，将感悟化为诗句")
-		_advance_to_phase_7()
+	Logging.info("TutorialController: Phase 6 state_check — step=%d（无白名单驱动逻辑）" % _p6_step)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -698,13 +698,26 @@ func _on_phase_6_action() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _on_phase_6_event_confirmed() -> void:
-	#breakpoint 这里没有问题，正确解锁了向上看。这里的confirmed 实际上说的是lv5的事件
 	Logging.info("TutorialController: Phase 6 event_confirmed — step=%d" % _p6_step)
 	if _p6_step == Phase6Step.DEFER_DONE_EVENT:
 		# tut_defer_done 确认 → 解锁"往上看"
 		Logging.info("TutorialController: tut_defer_done 确认 → 「往上看」可用")
 		_p6_step = Phase6Step.LOOK_UP_READY
+		_just_entered_lookup_ready = true
 		_show_special_label("云雾已散！点击「出游」→ 往山顶看看")
+
+	elif _p6_step == Phase6Step.LOOK_UP_READY:
+		if _just_entered_lookup_ready:
+			# 🆕 tut_defer_done 的 choice_result 后果（set_stay_place 等）会在同一事件链内
+			# 额外 emit event_confirmed，跳过此次，不误触「往上看确认」
+			Logging.info("TutorialController: Phase 6 LOOK_UP_READY 守卫 — 跳过 tut_defer_done 后果的 event_confirmed")
+			_just_entered_lookup_ready = false
+		else:
+			# 玩家点了"往上看" → 事件确认 → 获取最后 Lv3 意象 → Phase 7
+			Logging.info("TutorialController: 往上看确认 → 获得最后意象 → Phase 7")
+			_p6_step = Phase6Step.FINAL_IMAGINARY
+			_show_special_label("泰山之巅尽收眼底！点击右下角蓝色印章，将感悟化为诗句")
+			_advance_to_phase_7()
 
 
 # ═══════════════════════════════════════════════════════════
@@ -768,7 +781,7 @@ func _on_poem_start_clicked() -> void:
 
 
 func _on_phase_7_action() -> void:
-	Logging.info("TutorialController: Phase 7 action_executed — step=%d" % _p7_step)
+	Logging.info("TutorialController: Phase 7 state_check — step=%d" % _p7_step)
 
 	if _p7_step == Phase7Step.DRINK_WINE:
 		# 玩家喝了药酒 → 检查兴是否恢复
