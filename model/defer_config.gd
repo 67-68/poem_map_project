@@ -18,3 +18,6 @@ class_name DeferConfig extends Resource
 ## 当 defer 期间某旬资源无法支付 used_resource 时，强制中断 defer，
 ## 如果此字段非空则通过 EventBus.push_event 推送此事件。
 @export var failed_fallback: String = ''
+
+@export var defer_success_event: String = '' # defer 完成之后，如果这个事件指定了，那么不使用scan event
+@export var use_defer: bool = false

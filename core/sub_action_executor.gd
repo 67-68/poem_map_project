@@ -169,6 +169,7 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 			Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events后 stay_place='%s'" % PlayerState.stay_place)
 		
 		# sub-action success 后启动 defer
+		#breakpoint
 		if sub_action and sub_action.defer_config and not sub_action.defer_config.xun_defered.is_empty():
 			Logging.info("SubActionExecutor.execute: sub-action '%s' 检测到 defer_config，启动 defer npc_target='%s'" % [sub_action.uuid, npc_target])
 			ActionManager.start_defer(sub_action, npc_target)

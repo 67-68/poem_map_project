@@ -317,3 +317,11 @@ func set_bottom_btn_bar_visible(v: bool) -> void:
 func set_special_label_visible(v: bool) -> void:
 	_special_label.visible = v
 	Logging.info("RightInfoPanel.set_special_label_visible: %s" % v)
+
+## 🆕 设置 SpecialLabel 文本（tutorial 提示用）
+func set_special_label_text(p_text: String) -> void:
+	#breakpoint
+	_special_label.text = p_text
+	_special_label.visible = true
+	Logging.info("RightInfoPanel.set_special_label_text: '%s'" % p_text)
+	

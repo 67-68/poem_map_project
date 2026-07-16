@@ -747,11 +747,12 @@ func start_defer(action: Action, npc_target: String = "") -> void:
 		"used_resource_archetype": config.used_resource_archetype,
 		"ap_cost": config.ap_cost,
 		"failed_fallback": config.failed_fallback,
+		"defer_success_event": config.defer_success_event,
 		"main_tag": main_tag,
 		"npc_target": npc_target,
 	}
-	Logging.info("[ActionManager] ✅ 激活 defer: action=%s, xun=%d, ap_cost='%s'(%d), archetype='%s', fallback='%s'" % [
-		action_id, total_xun, config.ap_cost, amounts_ap, config.used_resource_archetype, config.failed_fallback
+	Logging.info("[ActionManager] ✅ 激活 defer: action=%s, xun=%d, ap_cost='%s'(%d), archetype='%s', fallback='%s', success_event='%s'" % [
+		action_id, total_xun, config.ap_cost, amounts_ap, config.used_resource_archetype, config.failed_fallback, config.defer_success_event
 	])
 	
 	# 通知 UI 刷新状态
@@ -903,13 +904,22 @@ func process_xun_tick() -> void:
 	
 	# ── 清理已到期/已中断的 defer ──
 	for action_id in expired_defers:
-		# 到期 → 使用 main_tag 做事件扫描
+		# 到期 → 优先使用 defer_success_event，其次 main_tag scan_events，最后 fallback_event_uuid
 		var data: Dictionary = _deferring_actions[action_id]
+		var success_event: String = data.get("defer_success_event", "")
 		var main_tag: String = data.get("main_tag", "")
 		var npc_target: String = data.get("npc_target", "")
 		_deferring_actions.erase(action_id)
 		
-		if not main_tag.is_empty():
+		# ── 优先级 1: defer_success_event（精确指定）──
+		if not success_event.is_empty():
+			Logging.info("[ActionManager] 📖 defer 到期: 推 defer_success_event='%s' archetype_base='%s' outcome='success' npc_target='%s'" % [success_event, action_id, npc_target])
+			EventBus.request_event_key.emit(success_event, {
+				'archetype_base': action_id,
+				'outcome': 'success',
+				'npc_target': npc_target,
+			})
+		elif not main_tag.is_empty():
 			Logging.info("[ActionManager] 📖 defer 到期触发器: scan_events with main_tag='%s' npc_target='%s'" % [main_tag, npc_target])
 			var context := {
 				'main_tag': main_tag,

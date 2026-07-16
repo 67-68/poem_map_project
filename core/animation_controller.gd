@@ -114,7 +114,7 @@ func _on_event_shown(event: Variant) -> void:
 
 	var uuid: String = event.uuid
 	var entry_id: String = str(event.get_instance_id())
-
+	
 	# 优先时间线脚本
 	if uuid in timeline_scripts:
 		var stages: Array = timeline_scripts[uuid]

@@ -1447,6 +1447,7 @@ static func _parse_converter_context(ctx_str: String) -> Dictionary:
         "defer_xun": "",
         "ap_cost_per_xun": "",
         "override_action": "",
+        "defer_success_event": "",
     }
     if ctx_str.is_empty():
         return ctx
@@ -1476,6 +1477,8 @@ static func _parse_converter_context(ctx_str: String) -> Dictionary:
                 ctx.ap_cost_per_xun = value
             "override_action":
                 ctx.override_action = value
+            "defer_success_event":
+                ctx.defer_success_event = value
             _:
                 Logging.info("[resource_converter] 未知 context key: %s = %s" % [key, value])
 
@@ -1551,6 +1554,9 @@ static func _build_action_from_row(row: Dictionary, ctx: Dictionary,
             dc.used_resource_archetype = "%s_defer" % uuid
         if not failed_fallback.is_empty():
             dc.failed_fallback = failed_fallback
+        var defer_success_event = ctx.get("defer_success_event", "")
+        if not defer_success_event.is_empty():
+            dc.defer_success_event = defer_success_event
         action.defer_config = dc
 
     # ── custom_option 硬编码处理 ──

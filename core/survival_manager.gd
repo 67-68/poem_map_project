@@ -67,10 +67,9 @@ func _cost_survival():
 	# 🆕 Tutorial 期间跳过每旬扣钱，仅刷新 AP
 	#breakpoint
 	if TutorialController.is_tutorial_active():
-		var cap: int = TimeService.get_days_per_xun()  # tutorial 期间强制 = days_per_xun
-		Logging.info('[SurvivalManager] _cost_survival: tutorial 模式，AP 强制 = %d（days_per_xun），跳过扣钱' % cap)
-		PlayerState.force_set_stat_val("_time", cap)
+		Logging.info('[SurvivalManager] _cost_survival: tutorial 模式 跳过扣钱')
 		return
+
 	var money_ok: bool = PlayerState.append_stat(ENUMS.PROPS.MONEY, -5)
 	if not money_ok:
 		Logging.err('[SurvivalManager] _cost_survival: append_stat MONEY failed')
@@ -111,6 +110,9 @@ static func get_current_ap_cap() -> int:
 		base_ap += ap_penalty_total  # ap_penalty 为负数，直接加 = 扣除
 		Logging.info('[SurvivalManager] get_current_ap_cap: 总 ap_penalty=%d → AP=%d' % [ap_penalty_total, base_ap])
 	
+	if TutorialController.is_tutorial_active:
+		base_ap = 2
+
 	# 底限钳制：AP 不能降到 1 以下
 	var final_ap := maxi(base_ap, 1)
 	Logging.info('[SurvivalManager] get_current_ap_cap: 最终 AP = %d' % final_ap)

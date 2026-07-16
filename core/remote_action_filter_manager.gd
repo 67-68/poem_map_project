@@ -39,6 +39,7 @@ static func is_action_local(action: Action, place: String = "") -> bool:
 	if place.is_empty():
 		place = get_current_place()
 	var req: String = action.required_place
+	Logging.info("RemoteActionFilterManager.is_action_local: action='%s' uuid='%s' required_place='%s' current_place='%s'" % [action.name, action.uuid, req, place])
 	if req.is_empty():
 		return true  # 无地点要求 = 本地可用
 	return req == place
@@ -52,6 +53,7 @@ static func is_action_remote(action: Action, place: String = "") -> bool:
 	if place.is_empty():
 		place = get_current_place()
 	var req: String = action.required_place
+	Logging.info("RemoteActionFilterManager.is_action_remote: action='%s' uuid='%s' required_place='%s' current_place='%s'" % [action.name, action.uuid, req, place])
 	if req.is_empty():
 		return false  # 无地点要求 = 不是异地
 	return req != place

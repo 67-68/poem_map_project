@@ -76,6 +76,9 @@ func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	var today: int = TimeService.current_day
+	if PlayerState.get_stat_val('time') == 0:
+		_on_link_button_pressed()
+		
 	if today != _last_known_day:
 		_last_known_day = today
 		_refresh_day_label()
@@ -117,11 +120,7 @@ func _on_year_changed(current_float_year: float):
 ## 点击一次推进到下一个 xun 边界（例：day 3 → day 9；day 12 → day 19）。
 ## 不再递归；每次点击执行一次精准跳跃。
 func _on_link_button_pressed() -> void:
-	if TutorialController.is_tutorial_active():
-		Logging.info('[time] tutorial 模式，跳过旬跳功能')
-		return
 	var days: int = TimeService.get_days_to_next_xun()
 	Logging.info('[time] jump %d days to next xun' % days)
 	TimeService.advance_time(days)
 		
-

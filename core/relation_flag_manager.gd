@@ -459,6 +459,7 @@ static func get_next_person_state(target_tag: String) -> String:
 ##
 ##   外部调用方负责判责（金钱/物品/Title 检查），本函数只做数据操作。
 static func upgrade_person_state(target_tag: String) -> bool:
+	#breakpoint
 	var next_state = get_next_person_state(target_tag)
 	if next_state.is_empty():
 		Logging.info("RelationFlagManager: upgrade_person_state(%s) — 已是最高级，无法再升级" % target_tag)

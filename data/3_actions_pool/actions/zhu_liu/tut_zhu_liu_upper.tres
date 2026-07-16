@@ -3,16 +3,21 @@
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_gt11a"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_3angc"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_hnu0c"]
+[ext_resource type="Script" uid="uid://di6d1e7t6mhli" path="res://core/operators/set_stay_place_operator.gd" id="4_setstay"]
+
+[sub_resource type="Resource" id="Resource_stay_upper"]
+script = ExtResource("4_setstay")
+place = "taishan_upper"
 
 [resource]
 script = ExtResource("3_hnu0c")
 _main_tag = -1
 _action_tags = Array[int]([])
-fallback_event_uuid = ""
+fallback_event_uuid = "tut_reside_upper"
 archetype_uuid = "tut_zhu_liu_upper_success"
 uuid = "tut_zhu_liu_upper"
 name = "驻留 · 泰山上"
 description = "在山腰处歇息"
 day_consumed = 1.0
-action_results = Array[ExtResource("2_3angc")]([])
+action_results = Array[ExtResource("2_3angc")]([SubResource("Resource_stay_upper")])
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

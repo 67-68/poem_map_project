@@ -12,4 +12,5 @@ uuid = "tut_jiaoyou_drink"
 name = "交游 · 共饮"
 description = "与玄明道人共饮"
 day_consumed = 1.0
+required_place = "taishan_base"
 action_results = Array[ExtResource("1_ypvuv")]([])

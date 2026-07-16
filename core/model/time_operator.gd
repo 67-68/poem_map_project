@@ -5,8 +5,17 @@ class_name TimeOperator extends BaseOperator
 
 @export var day: float = 10.0
 @export var refresh_time = false
+@export var refresh_time_to = 10
 
 func operate():
+	if refresh_time_to:
+		var ok: bool = PlayerState.set_stat_val("_time", refresh_time_to)
+		if not ok:
+			Logging.err('TimeOperator: refresh_time failed, PlayerState.set_stat_val("_time", x) returned false')
+			return
+		Logging.info('restore time')
+		return
+		
 	if refresh_time:
 		var ok: bool = PlayerState.set_stat_val("_time", 10)
 		if not ok:

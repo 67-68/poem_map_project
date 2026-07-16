@@ -348,13 +348,6 @@ func _set_taoist_meditating() -> void:
 	RelationFlagManager.set_person_state(TAOIST_NPC_KEY, "not_meet")
 	Logging.info("TutorialController: 道士 person_state → not_meet（打坐中）")
 
-
-func _set_taoist_available() -> void:
-	"""道士重新可用"""
-	RelationFlagManager.set_person_state(TAOIST_NPC_KEY, "know_about")
-	Logging.info("TutorialController: 道士 person_state → know_about（可交互）")
-
-
 # ═══════════════════════════════════════════════════════════
 # 公开 API
 # ═══════════════════════════════════════════════════════════
@@ -439,6 +432,19 @@ func _get_left_panel() -> Control:
 	if not main_node:
 		return null
 	return main_node.get_node_or_null("UI/Margin/HBox/LeftPanel") as Control
+
+
+func _get_right_panel() -> Control:
+	var tree := get_tree()
+	if not tree:
+		return null
+	var root := tree.root
+	if not root:
+		return null
+	var main_node := root.get_node_or_null("Main")
+	if not main_node:
+		return null
+	return main_node.get_node_or_null("UI/Margin/HBox/RightPanel") as Control
 
 
 # ═══════════════════════════════════════════════════════════
@@ -642,16 +648,7 @@ func _on_phase_5_action() -> void:
 		_just_entered_phase_5 = false
 		Logging.info("TutorialController: Phase 5 刚进入，跳过首次 action_executed 中断检测")
 		return
-
-	if _p5_step == Phase5Step.DEFERRING:
-		# defer 进行中，玩家执行了出游等操作
-		Logging.info("TutorialController: Phase 5 defer 进行中，玩家执行了操作")
-		# 检查是否中断了 defer
-		if not ActionManager.is_deferring("tut_taoist_dispel_fog") and not _defer_completed:
-			Logging.info("TutorialController: defer 被中断！→ 推送 tut_defer_interrupt")
-			_p5_step = Phase5Step.DEFER_INTERRUPTED
-			_push_tut_event("tut_defer_interrupt")
-
+		
 	elif _p5_step == Phase5Step.DEFER_INTERRUPTED:
 		# defer 中断事件已确认 → 重新开始 defer
 		Logging.info("TutorialController: defer 中断确认 → 重新启动 defer")
@@ -883,9 +880,11 @@ func _push_tut_event(event_key: String) -> void:
 
 
 func _show_special_label(text: String) -> void:
-	"""通过 EventBus.request_toast 显示右下角特殊提示"""
+	"""直接设置 RightInfoPanel 上 Control/SpecialLabel 的文本"""
 	Logging.info("TutorialController: SpecialLabel → '%s'" % text)
-	EventBus.request_toast.emit(text, 0)
+	var right_panel := _get_right_panel()
+	right_panel.set_special_label_text("")
+	right_panel.set_special_label_text(text)
 
 
 # ═══════════════════════════════════════════════════════════

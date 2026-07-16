@@ -45,12 +45,12 @@ shadow_offset = Vector2(3, 0)
 
 [node name="ShadowBox" type="PanelContainer" unique_id=694608092]
 custom_minimum_size = Vector2(320, 500)
-anchors_preset = -1
-offset_left = 15.0
-offset_top = 15.0
-offset_right = 335.0
-offset_bottom = 518.0
-grow_horizontal = 0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -301.0
+offset_right = 320.0
+offset_bottom = 301.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3crwo")
 script = ExtResource("2_3crwo")
@@ -60,16 +60,19 @@ z_index = 5
 layout_mode = 2
 
 [node name="SpecialLabel" type="Label" parent="Control" unique_id=1222984266]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 0
-offset_left = 20.0
-offset_top = 550.0
-offset_right = 188.0
-offset_bottom = 571.0
+offset_left = 9.0
+offset_top = 482.0
+offset_right = 309.0
+offset_bottom = 503.0
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.36862746, 0.09019608, 0, 0.85882354)
 text = "点击人脉按钮查看社交关系"
+autowrap_mode = 1
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=1085748511]
+custom_minimum_size = Vector2(318, 600)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_lnxk4")
 
@@ -113,6 +116,7 @@ layout_mode = 2
 
 [node name="PanelContainer2" type="PanelContainer" parent="Panel/V" unique_id=2058041489]
 layout_mode = 2
+size_flags_vertical = 10
 theme_override_styles/panel = SubResource("StyleBoxFlat_7xb00")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/V/PanelContainer2" unique_id=1295835298]

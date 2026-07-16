@@ -40,6 +40,9 @@ func _ready() -> void:
 # ════════════════════════════════════════════════════════════════
 
 func _on_xun_tick() -> void:
+	if TutorialController.is_tutorial_active():
+		Logging.info("[PlotController] tutorial 模式，跳过同乡来访检查")
+		return
 	_xun_count += 1
 	Logging.info("[PlotController] 第 %d 旬 tick, event_counter=%d" % [_xun_count, GameState.event_counter])
 

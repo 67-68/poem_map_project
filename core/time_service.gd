@@ -109,6 +109,7 @@ var _days_per_xun_override: int = -1  # -1 = 使用默认值 10
 
 ## 返回当前每旬天数（tutorial 期间 2，正常 10）
 func get_days_per_xun() -> int:
+	#breakpoint
 	return _days_per_xun_override if _days_per_xun_override > 0 else 10
 
 ## Tutorial 专用：设置每旬天数
