@@ -868,12 +868,24 @@ func process_xun_tick() -> void:
 				# 如果有兜底事件，push 它
 				if not failed_fb.is_empty():
 					var event_data = Database.resolve(failed_fb)
+					Logging.info("[ActionManager] 🔍 defer中断诊断: failed_fb='%s', resolve result=%s" % [failed_fb, str(event_data)])
 					if event_data:
+						Logging.info("[ActionManager] 🔍 defer中断诊断: 即将 push_event, event_data type=%s, event_data.name=%s" % [typeof(event_data), event_data.name if event_data and event_data.has_method("get_name") else event_data.get("name", "?")])
 						EventBus.push_event.emit(event_data)
 						Logging.info("[ActionManager] 📖 中断 defer 后推送 fallback 事件: %s" % failed_fb)
 					else:
 						Logging.warn("[ActionManager] 中断 defer: fallback 事件 '%s' 未找到" % failed_fb)
+				else:
+					Logging.warn("[ActionManager] 🔍 defer中断诊断: failed_fallback 字段为空! action=%s, data keys=%s" % [action_id, str(data.keys())])
 				continue  # 跳过本旬的资源消耗和递减
+		else:
+			# arch 为空或无 operators — 诊断日志：为什么资源检查被跳过？
+			if arch_key.is_empty():
+				Logging.info("[ActionManager] 🔍 defer中断诊断: used_resource_archetype 为空, action=%s → 跳过资源检查" % action_id)
+			elif not arch:
+				Logging.warn("[ActionManager] 🔍 defer中断诊断: archetype '%s' 未在 Database.action_archetypes 中找到, action=%s" % [arch_key, action_id])
+			elif arch.operators.is_empty():
+				Logging.info("[ActionManager] 🔍 defer中断诊断: archetype '%s' 的 operators 为空, action=%s" % [arch_key, action_id])
 		
 		# ── 资源充足：执行消耗 ──
 		# 1. 执行 archetype.operators（扣资源）

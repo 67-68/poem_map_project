@@ -180,7 +180,7 @@ func _on_tutorial_custom_action(action: String, dialog: AcceptDialog) -> void:
 
 
 func _skip_tutorial() -> void:
-
+	TimeService.jump_to_clean(745.0)
 	Logging.info("TutorialController: 跳过新手教程")
 	PlayerState.set_flag("tutorial_completed", true)
 	ActionManager.clear_tutorial_whitelist()
@@ -356,7 +356,6 @@ func is_tutorial_active() -> bool:
 	var active = not PlayerState.has_flag("tutorial_completed")
 	return active
 
-
 func get_current_phase() -> Phase:
 	return _current_phase
 
@@ -489,17 +488,24 @@ func _on_xun_tick() -> void:
 	ta.refresh_time_to = 2
 	ta.operate()
 
-	if _current_phase == Phase.PHASE_5_DEFER and _defer_started:
-		Logging.info("TutorialController: xun_tick — Phase 5 defer 进行中, p5_step=%d, is_deferring=%s, defer_completed=%s" % [
-			_p5_step, str(ActionManager.is_deferring("tut_taoist_dispel_fog")), str(_defer_completed)
-		])
-		# P0-5: 修复 — 检查 tut_taoist_dispel_fog 而非 tut_chuyou
-		if not ActionManager.is_deferring("tut_taoist_dispel_fog"):
-			# defer 已结束（被完成或被中断）
-			_defer_started = false
-			_defer_completed = true
-			Logging.info("TutorialController: xun_tick — defer 已完成！→ 进入 Phase 6")
-			_advance_to_phase_6()
+	if _current_phase == Phase.PHASE_5_DEFER:
+		if _defer_started:
+			Logging.info("TutorialController: xun_tick — Phase 5 defer 进行中, is_deferring=%s" % str(ActionManager.is_deferring("tut_taoist_dispel_fog")))
+			if not ActionManager.is_deferring("tut_taoist_dispel_fog"):
+				_defer_started = false
+				_defer_completed = true
+				Logging.info("TutorialController: xun_tick — defer 已完成！→ 进入 Phase 6")
+				_advance_to_phase_6()
+		else:
+			if ActionManager.is_deferring("tut_taoist_dispel_fog"):
+				_defer_started = true
+				Logging.info("TutorialController: xun_tick — defer 已启动！解锁出游4方向")
+				PlayerState.set_flag("tut_unlock_chuyou_subs", true)
+				PlayerState.set_flag("tut_lock_chuyou_subs", false)
+				_set_sub_whitelist([])
+				_show_special_label("道长开始做法驱散云雾，需要两旬时间…去周边转转吧！点击「出游」探索四方")
+			else:
+				Logging.info("TutorialController: xun_tick — Phase 5 等待玩家点击驱散云雾启动 defer")
 		return
 
 	Logging.info("TutorialController: xun_tick — phase=%d p4_step=%s(%d), _defer_started=%s, 无 defer 相关处理" % [
@@ -513,6 +519,7 @@ func _on_action_executed() -> void:
 	Logging.info("TutorialController: action_executed — phase=%d p4_step=%d" % [
 		_current_phase, _p4_step
 	])
+	breakpoint
 
 	match _current_phase:
 		Phase.PHASE_4_EXPLORE:
@@ -606,10 +613,13 @@ func _on_phase_4_event_confirmed() -> void:
 			# tut_taoist_dispel_fog 是覆盖 tut_jiaoyou_drink 的 override，需要关系 >= know_about
 
 		Phase4Step.OVERRIDE_LOCKED:
-				# 交游→共饮 事件确认 → 关系升级 not_meet→know_about → override 解锁
-				Logging.info("TutorialController: [P4:OVERRIDE_LOCKED] 共饮事件确认，升级道士关系 not_meet→know_about")
+				Logging.info("TutorialController: [P4:OVERRIDE_LOCKED] 共饮确认，关系升级 → 直接进入 Phase 5")
 				RelationFlagManager.upgrade_person_state(TAOIST_NPC_KEY)
 				_p4_step = Phase4Step.OVERRIDE_READY
+				_current_phase = Phase.PHASE_5_DEFER
+				_p5_step = Phase5Step.DEFERRING
+				_defer_started = false
+				Logging.info("TutorialController: [P5] 已进入 Phase 5, _defer_started=false")
 				_show_special_label("道长愿意帮你了！点击「交游」→ 请道长驱散云雾")
 
 		_:
@@ -626,9 +636,11 @@ func _on_phase_4_action() -> void:
 		Logging.info("TutorialController: Phase 4 FREE_ROAM — 行动已执行，等待事件确认或迁移")
 
 	elif _p4_step == Phase4Step.OVERRIDE_LOCKED:
-		# OVERRIDE_LOCKED 阶段的关系升级由 _on_phase_4_event_confirmed 处理
-		# 这里不做任何事 — 防止过早判定 know_about 导致跳过共饮
-		pass
+		if ActionManager.is_deferring("tut_taoist_dispel_fog"):
+			Logging.info("TutorialController: [P4:OVERRIDE_LOCKED] defer 已启动，直接进入 Phase 5")
+			_advance_to_phase_5()
+		else:
+			Logging.info("TutorialController: [P4:OVERRIDE_LOCKED] defer 尚未启动，等待 event_confirmed")
 	elif _p4_step == Phase4Step.OVERRIDE_READY:
 		# P0-4: 玩家点击了 override（驱散云雾）→ 进入 Phase 5
 		Logging.info("TutorialController: OVERRIDE_READY — 玩家点击了 override，进入 Phase 5")
@@ -672,7 +684,7 @@ func _on_phase_5_event_confirmed() -> void:
 
 func _on_phase_6_action() -> void:
 	Logging.info("TutorialController: Phase 6 action_executed — step=%d" % _p6_step)
-
+	breakpoint
 	if _p6_step == Phase6Step.LOOK_UP_READY:
 		# 玩家点了"往上看" → 获取最后 Lv3 意象
 		Logging.info("TutorialController: 往上看 → 获得最后意象")
@@ -686,6 +698,7 @@ func _on_phase_6_action() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _on_phase_6_event_confirmed() -> void:
+	#breakpoint 这里没有问题，正确解锁了向上看。这里的confirmed 实际上说的是lv5的事件
 	Logging.info("TutorialController: Phase 6 event_confirmed — step=%d" % _p6_step)
 	if _p6_step == Phase6Step.DEFER_DONE_EVENT:
 		# tut_defer_done 确认 → 解锁"往上看"
@@ -708,8 +721,9 @@ func _on_phase_7_event_confirmed() -> void:
 			_p7_step = Phase7Step.DRINK_WINE
 			PlayerState.set_flag("tut_unlock_duzhuo", true)
 			PlayerState.set_flag("tut_lock_duzhuo", false)
-			_set_whitelist(["jiao_you", "zhu_liu", "tut_chuyou", "du_zhuo"])
-			_show_special_label("喝点药酒提提神吧！点击「独酌」→「喝药酒」")
+			_set_whitelist(["jiao_you", "zhu_liu", "du_zhuo"])
+			_set_sub_whitelist(["tut_duzhuo_heyaojiu"])
+			_show_special_label("喝点药酒提提神吧！点击「闲居」→「喝药酒」")
 
 		Phase7Step.POEM_REVIEWED:
 			# 道人评诗确认 → 解锁理念
@@ -797,36 +811,29 @@ func _advance_to_phase_5() -> void:
 	Logging.info("TutorialController: ====== PHASE_4_EXPLORE → PHASE_5_DEFER ======")
 	_current_phase = Phase.PHASE_5_DEFER
 	_p5_step = Phase5Step.DEFERRING
-	_defer_started = true
-	_just_entered_phase_5 = true  # 🆕 跳过首次 _on_phase_5_action 中断检测
-	Logging.info("TutorialController: [P5] p5_step=DEFERRING, _just_entered_phase_5=true")
-	# P0-6: SubActionExecutor 会自动调用 ActionManager.start_defer()（检测到 defer_config 时）
-	# 解锁出游 4 方向
-	PlayerState.set_flag("tut_unlock_chuyou_subs", true)
-	PlayerState.set_flag("tut_lock_chuyou_subs", false)
-	# P3-2: defer 期间子白名单清空，出游4方向由 flag 控制
+	_defer_started = false
+	Logging.info("TutorialController: [P5] p5_step=DEFERRING, _defer_started=false（等待 xun_tick 检测 defer）")
 	_set_sub_whitelist([])
-	Logging.info("TutorialController: [P5] 子白名单已清空，出游4方向由 flag 控制")
-	_show_special_label("道长开始做法驱散云雾，需要两旬时间…去周边转转吧！点击「出游」探索四方")
 
 
 func _advance_to_phase_6() -> void:
 	Logging.info("TutorialController: ====== PHASE_5_DEFER → PHASE_6_VISION ======")
 	_current_phase = Phase.PHASE_6_VISION
 	_p6_step = Phase6Step.DEFER_DONE_EVENT
-	Logging.info("TutorialController: [P6] p6_step=DEFER_DONE_EVENT, 推送 tut_defer_done")
+	_set_whitelist(["jiao_you", "zhu_liu", "tut_chuyou"])
+	_set_sub_whitelist(["tut_chuyou_lookup"])
+	Logging.info("TutorialController: [P6] p6_step=DEFER_DONE_EVENT, 白名单=[jiao_you,zhu_liu,tut_chuyou], 子白名单=[tut_chuyou_lookup]")
 	_push_tut_event("tut_defer_done")
-
-	# defer 完成事件确认后 → 解锁"往上看"
 
 
 func _advance_to_phase_7() -> void:
 	Logging.info("TutorialController: ====== PHASE_6_VISION → PHASE_7_POEM ======")
 	_current_phase = Phase.PHASE_7_POEM
 	_p7_step = Phase7Step.POEM_BTN_VISIBLE
-	Logging.info("TutorialController: [P7] p7_step=POEM_BTN_VISIBLE")
+	_set_whitelist(["jiao_you", "zhu_liu"])
+	_set_sub_whitelist([])
+	Logging.info("TutorialController: [P7] p7_step=POEM_BTN_VISIBLE, 白名单=[jiao_you,zhu_liu]")
 	_show_special_label("面对壮丽山河，何不赋诗一首？点击右下角毛笔按钮开始创作")
-	# poem_btn 在 tut_defer_done 的 timeline 中已可见
 
 
 func _advance_to_end() -> void:

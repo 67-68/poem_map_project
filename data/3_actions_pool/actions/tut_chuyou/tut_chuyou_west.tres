@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Action" format=3]
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://bnxycnembc20e"]
 
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_xc4ki"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_w3k5m"]
@@ -10,7 +10,7 @@ script = ExtResource("4_3eals")
 
 [resource]
 script = ExtResource("5_m3yhk")
-_action_tags = Array[int]([])
+required_place = "taishan_upper"
 fallback_event_uuid = "tut_chuyou_fallback"
 failed_result = SubResource("Resource_p2u5r")
 uuid = "tut_chuyou_west"

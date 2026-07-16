@@ -1,10 +1,13 @@
-[gd_resource type="Resource" script_class="Action" format=3]
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://ceqs7u6ve5145"]
 
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_c7uhn"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_5n7vi"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_m3yhk"]
 
 [resource]
 script = ExtResource("5_m3yhk")
-_action_tags = Array[int]([])
+required_place = "taishan_upper"
+fallback_event_uuid = "tut_chuyou_fallback"
 archetype_uuid = "tut_chuyou_lookup_success"
 uuid = "tut_chuyou_lookup"
 name = "出游 · 往上看"

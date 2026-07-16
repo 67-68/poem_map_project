@@ -50,7 +50,7 @@ var mood: float:
 # 常量 / 非持久化字段（保持原样）
 # ════════════════════════════════════════════════════════════════
 
-const start_year := 745.0
+const start_year := 735.0
 const end_year := 755.9
 var time_span := end_year - start_year
 

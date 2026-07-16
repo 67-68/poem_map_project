@@ -70,6 +70,10 @@ func get_left_panel():
 		_left_panel = get_tree().root.get_node("Main/UI/Margin/HBox/LeftPanel")
 
 func _on_month_tick() -> void:
+	if TutorialController.is_tutorial_active():
+		Logging.info('month end settlement: tutorial active, not on month tick')
+		return
+
 	# 月初刷新时清空所有属性颜色覆盖
 	if _left_panel != null:
 		_left_panel.reset_all_prop_colors()
@@ -100,6 +104,9 @@ func _on_month_tick() -> void:
 
 # ── 每旬初清空染色 ────────────────────────────────
 func _on_xun_color_reset() -> void:
+	if TutorialController.is_tutorial_active():
+		Logging.info('month end settlement: tutorial active, not on xun tick')
+		return
 	"""每旬结算开始时清空所有属性颜色覆盖，使染色仅反映当旬变化。"""
 	if _left_panel != null:
 		_left_panel.reset_all_prop_colors()
@@ -115,6 +122,10 @@ func _get_snapshot_value_for_stat(stat_name: String) -> int:
 
 # ── player_stat_changed 回调：属性变化时实时染色 ──
 func _on_stat_changed_for_color(stat_name: String) -> void:
+	if TutorialController.is_tutorial_active():
+		Logging.info('month end settlement: tutorial active, not paint color')
+		return
+
 	if _last_snapshot.is_empty():
 		return  # 首月不染色
 
