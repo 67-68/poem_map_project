@@ -388,6 +388,11 @@ func _hide_all_panels() -> void:
 		left_panel.visible = false
 	if right_panel:
 		right_panel.visible = false
+		# 隐藏右下四个功能按钮（社交、理念、作诗、记事）
+		var hbox = right_panel.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer")
+		if hbox:
+			for btn in hbox.get_children():
+				btn.visible = false
 	# 重置 LeftPanel 内部属性可见性
 	if left_panel and left_panel.has_method("_hide_all_properties_tutorial"):
 		left_panel._hide_all_properties_tutorial()
