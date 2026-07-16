@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("5_m3yhk")
 required_place = "taishan_upper"
-fallback_event_uuid = "tut_chuyou_fallback"
+fallback_event_uuid = "tut_lookup_mountain"
 archetype_uuid = "tut_chuyou_lookup_success"
 uuid = "tut_chuyou_lookup"
 name = "出游 · 往上看"

@@ -734,7 +734,7 @@ func _on_phase_7_event_confirmed() -> void:
 			_p7_step = Phase7Step.DRINK_WINE
 			PlayerState.set_flag("tut_unlock_duzhuo", true)
 			PlayerState.set_flag("tut_lock_duzhuo", false)
-			_set_whitelist(["jiao_you", "zhu_liu", "du_zhuo"])
+			_set_whitelist(["du_zhuo"])
 			_set_sub_whitelist(["tut_duzhuo_heyaojiu"])
 			_show_special_label("喝点药酒提提神吧！点击「闲居」→「喝药酒」")
 
@@ -843,9 +843,9 @@ func _advance_to_phase_7() -> void:
 	Logging.info("TutorialController: ====== PHASE_6_VISION → PHASE_7_POEM ======")
 	_current_phase = Phase.PHASE_7_POEM
 	_p7_step = Phase7Step.POEM_BTN_VISIBLE
-	_set_whitelist(["jiao_you", "zhu_liu"])
+	_set_whitelist([])
 	_set_sub_whitelist([])
-	Logging.info("TutorialController: [P7] p7_step=POEM_BTN_VISIBLE, 白名单=[jiao_you,zhu_liu]")
+	Logging.info("TutorialController: [P7] p7_step=POEM_BTN_VISIBLE, 白名单=[]（全禁，等待兴不足后解锁独酌）")
 	_show_special_label("面对壮丽山河，何不赋诗一首？点击右下角毛笔按钮开始创作")
 
 
@@ -903,7 +903,6 @@ func _show_special_label(text: String) -> void:
 	"""直接设置 RightInfoPanel 上 Control/SpecialLabel 的文本"""
 	Logging.info("TutorialController: SpecialLabel → '%s'" % text)
 	var right_panel := _get_right_panel()
-	right_panel.set_special_label_text("")
 	right_panel.set_special_label_text(text)
 
 

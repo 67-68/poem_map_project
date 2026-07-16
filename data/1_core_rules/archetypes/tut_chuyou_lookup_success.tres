@@ -6,6 +6,6 @@
 script = ExtResource("1_jgsjp")
 uuid = "tut_chuyou_lookup_success"
 name = "tut_chuyou_lookup.success"
-universal_result = "roll_imaginary(level=3)"
+universal_result = "imagery_add(name=great_void)|imagery_add(name=vast_sea)|imagery_add(name=long_river)"
 action_uuid = "tut_chuyou_lookup"
 state = "success"

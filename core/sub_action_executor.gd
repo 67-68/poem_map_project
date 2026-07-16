@@ -70,11 +70,12 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 				_sub_cost_ctx = r.init(_sub_cost_ctx)
 		Logging.info("SubActionExecutor.execute: sub-action '%s' cost archetype init (%d ops), ctx keys=%s" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size(), str(_sub_cost_ctx.keys())])
 	
-	# ── Step 2: sub-action action_results.init() ──
+	# ── Step 2: sub-action action_results.init()（合并 archetype universal_result DSL）──
+	var _sub_merged_results: Array = sub_action.get_all_action_results() if sub_action else []
 	var _sub_act_ctx: Dictionary = {}
-	if sub_action and sub_action.action_results and not sub_action.action_results.is_empty():
+	if not _sub_merged_results.is_empty():
 		_sub_act_ctx["current_action"] = sub_action
-		for r in sub_action.action_results:
+		for r in _sub_merged_results:
 			if r and r.has_method("init"):
 				_sub_act_ctx = r.init(_sub_act_ctx)
 	
@@ -123,10 +124,10 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 	# ── Step 7: 分支 — 成功 / 失败 ──
 	var _action_pushed_to_stack := false  # action_results 是否自主推了栈条目（如 ItemPicker）
 	if _sub_outcome == "success":
-		# ── Step 7a: 执行 sub-action action_results.operate() ──
-		if sub_action and sub_action.action_results and not sub_action.action_results.is_empty():
-			Logging.info("SubActionExecutor.execute: 执行 sub-action action_results.operate() (%d ops) for '%s'" % [sub_action.action_results.size(), sub_action.name])
-			for r in sub_action.action_results:
+		# ── Step 7a: 执行 sub-action merged results（archetype universal_result + 原生 action_results）.operate() ──
+		if not _sub_merged_results.is_empty():
+			Logging.info("SubActionExecutor.execute: 执行 sub-action merged results.operate() (%d ops, 含 archetype) for '%s'" % [_sub_merged_results.size(), sub_action.name])
+			for r in _sub_merged_results:
 				if r:
 					# 🐛 修复：检测会自主推栈的 operator（PoemTypeChooseOperator 等）
 					# 此类 operator 的 operate() 会自行 push_item_picker 到栈，
