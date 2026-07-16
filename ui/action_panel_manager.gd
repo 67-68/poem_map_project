@@ -111,6 +111,10 @@ func _rebuild_all_buttons(_era: String = "") -> void:
 				if not action:
 					Logging.warn("ActionPanelManager: Database 中未找到 action_id='%s' (name='%s')，跳过" % [action_id, name])
 					continue
+				# 🆕 Tutorial 白名单过滤（优先级最高）
+				if not ActionManager.is_action_tutorial_allowed(action_id):
+					Logging.info("ActionPanelManager: action '%s' (id='%s') 不在 tutorial 白名单中，跳过" % [name, action_id])
+					continue
 				# Era 过滤
 				if not ActionManager.is_action_era_allowed(action):
 					Logging.info("ActionPanelManager: action '%s' (id='%s') 被 Era 过滤，跳过" % [name, action_id])
@@ -168,9 +172,15 @@ func _on_xun_tick() -> void:
 	_rebuild_all_buttons()
 
 ## 事件链 / Focus 结束回调：保留抽取结果，仅刷新锁定态
+## 🆕 Tutorial 白名单模式下强制重建（否则白名单变化不生效）
 func _on_refresh_panel() -> void:
-	Logging.info("ActionPanelManager: 刷新面板（不重抽）")
-	_on_refresh_locks_only()
+	var whitelist := ActionManager.get_tutorial_whitelist()
+	if not whitelist.is_empty():
+		Logging.info("ActionPanelManager: 白名单非空（%s），触发完全重建" % str(whitelist))
+		_rebuild_all_buttons()
+	else:
+		Logging.info("ActionPanelManager: 刷新面板（不重抽）")
+		_on_refresh_locks_only()
 
 ## 增量更新锁定状态（属性变动后由 ActionManager.reevaluate_all_locks 发射信号触发）
 ## 使用 _panel_lock_cache 做差分更新，避免无意义的 HoverPopup 注册/注销风暴

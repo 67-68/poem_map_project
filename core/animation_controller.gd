@@ -208,6 +208,10 @@ func _execute_stage(stage: Dictionary, entry_id: String, uuid: String) -> void:
 			_show_special_label(stage)
 		"show_panel":
 			_show_panel_target(stage)
+		"refresh_time_panel":
+			_refresh_time_panel()
+		"set_special_label_visible":
+			_set_special_label_visible(stage)
 		_:
 			Logging.err("AnimationController._execute_stage: 未知 action='%s'" % action)
 
@@ -900,3 +904,36 @@ func _set_hover_enabled(stage: Dictionary) -> void:
 	var enabled: bool = stage.get("enabled", true)
 	HoverPopupManager.set_hover_enabled(enabled)
 	Logging.info("AnimationController._set_hover_enabled: enabled=%s" % enabled)
+
+
+# ═══════════════════════════════════════════════
+# refresh_time_panel — 强制刷新右侧时间面板显示
+# ═══════════════════════════════════════════════
+
+func _refresh_time_panel() -> void:
+	var right_panel := _get_right_panel()
+	if not right_panel:
+		Logging.err("AnimationController._refresh_time_panel: 未找到 right_panel")
+		return
+	if right_panel.has_method("refresh_time_panel"):
+		right_panel.refresh_time_panel()
+		Logging.info("AnimationController._refresh_time_panel: 时间面板已刷新")
+	else:
+		Logging.warn("AnimationController._refresh_time_panel: right_panel 没有 refresh_time_panel 方法")
+
+
+# ═══════════════════════════════════════════════
+# set_special_label_visible — 控制 SpecialLabel 可见性
+# ═══════════════════════════════════════════════
+
+func _set_special_label_visible(stage: Dictionary) -> void:
+	var right_panel := _get_right_panel()
+	if not right_panel:
+		Logging.err("AnimationController._set_special_label_visible: 未找到 right_panel")
+		return
+	if right_panel.has_method("set_special_label_visible"):
+		var visible: bool = stage.get("visible", true)
+		right_panel.set_special_label_visible(visible)
+		Logging.info("AnimationController._set_special_label_visible: visible=%s" % visible)
+	else:
+		Logging.warn("AnimationController._set_special_label_visible: right_panel 没有 set_special_label_visible 方法")

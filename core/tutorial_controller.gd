@@ -2,24 +2,24 @@ extends Node
 ## TutorialController — 青年杜甫泰山引导流程线性状态机
 ##
 ## 通过物理可见性（按钮/属性的隐藏/显示）引导玩家逐步学习 UI。
-## Phase 1-3: event_confirmed 驱动（叙事阶段）
+## Phase 1-2: event_confirmed 驱动（叙事阶段）
 ## Phase 4-7: 行动系统 + 多信号驱动（探索阶段）
 ##
 ## 信号矩阵:
-##   event_confirmed              → Phase 1→2, 2内部3步, 3→4
+##   event_confirmed              → Phase 1→2, 2内部, 2→4
 ##   stay_place_changed           → Phase 4 迁移检测
 ##   request_refresh_action_panel → Phase 4-5 行动执行检测
 ##   on_xun_tick                  → Phase 5 defer 倒计时
 ##   poems_created                → Phase 7 创作检测
 ##
+## 行动可见性由 ActionManager.tutorial_whitelist 白名单控制（非 block/unblock）。
 ## 作为 Autoload 注册，自动检测 tutorial_completed 标志。
 ## 非 tutorial 模式下静默跳过，不影响正常游戏。
 
 enum Phase {
 	INIT,
 	PHASE_1_MEET,       # 道士出场 + 鸟语花香音效
-	PHASE_2_DIALOGUE,   # 对话 + 面板滑入 + 属性揭示
-	PHASE_3_TRAIT,      # trait 展示 + health +50
+	PHASE_2_DIALOGUE,   # 对话 + 面板滑入 + 属性揭示（含 trait+health+50）
 	PHASE_4_EXPLORE,    # 自由探索（行动驱动）
 	PHASE_5_DEFER,      # override + defer 驱散云雾
 	PHASE_6_VISION,     # 往上看 + 最后 Lv3 意象
@@ -31,14 +31,12 @@ enum Phase {
 enum Phase4Step {
 	VAST_WORLD,           # tut_vast_world 展示中
 	FREE_ROAM,            # 仅交游+驻留可见，道士 not_meet
-	TAOIST_NO_RESPONSE,   # 交游→fallback 无回应
 	MOVED_AWAY,           # 驻留迁移完成 → tut_move_away 展示中
 	FOG_FOUND,            # tut_move_away 确认 → 出游(查看)解锁
 	CHUYOU_VIEWED,        # 出游查看雾 → 提示回找道士
 	BACK_AT_TAOIST,       # tut_return_taoist 展示中
-	OVERRIDE_LOCKED,      # override 可见但锁定（not_meet < know_about）
-	DRINKING,             # 交游喝酒中
-	OVERRIDE_READY,       # 关系升级 → override 解锁
+	OVERRIDE_LOCKED,      # override 可见但锁定（关系不够）
+	OVERRIDE_READY,       # 共饮后关系升级 → override 解锁
 }
 
 # ── Phase 5 子阶段 ──
@@ -64,7 +62,7 @@ enum Phase7Step {
 	POEM_CREATED,         # 诗词创作完成
 	POEM_REVIEWED,        # tut_poem_review 展示中
 	IDEA_UNLOCKED,        # 理念解锁
-	FINAL_REVEAL_DONE,    # 🆕 tut_final_reveal 已确认 → END
+	FINAL_REVEAL_DONE,    # tut_final_reveal 已确认 → END
 }
 
 var _current_phase: Phase = Phase.INIT
@@ -75,13 +73,12 @@ var _p5_step: Phase5Step = Phase5Step.OVERRIDE_CLICKED
 var _p6_step: Phase6Step = Phase6Step.DEFER_DONE_EVENT
 var _p7_step: Phase7Step = Phase7Step.POEM_BTN_VISIBLE
 
-# ── Phase 2 对话子阶段 ──
+# ── Phase 2 对话子阶段（4步：tut_dialogue_3已删除, tut_dialogue_4合并了trait_demo）──
 var _dialogue_step: int = 0
 const DIALOGUE_EVENTS: Array[String] = [
 	"tut_dialogue_1",
 	"tut_dialogue_time",
 	"tut_dialogue_2",
-	"tut_dialogue_3",
 	"tut_dialogue_4",
 ]
 
@@ -94,11 +91,6 @@ var _defer_completed: bool = false
 
 # ── 道士 NPCDocument key ──
 const TAOIST_NPC_KEY := "tut_taoist"
-
-# ── Tutorial 行动白名单（按 phase 决定哪些行动可见）──
-# 这些 flag 由 ActionPanelManager / ActionManager 读取来控制按钮可见性
-const TUT_LOCK_PREFIX := "tut_lock_"
-const TUT_UNLOCK_PREFIX := "tut_unlock_"
 
 
 func _ready() -> void:
@@ -151,6 +143,7 @@ func _show_tutorial_prompt() -> void:
 	dialog.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN
 	dialog.close_requested.connect(_on_tutorial_dialog_closed.bind(dialog))
 
+
 	dialog.add_button("开始引导", true, "start_tutorial")
 	dialog.add_button("跳过", false, "skip_tutorial")
 
@@ -184,9 +177,11 @@ func _on_tutorial_custom_action(action: String, dialog: AcceptDialog) -> void:
 
 
 func _skip_tutorial() -> void:
+
 	Logging.info("TutorialController: 跳过新手教程")
 	PlayerState.set_flag("tutorial_completed", true)
-	_unblock_all_actions()
+	ActionManager.clear_tutorial_whitelist()
+	ActionManager.clear_tutorial_sub_whitelist()
 	_ensure_all_ui_visible()
 	_clear_all_tut_flags()
 
@@ -211,9 +206,8 @@ func _begin_tutorial() -> void:
 	HoverPopupManager.set_hover_enabled(false)
 	Logging.info("TutorialController: hover 已禁用")
 
-	# 阻塞所有默认 SceneAction（tutorial 期间仅显示白名单行动）
-	_block_all_default_actions()
-	# tut_chuyou 也在白名单外，初始被阻塞
+	# 🆕 用白名单控制行动面板：叙事阶段隐藏所有按钮
+	_set_whitelist([])
 
 	# 连接信号
 	_connect_tutorial_signals()
@@ -223,6 +217,13 @@ func _begin_tutorial() -> void:
 
 	# 隐藏所有 UI 面板
 	_hide_all_panels()
+
+	# 初始地点设为泰山脚下，而非继承存档的西市
+	PlayerState.stay_place = "taishan_base"
+	Logging.info("TutorialController: stay_place 已设为 taishan_base（泰山脚下）")
+
+	PlayerState.set_stat_val("_time", 2)
+	Logging.info("TutorialController: _time 强制设为 2（days_per_xun=2）")
 
 	# 设置道士初始状态：know_about（相遇时即认识）
 	_set_taoist_initial_state()
@@ -259,6 +260,10 @@ func _connect_tutorial_signals() -> void:
 		PlayerState.stay_place_changed.connect(_on_stay_place_changed)
 		Logging.info("TutorialController: 已连接 PlayerState.stay_place_changed")
 
+	if not EventBus.poem_start_clicked.is_connected(_on_poem_start_clicked):
+		EventBus.poem_start_clicked.connect(_on_poem_start_clicked)
+		Logging.info("TutorialController: 已连接 EventBus.poem_start_clicked")
+
 	_signals_connected = true
 
 
@@ -275,53 +280,35 @@ func _disconnect_tutorial_signals() -> void:
 		EventBus.poems_created.disconnect(_on_poem_created)
 	if PlayerState.stay_place_changed.is_connected(_on_stay_place_changed):
 		PlayerState.stay_place_changed.disconnect(_on_stay_place_changed)
+	if EventBus.poem_start_clicked.is_connected(_on_poem_start_clicked):
+		EventBus.poem_start_clicked.disconnect(_on_poem_start_clicked)
 	_signals_connected = false
 	Logging.info("TutorialController: 所有信号已断开")
 
 
 # ═══════════════════════════════════════════════════════════
-# 行动可见性管理
+# 行动可见性管理（白名单机制 — 不依赖 block/unblock）
 # ═══════════════════════════════════════════════════════════
 
-func _block_all_default_actions() -> void:
-	"""阻塞所有默认行动，由 TutorialController 按阶段逐步解锁"""
-	# 使用 ActionManager 的 block_action 阻塞所有 SceneAction
-	var all_actions := Database.get_actions_all()
-	for action_id in all_actions:
-		var action = Database.get_action(action_id)
-		if not action:
-			continue
-		# 仅阻塞 SceneAction（主行动），子行动不受影响
-		if action is SceneAction:
-			ActionManager.block_action_by_id(action_id, -1)
-			Logging.info("TutorialController: 阻塞行动 '%s'" % action_id)
+## 设置 tutorial 模式下可见的 action_id 白名单，并请求面板刷新。
+## 空数组 = 隐藏所有主行动按钮。
+func _set_whitelist(action_ids: Array[String]) -> void:
+	Logging.info("TutorialController: 白名单 → %s" % str(action_ids))
+	ActionManager.set_tutorial_visible_actions(action_ids)
+	EventBus.request_refresh_action_panel.emit()
+	Logging.info("TutorialController: 已请求刷新行动面板")
 
-	Logging.info("TutorialController: 所有默认行动已阻塞")
-
-
-func _unblock_action(action_id: String) -> void:
-	"""解锁特定行动"""
-	ActionManager.unblock_action_by_id(action_id)
-	Logging.info("TutorialController: 解锁行动 '%s'" % action_id)
-
-
-func _unblock_all_actions() -> void:
-	"""解锁所有 SceneAction"""
-	var all_actions := Database.get_actions_all()
-	for action_id in all_actions:
-		var action = Database.get_action(action_id)
-		if not action:
-			continue
-		if action is SceneAction:
-			ActionManager.unblock_action_by_id(action_id)
-	Logging.info("TutorialController: 所有行动已解锁")
+## 设置子行动白名单（控制 Picker 中哪些子行动可见）
+func _set_sub_whitelist(sub_action_ids: Array[String]) -> void:
+	Logging.info("TutorialController: 子白名单 → %s" % str(sub_action_ids))
+	ActionManager.set_tutorial_visible_sub_actions(sub_action_ids)
+	EventBus.request_refresh_action_panel.emit()
 
 
 func _clear_all_tut_flags() -> void:
 	"""清除所有 tutorial 相关的 flag"""
 	var tut_flags := [
-		"tut_lock_baiye", "tut_lock_denggao", "tut_lock_fangshi",
-		"tut_lock_duzhuo", "tut_lock_chuyou_subs",
+		"tut_lock_chuyou_subs",
 		"tut_unlock_chuyou_subs", "tut_unlock_duzhuo",
 		"tut_phase_started", "tut_fog_found",
 	]
@@ -357,7 +344,8 @@ func _set_taoist_available() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func is_tutorial_active() -> bool:
-	return not PlayerState.has_flag("tutorial_completed") and _current_phase != Phase.END
+	var active = not PlayerState.has_flag("tutorial_completed")
+	return active
 
 
 func get_current_phase() -> Phase:
@@ -406,7 +394,6 @@ func _ensure_all_ui_visible() -> void:
 				lp.visible = true
 			if rp:
 				rp.visible = true
-				# 🆕 恢复 right_panel 内部被 _hide_for_tutorial 隐藏的元素
 				if rp.has_method("set_time_panel_visible"):
 					rp.set_time_panel_visible(true)
 				if rp.has_method("set_rumors_section_visible"):
@@ -415,6 +402,8 @@ func _ensure_all_ui_visible() -> void:
 					rp.set_decisions_section_visible(true)
 				if rp.has_method("set_bottom_btn_bar_visible"):
 					rp.set_bottom_btn_bar_visible(true)
+				if rp.has_method("set_special_label_visible"):
+					rp.set_special_label_visible(true)
 	Logging.info("TutorialController: 非 tutorial 模式，UI 默认全部可见")
 
 
@@ -449,11 +438,14 @@ func _on_event_confirmed() -> void:
 		Phase.PHASE_2_DIALOGUE:
 			_advance_dialogue()
 
-		Phase.PHASE_3_TRAIT:
-			_advance_to_phase_4()
-
 		Phase.PHASE_4_EXPLORE:
 			_on_phase_4_event_confirmed()
+
+		Phase.PHASE_5_DEFER:
+			_on_phase_5_event_confirmed()
+
+		Phase.PHASE_6_VISION:
+			_on_phase_6_event_confirmed()
 
 		Phase.PHASE_7_POEM:
 			_on_phase_7_event_confirmed()
@@ -473,9 +465,8 @@ func _on_xun_tick() -> void:
 			# defer 已结束（被完成或被中断）
 			_defer_started = false
 			_defer_completed = true
-			Logging.info("TutorialController: defer 已完成！→ 推送 tut_defer_done")
-			_p5_step = Phase5Step.DEFER_DONE
-			_push_tut_event("tut_defer_done")
+			Logging.info("TutorialController: defer 已完成！→ 进入 Phase 6")
+			_advance_to_phase_6()
 		return
 
 	Logging.info("TutorialController: xun_tick — phase=%d，无 defer 相关处理" % _current_phase)
@@ -547,17 +538,17 @@ func _on_phase_4_event_confirmed() -> void:
 			# 道士进入打坐状态
 			_set_taoist_meditating()
 			# 仅显示交游 + 驻留
-			_unblock_action("jiao_you")
-			_unblock_action("zhu_liu")
-			Logging.info("TutorialController: FREE_ROAM — 交游+驻留已解锁")
-			# 系统提示
+			_set_whitelist(["jiao_you", "zhu_liu"])
+			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
+			Logging.info("TutorialController: FREE_ROAM — 交游+驻留已解锁, 子行动: tut_jiaoyou_talk, 驻留2地点")
 			_show_special_label("道长正在打坐…先在附近转转吧。点击右侧「交游」或「驻留」按钮开始探索")
 
-		Phase4Step.FOG_FOUND:
+		Phase4Step.MOVED_AWAY, Phase4Step.FOG_FOUND:
 			# tut_move_away 确认 → 解锁出游（仅查看）
 			Logging.info("TutorialController: 雾事件确认 → 解锁出游按钮（查看模式）")
 			_p4_step = Phase4Step.CHUYOU_VIEWED
-			_unblock_action("tut_chuyou")
+			_set_whitelist(["jiao_you", "zhu_liu", "tut_chuyou"])
+			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper", "tut_chuyou_east", "tut_chuyou_west", "tut_chuyou_south", "tut_chuyou_north"])
 			Logging.info("TutorialController: FOG_FOUND — 出游已解锁")
 			_show_special_label("山雾弥漫，看不清山顶…或许道长知道些什么？点击「出游」查看")
 
@@ -573,13 +564,13 @@ func _on_phase_4_event_confirmed() -> void:
 			Logging.info("TutorialController: 回找道士确认 → override 锁定态")
 			_p4_step = Phase4Step.OVERRIDE_LOCKED
 			_show_special_label("与道长关系还不够密切…试试请他喝酒？点击「交游」→「共饮」")
-			# 注意：override button 的锁定由 OverrideActionButton/NpcActionLockChecker 自动处理
-			# 因为道士 person_state=know_about，但 tut_jiaoyou_drink 在 normal_actions 中，
-			# 需要 know_about 才能用的 action 对 know_about 是解锁的
+			_set_sub_whitelist(["tut_jiaoyou_drink", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
+			# tut_jiaoyou_drink 是 jiao_you 的普通子行动，不依赖 NPC 关系即可显示
+			# tut_taoist_dispel_fog 是覆盖 tut_jiaoyou_drink 的 override，需要关系 >= know_about
 
 		Phase4Step.OVERRIDE_LOCKED:
 				# 交游→共饮 事件确认 → 关系升级 → override 解锁
-				Logging.info("TutorialController: OVRIDE_LOCKED — 共饮事件确认，升级道士关系")
+				Logging.info("TutorialController: OVERRIDE_LOCKED — 共饮事件确认，升级道士关系")
 				RelationFlagManager.upgrade_person_state(TAOIST_NPC_KEY)
 				_p4_step = Phase4Step.OVERRIDE_READY
 				_show_special_label("道长愿意帮你了！点击「交游」→ 请道长驱散云雾")
@@ -624,6 +615,7 @@ func _on_phase_5_action() -> void:
 		PlayerState.set_flag("tut_lock_chuyou_subs", false)
 		PlayerState.set_flag("tut_unlock_chuyou_subs", true)
 		_show_special_label("道长开始做法驱散云雾，需要两旬时间…去周边转转吧！点击「出游」探索四方")
+		_set_sub_whitelist([])
 
 	elif _p5_step == Phase5Step.DEFERRING:
 		# defer 进行中，玩家执行了出游等操作
@@ -644,6 +636,14 @@ func _on_phase_5_action() -> void:
 
 
 # ═══════════════════════════════════════════════════════════
+# Phase 5 event_confirmed
+# ═══════════════════════════════════════════════════════════
+
+func _on_phase_5_event_confirmed() -> void:
+	Logging.info("TutorialController: Phase 5 event_confirmed — step=%d" % _p5_step)
+
+
+# ═══════════════════════════════════════════════════════════
 # Phase 6 信号处理（泰山显现）
 # ═══════════════════════════════════════════════════════════
 
@@ -655,6 +655,20 @@ func _on_phase_6_action() -> void:
 		Logging.info("TutorialController: 往上看 → 获得最后意象")
 		_p6_step = Phase6Step.FINAL_IMAGINARY
 		_show_special_label("泰山之巅尽收眼底！点击右下角蓝色印章，将感悟化为诗句")
+		_advance_to_phase_7()
+
+
+# ═══════════════════════════════════════════════════════════
+# Phase 6 event_confirmed
+# ═══════════════════════════════════════════════════════════
+
+func _on_phase_6_event_confirmed() -> void:
+	Logging.info("TutorialController: Phase 6 event_confirmed — step=%d" % _p6_step)
+	if _p6_step == Phase6Step.DEFER_DONE_EVENT:
+		# tut_defer_done 确认 → 解锁"往上看"
+		Logging.info("TutorialController: tut_defer_done 确认 → 「往上看」可用")
+		_p6_step = Phase6Step.LOOK_UP_READY
+		_show_special_label("云雾已散！点击「出游」→ 往山顶看看")
 
 
 # ═══════════════════════════════════════════════════════════
@@ -671,7 +685,7 @@ func _on_phase_7_event_confirmed() -> void:
 			_p7_step = Phase7Step.DRINK_WINE
 			PlayerState.set_flag("tut_unlock_duzhuo", true)
 			PlayerState.set_flag("tut_lock_duzhuo", false)
-			_unblock_action("du_zhuo")
+			_set_whitelist(["jiao_you", "zhu_liu", "tut_chuyou", "du_zhuo"])
 			_show_special_label("喝点药酒提提神吧！点击「独酌」→「喝药酒」")
 
 		Phase7Step.POEM_REVIEWED:
@@ -693,6 +707,21 @@ func _on_phase_7_event_confirmed() -> void:
 
 		_:
 			Logging.warn("TutorialController: Phase 7 未处理的 event_confirmed step=%d" % _p7_step)
+
+
+func _on_poem_start_clicked() -> void:
+	if not is_tutorial_active():
+		return
+	if _current_phase != Phase.PHASE_7_POEM:
+		return
+	if _p7_step != Phase7Step.POEM_BTN_VISIBLE:
+		return
+	var inspiration = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
+	Logging.info("TutorialController: poem_start_clicked — 兴=%d" % inspiration)
+	if inspiration <= 0:
+		Logging.info("TutorialController: 兴=0 → 推送 tut_no_inspiration")
+		_p7_step = Phase7Step.NO_INSPIRATION
+		_push_tut_event("tut_no_inspiration")
 
 
 func _on_phase_7_action() -> void:
@@ -726,16 +755,12 @@ func _advance_dialogue() -> void:
 		Logging.info("TutorialController: PHASE_2 step %d/%d" % [_dialogue_step + 1, DIALOGUE_EVENTS.size()])
 		_push_tut_event(DIALOGUE_EVENTS[_dialogue_step])
 	else:
-		Logging.info("TutorialController: PHASE_2_DIALOGUE → PHASE_3_TRAIT")
-		_current_phase = Phase.PHASE_3_TRAIT
-		_push_tut_event("tut_trait_demo")
-
-
-func _advance_to_phase_4() -> void:
-	Logging.info("TutorialController: PHASE_3_TRAIT → PHASE_4_EXPLORE")
-	_current_phase = Phase.PHASE_4_EXPLORE
-	_p4_step = Phase4Step.VAST_WORLD
-	_push_tut_event("tut_vast_world")
+		# tut_dialogue_4 已合并 trait_add(strong_body) + prop_add(health+50)
+		# 直接进入 PHASE_4_EXPLORE，跳过 PHASE_3_TRAIT
+		Logging.info("TutorialController: PHASE_2_DIALOGUE → PHASE_4_EXPLORE（已跳过 PHASE_3_TRAIT）")
+		_current_phase = Phase.PHASE_4_EXPLORE
+		_p4_step = Phase4Step.VAST_WORLD
+		_push_tut_event("tut_vast_world")
 
 
 func _advance_to_phase_5() -> void:
@@ -753,16 +778,6 @@ func _advance_to_phase_6() -> void:
 	_push_tut_event("tut_defer_done")
 
 	# defer 完成事件确认后 → 解锁"往上看"
-	# 这里直接设置 LOOK_UP_READY，因为 tut_defer_done 的 event_confirmed 
-	# 不经过 _on_event_confirmed（当前是 PHASE_6_VISION 但尚未有事件确认处理）
-	# 所以 deferred:
-	call_deferred("_setup_phase_6_look_up")
-
-
-func _setup_phase_6_look_up() -> void:
-	Logging.info("TutorialController: Phase 6 → 设置「往上看」可用")
-	_p6_step = Phase6Step.LOOK_UP_READY
-	_show_special_label("云雾已散！点击「出游」→ 往山顶看看")
 
 
 func _advance_to_phase_7() -> void:
@@ -777,7 +792,8 @@ func _advance_to_end() -> void:
 	Logging.info("TutorialController: PHASE_7_POEM → END")
 	_current_phase = Phase.END
 	_disconnect_tutorial_signals()
-	_unblock_all_actions()
+	ActionManager.clear_tutorial_whitelist()
+	ActionManager.clear_tutorial_sub_whitelist()
 	_clear_all_tut_flags()
 	PlayerState.set_flag("tutorial_completed", true)
 	TimeService.reset_days_per_xun()
@@ -846,10 +862,11 @@ func _inject_timeline_scripts() -> void:
 			{ "delay": 0.0, "action": "set_left_section_visible", "target": "identity", "visible": true },
 		],
 
-		# PHASE_2 Step 2: 🆕 道士问时间 → 展示时间面板
+		# PHASE_2 Step 2: 道士问时间 → 展示时间面板（含刷新）
 		"tut_dialogue_time": [
 			{ "delay": 0.0, "action": "show_panel", "target": "right_panel" },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "time_panel", "visible": true },
+			{ "delay": 0.1, "action": "refresh_time_panel", "target": "right_panel" },
 		],
 
 		# PHASE_2 Step 3: 谈身板 → 展示健康+钱财（满值）
@@ -858,15 +875,8 @@ func _inject_timeline_scripts() -> void:
 			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "money", "visible": true },
 		],
 
-		# PHASE_2 Step 4: 谈政略 → 展示政略主权区（兴/势/望）
-		"tut_dialogue_3": [
-			{ "delay": 0.0, "action": "set_left_section_visible", "target": "ambition_section", "visible": true },
-			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "inspiration", "visible": true },
-			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "momentum", "visible": true },
-			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "prestige", "visible": true },
-		],
-
-		# PHASE_2 Step 5: 🆕 建议强身 → 展示 TraitGrid + 启用 hover
+		# PHASE_2 Step 4: 强身之道+身强体壮（合并）→ 展示 TraitGrid + 启用 hover
+		# trait_add(strong_body) + prop_add(health+50) 在 tut_dialogue_4.tres 的 choice_result 中执行
 		"tut_dialogue_4": [
 			{ "delay": 0.0, "action": "set_trait_grid_visible", "target": "left_panel", "visible": true },
 			{ "delay": 0.0, "action": "set_hover_enabled", "target": "", "enabled": true },
@@ -888,12 +898,13 @@ func _inject_timeline_scripts() -> void:
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "idea_btn", "visible": true },
 		],
 
-		# 🆕 最后揭示：风闻 + 决议 + 底层修饰 + 底部按钮栏
+		# 🆕 最后揭示：风闻 + 决议 + 底层修饰 + 底部按钮栏 + SpecialLabel
 		"tut_final_reveal": [
 			{ "delay": 0.0, "action": "set_left_section_visible", "target": "bottom_decoration", "visible": true },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "rumors_section", "visible": true },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "decisions_section", "visible": true },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "bottom_btn_bar", "visible": true },
+			{ "delay": 0.0, "action": "set_special_label_visible", "target": "right_panel", "visible": true },
 		],
 	}
 

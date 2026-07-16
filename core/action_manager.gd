@@ -25,6 +25,9 @@ var _locked_in_actions: Dictionary = {}
 ## 持久化阻塞（多旬生效），key=action_id, val=剩余旬数（-1=无限）
 var _blocked_actions: Dictionary = {}
 
+## 🆕 Tutorial 行动白名单：空数组 = 不过滤（正常模式），非空 = 只显示白名单内的 action_id
+var _tutorial_whitelist: Array[String] = []
+
 ## 🆕 本轮已抽中的 action ID 集合（key=action_id, val=true）。
 ## 属性变动重评估时，已中签的 action 保留此标记，未中签的永远灰化。
 var _selected_action_ids: Dictionary = {}
@@ -626,6 +629,55 @@ func is_action_locked(action_type: ENUMS.ACTION_TYPE) -> bool:
 func is_action_blocked(action_type: ENUMS.ACTION_TYPE) -> bool:
 	var action_id := action_type_to_id(action_type)
 	return _blocked_actions.has(action_id)
+
+
+# ════════════════════════════════════════════════════════════
+# 🆕 Tutorial 行动白名单（手动控制可见行动列表）
+# ════════════════════════════════════════════════════════════
+
+## 设置 tutorial 模式下可见的 action_id 白名单。
+## 空数组 = 正常模式（不过滤），非空 = 只显示列表内的 action。
+func set_tutorial_visible_actions(action_ids: Array[String]) -> void:
+	_tutorial_whitelist = action_ids.duplicate()
+	Logging.info("[ActionManager] set_tutorial_visible_actions: %s" % str(_tutorial_whitelist))
+
+## 清空白名单，恢复所有 action 可见。
+func clear_tutorial_whitelist() -> void:
+	_tutorial_whitelist.clear()
+	Logging.info("[ActionManager] clear_tutorial_whitelist: 白名单已清空，恢复所有行动可见")
+
+## 获取当前白名单快照（供 ActionPanelManager 查询）。
+func get_tutorial_whitelist() -> Array[String]:
+	return _tutorial_whitelist.duplicate()
+
+# ════════════════════════════════════════════════════════════
+# 🆕 Tutorial 子行动白名单
+# ════════════════════════════════════════════════════════════
+
+var _tutorial_sub_whitelist: Array[String] = []
+
+func set_tutorial_visible_sub_actions(action_ids: Array[String]) -> void:
+	_tutorial_sub_whitelist = action_ids.duplicate()
+	Logging.info("[ActionManager] set_tutorial_visible_sub_actions: %s" % str(_tutorial_sub_whitelist))
+
+func clear_tutorial_sub_whitelist() -> void:
+	_tutorial_sub_whitelist.clear()
+	Logging.info("[ActionManager] clear_tutorial_sub_whitelist: 已清空")
+
+func is_sub_action_tutorial_allowed(sub_action_id: String) -> bool:
+	if _tutorial_sub_whitelist.is_empty():
+		return true
+	return _tutorial_sub_whitelist.has(sub_action_id)
+
+## 检查指定 action_id 是否在白名单中。
+## 白名单为空（正常模式）时始终返回 true。
+func is_action_tutorial_allowed(action_id: String) -> bool:
+	if _tutorial_whitelist.is_empty():
+		return true
+	var allowed := _tutorial_whitelist.has(action_id)
+	if not allowed:
+		Logging.info("[ActionManager] is_action_tutorial_allowed: '%s' 不在 tutorial 白名单中，跳过" % action_id)
+	return allowed
 
 
 # ════════════════════════════════════════════════════════════

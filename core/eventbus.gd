@@ -118,6 +118,9 @@ signal on_flag_change()
 ## new_state: 新状态值
 signal on_person_state_changed(target_tag: String, new_state: String)
 signal lianju_score_calculated(score: int)
+## 笔记触发信号（由 NoteManager 发射）
+## note_uuid: 被触发的 Note 的 uuid
+signal note_triggered(note_uuid: String)
 
 # ── 图像特效信号 ──────────────────────────────────────────
 ## 请求播放图片粉碎解体特效 (由 ImageEffectManager 监听)

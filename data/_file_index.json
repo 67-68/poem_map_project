@@ -202,7 +202,10 @@
     "4_eras/735_youth/events/tut_dialogue_1.tres",
     "4_eras/735_youth/events/tut_dialogue_2.tres",
     "4_eras/735_youth/events/tut_dialogue_3.tres",
+    "4_eras/735_youth/events/tut_dialogue_4.tres",
+    "4_eras/735_youth/events/tut_dialogue_time.tres",
     "4_eras/735_youth/events/tut_drink_together.tres",
+    "4_eras/735_youth/events/tut_final_reveal.tres",
     "4_eras/735_youth/events/tut_goodbye.tres",
     "4_eras/735_youth/events/tut_idea_hint.tres",
     "4_eras/735_youth/events/tut_idea_unlock.tres",
@@ -355,6 +358,7 @@
     "1_core_rules/traits/reserve_baiye.tres",
     "1_core_rules/traits/severe_injury.tres",
     "1_core_rules/traits/sprained_ankle.tres",
+    "1_core_rules/traits/strong_body.tres",
     "1_core_rules/traits/terminal_illness.tres",
     "1_core_rules/traits/test_coder_debug.tres",
     "1_core_rules/archetypes/baiye_mass_distribution_cost.tres",
@@ -422,6 +426,8 @@
     "1_core_rules/ambitions/ambition_loushi.tres",
     "1_core_rules/ambitions/default_ambition.tres",
     "1_core_rules/ambitions/dufu_ambition.tres",
+    "1_core_rules/notes/note_fangshi_chuyou.tres",
+    "1_core_rules/notes/note_fangshi_chuyou_health.tres",
     "1_core_rules/properties/astuteness.tres",
     "1_core_rules/properties/composure.tres",
     "1_core_rules/properties/health.tres",
@@ -549,6 +555,7 @@
     "3_actions_pool/actions/du_zhuo/duzhuo_fangjian_tingwen.tres",
     "3_actions_pool/actions/du_zhuo/duzhuo_heyaojiu.tres",
     "3_actions_pool/actions/du_zhuo/duzhuo_xiaozhuo.tres",
+    "3_actions_pool/actions/du_zhuo/tut_duzhuo_heyaojiu.tres",
     "3_actions_pool/actions/deng_gao/denggao_leyouyuan.tres",
     "3_actions_pool/actions/deng_gao/denggao_qujiangchi.tres",
     "3_actions_pool/actions/deng_gao/denggao_shaolingyuan.tres",
@@ -563,6 +570,7 @@
     "3_actions_pool/actions/jiao_you/jiaoyou_tavern_gacha.tres",
     "3_actions_pool/actions/jiao_you/jiaoyou_tongyou_changan.tres",
     "3_actions_pool/actions/jiao_you/tut_jiaoyou_drink.tres",
+    "3_actions_pool/actions/jiao_you/tut_taoist_dispel_fog.tres",
     "3_actions_pool/actions/jiao_you/zhengqian_poem_exchange.tres",
     "3_actions_pool/actions/bai_ye/baiye_mass_distribution.tres",
     "3_actions_pool/actions/bai_ye/baiye_normal.tres",
@@ -642,6 +650,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-15T09:27:49.735759+00:00",
-  "total": 641
+  "generated_at": "2026-07-16T03:35:04.711967+00:00",
+  "total": 649
 }

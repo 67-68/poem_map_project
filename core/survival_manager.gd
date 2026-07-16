@@ -65,9 +65,10 @@ func _get_decay_threshold(prop_enum) -> int:
 
 func _cost_survival():
 	# 🆕 Tutorial 期间跳过每旬扣钱，仅刷新 AP
+	#breakpoint
 	if TutorialController.is_tutorial_active():
-		var cap: int = get_current_ap_cap()
-		Logging.info('[SurvivalManager] _cost_survival: tutorial 模式，跳过扣钱，刷新 _time 到 %d' % cap)
+		var cap: int = TimeService.get_days_per_xun()  # tutorial 期间强制 = days_per_xun
+		Logging.info('[SurvivalManager] _cost_survival: tutorial 模式，AP 强制 = %d（days_per_xun），跳过扣钱' % cap)
 		PlayerState.set_stat_val("_time", cap)
 		return
 	var money_ok: bool = PlayerState.append_stat(ENUMS.PROPS.MONEY, -5)

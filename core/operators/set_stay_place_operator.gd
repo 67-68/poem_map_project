@@ -14,6 +14,8 @@ const PLACE_CN_MAP: Dictionary = {
 	"xishi": "西市",
 	"pingkangfang": "平康坊",
 	"huangcheng": "皇城",
+	"taishan_base": "泰山脚下",
+	"taishan_upper": "泰山上",
 }
 
 func describe_preview() -> String:

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_m3yhk"]
+
+[resource]
+script = ExtResource("5_m3yhk")
+_action_tags = Array[int]([])
+archetype_uuid = "tut_chuyou_lookup_success"
+uuid = "tut_chuyou_lookup"
+name = "出游 · 往上看"
+description = "云雾散尽，抬头仰望泰山之巅"

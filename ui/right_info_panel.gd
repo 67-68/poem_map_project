@@ -68,6 +68,9 @@ func _ready() -> void:
 	# 监听特殊属性（望/兴/势）变化
 	if not PlayerState.player_stat_changed.is_connected(_on_special_prop_changed):
 		PlayerState.player_stat_changed.connect(_on_special_prop_changed)
+	# 🆕 笔记触发提示
+	if not EventBus.note_triggered.is_connected(_on_note_triggered):
+		EventBus.note_triggered.connect(_on_note_triggered)
 	# 点击对应按钮后清除提示
 	if not EventBus.social_connection_toggled.is_connected(_clear_special_hint):
 		EventBus.social_connection_toggled.connect(_clear_special_hint)
@@ -75,6 +78,9 @@ func _ready() -> void:
 		EventBus.poem_start_clicked.connect(_clear_special_hint)
 	if not EventBus.idea_page_toggled.is_connected(_clear_special_hint):
 		EventBus.idea_page_toggled.connect(_clear_special_hint)
+	# 🆕 笔记页面打开 → 清除提示
+	if not EventBus.note_page_toggled.is_connected(_clear_special_hint):
+		EventBus.note_page_toggled.connect(_clear_special_hint)
 
 	# ── 🆕 Tutorial 模式：默认隐藏非时间面板区域 ──
 	if not PlayerState.has_flag("tutorial_completed"):
@@ -227,9 +233,29 @@ func _on_special_prop_changed(prop_name: String) -> void:
 		_special_label.text = "点击理念按钮接受理念"
 		Logging.info("RightInfoPanel: 特殊属性 '%s' 变化 → 显示理念提示" % prop_name)
 
+## 🆕 笔记触发 → 提示点击注解按钮
+var _note_hint_timer: SceneTreeTimer = null
+
+func _on_note_triggered(note_uuid: String) -> void:
+	var note: Note = NoteManager.get_note(note_uuid)
+	if note == null:
+		Logging.warn("RightInfoPanel: note_triggered 但 Note '%s' 未找到" % note_uuid)
+		return
+	_special_label.text = "点击注解按钮查看关于「%s」的注解" % note.name
+	Logging.info("RightInfoPanel: note_triggered '%s' → 显示注解提示" % note_uuid)
+
+	# 5s 后自动清除（重置已有定时器）
+	if _note_hint_timer != null:
+		_note_hint_timer.timeout.disconnect(_clear_special_hint)
+	_note_hint_timer = get_tree().create_timer(5.0)
+	_note_hint_timer.timeout.connect(_clear_special_hint)
+
 ## 点击任一对应按钮后清除提示
 func _clear_special_hint() -> void:
 	_special_label.text = ""
+	if _note_hint_timer != null:
+		_note_hint_timer.timeout.disconnect(_clear_special_hint)
+		_note_hint_timer = null
 	Logging.info("RightInfoPanel: 按钮已点击 → 清除 SpecialLabel 提示")
 
 
@@ -251,12 +277,22 @@ func _hide_for_tutorial() -> void:
 	_bottom_btn_bar.visible = false
 	# 隐藏时间面板（将由 AnimationController 在合适时机展示）
 	_time_panel.visible = false
+	# 🆕 隐藏 SpecialLabel（将在 tut_final_reveal 时和 social_btn 一起显示）
+	_special_label.visible = false
 	Logging.info("RightInfoPanel: tutorial 模式，非时间区域已隐藏")
 
 ## 设置时间面板可见性
 func set_time_panel_visible(v: bool) -> void:
 	_time_panel.visible = v
 	Logging.info("RightInfoPanel.set_time_panel_visible: %s" % v)
+
+## 🆕 刷新时间面板显示（确保年份/日期等实时数据更新）
+func refresh_time_panel() -> void:
+	if _time_panel and _time_panel.has_method("refresh"):
+		_time_panel.refresh()
+		Logging.info("RightInfoPanel.refresh_time_panel: 已刷新时间面板")
+	else:
+		Logging.info("RightInfoPanel.refresh_time_panel: _time_panel 无 refresh 方法，跳过")
 
 ## 设置风闻区域可见性（"风闻" Label + InfoGrid + HSeparator）
 func set_rumors_section_visible(v: bool) -> void:
@@ -276,3 +312,8 @@ func set_decisions_section_visible(v: bool) -> void:
 func set_bottom_btn_bar_visible(v: bool) -> void:
 	_bottom_btn_bar.visible = v
 	Logging.info("RightInfoPanel.set_bottom_btn_bar_visible: %s" % v)
+
+## 🆕 设置 SpecialLabel 可见性（独立于 right_panel 的显示/隐藏）
+func set_special_label_visible(v: bool) -> void:
+	_special_label.visible = v
+	Logging.info("RightInfoPanel.set_special_label_visible: %s" % v)

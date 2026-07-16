@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://bsht8750042re"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_jgsjp"]
+
+[resource]
+script = ExtResource("1_jgsjp")
+uuid = "tut_chuyou_lookup_success"
+name = "tut_chuyou_lookup.success"
+universal_result = "roll_imaginary(level=3)"
+action_uuid = "tut_chuyou_lookup"
+state = "success"

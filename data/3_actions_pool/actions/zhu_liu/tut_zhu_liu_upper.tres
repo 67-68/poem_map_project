@@ -8,10 +8,11 @@
 script = ExtResource("3_hnu0c")
 _main_tag = -1
 _action_tags = Array[int]([])
+fallback_event_uuid = ""
+archetype_uuid = "tut_zhu_liu_upper_success"
+uuid = "tut_zhu_liu_upper"
+name = "驻留 · 泰山上"
+description = "在山腰处歇息"
 day_consumed = 1.0
 action_results = Array[ExtResource("2_3angc")]([])
-sub_actions = Array[String](["tut_chuyou_east", "tut_chuyou_west", "tut_chuyou_south", "tut_chuyou_north", "tut_chuyou_lookup"])
-uuid = "tut_chuyou"
-name = "出游"
-description = "在泰山周围探索"
 metadata/_custom_type_script = "uid://crewiibqgbs2f"

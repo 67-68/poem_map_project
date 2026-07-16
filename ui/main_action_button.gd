@@ -82,6 +82,11 @@ func _on_clicked() -> void:
 				Logging.warn("MainActionButton: sub_actions 中 UUID '%s' 无法解析为 Action，跳过" % sub_uuid)
 				continue
 			
+			# 🆕 Tutorial 子行动白名单过滤
+			if not ActionManager.is_sub_action_tutorial_allowed(sub_uuid):
+				Logging.info("MainActionButton: sub-action '%s' 不在 tutorial 子白名单中，跳过" % sub_uuid)
+				continue
+			
 			# Phase 1: HIDE 检查
 			var _should_hide := false
 			var archetype = Database.get_archetype_by_uuid(sub_action.uuid, "success")

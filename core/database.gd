@@ -17,6 +17,7 @@ const _NPCDocument = preload("res://model/npc_document.gd")
 const _NpcBatchCheckOperator = preload("res://core/operators/npc_batch_check_operator.gd")
 const _PoetLifePoint = preload("res://characters/poet_life_point.gd")
 const _RandomEvent = preload("res://model/random_event.gd")
+const _Note = preload("res://core/note.gd")
 const _SceneAction = preload("res://core/model/scene_action.gd")
 const _Trait = preload("res://core/model/trait.gd")
 
@@ -65,6 +66,9 @@ var imaginaries_detail: Dictionary:
 			GameSave.data.imaginaries_detail[k] = val[k]
 var feihualing_imageries: Dictionary
 var tags: Dictionary
+
+# 🆕 笔记 — 由 DataScanner 自动分类填充，key=uuid, val=Note
+var notes: Dictionary = {}
 
 var normal_poem_events: Dictionary
 
@@ -226,6 +230,8 @@ func _init() -> void:
 				decided_events[uuid] = res
 			elif res is FocusedChat:
 				focused_chat_data[uuid] = res
+			elif res is _Note:
+				notes[uuid] = res
 			elif res is Era:
 				eras[uuid] = res
 
@@ -233,6 +239,7 @@ func _init() -> void:
 	Logging.info("Database: _events_by_era 已构建，%d 个时代" % _events_by_era.size())
 	Logging.info("Database: history_events=%d, decided_events=%d, focused_chat_data=%d" % [history_events.size(), decided_events.size(), focused_chat_data.size()])
 	Logging.info("Database: normal_poem_events=%d, end_random_events=%d" % [normal_poem_events.size(), end_random_events.size()])
+	Logging.info("Database: notes=%d" % notes.size())
 	Logging.info("Database: actions=%d, decisions=%d" % [actions.size(), decisions.size()])
 	# 诊断日志：验证 bai_ye 子行动是否已注册到 actions 字典
 	Logging.info("Database: baiye sub-actions in actions dict: threaten=%s normal=%s mass_distribution=%s poem_visit=%s" % [

@@ -367,10 +367,12 @@ const PLACE_STR_MAP: Dictionary = {
  CHANGAN_PLACES.TAISHAN: "taishan",
 }
 const PLACE_CN_MAP: Dictionary = {
- "xishi": "西市",
- "pingkangfang": "平康坊",
- "huangcheng": "皇城",
- "taishan": "泰山",
+	"xishi": "西市",
+	"pingkangfang": "平康坊",
+	"huangcheng": "皇城",
+	"taishan": "泰山",
+	"taishan_base": "泰山脚下",
+	"taishan_upper": "泰山上",
 }
 
 ## CHANGAN_PLACES 枚举 → String key（用于 GameSave 持久化）

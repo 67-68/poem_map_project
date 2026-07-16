@@ -141,7 +141,7 @@ func initialize(data: Array, ui_constructor: Callable = Callable(), on_filter_to
 	# ── CheckBox 可见性 + 初始勾选态 ──
 	var _init_show_remote := RemoteActionFilterManager.get_show_remote()
 	if _filter_checkbox:
-		_filter_checkbox.visible = _has_remote_item
+		_filter_checkbox.visible = _has_remote_item and not TutorialController.is_tutorial_active()
 		if _has_remote_item:
 			_filter_checkbox.set_pressed_no_signal(_init_show_remote)
 			Logging.info("PickerTapeAttachment.initialize: 检测到异地 sub-action，显示 CheckBox pressed=%s" % str(_init_show_remote))

@@ -2,116 +2,124 @@
 
 ## 涉及文件
 
-- `core/tutorial_controller.gd` — Tutorial 线性状态机 Autoload（多信号驱动）
-- `core/animation_controller.gd` — timeline_scripts 注入（UI 渐进揭示）
-- `ui/left_player_panel.gd` — 左侧面板可见性 API（set_name/place/identity/ambition_section/bottom_decoration_visible）
-- `ui/right_info_panel.gd` — 右侧面板可见性 API（set_time_panel/rumors_section/decisions_section/bottom_btn_bar_visible）
+- `core/tutorial_controller.gd` — Tutorial 线性状态机 Autoload（多信号驱动），使用白名单机制控制行动面板
+- `core/action_manager.gd` — `_tutorial_whitelist` + `_tutorial_sub_whitelist` + `set_tutorial_visible_actions()` / `set_tutorial_visible_sub_actions()` / `is_action_tutorial_allowed()` / `is_sub_action_tutorial_allowed()`
+- `core/animation_controller.gd` — timeline_scripts 注入（UI 渐进揭示 + refresh_time_panel + set_special_label_visible）
+- `core/operators/set_stay_place_operator.gd` — PLACE_CN_MAP 含 `taishan_base`/`taishan_upper`
+- `ui/action_panel_manager.gd` — `_rebuild_all_buttons()` 中使用 ActionManager.is_action_tutorial_allowed() 过滤
+- `ui/left_player_panel.gd` — 左侧面板可见性 API
+- `ui/right_info_panel.gd` — `_hide_for_tutorial()` 隐藏 SpecialLabel, `refresh_time_panel()`, `set_special_label_visible()`
 - `ui/hover_popup_manager.gd` — set_hover_enabled 全局开关
-- `core/survival_manager.gd` — tutorial 期间跳过每旬扣钱
 - `data/2_characters/npc_docs/tut_taoist.tres` — 道士 NPCDocument
 - `data/4_eras/735_youth/events/` — tutorial 专属事件（.tres）
+- `data/3_actions_pool/actions/jiao_you/` — tut_jiaoyou_talk, tut_jiaoyou_drink, tut_taoist_dispel_fog
+- `data/3_actions_pool/actions/zhu_liu/` — tut_zhu_liu_base, tut_zhu_liu_upper
+- `data/3_actions_pool/actions/tut_chuyou/` — tut_chuyou 4方向 + tut_chuyou_lookup
+- `data/1_core_rules/archetypes/` — tut_zhu_liu_base_success, tut_zhu_liu_upper_success, tut_chuyou_lookup_success
 
-## 核心设计原则
+## 行动可见性：双层白名单机制
 
-**物理可见性引导 > 文字提示**：不告诉玩家「你应该做什么」，而是通过按钮/属性的物理隐藏/显示来引导行为。
+**主白名单** (`_tutorial_whitelist`)：空=正常模式，非空=只显示列表内的主行动按钮。
 
-## 入口流程
+**子白名单** (`_tutorial_sub_whitelist`)：空=正常模式（所有子行动可见），非空=只显示列表内的子行动。
 
-`TutorialController._ready()` 检测 `tutorial_completed` flag：
-- **已存在**：静默跳过，确保全部 UI 可见
-- **不存在**：等待 Main 场景加载 → 弹出 Modal → 「开始引导」或「跳过」
+两个白名单均由 `TutorialController` 在每个阶段转换时同步设置。
 
-## 渐进式 UI 揭示时间线（完整）
+## 渐进式 UI 揭示
 
 ### LeftPanel
 
-| 步骤 | 事件 | 名字 | 地点 | 身份 | 健康 | 钱财 | 兴 | 势 | 望 | 才 | 府 | 定 | TraitGrid | 政略区 | 底层修饰 |
-|------|------|:---:|:---:|:---:|:---:|:---:|:--:|:--:|:--:|:--:|:--:|:--:|:---------:|:------:|:--------:|
-| P1 | tut_meet_taoist | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| P2.1 | tut_dialogue_1 | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| P2.3 | tut_dialogue_2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| P2.4 | tut_dialogue_3 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ |
-| P2.5 | tut_dialogue_4 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ |
-| P6 | tut_defer_done | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ |
-| P7b | tut_poem_review | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ |
-| P7c | tut_final_reveal | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 步骤 | 事件 | 名字 | 地点 | 身份 | 健康 | 钱财 | TraitGrid | 底层修饰(才府定) |
+|------|------|:---:|:---:|:---:|:---:|:---:|:---------:|:------------:|
+| P1 | tut_meet_taoist | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| P2.1 | tut_dialogue_1 | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
+| P2.2 | tut_dialogue_time | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
+| P2.3 | tut_dialogue_2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ |
+| P2.4 | tut_dialogue_4 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ |
+| P7 | tut_final_reveal | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+> 兴/势/望/政略区不在 tutorial 期间揭示。
 
 ### RightPanel
 
-| 步骤 | 事件 | 时间面板 | 风闻区 | 决议区 | 社交按钮 | 理念按钮 | 写诗按钮 | 底部按钮栏 |
-|------|------|:------:|:-----:|:-----:|:------:|:------:|:------:|:--------:|
-| P1-2.1 | tut_meet_taoist/tut_dialogue_1 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| P2.2 | tut_dialogue_time | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| P2.3-5 | tut_dialogue_2/3/4 | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| P6 | tut_defer_done | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ |
-| P7b | tut_idea_unlock | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ |
-| P7c | tut_final_reveal | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 步骤 | 事件 | 时间面板 | 风闻区 | 决议区 | 社交按钮 | 理念按钮 | 写诗按钮 | 底部按钮栏 | SpecialLabel |
+|------|------|:------:|:-----:|:-----:|:------:|:------:|:------:|:--------:|:----------:|
+| P1-2.1 | tut_meet_taoist/tut_dialogue_1 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| P2.2 | tut_dialogue_time | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| P2.3-4 | tut_dialogue_2/4 | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| P6 | tut_defer_done | ✓ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ |
+| P7b | tut_idea_unlock | ✓ | ✗ | ✗ | ✗ | ✓ | ✓ | ✗ | ✗ |
+| P7c | tut_final_reveal | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
-### 全局控制
+## 白名单随时间线变化
 
-| 步骤 | Hover | 扣钱 | 健康/钱财值 |
-|------|:-----:|:----:|:----------:|
-| 开局-2.4 | ✗禁用 | ✗跳过 | 满值(100/满) |
-| P2.5+ | ✓启用 | ✗跳过 | 满值 |
-| END | ✓启用 | ✓恢复 | source_of_truth(50/45) |
+| 阶段 | 主白名单 | 子白名单 |
+|------|---------|---------|
+| P1-P2 (叙事) | `[]` | `[]` |
+| P4 FREE_ROAM | `["jiao_you", "zhu_liu"]` | `["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"]` |
+| P4 FOG_FOUND | `["jiao_you", "zhu_liu", "tut_chuyou"]` | 同上 |
+| P4 BACK_AT_TAOIST (→ OVERRIDE_LOCKED) | 同上 | `["tut_jiaoyou_drink", "tut_zhu_liu_base", "tut_zhu_liu_upper"]` |
+| P5 DEFERRING | `["jiao_you", "zhu_liu", "tut_chuyou"]` | `[]` (正常模式，出游4方向由flag控制) |
+| P6 VISION | 同上 | `[]` |
+| P7 DRINK_WINE | `["jiao_you", "zhu_liu", "tut_chuyou", "du_zhuo"]` | `["tut_duzhuo_heyaojiu"]` |
+| END | 清空 | 清空 |
 
 ## 状态转换
 
 ```
-INIT → PHASE_1_MEET (事件 tut_meet_taoist)
-  → PHASE_2_DIALOGUE (事件, 5步)
+INIT → PHASE_1_MEET (tut_meet_taoist, 鸟语花香)
+  → PHASE_2_DIALOGUE (4步对话)
     → tut_dialogue_1 (名字+地点+身份)
-    → tut_dialogue_time (时间面板)
+    → tut_dialogue_time (时间面板 735年)
     → tut_dialogue_2 (健康+钱财)
-    → tut_dialogue_3 (政略主权区)
-    → tut_dialogue_4 (TraitGrid + hover启用)
-  → PHASE_3_TRAIT (事件 tut_trait_demo, trait+health+50)
-  → PHASE_4_EXPLORE (行动驱动, 自由探索)
-  → PHASE_5_DEFER (defer 驱雾)
-  → PHASE_6_VISION (云开雾散+看山)
-  → PHASE_7_POEM (创作+理念)
-    → tut_final_reveal (最后UI揭示)
-  → END (tut_goodbye 下山)
+    → tut_dialogue_4 (TraitGrid+hover+trait_add(strong_body)+prop_add(health+50))
+  → PHASE_4_EXPLORE (行动白名单驱动)
+    → VAST_WORLD: tut_vast_world (2个Lv3意象) → FREE_ROAM
+    → FREE_ROAM: 仅交游+驻留。问道士话→tut_talk_no_response（打坐无回应）。驻留迁移→stay_place_changed→tut_move_away
+    → FOG_FOUND: tut_move_away确认→出游解锁(CHUYOU_VIEWED)
+    → CHUYOU_VIEWED: 出游查看雾→tut_return_taoist
+    → BACK_AT_TAOIST: tut_return_taoist确认→子白名单切共饮(OVERRIDE_LOCKED)
+    → OVERRIDE_LOCKED: 共饮确认→关系升级→override解锁(OVERRIDE_READY)
+  → PHASE_5_DEFER (defer 2旬, 出游4方向)
+    → OVERRIDE_CLICKED→子白名单清空，defer开始
+  → PHASE_6_VISION (defer完成→tut_defer_done→poem_btn可见)
+    → tut_defer_done确认→LOOK_UP_READY（往上看可用）
+    → 往上看→tut_chuyou_lookup_success(最后Lv3意象)→_advance_to_phase_7
+  → PHASE_7_POEM
+    → poem_btn点击+兴=0 → tut_no_inspiration → 独酌解锁(DRINK_WINE)
+    → poems_created → tut_poem_review → tut_idea_unlock → tut_final_reveal
+  → END (tut_goodbye, 属性恢复, SpecialLabel恢复)
 ```
 
-## 各 Phase 详细流程
+## 子行动清单
 
-### Phase 1: 遇道士
-- `tut_meet_taoist` → 鸟语花香音效
-- 所有 UI 完全隐藏，仅中间叙事栏可见
-- 3 选项：游历天下 / 寻找灵感 / 就是觉得该来
-- `event_confirmed` → Phase 2
+| uuid | 类型 | 说明 |
+|------|------|------|
+| tut_jiaoyou_talk | 交游子行动 | FREE_ROAM: 问道士话, fallback→tut_talk_no_response |
+| tut_jiaoyou_drink | 交游子行动 | OVERRIDE_LOCKED: 共饮升级关系, fallback→tut_drink_together |
+| tut_taoist_dispel_fog | 交游 override | override=tut_jiaoyou_drink, fallback→tut_defer_done, 触发defer |
+| tut_zhu_liu_base | 驻留子行动 | 泰山脚下→taishan_base, archetype→set_stay_place(place=taishan_base) |
+| tut_zhu_liu_upper | 驻留子行动 | 泰山上→taishan_upper, archetype→set_stay_place(place=taishan_upper) |
+| tut_chuyou_east/west/south/north | 出游子行动 | Phase 5 defer期间探索四方 |
+| tut_chuyou_lookup | 出游子行动 | Phase 6: 往上看→archetype→roll_imaginary(level=3) |
+| tut_duzhuo_heyaojiu | 独酌子行动 | Phase 7: 喝药酒+40兴 |
 
-### Phase 2: 对话+UI揭示（5步）
-- **tut_dialogue_1**: 道士问大名 → left_panel 出现(名字+地点+身份)
-- **tut_dialogue_time** 🆕: 道士问年月 → right_panel 出现(时间面板)
-- **tut_dialogue_2**: 谈身体和盘缠 → 健康+钱财行可见
-- **tut_dialogue_3**: 谈志向 → 政略主权区(兴/势/望)可见
-- **tut_dialogue_4** 🆕: 建议强身 → TraitGrid 出现 + **hover 系统启用**（description 含系统提示）
+## 信号矩阵
 
-### Phase 3: Trait展示
-- `tut_trait_demo`: 道士拍肩 → trait_add(strong_body) + prop_add(health +50)
-- `event_confirmed` → Phase 4
+| 信号 | 驱动阶段 |
+|------|---------|
+| event_confirmed | Phase 1→2, 2内部, 2→4, 4内部, 5内部, 6内部, 7内部 |
+| stay_place_changed | Phase 4 FREE_ROAM→MOVED_AWAY |
+| request_refresh_action_panel | Phase 4-7 行动执行检测 |
+| on_xun_tick | Phase 5 defer倒计时→_advance_to_phase_6 |
+| poems_created | Phase 7 创作检测 |
+| poem_start_clicked | Phase 7 兴=0检测→tut_no_inspiration |
 
-### Phase 4-6: 探索/驱雾/看山
-- 同原设计，UI 在 tut_defer_done 时 poem_btn 出现
+## 全局控制
 
-### Phase 7: 诗词创作+理念+最终揭示
-- 创作系统检测兴=0 → `tut_no_inspiration` → 独酌 +40兴
-- 创作成功 → `tut_poem_review`
-- 理念解锁 → `tut_idea_unlock` (idea_btn 可见)
-- → **`tut_final_reveal`** 🆕: 最后揭示（风闻区+决议区+底层修饰(才府定)+底部按钮栏全部出现）
-
-### END: 下山
-- `tut_goodbye` → era 切换 745_ambition + 道士移除
-- health → 50, money → 45（恢复 source_of_truth）
-- 恢复每旬扣钱，恢复 hover
-- 「约好再见，没想到一别二十年」
-
-## Tutorial 状态管理
-
-| 阶段 | health | money | 每日扣钱 | hover |
-|------|:------:|:-----:|:------:|:-----:|
-| 开局 | 满值 | 满值 | ✗ | ✗ |
-| P2.5+ | 满值 | 满值 | ✗ | ✓ |
-| END 后 | 50 | 45 | ✓ | ✓ |
+| 步骤 | Hover | 扣钱 | 健康/钱财值 | SpecialLabel |
+|------|:-----:|:----:|:----------:|:----------:|
+| 开局 | ✗ | ✗ | 满值 | ✗ |
+| P2.4(tut_dialogue_4)+ | ✓ | ✗ | 满值 | ✗ |
+| P7c(tut_final_reveal)+ | ✓ | ✗ | 满值 | ✓ |
+| END | ✓ | ✓ | 50/45 | ✓ |

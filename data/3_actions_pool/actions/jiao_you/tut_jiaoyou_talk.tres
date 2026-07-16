@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_ypvuv"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="2_gcccu"]
+
+[resource]
+script = ExtResource("2_gcccu")
+_action_tags = Array[int]([30])
+fallback_event_uuid = "tut_talk_no_response"
+uuid = "tut_jiaoyou_talk"
+name = "交游 · 问道士话"
+description = "和道长说几句话"
+day_consumed = 1.0
+action_results = Array[ExtResource("1_ypvuv")]([])

@@ -92,6 +92,17 @@ func _refresh_day_label() -> void:
 	var day_zero_based: int = TimeService.current_day
 	label_day.text = "第%d天" % (day_zero_based + 1)
 
+## 🆕 强制刷新所有时间显示（年份/年号/旬/天）。
+func refresh() -> void:
+	var year: float = GameState.year if GameState else 735.0
+	_on_year_changed(year)
+	label_xun.text = TimeService.current_xun
+	_refresh_day_label()
+	_refresh_time_left()
+	Logging.info("TimeControlPanel.refresh: year=%.1f era='%s' xun='%s' day=%d" % [
+		year, label_era.text, label_xun.text, TimeService.current_day
+	])
+
 func _on_year_changed(current_float_year: float):
 	var current_year = int(floor(current_float_year))
 	# 比如 755.5 -> 0.5 * 12 + 1 = 7月
@@ -106,6 +117,9 @@ func _on_year_changed(current_float_year: float):
 ## 点击一次推进到下一个 xun 边界（例：day 3 → day 9；day 12 → day 19）。
 ## 不再递归；每次点击执行一次精准跳跃。
 func _on_link_button_pressed() -> void:
+	if TutorialController.is_tutorial_active():
+		Logging.info('[time] tutorial 模式，跳过旬跳功能')
+		return
 	var days: int = TimeService.get_days_to_next_xun()
 	Logging.info('[time] jump %d days to next xun' % days)
 	TimeService.advance_time(days)

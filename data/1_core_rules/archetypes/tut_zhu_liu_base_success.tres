@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_jgsjp"]
+
+[resource]
+script = ExtResource("1_jgsjp")
+uuid = "tut_zhu_liu_base_success"
+name = "tut_zhu_liu_base.success"
+universal_result = "set_stay_place(place=taishan_base)"
+action_uuid = "tut_zhu_liu_base"
+state = "success"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://strongbodytut00001"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
+
+[resource]
+script = ExtResource("1_trait")
+duration_xun = -1
+uuid = "strong_body"
+name = "身强体壮"
+hover_narrative = "筋骨强健，登山涉水不在话下。体力上限永久提升50点。"
