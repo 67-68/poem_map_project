@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="Note" format=3 uid="uid://note_accept_linian"]
+
+[ext_resource type="Script" uid="uid://bf1jik0b5p75b" path="res://core/note.gd" id="1_note"]
+[ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="2_prop_req"]
+[ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="3_complex_req"]
+
+[sub_resource type="Resource" id="SubMomentum"]
+script = ExtResource("2_prop_req")
+property = "momentum"
+value = 0
+operator = 1
+
+[sub_resource type="Resource" id="SubInspiration"]
+script = ExtResource("2_prop_req")
+property = "inspiration"
+value = 0
+operator = 1
+
+[sub_resource type="Resource" id="SubPrestige"]
+script = ExtResource("2_prop_req")
+property = "prestige"
+value = 0
+operator = 1
+
+[sub_resource type="Resource" id="SubComplexReq"]
+script = ExtResource("3_complex_req")
+operators = Array[ExtResource("2_prop_req")]([SubResource("SubMomentum"), SubResource("SubInspiration"), SubResource("SubPrestige")])
+current_operator = 1
+
+[resource]
+script = ExtResource("1_note")
+uuid = "note_accept_linian"
+name = "接受理念"
+description = "去马来牛不复辨，浊泾清渭何当分？"
+description_explanation = "暴雨倾盆、道路泥泞，极目望去，连跑去的马和走来的牛都分不清了。连绵的阴雨让山洪暴发，原本清浊分明的泾河与渭河，此时又怎能分得清呢？"
+note_narrative = "莫再蹉跎于裘马清狂之间，立定志向当在今日——哪怕多历坎坷、走些弯路，也胜过在犹豫不决中白了少年头。"
+note_explanation = "点击右下角理念按钮以决定何所往"
+triggered = false
+requirement = SubResource("SubComplexReq")

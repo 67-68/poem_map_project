@@ -23,6 +23,8 @@ extends PanelContainer
 @onready var _decoration_title_label: Label = $"Panel/VBox/ScrollContainer/V/Label2"
 @onready var _decoration_hbox: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2"
 
+const _ActionHintFormatter = preload("res://core/hints/action_hint_formatter.gd")
+
 # ── 固定属性 Label 节点（对应 tscn 预制体实例）─────────
 # 🆕 tscn 根节点为 PanelContainer（内嵌 HBoxContainer），适配解包到内层
 @onready var _prop_health: PanelContainer = $"Panel/VBox/HBoxContainer/PropLabel"
@@ -33,6 +35,9 @@ extends PanelContainer
 @onready var _prop_talent: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel"
 @onready var _prop_astuteness: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel2"
 @onready var _prop_composure: PanelContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2/SmallerPropLabel3"
+
+# prop_key → PanelContainer 的映射（用于 hover 注册）
+var _prop_panel_map: Dictionary = {}
 
 # ── 属性显示格式配置 ────────────────────────────────────
 # prop_label.tscn（健康/钱财）：大字号，格式「50/100 健」+「「奄奄一息」」
@@ -95,6 +100,9 @@ func _ready() -> void:
 	_build_prop_label_map()
 	_refresh_all_props()
 
+	# 🆕 为属性标签注册 hover（SLIDE_FROM_LEFT 流）
+	_register_prop_hovers()
+
 	# 动态重建 TraitGrid
 	_rebuild_trait_grid()
 
@@ -150,12 +158,23 @@ static func _extract_labels(panel: PanelContainer) -> Dictionary:
 	var perception_label := inner_box.get_child(1) as Label
 	if not value_label or not perception_label:
 		Logging.err("LeftPlayerPanel._extract_labels: panel '%s' 内层 HBoxContainer 缺少 Label 子节点 (value=%s, perception=%s)" % [panel.name, "ok" if value_label else "NULL", "ok" if perception_label else "NULL"])
+	Logging.debug("LeftPlayerPanel._extract_labels: panel '%s' OK — value_label='%s', perception_label='%s'" % [panel.name, value_label.name if value_label else "NULL", perception_label.name if perception_label else "NULL"])
 	return {
 		"value": value_label,
 		"perception": perception_label,
 	}
 
 func _build_prop_label_map() -> void:
+	_prop_panel_map = {
+		"health":      _prop_health,
+		"money":       _prop_money,
+		"inspiration": _prop_inspiration,
+		"momentum":    _prop_momentum,
+		"prestige":    _prop_prestige,
+		"talent":      _prop_talent,
+		"astuteness":  _prop_astuteness,
+		"composure":   _prop_composure,
+	}
 	_prop_label_map = {
 		"health":      _extract_labels(_prop_health),
 		"money":       _extract_labels(_prop_money),
@@ -167,6 +186,31 @@ func _build_prop_label_map() -> void:
 		"composure":   _extract_labels(_prop_composure),
 	}
 	Logging.info("LeftPlayerPanel: prop label map built with %d entries" % _prop_label_map.size())
+
+## 🆕 为所有属性标签 PanelContainer 注册 hover（SLIDE_FROM_LEFT 流）
+func _register_prop_hovers() -> void:
+	Logging.info("LeftPlayerPanel._register_prop_hovers: start — %d props to register" % _prop_panel_map.size())
+	for prop_key in _prop_panel_map:
+		var panel := _prop_panel_map[prop_key] as PanelContainer
+		if not panel:
+			Logging.err("LeftPlayerPanel._register_prop_hovers: panel '%s' 为 null，跳过" % prop_key)
+			continue
+
+		HoverPopupManager.unregister(panel)
+		var hint = _ActionHintFormatter.build_prop_hint(prop_key)
+		if not hint:
+			Logging.warn("LeftPlayerPanel._register_prop_hovers: build_prop_hint('%s') 返回 null，跳过" % prop_key)
+			continue
+
+		var narrative: String = hint.narrative
+		var vector: String = hint.vector
+
+		if narrative.is_empty() and vector.is_empty():
+			Logging.info("LeftPlayerPanel._register_prop_hovers: '%s' narrative + vector 均为空，跳过注册" % prop_key)
+			continue
+
+		HoverPopupManager.register(panel, {"narrative": narrative, "vector": vector}, 0.4, 0.75, HoverPopupManager.FlowType.SLIDE_FROM_LEFT)
+		Logging.info("LeftPlayerPanel._register_prop_hovers: '%s' hover registered (SLIDE_FROM_LEFT, narrative=%d chars, vector=%d chars)" % [prop_key, narrative.length(), vector.length()])
 
 # ── 驻留地点 PlaceLabel ─────────────────────────────────
 

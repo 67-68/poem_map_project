@@ -58,6 +58,7 @@ perception_text = "诗兴大发，下笔如有神"
 
 [resource]
 script = ExtResource("1_insp")
+description = "诗兴如泉涌，是创作的不竭动力。兴致愈高，下笔愈畅，灵感迸发。"
 hard_max = -1
 soft_max = 50
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])

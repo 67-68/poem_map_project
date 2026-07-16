@@ -59,6 +59,7 @@ perception_text = "幕后执棋"
 
 [resource]
 script = ExtResource("1_ast")
+description = "你的城府与心计。城府越高，势衰减越小，浊流交互消耗大减，但你的声望积累会因此放缓。"
 uuid = "astuteness"
 name = "城府"
 hard_max = 100

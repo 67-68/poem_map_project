@@ -1,5 +1,5 @@
 extends RefCounted
-## Action 与 SubAction 提示文本构建器
+## Action 与 SubAction 提示文本构建器 + 🆕 属性标签 hover
 ##
 ## 从 ActionHintBuilder 绞杀迁移而来。收敛 build_action_hint 和
 ## build_sub_action_preview 的全部逻辑。
@@ -9,11 +9,13 @@ extends RefCounted
 ##
 ## 🆕 返回类型: build_action_hint → ActionHint 结构化对象（含四模块 + narrative + vector）
 ## 🆕 支持两套 Profile：DEFAULT（详版）和 SIMPLE（简版）
+## 🆕 build_prop_hint(prop_key) — 属性标签 hover 提示（含 modifier 效果翻译）
 
 const _BBCode = preload("res://ui/utils/bbcode.gd")
 const _OPFormatter = preload("res://core/hints/operator_preview_formatter.gd")
 const _ActionHint = preload("res://core/model/action_hint.gd")
 const _HintProfile = preload("res://core/hints/hint_profile.gd")
+const _ModifierHintFormatter = preload("res://core/hints/modifier_hint_formatter.gd")
 
 
 # ════════════════════════════════════════════════════════════════
@@ -203,6 +205,41 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		_build_simple_labels(hint, is_locked, lock_reason)
 
 	Logging.info("ActionHintFormatter.build_sub_action_preview: done for '%s', vector=%d chars" % [sub_action.name, hint.vector.length()])
+	return hint
+
+
+## 🆕 为属性标签 hover 构建提示文本。
+## narrative = Property.description（属性介绍）
+## vector = modifier 效果翻译（仅城府/才华/定力有，其他属性为空）
+##
+## @param prop_key: 属性名（"health"/"money"/"talent"/"astuteness"/"composure" 等）
+## @return ActionHint 结构化对象
+static func build_prop_hint(prop_key: String):
+	var hint = _ActionHint.new()
+
+	# ── narrative: 属性描述 ──
+	var prop: Property = Database.get_property(prop_key)
+	if prop and not prop.description.is_empty():
+		hint.narrative = prop.description
+		Logging.info("ActionHintFormatter.build_prop_hint: '%s' description=%d chars" % [prop_key, prop.description.length()])
+	else:
+		var display_name := prop.get_display_name() if prop else prop_key
+		hint.narrative = "（%s）" % display_name
+		Logging.info("ActionHintFormatter.build_prop_hint: '%s' 无 description，使用降级文本" % prop_key)
+
+	# ── vector: modifier 效果翻译 ──
+	var modifier_props := ["astuteness", "talent", "composure"]
+	if prop_key in modifier_props:
+		var effect_lines: Array[String] = _ModifierHintFormatter.build_single_prop_effects(prop_key)
+		if not effect_lines.is_empty():
+			hint.vector = "\n".join(effect_lines)
+			Logging.info("ActionHintFormatter.build_prop_hint: '%s' modifier effects → %d lines" % [prop_key, effect_lines.size()])
+		else:
+			Logging.info("ActionHintFormatter.build_prop_hint: '%s' modifier prop but no registered effects" % prop_key)
+	else:
+		Logging.info("ActionHintFormatter.build_prop_hint: '%s' 非 modifier 属性，无 vector" % prop_key)
+
+	Logging.info("ActionHintFormatter.build_prop_hint: done for '%s', narrative=%d chars, vector=%d chars" % [prop_key, hint.narrative.length(), hint.vector.length()])
 	return hint
 
 

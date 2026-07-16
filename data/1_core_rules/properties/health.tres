@@ -51,6 +51,7 @@ perception_text = "百病不侵"
 
 [resource]
 script = ExtResource("1_l3cyt")
+description = "你的生命之本。健康越低，行动越受限。低于20将触发濒死危机。"
 hard_max = 100
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3")])

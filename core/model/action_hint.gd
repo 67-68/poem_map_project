@@ -34,13 +34,17 @@ func _init():
 func mark_dirty() -> void:
 	_vector_dirty = true
 
-## vector 懒拼接：按模块顺序拼接非空模块
+## vector 懒拼接：按模块顺序拼接非空模块。
+## 🆕 支持显式 setter — build_prop_hint 等非模块化场景可直写。
 var vector: String:
 	get:
 		if _vector_dirty:
 			_vector = _build_vector()
 			_vector_dirty = false
 		return _vector
+	set(val):
+		_vector = val
+		_vector_dirty = false
 
 func _build_vector() -> String:
 	var parts: Array[String] = []

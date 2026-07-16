@@ -58,6 +58,7 @@ perception_text = "大势所趋，天下归心"
 
 [resource]
 script = ExtResource("1_mom")
+description = "时运之风。势高则诸事顺遂，势低则举步维艰。每旬自然衰减，城府可稍加减缓。"
 soft_max = 50
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])

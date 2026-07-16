@@ -64,9 +64,7 @@ static func _sync_prop(prop_name: String) -> void:
 
 	# 2. 获取当前值
 	var mod_val: int = PlayerState.get_stat_val(prop_name) as int
-	if mod_val <= 0:
-		Logging.info("[ModifierPropRegistrar] _sync_prop: '%s' = %d ≤ 0, no effects registered" % [prop_name, mod_val])
-		return
+	# 🆕 即使值为0也注册（pct=0%），让 UI hint 能展示效果清单
 
 	# 3. 遍历 MODIFIER_EFFECTS，注册匹配的效果
 	var registered := 0

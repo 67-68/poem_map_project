@@ -59,6 +59,7 @@ perception_text = "泰山崩于前而色不变"
 
 [resource]
 script = ExtResource("1_cmp")
+description = "你心性的稳固程度。定力越高，承受的伤害越小，但兴致起伏也变得平缓，更沉静内敛。"
 uuid = "composure"
 name = "定力"
 hard_max = 100

@@ -69,7 +69,7 @@ func _cost_survival():
 	if TutorialController.is_tutorial_active():
 		var cap: int = TimeService.get_days_per_xun()  # tutorial 期间强制 = days_per_xun
 		Logging.info('[SurvivalManager] _cost_survival: tutorial 模式，AP 强制 = %d（days_per_xun），跳过扣钱' % cap)
-		PlayerState.set_stat_val("_time", cap)
+		PlayerState.force_set_stat_val("_time", cap)
 		return
 	var money_ok: bool = PlayerState.append_stat(ENUMS.PROPS.MONEY, -5)
 	if not money_ok:

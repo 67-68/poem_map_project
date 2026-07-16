@@ -220,12 +220,15 @@ static func get_modifier_prop_adjusted_delta(stat_name: String, raw_delta: int) 
 
 		# ── 1. target_prop 过滤 ──
 		if not target_prop.is_empty() and target_prop != stat_name:
+			Logging.debug("[ModifierRegistry] get_modifier_prop_adjusted_delta: entry source='%s' target_prop='%s' ≠ stat='%s' → skip" % [entry.get("source", "?"), target_prop, stat_name])
 			continue
 
 		# ── 2. delta_sign 过滤 ──
 		if delta_sign == "positive" and not delta_is_positive:
+			Logging.debug("[ModifierRegistry] get_modifier_prop_adjusted_delta: entry source='%s' delta_sign=positive but raw_delta=%d → skip" % [entry.get("source", "?"), raw_delta])
 			continue
 		if delta_sign == "negative" and not delta_is_negative:
+			Logging.debug("[ModifierRegistry] get_modifier_prop_adjusted_delta: entry source='%s' delta_sign=negative but raw_delta=%d → skip" % [entry.get("source", "?"), raw_delta])
 			continue
 
 		# ── 3. faction_filter 过滤 ──
@@ -239,6 +242,7 @@ static func get_modifier_prop_adjusted_delta(stat_name: String, raw_delta: int) 
 
 		# ── 4. mod_val ≤ 0 跳过 ──
 		if mod_val <= 0:
+			Logging.debug("[ModifierRegistry] get_modifier_prop_adjusted_delta: entry source='%s' mod_val=%d ≤ 0 → skip" % [entry.get("source", "?"), mod_val])
 			continue
 
 		# ── 5. 应用公式 ──

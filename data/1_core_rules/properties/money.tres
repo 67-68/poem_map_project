@@ -58,6 +58,7 @@ perception_text = "富甲一方"
 
 [resource]
 script = ExtResource("1_kxe2f")
+description = "铜钱银两，长安米贵。行卷、买酒、交游，样样要钱。无钱寸步难行。"
 hard_max = 200
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])

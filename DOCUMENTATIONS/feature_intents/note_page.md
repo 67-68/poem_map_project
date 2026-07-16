@@ -151,6 +151,15 @@ NotePage 初始化（visible = false）
 
 示例文件: `data/1_core_rules/notes/note_fangshi_chuyou.tres`
 
+### 已实现笔记清单
+
+| UUID | 名称 | 触发条件 | 需求类型 |
+|------|------|---------|---------|
+| `note_fangshi_chuyou` | 坊市-出游循环 | money >= 20 | PropertyRequirement |
+| `note_fangshi_chuyou_health` | 坊市-出游循环 | health >= 30 | PropertyRequirement |
+| `note_jiedu` | 解毒 | 获得 poisoned trait | TraitRequirement(HAS) |
+| `note_accept_linian` | 接受理念 | 势/望/兴任一 > 0 | ComplexRequirements(OR) |
+
 ## 依赖
 
 | 组件 | 文件 | 用途 |
