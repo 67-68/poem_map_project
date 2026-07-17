@@ -1,5 +1,5 @@
 {
-    "godotTools.editorPath.godot4": "/usr/local/bin/godot",
+    "godotTools.editorPath.godot4": "/Applications/Godot.app",
     "godot_tools.editor_path": "/usr/local/bin/godot",
     "peacock.color": "#ff3d00",
     "files.exclude": {

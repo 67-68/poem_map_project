@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cafk0ewommxp3" path="res://assets/唐朝疆域（繁）.png" id="1_7vrkn"]
 [ext_resource type="Script" uid="uid://bm2pt10fn111x" path="res://app/start_page_background.gd" id="2_glbon"]
 [ext_resource type="Script" uid="uid://ugu818rrdil4" path="res://app/quit.gd" id="3_fu7sn"]
-[ext_resource type="Texture2D" uid="uid://dagub1i8rk8w4" path="res://assets/6768.png" id="4_jix8l"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="5_sfx"]
+[ext_resource type="Texture2D" uid="uid://d1wmri2oxn35" path="res://assets/LOGO.png" id="6_nlkkf"]
 
 [node name="MainMenu" type="Control" unique_id=2003337184]
 layout_mode = 3
@@ -65,9 +65,11 @@ click_category = "book_impact"
 hover_category = "book_flip"
 
 [node name="logo" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=1734031480]
+custom_minimum_size = Vector2(10, 30)
 layout_mode = 2
-texture = ExtResource("4_jix8l")
-expand_mode = 4
+texture = ExtResource("6_nlkkf")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/start" to="MarginContainer/VBoxContainer/start" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/quit" to="MarginContainer/VBoxContainer/quit" method="_on_pressed"]

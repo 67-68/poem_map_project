@@ -12,10 +12,13 @@ extends Node
 
 enum Level { DEBUG, INFO, WARN, ERROR }
 
+# ── 控制台输出最低级别（debug 不喷控制台，仅进缓冲区）──
+static var _min_print_level: int = Level.INFO
+
 # ── 静态环形缓冲区 ──
 static var _ring_buffer: Array[Dictionary] = []
 static var _seq_counter: int = 0
-const MAX_BUFFER_SIZE := 500
+const MAX_BUFFER_SIZE := 2000
 
 # ── 内部推送 ──
 static func _push_to_buffer(level: String, msg: String) -> void:
@@ -30,11 +33,12 @@ static func _push_to_buffer(level: String, msg: String) -> void:
 	if _ring_buffer.size() > MAX_BUFFER_SIZE:
 		_ring_buffer.pop_front()
 
-# ── 核心发射器（双通道） ──
-static func _emit(level: String, msg: String, color: String) -> void:
+# ── 核心发射器（双通道，debug 级别默认不喷控制台）──
+static func _emit(level: String, msg: String, color: String, level_int: int) -> void:
 	var time = Time.get_time_string_from_system()
-	# 通道 1: Godot Editor Output / stdout (保留)
-	print_rich("[color=%s][%s] [%s] %s[/color]" % [color, time, level, msg])
+	# 通道 1: Godot Editor Output / stdout（仅当 >= min_print_level）
+	if level_int >= _min_print_level:
+		print_rich("[color=%s][%s] [%s] %s[/color]" % [color, time, level, msg])
 	# 通道 2: 环形缓冲区 (供 RuntimeProbe 拉取)
 	_push_to_buffer(level, msg)
 
@@ -42,10 +46,10 @@ static func _emit(level: String, msg: String, color: String) -> void:
 # 公共静态 API
 # ═════════════════════════════════════════════════════════════════════════════
 
-static func debug(msg: String) -> void: _emit("DEBUG", msg, "gray")
-static func info(msg: String)  -> void: _emit("INFO",  msg, "white")
-static func warn(msg: String)  -> void: _emit("WARN",  msg, "yellow")
-static func err(msg: String)   -> void: _emit("ERROR", msg, "red")
+static func debug(msg: String) -> void: _emit("DEBUG", msg, "gray", Level.DEBUG)
+static func info(msg: String)  -> void: _emit("INFO",  msg, "white", Level.INFO)
+static func warn(msg: String)  -> void: _emit("WARN",  msg, "yellow", Level.WARN)
+static func err(msg: String)   -> void: _emit("ERROR", msg, "red", Level.ERROR)
 
 static func not_exists(source: String, ...obj) -> bool:
 	var i := 0

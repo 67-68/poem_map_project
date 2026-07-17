@@ -218,13 +218,13 @@ static func _load_resource(
 		return
 
 	result.pool[full_id] = resource
-	Logging.info("DataScanner: 加载 [%s] <- %s" % [full_id, file_path])
+	Logging.debug("DataScanner: 加载 [%s] <- %s" % [full_id, file_path])
 
 	# ── 自动填充命名空间 ──
 	# 对所有 Resource 写入 _namespace，便于调试追溯来源
 	if "_namespace" in resource:
 		resource.set("_namespace", current_ns)
-		Logging.info("DataScanner: 写入 _namespace='%s' 到资源 '%s'" % [current_ns, full_id])
+		Logging.debug("DataScanner: 写入 _namespace='%s' 到资源 '%s'" % [current_ns, full_id])
 
 	# 🚨 自动速度升级规则：仅当 display_speed 为默认值 FAST(0) 时才升级到 SLOW
 	# 仅对 namespace 以 "5_story_arcs." 开头的资源生效
@@ -235,9 +235,9 @@ static func _load_resource(
 			var cur_speed = ui_decl_res.get("display_speed") if "display_speed" in ui_decl_res else 0
 			if cur_speed == 0:  # DisplaySpeed.FAST
 				ui_decl_res.set("display_speed", 1)  # DisplaySpeed.SLOW
-				Logging.info("DataScanner: 事件 '%s' 自动标记为 SLOW（namespace: %s）" % [full_id, current_ns])
+				Logging.debug("DataScanner: 事件 '%s' 自动标记为 SLOW（namespace: %s）" % [full_id, current_ns])
 			else:
-				Logging.info("DataScanner: 事件 '%s' 保持手动设定的 display_speed=%d（namespace: %s）" % [full_id, cur_speed, current_ns])
+				Logging.debug("DataScanner: 事件 '%s' 保持手动设定的 display_speed=%d（namespace: %s）" % [full_id, cur_speed, current_ns])
 
 	# ── 按完整相对路径分表 ──
 	# top_level_base 现在是完整相对路径（如 "1_core_rules.traits"、"3_actions_pool.baiye"）
@@ -300,7 +300,7 @@ static func _load_csv(
 			result.duplicates.append(full_id)
 			continue
 		result.pool[full_id] = item
-		Logging.info("DataScanner: CSV 写入 pool [%s] <- %s" % [full_id, file_path])
+		Logging.debug("DataScanner: CSV 写入 pool [%s] <- %s" % [full_id, file_path])
 
 
 static func _load_event_base_json(
@@ -367,7 +367,7 @@ static func _load_event_base_json(
 		return
 
 	result.pool[full_id] = event_base
-	Logging.info("DataScanner: 加载 EventBase [%s] <- %s (events=%d, strategy=%s)" % [full_id, file_path, event_base.events.size(), event_base.draw_strategies])
+	Logging.debug("DataScanner: 加载 EventBase [%s] <- %s (events=%d, strategy=%s)" % [full_id, file_path, event_base.events.size(), event_base.draw_strategies])
 
 	# ── 按完整相对路径分表 ──
 	if top_level_base != "":

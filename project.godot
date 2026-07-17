@@ -56,6 +56,11 @@ file_logging/enable_file_logging=true
 file_logging/log_path="user://logs/game.log"
 gdscript/autoload_on_startup=true
 
+[network]
+
+limits/debugger/max_chars_per_second=131072
+limits/debugger/max_errors_per_second=400
+
 [display]
 
 window/stretch/mode="canvas_items"

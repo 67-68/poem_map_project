@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://b46t2rs7i4xft"]
+
+[ext_resource type="Texture2D" uid="uid://cfurbjx1g62f5" path="res://assets/test.png" id="1_y2fak"]
+[ext_resource type="Texture2D" uid="uid://cadb6exsf01df" path="res://assets/mountain.png" id="2_de8ag"]
+[ext_resource type="Script" uid="uid://dd8icp050t1au" path="res://ui/start_line.gd" id="3_4g3u1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0ppi5"]
+content_margin_left = 200.0
+content_margin_right = 200.0
+
+[sub_resource type="Shader" id="Shader_de8ag"]
+code = "shader_type canvas_item;
+
+// ── 赛博雕版：动态二值化 Shader ──────────────────
+// 将任意彩图降维为单色版画：
+//   1. 提取灰度 (BT.601 Luminance)
+//   2. step 斩首：暗→墨色，亮→透明
+//   3. 透出下层 PaperContainer 的麻纸底色
+//
+// self_modulate.a 可叠加控制全局透明度，与 shader 解耦
+
+uniform float threshold : hint_range(0.0, 1.0) = 0.5;
+uniform vec4 ink_color : source_color = vec4(0.0, 0.0, 0.0, 0.85);
+uniform vec4 paper_color : source_color = vec4(1.0, 1.0, 1.0, 0.0);
+
+void fragment() {
+	// Step 1: 采样纹理并提取灰度 (BT.601)
+	vec4 tex = texture(TEXTURE, UV);
+	float lum = dot(tex.rgb, vec3(0.299, 0.587, 0.114));
+
+	// Step 2: 阶跃斩首 — 灰度 > threshold → 留白(0.0), 否则 → 墨色(1.0)
+	float mask = 1.0 - step(threshold, lum);
+
+	// Step 3: mix 输出 — 暗部染 ink_color，亮部 paper_color
+	COLOR = mix(paper_color, ink_color, mask);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4g3u1"]
+shader = SubResource("Shader_de8ag")
+shader_parameter/threshold = 0.778000036955
+shader_parameter/ink_color = Color(0, 0, 0, 0.28627452)
+shader_parameter/paper_color = Color(0.70980394, 0.6509804, 0.54901963, 1)
+
+[sub_resource type="Gradient" id="Gradient_eeo8n"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.7782178)
+colors = PackedColorArray(1, 1, 1, 0, 0, 0, 0, 0.92941177)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7xb00"]
+gradient = SubResource("Gradient_eeo8n")
+fill = 1
+fill_from = Vector2(0.47863248, 0.49358973)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8hk5g"]
+bg_color = Color(0, 0, 0, 0.5529412)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y2fak"]
+texture = ExtResource("2_de8ag")
+modulate_color = Color(0, 0, 0, 1)
+
+[node name="PanelContainer" type="PanelContainer" unique_id=899094804]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0ppi5")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=501392592]
+material = SubResource("ShaderMaterial_4g3u1")
+layout_mode = 2
+texture = ExtResource("1_y2fak")
+expand_mode = 3
+stretch_mode = 6
+
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=1946783692]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_7xb00")
+expand_mode = 3
+stretch_mode = 6
+
+[node name="Control" type="Control" parent="." unique_id=51331095]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control" unique_id=1656897051]
+custom_maximum_size = Vector2(-1, 40)
+layout_mode = 0
+offset_left = 337.0
+offset_top = 259.0
+offset_right = 377.0
+offset_bottom = 299.0
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8hk5g")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/PanelContainer" unique_id=1633875708]
+custom_minimum_size = Vector2(30, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+theme_type_variation = &"ChaosText"
+bbcode_enabled = true
+text = "京"
+fit_content = true
+scroll_active = false
+
+[node name="PanelContainer2" type="PanelContainer" parent="Control" unique_id=2128017974]
+custom_maximum_size = Vector2(1000, 40)
+layout_mode = 0
+offset_left = 466.0
+offset_top = 367.0
+offset_right = 506.0
+offset_bottom = 407.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_8hk5g")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/PanelContainer2" unique_id=1540900150]
+custom_minimum_size = Vector2(30, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"ChaosText"
+bbcode_enabled = true
+text = "隐"
+fit_content = true
+scroll_active = false
+
+[node name="PanelContainer3" type="PanelContainer" parent="Control" unique_id=1404160261]
+custom_maximum_size = Vector2(80, 40)
+layout_mode = 0
+offset_left = 601.0
+offset_top = 3.0
+offset_right = 641.0
+offset_bottom = 43.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_8hk5g")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/PanelContainer3" unique_id=1939113180]
+custom_minimum_size = Vector2(30, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"ChaosText"
+bbcode_enabled = true
+text = "律法"
+fit_content = true
+scroll_active = false
+
+[node name="PanelContainer4" type="PanelContainer" parent="Control" unique_id=1105086487]
+custom_maximum_size = Vector2(-1, 40)
+layout_mode = 0
+offset_left = 443.0
+offset_top = 200.0
+offset_right = 483.0
+offset_bottom = 240.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_y2fak")
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1416537533]
+modulate = Color(0.7882353, 0.16470589, 0.16470589, 0)
+width = 3.0
+default_color = Color(0.7882353, 0.16470589, 0.16470589, 1)
+script = ExtResource("3_4g3u1")

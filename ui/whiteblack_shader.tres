@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://l32yavlduio"]
+
+[ext_resource type="Shader" uid="uid://b1rw3gxjxtsyx" path="res://shaders/woodcut_binary.gdshader" id="1_an1lp"]
+
+[resource]
+shader = ExtResource("1_an1lp")
+shader_parameter/threshold = 0.2000000095
+shader_parameter/ink_color = Color(0, 0, 0, 0.23529412)
+shader_parameter/paper_color = Color(0.83137256, 0.74509805, 0.654902, 1)
