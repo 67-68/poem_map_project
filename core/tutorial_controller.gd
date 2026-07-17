@@ -151,44 +151,62 @@ func _show_tutorial_prompt() -> void:
 		Logging.err("TutorialController: root 为空，兜底跳过 tutorial")
 		_skip_tutorial()
 		return
+	
+	if PlayerState.has_flag("tutorial_completed"):
+		return
 
-	var dialog := AcceptDialog.new()
+	var dialog_scene := load("res://ui/confirmation_dialog_custom.tscn")
+	if not dialog_scene:
+		Logging.err("TutorialController: 无法加载 confirmation_dialog_custom.tscn，兜底跳过 tutorial")
+		_skip_tutorial()
+		return
+
+	var dialog := dialog_scene.instantiate() as PanelContainer
+	if not dialog:
+		Logging.err("TutorialController: confirmation_dialog_custom.tscn 实例化失败，兜底跳过 tutorial")
+		_skip_tutorial()
+		return
+
 	dialog.name = "TutorialPrompt"
-	dialog.title = "泰山游历"
-	dialog.dialog_text = "昔游齐鲁，登泰山而小天下了么？\n\n你愿意随老夫重游泰山，重温那段少年心气吗？"
-	dialog.min_size = Vector2(500, 250)
-	dialog.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_MAIN_WINDOW_SCREEN
-	dialog.close_requested.connect(_on_tutorial_dialog_closed.bind(dialog))
 
+	# 连接「跳过」按钮（unique_id=112152359）
+	var skip_btn := dialog.get_node_or_null("PanelContainer/VBoxContainer/HBoxContainer/LinkButton") as LinkButton
+	if skip_btn:
+		if skip_btn.pressed.is_connected(_on_tutorial_skip_pressed):
+			skip_btn.pressed.disconnect(_on_tutorial_skip_pressed)
+		skip_btn.pressed.connect(_on_tutorial_skip_pressed.bind(dialog))
+		Logging.info("TutorialController: 已连接「跳过」LinkButton")
+	else:
+		Logging.err("TutorialController: 找不到「跳过」LinkButton，兜底跳过 tutorial")
+		_skip_tutorial()
+		return
 
-	dialog.add_button("开始引导", true, "start_tutorial")
-	dialog.add_button("跳过", false, "skip_tutorial")
-
-	if dialog.custom_action.is_connected(_on_tutorial_custom_action):
-		dialog.custom_action.disconnect(_on_tutorial_custom_action)
-	dialog.custom_action.connect(_on_tutorial_custom_action.bind(dialog))
+	# 连接「开始引导」按钮（unique_id=596627211）
+	var start_btn := dialog.get_node_or_null("PanelContainer/VBoxContainer/HBoxContainer/LinkButton2") as LinkButton
+	if start_btn:
+		if start_btn.pressed.is_connected(_on_tutorial_start_pressed):
+			start_btn.pressed.disconnect(_on_tutorial_start_pressed)
+		start_btn.pressed.connect(_on_tutorial_start_pressed.bind(dialog))
+		Logging.info("TutorialController: 已连接「开始引导」LinkButton")
+	else:
+		Logging.err("TutorialController: 找不到「开始引导」LinkButton，兜底跳过 tutorial")
+		_skip_tutorial()
+		return
 
 	root.add_child(dialog)
-	dialog.popup_centered()
-	Logging.info("TutorialController: 新手教程确认 Modal 已弹出")
+	Logging.info("TutorialController: 新手教程确认 Modal 已弹出（使用 ConfirmationDialogCustom 场景）")
 
 
-func _on_tutorial_dialog_closed(dialog: AcceptDialog) -> void:
-	Logging.info("TutorialController: 对话框被关闭（默认 = 跳过）")
+func _on_tutorial_skip_pressed(dialog: PanelContainer) -> void:
+	Logging.info("TutorialController: 「跳过」按钮被点击")
 	_skip_tutorial()
 	if is_instance_valid(dialog):
 		dialog.queue_free()
 
 
-func _on_tutorial_custom_action(action: String, dialog: AcceptDialog) -> void:
-	Logging.info("TutorialController: 自定义按钮 '%s'" % action)
-	match action:
-		"start_tutorial":
-			_begin_tutorial()
-		"skip_tutorial":
-			_skip_tutorial()
-		_:
-			_skip_tutorial()
+func _on_tutorial_start_pressed(dialog: PanelContainer) -> void:
+	Logging.info("TutorialController: 「开始引导」按钮被点击")
+	_begin_tutorial()
 	if is_instance_valid(dialog):
 		dialog.queue_free()
 

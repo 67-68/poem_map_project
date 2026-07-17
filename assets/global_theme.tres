@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="1_g5th0"]
 [ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="1_h77k8"]
+[ext_resource type="StyleBox" uid="uid://kui3d5hudd7x" path="res://ui/paper_style.tres" id="2_8l8a3"]
 [ext_resource type="FontFile" uid="uid://b0jq4f032woif" path="res://assets/fonts/Noto_Serif_SC/static/NotoSerifSC-Bold.ttf" id="2_j3t25"]
 [ext_resource type="FontFile" uid="uid://bu472jjbmjeb3" path="res://assets/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Regular.ttf" id="4_j3t25"]
 
@@ -50,6 +51,11 @@ ChaosText/base_type = &"RichTextLabel"
 ChaosText/colors/default_color = Color(0.7882353, 0.16470589, 0.16470589, 1)
 ChaosText/font_sizes/normal_font_size = 32
 ChaosText/fonts/normal_font = ExtResource("1_g5th0")
+ConfirmationDialogNew/base_type = &"AcceptDialog"
+ConfirmationDialogNew/colors/title_color = Color(1, 1, 1, 1)
+ConfirmationDialogNew/font_sizes/title_font_size = 28
+ConfirmationDialogNew/fonts/title_font = ExtResource("2_j3t25")
+ConfirmationDialogNew/styles/panel = ExtResource("2_8l8a3")
 DefaultText/base_type = &"Label"
 DefaultText/colors/font_color = Color(0.2, 0.2, 0.2, 1)
 DefaultText/font_sizes/font_size = 14

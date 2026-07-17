@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://pyldjarsfljr"]
+
+[ext_resource type="StyleBox" uid="uid://cb0hsnugbu120" path="res://ui/shadow_style.tres" id="1_gjagu"]
+[ext_resource type="StyleBox" uid="uid://kui3d5hudd7x" path="res://ui/paper_style.tres" id="2_fhja2"]
+[ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="3_kyxu0"]
+
+[node name="ConfirmationDialogCustom" type="PanelContainer" unique_id=1260072418]
+custom_minimum_size = Vector2(400, 250)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -125.0
+offset_right = 200.0
+offset_bottom = 125.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("1_gjagu")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1420357194]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_fhja2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1087357844]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=97377267]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "泰山游历"
+
+[node name="Label2" type="RichTextLabel" parent="PanelContainer/VBoxContainer" unique_id=1972229877]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+bbcode_enabled = true
+text = "昔游齐鲁，登泰山而小天下了么?
+(开始新手教程?)"
+fit_content = true
+scroll_active = false
+autowrap_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=394594386]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="LinkButton" type="LinkButton" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=112152359]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_kyxu0")
+text = "跳过"
+
+[node name="LinkButton2" type="LinkButton" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=596627211]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_kyxu0")
+text = "开始引导"

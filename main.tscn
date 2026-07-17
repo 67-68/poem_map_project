@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://cd4vn8xulyovp" path="res://core/pool_manager.gd" id="13_ycdy4"]
 [ext_resource type="PackedScene" uid="uid://6ilphg3nn6wx" path="res://ui/debug_info.tscn" id="16_cegan"]
 [ext_resource type="PackedScene" uid="uid://d323p71vdp3wn" path="res://ui/social_connection_page.tscn" id="17_xuqvo"]
-[ext_resource type="PackedScene" uid="uid://bfevseldghfh0" path="res://ui/note_page.tscn" id="42_note"]
+[ext_resource type="PackedScene" uid="uid://pyldjarsfljr" path="res://ui/confirmation_dialog_custom.tscn" id="20_seu75"]
 [ext_resource type="PackedScene" uid="uid://bagmf63e3hmbi" path="res://ui/left_player_panel.tscn" id="22_0odxb"]
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
 [ext_resource type="Script" uid="uid://dv28khs0ehggj" path="res://ui/time_breath_ui.gd" id="24_htxhm"]
@@ -28,8 +28,9 @@
 [ext_resource type="PackedScene" uid="uid://bclflf5hxj5r4" path="res://ui/ambition_hud.tscn" id="37_ambition"]
 [ext_resource type="Script" uid="uid://bfm8lbvd4s6rw" path="res://main.gd" id="38_main"]
 [ext_resource type="Script" uid="uid://m3y6l6yi3con" path="res://core/input_manager.gd" id="39_inputmgr"]
-[ext_resource type="PackedScene" uid="uid://dc3hxtwrx57y7" path="res://ui/idea_page.tscn" id="41_idea"]
 [ext_resource type="PackedScene" uid="uid://cd6hwp2pe4b41" path="res://ui/system_menu.tscn" id="40_sysmenu"]
+[ext_resource type="PackedScene" uid="uid://dc3hxtwrx57y7" path="res://ui/idea_page.tscn" id="41_idea"]
+[ext_resource type="PackedScene" uid="uid://bfevseldghfh0" path="res://ui/note_page.tscn" id="42_note"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qsp4k"]
 shader = ExtResource("3_xuqvo")
@@ -164,13 +165,14 @@ visible = false
 [node name="NotePage" parent="UI" unique_id=992720836 instance=ExtResource("42_note")]
 visible = false
 
+[node name="ConfirmationDialogCustom" parent="UI" unique_id=1260072418 instance=ExtResource("20_seu75")]
+
 [node name="TapeLayer" type="CanvasLayer" parent="." unique_id=2047123948]
 layer = 100
 
 [node name="NarrativeOverlay" parent="TapeLayer" unique_id=1251280475 instance=ExtResource("11_vivmo")]
 visible = false
 z_index = 8
-anchors_preset = 0
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
