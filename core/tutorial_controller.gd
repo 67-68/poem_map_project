@@ -140,41 +140,22 @@ func _on_node_added(node: Node) -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _show_tutorial_prompt() -> void:
-	var tree := get_tree()
-	if not tree:
-		Logging.err("TutorialController: get_tree() 为空，兜底跳过 tutorial")
-		_skip_tutorial()
-		return
-
-	var root := tree.root
-	if not root:
-		Logging.err("TutorialController: root 为空，兜底跳过 tutorial")
-		_skip_tutorial()
-		return
-	
 	if PlayerState.has_flag("tutorial_completed"):
 		return
 
-	var dialog_scene := load("res://ui/confirmation_dialog_custom.tscn")
-	if not dialog_scene:
-		Logging.err("TutorialController: 无法加载 confirmation_dialog_custom.tscn，兜底跳过 tutorial")
-		_skip_tutorial()
-		return
-
-	var dialog := dialog_scene.instantiate() as PanelContainer
+	# 从 main.tscn 场景树中获取已有的 ConfirmationDialogCustom 实例
+	# 路径: Main/UI/ConfirmationDialogCustom
+	var dialog := _get_tutorial_dialog()
 	if not dialog:
-		Logging.err("TutorialController: confirmation_dialog_custom.tscn 实例化失败，兜底跳过 tutorial")
+		Logging.err("TutorialController: 找不到 Main/UI/ConfirmationDialogCustom 节点，兜底跳过 tutorial")
 		_skip_tutorial()
 		return
-
-	dialog.name = "TutorialPrompt"
 
 	# 连接「跳过」按钮（unique_id=112152359）
 	var skip_btn := dialog.get_node_or_null("PanelContainer/VBoxContainer/HBoxContainer/LinkButton") as LinkButton
 	if skip_btn:
-		if skip_btn.pressed.is_connected(_on_tutorial_skip_pressed):
-			skip_btn.pressed.disconnect(_on_tutorial_skip_pressed)
-		skip_btn.pressed.connect(_on_tutorial_skip_pressed.bind(dialog))
+		if not skip_btn.pressed.is_connected(_on_tutorial_skip_pressed):
+			skip_btn.pressed.connect(_on_tutorial_skip_pressed)
 		Logging.info("TutorialController: 已连接「跳过」LinkButton")
 	else:
 		Logging.err("TutorialController: 找不到「跳过」LinkButton，兜底跳过 tutorial")
@@ -184,31 +165,46 @@ func _show_tutorial_prompt() -> void:
 	# 连接「开始引导」按钮（unique_id=596627211）
 	var start_btn := dialog.get_node_or_null("PanelContainer/VBoxContainer/HBoxContainer/LinkButton2") as LinkButton
 	if start_btn:
-		if start_btn.pressed.is_connected(_on_tutorial_start_pressed):
-			start_btn.pressed.disconnect(_on_tutorial_start_pressed)
-		start_btn.pressed.connect(_on_tutorial_start_pressed.bind(dialog))
+		if not start_btn.pressed.is_connected(_on_tutorial_start_pressed):
+			start_btn.pressed.connect(_on_tutorial_start_pressed)
 		Logging.info("TutorialController: 已连接「开始引导」LinkButton")
 	else:
 		Logging.err("TutorialController: 找不到「开始引导」LinkButton，兜底跳过 tutorial")
 		_skip_tutorial()
 		return
 
-	root.add_child(dialog)
-	Logging.info("TutorialController: 新手教程确认 Modal 已弹出（使用 ConfirmationDialogCustom 场景）")
+	dialog.visible = true
+	Logging.info("TutorialController: 新手教程确认 Modal 已显示（Main/UI/ConfirmationDialogCustom）")
 
 
-func _on_tutorial_skip_pressed(dialog: PanelContainer) -> void:
+func _get_tutorial_dialog() -> PanelContainer:
+	"""返回 main.tscn 中预置的 ConfirmationDialogCustom 实例"""
+	var tree := get_tree()
+	if not tree:
+		return null
+	var root := tree.root
+	if not root:
+		return null
+	return root.get_node_or_null("Main/UI/ConfirmationDialogCustom") as PanelContainer
+
+
+func _on_tutorial_skip_pressed() -> void:
 	Logging.info("TutorialController: 「跳过」按钮被点击")
+	_hide_tutorial_dialog()
 	_skip_tutorial()
-	if is_instance_valid(dialog):
-		dialog.queue_free()
 
 
-func _on_tutorial_start_pressed(dialog: PanelContainer) -> void:
+func _on_tutorial_start_pressed() -> void:
 	Logging.info("TutorialController: 「开始引导」按钮被点击")
+	_hide_tutorial_dialog()
 	_begin_tutorial()
-	if is_instance_valid(dialog):
-		dialog.queue_free()
+
+
+func _hide_tutorial_dialog() -> void:
+	var dialog := _get_tutorial_dialog()
+	if dialog:
+		dialog.visible = false
+		Logging.info("TutorialController: ConfirmationDialogCustom 已隐藏")
 
 
 func _skip_tutorial() -> void:

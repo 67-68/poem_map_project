@@ -166,6 +166,7 @@ visible = false
 visible = false
 
 [node name="ConfirmationDialogCustom" parent="UI" unique_id=1260072418 instance=ExtResource("20_seu75")]
+visible = false
 
 [node name="TapeLayer" type="CanvasLayer" parent="." unique_id=2047123948]
 layer = 100
