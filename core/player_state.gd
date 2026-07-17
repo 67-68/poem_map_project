@@ -627,6 +627,7 @@ func set_flag(flag_id: String, value, type: String = ''):
 	if type.is_empty():
 		type = _validate_flag_type(flag_id)
 		if type.is_empty():
+			Logging.err('some flag dont have type')
 			return
 	elif type not in ['str', 'int', 'bool']:
 		Logging.err('set_flag: unknown type %s for flag %s' % [type, flag_id])

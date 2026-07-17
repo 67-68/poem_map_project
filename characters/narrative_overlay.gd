@@ -141,7 +141,11 @@ func _ready() -> void:
 	# 🆕 Tape 隐藏模式：SocialConnectionPage / PoemCreationPage 借用纸带 UI
 	EventBus.narrative_tape_hide_requested.connect(_on_tape_hide_requested)
 	EventBus.narrative_tape_show_requested.connect(_on_tape_show_requested)
-
+	EventBus.show_mid_panel.connect(func(): 
+		show()
+		$TapeContainer.show()
+	)
+	
 	Logging.info("NarrativeOverlay._ready: 信号接线完成")
 
 

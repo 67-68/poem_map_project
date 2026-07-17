@@ -152,3 +152,6 @@ signal set_action_in_other_place_btn_visibility(show: bool)
 signal try_create_poem()
 signal exit_poem_page()
 signal idea_upgraded()
+
+signal show_mid_panel()
+signal idea_page_close()

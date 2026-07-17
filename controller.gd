@@ -22,7 +22,12 @@ func _on_text_submitted(new_text: String) -> void:
 		return
 	parse(new_text)
 
+func test():
+	TutorialController._advance_to_end()
+
 func parse(new_text):
+	if new_text == 'test':
+		test()
 	var parts = new_text.split(' ')
 	Logging.info('try to execute %s' % new_text)
 	if parts.size() < 2 or not parts[1]: return

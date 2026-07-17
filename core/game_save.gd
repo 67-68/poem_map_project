@@ -17,7 +17,6 @@ func _init() -> void:
 func _ready() -> void:
 	Logging.info("GameSave: Autoload ready, data initialized")
 
-
 # ════════════════════════════════════════════════════════════════
 # 文件 I/O
 # ════════════════════════════════════════════════════════════════

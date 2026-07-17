@@ -96,6 +96,14 @@ var _just_entered_phase_5: bool = false
 ##  后果（如 set_stay_place）会在同帧内再次 emit event_confirmed，误触发「往上看确认」）
 var _just_entered_lookup_ready: bool = false
 
+# ── UI 可见性快照（tutorial 开始前记录，结束时还原）──
+## 结构：{node_path (String): visible (bool)}
+var _visibility_snapshot: Dictionary = {}
+
+# ── 游戏存档快照（tutorial 开始前记录，结束时还原）──
+## 结构：GameSaveData.to_dict() 返回的完整 Dictionary
+var _game_save_snapshot: Dictionary = {}
+
 # ── 道士 NPCDocument key ──
 const TAOIST_NPC_KEY := "tut_taoist"
 
@@ -114,6 +122,8 @@ func _ready() -> void:
 	if not get_tree().node_added.is_connected(_on_node_added):
 		get_tree().node_added.connect(_on_node_added)
 		Logging.info("TutorialController: 已连接 node_added，等待 Main 场景加载")
+	
+	PlayerState.register_virtual_flag("tutorial_completed",'bool')
 
 
 func _on_node_added(node: Node) -> void:
@@ -186,15 +196,31 @@ func _on_tutorial_custom_action(action: String, dialog: AcceptDialog) -> void:
 func _skip_tutorial() -> void:
 	TimeService.jump_to_clean(745.0)
 	Logging.info("TutorialController: 跳过新手教程")
-	PlayerState.set_flag("tutorial_completed", true)
 	ActionManager.clear_tutorial_whitelist()
 	ActionManager.clear_tutorial_sub_whitelist()
+	# 还原游戏存档快照（兜底：如果 _begin_tutorial 已执行过）
+	if not _game_save_snapshot.is_empty():
+		_restore_game_save_snapshot()
+		Logging.info("TutorialController: [skip] 游戏存档快照已还原")
+	# 🆕 set_flag 必须在快照还原之后，否则会被旧快照覆盖
+	PlayerState.set_flag("tutorial_completed", true, 'bool')
+	# 记录当前可见性（兜底：如果 _begin_tutorial 从未执行），然后还原
+	if _visibility_snapshot.is_empty():
+		_record_all_visibility(get_tree().root)
+		Logging.info("TutorialController: [skip] 快照为空，重新记录")
+	_restore_all_visibility(get_tree().root)
+	# 兜底：刷新面板内部状态
 	_ensure_all_ui_visible()
+	Logging.info("TutorialController: [skip] _ensure_all_ui_visible 已调用（兜底刷新）")
 	_clear_all_tut_flags()
 
 
 func _begin_tutorial() -> void:
 	Logging.info("TutorialController: ====== 开始新手教程 ======")
+
+	# 🆕 保存游戏存档快照（tutorial 结束后完整还原）
+	_record_game_save_snapshot()
+	Logging.info("TutorialController: [init 0/9] 游戏存档快照已记录")
 
 	# 设置每旬 2 天
 	TimeService.on_xun_tick.emit()
@@ -226,7 +252,9 @@ func _begin_tutorial() -> void:
 	_inject_timeline_scripts()
 	Logging.info("TutorialController: [init 6/9] timeline_scripts 已注入")
 
-	# 隐藏所有 UI 面板
+	# 递归记录所有控件可见性快照，然后隐藏所有 UI 面板
+	_record_all_visibility(get_tree().root)
+	Logging.info("TutorialController: [init 6.5/9] UI 可见性快照已记录")
 	_hide_all_panels()
 	Logging.info("TutorialController: [init 7/9] UI 面板已隐藏")
 
@@ -281,6 +309,8 @@ func _connect_tutorial_signals() -> void:
 	if not EventBus.exit_poem_page.is_connected(_on_poem_start_clicked):
 		EventBus.exit_poem_page.connect(_on_poem_start_clicked)
 		Logging.info("TutorialController: 已连接 EventBus.exit_poem_page")
+	
+	EventBus.idea_page_close.connect(end)
 
 	_signals_connected = true
 
@@ -363,6 +393,7 @@ func _set_taoist_meditating() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func is_tutorial_active() -> bool:
+	#breakpoint
 	var active = not PlayerState.has_flag("tutorial_completed")
 	return active
 
@@ -373,6 +404,71 @@ func get_current_phase() -> Phase:
 # ═══════════════════════════════════════════════════════════
 # UI 面板管理
 # ═══════════════════════════════════════════════════════════
+
+## 递归记录 Main 节点下所有 CanvasItem 及其子节点的 visible 状态。
+## 快照存入 _visibility_snapshot：{node.get_path(): bool}
+func _record_all_visibility(root_node: Node) -> void:
+	_visibility_snapshot.clear()
+	if not root_node:
+		Logging.err("TutorialController: _record_all_visibility — root_node 为空")
+		return
+	# 从 Main 节点开始，避免遍历引擎内部节点导致输出洪泛
+	var main_node := root_node.get_node_or_null("Main")
+	if not main_node:
+		Logging.err("TutorialController: _record_all_visibility — Main 节点不存在")
+		return
+	_record_visibility_recursive(main_node)
+	Logging.info("TutorialController: UI 可见性快照已记录，共 %d 个控件" % _visibility_snapshot.size())
+
+
+## 递归核心：遍历 node 及其所有子孙 CanvasItem，记录 visible 状态（不打逐条 debug 避免输出洪泛）
+func _record_visibility_recursive(node: Node) -> void:
+	if not node:
+		return
+	if node is CanvasItem:
+		_visibility_snapshot[str(node.get_path())] = node.visible
+	for child in node.get_children():
+		_record_visibility_recursive(child)
+
+
+## 根据 _visibility_snapshot 还原所有控件的 visible 状态。
+func _restore_all_visibility(root_node: Node) -> void:
+	if _visibility_snapshot.is_empty():
+		Logging.info("TutorialController: _restore_all_visibility — 快照为空，跳过还原")
+		return
+	if not root_node:
+		Logging.err("TutorialController: _restore_all_visibility — root_node 为空")
+		return
+	var restored_count: int = 0
+	var missing_count: int = 0
+	for node_path_str in _visibility_snapshot:
+		var saved_visible: bool = _visibility_snapshot[node_path_str]
+		var target := root_node.get_node_or_null(node_path_str)
+		if target:
+			if target is CanvasItem:
+				target.visible = saved_visible
+				restored_count += 1
+		else:
+			missing_count += 1
+	Logging.info("TutorialController: UI 可见性已还原 — 成功=%d, 缺失=%d, 总计=%d" % [restored_count, missing_count, _visibility_snapshot.size()])
+	_visibility_snapshot.clear()
+
+
+## 保存 GameSave.data 的完整快照（tutorial 开始前调用）。
+func _record_game_save_snapshot() -> void:
+	_game_save_snapshot = GameSave.data.to_dict()
+	Logging.info("TutorialController: 游戏存档快照已记录，共 %d 个 key" % _game_save_snapshot.size())
+
+
+## 将 _game_save_snapshot 替换回 GameSave.data（tutorial 结束时调用）。
+func _restore_game_save_snapshot() -> void:
+	if _game_save_snapshot.is_empty():
+		Logging.info("TutorialController: _restore_game_save_snapshot — 快照为空，跳过还原")
+		return
+	GameSave.data.from_dict(_game_save_snapshot)
+	Logging.info("TutorialController: 游戏存档快照已还原，共 %d 个 key" % _game_save_snapshot.size())
+	_game_save_snapshot.clear()
+
 
 func _hide_all_panels() -> void:
 	var tree := get_tree()
@@ -770,15 +866,14 @@ func _on_phase_7_event_confirmed() -> void:
 			Logging.info("TutorialController: idea_unlock 确认 → 推送 tut_final_reveal")
 			_p7_step = Phase7Step.AWAIT_ENDING
 			_push_tut_event("tut_final_reveal")
-
-		Phase7Step.AWAIT_ENDING:
-			# tut_final_reveal 确认 → 进入 END
-			Logging.info("TutorialController: final_reveal 确认 → 进入 END")
-			_advance_to_end()
-
 		_:
 			Logging.warn("TutorialController: Phase 7 未处理的 event_confirmed step=%d" % _p7_step)
 
+func end():
+	if _p7_step == Phase7Step.AWAIT_ENDING:
+		# tut_final_reveal 确认 → 进入 END
+		Logging.info("TutorialController: final_reveal 确认 → 进入 END")
+		_advance_to_end()
 
 func _on_poem_start_clicked() -> void:
 	#breakpoint
@@ -854,29 +949,35 @@ func _advance_to_phase_7() -> void:
 
 
 func _advance_to_end() -> void:
+	"""无法事件期间触发"""
 	Logging.info("TutorialController: ====== PHASE_7_POEM → END ======")
 	_current_phase = Phase.END
 	_disconnect_tutorial_signals()
 	ActionManager.clear_tutorial_whitelist()
 	ActionManager.clear_tutorial_sub_whitelist()
 	_clear_all_tut_flags()
-	PlayerState.set_flag("tutorial_completed", true)
 	TimeService.reset_days_per_xun()
 
-	# 🆕 恢复 source_of_truth 属性值
-	var sot_resources: Dictionary = SourceOfTruth.debug_dashboard_state.get("resources", {})
-	var sot_health: int = sot_resources.get("health", 50)
-	var sot_money: int = sot_resources.get("money", 45)
-	PlayerState.force_set_stat_val("health", sot_health)
-	PlayerState.force_set_stat_val("money", sot_money)
-	Logging.info("TutorialController: 恢复 source_of_truth 属性 — health=%d money=%d" % [sot_health, sot_money])
+	# 🆕 还原游戏存档快照（覆盖 tutorial 期间所有修改）
+	_restore_game_save_snapshot()
+	Logging.info("TutorialController: 游戏存档快照已还原（覆盖 tutorial 期间所有状态变更）")
+	PlayerState.set_flag("tutorial_completed", true, 'bool')
+
+	# 🆕 根据快照递归还原所有控件可见性
+	_restore_all_visibility(get_tree().root)
+	Logging.info("TutorialController: UI 可见性已根据快照还原")
+	# 兜底：调用 _ensure_all_ui_visible 刷新面板内部状态（属性列表、时间面板、风闻等）
+	_ensure_all_ui_visible()
+	Logging.info("TutorialController: _ensure_all_ui_visible 已调用（兜底刷新）")
 
 	# 🆕 恢复 hover
 	HoverPopupManager.set_hover_enabled(true)
 	Logging.info("TutorialController: hover 已恢复")
-
-	_push_tut_event("tut_goodbye")
 	Logging.info("TutorialController: tutorial 完成！days_per_xun 已恢复默认，所有信号已断开，白名单已清除")
+	TimeService.jump_to_clean(745.0)
+	EventBus.request_refresh_action_panel.emit()
+	EventBus.show_mid_panel.emit()
+	
 
 
 # ═══════════════════════════════════════════════════════════

@@ -426,3 +426,4 @@ func hide_page() -> void:
 	)
 
 	Logging.info("IdeaPage: hide_page 完成")
+	EventBus.idea_page_close.emit()
