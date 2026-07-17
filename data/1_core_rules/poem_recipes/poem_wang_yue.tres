@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Poem" format=3 uid="uid://byelhd1mhirem"]
+
+[ext_resource type="Script" uid="uid://dberqktmglsse" path="res://core/model/conditional_time_penalty.gd" id="1_hvvlb"]
+[ext_resource type="Script" uid="uid://cr88qxtsjl4ry" path="res://core/model/poem.gd" id="2_x8wvh"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_4jqf4"]
+
+[resource]
+script = ExtResource("2_x8wvh")
+required_fragments = Array[String](["great_void", "vast_sea", "tai_shan"])
+level = 3
+topic = "POEM"
+specific_topic = "JI_LV"
+uuid = "poem_recipe_wang_yue"
+name = "望岳"
+description = "泰山"

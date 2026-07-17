@@ -507,6 +507,13 @@ func _refresh_trait_grid() -> void:
 ## 设置单个属性行的可见性
 ## prop_key: "health"/"money"/"inspiration"/"momentum"/"prestige"/"talent"/"astuteness"/"composure"
 func set_property_visible(prop_key: String, v: bool) -> void:
+	if prop_key == 'prestige':
+		$Panel/VBox/ScrollContainer/V/HBoxContainer.visible = true
+		$Panel/VBox/ScrollContainer/V/Prop.visible = true
+		$Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel.visible = true
+		$Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel2.visible = true
+		$Panel/VBox/ScrollContainer/V/HBoxContainer/SmallerPropLabel3.visible = true
+
 	var labels: Dictionary = _prop_label_map.get(prop_key)
 	if labels:
 		# 找到 prop 的父 HBoxContainer，通过 _prop_label_map 反向查找

@@ -13,4 +13,4 @@ func _process(delta: float) -> void:
 
 func _on_button_pressed() -> void:
 	#breakpoint
-	EventBus.poem_start_clicked.emit()
+	EventBus.try_create_poem.emit()

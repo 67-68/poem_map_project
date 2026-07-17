@@ -254,6 +254,7 @@ func _show_detail_for_selected() -> void:
 	var cost_name = idea.idea_cost_name
 	var cost_amount = idea.idea_cost_amount
 	var current_val = PlayerState.get_stat_val(cost_name)
+	var cost_demonstration = Database.get_property(cost_name).name
 
 	# 是否已拥有此理念
 	var is_owned := GameSave.data.current_unlock_ideas.has(idea.uuid)
@@ -271,7 +272,7 @@ func _show_detail_for_selected() -> void:
 			_upgrade_btn.text = "已满级"
 			_upgrade_btn.disabled = true
 		else:
-			_upgrade_btn.text = "解锁效果%d？消耗 %d点%s" % [next_level + 1, cost_amount, cost_name]
+			_upgrade_btn.text = "解锁效果%d？消耗 %d点%s" % [next_level + 1, cost_amount, cost_demonstration]
 			if current_val < cost_amount:
 				_upgrade_btn.text += "（不足）"
 				_upgrade_btn.disabled = true
@@ -325,6 +326,8 @@ func _on_upgrade_pressed() -> void:
 		idea.increase_idea_level()
 		Logging.info("[IdeaPage] 理念 '%s' 升级至等级 %d" % [idea.name, idea.current_idea_level])
 		_show_detail_for_selected()
+	
+	EventBus.idea_upgraded.emit()
 
 
 func _clear_effect_lines() -> void:

@@ -199,6 +199,8 @@ func _begin_tutorial() -> void:
 	# 设置每旬 2 天
 	TimeService.on_xun_tick.emit()
 
+	EventBus.idea_upgraded.connect(_on_phase_7_event_confirmed)
+
 	# 🆕 设置健康/钱为满值（tutorial 结束后切换回 source_of_truth 值）
 	var health_prop = Database.get_property("health")
 	var money_prop = Database.get_property("money")
@@ -268,17 +270,17 @@ func _connect_tutorial_signals() -> void:
 		EventBus.request_refresh_action_panel.connect(_on_state_check)
 		Logging.info("TutorialController: 已连接 EventBus.request_refresh_action_panel -> _on_state_check")
 
-	if not EventBus.poems_created.is_connected(_on_poem_created):
-		EventBus.poems_created.connect(_on_poem_created)
+	if not EventBus.event_confirmed.is_connected(_on_poem_created):
+		EventBus.event_confirmed.connect(_on_poem_created)
 		Logging.info("TutorialController: 已连接 EventBus.poems_created")
 
 	if not PlayerState.stay_place_changed.is_connected(_on_stay_place_changed):
 		PlayerState.stay_place_changed.connect(_on_stay_place_changed)
 		Logging.info("TutorialController: 已连接 PlayerState.stay_place_changed")
 
-	if not EventBus.poem_start_clicked.is_connected(_on_poem_start_clicked):
-		EventBus.poem_start_clicked.connect(_on_poem_start_clicked)
-		Logging.info("TutorialController: 已连接 EventBus.poem_start_clicked")
+	if not EventBus.exit_poem_page.is_connected(_on_poem_start_clicked):
+		EventBus.exit_poem_page.connect(_on_poem_start_clicked)
+		Logging.info("TutorialController: 已连接 EventBus.exit_poem_page")
 
 	_signals_connected = true
 
@@ -292,12 +294,12 @@ func _disconnect_tutorial_signals() -> void:
 		TimeService.on_xun_tick.disconnect(_on_xun_tick)
 	if EventBus.request_refresh_action_panel.is_connected(_on_state_check):
 		EventBus.request_refresh_action_panel.disconnect(_on_state_check)
-	if EventBus.poems_created.is_connected(_on_poem_created):
-		EventBus.poems_created.disconnect(_on_poem_created)
+	if EventBus.event_confirmed.is_connected(_on_poem_created):
+		EventBus.event_confirmed.disconnect(_on_poem_created)
 	if PlayerState.stay_place_changed.is_connected(_on_stay_place_changed):
 		PlayerState.stay_place_changed.disconnect(_on_stay_place_changed)
-	if EventBus.poem_start_clicked.is_connected(_on_poem_start_clicked):
-		EventBus.poem_start_clicked.disconnect(_on_poem_start_clicked)
+	if EventBus.exit_poem_page.is_connected(_on_poem_start_clicked):
+		EventBus.exit_poem_page.disconnect(_on_poem_start_clicked)
 	_signals_connected = false
 	Logging.info("TutorialController: 所有信号已断开")
 
@@ -535,8 +537,6 @@ func _on_state_check(_unused = null) -> void:
 			_on_phase_5_action()
 		Phase.PHASE_6_VISION:
 			_on_phase_6_action()
-		Phase.PHASE_7_POEM:
-			_on_phase_7_action()
 		_:
 			Logging.info("TutorialController: state_check 在 phase=%d 无特殊处理" % _current_phase)
 
@@ -559,6 +559,10 @@ func _on_stay_place_changed(place_str: String) -> void:
 func _on_poem_created(_data: Array = []) -> void:
 	if not is_tutorial_active():
 		return
+	
+	if not PlayerState.created_poems.size() > 0:
+		return
+
 	Logging.info("TutorialController: poems_created — phase=%d p7_step=%d" % [
 		_current_phase, _p7_step
 	])
@@ -727,6 +731,7 @@ func _on_phase_6_event_confirmed() -> void:
 func _on_phase_7_event_confirmed() -> void:
 	Logging.info("TutorialController: Phase 7 event_confirmed — step=%d" % _p7_step)
 
+	#breakpoint
 	match _p7_step:
 		Phase7Step.NO_INSPIRATION:
 			# 兴不足事件确认 → 解锁独酌
@@ -737,12 +742,22 @@ func _on_phase_7_event_confirmed() -> void:
 			_set_whitelist(["du_zhuo"])
 			_set_sub_whitelist(["tut_duzhuo_heyaojiu"])
 			_show_special_label("喝点药酒提提神吧！点击「闲居」→「喝药酒」")
+		Phase7Step.DRINK_WINE:
+			# 玩家喝了药酒 → 事件确认 → 检查兴是否恢复
+			var inspiration = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
+			Logging.info("TutorialController: 喝药酒后 event_confirmed — 兴=%d" % inspiration)
+			if inspiration > 0:
+				_inspiration_gained = true
+				_show_special_label("文思如泉涌！点击右下角毛笔按钮，开始写诗吧")
+			else:
+				Logging.warn("TutorialController: 喝药酒后兴仍为0，检查 duzhuo_heyaojiu action 是否正确配置")
 
 		Phase7Step.POEM_REVIEWED:
 			# 道人评诗确认 → 解锁理念
 			Logging.info("TutorialController: 评诗确认 → 解锁理念按钮")
 			_p7_step = Phase7Step.IDEA_UNLOCKED
 			_show_special_label("道长对你的诗赞不绝口！点击右下角蓝色印章，确立你的远大志向")
+			
 
 		Phase7Step.IDEA_UNLOCKED:
 			# P2-1: 理念解锁 → 先推 tut_idea_unlock 事件（展示理念按钮）
@@ -766,6 +781,7 @@ func _on_phase_7_event_confirmed() -> void:
 
 
 func _on_poem_start_clicked() -> void:
+	#breakpoint
 	if not is_tutorial_active():
 		return
 	if _current_phase != Phase.PHASE_7_POEM:
@@ -778,21 +794,6 @@ func _on_poem_start_clicked() -> void:
 		Logging.info("TutorialController: 兴=0 → 推送 tut_no_inspiration")
 		_p7_step = Phase7Step.NO_INSPIRATION
 		_push_tut_event("tut_no_inspiration")
-
-
-func _on_phase_7_action() -> void:
-	Logging.info("TutorialController: Phase 7 state_check — step=%d" % _p7_step)
-
-	if _p7_step == Phase7Step.DRINK_WINE:
-		# 玩家喝了药酒 → 检查兴是否恢复
-		var inspiration = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
-		Logging.info("TutorialController: 喝药酒后 兴=%d" % inspiration)
-		if inspiration > 0:
-			_inspiration_gained = true
-			_show_special_label("文思如泉涌！点击右下角毛笔按钮，开始写诗吧")
-		else:
-			Logging.warn("TutorialController: 喝药酒后兴仍为0，检查 duzhuo_heyaojiu action 是否正确配置")
-
 
 # ═══════════════════════════════════════════════════════════
 # 状态机推进（Phase 级别）
@@ -959,6 +960,7 @@ func _inject_timeline_scripts() -> void:
 		# PHASE_7a: 诗词创作后 → 名望行可见
 		"tut_poem_review": [
 			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "prestige", "visible": true },
+			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "idea_btn", "visible": true },
 		],
 
 		# P2-2: tut_idea_unlock — 理念按钮可见（确认后由 final_reveal 揭示剩余 UI）

@@ -4,14 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="3_36lce"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="4_sfx"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rixq6"]
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-shadow_color = Color(0, 0, 0, 0.45882353)
-shadow_size = 10
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nkd15"]
 content_margin_left = 15.0
 content_margin_top = 15.0
@@ -22,14 +14,14 @@ modulate_color = Color(0.07005369, 0.06743416, 0.09324034, 1)
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_otk17"]
 
-[node name="ShadowBox" type="PanelContainer" unique_id=1214157939]
+[node name="Panel" type="PanelContainer" unique_id=937197515]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_rixq6")
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_nkd15")
 script = ExtResource("1_otk17")
 
 [node name="Control" type="Control" parent="." unique_id=783040939]
@@ -47,35 +39,30 @@ size_flags_vertical = 0
 theme_type_variation = &"DefaultText"
 text = "wasd移动"
 
-[node name="Panel" type="PanelContainer" parent="." unique_id=937197515]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxTexture_nkd15")
-
-[node name="InputImagPanel" type="VBoxContainer" parent="Panel" unique_id=531798169]
+[node name="InputImagPanel" type="VBoxContainer" parent="." unique_id=531798169]
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 32
+theme_override_constants/separation = 0
 
-[node name="H" type="HBoxContainer" parent="Panel/InputImagPanel" unique_id=1122163985]
+[node name="H" type="HBoxContainer" parent="InputImagPanel" unique_id=1122163985]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="VBoxContainer2" type="HBoxContainer" parent="Panel/InputImagPanel" unique_id=847022550]
+[node name="VBoxContainer2" type="HBoxContainer" parent="InputImagPanel" unique_id=847022550]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Button2" type="Button" parent="Panel/InputImagPanel/VBoxContainer2" unique_id=997301390]
+[node name="Button2" type="Button" parent="InputImagPanel/VBoxContainer2" unique_id=997301390]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_otk17")
 text = "登高抒怀"
 
-[node name="Button" type="Button" parent="Panel/InputImagPanel/VBoxContainer2" unique_id=736597084]
+[node name="Button" type="Button" parent="InputImagPanel/VBoxContainer2" unique_id=736597084]
 layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
@@ -83,7 +70,7 @@ button_pressed = true
 button_group = SubResource("ButtonGroup_otk17")
 text = "干谒权贵"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/InputImagPanel" unique_id=1350550608]
+[node name="RichTextLabel" type="RichTextLabel" parent="InputImagPanel" unique_id=1350550608]
 layout_mode = 2
 theme_type_variation = &"FrozenInnerThoughtText"
 bbcode_enabled = true
@@ -92,7 +79,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 1
 
-[node name="CraftBtn" type="LinkButton" parent="Panel/InputImagPanel" unique_id=1695117411]
+[node name="CraftBtn" type="LinkButton" parent="InputImagPanel" unique_id=1695117411]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
@@ -100,11 +87,11 @@ theme_type_variation = &"ButtonTheme"
 theme_override_colors/font_color = Color(0.5591598, 0.8274052, 1, 1)
 text = "开始创作"
 
-[node name="UISoundComponent" type="Node" parent="Panel/InputImagPanel/CraftBtn" unique_id=418807036]
+[node name="UISoundComponent" type="Node" parent="InputImagPanel/CraftBtn" unique_id=418807036]
 script = ExtResource("4_sfx")
 click_category = "book_impact"
 
-[node name="Button" type="Button" parent="Panel" unique_id=80726385]
+[node name="Button" type="Button" parent="." unique_id=80726385]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8

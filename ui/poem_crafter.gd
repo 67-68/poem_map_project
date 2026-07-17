@@ -14,7 +14,7 @@ extends PanelContainer
 var current_mode: String = "gan_ye"
 
 ## Slot 容器路径
-const SLOTS_PARENT_PATH := "Panel/InputImagPanel/H"
+const SLOTS_PARENT_PATH := "InputImagPanel/H"
 
 ## 浮动灵感容器（复用 tscn 中已有的 Control 节点）
 const FLOATING_CONTAINER_PATH := "Control"
@@ -35,6 +35,7 @@ var _cached_upgrade_succeeded: bool = false
 ## 缓存预览时选中渲染的文本，保证切换 mode 时前两行不变
 var _cached_line1_text: String = ""
 var _cached_line2_text: String = ""
+var _cached_recipe_line: String = ""  ## V12: 配方匹配行文本（空 = 无匹配）
 
 ## V9.2: 缓存创作代价 operators（切换 mode 时复用，代价与 mode 无关）
 var _cached_cost_operators: Array = []
@@ -67,13 +68,13 @@ func _ready() -> void:
 	EventBus.imaginary_changed.connect(on_imaginary_changed)
 
 	# "开始创作"按钮
-	var craft_btn := $Panel/InputImagPanel/CraftBtn
+	var craft_btn := $InputImagPanel/CraftBtn
 	if craft_btn:
 		craft_btn.pressed.connect(_on_button_pressed)
 		Logging.info('PoemCrafter: CraftBtn.pressed 连接成功')
 
 	# "撕毁卷轴"按钮
-	var tear_btn := $Panel/Button
+	var tear_btn := $Button
 	if tear_btn:
 		tear_btn.pressed.connect(_on_tear_scroll_pressed)
 
@@ -95,8 +96,8 @@ func _ready() -> void:
 # ──────────────────────────────────────────────
 
 func _connect_toggle_signals() -> void:
-	var btn_deng_gao := $Panel/InputImagPanel/VBoxContainer2/Button2
-	var btn_gan_ye := $Panel/InputImagPanel/VBoxContainer2/Button
+	var btn_deng_gao := $InputImagPanel/VBoxContainer2/Button2
+	var btn_gan_ye := $InputImagPanel/VBoxContainer2/Button
 
 	if btn_deng_gao:
 		btn_deng_gao.toggled.connect(_on_toggle_deng_gao)
@@ -134,8 +135,10 @@ func _refresh_mode_display_only() -> void:
 		Logging.info('PoemCrafter(V9.2): _refresh_mode_display_only — 无缓存，跳过')
 		return
 
-	# 行1/行2 复用 _preview_current 时缓存的文本，行3 按 current_mode 更新
+	# V12: 配方行 + 行1/行2 复用 _preview_current 时缓存的文本，行3 按 current_mode 更新
 	var lines: Array[String] = []
+	if not _cached_recipe_line.is_empty():
+		lines.append(_cached_recipe_line)
 	lines.append("[color=#daa520]%s[/color]" % _cached_line1_text)
 	lines.append("[color=#87ceeb]%s[/color]" % _cached_line2_text)
 
@@ -147,7 +150,7 @@ func _refresh_mode_display_only() -> void:
 	# V9.2: 代价预览（从缓存 operators 重建，代价与 mode 无关）
 	lines.append_array(_build_cost_preview_lines())
 
-	$Panel/InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
+	$InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
 	Logging.info('PoemCrafter(V9.2): _refresh_mode_display_only — 已更新, mode=%s, line1=%s' % [current_mode, _cached_line1_text])
 
 
@@ -253,7 +256,7 @@ func _on_button_pressed() -> void:
 	# ── 1. 已有诗作上限检查 ──
 	if _has_unused_poem():
 		Logging.warn('PoemCrafter(V9.1): 已有未使用的诗词，拒绝创作')
-		$Panel/InputImagPanel/RichTextLabel.text = "已有诗作，先将其送出或题壁后再来。"
+		$InputImagPanel/RichTextLabel.text = "已有诗作，先将其送出或题壁后再来。"
 		return
 
 	# 🆕 灵感（兴）检查：创作诗词需要至少 POEM_CRAFT_INSPIRATION_COST 兴
@@ -261,13 +264,13 @@ func _on_button_pressed() -> void:
 	Logging.info('PoemCrafter(V9.1): 灵感检查 — 当前兴=%d, 需要=%d' % [current_inspiration, POEM_CRAFT_INSPIRATION_COST])
 	if current_inspiration < POEM_CRAFT_INSPIRATION_COST:
 		Logging.warn('PoemCrafter(V9.1): 灵感不足，拒绝创作 — 当前%d < 需要%d' % [current_inspiration, POEM_CRAFT_INSPIRATION_COST])
-		$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]灵感不足，至少需要 %d 兴方能创作。[/color]" % POEM_CRAFT_INSPIRATION_COST
+		$InputImagPanel/RichTextLabel.text = "[color=#aaa]灵感不足，至少需要 %d 兴方能创作。[/color]" % POEM_CRAFT_INSPIRATION_COST
 		return
 
 	# ── 2. 缓存必须存在（预览阶段已锁定结果） ──
 	if _cached_result == null:
 		Logging.err('PoemCrafter(V9.1): 缓存缺失 — 预览未完成或已过期，阻断创作')
-		$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题，稍后再试吧。[/color]"
+		$InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题，稍后再试吧。[/color]"
 		return
 
 	var final_level: int = _cached_final_level
@@ -275,13 +278,30 @@ func _on_button_pressed() -> void:
 	Logging.info('PoemCrafter(V9.1): 从缓存读取 — final_level=%d (%s), upgrade=%s' % [final_level, PoemCraftingCalculator.get_level_display_name(final_level), upgrade_succeeded])
 
 	# ── 3. 创建 Poem 对象（V10: 不再绑定 secular/literary value，价值由 PoemRewardOperator 消费时决定） ──
+	# V12: 优先使用配方匹配数据，匹配失败则回退通用名
 	var level_display_name := PoemCraftingCalculator.get_level_display_name(final_level)
-	var poem = Poem.new("POEM", level_display_name)
-	poem.uuid = "crafted_poem_l%d_%d" % [final_level, Time.get_unix_time_from_system()]
-	poem.name = "《%s》" % level_display_name
-	poem.level = final_level
-	poem.specific_topic = level_display_name
-	Logging.info('PoemCrafter(V10): Poem created — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
+	var matched: Poem = _cached_result.matched_recipe
+	var poem: Poem
+	var poem_name: String
+	var poem_specific: String
+	
+	if matched:
+		# 命中配方 → 使用配方的真实诗名 / specific_topic / required_fragments
+		poem = Poem.new("POEM", matched.specific_topic)
+		poem.uuid = "crafted_poem_l%d_%d" % [final_level, Time.get_unix_time_from_system()]
+		poem.name = "《%s》" % matched.name
+		poem.level = final_level
+		poem.specific_topic = matched.specific_topic
+		poem.required_fragments = matched.required_fragments.duplicate()
+		Logging.info('PoemCrafter(V12): Poem from recipe — uuid=%s, name=%s, level=%d, topic=%s, recipe_uuid=%s' % [poem.uuid, poem.name, poem.level, matched.specific_topic, matched.uuid])
+	else:
+		# 无匹配配方 → 回退通用名
+		poem = Poem.new("POEM", level_display_name)
+		poem.uuid = "crafted_poem_l%d_%d" % [final_level, Time.get_unix_time_from_system()]
+		poem.name = "《%s》" % level_display_name
+		poem.level = final_level
+		poem.specific_topic = level_display_name
+		Logging.info('PoemCrafter(V12): Poem generic fallback — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
 
 	PlayerState.created_poems.append(poem)
 	Logging.info('PoemCrafter(V10): Poem added to created_poems')
@@ -344,8 +364,9 @@ func _clear_cached_result() -> void:
 	_cached_upgrade_succeeded = false
 	_cached_line1_text = ""
 	_cached_line2_text = ""
+	_cached_recipe_line = ""
 	_cached_cost_operators.clear()
-	Logging.info('PoemCrafter(V9.2): 缓存已清除（含 cost operators）')
+	Logging.info('PoemCrafter(V12): 缓存已清除（含 cost operators + recipe）')
 
 
 func _consume_matched_imaginaries(uuids: Array[String]) -> void:
@@ -410,14 +431,15 @@ func _preview_current() -> void:
 	# ── 2. insufficient ──
 	if not result.passed:
 		if result.fail_reason == "insufficient":
-			$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]意象不足，至少需要%d个意象方能成诗。[/color]" % max_manageable
+			$InputImagPanel/RichTextLabel.text = "[color=#aaa]意象不足，至少需要%d个意象方能成诗。[/color]" % max_manageable
 			Logging.info('PoemCrafter(V9.1): _preview_current — insufficient, 清除缓存')
 		else:
-			$Panel/InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题…[/color]"
+			$InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题…[/color]"
 			Logging.err('PoemCrafter(V9.1): _preview_current — 未知错误 fail_reason=%s' % result.fail_reason)
 		_cached_result = null
 		_cached_final_level = 1
 		_cached_upgrade_succeeded = false
+		_cached_recipe_line = ""
 		return
 
 	# ── 3. 掷骰子锁定结果（路线 B：预览即锁定） ──
@@ -436,8 +458,17 @@ func _preview_current() -> void:
 	else:
 		Logging.info('PoemCrafter(V9.1): 预览锁定 — 无需升级 base_level=%d (%s), prob=%.3f' % [_cached_final_level, PoemCraftingCalculator.get_level_display_name(_cached_final_level), result.upgrade_probability])
 
-	# ── 4. 构建三行文学评价（缓存选中的文本，切换 mode 时复用） ──
+	# ── 4. 构建预览（缓存选中的文本，切换 mode 时复用） ──
 	var lines: Array[String] = []
+	
+	# V12: 配方匹配行（#ffd700 金色）— 命中配方时显示诗名
+	var recipe: Poem = result.matched_recipe
+	if recipe:
+		_cached_recipe_line = "[color=#ffd700]「%s」[/color]" % recipe.name
+		lines.append(_cached_recipe_line)
+		Logging.info('PoemCrafter(V12): _preview_current — 配方预览: %s' % recipe.name)
+	else:
+		_cached_recipe_line = ""
 
 	# 行 1: 意象丰瘠（#daa520 暗金）— 基于 base_level
 	_cached_line1_text = _pick_random_from_pool(LITERARY_IMAGERY_TEXTS.get(result.base_level, ["意象平平"]))
@@ -471,7 +502,7 @@ func _preview_current() -> void:
 	_cached_cost_operators = PoemCraftingCalculator.calculate_crafting_cost(result.score)
 	lines.append_array(_build_cost_preview_lines())
 
-	$Panel/InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
+	$InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
 	Logging.info('PoemCrafter(V9.2): _preview_current — 渲染完成, final_level=%d, upgrade=%s, line1=%s, cost_ops=%d' % [_cached_final_level, _cached_upgrade_succeeded, _cached_line1_text, _cached_cost_operators.size()])
 
 
@@ -519,7 +550,7 @@ func _on_tear_scroll_pressed() -> void:
 	var loss = amounts.get("s_fame_cost", -10)
 	PlayerState.append_stat("prestige", loss)
 	Logging.info('PoemCrafter: 扣除 prestige %d' % loss)
-
+	EventBus.exit_poem_page.emit()
 	EventBus.poem_cancel.emit()
 
 
@@ -597,6 +628,7 @@ func hide_with_animation() -> void:
 	tw.tween_property(self, "position:y", position.y + 10, 0.3)
 	await tw.finished
 	hide()
+	EventBus.exit_poem_page.emit()
 	Logging.info("PoemCrafter: hide_with_animation 完成")
 
 

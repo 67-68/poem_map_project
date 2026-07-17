@@ -59,6 +59,7 @@ class PoemCraftingResult:
 	var score: int = 0                ## 原始分数（可负）
 	var base_level: int = 1           ## 基础等级 (1-3)
 	var upgrade_probability: float = 0.0  ## 升级概率 [0.0, 1.0)，纯计算结果
+	var matched_recipe: Poem = null   ## V12: 精确 Set 匹配到的诗词配方（null = 无匹配）
 
 
 ## ──────────────────────────────────────────────
@@ -123,6 +124,13 @@ static func calculate_poem_grade(
 	# ── 4. 计算升级概率 ──
 	result.upgrade_probability = calculate_upgrade_probability(score, result.base_level)
 	Logging.info("PoemCraftingCalculator(V11): upgrade_probability=%.3f" % result.upgrade_probability)
+	
+	# ── 5. V12: 配方匹配 — 前 max_manageable 个意象 uuid 精确 Set 匹配 recipe_index ──
+	result.matched_recipe = _match_recipe(imaginaries, max_manageable)
+	if result.matched_recipe:
+		Logging.info("PoemCraftingCalculator(V12): 配方匹配成功 — recipe=%s (%s)" % [result.matched_recipe.name, result.matched_recipe.uuid])
+	else:
+		Logging.info("PoemCraftingCalculator(V12): 配方匹配失败，将使用通用诗名")
 	
 	result.passed = true
 	return result
@@ -200,6 +208,42 @@ static func calculate_level_upgrade_probability(level: int) -> float:
 		return 0.0
 	Logging.debug("PoemCraftingCalculator(V10): calculate_level_upgrade_probability — level=%d, median_score=%d" % [level, median_score])
 	return calculate_upgrade_probability(median_score, level)
+
+
+## ──────────────────────────────────────────────
+## V12: 配方匹配 — 前 max_manageable 个 Imaginary uuid 精确 Set 匹配 Database.recipe_index
+##
+## 提取前 max_manageable 个意象的 uuid，通过 FragmentMatcher.build_key 查 recipe_index。
+## 返回匹配到的 Poem 配方，无匹配返回 null。
+## ──────────────────────────────────────────────
+
+static func _match_recipe(imaginaries: Array, max_manageable: int) -> Poem:
+	var uuids: Array[String] = []
+	for i in range(mini(imaginaries.size(), max_manageable)):
+		var imag = imaginaries[i]
+		if imag is Imaginary:
+			uuids.append(imag.uuid)
+	Logging.info("PoemCraftingCalculator(V12): _match_recipe — 前%d个意象 uuids=%s" % [uuids.size(), str(uuids)])
+	
+	if uuids.size() < max_manageable:
+		Logging.info("PoemCraftingCalculator(V12): _match_recipe — 意象数量不足 max_manageable，跳过匹配")
+		return null
+	
+	var key := FragmentMatcher.build_key(uuids)
+	Logging.info("PoemCraftingCalculator(V12): _match_recipe — build_key=%s" % key)
+	
+	var recipe_index: Dictionary = Database.recipe_index
+	if recipe_index.is_empty():
+		Logging.warn("PoemCraftingCalculator(V12): _match_recipe — Database.recipe_index 为空")
+		return null
+	
+	var recipe = recipe_index.get(key)
+	if recipe and recipe is Poem:
+		Logging.info("PoemCraftingCalculator(V12): _match_recipe — 命中配方: %s" % recipe.name)
+		return recipe
+	
+	Logging.info("PoemCraftingCalculator(V12): _match_recipe — key '%s' 未命中任何配方" % key)
+	return null
 
 
 ## ──────────────────────────────────────────────
