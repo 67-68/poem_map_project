@@ -20,5 +20,5 @@ archetype_uuid = "denggao_qujiangchi_success"
 failed_result = SubResource("Resource_win54")
 defer_config = SubResource("Resource_tm8aw")
 uuid = "denggao_qujiangchi"
-name = "远游 · 曲江池"
-description = "曲江池畔遣兴"
+name = "ACT_DENGGAO_QUJIANGCHI_NAME"
+description = "ACT_DENGGAO_QUJIANGCHI_DESC"

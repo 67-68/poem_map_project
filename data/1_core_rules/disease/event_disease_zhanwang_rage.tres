@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_ffpm5")]([SubResource("Resource_epd4q"), SubRes
 [sub_resource type="Resource" id="Resource_fk7xe"]
 script = ExtResource("5_gep6x")
 choice_result = SubResource("Resource_m78dt")
-description = "砸完之后大口喘气，渐渐冷静"
+description = "EVT_EVENT_DISEASE_ZHANWANG_RAGE_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_ppwwf"]
 script = ExtResource("3_q08ff")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_ffpm5")]([SubResource("Resource_ppwwf"), SubRes
 [sub_resource type="Resource" id="Resource_6weme"]
 script = ExtResource("5_gep6x")
 choice_result = SubResource("Resource_7487u")
-description = "愈发兴奋，想要更多宣泄"
+description = "EVT_EVENT_DISEASE_ZHANWANG_RAGE_OPT1_DESC"
 
 [resource]
 script = ExtResource("6_yccym")
@@ -51,5 +51,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:mania"])
 options = Array[ExtResource("1_v87bk")]([SubResource("Resource_fk7xe"), SubResource("Resource_6weme")])
 uuid = "event_disease_zhanwang_rage"
-name = "毁物"
-description = "你瞪着案上的端砚，越看越觉得它在嘲弄你。忽然一股无名火窜上心头，你抓起砚台狠狠砸向地面——砰！墨汁四溅，在墙上炸开一朵黑色的花。还不够。你又掀翻了书案，纸笔散落一地。"
+name = "EVT_EVENT_DISEASE_ZHANWANG_RAGE_TITLE"
+description = "EVT_EVENT_DISEASE_ZHANWANG_RAGE_DESC"

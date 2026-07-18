@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_xe8ll")]([SubResource("Resource_7a302"), SubRes
 [sub_resource type="Resource" id="Resource_v36ip"]
 script = ExtResource("5_qu8pj")
 choice_result = SubResource("Resource_w0f7l")
-description = "再加一床被褥"
+description = "EVT_EVENT_DISEASE_FENGHAN_CHILLS_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_qj8nl"]
 script = ExtResource("3_sq18o")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_xe8ll")]([SubResource("Resource_qj8nl"), SubRes
 [sub_resource type="Resource" id="Resource_mh26e"]
 script = ExtResource("5_qu8pj")
 choice_result = SubResource("Resource_fkyl2")
-description = "硬撑着起身煮姜汤"
+description = "EVT_EVENT_DISEASE_FENGHAN_CHILLS_OPT1_DESC"
 
 [resource]
 script = ExtResource("6_bbbnb")
@@ -51,5 +51,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickAcute"])
 options = Array[ExtResource("1_ngdu5")]([SubResource("Resource_v36ip"), SubResource("Resource_mh26e")])
 uuid = "event_disease_fenghan_chills"
-name = "寒战"
-description = "一阵寒风透过窗棂钻进被衾，你蜷缩成一团，牙齿磕得咯咯响。炭盆里的火苗明明灭灭，暖不了你半分。连骨缝里都在往外冒着凉气。"
+name = "EVT_EVENT_DISEASE_FENGHAN_CHILLS_TITLE"
+description = "EVT_EVENT_DISEASE_FENGHAN_CHILLS_DESC"

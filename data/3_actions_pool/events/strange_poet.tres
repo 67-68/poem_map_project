@@ -20,12 +20,12 @@ operators = Array[ExtResource("2_c0dak")]([SubResource("Resource_ulfsb")])
 [sub_resource type="Resource" id="Resource_bw352"]
 script = ExtResource("5_ipp21")
 choice_result = SubResource("Resource_b8xty")
-description = "上前跟他说话"
+description = "EVT_STRANGE_POET_OPT_DESC"
 
 [resource]
 script = ExtResource("6_7xhml")
 _target_tags = Array[String](["test1:test1:test1:test1"])
 options = Array[ExtResource("1_dafel")]([SubResource("Resource_bw352")])
 uuid = "strange_poet"
-name = "奇怪的诗人"
-description = "你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。"
+name = "EVT_STRANGE_POET_TITLE"
+description = "EVT_STRANGE_POET_DESC"

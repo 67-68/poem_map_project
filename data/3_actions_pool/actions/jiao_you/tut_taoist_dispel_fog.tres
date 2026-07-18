@@ -1,37 +1,33 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://b8cdmr3oub5if"]
 
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_base"]
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_fby4e"]
-[ext_resource type="Script" uid="uid://f2uxsuxcyoky" path="res://core/operators/roll_imaginary_operator.gd" id="2_ri"]
-[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_prop"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="4_action"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_defer"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_d655u"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_w28ke"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_0ecur"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_4d7rk"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_yin8a"]
 
-[sub_resource type="Resource" id="Resource_dispel_success_ri"]
-script = ExtResource("2_ri")
-level = 3
-metadata/_custom_type_script = "uid://f2uxsuxcyoky"
-
-[sub_resource type="Resource" id="Resource_dispel_success_prop"]
-script = ExtResource("3_prop")
-str_props = "inspiration"
-value = 10
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_defer_config"]
-script = ExtResource("5_defer")
-xun_defered = "s_xun_cost"
+[sub_resource type="Resource" id="Resource_odxim"]
+script = ExtResource("3_w28ke")
+xun_defered = "m_xun_cost"
+ap_cost = "s_ap_cost"
 failed_fallback = "tut_defer_interrupt"
-defer_success_event = "tut_defer_done"
+
+[sub_resource type="Resource" id="Resource_00ith"]
+script = ExtResource("4_0ecur")
+event_key = "tut_defer_interrupt"
+
+[sub_resource type="Resource" id="Resource_85qn1"]
+script = ExtResource("5_4d7rk")
+operators = Array[ExtResource("2_d655u")]([SubResource("Resource_00ith")])
 
 [resource]
-script = ExtResource("4_action")
-required_place = "taishan_base"
+script = ExtResource("6_yin8a")
 _action_tags = Array[int]([30, 58])
-action_results = Array[ExtResource("1_base")]([SubResource("Resource_dispel_success_ri"), SubResource("Resource_dispel_success_prop")])
-fallback_event_uuid = "tut_defer_start"
-defer_config = SubResource("Resource_defer_config")
-override_action = "tut_jiaoyou_drink"
+fallback_event_uuid = "tut_defer_done"
+archetype_uuid = "tut_taoist_dispel_fog_success"
+failed_result = SubResource("Resource_85qn1")
+defer_config = SubResource("Resource_odxim")
 uuid = "tut_taoist_dispel_fog"
-name = "交游 · 驱散云雾"
-description = "请道长施法驱散山顶云雾"
+name = "ACT_TUT_TAOIST_DISPEL_FOG_NAME"
+description = "ACT_TUT_TAOIST_DISPEL_FOG_DESC"

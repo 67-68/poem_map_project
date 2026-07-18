@@ -27,11 +27,11 @@ operators = Array[ExtResource("2_mrxjf")]([SubResource("Resource_x2g23"), SubRes
 [sub_resource type="Resource" id="Resource_bku06"]
 script = ExtResource("6_8sll1")
 choice_result = SubResource("Resource_nvo2b")
-description = "脱下半臂，裹起婴孩，继续前行"
+description = "EVT_GANLU_JOURNEY_SCENE_ABANDONED_BABY_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_r1m5q"]
 script = ExtResource("6_8sll1")
-description = "将雪重新拢上，起身赶路"
+description = "EVT_GANLU_JOURNEY_SCENE_ABANDONED_BABY_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_gy7yn")
@@ -40,5 +40,5 @@ archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu"])
 options = Array[ExtResource("1_ryau7")]([SubResource("Resource_bku06"), SubResource("Resource_r1m5q")])
 uuid = "ganlu_journey_scene_abandoned_baby"
-name = "雪中婴骸"
-description = "风雪中，道旁雪堆有一处隆起，颜色异于周遭——泛着青灰。他蹲下，手扒开覆雪，指节触到冰硬的织物。雪粒簌簌落下，露出蜷缩的脚趾，比指甲盖还小，皮肤已是冻透的青紫色。婴儿侧卧，姿态如睡，雪落在眼睑上，不化。风声灌耳，除此之外，再无声息。他蹲在原地，手指停在半空，新雪渐渐覆上他刚扒开的坑沿。"
+name = "EVT_GANLU_JOURNEY_SCENE_ABANDONED_BABY_TITLE"
+description = "EVT_GANLU_JOURNEY_SCENE_ABANDONED_BABY_DESC"

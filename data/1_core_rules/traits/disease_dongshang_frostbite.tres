@@ -10,4 +10,4 @@ topic = "DISEASE"
 specific_topic = "ACUTE"
 time_penalty = 3
 uuid = "disease_dongshang_frostbite"
-name = "冻伤初起"
+name = "TRAIT_DISEASE_DONGSHANG_FROSTBITE_TRAIT_NAME"

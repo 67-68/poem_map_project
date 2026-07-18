@@ -9,4 +9,4 @@ script = ExtResource("2_nxymy")
 topic = "DISEASE"
 specific_topic = "CHRONIC"
 uuid = "disease_dongshang_necrosis"
-name = "冻疮坏死"
+name = "TRAIT_DISEASE_DONGSHANG_NECROSIS_TRAIT_NAME"

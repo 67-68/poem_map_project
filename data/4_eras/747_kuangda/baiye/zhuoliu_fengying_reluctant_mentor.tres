@@ -30,7 +30,7 @@ value = true
 script = ExtResource("6_phd8t")
 choice_result = SubResource("Resource_uf2qr")
 requirement = SubResource("Resource_082kd")
-description = "肩头残余的拍击温度还没散。你把门框上挂着的那壶浊酒拎下来，壶底朝上搁在门槛正中间。"
+description = "EVT_ZHUOLIU_FENGYING_RELUCTANT_MENTOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_u26nq"]
 script = ExtResource("3_71vnk")
@@ -50,7 +50,7 @@ value = true
 script = ExtResource("6_phd8t")
 choice_result = SubResource("Resource_6hqed")
 requirement = SubResource("Resource_te6ed")
-description = "你没看那年轻人，只对李十二郎问了一句：“韦侍郎最近还在收碑帖？”"
+description = "EVT_ZHUOLIU_FENGYING_RELUCTANT_MENTOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_p7gga"]
 script = ExtResource("3_71vnk")
@@ -63,7 +63,7 @@ operators = Array[ExtResource("2_d3vfl")]([SubResource("Resource_p7gga")])
 [sub_resource type="Resource" id="Resource_lqtko"]
 script = ExtResource("6_phd8t")
 choice_result = SubResource("Resource_yy4jx")
-description = "你把椅子从桌前往后挪了半寸，伸手去接那卷诗稿。"
+description = "EVT_ZHUOLIU_FENGYING_RELUCTANT_MENTOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_avyon"]
 script = ExtResource("8_l3w3n")
@@ -92,5 +92,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_NPC_DUFU:thatched_grass", "action:main:baiye"])
 options = Array[ExtResource("1_0ed6e")]([SubResource("Resource_ty1k8"), SubResource("Resource_6ugt1"), SubResource("Resource_lqtko")])
 uuid = "zhuoliu_fengying_reluctant_mentor"
-name = "推门，他熟门熟路"
-description = "李十二郎推开你那间租来的破屋门时没敲门。他身后站着一个年轻人——二十出头，诗稿捏在手里，指节发白。李十二郎搭着你肩拍了两下，那力度和三个月前你替他誊抄账本时一模一样。“这孩子想投卷，你领他走一趟韦府。”年轻人膝盖微屈，将跪未跪。你看见诗稿最上面那首，题目是你二十三岁时也写过的题材。"
+name = "EVT_ZHUOLIU_FENGYING_RELUCTANT_MENTOR_TITLE"
+description = "EVT_ZHUOLIU_FENGYING_RELUCTANT_MENTOR_DESC"

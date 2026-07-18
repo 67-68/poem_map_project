@@ -24,7 +24,7 @@ operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_2ba41")])
 [sub_resource type="Resource" id="Resource_lj35a"]
 script = ExtResource("5_5oatp")
 choice_result = SubResource("Resource_brj62")
-description = "将诗稿放回案上，端起残酒饮尽，起身离席。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_JIAOYOU_IDENTITY_VENDOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_iku0h"]
 script = ExtResource("4_pfs3l")
@@ -42,7 +42,7 @@ operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_iku0h"), SubRes
 [sub_resource type="Resource" id="Resource_jqyrp"]
 script = ExtResource("5_5oatp")
 choice_result = SubResource("Resource_a4prl")
-description = "应声坐下，研墨展卷，俯首逐字抄录。笔尖沙沙作响。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_JIAOYOU_IDENTITY_VENDOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_cyfsr"]
 script = ExtResource("4_pfs3l")
@@ -60,7 +60,7 @@ operators = Array[ExtResource("1_2stxw")]([SubResource("Resource_cyfsr"), SubRes
 [sub_resource type="Resource" id="Resource_kcabm"]
 script = ExtResource("5_5oatp")
 choice_result = SubResource("Resource_pjhri")
-description = "躬身赔笑，问主人可需再加个序。随即铺纸研磨，笔不停挥。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_JIAOYOU_IDENTITY_VENDOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_hqdcw"]
 script = ExtResource("7_io8mn")
@@ -78,4 +78,4 @@ options = Array[ExtResource("3_vir0b")]([SubResource("Resource_lj35a"), SubResou
 on_enter_result = SubResource("Resource_5a5mx")
 uuid = "duotai_humiliation_cheap_labor_gateway_jiaoyou_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
-description = "抄诗之辱"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_JIAOYOU_IDENTITY_VENDOR_DESC"

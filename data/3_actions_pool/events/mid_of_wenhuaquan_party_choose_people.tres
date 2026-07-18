@@ -22,7 +22,7 @@ choice_result = SubResource("Resource_bq86i")
 [sub_resource type="Resource" id="Resource_wlc3n"]
 script = ExtResource("6_g036t")
 list_key = "guests"
-text_template = "走向 {item}"
+text_template = "EVT_RND_TEXT_TEMPLATE_WALK_TO"
 target_event_key = "event_talk_guest"
 payload_key = "target_npc"
 use_push_event = true
@@ -32,5 +32,5 @@ script = ExtResource("7_hflg8")
 options = Array[ExtResource("1_21hv6")]([SubResource("Resource_0osye")])
 provider = SubResource("Resource_wlc3n")
 uuid = "mid_of_wenhuaquan_party_choose_people"
-name = "要选谁呢？"
-description = "商务还是运动？"
+name = "EVT_MID_OF_WENHUAQUAN_PARTY_CHOOSE_PEOPLE_TITLE"
+description = "EVT_MID_OF_WENHUAQUAN_PARTY_CHOOSE_PEOPLE_DESC"

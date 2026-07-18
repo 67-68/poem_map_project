@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_2g7ct")]([SubResource("Resource_mv5di"), SubRes
 [sub_resource type="Resource" id="Resource_2ruy3"]
 script = ExtResource("5_yevfd")
 choice_result = SubResource("Resource_dn5f1")
-description = "硬撑着去拜谒"
+description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_t6fuu"]
 script = ExtResource("3_yhaho")
@@ -43,11 +43,11 @@ operators = Array[ExtResource("2_2g7ct")]([SubResource("Resource_t6fuu"), SubRes
 [sub_resource type="Resource" id="Resource_u3ns2"]
 script = ExtResource("5_yevfd")
 choice_result = SubResource("Resource_y3s3n")
-description = "告假一日，闭门养病"
+description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_dxam5"]
 script = ExtResource("5_yevfd")
-description = "裹紧被褥，闭目不语"
+description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_OPT2_DESC"
 
 [resource]
 script = ExtResource("6_e5jku")
@@ -55,5 +55,5 @@ weight = 100.0
 era = "1_core_rules"
 options = Array[ExtResource("1_kd1c1")]([SubResource("Resource_2ruy3"), SubResource("Resource_u3ns2"), SubResource("Resource_dxam5")])
 uuid = "event_disease_fenghan_diagnosis"
-name = "风寒入体"
-description = "长安的秋风裹着一层潮气钻进衣领。你缩了缩脖子，喉咙里泛起一阵腥甜。\\n\\n第二天醒来，头重如裹，四肢百骸像被人拆开又胡乱拼了回去。铜盆里的水映出一张泛着不正常潮红的脸——这大概就是「病」了。"
+name = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_TITLE"
+description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_DESC"

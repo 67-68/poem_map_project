@@ -29,7 +29,7 @@ value = true
 script = ExtResource("6_6vdlt")
 choice_result = SubResource("Resource_llusm")
 requirement = SubResource("Resource_cktn3")
-description = "他双膝触地，额头压上那卷诗的竹筒边缘。"
+description = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_twscs"]
 script = ExtResource("3_affki")
@@ -49,7 +49,7 @@ value = true
 script = ExtResource("6_6vdlt")
 choice_result = SubResource("Resource_tmibn")
 requirement = SubResource("Resource_s64c8")
-description = "他从袖中摸出半块玉佩，推过桌面，停在酒壶与诗卷之间。"
+description = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_w1y7u"]
 script = ExtResource("3_affki")
@@ -71,7 +71,7 @@ operators = Array[ExtResource("2_50i87")]([SubResource("Resource_w1y7u"), SubRes
 [sub_resource type="Resource" id="Resource_jdgxj"]
 script = ExtResource("6_6vdlt")
 choice_result = SubResource("Resource_0ls3e")
-description = "他伸手取过那壶没人斟的酒，自己斟满，一饮而尽。"
+description = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_jmpro"]
 script = ExtResource("9_lf25o")
@@ -85,5 +85,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["ACTION_TRAVEL_BOAT:lone_sail", "action:main:baiye"])
 options = Array[ExtResource("1_58n1e")]([SubResource("Resource_4c6ls"), SubResource("Resource_xkoxy"), SubResource("Resource_jdgxj")])
 uuid = "kuangke_zhuoliu_malicious_misinterpretation"
-name = "浊流设宴，诗成铁证"
-description = "“野老墙低还似旧。”他停下来，看着你对旁边的人笑了一声：“这墙低，说的是谁家的墙？”旁边的人没答话。他把竹筒搁回案上，手指在“墙低”二字上敲了三下。站在你身后的随从把门帘放了下来。"
+name = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_TITLE"
+description = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_DESC"

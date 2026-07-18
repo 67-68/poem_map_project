@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_g4qng")]([SubResource("Resource_012j8")])
 [sub_resource type="Resource" id="Resource_4xd7w"]
 script = ExtResource("5_fqtm1")
 choice_result = SubResource("Resource_4o2pn")
-description = "取出三钱银子递与清客"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEA_M1_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_shxt1"]
 script = ExtResource("6_hy8m4")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_mnwja")]([SubResource("Resource_4xd7w")])
 uuid = "bai_ye_honeymoon_l1_typea_m1"
-name = "拜帖润笔"
-description = "暮色中，玩家至某王府拜谒，在二门处被一名身着青衫的清客拦住。清客接过拜帖，不急着看内容，先就着烛火反复捻纸，皱眉挑剔纸色“太素”，又指字迹“缺骨力”，说此等拜帖递进去恐惹王爷不悦。他斜睨玩家一眼，慢吞吞道：“不若某替你重誊一纸，润笔费只收三钱银子。”态度客气，但那捻纸的指尖迟迟不松开，分明在等玩家拿钱。"
+name = "EVT_BAI_YE_HONEYMOON_L1_TYPEA_M1_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEA_M1_DESC"

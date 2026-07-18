@@ -26,7 +26,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("6_og0yd")
 choice_result = SubResource("Resource_vmu6x")
 requirement = SubResource("Resource_d5l7e")
-description = "他掀开破被子站起来，直直走出门，站在雪地里，不说话。"
+description = "EVT_ZHUOLIU_LIEQI_POVERTY_TOURISM_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_ilhjm"]
 script = ExtResource("3_oka76")
@@ -44,7 +44,7 @@ trait_name = "kuangda_fengying"
 script = ExtResource("6_og0yd")
 choice_result = SubResource("Resource_cyt1k")
 requirement = SubResource("Resource_3kodm")
-description = "他展开纸，不等对方开口，已开始默写昨日未完成的诗句。"
+description = "EVT_ZHUOLIU_LIEQI_POVERTY_TOURISM_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_aa40j"]
 script = ExtResource("3_oka76")
@@ -62,7 +62,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("6_og0yd")
 choice_result = SubResource("Resource_fyhpn")
 requirement = SubResource("Resource_onfqf")
-description = "“大人既喜观清寒，可愿听一句实话？”他隔着门帘开口，语气平和。"
+description = "EVT_ZHUOLIU_LIEQI_POVERTY_TOURISM_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_dxoju"]
 script = ExtResource("5_4g55r")
@@ -88,5 +88,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_NPC_DUFU:thatched_grass", "action:main:fangshi"])
 options = Array[ExtResource("1_nm5xn")]([SubResource("Resource_qm4ex"), SubResource("Resource_2hbjh"), SubResource("Resource_v3ora")])
 uuid = "zhuoliu_lieqi_poverty_tourism"
-name = "赛博贫困游"
-description = "“看见这洞了么？屋里比屋外还冷三分。”他没有进屋，只是隔着门帘吩咐：子美，出来走两步，让她们看看你是怎么过冬的。帘子那头没有回应。他笑了一声，不高不低：“不打紧，我等得起。”"
+name = "EVT_ZHUOLIU_LIEQI_POVERTY_TOURISM_TITLE"
+description = "EVT_ZHUOLIU_LIEQI_POVERTY_TOURISM_DESC"

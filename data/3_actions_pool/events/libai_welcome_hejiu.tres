@@ -14,7 +14,7 @@ value = 10
 [sub_resource type="Resource" id="Resource_l4img"]
 script = ExtResource("3_ri5pm")
 requirement = SubResource("Resource_cn1ho")
-description = "libai_hejiu_1（5好感以上）"
+description = "EVT_LIBAI_HEJIU_1_DESC"
 
 [sub_resource type="Resource" id="Resource_cqm8s"]
 script = ExtResource("2_tvn3v")
@@ -25,11 +25,11 @@ value = 15
 [sub_resource type="Resource" id="Resource_5nnss"]
 script = ExtResource("3_ri5pm")
 requirement = SubResource("Resource_cqm8s")
-description = "libai_hejiu_2（15好感以上）"
+description = "EVT_LIBAI_HEJIU_2_DESC"
 
 [resource]
 script = ExtResource("4_cnds0")
 weight = 0.0
 options = Array[ExtResource("1_7laky")]([SubResource("Resource_l4img"), SubResource("Resource_5nnss")])
 uuid = "libai_welcome_hejiu"
-name = "李白邀请喝酒"
+name = "EVT_LIBAI_WELCOME_HEJIU_TITLE"

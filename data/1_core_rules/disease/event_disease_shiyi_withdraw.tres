@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_unw1s")]([SubResource("Resource_ebgd7"), SubRes
 [sub_resource type="Resource" id="Resource_l4jon"]
 script = ExtResource("6_w6e22")
 choice_result = SubResource("Resource_ia8a0")
-description = "勉强赴约"
+description = "EVT_EVENT_DISEASE_SHIYI_WITHDRAW_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_jcqqh"]
 script = ExtResource("3_13dtj")
@@ -42,7 +42,7 @@ operators = Array[ExtResource("2_unw1s")]([SubResource("Resource_jcqqh"), SubRes
 [sub_resource type="Resource" id="Resource_88kte"]
 script = ExtResource("6_w6e22")
 choice_result = SubResource("Resource_2cd7q")
-description = "就让我静静吧"
+description = "EVT_EVENT_DISEASE_SHIYI_WITHDRAW_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_vdhi5")
@@ -50,5 +50,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:depression"])
 options = Array[ExtResource("1_6flex")]([SubResource("Resource_l4jon"), SubResource("Resource_88kte")])
 uuid = "event_disease_shiyi_withdraw"
-name = "闭门不出"
-description = "你推掉了所有邀约。门外的请柬堆了一摞，你连拆都懒得拆。\\n\\n谁也不想见。什么也不想做。诗也不想写。"
+name = "EVT_EVENT_DISEASE_SHIYI_WITHDRAW_TITLE"
+description = "EVT_EVENT_DISEASE_SHIYI_WITHDRAW_DESC"

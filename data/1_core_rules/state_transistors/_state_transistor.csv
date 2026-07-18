@@ -1,4 +1,4 @@
-uuid,target_resource,transist_value,current_resource,triggered_event,requirement,operators,第 8 列,第 9 列
+uuid,target_resource,transist_value,current_resource,triggered_event,requirement,operators,col8,col9
 trig_dist_outside_city,,,,backhome_outside_city_1,"prop_gt(name=distance; val=5)|prop_lt(name=distance; val=10)|flag_int_ne(name=trig_dist_outside_city; val=1)","flag_int_set(name=trig_dist_outside_city; val=1)",,
 trig_dist_lishan,,,,backhome_lishan_1,"prop_gt(name=distance; val=40)|prop_lt(name=distance; val=50)|flag_int_ne(name=trig_dist_lishan; val=1)","flag_int_set(name=trig_dist_lishan; val=1)",,
 trig_dist_indifferent_wind,,,,backhome_indifferent_wind_1,"prop_gt(name=distance; val=70)|prop_lt(name=distance; val=80)|flag_int_ne(name=trig_dist_indifferent_wind; val=1)","flag_int_set(name=trig_dist_indifferent_wind; val=1)",,

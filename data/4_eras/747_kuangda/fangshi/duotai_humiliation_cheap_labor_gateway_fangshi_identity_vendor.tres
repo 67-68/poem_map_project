@@ -24,7 +24,7 @@ operators = Array[ExtResource("1_2fpd6")]([SubResource("Resource_vf7ye")])
 [sub_resource type="Resource" id="Resource_mumkv"]
 script = ExtResource("5_youx0")
 choice_result = SubResource("Resource_6r3xq")
-description = "你将笔搁在砚沿上，转身隐入人潮。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_FANGSHI_IDENTITY_VENDOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_ysjej"]
 script = ExtResource("4_urh3i")
@@ -42,7 +42,7 @@ operators = Array[ExtResource("1_2fpd6")]([SubResource("Resource_ysjej"), SubRes
 [sub_resource type="Resource" id="Resource_8unmc"]
 script = ExtResource("5_youx0")
 choice_result = SubResource("Resource_er81h")
-description = "你蘸墨，按他要求写完，放下笔静候。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_FANGSHI_IDENTITY_VENDOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_b6ba4"]
 script = ExtResource("4_urh3i")
@@ -60,7 +60,7 @@ operators = Array[ExtResource("1_2fpd6")]([SubResource("Resource_b6ba4"), SubRes
 [sub_resource type="Resource" id="Resource_o6y7q"]
 script = ExtResource("5_youx0")
 choice_result = SubResource("Resource_itlgt")
-description = "你写好封面，又主动问可需帮誊内页，极尽谦和。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_FANGSHI_IDENTITY_VENDOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_gavie"]
 script = ExtResource("7_a2scy")
@@ -78,4 +78,4 @@ options = Array[ExtResource("3_23smg")]([SubResource("Resource_mumkv"), SubResou
 on_enter_result = SubResource("Resource_2kw0l")
 uuid = "duotai_humiliation_cheap_labor_gateway_fangshi_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
-description = "账册封面的屈才"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_FANGSHI_IDENTITY_VENDOR_DESC"

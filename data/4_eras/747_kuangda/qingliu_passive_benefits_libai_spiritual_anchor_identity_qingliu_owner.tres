@@ -32,7 +32,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_215gn")
 choice_result = SubResource("Resource_5jme8")
 requirement = SubResource("Resource_480e4")
-description = "跪坐沙地前以枯枝描深“李太白”于三字之下，完成后起身便走。"
+description = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_0danq"]
 script = ExtResource("3_xvpqh")
@@ -45,7 +45,7 @@ operators = Array[ExtResource("2_xneem")]([SubResource("Resource_0danq")])
 [sub_resource type="Resource" id="Resource_j3o1t"]
 script = ExtResource("7_215gn")
 choice_result = SubResource("Resource_froh2")
-description = "盯着字迹直到日影偏移，用袖子抹平那片沙地，字迹消失后离去。"
+description = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_tujky"]
 script = ExtResource("3_xvpqh")
@@ -71,7 +71,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_215gn")
 choice_result = SubResource("Resource_4qy2q")
 requirement = SubResource("Resource_wk356")
-description = "等那人走后对身旁的人说“太白过此竟未相访”，让对方把话传出去。"
+description = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_dm0qk"]
 script = ExtResource("9_ra6ou")
@@ -96,5 +96,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility", "action:main:fangshi"])
 options = Array[ExtResource("1_3m2u6")]([SubResource("Resource_bc1u3"), SubResource("Resource_j3o1t"), SubResource("Resource_gw8nw")])
 uuid = "qingliu_passive_benefits_libai_spiritual_anchor_identity_qingliu_owner"
-name = "沙上剑书"
-description = "天宝十三载秋，李白过下杜城。他醉了，没叩你的门。后来有人在渭水边的沙地上看见一行字——是用剑尖划出的“杜子美”三字，歪斜潦草，旁边散落着马蹄印，延伸向潼关方向。那人来告诉你时，沙上的字迹已被风吹浅了一半。"
+name = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_TITLE"
+description = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_DESC"

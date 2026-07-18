@@ -13,7 +13,7 @@ script = ExtResource("2_tsn4n")
 
 [sub_resource type="Resource" id="Resource_kjtaq"]
 script = ExtResource("4_4rrxt")
-description = "你将纸条抽出，看也不看，递还给门子。“不必了。”"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_BAIYE_IDENTITY_VENDOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_1up43"]
 script = ExtResource("5_2onkx")
@@ -26,7 +26,7 @@ operators = Array[ExtResource("1_tb36p")]([SubResource("Resource_1up43")])
 [sub_resource type="Resource" id="Resource_hutmg"]
 script = ExtResource("4_4rrxt")
 choice_result = SubResource("Resource_0yeyl")
-description = "你折叠纸条，收好诗稿，朝门房方向拱了拱手。"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_BAIYE_IDENTITY_VENDOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_1dk3d"]
 script = ExtResource("5_2onkx")
@@ -39,7 +39,7 @@ operators = Array[ExtResource("1_tb36p")]([SubResource("Resource_1dk3d")])
 [sub_resource type="Resource" id="Resource_v4whn"]
 script = ExtResource("4_4rrxt")
 choice_result = SubResource("Resource_1mcix")
-description = "你收好纸条，低声对门子说：“敢问……方才厅上哪位宾客？”"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_BAIYE_IDENTITY_VENDOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_noxpl"]
 script = ExtResource("6_q4lu3")
@@ -57,4 +57,4 @@ options = Array[ExtResource("3_6oagx")]([SubResource("Resource_kjtaq"), SubResou
 on_enter_result = SubResource("Resource_fu4dr")
 uuid = "duotai_humiliation_hidden_charity_gateway_baiye_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
-description = "门缝里的纸条"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_BAIYE_IDENTITY_VENDOR_DESC"

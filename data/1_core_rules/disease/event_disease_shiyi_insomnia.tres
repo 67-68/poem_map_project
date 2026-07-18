@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_w62l2")]([SubResource("Resource_xsu8o"), SubRes
 [sub_resource type="Resource" id="Resource_bf23x"]
 script = ExtResource("6_p6mjl")
 choice_result = SubResource("Resource_mjp5i")
-description = "索性起来写诗"
+description = "EVT_EVENT_DISEASE_SHIYI_INSOMNIA_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_0bp7a"]
 script = ExtResource("4_5wm75")
@@ -42,7 +42,7 @@ operators = Array[ExtResource("2_w62l2")]([SubResource("Resource_0bp7a"), SubRes
 [sub_resource type="Resource" id="Resource_vi0rl"]
 script = ExtResource("6_p6mjl")
 choice_result = SubResource("Resource_uagdk")
-description = "闭眼假寐，等天亮"
+description = "EVT_EVENT_DISEASE_SHIYI_INSOMNIA_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_0u54e")
@@ -50,5 +50,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:depression"])
 options = Array[ExtResource("1_7akbx")]([SubResource("Resource_bf23x"), SubResource("Resource_vi0rl")])
 uuid = "event_disease_shiyi_insomnia"
-name = "不寐"
-description = "你翻了个身，又翻了个身。床板硬得像棺材板，窗外的月光亮得刺眼。更鼓敲了三更——四更——五更了。天边泛起鱼肚白时，你依然睁着眼睛。又是一夜未眠。"
+name = "EVT_EVENT_DISEASE_SHIYI_INSOMNIA_TITLE"
+description = "EVT_EVENT_DISEASE_SHIYI_INSOMNIA_DESC"

@@ -34,5 +34,5 @@ failed_result = SubResource("Resource_i1ynm")
 defer_config = SubResource("Resource_mwpil")
 override_action = "baiye_threaten"
 uuid = "jiwen_leverage_exchange"
-name = "吉温 · 把柄换势"
-description = "以把柄为筹码换取吉温的助力"
+name = "ACT_JIWEN_LEVERAGE_EXCHANGE_NAME"
+description = "ACT_JIWEN_LEVERAGE_EXCHANGE_DESC"

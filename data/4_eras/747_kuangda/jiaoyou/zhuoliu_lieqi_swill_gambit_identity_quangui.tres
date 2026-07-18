@@ -32,7 +32,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_q6u6x")
 choice_result = SubResource("Resource_kac4t")
 requirement = SubResource("Resource_s3uji")
-description = "他端起碗，没有喝——松手。碗碎，泔水飞溅。他推门便走。"
+description = "EVT_ZHUOLIU_LIEQI_SWILL_GAMBIT_IDENTITY_QUANGUI_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_cqfic"]
 script = ExtResource("3_aslsy")
@@ -55,7 +55,7 @@ trait_name = "kuangda_fengying"
 script = ExtResource("7_q6u6x")
 choice_result = SubResource("Resource_sdajn")
 requirement = SubResource("Resource_suhwh")
-description = "不等对方说完，他已经走到矮几前展开那张纸，提笔蘸墨。"
+description = "EVT_ZHUOLIU_LIEQI_SWILL_GAMBIT_IDENTITY_QUANGUI_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_qstos"]
 script = ExtResource("3_aslsy")
@@ -78,7 +78,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_q6u6x")
 choice_result = SubResource("Resource_rxfga")
 requirement = SubResource("Resource_ip77g")
-description = "“大人说的举荐信，落款是哪位府君的印？”"
+description = "EVT_ZHUOLIU_LIEQI_SWILL_GAMBIT_IDENTITY_QUANGUI_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_8sky6"]
 script = ExtResource("6_n2eys")
@@ -104,5 +104,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["ACTION_ENTERTAIN_DRINK:empty_cup", "TARGET_FACTION_ROYAL:jade_step", "action:main:jiaoyou", "TARGET_IDENTITY_QUANGUI"])
 options = Array[ExtResource("1_b3wus")]([SubResource("Resource_h6ce6"), SubResource("Resource_2xjmi"), SubResource("Resource_etx6n")])
 uuid = "zhuoliu_lieqi_swill_gambit_identity_quangui"
-name = "泔水赌局"
-description = "馊水的气味比酒先到。你进门的时候就已经闻到了。一个浊流大员斜靠在胡床上，没站起来，只用筷子指了指墙边矮几上的两样东西——金锭和一张纸。“你只有一炷香的时间。”他的筷子在空中画了个圈，最后指回他自己面前的粗陶碗，“一炷香之内，金子归你或者举荐信归你。然后——”他咂了咂嘴，“然后你喝这个。”筷子上沾着的油星滴进了泔水里。"
+name = "EVT_ZHUOLIU_LIEQI_SWILL_GAMBIT_IDENTITY_QUANGUI_TITLE"
+description = "EVT_ZHUOLIU_LIEQI_SWILL_GAMBIT_IDENTITY_QUANGUI_DESC"

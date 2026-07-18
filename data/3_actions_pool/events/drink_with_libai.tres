@@ -25,11 +25,11 @@ custom_context_params = {
 "taste_owner_relation_flag": "flag_relation_with_libai"
 }
 uuid = "drink_with_libai_send_poem"
-description = "赠诗一首"
+description = "EVT_DRINK_WITH_LIBAI_SEND_POEM_TITLE"
 
 [resource]
 script = ExtResource("6_8kqg1")
 options = Array[ExtResource("1_aydjf")]([SubResource("Resource_yc02m")])
 uuid = "drink_with_libai"
-name = "和李白喝酒"
-description = "他看着你：“喝！”"
+name = "EVT_DRINK_WITH_LIBAI_TITLE"
+description = "EVT_DRINK_WITH_LIBAI_DESC"

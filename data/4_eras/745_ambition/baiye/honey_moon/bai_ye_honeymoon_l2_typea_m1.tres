@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_bbwjv")]([SubResource("Resource_30q8o")])
 [sub_resource type="Resource" id="Resource_smc2e"]
 script = ExtResource("5_l58c2")
 choice_result = SubResource("Resource_h7uyb")
-description = "玩家提笔写下白银百两之数"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M1_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_ano76"]
 script = ExtResource("6_vhlk3")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_co7ly")]([SubResource("Resource_smc2e")])
 uuid = "bai_ye_honeymoon_l2_typea_m1"
-name = "含笑索巨礼"
-description = "“某位上官不日寿辰，群僚皆备厚礼。贤弟初来，当知此中关节。”侍从捧出青玉镇纸压住空白礼单，权贵指尖轻叩桌面，目光温和如慈长，却将礼单缓缓推至你面前。"
+name = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M1_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M1_DESC"

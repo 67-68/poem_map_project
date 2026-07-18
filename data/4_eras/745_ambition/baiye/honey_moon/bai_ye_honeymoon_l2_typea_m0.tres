@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_oalhf")]([SubResource("Resource_q7rjh")])
 [sub_resource type="Resource" id="Resource_rabi6"]
 script = ExtResource("5_b7tog")
 choice_result = SubResource("Resource_l04o2")
-description = "应允权贵，承诺三日内献上吴绫一匹"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M0_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_j82k8"]
 script = ExtResource("6_in45x")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_6nf53")]([SubResource("Resource_rabi6")])
 uuid = "bai_ye_honeymoon_l2_typea_m0"
-name = "含笑索帛"
-description = "“近日圣上欲为贵妃娘娘新制霓裳，颁旨命各府进献锦帛。本王府中尚缺一匹上等吴绫，听闻你与江南织造有些渊源？”话音未落，侍从已捧出一卷空白礼单，铺在案上。权贵目光落在礼单上，指尖轻叩案面，含笑不语。玩家明白，这是一笔“孝敬上官”的贡品，须自掏腰包补上。"
+name = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M0_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M0_DESC"

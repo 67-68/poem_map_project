@@ -27,5 +27,5 @@ possibility = "xs_success_rate"
 failed_result = SubResource("Resource_mvj1m")
 defer_config = SubResource("Resource_jdrjg")
 uuid = "duzhuo_fangjian_tingwen"
-name = "闲居 · 坊间听闻"
-description = "在酒肆茶馆间打听奇闻异事"
+name = "ACT_DUZHUO_FANGJIAN_TINGWEN_NAME"
+description = "ACT_DUZHUO_FANGJIAN_TINGWEN_DESC"

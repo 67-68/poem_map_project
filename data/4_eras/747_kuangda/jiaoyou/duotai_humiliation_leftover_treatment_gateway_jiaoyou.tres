@@ -13,7 +13,7 @@ script = ExtResource("2_w7wdo")
 
 [sub_resource type="Resource" id="Resource_8lh4d"]
 script = ExtResource("4_kbm30")
-description = "搁笔于案，转身步入夜色。"
+description = "EVT_DUOTAI_HUMILIATION_LEFTOVER_TREATMENT_GATEWAY_JIAOYOU_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_tg7lu"]
 script = ExtResource("5_0uy30")
@@ -26,7 +26,7 @@ operators = Array[ExtResource("1_cjiax")]([SubResource("Resource_tg7lu")])
 [sub_resource type="Resource" id="Resource_wd4tf"]
 script = ExtResource("4_kbm30")
 choice_result = SubResource("Resource_3bya6")
-description = "拱手称谢，将碎银收入囊中。"
+description = "EVT_DUOTAI_HUMILIATION_LEFTOVER_TREATMENT_GATEWAY_JIAOYOU_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_h7f65"]
 script = ExtResource("5_0uy30")
@@ -39,7 +39,7 @@ operators = Array[ExtResource("1_cjiax")]([SubResource("Resource_h7f65")])
 [sub_resource type="Resource" id="Resource_ka27n"]
 script = ExtResource("4_kbm30")
 choice_result = SubResource("Resource_6xewe")
-description = "躬身接过银两，笑答：“谢员外赏，愿再效劳。”"
+description = "EVT_DUOTAI_HUMILIATION_LEFTOVER_TREATMENT_GATEWAY_JIAOYOU_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_85yab"]
 script = ExtResource("6_2exvi")
@@ -57,4 +57,4 @@ options = Array[ExtResource("3_u6qj5")]([SubResource("Resource_8lh4d"), SubResou
 on_enter_result = SubResource("Resource_0hltk")
 uuid = "duotai_humiliation_leftover_treatment_gateway_jiaoyou"
 name = "emo_lt(name=ambition; val=100)"
-description = "碎银换墓志"
+description = "EVT_DUOTAI_HUMILIATION_LEFTOVER_TREATMENT_GATEWAY_JIAOYOU_DESC"

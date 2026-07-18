@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_g2oa3")]([SubResource("Resource_jskry")])
 [sub_resource type="Resource" id="Resource_ihg20"]
 script = ExtResource("5_mda5j")
 choice_result = SubResource("Resource_x05xk")
-description = "强笑拱手，躬身告退，称改日再来请教。"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEC_M1_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_i61ag"]
 script = ExtResource("6_m866v")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_xfxxf")]([SubResource("Resource_ihg20")])
 uuid = "bai_ye_honeymoon_l2_typec_m1"
-name = "虚赞后讥出身如献礼"
-description = "“此等笔墨，倒让我想起当年在陇右节度府中，见那些边将进贡的骏马——皮毛光鲜，用起来却不知深浅。”说罢将诗稿掷回案角，“今日乏了，你且回去，将诗中‘寒门’二字改去，再来见我。”"
+name = "EVT_BAI_YE_HONEYMOON_L2_TYPEC_M1_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEC_M1_DESC"

@@ -13,11 +13,11 @@ script = ExtResource("2_say8a")
 
 [sub_resource type="Resource" id="Resource_40jf6"]
 script = ExtResource("4_vkvn8")
-description = "转身将名帖留在原地，不看门子，步出大门。"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_4eilo"]
 script = ExtResource("4_vkvn8")
-description = "退到偏廊坐下，将湿了的袖口拧干，垂首等待。"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_b8p78"]
 script = ExtResource("5_8e0p6")
@@ -30,7 +30,7 @@ operators = Array[ExtResource("1_q3bsm")]([SubResource("Resource_b8p78")])
 [sub_resource type="Resource" id="Resource_a1rkt"]
 script = ExtResource("4_vkvn8")
 choice_result = SubResource("Resource_eqmyf")
-description = "赔笑凑近门子，低声道「大人辛苦，小的有劳通传。」"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_hkxk5"]
 script = ExtResource("6_lmp52")
@@ -48,4 +48,4 @@ options = Array[ExtResource("3_bs3bb")]([SubResource("Resource_40jf6"), SubResou
 on_enter_result = SubResource("Resource_bn4nv")
 uuid = "duotai_humiliation_class_bullying_gateway_baiye_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
-description = "门房冷眼"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_DESC"

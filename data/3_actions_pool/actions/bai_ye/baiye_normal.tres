@@ -25,5 +25,5 @@ day_consumed = 1.0
 failed_result = SubResource("Resource_tqtth")
 defer_config = SubResource("Resource_6eu1m")
 uuid = "baiye_normal"
-name = "拜谒 · 普通拜谒"
-description = "投刺候见无人引荐不足为外人道"
+name = "ACT_BAIYE_NORMAL_NAME"
+description = "ACT_BAIYE_NORMAL_DESC"

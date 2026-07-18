@@ -25,7 +25,7 @@ operators = Array[ExtResource("2_rp5a6")]([SubResource("Resource_20lln"), SubRes
 [sub_resource type="Resource" id="Resource_2c0ix"]
 script = ExtResource("5_u4k44")
 choice_result = SubResource("Resource_djxyl")
-description = "称二两肉来补补"
+description = "EVT_EVENT_DISEASE_FEILAO_WASTING_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_xegl2"]
 script = ExtResource("6_imqxb")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_rp5a6")]([SubResource("Resource_xegl2"), SubRes
 [sub_resource type="Resource" id="Resource_qage4"]
 script = ExtResource("5_u4k44")
 choice_result = SubResource("Resource_bl5oi")
-description = "镜前呆立良久，黯然离去"
+description = "EVT_EVENT_DISEASE_FEILAO_WASTING_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_utal6")
@@ -51,5 +51,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickChronic"])
 options = Array[ExtResource("1_0vku7")]([SubResource("Resource_2c0ix"), SubResource("Resource_qage4")])
 uuid = "event_disease_feilao_wasting"
-name = "消瘦"
-description = "你路过铜镜时瞥了一眼，愣住了。镜中那人颧骨高耸，眼窝深陷，衣袍空荡荡地挂在身上。你记得自己曾经不是这样的——曾经的面如冠玉呢？曾经的意气风发呢？"
+name = "EVT_EVENT_DISEASE_FEILAO_WASTING_TITLE"
+description = "EVT_EVENT_DISEASE_FEILAO_WASTING_DESC"

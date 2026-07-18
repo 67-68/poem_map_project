@@ -32,11 +32,11 @@ operators = Array[ExtResource("2_q16dx")]([SubResource("Resource_osl7u"), SubRes
 [sub_resource type="Resource" id="Resource_pbj3d"]
 script = ExtResource("7_51365")
 choice_result = SubResource("Resource_67r78")
-description = "抓住腰带末端，迎着风用牙齿咬"
+description = "EVT_GANLU_JOURNEY_SCENE_FROZEN_RIVER_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_83gvp"]
 script = ExtResource("7_51365")
-description = "把手缩回袖中，任腰带在风中乱拍"
+description = "EVT_GANLU_JOURNEY_SCENE_FROZEN_RIVER_OPT1_DESC"
 
 [resource]
 script = ExtResource("8_2n8w0")
@@ -45,5 +45,5 @@ archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu"])
 options = Array[ExtResource("1_5bl1w")]([SubResource("Resource_pbj3d"), SubResource("Resource_83gvp")])
 uuid = "ganlu_journey_scene_frozen_river"
-name = "腰带如活鱼"
-description = "啪嗒。一声，两声。风声把所有声音撕成碎片，但腰带拍打冰面的声音在碎片中钻出来——啪——啪——啪——。杜甫的手垂在身侧，五指青紫，指甲缝里渗出的血在皮肤表面结成细线。他试着将食指弯向掌心，关节发出干燥的咔嚓声，指腹在官服布料上滑过三次，留下三道发白的印痕。第四次，指甲勾住一根丝线——又滑脱。风灌进敞开的衣摆，布料贴住湿透的腿，整个身体像一面被敲击的鼓，震颤从骨头传到冻僵的指尖，再从指尖扩散成虚无。"
+name = "EVT_GANLU_JOURNEY_SCENE_FROZEN_RIVER_TITLE"
+description = "EVT_GANLU_JOURNEY_SCENE_FROZEN_RIVER_DESC"

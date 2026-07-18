@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_4vy50")]([SubResource("Resource_ksjw7")])
 [sub_resource type="Resource" id="Resource_hsu1u"]
 script = ExtResource("5_dddts")
 choice_result = SubResource("Resource_epjrh")
-description = "从袖中取出三贯银票，置于案上。"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M2_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_4frtn"]
 script = ExtResource("6_vx2j2")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_7y5d7")]([SubResource("Resource_hsu1u")])
 uuid = "bai_ye_honeymoon_l2_typea_m2"
-name = "值房例钱"
-description = "“近日本部整顿铨选簿册，凡新进士子，须按例纳‘给帖钱’三贯，方得登录。此乃衙中旧规。”语毕，他抬目看你，目光平静，指尖在案上轻叩两下。"
+name = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M2_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEA_M2_DESC"

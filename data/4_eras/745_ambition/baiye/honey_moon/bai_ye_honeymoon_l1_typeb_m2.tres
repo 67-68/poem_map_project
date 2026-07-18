@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_sasof")]([SubResource("Resource_gkd6e")])
 [sub_resource type="Resource" id="Resource_5aqc2"]
 script = ExtResource("5_wobgx")
 choice_result = SubResource("Resource_3kk4p")
-description = "玩家拱手道谢，继续立在廊下等候"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEB_M2_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_hkifm"]
 script = ExtResource("6_ohrqt")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_wcegx")]([SubResource("Resource_5aqc2")])
 uuid = "bai_ye_honeymoon_l1_typeb_m2"
-name = "寒阶侍立"
-description = "“新进士果然勤勉，这般冷天还来拜谒，老夫甚是感佩。只是郎中今日公务繁忙，恐无暇接见。不如明日再来，老夫替你递个话。”言罢转身回屋，玩家听见屋内炭火噼啪，夹着茶盏轻碰声。"
+name = "EVT_BAI_YE_HONEYMOON_L1_TYPEB_M2_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEB_M2_DESC"

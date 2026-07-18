@@ -32,7 +32,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_ouytb")
 choice_result = SubResource("Resource_kjjtq")
 requirement = SubResource("Resource_6m77k")
-description = "就着菜市的喧嚷大声念出旧作，念到第三句时郑虔回头，两人隔着人潮笑了。"
+description = "EVT_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_putnn"]
 script = ExtResource("3_euotj")
@@ -49,7 +49,7 @@ operators = Array[ExtResource("2_xaaku")]([SubResource("Resource_putnn"), SubRes
 [sub_resource type="Resource" id="Resource_pdpt7"]
 script = ExtResource("7_ouytb")
 choice_result = SubResource("Resource_ravaw")
-description = "接过时触到那片焦痕，指腹在纸缘停留了一瞬，低头默默将稿纸卷回。"
+description = "EVT_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_2yo1a"]
 script = ExtResource("3_euotj")
@@ -71,7 +71,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_ouytb")
 choice_result = SubResource("Resource_7dj7g")
 requirement = SubResource("Resource_kwort")
-description = "连声称难得郑广文眼力，随即翻开其他废纸就近请教——可还有遗珠。"
+description = "EVT_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_kb2dw"]
 script = ExtResource("9_em245")
@@ -96,5 +96,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility", "action:main:fangshi"])
 options = Array[ExtResource("1_am6am")]([SubResource("Resource_2i0us"), SubResource("Resource_pdpt7"), SubResource("Resource_ybici")])
 uuid = "qingliu_passive_benefits_zhengqian_spiritual_anchor_identity_qingliu_official"
-name = "菜市口旧稿"
-description = "春晨下杜城菜市口，郑虔从人潮中挤出来拦住你，从怀里掏出一卷被油渍浸透的旧稿——去岁你丢进灶膛的那卷，被他从火口抢了回来。他什么也没说，只是把那卷纸塞进你手里，转身便走。纸张边缘焦痕犹在，烟熏味混着菜市的葱韭气息。"
+name = "EVT_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OFFICIAL_TITLE"
+description = "EVT_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OFFICIAL_DESC"

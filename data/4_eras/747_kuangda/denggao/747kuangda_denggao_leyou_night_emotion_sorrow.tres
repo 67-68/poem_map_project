@@ -36,7 +36,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_hx360")
 choice_result = SubResource("Resource_jh611")
 requirement = SubResource("Resource_oo1m1")
-description = "“这满城灯火，倒是替天省了蜡烛。”"
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_SORROW_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_80ra3"]
 script = ExtResource("3_i7xda")
@@ -53,7 +53,7 @@ operators = Array[ExtResource("2_dlxmu")]([SubResource("Resource_80ra3"), SubRes
 [sub_resource type="Resource" id="Resource_dc8fi"]
 script = ExtResource("7_hx360")
 choice_result = SubResource("Resource_cyccr")
-description = "伸手接住那片凉意，转身往原下走。"
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_SORROW_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_navpt"]
 script = ExtResource("3_i7xda")
@@ -83,7 +83,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_hx360")
 choice_result = SubResource("Resource_en1le")
 requirement = SubResource("Resource_epefh")
-description = "望灯火出神片刻，低声自语：“不知哪一盏，能为我留门。”"
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_SORROW_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_uxaef"]
 script = ExtResource("9_jm7ha")
@@ -108,5 +108,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["ENV_NATURE_NIGHTMOON:cold_moon", "ENV_NATURE_AUTUMNWIND:falling_leaf", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_leyou_night", "emotion_pair:pair_sorrow", "VIBE_THEME_HISTORY:ruined_wall", "ENV_NATURE_AUTUMNWIND:falling_leaf"])
 options = Array[ExtResource("1_2q47i")]([SubResource("Resource_ufvlf"), SubResource("Resource_dc8fi"), SubResource("Resource_8ldfr")])
 uuid = "747kuangda_denggao_leyou_night_emotion_sorrow"
-name = "灯火如星照孤影"
-description = "乐游原上，晚风萧瑟。你立于原畔，望着脚下长安城万千灯火如繁星落地。远处传来模糊的人声与笛音，夜风将它们揉碎，送到你耳中时已辨不清悲喜。你站了很久，衣袍被风灌满，身体却越来越重。不是累了，是沉了。转身下山时，有露水般凉的东西落在你手背上。"
+name = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_SORROW_TITLE"
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_SORROW_DESC"

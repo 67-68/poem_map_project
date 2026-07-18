@@ -32,7 +32,7 @@ value = true
 script = ExtResource("6_rsj04")
 choice_result = SubResource("Resource_4q6fq")
 requirement = SubResource("Resource_7k6vs")
-description = "将信收入怀中，对仆从点头应允，随其前往。"
+description = "EVT_KUANGKE_ZHUOLIU_PERSONA_HOSTAGE_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_q10v4"]
 script = ExtResource("3_af1jb")
@@ -56,7 +56,7 @@ value = true
 script = ExtResource("6_rsj04")
 choice_result = SubResource("Resource_ak3bb")
 requirement = SubResource("Resource_ahufu")
-description = "取出二十文钱塞给仆从，附耳探问座中宾客名姓。"
+description = "EVT_KUANGKE_ZHUOLIU_PERSONA_HOSTAGE_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_aiwri"]
 script = ExtResource("3_af1jb")
@@ -81,7 +81,7 @@ operators = Array[ExtResource("2_cptih")]([SubResource("Resource_aiwri"), SubRes
 [sub_resource type="Resource" id="Resource_6i1x7"]
 script = ExtResource("6_rsj04")
 choice_result = SubResource("Resource_ft0ul")
-description = "将信撕作两片，掷还仆从，转身入巷。"
+description = "EVT_KUANGKE_ZHUOLIU_PERSONA_HOSTAGE_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_ca62u"]
 script = ExtResource("8_4r6vl")
@@ -95,5 +95,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["ENV_NATURE_NIGHTMOON:cold_moon", "action:main:fangshi"])
 options = Array[ExtResource("1_uspa8")]([SubResource("Resource_2v1fs"), SubResource("Resource_r8cbj"), SubResource("Resource_6i1x7")])
 uuid = "kuangke_zhuoliu_persona_hostage"
-name = "赏花帖"
-description = "信在手上停了很久——不是内容多难读，而是信末那句附言印进指甲缝里。灰衣仆从站在三步外，不等回话，只是看。他的眼珠跟着你折信纸的指节从左移到右。巷口有马匹打喷嚏的声音。你把信叠回原样的时候，纸边割进食指第二个关节，没流血。"
+name = "EVT_KUANGKE_ZHUOLIU_PERSONA_HOSTAGE_TITLE"
+description = "EVT_KUANGKE_ZHUOLIU_PERSONA_HOSTAGE_DESC"

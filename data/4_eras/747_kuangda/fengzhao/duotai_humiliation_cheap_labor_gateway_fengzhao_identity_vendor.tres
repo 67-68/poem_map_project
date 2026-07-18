@@ -24,7 +24,7 @@ operators = Array[ExtResource("1_5br6m")]([SubResource("Resource_v0kwm")])
 [sub_resource type="Resource" id="Resource_wqw32"]
 script = ExtResource("5_t2syp")
 choice_result = SubResource("Resource_j1qqw")
-description = "未接掸子，跨过地上卷册，径直步出房门。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_FENGZHAO_IDENTITY_VENDOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_gpotj"]
 script = ExtResource("4_u21rg")
@@ -42,7 +42,7 @@ operators = Array[ExtResource("1_5br6m")]([SubResource("Resource_gpotj"), SubRes
 [sub_resource type="Resource" id="Resource_n5ntx"]
 script = ExtResource("5_t2syp")
 choice_result = SubResource("Resource_focym")
-description = "接过掸子，拂净桌面，开始逐册检视年份。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_FENGZHAO_IDENTITY_VENDOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_qs8r0"]
 script = ExtResource("4_u21rg")
@@ -60,7 +60,7 @@ operators = Array[ExtResource("1_5br6m")]([SubResource("Resource_qs8r0"), SubRes
 [sub_resource type="Resource" id="Resource_w8a2o"]
 script = ExtResource("5_t2syp")
 choice_result = SubResource("Resource_5a88j")
-description = "接过掸子，连连躬身，又问签条是否需备墨重写。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_FENGZHAO_IDENTITY_VENDOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_n82pt"]
 script = ExtResource("7_uewe1")
@@ -78,4 +78,4 @@ options = Array[ExtResource("3_8mq22")]([SubResource("Resource_wqw32"), SubResou
 on_enter_result = SubResource("Resource_ux8ny")
 uuid = "duotai_humiliation_cheap_labor_gateway_fengzhao_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
-description = "积年案牍"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_FENGZHAO_IDENTITY_VENDOR_DESC"

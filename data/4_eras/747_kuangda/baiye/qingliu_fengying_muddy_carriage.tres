@@ -30,7 +30,7 @@ value = true
 script = ExtResource("6_usk15")
 choice_result = SubResource("Resource_nycap")
 requirement = SubResource("Resource_pyvc4")
-description = "拂袖转身，靴跟在冻硬的泥地上磕出脆响。"
+description = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_2oe1u"]
 script = ExtResource("3_2m5h5")
@@ -50,7 +50,7 @@ value = true
 script = ExtResource("6_usk15")
 choice_result = SubResource("Resource_ws1sh")
 requirement = SubResource("Resource_3pyjw")
-description = "目光急速扫向府门内侧，寻找那位欠过你润笔的录事参军。"
+description = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_n13tp"]
 script = ExtResource("3_2m5h5")
@@ -63,7 +63,7 @@ operators = Array[ExtResource("2_7usxe")]([SubResource("Resource_n13tp")])
 [sub_resource type="Resource" id="Resource_d2f84"]
 script = ExtResource("6_usk15")
 choice_result = SubResource("Resource_gy7qa")
-description = "弯下腰，将袖口往上拢了拢。"
+description = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_j8ye3"]
 script = ExtResource("8_3qju3")
@@ -92,5 +92,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:baiye"])
 options = Array[ExtResource("1_lyfpl")]([SubResource("Resource_rg2ka"), SubResource("Resource_l301r"), SubResource("Resource_d2f84")])
 uuid = "qingliu_fengying_muddy_carriage"
-name = "鞋入臭水"
-description = "腊月里的泥泞又黑又稠，像煮过头的药渣。李相的车驾刚拐过街角，惊马前蹄一扬，那只锦缎绣鞋从轿帘里飞出来，划过一道弧，正落进路边尺许深的臭水沟。门子认得你——他冲你点了点头，像对隔三差五来串门的街坊。周围官员的目光齐刷刷落在你身上，不是看你这个诗人，是看这个“老熟人”。"
+name = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_TITLE"
+description = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_DESC"

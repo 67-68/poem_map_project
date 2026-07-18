@@ -28,5 +28,5 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_7dd4n")
 defer_config = SubResource("Resource_kslgw")
 uuid = "fangshi_shiyao"
-name = "坊市 · 试药"
-description = "当代李时珍"
+name = "ACT_FANGSHI_SHIYAO_NAME"
+description = "ACT_FANGSHI_SHIYAO_DESC"

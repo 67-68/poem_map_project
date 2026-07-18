@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_6ucwu")]([SubResource("Resource_e8eee"), SubRes
 [sub_resource type="Resource" id="Resource_b3aj1"]
 script = ExtResource("6_x4o5g")
 choice_result = SubResource("Resource_rh1r1")
-description = "逼自己吃几口"
+description = "EVT_EVENT_DISEASE_SHIYI_ANOREXIA_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_o2ngr"]
 script = ExtResource("3_dl5wi")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_6ucwu")]([SubResource("Resource_o2ngr"), SubRes
 [sub_resource type="Resource" id="Resource_rhedd"]
 script = ExtResource("6_x4o5g")
 choice_result = SubResource("Resource_y461g")
-description = "推盘而起，不吃了"
+description = "EVT_EVENT_DISEASE_SHIYI_ANOREXIA_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_yao48")
@@ -51,5 +51,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:depression"])
 options = Array[ExtResource("1_7wpqg")]([SubResource("Resource_b3aj1"), SubResource("Resource_rhedd")])
 uuid = "event_disease_shiyi_anorexia"
-name = "厌食"
-description = "桌上摆着你平日最爱吃的几碟小菜——莼菜羹、鲈鱼脍、桂花糕。你夹了一筷子，在嘴里嚼了嚼——咽不下去。没有味道。什么都没有味道。你放下筷子，叹了口气。"
+name = "EVT_EVENT_DISEASE_SHIYI_ANOREXIA_TITLE"
+description = "EVT_EVENT_DISEASE_SHIYI_ANOREXIA_DESC"

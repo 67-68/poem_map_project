@@ -26,5 +26,5 @@ archetype_uuid = "duzhuo_xiaozhuo_success"
 failed_result = SubResource("Resource_gi0lc")
 defer_config = SubResource("Resource_xgiop")
 uuid = "duzhuo_xiaozhuo"
-name = "闲居 · 小酌一口"
-description = "浅尝辄止微醺养生"
+name = "ACT_DUZHUO_XIAOZHUO_NAME"
+description = "ACT_DUZHUO_XIAOZHUO_DESC"

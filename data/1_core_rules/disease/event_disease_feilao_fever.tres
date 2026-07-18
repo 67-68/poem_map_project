@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_xk67s")]([SubResource("Resource_mbkbk"), SubRes
 [sub_resource type="Resource" id="Resource_68u7r"]
 script = ExtResource("5_2tpux")
 choice_result = SubResource("Resource_m0d6o")
-description = "用凉水拍面降温"
+description = "EVT_EVENT_DISEASE_FEILAO_FEVER_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_bcd72"]
 script = ExtResource("3_umxxo")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_xk67s")]([SubResource("Resource_bcd72"), SubRes
 [sub_resource type="Resource" id="Resource_0c45i"]
 script = ExtResource("5_2tpux")
 choice_result = SubResource("Resource_rwco1")
-description = "卧床歇息，闭目养神"
+description = "EVT_EVENT_DISEASE_FEILAO_FEVER_OPT1_DESC"
 
 [resource]
 script = ExtResource("6_nbyeq")
@@ -51,5 +51,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickChronic"])
 options = Array[ExtResource("1_ff43q")]([SubResource("Resource_68u7r"), SubResource("Resource_0c45i")])
 uuid = "event_disease_feilao_fever"
-name = "潮热"
-description = "午后你正在窗前翻书，忽然一股热浪从胸口涌起，双颊烧得发烫。你拿手背贴了贴脸——烫得吓人，掌心却凉得像冰块。窗外的日光暖融融的，你却觉得那光刺得人头晕。"
+name = "EVT_EVENT_DISEASE_FEILAO_FEVER_TITLE"
+description = "EVT_EVENT_DISEASE_FEILAO_FEVER_DESC"

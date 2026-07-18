@@ -29,4 +29,4 @@ script = ExtResource("5_j32db")
 script = ExtResource("6_7ojh0")
 options = Array[ExtResource("1_c8r05")]([SubResource("Resource_qcrg6"), SubResource("Resource_ksxsd")])
 uuid = "welcome_to_wenhuaquan_party"
-name = "被文化圈邀请到宴席"
+name = "EVT_WELCOME_TO_WENHUAQUAN_PARTY_TITLE"

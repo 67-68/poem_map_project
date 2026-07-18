@@ -28,5 +28,5 @@ day_consumed = 2.0
 failed_result = SubResource("Resource_cnspr")
 defer_config = SubResource("Resource_q6kjp")
 uuid = "duzhuo_heyaojiu"
-name = "闲居 · 喝药酒"
-description = "以药酒祛毒养身"
+name = "ACT_DUZHUO_HEYAOJIU_NAME"
+description = "ACT_DUZHUO_HEYAOJIU_DESC"

@@ -28,5 +28,5 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_dx4dg")
 defer_config = SubResource("Resource_oxe0n")
 uuid = "fangshi_fgmaizi"
-name = "坊市 · 风骨卖字"
-description = "清高卖字"
+name = "ACT_FANGSHI_FGMAIZI_NAME"
+description = "ACT_FANGSHI_FGMAIZI_DESC"

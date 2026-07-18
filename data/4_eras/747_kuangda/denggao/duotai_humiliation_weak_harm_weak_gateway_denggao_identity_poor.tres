@@ -13,11 +13,11 @@ script = ExtResource("2_vy2eg")
 
 [sub_resource type="Resource" id="Resource_vj1w4"]
 script = ExtResource("4_i6cnr")
-description = "掉头走开，不看那人的字画，也不看那人。"
+description = "EVT_DUOTAI_HUMILIATION_WEAK_HARM_WEAK_GATEWAY_DENGGAO_IDENTITY_POOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_jbndd"]
 script = ExtResource("4_i6cnr")
-description = "苦笑一下，退到旁边垛口，背风而立。"
+description = "EVT_DUOTAI_HUMILIATION_WEAK_HARM_WEAK_GATEWAY_DENGGAO_IDENTITY_POOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_tywqa"]
 script = ExtResource("5_31i6f")
@@ -30,7 +30,7 @@ operators = Array[ExtResource("1_efrkn")]([SubResource("Resource_tywqa")])
 [sub_resource type="Resource" id="Resource_33vgx"]
 script = ExtResource("4_i6cnr")
 choice_result = SubResource("Resource_evlul")
-description = "上前拱手：“兄台莫怕，某只是来吹风的。”语气卑微。"
+description = "EVT_DUOTAI_HUMILIATION_WEAK_HARM_WEAK_GATEWAY_DENGGAO_IDENTITY_POOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_if87u"]
 script = ExtResource("6_a2mrk")
@@ -48,4 +48,4 @@ options = Array[ExtResource("3_g55wp")]([SubResource("Resource_vj1w4"), SubResou
 on_enter_result = SubResource("Resource_jk2ka")
 uuid = "duotai_humiliation_weak_harm_weak_gateway_denggao_identity_poor"
 name = "emo_lt(name=ambition; val=100)"
-description = "城楼卖字者相疑"
+description = "EVT_DUOTAI_HUMILIATION_WEAK_HARM_WEAK_GATEWAY_DENGGAO_IDENTITY_POOR_DESC"

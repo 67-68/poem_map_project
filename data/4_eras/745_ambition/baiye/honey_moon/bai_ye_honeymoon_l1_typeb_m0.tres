@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_oa3f4")]([SubResource("Resource_e10f2")])
 [sub_resource type="Resource" id="Resource_arscf"]
 script = ExtResource("5_rjd3j")
 choice_result = SubResource("Resource_bn3w2")
-description = "立在帘侧继续候着，不动声色"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEB_M0_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_w00bt"]
 script = ExtResource("6_bltie")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_hdcyo")]([SubResource("Resource_arscf")])
 uuid = "bai_ye_honeymoon_l1_typeb_m0"
-name = "衙门口的风雪"
-description = "“尚书大人昨日议贡举事至深夜，今日恐未得闲。”说着用火箸拨了拨炉中炭，火星一溅即灭。他在炉边坐下，自斟一盏茶，翻册页时不急不缓，偶尔抬眼看窗外天色。你立在门帘旁，冷风从帘隙灌入，足底渐麻。清客翻完一卷册子，又另取一卷来读，像是忘了你还在。"
+name = "EVT_BAI_YE_HONEYMOON_L1_TYPEB_M0_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEB_M0_DESC"

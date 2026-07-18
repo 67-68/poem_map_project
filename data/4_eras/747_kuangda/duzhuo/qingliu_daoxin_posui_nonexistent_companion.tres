@@ -27,7 +27,7 @@ operators = Array[ExtResource("2_3b2ji")]([SubResource("Resource_v2u64"), SubRes
 [sub_resource type="Resource" id="Resource_s78vp"]
 script = ExtResource("5_n7t6o")
 choice_result = SubResource("Resource_v4dhe")
-description = "他将那只空杯轻轻扣在桌上，动作慢得像在摆放一件易碎的物件。"
+description = "EVT_QINGLIU_DAOXIN_POSUI_NONEXISTENT_COMPANION_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_58fls"]
 script = ExtResource("6_v6ear")
@@ -42,5 +42,5 @@ archetype_id = "duzhuo"
 _target_tags = Array[String](["action:main:duzhuo"])
 options = Array[ExtResource("1_q86by")]([SubResource("Resource_s78vp")])
 uuid = "qingliu_daoxin_posui_nonexistent_companion"
-name = "秋夜对空饮"
-description = "酒肆的木格窗半敞着，秋夜的凉从缝隙里淌进来。桌上四只酒杯排成一列，酒液在烛光里一动不动。掌柜第三次从后堂探出头，目光扫过那张四人桌上唯一的人影。杜甫端起靠近自己的那只杯，手指在杯沿上停了一瞬。酒入喉时，对面三只杯中的液面同时晃了晃。他放下空杯起身，袍角带起了一阵风。身后，四只满杯在摇晃的烛焰下亮晶晶地排着队。门槛外，长安的街面空无一人。"
+name = "EVT_QINGLIU_DAOXIN_POSUI_NONEXISTENT_COMPANION_TITLE"
+description = "EVT_QINGLIU_DAOXIN_POSUI_NONEXISTENT_COMPANION_DESC"

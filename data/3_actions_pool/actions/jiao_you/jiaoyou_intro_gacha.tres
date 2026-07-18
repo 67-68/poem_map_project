@@ -32,5 +32,5 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_qyoep")
 defer_config = SubResource("Resource_eltuc")
 uuid = "jiaoyou_intro_gacha"
-name = "交游 · 赴宴雅集"
-description = "出席权贵宴席广结人脉或可获得引荐之机"
+name = "ACT_JIAOYOU_INTRO_GACHA_NAME"
+description = "ACT_JIAOYOU_INTRO_GACHA_DESC"

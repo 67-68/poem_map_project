@@ -128,5 +128,5 @@ options = Array[ExtResource("4_rnled")]([SubResource("Resource_58rdr"), SubResou
 pre_event_interrupter_sequence = [SubResource("Resource_qc35i"), SubResource("Resource_lgquf")]
 on_enter_result = SubResource("Resource_i1hfe")
 uuid = "mid_of_wenhuaquan_party"
-name = "在盛大讲话完毕之后"
-description = "正式开场！你看见有人斗诗有人讲话，还有人在扫荡小食"
+name = "EVT_MID_OF_WENHUAQUAN_PARTY_TITLE"
+description = "EVT_MID_OF_WENHUAQUAN_PARTY_DESC"

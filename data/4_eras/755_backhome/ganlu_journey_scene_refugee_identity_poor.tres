@@ -23,7 +23,7 @@ operators = Array[ExtResource("2_oqrhk")]([SubResource("Resource_g2nhq"), SubRes
 [sub_resource type="Resource" id="Resource_tal5c"]
 script = ExtResource("6_mukxd")
 choice_result = SubResource("Resource_xiqyj")
-description = "上前两步，朝沟底喊了句“喂——”"
+description = "EVT_GANLU_JOURNEY_SCENE_REFUGEE_IDENTITY_POOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_i3x4v"]
 script = ExtResource("3_4tj2w")
@@ -36,7 +36,7 @@ operators = Array[ExtResource("2_oqrhk")]([SubResource("Resource_i3x4v")])
 [sub_resource type="Resource" id="Resource_l7l6u"]
 script = ExtResource("6_mukxd")
 choice_result = SubResource("Resource_cbfta")
-description = "站在原地，等风吹完才继续走。"
+description = "EVT_GANLU_JOURNEY_SCENE_REFUGEE_IDENTITY_POOR_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_jju4e")
@@ -45,5 +45,5 @@ archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_SOCIETY_FAMINE:starving_bone", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu", "TARGET_IDENTITY_POOR"])
 options = Array[ExtResource("1_pk2f7")]([SubResource("Resource_tal5c"), SubResource("Resource_l7l6u")])
 uuid = "ganlu_journey_scene_refugee_identity_poor"
-name = "冰辙压雪"
-description = "官道积雪未化，冻土裂出细纹。远处一个模糊轮廓蹲在道旁，背对风来的方向，膝盖上摊着半块干饼。马队蹄声先于影子抵达——碎冰从冻土上炸开，六匹快马并排碾过，颈下红绸被风扯成直线。那个轮廓侧翻进深沟，干饼落在路面上被蹄铁踏成粉末。骑手过完最后一匹时，沟底没有声音。风重新把雪末吹上路面，盖住饼屑。"
+name = "EVT_GANLU_JOURNEY_SCENE_REFUGEE_IDENTITY_POOR_TITLE"
+description = "EVT_GANLU_JOURNEY_SCENE_REFUGEE_IDENTITY_POOR_DESC"

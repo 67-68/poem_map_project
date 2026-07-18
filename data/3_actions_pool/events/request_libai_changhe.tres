@@ -47,5 +47,5 @@ choice_result = SubResource("Resource_2i2aj")
 script = ExtResource("7_ctnsd")
 options = Array[ExtResource("1_atnbh")]([SubResource("Resource_ni8s7"), SubResource("Resource_54qn0")])
 uuid = "request_libai_changhe"
-name = "李白唱和"
-description = "李白醉眼朦胧地举杯向你走来：好酒好诗，来，与我唱和一首！"
+name = "EVT_REQUEST_LIBAI_CHANGHE_TITLE"
+description = "EVT_REQUEST_LIBAI_CHANGHE_DESC"

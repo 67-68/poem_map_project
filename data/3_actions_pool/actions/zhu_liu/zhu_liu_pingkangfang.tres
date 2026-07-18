@@ -21,5 +21,5 @@ archetype_uuid = "zhu_liu_pingkangfang_success"
 failed_result = SubResource("Resource_cafc4")
 defer_config = SubResource("Resource_alyqf")
 uuid = "zhu_liu_pingkangfang"
-name = "驻留 · 平康坊"
-description = "移步平康坊落脚"
+name = "ACT_ZHU_LIU_PINGKANGFANG_NAME"
+description = "ACT_ZHU_LIU_PINGKANGFANG_DESC"

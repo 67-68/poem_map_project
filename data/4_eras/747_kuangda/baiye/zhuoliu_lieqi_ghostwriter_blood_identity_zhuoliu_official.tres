@@ -32,7 +32,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_bkl3u")
 choice_result = SubResource("Resource_0d2tn")
 requirement = SubResource("Resource_m7vws")
-description = "杜甫起身，将膝边那张纸连带碎银一起从冻土上拨开，从两人之间走过。"
+description = "EVT_ZHUOLIU_LIEQI_GHOSTWRITER_BLOOD_IDENTITY_ZHUOLIU_OFFICIAL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_5votn"]
 script = ExtResource("3_vdjdw")
@@ -55,7 +55,7 @@ trait_name = "kuangda_fengying"
 script = ExtResource("7_bkl3u")
 choice_result = SubResource("Resource_tua4w")
 requirement = SubResource("Resource_468jq")
-description = "杜甫伸手按住被风掀动的纸角，从怀中摸出笔，在冻土上润了润墨。"
+description = "EVT_ZHUOLIU_LIEQI_GHOSTWRITER_BLOOD_IDENTITY_ZHUOLIU_OFFICIAL_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_wosln"]
 script = ExtResource("3_vdjdw")
@@ -78,7 +78,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_bkl3u")
 choice_result = SubResource("Resource_f75af")
 requirement = SubResource("Resource_1v4uo")
-description = "杜甫没碰那张纸，只问了一句：“碑刻成之后，拓片能带回长安一卷么？”"
+description = "EVT_ZHUOLIU_LIEQI_GHOSTWRITER_BLOOD_IDENTITY_ZHUOLIU_OFFICIAL_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_is1rh"]
 script = ExtResource("6_6t7lc")
@@ -104,5 +104,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["TARGET_OBJECT_SWORD:cold_blade", "VIBE_THEME_MARTIAL:giant_roc", "action:main:baiye", "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"])
 options = Array[ExtResource("1_gj8b4")]([SubResource("Resource_42rft"), SubResource("Resource_e2g7p"), SubResource("Resource_6a67k")])
 uuid = "zhuoliu_lieqi_ghostwriter_blood_identity_zhuoliu_official"
-name = "碑记与刀环"
-description = "坊墙下的风是从北边灌进来的。年老的那个挡在你面前，离你三步，刚好占住你唯一能起身的方向。年轻的站在你身后，你听见他的手指一下一下拨着刀环，铁碰铁，不高不低，像在敲一种不需要旋律的拍子。年老的那个没有催，他把那个名字又说了一遍，放慢了说，像在教一个孩童认字。然后他从袖中取出一卷纸，展开——是空白的，只在上方端正地压了一方朱砂印。他将纸放在你膝边的冻土上，压了一小块碎银在纸角。风把纸边掀起一点，又落下。"
+name = "EVT_ZHUOLIU_LIEQI_GHOSTWRITER_BLOOD_IDENTITY_ZHUOLIU_OFFICIAL_TITLE"
+description = "EVT_ZHUOLIU_LIEQI_GHOSTWRITER_BLOOD_IDENTITY_ZHUOLIU_OFFICIAL_DESC"

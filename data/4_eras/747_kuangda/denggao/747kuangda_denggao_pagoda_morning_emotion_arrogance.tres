@@ -36,7 +36,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_ch7iq")
 choice_result = SubResource("Resource_3v4tv")
 requirement = SubResource("Resource_2uneb")
-description = "你解下腰间酒葫芦，对着塔下遥遥一举，自顾饮尽。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_ARROGANCE_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_fky80"]
 script = ExtResource("3_fesxj")
@@ -53,7 +53,7 @@ operators = Array[ExtResource("2_wxyul")]([SubResource("Resource_fky80"), SubRes
 [sub_resource type="Resource" id="Resource_a16x1"]
 script = ExtResource("7_ch7iq")
 choice_result = SubResource("Resource_cua60")
-description = "你松了松衣领，任风吹散襟口热意，转身倚栏眺望终南山。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_ARROGANCE_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_rge65"]
 script = ExtResource("3_fesxj")
@@ -83,7 +83,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_ch7iq")
 choice_result = SubResource("Resource_3d6br")
 requirement = SubResource("Resource_ne81t")
-description = "你侧耳听了听塔下的谈笑声，然后掸平衣褶，站直了身子。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_ARROGANCE_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_8oanp"]
 script = ExtResource("9_1a5cl")
@@ -108,5 +108,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_pagoda_morning", "emotion_pair:pair_arrogance", "TARGET_OBJECT_SWORD:cold_blade", "TARGET_NPC_LIBAI:wine_gourd"])
 options = Array[ExtResource("1_qvo6w")]([SubResource("Resource_mcf5q"), SubResource("Resource_a16x1"), SubResource("Resource_o7jtu")])
 uuid = "747kuangda_denggao_pagoda_morning_emotion_arrogance"
-name = "塔顶振衣嗤名利"
-description = "晨钟撞碎塔下湿雾。你登至第七层时，两腋生风。拂晓的长安城在脚下摊开如棋盘——坊市方正，街巷纵横，那些朱门与锦袍都缩成模糊的色块。塔下传来新科进士们高谈阔论的回声，被风撕成断断续续的碎片。你伸手掸了掸袖口沾着的塔灰，有几粒尘埃飘落下去，融进下界的晨光里。"
+name = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_ARROGANCE_TITLE"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_ARROGANCE_DESC"

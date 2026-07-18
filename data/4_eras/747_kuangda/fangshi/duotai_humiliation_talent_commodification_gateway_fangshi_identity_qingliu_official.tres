@@ -22,11 +22,11 @@ operators = Array[ExtResource("1_ipx0l")]([SubResource("Resource_qtcn6")])
 [sub_resource type="Resource" id="Resource_g18hs"]
 script = ExtResource("5_fixyx")
 choice_result = SubResource("Resource_gs65g")
-description = "目光越过纸和老板的脸，转身迈入人流。"
+description = "EVT_DUOTAI_HUMILIATION_TALENT_COMMODIFICATION_GATEWAY_FANGSHI_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_3ds8o"]
 script = ExtResource("5_fixyx")
-description = "怔了半瞬，提笔蘸墨，低头写了几行。"
+description = "EVT_DUOTAI_HUMILIATION_TALENT_COMMODIFICATION_GATEWAY_FANGSHI_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_7q8um"]
 script = ExtResource("4_rf3hn")
@@ -39,7 +39,7 @@ operators = Array[ExtResource("1_ipx0l")]([SubResource("Resource_7q8um")])
 [sub_resource type="Resource" id="Resource_qehyk"]
 script = ExtResource("5_fixyx")
 choice_result = SubResource("Resource_kdvf4")
-description = "躬身拱手：“愿效劳——若嫌不足，还能再添三首。”"
+description = "EVT_DUOTAI_HUMILIATION_TALENT_COMMODIFICATION_GATEWAY_FANGSHI_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_e8eev"]
 script = ExtResource("6_4rr8a")
@@ -57,4 +57,4 @@ options = Array[ExtResource("3_b03bk")]([SubResource("Resource_g18hs"), SubResou
 on_enter_result = SubResource("Resource_yhb4w")
 uuid = "duotai_humiliation_talent_commodification_gateway_fangshi_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
-description = "纸铺前的交易"
+description = "EVT_DUOTAI_HUMILIATION_TALENT_COMMODIFICATION_GATEWAY_FANGSHI_IDENTITY_QINGLIU_OFFICIAL_DESC"

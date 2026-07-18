@@ -23,11 +23,11 @@ operators = Array[ExtResource("2_05btn")]([SubResource("Resource_hovj1"), SubRes
 [sub_resource type="Resource" id="Resource_t6qef"]
 script = ExtResource("6_0k3x6")
 choice_result = SubResource("Resource_u12ew")
-description = "将官凭压在麦袋上，说“赊账”"
+description = "EVT_GANLU_JOURNEY_SCENE_BLACK_INN_IDENTITY_VENDOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_0aun7"]
 script = ExtResource("6_0k3x6")
-description = "将铜板复数回袖中，转身出门"
+description = "EVT_GANLU_JOURNEY_SCENE_BLACK_INN_IDENTITY_VENDOR_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_ootlx")
@@ -36,5 +36,5 @@ archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_SOCIETY_FAMINE:starving_bone", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu", "TARGET_IDENTITY_VENDOR"])
 options = Array[ExtResource("1_rc3qb")]([SubResource("Resource_t6qef"), SubResource("Resource_0aun7")])
 uuid = "ganlu_journey_scene_black_inn_identity_vendor"
-name = "三斗麦子"
-description = "“一斗一百二十文。”杜甫袖中手指将铜板数了三遍——全数掏出，不够。他站着没动，墙缝里的雪沫飘进来，落在颈窝里化成水。店家往火里添了根柴：“过了这村，下个店更贵。”袖中铜板硌着指节。"
+name = "EVT_GANLU_JOURNEY_SCENE_BLACK_INN_IDENTITY_VENDOR_TITLE"
+description = "EVT_GANLU_JOURNEY_SCENE_BLACK_INN_IDENTITY_VENDOR_DESC"

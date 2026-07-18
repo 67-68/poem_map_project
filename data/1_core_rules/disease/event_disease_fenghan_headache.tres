@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_2bhc1")]([SubResource("Resource_7t1b8"), SubRes
 [sub_resource type="Resource" id="Resource_sji57"]
 script = ExtResource("5_8ad4i")
 choice_result = SubResource("Resource_2sra4")
-description = "用热毛巾敷额"
+description = "EVT_EVENT_DISEASE_FENGHAN_HEADACHE_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_cyk52"]
 script = ExtResource("3_tmxuv")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_2bhc1")]([SubResource("Resource_cyk52"), SubRes
 [sub_resource type="Resource" id="Resource_fey8h"]
 script = ExtResource("5_8ad4i")
 choice_result = SubResource("Resource_vy5hb")
-description = "吞两片止痛的草药"
+description = "EVT_EVENT_DISEASE_FENGHAN_HEADACHE_OPT1_DESC"
 
 [resource]
 script = ExtResource("6_mlmv3")
@@ -51,5 +51,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickAcute"])
 options = Array[ExtResource("1_jdqo1")]([SubResource("Resource_sji57"), SubResource("Resource_fey8h")])
 uuid = "event_disease_fenghan_headache"
-name = "头风"
-description = "额角像有人拿凿子在一下一下地敲。睁开眼，日光刺得你立刻又闭上。半边脸都是木的，连咀嚼都成了一种折磨。"
+name = "EVT_EVENT_DISEASE_FENGHAN_HEADACHE_TITLE"
+description = "EVT_EVENT_DISEASE_FENGHAN_HEADACHE_DESC"

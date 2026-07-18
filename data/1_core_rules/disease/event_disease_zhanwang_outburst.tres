@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_dlu7f")]([SubResource("Resource_qmsb8"), SubRes
 [sub_resource type="Resource" id="Resource_257de"]
 script = ExtResource("5_gwvnp")
 choice_result = SubResource("Resource_4mbhe")
-description = "邀路人共饮"
+description = "EVT_EVENT_DISEASE_ZHANWANG_OUTBURST_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_rv4k0"]
 script = ExtResource("3_o6fmg")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_dlu7f")]([SubResource("Resource_rv4k0"), SubRes
 [sub_resource type="Resource" id="Resource_labba"]
 script = ExtResource("5_gwvnp")
 choice_result = SubResource("Resource_40pj7")
-description = "拂袖而去，继续写诗"
+description = "EVT_EVENT_DISEASE_ZHANWANG_OUTBURST_OPT1_DESC"
 
 [resource]
 script = ExtResource("6_ol28g")
@@ -51,5 +51,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:mania"])
 options = Array[ExtResource("1_o3a6a")]([SubResource("Resource_257de"), SubResource("Resource_labba")])
 uuid = "event_disease_zhanwang_outburst"
-name = "当街吟诗"
-description = "你忽然推开窗户，对着街巷放声吟诵近日新作。路上行人驻足，有人击节叫好，有人皱眉摇头。\\n\\n你不在乎。你的诗句就是你的世界。"
+name = "EVT_EVENT_DISEASE_ZHANWANG_OUTBURST_TITLE"
+description = "EVT_EVENT_DISEASE_ZHANWANG_OUTBURST_DESC"

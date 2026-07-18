@@ -32,5 +32,5 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_ghvof")
 defer_config = SubResource("Resource_fn0gx")
 uuid = "jiaoyou_hold_feast"
-name = "交游 · 举办宴席"
-description = "设宴款待各路宾客或可获得引荐之机"
+name = "ACT_JIAOYOU_HOLD_FEAST_NAME"
+description = "ACT_JIAOYOU_HOLD_FEAST_DESC"

@@ -36,7 +36,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_h8ft1")
 choice_result = SubResource("Resource_ppb8n")
 requirement = SubResource("Resource_kwotk")
-description = "对楼下吟诗声方向吐一口唾沫，转身看另一侧云雾。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_141we"]
 script = ExtResource("3_riu0t")
@@ -53,7 +53,7 @@ operators = Array[ExtResource("2_7dwsi")]([SubResource("Resource_141we"), SubRes
 [sub_resource type="Resource" id="Resource_8y7fu"]
 script = ExtResource("7_h8ft1")
 choice_result = SubResource("Resource_28vre")
-description = "收回视线，低头看自己靴尖已磨破的鞋面。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_bnurm"]
 script = ExtResource("3_riu0t")
@@ -83,7 +83,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_h8ft1")
 choice_result = SubResource("Resource_kvms7")
 requirement = SubResource("Resource_lxocr")
-description = "轻咳一声，整了整衣领，待下方有人抬头时微微颔首。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_cnjl2"]
 script = ExtResource("9_loi4k")
@@ -108,5 +108,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_pagoda_morning", "emotion_pair:pair_tranquility", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_SNOWSTORM:lone_snow"])
 options = Array[ExtResource("1_eopi7")]([SubResource("Resource_jxqrg"), SubResource("Resource_8y7fu"), SubResource("Resource_i5302")])
 uuid = "747kuangda_denggao_pagoda_morning_emotion_tranquility"
-name = "塔顶孤影瞰晨钟"
-description = "卯时三刻，慈恩寺钟声荡开薄雾。你立在塔上第七层，手扶暗红色木栏。脚下的塔基广场上，人影渐密——青衫进士三五成群，有人展开一卷纸高声吟哦，佩玉相击声清脆。更远处，一乘朱轮车停在门外，帘子掀起半角。风从檐角穿过，吹动你袍角。你手指有一下没一下地叩着栏木，目光越过那些锦袍，落在更远处的终南山轮廓上。"
+name = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_TITLE"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_DESC"

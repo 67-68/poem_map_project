@@ -19,12 +19,12 @@ operators = Array[ExtResource("1_f7h5e")]([SubResource("Resource_m70ja")])
 
 [sub_resource type="Resource" id="Resource_f7lys"]
 script = ExtResource("5_qtlxx")
-list_key = "feihualing_words, display_datasource=imaginaries, display_prop=name, text_template=以「{item}」为题, target_event_key=feihualing_other_done, payload_key=feihualing_chosen_word, use_push_event=true"
+list_key = "feihualing_words, display_datasource=imaginaries, display_prop=name, text_template=EVT_RND_TEXT_TEMPLATE_WRITE_ABOUT, target_event_key=feihualing_other_done, payload_key=feihualing_chosen_word, use_push_event=true"
 
 [resource]
 script = ExtResource("6_fo00d")
 provider = SubResource("Resource_f7lys")
 on_enter_result = SubResource("Resource_4s5hi")
 uuid = "feihualing_choose_word"
-name = "选择意象"
-description = "你要吟咏什么主题？"
+name = "EVT_FEIHUALING_CHOOSE_WORD_TITLE"
+description = "EVT_FEIHUALING_CHOOSE_WORD_DESC"

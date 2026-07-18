@@ -36,7 +36,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_cfhof")
 choice_result = SubResource("Resource_2n3sj")
 requirement = SubResource("Resource_8neiu")
-description = "弯腰捡起一片碎瓦，对着风用力掷向远方"
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_MORNING_EMOTION_SORROW_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_eaxu3"]
 script = ExtResource("3_fw8ed")
@@ -53,7 +53,7 @@ operators = Array[ExtResource("2_qhivb")]([SubResource("Resource_eaxu3"), SubRes
 [sub_resource type="Resource" id="Resource_mhg56"]
 script = ExtResource("7_cfhof")
 choice_result = SubResource("Resource_giqba")
-description = "抬手接住一粒雨珠，看了一眼，继续望着城"
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_MORNING_EMOTION_SORROW_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_hmip8"]
 script = ExtResource("3_fw8ed")
@@ -83,7 +83,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_cfhof")
 choice_result = SubResource("Resource_63lhq")
 requirement = SubResource("Resource_n46dv")
-description = "缩了缩肩，低头把衣领裹紧，快步寻避风处"
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_MORNING_EMOTION_SORROW_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_stap5"]
 script = ExtResource("9_i8hl2")
@@ -108,5 +108,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "ENV_SOCIETY_FAMINE:starving_bone", "VIBE_THEME_HISTORY:ruined_wall", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_shaoling_morning", "emotion_pair:pair_sorrow", "VIBE_THEME_HISTORY:ruined_wall", "ENV_NATURE_AUTUMNWIND:falling_leaf"])
 options = Array[ExtResource("1_oxsxu")]([SubResource("Resource_t21jb"), SubResource("Resource_mhg56"), SubResource("Resource_o8o7m")])
 uuid = "747kuangda_denggao_shaoling_morning_emotion_sorrow"
-name = "疾风卷尘登高台"
-description = "少陵原上，晨风裹着雨腥扑面，衣袍灌满冷气。远处长安城楼隐在昏光里，万家屋顶无声。脚下干裂的土纹被风抹平，几只鸟低叫掠过。站得久了，眼睛盯着城里某处烟柱，肩头落下凉凉一滴。抬头看天，云已压得很低。转身时风推着背，脚步慢慢挪向坡下。"
+name = "EVT_747KUANGDA_DENGGAO_SHAOLING_MORNING_EMOTION_SORROW_TITLE"
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_MORNING_EMOTION_SORROW_DESC"

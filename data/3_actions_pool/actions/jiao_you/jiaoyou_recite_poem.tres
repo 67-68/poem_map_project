@@ -37,5 +37,5 @@ fallback_event_uuid = "jiaoyou_recite_poem_fallback"
 failed_result = SubResource("Resource_jo6cf")
 defer_config = SubResource("Resource_3lh7e")
 uuid = "jiaoyou_recite_poem"
-name = "交游 · 宣读诗词"
-description = "当众宣读新作以诗换名"
+name = "ACT_JIAOYOU_RECITE_POEM_NAME"
+description = "ACT_JIAOYOU_RECITE_POEM_DESC"

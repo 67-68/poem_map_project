@@ -13,11 +13,11 @@ script = ExtResource("2_k10yh")
 
 [sub_resource type="Resource" id="Resource_4w1o1"]
 script = ExtResource("4_xcmq2")
-description = "杜甫未应答，转身望向远处的终南山。片刻后，缓步走下城楼。"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_DENGGAO_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_2o5m7"]
 script = ExtResource("4_xcmq2")
-description = "杜甫点头，收起袖中文稿，退至城墙东侧转角，将主位让出。"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_DENGGAO_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_wk1il"]
 script = ExtResource("5_dty50")
@@ -30,7 +30,7 @@ operators = Array[ExtResource("1_qxkxy")]([SubResource("Resource_wk1il")])
 [sub_resource type="Resource" id="Resource_t3yd7"]
 script = ExtResource("4_xcmq2")
 choice_result = SubResource("Resource_mx4up")
-description = "杜甫躬身致歉，一面退至墙角，一面替随从按住被风吹起的席角。"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_DENGGAO_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_xlg7t"]
 script = ExtResource("6_go8i6")
@@ -48,4 +48,4 @@ options = Array[ExtResource("3_v3gnw")]([SubResource("Resource_4w1o1"), SubResou
 on_enter_result = SubResource("Resource_boumy")
 uuid = "duotai_humiliation_class_bullying_gateway_denggao_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
-description = "城楼上的段落"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_DENGGAO_IDENTITY_QINGLIU_OFFICIAL_DESC"

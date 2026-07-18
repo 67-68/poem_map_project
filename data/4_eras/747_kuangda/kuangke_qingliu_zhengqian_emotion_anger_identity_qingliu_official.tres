@@ -27,7 +27,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("6_t37vy")
 choice_result = SubResource("Resource_xak65")
 requirement = SubResource("Resource_yh1p7")
-description = "你接过纸卷看也不看，一脚把井台上的碎砚台踢进井里：「听个响。」"
+description = "EVT_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_g25v6"]
 script = ExtResource("5_gplj2")
@@ -56,5 +56,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ACTOR_EMOTION_ANGER", "emotion_pair:pair_anger", "action:main:fangshi"])
 options = Array[ExtResource("1_nc1bx")]([SubResource("Resource_vfsms")])
 uuid = "kuangke_qingliu_zhengqian_emotion_anger_identity_qingliu_official"
-name = "井台上的愤懑"
-description = "广文馆后院，郑虔把一摞学生默写的诗卷摔在井台上，井绳晃了两晃。碎纸从捆扎处崩开，散了一地。「错别字比对的还多——有个学生把『烽火』写成了『峰火』，我怎么教的？」他用拇指和中指掐着鼻梁，掌根压住眼睛，把一卷皱巴巴的纸往你怀里塞，「你看看，你自己看。」纸上的墨迹洇了水，字都鼓着毛边。郑虔的手腕在抖。"
+name = "EVT_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_TITLE"
+description = "EVT_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_DESC"

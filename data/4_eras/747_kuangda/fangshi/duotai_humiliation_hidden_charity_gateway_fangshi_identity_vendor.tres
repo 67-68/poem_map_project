@@ -13,7 +13,7 @@ script = ExtResource("2_yuqt5")
 
 [sub_resource type="Resource" id="Resource_g51j1"]
 script = ExtResource("4_cqrx0")
-description = "将饼放回铺板，转身没入人流，未发一言。"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_FANGSHI_IDENTITY_VENDOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_euwnt"]
 script = ExtResource("5_c5iug")
@@ -26,7 +26,7 @@ operators = Array[ExtResource("1_0boc3")]([SubResource("Resource_euwnt")])
 [sub_resource type="Resource" id="Resource_mi7px"]
 script = ExtResource("4_cqrx0")
 choice_result = SubResource("Resource_4gki7")
-description = "接过饼，低首道声谢，咬了一口，目光落在街石上。"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_FANGSHI_IDENTITY_VENDOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_uyvnv"]
 script = ExtResource("5_c5iug")
@@ -39,7 +39,7 @@ operators = Array[ExtResource("1_0boc3")]([SubResource("Resource_uyvnv")])
 [sub_resource type="Resource" id="Resource_xs3am"]
 script = ExtResource("4_cqrx0")
 choice_result = SubResource("Resource_ftrae")
-description = "双手捧饼，躬身轻语：“店主慈悲，小生窘迫，只怕受之有愧。”"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_FANGSHI_IDENTITY_VENDOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_yvgqa"]
 script = ExtResource("6_fceuc")
@@ -57,4 +57,4 @@ options = Array[ExtResource("3_bwsl3")]([SubResource("Resource_g51j1"), SubResou
 on_enter_result = SubResource("Resource_yagfn")
 uuid = "duotai_humiliation_hidden_charity_gateway_fangshi_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
-description = "饼铺前的多付银钱"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_FANGSHI_IDENTITY_VENDOR_DESC"

@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_6fc3r")]([SubResource("Resource_cemba")])
 [sub_resource type="Resource" id="Resource_wk48n"]
 script = ExtResource("5_5hnxm")
 choice_result = SubResource("Resource_bid4g")
-description = "躬身致谢，称大人指点的是，学生回去重新来过。"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M1_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_s7v50"]
 script = ExtResource("6_qr7ca")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_o8125")]([SubResource("Resource_wk48n")])
 uuid = "bai_ye_honeymoon_l1_typec_m1"
-name = "脂粉气"
-description = "“足下这文章，辞藻华丽，却透着一股子‘脂粉气’，只怕是闺阁中读多了艳词，少了些庙堂上的筋骨。”他抬眼，目光懒懒地扫过你的脸，“这玩意儿，不是我长安官场的气象。拿回去，照着《贞观政要》的笔意，重写它百遍，磨去那层粉黛，再来见我。”言罢，他不再看你，只朝侍立的小厮抬了抬下巴，低声吩咐：“看茶，凉些的好。”客堂中一时寂静，只余茶香与那几页薄纸被风吹动的轻响。"
+name = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M1_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M1_DESC"

@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_tgd4g")]([SubResource("Resource_la36l")])
 [sub_resource type="Resource" id="Resource_7knmt"]
 script = ExtResource("5_2cqh3")
 choice_result = SubResource("Resource_722fa")
-description = "从袖口取出一串铜钱，压在名帖下"
+description = "EVT_BAI_YE_HONEYMOON_L0_TYPEA_M2_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_7e1k1"]
 script = ExtResource("6_8esee")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_a88xm")]([SubResource("Resource_7knmt")])
 uuid = "bai_ye_honeymoon_l0_typea_m2"
-name = "门子静候"
-description = "细雨蒙蒙，长安某部衙门东侧偏门。你递上名帖，门子接过，并不打开，反手将名帖轻轻搁在湿漉漉的门槛上。他站直身子，目光越过你的肩膀看往远处雨幕，右手拇指无意识地搓着食指指腹。名帖一角渐渐被雨水洇湿，他仍不动，仿佛在等雨停，又仿佛在等别的什么。"
+name = "EVT_BAI_YE_HONEYMOON_L0_TYPEA_M2_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L0_TYPEA_M2_DESC"

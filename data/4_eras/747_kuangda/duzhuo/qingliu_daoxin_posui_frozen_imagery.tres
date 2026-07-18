@@ -19,7 +19,7 @@ operators = Array[ExtResource("2_3ljic")]([SubResource("Resource_qj14e")])
 [sub_resource type="Resource" id="Resource_o4biu"]
 script = ExtResource("5_1nlcq")
 choice_result = SubResource("Resource_xyppd")
-description = "笔杆的尾部轻扣在砚沿。墨滴洒在纸上，恰好隐去了第一个字。"
+description = "EVT_QINGLIU_DAOXIN_POSUI_FROZEN_IMAGERY_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_0qcfr"]
 script = ExtResource("6_qsihi")
@@ -34,5 +34,5 @@ archetype_id = "duzhuo"
 _target_tags = Array[String](["action:main:duzhuo"])
 options = Array[ExtResource("1_7ak2p")]([SubResource("Resource_o4biu")])
 uuid = "qingliu_daoxin_posui_frozen_imagery"
-name = "秋夜三字"
-description = "纸上的三个字不像是从笔端生发的。它们更像是早就刻在那里——一笔一画都指向过去的某个时辰，与此刻再无瓜葛。墨在砚台里守着，稠得泛不出光。烛火跳了一下，影子从墙上滑过，沿着书案的边缘，歪了。"
+name = "EVT_QINGLIU_DAOXIN_POSUI_FROZEN_IMAGERY_TITLE"
+description = "EVT_QINGLIU_DAOXIN_POSUI_FROZEN_IMAGERY_DESC"

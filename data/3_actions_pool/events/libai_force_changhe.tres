@@ -39,7 +39,7 @@ custom_context_params = {
 "taste_owner_relation_flag": "flag_relation_with_libai"
 }
 uuid = "libai_force_changhe_accept"
-description = "和一首！"
+description = "EVT_LIBAI_FORCE_CHANGHE_ACCEPT_TITLE"
 
 [sub_resource type="Resource" id="Resource_i2n1m"]
 script = ExtResource("2_hbp6o")
@@ -64,5 +64,5 @@ script = ExtResource("8_ugswx")
 options = Array[ExtResource("4_30sun")]([SubResource("Resource_ybj3e"), SubResource("Resource_00bmf")])
 on_enter_result = SubResource("Resource_ru0c7")
 uuid = "libai_force_changhe"
-name = "李白强迫唱和"
-description = "李白醉醺醺地盯着你：来都来了，必须与我一和！"
+name = "EVT_LIBAI_FORCE_CHANGHE_TITLE"
+description = "EVT_LIBAI_FORCE_CHANGHE_DESC"

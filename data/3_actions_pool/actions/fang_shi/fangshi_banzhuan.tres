@@ -27,5 +27,5 @@ archetype_uuid = "fangshi_banzhuan_success"
 failed_result = SubResource("Resource_x5nmp")
 defer_config = SubResource("Resource_07rle")
 uuid = "fangshi_banzhuan"
-name = "坊市 · 搬砖"
-description = "体力活"
+name = "ACT_FANGSHI_BANZHUAN_NAME"
+description = "ACT_FANGSHI_BANZHUAN_DESC"

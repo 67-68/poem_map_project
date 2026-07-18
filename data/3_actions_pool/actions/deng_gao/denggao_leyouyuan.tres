@@ -27,5 +27,5 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_fnjj6")
 defer_config = SubResource("Resource_mswl1")
 uuid = "denggao_leyouyuan"
-name = "远游 · 乐游原"
-description = "乐游原上怀古"
+name = "ACT_DENGGAO_LEYOUYUAN_NAME"
+description = "ACT_DENGGAO_LEYOUYUAN_DESC"

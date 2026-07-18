@@ -30,7 +30,7 @@ value = true
 script = ExtResource("6_hka0u")
 choice_result = SubResource("Resource_njl6c")
 requirement = SubResource("Resource_srq5h")
-description = "一脚踢翻殿前的铜香炉，转身踏雪而去。"
+description = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_wyj08"]
 script = ExtResource("3_dmttr")
@@ -50,7 +50,7 @@ value = true
 script = ExtResource("6_hka0u")
 choice_result = SubResource("Resource_j73rh")
 requirement = SubResource("Resource_pv107")
-description = "目光扫向亲王随行的侍从，试图从某个熟面孔找到缝隙。"
+description = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_wkyr4"]
 script = ExtResource("3_dmttr")
@@ -67,7 +67,7 @@ operators = Array[ExtResource("2_ee0y5")]([SubResource("Resource_wkyr4"), SubRes
 [sub_resource type="Resource" id="Resource_3r77q"]
 script = ExtResource("6_hka0u")
 choice_result = SubResource("Resource_b8llb")
-description = "你把肩上的雪拍掉，往殿门边又挪了半步。"
+description = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_w3w6m"]
 script = ExtResource("8_ntc1x")
@@ -96,5 +96,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_SNOWSTORM:lone_snow", "action:main:fangshi"])
 options = Array[ExtResource("1_op5w5")]([SubResource("Resource_38tk2"), SubResource("Resource_3sy8c"), SubResource("Resource_3r77q")])
 uuid = "qingliu_fengying_temple_staged"
-name = "慈恩寺雪中偶遇"
-description = "“施主，上个月你也来过——那天是王给事中进香。今天亲王来，你又来了。”说完继续扫地。雪落在他刚扫过的青石上，又积了一层。殿门紧闭，里面传来亲王与方丈的谈笑，声音在雪里闷着，不太真切。"
+name = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_TITLE"
+description = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_DESC"

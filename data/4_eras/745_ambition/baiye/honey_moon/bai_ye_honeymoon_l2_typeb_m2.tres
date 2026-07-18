@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_2wbw3")]([SubResource("Resource_hrkfc")])
 [sub_resource type="Resource" id="Resource_xlu0q"]
 script = ExtResource("5_p3k1v")
 choice_result = SubResource("Resource_33sfn")
-description = "整了整衣冠，继续在阶下恭候"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEB_M2_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_m1jxa"]
 script = ExtResource("6_maeb8")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_2xpxk")]([SubResource("Resource_xlu0q")])
 uuid = "bai_ye_honeymoon_l2_typeb_m2"
-name = "风雪跪候宴饮时"
-description = "“王爷正在宴客，请稍候。”玩家立于阶下，寒风卷着雪粒扑面。约半个时辰后，门内隐约传出丝竹声与谈笑，间或有劝酒之声。门子偶尔探头望一眼，又缩回门房。又过两刻，有仆役端着残羹出来，随手泼在阶前，汤水溅湿玩家袍角。玩家继续候至日头偏西，门子方道：“王爷今日倦了，明日再来罢。”"
+name = "EVT_BAI_YE_HONEYMOON_L2_TYPEB_M2_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEB_M2_DESC"

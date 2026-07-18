@@ -7,4 +7,4 @@
 [resource]
 script = ExtResource("2_g1rva")
 uuid = "terminal_illness"
-name = "病入膏肓"
+name = "TRAIT_TERMINAL_ILLNESS_TRAIT_NAME"

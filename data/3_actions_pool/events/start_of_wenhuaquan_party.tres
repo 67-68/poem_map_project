@@ -23,5 +23,5 @@ choice_result = SubResource("Resource_bmj1c")
 script = ExtResource("6_6eapa")
 options = Array[ExtResource("1_nklhw")]([SubResource("Resource_mjgl7")])
 uuid = "start_of_wenhuaquan_party"
-name = "文化圈盛大筵席！"
-description = "你们假装这是一段很长的很棒的写景抒情文字"
+name = "EVT_START_OF_WENHUAQUAN_PARTY_TITLE"
+description = "EVT_START_OF_WENHUAQUAN_PARTY_DESC"

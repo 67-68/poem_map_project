@@ -7,4 +7,4 @@
 [resource]
 script = ExtResource("2_t8fab")
 uuid = "exhaustion_initial"
-name = "疲态初显"
+name = "TRAIT_EXHAUSTION_INITIAL_TRAIT_NAME"

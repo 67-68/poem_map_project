@@ -24,7 +24,7 @@ operators = Array[ExtResource("1_pjqda")]([SubResource("Resource_sfbua")])
 [sub_resource type="Resource" id="Resource_d37eh"]
 script = ExtResource("5_ott0d")
 choice_result = SubResource("Resource_oj0fb")
-description = "你没看名帖，转身走向大门。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_BAIYE_IDENTITY_VENDOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_v6pf8"]
 script = ExtResource("4_s1f7p")
@@ -42,7 +42,7 @@ operators = Array[ExtResource("1_pjqda")]([SubResource("Resource_v6pf8"), SubRes
 [sub_resource type="Resource" id="Resource_ows7c"]
 script = ExtResource("5_ott0d")
 choice_result = SubResource("Resource_jl7kp")
-description = "你挽起袖子，磨墨，提笔，一字一字照写。"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_BAIYE_IDENTITY_VENDOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_17lma"]
 script = ExtResource("4_s1f7p")
@@ -60,7 +60,7 @@ operators = Array[ExtResource("1_pjqda")]([SubResource("Resource_17lma"), SubRes
 [sub_resource type="Resource" id="Resource_4qehr"]
 script = ExtResource("5_ott0d")
 choice_result = SubResource("Resource_3dqhj")
-description = "你拱手应道：“小的遵命。写完可要送去后堂？”"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_BAIYE_IDENTITY_VENDOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_il3aj"]
 script = ExtResource("7_7pi1b")
@@ -78,4 +78,4 @@ options = Array[ExtResource("3_j1v8i")]([SubResource("Resource_d37eh"), SubResou
 on_enter_result = SubResource("Resource_yrafu")
 uuid = "duotai_humiliation_cheap_labor_gateway_baiye_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
-description = "名帖抄录"
+description = "EVT_DUOTAI_HUMILIATION_CHEAP_LABOR_GATEWAY_BAIYE_IDENTITY_VENDOR_DESC"

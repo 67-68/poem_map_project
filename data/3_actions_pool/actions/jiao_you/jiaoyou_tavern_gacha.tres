@@ -32,5 +32,5 @@ possibility = "xxs_success_rate"
 failed_result = SubResource("Resource_2607k")
 defer_config = SubResource("Resource_trxy2")
 uuid = "jiaoyou_tavern_gacha"
-name = "交游 · 坊间买醉"
-description = "在坊间酒肆以酒会友结识市井中人"
+name = "ACT_JIAOYOU_TAVERN_GACHA_NAME"
+description = "ACT_JIAOYOU_TAVERN_GACHA_DESC"

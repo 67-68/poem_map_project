@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_x5e7h")]([SubResource("Resource_6gmy4"), SubRes
 [sub_resource type="Resource" id="Resource_b4fru"]
 script = ExtResource("5_vmfhh")
 choice_result = SubResource("Resource_ie30w")
-description = "摸黑换一件干衣"
+description = "EVT_EVENT_DISEASE_FEILAO_NIGHT_SWEATS_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_0kahu"]
 script = ExtResource("3_q3hgr")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_x5e7h")]([SubResource("Resource_0kahu"), SubRes
 [sub_resource type="Resource" id="Resource_h3rfl"]
 script = ExtResource("5_vmfhh")
 choice_result = SubResource("Resource_iibm4")
-description = "不理会，翻身继续躺着"
+description = "EVT_EVENT_DISEASE_FEILAO_NIGHT_SWEATS_OPT1_DESC"
 
 [resource]
 script = ExtResource("6_8ju1n")
@@ -51,5 +51,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickChronic"])
 options = Array[ExtResource("1_pjim2")]([SubResource("Resource_b4fru"), SubResource("Resource_h3rfl")])
 uuid = "event_disease_feilao_night_sweats"
-name = "盗汗"
-description = "夜半时分你猛地惊醒，后背湿漉漉的，亵衣粘在皮肤上黏腻不堪。月光透过窗纸洒进来，照见你枯瘦的手臂。你摸了摸额头——一手的冷汗。"
+name = "EVT_EVENT_DISEASE_FEILAO_NIGHT_SWEATS_TITLE"
+description = "EVT_EVENT_DISEASE_FEILAO_NIGHT_SWEATS_DESC"

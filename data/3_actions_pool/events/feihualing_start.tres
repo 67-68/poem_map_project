@@ -35,5 +35,5 @@ choice_result = SubResource("Resource_0wlia")
 script = ExtResource("7_wvkue")
 options = Array[ExtResource("1_0aw6w")]([SubResource("Resource_gygct"), SubResource("Resource_vo3nk")])
 uuid = "feihualing_start"
-name = "飞花令"
-description = "宴席上有人提议玩飞花令，是否参与？"
+name = "EVT_FEIHUALING_START_TITLE"
+description = "EVT_FEIHUALING_START_DESC"

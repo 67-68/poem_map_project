@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_2kc2e")]([SubResource("Resource_gw5dw"), SubRes
 [sub_resource type="Resource" id="Resource_63lv1"]
 script = ExtResource("5_aa3g1")
 choice_result = SubResource("Resource_6s0md")
-description = "寻医问药"
+description = "EVT_EVENT_DISEASE_DONGSHANG_DIAGNOSIS_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_t21b6"]
 script = ExtResource("3_uomea")
@@ -43,7 +43,7 @@ operators = Array[ExtResource("2_2kc2e")]([SubResource("Resource_t21b6"), SubRes
 [sub_resource type="Resource" id="Resource_lts7t"]
 script = ExtResource("5_aa3g1")
 choice_result = SubResource("Resource_b5bt2")
-description = "置之不理"
+description = "EVT_EVENT_DISEASE_DONGSHANG_DIAGNOSIS_OPT1_DESC"
 
 [resource]
 script = ExtResource("6_67vy0")
@@ -51,5 +51,5 @@ weight = 100.0
 era = "1_core_rules"
 options = Array[ExtResource("1_umkyr")]([SubResource("Resource_63lv1"), SubResource("Resource_lts7t")])
 uuid = "event_disease_dongshang_diagnosis"
-name = "指不得屈"
-description = "风雪已追了你三日。第一天你还能攥紧缰绳——第二天缰绳从你手里滑脱了三次——今天你连马鞭都握不住了。\\n\\n你低头看自己的手：十根手指肿得像十根红萝卜，指节处的皮肤绷得发亮，隐隐透着紫黑色。你试着弯曲食指——咔。不是关节的响声，是皮肉里冰碴碎裂的声音。指尖已经完全没了知觉，像十颗不属于你的石头挂在手掌上。\\n\\n这不是普通的冻疮。这冻到骨头里去了。"
+name = "EVT_EVENT_DISEASE_DONGSHANG_DIAGNOSIS_TITLE"
+description = "EVT_EVENT_DISEASE_DONGSHANG_DIAGNOSIS_DESC"

@@ -13,7 +13,7 @@ script = ExtResource("2_kfhev")
 
 [sub_resource type="Resource" id="Resource_2gr2l"]
 script = ExtResource("4_rqyn3")
-description = "看了一眼铜钱，转身走进西市的人流。"
+description = "EVT_DUOTAI_HUMILIATION_LEFTOVER_TREATMENT_GATEWAY_FANGSHI_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_k00rq"]
 script = ExtResource("5_st23a")
@@ -26,7 +26,7 @@ operators = Array[ExtResource("1_70ba3")]([SubResource("Resource_k00rq")])
 [sub_resource type="Resource" id="Resource_iyld4"]
 script = ExtResource("4_rqyn3")
 choice_result = SubResource("Resource_diqjl")
-description = "说了声多谢，用袖口拂去铜钱上的灰尘，收入怀中。"
+description = "EVT_DUOTAI_HUMILIATION_LEFTOVER_TREATMENT_GATEWAY_FANGSHI_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_fql7e"]
 script = ExtResource("5_st23a")
@@ -39,7 +39,7 @@ operators = Array[ExtResource("1_70ba3")]([SubResource("Resource_fql7e")])
 [sub_resource type="Resource" id="Resource_4sugq"]
 script = ExtResource("4_rqyn3")
 choice_result = SubResource("Resource_nbsqu")
-description = "拱手道谢，说承蒙娘子照顾，以后有活还望记着小的。"
+description = "EVT_DUOTAI_HUMILIATION_LEFTOVER_TREATMENT_GATEWAY_FANGSHI_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_0rwbb"]
 script = ExtResource("6_sducy")
@@ -57,4 +57,4 @@ options = Array[ExtResource("3_tc8yl")]([SubResource("Resource_2gr2l"), SubResou
 on_enter_result = SubResource("Resource_gnck0")
 uuid = "duotai_humiliation_leftover_treatment_gateway_fangshi"
 name = "emo_lt(name=ambition; val=100)"
-description = "三文钱的润笔"
+description = "EVT_DUOTAI_HUMILIATION_LEFTOVER_TREATMENT_GATEWAY_FANGSHI_DESC"

@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_1egym")]([SubResource("Resource_b5go2")])
 [sub_resource type="Resource" id="Resource_iaupy"]
 script = ExtResource("5_skt74")
 choice_result = SubResource("Resource_yemvu")
-description = "忍气吞声，在阶下继续等待。"
+description = "EVT_BAI_YE_HONEYMOON_L0_TYPEB_M0_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_f3b63"]
 script = ExtResource("6_20q05")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_5lkhl")]([SubResource("Resource_iaupy")])
 uuid = "bai_ye_honeymoon_l0_typeb_m0"
-name = "门外三候"
-description = "“相公昨夜批阅奏章至四更，此刻尚未起身。”言毕转身与同僚闲谈。约半个时辰，你双腿僵直，腹中饥馁。忽见一内监骑马直入中门，门子反倒殷勤赔笑。你隐约听他低语：“早间侍郎府来人，也是这般候着的。”这分明是他为向清客显摆门禁之严，故意拖延。"
+name = "EVT_BAI_YE_HONEYMOON_L0_TYPEB_M0_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L0_TYPEB_M0_DESC"

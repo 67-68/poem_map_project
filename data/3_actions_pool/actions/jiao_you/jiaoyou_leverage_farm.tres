@@ -28,5 +28,5 @@ possibility = "s_success_rate"
 failed_result = SubResource("Resource_ekrp0")
 defer_config = SubResource("Resource_jp31b")
 uuid = "jiaoyou_leverage_farm"
-name = "交游 · 暗巷刺探"
-description = "在暗巷中打探风声或可获知他人隐秘"
+name = "ACT_JIAOYOU_LEVERAGE_FARM_NAME"
+description = "ACT_JIAOYOU_LEVERAGE_FARM_DESC"

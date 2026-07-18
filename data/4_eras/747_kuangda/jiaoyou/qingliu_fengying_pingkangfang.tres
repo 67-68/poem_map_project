@@ -30,7 +30,7 @@ value = true
 script = ExtResource("6_d4wpj")
 choice_result = SubResource("Resource_y1c46")
 requirement = SubResource("Resource_w000j")
-description = "转身就走，袖风扫落她掌心那枚铜钱。"
+description = "EVT_QINGLIU_FENGYING_PINGKANGFANG_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_c0nke"]
 script = ExtResource("3_24kf4")
@@ -50,7 +50,7 @@ value = true
 script = ExtResource("6_d4wpj")
 choice_result = SubResource("Resource_c02wm")
 requirement = SubResource("Resource_rkxh6")
-description = "从袖中摸出最后半贯铜钱，往她手里塞。"
+description = "EVT_QINGLIU_FENGYING_PINGKANGFANG_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_p6318"]
 script = ExtResource("3_24kf4")
@@ -63,7 +63,7 @@ operators = Array[ExtResource("2_eq3wv")]([SubResource("Resource_p6318")])
 [sub_resource type="Resource" id="Resource_q65p2"]
 script = ExtResource("6_d4wpj")
 choice_result = SubResource("Resource_nl1ns")
-description = "走到小杌子边坐下，铺纸、研墨、提笔。"
+description = "EVT_QINGLIU_FENGYING_PINGKANGFANG_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_3m8n2"]
 script = ExtResource("8_o311e")
@@ -92,5 +92,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:main:jiaoyou"])
 options = Array[ExtResource("1_t32x4")]([SubResource("Resource_vuopw"), SubResource("Resource_n3828"), SubResource("Resource_q65p2")])
 uuid = "qingliu_fengying_pingkangfang"
-name = "平康坊闭门羹"
-description = "“哟，杜先生又来了。”那个“又”字咬得轻，但很准。楼上的丝竹声灌下来，她侧身挡着门，下巴朝坊墙边的小杌子一抬：“写首艳词，写好了让你进去。”语气像在吩咐一个熟客——一个不用客气的熟客。"
+name = "EVT_QINGLIU_FENGYING_PINGKANGFANG_TITLE"
+description = "EVT_QINGLIU_FENGYING_PINGKANGFANG_DESC"

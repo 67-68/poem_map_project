@@ -13,7 +13,7 @@ script = ExtResource("2_qk0f5")
 
 [sub_resource type="Resource" id="Resource_m25mo"]
 script = ExtResource("4_gjlvd")
-description = "从袖中取出一文钱压在碗底，起身推门走入夜色。"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_DUZHUO_IDENTITY_VENDOR_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_ni7o7"]
 script = ExtResource("5_5vgu5")
@@ -26,11 +26,11 @@ operators = Array[ExtResource("1_357ri")]([SubResource("Resource_ni7o7")])
 [sub_resource type="Resource" id="Resource_1sb6t"]
 script = ExtResource("4_gjlvd")
 choice_result = SubResource("Resource_4roqf")
-description = "对店家拱手，斟满空碗，一饮而尽后搁下铜钱离去。"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_DUZHUO_IDENTITY_VENDOR_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_kabfd"]
 script = ExtResource("4_gjlvd")
-description = "向店家欠身道：“烦请代谢那位客官，杜某改日必往拜访。”"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_DUZHUO_IDENTITY_VENDOR_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_gf8sa"]
 script = ExtResource("6_sf3mk")
@@ -48,4 +48,4 @@ options = Array[ExtResource("3_n76ke")]([SubResource("Resource_m25mo"), SubResou
 on_enter_result = SubResource("Resource_n8ayg")
 uuid = "duotai_humiliation_hidden_charity_gateway_duzhuo_identity_vendor"
 name = "emo_lt(name=ambition; val=100)"
-description = "无名酒账"
+description = "EVT_DUOTAI_HUMILIATION_HIDDEN_CHARITY_GATEWAY_DUZHUO_IDENTITY_VENDOR_DESC"

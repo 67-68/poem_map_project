@@ -36,7 +36,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_oju4n")
 choice_result = SubResource("Resource_5dc0j")
 requirement = SubResource("Resource_8333f")
-description = "转身向塔下吟诗者，从袖中抽出一卷旧纸，迎风展开。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_AMBITION_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_hfb12"]
 script = ExtResource("3_ql8vu")
@@ -53,7 +53,7 @@ operators = Array[ExtResource("2_lx06s")]([SubResource("Resource_hfb12"), SubRes
 [sub_resource type="Resource" id="Resource_3jsrx"]
 script = ExtResource("7_oju4n")
 choice_result = SubResource("Resource_q7am7")
-description = "收回视线，在阶上蹲下，食指轻划青苔表面，起身拍手。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_AMBITION_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_dmwnm"]
 script = ExtResource("3_ql8vu")
@@ -83,7 +83,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_oju4n")
 choice_result = SubResource("Resource_r5tin")
 requirement = SubResource("Resource_x1xmv")
-description = "整了整衣襟，向最近一群进士走近两步，抱拳低首。"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_AMBITION_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_ugb2r"]
 script = ExtResource("9_iosbk")
@@ -108,5 +108,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_pagoda_morning", "emotion_pair:pair_ambition", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc"])
 options = Array[ExtResource("1_60fb0")]([SubResource("Resource_c0551"), SubResource("Resource_3jsrx"), SubResource("Resource_p4axr")])
 uuid = "747kuangda_denggao_pagoda_morning_emotion_ambition"
-name = "塔砖裂纹与青苔"
-description = "卯时，慈恩寺钟声震荡塔檐。塔基石板湿滑，晨露反光。塔下广场上，新科进士们倚栏吟诗，佩玉相碰，有人高声念诵新题。杜甫立在塔阶旁，右手扶住第一块塔砖，指腹沿着砖面一道裂纹从左划到右。视线越过人群，锁定远处朱门与衙署的轮廓。阶上青苔在晨光中泛着暗绿。钟声歇时，他换了一只脚承重，手指仍停在裂纹尽头。"
+name = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_AMBITION_TITLE"
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_AMBITION_DESC"

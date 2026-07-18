@@ -8,6 +8,6 @@
 script = ExtResource("2_dhjql")
 time_penalty = 1
 duration_xun = 2
-narrative_murmur = "脚踝还在隐隐发疼，走路得慢些。"
+narrative_murmur = "TRAIT_SPRAINED_ANKLE_NARRATIVE_MURMUR"
 uuid = "sprained_ankle"
-name = "崴脚"
+name = "TRAIT_SPRAINED_ANKLE_TRAIT_NAME"

@@ -30,7 +30,7 @@ value = true
 script = ExtResource("6_a8m1y")
 choice_result = SubResource("Resource_5eocx")
 requirement = SubResource("Resource_rcr62")
-description = "砚台推过桌心，墨汁泼上那张素笺。"
+description = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_0c0om"]
 script = ExtResource("3_w5aux")
@@ -50,7 +50,7 @@ value = true
 script = ExtResource("6_a8m1y")
 choice_result = SubResource("Resource_mdc0k")
 requirement = SubResource("Resource_kjvdh")
-description = "问了一句：隔壁背书的那篇，可是来年应试的篇目？"
+description = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_jqwge"]
 script = ExtResource("3_w5aux")
@@ -63,7 +63,7 @@ operators = Array[ExtResource("2_ypbqo")]([SubResource("Resource_jqwge")])
 [sub_resource type="Resource" id="Resource_g1mnb"]
 script = ExtResource("6_a8m1y")
 choice_result = SubResource("Resource_f86an")
-description = "把素笺在桌面铺平，提笔蘸了最后一点墨。"
+description = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_k1b60"]
 script = ExtResource("8_24ele")
@@ -92,5 +92,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:fangshi"])
 options = Array[ExtResource("1_3ibqa")]([SubResource("Resource_sxgyo"), SubResource("Resource_e7cah"), SubResource("Resource_g1mnb")])
 uuid = "zhuoliu_fengying_discounted_ink"
-name = "贱价润笔"
-description = "「祭文，润笔两贯。」比市价少了八贯。他用的不是商量的语气，是提醒——去年你替他外甥润色过的那篇行状，至今没付过一字润金。"
+name = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_TITLE"
+description = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_DESC"

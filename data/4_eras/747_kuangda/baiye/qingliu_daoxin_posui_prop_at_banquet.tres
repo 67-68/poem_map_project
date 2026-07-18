@@ -27,7 +27,7 @@ operators = Array[ExtResource("2_gbne2")]([SubResource("Resource_ag6u5"), SubRes
 [sub_resource type="Resource" id="Resource_33gq7"]
 script = ExtResource("5_o6qws")
 choice_result = SubResource("Resource_q87f6")
-description = "把手收回膝上，目光落在对面的空席。那边暗着。"
+description = "EVT_QINGLIU_DAOXIN_POSUI_PROP_AT_BANQUET_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_p7inm"]
 script = ExtResource("6_apx6u")
@@ -42,5 +42,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_4qjy0")]([SubResource("Resource_33gq7")])
 uuid = "qingliu_daoxin_posui_prop_at_banquet"
-name = "偏席"
-description = "宴设在东庭，灯火把主桌围出一团暖光。你的坐席靠西墙，旁边是两名抱琴的乐师。席上的食案比主桌窄了一掌，筷箸横在碗沿。你数了数，少一副。主桌有人在劝酒，笑声叠着笑声。左边的乐师低头调弦，咚的一声闷响停在第三根弦上。你面前的案面有一道旧渍，深褐色的，渗在木纹里。那只多出来的酒杯搁在你右手边，杯口朝下，底上印着半个指痕。你把它翻过来，又翻回去。"
+name = "EVT_QINGLIU_DAOXIN_POSUI_PROP_AT_BANQUET_TITLE"
+description = "EVT_QINGLIU_DAOXIN_POSUI_PROP_AT_BANQUET_DESC"

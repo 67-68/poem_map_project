@@ -36,7 +36,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_wev26")
 choice_result = SubResource("Resource_etd6b")
 requirement = SubResource("Resource_nodrt")
-description = "接过帖子看也不看，随手搁在石栏上，转身望向远处。"
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_TRANQUILITY_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_ancs4"]
 script = ExtResource("3_d847o")
@@ -53,7 +53,7 @@ operators = Array[ExtResource("2_rg1nk")]([SubResource("Resource_ancs4"), SubRes
 [sub_resource type="Resource" id="Resource_waft1"]
 script = ExtResource("7_wev26")
 choice_result = SubResource("Resource_8uhio")
-description = "接过帖子，展开扫了一眼，折好收入袖中，继续看夜景。"
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_TRANQUILITY_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_mf5ur"]
 script = ExtResource("3_d847o")
@@ -79,7 +79,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_wev26")
 choice_result = SubResource("Resource_udxvc")
 requirement = SubResource("Resource_bl860")
-description = "双手接过帖子，压低声音问：“敢问主人名讳？小的好登门拜"
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_TRANQUILITY_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_bultp"]
 script = ExtResource("9_1mtwx")
@@ -104,5 +104,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["ENV_NATURE_NIGHTMOON:cold_moon", "ENV_NATURE_AUTUMNWIND:falling_leaf", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_leyou_night", "emotion_pair:pair_tranquility", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_SNOWSTORM:lone_snow"])
 options = Array[ExtResource("1_nhagt")]([SubResource("Resource_bcwcx"), SubResource("Resource_waft1"), SubResource("Resource_14aew")])
 uuid = "747kuangda_denggao_leyou_night_emotion_tranquility"
-name = "灯火寒笛"
-description = "站在乐游原最高处。脚下万家灯火连成一片，模糊的市声被风吹散。远处断续传来笛声，不知从哪座府邸飘出。你手指在石栏上缓缓摩挲，触感冰凉粗糙。更鼓敲过一巡，声音在空旷的夜里显得格外清晰。"
+name = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_TRANQUILITY_TITLE"
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_TRANQUILITY_DESC"

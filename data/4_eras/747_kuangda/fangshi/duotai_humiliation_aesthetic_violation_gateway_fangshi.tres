@@ -22,11 +22,11 @@ operators = Array[ExtResource("1_v85pk")]([SubResource("Resource_xua6s")])
 [sub_resource type="Resource" id="Resource_yp7xs"]
 script = ExtResource("5_kvpyx")
 choice_result = SubResource("Resource_fdtfp")
-description = "搁下诗稿，起身走入人群，未回头。"
+description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_FANGSHI_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_f1vdt"]
 script = ExtResource("5_kvpyx")
-description = "接过笔，划去原句，写下“户户有余粮”。"
+description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_FANGSHI_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_vbfdc"]
 script = ExtResource("4_a44wt")
@@ -39,7 +39,7 @@ operators = Array[ExtResource("1_v85pk")]([SubResource("Resource_vbfdc")])
 [sub_resource type="Resource" id="Resource_8wp7u"]
 script = ExtResource("5_kvpyx")
 choice_result = SubResource("Resource_a7yxj")
-description = "躬腰凑近，问：“先生看还有哪句不顺？小的这就改。”"
+description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_FANGSHI_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_2rwlq"]
 script = ExtResource("6_10ara")
@@ -57,4 +57,4 @@ options = Array[ExtResource("3_hfbw8")]([SubResource("Resource_yp7xs"), SubResou
 on_enter_result = SubResource("Resource_nudfg")
 uuid = "duotai_humiliation_aesthetic_violation_gateway_fangshi"
 name = "emo_lt(name=ambition; val=100)"
-description = "市井改诗"
+description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_FANGSHI_DESC"

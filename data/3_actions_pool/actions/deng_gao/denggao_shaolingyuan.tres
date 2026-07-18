@@ -27,5 +27,5 @@ possibility = "m_success_rate"
 failed_result = SubResource("Resource_cuv37")
 defer_config = SubResource("Resource_vxi70")
 uuid = "denggao_shaolingyuan"
-name = "远游 · 少陵原"
-description = "少陵原上咏史"
+name = "ACT_DENGGAO_SHAOLINGYUAN_NAME"
+description = "ACT_DENGGAO_SHAOLINGYUAN_DESC"

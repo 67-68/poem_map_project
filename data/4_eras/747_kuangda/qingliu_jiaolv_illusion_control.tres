@@ -22,7 +22,7 @@ operators = Array[ExtResource("2_qx1r7")]([SubResource("Resource_fvu8j")])
 [sub_resource type="Resource" id="Resource_ald1x"]
 script = ExtResource("5_2okst")
 choice_result = SubResource("Resource_cfdwk")
-description = "指尖在筹身木纹的断茬处停了片刻，然后拿过来。"
+description = "EVT_QINGLIU_JIAOLV_ILLUSION_CONTROL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_1h0x5"]
 script = ExtResource("7_mg7pg")
@@ -63,5 +63,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_SNOWSTORM:lone_snow", "action:main:fangshi"])
 options = Array[ExtResource("1_6x4ex")]([SubResource("Resource_ald1x")])
 uuid = "qingliu_jiaolv_illusion_control"
-name = "鞋底泥"
-description = "“上一个和你鞋底有一样泥的人，现在已不穿这双靴了。他拿了我一枚木筹，那天起，他的靴底再没沾过寺后泥土。”他从怀里摸出一枚拇指长的旧木筹，递到离你一尺远的地方，没有催促，只是让它悬在那里。"
+name = "EVT_QINGLIU_JIAOLV_ILLUSION_CONTROL_TITLE"
+description = "EVT_QINGLIU_JIAOLV_ILLUSION_CONTROL_DESC"

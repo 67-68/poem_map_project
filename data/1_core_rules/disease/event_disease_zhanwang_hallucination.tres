@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_gjqts")]([SubResource("Resource_qrhia"), SubRes
 [sub_resource type="Resource" id="Resource_72htr"]
 script = ExtResource("6_nwl5u")
 choice_result = SubResource("Resource_hsptj")
-description = "与幻影对谈，自得其乐"
+description = "EVT_EVENT_DISEASE_ZHANWANG_HALLUCINATION_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_ydq8r"]
 script = ExtResource("3_5kvb5")
@@ -42,7 +42,7 @@ operators = Array[ExtResource("2_gjqts")]([SubResource("Resource_ydq8r"), SubRes
 [sub_resource type="Resource" id="Resource_1syjl"]
 script = ExtResource("6_nwl5u")
 choice_result = SubResource("Resource_h1uul")
-description = "猛然清醒，惊出一身冷汗"
+description = "EVT_EVENT_DISEASE_ZHANWANG_HALLUCINATION_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_0thmo")
@@ -50,5 +50,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:mania"])
 options = Array[ExtResource("1_kario")]([SubResource("Resource_72htr"), SubResource("Resource_1syjl")])
 uuid = "event_disease_zhanwang_hallucination"
-name = "谵语"
-description = "你对着空无一人的角落说话。那里站着一个人——不，是一个影子——不，是一个你认识的人。他/她对你微笑，伸手递来一杯酒。你接过并不存在的酒杯，一饮而尽。旁人看你对着空气碰杯，纷纷摇头走开。"
+name = "EVT_EVENT_DISEASE_ZHANWANG_HALLUCINATION_TITLE"
+description = "EVT_EVENT_DISEASE_ZHANWANG_HALLUCINATION_DESC"

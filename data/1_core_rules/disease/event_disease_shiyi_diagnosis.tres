@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_mumt4")]([SubResource("Resource_6xqjj"), SubRes
 [sub_resource type="Resource" id="Resource_e0vh4"]
 script = ExtResource("6_nvip8")
 choice_result = SubResource("Resource_tn0g8")
-description = "借酒浇愁"
+description = "EVT_EVENT_DISEASE_SHIYI_DIAGNOSIS_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_5lidw"]
 script = ExtResource("3_0xlkk")
@@ -42,11 +42,11 @@ operators = Array[ExtResource("2_mumt4")]([SubResource("Resource_5lidw"), SubRes
 [sub_resource type="Resource" id="Resource_mlxlh"]
 script = ExtResource("6_nvip8")
 choice_result = SubResource("Resource_myool")
-description = "沉默不语，呆坐终日"
+description = "EVT_EVENT_DISEASE_SHIYI_DIAGNOSIS_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_lnjof"]
 script = ExtResource("6_nvip8")
-description = "长叹一声，阖上双眼"
+description = "EVT_EVENT_DISEASE_SHIYI_DIAGNOSIS_OPT2_DESC"
 
 [resource]
 script = ExtResource("7_jsdds")
@@ -54,5 +54,5 @@ weight = 100.0
 era = "1_core_rules"
 options = Array[ExtResource("1_gpen8")]([SubResource("Resource_e0vh4"), SubResource("Resource_mlxlh"), SubResource("Resource_lnjof")])
 uuid = "event_disease_shiyi_diagnosis"
-name = "壮志难酬"
-description = "你又落榜了。\\n\\n巷口的酒旗簌簌地响，你坐在榻上，手里攥着那张写满朱批的试卷，眼睛里干涩得挤不出一滴泪。窗外的喧哗声像是隔了一层水——你听得到，但什么也听不进去。"
+name = "EVT_EVENT_DISEASE_SHIYI_DIAGNOSIS_TITLE"
+description = "EVT_EVENT_DISEASE_SHIYI_DIAGNOSIS_DESC"

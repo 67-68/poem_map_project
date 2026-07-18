@@ -33,5 +33,5 @@ possibility = "ms_success_rate"
 failed_result = SubResource("Resource_2abb8")
 defer_config = SubResource("Resource_rs8o8")
 uuid = "baiye_threaten"
-name = "拜谒 · 要挟"
-description = "以把柄为筹码换来横财"
+name = "ACT_BAIYE_THREATEN_NAME"
+description = "ACT_BAIYE_THREATEN_DESC"

@@ -28,7 +28,7 @@ value = true
 script = ExtResource("6_rwsar")
 choice_result = SubResource("Resource_2ppg2")
 requirement = SubResource("Resource_31d8i")
-description = "端起茶盏，说出他想听的那两句评语。"
+description = "EVT_KUANGKE_ZHUOLIU_TOXIC_PATRON_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_wcq0u"]
 script = ExtResource("3_gm4co")
@@ -48,7 +48,7 @@ value = true
 script = ExtResource("6_rwsar")
 choice_result = SubResource("Resource_r6tgl")
 requirement = SubResource("Resource_1lkl8")
-description = "先从画轴落款处辨认藏家来历，再开口询价。"
+description = "EVT_KUANGKE_ZHUOLIU_TOXIC_PATRON_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_wymhf"]
 script = ExtResource("3_gm4co")
@@ -69,7 +69,7 @@ operators = Array[ExtResource("2_olxa1")]([SubResource("Resource_wymhf"), SubRes
 [sub_resource type="Resource" id="Resource_lvbbj"]
 script = ExtResource("6_rwsar")
 choice_result = SubResource("Resource_887hp")
-description = "看也不看那幅画，起身朝门外走去。"
+description = "EVT_KUANGKE_ZHUOLIU_TOXIC_PATRON_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_km5oj"]
 script = ExtResource("8_uvasx")
@@ -83,5 +83,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "action:main:fangshi"])
 options = Array[ExtResource("1_gaglg")]([SubResource("Resource_g8kpo"), SubResource("Resource_1p8ys"), SubResource("Resource_lvbbj")])
 uuid = "kuangke_zhuoliu_toxic_patron"
-name = "画为饵"
-description = "“吴道子真迹。主上说，先生是长安城里少数不用钱能砸动的人。”他顿了顿，“所以不用钱——用画。先生点评两句，就带走。”茶盏在他右手边冒着热气，你的那盏搁在茶几左侧，隔着一张空椅子。"
+name = "EVT_KUANGKE_ZHUOLIU_TOXIC_PATRON_TITLE"
+description = "EVT_KUANGKE_ZHUOLIU_TOXIC_PATRON_DESC"

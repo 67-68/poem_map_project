@@ -36,7 +36,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_y7y8f")
 choice_result = SubResource("Resource_xpd4c")
 requirement = SubResource("Resource_oxd0n")
-description = "“纸灰未冷，不写贺诗。”说完阖上眼，不再看门槛外的任何方向。"
+description = "EVT_ZHUOLIU_LIEQI_HIJACKED_GRIEF_IDENTITY_QUANGUI_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_4r6ci"]
 script = ExtResource("3_a4auw")
@@ -63,7 +63,7 @@ trait_name = "kuangda_fengying"
 script = ExtResource("7_y7y8f")
 choice_result = SubResource("Resource_dwkmc")
 requirement = SubResource("Resource_b6lv4")
-description = "跪着的膝盖未移动，手已从袖中摸出那截用剩下的秃笔，在蒲团旁铺平了纸。"
+description = "EVT_ZHUOLIU_LIEQI_HIJACKED_GRIEF_IDENTITY_QUANGUI_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_fdi6j"]
 script = ExtResource("3_a4auw")
@@ -90,7 +90,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_y7y8f")
 choice_result = SubResource("Resource_806nc")
 requirement = SubResource("Resource_aa807")
-description = "“昨夜的纸灰还热着。何处贺诗——是给谁贺？”"
+description = "EVT_ZHUOLIU_LIEQI_HIJACKED_GRIEF_IDENTITY_QUANGUI_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_nsoyr"]
 script = ExtResource("6_bma4b")
@@ -116,5 +116,5 @@ archetype_id = "duzhuo"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:duzhuo", "TARGET_IDENTITY_QUANGUI"])
 options = Array[ExtResource("1_7ev1b")]([SubResource("Resource_0olq1"), SubResource("Resource_6d5j1"), SubResource("Resource_kp8ug")])
 uuid = "zhuoliu_lieqi_hijacked_grief_identity_quangui"
-name = "纸灰未冷"
-description = "纸灰飞进眼睛时门被推开了。不是风吹的。那人停在门槛外，停了好一会儿——你跪在蒲团上，他站在门槛外，中间隔着昨夜烧尽的纸灰和今日尚未烧的纸钱。他不进来。庙里的寒气从地面往上漫，他站在门外仅一步远的地方，靴跟在石阶上轻轻磕了两下。“杜先生，就一句——今日午时，一首贺诗，老地方，要喜庆。”他没进来，只把话搁在门槛外，踩着你昨夜烧的纸灰转身走了。你回头时只看见他背影。靴跟上沾着黑色残烬。庙外他的马打了个响鼻，声音在空荡荡的大殿里弹了三个来回才落定。"
+name = "EVT_ZHUOLIU_LIEQI_HIJACKED_GRIEF_IDENTITY_QUANGUI_TITLE"
+description = "EVT_ZHUOLIU_LIEQI_HIJACKED_GRIEF_IDENTITY_QUANGUI_DESC"

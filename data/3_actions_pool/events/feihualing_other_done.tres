@@ -41,7 +41,7 @@ script = ExtResource("4_76ncv")
 [sub_resource type="Resource" id="Resource_wyk80"]
 script = ExtResource("6_4jr05")
 choice_result = SubResource("Resource_7k4v4")
-description = "妙语连珠"
+description = "EVT_FEIHUALING_OTHER_DONE_IMAGINARY_DESC"
 
 [sub_resource type="Resource" id="Resource_mcr6r"]
 script = ExtResource("7_lwkl5")
@@ -60,7 +60,7 @@ operator = 1
 script = ExtResource("6_4jr05")
 choice_result = SubResource("Resource_pidff")
 requirement = SubResource("Resource_yhv3r")
-description = "灵感硬接"
+description = "EVT_FEIHUALING_OTHER_DONE_INSPIRATION_DESC"
 
 [sub_resource type="Resource" id="Resource_6wrun"]
 script = ExtResource("7_lwkl5")
@@ -72,12 +72,12 @@ operators = Array[ExtResource("1_0yjba")]([SubResource("Resource_6wrun")])
 [sub_resource type="Resource" id="Resource_8gx8l"]
 script = ExtResource("6_4jr05")
 choice_result = SubResource("Resource_6xal5")
-description = "自罚三杯"
+description = "EVT_FEIHUALING_OTHER_DONE_PENALTY_DESC"
 
 [resource]
 script = ExtResource("9_821d1")
 options = Array[ExtResource("5_5inot")]([SubResource("Resource_wyk80"), SubResource("Resource_h717p"), SubResource("Resource_8gx8l")])
 on_enter_result = SubResource("Resource_wovth")
 uuid = "feihualing_other_done"
-name = "飞花令"
-description = "你选择了以「{@keyword}」为题吟咏。[br][br]{@imaginary_desc}[br][br]{@npc_report}"
+name = "EVT_FEIHUALING_OTHER_DONE_TITLE"
+description = "EVT_FEIHUALING_OTHER_DONE_DESC"

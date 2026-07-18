@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_grh5p")]([SubResource("Resource_8w5h1")])
 [sub_resource type="Resource" id="Resource_mi4nd"]
 script = ExtResource("5_a65yf")
 choice_result = SubResource("Resource_3tne3")
-description = "强忍咳意，继续誊写文牍"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEB_M1_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_dpgie"]
 script = ExtResource("6_qeim0")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_hlyxy")]([SubResource("Resource_mi4nd")])
 uuid = "bai_ye_honeymoon_l2_typeb_m1"
-name = "抱病誊牍"
-description = "你持帖入内，侍郎抱炉而坐，命你至侧室誊写百页历年奏议。室内炭火将尽，冷风从窗隙灌入。侍郎隔帘与清客谈笑，不时扬声催问进度。你咳嗽渐剧，握笔的手微微发颤。侍郎命人取来一盏冷茶，说“润润喉，莫误了正事”。两个时辰后，你誊完最后一页，他接过后随手翻看，颔首道“尚可”，转身离去，未提举荐之事。"
+name = "EVT_BAI_YE_HONEYMOON_L2_TYPEB_M1_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L2_TYPEB_M1_DESC"

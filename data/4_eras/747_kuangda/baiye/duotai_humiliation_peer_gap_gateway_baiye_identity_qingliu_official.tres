@@ -13,11 +13,11 @@ script = ExtResource("2_5b4qv")
 
 [sub_resource type="Resource" id="Resource_nad06"]
 script = ExtResource("4_n0ck7")
-description = "你站起身，朝门外走去，檐角日影未移半步，头也不回。"
+description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_nrhyx"]
 script = ExtResource("4_n0ck7")
-description = "你拱手还礼，端起凉茶饮尽，将名帖留在桌上，缓步离去。"
+description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_fpeyc"]
 script = ExtResource("5_wi66f")
@@ -30,7 +30,7 @@ operators = Array[ExtResource("1_ujowf")]([SubResource("Resource_fpeyc")])
 [sub_resource type="Resource" id="Resource_eroff"]
 script = ExtResource("4_n0ck7")
 choice_result = SubResource("Resource_h81wl")
-description = "你追上两步，躬身作揖：“郑兄提携则个，弟但求一饭之地。”"
+description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_mtusw"]
 script = ExtResource("6_scc18")
@@ -48,4 +48,4 @@ options = Array[ExtResource("3_nueiq")]([SubResource("Resource_nad06"), SubResou
 on_enter_result = SubResource("Resource_hwetp")
 uuid = "duotai_humiliation_peer_gap_gateway_baiye_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
-description = "门内门外"
+description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_DESC"

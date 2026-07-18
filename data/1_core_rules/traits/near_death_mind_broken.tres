@@ -7,4 +7,4 @@
 [resource]
 script = ExtResource("2_67i45")
 uuid = "near_death_mind_broken"
-name = "心智破损"
+name = "TRAIT_NEAR_DEATH_MIND_BROKEN_TRAIT_NAME"

@@ -27,7 +27,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("6_2hsky")
 choice_result = SubResource("Resource_dk4cc")
 requirement = SubResource("Resource_w3132")
-description = "你爬上土台，在李白身旁躺下，也闭上眼。"
+description = "EVT_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_IDENTITY_QINGLIU_OWNER_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_vold8"]
 script = ExtResource("5_q3uho")
@@ -56,5 +56,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "ACTOR_EMOTION_TRANQUILITY", "emotion_pair:pair_tranquility", "action:main:jiaoyou"])
 options = Array[ExtResource("1_m74b2")]([SubResource("Resource_o08vt")])
 uuid = "kuangke_qingliu_libai_emotion_tranquility_identity_qingliu_owner"
-name = "土台上的白昼星辰"
-description = "“你猜我在看什么？”没等你回答，他自己接下去：“什么都没看。就是躺着。”然后他往旁边挪了挪，让出一块干裂的黄土。土台边沿的野草被晒得卷了边，远处的蝉鸣像一根绷紧的弦。"
+name = "EVT_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_IDENTITY_QINGLIU_OWNER_TITLE"
+description = "EVT_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_IDENTITY_QINGLIU_OWNER_DESC"

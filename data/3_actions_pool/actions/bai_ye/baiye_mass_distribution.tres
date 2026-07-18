@@ -27,5 +27,5 @@ archetype_uuid = "baiye_mass_distribution_success"
 failed_result = SubResource("Resource_nj454")
 defer_config = SubResource("Resource_4fc8a")
 uuid = "baiye_mass_distribution"
-name = "拜谒 · 广发行卷"
-description = "广发诗文行卷以期一遇伯乐"
+name = "ACT_BAIYE_MASS_DISTRIBUTION_NAME"
+description = "ACT_BAIYE_MASS_DISTRIBUTION_DESC"

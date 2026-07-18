@@ -27,5 +27,5 @@ possibility = "s_success_rate"
 failed_result = SubResource("Resource_4fogc")
 defer_config = SubResource("Resource_1pbo4")
 uuid = "jiaoyou_tongyou_changan"
-name = "交游 · 同游长安"
-description = "与友人结伴遍览长安风物"
+name = "ACT_JIAOYOU_TONGYOU_CHANGAN_NAME"
+description = "ACT_JIAOYOU_TONGYOU_CHANGAN_DESC"

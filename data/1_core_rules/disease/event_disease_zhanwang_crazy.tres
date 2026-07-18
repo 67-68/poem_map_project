@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_bf5os")]([SubResource("Resource_aqqsh"), SubRes
 [sub_resource type="Resource" id="Resource_oebhp"]
 script = ExtResource("5_lji6f")
 choice_result = SubResource("Resource_qq081")
-description = "继续高歌，不管不顾"
+description = "EVT_EVENT_DISEASE_ZHANWANG_CRAZY_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_8si18"]
 script = ExtResource("3_ql8q7")
@@ -43,11 +43,11 @@ operators = Array[ExtResource("2_bf5os")]([SubResource("Resource_8si18"), SubRes
 [sub_resource type="Resource" id="Resource_6m561"]
 script = ExtResource("5_lji6f")
 choice_result = SubResource("Resource_0bnto")
-description = "被友人拖回家中"
+description = "EVT_EVENT_DISEASE_ZHANWANG_CRAZY_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_akod4"]
 script = ExtResource("5_lji6f")
-description = "任由胸中那团火烧着，不再挣扎"
+description = "EVT_EVENT_DISEASE_ZHANWANG_CRAZY_OPT2_DESC"
 
 [resource]
 script = ExtResource("6_as8bh")
@@ -55,5 +55,5 @@ weight = 100.0
 era = "1_core_rules"
 options = Array[ExtResource("1_uc7yn")]([SubResource("Resource_oebhp"), SubResource("Resource_6m561"), SubResource("Resource_akod4")])
 uuid = "event_disease_zhanwang_crazy"
-name = "狂言"
-description = "你在市集中大笑不止，指着县衙的方向高声吟诵：\\n\\n「君不见——黄河之水天上来，奔流到海不复回！」\\n\\n路人侧目，孩童跟着起哄。你浑然不觉，只觉得胸中有一团火在烧，烧得你必须说些什么、喊些什么。"
+name = "EVT_EVENT_DISEASE_ZHANWANG_CRAZY_TITLE"
+description = "EVT_EVENT_DISEASE_ZHANWANG_CRAZY_DESC"

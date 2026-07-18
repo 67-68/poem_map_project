@@ -24,7 +24,7 @@ operators = Array[ExtResource("2_7o125")]([SubResource("Resource_avju3"), SubRes
 [sub_resource type="Resource" id="Resource_ramun"]
 script = ExtResource("5_ok3ux")
 choice_result = SubResource("Resource_gse7s")
-description = "唤郎中来"
+description = "EVT_EVENT_DISEASE_FEILAO_HEMOPTYSIS_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_cbgae"]
 script = ExtResource("3_d2ifr")
@@ -38,7 +38,7 @@ operators = Array[ExtResource("2_7o125")]([SubResource("Resource_cbgae")])
 [sub_resource type="Resource" id="Resource_x6qg4"]
 script = ExtResource("5_ok3ux")
 choice_result = SubResource("Resource_51q5r")
-description = "独自咽下这口气"
+description = "EVT_EVENT_DISEASE_FEILAO_HEMOPTYSIS_OPT1_DESC"
 
 [resource]
 script = ExtResource("6_cmgj7")
@@ -46,5 +46,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:health:sickChronic"])
 options = Array[ExtResource("1_mq70x")]([SubResource("Resource_ramun"), SubResource("Resource_x6qg4")])
 uuid = "event_disease_feilao_hemoptysis"
-name = "咳血"
-description = "晨起梳洗时，铜帕上赫然一摊血色。你怔怔地看着那片殷红，手指不自觉地攥紧了巾帕。\\n\\n秋风在窗外打着旋儿，你的命难道也要像这落叶一样了么？"
+name = "EVT_EVENT_DISEASE_FEILAO_HEMOPTYSIS_TITLE"
+description = "EVT_EVENT_DISEASE_FEILAO_HEMOPTYSIS_DESC"

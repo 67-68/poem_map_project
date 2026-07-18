@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_sfag0")]([SubResource("Resource_y7p6y")])
 [sub_resource type="Resource" id="Resource_sh0kg"]
 script = ExtResource("5_vnfl7")
 choice_result = SubResource("Resource_8vhof")
-description = "从袖中取出一锭银子，递与清客。"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEA_M0_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_1y4sl"]
 script = ExtResource("6_3ucvt")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_rvalq")]([SubResource("Resource_sh0kg")])
 uuid = "bai_ye_honeymoon_l1_typea_m0"
-name = "贺寿份子钱堵门"
-description = "“来得正好，相爷三日后寿辰，凡拜谒者需先纳份子钱，方显诚意。”他身后门内隐约传出算盘声。清客目光扫过玩家衣袋，补充道：“这是相爷身边人定的规矩，我也只是照办。”言罢静立不语，手却已半伸出来。"
+name = "EVT_BAI_YE_HONEYMOON_L1_TYPEA_M0_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEA_M0_DESC"

@@ -31,7 +31,7 @@ value = true
 script = ExtResource("6_u1w6q")
 choice_result = SubResource("Resource_regru")
 requirement = SubResource("Resource_7lcwp")
-description = "掀案而起，酒盏在席面骨碌碌滚出三尺远。"
+description = "EVT_QINGLIU_FENGYING_GHOSTWRITING_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_q8xpp"]
 script = ExtResource("3_auryo")
@@ -51,7 +51,7 @@ value = true
 script = ExtResource("6_u1w6q")
 choice_result = SubResource("Resource_6qkp7")
 requirement = SubResource("Resource_eyvry")
-description = "目光迅速扫向主位，搜寻那位致仕多年的郑老大人。"
+description = "EVT_QINGLIU_FENGYING_GHOSTWRITING_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_7jtw6"]
 script = ExtResource("3_auryo")
@@ -69,7 +69,7 @@ operators = Array[ExtResource("2_ot2cc")]([SubResource("Resource_7jtw6"), SubRes
 [sub_resource type="Resource" id="Resource_0xnxi"]
 script = ExtResource("6_u1w6q")
 choice_result = SubResource("Resource_a02yy")
-description = "接过那支秃笔，在纸上落下第一个字。"
+description = "EVT_QINGLIU_FENGYING_GHOSTWRITING_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_icnbn"]
 script = ExtResource("9_1vd5y")
@@ -98,5 +98,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_NPC_DUFU:thatched_grass", "action:main:jiaoyou"])
 options = Array[ExtResource("1_1tvk3")]([SubResource("Resource_7rusb"), SubResource("Resource_d6ghs"), SubResource("Resource_0xnxi")])
 uuid = "qingliu_fengying_ghostwriting"
-name = "席间纸笔"
-description = "酒过三巡，郑家公子从袖中摸出叠得齐整的纸，铺在湿漉漉的桌面上。“上回那首《秋兴》改得好，家父逢人便夸。”他替你斟满酒，推过来，“今日再劳烦一回。”席上无人抬眼——他们都记得上次雅集，你替这位公子的诗润色了整整一个时辰。现下纸笔已备好，砚台也摆在你手边。那支笔的笔锋微秃，正是你上次落在郑家的。"
+name = "EVT_QINGLIU_FENGYING_GHOSTWRITING_TITLE"
+description = "EVT_QINGLIU_FENGYING_GHOSTWRITING_DESC"

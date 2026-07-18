@@ -28,7 +28,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("6_yxy2b")
 choice_result = SubResource("Resource_qt6s8")
 requirement = SubResource("Resource_3u3ck")
-description = "（[狂客动作]）"
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_NUMBNESS_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_8fj13"]
 script = ExtResource("3_6vi2u")
@@ -45,7 +45,7 @@ operators = Array[ExtResource("2_olpp3")]([SubResource("Resource_8fj13"), SubRes
 [sub_resource type="Resource" id="Resource_uuddj"]
 script = ExtResource("6_yxy2b")
 choice_result = SubResource("Resource_asif1")
-description = "（[旷达动作]）"
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_NUMBNESS_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_pwgjm"]
 script = ExtResource("3_6vi2u")
@@ -71,7 +71,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("6_yxy2b")
 choice_result = SubResource("Resource_5tpde")
 requirement = SubResource("Resource_gjh8h")
-description = "（[低旷达动作]）"
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_NUMBNESS_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_dj2be"]
 script = ExtResource("9_0we1k")
@@ -96,5 +96,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_THEME_MACABRE:ghost_fire", "ENV_NATURE_NIGHTMOON:cold_moon", "ENV_NATURE_AUTUMNWIND:falling_leaf", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_shaoling_night", "emotion_pair:pair_numbness", "VIBE_PHILOSOPHY_ZEN:incense_ash", "TARGET_NPC_DUFU:thatched_grass"])
 options = Array[ExtResource("1_xrpy1")]([SubResource("Resource_qg5i2"), SubResource("Resource_uuddj"), SubResource("Resource_i1hx3")])
 uuid = "747kuangda_denggao_shaoling_night_emotion_numbness"
-name = "鬼火明灭长安倦"
-description = "深夜少陵原，鬼火在古墓间游移。你在枯树下靠了许久，腿酸了，背疼了，索性坐下。风穿过枯枝呜呜作响，远处长安城的灯火明明灭灭。你数了几遍，数到一半忘了数到哪，干脆不数了。膝盖咯吱响了一声，你揉了揉，没动。"
+name = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_NUMBNESS_TITLE"
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_NUMBNESS_DESC"

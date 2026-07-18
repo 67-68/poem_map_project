@@ -7,4 +7,4 @@
 [resource]
 script = ExtResource("2_m5xfl")
 uuid = "lilinfu_student"
-name = "右相门生"
+name = "TRAIT_LILINFU_STUDENT_TRAIT_NAME"

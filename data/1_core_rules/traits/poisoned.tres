@@ -10,4 +10,4 @@ topic = "DISEASE"
 lasting_xun = 15
 time_penalty = 2
 uuid = "poisoned"
-name = "中毒"
+name = "TRAIT_POISONED_TRAIT_NAME"

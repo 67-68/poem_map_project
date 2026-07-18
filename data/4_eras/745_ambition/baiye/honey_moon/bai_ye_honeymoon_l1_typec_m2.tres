@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_tfx6q")]([SubResource("Resource_04lil")])
 [sub_resource type="Resource" id="Resource_gegwo"]
 script = ExtResource("5_fmqxq")
 choice_result = SubResource("Resource_8q51i")
-description = "躬身告退，将诗文揣入怀中"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M2_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_qpq2m"]
 script = ExtResource("6_v3yhv")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_mg5ta")]([SubResource("Resource_gegwo")])
 uuid = "bai_ye_honeymoon_l1_typec_m2"
-name = "文章受斥"
-description = "“这文章虽通顺，却少了几分刚健之气，倒有几分脂粉闺阁之态。”他顿了顿，将茶盏不轻不重地搁下，“写文章如同做人，你这般文风，怕是不合府上规矩。拿去重写，写到我满意了再来吧。”说完便低头整理文书，不再看你。"
+name = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M2_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M2_DESC"

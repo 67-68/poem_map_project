@@ -23,7 +23,7 @@ operators = Array[ExtResource("2_pucnl")]([SubResource("Resource_p8lcj"), SubRes
 [sub_resource type="Resource" id="Resource_80arv"]
 script = ExtResource("5_tp4iq")
 choice_result = SubResource("Resource_wj5f3")
-description = "将手指从杯沿上收回来搁在膝上。衣料摩擦声停顿。油花从正中缓缓漂向杯壁。"
+description = "EVT_QINGLIU_DAOXIN_POSUI_SUBCONSCIOUS_PROSODY_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_vp7po"]
 script = ExtResource("6_lb70a")
@@ -38,5 +38,5 @@ archetype_id = "duzhuo"
 _target_tags = Array[String](["action:main:duzhuo"])
 options = Array[ExtResource("1_4lnj6")]([SubResource("Resource_80arv")])
 uuid = "qingliu_daoxin_posui_subconscious_prosody"
-name = "酒局叩杯成谶句"
-description = "酒已过三巡。手指不自觉地叩着杯沿——平、仄、平、仄、平。你停下手。刚才叩出的句式恰好是一句五言。你在心里默念出来。杯中残酒表面微震了一下，复归静止。酒液上浮着一粒未散的油花。你盯着这粒油花。手指搁在膝上，不再叩了。座中有人正劝下一轮酒，声音从左手边传来，你没有转头。"
+name = "EVT_QINGLIU_DAOXIN_POSUI_SUBCONSCIOUS_PROSODY_TITLE"
+description = "EVT_QINGLIU_DAOXIN_POSUI_SUBCONSCIOUS_PROSODY_DESC"

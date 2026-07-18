@@ -30,7 +30,7 @@ operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_n2mgw"), SubRes
 [sub_resource type="Resource" id="Resource_0f5yr"]
 script = ExtResource("5_sa4fj")
 choice_result = SubResource("Resource_a2uv2")
-description = "割去坏死指头"
+description = "EVT_EVENT_DISEASE_DONGSHANG_NECROSIS_ONSET_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_l57j6"]
 script = ExtResource("3_46wxo")
@@ -48,7 +48,7 @@ operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_l57j6"), SubRes
 [sub_resource type="Resource" id="Resource_b7oge"]
 script = ExtResource("5_sa4fj")
 choice_result = SubResource("Resource_6jhl2")
-description = "裹以破布"
+description = "EVT_EVENT_DISEASE_DONGSHANG_NECROSIS_ONSET_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_umsg3")
@@ -57,5 +57,5 @@ era = "1_core_rules"
 _target_tags = Array[String](["actor:health:coldNecrosis"])
 options = Array[ExtResource("1_tyut7")]([SubResource("Resource_0f5yr"), SubResource("Resource_b7oge")])
 uuid = "event_disease_dongshang_necrosis_onset"
-name = "指骨坏死"
-description = "第七天了。你醒来的时候发现右手食指的指甲盖整个翻了起来——不是磕碰的，是冻死的。指甲底下的肉变成了黑色。不是紫黑，是焦黑，像烧过的木柴那种黑。你碰了碰，不疼。不疼才可怕。\\n\\n你把手指举到眼前。指尖那截已经分辨不出原来的肤色，皮肉像腊肉一样硬，关节完全锁死。你知道那根手指已经死了。它挂在你的手上，但已经不是你的了。再过几天——也许是明天——它会从指节上脱落，留下一截白森森的骨头。这就是冻疮走到尽头的样子。\\n\\n你看着自己的手。十根手指。还剩九根是活的。"
+name = "EVT_EVENT_DISEASE_DONGSHANG_NECROSIS_ONSET_TITLE"
+description = "EVT_EVENT_DISEASE_DONGSHANG_NECROSIS_ONSET_DESC"

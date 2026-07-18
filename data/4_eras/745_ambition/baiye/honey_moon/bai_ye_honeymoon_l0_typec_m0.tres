@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_dcbrm")]([SubResource("Resource_xo6wo")])
 [sub_resource type="Resource" id="Resource_xgl27"]
 script = ExtResource("5_dh3qy")
 choice_result = SubResource("Resource_0kb5h")
-description = "退到墙根阴凉处，耐心等候"
+description = "EVT_BAI_YE_HONEYMOON_L0_TYPEC_M0_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_f2itb"]
 script = ExtResource("6_0orvn")
@@ -35,5 +35,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_546lf")]([SubResource("Resource_xgl27")])
 uuid = "bai_ye_honeymoon_l0_typec_m0"
-name = "门檐影斜"
-description = "右相府午门紧闭。你上前自报家门，门子倚着门框，目光越过你，投向巷口一顶青呢官轿。你要通报？他缓缓掸了掸衣袖上并不存在的灰，说相爷正在用午膳，你且候着。日头爬过墙头，将你的影子一寸寸烤短。门子转身与另一个仆役低声说笑，笑声断断续续，间或回头看你一眼，仿佛在等什么有趣的事发生。他们的声音不大不小，恰好能让你听见——也不知是哪个穷措大，也配来见相爷。你站在石阶下，进退不得。"
+name = "EVT_BAI_YE_HONEYMOON_L0_TYPEC_M0_TITLE"
+description = "EVT_BAI_YE_HONEYMOON_L0_TYPEC_M0_DESC"

@@ -13,11 +13,11 @@ script = ExtResource("2_4o0om")
 
 [sub_resource type="Resource" id="Resource_ynppa"]
 script = ExtResource("4_w181s")
-description = "将抄笔搁回笔架，转身步出值房，不看任何人一眼。"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_FENGZHAO_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
 [sub_resource type="Resource" id="Resource_uj3vj"]
 script = ExtResource("4_w181s")
-description = "略顿首，将公文归位，低声道“告退”，自行离去。"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_FENGZHAO_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
 [sub_resource type="Resource" id="Resource_qt5vw"]
 script = ExtResource("5_3jc1m")
@@ -30,7 +30,7 @@ operators = Array[ExtResource("1_lydkh")]([SubResource("Resource_qt5vw")])
 [sub_resource type="Resource" id="Resource_e7laq"]
 script = ExtResource("4_w181s")
 choice_result = SubResource("Resource_hb1hf")
-description = "躬身道“大人若有别事，小的随叫随到”，又退回门外候立。"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_FENGZHAO_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
 [sub_resource type="Resource" id="Resource_5toom"]
 script = ExtResource("6_cfpq1")
@@ -48,4 +48,4 @@ options = Array[ExtResource("3_68pwg")]([SubResource("Resource_ynppa"), SubResou
 on_enter_result = SubResource("Resource_vhyq1")
 uuid = "duotai_humiliation_class_bullying_gateway_fengzhao_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
-description = "文牍之弃"
+description = "EVT_DUOTAI_HUMILIATION_CLASS_BULLYING_GATEWAY_FENGZHAO_IDENTITY_QINGLIU_OFFICIAL_DESC"
