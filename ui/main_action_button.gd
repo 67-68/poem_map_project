@@ -87,6 +87,11 @@ func _on_clicked() -> void:
 				Logging.info("MainActionButton: sub-action '%s' 不在 tutorial 子白名单中，跳过" % sub_uuid)
 				continue
 			
+			# 🆕 全局黑名单过滤：子 Action 在黑名单中 → 不显示在 Picker
+			if ActionManager.is_action_hidden(sub_uuid):
+				Logging.info("MainActionButton: sub-action '%s' 在黑名单中，跳过" % sub_uuid)
+				continue
+			
 			# Phase 1: HIDE 检查
 			var _should_hide := false
 			var archetype = Database.get_archetype_by_uuid(sub_action.uuid, "success")

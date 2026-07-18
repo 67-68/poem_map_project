@@ -120,6 +120,13 @@ var npc_relations: Dictionary = {}
 # ════════════════════════════════════════════════════════════════
 var triggered_note_uuids: Array[String] = []
 
+# ════════════════════════════════════════════════════════════════
+# 行动黑名单 — 全局永久隐藏的 action UUID 列表（不随 Era/旬变化）
+# 填入父 Action UUID → 整个 action（含子 action）不显示
+# 填入子 Action UUID → 仅该子 action 不显示在 Picker 中
+# ════════════════════════════════════════════════════════════════
+var hidden_action_uuids: Array[String] = []
+
 
 # ════════════════════════════════════════════════════════════════
 # 序列化 / 反序列化
@@ -148,6 +155,7 @@ func to_dict() -> Dictionary:
 		"imaginary_uuids": imaginaries_detail.keys(),
 		"npc_relations": _copy_dict(npc_relations),
 		"triggered_note_uuids": triggered_note_uuids.duplicate(),
+		"hidden_action_uuids": hidden_action_uuids.duplicate(),
 		"year": year,
 		"current_era": current_era,
 		"is_game_over": is_game_over,
@@ -181,6 +189,7 @@ func from_dict(d: Dictionary) -> void:
 	# created_poems / imaginaries_detail 需要外部注入，from_dict 不处理 Resource
 	npc_relations = _safe_dict(d, "npc_relations")
 	triggered_note_uuids = _safe_array_str(d, "triggered_note_uuids")
+	hidden_action_uuids = _safe_array_str(d, "hidden_action_uuids")
 	# NPC 关系数据恢复到 NPCDocument 实例（调用方需在 Database 就绪后调用 restore_npc_relations_to_documents()）
 	year = d.get("year", 745.0)
 	current_era = d.get("current_era", "")

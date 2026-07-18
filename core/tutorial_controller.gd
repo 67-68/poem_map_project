@@ -218,6 +218,8 @@ func _skip_tutorial() -> void:
 		Logging.info("TutorialController: [skip] 游戏存档快照已还原")
 	# 🆕 set_flag 必须在快照还原之后，否则会被旧快照覆盖
 	PlayerState.set_flag("tutorial_completed", true, 'bool')
+	# 🆕 全局黑名单：ban 掉 tutorial 特有的子行动（必须在快照还原之后，否则会被覆盖）
+	_ban_tutorial_actions()
 	# 记录当前可见性（兜底：如果 _begin_tutorial 从未执行），然后还原
 	if _visibility_snapshot.is_empty():
 		_record_all_visibility(get_tree().root)
@@ -391,6 +393,32 @@ func _clear_all_tut_flags() -> void:
 	for flag in tut_flags:
 		PlayerState.set_flag(flag, false)
 	Logging.info("TutorialController: 所有 tutorial flag 已清除")
+
+
+## 🆕 将 tutorial 特有的 action 加入全局黑名单。
+## tutorial 结束后这些行动在正常游戏中不应出现。
+## 必须在 _restore_game_save_snapshot() 之后调用，否则会被旧快照覆盖。
+func _ban_tutorial_actions() -> void:
+	var tut_uuids := [
+		# ── 出游（父行动 + 5 个方向子行动）──
+		"tut_chuyou",           # 父行动 → 整个出游不显示
+		"tut_chuyou_east",
+		"tut_chuyou_west",
+		"tut_chuyou_south",
+		"tut_chuyou_north",
+		"tut_chuyou_lookup",
+		# ── 独酌（喝药酒子行动）──
+		"tut_duzhuo_heyaojiu",
+		# ── 交游（和道人说话 + 共饮）──
+		"tut_jiaoyou_talk",
+		"tut_jiaoyou_drink",
+		# ── 驻留（泰山两个地点子行动）──
+		"tut_zhu_liu_base",
+		"tut_zhu_liu_upper",
+	]
+	for uuid in tut_uuids:
+		ActionManager.add_hidden_action(uuid)
+	Logging.info("TutorialController: 已将 %d 个 tutorial 特有 action 加入全局黑名单" % tut_uuids.size())
 
 
 # ═══════════════════════════════════════════════════════════
@@ -976,6 +1004,8 @@ func _advance_to_end() -> void:
 	_restore_game_save_snapshot()
 	Logging.info("TutorialController: 游戏存档快照已还原（覆盖 tutorial 期间所有状态变更）")
 	PlayerState.set_flag("tutorial_completed", true, 'bool')
+	# 🆕 全局黑名单：ban 掉 tutorial 特有的子行动（必须在快照还原之后，否则会被覆盖）
+	_ban_tutorial_actions()
 
 	# 🆕 根据快照递归还原所有控件可见性
 	_restore_all_visibility(get_tree().root)

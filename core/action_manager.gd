@@ -1215,3 +1215,50 @@ func consume_generator(action: Action) -> void:
 		lock_action(action_type as int, 1)
 		action.generator = null
 		Logging.info("[ActionManager] generator '%s' 已耗尽，action 锁定 1 旬，generator 已清空" % gen_name)
+
+
+# ════════════════════════════════════════════════════════════
+# 🆕 行动黑名单（全局永久过滤，不随 Era/旬变化，持久化到存档）
+# ════════════════════════════════════════════════════════════
+
+## 将 action UUID 加入全局黑名单。立即生效。
+## 父 Action UUID → 整个 action（含子 action）不显示
+## 子 Action UUID → 仅该子 action 不显示在 Picker 中
+static func add_hidden_action(uuid: String) -> void:
+	if uuid.is_empty():
+		Logging.err("[ActionManager] add_hidden_action: uuid 为空，跳过")
+		return
+	if GameSave.data.hidden_action_uuids.has(uuid):
+		Logging.info("[ActionManager] add_hidden_action: '%s' 已在黑名单中，跳过" % uuid)
+		return
+	GameSave.data.hidden_action_uuids.append(uuid)
+	Logging.info("[ActionManager] ✅ add_hidden_action: '%s' 已加入黑名单（当前 %d 项）" % [uuid, GameSave.data.hidden_action_uuids.size()])
+	# 触发面板重建以立即反映过滤
+	if EventBus.has_signal("request_refresh_action_panel"):
+		EventBus.request_refresh_action_panel.emit()
+
+
+## 从黑名单中移除 action UUID。立即生效。
+static func remove_hidden_action(uuid: String) -> void:
+	if uuid.is_empty():
+		Logging.err("[ActionManager] remove_hidden_action: uuid 为空，跳过")
+		return
+	if not GameSave.data.hidden_action_uuids.has(uuid):
+		Logging.info("[ActionManager] remove_hidden_action: '%s' 不在黑名单中，跳过" % uuid)
+		return
+	GameSave.data.hidden_action_uuids.erase(uuid)
+	Logging.info("[ActionManager] 🔓 remove_hidden_action: '%s' 已从黑名单移除（剩余 %d 项）" % [uuid, GameSave.data.hidden_action_uuids.size()])
+	if EventBus.has_signal("request_refresh_action_panel"):
+		EventBus.request_refresh_action_panel.emit()
+
+
+## 检查 action UUID 是否在黑名单中。
+static func is_action_hidden(uuid: String) -> bool:
+	if uuid.is_empty():
+		return false
+	return GameSave.data.hidden_action_uuids.has(uuid)
+
+
+## 获取当前黑名单快照（调试用）。
+static func get_hidden_actions() -> Array[String]:
+	return GameSave.data.hidden_action_uuids.duplicate()

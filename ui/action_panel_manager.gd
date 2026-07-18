@@ -123,6 +123,10 @@ func _rebuild_all_buttons(_era: String = "") -> void:
 				if not ActionManager.is_action_era_allowed(action):
 					Logging.info("ActionPanelManager: action '%s' (id='%s') 被 Era 过滤，跳过" % [name, action_id])
 					continue
+				# 🆕 全局黑名单过滤：父 Action 在黑名单中 → 整个不显示
+				if ActionManager.is_action_hidden(action_id):
+					Logging.info("ActionPanelManager: action '%s' (id='%s') 在黑名单中，跳过" % [name, action_id])
+					continue
 				# 🆕 地点过滤：未勾选「显示异地」时，只显示有本地子行动的父行动
 				if not show_remote:
 					if not RemoteActionFilterManager.has_local_sub_actions(action, current_place):
