@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "你在暗巷的角落蹲了整整一夜，腿脚发麻，露水浸透了衣衫。往来的人影在巷口晃了又晃，却没有一个停下来的。更夫的梆子敲了三响，天边已露鱼肚白。你站起身来拍了拍尘土，白费了一夜功夫和几两碎银。这长安城的秘密，比你想的要深得多。"
+description = "TRES_LEVERAGE_FARM_FAILURE_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "leverage_farm_failure"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "leverage_farm_failure_fallback"
-name = "空守一夜"
+name = "TRES_LEVERAGE_FARM_FAILURE_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

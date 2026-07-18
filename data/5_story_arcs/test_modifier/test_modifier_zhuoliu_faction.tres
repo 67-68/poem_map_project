@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_money_zhuo")])
 [sub_resource type="Resource" id="Res_opt_money_zhuo"]
 script = ExtResource("5_evopt")
 choice_result = SubResource("Res_cr_money_zhuo")
-description = "A) 浊流索钱 -40 (城府↓浊流消耗)"
+description = "TRES_TEST_MODIFIER_ZHUOLIU_FACTION_DESCRIPTION_0"
 
 ;; ── Option B: health -20 — 浊流消耗减免 ──
 [sub_resource type="Resource" id="Res_prop_health_zhuo"]
@@ -35,7 +35,7 @@ operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_health_zhuo")]
 [sub_resource type="Resource" id="Res_opt_health_zhuo"]
 script = ExtResource("5_evopt")
 choice_result = SubResource("Res_cr_health_zhuo")
-description = "B) 浊流伤身 -20 (城府↓浊流消耗)"
+description = "TRES_TEST_MODIFIER_ZHUOLIU_FACTION_DESCRIPTION_1"
 
 ;; ── Option C: prestige +20 — 对比：望获取不走 faction ──
 [sub_resource type="Resource" id="Res_prop_prestige_zhuo"]
@@ -50,7 +50,7 @@ operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_prestige_zhuo"
 [sub_resource type="Resource" id="Res_opt_prestige_zhuo"]
 script = ExtResource("5_evopt")
 choice_result = SubResource("Res_cr_prestige_zhuo")
-description = "C) 望+20 (城府↓望 才华↑望 不与 faction 交互)"
+description = "TRES_TEST_MODIFIER_ZHUOLIU_FACTION_DESCRIPTION_2"
 
 [resource]
 script = ExtResource("6_re")
@@ -59,5 +59,5 @@ archetype_id = ""
 _target_tags = Array[String]([])
 options = Array[ExtResource("1_baseopt")]([SubResource("Res_opt_money_zhuo"), SubResource("Res_opt_health_zhuo"), SubResource("Res_opt_prestige_zhuo")])
 uuid = "test_modifier_zhuoliu_faction"
-name = "【测试】修饰符-浊流交互"
-description = "需要先通过 debug console 注入浊流 NPC 上下文。\n注入指令: PlayerState.last_event[\"target_tag\"] = \"lilinfu\"\n\n预期（城府 50）：A) 钱-40 → 浊流 dampen → ~-24\nB) 健-20 → 浊流 dampen → ~-12\nC) 望+20 → 城府↓望 + 才华↑望（无 faction）→ ~+20"
+name = "TRES_TEST_MODIFIER_ZHUOLIU_FACTION_NAME_0"
+description = "TRES_TEST_MODIFIER_ZHUOLIU_FACTION_DESCRIPTION_3"

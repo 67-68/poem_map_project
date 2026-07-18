@@ -22,11 +22,11 @@ condition = SubResource("Resource_cond_tier1")
 [resource]
 script = ExtResource("1")
 uuid = "idea_caomangluotuo"
-name = "势：草莽落拓"
-description = "宁与市井小民为伍"
+name = "TRES_IDEA_CAOMANGLUOTUO_NAME_0"
+description = "TRES_IDEA_CAOMANGLUOTUO_DESCRIPTION_0"
 idea_buffs = Array[ExtResource("2")]([SubResource("Resource_buff_l0"), SubResource("Resource_buff_l1")])
 current_idea_level = -1
-idea_demonstrations = Array[String](["势获取效率提高 20%", "下层人的好感提高需要的事件减少 1 旬"])
+idea_demonstrations = Array[String](["TRES_IDEA_CAOMANGLUOTUO_IDEA_DEMONSTRATIONS_0", "TRES_IDEA_CAOMANGLUOTUO_IDEA_DEMONSTRATIONS_1"])
 idea_cost_name = "momentum"
 idea_cost_amount = 50
 counter_idea = "idea_zhejieganye"

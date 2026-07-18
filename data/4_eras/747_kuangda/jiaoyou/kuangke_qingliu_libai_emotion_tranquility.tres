@@ -43,7 +43,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_wwaoh")
 choice_result = SubResource("Resource_tdh10")
 requirement = SubResource("Resource_5o307")
-description = "你爬上土台，在李白身旁躺下，也闭上眼。"
+description = "TRES_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_tuwu4"]
 script = ExtResource("6_1n3he")
@@ -71,5 +71,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:main:jiaoyou"])
 options = Array[ExtResource("1_sdxov")]([SubResource("Resource_7twgt")])
 uuid = "kuangke_qingliu_libai_emotion_tranquility"
-name = "土台上的白昼星辰"
-description = "“你猜我在看什么？”没等你回答，他自己接下去：“什么都没看。就是躺着。”然后他往旁边挪了挪，让出一块干裂的黄土。土台边沿的野草被晒得卷了边，远处的蝉鸣像一根绷紧的弦。"
+name = "TRES_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_NAME_0"
+description = "TRES_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_DESCRIPTION_1"

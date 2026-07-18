@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_fengxue")
 uuid = "poem_recipe_fengxue_ye"
-name = "风雪夜归人"
-description = "寒月孤雪落叶：羁旅登高，天地苍茫"
+name = "TRES_POEM_FENGXUE_YE_NAME_0"
+description = "TRES_POEM_FENGXUE_YE_DESCRIPTION_0"
 topic = "POEM"
 specific_topic = "DENG_GAO"
 required_fragments = Array[String](["cold_moon", "snow", "falling_leaf"])

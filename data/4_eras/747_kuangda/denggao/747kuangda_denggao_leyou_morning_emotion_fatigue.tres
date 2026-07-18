@@ -57,7 +57,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_hyesc")
 choice_result = SubResource("Resource_5yjq3")
 requirement = SubResource("Resource_wcjs5")
-description = "掸了掸肩上露水，头也不回地朝雾中走去。"
+description = "TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_1kt3d"]
 script = ExtResource("3_p3787")
@@ -88,7 +88,7 @@ operators = Array[ExtResource("2_dlmxs")]([SubResource("Resource_1kt3d"), SubRes
 [sub_resource type="Resource" id="Resource_my73y"]
 script = ExtResource("8_hyesc")
 choice_result = SubResource("Resource_euac7")
-description = "收回目光，继续看着雾中的终南山影。"
+description = "TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_olnav"]
 script = ExtResource("3_p3787")
@@ -133,7 +133,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_hyesc")
 choice_result = SubResource("Resource_ee0j6")
 requirement = SubResource("Resource_t1hao")
-description = "稍稍侧身，给对方腾出半边靠着的树身。"
+description = "TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_ibdfy"]
 script = ExtResource("10_ftcpw")
@@ -157,5 +157,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:scene_denggao_leyou_morning"])
 options = Array[ExtResource("1_dsh4t")]([SubResource("Resource_ni84c"), SubResource("Resource_my73y"), SubResource("Resource_olfbs")])
 uuid = "747kuangda_denggao_leyou_morning_emotion_fatigue"
-name = "雾重肩沉"
-description = "秋日清晨，你沿着湿滑的石阶登上乐游原。晨雾比前几日更浓，长安城的轮廓浮在雾中，像一幅未干透的水墨画。你靠在一棵老槐树粗糙的树干上时，膝盖咯吱响了一声。远处终南山的影子在雾里时隐时现，早市的叫卖声和人语碎片断断续续随风送上来。有人登原，在你身后几步停住——拂了拂石凳上的露水，坐了下来，没说话，也没起身离开。你垂下眼，看见自己袖口的泥渍和鞋帮上干涸的草屑。"
+name = "TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_NAME_0"
+description = "TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_DESCRIPTION_3"

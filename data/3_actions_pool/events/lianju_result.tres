@@ -18,7 +18,7 @@ operators = Array[ExtResource("3_baseop")]([SubResource("Resource_pop_to_party")
 [sub_resource type="Resource" id="Resource_opt_continue"]
 script = ExtResource("5_eo")
 choice_result = SubResource("Resource_cr_continue")
-description = "回到宴席"
+description = "TRES_LIANJU_RESULT_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("7_re")
@@ -26,7 +26,7 @@ weight = 0.0
 options = Array[ExtResource("2_baseopt")]([SubResource("Resource_opt_continue")])
 pre_event_interrupter_sequence = null
 uuid = "lianju_result"
-name = "联句·结果"
-description = "你以「{@lianju_picked_name}」对句，赢得 {@lianju_score} 文名！[br]{@lianju_evaluation}"
+name = "TRES_LIANJU_RESULT_NAME_0"
+description = "TRES_LIANJU_RESULT_DESCRIPTION_1"
 owner_uuids = null
 tags = null

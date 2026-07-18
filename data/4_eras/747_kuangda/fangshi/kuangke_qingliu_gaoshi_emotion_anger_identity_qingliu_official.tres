@@ -27,7 +27,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_xr1mh")
 choice_result = SubResource("Resource_tsc2o")
 requirement = SubResource("Resource_m4ksf")
-description = "你摔碗，我摔碗。河西怎么走——他问的是河西怎么走。"
+description = "TRES_KUANGKE_QINGLIU_GAOSHI_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_qchgq"]
 script = ExtResource("6_c1b3m")
@@ -56,5 +56,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_THEME_MARTIAL:giant_roc", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ACTOR_EMOTION_ANGER", "emotion_pair:pair_anger", "action:main:fangshi"])
 options = Array[ExtResource("1_tsc2o")]([SubResource("Resource_rimqk")])
 uuid = "kuangke_qingliu_gaoshi_emotion_anger_identity_qingliu_official"
-name = "三碗酒后摔碗"
-description = "下杜城西的小酒肆，高适灌下第三碗浊酒，碗底往桌上一顿，酒水溅出来洒了半张桌。「今日在朱雀街碰见兵部的书吏，」他声音压得极低，「他问我河西怎么走——他娘的兵部书吏，问一个幕府参谋河西怎么走。」说完笑得浑身发抖，笑容里有火。"
+name = "TRES_KUANGKE_QINGLIU_GAOSHI_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_NAME_0"
+description = "TRES_KUANGKE_QINGLIU_GAOSHI_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_1"

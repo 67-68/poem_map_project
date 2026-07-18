@@ -21,17 +21,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("6_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "请道长指点"
+description = "TRES_TUT_POEM_REVIEW_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("7_t2b8r")
 options = Array[ExtResource("1_br8w2")]([SubResource("Resource_opt")])
 uuid = "tut_poem_review"
-name = "道人评诗"
-description = "几杯药酒下肚，文思果然如泉涌。你一气呵成写下一首《望岳》，字里行间尽是少年人的锐气与壮志。
-
-道士不知何时已站在你身后，探头看了一眼诗稿，眼中闪过惊艳之色。
-
-「好！好一句『会当凌绝顶，一览众山小』！」道士拍手称赞，「年轻人，你这诗才，他日必有大名，青史留名不在话下。」"
+name = "TRES_TUT_POEM_REVIEW_NAME_0"
+description = "TRES_TUT_POEM_REVIEW_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

@@ -29,13 +29,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_y3v7k"]
 script = ExtResource("5_vvcmu")
 choice_result = SubResource("Resource_bh1ae")
-description = "磨墨，在卷首郑重写下你的名字"
+description = "TRES_EVENT_AMBITION_START_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_fc71i")
 options = Array[ExtResource("1_qstco")]([SubResource("Resource_y3v7k")])
 uuid = "event_ambition_start"
-name = "中年寻志"
-description = "长安的物价贵得令人咋舌。你在城南偏僻的客舍里租下了一张散发着霉味的床榻，点燃了身上最后半截劣质的残烛。案几上，是你准备投递给当朝右相李林甫的诗文。夜风透窗，烛火摇晃得让人心慌。窗外的萤火虫闪烁，好像暗示着你，和你的才华的命运"
+name = "TRES_EVENT_AMBITION_START_NAME_0"
+description = "TRES_EVENT_AMBITION_START_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

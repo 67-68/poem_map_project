@@ -28,14 +28,14 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_ungas"]
 script = ExtResource("5_ur8vy")
-failed_hint = "[shake rate=15 level=4]（开门... 开门... 我是从八品下的官员... 我带了俸禄回来... 只要开门一切都会好起来的...）[/shake]"
+failed_hint = "TRES_BACKHOME_THE_WOOD_FAILED_HINT_0"
 metadata/_custom_type_script = "uid://bfs1tasr8ihre"
 
 [sub_resource type="Resource" id="Resource_af3of"]
 script = ExtResource("3_cqxvc")
 choice_result = SubResource("Resource_h0cal")
 requirement = SubResource("Resource_ungas")
-description = "推开门"
+description = "TRES_BACKHOME_THE_WOOD_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_ur8vy"]
@@ -47,8 +47,8 @@ metadata/_custom_type_script = "uid://bs881r2io48fq"
 script = ExtResource("2_uv72d")
 options = Array[ExtResource("1_bi1gv")]([SubResource("Resource_af3of")])
 uuid = "backhome_the_wood"
-name = "叩门"
-description = "那扇漏风的破木门就在眼前。门缝里透不出半点柴火的光。你僵硬的手指正要触碰门环，一阵极其沉闷的啼哭声穿透了木板。这声音不像是属于人间的，它像是在你冻僵的颅骨腔内直接震荡。"
+name = "TRES_BACKHOME_THE_WOOD_NAME_0"
+description = "TRES_BACKHOME_THE_WOOD_DESCRIPTION_1"
 icon = ExtResource("1_tx2p3")
 ui_decl = SubResource("Resource_ur8vy")
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

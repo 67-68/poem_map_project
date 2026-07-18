@@ -48,7 +48,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_xkurk")
 choice_result = SubResource("Resource_irxvw")
 requirement = SubResource("Resource_pejhe")
-description = "接过便穿上，只问了一句“《辋川集》何时付梓”。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_3ymp1"]
 script = ExtResource("3_0652o")
@@ -71,7 +71,7 @@ operators = Array[ExtResource("2_run0v")]([SubResource("Resource_3ymp1"), SubRes
 [sub_resource type="Resource" id="Resource_yvep0"]
 script = ExtResource("8_xkurk")
 choice_result = SubResource("Resource_3v78j")
-description = "默然许久，才低声道袍子针脚极细密。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_m6mld"]
 script = ExtResource("3_0652o")
@@ -107,7 +107,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_xkurk")
 choice_result = SubResource("Resource_wcx8u")
 requirement = SubResource("Resource_av1ul")
-description = "穿上后连声说王右丞体恤，转而便问崇文馆可还有空缺。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_b1b8t"]
 script = ExtResource("10_edua0")
@@ -131,5 +131,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:main:fangshi"])
 options = Array[ExtResource("1_cy5of")]([SubResource("Resource_00cbq"), SubResource("Resource_yvep0"), SubResource("Resource_vbj28")])
 uuid = "qingliu_passive_benefits_wangwei_silent_bailout"
-name = "法物流通处"
-description = "大慈恩寺的法物流通处里，王维与你并肩站了许久。他在《金刚经》抄本前停下，未曾开口，只将一件厚实的棉袍搁在你臂弯上——“买重了。”语气如谈论今日风大一般平淡。你认得这件袍子，是方才寺门外那个辽东皮货商担来的。王维转身去付抄经的银钱，袍子就这么留在你手中，一言未再多说。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_DESCRIPTION_3"

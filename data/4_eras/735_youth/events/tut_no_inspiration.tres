@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt1"]
 script = ExtResource("4_v7m9w")
 choice_result = SubResource("Resource_opt1_cr")
-description = "看来需要喝点酒助兴"
+description = "TRES_TUT_NO_INSPIRATION_DESCRIPTION_ML"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_opt2_cr"]
@@ -23,17 +23,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt2"]
 script = ExtResource("4_v7m9w")
 choice_result = SubResource("Resource_opt2_cr")
-description = "还是算了"
+description = "TRES_TUT_NO_INSPIRATION_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_t2b8r")
 options = Array[ExtResource("1_bq7v2")]([SubResource("Resource_opt1"), SubResource("Resource_opt2")])
 uuid = "tut_no_inspiration"
-name = "文思枯涩"
-description = "你面对壮丽的山河，想要写一首诗记录下来。然而提起笔，脑中却一片空白。
-
-搜肠刮肚半天，只写出几句干巴巴的字句，连你自己看了都摇头。
-
-你想起道士说过的话——「登山不是靠笔杆子」。或许，你还需要一点别的什么。"
+name = "TRES_TUT_NO_INSPIRATION_NAME_0"
+description = "TRES_TUT_NO_INSPIRATION_DESCRIPTION_ML"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

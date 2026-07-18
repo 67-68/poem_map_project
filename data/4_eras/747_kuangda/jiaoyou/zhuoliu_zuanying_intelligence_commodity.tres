@@ -31,7 +31,7 @@ value = true
 script = ExtResource("7_pb5sp")
 choice_result = SubResource("Resource_ccb6t")
 requirement = SubResource("Resource_ag3qu")
-description = "拂袖将茶碗扫落，纸条在湿痕里裂成两半。"
+description = "TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_nxmje"]
 script = ExtResource("4_dj8pu")
@@ -55,7 +55,7 @@ value = true
 script = ExtResource("7_pb5sp")
 choice_result = SubResource("Resource_pb5sp")
 requirement = SubResource("Resource_4tsgw")
-description = "双手接过那张报价单，脸上堆出笑容，腰已弯下三分。"
+description = "TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_t7luo"]
 script = ExtResource("4_dj8pu")
@@ -72,7 +72,7 @@ operators = Array[ExtResource("2_ccb6t")]([SubResource("Resource_t7luo"), SubRes
 [sub_resource type="Resource" id="Resource_6uuno"]
 script = ExtResource("7_pb5sp")
 choice_result = SubResource("Resource_ram40")
-description = "指尖压住纸条一角，不翻也不推，只问他要的这个名字，市价几何。"
+description = "TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_bvgu1"]
 script = ExtResource("8_4tsgw")
@@ -86,5 +86,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:medicine_stall", "ENV_NATURE_NIGHTMOON:dry_lips", "action:main:jiaoyou"])
 options = Array[ExtResource("1_fajgr")]([SubResource("Resource_dj8pu"), SubResource("Resource_3rar6"), SubResource("Resource_6uuno")])
 uuid = "zhuoliu_zuanying_intelligence_commodity"
-name = "茶案上的价码"
-description = "东市茶肆二楼临窗的位置，一个绸缎商把一张纸条推过案面。纸上只写着一个官员的名字，墨迹已干。他将茶碗搁在纸条旁边，碗底在纸上压出一圈湿痕。“上次你在盐商老张那儿‘问’的事，我听说过。”目光越过碗沿，不紧不慢地看着你，“我不是来为难你的。我也是来做生意的。”窗外楼下，东市的骡马队正在卸货，鞭子抽在青石板上的声响传上来。绸缎商从袖口又抽出一张叠好的纸，“这是价钱。你看看。”"
+name = "TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_NAME_0"
+description = "TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_DESCRIPTION_3"

@@ -14,20 +14,20 @@
 
 [sub_resource type="Resource" id="Resource_fc7bs"]
 script = ExtResource("1_t8ywb")
-name = "试卷的第二题并非诗词经义，而是策问：“今圣上垂拱而治，右相理政，天下如何？”你握紧了笔，冷汗滴在纸上。主考官（李林甫的心腹）在走道里来回巡视，眼神阴冷。"
+name = "TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_NAME_0"
 background = ExtResource("2_1p5uu")
 metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
 
 [sub_resource type="Resource" id="Resource_8s4po"]
 script = ExtResource("3_1amxv")
 is_disabled = true
-disabled_reason = "考官死死盯着你的笔尖。你敢写下半个字，今天就别想活着走出贡院。"
-description = "针砭时弊：言明边镇兵权过重，朝堂言路闭塞。"
+disabled_reason = "TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_DISABLED_REASON_0"
+description = "TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://dipsh2f0qa3ei"
 
 [sub_resource type="Resource" id="Resource_qha22"]
 script = ExtResource("5_1p5uu")
-info = "你感到一阵反胃"
+info = "TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_r0syb"]
@@ -48,7 +48,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_672kh"]
 script = ExtResource("7_r0syb")
 choice_result = SubResource("Resource_yq8gi")
-description = "违心作答：“右相调理阴阳，海内晏清，真乃千古贤相！”"
+description = "TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -56,5 +56,5 @@ script = ExtResource("3_fc7bs")
 chats = Array[ExtResource("1_t8ywb")]([SubResource("Resource_fc7bs")])
 options = Array[ExtResource("2_1amxv")]([SubResource("Resource_8s4po"), SubResource("Resource_672kh")])
 uuid = "focused_chat_exam_second_question"
-name = "第二题"
+name = "TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_NAME_1"
 metadata/_custom_type_script = "uid://bgapuvasp48wh"

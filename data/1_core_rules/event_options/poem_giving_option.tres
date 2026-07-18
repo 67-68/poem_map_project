@@ -19,5 +19,5 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 script = ExtResource("2_65t44")
 choice_result = SubResource("Resource_w78wo")
 uuid = "poem_giving_option"
-description = "献上诗词"
+description = "TRES_POEM_GIVING_OPTION_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"

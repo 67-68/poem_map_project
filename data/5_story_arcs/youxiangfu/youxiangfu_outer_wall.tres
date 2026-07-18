@@ -21,7 +21,7 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_push_gate")])
 [sub_resource type="Resource" id="Resource_opt_knock"]
 script = ExtResource("6_eo")
 choice_result = SubResource("Resource_cr_knock")
-description = "迈上台阶，叩响门环"
+description = "TRES_YOUXIANGFU_OUTER_WALL_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_emo_frust"]
@@ -40,13 +40,13 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_emo_frust"), S
 [sub_resource type="Resource" id="Resource_opt_leave"]
 script = ExtResource("6_eo")
 choice_result = SubResource("Resource_cr_leave")
-description = "转身离去"
+description = "TRES_YOUXIANGFU_OUTER_WALL_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("8_re")
 options = Array[ExtResource("7_bo")]([SubResource("Resource_opt_knock"), SubResource("Resource_opt_leave")])
 uuid = "youxiangfu_outer_wall"
-name = "相府青门外"
-description = "拐过街角，一面高耸得仿佛没有尽头的青砖坊墙将天光生生截断。几十个穿着旧青袍或麻布衣的士子，像冻僵的鹌鹑一样贴着墙根瑟缩排开，没人敢出声，连咳嗽都被死死捂在袖子里。你走到队伍最末端站定。抬头望去，三丈高的朱漆大门紧紧闭合，两尊巨大的石狮子在阴影中俯视着阶下的蝼蚁。一阵穿堂冷风卷过，门上磨盘大小的兽面衔环发出一声沉闷的金属撞击音，墙根下的几十颗脑袋同时条件反射般地瑟缩了一下。你呼出的白气，在这堵绝对寂静的高墙前，瞬间便被吹得粉碎。"
+name = "TRES_YOUXIANGFU_OUTER_WALL_NAME_0"
+description = "TRES_YOUXIANGFU_OUTER_WALL_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

@@ -22,7 +22,7 @@ operators = Array[ExtResource("2_uu0rt")]([SubResource("Resource_5115n")])
 [sub_resource type="Resource" id="Resource_uu0rt"]
 script = ExtResource("6_xv5dc")
 choice_result = SubResource("Resource_juqw0")
-description = "袖口抹去坛沿的灰，仰头灌下第一口时，喉结还没动，鼻腔先涌出酸气。"
+description = "TRES_QINGLIU_JIAOLV_DOOMSDAY_BINGE_IDENTITY_VENDOR_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_180p4"]
 script = ExtResource("8_tgthf")
@@ -63,5 +63,5 @@ archetype_id = "duzhuo"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:duzhuo", "TARGET_IDENTITY_VENDOR"])
 options = Array[ExtResource("1_juqw0")]([SubResource("Resource_uu0rt")])
 uuid = "qingliu_jiaolv_doomsday_binge_identity_vendor"
-name = "第五更"
-description = "更声敲到第三下时，你已经坐进东市那家不收欠据的酒肆。锣声在你决定不去数的今夜，敲得格外清楚——一共是五更，而你走了六条街才找到这家还亮着灯火的铺子。你在角落里坐下，手指按在桌面那道裂缝上，顺着它推过去，推回来。酒保把坛子往桌上一搁，没有看你。"
+name = "TRES_QINGLIU_JIAOLV_DOOMSDAY_BINGE_IDENTITY_VENDOR_NAME_0"
+description = "TRES_QINGLIU_JIAOLV_DOOMSDAY_BINGE_IDENTITY_VENDOR_DESCRIPTION_1"

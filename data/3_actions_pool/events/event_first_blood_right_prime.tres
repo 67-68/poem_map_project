@@ -22,7 +22,7 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_jxudv"]
 script = ExtResource("4_2qmwj")
-info = "你走出相府，秋风微凉，但你的内心却已被这句客套话点燃了熊熊烈火。"
+info = "TRES_EVENT_FIRST_BLOOD_RIGHT_PRIME_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_srdnd"]
@@ -33,13 +33,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_h5f8r"]
 script = ExtResource("6_omfgk")
 choice_result = SubResource("Resource_srdnd")
-description = "恭敬地递上行卷，并在下面压上你大半的盘缠"
+description = "TRES_EVENT_FIRST_BLOOD_RIGHT_PRIME_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_0ywmh")
 options = Array[ExtResource("1_b5y6t")]([SubResource("Resource_h5f8r")])
 uuid = "event_first_blood_right_prime"
-name = "初见相府"
-description = "右相府的朱门比你想象的还要高耸。出乎意料，接待你的并非粗鄙的门卫，而是一位衣着考究的相府主簿。他面带春风般的微笑，甚至命人给你端来了一杯温度恰到好处的茶水。主簿修长的手指不经意地将银钱拨入袖中，随手翻开你的行卷瞥了一眼首联。'好字。'他赞许地点点头，'杜公子的才情，在下必定如实禀报相爷。回去静候佳音吧。"
+name = "TRES_EVENT_FIRST_BLOOD_RIGHT_PRIME_NAME_0"
+description = "TRES_EVENT_FIRST_BLOOD_RIGHT_PRIME_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

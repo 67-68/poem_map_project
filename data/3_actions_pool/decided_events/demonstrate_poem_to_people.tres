@@ -38,7 +38,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_i2cdq"]
 script = ExtResource("7_a3yff")
 choice_result = SubResource("Resource_po52o")
-description = "公开展示你的诗词"
+description = "TRES_DEMONSTRATE_POEM_TO_PEOPLE_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_vqqcp"]
 script = ExtResource("4_4hk4b")
@@ -69,11 +69,11 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_2eq84"]
 script = ExtResource("7_a3yff")
 choice_result = SubResource("Resource_hwjpt")
-description = "私下展示你的诗词"
+description = "TRES_DEMONSTRATE_POEM_TO_PEOPLE_DESCRIPTION_1"
 
 [resource]
 script = ExtResource("8_fv4wl")
 options = Array[ExtResource("2_1jb8q")]([SubResource("Resource_i2cdq"), SubResource("Resource_2eq84")])
 uuid = "demonstrate_poem_to_people"
-name = "如何展示你的诗词？"
+name = "TRES_DEMONSTRATE_POEM_TO_PEOPLE_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

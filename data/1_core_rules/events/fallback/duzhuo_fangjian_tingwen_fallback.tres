@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "酒肆角落，一桌客人压低了声音在谈——{@imaginary_gain_hint}。你端着杯，装作看窗外的雨，耳朵却一字不漏地收着。说者无心，听者有意，这倒是意外所得。"
+description = "TRES_DUZHUO_FANGJIAN_TINGWEN_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "fangjian_tingwen_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "duzhuo_fangjian_tingwen_fallback"
-name = "偶得奇闻"
+name = "TRES_DUZHUO_FANGJIAN_TINGWEN_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

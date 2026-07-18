@@ -18,13 +18,13 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_pe")])
 [sub_resource type="Resource" id="Resource_opt_continue"]
 script = ExtResource("4_eo")
 choice_result = SubResource("Resource_cr_continue")
-description = "继续在街上闲逛"
+description = "TRES_TEST_INTERRUPT_DISPLAY_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_re")
 options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_continue")])
 uuid = "test_interrupt_display"
-name = "街市漫步"
-description = "长安的街市一如既往地热闹。卖胡饼的摊贩在吆喝，西域来的珠宝商人在展示货品，远处传来一阵骚动的声音，似乎有人在争吵。你正犹豫要不要过去看看。"
+name = "TRES_TEST_INTERRUPT_DISPLAY_NAME_0"
+description = "TRES_TEST_INTERRUPT_DISPLAY_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

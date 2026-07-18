@@ -27,7 +27,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_5k533")
 choice_result = SubResource("Resource_vudty")
 requirement = SubResource("Resource_rm37g")
-description = "杜甫端碗饮尽，也不道谢，只说：正好练笔。碗底叩在桌上的声响干脆利落。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_5ct2f"]
 script = ExtResource("4_5ct2f")
@@ -40,7 +40,7 @@ operators = Array[ExtResource("2_rm37g")]([SubResource("Resource_5ct2f")])
 [sub_resource type="Resource" id="Resource_pjoc1"]
 script = ExtResource("7_5k533")
 choice_result = SubResource("Resource_tsi7c")
-description = "杜甫看着晃动的酒碗，手指在桌沿停了一瞬，才说：知道了。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_5k533"]
 script = ExtResource("4_5ct2f")
@@ -62,7 +62,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_5k533")
 choice_result = SubResource("Resource_un0n1")
 requirement = SubResource("Resource_3gpe5")
-description = "杜甫点头记下，随后问起王员外的交游——他最近跟谁走得近？"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_u12ti"]
 script = ExtResource("9_un0n1")
@@ -87,5 +87,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_THEME_MARTIAL:giant_roc", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "VIBE_THEME_MARTIAL:giant_roc", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_survival", "action:main:jiaoyou"])
 options = Array[ExtResource("1_vudty")]([SubResource("Resource_md8yb"), SubResource("Resource_pjoc1"), SubResource("Resource_vh55h")])
 uuid = "qingliu_passive_benefits_gaoshi_intel_routing_identity_qingliu_official"
-name = "夏夜的线报"
-description = "夏夜，城南一家胡人开的酒肆里，高适喝到第三碗时忽然把碗往桌上一推。他说城西的王员外最近手头松，家中老太太要立碑，四处托人寻像样的碑文。说完便起身去结账，走到门口又回头补了一句——只说是我偶然提起，别的话没有。酒碗在木桌上晃了晃，稳住了。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_IDENTITY_QINGLIU_OFFICIAL_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_3"

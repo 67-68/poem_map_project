@@ -8,60 +8,60 @@
 script = ExtResource("2_cp")
 min_delta = 1
 max_delta = 5
-gain_text = "心神稍定"
-loss_text = "心湖微澜"
+gain_text = "TRES_COMPOSURE_GAIN_TEXT_0"
+loss_text = "TRES_COMPOSURE_LOSS_TEXT_0"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_2"]
 script = ExtResource("2_cp")
 min_delta = 6
 max_delta = 20
-gain_text = "心性沉稳了不少"
-loss_text = "心神不宁"
+gain_text = "TRES_COMPOSURE_GAIN_TEXT_1"
+loss_text = "TRES_COMPOSURE_LOSS_TEXT_1"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_3"]
 script = ExtResource("2_cp")
 min_delta = 21
 max_delta = 50
-gain_text = "八风不动，心若磐石"
-loss_text = "方寸大乱"
+gain_text = "TRES_COMPOSURE_GAIN_TEXT_2"
+loss_text = "TRES_COMPOSURE_LOSS_TEXT_2"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_4"]
 script = ExtResource("2_cp")
 min_delta = 51
 max_delta = 9999
-gain_text = "外物不扰，心镜无尘"
-loss_text = "心神崩溃，万念俱灰"
+gain_text = "TRES_COMPOSURE_GAIN_TEXT_3"
+loss_text = "TRES_COMPOSURE_LOSS_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("3_sp")
 stage_val = 0
-perception_text = "心如乱麻"
+perception_text = "TRES_COMPOSURE_PERCEPTION_TEXT_0"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
 script = ExtResource("3_sp")
 stage_val = 20
-perception_text = "心猿意马"
+perception_text = "TRES_COMPOSURE_PERCEPTION_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_3"]
 script = ExtResource("3_sp")
 stage_val = 50
-perception_text = "心神安定"
+perception_text = "TRES_COMPOSURE_PERCEPTION_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_4"]
 script = ExtResource("3_sp")
 stage_val = 100
-perception_text = "心如止水"
+perception_text = "TRES_COMPOSURE_PERCEPTION_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_5"]
 script = ExtResource("3_sp")
 stage_val = 300
-perception_text = "泰山崩于前而色不变"
+perception_text = "TRES_COMPOSURE_PERCEPTION_TEXT_4"
 
 [resource]
 script = ExtResource("1_cmp")
-description = "你心性的稳固程度。定力越高，承受的伤害越小，但兴致起伏也变得平缓，更沉静内敛。"
+description = "TRES_COMPOSURE_DESCRIPTION_0"
 uuid = "composure"
-name = "定力"
+name = "TRES_COMPOSURE_NAME_0"
 hard_max = 100
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])

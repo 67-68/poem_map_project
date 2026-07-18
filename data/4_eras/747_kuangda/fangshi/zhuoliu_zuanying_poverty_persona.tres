@@ -27,7 +27,7 @@ value = true
 script = ExtResource("7_dm08g")
 choice_result = SubResource("Resource_0o1d1")
 requirement = SubResource("Resource_csy2j")
-description = "将纸条揉成一团掷还老周，袍子甩回摊上。"
+description = "TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_341r6"]
 script = ExtResource("4_341r6")
@@ -47,7 +47,7 @@ value = true
 script = ExtResource("7_dm08g")
 choice_result = SubResource("Resource_gkyow")
 requirement = SubResource("Resource_4uxiy")
-description = "双手接过纸条，弯腰堆笑：“周爷的事就是我的事。”"
+description = "TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_pkc7c"]
 script = ExtResource("4_341r6")
@@ -60,7 +60,7 @@ operators = Array[ExtResource("2_csy2j")]([SubResource("Resource_pkc7c")])
 [sub_resource type="Resource" id="Resource_seyua"]
 script = ExtResource("7_dm08g")
 choice_result = SubResource("Resource_wvvfx")
-description = "捏着纸条不接也不拒，平静开口：“递话可以，但你这摊子得替我瞒三年。”"
+description = "TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_663s0"]
 script = ExtResource("8_pkc7c")
@@ -74,5 +74,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["TARGET_OBJECT_SWORD:medicine_stall", "ENV_NATURE_SNOWSTORM:cloud_and_sun", "action:main:fangshi"])
 options = Array[ExtResource("1_0o1d1")]([SubResource("Resource_3ftjg"), SubResource("Resource_dm08g"), SubResource("Resource_seyua")])
 uuid = "zhuoliu_zuanying_poverty_persona"
-name = "旧衣摊前的账本"
-description = "城东的旧衣摊弥漫着霉味和旧尘。你把那件洗得发白的袍子展开——袖口磨出毛边，领子泛黄，正合你经营多年的贫寒模样。摊主老周堆着笑递过来，袖子里却抖出一张纸条。“杜先生，上月南城那封信替你换了五贯，这账我记得。今天这件袍子，就不跟你砍价了——你帮我个忙。”他把纸条往你掌心推了推，上面写着城南韦府一个通房丫头的名字。“你替我给这个人递句话，她的私盐生意我查清了。不递，我就跟左邻右舍讲讲你穿旧袍子替人写密信的事。”"
+name = "TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_NAME_0"
+description = "TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_DESCRIPTION_3"

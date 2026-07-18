@@ -20,12 +20,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_symg3"]
 script = ExtResource("5_sgyxa")
 choice_result = SubResource("Resource_7w263")
-description = "你看着他，又看了看自己脚下那摊糊满泥水的干谒诗稿..."
+description = "TRES_CHANGAN_WALK_05_OBSERVE_ZHENGQIAN_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_635wr")
 options = Array[ExtResource("1_q7lqf")]([SubResource("Resource_symg3")])
 uuid = "changan_walk_05_observe_zhengqian"
-description = "你呆立在泥水坑前。不远处的酒肆屋檐下，你看到了国子监广文馆博士郑虔。他正把几枚生锈的铜钱排在案上，换了一角最劣质的浊酒。一阵风吹过，你曾以为他那身打满补丁却洗得发白的青衫是名士的‘清流作秀’，直到此刻，你看到他在寒风中不受控制地瑟缩了一下，却依然小心翼翼地用袖口护着怀里那方廉价的残墨。"
+description = "TRES_CHANGAN_WALK_05_OBSERVE_ZHENGQIAN_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

@@ -10,7 +10,7 @@
 
 [sub_resource type="Resource" id="SubRes_info"]
 script = ExtResource("4_infoop")
-info = "纸带从底部滑入 —— 动画策略测试成功。"
+info = "TRES_EVENT_DEMO_SLIDE_FROM_BOTTOM_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="SubRes_choice"]
@@ -21,7 +21,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="SubRes_option"]
 script = ExtResource("6_evtopt")
 choice_result = SubResource("SubRes_choice")
-description = "确认"
+description = "TRES_EVENT_DEMO_SLIDE_FROM_BOTTOM_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="SubRes_uidecl"]
@@ -33,7 +33,7 @@ metadata/_custom_type_script = "uid://bs881r2io48fq"
 script = ExtResource("2_baseevt")
 options = Array[ExtResource("1_baseopt")]([SubResource("SubRes_option")])
 uuid = "demo_slide_from_bottom"
-name = "纸带测试 · 下方滑入"
-description = "此事件应从屏幕底部向上滑入。选择确认后无副作用，后续事件回归正常（默认顶部滑入）。"
+name = "TRES_EVENT_DEMO_SLIDE_FROM_BOTTOM_NAME_0"
+description = "TRES_EVENT_DEMO_SLIDE_FROM_BOTTOM_DESCRIPTION_1"
 ui_decl = SubResource("SubRes_uidecl")
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

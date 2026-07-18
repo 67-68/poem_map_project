@@ -7,25 +7,25 @@
 [sub_resource type="Resource" id="Resource_sxnfo"]
 script = ExtResource("2_tsgnh")
 stage_id = "岁暮出城"
-perception_text = "冷。官服的布料比你想象的还要单薄。腰带在寒风中断裂，僵硬的手指甚至无法将它重新打结。没关系，只要走快一点，风就追不上你"
+perception_text = "TRES_BACKHOME_AMBITION_PERCEPTION_TEXT_0"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_tsgnh"]
 script = ExtResource("2_tsgnh")
 stage_id = "骊山之阴"
-perception_text = "风里飘来极其浓郁的肉香和温泉的暖意。那是骊山，是你这十年苦苦拜谒的权贵们冬日寻欢的地方。路边的雪堆里倒着几个僵硬的流民，你低着头，不敢看他们，也不敢看骊山。"
+perception_text = "TRES_BACKHOME_AMBITION_PERCEPTION_TEXT_1"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_15fnd"]
 script = ExtResource("2_tsgnh")
 stage_id = "裂海太白"
-perception_text = "猛风把天地撕成碎片。你失去了方向，只剩下一具凭本能在雪地里挪动的躯壳。你开始怀疑，从八品下的俸禄，真的能买到足够全家人过冬的生麦吗？"
+perception_text = "TRES_BACKHOME_AMBITION_PERCEPTION_TEXT_2"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_hfyfc"]
 script = ExtResource("2_tsgnh")
 stage_id = "终局叩门"
-perception_text = "你到了。那个漏风的茅草屋就在前面。推开门，你就能看见他们了。"
+perception_text = "TRES_BACKHOME_AMBITION_PERCEPTION_TEXT_3"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [resource]
@@ -34,8 +34,8 @@ leveled_stages = Array[String](["岁暮出城", "骊山之阴", "裂海太白", 
 staged_perceptions = Array[ExtResource("2_tsgnh")]([SubResource("Resource_sxnfo"), SubResource("Resource_tsgnh"), SubResource("Resource_15fnd"), SubResource("Resource_hfyfc")])
 tracked_property = ""
 deadline = 756.0
-deadline_warning = "如果你回不去，你的尸体和路边那些无名的流民混在一起，被同一场大雪掩埋。远在奉先的妻子还在等一个永远不会到来的好消息。你甚至没能看一眼那个被大火点燃的乱世"
+deadline_warning = "TRES_BACKHOME_AMBITION_DEADLINE_WARNING_0"
 uuid = "backhome_ambition"
-name = "衣锦还乡"
-description = "你终于拿到了那身发绿的从八品下官服。你迫不及待地想要向奉先县的妻儿报喜。这十年的长安风雪，终究是没有白挨。只要穿过骊山，渡过那条结冰的河，一切都会好起来的。大概吧。"
+name = "TRES_BACKHOME_AMBITION_NAME_0"
+description = "TRES_BACKHOME_AMBITION_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://bjjv85stmu4sj"

@@ -14,7 +14,7 @@
 
 [sub_resource type="Resource" id="Resource_t40y6"]
 script = ExtResource("3_wp7vd")
-transition_text = "你回到村头，察看着四周"
+transition_text = "TRES_FENGXIAN_FAMILIAR_PATH_TRANSITION_TEXT_0"
 
 [sub_resource type="Resource" id="Resource_rsbae"]
 script = ExtResource("4_r6frj")
@@ -24,7 +24,7 @@ value = true
 
 [sub_resource type="Resource" id="Resource_0glhg"]
 script = ExtResource("5_0a0hy")
-info = "远处的茅草屋里传来婴儿断断续续的啼哭，像是在硬撑。"
+info = "TRES_FENGXIAN_FAMILIAR_PATH_INFO_0"
 
 [sub_resource type="Resource" id="Resource_b7ney"]
 script = ExtResource("6_iurib")
@@ -34,7 +34,7 @@ operators = Array[ExtResource("2_4l2dn")]([SubResource("Resource_t40y6"), SubRes
 script = ExtResource("7_66o24")
 choice_result = SubResource("Resource_b7ney")
 uuid = "opt_return_village"
-description = "折返回村口"
+description = "TRES_FENGXIAN_FAMILIAR_PATH_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_r6frj"]
 script = ExtResource("10_wp7vd")
@@ -45,7 +45,7 @@ metadata/_custom_type_script = "uid://bs881r2io48fq"
 script = ExtResource("8_4ex11")
 options = Array[ExtResource("1_wc5i7")]([SubResource("Resource_i1n1u")])
 uuid = "fengxian_familiar_path"
-name = "熟悉的路径"
-description = "你凭着十年前的记忆在这片田野里摸索。路早就被荒草吞没了大半，但方向还在骨头里。风从奉先县城那边吹过来，夹着一股[glitch]柴̧̧̱̰̣̱̈̄̃̇́̀́̄烟̄̂̈̆̂̇̌̀[/glitch]味。"
+name = "TRES_FENGXIAN_FAMILIAR_PATH_NAME_0"
+description = "TRES_FENGXIAN_FAMILIAR_PATH_DESCRIPTION_1"
 icon = ExtResource("1_r6frj")
 ui_decl = SubResource("Resource_r6frj")

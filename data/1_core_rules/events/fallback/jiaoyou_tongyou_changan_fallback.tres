@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "与{@npc_name}并辔行过长安街市，朱雀大街两侧的槐树投下斑驳的影子。你们一路谈诗论文，从东市逛到西市，虽未有什么了不得的际遇，却有这半日清闲，也算不负长安好时节。"
+description = "TRES_JIAOYOU_TONGYOU_CHANGAN_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "tongyou_changan_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "jiaoyou_tongyou_changan_fallback"
-name = "长安偶得"
+name = "TRES_JIAOYOU_TONGYOU_CHANGAN_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

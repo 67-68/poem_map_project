@@ -8,51 +8,51 @@
 script = ExtResource("2_cp")
 min_delta = 1
 max_delta = 10
-gain_text = "才气微涨，灵光一闪"
-loss_text = "灵光稍逝"
+gain_text = "TRES_TALENT_GAIN_TEXT_0"
+loss_text = "TRES_TALENT_LOSS_TEXT_0"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_2"]
 script = ExtResource("2_cp")
 min_delta = 11
 max_delta = 50
-gain_text = "才思泉涌，妙笔生花"
-loss_text = "才气枯竭，文思滞涩"
+gain_text = "TRES_TALENT_GAIN_TEXT_1"
+loss_text = "TRES_TALENT_LOSS_TEXT_1"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_3"]
 script = ExtResource("2_cp")
 min_delta = 51
 max_delta = 9999
-gain_text = "惊才绝艳，天人之资"
-loss_text = "江郎才尽"
+gain_text = "TRES_TALENT_GAIN_TEXT_2"
+loss_text = "TRES_TALENT_LOSS_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("3_sp")
 stage_val = 0
-perception_text = "才疏学浅"
+perception_text = "TRES_TALENT_PERCEPTION_TEXT_0"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
 script = ExtResource("3_sp")
 stage_val = 20
-perception_text = "初窥门径"
+perception_text = "TRES_TALENT_PERCEPTION_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_3"]
 script = ExtResource("3_sp")
 stage_val = 50
-perception_text = "才学出众"
+perception_text = "TRES_TALENT_PERCEPTION_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_4"]
 script = ExtResource("3_sp")
 stage_val = 200
-perception_text = "才华横溢"
+perception_text = "TRES_TALENT_PERCEPTION_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_5"]
 script = ExtResource("3_sp")
 stage_val = 1000
-perception_text = "天纵之才"
+perception_text = "TRES_TALENT_PERCEPTION_TEXT_4"
 
 [resource]
 script = ExtResource("1_h0btd")
-description = "你的诗才天赋。才华越高，诗作评分越佳，声望获取越多，清流的赏识亦会倍增。"
+description = "TRES_TALENT_DESCRIPTION_0"
 uuid = "talent"
 name = "talent"
 hard_max = -1

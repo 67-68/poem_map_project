@@ -43,7 +43,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_inivo")
 choice_result = SubResource("Resource_hvxxl")
 requirement = SubResource("Resource_i7ao8")
-description = "你拿起案上那支干透了的笔，在信纸旁的空宣纸上补了几笔枯枝。"
+description = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_SORROW_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_mo7vc"]
 script = ExtResource("6_ah51i")
@@ -71,5 +71,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:main:denggao"])
 options = Array[ExtResource("1_7sehk")]([SubResource("Resource_uteif")])
 uuid = "kuangke_qingliu_wangwei_emotion_sorrow"
-name = "回廊上，信纸起毛边了"
-description = "「裴迪说河西入冬了。」手里那张信纸的边角，被他拇指捏得微微发白。他侧身，把信搁在画案空白的宣纸上。"
+name = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_SORROW_NAME_0"
+description = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_SORROW_DESCRIPTION_1"

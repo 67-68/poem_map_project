@@ -27,7 +27,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_y64im"]
 script = ExtResource("5_uac47")
 choice_result = SubResource("Resource_27qtt")
-description = "脱下官服，换上破棉袄"
+description = "TRES_BACKHOME_INDIFFERENT_WIND_1_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_q8nsr"]
@@ -44,13 +44,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_ac6t0"]
 script = ExtResource("5_uac47")
 choice_result = SubResource("Resource_ryumf")
-description = "裹紧官服死撑"
+description = "TRES_BACKHOME_INDIFFERENT_WIND_1_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_62v5i")
 options = Array[ExtResource("1_alini")]([SubResource("Resource_y64im"), SubResource("Resource_ac6t0")])
 uuid = "backhome_indifferent_wind_1"
-name = "一片太白"
-description = "你引以为傲的、朝廷刚发的那身从八品下绿色官服，用的是最劣质的单薄丝帛，在雪地里吸满水后结成了冰甲。"
+name = "TRES_BACKHOME_INDIFFERENT_WIND_1_NAME_0"
+description = "TRES_BACKHOME_INDIFFERENT_WIND_1_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

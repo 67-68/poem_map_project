@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_govja")
 uuid = "reserve_baiye"
-name = "预定拜谒"
+name = "TRES_RESERVE_BAIYE_NAME_0"
 metadata/_custom_type_script = "uid://pom0464obfp2"

@@ -31,7 +31,7 @@ value = true
 script = ExtResource("7_sfk6c")
 choice_result = SubResource("Resource_5yh07")
 requirement = SubResource("Resource_xpequ")
-description = "把酒杯扫进炭火盆里，让炉灰和碎瓷溅上三人袍角。"
+description = "TRES_QINGLIU_ZUANYING_TRIPLE_DIPPED_SUFFERING_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_1gjap"]
 script = ExtResource("4_p14h3")
@@ -55,7 +55,7 @@ value = true
 script = ExtResource("7_sfk6c")
 choice_result = SubResource("Resource_sfk6c")
 requirement = SubResource("Resource_fk7tw")
-description = "双膝砸在砖地上，额头贴着冰冷的青砖。"
+description = "TRES_QINGLIU_ZUANYING_TRIPLE_DIPPED_SUFFERING_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_pk034"]
 script = ExtResource("4_p14h3")
@@ -72,7 +72,7 @@ operators = Array[ExtResource("2_5yh07")]([SubResource("Resource_pk034"), SubRes
 [sub_resource type="Resource" id="Resource_0fnuq"]
 script = ExtResource("7_sfk6c")
 choice_result = SubResource("Resource_4bxsc")
-description = "你托的那个送信人——他确实抄错了日期，把三封信都写成了同一天。"
+description = "TRES_QINGLIU_ZUANYING_TRIPLE_DIPPED_SUFFERING_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_ri3c8"]
 script = ExtResource("8_fk7tw")
@@ -86,5 +86,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["ACTION_ENTERTAIN_DRINK:cloud_and_sun", "TARGET_NPC_DUFU:jade_step", "action:main:jiaoyou"])
 options = Array[ExtResource("1_7uepq")]([SubResource("Resource_p14h3"), SubResource("Resource_1npjw"), SubResource("Resource_0fnuq")])
 uuid = "qingliu_zuanying_triple_dipped_suffering"
-name = "冬至对账"
-description = "“九月十三，子美来书，言天寒无炭。”张参军放下酒杯：“巧了，我也是九月十三收到的。”他顿了顿，“他在信里说孩子咳了一冬。”李司仓没收到信——但他记得那个日子。那天他在朱雀街东口碰见你，你拉住他的袖子，说老母病重，等钱抓药。三人在炉边沉默了。崔九把那页日记摊在桌上，手指点着日期：“九月十三……你这一天，挺忙的。”火光照着那一行字，墨迹已经褪成灰褐色。"
+name = "TRES_QINGLIU_ZUANYING_TRIPLE_DIPPED_SUFFERING_NAME_0"
+description = "TRES_QINGLIU_ZUANYING_TRIPLE_DIPPED_SUFFERING_DESCRIPTION_3"

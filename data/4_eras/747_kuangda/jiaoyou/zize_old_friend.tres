@@ -23,7 +23,7 @@ operators = Array[ExtResource("2_7tjgj")]([SubResource("Resource_r8lks"), SubRes
 [sub_resource type="Resource" id="Resource_chkyi"]
 script = ExtResource("6_egpa8")
 choice_result = SubResource("Resource_7tjgj")
-description = "顿了顿。把下巴搁在最上面那本书的封皮上，朝坊门另一头走。"
+description = "TRES_ZIZE_OLD_FRIEND_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_v4hsp"]
 script = ExtResource("7_yhwcn")
@@ -38,5 +38,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["ACTION_SOCIAL_PARTING:willow_branch", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:jiaoyou"])
 options = Array[ExtResource("1_oecmb")]([SubResource("Resource_chkyi")])
 uuid = "zize_old_friend"
-name = "书堆的重量"
-description = "牛车停在坊门口，车板上的干草簌簌往下掉碎屑。他把书一本一本往你怀里堆，你往后趔趄了小半步——他没看你是否站稳。转身去解缰绳，手指快得像在赶什么东西追上他之前。琴搁在书堆最上面，弦上还绷着昨夜的潮气。你喉咙滚了一下。想说「我也走」——那四个字已经抵在舌根。但你咽回去了。齿关合上时发出一声轻响，像咬碎了一小块脆骨。牛车动了。车轮碾过水沟边沿，琴弦被震出一声闷响——短促，低哑，像被谁从底下踩了一脚。你抱着那摞书站在坊门口。车的影子拉细，缩进春明门方向的灰尘里。"
+name = "TRES_ZIZE_OLD_FRIEND_NAME_0"
+description = "TRES_ZIZE_OLD_FRIEND_DESCRIPTION_1"

@@ -9,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_info_nothing"]
 script = ExtResource("3_infoop")
-info = "什么都没有发生。"
+info = "TRES_NEAR_DEATH_NOTHING_TO_BURN_INFO_0"
 
 [sub_resource type="Resource" id="Resource_cr"]
 script = ExtResource("4_choiceresult")
@@ -25,5 +25,5 @@ script = ExtResource("6_randomevent")
 _action_tags = Array[int]([])
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_option")])
 uuid = "near_death_nothing_to_burn"
-name = "無物可燒"
-description = "你翻遍了全身，没有纸，没有酒，甚至连悲哀和愤怒的情绪都已被榨干。大唐已经没有什么东西可以让你拿来燃烧了。"
+name = "TRES_NEAR_DEATH_NOTHING_TO_BURN_NAME_0"
+description = "TRES_NEAR_DEATH_NOTHING_TO_BURN_DESCRIPTION_0"

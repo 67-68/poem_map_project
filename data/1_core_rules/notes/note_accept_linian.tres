@@ -30,10 +30,10 @@ current_operator = 1
 [resource]
 script = ExtResource("1_note")
 uuid = "note_accept_linian"
-name = "接受理念"
-description = "去马来牛不复辨，浊泾清渭何当分？"
-description_explanation = "暴雨倾盆、道路泥泞，极目望去，连跑去的马和走来的牛都分不清了。连绵的阴雨让山洪暴发，原本清浊分明的泾河与渭河，此时又怎能分得清呢？"
-note_narrative = "莫再蹉跎于裘马清狂之间，立定志向当在今日——哪怕多历坎坷、走些弯路，也胜过在犹豫不决中白了少年头。"
-note_explanation = "点击右下角理念按钮以决定何所往"
+name = "TRES_NOTE_ACCEPT_LINIAN_NAME_0"
+description = "TRES_NOTE_ACCEPT_LINIAN_DESCRIPTION_0"
+description_explanation = "TRES_NOTE_ACCEPT_LINIAN_DESCRIPTION_EXPLANATION_0"
+note_narrative = "TRES_NOTE_ACCEPT_LINIAN_NOTE_NARRATIVE_0"
+note_explanation = "TRES_NOTE_ACCEPT_LINIAN_NOTE_EXPLANATION_0"
 triggered = false
 requirement = SubResource("SubComplexReq")

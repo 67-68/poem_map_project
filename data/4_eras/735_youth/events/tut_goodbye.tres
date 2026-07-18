@@ -33,21 +33,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("7_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "后会有期"
+description = "TRES_TUT_GOODBYE_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("8_t2b8r")
 options = Array[ExtResource("1_bt0y2")]([SubResource("Resource_opt")])
 uuid = "tut_goodbye"
-name = "下山"
-description = "离别的日子终于到了。你在山脚下与玄明道人告别。
-
-「去吧。」道士挥了挥手，神色平静，「你我有缘，日后自会再见。」
-
-你深深鞠了一躬，转身踏上归途。走出几步，又忍不住回头看了一眼——道士已转身走向山中，身形渐渐隐入林间。
-
-你心想，此番泰山之行使你获益良多，日后再来拜访。
-
-只是你没想到，这一别，竟过了二十年。"
+name = "TRES_TUT_GOODBYE_NAME_0"
+description = "TRES_TUT_GOODBYE_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

@@ -20,12 +20,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_wchke"]
 script = ExtResource("2_siawr")
 choice_result = SubResource("Resource_7x65b")
-description = "犹豫了一下，你勉强的笑着，又开始狂笑，大步走向了那个同样落魄的老头。"
+description = "TRES_CHANGAN_WALK_06_THE_CALL_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_l6jau")
 options = Array[ExtResource("1_0t2cx")]([SubResource("Resource_wchke")])
 uuid = "changan_walk_06_the_call"
-description = "郑虔转过头，看到了浑身泥水、失魂落魄的你，也看到了地上的残稿。他没有问你考得如何，也没有丝毫的怜悯。他只是笑着扬了扬手里的酒葫芦，朝你招手：【子美！愣着干嘛？今夜金吾不禁，这上等的酸米酒，我请客！】"
+description = "TRES_CHANGAN_WALK_06_THE_CALL_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

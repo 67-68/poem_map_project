@@ -19,13 +19,13 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_push_revisit")
 [sub_resource type="Resource" id="Resource_opt_enter"]
 script = ExtResource("4_eo")
 choice_result = SubResource("Resource_cr_enter")
-description = "步入府中"
+description = "TRES_YOUXIANGFU_GATE_L0_REVISIT_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_re")
 options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_enter")])
 uuid = "youxiangfu_gate_l0_revisit"
-name = "右相府门卫·再访"
-description = "再次来到相府门前。那胖大门房正与一个西域商贾低声调笑，余光扫到你走近。他甚至没有停下嘴里的诨话，只是懒洋洋地用鞋底踢开挡在路中间的扫帚，留出一条仅供一人侧身挤入的缝隙，随后便低下头，继续盘算着手里新得的银锞子。你掸去袖上的灰尘，从那道狭窄的缝隙中艰难挤入。"
+name = "TRES_YOUXIANGFU_GATE_L0_REVISIT_NAME_0"
+description = "TRES_YOUXIANGFU_GATE_L0_REVISIT_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

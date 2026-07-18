@@ -43,7 +43,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_y47qt")
 choice_result = SubResource("Resource_l7woo")
 requirement = SubResource("Resource_d5ppw")
-description = "将红叶轻搁王维琴尾，压住未落的弦音。"
+description = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_TRANQUILITY_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_d86i2"]
 script = ExtResource("6_3bkg4")
@@ -71,5 +71,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:main:jiaoyou"])
 options = Array[ExtResource("1_u56jp")]([SubResource("Resource_p3cyq")])
 uuid = "kuangke_qingliu_wangwei_emotion_tranquility"
-name = "山色刚好时"
-description = "“坐下吧，山色刚好。”面前的蒲团像是特意为你备下的，矮几上的茶还冒着热气。你未接话，只是走过去，将方才山道上拾得的一片红叶轻轻放在琴尾，正压住那根还在微微颤动的弦。"
+name = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_TRANQUILITY_NAME_0"
+description = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_TRANQUILITY_DESCRIPTION_1"

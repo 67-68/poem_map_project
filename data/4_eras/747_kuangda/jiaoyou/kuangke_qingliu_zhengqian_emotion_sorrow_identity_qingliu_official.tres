@@ -27,7 +27,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_lnqfe")
 choice_result = SubResource("Resource_pq3py")
 requirement = SubResource("Resource_efvxc")
-description = "杜甫什么也不说，把脚边还没烧的废卷纸一张张递给郑虔。火又续上了。"
+description = "TRES_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_SORROW_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_hkqbg"]
 script = ExtResource("6_6fhut")
@@ -56,5 +56,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ACTOR_EMOTION_SORROW", "emotion_pair:pair_sorrow", "action:main:denggao"])
 options = Array[ExtResource("1_pq3py")]([SubResource("Resource_7a3sg")])
 uuid = "kuangke_qingliu_zhengqian_emotion_sorrow_identity_qingliu_official"
-name = "纸灰落定"
-description = "「以前觉得教书是天下最好的事，可以教人识字，教人读诗。现在觉得，教他们识字干什么呢？识了字也还是穷。」火盆里的纸灰薄薄地积了一层，他不再往里添纸，就那么坐着。"
+name = "TRES_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_SORROW_IDENTITY_QINGLIU_OFFICIAL_NAME_0"
+description = "TRES_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_SORROW_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_1"

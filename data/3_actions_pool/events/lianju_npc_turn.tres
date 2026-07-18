@@ -59,7 +59,7 @@ operators = Array[ExtResource("3_baseop")]([SubResource("Resource_push_show")])
 [sub_resource type="Resource" id="Resource_opt_show"]
 script = ExtResource("5_eo")
 choice_result = SubResource("Resource_cr_show")
-description = "欣赏联句"
+description = "TRES_LIANJU_NPC_TURN_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("7_re")
@@ -68,5 +68,5 @@ on_enter_result = SubResource("Resource_cr_on_enter")
 options = Array[ExtResource("2_baseopt")]([SubResource("Resource_opt_show")])
 pre_event_interrupter_sequence = null
 uuid = "lianju_npc_turn"
-name = "联句·宾先"
-description = "宾客以「{@lianju_npc_name}」为题，略作沉吟，开口吟道：[br][br]{@npc_couplet}"
+name = "TRES_LIANJU_NPC_TURN_NAME_0"
+description = "TRES_LIANJU_NPC_TURN_DESCRIPTION_1"

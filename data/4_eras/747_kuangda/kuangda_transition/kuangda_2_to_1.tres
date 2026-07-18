@@ -27,5 +27,5 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 script = ExtResource("6_r65ef")
 options = Array[ExtResource("1_4bd3w")]([SubResource("Resource_rhr0d")])
 uuid = "kuangda_2_to_1"
-name = "你变得更加不旷达了"
+name = "TRES_KUANGDA_2_TO_1_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "皇城巍峨，朱门深锁。他站在朱雀大街的尽头，远远望着宫墙之内那些飞檐翘角。权谋与荣辱在那里轮番上演，而他只是一个看客。"
+description = "TRES_ZHU_LIU_HUANGCHENG_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "zhuliu_huangcheng_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "zhu_liu_huangcheng_fallback"
-name = "皇城远望"
+name = "TRES_ZHU_LIU_HUANGCHENG_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

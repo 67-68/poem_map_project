@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_udmdi")
 taste_id = ""
-name = "郑虔"
+name = "TRES_NPC_DOC_ZHENGQIAN_NAME_0"
 uuid = "zhengqian"
 preferred_places = Array[String](["pingkangfang"])
 prop = {

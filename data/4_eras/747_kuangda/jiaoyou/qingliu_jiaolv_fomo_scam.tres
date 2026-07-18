@@ -22,7 +22,7 @@ operators = Array[ExtResource("2_p0sa4")]([SubResource("Resource_ms6sg")])
 [sub_resource type="Resource" id="Resource_p0sa4"]
 script = ExtResource("6_nnp0e")
 choice_result = SubResource("Resource_bhq2e")
-description = "袖口在墙灰上蹭出一道痕，铜钱已从腰间解下攥进手中"
+description = "TRES_QINGLIU_JIAOLV_FOMO_SCAM_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_7onb7"]
 script = ExtResource("8_82g6c")
@@ -63,5 +63,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:incense_ash", "TARGET_NPC_DUFU:thatched_grass", "action:main:jiaoyou"])
 options = Array[ExtResource("1_bhq2e")]([SubResource("Resource_p0sa4")])
 uuid = "qingliu_jiaolv_fomo_scam"
-name = "墙头残纸"
-description = "「三月十七·吏部东院·未时·携——」后面的字被雨水洇成淡青色的一团。纸边有撕扯时留下的毛刺。你站在墙前的时间长度，足够西边的云把日头吃掉一半。"
+name = "TRES_QINGLIU_JIAOLV_FOMO_SCAM_NAME_0"
+description = "TRES_QINGLIU_JIAOLV_FOMO_SCAM_DESCRIPTION_1"

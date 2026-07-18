@@ -57,7 +57,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_sl5v0")
 choice_result = SubResource("Resource_25kxs")
 requirement = SubResource("Resource_mpgws")
-description = "你站起身，对着那片灯火长长吐出一口浊气。"
+description = "TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_6oj7e"]
 script = ExtResource("3_6oj7a")
@@ -88,7 +88,7 @@ operators = Array[ExtResource("2_3jh78")]([SubResource("Resource_6oj7e"), SubRes
 [sub_resource type="Resource" id="Resource_cyou2"]
 script = ExtResource("8_sl5v0")
 choice_result = SubResource("Resource_dw6ai")
-description = "你抽出腰间酒囊，仰头灌了一口，又将目光投向远处。"
+description = "TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_5aj8m"]
 script = ExtResource("3_6oj7a")
@@ -133,7 +133,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_sl5v0")
 choice_result = SubResource("Resource_0iuem")
 requirement = SubResource("Resource_a4ptp")
-description = "你侧耳细听那车马声，辨认来人身份，手按膝头缓缓站起。"
+description = "TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_vmcu6"]
 script = ExtResource("10_i6jho")
@@ -157,5 +157,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:scene_denggao_leyou_night"])
 options = Array[ExtResource("1_k80ng")]([SubResource("Resource_vo0yh"), SubResource("Resource_cyou2"), SubResource("Resource_iwljb")])
 uuid = "747kuangda_denggao_leyou_night_emotion_fatigue"
-name = "倚石听灯"
-description = "你背靠一块半埋入土的残碑坐下，膝盖咯吱响了一声。风从原下灌上来，撩动衣摆。远处万家灯火明灭不定，像蒸腾的雾气。你听着风声，听着自己粗重的呼吸。有车马声从身后传来，停在坡下。"
+name = "TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_NAME_0"
+description = "TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_DESCRIPTION_3"

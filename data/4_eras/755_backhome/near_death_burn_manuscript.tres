@@ -17,7 +17,7 @@ value = 15
 
 [sub_resource type="Resource" id="Resource_info_burn"]
 script = ExtResource("4_infoop")
-info = "你的诗稿在火焰中化为灰烬。手指恢复了知觉。"
+info = "TRES_NEAR_DEATH_BURN_MANUSCRIPT_INFO_0"
 
 [sub_resource type="Resource" id="Resource_health10"]
 script = ExtResource("3_propop")
@@ -26,7 +26,7 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_info_nothing"]
 script = ExtResource("4_infoop")
-info = "你身上没有什么可烧的。但身体莫名回暖了一些。"
+info = "TRES_NEAR_DEATH_BURN_MANUSCRIPT_INFO_1"
 
 [sub_resource type="Resource" id="Resource_accepted_cr"]
 script = ExtResource("5_choiceresult")
@@ -60,12 +60,12 @@ operators = Array[ExtResource("2_baseop")]([SubResource("Resource_choose_op")])
 [sub_resource type="Resource" id="Resource_option"]
 script = ExtResource("8_eventopt")
 choice_result = SubResource("Resource_option_cr")
-description = "选一份诗稿，投入火中"
+description = "TRES_NEAR_DEATH_BURN_MANUSCRIPT_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("9_randomevent")
 _action_tags = Array[int]([])
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_option")])
 uuid = "near_death_burn_manuscript"
-name = "焚稿求生"
-description = "这些轻薄的丝帛和宣纸，曾是你叩开长安权贵大门的敲门砖。你看着它们在火光中卷曲、发黑，变成一小撮灰烬。火很小，但足够让你的手指恢复一点知觉了。"
+name = "TRES_NEAR_DEATH_BURN_MANUSCRIPT_NAME_0"
+description = "TRES_NEAR_DEATH_BURN_MANUSCRIPT_DESCRIPTION_1"

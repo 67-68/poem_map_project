@@ -12,7 +12,7 @@ script = ExtResource("3_cr")
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "你的行卷辗转递到了{@npc_name}手中。这位大人翻阅了片刻，虽未当场表态，却也没有随手丢弃——而是将你的诗文收进了案头的卷宗里。你瞧在眼中，心中燃起一线希望。"
+description = "TRES_BAIYE_MASS_DISTRIBUTION_FALLBACK_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("5_randomev")
@@ -20,4 +20,4 @@ weight = 0.0
 archetype_id = "baiye_mass_distribution_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "baiye_mass_distribution_fallback"
-name = "泥牛入海"
+name = "TRES_BAIYE_MASS_DISTRIBUTION_FALLBACK_NAME_0"

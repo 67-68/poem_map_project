@@ -12,7 +12,7 @@ script = ExtResource("3_cr")
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "递上新诗，主家展卷细读，缓缓点头。虽说今日并未许下任何承诺，但那扇门至少没有当面关上。"
+description = "TRES_BAIYE_POEM_VISIT_FALLBACK_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("5_randomev")
@@ -20,4 +20,4 @@ weight = 0.0
 archetype_id = "baiye_poem_visit_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "baiye_poem_visit_fallback"
-name = "携诗叩门"
+name = "TRES_BAIYE_POEM_VISIT_FALLBACK_NAME_0"

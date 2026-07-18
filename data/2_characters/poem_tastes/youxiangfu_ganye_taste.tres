@@ -25,7 +25,7 @@ script = ExtResource("5_cr")
 
 [sub_resource type="Resource" id="Resource_rej_info"]
 script = ExtResource("4_info")
-info = "你提笔悬腕，却迟迟落不下去——这诗稿上的批注字字如刀，你无从下笔。清客见状，微微摇头，将诗稿收回袖中。"
+info = "TRES_YOUXIANGFU_GANYE_TASTE_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_rej_pe"]

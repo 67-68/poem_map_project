@@ -8,60 +8,60 @@
 script = ExtResource("2_cp")
 min_delta = 1
 max_delta = 5
-gain_text = "势微起，前路渐开"
-loss_text = "势头稍减"
+gain_text = "TRES_MOMENTUM_GAIN_TEXT_0"
+loss_text = "TRES_MOMENTUM_LOSS_TEXT_0"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_2"]
 script = ExtResource("2_cp")
 min_delta = 6
 max_delta = 20
-gain_text = "运势渐起，诸事顺遂"
-loss_text = "势头受挫"
+gain_text = "TRES_MOMENTUM_GAIN_TEXT_1"
+loss_text = "TRES_MOMENTUM_LOSS_TEXT_1"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_3"]
 script = ExtResource("2_cp")
 min_delta = 21
 max_delta = 50
-gain_text = "大势已成，所向披靡"
-loss_text = "势头大挫，处处碰壁"
+gain_text = "TRES_MOMENTUM_GAIN_TEXT_2"
+loss_text = "TRES_MOMENTUM_LOSS_TEXT_2"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_4"]
 script = ExtResource("2_cp")
 min_delta = 51
 max_delta = 9999
-gain_text = "天下大势汇于我身"
-loss_text = "大势已去，回天乏术"
+gain_text = "TRES_MOMENTUM_GAIN_TEXT_3"
+loss_text = "TRES_MOMENTUM_LOSS_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("3_sp")
-perception_text = "寸步难行"
+perception_text = "TRES_MOMENTUM_PERCEPTION_TEXT_0"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
 script = ExtResource("3_sp")
 stage_val = 20
-perception_text = "时运不济"
+perception_text = "TRES_MOMENTUM_PERCEPTION_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_3"]
 script = ExtResource("3_sp")
 stage_val = 50
-perception_text = "顺势而为"
+perception_text = "TRES_MOMENTUM_PERCEPTION_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_4"]
 script = ExtResource("3_sp")
 stage_val = 100
-perception_text = "势不可挡"
+perception_text = "TRES_MOMENTUM_PERCEPTION_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_5"]
 script = ExtResource("3_sp")
 stage_val = 300
-perception_text = "大势所趋，天下归心"
+perception_text = "TRES_MOMENTUM_PERCEPTION_TEXT_4"
 
 [resource]
 script = ExtResource("1_mom")
-description = "时运之风。势高则诸事顺遂，势低则举步维艰。每旬自然衰减，城府可稍加减缓。"
+description = "TRES_MOMENTUM_DESCRIPTION_0"
 soft_max = 50
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])
 uuid = "momentum"
-name = "势"
+name = "TRES_MOMENTUM_NAME_0"
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"

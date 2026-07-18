@@ -18,7 +18,7 @@ operators = Array[ExtResource("3_baseop")]([SubResource("Resource_push_myturn")]
 [sub_resource type="Resource" id="Resource_opt_myturn"]
 script = ExtResource("5_eo")
 choice_result = SubResource("Resource_cr_myturn")
-description = "轮到我了"
+description = "TRES_LIANJU_SHOW_POEM_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("7_re")
@@ -26,5 +26,5 @@ weight = 0.0
 options = Array[ExtResource("2_baseopt")]([SubResource("Resource_opt_myturn")])
 pre_event_interrupter_sequence = null
 uuid = "lianju_show_poem"
-name = "联句·赏诗"
-description = "{@npc_couplet}[br][br]——好一句「{@lianju_npc_name}」！现在轮到你对句了。"
+name = "TRES_LIANJU_SHOW_POEM_NAME_0"
+description = "TRES_LIANJU_SHOW_POEM_DESCRIPTION_1"

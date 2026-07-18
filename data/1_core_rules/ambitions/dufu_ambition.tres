@@ -8,19 +8,19 @@
 [sub_resource type="Resource" id="Resource_uhya7"]
 script = ExtResource("6_ivce5")
 stage_id = "stage0"
-perception_text = "「状态」长安布衣。相府的门房连正眼都不会看你。长安城的名利场里，查无此人。"
+perception_text = "TRES_DUFU_AMBITION_PERCEPTION_TEXT_0"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_62cbg"]
 script = ExtResource("6_ivce5")
 stage_id = "stage1"
-perception_text = "「状态」名动公卿。你的干谒诗已被多位权贵传阅。只要再多送些盘缠，补上几首好诗，似乎就只差那临门一脚了"
+perception_text = "TRES_DUFU_AMBITION_PERCEPTION_TEXT_1"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_fb1kn"]
 script = ExtResource("6_ivce5")
 stage_id = "stage2"
-perception_text = "窃比稷契。相国已向你许下重诺。你自认才华已比肩上古贤相稷与契，立登要路津，就在今朝！"
+perception_text = "TRES_DUFU_AMBITION_PERCEPTION_TEXT_2"
 metadata/_custom_type_script = "uid://bte53fleub1ki"
 
 [sub_resource type="Resource" id="Resource_6qswf"]
@@ -55,8 +55,8 @@ leveled_stages = Array[String](["stage0", "stage1", "stage2"])
 staged_requirements = Array[ExtResource("7_8wcjv")]([SubResource("Resource_r8ywo"), SubResource("Resource_p6pgc")])
 staged_perceptions = Array[ExtResource("6_ivce5")]([SubResource("Resource_uhya7"), SubResource("Resource_62cbg"), SubResource("Resource_fb1kn")])
 deadline = 747.0
-deadline_warning = "天宝六载秋科举，若叩不开这扇门，你的一身才华，终将沦为盛世的笑柄。"
+deadline_warning = "TRES_DUFU_AMBITION_DEADLINE_WARNING_0"
 deadline_xun = 30
 uuid = "dufu_ambition"
-name = "致君尧舜上"
-description = "你想齐家治国平天下，而这需要以跃入体制为前提。带着半生心血的行卷，你站到了长安的朱门之外。权贵的手指缝里，漏下的是天下士子的命运。"
+name = "TRES_DUFU_AMBITION_NAME_0"
+description = "TRES_DUFU_AMBITION_DESCRIPTION_0"

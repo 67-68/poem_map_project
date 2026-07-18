@@ -13,19 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("5_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "好一片天地"
+description = "TRES_TUT_VAST_WORLD_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_t2b8r")
 options = Array[ExtResource("1_bf3q5")]([SubResource("Resource_opt")])
 uuid = "tut_vast_world"
-name = "天地苍茫"
-description = "道士带你绕过几条山路，眼前豁然开朗——一整片开阔的山谷，远处群山如黛，云海翻涌。风声穿过松林，带着湿润的草木气息。
-
-你站在崖边，看着脚下绵延至天际的山脉，胸中涌起一股说不清的情绪。天地如此之大，而你只是其中一粒尘埃。
-
-道士在你身旁站定，轻声道：「贫道需打坐片刻，你自去转转吧。这山间还有不少可看之处。」
-
-说罢，他寻了一块青石盘膝坐下，闭上双眼，不再言语。"
+name = "TRES_TUT_VAST_WORLD_NAME_0"
+description = "TRES_TUT_VAST_WORLD_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

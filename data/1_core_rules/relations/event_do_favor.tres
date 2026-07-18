@@ -13,12 +13,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_df_option"]
 script = ExtResource("4_dofavor")
 choice_result = SubResource("Resource_df_empty_result")
-description = "好"
+description = "TRES_EVENT_DO_FAVOR_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_dofavor")
 options = Array[ExtResource("1_dofavor")]([SubResource("Resource_df_option")])
 uuid = "event_do_favor"
-name = "主动交好"
-description = "你主动示好，对方有些意外，对你多了几分善意。"
+name = "TRES_EVENT_DO_FAVOR_NAME_0"
+description = "TRES_EVENT_DO_FAVOR_DESCRIPTION_1"

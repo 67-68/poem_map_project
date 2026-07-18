@@ -13,15 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "继续前行"
+description = "TRES_TUT_CHUYOU_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_t2b8r")
 options = Array[ExtResource("1_f3s2d")]([SubResource("Resource_opt")])
 uuid = "tut_chuyou_fallback"
-name = "山间漫步"
-description = "你在泰山山间漫步，呼吸着新鲜空气。山风吹过，树叶沙沙作响，偶尔几声鸟鸣从远处传来。
-
-远远望去，山顶仍被那团浓雾笼罩着。不知何时才能一睹泰山真容。"
+name = "TRES_TUT_CHUYOU_FALLBACK_NAME_0"
+description = "TRES_TUT_CHUYOU_FALLBACK_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

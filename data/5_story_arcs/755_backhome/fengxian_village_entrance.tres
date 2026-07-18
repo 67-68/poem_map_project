@@ -41,7 +41,7 @@ script = ExtResource("7_mur18")
 choice_result = SubResource("Resource_lafwo")
 requirement = SubResource("Resource_elear")
 uuid = "opt_go_familiar_path"
-description = "沿着记忆中的小径，去找十年前住过的那间屋"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_hio2j"]
 script = ExtResource("3_prxmf")
@@ -69,7 +69,7 @@ script = ExtResource("7_mur18")
 choice_result = SubResource("Resource_o1q3r")
 requirement = SubResource("Resource_y6djk")
 uuid = "opt_ask_lizheng"
-description = "回头去找村口的里正，他应该知道这些年发生了什么"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_bsftb"]
 script = ExtResource("3_prxmf")
@@ -97,7 +97,7 @@ script = ExtResource("6_nrkmv")
 flag_id = "flag_fengxian_familiar_path_done"
 type = "bool"
 value = false
-failed_hint = "你不知道家在哪里"
+failed_hint = "TRES_FENGXIAN_VILLAGE_ENTRANCE_FAILED_HINT_0"
 
 [sub_resource type="Resource" id="Resource_hcxvo"]
 script = ExtResource("9_w8wgv")
@@ -108,7 +108,7 @@ script = ExtResource("7_mur18")
 choice_result = SubResource("Resource_3sga3")
 requirement = SubResource("Resource_hcxvo")
 uuid = "opt_find_old_home"
-description = "不去问人，直接凭着直觉去找那间漏雨的老屋"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_prxmf"]
 script = ExtResource("6_nrkmv")
@@ -160,7 +160,7 @@ script = ExtResource("10_ieqy8")
 options = Array[ExtResource("1_xi6j8")]([SubResource("Resource_1x5a4"), SubResource("Resource_hsmts"), SubResource("Resource_0c6xc")])
 pre_event_interrupter_sequence = [SubResource("Resource_m458u")]
 uuid = "fengxian_village_entrance"
-name = "奉先村村头"
-description = "你站在奉先村的村口，风从骊山方向灌过来，把衣摆吹得猎猎作响。十年前的记忆在脑子里乱撞，每条巷子都像，又都不像。村口的老槐树还在，但树下的石凳上坐着陌生的人。"
+name = "TRES_FENGXIAN_VILLAGE_ENTRANCE_NAME_0"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_3"
 icon = ExtResource("1_gsi4o")
 ui_decl = SubResource("Resource_w8wgv")

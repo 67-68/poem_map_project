@@ -6,5 +6,5 @@
 script = ExtResource("1_era")
 rejected_actions = Array[int]([6, 4])
 uuid = "745_ambition"
-name = "入世/功名时期"
-description = "745年，杜甫初入长安，怀抱功名之志"
+name = "TRES_745_AMBITION_ERA_NAME_0"
+description = "TRES_745_AMBITION_ERA_DESCRIPTION_0"

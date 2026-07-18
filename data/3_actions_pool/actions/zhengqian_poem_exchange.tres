@@ -25,5 +25,5 @@ failed_result = SubResource("Resource_cf8ag")
 defer_config = SubResource("Resource_rrs2a")
 override_action = "jiaoyou_recite_poem"
 uuid = "zhengqian_poem_exchange"
-name = "郑虔 · 以诗换兴望"
-description = "向郑虔展示诗作换取灵感与文名"
+name = "TRES_ZHENGQIAN_POEM_EXCHANGE_NAME_0"
+description = "TRES_ZHENGQIAN_POEM_EXCHANGE_DESCRIPTION_0"

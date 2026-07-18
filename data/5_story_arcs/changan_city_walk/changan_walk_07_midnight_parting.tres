@@ -20,12 +20,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_dasly"]
 script = ExtResource("2_k65eb")
 choice_result = SubResource("Resource_hhs3e")
-description = "目送他的背影消失在黑暗中..."
+description = "TRES_CHANGAN_WALK_07_MIDNIGHT_PARTING_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_26byg")
 options = Array[ExtResource("1_d5qdg")]([SubResource("Resource_dasly")])
 uuid = "changan_walk_07_midnight_parting"
-description = "酒的辛辣在胃里渐渐褪去，却奇迹般地抵御了春夜的死寒。上元节的喧闹已近尾声，长街上满是被踩烂的灯笼纸。郑虔拍了拍你的肩膀，裹紧那件单薄的青衫，摇摇晃晃地走入了没有灯光的暗巷。\\n\\n'子美，这长安的月亮，在哪看都一样。' 他没有劝你留下，也没有劝你离开。"
+description = "TRES_CHANGAN_WALK_07_MIDNIGHT_PARTING_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

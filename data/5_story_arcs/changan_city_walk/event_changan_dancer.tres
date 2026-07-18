@@ -10,7 +10,7 @@
 
 [sub_resource type="Resource" id="Resource_r120g"]
 script = ExtResource("3_vdyub")
-info = "一只穿着丝绸锦履的脚踩在了卷轴上。紧接着是第二只、第三只。欢笑的人群从你身边涌过。当你再抽回卷轴时，上面的字迹已经和泥水糊成了一团黑泥。"
+info = "TRES_EVENT_CHANGAN_DANCER_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_6ctoq"]
@@ -26,7 +26,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_3lchp"]
 script = ExtResource("6_6uaga")
 choice_result = SubResource("Resource_fd7ld")
-description = "捡起来"
+description = "TRES_EVENT_CHANGAN_DANCER_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -34,6 +34,6 @@ script = ExtResource("2_7fwya")
 display_speed = 2
 options = Array[ExtResource("1_qb5x3")]([SubResource("Resource_3lchp")])
 uuid = "event_changan_dancer"
-name = "欢呼"
-description = "一队戴着傩面具的舞者欢呼着冲进人群。你被重重地撞在肩膀上，摔倒在青石板上。怀里那卷写满治国策论和干谒诗的卷轴滚落进了地上的水坑里。"
+name = "TRES_EVENT_CHANGAN_DANCER_NAME_0"
+description = "TRES_EVENT_CHANGAN_DANCER_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

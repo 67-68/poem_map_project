@@ -27,7 +27,7 @@ value = true
 script = ExtResource("7_tr2nn")
 choice_result = SubResource("Resource_ti1vi")
 requirement = SubResource("Resource_3a7sg")
-description = "掷杯在地，拂袖间掀翻案上酒盏。"
+description = "TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_28s31"]
 script = ExtResource("4_28s31")
@@ -47,7 +47,7 @@ value = true
 script = ExtResource("7_tr2nn")
 choice_result = SubResource("Resource_atq60")
 requirement = SubResource("Resource_p354r")
-description = "堆出笑容，双手捧起酒壶为对方斟满。"
+description = "TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_htqgl"]
 script = ExtResource("4_28s31")
@@ -60,7 +60,7 @@ operators = Array[ExtResource("2_3a7sg")]([SubResource("Resource_htqgl")])
 [sub_resource type="Resource" id="Resource_fpxei"]
 script = ExtResource("7_tr2nn")
 choice_result = SubResource("Resource_dmpyr")
-description = "沉默片刻，问他那位同僚手里有什么可以交换。"
+description = "TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_wxvxp"]
 script = ExtResource("8_htqgl")
@@ -74,5 +74,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "VIBE_AESTHETIC_ELEGANT:giant_roc", "action:main:jiaoyou"])
 options = Array[ExtResource("1_ti1vi")]([SubResource("Resource_tak8j"), SubResource("Resource_tr2nn"), SubResource("Resource_fpxei")])
 uuid = "zhuoliu_zuanying_dinner_party_broker"
-name = "酒宴上的旧账"
-description = "“子美兄，我有个同僚想见户部的人。价钱好说。”说这话时他的眼睛没看你，看的是你身后那扇门——门后是今日宴席上所有正在交易的秘密。他笃定你还在这张桌上。"
+name = "TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_NAME_0"
+description = "TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_DESCRIPTION_3"

@@ -6,5 +6,5 @@
 script = ExtResource("1_trait")
 duration_xun = -1
 uuid = "strong_body"
-name = "身强体壮"
-hover_narrative = "筋骨强健，登山涉水不在话下。体力上限永久提升50点。"
+name = "TRES_STRONG_BODY_NAME_0"
+hover_narrative = "TRES_STRONG_BODY_HOVER_NARRATIVE_0"

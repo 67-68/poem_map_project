@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_era")
 uuid = "735_youth"
-name = "青年漫游"
-description = "735年，青年杜甫游历泰山"
+name = "TRES_735_YOUTH_ERA_NAME_0"
+description = "TRES_735_YOUTH_ERA_DESCRIPTION_0"

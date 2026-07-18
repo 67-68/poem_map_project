@@ -13,13 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "继续赶路"
+description = "TRES_TUT_RESIDE_UPPER_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_t2b8r")
 options = Array[ExtResource("1_bm3s2")]([SubResource("Resource_opt")])
 uuid = "tut_reside_upper"
-name = "山中歇息"
-description = "山腰处的风景与山脚迥然不同。松涛阵阵，云雾时聚时散。你靠在树干上，望着远处的层峦叠嶂，心中涌起一股登高望远的豪情。"
+name = "TRES_TUT_RESIDE_UPPER_NAME_0"
+description = "TRES_TUT_RESIDE_UPPER_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

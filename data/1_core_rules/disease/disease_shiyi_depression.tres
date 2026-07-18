@@ -50,5 +50,5 @@ topic = "MENTAL_ILLNESS"
 specific_topic = "DEPRESSION"
 trait_effect_operations = Array[ExtResource("3_f7b60")]([SubResource("Resource_1h2tl"), SubResource("Resource_2v0kj")])
 uuid = "disease_shiyi_depression"
-name = "失意之郁"
-description = "宦海浮沉，壮志难酬，心中郁结难解"
+name = "TRES_DISEASE_SHIYI_DEPRESSION_NAME_0"
+description = "TRES_DISEASE_SHIYI_DEPRESSION_DESCRIPTION_0"

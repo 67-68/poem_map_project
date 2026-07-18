@@ -13,8 +13,8 @@
 [sub_resource type="Resource" id="Resource_doaqb"]
 script = ExtResource("2_jhtqw")
 is_disabled = true
-disabled_reason = "一阵寒风吹过，你猛地干呕起来。你的胃和你的脊梁比理智更早做出了决定——你已经无法强迫自己的双膝再弯下去了。(未解锁，正式版解锁）"
-description = "[未解锁] 捡起烂泥里的残稿。也许明天去右相府门前长跪不起，哪怕只求个幕僚的位子……"
+disabled_reason = "TRES_CHANGAN_WALK_08_THE_CROSSROADS_DISABLED_REASON_0"
+description = "TRES_CHANGAN_WALK_08_THE_CROSSROADS_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://dipsh2f0qa3ei"
 
 [sub_resource type="Resource" id="Resource_n3tt2"]
@@ -39,12 +39,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_bx36x"]
 script = ExtResource("3_dqdj3")
 choice_result = SubResource("Resource_a6jx1")
-description = "天大笑，将残酒猛地泼在那团烂泥般的诗稿上。去他娘的野无遗贤！"
+description = "TRES_CHANGAN_WALK_08_THE_CROSSROADS_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_wlnfx")
 options = Array[ExtResource("1_xq5hs")]([SubResource("Resource_doaqb"), SubResource("Resource_bx36x")])
 uuid = "changan_walk_08_the_crossroads"
-description = "你独自站在冷风中。左手是那团糊满烂泥的干谒诗稿，右手是空荡荡的酒碗。过去的三年，你就像一台精确的机器，每天在那些朱门前计算着笑容的弧度和弯腰的角度。现在，你看着地上相国府马车留下的深深车辙，那股支撑着你的发条……好像断了。"
+description = "TRES_CHANGAN_WALK_08_THE_CROSSROADS_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

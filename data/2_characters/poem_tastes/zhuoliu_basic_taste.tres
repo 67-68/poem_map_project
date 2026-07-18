@@ -22,7 +22,7 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_1r1sn"]
 script = ExtResource("4_llxnk")
-info = "“尚才相戏尔！”"
+info = "TRES_ZHUOLIU_BASIC_TASTE_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_5ahdn"]

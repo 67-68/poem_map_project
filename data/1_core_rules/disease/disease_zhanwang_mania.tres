@@ -23,5 +23,5 @@ topic = "MENTAL_ILLNESS"
 specific_topic = "MANIA"
 trait_effect_operations = Array[ExtResource("3_f7b60")]([SubResource("Resource_1h2tl"), SubResource("Resource_2v0kj")])
 uuid = "disease_zhanwang_mania"
-name = "谵狂"
-description = "狂言谵语，不避亲疏，形神皆乱。"
+name = "TRES_DISEASE_ZHANWANG_MANIA_NAME_0"
+description = "TRES_DISEASE_ZHANWANG_MANIA_DESCRIPTION_0"

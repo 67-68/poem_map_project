@@ -36,5 +36,5 @@ topic = "DISEASE"
 specific_topic = "CHRONIC"
 trait_effect_operations = Array[ExtResource("3_f7b60")]([SubResource("Resource_nx3"), SubResource("Resource_nx4")])
 uuid = "disease_dongshang_necrosis"
-name = "冻疮坏死"
-description = "指尖坏死，皮肉焦黑如炭，关节锁死，痛觉尽失。"
+name = "TRES_DISEASE_DONGSHANG_NECROSIS_NAME_0"
+description = "TRES_DISEASE_DONGSHANG_NECROSIS_DESCRIPTION_0"

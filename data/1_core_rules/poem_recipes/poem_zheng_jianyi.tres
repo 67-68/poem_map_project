@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_zheng")
 uuid = "poem_recipe_zheng_jianyi"
-name = "敬赠郑谏议十韵"
-description = "饥寒 + 明主：谏议底色，穷年忧黎"
+name = "TRES_POEM_ZHENG_JIANYI_NAME_0"
+description = "TRES_POEM_ZHENG_JIANYI_DESCRIPTION_0"
 topic = "POEM"
 specific_topic = "GAN_YE"
 required_fragments = Array[String](["famine", "cold_blade", "thatched_grass"])

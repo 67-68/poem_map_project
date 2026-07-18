@@ -18,11 +18,11 @@ condition = null
 [resource]
 script = ExtResource("1")
 uuid = "idea_chizibaiyi"
-name = "兴：赤子白衣"
-description = "童心未泯，万事皆可兴"
+name = "TRES_IDEA_CHIZIBAIYI_NAME_0"
+description = "TRES_IDEA_CHIZIBAIYI_DESCRIPTION_0"
 idea_buffs = Array[ExtResource("2")]([SubResource("Resource_1"), SubResource("Resource_2")])
 current_idea_level = -1
-idea_demonstrations = Array[String](["平时的兴获取效率提高 20%", "任何一个行动都会附带少量的兴获取，缓慢增加灵感"])
+idea_demonstrations = Array[String](["TRES_IDEA_CHIZIBAIYI_IDEA_DEMONSTRATIONS_0", "TRES_IDEA_CHIZIBAIYI_IDEA_DEMONSTRATIONS_1"])
 idea_cost_name = "inspiration"
 idea_cost_amount = 50
 counter_idea = "idea_chenyuduncuo"

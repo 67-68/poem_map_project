@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt1"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "放下酒杯，侧耳继续听下去。"
+description = "TRES_ACQUAINT_SHENYI_TAVERN_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,6 +22,6 @@ weight = 10.0
 _target_tags = Array[String](["actor:npc:shenyi", "social:acquaint"])
 options = Array[ExtResource("1_opt")]([SubResource("Resource_opt1")])
 uuid = "acquaint_shenyi_tavern"
-name = "坊间传闻"
-description = "邻桌几个汉子正说得热闹，唾沫星子飞溅。其中一个拍着桌子：「我家那小子烧了三天三夜，城南那几家药铺都走遍了，银子花了一箩筐，屁用没有！后来经人指点找了西市那位神医——就三剂药，隔天就能下地跑！」旁边的人纷纷凑头过去打听住处。你端起酒杯抿了一口，记下了这个名字。"
+name = "TRES_ACQUAINT_SHENYI_TAVERN_NAME_0"
+description = "TRES_ACQUAINT_SHENYI_TAVERN_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

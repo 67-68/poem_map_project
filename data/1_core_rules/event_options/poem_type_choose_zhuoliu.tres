@@ -62,5 +62,5 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_tco")])
 script = ExtResource("4_eo")
 choice_result = SubResource("Resource_wrapper_cr")
 uuid = "poem_type_choose_zhuoliu"
-description = "展示诗词"
+description = "TRES_POEM_TYPE_CHOOSE_ZHUOLIU_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"

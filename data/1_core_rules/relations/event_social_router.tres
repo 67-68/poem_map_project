@@ -20,7 +20,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_router_option1"]
 script = ExtResource("5_router")
 choice_result = SubResource("Resource_router_result1")
-description = "交好"
+description = "TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_router_op2"]
@@ -36,7 +36,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_router_option2"]
 script = ExtResource("5_router")
 choice_result = SubResource("Resource_router_result2")
-description = "威胁"
+description = "TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_router_op3"]
@@ -52,12 +52,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_router_option3"]
 script = ExtResource("5_router")
 choice_result = SubResource("Resource_router_result3")
-description = "返回"
+description = "TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_router")
 options = Array[ExtResource("1_router")]([SubResource("Resource_router_option1"), SubResource("Resource_router_option2"), SubResource("Resource_router_option3")])
 uuid = "event_social_router"
-name = "社交行动"
-description = "你掌握了对方的把柄，是交好还是威胁？"
+name = "TRES_EVENT_SOCIAL_ROUTER_NAME_0"
+description = "TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_3"

@@ -48,7 +48,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_ankot")
 choice_result = SubResource("Resource_4o6mu")
 requirement = SubResource("Resource_ns4gc")
-description = "将荐书对折收入怀中，抬眼看他：「何不早来？」"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_rvucu"]
 script = ExtResource("3_8kx82")
@@ -71,7 +71,7 @@ operators = Array[ExtResource("2_nljxo")]([SubResource("Resource_rvucu"), SubRes
 [sub_resource type="Resource" id="Resource_us21j"]
 script = ExtResource("8_ankot")
 choice_result = SubResource("Resource_cwol3")
-description = "指尖触到纸沿时停了半拍，垂下眼去，一路不曾碰那纸。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_i2u5r"]
 script = ExtResource("3_8kx82")
@@ -107,7 +107,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_ankot")
 choice_result = SubResource("Resource_813b8")
 requirement = SubResource("Resource_auf61")
-description = "连声称谢，目光却反复扫过荐书上右丞的印鉴——落款处空着一行。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_uxndf"]
 script = ExtResource("10_8dp21")
@@ -131,5 +131,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("1_2q1ae")]([SubResource("Resource_fg7gy"), SubResource("Resource_us21j"), SubResource("Resource_gonn6")])
 uuid = "qingliu_passive_benefits_wangwei_halo_protection"
-name = "帘内一言"
-description = "「上来。」车中散出檀香。他一路无言，只在车驾转入辋川别业方向时，将一纸荐书搁在你膝上，不算什么好缺——崇文馆校书郎，正九品下。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_DESCRIPTION_3"

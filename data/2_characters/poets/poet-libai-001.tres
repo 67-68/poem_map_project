@@ -7,4 +7,4 @@ script = ExtResource("1_ltaih")
 death_year = 1.0
 uv_position = Vector2(0.3, 0.3)
 uuid = "poet-libai-001"
-name = "李白"
+name = "TRES_POET_LIBAI_001_NAME_0"

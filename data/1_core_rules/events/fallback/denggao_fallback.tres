@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_mfw3a"]
 script = ExtResource("4_w2gsl")
 choice_result = SubResource("Resource_axncj")
-description = "也罢\n登高本为遣兴，今日既无此心，强求反而不美。凭栏远眺，云低风急，不如归去。"
+description = "TRES_DENGGAO_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "denggao"
 options = Array[ExtResource("1_3rsjn")]([SubResource("Resource_mfw3a")])
 uuid = "denggao_fallback"
-name = "登高失趣"
+name = "TRES_DENGGAO_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

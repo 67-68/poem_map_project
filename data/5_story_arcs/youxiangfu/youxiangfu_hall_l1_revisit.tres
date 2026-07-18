@@ -20,7 +20,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_0bdr6"]
 script = ExtResource("4_eo")
 choice_result = SubResource("Resource_k8ru1")
-description = "面见右相"
+description = "TRES_YOUXIANGFU_HALL_L1_REVISIT_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_pe"]
@@ -34,13 +34,13 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_pe")])
 [sub_resource type="Resource" id="Resource_opt_thanks"]
 script = ExtResource("4_eo")
 choice_result = SubResource("Resource_cr_thanks")
-description = "接过诗稿，拱手道谢"
+description = "TRES_YOUXIANGFU_HALL_L1_REVISIT_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_re")
 options = Array[ExtResource("5_bo")]([SubResource("Resource_0bdr6"), SubResource("Resource_opt_thanks")])
 uuid = "youxiangfu_hall_l1_revisit"
-name = "管家为难·清客"
-description = "你再次步入前堂。那青袍掌书记正低头翻阅着你昨日呕心沥血献上的诗卷，甚至随手拿朱笔在上面乱勾了几笔。你急忙上前一步拱手，他却仿佛没看见面前这个大活人似的，径直向一旁的侍女招手：「这诗稿的纸张质地太糙，拿去垫偏殿那张缺了角的酸枝木桌吧，莫要划伤了相爷的玉管笔。」从头到尾，他的目光未曾在你身上停留半寸。"
+name = "TRES_YOUXIANGFU_HALL_L1_REVISIT_NAME_0"
+description = "TRES_YOUXIANGFU_HALL_L1_REVISIT_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

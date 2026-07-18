@@ -13,13 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "晚辈知错了"
+description = "TRES_TUT_DEFER_INTERRUPT_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_t2b8r")
 options = Array[ExtResource("1_bn4s2")]([SubResource("Resource_opt")])
 uuid = "tut_defer_interrupt"
-name = "道士不悦"
-description = "你贸然打断了道士的作法。他手中拂尘一顿，周身气息散了开去。\n\n道士转过头，眉头紧皱：「年轻人，作法讲究一气呵成，你这一打断，贫道又得重头来过。」\n\n他叹了口气，重新闭上双眼：「罢了罢了，下不为例。」"
+name = "TRES_TUT_DEFER_INTERRUPT_NAME_0"
+description = "TRES_TUT_DEFER_INTERRUPT_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

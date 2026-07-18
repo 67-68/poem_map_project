@@ -28,13 +28,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("6_b4n1w")
 choice_result = SubResource("Resource_opt_cr")
-description = "多谢道长指点"
+description = "TRES_TUT_TRAIT_DEMO_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("7_k6h3j")
 options = Array[ExtResource("1_bs3d2")]([SubResource("Resource_opt")])
 uuid = "tut_trait_demo"
-name = "身强体壮"
-description = "道士在你肩上拍了拍，力道不轻不重。\n\n「嗯，底子不错。我见过不少读书人，十年寒窗下来不是弯腰就是驼背。你这副筋骨，比他们强。」\n\n他简单教了你几式调息之法，嘱咐道：「登山之人，气力是本钱。记着这个道理。」"
+name = "TRES_TUT_TRAIT_DEMO_NAME_0"
+description = "TRES_TUT_TRAIT_DEMO_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

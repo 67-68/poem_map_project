@@ -13,13 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_v6n1j")
 choice_result = SubResource("Resource_opt_cr")
-description = "在下杜甫，此番游历是为增长见识"
+description = "TRES_TUT_DIALOGUE_1_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_t2b8w")
 options = Array[ExtResource("1_cds2x")]([SubResource("Resource_opt")])
 uuid = "tut_dialogue_1"
-name = "山中偶遇"
-description = "道士打量了你一番，笑道：「贫道在此山修行多年，看人倒也有几分眼力。小友脚步稳健，不像寻常书生那般弱不禁风。」\n\n他拂尘轻摆，示意你坐下：「未请教大名？此番来泰山，所为何事？」"
+name = "TRES_TUT_DIALOGUE_1_NAME_0"
+description = "TRES_TUT_DIALOGUE_1_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

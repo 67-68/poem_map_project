@@ -11,10 +11,10 @@ operator = 0
 [resource]
 script = ExtResource("1_note")
 uuid = "note_jiedu"
-name = "解毒"
-description = "疟疠三秋孰可忍，寒热百日相交战"
-description_explanation = "体内的寒气与热毒像两支军队一样，在我的身体里交锋厮杀。"
-note_narrative = "莫硬撑了！那寒热消渴非小疾，快去求医。莫等老来右臂偏枯、日夕枯渴，徒留一身病骨，悔之晚矣！"
-note_explanation = "…或许和西市地下神医打好关系到【相识】之后他有办法？"
+name = "TRES_NOTE_JIEDU_NAME_0"
+description = "TRES_NOTE_JIEDU_DESCRIPTION_0"
+description_explanation = "TRES_NOTE_JIEDU_DESCRIPTION_EXPLANATION_0"
+note_narrative = "TRES_NOTE_JIEDU_NOTE_NARRATIVE_0"
+note_explanation = "TRES_NOTE_JIEDU_NOTE_EXPLANATION_0"
 triggered = false
 requirement = SubResource("SubReq")

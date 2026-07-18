@@ -8,46 +8,46 @@
 script = ExtResource("3_cp")
 min_delta = 1
 max_delta = 10
-gain_text = "小有进展"
-loss_text = "略有波折"
+gain_text = "TRES_PROGRESS_GAIN_TEXT_0"
+loss_text = "TRES_PROGRESS_LOSS_TEXT_0"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_2"]
 script = ExtResource("3_cp")
 min_delta = 11
 max_delta = 30
-gain_text = "平步青云"
-loss_text = "宦海沉浮"
+gain_text = "TRES_PROGRESS_GAIN_TEXT_1"
+loss_text = "TRES_PROGRESS_LOSS_TEXT_1"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_3"]
 script = ExtResource("3_cp")
 min_delta = 31
 max_delta = 99
-gain_text = "飞黄腾达"
-loss_text = "一落千丈"
+gain_text = "TRES_PROGRESS_GAIN_TEXT_2"
+loss_text = "TRES_PROGRESS_LOSS_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("2_6wq60")
-perception_text = "布衣之身"
+perception_text = "TRES_PROGRESS_PERCEPTION_TEXT_0"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
 script = ExtResource("2_6wq60")
 stage_val = 25
-perception_text = "初入仕途"
+perception_text = "TRES_PROGRESS_PERCEPTION_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_3"]
 script = ExtResource("2_6wq60")
 stage_val = 50
-perception_text = "官居要职"
+perception_text = "TRES_PROGRESS_PERCEPTION_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_4"]
 script = ExtResource("2_6wq60")
 stage_val = 75
-perception_text = "封侯拜相"
+perception_text = "TRES_PROGRESS_PERCEPTION_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_5"]
 script = ExtResource("2_6wq60")
 stage_val = 99
-perception_text = "权倾朝野"
+perception_text = "TRES_PROGRESS_PERCEPTION_TEXT_4"
 
 [resource]
 script = ExtResource("1_xeosg")

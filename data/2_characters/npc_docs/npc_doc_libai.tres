@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_udmdi")
 taste_id = "libai_taste"
-name = "李白"
+name = "TRES_NPC_DOC_LIBAI_NAME_0"
 uuid = "libai"
 prop = {
 "TALENT": 80

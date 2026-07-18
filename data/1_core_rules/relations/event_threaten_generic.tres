@@ -18,8 +18,8 @@ metadata/_custom_type_script = "uid://d25kbxawh53k4"
 script = ExtResource("3_generic_cond")
 base_chance = 40
 success_result = Array[ExtResource("2_generic")]([SubResource("Resource_gr_prop")])
-success_hint = "威胁奏效"
-failed_hint = "威胁被无视"
+success_hint = "TRES_EVENT_THREATEN_GENERIC_SUCCESS_HINT_0"
+failed_hint = "TRES_EVENT_THREATEN_GENERIC_FAILED_HINT_0"
 metadata/_custom_type_script = "uid://c7thvd47yis2i"
 
 [sub_resource type="Resource" id="Resource_gr_result"]
@@ -30,12 +30,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_gr_option"]
 script = ExtResource("6_generic")
 choice_result = SubResource("Resource_gr_result")
-description = "继续"
+description = "TRES_EVENT_THREATEN_GENERIC_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("7_generic")
 options = Array[ExtResource("1_generic")]([SubResource("Resource_gr_option")])
 uuid = "event_threaten_generic"
-name = "暗中威胁"
-description = "你隐晦地暗示手中的把柄，对方神情一紧。"
+name = "TRES_EVENT_THREATEN_GENERIC_NAME_0"
+description = "TRES_EVENT_THREATEN_GENERIC_DESCRIPTION_1"

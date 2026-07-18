@@ -31,7 +31,7 @@ value = true
 script = ExtResource("7_uqfft")
 choice_result = SubResource("Resource_nxham")
 requirement = SubResource("Resource_b3d77")
-description = "转身抬脚就走，名帖在身后落地。"
+description = "TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_jsueo"]
 script = ExtResource("4_q81am")
@@ -55,7 +55,7 @@ value = true
 script = ExtResource("7_uqfft")
 choice_result = SubResource("Resource_uqfft")
 requirement = SubResource("Resource_1fiu6")
-description = "双袖一振顺势跪下，额头已触到石阶。"
+description = "TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_y6gsh"]
 script = ExtResource("4_q81am")
@@ -72,7 +72,7 @@ operators = Array[ExtResource("2_nxham")]([SubResource("Resource_y6gsh"), SubRes
 [sub_resource type="Resource" id="Resource_1xask"]
 script = ExtResource("7_uqfft")
 choice_result = SubResource("Resource_o2hs1")
-description = "从袖中摸出一张折好的纸，推过桌面。"
+description = "TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_6oac7"]
 script = ExtResource("8_1fiu6")
@@ -86,5 +86,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:dry_lips", "TARGET_FACTION_ROYAL:ink_for_sale", "action:main:fangshi"])
 options = Array[ExtResource("1_5c7vv")]([SubResource("Resource_q81am"), SubResource("Resource_wjtns"), SubResource("Resource_1xask")])
 uuid = "zhuoliu_zuanying_endorsement_request"
-name = "旧邸问价"
-description = "“上次你递的干谒诗，老爷压在案角看了三日。这次又来了？”他往前凑了半步，嗓音压到只有檐下能听见：“不过老爷听说，赵主事那条盐铁司的路子，是你给牵的线。你要是有什么消息或是条件，我一并进去说。”廊柱的影子斜在两人之间，他在等一个数字。"
+name = "TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_NAME_0"
+description = "TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_DESCRIPTION_3"

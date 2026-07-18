@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_udmdi")
-name = "王维"
+name = "TRES_NPC_DOC_WANGWEI_NAME_0"
 uuid = "wangwei"
 prop = {
 "TALENT": 75

@@ -8,50 +8,50 @@
 script = ExtResource("2_cp")
 min_delta = 1
 max_delta = 10
-gain_text = "精神稍振"
-loss_text = "偶感不适"
+gain_text = "TRES_HEALTH_GAIN_TEXT_0"
+loss_text = "TRES_HEALTH_LOSS_TEXT_0"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_2"]
 script = ExtResource("2_cp")
 min_delta = 11
 max_delta = 30
-gain_text = "容光焕发"
-loss_text = "病来如山倒"
+gain_text = "TRES_HEALTH_GAIN_TEXT_1"
+loss_text = "TRES_HEALTH_LOSS_TEXT_1"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_3"]
 script = ExtResource("2_cp")
 min_delta = 31
 max_delta = 9999
-gain_text = "脱胎换骨，百病不侵"
-loss_text = "命悬一线"
+gain_text = "TRES_HEALTH_GAIN_TEXT_2"
+loss_text = "TRES_HEALTH_LOSS_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("3_sp")
-perception_text = "奄奄一息"
+perception_text = "TRES_HEALTH_PERCEPTION_TEXT_0"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
 script = ExtResource("3_sp")
 stage_val = 20
-perception_text = "体弱多病"
+perception_text = "TRES_HEALTH_PERCEPTION_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_3"]
 script = ExtResource("3_sp")
 stage_val = 50
-perception_text = "尚算康健"
+perception_text = "TRES_HEALTH_PERCEPTION_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_4"]
 script = ExtResource("3_sp")
 stage_val = 100
-perception_text = "身强体健"
+perception_text = "TRES_HEALTH_PERCEPTION_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_5"]
 script = ExtResource("3_sp")
 stage_val = 300
-perception_text = "百病不侵"
+perception_text = "TRES_HEALTH_PERCEPTION_TEXT_4"
 
 [resource]
 script = ExtResource("1_l3cyt")
-description = "你的生命之本。健康越低，行动越受限。低于20将触发濒死危机。"
+description = "TRES_HEALTH_DESCRIPTION_0"
 hard_max = 100
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3")])

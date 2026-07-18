@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_mdhfg")
-name = "玄明道人"
+name = "TRES_TUT_TAOIST_NAME_0"
 uuid = "tut_taoist"
 prop = {
 "HEALTH": 80,

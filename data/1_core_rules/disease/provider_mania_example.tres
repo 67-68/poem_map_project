@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_3d5gj")
-crazy_option_text = "狂笑不止，踽踽独行"
+crazy_option_text = "TRES_PROVIDER_MANIA_EXAMPLE_CRAZY_OPTION_TEXT_0"
 crazy_event_key = "event_disease_zhanwang_crazy"
 resist_health_cost = 20
 resist_burnout_cost = 10

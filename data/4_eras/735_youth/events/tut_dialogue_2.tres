@@ -13,13 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_p8g2h")
 choice_result = SubResource("Resource_opt_cr")
-description = "晚辈记下了"
+description = "TRES_TUT_DIALOGUE_2_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_m3k6j")
 options = Array[ExtResource("1_fh9w2")]([SubResource("Resource_opt")])
 uuid = "tut_dialogue_2"
-name = "少年意气"
-description = "道士闻言，微微颔首：「年纪轻轻便有此志，难得。」\n\n他伸手在你肩上按了按，又看了看你的脸色：「身子骨还算硬朗，面色也红润——看来家中不曾亏待了你。出门在外，身体是本钱，钱财是盘缠。这两样本钱，你得时时放在心上。」\n\n他从袖中取出一枚铜钱把玩：「贫道云游四方，深知一文钱难倒英雄汉。好在你眼下囊中尚不羞涩，趁年轻多走走。」"
+name = "TRES_TUT_DIALOGUE_2_NAME_0"
+description = "TRES_TUT_DIALOGUE_2_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

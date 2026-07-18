@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fwa4"]
 script = ExtResource("4_gsl4")
 choice_result = SubResource("Resource_xncj4")
-description = "兴尽\n曲江池畔游人如织，喧闹不堪。本想寻一处清静，却被嘈杂扰了心境，兴致索然，转身离去。"
+description = "TRES_DENGGAO_QUJIANGCHI_FAILED_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "qujiangchi_success"
 options = Array[ExtResource("1_rsjn4")]([SubResource("Resource_fwa4")])
 uuid = "denggao_qujiangchi_failed_fallback"
-name = "曲江兴尽"
+name = "TRES_DENGGAO_QUJIANGCHI_FAILED_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

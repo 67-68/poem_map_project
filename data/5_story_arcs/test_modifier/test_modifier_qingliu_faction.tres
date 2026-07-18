@@ -20,7 +20,7 @@ operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_money_qing")])
 [sub_resource type="Resource" id="Res_opt_money_qing"]
 script = ExtResource("5_evopt")
 choice_result = SubResource("Res_cr_money_qing")
-description = "A) 清流索钱 -40 (才华↓清流消耗)"
+description = "TRES_TEST_MODIFIER_QINGLIU_FACTION_DESCRIPTION_0"
 
 ;; ── Option B: health -20 — 清流消耗减免 ──
 [sub_resource type="Resource" id="Res_prop_health_qing"]
@@ -35,7 +35,7 @@ operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_health_qing")]
 [sub_resource type="Resource" id="Res_opt_health_qing"]
 script = ExtResource("5_evopt")
 choice_result = SubResource("Res_cr_health_qing")
-description = "B) 清流伤身 -20 (才华↓清流消耗)"
+description = "TRES_TEST_MODIFIER_QINGLIU_FACTION_DESCRIPTION_1"
 
 ;; ── Option C: time -5 — 清流时间消耗减免 ──
 [sub_resource type="Resource" id="Res_prop_time_qing"]
@@ -50,7 +50,7 @@ operators = Array[ExtResource("2_baseop")]([SubResource("Res_prop_time_qing")])
 [sub_resource type="Resource" id="Res_opt_time_qing"]
 script = ExtResource("5_evopt")
 choice_result = SubResource("Res_cr_time_qing")
-description = "C) 清流耗时 -5 (才华↓清流消耗)"
+description = "TRES_TEST_MODIFIER_QINGLIU_FACTION_DESCRIPTION_2"
 
 [resource]
 script = ExtResource("6_re")
@@ -59,5 +59,5 @@ archetype_id = ""
 _target_tags = Array[String]([])
 options = Array[ExtResource("1_baseopt")]([SubResource("Res_opt_money_qing"), SubResource("Res_opt_health_qing"), SubResource("Res_opt_time_qing")])
 uuid = "test_modifier_qingliu_faction"
-name = "【测试】修饰符-清流交互"
-description = "需要先通过 debug console 注入清流 NPC 上下文。\n注入指令: PlayerState.last_event[\"target_tag\"] = \"gaoshi\"\n\n预期（才华 50）：A) 钱-40 → 清流 dampen → ~-24\nB) 健-20 → 清流 dampen → ~-12\nC) 时-5 → 清流 dampen → ~-3"
+name = "TRES_TEST_MODIFIER_QINGLIU_FACTION_NAME_0"
+description = "TRES_TEST_MODIFIER_QINGLIU_FACTION_DESCRIPTION_3"

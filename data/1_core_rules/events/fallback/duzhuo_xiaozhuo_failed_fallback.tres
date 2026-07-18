@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "杯中之酒寡淡如水，喝了半日也不见暖意。这酒怕是掺了水，白花了银钱。"
+description = "TRES_DUZHUO_XIAOZHUO_FAILED_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "xiaozhuo_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "duzhuo_xiaozhuo_failed_fallback"
-name = "寡淡无味"
+name = "TRES_DUZHUO_XIAOZHUO_FAILED_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

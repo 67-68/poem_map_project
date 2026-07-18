@@ -14,13 +14,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("5_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "等待道士行动。如果打断他可能不会很开心。"
+description = "TRES_TUT_DEFER_START_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_t2b8r")
 options = Array[ExtResource("1_bo5t2")]([SubResource("Resource_opt")])
 uuid = "tut_defer_start"
-name = "等待"
-description = "他坐下，开始作法。"
+name = "TRES_TUT_DEFER_START_NAME_0"
+description = "TRES_TUT_DEFER_START_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

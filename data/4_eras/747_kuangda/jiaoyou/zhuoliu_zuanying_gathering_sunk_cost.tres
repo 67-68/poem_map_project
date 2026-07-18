@@ -27,7 +27,7 @@ value = true
 script = ExtResource("7_y0yqr")
 choice_result = SubResource("Resource_uus1f")
 requirement = SubResource("Resource_2njb2")
-description = "名帖往地上一掷，转身踩着新靴踏出廊去。"
+description = "TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_mav1b"]
 script = ExtResource("4_mav1b")
@@ -47,7 +47,7 @@ value = true
 script = ExtResource("7_y0yqr")
 choice_result = SubResource("Resource_p817e")
 requirement = SubResource("Resource_7ykyr")
-description = "腰一弯，笑容堆满脸，双手将名帖捧过头顶。"
+description = "TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_ecs1u"]
 script = ExtResource("4_mav1b")
@@ -60,7 +60,7 @@ operators = Array[ExtResource("2_2njb2")]([SubResource("Resource_ecs1u")])
 [sub_resource type="Resource" id="Resource_kfh2s"]
 script = ExtResource("7_y0yqr")
 choice_result = SubResource("Resource_d7k8d")
-description = "掂了掂袖中另一条消息，走向厅侧等他的管事。"
+description = "TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_ohyyt"]
 script = ExtResource("8_ecs1u")
@@ -74,5 +74,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["ACTION_ENTERTAIN_DRINK:cloud_and_sun", "TARGET_NPC_DUFU:ink_for_sale", "action:main:jiaoyou"])
 options = Array[ExtResource("1_uus1f")]([SubResource("Resource_erd0d"), SubResource("Resource_y0yqr"), SubResource("Resource_kfh2s")])
 uuid = "zhuoliu_zuanying_gathering_sunk_cost"
-name = "旧债新袍"
-description = "“客人又来了。”他说完就走了，托盘在肘边晃了一下，映出灯影——那块漆掉了一块，露出旧木，上次你见它时还没掉。"
+name = "TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_NAME_0"
+description = "TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_DESCRIPTION_3"

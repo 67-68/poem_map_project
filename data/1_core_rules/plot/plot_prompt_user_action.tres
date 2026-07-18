@@ -22,7 +22,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt_take_money"]
 script = ExtResource("5_eo")
 choice_result = SubResource("Resource_cr_take_money")
-description = "收下银钱，谢过同乡"
+description = "TRES_PLOT_PROMPT_USER_ACTION_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_ui_decl"]
@@ -35,6 +35,6 @@ script = ExtResource("6_re")
 options = Array[ExtResource("1_bo")]([SubResource("Resource_opt_take_money")])
 ui_decl = SubResource("Resource_ui_decl")
 uuid = "plot_prompt_user_action"
-name = "同乡来访"
-description = "同乡老张风尘仆仆地找到你，从怀里掏出一个灰布包裹塞进你手中。\n\n「这是三十钱，乡里凑的。子美啊，你到长安也有些时日了，怎么还不去拜谒？这都第三旬了，再不去可就晚了！」\n\n他说完，重重拍了拍你的肩，转身消失在街巷尽头。\n\n（天意旁白：是时候了，点击右下角「拜谒」行动，叩响仕途的第一扇门。）"
+name = "TRES_PLOT_PROMPT_USER_ACTION_NAME_0"
+description = "TRES_PLOT_PROMPT_USER_ACTION_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

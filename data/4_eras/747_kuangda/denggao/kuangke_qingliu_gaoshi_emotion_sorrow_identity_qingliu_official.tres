@@ -27,7 +27,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_r67xk")
 choice_result = SubResource("Resource_snvnw")
 requirement = SubResource("Resource_17t7w")
-description = "走近，并排倚在另一棵柳树上，不说话，和高适一起看路的尽头。"
+description = "TRES_KUANGKE_QINGLIU_GAOSHI_EMOTION_SORROW_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_xsra6"]
 script = ExtResource("6_h71kv")
@@ -56,5 +56,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_THEME_MARTIAL:giant_roc", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ACTOR_EMOTION_SORROW", "emotion_pair:pair_sorrow", "action:main:denggao"])
 options = Array[ExtResource("1_snvnw")]([SubResource("Resource_05pgg")])
 uuid = "kuangke_qingliu_gaoshi_emotion_sorrow_identity_qingliu_official"
-name = "第四十三道刀痕"
-description = "高适站在官驿门外的柳树下，出神地望着驿道尽头。秋风把他的衣摆反复掀起又落下。听见脚步声，他没有回头。「四十三天了。」手指摸上树干——密密麻麻的刀痕，最新那道还泛着青白的木茬。官袍穿在他身上总觉得大了一号，肩头空落落的。驿站门里有人喊了声「高参军」，他肩背一僵，却没应声。风把柳叶吹落在他肩上，他也没拂去。"
+name = "TRES_KUANGKE_QINGLIU_GAOSHI_EMOTION_SORROW_IDENTITY_QINGLIU_OFFICIAL_NAME_0"
+description = "TRES_KUANGKE_QINGLIU_GAOSHI_EMOTION_SORROW_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_1"

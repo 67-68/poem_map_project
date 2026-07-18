@@ -13,13 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "先不打扰道长了"
+description = "TRES_TUT_TALK_NO_RESPONSE_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_t2b8r")
 options = Array[ExtResource("1_bm3s2")]([SubResource("Resource_opt")])
 uuid = "tut_talk_no_response"
-name = "无回应"
-description = "你走近道士打坐的青石旁，轻声唤了几句。「道长？」\n\n道士盘膝而坐，双目紧闭，呼吸悠长，似乎已入定境。你等了片刻，他依然没有任何回应。\n\n看来道长正在修炼的关键时刻，不便打扰。还是先去别处转转吧。"
+name = "TRES_TUT_TALK_NO_RESPONSE_NAME_0"
+description = "TRES_TUT_TALK_NO_RESPONSE_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

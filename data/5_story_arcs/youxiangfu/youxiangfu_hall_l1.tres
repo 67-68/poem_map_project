@@ -23,7 +23,7 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_tco")])
 [sub_resource type="Resource" id="Resource_opt_poem"]
 script = ExtResource("5_eo")
 choice_result = SubResource("Resource_cr_poem")
-description = "上前一步，拱手请命：在下愿献拙作"
+description = "TRES_YOUXIANGFU_HALL_L1_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_set_money_zero"]
@@ -42,13 +42,13 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_set_money_zero
 [sub_resource type="Resource" id="Resource_opt_bribe"]
 script = ExtResource("5_eo")
 choice_result = SubResource("Resource_cr_bribe")
-description = "将身上余钱塞给清客，低声求通融"
+description = "TRES_YOUXIANGFU_HALL_L1_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("7_re")
 options = Array[ExtResource("6_bo")]([SubResource("Resource_opt_poem"), SubResource("Resource_opt_bribe")])
 uuid = "youxiangfu_hall_l1"
-name = "管家为难"
-description = "穿过前院，堂下站着一位着青袍的掌书记。他正用一柄玉如意逗弄着廊下的画眉，听闻你自报家门，他停下手中的玉如意，目光终于落在你破旧的衣摆上。「子美？听说你在洛阳薄有诗名。」他端起茶盏，杯盖轻轻撇去浮沫，发出清脆的刮擦声，「相爷今日乏了。若没有能镇得住这满堂锦绣的千古绝唱，就别拿那些俗物来污了右相府的青砖。」"
+name = "TRES_YOUXIANGFU_HALL_L1_NAME_0"
+description = "TRES_YOUXIANGFU_HALL_L1_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

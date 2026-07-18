@@ -10,7 +10,7 @@
 
 [sub_resource type="Resource" id="Resource_jbp24"]
 script = ExtResource("3_mt4gb")
-info = "越擦越黑。【致君尧舜上，再使风俗淳】的墨迹彻底化开了。"
+info = "TRES_CHANGAN_WALK_04_MARKET_TRAMPLE_STRUGGLE_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_ahqt6"]
@@ -26,12 +26,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_e0iwl"]
 script = ExtResource("5_6bjvk")
 choice_result = SubResource("Resource_7cac2")
-description = "试图用袖口擦去上面的泥水..."
+description = "TRES_CHANGAN_WALK_04_MARKET_TRAMPLE_STRUGGLE_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_pno3m")
 options = Array[ExtResource("1_7l1bl")]([SubResource("Resource_e0iwl")])
 uuid = "changan_walk_04_market_trample_struggle"
-name = "人群终于散去。那卷轴已经和泥水糊成了一团黑泥，散发着腥臭。"
+name = "TRES_CHANGAN_WALK_04_MARKET_TRAMPLE_STRUGGLE_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

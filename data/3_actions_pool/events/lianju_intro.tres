@@ -18,7 +18,7 @@ operators = Array[ExtResource("3_baseop")]([SubResource("Resource_push_start")])
 [sub_resource type="Resource" id="Resource_opt_start"]
 script = ExtResource("5_eo")
 choice_result = SubResource("Resource_cr_start")
-description = "开始联句"
+description = "TRES_LIANJU_INTRO_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("7_re")
@@ -26,5 +26,5 @@ weight = 0.0
 options = Array[ExtResource("2_baseopt")]([SubResource("Resource_opt_start")])
 pre_event_interrupter_sequence = null
 uuid = "lianju_intro"
-name = "联句"
-description = "联句规则：宾客先就一意象作联句，你对句时需选择你的意象。[br]评分依据：[br]  · 意象等级（L1/L2/L3）决定基础分[br]  · 若你的当前情绪与所选意象契合，将获得额外倍率加成[br]  · 等级越高、情绪越合，得分越高！"
+name = "TRES_LIANJU_INTRO_NAME_0"
+description = "TRES_LIANJU_INTRO_DESCRIPTION_1"

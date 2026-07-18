@@ -13,8 +13,8 @@
 [sub_resource type="Resource" id="Resource_qreu0"]
 script = ExtResource("2_n0joy")
 is_disabled = true
-disabled_reason = "你只有这一条路"
-description = "继续拜谒"
+disabled_reason = "TRES_AFTER_CRASHOUT_4_DISABLED_REASON_0"
+description = "TRES_AFTER_CRASHOUT_4_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://dipsh2f0qa3ei"
 
 [sub_resource type="Resource" id="Resource_r3c5i"]
@@ -39,13 +39,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_mdukq"]
 script = ExtResource("6_hk7qh")
 choice_result = SubResource("Resource_nwert")
-description = "“既然庙堂朽坏，我便去结交这世间真正的风流人物！太白兄、摩诘兄（王维），只要与他们诗酒唱和，让我李杜之名响彻长安，何愁大唐没有我施展抱负的青天！”"
+description = "TRES_AFTER_CRASHOUT_4_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("7_tpt6h")
 options = Array[ExtResource("1_vdutw")]([SubResource("Resource_qreu0"), SubResource("Resource_mdukq")])
 uuid = "after_crashout_4"
-name = "茶肆里的狂言"
-description = "你坐在角落里喝着闷酒。隔壁桌的几个太学生正在高声谈论：“听说了吗？太白先生昨日在沉香亭，醉草吓蛮书，连高力士都得给他脱靴！只凭这惊世的诗才，皇上便赐了他翰林供奉！”你握着酒杯的手微微一颤。你的脑海中闪过李林甫那张阴沉的脸，又闪过李白狂放的笑声。一条隐秘而辉煌的道路，在你面前徐徐展开。"
+name = "TRES_AFTER_CRASHOUT_4_NAME_0"
+description = "TRES_AFTER_CRASHOUT_4_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

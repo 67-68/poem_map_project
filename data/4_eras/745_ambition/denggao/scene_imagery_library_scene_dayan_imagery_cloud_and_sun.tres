@@ -23,7 +23,7 @@ operators = Array[ExtResource("2_vfbl4")]([SubResource("Resource_sx5qo"), SubRes
 [sub_resource type="Resource" id="Resource_qegtj"]
 script = ExtResource("6_velf3")
 choice_result = SubResource("Resource_ey7b0")
-description = "（冷眼旁观）"
+description = "TRES_SCENE_IMAGERY_LIBRARY_SCENE_DAYAN_IMAGERY_CLOUD_AND_SUN_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("7_ti4qt")
@@ -32,5 +32,5 @@ archetype_id = "denggao"
 _target_tags = Array[String](["action:main:denggao"])
 options = Array[ExtResource("1_6hm5t")]([SubResource("Resource_qegtj")])
 uuid = "scene_imagery_library_scene_dayan_imagery_cloud_and_sun"
-name = "云日塔顶炊烟散"
-description = "日头被几块薄云交叠着裹住，天光如万千细针穿过云隙，一根一根钉在地上。俯首再望那宅邸，不过巴掌大，可你记得它门前的石阶——每一步都要仰起脖子才能看清匾额。暮鼓沉闷滚来，归鸦绕塔盘旋，你扶栏的手又往里扣了一分。"
+name = "TRES_SCENE_IMAGERY_LIBRARY_SCENE_DAYAN_IMAGERY_CLOUD_AND_SUN_NAME_0"
+description = "TRES_SCENE_IMAGERY_LIBRARY_SCENE_DAYAN_IMAGERY_CLOUD_AND_SUN_DESCRIPTION_1"

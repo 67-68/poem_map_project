@@ -44,7 +44,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_gr7hd")
 choice_result = SubResource("Resource_cnh1j")
 requirement = SubResource("Resource_gudto")
-description = "接过毡子披上，顺手把桌上半壶浊酒推到他面前。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_k2ckd"]
 script = ExtResource("3_pvand")
@@ -71,7 +71,7 @@ operators = Array[ExtResource("2_u6hc8")]([SubResource("Resource_k2ckd"), SubRes
 [sub_resource type="Resource" id="Resource_28xl8"]
 script = ExtResource("7_gr7hd")
 choice_result = SubResource("Resource_8kxke")
-description = "手指碰到毡子时顿了一下。披上后低头研墨，许久没有说话。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_ursjs"]
 script = ExtResource("3_pvand")
@@ -103,7 +103,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_gr7hd")
 choice_result = SubResource("Resource_jv1gi")
 requirement = SubResource("Resource_1f6f7")
-description = "接过毡子连声道谢，随即提起广文馆近日可有富家子弟求学。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_sktm1"]
 script = ExtResource("10_hmex8")
@@ -127,5 +127,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:main:jiaoyou"])
 options = Array[ExtResource("1_0k3sx")]([SubResource("Resource_04qs1"), SubResource("Resource_28xl8"), SubResource("Resource_8ecp8")])
 uuid = "qingliu_passive_benefits_zhengqian_solidarity_wretched"
-name = "破毡披肩"
-description = "“明日广文馆有课，用不上这个。”毡子上还带着他刚离开的体温。你看见他肩膀在灯下微微发颤。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_DESCRIPTION_3"

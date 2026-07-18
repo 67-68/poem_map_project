@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("2_obw4y")
 uuid = "out_of_the_city"
-name = "岁暮出城"
-description = "你终于拿到了对应的官职，你唯一想做的事情就是回家报喜，改善家人的生活。"
+name = "TRES_OUT_OF_THE_CITY_NAME_0"
+description = "TRES_OUT_OF_THE_CITY_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

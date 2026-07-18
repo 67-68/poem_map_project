@@ -37,7 +37,7 @@ metadata/_custom_type_script = "uid://pyecoqx4dr1i"
 script = ExtResource("6_eo")
 choice_result = SubResource("Resource_cr_pay")
 requirement = SubResource("Resource_req_money_100")
-description = "将袖中所有银钱尽数倒在他摊开的掌中"
+description = "TRES_YOUXIANGFU_GATE_L0_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_cr_empty"]
@@ -45,14 +45,14 @@ script = ExtResource("5_cr")
 
 [sub_resource type="Resource" id="Resource_nlock"]
 script = ExtResource("9_nlr")
-failed_hint = "门卫对你虎视眈眈，不交钱还想走？"
+failed_hint = "TRES_YOUXIANGFU_GATE_L0_FAILED_HINT_0"
 metadata/_custom_type_script = "uid://gwr4c2x26au3"
 
 [sub_resource type="Resource" id="Resource_opt_locked"]
 script = ExtResource("6_eo")
 choice_result = SubResource("Resource_cr_empty")
 requirement = SubResource("Resource_nlock")
-description = "转身离去"
+description = "TRES_YOUXIANGFU_GATE_L0_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_set_money_zero"]
@@ -71,13 +71,13 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_set_money_zero
 [sub_resource type="Resource" id="Resource_opt_broke"]
 script = ExtResource("6_eo")
 choice_result = SubResource("Resource_cr_broke")
-description = "将剩余银钱尽数倒出，期望他可以放了你"
+description = "TRES_YOUXIANGFU_GATE_L0_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("8_re")
 options = Array[ExtResource("7_bo")]([SubResource("Resource_opt_pay"), SubResource("Resource_opt_locked"), SubResource("Resource_opt_broke")])
 uuid = "youxiangfu_gate_l0"
-name = "右相府门卫"
-description = "相府青鞜大门半开，门房的胖汉横跨在石阶上，正用小指抠着牙缝，连正眼都没落在一个穿布衣的访客身上。当你踏上第一级台阶，一截包着铜皮的水火棍猛地横扫过来，险些砸碎你的膝盖。「相爷府的门，也配沾你的酸泥？」胖汉冷哼一声，蒲扇般的手掌直直摊在你眼前。他掂了掂另一只手里的空钱袋，铜钱碰撞的暗哑声在寒风里格外刺耳。"
+name = "TRES_YOUXIANGFU_GATE_L0_NAME_0"
+description = "TRES_YOUXIANGFU_GATE_L0_DESCRIPTION_3"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

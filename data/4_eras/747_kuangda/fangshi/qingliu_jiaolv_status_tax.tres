@@ -22,7 +22,7 @@ operators = Array[ExtResource("2_ll7w1")]([SubResource("Resource_bkqoe")])
 [sub_resource type="Resource" id="Resource_ll7w1"]
 script = ExtResource("6_6guwu")
 choice_result = SubResource("Resource_1qtwi")
-description = "肩颈微微一僵。鞋尖转向床边，已迈了半步。"
+description = "TRES_QINGLIU_JIAOLV_STATUS_TAX_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_tebxk"]
 script = ExtResource("8_2h2jc")
@@ -63,5 +63,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_NPC_DUFU:thatched_grass", "action:main:fangshi", "TARGET_IDENTITY_MENZI"])
 options = Array[ExtResource("1_1qtwi")]([SubResource("Resource_ll7w1")])
 uuid = "qingliu_jiaolv_status_tax"
-name = "一件旧袍"
-description = "张垍旧宅偏院的槐树下，小厮引你到一处厢房。床上摊开一件半旧圆领袍，袖口磨得发亮，料子在暗处隐隐泛着青灰——不是新物，是被人穿过的。那人靠在门框上，没开口谈价。他说，上次穿着这件衣裳的人现在在万年县做县尉。又说，集贤院散席的时候，魏某人在门口看见这领子——唤了一声张公。说完他从袖中抽出一封信，是你三年前写给张垍的自荐诗。信纸在浆洗过的衣领旁展开，墨迹已经有些洇开了。他把信放在袍子上，什么也没说。"
+name = "TRES_QINGLIU_JIAOLV_STATUS_TAX_NAME_0"
+description = "TRES_QINGLIU_JIAOLV_STATUS_TAX_DESCRIPTION_1"

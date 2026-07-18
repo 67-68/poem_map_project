@@ -31,7 +31,7 @@ flag_id_prefix = "talk_count_"
 script = ExtResource("4_gjvy3")
 choice_result = SubResource("Resource_u8cot")
 requirement = SubResource("Resource_r81hc")
-description = "你好，{@target_npc}"
+description = "TRES_EVENT_TALK_GUEST_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_iitol"]
@@ -45,7 +45,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_ihd3p"]
 script = ExtResource("4_gjvy3")
 choice_result = SubResource("Resource_2du5y")
-description = "去看看其他活动"
+description = "TRES_EVENT_TALK_GUEST_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 ; ── 主动唱和：push party_subjective_changhe ──
@@ -60,7 +60,7 @@ operators = Array[ExtResource("3_7uaht")]([SubResource("Resource_push_changhe")]
 [sub_resource type="Resource" id="Resource_opt_changhe"]
 script = ExtResource("4_gjvy3")
 choice_result = SubResource("Resource_cr_changhe")
-description = "主动唱和"
+description = "TRES_EVENT_TALK_GUEST_DESCRIPTION_2"
 
 [resource]
 script = ExtResource("2_bdme3")
@@ -68,7 +68,7 @@ weight = 0.0
 options = Array[ExtResource("1_innj3")]([SubResource("Resource_7uaht"), SubResource("Resource_opt_changhe"), SubResource("Resource_ihd3p")])
 pre_event_interrupter_sequence = null
 uuid = "event_talk_guest"
-name = "和宾客说话"
-description = "要干什么呢？"
+name = "TRES_EVENT_TALK_GUEST_NAME_0"
+description = "TRES_EVENT_TALK_GUEST_DESCRIPTION_3"
 icon = ExtResource("1_6b7y2")
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

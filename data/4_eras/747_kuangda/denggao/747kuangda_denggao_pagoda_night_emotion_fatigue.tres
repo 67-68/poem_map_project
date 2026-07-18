@@ -57,7 +57,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_kwtdb")
 choice_result = SubResource("Resource_xucoc")
 requirement = SubResource("Resource_ydpp8")
-description = "对着无名碑哼了一句乡谣，转身去拨弄塔铃。"
+description = "TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_kwc0u"]
 script = ExtResource("3_5w638")
@@ -88,7 +88,7 @@ operators = Array[ExtResource("2_qdxd3")]([SubResource("Resource_kwc0u"), SubRes
 [sub_resource type="Resource" id="Resource_t30bn"]
 script = ExtResource("8_kwtdb")
 choice_result = SubResource("Resource_a223n")
-description = "收下这片月光，拍了拍膝上的灰，望向远处。"
+description = "TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_1tjfq"]
 script = ExtResource("3_5w638")
@@ -133,7 +133,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_kwtdb")
 choice_result = SubResource("Resource_6ypvj")
 requirement = SubResource("Resource_3tau0")
-description = "倚着碑时调整了腰背的弧度，让脊骨贴合石面的凉意。"
+description = "TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_vs82e"]
 script = ExtResource("10_0cvxs")
@@ -157,5 +157,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:scene_denggao_pagoda_night"])
 options = Array[ExtResource("1_8ckih")]([SubResource("Resource_cx20c"), SubResource("Resource_t30bn"), SubResource("Resource_noh8c")])
 uuid = "747kuangda_denggao_pagoda_night_emotion_fatigue"
-name = "碑前枯坐，月落风停"
-description = "你沿着塔基走到北侧，在无名碑前停下。腿沉得抬不动，索性靠着石碑坐下，膝盖咯吱一声。月光被塔身切去一半，碑文的上半截泛着白，下半截埋在阴影里。你盯着几行字看了一会儿——那些名字入眼，但没入脑，像水从石面滑过。风从塔檐穿过来，铜铃响了两三声，又安静了。远处有更夫梆子响，一声长一声短，接着是几声狗叫。你坐着，脚底能感到底下砖缝的凉。坐了约莫一盏茶的时间，起了身，腿麻得厉害，扶了一把石碑才站稳。影子在地上从歪的拉成正的。你没再看碑文，顺着来路往回走。"
+name = "TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_NAME_0"
+description = "TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_DESCRIPTION_3"

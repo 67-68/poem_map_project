@@ -43,7 +43,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_2tpxs")
 choice_result = SubResource("Resource_iq6mp")
 requirement = SubResource("Resource_qwekn")
-description = "你捡起纸，啐口唾沫在砚台上，提笔改掉他第三联的韵脚。"
+description = "TRES_KUANGKE_QINGLIU_LIBAI_EMOTION_ARROGANCE_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_7b0e0"]
 script = ExtResource("6_dlllm")
@@ -71,5 +71,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:main:jiaoyou"])
 options = Array[ExtResource("1_0x7no")]([SubResource("Resource_b1v4y")])
 uuid = "kuangke_qingliu_libai_emotion_arrogance"
-name = "纸与仇"
-description = "黄昏时分，李白蹲在下杜城陋室的矮墙头上，像只鹞子。他从怀里掏出一卷纸扔下来，墨迹张牙舞爪，像是写的时候笔跟纸有仇。「前两天写的，第三联总觉得不够劲。」纸卷散开在泥地上，黄昏的光把那些潦草的字迹压得很低。屋里没有点灯。"
+name = "TRES_KUANGKE_QINGLIU_LIBAI_EMOTION_ARROGANCE_NAME_0"
+description = "TRES_KUANGKE_QINGLIU_LIBAI_EMOTION_ARROGANCE_DESCRIPTION_1"

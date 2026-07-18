@@ -32,11 +32,11 @@ buffs = Array[ExtResource("2")]([SubResource("Resource_buff_l1_eff"), SubResourc
 [resource]
 script = ExtResource("1")
 uuid = "idea_chenyuduncuo"
-name = "兴：沉郁顿挫"
-description = "胸中有丘壑，情到深处兴方浓"
+name = "TRES_IDEA_CHENYUDUNCUO_NAME_0"
+description = "TRES_IDEA_CHENYUDUNCUO_DESCRIPTION_0"
 idea_buffs = Array[ExtResource("2")]([SubResource("Resource_buff_l0"), SubResource("Resource_multi_l1")])
 current_idea_level = -1
-idea_demonstrations = Array[String](["爬少陵原获取的兴加 80%", "被动提升城府上限和加速度（50%）"])
+idea_demonstrations = Array[String](["TRES_IDEA_CHENYUDUNCUO_IDEA_DEMONSTRATIONS_0", "TRES_IDEA_CHENYUDUNCUO_IDEA_DEMONSTRATIONS_1"])
 idea_cost_name = "inspiration"
 idea_cost_amount = 50
 counter_idea = "idea_chizibaiyi"

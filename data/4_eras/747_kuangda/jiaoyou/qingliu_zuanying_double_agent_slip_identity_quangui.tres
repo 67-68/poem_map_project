@@ -34,7 +34,7 @@ value = true
 script = ExtResource("7_10oa0")
 choice_result = SubResource("Resource_bc4b4")
 requirement = SubResource("Resource_f88br")
-description = "他摔碎茶碗让碎片溅到拜帖上——场域戛然而止。"
+description = "TRES_QINGLIU_ZUANYING_DOUBLE_AGENT_SLIP_IDENTITY_QUANGUI_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_5lq3v"]
 script = ExtResource("4_f88br")
@@ -58,7 +58,7 @@ value = true
 script = ExtResource("7_10oa0")
 choice_result = SubResource("Resource_5e7g8")
 requirement = SubResource("Resource_o8snd")
-description = "他跪地抓住对方袍角，额头抵住冷砖。"
+description = "TRES_QINGLIU_ZUANYING_DOUBLE_AGENT_SLIP_IDENTITY_QUANGUI_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_pfa84"]
 script = ExtResource("4_f88br")
@@ -75,7 +75,7 @@ operators = Array[ExtResource("2_bkptg")]([SubResource("Resource_pfa84"), SubRes
 [sub_resource type="Resource" id="Resource_6dga8"]
 script = ExtResource("7_10oa0")
 choice_result = SubResource("Resource_1e3g2")
-description = "他用指尖在桌面划过，声音压得极低：“赵主事那天也离席了，去催茶的。”"
+description = "TRES_QINGLIU_ZUANYING_DOUBLE_AGENT_SLIP_IDENTITY_QUANGUI_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_a10si"]
 script = ExtResource("8_5e7g8")
@@ -90,5 +90,5 @@ _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:giant_roc", "TARGET_FACTIO
 options = Array[ExtResource("1_3n8n4")]([SubResource("Resource_k2i5q"), SubResource("Resource_bwnfj"), SubResource("Resource_6dga8")])
 on_enter_result = SubResource("Resource_lebfi")
 uuid = "qingliu_zuanying_double_agent_slip_identity_quangui"
-name = "辨认书风时的离席者"
-description = "“那天的密议，中途离席的有三个。一个去更衣，一个出去催茶"
+name = "TRES_QINGLIU_ZUANYING_DOUBLE_AGENT_SLIP_IDENTITY_QUANGUI_NAME_0"
+description = "TRES_QINGLIU_ZUANYING_DOUBLE_AGENT_SLIP_IDENTITY_QUANGUI_DESCRIPTION_3"

@@ -32,7 +32,7 @@ value = true
 script = ExtResource("7_cnjny")
 choice_result = SubResource("Resource_bv4ui")
 requirement = SubResource("Resource_2mvio")
-description = "抄起案上的酒壶砸向那两张并置的诗笺——但酒壶在手中转了半圈，只倒了一杯，自己喝了。"
+description = "TRES_QINGLIU_ZUANYING_GHOSTWRITER_COLLISION_IDENTITY_QUANGUI_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_0b58e"]
 script = ExtResource("4_euncq")
@@ -56,7 +56,7 @@ value = true
 script = ExtResource("7_cnjny")
 choice_result = SubResource("Resource_cnjny")
 requirement = SubResource("Resource_l64tk")
-description = "从席上滑跪下去，额头抵在两种笔迹交叠的诗笺上——但膝盖锁死在袍摆里，站不起来。"
+description = "TRES_QINGLIU_ZUANYING_GHOSTWRITER_COLLISION_IDENTITY_QUANGUI_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_olqdy"]
 script = ExtResource("4_euncq")
@@ -78,7 +78,7 @@ operators = Array[ExtResource("2_bv4ui")]([SubResource("Resource_olqdy"), SubRes
 [sub_resource type="Resource" id="Resource_hk3wp"]
 script = ExtResource("7_cnjny")
 choice_result = SubResource("Resource_k245k")
-description = "欠身拿起两张诗笺端详，顺着韵脚往下比对，评了一句“第三字若用去声会更稳”，把话题转向用典。"
+description = "TRES_QINGLIU_ZUANYING_GHOSTWRITER_COLLISION_IDENTITY_QUANGUI_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_fdyvk"]
 script = ExtResource("9_vkwqj")
@@ -92,5 +92,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["ACTION_ENTERTAIN_DRINK:cloud_and_sun", "TARGET_NPC_DUFU:ink_for_sale", "action:main:jiaoyou", "TARGET_IDENTITY_QUANGUI"])
 options = Array[ExtResource("1_j63h2")]([SubResource("Resource_euncq"), SubResource("Resource_vkwqj"), SubResource("Resource_hk3wp")])
 uuid = "qingliu_zuanying_ghostwriter_collision_identity_quangui"
-name = "韵脚撞车"
-description = "“近日坊间传抄的，说是某公子新作，你们品品这句——‘孤舟系在楚云根’。”你握着酒杯的手指未动。王参军接过去看了看，却从自己行囊里翻出另一卷残稿：“巧了，去年子美送我的干谒诗里，也有一联‘独木横于湘水湄’。这押韵的路数，倒是如出一辙。”他把两张诗笺并排放在案上，笔画不清，但韵脚的骨架——仄起平收、第五字必用入声——两首诗像同一只手在打拍子。陈明府的眼睛眯了起来，转向你看了一眼，什么也没问。他在等。"
+name = "TRES_QINGLIU_ZUANYING_GHOSTWRITER_COLLISION_IDENTITY_QUANGUI_NAME_0"
+description = "TRES_QINGLIU_ZUANYING_GHOSTWRITER_COLLISION_IDENTITY_QUANGUI_DESCRIPTION_3"

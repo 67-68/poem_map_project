@@ -32,7 +32,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_fmte3")
 choice_result = SubResource("Resource_dgcdr")
 requirement = SubResource("Resource_tx11o")
-description = "取案上残墨，在太白诗旁草草题了两个字：收到。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_CULTURAL_CAPITAL_IDENTITY_QINGLIU_OWNER_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_lmsqc"]
 script = ExtResource("4_k0pes")
@@ -45,7 +45,7 @@ operators = Array[ExtResource("2_dgcdr")]([SubResource("Resource_lmsqc")])
 [sub_resource type="Resource" id="Resource_dc4a3"]
 script = ExtResource("8_fmte3")
 choice_result = SubResource("Resource_v6qg4")
-description = "对着那行「独立苍茫」垂目良久，转身时袖口蹭了一笔墨痕。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_CULTURAL_CAPITAL_IDENTITY_QINGLIU_OWNER_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_fmte3"]
 script = ExtResource("4_k0pes")
@@ -71,7 +71,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_fmte3")
 choice_result = SubResource("Resource_7s7wa")
 requirement = SubResource("Resource_i3vc1")
-description = "朝围观文士拱手：「太白兄盛情难却。列位若有雅集，子美愿携此诗同往。」"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_CULTURAL_CAPITAL_IDENTITY_QINGLIU_OWNER_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_o8p6v"]
 script = ExtResource("10_66dht")
@@ -96,5 +96,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "ACTION_ENTERTAIN_DRINK:empty_cup", "emotion_pair:pair_tranquility", "action:main:jiaoyou"])
 options = Array[ExtResource("1_1peop")]([SubResource("Resource_k0pes"), SubResource("Resource_dc4a3"), SubResource("Resource_wkuku")])
 uuid = "qingliu_passive_benefits_libai_cultural_capital_identity_qingliu_owner"
-name = "壁上龙蛇迹未干"
-description = "「杜二先生，这诗是写给你的！方才李太白就在这儿，说什么'寄问杜陵老'。」壁上的句子确有「独立苍茫」四字，像是隔空递过来的一杯酒。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_CULTURAL_CAPITAL_IDENTITY_QINGLIU_OWNER_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_CULTURAL_CAPITAL_IDENTITY_QINGLIU_OWNER_DESCRIPTION_3"

@@ -29,7 +29,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fwj8k"]
 script = ExtResource("5_s4a4d")
 choice_result = SubResource("Resource_3mctb")
-description = "获取"
+description = "TRES_EVENT_GET_OFFICIAL_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_4xcex"]
@@ -44,7 +44,7 @@ metadata/_custom_type_script = "uid://bs881r2io48fq"
 script = ExtResource("2_1l313")
 options = Array[ExtResource("1_hbtks")]([SubResource("Resource_fwj8k")])
 uuid = "event_get_official"
-name = "吏部 · 官赏"
-description = "获得从八品官，月薪两斗米"
+name = "TRES_EVENT_GET_OFFICIAL_NAME_0"
+description = "TRES_EVENT_GET_OFFICIAL_DESCRIPTION_1"
 ui_decl = SubResource("Resource_4xcex")
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

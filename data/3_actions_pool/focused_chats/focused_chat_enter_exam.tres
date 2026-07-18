@@ -12,7 +12,7 @@
 
 [sub_resource type="Resource" id="Resource_24m2y"]
 script = ExtResource("1_anmoj")
-name = "你带着这几年在长安四处干谒换来的微薄名望，深吸一口气，跨过贡院高高的门槛。阳光洒在你的白袍上，你觉得大唐的未来就在你笔下。"
+name = "TRES_FOCUSED_CHAT_ENTER_EXAM_NAME_0"
 background = ExtResource("2_dua3m")
 metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
 
@@ -35,7 +35,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_510n1"]
 script = ExtResource("7_vp8ee")
 choice_result = SubResource("Resource_013d7")
-description = "开始考试"
+description = "TRES_FOCUSED_CHAT_ENTER_EXAM_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -43,5 +43,5 @@ script = ExtResource("3_y2scg")
 chats = Array[ExtResource("1_anmoj")]([SubResource("Resource_24m2y")])
 options = Array[ExtResource("2_7vltk")]([SubResource("Resource_510n1")])
 uuid = "focused_chat_enter_exam"
-name = "进入贡院"
+name = "TRES_FOCUSED_CHAT_ENTER_EXAM_NAME_1"
 metadata/_custom_type_script = "uid://bgapuvasp48wh"

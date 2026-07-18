@@ -28,13 +28,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("6_v6n1j")
 choice_result = SubResource("Resource_opt_cr")
-description = "多谢道长指点"
+description = "TRES_TUT_DIALOGUE_4_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("7_t2b8w")
 options = Array[ExtResource("1_bopt")]([SubResource("Resource_opt")])
 uuid = "tut_dialogue_4"
-name = "身强体壮"
-description = "道士又看了你几眼，忽然说道：「我观你才思尚可，但身子骨还需磨砺。登山不是靠笔杆子，是靠腿脚。你这副身板，若不先打熬打熬，怕是走不了多远。」\n\n他站起身，拍了拍道袍上的尘土，在你肩上按了按，力道不轻不重。\n\n「嗯，底子不错。我见过不少读书人，十年寒窗下来不是弯腰就是驼背。你这副筋骨，比他们强。」\n\n他简单教了你几式调息之法，嘱咐道：「登山之人，气力是本钱。记着这个道理。」\n\n[size=13][color=#888888]系统提示：将鼠标悬浮在左侧出现的刻印上，可以查看详细效果说明[/color][/size]"
+name = "TRES_TUT_DIALOGUE_4_NAME_0"
+description = "TRES_TUT_DIALOGUE_4_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

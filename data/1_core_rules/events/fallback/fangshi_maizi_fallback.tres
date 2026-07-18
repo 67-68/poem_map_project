@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fwa9"]
 script = ExtResource("4_gsl9")
 choice_result = SubResource("Resource_xncj9")
-description = "卖字\n铺开宣纸，研墨挥毫，写了三两幅字挂在摊前。有路人驻足看了看，掏出几文钱买去——虽不识草隶行楷，倒也图个新鲜。"
+description = "TRES_FANGSHI_MAIZI_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "maizi_success"
 options = Array[ExtResource("1_rsjn9")]([SubResource("Resource_fwa9")])
 uuid = "fangshi_maizi_fallback"
-name = "卖字换米"
+name = "TRES_FANGSHI_MAIZI_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

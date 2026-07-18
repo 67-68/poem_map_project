@@ -21,12 +21,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_h8oms"]
 script = ExtResource("5_failed")
 choice_result = SubResource("Resource_failed_result")
-description = "算你狠"
+description = "TRES_EVENT_THREATEN_FAILED_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("3_y8s7r")
 options = Array[ExtResource("1_failed")]([SubResource("Resource_h8oms")])
 uuid = "event_threaten_failed"
-name = "威胁落空"
-description = "对方嗤笑一声，你的威胁软弱无力，如同蝼蚁撼树。"
+name = "TRES_EVENT_THREATEN_FAILED_NAME_0"
+description = "TRES_EVENT_THREATEN_FAILED_DESCRIPTION_1"

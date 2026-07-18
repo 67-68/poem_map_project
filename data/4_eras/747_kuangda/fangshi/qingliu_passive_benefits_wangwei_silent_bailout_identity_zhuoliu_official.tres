@@ -32,7 +32,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_m68le")
 choice_result = SubResource("Resource_6swct")
 requirement = SubResource("Resource_44qjd")
-description = "接过便穿上，只问了一句“《辋川集》何时付梓”。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_jy0x2"]
 script = ExtResource("4_8v8nn")
@@ -45,7 +45,7 @@ operators = Array[ExtResource("2_6swct")]([SubResource("Resource_jy0x2")])
 [sub_resource type="Resource" id="Resource_vkegd"]
 script = ExtResource("8_m68le")
 choice_result = SubResource("Resource_sdudf")
-description = "默然许久，才低声道袍子针脚极细密。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_m68le"]
 script = ExtResource("4_8v8nn")
@@ -71,7 +71,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_m68le")
 choice_result = SubResource("Resource_132h0")
 requirement = SubResource("Resource_r2ci8")
-description = "穿上后连声说王右丞体恤，转而便问崇文馆可还有空缺。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_dwc22"]
 script = ExtResource("10_6ldwt")
@@ -96,5 +96,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_IDENTITY_ZHUOLIU_OFFICIAL", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "emotion_pair:pair_tranquility", "action:main:fangshi"])
 options = Array[ExtResource("1_8mhhl")]([SubResource("Resource_8v8nn"), SubResource("Resource_vkegd"), SubResource("Resource_vih1l")])
 uuid = "qingliu_passive_benefits_wangwei_silent_bailout_identity_zhuoliu_official"
-name = "法物流通处"
-description = "大慈恩寺的法物流通处里，王维与你并肩站了许久。他在《金刚经》抄本前停下，未曾开口，只将一件厚实的棉袍搁在你臂弯上——“买重了。”语气如谈论今日风大一般平淡。你认得这件袍子，是方才寺门外那个辽东皮货商担来的。王维转身去付抄经的银钱，袍子就这么留在你手中，一言未再多说。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_3"

@@ -11,7 +11,7 @@
 
 [sub_resource type="Resource" id="Resource_wet3u"]
 script = ExtResource("3_30v84")
-transition_text = "我怎么对这个地方一点都不熟悉"
+transition_text = "TRES_FENGXIAN_ASK_LIZHENG_TRANSITION_TEXT_0"
 
 [sub_resource type="Resource" id="Resource_othgt"]
 script = ExtResource("4_xlpj7")
@@ -21,7 +21,7 @@ value = true
 
 [sub_resource type="Resource" id="Resource_qfa7r"]
 script = ExtResource("5_knadk")
-info = "里正闭着眼，指了一个你根本不认识的方向。风里…听不到哭声了。"
+info = "TRES_FENGXIAN_ASK_LIZHENG_INFO_0"
 
 [sub_resource type="Resource" id="Resource_xlwrx"]
 script = ExtResource("6_chl1j")
@@ -31,11 +31,11 @@ operators = Array[ExtResource("2_iipt8")]([SubResource("Resource_wet3u"), SubRes
 script = ExtResource("7_xyfm1")
 choice_result = SubResource("Resource_xlwrx")
 uuid = "opt_return_village"
-description = "转身离开"
+description = "TRES_FENGXIAN_ASK_LIZHENG_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("8_7lvy4")
 options = Array[ExtResource("1_y5c3i")]([SubResource("Resource_8ih4e")])
 uuid = "fengxian_ask_lizheng"
-name = "村口的里正"
-description = "里正还坐在那张磨得发亮的木凳上，像是从未挪过。你走过去的时候，他正[glitch level=6]闭着眼[/glitch]晒太阳——不，也许只是在打盹。冬天的太阳没有温度，照在他脸上像一层薄灰。"
+name = "TRES_FENGXIAN_ASK_LIZHENG_NAME_0"
+description = "TRES_FENGXIAN_ASK_LIZHENG_DESCRIPTION_1"

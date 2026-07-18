@@ -20,13 +20,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_2yeng"]
 script = ExtResource("5_at2c7")
 choice_result = SubResource("Resource_743pu")
-description = "不对..发生了什么？"
+description = "TRES_AFTER_CRASHOUT_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_q0mr4")
 options = Array[ExtResource("1_wra42")]([SubResource("Resource_2yeng")])
 uuid = "after_crashout"
-name = "酒醒之后"
-description = "...睁开眼睛，先于阳光袭来的是一股酒精的味道和一股恶臭。你下意识准备爬起来，但手摸到的不是自家床榻通常的柔软被子，而是坚硬的石头。稍微直起身来。你看见一个颓废的老头，胡须花白，正睡在你对面。矮桌上还有半盏没喝完的酒。你一阵眩晕想吐。强撑着站起来，扶着墙，真准备往右相府门口走。"
+name = "TRES_AFTER_CRASHOUT_NAME_0"
+description = "TRES_AFTER_CRASHOUT_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

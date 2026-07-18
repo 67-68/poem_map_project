@@ -15,7 +15,7 @@ metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_1nk4l"]
 script = ExtResource("4_tvfpo")
-info = "老天...我怎么没发现这里有这么多穷人？"
+info = "TRES_EVENT_CHANGAN_POORAREA_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_xg5v4"]
@@ -26,7 +26,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_ie5tf"]
 script = ExtResource("5_g5ek5")
 choice_result = SubResource("Resource_xg5v4")
-description = "靠在湿冷的墙壁上，直到雨停..."
+description = "TRES_EVENT_CHANGAN_POORAREA_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -34,6 +34,6 @@ script = ExtResource("2_l2gta")
 display_speed = 2
 options = Array[ExtResource("1_unb2w")]([SubResource("Resource_ie5tf")])
 uuid = "event_changan_poorarea"
-name = "物伤其类"
-description = "你跌入屋背后的暗巷。这里积水没过脚踝，混合着腐烂的菜叶和马粪味。一个蜷缩在草席下的流民递过来半块发黑的胡饼：“别饿死了”。你下意识地想要摆手拒绝，却借着闪电，看清了自己伸出去的手——指甲缝里塞满黑泥，袖口破裂，比那流民好不到哪去"
+name = "TRES_EVENT_CHANGAN_POORAREA_NAME_0"
+description = "TRES_EVENT_CHANGAN_POORAREA_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

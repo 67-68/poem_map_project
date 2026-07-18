@@ -13,7 +13,7 @@
 
 [sub_resource type="Resource" id="Resource_8w3u1"]
 script = ExtResource("3_k6qop")
-transition_text = "哭声弱下来了..."
+transition_text = "TRES_FENGXIAN_OLD_HOME_CORPSE_TRANSITION_TEXT_0"
 
 [sub_resource type="Resource" id="Resource_jtutj"]
 script = ExtResource("4_mkke1")
@@ -23,7 +23,7 @@ value = true
 
 [sub_resource type="Resource" id="Resource_0pvty"]
 script = ExtResource("5_k2a6f")
-info = "你急疯了，在泥水里跌跌撞撞。那阵哭声变得极其微弱，几乎要被风声盖过。"
+info = "TRES_FENGXIAN_OLD_HOME_CORPSE_INFO_0"
 
 [sub_resource type="Resource" id="Resource_qi6de"]
 script = ExtResource("6_t3112")
@@ -33,7 +33,7 @@ operators = Array[ExtResource("2_hso5m")]([SubResource("Resource_8w3u1"), SubRes
 script = ExtResource("7_0pkbp")
 choice_result = SubResource("Resource_qi6de")
 uuid = "opt_return_village"
-description = "退出门外"
+description = "TRES_FENGXIAN_OLD_HOME_CORPSE_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_mkke1"]
 script = ExtResource("10_k6qop")
@@ -44,6 +44,6 @@ metadata/_custom_type_script = "uid://bs881r2io48fq"
 script = ExtResource("8_aappf")
 options = Array[ExtResource("1_75lp4")]([SubResource("Resource_ul8w8")])
 uuid = "fengxian_old_home_corpse"
-name = "旧居"
-description = "门虚掩着。你推开门，屋里的霉味混着一股甜腻的腐烂气息迎面扑来。地上趴着一具[glitch level=4]干尸[/glitch]——骨节粗大，肩宽，不像女人，更不是孩子。你蹲下来翻看尸体的手，指节上有老茧，是握锄头的痕迹。"
+name = "TRES_FENGXIAN_OLD_HOME_CORPSE_NAME_0"
+description = "TRES_FENGXIAN_OLD_HOME_CORPSE_DESCRIPTION_1"
 ui_decl = SubResource("Resource_mkke1")

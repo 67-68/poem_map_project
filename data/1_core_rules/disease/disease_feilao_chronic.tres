@@ -36,5 +36,5 @@ topic = "DISEASE"
 specific_topic = "CHRONIC"
 trait_effect_operations = Array[ExtResource("3_f7b60")]([SubResource("Resource_1h2tl"), SubResource("Resource_2v0kj")])
 uuid = "disease_feilao_chronic"
-name = "肺痨"
-description = "肺气已损，咳血不止，形销骨立。"
+name = "TRES_DISEASE_FEILAO_CHRONIC_NAME_0"
+description = "TRES_DISEASE_FEILAO_CHRONIC_DESCRIPTION_0"

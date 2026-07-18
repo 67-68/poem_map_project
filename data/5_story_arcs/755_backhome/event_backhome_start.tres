@@ -26,13 +26,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_17qst"]
 script = ExtResource("4_imh7e")
 choice_result = SubResource("Resource_sjwnl")
-description = "走吧"
+description = "TRES_EVENT_BACKHOME_START_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_irxcg")
 options = Array[ExtResource("1_qhwya")]([SubResource("Resource_17qst")])
 uuid = "event_backhome_start"
-name = "衣锦还乡"
-description = "你决定回家看看。一路从东门灞桥出，到骊山，强渡渭河。再到奉先县"
+name = "TRES_EVENT_BACKHOME_START_NAME_0"
+description = "TRES_EVENT_BACKHOME_START_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

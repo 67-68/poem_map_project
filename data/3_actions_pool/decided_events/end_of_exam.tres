@@ -23,17 +23,17 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_vlwam"]
 script = ExtResource("6_44gst")
-info = "门卫看都没看你一眼。"
+info = "TRES_END_OF_EXAM_INFO_0"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_xsl86"]
 script = ExtResource("6_44gst")
-info = "相国府的后门也对你关上了。"
+info = "TRES_END_OF_EXAM_INFO_1"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_sa7u2"]
 script = ExtResource("6_44gst")
-info = "你发现自己连打点下人的铜钱都没了..."
+info = "TRES_END_OF_EXAM_INFO_2"
 metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_6yf8h"]
@@ -61,7 +61,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_bw5tr"]
 script = ExtResource("5_06hn4")
 choice_result = SubResource("Resource_nifla")
-description = "结束了。？"
+description = "TRES_END_OF_EXAM_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -69,6 +69,6 @@ script = ExtResource("2_4ccc5")
 options = Array[ExtResource("1_m3x1n")]([SubResource("Resource_bw5tr")])
 on_enter_result = SubResource("Resource_2d5uh")
 uuid = "end_of_exam"
-name = "结束了...?"
-description = "你彻底失败了"
+name = "TRES_END_OF_EXAM_NAME_0"
+description = "TRES_END_OF_EXAM_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

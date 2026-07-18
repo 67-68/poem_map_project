@@ -28,7 +28,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_l18cd"]
 script = ExtResource("5_fxifg")
 choice_result = SubResource("Resource_27qtt")
-description = "闭眼快步走过"
+description = "TRES_BACKHOME_LISHAN_1_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_nwfle"]
@@ -57,13 +57,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_n6618"]
 script = ExtResource("5_fxifg")
 choice_result = SubResource("Resource_fxifg")
-description = "死死盯住这墙外的冻死骨"
+description = "TRES_BACKHOME_LISHAN_1_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_ppmsx")
 options = Array[ExtResource("1_t1u35")]([SubResource("Resource_l18cd"), SubResource("Resource_n6618")])
 uuid = "backhome_lishan_1"
-name = "赏骊山"
-description = "骊山的行宫里，天子正在论功行赏。那是大唐的最高 API 接口，输出着绝对的恩典与仁慈。但你低头看着路边那具衣不蔽体的女尸，你的大脑陷入了死循环。你从小学习的《论语》告诉你，雷霆雨露皆是君恩；但十年长安的常识告诉你，骊山里赏赐的每一匹丝绸，都精准对应着墙外某个被抽干鲜血的家庭。国家没有缺陷，天子依然圣明，只是大唐的注意力不再分配给这些路边的冻死骨了。"
+name = "TRES_BACKHOME_LISHAN_1_NAME_0"
+description = "TRES_BACKHOME_LISHAN_1_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

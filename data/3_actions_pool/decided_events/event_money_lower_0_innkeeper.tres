@@ -22,14 +22,14 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_option"]
 script = ExtResource("1_event_opt")
 choice_result = SubResource("Resource_choice_result")
-description = "咬牙撑过去"
+description = "TRES_EVENT_MONEY_LOWER_0_INNKEEPER_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_event")
 options = Array[ExtResource("2_opt")]([SubResource("Resource_option")])
 uuid = "event_money_lower_0_innkeeper"
-name = "流落街头"
-description = "旬末结算，囊中已无一文钱。客栈老板骂骂咧咧地将你赶出门外，寒风中你蜷缩在街角……"
+name = "TRES_EVENT_MONEY_LOWER_0_INNKEEPER_NAME_0"
+description = "TRES_EVENT_MONEY_LOWER_0_INNKEEPER_DESCRIPTION_1"
 icon = ExtResource("1_icon")
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

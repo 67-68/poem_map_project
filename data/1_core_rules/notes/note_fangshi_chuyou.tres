@@ -12,10 +12,10 @@ operator = 0
 [resource]
 script = ExtResource("1_note")
 uuid = "note_fangshi_chuyou"
-name = "坊市-出游循环"
-description = "朝扣富儿门，暮随肥马尘。残杯与冷炙，到处潜悲辛。"
-description_explanation = "清晨去敲富豪的大门，傍晚随在达官贵人的马后吃尘土；吃的是别人的残羹冷炙，到处偷偷吞咽着悲伤与痛苦。即使如此的下贱，但仍然吃不上饭。"
-note_narrative = "昔年泰山清狂，不知薪米之贵；今入长安，方知出卖体力之迫切也。"
-note_explanation = "去坊市出卖体力之后去出游可以有效获取额外的资源。"
+name = "TRES_NOTE_FANGSHI_CHUYOU_NAME_0"
+description = "TRES_NOTE_FANGSHI_CHUYOU_DESCRIPTION_0"
+description_explanation = "TRES_NOTE_FANGSHI_CHUYOU_DESCRIPTION_EXPLANATION_0"
+note_narrative = "TRES_NOTE_FANGSHI_CHUYOU_NOTE_NARRATIVE_0"
+note_explanation = "TRES_NOTE_FANGSHI_CHUYOU_NOTE_EXPLANATION_0"
 triggered = false
 requirement = SubResource("SubReq")

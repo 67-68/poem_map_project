@@ -43,12 +43,12 @@ accepted_poem_types = Array[int]([0])
 script = ExtResource("8_jf45p")
 choice_result = SubResource("Resource_hk02i")
 requirement = SubResource("Resource_x3pvl")
-description = "呈上诗稿"
+description = "TRES_BAI_YE_REAL_APPEARANCE_FALLBACK_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_0w2bm"]
 script = ExtResource("8_jf45p")
 choice_result = SubResource("Resource_hu1gx")
-description = "只是恭维"
+description = "TRES_BAI_YE_REAL_APPEARANCE_FALLBACK_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_3rhxy"]
 script = ExtResource("10_qyy55")
@@ -86,5 +86,5 @@ _target_tags = Array[String](["action:main:baiye"])
 options = Array[ExtResource("3_1ub2h")]([SubResource("Resource_atsab"), SubResource("Resource_0w2bm")])
 on_enter_result = SubResource("Resource_l555t")
 uuid = "bai_ye_real_appearance_fallback"
-name = "冷茶与残稿"
-description = "诗尚可,把名字抹了,改日送与刘参军.又转头向你笑道:赐坐,赏你一壶茶.侍从端来一壶冷茶"
+name = "TRES_BAI_YE_REAL_APPEARANCE_FALLBACK_NAME_0"
+description = "TRES_BAI_YE_REAL_APPEARANCE_FALLBACK_DESCRIPTION_2"

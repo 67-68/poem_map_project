@@ -10,7 +10,7 @@
 [sub_resource type="Resource" id="Resource_8egul"]
 script = ExtResource("3_ttg22")
 command = "game_over"
-death_hint = "漁陽鼙鼓動地來，驚破霓裳羽衣曲。你在戰火中歸鄉，卻發現家園已成廢墟，而自己也未能躲過這場浩劫……"
+death_hint = "TRES_THE_END_DEATH_HINT_0"
 metadata/_custom_type_script = "uid://c4swvur288j0n"
 
 [sub_resource type="Resource" id="Resource_l8gsg"]
@@ -29,5 +29,5 @@ script = ExtResource("2_fl3i3")
 _namespace = "10"
 options = Array[ExtResource("1_pxufj")]([SubResource("Resource_6jsv1")])
 uuid = "the_end"
-name = "漁陽鼙鼓"
+name = "TRES_THE_END_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

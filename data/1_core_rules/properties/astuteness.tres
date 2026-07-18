@@ -8,60 +8,60 @@
 script = ExtResource("2_cp")
 min_delta = 1
 max_delta = 5
-gain_text = "心思缜密了几分"
-loss_text = "露了破绽"
+gain_text = "TRES_ASTUTENESS_GAIN_TEXT_0"
+loss_text = "TRES_ASTUTENESS_LOSS_TEXT_0"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_2"]
 script = ExtResource("2_cp")
 min_delta = 6
 max_delta = 20
-gain_text = "城府日深"
-loss_text = "心思被看穿"
+gain_text = "TRES_ASTUTENESS_GAIN_TEXT_1"
+loss_text = "TRES_ASTUTENESS_LOSS_TEXT_1"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_3"]
 script = ExtResource("2_cp")
 min_delta = 21
 max_delta = 50
-gain_text = "运筹帷幄，深藏不露"
-loss_text = "底牌暴露"
+gain_text = "TRES_ASTUTENESS_GAIN_TEXT_2"
+loss_text = "TRES_ASTUTENESS_LOSS_TEXT_2"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_4"]
 script = ExtResource("2_cp")
 min_delta = 51
 max_delta = 9999
-gain_text = "翻云覆雨，一手遮天"
-loss_text = "心防尽碎，再无遮掩"
+gain_text = "TRES_ASTUTENESS_GAIN_TEXT_3"
+loss_text = "TRES_ASTUTENESS_LOSS_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("3_sp")
 stage_val = 0
-perception_text = "心思单纯"
+perception_text = "TRES_ASTUTENESS_PERCEPTION_TEXT_0"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
 script = ExtResource("3_sp")
 stage_val = 20
-perception_text = "略有心计"
+perception_text = "TRES_ASTUTENESS_PERCEPTION_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_3"]
 script = ExtResource("3_sp")
 stage_val = 50
-perception_text = "城府渐深"
+perception_text = "TRES_ASTUTENESS_PERCEPTION_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_4"]
 script = ExtResource("3_sp")
 stage_val = 100
-perception_text = "深不可测"
+perception_text = "TRES_ASTUTENESS_PERCEPTION_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_5"]
 script = ExtResource("3_sp")
 stage_val = 300
-perception_text = "幕后执棋"
+perception_text = "TRES_ASTUTENESS_PERCEPTION_TEXT_4"
 
 [resource]
 script = ExtResource("1_ast")
-description = "你的城府与心计。城府越高，势衰减越小，浊流交互消耗大减，但你的声望积累会因此放缓。"
+description = "TRES_ASTUTENESS_DESCRIPTION_0"
 uuid = "astuteness"
-name = "城府"
+name = "TRES_ASTUTENESS_NAME_0"
 hard_max = 100
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])

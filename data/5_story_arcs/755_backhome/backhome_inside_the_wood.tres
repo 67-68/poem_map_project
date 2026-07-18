@@ -44,7 +44,7 @@ display_speed = 2
 options = Array[ExtResource("1_jtxd8")]([SubResource("Resource_41tl8")])
 lasting_time = 5.0
 uuid = "backhome_inside_the_wood"
-name = "推开门"
-description = "门开了。屋里比外面更冷。没有哭声。土炕上的那个小小的襁褓，已经和底下的稻草[glitch level=5.0]冻结成了一块坚硬的冰疙瘩[/glitch]。你本能地想要把怀里那层象征身份的绿袍脱下来盖上去，但那层布料早就被风雪撕成了碎条。大唐的从八品下右卫率府兵曹参军，站在大唐的盛世里。你试图调用那个名为‘父亲’的接口，但物理世界只向你抛回了[glitch level=10.0]ERR_TARGET_ENTITY_DEAD[/glitch]。"
+name = "TRES_BACKHOME_INSIDE_THE_WOOD_NAME_0"
+description = "TRES_BACKHOME_INSIDE_THE_WOOD_DESCRIPTION_0"
 icon = ExtResource("1_xclyn")
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

@@ -8,57 +8,57 @@
 script = ExtResource("2_cp")
 min_delta = 1
 max_delta = 5
-gain_text = "荷包微沉，多了几文铜钱"
-loss_text = "用了几文铜钱"
+gain_text = "TRES_MONEY_GAIN_TEXT_0"
+loss_text = "TRES_MONEY_LOSS_TEXT_0"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_2"]
 script = ExtResource("2_cp")
 min_delta = 6
 max_delta = 20
-gain_text = "一笔不小的进项"
-loss_text = "花销不小呢"
+gain_text = "TRES_MONEY_GAIN_TEXT_1"
+loss_text = "TRES_MONEY_LOSS_TEXT_1"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_3"]
 script = ExtResource("2_cp")
 min_delta = 21
 max_delta = 100
-gain_text = "你掂量着一大袋钱，沉重厚实"
-loss_text = "这一下可花了不少"
+gain_text = "TRES_MONEY_GAIN_TEXT_2"
+loss_text = "TRES_MONEY_LOSS_TEXT_2"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_4"]
 script = ExtResource("2_cp")
 min_delta = 101
 max_delta = 9999
-gain_text = "富可敌国！银钱堆积如山"
-loss_text = "倾家荡产..."
+gain_text = "TRES_MONEY_GAIN_TEXT_3"
+loss_text = "TRES_MONEY_LOSS_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("3_sp")
-perception_text = "囊中羞涩"
+perception_text = "TRES_MONEY_PERCEPTION_TEXT_0"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
 script = ExtResource("3_sp")
 stage_val = 50
-perception_text = "尚可度日"
+perception_text = "TRES_MONEY_PERCEPTION_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_3"]
 script = ExtResource("3_sp")
 stage_val = 200
-perception_text = "小有积蓄"
+perception_text = "TRES_MONEY_PERCEPTION_TEXT_2"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_4"]
 script = ExtResource("3_sp")
 stage_val = 1000
-perception_text = "家资殷实"
+perception_text = "TRES_MONEY_PERCEPTION_TEXT_3"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_5"]
 script = ExtResource("3_sp")
 stage_val = 5000
-perception_text = "富甲一方"
+perception_text = "TRES_MONEY_PERCEPTION_TEXT_4"
 
 [resource]
 script = ExtResource("1_kxe2f")
-description = "铜钱银两，长安米贵。行卷、买酒、交游，样样要钱。无钱寸步难行。"
+description = "TRES_MONEY_DESCRIPTION_0"
 hard_max = 200
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])

@@ -22,11 +22,11 @@ condition = SubResource("Resource_cond_qingliu")
 [resource]
 script = ExtResource("1")
 uuid = "idea_qingliufenggu"
-name = "望：清流风骨"
-description = "风骨清高，以才华立身"
+name = "TRES_IDEA_QINGLIUFENGGU_NAME_0"
+description = "TRES_IDEA_QINGLIUFENGGU_DESCRIPTION_0"
 idea_buffs = Array[ExtResource("2")]([SubResource("Resource_buff_l0"), SubResource("Resource_buff_l1")])
 current_idea_level = -1
-idea_demonstrations = Array[String](["缓慢增加才华", "减少 50%提升清流关系的需求"])
+idea_demonstrations = Array[String](["TRES_IDEA_QINGLIUFENGGU_IDEA_DEMONSTRATIONS_0", "TRES_IDEA_QINGLIUFENGGU_IDEA_DEMONSTRATIONS_1"])
 idea_cost_name = "prestige"
 idea_cost_amount = 50
 counter_idea = "idea_wulingshaonian"

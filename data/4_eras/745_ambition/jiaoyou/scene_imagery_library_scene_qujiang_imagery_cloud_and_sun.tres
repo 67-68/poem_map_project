@@ -23,7 +23,7 @@ operators = Array[ExtResource("2_6wwd0")]([SubResource("Resource_nw7qu"), SubRes
 [sub_resource type="Resource" id="Resource_qgjgd"]
 script = ExtResource("6_6waf3")
 choice_result = SubResource("Resource_jdyj1")
-description = "（冷眼旁观）"
+description = "TRES_SCENE_IMAGERY_LIBRARY_SCENE_QUJIANG_IMAGERY_CLOUD_AND_SUN_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("7_ouv7w")
@@ -32,5 +32,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["action:main:jiaoyou"])
 options = Array[ExtResource("1_t4v14")]([SubResource("Resource_qgjgd")])
 uuid = "scene_imagery_library_scene_qujiang_imagery_cloud_and_sun"
-name = "流觞碎影"
-description = "流觞亭的水面，云影与飞檐倒映成完整的画卷。你伸手截住漂来的酒杯，指节在杯沿上压出白痕。有人吟出上句，你脖颈肌肉一绷，笑着接了下句——笑纹没有爬上眼角。斟酒时壶嘴偏了三分，浅了半寸。风掠过水面，倒影碎了；你垂眼，杯中酒面一片浑浊。"
+name = "TRES_SCENE_IMAGERY_LIBRARY_SCENE_QUJIANG_IMAGERY_CLOUD_AND_SUN_NAME_0"
+description = "TRES_SCENE_IMAGERY_LIBRARY_SCENE_QUJIANG_IMAGERY_CLOUD_AND_SUN_DESCRIPTION_1"

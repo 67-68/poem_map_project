@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fwa12"]
 script = ExtResource("4_gsl12")
 choice_result = SubResource("Resource_xncj12")
-description = "试药\n掌柜的递来一碗新配的汤药，说是大补之方。你喝下去只觉得腹中翻腾，冷汗涔涔，半天缓不过气来——这药怕是配错了。"
+description = "TRES_FANGSHI_SHIYAO_FAILED_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "shiyao_failure"
 options = Array[ExtResource("1_rsjn12")]([SubResource("Resource_fwa12")])
 uuid = "fangshi_shiyao_failed_fallback"
-name = "药不对症"
+name = "TRES_FANGSHI_SHIYAO_FAILED_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

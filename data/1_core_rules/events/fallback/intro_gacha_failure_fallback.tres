@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "宴席之上，玉盘珍馐，觥筹交错。你端着酒杯在人群中穿梭，试图与几位说得上话的人物攀谈。然而这些贵人要么被更显赫的宾客包围，要么对你只是敷衍地点头寒暄便转身而去。夜深宴散，朱门在身后吱呀关上。你立在阶下，望着一地狼藉的残烛，心中空落落的。这重金购得的入席券，终究没有换来一句承诺。"
+description = "TRES_INTRO_GACHA_FAILURE_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "intro_gacha_failure"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "intro_gacha_failure_fallback"
-name = "宴散人空"
+name = "TRES_INTRO_GACHA_FAILURE_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

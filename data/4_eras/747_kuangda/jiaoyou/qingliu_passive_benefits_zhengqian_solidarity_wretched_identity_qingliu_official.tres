@@ -28,7 +28,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_g7ppl")
 choice_result = SubResource("Resource_r3n8k")
 requirement = SubResource("Resource_ohl77")
-description = "接过毡子披上，顺手把桌上半壶浊酒推到他面前。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_kyr6p"]
 script = ExtResource("4_kyr6p")
@@ -45,7 +45,7 @@ operators = Array[ExtResource("2_ohl77")]([SubResource("Resource_kyr6p"), SubRes
 [sub_resource type="Resource" id="Resource_g7ppl"]
 script = ExtResource("7_g7ppl")
 choice_result = SubResource("Resource_kb336")
-description = "手指碰到毡子时顿了一下。披上后低头研墨，许久没有说话。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_morfh"]
 script = ExtResource("4_kyr6p")
@@ -67,7 +67,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_g7ppl")
 choice_result = SubResource("Resource_74lv5")
 requirement = SubResource("Resource_c2s8a")
-description = "接过毡子连声道谢，随即提起广文馆近日可有富家子弟求学。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_qmae1"]
 script = ExtResource("10_74lv5")
@@ -92,5 +92,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_NPC_DUFU:thatched_grass", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ENV_SOCIETY_FAMINE:starving_bone", "ENV_NATURE_SNOWSTORM:lone_snow", "emotion_pair:pair_survival", "action:main:jiaoyou"])
 options = Array[ExtResource("1_r3n8k")]([SubResource("Resource_0g3m8"), SubResource("Resource_g7ppl"), SubResource("Resource_sldbv")])
 uuid = "qingliu_passive_benefits_zhengqian_solidarity_wretched_identity_qingliu_official"
-name = "破毡披肩"
-description = "“明日广文馆有课，用不上这个。”毡子上还带着他刚离开的体温。你看见他肩膀在灯下微微发颤。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_IDENTITY_QINGLIU_OFFICIAL_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_ZHENGQIAN_SOLIDARITY_WRETCHED_IDENTITY_QINGLIU_OFFICIAL_DESCRIPTION_3"

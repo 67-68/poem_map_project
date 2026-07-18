@@ -45,7 +45,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_atld0"]
 script = ExtResource("5_yhcam")
 choice_result = SubResource("Resource_xnfye")
-description = "向东走"
+description = "TRES_BACKHOME_OUTSIDE_CITY_1_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_yhcam"]
@@ -72,7 +72,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fqfcp"]
 script = ExtResource("5_yhcam")
 choice_result = SubResource("Resource_f46ou")
-description = "盯着灞桥，直到雪盖满身"
+description = "TRES_BACKHOME_OUTSIDE_CITY_1_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -80,6 +80,6 @@ script = ExtResource("2_8lav0")
 options = Array[ExtResource("1_3x4t2")]([SubResource("Resource_atld0"), SubResource("Resource_fqfcp")])
 on_enter_result = SubResource("Resource_onc84")
 uuid = "backhome_outside_city_1"
-name = "灞桥之别"
-description = "灞桥的残柳被冻成铁丝。你努力挺直腰板，试图让那身薄得透风的从八品下绿袍显出几分官威，好对得起这十年的卑躬屈膝。你本想饮尽最后一口浊酒赋诗一首，但冻僵的酒壶粘住了嘴唇，撕下一层皮。狂风灌进胃里，把你精心排练的衣锦还乡，吹成了一个毫无知觉的死循环。"
+name = "TRES_BACKHOME_OUTSIDE_CITY_1_NAME_0"
+description = "TRES_BACKHOME_OUTSIDE_CITY_1_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

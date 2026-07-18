@@ -8,29 +8,29 @@
 script = ExtResource("2_cp")
 min_delta = 1
 max_delta = 3
-gain_text = "时光从容，岁月静好"
-loss_text = "时光流逝"
+gain_text = "TRES_TIME_GAIN_TEXT_0"
+loss_text = "TRES_TIME_LOSS_TEXT_0"
 
 [sub_resource type="Resource" id="PropChangePerceptionData_2"]
 script = ExtResource("2_cp")
 min_delta = 4
 max_delta = 6
-gain_text = "偷得浮生半日闲"
-loss_text = "光阴似箭，日月如梭"
+gain_text = "TRES_TIME_GAIN_TEXT_1"
+loss_text = "TRES_TIME_LOSS_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_1"]
 script = ExtResource("3_sp")
-perception_text = "时间紧迫"
+perception_text = "TRES_TIME_PERCEPTION_TEXT_0"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_2"]
 script = ExtResource("3_sp")
 stage_val = 5
-perception_text = "尚有余裕"
+perception_text = "TRES_TIME_PERCEPTION_TEXT_1"
 
 [sub_resource type="Resource" id="PropStagedPerceptionData_3"]
 script = ExtResource("3_sp")
 stage_val = 8
-perception_text = "时间充裕"
+perception_text = "TRES_TIME_PERCEPTION_TEXT_2"
 
 [resource]
 script = ExtResource("1_kxe2f")

@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "平康坊内丝竹声声，歌楼之上有人正唱着一首新词。他在坊间踱步，听着曲声，心底那句「此曲只应天上有」悄悄浮了上来。"
+description = "TRES_ZHU_LIU_PINGKANGFANG_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "zhuliu_pingkangfang_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "zhu_liu_pingkangfang_fallback"
-name = "平康听曲"
+name = "TRES_ZHU_LIU_PINGKANGFANG_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

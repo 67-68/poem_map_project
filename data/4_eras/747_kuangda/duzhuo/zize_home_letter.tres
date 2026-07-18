@@ -19,7 +19,7 @@ operators = Array[ExtResource("2_7k7p1")]([SubResource("Resource_ih8cg")])
 [sub_resource type="Resource" id="Resource_7k7p1"]
 script = ExtResource("6_pfxai")
 choice_result = SubResource("Resource_v4pn2")
-description = "喉结动一下，袖口拭过案角，往门口走。"
+description = "TRES_ZIZE_HOME_LETTER_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_7mb3n"]
 script = ExtResource("7_45wy1")
@@ -34,5 +34,5 @@ archetype_id = "duzhuo"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_NPC_DUFU:thatched_grass", "action:main:duzhuo"])
 options = Array[ExtResource("1_v4pn2")]([SubResource("Resource_7k7p1")])
 uuid = "zize_home_letter"
-name = "家书与冬袜"
-description = "信差在门廊外跺着脚上的雪泥。信纸摊在案上，墨迹洇开的地方刚好是“不如早归”四个字。那双冬袜叠得齐整，袜口收针处多绕了两道线——她手冻时才这样收针。你坐下磨墨，笔管在指间转了两圈。纸铺好了。墨磨浓了。手落下去时笔尖停在半空，一滴墨坠在纸上，正好盖住“归”字。你从旧袍腋下拆了一颗木扣子放进信封。信差接过时掂了掂，没说话。"
+name = "TRES_ZIZE_HOME_LETTER_NAME_0"
+description = "TRES_ZIZE_HOME_LETTER_DESCRIPTION_1"

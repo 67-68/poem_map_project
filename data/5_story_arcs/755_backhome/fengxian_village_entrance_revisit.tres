@@ -16,39 +16,39 @@ script = ExtResource("2_vdkuf")
 flag_id = "__never_unlock"
 type = "bool"
 value = false
-failed_hint = "你知道那里不对，里正死了，他们似乎搬迁到了你不熟悉的地方"
+failed_hint = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_FAILED_HINT_0"
 
 [sub_resource type="Resource" id="Resource_b7n84"]
 script = ExtResource("3_v1x3a")
 requirement = SubResource("Resource_nsdsi")
 uuid = "opt_go_familiar_path_locked"
-description = "沿着记忆中的小径，去找十年前住过的那间屋"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_gjrey"]
 script = ExtResource("2_vdkuf")
 flag_id = "__never_unlock"
 type = "bool"
 value = false
-failed_hint = "你知道那里不对，里正死了，他们似乎搬迁到了你不熟悉的地方"
+failed_hint = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_FAILED_HINT_1"
 
 [sub_resource type="Resource" id="Resource_j3bh7"]
 script = ExtResource("3_v1x3a")
 requirement = SubResource("Resource_gjrey")
 uuid = "opt_ask_lizheng_locked"
-description = "回头去找村口的里正，他应该知道这些年发生了什么"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_dvttg"]
 script = ExtResource("2_vdkuf")
 flag_id = "__never_unlock"
 type = "bool"
 value = false
-failed_hint = "你知道那里不对，里正死了，他们似乎搬迁到了你不熟悉的地方"
+failed_hint = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_FAILED_HINT_2"
 
 [sub_resource type="Resource" id="Resource_35utx"]
 script = ExtResource("3_v1x3a")
 requirement = SubResource("Resource_dvttg")
 uuid = "opt_find_old_home_locked"
-description = "不去问人，直接凭着直觉去找那间漏雨的老屋"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_346j0"]
 script = ExtResource("5_gjrey")
@@ -64,7 +64,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 script = ExtResource("3_v1x3a")
 choice_result = SubResource("Resource_tln5y")
 uuid = "opt_walk_to_cabin"
-description = "向小木屋走去"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_3"
 
 [sub_resource type="Resource" id="Resource_rq3a5"]
 script = ExtResource("9_35utx")
@@ -75,7 +75,7 @@ metadata/_custom_type_script = "uid://bs881r2io48fq"
 script = ExtResource("4_nb8kf")
 options = Array[ExtResource("1_2f4ym")]([SubResource("Resource_b7n84"), SubResource("Resource_j3bh7"), SubResource("Resource_35utx"), SubResource("Resource_dpaph")])
 uuid = "fengxian_village_entrance_revisit"
-name = "奉先村村头"
-description = "你又站在了村口。风还是从骊山方向来，但现在你知道有些东西已经不一样了。里正死了，那片你住过的区域已经换了模样——他们似乎搬迁到了你不熟悉的地方。你不常回来，也没钱，这些年村子对你来说，已经成了一个陌生的地方。"
+name = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_NAME_0"
+description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_4"
 icon = ExtResource("1_gjrey")
 ui_decl = SubResource("Resource_rq3a5")

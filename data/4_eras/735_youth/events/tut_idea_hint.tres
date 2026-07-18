@@ -13,13 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_v7m9w")
 choice_result = SubResource("Resource_opt_cr")
-description = "我心中似乎有了方向"
+description = "TRES_TUT_IDEA_HINT_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_t2b8r")
 options = Array[ExtResource("1_bp6u2")]([SubResource("Resource_opt")])
 uuid = "tut_idea_hint"
-name = "新的领悟"
-description = "站在泰山之巅，你俯瞰着脚下的云海和远方的山河。此行泰山的收获远超预期。\n\n你心中隐隐有了些关于未来的想法——虽然还很模糊，但你能感觉到，自己的人生不该只是随波逐流。\n\n点击右下角蓝色印章，将这份感悟化为前行的方向。"
+name = "TRES_TUT_IDEA_HINT_NAME_0"
+description = "TRES_TUT_IDEA_HINT_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

@@ -32,7 +32,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_54ji6")
 choice_result = SubResource("Resource_lmvx0")
 requirement = SubResource("Resource_ikoi8")
-description = "跪坐沙地前以枯枝描深“李太白”于三字之下，完成后起身便走。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_31xn8"]
 script = ExtResource("4_jpcmd")
@@ -45,7 +45,7 @@ operators = Array[ExtResource("2_lmvx0")]([SubResource("Resource_31xn8")])
 [sub_resource type="Resource" id="Resource_n7cdd"]
 script = ExtResource("8_54ji6")
 choice_result = SubResource("Resource_fj67b")
-description = "盯着字迹直到日影偏移，用袖子抹平那片沙地，字迹消失后离去。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_54ji6"]
 script = ExtResource("4_jpcmd")
@@ -71,7 +71,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_54ji6")
 choice_result = SubResource("Resource_0vgr0")
 requirement = SubResource("Resource_06f6c")
-description = "等那人走后对身旁的人说“太白过此竟未相访”，让对方把话传出去。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_qnar6"]
 script = ExtResource("10_3m0u2")
@@ -96,5 +96,5 @@ archetype_id = "fangshi"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility", "action:main:fangshi"])
 options = Array[ExtResource("1_hxh2w")]([SubResource("Resource_jpcmd"), SubResource("Resource_n7cdd"), SubResource("Resource_pongt")])
 uuid = "qingliu_passive_benefits_libai_spiritual_anchor_identity_qingliu_owner"
-name = "沙上剑书"
-description = "天宝十三载秋，李白过下杜城。他醉了，没叩你的门。后来有人在渭水边的沙地上看见一行字——是用剑尖划出的“杜子美”三字，歪斜潦草，旁边散落着马蹄印，延伸向潼关方向。那人来告诉你时，沙上的字迹已被风吹浅了一半。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_DESCRIPTION_3"

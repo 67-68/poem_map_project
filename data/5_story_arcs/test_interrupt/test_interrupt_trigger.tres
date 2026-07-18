@@ -11,7 +11,7 @@
 script = ExtResource("7_pie")
 event_key = "test_interrupt_display"
 interrupt_target_key = "test_interrupt_target"
-interrupt_text = "查看"
+interrupt_text = "TRES_TEST_INTERRUPT_TRIGGER_INTERRUPT_TEXT_0"
 
 [sub_resource type="Resource" id="Resource_cr_trigger"]
 script = ExtResource("3_cr")
@@ -20,13 +20,13 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_push_interrupt
 [sub_resource type="Resource" id="Resource_opt_trigger"]
 script = ExtResource("4_eo")
 choice_result = SubResource("Resource_cr_trigger")
-description = "派仆从去打探消息"
+description = "TRES_TEST_INTERRUPT_TRIGGER_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_re")
 options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_trigger")])
 uuid = "test_interrupt_trigger"
-name = "府中闲坐"
-description = "你在府中闲坐看书，忽然听到街市方向传来一阵嘈杂的喧哗声。仆役匆匆来报，说街市上出了事，似乎有人与武侯发生了冲突。你放下书卷，犹豫是否要遣人前去打探。"
+name = "TRES_TEST_INTERRUPT_TRIGGER_NAME_0"
+description = "TRES_TEST_INTERRUPT_TRIGGER_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

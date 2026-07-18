@@ -27,7 +27,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_s5bfc")
 choice_result = SubResource("Resource_vmvis")
 requirement = SubResource("Resource_kdgpb")
-description = "你拿起案上那支干透了的笔，在信纸旁的空宣纸上补了几笔枯枝。"
+description = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_SORROW_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_8gxof"]
 script = ExtResource("6_tsxwg")
@@ -56,5 +56,5 @@ archetype_id = "jiaoyou"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_IDENTITY_ZHUOLIU_OFFICIAL", "ACTOR_EMOTION_SORROW", "emotion_pair:pair_sorrow", "action:main:denggao"])
 options = Array[ExtResource("1_vmvis")]([SubResource("Resource_umxb2")])
 uuid = "kuangke_qingliu_wangwei_emotion_sorrow_identity_zhuoliu_official"
-name = "回廊上，信纸起毛边了"
-description = "「裴迪说河西入冬了。」手里那张信纸的边角，被他拇指捏得微微发白。他侧身，把信搁在画案空白的宣纸上。"
+name = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_SORROW_IDENTITY_ZHUOLIU_OFFICIAL_NAME_0"
+description = "TRES_KUANGKE_QINGLIU_WANGWEI_EMOTION_SORROW_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_1"

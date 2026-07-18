@@ -24,7 +24,7 @@ custom_context_params = {
 "poem_taste": "urn:poem_taste:zhuoliu_basic_taste"
 }
 uuid = "jiaoyou_poem_public_opt"
-description = "献上诗词"
+description = "TRES_JIAOYOU_POEM_PUBLIC_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("6_yuuqc")

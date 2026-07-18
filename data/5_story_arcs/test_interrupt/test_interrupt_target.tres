@@ -18,13 +18,13 @@ operators = Array[ExtResource("1_baseop")]([SubResource("Resource_pe")])
 [sub_resource type="Resource" id="Resource_opt_continue"]
 script = ExtResource("4_eo")
 choice_result = SubResource("Resource_cr_continue")
-description = "我知道了"
+description = "TRES_TEST_INTERRUPT_TARGET_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("6_re")
 options = Array[ExtResource("5_bo")]([SubResource("Resource_opt_continue")])
 uuid = "test_interrupt_target"
-name = "街市异变"
-description = "你挤过人群，只见一个西域商人正与巡街的武侯激烈争执。商人的骆驼倒在地上，货物散落一地，周围围观的百姓越聚越多。武侯手握刀柄，脸上写满了不耐烦。看来事情并不简单。"
+name = "TRES_TEST_INTERRUPT_TARGET_NAME_0"
+description = "TRES_TEST_INTERRUPT_TARGET_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"

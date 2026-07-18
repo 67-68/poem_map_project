@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "平康坊传唱\n你将诗稿递入平康坊。数日后，坊中歌女竟已在传唱你的新词——虽只卖了几个铜板，但曲声穿过帘栊，落在行人的耳边。"
+description = "TRES_FANGSHI_SELL_POEM_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,5 +22,5 @@ weight = 0.0
 archetype_id = "sell_poem_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "fangshi_sell_poem_fallback"
-name = "歌女传唱"
+name = "TRES_FANGSHI_SELL_POEM_FALLBACK_NAME_0"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

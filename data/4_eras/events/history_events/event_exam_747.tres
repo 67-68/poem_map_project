@@ -27,7 +27,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_taiv1"]
 script = ExtResource("5_o2f43")
 choice_result = SubResource("Resource_4m2sr")
-description = "\"十年寒窗，在此一举！\""
+description = "TRES_EVENT_EXAM_747_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -35,5 +35,5 @@ script = ExtResource("2_blpch")
 target_year = 747.2
 options = Array[ExtResource("1_w7s0s")]([SubResource("Resource_taiv1")])
 uuid = "event_exam_747"
-name = "天宝六年春，大考之日。"
+name = "TRES_EVENT_EXAM_747_NAME_0"
 metadata/_custom_type_script = "uid://cb7y7amwmeuo4"

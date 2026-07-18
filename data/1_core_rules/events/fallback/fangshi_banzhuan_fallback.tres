@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_fwa7"]
 script = ExtResource("4_gsl7")
 choice_result = SubResource("Resource_xncj7")
-description = "诺"
+description = "TRES_FANGSHI_BANZHUAN_FALLBACK_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -22,6 +22,6 @@ weight = 0.0
 archetype_id = "banzhuan_success"
 options = Array[ExtResource("1_rsjn7")]([SubResource("Resource_fwa7")])
 uuid = "fangshi_banzhuan_fallback"
-name = "搬砖糊口"
-description = "搬砖今日市口热闹，工头见你膀大腰圆，招手便唤：「来得好！正缺人手。」你扛了几趟砖石，虽汗流浃背，倒也挣得几文铜钱。"
+name = "TRES_FANGSHI_BANZHUAN_FALLBACK_NAME_0"
+description = "TRES_FANGSHI_BANZHUAN_FALLBACK_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

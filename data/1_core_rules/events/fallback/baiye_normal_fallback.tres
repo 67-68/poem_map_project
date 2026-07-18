@@ -12,7 +12,7 @@ script = ExtResource("3_cr")
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "你递上名帖候见，门人延请入内。{@npc_name}倒也和气，虽未予你什么明确的承诺，却也让座奉了茶，问了几句近来的文章。出门时你细细回味，觉得这一趟不算白来。"
+description = "TRES_BAIYE_NORMAL_FALLBACK_DESCRIPTION_0"
 
 [resource]
 script = ExtResource("5_randomev")
@@ -20,4 +20,4 @@ weight = 0.0
 archetype_id = "baiye_normal_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "baiye_normal_fallback"
-name = "无处投刺"
+name = "TRES_BAIYE_NORMAL_FALLBACK_NAME_0"

@@ -13,13 +13,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_v6n1j")
 choice_result = SubResource("Resource_opt_cr")
-description = "晚辈生于大唐开元十五年，今年该是二十有六了"
+description = "TRES_TUT_DIALOGUE_TIME_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_t2b8w")
 options = Array[ExtResource("1_bopt")]([SubResource("Resource_opt")])
 uuid = "tut_dialogue_time"
-name = "岁月如梭"
-description = "道士捻须一笑：「贫道久居山中，对年月已不甚在意。小友可知今夕是何年？」\n\n他望向远处天际，目光似乎穿透了云层：「修道之人不计春秋，但你这读书人，须得心中有数。何时赶考、何时进京，都是要紧事。」\n\n他伸手指向山外：「记着时日，莫负光阴。」\n\n[size=13][color=#888888]系统提示：右上角的时间面板展示了当前的年号与旬次。每个白色圆球代表一天——在本教程中，每旬仅有 2 天可用。点击"跳过"按钮可以快速结束本旬，进入下一旬。[/color][/size]"
+name = "TRES_TUT_DIALOGUE_TIME_NAME_0"
+description = "TRES_TUT_DIALOGUE_TIME_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

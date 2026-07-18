@@ -43,7 +43,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("7_cxawt")
 choice_result = SubResource("Resource_ais5b")
 requirement = SubResource("Resource_yi71b")
-description = "杜甫端碗饮尽，也不道谢，只说：正好练笔。碗底叩在桌上的声响干脆利落。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_ms264"]
 script = ExtResource("3_hdtym")
@@ -66,7 +66,7 @@ operators = Array[ExtResource("2_pxdqp")]([SubResource("Resource_ms264"), SubRes
 [sub_resource type="Resource" id="Resource_xvppf"]
 script = ExtResource("7_cxawt")
 choice_result = SubResource("Resource_a1ddt")
-description = "杜甫看着晃动的酒碗，手指在桌沿停了一瞬，才说：知道了。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_g235f"]
 script = ExtResource("3_hdtym")
@@ -98,7 +98,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("7_cxawt")
 choice_result = SubResource("Resource_4dqmg")
 requirement = SubResource("Resource_sjewm")
-description = "杜甫点头记下，随后问起王员外的交游——他最近跟谁走得近？"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_8lk0d"]
 script = ExtResource("9_abtc8")
@@ -122,5 +122,5 @@ era = "747_kuangda"
 _target_tags = Array[String](["action:main:jiaoyou"])
 options = Array[ExtResource("1_a8in5")]([SubResource("Resource_7qb6b"), SubResource("Resource_xvppf"), SubResource("Resource_bjhmd")])
 uuid = "qingliu_passive_benefits_gaoshi_intel_routing"
-name = "夏夜的线报"
-description = "夏夜，城南一家胡人开的酒肆里，高适喝到第三碗时忽然把碗往桌上一推。他说城西的王员外最近手头松，家中老太太要立碑，四处托人寻像样的碑文。说完便起身去结账，走到门口又回头补了一句——只说是我偶然提起，别的话没有。酒碗在木桌上晃了晃，稳住了。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_GAOSHI_INTEL_ROUTING_DESCRIPTION_3"

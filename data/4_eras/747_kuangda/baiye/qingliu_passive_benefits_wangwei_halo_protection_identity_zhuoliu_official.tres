@@ -32,7 +32,7 @@ trait_name = "kuangda_kuangke"
 script = ExtResource("8_pgr1u")
 choice_result = SubResource("Resource_wgnwk")
 requirement = SubResource("Resource_stiku")
-description = "将荐书对折收入怀中，抬眼看他：「何不早来？」"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_oklel"]
 script = ExtResource("4_era1v")
@@ -45,7 +45,7 @@ operators = Array[ExtResource("2_wgnwk")]([SubResource("Resource_oklel")])
 [sub_resource type="Resource" id="Resource_ybtu0"]
 script = ExtResource("8_pgr1u")
 choice_result = SubResource("Resource_nnfyt")
-description = "指尖触到纸沿时停了半拍，垂下眼去，一路不曾碰那纸。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_1"
 
 [sub_resource type="Resource" id="Resource_pgr1u"]
 script = ExtResource("4_era1v")
@@ -71,7 +71,7 @@ trait_name = "kuangda_zuanying"
 script = ExtResource("8_pgr1u")
 choice_result = SubResource("Resource_7tdui")
 requirement = SubResource("Resource_g5qqr")
-description = "连声称谢，目光却反复扫过荐书上右丞的印鉴——落款处空着一行。"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_d35mp"]
 script = ExtResource("10_b10wi")
@@ -96,5 +96,5 @@ archetype_id = "baiye"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_IDENTITY_ZHUOLIU_OFFICIAL", "TARGET_FACTION_ROYAL:jade_step", "VIBE_PHILOSOPHY_ZEN:temple_bell", "emotion_pair:pair_tranquility", "action:main:baiye"])
 options = Array[ExtResource("1_fe7vd")]([SubResource("Resource_era1v"), SubResource("Resource_ybtu0"), SubResource("Resource_ya54o")])
 uuid = "qingliu_passive_benefits_wangwei_halo_protection_identity_zhuoliu_official"
-name = "帘内一言"
-description = "「上来。」车中散出檀香。他一路无言，只在车驾转入辋川别业方向时，将一纸荐书搁在你膝上，不算什么好缺——崇文馆校书郎，正九品下。"
+name = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_IDENTITY_ZHUOLIU_OFFICIAL_NAME_0"
+description = "TRES_QINGLIU_PASSIVE_BENEFITS_WANGWEI_HALO_PROTECTION_IDENTITY_ZHUOLIU_OFFICIAL_DESCRIPTION_3"

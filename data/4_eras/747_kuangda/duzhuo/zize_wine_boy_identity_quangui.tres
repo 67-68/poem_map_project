@@ -29,7 +29,7 @@ operators = Array[ExtResource("2_h17k2")]([SubResource("Resource_73jre"), SubRes
 [sub_resource type="Resource" id="Resource_aip0h"]
 script = ExtResource("7_7npag")
 choice_result = SubResource("Resource_ih1l2")
-description = "等了半截入城鼓。你的手从腿边垂下来。"
+description = "TRES_ZIZE_WINE_BOY_IDENTITY_QUANGUI_DESCRIPTION_0"
 
 [sub_resource type="Resource" id="Resource_ttolr"]
 script = ExtResource("8_ngxtj")
@@ -44,5 +44,5 @@ archetype_id = "duzhuo"
 _target_tags = Array[String](["ACTION_ENTERTAIN_DRINK:empty_cup", "TARGET_NPC_DUFU:thatched_grass", "action:main:duzhuo", "TARGET_IDENTITY_QUANGUI"])
 options = Array[ExtResource("1_cnlmm")]([SubResource("Resource_aip0h")])
 uuid = "zize_wine_boy_identity_quangui"
-name = "地上的湿痕"
-description = "权贵走后半炷香，才有人把酒保往后厨拖。他的靴底在砖缝上划了一下，留下一道深色的痕迹。你看见桌上的碎银子——指甲盖大小，沾着一点血沫。你的手在袖子里张开，拇指碰到两枚铜钱。铜钱是凉的。手慢慢卷回去。旁边有人踢了一脚倒掉的酒坛，酒液还在往砖缝里渗。你站起身，绕过那片湿痕，从另一个方向走了。"
+name = "TRES_ZIZE_WINE_BOY_IDENTITY_QUANGUI_NAME_0"
+description = "TRES_ZIZE_WINE_BOY_IDENTITY_QUANGUI_DESCRIPTION_1"

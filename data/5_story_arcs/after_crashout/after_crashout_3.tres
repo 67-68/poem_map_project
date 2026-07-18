@@ -20,12 +20,12 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_0mh2o"]
 script = ExtResource("2_4t1et")
 choice_result = SubResource("Resource_7nue7")
-description = "去吃点东西吧"
+description = "TRES_AFTER_CRASHOUT_3_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_t5svl")
 options = Array[ExtResource("1_qaalk")]([SubResource("Resource_0mh2o")])
 uuid = "after_crashout_3"
-description = "一路上，你都在愤恨着。你知道自己的才华，但这个杀千刀的世界，右相大人，就没来由的拦截了你。"
+description = "TRES_AFTER_CRASHOUT_3_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

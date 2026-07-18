@@ -13,7 +13,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt1"]
 script = ExtResource("4_s3k8p")
 choice_result = SubResource("Resource_opt1_cr")
-description = "我来游历天下，增长见识"
+description = "TRES_TUT_MEET_TAOIST_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_opt2_cr"]
@@ -23,7 +23,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt2"]
 script = ExtResource("4_s3k8p")
 choice_result = SubResource("Resource_opt2_cr")
-description = "我来寻找作诗的灵感"
+description = "TRES_TUT_MEET_TAOIST_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [sub_resource type="Resource" id="Resource_opt3_cr"]
@@ -33,15 +33,13 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_opt3"]
 script = ExtResource("4_s3k8p")
 choice_result = SubResource("Resource_opt3_cr")
-description = "我……我也不知道，就是觉得该来"
+description = "TRES_TUT_MEET_TAOIST_DESCRIPTION_2"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("5_rs4l6")
 options = Array[ExtResource("1_r7xqf")]([SubResource("Resource_opt1"), SubResource("Resource_opt2"), SubResource("Resource_opt3")])
 uuid = "tut_meet_taoist"
-name = "泰山脚下"
-description = "泰山巍峨，山脚下鸟语花香，溪水潺潺。你正沉醉于这天地间的灵气，忽见一位白发道士端坐于青石之上。他仙风道骨，手持拂尘，双目微阖，像是早已在此等候多时。
-
-他缓缓睁开眼，打量着你片刻，开口问道：「少年人，你为何来到这泰山？」"
+name = "TRES_TUT_MEET_TAOIST_NAME_0"
+description = "TRES_TUT_MEET_TAOIST_DESCRIPTION_ML"
 metadata/_custom_type_script = "uid://cpb80yg1s313y"

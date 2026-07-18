@@ -32,7 +32,7 @@ metadata/_custom_type_script = "uid://prpfdj2ag46k"
 [sub_resource type="Resource" id="Resource_xlgee"]
 script = ExtResource("3_4vyvk")
 choice_result = SubResource("Resource_mcs3h")
-description = "你有什么事吗？"
+description = "TRES_EVENT_CHAT_GUEST_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
@@ -42,6 +42,6 @@ on_enter_result = SubResource("Resource_6msi5")
 options = Array[ExtResource("1_2dral")]([SubResource("Resource_xlgee")])
 pre_event_interrupter_sequence = null
 uuid = "event_chat_guest"
-name = "和他聊天"
-description = "{@target_npc}看着你"
+name = "TRES_EVENT_CHAT_GUEST_NAME_0"
+description = "TRES_EVENT_CHAT_GUEST_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://qhuu117ngmbk"
