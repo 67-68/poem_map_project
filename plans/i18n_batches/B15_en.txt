@@ -1,0 +1,117 @@
+# Batch B15: UI② — UI NPC行动/覆盖行动/选择器/诗词创作/诗词需求/诗词槽/属性标签/右侧面板/小按钮/小属性/社交页/系统菜单/时间控制/墓碑/特质展示/养疴
+# 行范围: 2841-2874  待翻译: 34行  已有: 0行
+# ─── 全局翻译铁律 ──────────────────────────────────────────────
+# 1. 保留所有标记原样: {param} {@keyword} [br] [glitch level=N]...[/glitch]
+#    [color=#xxx]...[/color] [font_size=N][b]...[/b][/font_size] [i]...[/i]
+#    [center]...[/center] [shake rate=N level=N]...[/shake] \n
+# 2. 保留 %d %s %.1f %% 等 C 风格格式说明符
+# 3. 保留 emoji 和特殊字符: ⏱ ⏳ 📍 ⚠ ━━━ • 等
+# 4. 风格: 自然流畅英文，非文言英译。唐代氛围但不堆砌生僻词
+# 5. 只输出第3列(en)的翻译，每行一个翻译字符串，按输入顺序，空行输出空
+# 6. 输出格式: 一个纯文本文件，每行一个英文翻译
+# ────────────────────────────────────────────────────────────────
+# 域: UI②
+# 格式: 每行一条英文翻译。已翻译的行保留原 en 值不动，待翻译的行填空行。
+# ────────────────────────────────────────────────────────────────
+
+# [UI_POEM_DEMAND_TEXT_0] 自京附奉先县诵咏五百字
+Five Hundred Characters from Capital to Fengxian
+
+# [UI_POEM_DEMAND_TEXT_1] 骊山权贵 + 幼子饿殍 + 自觉荒谬
+Mt. Li Elites + Starving Child + Sense of Absurdity
+
+# [UI_POEM_SLOT_TEXT_0] 意象
+Imagery
+
+# [UI_POEM_START_TEXT_0] 开始创作
+Begin Composing
+
+# [UI_PROP_LABEL_TEXT_0] 50 健
+50 Health
+
+# [UI_PROP_LABEL_TEXT_1] 「奄奄一息」
+«Barely Alive»
+
+# [UI_RIGHT_INFO_PANEL_TEXT_0] 点击人脉按钮查看社交关系
+Click Connections to view social relations
+
+# [UI_RIGHT_INFO_PANEL_TEXT_1] 风闻
+Hearsay
+
+# [UI_RIGHT_INFO_PANEL_TEXT_2] 右相府：「死穴：西市私盐」  「恩义」
+Chancellor's Residence: «Weak Spot: West Market Salt»  «Gratitude»
+
+# [UI_RIGHT_INFO_PANEL_TEXT_3] 决议
+Decrees
+
+# [UI_SMALLER_ACTION_BUTTON_TEXT_0] 交游 · 赴宴
+Socialize · Banquet
+
+# [UI_SMALLER_ACTION_BUTTON_TEXT_1] 颍川，王维召开了盛大宴会
+Yingchuan: Wang Wei hosts a grand banquet
+
+# [UI_SMALLER_PROP_LABEL_TEXT_0] 生命: 50
+Health: 50
+
+# [UI_SMALLER_PROP_LABEL_TEXT_1] (奄奄一息)
+(Barely Alive)
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_0] 按地区分类
+By Region
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_1] 按阵营分类
+By Faction
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_2] 基本信息
+Basic Info
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_3] 当前状态 + 名字 + 偏好地点
+Status + Name + Preferred Location
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_4] 关系
+Relationship
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_5] 把柄 + 推荐信
+Leverage + Introduction Letters
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_6] 相关人物
+Related NPCs
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_7] 已经探索的所有可用任务
+All Discovered Tasks
+
+# [UI_SOCIAL_CONNECTION_PAGE_TEXT_8] 可用资源转换配方
+Resource Conversion Recipes
+
+# [UI_SOCIAL_WALL_PANEL_TEXT_0] 红黑榜
+Honor & Shame Board
+
+# [UI_SYSTEM_MENU_TEXT_0] 系统
+System
+
+# [UI_SYSTEM_MENU_TEXT_1] 继续游戏
+Resume
+
+# [UI_SYSTEM_MENU_TEXT_2] 返回主菜单
+Return to Main Menu
+
+# [UI_TIME_CONTROL_PANEL_TEXT_0] 天宝十四载
+Year 14 of Tianbao
+
+# [UI_TIME_CONTROL_PANEL_TEXT_1] 跳过
+Skip
+
+# [UI_TIME_CONTROL_PANEL_TEXT_2] 上旬
+Early Month
+
+# [UI_TIME_CONTROL_PANEL_TEXT_3] 第1天
+Day 1
+
+# [UI_TOMB_STONE_SCREEN_TEXT_0] 退出观测
+Exit Observation
+
+# [UI_TRAIT_DEMONSTRATOR_TEXT_0] 身心俱疲
+Exhausted
+
+# [UI_YANG_KE_TEXT_0] 疲
+Fatigue

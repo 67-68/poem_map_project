@@ -1,0 +1,234 @@
+# Batch B13: 教程②+叙事 — 教程理念提示/解锁、交游、望山、遇道士、迷雾、无灵感、评诗、驻留、回道人、道人名、天地苍茫、升官、右相府门叙事、郑虔交换、浊流钻营碎片
+# 行范围: 2688-2795  待翻译: 0行  已有: 108行
+# ─── 全局翻译铁律 ──────────────────────────────────────────────
+# 1. 保留所有标记原样: {param} {@keyword} [br] [glitch level=N]...[/glitch]
+#    [color=#xxx]...[/color] [font_size=N][b]...[/b][/font_size] [i]...[/i]
+#    [center]...[/center] [shake rate=N level=N]...[/shake] \n
+# 2. 保留 %d %s %.1f %% 等 C 风格格式说明符
+# 3. 保留 emoji 和特殊字符: ⏱ ⏳ 📍 ⚠ ━━━ • 等
+# 4. 风格: 自然流畅英文，非文言英译。唐代氛围但不堆砌生僻词
+# 5. 只输出第3列(en)的翻译，每行一个翻译字符串，按输入顺序，空行输出空
+# 6. 输出格式: 一个纯文本文件，每行一个英文翻译
+# ────────────────────────────────────────────────────────────────
+# 域: 教程②+叙事
+# 格式: 每行一条英文翻译。已翻译的行保留原 en 值不动，待翻译的行填空行。
+# ────────────────────────────────────────────────────────────────
+
+# [TRES_YOUXIANGFU_OUTER_WALL_DESCRIPTION_2] 拐过街角，一面高耸得仿佛没有尽头的青砖坊墙将天光生生截断。几十个穿着旧青袍或麻布衣的士子，像冻僵的鹌鹑一样贴着墙根瑟缩排开，没人敢出声，连咳嗽都被死死捂在袖子里。你走到队伍最末端站定。抬头望去，三丈高的朱漆大门紧紧闭合，两尊巨大的石狮子在阴影中俯视着阶下的蝼蚁。一阵穿堂冷风卷过，门上磨盘大小的兽面衔环发出一声沉闷的金属撞击音，墙根下的几十颗脑袋同时条件反射般地瑟缩了一下。你呼出的白气，在这堵绝对寂静的高墙前，瞬间便被吹得粉碎。
+Turn and walk away.
+# [TRES_YOUXIANGFU_OUTER_WALL_NAME_0] 相府青门外
+Round the corner, and a soaring blue-brick compound wall—seemingly without end—shears the daylight in two. Dozens of scholars in faded green robes or coarse hemp garments huddle against the wall's base like frozen quails, shoulder to shoulder, none daring to make a sound; even coughs are smothered dead in their sleeves. You walk to the very end of the line and stop. Looking up, the three-zhang vermilion gates are shut tight. Two colossal stone lions glower down from the shadows at the ants beneath the steps. A draft of cold corridor wind sweeps through, and the millstone-sized beast-head knocker on the gate lets out a dull metallic clang. Dozens of heads along the wall base flinch in unison, a reflexive shudder. The white mist of your breath, before this wall of absolute silence, is instantly blown to nothing.
+# [TRES_YOUXIANGFU_WAY_DESCRIPTION_0] 继续前行
+Outside the Chancellor's Azure Gate
+# [TRES_YOUXIANGFU_WAY_DESCRIPTION_1] 长安平康坊以南，右相府邸的坊墙连绵如铁。你沿街疾走，晨霜早已湿透了麻鞋。越靠近那两扇高耸的朱漆大门，周围的喧闹声便越是被一种死寂的威压吞没。你的手死死攥着袖口中那卷拜帖，骨节因过度用力而惨白。抬起头，相府门楼上的琉璃兽脊仿佛要刺破厚重的云层，你死死盯着那高不可攀的门槛，喉结艰难地滚动了一下，连呼吸都忘了吐出。
+Continue onward.
+# [TRES_YOUXIANGFU_WAY_NAME_0] 相府路上
+South of Pingkang Ward in Chang'an, the Right Chancellor's compound wall stretches unbroken like iron. You hurry along the street, morning frost long since soaking through your hemp shoes. The closer you draw to those towering vermilion gates, the more the surrounding clamor is swallowed by a deathly, oppressive silence. Your hand clutches the visiting card inside your sleeve, knuckles bone-white from the grip. Looking up, the glazed beast-ridge tiles atop the mansion gate tower seem ready to pierce the thick cloud layer. You stare fixedly at that unreachable threshold, your Adam's apple bobbing with difficulty, forgetting even to exhale.
+# [TRES_ZHENGQIAN_POEM_EXCHANGE_DESCRIPTION_0] 向郑虔展示诗作换取灵感与文名
+On the Road to the Chancellor's Mansion
+# [TRES_ZHENGQIAN_POEM_EXCHANGE_FALLBACK_DESCRIPTION_0] 郑虔见你登门，欣然与你论诗谈文。你将从平康坊郑虔处所得的感悟融入诗稿，文思略有进益。
+Show Zheng Qian your poems in exchange for inspiration and literary renown.
+# [TRES_ZHENGQIAN_POEM_EXCHANGE_FALLBACK_NAME_0] 郑虔 · 以诗换兴望
+Zheng Qian sees you at his door and gladly discusses poetry and prose with you. You incorporate the insights gained from Zheng Qian at Pingkang Ward into your drafts; your literary thoughts show modest progress.
+# [TRES_ZHENGQIAN_POEM_EXCHANGE_NAME_0] 郑虔 · 以诗换兴望
+Zheng Qian · Trading Poems for Inspiration and Fame
+# [TRES_ZHUOLIU_BASIC_TASTE_INFO_0] “尚才相戏尔！”
+Zheng Qian · Trading Poems for Inspiration and Fame
+# [TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_DESCRIPTION_0] 掷杯在地，拂袖间掀翻案上酒盏。
+"Mere jesting among talents!"
+# [TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_DESCRIPTION_1] 堆出笑容，双手捧起酒壶为对方斟满。
+Hurl the cup to the floor, sweeping your sleeve to overturn the wine vessels on the table.
+# [TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_DESCRIPTION_2] 沉默片刻，问他那位同僚手里有什么可以交换。
+Put on a smile, lift the wine flask with both hands, and fill the other's cup to the brim.
+# [TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_DESCRIPTION_3] “子美兄，我有个同僚想见户部的人。价钱好说。”说这话时他的眼睛没看你，看的是你身后那扇门——门后是今日宴席上所有正在交易的秘密。他笃定你还在这张桌上。
+Fall silent for a moment, then ask what his colleague has to offer in exchange.
+# [TRES_ZHUOLIU_ZUANYING_DINNER_PARTY_BROKER_NAME_0] 酒宴上的旧账
+"Zimei, my friend, a colleague of mine needs to meet someone at the Ministry of Revenue. The price is negotiable." As he speaks, his eyes are not on you but on the door behind you—the door behind which all the day's dealings at this banquet are being transacted in secret. He is certain you are still seated at this table.
+# [TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_DESCRIPTION_0] 转身抬脚就走，名帖在身后落地。
+Old Debts at the Banquet
+# [TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_DESCRIPTION_1] 双袖一振顺势跪下，额头已触到石阶。
+Turn and stride away, the visiting card falling to the ground behind you.
+# [TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_DESCRIPTION_2] 从袖中摸出一张折好的纸，推过桌面。
+With a shake of both sleeves, drop to your knees in one motion, forehead already touching the stone steps.
+# [TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_DESCRIPTION_3] “上次你递的干谒诗，老爷压在案角看了三日。这次又来了？”他往前凑了半步，嗓音压到只有檐下能听见：“不过老爷听说，赵主事那条盐铁司的路子，是你给牵的线。你要是有什么消息或是条件，我一并进去说。”廊柱的影子斜在两人之间，他在等一个数字。
+Draw a folded slip of paper from your sleeve and slide it across the table.
+# [TRES_ZHUOLIU_ZUANYING_ENDORSEMENT_REQUEST_NAME_0] 旧邸问价
+"The last poem of self-recommendation you submitted—the Master kept it on the corner of his desk for three days. Now you've come again?" He leans half a step closer, his voice dropping to where only the eaves can hear: "Though the Master has heard that the salt-and-iron monopoly route through Secretary Zhao—you were the one who brokered it. If you have any news or terms, I'll convey them together when I go in." The shadow of the corridor pillar slants between the two of you. He is waiting for a number.
+# [TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_DESCRIPTION_0] 名帖往地上一掷，转身踩着新靴踏出廊去。
+Pricing at the Old Residence
+# [TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_DESCRIPTION_1] 腰一弯，笑容堆满脸，双手将名帖捧过头顶。
+Fling the visiting card to the floor, turn, and stride out of the corridor in new boots.
+# [TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_DESCRIPTION_2] 掂了掂袖中另一条消息，走向厅侧等他的管事。
+Bend at the waist, pile a smile onto your face, and raise the visiting card above your head with both hands.
+# [TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_DESCRIPTION_3] “客人又来了。”他说完就走了，托盘在肘边晃了一下，映出灯影——那块漆掉了一块，露出旧木，上次你见它时还没掉。
+Weigh the other piece of intelligence in your sleeve, then walk toward the steward waiting at the side of the hall.
+# [TRES_ZHUOLIU_ZUANYING_GATHERING_SUNK_COST_NAME_0] 旧债新袍
+"The guest is here again." He says this and leaves, the tray swaying at his elbow, catching the lamplight—a patch of lacquer has chipped off, revealing old wood beneath. The last time you saw it, the chip wasn't there.
+# [TRES_ZHUOLIU_ZUANYING_GHOSTWRITER_CONFRONT_DESCRIPTION_0] 拂袖打翻那杯酒，杯盏在案上滚出刺耳的声响。
+Old Debts, New Robes
+# [TRES_ZHUOLIU_ZUANYING_GHOSTWRITER_CONFRONT_DESCRIPTION_1] 双手接过酒杯一口饮尽，堆着笑连声应承。
+Sweep your sleeve and knock over that cup of wine; the vessel rolls across the table with a grating sound.
+# [TRES_ZHUOLIU_ZUANYING_GHOSTWRITER_CONFRONT_DESCRIPTION_2] 用食指抵住杯沿慢慢推回半寸，报出一个诗题和价码。
+Take the cup with both hands, drain it in one gulp, and assent repeatedly with a smile piled high.
+# [TRES_ZHUOLIU_ZUANYING_GHOSTWRITER_CONFRONT_DESCRIPTION_3] 贡院东墙外的小酒馆，灯笼在秋风中晃。几个举子的议论声从角落飘来——「那首《登科后》真是意气风发」「听说是张侍郎公子的手笔」。你认得那首诗。三个月前在张府后院，你用了两壶酒的时间把那些句子排好，换来一纸谒帖的承诺。现在张公子端着酒杯走过来了，靴底踩在松木地板上，每一步都稳得很。「子美兄，我爹很满意上回那首。这次再来一首？」酒杯往你这边推了半寸，杯沿上的唇印还没干透。他的语气像在谈一笔已经成交的买卖。
+Press your index finger against the cup's rim and slowly push it back half an inch, naming a poem title and a price.
+# [TRES_ZHUOLIU_ZUANYING_GHOSTWRITER_CONFRONT_NAME_0] 代笔旧账
+The small tavern outside the eastern wall of the examination hall, its lantern swaying in the autumn wind. Snatches of conversation drift from a corner where several examination candidates sit—"That poem 'After Passing the Exam' is truly spirited"—"I heard it was the handiwork of Vice Minister Zhang's son." You recognize that poem. Three months ago, in the rear courtyard of the Zhang residence, you spent two pots of wine arranging those lines in exchange for a promise of a recommendation letter. Now young Master Zhang is walking over, cup in hand, his boot soles steady on the pine floorboards, each step assured. "Zimei, my father was most satisfied with the last one. How about another?" The wine cup is nudged half an inch toward you, the lip print on its rim still wet. His tone is that of someone discussing a transaction already closed.
+# [TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_DESCRIPTION_0] 拂袖将茶碗扫落，纸条在湿痕里裂成两半。
+Old Ghostwriting Debts
+# [TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_DESCRIPTION_1] 双手接过那张报价单，脸上堆出笑容，腰已弯下三分。
+Sweep your sleeve and knock the tea bowl to the ground; the slip of paper splits in two in the wet stain.
+# [TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_DESCRIPTION_2] 指尖压住纸条一角，不翻也不推，只问他要的这个名字，市价几何。
+Take the price list with both hands, pile a smile onto your face, your waist already bending three parts down.
+# [TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_DESCRIPTION_3] 东市茶肆二楼临窗的位置，一个绸缎商把一张纸条推过案面。纸上只写着一个官员的名字，墨迹已干。他将茶碗搁在纸条旁边，碗底在纸上压出一圈湿痕。“上次你在盐商老张那儿‘问’的事，我听说过。”目光越过碗沿，不紧不慢地看着你，“我不是来为难你的。我也是来做生意的。”窗外楼下，东市的骡马队正在卸货，鞭子抽在青石板上的声响传上来。绸缎商从袖口又抽出一张叠好的纸，“这是价钱。你看看。”
+Press a fingertip onto one corner of the slip—neither flipping it over nor pushing it back—and simply ask what the market price is for this name he wants.
+# [TRES_ZHUOLIU_ZUANYING_INTELLIGENCE_COMMODITY_NAME_0] 茶案上的价码
+A second-floor seat by the window in an East Market teahouse. A silk merchant slides a slip of paper across the table. Only an official's name is written on it, the ink long dry. He sets his tea bowl beside the slip; the bowl's base presses a ring of moisture into the paper. "That matter you 'inquired' about last time at Old Zhang the salt merchant's—I've heard of it." His gaze passes over the rim of the bowl, unhurried, regarding you. "I'm not here to make trouble. I'm here to do business too." Outside the window below, mule teams at the East Market are unloading cargo, the crack of whips on blue flagstones rising up. The silk merchant draws another folded sheet from his sleeve. "This is the price. Take a look."
+# [TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_DESCRIPTION_0] 将纸条揉成一团掷还老周，袍子甩回摊上。
+A Price on the Tea Table
+# [TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_DESCRIPTION_1] 双手接过纸条，弯腰堆笑：“周爷的事就是我的事。”
+Crush the slip of paper into a ball and throw it back at Old Zhou; toss the robe back onto the stall.
+# [TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_DESCRIPTION_2] 捏着纸条不接也不拒，平静开口：“递话可以，但你这摊子得替我瞒三年。”
+Take the slip with both hands, bend at the waist with a smile: "Master Zhou's business is my business."
+# [TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_DESCRIPTION_3] 城东的旧衣摊弥漫着霉味和旧尘。你把那件洗得发白的袍子展开——袖口磨出毛边，领子泛黄，正合你经营多年的贫寒模样。摊主老周堆着笑递过来，袖子里却抖出一张纸条。“杜先生，上月南城那封信替你换了五贯，这账我记得。今天这件袍子，就不跟你砍价了——你帮我个忙。”他把纸条往你掌心推了推，上面写着城南韦府一个通房丫头的名字。“你替我给这个人递句话，她的私盐生意我查清了。不递，我就跟左邻右舍讲讲你穿旧袍子替人写密信的事。”
+Hold the slip—neither accepting nor refusing—and say evenly: "I can pass the message, but this stall of yours keeps my secret for three years."
+# [TRES_ZHUOLIU_ZUANYING_POVERTY_PERSONA_NAME_0] 旧衣摊前的账本
+The used-clothing stall in the east of the city reeks of mildew and old dust. You unfold that washed-out robe—cuffs frayed to threads, collar yellowed, perfectly matching the impoverished appearance you've cultivated for years. The stall owner, Old Zhou, hands it over with a grin, but a slip of paper falls from his sleeve. "Master Du, that letter you wrote for me last month at South City brought in five strings of cash—I remember. Today, for this robe, I won't haggle with you—you do me a favor." He presses the slip into your palm. Written on it is the name of a chamber maid from the Wei residence in the south of the city. "Pass a message to this person for me. I've looked into her private salt business. Refuse, and I'll share with the neighbors the story of how you wear old robes while writing secret letters for people."
+# [TRES_ZHU_LIU_DESCRIPTION_0] 择一地面北而栖。
+The Ledger at the Used-Clothing Stall
+# [TRES_ZHU_LIU_HUANGCHENG_FALLBACK_DESCRIPTION_0] 皇城巍峨，朱门深锁。他站在朱雀大街的尽头，远远望着宫墙之内那些飞檐翘角。权谋与荣辱在那里轮番上演，而他只是一个看客。
+Choose a spot, face north, and settle there.
+# [TRES_ZHU_LIU_HUANGCHENG_FALLBACK_NAME_0] 皇城远望
+The Imperial City looms majestic, its vermilion gates locked deep. He stands at the end of Vermilion Sparrow Avenue, gazing from afar at the sweeping eaves and upturned corners within the palace walls. Power and disgrace take turns performing there, and he is but a spectator.
+# [TRES_ZHU_LIU_LOCK_NARRATIVE_0] 四方扰扰，竟无一处可安心驻足
+Gazing at the Imperial City from Afar
+# [TRES_ZHU_LIU_NAME_0] 驻留
+The four directions are in turmoil, yet there is not a single place where one may rest the heart in peace.
+# [TRES_ZHU_LIU_PINGKANGFANG_FALLBACK_DESCRIPTION_0] 平康坊内丝竹声声，歌楼之上有人正唱着一首新词。他在坊间踱步，听着曲声，心底那句「此曲只应天上有」悄悄浮了上来。
+Residing
+# [TRES_ZHU_LIU_PINGKANGFANG_FALLBACK_NAME_0] 平康听曲
+Within Pingkang Ward, the strings and flutes sound; in the singing halls, someone is performing a new lyric. He paces through the ward, listening to the melody, and from the depths of his heart, that line quietly rises: "This music should only exist in heaven."
+# [TRES_ZHU_LIU_XISHI_FALLBACK_DESCRIPTION_0] 西市喧嚣，胡商牵着骆驼穿过人群，香料、绸缎、宝玉琳琅满目。他在一家胡饼摊前驻足，买了一枚胡饼，边走边看这人间烟火。
+Listening to Songs in Pingkang
+# [TRES_ZHU_LIU_XISHI_FALLBACK_NAME_0] 西市烟火
+The West Market bustles; Sogdian merchants lead camels through the crowds. Spices, silks, and precious gems dazzle the eye. He stops before a sesame cake stall, buys one, and walks on, taking in this panorama of common life.
+# [TRES_ZIZE_FROZEN_CORPSE_DESCRIPTION_0] 袖口蹭过坊墙，干土簌簌落下。你继续穿过路口。
+The Hustle of the West Market
+# [TRES_ZIZE_FROZEN_CORPSE_DESCRIPTION_1] 铁钩刮过石板的声音先于坊丁的身影抵达。你起先以为坊墙下是一堆破被褥，走近三步才看清被褥里伸出的半只手——手指收拢，掌心空着，指甲暗紫色。坊丁走近时你往后退了一步，手不自觉伸进怀里，指腹触到那几枚铜钱，还在。铜钱贴着肋骨，温热。你停了半秒，把铜钱在指间转了一下，按回原处。坊丁弯下腰时你已从他和那具身体旁绕了过去，袖口蹭过坊墙的粗面，带下一撮干土。
+Your sleeve brushes the ward wall; dry earth crumbles down. You continue through the intersection.
+# [TRES_ZIZE_FROZEN_CORPSE_NAME_0] 坊墙下
+The scrape of an iron hook against flagstones reaches you before the ward guard does. At first you thought the base of the ward wall held a heap of torn bedding. Three steps closer, you made out the half-hand reaching from within—fingers curled inward, palm empty, nails dark purple. When the ward guard drew near, you stepped back, your hand moving unbidden to your chest, fingertip brushing those few copper coins—still there. The coins pressed against your ribs, warm. You paused half a second, turned a coin between your fingers, and pressed it back. By the time the guard bent down, you had already circled past him and that body. Your sleeve caught the rough face of the ward wall, taking a pinch of dry soil with it.
+# [TRES_ZIZE_HOME_LETTER_DESCRIPTION_0] 喉结动一下，袖口拭过案角，往门口走。
+Beneath the Ward Wall
+# [TRES_ZIZE_HOME_LETTER_DESCRIPTION_1] 信差在门廊外跺着脚上的雪泥。信纸摊在案上，墨迹洇开的地方刚好是“不如早归”四个字。那双冬袜叠得齐整，袜口收针处多绕了两道线——她手冻时才这样收针。你坐下磨墨，笔管在指间转了两圈。纸铺好了。墨磨浓了。手落下去时笔尖停在半空，一滴墨坠在纸上，正好盖住“归”字。你从旧袍腋下拆了一颗木扣子放进信封。信差接过时掂了掂，没说话。
+Your Adam's apple bobs once. Your sleeve brushes the corner of the desk. You walk toward the door.
+# [TRES_ZIZE_HOME_LETTER_NAME_0] 家书与冬袜
+The courier stamps snow-mud off his boots outside the doorframe. The letter lies open on the desk; the ink has bled precisely where the words "better to come home soon" are written. The winter socks are folded neatly, the stitching at the cuffs doubled over with two extra passes—the way she sews when her hands are cold. You sit down and grind the ink. The brush handle turns twice between your fingers. The paper is laid. The ink is thick. When your hand descends, the brush tip halts in midair; a drop of ink falls onto the paper, exactly covering the character for "home." You unpick a wooden button from the armpit of your old robe and place it in the envelope. The courier weighs it in his hand as he takes it, and says nothing.
+# [TRES_ZIZE_OLD_FRIEND_DESCRIPTION_0] 顿了顿。把下巴搁在最上面那本书的封皮上，朝坊门另一头走。
+The Letter Home and the Winter Socks
+# [TRES_ZIZE_OLD_FRIEND_DESCRIPTION_1] 牛车停在坊门口，车板上的干草簌簌往下掉碎屑。他把书一本一本往你怀里堆，你往后趔趄了小半步——他没看你是否站稳。转身去解缰绳，手指快得像在赶什么东西追上他之前。琴搁在书堆最上面，弦上还绷着昨夜的潮气。你喉咙滚了一下。想说「我也走」——那四个字已经抵在舌根。但你咽回去了。齿关合上时发出一声轻响，像咬碎了一小块脆骨。牛车动了。车轮碾过水沟边沿，琴弦被震出一声闷响——短促，低哑，像被谁从底下踩了一脚。你抱着那摞书站在坊门口。车的影子拉细，缩进春明门方向的灰尘里。
+Pause. Rest your chin on the cover of the topmost book. Walk toward the other end of the ward gate.
+# [TRES_ZIZE_OLD_FRIEND_NAME_0] 书堆的重量
+The oxcart stops at the ward gate; bits of dried grass sift down from the cart bed. He stacks books into your arms one by one; you stagger back half a step—he doesn't check whether you've steadied yourself. He turns to untie the reins, fingers moving as fast as if something were chasing him. The qin rests atop the pile of books, its strings still taut with last night's damp. Your throat tightens. You want to say "I'm leaving too"—those four words are already on the tip of your tongue. But you swallow them back. Your teeth close with a soft click, like biting through a small piece of gristle. The oxcart moves. The wheel rolls over the edge of the drainage ditch; the qin string vibrates with a muffled thrum—brief, low, hoarse, as if stomped from below. You stand at the ward gate holding that stack of books. The cart's shadow stretches thin, shrinking into the dust in the direction of Chunming Gate.
+# [TRES_ZIZE_PAWN_JADE_DESCRIPTION_0] 站住。袖口往下坠了一坠。继续往米铺走。
+The Weight of the Books
+# [TRES_ZIZE_PAWN_JADE_DESCRIPTION_1] 一道老裂痕从云纹中间贯过去，朝奉把它在窗口的光下翻了翻放回柜台。“死当？”你说是。他报的数刚好够付欠了半月的房租和三斗米。你没有还价。帕子在指间叠成方块时，原先包玉的凹处还带着一点余温，四角被玉佩压出的棱硌进掌心。麻绳从栅栏那边推过来，铜钱在绳上沉甸甸地响了一声。你松开帕子，把铜钱拨进袖口——手腕内侧那块被玉焐了十年的皮肉现在贴上了冰凉的方孔。
+Stop. Your sleeve sinks. Continue toward the rice shop.
+# [TRES_ZIZE_PAWN_JADE_NAME_0] 帕子叠好
+An old crack runs straight through the cloud pattern. The pawnbroker turns it over in the light at the window, then sets it back on the counter. "Irredeemable?" You say yes. The figure he names is just enough to cover half a month's overdue rent and three dou of rice. You don't haggle. As the handkerchief folds into a square between your fingers, the hollow where the jade once rested still holds a trace of warmth; the four corners, creased by the jade's weight, press into your palm. The hemp cord with the coins is pushed through from behind the grating; the copper clinks heavily on the cord. You release the handkerchief and scoop the coins into your sleeve—the patch of skin on your inner wrist, warmed by jade for ten years, now presses against cold square holes.
+# [TRES_ZIZE_WINE_BOY_IDENTITY_QUANGUI_DESCRIPTION_0] 等了半截入城鼓。你的手从腿边垂下来。
+The Handkerchief, Folded
+# [TRES_ZIZE_WINE_BOY_IDENTITY_QUANGUI_DESCRIPTION_1] 权贵走后半炷香，才有人把酒保往后厨拖。他的靴底在砖缝上划了一下，留下一道深色的痕迹。你看见桌上的碎银子——指甲盖大小，沾着一点血沫。你的手在袖子里张开，拇指碰到两枚铜钱。铜钱是凉的。手慢慢卷回去。旁边有人踢了一脚倒掉的酒坛，酒液还在往砖缝里渗。你站起身，绕过那片湿痕，从另一个方向走了。
+Wait through half a city-entry drumbeat. Your hand drops from your thigh.
+# [TRES_ZIZE_WINE_BOY_IDENTITY_QUANGUI_NAME_0] 地上的湿痕
+Half an incense stick after the powerful man left, someone finally dragged the wine boy toward the back kitchen. His boot sole scraped across a gap in the bricks, leaving a dark smear. You see the loose silver on the table—fingernail-sized, specked with blood foam. Your hand opens inside your sleeve; your thumb finds two copper coins. The coins are cold. Your hand slowly curls back. Nearby, someone kicks over a fallen wine jar; the wine is still seeping into the brick gaps. You rise, circle around that wet patch, and leave from another direction.
+# [TRES_ZIZE_YOUNG_SCHOLAR_DESCRIPTION_0] 顿一下。把那截秃笔推还给他。
+The Wet Stain on the Ground
+# [TRES_ZIZE_YOUNG_SCHOLAR_DESCRIPTION_1] 他在门口站定时你正数着袖里的铜钱。余光先触到那件青衫——经纬洗得松了，透出里层麻布的纹路。他往前迈了一步，门槛的阴影从他脚背移到脚踝。你听见自己的脊椎一节节凉下去。他问“先生在长安怎么才能被人看见”。你张开嘴。舌根往上颚顶了一下。然后你听见一句话从自己喉咙里出来——“好好写，总会有人看见的”。那声音薄得像坊墙外飘进来的叫卖。他低着头认真点头，袖子里摸出一截秃笔，用唾沫润了润笔尖，抬头说“您再说一遍，我记一记”。你说不用记了。他写字的姿势让你想起十年前租住在城南土墙房里，每天蘸井水在桌上练字的时辰。
+Pause. Push that stub of a worn brush back toward him.
+# [TRES_ZIZE_YOUNG_SCHOLAR_NAME_0] 那件松了的青衫
+When he stopped at your doorway, you were counting the coppers in your sleeve. Peripheral vision caught the green robe first—the warp and weft washed loose, revealing the hemp weave beneath. He stepped forward; the threshold's shadow climbed from his instep to his ankle. You felt your spine go cold, vertebra by vertebra. He asked, "Sir, how does one get noticed in Chang'an?" You opened your mouth. Your tongue pressed against the roof of your mouth. Then you heard a sentence come out of your own throat—"Keep writing. Someone will notice eventually." The voice was thin as a street vendor's cry drifting in from beyond the ward wall. He lowered his head and nodded earnestly, fished out a stub of a worn brush from his sleeve, moistened the tip with spit, looked up, and said, "Say it again, please—I'll write it down." You told him there was no need. The way he wrote reminded you of yourself ten years ago, renting an earthen-walled room south of the city, practicing characters on the table with well water each day.
+# [UI_ACTION_BUTTON_TEXT_0] 赴宴
+That Loose Green Robe
+# [UI_ACTION_BUTTON_TEXT_1] 颍川，王维召开了盛大宴会
+Attend the Banquet
+# [UI_AMBITION_HUD_TEXT_0] 致君尧舜上
+Yingchuan: Wang Wei Has Convened a Grand Banquet
+# [UI_AMBITION_HUD_TEXT_1] 你想齐家治国平天下，而这需要以做官为前提。
+你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
+To Make the Sovereign a Yao or a Shun
+# [UI_AMBITION_HUD_TEXT_2] 如果完不成，你的一身才华将无用武之处
+你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
+# [UI_AMBITION_HUD_TEXT_3] 「状态」没有人认得你，你是彻底的无名之辈
+You wish to bring order to the family, govern the state, and bring peace to all under heaven—and this requires holding office as a prerequisite.
+# [UI_BAMBOO_SLIP_TEXT_0] 贺知章
+You plan to try your luck in the capital, where high officials are especially numerous and there ought to be someone who appreciates your talent.
+# [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_0] 泰山游历
+If you fail, all your talent will find no field of use.
+# [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_1] 昔游齐鲁，登泰山而小天下了么?
+(开始新手教程?)
+[Status] No one knows who you are. You are an utter nobody.
+# [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_2] 跳过
+He Zhizhang
+# [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_3] 开始引导
+Journey to Mount Tai
+# [UI_GAME_DATA_PANEL_TEXT_0] 存档1
+(开始新手教程?)
+# [UI_GAME_DATA_PANEL_TEXT_1] 保存于 7.7 17.37
+Traveling through Qi and Lu of old—shall we ascend Mount Tai and see the world grow small?
+# [UI_GAME_DATA_PANEL_TEXT_2] 保存到此
+(Begin tutorial?)
+# [UI_GAME_DATA_PANEL_TEXT_3] 依此加载
+Skip
+# [UI_IDEA_BTN_TEXT_0] 兴：存在城府
+Begin Tutorial
+# [UI_IDEA_BTN_TEXT_1] 平易近人
+Save Slot 1
+# [UI_IDEA_BTN_TEXT_2] 被锁定，由于和兴：没有城府冲突
+Saved on 7.7 17:37
+# [UI_IDEA_PAGE_TEXT_0] 当前理念
+Save Here
+# [UI_IDEA_PAGE_TEXT_1] 空槽位
+Load from Here
+# [UI_IDEA_PAGE_TEXT_2] 空槽位
+Inspiration: Guarded Depths
+# [UI_IDEA_PAGE_TEXT_3] 空槽位
+Approachable
+# [UI_IDEA_PAGE_TEXT_4] 空槽位
+Locked — conflicts with Inspiration: Unguarded Openness
+# [UI_IDEA_PAGE_TEXT_5] 空槽位
+Current Idea
+# [UI_IDEA_PAGE_TEXT_6] 选择一个理念
+Empty Slot
+# [UI_IDEA_PAGE_TEXT_7] 选择一个理念
+Empty Slot
+# [UI_IDEA_PAGE_TEXT_8] 点击选择理念
+Empty Slot
+# [UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_0] 【选择物品】
+Empty Slot
+# [UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_1] 不回答
+Empty Slot
+# [UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_2] 请选择一项
+Select an Idea
+# [UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_3] 确认
+Select an Idea
+# [UI_LEFT_PLAYER_PANEL_TEXT_0] 杜甫[字子美]
+Tap to Select an Idea
+# [UI_LEFT_PLAYER_PANEL_TEXT_1] 距离大考还剩: -- 旬
+[Select Item]
+# [UI_LEFT_PLAYER_PANEL_TEXT_2] 京兆府·举子
+Decline to Answer
+# [UI_LEFT_PLAYER_PANEL_TEXT_3] 东市：李白在此
+Please Select One
+# [UI_LEFT_PLAYER_PANEL_TEXT_4] 特质
+Confirm
+# [UI_LEFT_PLAYER_PANEL_TEXT_5] 政略主权
+Du Fu [courtesy name Zimei]
+# [UI_LEFT_PLAYER_PANEL_TEXT_6] 底层修饰
+Time Until the Grand Exam: -- xun
+# [UI_MAIN_ACTION_BUTTON_TEXT_0] 赴宴
+Jingzhao Prefecture · Examination Candidate
+# [UI_MAIN_ACTION_BUTTON_TEXT_1] 颍川，王维召开了盛大宴会
+East Market: Li Bai Is Here
+# [UI_MAIN_PAGE_TEXT_0] 京
+Traits

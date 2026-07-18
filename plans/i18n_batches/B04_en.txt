@@ -1,0 +1,296 @@
+# Batch B04: 游戏逻辑 — 联句计分、检查器、主行动按钮、修饰符、月末结算、叙事覆盖、笔记管理、NPC行动/需求、选项按钮、人物状态、选择器、人选、玩家状态、诗词创作器
+# 行范围: 422-561  待翻译: 0行  已有: 140行
+# ─── 全局翻译铁律 ──────────────────────────────────────────────
+# 1. 保留所有标记原样: {param} {@keyword} [br] [glitch level=N]...[/glitch]
+#    [color=#xxx]...[/color] [font_size=N][b]...[/b][/font_size] [i]...[/i]
+#    [center]...[/center] [shake rate=N level=N]...[/shake] \n
+# 2. 保留 %d %s %.1f %% 等 C 风格格式说明符
+# 3. 保留 emoji 和特殊字符: ⏱ ⏳ 📍 ⚠ ━━━ • 等
+# 4. 风格: 自然流畅英文，非文言英译。唐代氛围但不堆砌生僻词
+# 5. 只输出第3列(en)的翻译，每行一个翻译字符串，按输入顺序，空行输出空
+# 6. 输出格式: 一个纯文本文件，每行一个英文翻译
+# ────────────────────────────────────────────────────────────────
+# 域: 游戏逻辑
+# 格式: 每行一条英文翻译。已翻译的行保留原 en 值不动，待翻译的行填空行。
+# ────────────────────────────────────────────────────────────────
+
+# [CODE_MAIN_ACTION_BUTTON_DC059CE490] 时间不足（剩余%d天，需要%s）
+Conditions not met:
+# [CODE_MAIN_PAGE_59CA1F817B] 律法
+Insufficient time (%d days remaining, need %s)
+# [CODE_MAIN_PAGE_B6BDB1C7B1] 隐
+Law & Order
+# [CODE_MAIN_PAGE_FE9C846C52] 京
+Seclusion
+# [CODE_MANIA_PROVIDER_5B4A72C92F] 狂笑不止，踽踽独行
+Capital
+# [CODE_MODIFIER_CONFIG_0288A3D9E2] 才华
+Laughing uncontrollably, wandering alone
+# [CODE_MODIFIER_CONFIG_0B0EC74089] 才华 {mod_val} → 清流交互消耗 -{pct}%
+Talent
+# [CODE_MODIFIER_CONFIG_24C118E561] 城府
+Talent {mod_val} → Pure Faction interaction cost -{pct}%
+# [CODE_MODIFIER_CONFIG_27F59B3B2C] 城府 {mod_val} → 浊流交互消耗 -{pct}%
+Cunning
+# [CODE_MODIFIER_CONFIG_5A9DF0C8BE] 城府 {mod_val} → 钱财获取 +{pct}%
+Cunning {mod_val} → Corrupt Faction interaction cost -{pct}%
+# [CODE_MODIFIER_CONFIG_6437EEB330] 才华 {mod_val} → 声望获取 +{pct}%
+Cunning {mod_val} → Wealth gain +{pct}%
+# [CODE_MODIFIER_CONFIG_6A9F4227A3] 定力 {mod_val} → 健康失去减免 {pct}%
+Talent {mod_val} → Reputation gain +{pct}%
+# [CODE_MODIFIER_CONFIG_70B6B26C92] 定力
+Composure {mod_val} → Health loss reduction {pct}%
+# [CODE_MODIFIER_CONFIG_78ACB44470] 城府 {mod_val} → 声望获取 -{pct}%
+Composure
+# [CODE_MODIFIER_CONFIG_79A843720B] 城府 {mod_val} → 势衰减减免 {pct}%
+Cunning {mod_val} → Reputation gain -{pct}%
+# [CODE_MODIFIER_CONFIG_BCACFF08CC] 定力 {mod_val} → 兴致获取 -{pct}%
+Cunning {mod_val} → Influence decay reduction {pct}%
+# [CODE_MODIFIER_HINT_FORMATTER_0288A3D9E2] 才华
+Composure {mod_val} → Inspiration gain -{pct}%
+# [CODE_MODIFIER_HINT_FORMATTER_24C118E561] 城府
+Talent
+# [CODE_MODIFIER_HINT_FORMATTER_70B6B26C92] 定力
+Cunning
+# [CODE_MONTH_END_SETTLEMENT_0868FBC8C0] 冬
+Composure
+# [CODE_MONTH_END_SETTLEMENT_0EB863C78D] 钱
+Winter
+# [CODE_MONTH_END_SETTLEMENT_1047F73848] 合上考评
+Wealth
+# [CODE_MONTH_END_SETTLEMENT_1E52BBFF88] [font_size=16][b]「长安米贵」[/b][/font_size]
+Overall Assessment
+# [CODE_MONTH_END_SETTLEMENT_213A369D1D] [font_size=16][b]「潜伏暗线」[/b][/font_size]
+[font_size=16][b]"Chang'an Rice Is Dear"[/b][/font_size]
+# [CODE_MONTH_END_SETTLEMENT_2DF825FBDA] 府
+[font_size=16][b]"Lurking Hidden Threads"[/b][/font_size]
+# [CODE_MONTH_END_SETTLEMENT_3281E6BBE7] 途
+Residence
+# [CODE_MONTH_END_SETTLEMENT_403869A2B5] [i]天道盈亏，自有定数。月盈则亏，水满则溢。[/i]
+Journey
+# [CODE_MONTH_END_SETTLEMENT_4B35F007CC] 每旬结算开始时清空所有属性颜色覆盖，使染色仅反映当旬变化。
+[i]The way of Heaven waxes and wanes by its own measure. The full moon must wane, the brimming cup must spill.[/i]
+# [CODE_MONTH_END_SETTLEMENT_4BA71F5DC5] [i]本月诸般光景，与上月无异[/i]
+Clear all property color overrides at the start of each ten-day settlement, so coloring reflects only the current period's changes.
+# [CODE_MONTH_END_SETTLEMENT_51A5D681A9] 名
+[i]This month's affairs are no different from the last.[/i]
+# [CODE_MONTH_END_SETTLEMENT_55D3A19D9E] 势
+Fame
+# [CODE_MONTH_END_SETTLEMENT_5A2E5E4B12] 秋
+Influence
+# [CODE_MONTH_END_SETTLEMENT_5B0E0492B5] 季
+Autumn
+# [CODE_MONTH_END_SETTLEMENT_66329961B5] %s·%s 结
+Season
+# [CODE_MONTH_END_SETTLEMENT_6EC5A9FCC0] [i]天机未显，静待时变。[/i]
+%s · %s Settlement
+# [CODE_MONTH_END_SETTLEMENT_7D58B6422C] 时
+[i]Heaven's design remains hidden; await the turning of the tide.[/i]
+# [CODE_MONTH_END_SETTLEMENT_8482432C02] 夏
+Time
+# [CODE_MONTH_END_SETTLEMENT_8B0329C50B] 健
+Summer
+# [CODE_MONTH_END_SETTLEMENT_9A8D951DCB] 才
+Health
+# [CODE_MONTH_END_SETTLEMENT_A071406EDF] 定
+Talent
+# [CODE_MONTH_END_SETTLEMENT_ACF5072074] 孟
+Composure
+# [CODE_MONTH_END_SETTLEMENT_AD90D4FFCA] 兴
+Early
+# [CODE_MONTH_END_SETTLEMENT_B3C33B7ABA] 春
+Inspiration
+# [CODE_MONTH_END_SETTLEMENT_E7830EE499] [font_size=16][b]「状态衰变」[/b][/font_size]
+Spring
+# [CODE_MONTH_END_SETTLEMENT_FE801EE143] 仲
+[font_size=16][b]"Status Decay"[/b][/font_size]
+# [CODE_MULTIPLE_REQUIREMENETS_CFE59E3D4A] 或
+Mid
+# [CODE_NARRATIVE_DIRECTOR_F9D19345A0] 中断
+or
+# [CODE_NARRATIVE_OVERLAY_0FD45121F9] 囊中已近空空，再过一旬怕是揭不开锅了…
+Interrupt
+# [CODE_NARRATIVE_OVERLAY_122B32DFFA] 债台高筑，负债%d钱…这日子何时是个头？
+My purse is nearly empty; another ten days and I fear the pot will boil no more...
+# [CODE_NARRATIVE_OVERLAY_182CC3CF53] 独白
+Drowning in debt, owing %d coins... When will this misery end?
+# [CODE_NARRATIVE_OVERLAY_18E02E9CCA] [中断]
+Soliloquy
+# [CODE_NARRATIVE_OVERLAY_239A7F9A00] [选择]
+[Interrupt]
+# [CODE_NARRATIVE_OVERLAY_25A6D2931B] [自动]
+[Choice]
+# [CODE_NARRATIVE_OVERLAY_27CF55BC59] 朱门酒肉臭，路有冻死骨。
+[Auto]
+# [CODE_NARRATIVE_OVERLAY_4BCAAF19D3] ⚡ 过场动画
+Behind vermilion gates, wine and meat spoil; upon the road, frozen bones lie bare.
+# [CODE_NARRATIVE_OVERLAY_4D55EEC9A8] 手头缺了%d钱，下一旬的生计还没着落。
+⚡ Cutscene
+# [CODE_NARRATIVE_OVERLAY_86A00CF742] 效果
+Short by %d coins, with no means for the coming ten-day stretch.
+# [CODE_NARRATIVE_OVERLAY_9BB022C2C6] 安得广厦千万间，大庇天下寒士俱欢颜。
+Effect
+# [CODE_NARRATIVE_OVERLAY_9DC2A087A1] 致君尧舜上，再使风俗淳。
+If only I could build a mansion of a thousand rooms, to shelter all the world's poor scholars with joyful faces.
+# [CODE_NARRATIVE_OVERLAY_A693D63283] [时尽]
+To raise my sovereign above Yao and Shun, and restore purity to the customs of the age.
+# [CODE_NARRATIVE_OVERLAY_A70B4CA97E] 人生如寄，山河万里，何处是归程？
+[Time's Up]
+# [CODE_NARRATIVE_OVERLAY_ADA3A9AF8D] [跳过]
+Life is but a sojourn; across ten thousand miles of rivers and mountains, where does the road home lie?
+# [CODE_NARRATIVE_OVERLAY_DC51FCD65A] 白日放歌须纵酒，青春作伴好还乡。
+[Skip]
+# [CODE_NOTE_MANAGER_4A78691E24] 属性变化 → 检查 _notes_by_prop[prop_name]
+Sing loud by daylight, drink deep without restraint; with youth as my companion, I journey home.
+# [CODE_NOTE_MANAGER_5BA714241D] 执行笔记触发流程
+Property changed → check _notes_by_prop[prop_name]
+# [CODE_NOTE_MANAGER_6D672C2A84] 检查笔记是否已被触发（持久化状态）
+Execute note trigger flow
+# [CODE_NOTE_MANAGER_855448D5F6] Flag 变化 → 遍历所有非 PropertyRequirement 笔记中 FlagRequirement 的
+Check if note has already been triggered (persisted state)
+# [CODE_NOTE_MANAGER_8621B5666F] 检查 Note 的 requirement 是否满足
+Flag changed → iterate all notes with FlagRequirement that are not PropertyRequirement
+# [CODE_NOTE_MANAGER_9BD0BBE336] Trait 变化 → 遍历所有 TraitRequirement 笔记
+Check if the note's requirement is satisfied
+# [CODE_NOTE_MANAGER_D69F745081] 注册信号钩子
+Trait changed → iterate all TraitRequirement notes
+# [CODE_NOTE_MANAGER_E24EB48F12] 从 Database.notes 加载并建立索引
+Register signal hooks
+# [CODE_NOTE_PAGE_4B713DD25B] 已触发 %d/%d 篇笔记
+Load from Database.notes and build index
+# [CODE_NOTE_PAGE_5256C46E1D] 刷新左侧笔记列表 + 更新 NoteAmount
+%d/%d notes triggered
+# [CODE_NOTE_PAGE_6BDBAF77F8] 无已触发笔记时显示待触发占位
+Refresh left note list + update NoteAmount
+# [CODE_NOTE_PAGE_6FAAC7AB6E] 左侧笔记按钮点击 → 右侧展示详情
+Show placeholder when no notes triggered
+# [CODE_NOTE_PAGE_A4B3B97E7C] 暂无可查看的笔记
+Left note button clicked → show details on the right
+# [CODE_NOTE_PAGE_BAC59007BF] （未命名笔记）
+No notes available to view
+# [CODE_NOTE_PAGE_C80B8A993F] 填充右侧详情面板
+(Untitled Note)
+# [CODE_NPC_ACTION_BUTTON_021C2B38D2] 条件不满足
+Populate right detail panel
+# [CODE_NPC_ACTION_BUTTON_0F9928F317] 产：无
+Conditions not met
+# [CODE_NPC_ACTION_BUTTON_4D7C36AA23] 险：
+Yield: None
+# [CODE_NPC_ACTION_BUTTON_50E9C6E262] 需要诗词才能执行此行动
+Risk:
+# [CODE_NPC_ACTION_BUTTON_60ABF5AC4F] 暂时无法执行此行动
+A poem is required to perform this action
+# [CODE_NPC_ACTION_BUTTON_7005AA9069] 可行：?
+Unable to perform this action at this time
+# [CODE_NPC_ACTION_BUTTON_7CA5205A5B] 耗：无
+Feasible: ?
+# [CODE_NPC_ACTION_BUTTON_B5F6E16585] 行动数据异常
+Cost: None
+# [CODE_NPC_ACTION_BUTTON_B7F447C362] 请先选择一个行动
+Action data anomaly
+# [CODE_NPC_ACTION_LOCK_CHECKER_71BC43506B] 需要与%s相识方可执行此行动
+Please select an action first
+# [CODE_NPC_ACTION_LOCK_CHECKER_ED757BE5DD] 需要与NPC相识方可执行此行动
+Must be acquainted with %s to perform this action
+# [CODE_NPC_FACTION_REQUIREMENT_02BAE0D4E1] 浊流
+Must be acquainted with the NPC to perform this action
+# [CODE_NPC_FACTION_REQUIREMENT_92C54C878B] 清流
+Corrupt Faction
+# [CODE_NPC_FACTION_REQUIREMENT_C528572287] 目标为「%s」派系时
+Pure Faction
+# [CODE_NPC_TIER_REQUIREMENT_83FDDD20EC] 目标为「%s」阶层时
+When target belongs to the "%s" faction
+# [CODE_NPC_TIER_REQUIREMENT_B5B9D84ABF] 市井
+When target belongs to the "%s" tier
+# [CODE_NPC_TIER_REQUIREMENT_C74492EB54] 文人
+Commoner
+# [CODE_NPC_TIER_REQUIREMENT_E4CA3EA091] 权贵
+Scholar
+# [CODE_OPTION_BTNS_12267A7A5D] 遍历所有 EventBtn 子按钮，包装 Callable，注册到 InputManager
+Aristocrat
+# [CODE_PERSON_STATE_OPERATOR_27212B01DC] 升级 %s 到下一级
+Iterate all EventBtn child buttons, wrap as Callable, register to InputManager
+# [CODE_PERSON_STATE_OPERATOR_3D01BBC36A] 设置 %s → %s
+Upgrade %s to next level
+# [CODE_PICKER_ITEM_5DB17E4310] 暂时无法选择此行动
+Set %s → %s
+# [CODE_PICKER_ITEM_CC479D8361] 无名
+Unable to select this action at this time
+# [CODE_PICKER_TAPE_ATTACHMENT_3951965D54] 暂无特殊行动
+Nameless
+# [CODE_PICKER_TAPE_ATTACHMENT_C32B61E9BD] 特殊
+No special actions available
+# [CODE_PICKER_TAPE_ATTACHMENT_DE907D10DF] 普通
+Special
+# [CODE_PICKER_TAPE_ATTACHMENT_E234B1D8D2] 暂无普通行动
+Normal
+# [CODE_PICK_NPC_BY_PLACE_OPERATOR_32ACEBF8BA] 在当前驻留地点中随机选人
+No normal actions available
+# [CODE_PICK_NPC_BY_PLACE_OPERATOR_5254542205] 所有选择逻辑在 init() 中完成
+Randomly pick from NPCs at current location
+# [CODE_PICK_NPC_OPERATOR_039C53C7AF] 选人（mode=%s）
+All selection logic completed in init()
+# [CODE_PICK_NPC_OPERATOR_4645ED88AF] 将 NPC tag + social_tag 注入 current_action_tags
+Pick NPC (mode=%s)
+# [CODE_PLAYER_STATE_D1A76721CD] 杜甫
+Inject NPC tag + social_tag into current_action_tags
+# [CODE_PLAYER_STATE_E3DEF00A8B] 从 SourceOfTruth.npc_person_state_overrides 覆盖 NPC 开局 person_state
+Du Fu
+# [CODE_PLAYER_STATE_FF59D8BF92] 确保 GameSave.data.properties 中有该属性，不存在时从 Property 模板读取默认 val 写入
+Override NPC starting person_state from SourceOfTruth.npc_person_state_overrides
+# [CODE_POEM_CRAFTER_08CAA7B0F4] 万象在旁，呼之欲出
+Ensure property exists in GameSave.data.properties; if missing, read default val from Property template and write
+# [CODE_POEM_CRAFTER_101706478E] 手感生涩，勉力为之
+All creation stands at hand, ready to spring forth
+# [CODE_POEM_CRAFTER_158B31FA2D] 文思渐涌，偶得佳句
+The hand moves stiffly, straining to shape the verse
+# [CODE_POEM_CRAFTER_161BC32B63] 意象丰沛，气韵生动
+Thoughts gradually surge, a fine line caught by chance
+# [CODE_POEM_CRAFTER_1637FC84DB] 过多…
+Imagery abundant, spirit and rhythm alive
+# [CODE_POEM_CRAFTER_1DBE0EA442] 文思枯涩，全凭基本功
+Too many...
+# [CODE_POEM_CRAFTER_357762EA7B] 已有诗作，先将其送出或题壁后再来。
+Inspiration runs dry, relying solely on fundamentals
+# [CODE_POEM_CRAFTER_3E435BB535] [color=#aaa]出了些问题，稍后再试吧。[/color]
+You already have a poem. Present it or inscribe it on a wall first.
+# [CODE_POEM_CRAFTER_46DC19151B] [color=#aaa]意象不足，至少需要%d个意象方能成诗。[/color]
+[color=#aaa]Something went wrong. Try again later.[/color]
+# [CODE_POEM_CRAFTER_493B39E86C] 似有灵光，若即若离
+[color=#aaa]Not enough imagery. At least %d images are needed to compose a poem.[/color]
+# [CODE_POEM_CRAFTER_5149591659] ━━━ 创作代价 ━━━
+A glimmer of inspiration, hovering just out of reach
+# [CODE_POEM_CRAFTER_54EAEBD3D3] 意象贫瘠，恐成陈词滥调
+━━━ Cost of Creation ━━━
+# [CODE_POEM_CRAFTER_5971DCC005] 才思泉涌，下笔如飞
+Imagery is barren, risking tired clichés
+# [CODE_POEM_CRAFTER_5DADE3605B] [color=#ff4444]（不足）[/color]
+Talent surges like a spring; the brush flies across the page
+# [CODE_POEM_CRAFTER_6510BE12F0] 文思平平
+[color=#ff4444](Insufficient)[/color]
+# [CODE_POEM_CRAFTER_659C9410D1] 消耗灵感：%d 兴
+Inspiration: unremarkable
+# [CODE_POEM_CRAFTER_6CCA05DC6F] 灵光乍现，妙手偶得
+Inspiration cost: %d
+# [CODE_POEM_CRAFTER_7150BC2988] [color=#888888]当前 %d[/color]
+A flash of brilliance, seized by a deft hand
+# [CODE_POEM_CRAFTER_728EB1E5A1] 意象单薄，难成气候
+[color=#888888]Current: %d[/color]
+# [CODE_POEM_CRAFTER_7D1B3E04F1] 意象平平
+Imagery is thin, unlikely to make an impact
+# [CODE_POEM_CRAFTER_8DD341F160] 灵感涌动，如有神助
+Imagery: unremarkable
+# [CODE_POEM_CRAFTER_8F3C2318AC] 思绪凝滞，步步为营
+Inspiration surges, as if the gods themselves lend a hand
+# [CODE_POEM_CRAFTER_9050E24622] [color=#aaa]出了些问题…[/color]
+Thoughts congeal; every step is a battle
+# [CODE_POEM_CRAFTER_A34283ABC1] 意象得体，渐入佳境
+[color=#aaa]Something went wrong...[/color]
+# [CODE_POEM_CRAFTER_AB290C38E3] 意象纵横，吞吐大荒
+Imagery fits well, gradually entering a finer state
+# [CODE_POEM_CRAFTER_B6C4708BC5] 暂无意象
+Imagery roams unbound, breathing the vast wilderness
+# [CODE_POEM_CRAFTER_B95E344FCD] 心手渐畅，暗藏机锋
+No imagery yet
+# [CODE_POEM_CRAFTER_BED5C7074B] 意象尚可，颇有章法
+Hand and heart grow fluent, a hidden edge within

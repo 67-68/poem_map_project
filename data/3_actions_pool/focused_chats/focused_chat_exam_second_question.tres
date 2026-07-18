@@ -32,7 +32,7 @@ metadata/_custom_type_script = "uid://bxdw08m7bfi13"
 
 [sub_resource type="Resource" id="Resource_r0syb"]
 script = ExtResource("7_tr3sl")
-texts = Array[String](["天宝六年，贡院放榜。你满怀信心地挤入人群，寻找自己的名字。", "没有。不仅没有你，你认识的所有才子，郑虔、高适……全都不在榜上.", "相国李林甫上表贺皇帝：‘天下英才尽入彀中，野无遗贤。’"])
+texts = Array[String](["TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_TEXTS_0", "TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_TEXTS_1", "TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_TEXTS_2"])
 metadata/_custom_type_script = "uid://bhm8bigwrwgjm"
 
 [sub_resource type="Resource" id="Resource_85no0"]

@@ -1,0 +1,238 @@
+# Batch B09: 回落叙事②+理念 — 坊市回落(续)、奉先村叙事、奉召回落、科举叙事、归家、健康渐变、宴席回落、理念描述、灵感渐变
+# 行范围: 1998-2108  待翻译: 0行  已有: 111行
+# ─── 全局翻译铁律 ──────────────────────────────────────────────
+# 1. 保留所有标记原样: {param} {@keyword} [br] [glitch level=N]...[/glitch]
+#    [color=#xxx]...[/color] [font_size=N][b]...[/b][/font_size] [i]...[/i]
+#    [center]...[/center] [shake rate=N level=N]...[/shake] \n
+# 2. 保留 %d %s %.1f %% 等 C 风格格式说明符
+# 3. 保留 emoji 和特殊字符: ⏱ ⏳ 📍 ⚠ ━━━ • 等
+# 4. 风格: 自然流畅英文，非文言英译。唐代氛围但不堆砌生僻词
+# 5. 只输出第3列(en)的翻译，每行一个翻译字符串，按输入顺序，空行输出空
+# 6. 输出格式: 一个纯文本文件，每行一个英文翻译
+# ────────────────────────────────────────────────────────────────
+# 域: 回落叙事②+理念
+# 格式: 每行一条英文翻译。已翻译的行保留原 en 值不动，待翻译的行填空行。
+# ────────────────────────────────────────────────────────────────
+
+# [TRES_FANGSHI_SHIYAO_FALLBACK_DESCRIPTION_0] 试药\n掌柜的递来一碗新配的汤药，说是补气血的方子。你仰头喝下，药性平和，倒无不适。掌柜满意地点点头，从柜下摸出几枚铜钱递来。
+The Wrong Medicine
+# [TRES_FANGSHI_SHIYAO_FALLBACK_NAME_0] 试药换钱
+Testing Medicine\nThe shopkeeper hands you a bowl of freshly prepared herbal brew, claiming it nourishes the blood and qi. You tilt your head back and drink. The medicine is mild, causing no discomfort. The shopkeeper nods with satisfaction and fishes out a few copper coins from beneath the counter, handing them to you.
+# [TRES_FANG_SHI_DESCRIPTION_0] 脱下长衫
+Testing Medicine for Coin
+# [TRES_FANG_SHI_LOCK_NARRATIVE_0] 适逢某公忌日，长安罢市，百肆紧闭
+Cast Off the Scholar's Robe
+# [TRES_FANG_SHI_NAME_0] 集市
+It happens to be the death anniversary of a certain dignitary. Chang'an's markets are shuttered, every shop bolted shut.
+# [TRES_FENGXIAN_ASK_LIZHENG_DESCRIPTION_0] 转身离开
+The Marketplace
+# [TRES_FENGXIAN_ASK_LIZHENG_DESCRIPTION_1] 里正还坐在那张磨得发亮的木凳上，像是从未挪过。你走过去的时候，他正[glitch level=6]闭着眼[/glitch]晒太阳——不，也许只是在打盹。冬天的太阳没有温度，照在他脸上像一层薄灰。
+Turn and Leave
+# [TRES_FENGXIAN_ASK_LIZHENG_INFO_0] 里正闭着眼，指了一个你根本不认识的方向。风里…听不到哭声了。
+The village head still sits on that wooden stool, its surface worn glossy, as if he had never moved. When you approach, he has his eyes [glitch level=6]closed[/glitch], basking in the sun — no, perhaps just dozing. The winter sun carries no warmth; it lies on his face like a thin layer of ash.
+# [TRES_FENGXIAN_ASK_LIZHENG_NAME_0] 村口的里正
+Eyes still shut, the village head points in a direction you don't recognize at all. In the wind… you can no longer hear the crying.
+# [TRES_FENGXIAN_ASK_LIZHENG_TRANSITION_TEXT_0] 我怎么对这个地方一点都不熟悉
+The Village Head at the Entrance
+# [TRES_FENGXIAN_FAMILIAR_PATH_DESCRIPTION_0] 折返回村口
+Why does this place feel so utterly unfamiliar
+# [TRES_FENGXIAN_FAMILIAR_PATH_DESCRIPTION_1] 你凭着十年前的记忆在这片田野里摸索。路早就被荒草吞没了大半，但方向还在骨头里。风从奉先县城那边吹过来，夹着一股[glitch]柴̧̧̱̰̣̱̈̄̃̇́̀́̄烟̄̂̈̆̂̇̌̀[/glitch]味。
+Turn Back to the Village Entrance
+# [TRES_FENGXIAN_FAMILIAR_PATH_INFO_0] 远处的茅草屋里传来婴儿断断续续的啼哭，像是在硬撑。
+You grope through the fields, relying on memories from a decade ago. The path has long been swallowed by wild grass, but its direction still lives in your bones. The wind blows over from Fengxian county town, carrying a whiff of [glitch]f̈̄̃̇í̀́̄ŗ̧̱̰̣̱ē̂̈̆̂̇̌̀ẅ̄̃̇́̀́̄o̧̧̱̰̣̱ō̂̈̆̂̇̌̀d[/glitch] smoke.
+# [TRES_FENGXIAN_FAMILIAR_PATH_NAME_0] 熟悉的路径
+From a distant thatched hut comes the intermittent cry of a baby, as if struggling to hold on.
+# [TRES_FENGXIAN_FAMILIAR_PATH_TRANSITION_TEXT_0] 你回到村头，察看着四周
+A Familiar Path
+# [TRES_FENGXIAN_OLD_HOME_CORPSE_DESCRIPTION_0] 退出门外
+You return to the village entrance and survey your surroundings
+# [TRES_FENGXIAN_OLD_HOME_CORPSE_DESCRIPTION_1] 门虚掩着。你推开门，屋里的霉味混着一股甜腻的腐烂气息迎面扑来。地上趴着一具[glitch level=4]干尸[/glitch]——骨节粗大，肩宽，不像女人，更不是孩子。你蹲下来翻看尸体的手，指节上有老茧，是握锄头的痕迹。
+Step Back Outside
+# [TRES_FENGXIAN_OLD_HOME_CORPSE_INFO_0] 你急疯了，在泥水里跌跌撞撞。那阵哭声变得极其微弱，几乎要被风声盖过。
+The door is ajar. You push it open. A musty odor mixed with a cloying sweetness of decay hits your face. On the floor lies a [glitch level=4]desiccated corpse[/glitch] — thick-knuckled, broad-shouldered. Not a woman, certainly not a child. You crouch down and turn over the hand. Calloused knuckles. The marks of a hoe.
+# [TRES_FENGXIAN_OLD_HOME_CORPSE_NAME_0] 旧居
+Mad with desperation, you stumble through the mud. The crying has grown terribly faint, nearly swallowed by the wind.
+# [TRES_FENGXIAN_OLD_HOME_CORPSE_TRANSITION_TEXT_0] 哭声弱下来了...
+The Old Home
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_0] 沿着记忆中的小径，去找十年前住过的那间屋
+The crying grows weaker…
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_1] 回头去找村口的里正，他应该知道这些年发生了什么
+Follow the path in your memory to find the house you lived in ten years ago
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_2] 不去问人，直接凭着直觉去找那间漏雨的老屋
+Go back and find the village head at the entrance; he should know what happened these years
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_3] 你站在奉先村的村口，风从骊山方向灌过来，把衣摆吹得猎猎作响。十年前的记忆在脑子里乱撞，每条巷子都像，又都不像。村口的老槐树还在，但树下的石凳上坐着陌生的人。
+Don't ask anyone — trust your instincts to find that leaky old house
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_FAILED_HINT_0] 你不知道家在哪里
+You stand at the entrance of Fengxian village. The wind barrels in from the direction of Mount Li, whipping your robes with a snapping sound. Memories from ten years ago crash through your mind — every alley looks right and wrong at the same time. The old locust tree at the entrance still stands, but strangers now sit on the stone bench beneath it.
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_NAME_0] 奉先村村头
+You don't know where home is
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_0] 沿着记忆中的小径，去找十年前住过的那间屋
+Fengxian Village Entrance
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_1] 回头去找村口的里正，他应该知道这些年发生了什么
+Follow the path in your memory to find the house you lived in ten years ago
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_2] 不去问人，直接凭着直觉去找那间漏雨的老屋
+Go back and find the village head at the entrance; he should know what happened these years
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_3] 向小木屋走去
+Don't ask anyone — trust your instincts to find that leaky old house
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_4] 你又站在了村口。风还是从骊山方向来，但现在你知道有些东西已经不一样了。里正死了，那片你住过的区域已经换了模样——他们似乎搬迁到了你不熟悉的地方。你不常回来，也没钱，这些年村子对你来说，已经成了一个陌生的地方。
+Head Toward the Small Wooden Hut
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_FAILED_HINT_0] 你知道那里不对，里正死了，他们似乎搬迁到了你不熟悉的地方
+You stand at the village entrance again. The wind still comes from Mount Li, but now you know — some things are no longer the same. The village head is dead. The area where you once lived has changed beyond recognition — they seem to have relocated somewhere unfamiliar. You rarely come back, and you have no money. Over the years, the village has become a foreign place to you.
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_FAILED_HINT_1] 你知道那里不对，里正死了，他们似乎搬迁到了你不熟悉的地方
+You know something is wrong. The village head is dead, and they seem to have relocated somewhere you don't recognize.
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_FAILED_HINT_2] 你知道那里不对，里正死了，他们似乎搬迁到了你不熟悉的地方
+You know something is wrong. The village head is dead, and they seem to have relocated somewhere you don't recognize.
+# [TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_NAME_0] 奉先村村头
+You know something is wrong. The village head is dead, and they seem to have relocated somewhere you don't recognize.
+# [TRES_FENG_ZHAO_DESCRIPTION_0] 写诗
+Fengxian Village Entrance
+# [TRES_FENG_ZHAO_LOCK_NARRATIVE_0] 文思枯涩，笔端如坠千钧，纸上空无一字
+Compose Poetry
+# [TRES_FENG_ZHAO_NAME_0] 奉召
+Your literary thoughts run dry and coarse. The brush-tip feels weighed down by a thousand pounds. The paper remains blank — not a single word.
+# [TRES_FOCUSED_CHAT_ENTER_EXAM_DESCRIPTION_0] 开始考试
+Summoned to Court
+# [TRES_FOCUSED_CHAT_ENTER_EXAM_NAME_0] 你带着这几年在长安四处干谒换来的微薄名望，深吸一口气，跨过贡院高高的门槛。阳光洒在你的白袍上，你觉得大唐的未来就在你笔下。
+Begin the Examination
+# [TRES_FOCUSED_CHAT_ENTER_EXAM_NAME_1] 进入贡院
+Carrying the meager reputation you've scraped together from years of petitioning officials across Chang'an, you draw a deep breath and step over the Examination Hall's towering threshold. Sunlight falls upon your white robes. You feel that the future of the Great Tang lies beneath your brush.
+# [TRES_FOCUSED_CHAT_EXAM_FIRST_QUESTION_DESCRIPTION_0] 选A
+Enter the Examination Hall
+# [TRES_FOCUSED_CHAT_EXAM_FIRST_QUESTION_NAME_0] 正常的诗词题
+Choose A
+# [TRES_FOCUSED_CHAT_EXAM_FIRST_QUESTION_NAME_1] 第一题
+A Standard Poetry Question
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_DESCRIPTION_0] 针砭时弊：言明边镇兵权过重，朝堂言路闭塞。
+Question One
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_DESCRIPTION_1] 违心作答：“右相调理阴阳，海内晏清，真乃千古贤相！”
+Criticize the current abuses: Argue that border garrisons hold excessive military power and the court has stifled all channels of honest counsel.
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_DISABLED_REASON_0] 考官死死盯着你的笔尖。你敢写下半个字，今天就别想活着走出贡院。
+Answer against your conscience: "The Grand Chancellor harmonizes yin and yang; the realm is at peace under his governance. Truly a sage minister for the ages!"
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_INFO_0] 你感到一阵反胃
+The examiner fixes his stare on the tip of your brush. Write so much as half a character of dissent, and you won't leave this examination hall alive today.
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_NAME_0] 试卷的第二题并非诗词经义，而是策问：“今圣上垂拱而治，右相理政，天下如何？”你握紧了笔，冷汗滴在纸上。主考官（李林甫的心腹）在走道里来回巡视，眼神阴冷。
+A wave of nausea rises in your stomach
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_NAME_1] 第二题
+The second question on the exam paper is not about poetry or the classics — it's a policy essay: "His Majesty governs through effortless virtue while the Grand Chancellor administers the realm. How fares the empire?" You grip your brush tighter; cold sweat drips onto the paper. The chief examiner — Li Linfu's trusted man — paces the aisles, his gaze dark and cold.
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_TEXTS_0] 天宝六年，贡院放榜。你满怀信心地挤入人群，寻找自己的名字。
+Question Two
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_TEXTS_1] 没有。不仅没有你，你认识的所有才子，郑虔、高适……全都不在榜上.
+In the sixth year of Tianbao, the Examination Hall posts its results. Full of confidence, you squeeze into the crowd, searching for your name.
+# [TRES_FOCUSED_CHAT_EXAM_SECOND_QUESTION_TEXTS_2] 相国李林甫上表贺皇帝：‘天下英才尽入彀中，野无遗贤。’
+Nothing. Not just you — every talented scholar you know — Zheng Qian, Gao Shi… none of them are on the list.
+# [TRES_GAN_LU_DESCRIPTION_0] 长路漫漫，归乡
+Grand Chancellor Li Linfu submits a memorial congratulating the Emperor: "All the empire's talents have been gathered into the fold. No worthy man remains outside the court."
+# [TRES_GAN_LU_NAME_0] 归家
+A Long Road Ahead — Return Home
+# [TRES_HEALTH_DESCRIPTION_0] 你的生命之本。健康越低，行动越受限。低于20将触发濒死危机。
+Returning Home
+# [TRES_HEALTH_GAIN_TEXT_0] 精神稍振
+The root of your life force. The lower your health, the more restricted your actions become. Falling below 20 triggers a life-threatening crisis.
+# [TRES_HEALTH_GAIN_TEXT_1] 容光焕发
+Slightly refreshed
+# [TRES_HEALTH_GAIN_TEXT_2] 脱胎换骨，百病不侵
+Visibly rejuvenated
+# [TRES_HEALTH_LOSS_TEXT_0] 偶感不适
+Reborn anew — no ailment can touch you
+# [TRES_HEALTH_LOSS_TEXT_1] 病来如山倒
+A passing discomfort
+# [TRES_HEALTH_LOSS_TEXT_2] 命悬一线
+Sickness crashes down like a mountain
+# [TRES_HEALTH_PERCEPTION_TEXT_0] 奄奄一息
+Life hangs by a thread
+# [TRES_HEALTH_PERCEPTION_TEXT_1] 体弱多病
+At death's door
+# [TRES_HEALTH_PERCEPTION_TEXT_2] 尚算康健
+Frail and sickly
+# [TRES_HEALTH_PERCEPTION_TEXT_3] 身强体健
+Reasonably healthy
+# [TRES_HEALTH_PERCEPTION_TEXT_4] 百病不侵
+Strong and robust
+# [TRES_HOLD_FEAST_FAILURE_FALLBACK_DESCRIPTION_0] 宴席之上，玉盘珍馐，觥筹交错。你端着酒杯在人群中穿梭，试图与几位说得上话的人物攀谈。然而这些贵人要么被更显赫的宾客包围，要么对你只是敷衍地点头寒暄便转身而去。夜深宴散，朱门在身后吱呀关上。你立在阶下，望着一地狼藉的残烛，心中空落落的。这重金购得的入席券，终究没有换来一句承诺。
+Impervious to all ailments
+# [TRES_HOLD_FEAST_FAILURE_FALLBACK_NAME_0] 宴散人空
+At the banquet, jade platters bear rare delicacies, wine cups cross in festive toasts. You navigate through the crowd, cup in hand, attempting to strike up conversation with several figures of influence. Yet these dignitaries are either surrounded by more prominent guests or merely offer you a perfunctory nod before turning away. Night deepens; the feast disperses. The vermilion gates creak shut behind you. Standing beneath the steps, gazing at the scattered remains of spent candles, emptiness fills your chest. The seat at this table, bought at great cost, has yielded not a single promise.
+# [TRES_HOLD_FEAST_SUCCESS_FALLBACK_DESCRIPTION_0] 朱门之内，灯火辉煌。你与{@npc_name}相谈甚欢，从他的言谈中你感受到此人虽素未谋面，却在长安城中颇有根基。宴罢，{@npc_name}从袖中取出一封亲笔书信递给你，以作引荐之资。
+The Feast Ends — The Guests Vanish
+# [TRES_HOLD_FEAST_SUCCESS_FALLBACK_NAME_0] 宴上知遇
+Within the vermilion gates, lanterns blaze bright. You share warm conversation with {@npc_name}; from his manner of speech you sense that though you've never met before, this man has substantial connections in Chang'an. As the feast concludes, {@npc_name} draws a personally written letter from his sleeve and hands it to you — a token of introduction.
+# [TRES_IDEA_CAOMANGLUOTUO_DESCRIPTION_0] 宁与市井小民为伍
+Recognition at the Feast
+# [TRES_IDEA_CAOMANGLUOTUO_IDEA_DEMONSTRATIONS_0] 势获取效率提高 20%
+Would rather keep company with common market folk
+# [TRES_IDEA_CAOMANGLUOTUO_IDEA_DEMONSTRATIONS_1] 下层人的好感提高需要的事件减少 1 旬
+Influence gain efficiency increased by 20%
+# [TRES_IDEA_CAOMANGLUOTUO_NAME_0] 势：草莽落拓
+Affinity gain with lower-class characters requires 1 less xun (10-day period)
+# [TRES_IDEA_CHENYUDUNCUO_DESCRIPTION_0] 胸中有丘壑，情到深处兴方浓
+Influence: Grassroots Resilience
+# [TRES_IDEA_CHENYUDUNCUO_IDEA_DEMONSTRATIONS_0] 爬少陵原获取的兴加 80%
+A landscape within the heart — inspiration surges when emotion runs deep
+# [TRES_IDEA_CHENYUDUNCUO_IDEA_DEMONSTRATIONS_1] 被动提升城府上限和加速度（50%）
+Inspiration gain from climbing Shaoling Plain increased by 80%
+# [TRES_IDEA_CHENYUDUNCUO_NAME_0] 兴：沉郁顿挫
+Passively increases depth cap and growth rate (50%)
+# [TRES_IDEA_CHIZIBAIYI_DESCRIPTION_0] 童心未泯，万事皆可兴
+Inspiration: Melancholic Cadence
+# [TRES_IDEA_CHIZIBAIYI_IDEA_DEMONSTRATIONS_0] 平时的兴获取效率提高 20%
+A childlike heart unspoiled — everything can spark inspiration
+# [TRES_IDEA_CHIZIBAIYI_IDEA_DEMONSTRATIONS_1] 任何一个行动都会附带少量的兴获取，缓慢增加灵感
+Daily inspiration gain efficiency increased by 20%
+# [TRES_IDEA_CHIZIBAIYI_NAME_0] 兴：赤子白衣
+Every action brings a small trickle of inspiration, gradually building creative energy
+# [TRES_IDEA_QINGLIUFENGGU_DESCRIPTION_0] 风骨清高，以才华立身
+Inspiration: Purehearted Innocence
+# [TRES_IDEA_QINGLIUFENGGU_IDEA_DEMONSTRATIONS_0] 缓慢增加才华
+Lofty integrity — standing firm on pure talent
+# [TRES_IDEA_QINGLIUFENGGU_IDEA_DEMONSTRATIONS_1] 减少 50%提升清流关系的需求
+Slowly increases talent
+# [TRES_IDEA_QINGLIUFENGGU_NAME_0] 望：清流风骨
+Reduces the requirement for improving Qingliu faction relations by 50%
+# [TRES_IDEA_WULINGSHAONIAN_DESCRIPTION_0] 千金散尽还复来
+Reputation: Qingliu Integrity
+# [TRES_IDEA_WULINGSHAONIAN_IDEA_DEMONSTRATIONS_0] 缓慢增加望
+A thousand gold coins scattered shall return again
+# [TRES_IDEA_WULINGSHAONIAN_IDEA_DEMONSTRATIONS_1] 增加清流 NPC 交易提供的内容（上一个档次）
+Slowly increases reputation
+# [TRES_IDEA_WULINGSHAONIAN_NAME_0] 望：五陵年少
+Increases what Qingliu NPCs offer in trade (one tier higher)
+# [TRES_IDEA_ZHEJIEGANYE_DESCRIPTION_0] 隐忍待发，攀附权贵
+Reputation: Wuling Youth
+# [TRES_IDEA_ZHEJIEGANYE_IDEA_DEMONSTRATIONS_0] 提升携诗拜谒的效果 20%
+Biding time, clinging to the powerful
+# [TRES_IDEA_ZHEJIEGANYE_IDEA_DEMONSTRATIONS_1] 势上限提高 20%，缓慢增加定力
+Increases the effectiveness of poetry-bearing visits by 20%
+# [TRES_IDEA_ZHEJIEGANYE_NAME_0] 势：折节干谒
+Influence cap increased by 20%; slowly increases composure
+# [TRES_INSPIRATION_DESCRIPTION_0] 诗兴如泉涌，是创作的不竭动力。兴致愈高，下笔愈畅，灵感迸发。
+Influence: Humble Petitioning
+# [TRES_INSPIRATION_GAIN_TEXT_0] 灵光微闪
+Poetic inspiration surges like a spring — the inexhaustible wellspring of creation. The higher your inspiration, the more fluid your brush, and the more brilliant your creative bursts.
+# [TRES_INSPIRATION_GAIN_TEXT_1] 文思如泉涌
+A faint glimmer of brilliance
+# [TRES_INSPIRATION_GAIN_TEXT_2] 诗兴勃发，不可遏制
+Literary thoughts gush forth like a spring
+# [TRES_INSPIRATION_GAIN_TEXT_3] 如有神助，下笔千言
+Poetic fervor surges — irrepressible
+# [TRES_INSPIRATION_LOSS_TEXT_0] 灵感稍纵
+As if aided by the divine — a thousand words flow from the brush
+# [TRES_INSPIRATION_LOSS_TEXT_1] 灵感枯竭
+Inspiration slips away
+# [TRES_INSPIRATION_LOSS_TEXT_2] 无从下笔，心意茫然
+Inspiration runs dry
+# [TRES_INSPIRATION_LOSS_TEXT_3] 江郎才尽，文脉断绝
+Unable to set brush to paper — heart and mind adrift
+# [TRES_INSPIRATION_NAME_0] 兴
+The well of talent exhausted — the literary lineage severed
+# [TRES_INSPIRATION_PERCEPTION_TEXT_0] 文思枯竭
+Inspiration
+# [TRES_INSPIRATION_PERCEPTION_TEXT_1] 灵光偶现
+Literary thoughts parched dry
+# [TRES_INSPIRATION_PERCEPTION_TEXT_2] 文思涌动
+Fleeting glimpses of brilliance
+# [TRES_INSPIRATION_PERCEPTION_TEXT_3] 灵感迸发
+Literary thoughts surging
+# [TRES_INSPIRATION_PERCEPTION_TEXT_4] 诗兴大发，下笔如有神
+Inspiration erupting
+# [TRES_INTRO_GACHA_FAILURE_FALLBACK_DESCRIPTION_0] 宴席之上，玉盘珍馐，觥筹交错。你端着酒杯在人群中穿梭，试图与几位说得上话的人物攀谈。然而这些贵人要么被更显赫的宾客包围，要么对你只是敷衍地点头寒暄便转身而去。夜深宴散，朱门在身后吱呀关上。你立在阶下，望着一地狼藉的残烛，心中空落落的。这重金购得的入席券，终究没有换来一句承诺。
+Poetic inspiration at full tide — the brush moves as if possessed by the gods

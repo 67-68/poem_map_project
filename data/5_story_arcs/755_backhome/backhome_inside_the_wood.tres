@@ -23,7 +23,7 @@ metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_rsttg"]
 script = ExtResource("5_bfjbd")
-texts = Array[String](["你摸着身上那层发绿的从八品下官服。你突然意识到一个极其恐怖的逻辑悖论……", "【默思失业徒，因念远戍卒。】"])
+texts = Array[String](["TRES_BACKHOME_INSIDE_THE_WOOD_TEXTS_0", "TRES_BACKHOME_INSIDE_THE_WOOD_TEXTS_1"])
 overlay_opacity = 0.3
 metadata/_custom_type_script = "uid://bhm8bigwrwgjm"
 

@@ -21,7 +21,7 @@ metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_3y1xc"]
 script = ExtResource("3_b7ob1")
-texts = Array[String](["「自谓颇挺出，立登要路津。」", "天宝四年，秋。你默念着自己的诗句，带着这股想要致君尧舜上的狂妄，一头撞进了这座权力的迷宫。", "但长安的盛世太过喧嚣...", "根本没人听得见，一个异乡人的野心。"])
+texts = Array[String](["TRES_EVENT_INTRO_745_TEXTS_0", "TRES_EVENT_INTRO_745_TEXTS_1", "TRES_EVENT_INTRO_745_TEXTS_2", "TRES_EVENT_INTRO_745_TEXTS_3"])
 metadata/_custom_type_script = "uid://bhm8bigwrwgjm"
 
 [sub_resource type="Resource" id="Resource_osg28"]
