@@ -50,7 +50,7 @@ const NPC_FACTION_MAP: Dictionary = {
 #   hint_text:      String — UI 展示文本模板（{mod_val} 替换为实际值）
 # ════════════════════════════════════════════════════════════════
 
-var MODIFIER_EFFECTS: Array[Dictionary] = [
+static var MODIFIER_EFFECTS: Array[Dictionary] = [
 	# ── 城府 ASTUTENESS ──
 	{
 		source_prop = "astuteness",
@@ -60,7 +60,7 @@ var MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.8,
 		half_point = 20.0,
-		hint_text = tr("CODE_MODIFIER_CONFIG_79A843720B"),
+		hint_text = TranslationServer.translate("CODE_MODIFIER_CONFIG_79A843720B"),
 	},
 	{
 		source_prop = "astuteness",
@@ -70,7 +70,7 @@ var MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = tr("CODE_MODIFIER_CONFIG_78ACB44470"),
+		hint_text = TranslationServer.translate("CODE_MODIFIER_CONFIG_78ACB44470"),
 	},
 	{
 		source_prop = "astuteness",
@@ -80,7 +80,7 @@ var MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "zhuoliu",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = tr("CODE_MODIFIER_CONFIG_27F59B3B2C"),
+		hint_text = TranslationServer.translate("CODE_MODIFIER_CONFIG_27F59B3B2C"),
 	},
 	{
 		source_prop = "astuteness",
@@ -90,7 +90,7 @@ var MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.3,
 		half_point = 30.0,
-		hint_text = tr("CODE_MODIFIER_CONFIG_5A9DF0C8BE"),
+		hint_text = TranslationServer.translate("CODE_MODIFIER_CONFIG_5A9DF0C8BE"),
 	},
 
 	# ── 才华 TALENT ──
@@ -102,7 +102,7 @@ var MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = tr("CODE_MODIFIER_CONFIG_6437EEB330"),
+		hint_text = TranslationServer.translate("CODE_MODIFIER_CONFIG_6437EEB330"),
 	},
 	{
 		source_prop = "talent",
@@ -112,7 +112,7 @@ var MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "qingliu",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = tr("CODE_MODIFIER_CONFIG_0B0EC74089"),
+		hint_text = TranslationServer.translate("CODE_MODIFIER_CONFIG_0B0EC74089"),
 	},
 
 	# ── 定力 COMPOSURE ──
@@ -124,7 +124,7 @@ var MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = tr("CODE_MODIFIER_CONFIG_BCACFF08CC"),
+		hint_text = TranslationServer.translate("CODE_MODIFIER_CONFIG_BCACFF08CC"),
 	},
 	{
 		source_prop = "composure",
@@ -134,7 +134,7 @@ var MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.6,
 		half_point = 20.0,
-		hint_text = tr("CODE_MODIFIER_CONFIG_6A9F4227A3"),
+		hint_text = TranslationServer.translate("CODE_MODIFIER_CONFIG_6A9F4227A3"),
 	},
 ]
 

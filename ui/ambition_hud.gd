@@ -63,7 +63,7 @@ func _load_static():
 	# 初始化阶段感知文本（动态状态标签）
 	var initial_perception = _find_perception_by_stage_id(ambition.leveled_stages[ambition.current_stage])
 	if initial_perception:
-		dynamic_state_label.text = initial_perception.perception_text
+		dynamic_state_label.text = tr(initial_perception.perception_text)
 		Logging.info("AmbitionHUD: Initial perception text set: %s" % initial_perception.perception_text)
 
 	# 解析追踪的属性资源，并刷新进度显示
@@ -148,7 +148,7 @@ func _on_model_stat_changed(_prop_name):
 		var perception = _find_perception_by_stage_id(ambition.leveled_stages[ambition.current_stage])
 		if perception:
 			Logging.info("AmbitionHUD: Setting perception text: %s" % perception.perception_text)
-			dynamic_state_label.text = perception.perception_text
+			dynamic_state_label.text = tr(perception.perception_text)
 		else:
 			Logging.warn("AmbitionHUD: No perception found for stage: %s" % ambition.leveled_stages[ambition.current_stage])
 

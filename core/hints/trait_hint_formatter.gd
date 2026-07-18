@@ -201,21 +201,21 @@ func _build_standard_trait_hint(t, lines: Array[String], display_name: String) -
 # ════════════════════════════════════════════════════════════════
 
 ## MultiplyOperator.operator 枚举 → 中文展示文本
-func _mul_operator_mode_string(op_enum: int) -> String:
+static func _mul_operator_mode_string(op_enum: int) -> String:
 	match op_enum:
 		MultiplyOperator.MUL_OPERATOR.POSITIVE_ONLY:
-			return tr("CODE_TRAIT_HINT_FORMATTER_4F7367ADBD")
+			return TranslationServer.translate("CODE_TRAIT_HINT_FORMATTER_4F7367ADBD")
 		MultiplyOperator.MUL_OPERATOR.NEGATIVE_ONLY:
-			return tr("CODE_TRAIT_HINT_FORMATTER_6E03EF5EFD")
+			return TranslationServer.translate("CODE_TRAIT_HINT_FORMATTER_6E03EF5EFD")
 		MultiplyOperator.MUL_OPERATOR.BOTH:
-			return tr("CODE_TRAIT_HINT_FORMATTER_D9F38FD52F")
+			return TranslationServer.translate("CODE_TRAIT_HINT_FORMATTER_D9F38FD52F")
 		_:
 			Logging.warn("TraitHintFormatter._mul_operator_mode_string: 未知 op_enum=%d" % op_enum)
-			return tr("CODE_TRAIT_HINT_FORMATTER_AD303D19FC")
+			return TranslationServer.translate("CODE_TRAIT_HINT_FORMATTER_AD303D19FC")
 
 
 ## prop key → display_name，复用 Database.get_property().get_display_name()
-func _get_prop_display_name(prop_key: String) -> String:
+static func _get_prop_display_name(prop_key: String) -> String:
 	var prop = Database.get_property(prop_key)
 	if prop:
 		var dn = prop.get_display_name()
@@ -225,7 +225,7 @@ func _get_prop_display_name(prop_key: String) -> String:
 
 
 ## trait_uuid → display_name，复用 Database.get_trait
-func _get_trait_display_name(trait_uuid: String) -> String:
+static func _get_trait_display_name(trait_uuid: String) -> String:
 	var t = Database.get_trait(trait_uuid)
 	if t and not t.name.is_empty():
 		return t.name

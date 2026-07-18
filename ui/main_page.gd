@@ -21,9 +21,8 @@ func _ready() -> void:
 	# 把三组 trigger + 坐标注入 Line2D
 	if line.has_method("bind_triggers"):
 		line.bind_triggers([
-			[t1, Vector2(665, 240), Vector2(560, 310)],  # 京
-			[t2, Vector2(665, 240), Vector2(686, 365)],  # 隐
-			[t3, Vector2(665, 240), Vector2(835, 38)],   # 律法
+			[t1, Vector2(465, 240), Vector2(360, 310)],  # 京
+			[t2, Vector2(465, 240), Vector2(486, 365)],  # 隐
 		])
 		Logging.info("main_page: 已绑定 3 个 trigger 到 route_line")
 	else:

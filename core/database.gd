@@ -114,7 +114,7 @@ func _init() -> void:
 	index_image = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
 
 	# 显式加载翻译：确保 Resource 脚本能访问翻译
-	var trans_path = "res://data/1_core_rules/translations/dynamic_events.zh.translation"
+	var trans_path = "res://data/1_core_rules/translations/_dynamic_events.zh.translation"
 	if ResourceLoader.exists(trans_path):
 		var trans = load(trans_path)
 		if trans is Translation:

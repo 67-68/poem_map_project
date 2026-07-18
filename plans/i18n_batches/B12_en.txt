@@ -1,5 +1,5 @@
 # Batch B12: 教程对话① — 渔阳鼙鼓结局、时间渐变、吐蕃、教程出游（山间/望山/四方探索）、延迟完成、对话（偶遇/意气/志向/体魄/岁月）、共饮、揭示、告别
-# 行范围: 2558-2687  待翻译: 110行  已有: 20行
+# 行范围: 2558-2687  待翻译: 0行  已有: 130行
 # ─── 全局翻译铁律 ──────────────────────────────────────────────
 # 1. 保留所有标记原样: {param} {@keyword} [br] [glitch level=N]...[/glitch]
 #    [color=#xxx]...[/color] [font_size=N][b]...[/b][/font_size] [i]...[/i]
@@ -43,7 +43,7 @@ You rack your brains for what feels like an eternity, but all you manage are a f
 # [TRES_TUT_CHUYOU_FALLBACK_DESCRIPTION_1] 你在泰山山间漫步，呼吸着新鲜空气。山风吹过，树叶沙沙作响，偶尔几声鸟鸣从远处传来。
 
 远远望去，山顶仍被那团浓雾笼罩着。不知何时才能一睹泰山真容。
-You wander through Mount Tai's slopes, breathing the crisp mountain air. The wind rustles through the leaves, and birdsong drifts from afar.\n\nGazing into the distance, the summit remains shrouded in that thick bank of fog. Who knows when you will finally behold Mount Tai's true face.
+You recall the Taoist's words — "Mountaineering is not won with the brush." Perhaps you still need something more.
 # [TRES_TUT_CHUYOU_FALLBACK_NAME_0] 山间漫步
 The Taoist, you realize, has been standing behind you for some time. He leans over to glance at the draft, and a flash of astonishment crosses his eyes.
 # [TRES_TUT_CHUYOU_LOOKUP_DESCRIPTION_0] 云雾散尽，抬头仰望泰山之巅
@@ -57,75 +57,75 @@ The Taoist comes to stand beside you and speaks softly: "This humble priest must
 # [TRES_TUT_CHUYOU_NORTH_NAME_0] 北岩望岳
 With that, he finds a green stone, settles cross-legged upon it, closes his eyes, and speaks no more.
 # [TRES_TUT_CHUYOU_SOUTH_DESCRIPTION_0] 沿着山间溪流向南，寻幽访胜
-Follow the mountain stream southward, seeking out secluded beauty.
+Gazing into the distance, the peak remains shrouded in that thick bank of fog. Who knows when you'll finally behold Mount Tai's true face.
 # [TRES_TUT_CHUYOU_SOUTH_NAME_0] 南溪拾趣
-Southern Stream Discoveries
+"Go on." He waves a hand, his expression serene. "You and I share a bond of affinity. We shall meet again, in time."
 # [TRES_TUT_CHUYOU_WEST_DESCRIPTION_0] 登上西边山岭，观赏云海奇景
-Ascend the western ridge and behold the wondrous sea of clouds.
+You bow deeply, turn, and set out on the road home. After a few steps, you cannot help but glance back — the Taoist has already turned toward the mountain, his figure slowly vanishing into the forest.
 # [TRES_TUT_CHUYOU_WEST_NAME_0] 西峰观云
-Western Peak Cloud Vista
+This journey to Mount Tai has profited you greatly, you think. You will return to pay a visit someday.
 # [TRES_TUT_DEFER_DONE_DESCRIPTION_0] 云雾散了！看，泰山！
-The fog has lifted! Look — Mount Tai!
+What you do not realize is that this parting will stretch across twenty years.
 # [TRES_TUT_DEFER_DONE_DESCRIPTION_1] 两旬时光匆匆而过。这一日清晨，你来到道士打坐处，见他缓缓睁开眼睛。\n\n「成了。」道士拂尘一挥。\n\n你抬头望去，笼罩山顶的浓雾正以肉眼可见的速度消散。阳光穿透云层，将泰山之巅染成一片金黄。那巍峨的山体第一次完整地展现在你面前——这就是泰山，如画，如诗。
-Two tendays pass in the blink of an eye. One morning, you arrive at the Taoist's meditation spot and find him slowly opening his eyes.\n\n\"It is done.\" The Taoist sweeps his horsetail whisk.\n\nYou look up. The dense fog shrouding the summit is dissipating before your very eyes. Sunlight pierces the clouds, dyeing Mount Tai's peak a brilliant gold. For the first time, the majestic mountain reveals itself in full before you — this is Mount Tai, a painting, a poem.
+The clouds beneath your feet churn like an ocean of waves. Distant peaks emerge and vanish in the sea of mist, like azure islands floating in a white expanse. The dome of heaven arches above, the stars arrayed across it, and for a moment you feel utterly alone between sky and earth.
 # [TRES_TUT_DEFER_DONE_NAME_0] 云开雾散
-Clouds Part, Fog Lifts
+Ten thousand leagues of deep-blue waves surge and roll — the sun and moon seem to rise from within them, the River of Stars to pour from their depths.
 # [TRES_TUT_DEFER_INTERRUPT_DESCRIPTION_0] 晚辈知错了
-This junior admits his error.
+Scroll after scroll of bamboo slips unfurl before your eyes, filled with the names of those who rose and fell, who triumphed and perished.
 # [TRES_TUT_DEFER_INTERRUPT_DESCRIPTION_1] 你贸然打断了道士的作法。他手中拂尘一顿，周身气息散了开去。\n\n道士转过头，眉头紧皱：「年轻人，作法讲究一气呵成，你这一打断，贫道又得重头来过。」\n\n他叹了口气，重新闭上双眼：「罢了罢了，下不为例。」
-You rashly interrupt the Taoist's ritual. His whisk freezes mid-motion, and the gathered aura scatters around him.\n\nThe Taoist turns his head, brow furrowed deep: \"Young man, ritual workings must flow in one unbroken breath. With this disruption, this humble priest must begin anew from the very start.\"\n\nHe sighs and closes his eyes once more: \"Enough, enough. Let it not happen again.\"
+You suddenly understand — this magnificent landscape, this is the poetry you are meant to write.
 # [TRES_TUT_DEFER_INTERRUPT_NAME_0] 道士不悦
-The Taoist's Displeasure
+He slowly opens his eyes, studies you for a moment, then speaks: "Young man, why have you come to Mount Tai?"
 # [TRES_TUT_DEFER_START_DESCRIPTION_0] 等待道士行动。如果打断他可能不会很开心。
-Wait for the Taoist to act. Interrupting him may not go over well.
+The mountain wind rises, and the fog churns like a tide. For a moment you think you glimpse the silhouette of the summit — then it is gone, as if it were never there.
 # [TRES_TUT_DEFER_START_DESCRIPTION_1] 他坐下，开始作法。
-He sits down and begins the ritual.
+You think of the Taoist — he has cultivated on this mountain for many years. Perhaps he knows the origin of this fog.
 # [TRES_TUT_DEFER_START_NAME_0] 等待
-Waiting
+You rack your brains for what feels like an eternity, but all you manage are a few dry, lifeless lines. Even you shake your head at them.
 # [TRES_TUT_DIALOGUE_1_DESCRIPTION_0] 在下杜甫，此番游历是为增长见识
-I am Du Fu. I travel to broaden my knowledge of the world.
+远远望去，山顶仍被那团浓雾笼罩着。不知何时才能一睹泰山真容。
 # [TRES_TUT_DIALOGUE_1_DESCRIPTION_1] 道士打量了你一番，笑道：「贫道在此山修行多年，看人倒也有几分眼力。小友脚步稳健，不像寻常书生那般弱不禁风。」\n\n他拂尘轻摆，示意你坐下：「未请教大名？此番来泰山，所为何事？」
-The Taoist sizes you up, then smiles: \"This humble priest has cultivated on this mountain for many years and has learned to read a man. Your steps are steady, young friend — not frail like the typical scholar.\"\n\nHe gestures with his whisk, beckoning you to sit: \"May I ask your distinguished name? What brings you to Mount Tai?\"
+You wander through Mount Tai's slopes, breathing the crisp mountain air. The wind rustles through the leaves, and birdsong drifts from afar.\n\nGazing into the distance, the summit remains shrouded in that thick bank of fog. Who knows when you will finally behold Mount Tai's true face.
 # [TRES_TUT_DIALOGUE_1_NAME_0] 山中偶遇
-A Chance Meeting in the Mountains
+The Taoist, you realize, has been standing behind you for some time. He leans over to glance at the draft, and a flash of astonishment crosses his eyes.
 # [TRES_TUT_DIALOGUE_2_DESCRIPTION_0] 晚辈记下了
-This junior will remember.
+"Fine! Fine indeed! 'I must ascend the utmost peak, and see all other mountains dwarfed beneath!'" The Taoist claps his hands in praise. "Young man, with a poetic gift like this, you will surely win great renown. A name inscribed in the annals of history is no idle dream."
 # [TRES_TUT_DIALOGUE_2_DESCRIPTION_1] 道士闻言，微微颔首：「年纪轻轻便有此志，难得。」\n\n他伸手在你肩上按了按，又看了看你的脸色：「身子骨还算硬朗，面色也红润——看来家中不曾亏待了你。出门在外，身体是本钱，钱财是盘缠。这两样本钱，你得时时放在心上。」\n\n他从袖中取出一枚铜钱把玩：「贫道云游四方，深知一文钱难倒英雄汉。好在你眼下囊中尚不羞涩，趁年轻多走走。」
-The Taoist nods slightly: \"To possess such ambition at your age — rare indeed.\"\n\nHe presses a hand on your shoulder and studies your complexion: \"Your frame is sturdy, your color healthy — your family has not neglected you. When abroad in the world, your body is your capital and coin is your provision. Keep both ever in mind.\"\n\nHe produces a copper coin from his sleeve and toys with it: \"This humble priest has wandered far and wide. I know well how a single copper coin can humble even the mightiest of men. Your purse is not yet empty — travel while you are young.\"
+"You're back." His tone is calm. "Judging by your expression — what did you encounter?"
 # [TRES_TUT_DIALOGUE_2_NAME_0] 少年意气
-A Youth's High Spirits
+You stand at the cliff's edge, looking down at the mountain ranges stretching to the edge of the sky. An indescribable emotion swells in your chest. The world is so vast — and you are but a speck of dust within it.
 # [TRES_TUT_DIALOGUE_3_DESCRIPTION_0] 晚辈愿闻其详
-This junior would hear more.
+The Taoist comes to stand beside you and speaks softly: "This humble priest must sit in meditation for a while. Go wander where you will. These mountains still hold much worth seeing."
 # [TRES_TUT_DIALOGUE_3_DESCRIPTION_1] 道士将铜钱递还给你，正色道：「杜小友，贫道观你不是甘于庸碌之人。你这等读书人，心里都揣着一团火——那是志向，是抱负。」\n\n他抬手指向远方：「你且看这天地。有人为名利奔波，有人为家国忧心。读圣贤书，所为者何？」\n\n他顿了顿：「文思、声望、时运——这三样东西，日后会推着你往前走，也会在关键时刻绊你一脚。心中有数，方能行远。」
-The Taoist returns the coin to you, his tone turning earnest: \"Young Du, this humble priest sees that you are not one content with mediocrity. Scholars like you carry a fire within their hearts — that is ambition, that is purpose.\"\n\nHe raises a hand toward the distance: \"Look upon this world. Some chase fame and fortune. Some worry for family and country. You study the sages — to what end, then?\"\n\nHe pauses: \"Literary genius, renown, fortune's favor — these three will propel you forward, yet they will trip you at critical moments. Know their measure, and you shall travel far.\"
+With that, he finds a green stone, settles cross-legged upon it, closes his eyes, and speaks no more.
 # [TRES_TUT_DIALOGUE_3_NAME_0] 志在四方
-Ambitions to the Four Corners
+Follow the mountain stream southward, seeking out secluded beauty.
 # [TRES_TUT_DIALOGUE_4_DESCRIPTION_0] 多谢道长指点
-Thank you for your guidance, Master.
+Southern Stream Discoveries
 # [TRES_TUT_DIALOGUE_4_DESCRIPTION_1] 道士又看了你几眼，忽然说道：「我观你才思尚可，但身子骨还需磨砺。登山不是靠笔杆子，是靠腿脚。你这副身板，若不先打熬打熬，怕是走不了多远。」\n\n他站起身，拍了拍道袍上的尘土，在你肩上按了按，力道不轻不重。\n\n「嗯，底子不错。我见过不少读书人，十年寒窗下来不是弯腰就是驼背。你这副筋骨，比他们强。」\n\n他简单教了你几式调息之法，嘱咐道：「登山之人，气力是本钱。记着这个道理。」\n\n[size=13][color=#888888]系统提示：将鼠标悬浮在左侧出现的刻印上，可以查看详细效果说明[/color][/size]
-The Taoist gives you another long look, then speaks: \"Your literary talent is passable, but your body still needs tempering. Mountaineering is not won with the brush — it is won with the legs. This frame of yours — if you do not first weather it, I fear you will not travel far.\"\n\nHe rises, dusts off his robe, and presses a hand on your shoulder — not too light, not too heavy.\n\n\"Mm. Your foundation is solid. I have seen many scholars — after ten years buried in books, they emerge stooped and hunched. Your frame is stronger than theirs.\"\n\nHe teaches you a few breathing exercises and counsels: \"One who climbs mountains — vigor is your capital. Remember this truth.\"\n\n[size=13][color=#888888]System Tip: Hover over the markings that appear on the left to view detailed effect descriptions.[/color][/size]
+Ascend the western ridge and behold the wondrous sea of clouds.
 # [TRES_TUT_DIALOGUE_4_NAME_0] 身强体壮
-Body Forged Strong
+Western Peak Cloud Vista
 # [TRES_TUT_DIALOGUE_TIME_DESCRIPTION_0] 晚辈生于大唐开元十五年，今年该是二十有六了
-This junior was born in the fifteenth year of the Kaiyuan era of the Great Tang. I should be twenty-six this year.
+The fog has lifted! Look — Mount Tai!
 # [TRES_TUT_DIALOGUE_TIME_DESCRIPTION_1] 道士捻须一笑：「贫道久居山中，对年月已不甚在意。小友可知今夕是何年？」\n\n他望向远处天际，目光似乎穿透了云层：「修道之人不计春秋，但你这读书人，须得心中有数。何时赶考、何时进京，都是要紧事。」\n\n他伸手指向山外：「记着时日，莫负光阴。」\n\n[size=13][color=#888888]系统提示：右上角的时间面板展示了当前的年号与旬次。每个白色圆球代表一天——在本教程中，每旬仅有 2 天可用。点击"跳过"按钮可以快速结束本旬，进入下一旬。[/color][/size]
-The Taoist strokes his beard and laughs: \"This humble priest has dwelt long in the mountains — the passing of months and years has grown faint to me. But tell me, young friend — do you know what year it is now?\"\n\nHe gazes toward the distant horizon, his eyes seeming to pierce the clouds: \"One who cultivates the Way counts not the seasons, but a scholar like you must keep them in mind. When to sit the examinations, when to enter the capital — these are matters of consequence.\"\n\nHe points beyond the mountains: \"Mark the days. Do not squander time.\"\n\n[size=13][color=#888888]System Tip: The time panel in the upper-right corner displays the current reign era and tenday. Each white orb represents one day — in this tutorial, only 2 days are available per tenday. Click the \"Skip\" button to quickly end the current tenday and advance to the next.[/color][/size]
+Two tendays pass in the blink of an eye. One morning, you arrive at the Taoist's meditation spot and find him slowly opening his eyes.\n\n\"It is done.\" The Taoist sweeps his horsetail whisk.\n\nYou look up. The dense fog shrouding the summit is dissipating before your very eyes. Sunlight pierces the clouds, dyeing Mount Tai's peak a brilliant gold. For the first time, the majestic mountain reveals itself in full before you — this is Mount Tai, a painting, a poem.
 # [TRES_TUT_DIALOGUE_TIME_NAME_0] 岁月如梭
-Time Flies Like the Shuttle
+Clouds Part, Fog Lifts
 # [TRES_TUT_DRINK_TOGETHER_DESCRIPTION_0] 与道长对饮
-Share a drink with the Taoist Master.
+This junior admits his error.
 # [TRES_TUT_DRINK_TOGETHER_DESCRIPTION_1] 你取出随身携带的酒囊，在道士面前晃了晃。\n\n道士眼睛一亮：「好小子，来泰山还带着酒？」\n\n你们二人在青石上对坐，几杯下肚，道士的话匣子渐渐打开。他讲起年轻时云游各处的见闻，讲起各处的风土人情，语气中透着几分过来人的感慨。\n\n酒酣耳热，你感觉与这道士之间的距离近了不少。
-You produce the wineskin from your belt and wave it before the Taoist.\n\nThe Taoist's eyes light up: \"Well done, lad! You brought wine to Mount Tai?\"\n\nThe two of you sit facing each other on the green stone. After a few cups, the Taoist's reserve loosens. He recounts tales from his wandering youth — the customs and peoples of distant lands — his voice tinged with a veteran's nostalgia.\n\nWarm with wine, you feel the distance between you and this Taoist shrink considerably.
+You rashly interrupt the Taoist's ritual. His whisk freezes mid-motion, and the gathered aura scatters around him.\n\nThe Taoist turns his head, brow furrowed deep: \"Young man, ritual workings must flow in one unbroken breath. With this disruption, this humble priest must begin anew from the very start.\"\n\nHe sighs and closes his eyes once more: \"Enough, enough. Let it not happen again.\"
 # [TRES_TUT_DRINK_TOGETHER_NAME_0] 共饮
-Drinking Together
+The Taoist's Displeasure
 # [TRES_TUT_FINAL_REVEAL_DESCRIPTION_0] 下山去了
-Descend the mountain.
+Wait for the Taoist to act. Interrupting him may not go over well.
 # [TRES_TUT_FINAL_REVEAL_DESCRIPTION_1] 你站在山巅，回望这一路——从山脚遇道士，到山腰得指点，再到此刻俯瞰万山。\n\n风从四面八方吹来，你忽然感觉自己不再只是那个初出茅庐的书生了。泰山的灵秀之气仿佛渗入了你的骨血，那些不曾想过的才华、那些深藏的城府、那份与生俱来的定力，都在这一刻变得清晰起来。\n\n再看这天地，你有了新的感悟——朝堂的风声、人间的恩怨、那些暗流涌动的关系网，都隐隐浮现。\n\n泰山之行，不虚此行。\n\n[size=13][color=#888888]系统提示：新的界面元素已解锁。右下角的按钮可查看人脉、理念、诗词等功能[/color][/size]
-You stand at the summit and look back upon the road you have traveled — from meeting the Taoist at the mountain's foot, to receiving his guidance on the slopes, to this moment gazing down upon ten thousand peaks.\n\nThe wind rushes in from every direction, and you suddenly feel you are no longer just that callow young scholar. Mount Tai's numinous spirit seems to have seeped into your very blood. Talents you never imagined, depths of shrewdness long hidden, a composure born within you — all become sharp and clear in this moment.\n\nYou look upon the world anew with fresh insight — the whispers of the court, the grudges and debts among men, the undercurrents of power and connection — all loom before you, faint but unmistakable.\n\nThis journey to Mount Tai has not been in vain.\n\n[size=13][color=#888888]System Tip: New interface elements are now unlocked. The buttons in the lower-right corner provide access to Connections, Ideas, Poems, and other features.[/color][/size]
+He sits down and begins the ritual.
 # [TRES_TUT_FINAL_REVEAL_NAME_0] 豁然开朗
-Sudden Illumination
+Waiting
 # [TRES_TUT_GOODBYE_DESCRIPTION_0] 后会有期
-Until we meet again.
+I am Du Fu. I travel to broaden my knowledge of the world.
 # [TRES_TUT_GOODBYE_DESCRIPTION_1] 离别的日子终于到了。你在山脚下与玄明道人告别。
 
 「去吧。」道士挥了挥手，神色平静，「你我有缘，日后自会再见。」
@@ -135,31 +135,31 @@ Until we meet again.
 你心想，此番泰山之行使你获益良多，日后再来拜访。
 
 只是你没想到，这一别，竟过了二十年。
-The day of parting arrives at last. At the foot of the mountain, you bid farewell to Taoist Master Xuanming.\n\n\"Go on.\" He waves a hand, his expression serene. \"You and I share a bond of affinity. We shall meet again, in time.\"\n\nYou bow deeply, turn, and set out on the road home. After a few steps, you cannot help but glance back — the Taoist has already turned toward the mountain, his figure slowly vanishing into the forest.\n\nThis journey to Mount Tai has profited you greatly, you think. You will return to pay a visit someday.\n\nWhat you do not realize is that this parting will stretch across twenty years.
+The Taoist sizes you up, then smiles: \"This humble priest has cultivated on this mountain for many years and has learned to read a man. Your steps are steady, young friend — not frail like the typical scholar.\"\n\nHe gestures with his whisk, beckoning you to sit: \"May I ask your distinguished name? What brings you to Mount Tai?\"
 # [TRES_TUT_GOODBYE_NAME_0] 下山
-Descending the Mountain
+A Chance Meeting in the Mountains
 # [TRES_TUT_IDEA_HINT_DESCRIPTION_0] 我心中似乎有了方向
-A direction seems to have formed in my heart.
+This junior will remember.
 # [TRES_TUT_IDEA_HINT_DESCRIPTION_1] 站在泰山之巅，你俯瞰着脚下的云海和远方的山河。此行泰山的收获远超预期。\n\n你心中隐隐有了些关于未来的想法——虽然还很模糊，但你能感觉到，自己的人生不该只是随波逐流。\n\n点击右下角蓝色印章，将这份感悟化为前行的方向。
-Standing atop Mount Tai, you look down upon the sea of clouds at your feet and the mountains and rivers stretching into the distance. This journey has yielded far more than you expected.\n\nVague thoughts about the future stir within you — still indistinct, but you can feel that your life should be more than drifting with the current.\n\nClick the blue stamp in the lower-right corner to crystallize this insight into a direction forward.
+The Taoist nods slightly: \"To possess such ambition at your age — rare indeed.\"\n\nHe presses a hand on your shoulder and studies your complexion: \"Your frame is sturdy, your color healthy — your family has not neglected you. When abroad in the world, your body is your capital and coin is your provision. Keep both ever in mind.\"\n\nHe produces a copper coin from his sleeve and toys with it: \"This humble priest has wandered far and wide. I know well how a single copper coin can humble even the mightiest of men. Your purse is not yet empty — travel while you are young.\"
 # [TRES_TUT_IDEA_HINT_NAME_0] 新的领悟
-A New Realization
+A Youth's High Spirits
 # [TRES_TUT_IDEA_UNLOCK_DESCRIPTION_0] 我明白了
-I understand now.
+This junior would hear more.
 # [TRES_TUT_IDEA_UNLOCK_DESCRIPTION_1] 你站在山巅，迎着猎猎山风，心中涌起一股从未有过的豪情。\n\n道士的话又在耳边响起——「人生在世，最要紧的是什么？」\n\n那时你没有回答。但现在，你心中有了答案。天下这么大，总有一条路，是为你准备的。
-You stand at the summit, the fierce mountain wind whipping past you, and a heroic fervor like never before surges within your chest.\n\nThe Taoist's words echo in your ears — \"What matters most in this life?\"\n\nYou had no answer then. But now, the answer rests in your heart. The world is vast — somewhere, a path awaits that is meant for you.
+The Taoist returns the coin to you, his tone turning earnest: \"Young Du, this humble priest sees that you are not one content with mediocrity. Scholars like you carry a fire within their hearts — that is ambition, that is purpose.\"\n\nHe raises a hand toward the distance: \"Look upon this world. Some chase fame and fortune. Some worry for family and country. You study the sages — to what end, then?\"\n\nHe pauses: \"Literary genius, renown, fortune's favor — these three will propel you forward, yet they will trip you at critical moments. Know their measure, and you shall travel far.\"
 # [TRES_TUT_IDEA_UNLOCK_NAME_0] 远大志向
-Lofty Aspirations
+Ambitions to the Four Corners
 # [TRES_TUT_JIAOYOU_DRINK_DESCRIPTION_0] 与玄明道人共饮
-Drink with Taoist Master Xuanming.
+Thank you for your guidance, Master.
 # [TRES_TUT_JIAOYOU_DRINK_NAME_0] 交游 · 共饮
-Socialize · Share a Drink
+The Taoist gives you another long look, then speaks: \"Your literary talent is passable, but your body still needs tempering. Mountaineering is not won with the brush — it is won with the legs. This frame of yours — if you do not first weather it, I fear you will not travel far.\"\n\nHe rises, dusts off his robe, and presses a hand on your shoulder — not too light, not too heavy.\n\n\"Mm. Your foundation is solid. I have seen many scholars — after ten years buried in books, they emerge stooped and hunched. Your frame is stronger than theirs.\"\n\nHe teaches you a few breathing exercises and counsels: \"One who climbs mountains — vigor is your capital. Remember this truth.\"\n\n[size=13][color=#888888]System Tip: Hover over the markings that appear on the left to view detailed effect descriptions.[/color][/size]
 # [TRES_TUT_JIAOYOU_TALK_DESCRIPTION_0] 和道长说几句话
-Exchange a few words with the Taoist Master.
+Body Forged Strong
 # [TRES_TUT_JIAOYOU_TALK_NAME_0] 交游 · 问道士话
-Socialize · Speak with the Taoist
+This junior was born in the fifteenth year of the Kaiyuan era of the Great Tang. I should be twenty-six this year.
 # [TRES_TUT_LOOKUP_MOUNTAIN_DESCRIPTION_0] 一览众山小
-All other mountains dwarfed beneath.
+The Taoist strokes his beard and laughs: \"This humble priest has dwelt long in the mountains — the passing of months and years has grown faint to me. But tell me, young friend — do you know what year it is now?\"\n\nHe gazes toward the distant horizon, his eyes seeming to pierce the clouds: \"One who cultivates the Way counts not the seasons, but a scholar like you must keep them in mind. When to sit the examinations, when to enter the capital — these are matters of consequence.\"\n\nHe points beyond the mountains: \"Mark the days. Do not squander time.\"\n\n[size=13][color=#888888]System Tip: The time panel in the upper-right corner displays the current reign era and tenday. Each white orb represents one day — in this tutorial, only 2 days are available per tenday. Click the \"Skip\" button to quickly end the current tenday and advance to the next.[/color][/size]
 # [TRES_TUT_LOOKUP_MOUNTAIN_DESCRIPTION_1] 你登上泰山之巅，极目远眺。
 
 脚下的云雾如海浪般翻涌，远处群山在云海中若隐若现，如同浮在白色汪洋中的青色岛屿。天穹如盖，星斗罗列其间，天地间仿佛只剩下你一人。
@@ -169,87 +169,89 @@ All other mountains dwarfed beneath.
 一页页竹简在眼前展开，上面写满了兴亡成败的名字。
 
 你忽然明白——这壮丽山河，便是你要书写的诗行。
-You scale Mount Tai's summit and gaze into the far distance.\n\nThe clouds beneath your feet churn like an ocean of waves. Distant peaks emerge and vanish in the sea of mist, like azure islands floating in a white expanse. The dome of heaven arches above, the stars arrayed across it, and for a moment you feel utterly alone between sky and earth.\n\nTen thousand leagues of deep-blue waves surge and roll — the sun and moon seem to rise from within them, the River of Stars to pour from their depths.\n\nScroll after scroll of bamboo slips unfurl before your eyes, filled with the names of those who rose and fell, who triumphed and perished.\n\nYou suddenly understand — this magnificent landscape, this is the poetry you are meant to write.
+Time Flies Like the Shuttle
 # [TRES_TUT_LOOKUP_MOUNTAIN_NAME_0] 一览众山
-All Mountains Dwarfed
+Share a drink with the Taoist Master.
 # [TRES_TUT_MEET_TAOIST_DESCRIPTION_0] 我来游历天下，增长见识
-I travel the realm to broaden my understanding.
+You produce the wineskin from your belt and wave it before the Taoist.\n\nThe Taoist's eyes light up: \"Well done, lad! You brought wine to Mount Tai?\"\n\nThe two of you sit facing each other on the green stone. After a few cups, the Taoist's reserve loosens. He recounts tales from his wandering youth — the customs and peoples of distant lands — his voice tinged with a veteran's nostalgia.\n\nWarm with wine, you feel the distance between you and this Taoist shrink considerably.
 # [TRES_TUT_MEET_TAOIST_DESCRIPTION_1] 我来寻找作诗的灵感
-I have come seeking inspiration for my poetry.
+Drinking Together
 # [TRES_TUT_MEET_TAOIST_DESCRIPTION_2] 我……我也不知道，就是觉得该来
-I... I don't know either. I just felt I had to come.
+Descend the mountain.
 # [TRES_TUT_MEET_TAOIST_DESCRIPTION_ML] 泰山巍峨，山脚下鸟语花香，溪水潺潺。你正沉醉于这天地间的灵气，忽见一位白发道士端坐于青石之上。他仙风道骨，手持拂尘，双目微阖，像是早已在此等候多时。
 
 他缓缓睁开眼，打量着你片刻，开口问道：「少年人，你为何来到这泰山？」
-Mount Tai stands majestic. At its foot, birds sing among fragrant blossoms, and brooks murmur over smooth stones. You are drinking in the numinous spirit of this place when you suddenly notice a white-haired Taoist seated upon a green boulder. His bearing is transcendent, a horsetail whisk in hand, his eyes gently closed — as though he has been waiting here for you all along.\n\nHe slowly opens his eyes, studies you for a moment, then speaks: \"Young man, why have you come to Mount Tai?\"
+You stand at the summit and look back upon the road you have traveled — from meeting the Taoist at the mountain's foot, to receiving his guidance on the slopes, to this moment gazing down upon ten thousand peaks.\n\nThe wind rushes in from every direction, and you suddenly feel you are no longer just that callow young scholar. Mount Tai's numinous spirit seems to have seeped into your very blood. Talents you never imagined, depths of shrewdness long hidden, a composure born within you — all become sharp and clear in this moment.\n\nYou look upon the world anew with fresh insight — the whispers of the court, the grudges and debts among men, the undercurrents of power and connection — all loom before you, faint but unmistakable.\n\nThis journey to Mount Tai has not been in vain.\n\n[size=13][color=#888888]System Tip: New interface elements are now unlocked. The buttons in the lower-right corner provide access to Connections, Ideas, Poems, and other features.[/color][/size]
 # [TRES_TUT_MEET_TAOIST_NAME_0] 泰山脚下
-At the Foot of Mount Tai
+Sudden Illumination
 # [TRES_TUT_MOVE_AWAY_DESCRIPTION_0] 好大的雾
-Such thick fog!
+Until we meet again.
 # [TRES_TUT_MOVE_AWAY_DESCRIPTION_1] 你沿着山路走到了泰山另一侧。抬头想看清山顶的轮廓，却发现一层浓雾将山头裹得严严实实，什么也看不见。
 
 山风一起，雾气翻涌如浪，隐约间似乎能瞧见山巅的轮廓，又好像什么都没有。
 
 你想起了道士——他在此山修行多年，或许知道这雾的来历。
-You follow the mountain path to the other side of Mount Tai. You look up, hoping to make out the summit's outline — only to find a dense fog wrapped tight around the peak, revealing nothing.\n\nThe mountain wind rises, and the fog churns like a tide. For a moment you think you glimpse the silhouette of the summit — then it is gone, as if it were never there.\n\nYou think of the Taoist — he has cultivated on this mountain for many years. Perhaps he knows the origin of this fog.
+「去吧。」道士挥了挥手，神色平静，「你我有缘，日后自会再见。」
 # [TRES_TUT_MOVE_AWAY_NAME_0] 山间迷雾
-Mist Among the Mountains
+你深深鞠了一躬，转身踏上归途。走出几步，又忍不住回头看了一眼——道士已转身走向山中，身形渐渐隐入林间。
 # [TRES_TUT_NO_INSPIRATION_DESCRIPTION_0] 看来需要喝点酒助兴
-Seems I'll need some wine to stir the muse.
+你心想，此番泰山之行使你获益良多，日后再来拜访。
 # [TRES_TUT_NO_INSPIRATION_DESCRIPTION_1] 还是算了
-Never mind.
+只是你没想到，这一别，竟过了二十年。
 # [TRES_TUT_NO_INSPIRATION_DESCRIPTION_ML] 你面对壮丽的山河，想要写一首诗记录下来。然而提起笔，脑中却一片空白。
 
 搜肠刮肚半天，只写出几句干巴巴的字句，连你自己看了都摇头。
 
 你想起道士说过的话——「登山不是靠笔杆子」。或许，你还需要一点别的什么。
-You face the magnificent landscape, brush in hand, determined to capture it in verse. Yet as you raise the brush, your mind goes blank.\n\nYou rack your brains for what feels like an eternity, but all you manage are a few dry, lifeless lines. Even you shake your head at them.\n\nYou recall the Taoist's words — \"Mountaineering is not won with the brush.\" Perhaps you still need something more.
+The day of parting arrives at last. At the foot of the mountain, you bid farewell to Taoist Master Xuanming.\n\n\"Go on.\" He waves a hand, his expression serene. \"You and I share a bond of affinity. We shall meet again, in time.\"\n\nYou bow deeply, turn, and set out on the road home. After a few steps, you cannot help but glance back — the Taoist has already turned toward the mountain, his figure slowly vanishing into the forest.\n\nThis journey to Mount Tai has profited you greatly, you think. You will return to pay a visit someday.\n\nWhat you do not realize is that this parting will stretch across twenty years.
 # [TRES_TUT_NO_INSPIRATION_NAME_0] 文思枯涩
-The Well of Words Runs Dry
+Descending the Mountain
 # [TRES_TUT_POEM_REVIEW_DESCRIPTION_0] 请道长指点
-Ask the Master for his critique.
+A direction seems to have formed in my heart.
 # [TRES_TUT_POEM_REVIEW_DESCRIPTION_1] 几杯药酒下肚，文思果然如泉涌。你一气呵成写下一首《望岳》，字里行间尽是少年人的锐气与壮志。
 
 道士不知何时已站在你身后，探头看了一眼诗稿，眼中闪过惊艳之色。
 
 「好！好一句『会当凌绝顶，一览众山小』！」道士拍手称赞，「年轻人，你这诗才，他日必有大名，青史留名不在话下。」
-After a few cups of medicinal wine, inspiration indeed flows like a spring. You dash off \"Gazing on Mount Tai\" in a single breath — every line brimming with a young man's edge and soaring ambition.\n\nThe Taoist, you realize, has been standing behind you for some time. He leans over to glance at the draft, and a flash of astonishment crosses his eyes.\n\n\"Fine! Fine indeed! 'I must ascend the utmost peak, and see all other mountains dwarfed beneath!'\" The Taoist claps his hands in praise. \"Young man, with a poetic gift like this, you will surely win great renown. A name inscribed in the annals of history is no idle dream.\"
+Standing atop Mount Tai, you look down upon the sea of clouds at your feet and the mountains and rivers stretching into the distance. This journey has yielded far more than you expected.\n\nVague thoughts about the future stir within you — still indistinct, but you can feel that your life should be more than drifting with the current.\n\nClick the blue stamp in the lower-right corner to crystallize this insight into a direction forward.
 # [TRES_TUT_POEM_REVIEW_NAME_0] 道人评诗
-The Taoist Critiques the Poem
+A New Realization
 # [TRES_TUT_RESIDE_BASE_DESCRIPTION_0] 起身前行
-Rise and press onward.
+I understand now.
 # [TRES_TUT_RESIDE_BASE_DESCRIPTION_1] 你在泰山脚下寻了一处青石坐下。山风轻拂，草木清香扑鼻。远处传来几声鸟鸣，更显得山间幽静。歇息片刻，你决定继续前行。
-You find a green boulder at the foot of Mount Tai and sit. The mountain breeze brushes past, carrying the clean scent of grass and trees. Birdsong drifts from afar, deepening the mountain stillness. After a short rest, you decide to press onward.
+You stand at the summit, the fierce mountain wind whipping past you, and a heroic fervor like never before surges within your chest.\n\nThe Taoist's words echo in your ears — \"What matters most in this life?\"\n\nYou had no answer then. But now, the answer rests in your heart. The world is vast — somewhere, a path awaits that is meant for you.
 # [TRES_TUT_RESIDE_BASE_NAME_0] 山脚歇息
-Rest at the Mountain's Foot
+Lofty Aspirations
 # [TRES_TUT_RESIDE_UPPER_DESCRIPTION_0] 继续赶路
-Continue the journey.
+Drink with Taoist Master Xuanming.
 # [TRES_TUT_RESIDE_UPPER_DESCRIPTION_1] 山腰处的风景与山脚迥然不同。松涛阵阵，云雾时聚时散。你靠在树干上，望着远处的层峦叠嶂，心中涌起一股登高望远的豪情。
-The scenery at mid-mountain is wholly different from the foot. Pine winds roar in waves, and the mist gathers and scatters by turns. You lean against a tree trunk, gazing at the layered ridges receding into the distance. A bold yearning to climb higher and see farther surges within you.
+Socialize · Share a Drink
 # [TRES_TUT_RESIDE_UPPER_NAME_0] 山中歇息
-Rest on the Mountainside
+Exchange a few words with the Taoist Master.
 # [TRES_TUT_RETURN_TAOIST_DESCRIPTION_0] 山顶被大雾罩着，什么也看不见
-The summit is blanketed in thick fog — nothing can be seen.
-# [TRES_TUT_RETURN_TAOIST_DESCRIPTION_1] 你回到道士打坐的青石旁。他仍是那副云淡风轻的模样，但听到脚步声便已睁开眼。\n\n「回来了。」他语气平静，「看你的表情，是遇到了什么？」
-You return to the green boulder where the Taoist meditates. He remains as serene as drifting clouds, yet the moment he hears your footsteps, his eyes open.\n\n\"You're back.\" His tone is calm. \"Judging by your expression — what did you encounter?\"
+Socialize · Speak with the Taoist
+# [TRES_TUT_RETURN_TAOIST_DESCRIPTION_1] 你回到道士打坐的青石旁。他仍是那副云淡风轻的模样，但听到脚步声便已睁开眼。
+
+「回来了。」他语气平静，「看你的表情，是遇到了什么？」
+All other mountains dwarfed beneath.
 # [TRES_TUT_RETURN_TAOIST_NAME_0] 再见道人
-Meeting the Taoist Again
+脚下的云雾如海浪般翻涌，远处群山在云海中若隐若现，如同浮在白色汪洋中的青色岛屿。天穹如盖，星斗罗列其间，天地间仿佛只剩下你一人。
 # [TRES_TUT_TALK_NO_RESPONSE_DESCRIPTION_0] 先不打扰道长了
-Better not disturb the Master for now.
+万里沧波翻涌，日月若出其中，星汉灿烂若出其里。
 # [TRES_TUT_TALK_NO_RESPONSE_DESCRIPTION_1] 你走近道士打坐的青石旁，轻声唤了几句。「道长？」\n\n道士盘膝而坐，双目紧闭，呼吸悠长，似乎已入定境。你等了片刻，他依然没有任何回应。\n\n看来道长正在修炼的关键时刻，不便打扰。还是先去别处转转吧。
-You approach the green boulder where the Taoist sits in meditation and call out softly. \"Master?\"\n\nThe Taoist sits cross-legged, eyes shut, breathing deep and slow — he appears to have entered a state of deep absorption. You wait a while, but still there is no response.\n\nIt seems the Master is at a crucial stage of his cultivation. Best not to disturb him. Perhaps you should wander elsewhere for now.
+一页页竹简在眼前展开，上面写满了兴亡成败的名字。
 # [TRES_TUT_TALK_NO_RESPONSE_NAME_0] 无回应
-No Response
+你忽然明白——这壮丽山河，便是你要书写的诗行。
 # [TRES_TUT_TAOIST_NAME_0] 玄明道人
-Taoist Master Xuanming
+You scale Mount Tai's summit and gaze into the far distance.\n\nThe clouds beneath your feet churn like an ocean of waves. Distant peaks emerge and vanish in the sea of mist, like azure islands floating in a white expanse. The dome of heaven arches above, the stars arrayed across it, and for a moment you feel utterly alone between sky and earth.\n\nTen thousand leagues of deep-blue waves surge and roll — the sun and moon seem to rise from within them, the River of Stars to pour from their depths.\n\nScroll after scroll of bamboo slips unfurl before your eyes, filled with the names of those who rose and fell, who triumphed and perished.\n\nYou suddenly understand — this magnificent landscape, this is the poetry you are meant to write.
 # [TRES_TUT_TRAIT_DEMO_DESCRIPTION_0] 多谢道长指点
-Thank you for your instruction, Master.
+All Mountains Dwarfed
 # [TRES_TUT_TRAIT_DEMO_DESCRIPTION_1] 道士在你肩上拍了拍，力道不轻不重。\n\n「嗯，底子不错。我见过不少读书人，十年寒窗下来不是弯腰就是驼背。你这副筋骨，比他们强。」\n\n他简单教了你几式调息之法，嘱咐道：「登山之人，气力是本钱。记着这个道理。」
-The Taoist pats you on the shoulder — not too light, not too heavy.\n\n\"Mm. Your foundation is solid. I have seen many scholars — after ten years buried in books, they emerge stooped and hunched. Your frame is stronger than theirs.\"\n\nHe teaches you a few breathing exercises and counsels: \"One who climbs mountains — vigor is your capital. Remember this truth.\"
+I travel the realm to broaden my understanding.
 # [TRES_TUT_TRAIT_DEMO_NAME_0] 身强体壮
-Body Forged Strong
+I have come seeking inspiration for my poetry.
 # [TRES_TUT_VAST_WORLD_DESCRIPTION_0] 好一片天地
-What a vast world this is.
+I... I don't know either. I just felt I had to come.
 # [TRES_TUT_VAST_WORLD_DESCRIPTION_1] 道士带你绕过几条山路，眼前豁然开朗——一整片开阔的山谷，远处群山如黛，云海翻涌。风声穿过松林，带着湿润的草木气息。
 
 你站在崖边，看着脚下绵延至天际的山脉，胸中涌起一股说不清的情绪。天地如此之大，而你只是其中一粒尘埃。
@@ -257,58 +259,58 @@ What a vast world this is.
 道士在你身旁站定，轻声道：「贫道需打坐片刻，你自去转转吧。这山间还有不少可看之处。」
 
 说罢，他寻了一块青石盘膝坐下，闭上双眼，不再言语。
-The Taoist leads you around a few bends in the mountain path, and suddenly the view opens wide — an entire valley stretches before you, distant mountains blue as pigment, a sea of clouds surging below. The wind cuts through the pine forest, carrying the damp scent of trees and earth.\n\nYou stand at the cliff's edge, looking down at the mountain ranges stretching to the edge of the sky. An indescribable emotion swells in your chest. The world is so vast — and you are but a speck of dust within it.\n\nThe Taoist comes to stand beside you and speaks softly: \"This humble priest must sit in meditation for a while. Go wander where you will. These mountains still hold much worth seeing.\"\n\nWith that, he finds a green stone, settles cross-legged upon it, closes his eyes, and speaks no more.
+他缓缓睁开眼，打量着你片刻，开口问道：「少年人，你为何来到这泰山？」
 # [TRES_TUT_VAST_WORLD_NAME_0] 天地苍茫
-The Vastness of Heaven and Earth
+Mount Tai stands majestic. At its foot, birds sing among fragrant blossoms, and brooks murmur over smooth stones. You are drinking in the numinous spirit of this place when you suddenly notice a white-haired Taoist seated upon a green boulder. His bearing is transcendent, a horsetail whisk in hand, his eyes gently closed — as though he has been waiting here for you all along.\n\nHe slowly opens his eyes, studies you for a moment, then speaks: \"Young man, why have you come to Mount Tai?\"
 # [TRES_TUT_ZHU_LIU_BASE_DESCRIPTION_0] 在泰山脚下歇息
-Rest at the foot of Mount Tai.
+At the Foot of Mount Tai
 # [TRES_TUT_ZHU_LIU_BASE_NAME_0] 驻留 · 泰山脚下
-Reside · Foot of Mount Tai
+Such thick fog!
 # [TRES_TUT_ZHU_LIU_UPPER_DESCRIPTION_0] 在山腰处歇息
-Rest on the mountainside.
+山风一起，雾气翻涌如浪，隐约间似乎能瞧见山巅的轮廓，又好像什么都没有。
 # [TRES_TUT_ZHU_LIU_UPPER_NAME_0] 驻留 · 泰山上
-Reside · Mount Tai Ascent
+你想起了道士——他在此山修行多年，或许知道这雾的来历。
 # [TRES_UPDATE_TO_RANK8_OFFICIAL_DESCRIPTION_0] 你去找了几个朋友运作了一下
-You approached a few friends to pull some strings.
+You follow the mountain path to the other side of Mount Tai. You look up, hoping to make out the summit's outline — only to find a dense fog wrapped tight around the peak, revealing nothing.\n\nThe mountain wind rises, and the fog churns like a tide. For a moment you think you glimpse the silhouette of the summit — then it is gone, as if it were never there.\n\nYou think of the Taoist — he has cultivated on this mountain for many years. Perhaps he knows the origin of this fog.
 # [TRES_UPDATE_TO_RANK8_OFFICIAL_NAME_0] 升八品官
-Promoted to Rank Eight Official
+Mist Among the Mountains
 # [TRES_YOUXIANGFU_GANYE_TASTE_INFO_0] 你提笔悬腕，却迟迟落不下去——这诗稿上的批注字字如刀，你无从下笔。清客见状，微微摇头，将诗稿收回袖中。
-You hold the brush aloft, wrist suspended — yet you cannot bring yourself to write. The annotations on your draft cut like blades, and the words will not come. Seeing this, the secretary shakes his head faintly and slips the draft back into his sleeve.
+Seems I'll need some wine to stir the muse.
 # [TRES_YOUXIANGFU_GATE_L0_DESCRIPTION_0] 将袖中所有银钱尽数倒在他摊开的掌中
-Empty every coin from your sleeve into his outstretched palm.
+Never mind.
 # [TRES_YOUXIANGFU_GATE_L0_DESCRIPTION_1] 转身离去
-Turn and leave.
+搜肠刮肚半天，只写出几句干巴巴的字句，连你自己看了都摇头。
 # [TRES_YOUXIANGFU_GATE_L0_DESCRIPTION_2] 将剩余银钱尽数倒出，期望他可以放了你
-Pour out the rest of your coins, hoping he will let you pass.
+你想起道士说过的话——「登山不是靠笔杆子」。或许，你还需要一点别的什么。
 # [TRES_YOUXIANGFU_GATE_L0_DESCRIPTION_3] 相府青鞜大门半开，门房的胖汉横跨在石阶上，正用小指抠着牙缝，连正眼都没落在一个穿布衣的访客身上。当你踏上第一级台阶，一截包着铜皮的水火棍猛地横扫过来，险些砸碎你的膝盖。「相爷府的门，也配沾你的酸泥？」胖汉冷哼一声，蒲扇般的手掌直直摊在你眼前。他掂了掂另一只手里的空钱袋，铜钱碰撞的暗哑声在寒风里格外刺耳。
-The Chancellor's dark-lacquered gate stands half-open. The burly gatekeeper sprawls across the stone steps, picking his teeth with his pinky, not even glancing at the visitor in common cloth. As you set foot on the first step, a copper-bound cudgel comes sweeping across — nearly shattering your kneecap. \"The Chancellor's gate — you think it deserves your mud?\" The fat man snorts, thrusting a palm the size of a cattail fan right in front of your face. He hefts the empty coin pouch in his other hand; the dull clink of copper rings harshly in the cold wind.
+You face the magnificent landscape, brush in hand, determined to capture it in verse. Yet as you raise the brush, your mind goes blank.\n\nYou rack your brains for what feels like an eternity, but all you manage are a few dry, lifeless lines. Even you shake your head at them.\n\nYou recall the Taoist's words — \"Mountaineering is not won with the brush.\" Perhaps you still need something more.
 # [TRES_YOUXIANGFU_GATE_L0_FAILED_HINT_0] 门卫对你虎视眈眈，不交钱还想走？
-The gatekeeper glares at you menacingly. Think you can leave without paying?
+The Well of Words Runs Dry
 # [TRES_YOUXIANGFU_GATE_L0_NAME_0] 右相府门卫
-Gatekeeper of the Right Chancellor's Mansion
+Ask the Master for his critique.
 # [TRES_YOUXIANGFU_GATE_L0_REVISIT_DESCRIPTION_0] 步入府中
-Enter the mansion.
+道士不知何时已站在你身后，探头看了一眼诗稿，眼中闪过惊艳之色。
 # [TRES_YOUXIANGFU_GATE_L0_REVISIT_DESCRIPTION_1] 再次来到相府门前。那胖大门房正与一个西域商贾低声调笑，余光扫到你走近。他甚至没有停下嘴里的诨话，只是懒洋洋地用鞋底踢开挡在路中间的扫帚，留出一条仅供一人侧身挤入的缝隙，随后便低下头，继续盘算着手里新得的银锞子。你掸去袖上的灰尘，从那道狭窄的缝隙中艰难挤入。
-You return to the Chancellor's gate. The fat gatekeeper is trading lewd jokes with a Western merchant in a low voice. Out of the corner of his eye, he notices you approaching. Without even pausing his banter, he lazily kicks aside a broom blocking the path with the sole of his shoe, leaving a gap barely wide enough for one person to squeeze through sideways. Then he lowers his head and resumes counting the silver ingots newly come into his possession. You brush the dust from your sleeves and squeeze through the narrow gap with difficulty.
+「好！好一句『会当凌绝顶，一览众山小』！」道士拍手称赞，「年轻人，你这诗才，他日必有大名，青史留名不在话下。」
 # [TRES_YOUXIANGFU_GATE_L0_REVISIT_NAME_0] 右相府门卫·再访
-Gatekeeper of the Right Chancellor's Mansion · Return Visit
+After a few cups of medicinal wine, inspiration indeed flows like a spring. You dash off \"Gazing on Mount Tai\" in a single breath — every line brimming with a young man's edge and soaring ambition.\n\nThe Taoist, you realize, has been standing behind you for some time. He leans over to glance at the draft, and a flash of astonishment crosses his eyes.\n\n\"Fine! Fine indeed! 'I must ascend the utmost peak, and see all other mountains dwarfed beneath!'\" The Taoist claps his hands in praise. \"Young man, with a poetic gift like this, you will surely win great renown. A name inscribed in the annals of history is no idle dream.\"
 # [TRES_YOUXIANGFU_HALL_L1_DESCRIPTION_0] 上前一步，拱手请命：在下愿献拙作
-Step forward, clasp your hands, and declare: I wish to offer my humble work.
+The Taoist Critiques the Poem
 # [TRES_YOUXIANGFU_HALL_L1_DESCRIPTION_1] 将身上余钱塞给清客，低声求通融
-Slip your remaining coins to the secretary and quietly beg for leniency.
+Rise and press onward.
 # [TRES_YOUXIANGFU_HALL_L1_DESCRIPTION_2] 穿过前院，堂下站着一位着青袍的掌书记。他正用一柄玉如意逗弄着廊下的画眉，听闻你自报家门，他停下手中的玉如意，目光终于落在你破旧的衣摆上。「子美？听说你在洛阳薄有诗名。」他端起茶盏，杯盖轻轻撇去浮沫，发出清脆的刮擦声，「相爷今日乏了。若没有能镇得住这满堂锦绣的千古绝唱，就别拿那些俗物来污了右相府的青砖。」
-You cross the front courtyard. In the hall stands a registrar in a blue robe. He is teasing a thrush beneath the veranda with a jade scepter. Upon hearing you announce yourself, he stills the scepter, his gaze finally settling — on your threadbare hem. \"Zimei? I hear you have some small poetic renown in Luoyang.\" He lifts his teacup, its lid scraping sharply as he skims the foam. \"The Chancellor is weary today. Unless you possess an immortal masterpiece that can hold its own against the splendors of this hall, spare the blue bricks of this mansion the stain of your mediocrity.\"
+You find a green boulder at the foot of Mount Tai and sit. The mountain breeze brushes past, carrying the clean scent of grass and trees. Birdsong drifts from afar, deepening the mountain stillness. After a short rest, you decide to press onward.
 # [TRES_YOUXIANGFU_HALL_L1_NAME_0] 管家为难
-The Steward's Obstruction
+Rest at the Mountain's Foot
 # [TRES_YOUXIANGFU_HALL_L1_REVISIT_DESCRIPTION_0] 面见右相
-Request audience with the Right Chancellor.
+Continue the journey.
 # [TRES_YOUXIANGFU_HALL_L1_REVISIT_DESCRIPTION_1] 接过诗稿，拱手道谢
-Accept the draft and offer thanks with clasped hands.
+The scenery at mid-mountain is wholly different from the foot. Pine winds roar in waves, and the mist gathers and scatters by turns. You lean against a tree trunk, gazing at the layered ridges receding into the distance. A bold yearning to climb higher and see farther surges within you.
 # [TRES_YOUXIANGFU_HALL_L1_REVISIT_DESCRIPTION_2] 你再次步入前堂。那青袍掌书记正低头翻阅着你昨日呕心沥血献上的诗卷，甚至随手拿朱笔在上面乱勾了几笔。你急忙上前一步拱手，他却仿佛没看见面前这个大活人似的，径直向一旁的侍女招手：「这诗稿的纸张质地太糙，拿去垫偏殿那张缺了角的酸枝木桌吧，莫要划伤了相爷的玉管笔。」从头到尾，他的目光未曾在你身上停留半寸。
-You enter the front hall once more. The blue-robed registrar is leafing through the poems you poured your heart into yesterday — even casually scratching red marks across them with a vermilion brush. You hurry forward and clasp your hands, but he acts as though the person before him does not exist. He beckons a serving maid: \"The paper of this draft is too coarse. Take it and wedge it under that chipped rosewood table in the side hall — we wouldn't want it scratching the Chancellor's jade brush.\" From start to finish, his eyes never rest on you for a single instant.
+Rest on the Mountainside
 # [TRES_YOUXIANGFU_HALL_L1_REVISIT_NAME_0] 管家为难·清客
-The Steward's Obstruction · The Secretary
+The summit is blanketed in thick fog — nothing can be seen.
 # [TRES_YOUXIANGFU_OUTER_WALL_DESCRIPTION_0] 迈上台阶，叩响门环
-Ascend the steps and rap the door knocker.
+You return to the green boulder where the Taoist meditates. He remains as serene as drifting clouds, yet the moment he hears your footsteps, his eyes open.\n\n\"You're back.\" His tone is calm. \"Judging by your expression — what did you encounter?\"
 # [TRES_YOUXIANGFU_OUTER_WALL_DESCRIPTION_1] 转身离去
-Turn and leave.
+Meeting the Taoist Again

@@ -21,6 +21,7 @@ size_flags_horizontal = 6
 theme_override_constants/separation = 0
 
 [node name="Label2" type="Label" parent="SmallerPropLabel" unique_id=19441402]
+auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 5
 size_flags_vertical = 8
@@ -31,6 +32,7 @@ text = "UI_SMALLER_PROP_LABEL_TEXT_0"
 vertical_alignment = 2
 
 [node name="Label" type="Label" parent="SmallerPropLabel" unique_id=991272602]
+auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 5
 size_flags_vertical = 8

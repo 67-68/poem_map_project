@@ -1,6 +1,6 @@
 extends Camera2D
 
-@export_group(tr("CODE_CAMERA_8BFDF5633D"))
+@export_group("Camera")
 @export var min_zoom: float = 0.1   # 大地图极远
 @export var max_zoom: float = 2.0   # 城市街道极近
 @export var zoom_speed: float = 0.2 # 缩放步长
@@ -17,46 +17,46 @@ var _target_zoom: float = 1.0
 var _current_state: String = 'world'
 
 func _ready() -> void:
-    Logging.info("🎥 [DebugCamera] 已上线. 滚轮缩放，右键/中键拖拽，Q键复位。")
-    enabled = true
-    _target_zoom = zoom.x
-    _apply_zoom(0.7)
+	Logging.info("🎥 [DebugCamera] 已上线. 滚轮缩放，右键/中键拖拽，Q键复位。")
+	enabled = true
+	_target_zoom = zoom.x
+	_apply_zoom(0.7)
 
 func _unhandled_input(event: InputEvent) -> void:
-    # 1. 缩放控制 (滚轮)
-    if event is InputEventMouseButton and event.pressed:
-        if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-            _apply_zoom(zoom_speed)
-        elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-            _apply_zoom(-zoom_speed)
-    
-    # 2. 拖拽状态开关 (右键/中键)
-    if event is InputEventMouseButton:
-        if event.button_index in [MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_MIDDLE]:
-            if event.pressed:
-                _dragging = true
-                _last_mouse_pos = event.position
-            else:
-                _dragging = false
+	# 1. 缩放控制 (滚轮)
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			_apply_zoom(zoom_speed)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			_apply_zoom(-zoom_speed)
+	
+	# 2. 拖拽状态开关 (右键/中键)
+	if event is InputEventMouseButton:
+		if event.button_index in [MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_MIDDLE]:
+			if event.pressed:
+				_dragging = true
+				_last_mouse_pos = event.position
+			else:
+				_dragging = false
 
-    # 3. 丝滑拖拽逻辑
-    if event is InputEventMouseMotion and _dragging:
-        var delta = event.position - _last_mouse_pos
-        # 必须除以当前的缩放倍率，否则放大时拖拽会像光速一样飞走 💀
-        position -= delta / zoom.x 
-        _last_mouse_pos = event.position
+	# 3. 丝滑拖拽逻辑
+	if event is InputEventMouseMotion and _dragging:
+		var delta = event.position - _last_mouse_pos
+		# 必须除以当前的缩放倍率，否则放大时拖拽会像光速一样飞走 💀
+		position -= delta / zoom.x 
+		_last_mouse_pos = event.position
 
-    # 4. 快捷键复位
-    if event is InputEventKey and event.pressed and event.keycode == KEY_Q:
-        position = Vector2.ZERO
-        _target_zoom = 1.0
-        _apply_zoom(0) # 传入 0 只触发复位补间和状态检查
+	# 4. 快捷键复位
+	if event is InputEventKey and event.pressed and event.keycode == KEY_Q:
+		position = Vector2.ZERO
+		_target_zoom = 1.0
+		_apply_zoom(0) # 传入 0 只触发复位补间和状态检查
 
 # 统一的缩放与状态分发引擎
 func _apply_zoom(amount: float) -> void:
-    # 限制目标缩放值在合法范围内
-    _target_zoom = clamp(_target_zoom + amount, min_zoom, max_zoom)
-    
-    # 丝滑补间动画
-    var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-    tween.tween_property(self, "zoom", Vector2(_target_zoom, _target_zoom), 0.2)
+	# 限制目标缩放值在合法范围内
+	_target_zoom = clamp(_target_zoom + amount, min_zoom, max_zoom)
+	
+	# 丝滑补间动画
+	var tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "zoom", Vector2(_target_zoom, _target_zoom), 0.2)

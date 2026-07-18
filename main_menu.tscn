@@ -2,7 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://b46t2rs7i4xft" path="res://ui/main_page.tscn" id="1_7vrkn"]
 [ext_resource type="FontFile" uid="uid://baehtc6a3eewr" path="res://assets/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf" id="3_fu7sn"]
+[ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="4_nlkkf"]
 [ext_resource type="Texture2D" uid="uid://d1wmri2oxn35" path="res://assets/LOGO.png" id="6_nlkkf"]
+[ext_resource type="ButtonGroup" uid="uid://djtodat5jvbpo" path="res://ui/language_btn_group.tres" id="6_qe12f"]
+[ext_resource type="FontFile" uid="uid://bu472jjbmjeb3" path="res://assets/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Regular.ttf" id="7_0o4t1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
 content_margin_left = 15.0
@@ -20,7 +23,10 @@ content_margin_right = 15.0
 content_margin_bottom = 15.0
 bg_color = Color(0.9220404, 0.7267846, 0.60411954, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j5v2v"]
+
 [node name="MainMenu" type="Control" unique_id=1914112020]
+auto_translate_mode = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -60,6 +66,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" parent="HBoxContainer" unique_id=899094804 instance=ExtResource("1_7vrkn")]
+auto_translate_mode = 0
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1015698911]
@@ -103,3 +110,42 @@ layout_mode = 2
 theme_type_variation = &"TitleText"
 text = "Settings"
 horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer" unique_id=1793877439]
+z_index = 1
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "click the red button left to enter"
+horizontal_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer" unique_id=1139110152]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 10
+
+[node name="LinkButton2" type="LinkButton" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer" unique_id=1256558270]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("4_nlkkf")
+theme_override_colors/font_color = Color(0.17130643, 0.15159604, 0.14966008, 1)
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxFlat_j5v2v")
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("6_qe12f")
+text = "中文"
+
+[node name="LinkButton3" type="LinkButton" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer/HBoxContainer" unique_id=1324126508]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("4_nlkkf")
+theme_override_colors/font_color = Color(0.17130643, 0.15159604, 0.14966008, 1)
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxFlat_j5v2v")
+toggle_mode = true
+button_group = ExtResource("6_qe12f")
+text = "English"

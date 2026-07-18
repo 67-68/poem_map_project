@@ -13,6 +13,7 @@ texture = ExtResource("4_kxi5c")
 
 [node name="ShadowBox" type="PanelContainer" unique_id=1492512419]
 custom_minimum_size = Vector2(320, 450)
+custom_maximum_size = Vector2(320, -1)
 offset_left = 1.0
 offset_top = 1.0
 offset_right = 321.0

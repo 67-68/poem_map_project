@@ -106,7 +106,8 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="RightPanel" parent="UI/Margin/HBox" unique_id=604963217 instance=ExtResource("23_lswn8")]
-custom_minimum_size = Vector2(350, 450)
+custom_minimum_size = Vector2(320, 450)
+custom_maximum_size = Vector2(320, -1)
 layout_mode = 2
 
 [node name="SimpleToast" parent="UI" unique_id=446129939 instance=ExtResource("12_2cqfq")]
@@ -166,6 +167,7 @@ visible = false
 visible = false
 
 [node name="ConfirmationDialogCustom" parent="UI" unique_id=1260072418 instance=ExtResource("20_seu75")]
+auto_translate_mode = 1
 visible = false
 
 [node name="TapeLayer" type="CanvasLayer" parent="." unique_id=2047123948]

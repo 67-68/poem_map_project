@@ -17,13 +17,13 @@ var default_staged_perception: Array[PropStagedPerceptionData] = _init_default_s
 static func _init_default_staged_perception() -> Array[PropStagedPerceptionData]:
 	var arr: Array[PropStagedPerceptionData] = []
 	var p1 = PropStagedPerceptionData.new()
-	p1.stage_val = 0; p1.perception_text = tr("CODE_PROPERTY_599ABC8C57")
+	p1.stage_val = 0; p1.perception_text = TranslationServer.translate("CODE_PROPERTY_599ABC8C57")
 	arr.append(p1)
 	var p2 = PropStagedPerceptionData.new()
-	p2.stage_val = 20; p2.perception_text = tr("CODE_PROPERTY_ADF6F87B42")
+	p2.stage_val = 20; p2.perception_text = TranslationServer.translate("CODE_PROPERTY_ADF6F87B42")
 	arr.append(p2)
 	var p3 = PropStagedPerceptionData.new()
-	p3.stage_val = 40; p3.perception_text = tr("CODE_PROPERTY_1613904BFA")
+	p3.stage_val = 40; p3.perception_text = TranslationServer.translate("CODE_PROPERTY_1613904BFA")
 	arr.append(p3)
 	var p4 = PropStagedPerceptionData.new()
 	p4.stage_val = 60; p4.perception_text = "GoodGood"
@@ -38,13 +38,13 @@ func get_staged_perception_text() -> String:
 	for i in range(staged_perceptions.size() - 1, -1, -1):
 		var perception = staged_perceptions[i]
 		if perception.stage_val <= val:
-			return perception.perception_text
+			return tr(perception.perception_text)
 
 	# fallback 默认感知
 	for i in range(default_staged_perception.size() - 1, -1, -1):
 		var perception = default_staged_perception[i]
 		if perception.stage_val <= val:
-			return perception.perception_text
+			return tr(perception.perception_text)
 	
 	return tr("CODE_RANGE_REQUIREMENT_EC0D9BDB00")
 
@@ -83,13 +83,13 @@ func get_staged_perception_at_threshold(threshold: int) -> String:
 	for i in range(staged_perceptions.size() - 1, -1, -1):
 		var perception = staged_perceptions[i]
 		if perception.stage_val <= threshold:
-			return perception.perception_text
+			return tr(perception.perception_text)
 
 	# fallback 默认感知
 	for i in range(default_staged_perception.size() - 1, -1, -1):
 		var perception = default_staged_perception[i]
 		if perception.stage_val <= threshold:
-			return perception.perception_text
+			return tr(perception.perception_text)
 
 	return tr("CODE_RANGE_REQUIREMENT_EC0D9BDB00")
 

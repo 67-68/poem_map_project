@@ -17,19 +17,19 @@ const MOMENTUM_DECAY_PER_XUN: int = 5
 # 按 health_max 升序排列，遍历顺序从最严重到最轻微。
 # 外部消费方（action_hint_builder / time_control_panel）通过静态查询接口获取数据，
 # 严禁各自硬编码 trait 名或数值。
-var HEALTH_AP_TIERS: Array[Dictionary] = [
+static var HEALTH_AP_TIERS: Array[Dictionary] = [
 	{
 		health_max = 30,       # ≤30
 		ap_cap = 5,
 		trait_enum = ENUMS.TRAITS.TERMINAL_ILLNESS,
-		hint_text = tr("CODE_SURVIVAL_MANAGER_3F464BCF67"),
+		hint_text = TranslationServer.translate("CODE_SURVIVAL_MANAGER_3F464BCF67"),
 		hint_color = "#cc6666",
 	},
 	{
 		health_max = 60,       # ≤60
 		ap_cap = 8,
 		trait_enum = ENUMS.TRAITS.EXHAUSTION_INITIAL,
-		hint_text = tr("CODE_SURVIVAL_MANAGER_8E973C4B99"),
+		hint_text = TranslationServer.translate("CODE_SURVIVAL_MANAGER_8E973C4B99"),
 		hint_color = "#ccaa66",
 	},
 ]

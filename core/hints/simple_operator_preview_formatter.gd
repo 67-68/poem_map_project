@@ -19,7 +19,7 @@ const _PropertyOperator = preload("res://core/model/property_operator.gd")
 # ════════════════════════════════════════════════════════════════
 
 ## 将一列 BaseOperator 转为简单版 "{desc}" 字符串数组（无 • 前缀）。
-func build_simple_preview(operators: Array) -> Array[String]:
+static func build_simple_preview(operators: Array) -> Array[String]:
 	var lines: Array[String] = []
 	if operators.is_empty():
 		return lines
@@ -40,7 +40,7 @@ func build_simple_preview(operators: Array) -> Array[String]:
 # 内部：按 Operator 类型分发
 # ════════════════════════════════════════════════════════════════
 
-func _simple_desc_for(op) -> String:
+static func _simple_desc_for(op) -> String:
 	if op is _PropertyOperator:
 		return _simple_property(op)
 	if op is TimeOperator:
@@ -58,7 +58,7 @@ func _simple_desc_for(op) -> String:
 # ════════════════════════════════════════════════════════════════
 
 ## PropertyOperator: 「健康↑↑↑」— 属性名 + 箭头（复用 _get_arrow_count），无数字无知觉文本
-func _simple_property(pop) -> String:
+static func _simple_property(pop) -> String:
 	if pop.value == 0 or pop.property.is_empty():
 		return ""
 
@@ -76,34 +76,34 @@ func _simple_property(pop) -> String:
 
 
 ## TimeOperator: 「⏱5天」
-func _simple_time(top) -> String:
+static func _simple_time(top) -> String:
 	if top.refresh_time or top.day <= 0:
 		return ""
-	return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_20C021DFAA") % int(top.day)
+	return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_20C021DFAA") % int(top.day)
 
 
 ## TraitOperator: 「获 崴脚」/「失 中毒」
-func _simple_trait(top) -> String:
+static func _simple_trait(top) -> String:
 	if top.trait_key.is_empty():
 		return ""
 	var trait_obj = Database.get_trait(top.trait_key)
 	var cn_name = trait_obj.name if trait_obj and not trait_obj.name.is_empty() else top.trait_key
 
 	if top.operator == REQ_OPERATOR.CRUD.ADD:
-		return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_52AC4C7A26") % cn_name
+		return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_52AC4C7A26") % cn_name
 	elif top.operator == REQ_OPERATOR.CRUD.REMOVE:
-		return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_F8ABBE184F") % cn_name
+		return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_F8ABBE184F") % cn_name
 	return ""
 
 
 ## PoemRewardOperator: mode→短标签
-func _simple_poem_reward(pro) -> String:
+static func _simple_poem_reward(pro) -> String:
 	match pro.mode:
 		"money":
-			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
+			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
 		"fame":
-			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324")
+			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324")
 		"baiye":
-			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE")
+			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE")
 		_:
-			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
+			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")

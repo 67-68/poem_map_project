@@ -59,6 +59,7 @@ texture = ExtResource("2_de8ag")
 modulate_color = Color(0, 0, 0, 1)
 
 [node name="PanelContainer" type="PanelContainer" unique_id=899094804]
+auto_translate_mode = 1
 custom_minimum_size = Vector2(752, 648)
 anchors_preset = 8
 anchor_left = 0.5

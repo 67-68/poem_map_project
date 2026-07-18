@@ -145,34 +145,38 @@ def apply_batch(batch_id: str):
         print(f"❌ 未知批次: {batch_id}")
         sys.exit(1)
 
-    _, start, end, _, _ = batch_info
-
-    # 读取 _en.txt 翻译
-    translations = []
+    # 读取 _en.txt — 按 key 解析翻译（每行格式: # [KEY] zh_text \n en_text）
+    key_to_en: dict[str, str] = {}
+    current_key = None
     with open(en_file, "r", encoding="utf-8") as f:
         for line in f:
             stripped = line.rstrip("\n").rstrip("\r")
-            if stripped.startswith("#") or stripped == "":
-                continue
-            translations.append(stripped)
+            if stripped.startswith("# [") and "] " in stripped:
+                # e.g. "# [CODE_EXAMPLE_USAGE_2117252AA8] 拂袖而去"
+                bracket_end = stripped.index("] ")
+                current_key = stripped[3:bracket_end]  # skip "# ["
+            elif current_key and not stripped.startswith("#"):
+                # Translation line (non-comment, non-blank) — only store if not already set
+                if stripped and current_key not in key_to_en:
+                    key_to_en[current_key] = stripped
+                current_key = None
+            elif stripped == "":
+                # Blank line — consume current_key without storing
+                current_key = None
 
+    # 写回主 CSV — 按 key 匹配
     all_rows = read_master_csv()
-    start_idx = start - 2
-    end_idx = end - 2
-
-    trans_idx = 0
     applied = 0
-    for i in range(start_idx, min(end_idx + 1, len(all_rows))):
-        if all_rows[i]["zh"] and not all_rows[i]["en"]:
-            if trans_idx < len(translations):
-                new_en = translations[trans_idx].strip()
-                if new_en:
-                    all_rows[i]["en"] = new_en
-                    applied += 1
-                trans_idx += 1
+    for row in all_rows:
+        key = row["keys"]
+        if key in key_to_en and row["zh"] and not row["en"]:
+            new_en = key_to_en[key].strip()
+            if new_en:
+                row["en"] = new_en
+                applied += 1
 
     write_master_csv(all_rows)
-    print(f"✅ {batch_id}: 已写入 {applied} 条 EN 翻译 → {MASTER_CSV}")
+    print(f"✅ {batch_id}: 已写入 {applied} 条 EN 翻译（按 key 匹配） → {MASTER_CSV}")
 
 
 def status_batches():

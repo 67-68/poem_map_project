@@ -50,7 +50,7 @@ func _ready():
 	# 监听时间流动
 	EventBus.year_changed.connect(_on_year_changed)
 	TimeService.on_xun_tick.connect(func():
-		label_xun.text = TimeService.current_xun
+		label_xun.text = tr(TimeService.current_xun)
 		_refresh_day_label()
 		Logging.info('[time] xun tick: %s, day: %d' % [TimeService.current_xun, TimeService.current_day])
 	)
@@ -99,7 +99,7 @@ func _refresh_day_label() -> void:
 func refresh() -> void:
 	var year: float = GameState.year if GameState else 735.0
 	_on_year_changed(year)
-	label_xun.text = TimeService.current_xun
+	label_xun.text = tr(TimeService.current_xun)
 	_refresh_day_label()
 	_refresh_time_left()
 	Logging.info("TimeControlPanel.refresh: year=%.1f era='%s' xun='%s' day=%d" % [
