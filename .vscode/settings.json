@@ -17,7 +17,6 @@
         "**/*.import": true
     },
     // 🤓☝️ 新增：让语言服务器跨越容器，去连接你的 Mac！
-    "godotTools.lsp.serverHost": "host.docker.internal",
     "godotTools.lsp.serverPort": 6005,
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#ff6433",
