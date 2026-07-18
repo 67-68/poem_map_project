@@ -3,7 +3,7 @@ extends PanelContainer
 # ═══════════════════════════════════════════════════════════
 # 目标中文名映射（ENUMS.RELATION_TARGET → 游戏内显示名）
 # ═══════════════════════════════════════════════════════════
-const CN_NAME_MAP: Dictionary = {
+var CN_NAME_MAP: Dictionary = {
 	"libai": tr("TRES_POET_LIBAI_001_NAME_0"),
 	"hushang": tr("CODE_RIGHT_INFO_PANEL_C5E7068A59"),
 	"lilinfu": tr("TRES_LILINFU_PROMISE_NAME_5"),

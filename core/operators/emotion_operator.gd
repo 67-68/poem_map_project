@@ -22,7 +22,7 @@ var str_emotion: String = ""
 @export_enum('append', 'set', 'reduce_to_lowest_zero') var mode: String = 'append'
 
 ## 情绪英文键 → 中文名映射（与 ui/emotion_radar.gd 保持一致）
-const _EMOTION_CN_NAMES: Dictionary = {
+var _EMOTION_CN_NAMES: Dictionary = {
 	"sorrow": tr("CODE_EMOTION_REQUIREMENT_192BC492B2"),
 	"arrogance": tr("CODE_EMOTION_REQUIREMENT_9A85FF3DCC"),
 	"anger": tr("CODE_EMOTION_REQUIREMENT_DC917B1566"),

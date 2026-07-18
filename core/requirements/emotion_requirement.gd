@@ -15,7 +15,7 @@ class_name EmotionRequirement extends BaseRequirements
 @export var operator: REQ_OPERATOR.COMPARE
 
 ## 情绪英文键 → 中文名映射
-const _EMOTION_CN: Dictionary = {
+var _EMOTION_CN: Dictionary = {
 	"sorrow": tr("CODE_EMOTION_REQUIREMENT_192BC492B2"),
 	"arrogance": tr("CODE_EMOTION_REQUIREMENT_9A85FF3DCC"),
 	"anger": tr("CODE_EMOTION_REQUIREMENT_DC917B1566"),

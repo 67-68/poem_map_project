@@ -160,7 +160,7 @@ func _register_hover_popup() -> void:
 		Logging.warn("SceneActionPanel._register_hover_popup: action is null, skip")
 		return
 	
-	var hint = ActionHintBuilder.build_action_hint(action, _is_locked)
+	var hint = ActionHintBuilder.new().build_action_hint(action, _is_locked)
 	
 	HoverPopupManager.register(self, {"narrative": hint.narrative, "vector": hint.vector}, 0.4, 0.75, HoverPopupManager.FlowType.SLIDE_FROM_RIGHT)
 	Logging.info("SceneActionPanel._register_hover_popup: done for '%s' (SLIDE_FROM_RIGHT)" % action.name)

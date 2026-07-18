@@ -19,7 +19,7 @@ class_name LeverageAddOperator extends BaseOperator
 @export var silent: bool = false
 
 # ── label 映射：TAG → 中文名称 ──
-static var _label_map: Dictionary = {
+var _label_map: Dictionary = {
 	# 9 大基础身份
 	"TARGET_IDENTITY_QINGLIU_OWNER":      tr("CODE_LEVERAGE_ADD_OPERATOR_AAAA7D9F19"),
 	"TARGET_IDENTITY_QINGLIU_OFFICIAL":   tr("CODE_LEVERAGE_ADD_OPERATOR_D972C462FC"),
@@ -40,7 +40,7 @@ static var _label_map: Dictionary = {
 }
 
 ## 解析 target_tag 为可读中文标签
-static func _resolve_label(tag: String) -> String:
+func _resolve_label(tag: String) -> String:
 	if _label_map.has(tag):
 		return _label_map[tag]
 	# 降级：返回 tag 本身

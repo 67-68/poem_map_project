@@ -35,7 +35,7 @@ const LEVEL_SCORE_MAP := {
 	3: 15,
 }
 
-const POEM_LEVEL_NAMES := {
+var POEM_LEVEL_NAMES := {
 	1: tr("CODE_POEM_CRAFTING_CALCULATOR_CE57606FBB"),
 	2: tr("CODE_POEM_CRAFTING_CALCULATOR_2EA731CCE3"),
 	3: tr("CODE_POEM_CRAFTING_CALCULATOR_C335175F07"),
@@ -71,7 +71,7 @@ class PoemCraftingResult:
 ## @return PoemCraftingResult
 ## ──────────────────────────────────────────────
 
-static func calculate_poem_grade(
+func calculate_poem_grade(
 	imaginaries: Array,
 	mode: String,
 	max_manageable: int = 3
@@ -258,7 +258,7 @@ static func _get_level_score(level: int) -> int:
 ## 工具：base_level → 显示名称
 ## ──────────────────────────────────────────────
 
-static func get_level_display_name(level: int) -> String:
+func get_level_display_name(level: int) -> String:
 	return POEM_LEVEL_NAMES.get(level, tr("CODE_POEM_CRAFTING_CALCULATOR_4D8C1C5B42"))
 
 

@@ -96,7 +96,7 @@ func refresh_current_decisions():
 # ── 空状态占位 Label 管理 ──
 
 const PLACEHOLDER_NAME := &"__decision_placeholder__"
-const PLACEHOLDER_TEXT := tr("CODE_DECISION_SCROLL_46A040596E")
+var PLACEHOLDER_TEXT := tr("CODE_DECISION_SCROLL_46A040596E")
 
 func _get_or_create_placeholder() -> Label:
 	var path := NodePath(PLACEHOLDER_NAME)

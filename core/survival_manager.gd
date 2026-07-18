@@ -17,7 +17,7 @@ const MOMENTUM_DECAY_PER_XUN: int = 5
 # 按 health_max 升序排列，遍历顺序从最严重到最轻微。
 # 外部消费方（action_hint_builder / time_control_panel）通过静态查询接口获取数据，
 # 严禁各自硬编码 trait 名或数值。
-const HEALTH_AP_TIERS: Array[Dictionary] = [
+var HEALTH_AP_TIERS: Array[Dictionary] = [
 	{
 		health_max = 30,       # ≤30
 		ap_cap = 5,

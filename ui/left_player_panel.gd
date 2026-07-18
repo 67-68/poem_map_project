@@ -43,7 +43,7 @@ var _prop_panel_map: Dictionary = {}
 # prop_label.tscn（健康/钱财）：大字号，格式「50/100 健」+「「奄奄一息」」
 # smaller_prop_label.tscn（其他）：小字号，格式「兴 50/100」+「(初露锋芒)」
 # 所有 value 格式含两个 %d 占位符：当前值 / 上限（soft_max 与 hard_max 中较低者）
-const _PROP_FORMAT: Dictionary = {
+var _PROP_FORMAT: Dictionary = {
 	"health":      { "value": tr("CODE_LEFT_PLAYER_PANEL_87D55E3395"), "perception": "「%s」" },
 	"money":       { "value": tr("CODE_LEFT_PLAYER_PANEL_745A42FECC"), "perception": "「%s」" },
 	"inspiration": { "value": tr("CODE_LEFT_PLAYER_PANEL_C5D046C34E"), "perception": "(%s)" },
@@ -197,7 +197,7 @@ func _register_prop_hovers() -> void:
 			continue
 
 		HoverPopupManager.unregister(panel)
-		var hint = _ActionHintFormatter.build_prop_hint(prop_key)
+		var hint = _ActionHintFormatter.new().build_prop_hint(prop_key)
 		if not hint:
 			Logging.warn("LeftPlayerPanel._register_prop_hovers: build_prop_hint('%s') 返回 null，跳过" % prop_key)
 			continue

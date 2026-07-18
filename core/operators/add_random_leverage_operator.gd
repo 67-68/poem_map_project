@@ -29,7 +29,7 @@ const LEVERAGE_KEY_POOL: Array[String] = [
 ]
 
 ## key → 中文描述映射（用于 hint 展示）
-const LEVERAGE_KEY_LABELS: Dictionary = {
+var LEVERAGE_KEY_LABELS: Dictionary = {
 	"debt_secret":      tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_D1A59CEE54"),
 	"family_scandal":   tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_7D65F67B10"),
 	"past_crime":       tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_F66EF53384"),

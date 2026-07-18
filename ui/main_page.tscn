@@ -6,12 +6,9 @@
 [ext_resource type="StyleBox" uid="uid://d05t2pedxyypo" path="res://ui/border_style.tres" id="3_tn2xg"]
 [ext_resource type="Script" uid="uid://cj2yhwkgwpppy" path="res://ui/main_page.gd" id="4_main"]
 [ext_resource type="Texture2D" uid="uid://m8yy0l7pdhw3" path="res://assets/start.png" id="5_ky0yw"]
-[ext_resource type="Texture2D" uid="uid://cubrsefmlx3wu" path="res://assets/setting.png" id="6_073pa"]
 [ext_resource type="Texture2D" uid="uid://ch3p1mnttd5hc" path="res://assets/exit.png" id="7_p5jsy"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0ppi5"]
-content_margin_left = 200.0
-content_margin_right = 200.0
 
 [sub_resource type="Shader" id="Shader_de8ag"]
 code = "shader_type canvas_item;
@@ -45,7 +42,7 @@ void fragment() {
 shader = SubResource("Shader_de8ag")
 shader_parameter/threshold = 0.778000036955
 shader_parameter/ink_color = Color(0, 0, 0, 0)
-shader_parameter/paper_color = Color(0.70980394, 0.6509804, 0.54901963, 0.6745098)
+shader_parameter/paper_color = Color(0.9062459, 0.7406774, 0.67219496, 1)
 
 [sub_resource type="Gradient" id="Gradient_eeo8n"]
 interpolation_mode = 2
@@ -62,31 +59,42 @@ texture = ExtResource("2_de8ag")
 modulate_color = Color(0, 0, 0, 1)
 
 [node name="PanelContainer" type="PanelContainer" unique_id=899094804]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+custom_minimum_size = Vector2(752, 648)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -376.0
+offset_top = -324.0
+offset_right = 376.0
+offset_bottom = 324.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 0
-size_flags_vertical = 6
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0ppi5")
 script = ExtResource("4_main")
 route_line = NodePath("Line2D")
 trigger_pc1 = NodePath("Control/Start")
 trigger_pc2 = NodePath("Control/Quit")
-trigger_pc3 = NodePath("Control/Settings")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=501392592]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1170632368]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer" unique_id=501392592]
 material = SubResource("ShaderMaterial_4g3u1")
+custom_minimum_size = Vector2(752, 648)
+custom_maximum_size = Vector2(752, 648)
 layout_mode = 2
 texture = ExtResource("1_y2fak")
-expand_mode = 3
+expand_mode = 1
 stretch_mode = 6
 
-[node name="TextureRect2" type="TextureRect" parent="." unique_id=1946783692]
+[node name="TextureRect2" type="TextureRect" parent="CenterContainer" unique_id=1946783692]
+custom_minimum_size = Vector2(752, 648)
+custom_maximum_size = Vector2(752, 648)
 layout_mode = 2
 texture = SubResource("GradientTexture2D_7xb00")
-expand_mode = 3
+expand_mode = 1
 stretch_mode = 6
 
 [node name="Control" type="Control" parent="." unique_id=51331095]
@@ -144,32 +152,6 @@ text = "UI_MAIN_PAGE_TEXT_1"
 fit_content = true
 scroll_active = false
 
-[node name="Settings" type="PanelContainer" parent="Control" unique_id=1404160261]
-custom_maximum_size = Vector2(80, 40)
-layout_mode = 0
-offset_left = 601.0
-offset_top = 3.0
-offset_right = 641.0
-offset_bottom = 43.0
-mouse_default_cursor_shape = 2
-theme_override_styles/panel = ExtResource("3_tn2xg")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/Settings" unique_id=1939113180]
-custom_minimum_size = Vector2(30, 20)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 1
-mouse_default_cursor_shape = 2
-theme_type_variation = &"ChaosText"
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.3137255)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-bbcode_enabled = true
-text = "UI_MAIN_PAGE_TEXT_2"
-fit_content = true
-scroll_active = false
-
 [node name="MountainTexture" type="PanelContainer" parent="Control" unique_id=1105086487]
 custom_maximum_size = Vector2(-1, 40)
 layout_mode = 0
@@ -214,15 +196,6 @@ offset_right = 396.0
 offset_bottom = 297.0
 texture = ExtResource("5_ky0yw")
 expand_mode = 1
-
-[node name="TextureRect2" type="TextureRect" parent="Control" unique_id=250436043]
-custom_maximum_size = Vector2(20, 20)
-layout_mode = 0
-offset_left = 580.0
-offset_top = 22.0
-offset_right = 600.0
-offset_bottom = 42.0
-texture = ExtResource("6_073pa")
 
 [node name="TextureRect3" type="TextureRect" parent="Control" unique_id=704228646]
 custom_maximum_size = Vector2(20, 20)

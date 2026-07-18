@@ -16,7 +16,7 @@ const _ModifierConfig = preload("res://core/modifier_config.gd")
 
 ## 生成修饰符属性效果文本（用于 UI hover/面板展示）。
 ## @return BBCode 格式化字符串，无有效效果时返回 ""
-static func build_effects_hint() -> String:
+func build_effects_hint() -> String:
 	Logging.info("ModifierHintFormatter.build_effects_hint: start")
 	var lines: Array[String] = []
 
@@ -79,7 +79,7 @@ static func build_effects_hint() -> String:
 ##
 ## @param source_prop: 修饰符属性名（"astuteness"/"talent"/"composure"）
 ## @return BBCode 行数组，无效果时返回空数组
-static func build_single_prop_effects(source_prop: String) -> Array[String]:
+func build_single_prop_effects(source_prop: String) -> Array[String]:
 	Logging.info("ModifierHintFormatter.build_single_prop_effects: start for '%s'" % source_prop)
 	var lines: Array[String] = []
 

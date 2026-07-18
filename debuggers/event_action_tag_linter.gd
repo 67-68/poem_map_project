@@ -23,7 +23,7 @@ func start_linter() -> void:
 	"""
 	Logging.info("开始检查event和action的tag...")
 	# 🆕 用 DataScanner 单次扫描替代所有 Registry 加载
-	var r = DataScanner.scan("res://data/")
+	var r = DataScanner.new().scan("res://data/")
 	var actions: Dictionary = r.bases.get("3_actions_pool.actions", {})
 
 	# 合并所有 random events（从 3_actions_pool 中提取，排除非随机类型）

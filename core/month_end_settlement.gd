@@ -21,7 +21,7 @@ const PROP_DISPLAY_ORDER: Array[int] = [
 ]
 
 # ── 属性中文简称映射 ─────────────────────────────
-const PROP_SHORT_NAMES: Dictionary = {
+var PROP_SHORT_NAMES: Dictionary = {
 	ENUMS.PROPS.MONEY: tr("PROPERTY_NAME_MONEY"),
 	ENUMS.PROPS.HEALTH: tr("PROPERTY_NAME_HEALTH"),
 	ENUMS.PROPS.PRESTIGE: tr("PROPERTY_NAME_LITERARY_FAME"),

@@ -127,7 +127,7 @@ func _init() -> void:
 	Logging.info("Database: tr(FEIHUALING_FAIL) = '%s'" % TranslationServer.translate("FEIHUALING_FAIL"))
 
 	# ── 单次扫描整个 data/ 目录树替代所有 Registry ──
-	var r = DataScanner.scan("res://data/")
+	var r = DataScanner.new().scan("res://data/")
 	_scanner_result = r
 	Logging.info("Database: DataScanner 扫描完成，pool=%d 条目，bases=%d 键" % [r.pool.size(), r.bases.size()])
 
@@ -836,7 +836,7 @@ func _preprocess_all_entities() -> void:
 			continue
 		# 只预处理具有 description 或 options 的实体
 		if "description" in res or "options" in res:
-			GlitchPreprocessor.preprocess_entity(res)
+			GlitchPreprocessor.new().preprocess_entity(res)
 			processed_count += 1
 
 	Logging.info("Database: GlitchPreprocessor 编译期参数注入完成: %d/%d 个实体已处理" % [processed_count, total])

@@ -10,7 +10,7 @@ class_name SetStayPlaceOperator extends BaseOperator
 @export var place: String = "xishi"
 
 # 中文名映射
-const PLACE_CN_MAP: Dictionary = {
+var PLACE_CN_MAP: Dictionary = {
 	"xishi": tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"),
 	"pingkangfang": tr("CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54"),
 	"huangcheng": tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A"),

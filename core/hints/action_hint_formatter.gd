@@ -30,7 +30,7 @@ const _SIMPLE_FEASIBILITY_VALUES: Dictionary = {
 }
 
 # SIMPLE profile feasibility labels (2-character Chinese)
-const _SIMPLE_FEASIBILITY_TEXT: Dictionary = {
+var _SIMPLE_FEASIBILITY_TEXT: Dictionary = {
 	"xxs": tr("CODE_ACTION_HINT_FORMATTER_B3A5CEA754"),
 	"xs":  tr("CODE_ACTION_HINT_FORMATTER_0094D495FD"),
 	"s":   tr("CODE_ACTION_HINT_FORMATTER_F30071FA50"),
@@ -50,7 +50,7 @@ const _SIMPLE_FEASIBILITY_TEXT: Dictionary = {
 ## @param ctx: 预组装的 HintContext（由调用方从运行时状态填充）
 ## @param profile: 提示模式 — HintProfile.Profile.DEFAULT（默认）或 SIMPLE
 ## @return ActionHint 结构化对象（含 narrative + feasibility/cost/output/risk/other 模块 + vector）
-static func build_action_hint(action, is_locked: bool, ctx, profile := _HintProfile.Profile.DEFAULT):
+func build_action_hint(action, is_locked: bool, ctx, profile := _HintProfile.Profile.DEFAULT):
 	if not action:
 		Logging.err("ActionHintFormatter.build_action_hint: action is null")
 		return { "narrative": tr("CODE_ACTION_HINT_FORMATTER_D8D33EAD9A"), "vector": "" }
@@ -85,7 +85,7 @@ static func build_action_hint(action, is_locked: bool, ctx, profile := _HintProf
 ## 为 sub-action picker tooltip 构建预览文本。
 ## 现在返回 ActionHint 结构化对象，consumer 通过 .vector 获取旧格式的完整文本。
 ## @param profile: 提示模式 — HintProfile.Profile.DEFAULT（默认）或 SIMPLE
-static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0, profile := _HintProfile.Profile.DEFAULT, is_locked: bool = false, lock_reason: String = ""):
+func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], fail_ops: Array = [], parent_day_consumed: float = 0.0, profile := _HintProfile.Profile.DEFAULT, is_locked: bool = false, lock_reason: String = ""):
 	if not sub_action:
 		Logging.err("ActionHintFormatter.build_sub_action_preview: sub_action is null")
 		return { "narrative": "", "vector": "" }
@@ -146,7 +146,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 	# 🆕 cost archetype operators（花钱/耗材等）→ cost 模块
 	var cost_arch = Database.get_archetype_by_uuid(sub_action.uuid, "cost")
 	if cost_arch and not cost_arch.operators.is_empty():
-		var cost_lines = _OPFormatter.build_preview(cost_arch.operators, profile)
+		var cost_lines = _OPFormatter.new().build_preview(cost_arch.operators, profile)
 		if not cost_lines.is_empty():
 			hint.cost.append_array(cost_lines)
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' cost archetype (%d ops → %d lines) → 已合并" % [sub_action.name, cost_arch.operators.size(), cost_lines.size()])
@@ -157,10 +157,10 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 	# ── 成功效果 → output ──
 	var success_descs: Array[String] = []
 	if not success_ops.is_empty():
-		success_descs.append_array(_OPFormatter.build_preview(success_ops, profile))
+		success_descs.append_array(_OPFormatter.new().build_preview(success_ops, profile))
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' archetype success_ops (%d ops) → 已合并" % [sub_action.name, success_ops.size()])
 	if sub_action.action_results and not sub_action.action_results.is_empty():
-		var tres_lines = _OPFormatter.build_preview(sub_action.action_results, profile)
+		var tres_lines = _OPFormatter.new().build_preview(sub_action.action_results, profile)
 		if not tres_lines.is_empty():
 			success_descs.append_array(tres_lines)
 			Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' .tres action_results (%d ops → %d descs) → 已合并" % [sub_action.name, sub_action.action_results.size(), tres_lines.size()])
@@ -183,7 +183,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 	# ── 失败效果 → risk（仅使用 failure archetype，不 fallback 到 .tres failed_result）──
 	var fail_descs: Array[String] = []
 	if not fail_ops.is_empty():
-		fail_descs.append_array(_OPFormatter.build_preview(fail_ops, profile))
+		fail_descs.append_array(_OPFormatter.new().build_preview(fail_ops, profile))
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' archetype fail_ops (%d ops → %d lines) → 已合并" % [sub_action.name, fail_ops.size(), fail_descs.size()])
 
 	if fail_descs.is_empty():
@@ -214,7 +214,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 ##
 ## @param prop_key: 属性名（"health"/"money"/"talent"/"astuteness"/"composure" 等）
 ## @return ActionHint 结构化对象
-static func build_prop_hint(prop_key: String):
+func build_prop_hint(prop_key: String):
 	var hint = _ActionHint.new()
 
 	# ── narrative: 属性描述 ──
@@ -230,7 +230,7 @@ static func build_prop_hint(prop_key: String):
 	# ── vector: modifier 效果翻译 ──
 	var modifier_props := ["astuteness", "talent", "composure"]
 	if prop_key in modifier_props:
-		var effect_lines: Array[String] = _ModifierHintFormatter.build_single_prop_effects(prop_key)
+		var effect_lines: Array[String] = _ModifierHintFormatter.new().build_single_prop_effects(prop_key)
 		if not effect_lines.is_empty():
 			hint.vector = "\n".join(effect_lines)
 			Logging.info("ActionHintFormatter.build_prop_hint: '%s' modifier effects → %d lines" % [prop_key, effect_lines.size()])
@@ -247,7 +247,7 @@ static func build_prop_hint(prop_key: String):
 # Extracted 模块组装函数（building_action_hint 专用）
 # ════════════════════════════════════════════════════════════════
 
-static func _assemble_feasibility_module(action, feas_mod, profile) -> void:
+func _assemble_feasibility_module(action, feas_mod, profile) -> void:
 	var prob: int = action.get_possibility_int()
 
 	if profile == _HintProfile.Profile.SIMPLE:
@@ -276,7 +276,7 @@ static func _assemble_feasibility_module(action, feas_mod, profile) -> void:
 		Logging.info("ActionHintFormatter._assemble_feasibility_module: possibility=%d for '%s'" % [prob, action.name])
 
 
-static func _assemble_cost_module(action, ctx, cost_mod, profile) -> void:
+func _assemble_cost_module(action, ctx, cost_mod, profile) -> void:
 	# Defer 信息
 	_defer_info_lines(action, ctx, cost_mod)
 
@@ -302,10 +302,10 @@ static func _assemble_cost_module(action, ctx, cost_mod, profile) -> void:
 		cost_mod.title = tr("CODE_ACTION_HINT_FORMATTER_C611D44ACD")
 
 
-static func _assemble_output_module(action, is_repeated: bool, output_mod, profile) -> void:
+func _assemble_output_module(action, is_repeated: bool, output_mod, profile) -> void:
 	if not action.action_results.is_empty():
 		output_mod.title = tr("CODE_ACTION_HINT_FORMATTER_7D295E9E17")
-		var success_lines = _OPFormatter.build_preview(action.action_results, profile)
+		var success_lines = _OPFormatter.new().build_preview(action.action_results, profile)
 		output_mod.append_array(success_lines)
 		Logging.info("ActionHintFormatter._assemble_output_module: %d action_results → %d lines for '%s'" % [action.action_results.size(), success_lines.size(), action.name])
 	else:
@@ -316,10 +316,10 @@ static func _assemble_output_module(action, is_repeated: bool, output_mod, profi
 			Logging.info("ActionHintFormatter._assemble_output_module: archetype 定性预览 %d lines for '%s'" % [archetype_lines.size(), action.name])
 
 
-static func _assemble_risk_module(action, risk_mod, profile) -> void:
+func _assemble_risk_module(action, risk_mod, profile) -> void:
 	if action.failed_result and not action.failed_result.operators.is_empty():
 		risk_mod.title = tr("CODE_ACTION_HINT_FORMATTER_AED2FEF5AE")
-		var fail_lines = _OPFormatter.build_choice_result_preview(action.failed_result, profile)
+		var fail_lines = _OPFormatter.new().build_choice_result_preview(action.failed_result, profile)
 		risk_mod.append_array(fail_lines)
 		Logging.info("ActionHintFormatter._assemble_risk_module: %d failed_result ops → %d lines for '%s'" % [action.failed_result.operators.size(), fail_lines.size(), action.name])
 
@@ -328,7 +328,7 @@ static func _assemble_risk_module(action, risk_mod, profile) -> void:
 # 内部：Defer 信息行
 # ════════════════════════════════════════════════════════════════
 
-static func _find_deferring_sub_action(action, ctx):
+func _find_deferring_sub_action(action, ctx):
 	if action.defer_config and not action.defer_config.xun_defered.is_empty():
 		var ds = ctx.get_defer_state(action.uuid)
 		if ds.get("is_deferring", false):
@@ -342,7 +342,7 @@ static func _find_deferring_sub_action(action, ctx):
 	return null
 
 
-static func _defer_info_lines(action, ctx, cost_mod) -> void:
+func _defer_info_lines(action, ctx, cost_mod) -> void:
 	var _defer_sub = _find_deferring_sub_action(action, ctx)
 	if not _defer_sub:
 		return
@@ -376,7 +376,7 @@ static func _defer_info_lines(action, ctx, cost_mod) -> void:
 			cost_mod.append(_BBCode.defer_cost(cost_parts, false))
 
 
-static func _defer_cost_parts(defer_sub, amounts: Dictionary, cost_parts: Array[String]) -> void:
+func _defer_cost_parts(defer_sub, amounts: Dictionary, cost_parts: Array[String]) -> void:
 	if not defer_sub.defer_config.used_resource_archetype.is_empty():
 		var arch = Database.action_archetypes.get(defer_sub.defer_config.used_resource_archetype)
 		if arch and not arch.operators.is_empty():
@@ -395,7 +395,7 @@ static func _defer_cost_parts(defer_sub, amounts: Dictionary, cost_parts: Array[
 # 内部：时间消耗行
 # ════════════════════════════════════════════════════════════════
 
-static func _time_cost_lines(action, cost_mod) -> void:
+func _time_cost_lines(action, cost_mod) -> void:
 	if action.day_consumed <= 0:
 		return
 
@@ -429,7 +429,7 @@ static func _time_cost_lines(action, cost_mod) -> void:
 # 内部：Archetype 定性预览（支持 SIMPLE profile）
 # ════════════════════════════════════════════════════════════════
 
-static func _build_archetype_qualitative_preview(action, is_repeated: bool, profile) -> Array[String]:
+func _build_archetype_qualitative_preview(action, is_repeated: bool, profile) -> Array[String]:
 	var lines: Array[String] = []
 	if not action or not action is SceneAction:
 		Logging.info("ActionHintFormatter._build_archetype_qualitative_preview: action 非 SceneAction, 跳过")
@@ -498,7 +498,7 @@ static func _build_archetype_qualitative_preview(action, is_repeated: bool, prof
 ## SIMPLE profile 的 archetype 定性预览简化版
 ## 在 default 的 _build_archetype_qualitative_preview 基础上通过委托
 ## SimpleOperatorPreviewFormatter 获取简化描述行（无 • 前缀）。
-static func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Array[String]:
+func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Array[String]:
 	var lines: Array[String] = []
 	for op in ops:
 		if op is PropertyOperator:
@@ -541,7 +541,7 @@ static func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Ar
 
 ## 使用 BBCode 方法替代原来带 • / 、的 _finalize_simple_labels
 ## SIMPLE 模式标签：空格分割，无 • 无 、
-static func _build_simple_labels(hint, is_locked: bool, lock_reason: String) -> void:
+func _build_simple_labels(hint, is_locked: bool, lock_reason: String) -> void:
 	var labels := {}
 	if is_locked:
 		labels["feasibility"] = _BBCode.simple_feasibility_label(tr("CODE_ACTION_HINT_FORMATTER_1A5219A827"))

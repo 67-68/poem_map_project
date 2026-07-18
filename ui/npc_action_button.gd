@@ -110,8 +110,8 @@ func set_action_data(action_name: String, action_uuid: String, entity = null) ->
 	var fail_ops: Array = fail_arch.operators.duplicate(true) if fail_arch else []
 
 	# 🆕 使用 build_sub_action_preview：SIMPLE → labels, DEFAULT → hover
-	var simple_hint = _ActionHintBuilder.build_sub_action_preview(action, success_ops, fail_ops, 0.0, _HintProfile.Profile.SIMPLE, is_locked, entity.get_meta("_locked_reason", "") if entity else "")
-	var default_hint = _ActionHintBuilder.build_sub_action_preview(action, success_ops, fail_ops, 0.0, _HintProfile.Profile.DEFAULT)
+	var simple_hint = _ActionHintBuilder.new().build_sub_action_preview(action, success_ops, fail_ops, 0.0, _HintProfile.Profile.SIMPLE, is_locked, entity.get_meta("_locked_reason", "") if entity else "")
+	var default_hint = _ActionHintBuilder.new().build_sub_action_preview(action, success_ops, fail_ops, 0.0, _HintProfile.Profile.DEFAULT)
 
 	if is_locked:
 		_populate_labels_from_hint(simple_hint, true, entity.get_meta("_locked_reason", "") if entity else "")
@@ -173,8 +173,8 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 	var success_ops: Array = succ_arch.operators.duplicate(true) if succ_arch else []
 	var fail_arch = Database.get_archetype_by_uuid(override_action_uuid, "failure")
 	var fail_ops: Array = fail_arch.operators.duplicate(true) if fail_arch else []
-	var simple_hint = _ActionHintBuilder.build_sub_action_preview(override_action, success_ops, fail_ops, 0.0, _HintProfile.Profile.SIMPLE, _is_locked, _lock_reason)
-	var default_hint = _ActionHintBuilder.build_sub_action_preview(override_action, success_ops, fail_ops, 0.0, _HintProfile.Profile.DEFAULT)
+	var simple_hint = _ActionHintBuilder.new().build_sub_action_preview(override_action, success_ops, fail_ops, 0.0, _HintProfile.Profile.SIMPLE, _is_locked, _lock_reason)
+	var default_hint = _ActionHintBuilder.new().build_sub_action_preview(override_action, success_ops, fail_ops, 0.0, _HintProfile.Profile.DEFAULT)
 
 	_populate_labels_from_hint(simple_hint, _is_locked, _lock_reason)
 	_register_hover_from_action_hint(default_hint)

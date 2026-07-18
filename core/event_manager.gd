@@ -159,7 +159,7 @@ func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multi
         _mark_event_base_triggered(ev_name)
         var ev = Database.resolve(ev_name, "BaseEvent", true)
         if ev:
-            context = SocialActionResolver.enrich_context(ev, ev_name, context)
+            context = SocialActionResolver.new().enrich_context(ev, ev_name, context)
         EventBus.request_event_key.emit(ev_name, context)
         Logging.info("[EventManager] 命运降临: " + ev_name)
     else:
@@ -483,7 +483,7 @@ func draw_from_event_base(base_uuid: String, context: Dictionary = {}) -> String
     _mark_event_base_triggered(selected_uuid)
     var ev = Database.resolve(selected_uuid, "BaseEvent", true)
     if ev:
-        context = SocialActionResolver.enrich_context(ev, selected_uuid, context)
+        context = SocialActionResolver.new().enrich_context(ev, selected_uuid, context)
     EventBus.request_event_key.emit(selected_uuid, context)
     Logging.info("[EventManager] 命运降临（诗词事件库）: " + selected_uuid)
     

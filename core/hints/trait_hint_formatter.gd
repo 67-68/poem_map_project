@@ -20,7 +20,7 @@ const _BBCode = preload("res://ui/utils/bbcode.gd")
 ## 🆕 Imaginary 分支：显示 level/get_hint/trait_effect_operations，不显示 buffer/prop/时间惩罚/持续区。
 ## @param trait_data: 目标 Trait 资源（或 Imaginary，因为 Imaginary extends Trait）
 ## @return 格式化后的 BBCode 字符串，无有效信息时返回 ""
-static func build_hint(trait_data) -> String:
+func build_hint(trait_data) -> String:
 	if not trait_data:
 		Logging.err("TraitHintFormatter.build_hint: trait_data is null, check upstream caller!")
 		return ""
@@ -44,7 +44,7 @@ static func build_hint(trait_data) -> String:
 # 内部：Imaginary 分支
 # ════════════════════════════════════════════════════════════════
 
-static func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display_name: String) -> String:
+func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display_name: String) -> String:
 	# 等级 + description（如果有）
 	var level_label = tr("CODE_TRAIT_HINT_FORMATTER_D8663A39B4") % imag.level
 	if not imag.description.is_empty():
@@ -101,7 +101,7 @@ static func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display
 # 内部：普通 Trait 分支
 # ════════════════════════════════════════════════════════════════
 
-static func _build_standard_trait_hint(t, lines: Array[String], display_name: String) -> String:
+func _build_standard_trait_hint(t, lines: Array[String], display_name: String) -> String:
 	# ── 描述行 ──
 	if not t.description.is_empty():
 		lines.append(t.description)
@@ -201,7 +201,7 @@ static func _build_standard_trait_hint(t, lines: Array[String], display_name: St
 # ════════════════════════════════════════════════════════════════
 
 ## MultiplyOperator.operator 枚举 → 中文展示文本
-static func _mul_operator_mode_string(op_enum: int) -> String:
+func _mul_operator_mode_string(op_enum: int) -> String:
 	match op_enum:
 		MultiplyOperator.MUL_OPERATOR.POSITIVE_ONLY:
 			return tr("CODE_TRAIT_HINT_FORMATTER_4F7367ADBD")
@@ -215,7 +215,7 @@ static func _mul_operator_mode_string(op_enum: int) -> String:
 
 
 ## prop key → display_name，复用 Database.get_property().get_display_name()
-static func _get_prop_display_name(prop_key: String) -> String:
+func _get_prop_display_name(prop_key: String) -> String:
 	var prop = Database.get_property(prop_key)
 	if prop:
 		var dn = prop.get_display_name()
@@ -225,7 +225,7 @@ static func _get_prop_display_name(prop_key: String) -> String:
 
 
 ## trait_uuid → display_name，复用 Database.get_trait
-static func _get_trait_display_name(trait_uuid: String) -> String:
+func _get_trait_display_name(trait_uuid: String) -> String:
 	var t = Database.get_trait(trait_uuid)
 	if t and not t.name.is_empty():
 		return t.name

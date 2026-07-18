@@ -48,14 +48,14 @@ const POEM_CRAFT_INSPIRATION_COST := 20
 ## ──────────────────────────────────────────────
 
 ## 意象丰瘠评价 — 按 base_level (1=平庸, 2=佳作, 3=绝唱)
-const LITERARY_IMAGERY_TEXTS := {
+var LITERARY_IMAGERY_TEXTS := {
 	1: [tr("CODE_POEM_CRAFTER_54EAEBD3D3"), tr("CODE_POEM_CRAFTER_728EB1E5A1"), tr("CODE_POEM_CRAFTER_C260C3CC52")],
 	2: [tr("CODE_POEM_CRAFTER_BED5C7074B"), tr("CODE_POEM_CRAFTER_DEE7793FFC"), tr("CODE_POEM_CRAFTER_A34283ABC1")],
 	3: [tr("CODE_POEM_CRAFTER_161BC32B63"), tr("CODE_POEM_CRAFTER_AB290C38E3"), tr("CODE_POEM_CRAFTER_08CAA7B0F4")],
 }
 
 ## 灵感手感评价 — 按 upgrade_probability 档位: 0=低(<0.33), 1=中(0.33~0.66), 2=高(≥0.66)
-const LITERARY_INSPIRATION_TEXTS := {
+var LITERARY_INSPIRATION_TEXTS := {
 	0: [tr("CODE_POEM_CRAFTER_1DBE0EA442"), tr("CODE_POEM_CRAFTER_101706478E"), tr("CODE_POEM_CRAFTER_8F3C2318AC")],
 	1: [tr("CODE_POEM_CRAFTER_158B31FA2D"), tr("CODE_POEM_CRAFTER_493B39E86C"), tr("CODE_POEM_CRAFTER_B95E344FCD")],
 	2: [tr("CODE_POEM_CRAFTER_8DD341F160"), tr("CODE_POEM_CRAFTER_5971DCC005"), tr("CODE_POEM_CRAFTER_6CCA05DC6F")],
@@ -275,11 +275,11 @@ func _on_button_pressed() -> void:
 
 	var final_level: int = _cached_final_level
 	var upgrade_succeeded: bool = _cached_upgrade_succeeded
-	Logging.info('PoemCrafter(V9.1): 从缓存读取 — final_level=%d (%s), upgrade=%s' % [final_level, PoemCraftingCalculator.get_level_display_name(final_level), upgrade_succeeded])
+	Logging.info('PoemCrafter(V9.1): 从缓存读取 — final_level=%d (%s), upgrade=%s' % [final_level, PoemCraftingCalculator.new().get_level_display_name(final_level), upgrade_succeeded])
 
 	# ── 3. 创建 Poem 对象（V10: 不再绑定 secular/literary value，价值由 PoemRewardOperator 消费时决定） ──
 	# V12: 优先使用配方匹配数据，匹配失败则回退通用名
-	var level_display_name := PoemCraftingCalculator.get_level_display_name(final_level)
+	var level_display_name := PoemCraftingCalculator.new().get_level_display_name(final_level)
 	var matched: Poem = _cached_result.matched_recipe
 	var poem: Poem
 	var poem_name: String
@@ -426,7 +426,7 @@ func _preview_current() -> void:
 	Logging.info('PoemCrafter(V9.1): _preview_current — 意象数=%d, mode=%s' % [all_imaginaries.size(), current_mode])
 
 	# ── 1. 纯函数计算 ──
-	var result := PoemCraftingCalculator.calculate_poem_grade(all_imaginaries, current_mode, max_manageable)
+	var result := PoemCraftingCalculator.new().calculate_poem_grade(all_imaginaries, current_mode, max_manageable)
 
 	# ── 2. insufficient ──
 	if not result.passed:
@@ -452,11 +452,11 @@ func _preview_current() -> void:
 		if roll < result.upgrade_probability:
 			_cached_final_level += 1
 			_cached_upgrade_succeeded = true
-			Logging.info('PoemCrafter(V9.1): 预览锁定 — 升级成功！roll=%.3f < prob=%.3f → final_level=%d (%s)' % [roll, result.upgrade_probability, _cached_final_level, PoemCraftingCalculator.get_level_display_name(_cached_final_level)])
+			Logging.info('PoemCrafter(V9.1): 预览锁定 — 升级成功！roll=%.3f < prob=%.3f → final_level=%d (%s)' % [roll, result.upgrade_probability, _cached_final_level, PoemCraftingCalculator.new().get_level_display_name(_cached_final_level)])
 		else:
-			Logging.info('PoemCrafter(V9.1): 预览锁定 — 升级失败 roll=%.3f >= prob=%.3f → final_level=%d (%s)' % [roll, result.upgrade_probability, _cached_final_level, PoemCraftingCalculator.get_level_display_name(_cached_final_level)])
+			Logging.info('PoemCrafter(V9.1): 预览锁定 — 升级失败 roll=%.3f >= prob=%.3f → final_level=%d (%s)' % [roll, result.upgrade_probability, _cached_final_level, PoemCraftingCalculator.new().get_level_display_name(_cached_final_level)])
 	else:
-		Logging.info('PoemCrafter(V9.1): 预览锁定 — 无需升级 base_level=%d (%s), prob=%.3f' % [_cached_final_level, PoemCraftingCalculator.get_level_display_name(_cached_final_level), result.upgrade_probability])
+		Logging.info('PoemCrafter(V9.1): 预览锁定 — 无需升级 base_level=%d (%s), prob=%.3f' % [_cached_final_level, PoemCraftingCalculator.new().get_level_display_name(_cached_final_level), result.upgrade_probability])
 
 	# ── 4. 构建预览（缓存选中的文本，切换 mode 时复用） ──
 	var lines: Array[String] = []
@@ -531,7 +531,7 @@ func _build_cost_preview_lines() -> Array[String]:
 	
 	# 时间/健康代价（来自 _cached_cost_operators）
 	if not _cached_cost_operators.is_empty():
-		var previews: Array[String] = ActionHintBuilder.build_operator_preview(_cached_cost_operators)
+		var previews: Array[String] = ActionHintBuilder.new().build_operator_preview(_cached_cost_operators)
 		for p in previews:
 			lines.append(BBCode.color(p, BBCode.COLOR_DANGER))
 	

@@ -78,7 +78,7 @@ func _ready() -> void:
 
 
 func _dump_one(output: PackedStringArray, t: Trait) -> void:
-	var hint := ActionHintBuilder.build_trait_hint(t)
+	var hint := ActionHintBuilder.new().build_trait_hint(t)
 	var cls := "Imaginary" if t is Imaginary else ("Disease" if t is Disease else "Trait")
 	output.append("─".repeat(70))
 	output.append("[%s] %-14s | uuid: %-38s | dur:%2d  exp:%s  Lv:%s" % [cls, t.name, t.uuid, t.duration_xun, t.expiry_trait, str(t.get("level")) if t is Imaginary else "-"])

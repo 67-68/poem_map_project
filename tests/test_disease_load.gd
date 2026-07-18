@@ -90,7 +90,7 @@ func _init() -> void:
 		print("\n  --- 手动 DataScanner 扫描 ---")
 		var DataScanner = load("res://core/data_scanner.gd")
 		if DataScanner:
-			var result = DataScanner.scan("res://data/")
+			var result = DataScanner.new().scan("res://data/")
 			if result:
 				print("  ✅ scan() 成功: pool=" + str(result.pool.size()) + " bases=" + str(result.bases.size()))
 				for bk in result.bases:

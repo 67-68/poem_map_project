@@ -290,7 +290,7 @@ func _parse_archetype_costs(action: Action) -> Array:
 ## 适用于主行动（archetype operators）和子行动（success/fail archetype operators）。
 ## @param operators: Array[BaseOperator] — 来自 archetype 的 operators
 ## @return Array[String] — 失败原因列表（空数组表示全部可通过）
-static func check_archetype_property_costs(operators: Array) -> Array[String]:
+func check_archetype_property_costs(operators: Array) -> Array[String]:
 	var reasons: Array[String] = []
 	if operators.is_empty():
 		return reasons
@@ -1182,7 +1182,7 @@ static func get_action_day_cost(action: Action, parent_day: float = -1.0) -> int
 ## 格式化时间消耗的详细文本，包含各 trait 惩罚的标注。
 ## 例如：base=4, 崴脚+1 → "5天（+1, 由于 崴脚）"
 ## 无惩罚时 → "5天"
-static func format_time_detail(base_days: float) -> String:
+func format_time_detail(base_days: float) -> String:
 	var total := int(base_days)
 	var penalties := PlayerState.get_active_time_penalties()
 	var extra := 0

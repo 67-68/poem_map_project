@@ -58,7 +58,7 @@ func _load_and_dump(include_no_effect: bool, include_timed_only: bool) -> void:
 			continue
 		
 		var t := res as Trait
-		var hint := ActionHintBuilder.build_trait_hint(t)
+		var hint := ActionHintBuilder.new().build_trait_hint(t)
 		
 		if not include_no_effect and hint.contains(tr("CODE_VTEST_TRAIT_HINTS_508D363EA0")):
 			continue

@@ -26,10 +26,10 @@ const _SimpleFormatter = preload("res://core/hints/simple_operator_preview_forma
 ## 🆕 PropertyOperator 会追加修饰符注解（如 "城府 -8"）。
 ## 自动过滤空描述和无效 operator。
 ## @param profile: 提示模式 — HintProfile.Profile.DEFAULT（默认）或 SIMPLE
-static func build_preview(operators: Array, profile := _HintProfile.Profile.DEFAULT) -> Array[String]:
+func build_preview(operators: Array, profile := _HintProfile.Profile.DEFAULT) -> Array[String]:
 	# 🆕 SIMPLE 模式：委托 SimpleOperatorPreviewFormatter
 	if profile == _HintProfile.Profile.SIMPLE:
-		return _SimpleFormatter.build_simple_preview(operators)
+		return _SimpleFormatter.new().build_simple_preview(operators)
 
 	var lines: Array[String] = []
 	if operators.is_empty():
@@ -60,7 +60,7 @@ static func build_preview(operators: Array, profile := _HintProfile.Profile.DEFA
 
 			# 追加注解：原始值 ≠ 调整后值时
 			if delta != 0:
-				var annotations: Array[String] = _ModifierConfig.get_preview_annotations(pop.property, raw_val)
+				var annotations: Array[String] = _ModifierConfig.new().get_preview_annotations(pop.property, raw_val)
 				if not annotations.is_empty():
 					desc += " (%s)" % ", ".join(annotations)
 				else:
@@ -79,7 +79,7 @@ static func build_preview(operators: Array, profile := _HintProfile.Profile.DEFA
 
 ## 糖衣：从 ChoiceResult 解包 .operators，委托给 build_preview。
 ## @param profile: 提示模式 — HintProfile.Profile.DEFAULT（默认）或 SIMPLE
-static func build_choice_result_preview(result, profile := _HintProfile.Profile.DEFAULT) -> Array[String]:
+func build_choice_result_preview(result, profile := _HintProfile.Profile.DEFAULT) -> Array[String]:
 	if not result or result.operators.is_empty():
 		Logging.info("OperatorPreviewFormatter.build_choice_result_preview: result null or operators empty")
 		return []

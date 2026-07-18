@@ -50,7 +50,7 @@ const NPC_FACTION_MAP: Dictionary = {
 #   hint_text:      String — UI 展示文本模板（{mod_val} 替换为实际值）
 # ════════════════════════════════════════════════════════════════
 
-const MODIFIER_EFFECTS: Array[Dictionary] = [
+var MODIFIER_EFFECTS: Array[Dictionary] = [
 	# ── 城府 ASTUTENESS ──
 	{
 		source_prop = "astuteness",
@@ -197,7 +197,7 @@ static func get_pct_for_display(source_prop: String, max_limit: float, half_poin
 ## @param prop_name: 属性名（如 "money"）
 ## @param raw_delta: 原始变化量（如 -40）
 ## @return Array[String] — 如 ["城府 -8"]，无匹配时返回空数组
-static func get_preview_annotations(prop_name: String, raw_delta: int) -> Array[String]:
+func get_preview_annotations(prop_name: String, raw_delta: int) -> Array[String]:
 	if raw_delta == 0:
 		return []
 
@@ -282,7 +282,7 @@ static func _tag_to_faction(tag: String) -> int:
 ## @param stat_name: 属性名（如 "prestige"）
 ## @param raw_delta: 当前累积的变化量
 ## @return int — 修正后的变化量
-static func apply_all_matching_effects(stat_name: String, raw_delta: int) -> int:
+func apply_all_matching_effects(stat_name: String, raw_delta: int) -> int:
 	if raw_delta == 0:
 		Logging.debug("[ModifierConfig] apply_all_matching_effects: raw_delta=0 → no-op")
 		return 0

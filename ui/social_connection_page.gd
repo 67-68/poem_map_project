@@ -15,27 +15,27 @@ class_name SocialConnectionPage
 # 常量映射
 # ═══════════════════════════════════════════════════════════
 
-const PLACE_CN: Dictionary = {
+var PLACE_CN: Dictionary = {
 	"pingkangfang": tr("CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54"),
 	"huangcheng": tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A"),
 	"xishi": tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"),
 }
 
-const PERSON_STATE_CN: Dictionary = {
+var PERSON_STATE_CN: Dictionary = {
 	"not_meet": tr("CODE_SOCIAL_CONNECTION_PAGE_FC09E638F1"),
 	"know_about": tr("CODE_SOCIAL_CONNECTION_PAGE_320A6DD958"),
 	"inner_circle": tr("CODE_SOCIAL_CONNECTION_PAGE_67B1207A0B"),
 	"blood_oath": tr("CODE_SOCIAL_CONNECTION_PAGE_82200B0785"),
 }
 
-const TIER_LABELS: Dictionary = {
+var TIER_LABELS: Dictionary = {
 	1: tr("CODE_SOCIAL_CONNECTION_PAGE_D5617BCA8A"),
 	2: tr("CODE_SOCIAL_CONNECTION_PAGE_AF314B7D7E"),
 	3: tr("CODE_SOCIAL_CONNECTION_PAGE_76BE7378D6"),
 }
 
-const UNKNOWN_TIER_LABEL: String = tr("CODE_SOCIAL_CONNECTION_PAGE_AF4682C8B2")
-const UNKNOWN_PLACE_LABEL: String = tr("CODE_SOCIAL_CONNECTION_PAGE_CDC9E0E088")
+var UNKNOWN_TIER_LABEL: String = tr("CODE_SOCIAL_CONNECTION_PAGE_AF4682C8B2")
+var UNKNOWN_PLACE_LABEL: String = tr("CODE_SOCIAL_CONNECTION_PAGE_CDC9E0E088")
 
 # ═══════════════════════════════════════════════════════════
 # Onready 节点引用
@@ -437,8 +437,8 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 			Logging.warn("[SocialConnectionPage] normal_actions 中的 action '%s' 未在 Database 中找到" % action_uuid)
 			continue
 
-		# 使用 ActionHintBuilder.build_action_hint 获取结构化 hint
-		var hint = ActionHintBuilder.build_action_hint(action, false)
+		# 使用 ActionHintBuilder.new().build_action_hint 获取结构化 hint
+		var hint = ActionHintBuilder.new().build_action_hint(action, false)
 		if hint == null:
 			continue
 

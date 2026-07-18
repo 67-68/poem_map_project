@@ -898,7 +898,7 @@ func _subconscious_murmur() -> String:
 	return ""
 
 ## 两个函数均无内容时的 fallback：硬编码 5 句杜甫独白，随机挑一句
-const FALLBACK_MURMURS: Array[String] = [
+var FALLBACK_MURMURS: Array[String] = [
 	tr("CODE_NARRATIVE_OVERLAY_A70B4CA97E"),
 	tr("CODE_NARRATIVE_OVERLAY_9DC2A087A1"),
 	tr("CODE_NARRATIVE_OVERLAY_9BB022C2C6"),

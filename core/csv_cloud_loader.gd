@@ -55,7 +55,7 @@ extends Node
 #   - 如果 trait/flag 尚未加载到 Database，URN 解析会失败，template 回退为空事件
 #   - 届时错误将难以追踪 💀
 # 如果你觉得"我换个顺序也没事吧"然后乱改 → 时序bug自求多福。
-const DATA_MANIFEST: Array[Dictionary] = [
+var DATA_MANIFEST: Array[Dictionary] = [
 	{
 		"name": "trait_data",
 		"url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=309055591&single=true&output=csv",

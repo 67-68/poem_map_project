@@ -110,7 +110,7 @@ func _register_hover_popup_for_entity() -> void:
 		vector_lines.append(sub_action_preview)
 		Logging.info("SubActionButton._register_hover_popup_for_entity: sub_action_preview 非空，跳过 operators 独立展示")
 	else:
-		var op_lines := ActionHintBuilder.build_operator_preview(ops)
+		var op_lines := ActionHintBuilder.new().build_operator_preview(ops)
 		vector_lines.append_array(op_lines)
 		Logging.info("SubActionButton._register_hover_popup_for_entity: ActionHintBuilder 生成 %d 行 operator 描述" % op_lines.size())
 	

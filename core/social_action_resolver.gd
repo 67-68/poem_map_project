@@ -9,7 +9,7 @@ class_name SocialActionResolver extends RefCounted
 
 # ── 唯一入口 ─────────────────────────────────────────────
 
-static func enrich_context(ev: BaseEvent, ev_name: String, context: Dictionary) -> Dictionary:
+func enrich_context(ev: BaseEvent, ev_name: String, context: Dictionary) -> Dictionary:
 	if not context.has("main_tag") or str(context["main_tag"]).is_empty():
 		return context
 

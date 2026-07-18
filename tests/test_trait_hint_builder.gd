@@ -1,5 +1,5 @@
 # ================================================================
-# ActionHintBuilder.build_trait_hint() 全面测试
+# ActionHintBuilder.new().build_trait_hint() 全面测试
 # ================================================================
 # 架构：before_all 加载所有 traits .tres 文件，遍历调用 build_trait_hint，
 # 断言结构性不变量 + 富数据 trait 内容级断言。
@@ -56,7 +56,7 @@ func before_all():
 	
 	# 3. 预计算所有 hint 并建索引
 	for t in _all_traits:
-		var hint := ActionHintBuilder.build_trait_hint(t)
+		var hint := ActionHintBuilder.new().build_trait_hint(t)
 		_all_results.append({"trait": t, "hint": hint})
 		_trait_by_name[t.name] = t
 		_hint_by_name[t.name] = hint
@@ -80,7 +80,7 @@ func test_all_traits_loaded():
 
 
 func test_null_trait_returns_empty():
-	var result := ActionHintBuilder.build_trait_hint(null)
+	var result := ActionHintBuilder.new().build_trait_hint(null)
 	assert_eq(result, "", "null trait 应返回空字符串")
 
 
@@ -206,7 +206,7 @@ func test_hover_narrative_in_output():
 
 
 func test_hint_instance_creation():
-	assert_not_null(ActionHintBuilder.new())
+	assert_not_null(ActionHintBuilder.new().new())
 	assert_not_null(preload("res://core/hints/trait_hint_formatter.gd").new())
 	assert_not_null(preload("res://core/hints/operator_preview_formatter.gd").new())
 	assert_not_null(preload("res://core/hints/action_hint_formatter.gd").new())

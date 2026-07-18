@@ -44,7 +44,7 @@ class LoadResult:
 ## 扫描 start_path 下的所有子文件夹和 .tres/.csv 文件
 ## delim: 命名空间分隔符，建议使用 "."
 ## 策略：先尝试 DirAccess 递归扫描（桌面端），如返回 0 文件则降级到预构建索引（HTML5 端）
-static func scan(
+func scan(
 	start_path: String = "res://data",
 	delim: String = "."
 ) -> LoadResult:
@@ -75,7 +75,7 @@ static func scan(
 
 
 ## 从预构建 JSON 索引加载（HTML5 降级路径）
-static func _scan_from_index(
+func _scan_from_index(
 	start_path: String,
 	delim: String
 ) -> LoadResult:
@@ -134,7 +134,7 @@ static func _scan_from_index(
 	return result
 
 
-static func _scan_dir(
+func _scan_dir(
 	dir: DirAccess,
 	current_dir_path: String,
 	current_ns: String,
@@ -191,7 +191,7 @@ static func _scan_dir(
 	dir.list_dir_end()
 
 
-static func _load_resource(
+func _load_resource(
 	file_path: String,
 	current_ns: String,
 	result: LoadResult,
@@ -251,7 +251,7 @@ static func _load_resource(
 		result.bases[top_level_base][uuid] = resource
 
 
-static func _load_csv(
+func _load_csv(
 	file_path: String,
 	current_ns: String,
 	result: LoadResult,
@@ -303,7 +303,7 @@ static func _load_csv(
 		Logging.debug("DataScanner: CSV 写入 pool [%s] <- %s" % [full_id, file_path])
 
 
-static func _load_event_base_json(
+func _load_event_base_json(
 	file_path: String,
 	current_ns: String,
 	result: LoadResult,
@@ -375,7 +375,7 @@ static func _load_event_base_json(
 		result.bases[top_level_base][uuid] = event_base
 
 
-static func _extract_uuid(resource: Resource) -> String:
+func _extract_uuid(resource: Resource) -> String:
 	if "uuid" in resource:
 		var val = resource.get("uuid")
 		if val is String and not val.is_empty():

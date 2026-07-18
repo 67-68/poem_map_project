@@ -37,4 +37,4 @@ func append(op: BaseOperator) -> ChoiceResult:
 ## 聚合所有 operator 的预览文本，委托给 ActionHintBuilder 统一生成（含修饰符注解）
 func format_preview() -> Array[String]:
 	const _HintBuilder = preload("res://core/action_hint_builder.gd")
-	return _HintBuilder.build_operator_preview(operators)
+	return _HintBuilder.new().build_operator_preview(operators)

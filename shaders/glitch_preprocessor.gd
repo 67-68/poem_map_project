@@ -47,7 +47,7 @@ const _BARE_TAG_TEMPLATE := "\\[%s\\]"
 ## - [/TAG] → 不动（闭标签）
 ## - [TAG key=val] → 不动（已有参数，不覆盖）
 ## - [TAGxxx] → 不动（不是目标标签）
-static func inject_params(raw_text: String, tag_params: Dictionary) -> String:
+func inject_params(raw_text: String, tag_params: Dictionary) -> String:
 	if tag_params.is_empty():
 		return raw_text
 
@@ -70,7 +70,7 @@ static func inject_params(raw_text: String, tag_params: Dictionary) -> String:
 ## [param raw_text] 原始文本
 ## [param tag]      BBCode 标签名，如 "glitch"
 ## [param params]   参数字典，如 {"level": 5.0}
-static func inject_single(raw_text: String, tag: String, params: Dictionary) -> String:
+func inject_single(raw_text: String, tag: String, params: Dictionary) -> String:
 	return inject_params(raw_text, {tag: params})
 
 
@@ -89,7 +89,7 @@ static func inject_single(raw_text: String, tag: String, params: Dictionary) -> 
 ## [b]注意：[/b]
 ## - 只替换裸标签 [glitch]，已有参数的标签如 [glitch level=5] 不受影响
 ## - 空字符串/无文本字段的实体直接跳过
-static func preprocess_entity(res: Resource) -> void:
+func preprocess_entity(res: Resource) -> void:
 	if res == null:
 		return
 
@@ -142,7 +142,7 @@ static func preprocess_entity(res: Resource) -> void:
 # ============================================================
 
 ## 对单个标签执行参数注入
-static func _inject_one(text: String, tag: String, params: Dictionary) -> String:
+func _inject_one(text: String, tag: String, params: Dictionary) -> String:
 	var regex := RegEx.new()
 	var pattern := _BARE_TAG_TEMPLATE % tag
 	var err := regex.compile(pattern)
@@ -159,7 +159,7 @@ static func _inject_one(text: String, tag: String, params: Dictionary) -> String
 ## 构建注入后的开标签字符串
 ## 输入: tag="glitch", params={"level": 5.0, "color_shift": 0.8}
 ## 输出: "[glitch level=5.0 color_shift=0.8]"
-static func _build_injected_tag(tag: String, params: Dictionary) -> String:
+func _build_injected_tag(tag: String, params: Dictionary) -> String:
 	var parts: Array[String] = ["[%s" % tag]
 	for key: String in params:
 		parts.append(" %s=%s" % [key, str(params[key])])

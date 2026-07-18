@@ -75,7 +75,7 @@ func set_trait_fallback(trait_key: String, display_name: String) -> void:
 ## 重复调用 set_trait 时先注销旧绑定再注册新绑定。
 func _register_trait_hover(trait_data: Trait) -> void:
 	HoverPopupManager.unregister(self)
-	var hint: String = ActionHintBuilder.build_trait_hint(trait_data)
+	var hint: String = ActionHintBuilder.new().build_trait_hint(trait_data)
 	if hint.is_empty():
 		Logging.info("TraitDemonstrator._register_trait_hover: build_trait_hint 返回空，跳过注册")
 		return

@@ -19,7 +19,7 @@ const _PropertyOperator = preload("res://core/model/property_operator.gd")
 # ════════════════════════════════════════════════════════════════
 
 ## 将一列 BaseOperator 转为简单版 "{desc}" 字符串数组（无 • 前缀）。
-static func build_simple_preview(operators: Array) -> Array[String]:
+func build_simple_preview(operators: Array) -> Array[String]:
 	var lines: Array[String] = []
 	if operators.is_empty():
 		return lines
@@ -40,7 +40,7 @@ static func build_simple_preview(operators: Array) -> Array[String]:
 # 内部：按 Operator 类型分发
 # ════════════════════════════════════════════════════════════════
 
-static func _simple_desc_for(op) -> String:
+func _simple_desc_for(op) -> String:
 	if op is _PropertyOperator:
 		return _simple_property(op)
 	if op is TimeOperator:
@@ -58,7 +58,7 @@ static func _simple_desc_for(op) -> String:
 # ════════════════════════════════════════════════════════════════
 
 ## PropertyOperator: 「健康↑↑↑」— 属性名 + 箭头（复用 _get_arrow_count），无数字无知觉文本
-static func _simple_property(pop) -> String:
+func _simple_property(pop) -> String:
 	if pop.value == 0 or pop.property.is_empty():
 		return ""
 
@@ -76,14 +76,14 @@ static func _simple_property(pop) -> String:
 
 
 ## TimeOperator: 「⏱5天」
-static func _simple_time(top) -> String:
+func _simple_time(top) -> String:
 	if top.refresh_time or top.day <= 0:
 		return ""
 	return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_20C021DFAA") % int(top.day)
 
 
 ## TraitOperator: 「获 崴脚」/「失 中毒」
-static func _simple_trait(top) -> String:
+func _simple_trait(top) -> String:
 	if top.trait_key.is_empty():
 		return ""
 	var trait_obj = Database.get_trait(top.trait_key)
@@ -97,7 +97,7 @@ static func _simple_trait(top) -> String:
 
 
 ## PoemRewardOperator: mode→短标签
-static func _simple_poem_reward(pro) -> String:
+func _simple_poem_reward(pro) -> String:
 	match pro.mode:
 		"money":
 			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
