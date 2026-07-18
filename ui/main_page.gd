@@ -1,11 +1,11 @@
 # main_page.gd — 入口场景根脚本
-# 负责将 PanelContainer 标签 hover 事件绑定到 Line2D 上。
+# 负责将 PanelContainer 标签 hover 事件绑定到 Line2D 上，以及点击逻辑。
 extends PanelContainer
 
 @export var route_line: NodePath
-@export var trigger_pc1: NodePath  # PanelContainer "京"
-@export var trigger_pc2: NodePath  # PanelContainer2 "隐"
-@export var trigger_pc3: NodePath  # PanelContainer3 "律法"
+@export var trigger_pc1: NodePath  # PanelContainer "京" (Start)
+@export var trigger_pc2: NodePath  # PanelContainer2 "隐" (Quit)
+@export var trigger_pc3: NodePath  # PanelContainer3 "律法" (Settings)
 
 
 func _ready() -> void:
@@ -28,3 +28,65 @@ func _ready() -> void:
 		Logging.info("main_page: 已绑定 3 个 trigger 到 route_line")
 	else:
 		Logging.err("main_page: route_line 缺少 bind_triggers 方法")
+
+	# ── 连接点击逻辑 ──
+	if t1:
+		t1.gui_input.connect(_on_start_clicked)
+		Logging.info("main_page: 已连接 Start.gui_input")
+	else:
+		Logging.err("main_page: Start PanelContainer 为 null")
+
+	if t2:
+		t2.gui_input.connect(_on_quit_clicked)
+		Logging.info("main_page: 已连接 Quit.gui_input")
+	else:
+		Logging.err("main_page: Quit PanelContainer 为 null")
+
+	if t3:
+		t3.gui_input.connect(_on_settings_clicked)
+		Logging.info("main_page: 已连接 Settings.gui_input")
+	else:
+		Logging.err("main_page: Settings PanelContainer 为 null")
+
+
+# ── 点击回调 ─────────────────────────────────────────────
+
+## 开始游戏：黑屏过渡 → main.tscn
+func _on_start_clicked(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton):
+		return
+	var mb := event as InputEventMouseButton
+	if mb.button_index != MOUSE_BUTTON_LEFT or not mb.pressed:
+		return
+
+	Logging.info("main_page: Start 被点击，即将转换到 main.tscn")
+	var tree := get_tree()
+	# 复用 app/start.gd 的过渡协议：先黑屏再亮屏再切场景
+	EventBus.request_start_black.emit(true)
+	await tree.create_timer(1.0).timeout
+	EventBus.request_start_black.emit(false)
+	await tree.create_timer(1.0).timeout
+	tree.change_scene_to_file("res://main.tscn")
+
+
+## 退出游戏
+func _on_quit_clicked(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton):
+		return
+	var mb := event as InputEventMouseButton
+	if mb.button_index != MOUSE_BUTTON_LEFT or not mb.pressed:
+		return
+
+	Logging.info("main_page: Quit 被点击，退出游戏")
+	get_tree().quit()
+
+
+## 设置（律法）：当前 main_page 场景无系统菜单，仅打日志
+func _on_settings_clicked(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton):
+		return
+	var mb := event as InputEventMouseButton
+	if mb.button_index != MOUSE_BUTTON_LEFT or not mb.pressed:
+		return
+
+	Logging.info("main_page: Settings 被点击（暂无可用操作，main_page 场景下系统菜单不可用）")
