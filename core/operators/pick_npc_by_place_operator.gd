@@ -64,7 +64,6 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func operate() -> void:
-	""tr("CODE_PICK_NPC_BY_PLACE_OPERATOR_5254542205")""
 	pass
 
 

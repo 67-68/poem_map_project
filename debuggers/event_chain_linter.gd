@@ -91,13 +91,13 @@ func _save_mermaid_to_file(mermaid_content: String) -> void:
 
 func _generate_mermaid_diagram(all_groups: Array[Array], adjacency_list: Dictionary) -> String:
     var lines = ["flowchart TD"]
-    lines.append("    %% 事件链依赖关系图")
+    lines.append("    %% Event Chain Dependency Graph")
     lines.append("")
 
     # 事件链分组
     for i in range(all_groups.size()):
         var chain = all_groups[i]
-        lines.append("    subgraph Chain%d[链 %d: %d个事件]" % [i, i, chain.size()])
+        lines.append("    subgraph Chain%d[Chain %d: %d events]" % [i, i, chain.size()])
         for uuid in chain:
             var safe_id = _sanitize_mermaid_id(uuid)
             var display_name = uuid.substr(0, 8)

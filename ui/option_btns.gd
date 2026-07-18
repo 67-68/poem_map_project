@@ -34,7 +34,6 @@ func _exit_tree() -> void:
 # ═══════════════════════════════════════════════
 
 func _register_number_keys() -> void:
-	""tr("CODE_OPTION_BTNS_12267A7A5D")""
 	var btns := get_children()
 	var callbacks: Array[Callable] = []
 	for i in range(min(btns.size(), 4)):

@@ -360,13 +360,13 @@ static func to_relation_str(item) -> String:
 
 # ── 驻留地点 (CHANGAN_PLACES) 转换方法 ──────────────────────
 # GameSaveData 存 String key，运行时转换到中文/枚举
-const PLACE_STR_MAP: Dictionary = {
+static var PLACE_STR_MAP: Dictionary = {
  CHANGAN_PLACES.XISHI: "xishi",
  CHANGAN_PLACES.PINGKANGFANG: "pingkangfang",
  CHANGAN_PLACES.HUANGCHENG: "huangcheng",
  CHANGAN_PLACES.TAISHAN: "taishan",
 }
-const PLACE_CN_MAP: Dictionary = {
+var PLACE_CN_MAP: Dictionary = {
 	"xishi": tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"),
 	"pingkangfang": tr("CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54"),
 	"huangcheng": tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A"),
@@ -388,7 +388,7 @@ static func from_place_str(s: String) -> CHANGAN_PLACES:
 	return CHANGAN_PLACES.XISHI
 
 ## String key → 中文名
-static func place_to_cn(s: String) -> String:
+func place_to_cn(s: String) -> String:
 	return PLACE_CN_MAP.get(s, tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"))
 
 # ── 图片位置枚举 (UV 坐标 0.0~1.0) ─────────────────────────

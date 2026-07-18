@@ -210,7 +210,6 @@ func init_emotions():
 		Logging.info('init_emotions: set %s to %d from SourceOfTruth' % [emo_name, emo_val])
 
 func init_npc_person_states():
-	""tr("CODE_PLAYER_STATE_E3DEF00A8B")""
 	var overrides = SourceOfTruth.debug_dashboard_state.get("npc_person_state_overrides", {})
 	if overrides.is_empty():
 		Logging.info("init_npc_person_states: no overrides in SourceOfTruth, skipping")
@@ -474,7 +473,6 @@ func force_set_stat_val(stat_name, data):
 
 
 func _ensure_prop_in_gamesave(stat_name: String) -> int:
-	""tr("CODE_PLAYER_STATE_FF59D8BF92")""
 	if GameSave.data.properties.has(stat_name):
 		return GameSave.data.properties[stat_name]
 	

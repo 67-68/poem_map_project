@@ -16,7 +16,6 @@ var _hover_tween: Tween = null
 var _cached_tooltip: Control = null
 
 static func create(data: BaseOption) -> EventBtn:
-	""tr("CODE_EVENT_BTN_B9820968D7")""
 	var scene = load("res://characters/event_btn.tscn")
 	var btn = scene.instantiate()
 	btn._init_option(data)
@@ -138,7 +137,6 @@ func _register_event_btn_hover() -> void:
 	Logging.info("EventBtn._register_event_btn_hover: 注册完成 (BELOW_OVERLAY), text='%s'" % text)
 
 func _init_option(data: BaseOption):
-	""tr("CODE_EVENT_BTN_8C71DF151B")""
 	option = data
 	# 🔒 优先读取 _resolved_description（动态模板解析后的值，不污染原始 description）
 	#     fallback 到 description（静态文本）

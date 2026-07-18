@@ -169,7 +169,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		if profile == _HintProfile.Profile.SIMPLE:
 			hint.output.append(tr("CODE_ACTION_HINT_FORMATTER_213F14AD2B"))
 		else:
-			hint.output.append(_BBCode.success_header() + " 成败未卜…")
+			hint.output.append(_BBCode.success_header() + tr("CODE_ACTION_HINT_FORMATTER_OUTCOME_UNKNOWN"))
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' success 无有效 operator，使用 fallback" % sub_action.name)
 	else:
 		if profile == _HintProfile.Profile.SIMPLE:
@@ -190,7 +190,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		if profile == _HintProfile.Profile.SIMPLE:
 			hint.risk.append(tr("CODE_ACTION_HINT_FORMATTER_400F1725F5"))
 		else:
-			hint.risk.append(_BBCode.fail_header() + " 后果难料…")
+			hint.risk.append(_BBCode.fail_header() + tr("CODE_ACTION_HINT_FORMATTER_CONSEQ_UNKNOWN"))
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' fail 无有效 operator，使用 fallback" % sub_action.name)
 	else:
 		if profile == _HintProfile.Profile.SIMPLE:

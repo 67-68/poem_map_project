@@ -88,7 +88,6 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func refresh_all() -> void:
-	""tr("CODE_IDEA_PAGE_EC97C1482B")""
 	Logging.info("[IdeaPage] refresh_all")
 
 	_refresh_slot_buttons()
@@ -101,7 +100,6 @@ func refresh_all() -> void:
 
 
 func _refresh_slot_buttons() -> void:
-	""tr("CODE_IDEA_PAGE_27819FC258")""
 	var unlocked: Array[String] = GameSave.data.current_unlock_ideas
 
 	for i in range(_slot_btns.size()):
@@ -120,7 +118,6 @@ func _refresh_slot_buttons() -> void:
 
 
 func _refresh_candidate_pool() -> void:
-	""tr("CODE_IDEA_PAGE_06953F3F53")""
 	Logging.info("[IdeaPage] _refresh_candidate_pool: Database.ideas=%s" % str(Database.ideas.keys()))
 	# 清除旧的 IdeaBtn
 	for child in _candidate_container.get_children():
@@ -167,7 +164,6 @@ func _refresh_candidate_pool() -> void:
 
 
 func _describe_counter(idea: Idea) -> String:
-	""tr("CODE_IDEA_PAGE_693D8DE286")""
 	if idea.counter_idea.is_empty():
 		return ""
 	var counter = Database.get_idea(idea.counter_idea)
@@ -198,7 +194,6 @@ func _check_conflict(idea: Idea, unlocked: Array[String]) -> String:
 
 
 func _on_slot_pressed(index: int) -> void:
-	""tr("CODE_IDEA_PAGE_42BB022322")""
 	var unlocked: Array[String] = GameSave.data.current_unlock_ideas
 	if index < unlocked.size():
 		_selected_idea_uuid = unlocked[index]
@@ -213,7 +208,6 @@ func _on_candidate_pressed(uuid: String) -> void:
 
 
 func _show_detail_for_selected() -> void:
-	""tr("CODE_IDEA_PAGE_65257D423A")""
 	if _selected_idea_uuid.is_empty():
 		_detail_title.text = tr("UI_IDEA_PAGE_TEXT_7")
 		_clear_effect_lines()
@@ -279,7 +273,6 @@ func _show_detail_for_selected() -> void:
 
 
 func _on_upgrade_pressed() -> void:
-	""tr("CODE_IDEA_PAGE_9E946767B7")""
 	if _selected_idea_uuid.is_empty():
 		return
 
@@ -331,13 +324,11 @@ func _on_upgrade_pressed() -> void:
 
 
 func _clear_effect_lines() -> void:
-	""tr("CODE_IDEA_PAGE_8CE5EBD06A")""
 	for child in _detail_effects_container.get_children():
 		child.queue_free()
 
 
 func _is_idea_available(uuid: String) -> bool:
-	""tr("CODE_IDEA_PAGE_913DD190F6")""
 	if GameSave.data.current_unlock_ideas.has(uuid):
 		return true
 	if Database.ideas.has(uuid):
@@ -346,7 +337,6 @@ func _is_idea_available(uuid: String) -> bool:
 
 
 func _on_idea_data_changed() -> void:
-	""tr("CODE_IDEA_PAGE_1D52523402")""
 	refresh_all()
 
 

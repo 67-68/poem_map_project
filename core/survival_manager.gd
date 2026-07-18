@@ -332,7 +332,6 @@ func _process_single_xun_settlement():
 	call_deferred("_post_xun_money_deduct")
 
 func _update_heartbeat_sfx() -> void:
-	""tr("CODE_SURVIVAL_MANAGER_83EB826B68")""
 	var health: int = PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) as int
 	if health <= HEARTBEAT_HEALTH_THRESHOLD and health > 0:
 		if not AudioManager.is_sfx_loop_playing():

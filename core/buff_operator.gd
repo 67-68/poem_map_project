@@ -27,7 +27,6 @@ var source_uuid: String = ""
 
 
 func operate():
-	""tr("CODE_BUFF_OPERATOR_CC1E0272A8")""
 	if named_amount_key.is_empty():
 		Logging.err("BuffOperator.operate: named_amount_key 为空，跳过执行")
 		return
@@ -56,7 +55,6 @@ func operate():
 
 
 func on_exit(_context: Dictionary) -> Dictionary:
-	""tr("CODE_BUFF_OPERATOR_D763EDC735")""
 	if source_uuid.is_empty():
 		Logging.warn("BuffOperator.on_exit: source_uuid 为空，无法精确删除，按 modifier_type + named_key 模糊删除")
 		_remove_by_type_key(modifier_type, named_amount_key)
@@ -83,7 +81,6 @@ func on_exit(_context: Dictionary) -> Dictionary:
 
 
 func _remove_by_type_key(mod_type: String, named_key: String) -> void:
-	""tr("CODE_BUFF_OPERATOR_26DD29F108")""
 	var remaining: Array[Dictionary] = []
 	var removed := 0
 	for entry in GameSave.data.active_modifiers:
@@ -97,7 +94,6 @@ func _remove_by_type_key(mod_type: String, named_key: String) -> void:
 
 
 func init(_context: Dictionary) -> Dictionary:
-	""tr("CODE_BUFF_OPERATOR_540C92CD69")""
 	if named_amount_key.is_empty():
 		Logging.warn("BuffOperator.init: named_amount_key 为空，跳过验证")
 		return _context
@@ -111,7 +107,6 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func describe_preview() -> String:
-	""tr("CODE_BUFF_OPERATOR_CE5F9104CD")""
 	if named_amount_key.is_empty() or modifier_type.is_empty():
 		return ""
 
@@ -154,10 +149,8 @@ func describe_preview() -> String:
 
 
 func get_referenced_props() -> Array:
-	""tr("CODE_BUFF_OPERATOR_7591B94741")""
 	return []
 
 
 func get_demanded_props() -> Array:
-	""tr("CODE_BUFF_OPERATOR_A61F72D944")""
 	return []

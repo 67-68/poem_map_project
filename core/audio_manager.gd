@@ -348,7 +348,6 @@ func _initialize_imaginary_sound_listener() -> void:
 	Logging.info("%s: ImaginarySoundListener 已实例化并添加到场景树" % LOG_TAG)
 
 func play_sfx_loop(category: String, pitch_randomness: float = 0.0, volume_db: float = 0.0) -> bool:
-	""tr("CODE_AUDIO_MANAGER_13C2163725")""
 	if category.is_empty():
 		return false
 	if not _loop_player:
@@ -377,7 +376,6 @@ func play_sfx_loop(category: String, pitch_randomness: float = 0.0, volume_db: f
 
 
 func stop_sfx_loop() -> void:
-	""tr("CODE_AUDIO_MANAGER_5A9B74407B")""
 	if _loop_player:
 		if _loop_player.finished.is_connected(_on_loop_finished):
 			_loop_player.finished.disconnect(_on_loop_finished)
@@ -389,7 +387,6 @@ func is_sfx_loop_playing() -> bool:
 
 
 func _on_loop_finished() -> void:
-	""tr("CODE_AUDIO_MANAGER_0AEE7286EA")""
 	if _loop_player and _loop_player.stream:
 		_loop_player.play()
 

@@ -766,7 +766,6 @@ func get_all_of_class(cls_name: String) -> Array:
 
 
 func _check_class_filter(res: Variant, class_filter: String) -> bool:
-	""tr("CODE_DATABASE_651DC1486F")""
 	if class_filter.is_empty():
 		return true
 	if res == null:
@@ -807,7 +806,6 @@ func _build_unified_index() -> void:
 
 
 func _build_recipe_index() -> void:
-	""tr("CODE_DATABASE_4D67642CC6")""
 	recipe_index.clear()
 	var all_poems = get_all_of_class("Poem")
 	for res in all_poems:
@@ -845,7 +843,6 @@ func _preprocess_all_entities() -> void:
 
 
 func _scan_flat_dict(dict: Dictionary, source_desc: String) -> void:
-	""tr("CODE_DATABASE_6F781D1EED")""
 	for key in dict:
 		var val = dict[key]
 		if val is Resource:
@@ -853,7 +850,6 @@ func _scan_flat_dict(dict: Dictionary, source_desc: String) -> void:
 
 
 func _index_resource(res: Resource, source_desc: String) -> void:
-	""tr("CODE_DATABASE_63FD4D1686")""
 	var uuid = _extract_uuid_from_resource(res)
 	if uuid.is_empty():
 		return
@@ -872,7 +868,6 @@ func _index_resource(res: Resource, source_desc: String) -> void:
 
 
 static func _extract_uuid_from_resource(res: Resource) -> String:
-	""tr("CODE_DATABASE_FAD55858C4")""
 	if "uuid" in res:
 		var val = res.get("uuid")
 		if val is String and not val.is_empty():

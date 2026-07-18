@@ -735,7 +735,7 @@ func _apply_woodcut_shader(bg: TextureRect, has_icon: bool) -> void:
 # ═══════════════════════════════════════════════
 
 func register_scroll_for_input_manager() -> void:
-	""tr("CODE_EVENT_UI_5819995A2D")""
+	"""注册纸带 ScrollContainer，供 InputManager 处理 PgUp/PgDn"""
 	var im := _get_input_manager()
 	if not im:
 		Logging.warn("EventUI.register_scroll_for_input_manager: 无法获取 InputManager")

@@ -178,7 +178,6 @@ func _show_tutorial_prompt() -> void:
 
 
 func _get_tutorial_dialog() -> PanelContainer:
-	""tr("CODE_TUTORIAL_CONTROLLER_7E905994B5")""
 	var tree := get_tree()
 	if not tree:
 		return null
@@ -384,7 +383,6 @@ func _p4_step_name() -> String:
 
 
 func _clear_all_tut_flags() -> void:
-	""tr("CODE_TUTORIAL_CONTROLLER_AD341EBFCF")""
 	var tut_flags := [
 		"tut_lock_chuyou_subs",
 		"tut_unlock_chuyou_subs", "tut_unlock_duzhuo",
@@ -426,7 +424,6 @@ func _ban_tutorial_actions() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _set_taoist_meditating() -> void:
-	""tr("CODE_TUTORIAL_CONTROLLER_12586AB749")""
 	RelationFlagManager.set_person_state(TAOIST_NPC_KEY, "not_meet")
 	Logging.info("TutorialController: 道士 person_state → not_meet（打坐中）")
 
@@ -991,7 +988,6 @@ func _advance_to_phase_7() -> void:
 
 
 func _advance_to_end() -> void:
-	""tr("CODE_TUTORIAL_CONTROLLER_6D0E37AE7F")""
 	Logging.info("TutorialController: ====== PHASE_7_POEM → END ======")
 	_current_phase = Phase.END
 	_disconnect_tutorial_signals()
@@ -1049,7 +1045,6 @@ func _push_tut_event(event_key: String) -> void:
 
 
 func _show_special_label(text: String) -> void:
-	""tr("CODE_TUTORIAL_CONTROLLER_2482669467")""
 	Logging.info("TutorialController: SpecialLabel → '%s'" % text)
 	var right_panel := _get_right_panel()
 	right_panel.set_special_label_text(text)

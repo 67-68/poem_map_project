@@ -107,7 +107,6 @@ func _on_xun_color_reset() -> void:
 	if TutorialController.is_tutorial_active():
 		Logging.info('month end settlement: tutorial active, not on xun tick')
 		return
-	""tr("CODE_MONTH_END_SETTLEMENT_4B35F007CC")""
 	if _left_panel != null:
 		_left_panel.reset_all_prop_colors()
 	Logging.info("[MonthEndSettlement] 旬初已清空所有属性颜色覆盖")

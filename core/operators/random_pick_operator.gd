@@ -80,5 +80,4 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func operate() -> void:
-	""tr("CODE_RANDOM_PICK_OPERATOR_AA9CEC85C5")""
 	pass

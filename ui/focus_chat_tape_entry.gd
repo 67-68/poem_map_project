@@ -206,7 +206,6 @@ func _on_option_selected(choice_result: ChoiceResult) -> void:
 
 
 func _find_chosen_text(choice_result: ChoiceResult) -> String:
-	""tr("CODE_FOCUS_CHAT_TAPE_ENTRY_32FCFCFD75")""
 	for opt in _chat_data.options:
 		if opt.choice_result == choice_result:
 			var txt = opt._resolved_description if '_resolved_description' in opt and opt._resolved_description else opt.description

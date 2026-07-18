@@ -16,7 +16,6 @@ var _conflict_reason: String = ""
 
 
 func set_idea(idea: Idea, locked: bool = false, conflict_reason: String = "") -> void:
-	""tr("CODE_IDEA_BTN_8BA872D0D3")""
 	_idea = idea
 	_locked = locked
 	_conflict_reason = conflict_reason
@@ -41,7 +40,6 @@ func is_locked() -> bool:
 
 
 func _update_display() -> void:
-	""tr("CODE_IDEA_BTN_BBF2377F0F")""
 	if not _idea:
 		_update_display_empty()
 		return

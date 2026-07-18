@@ -43,7 +43,6 @@ func _make_imagery_op(tag: String) -> ImageryAcquisitionOperator:
 
 func _make_chained_event(event_uuid: String, archetype: String, desc: String,
 		imagery_tags: Array[String]) -> Resource:
-	""tr("CODE_GENERATE_TEST_POEM_EVENTS_04A0AC9ECB")""
 	var event = RandomEvent.new()
 	event.uuid = event_uuid
 	event.name = event_uuid

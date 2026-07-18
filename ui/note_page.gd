@@ -68,7 +68,6 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func refresh_list() -> void:
-	""tr("CODE_NOTE_PAGE_5256C46E1D")""
 	var triggered: Array[Note] = NoteManager.get_triggered_notes()
 
 	# 更新数量标签
@@ -106,7 +105,6 @@ func refresh_list() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _on_note_btn_pressed(note_uuid: String) -> void:
-	""tr("CODE_NOTE_PAGE_6FAAC7AB6E")""
 	var note: Note = NoteManager.get_note(note_uuid)
 	if note == null:
 		Logging.warn("[NotePage] 选中笔记但未找到: uuid=%s" % note_uuid)
@@ -115,7 +113,6 @@ func _on_note_btn_pressed(note_uuid: String) -> void:
 
 
 func _show_note_detail(note: Note) -> void:
-	""tr("CODE_NOTE_PAGE_C80B8A993F")""
 	# 隐藏占位，显示详情
 	_placeholder.visible = false
 	_demon_title.visible = true
@@ -144,7 +141,6 @@ func _show_note_detail(note: Note) -> void:
 
 
 func _show_placeholder() -> void:
-	""tr("CODE_NOTE_PAGE_6BDBAF77F8")""
 	_demon_title.visible = false
 	_demon_poem.visible = false
 	_demon_description.visible = false

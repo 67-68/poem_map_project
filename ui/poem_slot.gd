@@ -10,7 +10,6 @@ func apply_text(text):
     $C/RichTextLabel.text = text
 
 func set_greyed(greyed: bool) -> void:
-    ""tr("CODE_POEM_SLOT_FE548D8FF5")""
     if greyed:
         $C/RichTextLabel.modulate = Color(0.4, 0.4, 0.4, 1.0)
         $C/RichTextLabel.add_theme_color_override("default_color", Color(0.4, 0.4, 0.4, 1.0))

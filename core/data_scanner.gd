@@ -309,7 +309,6 @@ static func _load_event_base_json(
 	result: LoadResult,
 	top_level_base: String
 ) -> void:
-	""tr("CODE_DATA_SCANNER_F7573DA95E")""
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if not file:
 		Logging.err("DataScanner: 无法打开 JSON 文件: " + file_path)
@@ -377,7 +376,6 @@ static func _load_event_base_json(
 
 
 static func _extract_uuid(resource: Resource) -> String:
-	""tr("CODE_DATA_SCANNER_546FD6E862")""
 	if "uuid" in resource:
 		var val = resource.get("uuid")
 		if val is String and not val.is_empty():

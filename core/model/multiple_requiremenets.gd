@@ -121,5 +121,5 @@ func describe_requirement() -> String:
     if parts.is_empty():
         return ""
     if current_operator == REQ_OPERATOR.LOGIC.OR:
-        return "或 ".join(parts)
+        return tr("CODE_REQ_JOIN_OR").join(parts)
     return "\n".join(parts)

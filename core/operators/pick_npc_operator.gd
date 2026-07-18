@@ -107,7 +107,6 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func operate() -> void:
-	""tr("CODE_PICK_NPC_OPERATOR_4645ED88AF")""
 	var npc_tag: String = _captured_context.get(key_stored_context, "")
 
 	if npc_tag.is_empty():
