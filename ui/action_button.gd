@@ -202,12 +202,12 @@ func _on_button_pressed() -> void:
 			for d_id in defer_ids:
 				ActionManager.cancel_defer(d_id)
 				Logging.info("SceneActionPanel: deferring 态点击 → 取消 defer id=%s" % d_id)
-			EventBus.request_toast.emit("已取消等待", 1)
+			EventBus.request_toast.emit(tr("CODE_ACTION_BUTTON_A3ED1BB61F"), 1)
 			return
 	
 	# ── 锁定态 → 弹出 toast，不执行 ──
 	if _is_locked:
-		var reason := action.dynamic_failed_hint if not action.dynamic_failed_hint.is_empty() else "暂时无法执行此行动"
+		var reason := action.dynamic_failed_hint if not action.dynamic_failed_hint.is_empty() else tr("CODE_NPC_ACTION_BUTTON_60ABF5AC4F")
 		EventBus.request_toast.emit(reason, 1)
 		Logging.info("SceneActionPanel: 锁定态点击被拦截 action=%s reason=%s" % [action.uuid if action else "NULL", reason])
 		return

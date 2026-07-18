@@ -29,6 +29,6 @@ size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.7882353, 0.16470589, 0.16470589, 1)
 theme_override_fonts/font = ExtResource("2_3ecjc")
 theme_override_font_sizes/font_size = 14
-text = "疲"
+text = "UI_YANG_KE_TEXT_0"
 horizontal_alignment = 1
 vertical_alignment = 1

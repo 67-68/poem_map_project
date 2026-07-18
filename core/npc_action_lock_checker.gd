@@ -44,9 +44,9 @@ static func is_locked(action_uuid: String, npc_doc: NPCDocument) -> bool:
 ## 返回锁定原因字符串（供 toast / tooltip 展示）
 static func get_lock_reason(action_uuid: String, npc_doc: NPCDocument) -> String:
 	if npc_doc == null:
-		return "需要与NPC相识方可执行此行动"
+		return tr("CODE_NPC_ACTION_LOCK_CHECKER_ED757BE5DD")
 	var npc_name := npc_doc.name if not npc_doc.name.is_empty() else npc_doc.uuid
-	var reason := "需要与%s相识方可执行此行动" % npc_name
+	var reason := tr("CODE_NPC_ACTION_LOCK_CHECKER_71BC43506B") % npc_name
 	Logging.info("NpcActionLockChecker.get_lock_reason: action='%s' npc='%s' → '%s'" % [action_uuid, npc_doc.name, reason])
 	return reason
 

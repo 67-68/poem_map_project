@@ -7,8 +7,8 @@ class_name UnlockSocialNodePlaceholderOperator extends BaseOperator
 
 func operate():
 	Logging.info("[UnlockSocialNodePlaceholderOperator] operate: TODO - 解锁社交节点（待实装）")
-	show_hint("社交节点解锁（待实装）")
+	show_hint(tr("CODE_UNLOCK_SOCIAL_NODE_PLACEHOLDER_OPERATOR_5F04530ED6"))
 
 
 func describe_preview() -> String:
-	return "解锁社交节点（待实装）"
+	return tr("CODE_UNLOCK_SOCIAL_NODE_PLACEHOLDER_OPERATOR_AD6CB47C02")

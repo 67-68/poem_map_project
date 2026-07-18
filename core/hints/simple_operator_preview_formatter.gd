@@ -79,7 +79,7 @@ static func _simple_property(pop) -> String:
 static func _simple_time(top) -> String:
 	if top.refresh_time or top.day <= 0:
 		return ""
-	return "⏱%d天" % int(top.day)
+	return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_20C021DFAA") % int(top.day)
 
 
 ## TraitOperator: 「获 崴脚」/「失 中毒」
@@ -90,9 +90,9 @@ static func _simple_trait(top) -> String:
 	var cn_name = trait_obj.name if trait_obj and not trait_obj.name.is_empty() else top.trait_key
 
 	if top.operator == REQ_OPERATOR.CRUD.ADD:
-		return "获 %s" % cn_name
+		return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_52AC4C7A26") % cn_name
 	elif top.operator == REQ_OPERATOR.CRUD.REMOVE:
-		return "失 %s" % cn_name
+		return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_F8ABBE184F") % cn_name
 	return ""
 
 
@@ -100,10 +100,10 @@ static func _simple_trait(top) -> String:
 static func _simple_poem_reward(pro) -> String:
 	match pro.mode:
 		"money":
-			return "卖诗"
+			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
 		"fame":
-			return "以诗换名"
+			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324")
 		"baiye":
-			return "携诗拜谒"
+			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE")
 		_:
-			return "卖诗"
+			return tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")

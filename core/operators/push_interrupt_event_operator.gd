@@ -8,7 +8,7 @@ class_name PushInterruptEventOperator extends BaseOperator
 @export var interrupt_target_key: String = ""
 
 ## 中断按钮上显示的文字
-@export var interrupt_text: String = "中断"
+@export var interrupt_text: String = tr("CODE_PUSH_INTERRUPT_EVENT_OPERATOR_F9D19345A0")
 
 ## 中断按钮颜色（self_modulate），默认深红色
 @export var interrupt_color: Color = Color(0.70, 0.15, 0.30, 1.0)

@@ -26,7 +26,7 @@ func operate():
 func describe_preview() -> String:
 	if value == 0:
 		return ""
-	return "全情↓(%d)" % value
+	return tr("CODE_ALL_EMO_SUB_OPERATOR_AD44EE7793") % value
 
 func get_referenced_flags() -> Array:
 	return []

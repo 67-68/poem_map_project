@@ -52,4 +52,4 @@ func operate():
 
 
 func describe_preview() -> String:
-	return "消耗随机一个把柄"
+	return tr("CODE_CONSUME_RANDOM_LEVERAGE_OPERATOR_1EAD417A70")

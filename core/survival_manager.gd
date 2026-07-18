@@ -22,14 +22,14 @@ const HEALTH_AP_TIERS: Array[Dictionary] = [
 		health_max = 30,       # ≤30
 		ap_cap = 5,
 		trait_enum = ENUMS.TRAITS.TERMINAL_ILLNESS,
-		hint_text = "每旬仅 5 天可用（病入膏肓）",
+		hint_text = tr("CODE_SURVIVAL_MANAGER_3F464BCF67"),
 		hint_color = "#cc6666",
 	},
 	{
 		health_max = 60,       # ≤60
 		ap_cap = 8,
 		trait_enum = ENUMS.TRAITS.EXHAUSTION_INITIAL,
-		hint_text = "每旬仅 8 天可用（疲态初显）",
+		hint_text = tr("CODE_SURVIVAL_MANAGER_8E973C4B99"),
 		hint_color = "#ccaa66",
 	},
 ]
@@ -332,7 +332,7 @@ func _process_single_xun_settlement():
 	call_deferred("_post_xun_money_deduct")
 
 func _update_heartbeat_sfx() -> void:
-	"""根据健康值启动/停止心跳循环音效。"""
+	""tr("CODE_SURVIVAL_MANAGER_83EB826B68")""
 	var health: int = PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) as int
 	if health <= HEARTBEAT_HEALTH_THRESHOLD and health > 0:
 		if not AudioManager.is_sfx_loop_playing():
@@ -386,9 +386,9 @@ func _apply_npc_inner_circle_bonus() -> void:
 	
 	# 属性元组：[属性枚举, 字段前缀, 属性显示名]
 	var prop_configs := [
-		[ENUMS.PROPS.MOMENTUM,    "shi", "势"],
-		[ENUMS.PROPS.INSPIRATION, "xing", "兴"],
-		[ENUMS.PROPS.PRESTIGE,    "wang", "望"],
+		[ENUMS.PROPS.MOMENTUM,    "shi", tr("TRES_MOMENTUM_NAME_0")],
+		[ENUMS.PROPS.INSPIRATION, "xing", tr("TRES_INSPIRATION_NAME_0")],
+		[ENUMS.PROPS.PRESTIGE,    "wang", tr("TRES_PRESTIGE_NAME_0")],
 	]
 	
 	# 收集所有 inner_circle NPC

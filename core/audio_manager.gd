@@ -250,7 +250,7 @@ func _load_sfx_category(category: String) -> void:
 
 	if not streams.is_empty():
 		_sfx_category_cache[category] = streams
-		var via_label := "DirAccess" if loaded_via_diraccess else "索引"
+		var via_label := "DirAccess" if loaded_via_diraccess else tr("CODE_AUDIO_MANAGER_9AC22D24D8")
 		Logging.info("%s: 已加载类别 [%s] → %d 个音效 (via %s)" % [LOG_TAG, category, streams.size(), via_label])
 	else:
 		Logging.info("%s: 类别 [%s] 为空，跳过" % [LOG_TAG, category])
@@ -348,7 +348,7 @@ func _initialize_imaginary_sound_listener() -> void:
 	Logging.info("%s: ImaginarySoundListener 已实例化并添加到场景树" % LOG_TAG)
 
 func play_sfx_loop(category: String, pitch_randomness: float = 0.0, volume_db: float = 0.0) -> bool:
-	"""从类别随机选一个音效，用独立循环播放器无限循环。返回是否成功。"""
+	""tr("CODE_AUDIO_MANAGER_13C2163725")""
 	if category.is_empty():
 		return false
 	if not _loop_player:
@@ -377,7 +377,7 @@ func play_sfx_loop(category: String, pitch_randomness: float = 0.0, volume_db: f
 
 
 func stop_sfx_loop() -> void:
-	"""停止循环播放器。"""
+	""tr("CODE_AUDIO_MANAGER_5A9B74407B")""
 	if _loop_player:
 		if _loop_player.finished.is_connected(_on_loop_finished):
 			_loop_player.finished.disconnect(_on_loop_finished)
@@ -389,7 +389,7 @@ func is_sfx_loop_playing() -> bool:
 
 
 func _on_loop_finished() -> void:
-	"""循环回调：重新播放。"""
+	""tr("CODE_AUDIO_MANAGER_0AEE7286EA")""
 	if _loop_player and _loop_player.stream:
 		_loop_player.play()
 

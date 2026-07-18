@@ -29,14 +29,13 @@ layout_mode = 2
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=97377267]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "泰山游历"
+text = "UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_0"
 
 [node name="Label2" type="RichTextLabel" parent="PanelContainer/VBoxContainer" unique_id=1972229877]
 layout_mode = 2
 theme_type_variation = &"NarrativeText"
 bbcode_enabled = true
-text = "昔游齐鲁，登泰山而小天下了么?
-(开始新手教程?)"
+text = "UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_1"
 fit_content = true
 scroll_active = false
 autowrap_mode = 1
@@ -50,11 +49,11 @@ layout_mode = 2
 size_flags_horizontal = 6
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_kyxu0")
-text = "跳过"
+text = "UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_2"
 
 [node name="LinkButton2" type="LinkButton" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=596627211]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_kyxu0")
-text = "开始引导"
+text = "UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_3"

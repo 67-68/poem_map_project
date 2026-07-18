@@ -5,10 +5,10 @@
 [node name="Title" type="Label" parent="." unique_id=1484412921]
 layout_mode = 2
 theme_type_variation = &"FrozenTitleText"
-text = "自京附奉先县诵咏五百字"
+text = "UI_POEM_DEMAND_TEXT_0"
 
 [node name="ImaginaryDemand" type="Label" parent="." unique_id=1881559940]
 layout_mode = 2
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.9769085, 0.8854819, 0.888225, 1)
-text = "骊山权贵 + 幼子饿殍 + 自觉荒谬"
+text = "UI_POEM_DEMAND_TEXT_1"

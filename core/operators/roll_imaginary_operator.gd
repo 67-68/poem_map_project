@@ -75,8 +75,8 @@ func init(_context: Dictionary) -> Dictionary:
 ## describe_preview() — 供 ActionHintBuilder 多态调用，显示在 hover 预览的「结果」区
 func describe_preview() -> String:
 	if level <= 0:
-		return "随机获得一个意象"
-	return "随机获得一个等级%d的意象" % level
+		return tr("CODE_ROLL_IMAGINARY_OPERATOR_F52969836C")
+	return tr("CODE_ROLL_IMAGINARY_OPERATOR_5E10AC6407") % level
 
 
 func operate():

@@ -25,7 +25,7 @@ func initialize(
 	params: Dictionary = {}
 ) -> void:
 	# ── 契约检查 ──────────────────────────────────────────
-	assert(tex != null, "%s: texture 为空, 碎个寂寞 💀" % LOG_TAG)
+	assert(tex != null, tr("CODE_SHATTEREFFECT_C40174C301") % LOG_TAG)
 	if tex == null:
 		Logging.err("%s: texture is null, aborting" % LOG_TAG)
 		queue_free()

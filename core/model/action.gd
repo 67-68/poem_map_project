@@ -14,11 +14,11 @@ class_name Action extends GameEntity
 func get_required_place_name() -> String:
 	match required_place:
 		"xishi":
-			return "西市"
+			return tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592")
 		"pingkangfang":
-			return "平康坊"
+			return tr("CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54")
 		"huangcheng":
-			return "皇城"
+			return tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A")
 		_:
 			return ""
 

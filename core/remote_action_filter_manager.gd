@@ -99,7 +99,7 @@ static func is_action_fully_remote(action: Action, place: String = "") -> bool:
 	if place.is_empty():
 		place = get_current_place()
 	if action.sub_actions.is_empty():
-		return false  # 无子行动 = 不是"完全异地"
+		return false  # 无子行动 = 不是tr("CODE_REMOTE_ACTION_FILTER_MANAGER_17B380DCF4")
 	return not has_local_sub_actions(action, place)
 
 

@@ -60,7 +60,7 @@ const MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.8,
 		half_point = 20.0,
-		hint_text = "城府 {mod_val} → 势衰减减免 {pct}%",
+		hint_text = tr("CODE_MODIFIER_CONFIG_79A843720B"),
 	},
 	{
 		source_prop = "astuteness",
@@ -70,7 +70,7 @@ const MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = "城府 {mod_val} → 声望获取 -{pct}%",
+		hint_text = tr("CODE_MODIFIER_CONFIG_78ACB44470"),
 	},
 	{
 		source_prop = "astuteness",
@@ -80,7 +80,7 @@ const MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "zhuoliu",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = "城府 {mod_val} → 浊流交互消耗 -{pct}%",
+		hint_text = tr("CODE_MODIFIER_CONFIG_27F59B3B2C"),
 	},
 	{
 		source_prop = "astuteness",
@@ -90,7 +90,7 @@ const MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.3,
 		half_point = 30.0,
-		hint_text = "城府 {mod_val} → 钱财获取 +{pct}%",
+		hint_text = tr("CODE_MODIFIER_CONFIG_5A9DF0C8BE"),
 	},
 
 	# ── 才华 TALENT ──
@@ -102,7 +102,7 @@ const MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = "才华 {mod_val} → 声望获取 +{pct}%",
+		hint_text = tr("CODE_MODIFIER_CONFIG_6437EEB330"),
 	},
 	{
 		source_prop = "talent",
@@ -112,7 +112,7 @@ const MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "qingliu",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = "才华 {mod_val} → 清流交互消耗 -{pct}%",
+		hint_text = tr("CODE_MODIFIER_CONFIG_0B0EC74089"),
 	},
 
 	# ── 定力 COMPOSURE ──
@@ -124,7 +124,7 @@ const MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.5,
 		half_point = 25.0,
-		hint_text = "定力 {mod_val} → 兴致获取 -{pct}%",
+		hint_text = tr("CODE_MODIFIER_CONFIG_BCACFF08CC"),
 	},
 	{
 		source_prop = "composure",
@@ -134,7 +134,7 @@ const MODIFIER_EFFECTS: Array[Dictionary] = [
 		faction_filter = "",
 		max_limit = 0.6,
 		half_point = 20.0,
-		hint_text = "定力 {mod_val} → 健康失去减免 {pct}%",
+		hint_text = tr("CODE_MODIFIER_CONFIG_6A9F4227A3"),
 	},
 ]
 
@@ -254,9 +254,9 @@ static func get_preview_annotations(prop_name: String, raw_delta: int) -> Array[
 
 	# ── 构建注解文本 ──
 	var display_names := {
-		"astuteness": "城府",
-		"talent": "才华",
-		"composure": "定力",
+		"astuteness": tr("TRES_ASTUTENESS_NAME_0"),
+		"talent": tr("CODE_MODIFIER_HINT_FORMATTER_0288A3D9E2"),
+		"composure": tr("TRES_COMPOSURE_NAME_0"),
 	}
 
 	for sp in per_prop:

@@ -104,13 +104,13 @@ func _apply_score():
 
 	var evaluation: String
 	if _final_score >= 30:
-		evaluation = "妙绝！此句浑然天成，四座皆惊！"
+		evaluation = tr("CODE_LIANJU_SCORE_OPERATOR_3478636167")
 	elif _final_score >= 15:
-		evaluation = "佳句！宾客纷纷点头赞许。"
+		evaluation = tr("CODE_LIANJU_SCORE_OPERATOR_6ADE1D34AF")
 	elif _final_score >= 5:
-		evaluation = "尚可，中规中矩。"
+		evaluation = tr("CODE_LIANJU_SCORE_OPERATOR_322E3E0A8C")
 	else:
-		evaluation = "你的对句平淡无奇…"
+		evaluation = tr("CODE_LIANJU_SCORE_OPERATOR_8D7675BC3A")
 	Logging.info("LianjuScoreOperator: evaluation = '%s' (score=%d)" % [evaluation, _final_score])
 
 	var ctx = {

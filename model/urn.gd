@@ -37,7 +37,7 @@ enum URN_TYPE {
 }
 
 static func urn_type_to_str(type: int) -> String:
-	"""将 URN_TYPE enum 值转换为 URN 资源类型字符串（小写+连字符）"""
+	""tr("CODE_URN_24DA95FEFE")""
 	var names = URN_TYPE.keys()
 	if type >= 0 and type < names.size():
 		return names[type].to_lower().replace("_", "-")
@@ -45,7 +45,7 @@ static func urn_type_to_str(type: int) -> String:
 	return "unknown"
 
 static func make_urn(type: int, resource_id: String) -> String:
-	"""生成完整的 URN 字符串: urn:<type>:<id>"""
+	""tr("CODE_URN_759765FF8C")""
 	var type_str = urn_type_to_str(type)
 	if type_str == "unknown":
 		Logging.err("Failed to create URN for type " + str(type) + " with id " + resource_id)
@@ -68,7 +68,7 @@ static func parse_urn(urn: String) -> Dictionary:
 	}
 
 static func find_urn_type(type_str: String) -> int:
-	"""通过字符串查找对应的 URN_TYPE enum 值，未找到返回 -1"""
+	""tr("CODE_URN_34D8031DE2")""
 	var normalized = type_str.to_lower().replace("-", "_")
 	var names = URN_TYPE.keys()
 	for i in range(names.size()):
@@ -130,7 +130,7 @@ static func get_resource_through_urn(urn_string: String):
 
 
 static func _find_resource_in_dir(data_dir: String, resource_id: String):
-	"""编辑器模式辅助：用 DirAccess 扫描 data_dir 目录下的 .tres/.tscn 文件，按 uuid 匹配资源"""
+	""tr("CODE_URN_0C13829F5F")""
 	var dir = DirAccess.open(data_dir)
 	if not dir:
 		Logging.err("_find_resource_in_dir: 无法打开目录: " + data_dir)

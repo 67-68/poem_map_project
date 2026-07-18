@@ -30,4 +30,4 @@ size_flags_horizontal = 2
 [node name="TraitNameLabel" type="Label" parent="HBoxContainer" unique_id=2142609938]
 layout_mode = 2
 theme_type_variation = &"DefaultText"
-text = "身心俱疲"
+text = "UI_TRAIT_DEMONSTRATOR_TEXT_0"

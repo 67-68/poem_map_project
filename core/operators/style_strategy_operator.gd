@@ -45,8 +45,8 @@ func operate() -> void:
 
 func describe_preview() -> String:
 	var target_label := _enum_to_label()
-	var strat_label := strategy_name if not strategy_name.is_empty() else "(默认)"
-	return "风格策略: %s → %s" % [target_label, strat_label]
+	var strat_label := strategy_name if not strategy_name.is_empty() else tr("CODE_STYLE_STRATEGY_OPERATOR_0EF211C6E3")
+	return tr("CODE_STYLE_STRATEGY_OPERATOR_F7CD302E68") % [target_label, strat_label]
 
 
 # ============================================================
@@ -104,4 +104,4 @@ func _enum_to_label() -> String:
 		TARGET_CONTROL.AMBITION_HUD:
 			return "AmbitionHUD"
 		_:
-			return "未知控件"
+			return tr("CODE_STYLE_STRATEGY_OPERATOR_A12A874BF6")

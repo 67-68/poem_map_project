@@ -21,7 +21,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "红黑榜"
+text = "UI_SOCIAL_WALL_PANEL_TEXT_0"
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1094901436]

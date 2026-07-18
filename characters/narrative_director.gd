@@ -367,7 +367,7 @@ func _emit_interrupt_signals(ctx: Dictionary):
 			_pending_interrupt_event_key = event_key
 			_pending_interrupt_context = ctx.duplicate(true)
 			_pending_interrupt_context.erase("interrupt_event")
-			var btn_text: String = interrupt_data.get("text", "中断")
+			var btn_text: String = interrupt_data.get("text", tr("CODE_PUSH_INTERRUPT_EVENT_OPERATOR_F9D19345A0"))
 			var btn_color: Color = interrupt_data.get("color", Color(0.70, 0.15, 0.30))
 			Logging.info("_emit_interrupt_signals: 中断可用 event_key='%s' btn_text='%s'" % [event_key, btn_text])
 			interrupt_available.emit(event_key, _pending_interrupt_context, btn_text, btn_color)

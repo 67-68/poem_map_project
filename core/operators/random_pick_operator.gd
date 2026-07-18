@@ -80,5 +80,5 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func operate() -> void:
-	"""所有逻辑在 init() 中完成"""
+	""tr("CODE_RANDOM_PICK_OPERATOR_AA9CEC85C5")""
 	pass

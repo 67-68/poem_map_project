@@ -179,7 +179,7 @@ func _on_option_selected(choice_result: ChoiceResult) -> void:
 	# 格式：「 既决：<选项文本> 」
 	# 暗朱砂红 + 极淡麻纸底色 + 微弱红色下划线 + 左缩进 20px + 上下双倍间距
 	var chosen_lbl := Label.new()
-	chosen_lbl.text = "「 既决：%s 」" % chosen_text
+	chosen_lbl.text = tr("CODE_SETTLEMENT_TAPE_ENTRY_46A78AC7C9") % chosen_text
 	chosen_lbl.add_theme_color_override("font_color", Color(0.55, 0.10, 0.10))
 	chosen_lbl.add_theme_font_size_override("font_size", 14)
 
@@ -206,7 +206,7 @@ func _on_option_selected(choice_result: ChoiceResult) -> void:
 
 
 func _find_chosen_text(choice_result: ChoiceResult) -> String:
-	"""根据 ChoiceResult 反向查找选项的展示文本"""
+	""tr("CODE_FOCUS_CHAT_TAPE_ENTRY_32FCFCFD75")""
 	for opt in _chat_data.options:
 		if opt.choice_result == choice_result:
 			var txt = opt._resolved_description if '_resolved_description' in opt and opt._resolved_description else opt.description

@@ -42,17 +42,17 @@ const MODE_TO_PROP := {
 }
 
 const SIZE_DISPLAY := {
-	"small": "少量",
-	"medium": "中等",
-	"large": "大量",
-	"extra_large": "巨额",
+	"small": tr("CODE_POEM_REWARD_OPERATOR_7BEB46C6C3"),
+	"medium": tr("CODE_POEM_REWARD_OPERATOR_C7092C51FD"),
+	"large": tr("CODE_POEM_REWARD_OPERATOR_F5C239DF75"),
+	"extra_large": tr("CODE_POEM_REWARD_OPERATOR_932A98F687"),
 }
 
 const MODE_DISPLAY := {
-	"money": "金钱",
-	"fame": "文学声望",
-	"baiye": "仕途进度",
-	"xing_wang": "灵感+声望",
+	"money": tr("CODE_POEM_REWARD_OPERATOR_5CA4682D5D"),
+	"fame": tr("CODE_POEM_REWARD_OPERATOR_23C1E43C42"),
+	"baiye": tr("CODE_POEM_REWARD_OPERATOR_7C67E3E689"),
+	"xing_wang": tr("CODE_POEM_REWARD_OPERATOR_FF9D757A8F"),
 }
 
 
@@ -135,16 +135,16 @@ func operate():
 	if show_hint_on_reward:
 		if mode == "xing_wang":
 			var size_display: String = SIZE_DISPLAY.get(size_key, "")
-			var hint: String = "向郑虔展示《%s》，获%s灵感+声望" % [poem.name, size_display]
+			var hint: String = tr("CODE_POEM_REWARD_OPERATOR_9DF9932972") % [poem.name, size_display]
 			if upgrade_succeeded:
-				hint += "（灵感迸发！）"
+				hint += tr("CODE_POEM_REWARD_OPERATOR_F88651B977")
 			show_hint(hint)
 		else:
 			var prop_display: String = MODE_DISPLAY.get(mode, "")
 			var size_display: String = SIZE_DISPLAY.get(size_key, "")
-			var hint: String = "《%s》换得%s%s" % [poem.name, size_display, prop_display]
+			var hint: String = tr("CODE_POEM_REWARD_OPERATOR_D206220AA1") % [poem.name, size_display, prop_display]
 			if upgrade_succeeded:
-				hint += "（灵感迸发！）"
+				hint += tr("CODE_POEM_REWARD_OPERATOR_F88651B977")
 			show_hint(hint)
 
 
@@ -169,15 +169,15 @@ func describe_preview() -> String:
 	var size_hint := ""
 	match mode:
 		"money":
-			size_hint = "（平庸→中等 佳作→大量 绝唱→巨额）"
+			size_hint = tr("CODE_POEM_REWARD_OPERATOR_857EF83274")
 		"xing_wang":
-			size_hint = "（平庸→中等灵感+声望 佳作→大量 绝唱→巨额）"
+			size_hint = tr("CODE_POEM_REWARD_OPERATOR_7DA42E20E7")
 		"fame":
-			size_hint = "（平庸→少量 佳作→中等 绝唱→大量）"
+			size_hint = tr("CODE_POEM_REWARD_OPERATOR_C1599FB99A")
 		"baiye":
-			size_hint = "（平庸→少量 佳作→中等 绝唱→大量）"
+			size_hint = tr("CODE_POEM_REWARD_OPERATOR_C1599FB99A")
 		_:
-			size_hint = "（平庸→少量 佳作→中等 绝唱→大量）"
-	var text: String = "选择一首诗词换取%s%s" % [prop_display, size_hint]
+			size_hint = tr("CODE_POEM_REWARD_OPERATOR_C1599FB99A")
+	var text: String = tr("CODE_POEM_REWARD_OPERATOR_DCEF4BD7C0") % [prop_display, size_hint]
 	Logging.debug('PoemRewardOperator.describe_preview: mode=%s → "%s"' % [mode, text])
 	return text

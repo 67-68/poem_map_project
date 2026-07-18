@@ -31,14 +31,14 @@ theme_override_constants/separation = 30
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1447522357]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "系统"
+text = "UI_SYSTEM_MENU_TEXT_0"
 horizontal_alignment = 1
 
 [node name="ContinueBtn" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1396548219]
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 theme_type_variation = &"ButtonTheme"
-text = "继续游戏"
+text = "UI_SYSTEM_MENU_TEXT_1"
 
 [node name="UISoundComponent" type="Node" parent="CenterContainer/VBoxContainer/ContinueBtn" unique_id=1279984333]
 script = ExtResource("2_sfx")
@@ -48,7 +48,7 @@ click_category = "book_impact"
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 theme_type_variation = &"ButtonTheme"
-text = "返回主菜单"
+text = "UI_SYSTEM_MENU_TEXT_2"
 
 [node name="UISoundComponent" type="Node" parent="CenterContainer/VBoxContainer/ReturnBtn" unique_id=177092399]
 script = ExtResource("2_sfx")

@@ -46,7 +46,7 @@ class ExecResult:
 # 执行单条命令
 static func execute(command: ChainCommand) -> ExecResult:
 	if command == null:
-		return ExecResult.new(false, "[ChainExecutor] 命令为 null", null)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_3C51E8A9A5"), null)
 
 	Logging.info("[ChainExecutor] 执行命令: %s" % str(command))
 
@@ -58,7 +58,7 @@ static func execute(command: ChainCommand) -> ExecResult:
 		ChainCommand.CommandType.CREATE_ONCE_OPTION:
 			return _execute_create_once_option(command)
 		_:
-			return ExecResult.new(false, "[ChainExecutor] 未知命令类型: %d" % command.type, command)
+			return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_3CA68A727F") % command.type, command)
 
 
 # 批量执行多条命令
@@ -99,7 +99,7 @@ static func _execute_create_hierarchy(command: ChainCommand) -> ExecResult:
 	var target = command.params.get("target", "")
 
 	if source.is_empty() or source_opt.is_empty() or target.is_empty():
-		return ExecResult.new(false, "[ChainExecutor] create_hierarchy 参数不完整: %s" % str(command.params), command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_2944CE15BE") % str(command.params), command)
 
 	# 创建 PushEventOperator
 	var push_op = PushEventOperator.new()
@@ -108,9 +108,9 @@ static func _execute_create_hierarchy(command: ChainCommand) -> ExecResult:
 	# 注入到源事件的选项
 	var success = ChainTresEditor.load_find_inject_save(source, source_opt, push_op)
 	if not success:
-		return ExecResult.new(false, "[ChainExecutor] create_hierarchy 失败: source=%s, source_opt=%s, target=%s" % [source, source_opt, target], command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_C811A52B2C") % [source, source_opt, target], command)
 
-	return ExecResult.new(true, "[ChainExecutor] create_hierarchy 成功: %s(%s) ──[Push(%s)]──► %s" % [source, source_opt, target, target], command)
+	return ExecResult.new(true, tr("CODE_CHAIN_EXECUTOR_7697E711FC") % [source, source_opt, target, target], command)
 
 
 # ─── 2. CREATE_REVERSIBLE_HIERARCHY ───
@@ -125,22 +125,22 @@ static func _execute_create_reversible_hierarchy(command: ChainCommand) -> ExecR
 	var b_opt = command.params.get("b_opt", "")
 
 	if a.is_empty() or a_opt.is_empty() or b.is_empty() or b_opt.is_empty():
-		return ExecResult.new(false, "[ChainExecutor] create_reversible_hierarchy 参数不完整: %s" % str(command.params), command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_6A127B566C") % str(command.params), command)
 
 	# 1. 创建 PushEventOperator 注入到 A 的选项
 	var push_op = PushEventOperator.new()
 	push_op.event_key = b
 	var success_a = ChainTresEditor.load_find_inject_save(a, a_opt, push_op)
 	if not success_a:
-		return ExecResult.new(false, "[ChainExecutor] create_reversible_hierarchy 失败: 无法注入 Push 到 %s(%s)" % [a, a_opt], command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_B5BF8FA3BE") % [a, a_opt], command)
 
 	# 2. 创建 PopEventOperator 注入到 B 的选项
 	var pop_op = PopEventOperator.new()
 	var success_b = ChainTresEditor.load_find_inject_save(b, b_opt, pop_op)
 	if not success_b:
-		return ExecResult.new(false, "[ChainExecutor] create_reversible_hierarchy 失败: 无法注入 Pop 到 %s(%s)（Push 已注入 %s）" % [b, b_opt, a], command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_8783882DF6") % [b, b_opt, a], command)
 
-	return ExecResult.new(true, "[ChainExecutor] create_reversible_hierarchy 成功: %s(%s) ──[Push]──► %s ──[Pop]──► %s" % [a, a_opt, b, b_opt], command)
+	return ExecResult.new(true, tr("CODE_CHAIN_EXECUTOR_B88A99114E") % [a, a_opt, b, b_opt], command)
 
 
 # ─── 3. CREATE_ONCE_OPTION ───
@@ -157,12 +157,12 @@ static func _execute_create_once_option(command: ChainCommand) -> ExecResult:
 	var opt_uuid = command.params.get("opt", "")
 
 	if event_key.is_empty() or opt_uuid.is_empty():
-		return ExecResult.new(false, "[ChainExecutor] create_once_option 参数不完整: %s" % str(command.params), command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_94EC82CEBD") % str(command.params), command)
 
 	# 1. 生成 flag_id
 	var flag_id = ChainFlagGenerator.generate_once_flag_id(event_key, opt_uuid)
 	if flag_id.is_empty():
-		return ExecResult.new(false, "[ChainExecutor] create_once_option: 无法生成 flag_id", command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_0C0C93145A"), command)
 
 	# 2. 创建 flag_bool_not_has requirement
 	var req = FlagRequirement.new()
@@ -181,22 +181,22 @@ static func _execute_create_once_option(command: ChainCommand) -> ExecResult:
 	# 4. 注入 requirement 到选项
 	var event = ChainTresEditor.load_event(event_key)
 	if event == null:
-		return ExecResult.new(false, "[ChainExecutor] create_once_option: 无法加载事件 '%s'" % event_key, command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_BE7B523902") % event_key, command)
 
 	var option = ChainTresEditor.find_option(event, opt_uuid)
 	if option == null:
-		return ExecResult.new(false, "[ChainExecutor] create_once_option: 在事件 '%s' 中未找到选项 '%s'" % [event_key, opt_uuid], command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_FDD75F2F56") % [event_key, opt_uuid], command)
 
 	# 设置 requirement
 	if not ChainTresEditor.set_requirement(option, req):
-		return ExecResult.new(false, "[ChainExecutor] create_once_option: 设置 requirement 失败", command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_55DC78D4EA"), command)
 
 	# 注入 flag operator
 	if not ChainTresEditor.inject_operator(option, flag_op):
-		return ExecResult.new(false, "[ChainExecutor] create_once_option: 注入 operator 失败", command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_2AB12B839F"), command)
 
 	# 保存
 	if not ChainTresEditor.save_event(event, event_key):
-		return ExecResult.new(false, "[ChainExecutor] create_once_option: 保存事件 '%s' 失败" % event_key, command)
+		return ExecResult.new(false, tr("CODE_CHAIN_EXECUTOR_33AB74724F") % event_key, command)
 
-	return ExecResult.new(true, "[ChainExecutor] create_once_option 成功: %s(%s) [flag=%s]" % [event_key, opt_uuid, flag_id], command)
+	return ExecResult.new(true, tr("CODE_CHAIN_EXECUTOR_ECB00882C2") % [event_key, opt_uuid, flag_id], command)

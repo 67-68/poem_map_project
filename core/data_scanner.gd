@@ -212,7 +212,7 @@ static func _load_resource(
 
 	# ── 全局池冲突检测 ──
 	if result.pool.has(full_id):
-		var msg = "DataScanner: ID 冲突！full_id='%s' 已存在（文件: %s）" % [full_id, file_path]
+		var msg = tr("CODE_DATA_SCANNER_87B9B14697") % [full_id, file_path]
 		Logging.err(msg)
 		result.duplicates.append(full_id)
 		return
@@ -295,7 +295,7 @@ static func _load_csv(
 		var item = csv_dict[item_uuid]
 		var full_id = current_ns + item_uuid
 		if result.pool.has(full_id):
-			var msg = "DataScanner: CSV 池冲突！full_id='%s' 已存在" % full_id
+			var msg = tr("CODE_DATA_SCANNER_D144DA1A9F") % full_id
 			Logging.err(msg)
 			result.duplicates.append(full_id)
 			continue
@@ -309,7 +309,7 @@ static func _load_event_base_json(
 	result: LoadResult,
 	top_level_base: String
 ) -> void:
-	"""加载 eb_*.json 文件为 EventBase Resource"""
+	""tr("CODE_DATA_SCANNER_F7573DA95E")""
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if not file:
 		Logging.err("DataScanner: 无法打开 JSON 文件: " + file_path)
@@ -377,7 +377,7 @@ static func _load_event_base_json(
 
 
 static func _extract_uuid(resource: Resource) -> String:
-	"""从 Resource 中提取 uuid，支持 'uuid' 和 'id' 字段"""
+	""tr("CODE_DATA_SCANNER_546FD6E862")""
 	if "uuid" in resource:
 		var val = resource.get("uuid")
 		if val is String and not val.is_empty():

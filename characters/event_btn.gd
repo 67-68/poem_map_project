@@ -16,7 +16,7 @@ var _hover_tween: Tween = null
 var _cached_tooltip: Control = null
 
 static func create(data: BaseOption) -> EventBtn:
-	"""工厂方法：创建并初始化按钮"""
+	""tr("CODE_EVENT_BTN_B9820968D7")""
 	var scene = load("res://characters/event_btn.tscn")
 	var btn = scene.instantiate()
 	btn._init_option(data)
@@ -100,7 +100,7 @@ func _register_event_btn_hover() -> void:
 		return
 
 	# 叙事层：按钮文本即选项描述
-	var narrative: String = text if not text.is_empty() else "选项"
+	var narrative: String = text if not text.is_empty() else tr("CODE_EVENT_BTN_BB7486F441")
 
 	# 向量层
 	var vector_lines: Array[String] = []
@@ -110,7 +110,7 @@ func _register_event_btn_hover() -> void:
 		and option.requirement.has_method('describe_requirement'):
 		var req_text = option.requirement.describe_requirement()
 		if not req_text.is_empty():
-			vector_lines.append("[前提]")
+			vector_lines.append(tr("CODE_EVENT_BTN_057AE9C4A2"))
 			vector_lines.append(req_text)
 	
 	# (B) Operator 预览
@@ -121,12 +121,12 @@ func _register_event_btn_hover() -> void:
 	if operator_lines.is_empty():
 		if not vector_lines.is_empty():
 			vector_lines.append("")
-			vector_lines.append("[影响]")
-		vector_lines.append("你想知道什么发生了")
+			vector_lines.append(tr("CODE_EVENT_BTN_CDAC366955"))
+		vector_lines.append(tr("CODE_EVENT_BTN_29178BE430"))
 	else:
 		if not vector_lines.is_empty():
 			vector_lines.append("")
-		vector_lines.append("[影响]")
+		vector_lines.append(tr("CODE_EVENT_BTN_CDAC366955"))
 		vector_lines.append_array(operator_lines)
 	
 	var vector_text := "\n".join(vector_lines)
@@ -138,7 +138,7 @@ func _register_event_btn_hover() -> void:
 	Logging.info("EventBtn._register_event_btn_hover: 注册完成 (BELOW_OVERLAY), text='%s'" % text)
 
 func _init_option(data: BaseOption):
-	"""初始化选项数据"""
+	""tr("CODE_EVENT_BTN_8C71DF151B")""
 	option = data
 	# 🔒 优先读取 _resolved_description（动态模板解析后的值，不污染原始 description）
 	#     fallback 到 description（静态文本）
@@ -146,7 +146,7 @@ func _init_option(data: BaseOption):
 		text = data._resolved_description
 		Logging.info("EventBtn._init_option: 使用 _resolved_description='%s'" % text)
 	else:
-		text = data.description if 'description' in data else "选项"
+		text = data.description if 'description' in data else tr("CODE_EVENT_BTN_BB7486F441")
 		Logging.info("EventBtn._init_option: 使用 description='%s' (has description=%s)" % [text, 'description' in data])
 	autowrap_mode = TextServer.AUTOWRAP_WORD_SMART  # Enable text wrapping
 	# custom_minimum_size 已经在场景中设置了，不需要重复设置
@@ -191,7 +191,7 @@ func disable_btn():
 		return
 	self.modulate = Color.GRAY
 	disabled = true
-	var reason = option.requirement.get_failed_hint() if option.requirement else "选项已禁用"
+	var reason = option.requirement.get_failed_hint() if option.requirement else tr("CODE_EVENT_BTN_1F4CD3AC79")
 	EventBus.request_toast.emit(reason, 1)
 
 func double_check() -> bool:

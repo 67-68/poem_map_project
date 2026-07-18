@@ -27,7 +27,7 @@ var source_uuid: String = ""
 
 
 func operate():
-	"""注册修饰器：向 GameSave.data.active_modifiers 添加一条"""
+	""tr("CODE_BUFF_OPERATOR_CC1E0272A8")""
 	if named_amount_key.is_empty():
 		Logging.err("BuffOperator.operate: named_amount_key 为空，跳过执行")
 		return
@@ -56,7 +56,7 @@ func operate():
 
 
 func on_exit(_context: Dictionary) -> Dictionary:
-	"""注销修饰器：从 GameSave.data.active_modifiers 删除匹配本条的所有条目"""
+	""tr("CODE_BUFF_OPERATOR_D763EDC735")""
 	if source_uuid.is_empty():
 		Logging.warn("BuffOperator.on_exit: source_uuid 为空，无法精确删除，按 modifier_type + named_key 模糊删除")
 		_remove_by_type_key(modifier_type, named_amount_key)
@@ -83,7 +83,7 @@ func on_exit(_context: Dictionary) -> Dictionary:
 
 
 func _remove_by_type_key(mod_type: String, named_key: String) -> void:
-	"""按 type+named_key 模糊删除（兜底）"""
+	""tr("CODE_BUFF_OPERATOR_26DD29F108")""
 	var remaining: Array[Dictionary] = []
 	var removed := 0
 	for entry in GameSave.data.active_modifiers:
@@ -97,7 +97,7 @@ func _remove_by_type_key(mod_type: String, named_key: String) -> void:
 
 
 func init(_context: Dictionary) -> Dictionary:
-	"""初始化：验证 named_amount_key 是否存在"""
+	""tr("CODE_BUFF_OPERATOR_540C92CD69")""
 	if named_amount_key.is_empty():
 		Logging.warn("BuffOperator.init: named_amount_key 为空，跳过验证")
 		return _context
@@ -111,7 +111,7 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func describe_preview() -> String:
-	"""Alt 预览：展示修饰器效果文本"""
+	""tr("CODE_BUFF_OPERATOR_CE5F9104CD")""
 	if named_amount_key.is_empty() or modifier_type.is_empty():
 		return ""
 
@@ -122,26 +122,26 @@ func describe_preview() -> String:
 	var display_val := ""
 	match modifier_type:
 		"efficiency":
-			type_cn = "获取效率"
+			type_cn = tr("CODE_BUFF_OPERATOR_0A676BE9DE")
 			display_val = "+%d%%" % raw_val
 		"per_xun_passive":
-			type_cn = "每旬"
+			type_cn = tr("CODE_BUFF_OPERATOR_27D874C137")
 			display_val = "%+d" % raw_val
 		"action_specific":
-			type_cn = "行动加成"
+			type_cn = tr("CODE_BUFF_OPERATOR_2D602CA4EF")
 			display_val = "+%d%%" % raw_val
 		"cap_boost":
-			type_cn = "上限"
+			type_cn = tr("CODE_BUFF_OPERATOR_8E7DDBEEE3")
 			display_val = "+%d%%" % raw_val
 		"relation_speed_pct":
-			type_cn = "关系需求"
+			type_cn = tr("CODE_BUFF_OPERATOR_1DD5A83A65")
 			display_val = "-%d%%" % raw_val
 		"relation_speed_abs":
-			type_cn = "关系时间"
-			display_val = "-%d旬" % raw_val
+			type_cn = tr("CODE_BUFF_OPERATOR_33564A7B86")
+			display_val = tr("CODE_BUFF_OPERATOR_0B15CFDD12") % raw_val
 		"npc_trade_tier":
-			type_cn = "交易档次"
-			display_val = "+%d档" % raw_val
+			type_cn = tr("CODE_BUFF_OPERATOR_A22B5ACD70")
+			display_val = tr("CODE_BUFF_OPERATOR_66D1B869F2") % raw_val
 		_:
 			return "%s %s=%s" % [modifier_type, named_amount_key, str(raw_val)]
 
@@ -154,10 +154,10 @@ func describe_preview() -> String:
 
 
 func get_referenced_props() -> Array:
-	"""修饰器不直接引用属性，返回空"""
+	""tr("CODE_BUFF_OPERATOR_7591B94741")""
 	return []
 
 
 func get_demanded_props() -> Array:
-	"""修饰器不直接依赖属性，返回空"""
+	""tr("CODE_BUFF_OPERATOR_A61F72D944")""
 	return []

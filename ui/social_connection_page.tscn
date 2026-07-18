@@ -54,14 +54,14 @@ theme_type_variation = &"ButtonTheme"
 toggle_mode = true
 button_pressed = true
 button_group = ExtResource("2_enmti")
-text = "按地区分类"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_0"
 
 [node name="Button2" type="Button" parent="PanelContainer/H/V/Modes" unique_id=1883267227]
 layout_mode = 2
 theme_type_variation = &"ButtonTheme"
 toggle_mode = true
 button_group = ExtResource("2_enmti")
-text = "按阵营分类"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_1"
 
 [node name="Tree" type="Tree" parent="PanelContainer/H/V" unique_id=2112479787]
 custom_minimum_size = Vector2(300, 0)
@@ -87,12 +87,12 @@ layout_mode = 2
 [node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit8" unique_id=1899099193]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "基本信息"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_2"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit8" unique_id=2121436069]
 layout_mode = 2
 theme_type_variation = &"NarrativeText"
-text = "当前状态 + 名字 + 偏好地点"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_3"
 fit_content = true
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/H/Info/VBoxContainer/Unit8" unique_id=739746259]
@@ -104,12 +104,12 @@ layout_mode = 2
 [node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit2" unique_id=296453703]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "关系"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_4"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit2" unique_id=2022856935]
 layout_mode = 2
 theme_type_variation = &"NarrativeText"
-text = "把柄 + 推荐信"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_5"
 fit_content = true
 
 [node name="HSeparator" type="HSeparator" parent="PanelContainer/H/Info/VBoxContainer/Unit2" unique_id=265369354]
@@ -121,7 +121,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit5" unique_id=251314049]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "相关人物"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_6"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit5" unique_id=1437219299]
 layout_mode = 2
@@ -138,7 +138,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit6" unique_id=983741078]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "已经探索的所有可用任务"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_7"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit6" unique_id=1275044903]
 layout_mode = 2
@@ -155,7 +155,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="PanelContainer/H/Info/VBoxContainer/Unit7" unique_id=455892033]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "可用资源转换配方"
+text = "UI_SOCIAL_CONNECTION_PAGE_TEXT_8"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/H/Info/VBoxContainer/Unit7" unique_id=121913037]
 layout_mode = 2

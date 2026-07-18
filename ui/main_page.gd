@@ -3,9 +3,9 @@
 extends PanelContainer
 
 @export var route_line: NodePath
-@export var trigger_pc1: NodePath  # PanelContainer "京" (Start)
-@export var trigger_pc2: NodePath  # PanelContainer2 "隐" (Quit)
-@export var trigger_pc3: NodePath  # PanelContainer3 "律法" (Settings)
+@export var trigger_pc1: NodePath  # PanelContainer tr("UI_MAIN_PAGE_TEXT_0") (Start)
+@export var trigger_pc2: NodePath  # PanelContainer2 tr("UI_MAIN_PAGE_TEXT_1") (Quit)
+@export var trigger_pc3: NodePath  # PanelContainer3 tr("UI_MAIN_PAGE_TEXT_2") (Settings)
 
 
 func _ready() -> void:

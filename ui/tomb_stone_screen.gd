@@ -10,7 +10,7 @@ func _ready():
 	var cause: String = GameState.death_cause
 	if cause.is_empty():
 		Logging.err('TombstoneScreen._ready: GameState.death_cause is empty, using fallback')
-		cause = "观测者消逝于无名的熵增..."
+		cause = tr("CODE_TOMB_STONE_SCREEN_46432180C4")
 	
 	render_entropy_death(cause)
 	EventBus.request_return_to_main_menu.connect(_on_return_to_main_menu)
@@ -28,11 +28,11 @@ func render_entropy_death(cause_text: String) -> void:
 	var bbcode: String = ""
 	
 	# 【头部：终局宣判】 红色，居中，冷酷无情
-	bbcode += "[center][font_size=36][color=#aa3333]■ 观测停止 ■[/color][/font_size][/center]\n"
+	bbcode += tr("CODE_TOMB_STONE_SCREEN_1E45D99EA5")
 	bbcode += "[center][color=#aaaaaa]%s[/color][/center]\n\n" % cause_text
 	
 	# 【左上角：风化的世俗属性】 极低透明度的灰色（#88888855），代表无人在意 💀
-	bbcode += "[color=#88888855][font_size=16]数据快照 | 财富:%d | 仕途进程:%d [/font_size][/color]\n\n" % [
+	bbcode += tr("CODE_TOMB_STONE_SCREEN_2B1EDECF08") % [
 		PlayerState.get_stat_val(ENUMS.PROPS.MONEY),
 		PlayerState.get_stat_val(ENUMS.PROPS.PROGRESS)
 	]
@@ -40,17 +40,17 @@ func render_entropy_death(cause_text: String) -> void:
 	# 【中部：平庸的历史长河】
 	#breakpoint
 	if not TimeService.get_master_timeline():
-		bbcode += "\n[center][color=#911414]可怜的人类，如虫子一般被风吹散，不曾留下任何挣扎的痕迹[/color][/center]\n\n"
+		bbcode += tr("CODE_TOMB_STONE_SCREEN_D75D9088E0")
 	else:
-		bbcode += "[color=#cccccc]观测记录：[/color]\n"
+		bbcode += tr("CODE_TOMB_STONE_SCREEN_E888517B9E")
 		for evt in TimeService.get_master_timeline():
-			bbcode += "[color=#999999] - %s 你干了 %s [/color]\n" % [evt.time, evt.name]
+			bbcode += tr("CODE_TOMB_STONE_SCREEN_1F46FB6E91") % [evt.time, evt.name]
 			
-		bbcode += "\n[center][color=#555555]...然而这些世俗的挣扎，终将被时间彻底风化...[/color][/center]\n\n"
+		bbcode += tr("CODE_TOMB_STONE_SCREEN_3D83BB3103")
 	
 	# 【尾部：唯一抵抗热寂的锚点——诗词】 暗金色，超大字号，占据绝对视觉中心！
 	if PlayerState.created_poems.is_empty():
-		bbcode += "[center][font_size=40][color=#555555]（绝笔无言，泯然众人）[/color][/font_size][/center]\n"
+		bbcode += tr("CODE_TOMB_STONE_SCREEN_96317E1F85")
 	else:
 		for poem in PlayerState.created_poems:
 			if poem and poem is Poem:

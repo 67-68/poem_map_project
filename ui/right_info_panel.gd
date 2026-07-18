@@ -4,18 +4,18 @@ extends PanelContainer
 # 目标中文名映射（ENUMS.RELATION_TARGET → 游戏内显示名）
 # ═══════════════════════════════════════════════════════════
 const CN_NAME_MAP: Dictionary = {
-	"libai": "李白",
-	"hushang": "胡商",
-	"lilinfu": "李林甫",
-	"jiwen": "纪闻",
-	"youxiangfu": "右相府",
-	"qingliu": "清流",
-	"gaoshi": "高适",
-	"wangwei": "王维",
-	"zhengqian": "郑虔",
-	"waiqi": "外戚",
-	"yangguozhong": "杨国忠",
-	"guoguofuren": "虢国夫人",
+	"libai": tr("TRES_POET_LIBAI_001_NAME_0"),
+	"hushang": tr("CODE_RIGHT_INFO_PANEL_C5E7068A59"),
+	"lilinfu": tr("TRES_LILINFU_PROMISE_NAME_5"),
+	"jiwen": tr("CODE_RIGHT_INFO_PANEL_C3C019A3D2"),
+	"youxiangfu": tr("CODE_RIGHT_INFO_PANEL_D261840111"),
+	"qingliu": tr("CODE_RIGHT_INFO_PANEL_92C54C878B"),
+	"gaoshi": tr("CODE_RIGHT_INFO_PANEL_5692EF6E24"),
+	"wangwei": tr("TRES_NPC_DOC_WANGWEI_NAME_0"),
+	"zhengqian": tr("TRES_NPC_DOC_ZHENGQIAN_NAME_0"),
+	"waiqi": tr("CODE_RIGHT_INFO_PANEL_2C01ABE772"),
+	"yangguozhong": tr("CODE_RIGHT_INFO_PANEL_1BA44F209A"),
+	"guoguofuren": tr("CODE_RIGHT_INFO_PANEL_96BE00E055"),
 }
 
 @onready var _info_grid: VBoxContainer = $Panel/V/InfoGrid
@@ -126,15 +126,15 @@ func _refresh_rumors() -> void:
 		# ── 死穴 ──
 		if not leverage_keys.is_empty():
 			for key in leverage_keys:
-				parts.append("「死穴：%s」" % key)
+				parts.append(tr("CODE_RIGHT_INFO_PANEL_489B840597") % key)
 			if leverage_keys.size() > 1:
-				parts.append("死穴：%d" % leverage_keys.size())
+				parts.append(tr("CODE_RIGHT_INFO_PANEL_422551FD0B") % leverage_keys.size())
 
 		# ── 恩义 ──
 		if help_count > 0:
-			parts.append("「恩义」×%d" % help_count)
+			parts.append(tr("CODE_RIGHT_INFO_PANEL_74592EF709") % help_count)
 			if help_count > 1:
-				parts.append("恩义：%d" % help_count)
+				parts.append(tr("CODE_RIGHT_INFO_PANEL_7FB471BC60") % help_count)
 
 		label_texts.append("%s：%s" % [cn_name, "  ".join(parts)])
 
@@ -217,12 +217,12 @@ func _on_focus_changed(active: bool) -> void:
 
 ## 社交关系状态改变 → 提示点击人脉按钮
 func _on_person_state_changed(_target_tag: String, _new_state: String) -> void:
-	_special_label.text = "点击人脉按钮查看社交关系"
+	_special_label.text = tr("UI_RIGHT_INFO_PANEL_TEXT_0")
 	Logging.info("RightInfoPanel: person_state changed → 显示社交提示")
 
 ## 意象获得 → 提示点击诗词按钮
 func _on_imaginary_changed() -> void:
-	_special_label.text = "点击诗词按钮创作诗词"
+	_special_label.text = tr("CODE_RIGHT_INFO_PANEL_441BE330DE")
 	Logging.info("RightInfoPanel: imaginary changed → 显示诗词提示")
 
 ## 特殊属性（望/兴/势）变化 → 提示点击理念按钮
@@ -230,7 +230,7 @@ const SPECIAL_PROPS: Array[String] = ["prestige", "inspiration", "momentum"]
 
 func _on_special_prop_changed(prop_name: String) -> void:
 	if prop_name in SPECIAL_PROPS:
-		_special_label.text = "点击理念按钮接受理念"
+		_special_label.text = tr("CODE_RIGHT_INFO_PANEL_B593A0EA10")
 		Logging.info("RightInfoPanel: 特殊属性 '%s' 变化 → 显示理念提示" % prop_name)
 
 ## 🆕 笔记触发 → 提示点击注解按钮
@@ -241,7 +241,7 @@ func _on_note_triggered(note_uuid: String) -> void:
 	if note == null:
 		Logging.warn("RightInfoPanel: note_triggered 但 Note '%s' 未找到" % note_uuid)
 		return
-	_special_label.text = "点击注解按钮查看关于「%s」的注解" % note.name
+	_special_label.text = tr("CODE_RIGHT_INFO_PANEL_3732C36978") % note.name
 	Logging.info("RightInfoPanel: note_triggered '%s' → 显示注解提示" % note_uuid)
 
 	# 5s 后自动清除（重置已有定时器）

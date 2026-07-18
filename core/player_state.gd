@@ -17,7 +17,7 @@ const _TierDeterminer = preload("res://core/tier_determiner.gd")
 
 ## ── 以下 @export var 均通过 getter/setter 代理到 GameSave.data ──
 
-@export var player_name: String = "杜甫":
+@export var player_name: String = tr("TRES_POET_DUFU_002_NAME_0"):
 	get: return GameSave.data.player_name
 	set(val): GameSave.data.player_name = val
 
@@ -210,7 +210,7 @@ func init_emotions():
 		Logging.info('init_emotions: set %s to %d from SourceOfTruth' % [emo_name, emo_val])
 
 func init_npc_person_states():
-	"""从 SourceOfTruth.npc_person_state_overrides 覆盖 NPC 开局 person_state"""
+	""tr("CODE_PLAYER_STATE_E3DEF00A8B")""
 	var overrides = SourceOfTruth.debug_dashboard_state.get("npc_person_state_overrides", {})
 	if overrides.is_empty():
 		Logging.info("init_npc_person_states: no overrides in SourceOfTruth, skipping")
@@ -474,7 +474,7 @@ func force_set_stat_val(stat_name, data):
 
 
 func _ensure_prop_in_gamesave(stat_name: String) -> int:
-	"""确保 GameSave.data.properties 中有该属性，不存在时从 Property 模板读取默认 val 写入"""
+	""tr("CODE_PLAYER_STATE_FF59D8BF92")""
 	if GameSave.data.properties.has(stat_name):
 		return GameSave.data.properties[stat_name]
 	

@@ -37,7 +37,7 @@ func _ready() -> void:
 
 
 func _load_and_index() -> void:
-	"""从 Database.notes 加载并建立索引"""
+	""tr("CODE_NOTE_MANAGER_E24EB48F12")""
 	_all_notes = Database.notes.duplicate()
 	_notes_by_prop.clear()
 	_other_notes.clear()
@@ -63,7 +63,7 @@ func _load_and_index() -> void:
 
 
 func _register_hooks() -> void:
-	"""注册信号钩子"""
+	""tr("CODE_NOTE_MANAGER_D69F745081")""
 	# Property 变化钩子
 	if not PlayerState.player_stat_changed.is_connected(_on_prop_changed):
 		PlayerState.player_stat_changed.connect(_on_prop_changed)
@@ -82,12 +82,12 @@ func _register_hooks() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _is_triggered(note: Note) -> bool:
-	"""检查笔记是否已被触发（持久化状态）"""
+	""tr("CODE_NOTE_MANAGER_6D672C2A84")""
 	return GameSave.data.triggered_note_uuids.has(note.uuid)
 
 
 func _on_prop_changed(prop_name: String) -> void:
-	"""属性变化 → 检查 _notes_by_prop[prop_name]"""
+	""tr("CODE_NOTE_MANAGER_4A78691E24")""
 	var candidates: Array = _notes_by_prop.get(prop_name, [])
 	if candidates.is_empty():
 		return
@@ -100,7 +100,7 @@ func _on_prop_changed(prop_name: String) -> void:
 
 
 func _on_flag_changed() -> void:
-	"""Flag 变化 → 遍历所有非 PropertyRequirement 笔记中 FlagRequirement 的"""
+	""tr("CODE_NOTE_MANAGER_855448D5F6")""
 	for note: Note in _other_notes:
 		if _is_triggered(note):
 			continue
@@ -112,7 +112,7 @@ func _on_flag_changed() -> void:
 
 
 func _on_trait_changed() -> void:
-	"""Trait 变化 → 遍历所有 TraitRequirement 笔记"""
+	""tr("CODE_NOTE_MANAGER_9BD0BBE336")""
 	for note: Note in _other_notes:
 		if _is_triggered(note):
 			continue
@@ -128,7 +128,7 @@ func _on_trait_changed() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _check_requirement(note: Note) -> bool:
-	"""检查 Note 的 requirement 是否满足"""
+	""tr("CODE_NOTE_MANAGER_8621B5666F")""
 	if note.requirement == null:
 		# 无 requirement 视为无条件触发
 		return true
@@ -136,7 +136,7 @@ func _check_requirement(note: Note) -> bool:
 
 
 func _do_trigger(note: Note) -> void:
-	"""执行笔记触发流程"""
+	""tr("CODE_NOTE_MANAGER_5BA714241D")""
 	note.triggered = true
 
 	# 持久化

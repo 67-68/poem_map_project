@@ -56,13 +56,13 @@ func test_narrative_scenarios(map):
 	var v0 = map.get('0')
 	if is_instance_valid(v0):
 		var ev := BaseEvent.new()
-		ev.name = "石壕吏"
-		ev.description = "暮投石壕村，有吏夜捉人。老翁逾墙走，老妇出门看。"
+		ev.name = tr("CODE_VTEST_NARRATIVE_OVERLAY_646CD3FFE7")
+		ev.description = tr("CODE_VTEST_NARRATIVE_OVERLAY_D2EFB8D7EF")
 		ev.ui_decl = UIDecl.new()
-		ev.ui_decl.example = "758年 陕州"
+		ev.ui_decl.example = tr("CODE_VTEST_NARRATIVE_OVERLAY_B727926D45")
 
 		var opt := EventOption.new()
-		opt.description = "在墙角默默记录"
+		opt.description = tr("CODE_VTEST_NARRATIVE_OVERLAY_65F2DF86F1")
 		ev.options = [opt]
 
 		EventBus.request_event.emit(ev, {})
@@ -73,13 +73,13 @@ func test_narrative_scenarios(map):
 	var v1 = map.get('1')
 	if is_instance_valid(v1):
 		var ev := BaseEvent.new()
-		ev.name = "安史之乱"
-		ev.description = "渔阳鼙鼓动地来，惊破霓裳羽衣曲。安禄山在范阳起兵，直指洛阳。"
+		ev.name = tr("CODE_VTEST_NARRATIVE_OVERLAY_83D5BE2253")
+		ev.description = tr("CODE_VTEST_NARRATIVE_OVERLAY_AE6DF29F62")
 		ev.ui_decl = UIDecl.new()
-		ev.ui_decl.example = "755年 范阳"
+		ev.ui_decl.example = tr("CODE_VTEST_NARRATIVE_OVERLAY_A0E36E4083")
 
 		var opt := EventOption.new()
-		opt.description = "我知道了"
+		opt.description = tr("TRES_TEST_INTERRUPT_TARGET_DESCRIPTION_0")
 		ev.options = [opt]
 
 		EventBus.request_event.emit(ev, {})
@@ -90,16 +90,16 @@ func test_narrative_scenarios(map):
 	var v2 = map.get('2')
 	if is_instance_valid(v2):
 		var ev := BaseEvent.new()
-		ev.name = "马嵬坡之变"
-		ev.description = "六军不发无奈何，宛转蛾眉马前死。禁军要求处死杨贵妃，否则拒绝开拔。"
+		ev.name = tr("CODE_VTEST_NARRATIVE_OVERLAY_DCAFE4963D")
+		ev.description = tr("CODE_VTEST_NARRATIVE_OVERLAY_D090BECA34")
 		ev.ui_decl = UIDecl.new()
-		ev.ui_decl.example = "756年 马嵬驿"
+		ev.ui_decl.example = tr("CODE_VTEST_NARRATIVE_OVERLAY_DB1CE346AF")
 
 		var opt1 := EventOption.new()
-		opt1.description = "赐死杨玉环"
+		opt1.description = tr("CODE_VTEST_NARRATIVE_OVERLAY_77CD91DEDE")
 
 		var opt2 := EventOption.new()
-		opt2.description = "坚决保住她"
+		opt2.description = tr("CODE_VTEST_NARRATIVE_OVERLAY_1A7BACE0E6")
 
 		ev.options = [opt1, opt2]
 
@@ -111,13 +111,13 @@ func test_narrative_scenarios(map):
 	var v3 = map.get('3')
 	if is_instance_valid(v3):
 		var ev := BaseEvent.new()
-		ev.name = "收复长安"
-		ev.description = "剑外忽传收蓟北，初闻涕泪满衣裳。官军已收复京师！"
+		ev.name = tr("CODE_VTEST_NARRATIVE_OVERLAY_4EE29B8406")
+		ev.description = tr("CODE_VTEST_NARRATIVE_OVERLAY_45323DA6A8")
 		ev.ui_decl = UIDecl.new()
-		ev.ui_decl.example = "757年 长安"
+		ev.ui_decl.example = tr("CODE_VTEST_NARRATIVE_OVERLAY_1C015818A6")
 
 		var opt := EventOption.new()
-		opt.description = "漫卷诗书喜欲狂"
+		opt.description = tr("CODE_VTEST_NARRATIVE_OVERLAY_7369422DC5")
 		ev.options = [opt]
 
 		EventBus.request_event.emit(ev, {})

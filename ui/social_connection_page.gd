@@ -16,26 +16,26 @@ class_name SocialConnectionPage
 # ═══════════════════════════════════════════════════════════
 
 const PLACE_CN: Dictionary = {
-	"pingkangfang": "平康坊",
-	"huangcheng": "皇城",
-	"xishi": "西市",
+	"pingkangfang": tr("CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54"),
+	"huangcheng": tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A"),
+	"xishi": tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"),
 }
 
 const PERSON_STATE_CN: Dictionary = {
-	"not_meet": "听闻",
-	"know_about": "相识",
-	"inner_circle": "知己",
-	"blood_oath": "死友",
+	"not_meet": tr("CODE_SOCIAL_CONNECTION_PAGE_FC09E638F1"),
+	"know_about": tr("CODE_SOCIAL_CONNECTION_PAGE_320A6DD958"),
+	"inner_circle": tr("CODE_SOCIAL_CONNECTION_PAGE_67B1207A0B"),
+	"blood_oath": tr("CODE_SOCIAL_CONNECTION_PAGE_82200B0785"),
 }
 
 const TIER_LABELS: Dictionary = {
-	1: "T1 市井",
-	2: "T2 文人",
-	3: "T3 权贵",
+	1: tr("CODE_SOCIAL_CONNECTION_PAGE_D5617BCA8A"),
+	2: tr("CODE_SOCIAL_CONNECTION_PAGE_AF314B7D7E"),
+	3: tr("CODE_SOCIAL_CONNECTION_PAGE_76BE7378D6"),
 }
 
-const UNKNOWN_TIER_LABEL: String = "未知阵营"
-const UNKNOWN_PLACE_LABEL: String = "其他地点"
+const UNKNOWN_TIER_LABEL: String = tr("CODE_SOCIAL_CONNECTION_PAGE_AF4682C8B2")
+const UNKNOWN_PLACE_LABEL: String = tr("CODE_SOCIAL_CONNECTION_PAGE_CDC9E0E088")
 
 # ═══════════════════════════════════════════════════════════
 # Onready 节点引用
@@ -337,7 +337,7 @@ func _format_npc_label(doc: NPCDocument) -> String:
 
 func _format_places(doc: NPCDocument) -> String:
 	if doc.preferred_places.is_empty():
-		return "无特定偏好"
+		return tr("CODE_SOCIAL_CONNECTION_PAGE_CBAC35BFBD")
 	var parts: Array[String] = []
 	for place: String in doc.preferred_places:
 		parts.append(PLACE_CN.get(place, place))
@@ -377,7 +377,7 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 
 	# ── Unit8: 基本信息 ──
 	var state_cn: String = PERSON_STATE_CN.get(doc.person_state, doc.person_state)
-	var basic_text: String = "[b]%s[/b]\n关系状态: %s\n偏好地点: %s" % [
+	var basic_text: String = tr("CODE_SOCIAL_CONNECTION_PAGE_90D2FA0B75") % [
 		doc.name if not doc.name.is_empty() else doc.uuid,
 		state_cn,
 		_format_places(doc),
@@ -389,21 +389,21 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 	var relation_parts: Array[String] = []
 
 	if not doc.leverage_keys.is_empty():
-		relation_parts.append("把柄 (%d 个):" % doc.leverage_keys.size())
+		relation_parts.append(tr("CODE_SOCIAL_CONNECTION_PAGE_02A90CFD1C") % doc.leverage_keys.size())
 		for key: String in doc.leverage_keys:
 			relation_parts.append("  · %s" % key)
 
 	if not doc.intro_keys.is_empty():
-		relation_parts.append("引荐信 (%d 封):" % doc.intro_keys.size())
+		relation_parts.append(tr("CODE_SOCIAL_CONNECTION_PAGE_1559C9C814") % doc.intro_keys.size())
 		for key: String in doc.intro_keys:
 			relation_parts.append("  · %s" % key)
 
 	if doc.help_count > 0:
-		relation_parts.append("恩义 ×%d" % doc.help_count)
+		relation_parts.append(tr("CODE_SOCIAL_CONNECTION_PAGE_272D014D81") % doc.help_count)
 
 	var relation_text: String
 	if relation_parts.is_empty():
-		relation_text = "暂无关系记录"
+		relation_text = tr("CODE_SOCIAL_CONNECTION_PAGE_42ED69BD0B")
 	else:
 		relation_text = "\n".join(relation_parts)
 	_info_relation.text = relation_text
@@ -412,7 +412,7 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 	# ── Unit5: 相关人物 ──
 	var related_text: String
 	if doc.relate_to.is_empty():
-		related_text = "无关联人物"
+		related_text = tr("CODE_SOCIAL_CONNECTION_PAGE_A2A09D3198")
 	else:
 		var names: Array[String] = []
 		for target_tag: String in doc.relate_to:
@@ -426,7 +426,7 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 	Logging.info("[SocialConnectionPage]   相关人物 — %s" % str(doc.relate_to))
 
 	# ── Unit6: 可用任务（后端未就绪） ──
-	_info_quests.text = "暂无数据"
+	_info_quests.text = tr("CODE_SOCIAL_CONNECTION_PAGE_497C85690C")
 	Logging.info("[SocialConnectionPage]   可用任务 — 暂无数据")
 
 	# ── Unit7: 资源转换配方（使用 ActionHintBuilder 构建预览） ──
@@ -446,7 +446,7 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 		if not action.override_action.is_empty():
 			var overridden_action: Action = Database.get_action(action.override_action) as Action
 			var overridden_name: String = overridden_action.name if overridden_action else action.override_action
-			recipe_parts.append("[b]%s[/b] （覆盖「%s」）" % [action.name, overridden_name])
+			recipe_parts.append(tr("CODE_SOCIAL_CONNECTION_PAGE_73CA9EBD64") % [action.name, overridden_name])
 		else:
 			recipe_parts.append("[b]%s[/b]" % action.name)
 
@@ -464,7 +464,7 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 
 	var recipe_text: String
 	if recipe_parts.is_empty():
-		recipe_text = "暂无可用配方"
+		recipe_text = tr("CODE_SOCIAL_CONNECTION_PAGE_ECF3D57F6F")
 	else:
 		recipe_text = "\n".join(recipe_parts).strip_edges()
 	_info_recipes.text = recipe_text
@@ -473,7 +473,7 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 
 func _clear_info() -> void:
 	Logging.info("[SocialConnectionPage] 清空信息面板全部字段")
-	_info_basic.text = "请从左侧选择一位人物"
+	_info_basic.text = tr("CODE_SOCIAL_CONNECTION_PAGE_4F10F59F78")
 	_info_relation.text = ""
 	_info_related.text = ""
 	_info_quests.text = ""

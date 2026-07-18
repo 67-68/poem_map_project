@@ -24,7 +24,7 @@ func compare(_data = null) -> bool:
 func describe_requirement() -> String:
 	if action_id.is_empty():
 		return ""
-	return "当执行「%s」时" % action_id
+	return tr("CODE_ACTION_MATCH_REQUIREMENT_C6CF49304D") % action_id
 
 
 func get_referenced_flags() -> Array:

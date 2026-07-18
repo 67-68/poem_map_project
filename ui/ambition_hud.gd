@@ -72,7 +72,7 @@ func _load_static():
 	Logging.info("AmbitionHUD: Static content loading complete")
 
 func _resolve_tracked_property() -> void:
-	"""根据 ambition.tracked_property 从 Database 中取出对应的 Property 资源"""
+	""tr("CODE_AMBITION_HUD_C835E76AC4")""
 	if not ambition or ambition.tracked_property.is_empty():
 		_tracked_prop = null
 		Logging.warn("AmbitionHUD: No tracked property configured for ambition")
@@ -85,7 +85,7 @@ func _resolve_tracked_property() -> void:
 		Logging.info("AmbitionHUD: Resolved tracked property '%s' (soft_max=%d, val=%d)" % [ambition.tracked_property, _tracked_prop.soft_max, PlayerState.get_stat_val(ambition.tracked_property)])
 
 func _update_progress() -> void:
-	"""将 tracked_property 连续值映射为 Unicode 古典圆点：●●●◐○ + 文学化文本"""
+	""tr("CODE_AMBITION_HUD_314DD9FA4C")""
 	if not _tracked_prop:
 		progress_dots_label.hide()
 		Logging.warn("AmbitionHUD: No tracked property to display progress")

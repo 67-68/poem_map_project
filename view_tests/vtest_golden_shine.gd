@@ -6,22 +6,22 @@ var view: Control
 func create_debug_view(idx: int) -> Control:
 	match idx:
 		0:
-			var btn := _make_shine_button("呼吸金光", Color(0.9, 0.75, 0.1))
+			var btn := _make_shine_button(tr("CODE_VTEST_GOLDEN_SHINE_EF622DDDC0"), Color(0.9, 0.75, 0.1))
 			btn.custom_minimum_size = Vector2(180, 60)
 			btn.size = Vector2(180, 60)
 			return btn
 		1:
-			var btn := _make_shine_button("大唐风华", Color(1.0, 0.85, 0.0))
+			var btn := _make_shine_button(tr("CODE_VTEST_GOLDEN_SHINE_E56FE50456"), Color(1.0, 0.85, 0.0))
 			btn.custom_minimum_size = Vector2(220, 80)
 			btn.size = Vector2(220, 80)
 			return btn
 		2:
-			var btn := _make_shine_button("金碧辉煌", Color(0.95, 0.7, 0.05))
+			var btn := _make_shine_button(tr("CODE_VTEST_GOLDEN_SHINE_2C4C6284D0"), Color(0.95, 0.7, 0.05))
 			btn.custom_minimum_size = Vector2(200, 70)
 			btn.size = Vector2(200, 70)
 			return btn
 		3:
-			var btn := _make_shine_button("诗意盎然", Color(1.0, 0.8, 0.2))
+			var btn := _make_shine_button(tr("CODE_VTEST_GOLDEN_SHINE_06FFA726CD"), Color(1.0, 0.8, 0.2))
 			btn.custom_minimum_size = Vector2(200, 60)
 			btn.size = Vector2(200, 60)
 			return btn

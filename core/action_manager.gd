@@ -103,13 +103,13 @@ func reserve_action(action_id: String) -> bool:
 	# 1. 检查席位是否已满
 	if _reserved_action_ids.size() >= MAX_PICK_COUNT:
 		Logging.err("[ActionManager] 预留席位已满 (%d/%d)，预定失败: %s" % [MAX_PICK_COUNT, MAX_PICK_COUNT, action_id])
-		push_error("预留席位已满")
+		push_error(tr("CODE_ACTION_MANAGER_3BB5410E85"))
 		return false
 	
 	# 2. 检查是否重复预定
 	if action_id in _reserved_action_ids:
 		Logging.err("[ActionManager] action 已被重复预定: %s" % action_id)
-		push_error("重复预定")
+		push_error(tr("CODE_ACTION_MANAGER_C1939F32EF"))
 		return false
 	
 	_reserved_action_ids.append(action_id)
@@ -312,7 +312,7 @@ static func check_archetype_property_costs(operators: Array) -> Array[String]:
 		if current_val < adjusted_need:
 			var prop_data = Database.get_property(prop_name)
 			var prop_display_name = prop_data.get_display_name() if prop_data else prop_name
-			var precise_line := "「%s」不足，当前%d，需要%d" % [prop_display_name, current_val, adjusted_need]
+			var precise_line := tr("CODE_ACTION_MANAGER_14BEE7594A") % [prop_display_name, current_val, adjusted_need]
 			reasons.append(precise_line)
 			Logging.info("[ActionManager] check_archetype_property_costs: prop=%s current=%d raw_need=%d adjusted_need=%d → GRAY" % [prop_name, current_val, raw_need, adjusted_need])
 		else:
@@ -381,7 +381,7 @@ func check_action_validity(action: Action) -> Dictionary:
 		var cost_detail := format_time_detail(action.day_consumed)
 		if current_time < cost:
 			result.valid = false
-			var precise_line := "时间剩余%d天，但这项行动需要%s" % [current_time, cost_detail]
+			var precise_line := tr("CODE_ACTION_MANAGER_4267E5ADD3") % [current_time, cost_detail]
 			result.reasons.append(precise_line)
 			result.prop_name = "time"
 			return result
@@ -391,7 +391,7 @@ func check_action_validity(action: Action) -> Dictionary:
 	if cost > 0:
 		var current_time := int(PlayerState.get_stat_val("time"))
 		var cost_detail := format_time_detail(action.day_consumed)
-		valid_parts.append("时间充足（剩余%d天，需要%s）" % [current_time, cost_detail])
+		valid_parts.append(tr("CODE_ACTION_MANAGER_1E3F359752") % [current_time, cost_detail])
 	for temp_op in costs:
 		if not temp_op is PropertyOperator:
 			continue
@@ -402,11 +402,11 @@ func check_action_validity(action: Action) -> Dictionary:
 		var current_val = int(PlayerState.get_stat_val(prop_name))
 		var prop_data = Database.get_property(prop_name)
 		var display_name = prop_data.get_display_name() if prop_data else prop_name
-		valid_parts.append("「%s」充足（当前%d）" % [display_name, current_val])
+		valid_parts.append(tr("CODE_ACTION_MANAGER_D16BFC8474") % [display_name, current_val])
 	if valid_parts.is_empty():
-		result.valid_hint = "条件满足"
+		result.valid_hint = tr("CODE_ACTION_MANAGER_F5B23A5C5F")
 	else:
-		valid_parts.append("条件满足")
+		valid_parts.append(tr("CODE_ACTION_MANAGER_F5B23A5C5F"))
 		result.valid_hint = "\n".join(valid_parts)
 	
 	return result
@@ -795,7 +795,7 @@ func process_xun_tick() -> void:
 	if decremented_locks.size() > 0:
 		var dec_lock_details: Array[String] = []
 		for lid in decremented_locks:
-			dec_lock_details.append("%s→%d旬" % [lid, _locked_in_actions[lid]])
+			dec_lock_details.append(tr("CODE_ACTION_MANAGER_5576EB8849") % [lid, _locked_in_actions[lid]])
 		Logging.info("[ActionManager] 🔒 锁定冷却递减 (%d): %s" % [decremented_locks.size(), ", ".join(dec_lock_details)])
 	if expired_locks.size() > 0:
 		Logging.info("[ActionManager] ✅ 锁定完全解锁 (%d): %s" % [expired_locks.size(), ", ".join(expired_locks)])
@@ -821,7 +821,7 @@ func process_xun_tick() -> void:
 	if decremented_blocks.size() > 0:
 		var dec_block_details: Array[String] = []
 		for bid in decremented_blocks:
-			dec_block_details.append("%s→%d旬" % [bid, _blocked_actions[bid]])
+			dec_block_details.append(tr("CODE_ACTION_MANAGER_5576EB8849") % [bid, _blocked_actions[bid]])
 		Logging.info("[ActionManager] 🚫 阻塞冷却递减 (%d): %s" % [decremented_blocks.size(), ", ".join(dec_block_details)])
 	if expired_blocks.size() > 0:
 		Logging.info("[ActionManager] ✅ 阻塞完全解阻 (%d): %s" % [expired_blocks.size(), ", ".join(expired_blocks)])
@@ -829,11 +829,11 @@ func process_xun_tick() -> void:
 	var active_locks: Array[String] = []
 	for lid in _locked_in_actions:
 		var rem = _locked_in_actions[lid]
-		active_locks.append("%s(%s旬)" % [lid, "∞" if rem == -1 else str(rem)])
+		active_locks.append(tr("CODE_ACTION_MANAGER_54213AACF4") % [lid, "∞" if rem == -1 else str(rem)])
 	var active_blocks: Array[String] = []
 	for bid in _blocked_actions:
 		var rem = _blocked_actions[bid]
-		active_blocks.append("%s(%s旬)" % [bid, "∞" if rem == -1 else str(rem)])
+		active_blocks.append(tr("CODE_ACTION_MANAGER_54213AACF4") % [bid, "∞" if rem == -1 else str(rem)])
 	
 	if active_locks.size() > 0 or active_blocks.size() > 0:
 		Logging.info("[ActionManager] ═══ 旬结算后: 🔒锁定[%s] | 🚫阻塞[%s] ═══" % [", ".join(active_locks) if active_locks.size() > 0 else "无", ", ".join(active_blocks) if active_blocks.size() > 0 else "无"])
@@ -967,7 +967,7 @@ func process_xun_tick() -> void:
 	if expired_defers.size() > 0 or interrupted_defers.size() > 0 or _deferring_actions.size() > 0:
 		var remaining_strs: Array[String] = []
 		for aid in _deferring_actions:
-			remaining_strs.append("%s(%d旬)" % [aid, _deferring_actions[aid].get("remaining_xun", 0)])
+			remaining_strs.append(tr("CODE_ACTION_MANAGER_302B5DE297") % [aid, _deferring_actions[aid].get("remaining_xun", 0)])
 		Logging.info("[ActionManager] ═══ 旬结算 defer: ✅到期=%d | ❌中断=%d | 🔵剩余=[%s] ═══" % [
 			expired_defers.size(), interrupted_defers.size(), ", ".join(remaining_strs)
 		])
@@ -1039,7 +1039,7 @@ func pick_top_actions(action_pool: Dictionary, pick_count: int = MAX_PICK_COUNT)
 	
 	if _reserved_action_ids.size() > action_pool.size():
 		Logging.err("[ActionManager] 预留数量 (%d) 超过候选池 (%d)" % [_reserved_action_ids.size(), action_pool.size()])
-		push_error("超过当前可用行动数量")
+		push_error(tr("CODE_ACTION_MANAGER_0E03C08950"))
 		clear_reservations()
 		return []
 	
@@ -1104,7 +1104,7 @@ func apply_visibility_flags() -> void:
 			# 未中签 → B类 + A类
 			if not a.lock_narrative.is_empty():
 				a.append_failed_hint(a.lock_narrative)
-			a.append_failed_hint("此路不通，换个主意吧")
+			a.append_failed_hint(tr("CODE_ACTION_MANAGER_E29F84E3C5"))
 			var v := check_action_validity(a)
 			if not v.valid and v.reasons.size() > 0:
 				for reason in v.reasons:
@@ -1193,8 +1193,8 @@ static func format_time_detail(base_days: float) -> String:
 		penalty_names.append(name)
 	total += extra
 	if penalty_names.is_empty():
-		return "%d天" % total
-	return "%d天（+%d, 由于 %s）" % [total, extra, "，".join(penalty_names)]
+		return tr("CODE_ACTION_MANAGER_4A67FE38B4") % total
+	return tr("CODE_ACTION_MANAGER_27122C05D7") % [total, extra, "，".join(penalty_names)]
 
 
 # ════════════════════════════════════════════════════════════

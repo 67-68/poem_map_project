@@ -36,9 +36,9 @@ const LEVEL_SCORE_MAP := {
 }
 
 const POEM_LEVEL_NAMES := {
-	1: "平庸",
-	2: "佳作",
-	3: "绝唱",
+	1: tr("CODE_POEM_CRAFTING_CALCULATOR_CE57606FBB"),
+	2: tr("CODE_POEM_CRAFTING_CALCULATOR_2EA731CCE3"),
+	3: tr("CODE_POEM_CRAFTING_CALCULATOR_C335175F07"),
 }
 
 ## level → 段位中位分数（用于消费时升级概率计算）
@@ -259,7 +259,7 @@ static func _get_level_score(level: int) -> int:
 ## ──────────────────────────────────────────────
 
 static func get_level_display_name(level: int) -> String:
-	return POEM_LEVEL_NAMES.get(level, "未知")
+	return POEM_LEVEL_NAMES.get(level, tr("CODE_POEM_CRAFTING_CALCULATOR_4D8C1C5B42"))
 
 
 ## ──────────────────────────────────────────────

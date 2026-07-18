@@ -17,13 +17,13 @@ var default_staged_perception: Array[PropStagedPerceptionData] = _init_default_s
 static func _init_default_staged_perception() -> Array[PropStagedPerceptionData]:
 	var arr: Array[PropStagedPerceptionData] = []
 	var p1 = PropStagedPerceptionData.new()
-	p1.stage_val = 0; p1.perception_text = "初始状态"
+	p1.stage_val = 0; p1.perception_text = tr("CODE_PROPERTY_599ABC8C57")
 	arr.append(p1)
 	var p2 = PropStagedPerceptionData.new()
-	p2.stage_val = 20; p2.perception_text = "成长中"
+	p2.stage_val = 20; p2.perception_text = tr("CODE_PROPERTY_ADF6F87B42")
 	arr.append(p2)
 	var p3 = PropStagedPerceptionData.new()
-	p3.stage_val = 40; p3.perception_text = "成熟"
+	p3.stage_val = 40; p3.perception_text = tr("CODE_PROPERTY_1613904BFA")
 	arr.append(p3)
 	var p4 = PropStagedPerceptionData.new()
 	p4.stage_val = 60; p4.perception_text = "GoodGood"
@@ -46,7 +46,7 @@ func get_staged_perception_text() -> String:
 		if perception.stage_val <= val:
 			return perception.perception_text
 	
-	return "未知状态"
+	return tr("CODE_RANGE_REQUIREMENT_EC0D9BDB00")
 
 ## 根据变化量 delta 返回描述性文本（用于飘字系统）
 ## delta > 0: 增加, delta < 0: 减少
@@ -91,7 +91,7 @@ func get_staged_perception_at_threshold(threshold: int) -> String:
 		if perception.stage_val <= threshold:
 			return perception.perception_text
 
-	return "未知状态"
+	return tr("CODE_RANGE_REQUIREMENT_EC0D9BDB00")
 
 # 强制设值，跳过 hard_max 检查（给 debug/force_set_stat_val 用）
 func force_set_val(new_val: int) -> void:

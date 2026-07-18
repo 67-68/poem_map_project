@@ -203,7 +203,7 @@ func _gui_input(event: InputEvent) -> void:
 # ═══════════════════════════════════════════════
 
 func scroll_page(direction: int) -> void:
-	"""由 InputManager 调用。direction: -1=向上, +1=向下"""
+	""tr("CODE_SMOOTH_SCROLL_CONTAINER_38E1A679FE")""
 	var v_scrollbar = get_v_scroll_bar()
 	var max_scroll = v_scrollbar.max_value - v_scrollbar.page
 	target_scroll = clamp(target_scroll + direction * v_scrollbar.page * 0.8, 0.0, max_scroll)

@@ -20,7 +20,7 @@ func _init(data: Dictionary = {}):
 	actual_ruler = str(props.get("actual_ruler", ""))
 	prestige = float(props.get("prestige", 100.0))
 	finance = float(props.get("finance", 0.0))
-	primary_ethnicity = props.get("primary_ethnicity", "汉")
+	primary_ethnicity = props.get("primary_ethnicity", tr("CODE_FACTION_80FA989E68"))
 	capital = str(props.get("capital", ""))
 
 	# 2. 颜色解析 (支持 "#ffffff" 字符串或 [r,g,b,a] 数组)

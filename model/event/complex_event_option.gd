@@ -11,7 +11,7 @@ func init(context: Dictionary) -> Dictionary:
 	# 桥接 is_disabled → NarrativeLockRequirement
 	if is_disabled:
 		var lock = NarrativeLockRequirement.new()
-		lock.failed_hint = disabled_reason if not disabled_reason.is_empty() else "选项已禁用"
+		lock.failed_hint = disabled_reason if not disabled_reason.is_empty() else tr("CODE_EVENT_BTN_1F4CD3AC79")
 		
 		if requirement != null:
 			var complex = ComplexRequirements.new()

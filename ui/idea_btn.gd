@@ -16,7 +16,7 @@ var _conflict_reason: String = ""
 
 
 func set_idea(idea: Idea, locked: bool = false, conflict_reason: String = "") -> void:
-	"""设置按钮显示的 Idea。locked=true 时禁用并显示锁定原因。"""
+	""tr("CODE_IDEA_BTN_8BA872D0D3")""
 	_idea = idea
 	_locked = locked
 	_conflict_reason = conflict_reason
@@ -41,7 +41,7 @@ func is_locked() -> bool:
 
 
 func _update_display() -> void:
-	"""根据 _idea 填充 Label 文本"""
+	""tr("CODE_IDEA_BTN_BBF2377F0F")""
 	if not _idea:
 		_update_display_empty()
 		return
@@ -49,7 +49,7 @@ func _update_display() -> void:
 	# 标题 Label
 	var title_label := get_node_or_null("VBoxContainer/HBoxContainer/Label") as Label
 	if title_label:
-		var name_text: String = _idea.name if not _idea.name.is_empty() else "未知理念"
+		var name_text: String = _idea.name if not _idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
 		title_label.text = name_text
 
 	# 描述 Label
@@ -64,13 +64,13 @@ func _update_display() -> void:
 	var lock_label := get_node_or_null("VBoxContainer/Label2") as Label
 	if lock_label:
 		if _locked and not _conflict_reason.is_empty():
-			lock_label.text = "被锁定，由于" + _conflict_reason
+			lock_label.text = tr("CODE_IDEA_BTN_17A8CAB3B2") + _conflict_reason
 			lock_label.show()
 		elif _locked:
-			lock_label.text = "被锁定"
+			lock_label.text = tr("CODE_IDEA_BTN_115FA2A54C")
 			lock_label.show()
 		elif disabled:
-			lock_label.text = "不可用"
+			lock_label.text = tr("CODE_IDEA_BTN_460B3574E4")
 			lock_label.show()
 		else:
 			lock_label.text = _conflict_reason

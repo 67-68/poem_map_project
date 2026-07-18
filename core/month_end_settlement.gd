@@ -22,16 +22,16 @@ const PROP_DISPLAY_ORDER: Array[int] = [
 
 # ── 属性中文简称映射 ─────────────────────────────
 const PROP_SHORT_NAMES: Dictionary = {
-	ENUMS.PROPS.MONEY: "钱",
-	ENUMS.PROPS.HEALTH: "健",
-	ENUMS.PROPS.PRESTIGE: "名",
-	ENUMS.PROPS.TALENT: "才",
-	ENUMS.PROPS.PROGRESS: "途",
-	ENUMS.PROPS.TIME: "时",
-	ENUMS.PROPS.ASTUTENESS: "府",
-	ENUMS.PROPS.COMPOSURE: "定",
-	ENUMS.PROPS.INSPIRATION: "兴",
-	ENUMS.PROPS.MOMENTUM: "势",
+	ENUMS.PROPS.MONEY: tr("PROPERTY_NAME_MONEY"),
+	ENUMS.PROPS.HEALTH: tr("PROPERTY_NAME_HEALTH"),
+	ENUMS.PROPS.PRESTIGE: tr("PROPERTY_NAME_LITERARY_FAME"),
+	ENUMS.PROPS.TALENT: tr("PROPERTY_NAME_TALENT"),
+	ENUMS.PROPS.PROGRESS: tr("CODE_MONTH_END_SETTLEMENT_3281E6BBE7"),
+	ENUMS.PROPS.TIME: tr("CODE_MONTH_END_SETTLEMENT_7D58B6422C"),
+	ENUMS.PROPS.ASTUTENESS: tr("CODE_MONTH_END_SETTLEMENT_2DF825FBDA"),
+	ENUMS.PROPS.COMPOSURE: tr("CODE_MONTH_END_SETTLEMENT_A071406EDF"),
+	ENUMS.PROPS.INSPIRATION: tr("TRES_INSPIRATION_NAME_0"),
+	ENUMS.PROPS.MOMENTUM: tr("TRES_MOMENTUM_NAME_0"),
 }
 
 # ── 上月末11属性快照 ──────────────────────────────
@@ -107,7 +107,7 @@ func _on_xun_color_reset() -> void:
 	if TutorialController.is_tutorial_active():
 		Logging.info('month end settlement: tutorial active, not on xun tick')
 		return
-	"""每旬结算开始时清空所有属性颜色覆盖，使染色仅反映当旬变化。"""
+	""tr("CODE_MONTH_END_SETTLEMENT_4B35F007CC")""
 	if _left_panel != null:
 		_left_panel.reset_all_prop_colors()
 	Logging.info("[MonthEndSettlement] 旬初已清空所有属性颜色覆盖")
@@ -204,15 +204,15 @@ func _get_era_season_text() -> String:
 	var season_index: int = day_of_year / 90          # 0春 1夏 2秋 3冬
 	var month_in_season: int = (day_of_year % 90) / 30  # 0孟 1仲 2季
 
-	var season_names := ["春", "夏", "秋", "冬"]
-	var month_prefix := ["孟", "仲", "季"]
+	var season_names := [tr("CODE_MONTH_END_SETTLEMENT_B3C33B7ABA"), tr("CODE_MONTH_END_SETTLEMENT_8482432C02"), tr("CODE_MONTH_END_SETTLEMENT_5A2E5E4B12"), tr("CODE_MONTH_END_SETTLEMENT_0868FBC8C0")]
+	var month_prefix := [tr("CODE_MONTH_END_SETTLEMENT_ACF5072074"), tr("CODE_MONTH_END_SETTLEMENT_FE801EE143"), tr("CODE_MONTH_END_SETTLEMENT_5B0E0492B5")]
 
 	var season_str: String = month_prefix[month_in_season] + season_names[season_index]
 
 	var year_int: int = int(TimeService._total_days_elapsed / 360)
 	var era_text := TimeService.get_era_text(year_int)
 
-	return "%s·%s 结" % [era_text, season_str]
+	return tr("CODE_MONTH_END_SETTLEMENT_66329961B5") % [era_text, season_str]
 
 # ── 构造结算 BaseEvent ───────────────────────────
 func _build_settlement_event(_current: Dictionary, deltas: Dictionary) -> BaseEvent:
@@ -226,9 +226,9 @@ func _build_settlement_event(_current: Dictionary, deltas: Dictionary) -> BaseEv
 	var lines: PackedStringArray = []
 
 	# 第一段：「长安米贵」— 11行属性变化
-	lines.append("[font_size=16][b]「长安米贵」[/b][/font_size]")
+	lines.append(tr("CODE_MONTH_END_SETTLEMENT_1E52BBFF88"))
 	if _all_deltas_zero(deltas):
-		lines.append("[i]本月诸般光景，与上月无异[/i]")
+		lines.append(tr("CODE_MONTH_END_SETTLEMENT_4BA71F5DC5"))
 	else:
 		for prop in PROP_DISPLAY_ORDER:
 			if deltas[prop] == 0:
@@ -237,19 +237,19 @@ func _build_settlement_event(_current: Dictionary, deltas: Dictionary) -> BaseEv
 	lines.append("")
 
 	# 第二段：「状态衰变」
-	lines.append("[font_size=16][b]「状态衰变」[/b][/font_size]")
-	lines.append("[i]天道盈亏，自有定数。月盈则亏，水满则溢。[/i]")
+	lines.append(tr("CODE_MONTH_END_SETTLEMENT_E7830EE499"))
+	lines.append(tr("CODE_MONTH_END_SETTLEMENT_403869A2B5"))
 	lines.append("")
 
 	# 第三段：「潜伏暗线」
-	lines.append("[font_size=16][b]「潜伏暗线」[/b][/font_size]")
-	lines.append("[i]天机未显，静待时变。[/i]")
+	lines.append(tr("CODE_MONTH_END_SETTLEMENT_213A369D1D"))
+	lines.append(tr("CODE_MONTH_END_SETTLEMENT_6EC5A9FCC0"))
 
 	event.description = "\n".join(lines)
 
 	# ── event.options：唯一选项 "合上考评" ──
 	var option := EventOption.new()
-	option.description = "合上考评"
+	option.description = tr("CODE_SETTLEMENT_TAPE_ENTRY_1047F73848")
 
 	var result := ChoiceResult.new()
 	var pop_op := PopEventOperator.new()

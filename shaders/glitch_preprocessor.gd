@@ -55,7 +55,7 @@ static func inject_params(raw_text: String, tag_params: Dictionary) -> String:
 	for tag: String in tag_params:
 		var params = tag_params[tag]
 		if not (params is Dictionary):
-			push_warning("%s: tag '%s' 的参数不是 Dictionary，跳过" % [LOG_TAG, tag])
+			push_warning(tr("CODE_GLITCH_PREPROCESSOR_8E14EED932") % [LOG_TAG, tag])
 			continue
 		var d := params as Dictionary
 		if d.is_empty():
@@ -147,7 +147,7 @@ static func _inject_one(text: String, tag: String, params: Dictionary) -> String
 	var pattern := _BARE_TAG_TEMPLATE % tag
 	var err := regex.compile(pattern)
 	if err != OK:
-		push_error("%s: 正则编译失败 tag=%s pattern=%s" % [LOG_TAG, tag, pattern])
+		push_error(tr("CODE_GLITCH_PREPROCESSOR_FB8806A61B") % [LOG_TAG, tag, pattern])
 		return text
 
 	var injected_tag := _build_injected_tag(tag, params)

@@ -26,8 +26,8 @@ func configure(meta: Dictionary) -> void:
 	if meta.is_empty():
 		Logging.info("GameDataPanel: 配置为空档位")
 		_save_uuid = ""
-		_name_label.text = "空存档"
-		_time_label.text = "点击保存以占用此槽位"
+		_name_label.text = tr("CODE_GAME_DATA_PANEL_E191E9DFB1")
+		_time_label.text = tr("CODE_GAME_DATA_PANEL_088AAD036F")
 		_load_btn.visible = false
 		_save_btn.visible = true
 		return
@@ -35,13 +35,13 @@ func configure(meta: Dictionary) -> void:
 	_save_uuid = meta.get("uuid", "")
 	Logging.info("GameDataPanel: 配置存档 → uuid=%s, year=%.1f" % [_save_uuid, meta.get("year", 0.0)])
 
-	var name_str: String = meta.get("player_name", "杜甫")
+	var name_str: String = meta.get("player_name", tr("TRES_POET_DUFU_002_NAME_0"))
 	_name_label.text = name_str
 
 	var year: float = meta.get("year", 745.0)
 	var days: int = meta.get("total_days_elapsed", 0)
 	var location: String = meta.get("current_location", "yong_zhou")
-	_time_label.text = "第%dd | %.1f年 | %s" % [days, year, location]
+	_time_label.text = tr("CODE_GAME_DATA_PANEL_B7F0764174") % [days, year, location]
 
 	_load_btn.visible = true
 	_save_btn.visible = true

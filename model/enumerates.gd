@@ -367,12 +367,12 @@ const PLACE_STR_MAP: Dictionary = {
  CHANGAN_PLACES.TAISHAN: "taishan",
 }
 const PLACE_CN_MAP: Dictionary = {
-	"xishi": "西市",
-	"pingkangfang": "平康坊",
-	"huangcheng": "皇城",
-	"taishan": "泰山",
-	"taishan_base": "泰山脚下",
-	"taishan_upper": "泰山上",
+	"xishi": tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"),
+	"pingkangfang": tr("CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54"),
+	"huangcheng": tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A"),
+	"taishan": tr("UI_MAIN_PAGE_TEXT_3"),
+	"taishan_base": tr("TRES_TUT_MEET_TAOIST_NAME_0"),
+	"taishan_upper": tr("CODE_SET_STAY_PLACE_OPERATOR_FAD381D3E4"),
 }
 
 ## CHANGAN_PLACES 枚举 → String key（用于 GameSave 持久化）
@@ -389,7 +389,7 @@ static func from_place_str(s: String) -> CHANGAN_PLACES:
 
 ## String key → 中文名
 static func place_to_cn(s: String) -> String:
-	return PLACE_CN_MAP.get(s, "西市")
+	return PLACE_CN_MAP.get(s, tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"))
 
 # ── 图片位置枚举 (UV 坐标 0.0~1.0) ─────────────────────────
 enum IMAGE_POS {

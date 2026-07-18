@@ -107,7 +107,7 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func operate() -> void:
-	"""将 NPC tag + social_tag 注入 current_action_tags"""
+	""tr("CODE_PICK_NPC_OPERATOR_4645ED88AF")""
 	var npc_tag: String = _captured_context.get(key_stored_context, "")
 
 	if npc_tag.is_empty():
@@ -128,7 +128,7 @@ func operate() -> void:
 
 
 func describe_preview() -> String:
-	var desc = "选人（mode=%s）" % mode
+	var desc = tr("CODE_PICK_NPC_OPERATOR_039C53C7AF") % mode
 	if not state.is_empty():
 		desc += "，state=%s" % state
 	if not social_tag.is_empty():

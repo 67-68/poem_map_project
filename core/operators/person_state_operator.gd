@@ -75,7 +75,7 @@ func operate() -> void:
 func describe_preview() -> String:
 	match mode:
 		"set":
-			return "设置 %s → %s" % [target_key, state]
+			return tr("CODE_PERSON_STATE_OPERATOR_3D01BBC36A") % [target_key, state]
 		"upgrade":
-			return "升级 %s 到下一级" % target_key
+			return tr("CODE_PERSON_STATE_OPERATOR_27212B01DC") % target_key
 	return "person_state(mode=%s)" % mode

@@ -68,7 +68,7 @@ offset_right = 309.0
 offset_bottom = 503.0
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.36862746, 0.09019608, 0, 0.85882354)
-text = "点击人脉按钮查看社交关系"
+text = "UI_RIGHT_INFO_PANEL_TEXT_0"
 autowrap_mode = 1
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=1085748511]
@@ -88,7 +88,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="Panel/V" unique_id=360085244]
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
-text = "风闻"
+text = "UI_RIGHT_INFO_PANEL_TEXT_1"
 
 [node name="InfoGrid" type="VBoxContainer" parent="Panel/V" unique_id=623957139]
 layout_mode = 2
@@ -99,7 +99,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_type_variation = &"DefaultText"
-text = "右相府：「死穴：西市私盐」  「恩义」"
+text = "UI_RIGHT_INFO_PANEL_TEXT_2"
 autowrap_mode = 2
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/V" unique_id=1463732044]
@@ -108,7 +108,7 @@ layout_mode = 2
 [node name="Label3" type="Label" parent="Panel/V" unique_id=762180155]
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
-text = "决议"
+text = "UI_RIGHT_INFO_PANEL_TEXT_3"
 
 [node name="DecisioinScr" parent="Panel/V" unique_id=1783840445 instance=ExtResource("10_j8k2n")]
 custom_minimum_size = Vector2(0, 30)

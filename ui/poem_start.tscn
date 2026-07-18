@@ -35,7 +35,7 @@ offset_top = 18.0
 offset_right = 161.0
 offset_bottom = 42.0
 mouse_filter = 1
-text = "开始创作"
+text = "UI_POEM_START_TEXT_0"
 horizontal_alignment = 1
 vertical_alignment = 1
 

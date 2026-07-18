@@ -64,7 +64,7 @@ func _on_clicked() -> void:
 	if _is_locked:
 		var toast_reason = entity.get_meta("_locked_reason", "") if entity else ""
 		if toast_reason.is_empty():
-			toast_reason = "暂时无法选择此行动"
+			toast_reason = tr("CODE_SUB_ACTION_BUTTON_5DB17E4310")
 		EventBus.request_toast.emit(toast_reason, 1)
 		Logging.info("SubActionButton: 锁定态点击被拦截, entity='%s', reason='%s'" % [entity.name if entity else "null", toast_reason])
 		return

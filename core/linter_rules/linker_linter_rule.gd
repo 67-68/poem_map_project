@@ -3,7 +3,7 @@ class_name LinkerLinterRule extends BaseLinterRule
 ## 只管引用对不对（Trait A 被需求，但有没有人提供？Flag B 被 set，有没有在白名单里？）🤓☝️
 
 func _init():
-	rule_name = "链接检查官"
+	rule_name = tr("CODE_LINKER_LINTER_RULE_805DBF72C7")
 
 func execute(event_data: Node) -> void:
 	errors.clear()
@@ -44,7 +44,7 @@ func _check_trait_supply_demand(all_events: Dictionary) -> void:
 	# 第三阶段：验证供需
 	for trait_uuid in all_trait_reqs:
 		if not trait_uuid in trait_providers or trait_providers[trait_uuid].is_empty():
-			add_error("Trait %s 被需求但没有事件提供" % trait_uuid)
+			add_error(tr("CODE_LINKER_LINTER_RULE_F7EDD1483F") % trait_uuid)
 		else:
 			Logging.info("Trait %s: 由 %d 个事件提供 -> %s" % [trait_uuid, trait_providers[trait_uuid].size(), str(trait_providers[trait_uuid])])
 
@@ -70,7 +70,7 @@ func _check_flag_supply_demand(all_events: Dictionary, flags_dict: Dictionary) -
 	# 第三阶段：验证供需
 	for flag_uuid in all_flag_reqs:
 		if not flag_uuid in flag_providers or flag_providers[flag_uuid].is_empty():
-			add_error("Flag %s 被需求但没有事件提供" % flag_uuid)
+			add_error(tr("CODE_LINKER_LINTER_RULE_A3922B8D57") % flag_uuid)
 		else:
 			Logging.info("Flag %s: 由 %d 个事件提供 -> %s" % [flag_uuid, flag_providers[flag_uuid].size(), str(flag_providers[flag_uuid])])
 

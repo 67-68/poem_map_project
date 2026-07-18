@@ -11,76 +11,76 @@ var time_start := false
 # 年号词典：[起始年份, 结束年份, 年号名称, 使用"年"还是"载"]
 const ERA_TABLE = [
 	# --- 初唐：打天下与贞观之治 ---
-	[618, 627, "武德", "年"], # 唐高祖 李渊
-	[627, 650, "贞观", "年"], # 唐太宗 李世民
-	[650, 656, "永徽", "年"], # 唐高宗 李治 (起手式)
-	[656, 661, "显庆", "年"],
-	[661, 664, "龙朔", "年"],
-	[664, 666, "麟德", "年"],
-	[666, 668, "乾封", "年"],
-	[668, 670, "总章", "年"],
-	[670, 674, "咸亨", "年"],
-	[674, 676, "上元", "年"],
-	[676, 679, "仪凤", "年"],
-	[679, 680, "调露", "年"],
-	[680, 681, "永隆", "年"],
-	[681, 682, "开耀", "年"],
-	[682, 683, "永淳", "年"],
-	[683, 684, "弘道", "年"],
+	[618, 627, tr("CODE_TIME_SERVICE_EF11B5079E"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 唐高祖 李渊
+	[627, 650, tr("CODE_TIME_SERVICE_403E603F8E"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 唐太宗 李世民
+	[650, 656, tr("CODE_TIME_SERVICE_0D5E3BBCFF"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 唐高宗 李治 (起手式)
+	[656, 661, tr("CODE_TIME_SERVICE_E95AAC3C95"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[661, 664, tr("CODE_TIME_SERVICE_F85E33B67D"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[664, 666, tr("CODE_TIME_SERVICE_768FFF6C9D"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[666, 668, tr("CODE_TIME_SERVICE_A496F11152"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[668, 670, tr("CODE_TIME_SERVICE_B2F2889795"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[670, 674, tr("CODE_TIME_SERVICE_13DF179D96"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[674, 676, tr("CODE_TIME_SERVICE_DB90AAFB25"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[676, 679, tr("CODE_TIME_SERVICE_B07BC6AE9A"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[679, 680, tr("CODE_TIME_SERVICE_6EFB5FBAAD"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[680, 681, tr("CODE_TIME_SERVICE_52D8404CDB"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[681, 682, tr("CODE_TIME_SERVICE_8005F72353"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[682, 683, tr("CODE_TIME_SERVICE_65002B56BD"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[683, 684, tr("CODE_TIME_SERVICE_9945881634"), tr("CODE_TIME_SERVICE_62EF900A8F")],
 	# --- 武周代唐：改名狂魔武则天 ---
-	[684, 685, "光宅", "年"], # 此年极乱，嗣圣/文明被我无情抹除了
-	[685, 689, "垂拱", "年"],
-	[689, 690, "永昌", "年"],
-	[690, 692, "天授", "年"], # 就在这年，大唐变成了武周
-	[692, 694, "长寿", "年"],
-	[694, 695, "延载", "年"],
-	[695, 696, "万岁登封", "年"], # 不要问我为什么叫这么中二的名字
-	[696, 697, "万岁通天", "年"],
-	[697, 698, "神功", "年"],
-	[698, 700, "圣历", "年"],
-	[700, 701, "久视", "年"],
-	[701, 705, "长安", "年"],
+	[684, 685, tr("CODE_TIME_SERVICE_DB1ED4AFEC"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 此年极乱，嗣圣/文明被我无情抹除了
+	[685, 689, tr("CODE_TIME_SERVICE_94C28C1B7D"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[689, 690, tr("CODE_TIME_SERVICE_4CE0CCE1D6"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[690, 692, tr("CODE_TIME_SERVICE_A032500609"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 就在这年，大唐变成了武周
+	[692, 694, tr("CODE_TIME_SERVICE_EE29E8AAA4"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[694, 695, tr("CODE_TIME_SERVICE_997643A9ED"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[695, 696, tr("CODE_TIME_SERVICE_E0A29CB71B"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 不要问我为什么叫这么中二的名字
+	[696, 697, tr("CODE_TIME_SERVICE_AE6E896497"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[697, 698, tr("CODE_TIME_SERVICE_F26B3DA78A"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[698, 700, tr("CODE_TIME_SERVICE_08B1AD763F"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[700, 701, tr("CODE_TIME_SERVICE_6C5C004D20"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[701, 705, tr("CODE_TIME_SERVICE_1F1F9CFE35"), tr("CODE_TIME_SERVICE_62EF900A8F")],
 	# --- 盛唐：复辟与极盛 ---
-	[705, 707, "神龙", "年"], # 神龙政变，唐中宗复辟
-	[707, 710, "景龙", "年"],
-	[710, 712, "景云", "年"], # 唐睿宗
-	[712, 713, "先天", "年"], # 唐玄宗 李隆基上号
-	[713, 742, "开元", "年"], # 最牛逼的时代来了
+	[705, 707, tr("CODE_TIME_SERVICE_76B14E9510"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 神龙政变，唐中宗复辟
+	[707, 710, tr("CODE_TIME_SERVICE_7F0F044408"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[710, 712, tr("CODE_TIME_SERVICE_6433E7CCD9"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 唐睿宗
+	[712, 713, tr("CODE_TIME_SERVICE_20CFB0C092"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 唐玄宗 李隆基上号
+	[713, 742, tr("CODE_TIME_SERVICE_EBEE17546E"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 最牛逼的时代来了
 	# --- 中唐：安史之乱与藩镇割据 ---
-	[742, 756, "天宝", "载"], # 唯一用"载"的时代开始了
-	[756, 758, "至德", "载"], # 肃宗在灵武登基，继续用"载"
-	[758, 760, "乾元", "年"], # 恢复用"年"
-	[760, 762, "上元", "年"],
-	[762, 763, "宝应", "年"], # 代宗
-	[763, 765, "广德", "年"],
-	[765, 766, "永泰", "年"],
-	[766, 780, "大历", "年"],
-	[780, 784, "建中", "年"], # 德宗
-	[784, 785, "兴元", "年"],
-	[785, 805, "贞元", "年"],
-	[805, 806, "永贞", "年"], # 顺宗 (二王八司马事件)
-	[806, 821, "元和", "年"], # 宪宗 (元和中兴)
+	[742, 756, tr("CODE_TIME_SERVICE_A3812802ED"), tr("CODE_TIME_SERVICE_42C209DA45")], # 唯一用tr("CODE_TIME_SERVICE_42C209DA45")的时代开始了
+	[756, 758, tr("CODE_TIME_SERVICE_3E78DF1CAF"), tr("CODE_TIME_SERVICE_42C209DA45")], # 肃宗在灵武登基，继续用tr("CODE_TIME_SERVICE_42C209DA45")
+	[758, 760, tr("CODE_TIME_SERVICE_586BDF6287"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 恢复用tr("CODE_TIME_SERVICE_62EF900A8F")
+	[760, 762, tr("CODE_TIME_SERVICE_DB90AAFB25"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[762, 763, tr("CODE_TIME_SERVICE_820487222A"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 代宗
+	[763, 765, tr("CODE_TIME_SERVICE_143A14DCBD"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[765, 766, tr("CODE_TIME_SERVICE_BE459DFCE3"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[766, 780, tr("CODE_TIME_SERVICE_2A3DCD2909"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[780, 784, tr("CODE_TIME_SERVICE_95A8ABDB21"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 德宗
+	[784, 785, tr("CODE_TIME_SERVICE_44D1B109F0"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[785, 805, tr("CODE_TIME_SERVICE_BC72E0C796"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[805, 806, tr("CODE_TIME_SERVICE_996CA5380A"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 顺宗 (二王八司马事件)
+	[806, 821, tr("CODE_TIME_SERVICE_F9160160E9"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 宪宗 (元和中兴)
 	# --- 晚唐：牛李党争与宦官专权 ---
-	[821, 825, "长庆", "年"], # 穆宗
-	[825, 827, "宝历", "年"], # 敬宗
-	[827, 836, "太和", "年"], # 文宗 (甘露之变)
-	[836, 841, "开成", "年"],
-	[841, 847, "会昌", "年"], # 武宗 (会昌灭佛)
-	[847, 860, "大中", "年"], # 宣宗 (大中之治)
-	[860, 874, "咸通", "年"], # 懿宗
-	[874, 880, "乾符", "年"], # 僖宗 (黄巢起义开始)
-	[880, 881, "广明", "年"],
-	[881, 885, "中和", "年"],
-	[885, 888, "光启", "年"],
-	[888, 889, "文德", "年"],
+	[821, 825, tr("CODE_TIME_SERVICE_52EB72A19A"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 穆宗
+	[825, 827, tr("CODE_TIME_SERVICE_AB0C667C28"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 敬宗
+	[827, 836, tr("CODE_TIME_SERVICE_BD75E4D1F4"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 文宗 (甘露之变)
+	[836, 841, tr("CODE_TIME_SERVICE_CE70CDD370"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[841, 847, tr("CODE_TIME_SERVICE_94C832BD32"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 武宗 (会昌灭佛)
+	[847, 860, tr("CODE_TIME_SERVICE_C035071BB3"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 宣宗 (大中之治)
+	[860, 874, tr("CODE_TIME_SERVICE_14A8C51CF5"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 懿宗
+	[874, 880, tr("CODE_TIME_SERVICE_DF16A52314"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 僖宗 (黄巢起义开始)
+	[880, 881, tr("CODE_TIME_SERVICE_622C678144"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[881, 885, tr("CODE_TIME_SERVICE_FB3F2583E0"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[885, 888, tr("CODE_TIME_SERVICE_8DFE461005"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[888, 889, tr("CODE_TIME_SERVICE_C01217EA48"), tr("CODE_TIME_SERVICE_62EF900A8F")],
 	# --- 终局：大厦将倾 ---
-	[889, 890, "龙纪", "年"], # 昭宗
-	[890, 892, "大顺", "年"],
-	[892, 894, "景福", "年"],
-	[894, 898, "乾宁", "年"],
-	[898, 901, "光化", "年"],
-	[901, 904, "天复", "年"],
-	[904, 907, "天祐", "年"]  # 哀帝 (907年被朱温篡位，大唐剧终)
+	[889, 890, tr("CODE_TIME_SERVICE_806479BBE5"), tr("CODE_TIME_SERVICE_62EF900A8F")], # 昭宗
+	[890, 892, tr("CODE_TIME_SERVICE_EBACEF51CD"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[892, 894, tr("CODE_TIME_SERVICE_4CE22F0D8E"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[894, 898, tr("CODE_TIME_SERVICE_EDEB19DEA2"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[898, 901, tr("CODE_TIME_SERVICE_205BE8D289"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[901, 904, tr("CODE_TIME_SERVICE_2B7437DCC3"), tr("CODE_TIME_SERVICE_62EF900A8F")],
+	[904, 907, tr("CODE_TIME_SERVICE_43283C362D"), tr("CODE_TIME_SERVICE_62EF900A8F")]  # 哀帝 (907年被朱温篡位，大唐剧终)
 ]
 
 # 1. 史书全卷 (Master Database)：只读，永远不删元素
@@ -100,7 +100,7 @@ var _tick_checkpoint: int:
 	set(val): GameSave.data.tick_checkpoint = val
 
 var current_day_of_year :int = 0
-var current_xun := "上旬"
+var current_xun := tr("UI_TIME_CONTROL_PANEL_TEXT_2")
 var current_day := 1
 const DAYS_PER_YEAR: int = 360 # 标准化历法，一年 360 天，每月 30 天
 
@@ -316,7 +316,7 @@ func resume_world():
 # --- 年号相关静态方法 ---
 # 将年份转换为年号文本的静态方法
 func get_era_text(year: int) -> String:
-	var era_text = "未知年号"
+	var era_text = tr("CODE_TIME_SERVICE_A00C2A7703")
 	for era in ERA_TABLE:
 		if year >= era[0] and year <= era[1]:
 			var era_year_num = year - era[0] + 1
@@ -329,15 +329,15 @@ func get_era_text(year: int) -> String:
 
 # 一个简单的数字转中文辅助函数（1-99够用了）
 func _get_chinese_number(num: int) -> String:
-	if num == 1: return "元" # 第一年永远叫元年/元载
+	if num == 1: return tr("CODE_TIME_SERVICE_7F77F23AF7") # 第一年永远叫元年/元载
 	
-	var digits = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]
+	var digits = ["", tr("CODE_TIME_SERVICE_51A75F4634"), tr("CODE_TIME_SERVICE_084B42F6E9"), tr("CODE_TIME_SERVICE_A4C3313DEB"), tr("CODE_TIME_SERVICE_754A9D5828"), tr("CODE_TIME_SERVICE_C9B87F516A"), tr("CODE_TIME_SERVICE_DE07B53838"), tr("CODE_TIME_SERVICE_1B0542878C"), tr("CODE_TIME_SERVICE_2C467D3673"), tr("CODE_TIME_SERVICE_DF897DA6E0"), tr("CODE_TIME_SERVICE_FC7EDD399A")]
 	if num <= 10: return digits[num]
-	if num < 20: return "十" + digits[num % 10]
+	if num < 20: return tr("CODE_TIME_SERVICE_FC7EDD399A") + digits[num % 10]
 	
 	var tens = num / 10.0
 	var ones = num % 10
-	var res = digits[int(tens)] + "十"
+	var res = digits[int(tens)] + tr("CODE_TIME_SERVICE_FC7EDD399A")
 	if ones > 0: res += digits[ones]
 	return res
 
@@ -377,11 +377,11 @@ func get_xun_text(day: int) -> String:
 	var b2 := 2 * dp_xun - 1
 	var b3 := 3 * dp_xun - 1
 	if day == b2:
-		return "中旬"
+		return tr("CODE_TIME_SERVICE_FEAEC3E70D")
 	elif day == b3:
-		return "下旬"
+		return tr("CODE_TIME_SERVICE_475BAB9FD8")
 	else:
-		return "上旬"
+		return tr("UI_TIME_CONTROL_PANEL_TEXT_2")
 
 func get_master_timeline() -> Array:
 	"""

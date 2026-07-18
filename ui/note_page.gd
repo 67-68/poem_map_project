@@ -68,13 +68,13 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func refresh_list() -> void:
-	"""刷新左侧笔记列表 + 更新 NoteAmount"""
+	""tr("CODE_NOTE_PAGE_5256C46E1D")""
 	var triggered: Array[Note] = NoteManager.get_triggered_notes()
 
 	# 更新数量标签
 	var total: int = NoteManager.get_total_count()
 	var triggered_count: int = triggered.size()
-	_note_amount_label.text = "已触发 %d/%d 篇笔记" % [triggered_count, total]
+	_note_amount_label.text = tr("CODE_NOTE_PAGE_4B713DD25B") % [triggered_count, total]
 
 	# 清空旧的按钮列表
 	for child in _note_list_container.get_children():
@@ -106,7 +106,7 @@ func refresh_list() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _on_note_btn_pressed(note_uuid: String) -> void:
-	"""左侧笔记按钮点击 → 右侧展示详情"""
+	""tr("CODE_NOTE_PAGE_6FAAC7AB6E")""
 	var note: Note = NoteManager.get_note(note_uuid)
 	if note == null:
 		Logging.warn("[NotePage] 选中笔记但未找到: uuid=%s" % note_uuid)
@@ -115,7 +115,7 @@ func _on_note_btn_pressed(note_uuid: String) -> void:
 
 
 func _show_note_detail(note: Note) -> void:
-	"""填充右侧详情面板"""
+	""tr("CODE_NOTE_PAGE_C80B8A993F")""
 	# 隐藏占位，显示详情
 	_placeholder.visible = false
 	_demon_title.visible = true
@@ -126,7 +126,7 @@ func _show_note_detail(note: Note) -> void:
 	_note_logical.visible = true
 
 	# Note.name → DemonTitle
-	_demon_title.text = note.name if not note.name.is_empty() else "（未命名笔记）"
+	_demon_title.text = note.name if not note.name.is_empty() else tr("CODE_NOTE_PAGE_BAC59007BF")
 
 	# Note.description → DemonPoem（诗词片段）
 	_demon_poem.text = note.description if not note.description.is_empty() else ""
@@ -144,7 +144,7 @@ func _show_note_detail(note: Note) -> void:
 
 
 func _show_placeholder() -> void:
-	"""无已触发笔记时显示待触发占位"""
+	""tr("CODE_NOTE_PAGE_6BDBAF77F8")""
 	_demon_title.visible = false
 	_demon_poem.visible = false
 	_demon_description.visible = false
@@ -152,7 +152,7 @@ func _show_placeholder() -> void:
 	_note_narrative.visible = false
 	_note_logical.visible = false
 	_placeholder.visible = true
-	_placeholder.text = "暂无可查看的笔记"
+	_placeholder.text = tr("UI_NOTE_PAGE_TEXT_7")
 	Logging.info("[NotePage] 无已触发笔记，显示待触发占位")
 
 

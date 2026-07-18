@@ -6,7 +6,7 @@ extends VBoxContainer
 
 func _ready():
 	command_input.text_submitted.connect(_on_command_submitted)
-	_log("[color=yellow][b]⚔️ 大唐数值资产控制台已挂载。输入 'help' 查看可用指令。[/b][/color]")
+	_log(tr("CODE_LINTER_CONSOLE_E79CC36346"))
 
 func _on_command_submitted(new_text: String):
 	var cmd = new_text.strip_edges().to_lower()
@@ -16,18 +16,18 @@ func _on_command_submitted(new_text: String):
 	
 	match cmd:
 		"help":
-			_log("[color=cyan]fetch[/color] - 从云端同步原始 CSV 资产")
-			_log("[color=cyan]lint[/color]  - 执行数据完整性与永动机漏洞静态扫描")
-			_log("[color=cyan]bake[/color]  - 将原始数据分流打包为 O(1) .tres 运行时数据库")
+			_log(tr("CODE_LINTER_CONSOLE_2F8ABC3F69"))
+			_log(tr("CODE_LINTER_CONSOLE_78294FDE39"))
+			_log(tr("CODE_LINTER_CONSOLE_89A8022B7B"))
 		"clear":
 			output_log.clear()
 		"fetch":
-			_log("[color=green]🚀 开始执行异步链式下载...[/color]")
+			_log(tr("CODE_LINTER_CONSOLE_BFCDCC4442"))
 			# 这里可以无缝调用你之前写好的 DATA_MANIFEST 队列逻辑！
 		"lint":
-			_log("[color=red][b]😡 [Linter Error] 发现永动机选项！事件 [event_9527] 消耗时间为0却提供奖励！[/b][/color]")
+			_log(tr("CODE_LINTER_CONSOLE_FA600D9974"))
 		_:
-			_log("[color=magenta]💀 未知指令。输入 'help' 获取救赎。[/color]")
+			_log(tr("CODE_LINTER_CONSOLE_03C60BBCBB"))
 
 func _log(text: String):
 	output_log.append_text(text + "\n")

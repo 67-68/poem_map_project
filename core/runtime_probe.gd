@@ -113,7 +113,7 @@ func _handle_request(peer: StreamPeerTCP, request: Dictionary) -> void:
 	if request["method"] != "GET":
 		_send_http_response(peer, 405, JSON.stringify({
 			"error": "Method Not Allowed",
-			"message": "本探针仅接受 GET 请求。"
+			"message": tr("CODE_RUNTIME_PROBE_D15CF5899A")
 		}))
 		return
 
@@ -145,7 +145,7 @@ func _handle_request(peer: StreamPeerTCP, request: Dictionary) -> void:
 		_:
 			_send_http_response(peer, 404, JSON.stringify({
 				"error": "Not Found",
-				"message": "未知端点。可用端点: /api/scene_tree, /api/game_state, /api/event_system, /api/logs",
+				"message": tr("CODE_RUNTIME_PROBE_7F961B96F1"),
 				"available_endpoints": ["/api/scene_tree", "/api/game_state", "/api/event_system", "/api/logs"]
 			}))
 
@@ -201,7 +201,7 @@ static func _send_http_response(peer: StreamPeerTCP, status_code: int, body: Str
 # ─────────────────────────────────────────────────────────────────────────────
 func _serialize_scene_tree() -> String:
 	if not is_inside_tree():
-		return JSON.stringify({"error": "RuntimeProbe 尚未挂入场景树"})
+		return JSON.stringify({"error": tr("CODE_RUNTIME_PROBE_E73103FE03")})
 
 	var root := get_tree().root
 	var data := _serialize_node(root, 0)
@@ -259,7 +259,7 @@ func _serialize_game_state() -> String:
 	var gs := GameState    # Autoload
 
 	if not ps or not gs:
-		return JSON.stringify({"error": "PlayerState 或 GameState Autoload 不可用"})
+		return JSON.stringify({"error": tr("CODE_RUNTIME_PROBE_DF6CDFCE02")})
 
 	# 收集所有属性统计值
 	var stats := {}
@@ -332,7 +332,7 @@ func _serialize_event_system() -> String:
 	var em := EventManager  # Autoload
 
 	if not em:
-		return JSON.stringify({"error": "EventManager Autoload 不可用"})
+		return JSON.stringify({"error": tr("CODE_RUNTIME_PROBE_52A3654848")})
 
 	# 序列化当前签筒
 	var event_pool_data: Array[Dictionary] = []

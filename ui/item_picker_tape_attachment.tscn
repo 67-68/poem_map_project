@@ -29,7 +29,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.42, 0.31, 1)
 theme_override_fonts/font = ExtResource("2_26bj5")
 theme_override_font_sizes/font_size = 18
-text = "【选择物品】"
+text = "UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_0"
 horizontal_alignment = 1
 
 [node name="LinkButton" type="LinkButton" parent="HBox"]
@@ -40,7 +40,7 @@ theme_override_colors/font_color = Color(0.7071239, 0.66651803, 0.6636292, 1)
 theme_override_fonts/font = ExtResource("2_26bj5")
 theme_override_font_sizes/font_size = 14
 theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
-text = "不回答"
+text = "UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_1"
 
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
@@ -48,7 +48,7 @@ layout_mode = 2
 [node name="HintLabel" type="Label" parent="."]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.42, 0.31, 1)
-text = "请选择一项"
+text = "UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_2"
 horizontal_alignment = 1
 
 [node name="ListPanel" type="VBoxContainer" parent="."]
@@ -63,4 +63,4 @@ layout_mode = 2
 [node name="ConfirmButton" type="Button" parent="."]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "确认"
+text = "UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_3"

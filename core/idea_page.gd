@@ -88,7 +88,7 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func refresh_all() -> void:
-	"""刷新所有栏位的数据"""
+	""tr("CODE_IDEA_PAGE_EC97C1482B")""
 	Logging.info("[IdeaPage] refresh_all")
 
 	_refresh_slot_buttons()
@@ -101,7 +101,7 @@ func refresh_all() -> void:
 
 
 func _refresh_slot_buttons() -> void:
-	"""刷新左栏 5 个槽位（已解锁理念）"""
+	""tr("CODE_IDEA_PAGE_27819FC258")""
 	var unlocked: Array[String] = GameSave.data.current_unlock_ideas
 
 	for i in range(_slot_btns.size()):
@@ -112,15 +112,15 @@ func _refresh_slot_buttons() -> void:
 				btn.text = idea.name if not idea.name.is_empty() else idea.uuid
 				btn.disabled = false
 			else:
-				btn.text = "（未知）"
+				btn.text = tr("CODE_IDEA_PAGE_90A49E5099")
 				btn.disabled = true
 		else:
-			btn.text = "空槽位"
+			btn.text = tr("UI_IDEA_PAGE_TEXT_5")
 			btn.disabled = true
 
 
 func _refresh_candidate_pool() -> void:
-	"""刷新右栏候选理念池（Database.ideas - 已解锁 - 冲突检测）"""
+	""tr("CODE_IDEA_PAGE_06953F3F53")""
 	Logging.info("[IdeaPage] _refresh_candidate_pool: Database.ideas=%s" % str(Database.ideas.keys()))
 	# 清除旧的 IdeaBtn
 	for child in _candidate_container.get_children():
@@ -161,18 +161,18 @@ func _refresh_candidate_pool() -> void:
 			btn_instance.pressed.connect(_on_candidate_pressed.bind(uuid))
 
 	if not any_available:
-		_candidate_hint.text = "暂无可用理念"
+		_candidate_hint.text = tr("CODE_IDEA_PAGE_0127C5A788")
 	else:
-		_candidate_hint.text = "点击选择理念"
+		_candidate_hint.text = tr("UI_IDEA_PAGE_TEXT_8")
 
 
 func _describe_counter(idea: Idea) -> String:
-	"""描述理念的 counter_idea 关系（无冲突时显示潜在互斥）"""
+	""tr("CODE_IDEA_PAGE_693D8DE286")""
 	if idea.counter_idea.is_empty():
 		return ""
 	var counter = Database.get_idea(idea.counter_idea)
 	if counter:
-		return "与「%s」互斥" % (counter.name if not counter.name.is_empty() else counter.uuid)
+		return tr("CODE_IDEA_PAGE_A440FE94DB") % (counter.name if not counter.name.is_empty() else counter.uuid)
 	return ""
 
 
@@ -189,16 +189,16 @@ func _check_conflict(idea: Idea, unlocked: Array[String]) -> String:
 			continue
 		# 正向：候选的 counter_idea == 已解锁理念的 uuid
 		if not idea.counter_idea.is_empty() and unlocked_idea.uuid == idea.counter_idea:
-			return "%s：与「%s」冲突" % [unlocked_idea.name if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, idea.name if not idea.name.is_empty() else idea.uuid]
+			return tr("CODE_IDEA_PAGE_811A80B78E") % [unlocked_idea.name if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, idea.name if not idea.name.is_empty() else idea.uuid]
 		# 反向：已解锁理念的 counter_idea == 候选理念的 uuid
 		if not unlocked_idea.counter_idea.is_empty() and unlocked_idea.counter_idea == idea.uuid:
-			return "%s：与「%s」冲突" % [unlocked_idea.name if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, idea.name if not idea.name.is_empty() else idea.uuid]
+			return tr("CODE_IDEA_PAGE_811A80B78E") % [unlocked_idea.name if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, idea.name if not idea.name.is_empty() else idea.uuid]
 
 	return ""
 
 
 func _on_slot_pressed(index: int) -> void:
-	"""左栏槽位点击：选中已解锁理念"""
+	""tr("CODE_IDEA_PAGE_42BB022322")""
 	var unlocked: Array[String] = GameSave.data.current_unlock_ideas
 	if index < unlocked.size():
 		_selected_idea_uuid = unlocked[index]
@@ -213,9 +213,9 @@ func _on_candidate_pressed(uuid: String) -> void:
 
 
 func _show_detail_for_selected() -> void:
-	"""根据 _selected_idea_uuid 填充中栏详情"""
+	""tr("CODE_IDEA_PAGE_65257D423A")""
 	if _selected_idea_uuid.is_empty():
-		_detail_title.text = "选择一个理念"
+		_detail_title.text = tr("UI_IDEA_PAGE_TEXT_7")
 		_clear_effect_lines()
 		_upgrade_btn.text = ""
 		_upgrade_btn.disabled = true
@@ -223,7 +223,7 @@ func _show_detail_for_selected() -> void:
 
 	var idea = Database.get_idea(_selected_idea_uuid)
 	if not idea:
-		_detail_title.text = "（理念未找到）"
+		_detail_title.text = tr("CODE_IDEA_PAGE_7705E3690F")
 		_clear_effect_lines()
 		_upgrade_btn.text = ""
 		_upgrade_btn.disabled = true
@@ -232,9 +232,9 @@ func _show_detail_for_selected() -> void:
 	# 标题：理念名称
 	var owner_text := ""
 	if GameSave.data.current_unlock_ideas.has(idea.uuid):
-		owner_text = idea.name if not idea.name.is_empty() else "未知理念"
+		owner_text = idea.name if not idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
 	else:
-		owner_text = idea.name if not idea.name.is_empty() else "未知理念"
+		owner_text = idea.name if not idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
 	_detail_title.text = owner_text
 
 	# 效果描述：遍历 idea_demonstrations 显示已解锁/未解锁的条
@@ -261,25 +261,25 @@ func _show_detail_for_selected() -> void:
 
 	if not is_owned:
 		# 未拥有：获取入口（加入槽位 → level -1 → 自动升到 0）
-		_upgrade_btn.text = "获取「%s」？消耗 %d点%s" % [idea.name if not idea.name.is_empty() else idea.uuid, cost_amount, cost_name]
+		_upgrade_btn.text = tr("CODE_IDEA_PAGE_D89BCCFDA0") % [idea.name if not idea.name.is_empty() else idea.uuid, cost_amount, cost_name]
 		if current_val < cost_amount:
-			_upgrade_btn.text += "（不足）"
+			_upgrade_btn.text += tr("CODE_IDEA_PAGE_EC45DBDF25")
 			_upgrade_btn.disabled = true
 	else:
 		var next_level = idea.current_idea_level + 1
 		if next_level >= idea.idea_buffs.size():
 			# 已满级
-			_upgrade_btn.text = "已满级"
+			_upgrade_btn.text = tr("CODE_IDEA_PAGE_D6D8E1DE4A")
 			_upgrade_btn.disabled = true
 		else:
-			_upgrade_btn.text = "解锁效果%d？消耗 %d点%s" % [next_level + 1, cost_amount, cost_demonstration]
+			_upgrade_btn.text = tr("CODE_IDEA_PAGE_28231E903A") % [next_level + 1, cost_amount, cost_demonstration]
 			if current_val < cost_amount:
-				_upgrade_btn.text += "（不足）"
+				_upgrade_btn.text += tr("CODE_IDEA_PAGE_EC45DBDF25")
 				_upgrade_btn.disabled = true
 
 
 func _on_upgrade_pressed() -> void:
-	"""升级/获取按钮点击：消耗资源 + 加入槽位/提升理念等级"""
+	""tr("CODE_IDEA_PAGE_9E946767B7")""
 	if _selected_idea_uuid.is_empty():
 		return
 
@@ -331,13 +331,13 @@ func _on_upgrade_pressed() -> void:
 
 
 func _clear_effect_lines() -> void:
-	"""清除效果列所有 Label（保留 EffectsContainer 自身）"""
+	""tr("CODE_IDEA_PAGE_8CE5EBD06A")""
 	for child in _detail_effects_container.get_children():
 		child.queue_free()
 
 
 func _is_idea_available(uuid: String) -> bool:
-	"""检查理念是否仍然可访问（在已解锁或 Database 中）"""
+	""tr("CODE_IDEA_PAGE_913DD190F6")""
 	if GameSave.data.current_unlock_ideas.has(uuid):
 		return true
 	if Database.ideas.has(uuid):
@@ -346,7 +346,7 @@ func _is_idea_available(uuid: String) -> bool:
 
 
 func _on_idea_data_changed() -> void:
-	"""外部调用：当获得新理念或理念数据变化时刷新页面"""
+	""tr("CODE_IDEA_PAGE_1D52523402")""
 	refresh_all()
 
 

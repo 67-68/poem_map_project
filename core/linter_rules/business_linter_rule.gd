@@ -3,7 +3,7 @@ class_name BusinessLinterRule extends BaseLinterRule
 ## 专门负责校验策划的业务规则（拿了好处必须消耗时间等）🤓☝️
 
 func _init():
-	rule_name = "业务规则检查官"
+	rule_name = tr("CODE_BUSINESS_LINTER_RULE_4FE69FE119")
 
 func execute(event_data: Node) -> void:
 	errors.clear()
@@ -78,7 +78,7 @@ func _check_single_option(option: Variant, event_uuid: String, violations: Array
 	
 	if has_positive_result and not has_time_operator:
 		var option_desc = option.get("description") if option.has_method("get") else option.description if "description" in option else "unknown"
-		violations.append("事件 %s 的选项 '%s' 有结果但没有时间推动" % [event_uuid, option_desc])
+		violations.append(tr("CODE_BUSINESS_LINTER_RULE_96E1440EBB") % [event_uuid, option_desc])
 
 ## 递归检查对象中是否包含TimeOperator
 func _has_time_operator(obj: Variant) -> bool:
@@ -171,31 +171,31 @@ func _validate_event_operators_recursive(obj: Variant, event_uuid: String, error
 			return  # str_traits设置正确，无需检查枚举
 		var trait_key = obj.get("_trait_key")
 		if trait_key == null:
-			errors.append("事件 %s 的TraitOperator缺少str_traits和_trait_key设置" % event_uuid)
+			errors.append(tr("CODE_BUSINESS_LINTER_RULE_5501701ABA") % event_uuid)
 		return
 	
 	# 🤓☝️ 鸭子类型：检查TraitReplaceOperator（具有_replace_other_trait和_to_be_replaced_trait属性，仅对Object类型）
 	if obj is Object and obj.has_method("get") and obj.get("_replace_other_trait") != null:
 		var replace_other = obj.get("_replace_other_trait")
 		if replace_other == null:
-			errors.append("事件 %s 的TraitReplaceOperator缺少_replace_other_trait设置" % event_uuid)
+			errors.append(tr("CODE_BUSINESS_LINTER_RULE_C3F663CE96") % event_uuid)
 		var to_be_replaced = obj.get("_to_be_replaced_trait")
 		if to_be_replaced == null:
-			errors.append("事件 %s 的TraitReplaceOperator缺少_to_be_replaced_trait设置" % event_uuid)
+			errors.append(tr("CODE_BUSINESS_LINTER_RULE_F3604B2778") % event_uuid)
 		return
 	
 	# 🤓☝️ 鸭子类型：检查FlagOperator（具有flag_id属性，仅对Object类型）
 	if obj is Object and obj.has_method("get") and obj.get("flag_id") != null:
 		var flag_id = obj.get("flag_id")
 		if flag_id is String and flag_id.is_empty():
-			errors.append("事件 %s 的FlagOperator缺少flag_id设置" % event_uuid)
+			errors.append(tr("CODE_BUSINESS_LINTER_RULE_5B18B68CBF") % event_uuid)
 		return
 	
 	# 🤓☝️ 鸭子类型：检查PropertyOperator（具有property属性，仅对Object类型）
 	if obj is Object and obj.has_method("get") and obj.get("property") != null:
 		var property = obj.get("property")
 		if property is String and property.is_empty():
-			errors.append("事件 %s 的PropertyOperator缺少property设置" % event_uuid)
+			errors.append(tr("CODE_BUSINESS_LINTER_RULE_05E50861A1") % event_uuid)
 		return
 	
 	# 递归检查字典

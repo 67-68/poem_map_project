@@ -85,7 +85,7 @@ func _register_trait_hover(trait_data: Trait) -> void:
 ## 软 trait fallback：构建简单文本注册到 HoverPopupManager。
 func _register_trait_hover_fallback(trait_key: String, display_name: String) -> void:
 	HoverPopupManager.unregister(self)
-	var hint: String = "【%s】\n（未注册的软特质，无详细效果数据）" % display_name
+	var hint: String = tr("CODE_TRAIT_DEMONSTRATOR_4D0041FE1D") % display_name
 	HoverPopupManager.register(self, {"narrative": hint, "vector": ""}, 0.4, 0.75, HoverPopupManager.FlowType.SLIDE_FROM_LEFT)
 	Logging.info("TraitDemonstrator._register_trait_hover_fallback: 注册成功 for '%s'" % trait_key)
 

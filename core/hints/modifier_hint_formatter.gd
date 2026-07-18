@@ -30,9 +30,9 @@ static func build_effects_hint() -> String:
 	Logging.debug("ModifierHintFormatter.build_effects_hint: grouped %d source_props" % grouped.size())
 
 	var prop_display_names := {
-		"astuteness": "城府",
-		"talent": "才华",
-		"composure": "定力",
+		"astuteness": tr("TRES_ASTUTENESS_NAME_0"),
+		"talent": tr("CODE_MODIFIER_HINT_FORMATTER_0288A3D9E2"),
+		"composure": tr("TRES_COMPOSURE_NAME_0"),
 	}
 
 	var empty_count := 0
@@ -107,9 +107,9 @@ static func build_single_prop_effects(source_prop: String) -> Array[String]:
 		return lines
 
 	var prop_display_names := {
-		"astuteness": "城府",
-		"talent": "才华",
-		"composure": "定力",
+		"astuteness": tr("TRES_ASTUTENESS_NAME_0"),
+		"talent": tr("CODE_MODIFIER_HINT_FORMATTER_0288A3D9E2"),
+		"composure": tr("TRES_COMPOSURE_NAME_0"),
 	}
 	var display_name = prop_display_names.get(source_prop, source_prop)
 

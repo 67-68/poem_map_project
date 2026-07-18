@@ -93,7 +93,7 @@ func _refresh_time_left() -> void:
 ## 与 NPCDocument.appear_days (同样 0-based) 对应。
 func _refresh_day_label() -> void:
 	var day_zero_based: int = TimeService.current_day
-	label_day.text = "第%d天" % (day_zero_based + 1)
+	label_day.text = tr("CODE_TIME_CONTROL_PANEL_670AC1B359") % (day_zero_based + 1)
 
 ## 🆕 强制刷新所有时间显示（年份/年号/旬/天）。
 func refresh() -> void:
@@ -112,7 +112,7 @@ func _on_year_changed(current_float_year: float):
 	var current_month = int(floor((current_float_year - current_year) * 12.0)) + 1
 	
 	# 1. 更新公元小字 (直白，功能性)
-	label_greg.text = "公元 %d 年 %d 月" % [current_year, current_month]
+	label_greg.text = tr("CODE_TIME_CONTROL_PANEL_479D71C5EB") % [current_year, current_month]
 	
 	# 2. 查表计算大唐年号 (氛围，沉浸感)
 	label_era.text = TimeService.get_era_text(current_year)

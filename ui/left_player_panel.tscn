@@ -30,7 +30,7 @@ layout_mode = 2
 [node name="NameLabel" type="Label" parent="Panel/VBox" unique_id=542808679]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "杜甫[字子美]"
+text = "UI_LEFT_PLAYER_PANEL_TEXT_0"
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBox" unique_id=289461836]
@@ -78,7 +78,7 @@ grow_vertical = 2
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.54509807, 0.14509805, 0, 1)
 theme_override_font_sizes/font_size = 11
-text = "距离大考还剩: -- 旬"
+text = "UI_LEFT_PLAYER_PANEL_TEXT_1"
 horizontal_alignment = 1
 
 [node name="Label" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1735738424]
@@ -86,7 +86,7 @@ layout_mode = 2
 size_flags_horizontal = 7
 theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
-text = "京兆府·举子"
+text = "UI_LEFT_PLAYER_PANEL_TEXT_2"
 horizontal_alignment = 1
 
 [node name="PlaceLabel" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1375808321]
@@ -94,7 +94,7 @@ layout_mode = 2
 size_flags_horizontal = 7
 theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
-text = "东市：李白在此"
+text = "UI_LEFT_PLAYER_PANEL_TEXT_3"
 horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 5
@@ -105,7 +105,7 @@ layout_mode = 2
 [node name="Prop2" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=126398624]
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
-text = "特质"
+text = "UI_LEFT_PLAYER_PANEL_TEXT_4"
 
 [node name="TraitGrid" type="GridContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=1030034591]
 layout_mode = 2
@@ -117,7 +117,7 @@ layout_mode = 2
 [node name="Prop" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1291814332]
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
-text = "政略主权"
+text = "UI_LEFT_PLAYER_PANEL_TEXT_5"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=1711015811]
 layout_mode = 2
@@ -140,7 +140,7 @@ layout_mode = 2
 [node name="Label2" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=115869624]
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
-text = "底层修饰"
+text = "UI_LEFT_PLAYER_PANEL_TEXT_6"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=2042948336]
 layout_mode = 2

@@ -63,7 +63,7 @@ offset_left = -8.0
 offset_top = -40.0
 grow_horizontal = 0
 grow_vertical = 0
-text = "退出观测"
+text = "UI_TOMB_STONE_SCREEN_TEXT_0"
 
 [node name="UISoundComponent" type="Node" parent="ColorRect/Button"]
 script = ExtResource("3_sfx")

@@ -70,9 +70,9 @@ func describe_preview() -> String:
         return trait_key
     var cn_name = trait_obj.name if not trait_obj.name.is_empty() else trait_key
     if operator == REQ_OPERATOR.CRUD.ADD:
-        return "获得「%s」" % cn_name
+        return tr("CODE_TRAIT_OPERATOR_587CC92918") % cn_name
     elif operator == REQ_OPERATOR.CRUD.REMOVE:
-        return "失去「%s」" % cn_name
+        return tr("CODE_TRAIT_OPERATOR_9DBEC35E50") % cn_name
     return ""
 
 func _emit_float_text(trait_name: String) -> void:

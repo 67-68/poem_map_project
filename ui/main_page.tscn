@@ -114,7 +114,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.3137255)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 bbcode_enabled = true
-text = "京"
+text = "UI_MAIN_PAGE_TEXT_0"
 fit_content = true
 scroll_active = false
 
@@ -140,7 +140,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.3137255)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 bbcode_enabled = true
-text = "隐"
+text = "UI_MAIN_PAGE_TEXT_1"
 fit_content = true
 scroll_active = false
 
@@ -166,7 +166,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.3137255)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 bbcode_enabled = true
-text = "律法"
+text = "UI_MAIN_PAGE_TEXT_2"
 fit_content = true
 scroll_active = false
 
@@ -201,7 +201,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.3137255)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 bbcode_enabled = true
-text = "泰山"
+text = "UI_MAIN_PAGE_TEXT_3"
 fit_content = true
 scroll_active = false
 

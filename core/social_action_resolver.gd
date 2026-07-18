@@ -40,7 +40,7 @@ static func enrich_context(ev: BaseEvent, ev_name: String, context: Dictionary) 
 			"origin_event_key": ev_name
 		}
 		context["interrupt_event"] = {
-			"text": "社交行动",
+			"text": tr("TRES_EVENT_SOCIAL_ROUTER_NAME_0"),
 			"event_key": "event_social_router"
 		}
 		Logging.info("[SocialActionResolver] both threaten(%s) + do_favor(%s) → router" % [threaten_id, do_favor_id])
@@ -48,7 +48,7 @@ static func enrich_context(ev: BaseEvent, ev_name: String, context: Dictionary) 
 	elif has_threaten:
 		# 仅 threaten
 		context["interrupt_event"] = {
-			"text": "威胁",
+			"text": tr("TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_1"),
 			"event_key": threaten_id
 		}
 		Logging.info("[SocialActionResolver] only threaten → %s" % threaten_id)
@@ -56,7 +56,7 @@ static func enrich_context(ev: BaseEvent, ev_name: String, context: Dictionary) 
 	elif has_do_favor:
 		# 仅 do_favor
 		context["interrupt_event"] = {
-			"text": "交好",
+			"text": tr("TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_0"),
 			"event_key": do_favor_id
 		}
 		Logging.info("[SocialActionResolver] only do_favor → %s" % do_favor_id)

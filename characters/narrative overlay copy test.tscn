@@ -44,11 +44,11 @@ layout_mode = 2
 
 [node name="TitleLabel" parent="EventHistory/Margin/ScrollContainer/VBox_TapeContent/Event/MarginContainer/VBox/HBox" parent_id_path=PackedInt32Array(1537400182, 491879260) index="0" unique_id=245641313]
 theme_type_variation = &"FrozenTitleText"
-text = "标题"
+text = "UI_NARRATIVE_OVERLAY_COPY_TEST_TEXT_0"
 
 [node name="ExampleLabel" parent="EventHistory/Margin/ScrollContainer/VBox_TapeContent/Event/MarginContainer/VBox" parent_id_path=PackedInt32Array(1537400182, 198044391) index="1" unique_id=318671725]
 theme_type_variation = &"FrozenNarrativeText"
-text = "例子"
+text = "UI_NARRATIVE_OVERLAY_COPY_TEST_TEXT_1"
 
 [node name="ContentLabel" parent="EventHistory/Margin/ScrollContainer/VBox_TapeContent/Event/MarginContainer/VBox" parent_id_path=PackedInt32Array(1537400182, 198044391) index="2" unique_id=1208982363]
 theme_type_variation = &"FrozenNarrativeText"

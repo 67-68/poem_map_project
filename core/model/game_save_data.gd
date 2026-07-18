@@ -54,7 +54,7 @@ var current_action_id: String = ""
 # ════════════════════════════════════════════════════════════════
 # 身份 / 位置
 # ════════════════════════════════════════════════════════════════
-var player_name: String = "杜甫"
+var player_name: String = tr("TRES_POET_DUFU_002_NAME_0")
 var current_location: String = "yong_zhou"
 var stay_place: String = "xishi"
 
@@ -180,7 +180,7 @@ func from_dict(d: Dictionary) -> void:
 	traits = _safe_array_str(d, "traits")
 	current_unlock_ideas = _safe_array_str(d, "current_unlock_ideas")
 	active_modifiers = _safe_modifiers_array(d, "active_modifiers")
-	player_name = d.get("player_name", "杜甫")
+	player_name = d.get("player_name", tr("TRES_POET_DUFU_002_NAME_0"))
 	current_location = d.get("current_location", "yong_zhou")
 	ambition_uuid = d.get("ambition_uuid", "")
 	ambition_start_days = d.get("ambition_start_days", -1)

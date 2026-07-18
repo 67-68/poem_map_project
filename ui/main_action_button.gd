@@ -129,7 +129,7 @@ func _on_clicked() -> void:
 					if req is PropertyRequirement or req is EmotionRequirement or req is PropRangeRequirement or req is PoemRequirement:
 						if not req.compare(PlayerState):
 							var desc := req.describe_requirement() if req.has_method("describe_requirement") else ""
-							var reason := desc if not desc.is_empty() else "属性不满足"
+							var reason := desc if not desc.is_empty() else tr("CODE_MAIN_ACTION_BUTTON_13B937F5A7")
 							_gray_reasons.append(reason)
 							Logging.info("MainActionButton: sub-action '%s' GRAY — requirement type='%s' not met: '%s'" % [sub_action.uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown", reason])
 			
@@ -146,7 +146,7 @@ func _on_clicked() -> void:
 				var current_time := int(PlayerState.get_stat_val("time"))
 				if current_time < sub_cost:
 					var cost_detail := ActionManager.format_time_detail(action.day_consumed)
-					var time_reason := "时间不足（剩余%d天，需要%s）" % [current_time, cost_detail]
+					var time_reason := tr("CODE_MAIN_ACTION_BUTTON_DC059CE490") % [current_time, cost_detail]
 					_gray_reasons.append(time_reason)
 					Logging.info("MainActionButton: sub-action '%s' GRAY — %s" % [sub_action.uuid, time_reason])
 			
@@ -178,7 +178,7 @@ func _on_clicked() -> void:
 				entity.set_meta("_place_mismatch", false)
 			
 			if not _place_mismatch and not _gray_reasons.is_empty():
-				var joined_reason := "条件不满足：" + "、".join(_gray_reasons)
+				var joined_reason := tr("CODE_MAIN_ACTION_BUTTON_46F4EC4498") + "、".join(_gray_reasons)
 				entity.set_meta("_is_locked", true)
 				entity.set_meta("_locked_reason", joined_reason)
 				Logging.info("MainActionButton: sub-action '%s' 标记为灰化锁定, reason='%s'" % [sub_action.uuid, joined_reason])

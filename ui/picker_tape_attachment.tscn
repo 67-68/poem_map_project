@@ -31,7 +31,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.42, 0.31, 1)
 theme_override_fonts/font = ExtResource("2_26bj5")
 theme_override_font_sizes/font_size = 18
-text = "【呈堂物证】"
+text = "UI_PICKER_TAPE_ATTACHMENT_TEXT_0"
 horizontal_alignment = 1
 
 [node name="LinkButton" type="LinkButton" parent="HBox" unique_id=131069460]
@@ -43,14 +43,14 @@ theme_override_colors/font_color = Color(0.7071239, 0.66651803, 0.6636292, 1)
 theme_override_fonts/font = ExtResource("2_26bj5")
 theme_override_font_sizes/font_size = 14
 theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
-text = "不回答"
+text = "UI_PICKER_TAPE_ATTACHMENT_TEXT_1"
 
 [node name="CheckBox" type="CheckBox" parent="HBox" unique_id=1821039094]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7058824, 0.6666667, 0.6627451, 1)
 theme_override_fonts/font = ExtResource("2_26bj5")
 theme_override_font_sizes/font_size = 14
-text = "显示异地行动"
+text = "UI_PICKER_TAPE_ATTACHMENT_TEXT_2"
 
 [node name="LinkButton2" type="LinkButton" parent="HBox" unique_id=782826471]
 layout_mode = 2
@@ -63,7 +63,7 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
 toggle_mode = true
 button_group = ExtResource("4_rtv0q")
-text = "普通"
+text = "UI_PICKER_TAPE_ATTACHMENT_TEXT_3"
 
 [node name="LinkButton3" type="LinkButton" parent="HBox" unique_id=2027900441]
 layout_mode = 2
@@ -76,7 +76,7 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/focus = SubResource("StyleBoxFlat_7xb00")
 toggle_mode = true
 button_group = ExtResource("4_rtv0q")
-text = "特殊"
+text = "UI_PICKER_TAPE_ATTACHMENT_TEXT_4"
 
 [node name="HSeparator" type="HSeparator" parent="." unique_id=2084923762]
 layout_mode = 2
@@ -87,20 +87,20 @@ layout_mode = 2
 [node name="Label" type="Label" parent="HBoxContainer2" unique_id=1854823121]
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
-text = "行动"
+text = "UI_PICKER_TAPE_ATTACHMENT_TEXT_5"
 
 [node name="Label3" type="Label" parent="HBoxContainer2" unique_id=1811841069]
 layout_mode = 2
 size_flags_vertical = 8
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 0.52156866)
-text = "选择行动 + 姿态以行动"
+text = "UI_PICKER_TAPE_ATTACHMENT_TEXT_6"
 
 [node name="Label2" type="Label" parent="HBoxContainer2" unique_id=986400628]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_type_variation = &"SubTitleText"
-text = "姿态"
+text = "UI_PICKER_TAPE_ATTACHMENT_TEXT_7"
 
 [node name="HSeparator2" type="HSeparator" parent="." unique_id=664319995]
 layout_mode = 2

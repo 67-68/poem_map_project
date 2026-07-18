@@ -285,7 +285,7 @@ func mark_chosen(entry_id: String, choice_text: String) -> void:
 	# 2. 创建文本烙印 "「 既决：XXX 」"（古典格式）
 	var chosen_lbl := Label.new()
 	chosen_lbl.name = "ChoiceLabel"
-	chosen_lbl.text = "「 既决：%s 」" % choice_text
+	chosen_lbl.text = tr("CODE_SETTLEMENT_TAPE_ENTRY_46A78AC7C9") % choice_text
 	chosen_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	chosen_lbl.add_theme_color_override("font_color", Color(0.55, 0.10, 0.10))
 	chosen_lbl.add_theme_font_size_override("font_size", 14)
@@ -735,7 +735,7 @@ func _apply_woodcut_shader(bg: TextureRect, has_icon: bool) -> void:
 # ═══════════════════════════════════════════════
 
 func register_scroll_for_input_manager() -> void:
-	"""注册纸带 ScrollContainer，供 InputManager 处理 PgUp/PgDn"""
+	""tr("CODE_EVENT_UI_5819995A2D")""
 	var im := _get_input_manager()
 	if not im:
 		Logging.warn("EventUI.register_scroll_for_input_manager: 无法获取 InputManager")

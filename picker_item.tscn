@@ -30,4 +30,4 @@ custom_click_signal = "clicked"
 [node name="Label" type="Label" parent="." unique_id=536095088]
 layout_mode = 2
 theme_type_variation = &"DefaultText"
-text = "初级拜谒"
+text = "UI_PICKER_ITEM_TEXT_0"

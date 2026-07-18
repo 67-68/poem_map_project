@@ -28,7 +28,7 @@ static func build_hint(trait_data) -> String:
 	var lines: Array[String] = []
 
 	# ── 名称行 ──
-	var display_name = trait_data.name if not trait_data.name.is_empty() else "（未知道）"
+	var display_name = trait_data.name if not trait_data.name.is_empty() else tr("CODE_TRAIT_HINT_FORMATTER_3F4306227C")
 	lines.append("【%s】" % display_name)
 	Logging.info("TraitHintFormatter.build_hint: trait='%s', is_imaginary=%s" % [display_name, str(trait_data is Imaginary)])
 
@@ -46,7 +46,7 @@ static func build_hint(trait_data) -> String:
 
 static func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display_name: String) -> String:
 	# 等级 + description（如果有）
-	var level_label = "Lv%d 意象" % imag.level
+	var level_label = tr("CODE_TRAIT_HINT_FORMATTER_D8663A39B4") % imag.level
 	if not imag.description.is_empty():
 		level_label += " — %s" % imag.description
 	lines.append(_BBCode.color(level_label, _BBCode.COLOR_IMAGINARY_GOLD if imag.level >= 3 else (_BBCode.COLOR_IMAGINARY_WHITE if imag.level == 2 else _BBCode.COLOR_IMAGINARY_GRAY)))
@@ -67,10 +67,10 @@ static func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display
 				continue
 			var desc: String = op.describe_preview() if op.has_method("describe_preview") else ""
 			if not desc.is_empty():
-				lines.append("• 每旬：%s" % desc)
+				lines.append(tr("CODE_TRAIT_HINT_FORMATTER_FA613EE11A") % desc)
 		Logging.info("TraitHintFormatter._build_imaginary_hint: trait_effect_operations → %d lines" % imag.trait_effect_operations.size())
 	else:
-		lines.append("（持有期无副作用）")
+		lines.append(tr("CODE_TRAIT_HINT_FORMATTER_99D99C2111"))
 		Logging.info("TraitHintFormatter._build_imaginary_hint: 无 trait_effect_operations")
 
 	# 持续时间
@@ -81,9 +81,9 @@ static func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display
 		var remaining = max(0, imag.duration_xun - already)
 		if not imag.expiry_trait.is_empty():
 			var expiry_name = _get_trait_display_name(imag.expiry_trait)
-			lines.append("• %d旬后转化为「%s」（已持续%d旬）" % [remaining, expiry_name, already])
+			lines.append(tr("CODE_TRAIT_HINT_FORMATTER_49F63F252B") % [remaining, expiry_name, already])
 		else:
-			lines.append("• %d旬后自动移除（已持续%d旬）" % [remaining, already])
+			lines.append(tr("CODE_TRAIT_HINT_FORMATTER_B0F0BFCE9A") % [remaining, already])
 		Logging.info("TraitHintFormatter._build_imaginary_hint: duration=%d, lasting=%d" % [imag.duration_xun, already])
 
 	# hover_narrative
@@ -117,7 +117,7 @@ static func _build_standard_trait_hint(t, lines: Array[String], display_name: St
 				continue
 			var desc: String = op.describe_preview() if op.has_method("describe_preview") else ""
 			if not desc.is_empty():
-				effect_lines.append("• 每旬：%s" % desc)
+				effect_lines.append(tr("CODE_TRAIT_HINT_FORMATTER_FA613EE11A") % desc)
 		Logging.info("TraitHintFormatter._build_standard_trait_hint: trait_effect_operations → %d effect lines" % effect_lines.size())
 
 	# 2. buffer_to_prop（属性倍率修正）
@@ -137,12 +137,12 @@ static func _build_standard_trait_hint(t, lines: Array[String], display_name: St
 				continue
 			var prop_display = _get_prop_display_name(mul_op.key)
 			var mode_str = _mul_operator_mode_string(mul_op.operator)
-			effect_lines.append("• %s（区域）%s ×%.1f" % [prop_display, mode_str, mul_op.value])
+			effect_lines.append(tr("CODE_TRAIT_HINT_FORMATTER_470CFD541A") % [prop_display, mode_str, mul_op.value])
 		Logging.info("TraitHintFormatter._build_standard_trait_hint: buffer_to_region → %d ops" % t.buffer_to_region.operators.size())
 
 	# 4. time_penalty（全局行动天数惩罚）
 	if t.time_penalty > 0:
-		effect_lines.append("• 所有行动 +%d天" % t.time_penalty)
+		effect_lines.append(tr("CODE_TRAIT_HINT_FORMATTER_F2B2580C35") % t.time_penalty)
 		Logging.info("TraitHintFormatter._build_standard_trait_hint: time_penalty=+%d" % t.time_penalty)
 
 	# 5. conditional_time_penalties（条件天数惩罚）
@@ -152,21 +152,21 @@ static func _build_standard_trait_hint(t, lines: Array[String], display_name: St
 				continue
 			if ctp.add_to_all:
 				var desc_suffix = "（%s）" % ctp.description if not ctp.description.is_empty() else ""
-				effect_lines.append("• 所有行动：+%d天%s" % [ctp.penalty_days, desc_suffix])
+				effect_lines.append(tr("CODE_TRAIT_HINT_FORMATTER_242227891D") % [ctp.penalty_days, desc_suffix])
 			else:
 				var label = ctp.description if not ctp.description.is_empty() else ctp.action_tag_match
-				effect_lines.append("• %s：+%d天" % [label, ctp.penalty_days])
+				effect_lines.append(tr("CODE_TRAIT_HINT_FORMATTER_D0C04469DD") % [label, ctp.penalty_days])
 		Logging.info("TraitHintFormatter._build_standard_trait_hint: conditional_time_penalties → %d entries" % t.conditional_time_penalties.size())
 
 	# 6. ap_penalty（AP 上限削减）
 	if t.ap_penalty != 0:
-		effect_lines.append("• 行动力上限 %+d" % t.ap_penalty)
+		effect_lines.append(tr("CODE_TRAIT_HINT_FORMATTER_48D974DBB2") % t.ap_penalty)
 		Logging.info("TraitHintFormatter._build_standard_trait_hint: ap_penalty=%+d" % t.ap_penalty)
 
 	# 效果区输出
 	lines.append(_BBCode.effect_section())
 	if effect_lines.is_empty():
-		lines.append("（无特殊效果）")
+		lines.append(tr("CODE_VTEST_TRAIT_HINTS_508D363EA0"))
 		Logging.info("TraitHintFormatter._build_standard_trait_hint: 无任何活跃效果字段")
 	else:
 		lines.append_array(effect_lines)
@@ -179,10 +179,10 @@ static func _build_standard_trait_hint(t, lines: Array[String], display_name: St
 		var remaining = max(0, t.duration_xun - already)
 		if not t.expiry_trait.is_empty():
 			var expiry_name = _get_trait_display_name(t.expiry_trait)
-			lines.append("• %d旬后转化为「%s」（已持续%d旬）" % [remaining, expiry_name, already])
+			lines.append(tr("CODE_TRAIT_HINT_FORMATTER_49F63F252B") % [remaining, expiry_name, already])
 			Logging.info("TraitHintFormatter._build_standard_trait_hint: duration=%d, expiry_trait='%s', lasting=%d" % [t.duration_xun, t.expiry_trait, t.lasting_xun])
 		else:
-			lines.append("• %d旬后自动移除（已持续%d旬）" % [remaining, already])
+			lines.append(tr("CODE_TRAIT_HINT_FORMATTER_B0F0BFCE9A") % [remaining, already])
 			Logging.info("TraitHintFormatter._build_standard_trait_hint: duration=%d, no expiry, lasting=%d" % [t.duration_xun, t.lasting_xun])
 
 	# ── hover_narrative（获取途径等硬编码叙事文本，末尾）──
@@ -204,14 +204,14 @@ static func _build_standard_trait_hint(t, lines: Array[String], display_name: St
 static func _mul_operator_mode_string(op_enum: int) -> String:
 	match op_enum:
 		MultiplyOperator.MUL_OPERATOR.POSITIVE_ONLY:
-			return "正面效果"
+			return tr("CODE_TRAIT_HINT_FORMATTER_4F7367ADBD")
 		MultiplyOperator.MUL_OPERATOR.NEGATIVE_ONLY:
-			return "负面效果"
+			return tr("CODE_TRAIT_HINT_FORMATTER_6E03EF5EFD")
 		MultiplyOperator.MUL_OPERATOR.BOTH:
-			return "所有变动"
+			return tr("CODE_TRAIT_HINT_FORMATTER_D9F38FD52F")
 		_:
 			Logging.warn("TraitHintFormatter._mul_operator_mode_string: 未知 op_enum=%d" % op_enum)
-			return "变动"
+			return tr("CODE_TRAIT_HINT_FORMATTER_AD303D19FC")
 
 
 ## prop key → display_name，复用 Database.get_property().get_display_name()

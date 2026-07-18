@@ -82,7 +82,7 @@ const DATA_MANIFEST: Array[Dictionary] = [
 		"data_type": "state_transistor"
 	},
 	{
-		"name": "随机事件池",
+		"name": tr("CODE_CSV_CLOUD_LOADER_6275468EAB"),
 		"url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRaiGJGCA7xT0b1Ch_GB_i7lMzBHD77JwzEThqqzXrLn7cIvUPc5dsfwM4LINfR7PmEYv3x34fou_Ji/pub?gid=0&single=true&output=csv",
 		"save_path": "res://data/3_actions_pool/events/_random_events.csv",
 		"data_type": "random_event"
@@ -91,7 +91,7 @@ const DATA_MANIFEST: Array[Dictionary] = [
 	# 🔬 核心规则数据（本地维护，无需云端拉取）
 	# ════════════════════════════════════════════════════════════════
 	{
-		"name": "疾病事件（诊断+污染）",
+		"name": tr("CODE_CSV_CLOUD_LOADER_F4692DBE3F"),
 		"save_path": "res://data/1_core_rules/disease/_disease_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
@@ -102,103 +102,103 @@ const DATA_MANIFEST: Array[Dictionary] = [
 	# .tres 输出目录需要手动指定（通过 tres_output_dir 字段）。
 	# ════════════════════════════════════════════════════════════════
 	{
-		"name": "拜谒蜜月期生成事件（本地生成）",
+		"name": tr("CODE_CSV_CLOUD_LOADER_61DBE2097D"),
 		"save_path": "data/4_eras/745_ambition/baiye/honey_moon/_bai_ye_honeymoon_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "拜谒真实面目",
+		"name": tr("CODE_CSV_CLOUD_LOADER_82FF83CBA9"),
 		"save_path": "res://data/4_eras/745_ambition/baiye/real_appearance/_bai_ye_real_appearance_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "野心生活事件",
+		"name": tr("CODE_CSV_CLOUD_LOADER_8E0945C965"),
 		"save_path": "res://data/4_eras/745_ambition/_scene_imagery_library_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "多态旷达事件",
+		"name": tr("CODE_CSV_CLOUD_LOADER_8A38D983E1"),
 		"save_path": "res://data/4_eras/747_kuangda/_duotai_humiliation_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "旷达期登高事件",
+		"name": tr("CODE_CSV_CLOUD_LOADER_7793AAD691"),
 		"save_path": "res://data/4_eras/747_kuangda/denggao/_747kuangda_denggao_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	}, 
 	{
-		"name": "清流互助事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_1DFC949653"),
 		"save_path": "res://data/4_eras/747_kuangda/_qingliu_passive_benefits_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "狂客×清流谐振事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_E172FAE110"),
 		"save_path": "res://data/4_eras/747_kuangda/_kuangke_qingliu_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "清流逢迎事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_05926677F2"),
 		"save_path": "res://data/4_eras/747_kuangda/_qingliu_fengying_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "清流钻营事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_86F0576A5B"),
 		"save_path": "res://data/4_eras/747_kuangda/_qingliu_zuanying_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "道心破碎事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_F80D0EB98B"),
 		"save_path": "res://data/4_eras/747_kuangda/_qingliu_daoxin_posui_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "焦虑事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_D052A649DA"),
 		"save_path": "res://data/4_eras/747_kuangda/_qingliu_jiaolv_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "自责事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_BE236A6399"),
 		"save_path": "res://data/4_eras/747_kuangda/_zize_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "狂客-浊流事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_FD173F084C"),
 		"save_path": "res://data/4_eras/747_kuangda/_kuangke_zhuoliu_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "浊流逢迎事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_9DC0C591E5"),
 		"save_path": "res://data/4_eras/747_kuangda/_zhuoliu_fengying_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "浊流钻营事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_CB2B5390A8"),
 		"save_path": "res://data/4_eras/747_kuangda/_zhuoliu_zuanying_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "浊流猎奇事件库",
+		"name": tr("CODE_CSV_CLOUD_LOADER_83DAF1A19E"),
 		"save_path": "res://data/4_eras/747_kuangda/_zhuoliu_lieqi_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
 	},
 	{
-		"name": "赶路旅途事件库（本地生成）",
+		"name": tr("CODE_CSV_CLOUD_LOADER_545965AE5D"),
 		"save_path": "res://data/4_eras/755_backhome/_ganlu_journey_events.csv",
 		"data_type": "random_event",
 		"is_generated": true,
@@ -260,7 +260,7 @@ func start_sync_queue() -> void:
 		Logging.err("DATA_MANIFEST 为空，没有配置任何数据源！💀")
 		return
 	
-	var source_mode = "本地优先" if prefer_local_files else "云端"
+	var source_mode = tr("CODE_CSV_CLOUD_LOADER_085931B25C") if prefer_local_files else tr("CODE_CSV_CLOUD_LOADER_45A38D424B")
 	Logging.info("===== 开始数据同步队列 (%s 模式) =====" % source_mode)
 	Logging.info("共需同步 %d 个数据源" % DATA_MANIFEST.size())
 	

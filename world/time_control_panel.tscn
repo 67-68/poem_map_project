@@ -35,7 +35,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_v2d34")
 theme_type_variation = &"DefaultText"
-text = "天宝十四载"
+text = "UI_TIME_CONTROL_PANEL_TEXT_0"
 
 [node name="HBox2" type="HBoxContainer" parent="HBox" unique_id=1329272013]
 layout_mode = 2
@@ -46,7 +46,7 @@ process_mode = 3
 layout_mode = 2
 theme = ExtResource("2_v2d34")
 theme_type_variation = &"ButtonTheme"
-text = "跳过"
+text = "UI_TIME_CONTROL_PANEL_TEXT_1"
 
 [node name="TimeLeft" type="Label" parent="HBox/HBox2" unique_id=988730346]
 layout_mode = 2
@@ -71,7 +71,7 @@ layout_mode = 2
 theme = ExtResource("2_v2d34")
 theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
-text = "上旬"
+text = "UI_TIME_CONTROL_PANEL_TEXT_2"
 
 [node name="Label_Day" type="Label" parent="HBox/HBox2" unique_id=431041917]
 process_mode = 3
@@ -80,7 +80,7 @@ layout_mode = 2
 theme = ExtResource("2_v2d34")
 theme_type_variation = &"DefaultText"
 theme_override_font_sizes/font_size = 10
-text = "第1天"
+text = "UI_TIME_CONTROL_PANEL_TEXT_3"
 
 [node name="TimeTexture" type="TextureRect" parent="HBox" unique_id=797531913]
 custom_minimum_size = Vector2(77, 77)

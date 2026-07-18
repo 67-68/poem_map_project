@@ -11,16 +11,16 @@ class_name SetStayPlaceOperator extends BaseOperator
 
 # 中文名映射
 const PLACE_CN_MAP: Dictionary = {
-	"xishi": "西市",
-	"pingkangfang": "平康坊",
-	"huangcheng": "皇城",
-	"taishan_base": "泰山脚下",
-	"taishan_upper": "泰山上",
+	"xishi": tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"),
+	"pingkangfang": tr("CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54"),
+	"huangcheng": tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A"),
+	"taishan_base": tr("TRES_TUT_MEET_TAOIST_NAME_0"),
+	"taishan_upper": tr("CODE_SET_STAY_PLACE_OPERATOR_FAD381D3E4"),
 }
 
 func describe_preview() -> String:
 	var cn = PLACE_CN_MAP.get(place, place)
-	return "驻留 → %s" % cn
+	return tr("CODE_SET_STAY_PLACE_OPERATOR_011D4BC5AA") % cn
 
 func operate() -> void:
 	if place.is_empty():

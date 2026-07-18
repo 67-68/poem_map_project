@@ -59,7 +59,7 @@ var _tape_hide_refcount: int = 0            # 引用计数：>0 时 tape_contain
 # ── 日常面板快照（与 hover 快照独立）──
 var _daily_snapshot_text: String = ""
 var _daily_snapshot_sep: bool = false
-var _daily_snapshot_title: String = "独白"
+var _daily_snapshot_title: String = tr("CODE_NARRATIVE_OVERLAY_182CC3CF53")
 # ── hover 快照（用于 show/hide_hover_text）──
 var _hover_snapshot_text: String = ""
 var _hover_snapshot_sep: bool = false
@@ -191,7 +191,7 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 		if _lt0 <= 0.0:
 			Logging.err("[DIAG] _on_event_ready_to_play: 事件 '%s' 所有选项文本为空且 lasting_time=0，跳过（即将调用 on_option_selected）" % data.name)
 			Logging.info("[DIAG] _on_event_ready_to_play: 调用 director.on_option_selected 前 _is_active=%s" % director._is_active)
-			director.on_option_selected(null, "[跳过]")
+			director.on_option_selected(null, tr("CODE_NARRATIVE_OVERLAY_ADA3A9AF8D"))
 			Logging.info("[DIAG] _on_event_ready_to_play: 调用 director.on_option_selected 后 _is_active=%s" % director._is_active)
 			return
 		Logging.info("_on_event_ready_to_play: 事件 '%s' 0 选项但 lasting_time=%.1f > 0" % [data.name, _lt0])
@@ -309,7 +309,7 @@ func _on_event_ui_option_selected(choice_result, choice_text: String = "") -> vo
 
 	# choice_text 为空时用 choice_result 作为标记文本
 	if choice_text.is_empty():
-		choice_text = str(choice_result) if choice_result else "[选择]"
+		choice_text = str(choice_result) if choice_result else tr("CODE_NARRATIVE_OVERLAY_239A7F9A00")
 
 	_on_event_ui_option_selected_internal(choice_result, choice_text)
 
@@ -351,7 +351,7 @@ func _on_interrupt_button_pressed() -> void:
 		return
 	_interrupt_button.get_parent().visible = false
 	var entry_id := str(current_event_data.get_instance_id())
-	event_ui.mark_chosen(entry_id, "[中断]")
+	event_ui.mark_chosen(entry_id, tr("CODE_NARRATIVE_OVERLAY_18E02E9CCA"))
 	Logging.info("NarrativeOverlay._on_interrupt_button_pressed: 中断已标记，转发 Director")
 	director.on_interrupt_pressed()
 
@@ -485,7 +485,7 @@ func _on_cinematic_ready(entry: Dictionary) -> void:
 	await BlurManager.trigger_cinematic_post_blur(3.0)
 
 	# 纸带追加 stub 摘要
-	var summary: String = "⚡ 过场动画"
+	var summary: String = tr("CODE_NARRATIVE_OVERLAY_4BCAAF19D3")
 	if texts.size() > 0:
 		var first := texts[0] as String
 		if first.length() > 20:
@@ -692,8 +692,8 @@ func _on_auto_advance_timeout(all_options: Array, entry_id: String) -> void:
 	if displayable_count == 0:
 		# 0 选项：静默关闭，不执行后果（类似中断，但不触发后续 push）
 		Logging.info("NarrativeOverlay: auto-advance 到期，0选项 → 自动关闭 entry_id='%s'" % entry_id)
-		event_ui.mark_chosen(entry_id, "[时尽]")
-		_on_event_ui_option_selected_internal(null, "[时尽]")
+		event_ui.mark_chosen(entry_id, tr("CODE_NARRATIVE_OVERLAY_A693D63283"))
+		_on_event_ui_option_selected_internal(null, tr("CODE_NARRATIVE_OVERLAY_A693D63283"))
 
 	elif displayable_count == 1:
 		# 1 选项：自动选择
@@ -710,13 +710,13 @@ func _on_auto_advance_timeout(all_options: Array, entry_id: String) -> void:
 				break
 		if option:
 			var choice_result = option.get("choice_result") if option else null
-			var choice_text = event_ui._find_option_text(all_options, choice_result) if choice_result else "[自动]"
+			var choice_text = event_ui._find_option_text(all_options, choice_result) if choice_result else tr("CODE_NARRATIVE_OVERLAY_25A6D2931B")
 			_on_event_ui_option_selected_internal(choice_result, choice_text)
 		else:
 			# 防御性：理论上不会到这里
 			Logging.warn("NarrativeOverlay: auto-advance 1选项但未找到有效选项，静默关闭 entry_id='%s'" % entry_id)
-			event_ui.mark_chosen(entry_id, "[时尽]")
-			_on_event_ui_option_selected_internal(null, "[时尽]")
+			event_ui.mark_chosen(entry_id, tr("CODE_NARRATIVE_OVERLAY_A693D63283"))
+			_on_event_ui_option_selected_internal(null, tr("CODE_NARRATIVE_OVERLAY_A693D63283"))
 	else:
 		# >1 选项：不自动选择（等待玩家手动操作）
 		Logging.info("NarrativeOverlay: auto-advance 到期，%d 选项 > 1，不自动选择 entry_id='%s'" % [displayable_count, entry_id])
@@ -801,7 +801,7 @@ func show_hover_text(narrative: String, vector: String) -> void:
 	if not _is_hover_displaying:
 		_store_hover_snapshot()
 	_is_hover_displaying = true
-	hover_title.text = "效果"
+	hover_title.text = tr("UI_NARRATIVE_OVERLAY_TEXT_3")
 	var text_parts: Array[String] = []
 	if not narrative.is_empty():
 		text_parts.append(narrative)
@@ -866,9 +866,9 @@ func refresh_daily_panel() -> void:
 	# 写日常面板快照（供 hover 结束后恢复）
 	_daily_snapshot_text = combined
 	_daily_snapshot_sep = true
-	_daily_snapshot_title = "独白"
+	_daily_snapshot_title = tr("CODE_NARRATIVE_OVERLAY_182CC3CF53")
 	# 应用到 UI
-	hover_title.text = "独白"
+	hover_title.text = tr("CODE_NARRATIVE_OVERLAY_182CC3CF53")
 	hover_separator.visible = true
 	hover_label.text = combined
 	Logging.info("NarrativeOverlay.refresh_daily_panel: combined=%d chars" % combined.length())
@@ -881,11 +881,11 @@ func _check_survival_goal() -> String:
 		return ""
 	var needed = abs(current_money)
 	if current_money > -5:
-		return "囊中已近空空，再过一旬怕是揭不开锅了…"
+		return tr("CODE_NARRATIVE_OVERLAY_0FD45121F9")
 	elif current_money <= -30:
-		return "债台高筑，负债%d钱…这日子何时是个头？" % needed
+		return tr("CODE_NARRATIVE_OVERLAY_122B32DFFA") % needed
 	else:
-		return "手头缺了%d钱，下一旬的生计还没着落。" % needed
+		return tr("CODE_NARRATIVE_OVERLAY_4D55EEC9A8") % needed
 
 ## 2. 潜意识碎碎念：检查中毒 / 崴脚
 ## 有 debuff 时返回杜甫口吻的一句话，否则返回 ""
@@ -899,11 +899,11 @@ func _subconscious_murmur() -> String:
 
 ## 两个函数均无内容时的 fallback：硬编码 5 句杜甫独白，随机挑一句
 const FALLBACK_MURMURS: Array[String] = [
-	"人生如寄，山河万里，何处是归程？",
-	"致君尧舜上，再使风俗淳。",
-	"安得广厦千万间，大庇天下寒士俱欢颜。",
-	"白日放歌须纵酒，青春作伴好还乡。",
-	"朱门酒肉臭，路有冻死骨。",
+	tr("CODE_NARRATIVE_OVERLAY_A70B4CA97E"),
+	tr("CODE_NARRATIVE_OVERLAY_9DC2A087A1"),
+	tr("CODE_NARRATIVE_OVERLAY_9BB022C2C6"),
+	tr("CODE_NARRATIVE_OVERLAY_DC51FCD65A"),
+	tr("CODE_NARRATIVE_OVERLAY_27CF55BC59"),
 ]
 
 func _random_fallback_murmur() -> String:

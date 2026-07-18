@@ -21,22 +21,22 @@ class_name LeverageAddOperator extends BaseOperator
 # ── label 映射：TAG → 中文名称 ──
 static var _label_map: Dictionary = {
 	# 9 大基础身份
-	"TARGET_IDENTITY_QINGLIU_OWNER":      "清流主人",
-	"TARGET_IDENTITY_QINGLIU_OFFICIAL":   "清流官",
-	"TARGET_IDENTITY_ZHUOLIU_OFFICIAL":   "浊流官",
-	"TARGET_IDENTITY_QUANGUI":            "权贵",
-	"TARGET_IDENTITY_QINGKE":             "清客",
-	"TARGET_IDENTITY_MENZI":              "门子",
-	"TARGET_IDENTITY_COUNTY_SHERIFF":     "县尉",
-	"TARGET_IDENTITY_VENDOR":             "商贩",
-	"TARGET_IDENTITY_POOR":               "穷人",
+	"TARGET_IDENTITY_QINGLIU_OWNER":      tr("CODE_LEVERAGE_ADD_OPERATOR_AAAA7D9F19"),
+	"TARGET_IDENTITY_QINGLIU_OFFICIAL":   tr("CODE_LEVERAGE_ADD_OPERATOR_D972C462FC"),
+	"TARGET_IDENTITY_ZHUOLIU_OFFICIAL":   tr("CODE_LEVERAGE_ADD_OPERATOR_F09988C201"),
+	"TARGET_IDENTITY_QUANGUI":            tr("CODE_NPC_TIER_REQUIREMENT_E4CA3EA091"),
+	"TARGET_IDENTITY_QINGKE":             tr("CODE_LEVERAGE_ADD_OPERATOR_2D61825931"),
+	"TARGET_IDENTITY_MENZI":              tr("CODE_LEVERAGE_ADD_OPERATOR_1E0F945362"),
+	"TARGET_IDENTITY_COUNTY_SHERIFF":     tr("CODE_LEVERAGE_ADD_OPERATOR_E3BD042ACC"),
+	"TARGET_IDENTITY_VENDOR":             tr("CODE_LEVERAGE_ADD_OPERATOR_6E27E9DA69"),
+	"TARGET_IDENTITY_POOR":               tr("CODE_LEVERAGE_ADD_OPERATOR_9CF19D2B90"),
 	# NPC
-	"TARGET_NPC_LIBAI":      "李白",
-	"TARGET_NPC_WANGWEI":    "王维",
-	"TARGET_NPC_GAOSHI":     "高适",
-	"TARGET_NPC_ZHENGQIAN":  "郑虔",
-	"TARGET_NPC_LILINFU":    "李灵甫",
-	"TARGET_NPC_DUFU":       "杜甫",
+	"TARGET_NPC_LIBAI":      tr("TRES_POET_LIBAI_001_NAME_0"),
+	"TARGET_NPC_WANGWEI":    tr("TRES_NPC_DOC_WANGWEI_NAME_0"),
+	"TARGET_NPC_GAOSHI":     tr("CODE_RIGHT_INFO_PANEL_5692EF6E24"),
+	"TARGET_NPC_ZHENGQIAN":  tr("TRES_NPC_DOC_ZHENGQIAN_NAME_0"),
+	"TARGET_NPC_LILINFU":    tr("CODE_LEVERAGE_ADD_OPERATOR_7A4C672055"),
+	"TARGET_NPC_DUFU":       tr("TRES_POET_DUFU_002_NAME_0"),
 }
 
 ## 解析 target_tag 为可读中文标签
@@ -60,5 +60,5 @@ func operate():
 	
 	if not silent:
 		var label = _resolve_label(target_tag)
-		var msg = "获得了关于「%s」的把柄" % [label]
-		EventBus.request_toast.emit("[系统提示]：" + msg, 1)
+		var msg = tr("CODE_LEVERAGE_ADD_OPERATOR_6AEECA1FB4") % [label]
+		EventBus.request_toast.emit(tr("CODE_LEVERAGE_ADD_OPERATOR_85A28E77E3") + msg, 1)

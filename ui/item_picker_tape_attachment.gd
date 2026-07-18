@@ -35,7 +35,7 @@ func initialize(data: Array) -> void:
 	_selected_item = null
 	_confirm_btn.disabled = true
 	
-	header.text = "【选择物品】"
+	header.text = tr("UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_0")
 	
 	for child in _list_panel.get_children():
 		child.queue_free()

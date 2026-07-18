@@ -2,7 +2,7 @@
 class_name ManiaProvider extends BaseProvider
 
 # 狂症劫持：在现有选项前插入一条"疯批选项"
-@export var crazy_option_text: String = ""     # 狂症选项文本（如"狂笑不止，踽踽独行"）
+@export var crazy_option_text: String = ""     # 狂症选项文本（如tr("TRES_PROVIDER_MANIA_EXAMPLE_CRAZY_OPTION_TEXT_0")）
 @export var crazy_event_key: String = ""       # 狂症选项触发的事件 key
 @export var resist_health_cost: int = 20       # 正常选项额外消耗的健康
 @export var resist_burnout_cost: int = 10      # 正常选项额外增加的 BURNOUT

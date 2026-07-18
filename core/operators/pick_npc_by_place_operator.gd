@@ -64,12 +64,12 @@ func init(_context: Dictionary) -> Dictionary:
 
 
 func operate() -> void:
-	"""所有选择逻辑在 init() 中完成"""
+	""tr("CODE_PICK_NPC_BY_PLACE_OPERATOR_5254542205")""
 	pass
 
 
 func describe_preview() -> String:
-	var desc = "在当前驻留地点中随机选人"
+	var desc = tr("CODE_PICK_NPC_BY_PLACE_OPERATOR_32ACEBF8BA")
 	if not state.is_empty():
 		desc += "（state=%s）" % state
 	desc += " → context[%s]" % key_stored_context

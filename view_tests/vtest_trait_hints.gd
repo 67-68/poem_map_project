@@ -10,9 +10,9 @@ func create_debug_view(_idx: int) -> Control:
 
 func get_actions() -> Array[ViewTestAction]:
 	return [
-		ViewTestAction.new("🔍 Dump 所有 Trait Hint 到控制台", func(_map: Dictionary): _dump_all()),
-		ViewTestAction.new("🔍 仅 Dump 有 duration_xun 的 Trait", func(_map: Dictionary): _dump_timed()),
-		ViewTestAction.new("🔍 仅 Dump 有 效果字段 的 Trait", func(_map: Dictionary): _dump_with_effects()),
+		ViewTestAction.new(tr("CODE_VTEST_TRAIT_HINTS_CBAB3C0E87"), func(_map: Dictionary): _dump_all()),
+		ViewTestAction.new(tr("CODE_VTEST_TRAIT_HINTS_D0C5FDDF75"), func(_map: Dictionary): _dump_timed()),
+		ViewTestAction.new(tr("CODE_VTEST_TRAIT_HINTS_BE1E9C3C80"), func(_map: Dictionary): _dump_with_effects()),
 	]
 
 
@@ -60,7 +60,7 @@ func _load_and_dump(include_no_effect: bool, include_timed_only: bool) -> void:
 		var t := res as Trait
 		var hint := ActionHintBuilder.build_trait_hint(t)
 		
-		if not include_no_effect and hint.contains("（无特殊效果）"):
+		if not include_no_effect and hint.contains(tr("CODE_VTEST_TRAIT_HINTS_508D363EA0")):
 			continue
 		if include_timed_only and t.duration_xun <= 0:
 			continue

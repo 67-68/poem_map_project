@@ -12,11 +12,11 @@ layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="VBoxContainer" unique_id=964898493]
 layout_mode = 2
-text = "存档1"
+text = "UI_GAME_DATA_PANEL_TEXT_0"
 
 [node name="TimeLabel" type="Label" parent="VBoxContainer" unique_id=465540322]
 layout_mode = 2
-text = "保存于 7.7 17.37"
+text = "UI_GAME_DATA_PANEL_TEXT_1"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1175346859]
 layout_mode = 2
@@ -24,8 +24,8 @@ layout_mode = 2
 [node name="Save" type="LinkButton" parent="VBoxContainer/HBoxContainer" unique_id=1442103972]
 layout_mode = 2
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0ppi5")
-text = "保存到此"
+text = "UI_GAME_DATA_PANEL_TEXT_2"
 
 [node name="Load" type="LinkButton" parent="VBoxContainer/HBoxContainer" unique_id=956298578]
 layout_mode = 2
-text = "依此加载"
+text = "UI_GAME_DATA_PANEL_TEXT_3"

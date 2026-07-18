@@ -60,10 +60,10 @@ func operate():
 	RelationFlagManager.add_intro(chosen_target, intro_key)
 
 	# 4. hint
-	show_hint("获得了「%s」的引荐信" % chosen_target)
+	show_hint(tr("CODE_ADD_RANDOM_INTRO_OPERATOR_6C288E2BB4") % chosen_target)
 
 
 func describe_preview() -> String:
 	if not target_key.is_empty():
-		return "添加引荐信给 context[%s]" % target_key
-	return "随机获得某人的引荐信"
+		return tr("CODE_ADD_RANDOM_INTRO_OPERATOR_7C0C7B5038") % target_key
+	return tr("CODE_ADD_RANDOM_INTRO_OPERATOR_D093C7C50C")

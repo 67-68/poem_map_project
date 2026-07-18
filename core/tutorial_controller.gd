@@ -49,7 +49,7 @@ enum Phase5Step {
 # ── Phase 6 子阶段 ──
 enum Phase6Step {
 	DEFER_DONE_EVENT,     # tut_defer_done 展示中
-	LOOK_UP_READY,        # "往上看"可用
+	LOOK_UP_READY,        # tr("CODE_TUTORIAL_CONTROLLER_3171C95644")可用
 	FINAL_IMAGINARY,      # 最后 Lv3 意象获取
 }
 
@@ -178,7 +178,7 @@ func _show_tutorial_prompt() -> void:
 
 
 func _get_tutorial_dialog() -> PanelContainer:
-	"""返回 main.tscn 中预置的 ConfirmationDialogCustom 实例"""
+	""tr("CODE_TUTORIAL_CONTROLLER_7E905994B5")""
 	var tree := get_tree()
 	if not tree:
 		return null
@@ -384,7 +384,7 @@ func _p4_step_name() -> String:
 
 
 func _clear_all_tut_flags() -> void:
-	"""清除所有 tutorial 相关的 flag"""
+	""tr("CODE_TUTORIAL_CONTROLLER_AD341EBFCF")""
 	var tut_flags := [
 		"tut_lock_chuyou_subs",
 		"tut_unlock_chuyou_subs", "tut_unlock_duzhuo",
@@ -426,7 +426,7 @@ func _ban_tutorial_actions() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _set_taoist_meditating() -> void:
-	"""道士进入打坐状态（not_meet，玩家不能交互）"""
+	""tr("CODE_TUTORIAL_CONTROLLER_12586AB749")""
 	RelationFlagManager.set_person_state(TAOIST_NPC_KEY, "not_meet")
 	Logging.info("TutorialController: 道士 person_state → not_meet（打坐中）")
 
@@ -651,7 +651,7 @@ func _on_xun_tick() -> void:
 				PlayerState.set_flag("tut_unlock_chuyou_subs", true)
 				PlayerState.set_flag("tut_lock_chuyou_subs", false)
 				_set_sub_whitelist([])
-				_show_special_label("道长开始做法驱散云雾，需要两旬时间…去周边转转吧！点击「出游」探索四方")
+				_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_24F0B161F7"))
 			else:
 				Logging.info("TutorialController: xun_tick — Phase 5 等待玩家点击驱散云雾启动 defer")
 		return
@@ -732,7 +732,7 @@ func _on_phase_4_event_confirmed() -> void:
 			_set_whitelist(["jiao_you", "zhu_liu"])
 			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
 			Logging.info("TutorialController: FREE_ROAM — 交游+驻留已解锁, 子行动: tut_jiaoyou_talk, 驻留2地点")
-			_show_special_label("道长正在打坐…先在附近转转吧。点击右侧「交游」或「驻留」按钮开始探索")
+			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_93E7E727A3"))
 
 		Phase4Step.MOVED_AWAY, Phase4Step.FOG_FOUND:
 			# tut_move_away 确认 → 解锁出游（仅查看）
@@ -742,7 +742,7 @@ func _on_phase_4_event_confirmed() -> void:
 			# P3-1: FOG_FOUND 阶段不暴露出游4方向，defer 期间通过 flag 控制解锁
 			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
 			Logging.info("TutorialController: FOG_FOUND — 出游已解锁（仅查看模式）")
-			_show_special_label("山雾弥漫，看不清山顶…或许道长知道些什么？点击「出游」查看")
+			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_095EFAB7C8"))
 
 		Phase4Step.CHUYOU_VIEWED:
 			# 出游查看后 → 提示回找道士（道士保持 not_meet，共饮后才升级）
@@ -756,7 +756,7 @@ func _on_phase_4_event_confirmed() -> void:
 			Logging.info("TutorialController: [P4:BACK_AT_TAOIST] 回找道士确认 → override 锁定态")
 			_p4_step = Phase4Step.OVERRIDE_LOCKED
 			_set_whitelist(["jiao_you", "zhu_liu"])
-			_show_special_label("与道长关系还不够密切…试试请他喝酒？点击「交游」→「共饮」")
+			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_16EFDC16D7"))
 			_set_sub_whitelist(["tut_jiaoyou_drink", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
 			# tut_jiaoyou_drink 是 jiao_you 的普通子行动，不依赖 NPC 关系即可显示
 			# tut_taoist_dispel_fog 是覆盖 tut_jiaoyou_drink 的 override，需要关系 >= know_about
@@ -769,7 +769,7 @@ func _on_phase_4_event_confirmed() -> void:
 				_p5_step = Phase5Step.DEFERRING
 				_defer_started = false
 				Logging.info("TutorialController: [P5] 已进入 Phase 5, _defer_started=false")
-				_show_special_label("道长愿意帮你了！点击「交游」→ 请道长驱散云雾")
+				_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_179CB8FB4E"))
 
 		_:
 			Logging.warn("TutorialController: Phase 4 未处理的 event_confirmed step=%s(%d)" % [_p4_step_name(), _p4_step])
@@ -816,7 +816,7 @@ func _on_phase_5_action() -> void:
 		_defer_started = true
 		_defer_completed = false
 		_p5_step = Phase5Step.DEFERRING
-		_show_special_label("道长重新开始做法…这次别再打断了。点击「出游」探索周边")
+		_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_ED9554CBC2"))
 
 
 # ═══════════════════════════════════════════════════════════
@@ -846,7 +846,7 @@ func _on_phase_6_event_confirmed() -> void:
 		Logging.info("TutorialController: tut_defer_done 确认 → 「往上看」可用")
 		_p6_step = Phase6Step.LOOK_UP_READY
 		_just_entered_lookup_ready = true
-		_show_special_label("云雾已散！点击「出游」→ 往山顶看看")
+		_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_40AB2EDE13"))
 
 	elif _p6_step == Phase6Step.LOOK_UP_READY:
 		if _just_entered_lookup_ready:
@@ -858,7 +858,7 @@ func _on_phase_6_event_confirmed() -> void:
 			# 玩家点了"往上看" → 事件确认 → 获取最后 Lv3 意象 → Phase 7
 			Logging.info("TutorialController: 往上看确认 → 获得最后意象 → Phase 7")
 			_p6_step = Phase6Step.FINAL_IMAGINARY
-			_show_special_label("泰山之巅尽收眼底！点击右下角蓝色印章，将感悟化为诗句")
+			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_492C9E4D68"))
 			_advance_to_phase_7()
 
 
@@ -879,14 +879,14 @@ func _on_phase_7_event_confirmed() -> void:
 			PlayerState.set_flag("tut_lock_duzhuo", false)
 			_set_whitelist(["du_zhuo"])
 			_set_sub_whitelist(["tut_duzhuo_heyaojiu"])
-			_show_special_label("喝点药酒提提神吧！点击「闲居」→「喝药酒」")
+			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_BC3D3B02C0"))
 		Phase7Step.DRINK_WINE:
 			# 玩家喝了药酒 → 事件确认 → 检查兴是否恢复
 			var inspiration = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
 			Logging.info("TutorialController: 喝药酒后 event_confirmed — 兴=%d" % inspiration)
 			if inspiration > 0:
 				_inspiration_gained = true
-				_show_special_label("文思如泉涌！点击右下角毛笔按钮，开始写诗吧")
+				_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_0AE2169679"))
 			else:
 				Logging.warn("TutorialController: 喝药酒后兴仍为0，检查 duzhuo_heyaojiu action 是否正确配置")
 
@@ -894,7 +894,7 @@ func _on_phase_7_event_confirmed() -> void:
 			# 道人评诗确认 → 解锁理念
 			Logging.info("TutorialController: 评诗确认 → 解锁理念按钮")
 			_p7_step = Phase7Step.IDEA_UNLOCKED
-			_show_special_label("道长对你的诗赞不绝口！点击右下角蓝色印章，确立你的远大志向")
+			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_ACE0C1BEC6"))
 			
 
 		Phase7Step.IDEA_UNLOCKED:
@@ -987,11 +987,11 @@ func _advance_to_phase_7() -> void:
 	# 不清零则 PoemCrafter 检查通过，跳过 tut_no_inspiration 分支
 	PlayerState.force_set_stat_val("inspiration", 0)
 	Logging.info("TutorialController: [P7] 兴已归零，白名单=[]（全禁，等待 tut_no_inspiration 后解锁独酌）")
-	_show_special_label("面对壮丽山河，何不赋诗一首？点击右下角毛笔按钮开始创作")
+	_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_343A3514E3"))
 
 
 func _advance_to_end() -> void:
-	"""无法事件期间触发"""
+	""tr("CODE_TUTORIAL_CONTROLLER_6D0E37AE7F")""
 	Logging.info("TutorialController: ====== PHASE_7_POEM → END ======")
 	_current_phase = Phase.END
 	_disconnect_tutorial_signals()
@@ -1049,7 +1049,7 @@ func _push_tut_event(event_key: String) -> void:
 
 
 func _show_special_label(text: String) -> void:
-	"""直接设置 RightInfoPanel 上 Control/SpecialLabel 的文本"""
+	""tr("CODE_TUTORIAL_CONTROLLER_2482669467")""
 	Logging.info("TutorialController: SpecialLabel → '%s'" % text)
 	var right_panel := _get_right_panel()
 	right_panel.set_special_label_text(text)
@@ -1098,7 +1098,7 @@ func _inject_timeline_scripts() -> void:
 
 		# PHASE_6: 云开雾散 → poem_btn 可见
 		"tut_defer_done": [
-			{ "delay": 0.5, "action": "show_special_label", "target": "right_panel", "text": "云雾消散，泰山之巅显现！点击右下角毛笔按钮开始写诗" },
+			{ "delay": 0.5, "action": "show_special_label", "target": "right_panel", "text": tr("CODE_TUTORIAL_CONTROLLER_FF7E1A1C7B") },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "poem_btn", "visible": true },
 		],
 

@@ -98,7 +98,7 @@ func _construct_layout() -> void:
 	# ── 确认按钮 "合上考评" ──
 	_confirm_btn = Button.new()
 	_confirm_btn.name = "ConfirmBtn"
-	_confirm_btn.text = "合上考评"
+	_confirm_btn.text = tr("CODE_SETTLEMENT_TAPE_ENTRY_1047F73848")
 	_confirm_btn.theme_type_variation = "ButtonTheme"
 	
 	# ── 音效挂件注入 ──
@@ -145,7 +145,7 @@ func _on_confirm_pressed() -> void:
 	Logging.info("SettlementTapeEntry: '合上考评' 被点击，原地构造 PopEventOperator")
 	var result := ChoiceResult.new()
 	result.operators = [PopEventOperator.new()]
-	option_selected.emit(result, "合上考评")
+	option_selected.emit(result, tr("CODE_SETTLEMENT_TAPE_ENTRY_1047F73848"))
 
 
 ## 将按钮区域替换为「既决：xxx」文本烙印（复用 EventUI 既有样式）
@@ -160,7 +160,7 @@ func mark_chosen(choice_text: String) -> void:
 	# 2. 创建「既决：xxx」文本烙印
 	var chosen_lbl := Label.new()
 	chosen_lbl.name = "ChoiceLabel"
-	chosen_lbl.text = "「 既决：%s 」" % choice_text
+	chosen_lbl.text = tr("CODE_SETTLEMENT_TAPE_ENTRY_46A78AC7C9") % choice_text
 	chosen_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	chosen_lbl.add_theme_color_override("font_color", Color(0.55, 0.10, 0.10))
 	chosen_lbl.add_theme_font_size_override("font_size", 14)

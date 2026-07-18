@@ -43,7 +43,7 @@ func _make_imagery_op(tag: String) -> ImageryAcquisitionOperator:
 
 func _make_chained_event(event_uuid: String, archetype: String, desc: String,
 		imagery_tags: Array[String]) -> Resource:
-	"""创建一个事件，每选一个选项就获得一个意象"""
+	""tr("CODE_GENERATE_TEST_POEM_EVENTS_04A0AC9ECB")""
 	var event = RandomEvent.new()
 	event.uuid = event_uuid
 	event.name = event_uuid
@@ -57,7 +57,7 @@ func _make_chained_event(event_uuid: String, archetype: String, desc: String,
 		choice_result.operators = [_make_imagery_op(tag)] as Array[BaseOperator]
 
 		var option = EventOption.new()
-		option.description = "获得意象: %s" % tag
+		option.description = tr("CODE_GENERATE_TEST_POEM_EVENTS_6FBDCC9010") % tag
 		option.choice_result = choice_result
 		options.append(option)
 
@@ -76,7 +76,7 @@ func _generate_scenario_1() -> void:
 	var event = _make_chained_event(
 		"test_s1_imaginary_overlap",
 		"jiaoyou",
-		"[测试] 场景1: 获取两个重叠 Imaginary",
+		tr("CODE_GENERATE_TEST_POEM_EVENTS_F5A050C3E9"),
 		[
 			"buyi",
 			"qianli",
@@ -97,7 +97,7 @@ func _generate_scenario_2() -> void:
 	var event = _make_chained_event(
 		"test_s2_exact_match",
 		"denggao",
-		"[测试] 场景2: 获取「风雪夜归人」食谱的 Imaginary",
+		tr("CODE_GENERATE_TEST_POEM_EVENTS_BDF92E1A1B"),
 		[
 			"cold_moon",
 			"lone_snow",
@@ -117,7 +117,7 @@ func _generate_scenario_3() -> void:
 	var event = _make_chained_event(
 		"test_s3_no_match",
 		"baiye",
-		"[测试] 场景3: 获取各种不相干的 Imaginary",
+		tr("CODE_GENERATE_TEST_POEM_EVENTS_AC8B504A29"),
 		[
 			"drunk",
 			"ink_stone",
@@ -141,7 +141,7 @@ func _generate_scenario_4() -> void:
 	var event = _make_chained_event(
 		"test_s4_exact_match",
 		"fangshi",
-		"[测试] 场景4: 获取「风雪夜归人」食谱的 Imaginary",
+		tr("CODE_GENERATE_TEST_POEM_EVENTS_5633C6F5A2"),
 		[
 			"cold_moon",
 			"lone_snow",
@@ -170,7 +170,7 @@ func _generate_scenario_5() -> void:
 	give_poem_result.operators = [give_poem_op] as Array[BaseOperator]
 
 	var give_poem_opt = EventOption.new()
-	give_poem_opt.description = "获得诗词: 干谒诗 Lv1"
+	give_poem_opt.description = tr("CODE_GENERATE_TEST_POEM_EVENTS_522D4F744A")
 	give_poem_opt.choice_result = give_poem_result
 
 	# 选项 2: 使用 PoemTypeChooseOperator 选择诗词
@@ -183,7 +183,7 @@ func _generate_scenario_5() -> void:
 	choose_poem_result.operators = [choose_op] as Array[BaseOperator]
 
 	var choose_poem_opt = EventOption.new()
-	choose_poem_opt.description = "使用 PoemTypeChooseOperator 选择诗词"
+	choose_poem_opt.description = tr("CODE_GENERATE_TEST_POEM_EVENTS_0599B96A29")
 	choose_poem_opt.choice_result = choose_poem_result
 
 	event.options = [give_poem_opt, choose_poem_opt]
@@ -200,7 +200,7 @@ func _generate_scenario_6() -> void:
 	var event = _make_chained_event(
 		"test_s6_tier_pipeline",
 		"denggao",
-		"[测试] 场景6: 获取 Tier 1/2 的 Imaginary 素材（V5: Tier 2/3 已合并）",
+		tr("CODE_GENERATE_TEST_POEM_EVENTS_F3F05F0AE5"),
 		[
 			"ink_stone",
 			"empty_cup",
@@ -229,7 +229,7 @@ func _generate_scenario_7() -> void:
 	var event = _make_chained_event(
 		"test_s7_doggerel",
 		"fangshi",
-		"[测试] 场景7: 2/3 命中 → 打油诗",
+		tr("CODE_GENERATE_TEST_POEM_EVENTS_AD52404E24"),
 		[
 			"cold_moon",
 			"lone_snow",

@@ -95,7 +95,7 @@ func list_saves() -> Array:
 		var meta := {
 			"uuid": uuid,
 			"file_path": file_path,
-			"player_name": dict.get("player_name", "杜甫"),
+			"player_name": dict.get("player_name", tr("TRES_POET_DUFU_002_NAME_0")),
 			"year": dict.get("year", 745.0),
 			"current_location": dict.get("current_location", "yong_zhou"),
 			"total_days_elapsed": dict.get("total_days_elapsed", 0),

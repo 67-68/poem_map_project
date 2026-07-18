@@ -39,4 +39,4 @@ func describe_preview() -> String:
 		return ""
 	if day <= 0:
 		return ""
-	return "时间消耗 %d 天" % int(day)
+	return tr("CODE_TIME_OPERATOR_8AD92110DA") % int(day)

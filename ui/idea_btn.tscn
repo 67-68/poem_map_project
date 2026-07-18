@@ -18,17 +18,17 @@ layout_mode = 2
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1712242138]
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
-text = "兴：存在城府"
+text = "UI_IDEA_BTN_TEXT_0"
 
 [node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1262766706]
 layout_mode = 2
 size_flags_vertical = 8
 theme_type_variation = &"DefaultText"
-text = "平易近人"
+text = "UI_IDEA_BTN_TEXT_1"
 horizontal_alignment = 2
 vertical_alignment = 2
 
 [node name="Label2" type="Label" parent="VBoxContainer" unique_id=2012908116]
 layout_mode = 2
 theme_type_variation = &"DefaultText"
-text = "被锁定，由于和兴：没有城府冲突"
+text = "UI_IDEA_BTN_TEXT_2"

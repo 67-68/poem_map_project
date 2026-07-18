@@ -72,12 +72,12 @@ func _ready() -> void:
 static func run(dsl: String) -> Dictionary:
 	if dsl.is_empty():
 		Logging.err("[EventChainBuilder] run: DSL 为空")
-		return _result(false, "DSL 为空", [], [])
+		return _result(false, tr("CODE_EVENT_CHAIN_BUILDER_6975313313"), [], [])
 
 	# 1. 解析 DSL 为 ChainCommand
 	var commands = ChainDSLParser.parse_batch(dsl)
 	if commands.is_empty():
-		return _result(false, "DSL 解析失败，未产生任何命令", [], [])
+		return _result(false, tr("CODE_EVENT_CHAIN_BUILDER_347845FC55"), [], [])
 
 	# 2. 执行所有命令
 	var exec_result = ChainExecutor.execute_batch(commands)
@@ -88,7 +88,7 @@ static func run(dsl: String) -> Dictionary:
 	for r in exec_result.results as Array:
 		messages.append(r.message)
 
-	return _result(success, "执行完成: %d 成功, %d 失败" % [exec_result.success_count, exec_result.fail_count], messages, commands)
+	return _result(success, tr("CODE_EVENT_CHAIN_BUILDER_EF28AAE998") % [exec_result.success_count, exec_result.fail_count], messages, commands)
 
 
 # ─── 内部方法 ───

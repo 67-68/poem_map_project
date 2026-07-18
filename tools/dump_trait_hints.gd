@@ -6,7 +6,7 @@ func _ready() -> void:
 	await get_tree().create_timer(0.5).timeout
 
 	var output := PackedStringArray()
-	output.append("=== 全量 Trait + Imaginary Hint Dump ===\n")
+	output.append(tr("CODE_DUMP_TRAIT_HINTS_EF92583DCC"))
 
 	# Database.properties 塞基本数据
 	for key in ["health", "money", "prestige", "talent"]:
@@ -19,7 +19,7 @@ func _ready() -> void:
 	# Part 1: 所有 Trait .tres 文件
 	# ═══════════════════════════════════════════════════
 	output.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-	output.append("📁 第1部分：静态 .tres Trait 文件")
+	output.append(tr("CODE_DUMP_TRAIT_HINTS_E58116E336"))
 	output.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
 	var dirs := [
@@ -46,7 +46,7 @@ func _ready() -> void:
 	# Part 2: Database.imaginaries_detail 中的 Imaginary
 	# ═══════════════════════════════════════════════════
 	output.append("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-	output.append("📁 第2部分：运行时 Imaginary (Database.imaginaries_detail)")
+	output.append(tr("CODE_DUMP_TRAIT_HINTS_F4013C8605"))
 	output.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
 	# 初始化开局 Imaginary（布衣、孤松等）
@@ -60,9 +60,9 @@ func _ready() -> void:
 			imag_count += 1
 
 	if imag_count == 0:
-		output.append("⚠️ Database.imaginaries_detail 为空 — 无运行时 Imaginary")
+		output.append(tr("CODE_DUMP_TRAIT_HINTS_D14370FE66"))
 	else:
-		output.append("共 %d 个 Imaginary" % imag_count)
+		output.append(tr("CODE_DUMP_TRAIT_HINTS_399888A2E0") % imag_count)
 
 	output.append("\n=== DUMP COMPLETE ===")
 	var result := "\n".join(output)
@@ -72,7 +72,7 @@ func _ready() -> void:
 		file.close()
 		print("✅ Dump 完成: " + ProjectSettings.globalize_path("user://trait_hint_dump.txt"))
 	else:
-		print("❌ 无法写入文件")
+		print(tr("CODE_DUMP_TRAIT_HINTS_980FA0FD3E"))
 
 	get_tree().quit(0)
 

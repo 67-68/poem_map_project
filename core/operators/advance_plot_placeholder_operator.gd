@@ -24,10 +24,10 @@ func operate():
 	# 关系层级升级一级
 	var upgraded = RelationFlagManager.upgrade_person_state(target_tag)
 	if upgraded:
-		show_hint("与%s攀谈甚欢，关系增进" % target_tag)
+		show_hint(tr("CODE_ADVANCE_PLOT_PLACEHOLDER_OPERATOR_A0F966902C") % target_tag)
 	else:
-		show_hint("与%s攀谈甚欢" % target_tag)
+		show_hint(tr("CODE_ADVANCE_PLOT_PLACEHOLDER_OPERATOR_B42B332E93") % target_tag)
 
 
 func describe_preview() -> String:
-	return "随机与一位人物增进交情，关系层级提升"
+	return tr("CODE_ADVANCE_PLOT_PLACEHOLDER_OPERATOR_321B98CB7A")

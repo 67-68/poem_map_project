@@ -23,11 +23,11 @@ var str_emotion: String = ""
 
 ## 情绪英文键 → 中文名映射（与 ui/emotion_radar.gd 保持一致）
 const _EMOTION_CN_NAMES: Dictionary = {
-	"sorrow": "愁苦",
-	"arrogance": "狂傲",
-	"anger": "愤懑",
-	"tranquility": "旷达",
-	"ambition": "野心",
+	"sorrow": tr("CODE_EMOTION_REQUIREMENT_192BC492B2"),
+	"arrogance": tr("CODE_EMOTION_REQUIREMENT_9A85FF3DCC"),
+	"anger": tr("CODE_EMOTION_REQUIREMENT_DC917B1566"),
+	"tranquility": tr("CODE_EMOTION_REQUIREMENT_A62908DEDA"),
+	"ambition": tr("CODE_EMOTION_REQUIREMENT_0AB342DF06"),
 }
 
 func _get_emotion_cn_name() -> String:

@@ -9,19 +9,19 @@ func _ready():
 func get_season_text():
     #breakpoint
     if TimeService.current_day_of_year == null:
-        return "季节更替"
+        return tr("CODE_TIME_BREATH_UI_1640D0A850")
     var season_index = (TimeService._total_days_elapsed / 90) % 4
     match season_index:
         0:
-            return "万物复苏"
+            return tr("CODE_TIME_BREATH_UI_E451C2C5EF")
         1:
-            return "夏至"
+            return tr("CODE_TIME_BREATH_UI_63B8A20FF1")
         2:
-            return "树叶枯黄"
+            return tr("CODE_TIME_BREATH_UI_D99449E075")
         3:
-            return "天寒地冻"
+            return tr("CODE_TIME_BREATH_UI_364138561F")
         _:
-            return "季节更替"
+            return tr("CODE_TIME_BREATH_UI_1640D0A850")
 
 # 监听 TimeService 的跨年/跨季信号
 func _on_season_changed() -> void:

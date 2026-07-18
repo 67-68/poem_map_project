@@ -95,7 +95,7 @@ theme_override_constants/margin_left = 5
 [node name="Label" type="Label" parent="InterruptButton/Button/Margin" unique_id=439669529]
 layout_mode = 2
 theme_type_variation = &"DefaultText"
-text = "查看"
+text = "UI_NARRATIVE_OVERLAY_TEXT_0"
 horizontal_alignment = 1
 autowrap_mode = 1
 
@@ -129,7 +129,7 @@ layout_mode = 2
 [node name="Label2" type="Label" parent="TapeContainer/VBox/ActionPanel/V" unique_id=1593771078]
 layout_mode = 2
 theme_type_variation = &"TitleText"
-text = "行动"
+text = "UI_NARRATIVE_OVERLAY_TEXT_1"
 horizontal_alignment = 1
 
 [node name="CheckBox" type="CheckBox" parent="TapeContainer/VBox/ActionPanel/V" unique_id=1382663956]
@@ -139,7 +139,7 @@ size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.7058824, 0.6666667, 0.6627451, 1)
 theme_override_fonts/font = ExtResource("7_osi0o")
 theme_override_font_sizes/font_size = 14
-text = "显示异地行动"
+text = "UI_NARRATIVE_OVERLAY_TEXT_2"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TapeContainer/VBox/ActionPanel/V" unique_id=2121651520]
 layout_mode = 2
@@ -225,7 +225,7 @@ theme_override_styles/separator = SubResource("StyleBoxLine_7xb00")
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"TitleText"
-text = "效果"
+text = "UI_NARRATIVE_OVERLAY_TEXT_3"
 
 [node name="HoverLabel" type="RichTextLabel" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V" unique_id=636252671]
 layout_mode = 2

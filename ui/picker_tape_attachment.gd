@@ -554,22 +554,22 @@ func _update_filter_button_states() -> void:
 	if _normal_btn and is_instance_valid(_normal_btn):
 		if normal_total == 0:
 			_normal_btn.disabled = true
-			_normal_btn.text = "暂无普通行动"
+			_normal_btn.text = tr("CODE_PICKER_TAPE_ATTACHMENT_E234B1D8D2")
 			_normal_btn.modulate = Color(0.4, 0.4, 0.4, 0.5)
 		else:
 			_normal_btn.disabled = false
-			_normal_btn.text = "普通"
+			_normal_btn.text = tr("UI_PICKER_TAPE_ATTACHMENT_TEXT_3")
 			_normal_btn.modulate = Color.WHITE
 
 	# ── 更新特殊按钮 ──
 	if _special_btn and is_instance_valid(_special_btn):
 		if special_total == 0:
 			_special_btn.disabled = true
-			_special_btn.text = "暂无特殊行动"
+			_special_btn.text = tr("CODE_PICKER_TAPE_ATTACHMENT_3951965D54")
 			_special_btn.modulate = Color(0.4, 0.4, 0.4, 0.5)
 		else:
 			_special_btn.disabled = false
-			_special_btn.text = "特殊"
+			_special_btn.text = tr("UI_PICKER_TAPE_ATTACHMENT_TEXT_4")
 			_special_btn.modulate = Color.WHITE
 
 	Logging.info("PickerTapeAttachment._update_filter_button_states: normal_total=%d special_total=%d (show_remote=%s)" % [normal_total, special_total, str(show_remote)])

@@ -41,7 +41,7 @@ size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.54509807, 0.14509805, 0, 1)
 theme_override_fonts/font = ExtResource("3_hj3uc")
 theme_override_font_sizes/font_size = 29
-text = "致君尧舜上"
+text = "UI_AMBITION_HUD_TEXT_0"
 
 [node name="VagueText" type="Label" parent="Mar/VBox" unique_id=1789226383]
 custom_minimum_size = Vector2(100, 0)
@@ -50,8 +50,7 @@ size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.17254902, 0.15686275, 0.14509805, 1)
 theme_override_fonts/font = ExtResource("3_hj3uc")
 theme_override_font_sizes/font_size = 10
-text = "你想齐家治国平天下，而这需要以做官为前提。
-你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人"
+text = "UI_AMBITION_HUD_TEXT_1"
 autowrap_mode = 3
 
 [node name="DeadlineResult" type="Label" parent="Mar/VBox" unique_id=24349763]
@@ -62,7 +61,7 @@ size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.34664103, 0.016675765, 3.6098065e-08, 1)
 theme_override_fonts/font = ExtResource("3_hj3uc")
 theme_override_font_sizes/font_size = 10
-text = "如果完不成，你的一身才华将无用武之处"
+text = "UI_AMBITION_HUD_TEXT_2"
 autowrap_mode = 3
 
 [node name="DynamicStateLabel" type="Label" parent="Mar/VBox" unique_id=218237166]
@@ -71,7 +70,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_hj3uc")
 theme_override_font_sizes/font_size = 16
-text = "「状态」没有人认得你，你是彻底的无名之辈"
+text = "UI_AMBITION_HUD_TEXT_3"
 autowrap_mode = 3
 
 [node name="ProgressDots" type="Label" parent="Mar/VBox" unique_id=2035710588]

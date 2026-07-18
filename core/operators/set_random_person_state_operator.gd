@@ -49,7 +49,7 @@ func operate():
 	
 	if candidates.is_empty():
 		Logging.info("[SetRandomPersonStateOperator] tier=%d 层级无 uncharted 目标可用" % tier)
-		show_hint("酒酣耳热之际环顾四周，却无值得结交之人")
+		show_hint(tr("CODE_SET_RANDOM_PERSON_STATE_OPERATOR_F6DF6F2CDB"))
 		return
 	
 	# 2. 随机选一个
@@ -60,8 +60,8 @@ func operate():
 	RelationFlagManager.set_person_state(chosen, state)
 	Logging.info("[SetRandomPersonStateOperator] %s person_state → %s" % [chosen, state])
 	
-	show_hint("酒酣耳热之际，听人提起了%s" % chosen)
+	show_hint(tr("CODE_SET_RANDOM_PERSON_STATE_OPERATOR_02240D6CB4") % chosen)
 
 
 func describe_preview() -> String:
-	return "在酒馆中听人提起新面孔"
+	return tr("CODE_SET_RANDOM_PERSON_STATE_OPERATOR_89C40F81F7")

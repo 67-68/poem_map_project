@@ -37,7 +37,7 @@ offset_bottom = 208.5
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_type_variation = &"DefaultText"
-text = "wasd移动"
+text = "UI_POEM_CRAFTER_TEXT_0"
 
 [node name="InputImagPanel" type="VBoxContainer" parent="." unique_id=531798169]
 custom_minimum_size = Vector2(400, 100)
@@ -60,7 +60,7 @@ layout_mode = 2
 theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "登高抒怀"
+text = "UI_POEM_CRAFTER_TEXT_1"
 
 [node name="Button" type="Button" parent="InputImagPanel/VBoxContainer2" unique_id=736597084]
 layout_mode = 2
@@ -68,13 +68,13 @@ theme_type_variation = &"ToggleButtonTheme"
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_otk17")
-text = "干谒权贵"
+text = "UI_POEM_CRAFTER_TEXT_2"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="InputImagPanel" unique_id=1350550608]
 layout_mode = 2
 theme_type_variation = &"FrozenInnerThoughtText"
 bbcode_enabled = true
-text = "代价是..."
+text = "UI_POEM_CRAFTER_TEXT_3"
 fit_content = true
 scroll_active = false
 horizontal_alignment = 1
@@ -85,7 +85,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 10
 theme_type_variation = &"ButtonTheme"
 theme_override_colors/font_color = Color(0.5591598, 0.8274052, 1, 1)
-text = "开始创作"
+text = "UI_POEM_CRAFTER_TEXT_4"
 
 [node name="UISoundComponent" type="Node" parent="InputImagPanel/CraftBtn" unique_id=418807036]
 script = ExtResource("4_sfx")
@@ -95,4 +95,4 @@ click_category = "book_impact"
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
-text = "撕毁卷轴"
+text = "UI_POEM_CRAFTER_TEXT_5"

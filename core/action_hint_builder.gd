@@ -53,7 +53,7 @@ static func build_action_hint(action: Action, is_locked: bool, profile := _HintP
 	if not action:
 		Logging.err("ActionHintBuilder.build_action_hint: action is null")
 		var _empty = _ActionHint.new()
-		_empty.narrative = "（无数据）"
+		_empty.narrative = tr("CODE_ACTION_HINT_FORMATTER_D8D33EAD9A")
 		return _empty
 	
 	# 构建 HintContext（自动填充运行时状态）

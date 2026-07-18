@@ -56,7 +56,7 @@ func _on_default_pressed() -> void:
 		VolatileState.action_state.selected_entity_required_place
 	])
 	if selected_uuid.is_empty():
-		EventBus.request_toast.emit("请先选择一个行动", 1)
+		EventBus.request_toast.emit(tr("CODE_NPC_ACTION_BUTTON_B7F447C362"), 1)
 		return
 	Logging.info("NpcActionButton._on_default_pressed: [地点DEBUG] 即将执行 SubActionExecutor, stay_place='%s'" % PlayerState.stay_place)
 	SubActionExecutor.execute(selected_uuid, VolatileState.action_state)
@@ -67,11 +67,11 @@ func _on_default_pressed() -> void:
 
 func _on_override_pressed() -> void:
 	if _is_locked:
-		var reason := _lock_reason if not _lock_reason.is_empty() else "暂时无法执行此行动"
+		var reason := _lock_reason if not _lock_reason.is_empty() else tr("CODE_NPC_ACTION_BUTTON_60ABF5AC4F")
 		EventBus.request_toast.emit(reason, 1)
 		return
 	if _override_action_uuid.is_empty():
-		EventBus.request_toast.emit("行动数据异常", 1)
+		EventBus.request_toast.emit(tr("CODE_NPC_ACTION_BUTTON_B5F6E16585"), 1)
 		return
 	SubActionExecutor.execute(_override_action_uuid, VolatileState.action_state)
 	var override_action: Action = Database.get_action(_override_action_uuid) as Action
@@ -157,9 +157,9 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 					if not req.compare(PlayerState):
 						_is_locked = true
 						if req is PoemRequirement:
-							_lock_reason = "需要诗词才能执行此行动"
+							_lock_reason = tr("CODE_NPC_ACTION_BUTTON_50E9C6E262")
 						elif req is TraitRequirement:
-							var desc := req.describe_requirement() if req.has_method("describe_requirement") else "条件不满足"
+							var desc := req.describe_requirement() if req.has_method("describe_requirement") else tr("CODE_NPC_ACTION_BUTTON_021C2B38D2")
 							_lock_reason = desc
 						_set_gray_visual(true)
 						Logging.info("NpcActionButton.bind: override '%s' — requirement type='%s' not met → locked, reason='%s'" % [action_name, req.get_script().resource_path.get_file() if req.get_script() else "unknown", _lock_reason])
@@ -190,10 +190,10 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 ## @param lock_reason: 当前未使用，保留签名兼容
 func _populate_labels_from_hint(hint, locked: bool, lock_reason: String) -> void:
 	var labels: Dictionary = hint.simple_labels if hint else {}
-	_set_label(_feas_label, labels.get("feasibility", "可行：?"))
-	_set_label(_cost_label, labels.get("cost", "耗：无"))
-	_set_label(_output_label, labels.get("output", "产：无"))
-	_set_label(_risk_label, labels.get("risk", "险："))
+	_set_label(_feas_label, labels.get("feasibility", tr("CODE_NPC_ACTION_BUTTON_7005AA9069")))
+	_set_label(_cost_label, labels.get("cost", tr("CODE_NPC_ACTION_BUTTON_7CA5205A5B")))
+	_set_label(_output_label, labels.get("output", tr("CODE_NPC_ACTION_BUTTON_0F9928F317")))
+	_set_label(_risk_label, labels.get("risk", tr("CODE_NPC_ACTION_BUTTON_4D7C36AA23")))
 	Logging.info("NpcActionButton._populate_labels_from_hint: labels=%s" % str(labels))
 
 

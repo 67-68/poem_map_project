@@ -67,7 +67,7 @@ size_flags_horizontal = 3
 mouse_filter = 1
 theme = ExtResource("2_vmy6r")
 theme_type_variation = &"SubTitleText"
-text = "赴宴"
+text = "UI_ACTION_BUTTON_TEXT_0"
 autowrap_mode = 2
 
 [node name="Outcome" type="Label" parent="Panel/HBoxContainer/VBoxContainer" unique_id=910935909]
@@ -76,5 +76,5 @@ mouse_filter = 1
 theme = ExtResource("2_vmy6r")
 theme_type_variation = &"DefaultText"
 theme_override_fonts/font = ExtResource("2_sl2ex")
-text = "颍川，王维召开了盛大宴会"
+text = "UI_ACTION_BUTTON_TEXT_1"
 vertical_alignment = 2

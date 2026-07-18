@@ -62,7 +62,7 @@ mouse_filter = 1
 theme = ExtResource("1_d4dn7")
 theme_type_variation = &"SubTitleText"
 theme_override_font_sizes/font_size = 16
-text = "交游 · 赴宴"
+text = "UI_SMALLER_ACTION_BUTTON_TEXT_0"
 
 [node name="Outcome" type="Label" parent="Panel/HBoxContainer/VBoxContainer" unique_id=910935909]
 layout_mode = 2
@@ -71,5 +71,5 @@ theme = ExtResource("1_d4dn7")
 theme_type_variation = &"DefaultText"
 theme_override_fonts/font = ExtResource("2_s8kc4")
 theme_override_font_sizes/font_size = 9
-text = "颍川，王维召开了盛大宴会"
+text = "UI_SMALLER_ACTION_BUTTON_TEXT_1"
 vertical_alignment = 2

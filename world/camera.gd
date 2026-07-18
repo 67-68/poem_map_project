@@ -1,6 +1,6 @@
 extends Camera2D
 
-@export_group("大唐时空视界控制")
+@export_group(tr("CODE_CAMERA_8BFDF5633D"))
 @export var min_zoom: float = 0.1   # 大地图极远
 @export var max_zoom: float = 2.0   # 城市街道极近
 @export var zoom_speed: float = 0.2 # 缩放步长

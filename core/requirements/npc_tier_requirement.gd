@@ -40,12 +40,12 @@ func describe_requirement() -> String:
 	var tier_cn := ""
 	match tier:
 		1:
-			tier_cn = "市井"
+			tier_cn = tr("CODE_NPC_TIER_REQUIREMENT_B5B9D84ABF")
 		2:
-			tier_cn = "文人"
+			tier_cn = tr("CODE_NPC_TIER_REQUIREMENT_C74492EB54")
 		3:
-			tier_cn = "权贵"
-	return "目标为「%s」阶层时" % tier_cn
+			tier_cn = tr("CODE_NPC_TIER_REQUIREMENT_E4CA3EA091")
+	return tr("CODE_NPC_TIER_REQUIREMENT_83FDDD20EC") % tier_cn
 
 
 func get_referenced_flags() -> Array:

@@ -41,7 +41,7 @@ func initialize(entity_data: GameEntity) -> void:
 func _apply_data(entity_data: GameEntity) -> void:
 	entity = entity_data
 	if not entity:
-		_label.text = "无名"
+		_label.text = tr("CODE_PICKER_ITEM_CC479D8361")
 		Logging.warn("PickerItem._apply_data: entity 为空，显示占位")
 		return
 
@@ -84,7 +84,7 @@ func _gui_input(event: InputEvent) -> void:
 		
 		# 🆕 锁定态拦截：弹出 toast，不发射 clicked
 		if _is_locked:
-			var toast_reason := _locked_reason if not _locked_reason.is_empty() else "暂时无法选择此行动"
+			var toast_reason := _locked_reason if not _locked_reason.is_empty() else tr("CODE_SUB_ACTION_BUTTON_5DB17E4310")
 			EventBus.request_toast.emit(toast_reason, 1)
 			Logging.info("PickerItem: 锁定态点击被拦截, entity='%s', reason='%s'" % [entity.name if entity else "null", toast_reason])
 			return

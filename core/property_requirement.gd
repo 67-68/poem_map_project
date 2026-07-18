@@ -22,9 +22,9 @@ func describe_requirement() -> String:
 	if not prop:
 		return ""
 	var perception = prop.get_staged_perception_at_threshold(value)
-	if perception.is_empty() or perception == "未知状态":
+	if perception.is_empty() or perception == tr("CODE_RANGE_REQUIREMENT_EC0D9BDB00"):
 		return ""
-	return "需要「%d(%s)」" % [value, perception]
+	return tr("CODE_RANGE_REQUIREMENT_B0E2EB548E") % [value, perception]
 
 func get_referenced_flags() -> Array:
 	return []

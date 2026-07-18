@@ -49,16 +49,16 @@ const POEM_CRAFT_INSPIRATION_COST := 20
 
 ## 意象丰瘠评价 — 按 base_level (1=平庸, 2=佳作, 3=绝唱)
 const LITERARY_IMAGERY_TEXTS := {
-	1: ["意象贫瘠，恐成陈词滥调", "意象单薄，难成气候", "寥寥数象，勉强成篇"],
-	2: ["意象尚可，颇有章法", "意象初具，犹待点睛", "意象得体，渐入佳境"],
-	3: ["意象丰沛，气韵生动", "意象纵横，吞吐大荒", "万象在旁，呼之欲出"],
+	1: [tr("CODE_POEM_CRAFTER_54EAEBD3D3"), tr("CODE_POEM_CRAFTER_728EB1E5A1"), tr("CODE_POEM_CRAFTER_C260C3CC52")],
+	2: [tr("CODE_POEM_CRAFTER_BED5C7074B"), tr("CODE_POEM_CRAFTER_DEE7793FFC"), tr("CODE_POEM_CRAFTER_A34283ABC1")],
+	3: [tr("CODE_POEM_CRAFTER_161BC32B63"), tr("CODE_POEM_CRAFTER_AB290C38E3"), tr("CODE_POEM_CRAFTER_08CAA7B0F4")],
 }
 
 ## 灵感手感评价 — 按 upgrade_probability 档位: 0=低(<0.33), 1=中(0.33~0.66), 2=高(≥0.66)
 const LITERARY_INSPIRATION_TEXTS := {
-	0: ["文思枯涩，全凭基本功", "手感生涩，勉力为之", "思绪凝滞，步步为营"],
-	1: ["文思渐涌，偶得佳句", "似有灵光，若即若离", "心手渐畅，暗藏机锋"],
-	2: ["灵感涌动，如有神助", "才思泉涌，下笔如飞", "灵光乍现，妙手偶得"],
+	0: [tr("CODE_POEM_CRAFTER_1DBE0EA442"), tr("CODE_POEM_CRAFTER_101706478E"), tr("CODE_POEM_CRAFTER_8F3C2318AC")],
+	1: [tr("CODE_POEM_CRAFTER_158B31FA2D"), tr("CODE_POEM_CRAFTER_493B39E86C"), tr("CODE_POEM_CRAFTER_B95E344FCD")],
+	2: [tr("CODE_POEM_CRAFTER_8DD341F160"), tr("CODE_POEM_CRAFTER_5971DCC005"), tr("CODE_POEM_CRAFTER_6CCA05DC6F")],
 }
 
 
@@ -143,9 +143,9 @@ func _refresh_mode_display_only() -> void:
 	lines.append("[color=#87ceeb]%s[/color]" % _cached_line2_text)
 
 	if current_mode == "gan_ye":
-		lines.append("[color=#ddd]此诗的精力将倾注于世俗功名之上[/color]")
+		lines.append(tr("CODE_POEM_CRAFTER_FD387E2C9F"))
 	else:
-		lines.append("[color=#ddd]此诗的精力将倾注于千古文章之上[/color]")
+		lines.append(tr("CODE_POEM_CRAFTER_C7E02CBBD0"))
 
 	# V9.2: 代价预览（从缓存 operators 重建，代价与 mode 无关）
 	lines.append_array(_build_cost_preview_lines())
@@ -177,7 +177,7 @@ func _rebuild_slots() -> void:
 
 	if all_imaginaries.is_empty():
 		var label := Label.new()
-		label.text = "暂无意象"
+		label.text = tr("CODE_POEM_CRAFTER_B6C4708BC5")
 		label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 		h_container.add_child(label)
 		return
@@ -205,7 +205,7 @@ func _rebuild_slots() -> void:
 
 	# 溢出 Slot
 	if has_overflow:
-		var overflow_slot := _create_slot("过多…", true)
+		var overflow_slot := _create_slot(tr("CODE_POEM_CRAFTER_1637FC84DB"), true)
 		overflow_slot.item_occupying = null
 		h_container.add_child(overflow_slot)
 		Logging.info('PoemCrafter: 添加溢出 Slot "过多…"')
@@ -256,7 +256,7 @@ func _on_button_pressed() -> void:
 	# ── 1. 已有诗作上限检查 ──
 	if _has_unused_poem():
 		Logging.warn('PoemCrafter(V9.1): 已有未使用的诗词，拒绝创作')
-		$InputImagPanel/RichTextLabel.text = "已有诗作，先将其送出或题壁后再来。"
+		$InputImagPanel/RichTextLabel.text = tr("CODE_POEM_CRAFTER_357762EA7B")
 		return
 
 	# 🆕 灵感（兴）检查：创作诗词需要至少 POEM_CRAFT_INSPIRATION_COST 兴
@@ -264,13 +264,13 @@ func _on_button_pressed() -> void:
 	Logging.info('PoemCrafter(V9.1): 灵感检查 — 当前兴=%d, 需要=%d' % [current_inspiration, POEM_CRAFT_INSPIRATION_COST])
 	if current_inspiration < POEM_CRAFT_INSPIRATION_COST:
 		Logging.warn('PoemCrafter(V9.1): 灵感不足，拒绝创作 — 当前%d < 需要%d' % [current_inspiration, POEM_CRAFT_INSPIRATION_COST])
-		$InputImagPanel/RichTextLabel.text = "[color=#aaa]灵感不足，至少需要 %d 兴方能创作。[/color]" % POEM_CRAFT_INSPIRATION_COST
+		$InputImagPanel/RichTextLabel.text = tr("CODE_POEM_CRAFTER_D70FF08DAF") % POEM_CRAFT_INSPIRATION_COST
 		return
 
 	# ── 2. 缓存必须存在（预览阶段已锁定结果） ──
 	if _cached_result == null:
 		Logging.err('PoemCrafter(V9.1): 缓存缺失 — 预览未完成或已过期，阻断创作')
-		$InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题，稍后再试吧。[/color]"
+		$InputImagPanel/RichTextLabel.text = tr("CODE_POEM_CRAFTER_3E435BB535")
 		return
 
 	var final_level: int = _cached_final_level
@@ -431,10 +431,10 @@ func _preview_current() -> void:
 	# ── 2. insufficient ──
 	if not result.passed:
 		if result.fail_reason == "insufficient":
-			$InputImagPanel/RichTextLabel.text = "[color=#aaa]意象不足，至少需要%d个意象方能成诗。[/color]" % max_manageable
+			$InputImagPanel/RichTextLabel.text = tr("CODE_POEM_CRAFTER_46DC19151B") % max_manageable
 			Logging.info('PoemCrafter(V9.1): _preview_current — insufficient, 清除缓存')
 		else:
-			$InputImagPanel/RichTextLabel.text = "[color=#aaa]出了些问题…[/color]"
+			$InputImagPanel/RichTextLabel.text = tr("CODE_POEM_CRAFTER_9050E24622")
 			Logging.err('PoemCrafter(V9.1): _preview_current — 未知错误 fail_reason=%s' % result.fail_reason)
 		_cached_result = null
 		_cached_final_level = 1
@@ -471,13 +471,13 @@ func _preview_current() -> void:
 		_cached_recipe_line = ""
 
 	# 行 1: 意象丰瘠（#daa520 暗金）— 基于 base_level
-	_cached_line1_text = _pick_random_from_pool(LITERARY_IMAGERY_TEXTS.get(result.base_level, ["意象平平"]))
+	_cached_line1_text = _pick_random_from_pool(LITERARY_IMAGERY_TEXTS.get(result.base_level, [tr("CODE_POEM_CRAFTER_7D1B3E04F1")]))
 	lines.append("[color=#daa520]%s[/color]" % _cached_line1_text)
 
 	# 行 2: 灵感手感（#87ceeb 天蓝）— 基于 upgrade_probability 三档 / 绝唱特殊文本
 	if result.base_level >= 3:
 		# 绝唱：固定特殊文本
-		_cached_line2_text = "已达化境，随心所欲"
+		_cached_line2_text = tr("CODE_POEM_CRAFTER_DA3A618F49")
 	else:
 		var prob: float = result.upgrade_probability
 		var tier: int = 0
@@ -487,16 +487,16 @@ func _preview_current() -> void:
 			tier = 1
 		else:
 			tier = 0
-		_cached_line2_text = _pick_random_from_pool(LITERARY_INSPIRATION_TEXTS.get(tier, ["文思平平"]))
+		_cached_line2_text = _pick_random_from_pool(LITERARY_INSPIRATION_TEXTS.get(tier, [tr("CODE_POEM_CRAFTER_6510BE12F0")]))
 		if _cached_upgrade_succeeded:
-			_cached_line2_text += "——竟有神来之笔！"
+			_cached_line2_text += tr("CODE_POEM_CRAFTER_DFCDFD5D28")
 	lines.append("[color=#87ceeb]%s[/color]" % _cached_line2_text)
 
 	# 行 3: 精力方向（white）— 基于 current_mode
 	if current_mode == "gan_ye":
-		lines.append("[color=#ddd]此诗的精力将倾注于世俗功名之上[/color]")
+		lines.append(tr("CODE_POEM_CRAFTER_FD387E2C9F"))
 	else:
-		lines.append("[color=#ddd]此诗的精力将倾注于千古文章之上[/color]")
+		lines.append(tr("CODE_POEM_CRAFTER_C7E02CBBD0"))
 
 	# ── V9.2: 创作代价预览 ──
 	_cached_cost_operators = PoemCraftingCalculator.calculate_crafting_cost(result.score)
@@ -509,7 +509,7 @@ func _preview_current() -> void:
 ## 从常量池中随机选一条文本（使用 randi 保证预览评价的微妙变化）
 func _pick_random_from_pool(pool: Array) -> String:
 	if pool.is_empty():
-		return "意象平平"
+		return tr("CODE_POEM_CRAFTER_7D1B3E04F1")
 	return pool[randi() % pool.size()]
 
 
@@ -519,11 +519,11 @@ func _build_cost_preview_lines() -> Array[String]:
 	var lines: Array[String] = []
 	
 	# 分隔线
-	lines.append(BBCode.color_size("━━━ 创作代价 ━━━", BBCode.COLOR_DANGER, 13))
+	lines.append(BBCode.color_size(tr("CODE_POEM_CRAFTER_5149591659"), BBCode.COLOR_DANGER, 13))
 	
 	# 🆕 灵感消耗预览（始终显示）
 	var current_inspiration: int = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
-	var insp_preview: String = "消耗灵感：%d 兴" % POEM_CRAFT_INSPIRATION_COST
+	var insp_preview: String = tr("CODE_POEM_CRAFTER_659C9410D1") % POEM_CRAFT_INSPIRATION_COST
 	if current_inspiration < POEM_CRAFT_INSPIRATION_COST:
 		insp_preview += " [color=#ff4444]（不足）[/color]"
 	insp_preview += " [color=#888888]当前 %d[/color]" % current_inspiration

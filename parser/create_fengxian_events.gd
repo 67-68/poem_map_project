@@ -37,7 +37,7 @@ const FLAG_ONCE_E1_OPT3 := ONCE_PREFIX + EVENT1_KEY + "_opt_find_old_home"
 
 
 func _ready() -> void:
-	print("[FengxianCreator] ========== 开始创建奉先村事件链 ==========")
+	print(tr("CODE_CREATE_FENGXIAN_EVENTS_842353CF65"))
 
 	_create_event_2()
 	_create_event_3()
@@ -45,8 +45,8 @@ func _ready() -> void:
 	_create_event_1()
 	_create_event_5()
 
-	print("[FengxianCreator] ========== 全部完成 ==========")
-	print("[FengxianCreator] 三个 Flag 名称（用于手动 interruptor）:")
+	print(tr("CODE_CREATE_FENGXIAN_EVENTS_E8D1E0FB2C"))
+	print(tr("CODE_CREATE_FENGXIAN_EVENTS_1F0DF912AC"))
 	print("  - %s" % FLAG_FAMILIAR_PATH_DONE)
 	print("  - %s" % FLAG_ASK_LIZHENG_DONE)
 	print("  - %s" % FLAG_OLD_HOME_DONE)
@@ -57,13 +57,13 @@ func _ready() -> void:
 func _create_event_2() -> void:
 	var event = BaseEvent.new()
 	event.uuid = "fengxian_familiar_path"
-	event.name = "熟悉的路径"
-	event.description = "你凭着十年前的记忆在这片田野里摸索。路早就被荒草吞没了大半，但方向还在骨头里。风从奉先县城那边吹过来，夹着一股柴烟味。"
+	event.name = tr("TRES_FENGXIAN_FAMILIAR_PATH_NAME_0")
+	event.description = tr("CODE_CREATE_FENGXIAN_EVENTS_9A7899478F")
 
 	# 唯一的选项: 返回村口
 	var opt = EventOption.new()
 	opt.uuid = "opt_return_village"
-	opt.description = "折返回村口"
+	opt.description = tr("TRES_FENGXIAN_FAMILIAR_PATH_DESCRIPTION_0")
 
 	# Pop 回 Event 1
 	var pop_op = PopEventOperator.new()
@@ -77,7 +77,7 @@ func _create_event_2() -> void:
 
 	# 不详预感 InfoDemo
 	var info_op = InfoDemoOperator.new()
-	info_op.info = "远处的茅草屋里传来婴儿断断续续的啼哭，像是在硬撑。"
+	info_op.info = tr("TRES_FENGXIAN_FAMILIAR_PATH_INFO_0")
 
 	var cr = ChoiceResult.new()
 	cr.operators.append(pop_op)
@@ -95,13 +95,13 @@ func _create_event_2() -> void:
 func _create_event_3() -> void:
 	var event = BaseEvent.new()
 	event.uuid = "fengxian_ask_lizheng"
-	event.name = "村口的里正"
-	event.description = "里正还坐在那张磨得发亮的木凳上，像是从未挪过。你走过去的时候，他正闭着眼晒太阳——不，也许只是在打盹。冬天的太阳没有温度，照在他脸上像一层薄灰。"
+	event.name = tr("TRES_FENGXIAN_ASK_LIZHENG_NAME_0")
+	event.description = tr("CODE_CREATE_FENGXIAN_EVENTS_6058B754AE")
 
 	# 唯一的选项: 返回村口
 	var opt = EventOption.new()
 	opt.uuid = "opt_return_village"
-	opt.description = "转身离开"
+	opt.description = tr("TRES_FENGXIAN_ASK_LIZHENG_DESCRIPTION_0")
 
 	var pop_op = PopEventOperator.new()
 
@@ -112,7 +112,7 @@ func _create_event_3() -> void:
 	flag_op.value = true
 
 	var info_op = InfoDemoOperator.new()
-	info_op.info = "里正闭着眼，指了一个你根本不认识的方向。风里…听不到哭声了。"
+	info_op.info = tr("TRES_FENGXIAN_ASK_LIZHENG_INFO_0")
 
 	var cr = ChoiceResult.new()
 	cr.operators.append(pop_op)
@@ -130,13 +130,13 @@ func _create_event_3() -> void:
 func _create_event_4() -> void:
 	var event = BaseEvent.new()
 	event.uuid = "fengxian_old_home_corpse"
-	event.name = "旧居"
-	event.description = "门虚掩着。你推开门，屋里的霉味混着一股甜腻的腐烂气息迎面扑来。地上趴着一具干尸——骨节粗大，肩宽，不像女人，更不是孩子。你蹲下来翻看尸体的手，指节上有老茧，是握锄头的痕迹。"
+	event.name = tr("TRES_FENGXIAN_OLD_HOME_CORPSE_NAME_0")
+	event.description = tr("CODE_CREATE_FENGXIAN_EVENTS_B93E5BF815")
 
 	# 唯一的选项: 返回村口
 	var opt = EventOption.new()
 	opt.uuid = "opt_return_village"
-	opt.description = "退出门外"
+	opt.description = tr("TRES_FENGXIAN_OLD_HOME_CORPSE_DESCRIPTION_0")
 
 	var pop_op = PopEventOperator.new()
 
@@ -147,7 +147,7 @@ func _create_event_4() -> void:
 	flag_op.value = true
 
 	var info_op = InfoDemoOperator.new()
-	info_op.info = "你急疯了，在泥水里跌跌撞撞。那阵哭声变得极其微弱，几乎要被风声盖过。"
+	info_op.info = tr("TRES_FENGXIAN_OLD_HOME_CORPSE_INFO_0")
 
 	var cr = ChoiceResult.new()
 	cr.operators.append(pop_op)
@@ -165,13 +165,13 @@ func _create_event_4() -> void:
 func _create_event_1() -> void:
 	var event = BaseEvent.new()
 	event.uuid = EVENT1_KEY
-	event.name = "奉先村村头"
-	event.description = "你站在奉先村的村口，风从骊山方向灌过来，把衣摆吹得猎猎作响。十年前的记忆在脑子里乱撞，每条巷子都像，又都不像。村口的老槐树还在，但树下的石凳上坐着陌生的人。"
+	event.name = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_NAME_0")
+	event.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_DESCRIPTION_3")
 
 	# ─── 选项 1: 沿熟悉路径找家 [ONCE] → Push E2 ───
 	var opt1 = EventOption.new()
 	opt1.uuid = "opt_go_familiar_path"
-	opt1.description = "沿着记忆中的小径，去找十年前住过的那间屋"
+	opt1.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_0")
 	# Once requirement: flag_bool_not_has
 	opt1.requirement = _make_bool_not_has_req(FLAG_ONCE_E1_OPT1)
 	# Operators: Push + Set Flag
@@ -184,7 +184,7 @@ func _create_event_1() -> void:
 	# ─── 选项 2: 折返问里正 [ONCE] → Push E3 ───
 	var opt2 = EventOption.new()
 	opt2.uuid = "opt_ask_lizheng"
-	opt2.description = "回头去找村口的里正，他应该知道这些年发生了什么"
+	opt2.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_1")
 	opt2.requirement = _make_bool_not_has_req(FLAG_ONCE_E1_OPT2)
 	var cr2 = ChoiceResult.new()
 	cr2.operators.append(_make_push_op("fengxian_ask_lizheng"))
@@ -195,12 +195,12 @@ func _create_event_1() -> void:
 	# ─── 选项 3: 直接找旧家 [ONCE + REQUIRE: E2已完成 flag_bool_has] → Push E4 ───
 	var opt3 = EventOption.new()
 	opt3.uuid = "opt_find_old_home"
-	opt3.description = "不去问人，直接凭着直觉去找那间漏雨的老屋"
+	opt3.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_2")
 	# ComplexRequirements: AND(Once + E2 done)
 	var multi_req = ComplexRequirements.new()
 	multi_req.current_operator = 0  # LOGIC.AND
 	multi_req.operators.append(_make_bool_not_has_req(FLAG_ONCE_E1_OPT3))
-	multi_req.operators.append(_make_bool_has_req(FLAG_FAMILIAR_PATH_DONE, "你不知道家在哪里"))
+	multi_req.operators.append(_make_bool_has_req(FLAG_FAMILIAR_PATH_DONE, tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_FAILED_HINT_0")))
 	opt3.requirement = multi_req
 
 	var cr3 = ChoiceResult.new()
@@ -217,36 +217,36 @@ func _create_event_1() -> void:
 func _create_event_5() -> void:
 	var event = BaseEvent.new()
 	event.uuid = "fengxian_village_entrance_revisit"
-	event.name = "奉先村村头"
-	event.description = "你又站在了村口。风还是从骊山方向来，但现在你知道有些东西已经不一样了。里正死了，那片你住过的区域已经换了模样——他们似乎搬迁到了你不熟悉的地方。你不常回来，也没钱，这些年村子对你来说，已经成了一个陌生的地方。"
+	event.name = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_NAME_0")
+	event.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_4")
 
-	var locked_hint = "你知道那里不对，里正死了，他们似乎搬迁到了你不熟悉的地方"
+	var locked_hint = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_FAILED_HINT_2")
 
 	# ─── 选项 1: 锁死 ───
 	var opt1 = EventOption.new()
 	opt1.uuid = "opt_go_familiar_path_locked"
-	opt1.description = "沿着记忆中的小径，去找十年前住过的那间屋"
+	opt1.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_0")
 	opt1.requirement = _make_never_unlock_req(locked_hint)
 	event.options.append(opt1)
 
 	# ─── 选项 2: 锁死 ───
 	var opt2 = EventOption.new()
 	opt2.uuid = "opt_ask_lizheng_locked"
-	opt2.description = "回头去找村口的里正，他应该知道这些年发生了什么"
+	opt2.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_1")
 	opt2.requirement = _make_never_unlock_req(locked_hint)
 	event.options.append(opt2)
 
 	# ─── 选项 3: 锁死 ───
 	var opt3 = EventOption.new()
 	opt3.uuid = "opt_find_old_home_locked"
-	opt3.description = "不去问人，直接凭着直觉去找那间漏雨的老屋"
+	opt3.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_2")
 	opt3.requirement = _make_never_unlock_req(locked_hint)
 	event.options.append(opt3)
 
 	# ─── 选项 4: 向小木屋走去（新选项，你后续手动链接） ───
 	var opt4 = EventOption.new()
 	opt4.uuid = "opt_walk_to_cabin"
-	opt4.description = "向小木屋走去"
+	opt4.description = tr("TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_3")
 	# 空 choice_result，你后续手动注入 PushEventOperator
 	event.options.append(opt4)
 
@@ -309,6 +309,6 @@ func _make_flag_set_op(flag_id: String) -> FlagOperator:
 func _save(resource: Resource, path: String) -> void:
 	var result = ResourceSaver.save(resource, path)
 	if result == OK:
-		print("[FengxianCreator] ✓ 已保存: %s" % path)
+		print(tr("CODE_CREATE_FENGXIAN_EVENTS_20CA6FDCE5") % path)
 	else:
-		print("[FengxianCreator] ✗ 保存失败 (code=%d): %s" % [result, path])
+		print(tr("CODE_CREATE_FENGXIAN_EVENTS_CE07598636") % [result, path])

@@ -15,9 +15,9 @@ func describe_requirement() -> String:
 	if not prop:
 		return ""
 	var min_text = prop.get_staged_perception_at_threshold(int(min_value))
-	if min_text.is_empty() or min_text == "未知状态":
+	if min_text.is_empty() or min_text == tr("CODE_RANGE_REQUIREMENT_EC0D9BDB00"):
 		return ""
-	return "需要「%d(%s)」" % [int(min_value), min_text]
+	return tr("CODE_RANGE_REQUIREMENT_B0E2EB548E") % [int(min_value), min_text]
 
 func compare(player_state) -> bool:
 	return player_state.get_stat_val(property) >= min_value and player_state.get_stat_val(property) <= max_value

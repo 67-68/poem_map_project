@@ -26,12 +26,12 @@ func describe_requirement() -> String:
 	var faction_cn := ""
 	match faction:
 		"qingliu":
-			faction_cn = "清流"
+			faction_cn = tr("CODE_RIGHT_INFO_PANEL_92C54C878B")
 		"zhuoliu":
-			faction_cn = "浊流"
+			faction_cn = tr("CODE_NPC_FACTION_REQUIREMENT_02BAE0D4E1")
 		_:
 			faction_cn = faction
-	return "目标为「%s」派系时" % faction_cn
+	return tr("CODE_NPC_FACTION_REQUIREMENT_C528572287") % faction_cn
 
 
 func get_referenced_flags() -> Array:

@@ -31,12 +31,12 @@ const _SIMPLE_FEASIBILITY_VALUES: Dictionary = {
 
 # SIMPLE profile feasibility labels (2-character Chinese)
 const _SIMPLE_FEASIBILITY_TEXT: Dictionary = {
-	"xxs": "渺茫",
-	"xs":  "微小",
-	"s":   "半",
-	"ms":  "多半",
-	"m":   "很高",
-	"l":   "必然",
+	"xxs": tr("CODE_ACTION_HINT_FORMATTER_B3A5CEA754"),
+	"xs":  tr("CODE_ACTION_HINT_FORMATTER_0094D495FD"),
+	"s":   tr("CODE_ACTION_HINT_FORMATTER_F30071FA50"),
+	"ms":  tr("CODE_ACTION_HINT_FORMATTER_5B7E1F080F"),
+	"m":   tr("CODE_ACTION_HINT_FORMATTER_2508765118"),
+	"l":   tr("CODE_ACTION_HINT_FORMATTER_23FB1D474F"),
 }
 
 
@@ -53,13 +53,13 @@ const _SIMPLE_FEASIBILITY_TEXT: Dictionary = {
 static func build_action_hint(action, is_locked: bool, ctx, profile := _HintProfile.Profile.DEFAULT):
 	if not action:
 		Logging.err("ActionHintFormatter.build_action_hint: action is null")
-		return { "narrative": "（无数据）", "vector": "" }
+		return { "narrative": tr("CODE_ACTION_HINT_FORMATTER_D8D33EAD9A"), "vector": "" }
 
 	var hint = _ActionHint.new()
 	var _is_repeated = ctx.is_repeated
 
 	# ── 叙事层（profile 不影响，保持原样）──
-	hint.narrative = action.description if not action.description.is_empty() else "（无叙述）"
+	hint.narrative = action.description if not action.description.is_empty() else tr("CODE_ACTION_HINT_FORMATTER_BF10FD5886")
 
 	if is_locked and not action.dynamic_failed_hint.is_empty():
 		hint.narrative = _BBCode.locked_prefix(action.dynamic_failed_hint) + "\n\n" + hint.narrative
@@ -104,11 +104,11 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 			if dist < best_distance or (dist == best_distance and level < best_level):
 				best_distance = dist
 				best_level = level
-		var label = _SIMPLE_FEASIBILITY_TEXT.get(best_level, "未知")
+		var label = _SIMPLE_FEASIBILITY_TEXT.get(best_level, tr("CODE_POEM_CRAFTING_CALCULATOR_4D8C1C5B42"))
 		hint.feasibility.append(label)
 		Logging.info("ActionHintFormatter.build_sub_action_preview(SIMPLE): sub_action='%s' prob=%d → %s" % [sub_action.name, prob, label])
 	else:
-		hint.feasibility.title = "━━━ 可行性 ━━━"
+		hint.feasibility.title = tr("CODE_ACTION_HINT_FORMATTER_C5ECC3C43D")
 		hint.feasibility.append(_BBCode.sub_prob_line(prob))
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' possibility=%d" % [sub_action.name, prob])
 
@@ -140,7 +140,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 			hint.cost.append(_BBCode.time_insufficient(cost_detail, current_time))
 			Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' 时间不足 (need=%d, have=%d)" % [sub_action.name, cost_total, current_time])
 		else:
-			hint.cost.append("⏱ 耗时 %s" % cost_detail)
+			hint.cost.append(tr("CODE_BBCODE_2FB48A6C2F") % cost_detail)
 			Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' time ok (need=%d, have=%d)" % [sub_action.name, cost_total, current_time])
 
 	# 🆕 cost archetype operators（花钱/耗材等）→ cost 模块
@@ -152,7 +152,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' cost archetype (%d ops → %d lines) → 已合并" % [sub_action.name, cost_arch.operators.size(), cost_lines.size()])
 
 	if not hint.cost.is_empty() and hint.cost.title.is_empty():
-		hint.cost.title = "━━━ 耗费 ━━━"
+		hint.cost.title = tr("CODE_ACTION_HINT_FORMATTER_C611D44ACD")
 
 	# ── 成功效果 → output ──
 	var success_descs: Array[String] = []
@@ -167,7 +167,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 
 	if success_descs.is_empty():
 		if profile == _HintProfile.Profile.SIMPLE:
-			hint.output.append("成败未卜")
+			hint.output.append(tr("CODE_ACTION_HINT_FORMATTER_213F14AD2B"))
 		else:
 			hint.output.append(_BBCode.success_header() + " 成败未卜…")
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' success 无有效 operator，使用 fallback" % sub_action.name)
@@ -175,7 +175,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		if profile == _HintProfile.Profile.SIMPLE:
 			hint.output.append_array(success_descs)
 		else:
-			hint.output.title = "━━━ 产出 ━━━"
+			hint.output.title = tr("CODE_ACTION_HINT_FORMATTER_7D295E9E17")
 			hint.output.append(_BBCode.success_header())
 			hint.output.append_array(success_descs)
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' success preview: %d lines" % [sub_action.name, success_descs.size()])
@@ -188,7 +188,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 
 	if fail_descs.is_empty():
 		if profile == _HintProfile.Profile.SIMPLE:
-			hint.risk.append("后果难料")
+			hint.risk.append(tr("CODE_ACTION_HINT_FORMATTER_400F1725F5"))
 		else:
 			hint.risk.append(_BBCode.fail_header() + " 后果难料…")
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' fail 无有效 operator，使用 fallback" % sub_action.name)
@@ -196,7 +196,7 @@ static func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], f
 		if profile == _HintProfile.Profile.SIMPLE:
 			hint.risk.append_array(fail_descs)
 		else:
-			hint.risk.title = "━━━ 风险 ━━━"
+			hint.risk.title = tr("CODE_ACTION_HINT_FORMATTER_AED2FEF5AE")
 			hint.risk.append(_BBCode.fail_header())
 			hint.risk.append_array(fail_descs)
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' fail preview: %d lines" % [sub_action.name, fail_descs.size()])
@@ -271,8 +271,8 @@ static func _assemble_feasibility_module(action, feas_mod, profile) -> void:
 
 	# DEFAULT profile – original logic unchanged
 	if prob < 100:
-		feas_mod.title = "━━━ 可行性 ━━━"
-		feas_mod.append("概率: %d%%" % prob)
+		feas_mod.title = tr("CODE_ACTION_HINT_FORMATTER_C5ECC3C43D")
+		feas_mod.append(tr("CODE_BBCODE_E18ED459F1") % prob)
 		Logging.info("ActionHintFormatter._assemble_feasibility_module: possibility=%d for '%s'" % [prob, action.name])
 
 
@@ -299,26 +299,26 @@ static func _assemble_cost_module(action, ctx, cost_mod, profile) -> void:
 
 	# 如果 cost 模块非空，设标题
 	if not cost_mod.is_empty() and cost_mod.title.is_empty():
-		cost_mod.title = "━━━ 耗费 ━━━"
+		cost_mod.title = tr("CODE_ACTION_HINT_FORMATTER_C611D44ACD")
 
 
 static func _assemble_output_module(action, is_repeated: bool, output_mod, profile) -> void:
 	if not action.action_results.is_empty():
-		output_mod.title = "━━━ 产出 ━━━"
+		output_mod.title = tr("CODE_ACTION_HINT_FORMATTER_7D295E9E17")
 		var success_lines = _OPFormatter.build_preview(action.action_results, profile)
 		output_mod.append_array(success_lines)
 		Logging.info("ActionHintFormatter._assemble_output_module: %d action_results → %d lines for '%s'" % [action.action_results.size(), success_lines.size(), action.name])
 	else:
 		var archetype_lines = _build_archetype_qualitative_preview(action, is_repeated, profile)
 		if not archetype_lines.is_empty():
-			output_mod.title = "━━━ 产出 ━━━"
+			output_mod.title = tr("CODE_ACTION_HINT_FORMATTER_7D295E9E17")
 			output_mod.append_array(archetype_lines)
 			Logging.info("ActionHintFormatter._assemble_output_module: archetype 定性预览 %d lines for '%s'" % [archetype_lines.size(), action.name])
 
 
 static func _assemble_risk_module(action, risk_mod, profile) -> void:
 	if action.failed_result and not action.failed_result.operators.is_empty():
-		risk_mod.title = "━━━ 风险 ━━━"
+		risk_mod.title = tr("CODE_ACTION_HINT_FORMATTER_AED2FEF5AE")
 		var fail_lines = _OPFormatter.build_choice_result_preview(action.failed_result, profile)
 		risk_mod.append_array(fail_lines)
 		Logging.info("ActionHintFormatter._assemble_risk_module: %d failed_result ops → %d lines for '%s'" % [action.failed_result.operators.size(), fail_lines.size(), action.name])
@@ -366,7 +366,7 @@ static func _defer_info_lines(action, ctx, cost_mod) -> void:
 
 		if is_failing:
 			var fb = _defer_sub.defer_config.failed_fallback
-			var fb_msg = "将有不良后果" if not fb.is_empty() else "将被迫中断"
+			var fb_msg = tr("CODE_ACTION_HINT_FORMATTER_E9186A064E") if not fb.is_empty() else tr("CODE_ACTION_HINT_FORMATTER_C7E5FDA3A3")
 			cost_mod.append(_BBCode.defer_failing(fb_msg))
 	else:
 		cost_mod.append(_BBCode.defer_pending(xun_val))
@@ -388,7 +388,7 @@ static func _defer_cost_parts(defer_sub, amounts: Dictionary, cost_parts: Array[
 					cost_parts.append("%s %d" % [pname, pop.value])
 	if not defer_sub.defer_config.ap_cost.is_empty():
 		var ap_val = amounts.get(defer_sub.defer_config.ap_cost, 0)
-		cost_parts.append("时间 %d" % ap_val)
+		cost_parts.append(tr("CODE_ACTION_HINT_FORMATTER_537A21D6E2") % ap_val)
 
 
 # ════════════════════════════════════════════════════════════════
@@ -468,14 +468,14 @@ static func _build_archetype_qualitative_preview(action, is_repeated: bool, prof
 
 			if is_repeated:
 				if pop.value > 0:
-					lines.append("• %s 将会增加（重复行动，效果减少20%%）" % display_name)
+					lines.append(tr("CODE_ACTION_HINT_FORMATTER_E90E20838E") % display_name)
 				else:
-					lines.append("• %s 将会消耗（重复行动，消耗增加20%%）" % display_name)
+					lines.append(tr("CODE_ACTION_HINT_FORMATTER_2EEE8E4508") % display_name)
 			else:
 				if pop.value > 0:
-					lines.append("• %s 将会增加" % display_name)
+					lines.append(tr("CODE_ACTION_HINT_FORMATTER_92A049E66F") % display_name)
 				else:
-					lines.append("• %s 将会消耗" % display_name)
+					lines.append(tr("CODE_ACTION_HINT_FORMATTER_389509B135") % display_name)
 		elif op is TimeOperator:
 			if action.day_consumed > 0:
 				continue
@@ -483,9 +483,9 @@ static func _build_archetype_qualitative_preview(action, is_repeated: bool, prof
 			if top.refresh_time or top.day <= 0:
 				continue
 			if is_repeated:
-				lines.append("• 额外耗时 %d 天（重复行动，消耗增加20%%）" % int(top.day))
+				lines.append(tr("CODE_ACTION_HINT_FORMATTER_BA06578EC5") % int(top.day))
 			else:
-				lines.append("• 额外耗时 %d 天" % int(top.day))
+				lines.append(tr("CODE_ACTION_HINT_FORMATTER_0BBC7EDA2B") % int(top.day))
 		elif op is PoemRewardOperator:
 			var desc = op.describe_preview()
 			if not desc.is_empty():
@@ -515,24 +515,24 @@ static func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Ar
 				arrows += arrow_char
 
 			if is_repeated:
-				lines.append("%s%s（重复）" % [display_name, arrows])
+				lines.append(tr("CODE_ACTION_HINT_FORMATTER_6391FF1D34") % [display_name, arrows])
 			else:
 				lines.append("%s%s" % [display_name, arrows])
 		elif op is TimeOperator:
 			if op.refresh_time or op.day <= 0:
 				continue
-			lines.append("⏱%d天" % int(op.day))
+			lines.append(tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_20C021DFAA") % int(op.day))
 		elif op is PoemRewardOperator:
 			var desc = ""
 			match op.mode:
 				"money":
-					desc = "卖诗"
+					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
 				"fame":
-					desc = "以诗换名"
+					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324")
 				"baiye":
-					desc = "携诗拜谒"
+					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE")
 				_:
-					desc = "卖诗"
+					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
 			if not desc.is_empty():
 				lines.append(desc)
 
@@ -544,13 +544,13 @@ static func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Ar
 static func _build_simple_labels(hint, is_locked: bool, lock_reason: String) -> void:
 	var labels := {}
 	if is_locked:
-		labels["feasibility"] = _BBCode.simple_feasibility_label("不足")
+		labels["feasibility"] = _BBCode.simple_feasibility_label(tr("CODE_ACTION_HINT_FORMATTER_1A5219A827"))
 		labels["cost"] = _BBCode.simple_cost_label([])
 		labels["output"] = _BBCode.simple_output_label([])
 		labels["risk"] = _BBCode.simple_lock_label(lock_reason)
 	else:
 		var feas_line = hint.feasibility.lines[0] if not hint.feasibility.lines.is_empty() else ""
-		labels["feasibility"] = _BBCode.simple_feasibility_label(feas_line if not feas_line.is_empty() else "未知")
+		labels["feasibility"] = _BBCode.simple_feasibility_label(feas_line if not feas_line.is_empty() else tr("CODE_POEM_CRAFTING_CALCULATOR_4D8C1C5B42"))
 
 		labels["cost"] = _BBCode.simple_cost_label(hint.cost.lines)
 		labels["output"] = _BBCode.simple_output_label(hint.output.lines)

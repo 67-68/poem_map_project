@@ -150,9 +150,9 @@ func describe_preview() -> String:
 	
 	if PlayerState._is_repeated_action and display_value != value:
 		if perception_text.is_empty():
-			base_str = "%s %s：%+d（原%+d，重复行动%s%d%%）" % [cn_name, arrows, display_value, value, ("+" if value < 0 else "-"), 20]
+			base_str = tr("CODE_PROPERTY_OPERATOR_D1DF056B3B") % [cn_name, arrows, display_value, value, ("+" if value < 0 else "-"), 20]
 		else:
-			base_str = "%s %s：%+d（原%+d%s，重复行动%s%d%%）" % [cn_name, arrows, display_value, value, "(%s)" % perception_text, ("+" if value < 0 else "-"), 20]
+			base_str = tr("CODE_PROPERTY_OPERATOR_3C14C9AF08") % [cn_name, arrows, display_value, value, "(%s)" % perception_text, ("+" if value < 0 else "-"), 20]
 		Logging.info("PropertyOperator.describe_preview: 重复行动 preview, %+d→%+d for '%s'" % [value, display_value, property])
 	else:
 		if perception_text.is_empty():
@@ -210,7 +210,7 @@ func convert_prop_limit_requirement() -> PropertyRequirement:
 			req.property = property
 			req.value = prop.lowest - value
 			req.operator = REQ_OPERATOR.COMPARE.GREATER_THAN
-			req.failed_hint = "不足，当前" + str(current_val) + "，消耗后仅剩" + str(new_val)
+			req.failed_hint = tr("CODE_PROPERTY_OPERATOR_6704B0D77C") + str(current_val) + tr("CODE_PROPERTY_OPERATOR_0D50242214") + str(new_val)
 			return req
 	elif value > 0:
 		if prop.hard_max >= 0 and new_val > prop.hard_max:
@@ -218,7 +218,7 @@ func convert_prop_limit_requirement() -> PropertyRequirement:
 			req.property = property
 			req.value = prop.hard_max - value + 1
 			req.operator = REQ_OPERATOR.COMPARE.LESS_THAN
-			req.failed_hint = "已达上限，无法继续获得"
+			req.failed_hint = tr("CODE_PROPERTY_OPERATOR_10A10C7F32")
 			return req
 	return null
 

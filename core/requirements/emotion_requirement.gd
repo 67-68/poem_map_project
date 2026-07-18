@@ -16,18 +16,18 @@ class_name EmotionRequirement extends BaseRequirements
 
 ## 情绪英文键 → 中文名映射
 const _EMOTION_CN: Dictionary = {
-	"sorrow": "愁苦",
-	"arrogance": "狂傲",
-	"anger": "愤懑",
-	"tranquility": "旷达",
-	"ambition": "野心",
+	"sorrow": tr("CODE_EMOTION_REQUIREMENT_192BC492B2"),
+	"arrogance": tr("CODE_EMOTION_REQUIREMENT_9A85FF3DCC"),
+	"anger": tr("CODE_EMOTION_REQUIREMENT_DC917B1566"),
+	"tranquility": tr("CODE_EMOTION_REQUIREMENT_A62908DEDA"),
+	"ambition": tr("CODE_EMOTION_REQUIREMENT_0AB342DF06"),
 }
 
 func describe_requirement() -> String:
 	if volatile_stat.is_empty():
 		return ""
 	var cn = _EMOTION_CN.get(volatile_stat, volatile_stat)
-	return "需要情绪: %s(≥%d)" % [cn, value]
+	return tr("CODE_EMOTION_REQUIREMENT_8C8222BD2A") % [cn, value]
 
 func compare(player_state: PlayerState):
 	var stat_front = player_state.get_emotion(volatile_stat)

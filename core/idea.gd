@@ -12,7 +12,7 @@ class_name Idea extends GameEntity
 @export var counter_idea: String = ''
 
 func increase_idea_level():
-    """提升一级，解锁更多一个buff，注入 source_uuid 后立即 operate 对应 buff"""
+    ""tr("CODE_IDEA_F1337B7A69")""
     if idea_buffs.is_empty():
         Logging.err("Idea.increase_idea_level: idea_buffs 为空，无法提升")
         return
@@ -31,7 +31,7 @@ func increase_idea_level():
 
 
 func _inject_source_and_operate(buff: BaseOperator) -> void:
-    """递归注入 source_uuid 并执行 operate（支持 MultiBuffOperator 嵌套）"""
+    ""tr("CODE_IDEA_DBA21B691F")""
     if buff is BuffOperator:
         buff.source_uuid = uuid
         Logging.info("Idea: 执行 buff — type='%s', named_key='%s'" % [buff.modifier_type, buff.named_amount_key])
@@ -46,7 +46,7 @@ func _inject_source_and_operate(buff: BaseOperator) -> void:
 
 
 func _inject_source_and_deactivate(buff: BaseOperator) -> void:
-    """递归注入 source_uuid 并执行 on_exit（支持 MultiBuffOperator 嵌套）"""
+    ""tr("CODE_IDEA_E147F80CD1")""
     if buff is BuffOperator:
         buff.source_uuid = uuid
         Logging.info("Idea: 清理 buff — type='%s', named_key='%s'" % [buff.modifier_type, buff.named_amount_key])
@@ -61,7 +61,7 @@ func _inject_source_and_deactivate(buff: BaseOperator) -> void:
 
 
 func deactivate():
-    """遍历 0..current_idea_level 所有已解锁 buff，注入 source_uuid 后 on_exit 清理，重置 level 为 -1"""
+    ""tr("CODE_IDEA_928E46A5AE")""
     if current_idea_level < 0:
         Logging.debug("Idea.deactivate: 无已激活 buff (level=%d)，跳过清理" % current_idea_level)
         return

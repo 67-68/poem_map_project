@@ -30,16 +30,16 @@ const LEVERAGE_KEY_POOL: Array[String] = [
 
 ## key → 中文描述映射（用于 hint 展示）
 const LEVERAGE_KEY_LABELS: Dictionary = {
-	"debt_secret":      "隐匿的巨额债务",
-	"family_scandal":   "见不得光的家丑",
-	"past_crime":       "尘封的旧日罪行",
-	"illicit_affair":   "与人私通的证据",
-	"tax_evasion":      "常年逃税的账目",
-	"forgery":          "伪造文书的笔迹",
-	"bribery_record":   "收受贿赂的记录",
-	"academic_fraud":   "科举舞弊的线索",
-	"embezzlement":     "挪用公款的痕迹",
-	"betrayal_secret":  "背信弃义的密约",
+	"debt_secret":      tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_D1A59CEE54"),
+	"family_scandal":   tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_7D65F67B10"),
+	"past_crime":       tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_F66EF53384"),
+	"illicit_affair":   tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_254E9A0624"),
+	"tax_evasion":      tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_B3AD279BCF"),
+	"forgery":          tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_502DC14B76"),
+	"bribery_record":   tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_184F5B7573"),
+	"academic_fraud":   tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_B13ABA59F6"),
+	"embezzlement":     tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_7F26389725"),
+	"betrayal_secret":  tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_3996EDABB3"),
 }
 
 ## 可选 — 从 context 读取 target_tag 的 key。空字符串 = 随机选。
@@ -88,10 +88,10 @@ func operate():
 
 	# 5. hint
 	var label = LEVERAGE_KEY_LABELS.get(chosen_key, chosen_key)
-	show_hint("探得了「%s」的把柄：%s" % [chosen_target, label])
+	show_hint(tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_C58E3CFC02") % [chosen_target, label])
 
 
 func describe_preview() -> String:
 	if not target_key.is_empty():
-		return "添加把柄给 context[%s]" % target_key
-	return "在暗巷中打探消息，或可获知他人把柄"
+		return tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_EC0F4AD515") % target_key
+	return tr("CODE_ADD_RANDOM_LEVERAGE_OPERATOR_0108716880")

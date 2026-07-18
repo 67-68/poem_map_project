@@ -44,14 +44,14 @@ var _prop_panel_map: Dictionary = {}
 # smaller_prop_label.tscn（其他）：小字号，格式「兴 50/100」+「(初露锋芒)」
 # 所有 value 格式含两个 %d 占位符：当前值 / 上限（soft_max 与 hard_max 中较低者）
 const _PROP_FORMAT: Dictionary = {
-	"health":      { "value": "%d/%d 健", "perception": "「%s」" },
-	"money":       { "value": "%d/%d 文", "perception": "「%s」" },
-	"inspiration": { "value": "兴 %d/%d", "perception": "(%s)" },
-	"momentum":    { "value": "势 %d/%d", "perception": "(%s)" },
-	"prestige":    { "value": "望 %d/%d", "perception": "(%s)" },
-	"talent":      { "value": "才 %d/%d", "perception": "(%s)" },
-	"astuteness":  { "value": "府 %d/%d", "perception": "(%s)" },
-	"composure":   { "value": "定 %d/%d", "perception": "(%s)" },
+	"health":      { "value": tr("CODE_LEFT_PLAYER_PANEL_87D55E3395"), "perception": "「%s」" },
+	"money":       { "value": tr("CODE_LEFT_PLAYER_PANEL_745A42FECC"), "perception": "「%s」" },
+	"inspiration": { "value": tr("CODE_LEFT_PLAYER_PANEL_C5D046C34E"), "perception": "(%s)" },
+	"momentum":    { "value": tr("CODE_LEFT_PLAYER_PANEL_0D13673A08"), "perception": "(%s)" },
+	"prestige":    { "value": tr("CODE_LEFT_PLAYER_PANEL_82ED953449"), "perception": "(%s)" },
+	"talent":      { "value": tr("CODE_LEFT_PLAYER_PANEL_B3540AF984"), "perception": "(%s)" },
+	"astuteness":  { "value": tr("CODE_LEFT_PLAYER_PANEL_B24700B22F"), "perception": "(%s)" },
+	"composure":   { "value": tr("CODE_LEFT_PLAYER_PANEL_34B6CBC411"), "perception": "(%s)" },
 }
 
 # prop_key → { value_label: Label, perception_label: Label }
@@ -239,11 +239,11 @@ func _refresh_place_label() -> void:
 				known_npcs.append(doc.name if not doc.name.is_empty() else target_tag)
 
 	if known_npcs.is_empty():
-		_place_label.text = "驻留 · %s" % cn
+		_place_label.text = tr("CODE_LEFT_PLAYER_PANEL_E6142E8810") % cn
 		Logging.info("LeftPlayerPanel._refresh_place_label: [地点DEBUG] PlaceLabel set → '驻留 · %s' (无已知 NPC)" % cn)
 	else:
 		var npc_str := "、".join(known_npcs)
-		_place_label.text = "驻留 · %s — %s在此" % [cn, npc_str]
+		_place_label.text = tr("CODE_LEFT_PLAYER_PANEL_7CB079ED6A") % [cn, npc_str]
 		Logging.info("LeftPlayerPanel._refresh_place_label: [地点DEBUG] PlaceLabel set → '驻留 · %s — %s在此' (%d NPC)" % [cn, npc_str, known_npcs.size()])
 
 # ── 上限计算 ────────────────────────────────────────────
@@ -382,7 +382,7 @@ func _refresh_ambition_progress_label() -> void:
 	var cn_name = tracked_prop.get_display_name()
 	var val: int = PlayerState.get_stat_val(ambition.tracked_property)
 	var perception = tracked_prop.get_staged_perception_text()
-	_ambition_progress_label.text = "进度「%s」：%d(%s)" % [cn_name, val, perception]
+	_ambition_progress_label.text = tr("CODE_LEFT_PLAYER_PANEL_73D0BD60AB") % [cn_name, val, perception]
 	_ambition_progress_label.show()
 
 func _on_ambition_stat_changed(prop_name: String) -> void:
@@ -412,7 +412,7 @@ func _update_ambition_deadline_bar() -> void:
 	_ambition_deadline_label.show()
 	_ambition_progress_bar.show()
 
-	_ambition_deadline_label.text = "距离大考还剩: %d 旬" % remaining
+	_ambition_deadline_label.text = tr("CODE_LEFT_PLAYER_PANEL_134E5C5565") % remaining
 
 	_ambition_progress_bar.max_value = float(total)
 	_ambition_progress_bar.value = float(remaining)
