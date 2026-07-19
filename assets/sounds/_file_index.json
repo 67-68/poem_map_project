@@ -34,6 +34,12 @@
     "book_place/bookPlace3.ogg",
     "heartbeat/impactWood_heavy_003.ogg",
     "heartbeat/impactWood_heavy_004.ogg",
+    "backgrounds/actions/jiao_you.ogg",
+    "backgrounds/actions/tut_chuyou.ogg",
+    "backgrounds/drones/drone1.ogg",
+    "backgrounds/drones/drone2.ogg",
+    "backgrounds/drones/drone3.ogg",
+    "backgrounds/drones/drone4.ogg",
     "coin/handleCoins.ogg",
     "coin/handleCoins2.ogg",
     "book_impact/impactWood_heavy_000.ogg",
@@ -51,6 +57,6 @@
     "book_flip/bookFlip1.ogg",
     "book_flip/bookFlip2.ogg"
   ],
-  "generated_at": "2026-07-16T07:02:56.749784+00:00",
-  "total": 50
+  "generated_at": "2026-07-19T09:20:40.754737+00:00",
+  "total": 56
 }

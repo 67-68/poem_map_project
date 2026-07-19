@@ -17,13 +17,13 @@ class_name ActionPanelManager extends Node
 # type: "scene_action" → 从 Database 查找 SceneAction
 # action_id: Database.get_action() 的 key
 const ACTION_PRIORITY: Array[Dictionary] = [
-	{ name = "Fangshi", type = "scene_action", action_id = "fang_shi" },
+	{ name = "坊市", type = "scene_action", action_id = "fang_shi" },
 	{ name = "Baiye",   type = "scene_action", action_id = "bai_ye" },
 	{ name = "Jiaoyou", type = "scene_action", action_id = "jiao_you" },
 	{ name = "Denggao", type = "scene_action", action_id = "deng_gao" },
 	{ name = "Duzhuo",  type = "scene_action", action_id = "du_zhuo" },
 	{ name = "Commute", type = "scene_action", action_id = "zhu_liu" },
-	{ name = "Chuyou",  type = "scene_action", action_id = "tut_chuyou" },
+	{ name = "出游",  type = "scene_action", action_id = "tut_chuyou" },
 ]
 
 # ── 子节点 ─────────────────────────────────────────

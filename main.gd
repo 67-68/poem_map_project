@@ -327,6 +327,11 @@ func _register_ambient_profiles() -> void:
 	])
 	Logging.info("Main: 已注册 ambient profile → 755_backhome")
 
+	# ── 注册 AmbientMusic profile ──
+	const ROYAL_MUSIC = preload("res://assets/sounds/royal_music.mp3")
+	AudioManager.register_ambient_music_profile("royal_ambient", [ROYAL_MUSIC], 30.0, 90.0, -6.0)
+	Logging.info("Main: 已注册 ambient music profile → royal_ambient")
+
 
 func _on_game_over(death_hint: String) -> void:
 	Logging.info("Main: 游戏结束 signal 收到，切换到独立墓碑场景")

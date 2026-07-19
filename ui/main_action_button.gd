@@ -12,6 +12,10 @@ func _on_clicked() -> void:
 		action.action_results.size() if action and action.action_results else 0,
 		"yes" if action and action.generator != null else "no"
 	])
+
+	# ── 触发行动环境音（cost 之前，父 action uuid）──
+	if action:
+		AudioManager.play_action_ambient(action.uuid)
 	
 	# ── 快照：在 begin_action_batch 之前锁定 action 元数据 ──
 	var _snap_is_scene := action is SceneAction

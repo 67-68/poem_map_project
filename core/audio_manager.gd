@@ -34,6 +34,27 @@ var _ambient_active: bool = false
 var _ambient_paused: bool = false
 var _ambient_layers: Array = []  # Array[AmbientLayer]
 var _profiles: Dictionary = {}   # String -> Array[Dictionary] 注册的 profile
+
+# ── AmbientMusic System（不定时氛围音乐，与 Ambient 互斥）──
+var _ambient_music_player: AudioStreamPlayer
+var _ambient_music_timer: Timer
+var _ambient_music_active: bool = false
+var _ambient_music_paused: bool = false
+var _ambient_music_pool: Array[AudioStream] = []   # 当前激活 profile 的音乐池
+var _ambient_music_profiles: Dictionary = {}        # String -> Dictionary 注册的 profile
+var _ambient_music_current_min_silence: float = 30.0
+var _ambient_music_current_max_silence: float = 90.0
+var _ambient_music_current_volume: float = 0.0
+
+# ── ActionAmbient System（行动触发环境音，BGM > ActionAmbient > Ambient = AmbientMusic）──
+var _action_ambient_player: AudioStreamPlayer
+var _action_ambient_limit_timer: Timer
+var _action_ambient_active: bool = false
+var _action_ambient_paused: bool = false
+var _action_ambient_current_volume: float = -6.0
+const ACTION_AMBIENT_ROOT: String = "res://assets/sounds/backgrounds/actions"
+const ACTION_AMBIENT_MAX_DURATION: float = 60.0
+
 var _bgm_was_playing: bool = false  # _process() 边缘检测
 
 func _ready():
@@ -57,26 +78,59 @@ func _ready():
 	# 5. 初始化意象音效监听器（独立节点，解耦 Operator 与 AudioManager）
 	_initialize_imaginary_sound_listener()
 
-# ── _process: 被动 BGM 互斥监控 ──
+	# 6. 初始化 AmbientMusic 播放器 + Timer
+	_ambient_music_player = _create_player("AmbientMusic")
+	_ambient_music_player.finished.connect(_on_ambient_music_finished)
+	
+	_ambient_music_timer = Timer.new()
+	_ambient_music_timer.name = "AmbientMusicTimer"
+	_ambient_music_timer.one_shot = true
+	_ambient_music_timer.timeout.connect(_on_ambient_music_timer_timeout)
+	add_child(_ambient_music_timer)
+	Logging.info("%s: AmbientMusic 子系统已初始化" % LOG_TAG)
+
+	# 7. 初始化 ActionAmbient 播放器 + 上限 Timer
+	_action_ambient_player = _create_player("ActionAmbient")
+	_action_ambient_player.finished.connect(_on_action_ambient_finished)
+	
+	_action_ambient_limit_timer = Timer.new()
+	_action_ambient_limit_timer.name = "ActionAmbientLimitTimer"
+	_action_ambient_limit_timer.one_shot = true
+	_action_ambient_limit_timer.timeout.connect(_on_action_ambient_limit_reached)
+	add_child(_action_ambient_limit_timer)
+	Logging.info("%s: ActionAmbient 子系统已初始化" % LOG_TAG)
+
+# ── _process: 四路互斥监控（BGM > ActionAmbient > Ambient = AmbientMusic）──
 func _process(_delta: float) -> void:
-	# 边缘检测：BGM 轨道状态变化时自动 pause/resume ambient
+	# 边缘检测：BGM 轨道状态变化时自动 pause/resume 所有环境音
 	var bgm_now_playing: bool = false
 	if is_instance_valid(_bgm_track_1) and _bgm_track_1.playing:
 		bgm_now_playing = true
 	if is_instance_valid(_bgm_track_2) and _bgm_track_2.playing:
 		bgm_now_playing = true
-	
-	if not _ambient_active:
+
+	var any_active := _ambient_active or _ambient_music_active or _action_ambient_active
+	if not any_active:
 		_bgm_was_playing = bgm_now_playing
 		return
-	
+
 	if bgm_now_playing and not _bgm_was_playing:
-		# BGM 从无到有 → pause ambient
-		_pause_ambient_internal()
+		# BGM 从无到有 → pause 所有环境音
+		if _action_ambient_active:
+			_pause_action_ambient_internal()
+		if _ambient_active:
+			_pause_ambient_internal()
+		if _ambient_music_active:
+			_pause_ambient_music_internal()
 	elif not bgm_now_playing and _bgm_was_playing:
-		# BGM 从有到无 → resume ambient
-		_resume_ambient_internal()
-	
+		# BGM 从有到无 → resume 之前活跃的环境音（按优先级）
+		if _action_ambient_active:
+			_resume_action_ambient_internal()
+		if _ambient_active:
+			_resume_ambient_internal()
+		if _ambient_music_active:
+			_resume_ambient_music_internal()
+
 	_bgm_was_playing = bgm_now_playing
 
 # 辅助函数：创建播放器
@@ -517,6 +571,7 @@ func register_ambient_profile(key: String, layers: Array) -> void:
 
 
 ## 激活指定 profile。若已有 active → 先 clear。
+## 同时清除 AmbientMusic（互斥）。
 ## 若 BGM 正在播 → 加载但不启动（标记 paused 等待 _process 恢复）
 func set_ambient_profile(key: String) -> void:
 	if not _profiles.has(key):
@@ -524,6 +579,7 @@ func set_ambient_profile(key: String) -> void:
 		return
 
 	clear_ambient_profile()
+	clear_ambient_music_profile()
 
 	var layers_config = _profiles[key] as Array
 	for i in range(layers_config.size()):
@@ -605,3 +661,286 @@ func _resume_ambient_internal() -> void:
 
 
 # ═══════════════════════════════════════════════════════
+# AmbientMusic System（不定时氛围音乐，与 Ambient 互斥）
+# ═══════════════════════════════════════════════════════
+
+## 注册 ambient music profile。key 用于 set_ambient_music_profile() 快速引用。
+## config: Dictionary { pool, min_silence_sec, max_silence_sec, volume_db, initial_delay }
+func register_ambient_music_profile(key: String, pool: Array, min_silence: float = 30.0, max_silence: float = 90.0, volume_db: float = 0.0) -> void:
+	if key.is_empty():
+		Logging.warn("%s: register_ambient_music_profile key 为空" % LOG_TAG)
+		return
+	if pool.is_empty():
+		Logging.warn("%s: register_ambient_music_profile pool 为空 [%s]" % [LOG_TAG, key])
+		return
+	# 过滤掉 null stream
+	var clean_pool: Array[AudioStream] = []
+	for s in pool:
+		if s is AudioStream:
+			clean_pool.append(s)
+		else:
+			Logging.warn("%s: register_ambient_music_profile [%s] 含非 AudioStream 元素，已跳过" % [LOG_TAG, key])
+	if clean_pool.is_empty():
+		Logging.warn("%s: register_ambient_music_profile [%s] 过滤后 pool 为空" % [LOG_TAG, key])
+		return
+	_ambient_music_profiles[key] = {
+		"pool": clean_pool,
+		"min_silence": min_silence,
+		"max_silence": max_silence,
+		"volume_db": volume_db,
+	}
+	Logging.info("%s: 已注册 ambient music profile [%s] → %d 首曲目 (silence %.0f-%.0fs, vol %.1fdB)" % [LOG_TAG, key, clean_pool.size(), min_silence, max_silence, volume_db])
+
+
+## 激活指定 ambient music profile。同时清除 Ambient（互斥）。
+## 若 BGM 正在播 → 加载但不启动（标记 paused 等待 _process 恢复）
+func set_ambient_music_profile(key: String) -> void:
+	if not _ambient_music_profiles.has(key):
+		Logging.warn("%s: 未找到 ambient music profile [%s]" % [LOG_TAG, key])
+		return
+
+	clear_ambient_music_profile()
+	clear_ambient_profile()
+
+	var cfg: Dictionary = _ambient_music_profiles[key]
+	_ambient_music_pool = cfg["pool"]
+	_ambient_music_current_min_silence = cfg["min_silence"]
+	_ambient_music_current_max_silence = cfg["max_silence"]
+	_ambient_music_current_volume = cfg["volume_db"]
+	_ambient_music_active = true
+
+	Logging.info("%s: 已设置 ambient music profile [%s] → %d 首曲目" % [LOG_TAG, key, _ambient_music_pool.size()])
+
+	# 若 BGM 正在播，标记 paused 不启动
+	var bgm_playing := false
+	if is_instance_valid(_bgm_track_1) and _bgm_track_1.playing:
+		bgm_playing = true
+	if is_instance_valid(_bgm_track_2) and _bgm_track_2.playing:
+		bgm_playing = true
+
+	if bgm_playing:
+		_ambient_music_paused = true
+		_bgm_was_playing = true
+		Logging.info("%s: ambient music profile [%s] 已加载但暂停（BGM 正在播放）" % [LOG_TAG, key])
+	else:
+		_ambient_music_paused = false
+		_bgm_was_playing = false
+		# 初始延迟 5 秒后开始第一首
+		_ambient_music_timer.start(5.0)
+		Logging.info("%s: ambient music profile [%s] 5s 后开始第一首" % [LOG_TAG, key])
+
+
+## 停止 AmbientMusic 并清理
+func clear_ambient_music_profile() -> void:
+	if not _ambient_music_active:
+		return
+
+	Logging.info("%s: 清除 ambient music profile" % LOG_TAG)
+	_ambient_music_timer.stop()
+	if _ambient_music_player and _ambient_music_player.playing:
+		_ambient_music_player.stop()
+	_ambient_music_pool.clear()
+	_ambient_music_active = false
+	_ambient_music_paused = false
+
+
+## 强制停止当前曲目并进入静默（如终局检定时调用）
+func ambient_music_force_silence() -> void:
+	if not _ambient_music_active:
+		Logging.info("%s: ambient_music_force_silence: 未激活，跳过" % LOG_TAG)
+		return
+	Logging.info("%s: ambient_music_force_silence: 强制进入静默" % LOG_TAG)
+	_ambient_music_timer.stop()
+	if _ambient_music_player and _ambient_music_player.playing:
+		_ambient_music_player.stop()
+	# 进入一次完整静默周期后恢复
+	var cooldown := randf_range(_ambient_music_current_min_silence, _ambient_music_current_max_silence)
+	_ambient_music_timer.start(cooldown)
+
+
+func is_ambient_music_active() -> bool:
+	return _ambient_music_active
+
+
+# ── Private: AmbientMusic 核心循环 ──
+
+## 计时器到期 → 从 pool 随机选一首播放
+func _on_ambient_music_timer_timeout() -> void:
+	if not _ambient_music_active or _ambient_music_paused:
+		Logging.info("%s: AmbientMusic timer 到期，但 active=%s paused=%s，跳过" % [LOG_TAG, _ambient_music_active, _ambient_music_paused])
+		return
+
+	if _ambient_music_pool.is_empty():
+		Logging.err("%s: AmbientMusic pool 为空！timer 到期但无曲可播 💀" % LOG_TAG)
+		return
+
+	var next_stream: AudioStream = _ambient_music_pool[randi() % _ambient_music_pool.size()]
+	if not next_stream:
+		Logging.err("%s: AmbientMusic pool 中含 null stream，跳过" % LOG_TAG)
+		return
+
+	if not is_instance_valid(_ambient_music_player):
+		Logging.err("%s: AmbientMusic player 无效" % LOG_TAG)
+		return
+
+	_ambient_music_player.stream = next_stream
+	_ambient_music_player.volume_db = _ambient_music_current_volume
+	_ambient_music_player.play()
+	Logging.info("%s: AmbientMusic 播放曲目: %s" % [LOG_TAG, next_stream.resource_path])
+
+
+## 曲目播放完毕 → 进入随机静默期
+func _on_ambient_music_finished() -> void:
+	if not _ambient_music_active:
+		Logging.info("%s: AmbientMusic finished 但未激活，跳过" % LOG_TAG)
+		return
+
+	var cooldown := randf_range(_ambient_music_current_min_silence, _ambient_music_current_max_silence)
+	Logging.info("%s: AmbientMusic 曲终，进入静默 %.1fs" % [LOG_TAG, cooldown])
+	_ambient_music_timer.start(cooldown)
+
+
+# ── Private: 内部 pause/resume（供 _process 调用）──
+
+func _pause_ambient_music_internal() -> void:
+	if not _ambient_music_active or _ambient_music_paused:
+		return
+	_ambient_music_paused = true
+	Logging.info("%s: 暂停 AmbientMusic" % LOG_TAG)
+	_ambient_music_timer.stop()
+	if _ambient_music_player and _ambient_music_player.playing:
+		_ambient_music_player.stream_paused = true
+
+
+func _resume_ambient_music_internal() -> void:
+	if not _ambient_music_active or not _ambient_music_paused:
+		return
+	_ambient_music_paused = false
+	Logging.info("%s: 恢复 AmbientMusic" % LOG_TAG)
+	if _ambient_music_player and _ambient_music_player.stream_paused:
+		_ambient_music_player.stream_paused = false
+		# 如果播放器在恢复后被暂停的曲目完成，finished 信号会触发静默期
+	else:
+		# 没有暂停的曲目 → 启动 timer 选新曲
+		_ambient_music_timer.start(1.0)
+
+# ═══════════════════════════════════════════════════════
+# ActionAmbient System（行动触发环境音 — BGM > ActionAmbient > Ambient = AmbientMusic）
+# ═══════════════════════════════════════════════════════
+
+## 播放行动环境音。
+## 从 assets/sounds/backgrounds/actions/{action_uuid}.ogg 加载并播放。
+## 同时暂停 Ambient 和 AmbientMusic（ActionAmbient 优先级更高）。
+## 文件不存在时 push_warning 并跳过。
+## 播放上限 60s，超时或曲终自动停止 → 恢复 Ambient/AmbientMusic。
+func play_action_ambient(action_uuid: String) -> void:
+	if action_uuid.is_empty():
+		Logging.warn("%s: play_action_ambient uuid 为空，跳过" % LOG_TAG)
+		return
+
+	# 先停止旧的
+	stop_action_ambient()
+
+	var file_path := ACTION_AMBIENT_ROOT.path_join("%s.ogg" % action_uuid)
+	if not FileAccess.file_exists(file_path):
+		Logging.info("%s: play_action_ambient 文件不存在 [%s]，跳过" % [LOG_TAG, file_path])
+		return
+
+	var stream := load(file_path) as AudioStream
+	if not stream:
+		Logging.err("%s: play_action_ambient 加载失败 [%s] 💀" % [LOG_TAG, file_path])
+		return
+
+	# 暂停 Ambient 和 AmbientMusic
+	if _ambient_active and not _ambient_paused:
+		_pause_ambient_internal()
+	if _ambient_music_active and not _ambient_music_paused:
+		_pause_ambient_music_internal()
+
+	# 检查 BGM：如果 BGM 在播，标记 paused
+	var bgm_playing := false
+	if is_instance_valid(_bgm_track_1) and _bgm_track_1.playing:
+		bgm_playing = true
+	if is_instance_valid(_bgm_track_2) and _bgm_track_2.playing:
+		bgm_playing = true
+
+	_action_ambient_player.stream = stream
+	_action_ambient_player.volume_db = _action_ambient_current_volume
+	_action_ambient_active = true
+
+	if bgm_playing:
+		_action_ambient_paused = true
+		_bgm_was_playing = true
+		Logging.info("%s: play_action_ambient [%s] 已加载但暂停（BGM 正在播放）" % [LOG_TAG, action_uuid])
+	else:
+		_action_ambient_paused = false
+		_bgm_was_playing = false
+		_action_ambient_player.play()
+		_action_ambient_limit_timer.start(ACTION_AMBIENT_MAX_DURATION)
+		Logging.info("%s: play_action_ambient [%s] 开始播放 (上限 %.0fs)" % [LOG_TAG, action_uuid, ACTION_AMBIENT_MAX_DURATION])
+
+
+## 停止 ActionAmbient 并恢复 Ambient/AmbientMusic
+func stop_action_ambient() -> void:
+	if not _action_ambient_active:
+		return
+
+	Logging.info("%s: stop_action_ambient" % LOG_TAG)
+	_action_ambient_limit_timer.stop()
+	if _action_ambient_player and _action_ambient_player.playing:
+		_action_ambient_player.stop()
+	_action_ambient_active = false
+	_action_ambient_paused = false
+
+	# 恢复 Ambient / AmbientMusic（如果之前被我们暂停了）
+	if _ambient_active and _ambient_paused:
+		_resume_ambient_internal()
+	if _ambient_music_active and _ambient_music_paused:
+		_resume_ambient_music_internal()
+
+
+func is_action_ambient_active() -> bool:
+	return _action_ambient_active
+
+
+# ── Private: ActionAmbient 生命周期回调 ──
+
+## 曲目自然结束 → 清理
+func _on_action_ambient_finished() -> void:
+	if not _action_ambient_active:
+		Logging.info("%s: ActionAmbient finished 但未激活，跳过" % LOG_TAG)
+		return
+	Logging.info("%s: ActionAmbient 曲终，自动清理" % LOG_TAG)
+	stop_action_ambient()
+
+
+## 60s 上限到达 → 强制停止
+func _on_action_ambient_limit_reached() -> void:
+	if not _action_ambient_active:
+		Logging.info("%s: ActionAmbient limit 到达但未激活，跳过" % LOG_TAG)
+		return
+	Logging.info("%s: ActionAmbient %.0fs 上限到达，强制停止" % [LOG_TAG, ACTION_AMBIENT_MAX_DURATION])
+	stop_action_ambient()
+
+
+# ── Private: 内部 pause/resume（供 _process() 的 BGM 互斥调用）──
+
+func _pause_action_ambient_internal() -> void:
+	if not _action_ambient_active or _action_ambient_paused:
+		return
+	_action_ambient_paused = true
+	Logging.info("%s: 暂停 ActionAmbient" % LOG_TAG)
+	_action_ambient_limit_timer.stop()
+	if _action_ambient_player and _action_ambient_player.playing:
+		_action_ambient_player.stream_paused = true
+
+
+func _resume_action_ambient_internal() -> void:
+	if not _action_ambient_active or not _action_ambient_paused:
+		return
+	_action_ambient_paused = false
+	Logging.info("%s: 恢复 ActionAmbient" % LOG_TAG)
+	# 恢复上限 timer（用剩余时间，这里简化：重置为 60s）
+	_action_ambient_limit_timer.start(ACTION_AMBIENT_MAX_DURATION)
+	if _action_ambient_player and _action_ambient_player.stream_paused:
+		_action_ambient_player.stream_paused = false

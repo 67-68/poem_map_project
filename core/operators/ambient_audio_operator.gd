@@ -1,12 +1,15 @@
 @tool
 class_name AmbientAudioOperator extends BaseOperator
 
-## 控制 constant_background_audio（环境背景音）
-## action: "set_profile" → 激活指定 profile（会先 clear 旧的）
-## action: "clear"       → 停止并清理所有 ambient 层
+## 控制环境背景音（Ambient / AmbientMusic）
+## action:
+##   "set_profile"       → 激活 ambient profile（先 clear 旧的，同时清除 AmbientMusic）
+##   "set_music_profile" → 激活 ambient music profile（先 clear 旧的，同时清除 Ambient）
+##   "clear"             → 停止并清理 ambient 层
+##   "clear_music"       → 停止并清理 ambient music
 
-@export var action: String = ""       # "set_profile" / "clear"
-@export var profile_key: String = ""  # 仅 set_profile 时使用
+@export var action: String = ""       # "set_profile" / "set_music_profile" / "clear" / "clear_music"
+@export var profile_key: String = ""  # 仅 set_profile / set_music_profile 时使用
 
 
 func operate() -> void:
@@ -16,8 +19,15 @@ func operate() -> void:
 				Logging.warn("AmbientAudioOperator: set_profile 缺少 profile_key")
 				return
 			AudioManager.set_ambient_profile(profile_key)
+		"set_music_profile":
+			if profile_key.is_empty():
+				Logging.warn("AmbientAudioOperator: set_music_profile 缺少 profile_key")
+				return
+			AudioManager.set_ambient_music_profile(profile_key)
 		"clear":
 			AudioManager.clear_ambient_profile()
+		"clear_music":
+			AudioManager.clear_ambient_music_profile()
 		_:
 			if action.is_empty():
 				Logging.warn("AmbientAudioOperator: action 为空，跳过")
