@@ -45,9 +45,13 @@ static func is_locked(action_uuid: String, npc_doc: NPCDocument) -> bool:
 static func get_lock_reason(action_uuid: String, npc_doc: NPCDocument) -> String:
 	if npc_doc == null:
 		return TranslationServer.translate("CODE_NPC_ACTION_LOCK_CHECKER_ED757BE5DD")
-	var npc_name := npc_doc.name if not npc_doc.name.is_empty() else npc_doc.uuid
+	var npc_name: String
+	if not npc_doc.uuid.is_empty():
+		npc_name = TranslationServer.translate("CHAR_NAME_%s" % npc_doc.uuid.to_upper())
+	else:
+		npc_name = npc_doc.name if not npc_doc.name.is_empty() else npc_doc.uuid
 	var reason := TranslationServer.translate("CODE_NPC_ACTION_LOCK_CHECKER_71BC43506B") % npc_name
-	Logging.info("NpcActionLockChecker.get_lock_reason: action='%s' npc='%s' → '%s'" % [action_uuid, npc_doc.name, reason])
+	Logging.info("NpcActionLockChecker.get_lock_reason: action='%s' npc='%s' uuid='%s' → '%s'" % [action_uuid, npc_doc.name, npc_doc.uuid, reason])
 	return reason
 
 

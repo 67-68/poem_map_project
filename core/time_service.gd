@@ -225,6 +225,7 @@ func jump_to_clean(new_year: float):
 
 # --- 修改 2：整数驱动时间推进，GameState.year 变为派生值 ---
 func advance_time(days_to_add: int):
+		#breakpoint
 	Logging.info("[time] 时间跃迁，推进 %d 天..." % days_to_add)
 	
 	# 1. 真理之源：整数加法，绝不使用浮点

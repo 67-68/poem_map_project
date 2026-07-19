@@ -382,7 +382,10 @@ func append_stat(stat_name, data) -> bool:
 	player_stat_changed.emit(stat_name)
 
 	if stat_name == "time" and new_val == 0:
+		GameSave.data.properties[stat_name] = TimeService.get_days_per_xun()
+		player_stat_changed.emit(stat_name)
 		TimeService.advance_time(1)
+		return true
 
 	return true
 
