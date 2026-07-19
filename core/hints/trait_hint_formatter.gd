@@ -28,7 +28,7 @@ func build_hint(trait_data) -> String:
 	var lines: Array[String] = []
 
 	# ── 名称行 ──
-	var display_name = trait_data.name if not trait_data.name.is_empty() else tr("CODE_TRAIT_HINT_FORMATTER_3F4306227C")
+	var display_name = tr(trait_data.name) if not trait_data.name.is_empty() else tr("CODE_TRAIT_HINT_FORMATTER_3F4306227C")
 	lines.append("【%s】" % display_name)
 	Logging.info("TraitHintFormatter.build_hint: trait='%s', is_imaginary=%s" % [display_name, str(trait_data is Imaginary)])
 

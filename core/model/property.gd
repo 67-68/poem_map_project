@@ -62,7 +62,9 @@ func get_display_name() -> String:
 	var translated = tr(key)
 	# 如果翻译结果等于 key 本身（未找到翻译），则回退到原始 name
 	if translated == key:
-		return name
+		# 🆕 name 本身可能是翻译键（如 TRES_INSPIRATION_NAME_0），尝试 tr(name)
+		var from_name = tr(name)
+		return from_name if from_name != name else name
 	return translated
 func get_change_perception_text(delta: int) -> String:
 	var abs_delta = abs(delta)

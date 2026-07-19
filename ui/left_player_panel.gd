@@ -18,10 +18,10 @@ extends PanelContainer
 @onready var _trait_sep: HSeparator = $"Panel/VBox/ScrollContainer/V/HSep2"
 @onready var _ambition_sep: HSeparator = $"Panel/VBox/ScrollContainer/V/HSep5"
 @onready var _ambition_title_label: Label = $"Panel/VBox/ScrollContainer/V/Prop"
-@onready var _ambition_hbox: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer"
+@onready var _ambition_hbox: VBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer"
 @onready var _decoration_sep: HSeparator = $"Panel/VBox/ScrollContainer/V/HSep3"
 @onready var _decoration_title_label: Label = $"Panel/VBox/ScrollContainer/V/Label2"
-@onready var _decoration_hbox: HBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2"
+@onready var _decoration_hbox: VBoxContainer = $"Panel/VBox/ScrollContainer/V/HBoxContainer2"
 
 const _ActionHintFormatter = preload("res://core/hints/action_hint_formatter.gd")
 
@@ -467,7 +467,7 @@ func _rebuild_trait_grid() -> void:
 			var resolved = Database.resolve(trait_key)
 			var display_name: String = trait_key
 			if resolved and "name" in resolved:
-				display_name = resolved.name
+				display_name = tr(resolved.name)
 			Logging.info("LeftPlayerPanel: trait key '%s' not in Database.traits, fallback display as '%s'" % [trait_key, display_name])
 			demonstrator.set_trait_fallback(trait_key, display_name)
 		else:

@@ -220,7 +220,7 @@ func build_prop_hint(prop_key: String):
 	# ── narrative: 属性描述 ──
 	var prop: Property = Database.get_property(prop_key)
 	if prop and not prop.description.is_empty():
-		hint.narrative = prop.description
+		hint.narrative = tr(prop.description)
 		Logging.info("ActionHintFormatter.build_prop_hint: '%s' description=%d chars" % [prop_key, prop.description.length()])
 	else:
 		var display_name := prop.get_display_name() if prop else prop_key

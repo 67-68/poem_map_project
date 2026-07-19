@@ -47,7 +47,7 @@ func _update_display() -> void:
 	# 标题 Label
 	var title_label := get_node_or_null("VBoxContainer/HBoxContainer/Label") as Label
 	if title_label:
-		var name_text: String = _idea.name if not _idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
+		var name_text: String = tr(_idea.name) if not _idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
 		title_label.text = name_text
 
 	# 描述 Label
@@ -56,7 +56,7 @@ func _update_display() -> void:
 		if _idea.description.is_empty():
 			desc_label.text = ""
 		else:
-			desc_label.text = _idea.description
+			desc_label.text = tr(_idea.description)
 
 	# 可用性/锁定提示 Label
 	var lock_label := get_node_or_null("VBoxContainer/Label2") as Label

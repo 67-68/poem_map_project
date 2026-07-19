@@ -107,7 +107,7 @@ func _refresh_slot_buttons() -> void:
 		if i < unlocked.size():
 			var idea = Database.get_idea(unlocked[i])
 			if idea:
-				btn.text = idea.name if not idea.name.is_empty() else idea.uuid
+				btn.text = tr(idea.name) if not idea.name.is_empty() else idea.uuid
 				btn.disabled = false
 			else:
 				btn.text = tr("CODE_IDEA_PAGE_90A49E5099")
@@ -168,7 +168,7 @@ func _describe_counter(idea: Idea) -> String:
 		return ""
 	var counter = Database.get_idea(idea.counter_idea)
 	if counter:
-		return tr("CODE_IDEA_PAGE_A440FE94DB") % (counter.name if not counter.name.is_empty() else counter.uuid)
+		return tr("CODE_IDEA_PAGE_A440FE94DB") % (tr(counter.name) if not counter.name.is_empty() else counter.uuid)
 	return ""
 
 
@@ -185,10 +185,10 @@ func _check_conflict(idea: Idea, unlocked: Array[String]) -> String:
 			continue
 		# 正向：候选的 counter_idea == 已解锁理念的 uuid
 		if not idea.counter_idea.is_empty() and unlocked_idea.uuid == idea.counter_idea:
-			return tr("CODE_IDEA_PAGE_811A80B78E") % [unlocked_idea.name if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, idea.name if not idea.name.is_empty() else idea.uuid]
+			return tr("CODE_IDEA_PAGE_811A80B78E") % [tr(unlocked_idea.name) if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, tr(idea.name) if not idea.name.is_empty() else idea.uuid]
 		# 反向：已解锁理念的 counter_idea == 候选理念的 uuid
 		if not unlocked_idea.counter_idea.is_empty() and unlocked_idea.counter_idea == idea.uuid:
-			return tr("CODE_IDEA_PAGE_811A80B78E") % [unlocked_idea.name if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, idea.name if not idea.name.is_empty() else idea.uuid]
+			return tr("CODE_IDEA_PAGE_811A80B78E") % [tr(unlocked_idea.name) if not unlocked_idea.name.is_empty() else unlocked_idea.uuid, tr(idea.name) if not idea.name.is_empty() else idea.uuid]
 
 	return ""
 
@@ -226,9 +226,9 @@ func _show_detail_for_selected() -> void:
 	# 标题：理念名称
 	var owner_text := ""
 	if GameSave.data.current_unlock_ideas.has(idea.uuid):
-		owner_text = idea.name if not idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
+		owner_text = tr(idea.name) if not idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
 	else:
-		owner_text = idea.name if not idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
+		owner_text = tr(idea.name) if not idea.name.is_empty() else tr("CODE_IDEA_PAGE_099E3CCA8A")
 	_detail_title.text = owner_text
 
 	# 效果描述：遍历 idea_demonstrations 显示已解锁/未解锁的条
@@ -238,9 +238,9 @@ func _show_detail_for_selected() -> void:
 		var line := Label.new()
 		line.theme_type_variation = &"DefaultText"
 		if is_unlocked:
-			line.text = "✅ " + idea.idea_demonstrations[i]
+			line.text = "✅ " + tr(idea.idea_demonstrations[i])
 		else:
-			line.text = "🔒 " + idea.idea_demonstrations[i]
+			line.text = "🔒 " + tr(idea.idea_demonstrations[i])
 		_detail_effects_container.add_child(line)
 
 	# 升级/获取按钮
@@ -248,14 +248,14 @@ func _show_detail_for_selected() -> void:
 	var cost_name = idea.idea_cost_name
 	var cost_amount = idea.idea_cost_amount
 	var current_val = PlayerState.get_stat_val(cost_name)
-	var cost_demonstration = Database.get_property(cost_name).name
+	var cost_demonstration = Database.get_property(cost_name).get_display_name() if Database.get_property(cost_name) else cost_name
 
 	# 是否已拥有此理念
 	var is_owned := GameSave.data.current_unlock_ideas.has(idea.uuid)
 
 	if not is_owned:
 		# 未拥有：获取入口（加入槽位 → level -1 → 自动升到 0）
-		_upgrade_btn.text = tr("CODE_IDEA_PAGE_D89BCCFDA0") % [idea.name if not idea.name.is_empty() else idea.uuid, cost_amount, cost_name]
+		_upgrade_btn.text = tr("CODE_IDEA_PAGE_D89BCCFDA0") % [tr(idea.name) if not idea.name.is_empty() else idea.uuid, cost_amount, cost_demonstration]
 		if current_val < cost_amount:
 			_upgrade_btn.text += tr("CODE_IDEA_PAGE_EC45DBDF25")
 			_upgrade_btn.disabled = true

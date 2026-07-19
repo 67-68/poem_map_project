@@ -29,7 +29,7 @@ func _populate() -> void:
 
 		var title_label := demand.get_node("Title") as Label
 		if title_label:
-			title_label.text = recipe.name
+			title_label.text = tr(recipe.name)
 
 		# 查询 Imaginary 的中文名
 		var frag_names: Array[String] = []

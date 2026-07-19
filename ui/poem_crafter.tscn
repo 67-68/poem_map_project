@@ -71,12 +71,15 @@ button_group = SubResource("ButtonGroup_otk17")
 text = "UI_POEM_CRAFTER_TEXT_2"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="InputImagPanel" unique_id=1350550608]
+custom_minimum_size = Vector2(760, 0)
+custom_maximum_size = Vector2(760, -1)
 layout_mode = 2
 theme_type_variation = &"FrozenInnerThoughtText"
 bbcode_enabled = true
 text = "UI_POEM_CRAFTER_TEXT_3"
 fit_content = true
 scroll_active = false
+autowrap_mode = 1
 horizontal_alignment = 1
 
 [node name="CraftBtn" type="LinkButton" parent="InputImagPanel" unique_id=1695117411]

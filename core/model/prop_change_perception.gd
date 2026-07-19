@@ -10,4 +10,5 @@ class_name PropChangePerceptionData extends Resource
 @export var loss_text: String = ""
 
 func get_text(delta: int) -> String:
-	return gain_text if delta > 0 else loss_text
+	var raw := gain_text if delta > 0 else loss_text
+	return tr(raw) if not raw.is_empty() else raw

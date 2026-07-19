@@ -289,7 +289,7 @@ func _on_button_pressed() -> void:
 		# 命中配方 → 使用配方的真实诗名 / specific_topic / required_fragments
 		poem = Poem.new("POEM", matched.specific_topic)
 		poem.uuid = "crafted_poem_l%d_%d" % [final_level, Time.get_unix_time_from_system()]
-		poem.name = "《%s》" % matched.name
+		poem.name = "《%s》" % tr(matched.name)
 		poem.level = final_level
 		poem.specific_topic = matched.specific_topic
 		poem.required_fragments = matched.required_fragments.duplicate()
@@ -464,7 +464,7 @@ func _preview_current() -> void:
 	# V12: 配方匹配行（#ffd700 金色）— 命中配方时显示诗名
 	var recipe: Poem = result.matched_recipe
 	if recipe:
-		_cached_recipe_line = "[color=#ffd700]「%s」[/color]" % recipe.name
+		_cached_recipe_line = "[color=#ffd700]「%s」[/color]" % tr(recipe.name)
 		lines.append(_cached_recipe_line)
 		Logging.info('PoemCrafter(V12): _preview_current — 配方预览: %s' % recipe.name)
 	else:
@@ -525,8 +525,8 @@ func _build_cost_preview_lines() -> Array[String]:
 	var current_inspiration: int = PlayerState.get_stat_val(ENUMS.PROPS.INSPIRATION)
 	var insp_preview: String = tr("CODE_POEM_CRAFTER_659C9410D1") % POEM_CRAFT_INSPIRATION_COST
 	if current_inspiration < POEM_CRAFT_INSPIRATION_COST:
-		insp_preview += " [color=#ff4444]（不足）[/color]"
-	insp_preview += " [color=#888888]当前 %d[/color]" % current_inspiration
+		insp_preview += tr("CODE_POEM_CRAFTER_5DADE3605B")
+	insp_preview += tr("CODE_POEM_CRAFTER_7150BC2988") % current_inspiration
 	lines.append(BBCode.color(insp_preview, BBCode.COLOR_DANGER))
 	
 	# 时间/健康代价（来自 _cached_cost_operators）
