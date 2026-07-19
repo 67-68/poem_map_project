@@ -40,23 +40,24 @@ const _ActionHintFormatter = preload("res://core/hints/action_hint_formatter.gd"
 var _prop_panel_map: Dictionary = {}
 
 # ── 属性显示格式配置 ────────────────────────────────────
-# prop_label.tscn（健康/钱财）：大字号，格式「50/100 健」+「「奄奄一息」」
-# smaller_prop_label.tscn（其他）：小字号，格式「兴 50/100」+「(初露锋芒)」
-# 所有 value 格式含两个 %d 占位符：当前值 / 上限（soft_max 与 hard_max 中较低者）
+# 三元组 {name, value, perception} 统一收敛属性 label 的三路文本输出：
+#   name:       属性短名，通过 tr("LEFT_PANEL_PROP_NAME_*") 走 i18n
+#   value:      纯数值格式 "%d/%d"，两个 %d  = 当前值 / 上限
+#   perception: 感知描述包装格式，健康/钱财用「」，其他用()
 var _PROP_FORMAT: Dictionary = {
-	"health":      { "value": tr("CODE_LEFT_PLAYER_PANEL_87D55E3395"), "perception": "「%s」" },
-	"money":       { "value": tr("CODE_LEFT_PLAYER_PANEL_745A42FECC"), "perception": "「%s」" },
-	"inspiration": { "value": tr("CODE_LEFT_PLAYER_PANEL_C5D046C34E"), "perception": "(%s)" },
-	"momentum":    { "value": tr("CODE_LEFT_PLAYER_PANEL_0D13673A08"), "perception": "(%s)" },
-	"prestige":    { "value": tr("CODE_LEFT_PLAYER_PANEL_82ED953449"), "perception": "(%s)" },
-	"talent":      { "value": tr("CODE_LEFT_PLAYER_PANEL_B3540AF984"), "perception": "(%s)" },
-	"astuteness":  { "value": tr("CODE_LEFT_PLAYER_PANEL_B24700B22F"), "perception": "(%s)" },
-	"composure":   { "value": tr("CODE_LEFT_PLAYER_PANEL_34B6CBC411"), "perception": "(%s)" },
+	"health":      { "name": tr("LEFT_PANEL_PROP_NAME_HEALTH"),      "value": "%d/%d", "perception": "「%s」" },
+	"money":       { "name": tr("LEFT_PANEL_PROP_NAME_MONEY"),       "value": "%d/%d", "perception": "「%s」" },
+	"inspiration": { "name": tr("LEFT_PANEL_PROP_NAME_INSPIRATION"), "value": "%d/%d", "perception": "「%s」" },
+	"momentum":    { "name": tr("LEFT_PANEL_PROP_NAME_MOMENTUM"),    "value": "%d/%d", "perception": "「%s」" },
+	"prestige":    { "name": tr("LEFT_PANEL_PROP_NAME_PRESTIGE"),    "value": "%d/%d", "perception": "「%s」" },
+	"talent":      { "name": tr("LEFT_PANEL_PROP_NAME_TALENT"),      "value": "%d/%d", "perception": "「%s」" },
+	"astuteness":  { "name": tr("LEFT_PANEL_PROP_NAME_ASTUTENESS"),  "value": "%d/%d", "perception": "「%s」" },
+	"composure":   { "name": tr("LEFT_PANEL_PROP_NAME_COMPOSURE"),   "value": "%d/%d", "perception": "「%s」" },
 }
 
-# prop_key → { value_label: Label, perception_label: Label }
+# prop_key → { name: Label, value: Label, perception: Label }
 var _prop_label_map: Dictionary = {}
-# 当前活跃的颜色覆盖，用于重新应用。{ prop_key → { value_color, perception_color } }
+# 当前活跃的颜色覆盖，用于重新应用。{ prop_key → { name_color, value_color, perception_color } }
 var _prop_color_overrides: Dictionary = {}
 
 # 野心追踪属性进度 Label（动态创建）
@@ -147,22 +148,50 @@ func _ready() -> void:
 
 # ── 属性 Label 映射表构建 ───────────────────────────────
 
-## 🆕 适配 tscn 根节点为 PanelContainer 的结构：
-## PanelContainer → HBoxContainer → [Label2(value), Label(perception)]
+## tscn 内部结构（prop_label.tscn / smaller_prop_label.tscn 通用）：
+## PanelContainer → HBoxContainer → [PropertyLabel(0), Control(1), NumberLabel(2), Description(3)]
+##   child 0: PropertyLabel — 属性名称（动态："健康" / "兴"）
+##   child 1: Control       — 布局 spacer
+##   child 2: NumberLabel   — 属性数值（动态："50/100"）
+##   child 3: Description   — 感知描述文本（动态："奄奄一息"）
 static func _extract_labels(panel: PanelContainer) -> Dictionary:
 	var inner_box := panel.get_child(0) as HBoxContainer
 	if not inner_box:
 		Logging.err("LeftPlayerPanel._extract_labels: panel '%s' 的第一个子节点不是 HBoxContainer，返回空 dict" % panel.name)
 		return {}
-	var value_label := inner_box.get_child(0) as Label
-	var perception_label := inner_box.get_child(1) as Label
-	if not value_label or not perception_label:
-		Logging.err("LeftPlayerPanel._extract_labels: panel '%s' 内层 HBoxContainer 缺少 Label 子节点 (value=%s, perception=%s)" % [panel.name, "ok" if value_label else "NULL", "ok" if perception_label else "NULL"])
-	Logging.debug("LeftPlayerPanel._extract_labels: panel '%s' OK — value_label='%s', perception_label='%s'" % [panel.name, value_label.name if value_label else "NULL", perception_label.name if perception_label else "NULL"])
+	if inner_box.get_child_count() < 4:
+		Logging.err("LeftPlayerPanel._extract_labels: panel '%s' 内层 HBoxContainer 子节点数=%d (期望≥4)，返回空 dict" % [panel.name, inner_box.get_child_count()])
+		return {}
+	var name_label := inner_box.get_child(0) as Label
+	var spacer_label := inner_box.get_child(1) as Label  # Control(Label) — 用于填充 "." 对齐
+	var value_label := inner_box.get_child(2) as Label
+	var perception_label := inner_box.get_child(3) as Label
+	if not name_label or not value_label or not perception_label:
+		Logging.err("LeftPlayerPanel._extract_labels: panel '%s' 内层 HBoxContainer — PropertyLabel(child0)=%s, NumberLabel(child2)=%s, Description(child3)=%s" % [panel.name, "ok" if name_label else "NULL", "ok" if value_label else "NULL", "ok" if perception_label else "NULL"])
+	Logging.debug("LeftPlayerPanel._extract_labels: panel '%s' OK — name_label='%s', spacer='%s', value_label='%s', perception_label='%s'" % [panel.name, name_label.name if name_label else "NULL", spacer_label.name if spacer_label else "NULL", value_label.name if value_label else "NULL", perception_label.name if perception_label else "NULL"])
 	return {
+		"name": name_label,
+		"control": spacer_label,
 		"value": value_label,
 		"perception": perception_label,
 	}
+
+# ── Control Label 点填充对齐 ─────────────────────────────
+# 为 spacer Label 设一大串 "."（100 个），HBoxContainer 自动收缩裁剪超出部分，
+# 靠 NAME_DOTS 宏控制占位宽度。
+const NAME_DOTS: int = 100
+
+## 为所有属性的 Control(Label) 填充一大串 "."，靠 HBox 自裁剪实现占位。
+func _fill_control_dots() -> void:
+	var dots := ".".repeat(NAME_DOTS)
+	for prop_key in _prop_label_map:
+		var labels: Dictionary = _prop_label_map[prop_key]
+		var spacer: Label = labels.get("control") as Label
+		if not spacer:
+			continue
+		spacer.text = dots
+		spacer.clip_text = true
+	Logging.debug("LeftPlayerPanel._fill_control_dots: set %d dots with clip_text=true for %d props" % [NAME_DOTS, _prop_label_map.size()])
 
 func _build_prop_label_map() -> void:
 	_prop_panel_map = {
@@ -224,7 +253,7 @@ func _refresh_place_label() -> void:
 		return
 	var cn := ENUMS.place_to_cn(PlayerState.stay_place)
 	var place_str: String = PlayerState.stay_place
-	Logging.info("LeftPlayerPanel._refresh_place_label: [地点DEBUG] ENTER — PlayerState.stay_place='%s' (%s), GameSave.data.stay_place='%s'" % [place_str, cn, GameSave.data.stay_place])
+	Logging.info("LeftPlayerPanel._refresh_place_label: [地点DEBUG] ENTER — PlayerState.stay_place='%s' 「%s」, GameSave.data.stay_place='%s'" % [place_str, cn, GameSave.data.stay_place])
 
 	# 收集当前地点已认识的 NPC（person_state > uncharted）
 	var known_npcs: Array[String] = []
@@ -277,7 +306,7 @@ func _on_any_stat_changed(_prop_name: String = "") -> void:
 	_refresh_all_props()
 	_refresh_ambition_progress_label()
 
-## 刷新所有固定属性的数值和感知文本
+## 刷新所有固定属性的名称、数值和感知文本
 ## 显示格式：当前值 / 上限（soft_max 与 hard_max 中较低者）
 func _refresh_all_props() -> void:
 	if not Database:
@@ -289,16 +318,22 @@ func _refresh_all_props() -> void:
 		var prop: Property = Database.get_property(prop_key)
 		var perception: String = prop.get_staged_perception_text() if prop else ""
 
-		var fmt: Dictionary = _PROP_FORMAT.get(prop_key, { "value": "%d/%d", "perception": "(%s)" })
+		var fmt: Dictionary = _PROP_FORMAT.get(prop_key, { "name": prop_key, "value": "%d/%d", "perception": "「%s」" })
+		labels.name.text = fmt.name
+		Logging.debug("LeftPlayerPanel._refresh_all_props: prop_key='%s' fmt.name='%s'" % [prop_key, fmt.name])
+
 		var cap := _get_effective_cap(prop) if prop else -1
 		if cap >= 0:
 			labels.value.text = fmt.value % [val, cap]
 		else:
 			# 无上限：仅显示值，隐藏 "/上限" 部分
 			labels.value.text = fmt.value.replace("/%d", "") % val
-		labels.perception.text = fmt.perception % perception
+		labels.perception.text = fmt.perception % perception if not perception.is_empty() else ""
 
-		Logging.info("LeftPlayerPanel: refresh prop '%s': val=%d, cap=%d, perception='%s'" % [prop_key, val, cap, perception])
+		Logging.info("LeftPlayerPanel: refresh prop '%s': name='%s' val=%d, cap=%d, perception='%s'" % [prop_key, fmt.name, val, cap, perception])
+
+	# 属性文本刷新后，为所有 Control(Label) 填充 "." + clip_text 实现占位对齐
+	_fill_control_dots()
 
 # ── Prop Label 颜色管理 API ─────────────────────────────
 # MonthEndSettlement 等外部模块通过以下 API 控制旬初染色。
@@ -315,17 +350,19 @@ func set_prop_label_color(prop_key: String, color: Color) -> void:
 		Logging.info("LeftPlayerPanel: set_prop_label_color: label not found for key '%s'" % prop_key)
 		return
 	var labels: Dictionary = _prop_label_map[prop_key]
+	var name_label: Label = labels.name
 	var value_label: Label = labels.value
 	var perception_label: Label = labels.perception
 
-	# 数值 → 传入的原色（鲜艳红/绿）
+	# 名称 + 数值 → 传入的原色（鲜艳红/绿）
+	name_label.add_theme_color_override("font_color", color)
 	value_label.add_theme_color_override("font_color", color)
 
 	# 感知文本 → 去饱和的灰色版本（60% 灰度 + 40% 原色）
 	var grayed := _desaturate_for_perception(color)
 	perception_label.add_theme_color_override("font_color", grayed)
 
-	_prop_color_overrides[prop_key] = { "value_color": color, "perception_color": grayed }
+	_prop_color_overrides[prop_key] = { "name_color": color, "value_color": color, "perception_color": grayed }
 
 ## 将颜色去饱和为灰色调（保持亮度，移除饱和度）
 static func _desaturate_for_perception(c: Color) -> Color:
@@ -337,6 +374,7 @@ func reset_prop_label_color(prop_key: String) -> void:
 	if not _prop_label_map.has(prop_key):
 		return
 	var labels: Dictionary = _prop_label_map[prop_key]
+	labels.name.remove_theme_color_override("font_color")
 	labels.value.remove_theme_color_override("font_color")
 	labels.perception.remove_theme_color_override("font_color")
 	_prop_color_overrides.erase(prop_key)
@@ -345,6 +383,7 @@ func reset_prop_label_color(prop_key: String) -> void:
 func reset_all_prop_colors() -> void:
 	for prop_key in _prop_label_map:
 		var labels: Dictionary = _prop_label_map[prop_key]
+		labels.name.remove_theme_color_override("font_color")
 		labels.value.remove_theme_color_override("font_color")
 		labels.perception.remove_theme_color_override("font_color")
 	_prop_color_overrides.clear()
@@ -516,8 +555,10 @@ func set_property_visible(prop_key: String, v: bool) -> void:
 
 	var labels: Dictionary = _prop_label_map.get(prop_key)
 	if labels:
-		# 找到 prop 的父 HBoxContainer，通过 _prop_label_map 反向查找
-		# 每个 labels 包含 value label 和 perception label
+		# 每个 labels 包含 name / value / perception 三个 Label
+		var name_label: Label = labels.get("name")
+		if name_label:
+			name_label.visible = v
 		var value_label: Label = labels.get("value")
 		if value_label:
 			value_label.visible = v
@@ -535,6 +576,9 @@ func set_trait_grid_visible(v: bool) -> void:
 func _show_all_properties() -> void:
 	for prop_key in _prop_label_map:
 		var labels: Dictionary = _prop_label_map[prop_key]
+		var name_label: Label = labels.get("name")
+		if name_label:
+			name_label.visible = true
 		var value_label: Label = labels.get("value")
 		if value_label:
 			value_label.visible = true
@@ -563,6 +607,9 @@ func _show_all_properties() -> void:
 func _hide_all_properties_tutorial() -> void:
 	for prop_key in _prop_label_map:
 		var labels: Dictionary = _prop_label_map[prop_key]
+		var name_label: Label = labels.get("name")
+		if name_label:
+			name_label.visible = false
 		var value_label: Label = labels.get("value")
 		if value_label:
 			value_label.visible = false

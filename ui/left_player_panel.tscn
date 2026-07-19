@@ -30,11 +30,12 @@ layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="Panel/VBox" unique_id=542808679]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_type_variation = &"TitleText"
 text = "UI_LEFT_PLAYER_PANEL_TEXT_0"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBox" unique_id=289461836]
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel/VBox" unique_id=1565502509]
 layout_mode = 2
 
 [node name="PropLabel" parent="Panel/VBox/HBoxContainer" unique_id=1246822294 instance=ExtResource("3_kxi5c")]
@@ -48,6 +49,7 @@ size_flags_horizontal = 3
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBox" unique_id=1184716942]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
 [node name="V" type="VBoxContainer" parent="Panel/VBox/ScrollContainer" unique_id=1704935683]
 layout_mode = 2
@@ -57,7 +59,7 @@ size_flags_vertical = 3
 [node name="AmbitionProgressBar" type="ProgressBar" parent="Panel/VBox/ScrollContainer/V" unique_id=218237168]
 custom_minimum_size = Vector2(140, 18)
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 0
 size_flags_vertical = 1
 max_value = 30.0
 value = 30.0
@@ -84,20 +86,20 @@ horizontal_alignment = 1
 
 [node name="Label" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1735738424]
 layout_mode = 2
-size_flags_horizontal = 7
+size_flags_horizontal = 0
 theme_type_variation = &"DefaultText"
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 14
 text = "UI_LEFT_PLAYER_PANEL_TEXT_2"
 horizontal_alignment = 1
 
 [node name="PlaceLabel" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1375808321]
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-size_flags_horizontal = 7
 theme_type_variation = &"DefaultText"
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 14
 text = "UI_LEFT_PLAYER_PANEL_TEXT_3"
-horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_trim_flags = 0
 text_overrun_behavior = 5
 
 [node name="HSep2" type="HSeparator" parent="Panel/VBox/ScrollContainer/V" unique_id=894122215]
@@ -105,11 +107,14 @@ layout_mode = 2
 
 [node name="Prop2" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=126398624]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_type_variation = &"SubTitleText"
 text = "UI_LEFT_PLAYER_PANEL_TEXT_4"
 
 [node name="TraitGrid" type="GridContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=1030034591]
+custom_minimum_size = Vector2(120, 30)
 layout_mode = 2
+size_flags_horizontal = 0
 columns = 2
 
 [node name="HSep5" type="HSeparator" parent="Panel/VBox/ScrollContainer/V" unique_id=226775684]
@@ -117,11 +122,13 @@ layout_mode = 2
 
 [node name="Prop" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=1291814332]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_type_variation = &"SubTitleText"
 text = "UI_LEFT_PLAYER_PANEL_TEXT_5"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=1711015811]
+[node name="HBoxContainer" type="VBoxContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=1630112561]
 layout_mode = 2
+size_flags_vertical = 0
 
 [node name="SmallerPropLabel" parent="Panel/VBox/ScrollContainer/V/HBoxContainer" unique_id=627612534 instance=ExtResource("4_a0q7c")]
 layout_mode = 2
@@ -140,11 +147,13 @@ layout_mode = 2
 
 [node name="Label2" type="Label" parent="Panel/VBox/ScrollContainer/V" unique_id=115869624]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_type_variation = &"SubTitleText"
 text = "UI_LEFT_PLAYER_PANEL_TEXT_6"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=2042948336]
+[node name="HBoxContainer2" type="VBoxContainer" parent="Panel/VBox/ScrollContainer/V" unique_id=251867533]
 layout_mode = 2
+size_flags_vertical = 0
 
 [node name="SmallerPropLabel" parent="Panel/VBox/ScrollContainer/V/HBoxContainer2" unique_id=1609417574 instance=ExtResource("4_a0q7c")]
 layout_mode = 2

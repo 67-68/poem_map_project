@@ -1,35 +1,45 @@
 [gd_scene format=3 uid="uid://bfumtrrdtv0f2"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_okync"]
-content_margin_left = 2.0
-content_margin_top = 2.0
-content_margin_right = 2.0
-content_margin_bottom = 2.0
-bg_color = Color(0.6, 0.6, 0.6, 0)
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
+[ext_resource type="StyleBox" uid="uid://b52prn81jlr7f" path="res://ui/underline_style.tres" id="1_okync"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1xd4k"]
 
 [node name="PanelContainer" type="PanelContainer" unique_id=574927843]
+custom_minimum_size = Vector2(290, 0)
+custom_maximum_size = Vector2(290, -1)
 offset_right = 98.0
 offset_bottom = 25.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_okync")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1xd4k")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1246822294]
 layout_mode = 2
-size_flags_horizontal = 6
+size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="Label2" type="Label" parent="HBoxContainer" unique_id=19441402]
+[node name="PropertyLabel" type="Label" parent="HBoxContainer" unique_id=19441402]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 5
 size_flags_vertical = 8
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.07683582, 0.07683582, 0.07683582, 1)
-text = "UI_PROP_LABEL_TEXT_0"
 vertical_alignment = 2
 
-[node name="Label" type="Label" parent="HBoxContainer" unique_id=991272602]
+[node name="Control" type="Label" parent="HBoxContainer" unique_id=524760235]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DefaultText"
+
+[node name="NumberLabel" type="Label" parent="HBoxContainer" unique_id=1764648110]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.07683582, 0.07683582, 0.07683582, 1)
+vertical_alignment = 2
+
+[node name="Description" type="Label" parent="HBoxContainer" unique_id=991272602]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 5
@@ -37,5 +47,5 @@ size_flags_vertical = 8
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.31431612, 0.31431612, 0.3143161, 1)
 theme_override_font_sizes/font_size = 10
-text = "UI_PROP_LABEL_TEXT_1"
+theme_override_styles/normal = ExtResource("1_okync")
 vertical_alignment = 1

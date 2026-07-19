@@ -228,7 +228,7 @@ func _skip_tutorial() -> void:
 	_ensure_all_ui_visible()
 	Logging.info("TutorialController: [skip] _ensure_all_ui_visible 已调用（兜底刷新）")
 	_clear_all_tut_flags()
-
+	EventBus.narrative_tape_show_requested.emit()
 
 func _begin_tutorial() -> void:
 	Logging.info("TutorialController: ====== 开始新手教程 ======")

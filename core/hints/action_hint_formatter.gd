@@ -486,6 +486,11 @@ func _build_archetype_qualitative_preview(action, is_repeated: bool, profile) ->
 				lines.append(tr("CODE_ACTION_HINT_FORMATTER_BA06578EC5") % int(top.day))
 			else:
 				lines.append(tr("CODE_ACTION_HINT_FORMATTER_0BBC7EDA2B") % int(top.day))
+		elif op is TraitOperator:
+			var desc = op.describe_preview()
+			if not desc.is_empty():
+				lines.append("• " + desc)
+			Logging.info("ActionHintFormatter._build_archetype_qualitative_preview: TraitOperator '%s' → '%s'" % [op.trait_key, desc])
 		elif op is PoemRewardOperator:
 			var desc = op.describe_preview()
 			if not desc.is_empty():
@@ -522,6 +527,15 @@ func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Array[Str
 			if op.refresh_time or op.day <= 0:
 				continue
 			lines.append(tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_20C021DFAA") % int(op.day))
+		elif op is TraitOperator:
+			if not op.trait_key.is_empty():
+				var trait_obj = Database.get_trait(op.trait_key)
+				var cn_name = trait_obj.name if trait_obj and not trait_obj.name.is_empty() else op.trait_key
+				if op.operator == REQ_OPERATOR.CRUD.ADD:
+					lines.append(tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_52AC4C7A26") % cn_name)
+				elif op.operator == REQ_OPERATOR.CRUD.REMOVE:
+					lines.append(tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_F8ABBE184F") % cn_name)
+				Logging.info("ActionHintFormatter._build_simple_archetype_preview: TraitOperator '%s' add=%s" % [op.trait_key, str(op.operator == REQ_OPERATOR.CRUD.ADD)])
 		elif op is PoemRewardOperator:
 			var desc = ""
 			match op.mode:

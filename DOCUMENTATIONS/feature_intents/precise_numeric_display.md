@@ -11,11 +11,12 @@
 ### 1. 左侧面板属性展示 (left_player_panel.gd)
 使用 [`prop_label.tscn`](ui/prop_label.tscn) / [`smaller_prop_label.tscn`](ui/smaller_prop_label.tscn) 固定预制体实例，不再动态生成 Label。
 
-- **健康 / 钱财**（`prop_label.tscn`，大字号）：`Label2` 显示 `"50 健"`，`Label` 显示 `"「奄奄一息」"`
-- **兴、势、望**（`smaller_prop_label.tscn`，小字号 → 政略主权下）：`Label2` 显示 `"兴 42"`，`Label` 显示 `"(初露锋芒)"`
+- **健康 / 钱财**（`prop_label.tscn`，大字号）：`PropertyLabel` 显示 `"健"` / `"文"`，`NumberLabel` 显示 `"50/100"`，`Description` 显示 `"「奄奄一息」"`
+- **兴、势、望**（`smaller_prop_label.tscn`，小字号 → 政略主权下）：`PropertyLabel` 显示 `"兴"` / `"势"` / `"望"`，`NumberLabel` 显示 `"42/100"`，`Description` 显示 `"(初露锋芒)"`
 - **才华、城府、定力**（`smaller_prop_label.tscn`，小字号 → 底层修饰下）：同上格式
 
-所有属性的数值和感知文本通过 `_refresh_all_props()` 统一刷新，格式由 `_PROP_FORMAT` 常量控制。
+所有属性的名称、数值、感知文本通过 `_refresh_all_props()` 统一刷新，格式由 `_PROP_FORMAT` 三元组 `{name, value, perception}` 控制。
+name 通过 `tr("LEFT_PANEL_PROP_NAME_*")` 走 i18n，value 为纯 `"%d/%d"` 格式串（无需 i18n），perception 为包装括号样式。
 
 ### 2. ~~左侧面板情绪展示 (left_player_panel.gd)~~
 - **已删除**。情绪 UI 展示从左侧面板移除，`_EMOTION_CFG`、`_refresh_emotions()`、所有 emotion RichTextLabel @onready 均已清理。

@@ -155,3 +155,4 @@ signal idea_upgraded()
 
 signal show_mid_panel()
 signal idea_page_close()
+signal request_show_event_tape()
