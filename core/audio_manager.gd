@@ -44,18 +44,19 @@ var _ambient_music_pool: Array[AudioStream] = []   # 当前激活 profile 的音
 var _ambient_music_profiles: Dictionary = {}        # String -> Dictionary 注册的 profile
 var _ambient_music_current_min_silence: float = 30.0
 var _ambient_music_current_max_silence: float = 90.0
-var _ambient_music_current_volume: float = 0.0
+var _ambient_music_fade_tween: Tween = null
 
 # ── ActionAmbient System（行动触发环境音，BGM > ActionAmbient > Ambient = AmbientMusic）──
 var _action_ambient_player: AudioStreamPlayer
 var _action_ambient_limit_timer: Timer
 var _action_ambient_active: bool = false
 var _action_ambient_paused: bool = false
-var _action_ambient_current_volume: float = -6.0
+var _action_ambient_fade_tween: Tween = null
 const ACTION_AMBIENT_ROOT: String = "res://assets/sounds/backgrounds/actions"
 const ACTION_AMBIENT_MAX_DURATION: float = 60.0
 
 var _bgm_was_playing: bool = false  # _process() 边缘检测
+var _last_applied_ratio: float = -1.0  # 上一次已应用的 music_volume_ratio（用于变化检测）
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS # 必须全天候运行！
@@ -132,6 +133,18 @@ func _process(_delta: float) -> void:
 			_resume_ambient_music_internal()
 
 	_bgm_was_playing = bgm_now_playing
+
+	# ── 实时音量监测：music_volume_ratio 变化时对当前播放中的曲目做 Tween ──
+	var current_ratio := GameSave.data.music_volume_ratio
+	if not is_equal_approx(current_ratio, _last_applied_ratio):
+		_last_applied_ratio = current_ratio
+		var target_db := linear_to_db(current_ratio)
+		if _ambient_music_active and not _ambient_music_paused and _ambient_music_player and _ambient_music_player.playing:
+			_fade_in(_ambient_music_player, target_db, _ambient_music_fade_tween)
+			Logging.info("%s: music_volume_ratio 变化 → %.2f (%.1fdB), 实时调整 AmbientMusic" % [LOG_TAG, current_ratio, target_db])
+		if _action_ambient_active and not _action_ambient_paused and _action_ambient_player and _action_ambient_player.playing:
+			_fade_in(_action_ambient_player, target_db, _action_ambient_fade_tween)
+			Logging.info("%s: music_volume_ratio 变化 → %.2f (%.1fdB), 实时调整 ActionAmbient" % [LOG_TAG, current_ratio, target_db])
 
 # 辅助函数：创建播放器
 func _create_player(node_name: String) -> AudioStreamPlayer:
@@ -706,7 +719,6 @@ func set_ambient_music_profile(key: String) -> void:
 	_ambient_music_pool = cfg["pool"]
 	_ambient_music_current_min_silence = cfg["min_silence"]
 	_ambient_music_current_max_silence = cfg["max_silence"]
-	_ambient_music_current_volume = cfg["volume_db"]
 	_ambient_music_active = true
 
 	Logging.info("%s: 已设置 ambient music profile [%s] → %d 首曲目" % [LOG_TAG, key, _ambient_music_pool.size()])
@@ -738,7 +750,7 @@ func clear_ambient_music_profile() -> void:
 	Logging.info("%s: 清除 ambient music profile" % LOG_TAG)
 	_ambient_music_timer.stop()
 	if _ambient_music_player and _ambient_music_player.playing:
-		_ambient_music_player.stop()
+		_fade_out_and_stop(_ambient_music_player, _ambient_music_fade_tween)
 	_ambient_music_pool.clear()
 	_ambient_music_active = false
 	_ambient_music_paused = false
@@ -752,7 +764,7 @@ func ambient_music_force_silence() -> void:
 	Logging.info("%s: ambient_music_force_silence: 强制进入静默" % LOG_TAG)
 	_ambient_music_timer.stop()
 	if _ambient_music_player and _ambient_music_player.playing:
-		_ambient_music_player.stop()
+		_fade_out_and_stop(_ambient_music_player, _ambient_music_fade_tween)
 	# 进入一次完整静默周期后恢复
 	var cooldown := randf_range(_ambient_music_current_min_silence, _ambient_music_current_max_silence)
 	_ambient_music_timer.start(cooldown)
@@ -784,16 +796,21 @@ func _on_ambient_music_timer_timeout() -> void:
 		return
 
 	_ambient_music_player.stream = next_stream
-	_ambient_music_player.volume_db = _ambient_music_current_volume
+	_ambient_music_player.volume_db = -80.0
 	_ambient_music_player.play()
-	Logging.info("%s: AmbientMusic 播放曲目: %s" % [LOG_TAG, next_stream.resource_path])
+	var target_db := linear_to_db(GameSave.data.music_volume_ratio)
+	_fade_in(_ambient_music_player, target_db, _ambient_music_fade_tween)
+	Logging.info("%s: AmbientMusic 播放曲目: %s (fade_in→%.1fdB)" % [LOG_TAG, next_stream.resource_path, target_db])
 
 
-## 曲目播放完毕 → 进入随机静默期
+## 曲目播放完毕 → 渐弱后进入随机静默期
 func _on_ambient_music_finished() -> void:
 	if not _ambient_music_active:
 		Logging.info("%s: AmbientMusic finished 但未激活，跳过" % LOG_TAG)
 		return
+
+	# 曲终自然淡出（音量可能已经在目标值附近，Tween 短暂过渡）
+	_fade_out_ambient_music_player()
 
 	var cooldown := randf_range(_ambient_music_current_min_silence, _ambient_music_current_max_silence)
 	Logging.info("%s: AmbientMusic 曲终，进入静默 %.1fs" % [LOG_TAG, cooldown])
@@ -865,7 +882,6 @@ func play_action_ambient(action_uuid: String) -> void:
 		bgm_playing = true
 
 	_action_ambient_player.stream = stream
-	_action_ambient_player.volume_db = _action_ambient_current_volume
 	_action_ambient_active = true
 
 	if bgm_playing:
@@ -875,9 +891,12 @@ func play_action_ambient(action_uuid: String) -> void:
 	else:
 		_action_ambient_paused = false
 		_bgm_was_playing = false
+		_action_ambient_player.volume_db = -80.0
 		_action_ambient_player.play()
+		var target_db := linear_to_db(GameSave.data.music_volume_ratio)
+		_fade_in(_action_ambient_player, target_db, _action_ambient_fade_tween)
 		_action_ambient_limit_timer.start(ACTION_AMBIENT_MAX_DURATION)
-		Logging.info("%s: play_action_ambient [%s] 开始播放 (上限 %.0fs)" % [LOG_TAG, action_uuid, ACTION_AMBIENT_MAX_DURATION])
+		Logging.info("%s: play_action_ambient [%s] 开始播放 (上限 %.0fs, fade_in→%.1fdB)" % [LOG_TAG, action_uuid, ACTION_AMBIENT_MAX_DURATION, target_db])
 
 
 ## 停止 ActionAmbient 并恢复 Ambient/AmbientMusic
@@ -888,7 +907,7 @@ func stop_action_ambient() -> void:
 	Logging.info("%s: stop_action_ambient" % LOG_TAG)
 	_action_ambient_limit_timer.stop()
 	if _action_ambient_player and _action_ambient_player.playing:
-		_action_ambient_player.stop()
+		_fade_out_and_stop(_action_ambient_player, _action_ambient_fade_tween)
 	_action_ambient_active = false
 	_action_ambient_paused = false
 
@@ -944,3 +963,43 @@ func _resume_action_ambient_internal() -> void:
 	_action_ambient_limit_timer.start(ACTION_AMBIENT_MAX_DURATION)
 	if _action_ambient_player and _action_ambient_player.stream_paused:
 		_action_ambient_player.stream_paused = false
+
+# ═══════════════════════════════════════════════════════
+# 淡入淡出工具方法
+# ═══════════════════════════════════════════════════════
+
+## 从 -80dB 渐变到 target_db，杀死旧 tween 防止冲突。
+func _fade_in(player: AudioStreamPlayer, target_db: float, prev_tween: Tween) -> void:
+	if not is_instance_valid(player):
+		Logging.err("%s: _fade_in player 无效 💀" % LOG_TAG)
+		return
+	if prev_tween and prev_tween.is_valid():
+		prev_tween.kill()
+	var fade_dur := GameSave.data.ambient_music_fade_duration
+	var t := create_tween()
+	t.tween_property(player, "volume_db", target_db, fade_dur).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	Logging.info("%s: _fade_in → %.1fdB (%.1fs)" % [LOG_TAG, target_db, fade_dur])
+
+## 从当前音量渐变到 -80dB 然后 stop，杀死旧 tween 防止冲突。
+func _fade_out_and_stop(player: AudioStreamPlayer, prev_tween: Tween) -> void:
+	if not is_instance_valid(player):
+		Logging.err("%s: _fade_out_and_stop player 无效 💀" % LOG_TAG)
+		return
+	if prev_tween and prev_tween.is_valid():
+		prev_tween.kill()
+	var fade_dur := GameSave.data.ambient_music_fade_duration
+	var t := create_tween()
+	t.tween_property(player, "volume_db", -80.0, fade_dur).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_callback(player.stop)
+	Logging.info("%s: _fade_out_and_stop → -80dB (%.1fs)" % [LOG_TAG, fade_dur])
+
+## AmbientMusic 专用的 player 渐弱（供 finished 回调使用，不 stop 只需归零视觉）
+func _fade_out_ambient_music_player() -> void:
+	if not is_instance_valid(_ambient_music_player):
+		return
+	if _ambient_music_fade_tween and _ambient_music_fade_tween.is_valid():
+		_ambient_music_fade_tween.kill()
+	var fade_dur := GameSave.data.ambient_music_fade_duration
+	_ambient_music_fade_tween = create_tween()
+	_ambient_music_fade_tween.tween_property(_ambient_music_player, "volume_db", -80.0, fade_dur).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	Logging.info("%s: AmbientMusic player 渐弱 → -80dB (%.1fs)" % [LOG_TAG, fade_dur])
