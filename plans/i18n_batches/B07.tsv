@@ -1,0 +1,206 @@
+# B07: Core Properties — 1596-1797 — 202 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+FEIHUALING_SUCCESS	{npc_name} 巧妙地吟出了「{keyword}」字，满座皆惊！	{npc_name} deftly chants the word "{keyword}", stunning everyone present!
+LIANJU_FAIL	{npc_name} 憋了半天，没能对上联句，气氛有些尴尬…	{npc_name} struggles for a long moment but fails to match the couplet. The mood turns awkward...
+LIANJU_SUCCESS	{npc_name} 以「{@lianju_npc_name}」为题，吟出一联，满座击节赞叹！	{npc_name} takes "{@lianju_npc_name}" as the theme and recites a couplet, drawing thunderous applause from all!
+PROPERTY_NAME_DRUNK	醉	Drunk
+PROPERTY_NAME_HEALTH	健	Health
+PROPERTY_NAME_INSPIRATION	兴	Inspiration
+PROPERTY_NAME_LITERARY_FAME	名	Fame
+PROPERTY_NAME_MONEY	钱	Wealth
+PROPERTY_NAME_OFFICIAL_PRESTIGE	望	Prestige
+PROPERTY_NAME_TALENT	才	Talent
+PROPERTY_NAME_progress	仕	Career
+TRAIT_DISEASE_DONGSHANG_FROSTBITE_NAME	冻伤初起	Frostbite Onset
+TRAIT_DISEASE_DONGSHANG_FROSTBITE_TRAIT_NAME	冻伤初起	Frostbite Onset
+TRAIT_DISEASE_DONGSHANG_NECROSIS_NAME	冻疮坏死	Frostbite Necrosis
+TRAIT_DISEASE_DONGSHANG_NECROSIS_TRAIT_NAME	冻疮坏死	Frostbite Necrosis
+TRAIT_EXHAUSTION_INITIAL_NAME	疲态初显	Fatigue Onset
+TRAIT_EXHAUSTION_INITIAL_TRAIT_NAME	疲态初显	Fatigue Onset
+TRAIT_KUANGDA_FENGYING_NAME	逢迎	Sycophancy
+TRAIT_KUANGDA_FENGYING_TRAIT_NAME	逢迎	Sycophancy
+TRAIT_KUANGDA_KUANGKE_NAME	狂客	Mad Poet
+TRAIT_KUANGDA_KUANGKE_TRAIT_NAME	狂客	Mad Poet
+TRAIT_KUANGDA_ZUANYING_NAME	钻营	Scheming
+TRAIT_KUANGDA_ZUANYING_TRAIT_NAME	钻营	Scheming
+TRAIT_LILINFU_STUDENT_NAME	右相门生	Disciple of the Chancellor
+TRAIT_LILINFU_STUDENT_TRAIT_NAME	右相门生	Disciple of the Chancellor
+TRAIT_NEAR_DEATH_MIND_BROKEN_NAME	心智破损	Shattered Mind
+TRAIT_NEAR_DEATH_MIND_BROKEN_TRAIT_NAME	心智破损	Shattered Mind
+TRAIT_POISONED_CONDITIONAL_TIME_PENALTY	腹中隐隐作痛，这毒物怕不是那日试药留下的…	A dull ache lingers in your stomach — this poison must be from that day you tested the medicine...
+TRAIT_POISONED_NAME	中毒	Poisoned
+TRAIT_POISONED_NARRATIVE_MURMUR	腹中隐隐作痛，这毒物怕不是那日试药留下的…	A dull ache lingers in your stomach — this poison must be from that day you tested the medicine...
+TRAIT_POISONED_TRAIT_NAME	中毒	Poisoned
+TRAIT_SEVERE_INJURY_EXPIRY_ACTION	重伤行动不便	Severely Injured — Movement Impaired
+TRAIT_SEVERE_INJURY_EXPIRY_DENGGAO	重伤登高	Severely Injured While Climbing
+TRAIT_SEVERE_INJURY_NAME	重伤	Severely Injured
+TRAIT_SEVERE_INJURY_TRAIT_NAME	重伤	Severely Injured
+TRAIT_SPRAINED_ANKLE_NAME	崴脚	Sprained Ankle
+TRAIT_SPRAINED_ANKLE_NARRATIVE_MURMUR	脚踝还在隐隐发疼，走路得慢些。	Your ankle still throbs faintly. Best take it slow.
+TRAIT_SPRAINED_ANKLE_TRAIT_NAME	崴脚	Sprained Ankle
+TRAIT_STRONG_BODY_NAME	身强体壮	Robust Physique
+TRAIT_STRONG_BODY_TRAIT_NAME	身强体壮	Robust Physique
+TRAIT_TERMINAL_ILLNESS_NAME	病入膏肓	Terminally Ill
+TRAIT_TERMINAL_ILLNESS_TRAIT_NAME	病入膏肓	Terminally Ill
+TRES_735_YOUTH_ERA_DESCRIPTION_0	735年，青年杜甫游历泰山	In 735, a young Du Fu journeyed to Mount Tai.
+TRES_735_YOUTH_ERA_NAME_0	青年漫游	Youthful Wanderings
+TRES_745_AMBITION_ERA_DESCRIPTION_0	745年，杜甫初入长安，怀抱功名之志	In 745, Du Fu first arrived in Chang'an, his heart burning with ambition for official renown.
+TRES_745_AMBITION_ERA_NAME_0	入世/功名时期	Entering the World / Pursuit of Renown
+TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_DESCRIPTION_0	掸了掸肩上露水，头也不回地朝雾中走去。	He brushed the dew from his shoulders and walked into the mist without looking back.
+TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_DESCRIPTION_1	收回目光，继续看着雾中的终南山影。	He withdrew his gaze and continued watching the silhouette of Mount Zhongnan in the mist.
+TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_DESCRIPTION_2	稍稍侧身，给对方腾出半边靠着的树身。	He shifted slightly, making room against the tree for the other person to lean on.
+TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_DESCRIPTION_3	秋日清晨，你沿着湿滑的石阶登上乐游原。晨雾比前几日更浓，长安城的轮廓浮在雾中，像一幅未干透的水墨画。你靠在一棵老槐树粗糙的树干上时，膝盖咯吱响了一声。远处终南山的影子在雾里时隐时现，早市的叫卖声和人语碎片断断续续随风送上来。有人登原，在你身后几步停住——拂了拂石凳上的露水，坐了下来，没说话，也没起身离开。你垂下眼，看见自己袖口的泥渍和鞋帮上干涸的草屑。	An autumn morning. You climb the slippery stone steps to Leyou Plateau. The morning mist is thicker than days before — the outline of Chang'an floats in the fog like an unfinished ink-wash painting. As you lean against the rough bark of an old locust tree, your knee creaks. In the distance, Mount Zhongnan's shadow flickers in and out of the mist. Fragments of hawking cries and human chatter drift up intermittently on the wind. Someone else ascends the plateau, stopping a few paces behind you — brushes dew from a stone bench, sits down, says nothing, and does not rise to leave. You lower your eyes and notice the mud stains on your cuffs and the dried blades of grass clinging to your shoes.
+TRES_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_FATIGUE_NAME_0	雾重肩沉	Heavy Mist, Weary Shoulders
+TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_DESCRIPTION_0	你站起身，对着那片灯火长长吐出一口浊气。	You rise to your feet and let out a long, heavy breath toward the sea of lantern lights.
+TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_DESCRIPTION_1	你抽出腰间酒囊，仰头灌了一口，又将目光投向远处。	You pull the wine flask from your belt, tilt your head back for a swig, then cast your gaze toward the distance.
+TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_DESCRIPTION_2	你侧耳细听那车马声，辨认来人身份，手按膝头缓缓站起。	You strain your ears at the sound of cart and horse, trying to discern the visitor's identity, then press a hand to your knee and slowly stand.
+TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_DESCRIPTION_3	你背靠一块半埋入土的残碑坐下，膝盖咯吱响了一声。风从原下灌上来，撩动衣摆。远处万家灯火明灭不定，像蒸腾的雾气。你听着风声，听着自己粗重的呼吸。有车马声从身后传来，停在坡下。	You sit with your back against a half-buried broken stele, your knee letting out a creak. The wind surges up from below the plateau, tugging at your robes. In the distance, ten thousand lantern lights flicker like steaming mist. You listen to the wind and to your own labored breath. The sound of cart and horse comes from behind, stopping at the foot of the slope.
+TRES_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_FATIGUE_NAME_0	倚石听灯	Leaning Against Stone, Listening to Lanterns
+TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_DESCRIPTION_0	对着无名碑哼了一句乡谣，转身去拨弄塔铃。	He hummed a line of a hometown tune to the nameless stele, then turned to toy with the pagoda bells.
+TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_DESCRIPTION_1	收下这片月光，拍了拍膝上的灰，望向远处。	He gathered this patch of moonlight, dusted off his knees, and gazed into the distance.
+TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_DESCRIPTION_2	倚着碑时调整了腰背的弧度，让脊骨贴合石面的凉意。	Leaning against the stele, he adjusted the arch of his back, letting the stone's coolness press against his spine.
+TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_DESCRIPTION_3	你沿着塔基走到北侧，在无名碑前停下。腿沉得抬不动，索性靠着石碑坐下，膝盖咯吱一声。月光被塔身切去一半，碑文的上半截泛着白，下半截埋在阴影里。你盯着几行字看了一会儿——那些名字入眼，但没入脑，像水从石面滑过。风从塔檐穿过来，铜铃响了两三声，又安静了。远处有更夫梆子响，一声长一声短，接着是几声狗叫。你坐着，脚底能感到底下砖缝的凉。坐了约莫一盏茶的时间，起了身，腿麻得厉害，扶了一把石碑才站稳。影子在地上从歪的拉成正的。你没再看碑文，顺着来路往回走。	You walk along the pagoda's base to the north side and stop before a nameless stele. Your legs are too heavy to lift, so you simply sit against it — your knee creaks. The pagoda body cuts the moonlight in half: the upper half of the inscription gleams pale white, the lower half buried in shadow. You stare at a few lines — the names enter your eyes but not your mind, like water gliding over stone. Wind threads through the pagoda eaves; the bronze bells chime two or three times, then fall silent. In the distance, a night watchman's clapper sounds, one beat long, one beat short, followed by a few barks of a dog. You sit, the soles of your feet sensing the chill of the brick seams beneath. After roughly the time it takes to drink a cup of tea, you rise — your legs have gone numb; you steady yourself against the stele before standing firm. Your shadow on the ground stretches from crooked to straight. You do not look at the inscription again, and retrace your steps the way you came.
+TRES_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_FATIGUE_NAME_0	碑前枯坐，月落风停	Withered Vigil Before the Stele — Moon Sets, Wind Stills
+TRES_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_FATIGUE_DESCRIPTION_0	站起来拍拍土，转身朝鬼火方向走去。	He rose, dusted himself off, and turned to walk toward the will-o'-wisps.
+TRES_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_FATIGUE_DESCRIPTION_1	从腰间解下水囊，仰头灌了一口，继续盯着远处的长安。	He unclasped the waterskin from his belt, tilted his head back for a drink, and kept staring at distant Chang'an.
+TRES_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_FATIGUE_DESCRIPTION_2	解下外袍折好垫在石头上，调整姿势靠得更舒服些。	He removed his outer robe, folded it neatly as a cushion on the stone, and adjusted his posture to lean more comfortably.
+TRES_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_FATIGUE_DESCRIPTION_3	深夜少陵原，鬼火在古墓间游移。你在枯树下靠了许久，腿酸了，背疼了，索性坐下。风穿过枯枝呜呜作响，远处长安城的灯火明明灭灭。你数了几遍，数到一半忘了数到哪，干脆不数了。膝盖咯吱响了一声，你揉了揉，没动。	Deep night on Shaoling Plain — will-o'-wisps drift among ancient tombs. You've been leaning against a withered tree for so long your legs ache and your back hurts, so you simply sit. Wind moans through the dead branches; the lights of Chang'an flicker in the distance. You tried counting them several times, but midway through you'd forget where you were — so you stopped counting altogether. Your knee creaks. You rub it, but do not move.
+TRES_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_FATIGUE_NAME_0	鬼火明灭长安倦	Will-o'-Wisps Flicker — Chang'an Exhaustion
+TRES_747_KUANGDA_ERA_DESCRIPTION_0	747年，杜甫经历了官场失意后逐渐走向旷达	In 747, after suffering official setbacks, Du Fu gradually moved toward a more uninhibited, expansive outlook.
+TRES_747_KUANGDA_ERA_NAME_0	旷达时期	The Unfettered Period
+TRES_755_BACKHOME_NAME_0	755年回奉先县	Returning to Fengxian County, 755
+TRES_ACQUAINT_SHENYI_TAVERN_DESCRIPTION_0	放下酒杯，侧耳继续听下去。	You set down your cup and tilt your ear to keep listening.
+TRES_ACQUAINT_SHENYI_TAVERN_DESCRIPTION_1	邻桌几个汉子正说得热闹，唾沫星子飞溅。其中一个拍着桌子：「我家那小子烧了三天三夜，城南那几家药铺都走遍了，银子花了一箩筐，屁用没有！后来经人指点找了西市那位神医——就三剂药，隔天就能下地跑！」旁边的人纷纷凑头过去打听住处。你端起酒杯抿了一口，记下了这个名字。	A few men at the next table are in the thick of animated talk, spittle flying. One slams the table: "My boy burned with fever for three days and nights — we tried every apothecary in the south of the city, spent a basketful of silver, completely useless! Then someone pointed us to that divine physician in the West Market — three doses of medicine, and the next day he was up and running!" The men around him lean in eagerly, asking for the address. You raise your cup for a sip and tuck the name away in memory.
+TRES_ACQUAINT_SHENYI_TAVERN_NAME_0	坊间传闻	Tavern Rumors
+TRES_AFTER_CRASHOUT_2_DESCRIPTION_0	怎么办....你跌跌撞撞的跑了出去	What now... You stumble out in a daze.
+TRES_AFTER_CRASHOUT_2_DESCRIPTION_1	你恍惚了一下，想起了昨天的遭遇。几乎是绝望的，你的脸一下子煞白，瘫坐在地上。手指用力抓住地面，探索着你中道崩卒的理想路径。	Your mind goes blank for a moment as yesterday's ordeal floods back. Nearly despairing, your face turns ashen and you slump to the ground. Your fingers claw at the earth, groping for the path your ideals took when they died halfway.
+TRES_AFTER_CRASHOUT_3_DESCRIPTION_0	去吃点东西吧	Go get something to eat.
+TRES_AFTER_CRASHOUT_3_DESCRIPTION_1	一路上，你都在愤恨着。你知道自己的才华，但这个杀千刀的世界，右相大人，就没来由的拦截了你。	All along the way, you seethe with indignation. You know your own talent — but this godforsaken world, His Excellency the Chancellor, has blocked you for no reason at all.
+TRES_AFTER_CRASHOUT_4_DESCRIPTION_0	继续拜谒	Continue paying visits.
+TRES_AFTER_CRASHOUT_4_DESCRIPTION_1	“既然庙堂朽坏，我便去结交这世间真正的风流人物！太白兄、摩诘兄（王维），只要与他们诗酒唱和，让我李杜之名响彻长安，何愁大唐没有我施展抱负的青天！”	"Since the court is rotten, I shall seek out the truly remarkable souls of this age! Brother Taibai, Brother Mojie (Wang Wei) — if I can trade poems and wine with them and make the name Li-Du resound through Chang'an, then surely the Tang dynasty will offer a sky broad enough for my ambitions!"
+TRES_AFTER_CRASHOUT_4_DESCRIPTION_2	你坐在角落里喝着闷酒。隔壁桌的几个太学生正在高声谈论：“听说了吗？太白先生昨日在沉香亭，醉草吓蛮书，连高力士都得给他脱靴！只凭这惊世的诗才，皇上便赐了他翰林供奉！”你握着酒杯的手微微一颤。你的脑海中闪过李林甫那张阴沉的脸，又闪过李白狂放的笑声。一条隐秘而辉煌的道路，在你面前徐徐展开。	You sit in the corner nursing a bitter cup of wine. At the next table, several Imperial Academy students are talking loudly: "Have you heard? Yesterday at the Aloeswood Pavilion, Master Taibai drafted a letter to intimidate the barbarians while drunk — even Gao Lishi had to pull off his boots for him! For his world-shaking poetic genius alone, the Emperor appointed him Hanlin Academician!" Your hand trembles slightly around the wine cup. Before your mind's eye flash two images: Li Linfu's grim face, and then Li Bai's wild, unrestrained laughter. A hidden but glorious path slowly unfolds before you.
+TRES_AFTER_CRASHOUT_4_DISABLED_REASON_0	你只有这一条路	This is your only path.
+TRES_AFTER_CRASHOUT_4_NAME_0	茶肆里的狂言	Wild Words in the Teahouse
+TRES_AFTER_CRASHOUT_DESCRIPTION_0	不对..发生了什么？	Wait... what happened?
+TRES_AFTER_CRASHOUT_DESCRIPTION_1	...睁开眼睛，先于阳光袭来的是一股酒精的味道和一股恶臭。你下意识准备爬起来，但手摸到的不是自家床榻通常的柔软被子，而是坚硬的石头。稍微直起身来。你看见一个颓废的老头，胡须花白，正睡在你对面。矮桌上还有半盏没喝完的酒。你一阵眩晕想吐。强撑着站起来，扶着墙，真准备往右相府门口走。	...You open your eyes. Before the sunlight hits, the stench of stale alcohol and something foul assaults you first. You instinctively try to get up, but your hand finds not the soft bedding of your own bed, but hard stone. You prop yourself up slightly. You see a disheveled old man with a graying beard, asleep across from you. On the low table between you, half a cup of unfinished wine. A wave of dizziness and nausea washes over you. You force yourself to stand, brace against the wall, and prepare to head toward the Chancellor's gate.
+TRES_AFTER_CRASHOUT_NAME_0	酒醒之后	After the Wine Wears Off
+TRES_AMBITION_LOUSHI_DESCRIPTION_0	尽管失败于一手遮天的右相府，你仍然相信你可以通过各种方法获得官职，清整这个世界。	Though defeated by the all-powerful Chancellor's office, you still believe you can obtain an official post through other means and set this world right.
+TRES_AMBITION_LOUSHI_NAME_0	陋室通天	A Humble Hut Reaches Heaven
+TRES_AMBITION_LOUSHI_PERCEPTION_TEXT_0	你变成了狂客。是真狂还是假旷达，真逃避？谁也说不清。	You have become a Mad Poet. Is it real madness, or false detachment — true escape? No one can say.
+TRES_AMBITION_LOUSHI_PERCEPTION_TEXT_1	你不止一次想起来自己的老婆孩子——但更多的是自己的政治报复。你曲意逢迎，希望这样可以带来好结局。	More than once you've thought of your wife and children — but even more of your political vengeance. You bend and fawn, hoping it will bring a good outcome.
+TRES_AMBITION_LOUSHI_PERCEPTION_TEXT_2	你被生活的重压折弯了腰，你不再在意什么政治，你唯一关系的就是填饱自己的肚子。	The crushing weight of life has bent your back. You no longer care about politics — your only concern is filling your belly.
+TRES_ASTUTENESS_DESCRIPTION_0	你的城府与心计。城府越高，势衰减越小，浊流交互消耗大减，但你的声望积累会因此放缓。	Your depth of guile and cunning. The higher your astuteness, the slower your Momentum decays and the less corruption drains you — but your Prestige accumulation will slow as a result.
+TRES_ASTUTENESS_GAIN_TEXT_0	心思缜密了几分	Your mind grows sharper.
+TRES_ASTUTENESS_GAIN_TEXT_1	城府日深	Your guile deepens by the day.
+TRES_ASTUTENESS_GAIN_TEXT_2	运筹帷幄，深藏不露	You plot from the shadows, revealing nothing.
+TRES_ASTUTENESS_GAIN_TEXT_3	翻云覆雨，一手遮天	You overturn clouds and rain — one hand blots out the sky.
+TRES_ASTUTENESS_LOSS_TEXT_0	露了破绽	A crack in your facade.
+TRES_ASTUTENESS_LOSS_TEXT_1	心思被看穿	Your thoughts are laid bare.
+TRES_ASTUTENESS_LOSS_TEXT_2	底牌暴露	Your hidden cards are exposed.
+TRES_ASTUTENESS_LOSS_TEXT_3	心防尽碎，再无遮掩	All defenses shattered — nothing left to hide behind.
+TRES_ASTUTENESS_NAME_0	城府	Astuteness
+TRES_ASTUTENESS_PERCEPTION_TEXT_0	心思单纯	Simple-hearted
+TRES_ASTUTENESS_PERCEPTION_TEXT_1	略有心计	Slightly cunning
+TRES_ASTUTENESS_PERCEPTION_TEXT_2	城府渐深	Growing in guile
+TRES_ASTUTENESS_PERCEPTION_TEXT_3	深不可测	Unfathomable
+TRES_ASTUTENESS_PERCEPTION_TEXT_4	幕后执棋	The hand behind the chessboard
+TRES_BACKHOME_AMBITION_DEADLINE_WARNING_0	如果你回不去，你的尸体和路边那些无名的流民混在一起，被同一场大雪掩埋。远在奉先的妻子还在等一个永远不会到来的好消息。你甚至没能看一眼那个被大火点燃的乱世	If you don't make it back, your corpse will mingle with those nameless refugees by the roadside, buried by the same blizzard. Far away in Fengxian, your wife is still waiting for good news that will never come. You won't even get to witness the world set ablaze by the coming chaos.
+TRES_BACKHOME_AMBITION_DESCRIPTION_0	你终于拿到了那身发绿的从八品下官服。你迫不及待地想要向奉先县的妻儿报喜。这十年的长安风雪，终究是没有白挨。只要穿过骊山，渡过那条结冰的河，一切都会好起来的。大概吧。	You've finally received that greenish Junior Eighth-Rank, Lower Grade official robe. You can't wait to bring the good news to your wife and children in Fengxian County. These ten years of Chang'an's wind and snow — they were not in vain after all. Just cross Mount Li, ford that frozen river, and everything will be fine. Probably.
+TRES_BACKHOME_AMBITION_NAME_0	衣锦还乡	Return Home in Glory
+TRES_BACKHOME_AMBITION_PERCEPTION_TEXT_0	冷。官服的布料比你想象的还要单薄。腰带在寒风中断裂，僵硬的手指甚至无法将它重新打结。没关系，只要走快一点，风就追不上你	Cold. The fabric of the official robe is thinner than you imagined. The belt snaps in the freezing wind — your stiff fingers cannot even tie it back together. No matter. Walk faster, and the wind won't catch you.
+TRES_BACKHOME_AMBITION_PERCEPTION_TEXT_1	风里飘来极其浓郁的肉香和温泉的暖意。那是骊山，是你这十年苦苦拜谒的权贵们冬日寻欢的地方。路边的雪堆里倒着几个僵硬的流民，你低着头，不敢看他们，也不敢看骊山。	The wind carries the rich aroma of roasting meat and the warmth of hot springs. That is Mount Li — where the powerful you've spent ten years groveling before go to seek winter pleasures. In the snowdrifts by the roadside lie several frozen refugees. You lower your head, not daring to look at them — nor at Mount Li.
+TRES_BACKHOME_AMBITION_PERCEPTION_TEXT_2	猛风把天地撕成碎片。你失去了方向，只剩下一具凭本能在雪地里挪动的躯壳。你开始怀疑，从八品下的俸禄，真的能买到足够全家人过冬的生麦吗？	The fierce wind tears heaven and earth to shreds. You've lost your bearings — nothing remains but a husk crawling through the snow on sheer instinct. You begin to wonder: can the salary of a Junior Eighth-Rank, Lower Grade official truly buy enough raw wheat to last the whole family through winter?
+TRES_BACKHOME_AMBITION_PERCEPTION_TEXT_3	你到了。那个漏风的茅草屋就在前面。推开门，你就能看见他们了。	You've arrived. That drafty thatched hut is right ahead. Push open the door, and you'll see them.
+TRES_BACKHOME_INDIFFERENT_WIND_1_DESCRIPTION_0	脱下官服，换上破棉袄	Take off the official robe and put on the tattered padded jacket.
+TRES_BACKHOME_INDIFFERENT_WIND_1_DESCRIPTION_1	裹紧官服死撑	Wrap the official robe tighter and tough it out.
+TRES_BACKHOME_INDIFFERENT_WIND_1_DESCRIPTION_2	你引以为傲的、朝廷刚发的那身从八品下绿色官服，用的是最劣质的单薄丝帛，在雪地里吸满水后结成了冰甲。	The green Junior Eighth-Rank, Lower Grade official robe — the one you were so proud of, freshly issued by the court — is made of the cheapest, thinnest silk. Soaked through in the snow, it has frozen into a suit of ice.
+TRES_BACKHOME_INDIFFERENT_WIND_1_NAME_0	一片太白	A Blanket of White
+TRES_BACKHOME_INSIDE_THE_WOOD_DESCRIPTION_0	门开了。屋里比外面更冷。没有哭声。土炕上的那个小小的襁褓，已经和底下的稻草[glitch level=5.0]冻结成了一块坚硬的冰疙瘩[/glitch]。你本能地想要把怀里那层象征身份的绿袍脱下来盖上去，但那层布料早就被风雪撕成了碎条。大唐的从八品下右卫率府兵曹参军，站在大唐的盛世里。你试图调用那个名为‘父亲’的接口，但物理世界只向你抛回了[glitch level=10.0]ERR_TARGET_ENTITY_DEAD[/glitch]。	The door opens. Inside is colder than outside. No crying. On the earthen bed, that tiny swaddled bundle has, along with the straw beneath it, [glitch level=5.0]frozen into a solid block of ice[/glitch]. Instinctively, you reach to take off that green robe — the emblem of your status — and cover it over, but the fabric was long ago torn to shreds by wind and snow. The Junior Eighth-Rank, Lower Grade Right Guard Commandery Staff Officer of the Great Tang stands in the glorious heyday of the empire. You attempt to invoke the interface named "Father," but the physical world only throws back [glitch level=10.0]ERR_TARGET_ENTITY_DEAD[/glitch].
+TRES_BACKHOME_INSIDE_THE_WOOD_NAME_0	推开门	Push Open the Door
+TRES_BACKHOME_INSIDE_THE_WOOD_TEXTS_0	你摸着身上那层发绿的从八品下官服。你突然意识到一个极其恐怖的逻辑悖论……	You touch the greenish Junior Eighth-Rank, Lower Grade official robe on your body. A terrifying logical paradox suddenly dawns on you...
+TRES_BACKHOME_INSIDE_THE_WOOD_TEXTS_1	【默思失业徒，因念远戍卒。】	[Silently I ponder the jobless wanderers, then think of soldiers guarding distant frontiers.]
+TRES_BACKHOME_LISHAN_1_DESCRIPTION_0	闭眼快步走过	Close your eyes and hurry past.
+TRES_BACKHOME_LISHAN_1_DESCRIPTION_1	死死盯住这墙外的冻死骨	Stare hard at the frozen corpses outside the walls.
+TRES_BACKHOME_LISHAN_1_DESCRIPTION_2	骊山的行宫里，天子正在论功行赏。那是大唐的最高 API 接口，输出着绝对的恩典与仁慈。但你低头看着路边那具衣不蔽体的女尸，你的大脑陷入了死循环。你从小学习的《论语》告诉你，雷霆雨露皆是君恩；但十年长安的常识告诉你，骊山里赏赐的每一匹丝绸，都精准对应着墙外某个被抽干鲜血的家庭。国家没有缺陷，天子依然圣明，只是大唐的注意力不再分配给这些路边的冻死骨了。	In the mountain palace on Mount Li, the Son of Heaven is distributing rewards. That is the Tang dynasty's highest API interface, outputting absolute grace and benevolence. But you look down at the half-naked female corpse by the roadside, and your brain enters an infinite loop. The Analects you studied since childhood tells you that both thunder and rain are the Emperor's grace; yet ten years of common sense in Chang'an tells you that every bolt of silk rewarded inside Mount Li corresponds precisely to some family outside these walls that has been drained of its blood. The state has no flaws. The Son of Heaven remains sagely. It's just that the Tang dynasty no longer allocates attention to these frozen corpses by the roadside.
+TRES_BACKHOME_LISHAN_1_NAME_0	赏骊山	Beholding Mount Li
+TRES_BACKHOME_OUTSIDE_CITY_1_DESCRIPTION_0	向东走	Walk east.
+TRES_BACKHOME_OUTSIDE_CITY_1_DESCRIPTION_1	盯着灞桥，直到雪盖满身	Stare at Ba Bridge until the snow covers you completely.
+TRES_BACKHOME_OUTSIDE_CITY_1_DESCRIPTION_2	灞桥的残柳被冻成铁丝。你努力挺直腰板，试图让那身薄得透风的从八品下绿袍显出几分官威，好对得起这十年的卑躬屈膝。你本想饮尽最后一口浊酒赋诗一首，但冻僵的酒壶粘住了嘴唇，撕下一层皮。狂风灌进胃里，把你精心排练的衣锦还乡，吹成了一个毫无知觉的死循环。	The withered willows of Ba Bridge have frozen into iron wire. You strain to straighten your back, trying to make that paper-thin Junior Eighth-Rank green robe project some official dignity — to justify these ten years of groveling. You meant to drain the last mouthful of cheap wine and compose a poem, but the frozen flask sticks to your lips and tears off a layer of skin. The gale pours into your stomach, and the triumphant homecoming you so carefully rehearsed is blown into a senseless, endless loop.
+TRES_BACKHOME_OUTSIDE_CITY_1_NAME_0	灞桥之别	Farewell at Ba Bridge
+TRES_BACKHOME_THE_WOOD_DESCRIPTION_0	推开门	Push open the door.
+TRES_BACKHOME_THE_WOOD_DESCRIPTION_1	那扇漏风的破木门就在眼前。门缝里透不出半点柴火的光。你僵硬的手指正要触碰门环，一阵极其沉闷的啼哭声穿透了木板。这声音不像是属于人间的，它像是在你冻僵的颅骨腔内直接震荡。	That drafty, broken wooden door is right before you. Not a sliver of firelight seeps through the cracks. Your stiff fingers are about to touch the door ring when an exceedingly muffled wail pierces through the wood. This sound does not seem to belong to the mortal world — it resonates directly inside your frozen skull.
+TRES_BACKHOME_THE_WOOD_FAILED_HINT_0	[shake rate=15 level=4]（开门... 开门... 我是从八品下的官员... 我带了俸禄回来... 只要开门一切都会好起来的...）[/shake]	[shake rate=15 level=4](Open the door... open the door... I am a Junior Eighth-Rank official... I've brought back my salary... just open the door and everything will be fine...)[/shake]
+TRES_BACKHOME_THE_WOOD_NAME_0	叩门	Knocking at the Door
+TRES_BAIYE_ASKING_FOR_ACTUAL_STUFF_DESCRIPTION_0	我要考上！崛起吧唐人！	I will pass the exam! Rise up, man of Tang!
+TRES_BAIYE_ASKING_FOR_ACTUAL_STUFF_DESCRIPTION_1	你感觉逐渐和豪强们打好关系了，现在应该开始实际请求他们的支持了	You feel you've gradually built rapport with the powerful families. It's time to start asking for their actual support.
+TRES_BAIYE_ASKING_FOR_ACTUAL_STUFF_NAME_0	开始实际拜谒	Begin Patronage in Earnest
+TRES_BAIYE_MASS_DISTRIBUTION_FALLBACK_DESCRIPTION_0	你的行卷辗转递到了{@npc_name}手中。这位大人翻阅了片刻，虽未当场表态，却也没有随手丢弃——而是将你的诗文收进了案头的卷宗里。你瞧在眼中，心中燃起一线希望。	Your scroll of writings eventually makes its way into the hands of {@npc_name}. The esteemed personage leafs through it for a moment. Though no commitment is made on the spot, neither is your work casually discarded — instead, your poems are tucked into the dossier on the desk. You catch this from the corner of your eye, and a thread of hope kindles in your heart.
+TRES_BAIYE_MASS_DISTRIBUTION_FALLBACK_NAME_0	泥牛入海	Like Clay Oxen Into the Sea
+TRES_BAIYE_NORMAL_FALLBACK_DESCRIPTION_0	你递上名帖候见，门人延请入内。{@npc_name}倒也和气，虽未予你什么明确的承诺，却也让座奉了茶，问了几句近来的文章。出门时你细细回味，觉得这一趟不算白来。	You present your name card and wait for an audience. The attendant invites you inside. {@npc_name} is cordial enough — while no explicit promise is made, you are offered a seat and tea, and asked a few questions about your recent writings. As you leave, you reflect carefully: this trip was not in vain.
+TRES_BAIYE_NORMAL_FALLBACK_NAME_0	无处投刺	No Door to Knock
+TRES_BAIYE_POEM_VISIT_FALLBACK_DESCRIPTION_0	递上新诗，主家展卷细读，缓缓点头。虽说今日并未许下任何承诺，但那扇门至少没有当面关上。	You present your new poem. The host unrolls it, reads carefully, and slowly nods. Though no promises were made today, at least the door was not shut in your face.
+TRES_BAIYE_POEM_VISIT_FALLBACK_NAME_0	携诗叩门	Knocking with Poems in Hand
+TRES_BAIYE_SHENYI_UPGRADE_DESCRIPTION_0	拱手称谢，心中暗记此人的名号。	You cup your hands in thanks, silently memorizing the name.
+TRES_BAIYE_SHENYI_UPGRADE_DESCRIPTION_1	你在西市巷陌间辗转打听，终于寻到了那间不起眼的医庐。门帘半卷，药香扑鼻。神医正在院里翻晒药材，见你来访也不惊讶，只指了指檐下的竹凳让你坐。你递上名帖，他放下手中的药杵，用粗布擦了擦手，接过去看了看。「你就是他们说的那个杜甫？」他笑着斟了一碗药茶推过来，「我听过你的诗。坐，不急。」	After asking around the alleys of the West Market, you finally locate that unassuming medical hut. The door curtain is half-drawn; the scent of medicine fills the air. The divine physician is in the courtyard, turning over drying herbs. He is not surprised by your visit — merely points to a bamboo stool under the eaves and gestures for you to sit. You hand him your name card. He sets down his pestle, wipes his hands on a coarse cloth, and takes it for a look. "So you're the Du Fu they speak of?" He smiles, pours a bowl of herbal tea, and slides it toward you. "I've heard your poems. Sit. No rush."
+TRES_BAIYE_SHENYI_UPGRADE_NAME_0	西市医庐	The West Market Medical Hut
+TRES_BAIYE_THREATEN_FAILED_FALLBACK_DESCRIPTION_0	那封密信被原封不动地退了回来。当晚，一群黑衣家丁堵住了你的归路。拳脚如雨，你在泥地里蜷作一团，肋骨传来清脆的断裂声。把柄已然暴露——但对方翻脸不认账。	The secret letter is returned, unopened. That very night, a group of black-clad household guards block your way home. Fists and kicks rain down; you curl into a ball in the mud as a crisp crack rings from your ribs. The leverage has been exposed — but the other side simply denies everything.
+TRES_BAIYE_THREATEN_FAILED_FALLBACK_NAME_0	密信败露	The Secret Letter Exposed
+TRES_BAIYE_THREATEN_FALLBACK_DESCRIPTION_0	一封密信递入门房，对方的脸色从倨傲变成惶惑。三日后，银两如数送至。那扇朱门，如今见你远远绕道而行。	A secret letter is delivered to the gatehouse. The recipient's expression shifts from arrogance to alarm. Three days later, the silver is delivered in full. That vermilion gate — now they take a wide detour at the sight of you.
+TRES_BAIYE_THREATEN_FALLBACK_NAME_0	密信要挟	Blackmail by Secret Letter
+TRES_BAI_YE_DESCRIPTION_0	投刺候见，叩响朱门	Present your name card and await audience — knock at the vermilion gates.
+TRES_BAI_YE_LOCK_NARRATIVE_0	朱门紧闭，闻说主人病重，谢绝一切宾客	The vermilion gates are shut tight. Word is the master is gravely ill — all visitors are turned away.
+TRES_BAI_YE_NAME_0	拜谒	Seek Patronage
+TRES_BAI_YE_REAL_APPEARANCE_FALLBACK_DESCRIPTION_0	呈上诗稿	Present your poem manuscript.
+TRES_BAI_YE_REAL_APPEARANCE_FALLBACK_DESCRIPTION_1	只是恭维	Offer only flattery.
+TRES_BAI_YE_REAL_APPEARANCE_FALLBACK_DESCRIPTION_2	诗尚可,把名字抹了,改日送与刘参军.又转头向你笑道:赐坐,赏你一壶茶.侍从端来一壶冷茶	"The poem is passable. Erase the name and send it to Adjutant Liu another day." He turns to you with a smile: "A seat for you, and grant him a pot of tea." The attendant brings a pot of cold tea.
+TRES_BAI_YE_REAL_APPEARANCE_FALLBACK_NAME_0	冷茶与残稿	Cold Tea and a Cast-Off Draft
+TRES_CHANGAN_WALK_04_MARKET_TRAMPLE_STRUGGLE_DESCRIPTION_0	试图用袖口擦去上面的泥水...	You try to wipe the mud off with your sleeve...
+TRES_CHANGAN_WALK_04_MARKET_TRAMPLE_STRUGGLE_INFO_0	越擦越黑。【致君尧舜上，再使风俗淳】的墨迹彻底化开了。	The more you rub, the blacker it gets. The ink of "[Serve the Emperor as Yao and Shun were served, and restore purity to the customs of the age]" has smeared beyond recognition.
+TRES_CHANGAN_WALK_04_MARKET_TRAMPLE_STRUGGLE_NAME_0	人群终于散去。那卷轴已经和泥水糊成了一团黑泥，散发着腥臭。	The crowd finally disperses. The scroll has congealed with mud and water into a lump of black sludge, reeking of filth.
+TRES_CHANGAN_WALK_05_OBSERVE_ZHENGQIAN_DESCRIPTION_0	你看着他，又看了看自己脚下那摊糊满泥水的干谒诗稿...	You look at him, then down at the pile of mud-caked patronage poems at your feet...
+TRES_CHANGAN_WALK_05_OBSERVE_ZHENGQIAN_DESCRIPTION_1	你呆立在泥水坑前。不远处的酒肆屋檐下，你看到了国子监广文馆博士郑虔。他正把几枚生锈的铜钱排在案上，换了一角最劣质的浊酒。一阵风吹过，你曾以为他那身打满补丁却洗得发白的青衫是名士的‘清流作秀’，直到此刻，你看到他在寒风中不受控制地瑟缩了一下，却依然小心翼翼地用袖口护着怀里那方廉价的残墨。	You stand frozen before the puddle of mud. Under the eaves of a nearby wineshop, you spot Zheng Qian — Doctor of the Broad Learning Academy at the Imperial Directorate. He is lining up a few rusted copper coins on the counter, exchanging them for a corner's worth of the cheapest cloudy wine. A gust of wind blows past. You once thought his patched but washed-to-fading blue robe was the "principled purity" posturing of a famous scholar — until this moment, when you see him shiver uncontrollably in the cold wind, yet still carefully shield that cheap, chipped inkstick in his breast with his sleeve.
+TRES_CHANGAN_WALK_06_THE_CALL_DESCRIPTION_0	犹豫了一下，你勉强的笑着，又开始狂笑，大步走向了那个同样落魄的老头。	You hesitate for a moment, force a smile, then break into raucous laughter and stride toward that equally down-and-out old man.
+TRES_CHANGAN_WALK_06_THE_CALL_DESCRIPTION_1	郑虔转过头，看到了浑身泥水、失魂落魄的你，也看到了地上的残稿。他没有问你考得如何，也没有丝毫的怜悯。他只是笑着扬了扬手里的酒葫芦，朝你招手：【子美！愣着干嘛？今夜金吾不禁，这上等的酸米酒，我请客！】	Zheng Qian turns around and sees you — covered in mud, utterly dejected — and also sees the ruined drafts on the ground. He does not ask how the exam went, nor does he show any pity. He simply grins, raises his wine gourd, and beckons to you: "Zimei! What are you standing there for? The night watch is suspended tonight — this premium sour rice wine is on me!"
+TRES_CHANGAN_WALK_07_MIDNIGHT_PARTING_DESCRIPTION_0	目送他的背影消失在黑暗中...	You watch his silhouette disappear into the darkness...
+TRES_CHANGAN_WALK_07_MIDNIGHT_PARTING_DESCRIPTION_1	酒的辛辣在胃里渐渐褪去，却奇迹般地抵御了春夜的死寒。上元节的喧闹已近尾声，长街上满是被踩烂的灯笼纸。郑虔拍了拍你的肩膀，裹紧那件单薄的青衫，摇摇晃晃地走入了没有灯光的暗巷。\\n\\n'子美，这长安的月亮，在哪看都一样。' 他没有劝你留下，也没有劝你离开。	The bite of the wine gradually fades in your stomach, yet miraculously it has warded off the deadly chill of the spring night. The Lantern Festival revelry is winding down; the main street is littered with crushed lantern paper. Zheng Qian pats your shoulder, wraps his thin blue robe tighter, and staggers into an unlit alley.\n\n"Zimei, the moon over Chang'an looks the same no matter where you see it." He did not urge you to stay, nor did he urge you to leave.
+TRES_CHANGAN_WALK_08_THE_CROSSROADS_DESCRIPTION_0	[未解锁] 捡起烂泥里的残稿。也许明天去右相府门前长跪不起，哪怕只求个幕僚的位子……	[Locked] Pick up the ruined drafts from the mud. Perhaps tomorrow you'll go kneel before the Chancellor's gate — even if it's just for a staff advisor post...
+TRES_CHANGAN_WALK_08_THE_CROSSROADS_DESCRIPTION_1	天大笑，将残酒猛地泼在那团烂泥般的诗稿上。去他娘的野无遗贤！	He laughs wildly at the heavens and splashes the dregs of his wine onto the mud-caked poems. To hell with "No talent left unrecognized in the wild!"
+TRES_CHANGAN_WALK_08_THE_CROSSROADS_DESCRIPTION_2	你独自站在冷风中。左手是那团糊满烂泥的干谒诗稿，右手是空荡荡的酒碗。过去的三年，你就像一台精确的机器，每天在那些朱门前计算着笑容的弧度和弯腰的角度。现在，你看着地上相国府马车留下的深深车辙，那股支撑着你的发条……好像断了。	You stand alone in the cold wind. In your left hand: that lump of mud-caked patronage poems. In your right: an empty wine bowl. For the past three years, you've been like a precision machine, calibrating the arc of your smile and the angle of your bow before those vermilion gates each day. Now, staring at the deep wheel ruts left by the Chancellor's carriage, the mainspring that has been driving you... seems to have snapped.
+TRES_CHANGAN_WALK_08_THE_CROSSROADS_DISABLED_REASON_0	一阵寒风吹过，你猛地干呕起来。你的胃和你的脊梁比理智更早做出了决定——你已经无法强迫自己的双膝再弯下去了。(未解锁，正式版解锁）	A cold gust blows past, and you suddenly retch. Your stomach and your spine reached a verdict before your reason did — you can no longer force your knees to bend. (Locked — available in the full release)
+TRES_COMPOSURE_DESCRIPTION_0	你心性的稳固程度。定力越高，承受的伤害越小，但兴致起伏也变得平缓，更沉静内敛。	The steadiness of your mind. The higher your composure, the less damage you take — but your emotional swings also grow milder, more restrained and introspective.
+TRES_COMPOSURE_GAIN_TEXT_0	心神稍定	Your mind settles slightly.
+TRES_COMPOSURE_GAIN_TEXT_1	心性沉稳了不少	Your temperament has steadied considerably.
+TRES_COMPOSURE_GAIN_TEXT_2	八风不动，心若磐石	Unmoved by the eight winds — your heart is like bedrock.
+TRES_COMPOSURE_GAIN_TEXT_3	外物不扰，心镜无尘	Undisturbed by external things — the mirror of your heart is spotless.
+TRES_COMPOSURE_LOSS_TEXT_0	心湖微澜	Ripples stir on the lake of your heart.
+TRES_COMPOSURE_LOSS_TEXT_1	心神不宁	Your mind grows restless.
+TRES_COMPOSURE_LOSS_TEXT_2	方寸大乱	Your composure crumbles.
+TRES_COMPOSURE_LOSS_TEXT_3	心神崩溃，万念俱灰	Your spirit shatters — all hope turns to ash.
+TRES_COMPOSURE_NAME_0	定力	Composure
+TRES_COMPOSURE_PERCEPTION_TEXT_0	心如乱麻	Heart tangled like knotted hemp.
+TRES_COMPOSURE_PERCEPTION_TEXT_1	心猿意马	Mind like a restless monkey, will like a galloping horse.
+TRES_COMPOSURE_PERCEPTION_TEXT_2	心神安定	Heart and mind at peace.
+TRES_COMPOSURE_PERCEPTION_TEXT_3	心如止水	Heart like still water.
+TRES_COMPOSURE_PERCEPTION_TEXT_4	泰山崩于前而色不变	Unmoved even if Mount Tai crumbles before you.
+TRES_DA_YOU_SHI_DESCRIPTION_0	罢了	Forget it.
+TRES_DA_YOU_SHI_DESCRIPTION_1	你随意吟了几句，觉得不成体统，也就搁下了。	You casually recite a few lines, feel they lack any proper form, and set the brush aside.
+TRES_DA_YOU_SHI_NAME_0	打油诗	Doggerel
+TRES_DECISION_BECOME_OFFICIAL_DESCRIPTION_0	从八品下小官，月薪两斗麦	A Junior Eighth-Rank, Lower Grade petty official — monthly salary: two pecks of wheat.
+TRES_DECISION_BECOME_OFFICIAL_NAME_0	奉诏：吏部告身	Imperial Decree: Ministry of Personnel Appointment
+TRES_DEFAULT_AMBITION_DEADLINE_WARNING_0	一旦你的寿命到达，你会死！	Once your lifespan runs out, you will die!
+TRES_DEFAULT_AMBITION_DESCRIPTION_0	你只是一个普通人	You are merely an ordinary person.
+TRES_DEFAULT_AMBITION_NAME_0	普通人	An Ordinary Person
+TRES_DEFAULT_AMBITION_PERCEPTION_TEXT_0	你的身体不行	Your body is failing.
+TRES_DEFAULT_AMBITION_PERCEPTION_TEXT_1	你是一个好人	You are a good person.
+TRES_DEFAULT_AMBITION_PERCEPTION_TEXT_2	你吃了很多蛋白粉	You've eaten a lot of protein powder.
+TRES_DEMONSTRATE_POEM_TO_PEOPLE_DESCRIPTION_0	公开展示你的诗词	Display your poem publicly.
+TRES_DEMONSTRATE_POEM_TO_PEOPLE_DESCRIPTION_1	私下展示你的诗词	Display your poem in private.
+TRES_DEMONSTRATE_POEM_TO_PEOPLE_NAME_0	如何展示你的诗词？	How to display your poem?
+TRES_DENGGAO_FALLBACK_DESCRIPTION_0	也罢\n登高本为遣兴，今日既无此心，强求反而不美。凭栏远眺，云低风急，不如归去。	So be it.\nYou climbed to dispel melancholy, but today your heart is simply not in it — forcing it would spoil the mood. Leaning on the railing, you gaze out: clouds hang low, the wind is urgent. Better to go home.
+TRES_DENGGAO_FALLBACK_NAME_0	登高失趣	Climbing Without Joy
+TRES_DENGGAO_LEYOUYUAN_FAILED_FALLBACK_DESCRIPTION_0	失足\n登至半途，脚下碎石松动，一个趔趄险些跌倒。虽无大碍，却也失了兴致，只得悻悻下山。	A Misstep\nHalfway up, loose gravel shifts beneath your feet — you stumble and nearly fall. Though unhurt, your spirit is dampened, and you descend the mountain in dejection.
+TRES_DENGGAO_LEYOUYUAN_FAILED_FALLBACK_NAME_0	登高失足	A Misstep While Climbing
+TRES_DENGGAO_LEYOUYUAN_FALLBACK_DESCRIPTION_0	登高\n乐游原上秋风猎猎，天高云淡。你登至高处，俯瞰长安城郭如棋盘，胸中块垒为之一舒。	Climbing High\nOn Leyou Plateau the autumn wind whistles — the sky is high, the clouds are thin. You ascend to the summit and look down upon Chang'an's city walls laid out like a chessboard, the knot in your chest loosening at last.
+TRES_DENGGAO_LEYOUYUAN_FALLBACK_NAME_0	乐游原上	

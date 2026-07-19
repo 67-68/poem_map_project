@@ -1,0 +1,87 @@
+# B10: NPC+Graidents — 2177-2259 — 83 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+TRES_LEVERAGE_FARM_FAILURE_FALLBACK_NAME_0	空守一夜	A Night Spent in Vain
+TRES_LEVERAGE_FARM_SUCCESS_FALLBACK_DESCRIPTION_0	你在暗巷的阴影中蹲守了半夜，终于等到了那个低语。一个裹着斗篷的身影匆匆走过，从怀中滑落了一封蜡封的信笺。借着月光匆匆一瞥——竟是{@npc_name}的把柄。你嘴角泛起一丝微笑，将信笺仔细收好，悄无声息地消失在了黑暗中。	You lurked in the shadows of the dark alley for half the night, and at last the whisper came. A cloaked figure hurried past, and from their sleeve slipped a wax-sealed letter. Under the moonlight, a furtive glance revealed — the leverage you needed on {@npc_name}. A faint smile crossed your lips. You tucked the letter away carefully and vanished into the darkness without a sound.
+TRES_LEVERAGE_FARM_SUCCESS_FALLBACK_NAME_0	暗巷拾遗	Dark Alley Find
+TRES_LIANJU_INTRO_DESCRIPTION_0	开始联句	Begin Linked Verse
+TRES_LIANJU_INTRO_DESCRIPTION_1	联句规则：宾客先就一意象作联句，你对句时需选择你的意象。[br]评分依据：[br]  · 意象等级（L1/L2/L3）决定基础分[br]  · 若你的当前情绪与所选意象契合，将获得额外倍率加成[br]  · 等级越高、情绪越合，得分越高！	Linked Verse Rules: A guest first composes a couplet on an image, and when it's your turn, you must choose your own image to respond.[br]Scoring:[br]  · Image tier (L1/L2/L3) determines base score[br]  · If your current mood aligns with the image you choose, you gain an extra multiplier bonus[br]  · Higher tier, better mood match — higher score!
+TRES_LIANJU_INTRO_NAME_0	联句	Linked Verse
+TRES_LIANJU_NPC_TURN_DESCRIPTION_0	欣赏联句	Admire the Couplet
+TRES_LIANJU_NPC_TURN_DESCRIPTION_1	宾客以「{@lianju_npc_name}」为题，略作沉吟，开口吟道：[br][br]{@npc_couplet}	The guest takes "{@lianju_npc_name}" as the theme. After a moment of reflection, they recite:[br][br]{@npc_couplet}
+TRES_LIANJU_NPC_TURN_NAME_0	联句·宾先	Linked Verse · Guest First
+TRES_LIANJU_PLAYER_TURN_CUSTOM_EVALUATION	宴席上泛起一丝尴尬的沉默…	An awkward silence ripples through the banquet...
+TRES_LIANJU_PLAYER_TURN_CUSTOM_PICKED_NAME	认输	Concede
+TRES_LIANJU_PLAYER_TURN_DESCRIPTION_0	对句	Compose Response
+TRES_LIANJU_PLAYER_TURN_DESCRIPTION_1	认输	Concede
+TRES_LIANJU_PLAYER_TURN_DESCRIPTION_2	宾客以「{@lianju_npc_name}」为题吟完，轮到你一展诗才了！[br]选择你的意象来对句，根据意象等级和情绪契合度计分。	The guest has finished reciting on the theme of "{@lianju_npc_name}" — now it's your turn to display your poetic talent![br]Choose your image to respond; scoring is based on image tier and mood affinity.
+TRES_LIANJU_PLAYER_TURN_NAME_0	联句·我对	Linked Verse · My Turn
+TRES_LIANJU_RESULT_DESCRIPTION_0	回到宴席	Return to the Banquet
+TRES_LIANJU_RESULT_DESCRIPTION_1	你以「{@lianju_picked_name}」对句，赢得 {@lianju_score} 文名！[br]{@lianju_evaluation}	You respond with "{@lianju_picked_name}" as your image, earning {@lianju_score} renown![br]{@lianju_evaluation}
+TRES_LIANJU_RESULT_NAME_0	联句·结果	Linked Verse · Result
+TRES_LIANJU_SHOW_POEM_DESCRIPTION_0	轮到我了	My Turn
+TRES_LIANJU_SHOW_POEM_DESCRIPTION_1	{@npc_couplet}[br][br]——好一句「{@lianju_npc_name}」！现在轮到你对句了。	{@npc_couplet}[br][br]— A fine line, "{@lianju_npc_name}"! Now it's your turn to respond.
+TRES_LIANJU_SHOW_POEM_NAME_0	联句·赏诗	Linked Verse · Appreciating Poetry
+TRES_LIBAI_TASTE_INFO_0	“尚才相戏尔！”	"I was merely teasing a fellow talent!"
+TRES_LILINFU_PROMISE_DESCRIPTION_0	穿过重重院落，相府的奢华让你甚至不敢抬头。你被引至一处熏着沉香的幽静暖阁。珠帘掀开，那位权倾朝野的大唐右相，并没有端坐在高堂之上。	You pass through courtyard after courtyard, the opulence of the Chancellor's manor so overwhelming you hardly dare lift your eyes. You are ushered into a quiet, warm chamber fragrant with aloeswood incense. The beaded curtain parts — and the man who holds the empire in his palm, the Grand Chancellor of the Great Tang, is not seated high upon a dais.
+TRES_LILINFU_PROMISE_DESCRIPTION_1	是子美吗？快，上前些，让老夫好好看看。	Is that Zimei? Come, come closer — let this old man have a proper look at you.
+TRES_LILINFU_PROMISE_DESCRIPTION_2	相爷，草民那卷《雕赋》……不知是否污了相爷的眼。	My Lord Chancellor, that scroll of mine, the "Rhapsody on the Eagle"... I only hope it did not offend Your Excellency's eyes.
+TRES_LILINFU_PROMISE_DESCRIPTION_3	（叹气）大唐太庞大了，朝堂上尽是些尸位素餐的蠢物。老夫昨夜挑灯将你的赋看了三遍……字字珠玑，这是王佐之才啊！	(sighs) The Great Tang is far too vast, and the court is stuffed with witless fools who merely occupy their posts. Last night I lit a lamp and read your rhapsody three times over... Every word a pearl, every phrase a gem — this is the talent of a king's counselor!
+TRES_LILINFU_PROMISE_DESCRIPTION_4	他竟亲自离座，走到你面前。那双翻手为云覆手为雨的手，重重地、却又极具温度地拍了拍你的肩膀。	He actually rose from his seat and walked up to you. Those hands — hands that could overturn clouds into rain with a single turn — landed heavily, yet with startling warmth, upon your shoulders.
+TRES_LILINFU_PROMISE_DESCRIPTION_5	天下，太需要你这样的年轻人了。回去好好歇息，无需再四处奔波受气。明年的春闱科举，老夫要在紫宸殿的金榜上，看到你的名字	The realm desperately needs young men like you. Go home and rest well — no more trudging about, swallowing insults from petty men. When the spring imperial examinations come next year, this old man expects to see your name upon the golden roster in the Hall of Purple Dawn.
+TRES_LILINFU_PROMISE_DESCRIPTION_6	欣喜若狂	Overjoyed
+TRES_LILINFU_PROMISE_DESCRIPTION_7	你终于获得了一次面见右相的机会	You have finally secured an audience with the Grand Chancellor
+TRES_LILINFU_PROMISE_NAME_0	旁白	Narrator
+TRES_LILINFU_PROMISE_NAME_1	李林甫	Li Linfu
+TRES_LILINFU_PROMISE_NAME_2	杜甫	Du Fu
+TRES_LILINFU_PROMISE_NAME_3	李林甫	Li Linfu
+TRES_LILINFU_PROMISE_NAME_4	旁白	Narrator
+TRES_LILINFU_PROMISE_NAME_5	李林甫	Li Linfu
+TRES_LILINFU_PROMISE_NAME_6	面见右相	Audience with the Grand Chancellor
+TRES_MEET_YOUXIANG_DESCRIPTION_0	是时候去拜访一下那位一人之下的右相了...	The time has come to pay a visit to the Grand Chancellor — the man second only to the Emperor himself...
+TRES_MEET_YOUXIANG_NAME_0	面见右相	Audience with the Grand Chancellor
+TRES_MOMENTUM_DESCRIPTION_0	时运之风。势高则诸事顺遂，势低则举步维艰。每旬自然衰减，城府可稍加减缓。	The wind of fortune. When momentum is high, all endeavors flow smoothly; when low, every step is a struggle. Decays naturally each ten-day period; political cunning can slow the decline.
+TRES_MOMENTUM_GAIN_TEXT_0	势微起，前路渐开	A faint stir of momentum — the path ahead begins to open
+TRES_MOMENTUM_GAIN_TEXT_1	运势渐起，诸事顺遂	Fortune rising, all things falling into place
+TRES_MOMENTUM_GAIN_TEXT_2	大势已成，所向披靡	Momentum fully forged — nothing can stand in your way
+TRES_MOMENTUM_GAIN_TEXT_3	天下大势汇于我身	The momentum of the realm converges upon me
+TRES_MOMENTUM_LOSS_TEXT_0	势头稍减	Momentum wanes slightly
+TRES_MOMENTUM_LOSS_TEXT_1	势头受挫	Momentum takes a blow
+TRES_MOMENTUM_LOSS_TEXT_2	势头大挫，处处碰壁	Momentum shattered — obstacles at every turn
+TRES_MOMENTUM_LOSS_TEXT_3	大势已去，回天乏术	Momentum spent — beyond all remedy
+TRES_MOMENTUM_NAME_0	势	Momentum
+TRES_MOMENTUM_PERCEPTION_TEXT_0	寸步难行	Unable to take a single step
+TRES_MOMENTUM_PERCEPTION_TEXT_1	时运不济	Fortune frowns
+TRES_MOMENTUM_PERCEPTION_TEXT_2	顺势而为	Riding the tide
+TRES_MOMENTUM_PERCEPTION_TEXT_3	势不可挡	Unstoppable
+TRES_MOMENTUM_PERCEPTION_TEXT_4	大势所趋，天下归心	The tide of history — all hearts turn as one
+TRES_MONEY_DESCRIPTION_0	铜钱银两，长安米贵。行卷、买酒、交游，样样要钱。无钱寸步难行。	Copper cash and silver taels. Grain in Chang'an does not come cheap. Presenting scrolls, buying wine, social connections — everything demands coin. Without money, you cannot take a single step.
+TRES_MONEY_GAIN_TEXT_0	荷包微沉，多了几文铜钱	Your purse grows slightly heavier — a few more copper coins
+TRES_MONEY_GAIN_TEXT_1	一笔不小的进项	A sizable sum comes in
+TRES_MONEY_GAIN_TEXT_2	你掂量着一大袋钱，沉重厚实	You heft a heavy sack of coin — solid, weighty, substantial
+TRES_MONEY_GAIN_TEXT_3	富可敌国！银钱堆积如山	Wealth to rival a kingdom! Silver and coin piled high as mountains
+TRES_MONEY_LOSS_TEXT_0	用了几文铜钱	A few copper coins spent
+TRES_MONEY_LOSS_TEXT_1	花销不小呢	That was no small expense...
+TRES_MONEY_LOSS_TEXT_2	这一下可花了不少	That one cost quite a bit
+TRES_MONEY_LOSS_TEXT_3	倾家荡产...	Ruined utterly, fortunes scattered to the wind...
+TRES_MONEY_PERCEPTION_TEXT_0	囊中羞涩	Pockets empty, purse ashamed
+TRES_MONEY_PERCEPTION_TEXT_1	尚可度日	Enough to get by
+TRES_MONEY_PERCEPTION_TEXT_2	小有积蓄	A modest nest egg
+TRES_MONEY_PERCEPTION_TEXT_3	家资殷实	Comfortably well-off
+TRES_MONEY_PERCEPTION_TEXT_4	富甲一方	The wealthiest for a hundred miles
+TRES_NEAR_DEATH_BURN_MANUSCRIPT_DESCRIPTION_0	选一份诗稿，投入火中	Choose a manuscript and cast it into the fire
+TRES_NEAR_DEATH_BURN_MANUSCRIPT_DESCRIPTION_1	这些轻薄的丝帛和宣纸，曾是你叩开长安权贵大门的敲门砖。你看着它们在火光中卷曲、发黑，变成一小撮灰烬。火很小，但足够让你的手指恢复一点知觉了。	These delicate sheets of silk and Xuan paper were once your keys to knock upon the gates of Chang'an's powerful. You watch them curl, blacken, and crumble into a small heap of ash in the firelight. The flame is small, but just enough to bring a hint of feeling back to your fingers.
+TRES_NEAR_DEATH_BURN_MANUSCRIPT_INFO_0	你的诗稿在火焰中化为灰烬。手指恢复了知觉。	Your manuscripts turn to ash in the flames. Feeling returns to your fingers.
+TRES_NEAR_DEATH_BURN_MANUSCRIPT_INFO_1	你身上没有什么可烧的。但身体莫名回暖了一些。	You have nothing left on your person to burn. Yet somehow, a strange warmth spreads through your body.
+TRES_NEAR_DEATH_BURN_MANUSCRIPT_NAME_0	焚稿求生	Burning Manuscripts for Survival
+TRES_NEAR_DEATH_NOTHING_TO_BURN_DESCRIPTION_0	你翻遍了全身，没有纸，没有酒，甚至连悲哀和愤怒的情绪都已被榨干。大唐已经没有什么东西可以让你拿来燃烧了。	You search every inch of your body — no paper, no wine, not even the emotions of grief and rage remain to be wrung out. The Great Tang has nothing left for you to set ablaze.
+TRES_NEAR_DEATH_NOTHING_TO_BURN_INFO_0	什么都没有发生。	Nothing happens.
+TRES_NEAR_DEATH_NOTHING_TO_BURN_NAME_0	無物可燒	Nothing Left to Burn
+TRES_NORMAL_DEEPSEEK_DESCRIPTION_0	你舒展身体，回忆自己都做了什么...	You stretch your limbs and reflect on what you've been up to...
+TRES_NORMAL_DEEPSEEK_NAME_0	一般探索思绪	General Introspection
+TRES_NOTE_ACCEPT_LINIAN_DESCRIPTION_0	去马来牛不复辨，浊泾清渭何当分？	Horses depart, oxen arrive — who can tell them apart? The Jing runs muddy, the Wei runs clear — how could they ever be divided now?
+TRES_NOTE_ACCEPT_LINIAN_DESCRIPTION_EXPLANATION_0	暴雨倾盆、道路泥泞，极目望去，连跑去的马和走来的牛都分不清了。连绵的阴雨让山洪暴发，原本清浊分明的泾河与渭河，此时又怎能分得清呢？	Torrential rain pours, the roads a quagmire. Gazing out as far as the eye can see, even galloping horses and plodding oxen blur into indistinction. The endless downpour has stirred mountain floods — the Jing and Wei rivers, once so clearly divided between murk and clarity, how could anyone tell them apart now?
+TRES_NOTE_ACCEPT_LINIAN_NAME_0	接受理念	Accept Conviction
+TRES_NOTE_ACCEPT_LINIAN_NOTE_EXPLANATION_0	点击右下角理念按钮以决定何所往	Click the Conviction button in the lower-right corner to decide your path forward
+TRES_NOTE_ACCEPT_LINIAN_NOTE_NARRATIVE_0	莫再蹉跎于裘马清狂之间，立定志向当在今日——哪怕多历坎坷、走些弯路，也胜过在犹豫不决中白了少年头。	

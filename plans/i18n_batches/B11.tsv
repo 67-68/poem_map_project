@@ -1,0 +1,88 @@
+# B11: Notes+Poems — 2260-2343 — 84 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+TRES_NOTE_FANGSHI_CHUYOU_DESCRIPTION_0	朝扣富儿门，暮随肥马尘。残杯与冷炙，到处潜悲辛。	At dawn I knock on the rich man's gate; at dusk I follow fat horses' dust. Leftover wine and cold scraps — everywhere I swallow grief unseen.
+TRES_NOTE_FANGSHI_CHUYOU_DESCRIPTION_EXPLANATION_0	清晨去敲富豪的大门，傍晚随在达官贵人的马后吃尘土；吃的是别人的残羹冷炙，到处偷偷吞咽着悲伤与痛苦。即使如此的下贱，但仍然吃不上饭。	Knocking on wealthy doors at dawn, eating dust behind nobles' horses at dusk; surviving on others' leftovers, secretly swallowing sorrow and bitterness wherever you go. Even debasing yourself this way, you still can't get enough to eat.
+TRES_NOTE_FANGSHI_CHUYOU_HEALTH_DESCRIPTION_0	朝扣富儿门，暮随肥马尘。残杯与冷炙，到处潜悲辛。	At dawn I knock on the rich man's gate; at dusk I follow fat horses' dust. Leftover wine and cold scraps — everywhere I swallow grief unseen.
+TRES_NOTE_FANGSHI_CHUYOU_HEALTH_DESCRIPTION_EXPLANATION_0	清晨去敲富豪的大门，傍晚随在达官贵人的马后吃尘土；吃的是别人的残羹冷炙，到处偷偷吞咽着悲伤与痛苦。即使如此的下贱，但仍然吃不上饭。	Knocking on wealthy doors at dawn, eating dust behind nobles' horses at dusk; surviving on others' leftovers, secretly swallowing sorrow and bitterness wherever you go. Even debasing yourself this way, you still can't get enough to eat.
+TRES_NOTE_FANGSHI_CHUYOU_HEALTH_NAME_0	坊市-出游循环	Fangshi-Chuyou Cycle
+TRES_NOTE_FANGSHI_CHUYOU_HEALTH_NOTE_EXPLANATION_0	去【坊市】行动出卖体力之后去【出游】可以有效获取生命。	After working at the [Market Ward] to sell your labor, going on an [Excursion] is an effective way to regain health.
+TRES_NOTE_FANGSHI_CHUYOU_HEALTH_NOTE_NARRATIVE_0	昔年泰山清狂，不知薪米之贵；今入长安，方知出卖体力之迫切也。	In years past atop Mount Tai, carefree and wild, I never knew the cost of firewood and rice. Now entering Chang'an, I finally understand the urgency of selling one's labor.
+TRES_NOTE_FANGSHI_CHUYOU_NAME_0	坊市-出游循环	Fangshi-Chuyou Cycle
+TRES_NOTE_FANGSHI_CHUYOU_NOTE_EXPLANATION_0	去坊市出卖体力之后去出游可以有效获取额外的资源。	Working at the Market Ward to sell your labor, then going on an Excursion, is an effective way to gain extra resources.
+TRES_NOTE_FANGSHI_CHUYOU_NOTE_NARRATIVE_0	昔年泰山清狂，不知薪米之贵；今入长安，方知出卖体力之迫切也。	In years past atop Mount Tai, carefree and wild, I never knew the cost of firewood and rice. Now entering Chang'an, I finally understand the urgency of selling one's labor.
+TRES_NOTE_JIEDU_DESCRIPTION_0	疟疠三秋孰可忍，寒热百日相交战	How can one endure three autumns of pestilence and plague? A hundred days of cold and fever clashing within.
+TRES_NOTE_JIEDU_DESCRIPTION_EXPLANATION_0	体内的寒气与热毒像两支军队一样，在我的身体里交锋厮杀。	Cold qi and heat toxin battle inside my body like two armies at war.
+TRES_NOTE_JIEDU_NAME_0	解毒	Detox
+TRES_NOTE_JIEDU_NOTE_EXPLANATION_0	…或许和西市地下神医打好关系到【相识】之后他有办法？	...Perhaps the underground divine doctor of the West Market has a remedy once you've earned his [Acquaintance]?
+TRES_NOTE_JIEDU_NOTE_NARRATIVE_0	莫硬撑了！那寒热消渴非小疾，快去求医。莫等老来右臂偏枯、日夕枯渴，徒留一身病骨，悔之晚矣！	Don't tough it out! That alternation of cold, fever, and wasting thirst is no minor ailment — go seek a doctor at once! Don't wait until old age, when your right arm withers and day and night you parch with thirst, leaving only a body of bone and sickness — by then it will be too late for regret!
+TRES_NPC_DOC_JIWEN_NAME_0	吉温	Ji Wen
+TRES_NPC_DOC_LIBAI_NAME_0	李白	Li Bai
+TRES_NPC_DOC_SHENYI_NAME_0	神医	Divine Doctor
+TRES_NPC_DOC_WANGWEI_NAME_0	王维	Wang Wei
+TRES_NPC_DOC_ZHENGQIAN_NAME_0	郑虔	Zheng Qian
+TRES_OUT_OF_THE_CITY_DESCRIPTION_0	你终于拿到了对应的官职，你唯一想做的事情就是回家报喜，改善家人的生活。	You've finally secured an official post. The only thing you want to do now is rush home with the good news and improve your family's life.
+TRES_OUT_OF_THE_CITY_NAME_0	岁暮出城	Leaving the City at Year's End
+TRES_PARTY_SUBJECTIVE_CHANGHE_DESCRIPTION_0	唱和	Exchange Poems
+TRES_PARTY_SUBJECTIVE_CHANGHE_DESCRIPTION_1	回去	Go Back
+TRES_PARTY_SUBJECTIVE_CHANGHE_DESCRIPTION_2	你决定与{@target_npc}唱和一首	You decide to exchange a poem with {@target_npc}
+TRES_PARTY_SUBJECTIVE_CHANGHE_NAME_0	主动唱和	Initiate Poetry Exchange
+TRES_PLOT_PROMPT_USER_ACTION_DESCRIPTION_0	收下银钱，谢过同乡	Accept the silver and thank the fellow villager
+TRES_PLOT_PROMPT_USER_ACTION_DESCRIPTION_1	同乡老张风尘仆仆地找到你，从怀里掏出一个灰布包裹塞进你手中。\n\n「这是三十钱，乡里凑的。子美啊，你到长安也有些时日了，怎么还不去拜谒？这都第三旬了，再不去可就晚了！」\n\n他说完，重重拍了拍你的肩，转身消失在街巷尽头。\n\n（天意旁白：是时候了，点击右下角「拜谒」行动，叩响仕途的第一扇门。）	Your fellow villager Old Zhang finds you, travel-worn and dusty. He pulls a grey cloth bundle from his coat and presses it into your hands.\n\n"Here's thirty coins, scraped together by the village. Zimei, you've been in Chang'an for some time now — why haven't you gone to pay your respects yet? It's already the third xun! Much longer and it'll be too late!"\n\nHe gives your shoulder a heavy pat, then turns and vanishes into the alley.\n\n(Aside from Providence: The time has come. Tap the "Pay Respects" action in the lower right, and knock on the first door of officialdom.)
+TRES_PLOT_PROMPT_USER_ACTION_NAME_0	同乡来访	A Fellow Villager Calls
+TRES_POEM_FENGXUE_YE_DESCRIPTION_0	寒月孤雪落叶：羁旅登高，天地苍茫	Cold Moon, Lonely Snow, Falling Leaves: Climbing high on a distant journey, heaven and earth vast and boundless
+TRES_POEM_FENGXUE_YE_NAME_0	风雪夜归人	Return in a Snowy Night
+TRES_POEM_GIVING_OPTION_DESCRIPTION_0	献上诗词	Present a Poem
+TRES_POEM_LEVEL_1_FALLBACK_DESCRIPTION_0	欣赏诗作	Appraise the Poem
+TRES_POEM_LEVEL_1_FALLBACK_DESCRIPTION_1	你展开卷轴，墨迹未干。这是一首平平无奇的诗，自我安慰尚可，赠人则略显寒酸。	You unroll the scroll; the ink is still damp. This is a thoroughly unremarkable poem — passable for self-consolation, but rather shabby as a gift.
+TRES_POEM_LEVEL_1_FALLBACK_NAME_0	平庸之诗	A Mediocre Poem
+TRES_POEM_LEVEL_2_FALLBACK_DESCRIPTION_0	欣赏诗作	Appraise the Poem
+TRES_POEM_LEVEL_2_FALLBACK_DESCRIPTION_1	你展开卷轴，墨迹未干。这是一首颇有章法的诗，令人点头称赞，唯欠几分神来之笔。	You unroll the scroll; the ink is still damp. This poem has genuine craft — it earns nods of approval, lacking only that touch of divine inspiration.
+TRES_POEM_LEVEL_2_FALLBACK_NAME_0	佳作之诗	A Fine Poem
+TRES_POEM_LEVEL_3_FALLBACK_DESCRIPTION_0	欣赏诗作	Appraise the Poem
+TRES_POEM_LEVEL_3_FALLBACK_DESCRIPTION_1	你展开卷轴，墨迹未干。这是一首泣鬼惊神的绝唱！字字珠玑，力透纸背，必将千古流传。	You unroll the scroll; the ink is still damp. This is a masterpiece that moves ghosts and gods to tears! Each word a pearl, the brushwork biting through the page — this will be passed down through the ages.
+TRES_POEM_LEVEL_3_FALLBACK_NAME_0	绝唱之诗	A Peerless Masterpiece
+TRES_POEM_REVEAL_DESCRIPTION_0	欣赏诗作	Appraise the Poem
+TRES_POEM_REVEAL_DESCRIPTION_1	你展开卷轴，墨迹未干。一首「{@poem_type}」诗已然落成。	You unroll the scroll; the ink is still damp. A poem of "{@poem_type}" has taken form.
+TRES_POEM_REVEAL_NAME_0	诗词新成	A New Poem
+TRES_POEM_TIAN_CHENG_DESCRIPTION_0	干将未省钝 + 主将收才子：献赋求荐，含蓄自尊	Ganjiang unaware of his own dullness + the Commander gathers talents: offering verse to seek recommendation, restrained yet proud
+TRES_POEM_TIAN_CHENG_NAME_0	赠献纳使起居田舍人澄	For the Palace Provisioner, Drafter Tian of Qiju
+TRES_POEM_TYPE_CHOOSE_YOUXIANGFU_DESCRIPTION_0	展示三级干谒诗	Display Tier 3 Patronage Poem
+TRES_POEM_TYPE_CHOOSE_ZHUOLIU_DESCRIPTION_0	展示诗词	Display Poem
+TRES_POEM_WANG_YUE_DESCRIPTION_0	泰山	Mount Tai
+TRES_POEM_WANG_YUE_NAME_0	望岳	Gazing at Mount Tai
+TRES_POEM_WEIZUO_CHENG_DESCRIPTION_0	求职诗的巅峰：骑驴十三载(羁旅) + 骅骝作骨(骐骥) + 致君尧舜上(尧舜)	The pinnacle of job-seeking poetry: thirteen years on donkey-back (Wandering) + a steed's spirit in the bones (Noble Steed) + raising the sovereign to the level of Yao and Shun (Sages)
+TRES_POEM_WEIZUO_CHENG_NAME_0	奉赠韦左丞丈二十二韵	Twenty-Two Couplets Humbly Presented to Vice Director Wei
+TRES_POEM_ZHENG_JIANYI_DESCRIPTION_0	饥寒 + 明主：谏议底色，穷年忧黎	Hunger, Cold + A Wise Ruler: the remonstrator's essence — year after year of poverty, grieving for the common people
+TRES_POEM_ZHENG_JIANYI_NAME_0	敬赠郑谏议十韵	Ten Couplets Respectfully Presented to Remonstrator Zheng
+TRES_POET_DUFU_002_NAME_0	杜甫	Du Fu
+TRES_POET_LIBAI_001_NAME_0	李白	Li Bai
+TRES_PRESTIGE_DESCRIPTION_0	才名与望誉。行卷投谒、风评交游的核心资本，是进入权贵圈层的入场券。	Reputation and renown. The core capital for submitting manuscripts, paying visits, and navigating social circles — your ticket into the world of the powerful.
+TRES_PRESTIGE_GAIN_TEXT_0	文思稍动，微名渐起	Literary talent stirs; a faint name begins to rise.
+TRES_PRESTIGE_GAIN_TEXT_1	才名渐起，坊间偶有传颂	Your reputation grows; your name is occasionally praised in the streets.
+TRES_PRESTIGE_GAIN_TEXT_2	声名鹊起，文人争相传颂	Your fame soars; scholars compete to recite your works.
+TRES_PRESTIGE_GAIN_TEXT_3	文曲星动，天下皆知	The literary star stirs; all under heaven knows your name.
+TRES_PRESTIGE_LOSS_TEXT_0	文名微损	Your literary name is slightly tarnished.
+TRES_PRESTIGE_LOSS_TEXT_1	声名稍坠	Your reputation dips somewhat.
+TRES_PRESTIGE_LOSS_TEXT_2	文名受损，颇受微词	Your literary name is damaged, drawing considerable criticism.
+TRES_PRESTIGE_LOSS_TEXT_3	声名狼藉，人人唾弃	Your name is in ruins; everyone spits at the mention of it.
+TRES_PRESTIGE_NAME_0	望	Prestige
+TRES_PRESTIGE_PERCEPTION_TEXT_0	籍籍无名	Utterly obscure
+TRES_PRESTIGE_PERCEPTION_TEXT_1	小有名气	Somewhat known
+TRES_PRESTIGE_PERCEPTION_TEXT_2	文名远播	Reputation spread far and wide
+TRES_PRESTIGE_PERCEPTION_TEXT_3	名动天下	A name that moves the world
+TRES_PRESTIGE_PERCEPTION_TEXT_4	千古流芳	Immortal fame through the ages
+TRES_PROGRESS_GAIN_TEXT_0	小有进展	A small step forward
+TRES_PROGRESS_GAIN_TEXT_1	平步青云	Rising through the ranks
+TRES_PROGRESS_GAIN_TEXT_2	飞黄腾达	A meteoric ascent
+TRES_PROGRESS_LOSS_TEXT_0	略有波折	A minor setback
+TRES_PROGRESS_LOSS_TEXT_1	宦海沉浮	Tossed on the sea of officialdom
+TRES_PROGRESS_LOSS_TEXT_2	一落千丈	A precipitous fall
+TRES_PROGRESS_PERCEPTION_TEXT_0	布衣之身	A commoner in plain clothes
+TRES_PROGRESS_PERCEPTION_TEXT_1	初入仕途	A fledgling on the official path
+TRES_PROGRESS_PERCEPTION_TEXT_2	官居要职	Holding a key official post
+TRES_PROGRESS_PERCEPTION_TEXT_3	封侯拜相	Ennobled and appointed chief minister
+TRES_PROGRESS_PERCEPTION_TEXT_4	权倾朝野	Power that overshadows the court
+TRES_PROVIDER_MANIA_EXAMPLE_CRAZY_OPTION_TEXT_0	狂笑不止，踽踽独行	Laughing madly, walking alone
+TRES_QINGLIU_JIAOLV_DOOMSDAY_BINGE_IDENTITY_VENDOR_DESCRIPTION_0	袖口抹去坛沿的灰，仰头灌下第一口时，喉结还没动，鼻腔先涌出酸气。	

@@ -43,8 +43,8 @@ func initialize(action_: Action = null):
 	if action_:
 		action = action_
 		# 使用 $ 内联访问而非 @onready，因为 initialize 可能在 _ready 之前调用
-		$Panel/HBoxContainer/VBoxContainer/Title.text = action.name
-		$Panel/HBoxContainer/VBoxContainer/Outcome.text = action.description
+		$Panel/HBoxContainer/VBoxContainer/Title.text = tr(action.name)
+		$Panel/HBoxContainer/VBoxContainer/Outcome.text = tr(action.description)
 		
 		# ── 图标：有数据则显示，无数据则隐藏 ──
 		if action.icon:
@@ -77,8 +77,8 @@ func initialize(action_: Action = null):
 ## 差分更新：只刷 UI 文本/图标，不重建信号 & HoverPopup（已注册的 popup 绑定不变）
 func update_action(new_action: Action) -> void:
 	action = new_action
-	$Panel/HBoxContainer/VBoxContainer/Title.text = new_action.name
-	$Panel/HBoxContainer/VBoxContainer/Outcome.text = new_action.description
+	$Panel/HBoxContainer/VBoxContainer/Title.text = tr(new_action.name)
+	$Panel/HBoxContainer/VBoxContainer/Outcome.text = tr(new_action.description)
 	
 	# ── 图标：有数据则显示，无数据则隐藏 ──
 	if new_action.icon:

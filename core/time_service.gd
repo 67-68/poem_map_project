@@ -320,7 +320,11 @@ func get_era_text(year: int) -> String:
 	for era in ERA_TABLE:
 		if year >= era[0] and year <= era[1]:
 			var era_year_num = year - era[0] + 1
-			var num_str = _get_chinese_number(era_year_num)
+			var num_str: String
+			if TranslationServer.get_locale() == "zh":
+				num_str = _get_chinese_number(era_year_num)
+			else:
+				num_str = str(era_year_num)
 			
 			# 拼装：比如 "天宝 十四 载" — 翻译延迟到访问时
 			era_text = "%s %s %s" % [TranslationServer.translate(era[2]), num_str, TranslationServer.translate(era[3])]

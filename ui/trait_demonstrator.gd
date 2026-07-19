@@ -40,7 +40,7 @@ func set_trait(trait_data: Trait) -> void:
 		Logging.err("TraitDemonstrator: _stamp_label 为 null，检查节点路径 '$HBoxContainer/YangKe/MarginContainer/Label'")
 
 	if _name_label:
-		_name_label.text = trait_data.name
+		_name_label.text = tr(trait_data.name)
 	else:
 		Logging.err("TraitDemonstrator: _name_label 为 null，检查节点路径 '$HBoxContainer/TraitNameLabel'")
 
@@ -60,7 +60,7 @@ func set_trait_fallback(trait_key: String, display_name: String) -> void:
 	else:
 		Logging.err("TraitDemonstrator: _stamp_label 为 null（fallback），检查节点路径")
 	if _name_label:
-		_name_label.text = display_name
+		_name_label.text = tr(display_name)
 	else:
 		Logging.err("TraitDemonstrator: _name_label 为 null（fallback），检查节点路径")
 

@@ -82,7 +82,7 @@ func _ready() -> void:
 	Logging.info("LeftPlayerPanel: _ready start")
 
 	# 静态数据
-	_name_label.text = PlayerState.player_name
+	_name_label.text = tr(PlayerState.player_name)
 	Logging.info("LeftPlayerPanel: player_name=%s" % PlayerState.player_name)
 
 	# ── 驻留地点 PlaceLabel ──
@@ -236,7 +236,7 @@ func _refresh_place_label() -> void:
 		if place_str in doc.preferred_places:
 			var state = RelationFlagManager.get_person_state(target_tag)
 			if state != RelationFlagManager.PERSON_STATE.UNCHARTED:
-				known_npcs.append(doc.name if not doc.name.is_empty() else target_tag)
+				known_npcs.append(tr(doc.name) if not doc.name.is_empty() else target_tag)
 
 	if known_npcs.is_empty():
 		_place_label.text = tr("CODE_LEFT_PLAYER_PANEL_E6142E8810") % cn

@@ -1,0 +1,124 @@
+# B02: System Internals — 122-241 — 120 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_184F5B7573	收受贿赂的记录	Evidence of an illicit affair
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_254E9A0624	与人私通的证据	A secret pact of betrayal
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_3996EDABB3	背信弃义的密约	Forged handwriting on official documents
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_502DC14B76	伪造文书的笔迹	A family scandal hidden from the light
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_7D65F67B10	见不得光的家丑	Traces of embezzled public funds
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_7F26389725	挪用公款的痕迹	Clues of exam cheating in the imperial examinations
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_B13ABA59F6	科举舞弊的线索	Ledgers of chronic tax evasion
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_B3AD279BCF	常年逃税的账目	Uncovered leverage on "%s": %s
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_C58E3CFC02	探得了「%s」的把柄：%s	Hidden massive debts
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_D1A59CEE54	隐匿的巨额债务	Adding leverage to context[%s]
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_EC0F4AD515	添加把柄给 context[%s]	A dusty old crime from years past
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_F66EF53384	尘封的旧日罪行	Deepen friendship with a random character, raising relationship tier
+CODE_ADVANCE_PLOT_PLACEHOLDER_OPERATOR_321B98CB7A	随机与一位人物增进交情，关系层级提升	Had a pleasant chat with %s, relationship improved
+CODE_ADVANCE_PLOT_PLACEHOLDER_OPERATOR_A0F966902C	与%s攀谈甚欢，关系增进	Had a pleasant chat with %s
+CODE_ADVANCE_PLOT_PLACEHOLDER_OPERATOR_B42B332E93	与%s攀谈甚欢	All Mood ↓(%d)
+CODE_ALL_EMO_SUB_OPERATOR_AD44EE7793	全情↓(%d)	Stage status unknown
+CODE_AMBITION_CONFIG_0329A1F3B0	阶段状态未知	Map tracked_property continuous values to Unicode classical dots: ●●●◐○ + literary text
+CODE_AMBITION_HUD_314DD9FA4C	将 tracked_property 连续值映射为 Unicode 古典圆点：●●●◐○ + 文学化文本	Fetch the corresponding Property resource from Database based on ambition.tracked_property
+CODE_AMBITION_HUD_C835E76AC4	根据 ambition.tracked_property 从 Database 中取出对应的 Property 资源	Loop callback: restart playback.
+CODE_AUDIO_MANAGER_0AEE7286EA	循环回调：重新播放。	Pick a random SFX from the category, loop infinitely with an independent loop player. Returns success status.
+CODE_AUDIO_MANAGER_13C2163725	从类别随机选一个音效，用独立循环播放器无限循环。返回是否成功。	Stop the loop player.
+CODE_AUDIO_MANAGER_5A9B74407B	停止循环播放器。	Index
+CODE_AUDIO_MANAGER_9AC22D24D8	索引	⏳ Waiting %d/%d xun
+CODE_BBCODE_01EEBE490C	⏳ 等待 %d/%d 旬	[Success Effects]:
+CODE_BBCODE_0C8ABDDBB1	[成功效果]:	Locked:
+CODE_BBCODE_0D46022B0E	锁定：	Yield: None
+CODE_BBCODE_0F9928F317	产：无	Available:
+CODE_BBCODE_1726614F08	可行：	Available: Unknown
+CODE_BBCODE_2C5F8B18A4	可行：未知	⏱ Duration %s
+CODE_BBCODE_2FB48A6C2F	⏱ 耗时 %s	Risk:
+CODE_BBCODE_4D7C36AA23	险：	⚠ Repeated action — rewards reduced by 20%%, costs increased by 20%%
+CODE_BBCODE_4F9DFB5567	⚠ 重复行动 — 收益减少20%%，消耗增加20%%	Cost:
+CODE_BBCODE_703E75446D	耗：	📍 Auto-consume 1 day to travel to %s
+CODE_BBCODE_7117939F67	📍 自动消耗1天前往%s	Cost: None
+CODE_BBCODE_7CA5205A5B	耗：无	Go to %s
+CODE_BBCODE_7F0CC21586	赴%s	⚠ Insufficient resources, %s
+CODE_BBCODE_85C48E965A	⚠ 资源不足，%s	[Failure Effects]:
+CODE_BBCODE_8B1564F7D5	[失败效果]:	━━━ Ongoing ━━━
+CODE_BBCODE_9B4C29C5F6	━━━ 持续 ━━━	[Preview]
+CODE_BBCODE_A8DE0CCC7F	[预览]	━━━ Result ━━━
+CODE_BBCODE_A95858CB62	━━━ 结果 ━━━	Yield:
+CODE_BBCODE_B082955862	产：	━━━ Requirements ━━━
+CODE_BBCODE_B9C206F855	━━━ 前提 ━━━	Chance: %d%% success,
+CODE_BBCODE_BB986C4BCD	概率: %d%%成功，	⏳ After execution, wait %d xun
+CODE_BBCODE_C1E9B923E7	⏳ 执行后等待 %d 旬	Per xun: %s
+CODE_BBCODE_C7EC16875B	每旬: %s	Lv%d Imagery
+CODE_BBCODE_D8663A39B4	Lv%d 意象	Chance: %d%%
+CODE_BBCODE_E18ED459F1	概率: %d%%	Locked: requirements not met
+CODE_BBCODE_E9BCBC440D	锁定：条件不足	⏱ Duration %s ~ %s
+CODE_BBCODE_EAE89B1E8B	⏱ 耗时 %s ～ %s	━━━ Failure ━━━
+CODE_BBCODE_ECCD17434E	━━━ 失败 ━━━	━━━ Effects ━━━
+CODE_BBCODE_F17C55154D	━━━ 效果 ━━━	⏱ Duration %s — time insufficient (%d days remaining)
+CODE_BBCODE_FA6F390B49	⏱ 耗时 %s — 时间不足（剩余%d天）	Acquisition efficiency
+CODE_BUFF_OPERATOR_0A676BE9DE	获取效率	-%d xun
+CODE_BUFF_OPERATOR_0B15CFDD12	-%d旬	Relationship requirement
+CODE_BUFF_OPERATOR_1DD5A83A65	关系需求	Fuzzy delete by type+named_key (fallback)
+CODE_BUFF_OPERATOR_26DD29F108	按 type+named_key 模糊删除（兜底）	Per xun
+CODE_BUFF_OPERATOR_27D874C137	每旬	Action bonus
+CODE_BUFF_OPERATOR_2D602CA4EF	行动加成	Relationship duration
+CODE_BUFF_OPERATOR_33564A7B86	关系时间	Init: verify named_amount_key exists
+CODE_BUFF_OPERATOR_540C92CD69	初始化：验证 named_amount_key 是否存在	+%d tier(s)
+CODE_BUFF_OPERATOR_66D1B869F2	+%d档	Modifier does not directly reference a property, returning empty
+CODE_BUFF_OPERATOR_7591B94741	修饰器不直接引用属性，返回空	Cap
+CODE_BUFF_OPERATOR_8E7DDBEEE3	上限	Trade tier
+CODE_BUFF_OPERATOR_A22B5ACD70	交易档次	Modifier does not directly depend on a property, returning empty
+CODE_BUFF_OPERATOR_A61F72D944	修饰器不直接依赖属性，返回空	Register modifier: add an entry to GameSave.data.active_modifiers
+CODE_BUFF_OPERATOR_CC1E0272A8	注册修饰器：向 GameSave.data.active_modifiers 添加一条	Alt preview: show modifier effect text
+CODE_BUFF_OPERATOR_CE5F9104CD	Alt 预览：展示修饰器效果文本	Unregister modifier: remove all matching entries from GameSave.data.active_modifiers
+CODE_BUFF_OPERATOR_D763EDC735	注销修饰器：从 GameSave.data.active_modifiers 删除匹配本条的所有条目	Event %s: PropertyOperator missing property setting
+CODE_BUSINESS_LINTER_RULE_05E50861A1	事件 %s 的PropertyOperator缺少property设置	Business Linter
+CODE_BUSINESS_LINTER_RULE_4FE69FE119	业务规则检查官	Event %s: TraitOperator missing str_traits and _trait_key settings
+CODE_BUSINESS_LINTER_RULE_5501701ABA	事件 %s 的TraitOperator缺少str_traits和_trait_key设置	Event %s: FlagOperator missing flag_id setting
+CODE_BUSINESS_LINTER_RULE_5B18B68CBF	事件 %s 的FlagOperator缺少flag_id设置	Event %s: option '%s' has results but no time advancement
+CODE_BUSINESS_LINTER_RULE_96E1440EBB	事件 %s 的选项 '%s' 有结果但没有时间推动	Event %s: TraitReplaceOperator missing _replace_other_trait setting
+CODE_BUSINESS_LINTER_RULE_C3F663CE96	事件 %s 的TraitReplaceOperator缺少_replace_other_trait设置	Event %s: TraitReplaceOperator missing _to_be_replaced_trait setting
+CODE_BUSINESS_LINTER_RULE_F3604B2778	事件 %s 的TraitReplaceOperator缺少_to_be_replaced_trait设置	Great Tang spacetime viewport control
+CODE_CAMERA_8BFDF5633D	大唐时空视界控制	[ChainExecutor] create_once_option: failed to generate flag_id
+CODE_CHAIN_EXECUTOR_0C0C93145A	[ChainExecutor] create_once_option: 无法生成 flag_id	[ChainExecutor] create_hierarchy: incomplete parameters: %s
+CODE_CHAIN_EXECUTOR_2944CE15BE	[ChainExecutor] create_hierarchy 参数不完整: %s	[ChainExecutor] create_once_option: failed to inject operator
+CODE_CHAIN_EXECUTOR_2AB12B839F	[ChainExecutor] create_once_option: 注入 operator 失败	[ChainExecutor] create_once_option: failed to save event '%s'
+CODE_CHAIN_EXECUTOR_33AB74724F	[ChainExecutor] create_once_option: 保存事件 '%s' 失败	[ChainExecutor] command is null
+CODE_CHAIN_EXECUTOR_3C51E8A9A5	[ChainExecutor] 命令为 null	[ChainExecutor] unknown command type: %d
+CODE_CHAIN_EXECUTOR_3CA68A727F	[ChainExecutor] 未知命令类型: %d	[ChainExecutor] create_once_option: failed to set requirement
+CODE_CHAIN_EXECUTOR_55DC78D4EA	[ChainExecutor] create_once_option: 设置 requirement 失败	[ChainExecutor] create_reversible_hierarchy: incomplete parameters: %s
+CODE_CHAIN_EXECUTOR_6A127B566C	[ChainExecutor] create_reversible_hierarchy 参数不完整: %s	[ChainExecutor] create_hierarchy succeeded: %s(%s) ──[Push(%s)]──► %s
+CODE_CHAIN_EXECUTOR_7697E711FC	[ChainExecutor] create_hierarchy 成功: %s(%s) ──[Push(%s)]──► %s	[ChainExecutor] create_reversible_hierarchy failed: cannot inject Pop into %s(%s) (Push already injected: %s)
+CODE_CHAIN_EXECUTOR_8783882DF6	[ChainExecutor] create_reversible_hierarchy 失败: 无法注入 Pop 到 %s(%s)（Push 已注入 %s）	[ChainExecutor] create_once_option: incomplete parameters: %s
+CODE_CHAIN_EXECUTOR_94EC82CEBD	[ChainExecutor] create_once_option 参数不完整: %s	[ChainExecutor] create_reversible_hierarchy failed: cannot inject Push into %s(%s)
+CODE_CHAIN_EXECUTOR_B5BF8FA3BE	[ChainExecutor] create_reversible_hierarchy 失败: 无法注入 Push 到 %s(%s)	[ChainExecutor] create_reversible_hierarchy succeeded: %s(%s) ──[Push]──► %s ──[Pop]──► %s
+CODE_CHAIN_EXECUTOR_B88A99114E	[ChainExecutor] create_reversible_hierarchy 成功: %s(%s) ──[Push]──► %s ──[Pop]──► %s	[ChainExecutor] create_once_option: failed to load event '%s'
+CODE_CHAIN_EXECUTOR_BE7B523902	[ChainExecutor] create_once_option: 无法加载事件 '%s'	[ChainExecutor] create_hierarchy failed: source=%s, source_opt=%s, target=%s
+CODE_CHAIN_EXECUTOR_C811A52B2C	[ChainExecutor] create_hierarchy 失败: source=%s, source_opt=%s, target=%s	[ChainExecutor] create_once_option succeeded: %s(%s) [flag=%s]
+CODE_CHAIN_EXECUTOR_ECB00882C2	[ChainExecutor] create_once_option 成功: %s(%s) [flag=%s]	[ChainExecutor] create_once_option: option '%s' not found in event '%s'
+CODE_CHAIN_EXECUTOR_FDD75F2F56	[ChainExecutor] create_once_option: 在事件 '%s' 中未找到选项 '%s'	Option disabled
+CODE_COMPLEX_EVENT_OPTION_1F4CD3AC79	选项已禁用	Consume a random leverage
+CODE_CONSUME_RANDOM_LEVERAGE_OPERATOR_1EAD417A70	消耗随机一个把柄	A familiar path
+CODE_CREATE_FENGXIAN_EVENTS_04F1363AC8	熟悉的路径	You do not know where home is
+CODE_CREATE_FENGXIAN_EVENTS_0ABC8F6837	你不知道家在哪里	Not asking anyone — rely on instinct to find that old leaky house
+CODE_CREATE_FENGXIAN_EVENTS_1078EFF619	不去问人，直接凭着直觉去找那间漏雨的老屋	Turn and leave
+CODE_CREATE_FENGXIAN_EVENTS_11B6F35547	转身离开	Panic overtakes you as you stumble through the mud. The crying grows faint, nearly swallowed by the howling wind.
+CODE_CREATE_FENGXIAN_EVENTS_1EB93AF397	你急疯了，在泥水里跌跌撞撞。那阵哭声变得极其微弱，几乎要被风声盖过。	[FengxianCreator] Three flag names (for manual interrupter):
+CODE_CREATE_FENGXIAN_EVENTS_1F0DF912AC	[FengxianCreator] 三个 Flag 名称（用于手动 interruptor）:	[FengxianCreator] ✓ Saved: %s
+CODE_CREATE_FENGXIAN_EVENTS_20CA6FDCE5	[FengxianCreator] ✓ 已保存: %s	Turn back to the village entrance
+CODE_CREATE_FENGXIAN_EVENTS_28C7A55C47	折返回村口	The village head, eyes shut, points toward a direction you don't recognize at all. On the wind... no more crying can be heard.
+CODE_CREATE_FENGXIAN_EVENTS_3E83AC39C2	里正闭着眼，指了一个你根本不认识的方向。风里…听不到哭声了。	Step back outside
+CODE_CREATE_FENGXIAN_EVENTS_49E10CD8E4	退出门外	The village head still sits on that worn-smooth wooden stool, as if he has never moved. As you approach, his eyes are closed against the sun — no, perhaps just dozing. The winter sun holds no warmth; it rests on his face like a thin layer of ash.
+CODE_CREATE_FENGXIAN_EVENTS_6058B754AE	里正还坐在那张磨得发亮的木凳上，像是从未挪过。你走过去的时候，他正闭着眼晒太阳——不，也许只是在打盹。冬天的太阳没有温度，照在他脸上像一层薄灰。	The old home
+CODE_CREATE_FENGXIAN_EVENTS_6BF646D272	旧居	[FengxianCreator] ========== Begin creating Fengxian Village event chain ==========
+CODE_CREATE_FENGXIAN_EVENTS_842353CF65	[FengxianCreator] ========== 开始创建奉先村事件链 ==========	You stand at the entrance of Fengxian Village. Wind pours in from Mount Li, whipping your robes with a sharp snap. Ten-year-old memories crash against one another inside your head — every alley looks familiar, yet not. The old locust tree at the village gate still stands, but strangers now sit on the stone bench beneath it.
+CODE_CREATE_FENGXIAN_EVENTS_8C95CA9E9A	你站在奉先村的村口，风从骊山方向灌过来，把衣摆吹得猎猎作响。十年前的记忆在脑子里乱撞，每条巷子都像，又都不像。村口的老槐树还在，但树下的石凳上坐着陌生的人。	You fumble through these fields by ten-year-old memory. The path has long been swallowed by wild grass, but the direction is still carved in your bones. Wind blows in from Fengxian county town, carrying the scent of firewood smoke.
+CODE_CREATE_FENGXIAN_EVENTS_9A7899478F	你凭着十年前的记忆在这片田野里摸索。路早就被荒草吞没了大半，但方向还在骨头里。风从奉先县城那边吹过来，夹着一股柴烟味。	The village head at the gate
+CODE_CREATE_FENGXIAN_EVENTS_9CC9AB94A9	村口的里正	You know something is wrong there. The village head is dead. They seem to have moved to somewhere you don't recognize.
+CODE_CREATE_FENGXIAN_EVENTS_A277BA513D	你知道那里不对，里正死了，他们似乎搬迁到了你不熟悉的地方	Follow the path from memory, toward the house you lived in ten years ago
+CODE_CREATE_FENGXIAN_EVENTS_A66C71E27A	沿着记忆中的小径，去找十年前住过的那间屋	Fengxian Village outskirts
+CODE_CREATE_FENGXIAN_EVENTS_B083A4688B	奉先村村头	The door is ajar. You push it open. The stench of mold mixed with a sickly-sweet rot hits you in the face. A dried corpse lies sprawled on the floor — thick-boned, broad-shouldered, no woman, certainly no child. You crouch down and turn over the hands; calluses on the knuckles, the marks of a hoe-handle.
+CODE_CREATE_FENGXIAN_EVENTS_B93E5BF815	门虚掩着。你推开门，屋里的霉味混着一股甜腻的腐烂气息迎面扑来。地上趴着一具干尸——骨节粗大，肩宽，不像女人，更不是孩子。你蹲下来翻看尸体的手，指节上有老茧，是握锄头的痕迹。	[FengxianCreator] ✗ Save failed (code=%d): %s
+CODE_CREATE_FENGXIAN_EVENTS_CE07598636	[FengxianCreator] ✗ 保存失败 (code=%d): %s	Turn back to find the village head at the gate — he should know what happened over these years
+CODE_CREATE_FENGXIAN_EVENTS_CFE205E880	回头去找村口的里正，他应该知道这些年发生了什么	Walk toward the wooden hut
+CODE_CREATE_FENGXIAN_EVENTS_E42A444235	向小木屋走去	[FengxianCreator] ========== All complete ==========
+CODE_CREATE_FENGXIAN_EVENTS_E8D1E0FB2C	[FengxianCreator] ========== 全部完成 ==========	

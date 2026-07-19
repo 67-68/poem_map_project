@@ -1,0 +1,174 @@
+# B06: Time+Effects — 702-871 — 170 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+CODE_SURVIVAL_MANAGER_AD90D4FFCA	兴	Prosperous
+CODE_TIME_BREATH_UI_1640D0A850	季节更替	Seasonal transition
+CODE_TIME_BREATH_UI_364138561F	天寒地冻	Bitter cold
+CODE_TIME_BREATH_UI_63B8A20FF1	夏至	Summer solstice
+CODE_TIME_BREATH_UI_D99449E075	树叶枯黄	Leaves turn yellow
+CODE_TIME_BREATH_UI_E451C2C5EF	万物复苏	All things revive
+CODE_TIME_CONTROL_PANEL_479D71C5EB	公元 %d 年 %d 月	%d CE, Month %d
+CODE_TIME_CONTROL_PANEL_670AC1B359	第%d天	Day %d
+CODE_TIME_OPERATOR_8AD92110DA	时间消耗 %d 天	Time cost: %d days
+CODE_TIME_SERVICE_084B42F6E9	二	Two
+CODE_TIME_SERVICE_08B1AD763F	圣历	Shengli
+CODE_TIME_SERVICE_0D5E3BBCFF	永徽	Yonghui
+CODE_TIME_SERVICE_13DF179D96	咸亨	Xianheng
+CODE_TIME_SERVICE_143A14DCBD	广德	Guangde
+CODE_TIME_SERVICE_14A8C51CF5	咸通	Xiantong
+CODE_TIME_SERVICE_1B0542878C	七	Seven
+CODE_TIME_SERVICE_1F1F9CFE35	长安	Chang'an
+CODE_TIME_SERVICE_205BE8D289	光化	Guanghua
+CODE_TIME_SERVICE_20CFB0C092	先天	Xiantian
+CODE_TIME_SERVICE_2A3DCD2909	大历	Dali
+CODE_TIME_SERVICE_2B7437DCC3	天复	Tianfu
+CODE_TIME_SERVICE_2C467D3673	八	Eight
+CODE_TIME_SERVICE_3E78DF1CAF	至德	Zhide
+CODE_TIME_SERVICE_403E603F8E	贞观	Zhenguan
+CODE_TIME_SERVICE_42C209DA45	载	Zai
+CODE_TIME_SERVICE_43283C362D	天祐	Tianyou
+CODE_TIME_SERVICE_44D1B109F0	兴元	Xingyuan
+CODE_TIME_SERVICE_475BAB9FD8	下旬	late
+CODE_TIME_SERVICE_4CE0CCE1D6	永昌	Yongchang
+CODE_TIME_SERVICE_4CE22F0D8E	景福	Jingfu
+CODE_TIME_SERVICE_51A75F4634	一	One
+CODE_TIME_SERVICE_52D8404CDB	永隆	Yonglong
+CODE_TIME_SERVICE_52EB72A19A	长庆	Changqing
+CODE_TIME_SERVICE_586BDF6287	乾元	Qianyuan
+CODE_TIME_SERVICE_622C678144	广明	Guangming
+CODE_TIME_SERVICE_62EF900A8F	年	Year
+CODE_TIME_SERVICE_6433E7CCD9	景云	Jingyun
+CODE_TIME_SERVICE_65002B56BD	永淳	Yongchun
+CODE_TIME_SERVICE_6C5C004D20	久视	Jiushi
+CODE_TIME_SERVICE_6EFB5FBAAD	调露	Tiaolu
+CODE_TIME_SERVICE_754A9D5828	四	Four
+CODE_TIME_SERVICE_768FFF6C9D	麟德	Linde
+CODE_TIME_SERVICE_76B14E9510	神龙	Shenlong
+CODE_TIME_SERVICE_7F0F044408	景龙	Jinglong
+CODE_TIME_SERVICE_7F77F23AF7	元	Yuan
+CODE_TIME_SERVICE_8005F72353	开耀	Kaiyao
+CODE_TIME_SERVICE_806479BBE5	龙纪	Longji
+CODE_TIME_SERVICE_820487222A	宝应	Baoying
+CODE_TIME_SERVICE_8DFE461005	光启	Guangqi
+CODE_TIME_SERVICE_94C28C1B7D	垂拱	Chuigong
+CODE_TIME_SERVICE_94C832BD32	会昌	Huichang
+CODE_TIME_SERVICE_95A8ABDB21	建中	Jianzhong
+CODE_TIME_SERVICE_9945881634	弘道	Hongdao
+CODE_TIME_SERVICE_996CA5380A	永贞	Yongzhen
+CODE_TIME_SERVICE_997643A9ED	延载	Yanzai
+CODE_TIME_SERVICE_9FE4309997	上旬	early
+CODE_TIME_SERVICE_A00C2A7703	未知年号	Unknown era
+CODE_TIME_SERVICE_A032500609	天授	Tianshou
+CODE_TIME_SERVICE_A3812802ED	天宝	Tianbao
+CODE_TIME_SERVICE_A496F11152	乾封	Qianfeng
+CODE_TIME_SERVICE_A4C3313DEB	三	Three
+CODE_TIME_SERVICE_AB0C667C28	宝历	Baoli
+CODE_TIME_SERVICE_AE6E896497	万岁通天	Wansui Tongtian
+CODE_TIME_SERVICE_B07BC6AE9A	仪凤	Yifeng
+CODE_TIME_SERVICE_B2F2889795	总章	Zongzhang
+CODE_TIME_SERVICE_BC72E0C796	贞元	Zhenyuan
+CODE_TIME_SERVICE_BD75E4D1F4	太和	Taihe
+CODE_TIME_SERVICE_BE459DFCE3	永泰	Yongtai
+CODE_TIME_SERVICE_C01217EA48	文德	Wende
+CODE_TIME_SERVICE_C035071BB3	大中	Dazhong
+CODE_TIME_SERVICE_C9B87F516A	五	Five
+CODE_TIME_SERVICE_CE70CDD370	开成	Kaicheng
+CODE_TIME_SERVICE_DB1ED4AFEC	光宅	Guangzhai
+CODE_TIME_SERVICE_DB90AAFB25	上元	Shangyuan
+CODE_TIME_SERVICE_DE07B53838	六	Six
+CODE_TIME_SERVICE_DF16A52314	乾符	Qianfu
+CODE_TIME_SERVICE_DF897DA6E0	九	Nine
+CODE_TIME_SERVICE_E0A29CB71B	万岁登封	Wansui Dengfeng
+CODE_TIME_SERVICE_E95AAC3C95	显庆	Xianqing
+CODE_TIME_SERVICE_EBACEF51CD	大顺	Dashun
+CODE_TIME_SERVICE_EBEE17546E	开元	Kaiyuan
+CODE_TIME_SERVICE_EDEB19DEA2	乾宁	Qianning
+CODE_TIME_SERVICE_EE29E8AAA4	长寿	Changshou
+CODE_TIME_SERVICE_EF11B5079E	武德	Wude
+CODE_TIME_SERVICE_F26B3DA78A	神功	Shengong
+CODE_TIME_SERVICE_F85E33B67D	龙朔	Longshuo
+CODE_TIME_SERVICE_F9160160E9	元和	Yuanhe
+CODE_TIME_SERVICE_FB3F2583E0	中和	Zhonghe
+CODE_TIME_SERVICE_FC7EDD399A	十	Ten
+CODE_TIME_SERVICE_FEAEC3E70D	中旬	mid
+CODE_TOMB_STONE_SCREEN_1E45D99EA5	[center][font_size=36][color=#aa3333]■ 观测停止 ■[/color][/font_size][/center]\n	[center][font_size=36][color=#aa3333]■ Observation Terminated ■[/color][/font_size][/center]\n
+CODE_TOMB_STONE_SCREEN_1F46FB6E91	[color=#999999] - %s 你干了 %s [/color]\n	[color=#999999] - %s you did %s [/color]\n
+CODE_TOMB_STONE_SCREEN_2B1EDECF08	[color=#88888855][font_size=16]数据快照 | 财富:%d | 仕途进程:%d [/font_size][/color]\n\n	[color=#88888855][font_size=16]Data Snapshot | Wealth: %d | Career progress: %d [/font_size][/color]\n\n
+CODE_TOMB_STONE_SCREEN_3D83BB3103	\n[center][color=#555555]...然而这些世俗的挣扎，终将被时间彻底风化...[/color][/center]\n\n	\n[center][color=#555555]...Yet these worldly struggles shall all be worn away by time...[/color][/center]\n\n
+CODE_TOMB_STONE_SCREEN_46432180C4	观测者消逝于无名的熵增...	The observer fades into nameless entropy...
+CODE_TOMB_STONE_SCREEN_96317E1F85	[center][font_size=40][color=#555555]（绝笔无言，泯然众人）[/color][/font_size][/center]\n	[center][font_size=40][color=#555555](No final words, lost among the countless)[/color][/font_size][/center]\n
+CODE_TOMB_STONE_SCREEN_D75D9088E0	\n[center][color=#911414]可怜的人类，如虫子一般被风吹散，不曾留下任何挣扎的痕迹[/color][/center]\n\n	\n[center][color=#911414]Pitiful humans, scattered by the wind like insects, leaving not a trace of their struggle behind[/color][/center]\n\n
+CODE_TOMB_STONE_SCREEN_E888517B9E	[color=#cccccc]观测记录：[/color]\n	[color=#cccccc]Observation Log:[/color]\n
+CODE_TRAIT_DEMONSTRATOR_4D0041FE1D	【%s】\n（未注册的软特质，无详细效果数据）	【%s】\n(Unregistered soft trait, no detailed effect data)
+CODE_TRAIT_HINT_FORMATTER_242227891D	• 所有行动：+%d天%s	• All actions: +%d days%s
+CODE_TRAIT_HINT_FORMATTER_3F4306227C	（未知道）	(Unknown)
+CODE_TRAIT_HINT_FORMATTER_470CFD541A	• %s（区域）%s ×%.1f	• %s (area) %s ×%.1f
+CODE_TRAIT_HINT_FORMATTER_48D974DBB2	• 行动力上限 %+d	• Action points cap %+d
+CODE_TRAIT_HINT_FORMATTER_49F63F252B	• %d旬后转化为「%s」（已持续%d旬）	• Transforms into "%s" after %d xun (lasted %d xun)
+CODE_TRAIT_HINT_FORMATTER_4F7367ADBD	正面效果	Positive effects
+CODE_TRAIT_HINT_FORMATTER_508D363EA0	（无特殊效果）	(No special effects)
+CODE_TRAIT_HINT_FORMATTER_6E03EF5EFD	负面效果	Negative effects
+CODE_TRAIT_HINT_FORMATTER_99D99C2111	（持有期无副作用）	(No side effects while active)
+CODE_TRAIT_HINT_FORMATTER_AD303D19FC	变动	Changes
+CODE_TRAIT_HINT_FORMATTER_B0F0BFCE9A	• %d旬后自动移除（已持续%d旬）	• Auto-removes after %d xun (lasted %d xun)
+CODE_TRAIT_HINT_FORMATTER_D0C04469DD	• %s：+%d天	• %s: +%d days
+CODE_TRAIT_HINT_FORMATTER_D8663A39B4	Lv%d 意象	Lv%d Imagery
+CODE_TRAIT_HINT_FORMATTER_D9F38FD52F	所有变动	All changes
+CODE_TRAIT_HINT_FORMATTER_F2B2580C35	• 所有行动 +%d天	• All actions +%d days
+CODE_TRAIT_HINT_FORMATTER_FA613EE11A	• 每旬：%s	• Per xun: %s
+CODE_TRAIT_OPERATOR_587CC92918	获得「%s」	Gained "%s"
+CODE_TRAIT_OPERATOR_9DBEC35E50	失去「%s」	Lost "%s"
+CODE_TRAIT_REQUIREMENT_7C2985A29D	需要「%s」	Requires "%s"
+CODE_TRAIT_REQUIREMENT_BFBF373707	禁止「%s」	Forbids "%s"
+CODE_TUTORIAL_CONTROLLER_095EFAB7C8	山雾弥漫，看不清山顶…或许道长知道些什么？点击「出游」查看	Mountain mist obscures the peak... perhaps the Taoist knows something? Tap "Travel" to check
+CODE_TUTORIAL_CONTROLLER_0AE2169679	文思如泉涌！点击右下角毛笔按钮，开始写诗吧	Inspiration flows like a spring! Tap the brush button in the bottom-right to compose a poem
+CODE_TUTORIAL_CONTROLLER_12586AB749	道士进入打坐状态（not_meet，玩家不能交互）	The Taoist enters meditation (not_meet, player cannot interact)
+CODE_TUTORIAL_CONTROLLER_16EFDC16D7	与道长关系还不够密切…试试请他喝酒？点击「交游」→「共饮」	Your bond with the Taoist isn't close enough... try offering him a drink? Tap "Socialize" → "Share a Drink"
+CODE_TUTORIAL_CONTROLLER_179CB8FB4E	道长愿意帮你了！点击「交游」→ 请道长驱散云雾	The Taoist is willing to help! Tap "Socialize" → Ask the Taoist to disperse the mist
+CODE_TUTORIAL_CONTROLLER_2482669467	直接设置 RightInfoPanel 上 Control/SpecialLabel 的文本	Directly set the text of Control/SpecialLabel on RightInfoPanel
+CODE_TUTORIAL_CONTROLLER_24F0B161F7	道长开始做法驱散云雾，需要两旬时间…去周边转转吧！点击「出游」探索四方	The Taoist begins the ritual to disperse the mist — it will take two xun... explore the surroundings! Tap "Travel" to roam
+CODE_TUTORIAL_CONTROLLER_3171C95644	往上看	Look upwards
+CODE_TUTORIAL_CONTROLLER_343A3514E3	面对壮丽山河，何不赋诗一首？点击右下角毛笔按钮开始创作	Facing such majestic scenery, why not compose a poem? Tap the brush button in the bottom-right to begin
+CODE_TUTORIAL_CONTROLLER_40AB2EDE13	云雾已散！点击「出游」→ 往山顶看看	The mist has cleared! Tap "Travel" → Head to the summit
+CODE_TUTORIAL_CONTROLLER_492C9E4D68	泰山之巅尽收眼底！点击右下角蓝色印章，将感悟化为诗句	Mount Tai's summit lies before you! Tap the blue seal in the bottom-right to turn insight into verse
+CODE_TUTORIAL_CONTROLLER_6D0E37AE7F	无法事件期间触发	Triggers when no event is active
+CODE_TUTORIAL_CONTROLLER_7E905994B5	返回 main.tscn 中预置的 ConfirmationDialogCustom 实例	Returns the pre-placed ConfirmationDialogCustom instance in main.tscn
+CODE_TUTORIAL_CONTROLLER_93E7E727A3	道长正在打坐…先在附近转转吧。点击右侧「交游」或「驻留」按钮开始探索	The Taoist is meditating... take a look around first. Tap "Socialize" or "Stay" on the right to begin exploring
+CODE_TUTORIAL_CONTROLLER_ACE0C1BEC6	道长对你的诗赞不绝口！点击右下角蓝色印章，确立你的远大志向	The Taoist praises your poem! Tap the blue seal in the bottom-right to declare your great ambition
+CODE_TUTORIAL_CONTROLLER_AD341EBFCF	清除所有 tutorial 相关的 flag	Clear all tutorial-related flags
+CODE_TUTORIAL_CONTROLLER_BC3D3B02C0	喝点药酒提提神吧！点击「闲居」→「喝药酒」	Have some medicinal wine to refresh yourself! Tap "Rest" → "Drink Medicinal Wine"
+CODE_TUTORIAL_CONTROLLER_ED9554CBC2	道长重新开始做法…这次别再打断了。点击「出游」探索周边	The Taoist restarts the ritual... don't interrupt it this time. Tap "Travel" to explore nearby
+CODE_TUTORIAL_CONTROLLER_FF7E1A1C7B	云雾消散，泰山之巅显现！点击右下角毛笔按钮开始写诗	The mist vanishes — Mount Tai's summit emerges! Tap the brush button in the bottom-right to compose
+CODE_UNLOCK_SOCIAL_NODE_PLACEHOLDER_OPERATOR_5F04530ED6	社交节点解锁（待实装）	Social node unlocked (pending implementation)
+CODE_UNLOCK_SOCIAL_NODE_PLACEHOLDER_OPERATOR_AD6CB47C02	解锁社交节点（待实装）	Unlock social node (pending implementation)
+CODE_URN_0C13829F5F	编辑器模式辅助：用 DirAccess 扫描 data_dir 目录下的 .tres/.tscn 文件，按 uuid 匹配资源	Editor mode helper: scans .tres/.tscn files under data_dir using DirAccess, matching resources by uuid
+CODE_URN_24DA95FEFE	将 URN_TYPE enum 值转换为 URN 资源类型字符串（小写+连字符）	Convert URN_TYPE enum value to URN resource type string (lowercase + hyphens)
+CODE_URN_34D8031DE2	通过字符串查找对应的 URN_TYPE enum 值，未找到返回 -1	Look up the matching URN_TYPE enum value by string, returns -1 if not found
+CODE_URN_759765FF8C	生成完整的 URN 字符串: urn:<type>:<id>	Generate full URN string: urn:<type>:<id>
+CODE_VTEST_GOLDEN_SHINE_06FFA726CD	诗意盎然	Brimming with poetry
+CODE_VTEST_GOLDEN_SHINE_2C4C6284D0	金碧辉煌	Resplendent in gold
+CODE_VTEST_GOLDEN_SHINE_E56FE50456	大唐风华	Glory of the Great Tang
+CODE_VTEST_GOLDEN_SHINE_EF622DDDC0	呼吸金光	Breathing golden light
+CODE_VTEST_NARRATIVE_OVERLAY_1A7BACE0E6	坚决保住她	Resolutely protect her
+CODE_VTEST_NARRATIVE_OVERLAY_1C015818A6	757年 长安	757 CE, Chang'an
+CODE_VTEST_NARRATIVE_OVERLAY_348F1CF124	我知道了	I understand
+CODE_VTEST_NARRATIVE_OVERLAY_45323DA6A8	剑外忽传收蓟北，初闻涕泪满衣裳。官军已收复京师！	News of Jibei's recapture arrives from afar — tears soak my robe at the first word. The imperial army has retaken the capital!
+CODE_VTEST_NARRATIVE_OVERLAY_4EE29B8406	收复长安	Recapture of Chang'an
+CODE_VTEST_NARRATIVE_OVERLAY_646CD3FFE7	石壕吏	The Recruiter at Shihao
+CODE_VTEST_NARRATIVE_OVERLAY_65F2DF86F1	在墙角默默记录	Silently recording in the corner
+CODE_VTEST_NARRATIVE_OVERLAY_7369422DC5	漫卷诗书喜欲狂	Wild with joy, rolling up my scrolls
+CODE_VTEST_NARRATIVE_OVERLAY_77CD91DEDE	赐死杨玉环	Execution of Yang Yuhuan
+CODE_VTEST_NARRATIVE_OVERLAY_83D5BE2253	安史之乱	An Lushan Rebellion
+CODE_VTEST_NARRATIVE_OVERLAY_A0E36E4083	755年 范阳	755 CE, Fanyang
+CODE_VTEST_NARRATIVE_OVERLAY_AE6DF29F62	渔阳鼙鼓动地来，惊破霓裳羽衣曲。安禄山在范阳起兵，直指洛阳。	War drums from Yuyang shake the earth, shattering the Rainbow Skirt song. An Lushan rises in Fanyang, marching on Luoyang.
+CODE_VTEST_NARRATIVE_OVERLAY_B727926D45	758年 陕州	758 CE, Shanzhou
+CODE_VTEST_NARRATIVE_OVERLAY_D090BECA34	六军不发无奈何，宛转蛾眉马前死。禁军要求处死杨贵妃，否则拒绝开拔。	The army refuses to march — what can be done? The beauty perishes before the horses. The imperial guard demands Lady Yang's execution, refusing to advance otherwise.
+CODE_VTEST_NARRATIVE_OVERLAY_D2EFB8D7EF	暮投石壕村，有吏夜捉人。老翁逾墙走，老妇出门看。	At dusk I lodge in Shihao Village — an officer comes by night to seize men. The old man flees over the wall, the old woman goes out to face him.
+CODE_VTEST_NARRATIVE_OVERLAY_DB1CE346AF	756年 马嵬驿	756 CE, Mawei Post Station
+CODE_VTEST_NARRATIVE_OVERLAY_DCAFE4963D	马嵬坡之变	The Mawei Incident
+CODE_VTEST_TRAIT_HINTS_508D363EA0	（无特殊效果）	(No special effects)
+CODE_VTEST_TRAIT_HINTS_BE1E9C3C80	🔍 仅 Dump 有 效果字段 的 Trait	🔍 Dump only traits with effect fields
+CODE_VTEST_TRAIT_HINTS_CBAB3C0E87	🔍 Dump 所有 Trait Hint 到控制台	🔍 Dump all trait hints to console
+CODE_VTEST_TRAIT_HINTS_D0C5FDDF75	🔍 仅 Dump 有 duration_xun 的 Trait	🔍 Dump only traits with duration_xun
+EVT_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_AMBITION_DESC	西南角的中书省、东侧礼部衙署、右相府邸的飞檐，手指在石栏上描出轮廓。早市叫卖声断断续续，风卷起你衣角。	

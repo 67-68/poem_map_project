@@ -16,7 +16,7 @@
 
 # [UI_AMBITION_HUD_TEXT_1] 你想齐家治国平天下，而这需要以做官为前提。
 你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
-To Make the Sovereign a Yao or a Shun
+你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
 # [UI_AMBITION_HUD_TEXT_2] 如果完不成，你的一身才华将无用武之处
 你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
 # [UI_AMBITION_HUD_TEXT_3] 「状态」没有人认得你，你是彻底的无名之辈
@@ -27,7 +27,7 @@ You plan to try your luck in the capital, where high officials are especially nu
 If you fail, all your talent will find no field of use.
 # [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_1] 昔游齐鲁，登泰山而小天下了么?
 (开始新手教程?)
-[Status] No one knows who you are. You are an utter nobody.
+(开始新手教程?)
 # [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_2] 跳过
 He Zhizhang
 # [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_3] 开始引导
@@ -93,21 +93,21 @@ East Market: Li Bai Is Here
 # [UI_MAIN_PAGE_TEXT_0] 京
 Traits
 # [UI_MAIN_PAGE_TEXT_1] 隐
-To make my sovereign a sage king like Yao and Shun
+Seclusion
 # [UI_MAIN_PAGE_TEXT_2] 律法
-你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
+Law & Order
 # [UI_MAIN_PAGE_TEXT_3] 泰山
-You aspire to bring order to your family, govern the state, and bring peace to the world — yet all of this hinges on holding office. You plan to try your luck in the capital, where high officials abound; surely someone there will recognize your talent.
+Mount Tai
 # [UI_NARRATIVE_OVERLAY_COPY_TEST_TEXT_0] 标题
-If you fail, all your talents will find no arena to shine.
+Title
 # [UI_NARRATIVE_OVERLAY_COPY_TEST_TEXT_1] 例子
-[Status] No one knows your name. You are a complete nobody.
+Example
 # [UI_NARRATIVE_OVERLAY_TEXT_0] 查看
-He Zhizhang
+View
 # [UI_NARRATIVE_OVERLAY_TEXT_1] 行动
-Mount Tai Journey
+Actions
 # [UI_NARRATIVE_OVERLAY_TEXT_2] 显示异地行动
-(开始新手教程?)
+Show Remote Actions
 # [UI_NARRATIVE_OVERLAY_TEXT_3] 效果
 Once you roamed Qi and Lu — did you climb Mount Tai and find the world small beneath you? (Begin the tutorial?)
 # [UI_NOTE_PAGE_TEXT_0] 已触发 0/0 篇笔记
@@ -118,7 +118,7 @@ Begin Tutorial
 Save 1
 # [UI_NOTE_PAGE_TEXT_3] 清晨去敲富豪的大门，傍晚随在达官贵人的马后吃尘土；吃的是别人的残羹冷炙，到处偷偷吞咽着悲伤与痛苦。
 即使如此的下贱，但仍然吃不上饭。
-Saved on 7/7 17:37
+即使如此的下贱，但仍然吃不上饭。
 # [UI_NOTE_PAGE_TEXT_4] 注：
 Save Here
 # [UI_NOTE_PAGE_TEXT_5] 昔年泰山清狂，不知薪米之贵；今入长安，方知出卖体力之迫切也。
@@ -182,4 +182,4 @@ Law
 # [UI_POEM_CRAFTER_TEXT_5] 撕毁卷轴
 Mount Tai
 # [UI_POEM_DEMAND_TEXT_0] 自京附奉先县诵咏五百字
-Title
+Five Hundred Characters from Capital to Fengxian

@@ -1,0 +1,37 @@
+# B15: UI Labels — 2841-2874 — 33 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+UI_POEM_DEMAND_TEXT_1	骊山权贵 + 幼子饿殍 + 自觉荒谬	Imagery
+UI_POEM_SLOT_TEXT_0	意象	Begin Composing
+UI_POEM_START_TEXT_0	开始创作	50 Health
+UI_PROP_LABEL_TEXT_0	50 健	«Barely Alive»
+UI_PROP_LABEL_TEXT_1	「奄奄一息」	Click Connections to view social relations
+UI_RIGHT_INFO_PANEL_TEXT_0	点击人脉按钮查看社交关系	Hearsay
+UI_RIGHT_INFO_PANEL_TEXT_1	风闻	Chancellor's Residence: «Weak Spot: West Market Salt»  «Gratitude»
+UI_RIGHT_INFO_PANEL_TEXT_2	右相府：「死穴：西市私盐」  「恩义」	Decrees
+UI_RIGHT_INFO_PANEL_TEXT_3	决议	Socialize · Banquet
+UI_SMALLER_ACTION_BUTTON_TEXT_0	交游 · 赴宴	Yingchuan: Wang Wei hosts a grand banquet
+UI_SMALLER_ACTION_BUTTON_TEXT_1	颍川，王维召开了盛大宴会	Health: 50
+UI_SMALLER_PROP_LABEL_TEXT_0	生命: 50	(Barely Alive)
+UI_SMALLER_PROP_LABEL_TEXT_1	(奄奄一息)	By Region
+UI_SOCIAL_CONNECTION_PAGE_TEXT_0	按地区分类	By Faction
+UI_SOCIAL_CONNECTION_PAGE_TEXT_1	按阵营分类	Basic Info
+UI_SOCIAL_CONNECTION_PAGE_TEXT_2	基本信息	Status + Name + Preferred Location
+UI_SOCIAL_CONNECTION_PAGE_TEXT_3	当前状态 + 名字 + 偏好地点	Relationship
+UI_SOCIAL_CONNECTION_PAGE_TEXT_4	关系	Leverage + Introduction Letters
+UI_SOCIAL_CONNECTION_PAGE_TEXT_5	把柄 + 推荐信	Related NPCs
+UI_SOCIAL_CONNECTION_PAGE_TEXT_6	相关人物	All Discovered Tasks
+UI_SOCIAL_CONNECTION_PAGE_TEXT_7	已经探索的所有可用任务	Resource Conversion Recipes
+UI_SOCIAL_CONNECTION_PAGE_TEXT_8	可用资源转换配方	Honor & Shame Board
+UI_SOCIAL_WALL_PANEL_TEXT_0	红黑榜	System
+UI_SYSTEM_MENU_TEXT_0	系统	Resume
+UI_SYSTEM_MENU_TEXT_1	继续游戏	Return to Main Menu
+UI_SYSTEM_MENU_TEXT_2	返回主菜单	Year 14 of Tianbao
+UI_TIME_CONTROL_PANEL_TEXT_0	天宝十四载	Skip
+UI_TIME_CONTROL_PANEL_TEXT_1	跳过	Early Month
+UI_TIME_CONTROL_PANEL_TEXT_2	上旬	Day 1
+UI_TIME_CONTROL_PANEL_TEXT_3	第1天	Exit Observation
+UI_TOMB_STONE_SCREEN_TEXT_0	退出观测	Exhausted
+UI_TRAIT_DEMONSTRATOR_TEXT_0	身心俱疲	Fatigue
+UI_YANG_KE_TEXT_0	疲	

@@ -156,7 +156,7 @@ Attend the Banquet
 Yingchuan: Wang Wei Has Convened a Grand Banquet
 # [UI_AMBITION_HUD_TEXT_1] 你想齐家治国平天下，而这需要以做官为前提。
 你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
-To Make the Sovereign a Yao or a Shun
+你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
 # [UI_AMBITION_HUD_TEXT_2] 如果完不成，你的一身才华将无用武之处
 你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
 # [UI_AMBITION_HUD_TEXT_3] 「状态」没有人认得你，你是彻底的无名之辈
@@ -167,7 +167,7 @@ You plan to try your luck in the capital, where high officials are especially nu
 If you fail, all your talent will find no field of use.
 # [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_1] 昔游齐鲁，登泰山而小天下了么?
 (开始新手教程?)
-[Status] No one knows who you are. You are an utter nobody.
+(开始新手教程?)
 # [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_2] 跳过
 He Zhizhang
 # [UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_3] 开始引导

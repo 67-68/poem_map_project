@@ -1,0 +1,144 @@
+# B05: Poems+Properties — 562-701 — 140 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+CODE_POEM_CRAFTER_C260C3CC52	寥寥数象，勉强成篇	Barely a few images, scarcely forms a poem.
+CODE_POEM_CRAFTER_C7E02CBBD0	[color=#ddd]此诗的精力将倾注于千古文章之上[/color]	[color=#ddd]This poem's vigor shall be devoted to timeless literature.[/color]
+CODE_POEM_CRAFTER_D70FF08DAF	[color=#aaa]灵感不足，至少需要 %d 兴方能创作。[/color]	[color=#aaa]Insufficient inspiration — at least %d Xing required to compose.[/color]
+CODE_POEM_CRAFTER_DA3A618F49	已达化境，随心所欲	Mastery achieved — compose at will.
+CODE_POEM_CRAFTER_DEE7793FFC	意象初具，犹待点睛	Imagery taking shape, awaiting the finishing touch.
+CODE_POEM_CRAFTER_DFCDFD5D28	——竟有神来之笔！	—A stroke of genius!
+CODE_POEM_CRAFTER_FD387E2C9F	[color=#ddd]此诗的精力将倾注于世俗功名之上[/color]	[color=#ddd]This poem's vigor shall be devoted to worldly fame.[/color]
+CODE_POEM_CRAFTING_CALCULATOR_2EA731CCE3	佳作	Excellent
+CODE_POEM_CRAFTING_CALCULATOR_4D8C1C5B42	未知	Unknown
+CODE_POEM_CRAFTING_CALCULATOR_C335175F07	绝唱	Masterpiece
+CODE_POEM_CRAFTING_CALCULATOR_CE57606FBB	平庸	Mediocre
+CODE_POEM_REWARD_OPERATOR_23C1E43C42	文学声望	Literary Fame
+CODE_POEM_REWARD_OPERATOR_5CA4682D5D	金钱	Gold
+CODE_POEM_REWARD_OPERATOR_7BEB46C6C3	少量	Small
+CODE_POEM_REWARD_OPERATOR_7C67E3E689	仕途进度	Career Progress
+CODE_POEM_REWARD_OPERATOR_7DA42E20E7	（平庸→中等灵感+声望 佳作→大量 绝唱→巨额）	(Mediocre→Moderate Inspiration+Fame  Excellent→Large  Masterpiece→Huge)
+CODE_POEM_REWARD_OPERATOR_857EF83274	（平庸→中等 佳作→大量 绝唱→巨额）	(Mediocre→Moderate  Excellent→Large  Masterpiece→Huge)
+CODE_POEM_REWARD_OPERATOR_932A98F687	巨额	Huge
+CODE_POEM_REWARD_OPERATOR_9DF9932972	向郑虔展示《%s》，获%s灵感+声望	Present "%s" to Zheng Qian, gain %s Inspiration+Fame
+CODE_POEM_REWARD_OPERATOR_C1599FB99A	（平庸→少量 佳作→中等 绝唱→大量）	(Mediocre→Small  Excellent→Moderate  Masterpiece→Large)
+CODE_POEM_REWARD_OPERATOR_C7092C51FD	中等	Moderate
+CODE_POEM_REWARD_OPERATOR_D206220AA1	《%s》换得%s%s	"%s" earned %s%s
+CODE_POEM_REWARD_OPERATOR_DCEF4BD7C0	选择一首诗词换取%s%s	Choose a poem in exchange for %s%s
+CODE_POEM_REWARD_OPERATOR_F5C239DF75	大量	Large
+CODE_POEM_REWARD_OPERATOR_F88651B977	（灵感迸发！）	(Inspiration surges!)
+CODE_POEM_REWARD_OPERATOR_FF9D757A8F	灵感+声望	Inspiration+Fame
+CODE_POEM_SLOT_FE548D8FF5	溢出／过多 Slot 置灰显示	Overflow / excess slots shown grayed out
+CODE_PROPERTY_1613904BFA	成熟	Mature
+CODE_PROPERTY_599ABC8C57	初始状态	Initial State
+CODE_PROPERTY_ADF6F87B42	成长中	Growing
+CODE_PROPERTY_EC0D9BDB00	未知状态	Unknown State
+CODE_PROPERTY_OPERATOR_0D50242214	，消耗后仅剩	, only remaining after cost
+CODE_PROPERTY_OPERATOR_10A10C7F32	已达上限，无法继续获得	Limit reached, cannot gain more
+CODE_PROPERTY_OPERATOR_3C14C9AF08	%s %s：%+d（原%+d%s，重复行动%s%d%%）	%s %s: %+d (was %+d%s, repeat action %s%d%%)
+CODE_PROPERTY_OPERATOR_6704B0D77C	不足，当前	Insufficient, currently
+CODE_PROPERTY_OPERATOR_D1DF056B3B	%s %s：%+d（原%+d，重复行动%s%d%%）	%s %s: %+d (was %+d, repeat action %s%d%%)
+CODE_PROPERTY_REQUIREMENT_B0E2EB548E	需要「%d(%s)」	Requires "%d(%s)"
+CODE_PROPERTY_REQUIREMENT_EC0D9BDB00	未知状态	Unknown State
+CODE_PUSH_INTERRUPT_EVENT_OPERATOR_F9D19345A0	中断	Interrupt
+CODE_RANDOM_PICK_OPERATOR_AA9CEC85C5	所有逻辑在 init() 中完成	All logic completed in init()
+CODE_RANGE_REQUIREMENT_B0E2EB548E	需要「%d(%s)」	Requires "%d(%s)"
+CODE_RANGE_REQUIREMENT_EC0D9BDB00	未知状态	Unknown State
+CODE_REMOTE_ACTION_FILTER_MANAGER_17B380DCF4	完全异地	Fully Remote
+CODE_REQ_JOIN_OR	或	or
+CODE_RIGHT_INFO_PANEL_1BA44F209A	杨国忠	Yang Guozhong
+CODE_RIGHT_INFO_PANEL_2C01ABE772	外戚	Imperial In-law
+CODE_RIGHT_INFO_PANEL_3732C36978	点击注解按钮查看关于「%s」的注解	Click the annotation button to view notes about "%s"
+CODE_RIGHT_INFO_PANEL_3DC14978A1	王维	Wang Wei
+CODE_RIGHT_INFO_PANEL_422551FD0B	死穴：%d	Fatal Flaw: %d
+CODE_RIGHT_INFO_PANEL_441BE330DE	点击诗词按钮创作诗词	Click the poem button to compose poetry
+CODE_RIGHT_INFO_PANEL_489B840597	「死穴：%s」	"Fatal Flaw: %s"
+CODE_RIGHT_INFO_PANEL_5692EF6E24	高适	Gao Shi
+CODE_RIGHT_INFO_PANEL_74592EF709	「恩义」×%d	"Bond" ×%d
+CODE_RIGHT_INFO_PANEL_7FB471BC60	恩义：%d	Bond: %d
+CODE_RIGHT_INFO_PANEL_92C54C878B	清流	Pure Stream
+CODE_RIGHT_INFO_PANEL_96BE00E055	虢国夫人	Lady of Guoguo
+CODE_RIGHT_INFO_PANEL_B23F840FF5	李白	Li Bai
+CODE_RIGHT_INFO_PANEL_B593A0EA10	点击理念按钮接受理念	Click the ideal button to accept an ideal
+CODE_RIGHT_INFO_PANEL_C3C019A3D2	纪闻	Ji Wen
+CODE_RIGHT_INFO_PANEL_C5E7068A59	胡商	Sogdian Merchant
+CODE_RIGHT_INFO_PANEL_C6BF361CC6	李林甫	Li Linfu
+CODE_RIGHT_INFO_PANEL_D261840111	右相府	Chancellor's Manor
+CODE_RIGHT_INFO_PANEL_F9BB96CFEC	郑虔	Zheng Qian
+CODE_RIGHT_INFO_PANEL_FEB5B96171	点击人脉按钮查看社交关系	Click the connections button to view social relations
+CODE_ROLL_IMAGINARY_OPERATOR_5E10AC6407	随机获得一个等级%d的意象	Randomly gain a tier %d imagery
+CODE_ROLL_IMAGINARY_OPERATOR_F52969836C	随机获得一个意象	Randomly gain an imagery
+CODE_RUNTIME_PROBE_52A3654848	EventManager Autoload 不可用	EventManager Autoload unavailable
+CODE_RUNTIME_PROBE_7F961B96F1	未知端点。可用端点: /api/scene_tree, /api/game_state, /api/event_system, /api/logs	Unknown endpoint. Available: /api/scene_tree, /api/game_state, /api/event_system, /api/logs
+CODE_RUNTIME_PROBE_D15CF5899A	本探针仅接受 GET 请求。	This probe only accepts GET requests.
+CODE_RUNTIME_PROBE_DF6CDFCE02	PlayerState 或 GameState Autoload 不可用	PlayerState or GameState Autoload unavailable
+CODE_RUNTIME_PROBE_E73103FE03	RuntimeProbe 尚未挂入场景树	RuntimeProbe not yet attached to scene tree
+CODE_SCHEMA_LINTER_RULE_1A1F83B77A	flags 为空 (Database.flags 无内容)	flags is empty (Database.flags has no content)
+CODE_SCHEMA_LINTER_RULE_3C8A35EC2B	Schema检查官	Schema Inspector
+CODE_SCHEMA_LINTER_RULE_4388E75BEC	focused_chat_data 为空	focused_chat_data is empty
+CODE_SCHEMA_LINTER_RULE_46647FC669	end_random_events 为空	end_random_events is empty
+CODE_SCHEMA_LINTER_RULE_4F195BBC21	normal_poem_events 为空	normal_poem_events is empty
+CODE_SCHEMA_LINTER_RULE_5217DB3371	ambitions 为空	ambitions is empty
+CODE_SCHEMA_LINTER_RULE_73ED188C58	decided_events 为空	decided_events is empty
+CODE_SCHEMA_LINTER_RULE_8247361078	flags 为 null (Database 尚未填充 flags 数据)	flags is null (Database flags data not yet populated)
+CODE_SCHEMA_LINTER_RULE_92E5D440AC	traits 为空	traits is empty
+CODE_SCHEMA_LINTER_RULE_947D08D6C6	properties 为空	properties is empty
+CODE_SCHEMA_LINTER_RULE_A043BE5907	history_events 为空	history_events is empty
+CODE_SCHEMA_LINTER_RULE_AB67772B4A	imaginaries 为空	imaginaries is empty
+CODE_SCHEMA_LINTER_RULE_B4B36D128C	decisions 为空	decisions is empty
+CODE_SCHEMA_LINTER_RULE_DC58ED20ED	random_events 为空	random_events is empty
+CODE_SCHEMA_LINTER_RULE_FE2059569F	actions 为空	actions is empty
+CODE_SETTLEMENT_TAPE_ENTRY_1047F73848	合上考评	Close & Review
+CODE_SETTLEMENT_TAPE_ENTRY_46A78AC7C9	「 既决：%s 」	"Decided: %s"
+CODE_SET_RANDOM_PERSON_STATE_OPERATOR_02240D6CB4	酒酣耳热之际，听人提起了%s	Amid warm wine and cheer, someone mentions %s
+CODE_SET_RANDOM_PERSON_STATE_OPERATOR_89C40F81F7	在酒馆中听人提起新面孔	Someone at the tavern mentions a new face
+CODE_SET_RANDOM_PERSON_STATE_OPERATOR_F6DF6F2CDB	酒酣耳热之际环顾四周，却无值得结交之人	Amid warm wine and cheer, looking around — yet none worth befriending
+CODE_SET_STAY_PLACE_OPERATOR_011D4BC5AA	驻留 → %s	Staying → %s
+CODE_SET_STAY_PLACE_OPERATOR_06CF4D3D54	平康坊	Pingkang Ward
+CODE_SET_STAY_PLACE_OPERATOR_BE2A911592	西市	West Market
+CODE_SET_STAY_PLACE_OPERATOR_CD2724EB5A	皇城	Imperial City
+CODE_SET_STAY_PLACE_OPERATOR_F1D945BB0B	泰山脚下	Foot of Mount Tai
+CODE_SET_STAY_PLACE_OPERATOR_FAD381D3E4	泰山上	Mount Tai Summit
+CODE_SHATTEREFFECT_C40174C301	%s: texture 为空, 碎个寂寞 💀	%s: texture is null, shattering into nothing 💀
+CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_20C021DFAA	⏱%d天	⏱%d days
+CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2	卖诗	Sell Poem
+CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_52AC4C7A26	获 %s	Gain %s
+CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324	以诗换名	Trade Poem for Fame
+CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE	携诗拜谒	Visit with Poem
+CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_F8ABBE184F	失 %s	Lose %s
+CODE_SMOOTH_SCROLL_CONTAINER_38E1A679FE	由 InputManager 调用。direction: -1=向上, +1=向下	Called by InputManager. direction: -1=up, +1=down
+CODE_SOCIAL_ACTION_RESOLVER_3EBA4A0836	社交行动	Social Action
+CODE_SOCIAL_ACTION_RESOLVER_7AD811D16A	威胁	Threaten
+CODE_SOCIAL_ACTION_RESOLVER_8EC1F89B4E	交好	Befriend
+CODE_SOCIAL_CONNECTION_PAGE_02A90CFD1C	把柄 (%d 个):	Leverage (%d):
+CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54	平康坊	Pingkang Ward
+CODE_SOCIAL_CONNECTION_PAGE_1559C9C814	引荐信 (%d 封):	Letters of Introduction (%d):
+CODE_SOCIAL_CONNECTION_PAGE_272D014D81	恩义 ×%d	Bond ×%d
+CODE_SOCIAL_CONNECTION_PAGE_320A6DD958	相识	Acquaintance
+CODE_SOCIAL_CONNECTION_PAGE_42ED69BD0B	暂无关系记录	No relationship records yet
+CODE_SOCIAL_CONNECTION_PAGE_497C85690C	暂无数据	No data available
+CODE_SOCIAL_CONNECTION_PAGE_4F10F59F78	请从左侧选择一位人物	Please select a character from the left
+CODE_SOCIAL_CONNECTION_PAGE_67B1207A0B	知己	Confidant
+CODE_SOCIAL_CONNECTION_PAGE_73CA9EBD64	[b]%s[/b] （覆盖「%s」）	[b]%s[/b] (overrides "%s")
+CODE_SOCIAL_CONNECTION_PAGE_76BE7378D6	T3 权贵	T3 Aristocrat
+CODE_SOCIAL_CONNECTION_PAGE_82200B0785	死友	Sworn Friend
+CODE_SOCIAL_CONNECTION_PAGE_90D2FA0B75	[b]%s[/b]\n关系状态: %s\n偏好地点: %s	[b]%s[/b]\nRelationship: %s\nPreferred Location: %s
+CODE_SOCIAL_CONNECTION_PAGE_A2A09D3198	无关联人物	No associated characters
+CODE_SOCIAL_CONNECTION_PAGE_AF314B7D7E	T2 文人	T2 Literati
+CODE_SOCIAL_CONNECTION_PAGE_AF4682C8B2	未知阵营	Unknown Faction
+CODE_SOCIAL_CONNECTION_PAGE_BE2A911592	西市	West Market
+CODE_SOCIAL_CONNECTION_PAGE_CBAC35BFBD	无特定偏好	No specific preference
+CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A	皇城	Imperial City
+CODE_SOCIAL_CONNECTION_PAGE_CDC9E0E088	其他地点	Other Locations
+CODE_SOCIAL_CONNECTION_PAGE_D5617BCA8A	T1 市井	T1 Commoner
+CODE_SOCIAL_CONNECTION_PAGE_ECF3D57F6F	暂无可用配方	No recipes available
+CODE_SOCIAL_CONNECTION_PAGE_FC09E638F1	听闻	Hearsay
+CODE_STYLE_STRATEGY_OPERATOR_0EF211C6E3	(默认)	(Default)
+CODE_STYLE_STRATEGY_OPERATOR_A12A874BF6	未知控件	Unknown Widget
+CODE_STYLE_STRATEGY_OPERATOR_F7CD302E68	风格策略: %s → %s	Style Strategy: %s → %s
+CODE_SUB_ACTION_BUTTON_5DB17E4310	暂时无法选择此行动	Cannot select this action right now
+CODE_SURVIVAL_MANAGER_260BD80462	望	Hope
+CODE_SURVIVAL_MANAGER_3F464BCF67	每旬仅 5 天可用（病入膏肓）	Only 5 days available per ten-day period (gravely ill)
+CODE_SURVIVAL_MANAGER_55D3A19D9E	势	Influence
+CODE_SURVIVAL_MANAGER_83EB826B68	根据健康值启动/停止心跳循环音效。	Start/stop heartbeat loop sound based on health value.
+CODE_SURVIVAL_MANAGER_8E973C4B99	每旬仅 8 天可用（疲态初显）	

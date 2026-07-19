@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://d1wmri2oxn35" path="res://assets/LOGO.png" id="6_nlkkf"]
 [ext_resource type="ButtonGroup" uid="uid://djtodat5jvbpo" path="res://ui/language_btn_group.tres" id="6_qe12f"]
 [ext_resource type="FontFile" uid="uid://bu472jjbmjeb3" path="res://assets/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Regular.ttf" id="7_0o4t1"]
+[ext_resource type="Script" uid="uid://cxg5ja35u0t2d" path="res://ui/main_menu.gd" id="8_menu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
 content_margin_left = 15.0
@@ -33,6 +34,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_menu")
 
 [node name="Control" type="Control" parent="." unique_id=1281598251]
 anchors_preset = 0
@@ -149,3 +151,19 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_j5v2v")
 toggle_mode = true
 button_group = ExtResource("6_qe12f")
 text = "English"
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer" unique_id=1466183179]
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer" unique_id=316859859]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "UI_MENU_INTRO_TITLE"
+horizontal_alignment = 2
+
+[node name="Label5" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer" unique_id=1409543639]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+text = "UI_MENU_INTRO"
+fit_content = true
+horizontal_alignment = 2

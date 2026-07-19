@@ -57,6 +57,7 @@ var current_action_id: String = ""
 var player_name: String = tr("TRES_POET_DUFU_002_NAME_0")
 var current_location: String = "yong_zhou"
 var stay_place: String = "xishi"
+var locale: String = "zh"
 
 # ════════════════════════════════════════════════════════════════
 # 野心 — 存 UUID 字符串，PlayerState 的 getter 从 Database 实时解析
@@ -163,6 +164,7 @@ func to_dict() -> Dictionary:
 		"ratio_time": ratio_time,
 		"mood": mood,
 		"stay_place": stay_place,
+		"locale": locale,
 		"total_days_elapsed": total_days_elapsed,
 		"tick_checkpoint": tick_checkpoint,
 		"event_counter": event_counter,
@@ -198,6 +200,7 @@ func from_dict(d: Dictionary) -> void:
 	ratio_time = d.get("ratio_time", 0.0)
 	mood = d.get("mood", 0.5)
 	stay_place = d.get("stay_place", "xishi")
+	locale = d.get("locale", "zh")
 	total_days_elapsed = d.get("total_days_elapsed", 0)
 	tick_checkpoint = d.get("tick_checkpoint", 0)
 	event_counter = d.get("event_counter", 0)

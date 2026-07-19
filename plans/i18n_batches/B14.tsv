@@ -1,0 +1,90 @@
+# B14: Narratives+UI — 2758-2840 — 83 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+UI_AMBITION_HUD_TEXT_1	你想齐家治国平天下，而这需要以做官为前提。
+你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人	你打算去京城碰碰运气，那里的大官格外多，理应有赏识你的人
+UI_AMBITION_HUD_TEXT_2	如果完不成，你的一身才华将无用武之处	You wish to bring order to the family, govern the state, and bring peace to all under heaven—and this requires holding office as a prerequisite.
+UI_AMBITION_HUD_TEXT_3	「状态」没有人认得你，你是彻底的无名之辈	You plan to try your luck in the capital, where high officials are especially numerous and there ought to be someone who appreciates your talent.
+UI_BAMBOO_SLIP_TEXT_0	贺知章	If you fail, all your talent will find no field of use.
+UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_0	泰山游历	He Zhizhang
+UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_1	昔游齐鲁，登泰山而小天下了么?
+(开始新手教程?)	(开始新手教程?)
+UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_2	跳过	Journey to Mount Tai
+UI_CONFIRMATION_DIALOG_CUSTOM_TEXT_3	开始引导	(开始新手教程?)
+UI_GAME_DATA_PANEL_TEXT_0	存档1	Traveling through Qi and Lu of old—shall we ascend Mount Tai and see the world grow small?
+UI_GAME_DATA_PANEL_TEXT_1	保存于 7.7 17.37	(Begin tutorial?)
+UI_GAME_DATA_PANEL_TEXT_2	保存到此	Skip
+UI_GAME_DATA_PANEL_TEXT_3	依此加载	Begin Tutorial
+UI_IDEA_BTN_TEXT_0	兴：存在城府	Save Slot 1
+UI_IDEA_BTN_TEXT_1	平易近人	Saved on 7.7 17:37
+UI_IDEA_BTN_TEXT_2	被锁定，由于和兴：没有城府冲突	Save Here
+UI_IDEA_PAGE_TEXT_0	当前理念	Load from Here
+UI_IDEA_PAGE_TEXT_1	空槽位	Inspiration: Guarded Depths
+UI_IDEA_PAGE_TEXT_2	空槽位	Approachable
+UI_IDEA_PAGE_TEXT_3	空槽位	Locked — conflicts with Inspiration: Unguarded Openness
+UI_IDEA_PAGE_TEXT_4	空槽位	Current Idea
+UI_IDEA_PAGE_TEXT_5	空槽位	Empty Slot
+UI_IDEA_PAGE_TEXT_6	选择一个理念	Empty Slot
+UI_IDEA_PAGE_TEXT_7	选择一个理念	Empty Slot
+UI_IDEA_PAGE_TEXT_8	点击选择理念	Empty Slot
+UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_0	【选择物品】	Empty Slot
+UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_1	不回答	Select an Idea
+UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_2	请选择一项	Select an Idea
+UI_ITEM_PICKER_TAPE_ATTACHMENT_TEXT_3	确认	Tap to Select an Idea
+UI_LEFT_PLAYER_PANEL_TEXT_0	杜甫[字子美]	[Select Item]
+UI_LEFT_PLAYER_PANEL_TEXT_1	距离大考还剩: -- 旬	Decline to Answer
+UI_LEFT_PLAYER_PANEL_TEXT_2	京兆府·举子	Please Select One
+UI_LEFT_PLAYER_PANEL_TEXT_3	东市：李白在此	Confirm
+UI_LEFT_PLAYER_PANEL_TEXT_4	特质	Du Fu [courtesy name Zimei]
+UI_LEFT_PLAYER_PANEL_TEXT_5	政略主权	Time Until the Grand Exam: -- xun
+UI_LEFT_PLAYER_PANEL_TEXT_6	底层修饰	Jingzhao Prefecture · Examination Candidate
+UI_MAIN_ACTION_BUTTON_TEXT_0	赴宴	East Market: Li Bai Is Here
+UI_MAIN_ACTION_BUTTON_TEXT_1	颍川，王维召开了盛大宴会	Traits
+UI_MAIN_PAGE_TEXT_0	京	Seclusion
+UI_MAIN_PAGE_TEXT_1	隐	Law & Order
+UI_MAIN_PAGE_TEXT_2	律法	Mount Tai
+UI_MAIN_PAGE_TEXT_3	泰山	Title
+UI_NARRATIVE_OVERLAY_COPY_TEST_TEXT_0	标题	Example
+UI_NARRATIVE_OVERLAY_COPY_TEST_TEXT_1	例子	View
+UI_NARRATIVE_OVERLAY_TEXT_0	查看	Actions
+UI_NARRATIVE_OVERLAY_TEXT_1	行动	Show Remote Actions
+UI_NARRATIVE_OVERLAY_TEXT_2	显示异地行动	Once you roamed Qi and Lu — did you climb Mount Tai and find the world small beneath you? (Begin the tutorial?)
+UI_NARRATIVE_OVERLAY_TEXT_3	效果	Skip
+UI_NOTE_PAGE_TEXT_0	已触发 0/0 篇笔记	Begin Tutorial
+UI_NOTE_PAGE_TEXT_1	坊市-出游循环	Save 1
+UI_NOTE_PAGE_TEXT_2	朝扣富儿门，暮随肥马尘。残杯与冷炙，到处潜悲辛。	Save Here
+UI_NOTE_PAGE_TEXT_3	清晨去敲富豪的大门，傍晚随在达官贵人的马后吃尘土；吃的是别人的残羹冷炙，到处偷偷吞咽着悲伤与痛苦。
+即使如此的下贱，但仍然吃不上饭。	即使如此的下贱，但仍然吃不上饭。
+UI_NOTE_PAGE_TEXT_4	注：	Load from Here
+UI_NOTE_PAGE_TEXT_5	昔年泰山清狂，不知薪米之贵；今入长安，方知出卖体力之迫切也。	Xing: Hidden Depths
+UI_NOTE_PAGE_TEXT_6	去坊市出卖体力之后去出游可以有效获取额外的资源。	Approachable
+UI_NOTE_PAGE_TEXT_7	暂无可查看的笔记	Locked — conflicts with Xing: No Hidden Depths
+UI_NPC_ACTION_BUTTON_TEXT_0	神医	Current Idea
+UI_NPC_ACTION_BUTTON_TEXT_1	邀请神医赴宴治疗他人	Empty Slot
+UI_NPC_ACTION_BUTTON_TEXT_2	可行性：高	Empty Slot
+UI_NPC_ACTION_BUTTON_TEXT_3	耗费：xxxx	Empty Slot
+UI_NPC_ACTION_BUTTON_TEXT_4	产出	Empty Slot
+UI_NPC_ACTION_BUTTON_TEXT_5	风险：会趋势	Empty Slot
+UI_OVERRIDE_ACTION_BUTTON_TEXT_0	行动名称	Choose an Idea
+UI_OVERRIDE_ACTION_BUTTON_TEXT_1	NPC提供	Choose an Idea
+UI_OVERRIDE_ACTION_BUTTON_TEXT_2	可行性	Click to choose an Idea
+UI_OVERRIDE_ACTION_BUTTON_TEXT_3	耗费	[Select Item]
+UI_OVERRIDE_ACTION_BUTTON_TEXT_4	产出	Decline to Answer
+UI_OVERRIDE_ACTION_BUTTON_TEXT_5	风险	Please select an item
+UI_PICKER_ITEM_TEXT_0	初级拜谒	Confirm
+UI_PICKER_TAPE_ATTACHMENT_TEXT_0	【呈堂物证】	Du Fu [courtesy name Zimei]
+UI_PICKER_TAPE_ATTACHMENT_TEXT_1	不回答	Until the Grand Examination: -- xún
+UI_PICKER_TAPE_ATTACHMENT_TEXT_2	显示异地行动	Jingzhao Prefecture · Examination Candidate
+UI_PICKER_TAPE_ATTACHMENT_TEXT_3	普通	East Market: Li Bai is here
+UI_PICKER_TAPE_ATTACHMENT_TEXT_4	特殊	Traits
+UI_PICKER_TAPE_ATTACHMENT_TEXT_5	行动	Political Leverage
+UI_PICKER_TAPE_ATTACHMENT_TEXT_6	选择行动 + 姿态以行动	Grassroots Polish
+UI_PICKER_TAPE_ATTACHMENT_TEXT_7	姿态	Attend Banquet
+UI_POEM_CRAFTER_TEXT_0	wasd移动	Yingchuan — Wang Wei is hosting a grand banquet
+UI_POEM_CRAFTER_TEXT_1	登高抒怀	Capital
+UI_POEM_CRAFTER_TEXT_2	干谒权贵	Recluse
+UI_POEM_CRAFTER_TEXT_3	代价是...	Law
+UI_POEM_CRAFTER_TEXT_4	开始创作	Mount Tai
+UI_POEM_CRAFTER_TEXT_5	撕毁卷轴	Five Hundred Characters from Capital to Fengxian
+UI_POEM_DEMAND_TEXT_0	自京附奉先县诵咏五百字	

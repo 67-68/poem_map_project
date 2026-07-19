@@ -114,16 +114,27 @@ func _init() -> void:
 	index_image = load(GameConfig.PROVINCE_INDEX_MAP_PATH).get_image()
 
 	# 显式加载翻译：确保 Resource 脚本能访问翻译
-	var trans_path = "res://data/1_core_rules/translations/_dynamic_events.zh.translation"
-	if ResourceLoader.exists(trans_path):
-		var trans = load(trans_path)
-		if trans is Translation:
-			TranslationServer.add_translation(trans)
-			Logging.info("Database: translations loaded from %s" % trans_path)
+	var locales := ["zh", "en"]
+	for loc in locales:
+		var trans_path = "res://data/1_core_rules/translations/_dynamic_events.%s.translation" % loc
+		if ResourceLoader.exists(trans_path):
+			var trans = load(trans_path)
+			if trans is Translation:
+				TranslationServer.add_translation(trans)
+				Logging.info("Database: translations loaded [%s] from %s" % [loc, trans_path])
+			else:
+				Logging.warn("Database: loaded translation [%s] is not a Translation resource (got %s)" % [loc, typeof(trans)])
 		else:
-			Logging.warn("Database: loaded translation is not a Translation resource (got %s)" % typeof(trans))
+			Logging.warn("Database: translation file not found for [%s] at %s" % [loc, trans_path])
+
+	# 恢复持久化的 locale 设置
+	var saved_locale: String = GameSave.data.locale
+	if not saved_locale.is_empty():
+		TranslationServer.set_locale(saved_locale)
+		Logging.info("Database: locale 恢复为 '%s'" % saved_locale)
 	else:
-		Logging.warn("Database: translation file not found at %s" % trans_path)
+		Logging.info("Database: 无持久化 locale，使用默认值")
+
 	Logging.info("Database: tr(FEIHUALING_FAIL) = '%s'" % TranslationServer.translate("FEIHUALING_FAIL"))
 
 	# ── 单次扫描整个 data/ 目录树替代所有 Registry ──

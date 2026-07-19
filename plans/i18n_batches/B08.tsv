@@ -1,0 +1,204 @@
+# B08: Fallback Narratives 1 — 1798-1997 — 200 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+TRES_DENGGAO_QUJIANGCHI_FAILED_FALLBACK_DESCRIPTION_0	兴尽\n曲江池畔游人如织，喧闹不堪。本想寻一处清静，却被嘈杂扰了心境，兴致索然，转身离去。	Joy Fades\nBy Qujiang Pool, the crowds press thick as woven silk, the clamor unbearable. You'd hoped to find a quiet corner, but the din frays your nerves. Interest spent, you turn and leave.
+TRES_DENGGAO_QUJIANGCHI_FAILED_FALLBACK_NAME_0	曲江兴尽	Joy Spent at Qujiang
+TRES_DENGGAO_QUJIANGCHI_FALLBACK_DESCRIPTION_0	游春\n曲江池畔春色正浓，烟柳画桥，游人如织。你沿池漫步，看碧波荡漾，听莺啼燕语，心神为之一畅。	Spring Outing\nBy Qujiang Pool, spring is at its peak — mist-veiled willows, painted bridges, crowds thick as brocade. You stroll along the bank, watching emerald waves ripple, listening to orioles and swallows call. Your spirit lifts.
+TRES_DENGGAO_QUJIANGCHI_FALLBACK_NAME_0	曲江游春	Spring Ramble at Qujiang
+TRES_DENGGAO_SHAOLINGYUAN_FAILED_FALLBACK_DESCRIPTION_0	荒原\n登上少陵原，满目荒草萋萋，断碑残垣散落其间。想起昔年在此吟咏的前辈，而今安在？不觉悲从中来。	Barrens\nYou climb Shaoling Yuan. Before you, wild grass stretches everywhere, broken stelae and crumbling walls scattered among them. You think of the elders who once composed verses here — where are they now? Sorrow rises unbidden.
+TRES_DENGGAO_SHAOLINGYUAN_FAILED_FALLBACK_NAME_0	悲少陵	Mourning Shaoling
+TRES_DENGGAO_SHAOLINGYUAN_FALLBACK_DESCRIPTION_0	登高\n少陵原上秋草萋萋，你登至高处凭吊古迹。断碑残垣间，依稀可见前朝题刻，不觉神游千载，诗兴勃发。	Ascending\nAutumn grass grows thick on Shaoling Yuan. You climb to the highest point to pay respects to the ruins. Among broken stelae and toppled walls, faint traces of past dynasties' inscriptions remain. Your mind wanders across a thousand years — poetic inspiration surges.
+TRES_DENGGAO_SHAOLINGYUAN_FALLBACK_NAME_0	少陵怀古	Remembering the Past at Shaoling
+TRES_DENG_GAO_DESCRIPTION_0	遣兴楼台，暂忘浮生。	Amid towers and terraces, one forgets this fleeting life a while.
+TRES_DENG_GAO_LOCK_NARRATIVE_0	风雨骤至，郊原路断，苍天不与人便	Wind and rain strike without warning, the country roads cut off — Heaven grants no convenience.
+TRES_DENG_GAO_NAME_0	远游	Excursion
+TRES_DISEASE_DONGSHANG_FROSTBITE_DESCRIPTION_0	指节冻伤，屈伸不利，皮肉青紫。	Finger joints frostbitten, stiff to bend or straighten, the flesh bruised purple.
+TRES_DISEASE_DONGSHANG_FROSTBITE_NAME_0	冻伤初起	Frostbite Onset
+TRES_DISEASE_DONGSHANG_NECROSIS_DESCRIPTION_0	指尖坏死，皮肉焦黑如炭，关节锁死，痛觉尽失。	Fingertips necrotic, flesh charred black like coal, joints locked solid, all sensation of pain gone.
+TRES_DISEASE_DONGSHANG_NECROSIS_NAME_0	冻疮坏死	Frostbite Necrosis
+TRES_DISEASE_FEILAO_CHRONIC_DESCRIPTION_0	肺气已损，咳血不止，形销骨立。	Lung qi damaged, ceaseless bloody coughing, body wasted to skin and bone.
+TRES_DISEASE_FEILAO_CHRONIC_NAME_0	肺痨	Consumption
+TRES_DISEASE_FENGHAN_ACUTE_DESCRIPTION_0	风寒入体，头痛身热，咳嗽不止。	Wind-cold invades the body — head aches, fever burns, coughing will not stop.
+TRES_DISEASE_FENGHAN_ACUTE_NAME_0	风寒急	Acute Wind-Cold
+TRES_DISEASE_FENGHAN_IMAGINARY_DESCRIPTION_0	意象耗尽，风寒入骨。健康流失速度倍增。	Imagery exhausted — wind-cold seeps into the bone. Health loss rate doubled.
+TRES_DISEASE_FENGHAN_IMAGINARY_DISPLAY_CHAR_0	寒	Cold
+TRES_DISEASE_FENGHAN_IMAGINARY_NAME_0	风寒	Wind-Cold
+TRES_DISEASE_OUXINLIXUE_DESCRIPTION_0	意象耗尽，心神俱损。每旬流失生命，行动上限永久削减。	Imagery exhausted — both heart and spirit wounded. Lose life each ten-day period; maximum actions permanently reduced.
+TRES_DISEASE_OUXINLIXUE_DISPLAY_CHAR_0	血	Blood
+TRES_DISEASE_OUXINLIXUE_NAME_0	呕心沥血	Heart's Blood
+TRES_DISEASE_SHIYI_DEPRESSION_DESCRIPTION_0	宦海浮沉，壮志难酬，心中郁结难解	Tossed on the bureaucratic sea, grand ambitions unfulfilled — the knot in your chest refuses to loosen.
+TRES_DISEASE_SHIYI_DEPRESSION_NAME_0	失意之郁	Melancholy of Disappointment
+TRES_DISEASE_ZHANWANG_MANIA_DESCRIPTION_0	狂言谵语，不避亲疏，形神皆乱。	Wild talk and delirious ravings, making no distinction between kin and stranger — both body and mind in chaos.
+TRES_DISEASE_ZHANWANG_MANIA_NAME_0	谵狂	Delirious Mania
+TRES_DRUNKEN_OBLIVION_DROWN_MEMORY_DESCRIPTION_0	仰头饮尽最后一碗。碗底朝天，一滴不剩。	You tilt your head back and drain the last bowl. The bowl faces the sky — not a drop remains.
+TRES_DRUNKEN_OBLIVION_DROWN_MEMORY_DESCRIPTION_1	酒旗在风里拍得猎猎作响。你推开那扇半掩的门，酒保看你一眼便不再说话——他认得这种眼神。你要了最烈的那种，不是品，是灌。每一口下去，昨日在权贵门前的记忆就淡一分。酒坛见底时，昨夜那张谄媚的嘴脸终于开始模糊——像墨迹在水里散开。你不记得付了多少钱，只记得走出门时，长安的月光刺得眼睛发酸。	The tavern banner snaps and crackles in the wind. You push open the half-closed door. The barkeeper glances at you and says nothing — he knows that look. You order the strongest they have, not to savor but to pour down. With each gulp, yesterday's memories before the gates of power fade a shade. When the jar runs dry, last night's fawning face finally begins to blur — like ink spreading in water. You can't remember how much you paid, only that when you stepped outside, Chang'an's moonlight stung your eyes.
+TRES_DRUNKEN_OBLIVION_DROWN_MEMORY_NAME_0	买醉忘忧	Drowning Sorrows in Wine
+TRES_DUFU_AMBITION_DEADLINE_WARNING_0	天宝六载秋科举，若叩不开这扇门，你的一身才华，终将沦为盛世的笑柄。	The imperial exam of the autumn of Tianbao Year 6. If you cannot pry open this door, all your talent will become nothing but a laughingstock in this golden age.
+TRES_DUFU_AMBITION_DESCRIPTION_0	你想齐家治国平天下，而这需要以跃入体制为前提。带着半生心血的行卷，你站到了长安的朱门之外。权贵的手指缝里，漏下的是天下士子的命运。	You wish to regulate the family, govern the state, and bring peace to all under Heaven — yet this requires plunging into the system first. Clutching a portfolio of half a lifetime's work, you stand before the vermilion gates of Chang'an. Between the fingers of the powerful slips the fate of every scholar in the empire.
+TRES_DUFU_AMBITION_NAME_0	致君尧舜上	Guiding the Sovereign to Sagehood
+TRES_DUFU_AMBITION_PERCEPTION_TEXT_0	「状态」长安布衣。相府的门房连正眼都不会看你。长安城的名利场里，查无此人。	[Status] A commoner of Chang'an. The gatekeepers of the Chancellor's mansion won't even look you in the eye. In this city's arena of fame and fortune, you simply do not exist.
+TRES_DUFU_AMBITION_PERCEPTION_TEXT_1	「状态」名动公卿。你的干谒诗已被多位权贵传阅。只要再多送些盘缠，补上几首好诗，似乎就只差那临门一脚了	[Status] A name whispered among the nobility. Your petitioning poems have circulated among several powerful figures. Send a little more silver, offer a few more fine verses, and it seems you're but a single kick from the goal.
+TRES_DUFU_AMBITION_PERCEPTION_TEXT_2	窃比稷契。相国已向你许下重诺。你自认才华已比肩上古贤相稷与契，立登要路津，就在今朝！	Daring to compare yourself to Ji and Xie. The Chancellor has made you a weighty promise. In your own eyes, your talent now rivals the sage ministers of antiquity. A swift ascent to the key posts — today is the day!
+TRES_DUZHUO_FANGJIAN_TINGWEN_FAILED_FALLBACK_DESCRIPTION_0	酒肆中人来人往，你侧耳听了半晌，却都是些家长里短的闲话。掌柜收了酒钱，用抹布敷衍地擦了一下桌面，什么新鲜事也没有。	The tavern bustles with comings and goings. You strain your ears for a good while, but it's all household gossip and small talk. The innkeeper takes your money, wipes the table with a perfunctory swipe of a rag — nothing newsworthy at all.
+TRES_DUZHUO_FANGJIAN_TINGWEN_FAILED_FALLBACK_NAME_0	无所获	Nothing Gained
+TRES_DUZHUO_FANGJIAN_TINGWEN_FALLBACK_DESCRIPTION_0	酒肆角落，一桌客人压低了声音在谈——{@imaginary_gain_hint}。你端着杯，装作看窗外的雨，耳朵却一字不漏地收着。说者无心，听者有意，这倒是意外所得。	In a corner of the tavern, a table of patrons speaks in lowered voices — {@imaginary_gain_hint}. You hold your cup, pretending to watch the rain beyond the window, but your ears catch every word. The speakers meant nothing by it, but the listener took note — an unexpected gain.
+TRES_DUZHUO_FANGJIAN_TINGWEN_FALLBACK_NAME_0	偶得奇闻	A Chance Tale
+TRES_DUZHUO_HEYAOJIU_FAILED_FALLBACK_DESCRIPTION_0	药酒葫芦见了底，可身上的毒症却纹丝不动。这药方，怕是不对症。	The medicinal wine gourd is empty, but the poison in your body hasn't budged. This prescription, you fear, is not the right one.
+TRES_DUZHUO_HEYAOJIU_FAILED_FALLBACK_NAME_0	药不对症	Wrong Remedy
+TRES_DUZHUO_HEYAOJIU_FALLBACK_DESCRIPTION_0	从袖中取出药酒葫芦，仰头灌下一口。药味辛辣，入腹却化作一股暖流，身上的毒症似乎轻了几分。	You draw the medicinal wine gourd from your sleeve, tilt your head back, and take a swig. The herbal taste is sharp, but once it settles in your belly it turns into a warm current — the poison afflicting you seems to ease a little.
+TRES_DUZHUO_HEYAOJIU_FALLBACK_NAME_0	药酒祛毒	Medicinal Wine Clears Poison
+TRES_DUZHUO_XIAOZHUO_FAILED_FALLBACK_DESCRIPTION_0	杯中之酒寡淡如水，喝了半日也不见暖意。这酒怕是掺了水，白花了银钱。	The wine in your cup is as bland as water. You've been drinking half the afternoon without the slightest warmth. This wine has surely been watered down — silver wasted.
+TRES_DUZHUO_XIAOZHUO_FAILED_FALLBACK_NAME_0	寡淡无味	Bland and Flavorless
+TRES_DUZHUO_XIAOZHUO_FALLBACK_DESCRIPTION_0	拈起酒杯，浅浅抿了一口。酒水温润入喉，微醺之际，只觉得身上轻快了些许。	You lift the wine cup and take a shallow sip. The wine glides down warm and smooth. In this gentle tipsiness, you feel your body grow a little lighter.
+TRES_DUZHUO_XIAOZHUO_FALLBACK_NAME_0	小酌怡情	A Quiet Drink Soothes the Heart
+TRES_DU_ZHUO_DESCRIPTION_0	闭门谢客，借酒避世。	Doors shut, guests turned away — hiding from the world in wine.
+TRES_DU_ZHUO_LOCK_NARRATIVE_0	酒瓮见底，四邻沽尽，无处可得一滴	The wine jar runs dry, every neighbor has sold out — not a single drop to be found anywhere.
+TRES_DU_ZHUO_NAME_0	闲居	Leisure
+TRES_END_OF_EXAM_DESCRIPTION_0	结束了。？	It's over.?
+TRES_END_OF_EXAM_DESCRIPTION_1	你彻底失败了	You have failed utterly.
+TRES_END_OF_EXAM_INFO_0	门卫看都没看你一眼。	The gate guard didn't even glance at you.
+TRES_END_OF_EXAM_INFO_1	相国府的后门也对你关上了。	Even the back door of the Chancellor's mansion has closed to you.
+TRES_END_OF_EXAM_INFO_2	你发现自己连打点下人的铜钱都没了...	You realize you don't even have the copper coins to bribe the servants anymore...
+TRES_END_OF_EXAM_NAME_0	结束了...?	It's over...?
+TRES_EVENT_AMBITION_START_DESCRIPTION_0	磨墨，在卷首郑重写下你的名字	Grind the ink, and solemnly write your name at the head of the scroll.
+TRES_EVENT_AMBITION_START_DESCRIPTION_1	长安的物价贵得令人咋舌。你在城南偏僻的客舍里租下了一张散发着霉味的床榻，点燃了身上最后半截劣质的残烛。案几上，是你准备投递给当朝右相李林甫的诗文。夜风透窗，烛火摇晃得让人心慌。窗外的萤火虫闪烁，好像暗示着你，和你的才华的命运	The prices in Chang'an are eye-watering. You rent a mold-scented cot in a remote hostel south of the city and light the last half-stump of your cheapest candle. On the desk lie the poems and essays you plan to submit to Chancellor Li Linfu. Night wind seeps through the window; the candle flame flickers and fills you with unease. Fireflies blink outside — as though hinting at the fate awaiting you and your talent.
+TRES_EVENT_AMBITION_START_NAME_0	中年寻志	Seeking Purpose in Middle Age
+TRES_EVENT_BACKHOME_START_DESCRIPTION_0	走吧	Let's go.
+TRES_EVENT_BACKHOME_START_DESCRIPTION_1	你决定回家看看。一路从东门灞桥出，到骊山，强渡渭河。再到奉先县	You decide to go home for a visit. You set out from Ba Bridge at the eastern gate, pass Mount Li, force a crossing of the Wei River, and press on to Fengxian County.
+TRES_EVENT_BACKHOME_START_NAME_0	衣锦还乡	Returning Home in Brocade
+TRES_EVENT_CHANGAN_CITYWALK_START_DESCRIPTION_0	你本能地跑向最近的一处朱门屋檐下避雨。	Instinctively, you dash toward the nearest vermilion gate and take shelter under its eaves.
+TRES_EVENT_CHANGAN_CITYWALK_START_DESCRIPTION_1	正午。第一滴雨砸在你袖口的墨迹上。紧接着是倾盆大雨。一辆紫盖马车从朱雀大街疾驰而过，泥水劈头盖脸浇透了你的白袍。	Noon. The first raindrop slams onto the ink stain at your cuff. Then the sky opens. A carriage with a violet canopy thunders down Vermilion Bird Avenue, drenching your white robe from head to foot in muddy water.
+TRES_EVENT_CHANGAN_CITYWALK_START_EXAMPLE_0	银瓶乍破水浆迸，铁骑突出刀枪鸣。	Like a silver vase shattering, water and slurry burst forth — like iron cavalry charging, blades and spears ring out.
+TRES_EVENT_CHANGAN_CITYWALK_START_NAME_0	晌午雨降	Midday Downpour
+TRES_EVENT_CHANGAN_DANCER_DESCRIPTION_0	捡起来	Pick it up.
+TRES_EVENT_CHANGAN_DANCER_DESCRIPTION_1	一队戴着傩面具的舞者欢呼着冲进人群。你被重重地撞在肩膀上，摔倒在青石板上。怀里那卷写满治国策论和干谒诗的卷轴滚落进了地上的水坑里。	A troupe of dancers wearing Nuo masks cheers and charges into the crowd. A shoulder slams hard into you, and you crash onto the flagstones. The scroll in your arms — covered with statecraft essays and petition poems — rolls into a puddle on the ground.
+TRES_EVENT_CHANGAN_DANCER_INFO_0	一只穿着丝绸锦履的脚踩在了卷轴上。紧接着是第二只、第三只。欢笑的人群从你身边涌过。当你再抽回卷轴时，上面的字迹已经和泥水糊成了一团黑泥。	A foot in embroidered silk brocade steps on the scroll. Then a second, then a third. The laughing crowd surges past you. When you finally pull the scroll back, the writing has mingled with mud into a black sludge.
+TRES_EVENT_CHANGAN_DANCER_NAME_0	欢呼	Cheers
+TRES_EVENT_CHANGAN_EXILED_BY_WEALTH_DESCRIPTION_0	跌跌撞撞的逃入暗巷	Stumbling and staggering, you flee into a dark alley.
+TRES_EVENT_CHANGAN_EXILED_BY_WEALTH_DESCRIPTION_1	砰！朱门半开，一根水火棍猛地杵在你的胸口，将你推入雨中。【滚远点，别脏了相府的台阶！】	Bang! The vermilion gate swings half-open. A guard's staff rams hard into your chest, shoving you back into the rain. [Get lost — don't dirty the Chancellor's steps!]
+TRES_EVENT_CHANGAN_EXILED_BY_WEALTH_NAME_0	背叛	Betrayal
+TRES_EVENT_CHANGAN_FANGSHI_DESCRIPTION_0	伸手摸向腰间的褡裢...	You reach for the pouch at your waist...
+TRES_EVENT_CHANGAN_FANGSHI_DESCRIPTION_1	你顺着人流走入西市。胡姬在酒肆二楼撒下花瓣，杂耍艺人喷出的火龙照亮了半条街。羊肉汤的浓烈香气直往鼻子里钻，你的胃里发出一阵痉挛的绞痛。路边的汤饼摊正冒着热气。	You follow the crowd into the Western Market. Foreign dancing girls scatter flower petals from a tavern's second floor. A street performer breathes a dragon of fire that lights up half the street. The rich aroma of mutton soup drills into your nostrils — your stomach convulses with a spasm of hunger. A noodle stall on the roadside steams invitingly.
+TRES_EVENT_CHANGAN_FANGSHI_INFO_0	褡裢里空空如也。为了打点考官和干谒权贵，你已经花光了最后一文铜钱。摊主原本堆笑的脸瞬间冷了下来，用抹布猛地一甩桌子：【不吃别挡道！】	The pouch is empty. To grease the examiners and petition the powerful, you have spent your very last copper coin. The vendor's smiling face freezes instantly. He snaps his rag against the table: [If you're not eating, get out of the way!]
+TRES_EVENT_CHANGAN_POORAREA_DESCRIPTION_0	靠在湿冷的墙壁上，直到雨停...	You lean against the cold, wet wall and wait for the rain to stop...
+TRES_EVENT_CHANGAN_POORAREA_DESCRIPTION_1	你跌入屋背后的暗巷。这里积水没过脚踝，混合着腐烂的菜叶和马粪味。一个蜷缩在草席下的流民递过来半块发黑的胡饼：“别饿死了”。你下意识地想要摆手拒绝，却借着闪电，看清了自己伸出去的手——指甲缝里塞满黑泥，袖口破裂，比那流民好不到哪去	You stumble into the alley behind the houses. Here, standing water rises past your ankles, mixed with the stench of rotting vegetable leaves and horse dung. A vagrant huddled under a straw mat holds out half a blackened flatbread: "Don't starve to death." Instinctively, you raise a hand to refuse — but a flash of lightning reveals your outstretched hand: nails clogged with black grime, sleeves torn. You're no better off than the vagrant.
+TRES_EVENT_CHANGAN_POORAREA_INFO_0	老天...我怎么没发现这里有这么多穷人？	Heavens... how did I never notice there were so many poor people here?
+TRES_EVENT_CHANGAN_POORAREA_NAME_0	物伤其类	Kindred in Misery
+TRES_EVENT_CHANGAN_RAINSTOP_MARKET_DESCRIPTION_0	走向坊市	Walking toward the market ward.
+TRES_EVENT_CHANGAN_RAINSTOP_MARKET_DESCRIPTION_1	雨停时已是入夜。远处的坊门没有像往常一样关闭。今夜是上元灯节，金吾不禁。漫天的红灯笼亮了起来。	By the time the rain stops, night has fallen. The ward gates in the distance have not closed as usual. Tonight is the Lantern Festival — the imperial guard stands down. A skyful of red lanterns begins to glow.
+TRES_EVENT_CHANGAN_RAINSTOP_MARKET_NAME_0	上元喜庆	Lantern Festival Joy
+TRES_EVENT_CHANGAN_UNDER_WEALTH_DESCRIPTION_0	你正拧干袖子上的泥水...	You are wringing muddy water from your sleeves...
+TRES_EVENT_CHANGAN_UNDER_WEALTH_DESCRIPTION_1	朱门宏大，辉煌。金色的檐角在雨中熠熠生辉，屋檐宽大的站三个人都绰绰有余。可能是因为才下雨，这里只有你一个人。你终于可以气定神闲的站在朱门下躲雨，就像以前常做的那样	The vermilion gate is grand, resplendent. Its gilded eaves gleam in the rain, broad enough to shelter three men with room to spare. Perhaps because it just rained, you're alone here. At last you can stand composed beneath the vermilion gate and wait out the rain — just as you used to do.
+TRES_EVENT_CHANGAN_UNDER_WEALTH_NAME_0	朱门远客	A Distant Guest at the Vermilion Gate
+TRES_EVENT_CHANGHE_GUEST_DESCRIPTION_0	对方等待着你先出一首诗	The other party waits for you to compose the first poem.
+TRES_EVENT_CHANGHE_GUEST_NAME_0	和@{target_npc}唱和	Exchanging verses with @{target_npc}
+TRES_EVENT_CHAT_GUEST_DESCRIPTION_0	你有什么事吗？	Is there something you need?
+TRES_EVENT_CHAT_GUEST_DESCRIPTION_1	{@target_npc}看着你	{@target_npc} looks at you.
+TRES_EVENT_CHAT_GUEST_NAME_0	和他聊天	Chat with him
+TRES_EVENT_COOLDOWN_WALL_DESCRIPTION_0	转身离去	Turn and leave.
+TRES_EVENT_COOLDOWN_WALL_DESCRIPTION_1	你来到门前，家仆通报后回话说主人身体不适，这三旬概不见客。你只得转身离去。	You arrive at the gate. The servant relays your greeting and returns with word that the master is unwell and will receive no guests for the next three ten-day periods. You can only turn and leave.
+TRES_EVENT_COOLDOWN_WALL_NAME_0	避而不见	Avoiding Visitors
+TRES_EVENT_DEATH_HEALTH_LUANSHI_DEATH_HINT_0	死于身体支撑不住	Died when the body could no longer hold on.
+TRES_EVENT_DEATH_HEALTH_LUANSHI_DESCRIPTION_0	结束观测	End observation.
+TRES_EVENT_DEATH_HEALTH_LUANSHI_DESCRIPTION_1	你死了，但你的痛苦也结束了。你不再需要为家人而担忧，你不再需要为百姓而痛苦：你死了，它带走了你的痛苦，忧患，才气和人格。	You are dead, but your suffering has ended too. No more worrying about your family, no more anguish for the common people. You died — and death took your pain, your cares, your talent, and your character with it.
+TRES_EVENT_DEATH_HEALTH_LUANSHI_NAME_0	次好结局	Second-Best Ending
+TRES_EVENT_DEATH_HEALTH_NORMAL_DEATH_HINT_0	在乱世不知道被谁所杀。这个世道？你自己？	Killed by someone unknown in these chaotic times. By this age? By yourself?
+TRES_EVENT_DEATH_HEALTH_NORMAL_DESCRIPTION_0	结束模拟	End simulation.
+TRES_EVENT_DEATH_HEALTH_NORMAL_DESCRIPTION_1	你死了，你变成了一具尸体，这样不是坏的，在乱世中反而可能是最好的结局	You are dead, reduced to a corpse. This is not a bad thing — in times of chaos, it may in fact be the best possible ending.
+TRES_EVENT_DEATH_HEALTH_NORMAL_NAME_0	好结局	Good Ending
+TRES_EVENT_DEMO_SLIDE_FROM_BOTTOM_DESCRIPTION_0	确认	Confirm
+TRES_EVENT_DEMO_SLIDE_FROM_BOTTOM_DESCRIPTION_1	此事件应从屏幕底部向上滑入。选择确认后无副作用，后续事件回归正常（默认顶部滑入）。	This event should slide in from the bottom of the screen. Choosing Confirm has no side effects; subsequent events return to normal (default top slide-in).
+TRES_EVENT_DEMO_SLIDE_FROM_BOTTOM_INFO_0	纸带从底部滑入 —— 动画策略测试成功。	Paper strip slides in from the bottom — animation strategy test successful.
+TRES_EVENT_DEMO_SLIDE_FROM_BOTTOM_NAME_0	纸带测试 · 下方滑入	Paper Strip Test · Bottom Slide-In
+TRES_EVENT_DO_FAVOR_DESCRIPTION_0	好	Fine.
+TRES_EVENT_DO_FAVOR_DESCRIPTION_1	你主动示好，对方有些意外，对你多了几分善意。	You take the initiative to befriend them. The other party is somewhat surprised and shows you a bit more goodwill.
+TRES_EVENT_DO_FAVOR_FENGYING_DESCRIPTION_0	好	Fine.
+TRES_EVENT_DO_FAVOR_FENGYING_DESCRIPTION_1	你以逢迎之道交好，对方欣然接纳。	You court their favor with flattery and charm — the other party gladly accepts.
+TRES_EVENT_DO_FAVOR_FENGYING_NAME_0	逢迎之交	Friendship by Flattery
+TRES_EVENT_DO_FAVOR_KUANGKE_DESCRIPTION_0	好	Fine.
+TRES_EVENT_DO_FAVOR_KUANGKE_DESCRIPTION_1	你以狂客之姿示好，对方不敢怠慢。	You approach with the swagger of an unrestrained eccentric — the other party dares not slight you.
+TRES_EVENT_DO_FAVOR_KUANGKE_NAME_0	狂客之交	Friendship of the Wild Guest
+TRES_EVENT_DO_FAVOR_NAME_0	主动交好	Taking the Initiative to Befriend
+TRES_EVENT_DO_FAVOR_ZUANYING_DESCRIPTION_0	好	Fine.
+TRES_EVENT_DO_FAVOR_ZUANYING_DESCRIPTION_1	你以钻营之道结交，对方见有利可图，态度热切。	You befriend them through opportunistic channels. Seeing profit to be had, the other party's attitude turns enthusiastic.
+TRES_EVENT_DO_FAVOR_ZUANYING_NAME_0	钻营之交	Friendship by Opportunism
+TRES_EVENT_EXAM_747_DESCRIPTION_0	\"十年寒窗，在此一举！\"	"Ten years of study by the cold window — everything rides on this moment!"
+TRES_EVENT_EXAM_747_NAME_0	天宝六年春，大考之日。	Spring of Tianbao Year 6 — the day of the grand examination.
+TRES_EVENT_FIRST_BLOOD_RIGHT_PRIME_DESCRIPTION_0	恭敬地递上行卷，并在下面压上你大半的盘缠	You respectfully present your portfolio, slipping most of your travel money underneath.
+TRES_EVENT_FIRST_BLOOD_RIGHT_PRIME_DESCRIPTION_1	右相府的朱门比你想象的还要高耸。出乎意料，接待你的并非粗鄙的门卫，而是一位衣着考究的相府主簿。他面带春风般的微笑，甚至命人给你端来了一杯温度恰到好处的茶水。主簿修长的手指不经意地将银钱拨入袖中，随手翻开你的行卷瞥了一眼首联。'好字。'他赞许地点点头，'杜公子的才情，在下必定如实禀报相爷。回去静候佳音吧。	The vermilion gate of the Right Chancellor's mansion is even more towering than you imagined. To your surprise, it is not a coarse gate guard who receives you, but an elegantly dressed chief clerk of the household. He wears a spring-breeze smile and even orders a cup of perfectly warm tea brought out for you. His slender fingers casually sweep the silver into his sleeve as he leafs through your portfolio and glances at the opening couplet. "Fine calligraphy." He nods approvingly. "Master Du's talent — I shall report it faithfully to His Excellency the Chancellor. Return home and await good news."
+TRES_EVENT_FIRST_BLOOD_RIGHT_PRIME_INFO_0	你走出相府，秋风微凉，但你的内心却已被这句客套话点燃了熊熊烈火。	You walk out of the Chancellor's mansion. The autumn wind is cool, but your heart has been set ablaze by those polite words.
+TRES_EVENT_FIRST_BLOOD_RIGHT_PRIME_NAME_0	初见相府	First Visit to the Chancellor's Mansion
+TRES_EVENT_GET_OFFICIAL_DESCRIPTION_0	获取	Receive.
+TRES_EVENT_GET_OFFICIAL_DESCRIPTION_1	获得从八品官，月薪两斗米	Awarded a Junior Eighth-Rank official post, with a monthly salary of two dou of rice.
+TRES_EVENT_GET_OFFICIAL_NAME_0	吏部 · 官赏	Ministry of Personnel · Official Appointment
+TRES_EVENT_INTRO_745_DESCRIPTION_0	踏入长安，谋求出身	Stepping into Chang'an to seek your place in the world.
+TRES_EVENT_INTRO_745_DESCRIPTION_1	你站在长安的明德门外，抬头望着这座被盛世狂热笼罩的庞大都城。你的行囊里没有多少盘缠，只有一卷你自认足以惊动天下公卿的诗稿。	You stand outside Chang'an's Mingde Gate, looking up at this vast capital swathed in the fevered glow of a golden age. Your traveling pack holds little silver — only a scroll of poems you believe sufficient to stir every duke and minister under Heaven.
+TRES_EVENT_INTRO_745_NAME_0	天宝四载，初入长安	Tianbao Year 4 — First Entry into Chang'an
+TRES_EVENT_INTRO_745_TEXTS_0	「自谓颇挺出，立登要路津。」	"I deemed myself rather outstanding, certain to swiftly ascend to the key posts."
+TRES_EVENT_INTRO_745_TEXTS_1	天宝四年，秋。你默念着自己的诗句，带着这股想要致君尧舜上的狂妄，一头撞进了这座权力的迷宫。	Autumn of Tianbao Year 4. Murmuring your own verses under your breath, carrying this arrogant ambition to guide the sovereign to sagehood, you plunge headlong into this labyrinth of power.
+TRES_EVENT_INTRO_745_TEXTS_2	但长安的盛世太过喧嚣...	But the golden age of Chang'an is far too loud...
+TRES_EVENT_INTRO_745_TEXTS_3	根本没人听得见，一个异乡人的野心。	No one can hear the ambition of a stranger from the provinces.
+TRES_EVENT_MONEY_LOWER_0_INNKEEPER_DESCRIPTION_0	咬牙撑过去	Grit your teeth and endure.
+TRES_EVENT_MONEY_LOWER_0_INNKEEPER_DESCRIPTION_1	旬末结算，囊中已无一文钱。客栈老板骂骂咧咧地将你赶出门外，寒风中你蜷缩在街角……	At the end of the ten-day period, your purse is empty. The innkeeper curses and throws you out. In the cold wind, you huddle in a street corner...
+TRES_EVENT_MONEY_LOWER_0_INNKEEPER_NAME_0	流落街头	Cast Out onto the Streets
+TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_0	交好	Befriend
+TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_1	威胁	Threaten
+TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_2	返回	Go Back
+TRES_EVENT_SOCIAL_ROUTER_DESCRIPTION_3	你掌握了对方的把柄，是交好还是威胁？	You hold leverage over the other party. Befriend them, or threaten them?
+TRES_EVENT_SOCIAL_ROUTER_NAME_0	社交行动	Social Action
+TRES_EVENT_TALK_GUEST_DESCRIPTION_0	你好，{@target_npc}	Hello, {@target_npc}.
+TRES_EVENT_TALK_GUEST_DESCRIPTION_1	去看看其他活动	Go check out other activities.
+TRES_EVENT_TALK_GUEST_DESCRIPTION_2	主动唱和	Initiate a poetic exchange.
+TRES_EVENT_TALK_GUEST_DESCRIPTION_3	要干什么呢？	What shall you do?
+TRES_EVENT_TALK_GUEST_NAME_0	和宾客说话	Speak with the guest.
+TRES_EVENT_TEST_LEVERAGE_ADD_DESCRIPTION_0	好，记下了。	Good, noted.
+TRES_EVENT_TEST_LEVERAGE_ADD_DESCRIPTION_1	你暗中查访，掌握了对方的一个把柄。	You investigate discreetly and obtain a piece of leverage over the other party.
+TRES_EVENT_TEST_LEVERAGE_ADD_NAME_0	暗中调查	Discreet Investigation
+TRES_EVENT_THREATEN_FAILED_DESCRIPTION_0	算你狠	You win this round.
+TRES_EVENT_THREATEN_FAILED_DESCRIPTION_1	对方嗤笑一声，你的威胁软弱无力，如同蝼蚁撼树。	The other party scoffs — your threat is weak and futile, like an ant trying to shake a tree.
+TRES_EVENT_THREATEN_FAILED_NAME_0	威胁落空	Threat Falls Flat
+TRES_EVENT_THREATEN_FENGYING_DESCRIPTION_0	继续	Continue.
+TRES_EVENT_THREATEN_FENGYING_DESCRIPTION_1	逢迎者八面玲珑，你的威胁如石沉大海。	The flatterer is smooth in every direction — your threat sinks like a stone in the sea.
+TRES_EVENT_THREATEN_FENGYING_FAILED_HINT_0	威胁被无视	Threat ignored.
+TRES_EVENT_THREATEN_FENGYING_NAME_0	逢迎之胁	Threatening a Flatterer
+TRES_EVENT_THREATEN_FENGYING_SUCCESS_HINT_0	威胁奏效	Threat takes effect.
+TRES_EVENT_THREATEN_GENERIC_DESCRIPTION_0	继续	Continue.
+TRES_EVENT_THREATEN_GENERIC_DESCRIPTION_1	你隐晦地暗示手中的把柄，对方神情一紧。	You subtly hint at the leverage you hold. The other party's expression tightens.
+TRES_EVENT_THREATEN_GENERIC_FAILED_HINT_0	威胁被无视	Threat ignored.
+TRES_EVENT_THREATEN_GENERIC_NAME_0	暗中威胁	Covert Threat
+TRES_EVENT_THREATEN_GENERIC_SUCCESS_HINT_0	威胁奏效	Threat takes effect.
+TRES_EVENT_THREATEN_KUANGKE_DESCRIPTION_0	继续	Continue.
+TRES_EVENT_THREATEN_KUANGKE_DESCRIPTION_1	狂客本性狷狂，你的威胁如烈火烹油。	The wild eccentric is unrestrained by nature — your threat is like pouring oil onto a blazing fire.
+TRES_EVENT_THREATEN_KUANGKE_FAILED_HINT_0	威胁被无视	Threat ignored.
+TRES_EVENT_THREATEN_KUANGKE_NAME_0	狂客之胁	Threatening a Wild Guest
+TRES_EVENT_THREATEN_KUANGKE_SUCCESS_HINT_0	威胁奏效	Threat takes effect.
+TRES_EVENT_THREATEN_SUCCESS_DESCRIPTION_0	哼，知道怕就好。	Hmph. Good that you know fear.
+TRES_EVENT_THREATEN_SUCCESS_DESCRIPTION_1	抓住了对方的痛处，对方冷汗涔涔，不得不服软。	You've seized their sore spot. The other party breaks out in a cold sweat and has no choice but to yield.
+TRES_EVENT_THREATEN_SUCCESS_NAME_0	威胁成功	Threat Succeeds
+TRES_EVENT_THREATEN_ZUANYING_DESCRIPTION_0	继续	Continue.
+TRES_EVENT_THREATEN_ZUANYING_DESCRIPTION_1	钻营者利益至上，你的威胁正中软肋。	The opportunist puts profit above all — your threat strikes right at their weak point.
+TRES_EVENT_THREATEN_ZUANYING_FAILED_HINT_0	威胁被无视	Threat ignored.
+TRES_EVENT_THREATEN_ZUANYING_NAME_0	钻营之胁	Threatening an Opportunist
+TRES_EVENT_THREATEN_ZUANYING_SUCCESS_HINT_0	威胁奏效	Threat takes effect.
+TRES_FANGSHI_BANZHUAN_FAILED_FALLBACK_DESCRIPTION_0	白忙\n搬了半日砖，累得腰酸背痛。到黄昏找工头结账，他却皱眉道：「今日主家没给钱，改日再来。」一句改日，不知又是何日。	Wasted Labor\nYou haul bricks for half a day until your back aches and your muscles scream. At dusk you find the foreman to settle up, but he frowns and says, "The master didn't pay today. Come back another time." "Another time" — who knows when that will be.
+TRES_FANGSHI_BANZHUAN_FAILED_FALLBACK_NAME_0	白忙一场	A Day's Work for Nothing
+TRES_FANGSHI_BANZHUAN_FALLBACK_DESCRIPTION_0	诺	Aye.
+TRES_FANGSHI_BANZHUAN_FALLBACK_DESCRIPTION_1	搬砖今日市口热闹，工头见你膀大腰圆，招手便唤：「来得好！正缺人手。」你扛了几趟砖石，虽汗流浃背，倒也挣得几文铜钱。	The market is bustling today. The foreman, seeing your stout build, waves you over: "Right on time! We're short-handed." You haul several loads of bricks and stone. Though drenched in sweat, you earn a few copper coins for your trouble.
+TRES_FANGSHI_BANZHUAN_FALLBACK_NAME_0	搬砖糊口	Hauling Bricks for a Living
+TRES_FANGSHI_FALLBACK_DESCRIPTION_0	市井无声\n坊间寂寥，商贩稀疏，偶有过客也是行色匆匆。无甚可看之处，不如归去翻翻书卷。	A Silent Market\nThe ward is desolate, vendors few and far between. The occasional passerby hurries along without a glance. Nothing worth seeing here — better to go home and leaf through a book.
+TRES_FANGSHI_FALLBACK_NAME_0	坊市萧索	The Market Ward Lies Bleak
+TRES_FANGSHI_FGMAIZI_FAILED_FALLBACK_DESCRIPTION_0	知音稀\n有人驻足看了半晌，你以为是知音，却听他道：「这字写得倒是有力，可惜不似王右军。」你苦笑——世人只知右军，哪知天地之大，岂止一家？	Few True Connoisseurs\nSomeone stops and studies your work for a long moment. You think you've found a kindred spirit — until he says, "These characters are forceful, yes, but they don't resemble Wang Xizhi's." You force a bitter smile. The world knows only the Sage of Calligraphy — who realizes that between Heaven and Earth, there is room for more than one master?
+TRES_FANGSHI_FGMAIZI_FAILED_FALLBACK_NAME_0	知音难觅	A Kindred Ear Is Hard to Find
+TRES_FANGSHI_FGMAIZI_FALLBACK_DESCRIPTION_0	卖字\n你带着近日最得意的一幅字来到东市，寻了个显眼的位置挂起来。有识货的文人驻足良久，最终点头掏钱——虽不多，却是知音之价。	Selling Calligraphy\nYou bring your most prized recent piece to the Eastern Market and hang it in a conspicuous spot. A discerning scholar stops, studies it at length, and finally nods, reaching for his purse. Not much silver — but it is the price of a true connoisseur.
+TRES_FANGSHI_FGMAIZI_FALLBACK_NAME_0	风骨卖字	Selling Calligraphy with Backbone
+TRES_FANGSHI_MAIZI_FAILED_FALLBACK_DESCRIPTION_0	市侩\n摆了一上午摊，好不容易来了个问价的，却是个附庸风雅的商人。嫌你字「不够工整」，只肯出三文钱的润笔费，气得你收摊走人。	Vulgar Haggler\nYou've kept your stall all morning. At last someone comes to ask the price — a merchant playing at refinement. He complains your calligraphy is "not neat enough" and offers a mere three copper coins for your brushwork. Furious, you pack up and leave.
+TRES_FANGSHI_MAIZI_FAILED_FALLBACK_NAME_0	斯文扫地	Dignity Dragged Through the Mud
+TRES_FANGSHI_MAIZI_FALLBACK_DESCRIPTION_0	卖字\n铺开宣纸，研墨挥毫，写了三两幅字挂在摊前。有路人驻足看了看，掏出几文钱买去——虽不识草隶行楷，倒也图个新鲜。	Selling Calligraphy\nYou spread out rice paper, grind ink, and wield the brush, producing two or three pieces to hang at your stall. A passerby stops, looks, and fishes out a few coins to buy one. They can't tell cursive from clerical from running script — but it's a novelty, at least.
+TRES_FANGSHI_MAIZI_FALLBACK_NAME_0	卖字换米	Selling Characters for Rice
+TRES_FANGSHI_SELL_POEM_FAILED_FALLBACK_DESCRIPTION_0	无人问津\n你辗转几个歌坊递上新词，皆被婉拒——「这位先生的诗，不合时下的调子」。你只得将诗稿收回袖中。	No One Inquires\nYou go from one song house to another offering your new verses, but each politely declines — "This gentleman's poems don't suit the current fashion." You can only tuck the manuscript back into your sleeve.
+TRES_FANGSHI_SELL_POEM_FAILED_FALLBACK_NAME_0	无人问津	No One Inquires
+TRES_FANGSHI_SELL_POEM_FALLBACK_DESCRIPTION_0	平康坊传唱\n你将诗稿递入平康坊。数日后，坊中歌女竟已在传唱你的新词——虽只卖了几个铜板，但曲声穿过帘栊，落在行人的耳边。	Sung in Pingkang Ward\nYou slip your poems into Pingkang Ward. Days later, the courtesans there are already singing your new verses. The sale brought only a few copper coins, but the melody slips through the curtains and falls upon the ears of passersby.
+TRES_FANGSHI_SELL_POEM_FALLBACK_NAME_0	歌女传唱	Sung by the Courtesans
+TRES_FANGSHI_SHIYAO_FAILED_FALLBACK_DESCRIPTION_0	试药\n掌柜的递来一碗新配的汤药，说是大补之方。你喝下去只觉得腹中翻腾，冷汗涔涔，半天缓不过气来——这药怕是配错了。	Testing Medicine\nThe apothecary hands you a bowl of freshly brewed decoction, claiming it's a potent tonic. You drink it down — your stomach immediately churns, cold sweat pours from you, and you spend half the day gasping for breath. This medicine must have been wrongly prepared.
+TRES_FANGSHI_SHIYAO_FAILED_FALLBACK_NAME_0	药不对症	

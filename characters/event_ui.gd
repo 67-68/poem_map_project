@@ -287,6 +287,8 @@ func mark_chosen(entry_id: String, choice_text: String) -> void:
 	chosen_lbl.name = "ChoiceLabel"
 	chosen_lbl.text = tr("CODE_SETTLEMENT_TAPE_ENTRY_46A78AC7C9") % choice_text
 	chosen_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	chosen_lbl.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+	chosen_lbl.custom_minimum_size.x = 350
 	chosen_lbl.add_theme_color_override("font_color", Color(0.55, 0.10, 0.10))
 	chosen_lbl.add_theme_font_size_override("font_size", 14)
 

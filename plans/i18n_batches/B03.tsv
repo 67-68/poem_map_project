@@ -1,0 +1,184 @@
+# B03: Data+UI — 242-421 — 180 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+CODE_CREATE_FENGXIAN_EVENTS_EC014FDEA7	远处的茅草屋里传来婴儿断断续续的啼哭，像是在硬撑。	You stand at the village entrance once more. The wind still blows from Mount Li, but now you know things have changed. The village head is dead, and the area where you once lived has transformed — they seem to have moved somewhere unfamiliar. You rarely return, and without money, over the years the village has become a foreign place.
+CODE_CREATE_FENGXIAN_EVENTS_F6B7B0EFB3	你又站在了村口。风还是从骊山方向来，但现在你知道有些东西已经不一样了。里正死了，那片你住过的区域已经换了模样——他们似乎搬迁到了你不熟悉的地方。你不常回来，也没钱，这些年村子对你来说，已经成了一个陌生的地方。	Pure Stream Flattery Event Pool
+CODE_CSV_CLOUD_LOADER_05926677F2	清流逢迎事件库	Local Priority
+CODE_CSV_CLOUD_LOADER_085931B25C	本地优先	Pure Stream Mutual Aid Event Pool
+CODE_CSV_CLOUD_LOADER_1DFC949653	清流互助事件库	Cloud
+CODE_CSV_CLOUD_LOADER_45A38D424B	云端	Travel Journey Event Pool (Locally Generated)
+CODE_CSV_CLOUD_LOADER_545965AE5D	赶路旅途事件库（本地生成）	Patronage Honeymoon Event (Locally Generated)
+CODE_CSV_CLOUD_LOADER_61DBE2097D	拜谒蜜月期生成事件（本地生成）	Random Event Pool
+CODE_CSV_CLOUD_LOADER_6275468EAB	随机事件池	Broad-minded Ascension Event
+CODE_CSV_CLOUD_LOADER_7793AAD691	旷达期登高事件	Patronage: True Colors
+CODE_CSV_CLOUD_LOADER_82FF83CBA9	拜谒真实面目	Turbid Stream Curiosity Event Pool
+CODE_CSV_CLOUD_LOADER_83DAF1A19E	浊流猎奇事件库	Pure Stream Scheming Event Pool
+CODE_CSV_CLOUD_LOADER_86F0576A5B	清流钻营事件库	Polymorphic Broad-minded Event
+CODE_CSV_CLOUD_LOADER_8A38D983E1	多态旷达事件	Ambition Life Event
+CODE_CSV_CLOUD_LOADER_8E0945C965	野心生活事件	Turbid Stream Flattery Event Pool
+CODE_CSV_CLOUD_LOADER_9DC0C591E5	浊流逢迎事件库	Self-Reproach Event Pool
+CODE_CSV_CLOUD_LOADER_BE236A6399	自责事件库	Turbid Stream Scheming Event Pool
+CODE_CSV_CLOUD_LOADER_CB2B5390A8	浊流钻营事件库	Anxiety Event Pool
+CODE_CSV_CLOUD_LOADER_D052A649DA	焦虑事件库	Mad Poet × Pure Stream Resonance Event Pool
+CODE_CSV_CLOUD_LOADER_E172FAE110	狂客×清流谐振事件库	Illness Event (Diagnosis + Contamination)
+CODE_CSV_CLOUD_LOADER_F4692DBE3F	疾病事件（诊断+污染）	Shattered Dao Heart Event Pool
+CODE_CSV_CLOUD_LOADER_F80D0EB98B	道心破碎事件库	Mad Poet - Turbid Stream Event Pool
+CODE_CSV_CLOUD_LOADER_FD173F084C	狂客-浊流事件库	Build poem recipe index — { sorted_concept_key → Poem recipe }
+CODE_DATABASE_4D67642CC6	构建诗词食谱索引 — { sorted_concept_key → Poem recipe }	Extract resource uuid and class_name, write to _raw_data_pool and _index_by_class
+CODE_DATABASE_63FD4D1686	提取 resource 的 uuid 和 class_name，写入 _raw_data_pool 和 _index_by_class	Validate resource against class_filter; empty filter counts as match
+CODE_DATABASE_651DC1486F	校验 resource 是否匹配 class_filter，空 filter 视为匹配	Scan all values of flat dictionary, index Resource types
+CODE_DATABASE_6F781D1EED	扫描平铺字典的所有值，对 Resource 类型执行索引	Extract uuid from Resource: prefer 'uuid' field, fallback to 'id' field
+CODE_DATABASE_FAD55858C4	从 Resource 提取 uuid，优先 'uuid' 字段，兜底 'id' 字段	Extract uuid from Resource, supports 'uuid' and 'id' fields
+CODE_DATA_SCANNER_546FD6E862	从 Resource 中提取 uuid，支持 'uuid' 和 'id' 字段	DataScanner: ID conflict! full_id='%s' already exists (file: %s)
+CODE_DATA_SCANNER_87B9B14697	DataScanner: ID 冲突！full_id='%s' 已存在（文件: %s）	DataScanner: CSV pool conflict! full_id='%s' already exists
+CODE_DATA_SCANNER_D144DA1A9F	DataScanner: CSV 池冲突！full_id='%s' 已存在	Load eb_*.json files as EventBase Resource
+CODE_DATA_SCANNER_F7573DA95E	加载 eb_*.json 文件为 EventBase Resource	The rivers and lakes are calm — nothing stirs here for now.
+CODE_DECISION_SCROLL_46A040596E	江湖风平浪静，此处暂且无事。	%d Imaginary total
+CODE_DUMP_TRAIT_HINTS_399888A2E0	共 %d 个 Imaginary	✅ Dump complete:
+CODE_DUMP_TRAIT_HINTS_8CE84AA5D3	✅ Dump 完成:	❌ Cannot write to file
+CODE_DUMP_TRAIT_HINTS_980FA0FD3E	❌ 无法写入文件	ERROR: Directory unreachable
+CODE_DUMP_TRAIT_HINTS_A410B3E61F	ERROR: 目录不可达	⚠️ Database.imaginaries_detail is empty — no runtime Imaginary
+CODE_DUMP_TRAIT_HINTS_D14370FE66	⚠️ Database.imaginaries_detail 为空 — 无运行时 Imaginary	📁 Part 1: Static .tres Trait files
+CODE_DUMP_TRAIT_HINTS_E58116E336	📁 第1部分：静态 .tres Trait 文件	=== Full Trait + Imaginary Hint Dump ===\n
+CODE_DUMP_TRAIT_HINTS_EF92583DCC	=== 全量 Trait + Imaginary Hint Dump ===\n	📁 Part 2: Runtime Imaginary (Database.imaginaries_detail)
+CODE_DUMP_TRAIT_HINTS_F4013C8605	📁 第2部分：运行时 Imaginary (Database.imaginaries_detail)	Ambition
+CODE_EMOTION_OPERATOR_0AB342DF06	野心	Melancholy
+CODE_EMOTION_OPERATOR_192BC492B2	愁苦	Arrogance
+CODE_EMOTION_OPERATOR_9A85FF3DCC	狂傲	Broad-mindedness
+CODE_EMOTION_OPERATOR_A62908DEDA	旷达	Resentment
+CODE_EMOTION_OPERATOR_DC917B1566	愤懑	Ambition
+CODE_EMOTION_REQUIREMENT_0AB342DF06	野心	Melancholy
+CODE_EMOTION_REQUIREMENT_192BC492B2	愁苦	Requires emotion: %s (≥%d)
+CODE_EMOTION_REQUIREMENT_8C8222BD2A	需要情绪: %s(≥%d)	Arrogance
+CODE_EMOTION_REQUIREMENT_9A85FF3DCC	狂傲	Broad-mindedness
+CODE_EMOTION_REQUIREMENT_A62908DEDA	旷达	Resentment
+CODE_EMOTION_REQUIREMENT_DC917B1566	愤懑	Pingkang Ward
+CODE_ENUMERATES_06CF4D3D54	平康坊	Mount Tai
+CODE_ENUMERATES_96DF5611DF	泰山	West Market
+CODE_ENUMERATES_BE2A911592	西市	Imperial City
+CODE_ENUMERATES_CD2724EB5A	皇城	Foot of Mount Tai
+CODE_ENUMERATES_F1D945BB0B	泰山脚下	Mount Tai Summit
+CODE_ENUMERATES_FAD381D3E4	泰山上	[Prerequisites]
+CODE_EVENT_BTN_057AE9C4A2	[前提]	Option disabled
+CODE_EVENT_BTN_1F4CD3AC79	选项已禁用	You want to know what happened
+CODE_EVENT_BTN_29178BE430	你想知道什么发生了	Initialize option data
+CODE_EVENT_BTN_8C71DF151B	初始化选项数据	Factory method: create and initialize button
+CODE_EVENT_BTN_B9820968D7	工厂方法：创建并初始化按钮	Option
+CODE_EVENT_BTN_BB7486F441	选项	[Effects]
+CODE_EVENT_BTN_CDAC366955	[影响]	DSL parsing failed, no commands generated
+CODE_EVENT_CHAIN_BUILDER_347845FC55	DSL 解析失败，未产生任何命令	DSL is empty
+CODE_EVENT_CHAIN_BUILDER_6975313313	DSL 为空	Execution complete: %d succeeded, %d failed
+CODE_EVENT_CHAIN_BUILDER_EF28AAE998	执行完成: %d 成功, %d 失败	subgraph Chain%d[Chain %d: %d events]
+CODE_EVENT_CHAIN_LINTER_04972C11EC	subgraph Chain%d[链 %d: %d个事件]	%% Event chain dependency graph
+CODE_EVENT_CHAIN_LINTER_F9AC67EC13	%% 事件链依赖关系图	「 Resolved: %s 」
+CODE_EVENT_UI_46A78AC7C9	「 既决：%s 」	Storm off
+CODE_EXAMPLE_USAGE_2117252AA8	拂袖而去	Market Poetry Gathering
+CODE_EXAMPLE_USAGE_34A3241C28	市场诗会	A poetry gathering is underway at the market, drawing many literati and scholars.
+CODE_EXAMPLE_USAGE_3A241EDFCE	市场上正在举行一场诗会，许多文人墨客聚集于此。	Slip a bribe
+CODE_EXAMPLE_USAGE_77392360EA	塞钱贿赂	Observe quietly
+CODE_EXAMPLE_USAGE_A456365D59	默默观察	You encounter a mysterious poet at a tavern in Chang'an.
+CODE_EXAMPLE_USAGE_BB27B4F5E7	你在长安的一家酒馆中遇到了一位神秘的诗人。	Join the poetry gathering
+CODE_EXAMPLE_USAGE_DB5BB25CD0	参与诗会	Chang'an Tavern Encounter
+CODE_EXAMPLE_USAGE_DF4F5862A6	长安酒馆奇遇	You encounter a mysterious poet at a tavern in Chang'an. He seems drunk, yet a glint of wisdom shines in his eyes.
+CODE_EXAMPLE_USAGE_F7F4376B3F	你在长安的一家酒馆中遇到了一位神秘的诗人，他似乎喝醉了，但眼中却闪烁着智慧的光芒。	Han
+CODE_FACTION_80FA989E68	汉	Reverse-lookup option display text from ChoiceResult
+CODE_FOCUS_CHAT_TAPE_ENTRY_32FCFCFD75	根据 ChoiceResult 反向查找选项的展示文本	「 Resolved: %s 」
+CODE_FOCUS_CHAT_TAPE_ENTRY_46A78AC7C9	「 既决：%s 」	Click save to occupy this slot
+CODE_GAME_DATA_PANEL_088AAD036F	点击保存以占用此槽位	Day %d | Year %.1f | %s
+CODE_GAME_DATA_PANEL_B7F0764174	第%dd | %.1f年 | %s	Du Fu
+CODE_GAME_DATA_PANEL_D1A76721CD	杜甫	Empty save
+CODE_GAME_DATA_PANEL_E191E9DFB1	空存档	Du Fu
+CODE_GAME_SAVE_D1A76721CD	杜甫	Du Fu
+CODE_GAME_SAVE_DATA_D1A76721CD	杜甫	Create an event where each choice grants an Imaginary
+CODE_GENERATE_TEST_POEM_EVENTS_04A0AC9ECB	创建一个事件，每选一个选项就获得一个意象	Use PoemTypeChooseOperator to select a poem type
+CODE_GENERATE_TEST_POEM_EVENTS_0599B96A29	使用 PoemTypeChooseOperator 选择诗词	Obtained poem: Petition Poem Lv1
+CODE_GENERATE_TEST_POEM_EVENTS_522D4F744A	获得诗词: 干谒诗 Lv1	[Test] Scenario 4: Obtain Imaginary for "Snowstorm Returnee" recipe
+CODE_GENERATE_TEST_POEM_EVENTS_5633C6F5A2	[测试] 场景4: 获取「风雪夜归人」食谱的 Imaginary	Obtained Imaginary: %s
+CODE_GENERATE_TEST_POEM_EVENTS_6FBDCC9010	获得意象: %s	[Test] Scenario 3: Obtain various unrelated Imaginaries
+CODE_GENERATE_TEST_POEM_EVENTS_AC8B504A29	[测试] 场景3: 获取各种不相干的 Imaginary	[Test] Scenario 7: 2/3 hits → Doggerel poem
+CODE_GENERATE_TEST_POEM_EVENTS_AD52404E24	[测试] 场景7: 2/3 命中 → 打油诗	[Test] Scenario 2: Obtain Imaginary for "Snowstorm Returnee" recipe
+CODE_GENERATE_TEST_POEM_EVENTS_BDF92E1A1B	[测试] 场景2: 获取「风雪夜归人」食谱的 Imaginary	[Test] Scenario 6: Obtain Tier 1/2 Imaginary materials (V5: Tier 2/3 merged)
+CODE_GENERATE_TEST_POEM_EVENTS_F3F05F0AE5	[测试] 场景6: 获取 Tier 1/2 的 Imaginary 素材（V5: Tier 2/3 已合并）	[Test] Scenario 1: Obtain two overlapping Imaginaries
+CODE_GENERATE_TEST_POEM_EVENTS_F5A050C3E9	[测试] 场景1: 获取两个重叠 Imaginary	%s: parameter for tag '%s' is not a Dictionary, skipping
+CODE_GLITCH_PREPROCESSOR_8E14EED932	%s: tag '%s' 的参数不是 Dictionary，跳过	%s: regex compilation failed tag=%s pattern=%s
+CODE_GLITCH_PREPROCESSOR_FB8806A61B	%s: 正则编译失败 tag=%s pattern=%s	Iterate 0..current_idea_level over all unlocked buffs, inject source_uuid then on_exit cleanup, reset level to -1
+CODE_IDEA_928E46A5AE	遍历 0..current_idea_level 所有已解锁 buff，注入 source_uuid 后 on_exit 清理，重置 level 为 -1	Unknown Idea
+CODE_IDEA_BTN_099E3CCA8A	未知理念	Locked
+CODE_IDEA_BTN_115FA2A54C	被锁定	Locked, due to
+CODE_IDEA_BTN_17A8CAB3B2	被锁定，由于	Unavailable
+CODE_IDEA_BTN_460B3574E4	不可用	Set the Idea displayed on button. Disable and show lock reason when locked=true.
+CODE_IDEA_BTN_8BA872D0D3	设置按钮显示的 Idea。locked=true 时禁用并显示锁定原因。	Populate Label text from _idea
+CODE_IDEA_BTN_BBF2377F0F	根据 _idea 填充 Label 文本	Recursively inject source_uuid and execute operate (supports MultiBuffOperator nesting)
+CODE_IDEA_DBA21B691F	递归注入 source_uuid 并执行 operate（支持 MultiBuffOperator 嵌套）	Recursively inject source_uuid and execute on_exit (supports MultiBuffOperator nesting)
+CODE_IDEA_E147F80CD1	递归注入 source_uuid 并执行 on_exit（支持 MultiBuffOperator 嵌套）	Level up, unlock one more buff, inject source_uuid then immediately operate the corresponding buff
+CODE_IDEA_F1337B7A69	提升一级，解锁更多一个buff，注入 source_uuid 后立即 operate 对应 buff	No Ideas available
+CODE_IDEA_PAGE_0127C5A788	暂无可用理念	Refresh right-column candidate Idea pool (Database.ideas - unlocked - conflict check)
+CODE_IDEA_PAGE_06953F3F53	刷新右栏候选理念池（Database.ideas - 已解锁 - 冲突检测）	Unknown Idea
+CODE_IDEA_PAGE_099E3CCA8A	未知理念	External call: refresh page when new Idea is acquired or Idea data changes
+CODE_IDEA_PAGE_1D52523402	外部调用：当获得新理念或理念数据变化时刷新页面	Refresh left-column 5 slots (unlocked Ideas)
+CODE_IDEA_PAGE_27819FC258	刷新左栏 5 个槽位（已解锁理念）	Unlock effect %d? Cost: %d %s
+CODE_IDEA_PAGE_28231E903A	解锁效果%d？消耗 %d点%s	Click to select Idea
+CODE_IDEA_PAGE_2DB22EE5C9	点击选择理念	Left-column slot click: select unlocked Idea
+CODE_IDEA_PAGE_42BB022322	左栏槽位点击：选中已解锁理念	Populate center-column details from _selected_idea_uuid
+CODE_IDEA_PAGE_65257D423A	根据 _selected_idea_uuid 填充中栏详情	Describe Idea counter_idea relationships (show potential mutual exclusion when no conflict)
+CODE_IDEA_PAGE_693D8DE286	描述理念的 counter_idea 关系（无冲突时显示潜在互斥）	(Idea not found)
+CODE_IDEA_PAGE_7705E3690F	（理念未找到）	%s: conflicts with "%s"
+CODE_IDEA_PAGE_811A80B78E	%s：与「%s」冲突	Clear all Label children of effects column (preserve EffectsContainer itself)
+CODE_IDEA_PAGE_8CE5EBD06A	清除效果列所有 Label（保留 EffectsContainer 自身）	(Unknown)
+CODE_IDEA_PAGE_90A49E5099	（未知）	Check if Idea is still accessible (in unlocked or Database)
+CODE_IDEA_PAGE_913DD190F6	检查理念是否仍然可访问（在已解锁或 Database 中）	Select an Idea
+CODE_IDEA_PAGE_967E62B0FF	选择一个理念	Upgrade/Acquire button click: consume resources + add to slot / increase Idea level
+CODE_IDEA_PAGE_9E946767B7	升级/获取按钮点击：消耗资源 + 加入槽位/提升理念等级	Empty slot
+CODE_IDEA_PAGE_A244E21556	空槽位	Mutually exclusive with "%s"
+CODE_IDEA_PAGE_A440FE94DB	与「%s」互斥	Max level
+CODE_IDEA_PAGE_D6D8E1DE4A	已满级	Acquire "%s"? Cost: %d %s
+CODE_IDEA_PAGE_D89BCCFDA0	获取「%s」？消耗 %d点%s	(Insufficient)
+CODE_IDEA_PAGE_EC45DBDF25	（不足）	Refresh all column data
+CODE_IDEA_PAGE_EC97C1482B	刷新所有栏位的数据	[Select Item]
+CODE_ITEM_PICKER_TAPE_ATTACHMENT_28A9393815	【选择物品】	Influence %d/%d
+CODE_LEFT_PLAYER_PANEL_0D13673A08	势 %d/%d	Days until Grand Exam: %d xun
+CODE_LEFT_PLAYER_PANEL_134E5C5565	距离大考还剩: %d 旬	Composure %d/%d
+CODE_LEFT_PLAYER_PANEL_34B6CBC411	定 %d/%d	Progress "%s": %d(%s)
+CODE_LEFT_PLAYER_PANEL_73D0BD60AB	进度「%s」：%d(%s)	%d/%d Literacy
+CODE_LEFT_PLAYER_PANEL_745A42FECC	%d/%d 文	Stationed · %s — %s is here
+CODE_LEFT_PLAYER_PANEL_7CB079ED6A	驻留 · %s — %s在此	Reputation %d/%d
+CODE_LEFT_PLAYER_PANEL_82ED953449	望 %d/%d	%d/%d Health
+CODE_LEFT_PLAYER_PANEL_87D55E3395	%d/%d 健	Estate %d/%d
+CODE_LEFT_PLAYER_PANEL_B24700B22F	府 %d/%d	Talent %d/%d
+CODE_LEFT_PLAYER_PANEL_B3540AF984	才 %d/%d	Mood %d/%d
+CODE_LEFT_PLAYER_PANEL_C5D046C34E	兴 %d/%d	Stationed · %s
+CODE_LEFT_PLAYER_PANEL_E6142E8810	驻留 · %s	Gatekeeper
+CODE_LEVERAGE_ADD_OPERATOR_1E0F945362	门子	Retainer-Scholar
+CODE_LEVERAGE_ADD_OPERATOR_2D61825931	清客	Wang Wei
+CODE_LEVERAGE_ADD_OPERATOR_3DC14978A1	王维	Gao Shi
+CODE_LEVERAGE_ADD_OPERATOR_5692EF6E24	高适	Gained leverage over "%s"
+CODE_LEVERAGE_ADD_OPERATOR_6AEECA1FB4	获得了关于「%s」的把柄	Merchant
+CODE_LEVERAGE_ADD_OPERATOR_6E27E9DA69	商贩	Li Lingfu
+CODE_LEVERAGE_ADD_OPERATOR_7A4C672055	李灵甫	[System]:
+CODE_LEVERAGE_ADD_OPERATOR_85A28E77E3	[系统提示]：	Poor folk
+CODE_LEVERAGE_ADD_OPERATOR_9CF19D2B90	穷人	Pure Stream Host
+CODE_LEVERAGE_ADD_OPERATOR_AAAA7D9F19	清流主人	Li Bai
+CODE_LEVERAGE_ADD_OPERATOR_B23F840FF5	李白	Du Fu
+CODE_LEVERAGE_ADD_OPERATOR_D1A76721CD	杜甫	Pure Stream Official
+CODE_LEVERAGE_ADD_OPERATOR_D972C462FC	清流官	County Magistrate
+CODE_LEVERAGE_ADD_OPERATOR_E3BD042ACC	县尉	Aristocrat
+CODE_LEVERAGE_ADD_OPERATOR_E4CA3EA091	权贵	Turbid Stream Official
+CODE_LEVERAGE_ADD_OPERATOR_F09988C201	浊流官	Zheng Qian
+CODE_LEVERAGE_ADD_OPERATOR_F9BB96CFEC	郑虔	Passable — adequate but unremarkable.
+CODE_LIANJU_SCORE_OPERATOR_322E3E0A8C	尚可，中规中矩。	Exquisite! The line feels heaven-sent — the whole hall is astounded!
+CODE_LIANJU_SCORE_OPERATOR_3478636167	妙绝！此句浑然天成，四座皆惊！	Fine verse! The guests nod in approval.
+CODE_LIANJU_SCORE_OPERATOR_6ADE1D34AF	佳句！宾客纷纷点头赞许。	Your couplet is flat and uninspired…
+CODE_LIANJU_SCORE_OPERATOR_8D7675BC3A	你的对句平淡无奇…	Link Inspector
+CODE_LINKER_LINTER_RULE_805DBF72C7	链接检查官	Flag %s is required but no event provides it
+CODE_LINKER_LINTER_RULE_A3922B8D57	Flag %s 被需求但没有事件提供	Trait %s is required but no event provides it
+CODE_LINKER_LINTER_RULE_F7EDD1483F	Trait %s 被需求但没有事件提供	[color=magenta]💀 Unknown command. Type 'help' for salvation.[/color]
+CODE_LINTER_CONSOLE_03C60BBCBB	[color=magenta]💀 未知指令。输入 'help' 获取救赎。[/color]	[color=cyan]fetch[/color] - Sync raw CSV assets from the cloud
+CODE_LINTER_CONSOLE_2F8ABC3F69	[color=cyan]fetch[/color] - 从云端同步原始 CSV 资产	[color=cyan]lint[/color]  - Run static scan for data integrity and perpetual-motion exploits
+CODE_LINTER_CONSOLE_78294FDE39	[color=cyan]lint[/color]  - 执行数据完整性与永动机漏洞静态扫描	[color=cyan]bake[/color]  - Shard and pack raw data into O(1) .tres runtime database
+CODE_LINTER_CONSOLE_89A8022B7B	[color=cyan]bake[/color]  - 将原始数据分流打包为 O(1) .tres 运行时数据库	[color=green]🚀 Starting async chain download...[/color]
+CODE_LINTER_CONSOLE_BFCDCC4442	[color=green]🚀 开始执行异步链式下载...[/color]	[color=yellow][b]⚔️ Tang Dynasty Data Console mounted. Type 'help' for available commands.[/b][/color]
+CODE_LINTER_CONSOLE_E79CC36346	[color=yellow][b]⚔️ 大唐数值资产控制台已挂载。输入 'help' 查看可用指令。[/b][/color]	[color=red][b]😡 [Linter Error] Perpetual-motion option detected! Event [event_9527] costs 0 time but grants rewards![/b][/color]
+CODE_LINTER_CONSOLE_FA600D9974	[color=red][b]😡 [Linter Error] 发现永动机选项！事件 [event_9527] 消耗时间为0却提供奖励！[/b][/color]	Attribute requirements not met
+CODE_MAIN_ACTION_BUTTON_13B937F5A7	属性不满足	Requirements not met:
+CODE_MAIN_ACTION_BUTTON_46F4EC4498	条件不满足：	

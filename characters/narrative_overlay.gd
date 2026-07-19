@@ -804,11 +804,11 @@ func show_hover_text(narrative: String, vector: String) -> void:
 	hover_title.text = tr("UI_NARRATIVE_OVERLAY_TEXT_3")
 	var text_parts: Array[String] = []
 	if not narrative.is_empty():
-		text_parts.append(narrative)
+		text_parts.append(tr(narrative))
 	if not vector.is_empty():
 		if not text_parts.is_empty():
 			text_parts.append("")  # 空行分隔
-		text_parts.append(vector)
+		text_parts.append(tr(vector))
 	hover_label.text = "\n".join(text_parts)
 	hover_separator.visible = not vector.is_empty()
 

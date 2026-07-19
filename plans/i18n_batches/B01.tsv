@@ -1,0 +1,124 @@
+# B01: System UI — 2-121 — 120 lines
+# GLOBAL: preserve {param} {@keyword} %%d %%s [glitch] [br] [color] BBCode emoji
+# FORMAT: append |en_text at end of each line
+# key	zh	en
+ACT_BAIYE_MASS_DISTRIBUTION_DESC	广发诗文行卷以期一遇伯乐	Pay Homage · Mass Distribution
+ACT_BAIYE_MASS_DISTRIBUTION_NAME	拜谒 · 广发行卷	Present a calling card and wait — without a sponsor, it's a humbling grind
+ACT_BAIYE_NORMAL_DESC	投刺候见无人引荐不足为外人道	Pay Homage · Ordinary Visit
+ACT_BAIYE_NORMAL_NAME	拜谒 · 普通拜谒	Submit a new poem and knock on noble gates with talent
+ACT_BAIYE_POEM_VISIT_DESC	递上新诗以才华叩响朱门	Pay Homage · Poem Visit
+ACT_BAIYE_POEM_VISIT_NAME	拜谒 · 携诗拜谒	Trade leverage for a sudden windfall
+ACT_BAIYE_THREATEN_DESC	以把柄为筹码换来横财	Pay Homage · Extortion
+ACT_BAIYE_THREATEN_NAME	拜谒 · 要挟	Reflect on the past atop Leyou Plateau
+ACT_DENGGAO_LEYOUYUAN_DESC	乐游原上怀古	Excursion · Leyou Plateau
+ACT_DENGGAO_LEYOUYUAN_NAME	远游 · 乐游原	Unwind by the shores of Qujiang Pool
+ACT_DENGGAO_QUJIANGCHI_DESC	曲江池畔遣兴	Excursion · Qujiang Pool
+ACT_DENGGAO_QUJIANGCHI_NAME	远游 · 曲江池	Compose historical verse on Shaoling Plateau
+ACT_DENGGAO_SHAOLINGYUAN_DESC	少陵原上咏史	Excursion · Shaoling Plateau
+ACT_DENGGAO_SHAOLINGYUAN_NAME	远游 · 少陵原	Eavesdrop on strange tales in taverns and tea houses
+ACT_DUZHUO_FANGJIAN_TINGWEN_DESC	在酒肆茶馆间打听奇闻异事	Leisure · Street Gossip
+ACT_DUZHUO_FANGJIAN_TINGWEN_NAME	闲居 · 坊间听闻	Use medicinal wine to purge toxins and nourish the body
+ACT_DUZHUO_HEYAOJIU_DESC	以药酒祛毒养身	Leisure · Drink Medicinal Wine
+ACT_DUZHUO_HEYAOJIU_NAME	闲居 · 喝药酒	Sip lightly — just enough to glow, not enough to stumble
+ACT_DUZHUO_XIAOZHUO_DESC	浅尝辄止微醺养生	Leisure · A Little Drink
+ACT_DUZHUO_XIAOZHUO_NAME	闲居 · 小酌一口	Manual labor
+ACT_FANGSHI_BANZHUAN_DESC	体力活	Markets · Brick Hauling
+ACT_FANGSHI_BANZHUAN_NAME	坊市 · 搬砖	Sell calligraphy with dignified pride
+ACT_FANGSHI_FGMAIZI_DESC	清高卖字	Markets · Proud Calligraphy
+ACT_FANGSHI_FGMAIZI_NAME	坊市 · 风骨卖字	Eke out a living selling calligraphy
+ACT_FANGSHI_MAIZI_DESC	卖字为生	Markets · Sell Calligraphy
+ACT_FANGSHI_MAIZI_NAME	坊市 · 卖字	Sell to the singing girls of Pingkang Ward for their repertoire
+ACT_FANGSHI_SELL_POEM_DESC	卖与平康坊歌女传唱	Markets · Sell Poems
+ACT_FANGSHI_SELL_POEM_NAME	坊市 · 卖诗	A modern-day Li Shizhen — test drugs on yourself
+ACT_FANGSHI_SHIYAO_DESC	当代李时珍	Markets · Drug Trial
+ACT_FANGSHI_SHIYAO_NAME	坊市 · 试药	Host a banquet for guests far and wide — may yield a referral
+ACT_JIAOYOU_HOLD_FEAST_DESC	设宴款待各路宾客或可获得引荐之机	Socializing · Host a Banquet
+ACT_JIAOYOU_HOLD_FEAST_NAME	交游 · 举办宴席	Attend a noble banquet, expand your network — may land a referral
+ACT_JIAOYOU_INTRO_GACHA_DESC	出席权贵宴席广结人脉或可获得引荐之机	Socializing · Elegant Gathering
+ACT_JIAOYOU_INTRO_GACHA_NAME	交游 · 赴宴雅集	Snoop in dark alleys — may uncover someone's dirty secret
+ACT_JIAOYOU_LEVERAGE_FARM_DESC	在暗巷中打探风声或可获知他人隐秘	Socializing · Back-Alley Intel
+ACT_JIAOYOU_LEVERAGE_FARM_NAME	交游 · 暗巷刺探	Recite your latest work in public — trade verse for renown
+ACT_JIAOYOU_RECITE_POEM_DESC	当众宣读新作以诗换名	Socializing · Public Recital
+ACT_JIAOYOU_RECITE_POEM_NAME	交游 · 宣读诗词	Make friends over drinks in local taverns — meet the common folk
+ACT_JIAOYOU_TAVERN_GACHA_DESC	在坊间酒肆以酒会友结识市井中人	Socializing · Tavern Crawl
+ACT_JIAOYOU_TAVERN_GACHA_NAME	交游 · 坊间买醉	Roam Chang'an with companions and take in the capital's sights
+ACT_JIAOYOU_TONGYOU_CHANGAN_DESC	与友人结伴遍览长安风物	Socializing · Tour Chang'an
+ACT_JIAOYOU_TONGYOU_CHANGAN_NAME	交游 · 同游长安	Trade leverage for Ji Wen's backing
+ACT_JIWEN_LEVERAGE_EXCHANGE_DESC	以把柄为筹码换取吉温的助力	Ji Wen · Leverage for Power
+ACT_JIWEN_LEVERAGE_EXCHANGE_NAME	吉温 · 把柄换势	Medicinal wine clears the mind and sparks literary inspiration
+ACT_TUT_DUZHUO_HEYAOJIU_DESC	药酒提神激发文思	Leisure · Drink Medicinal Wine (Refresh)
+ACT_TUT_DUZHUO_HEYAOJIU_NAME	闲居 · 喝药酒（醒神）	Ask the Taoist priest to dispel the mountain-top fog with a ritual
+ACT_TUT_TAOIST_DISPEL_FOG_DESC	请道长施法驱散山顶云雾	Socializing · Dispel the Clouds
+ACT_TUT_TAOIST_DISPEL_FOG_NAME	交游 · 驱散云雾	Show your poems to Zheng Qian in exchange for inspiration and fame
+ACT_ZHENGQIAN_POEM_EXCHANGE_DESC	向郑虔展示诗作换取灵感与文名	Zheng Qian · Verse for Renown
+ACT_ZHENGQIAN_POEM_EXCHANGE_NAME	郑虔 · 以诗换兴望	Relocate and settle in the Imperial City
+ACT_ZHU_LIU_HUANGCHENG_DESC	移步皇城落脚	Reside · Imperial City
+ACT_ZHU_LIU_HUANGCHENG_NAME	驻留 · 皇城	Relocate and settle in Pingkang Ward
+ACT_ZHU_LIU_PINGKANGFANG_DESC	移步平康坊落脚	Reside · Pingkang Ward
+ACT_ZHU_LIU_PINGKANGFANG_NAME	驻留 · 平康坊	Relocate and settle in the Western Market
+ACT_ZHU_LIU_XISHI_DESC	移步西市落脚	Reside · Western Market
+ACT_ZHU_LIU_XISHI_NAME	驻留 · 西市	Li Bai
+CHAR_NAME_LIBAI	李白	Wang Wei
+CHAR_NAME_WANGWEI	王维	Zheng Qian
+CHAR_NAME_ZHENGQIAN	郑虔	Pingkang Ward
+CODE_ACTION_06CF4D3D54	平康坊	Western Market
+CODE_ACTION_BE2A911592	西市	Cannot perform this action right now
+CODE_ACTION_BUTTON_60ABF5AC4F	暂时无法执行此行动	Wait cancelled
+CODE_ACTION_BUTTON_A3ED1BB61F	已取消等待	Imperial City
+CODE_ACTION_CD2724EB5A	皇城	(No data)
+CODE_ACTION_HINT_BUILDER_D8D33EAD9A	（无数据）	Tiny
+CODE_ACTION_HINT_FORMATTER_0094D495FD	微小	• Extra time cost: %d day(s)
+CODE_ACTION_HINT_FORMATTER_0BBC7EDA2B	• 额外耗时 %d 天	Insufficient
+CODE_ACTION_HINT_FORMATTER_1A5219A827	不足	⏱%d day(s)
+CODE_ACTION_HINT_FORMATTER_20C021DFAA	⏱%d天	Uncertain outcome
+CODE_ACTION_HINT_FORMATTER_213F14AD2B	成败未卜	Certain
+CODE_ACTION_HINT_FORMATTER_23FB1D474F	必然	Very High
+CODE_ACTION_HINT_FORMATTER_2508765118	很高	• %s will be consumed (repeat action, cost +20%%)
+CODE_ACTION_HINT_FORMATTER_2EEE8E4508	• %s 将会消耗（重复行动，消耗增加20%%）	⏱ Time cost: %s
+CODE_ACTION_HINT_FORMATTER_2FB48A6C2F	⏱ 耗时 %s	• %s will be consumed
+CODE_ACTION_HINT_FORMATTER_389509B135	• %s 将会消耗	Consequences unknown
+CODE_ACTION_HINT_FORMATTER_400F1725F5	后果难料	Consequences unknown…
+CODE_ACTION_HINT_FORMATTER_49020789F4	后果难料…	Sell Poems
+CODE_ACTION_HINT_FORMATTER_49638608D2	卖诗	Unknown
+CODE_ACTION_HINT_FORMATTER_4D8C1C5B42	未知	Time: %d
+CODE_ACTION_HINT_FORMATTER_537A21D6E2	时间 %d	Likely
+CODE_ACTION_HINT_FORMATTER_5B7E1F080F	多半	%s%s (Repeat)
+CODE_ACTION_HINT_FORMATTER_6391FF1D34	%s%s（重复）	Uncertain outcome…
+CODE_ACTION_HINT_FORMATTER_710EC86137	成败未卜…	━━━ Gains ━━━
+CODE_ACTION_HINT_FORMATTER_7D295E9E17	━━━ 产出 ━━━	• %s will increase
+CODE_ACTION_HINT_FORMATTER_92A049E66F	• %s 将会增加	Trade verse for renown
+CODE_ACTION_HINT_FORMATTER_A7B388A324	以诗换名	━━━ Risks ━━━
+CODE_ACTION_HINT_FORMATTER_AED2FEF5AE	━━━ 风险 ━━━	Slim
+CODE_ACTION_HINT_FORMATTER_B3A5CEA754	渺茫	• Extra time cost: %d day(s) (repeat action, cost +20%%)
+CODE_ACTION_HINT_FORMATTER_BA06578EC5	• 额外耗时 %d 天（重复行动，消耗增加20%%）	(No description)
+CODE_ACTION_HINT_FORMATTER_BF10FD5886	（无叙述）	━━━ Feasibility ━━━
+CODE_ACTION_HINT_FORMATTER_C5ECC3C43D	━━━ 可行性 ━━━	━━━ Costs ━━━
+CODE_ACTION_HINT_FORMATTER_C611D44ACD	━━━ 耗费 ━━━	Will be forcibly interrupted
+CODE_ACTION_HINT_FORMATTER_C7E5FDA3A3	将被迫中断	Consequences unknown…
+CODE_ACTION_HINT_FORMATTER_CONSEQ_UNKNOWN	后果难料…	Poem Visit
+CODE_ACTION_HINT_FORMATTER_D00FB77ACE	携诗拜谒	(No data)
+CODE_ACTION_HINT_FORMATTER_D8D33EAD9A	（无数据）	Probability: %d%%
+CODE_ACTION_HINT_FORMATTER_E18ED459F1	概率: %d%%	• %s will increase (repeat action, effect -20%%)
+CODE_ACTION_HINT_FORMATTER_E90E20838E	• %s 将会增加（重复行动，效果减少20%%）	Will have adverse consequences
+CODE_ACTION_HINT_FORMATTER_E9186A064E	将有不良后果	Half
+CODE_ACTION_HINT_FORMATTER_F30071FA50	半	Uncertain outcome…
+CODE_ACTION_HINT_FORMATTER_OUTCOME_UNKNOWN	成败未卜…	Exceeds current available action slots
+CODE_ACTION_MANAGER_0E03C08950	超过当前可用行动数量	「%s」insufficient — have %d, need %d
+CODE_ACTION_MANAGER_14BEE7594A	「%s」不足，当前%d，需要%d	Time is sufficient (%d day(s) remaining, need %s)
+CODE_ACTION_MANAGER_1E3F359752	时间充足（剩余%d天，需要%s）	%d day(s) (+%d, due to %s)
+CODE_ACTION_MANAGER_27122C05D7	%d天（+%d, 由于 %s）	%s (%d xun)
+CODE_ACTION_MANAGER_302B5DE297	%s(%d旬)	Reserved slots are full
+CODE_ACTION_MANAGER_3BB5410E85	预留席位已满	%d day(s) remain, but this action requires %s
+CODE_ACTION_MANAGER_4267E5ADD3	时间剩余%d天，但这项行动需要%s	%d day(s)
+CODE_ACTION_MANAGER_4A67FE38B4	%d天	%s (%s xun)
+CODE_ACTION_MANAGER_54213AACF4	%s(%s旬)	%s → %d xun
+CODE_ACTION_MANAGER_5576EB8849	%s→%d旬	Duplicate booking
+CODE_ACTION_MANAGER_C1939F32EF	重复预定	「%s」sufficient (currently %d)
+CODE_ACTION_MANAGER_D16BFC8474	「%s」充足（当前%d）	Dead end — try a different approach
+CODE_ACTION_MANAGER_E29F84E3C5	此路不通，换个主意吧	Conditions met
+CODE_ACTION_MANAGER_F5B23A5C5F	条件满足	When performing 「%s」
+CODE_ACTION_MATCH_REQUIREMENT_C6CF49304D	当执行「%s」时	Obtained a referral letter from 「%s」
+CODE_ADD_RANDOM_INTRO_OPERATOR_6C288E2BB4	获得了「%s」的引荐信	Add referral letter to context[%s]
+CODE_ADD_RANDOM_INTRO_OPERATOR_7C0C7B5038	添加引荐信给 context[%s]	Randomly obtain a referral letter from someone
+CODE_ADD_RANDOM_INTRO_OPERATOR_D093C7C50C	随机获得某人的引荐信	Probe for intel in dark alleys — may acquire leverage on someone
+CODE_ADD_RANDOM_LEVERAGE_OPERATOR_0108716880	在暗巷中打探消息，或可获知他人把柄	
