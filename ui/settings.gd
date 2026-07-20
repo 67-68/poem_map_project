@@ -6,6 +6,7 @@ extends PanelContainer
 ## 2. 语言切换（LinkButton toggled → TranslationServer.set_locale + GameSave.data.locale）
 
 @onready var _music_slider: HSlider = $VBoxContainer/HSlider
+@onready var _music_label: Label = $VBoxContainer/Label3
 @onready var _btn_zh: LinkButton = $VBoxContainer/HBoxContainer/LinkButton2
 @onready var _btn_en: LinkButton = $VBoxContainer/HBoxContainer/LinkButton3
 
@@ -24,6 +25,9 @@ func _ready() -> void:
 		else:
 			Logging.err("Settings: GameSave 或 GameSave.data 不可用，滑块使用默认值 30")
 			_music_slider.value = 30.0
+
+		# 初始化 label 显示当前音量
+		_update_music_label(_music_slider.value)
 
 		_music_slider.value_changed.connect(_on_music_volume_changed)
 		Logging.info("Settings: 音量滑块 value_changed 信号已连接")
@@ -61,6 +65,21 @@ func _on_music_volume_changed(value: float) -> void:
 	var ratio: float = clampf(value / 100.0, 0.0, 1.0)
 	GameSave.data.music_volume_ratio = ratio
 	Logging.info("Settings: music_volume_ratio 已更新 → %.2f (slider=%.0f)" % [ratio, value])
+
+	# 同步更新音量说明 label
+	_update_music_label(value)
+
+
+## 更新 Label3 显示当前音量百分比，通过 tr("UI_SETTING_MUSIC") 做 i18n
+## 翻译 key 格式：UI_SETTING_MUSIC = "音量: %d%%" / "Music: %d%%"
+func _update_music_label(slider_value: float) -> void:
+	if not _music_label:
+		Logging.err("Settings: _music_label 引用为空，无法更新音量文本")
+		return
+
+	var pct: int = int(slider_value)
+	_music_label.text = tr("UI_SETTING_MUSIC") % pct
+	Logging.info("Settings: 音量 label 已更新 → '%s'" % _music_label.text)
 
 
 # ═══════════════════════════════════════════════

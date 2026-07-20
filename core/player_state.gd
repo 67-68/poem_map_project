@@ -50,6 +50,8 @@ const _TierDeterminer = preload("res://core/tier_determiner.gd")
 	get: return GameSave.data.current_action_tags
 	set(val): GameSave.data.current_action_tags = val
 
+@export var persistant_tags
+
 @export var created_poems: Array = []:
 	get: return GameSave.data.created_poems
 	set(val): GameSave.data.created_poems = val
