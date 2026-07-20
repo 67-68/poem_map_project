@@ -98,9 +98,12 @@ func _populate_label_texts() -> void:
 	if not GameState.drained_resource_type.is_empty():
 		Logging.info('TombstoneScreen._populate_label_texts: drained_resource_type=%s' % GameState.drained_resource_type)
 
-	# TimeActionRank / SpecificResource / MidwareProduct / History / PoemAssessment
-	# 保持 tscn 内的占位文本。后续由玩家数据管道（PlayerObserver）填入实际内容。
-	Logging.info('TombstoneScreen._populate_label_texts: done — remaining labels use tscn placeholders')
+	_populate_time_action_rank()
+	_populate_specific_resource()
+	_populate_midware_product()
+	_populate_history()
+	_populate_poem_assessment()
+	Logging.info('TombstoneScreen._populate_label_texts: done — all 5 data labels populated from PlayerObserver')
 
 
 # ════════════════════════════════════════════════════════════════
@@ -314,3 +317,312 @@ func _on_button_pressed() -> void:
 func _on_return_to_main_menu() -> void:
 	Logging.info('TombstoneScreen: return_to_main_menu signal received, returning to main menu')
 	get_tree().change_scene_to_file("res://main_menu.tscn")
+
+
+# ════════════════════════════════════════════════════════════════
+# 数据填充 — 五个 label 从 PlayerObserver 读取
+# ════════════════════════════════════════════════════════════════
+
+const DAYS_PER_YEAR_TOMB: int = 360
+const START_YEAR_TOMB: int = 745
+
+func _populate_time_action_rank() -> void:
+	var consumption: Dictionary = PlayerObserver.get_all_consumption()
+	if consumption.is_empty():
+		Logging.info('TombstoneScreen._populate_time_action_rank: consumption_by_identity 为空, 保留 tscn 占位')
+		return
+
+	var ranked: Array = []
+	for identity in consumption:
+		var bucket: Dictionary = consumption[identity]
+		var time_spent: int = bucket.get("time", 0)
+		if time_spent <= 0:
+			continue
+		ranked.append({"identity": identity, "time": time_spent, "bucket": bucket})
+
+	if ranked.is_empty():
+		Logging.info('TombstoneScreen._populate_time_action_rank: 无 time 消耗记录, 保留 tscn 占位')
+		return
+
+	ranked.sort_custom(func(a, b): return a["time"] > b["time"])
+
+	var total_time: int = 0
+	for item in ranked:
+		total_time += item["time"]
+
+	var top_items: Array = []
+	var rest_total_time: int = 0
+	var rest_total_money: int = 0
+	var rest_total_health: int = 0
+	var rest_count: int = 0
+	for i in range(ranked.size()):
+		if i < 2:
+			top_items.append(ranked[i])
+		else:
+			var item = ranked[i]
+			rest_total_time += item["time"]
+			rest_total_money += item["bucket"].get("money", 0)
+			rest_total_health += item["bucket"].get("health", 0)
+			rest_count += 1
+
+	var parts: Array[String] = []
+	for i in range(top_items.size()):
+		var item = top_items[i]
+		var pct: int = int(float(item["time"]) / float(total_time) * 100.0)
+		var name_str: String = _resolve_identity_name(item["identity"])
+		var bucket: Dictionary = item["bucket"]
+		var other_resources: Array[String] = []
+		for prop_name in bucket:
+			if prop_name == "time":
+				continue
+			other_resources.append("%d%s" % [bucket[prop_name], _prop_display_name(prop_name)])
+		var other_str := ""
+		if not other_resources.is_empty():
+			other_str = "（" + "、".join(other_resources) + "）"
+		if i == 0:
+			parts.append("你花了%d%%的时间" % pct + other_str + "在【%s】上。" % name_str)
+		else:
+			parts.append("其次为【%s】，占%d%%的时间" % [name_str, pct] + other_str + "。")
+
+	if rest_count > 0:
+		var rest_pct: int = int(float(rest_total_time) / float(total_time) * 100.0)
+		var rest_extra: Array[String] = []
+		if rest_total_money > 0:
+			rest_extra.append("%d钱" % rest_total_money)
+		if rest_total_health > 0:
+			rest_extra.append("%d健康" % rest_total_health)
+		var rest_extra_str := ""
+		if not rest_extra.is_empty():
+			rest_extra_str = "，共消耗" + "、".join(rest_extra)
+		parts.append("其余%d个行动用了%d%%的时间%s。" % [rest_count, rest_pct, rest_extra_str])
+
+	time_action_rank_label.text = "".join(parts)
+	Logging.info('TombstoneScreen._populate_time_action_rank: %s' % time_action_rank_label.text)
+
+
+# ════════════════════════════════════════════════════════════════
+# SpecificResource — 指定资源消耗分析 + 风味文本
+# ════════════════════════════════════════════════════════════════
+
+const PROP_FLAVOR_TEXT: Dictionary = {
+	"health": "气血乃人之根本。过度消耗健康意味着身体被掏空——「正气存内，邪不可干」，体虚则百病丛生。",
+	"money": "钱财如水，流去复来。散尽千金，不过换来几场醉。",
+	"prestige": "声誉是士人的第二生命。声望耗尽，纵有满腹经纶，亦无人问津。",
+	"talent": "才华耗尽如灯油枯竭。江郎亦有才尽之时，何况凡人。",
+	"time": "光阴似箭，日月如梭。你把最好的年华，都付与了这些事。",
+	"progress": "功名路上，进寸退尺。消耗的进度，是你再也回不去的雄心。",
+	"astuteness": "洞察人心耗费心神。城府越深，负担越重。",
+	"composure": "泰山崩于前而色不变？一次两次可以，多了谁都扛不住。",
+	"inspiration": "灵感如朝露，转瞬即逝。消耗的每一分兴，都是你与缪斯女神的赌注。",
+	"momentum": "势如破竹，亦如退潮。消耗气势，如同逆水行舟。",
+}
+
+
+func _populate_specific_resource() -> void:
+	var prop_name: String = GameState.drained_resource_type
+	if prop_name.is_empty():
+		Logging.info('TombstoneScreen._populate_specific_resource: drained_resource_type 为空, 保留 tscn 占位')
+		return
+
+	var consumption: Dictionary = PlayerObserver.get_all_consumption()
+	if consumption.is_empty():
+		Logging.info('TombstoneScreen._populate_specific_resource: consumption_by_identity 为空, 保留 tscn 占位')
+		return
+
+	var ranked: Array = []
+	for identity in consumption:
+		var bucket: Dictionary = consumption[identity]
+		var amount: int = bucket.get(prop_name, 0)
+		if amount <= 0:
+			continue
+		ranked.append({"identity": identity, "amount": amount})
+
+	if ranked.is_empty():
+		Logging.info('TombstoneScreen._populate_specific_resource: 无 identity 消耗了 %s, 保留 tscn 占位' % prop_name)
+		return
+
+	ranked.sort_custom(func(a, b): return a["amount"] > b["amount"])
+
+	var total_amount: int = 0
+	for item in ranked:
+		total_amount += item["amount"]
+
+	var prop_display: String = _prop_display_name(prop_name)
+	var parts: Array[String] = []
+
+	var rest_amount: int = 0
+	for i in range(ranked.size()):
+		if i < 2:
+			var item = ranked[i]
+			var name_str: String = _resolve_identity_name(item["identity"])
+			parts.append("你用了%d%s在【%s】。" % [item["amount"], prop_display, name_str])
+		else:
+			rest_amount += ranked[i]["amount"]
+
+	if rest_amount > 0:
+		parts.append("另外%d%s花在了其他事情上。" % [rest_amount, prop_display])
+
+	var flavor: String = PROP_FLAVOR_TEXT.get(prop_name, "")
+	if not flavor.is_empty():
+		parts.append(flavor)
+
+	specific_resource_label.text = "".join(parts)
+	Logging.info('TombstoneScreen._populate_specific_resource: %s' % specific_resource_label.text)
+
+
+# ════════════════════════════════════════════════════════════════
+# MidwareProduct — 产出统计
+# ════════════════════════════════════════════════════════════════
+
+func _populate_midware_product() -> void:
+	var poems_count: int = PlayerObserver.get_accumulator("poems_created")
+	var friends_count: int = PlayerObserver.get_accumulator("friends_made")
+	var ideas_count: int = PlayerObserver.get_accumulator("ideas_accepted")
+
+	if poems_count == 0 and friends_count == 0 and ideas_count == 0:
+		Logging.info('TombstoneScreen._populate_midware_product: 三项产出均为 0, 保留 tscn 占位')
+		return
+
+	var parts: Array[String] = []
+	if poems_count > 0:
+		parts.append("你创作了%d首诗词" % poems_count)
+	if friends_count > 0:
+		parts.append("结交了%d个人" % friends_count)
+	if ideas_count > 0:
+		parts.append("接受了%d个理念" % ideas_count)
+
+	midware_product_label.text = "，".join(parts) + "。"
+	Logging.info('TombstoneScreen._populate_midware_product: %s' % midware_product_label.text)
+
+
+# ════════════════════════════════════════════════════════════════
+# History — 里程碑 + 历史事件
+# ════════════════════════════════════════════════════════════════
+
+static func _days_to_date_string(total_days: int) -> String:
+	var year: int = START_YEAR_TOMB + total_days / DAYS_PER_YEAR_TOMB
+	var day_of_year: int = total_days % DAYS_PER_YEAR_TOMB
+	var month: int = day_of_year / 30 + 1
+	var day: int = day_of_year % 30 + 1
+	return "%d.%d.%d" % [year, month, day]
+
+
+func _populate_history() -> void:
+	var lines: Array[String] = []
+
+	# ── 来源 1: 已达成里程碑 ──
+	var milestones: Dictionary = PlayerObserver.get_achieved_milestones()
+	var milestone_map: Dictionary = {}
+	var config_file := FileAccess.open("res://core/milestones_config.json", FileAccess.READ)
+	if config_file:
+		var content := config_file.get_as_text()
+		config_file.close()
+		var parsed = JSON.parse_string(content)
+		if parsed and parsed is Dictionary:
+			for entry in parsed.get("milestones", []):
+				if entry is Dictionary:
+					milestone_map[entry.get("key", "")] = entry
+
+	for milestone_key in milestones:
+		var data: Dictionary = milestones[milestone_key]
+		var achieved_day: int = data.get("achieved_at_day", 0)
+		var date_str: String = _days_to_date_string(achieved_day)
+		var config: Dictionary = milestone_map.get(milestone_key, {})
+		var desc: String = config.get("desc", milestone_key)
+		var threshold: int = int(config.get("threshold", 0))
+
+		if threshold <= 1:
+			lines.append("%s，你第一次%s。" % [date_str, desc])
+		else:
+			lines.append("%s，你%s。" % [date_str, desc])
+
+	if lines.size() > 0:
+		lines.sort()
+
+	# ── 来源 2: 历史事件 ──
+	var all_history: Dictionary = Database.get_history_events_all()
+	if not all_history.is_empty():
+		if lines.size() > 0:
+			lines.append("")
+		var history_items: Array = []
+		for uuid in all_history:
+			var event: HistoryEvent = all_history[uuid] as HistoryEvent
+			if not event:
+				continue
+			var date_str: String = _days_to_date_string(int(event.target_year * 360.0))
+			var event_name: String = tr(event.name) if not event.name.is_empty() else uuid
+			history_items.append("%s，%s" % [date_str, event_name])
+		if history_items.size() > 0:
+			history_items.sort()
+			lines.append_array(history_items)
+
+	if lines.is_empty():
+		Logging.info('TombstoneScreen._populate_history: 无里程碑也无历史事件, 保留 tscn 占位')
+		return
+
+	history_label.text = "\n".join(lines)
+	Logging.info('TombstoneScreen._populate_history: %d lines' % lines.size())
+
+
+# ════════════════════════════════════════════════════════════════
+# PoemAssessment — 诗风评价
+# ════════════════════════════════════════════════════════════════
+
+const STANCE_ZHUOLIU := "actor:poem:stance:zhuoliu"
+const STANCE_QINGLIU := "actor:poem:stance:qingliu"
+const STANCE_NEUTRAL := "actor:poem:stance:neutral"
+
+const POEM_ASSESSMENT_MAP: Dictionary = {
+	"none": "你一生未曾留下诗篇。在这个以诗为魂的时代，你是一个沉默的过客。",
+	"zhuoliu": "浊流诗人——你的笔下尽是家国天下的沉重，与功名尘世的挣扎。在长安诗坛，你是那个不肯向现实低头的倔强者。",
+	"qingliu": "清流诗人——你的诗是山间的风，是花间的酒，是月下的独白。世人说你不问世事，可你的自由，恰是最大的反叛。",
+	"mixed": "你的诗如人——一半清流，一半浊流。既有优游的洒脱，亦有兼济的沉郁。在旁人眼中，你就是盛唐千百面容中，最复杂的那一张。",
+}
+
+
+func _populate_poem_assessment() -> void:
+	var tags: Array[String] = PlayerState.persistant_tags
+	var has_zhuoliu: bool = tags.has(STANCE_ZHUOLIU)
+	var has_qingliu: bool = tags.has(STANCE_QINGLIU)
+	var has_neutral: bool = tags.has(STANCE_NEUTRAL)
+
+	var key: String
+	if has_zhuoliu and has_qingliu:
+		key = "mixed"
+	elif has_zhuoliu:
+		key = "zhuoliu"
+	elif has_qingliu:
+		key = "qingliu"
+	elif has_neutral:
+		key = "mixed"
+	else:
+		key = "none"
+
+	var text: String = POEM_ASSESSMENT_MAP.get(key, "")
+	if text.is_empty():
+		Logging.info('TombstoneScreen._populate_poem_assessment: 未知 stance key=%s, 保留 tscn 占位' % key)
+		return
+
+	poem_assessment_label.text = text
+	Logging.info('TombstoneScreen._populate_poem_assessment: key=%s text=%s' % [key, text])
+
+
+# ════════════════════════════════════════════════════════════════
+# 辅助函数
+# ════════════════════════════════════════════════════════════════
+
+func _resolve_identity_name(identity: String) -> String:
+	var action: Action = Database.get_action(identity) as Action
+	if action and not action.name.is_empty():
+		return tr(action.name)
+	Logging.info('TombstoneScreen._resolve_identity_name: identity=%s 无法通过 Database 解析，使用原值' % identity)
+	return identity
+
+
+func _prop_display_name(prop_name: String) -> String:
+	var prop = Database.get_property(prop_name)
+	if prop:
+		var display = prop.get_display_name()
+		if not display.is_empty():
+			return display
+	return prop_name
