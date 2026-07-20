@@ -346,8 +346,37 @@ func death_judgement():
 	三层濒死兜底系统：
 	- flag_near_death_count < 3：自增计数器 + 强制续命 HEALTH=1
 	- flag_near_death_count >= 3：走死亡结算流程
+	
+	🆕 NPC 救助（一次性，优先级最高）：
+	- 若有 ≥ know_about 的 NPC 且尚未被救助过：50% 概率触发
+	- 随机选一名 NPC，恢复 xs_health_gain 健康，设 flag_npc_rescued_this_life=1
+	- 推送救援叙事事件后直接 return，不进入后续濒死/死亡流程
 	"""
 	if PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) <= 0:
+		# 🆕 NPC 救助判定（一次性，优先于濒死兜底）
+		var rescued_flag: int = int(PlayerState.get_flag("flag_npc_rescued_this_life") or 0)
+		Logging.info('[SurvivalManager] death_judgement: flag_npc_rescued_this_life=%d' % rescued_flag)
+		if rescued_flag < 1:
+			var known_npcs: Array[String] = RelationFlagManager.get_known_targets()
+			var rescue_roll: float = randf()
+			Logging.info('[SurvivalManager] death_judgement: known_npcs=%s, rescue_roll=%.3f' % [str(known_npcs), rescue_roll])
+			if not known_npcs.is_empty() and rescue_roll < 0.5:
+				var rescuer_tag: String = known_npcs[randi() % known_npcs.size()]
+				var rescuer_name: String = tr("CHAR_NAME_%s" % rescuer_tag.to_upper())
+				var health_gain: int = _NamedDSLParser._load_named_amounts().get("xs_health_gain", 5)
+				var current_health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
+				var new_health: int = current_health + health_gain
+				force_set_prop(ENUMS.PROPS.HEALTH, new_health)
+				PlayerState.set_flag("flag_npc_rescued_this_life", 1, "int")
+				Logging.info('[SurvivalManager] NPC救助触发: %s, health %d→%d, flag_npc_rescued_this_life=1' % [rescuer_name, current_health, new_health])
+				EventBus.push_event.emit("event_npc_rescue_survival", {
+					"rescuer_name": rescuer_name,
+					"rescuer_tag": rescuer_tag
+				})
+				return
+			else:
+				Logging.info('[SurvivalManager] death_judgement: NPC救助未触发 (known=%d, rescue_roll=%.3f)' % [known_npcs.size(), rescue_roll])
+		# ── 现有濒死兜底逻辑（未获 NPC 救助时继续） ──
 		if GameState.current_era == "755_backhome":
 			var count = PlayerState.get_flag("flag_near_death_count")
 			breakpoint
@@ -538,6 +567,8 @@ func _post_xun_money_deduct():
 		OperatorFactory.create_event_operator('event_money_lower_0_innkeeper').operate()
 
 func _ready():
+	# 🆕 注册 NPC 救助一次性 virtual flag
+	PlayerState.register_virtual_flag("flag_npc_rescued_this_life", "int")
 	TimeService.on_xun_tick.connect(_process_single_xun_settlement)
 	# 实时监听健康变化，立即同步 AP trait 并判定死亡（不等下一旬）
 	PlayerState.player_stat_changed.connect(func(prop_name: String):

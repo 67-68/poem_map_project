@@ -103,6 +103,47 @@ for 势/兴/望:
 - **选项**：单选项「咬牙撑过去」→ `HEALTH -20`
 - **设计意图**：旬末大额扣费后才检测，而非日常小额扣费时触发。没钱了没有选择权，强制叙事 + 健康惩罚。
 
+## 🆕 NPC 濒死救助
+
+### 触发条件
+
+在 [`death_judgement()`](core/survival_manager.gd:344) 中，当 `health ≤ 0` 时，**优先于现有三层濒死兜底系统**，按以下条件判定：
+
+1. `flag_npc_rescued_this_life < 1`（尚未被救助过，一次性）
+2. 存在 `person_state ≥ "know_about"` 的 NPC（通过 [`RelationFlagManager.get_known_targets()`](core/relation_flag_manager.gd:361) 查询）
+3. 50% 随机概率（`randf() < 0.5`）
+
+### 救助效果
+
+| 步骤 | 操作 | 说明 |
+|------|------|------|
+| 1 | 随机选一名已知 NPC | `known_npcs[randi() % known_npcs.size()]` |
+| 2 | `force_set_prop(HEALTH, current + xs_health_gain)` | 恢复 5 点健康（`xs_health_gain = 5`） |
+| 3 | `set_flag("flag_npc_rescued_this_life", 1, "int")` | 标记已救助，下次濒死直接跳过 |
+| 4 | `EventBus.push_event("event_npc_rescue_survival", {...})` | 推送救援叙事事件到纸带栈 |
+| 5 | `return` | **提前退出**，不进入后续濒死兜底/死亡逻辑 |
+
+### 事件
+
+- **uuid**：`event_npc_rescue_survival`
+- **文件**：[`data/3_actions_pool/decided_events/event_npc_rescue_survival.tres`](data/3_actions_pool/decided_events/event_npc_rescue_survival.tres)
+- **标题**：`{rescuer_name}相救` — 通过 [`Util.tr_and_resolve()`](core/util.gd:399) 从 context 动态插值 NPC 翻译名
+- **正文**：`在性命攸关之际，{rescuer_name}察觉到了你的近况，伸出了援手...`
+- **选项**：单选项「大恩不言谢」，无后果（heal 已在 `death_judgement()` 中同步完成）
+
+### 与旧濒死兜底的关系
+
+```
+health ≤ 0
+  ├─ 🆕 NPC 救助（flag_rescued < 1 且 50% 概率）→ heal + push_event → return
+  └─ 救助未触发 / 已救助过 → 现有三层濒死兜底（era=="755_backhome" 三次续命）
+       └─ count >= 3 或 非 backhome → scan_death_events()
+```
+
+### 设计意图
+
+给玩家一次「人情」的体验——泛泛之交在危难时刻伸出援手，体现唐代士人之间的江湖情谊。但只有一次机会（`flag_npc_rescued_this_life`），避免无限续命。50% 概率增加不确定性，不是每次濒死都有人救。
+
 ## 关键机制
 
 ### 延迟扣除 (call_deferred)

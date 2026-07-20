@@ -73,7 +73,7 @@ func append_event_entry(event: BaseEvent, all_options: Array, context: Dictionar
 	var option_btns: Control = entry.get_node("MarginContainer/VBox/OptionBtns")
 
 	# 填充内容
-	title_label.text = event.name
+	title_label.text = Util.tr_and_resolve(event.name, context, event)
 	content_label.text = Util.tr_and_resolve(event.description, context, event)
 	if not event.ui_decl or event.ui_decl.example.is_empty():
 		example_label.hide()
@@ -434,7 +434,7 @@ func display_slow(event: BaseEvent, all_options: Array, context: Dictionary, fro
 
 	# Step 2: Phase 1 — Title 打字机
 	Logging.debug("EventUI.display_slow: Phase 1 — Title 打字机开始")
-	await _typewrite_phase(title_label, event.name, type_speed)
+	await _typewrite_phase(title_label, Util.tr_and_resolve(event.name, context, event), type_speed)
 	scroll_to_bottom()
 	Logging.debug("EventUI.display_slow: Phase 1 — Title 完成")
 
