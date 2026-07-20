@@ -47,6 +47,33 @@ SurvivalManager (health=0)
        └── PoemAssessment label（poem_accessment，未实现）
 ```
 
+## 打字机展示流程
+
+TombStoneScreen 从 `_ready()` 开始执行从上到下的逐 label 打字机序列：
+
+```
+_hide_all_typewriter_labels()           # 隐藏所有打字机 label + 按钮
+title_hbox visible=true                 # 标题行直接显示
+history_title_label visible=true        # "观测记录" 直接显示
+but_label visible=true                  # 过渡语直接显示
+
+_typewrite_sequence():
+  1. Reason           (visible → 逐字打字)
+  2. Judgement        (visible → 逐字打字)
+  3. TimeActionRank   (visible → 逐字打字)
+  4. SpecificResource (visible → 逐字打字)
+  5. MidwareProduct   (visible → 逐字打字)
+  6. History          (visible → 逐字打字)
+  7. SubViewport      (visible → 所有 RichTextLabel 并行 visible_characters Tween)
+  8. PoemAssessment   (visible → 逐字打字)
+  9. exit_button      (visible → 退出按钮出现)
+```
+
+- **Label 打字机**：预填充全文 → `await process_frame` → 锁定 `custom_minimum_size.y` → 清空 → 逐字 `full_text.left(i+1)` + Timer
+- **诗词并行**：SubViewport 内所有 `RichTextLabel` 设 `visible_characters=0` → 创建并行 Tween → 同时动画到各自全长
+- **速度**：Label 打字 `TYPE_SPEED=0.04` 秒/字，诗词 Tween 总时长 `POEM_TWEEN_DURATION=2.0` 秒
+- **无跳过**：玩家必须观看完整打字机序列，不支持点击跳过
+
 ## DeathEvent .tres 文件格式
 
 参见 [`ui/tomb_stone_screen.tscn`](ui/tomb_stone_screen.tscn) 顶部注释块。

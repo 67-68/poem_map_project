@@ -30,6 +30,8 @@ var death_tutorial: String:
 	get: return GameSave.data.death_tutorial
 	set(val): GameSave.data.death_tutorial = val
 
+var drained_resource_type: String = ''
+
 ## year — 由 TimeService 驱动写入
 var year: float:
 	get: return GameSave.data.year

@@ -166,3 +166,9 @@ func get_all_action_results() -> Array:
 	
 	Logging.warn("Action.get_all_action_results: success archetype '%s' 未找到或 operators 为空" % archetype_uuid)
 	return action_results if action_results else []
+
+@export_enum(
+	"social",
+	"poem",
+	"baiye",
+) var topic: String = ""

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dlm6ll2vhtvid" path="res://ui/tomb_stone_screen.gd" id="1_x36lu"]
 [ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="2_ixp4g"]
 [ext_resource type="PackedScene" uid="uid://e67ava8t51mi" path="res://ui/final_poem_label.tscn" id="3_q03tq"]
+[ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="3_s1v7q"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="3_sfx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ixp4g"]
@@ -53,15 +54,18 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="ColorRect/M/H/V" unique_id=1568890216]
+[node name="PanelContainer" type="ScrollContainer" parent="ColorRect/M/H/V" unique_id=1141665463]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ixp4g")
+script = ExtResource("3_s1v7q")
+metadata/_custom_type_script = "uid://y5gl8aohf1ll"
 
 [node name="S" type="ScrollContainer" parent="ColorRect/M/H/V/PanelContainer" unique_id=833588340]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
 [node name="V" type="VBoxContainer" parent="ColorRect/M/H/V/PanelContainer/S" unique_id=2039564181]
 layout_mode = 2
@@ -92,7 +96,7 @@ size_flags_vertical = 4
 color = Color(0.7346415, 0, 0.15257874, 1)
 
 [node name="Reason" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=2075804236]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
 theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
@@ -101,7 +105,7 @@ horizontal_alignment = 1
 autowrap_mode = 1
 
 [node name="Judgement" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=2045779816]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
 theme_override_colors/font_color = Color(0.41406557, 0.4140659, 0.41406557, 1)
@@ -111,7 +115,7 @@ horizontal_alignment = 1
 autowrap_mode = 1
 
 [node name="TimeActionRank" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=362223132]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
@@ -121,7 +125,7 @@ horizontal_alignment = 1
 autowrap_mode = 1
 
 [node name="SpecificResource" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1656106889]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
@@ -131,7 +135,7 @@ horizontal_alignment = 1
 autowrap_mode = 1
 
 [node name="MidwareProduct" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1674077424]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
@@ -141,7 +145,7 @@ horizontal_alignment = 1
 autowrap_mode = 1
 
 [node name="HistoryTitle" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=486666227]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
 theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
@@ -150,7 +154,7 @@ horizontal_alignment = 1
 autowrap_mode = 1
 
 [node name="History" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=982428038]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
@@ -163,7 +167,7 @@ horizontal_alignment = 1
 autowrap_mode = 1
 
 [node name="BUT" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1465232680]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
 theme_override_colors/font_color = Color(0.5984546, 0.08194832, 4.813075e-08, 1)
@@ -179,13 +183,13 @@ layout_mode = 2
 disable_3d = true
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(512, 200)
+size = Vector2i(460, 200)
 render_target_update_mode = 4
 
 [node name="Label" parent="ColorRect/M/H/V/PanelContainer/S/V/SubViewportContainer/SubViewport" unique_id=889515066 instance=ExtResource("3_q03tq")]
 
 [node name="PoemAssessment" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1419490039]
-custom_minimum_size = Vector2(484, 0)
+custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_type_variation = &"DefaultText"
 theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
