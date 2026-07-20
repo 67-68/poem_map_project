@@ -36,7 +36,15 @@ SurvivalManager (health=0)
   → main.gd._on_game_over
   → 场景切换 → TombStoneScreen
        ├── 读取 GameState.death_reason → 头部宣判
-       └── 读取 GameState.death_tutorial → 评语区域
+       ├── 读取 GameState.death_tutorial → 评语区域
+       ├── _populate_poems(): 从 PlayerState.created_poems 取诗词
+       │     ├── 清空 SubViewport 现有子节点（placeholder label）
+       │     ├── 实例化 final_poem_label.tscn（RichTextLabel）
+       │     ├── .text = poem.name（poem extends Trait → GameEntity）
+       │     ├── 随机 position（约束在 viewport 512×200 边界内）
+       │     ├── 随机 self_modulate（RGB 随机 + alpha 0.70~0.95）
+       │     └── add_child 到 SubViewport（允许重叠，制造散落混乱感）
+       └── PoemAssessment label（poem_accessment，未实现）
 ```
 
 ## DeathEvent .tres 文件格式
