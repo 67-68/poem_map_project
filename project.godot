@@ -49,6 +49,7 @@ AnimationController="*res://core/animation_controller.gd"
 PlotController="*res://core/plot_controller.gd"
 TutorialController="*res://core/tutorial_controller.gd"
 VolatileState="*res://core/volatile_state.gd"
+PlayerObserver="*res://core/player_observer.gd"
 
 [debug]
 

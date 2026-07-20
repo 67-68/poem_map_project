@@ -63,12 +63,16 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 	ActionManager.begin_action_batch()
 	var _sub_cost_ops := sub_action.get_cost_operators() if sub_action and sub_action.has_method("get_cost_operators") else []
 	var _sub_cost_ctx: Dictionary = {}
+	var _sub_identity: String = selected_uuid
+	if sub_action and not sub_action.topic.is_empty():
+		_sub_identity = sub_action.topic
 	if not _sub_cost_ops.is_empty():
+		PlayerState.push_cost_context(_sub_identity)
 		_sub_cost_ctx["current_action"] = sub_action
 		for r in _sub_cost_ops:
 			if r and r.has_method("init"):
 				_sub_cost_ctx = r.init(_sub_cost_ctx)
-		Logging.info("SubActionExecutor.execute: sub-action '%s' cost archetype init (%d ops), ctx keys=%s" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size(), str(_sub_cost_ctx.keys())])
+		Logging.info("SubActionExecutor.execute: sub-action '%s' cost archetype init (%d ops), ctx keys=%s identity=%s" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size(), str(_sub_cost_ctx.keys()), _sub_identity])
 	
 	# ── Step 2: sub-action action_results.init()（合并 archetype universal_result DSL）──
 	var _sub_merged_results: Array = sub_action.get_all_action_results() if sub_action else []
@@ -101,7 +105,8 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 		for r in _sub_cost_ops:
 			if r:
 				r.operate()
-		Logging.info("SubActionExecutor.execute: sub-action '%s' cost archetype operate (%d ops) — outcome=%s" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size(), _sub_outcome])
+		PlayerState.pop_cost_context()
+		Logging.info("SubActionExecutor.execute: sub-action '%s' cost archetype operate (%d ops) — outcome=%s identity=%s" % [sub_action.name if sub_action else "NULL", _sub_cost_ops.size(), _sub_outcome, _sub_identity])
 	
 	# ── Step 5: 执行父 action 的 operators ──
 	for r in state.pending_results:

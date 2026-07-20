@@ -88,6 +88,11 @@ var last_event: Dictionary = {}
 ## 会话级析构队列（不可序列化）
 var session_deferred_cleanups: Array[BaseOperator] = []
 
+## 🆕 Cost Context 栈 — 资源消耗身份追踪
+## push/pop 由 MainActionButton 和 SubActionExecutor 在 cost 执行前后调用。
+## PlayerObserver 通过 get_current_cost_context() 读取栈顶身份。
+var _cost_context_stack: Array[String] = []
+
 ## Imaginary 定义表静态缓存
 var _imaginary_defs: Dictionary = {}
 
@@ -818,3 +823,34 @@ func flush_cleanups():
 
 	session_deferred_cleanups.clear()
 	Logging.info('flush_cleanups: all cleanups executed, queue cleared')
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 Cost Context 栈 — 资源消耗身份追踪
+# ════════════════════════════════════════════════════════════════
+
+## 入栈一个成本身份。MainActionButton / SubActionExecutor 在 cost 执行前调用。
+## @param identity: action uuid 或 topic ("social"/"poem"/"baiye")
+func push_cost_context(identity: String) -> void:
+	if identity.is_empty():
+		Logging.warn("[PlayerState] push_cost_context: identity 为空，拒绝入栈")
+		return
+	_cost_context_stack.append(identity)
+	Logging.info("[PlayerState] push_cost_context: identity='%s', 栈深度=%d" % [identity, _cost_context_stack.size()])
+
+
+## 出栈一个成本身份。cost 执行完毕后调用。
+func pop_cost_context() -> void:
+	if _cost_context_stack.is_empty():
+		Logging.warn("[PlayerState] pop_cost_context: 栈已空，无法出栈（可能 push/pop 不配对）")
+		return
+	var popped: String = _cost_context_stack.pop_back() as String
+	Logging.info("[PlayerState] pop_cost_context: identity='%s', 栈深度=%d" % [popped, _cost_context_stack.size()])
+
+
+## 读取栈顶的 cost 身份。栈空时返回空字符串。
+## PlayerObserver 消费此方法获取当前活跃身份。
+func get_current_cost_context() -> String:
+	if _cost_context_stack.is_empty():
+		return ""
+	return _cost_context_stack[-1]

@@ -35,12 +35,14 @@ func _on_clicked() -> void:
 	var _cost_ops := action.get_cost_operators() if action.has_method("get_cost_operators") else []
 	if not _cost_ops.is_empty():
 		var _cost_ctx: Dictionary = {}
+		PlayerState.push_cost_context(action.uuid)
 		for r in _cost_ops:
 			if r and r.has_method("init"):
 				_cost_ctx = r.init(_cost_ctx)
 		for r in _cost_ops:
 			if r:
 				r.operate()
+		PlayerState.pop_cost_context()
 		Logging.info("MainActionButton: 执行 cost archetype (%d ops) for '%s'" % [_cost_ops.size(), action.name])
 	ActionManager.end_action_batch()
 	
