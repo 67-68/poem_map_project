@@ -50,7 +50,9 @@ const _TierDeterminer = preload("res://core/tier_determiner.gd")
 	get: return GameSave.data.current_action_tags
 	set(val): GameSave.data.current_action_tags = val
 
-@export var persistant_tags
+@export var persistant_tags: Array[String] = []:
+	get: return GameSave.data.persistant_tags
+	set(val): GameSave.data.persistant_tags = val
 
 @export var created_poems: Array = []:
 	get: return GameSave.data.created_poems
@@ -126,6 +128,40 @@ func is_action_repeated(tags: Array[String]) -> bool:
 			return true
 	Logging.info("PlayerState.is_action_repeated: tags=%s 与 last_action_tags=%s 无交集 → 非重复" % [str(tags), str(last_action_tags)])
 	return false
+
+
+# ════════════════════════════════════════════════════════════════
+# persistant_tags — 持久化 tag 合并系统
+# 将当前所有 active traits 的 tags 去重汇合到 persistant_tags，
+# 供 ActionTagFilter 在 current_action_tags 之外合并使用。
+# ════════════════════════════════════════════════════════════════
+
+## 返回 persistant_tags + current_action_tags 的合并数组（去重）
+func get_all_action_tags() -> Array[String]:
+	var result: Array[String] = []
+	result.append_array(current_action_tags)
+	for tag in persistant_tags:
+		if not result.has(tag):
+			result.append(tag)
+	Logging.info("PlayerState.get_all_action_tags: transient=%d + persistant=%d → merged=%d" % [current_action_tags.size(), persistant_tags.size(), result.size()])
+	return result
+
+## 从当前所有 active traits 的 tags 字段去重重建 persistant_tags
+func _rebuild_persistant_tags():
+	var new_tags: Array[String] = []
+	for trait_uuid in traits:
+		var trait_res = Database.get_trait(trait_uuid)
+		if not trait_res:
+			Logging.warn("PlayerState._rebuild_persistant_tags: trait '%s' not found in Database, skipping" % trait_uuid)
+			continue
+		if not trait_res.tags or trait_res.tags.is_empty():
+			Logging.info("PlayerState._rebuild_persistant_tags: trait '%s' has no tags, skipping" % trait_uuid)
+			continue
+		for tag in trait_res.tags:
+			if not new_tags.has(tag):
+				new_tags.append(tag)
+	persistant_tags = new_tags
+	Logging.info("PlayerState._rebuild_persistant_tags: rebuilt from %d traits → %d persistant_tags: %s" % [traits.size(), persistant_tags.size(), str(persistant_tags)])
 
 
 # ════════════════════════════════════════════════════════════════
@@ -233,6 +269,7 @@ func _ready():
 	init_emotions()
 	init_props()
 	init_traits()
+	_rebuild_persistant_tags()
 	init_flags()
 	init_imaginaries()
 	init_npc_person_states()
@@ -558,6 +595,7 @@ func add_trait(trait_name):
 	if not traits.has(trait_name):
 		traits.append(trait_name)
 		Logging.info("PlayerState: add_trait '%s', total=%d" % [trait_name, traits.size()])
+		_rebuild_persistant_tags()
 	EventBus.on_trait_change.emit()
 
 func has_trait(trait_name):
@@ -580,6 +618,7 @@ func remove_trait(trait_name):
 	if traits.has(trait_name):
 		traits.erase(trait_name)
 		Logging.info("PlayerState: remove_trait '%s', total=%d" % [trait_name, traits.size()])
+		_rebuild_persistant_tags()
 	EventBus.on_trait_change.emit()
 
 func get_traits():

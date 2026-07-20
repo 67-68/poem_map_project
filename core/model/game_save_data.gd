@@ -70,6 +70,7 @@ var ambition_start_days: int = -1
 # 行动状态
 # ════════════════════════════════════════════════════════════════
 var current_action_tags: Array[String] = []
+var persistant_tags: Array[String] = []
 var last_action_tags: Array[String] = []
 
 # ════════════════════════════════════════════════════════════════
@@ -160,6 +161,7 @@ func to_dict() -> Dictionary:
 		"ambition_uuid": ambition_uuid,
 		"ambition_start_days": ambition_start_days,
 		"current_action_tags": current_action_tags.duplicate(),
+		"persistant_tags": persistant_tags.duplicate(),
 		"last_action_tags": last_action_tags.duplicate(),
 		"created_poem_uuids": _extract_uuids(created_poems),
 		"imaginary_uuids": imaginaries_detail.keys(),
@@ -198,6 +200,7 @@ func from_dict(d: Dictionary) -> void:
 	ambition_uuid = d.get("ambition_uuid", "")
 	ambition_start_days = d.get("ambition_start_days", -1)
 	current_action_tags = _safe_array_str(d, "current_action_tags")
+	persistant_tags = _safe_array_str(d, "persistant_tags")
 	last_action_tags = _safe_array_str(d, "last_action_tags")
 	# created_poems / imaginaries_detail 需要外部注入，from_dict 不处理 Resource
 	npc_relations = _safe_dict(d, "npc_relations")

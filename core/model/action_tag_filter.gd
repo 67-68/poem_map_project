@@ -2,7 +2,7 @@ class_name ActionTagFilter extends BaseEventPoolFilter
 
 static func filter(tickets: Array[EventTicket], _context: Dictionary) -> Array[EventTicket]:
 	var new_events = {}
-	var current_tags = PlayerState.current_action_tags
+	var current_tags = PlayerState.get_all_action_tags()
 	var main_tag = _context.get('main_tag', '')
 	var tag_match_mode: String = _context.get('tag_match_mode', 'any')
 
