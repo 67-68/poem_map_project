@@ -125,11 +125,15 @@ func operate():
 		prop_op.operate()
 
 	# ── 6. 消耗诗词 ──
-	PlayerState.remove_trait(poem.uuid)
-	Database.traits.erase(poem.uuid)
+	# 先删 created_poems 再 remove_trait：确保 TagManager._on_trait_change 统计时诗词已不在列表
 	var idx := PlayerState.created_poems.find(poem)
 	if idx != -1:
 		PlayerState.created_poems.remove_at(idx)
+		Logging.info("PoemRewardOperator: removed poem '%s' from created_poems (idx=%d)" % [poem.uuid, idx])
+	else:
+		Logging.warn("PoemRewardOperator: poem '%s' not found in created_poems" % poem.uuid)
+	PlayerState.remove_trait(poem.uuid)
+	Database.traits.erase(poem.uuid)
 
 	# ── 7. Show hint ──
 	if show_hint_on_reward:

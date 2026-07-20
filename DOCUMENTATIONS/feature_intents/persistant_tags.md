@@ -1,51 +1,94 @@
-# persistant_tags — Trait 持久化 Tag 参与事件匹配
+# persistant_tags — TagManager 持久化 Tag 管理
 
 ## 文件
-- `core/model/game_save_data.gd` — 新增 `persistant_tags: Array[String]` + to_dict/from_dict 序列化
-- `core/player_state.gd` — 新增 `persistant_tags` 属性（代理到 GameSave）、`get_all_action_tags()`、`_rebuild_persistant_tags()`，hook `add_trait`/`remove_trait`/`_ready`
-- `core/model/action_tag_filter.gd` — `current_action_tags` → `PlayerState.get_all_action_tags()`
+- `core/tag_manager.gd` — **新增** TagManager 类（RefCounted），负责 NPC 相识 tag + 诗风站队 tag 的增删
+- `core/player_state.gd` — `_ready()` 中实例化 TagManager → init → full_sync；`persistant_tags` / `_rebuild_persistant_tags()` 已有
+- `core/model/game_save_data.gd` — `persistant_tags: Array[String]` + to_dict/from_dict 序列化（已有）
+- `core/model/action_tag_filter.gd` — `current_action_tags` → `PlayerState.get_all_action_tags()`（已有）
+- `core/operators/poem_reward_operator.gd` — 先删 `created_poems` 再 `remove_trait`，确保 TagManager 统计时序正确
 
 ## 想要实现的效果
 
-当玩家拥有某个 trait 时，该 trait 的 `tags` 字段中的 tag 可以**持续参与**每次行动后的事件匹配（`ActionTagFilter.filter()`），不需要每次行动时重新注入。
+### 规则 1：NPC 相识 Tag
 
-### 典型用例
-- 玩家获得 `disease_dongshang_frostbite` → 该 trait 携带 tag `actor:status:disease:frostbite` → 此后每次事件扫描都会匹配到需要此 tag 的冻伤相关事件
-- 玩家失去此 trait → 该 tag 立即从匹配池中移除
+当玩家认识某个 NPC（`person_state` 进入 `know_about` / `inner_circle` / `blood_oath`）时，自动在 `persistant_tags` 中追加 `actor:npc:{target_tag}`。退回到 `not_meet` / `uncharted` 时自动移除。
+
+### 规则 2：诗风站队 Tag（三态互斥）
+
+每当 `created_poems` 变动（新增/删除诗词），统计 `Poem.intent` 的 `official`（干谒）vs `literary`（登高）数量：
+
+```
+official > literary  → "浊流诗人" tag: actor:poem:stance:zhuoliu
+literary > official  → "清流诗人" tag: actor:poem:stance:qingliu
+official == literary → "中立诗人" tag: actor:poem:stance:neutral
+无诗创作             → 删除所有 stance tag（不放任何 tag）
+```
+
+三态互斥：每次计算后先清除所有已有 stance tag，再放入当前对应的一个。
 
 ## 状态转换
 
 ```
-add_trait(trait_uuid)
-  → traits.append()
-  → _rebuild_persistant_tags()  # 遍历所有 traits → Database.get_trait().tags → 去重汇合
-  → on_trait_change
+NPC 相识:
+  RelationFlagManager.set_person_state(target, "know_about")
+    → EventBus.on_person_state_changed.emit(target, "know_about")
+    → TagManager._on_person_state_changed()
+    → persistant_tags 追加 actor:npc:{target}
 
-remove_trait(trait_uuid)
-  → traits.erase()
-  → _rebuild_persistant_tags()
-  → on_trait_change
+  退回 not_meet/uncharted:
+    → EventBus.on_person_state_changed.emit(target, "not_meet")
+    → TagManager._on_person_state_changed()
+    → persistant_tags 移除 actor:npc:{target}
 
-ActionTagFilter.filter()
-  → current_tags = PlayerState.get_all_action_tags()  # transient + persistant 去重合并
-  → 事件匹配 ...
-  → PlayerState.current_action_tags.clear()  # 只清 transient，persistant 不受影响
+诗风站队:
+  PoemCrafter._on_button_pressed()
+    → PlayerState.created_poems.append(poem)
+    → PlayerState.add_trait(poem.uuid)
+    → _rebuild_persistant_tags() (trait tags)
+    → EventBus.on_trait_change.emit()
+    → TagManager._on_trait_change()
+    → _sync_poem_stance() → 替换 stance tag
+
+  PoemRewardOperator.operate()
+    → PlayerState.created_poems.remove_at(idx)  ← 先删！
+    → PlayerState.remove_trait(poem.uuid)
+    → EventBus.on_trait_change.emit()
+    → TagManager._on_trait_change()
+    → _sync_poem_stance() → 重新计算 stance tag
+
+初始化 (PlayerState._ready):
+  init_npc_person_states()
+  → TagManager.new() → init() (connect signals) → full_sync()
+    → _sync_npc_tags()  — 遍历 RELATION_TARGET 补上已相识 NPC tag
+    → _sync_poem_stance() — 遍历 created_poems 计算 stance tag
 ```
 
 ## 技术架构
 
 ```
-persistant_tags (GameSave.data)  ← _rebuild_persistant_tags() 全量重建
-                                       ↑
-                              add_trait / remove_trait / _ready
+TagManager (RefCounted, 非 autoload)
+  │  init() ──→ connect EventBus.on_person_state_changed
+  │          ──→ connect EventBus.on_trait_change
+  │  full_sync() ──→ _sync_npc_tags() + _sync_poem_stance()
+  │
+  ├──_on_person_state_changed(target, state)
+  │     └→ persistant_tags += / -= actor:npc:{target}
+  │
+  └──_on_trait_change()
+        └→ _sync_poem_stance()
+             └→ 统计 Poem.intent → _replace_stance_tag()
 
-get_all_action_tags()  ←  合并 persistant_tags + current_action_tags
-        ↓
-ActionTagFilter.filter()
+persistant_tags (GameSave.data)  ← TagManager 增量/替换写入
+                                    ↑
+                          get_all_action_tags() 合并 persistant + transient
+                                    ↓
+                          ActionTagFilter.filter()
 ```
 
 ## 注意事项
-- `persistant_tags` 全量重建而非增量同步，避免脏数据。traits < 20，O(n) 开销可忽略。
-- `persistant_tags` 可持久化到存档，读档后自动恢复，但 `_ready` 中仍会重建确保一致性。
-- Trait 的 `tags` 字段继承自 `GameEntity`，目前 CSV 中 trait 没有 tags 列，管线已就绪，数据后续补。
-- `current_action_tags` 的 getter 保持不变（返回 GameSave 底层数组引用），确保 `.append()` / `.clear()` 语义不被破坏。
+- `TagManager` 为 `RefCounted` 非 autoload，由 `PlayerState._ready()` 实例化为局部变量，靠 EventBus 信号维持活性。
+- 全量同步（`full_sync`）仅在 `_ready` 时调用一次。后续所有更新通过信号驱动增量。
+- `PoemRewardOperator` 必须先删 `created_poems` 再调 `remove_trait`，否则 `on_trait_change` 信号触发时 TagManager 统计到已删除的诗词。
+- `init_npc_person_states()` 直接操作 `doc.person_state`，不经过 `RelationFlagManager.set_person_state()`，因此不发射 `on_person_state_changed`——必须靠 `full_sync()` 补上初始化时的 NPC tag。
+- stance tag 三态互斥使用「先全删再放入」策略，避免脏数据残留。
+- 所有 tag 遵循四段式 `domain:category:type:specific` 格式。

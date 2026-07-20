@@ -276,6 +276,12 @@ func _ready():
 	_load_imaginary_definitions()
 	_connect_imaginary_signals()
 	
+	# 🆕 TagManager：管理 persistant_tags 的 NPC 相识 + 诗风站队逻辑
+	var tag_mgr := TagManager.new()
+	tag_mgr.init()
+	tag_mgr.full_sync()
+	Logging.info("PlayerState._ready: TagManager initialized and full_sync complete")
+	
 	# 🆕 修饰符属性注册表初始化（城府/才华/定力 S型阻尼 → active_modifiers）
 	_ModifierPropRegistrar.initialize()
 	

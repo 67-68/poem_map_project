@@ -1,6 +1,155 @@
-class_name TagManager extends GDScript
+class_name TagManager extends RefCounted
+## TagManager — 管理 persistant_tags 的增删逻辑
+##
+## 两条规则（冥等/确定性映射）：
+## 1. NPC 相识：person_state 进入 know_about+ → 追加 actor:npc:{target}
+##    person_state 退回 not_meet/uncharted → 移除 actor:npc:{target}
+## 2. 诗风站队：created_poems 变动 → 统计 official vs literary 计数
+##    official > literary  → "浊流诗人" (actor:poem:stance:zhuoliu)
+##    literary > official  → "清流诗人" (actor:poem:stance:qingliu)
+##    official == literary → "中立诗人" (actor:poem:stance:neutral)
+##    无诗创作 → 删除所有 stance tag
+##
+## 生命周期：PlayerState._ready() 创建 → init() 连接信号 → full_sync() 全量同步
 
-static func get_tag(tag_id: String) -> Tag: # 解析tag_id获取tag对象，如果是旧时代的三段式就加个:general变成新时代的四段式
-    if ":" not in tag_id:
-        tag_id += ":general"
-    return Database.get_tag(tag_id)
+## 诗风 stance tag 三态映射
+const STANCE_TAGS := {
+	"zhuoliu": "actor:poem:stance:zhuoliu",
+	"qingliu": "actor:poem:stance:qingliu",
+	"neutral": "actor:poem:stance:neutral",
+}
+
+## 相识状态集合（触发 NPC tag 追加）
+const KNOWN_STATES := ["know_about", "inner_circle", "blood_oath"]
+
+## 已初始化标记（防止重复 connect）
+var _initialized: bool = false
+
+
+## 连接 EventBus 信号。幂等：重复调用无害。
+func init() -> void:
+	if _initialized:
+		Logging.warn("TagManager.init: already initialized, skipping duplicate connect")
+		return
+	EventBus.on_person_state_changed.connect(_on_person_state_changed)
+	EventBus.on_trait_change.connect(_on_trait_change)
+	_initialized = true
+	Logging.info("TagManager.init: connected on_person_state_changed + on_trait_change")
+
+
+## 全量同步：遍历所有 RELATION_TARGET + created_poems，重建 persistant_tags。
+## 仅在初始化（读档/新游戏 _ready）时调用一次。
+func full_sync() -> void:
+	Logging.info("TagManager.full_sync: starting — persistant_tags before: %s" % str(PlayerState.persistant_tags))
+	_sync_npc_tags()
+	_sync_poem_stance()
+	Logging.info("TagManager.full_sync: complete — persistant_tags after: %s" % str(PlayerState.persistant_tags))
+
+
+# ════════════════════════════════════════════════════════════════
+# 信号处理
+# ════════════════════════════════════════════════════════════════
+
+func _on_person_state_changed(target_tag: String, new_state: String) -> void:
+	Logging.info("TagManager._on_person_state_changed: target=%s, new_state=%s" % [target_tag, new_state])
+	var npc_tag := "actor:npc:" + target_tag
+
+	if new_state in KNOWN_STATES:
+		if not PlayerState.persistant_tags.has(npc_tag):
+			PlayerState.persistant_tags.append(npc_tag)
+			Logging.info("TagManager._on_person_state_changed: +%s → persistant_tags now %d tags" % [npc_tag, PlayerState.persistant_tags.size()])
+		else:
+			Logging.info("TagManager._on_person_state_changed: %s already present, skipping append" % npc_tag)
+	else:
+		if PlayerState.persistant_tags.has(npc_tag):
+			PlayerState.persistant_tags.erase(npc_tag)
+			Logging.info("TagManager._on_person_state_changed: -%s → persistant_tags now %d tags" % [npc_tag, PlayerState.persistant_tags.size()])
+		else:
+			Logging.info("TagManager._on_person_state_changed: %s not present, nothing to remove" % npc_tag)
+
+
+func _on_trait_change() -> void:
+	Logging.info("TagManager._on_trait_change: trait 变动，重新计算诗风 stance")
+	_sync_poem_stance()
+
+
+# ════════════════════════════════════════════════════════════════
+# 内部同步逻辑
+# ════════════════════════════════════════════════════════════════
+
+## 遍历所有 RELATION_TARGET，为已相识的 NPC 补/删 actor:npc:{target} tag
+func _sync_npc_tags() -> void:
+	var added := 0
+	var removed := 0
+
+	for target_enum_value in ENUMS.RELATION_TARGET.values():
+		var target_tag := ENUMS.to_relation_str(target_enum_value)
+		if target_tag.is_empty():
+			Logging.warn("TagManager._sync_npc_tags: 空 target_tag for enum_value=%d, skipping" % target_enum_value)
+			continue
+
+		var state := RelationFlagManager.get_person_state(target_tag)
+		var npc_tag := "actor:npc:" + target_tag
+
+		if state in KNOWN_STATES:
+			if not PlayerState.persistant_tags.has(npc_tag):
+				PlayerState.persistant_tags.append(npc_tag)
+				added += 1
+				Logging.info("TagManager._sync_npc_tags: +%s (state=%s)" % [npc_tag, state])
+		else:
+			if PlayerState.persistant_tags.has(npc_tag):
+				PlayerState.persistant_tags.erase(npc_tag)
+				removed += 1
+				Logging.info("TagManager._sync_npc_tags: -%s (state=%s)" % [npc_tag, state])
+
+	Logging.info("TagManager._sync_npc_tags: done — added=%d, removed=%d, total persistant=%d" % [added, removed, PlayerState.persistant_tags.size()])
+
+
+## 遍历 created_poems，统计 official vs literary 计数 → 替换 stance tag
+func _sync_poem_stance() -> void:
+	var official_count := 0
+	var literary_count := 0
+
+	for poem in PlayerState.created_poems:
+		if not poem is Poem:
+			Logging.info("TagManager._sync_poem_stance: non-Poem element in created_poems, skipping")
+			continue
+		match poem.intent:
+			"official":
+				official_count += 1
+			"literary":
+				literary_count += 1
+			_:
+				Logging.info("TagManager._sync_poem_stance: poem '%s' intent='%s' (empty or unknown), treated as neutral" % [poem.uuid, poem.intent])
+
+	var stance: String
+	if official_count == 0 and literary_count == 0:
+		stance = ""  # 无诗 → 不放任何 stance tag
+	elif official_count > literary_count:
+		stance = "zhuoliu"
+	elif literary_count > official_count:
+		stance = "qingliu"
+	else:
+		stance = "neutral"
+
+	Logging.info("TagManager._sync_poem_stance: official=%d, literary=%d → stance=%s" % [official_count, literary_count, stance])
+	_replace_stance_tag(stance)
+
+
+## 互斥替换：先清空所有 stance 族 tag，再放入当前 stance
+func _replace_stance_tag(new_stance: String) -> void:
+	# 1. 移除所有已有的 stance tag
+	for stance_key in STANCE_TAGS.values():
+		if PlayerState.persistant_tags.has(stance_key):
+			PlayerState.persistant_tags.erase(stance_key)
+			Logging.info("TagManager._replace_stance_tag: removed %s" % stance_key)
+
+	# 2. 无诗 → 不放任何 stance tag（已清空，直接返回）
+	if new_stance.is_empty():
+		Logging.info("TagManager._replace_stance_tag: 无诗创作，所有 stance tag 已清除")
+		return
+
+	# 3. 放入当前 stance
+	var new_tag: String = STANCE_TAGS[new_stance]
+	PlayerState.persistant_tags.append(new_tag)
+	Logging.info("TagManager._replace_stance_tag: added %s" % new_tag)
