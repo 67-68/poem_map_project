@@ -1,14 +1,14 @@
 # 诗词评分创作 — 功能意图
 
-**状态**: 🟢 已验证（V9.2: 创作代价 + 预览锁定 + 文学化评价）
+**状态**: 🟢 已验证（V10: mode→intent + 即时创作激励）
 
 ---
 
 ## 意图摘要（<200字）
 
-砍掉 V8 的 C(N,3) 食谱枚举。诗词创作改为线性评分制：根据 Imaginary 数量与等级打分，超出 `max_imaginary_managable` 的额外 Imaginary 每个扣 5 分。评分定基础等级（平庸/佳作/绝唱），再按比例概率升级。mode 硬赋值 secular/literary 值（干谒→64/0，登高→0/48）。所有参与计算的 Imaginary 全量消耗。
+砍掉 V8 的 C(N,3) 食谱枚举。诗词创作改为线性评分制：根据 Imaginary 数量与等级打分，超出 `max_imaginary_managable` 的额外 Imaginary 每个扣 5 分。评分定基础等级（平庸/佳作/绝唱），再按比例概率升级。所有参与计算的 Imaginary 全量消耗。
 
-**V9.2 新增**：创作消耗时间与健康的代价系统。分数越高创作越久、越伤身。代价通过 TimeOperator + PropertyOperator 执行，与 ActionHintBuilder 统一展示。
+**V9.2**：创作代价（时间+健康）。**V10**：mode 决定 poem.intent + 即时激励（登高→声望M档/干谒→金钱M档），预览绿色展示。
 
 ---
 
@@ -47,12 +47,16 @@ base_level < 3 时:
 
 例：score=40 → base_level=2 (佳作), upgrade_probability=(40-25)/(50-25)=0.60 → 60% 概率升绝唱。
 
-### mode → 值硬赋值
+### mode → intent + 即时激励 (V10)
 
-| Mode | secular_value | literary_value |
-|------|:------------:|:-------------:|
-| `gan_ye` (干谒权贵) | 64 | 0 |
-| `deng_gao` (登高抒怀) | 0 | 48 |
+| Mode | poem.intent | 即时奖励 (M档) | named_amounts |
+|:----:|:-----------:|:-------------:|:---:|
+| `gan_ye` (干谒权贵) | `official` | money (金钱) | `m_money_gain` = 30 |
+| `deng_gao` (登高抒怀) | `literary` | prestige (文学声望) | `m_prestige_gain` = 5 |
+
+**即时激励**在创作确认时通过 [`PropertyOperator`](core/model/property_operator.gd:1) 执行，与 [`PoemRewardOperator`](core/operators/poem_reward_operator.gd:1) 消费奖励是两层独立经济循环。
+
+预览时以绿色（`#66cc66`）展示在代价行之后。
 
 ### 纯函数契约
 
@@ -170,7 +174,7 @@ flowchart TD
 | 文件 | 改动 |
 |------|------|
 | [`core/poem_crafting_calculator.gd`](core/poem_crafting_calculator.gd:1) | **重写** (V9) — 纯函数评分 + 等级分 + 升级概率计算；**V9.2 新增** `calculate_crafting_cost(score)` 纯函数 |
-| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | **修改** (V9.2) — `_preview_current` 预览锁定 + 文学化三行评价 + 代价预览；`_on_button_pressed` 先代价后收益；Toggle 回调复用代价预览；`_build_cost_preview_lines()` 新增 |
+| [`ui/poem_crafter.gd`](ui/poem_crafter.gd:1) | **修改** (V10) — V9.2 代价系统 + `_preview_current` 预览锁定 + 文学化三行评价；V10 新增 `MODE_TO_INTENT` 映射 + `_build_mode_reward_operator()` + `_build_reward_preview_lines()` + poem.intent 赋值 + 即时激励执行 |
 | [`core/event_manager.gd`](core/event_manager.gd:1) | **新增方法** — `draw_from_event_base` 从指定 EventBase 抽事件 |
 | [`data/1_core_rules/events/poem_levels/eb_poem_level_1.json`](data/1_core_rules/events/poem_levels/eb_poem_level_1.json) | **新建** — 平庸事件库 |
 | [`data/1_core_rules/events/poem_levels/eb_poem_level_2.json`](data/1_core_rules/events/poem_levels/eb_poem_level_2.json) | **新建** — 佳作事件库 |

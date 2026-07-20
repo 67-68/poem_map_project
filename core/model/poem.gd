@@ -10,6 +10,7 @@ class_name Poem extends Trait
 
 @export var level: int = 1 # 1,2,3
 
+@export_enum('official','literary') var intent: String = '' # 拜谒或者普通
 
 func _init(p_topic: String = "POEM", p_specific: String = ""):
 	topic = p_topic

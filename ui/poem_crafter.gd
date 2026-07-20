@@ -40,8 +40,17 @@ var _cached_recipe_line: String = ""  ## V12: 配方匹配行文本（空 = 无�
 ## V9.2: 缓存创作代价 operators（切换 mode 时复用，代价与 mode 无关）
 var _cached_cost_operators: Array = []
 
+## 🆕 mode 即时奖励 operator（切换 mode 时重建，奖励与 mode 相关）
+var _cached_mode_reward_operator: PropertyOperator = null
+
 ## 🆕 创作诗词所需灵感（兴）消耗
 const POEM_CRAFT_INSPIRATION_COST := 20
+
+## mode → intent 映射
+const MODE_TO_INTENT := {
+	"gan_ye": "official",
+	"deng_gao": "literary",
+}
 
 ## ──────────────────────────────────────────────
 ## 文学化评价常量字典
@@ -130,10 +139,15 @@ func _on_toggle_gan_ye(pressed: bool) -> void:
 
 ## 仅刷新 RichTextLabel 的第三行（精力方向），前两行复用缓存的文本，不重算/不重随机
 ## V9.2: 代价行也复用缓存，代价与 mode 无关
+## V10: 奖励行按 current_mode 重建
 func _refresh_mode_display_only() -> void:
 	if _cached_result == null:
 		Logging.info('PoemCrafter(V9.2): _refresh_mode_display_only — 无缓存，跳过')
 		return
+
+	# 🔄 V10: 切换 mode 时重建奖励 operator
+	_cached_mode_reward_operator = _build_mode_reward_operator()
+	Logging.info('PoemCrafter(V10): _refresh_mode_display_only — 重建奖励 operator, mode=%s' % current_mode)
 
 	# V12: 配方行 + 行1/行2 复用 _preview_current 时缓存的文本，行3 按 current_mode 更新
 	var lines: Array[String] = []
@@ -150,8 +164,11 @@ func _refresh_mode_display_only() -> void:
 	# V9.2: 代价预览（从缓存 operators 重建，代价与 mode 无关）
 	lines.append_array(_build_cost_preview_lines())
 
+	# 🆕 V10: 奖励预览（按 current_mode 重建，绿色）
+	lines.append_array(_build_reward_preview_lines())
+
 	$InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
-	Logging.info('PoemCrafter(V9.2): _refresh_mode_display_only — 已更新, mode=%s, line1=%s' % [current_mode, _cached_line1_text])
+	Logging.info('PoemCrafter(V10): _refresh_mode_display_only — 已更新, mode=%s, line1=%s' % [current_mode, _cached_line1_text])
 
 
 # ──────────────────────────────────────────────
@@ -277,6 +294,10 @@ func _on_button_pressed() -> void:
 	var upgrade_succeeded: bool = _cached_upgrade_succeeded
 	Logging.info('PoemCrafter(V9.1): 从缓存读取 — final_level=%d (%s), upgrade=%s' % [final_level, PoemCraftingCalculator.new().get_level_display_name(final_level), upgrade_succeeded])
 
+	# 🆕 V10: 确定 intent（current_mode → official/literary）
+	var poem_intent: String = MODE_TO_INTENT.get(current_mode, "")
+	Logging.info('PoemCrafter(V10): intent = %s (mode=%s)' % [poem_intent, current_mode])
+
 	# ── 3. 创建 Poem 对象（V10: 不再绑定 secular/literary value，价值由 PoemRewardOperator 消费时决定） ──
 	# V12: 优先使用配方匹配数据，匹配失败则回退通用名
 	var level_display_name := PoemCraftingCalculator.new().get_level_display_name(final_level)
@@ -293,7 +314,8 @@ func _on_button_pressed() -> void:
 		poem.level = final_level
 		poem.specific_topic = matched.specific_topic
 		poem.required_fragments = matched.required_fragments.duplicate()
-		Logging.info('PoemCrafter(V12): Poem from recipe — uuid=%s, name=%s, level=%d, topic=%s, recipe_uuid=%s' % [poem.uuid, poem.name, poem.level, matched.specific_topic, matched.uuid])
+		poem.intent = poem_intent
+		Logging.info('PoemCrafter(V12): Poem from recipe — uuid=%s, name=%s, level=%d, topic=%s, intent=%s, recipe_uuid=%s' % [poem.uuid, poem.name, poem.level, matched.specific_topic, poem_intent, matched.uuid])
 	else:
 		# 无匹配配方 → 回退通用名
 		poem = Poem.new("POEM", level_display_name)
@@ -301,7 +323,8 @@ func _on_button_pressed() -> void:
 		poem.name = "《%s》" % level_display_name
 		poem.level = final_level
 		poem.specific_topic = level_display_name
-		Logging.info('PoemCrafter(V12): Poem generic fallback — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
+		poem.intent = poem_intent
+		Logging.info('PoemCrafter(V12): Poem generic fallback — uuid=%s, name=%s, level=%d, intent=%s' % [poem.uuid, poem.name, poem.level, poem_intent])
 
 	PlayerState.created_poems.append(poem)
 	Logging.info('PoemCrafter(V10): Poem added to created_poems')
@@ -324,7 +347,12 @@ func _on_button_pressed() -> void:
 	else:
 		Logging.warn('PoemCrafter(V10): _cached_cost_operators 为空，跳过代价执行')
 	
-	# ── 5. V10: 收益算子已删除 — 诗词价值不再创作时立即获得，改由 PoemRewardOperator 消费时产出
+	# ── 5. V10: 即时创作激励 — mode 决定即时奖励（登高→声望 / 干谒→金钱）──
+	if _cached_mode_reward_operator:
+		Logging.info('PoemCrafter(V10): 执行创作激励 — mode=%s, prop=%s, val=%d' % [current_mode, _cached_mode_reward_operator.property, _cached_mode_reward_operator.value])
+		_cached_mode_reward_operator.operate()
+	else:
+		Logging.warn('PoemCrafter(V10): _cached_mode_reward_operator 为空，跳过创作激励')
 
 	# ── 6. 消耗所有参与计算的 Imaginary ──
 	_consume_all_imaginaries()
@@ -366,7 +394,8 @@ func _clear_cached_result() -> void:
 	_cached_line2_text = ""
 	_cached_recipe_line = ""
 	_cached_cost_operators.clear()
-	Logging.info('PoemCrafter(V12): 缓存已清除（含 cost operators + recipe）')
+	_cached_mode_reward_operator = null
+	Logging.info('PoemCrafter(V12): 缓存已清除（含 cost operators + reward + recipe）')
 
 
 func _consume_matched_imaginaries(uuids: Array[String]) -> void:
@@ -502,8 +531,12 @@ func _preview_current() -> void:
 	_cached_cost_operators = PoemCraftingCalculator.calculate_crafting_cost(result.score)
 	lines.append_array(_build_cost_preview_lines())
 
+	# 🆕 V10: 创作激励预览（按 current_mode 构建 reward operator，绿色）
+	_cached_mode_reward_operator = _build_mode_reward_operator()
+	lines.append_array(_build_reward_preview_lines())
+
 	$InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
-	Logging.info('PoemCrafter(V9.2): _preview_current — 渲染完成, final_level=%d, upgrade=%s, line1=%s, cost_ops=%d' % [_cached_final_level, _cached_upgrade_succeeded, _cached_line1_text, _cached_cost_operators.size()])
+	Logging.info('PoemCrafter(V10): _preview_current — 渲染完成, final_level=%d, upgrade=%s, line1=%s, cost_ops=%d, reward=%s' % [_cached_final_level, _cached_upgrade_succeeded, _cached_line1_text, _cached_cost_operators.size(), current_mode])
 
 
 ## 从常量池中随机选一条文本（使用 randi 保证预览评价的微妙变化）
@@ -536,6 +569,49 @@ func _build_cost_preview_lines() -> Array[String]:
 			lines.append(BBCode.color(p, BBCode.COLOR_DANGER))
 	
 	Logging.info("PoemCrafter(V9.2): _build_cost_preview_lines — 灵感消耗=%d, cost_ops=%d, 总%d行" % [POEM_CRAFT_INSPIRATION_COST, _cached_cost_operators.size(), lines.size()])
+	return lines
+
+
+## 🆕 V10: 根据 current_mode 构建即时奖励 PropertyOperator（M档）
+## 纯函数，无副作用。调用方负责缓存和展示。
+func _build_mode_reward_operator() -> PropertyOperator:
+	var op := PropertyOperator.new()
+	var amounts := NamedDSLParser._load_named_amounts()
+
+	if current_mode == "gan_ye":
+		# 干谒权贵 → 金钱 M 档 (m_money_gain = 30)
+		op.property = "money"
+		op.value = amounts.get("m_money_gain", 30)
+		Logging.info('PoemCrafter(V10): _build_mode_reward_operator — gan_ye → money +%d' % op.value)
+	else:
+		# 登高抒怀 → 文学声望 M 档 (m_prestige_gain = 5)
+		op.property = "prestige"
+		op.value = amounts.get("m_prestige_gain", 5)
+		Logging.info('PoemCrafter(V10): _build_mode_reward_operator — deng_gao → prestige +%d' % op.value)
+
+	return op
+
+
+## 🆕 V10: 从缓存 mode_reward_operator 构建奖励预览行（绿色 #66cc66）
+func _build_reward_preview_lines() -> Array[String]:
+	var lines: Array[String] = []
+
+	if _cached_mode_reward_operator == null:
+		Logging.warn('PoemCrafter(V10): _build_reward_preview_lines — _cached_mode_reward_operator 为空，跳过')
+		return lines
+
+	# 分隔线（绿色）
+	lines.append(BBCode.color_size(tr("CODE_POEM_CRAFTER_REWARD_SECTION"), BBCode.COLOR_SUCCESS, 13))
+
+	# 奖励描述（复用 PropertyOperator.describe_preview，绿色）
+	var desc: String = _cached_mode_reward_operator.describe_preview()
+	if not desc.is_empty():
+		lines.append(BBCode.color(desc, BBCode.COLOR_SUCCESS))
+		Logging.info('PoemCrafter(V10): _build_reward_preview_lines — mode=%s, desc=%s' % [current_mode, desc])
+	else:
+		Logging.warn('PoemCrafter(V10): _build_reward_preview_lines — describe_preview 返回空字符串')
+
+	Logging.info('PoemCrafter(V10): _build_reward_preview_lines — 总%d行' % lines.size())
 	return lines
 
 
