@@ -1,13 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://ci5u7rtqn6kan"]
+[gd_scene format=3 uid="uid://ci5u7rtqn6kan"]
 
 [ext_resource type="Script" uid="uid://dlm6ll2vhtvid" path="res://ui/tomb_stone_screen.gd" id="1_x36lu"]
 [ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="2_ixp4g"]
+[ext_resource type="PackedScene" uid="uid://e67ava8t51mi" path="res://ui/final_poem_label.tscn" id="3_q03tq"]
 [ext_resource type="Script" uid="uid://ce1lyuxwjk35b" path="res://features/ui_sound_component.gd" id="3_sfx"]
 
-[node name="TombStoneScreen" type="CanvasLayer"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ixp4g"]
+content_margin_left = 35.0
+content_margin_top = 35.0
+content_margin_right = 35.0
+content_margin_bottom = 35.0
+
+[node name="TombStoneScreen" type="CanvasLayer" unique_id=1965827563]
 script = ExtResource("1_x36lu")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=636194017]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -15,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="M" type="MarginContainer" parent="ColorRect"]
+[node name="M" type="MarginContainer" parent="ColorRect" unique_id=861885770]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,46 +34,173 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="H" type="HBoxContainer" parent="ColorRect/M"]
+[node name="H" type="HBoxContainer" parent="ColorRect/M" unique_id=479723237]
 layout_mode = 2
 
-[node name="M" type="MarginContainer" parent="ColorRect/M/H"]
+[node name="M" type="MarginContainer" parent="ColorRect/M/H" unique_id=1341337128]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="Portrait" type="TextureRect" parent="ColorRect/M/H/M"]
+[node name="Portrait" type="TextureRect" parent="ColorRect/M/H/M" unique_id=185043262]
 layout_mode = 2
 size_flags_horizontal = 3
 texture = ExtResource("2_ixp4g")
 expand_mode = 5
 
-[node name="S" type="ScrollContainer" parent="ColorRect/M/H"]
+[node name="V" type="VBoxContainer" parent="ColorRect/M/H" unique_id=1636310564]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="MonolithText" type="RichTextLabel" parent="ColorRect/M/H/S"]
-custom_minimum_size = Vector2(554, 0)
+[node name="PanelContainer" type="PanelContainer" parent="ColorRect/M/H/V" unique_id=1568890216]
 layout_mode = 2
-bbcode_enabled = true
-text = "test bbcode"
-fit_content = true
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ixp4g")
 
-[node name="Button" type="Button" parent="ColorRect"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.95
-anchor_top = 0.98
-anchor_right = 0.98
-anchor_bottom = 0.98
-offset_left = -8.0
-offset_top = -40.0
-grow_horizontal = 0
-grow_vertical = 0
+[node name="S" type="ScrollContainer" parent="ColorRect/M/H/V/PanelContainer" unique_id=833588340]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="V" type="VBoxContainer" parent="ColorRect/M/H/V/PanelContainer/S" unique_id=2039564181]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TitleHbox" type="HBoxContainer" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1876525578]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect/M/H/V/PanelContainer/S/V/TitleHbox" unique_id=469715982]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+color = Color(0.7346415, 0, 0.15257874, 1)
+
+[node name="Label" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V/TitleHbox" unique_id=104304981]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_type_variation = &"FrozenTitleText"
+text = "观测停止"
+
+[node name="ColorRect2" type="ColorRect" parent="ColorRect/M/H/V/PanelContainer/S/V/TitleHbox" unique_id=385787419]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+color = Color(0.7346415, 0, 0.15257874, 1)
+
+[node name="Reason" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=2075804236]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
+text = "死于健康不足，溺水没有坚持下来"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="Judgement" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=2045779816]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+theme_override_colors/font_color = Color(0.41406557, 0.4140659, 0.41406557, 1)
+theme_override_font_sizes/font_size = 18
+text = "身体撑不住了。可你的痛苦、才气和忧患也随之消散—死亡是最彻底的解脱。"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="TimeActionRank" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=362223132]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
+theme_override_font_sizes/font_size = 16
+text = "你花了50%的时间，100钱，在【交游】上面。其次为【拜谒】，吞噬了你30%的时间和200健康。其他行动总共用了20%的时间和30点才华。"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="SpecificResource" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1656106889]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
+theme_override_font_sizes/font_size = 16
+text = "你用了200健康在拜谒。100健康写诗，120点健康做其他事情。（一段中医文本说气血不足之类的）"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="MidwareProduct" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1674077424]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
+theme_override_font_sizes/font_size = 16
+text = "你创作了10首诗词，结交了3个人，接受了6个理念。"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="HistoryTitle" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=486666227]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
+text = "观测记录"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="History" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=982428038]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
+theme_override_font_sizes/font_size = 16
+text = "745.10.22，你进入长安
+745.11.25，你第一次认识【神医】
+746.12.5，你第一次写诗
+747.6.1，你总共创作了5首诗词"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="BUT" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1465232680]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+theme_override_colors/font_color = Color(0.5984546, 0.08194832, 4.813075e-08, 1)
+text = "…然而这些世俗的挣扎，终将被时间彻底风化…"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=833369081]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="ColorRect/M/H/V/PanelContainer/S/V/SubViewportContainer" unique_id=562207950]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(512, 200)
+render_target_update_mode = 4
+
+[node name="Label" parent="ColorRect/M/H/V/PanelContainer/S/V/SubViewportContainer/SubViewport" unique_id=889515066 instance=ExtResource("3_q03tq")]
+
+[node name="PoemAssessment" type="Label" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=1419490039]
+custom_minimum_size = Vector2(484, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+theme_override_colors/font_color = Color(0.8153892, 0.8153891, 0.81538904, 1)
+theme_override_font_sizes/font_size = 16
+text = "这些诗词青史留名"
+horizontal_alignment = 1
+autowrap_mode = 1
+
+[node name="Button" type="Button" parent="ColorRect/M/H/V" unique_id=1816358207]
+layout_mode = 2
+size_flags_vertical = 8
 text = "UI_TOMB_STONE_SCREEN_TEXT_0"
 
-[node name="UISoundComponent" type="Node" parent="ColorRect/Button"]
+[node name="UISoundComponent" type="Node" parent="ColorRect/M/H/V/Button" unique_id=859739812]
 script = ExtResource("3_sfx")
 click_category = "book_impact"
 
-[connection signal="pressed" from="ColorRect/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ColorRect/M/H/V/Button" to="." method="_on_button_pressed"]

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://e67ava8t51mi"]
+
+[node name="Label" type="RichTextLabel" unique_id=1437637437]
+offset_right = 240.0
+offset_bottom = 30.0
+theme_type_variation = &"NarrativeText"
+theme_override_colors/default_color = Color(0.65080035, 0.5402817, 0.24060777, 1)
+theme_override_font_sizes/normal_font_size = 20
+text = "天生我材必有用，千金散尽"
