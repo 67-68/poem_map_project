@@ -328,9 +328,15 @@ func _register_ambient_profiles() -> void:
 	Logging.info("Main: 已注册 ambient profile → 755_backhome")
 
 	# ── 注册 AmbientMusic profile ──
-	const ROYAL_MUSIC = preload("res://assets/sounds/royal_music.mp3")
-	AudioManager.register_ambient_music_profile("royal_ambient", [ROYAL_MUSIC], 30.0, 90.0, -6.0)
-	Logging.info("Main: 已注册 ambient music profile → royal_ambient")
+	const DRONE1 = preload("res://assets/sounds/backgrounds/drones/drone1.ogg")
+	const DRONE2 = preload("res://assets/sounds/backgrounds/drones/drone2.ogg")
+	const DRONE3 = preload("res://assets/sounds/backgrounds/drones/drone3.ogg")
+	const DRONE4 = preload("res://assets/sounds/backgrounds/drones/drone4.ogg")
+	AudioManager.register_ambient_music_profile("drones", [DRONE1, DRONE2, DRONE3, DRONE4], 30.0, 90.0)
+	Logging.info("Main: 已注册 ambient music profile → drones (4 首, music_volume_ratio=%.2f)" % GameSave.data.music_volume_ratio)
+
+	# ── 启动 AmbientMusic（5s 后渐入播放第一首，之后曲终静默 30-90s 循环）──
+	AudioManager.set_ambient_music_profile("drones")
 
 
 func _on_game_over(death_hint: String) -> void:

@@ -13,3 +13,4 @@ build/*
 build/
 *.translation
 .aider*
+assets/sounds/backgrounds/actions/fang_shi.ogg

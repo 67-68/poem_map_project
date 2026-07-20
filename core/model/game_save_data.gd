@@ -128,6 +128,15 @@ var triggered_note_uuids: Array[String] = []
 # ════════════════════════════════════════════════════════════════
 var hidden_action_uuids: Array[String] = []
 
+# ════════════════════════════════════════════════════════════════
+# 音频设置 — 玩家可调，持久化到存档
+# ════════════════════════════════════════════════════════════════
+## 所有音乐的统一响度比例 (0.0 ~ 1.0)，默认 0.3（≈ -10dB，比较安静）
+## 运行时通过 linear2db() 转换为 dB 应用到 AmbientMusic / ActionAmbient / BGM
+var music_volume_ratio: float = 0.3
+## 淡入/淡出时长 (秒)
+var ambient_music_fade_duration: float = 1.5
+
 
 # ════════════════════════════════════════════════════════════════
 # 序列化 / 反序列化
@@ -157,6 +166,8 @@ func to_dict() -> Dictionary:
 		"npc_relations": _copy_dict(npc_relations),
 		"triggered_note_uuids": triggered_note_uuids.duplicate(),
 		"hidden_action_uuids": hidden_action_uuids.duplicate(),
+		"music_volume_ratio": music_volume_ratio,
+		"ambient_music_fade_duration": ambient_music_fade_duration,
 		"year": year,
 		"current_era": current_era,
 		"is_game_over": is_game_over,
@@ -192,6 +203,10 @@ func from_dict(d: Dictionary) -> void:
 	npc_relations = _safe_dict(d, "npc_relations")
 	triggered_note_uuids = _safe_array_str(d, "triggered_note_uuids")
 	hidden_action_uuids = _safe_array_str(d, "hidden_action_uuids")
+	music_volume_ratio = d.get("music_volume_ratio", d.get("ambient_music_volume_db", 0.3))
+	# 旧存档可能有 dB 值(-12)或非法值流入 → clamp 到 [0.0, 1.0]
+	music_volume_ratio = clampf(music_volume_ratio, 0.0, 1.0)
+	ambient_music_fade_duration = d.get("ambient_music_fade_duration", 1.5)
 	# NPC 关系数据恢复到 NPCDocument 实例（调用方需在 Database 就绪后调用 restore_npc_relations_to_documents()）
 	year = d.get("year", 745.0)
 	current_era = d.get("current_era", "")

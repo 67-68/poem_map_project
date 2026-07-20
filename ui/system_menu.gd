@@ -5,17 +5,17 @@ class_name SystemMenu
 ## Esc 唤出，全屏高斯模糊 + 时间绝对静止
 
 @onready var _blur_rect: ColorRect = $BlurRect
-@onready var _continue_btn: Button = $CenterContainer/VBoxContainer/ContinueBtn
-@onready var _return_btn: Button = $CenterContainer/VBoxContainer/ReturnBtn
+@onready var _continue_btn: Button = $H/VBoxContainer/ContinueBtn
+@onready var _return_btn: Button = $H/VBoxContainer/ReturnBtn
 
 # ── 六个存档面板（game_data_panel.tscn 实例）──
 @onready var _save_panels: Array[GameDataPanel] = [
-	$CenterContainer/MarginContainer/HFlowContainer/PanelContainer as GameDataPanel,
-	$CenterContainer/MarginContainer/HFlowContainer/PanelContainer2 as GameDataPanel,
-	$CenterContainer/MarginContainer/HFlowContainer/PanelContainer3 as GameDataPanel,
-	$CenterContainer/MarginContainer/HFlowContainer/PanelContainer4 as GameDataPanel,
-	$CenterContainer/MarginContainer/HFlowContainer/PanelContainer5 as GameDataPanel,
-	$CenterContainer/MarginContainer/HFlowContainer/PanelContainer6 as GameDataPanel,
+	$H/VBoxContainer2/MarginContainer/GridContainer/PanelContainer as GameDataPanel,
+	$H/VBoxContainer2/MarginContainer/GridContainer/PanelContainer2 as GameDataPanel,
+	$H/VBoxContainer2/MarginContainer/GridContainer/PanelContainer3 as GameDataPanel,
+	$H/VBoxContainer2/MarginContainer/GridContainer/PanelContainer4 as GameDataPanel,
+	$H/VBoxContainer2/MarginContainer/GridContainer/PanelContainer5 as GameDataPanel,
+	$H/VBoxContainer2/MarginContainer/GridContainer/PanelContainer6 as GameDataPanel,
 ]
 
 # BlurOverlay 的 shader material 引用（与 main.tscn 中共享同一个 shader）

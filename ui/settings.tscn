@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://dihagmkk1mi6x"]
+
+[ext_resource type="Theme" uid="uid://6q62uqbnal4p" path="res://assets/global_theme.tres" id="1_feasd"]
+[ext_resource type="StyleBox" uid="uid://kui3d5hudd7x" path="res://ui/paper_style.tres" id="1_neoxp"]
+[ext_resource type="FontFile" uid="uid://bu472jjbmjeb3" path="res://assets/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Regular.ttf" id="2_neoxp"]
+[ext_resource type="ButtonGroup" uid="uid://djtodat5jvbpo" path="res://ui/language_btn_group.tres" id="3_yl6pr"]
+[ext_resource type="Script" uid="uid://clbu1fksot07q" path="res://ui/settings.gd" id="4_settings"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j5v2v"]
+
+[node name="Settings" type="PanelContainer" unique_id=746252722]
+theme_override_styles/panel = ExtResource("1_neoxp")
+script = ExtResource("4_settings")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=689978074]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1145234720]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "Settings"
+horizontal_alignment = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer" unique_id=2020996308]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"SubTitleText"
+text = "Language/语言"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1418967209]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 10
+
+[node name="LinkButton2" type="LinkButton" parent="VBoxContainer/HBoxContainer" unique_id=846217666]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("1_feasd")
+theme_override_colors/font_color = Color(0.17130643, 0.15159604, 0.14966008, 1)
+theme_override_fonts/font = ExtResource("2_neoxp")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxFlat_j5v2v")
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("3_yl6pr")
+text = "中文"
+
+[node name="LinkButton3" type="LinkButton" parent="VBoxContainer/HBoxContainer" unique_id=1257788653]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("1_feasd")
+theme_override_colors/font_color = Color(0.17130643, 0.15159604, 0.14966008, 1)
+theme_override_fonts/font = ExtResource("2_neoxp")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxFlat_j5v2v")
+toggle_mode = true
+button_group = ExtResource("3_yl6pr")
+text = "English"
+
+[node name="Label3" type="Label" parent="VBoxContainer" unique_id=1462066371]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_type_variation = &"SubTitleText"
+text = "UI_SETTING_MUSIC"
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer" unique_id=711876841]
+layout_mode = 2

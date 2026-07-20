@@ -3,13 +3,18 @@
 ## 涉及文件
 
 - `core/game_save.gd` — 新增 `save_to_file()`、`load_from_file()`、`list_saves()` 三个文件 I/O 方法
+- `core/model/game_save_data.gd` — `music_volume_ratio: float`（0.0~1.0，默认 0.3），持久化到存档
 - `ui/game_data_panel.gd` — 新建，挂到 `game_data_panel.tscn` 上，管理单个存档槽
 - `ui/game_data_panel.tscn` — 挂载 `game_data_panel.gd` 脚本
-- `ui/system_menu.gd` — 新增 6 个面板引用、`_refresh_save_panels()`、`open_menu()` 时刷新存档
+- `ui/system_menu.gd` — 6 个面板引用、`_refresh_save_panels()`、`open_menu()` 时刷新存档
+- `ui/settings.gd` — 新建，挂到 `settings.tscn`，音量 HSlider ↔ `GameSave.data.music_volume_ratio` 双向绑定
+- `ui/settings.tscn` — 挂载 `settings.gd` 脚本，含 HSlider（0~100 映射到 ratio 0~1）
 
 ## 预期效果
 
 玩家按 Esc 打开系统菜单后，右侧 6 个存档面板自动扫描 `user://saves/` 目录。已有存档的面板显示玩家名、年份、天数；空档位显示「空存档」。点击「保存到此」写入存档（空档位自动生成 UUID，已占用档位覆盖写入），点击「依此加载」读取存档并 `reload_current_scene`。
+
+设置面板提供音量滑块：拖动 HSlider 实时写入 `GameSave.data.music_volume_ratio`（0.0~1.0），每次切曲时 [`AudioManager`](core/audio_manager.gd:788) 自行通过 `linear_to_db()` 读取该值应用到播放器。滑块初始值从存档回读。
 
 ## 状态转换
 
