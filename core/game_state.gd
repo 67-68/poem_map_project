@@ -20,6 +20,16 @@ var death_cause: String:
 	get: return GameSave.data.death_cause
 	set(val): GameSave.data.death_cause = val
 
+## death_reason — 死亡原因，由 DeathEvent.on_enter() 注入，墓碑界面头部展示
+var death_reason: String:
+	get: return GameSave.data.death_reason
+	set(val): GameSave.data.death_reason = val
+
+## death_tutorial — 死亡评语/总结，由 DeathEvent.on_enter() 注入，墓碑界面中段展示
+var death_tutorial: String:
+	get: return GameSave.data.death_tutorial
+	set(val): GameSave.data.death_tutorial = val
+
 ## year — 由 TimeService 驱动写入
 var year: float:
 	get: return GameSave.data.year

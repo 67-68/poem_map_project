@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bkwbwwig34idg"]
+[gd_resource type="Resource" script_class="DeathEvent" format=3 uid="uid://bkwbwwig34idg"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_a3stu"]
 [ext_resource type="Texture2D" uid="uid://chtuso16hdsoe" path="res://assets/backgrounds/bg_rural_poor.png" id="1_c161s"]
-[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_5ukkl"]
+[ext_resource type="Script" uid="uid://cfvk3b0rxipt2" path="res://core/death_events.gd" id="3_death"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_7y4kg"]
 [ext_resource type="Script" uid="uid://c4swvur288j0n" path="res://core/operators/system_operator.gd" id="4_41dhj"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_majbg"]
@@ -11,7 +11,7 @@
 [sub_resource type="Resource" id="Resource_5757m"]
 script = ExtResource("4_41dhj")
 command = "game over"
-death_hint = "TRES_EVENT_DEATH_HEALTH_LUANSHI_DEATH_HINT_0"
+death_hint = ""
 metadata/_custom_type_script = "uid://c4swvur288j0n"
 
 [sub_resource type="Resource" id="Resource_e21j6"]
@@ -26,11 +26,13 @@ description = "TRES_EVENT_DEATH_HEALTH_LUANSHI_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
-script = ExtResource("2_5ukkl")
+script = ExtResource("3_death")
 _action_tags = Array[int]([24, 21])
 options = Array[ExtResource("1_a3stu")]([SubResource("Resource_hdv0o")])
 uuid = "event_death_health_luanshi"
 name = "TRES_EVENT_DEATH_HEALTH_LUANSHI_NAME_0"
 description = "TRES_EVENT_DEATH_HEALTH_LUANSHI_DESCRIPTION_1"
 icon = ExtResource("1_c161s")
-metadata/_custom_type_script = "uid://qhuu117ngmbk"
+death_reason = "TRES_EVENT_DEATH_HEALTH_LUANSHI_DEATH_HINT_0"
+death_tutorial = "TRES_EVENT_DEATH_HEALTH_LUANSHI_TUTORIAL_0"
+metadata/_custom_type_script = "uid://cfvk3b0rxipt2"

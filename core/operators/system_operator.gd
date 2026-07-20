@@ -10,9 +10,14 @@ func operate() -> void:
     match command:
         "game_over", "game over":
             # 1. 先检查 death_hint，避免空数据导致软死锁（时间冻结但无 UI 显示）
+            #    death_hint 为空时从 GameState.death_reason 兜底（DeathEvent.on_enter 路径）
             if not death_hint:
-                Logging.err('SystemOperator.operate: death_hint is empty, game over aborted')
-                return
+                if GameState.death_reason:
+                    death_hint = GameState.death_reason
+                    Logging.info('SystemOperator.operate: death_hint empty, fallback to GameState.death_reason="%s"' % death_hint)
+                else:
+                    Logging.err('SystemOperator.operate: death_hint is empty and GameState.death_reason is also empty, game over aborted')
+                    return
             
             # 2. 设置游戏结束状态锁，阻断后续事件链继续触发
             GameState.is_game_over = true

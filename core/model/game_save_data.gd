@@ -92,6 +92,8 @@ var year: float = 745.0
 var current_era: String = ""
 var is_game_over: bool = false
 var death_cause: String = ""
+var death_reason: String = ""
+var death_tutorial: String = ""
 var ratio_time: float = 0.0
 var mood: float = 0.5
 
@@ -174,6 +176,8 @@ func to_dict() -> Dictionary:
 		"current_era": current_era,
 		"is_game_over": is_game_over,
 		"death_cause": death_cause,
+		"death_reason": death_reason,
+		"death_tutorial": death_tutorial,
 		"ratio_time": ratio_time,
 		"mood": mood,
 		"stay_place": stay_place,
@@ -215,6 +219,8 @@ func from_dict(d: Dictionary) -> void:
 	current_era = d.get("current_era", "")
 	is_game_over = d.get("is_game_over", false)
 	death_cause = d.get("death_cause", "")
+	death_reason = d.get("death_reason", "")
+	death_tutorial = d.get("death_tutorial", "")
 	ratio_time = d.get("ratio_time", 0.0)
 	mood = d.get("mood", 0.5)
 	stay_place = d.get("stay_place", "xishi")
