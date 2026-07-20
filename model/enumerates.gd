@@ -61,6 +61,20 @@ enum ACTION_TAGS {
 	ACTION_ZHUILIU_XISHI,            # 驻留·西市
 	ACTION_ZHUILIU_PINGKANGFANG,     # 驻留·平康坊
 	ACTION_ZHUILIU_HUANGCHENG,       # 驻留·皇城
+
+	# 🆕 死亡结局标签 — TagManager.inject_death_tags() 动态打标
+	ACTOR_DEATH_POISONED,            # 坊市试药中毒死亡
+	ACTOR_DEATH_THREATEN,            # 胁迫人反噬死亡
+	ACTOR_DEATH_POEM_IMPLOSION,      # 意象爆掉死亡
+	ACTOR_DEATH_SPRAINED,            # 崴脚跌入斩线下
+	ACTOR_DEATH_OVERWORK,            # 坊市过劳死亡
+	ACTOR_DEATH_RICH_FUNERAL,        # 有钱的大葬
+	ACTOR_DEATH_HAS_FRIENDS,         # 有朋友来送
+	ACTOR_DEATH_GOOD_POET,           # 登高 > 拜谒诗人
+	ACTOR_DEATH_BAD_POET,            # 拜谒 > 登高诗人
+	ACTOR_DEATH_NEUTRAL_POET,        # 清浊参半诗人
+	ACTOR_DEATH_POOR,                # 没钱死亡
+	ACTOR_DEATH_NOBODY,              # 无人关注（fallback 专用）
 }
 
 enum PROPS {

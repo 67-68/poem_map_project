@@ -388,11 +388,11 @@ func death_judgement():
 			else:
 				# 第三次濒死兜底已耗尽，走向真正的死亡
 				AudioManager.stop_sfx_loop()
-				PlayerState.current_action_tags.append('actor:health:death:general')
+				TagManager.inject_death_tags()
 				EventManager.scan_death_events()
 		else:
 			AudioManager.stop_sfx_loop()
-			PlayerState.current_action_tags.append('actor:health:death:general')
+			TagManager.inject_death_tags()
 			EventManager.scan_death_events()
 
 # ─── 🆕 NPC inner_circle 每旬属性加成 ────────────────────────────

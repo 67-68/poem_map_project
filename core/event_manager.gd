@@ -110,6 +110,7 @@ func scan_death_events():
     """
     在结局之后使用，扫描死亡/失败/结束事件。
     跳过 guarantee_next FIFO 队列 — 人都死了，别排队了。
+    🆕 fallback: event_death_nobody — 当无任何死亡标签匹配时兜底。
     """
     if GameState.is_game_over:
         Logging.info("[EventManager] scan_death_events: GameState.is_game_over is true, skipping")
@@ -119,7 +120,7 @@ func scan_death_events():
     for e in Database.get_end_random_events_all().values():
         initial_tickets.append(_create_ticket(e))
     #breakpoint
-    scan_events_from_tickets(initial_tickets, 0.0, '', {}, false, true)
+    scan_events_from_tickets(initial_tickets, 0.0, 'event_death_nobody', {}, false, true)
 
 func scan_events_from_tickets(initial_tickets: Array[EventTicket], nothing_multiplication_weight = 10.0, fallback_event_uuid: String = "", context: Dictionary = {}, return_only: bool = false, skip_guarantees: bool = false):
     """

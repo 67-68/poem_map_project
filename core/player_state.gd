@@ -93,6 +93,9 @@ var session_deferred_cleanups: Array[BaseOperator] = []
 ## PlayerObserver 通过 get_current_cost_context() 读取栈顶身份。
 var _cost_context_stack: Array[String] = []
 
+## 🆕 最后一笔健康扣除来源（cost context identity），供 TagManager 死亡分类使用
+var _last_health_drain_source: String = ""
+
 ## Imaginary 定义表静态缓存
 var _imaginary_defs: Dictionary = {}
 
@@ -406,6 +409,15 @@ func append_stat(stat_name, data) -> bool:
 		Logging.info("change stat %s: 理念 efficiency 倍率 +%.2f → %d (原%d)" % [stat_name, mod_efficiency, amount_to_change, original])
 
 	before_property_change.emit(stat_name, amount_to_change)
+
+	# 🆕 记录最后一笔健康扣除的来源（供死亡分类使用）
+	if stat_name == "health" and amount_to_change < 0:
+		var src := get_current_cost_context()
+		if not src.is_empty():
+			_last_health_drain_source = src
+			Logging.info("[PlayerState] append_stat: last_health_drain_source = '%s'" % src)
+		else:
+			Logging.info("[PlayerState] append_stat: health -%d (无 cost context, 来源未知)" % -amount_to_change)
 
 	# FatigueManager 疲劳倍率
 	var fatigue_multiplier = FatigueManager.get_and_reset_fatigue_multiplier()
@@ -854,3 +866,9 @@ func get_current_cost_context() -> String:
 	if _cost_context_stack.is_empty():
 		return ""
 	return _cost_context_stack[-1]
+
+
+## 🆕 获取最后一笔健康扣除的来源身份。
+## 返回空字符串表示无记录（从未扣除健康或来源未被标记）。
+func get_last_health_drain_source() -> String:
+	return _last_health_drain_source
