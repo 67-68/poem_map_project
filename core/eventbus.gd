@@ -156,3 +156,8 @@ signal idea_upgraded()
 signal show_mid_panel()
 signal idea_page_close()
 signal request_show_event_tape()
+
+## 🆕 PlayerObserver 发射：里程碑达成
+## @param milestone_key: String — milestones_config.json 中的 key
+## @param config: Dictionary — 达成的里程碑配置（含 threshold, desc 等）
+signal milestone_achieved(milestone_key: String, config: Dictionary)

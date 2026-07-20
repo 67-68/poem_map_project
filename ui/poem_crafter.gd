@@ -328,6 +328,8 @@ func _on_button_pressed() -> void:
 
 	PlayerState.created_poems.append(poem)
 	Logging.info('PoemCrafter(V10): Poem added to created_poems')
+	EventBus.poems_created.emit([poem])
+	Logging.info('PoemCrafter(V10): poems_created signal emitted — uuid=%s' % poem.uuid)
 
 	# 🆕 V10 fix: 注册 Poem 到 PlayerState.traits + Database.traits
 	# 使左侧 trait 面板可显示，且 PoemRewardOperator.is_viable() 可查询

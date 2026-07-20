@@ -1,0 +1,47 @@
+{
+  "_comment": "里程碑配方配置文件。每个条目定义累加器名 + 阈值 + 描述。PlayerObserver 每次累加器变更时轮询此表。",
+  "milestones": [
+    {
+      "key": "first_poem",
+      "accumulator": "poems_created",
+      "threshold": 1,
+      "desc": "第一次创作诗词"
+    },
+    {
+      "key": "first_friend",
+      "accumulator": "friends_made",
+      "threshold": 1,
+      "desc": "第一次结交朋友"
+    },
+    {
+      "key": "first_idea",
+      "accumulator": "ideas_accepted",
+      "threshold": 1,
+      "desc": "第一次接受理念"
+    },
+    {
+      "key": "health_100",
+      "accumulator": "health_consumed",
+      "threshold": 100,
+      "desc": "消耗100点生命"
+    },
+    {
+      "key": "money_100",
+      "accumulator": "money_consumed",
+      "threshold": 100,
+      "desc": "消耗100点钱财"
+    },
+    {
+      "key": "survive_10_xun",
+      "accumulator": "xun_lived",
+      "threshold": 10,
+      "desc": "存活到10旬"
+    },
+    {
+      "key": "days_100",
+      "accumulator": "days_consumed",
+      "threshold": 100,
+      "desc": "消耗100天(AP)"
+    }
+  ]
+}
