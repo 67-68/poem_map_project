@@ -18,6 +18,7 @@ const _NpcBatchCheckOperator = preload("res://core/operators/npc_batch_check_ope
 const _PoetLifePoint = preload("res://characters/poet_life_point.gd")
 const _RandomEvent = preload("res://model/random_event.gd")
 const _Note = preload("res://core/note.gd")
+const _PoemType = preload("res://core/poem_type.gd")
 const _SceneAction = preload("res://core/model/scene_action.gd")
 const _Trait = preload("res://core/model/trait.gd")
 
@@ -78,6 +79,8 @@ var action_archetypes: Dictionary = {}  # 🆕 key=archetype_key, val=ActionArch
 var life_path_points: Dictionary
 
 var poem_taste: Dictionary
+
+var poem_types: Dictionary = {}
 
 var npc_document: Dictionary
 
@@ -245,6 +248,8 @@ func _init() -> void:
 				notes[uuid] = res
 			elif res is Era:
 				eras[uuid] = res
+			elif res is PoemType:
+				poem_types[uuid] = res
 
 	Logging.info("Database: random_events 已按 pool_tag 索引，%d 个池" % random_events.size())
 	Logging.info("Database: _events_by_era 已构建，%d 个时代" % _events_by_era.size())

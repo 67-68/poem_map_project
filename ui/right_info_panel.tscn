@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bn4j0rcvlbavx" path="res://assets/stamps/chuangzuo_stamp.png" id="6_lnxk4"]
 [ext_resource type="Texture2D" uid="uid://dkp22tjkoj2gj" path="res://assets/profile/linian_stamp.png" id="6_n54d2"]
 [ext_resource type="Texture2D" uid="uid://dyf7qq1yw3fh2" path="res://assets/profile/note_stamp.png" id="8_5hubg"]
+[ext_resource type="Texture2D" uid="uid://ctfo2ura50vdv" path="res://assets/stamps/poem_stamp.png" id="9_dvl40"]
 [ext_resource type="PackedScene" uid="uid://cu1a2mhu4xv3n" path="res://ui/decision_scroll.tscn" id="10_j8k2n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3crwo"]
@@ -168,4 +169,16 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_lnxk4")
 [node name="TextureRect" type="TextureRect" parent="Panel/V/PanelContainer2/HBoxContainer/NoteBtn" unique_id=587622179]
 layout_mode = 2
 texture = ExtResource("8_5hubg")
+expand_mode = 1
+
+[node name="PoemInfoBtn" type="PanelContainer" parent="Panel/V/PanelContainer2/HBoxContainer" unique_id=1531334154]
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_lnxk4")
+
+[node name="TextureRect" type="TextureRect" parent="Panel/V/PanelContainer2/HBoxContainer/PoemInfoBtn" unique_id=1184775683]
+layout_mode = 2
+texture = ExtResource("9_dvl40")
 expand_mode = 1

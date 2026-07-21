@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://67vwb4ogirx8"]
 
-[ext_resource type="Script" uid="uid://bud5jm8iw6k03" path="res://ui/note_page.gd" id="1_j05gc"]
+[ext_resource type="Script" uid="uid://bud5jm8iw6k03" path="res://ui/poem_page.gd" id="1_j05gc"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_2v1n5"]
 [ext_resource type="FontFile" uid="uid://b0jq4f032woif" path="res://assets/fonts/Noto_Serif_SC/static/NotoSerifSC-Bold.ttf" id="3_2v1n5"]
 

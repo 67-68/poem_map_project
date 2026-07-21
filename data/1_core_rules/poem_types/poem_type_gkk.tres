@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PoemType" load_steps=2 format=3 uid="uid://placeholder_6"]
+
+[ext_resource type="Script" path="res://core/poem_type.gd" id="1_pt"]
+
+[resource]
+script = ExtResource("1_pt")
+uuid = "poem_type_gkk"
+name = "狂歌请缨"
+composition = Array[String](["功名", "狂放", "狂放"])
+publication_effects = []

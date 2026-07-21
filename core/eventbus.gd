@@ -100,6 +100,9 @@ signal idea_page_toggled()
 ## 🆕 笔记页面 toggle — 由 RightInfoPanel.NoteBtn 发射，NotePage 监听
 signal note_page_toggled()
 
+## 🆕 诗词图鉴页面 toggle — 由 RightInfoPanel 发射，PoemPage 监听
+signal poem_page_toggled()
+
 ## 🆕 请求隐藏纸带（SocialConnectionPage / PoemCreationPage 打开时发射）
 ## 引用计数：hide_requested 递增，show_requested 递减，归零才恢复纸带显示
 signal narrative_tape_hide_requested()
