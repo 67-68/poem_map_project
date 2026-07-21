@@ -1,0 +1,201 @@
+[gd_scene format=3 uid="uid://67vwb4ogirx8"]
+
+[ext_resource type="Script" uid="uid://bud5jm8iw6k03" path="res://ui/note_page.gd" id="1_j05gc"]
+[ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_2v1n5"]
+[ext_resource type="FontFile" uid="uid://b0jq4f032woif" path="res://assets/fonts/Noto_Serif_SC/static/NotoSerifSC-Bold.ttf" id="3_2v1n5"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_enmti"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+texture = ExtResource("2_2v1n5")
+modulate_color = Color(0.9098039, 0.8784314, 0.80784315, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_enmti"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="NotePage" type="Control" unique_id=992720834]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j05gc")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1817549478]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_enmti")
+
+[node name="H" type="HBoxContainer" parent="PanelContainer" unique_id=1310597549]
+layout_mode = 2
+
+[node name="V" type="VBoxContainer" parent="PanelContainer/H" unique_id=856042535]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="TypeCount" type="Label" parent="PanelContainer/H/V" unique_id=1649831818]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "你解锁了 5 个类型的诗词"
+
+[node name="PoemTypeScroll" type="ScrollContainer" parent="PanelContainer/H/V" unique_id=624567716]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NoteListContainer" type="VBoxContainer" parent="PanelContainer/H/V/PoemTypeScroll" unique_id=573014648]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DemonDescription" type="LinkButton" parent="PanelContainer/H/V/PoemTypeScroll/NoteListContainer" unique_id=683952570]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"DefaultText"
+theme_override_fonts/font = ExtResource("3_2v1n5")
+theme_override_font_sizes/font_size = 18
+text = "类型1"
+
+[node name="PoemCount" type="Label" parent="PanelContainer/H/V" unique_id=1386867924]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "你解锁了 10 首历史诗词"
+
+[node name="HistoryPoemScroll" type="ScrollContainer" parent="PanelContainer/H/V" unique_id=1615802348]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NoteListContainer" type="VBoxContainer" parent="PanelContainer/H/V/HistoryPoemScroll" unique_id=1615802347]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DemonDescription" type="LinkButton" parent="PanelContainer/H/V/HistoryPoemScroll/NoteListContainer" unique_id=808337046]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"DefaultText"
+theme_override_fonts/font = ExtResource("3_2v1n5")
+theme_override_font_sizes/font_size = 18
+text = "饮中八仙歌"
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/H" unique_id=1446511408]
+layout_mode = 2
+
+[node name="Info" type="PanelContainer" parent="PanelContainer/H" unique_id=220723573]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_enmti")
+
+[node name="TypeDescriptor" type="HBoxContainer" parent="PanelContainer/H/Info" unique_id=501665714]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/H/Info/TypeDescriptor" unique_id=1454176476]
+layout_mode = 2
+
+[node name="TypeTitle" type="Label" parent="PanelContainer/H/Info/TypeDescriptor/VBoxContainer" unique_id=1873538749]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "类型1"
+autowrap_mode = 3
+
+[node name="CompositionTitle" type="Label" parent="PanelContainer/H/Info/TypeDescriptor/VBoxContainer" unique_id=1835684045]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "组成"
+autowrap_mode = 3
+
+[node name="Composition" type="Label" parent="PanelContainer/H/Info/TypeDescriptor/VBoxContainer" unique_id=18127986]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "功名 + 隐逸 + 狂放"
+autowrap_mode = 3
+
+[node name="EffectTitle" type="Label" parent="PanelContainer/H/Info/TypeDescriptor/VBoxContainer" unique_id=1517928788]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "效果"
+autowrap_mode = 3
+
+[node name="Effect" type="Label" parent="PanelContainer/H/Info/TypeDescriptor/VBoxContainer" unique_id=1547797412]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "（从他的效果文件翻译）"
+autowrap_mode = 3
+
+[node name="PoemDescriptor" type="HBoxContainer" parent="PanelContainer/H/Info" unique_id=444137083]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/H/Info/PoemDescriptor" unique_id=1141013323]
+layout_mode = 2
+
+[node name="PoemTitle" type="Label" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=2117252056]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "饮中八仙歌"
+autowrap_mode = 3
+
+[node name="CompositionTitle" type="Label" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=938996544]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "组成"
+autowrap_mode = 3
+
+[node name="Composition" type="Label" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=849713302]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "李白喝酒（狂放） + 意象1（狂放） + 意象2（狂放）"
+autowrap_mode = 3
+
+[node name="LevelTitle" type="Label" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=1796696488]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "等级"
+autowrap_mode = 3
+
+[node name="Level" type="Label" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=1834629063]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "Lv3"
+autowrap_mode = 3
+
+[node name="ContentTitle" type="Label" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=1759990234]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"SubTitleText"
+text = "内容"
+autowrap_mode = 3
+
+[node name="PoemContent" type="Label" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=1335865371]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "（饮中八仙歌具体内容）"
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="PanelContainer" unique_id=1089128283]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
