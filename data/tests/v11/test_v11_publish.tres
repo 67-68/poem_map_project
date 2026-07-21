@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_opt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="3_imagop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_result"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_evopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_event"]
+
+[sub_resource type="Resource" id="Res_imag_drunk"]
+script = ExtResource("3_imagop")
+imagery_name = "drunk"
+
+[sub_resource type="Resource" id="Res_imag_cold_moon"]
+script = ExtResource("3_imagop")
+imagery_name = "cold_moon"
+
+[sub_resource type="Resource" id="Res_imag_falling_leaf"]
+script = ExtResource("3_imagop")
+imagery_name = "falling_leaf"
+
+[sub_resource type="Resource" id="Res_result_kuang1"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_drunk")])
+
+[sub_resource type="Resource" id="Res_result_yin1"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_cold_moon")])
+
+[sub_resource type="Resource" id="Res_result_yin2"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_falling_leaf")])
+
+[sub_resource type="Resource" id="Res_opt_kuang"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_kuang1")
+description = "获得醉意（狂放·Lv1）"
+
+[sub_resource type="Resource" id="Res_opt_yin1"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_yin1")
+description = "获得寒月（隐逸·Lv1）"
+
+[sub_resource type="Resource" id="Res_opt_yin2"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_yin2")
+description = "获得落木（隐逸·Lv1）——凑齐3个，可创作诗词"
+
+[resource]
+script = ExtResource("6_event")
+era = "1_core_rules"
+options = Array[ExtResource("1_opt")]([SubResource("Res_opt_kuang"), SubResource("Res_opt_yin1"), SubResource("Res_opt_yin2")])
+uuid = "test_v11_publish"
+name = "【V11测试】发布效果 — 凑齐3意象后创作+发布"
+description = "测试发布诗词效果计算：\n1. 选3个选项获得3个意象（狂放+隐逸混合）\n2. 打开诗词创作面板（点击创作按钮）\n3. 勾选"并发布诗词" CheckButton\n4. 点击"开始创作"\n5. 在后续事件中查看 publish_effect 字段内容\n\n预期效果描述为 placeholder: "（诗词效果待实现）""

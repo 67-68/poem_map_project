@@ -4,11 +4,12 @@ class_name TagManager extends RefCounted
 ## 两条规则（冥等/确定性映射）：
 ## 1. NPC 相识：person_state 进入 know_about+ → 追加 actor:npc:{target}
 ##    person_state 退回 not_meet/uncharted → 移除 actor:npc:{target}
-## 2. 诗风站队（V11）：基于持有意象的三大类计数
+## 2. 诗风站队（V11.1）：基于已创作诗词使用的意象分类
+##    遍历 created_poems，从 poem.used_imaginary_types 累加三大类计数
 ##    功名 > (隐逸+狂放)   → "浊流诗人" (actor:poem:stance:zhuoliu)
 ##    (隐逸+狂放) > 功名   → "清流诗人" (actor:poem:stance:qingliu)
 ##    功名 == (隐逸+狂放)  → "中立诗人" (actor:poem:stance:neutral)
-##    无任何意象 → 删除所有 stance tag
+##    无任何已创作诗词 → 删除所有 stance tag
 ##
 ## 生命周期：PlayerState._ready() 创建 → init() 连接信号 → full_sync() 全量同步
 
@@ -105,39 +106,39 @@ func _sync_npc_tags() -> void:
 	Logging.info("TagManager._sync_npc_tags: done — added=%d, removed=%d, total persistant=%d" % [added, removed, PlayerState.persistant_tags.size()])
 
 
-## V11: 遍历 imaginaries_detail，按 imaginary_type 三大类计数 → 替换 stance tag
+## V11.1: 遍历 created_poems，从 poem.used_imaginary_types 累加三大类计数 → stance tag
 func _sync_poem_stance() -> void:
 	var gongming_count := 0
 	var yinyi_count := 0
 	var kuangfang_count := 0
 
-	for uuid in Database.imaginaries_detail:
-		var imag = Database.imaginaries_detail[uuid]
-		if not imag is Imaginary:
+	for entry in PlayerState.created_poems:
+		if not entry is Poem:
+			Logging.info("TagManager._sync_poem_stance: non-Poem element in created_poems, skipping")
 			continue
-		match imag.imaginary_type:
-			"功名":
-				gongming_count += 1
-			"隐逸":
-				yinyi_count += 1
-			"狂放":
-				kuangfang_count += 1
-			_:
-				Logging.info("TagManager._sync_poem_stance: Imaginary '%s' imaginary_type='%s' (unknown), skipped" % [imag.uuid, imag.imaginary_type])
+		var poem: Poem = entry as Poem
+		var types: Dictionary = poem.used_imaginary_types
+		if types.is_empty():
+			Logging.info("TagManager._sync_poem_stance: poem '%s' used_imaginary_types empty, skipped" % poem.uuid)
+			continue
+		gongming_count += types.get("功名", 0)
+		yinyi_count += types.get("隐逸", 0)
+		kuangfang_count += types.get("狂放", 0)
+		Logging.info("TagManager._sync_poem_stance: poem='%s' types=%s" % [poem.name, str(types)])
 
-	var qingliu_side := yinyi_count + kuangfang_count  # 隐逸+狂放 = 清流侧
+	var qingliu_side := yinyi_count + kuangfang_count
 
 	var stance: String
 	if gongming_count == 0 and qingliu_side == 0:
-		stance = ""  # 无意象 → 不放任何 stance tag
+		stance = ""
 	elif gongming_count > qingliu_side:
-		stance = "zhuoliu"   # 功名多 → 浊流
+		stance = "zhuoliu"
 	elif qingliu_side > gongming_count:
-		stance = "qingliu"   # 隐逸+狂放多 → 清流
+		stance = "qingliu"
 	else:
-		stance = "neutral"   # 相等 → 中立
+		stance = "neutral"
 
-	Logging.info("TagManager._sync_poem_stance(V11): 功名=%d, 隐逸=%d, 狂放=%d → stance=%s" % [gongming_count, yinyi_count, kuangfang_count, stance])
+	Logging.info("TagManager._sync_poem_stance(V11.1): 功名=%d, 隐逸=%d, 狂放=%d → stance=%s" % [gongming_count, yinyi_count, kuangfang_count, stance])
 	_replace_stance_tag(stance)
 
 
@@ -225,21 +226,20 @@ static func _has_known_npc() -> bool:
 
 
 static func _inject_poem_stance_death_tag() -> void:
-	# V11: 基于持有意象的三大类计数（而非 poem.intent）
+	# V11.1: 基于已创作诗词使用的意象分类（而非当前持有）
 	var gongming_count: int = 0
 	var yinyi_count: int = 0
 	var kuangfang_count: int = 0
-	for uuid in Database.imaginaries_detail:
-		var imag = Database.imaginaries_detail[uuid]
-		if not imag is Imaginary:
+	for entry in PlayerState.created_poems:
+		if not entry is Poem:
 			continue
-		match imag.imaginary_type:
-			"功名":
-				gongming_count += 1
-			"隐逸":
-				yinyi_count += 1
-			"狂放":
-				kuangfang_count += 1
+		var poem: Poem = entry as Poem
+		var types: Dictionary = poem.used_imaginary_types
+		if types.is_empty():
+			continue
+		gongming_count += types.get("功名", 0)
+		yinyi_count += types.get("隐逸", 0)
+		kuangfang_count += types.get("狂放", 0)
 
 	var qingliu_side := yinyi_count + kuangfang_count
 

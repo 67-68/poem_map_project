@@ -327,10 +327,19 @@ func _on_button_pressed() -> void:
 	else:
 		Logging.warn('PoemCrafter(V10): _cached_mode_reward_operator 为空，跳过创作激励')
 
-	# ── 6. 消耗所有参与计算的 Imaginary ──
+	# ── 6. V11: 统计消耗前的意象分类（供 TagManager stance 计算）──
+	var type_counts: Dictionary = {}
+	for uuid in Database.imaginaries_detail:
+		var imag = Database.imaginaries_detail[uuid]
+		if imag is Imaginary and not imag.imaginary_type.is_empty():
+			type_counts[imag.imaginary_type] = type_counts.get(imag.imaginary_type, 0) + 1
+	poem.used_imaginary_types = type_counts
+	Logging.info('PoemCrafter(V11): used_imaginary_types=%s' % str(type_counts))
+
+	# ── 7. 消耗所有参与计算的 Imaginary ──
 	_consume_all_imaginaries()
 
-	# ── 7. V11: 发布按钮效果计算 ──
+	# ── 8. V11: 发布按钮效果计算 ──
 	var publish_checkbtn := $InputImagPanel/CheckButton as CheckButton
 	var effect_desc: String = ""
 	if publish_checkbtn and publish_checkbtn.button_pressed:

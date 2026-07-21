@@ -1,0 +1,68 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_opt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="3_imagop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_result"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_evopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_event"]
+
+[sub_resource type="Resource" id="Res_imag_qianli"]
+script = ExtResource("3_imagop")
+imagery_name = "qianli"
+
+[sub_resource type="Resource" id="Res_imag_cangsheng"]
+script = ExtResource("3_imagop")
+imagery_name = "cangsheng"
+
+[sub_resource type="Resource" id="Res_imag_drunk"]
+script = ExtResource("3_imagop")
+imagery_name = "drunk"
+
+[sub_resource type="Resource" id="Res_imag_buyi"]
+script = ExtResource("3_imagop")
+imagery_name = "buyi"
+
+[sub_resource type="Resource" id="Res_result_zhuoliu1"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_qianli")])
+
+[sub_resource type="Resource" id="Res_result_zhuoliu2"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_cangsheng")])
+
+[sub_resource type="Resource" id="Res_result_qingliu1"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_drunk")])
+
+[sub_resource type="Resource" id="Res_result_qingliu2"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_buyi")])
+
+[sub_resource type="Resource" id="Res_opt_zl1"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_zhuoliu1")
+description = "获得骐骥（功名·Lv1）→ 浊流诗人"
+
+[sub_resource type="Resource" id="Res_opt_zl2"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_zhuoliu2")
+description = "获得苍生（功名·Lv1）→ 功名=2，浊流强化"
+
+[sub_resource type="Resource" id="Res_opt_ql1"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_qingliu1")
+description = "获得醉意（狂放·Lv1）→ 清流侧+1"
+
+[sub_resource type="Resource" id="Res_opt_ql2"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_qingliu2")
+description = "获得布衣（隐逸·Lv1）→ 清流侧=2，反超浊流！"
+
+[resource]
+script = ExtResource("6_event")
+era = "1_core_rules"
+options = Array[ExtResource("1_opt")]([SubResource("Res_opt_zl1"), SubResource("Res_opt_zl2"), SubResource("Res_opt_ql1"), SubResource("Res_opt_ql2")])
+uuid = "test_v11_stance"
+name = "【V11测试】Stance站队 — 三大类意象→诗风标签"
+description = "测试 Stance 站队系统（基于意象三大类计数）：\n1. 先选"骐骥"(功名=1)→ 浊流诗人\n2. 再选"苍生"(功名=2)→ 浊流\n3. 选"醉意"(狂放=1)→ 功名(2) > 清流(1)，仍浊流\n4. 选"布衣"(隐逸=1)→ 清流侧(2) == 功名(2)→ 中立！\n\n观察 persistant_tags 中的 stance tag 变化（用 # 命令查看）。"

@@ -1,0 +1,68 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_opt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://bsflkgyq8rcu6" path="res://core/operators/imagery_acquisition_operator.gd" id="3_imagop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_result"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_evopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_event"]
+
+[sub_resource type="Resource" id="Res_imag_qianli"]
+script = ExtResource("3_imagop")
+imagery_name = "qianli"
+
+[sub_resource type="Resource" id="Res_imag_cangsheng"]
+script = ExtResource("3_imagop")
+imagery_name = "cangsheng"
+
+[sub_resource type="Resource" id="Res_imag_jade_step"]
+script = ExtResource("3_imagop")
+imagery_name = "jade_step"
+
+[sub_resource type="Resource" id="Res_imag_cloud_and_sun"]
+script = ExtResource("3_imagop")
+imagery_name = "cloud_and_sun"
+
+[sub_resource type="Resource" id="Res_result_gongming1"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_qianli")])
+
+[sub_resource type="Resource" id="Res_result_gongming2"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_cangsheng")])
+
+[sub_resource type="Resource" id="Res_result_gongming3"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_jade_step")])
+
+[sub_resource type="Resource" id="Res_result_gongming4"]
+script = ExtResource("4_result")
+operators = Array[ExtResource("2_baseop")]([SubResource("Res_imag_cloud_and_sun")])
+
+[sub_resource type="Resource" id="Res_opt_gm1"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_gongming1")
+description = "获得骐骥（功名·Lv1）"
+
+[sub_resource type="Resource" id="Res_opt_gm2"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_gongming2")
+description = "获得苍生（功名·Lv1）"
+
+[sub_resource type="Resource" id="Res_opt_gm3"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_gongming3")
+description = "获得玉阶（功名·Lv1）"
+
+[sub_resource type="Resource" id="Res_opt_gm4"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Res_result_gongming4")
+description = "获得云日（功名·Lv1）——这将触发FIFO顶替！"
+
+[resource]
+script = ExtResource("6_event")
+era = "1_core_rules"
+options = Array[ExtResource("1_opt")]([SubResource("Res_opt_gm1"), SubResource("Res_opt_gm2"), SubResource("Res_opt_gm3"), SubResource("Res_opt_gm4")])
+uuid = "test_v11_fifo"
+name = "【V11测试】FIFO顶替 — 获取第4个意象"
+description = "测试 FIFO 顶替机制：\n先连续选前3个选项获得3个功名意象（填满 max_imaginary_managable=3）。\n再选第4个"云日"——此时最旧的"骐骥"会被顶替消失。\n观察左侧面板：第4个获取后，最早的意象被删除。"
