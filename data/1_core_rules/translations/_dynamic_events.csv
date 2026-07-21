@@ -3088,3 +3088,6 @@ DEATH_EVENT_THREATEN_NAME,重伤不治,Died of Severe Wounds,
 DEATH_EVENT_THREATEN_DESC,胁迫不成，反遭反噬。你惹了一个你惹不起的人。,"The threat backfired. You provoked someone you couldn't afford to provoke.",
 DEATH_EVENT_THREATEN_REASON,胁迫不成，反遭反噬。你惹了一个你惹不起的人。,"The threat backfired. You provoked someone you couldn't afford to provoke.",
 DEATH_EVENT_THREATEN_TUTORIAL,没有这个能力就不要胁迫。要么，先找到一个可以拿把柄的人——真正的把柄，不是你以为的把柄。,"Don't threaten unless you have the ability. Or first find someone you have real leverage on — real leverage, not what you think is leverage."
+TRES_IMAGINARY_GAIN_FALLBACK_NAME_0,偶得灵感,A Glimpse of Inspiration,
+TRES_IMAGINARY_GAIN_FALLBACK_DESC_0,{@imaginary_gain_hint},{@imaginary_gain_hint}
+TRES_IMAGINARY_GAIN_FALLBACK_DESCRIPTION_0,你忽有所感，脑海中浮现出一幅画面：{@imaginary_gain_hint}。这或许日后用得着。,"A sudden sensation stirs within you, and a vision surfaces in your mind: {@imaginary_gain_hint}. This may prove useful one day."

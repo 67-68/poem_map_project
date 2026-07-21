@@ -4,6 +4,12 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_f652d"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="3_yiapa"]
 [ext_resource type="Texture2D" uid="uid://bokcmb0kkcpu4" path="res://assets/stamps/baiye_stamp.png" id="4_yiapa"]
+[ext_resource type="Script" path="res://core/model/imaginary_grant_chance.gd" id="5_igc"]
+
+[sub_resource type="Resource" id="Resource_baiye_gongming"]
+script = ExtResource("5_igc")
+imaginary_type = "功名"
+obtain_possibility = "xxs_success_rate"
 
 [resource]
 script = ExtResource("3_yiapa")
@@ -14,6 +20,7 @@ action_results = Array[ExtResource("2_f652d")]([])
 fallback_event_uuid = "baiye_fallback"
 lock_narrative = "TRES_BAI_YE_LOCK_NARRATIVE_0"
 sub_actions = Array[String](["baiye_threaten", "baiye_poem_visit", "baiye_mass_distribution", "baiye_normal"])
+imaginary_grants = Array[ExtResource("5_igc")]([SubResource("Resource_baiye_gongming")])
 uuid = "bai_ye"
 name = "TRES_BAI_YE_NAME_0"
 description = "TRES_BAI_YE_DESCRIPTION_0"

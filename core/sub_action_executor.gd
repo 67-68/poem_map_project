@@ -2,9 +2,12 @@ class_name SubActionExecutor extends RefCounted
 ## 子行动执行器 — 从原 _on_sub_action_picked 提取的纯静态管线
 ##
 ## 输入：action_uuid（选中的子行动 UUID）+ VolatileState.action_state（pending 上下文）
-## 输出：执行完整的 cost → possibility → operators → scan_events 链路
+## 输出：执行完整的 cost → possibility → operators → imaginary_grant → scan_events 链路
 ##
 ## 消费方：NpcActionButton._on_clicked()
+
+const _ImaginaryGrantChance = preload("res://core/model/imaginary_grant_chance.gd")
+const _Imaginary = preload("res://core/model/imaginary.gd")
 
 ## 执行子行动完整管线。读取 VolatileState 中的 pending 数据，
 ## 独立完成 cost init/operate → possibility 投骰 → action_results → scan_events。
@@ -155,6 +158,9 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 				required_tags.append(tag)
 		Logging.info("SubActionExecutor.execute: SUCCESS — sub-action tags now: %s required=%s npc_target='%s'" % [str(PlayerState.current_action_tags), str(required_tags), npc_target])
 		
+		# 🆕 Step 7a.5: 意象获取抽奖（在 scan_events 之前，保证意象事件先入队列）
+		_try_imaginary_grant(sub_action, state)
+
 		# 🐛 修复：如果 action_results 中有 operator 自主推了栈（如 ItemPicker），跳过 scan_events
 		# 避免双推栈冲突：operator 推的栈条目 和 scan_events 推的 fallback 事件互相打架
 		if _action_pushed_to_stack:
@@ -209,4 +215,204 @@ static func _extract_npc_name_from_tags(tags: Array) -> String:
 			else:
 				Logging.debug("SubActionExecutor._extract_npc_name_from_tags: '%s' 无中文名，回退到 tag" % npc_tag)
 				return npc_tag
+	return ""
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 意象获取抽奖系统
+# ════════════════════════════════════════════════════════════════
+
+const FALLBACK_IMAGINARY_EVENT: String = "imaginary_gain_fallback"
+
+## 意象获取入口：解析 grants → 加权 roll → 随机选意象 → 授予 + 排队叙事事件。
+## 子行动优先使用自己的 grants，为空时继承父行动的 grants。
+static func _try_imaginary_grant(sub_action: Action, state: VolatileState.VolatileActionState) -> void:
+	Logging.info("SubActionExecutor._try_imaginary_grant: ═══ ENTER sub_action='%s' ═══" % (sub_action.uuid if sub_action else "NULL"))
+	if not sub_action:
+		Logging.info("SubActionExecutor._try_imaginary_grant: sub_action is null, 跳过")
+		return
+
+	# ── 解析父 action ──
+	var parent_action: Action = null
+	var parent_uuid := _resolve_parent_uuid(sub_action)
+	if not parent_uuid.is_empty():
+		parent_action = Database.get_action(parent_uuid) as Action
+		Logging.info("SubActionExecutor._try_imaginary_grant: 父 action = '%s' (%s)" % [parent_uuid, "found" if parent_action else "NOT FOUND"])
+
+	# ── 解析 grants（子优先 → 父继承 → 旧字段 fallback）──
+	var grants: Array = sub_action.resolve_imaginary_grants(parent_action)
+	if grants.is_empty():
+		Logging.info("SubActionExecutor._try_imaginary_grant: 无有效 grants，跳过意象获取")
+		return
+	Logging.info("SubActionExecutor._try_imaginary_grant: 解析到 %d 个 grant 条目" % grants.size())
+
+	# ── 加权单次 Roll ──
+	var total_pct: int = 0
+	for g in grants:
+		if g is _ImaginaryGrantChance:
+			total_pct += (g as _ImaginaryGrantChance).get_possibility_int()
+
+	if total_pct <= 0:
+		Logging.info("SubActionExecutor._try_imaginary_grant: 总概率=0%%，跳过")
+		return
+	if total_pct > 100:
+		Logging.err("SubActionExecutor._try_imaginary_grant: 总概率=%d%% > 100%%，截断为100%%" % total_pct)
+		total_pct = 100
+
+	var roll: int = randi() % 101
+	Logging.info("SubActionExecutor._try_imaginary_grant: roll=%d, total_pct=%d" % [roll, total_pct])
+
+	if roll >= total_pct:
+		Logging.info("SubActionExecutor._try_imaginary_grant: roll=%d 落在空区间(%d~100)，不触发意象获取" % [roll, total_pct])
+		return
+
+	# ── 找到命中的 grant ──
+	var accumulated: int = 0
+	var hit_grant: ImaginaryGrantChance = null
+	for g in grants:
+		if g is _ImaginaryGrantChance:
+			var gc := g as _ImaginaryGrantChance
+			accumulated += gc.get_possibility_int()
+			Logging.info("SubActionExecutor._try_imaginary_grant: 区间检查 type='%s' prob=%d accumulated=%d roll=%d" % [gc.imaginary_type, gc.get_possibility_int(), accumulated, roll])
+			if roll < accumulated:
+				hit_grant = gc
+				break
+
+	if not hit_grant:
+		Logging.err("SubActionExecutor._try_imaginary_grant: 加权 roll 未命中任何 grant（roll=%d total=%d），跳过" % [roll, total_pct])
+		return
+
+	Logging.info("SubActionExecutor._try_imaginary_grant: 🎯 命中 type='%s'" % hit_grant.imaginary_type)
+
+	# ── 按 type 过滤意象 → 随机选一个 ──
+	var picked := _pick_imaginary_by_type(hit_grant.imaginary_type)
+	if picked.is_empty():
+		Logging.warn("SubActionExecutor._try_imaginary_grant: type='%s' 无候选意象，跳过" % hit_grant.imaginary_type)
+		return
+
+	var base_uuid: String = picked.get("uuid", "")
+	var imag_name: String = picked.get("name", base_uuid)
+	var imag_hint: String = picked.get("get_hint", "")
+	var imag_type: String = picked.get("type", hit_grant.imaginary_type)
+
+	Logging.info("SubActionExecutor._try_imaginary_grant: 选中意象 '%s' (name=%s, type=%s, hint='%s')" % [base_uuid, imag_name, imag_type, imag_hint])
+
+	# ── 授予意象（写入 Database）──
+	EventBus.request_add_imaginary.emit(base_uuid)
+	Logging.info("SubActionExecutor._try_imaginary_grant: 已发射 request_add_imaginary('%s')" % base_uuid)
+
+	# ── 推送叙事事件（队列模式：request_event_key，不打断当前流）──
+	var event_uuid: String = _resolve_imaginary_event(base_uuid)
+	var event_context := {
+		"imaginary_uuid": base_uuid,
+		"imaginary_name": imag_name,
+		"imaginary_type": imag_type,
+		"imaginary_gain_hint": imag_hint,
+	}
+	Logging.info("SubActionExecutor._try_imaginary_grant: 队列推送意象事件 '%s' context=%s" % [event_uuid, str(event_context)])
+	EventBus.request_event_key.emit(event_uuid, event_context)
+
+
+## 加权单次 Roll：遍历 grants，累积概率，找到 roll 命中的 grant。
+## 返回命中的 ImaginaryGrantChance，若所有区间都未命中则返回 null。
+## 注意：此方法不直接调用，已内联到 _try_imaginary_grant 中以保持日志可读性。
+static func _roll_grant(grants: Array, roll: int) -> _ImaginaryGrantChance:
+	var accumulated: int = 0
+	for g in grants:
+		if g is _ImaginaryGrantChance:
+			var gc := g as _ImaginaryGrantChance
+			accumulated += gc.get_possibility_int()
+			if roll < accumulated:
+				return gc
+	return null
+
+
+## 加载意象定义表（复用 RollImaginaryOperator 的同款逻辑）。
+static var _cached_imaginary_defs: Dictionary = {}
+static var _defs_loaded: bool = false
+
+static func _load_imaginary_defs() -> Dictionary:
+	if _defs_loaded:
+		return _cached_imaginary_defs
+
+	var file := FileAccess.open("res://tools/data/imaginary_definitions.json", FileAccess.READ)
+	if not file:
+		Logging.err("SubActionExecutor._load_imaginary_defs: 无法打开 imaginary_definitions.json")
+		return {}
+
+	var content := file.get_as_text()
+	file.close()
+
+	var parsed = JSON.parse_string(content)
+	if parsed == null or typeof(parsed) != TYPE_DICTIONARY:
+		Logging.err("SubActionExecutor._load_imaginary_defs: JSON 解析失败")
+		return {}
+
+	_cached_imaginary_defs = parsed
+	_defs_loaded = true
+	Logging.info("SubActionExecutor._load_imaginary_defs: 成功加载 %d 条意象定义" % _cached_imaginary_defs.size())
+	return _cached_imaginary_defs
+
+
+## 从 imaginary_definitions.json 中按 type 过滤，随机选一个。
+## 返回 {uuid, name, type, get_hint} 字典；type 无候选时返回空字典。
+static func _pick_imaginary_by_type(target_type: String) -> Dictionary:
+	Logging.info("SubActionExecutor._pick_imaginary_by_type: 筛选 type='%s'" % target_type)
+
+	var defs := _load_imaginary_defs()
+	if defs.is_empty():
+		Logging.err("SubActionExecutor._pick_imaginary_by_type: 定义表为空")
+		return {}
+
+	var candidates: Array[Dictionary] = []
+	for uuid in defs:
+		var entry: Dictionary = defs[uuid]
+		var entry_type: String = str(entry.get("type", ""))
+		if entry_type == target_type:
+			candidates.append({
+				"uuid": str(uuid),
+				"name": str(entry.get("name", uuid)),
+				"type": entry_type,
+				"get_hint": str(entry.get("get_hint", "")),
+				"level": entry.get("level", 1),
+			})
+
+	if candidates.is_empty():
+		Logging.warn("SubActionExecutor._pick_imaginary_by_type: type='%s' 无候选意象" % target_type)
+		return {}
+
+	Logging.info("SubActionExecutor._pick_imaginary_by_type: 找到 %d 个 type='%s' 的候选意象" % [candidates.size(), target_type])
+	candidates.shuffle()
+	var picked: Dictionary = candidates[0]
+	Logging.info("SubActionExecutor._pick_imaginary_by_type: 随机选中 '%s' (name=%s, level=%d)" % [picked.get("uuid"), picked.get("name"), picked.get("level")])
+	return picked
+
+
+## 解析意象专属事件 uuid："imaginary_gain_{base_uuid}"。
+## 如果专属事件不存在，返回 FALLBACK_IMAGINARY_EVENT。
+static func _resolve_imaginary_event(base_uuid: String) -> String:
+	var specific_uuid := "imaginary_gain_" + base_uuid
+	var ev = Database.resolve(specific_uuid)
+	if ev != null:
+		Logging.info("SubActionExecutor._resolve_imaginary_event: 找到专属事件 '%s'" % specific_uuid)
+		return specific_uuid
+	Logging.info("SubActionExecutor._resolve_imaginary_event: 专属事件 '%s' 不存在，使用 fallback '%s'" % [specific_uuid, FALLBACK_IMAGINARY_EVENT])
+	return FALLBACK_IMAGINARY_EVENT
+
+
+## 从子 action 的 parent_action 字段（或 sub_actions 反向查找）解析父 action uuid。
+## 子 action 若是通过 CSV 生成的，其 parent_action 列明确指定了父 uuid。
+static func _resolve_parent_uuid(sub_action: Action) -> String:
+	# 方案 1: 全局扫描 Database 中所有 action，查找 sub_actions 包含 sub_action.uuid 的父 action
+	if not sub_action or sub_action.uuid.is_empty():
+		return ""
+
+	var all_actions := Database.get_actions_all()
+	for parent_id in all_actions:
+		var parent := Database.get_action(parent_id) as Action
+		if parent and parent.sub_actions.has(sub_action.uuid):
+			Logging.info("SubActionExecutor._resolve_parent_uuid: '%s' 的父 action = '%s'（反向查找）" % [sub_action.uuid, parent.uuid])
+			return parent.uuid
+
+	Logging.info("SubActionExecutor._resolve_parent_uuid: '%s' 无父 action（反向查找未命中）" % sub_action.uuid)
 	return ""

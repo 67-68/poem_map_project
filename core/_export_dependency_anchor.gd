@@ -56,6 +56,7 @@ const __preload_046 = preload("res://core/model/flag.gd")  # Flag
 const __preload_047 = preload("res://core/model/generator.gd")  # Generator
 const __preload_048 = preload("res://core/model/history_event.gd")  # HistoryEvent
 const __preload_049b = preload("res://core/model/imaginary.gd")  # Imaginary
+const __preload_049c = preload("res://core/model/imaginary_grant_chance.gd")  # ImaginaryGrantChance
 const __preload_050 = preload("res://core/model/imaginary_demand.gd")  # ImagenaryDemand
 const __preload_051 = preload("res://core/model/item_provider.gd")  # ItemProvider
 const __preload_051b = preload("res://core/modifier_config.gd")  # ModifierConfig

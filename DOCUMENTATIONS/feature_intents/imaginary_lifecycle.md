@@ -1,9 +1,12 @@
-# Imaginary 生命周期系统 (V11: 三大类意象 + FIFO顶替 + 5旬到期)
+# Imaginary 生命周期系统 (V12: + 行动触发意象获取)
 
 ## 文件
 - `core/model/imaginary.gd` — Imaginary extends Trait（V11: 新增 imaginary_type, created_at_day）
+- `core/model/imaginary_grant_chance.gd` — **新建**: Action 意象获取概率条目 Resource
+- `core/model/action.gd` — 新增 `imaginary_grants: Array[ImaginaryGrantChance]` + `resolve_imaginary_grants()`
 - `core/model/trait.gd` — Trait 基类（duration_xun/lasting_xun/trait_effect_operations）
 - `core/operators/roll_imaginary_operator.gd` — 创建 Imaginary（含 type 读取 + FIFO）
+- `core/sub_action_executor.gd` — `_try_imaginary_grant()` 行动触发意象获取入口
 - `core/player_state.gd` — `_on_request_add_imaginary()` / `init_imaginaries()` + `_enforce_imaginary_limit()`
 - `core/survival_manager.gd` — `_process_imaginary_effects()` 统一使用 lasting_xun/duration_xun
 - `core/tag_manager.gd` — `_sync_poem_stance()` 三大类计数 → stance tag
@@ -14,6 +17,8 @@
 - `ui/trait_demonstrator.tscn` — HSeparator 节点
 - `ui/poem_crafter.gd` — 删除 MODE_TO_INTENT/溢出Slot；接入 CheckButton 发布效果
 - `tools/data/imaginary_definitions.json` — 意象定义库（name/level/type/get_hint）
+- `data/1_core_rules/events/fallback/imaginary_gain_fallback.tres` — 通用意象获取 fallback 事件
+- `data/3_actions_pool/actions/*.tres` — 5 个父 action 配置 `imaginary_grants`
 
 ## 核心机制
 
@@ -91,3 +96,52 @@ Lv3 Imaginary (duration_xun=5)
 - Imaginary 与 Trait 混排在 [`TraitGrid`](ui/left_player_panel.gd:484) 中
 - 印章颜色: L1 灰 / L2 白 / L3 金
 - HSeparator 显示到期剩余比例（Imaginary 专属）
+
+## V12: 行动触发意象获取 (Action-Triggered Imaginary Grant)
+
+### 设计意图
+
+玩家执行子行动成功后，有一定概率通过加权抽奖获得一个与行动类型关联的意象。意象获取事件通过 `request_event_key` 进入队列（不打断正常叙事流），与主事件顺序播放。
+
+### ImaginaryGrantChance 数据类
+
+[`core/model/imaginary_grant_chance.gd`](core/model/imaginary_grant_chance.gd:1) — 每个条目描述一种意象类型及其独立获取概率。多个条目间通过加权单次 Roll 消歧。
+
+### Action 字段
+
+- [`Action.imaginary_grants`](core/model/action.gd:1): `Array[ImaginaryGrantChance]` — 多条目配置
+- [`Action.imaginary_type`](core/model/action.gd:1) + `imaginary_obtain_possibility`: 旧单条目字段（废弃但保留兼容）
+- [`Action.resolve_imaginary_grants(parent)`](core/model/action.gd:1): 优先级: 自己的 grants > 旧字段 fallback > 父行动继承
+
+### 数据流
+
+```
+SubActionExecutor.execute() success 路径
+  → _try_imaginary_grant(sub_action, state)
+    → resolve_imaginary_grants(parent_action)
+    → 加权单次 Roll（randi() % 101）
+    → 命中 → 按 type 从 imaginary_definitions.json 过滤
+    → 随机选一个意象
+    → EventBus.request_add_imaginary → 写入 Database
+    → EventBus.request_event_key → 队列排队叙事事件
+  → scan_events → request_event_key 主事件
+  → 播放顺序: 意象事件 → 主事件
+```
+
+### 各父 Action 意象配置
+
+| 父 Action | 意象类型 | 概率 | 概率值 |
+|-----------|:---:|:---:|:---:|
+| bai_ye (拜谒) | 功名 | `xxs_success_rate` | 20% |
+| fang_shi (坊市) | 功名 | `xxxs_success_rate` | 10% |
+| fang_shi (坊市) | 狂放 | `xxxs_success_rate` | 10% |
+| du_zhuo (闲居) | 隐逸 | `xxs_success_rate` | 20% |
+| deng_gao (出游) | 隐逸 | `xxxs_success_rate` | 10% |
+| jiao_you (交游) | 狂放 | `xxs_success_rate` | 20% |
+
+> 子行动不填 `imaginary_grants`，运行时自动从父 action 继承。
+
+### 事件路由
+
+- 专属事件 `imaginary_gain_{uuid}` 存在 → 使用专属事件
+- 专属事件不存在 → fallback `imaginary_gain_fallback`，动态插值 `{@imaginary_gain_hint}`

@@ -4,6 +4,12 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_1nf2l"]
 [ext_resource type="Texture2D" uid="uid://d2fkera73a5dj" path="res://assets/stamps/denggao_stamp.png" id="4_b6lfb"]
 [ext_resource type="Script" uid="uid://crewiibqgbs2f" path="res://core/model/scene_action.gd" id="5_ebpm8"]
+[ext_resource type="Script" path="res://core/model/imaginary_grant_chance.gd" id="6_igc"]
+
+[sub_resource type="Resource" id="Resource_denggao_yinyi"]
+script = ExtResource("6_igc")
+imaginary_type = "隐逸"
+obtain_possibility = "xxxs_success_rate"
 
 [resource]
 script = ExtResource("5_ebpm8")
@@ -14,6 +20,7 @@ action_results = Array[ExtResource("2_1nf2l")]([])
 fallback_event_uuid = "denggao_fallback"
 lock_narrative = "TRES_DENG_GAO_LOCK_NARRATIVE_0"
 sub_actions = Array[String](["denggao_qujiangchi", "denggao_leyouyuan", "denggao_shaolingyuan"])
+imaginary_grants = Array[ExtResource("6_igc")]([SubResource("Resource_denggao_yinyi")])
 uuid = "deng_gao"
 name = "TRES_DENG_GAO_NAME_0"
 description = "TRES_DENG_GAO_DESCRIPTION_0"

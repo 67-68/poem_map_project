@@ -173,5 +173,43 @@ func get_all_action_results() -> Array:
 	"baiye",
 ) var topic: String = ""
 
-@export var imaginary_type: String = '' # 必须是 功名, 隐逸, 狂放中的一种。分别是"gongming, yinyi, kuangfang". 如果不填充，那么寻找父行动的type. 如果父行动也没有就是不获得
-@export var imaginary_obtain_possibility: String = "xxxs_success_rate" # named amount
+## ── 意象获取概率条目（新字段，多条目支持）──
+## 每个 ImaginaryGrantChance 描述一种意象类型及其独立获取概率。
+## 多个条目之间通过加权单次 Roll 消歧（概率总和必须 ≤ 100%）。
+## 子行动优先使用自己的 grants，为空时继承父行动的 grants。
+@export var imaginary_grants: Array[ImaginaryGrantChance] = []
+
+## @deprecated — 使用 imaginary_grants 替代。
+## 单条目旧字段，仅在 imaginary_grants 为空时作为 fallback。
+@export var imaginary_type: String = ''
+## @deprecated — 使用 imaginary_grants 替代。
+@export var imaginary_obtain_possibility: String = "xxxs_success_rate"
+
+## 解析有效意象获取条目。
+## 优先级: 自己的 imaginary_grants > 旧字段 fallback > 父行动继承。
+## @param parent_action: 可选，父 Action 实例（用于继承查找）
+## @return Array[ImaginaryGrantChance] — 有效条目（可能为空数组）
+func resolve_imaginary_grants(parent_action: Action = null) -> Array[ImaginaryGrantChance]:
+	# 1. 自己的 imagary_grants 明确配置了 → 直接用
+	if not imaginary_grants.is_empty():
+		Logging.info("Action.resolve_imaginary_grants: '%s' 使用自身 imaginary_grants (%d 条目)" % [uuid, imaginary_grants.size()])
+		ImaginaryGrantChance.validate_probability_sum(imaginary_grants)
+		return imaginary_grants.duplicate()
+
+	# 2. 旧字段 fallback: imaginary_type 非空 → 构造单条目
+	if not imaginary_type.is_empty():
+		Logging.info("Action.resolve_imaginary_grants: '%s' 从旧字段 imaginary_type='%s' + obtain_possibility='%s' 构造单条目" % [uuid, imaginary_type, imaginary_obtain_possibility])
+		var grant := ImaginaryGrantChance.new()
+		grant.imaginary_type = imaginary_type
+		grant.obtain_possibility = imaginary_obtain_possibility
+		var arr: Array[ImaginaryGrantChance] = [grant]
+		ImaginaryGrantChance.validate_probability_sum(arr)
+		return arr
+
+	# 3. 查找父行动
+	if parent_action:
+		Logging.info("Action.resolve_imaginary_grants: '%s' 无自身配置，尝试继承父行动 '%s'" % [uuid, parent_action.uuid])
+		return parent_action.resolve_imaginary_grants()
+
+	Logging.info("Action.resolve_imaginary_grants: '%s' 无任何意象获取配置，返回空" % uuid)
+	return []
