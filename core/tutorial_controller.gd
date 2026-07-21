@@ -391,6 +391,7 @@ func _clear_all_tut_flags() -> void:
 	for flag in tut_flags:
 		PlayerState.set_flag(flag, false)
 	Logging.info("TutorialController: 所有 tutorial flag 已清除")
+	RelationFlagManager.set_person_state("tut_taoist",RelationFlagManager.PERSON_STATE.UNCHARTED)
 
 
 ## 🆕 将 tutorial 特有的 action 加入全局黑名单。

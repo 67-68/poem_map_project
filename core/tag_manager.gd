@@ -163,32 +163,32 @@ static func inject_death_tags() -> void:
 	Logging.info("[TagManager] inject_death_tags: 开始死亡标签注入")
 
 	if PlayerState.has_trait("poisoned"):
-		_append_death_tag("actor:death:poisoned")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_POISONED))
 
 	if _last_action_contains("action:baiye:threaten"):
-		_append_death_tag("actor:death:threaten")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_THREATEN))
 
 	var drain_src: String = PlayerState.get_last_health_drain_source()
 	if not drain_src.is_empty():
 		Logging.info("[TagManager] inject_death_tags: last_health_drain_source='%s'" % drain_src)
 		if _is_poem_related_drain(drain_src):
-			_append_death_tag("actor:death:poem_implosion")
+			_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_POEM_IMPLOSION))
 		elif _is_fangshi_related_drain(drain_src):
-			_append_death_tag("actor:death:overwork")
+			_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_OVERWORK))
 
 	if PlayerState.has_trait("sprained_ankle"):
-		_append_death_tag("actor:death:sprained")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_SPRAINED))
 
 	if PlayerState.get_stat_val("money") > 60:
-		_append_death_tag("actor:death:rich_funeral")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_RICH_FUNERAL))
 
 	if _has_known_npc():
-		_append_death_tag("actor:death:has_friends")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_HAS_FRIENDS))
 
 	_inject_poem_stance_death_tag()
 
 	if PlayerState.get_stat_val("money") < 10:
-		_append_death_tag("actor:death:poor")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_POOR))
 
 	Logging.info("[TagManager] inject_death_tags: 完成, current_action_tags=%s" % str(PlayerState.current_action_tags))
 
@@ -235,8 +235,8 @@ static func _inject_poem_stance_death_tag() -> void:
 		return
 
 	if denggao_count > baiye_count:
-		_append_death_tag("actor:death:good_poet")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_GOOD_POET))
 	elif baiye_count > denggao_count:
-		_append_death_tag("actor:death:bad_poet")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_BAD_POET))
 	else:
-		_append_death_tag("actor:death:neutral_poet")
+		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_NEUTRAL_POET))

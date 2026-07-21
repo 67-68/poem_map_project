@@ -25,13 +25,13 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("3_death")
+death_reason = "DEATH_EVENT_POISONED_REASON"
+death_tutorial = "DEATH_EVENT_POISONED_TUTORIAL"
+drained_resource_type = "health"
+weight = 120.0
 _action_tags = Array[int]([60])
 options = Array[ExtResource("1_opt")]([SubResource("Resource_option")])
 uuid = "event_death_poisoned"
-name = "毒发身亡"
-description = "你倒在药铺后巷，手指青黑，呼吸渐止。"
-death_reason = "坊市试药之毒终于拿走了最后一丝血。你倒在药铺后巷，手指青黑，呼吸渐止。"
-death_tutorial = "没有生命就别试药，去坊市打普通工。或者——找人解毒？长安又不是没有能治的人。"
-drained_resource_type = "health"
-weight = 120
+name = "DEATH_EVENT_POISONED_NAME"
+description = "DEATH_EVENT_POISONED_DESC"
 metadata/_custom_type_script = "uid://cfvk3b0rxipt2"

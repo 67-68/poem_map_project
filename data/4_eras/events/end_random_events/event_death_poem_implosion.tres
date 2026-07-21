@@ -25,13 +25,13 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("3_death")
+death_reason = "DEATH_EVENT_POEM_IMPLOSION_REASON"
+death_tutorial = "DEATH_EVENT_POEM_IMPLOSION_TUTORIAL"
+drained_resource_type = "health"
+weight = 110.0
 _action_tags = Array[int]([62])
 options = Array[ExtResource("1_opt")]([SubResource("Resource_option")])
 uuid = "event_death_poem_implosion"
-name = "气血迸裂"
-description = "意象堆叠如山崩，而你只是山下的一粒沙。"
-death_reason = "气血迸裂。普通的身体，无法安放躁动的灵魂。意象堆叠如山崩，而你只是山下的一粒沙。"
-death_tutorial = "诗词和意象是高风险的奢侈品。低资源的时候——别碰。活下来才能写诗，死了是别人给你写挽联。"
-drained_resource_type = "health"
-weight = 110
+name = "DEATH_EVENT_POEM_IMPLOSION_NAME"
+description = "DEATH_EVENT_POEM_IMPLOSION_DESC"
 metadata/_custom_type_script = "uid://cfvk3b0rxipt2"
