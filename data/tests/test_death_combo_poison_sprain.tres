@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/random_event.gd" id="event"]
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="opt"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="evopt"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="baseop"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="prop"]
+[ext_resource type="Script" path="res://core/model/trait_operator.gd" id="traitop"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="cr"]
+
+[sub_resource type="Resource" id="trait_poisoned"]
+script = ExtResource("traitop")
+str_traits = "poisoned"
+
+[sub_resource type="Resource" id="trait_sprained"]
+script = ExtResource("traitop")
+str_traits = "sprained_ankle"
+
+[sub_resource type="Resource" id="prop_health"]
+script = ExtResource("prop")
+str_props = "health"
+value = -50
+
+[sub_resource type="Resource" id="result"]
+script = ExtResource("cr")
+operators = Array[ExtResource("baseop")]([SubResource("trait_poisoned"), SubResource("trait_sprained"), SubResource("prop_health")])
+
+[sub_resource type="Resource" id="option"]
+script = ExtResource("evopt")
+choice_result = SubResource("result")
+description = "中毒+崴脚+扣50血"
+
+[resource]
+script = ExtResource("event")
+era = "1_core_rules"
+options = Array[ExtResource("opt")]([SubResource("option")])
+uuid = "test_death_combo_poison_sprain"
+name = "【测试】毒+崴脚濒死"
+description = "同时赋予中毒和崴脚trait，扣50血。死亡后可匹配多个tag。"

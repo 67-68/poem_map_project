@@ -160,8 +160,6 @@ func _replace_stance_tag(new_stance: String) -> void:
 # ════════════════════════════════════════════════════════════════
 
 static func inject_death_tags() -> void:
-	"""whatever. the ai kept misundeerstood me, fk it"""
-	
 	Logging.info("[TagManager] inject_death_tags: 开始死亡标签注入")
 
 	if PlayerState.has_trait("poisoned"):

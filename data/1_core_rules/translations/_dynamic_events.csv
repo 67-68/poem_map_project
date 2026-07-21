@@ -799,14 +799,6 @@ CODE_TIME_SERVICE_F9160160E9,元和,Yuanhe,
 CODE_TIME_SERVICE_FB3F2583E0,中和,Zhonghe,
 CODE_TIME_SERVICE_FC7EDD399A,十,Ten,
 CODE_TIME_SERVICE_FEAEC3E70D,中旬,mid,
-CODE_TOMB_STONE_SCREEN_1E45D99EA5,[center][font_size=36][color=#aa3333]■ 观测停止 ■[/color][/font_size][/center]\n,[center][font_size=36][color=#aa3333]■ Observation Terminated ■[/color][/font_size][/center]\n,
-CODE_TOMB_STONE_SCREEN_1F46FB6E91,[color=#999999] - %s 你干了 %s [/color]\n,[color=#999999] - %s you did %s [/color]\n,
-CODE_TOMB_STONE_SCREEN_2B1EDECF08,[color=#88888855][font_size=16]数据快照 | 财富:%d | 仕途进程:%d [/font_size][/color]\n\n,[color=#88888855][font_size=16]Data Snapshot | Wealth: %d | Career progress: %d [/font_size][/color]\n\n,
-CODE_TOMB_STONE_SCREEN_3D83BB3103,\n[center][color=#555555]...然而这些世俗的挣扎，终将被时间彻底风化...[/color][/center]\n\n,\n[center][color=#555555]...Yet these worldly struggles shall all be worn away by time...[/color][/center]\n\n,
-CODE_TOMB_STONE_SCREEN_46432180C4,观测者消逝于无名的熵增...,The observer fades into nameless entropy...,
-CODE_TOMB_STONE_SCREEN_96317E1F85,[center][font_size=40][color=#555555]（绝笔无言，泯然众人）[/color][/font_size][/center]\n,"[center][font_size=40][color=#555555](No final words, lost among the countless)[/color][/font_size][/center]\n",
-CODE_TOMB_STONE_SCREEN_D75D9088E0,\n[center][color=#911414]可怜的人类，如虫子一般被风吹散，不曾留下任何挣扎的痕迹[/color][/center]\n\n,"\n[center][color=#911414]Pitiful humans, scattered by the wind like insects, leaving not a trace of their struggle behind[/color][/center]\n\n",
-CODE_TOMB_STONE_SCREEN_E888517B9E,[color=#cccccc]观测记录：[/color]\n,[color=#cccccc]Observation Log:[/color]\n,
 CODE_TRAIT_DEMONSTRATOR_4D0041FE1D,【%s】\n（未注册的软特质，无详细效果数据）,"【%s】\n(Unregistered soft trait, no detailed effect data)",
 CODE_TRAIT_HINT_FORMATTER_242227891D,• 所有行动：+%d天%s,• All actions: +%d days%s,
 CODE_TRAIT_HINT_FORMATTER_3F4306227C,（未知道）,(Unknown),
@@ -3016,3 +3008,35 @@ UI_YANG_KE_TEXT_0,疲,Fatigue,
 UI_MENU_INTRO_TITLE,介绍,Intro,
 UI_MENU_INTRO,745 年，作为中年杜甫，长安的小人物，在安史之乱前繁华的长安城生存下来。写诗，考取功名，金榜题名？,Survive as Du Fu,
 UI_SETTING_MUSIC,音量: %d%%,Music: %d%%
+TOMB_STONE_COST_LIST_SEP,、,", "
+TOMB_STONE_COST_WRAPPER,（{costs}）, ({costs})
+TOMB_STONE_ITEM_SEPARATOR,、,", "
+TOMB_STONE_FLAVOR_HEALTH,气血乃人之根本。过度消耗健康意味着身体被掏空——「正气存内，邪不可干」，体虚则百病丛生。,"Health is the root of life. Draining it excessively depletes the body — ""When righteous qi dwells within, no evil can invade."" A weak body invites a hundred ailments."
+TOMB_STONE_FLAVOR_MONEY,钱财如水，流去复来。散尽千金，不过换来几场醉。,"Wealth is like water — it ebbs and flows. Scatter a thousand gold pieces, and all you get are a few nights of drunkenness."
+TOMB_STONE_FLAVOR_PRESTIGE,声誉是士人的第二生命。声望耗尽，纵有满腹经纶，亦无人问津。,"Reputation is a scholar's second life. Spend all your prestige, and even the greatest learning will attract no one's notice."
+TOMB_STONE_FLAVOR_TALENT,才华耗尽如灯油枯竭。江郎亦有才尽之时，何况凡人。,"Talent running dry is like a lamp burning out. Even Jiang Yan's genius faded — how much more so for ordinary mortals."
+TOMB_STONE_FLAVOR_TIME,光阴似箭，日月如梭。你把最好的年华，都付与了这些事。,"Time flies like an arrow, the sun and moon shuttle back and forth. You gave your best years to these pursuits."
+TOMB_STONE_FLAVOR_PROGRESS,功名路上，进寸退尺。消耗的进度，是你再也回不去的雄心。,"On the road to officialdom, you gain an inch only to lose a foot. The progress you squander is the ambition you can never reclaim."
+TOMB_STONE_FLAVOR_ASTUTENESS,洞察人心耗费心神。城府越深，负担越重。,"Reading others' hearts depletes your spirit. The deeper your cunning, the heavier the burden."
+TOMB_STONE_FLAVOR_COMPOSURE,泰山崩于前而色不变？一次两次可以，多了谁都扛不住。,"Unmoved even if Mount Tai crumbles before you? You can manage it once or twice — beyond that, no one can endure."
+TOMB_STONE_FLAVOR_INSPIRATION,灵感如朝露，转瞬即逝。消耗的每一分兴，都是你与缪斯女神的赌注。,"Inspiration is like morning dew — fleeting and fragile. Every spark of creativity you spend is a wager with the muse."
+TOMB_STONE_FLAVOR_MOMENTUM,势如破竹，亦如退潮。消耗气势，如同逆水行舟。,"Momentum can cleave through like a blade — or recede like the tide. Spending it is like rowing against the current."
+TOMB_STONE_TIME_RANK_PRIMARY,你花了{pct}%的时间在【{action}】上。,"You spent {pct}% of your time on [{action}]."
+TOMB_STONE_TIME_RANK_PRIMARY_WITH_COST,你花了{pct}%的时间{costs}在【{action}】上。,"You spent {pct}% of your time {costs} on [{action}]."
+TOMB_STONE_TIME_RANK_SECONDARY,其次为【{action}】，占{pct}%的时间。,"Second was [{action}], taking {pct}% of your time."
+TOMB_STONE_TIME_RANK_SECONDARY_WITH_COST,其次为【{action}】，占{pct}%的时间{costs}。,"Second was [{action}], taking {pct}% of your time {costs}."
+TOMB_STONE_TIME_RANK_REST,其余{count}个行动用了{pct}%的时间。,"The remaining {count} actions took {pct}% of your time."
+TOMB_STONE_TIME_RANK_REST_WITH_COST,其余{count}个行动用了{pct}%的时间，共消耗{costs}。,"The remaining {count} actions took {pct}% of your time, consuming {costs} in total."
+TOMB_STONE_COST_ENTRY,{amount}{unit},{amount}{unit}
+TOMB_STONE_SPECIFIC_RESOURCE_ITEM,你用了{amount}{unit}在【{action}】。,"You spent {amount}{unit} on [{action}]."
+TOMB_STONE_SPECIFIC_RESOURCE_REST,另外{amount}{unit}花在了其他事情上。,"Another {amount}{unit} was spent on other matters."
+TOMB_STONE_MIDWARE_POEMS,你创作了{count}首诗词,You composed {count} poems
+TOMB_STONE_MIDWARE_FRIENDS,结交了{count}个人,You befriended {count} people
+TOMB_STONE_MIDWARE_IDEAS,接受了{count}个理念,You accepted {count} convictions
+TOMB_STONE_HISTORY_MILESTONE_FIRST,{date}，你第一次{desc}。,"{date}, for the first time, you {desc}."
+TOMB_STONE_HISTORY_MILESTONE,{date}，你{desc}。,"{date}, you {desc}."
+TOMB_STONE_HISTORY_ENTRY,{date}，{event},{date}, {event}
+TOMB_STONE_POEM_ASSESS_NONE,你一生未曾留下诗篇。在这个以诗为魂的时代，你是一个沉默的过客。,"You left behind no poetry in your lifetime. In this age where verse is soul, you were a silent passerby."
+TOMB_STONE_POEM_ASSESS_ZHUOLIU,浊流诗人——你的笔下尽是家国天下的沉重，与功名尘世的挣扎。在长安诗坛，你是那个不肯向现实低头的倔强者。,"A Zhuoliu poet — your brush is burdened with the weight of family, state, and the struggle for worldly recognition. In Chang'an's poetry circles, you are that stubborn soul who refused to bow to reality."
+TOMB_STONE_POEM_ASSESS_QINGLIU,清流诗人——你的诗是山间的风，是花间的酒，是月下的独白。世人说你不问世事，可你的自由，恰是最大的反叛。,"A Qingliu poet — your verse is the mountain breeze, wine among blossoms, a soliloquy under the moon. They say you shun worldly affairs, but your freedom is the greatest rebellion of all."
+TOMB_STONE_POEM_ASSESS_MIXED,你的诗如人——一半清流，一半浊流。既有优游的洒脱，亦有兼济的沉郁。在旁人眼中，你就是盛唐千百面容中，最复杂的那一张。,"Your poems mirror yourself — half Qingliu, half Zhuoliu. Carefree detachment mingled with somber compassion. In the eyes of others, you are the most complex face among the countless visages of the High Tang."
