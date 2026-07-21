@@ -105,7 +105,9 @@ func operate():
 	imaginary.name = str(def_data.get("name", _picked_uuid))
 	imaginary.level = level
 	imaginary.get_hint = _picked_hint
-	imaginary.duration_xun = 2  # 所有等级统一 2 旬后到期删除
+	imaginary.duration_xun = 5  # V11: 所有等级统一 5 旬后到期删除
+	imaginary.imaginary_type = str(def_data.get("type", ""))
+	imaginary.created_at_day = TimeService._total_days_elapsed
 
 	# 🆕 Lv2: 持有期每旬 -5 健康（走 trait_effect_operations）
 	if level == 2:
@@ -116,13 +118,46 @@ func operate():
 		Logging.info("RollImaginaryOperator.operate: Lv2 Imaginary '%s' → trait_effect_operations: health -5" % final_uuid)
 
 	Database.imaginaries_detail[final_uuid] = imaginary
-	Logging.info("RollImaginaryOperator.operate: 新建 Imaginary '%s' (base=%s, name=%s, level=%d, duration_xun=2)" % [final_uuid, _picked_uuid, imaginary.name, imaginary.level])
+	Logging.info("RollImaginaryOperator.operate: 新建 Imaginary '%s' (base=%s, name=%s, level=%d, type=%s, duration_xun=5, created_at_day=%d)" % [final_uuid, _picked_uuid, imaginary.name, imaginary.level, imaginary.imaginary_type, imaginary.created_at_day])
+
+	# V11: FIFO 顶替 — 超出上限时删除最老的 Imaginary
+	_enforce_imaginary_limit()
 
 	# 通知 UI 更新
 	EventBus.imaginary_changed.emit()
 
 
 ## 懒加载 + 缓存：每次调用都重新加载（确保拿到最新数据）
+
+
+## V11: FIFO 顶替 — 超出 max_imaginary_managable 时删除最老的 Imaginary
+func _enforce_imaginary_limit() -> void:
+	var ps = _get_player_state()
+	if not ps:
+		Logging.err("RollImaginaryOperator._enforce_imaginary_limit: 无法获取 PlayerState，跳过 FIFO")
+		return
+	var limit: int = ps.max_imaginary_managable
+	if Database.imaginaries_detail.size() <= limit:
+		return
+
+	var oldest_uuid: String = ""
+	var oldest_day: int = 0x7FFFFFFF
+	for uuid in Database.imaginaries_detail:
+		var imag = Database.imaginaries_detail[uuid]
+		if not imag is Imaginary:
+			continue
+		if imag.created_at_day < oldest_day:
+			oldest_day = imag.created_at_day
+			oldest_uuid = uuid
+		elif imag.created_at_day == oldest_day and oldest_uuid.is_empty():
+			oldest_uuid = uuid
+
+	if not oldest_uuid.is_empty():
+		var imag = Database.imaginaries_detail[oldest_uuid]
+		Logging.info("RollImaginaryOperator._enforce_imaginary_limit: FIFO 顶替 — 删除最旧 Imaginary '%s' (type=%s, created_at_day=%d)" % [oldest_uuid, imag.imaginary_type if imag is Imaginary else "?", oldest_day])
+		Database.imaginaries_detail.erase(oldest_uuid)
+	else:
+		Logging.err("RollImaginaryOperator._enforce_imaginary_limit: 无法找到最旧的 Imaginary")
 static var _cached_defs: Dictionary = {}
 static var _cached: bool = false
 

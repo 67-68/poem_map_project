@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://12nirlu58pgm" path="res://ui/yang_ke.tscn" id="1_1llxn"]
 [ext_resource type="Script" uid="uid://dt338vb6jcj68" path="res://ui/trait_demonstrator.gd" id="1_script"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7xb00"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o1n17"]
 content_margin_left = 2.0
 content_margin_top = 2.0
@@ -16,18 +18,26 @@ border_color = Color(0, 0, 0, 1)
 offset_left = 81.0
 offset_right = 81.0
 offset_bottom = 25.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_o1n17")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_7xb00")
 script = ExtResource("1_script")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=972899098]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1662795872]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=972899098]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="YangKe" parent="HBoxContainer" unique_id=2030771061 instance=ExtResource("1_1llxn")]
+[node name="YangKe" parent="VBoxContainer/HBoxContainer" unique_id=2030771061 instance=ExtResource("1_1llxn")]
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="TraitNameLabel" type="Label" parent="HBoxContainer" unique_id=2142609938]
+[node name="TraitNameLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=2142609938]
 layout_mode = 2
 theme_type_variation = &"DefaultText"
 text = "UI_TRAIT_DEMONSTRATOR_TEXT_0"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1777833150]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxFlat_o1n17")

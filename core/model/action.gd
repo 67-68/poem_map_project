@@ -172,3 +172,6 @@ func get_all_action_results() -> Array:
 	"poem",
 	"baiye",
 ) var topic: String = ""
+
+@export var imaginary_type: String = '' # 必须是 功名, 隐逸, 狂放中的一种。分别是"gongming, yinyi, kuangfang". 如果不填充，那么寻找父行动的type. 如果父行动也没有就是不获得
+@export var imaginary_obtain_possibility: String = "xxxs_success_rate" # named amount

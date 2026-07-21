@@ -1,14 +1,15 @@
 extends PanelContainer
 
-## 诗词创作面板 — V9: 纯函数评分制 + 三级事件库抽奖
+## 诗词创作面板 — V11: 意象三大类重构 + FIFO + 发布效果
 ##
-## V9 变更:
-##   - 砍掉 C(N,3) 食谱枚举，替换为线性评分制
-##   - 纯函数 PoemCraftingCalculator：禁止 randf/Database/PlayerState
-##   - 概率升级抽奖由调用方执行，纯函数仅输出概率
-##   - 三个等级的 EventBase 事件库（平庸/佳作/绝唱）
-##   - mode 硬赋值 secular/literary（干谒→64/0，登高→0/48）
-##   - 消耗全部参与计算的 Imaginary（不再仅消耗命中 3 个）
+## V11 变更:
+##   - 删除 MODE_TO_INTENT + poem.intent 赋值
+##   - 删除随机截断/溢出 Slot 逻辑（FIFO 已保证不溢出）
+##   - poem.lore = true（命中配方时标记为有典故）
+##   - CheckButton「发布」接入 PoemEffectCalculator 计算效果
+##   - 保留：纯函数评分制 + 三级事件库 + 全量消耗意象 + 创作代价
+
+const _PoemEffectCalculator = preload("res://core/poem_effect_calculator.gd")
 
 ## 当前选中的 toggle mode: "deng_gao" | "gan_ye"
 var current_mode: String = "gan_ye"
@@ -45,12 +46,6 @@ var _cached_mode_reward_operator: PropertyOperator = null
 
 ## 🆕 创作诗词所需灵感（兴）消耗
 const POEM_CRAFT_INSPIRATION_COST := 20
-
-## mode → intent 映射
-const MODE_TO_INTENT := {
-	"gan_ye": "official",
-	"deng_gao": "literary",
-}
 
 ## ──────────────────────────────────────────────
 ## 文学化评价常量字典
@@ -199,33 +194,14 @@ func _rebuild_slots() -> void:
 		h_container.add_child(label)
 		return
 
-	var max_visible: int = PlayerState.max_imaginary_managable
-	var display_list: Array[Imaginary] = []
-	var has_overflow: bool = false
+	# V11: FIFO 已保证总数 ≤ max_imaginary_managable，直接全部展示
+	Logging.info('PoemCrafter(V11): 展示全部 %d 个 Imaginary（上限=%d）' % [all_imaginaries.size(), PlayerState.max_imaginary_managable])
 
-	if all_imaginaries.size() <= max_visible:
-		display_list = all_imaginaries
-		Logging.info('PoemCrafter: 全部展示 %d 个 Imaginary' % display_list.size())
-	else:
-		# 随机截断
-		all_imaginaries.shuffle()
-		for i in range(max_visible):
-			display_list.append(all_imaginaries[i])
-		has_overflow = true
-		Logging.info('PoemCrafter: 随机截断 %d/%d 个 Imaginary，溢出=%s' % [max_visible, all_imaginaries.size(), has_overflow])
-
-	# 创建 PoemSlot
-	for imag in display_list:
+	# 创建 PoemSlot（所有意象直接展示）
+	for imag in all_imaginaries:
 		var slot := _create_slot(imag.name, false)
 		slot.item_occupying = imag
 		h_container.add_child(slot)
-
-	# 溢出 Slot
-	if has_overflow:
-		var overflow_slot := _create_slot(tr("CODE_POEM_CRAFTER_1637FC84DB"), true)
-		overflow_slot.item_occupying = null
-		h_container.add_child(overflow_slot)
-		Logging.info('PoemCrafter: 添加溢出 Slot "过多…"')
 
 	# 自动预览
 	_preview_current()
@@ -292,13 +268,9 @@ func _on_button_pressed() -> void:
 
 	var final_level: int = _cached_final_level
 	var upgrade_succeeded: bool = _cached_upgrade_succeeded
-	Logging.info('PoemCrafter(V9.1): 从缓存读取 — final_level=%d (%s), upgrade=%s' % [final_level, PoemCraftingCalculator.new().get_level_display_name(final_level), upgrade_succeeded])
+	Logging.info('PoemCrafter(V11): 从缓存读取 — final_level=%d (%s), upgrade=%s' % [final_level, PoemCraftingCalculator.new().get_level_display_name(final_level), upgrade_succeeded])
 
-	# 🆕 V10: 确定 intent（current_mode → official/literary）
-	var poem_intent: String = MODE_TO_INTENT.get(current_mode, "")
-	Logging.info('PoemCrafter(V10): intent = %s (mode=%s)' % [poem_intent, current_mode])
-
-	# ── 3. 创建 Poem 对象（V10: 不再绑定 secular/literary value，价值由 PoemRewardOperator 消费时决定） ──
+	# ── 3. 创建 Poem 对象（V11: 删除 intent，价值由 PoemRewardOperator 消费时决定） ──
 	# V12: 优先使用配方匹配数据，匹配失败则回退通用名
 	var level_display_name := PoemCraftingCalculator.new().get_level_display_name(final_level)
 	var matched: Poem = _cached_result.matched_recipe
@@ -314,8 +286,8 @@ func _on_button_pressed() -> void:
 		poem.level = final_level
 		poem.specific_topic = matched.specific_topic
 		poem.required_fragments = matched.required_fragments.duplicate()
-		poem.intent = poem_intent
-		Logging.info('PoemCrafter(V12): Poem from recipe — uuid=%s, name=%s, level=%d, topic=%s, intent=%s, recipe_uuid=%s' % [poem.uuid, poem.name, poem.level, matched.specific_topic, poem_intent, matched.uuid])
+		poem.lore = true  # V11: 命中配方 → 标记为有典故
+		Logging.info('PoemCrafter(V11): Poem from recipe — uuid=%s, name=%s, level=%d, topic=%s, lore=true, recipe_uuid=%s' % [poem.uuid, poem.name, poem.level, matched.specific_topic, matched.uuid])
 	else:
 		# 无匹配配方 → 回退通用名
 		poem = Poem.new("POEM", level_display_name)
@@ -323,8 +295,7 @@ func _on_button_pressed() -> void:
 		poem.name = "《%s》" % level_display_name
 		poem.level = final_level
 		poem.specific_topic = level_display_name
-		poem.intent = poem_intent
-		Logging.info('PoemCrafter(V12): Poem generic fallback — uuid=%s, name=%s, level=%d, intent=%s' % [poem.uuid, poem.name, poem.level, poem_intent])
+		Logging.info('PoemCrafter(V11): Poem generic fallback — uuid=%s, name=%s, level=%d' % [poem.uuid, poem.name, poem.level])
 
 	PlayerState.created_poems.append(poem)
 	Logging.info('PoemCrafter(V10): Poem added to created_poems')
@@ -359,24 +330,35 @@ func _on_button_pressed() -> void:
 	# ── 6. 消耗所有参与计算的 Imaginary ──
 	_consume_all_imaginaries()
 
-	# ── 7. 从对应等级的 EventBase 抽取事件 ──
+	# ── 7. V11: 发布按钮效果计算 ──
+	var publish_checkbtn := $InputImagPanel/CheckButton as CheckButton
+	var effect_desc: String = ""
+	if publish_checkbtn and publish_checkbtn.button_pressed:
+		var effect_result := _PoemEffectCalculator.calculate(poem)
+		effect_desc = effect_result.effect_desc
+		Logging.info('PoemCrafter(V11): 发布按钮已勾选 — effect_desc=%s' % effect_desc)
+	else:
+		Logging.info('PoemCrafter(V11): 发布按钮未勾选，跳过效果计算')
+
+	# ── 8. 从对应等级的 EventBase 抽取事件 ──
 	var event_base_uuid := PoemCraftingCalculator.get_event_base_for_level(final_level)
 	var ctx := {
 		"poem_level": final_level,
 		"poem_level_name": level_display_name,
+		"publish_effect": effect_desc,  # V11: 发布效果描述（空="未发布"）
 	}
-	Logging.info('PoemCrafter(V10): 从 EventBase 抽事件 — base=%s, ctx=%s' % [event_base_uuid, str(ctx)])
+	Logging.info('PoemCrafter(V11): 从 EventBase 抽事件 — base=%s, ctx=%s' % [event_base_uuid, str(ctx)])
 
 	var event_manager = get_node_or_null("/root/EventManager")
 	if event_manager and event_manager.has_method("draw_from_event_base"):
 		var selected_uuid = event_manager.draw_from_event_base(event_base_uuid, ctx)
 		if selected_uuid.is_empty():
-			Logging.err('PoemCrafter(V9.1): EventBase 抽取失败，降级使用 push_event "poem_reveal"')
+			Logging.err('PoemCrafter(V11): EventBase 抽取失败，降级使用 push_event "poem_reveal"')
 			EventBus.push_event.emit("poem_reveal", ctx)
 		else:
-			Logging.info('PoemCrafter(V9.1): EventBase 抽取成功 — selected=%s' % selected_uuid)
+			Logging.info('PoemCrafter(V11): EventBase 抽取成功 — selected=%s' % selected_uuid)
 	else:
-		Logging.err('PoemCrafter(V9.1): EventManager 或 draw_from_event_base 不存在，降级使用 push_event "poem_reveal"')
+		Logging.err('PoemCrafter(V11): EventManager 或 draw_from_event_base 不存在，降级使用 push_event "poem_reveal"')
 		EventBus.push_event.emit("poem_reveal", ctx)
 
 	# ── 9. 清除缓存并重建 Slot ──

@@ -7,10 +7,8 @@ class_name Poem extends Trait
 
 ## 诗词配方所需的 Fragment 列表，FragmentMatcher 用于校验意象组合
 @export var required_fragments: Array[String] = []
-
 @export var level: int = 1 # 1,2,3
-
-@export_enum('official','literary') var intent: String = '' # 拜谒或者普通
+@export var lore: bool = false
 
 func _init(p_topic: String = "POEM", p_specific: String = ""):
 	topic = p_topic

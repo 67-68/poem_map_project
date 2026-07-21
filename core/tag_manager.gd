@@ -4,11 +4,11 @@ class_name TagManager extends RefCounted
 ## 两条规则（冥等/确定性映射）：
 ## 1. NPC 相识：person_state 进入 know_about+ → 追加 actor:npc:{target}
 ##    person_state 退回 not_meet/uncharted → 移除 actor:npc:{target}
-## 2. 诗风站队：created_poems 变动 → 统计 official vs literary 计数
-##    official > literary  → "浊流诗人" (actor:poem:stance:zhuoliu)
-##    literary > official  → "清流诗人" (actor:poem:stance:qingliu)
-##    official == literary → "中立诗人" (actor:poem:stance:neutral)
-##    无诗创作 → 删除所有 stance tag
+## 2. 诗风站队（V11）：基于持有意象的三大类计数
+##    功名 > (隐逸+狂放)   → "浊流诗人" (actor:poem:stance:zhuoliu)
+##    (隐逸+狂放) > 功名   → "清流诗人" (actor:poem:stance:qingliu)
+##    功名 == (隐逸+狂放)  → "中立诗人" (actor:poem:stance:neutral)
+##    无任何意象 → 删除所有 stance tag
 ##
 ## 生命周期：PlayerState._ready() 创建 → init() 连接信号 → full_sync() 全量同步
 
@@ -105,34 +105,39 @@ func _sync_npc_tags() -> void:
 	Logging.info("TagManager._sync_npc_tags: done — added=%d, removed=%d, total persistant=%d" % [added, removed, PlayerState.persistant_tags.size()])
 
 
-## 遍历 created_poems，统计 official vs literary 计数 → 替换 stance tag
+## V11: 遍历 imaginaries_detail，按 imaginary_type 三大类计数 → 替换 stance tag
 func _sync_poem_stance() -> void:
-	var official_count := 0
-	var literary_count := 0
+	var gongming_count := 0
+	var yinyi_count := 0
+	var kuangfang_count := 0
 
-	for poem in PlayerState.created_poems:
-		if not poem is Poem:
-			Logging.info("TagManager._sync_poem_stance: non-Poem element in created_poems, skipping")
+	for uuid in Database.imaginaries_detail:
+		var imag = Database.imaginaries_detail[uuid]
+		if not imag is Imaginary:
 			continue
-		match poem.intent:
-			"official":
-				official_count += 1
-			"literary":
-				literary_count += 1
+		match imag.imaginary_type:
+			"功名":
+				gongming_count += 1
+			"隐逸":
+				yinyi_count += 1
+			"狂放":
+				kuangfang_count += 1
 			_:
-				Logging.info("TagManager._sync_poem_stance: poem '%s' intent='%s' (empty or unknown), treated as neutral" % [poem.uuid, poem.intent])
+				Logging.info("TagManager._sync_poem_stance: Imaginary '%s' imaginary_type='%s' (unknown), skipped" % [imag.uuid, imag.imaginary_type])
+
+	var qingliu_side := yinyi_count + kuangfang_count  # 隐逸+狂放 = 清流侧
 
 	var stance: String
-	if official_count == 0 and literary_count == 0:
-		stance = ""  # 无诗 → 不放任何 stance tag
-	elif official_count > literary_count:
-		stance = "zhuoliu"
-	elif literary_count > official_count:
-		stance = "qingliu"
+	if gongming_count == 0 and qingliu_side == 0:
+		stance = ""  # 无意象 → 不放任何 stance tag
+	elif gongming_count > qingliu_side:
+		stance = "zhuoliu"   # 功名多 → 浊流
+	elif qingliu_side > gongming_count:
+		stance = "qingliu"   # 隐逸+狂放多 → 清流
 	else:
-		stance = "neutral"
+		stance = "neutral"   # 相等 → 中立
 
-	Logging.info("TagManager._sync_poem_stance: official=%d, literary=%d → stance=%s" % [official_count, literary_count, stance])
+	Logging.info("TagManager._sync_poem_stance(V11): 功名=%d, 隐逸=%d, 狂放=%d → stance=%s" % [gongming_count, yinyi_count, kuangfang_count, stance])
 	_replace_stance_tag(stance)
 
 
@@ -220,23 +225,30 @@ static func _has_known_npc() -> bool:
 
 
 static func _inject_poem_stance_death_tag() -> void:
-	var denggao_count: int = 0
-	var baiye_count: int = 0
-	for poem in PlayerState.created_poems:
-		if not poem is Poem:
+	# V11: 基于持有意象的三大类计数（而非 poem.intent）
+	var gongming_count: int = 0
+	var yinyi_count: int = 0
+	var kuangfang_count: int = 0
+	for uuid in Database.imaginaries_detail:
+		var imag = Database.imaginaries_detail[uuid]
+		if not imag is Imaginary:
 			continue
-		match poem.intent:
-			"official":
-				baiye_count += 1
-			"literary":
-				denggao_count += 1
+		match imag.imaginary_type:
+			"功名":
+				gongming_count += 1
+			"隐逸":
+				yinyi_count += 1
+			"狂放":
+				kuangfang_count += 1
 
-	if denggao_count == 0 and baiye_count == 0:
+	var qingliu_side := yinyi_count + kuangfang_count
+
+	if gongming_count == 0 and qingliu_side == 0:
 		return
 
-	if denggao_count > baiye_count:
+	if qingliu_side > gongming_count:
 		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_GOOD_POET))
-	elif baiye_count > denggao_count:
+	elif gongming_count > qingliu_side:
 		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_BAD_POET))
 	else:
 		_append_death_tag(ENUMS.to_action_str(ENUMS.ACTION_TAGS.ACTOR_DEATH_NEUTRAL_POET))

@@ -240,9 +240,13 @@ func init_imaginaries():
 			imaginary = Imaginary.new()
 			imaginary.uuid = imaginary_uuid
 			imaginary.name = name
-			imaginary.duration_xun = 2
+			imaginary.duration_xun = 5
+			imaginary.created_at_day = TimeService._total_days_elapsed
+			var def_data = _imaginary_defs.get(imaginary_uuid, {})
+			imaginary.imaginary_type = def_data.get("type", "")
 			Database.imaginaries_detail[imaginary_uuid] = imaginary
-			Logging.info("init_imaginaries: 新建 Imaginary '%s' (duration_xun=2)" % imaginary_uuid)
+			Logging.info("init_imaginaries: 新建 Imaginary '%s' (type=%s, duration_xun=5, created_at_day=%d)" % [imaginary_uuid, imaginary.imaginary_type, imaginary.created_at_day])
+			_enforce_imaginary_limit()
 
 func init_emotions():
 	var emotion_data = SourceOfTruth.debug_dashboard_state.get("emotions", {})
@@ -343,11 +347,44 @@ func _on_request_add_imaginary(tag: String):
 	var def_data = _imaginary_defs.get(base_uuid, {})
 	imaginary.name = def_data.get("name", tag)
 	imaginary.level = def_data.get("level", 1)  # 从定义库读取实际等级，fallback Lv1
-	imaginary.duration_xun = 2
+	imaginary.duration_xun = 5
+	imaginary.imaginary_type = def_data.get("type", "")
+	imaginary.created_at_day = TimeService._total_days_elapsed
+	imaginary.get_hint = def_data.get("get_hint", "")
 	Database.imaginaries_detail[imaginary_uuid] = imaginary
-	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (base=%s, name=%s, duration_xun=2)" % [imaginary_uuid, base_uuid, imaginary.name])
+	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (base=%s, name=%s, type=%s, duration_xun=5, created_at_day=%d)" % [imaginary_uuid, base_uuid, imaginary.name, imaginary.imaginary_type, imaginary.created_at_day])
+
+	# FIFO 顶替：超出上限时删除最老的 Imaginary
+	_enforce_imaginary_limit()
 
 	EventBus.imaginary_changed.emit()
+
+
+## FIFO 顶替：当 imaginaries_detail 数量超过 max_imaginary_managable 时，删除 created_at_day 最小的（最旧的）
+func _enforce_imaginary_limit() -> void:
+	var limit: int = max_imaginary_managable
+	if Database.imaginaries_detail.size() <= limit:
+		return
+
+	# 找到 created_at_day 最小的 Imaginary
+	var oldest_uuid: String = ""
+	var oldest_day: int = 0x7FFFFFFF  # INT32_MAX
+	for uuid in Database.imaginaries_detail:
+		var imag = Database.imaginaries_detail[uuid]
+		if not imag is Imaginary:
+			continue
+		if imag.created_at_day < oldest_day:
+			oldest_day = imag.created_at_day
+			oldest_uuid = uuid
+		elif imag.created_at_day == oldest_day and oldest_uuid.is_empty():
+			oldest_uuid = uuid
+
+	if not oldest_uuid.is_empty():
+		var imag = Database.imaginaries_detail[oldest_uuid]
+		Logging.info("PlayerState._enforce_imaginary_limit: FIFO 顶替 — 删除最旧 Imaginary '%s' (type=%s, created_at_day=%d), 当前总数=%d, 上限=%d" % [oldest_uuid, imag.imaginary_type if imag is Imaginary else "?", oldest_day, Database.imaginaries_detail.size(), limit])
+		Database.imaginaries_detail.erase(oldest_uuid)
+	else:
+		Logging.err("PlayerState._enforce_imaginary_limit: 无法找到最旧的 Imaginary, 总数=%d, 上限=%d" % [Database.imaginaries_detail.size(), limit])
 
 
 # ════════════════════════════════════════════════════════════════

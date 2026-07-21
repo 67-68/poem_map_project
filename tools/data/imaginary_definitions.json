@@ -2,191 +2,229 @@
   "buyi": {
     "name": "布衣",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "一件粗麻布衣，缝补痕迹历历可见"
   },
   "qianli": {
     "name": "骐骥",
     "level": 1,
+    "type": "功名",
     "get_hint": "一匹瘦骨嶙峋的老马，眼中却仍有千里之志"
   },
   "cangsheng": {
     "name": "苍生",
     "level": 1,
+    "type": "功名",
     "get_hint": "田间佝偻的农人，脊背被赋税压弯"
   },
   "famine": {
     "name": "饥荒",
     "level": 1,
+    "type": "功名",
     "get_hint": "路旁饿殍横陈，野狗争食残骸"
   },
   "snow": {
     "name": "孤雪",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "一片孤零零的雪花，落在掌心便化了"
   },
   "drunk": {
     "name": "醉意",
     "level": 1,
+    "type": "狂放",
     "get_hint": "酒坛倾倒，琥珀色的液体浸湿了衣袖"
   },
   "exile": {
     "name": "流亡",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "一个衣衫褴褛的身影，在暮色中踽踽独行"
   },
   "corrupt": {
     "name": "贪腐",
     "level": 1,
+    "type": "功名",
     "get_hint": "锦袍官吏袖中滑出一锭白花花的纹银"
   },
   "despair": {
     "name": "绝望",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "枯井无波，连投石问路的勇气都已消散"
   },
   "ink_stone": {
     "name": "古砚",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "一方古砚，墨痕已干涸开裂"
   },
   "cold_moon": {
     "name": "寒月",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "一轮冷月悬于枯枝之上，洒下如霜清辉"
   },
   "temple_bell": {
     "name": "晨钟",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "远处寺庙传来一声钟响，惊起寒鸦数点"
   },
   "jade_step": {
     "name": "玉阶",
     "level": 1,
+    "type": "功名",
     "get_hint": "宫门前的玉阶冰凉如霜，不见故人影"
   },
   "empty_cup": {
     "name": "空盏",
     "level": 1,
+    "type": "狂放",
     "get_hint": "一只空了的酒盏，杯底残留着半片月光"
   },
   "wind": {
     "name": "寒风",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "一阵刺骨寒风穿堂而过，吹得烛火摇摇欲灭"
   },
   "willow_branch": {
     "name": "折柳",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "一枝折下的柳条，叶已枯黄卷曲"
   },
   "thatched_grass": {
     "name": "茅草",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "屋顶的茅草被风吹得簌簌作响"
   },
   "high_tower": {
     "name": "危楼",
     "level": 1,
+    "type": "狂放",
     "get_hint": "一座高楼孤悬百尺，星辰仿佛伸手可摘"
   },
   "cloud_and_sun": {
     "name": "云日",
     "level": 1,
+    "type": "功名",
     "get_hint": "云层倏然散开，日光倾泻如金"
   },
   "lone_snow": {
     "name": "孤雪",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "天地间唯有一片孤雪，无声飘落"
   },
   "falling_leaf": {
     "name": "落木",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "无边落木萧萧而下，铺满了荒径"
   },
   "ghost_fire": {
     "name": "鬼火",
     "level": 1,
+    "type": "狂放",
     "get_hint": "荒野间几点磷火明灭不定，似有人语低回"
   },
   "ruined_wall": {
     "name": "残垣",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "一堵残墙，藤蔓爬满了裂隙"
   },
   "starving_bone": {
     "name": "饿殍",
     "level": 1,
+    "type": "功名",
     "get_hint": "一具枯骨半掩在黄土中，指节仍紧抓着泥土"
   },
   "cold_blade": {
     "name": "寒锋",
     "level": 1,
+    "type": "狂放",
     "get_hint": "一柄出鞘的剑，锋刃映着冷冷寒光"
   },
   "lone_sail": {
     "name": "孤帆",
     "level": 1,
+    "type": "隐逸",
     "get_hint": "江面上一点孤帆渐行渐远，消失在天际"
   },
   "wine_gourd": {
     "name": "酒葫芦",
     "level": 1,
+    "type": "狂放",
     "get_hint": "一只旧酒葫芦，腰间磨得油亮发黑"
   },
   "broken_stele": {
     "name": "断碑",
     "level": 2,
+    "type": "隐逸",
     "get_hint": "一方断裂的石碑，残存的刻字被青苔覆去大半"
   },
   "beacon_fire": {
     "name": "烽火",
     "level": 2,
+    "type": "功名",
     "get_hint": "远处山头升起一道狼烟，如墨笔在青天划下焦痕"
   },
   "returning_geese": {
     "name": "归雁",
     "level": 2,
+    "type": "隐逸",
     "get_hint": "一行归雁掠过长空，鸣声嘹唳似在唤人还乡"
   },
   "setting_sun": {
     "name": "残阳",
     "level": 2,
+    "type": "隐逸",
     "get_hint": "血色的残阳悬在地平线上，将万物浸入暮色"
   },
   "lone_boat": {
     "name": "孤舟",
     "level": 2,
+    "type": "隐逸",
     "get_hint": "一叶扁舟泊在寒江之上，船头一盏孤灯明灭不定"
   },
   "old_garden": {
     "name": "故园",
     "level": 2,
+    "type": "隐逸",
     "get_hint": "荒草掩径，断井颓垣间犹能辨出昔日花圃的轮廓"
   },
   "great_void": {
     "name": "太虚",
     "level": 3,
+    "type": "狂放",
     "get_hint": "苍穹如盖，星斗罗列其间，天地间仿佛只剩下你一人"
   },
   "vast_sea": {
     "name": "沧海",
     "level": 3,
+    "type": "狂放",
     "get_hint": "万里沧波翻涌，日月若出其中，星汉灿烂若出其里"
   },
   "tai_shan": {
     "name": "泰山",
     "level": 3,
+    "type": "功名",
     "get_hint": "会当凌绝顶。"
   },
   "blue_annals": {
     "name": "青史",
     "level": 3,
+    "type": "功名",
     "get_hint": "一页页竹简在眼前展开，上面写满了兴亡成败的名字"
   },
   "long_river": {
     "name": "长河",
     "level": 3,
+    "type": "狂放",
     "get_hint": "大河东去不舍昼夜，淘尽多少英雄，卷走多少悲欢"
   }
 }
