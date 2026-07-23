@@ -7,6 +7,9 @@
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_xjlwj"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_uac47"]
 
+[ext_resource type="Script" uid="uid://di6d1e7t6mhli" path="res://core/operators/set_stay_place_operator.gd" id="6_setstay"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_choiceresult"]
+
 [sub_resource type="Resource" id="Resource_iya3t"]
 script = ExtResource("3_q5w5u")
 _property = 4
@@ -47,8 +50,17 @@ choice_result = SubResource("Resource_ryumf")
 description = "TRES_BACKHOME_INDIFFERENT_WIND_1_DESCRIPTION_1"
 metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
+[sub_resource type="Resource" id="Resource_stayplace_frozen"]
+script = ExtResource("6_setstay")
+place = "frozen_wei_river"
+
+[sub_resource type="Resource" id="Resource_onenter_frozen"]
+script = ExtResource("7_choiceresult")
+operators = Array[ExtResource("2_stghg")]([SubResource("Resource_stayplace_frozen")])
+
 [resource]
 script = ExtResource("2_62v5i")
+on_enter_result = SubResource("Resource_onenter_frozen")
 options = Array[ExtResource("1_alini")]([SubResource("Resource_y64im"), SubResource("Resource_ac6t0")])
 uuid = "backhome_indifferent_wind_1"
 name = "TRES_BACKHOME_INDIFFERENT_WIND_1_NAME_0"

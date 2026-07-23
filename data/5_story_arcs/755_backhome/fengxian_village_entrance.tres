@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="10_ieqy8"]
 [ext_resource type="AudioStream" uid="uid://db3cdsiy2m4kr" path="res://assets/sounds/755_backhome/Instrumental.mp3" id="12_tdb7j"]
 [ext_resource type="Script" uid="uid://bs881r2io48fq" path="res://model/ui_decl.gd" id="13_gsi4o"]
+[ext_resource type="Script" uid="uid://di6d1e7t6mhli" path="res://core/operators/set_stay_place_operator.gd" id="14_setstay"]
 
 [sub_resource type="Resource" id="Resource_vfrvf"]
 script = ExtResource("3_prxmf")
@@ -155,8 +156,17 @@ script = ExtResource("13_gsi4o")
 audio = ExtResource("12_tdb7j")
 metadata/_custom_type_script = "uid://bs881r2io48fq"
 
+[sub_resource type="Resource" id="Resource_stayplace_fengxian"]
+script = ExtResource("14_setstay")
+place = "fengxian_village"
+
+[sub_resource type="Resource" id="Resource_onenter_fengxian"]
+script = ExtResource("5_gsi4o")
+operators = Array[ExtResource("2_acvnp")]([SubResource("Resource_stayplace_fengxian")])
+
 [resource]
 script = ExtResource("10_ieqy8")
+on_enter_result = SubResource("Resource_onenter_fengxian")
 options = Array[ExtResource("1_xi6j8")]([SubResource("Resource_1x5a4"), SubResource("Resource_hsmts"), SubResource("Resource_0c6xc")])
 pre_event_interrupter_sequence = [SubResource("Resource_m458u")]
 uuid = "fengxian_village_entrance"

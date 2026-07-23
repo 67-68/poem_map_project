@@ -390,6 +390,11 @@ var PLACE_CN_MAP: Dictionary = {
 	"taishan": "UI_MAIN_PAGE_TEXT_3",
 	"taishan_base": "TRES_TUT_MEET_TAOIST_NAME_0",
 	"taishan_upper": "CODE_SET_STAY_PLACE_OPERATOR_FAD381D3E4",
+	"dongmen_baqiao": "PLACE_DONGMEN_BAQIAO",
+	"lishan": "PLACE_LISHAN",
+	"frozen_wei_river": "PLACE_FROZEN_WEI_RIVER",
+	"fengxian_village": "PLACE_FENGXIAN_VILLAGE",
+	"wooden_hut_door": "PLACE_WOODEN_HUT_DOOR",
 }
 
 ## CHANGAN_PLACES 枚举 → String key（用于 GameSave 持久化）

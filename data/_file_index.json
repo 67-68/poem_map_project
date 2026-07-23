@@ -611,6 +611,7 @@
     "3_actions_pool/focused_chats/focused_chat_exam_first_question.tres",
     "3_actions_pool/focused_chats/focused_chat_exam_second_question.tres",
     "3_actions_pool/focused_chats/lilinfu_promise.tres",
+    "3_actions_pool/focused_chats/test_focus_chat.tres",
     "3_actions_pool/decisions/meet_youxiang.tres",
     "3_actions_pool/decisions/update_to_rank8_official.tres",
     "3_actions_pool/special/normal_deepseek.tres",
@@ -741,6 +742,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-23T03:28:24.308858+00:00",
-  "total": 740
+  "generated_at": "2026-07-23T07:54:24.126519+00:00",
+  "total": 741
 }
