@@ -213,3 +213,4 @@ script = ExtResource("3_sfx")
 click_category = "book_impact"
 
 [connection signal="pressed" from="ColorRect/M/H/V/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ColorRect/M/H/V/PanelContainer/S/V/ContinueButton" to="." method="_on_continue_pressed"]

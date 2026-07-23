@@ -233,6 +233,11 @@
     "4_eras/events/history_events/event_exam_30.tres",
     "4_eras/events/history_events/event_exam_747.tres",
     "4_eras/events/history_events/event_intro_745.tres",
+    "4_eras/events/history_events/test_setup_bad_inspiration.tres",
+    "4_eras/events/history_events/test_setup_default.tres",
+    "4_eras/events/history_events/test_setup_good_momentum.tres",
+    "4_eras/events/history_events/test_setup_medium_prestige.tres",
+    "4_eras/events/history_events/test_setup_rich.tres",
     "4_eras/events/end_random_events/event_death_bad_poet.tres",
     "4_eras/events/end_random_events/event_death_good_poet.tres",
     "4_eras/events/end_random_events/event_death_has_friends.tres",
@@ -736,6 +741,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-23T02:52:00.995120+00:00",
-  "total": 735
+  "generated_at": "2026-07-23T03:28:24.308858+00:00",
+  "total": 740
 }

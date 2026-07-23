@@ -37,7 +37,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_gu7hk")
-target_year = 745.12
+target_year = 900.0
 options = Array[ExtResource("1_wsgjf")]([SubResource("Resource_frvph")])
 uuid = "event_intro_745"
 name = "TRES_EVENT_INTRO_745_NAME_0"

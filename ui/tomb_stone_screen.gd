@@ -22,6 +22,7 @@ const POEM_TWEEN_DURATION: float = 2.0
 @onready var but_label: Label = $ColorRect/M/H/V/PanelContainer/S/V/BUT
 @onready var poem_assessment_label: Label = $ColorRect/M/H/V/PanelContainer/S/V/PoemAssessment
 @onready var exit_button: Button = $ColorRect/M/H/V/Button
+@onready var continue_button: Button = $ColorRect/M/H/V/PanelContainer/S/V/ContinueButton
 
 # ── 非打字机节点引用 ──
 @onready var title_hbox: HBoxContainer = $ColorRect/M/H/V/PanelContainer/S/V/TitleHbox
@@ -57,6 +58,7 @@ func _hide_all_typewriter_labels() -> void:
 	poem_assessment_label.visible = false
 	sub_viewport_container.visible = false
 	exit_button.visible = false
+	continue_button.visible = false
 	Logging.info('TombstoneScreen._hide_all_typewriter_labels: all typewriter labels hidden')
 
 
@@ -227,9 +229,13 @@ func _typewrite_sequence() -> void:
 	await _typewrite_label(poem_assessment_label, poem_assessment_label.text, TYPE_SPEED)
 	Logging.info('TombstoneScreen._typewrite_sequence: PoemAssessment done')
 
-	# Step 9: 显示返回按钮
-	exit_button.visible = true
-	Logging.info('TombstoneScreen._typewrite_sequence: all done, exit button shown')
+	# Step 9: 检测隐藏结局 → 显示对应按钮
+	if _is_hidden_ending():
+		continue_button.visible = true
+		Logging.info('TombstoneScreen._typewrite_sequence: all done, hidden ending detected → continue button shown')
+	else:
+		exit_button.visible = true
+		Logging.info('TombstoneScreen._typewrite_sequence: all done, exit button shown')
 
 
 # ════════════════════════════════════════════════════════════════
@@ -309,9 +315,48 @@ func _wait(seconds: float) -> void:
 # 按钮 / 信号回调
 # ════════════════════════════════════════════════════════════════
 
+func _is_hidden_ending() -> bool:
+	var result: bool = GameState.death_reason == "ENDING_HIDDEN_REASON"
+	Logging.info('TombstoneScreen._is_hidden_ending: death_reason="%s" → %s' % [GameState.death_reason, result])
+	return result
+
+
 func _on_button_pressed() -> void:
 	Logging.info('TombstoneScreen: exit button pressed, returning to main menu')
 	get_tree().change_scene_to_file("res://main_menu.tscn")
+
+
+func _on_continue_pressed() -> void:
+	Logging.info('TombstoneScreen._on_continue_pressed: hidden ending continue triggered')
+	
+	# 1. 设置瞬态信号，通知 main.gd 走隐藏结局继续流程
+	GameState.pending_hidden_ending_continue = true
+	Logging.info('TombstoneScreen._on_continue_pressed: GameState.pending_hidden_ending_continue = true')
+	
+	# 2. 解除游戏结束状态锁
+	GameState.is_game_over = false
+	Logging.info('TombstoneScreen._on_continue_pressed: GameState.is_game_over = false')
+	
+	# 3. 恢复时间流逝（SystemOperator 在 game_over 时 pause 了）
+	TimeService.resume_world()
+	Logging.info('TombstoneScreen._on_continue_pressed: TimeService resumed')
+	
+	# 4. 设置时代为 755_backhome
+	GameState.current_era = "755_backhome"
+	Logging.info('TombstoneScreen._on_continue_pressed: current_era = 755_backhome')
+	
+	# 5. 设置时间为 755年10月1日（755 + 9/12 = 755.75）
+	TimeService.jump_to(755.75)
+	Logging.info('TombstoneScreen._on_continue_pressed: time set to 755/10/1 (year=755.75)')
+	
+	# 6. 设置初始属性：钱 150，健康 100
+	PlayerState.force_set_stat_val("money", 150)
+	PlayerState.force_set_stat_val("health", 100)
+	Logging.info('TombstoneScreen._on_continue_pressed: money=150, health=100')
+	
+	# 7. 切换到 main.tscn（main.gd._ready 会检测 pending_hidden_ending_continue 并播放过场）
+	Logging.info('TombstoneScreen._on_continue_pressed: changing scene to main.tscn')
+	get_tree().change_scene_to_file("res://main.tscn")
 
 
 func _on_return_to_main_menu() -> void:

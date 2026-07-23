@@ -32,6 +32,10 @@ var death_tutorial: String:
 
 var drained_resource_type: String = ''
 
+## pending_hidden_ending_continue — 隐藏结局继续游戏的瞬态信号（不持久化）
+## tomb_stone_screen 设置 → main.gd 检测并消耗
+var pending_hidden_ending_continue: bool = false
+
 ## year — 由 TimeService 驱动写入
 var year: float:
 	get: return GameSave.data.year
@@ -62,7 +66,7 @@ var mood: float:
 # 常量 / 非持久化字段（保持原样）
 # ════════════════════════════════════════════════════════════════
 
-const start_year := 735.0
+const start_year := 745.0
 const end_year := 755.9
 var time_span := end_year - start_year
 

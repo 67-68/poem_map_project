@@ -143,3 +143,68 @@ left_player_panel._update_ambition_deadline_bar()
 | bad | 史书会记载你的性情，但你充其量就是小李白的地位。 | 兴花费成为诗词才能提升望 |
 | rich | 一时巨富，籍籍无名 | 流动的财富才是财富。 |
 | default | 终其一生，不过是个被自己愤慨撕扯的小人物。对自身的自信与自卑交织，在安史之乱前愤懑而终。 | 什么都没做成，什么都没留下。 |
+
+## 隐藏结局继续游戏（"继续游戏"流）
+
+### 触发条件
+
+DeathEvent `event_ending_hidden`（`death_reason="ENDING_HIDDEN_REASON"`）被触发时，墓碑界面在打字机序列结束后显示「继续游戏」按钮。
+
+### 涉及文件
+
+| 文件 | 角色 |
+|------|------|
+| [`core/game_state.gd`](core/game_state.gd) | 瞬态信号 `pending_hidden_ending_continue: bool` |
+| [`ui/tomb_stone_screen.gd`](ui/tomb_stone_screen.gd) | `_is_hidden_ending()` 检测 + `_on_continue_pressed()` 处理器 |
+| [`ui/tomb_stone_screen.tscn`](ui/tomb_stone_screen.tscn) | ContinueButton（已有节点，新连信号） |
+| [`main.gd`](main.gd) | `_check_hidden_ending_continue()` + `_start_hidden_ending_continue()` |
+| [`core/operators/queue_event_operator.gd`](core/operators/queue_event_operator.gd) | 排队 `event_get_official` |
+| [`data/5_story_arcs/755_backhome/event_get_official.tres`](data/5_story_arcs/755_backhome/event_get_official.tres) | 被排队的目标事件 |
+
+### 效果描述
+
+隐藏结局（望≥100 + Lv3诗词）不走单向死亡路线。墓碑展示结束后，玩家可以选择「继续游戏」：
+1. 解除游戏结束锁 (`is_game_over=false`)
+2. 恢复时间流逝 (`TimeService.resume_world()`)
+3. 设置时代为 `755_backhome`，时间跳到 755/10/1
+4. 初始属性：钱 150，健康 100
+5. 播放 cinematic 过场（叙说俗物花光、官场失意、养家糊口）
+6. 过场结束后排队 `event_get_official` 进入正常游戏循环
+
+### 数据流
+
+```
+TombStoneScreen._typewrite_sequence() 结束
+  → _is_hidden_ending()? death_reason=="ENDING_HIDDEN_REASON"
+    ├── true  → ContinueButton.visible=true
+    └── false → exit_button.visible=true（现有行为）
+
+ContinueButton.pressed:
+  → _on_continue_pressed()
+    ├── GameState.pending_hidden_ending_continue = true
+    ├── GameState.is_game_over = false
+    ├── TimeService.resume_world()
+    ├── GameState.current_era = "755_backhome"
+    ├── TimeService.jump_to(755.75)  // 755年10月1日
+    ├── PlayerState.force_set_stat_val("money", 150)
+    ├── PlayerState.force_set_stat_val("health", 100)
+    └── change_scene_to_file("res://main.tscn")
+
+main.gd._ready():
+  → call_deferred("_check_hidden_ending_continue")
+
+_check_hidden_ending_continue():
+  → pending_hidden_ending_continue? false → 正常启动，done
+  → true:
+    ├── pending = false（消耗 flag）
+    ├── await 2 × process_frame（等 CinematicOverlay ready）
+    └── _start_hidden_ending_continue()
+
+_start_hidden_ending_continue():
+  → EventBus.cinematic_start.emit(["俗物花光了…", "官场失意…", "养家糊口…", "……"])
+  → CinematicOverlay.finished 信号 → _on_hidden_ending_cinematic_finished()
+
+_on_hidden_ending_cinematic_finished():
+  → QueueEventOperator("event_get_official").operate()
+  → EventBus.request_event_key.emit("event_get_official", {})
+```

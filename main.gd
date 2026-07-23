@@ -68,6 +68,9 @@ func _ready() -> void:
 		EventBus.show_tombstone_screen.connect(_on_game_over)
 		Logging.info("Main: 已连接 EventBus.show_tombstone_screen -> _on_game_over")
 
+	# ── 隐藏结局继续游戏检测：tomb_stone_screen 设置 flag 后切换到此场景 ──
+	call_deferred("_check_hidden_ending_continue")
+
 
 func _record_positions() -> void:
 	if _positions_recorded:
@@ -353,6 +356,66 @@ func _do_change_to_tombstone() -> void:
 		Logging.err("Main: get_tree() 为 null，无法切换场景")
 		return
 	tree.change_scene_to_file("res://ui/tomb_stone_screen.tscn")
+
+
+# ═══════════════════════════════════════════════
+# 隐藏结局继续游戏
+# ═══════════════════════════════════════════════
+
+func _check_hidden_ending_continue() -> void:
+	if not GameState.pending_hidden_ending_continue:
+		Logging.info("Main._check_hidden_ending_continue: pending_hidden_ending_continue=false，正常启动")
+		return
+	
+	Logging.info("Main._check_hidden_ending_continue: 检测到隐藏结局继续信号，启动过场流程")
+	# 消耗 flag，防止重复触发
+	GameState.pending_hidden_ending_continue = false
+	
+	# 等一下让场景完全就绪（CinematicOverlay 节点需要 ready）
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	_start_hidden_ending_continue()
+
+
+func _start_hidden_ending_continue() -> void:
+	Logging.info("Main._start_hidden_ending_continue: 开始隐藏结局继续过场")
+	
+	var cinematic_node: CinematicOverlay = _cinematic_overlay
+	if not cinematic_node:
+		Logging.err("Main._start_hidden_ending_continue: CinematicOverlay 节点不存在！跳过过场直接入队事件")
+		_queue_get_official_event()
+		return
+	
+	var texts: Array[String] = [
+		"这么久过去了，那点俗物早就花光了。",
+		"你在三大礼赋之后，对官场彻底失去了信心。",
+		"也罢，不如暂时收起那些经世济民的念想，先养家糊口吧…",
+		"……",
+	]
+	
+	Logging.info("Main._start_hidden_ending_continue: 播放 cinematic 过场，%d 段文字" % texts.size())
+	
+	# 连接 finished 信号（如果还没连接）
+	if not cinematic_node.finished.is_connected(_on_hidden_ending_cinematic_finished):
+		cinematic_node.finished.connect(_on_hidden_ending_cinematic_finished, CONNECT_ONE_SHOT)
+	
+	EventBus.cinematic_start.emit(texts, {})
+
+
+func _on_hidden_ending_cinematic_finished() -> void:
+	Logging.info("Main._on_hidden_ending_cinematic_finished: 过场结束，排队 event_get_official")
+	_queue_get_official_event()
+
+
+func _queue_get_official_event() -> void:
+	Logging.info("Main._queue_get_official_event: 使用 QueueEventOperator 排队 event_get_official")
+	var op := QueueEventOperator.new()
+	op.event_key = "event_get_official"
+	# QueueEventOperator 依赖于 _captured_context，需要在 init 中捕获
+	op._captured_context = {}
+	op.operate()
+	Logging.info("Main._queue_get_official_event: 已发射 request_event_key → event_get_official")
 
 
 func _kill_all_tweens() -> void:

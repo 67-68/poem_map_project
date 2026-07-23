@@ -467,7 +467,7 @@ func _update_ambition_deadline_bar() -> void:
 	_ambition_deadline_label.show()
 	_ambition_progress_bar.show()
 
-	_ambition_deadline_label.text = tr("CODE_LEFT_PLAYER_PANEL_134E5C5565") % remaining
+	_ambition_deadline_label.text = tr("CODE_LEFT_PLAYER_PANEL_134E5C5565") % [remaining, total]
 
 	_ambition_progress_bar.max_value = float(total)
 	_ambition_progress_bar.value = float(remaining)
