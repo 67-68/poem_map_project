@@ -911,16 +911,21 @@ static func _resolve_resource_class_name(res: Resource) -> String:
 # Helper: 从事件的 trigger_tags 中提取池标签
 # ════════════════════════════════════════════════════════════════
 
-## 从事件的 target_tags 中提取第一个 action: 标签作为池标签（pool_tag）。
+## 从事件的 target_tags 中提取 action: 前缀的标签作为池标签（pool_tag）。
 ##
 ## 池标签用于 random_events 索引键，取代旧的 MAIN_TAG_TO_BASES 硬编码映射。
 ## 事件在 data/3_actions_pool/ 还是 data/4_eras/ 下不影响路由 — 系统只看 tag。
 ##
 ## 匹配规则：
-##   - 返回第一个非空 tag 作为桶路由 key（不限定前缀）
+##   - 优先返回第一个 "action:" 前缀的 tag 作为桶路由 key
+##   - 若无 action: 前缀 tag，fallback 到第一个非空 tag
 ##   - 不匹配时返回空字符串（该事件不会被加入任何随机事件池）
-##   - 每个事件取其首个 target_tag 入桶，确保唯一
 static func _extract_pool_tag(target_tags: Array) -> String:
+	# 优先查找 action: 前缀的 tag
+	for tag in target_tags:
+		if not tag.is_empty() and tag.begins_with("action:"):
+			return tag
+	# fallback: 第一个非空 tag
 	for tag in target_tags:
 		if not tag.is_empty():
 			return tag

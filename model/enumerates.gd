@@ -75,6 +75,7 @@ enum ACTION_TAGS {
 	ACTOR_DEATH_NEUTRAL_POET,        # 清浊参半诗人
 	ACTOR_DEATH_POOR,                # 没钱死亡
 	ACTOR_DEATH_NOBODY,              # 无人关注（fallback 专用）
+	ACTION_MAIN_GANLU,              # 赶路（主行动标签，用于事件路由）
 }
 
 enum PROPS {
@@ -305,6 +306,8 @@ static func action_tag_to_action_type(tag: int) -> int:
 		ACTION_TAGS.ACTION_MAIN_DUZHUO:
 			return ACTION_TYPE.DU_ZHUO
 		ACTION_TAGS.ACTION_SPECIAL_GANLU:
+			return ACTION_TYPE.GAN_LU
+		ACTION_TAGS.ACTION_MAIN_GANLU:
 			return ACTION_TYPE.GAN_LU
 		_:
 			return -1

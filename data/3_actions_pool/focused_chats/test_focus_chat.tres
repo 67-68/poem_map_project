@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="FocusedChat" format=3]
+
+[ext_resource type="Script" uid="uid://dsb2koxwa7ypp" path="res://model/single_focused_chat.gd" id="1_line"]
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="2_opt"]
+[ext_resource type="Texture2D" uid="uid://btkd7cxp6yr3d" path="res://assets/character/dufu_nervous.png" id="2_tex_dufu"]
+[ext_resource type="Texture2D" uid="uid://cckktvmpe61oe" path="res://assets/character/lilinfu_smile.png" id="3_tex_npc"]
+[ext_resource type="Script" uid="uid://bgapuvasp48wh" path="res://model/focused_chat.gd" id="4_fc"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="5_op"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="7_eo"]
+
+[sub_resource type="Resource" id="Resource_line1"]
+script = ExtResource("1_line")
+name = "神秘路人"
+description = "喂，那边的书生！你就是传说中的杜甫吗？听说你诗写得不错啊。"
+chat_position = 0
+texture = ExtResource("3_tex_npc")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_line2"]
+script = ExtResource("1_line")
+name = "杜甫"
+description = "正是在下。不知阁下有何指教？"
+chat_position = 1
+texture = ExtResource("2_tex_dufu")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_line3"]
+script = ExtResource("1_line")
+name = "神秘路人"
+description = "指教不敢当。只是听闻你最近在长安城四处碰壁，特来探望一番。这世道，有才之人未必能出头啊……"
+chat_position = 0
+texture = ExtResource("3_tex_npc")
+metadata/_custom_type_script = "uid://dsb2koxwa7ypp"
+
+[sub_resource type="Resource" id="Resource_result"]
+script = ExtResource("6_cr")
+operators = Array[ExtResource("5_op")]([])
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt1"]
+script = ExtResource("7_eo")
+choice_result = SubResource("Resource_result")
+description = "（点点头）多谢关心。"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("4_fc")
+chats = Array[ExtResource("1_line")]([SubResource("Resource_line1"), SubResource("Resource_line2"), SubResource("Resource_line3")])
+options = Array[ExtResource("2_opt")]([SubResource("Resource_opt1")])
+uuid = "test_focus_chat"
+name = "测试FocusChat"
+description = "这是一个用于手动测试 Focus Chat 系统的基础事件。"
+metadata/_custom_type_script = "uid://bgapuvasp48wh"

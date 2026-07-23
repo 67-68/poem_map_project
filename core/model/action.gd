@@ -48,6 +48,7 @@ var area_tags:
 ## null = 无活跃 generator；非 null = 每次点击 action 时消费一个 operator
 var generator: Generator = null
 
+@export var lead_to_event: String = "" # 注意!写入这个时候，点击行动会直接执行这个事件，其他的cost 什么的全部都会被忽略!
 ## 🆕 兜底事件 UUID：当过滤器链全部过滤后池空时触发此事件
 ## 例如 "event_baiye_cooldown_wall"（拜谒被拒叙事）
 @export var fallback_event_uuid: String = ""
