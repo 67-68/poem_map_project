@@ -25,6 +25,8 @@ var CN_NAME_MAP: Dictionary = {
 @onready var _poem_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/Poembtn
 ## 🆕 笔记按钮
 @onready var _note_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/NoteBtn
+## 🆕 诗词图鉴按钮
+@onready var _poem_info_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/PoemInfoBtn
 ## 特殊提示标签（SpecialLabel）
 @onready var _special_label: Label = $Control/SpecialLabel
 ## 🆕 Tutorial 可见性控制用节点引用
@@ -54,6 +56,9 @@ func _ready() -> void:
 	# ── 🆕 笔记按钮 ──
 	_note_btn.gui_input.connect(_on_note_btn_gui_input)
 
+	# ── 🆕 诗词图鉴按钮 ──
+	_poem_info_btn.gui_input.connect(_on_poem_info_btn_gui_input)
+
 	# ── Focus session 显隐 ──
 	if EventBus.focus_session_changed.is_connected(_on_focus_changed):
 		EventBus.focus_session_changed.disconnect(_on_focus_changed)
@@ -81,6 +86,9 @@ func _ready() -> void:
 	# 🆕 笔记页面打开 → 清除提示
 	if not EventBus.note_page_toggled.is_connected(_clear_special_hint):
 		EventBus.note_page_toggled.connect(_clear_special_hint)
+	# 🆕 诗词图鉴页面打开 → 清除提示
+	if not EventBus.poem_page_toggled.is_connected(_clear_special_hint):
+		EventBus.poem_page_toggled.connect(_clear_special_hint)
 
 	# ── 🆕 Tutorial 模式：默认隐藏非时间面板区域 ──
 	if not PlayerState.has_flag("tutorial_completed"):
@@ -200,6 +208,16 @@ func _on_note_btn_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Logging.info("RightInfoPanel: NoteBtn 点击 → 发射 note_page_toggled")
 		EventBus.note_page_toggled.emit()
+
+
+# ═══════════════════════════════════════════════════════════
+# 🆕 诗词图鉴按钮 — 点击弹出 PoemPage
+# ═══════════════════════════════════════════════════════════
+
+func _on_poem_info_btn_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		Logging.info("RightInfoPanel: PoemInfoBtn 点击 → 发射 poem_page_toggled")
+		EventBus.poem_page_toggled.emit()
 
 
 # ═══════════════════════════════════════════════════════════

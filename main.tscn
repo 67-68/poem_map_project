@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://6ilphg3nn6wx" path="res://ui/debug_info.tscn" id="16_cegan"]
 [ext_resource type="PackedScene" uid="uid://d323p71vdp3wn" path="res://ui/social_connection_page.tscn" id="17_xuqvo"]
 [ext_resource type="PackedScene" uid="uid://pyldjarsfljr" path="res://ui/confirmation_dialog_custom.tscn" id="20_seu75"]
+[ext_resource type="PackedScene" uid="uid://67vwb4ogirx8" path="res://ui/poem_page.tscn" id="21_htxhm"]
 [ext_resource type="PackedScene" uid="uid://bagmf63e3hmbi" path="res://ui/left_player_panel.tscn" id="22_0odxb"]
 [ext_resource type="PackedScene" uid="uid://bgv42km6rey70" path="res://ui/right_info_panel.tscn" id="23_lswn8"]
 [ext_resource type="Script" uid="uid://dv28khs0ehggj" path="res://ui/time_breath_ui.gd" id="24_htxhm"]
@@ -168,6 +169,9 @@ visible = false
 
 [node name="ConfirmationDialogCustom" parent="UI" unique_id=1260072418 instance=ExtResource("20_seu75")]
 auto_translate_mode = 1
+visible = false
+
+[node name="PoemPage" parent="UI" unique_id=1359524918 instance=ExtResource("21_htxhm")]
 visible = false
 
 [node name="TapeLayer" type="CanvasLayer" parent="." unique_id=2047123948]

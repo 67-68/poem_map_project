@@ -60,6 +60,7 @@ class PoemCraftingResult:
 	var base_level: int = 1           ## 基础等级 (1-3)
 	var upgrade_probability: float = 0.0  ## 升级概率 [0.0, 1.0)，纯计算结果
 	var matched_recipe: Poem = null   ## V12: 精确 Set 匹配到的诗词配方（null = 无匹配）
+	var matched_poem_type: PoemType = null  ## V13: imaginary_type 计数 sorted multiset 匹配到的 PoemType
 
 
 ## ──────────────────────────────────────────────
@@ -131,6 +132,13 @@ func calculate_poem_grade(
 		Logging.info("PoemCraftingCalculator(V12): 配方匹配成功 — recipe=%s (%s)" % [result.matched_recipe.name, result.matched_recipe.uuid])
 	else:
 		Logging.info("PoemCraftingCalculator(V12): 配方匹配失败，将使用通用诗名")
+
+	# ── 6. V13: 类型匹配 — 前 max_manageable 个意象 imaginary_type 计数 sorted multiset 匹配 Database.poem_types ──
+	result.matched_poem_type = match_poem_type(imaginaries, max_manageable)
+	if result.matched_poem_type:
+		Logging.info("PoemCraftingCalculator(V13): 类型匹配成功 — type=%s (%s), composition=%s" % [result.matched_poem_type.name, result.matched_poem_type.uuid, str(result.matched_poem_type.composition)])
+	else:
+		Logging.info("PoemCraftingCalculator(V13): 类型匹配失败，无匹配 PoemType")
 	
 	result.passed = true
 	return result
@@ -243,6 +251,48 @@ static func _match_recipe(imaginaries: Array, max_manageable: int) -> Poem:
 		return recipe
 	
 	Logging.info("PoemCraftingCalculator(V12): _match_recipe — key '%s' 未命中任何配方" % key)
+	return null
+
+
+## ──────────────────────────────────────────────
+## V13: 类型匹配 — 前 max_manageable 个 Imaginary 的 imaginary_type 计数 sorted multiset 匹配 Database.poem_types
+##
+## 提取前 max_manageable 个意象的 imaginary_type，展平为 sorted Array，
+## 与每个 PoemType.composition 的 sorted 版本比较。
+## 返回匹配到的 PoemType，无匹配返回 null。
+## ──────────────────────────────────────────────
+
+static func match_poem_type(imaginaries: Array, max_manageable: int) -> PoemType:
+	var types: Array[String] = []
+	for i in range(mini(imaginaries.size(), max_manageable)):
+		var imag = imaginaries[i]
+		if imag is Imaginary and not imag.imaginary_type.is_empty():
+			types.append(imag.imaginary_type)
+	Logging.info("PoemCraftingCalculator(V13): match_poem_type — 前%d个意象 imaginary_types=%s" % [types.size(), str(types)])
+	
+	if types.size() < max_manageable:
+		Logging.info("PoemCraftingCalculator(V13): match_poem_type — 有效类型数不足 max_manageable，跳过匹配")
+		return null
+	
+	types.sort()
+	Logging.info("PoemCraftingCalculator(V13): match_poem_type — sorted types=%s" % str(types))
+	
+	var poem_types_dict: Dictionary = Database.poem_types
+	if poem_types_dict.is_empty():
+		Logging.warn("PoemCraftingCalculator(V13): match_poem_type — Database.poem_types 为空")
+		return null
+	
+	for uuid in poem_types_dict:
+		var pt: PoemType = poem_types_dict[uuid] as PoemType
+		if not pt:
+			continue
+		var comp := pt.composition.duplicate()
+		comp.sort()
+		if types == comp:
+			Logging.info("PoemCraftingCalculator(V13): match_poem_type — 命中类型: %s (%s)" % [pt.name, pt.uuid])
+			return pt
+	
+	Logging.info("PoemCraftingCalculator(V13): match_poem_type — types=%s 未命中任何 PoemType" % str(types))
 	return null
 
 

@@ -3,9 +3,10 @@ extends Control
 
 ## PoemPage — 诗词图鉴页面
 ##
-## 全屏覆盖页面，左侧显示诗词类型列表（PoemType）和历史诗词列表（lore=true 的 Poem），
+## 全屏覆盖页面，左侧显示诗词类型列表（已解锁的 PoemType）和历史诗词列表（全部 created_poems），
 ## 右侧根据选中项切换 TypeDescriptor / PoemDescriptor 详情面板。
-## 打开时自动选中第一个 PoemType 显示其详情。
+## PoemDescriptor 中 CheckButton 只读展示该诗的 lore 解锁状态。
+## 打开时自动选中第一个已解锁 PoemType 显示其详情。
 
 # ═══════════════════════════════════════════════════════════
 # Onready 节点引用
@@ -28,6 +29,7 @@ extends Control
 # 右侧 — PoemDescriptor
 @onready var _poem_descriptor: HBoxContainer = $PanelContainer/H/Info/PoemDescriptor
 @onready var _poem_title: Label = $PanelContainer/H/Info/PoemDescriptor/VBoxContainer/PoemTitle
+@onready var _poem_lore_check: CheckButton = $PanelContainer/H/Info/PoemDescriptor/VBoxContainer/CheckButton
 @onready var _poem_composition: Label = $PanelContainer/H/Info/PoemDescriptor/VBoxContainer/Composition
 @onready var _poem_level: Label = $PanelContainer/H/Info/PoemDescriptor/VBoxContainer/Level
 @onready var _poem_content: Label = $PanelContainer/H/Info/PoemDescriptor/VBoxContainer/PoemContent
@@ -84,32 +86,38 @@ func refresh_page() -> void:
 	for child in _history_poem_container.get_children():
 		child.queue_free()
 
-	# ── 构建 PoemType 列表 ──
+	# ── 构建全部 PoemType 列表 ──
 	var all_types: Array = []
 	for uuid in Database.poem_types:
 		all_types.append(Database.poem_types[uuid])
 
-	var lore_poems: Array[Poem] = []
+	# ── 收集全部诗词（不限 lore）──
+	var all_poems: Array[Poem] = []
 	for entry in PlayerState.created_poems:
-		if entry is Poem and entry.lore:
-			lore_poems.append(entry as Poem)
+		if entry is Poem:
+			all_poems.append(entry as Poem)
+	Logging.info("[PoemPage] all_poems count=%d" % all_poems.size())
 
-	# ── 更新 TypeCount：玩家诗词覆盖的种类数 ──
-	var covered_type_count := 0
+	# ── 筛选已解锁的 PoemType（至少有一首诗的意象组合匹配）──
+	var unlocked_types: Array = []
 	for pt in all_types:
 		if not pt is PoemType:
 			continue
-		for poem in lore_poems:
+		for poem in all_poems:
 			if _poem_matches_type(poem, pt as PoemType):
-				covered_type_count += 1
+				unlocked_types.append(pt)
+				Logging.info("[PoemPage] PoemType unlocked: %s matched by poem %s" % [pt.uuid, poem.uuid])
 				break
+	Logging.info("[PoemPage] unlocked_types count=%d of %d" % [unlocked_types.size(), all_types.size()])
 
+	# ── 更新 TypeCount：已解锁种类数 ──
+	var covered_type_count := unlocked_types.size()
 	_type_count_label.text = tr("CODE_POEM_PAGE_TYPE_COUNT") % covered_type_count
-	Logging.info("[PoemPage] TypeCount=%d (covered %d of %d types)" % [covered_type_count, covered_type_count, all_types.size()])
+	Logging.info("[PoemPage] TypeCount=%d" % covered_type_count)
 
-	# ── 为每个 PoemType 创建按钮 ──
-	for i in range(all_types.size()):
-		var pt: PoemType = all_types[i] as PoemType
+	# ── 仅为已解锁的 PoemType 创建按钮 ──
+	for i in range(unlocked_types.size()):
+		var pt: PoemType = unlocked_types[i] as PoemType
 		var btn := LinkButton.new()
 		btn.theme_type_variation = &"DefaultText"
 		btn.text = tr(pt.name) if not pt.name.is_empty() else pt.uuid
@@ -117,14 +125,15 @@ func refresh_page() -> void:
 		btn.set_meta("poem_type_uuid", pt.uuid)
 		btn.pressed.connect(_on_type_btn_pressed.bind(pt.uuid))
 		_poem_type_container.add_child(btn)
+	Logging.info("[PoemPage] PoemType 按钮创建完成: %d 个" % unlocked_types.size())
 
-	# ── 更新 PoemCount：lore 诗词数 ──
-	_poem_count_label.text = tr("CODE_POEM_PAGE_POEM_COUNT") % lore_poems.size()
-	Logging.info("[PoemPage] PoemCount=%d" % lore_poems.size())
+	# ── 更新 PoemCount：全部诗词数 ──
+	_poem_count_label.text = tr("CODE_POEM_PAGE_POEM_COUNT") % all_poems.size()
+	Logging.info("[PoemPage] PoemCount=%d" % all_poems.size())
 
-	# ── 为每个 lore 诗词创建按钮 ──
-	for i in range(lore_poems.size()):
-		var poem: Poem = lore_poems[i]
+	# ── 为全部诗词创建按钮（不限 lore）──
+	for i in range(all_poems.size()):
+		var poem: Poem = all_poems[i]
 		var btn := LinkButton.new()
 		btn.theme_type_variation = &"DefaultText"
 		btn.text = tr(poem.name) if not poem.name.is_empty() else poem.uuid
@@ -132,9 +141,12 @@ func refresh_page() -> void:
 		btn.set_meta("poem_uuid", poem.uuid)
 		btn.pressed.connect(_on_poem_btn_pressed.bind(poem.uuid))
 		_history_poem_container.add_child(btn)
+	Logging.info("[PoemPage] 历史诗词按钮创建完成: %d 个" % all_poems.size())
 
-	# ── 默认选中第一个 PoemType ──
-	if all_types.size() > 0:
+	# ── 默认选中第一个已解锁 PoemType ──
+	if unlocked_types.size() > 0:
+		_show_type_detail(unlocked_types[0] as PoemType)
+	elif all_types.size() > 0:
 		_show_type_detail(all_types[0] as PoemType)
 	else:
 		Logging.warn("[PoemPage] 没有 PoemType 数据，无法显示默认详情")
@@ -190,12 +202,18 @@ func _show_type_detail(poem_type: PoemType) -> void:
 
 
 func _show_poem_detail(poem: Poem) -> void:
-	Logging.info("[PoemPage] _show_poem_detail: uuid=%s name=%s" % [poem.uuid, poem.name])
+	Logging.info("[PoemPage] _show_poem_detail: uuid=%s name=%s lore=%s" % [poem.uuid, poem.name, poem.lore])
 
 	_type_descriptor.hide()
 	_poem_descriptor.show()
 
 	_poem_title.text = tr(poem.name) if not poem.name.is_empty() else poem.uuid
+
+	# 只读 CheckButton 展示 lore 解锁状态
+	if poem.lore:
+		_poem_lore_check.text = tr("CODE_POEM_PAGE_LORE_YES")
+	else:
+		_poem_lore_check.text = tr("CODE_POEM_PAGE_LORE_NO")
 
 	# Composition: 展平 used_imaginary_types → ["功名","功名","隐逸"] → tr + " + "
 	var flat_types := _flatten_imaginary_types(poem.used_imaginary_types)

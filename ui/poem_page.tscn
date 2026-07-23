@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://67vwb4ogirx8"]
 
-[ext_resource type="Script" uid="uid://bud5jm8iw6k03" path="res://ui/poem_page.gd" id="1_j05gc"]
+[ext_resource type="Script" uid="uid://5fjdtcp80gnt" path="res://ui/poem_page.gd" id="1_2v1n5"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_2v1n5"]
 [ext_resource type="FontFile" uid="uid://b0jq4f032woif" path="res://assets/fonts/Noto_Serif_SC/static/NotoSerifSC-Bold.ttf" id="3_2v1n5"]
+[ext_resource type="FontFile" uid="uid://bu472jjbmjeb3" path="res://assets/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Regular.ttf" id="4_5gbdl"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_enmti"]
 content_margin_left = 15.0
@@ -26,7 +27,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_j05gc")
+script = ExtResource("1_2v1n5")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1817549478]
 layout_mode = 1
@@ -97,6 +98,7 @@ size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_enmti")
 
 [node name="TypeDescriptor" type="HBoxContainer" parent="PanelContainer/H/Info" unique_id=501665714]
+visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/H/Info/TypeDescriptor" unique_id=1454176476]
@@ -138,7 +140,6 @@ text = "（从他的效果文件翻译）"
 autowrap_mode = 3
 
 [node name="PoemDescriptor" type="HBoxContainer" parent="PanelContainer/H/Info" unique_id=444137083]
-visible = false
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/H/Info/PoemDescriptor" unique_id=1141013323]
@@ -150,6 +151,17 @@ layout_mode = 2
 theme_type_variation = &"TitleText"
 text = "饮中八仙歌"
 autowrap_mode = 3
+
+[node name="CheckButton" type="CheckButton" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=1930039894]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.33474416, 0.33474332, 0.3347435, 1)
+theme_override_colors/font_disabled_color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+theme_override_fonts/font = ExtResource("4_5gbdl")
+theme_override_font_sizes/font_size = 12
+disabled = true
+text = "解锁状态: 已解锁"
 
 [node name="CompositionTitle" type="Label" parent="PanelContainer/H/Info/PoemDescriptor/VBoxContainer" unique_id=938996544]
 custom_minimum_size = Vector2(480, 0)

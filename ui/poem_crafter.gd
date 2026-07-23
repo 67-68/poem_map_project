@@ -1,12 +1,17 @@
 extends PanelContainer
 
-## 诗词创作面板 — V11: 意象三大类重构 + FIFO + 发布效果
+## 诗词创作面板 — V13: 意象类型匹配 PoemType + 预览类型效果 + 发布执行 BuffOperator
 ##
-## V11 变更:
+## V13 变更:
+##   - 新增意象类型匹配：imaginary_type 计数 → Database.poem_types → PoemType
+##   - 预览中展示匹配到的 PoemType 名称 + 组成 + 发布效果
+##   - CheckButton「发布」直接执行 PoemType.publication_effects（BuffOperator.operate）
+##   - PoemEffectCalculator 重构为纯格式化器（参数从 Poem 改为 PoemType）
+##
+## V11 保留:
 ##   - 删除 MODE_TO_INTENT + poem.intent 赋值
 ##   - 删除随机截断/溢出 Slot 逻辑（FIFO 已保证不溢出）
 ##   - poem.lore = true（命中配方时标记为有典故）
-##   - CheckButton「发布」接入 PoemEffectCalculator 计算效果
 ##   - 保留：纯函数评分制 + 三级事件库 + 全量消耗意象 + 创作代价
 
 const _PoemEffectCalculator = preload("res://core/poem_effect_calculator.gd")
@@ -37,6 +42,7 @@ var _cached_upgrade_succeeded: bool = false
 var _cached_line1_text: String = ""
 var _cached_line2_text: String = ""
 var _cached_recipe_line: String = ""  ## V12: 配方匹配行文本（空 = 无匹配）
+var _cached_poem_type: PoemType = null  ## V13: 匹配到的 PoemType（null = 无匹配）
 
 ## V9.2: 缓存创作代价 operators（切换 mode 时复用，代价与 mode 无关）
 var _cached_cost_operators: Array = []
@@ -156,13 +162,18 @@ func _refresh_mode_display_only() -> void:
 	else:
 		lines.append(tr("CODE_POEM_CRAFTER_C7E02CBBD0"))
 
+	# V13: 类型信息行 — 从缓存 PoemType 重建（切换 mode 时复用）
+	if _cached_poem_type:
+		lines.append_array(_build_poem_type_preview_lines())
+		Logging.info('PoemCrafter(V13): _refresh_mode_display_only — 类型信息行已追加, type=%s' % _cached_poem_type.name)
+
 	# V9.2: 代价预览（从缓存 operators 重建，代价与 mode 无关）
 	lines.append_array(_build_cost_preview_lines())
 
 	# 🆕 V10: 奖励预览（按 current_mode 重建，绿色）
 	lines.append_array(_build_reward_preview_lines())
 
-	$InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
+	$InputImagPanel/RichTextLabel.text = "\n".join(lines)
 	Logging.info('PoemCrafter(V10): _refresh_mode_display_only — 已更新, mode=%s, line1=%s' % [current_mode, _cached_line1_text])
 
 
@@ -339,15 +350,29 @@ func _on_button_pressed() -> void:
 	# ── 7. 消耗所有参与计算的 Imaginary ──
 	_consume_all_imaginaries()
 
-	# ── 8. V11: 发布按钮效果计算 ──
+	# ── 8. V13: 发布按钮 — 执行 PoemType.publication_effects + 格式化 effect_desc ──
 	var publish_checkbtn := $InputImagPanel/CheckButton as CheckButton
 	var effect_desc: String = ""
 	if publish_checkbtn and publish_checkbtn.button_pressed:
-		var effect_result := _PoemEffectCalculator.calculate(poem)
+		# 8a. 遍历 publication_effects → 注入 source_uuid → operate()
+		if _cached_poem_type and not _cached_poem_type.publication_effects.is_empty():
+			Logging.info('PoemCrafter(V13): 发布按钮已勾选 — 执行 %d 个 BuffOperator' % _cached_poem_type.publication_effects.size())
+			for bo in _cached_poem_type.publication_effects:
+				if bo is BuffOperator:
+					bo.source_uuid = poem.uuid
+					bo.operate()
+					Logging.info('PoemCrafter(V13): BuffOperator 已执行 — source=%s, type=%s, named_key=%s' % [bo.source_uuid, bo.modifier_type, bo.named_amount_key])
+				else:
+					Logging.warn('PoemCrafter(V13): publication_effects 中包含非 BuffOperator 元素，跳过')
+		else:
+			Logging.info('PoemCrafter(V13): 发布按钮已勾选但无有效的 publication_effects')
+
+		# 8b. 用 PoemEffectCalculator 格式化效果描述
+		var effect_result := _PoemEffectCalculator.calculate(_cached_poem_type)
 		effect_desc = effect_result.effect_desc
-		Logging.info('PoemCrafter(V11): 发布按钮已勾选 — effect_desc=%s' % effect_desc)
+		Logging.info('PoemCrafter(V13): 发布效果格式化 — effect_desc=%s' % effect_desc)
 	else:
-		Logging.info('PoemCrafter(V11): 发布按钮未勾选，跳过效果计算')
+		Logging.info('PoemCrafter(V13): 发布按钮未勾选，跳过发布')
 
 	# ── 8. 从对应等级的 EventBase 抽取事件 ──
 	var event_base_uuid := PoemCraftingCalculator.get_event_base_for_level(final_level)
@@ -386,9 +411,10 @@ func _clear_cached_result() -> void:
 	_cached_line1_text = ""
 	_cached_line2_text = ""
 	_cached_recipe_line = ""
+	_cached_poem_type = null
 	_cached_cost_operators.clear()
 	_cached_mode_reward_operator = null
-	Logging.info('PoemCrafter(V12): 缓存已清除（含 cost operators + reward + recipe）')
+	Logging.info('PoemCrafter(V13): 缓存已清除（含 cost operators + reward + recipe + poem_type）')
 
 
 func _consume_matched_imaginaries(uuids: Array[String]) -> void:
@@ -520,6 +546,14 @@ func _preview_current() -> void:
 	else:
 		lines.append(tr("CODE_POEM_CRAFTER_C7E02CBBD0"))
 
+	# ── V13: 类型信息行 — 匹配到的 PoemType 名称 + 组成 + 发布效果 ──
+	_cached_poem_type = result.matched_poem_type
+	if _cached_poem_type:
+		lines.append_array(_build_poem_type_preview_lines())
+		Logging.info('PoemCrafter(V13): _preview_current — 类型信息已缓存, type=%s' % _cached_poem_type.name)
+	else:
+		Logging.info('PoemCrafter(V13): _preview_current — 无匹配 PoemType，跳过类型信息行')
+
 	# ── V9.2: 创作代价预览 ──
 	_cached_cost_operators = PoemCraftingCalculator.calculate_crafting_cost(result.score)
 	lines.append_array(_build_cost_preview_lines())
@@ -528,7 +562,7 @@ func _preview_current() -> void:
 	_cached_mode_reward_operator = _build_mode_reward_operator()
 	lines.append_array(_build_reward_preview_lines())
 
-	$InputImagPanel/RichTextLabel.text = "\n\n".join(lines)
+	$InputImagPanel/RichTextLabel.text = "\n".join(lines)
 	Logging.info('PoemCrafter(V10): _preview_current — 渲染完成, final_level=%d, upgrade=%s, line1=%s, cost_ops=%d, reward=%s' % [_cached_final_level, _cached_upgrade_succeeded, _cached_line1_text, _cached_cost_operators.size(), current_mode])
 
 
@@ -605,6 +639,43 @@ func _build_reward_preview_lines() -> Array[String]:
 		Logging.warn('PoemCrafter(V10): _build_reward_preview_lines — describe_preview 返回空字符串')
 
 	Logging.info('PoemCrafter(V10): _build_reward_preview_lines — 总%d行' % lines.size())
+	return lines
+
+
+## 🆕 V13: 从缓存 _cached_poem_type 构建类型信息预览行
+## 展示：分隔线 + 类型名 + 组成（三项用" + "连接）+ 发布效果（BuffOperator.describe_preview）
+func _build_poem_type_preview_lines() -> Array[String]:
+	var lines: Array[String] = []
+
+	if _cached_poem_type == null:
+		Logging.info('PoemCrafter(V13): _build_poem_type_preview_lines — _cached_poem_type 为空，跳过')
+		return lines
+
+	# 分隔线（金棕）
+	lines.append(BBCode.color_size(tr("CODE_POEM_CRAFTER_TYPE_SECTION"), BBCode.COLOR_WARNING, 13))
+
+	# 类型名
+	var type_name := tr(_cached_poem_type.name) if not _cached_poem_type.name.is_empty() else _cached_poem_type.uuid
+	lines.append(BBCode.color(tr("CODE_POEM_CRAFTER_TYPE_NAME") % type_name, BBCode.COLOR_WARNING))
+	Logging.info('PoemCrafter(V13): _build_poem_type_preview_lines — type_name=%s' % type_name)
+
+	# 组成：三项用 tr() 翻译后用 " + " 连接（无颜色包裹）
+	var comp_parts: Array[String] = []
+	for c in _cached_poem_type.composition:
+		comp_parts.append(tr(c))
+	lines.append(tr("CODE_POEM_CRAFTER_TYPE_COMPOSITION") % " + ".join(comp_parts))
+	Logging.info('PoemCrafter(V13): _build_poem_type_preview_lines — composition=%s' % str(comp_parts))
+
+	# 发布效果：遍历 publication_effects
+	var effect_text := _cached_poem_type.get_effects_text()
+	if effect_text.is_empty():
+		lines.append(BBCode.color(tr("CODE_POEM_CRAFTER_TYPE_NO_EFFECT"), BBCode.COLOR_MUTED))
+		Logging.info('PoemCrafter(V13): _build_poem_type_preview_lines — 无发布效果')
+	else:
+		lines.append(tr("CODE_POEM_CRAFTER_TYPE_EFFECT") % effect_text)
+		Logging.info('PoemCrafter(V13): _build_poem_type_preview_lines — effect=%s' % effect_text)
+
+	Logging.info('PoemCrafter(V13): _build_poem_type_preview_lines — 总%d行' % lines.size())
 	return lines
 
 
