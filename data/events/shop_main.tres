@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bshopmain001"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="2_revent"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_evopt"]
+[ext_resource type="Script" uid="uid://ceynn8ok3qy3h" path="res://core/operators/shop_buy_operator.gd" id="4_shopbuy"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="5_push"]
+[ext_resource type="Script" uid="uid://byn0qqw1xm33f" path="res://core/operators/pop_event_operator.gd" id="6_pop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_cr"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="8_baseop"]
+
+[sub_resource type="Resource" id="Resource_shopbuy"]
+script = ExtResource("4_shopbuy")
+shop_id = "market"
+page = 1
+
+[sub_resource type="Resource" id="Resource_cr_buy"]
+script = ExtResource("7_cr")
+operators = Array[ExtResource("8_baseop")]([SubResource("Resource_shopbuy")])
+
+[sub_resource type="Resource" id="Resource_opt_buy"]
+script = ExtResource("3_evopt")
+description = "购买物品"
+choice_result = SubResource("Resource_cr_buy")
+
+[sub_resource type="Resource" id="Resource_push_talk"]
+script = ExtResource("5_push")
+event_key = "shop_talk"
+
+[sub_resource type="Resource" id="Resource_cr_talk"]
+script = ExtResource("7_cr")
+operators = Array[ExtResource("8_baseop")]([SubResource("Resource_push_talk")])
+
+[sub_resource type="Resource" id="Resource_opt_talk"]
+script = ExtResource("3_evopt")
+description = "和店员说话"
+choice_result = SubResource("Resource_cr_talk")
+
+[sub_resource type="Resource" id="Resource_pop_exit"]
+script = ExtResource("6_pop")
+
+[sub_resource type="Resource" id="Resource_cr_exit"]
+script = ExtResource("7_cr")
+operators = Array[ExtResource("8_baseop")]([SubResource("Resource_pop_exit")])
+
+[sub_resource type="Resource" id="Resource_opt_exit"]
+script = ExtResource("3_evopt")
+description = "退出"
+choice_result = SubResource("Resource_cr_exit")
+
+[resource]
+script = ExtResource("2_revent")
+uuid = "shop_main"
+name = "市场"
+description = "琳琅满目的商品陈列在货架上。店小二热情地招呼着来往的客人。"
+options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt_buy"), SubResource("Resource_opt_talk"), SubResource("Resource_opt_exit")])

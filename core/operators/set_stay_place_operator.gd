@@ -16,6 +16,11 @@ var PLACE_CN_MAP: Dictionary = {
 	"huangcheng": tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A"),
 	"taishan_base": tr("TRES_TUT_MEET_TAOIST_NAME_0"),
 	"taishan_upper": tr("CODE_SET_STAY_PLACE_OPERATOR_FAD381D3E4"),
+	"dongmen_baqiao": tr("PLACE_DONGMEN_BAQIAO"),
+	"lishan": tr("PLACE_LISHAN"),
+	"frozen_wei_river": tr("PLACE_FROZEN_WEI_RIVER"),
+	"fengxian_village": tr("PLACE_FENGXIAN_VILLAGE"),
+	"wooden_hut_door": tr("PLACE_WOODEN_HUT_DOOR"),
 }
 
 func describe_preview() -> String:
