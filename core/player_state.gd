@@ -445,6 +445,20 @@ func append_stat(stat_name, data) -> bool:
 		amount_to_change = int(float(amount_to_change) * (1.0 + mod_efficiency))
 		Logging.info("change stat %s: 理念 efficiency 倍率 +%.2f → %d (原%d)" % [stat_name, mod_efficiency, amount_to_change, original])
 
+	# 🆕 理念修饰器 damage_reduction — 属性扣除百分比减免
+	# 对负 delta 施加百分比减免: delta ← delta × (1 - 减免倍率)
+	var mod_dmgred := ModifierRegistry.get_damage_reduction(stat_name)
+	if mod_dmgred != 0.0 and amount_to_change < 0:
+		var original = amount_to_change
+		amount_to_change = int(float(amount_to_change) * (1.0 - mod_dmgred))
+		Logging.info("change stat %s: damage_reduction -%.2f → %d (原%d)" % [stat_name, mod_dmgred, amount_to_change, original])
+
+	# 🆕 消费 max_uses（efficiency 正delta + damage_reduction 负delta）
+	if amount_to_change > 0 and mod_efficiency != 0.0:
+		_consume_efficiency_uses(stat_name)
+	if amount_to_change < 0 and mod_dmgred != 0.0:
+		_consume_damage_reduction_uses(stat_name)
+
 	before_property_change.emit(stat_name, amount_to_change)
 
 	# 🆕 记录最后一笔健康扣除的来源（供死亡分类使用）
@@ -501,6 +515,22 @@ func append_stat(stat_name, data) -> bool:
 ## @return int — 修正后的变化量
 static func _apply_modifier_formula(stat_name: String, raw_delta: int) -> int:
 	return _ModifierRegistry.get_modifier_prop_adjusted_delta(stat_name, raw_delta)
+
+
+## 🆕 消费 efficiency modifier 的 max_uses，耗尽时自动移除 modifier + trait
+static func _consume_efficiency_uses(stat_name: String) -> void:
+	var to_remove := ModifierRegistry.consume_and_check_max_uses("efficiency", stat_name)
+	for trait_uuid in to_remove:
+		Logging.info("[PlayerState] _consume_efficiency_uses: 移除耗尽 trait: %s" % trait_uuid)
+		PlayerState.remove_trait(trait_uuid)
+
+
+## 🆕 消费 damage_reduction modifier 的 max_uses，耗尽时自动移除 modifier + trait
+static func _consume_damage_reduction_uses(stat_name: String) -> void:
+	var to_remove := ModifierRegistry.consume_and_check_max_uses("damage_reduction", stat_name)
+	for trait_uuid in to_remove:
+		Logging.info("[PlayerState] _consume_damage_reduction_uses: 移除耗尽 trait: %s" % trait_uuid)
+		PlayerState.remove_trait(trait_uuid)
 
 
 ## 🆕 公开版本：供 ActionManager.check_archetype_property_costs() 做前置预估。

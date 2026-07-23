@@ -11,3 +11,7 @@ sprained_ankle,TRAIT_SPRAINED_ANKLE_TRAIT_NAME,,,,,,,,1,2,,,TRAIT_SPRAINED_ANKLE
 severe_injury,TRAIT_SEVERE_INJURY_TRAIT_NAME,DISEASE,,,prop_sub(name=health; val=15),,,1,3,,/1/TRAIT_SEVERE_INJURY_EXPIRY_ACTION/true|denggao/5/TRAIT_SEVERE_INJURY_EXPIRY_DENGGAO/false,,strong_body,TRAIT_STRONG_BODY_TRAIT_NAME,,,,,,,,,-1,,,,
 exhaustion_initial,TRAIT_EXHAUSTION_INITIAL_TRAIT_NAME,,,,,,,,,,,,,,
 terminal_illness,TRAIT_TERMINAL_ILLNESS_TRAIT_NAME,,,,,,,,,,,,,,
+xiyu_cockfight,西域斗鸡,,,,,,,,,,,,,
+premium_exam_scroll,极品行卷,,,,,,,,,,,,,
+fox_fur_coat,貂裘,,,,,,,,,,,,,
+rattle_drum,拨浪鼓,,,,,,,,,,,,,

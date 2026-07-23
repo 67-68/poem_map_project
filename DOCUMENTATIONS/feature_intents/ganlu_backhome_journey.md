@@ -16,6 +16,8 @@
 | [`data/5_story_arcs/755_backhome/backhome_indifferent_wind_1.tres`](data/5_story_arcs/755_backhome/backhome_indifferent_wind_1.tres) | on_enter → frozen_wei_river，所有选项 health -13，移除了 progress 自增 |
 | [`data/5_story_arcs/755_backhome/fengxian_village_entrance.tres`](data/5_story_arcs/755_backhome/fengxian_village_entrance.tres) | on_enter_result → fengxian_village |
 | [`data/5_story_arcs/755_backhome/fengxian_familiar_path.tres`](data/5_story_arcs/755_backhome/fengxian_familiar_path.tres) | on_enter_result → wooden_hut_door |
+| [`core/model/property_operator.gd`](core/model/property_operator.gd) | 🆕 重复行动惩罚跳过 755_backhome era（`current_era != "755_backhome"`） |
+| [`ui/left_player_panel.gd`](ui/left_player_panel.gd) | 🆕 冻土里程条改为 progress 属性直接驱动，不再依赖 ambition deadline |
 
 ## 效果
 
@@ -70,3 +72,16 @@ PlotController: progress > 60   → push backhome_indifferent_wind_1
 | 赶路 cost（生命消耗） | -13 | `ganlu_health_cost` |
 | 赶路 success（进度获得） | +20 | `xl_progress_gain` |
 | 事件选项（生命消耗） | -13（每个选项） | raw value（-13） |
+
+## 🆕 冻土里程条（LeftPlayerPanel）
+
+冻土模式（`flag_frost_panel_active`）激活后，左侧面板的野心进度条切换为「已行里程」显示：
+
+- **里程来源**：`PlayerState.get_stat_val("progress")`，capped at 243 唐里（`FROST_TOTAL_DISTANCE`）
+- **刷新时机**：每次 `player_stat_changed` 触发（含 progress / health 等任何属性变化），冻土模式下绕过 `tracked_property` 门控直接刷新
+- **双保险**：`_on_any_stat_changed` 中额外对 `progress` 变化做精准刷新
+- **非冻土模式**：保持 ambition `deadline_xun` 原有逻辑不变
+
+## 🆕 重复行动惩罚豁免
+
+`755_backhome` era 只有「赶路」一个可用行动，重复行动是设计常态。`PropertyOperator.operate()` 中重复行动 20% 惩罚对该 era 全局豁免（`GameState.current_era != "755_backhome"`），确保每次赶路 health -13 / progress +20 不受打折。

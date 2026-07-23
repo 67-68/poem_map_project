@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_0l48l"]
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_um40o"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_3b0ud"]
-[ext_resource type="Script" uid="uid://ojqxtgw57ec3" path="res://core/operators/imaginary_set_level_operator.gd" id="4_w4ex6"]
+[ext_resource type="Script" uid="uid://eut3n516ihu0" path="res://core/operators/add_random_leverage_operator.gd" id="4_w4ex6"]
 [ext_resource type="Script" uid="uid://bhm8bigwrwgjm" path="res://core/operators/play_transition_operator.gd" id="5_bfjbd"]
 [ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_bfjbd"]
 

@@ -300,6 +300,11 @@ func _on_stat_changed() -> void:
 ## 由 PlayerState.player_stat_changed 触发，每次属性变化立即刷新
 func _on_any_stat_changed(_prop_name: String = "") -> void:
 	_refresh_all_props()
+	_on_ambition_stat_changed('progress')
+	# 🆕 冻土模式：progress 变化时强制刷新里程条（双保险）
+	if _is_frost_panel_active() and _prop_name == "progress":
+		_update_frost_distance_bar()
+		Logging.info("LeftPlayerPanel._on_any_stat_changed: 冻土模式 progress 变化 → 刷新里程条 (val=%d)" % PlayerState.get_stat_val("progress"))
 
 ## 刷新所有固定属性的名称、数值和感知文本
 ## 显示格式：当前值 / 上限（soft_max 与 hard_max 中较低者）
@@ -385,13 +390,18 @@ func reset_all_prop_colors() -> void:
 
 
 func _on_ambition_stat_changed(prop_name: String) -> void:
+	# 🆕 冻土模式：任何属性变化都刷新里程条（不再依赖 tracked_property 门控）
+	if _is_frost_panel_active():
+		_update_frost_distance_bar()
+		Logging.debug("LeftPlayerPanel._on_ambition_stat_changed: 冻土模式 — 里程条已刷新 (prop=%s)" % prop_name)
+		return
+	
+	# 非冻土模式：保持原有逻辑
 	var ambition = PlayerState.ambition
 	if not ambition or ambition.tracked_property.is_empty():
 		return
 	if prop_name == ambition.tracked_property:
-		if _is_frost_panel_active():
-			_update_frost_distance_bar()
-			Logging.debug("LeftPlayerPanel._on_ambition_stat_changed: 冻土模式 — 里程条已刷新 (prop=%s)" % prop_name)
+		Logging.debug("LeftPlayerPanel._on_ambition_stat_changed: ambition progress 已刷新 (prop=%s)" % prop_name)
 
 func _on_ambition_changed(_new_ambition) -> void:
 	_update_ambition_deadline_bar()
@@ -424,28 +434,19 @@ func _restore_normal_panel_mode() -> void:
 		_identity_label.text = _original_identity_text
 		Logging.info("LeftPlayerPanel: 冻土面板模式已退出 — 身份还原为 '%s'" % _original_identity_text)
 
-## 冻土里程进度条：剩余旬数 → 已行里程（百分比 × 243 里）
+## 冻土里程进度条：progress 属性 → 已行里程（capped at 243 里）
+## 🆕 完全由 progress 属性驱动，不再依赖 ambition deadline 推算
 func _update_frost_distance_bar() -> void:
 	_apply_frost_panel_mode()
 	if not _ambition_progress_bar or not _ambition_deadline_label:
+		Logging.warn("LeftPlayerPanel._update_frost_distance_bar: progress_bar 或 deadline_label 为 null，跳过")
 		return
 
-	var remaining := PlayerState.get_ambition_remaining_xun()
-	if remaining < 0:
-		_ambition_deadline_label.hide()
-		_ambition_progress_bar.hide()
-		return
+	var progress_val: int = PlayerState.get_stat_val("progress")
+	var distance: float = float(progress_val) / 100 * FROST_TOTAL_DISTANCE
+	var ratio := distance / FROST_TOTAL_DISTANCE
 
-	var total := PlayerState.ambition.deadline_xun
-	if total <= 0:
-		Logging.warn("LeftPlayerPanel._update_frost_distance_bar: deadline_xun=%d 无效" % total)
-		_ambition_deadline_label.hide()
-		_ambition_progress_bar.hide()
-		return
-
-	var traveled_xun := total - remaining
-	var ratio := float(traveled_xun) / float(total)
-	var distance := ratio * FROST_TOTAL_DISTANCE
+	Logging.info("LeftPlayerPanel._update_frost_distance_bar: progress=%d → 已行 %.0f/%.0f 里 (ratio=%.3f)" % [progress_val, distance, FROST_TOTAL_DISTANCE, ratio])
 
 	_ambition_deadline_label.show()
 	_ambition_progress_bar.show()
