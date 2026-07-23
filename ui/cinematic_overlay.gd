@@ -132,20 +132,22 @@ func _cleanup_after_skip() -> void:
 
 
 func _typewrite(full_text: String, speed: float) -> void:
-	if speed <= 0.0 or full_text.is_empty():
-		text_label.text = full_text
+	# 先完整翻译，再对翻译结果进行打字机逐字拆分
+	var translated := tr(full_text)
+	if speed <= 0.0 or translated.is_empty():
+		text_label.text = translated
 		return
 	
 	# 按字符逐个追加
-	for i in range(full_text.length()):
+	for i in range(translated.length()):
 		if _skip_requested:
-			text_label.text = full_text
+			text_label.text = translated
 			return
-		text_label.text = full_text.left(i + 1)
+		text_label.text = translated.left(i + 1)
 		if speed > 0.0:
 			await _wait_seconds(speed)
 			if _skip_requested:
-				text_label.text = full_text
+				text_label.text = translated
 				return
 
 

@@ -10,7 +10,7 @@
 
 [sub_resource type="Resource" id="Resource_trans"]
 script = ExtResource("3_trans")
-texts = Array[String](["EXAM_30_CINEMATIC_0", "EXAM_30_CINEMATIC_1", "EXAM_30_CINEMATIC_2"])
+texts = Array[String](["大考之日已至，长安城内千人齐聚礼部贡院。", "榜单一空。", "没有一个人中第。"])
 metadata/_custom_type_script = "uid://bhm8bigwrwgjm"
 
 [sub_resource type="Resource" id="Resource_router"]

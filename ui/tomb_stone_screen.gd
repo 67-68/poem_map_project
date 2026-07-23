@@ -369,7 +369,6 @@ func _on_return_to_main_menu() -> void:
 # ════════════════════════════════════════════════════════════════
 
 const DAYS_PER_YEAR_TOMB: int = 360
-const START_YEAR_TOMB: int = 745
 
 func _populate_time_action_rank() -> void:
 	var consumption: Dictionary = PlayerObserver.get_all_consumption()
@@ -552,8 +551,9 @@ func _populate_midware_product() -> void:
 # History — 里程碑 + 历史事件
 # ════════════════════════════════════════════════════════════════
 
+## total_days 是从公元 0 年开始的绝对天数（与 TimeService._total_days_elapsed 同一量纲）
 static func _days_to_date_string(total_days: int) -> String:
-	var year: int = START_YEAR_TOMB + total_days / DAYS_PER_YEAR_TOMB
+	var year: int = total_days / DAYS_PER_YEAR_TOMB
 	var day_of_year: int = total_days % DAYS_PER_YEAR_TOMB
 	var month: int = day_of_year / 30 + 1
 	var day: int = day_of_year % 30 + 1
@@ -602,7 +602,7 @@ func _populate_history() -> void:
 			var event: HistoryEvent = all_history[uuid] as HistoryEvent
 			if not event:
 				continue
-			var date_str: String = _days_to_date_string(int(event.target_year * 360.0))
+			var date_str: String = _days_to_date_string(int(event.target_year * DAYS_PER_YEAR_TOMB))
 			var event_name: String = tr(event.name) if not event.name.is_empty() else uuid
 			history_items.append(tr("TOMB_STONE_HISTORY_ENTRY").format({"date": date_str, "event": event_name}))
 		if history_items.size() > 0:

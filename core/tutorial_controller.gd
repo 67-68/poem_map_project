@@ -230,7 +230,7 @@ func _skip_tutorial() -> void:
 	_clear_all_tut_flags()
 	EventBus.narrative_tape_show_requested.emit()
 	EventBus.request_event_key.emit("event_intro_745", {})
-
+ 
 func _begin_tutorial() -> void:
 	Logging.info("TutorialController: ====== 开始新手教程 ======")
 
