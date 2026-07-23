@@ -123,5 +123,9 @@
   "_comment_tier": "=== 🆕 理念修饰器等级/旬数档位 (Modifier Tier/Xun) ===",
   "_comment_tier_desc": "用于 npc_trade_tier 的档位步进和 relation_speed_abs 的旬数减少。",
   "xs_tier_step": 1,
-  "xs_xun_reduction": 1
+  "xs_xun_reduction": 1,
+
+  "_comment_shop": "=== 🛒 商店物品 Buff 百分比 ===",
+  "mod_pct_5": 5,
+  "mod_pct_30": 30
 }

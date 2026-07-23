@@ -60,9 +60,6 @@ var _prop_label_map: Dictionary = {}
 # 当前活跃的颜色覆盖，用于重新应用。{ prop_key → { name_color, value_color, perception_color } }
 var _prop_color_overrides: Dictionary = {}
 
-# 野心追踪属性进度 Label（动态创建）
-var _ambition_progress_label: Label = null
-
 # ── 侧滑动画 ─────────────────────────────────────────────
 var _original_pos_x: float
 var _is_animating: bool = false
@@ -124,7 +121,6 @@ func _ready() -> void:
 		Logging.info("LeftPlayerPanel: connected to EventBus.imaginary_changed")
 
 	# 野心进度 Label + 倒计时进度条
-	_create_ambition_progress_label()
 	_update_ambition_deadline_bar()
 
 	# 监听属性变动 → 刷新野心进度
@@ -304,7 +300,6 @@ func _on_stat_changed() -> void:
 ## 由 PlayerState.player_stat_changed 触发，每次属性变化立即刷新
 func _on_any_stat_changed(_prop_name: String = "") -> void:
 	_refresh_all_props()
-	_refresh_ambition_progress_label()
 
 ## 刷新所有固定属性的名称、数值和感知文本
 ## 显示格式：当前值 / 上限（soft_max 与 hard_max 中较低者）
@@ -388,59 +383,109 @@ func reset_all_prop_colors() -> void:
 		labels.perception.remove_theme_color_override("font_color")
 	_prop_color_overrides.clear()
 
-# ── 野心进度 ────────────────────────────────────────────
-
-func _create_ambition_progress_label() -> void:
-	if _ambition_progress_label:
-		return
-	_ambition_progress_label = Label.new()
-	_ambition_progress_label.name = "AmbitionProgressLabel"
-	_ambition_progress_label.theme_type_variation = &"DefaultText"
-	_ambition_progress_label.add_theme_font_size_override(&"font_size", 12)
-	_ambition_progress_label.add_theme_color_override(&"font_color", Color(0.5, 0.45, 0.35))
-	# 插入到 AmbitionProgressBar 之后
-	var parent_vbox := _ambition_progress_bar.get_parent()
-	if parent_vbox:
-		parent_vbox.add_child(_ambition_progress_label)
-		parent_vbox.move_child(_ambition_progress_label, _ambition_progress_bar.get_index() + 1)
-		Logging.info("LeftPlayerPanel: ambition progress label created")
-	_refresh_ambition_progress_label()
-
-func _refresh_ambition_progress_label() -> void:
-	if not _ambition_progress_label:
-		return
-	var ambition = PlayerState.ambition
-	if not ambition or ambition.tracked_property.is_empty():
-		_ambition_progress_label.hide()
-		return
-	var tracked_prop = Database.get_property(ambition.tracked_property)
-	if not tracked_prop:
-		_ambition_progress_label.hide()
-		Logging.warn("LeftPlayerPanel: tracked property '%s' not found" % ambition.tracked_property)
-		return
-	var cn_name = tracked_prop.get_display_name()
-	var val: int = PlayerState.get_stat_val(ambition.tracked_property)
-	var perception = tracked_prop.get_staged_perception_text()
-	_ambition_progress_label.text = tr("CODE_LEFT_PLAYER_PANEL_73D0BD60AB") % [cn_name, val, perception]
-	_ambition_progress_label.show()
 
 func _on_ambition_stat_changed(prop_name: String) -> void:
 	var ambition = PlayerState.ambition
 	if not ambition or ambition.tracked_property.is_empty():
 		return
 	if prop_name == ambition.tracked_property:
-		_refresh_ambition_progress_label()
+		if _is_frost_panel_active():
+			_update_frost_distance_bar()
+			Logging.debug("LeftPlayerPanel._on_ambition_stat_changed: 冻土模式 — 里程条已刷新 (prop=%s)" % prop_name)
 
 func _on_ambition_changed(_new_ambition) -> void:
-	if _ambition_progress_label:
-		_ambition_progress_label.queue_free()
-		_ambition_progress_label = null
-	_create_ambition_progress_label()
 	_update_ambition_deadline_bar()
+
+# ── 冻土面板模式 ────────────────────────────────────────
+
+## 奉先距长安约 243 唐里，进度条百分比换算为实际里程
+const FROST_TOTAL_DISTANCE: float = 243.0
+
+## 冻土模式激活时保存的原始身份文本（用于退出冻土时还原）
+var _original_identity_text: String = ""
+
+func _is_frost_panel_active() -> bool:
+	return PlayerState.has_flag("flag_frost_panel_active")
+
+## 应用冻土面板模式：身份切换 + 进度条转里程 + 考试门控
+func _apply_frost_panel_mode() -> void:
+	if not _identity_label:
+		return
+	# 首次激活时保存原始身份文本
+	#breakpoint
+	if _original_identity_text.is_empty():
+		_original_identity_text = _identity_label.text
+	_identity_label.text = "从八品府库看守"
+	Logging.info("LeftPlayerPanel: 冻土面板模式已激活 — 身份=%s" % _identity_label.text)
+
+## 退出冻土面板模式：还原身份 + 还原进度条
+func _restore_normal_panel_mode() -> void:
+	if not _original_identity_text.is_empty() and _identity_label:
+		_identity_label.text = _original_identity_text
+		Logging.info("LeftPlayerPanel: 冻土面板模式已退出 — 身份还原为 '%s'" % _original_identity_text)
+
+## 冻土里程进度条：剩余旬数 → 已行里程（百分比 × 243 里）
+func _update_frost_distance_bar() -> void:
+	_apply_frost_panel_mode()
+	if not _ambition_progress_bar or not _ambition_deadline_label:
+		return
+
+	var remaining := PlayerState.get_ambition_remaining_xun()
+	if remaining < 0:
+		_ambition_deadline_label.hide()
+		_ambition_progress_bar.hide()
+		return
+
+	var total := PlayerState.ambition.deadline_xun
+	if total <= 0:
+		Logging.warn("LeftPlayerPanel._update_frost_distance_bar: deadline_xun=%d 无效" % total)
+		_ambition_deadline_label.hide()
+		_ambition_progress_bar.hide()
+		return
+
+	var traveled_xun := total - remaining
+	var ratio := float(traveled_xun) / float(total)
+	var distance := ratio * FROST_TOTAL_DISTANCE
+
+	_ambition_deadline_label.show()
+	_ambition_progress_bar.show()
+
+	_ambition_deadline_label.text = tr("CODE_LEFT_PLAYER_PANEL_FROST_DISTANCE") % [int(distance), int(FROST_TOTAL_DISTANCE)]
+
+	_ambition_progress_bar.max_value = FROST_TOTAL_DISTANCE
+	_ambition_progress_bar.value = distance
+	_ambition_progress_bar.show_percentage = false
+
+	# 冻土色系进度条：冰蓝 → 雪白渐变
+	var bar_color := Color(0.3, 0.45, 0.6).lerp(Color(0.75, 0.85, 0.95), ratio)
+	var fg_style := StyleBoxFlat.new()
+	fg_style.bg_color = bar_color
+	fg_style.border_width_left = 1
+	fg_style.border_width_top = 1
+	fg_style.border_width_right = 1
+	fg_style.border_width_bottom = 1
+	fg_style.border_color = bar_color.darkened(0.3)
+	fg_style.corner_radius_top_left = 2
+	fg_style.corner_radius_top_right = 2
+	fg_style.corner_radius_bottom_left = 2
+	fg_style.corner_radius_bottom_right = 2
+	_ambition_progress_bar.add_theme_stylebox_override("fg", fg_style)
+
+	Logging.debug("LeftPlayerPanel._update_frost_distance_bar: 已行 %.0f/%.0f 里 (ratio=%.3f)" % [distance, FROST_TOTAL_DISTANCE, ratio])
+
 
 # ── 野心倒计时进度条 ────────────────────────────────────
 
 func _update_ambition_deadline_bar() -> void:
+	# ★ 冻土模式接管：里程进度条 + 考试门控
+	if _is_frost_panel_active():
+		_apply_frost_panel_mode()
+		return
+
+	# 退出冻土模式 → 还原身份文本
+	if not _original_identity_text.is_empty():
+		_restore_normal_panel_mode()
+
 	var remaining := PlayerState.get_ambition_remaining_xun()
 	if remaining < 0:
 		_ambition_deadline_label.hide()
