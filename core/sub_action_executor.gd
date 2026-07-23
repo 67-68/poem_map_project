@@ -53,7 +53,14 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 		sub_main_tag = state.pending_main_tag
 		sub_fallback = state.pending_fallback
 		sub_tags = state.pending_tags.duplicate()
-	
+
+	# ── lead_to_event 快速通道：跳过全部执行管线（cost/possibility/day_consumed/scan_events），直接推送事件 ──
+	if sub_action and not sub_action.lead_to_event.is_empty():
+		Logging.info("SubActionExecutor.execute: lead_to_event 快速通道 — 跳过执行管线，直接推送事件 '%s' for sub-action '%s'" % [sub_action.lead_to_event, selected_uuid])
+		EventBus.push_event.emit(sub_action.lead_to_event, {})
+		state.clear()
+		return
+
 	# ── 重复行动检测 ──
 	var _sub_identifying_tags: Array[String] = []
 	if not sub_main_tag.is_empty():

@@ -676,6 +676,49 @@ EventBus.push_picker(data, on_selected, ui_constructor, on_filter_toggled)
 
 ---
 
+## lead_to_event 快速通道
+
+### 设计意图
+
+Action 字段 [`lead_to_event: String`](core/model/action.gd) 用于子 Action 上。当 sub-action 在 Picker 中被选中并成功执行时，若 `lead_to_event` 非空，**跳过全部执行管线**（cost / possibility 投骰 / action_results / day_consumed / scan_events / 意象获取），直接以 `EventBus.push_event` 推送指定事件。
+
+锁定 / HIDE / GRAY 判定完全保留——`lead_to_event` 仅在被成功选中后生效。
+
+### 拦截位置
+
+在 [`SubActionExecutor.execute()`](core/sub_action_executor.gd) 中，sub_action 解析完成后、重复行动检测之前：
+
+```
+sub_action = Database.get_action(selected_uuid)
+  → lead_to_event 非空？
+    → EventBus.push_event(lead_to_event, {}) + state.clear() + return
+    → 否 → 正常管线
+```
+
+### 绕过清单
+
+| 管线步骤 | 是否绕过 |
+|----------|----------|
+| Picker HIDE（TraitRequirement/FlagRequirement/NarrativeLock） | ❌ 正常 |
+| Picker GRAY（PropertyRequirement/PoemRequirement/时间不足） | ❌ 正常 |
+| 异地行动地点校验 | ❌ 正常 |
+| NpcActionButton 锁定 | ❌ 正常 |
+| cost archetype | ✅ 跳过 |
+| possibility 投骰 | ✅ 跳过 |
+| action_results.operate() | ✅ 跳过 |
+| day_consumed 时间消耗 | ✅ 跳过 |
+| scan_events | ✅ 跳过 |
+| 意象获取 _try_imaginary_grant | ✅ 跳过 |
+| 重复行动检测 | ✅ 跳过 |
+| defer 启动 | ✅ 跳过 |
+
+### 相关文件
+
+- [`core/sub_action_executor.gd`](core/sub_action_executor.gd) — `execute()` 中快速通道拦截
+- [`core/model/action.gd`](core/model/action.gd) — `lead_to_event` 字段声明
+
+---
+
 ## 面板刷新信号分工（v3.1 — 2025-07-16）
 
 ### 问题背景
