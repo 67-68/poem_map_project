@@ -85,7 +85,7 @@ func operate():
 	# 正收益（val>0）*0.8 = 减少 20% 获得
 	# 负消耗（val<0）*1.2 = 增加 20% 消耗
 	var adjusted_value: int = value
-	if PlayerState._is_repeated_action and value != 0:
+	if PlayerState._is_repeated_action and value != 0 and GameState.current_era != "755_backhome":
 		if value > 0:
 			adjusted_value = int(float(value) * 0.8)
 		else:
@@ -139,7 +139,8 @@ func describe_preview() -> String:
 	var display_value: int = value
 	
 	# 🆕 重复行动疲惫：预览文本展示调整后数值
-	if PlayerState._is_repeated_action:
+	# 755_backhome era 豁免（只有赶路一个行动，重复是常态）
+	if PlayerState._is_repeated_action and GameState.current_era != "755_backhome":
 		if value > 0:
 			display_value = int(float(value) * 0.8)
 		else:
@@ -148,7 +149,7 @@ func describe_preview() -> String:
 	var perception_text = prop.get_change_perception_text(value)
 	var base_str: String
 	
-	if PlayerState._is_repeated_action and display_value != value:
+	if PlayerState._is_repeated_action and GameState.current_era != "755_backhome" and display_value != value:
 		if perception_text.is_empty():
 			base_str = tr("CODE_PROPERTY_OPERATOR_D1DF056B3B") % [cn_name, arrows, display_value, value, ("+" if value < 0 else "-"), 20]
 		else:

@@ -68,7 +68,7 @@ func build_action_hint(action, is_locked: bool, ctx, profile := _HintProfile.Pro
 		hint.narrative = _BBCode.success_prefix(action.success_hint) + "\n\n" + hint.narrative
 		Logging.info("ActionHintFormatter.build_action_hint: unlocked with success_hint for '%s'" % action.name)
 
-	if _is_repeated and not is_locked:
+	if _is_repeated and not is_locked and GameState.current_era != "755_backhome":
 		hint.narrative = _BBCode.repeated_warning() + "\n\n" + hint.narrative
 		Logging.info("ActionHintFormatter.build_action_hint: 重复行动警告追加到叙事层 for '%s'" % action.name)
 

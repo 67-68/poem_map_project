@@ -379,9 +379,9 @@ func death_judgement():
 		# ── 现有濒死兜底逻辑（未获 NPC 救助时继续） ──
 		if GameState.current_era == "755_backhome":
 			var count = PlayerState.get_flag("flag_near_death_count")
-			breakpoint
-			if count < 3:
-				breakpoint
+			#breakpoint
+			if not count or count < 3:
+				#breakpoint
 				PlayerState.append_flag("flag_near_death_count", 1)
 				force_set_prop(ENUMS.PROPS.HEALTH, 1)
 				Logging.info('[SurvivalManager] Near-death count=%d, force_set health=1' % (count + 1))

@@ -36,10 +36,21 @@ func _ready() -> void:
 		return
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-	# 监听每旬 tick
+	# 注册防重复触发的 flag（bool 型，存在即表示已触发）
+	PlayerState.register_virtual_flag(FLAG_LISHAN_TRIGGERED, "bool")
+	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_LISHAN_TRIGGERED)
+	PlayerState.register_virtual_flag(FLAG_INDIFFERENT_WIND_TRIGGERED, "bool")
+	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_INDIFFERENT_WIND_TRIGGERED)
+
+	# 监听每旬 tick（同乡来访触发）
 	if not TimeService.on_xun_tick.is_connected(_on_xun_tick):
 		TimeService.on_xun_tick.connect(_on_xun_tick)
 		Logging.info("[PlotController] 已连接 TimeService.on_xun_tick")
+
+	# 🆕 监听 progress 属性变化，立即检查阈值
+	if not PlayerState.player_stat_changed.is_connected(_on_stat_changed):
+		PlayerState.player_stat_changed.connect(_on_stat_changed)
+		Logging.info("[PlotController] 已连接 PlayerState.player_stat_changed")
 
 	Logging.info("[PlotController] Autoload 初始化完成")
 
@@ -89,6 +100,16 @@ func _check_town_folk_trigger() -> void:
 # ════════════════════════════════════════════════════════════════
 # 🆕 progress 阈值触发（755_backhome 时代）
 # ════════════════════════════════════════════════════════════════
+
+# 🆕 progress 属性变化回调（即时触发，不等 xun tick）
+func _on_stat_changed(prop_name: String) -> void:
+	if prop_name != "progress":
+		return
+	if TutorialController.is_tutorial_active():
+		Logging.info("[PlotController] tutorial 模式，跳过 progress 变化检查")
+		return
+	Logging.info("[PlotController] progress 属性变化检测到: prop_name=%s，触发阈值检查" % prop_name)
+	_check_progress_triggers()
 
 func _check_progress_triggers() -> void:
 	var progress_val: int = PlayerState.get_stat_val("progress")
