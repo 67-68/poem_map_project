@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://ganlu_success_archetype"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+
+[resource]
+script = ExtResource("1_arch")
+uuid = "ganlu_success"
+name = "gan_lu.success"
+universal_result = "prop_add(name=progress; val=xl_progress_gain)"
+action_uuid = "gan_lu"
+state = "success"

@@ -4,7 +4,8 @@ extends Node
 ## 职责：
 ##   1. 监听 TimeService.on_xun_tick，累计 xun 次数
 ##   2. 在第 3 旬时，检查 event_counter == 2，触发同乡来访事件
-##   3. 通过 flag_bool 持久化防重复触发
+##   3. 监控 progress 属性：>30 触发骊山事件，>60 触发结冰渭河事件
+##   4. 通过 flag_bool 持久化防重复触发
 
 # ════════════════════════════════════════════════════════════════
 # 常量
@@ -14,6 +15,14 @@ const TRIGGER_XUN: int = 3
 const REQUIRED_EVENT_COUNT: int = 2
 const PLOT_EVENT_KEY: String = "plot_prompt_user_action"
 const FLAG_TRIGGERED: String = "plot_prompt_user_action_triggered"
+
+## 🆕 755_backhome 时代 progress 阈值事件
+const EVENT_LISHAN: String = "backhome_lishan_1"
+const EVENT_INDIFFERENT_WIND: String = "backhome_indifferent_wind_1"
+const FLAG_LISHAN_TRIGGERED: String = "plot_lishan_triggered"
+const FLAG_INDIFFERENT_WIND_TRIGGERED: String = "plot_indifferent_wind_triggered"
+const PROGRESS_LISHAN_THRESHOLD: int = 31  # >30
+const PROGRESS_INDIFFERENT_WIND_THRESHOLD: int = 61  # >60
 
 # ════════════════════════════════════════════════════════════════
 # 内部状态
@@ -46,27 +55,69 @@ func _on_xun_tick() -> void:
 	_xun_count += 1
 	Logging.info("[PlotController] 第 %d 旬 tick, event_counter=%d" % [_xun_count, GameState.event_counter])
 
-	# 检查触发条件
+	# ── 检查同乡来访触发（原有逻辑）──
+	_check_town_folk_trigger()
+
+	# ── 🆕 检查 progress 阈值触发 ──
+	_check_progress_triggers()
+
+
+# ════════════════════════════════════════════════════════════════
+# 同乡来访触发
+# ════════════════════════════════════════════════════════════════
+
+func _check_town_folk_trigger() -> void:
 	if _xun_count != TRIGGER_XUN:
-		Logging.info("[PlotController] xun_count=%d ≠ %d，跳过触发检查" % [_xun_count, TRIGGER_XUN])
+		Logging.info("[PlotController] xun_count=%d ≠ %d，跳过同乡来访触发检查" % [_xun_count, TRIGGER_XUN])
 		return
 
 	if GameState.event_counter < REQUIRED_EVENT_COUNT:
-		Logging.info("[PlotController] event_counter=%d < %d，跳过触发" % [GameState.event_counter, REQUIRED_EVENT_COUNT])
+		Logging.info("[PlotController] event_counter=%d < %d，跳过同乡来访触发" % [GameState.event_counter, REQUIRED_EVENT_COUNT])
 		return
 
-	# 防重复：检查持久化 flag
 	if PlayerState.has_flag(FLAG_TRIGGERED):
 		Logging.info("[PlotController] flag '%s' 已存在，跳过重复触发" % FLAG_TRIGGERED)
 		return
 
-	# 🎯 条件满足，触发同乡来访事件
 	Logging.info("[PlotController] ═══ 触发剧情事件: %s ═══" % PLOT_EVENT_KEY)
-
-	# 设置持久化防重复标记
 	PlayerState.set_flag(FLAG_TRIGGERED, true)
 	Logging.info("[PlotController] flag '%s' 已设置" % FLAG_TRIGGERED)
-
-	# 推入事件栈
 	EventBus.push_event.emit(PLOT_EVENT_KEY, {})
 	Logging.info("[PlotController] 已发射 push_event: %s" % PLOT_EVENT_KEY)
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 progress 阈值触发（755_backhome 时代）
+# ════════════════════════════════════════════════════════════════
+
+func _check_progress_triggers() -> void:
+	var progress_val: int = PlayerState.get_stat_val("progress")
+	Logging.info("[PlotController] progress 检查: current=%d, lishan_threshold=%d, wind_threshold=%d" % [
+		progress_val, PROGRESS_LISHAN_THRESHOLD, PROGRESS_INDIFFERENT_WIND_THRESHOLD
+	])
+
+	# 骊山触发：progress > 30
+	if progress_val >= PROGRESS_LISHAN_THRESHOLD:
+		if not PlayerState.has_flag(FLAG_LISHAN_TRIGGERED):
+			Logging.info("[PlotController] ═══ progress=%d > 30，触发骊山事件: %s ═══" % [progress_val, EVENT_LISHAN])
+			PlayerState.set_flag(FLAG_LISHAN_TRIGGERED, true)
+			Logging.info("[PlotController] flag '%s' 已设置" % FLAG_LISHAN_TRIGGERED)
+			EventBus.push_event.emit(EVENT_LISHAN, {})
+			Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_LISHAN)
+		else:
+			Logging.info("[PlotController] flag '%s' 已存在，跳过骊山触发" % FLAG_LISHAN_TRIGGERED)
+	else:
+		Logging.info("[PlotController] progress=%d 未达骊山阈值 %d，跳过" % [progress_val, PROGRESS_LISHAN_THRESHOLD])
+
+	# 结冰渭河触发：progress > 60
+	if progress_val >= PROGRESS_INDIFFERENT_WIND_THRESHOLD:
+		if not PlayerState.has_flag(FLAG_INDIFFERENT_WIND_TRIGGERED):
+			Logging.info("[PlotController] ═══ progress=%d > 60，触发结冰渭河事件: %s ═══" % [progress_val, EVENT_INDIFFERENT_WIND])
+			PlayerState.set_flag(FLAG_INDIFFERENT_WIND_TRIGGERED, true)
+			Logging.info("[PlotController] flag '%s' 已设置" % FLAG_INDIFFERENT_WIND_TRIGGERED)
+			EventBus.push_event.emit(EVENT_INDIFFERENT_WIND, {})
+			Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_INDIFFERENT_WIND)
+		else:
+			Logging.info("[PlotController] flag '%s' 已存在，跳过结冰渭河触发" % FLAG_INDIFFERENT_WIND_TRIGGERED)
+	else:
+		Logging.info("[PlotController] progress=%d 未达结冰渭河阈值 %d，跳过" % [progress_val, PROGRESS_INDIFFERENT_WIND_THRESHOLD])

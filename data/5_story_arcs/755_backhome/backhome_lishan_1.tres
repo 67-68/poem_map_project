@@ -13,18 +13,12 @@
 [sub_resource type="Resource" id="Resource_iya3t"]
 script = ExtResource("3_nwfle")
 _property = 4
-value = -5
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_ks26h"]
-script = ExtResource("3_nwfle")
-str_props = "progress"
-value = 5
+value = -13
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_27qtt"]
 script = ExtResource("4_3r2op")
-operators = Array[ExtResource("2_n6618")]([SubResource("Resource_iya3t"), SubResource("Resource_ks26h")])
+operators = Array[ExtResource("2_n6618")]([SubResource("Resource_iya3t")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_l18cd"]
@@ -36,13 +30,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [sub_resource type="Resource" id="Resource_nwfle"]
 script = ExtResource("3_nwfle")
 _property = 4
-value = -8
-metadata/_custom_type_script = "uid://d25kbxawh53k4"
-
-[sub_resource type="Resource" id="Resource_3r2op"]
-script = ExtResource("3_nwfle")
-str_props = "progress"
-value = 3
+value = -13
 metadata/_custom_type_script = "uid://d25kbxawh53k4"
 
 [sub_resource type="Resource" id="Resource_k7qva"]
@@ -53,7 +41,7 @@ metadata/_custom_type_script = "uid://ojqxtgw57ec3"
 
 [sub_resource type="Resource" id="Resource_fxifg"]
 script = ExtResource("4_3r2op")
-operators = Array[ExtResource("2_n6618")]([SubResource("Resource_nwfle"), SubResource("Resource_3r2op"), SubResource("Resource_k7qva")])
+operators = Array[ExtResource("2_n6618")]([SubResource("Resource_nwfle"), SubResource("Resource_k7qva")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
 [sub_resource type="Resource" id="Resource_n6618"]

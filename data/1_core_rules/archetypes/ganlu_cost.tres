@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://ganlu_cost_archetype"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+
+[resource]
+script = ExtResource("1_arch")
+uuid = "ganlu_cost"
+name = "gan_lu.cost"
+universal_result = "prop_sub(name=health; val=ganlu_health_cost)"
+action_uuid = "gan_lu"
+state = "cost"
