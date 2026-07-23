@@ -56,5 +56,6 @@
 
 - **Property.val 变为模板默认值**，运行时值存在 `GameSave.data.properties`（避免 Resource 被运行时修改后无法区分初始值和当前值）
 - **ambition 存 UUID 字符串**，PlayerState getter 从 Database 实时解析回 AmbitionData 引用
+- **ambition 默认值 "" 和 -1**：`ambition_uuid` 默认为空字符串、`ambition_start_days` 默认为 -1，确保新游戏不自动激活野心。野心由 `event_intro_745` 事件管线中的 `AmbitionOperator` 负责激活（此时 `TimeService._total_days_elapsed` 已正确初始化为 268200+）。
 - **RelationFlagManager 不动**：它本身无状态（纯 static func），数据已通过 flags 字典存储
 - **所有 Autoload 的 @export var 保留**，仅内部改为 getter/setter → 编辑器 Inspector 依然可见，序列化不受影响

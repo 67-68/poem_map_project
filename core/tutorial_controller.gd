@@ -207,7 +207,7 @@ func _hide_tutorial_dialog() -> void:
 
 
 func _skip_tutorial() -> void:
-	TimeService.jump_to_clean(745.0)
+	# TimeService.jump_to_clean(745.0)
 	Logging.info("TutorialController: 跳过新手教程")
 	ActionManager.clear_tutorial_whitelist()
 	ActionManager.clear_tutorial_sub_whitelist()
@@ -229,6 +229,7 @@ func _skip_tutorial() -> void:
 	Logging.info("TutorialController: [skip] _ensure_all_ui_visible 已调用（兜底刷新）")
 	_clear_all_tut_flags()
 	EventBus.narrative_tape_show_requested.emit()
+	EventBus.request_event_key.emit("event_intro_745", {})
 
 func _begin_tutorial() -> void:
 	Logging.info("TutorialController: ====== 开始新手教程 ======")
@@ -1015,9 +1016,10 @@ func _advance_to_end() -> void:
 	HoverPopupManager.set_hover_enabled(true)
 	Logging.info("TutorialController: hover 已恢复")
 	Logging.info("TutorialController: tutorial 完成！days_per_xun 已恢复默认，所有信号已断开，白名单已清除")
-	TimeService.jump_to_clean(745.0)
+	# TimeService.jump_to_clean(745.0)
 	EventBus.request_refresh_action_panel.emit()
 	EventBus.show_mid_panel.emit()
+	EventBus.request_event_key.emit("event_intro_745", {})
 	
 
 

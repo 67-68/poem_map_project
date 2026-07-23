@@ -62,6 +62,7 @@ var locale: String = "zh"
 # ════════════════════════════════════════════════════════════════
 # 野心 — 存 UUID 字符串，PlayerState 的 getter 从 Database 实时解析
 # ambition_start_days: 野心激活时的累计天数（用于计算剩余旬数），-1=未激活
+# 默认值 "" / -1 确保新游戏不自动激活野心（由 event_intro_745 事件管线负责激活）
 # ════════════════════════════════════════════════════════════════
 var ambition_uuid: String = ""
 var ambition_start_days: int = -1

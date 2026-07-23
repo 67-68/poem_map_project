@@ -831,7 +831,8 @@ func clear_ambition():
 func get_ambition_remaining_xun() -> int:
 	if not ambition or ambition.deadline_xun <= 0:
 		return -1
-	if GameSave.data.ambition_start_days < 0:
+	if GameSave.data.ambition_start_days <= 0:
+		Logging.err("get_ambition_remaining_xun: ambition_start_days=%d 无效（≤0），ambition 可能尚未通过事件管线激活" % GameSave.data.ambition_start_days)
 		return -1
 	var current_days: int = TimeService._total_days_elapsed
 	var elapsed_xun: int = (current_days - GameSave.data.ambition_start_days) / 10
