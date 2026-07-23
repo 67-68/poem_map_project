@@ -13,14 +13,22 @@ class_name BuffOperator extends BaseOperator
 ##   relation_speed_pct — NPC 关系需求百分比减免 (pct)
 ##   relation_speed_abs — NPC 关系需求绝对旬数减少 (abs)
 ##   npc_trade_tier     — NPC 交易档次步进 (abs) — TODO 集成点
+##   damage_reduction   — 属性扣除百分比减免 (pct，对负 delta 生效)
 ##
 ## condition 是 nullable 的 BaseRequirements，用于运行时条件匹配。
 ## 例如 ActionMatchRequirement(action="denggao_shaolingyuan") 要求
 ## 当前 action_id 匹配时才生效。
 
 @export var named_amount_key: String = ""       # named_amounts.json 的 key
-@export var modifier_type: String = ""           # efficiency|per_xun_passive|action_specific|cap_boost|relation_speed_pct|relation_speed_abs|npc_trade_tier
+@export var modifier_type: String = ""           # efficiency|per_xun_passive|action_specific|cap_boost|relation_speed_pct|relation_speed_abs|npc_trade_tier|damage_reduction
 @export var condition: BaseRequirements = null   # nullable — DSL requirement 条件
+
+## 🆕 目标属性过滤（空字符串=全局生效）。efficiency/damage_reduction 类型可用。
+@export var target_prop: String = ""
+
+## 🆕 最大使用次数（>0 启用，每次 append_stat 触发后 ModifierRegistry.consume_max_uses 递减）
+## 减至 0 时自动移除该 modifier 条目和对应 trait。
+@export var max_uses: int = 0
 
 ## 运行时由 Idea.increase_idea_level() 注入，标识此 buff 的来源理念 UUID
 var source_uuid: String = ""
@@ -48,6 +56,9 @@ func operate():
 		"named_key": named_amount_key,
 		"value": amounts[named_amount_key],
 		"condition": condition.duplicate() if condition else null,
+		"target_prop": target_prop,
+		"max_uses": max_uses,
+		"uses_remaining": max_uses,
 	}
 
 	GameSave.data.active_modifiers.append(entry)
@@ -137,6 +148,9 @@ func describe_preview() -> String:
 		"npc_trade_tier":
 			type_cn = tr("CODE_BUFF_OPERATOR_A22B5ACD70")
 			display_val = tr("CODE_BUFF_OPERATOR_66D1B869F2") % raw_val
+		"damage_reduction":
+			type_cn = "伤害减免"
+			display_val = "-%d%%" % raw_val
 		_:
 			return "%s %s=%s" % [modifier_type, named_amount_key, str(raw_val)]
 

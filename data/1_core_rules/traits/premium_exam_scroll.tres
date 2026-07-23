@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://doxwcbyly5j81"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
+
+[resource]
+script = ExtResource("1_trait")
+uuid = "premium_exam_scroll"
+name = "极品行卷"
+hover_narrative = "精装行卷，封面烫金，内附名家题跋。下次获得势时额外加成30%，用过即废。"

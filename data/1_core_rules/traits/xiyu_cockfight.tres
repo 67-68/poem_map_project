@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://c6qxpwh0lbc05"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
+
+[resource]
+script = ExtResource("1_trait")
+uuid = "xiyu_cockfight"
+name = "西域斗鸡"
+hover_narrative = "一只来自西域的斗鸡，羽毛如霞。看它扑腾的样子，连写诗都来劲了——每旬额外获得3点兴。"

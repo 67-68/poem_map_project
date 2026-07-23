@@ -7,4 +7,4 @@ script = ExtResource("1_action")
 lead_to_event = "shop_main"
 uuid = "fangshi_market"
 name = "逛逛市场"
-description = "坊市里人来人往，各色货物琳琅满目。去市场看看有什么好东西。"
+description = "去市场看商品"

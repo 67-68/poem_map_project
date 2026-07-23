@@ -25,6 +25,7 @@ const _ModifierConfig = preload("res://core/modifier_config.gd")
 
 ## 返回指定属性的 efficiency 倍率总和。
 ## 例如 +20% 效率 = 返回 0.2。调用方在 append_stat 中将 delta ← delta × (1 + 总和)
+## 🆕 支持 target_prop 过滤：非空时仅对匹配属性生效。
 static func get_efficiency_multiplier(prop_name: String) -> float:
 	var total := 0.0
 	for entry in GameSave.data.active_modifiers:
@@ -32,8 +33,11 @@ static func get_efficiency_multiplier(prop_name: String) -> float:
 			continue
 		if not _condition_passes(entry):
 			continue
-		# efficiency 当前没有 prop 过滤（全局到所有 property）
-		# 如果未来需要按 prop 过滤，添加 entry["target_prop"] 字段
+		# 🆕 target_prop 过滤
+		var tgt_prop: String = entry.get("target_prop", "")
+		if not tgt_prop.is_empty() and tgt_prop != prop_name:
+			Logging.debug("ModifierRegistry.efficiency: source='%s' target_prop='%s' ≠ prop='%s' → skip" % [entry.get("source", "?"), tgt_prop, prop_name])
+			continue
 		var pct_val: int = entry.get("value", 0)
 		if pct_val > 0:
 			total += float(pct_val) / 100.0
@@ -177,6 +181,88 @@ static func get_npc_trade_tier_boost(faction: String) -> int:
 	if total != 0:
 		Logging.info("ModifierRegistry.npc_trade_tier: faction='%s' → 总档位提升 %d" % [faction, total])
 	return total
+
+
+# ════════════════════════════════════════════════════════════════
+# damage_reduction — 属性扣除百分比减免
+# ════════════════════════════════════════════════════════════════
+
+## 返回指定属性的 damage_reduction 倍率总和。
+## 例如 5% 减免 = 返回 0.05。调用方在 append_stat 中将负 delta 减免：delta ← delta × (1 - 总和)
+## 🆕 支持 target_prop 过滤：非空时仅对匹配属性生效。
+static func get_damage_reduction(prop_name: String) -> float:
+	var total := 0.0
+	for entry in GameSave.data.active_modifiers:
+		if entry.get("type") != "damage_reduction":
+			continue
+		if not _condition_passes(entry):
+			continue
+		var tgt_prop: String = entry.get("target_prop", "")
+		if not tgt_prop.is_empty() and tgt_prop != prop_name:
+			Logging.debug("ModifierRegistry.damage_reduction: source='%s' target_prop='%s' ≠ prop='%s' → skip" % [entry.get("source", "?"), tgt_prop, prop_name])
+			continue
+		var pct_val: int = entry.get("value", 0)
+		if pct_val > 0:
+			total += float(pct_val) / 100.0
+			Logging.info("ModifierRegistry.damage_reduction: source='%s' → -%.2f (累计 %.2f)" % [entry.get("source", "?"), float(pct_val) / 100.0, total])
+
+	if total != 0.0:
+		Logging.info("ModifierRegistry.damage_reduction: prop='%s' → 总减免倍率 %.2f" % [prop_name, total])
+	return total
+
+
+# ════════════════════════════════════════════════════════════════
+# max_uses — 使用次数消费与自动清理
+# ════════════════════════════════════════════════════════════════
+
+## 🆕 对所有有 max_uses 的 modifier 消费一次使用次数。
+## 返回需要移除 trait uuid 的列表（uses_remaining 归零的条目）。
+##
+## 过滤逻辑：只消费 type 匹配且（target_prop 为空 or 匹配）且 uses_remaining > 0 的条目。
+##
+## @param modifier_type_filter: 要消费的 modifier 类型（如 "efficiency"）
+## @param prop_name: 当前属性变化上下文
+## @return Array[String] — 需要移除的 trait uuid 列表
+static func consume_and_check_max_uses(modifier_type_filter: String, prop_name: String) -> Array[String]:
+	var to_remove_traits: Array[String] = []
+	var indices_to_remove: Array[int] = []
+	
+	for i in range(GameSave.data.active_modifiers.size() - 1, -1, -1):
+		var entry: Dictionary = GameSave.data.active_modifiers[i]
+		if entry.get("type") != modifier_type_filter:
+			continue
+		
+		var max_uses: int = entry.get("max_uses", 0)
+		if max_uses <= 0:
+			continue  # 无限使用次数，不消费
+		
+		var tgt_prop: String = entry.get("target_prop", "")
+		if not tgt_prop.is_empty() and tgt_prop != prop_name:
+			continue  # target_prop 不匹配，不消费
+		
+		var remaining: int = entry.get("uses_remaining", 0)
+		if remaining <= 0:
+			continue
+		
+		remaining -= 1
+		entry["uses_remaining"] = remaining
+		GameSave.data.active_modifiers[i] = entry
+		Logging.info("ModifierRegistry.consume_uses: source='%s' type='%s' uses_remaining=%d/%d" % [entry.get("source", "?"), modifier_type_filter, remaining, max_uses])
+		
+		if remaining <= 0:
+			indices_to_remove.append(i)
+			var source_uuid: String = entry.get("source", "")
+			if not source_uuid.is_empty():
+				to_remove_traits.append(source_uuid)
+				Logging.info("ModifierRegistry.consume_uses: source='%s' 使用次数耗尽，排队移除trait + modifier" % source_uuid)
+	
+	# 移除已耗尽条目（逆序安全删除）
+	for idx in indices_to_remove:
+		GameSave.data.active_modifiers.remove_at(idx)
+	
+	if not to_remove_traits.is_empty():
+		Logging.info("ModifierRegistry.consume_uses: 返回 %d 个待移除 trait" % to_remove_traits.size())
+	return to_remove_traits
 
 
 # ════════════════════════════════════════════════════════════════

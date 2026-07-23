@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Trait" format=3 uid="uid://ce3k07hy4g1xs"]
+
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
+
+[resource]
+script = ExtResource("1_trait")
+uuid = "rattle_drum"
+name = "拨浪鼓"
+hover_narrative = "一面小巧的拨浪鼓，咚咚作响。送给孩子的最好礼物，虽然对你没什么实际用处，但看着它就想起宗文宗武的笑脸。"
