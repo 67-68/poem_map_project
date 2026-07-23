@@ -448,6 +448,22 @@ func _update_ambition_deadline_bar() -> void:
 		return
 
 	var total := PlayerState.ambition.deadline_xun
+
+	# 🆕 大考触发：野心倒计时归零 → 推入考试事件链
+	if remaining == 0:
+		Logging.info("[LeftPlayerPanel] _update_ambition_deadline_bar: remaining==0, 触发大考事件链")
+		if not PlayerState.has_flag("flag_exam_triggered"):
+			PlayerState.set_flag("flag_exam_triggered", true)
+			Logging.info("[LeftPlayerPanel] 设置防重复标记 flag_exam_triggered")
+			EventBus.push_event.emit("event_exam_30", {})
+			Logging.info("[LeftPlayerPanel] 已推入 event_exam_30")
+		else:
+			Logging.info("[LeftPlayerPanel] flag_exam_triggered 已存在，跳过重复触发")
+		# 进度条归零后隐藏
+		_ambition_deadline_label.hide()
+		_ambition_progress_bar.hide()
+		return
+
 	_ambition_deadline_label.show()
 	_ambition_progress_bar.show()
 

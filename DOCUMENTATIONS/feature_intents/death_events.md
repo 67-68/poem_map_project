@@ -89,3 +89,57 @@ _typewrite_sequence():
 
 - 故事弧结局 [`the_end.tres`](data/5_story_arcs/755_backhome/the_end.tres) 保持 `BaseEvent` + `SystemOperator.death_hint` 直接赋值，不受影响
 - `GameState.death_cause` 保留不删除，作为 TombStoneScreen 的第三级 fallback
+
+## 大考结局系统
+
+### 涉及文件
+
+| 文件 | 角色 |
+|------|------|
+| [`core/exam_ending_router.gd`](core/exam_ending_router.gd) | 静态路由类，优先级匹配 6 条结局路径 |
+| [`ui/left_player_panel.gd`](ui/left_player_panel.gd) | AmbitionProgressBar remaining==0 时触发 push_event |
+| [`data/4_eras/events/history_events/event_exam_30.tres`] | HistoryEvent: 大考之日到了 |
+| [`data/4_eras/events/history_events/event_exam_result.tres`] | BaseEvent: on_enter 调 ExamEndingRouter.evaluate() |
+| [`data/4_eras/events/end_random_events/event_ending_*.tres`] | 6 个 DeathEvent 结局文件 |
+
+### 效果描述
+
+野心倒计时归零时触发大考事件链：显示 cinematic 过场（「无人中第」）→ ExamEndingRouter 按优先级评估玩家属性 → 推入对应结局 DeathEvent → 墓碑界面。
+
+### 结局优先级
+
+1. 望 ≥ 100 且 created_poems 中存在 level==3 的诗词 → hidden
+2. 势 ≥ 100 → good
+3. 望 ≥ 100 → medium
+4. 兴 ≥ 100 → bad
+5. 钱 ≥ 1000 且势望兴均 < 50 → rich
+6. fallback → default
+
+### 数据流
+
+```
+left_player_panel._update_ambition_deadline_bar()
+  → remaining==0 + !flag_exam_triggered
+  → PlayerState.set_flag("flag_exam_triggered", true)
+  → EventBus.push_event("event_exam_30")
+  → HistoryEvent.on_enter → choice_result:
+       PlayTransitionOperator (cinematic: "榜单一空...")
+       PushEventOperator ("event_exam_result")
+  → BaseEvent event_exam_result.on_enter:
+       ExamEndingRouter.evaluate()
+         → 优先级匹配属性阈值
+         → EventBus.push_event(匹配的 ending DeathEvent)
+  → DeathEvent.on_enter → 注入 death_reason/death_tutorial
+  → SystemOperator("game_over") → tombstone
+```
+
+### 结局内容
+
+| 结局 | death_reason | death_tutorial |
+|------|-------------|---------------|
+| hidden | 名望动天下。虽然没有当上官，但出名了，不日可以类似李白凭借名望接近玄宗 | 你还记得刚开始的那个玩具吗？虽然出名了但总得带点什么给孩子。 |
+| good | 在一时势盛，但在历史上的地位是被史书寥寥几笔带过的小人物。 | 望属性指在文坛之内的名声。 |
+| medium | 名望动天下，还是被史书带过的小人物，但这次是作为有清望的文坛先辈 | 如果你能有实际上的诗词创作就好了... |
+| bad | 史书会记载你的性情，但你充其量就是小李白的地位。 | 兴花费成为诗词才能提升望 |
+| rich | 一时巨富，籍籍无名 | 流动的财富才是财富。 |
+| default | 终其一生，不过是个被自己愤慨撕扯的小人物。对自身的自信与自卑交织，在安史之乱前愤懑而终。 | 什么都没做成，什么都没留下。 |

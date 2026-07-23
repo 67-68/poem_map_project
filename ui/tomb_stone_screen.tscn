@@ -198,6 +198,11 @@ text = "这些诗词青史留名"
 horizontal_alignment = 1
 autowrap_mode = 1
 
+[node name="ContinueButton" type="Button" parent="ColorRect/M/H/V/PanelContainer/S/V" unique_id=568560768]
+visible = false
+layout_mode = 2
+text = "继续游戏"
+
 [node name="Button" type="Button" parent="ColorRect/M/H/V" unique_id=1816358207]
 layout_mode = 2
 size_flags_vertical = 8
