@@ -58,10 +58,10 @@ perception_text = "TRES_MOMENTUM_PERCEPTION_TEXT_4"
 
 [resource]
 script = ExtResource("1_mom")
-description = "TRES_MOMENTUM_DESCRIPTION_0"
-soft_max = 50
+soft_max = 100
 staged_perceptions = Array[ExtResource("3_sp")]([SubResource("PropStagedPerceptionData_1"), SubResource("PropStagedPerceptionData_2"), SubResource("PropStagedPerceptionData_3"), SubResource("PropStagedPerceptionData_4"), SubResource("PropStagedPerceptionData_5")])
 change_perceptions = Array[ExtResource("2_cp")]([SubResource("PropChangePerceptionData_1"), SubResource("PropChangePerceptionData_2"), SubResource("PropChangePerceptionData_3"), SubResource("PropChangePerceptionData_4")])
 uuid = "momentum"
 name = "TRES_MOMENTUM_NAME_0"
+description = "TRES_MOMENTUM_DESCRIPTION_0"
 metadata/_custom_type_script = "uid://b3m5anke7kjyi"

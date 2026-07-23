@@ -226,7 +226,7 @@ func _resolve_event_for_stack(data: Variant) -> BaseEvent:
 	if data is String:
 		var ev = Database.resolve(data)
 		if not ev:
-			breakpoint
+			#breakpoint
 			Logging.err("push_event: Event not found: " + data)
 			Logging.err("检查你是不是又加了某个事件文件夹没写判断")
 			return null
@@ -430,6 +430,14 @@ func on_option_selected(choice, choice_text: String = ""):
 			# 不弹出！重置 processed=false，让 _process_next 重新处理
 			Logging.info("[DIAG] on_option_selected: 检测到 pop 回归父事件，重置 processed 标记")
 			_event_stack[0]["processed"] = false
+
+	# ── 清理：从栈中移除已消费的事件（可能被 cinematic 等条目埋住）──
+	for i in range(_event_stack.size()):
+		var entry = _event_stack[i]
+		if entry is Dictionary and entry.get("data") == _completed_data:
+			_event_stack.remove_at(i)
+			Logging.info("on_option_selected: 从栈[i=%d]移除已消费事件 '%s'" % [i, _completed_data.name])
+			break
 
 	Logging.info("[DIAG] on_option_selected: ⏰ 将 _is_active 设回 false（原=%s），调用 _resume_world + _process_next" % _is_active)
 	_is_active = false

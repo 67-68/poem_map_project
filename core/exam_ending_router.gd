@@ -14,8 +14,8 @@ const ENDING_RICH: String = "event_ending_rich"
 const ENDING_DEFAULT: String = "event_ending_default"
 
 ## 阈值常量
-const THRESHOLD_PRESTIGE: int = 100
-const THRESHOLD_MOMENTUM: int = 100
+const THRESHOLD_PRESTIGE: int = 90
+const THRESHOLD_MOMENTUM: int = 9
 const THRESHOLD_INSPIRATION: int = 100
 const THRESHOLD_MONEY: int = 1000
 const THRESHOLD_LOW: int = 50
@@ -98,4 +98,4 @@ static func evaluate() -> void:
 
 	# 推入结局事件
 	Logging.info("[ExamEndingRouter] evaluate: 推入结局事件 '%s'" % matched_event)
-	EventBus.push_event.emit(matched_event, {})
+	EventBus.request_event_key.emit(matched_event, {})

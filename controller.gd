@@ -156,15 +156,7 @@ func _setup_hidden_ending() -> void:
 
 
 func _fast_forward_30_xun() -> void:
-	var days: int = 30 * 10  # 30 旬 × 10 天/旬
-	Logging.info('[Controller] fast_forward_30_xun: 推进 %d 天 (%d 旬)' % [days, 30])
-	# 🆕 防止时间推进被 is_game_over 锁阻断
-	if GameState.is_game_over:
-		GameState.is_game_over = false
-		Logging.info('[Controller] fast_forward_30_xun: 强制解除 is_game_over 锁')
-	TimeService.advance_time(days)
-	Logging.info('[Controller] fast_forward_30_xun: 完成，当前 year=%.4f total_days=%d' % [GameState.year, TimeService._total_days_elapsed])
-
+	TimeService.jump_to_clean(755.10)
 
 func _on_button_pressed() -> void:
 	#breakpoint
