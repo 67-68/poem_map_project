@@ -49,5 +49,14 @@
 
 ## 进度触发事件
 
-- **uuid**: `backhome_lishan_1` — 骊山事件（progress > 30）
-- **uuid**: `backhome_indifferent_wind_1` — 结冰渭河事件（progress > 60）
+- **uuid**: `backhome_lishan_1` — 骊山事件（progress >= 31）
+- **uuid**: `backhome_indifferent_wind_1` — 结冰渭河事件（progress >= 61）
+- **uuid**: `backhome_lost_toy_1` — 遗失拨浪鼓事件（progress >= 79，且玩家持有 rattle_drum trait）
+
+### 遗失拨浪鼓（Phase 2 — 归家旅程·物品损耗）
+
+当 progress >= 79 且玩家持有 rattle_drum trait 时触发。事件 on_enter 阶段自动移除拨浪鼓 trait，给玩家两个选项：
+- **回头找找**：消耗一旬时间（time_add day=10），重新获得拨浪鼓 trait
+- **算了，赶路要紧**：空选项，拨浪鼓永久丢失
+
+触发条件额外要求 `PlayerState.has_trait("rattle_drum")`，若玩家从未获得拨浪鼓则永不触发。防重复 flag: `plot_lost_toy_triggered`。

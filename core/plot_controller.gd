@@ -19,10 +19,13 @@ const FLAG_TRIGGERED: String = "plot_prompt_user_action_triggered"
 ## 🆕 755_backhome 时代 progress 阈值事件
 const EVENT_LISHAN: String = "backhome_lishan_1"
 const EVENT_INDIFFERENT_WIND: String = "backhome_indifferent_wind_1"
+const EVENT_LOST_TOY: String = "backhome_lost_toy_1"
 const FLAG_LISHAN_TRIGGERED: String = "plot_lishan_triggered"
 const FLAG_INDIFFERENT_WIND_TRIGGERED: String = "plot_indifferent_wind_triggered"
+const FLAG_LOST_TOY_TRIGGERED: String = "plot_lost_toy_triggered"
 const PROGRESS_LISHAN_THRESHOLD: int = 31  # >30
 const PROGRESS_INDIFFERENT_WIND_THRESHOLD: int = 61  # >60
+const PROGRESS_LOST_TOY_THRESHOLD: int = 79  # >=79
 
 # ════════════════════════════════════════════════════════════════
 # 内部状态
@@ -41,6 +44,8 @@ func _ready() -> void:
 	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_LISHAN_TRIGGERED)
 	PlayerState.register_virtual_flag(FLAG_INDIFFERENT_WIND_TRIGGERED, "bool")
 	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_INDIFFERENT_WIND_TRIGGERED)
+	PlayerState.register_virtual_flag(FLAG_LOST_TOY_TRIGGERED, "bool")
+	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_LOST_TOY_TRIGGERED)
 
 	# 监听每旬 tick（同乡来访触发）
 	if not TimeService.on_xun_tick.is_connected(_on_xun_tick):
@@ -113,8 +118,8 @@ func _on_stat_changed(prop_name: String) -> void:
 
 func _check_progress_triggers() -> void:
 	var progress_val: int = PlayerState.get_stat_val("progress")
-	Logging.info("[PlotController] progress 检查: current=%d, lishan_threshold=%d, wind_threshold=%d" % [
-		progress_val, PROGRESS_LISHAN_THRESHOLD, PROGRESS_INDIFFERENT_WIND_THRESHOLD
+	Logging.info("[PlotController] progress 检查: current=%d, lishan_threshold=%d, wind_threshold=%d, lost_toy_threshold=%d" % [
+		progress_val, PROGRESS_LISHAN_THRESHOLD, PROGRESS_INDIFFERENT_WIND_THRESHOLD, PROGRESS_LOST_TOY_THRESHOLD
 	])
 
 	# 骊山触发：progress > 30
@@ -142,3 +147,19 @@ func _check_progress_triggers() -> void:
 			Logging.info("[PlotController] flag '%s' 已存在，跳过结冰渭河触发" % FLAG_INDIFFERENT_WIND_TRIGGERED)
 	else:
 		Logging.info("[PlotController] progress=%d 未达结冰渭河阈值 %d，跳过" % [progress_val, PROGRESS_INDIFFERENT_WIND_THRESHOLD])
+
+# 🆕 遗失拨浪鼓触发：progress >= 79 且玩家持有 rattle_drum trait
+if progress_val >= PROGRESS_LOST_TOY_THRESHOLD:
+	if not PlayerState.has_flag(FLAG_LOST_TOY_TRIGGERED):
+		if PlayerState.has_trait("rattle_drum"):
+			Logging.info("[PlotController] ═══ progress=%d >= %d 且持有 rattle_drum，触发遗失玩具事件: %s ═══" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD, EVENT_LOST_TOY])
+			PlayerState.set_flag(FLAG_LOST_TOY_TRIGGERED, true)
+			Logging.info("[PlotController] flag '%s' 已设置" % FLAG_LOST_TOY_TRIGGERED)
+			EventBus.push_event.emit(EVENT_LOST_TOY, {})
+			Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_LOST_TOY)
+		else:
+			Logging.info("[PlotController] progress=%d >= %d 但玩家没有 rattle_drum trait，跳过遗失玩具触发" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD])
+	else:
+		Logging.info("[PlotController] flag '%s' 已存在，跳过遗失玩具触发" % FLAG_LOST_TOY_TRIGGERED)
+else:
+	Logging.info("[PlotController] progress=%d 未达遗失玩具阈值 %d，跳过" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD])

@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="BaseEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://dp5gqdkppjq17" path="res://core/model/trait_operator.gd" id="3_traitop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_choiceresult"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_evopt"]
+[ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="6_event"]
+[ext_resource type="Script" path="res://core/model/time_operator.gd" id="7_timeop"]
+
+[sub_resource type="Resource" id="Resource_trait_remove_rattle"]
+script = ExtResource("3_traitop")
+operator = 1
+str_traits = "rattle_drum"
+
+[sub_resource type="Resource" id="Resource_on_enter_rattle"]
+script = ExtResource("4_choiceresult")
+operators = Array[ExtResource("2_baseop")]([SubResource("Resource_trait_remove_rattle")])
+
+[sub_resource type="Resource" id="Resource_empty_choice"]
+script = ExtResource("4_choiceresult")
+operators = Array[ExtResource("2_baseop")]([])
+
+[sub_resource type="Resource" id="Resource_trait_add_rattle"]
+script = ExtResource("3_traitop")
+str_traits = "rattle_drum"
+
+[sub_resource type="Resource" id="Resource_time_xun"]
+script = ExtResource("7_timeop")
+day = 10.0
+
+[sub_resource type="Resource" id="Resource_find_back_choice"]
+script = ExtResource("4_choiceresult")
+operators = Array[ExtResource("2_baseop")]([SubResource("Resource_trait_add_rattle"), SubResource("Resource_time_xun")])
+
+[sub_resource type="Resource" id="Resource_opt_find_back"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Resource_find_back_choice")
+description = "回头找找（会消耗一旬时间）"
+
+[sub_resource type="Resource" id="Resource_opt_give_up"]
+script = ExtResource("5_evopt")
+choice_result = SubResource("Resource_empty_choice")
+description = "算了，赶路要紧"
+
+[resource]
+script = ExtResource("6_event")
+on_enter_result = SubResource("Resource_on_enter_rattle")
+options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt_find_back"), SubResource("Resource_opt_give_up")])
+uuid = "backhome_lost_toy_1"
+name = "遗失拨浪鼓"
+description = "天色渐晚，你脚步不停，心里盘算着今夜在何处落脚。忽然手往腰间一摸——那面给宗文宗武带的拨浪鼓不见了。你脑海中闪过刚才跑得急的那段山路，肯定是掉在那片乱石堆里了。"
