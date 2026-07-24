@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://bxy_backhome_ending_router"]
+[gd_resource type="Resource" script_class="BaseEvent" format=3 uid="uid://cyet38bq03h6w"]
 
 [ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_opt"]
 [ext_resource type="Script" uid="uid://cpb80yg1s313y" path="res://model/event.gd" id="2_baseev"]

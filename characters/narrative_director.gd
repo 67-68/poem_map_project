@@ -45,6 +45,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 	EventBus.push_event.connect(_on_push_event)
+	EventBus.push_event_with_children.connect(_on_push_event_with_children)
 	EventBus.pop_event.connect(_on_pop_event)
 	EventBus.pop_to_event.connect(_on_pop_to_event)
 	EventBus.clear_scheduled_events.connect(_on_clear_scheduled_events)
@@ -62,6 +63,17 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════
 
 func _on_push_event(data: Variant, context: Dictionary):
+	_push_event_inner(data, context, false)
+
+
+## 推送一个可能有子事件（push/pop 回归）的父事件
+## 栈条目标记 persist_after_consumed=true，防止 on_option_selected 清理循环误删
+## 当 interrupter 替换父事件时，标记随条目自然消亡
+func _on_push_event_with_children(data: Variant, context: Dictionary):
+	_push_event_inner(data, context, true)
+
+
+func _push_event_inner(data: Variant, context: Dictionary, persist: bool):
 	var ev = _resolve_event_for_stack(data)
 	if not ev:
 		return
@@ -72,8 +84,14 @@ func _on_push_event(data: Variant, context: Dictionary):
 			Logging.warn("push_event: 事件 '%s' 的 entry requirement 未通过，忽略 push" % ev.name)
 			return
 
-	_event_stack.push_front({ "data": ev, "context": context.duplicate(true), "processed": false })
-	Logging.info("事件已推入栈: " + ev.name)
+	var entry := { "data": ev, "context": context.duplicate(true), "processed": false }
+	if persist:
+		entry["persist_after_consumed"] = true
+		Logging.info("事件已推入栈 (persist): " + ev.name)
+	else:
+		Logging.info("事件已推入栈: " + ev.name)
+
+	_event_stack.push_front(entry)
 
 	if not _is_active:
 		_process_next()
@@ -432,11 +450,15 @@ func on_option_selected(choice, choice_text: String = ""):
 			_event_stack[0]["processed"] = false
 
 	# ── 清理：从栈中移除已消费的事件（可能被 cinematic 等条目埋住）──
+	# 若条目标记了 persist_after_consumed，说明子事件会 pop 回归，跳过删除
 	for i in range(_event_stack.size()):
 		var entry = _event_stack[i]
 		if entry is Dictionary and entry.get("data") == _completed_data:
-			_event_stack.remove_at(i)
-			Logging.info("on_option_selected: 从栈[i=%d]移除已消费事件 '%s'" % [i, _completed_data.name])
+			if entry.get("persist_after_consumed", false):
+				Logging.info("on_option_selected: 父事件 '%s' 标记了 persist_after_consumed，跳过删除（等待子事件 pop 回归）" % _completed_data.name)
+			else:
+				_event_stack.remove_at(i)
+				Logging.info("on_option_selected: 从栈[i=%d]移除已消费事件 '%s'" % [i, _completed_data.name])
 			break
 
 	Logging.info("[DIAG] on_option_selected: ⏰ 将 _is_active 设回 false（原=%s），调用 _resume_world + _process_next" % _is_active)

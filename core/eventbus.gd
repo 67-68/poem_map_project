@@ -54,6 +54,11 @@ signal request_toggle_debug_controller()
 signal request_event(data: Variant, context: Dictionary)
 signal request_event_key(key: String, context: Dictionary)
 signal push_event(data: Variant, context: Dictionary)
+## push_event_with_children — 推送一个可能有子事件（push/pop 回归）的父事件
+## 与 push_event 的区别：栈条目会标记 persist_after_consumed=true，
+## 在 on_option_selected 清理循环中跳过删除，直到子事件全部 pop 回归后
+## interrupter 替换时自然消亡。
+signal push_event_with_children(data: Variant, context: Dictionary)
 ## pop_event — 弹出栈顶事件，回到栈中下一个事件
 ## transition_text: 回归时打印的过渡文本（可选，传 "" 向后兼容）
 ## 该文本会与目标事件的 on_returned 属性合并打印为 NarrativeText 条目

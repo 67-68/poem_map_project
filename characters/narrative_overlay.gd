@@ -1087,7 +1087,8 @@ func _dump_stack_state(caller: String) -> void:
 		var ev_name: String = _resolve_stack_entry_label(e)
 		var is_proc: bool = e.get("processed", false)
 		var is_pop_reg: bool = e.get("is_pop_regression", false)
-		lines.append("  [STACK_DIAG]   stack[%d] %s processed=%s pop_regression=%s" % [i, ev_name, is_proc, is_pop_reg])
+		var is_persist: bool = e.get("persist_after_consumed", false)
+		lines.append("  [STACK_DIAG]   stack[%d] %s processed=%s pop_regression=%s persist=%s" % [i, ev_name, is_proc, is_pop_reg, is_persist])
 	for i in range(queue.size()):
 		var q = queue[i]
 		var ev_name: String = _resolve_stack_entry_label(q)

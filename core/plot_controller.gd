@@ -137,8 +137,8 @@ func _check_progress_triggers() -> void:
 			Logging.info("[PlotController] ═══ progress=%d > 30，触发骊山事件: %s ═══" % [progress_val, EVENT_LISHAN])
 			PlayerState.set_flag(FLAG_LISHAN_TRIGGERED, true)
 			Logging.info("[PlotController] flag '%s' 已设置" % FLAG_LISHAN_TRIGGERED)
-			EventBus.push_event.emit(EVENT_LISHAN, {})
-			Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_LISHAN)
+			EventBus.push_event_with_children.emit(EVENT_LISHAN, {})
+			Logging.info("[PlotController] 已发射 push_event_with_children: %s" % EVENT_LISHAN)
 		else:
 			Logging.info("[PlotController] flag '%s' 已存在，跳过骊山触发" % FLAG_LISHAN_TRIGGERED)
 	else:
@@ -150,8 +150,8 @@ func _check_progress_triggers() -> void:
 			Logging.info("[PlotController] ═══ progress=%d > 60，触发结冰渭河事件: %s ═══" % [progress_val, EVENT_INDIFFERENT_WIND])
 			PlayerState.set_flag(FLAG_INDIFFERENT_WIND_TRIGGERED, true)
 			Logging.info("[PlotController] flag '%s' 已设置" % FLAG_INDIFFERENT_WIND_TRIGGERED)
-			EventBus.push_event.emit(EVENT_INDIFFERENT_WIND, {})
-			Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_INDIFFERENT_WIND)
+			EventBus.push_event_with_children.emit(EVENT_INDIFFERENT_WIND, {})
+			Logging.info("[PlotController] 已发射 push_event_with_children: %s" % EVENT_INDIFFERENT_WIND)
 		else:
 			Logging.info("[PlotController] flag '%s' 已存在，跳过结冰渭河触发" % FLAG_INDIFFERENT_WIND_TRIGGERED)
 	else:
@@ -164,8 +164,8 @@ func _check_progress_triggers() -> void:
 				Logging.info("[PlotController] ═══ progress=%d >= %d 且持有 rattle_drum，触发遗失玩具事件: %s ═══" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD, EVENT_LOST_TOY])
 				PlayerState.set_flag(FLAG_LOST_TOY_TRIGGERED, true)
 				Logging.info("[PlotController] flag '%s' 已设置" % FLAG_LOST_TOY_TRIGGERED)
-				EventBus.push_event.emit(EVENT_LOST_TOY, {})
-				Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_LOST_TOY)
+				EventBus.push_event_with_children.emit(EVENT_LOST_TOY, {})
+				Logging.info("[PlotController] 已发射 push_event_with_children: %s" % EVENT_LOST_TOY)
 			else:
 				Logging.info("[PlotController] progress=%d >= %d 但玩家没有 rattle_drum trait，跳过遗失玩具触发" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD])
 		else:
@@ -179,8 +179,8 @@ func _check_progress_triggers() -> void:
 			Logging.info("[PlotController] ═══ progress=%d >= %d，触发奉先村入口事件: %s ═══" % [progress_val, PROGRESS_FENGXIAN_THRESHOLD, EVENT_FENGXIAN_VILLAGE])
 			PlayerState.set_flag(FLAG_FENGXIAN_TRIGGERED, true)
 			Logging.info("[PlotController] flag '%s' 已设置" % FLAG_FENGXIAN_TRIGGERED)
-			EventBus.push_event.emit(EVENT_FENGXIAN_VILLAGE, {})
-			Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_FENGXIAN_VILLAGE)
+			EventBus.push_event_with_children.emit(EVENT_FENGXIAN_VILLAGE, {})
+			Logging.info("[PlotController] 已发射 push_event_with_children: %s" % EVENT_FENGXIAN_VILLAGE)
 		else:
 			Logging.info("[PlotController] flag '%s' 已存在，跳过奉先村入口触发" % FLAG_FENGXIAN_TRIGGERED)
 	else:

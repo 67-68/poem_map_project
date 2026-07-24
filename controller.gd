@@ -86,7 +86,7 @@ func parse(new_text):
 			TimeService.jump_to_clean(target_year)
 		elif parts.size() == 2:
 			# $ event_key — 触发事件（原有逻辑）
-			EventBus.push_event.emit(parts[1], {})
+			EventBus.push_event_with_children.emit(parts[1], {})
 	elif new_text.begins_with("#"):
 		# 🆕 # 前缀 → GDScript 表达式求值
 		# 支持任意表达式，如: # PlayerState.set_stat_val("astuteness", 50)

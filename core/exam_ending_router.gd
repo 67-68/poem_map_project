@@ -117,6 +117,7 @@ static func evaluate() -> void:
 ##
 ## 防重复：flag_backhome_ending_routed 保证同一局游戏只路由一次。
 static func evaluate_backhome() -> void:
+	breakpoint
 	Logging.info("[ExamEndingRouter] ═══ evaluate_backhome: 开始回家结局路由 ═══")
 
 	if PlayerState.has_flag(FLAG_BACKHOME_ROUTED):
@@ -149,4 +150,4 @@ static func evaluate_backhome() -> void:
 
 	# 推入结局事件
 	Logging.info("[ExamEndingRouter] evaluate_backhome: 推入结局事件 '%s'" % matched_event)
-	EventBus.request_event_key.emit(matched_event, {})
+	EventBus.push_event.emit(matched_event, {})
