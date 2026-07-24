@@ -144,6 +144,36 @@ health ≤ 0
 
 给玩家一次「人情」的体验——泛泛之交在危难时刻伸出援手，体现唐代士人之间的江湖情谊。但只有一次机会（`flag_npc_rescued_this_life`），避免无限续命。50% 概率增加不确定性，不是每次濒死都有人救。
 
+## 🆕 755_backhome 三次濒死事件链
+
+仅在 `era == "755_backhome"` 时生效。`death_judgement()` 将 health≤0 截获后：
+
+1. `flag_near_death_count` 自增，强制回血 `health=1`
+2. 同一旬的 `operate_state_transistors()` 检测 flag 匹配对应 state_transistor → `request_event_key` 推送濒死叙事事件
+3. 第 4 次濒死时 `flag_near_death_count >= 3` → 不再续命，走 `scan_death_events()` 真正死亡
+
+### 三次濒死叙事
+
+| 次数 | count | state_transistor | 事件 uuid | 事件名 | 效果 |
+|------|-------|-----------------|-----------|--------|------|
+| 第 1 次 | 1 | [`near_death_burn_manuscript_trans`](data/1_core_rules/state_transistors/near_death_burn_manuscript_trans.tres:35) | `near_death_burn_manuscript` | 焚稿求生 | 有诗稿: +15 健康; 无诗稿: +10 健康 |
+| 第 2 次 | 2 | [`near_death_sing_crazy_trans`](data/1_core_rules/state_transistors/near_death_sing_crazy_trans.tres:35) | `near_death_sing_crazy` | 对雪长啸 | +10 健康 + `near_death_mind_broken` trait |
+| 第 3 次 | 3 | [`near_death_nothing_to_burn_trans`](data/1_core_rules/state_transistors/near_death_nothing_to_burn_trans.tres:35) | `near_death_nothing_to_burn` | 無物可燒 | 纯叙事（无后果） |
+
+### 防重复机制
+
+每个 state_transistor 同时要求 `flag_near_death_rescued_N == 0`，触发后立即设 `flag_near_death_rescued_N = 1`。确保同一濒死次数不会重复推送事件。
+
+### 事件文件
+
+- `data/4_eras/755_backhome/near_death_burn_manuscript.tres`
+- `data/4_eras/755_backhome/near_death_sing_crazy.tres`
+- `data/4_eras/755_backhome/near_death_nothing_to_burn.tres`
+
+### 翻译
+
+见 `data/1_core_rules/translations/_dynamic_events.csv` 中 `TRES_NEAR_DEATH_*` 条目。
+
 ## 关键机制
 
 ### 延迟扣除 (call_deferred)

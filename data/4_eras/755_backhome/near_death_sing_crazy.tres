@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="3_propop"]
+[ext_resource type="Script" path="res://core/operators/info_demo_operator.gd" id="4_infoop"]
+[ext_resource type="Script" path="res://core/model/trait_operator.gd" id="5_traitop"]
+[ext_resource type="Script" path="res://model/choice_result.gd" id="6_choiceresult"]
+[ext_resource type="Script" path="res://model/event/event_option.gd" id="7_eventopt"]
+[ext_resource type="Script" path="res://model/random_event.gd" id="8_randomevent"]
+
+[sub_resource type="Resource" id="Resource_health10"]
+script = ExtResource("3_propop")
+str_props = "health"
+value = 10
+
+[sub_resource type="Resource" id="Resource_trait_broken"]
+script = ExtResource("5_traitop")
+str_traits = "near_death_mind_broken"
+
+[sub_resource type="Resource" id="Resource_info_sing"]
+script = ExtResource("4_infoop")
+info = "TRES_NEAR_DEATH_SING_CRAZY_INFO_0"
+
+[sub_resource type="Resource" id="Resource_cr"]
+script = ExtResource("6_choiceresult")
+operators = Array[ExtResource("2_baseop")]([SubResource("Resource_health10"), SubResource("Resource_trait_broken"), SubResource("Resource_info_sing")])
+
+[sub_resource type="Resource" id="Resource_option"]
+script = ExtResource("7_eventopt")
+choice_result = SubResource("Resource_cr")
+description = "TRES_NEAR_DEATH_SING_CRAZY_DESCRIPTION_1"
+
+[resource]
+script = ExtResource("8_randomevent")
+_action_tags = Array[int]([])
+options = Array[ExtResource("1_baseopt")]([SubResource("Resource_option")])
+uuid = "near_death_sing_crazy"
+name = "TRES_NEAR_DEATH_SING_CRAZY_NAME_0"
+description = "TRES_NEAR_DEATH_SING_CRAZY_DESCRIPTION_0"
