@@ -500,6 +500,12 @@
     "1_core_rules/properties/progress.tres",
     "1_core_rules/properties/talent.tres",
     "1_core_rules/properties/time.tres",
+    "1_core_rules/poem_types/poem_pub_large_shi.tres",
+    "1_core_rules/poem_types/poem_pub_large_wang.tres",
+    "1_core_rules/poem_types/poem_pub_large_xing.tres",
+    "1_core_rules/poem_types/poem_pub_mid_shi.tres",
+    "1_core_rules/poem_types/poem_pub_mid_wang.tres",
+    "1_core_rules/poem_types/poem_pub_mid_xing.tres",
     "1_core_rules/poem_types/poem_type_ggg.tres",
     "1_core_rules/poem_types/poem_type_ggk.tres",
     "1_core_rules/poem_types/poem_type_ggy.tres",
@@ -761,6 +767,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-24T03:10:17.438050+00:00",
-  "total": 760
+  "generated_at": "2026-07-24T06:47:14.423587+00:00",
+  "total": 766
 }

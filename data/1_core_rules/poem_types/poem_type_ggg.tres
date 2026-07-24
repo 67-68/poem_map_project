@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="PoemType" load_steps=2 format=3 uid="uid://placeholder_1"]
+[gd_resource type="Resource" script_class="PoemType" load_steps=3 format=3 uid="uid://placeholder_1"]
 
 [ext_resource type="Script" path="res://core/poem_type.gd" id="1_pt"]
+[ext_resource type="Resource" path="res://data/1_core_rules/poem_types/poem_pub_large_wang.tres" id="2_pw"]
 
 [resource]
 script = ExtResource("1_pt")
 uuid = "poem_type_ggg"
 name = "金戈边塞"
 composition = Array[String](["功名", "功名", "功名"])
-publication_effects = []
+publication_effects = Array[ExtResource("2_pw")]([ExtResource("2_pw")])

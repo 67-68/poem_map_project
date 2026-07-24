@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="PoemType" load_steps=2 format=3 uid="uid://placeholder_10"]
+[gd_resource type="Resource" script_class="PoemType" load_steps=3 format=3 uid="uid://placeholder_10"]
 
 [ext_resource type="Script" path="res://core/poem_type.gd" id="1_pt"]
+[ext_resource type="Resource" path="res://data/1_core_rules/poem_types/poem_pub_large_xing.tres" id="2_px"]
 
 [resource]
 script = ExtResource("1_pt")
 uuid = "poem_type_kkk"
 name = "潇洒浪漫"
 composition = Array[String](["狂放", "狂放", "狂放"])
-publication_effects = []
+publication_effects = Array[ExtResource("2_px")]([ExtResource("2_px")])

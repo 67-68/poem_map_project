@@ -5,7 +5,8 @@ extends Node
 ##   1. 监听 TimeService.on_xun_tick，累计 xun 次数
 ##   2. 在第 3 旬时，检查 event_counter == 2，触发同乡来访事件
 ##   3. 监控 progress 属性：>30 触发骊山事件，>60 触发结冰渭河事件
-##   4. 通过 flag_bool 持久化防重复触发
+##   4. 旬5-8 触发李白酒肆劝退事件，旬15-20 触发街头科举情报事件
+##   5. 通过 flag_bool 持久化防重复触发
 
 # ════════════════════════════════════════════════════════════════
 # 常量
@@ -15,6 +16,17 @@ const TRIGGER_XUN: int = 3
 const REQUIRED_EVENT_COUNT: int = 2
 const PLOT_EVENT_KEY: String = "plot_prompt_user_action"
 const FLAG_TRIGGERED: String = "plot_prompt_user_action_triggered"
+
+## 🆕 天宝六载「野无遗贤」前置剧情 — 旬窗口触发
+const LIBAI_WARNING_EVENT: String = "libai_tavern_warning"
+const LIBAI_WARNING_XUN_MIN: int = 5
+const LIBAI_WARNING_XUN_MAX: int = 8
+const FLAG_LIBAI_WARNING_TRIGGERED: String = "plot_libai_warning_triggered"
+
+const STREET_RUMOR_EVENT: String = "street_exam_rumor"
+const STREET_RUMOR_XUN_MIN: int = 15
+const STREET_RUMOR_XUN_MAX: int = 20
+const FLAG_STREET_RUMOR_TRIGGERED: String = "plot_street_rumor_triggered"
 
 ## 🆕 755_backhome 时代 progress 阈值事件
 const EVENT_LISHAN: String = "backhome_lishan_1"
@@ -50,6 +62,12 @@ func _ready() -> void:
 	PlayerState.register_virtual_flag(FLAG_LOST_TOY_TRIGGERED, "bool")
 	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_LOST_TOY_TRIGGERED)
 
+	# 🆕 天宝六载剧情 flag
+	PlayerState.register_virtual_flag(FLAG_LIBAI_WARNING_TRIGGERED, "bool")
+	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_LIBAI_WARNING_TRIGGERED)
+	PlayerState.register_virtual_flag(FLAG_STREET_RUMOR_TRIGGERED, "bool")
+	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_STREET_RUMOR_TRIGGERED)
+
 	# 🆕 回家结局路由 flag：玩家在骊山是否选择了「死死盯住冻死骨」
 	PlayerState.register_virtual_flag("flag_witnessed_lishan_corpses", "bool")
 	Logging.info("[PlotController] 注册虚拟 flag: flag_witnessed_lishan_corpses")
@@ -75,13 +93,17 @@ func _ready() -> void:
 
 func _on_xun_tick() -> void:
 	if TutorialController.is_tutorial_active():
-		Logging.info("[PlotController] tutorial 模式，跳过同乡来访检查")
+		Logging.info("[PlotController] tutorial 模式，跳过剧情检查")
 		return
 	_xun_count += 1
 	Logging.info("[PlotController] 第 %d 旬 tick, event_counter=%d" % [_xun_count, GameState.event_counter])
 
 	# ── 检查同乡来访触发（原有逻辑）──
 	_check_town_folk_trigger()
+
+	# ── 🆕 天宝六载前置剧情：旬窗口触发 ──
+	_check_libai_trigger()
+	_check_rumor_trigger()
 
 	# ── 🆕 检查 progress 阈值触发 ──
 	_check_progress_triggers()
@@ -185,3 +207,47 @@ func _check_progress_triggers() -> void:
 			Logging.info("[PlotController] flag '%s' 已存在，跳过奉先村入口触发" % FLAG_FENGXIAN_TRIGGERED)
 	else:
 		Logging.info("[PlotController] progress=%d 未达奉先村阈值 %d，跳过" % [progress_val, PROGRESS_FENGXIAN_THRESHOLD])
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 天宝六载「野无遗贤」前置剧情 — 旬窗口触发
+# ════════════════════════════════════════════════════════════════
+
+func _check_libai_trigger() -> void:
+	Logging.info("[PlotController] _check_libai_trigger: xun_count=%d, window=[%d,%d]" % [_xun_count, LIBAI_WARNING_XUN_MIN, LIBAI_WARNING_XUN_MAX])
+	if _xun_count < LIBAI_WARNING_XUN_MIN:
+		Logging.info("[PlotController] xun_count=%d < %d，未达李白酒肆事件窗口下限" % [_xun_count, LIBAI_WARNING_XUN_MIN])
+		return
+	if _xun_count > LIBAI_WARNING_XUN_MAX:
+		Logging.info("[PlotController] xun_count=%d > %d，已超出李白酒肆事件窗口上限" % [_xun_count, LIBAI_WARNING_XUN_MAX])
+		return
+
+	if PlayerState.has_flag(FLAG_LIBAI_WARNING_TRIGGERED):
+		Logging.info("[PlotController] flag '%s' 已存在，跳过李白酒肆事件" % FLAG_LIBAI_WARNING_TRIGGERED)
+		return
+
+	Logging.info("[PlotController] ═══ 触发剧情事件: %s ═══" % LIBAI_WARNING_EVENT)
+	PlayerState.set_flag(FLAG_LIBAI_WARNING_TRIGGERED, true)
+	Logging.info("[PlotController] flag '%s' 已设置" % FLAG_LIBAI_WARNING_TRIGGERED)
+	EventBus.push_event.emit(LIBAI_WARNING_EVENT, {})
+	Logging.info("[PlotController] 已发射 push_event: %s" % LIBAI_WARNING_EVENT)
+
+
+func _check_rumor_trigger() -> void:
+	Logging.info("[PlotController] _check_rumor_trigger: xun_count=%d, window=[%d,%d]" % [_xun_count, STREET_RUMOR_XUN_MIN, STREET_RUMOR_XUN_MAX])
+	if _xun_count < STREET_RUMOR_XUN_MIN:
+		Logging.info("[PlotController] xun_count=%d < %d，未达街头传言事件窗口下限" % [_xun_count, STREET_RUMOR_XUN_MIN])
+		return
+	if _xun_count > STREET_RUMOR_XUN_MAX:
+		Logging.info("[PlotController] xun_count=%d > %d，已超出街头传言事件窗口上限" % [_xun_count, STREET_RUMOR_XUN_MAX])
+		return
+
+	if PlayerState.has_flag(FLAG_STREET_RUMOR_TRIGGERED):
+		Logging.info("[PlotController] flag '%s' 已存在，跳过街头传言事件" % FLAG_STREET_RUMOR_TRIGGERED)
+		return
+
+	Logging.info("[PlotController] ═══ 触发剧情事件: %s ═══" % STREET_RUMOR_EVENT)
+	PlayerState.set_flag(FLAG_STREET_RUMOR_TRIGGERED, true)
+	Logging.info("[PlotController] flag '%s' 已设置" % FLAG_STREET_RUMOR_TRIGGERED)
+	EventBus.push_event.emit(STREET_RUMOR_EVENT, {})
+	Logging.info("[PlotController] 已发射 push_event: %s" % STREET_RUMOR_EVENT)

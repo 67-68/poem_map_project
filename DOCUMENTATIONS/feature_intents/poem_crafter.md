@@ -1,16 +1,38 @@
 # 诗词评分创作 — 功能意图
 
-**状态**: 🟢 V13（意象类型匹配 PoemType + 预览效果 + 发布执行 BuffOperator）
+**状态**: 🟢 V14（主导元素分类 → PropertyOperator 属性奖励 + BaseOperator 泛化）
 
 ---
 
 ## 意图摘要（<200字）
 
-线性评分制不变。新增意象类型匹配：`imaginary_type` 计数 sorted multiset → `Database.poem_types` → `PoemType`。预览中展示匹配到的类型名 + 组成 + 发布效果（`BuffOperator.describe_preview()`）。CheckButton「发布」勾选后直接执行 `PoemType.publication_effects`（注入 `source_uuid=poem.uuid` → `BuffOperator.operate()`），并用 `PoemEffectCalculator` 格式化 `effect_desc` 注入事件 ctx。
+线性评分制不变。V14 将 `PoemType.publication_effects` 从 `Array[BuffOperator]` 泛化为 `Array[BaseOperator]`，支持 PropertyOperator（直接属性奖励）。10 种 PoemType 按"主导元素"分类法固化属性奖励到 .tres 数据层：功名主导（≥2 功名）→ +8 望；隐逸主导（≥2 隐逸）→ +8 势；狂放主导（≥2 狂放）→ +10 兴；均衡（各×1）→ 望+5 势+5 兴+6。诗词等级不影响发布奖励。
 
 ---
 
-## V13 变更
+## V14 变更
+
+| 变更项 | 说明 |
+|--------|------|
+| ♻ 类型泛化 | `PoemType.publication_effects`: `Array[BuffOperator]` → `Array[BaseOperator]` |
+| 🆕 主导元素分类 | 10 种 PoemType 按 composition 中某元素 ≥2 即为该元素主导，固化到 .tres |
+| 🆕 属性奖励 | 6 个 PropertyOperator .tres: large_wang(8), large_shi(8), large_xing(10), mid_wang(5), mid_shi(5), mid_xing(6) |
+| ♻ poem_crafter 执行 | 遍历时 BuffOperator 仍注入 source_uuid → operate()；PropertyOperator 直接 operate() |
+
+### 主导元素 → 属性映射
+
+| 主导元素 | 涉及类型 | PropertyOperator 资源 | 效果 |
+|----------|---------|----------------------|------|
+| 功名 (≥2) | ggg, ggy, ggk | `poem_pub_large_wang` | 望 +8 |
+| 隐逸 (≥2) | gyy, yyy, yyk | `poem_pub_large_shi` | 势 +8 |
+| 狂放 (≥2) | gkk, ykk, kkk | `poem_pub_large_xing` | 兴 +10 |
+| 均衡 (1+1+1) | gyk | `poem_pub_mid_wang/shi/xing` | 望+5 势+5 兴+6 |
+
+> 主导元素分类法：只要某个元素占了 ≥2 个槽位（AAB/AAC/AAA 都算 A 主导），即体现该元素的极端物理特征；ABC 为系统平衡态。诗词等级（Lv1/2/3）不区分，统一使用 Large/Mid 档位。
+
+---
+
+## V13 变更（已吸纳）
 
 | 变更项 | 说明 |
 |--------|------|
@@ -43,8 +65,10 @@
 
 | 文件 | 改动 |
 |------|------|
+| `core/poem_type.gd` | V14: `publication_effects`: `Array[BuffOperator]` → `Array[BaseOperator]` |
+| `core/poem_effect_calculator.gd` | V14: 日志版本号更新，类型注释适配 BaseOperator |
+| `ui/poem_crafter.gd` | V14: 执行逻辑兼容 BuffOperator + PropertyOperator + 通用 BaseOperator |
+| `data/1_core_rules/poem_types/poem_pub_*.tres` | 🆕 6 个 PropertyOperator .tres 资源文件 |
+| `data/1_core_rules/poem_types/poem_type_*.tres` | V14: 10 个 PoemType .tres 的 publication_effects 引用 PropertyOperator 资源 |
 | `core/poem_crafting_calculator.gd` | 🆕 `match_poem_type()` 静态函数; `PoemCraftingResult.matched_poem_type`; `calculate_poem_grade()` 步骤 6 |
-| `ui/poem_crafter.gd` | 🆕 `_cached_poem_type` 缓存; `_build_poem_type_preview_lines()`; 预览/提交/刷新行中插入类型信息; 发布改执行 `BuffOperator.operate()` |
-| `core/poem_effect_calculator.gd` | ♻ 重构: `calculate(poem_type: PoemType)` → 从 PoemType 格式化 `effect_desc` |
 | `core/model/imaginary.gd` | V11: `imaginary_type` + `created_at_day` 字段（无变化） |
-| `core/poem_type.gd` | V11: `@tool` + `get_effects_text()`（无变化） |

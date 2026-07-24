@@ -350,29 +350,38 @@ func _on_button_pressed() -> void:
 	# ── 7. 消耗所有参与计算的 Imaginary ──
 	_consume_all_imaginaries()
 
-	# ── 8. V13: 发布按钮 — 执行 PoemType.publication_effects + 格式化 effect_desc ──
+	# ── 8. V14: 发布按钮 — 执行 PoemType.publication_effects（Array[BaseOperator]）+ 格式化 effect_desc ──
 	var publish_checkbtn := $InputImagPanel/CheckButton as CheckButton
 	var effect_desc: String = ""
 	if publish_checkbtn and publish_checkbtn.button_pressed:
-		# 8a. 遍历 publication_effects → 注入 source_uuid → operate()
+		# 8a. 遍历 publication_effects → BaseOperator.operate()
 		if _cached_poem_type and not _cached_poem_type.publication_effects.is_empty():
-			Logging.info('PoemCrafter(V13): 发布按钮已勾选 — 执行 %d 个 BuffOperator' % _cached_poem_type.publication_effects.size())
-			for bo in _cached_poem_type.publication_effects:
-				if bo is BuffOperator:
-					bo.source_uuid = poem.uuid
-					bo.operate()
-					Logging.info('PoemCrafter(V13): BuffOperator 已执行 — source=%s, type=%s, named_key=%s' % [bo.source_uuid, bo.modifier_type, bo.named_amount_key])
+			Logging.info('PoemCrafter(V14): 发布按钮已勾选 — 执行 %d 个 BaseOperator' % _cached_poem_type.publication_effects.size())
+			for op in _cached_poem_type.publication_effects:
+				if not op:
+					Logging.warn('PoemCrafter(V14): publication_effects 中包含 null 元素，跳过')
+					continue
+				if op is BuffOperator:
+					op.source_uuid = poem.uuid
+					op.operate()
+					Logging.info('PoemCrafter(V14): BuffOperator 已执行 — source=%s, type=%s, named_key=%s' % [op.source_uuid, op.modifier_type, op.named_amount_key])
+				elif op is PropertyOperator:
+					op.operate()
+					Logging.info('PoemCrafter(V14): PropertyOperator 已执行 — property=%s, value=%+d' % [op.property, op.value])
+				elif op.has_method("operate"):
+					op.operate()
+					Logging.info('PoemCrafter(V14): BaseOperator 已执行 — class=%s' % op.get_class())
 				else:
-					Logging.warn('PoemCrafter(V13): publication_effects 中包含非 BuffOperator 元素，跳过')
+					Logging.warn('PoemCrafter(V14): publication_effects 中包含无 operate() 的元素 (class=%s)，跳过' % op.get_class())
 		else:
-			Logging.info('PoemCrafter(V13): 发布按钮已勾选但无有效的 publication_effects')
+			Logging.info('PoemCrafter(V14): 发布按钮已勾选但无有效的 publication_effects')
 
 		# 8b. 用 PoemEffectCalculator 格式化效果描述
 		var effect_result := _PoemEffectCalculator.calculate(_cached_poem_type)
 		effect_desc = effect_result.effect_desc
-		Logging.info('PoemCrafter(V13): 发布效果格式化 — effect_desc=%s' % effect_desc)
+		Logging.info('PoemCrafter(V14): 发布效果格式化 — effect_desc=%s' % effect_desc)
 	else:
-		Logging.info('PoemCrafter(V13): 发布按钮未勾选，跳过发布')
+		Logging.info('PoemCrafter(V14): 发布按钮未勾选，跳过发布')
 
 	# ── 8. 从对应等级的 EventBase 抽取事件 ──
 	var event_base_uuid := PoemCraftingCalculator.get_event_base_for_level(final_level)

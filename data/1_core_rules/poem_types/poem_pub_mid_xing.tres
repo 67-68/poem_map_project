@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PropertyOperator" load_steps=2 format=3 uid="uid://poem_pub_mid_xing"]
+
+[ext_resource type="Script" path="res://core/model/property_operator.gd" id="1_po"]
+
+[resource]
+script = ExtResource("1_po")
+str_props = "inspiration"
+value = 6

@@ -1,10 +1,13 @@
-[gd_resource type="Resource" script_class="PoemType" load_steps=2 format=3 uid="uid://placeholder_5"]
+[gd_resource type="Resource" script_class="PoemType" load_steps=5 format=3 uid="uid://placeholder_5"]
 
 [ext_resource type="Script" path="res://core/poem_type.gd" id="1_pt"]
+[ext_resource type="Resource" path="res://data/1_core_rules/poem_types/poem_pub_mid_wang.tres" id="2_mw"]
+[ext_resource type="Resource" path="res://data/1_core_rules/poem_types/poem_pub_mid_shi.tres" id="3_ms"]
+[ext_resource type="Resource" path="res://data/1_core_rules/poem_types/poem_pub_mid_xing.tres" id="4_mx"]
 
 [resource]
 script = ExtResource("1_pt")
 uuid = "poem_type_gyk"
 name = "盛唐气象"
 composition = Array[String](["功名", "隐逸", "狂放"])
-publication_effects = []
+publication_effects = Array[ExtResource("2_mw"), ExtResource("3_ms"), ExtResource("4_mx")]([ExtResource("2_mw"), ExtResource("3_ms"), ExtResource("4_mx")])

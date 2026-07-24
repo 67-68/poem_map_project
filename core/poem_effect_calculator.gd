@@ -1,9 +1,9 @@
 class_name PoemEffectCalculator extends RefCounted
 
-## V13: 诗词发布效果格式化器
+## V14: 诗词发布效果格式化器
 ##
 ## 当 PoemCrafter 的「发布」CheckButton 被勾选时调用，
-## 从 PoemType.publication_effects 提取效果描述文本。
+## 从 PoemType.publication_effects（Array[BaseOperator]）提取效果描述文本。
 ## 保留 PoemEffectResult 结构为未来动态计算留扩展点。
 
 ## 计算结果结构
@@ -22,13 +22,13 @@ static func calculate(poem_type: PoemType) -> PoemEffectResult:
 		result.effect_desc = ""
 		return result
 
-	Logging.info("PoemEffectCalculator.calculate: poem_type=%s (%s), effects_count=%d" % [poem_type.name, poem_type.uuid, poem_type.publication_effects.size()])
+	Logging.info("PoemEffectCalculator.calculate(V14): poem_type=%s (%s), effects_count=%d" % [poem_type.name, poem_type.uuid, poem_type.publication_effects.size()])
 
 	result.effect_desc = poem_type.get_effects_text()
 	if result.effect_desc.is_empty():
-		Logging.info("PoemEffectCalculator.calculate: poem_type=%s 无 publication_effects，effect_desc 为空" % poem_type.name)
+		Logging.info("PoemEffectCalculator.calculate(V14): poem_type=%s 无 publication_effects，effect_desc 为空" % poem_type.name)
 	else:
-		Logging.info("PoemEffectCalculator.calculate: effect_desc=%s" % result.effect_desc)
+		Logging.info("PoemEffectCalculator.calculate(V14): effect_desc=%s" % result.effect_desc)
 
 	result.rewards = []
 	return result
