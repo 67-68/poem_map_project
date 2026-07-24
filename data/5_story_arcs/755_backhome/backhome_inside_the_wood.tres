@@ -12,8 +12,6 @@
 
 [sub_resource type="Resource" id="Resource_37ogv"]
 script = ExtResource("4_w4ex6")
-imaginary_name = "target:death:bereavement:son_die"
-target_level = 2
 metadata/_custom_type_script = "uid://ojqxtgw57ec3"
 
 [sub_resource type="Resource" id="Resource_uy2wo"]
@@ -40,9 +38,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 
 [resource]
 script = ExtResource("2_xclyn")
-display_speed = 2
 options = Array[ExtResource("1_jtxd8")]([SubResource("Resource_41tl8")])
-lasting_time = 5.0
 uuid = "backhome_inside_the_wood"
 name = "TRES_BACKHOME_INSIDE_THE_WOOD_NAME_0"
 description = "TRES_BACKHOME_INSIDE_THE_WOOD_DESCRIPTION_0"

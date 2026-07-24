@@ -210,3 +210,63 @@ _on_hidden_ending_cinematic_finished():
   → QueueEventOperator("event_get_official").operate()
   → EventBus.request_event_key.emit("event_get_official", {})
 ```
+
+## 回家结局系统（755_backhome era）
+
+### 涉及文件
+
+| 文件 | 角色 |
+|------|------|
+| [`core/exam_ending_router.gd`](core/exam_ending_router.gd) | `evaluate_backhome()` 静态方法：拨浪鼓分叉路由 |
+| [`core/operators/backhome_ending_router_operator.gd`](core/operators/backhome_ending_router_operator.gd) | Operator，在路由事件的 choice_result 中调用 `evaluate_backhome()` |
+| [`core/survival_manager.gd`](core/survival_manager.gd) | `death_judgement()`: era 755 + 三次濒死耗尽 → push `event_backhome_ending_death` |
+| [`data/5_story_arcs/755_backhome/event_backhome_ending_router.tres`](data/5_story_arcs/755_backhome/event_backhome_ending_router.tres) | 路由事件：叙事「小木屋门口」+ 单选项「推门而入」 |
+| [`data/5_story_arcs/755_backhome/fengxian_village_entrance_revisit.tres`](data/5_story_arcs/755_backhome/fengxian_village_entrance_revisit.tres) | push 目标从 `backhome_the_wood` 改为 `event_backhome_ending_router` |
+| [`data/4_eras/events/end_random_events/event_backhome_ending_good.tres`](data/4_eras/events/end_random_events/event_backhome_ending_good.tres) | DeathEvent: 好结局「风雪归人」 |
+| [`data/4_eras/events/end_random_events/event_backhome_ending_death.tres`](data/4_eras/events/end_random_events/event_backhome_ending_death.tres) | DeathEvent: 死亡结局「冻毙于风雪」 |
+
+### 效果描述
+
+755_backhome 时代有三条结局路径，分两个触发入口：
+
+**入口 A — 路途中死亡（SurvivalManager）：**
+- 三次濒死兜底耗尽后（`near_death_count >= 3`），不走通用 `scan_death_events()` 随机池
+- 直接 push 专属 DeathEvent `event_backhome_ending_death`（冻毙于风雪）
+- 玩家在路途中死亡，永远没能到家
+
+**入口 B — 活着到家（到家门口路由）：**
+- `fengxian_village_entrance_revisit` 的「走向小木屋」选项 push `event_backhome_ending_router`
+- 路由事件展示叙事「你终于走到了小木屋的门口…」+ 单选项「推门而入」
+- 点击后 `BackhomeEndingRouterOperator` 调用 `ExamEndingRouter.evaluate_backhome()`
+- **唯一分叉条件：`PlayerState.has_trait("rattle_drum")`**
+  - 有拨浪鼓 → 历史线：走现有链 `backhome_the_wood` → `backhome_inside_the_wood` → `the_end`（儿子饿死）
+  - 无拨浪鼓 → 好结局：push `event_backhome_ending_good`（风雪归人，儿子活着）
+
+### 结局内容
+
+| 结局 | 触发条件 | name | death_reason | death_tutorial |
+|------|---------|------|-------------|---------------|
+| 冻毙于风雪 | health=0 三次濒死耗尽 | ENDING_BACKHOME_DEATH_NAME | 朔风如刀，白雪覆身，没能走完二百四十三里路 | 至少不再痛苦。但妻儿还在等，理想埋在了大唐最冷的冬天 |
+| 风雪归人 | 到家 + 无拨浪鼓 | ENDING_BACKHOME_GOOD_NAME | 推开破门，孩子还活着，掏出半块胡饼，一家人围坐 | 没有功名没有诗篇，但今夜还在一起。文章憎命达 |
+| 历史线 | 到家 + 有拨浪鼓 | （不改动现有内容） | （现有 the_end） | （现有 the_end） |
+
+### 数据流
+
+```
+入口 A (死亡):
+  SurvivalManager.death_judgement()
+    → era=="755_backhome" + near_death_count>=3
+    → EventBus.request_event_key("event_backhome_ending_death")
+    → DeathEvent.on_enter → SystemOperator("game_over") → tombstone
+
+入口 B (到家):
+  fengxian_village_entrance_revisit → push event_backhome_ending_router
+    → on_enter: 叙事展示
+    → choice_result: BackhomeEndingRouterOperator.operate()
+      → ExamEndingRouter.evaluate_backhome()
+        → has_trait("rattle_drum")?
+          ├─ YES → request_event_key("backhome_the_wood")
+          │         → inside_the_wood → the_end → tombstone
+          └─ NO  → request_event_key("event_backhome_ending_good")
+                    → DeathEvent.on_enter → SystemOperator("game_over") → tombstone
+```

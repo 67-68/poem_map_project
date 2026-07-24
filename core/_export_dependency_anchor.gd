@@ -168,6 +168,7 @@ const __preload_147 = preload("res://debuggers/linter_debugger_container.gd")  #
 const __preload_148 = preload("res://effects/ShatterEffect.gd")  # ShatterEffect
 const __preload_148a = preload("res://core/exam_ending_router.gd")  # ExamEndingRouter
 const __preload_148b = preload("res://core/operators/exam_ending_router_operator.gd")  # ExamEndingRouterOperator
+const __preload_148c = preload("res://core/operators/backhome_ending_router_operator.gd")  # BackhomeEndingRouterOperator
 const __preload_149 = preload("res://features/image_handle.gd")  # ImageHandle
 const __preload_150 = preload("res://features/messager_manager.gd")  # MessagerManager
 const __preload_151 = preload("res://features/path_visualizer.gd")  # PathVisualizer

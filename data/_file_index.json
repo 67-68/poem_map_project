@@ -40,6 +40,7 @@
     "4_eras/755_backhome/ganlu_journey_scene_refugee_identity_poor.tres",
     "4_eras/755_backhome/near_death_burn_manuscript.tres",
     "4_eras/755_backhome/near_death_nothing_to_burn.tres",
+    "4_eras/755_backhome/near_death_sing_crazy.tres",
     "4_eras/747_kuangda/747_kuangda_era.tres",
     "4_eras/747_kuangda/kuangke_qingliu_libai_emotion_arrogance_identity_qingliu_owner.tres",
     "4_eras/747_kuangda/kuangke_qingliu_libai_emotion_tranquility_identity_qingliu_owner.tres",
@@ -238,6 +239,8 @@
     "4_eras/events/history_events/test_setup_good_momentum.tres",
     "4_eras/events/history_events/test_setup_medium_prestige.tres",
     "4_eras/events/history_events/test_setup_rich.tres",
+    "4_eras/events/end_random_events/event_backhome_ending_death.tres",
+    "4_eras/events/end_random_events/event_backhome_ending_good.tres",
     "4_eras/events/end_random_events/event_death_bad_poet.tres",
     "4_eras/events/end_random_events/event_death_good_poet.tres",
     "4_eras/events/end_random_events/event_death_has_friends.tres",
@@ -715,9 +718,11 @@
     "5_story_arcs/755_backhome/backhome_indifferent_wind_1.tres",
     "5_story_arcs/755_backhome/backhome_inside_the_wood.tres",
     "5_story_arcs/755_backhome/backhome_lishan_1.tres",
+    "5_story_arcs/755_backhome/backhome_lost_toy_1.tres",
     "5_story_arcs/755_backhome/backhome_outside_city_1.tres",
     "5_story_arcs/755_backhome/backhome_the_wood.tres",
     "5_story_arcs/755_backhome/decision_become_official.tres",
+    "5_story_arcs/755_backhome/event_backhome_ending_router.tres",
     "5_story_arcs/755_backhome/event_backhome_start.tres",
     "5_story_arcs/755_backhome/event_demo_slide_from_bottom.tres",
     "5_story_arcs/755_backhome/event_get_official.tres",
@@ -751,6 +756,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-23T09:29:21.317212+00:00",
-  "total": 750
+  "generated_at": "2026-07-24T02:29:25.033146+00:00",
+  "total": 755
 }

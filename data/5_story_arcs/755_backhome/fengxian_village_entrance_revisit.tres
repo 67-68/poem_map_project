@@ -52,7 +52,7 @@ description = "TRES_FENGXIAN_VILLAGE_ENTRANCE_REVISIT_DESCRIPTION_2"
 
 [sub_resource type="Resource" id="Resource_346j0"]
 script = ExtResource("5_gjrey")
-event_key = "backhome_the_wood"
+event_key = "event_backhome_ending_router"
 metadata/_custom_type_script = "uid://cxfcnsval1p54"
 
 [sub_resource type="Resource" id="Resource_tln5y"]

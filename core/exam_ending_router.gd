@@ -1,17 +1,22 @@
 @tool
 class_name ExamEndingRouter extends RefCounted
-## 大考结局优先级路由器
+## 大考结局优先级路由器 + 755_backhome 回家结局路由器
 ## 静态类，按优先级评估玩家属性 → 推入对应的 DeathEvent
 
 const FLAG_TRIGGERED: String = "flag_exam_ending_routed"
+const FLAG_BACKHOME_ROUTED: String = "flag_backhome_ending_routed"
 
-## 结局事件 UUID 映射
+## 结局事件 UUID 映射（大考结局）
 const ENDING_HIDDEN: String = "event_ending_hidden"
 const ENDING_GOOD_MOMENTUM: String = "event_ending_good_momentum"
 const ENDING_MEDIUM_PRESTIGE: String = "event_ending_medium_prestige"
 const ENDING_BAD_INSPIRATION: String = "event_ending_bad_inspiration"
 const ENDING_RICH: String = "event_ending_rich"
 const ENDING_DEFAULT: String = "event_ending_default"
+
+## 回家结局 UUID（755_backhome era 专属）
+const ENDING_BACKHOME_GOOD: String = "event_backhome_ending_good"
+const ENDING_BACKHOME_HISTORICAL: String = "backhome_the_wood"
 
 ## 阈值常量
 const THRESHOLD_PRESTIGE: int = 90
@@ -98,4 +103,42 @@ static func evaluate() -> void:
 
 	# 推入结局事件
 	Logging.info("[ExamEndingRouter] evaluate: 推入结局事件 '%s'" % matched_event)
+	EventBus.request_event_key.emit(matched_event, {})
+
+
+## ── 755_backhome 回家结局路由 ──────────────────────────
+## 在到家门口（fengxian_village_entrance_revisit → event_backhome_ending_router）
+## 的 choice_result 中通过 BackhomeEndingRouterOperator 调用。
+##
+## 分叉条件（唯一）：
+##   has_trait("rattle_drum") → 历史线（现有链: backhome_the_wood → inside_the_wood → the_end）
+##   !has_trait("rattle_drum") → 好结局（event_backhome_ending_good, DeathEvent）
+##
+## 防重复：flag_backhome_ending_routed 保证同一局游戏只路由一次。
+static func evaluate_backhome() -> void:
+	Logging.info("[ExamEndingRouter] ═══ evaluate_backhome: 开始回家结局路由 ═══")
+
+	if PlayerState.has_flag(FLAG_BACKHOME_ROUTED):
+		Logging.info("[ExamEndingRouter] evaluate_backhome: flag '%s' 已存在，跳过重复路由" % FLAG_BACKHOME_ROUTED)
+		return
+
+	if not PlayerState:
+		Logging.err("[ExamEndingRouter] evaluate_backhome: PlayerState 不可用")
+		return
+
+	var matched_event: String = ""
+
+	if PlayerState.has_trait("rattle_drum"):
+		matched_event = ENDING_BACKHOME_HISTORICAL
+		Logging.info("[ExamEndingRouter] evaluate_backhome: 匹配 → 历史线（有拨浪鼓，儿子已死）")
+	else:
+		matched_event = ENDING_BACKHOME_GOOD
+		Logging.info("[ExamEndingRouter] evaluate_backhome: 匹配 → 好结局（无拨浪鼓，儿子活着）")
+
+	# 设置防重复标记
+	PlayerState.set_flag(FLAG_BACKHOME_ROUTED, true)
+	Logging.info("[ExamEndingRouter] evaluate_backhome: flag '%s' 已设置" % FLAG_BACKHOME_ROUTED)
+
+	# 推入结局事件
+	Logging.info("[ExamEndingRouter] evaluate_backhome: 推入结局事件 '%s'" % matched_event)
 	EventBus.request_event_key.emit(matched_event, {})

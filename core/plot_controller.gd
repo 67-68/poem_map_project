@@ -147,19 +147,19 @@ func _check_progress_triggers() -> void:
 			Logging.info("[PlotController] flag '%s' 已存在，跳过结冰渭河触发" % FLAG_INDIFFERENT_WIND_TRIGGERED)
 	else:
 		Logging.info("[PlotController] progress=%d 未达结冰渭河阈值 %d，跳过" % [progress_val, PROGRESS_INDIFFERENT_WIND_THRESHOLD])
-
-# 🆕 遗失拨浪鼓触发：progress >= 79 且玩家持有 rattle_drum trait
-if progress_val >= PROGRESS_LOST_TOY_THRESHOLD:
-	if not PlayerState.has_flag(FLAG_LOST_TOY_TRIGGERED):
-		if PlayerState.has_trait("rattle_drum"):
-			Logging.info("[PlotController] ═══ progress=%d >= %d 且持有 rattle_drum，触发遗失玩具事件: %s ═══" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD, EVENT_LOST_TOY])
-			PlayerState.set_flag(FLAG_LOST_TOY_TRIGGERED, true)
-			Logging.info("[PlotController] flag '%s' 已设置" % FLAG_LOST_TOY_TRIGGERED)
-			EventBus.push_event.emit(EVENT_LOST_TOY, {})
-			Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_LOST_TOY)
+		
+	# 🆕 遗失拨浪鼓触发：progress >= 79 且玩家持有 rattle_drum trait
+	if progress_val >= PROGRESS_LOST_TOY_THRESHOLD:
+		if not PlayerState.has_flag(FLAG_LOST_TOY_TRIGGERED):
+			if PlayerState.has_trait("rattle_drum"):
+				Logging.info("[PlotController] ═══ progress=%d >= %d 且持有 rattle_drum，触发遗失玩具事件: %s ═══" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD, EVENT_LOST_TOY])
+				PlayerState.set_flag(FLAG_LOST_TOY_TRIGGERED, true)
+				Logging.info("[PlotController] flag '%s' 已设置" % FLAG_LOST_TOY_TRIGGERED)
+				EventBus.push_event.emit(EVENT_LOST_TOY, {})
+				Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_LOST_TOY)
+			else:
+				Logging.info("[PlotController] progress=%d >= %d 但玩家没有 rattle_drum trait，跳过遗失玩具触发" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD])
 		else:
-			Logging.info("[PlotController] progress=%d >= %d 但玩家没有 rattle_drum trait，跳过遗失玩具触发" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD])
+			Logging.info("[PlotController] flag '%s' 已存在，跳过遗失玩具触发" % FLAG_LOST_TOY_TRIGGERED)
 	else:
-		Logging.info("[PlotController] flag '%s' 已存在，跳过遗失玩具触发" % FLAG_LOST_TOY_TRIGGERED)
-else:
-	Logging.info("[PlotController] progress=%d 未达遗失玩具阈值 %d，跳过" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD])
+		Logging.info("[PlotController] progress=%d 未达遗失玩具阈值 %d，跳过" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD])
