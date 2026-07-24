@@ -20,12 +20,15 @@ const FLAG_TRIGGERED: String = "plot_prompt_user_action_triggered"
 const EVENT_LISHAN: String = "backhome_lishan_1"
 const EVENT_INDIFFERENT_WIND: String = "backhome_indifferent_wind_1"
 const EVENT_LOST_TOY: String = "backhome_lost_toy_1"
+const EVENT_FENGXIAN_VILLAGE: String = "fengxian_village_entrance"
 const FLAG_LISHAN_TRIGGERED: String = "plot_lishan_triggered"
 const FLAG_INDIFFERENT_WIND_TRIGGERED: String = "plot_indifferent_wind_triggered"
 const FLAG_LOST_TOY_TRIGGERED: String = "plot_lost_toy_triggered"
-const PROGRESS_LISHAN_THRESHOLD: int = 31  # >30
-const PROGRESS_INDIFFERENT_WIND_THRESHOLD: int = 61  # >60
-const PROGRESS_LOST_TOY_THRESHOLD: int = 79  # >=79
+const FLAG_FENGXIAN_TRIGGERED: String = "plot_fengxian_triggered"
+const PROGRESS_LISHAN_THRESHOLD: int = 21  # >30
+const PROGRESS_INDIFFERENT_WIND_THRESHOLD: int = 41  # >60
+const PROGRESS_LOST_TOY_THRESHOLD: int = 61  # >=79
+const PROGRESS_FENGXIAN_THRESHOLD: int = 100  # >=100 → 抵达奉先村口
 
 # ════════════════════════════════════════════════════════════════
 # 内部状态
@@ -46,6 +49,12 @@ func _ready() -> void:
 	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_INDIFFERENT_WIND_TRIGGERED)
 	PlayerState.register_virtual_flag(FLAG_LOST_TOY_TRIGGERED, "bool")
 	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_LOST_TOY_TRIGGERED)
+
+	# 🆕 回家结局路由 flag：玩家在骊山是否选择了「死死盯住冻死骨」
+	PlayerState.register_virtual_flag("flag_witnessed_lishan_corpses", "bool")
+	Logging.info("[PlotController] 注册虚拟 flag: flag_witnessed_lishan_corpses")
+	PlayerState.register_virtual_flag(FLAG_FENGXIAN_TRIGGERED, "bool")
+	Logging.info("[PlotController] 注册虚拟 flag: %s" % FLAG_FENGXIAN_TRIGGERED)
 
 	# 监听每旬 tick（同乡来访触发）
 	if not TimeService.on_xun_tick.is_connected(_on_xun_tick):
@@ -163,3 +172,16 @@ func _check_progress_triggers() -> void:
 			Logging.info("[PlotController] flag '%s' 已存在，跳过遗失玩具触发" % FLAG_LOST_TOY_TRIGGERED)
 	else:
 		Logging.info("[PlotController] progress=%d 未达遗失玩具阈值 %d，跳过" % [progress_val, PROGRESS_LOST_TOY_THRESHOLD])
+
+	# 奉先村口触发：progress >= 100
+	if progress_val >= PROGRESS_FENGXIAN_THRESHOLD:
+		if not PlayerState.has_flag(FLAG_FENGXIAN_TRIGGERED):
+			Logging.info("[PlotController] ═══ progress=%d >= %d，触发奉先村入口事件: %s ═══" % [progress_val, PROGRESS_FENGXIAN_THRESHOLD, EVENT_FENGXIAN_VILLAGE])
+			PlayerState.set_flag(FLAG_FENGXIAN_TRIGGERED, true)
+			Logging.info("[PlotController] flag '%s' 已设置" % FLAG_FENGXIAN_TRIGGERED)
+			EventBus.push_event.emit(EVENT_FENGXIAN_VILLAGE, {})
+			Logging.info("[PlotController] 已发射 push_event: %s" % EVENT_FENGXIAN_VILLAGE)
+		else:
+			Logging.info("[PlotController] flag '%s' 已存在，跳过奉先村入口触发" % FLAG_FENGXIAN_TRIGGERED)
+	else:
+		Logging.info("[PlotController] progress=%d 未达奉先村阈值 %d，跳过" % [progress_val, PROGRESS_FENGXIAN_THRESHOLD])

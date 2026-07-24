@@ -154,6 +154,9 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════════
 
 func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
+	# ── 🔍 栈状态诊断日志 ──
+	_dump_stack_state("_on_event_ready_to_play ENTER")
+	
 	# ── 进入事件状态，解除 auto-advance 封锁，dismiss 所有 hover ──
 	_auto_advance_blocked = false
 	HoverPopupManager.dismiss_all()
@@ -323,8 +326,14 @@ func _on_event_ui_option_selected_internal(choice_result, choice_text: String) -
 		BlurManager.hide_picker_blur()
 		_is_settlement = false
 
+	# 🔍 选项选择前栈状态诊断
+	_dump_stack_state("on_option_selected BEFORE (choice='%s')" % choice_text)
+	
 	# 转发给 Director 处理所有逻辑（后果执行 + 世界恢复 + process_next）
 	director.on_option_selected(choice_result, choice_text)
+	
+	# 🔍 选项选择后栈状态诊断（Director 已完成 push/pop/cleanup）
+	_dump_stack_state("on_option_selected AFTER (choice='%s')" % choice_text)
 
 
 # ═══════════════════════════════════════════════════
@@ -543,6 +552,8 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 
 func _on_hide_requested() -> void:
 	Logging.info("[DIAG] _on_hide_requested: 被调用")
+	# 🔍 栈状态诊断日志
+	_dump_stack_state("_on_hide_requested")
 	
 	# 🚨 隐藏纸带时取消 auto-advance（防止在 hide 动画期间触发）
 	_cancel_auto_advance()
@@ -1054,6 +1065,50 @@ func _on_tape_show_requested() -> void:
 		visible = true
 		refresh_daily_panel()
 		Logging.info("NarrativeOverlay._on_tape_show_requested: 根节点恢复可见，日常面板已刷新")
+
+
+# ═══════════════════════════════════════════════════
+# 🔍 栈状态诊断日志
+# ═══════════════════════════════════════════════════
+
+## 打印事件栈的完整快照，用于调试 push/pop 流转问题。
+## 在每个关键决策点（事件就绪、选项选择后、hide 请求时）调用。
+func _dump_stack_state(caller: String) -> void:
+	if not director:
+		Logging.info("[STACK_DIAG] %s: director 未就绪" % caller)
+		return
+	var stack: Array = director._event_stack
+	var queue: Array = director._event_queue
+	var active: bool = director._is_active
+	var lines: PackedStringArray = []
+	lines.append("[STACK_DIAG] %s: _is_active=%s, stack.size=%d, queue.size=%d" % [caller, active, stack.size(), queue.size()])
+	for i in range(stack.size()):
+		var e = stack[i]
+		var ev_name: String = _resolve_stack_entry_label(e)
+		var is_proc: bool = e.get("processed", false)
+		var is_pop_reg: bool = e.get("is_pop_regression", false)
+		lines.append("  [STACK_DIAG]   stack[%d] %s processed=%s pop_regression=%s" % [i, ev_name, is_proc, is_pop_reg])
+	for i in range(queue.size()):
+		var q = queue[i]
+		var ev_name: String = _resolve_stack_entry_label(q)
+		lines.append("  [STACK_DIAG]   queue[%d] %s" % [i, ev_name])
+	for line in lines:
+		Logging.info(line)
+
+
+func _resolve_stack_entry_label(entry: Dictionary) -> String:
+	if entry.get("type") == "cinematic":
+		return "Cinematic(%d texts)" % entry.get("texts", []).size()
+	if entry.get("type") == "sub_action_picker":
+		return "SubActionPicker(%d items)" % entry.get("data", []).size()
+	if entry.get("type") == "item_picker":
+		return "ItemPicker(%d items)" % entry.get("data", []).size()
+	if entry.get("type") == "focused_chat":
+		return "FocusChat"
+	var ev: BaseEvent = entry.get("data") as BaseEvent
+	if ev:
+		return "'%s' (uuid=%s)" % [ev.name, ev.uuid]
+	return "UNKNOWN"
 
 
 # ═══════════════════════════════════════════════════

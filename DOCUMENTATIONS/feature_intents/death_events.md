@@ -242,7 +242,71 @@ _on_hidden_ending_cinematic_finished():
   - 有拨浪鼓 → 历史线：走现有链 `backhome_the_wood` → `backhome_inside_the_wood` → `the_end`（儿子饿死）
   - 无拨浪鼓 → 好结局：push `event_backhome_ending_good`（风雪归人，儿子活着）
 
-### 结局内容
+| 结局 | 触发条件 | name | death_reason | death_tutorial |
+|------|---------|------|-------------|---------------|
+| 冻毙于风雪 | health=0 三次濒死耗尽 | ENDING_BACKHOME_DEATH_NAME | 朔风如刀，白雪覆身，没能走完二百四十三里路 | 至少不再痛苦。但妻儿还在等，理想埋在了大唐最冷的冬天 |
+| 冻毙于风雪 | health=0 三次濒死耗尽 | ENDING_BACKHOME_DEATH_NAME | 朔风如刀，白雪覆身 | 理想埋在了大唐最冷的冬天 |
+| 风雪归人 | 到家 + 无拨浪鼓 | ENDING_BACKHOME_GOOD_NAME | 推开破门，孩子还活着 | 没有功名，但今夜还在一起 |
+| 乱世诗人 | 到家 + 有拨浪鼓 + 未目睹冻死骨 | ENDING_BACKHOME_MIDDLE_NAME | 儿子死了，写了一首长诗 | 差一点就成了杜甫，差了一口气 |
+| 文章憎命达 | 到家 + 有拨浪鼓 + 目睹冻死骨 | ENDING_BACKHOME_HISTORICAL_NAME | 灶台冰冷，儿子已死 | 诗越伟大，命越凄惨 |
+
+### 数据流
+
+```
+入口 A (死亡):
+  SurvivalManager.death_judgement()
+    → era=="755_backhome" + near_death_count>=3
+    → EventBus.request_event_key("event_backhome_ending_death")
+    → DeathEvent.on_enter → SystemOperator("game_over") → tombstone
+
+入口 B (到家 — 三层分叉):
+  fengxian_village_entrance_revisit → push event_backhome_ending_router
+    → on_enter: 叙事展示
+    → choice_result: BackhomeEndingRouterOperator.operate()
+      → ExamEndingRouter.evaluate_backhome()
+        → has_trait("rattle_drum")?
+          ├─ NO  → event_backhome_ending_good → tombstone
+          └─ YES → flag_witnessed_lishan_corpses?
+                    ├─ YES → backhome_the_wood → inside_the_wood → the_end → tombstone
+                    └─ NO  → event_backhome_ending_middle → tombstone
+```
+
+| 结局 | 触发条件 | name | death_reason | death_tutorial |
+|------|---------|------|-------------|---------------|
+| 冻毙于风雪 | health=0 三次濒死耗尽 | ENDING_BACKHOME_DEATH_NAME | 朔风如刀，白雪覆身，没能走完二百四十三里路 | 至少不再痛苦。但妻儿还在等，理想埋在了大唐最冷的冬天 |
+| 风雪归人 | 到家 + 无拨浪鼓 | ENDING_BACKHOME_GOOD_NAME | 推开破门，孩子还活着，掏出半块胡饼，一家人围坐 | 没有功名没有诗篇，但今夜还在一起。文章憎命达 |
+| 历史线 | 到家 + 有拨浪鼓 | （不改动现有内容） | （现有 the_end） | （现有 the_end） |
+
+### 数据流
+
+```
+入口 A (死亡):
+  SurvivalManager.death_judgement()
+    → era=="755_backhome" + near_death_count>=3
+    → EventBus.request_event_key("event_backhome_ending_death")
+    → DeathEvent.on_enter → SystemOperator("game_over") → tombstone
+
+入口 B (到家):
+  fengxian_village_entrance_revisit → push event_backhome_ending_router
+    → on_enter: 叙事展示
+    → choice_result: BackhomeEndingRouterOperator.operate()
+      → ExamEndingRouter.evaluate_backhome()
+        → has_trait("rattle_drum")?
+          ├─ YES → request_event_key("backhome_the_wood")
+          │         → inside_the_wood → the_end → tombstone
+          └─ NO  → request_event_key("event_backhome_ending_good")
+                    → DeathEvent.on_enter → SystemOperator("game_over") → tombstone
+```
+  fengxian_village_entrance_revisit → push event_backhome_ending_router
+    → on_enter: 叙事展示
+    → choice_result: BackhomeEndingRouterOperator.operate()
+      → ExamEndingRouter.evaluate_backhome()
+        → has_trait("rattle_drum")?
+          ├─ YES → request_event_key("backhome_the_wood")
+          │         → inside_the_wood → the_end → tombstone
+          └─ NO  → request_event_key("event_backhome_ending_good")
+                    → DeathEvent.on_enter → SystemOperator("game_over") → tombstone
+```
 
 | 结局 | 触发条件 | name | death_reason | death_tutorial |
 |------|---------|------|-------------|---------------|

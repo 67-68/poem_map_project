@@ -16,6 +16,7 @@ const ENDING_DEFAULT: String = "event_ending_default"
 
 ## 回家结局 UUID（755_backhome era 专属）
 const ENDING_BACKHOME_GOOD: String = "event_backhome_ending_good"
+const ENDING_BACKHOME_MIDDLE: String = "event_backhome_ending_middle"
 const ENDING_BACKHOME_HISTORICAL: String = "backhome_the_wood"
 
 ## 阈值常量
@@ -127,13 +128,20 @@ static func evaluate_backhome() -> void:
 		return
 
 	var matched_event: String = ""
+	var has_rattle: bool = PlayerState.has_trait("rattle_drum")
+	var witnessed_corpses: bool = PlayerState.has_flag("flag_witnessed_lishan_corpses")
 
-	if PlayerState.has_trait("rattle_drum"):
-		matched_event = ENDING_BACKHOME_HISTORICAL
-		Logging.info("[ExamEndingRouter] evaluate_backhome: 匹配 → 历史线（有拨浪鼓，儿子已死）")
-	else:
+	Logging.info("[ExamEndingRouter] evaluate_backhome: has_rattle=%s, witnessed_corpses=%s" % [str(has_rattle), str(witnessed_corpses)])
+
+	if not has_rattle:
 		matched_event = ENDING_BACKHOME_GOOD
-		Logging.info("[ExamEndingRouter] evaluate_backhome: 匹配 → 好结局（无拨浪鼓，儿子活着）")
+		Logging.info("[ExamEndingRouter] evaluate_backhome: 匹配 → 好结局「风雪归人」（无拨浪鼓，儿子活着）")
+	elif has_rattle and witnessed_corpses:
+		matched_event = ENDING_BACKHOME_HISTORICAL
+		Logging.info("[ExamEndingRouter] evaluate_backhome: 匹配 → 真·历史结局「文章憎命达」（有拨浪鼓 + 亲眼目睹冻死骨）")
+	else:
+		matched_event = ENDING_BACKHOME_MIDDLE
+		Logging.info("[ExamEndingRouter] evaluate_backhome: 匹配 → 中庸结局「乱世诗人」（有拨浪鼓但未目睹冻死骨，感悟不深）")
 
 	# 设置防重复标记
 	PlayerState.set_flag(FLAG_BACKHOME_ROUTED, true)

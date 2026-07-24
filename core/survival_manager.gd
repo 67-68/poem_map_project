@@ -256,14 +256,6 @@ func operate_state_transistors():
 	for s in Database.get_state_transistors_all():
 		var trans = Database.get_state_transistors_all()[s]
 		trans.transition()
-	
-	var prog = PlayerState.get_stat_val(ENUMS.PROPS.PROGRESS)
-	if prog >= 100:
-		if KuangdaState.current() == "fengying": EventBus.request_event_key.emit("kuangda_2_to_3")
-		else: EventBus.request_event_key.emit("kuangda_1_to_2")
-	elif prog <= 0:
-		if KuangdaState.current() == "kuangke": EventBus.request_event_key.emit("kuangda_3_to_2")
-		else: EventBus.request_event_key.emit("kuangda_2_to_1")
 
 # 核心结算管线（上帝视角的暴政：顺序绝对不可更改！）
 func _process_single_xun_settlement():
@@ -324,10 +316,7 @@ func _process_single_xun_settlement():
 	# 🆕 结算完毕，统一执行一次锁定重评估，解除批量模式
 	ActionManager.end_action_batch()
 	
-	# 5. 通知 UI 刷新
-	EventBus.emit_signal("xun_settlement_completed")
-	
-	# 6. 延期扣除生活费（快照之后执行，确保计入下月 delta）
+	# 5. 延期扣除生活费（快照之后执行，确保计入下月 delta）
 	# ⚠️ 这个 deferred 调用在批量模式结束后才执行，会独立触发一次 reevaluate
 	call_deferred("_post_xun_money_deduct")
 
@@ -378,18 +367,37 @@ func death_judgement():
 				Logging.info('[SurvivalManager] death_judgement: NPC救助未触发 (known=%d, rescue_roll=%.3f)' % [known_npcs.size(), rescue_roll])
 		# ── 现有濒死兜底逻辑（未获 NPC 救助时继续） ──
 		if GameState.current_era == "755_backhome":
-			var count = PlayerState.get_flag("flag_near_death_count")
+			var count: int = int(PlayerState.get_flag("flag_near_death_count") or 0)
 			#breakpoint
-			if not count or count < 3:
-				#breakpoint
+			# if count < 3:
+			# 	#breakpoint
+			# 	var new_count: int = count + 1
+			# 	PlayerState.append_flag("flag_near_death_count", 1)
+			# 	force_set_prop(ENUMS.PROPS.HEALTH, 1)
+			# 	Logging.info('[SurvivalManager] Near-death count=%d, force_set health=1' % new_count)
+				
+			# 	# 🆕 直接硬编码推送濒死叙事事件（不再依赖 state_transistor 间接触发）
+			# 	var near_death_event: String = ""
+			# 	match new_count:
+			# 		1:
+			# 			near_death_event = "near_death_burn_manuscript"
+			# 		2:
+			# 			near_death_event = "near_death_sing_crazy"
+			# 		3:
+			# 			near_death_event = "near_death_nothing_to_burn"
+			# 	if not near_death_event.is_empty():
+			# 		Logging.info('[SurvivalManager] death_judgement: 第%d次濒死, push_event=%s' % [new_count, near_death_event])
+			# 		EventBus.push_event.emit(near_death_event, {})
+			# else:
+				# 第三次濒死兜底已耗尽，走向真正的死亡
+				# 🆕 755_backhome era 专属死亡结局：冻毙于风雪
+			if count < 1:
 				PlayerState.append_flag("flag_near_death_count", 1)
 				force_set_prop(ENUMS.PROPS.HEALTH, 1)
-				Logging.info('[SurvivalManager] Near-death count=%d, force_set health=1' % (count + 1))
 			else:
-				# 第三次濒死兜底已耗尽，走向真正的死亡
 				AudioManager.stop_sfx_loop()
-				TagManager.inject_death_tags()
-				EventManager.scan_death_events()
+				Logging.info("[SurvivalManager] death_judgement: 755_backhome 三次濒死耗尽，推入专属死亡结局 event_backhome_ending_death")
+				EventBus.request_event_key.emit("event_backhome_ending_death", {})
 		else:
 			AudioManager.stop_sfx_loop()
 			TagManager.inject_death_tags()
@@ -560,6 +568,7 @@ func _post_xun_money_deduct():
 	if TutorialController.is_tutorial_active():
 		Logging.info('[SurvivalManager] _post_xun_money_deduct: tutorial 模式，跳过扣钱')
 		return
+	if GameState.current_era == "755_backhome": return
 	PlayerState.append_stat(ENUMS.PROPS.MONEY, -30)
 	Logging.info('[SurvivalManager] 旬末扣除 30 money（快照之后执行，计入下月 delta）')
 	if PlayerState.get_stat_val(ENUMS.PROPS.MONEY) <= 0:

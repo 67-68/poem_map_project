@@ -234,6 +234,11 @@
     "4_eras/events/history_events/event_exam_30.tres",
     "4_eras/events/history_events/event_exam_747.tres",
     "4_eras/events/history_events/event_intro_745.tres",
+    "4_eras/events/history_events/test_backhome_death_ending.tres",
+    "4_eras/events/history_events/test_backhome_good_ending.tres",
+    "4_eras/events/history_events/test_backhome_historical_ending.tres",
+    "4_eras/events/history_events/test_backhome_middle_ending.tres",
+    "4_eras/events/history_events/test_backhome_progress_100.tres",
     "4_eras/events/history_events/test_setup_bad_inspiration.tres",
     "4_eras/events/history_events/test_setup_default.tres",
     "4_eras/events/history_events/test_setup_good_momentum.tres",
@@ -241,6 +246,7 @@
     "4_eras/events/history_events/test_setup_rich.tres",
     "4_eras/events/end_random_events/event_backhome_ending_death.tres",
     "4_eras/events/end_random_events/event_backhome_ending_good.tres",
+    "4_eras/events/end_random_events/event_backhome_ending_middle.tres",
     "4_eras/events/end_random_events/event_death_bad_poet.tres",
     "4_eras/events/end_random_events/event_death_good_poet.tres",
     "4_eras/events/end_random_events/event_death_has_friends.tres",
@@ -721,7 +727,6 @@
     "5_story_arcs/755_backhome/backhome_lost_toy_1.tres",
     "5_story_arcs/755_backhome/backhome_outside_city_1.tres",
     "5_story_arcs/755_backhome/backhome_the_wood.tres",
-    "5_story_arcs/755_backhome/decision_become_official.tres",
     "5_story_arcs/755_backhome/event_backhome_ending_router.tres",
     "5_story_arcs/755_backhome/event_backhome_start.tres",
     "5_story_arcs/755_backhome/event_demo_slide_from_bottom.tres",
@@ -756,6 +761,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-24T02:29:25.033146+00:00",
-  "total": 755
+  "generated_at": "2026-07-24T03:10:17.438050+00:00",
+  "total": 760
 }
