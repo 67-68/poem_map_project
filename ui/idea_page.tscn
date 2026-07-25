@@ -82,6 +82,38 @@ theme_override_fonts/font = ExtResource("3_8cqle")
 theme_override_font_sizes/font_size = 24
 text = "UI_IDEA_PAGE_TEXT_5"
 
+[node name="InfoContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=428579567]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="ShiLeft" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/InfoContainer" unique_id=138158738]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+text = "可以解锁 n 个 势 理念（n空余）"
+
+[node name="ShiTarget" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/InfoContainer" unique_id=1636617802]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+text = "下一个里程碑是 200 势"
+
+[node name="WangLeft" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/InfoContainer" unique_id=1012444343]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+text = "可以解锁 n 个 势 理念（n空余）"
+
+[node name="WangTarget" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/InfoContainer" unique_id=1596701987]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+text = "下一个里程碑是 200 势"
+
 [node name="VSeparator" type="VSeparator" parent="PanelContainer/HBoxContainer" unique_id=1582713649]
 layout_mode = 2
 

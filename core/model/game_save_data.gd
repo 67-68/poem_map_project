@@ -37,6 +37,14 @@ var traits: Array[String] = []
 var current_unlock_ideas: Array[String] = []
 
 # ════════════════════════════════════════════════════════════════
+# 理念令牌 — 势/望各自消耗的升级令牌数（全局共享，消费即扣）
+# 令牌可用量 = 属性阈值达标数 - 已消耗数
+# 阈值: [10, 40, 90, 180]
+# ════════════════════════════════════════════════════════════════
+var used_momentum_tokens: int = 0
+var used_prestige_tokens: int = 0
+
+# ════════════════════════════════════════════════════════════════
 # 理念修饰器注册表 — 由 BuffOperator 写入/删除
 # 每条格式: { source, type, named_key, value, condition }
 # 各执行管线（PlayerState/SurvivalManager/PropertyOperator 等）
@@ -158,6 +166,8 @@ func to_dict() -> Dictionary:
 		"flags": _copy_dict(flags),
 		"traits": traits.duplicate(),
 		"current_unlock_ideas": current_unlock_ideas.duplicate(),
+		"used_momentum_tokens": used_momentum_tokens,
+		"used_prestige_tokens": used_prestige_tokens,
 		"active_modifiers": _deep_copy_modifiers(active_modifiers),
 		"player_name": player_name,
 		"current_location": current_location,
@@ -199,6 +209,8 @@ func from_dict(d: Dictionary) -> void:
 	flags = _safe_dict(d, "flags")
 	traits = _safe_array_str(d, "traits")
 	current_unlock_ideas = _safe_array_str(d, "current_unlock_ideas")
+	used_momentum_tokens = d.get("used_momentum_tokens", 0)
+	used_prestige_tokens = d.get("used_prestige_tokens", 0)
 	active_modifiers = _safe_modifiers_array(d, "active_modifiers")
 	player_name = d.get("player_name", tr("TRES_POET_DUFU_002_NAME_0"))
 	current_location = d.get("current_location", "yong_zhou")
