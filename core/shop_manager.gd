@@ -26,12 +26,80 @@ const _FlagRequirement = preload("res://core/requirements/flag_requirement.gd")
 const _ShopConfig = preload("res://core/model/shop_config.gd")
 const _ShopBuyOperator = preload("res://core/operators/shop_buy_operator.gd")
 const _NarrativeLockRequirement = preload("res://core/requirements/narrative_lock_requirement.gd")
+const _TraitOperator = preload("res://core/model/trait_operator.gd")
+const _BuffOperator = preload("res://core/buff_operator.gd")
 
 ## key: shop_id, value: Array
 var _shops: Dictionary = {}
 
 ## 每页显示的商品数量
 const ITEMS_PER_PAGE: int = 4
+
+
+func _ready() -> void:
+	# ── 初始化坊市商店（market） ──
+	# BuffOperator 需要在 push 到 purchase_operators 前预先构造好 source_uuid
+	var cockfight_buff := _BuffOperator.new()
+	cockfight_buff.named_amount_key = "s_xing_gain"
+	cockfight_buff.modifier_type = "per_xun_passive"
+	cockfight_buff.source_uuid = "xiyu_cockfight"
+
+	var scroll_buff := _BuffOperator.new()
+	scroll_buff.named_amount_key = "mod_pct_30"
+	scroll_buff.modifier_type = "efficiency"
+	scroll_buff.target_prop = "momentum"
+	scroll_buff.max_uses = 1
+	scroll_buff.source_uuid = "premium_exam_scroll"
+
+	var coat_buff := _BuffOperator.new()
+	coat_buff.named_amount_key = "mod_pct_5"
+	coat_buff.modifier_type = "damage_reduction"
+	coat_buff.target_prop = "health"
+	coat_buff.source_uuid = "fox_fur_coat"
+
+	var products: Array = [
+		{
+			"product_id": "xiyu_cockfight",
+			"product_name": "西域斗鸡",
+			"price": 200,
+			"initial_stock": 1,
+			"detail_description": "一只来自西域的斗鸡，羽毛如霞。看它扑腾的样子，连写诗都来劲了——每旬额外获得3点兴。",
+			"purchase_operators": [_make_trait_add_op("xiyu_cockfight"), cockfight_buff],
+		},
+		{
+			"product_id": "premium_exam_scroll",
+			"product_name": "极品行卷",
+			"price": 50,
+			"initial_stock": 1,
+			"detail_description": "精装行卷，封面烫金，内附名家题跋。下次获得势时额外加成30%，用过即废。",
+			"purchase_operators": [_make_trait_add_op("premium_exam_scroll"), scroll_buff],
+		},
+		{
+			"product_id": "fox_fur_coat",
+			"product_name": "貂裘",
+			"price": 200,
+			"initial_stock": 1,
+			"detail_description": "上等狐皮制成的大氅，轻软如云。寒冬中穿着，生命值扣除减免5%。",
+			"purchase_operators": [_make_trait_add_op("fox_fur_coat"), coat_buff],
+		},
+		{
+			"product_id": "rattle_drum",
+			"product_name": "拨浪鼓",
+			"price": 5,
+			"initial_stock": 1,
+			"detail_description": "一面小巧的拨浪鼓，咚咚作响。送给孩子的最好礼物，虽然对你没什么实际用处，但看着它就想起宗文宗武的笑脸。",
+			"purchase_operators": [_make_trait_add_op("rattle_drum")],
+		},
+	]
+	init_shop("market", products)
+	Logging.info("[ShopManager] _ready: market 商店已初始化，共 %d 个商品" % products.size())
+
+
+static func _make_trait_add_op(trait_id: String):
+	var op := _TraitOperator.new()
+	op.str_traits = trait_id
+	op.operator = REQ_OPERATOR.CRUD.ADD
+	return op
 
 
 # ════════════════════════════════════════════════════════════════
@@ -68,7 +136,8 @@ func init_shop(shop_id: String, products: Array) -> void:
 		cfg.initial_stock = p_dict.get("initial_stock", 0)
 		cfg.detail_description = p_dict.get("detail_description", "")
 		cfg.icon = p_dict.get("icon", null)
-		cfg.purchase_operators = p_dict.get("purchase_operators", [])
+		var ops = p_dict.get("purchase_operators", [])
+		cfg.purchase_operators.assign(ops)
 
 		if cfg.product_id.is_empty():
 			Logging.err("[ShopManager] init_shop: shop_id='%s' 中存在空 product_id，跳过" % shop_id)

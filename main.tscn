@@ -222,3 +222,4 @@ visible = false
 layer = 1000
 
 [node name="SystemMenu" parent="SystemMenuLayer" unique_id=1920212223 instance=ExtResource("40_sysmenu")]
+visible = false

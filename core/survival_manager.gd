@@ -22,14 +22,14 @@ static var HEALTH_AP_TIERS: Array[Dictionary] = [
 		health_max = 30,       # ≤30
 		ap_cap = 5,
 		trait_enum = ENUMS.TRAITS.TERMINAL_ILLNESS,
-		hint_text = TranslationServer.translate("CODE_SURVIVAL_MANAGER_3F464BCF67"),
+		hint_key = "CODE_SURVIVAL_MANAGER_3F464BCF67",
 		hint_color = "#cc6666",
 	},
 	{
 		health_max = 60,       # ≤60
 		ap_cap = 8,
 		trait_enum = ENUMS.TRAITS.EXHAUSTION_INITIAL,
-		hint_text = TranslationServer.translate("CODE_SURVIVAL_MANAGER_8E973C4B99"),
+		hint_key = "CODE_SURVIVAL_MANAGER_8E973C4B99",
 		hint_color = "#ccaa66",
 	},
 ]
@@ -83,6 +83,11 @@ func _cost_survival():
 
 ## 返回当前健康对应的 AP 上限（含 Imaginary + 疾病惩罚）
 static func get_current_ap_cap() -> int:
+	# 🆕 Tutorial 期间固定 AP=2，跳过所有健康/意象/trait 计算
+	if TutorialController.is_tutorial_active():
+		Logging.info('[SurvivalManager] get_current_ap_cap: tutorial 模式 → AP=2')
+		return 2
+
 	var health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
 	var base_ap: int = DEFAULT_AP_CAP
 	for tier in HEALTH_AP_TIERS:
@@ -110,13 +115,6 @@ static func get_current_ap_cap() -> int:
 		base_ap += ap_penalty_total  # ap_penalty 为负数，直接加 = 扣除
 		Logging.info('[SurvivalManager] get_current_ap_cap: 总 ap_penalty=%d → AP=%d' % [ap_penalty_total, base_ap])
 	
-	#breakpoint
-	if TutorialController.is_tutorial_active():
-		base_ap = 2
-	else:
-		base_ap = 10
-
-	
 	# 底限钳制：AP 不能降到 1 以下
 	var final_ap := maxi(base_ap, 1)
 	Logging.info('[SurvivalManager] get_current_ap_cap: 最终 AP = %d' % final_ap)
@@ -140,7 +138,7 @@ static func get_active_ap_hint() -> String:
 	var health: int = int(PlayerState.get_stat_val(ENUMS.PROPS.HEALTH))
 	for tier in HEALTH_AP_TIERS:
 		if health <= tier.health_max:
-			return tier.hint_text
+			return TranslationServer.translate(tier.hint_key)
 	return ""
 
 ## 返回当前激活的 AP 削减提示颜色，无削减时返回 ""

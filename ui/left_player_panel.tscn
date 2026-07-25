@@ -5,11 +5,6 @@
 [ext_resource type="StyleBox" uid="uid://kui3d5hudd7x" path="res://ui/paper_style.tres" id="2_a0q7c"]
 [ext_resource type="PackedScene" uid="uid://bfumtrrdtv0f2" path="res://ui/prop_label.tscn" id="3_kxi5c"]
 [ext_resource type="PackedScene" uid="uid://dcgmrms31hswa" path="res://ui/smaller_prop_label.tscn" id="4_a0q7c"]
-[ext_resource type="Texture2D" uid="uid://cnu5fltxkafq3" path="res://assets/profile/maobi.png" id="4_kxi5c"]
-[ext_resource type="Script" uid="uid://7kgs8nddroem" path="res://ui/maobi_shake.gd" id="5_a0q7c"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b7l41"]
-texture = ExtResource("4_kxi5c")
 
 [node name="ShadowBox" type="PanelContainer" unique_id=1492512419]
 custom_minimum_size = Vector2(320, 450)
@@ -166,11 +161,3 @@ size_flags_horizontal = 3
 [node name="SmallerPropLabel3" parent="Panel/VBox/ScrollContainer/V/HBoxContainer2" unique_id=1952811184 instance=ExtResource("4_a0q7c")]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="MaobiContainer" type="PanelContainer" parent="Panel/VBox" unique_id=479986917]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-size_flags_horizontal = 0
-theme_type_variation = &"PanelTheme"
-theme_override_styles/panel = SubResource("StyleBoxTexture_b7l41")
-script = ExtResource("5_a0q7c")

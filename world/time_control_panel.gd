@@ -15,15 +15,12 @@ var _last_known_day: int = -1
 # ════════════════════════════════════════════════════════════
 # 静态工具方法（可被 GUT 直接测试，无需场景树）
 # ════════════════════════════════════════════════════════════
-
-
 ## 将剩余天数格式化为 5 字符的圆点串。
 ## ● = 2天, ◐ = 1天, ○ = 0天
 ## 防御性兜底: time_val 不在 [0, total_days] 时返回全白圆。
 static func format_time_dots(time_val: int, total_days: int, display_slots: int = -1) -> String:
 	if time_val < 0 or time_val > total_days:
 		Logging.err('[time] 当前天数为 %d, total_days=%d, 为什么这个会出现?' % [time_val, total_days])
-		return 'NaN'
 	
 	# 动态计算槽数：每 2 天一个槽，向上取整
 	if display_slots < 0:
@@ -40,6 +37,8 @@ static func format_time_dots(time_val: int, total_days: int, display_slots: int 
 		parts.append("◐")
 	for _i in range(white):
 		parts.append("○")
+	# if parts.size() > 7:
+	# 	return "●●●●●"
 	return "".join(parts)
 
 
@@ -70,6 +69,8 @@ func _ready():
 	_refresh_time_left()
 	_refresh_day_label()
 	_last_known_day = TimeService.current_day
+
+	EventBus.event_confirmed.connect(func():refresh())
 
 ## 每帧轮询 current_day 变化，确保任何时间变动都能刷新。
 func _process(_delta: float) -> void:
