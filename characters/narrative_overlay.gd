@@ -178,6 +178,7 @@ func _on_event_ready_to_play(entry: Dictionary, from_stack: bool) -> void:
 	Logging.info("[DIAG] _on_event_ready_to_play: ⏰ 即将发射 event_display_started")
 	# 🆕 发射事件显示开始信号
 	event_display_started.emit()
+	EventBus.event_display_started.emit()
 	Logging.info("[DIAG] _on_event_ready_to_play: ✅ event_display_started 已发射")
 
 	var data: BaseEvent = entry.get("data")
@@ -377,6 +378,7 @@ func _on_sub_action_picker_ready(entry: Dictionary) -> void:
 	# 🆕 Picker 也视为事件活跃，锁定右侧行动栏
 	HoverPopupManager.set_event_active(true)
 	event_display_started.emit()
+	EventBus.event_display_started.emit()
 
 	visualizer.restore_snapshot()
 	show()
@@ -408,6 +410,7 @@ func _on_item_picker_ready(entry: Dictionary) -> void:
 
 	HoverPopupManager.set_event_active(true)
 	event_display_started.emit()
+	EventBus.event_display_started.emit()
 
 	visualizer.restore_snapshot()
 	show()
@@ -426,6 +429,7 @@ func _on_item_picker_ready(entry: Dictionary) -> void:
 		visualizer.undim_history_ink()
 		HoverPopupManager.set_event_active(false)
 		event_display_ended.emit()
+		EventBus.event_display_ended.emit()
 		# item_picker 的 item_selected：传入当前 entry 精确弹栈
 		director.on_picker_item_selected(item, entry)
 		Logging.info("NarrativeOverlay._on_item_picker_ready: item_selected entity=%s entry type=%s" % [str(item), entry.get("type", "?")])
@@ -436,6 +440,7 @@ func _on_item_picker_ready(entry: Dictionary) -> void:
 		visualizer.undim_history_ink()
 		HoverPopupManager.set_event_active(false)
 		event_display_ended.emit()
+		EventBus.event_display_ended.emit()
 		director.on_picker_cancelled(entry)
 	, CONNECT_ONE_SHOT)
 	visualizer.dim_history_ink(attachment)
@@ -447,6 +452,7 @@ func _on_picker_item_selected(entity, entry: Dictionary) -> void:
 	# 🆕 Picker 选择完成，解锁行动栏
 	HoverPopupManager.set_event_active(false)
 	event_display_ended.emit()
+	EventBus.event_display_ended.emit()
 	# 传入 entry 让 director 精确弹栈（不是盲弹 pop_front）
 	director.on_picker_item_selected(entity, entry)
 	Logging.info("NarrativeOverlay._on_picker_item_selected: entity=%s" % str(entity))
@@ -460,6 +466,7 @@ func _on_picker_cancelled(entry: Dictionary) -> void:
 	# 解锁行动栏
 	HoverPopupManager.set_event_active(false)
 	event_display_ended.emit()
+	EventBus.event_display_ended.emit()
 	director.on_picker_cancelled(entry)
 
 
@@ -475,6 +482,7 @@ func _on_cinematic_ready(entry: Dictionary) -> void:
 	# 🆕 Cinematic 也视为事件活跃，锁定右侧行动栏
 	HoverPopupManager.set_event_active(true)
 	event_display_started.emit()
+	EventBus.event_display_started.emit()
 
 	# 🐛 修复：同 Picker 路径，恢复快照位置 + 显示自身
 	visualizer.restore_snapshot()
@@ -506,6 +514,7 @@ func _on_cinematic_ready(entry: Dictionary) -> void:
 	# 🆕 Cinematic 完成，解锁行动栏
 	HoverPopupManager.set_event_active(false)
 	event_display_ended.emit()
+	EventBus.event_display_ended.emit()
 
 	director.on_cinematic_finished()
 	Logging.info("NarrativeOverlay._on_cinematic_ready: Cinematic 完成")
@@ -523,6 +532,7 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 	# 🆕 FocusChat 也视为事件活跃，锁定右侧行动栏
 	HoverPopupManager.set_event_active(true)
 	event_display_started.emit()
+	EventBus.event_display_started.emit()
 
 	visualizer.play_show_tape()
 
@@ -542,6 +552,7 @@ func _on_focused_chat_ready(entry: Dictionary) -> void:
 		# 🆕 FocusChat 完成，解锁行动栏
 		HoverPopupManager.set_event_active(false)
 		event_display_ended.emit()
+		EventBus.event_display_ended.emit()
 		director.on_focused_chat_finished(result)
 	, CONNECT_ONE_SHOT)
 
@@ -565,6 +576,7 @@ func _on_hide_requested() -> void:
 	HoverPopupManager.set_event_active(false)
 	Logging.info("[DIAG] _on_hide_requested: ⏰ 即将发射 event_display_ended (解锁行动按钮)")
 	event_display_ended.emit()
+	EventBus.event_display_ended.emit()
 	Logging.info("[DIAG] _on_hide_requested: ✅ event_display_ended 已发射")
 
 	# 🚨 如果 overlay 动画正在进行中，延迟 hide 到动画完成后执行

@@ -47,6 +47,11 @@ signal request_change_bg_modulate(color: Color)
 signal request_restore_bg_modulate(duration: float)
 signal event_confirmed()
 
+## 事件显示开始 — 由 NarrativeOverlay 广播，外部系统（如 TimeControlPanel）监听以锁定 UI
+signal event_display_started()
+## 事件显示结束 — 由 NarrativeOverlay 广播，外部系统（如 TimeControlPanel）监听以解锁 UI
+signal event_display_ended()
+
 signal request_change_left_panel_visibility(enable)
 signal request_toggle_map_only()
 signal request_toggle_debug_overlay()

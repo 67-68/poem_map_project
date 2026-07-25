@@ -8,9 +8,12 @@ const TOTAL_SLOTS: int = 5
 @onready var label_day: Label = $HBox/HBox2/Label_Day
 @onready var label_time_left: Label = $HBox/HBox2/TimeLeft
 @onready var time_texture = $HBox/TimeTexture
+@onready var _skip_button: LinkButton = $HBox/HBox2/LinkButton
 
 # 缓存上一帧的 current_day，用于 _process 轮询检测变化
 var _last_known_day: int = -1
+# 🆕 事件活跃期间阻止跳过按钮点击 + _process 自动跳过
+var _is_event_active: bool = false
 
 # ════════════════════════════════════════════════════════════
 # 静态工具方法（可被 GUT 直接测试，无需场景树）
@@ -72,12 +75,24 @@ func _ready():
 
 	EventBus.event_confirmed.connect(func():refresh())
 
+	# 🆕 事件展示期间禁用跳过按钮，防止玩家在事件进行中跳过时间
+	EventBus.event_display_started.connect(func():
+		_is_event_active = true
+		_skip_button.disabled = true
+		Logging.info("TimeControlPanel: 事件活跃，跳过按钮已禁用")
+	)
+	EventBus.event_display_ended.connect(func():
+		_is_event_active = false
+		_skip_button.disabled = false
+		Logging.info("TimeControlPanel: 事件结束，跳过按钮已恢复")
+	)
+
 ## 每帧轮询 current_day 变化，确保任何时间变动都能刷新。
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	var today: int = TimeService.current_day
-	if PlayerState.get_stat_val('time') == 0:
+	if PlayerState.get_stat_val('time') == 0 and not _is_event_active:
 		_on_link_button_pressed()
 		
 	if today != _last_known_day:
@@ -121,6 +136,10 @@ func _on_year_changed(current_float_year: float):
 ## 点击一次推进到下一个 xun 边界（例：day 3 → day 9；day 12 → day 19）。
 ## 不再递归；每次点击执行一次精准跳跃。
 func _on_link_button_pressed() -> void:
+	# 🆕 事件活跃期间阻止跳过（双重守卫：_process 已过滤，按钮已 disabled；此处防御性）
+	if _is_event_active:
+		Logging.warn('[time] 事件活跃期间拒绝跳过操作')
+		return
 	var days: int = TimeService.get_days_to_next_xun()
 	Logging.info('[time] jump %d days to next xun' % days)
 	TimeService.advance_time(days)
