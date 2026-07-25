@@ -28,6 +28,7 @@ const _ShopBuyOperator = preload("res://core/operators/shop_buy_operator.gd")
 const _NarrativeLockRequirement = preload("res://core/requirements/narrative_lock_requirement.gd")
 const _TraitOperator = preload("res://core/model/trait_operator.gd")
 const _BuffOperator = preload("res://core/buff_operator.gd")
+const _TraitHintFormatter = preload("res://core/hints/trait_hint_formatter.gd")
 
 ## key: shop_id, value: Array
 var _shops: Dictionary = {}
@@ -221,7 +222,10 @@ func build_buy_event(shop_id: String, page: int, context: Dictionary):
 		var line := "%s（剩余%d，%d钱）" % [p.product_name, stock, p.price]
 		if stock <= 0:
 			line += " — 已售罄"
+		if not p.detail_description.is_empty():
+			line += "\n  %s" % p.detail_description
 		desc_parts.append(line)
+		Logging.info("[ShopManager] build_buy_event: product='%s' detail_description appended (%d chars)" % [p.product_id, p.detail_description.length()])
 	var description := "\n".join(desc_parts)
 
 	# ── 构建事件 ──
@@ -279,8 +283,25 @@ func _build_product_option(shop_id: String, product, context: Dictionary):
 	var stock := get_stock(shop_id, product.product_id)
 	opt.description = "%s（剩余%d，%d钱）" % [product.product_name, stock, product.price]
 
-	if product.detail_description.is_empty():
-		product.detail_description = product.product_name
+	# ── 构建 detail_description：自动检测 TraitOperator → 用 TraitHintFormatter 生成完整 trait 描述 ──
+	var detail_desc: String = ""
+	if not product.purchase_operators.is_empty():
+		for extra_op in product.purchase_operators:
+			if extra_op and extra_op is _TraitOperator:
+				var top = extra_op as _TraitOperator
+				var trait_obj = Database.get_trait(top.trait_key)
+				if trait_obj:
+					detail_desc = _TraitHintFormatter.new().build_hint(trait_obj)
+					Logging.info("[ShopManager] _build_product_option: product='%s' TraitOperator detected, trait='%s', hint=%d chars" % [product.product_id, top.trait_key, detail_desc.length()])
+					break
+	if detail_desc.is_empty():
+		detail_desc = product.detail_description
+		if detail_desc.is_empty():
+			detail_desc = product.product_name
+		Logging.info("[ShopManager] _build_product_option: product='%s' fallback to product.detail_description (%d chars)" % [product.product_id, detail_desc.length()])
+
+	# 存入 custom_context_params，供 EventBtn hover 链路消费
+	opt.custom_context_params["detail_description"] = detail_desc
 
 	# ── requirement: 库存 > 0 ──
 	if stock <= 0:

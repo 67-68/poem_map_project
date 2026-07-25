@@ -101,6 +101,13 @@ func _register_event_btn_hover() -> void:
 	# 叙事层：按钮文本即选项描述
 	var narrative: String = text if not text.is_empty() else tr("CODE_EVENT_BTN_BB7486F441")
 
+	# 🆕 商店商品详情：从 custom_context_params 读取 detail_description 追加到叙事层
+	if 'custom_context_params' in option and option.custom_context_params is Dictionary:
+		var detail = option.custom_context_params.get("detail_description", "")
+		if not detail.is_empty():
+			narrative += "\n\n" + detail
+			Logging.info("EventBtn._register_event_btn_hover: detail_description appended to narrative (%d chars)" % detail.length())
+
 	# 向量层
 	var vector_lines: Array[String] = []
 	

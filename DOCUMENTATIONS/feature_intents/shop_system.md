@@ -14,6 +14,7 @@
 
 - **商店主界面**：静态 .tres 事件，展示商店氛围描述，3 个固定选项
 - **商品分页**：运行时动态生成 RandomEvent，每页最多 4 个商品 + 2 个导航选项
+- **商品描述展示**：构建商品分页时自动检测 `purchase_operators` 中的 `TraitOperator`，调用 `TraitHintFormatter.build_hint()` 生成完整 trait 描述（名称/描述/效果/持续/hover_narrative）；无 TraitOperator 时回退到 `detail_description`。描述同时展示在商店分页正文（每行商品下方缩进）和 hover 弹窗叙事层（双空行后追加）
 - **库存管理**：通过 `shop_{shop_id}_{product_id}_stock` int flag 追踪实时库存，售罄后灰化
 - **翻页机制**：PopEventOperator(当前页) + ShopBuyOperator(新页码)，保持栈深度不变
 - **购买后果**：FlagOperator(stock-1) + PropertyOperator(money,-price) + TraitOperator(ADD) + BuffOperator
@@ -69,6 +70,8 @@
 | `core/player_state.gd` | **修改** | append_stat 加 damage_reduction + max_uses 消费 |
 | `tools/data/named_amounts.json` | **修改** | 加 mod_pct_5/mod_pct_30 |
 | `project.godot` | **修改** | 注册 ShopManager Autoload |
+| `characters/event_btn.gd` | **修改** | hover 叙事层追加 custom_context_params.detail_description |
+| `core/hints/trait_hint_formatter.gd` | **引用** | ShopManager 消费 build_hint() 生成完整 trait 描述 |
 
 ---
 
