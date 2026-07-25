@@ -27,6 +27,8 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 	# ── 异地行动：执行前消耗 1 天 + 切换 stay_place ──
 	if state.selected_entity_place_mismatch and not state.selected_entity_required_place.is_empty():
 		Logging.info("SubActionExecutor.execute: [地点DEBUG] 异地行动触发 — 消耗 1 天前往 '%s'(%s), 当前 stay_place='%s'" % [state.selected_entity_required_place_name, state.selected_entity_required_place, PlayerState.stay_place])
+		# 🐛 修复：异地旅行 1 天不仅要推进日历，还要从玩家时间池扣除
+		PlayerState.append_stat("_time", -1)
 		TimeService.advance_time(1)
 		PlayerState.stay_place = state.selected_entity_required_place
 		Logging.info("SubActionExecutor.execute: [地点DEBUG] stay_place 赋值后验证: PlayerState.stay_place='%s', GameSave.data.stay_place='%s'" % [PlayerState.stay_place, GameSave.data.stay_place])

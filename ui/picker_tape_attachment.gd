@@ -173,6 +173,12 @@ func _on_sub_button_toggled(btn: SubActionButton, pressed: bool, skip_animation:
 	if not pressed:
 		return  # ButtonGroup.allow_unpress 时忽略 unpressed
 	
+	# 🐛 修复：锁定态按钮不应被选中或执行。防御 initialize / _auto_select_if_needed 直接调用路径。
+	if btn._is_locked:
+		Logging.info("PickerTapeAttachment._on_sub_button_toggled: 锁定态按钮 '%s' 被触发 toggle，拒绝选中" % (btn.entity.name if btn.entity else "null"))
+		btn.set_pressed_no_signal(false)
+		return
+	
 	var is_remote: bool = btn.entity.get_meta("_place_mismatch", false) if btn.entity else false
 	var remote_place: String = btn.entity.get_meta("_required_place", "") if btn.entity else ""
 	var remote_place_name: String = btn.entity.get_meta("_required_place_name", "") if btn.entity else ""

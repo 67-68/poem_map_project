@@ -1130,10 +1130,11 @@ static func effective_day_consumed(action: Action, parent_day: float) -> float:
 	return parent_day
 
 
-## 获取行动的最终时间消耗（基础天数 + 所有活跃 trait 的时间惩罚）。
+## 获取行动的最终时间消耗（基础天数 + 所有活跃 trait 的时间惩罚 + 异地旅行惩罚）。
 ## 返回 int。无消耗时返回 0。
 ## @param parent_day: 若 >= 0 则为子行动模式，使用 effective_day_consumed 计算基础天数
-static func get_action_day_cost(action: Action, parent_day: float = -1.0) -> int:
+## @param remote_penalty_days: 异地行动的额外旅行天数（默认 0，异地时传 1）
+static func get_action_day_cost(action: Action, parent_day: float = -1.0, remote_penalty_days: int = 0) -> int:
 	if not action:
 		return 0
 	
@@ -1143,10 +1144,10 @@ static func get_action_day_cost(action: Action, parent_day: float = -1.0) -> int
 	else:
 		base = action.day_consumed
 	
-	if base <= 0:
+	if base <= 0 and remote_penalty_days <= 0:
 		return 0
 	
-	var total := int(base)
+	var total := int(base) + remote_penalty_days
 	var penalties := PlayerState.get_active_time_penalties()
 	for penalty_days in penalties.values():
 		total += penalty_days
@@ -1175,7 +1176,7 @@ static func get_action_day_cost(action: Action, parent_day: float = -1.0) -> int
 				total += ctp.penalty_days
 				Logging.info("[ActionManager] conditional_time_penalty: trait=%s tag=%s days=+%d desc=%s total=%d" % [t_name, ctp.action_tag_match, ctp.penalty_days, ctp.description, total])
 	
-	Logging.info("[ActionManager] get_action_day_cost: base=%d, penalties=%s → total=%d" % [int(base), str(penalties), total])
+	Logging.info("[ActionManager] get_action_day_cost: base=%d, remote_penalty=%d, penalties=%s → total=%d" % [int(base), remote_penalty_days, str(penalties), total])
 	return total
 
 

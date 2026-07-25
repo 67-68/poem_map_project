@@ -641,10 +641,18 @@ action_button 构建 picker data
 
 ### 异地点击处理
 
-- [`action_button._on_sub_action_picked`](ui/action_button.gd) 检测 `entity.get_meta("_place_mismatch")`：
-  - `TimeService.advance_time(1)` — 消耗 1 天前往目标地点
-  - `PlayerState.stay_place = _str_to_stay_place(_req_place)` — 切换当前地点
+- [`SubActionExecutor.execute()`](core/sub_action_executor.gd) 检测 `state.selected_entity_place_mismatch`：
+  - `PlayerState.append_stat("_time", -1)` + `TimeService.advance_time(1)` — 消耗 1 天前往目标地点（同时扣时间池+推进日历）
+  - `PlayerState.stay_place = state.selected_entity_required_place` — 切换当前地点
   - 之后继续正常 sub-action 执行流程（possibility 投骰 → operators → scan_events）
+
+### 异地行动时间校验
+
+- 前置校验（[`MainActionButton`](ui/main_action_button.gd) 构建 picker data + [`ActionManager.check_action_validity()`](core/action_manager.gd)）需计入异地旅行 +1 天惩罚
+- [`ActionManager.get_action_day_cost()`](core/action_manager.gd) 接受可选参数 `remote_penalty_days: int = 0`：
+  - `remote_penalty_days=0`：纯行动时间（默认）
+  - `remote_penalty_days=1`：行动时间 + 异地旅行 1 天（用于前置校验）
+- 实际执行时，旅行时间在 [`SubActionExecutor.execute()`](core/sub_action_executor.gd) 中独立扣除，子行动自身时间通过 `get_action_day_cost(action, parent_day, 0)` 计算
 
 ### Hint 提示
 

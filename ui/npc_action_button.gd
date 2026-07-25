@@ -24,6 +24,9 @@ var _npc_doc: NPCDocument = null
 var _is_locked: bool = false
 var _lock_reason: String = ""
 
+## 🐛 默认模式锁定检查 — 保存 set_action_data 传入的 entity 引用
+var _entity: GameEntity = null
+
 @onready var _title_label: Label = $MarginContainer/VBoxContainer/Label
 @onready var _desc_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer/Label2
 @onready var _feas_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer/Label3
@@ -58,6 +61,14 @@ func _on_default_pressed() -> void:
 	if selected_uuid.is_empty():
 		EventBus.request_toast.emit(tr("CODE_NPC_ACTION_BUTTON_B7F447C362"), 1)
 		return
+	# 🐛 修复：默认模式下检查 entity 锁定状态（与覆盖模式 _on_override_pressed 对称）
+	if _entity and _entity.get_meta("_is_locked", false):
+		var reason: String = _entity.get_meta("_locked_reason", "")
+		if reason.is_empty():
+			reason = tr("CODE_NPC_ACTION_BUTTON_60ABF5AC4F")
+		EventBus.request_toast.emit(reason, 1)
+		Logging.info("NpcActionButton._on_default_pressed: 锁定态点击被拦截, entity='%s', reason='%s'" % [_entity.name if _entity else "null", reason])
+		return
 	Logging.info("NpcActionButton._on_default_pressed: [地点DEBUG] 即将执行 SubActionExecutor, stay_place='%s'" % PlayerState.stay_place)
 	SubActionExecutor.execute(selected_uuid, VolatileState.action_state)
 	Logging.info("NpcActionButton._on_default_pressed: [地点DEBUG] SubActionExecutor 返回后 stay_place='%s'" % PlayerState.stay_place)
@@ -87,6 +98,9 @@ func set_placeholder(label_text: String = "") -> void:
 ## 设置默认模式的行动数据。
 ## @param entity: 可选的 GameEntity（传递 MainActionButton 注入的锁定元数据、operators meta）
 func set_action_data(action_name: String, action_uuid: String, entity = null) -> void:
+	# 🐛 修复：保存 entity 引用用于 _on_default_pressed 锁定检查
+	_entity = entity if entity else null
+
 	if _title_label:
 		_title_label.text = action_name
 

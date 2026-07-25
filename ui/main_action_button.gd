@@ -147,14 +147,16 @@ func _on_clicked() -> void:
 						_gray_reasons.append(r)
 					Logging.info("MainActionButton: sub-action '%s' GRAY — cost archetype check: %s" % [sub_action.uuid, str(arch_cost_reasons)])
 			
-			var sub_cost := ActionManager.get_action_day_cost(sub_action, action.day_consumed)
+			# 🐛 修复：前置计算异地标记，供时间校验传入 remote_penalty_days
+			var _is_remote := RemoteActionFilterManager.is_action_remote(sub_action)
+			var sub_cost := ActionManager.get_action_day_cost(sub_action, action.day_consumed, 1 if _is_remote else 0)
 			if sub_cost > 0:
 				var current_time := int(PlayerState.get_stat_val("time"))
 				if current_time < sub_cost:
 					var cost_detail := ActionManager.format_time_detail(action.day_consumed)
 					var time_reason := tr("CODE_MAIN_ACTION_BUTTON_DC059CE490") % [current_time, cost_detail]
 					_gray_reasons.append(time_reason)
-					Logging.info("MainActionButton: sub-action '%s' GRAY — %s" % [sub_action.uuid, time_reason])
+					Logging.info("MainActionButton: sub-action '%s' GRAY — %s (remote=%s)" % [sub_action.uuid, time_reason, str(_is_remote)])
 			
 			# 构建 entity
 			var entity := GameEntity.new({
@@ -171,9 +173,8 @@ func _on_clicked() -> void:
 			# 🆕 判定是否"特殊"行动（cost archetype 含非 PropertyOperator）
 			entity.set_meta("_is_special", _is_special_sub_action(sub_action))
 			
-			# 地点校验
-			var _place_mismatch := RemoteActionFilterManager.is_action_remote(sub_action)
-			if _place_mismatch:
+			# 地点校验（复用前置计算的 _is_remote）
+			if _is_remote:
 				var _place_name := sub_action.get_required_place_name()
 				var _req_place: String = sub_action.required_place
 				entity.set_meta("_place_mismatch", true)
@@ -183,7 +184,7 @@ func _on_clicked() -> void:
 			else:
 				entity.set_meta("_place_mismatch", false)
 			
-			if not _place_mismatch and not _gray_reasons.is_empty():
+			if not _is_remote and not _gray_reasons.is_empty():
 				var joined_reason := tr("CODE_MAIN_ACTION_BUTTON_46F4EC4498") + "、".join(_gray_reasons)
 				entity.set_meta("_is_locked", true)
 				entity.set_meta("_locked_reason", joined_reason)

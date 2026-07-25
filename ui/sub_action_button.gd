@@ -67,6 +67,8 @@ func _on_clicked() -> void:
 			toast_reason = tr("CODE_SUB_ACTION_BUTTON_5DB17E4310")
 		EventBus.request_toast.emit(toast_reason, 1)
 		Logging.info("SubActionButton: 锁定态点击被拦截, entity='%s', reason='%s'" % [entity.name if entity else "null", toast_reason])
+		# 🐛 修复：锁定态必须撤销 toggle pressed 状态，否则 ButtonGroup 仍将其标记为选中
+		set_pressed_no_signal(false)
 		return
 	
 	if not entity:
