@@ -32,7 +32,8 @@ var _entity: GameEntity = null
 @onready var _feas_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer/Label3
 @onready var _cost_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer2/Label4
 @onready var _output_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer2/Label5
-@onready var _risk_label: RichTextLabel = $MarginContainer/VBoxContainer/Label6
+@onready var _req_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer3/Label4
+@onready var _risk_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer3/Label6
 
 
 func _ready() -> void:
@@ -111,6 +112,9 @@ func set_action_data_for_locked(entity: GameEntity) -> void:
 		_cost_label.text = ""
 	if _output_label:
 		_output_label.text = ""
+	if _req_label:
+		_req_label.text = ""
+		_req_label.visible = false
 	if _risk_label:
 		_risk_label.text = ""
 	modulate = Color(0.4, 0.4, 0.4, 0.6)
@@ -235,6 +239,18 @@ func _populate_labels_from_hint(hint, locked: bool, lock_reason: String) -> void
 	_set_label(_feas_label, labels.get("feasibility", tr("CODE_NPC_ACTION_BUTTON_7005AA9069")))
 	_set_label(_cost_label, labels.get("cost", tr("CODE_NPC_ACTION_BUTTON_7CA5205A5B")))
 	_set_label(_output_label, labels.get("output", tr("CODE_NPC_ACTION_BUTTON_0F9928F317")))
+
+	# 🆕 requirements — 空字符串时隐藏 label
+	var req_text: String = labels.get("requirements", "")
+	if req_text.is_empty():
+		_set_label(_req_label, "")
+		if _req_label:
+			_req_label.visible = false
+	else:
+		_set_label(_req_label, req_text)
+		if _req_label:
+			_req_label.visible = true
+
 	_set_label(_risk_label, labels.get("risk", tr("CODE_NPC_ACTION_BUTTON_4D7C36AA23")))
 	Logging.info("NpcActionButton._populate_labels_from_hint: labels=%s" % str(labels))
 

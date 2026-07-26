@@ -40,3 +40,7 @@ func compare(player_state) -> bool:
 
 	Logging.debug("PoemRequirement: no matching poem trait found (types=%s)" % str(accepted_poem_types))
 	return false
+
+## SIMPLE profile 需求描述 — "需 诗词"
+func describe_requirement() -> String:
+	return tr("CODE_POEM_REQUIREMENT_SIMPLE_DESC")

@@ -223,3 +223,10 @@ static func simple_risk_label(lines: Array[String]) -> String:
 static func simple_lock_label(reason: String) -> String:
 	var text = TranslationServer.translate("CODE_BBCODE_0D46022B0E") + reason if not reason.is_empty() else TranslationServer.translate("CODE_BBCODE_E9BCBC440D")
 	return color(text, COLOR_DANGER)
+
+
+## SIMPLE profile: 需求标签 — "求：需 50 健 需 貂皮大衣"
+## 当 lines 为空时返回空字符串（UI 层据此隐藏 label）
+static func simple_requirement_label(lines: Array[String]) -> String:
+	var joined = " ".join(lines)
+	return TranslationServer.translate("CODE_SIMPLE_REQUIREMENT_LABEL_PREFIX") + joined if not joined.is_empty() else ""

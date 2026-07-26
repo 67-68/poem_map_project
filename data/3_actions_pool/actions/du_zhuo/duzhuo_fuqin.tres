@@ -5,13 +5,9 @@
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_base_op"]
 [ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_push_op"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_cr"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="6_4cqvf"]
 [ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="6_defer"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_action"]
-
-[sub_resource type="Resource" id="Resource_trait_req"]
-script = ExtResource("2_trait_req")
-trait_name = "qin_instrument"
-operator = 1
 
 [sub_resource type="Resource" id="Resource_defer_empty"]
 script = ExtResource("6_defer")
@@ -23,6 +19,10 @@ event_key = "duzhuo_fuqin_failed_fallback"
 [sub_resource type="Resource" id="Resource_failed_cr"]
 script = ExtResource("5_cr")
 operators = Array[ExtResource("3_base_op")]([SubResource("Resource_push_failed")])
+
+[sub_resource type="Resource" id="Resource_trait_req"]
+script = ExtResource("2_trait_req")
+trait_name = "qin_instrument"
 
 [resource]
 script = ExtResource("7_action")

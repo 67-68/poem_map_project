@@ -202,6 +202,7 @@ func build_sub_action_preview(sub_action, ctx, success_ops: Array = [], fail_ops
 		Logging.info("ActionHintFormatter.build_sub_action_preview: sub_action='%s' fail preview: %d lines" % [sub_action.name, fail_descs.size()])
 
 	if profile == _HintProfile.Profile.SIMPLE:
+		hint._requirements_lines = _collect_simple_requirements(sub_action)
 		_build_simple_labels(hint, is_locked, lock_reason)
 
 	Logging.info("ActionHintFormatter.build_sub_action_preview: done for '%s', vector=%d chars" % [sub_action.name, hint.vector.length()])
@@ -579,6 +580,7 @@ func _build_simple_labels(hint, is_locked: bool, lock_reason: String) -> void:
 		labels["cost"] = _BBCode.simple_cost_label([])
 		labels["output"] = _BBCode.simple_output_label([])
 		labels["risk"] = _BBCode.simple_lock_label(lock_reason)
+		labels["requirements"] = _BBCode.simple_requirement_label(hint._requirements_lines)
 	else:
 		var feas_line = hint.feasibility.lines[0] if not hint.feasibility.lines.is_empty() else ""
 		labels["feasibility"] = _BBCode.simple_feasibility_label(feas_line if not feas_line.is_empty() else tr("CODE_POEM_CRAFTING_CALCULATOR_4D8C1C5B42"))
@@ -586,5 +588,135 @@ func _build_simple_labels(hint, is_locked: bool, lock_reason: String) -> void:
 		labels["cost"] = _BBCode.simple_cost_label(hint.cost.lines)
 		labels["output"] = _BBCode.simple_output_label(hint.output.lines)
 		labels["risk"] = _BBCode.simple_risk_label(hint.risk.lines)
+		labels["requirements"] = _BBCode.simple_requirement_label(hint._requirements_lines)
 
 	hint.simple_labels = labels
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 SIMPLE profile: requirements 收集（type-based dispatch）
+# ════════════════════════════════════════════════════════════════
+
+## 情绪英文键 → 中文名静态映射（与 EmotionRequirement._EMOTION_CN 保持同步）
+const _SIMPLE_EMOTION_CN: Dictionary = {
+	"sorrow":      "CODE_EMOTION_REQUIREMENT_192BC492B2",
+	"arrogance":   "CODE_EMOTION_REQUIREMENT_9A85FF3DCC",
+	"anger":       "CODE_EMOTION_REQUIREMENT_DC917B1566",
+	"tranquility": "CODE_EMOTION_REQUIREMENT_A62908DEDA",
+	"ambition":    "CODE_EMOTION_REQUIREMENT_0AB342DF06",
+}
+
+## 遍历 action.aciton_requirements，为每种 Requirement 生成 SIMPLE 格式行。
+## 返回值: Array[String]，空数组表示无有效需求展示。
+static func _collect_simple_requirements(action) -> Array[String]:
+	var lines: Array[String] = []
+	if not action or action.aciton_requirements.is_empty():
+		Logging.info("ActionHintFormatter._collect_simple_requirements: 无 requirements")
+		return lines
+
+	for req in action.aciton_requirements:
+		if not req:
+			continue
+		var line := ""
+		if req is PropertyRequirement:
+			line = _simple_req_property(req as PropertyRequirement)
+		elif req is PropRangeRequirement:
+			line = _simple_req_prop_range(req as PropRangeRequirement)
+		elif req is TraitRequirement:
+			line = _simple_req_trait(req as TraitRequirement)
+		elif req is EmotionRequirement:
+			line = _simple_req_emotion(req as EmotionRequirement)
+		elif req is PoemRequirement:
+			line = TranslationServer.translate("CODE_POEM_REQUIREMENT_SIMPLE_DESC")
+		elif req is XunDayLimitRequirement:
+			line = _simple_req_xun_day(req as XunDayLimitRequirement)
+		elif req is ActionMatchRequirement:
+			line = _simple_req_action_match(req as ActionMatchRequirement)
+		elif req is ComplexRequirements:
+			var children = req.operators
+			if not children.is_empty():
+				for child in children:
+					if child is TraitRequirement:
+						var tl = _simple_req_trait(child as TraitRequirement)
+						if not tl.is_empty():
+							lines.append(tl)
+					elif child is PropertyRequirement:
+						var pl = _simple_req_property(child as PropertyRequirement)
+						if not pl.is_empty():
+							lines.append(pl)
+					elif child is PoemRequirement:
+						lines.append(TranslationServer.translate("CODE_POEM_REQUIREMENT_SIMPLE_DESC"))
+					elif child is EmotionRequirement:
+						var el = _simple_req_emotion(child as EmotionRequirement)
+						if not el.is_empty():
+							lines.append(el)
+					else:
+						Logging.info("ActionHintFormatter._collect_simple_requirements: ComplexRequirements 子项类型 %s 不展示" % child.get_script().resource_path.get_file())
+				continue
+			else:
+				Logging.info("ActionHintFormatter._collect_simple_requirements: ComplexRequirements 无子项")
+				continue
+		else:
+			Logging.info("ActionHintFormatter._collect_simple_requirements: 跳过类型 %s" % req.get_script().resource_path.get_file())
+			continue
+
+		if not line.is_empty():
+			lines.append(line)
+
+	Logging.info("ActionHintFormatter._collect_simple_requirements: %d requirements → %d SIMPLE 行" % [action.aciton_requirements.size(), lines.size()])
+	return lines
+
+
+static func _simple_req_property(req: PropertyRequirement) -> String:
+	if req.property.is_empty() or req.value == 0:
+		return ""
+	var prop = Database.get_property(req.property)
+	if not prop:
+		return ""
+	var perception = prop.get_staged_perception_at_threshold(req.value)
+	if perception.is_empty() or perception == TranslationServer.translate("CODE_RANGE_REQUIREMENT_EC0D9BDB00"):
+		return ""
+	return TranslationServer.translate("CODE_SIMPLE_ACTION_REQUIREMENT_PROPERTY_FMT") % [req.value, perception]
+
+
+static func _simple_req_prop_range(req: PropRangeRequirement) -> String:
+	if req.property.is_empty():
+		return ""
+	var prop = Database.get_property(req.property)
+	if not prop:
+		return ""
+	var perception = prop.get_staged_perception_at_threshold(int(req.min_value))
+	if perception.is_empty() or perception == TranslationServer.translate("CODE_RANGE_REQUIREMENT_EC0D9BDB00"):
+		return ""
+	return TranslationServer.translate("CODE_SIMPLE_ACTION_REQUIREMENT_PROPERTY_FMT") % [int(req.min_value), perception]
+
+
+static func _simple_req_trait(req: TraitRequirement) -> String:
+	if req.trait_name.is_empty():
+		return ""
+	var trait_obj = Database.get_trait(req.trait_name)
+	var cn_name = trait_obj.name if trait_obj and not trait_obj.name.is_empty() else req.trait_name
+	if req.operator == REQ_OPERATOR.EXIST.HAS:
+		return TranslationServer.translate("CODE_SIMPLE_ACTION_REQUIREMENT_TRAIT_NEED_FMT") % cn_name
+	elif req.operator == REQ_OPERATOR.EXIST.NOT_HAS:
+		return TranslationServer.translate("CODE_SIMPLE_ACTION_REQUIREMENT_TRAIT_NONE_FMT") % cn_name
+	return ""
+
+
+static func _simple_req_emotion(req: EmotionRequirement) -> String:
+	if req.volatile_stat.is_empty():
+		return ""
+	var cn_key = _SIMPLE_EMOTION_CN.get(req.volatile_stat, "")
+	var cn = TranslationServer.translate(cn_key) if not cn_key.is_empty() else req.volatile_stat
+	return TranslationServer.translate("CODE_SIMPLE_ACTION_REQUIREMENT_EMOTION_FMT") % [cn, req.value]
+
+
+static func _simple_req_xun_day(req: XunDayLimitRequirement) -> String:
+	var human_day: int = req.max_day + 1
+	return TranslationServer.translate("CODE_SIMPLE_ACTION_REQUIREMENT_XUN_DAY_FMT") % human_day
+
+
+static func _simple_req_action_match(req: ActionMatchRequirement) -> String:
+	if req.action_id.is_empty():
+		return ""
+	return TranslationServer.translate("CODE_SIMPLE_ACTION_REQUIREMENT_ACTION_MATCH_FMT") % req.action_id

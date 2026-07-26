@@ -21,3 +21,4 @@ class_name DeferConfig extends Resource
 
 @export var defer_success_event: String = '' # defer 完成之后，如果这个事件指定了，那么不使用scan event
 @export var use_defer: bool = false
+@export var event_picked_per_xun: BaseEventPicker = null

@@ -116,8 +116,30 @@ scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="Label6" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=1162219148]
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=83632684]
 layout_mode = 2
+theme_override_constants/separation = 1
+alignment = 2
+
+[node name="Label4" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1763795816]
+layout_mode = 2
+size_flags_horizontal = 11
+theme_type_variation = &"NarrativeText"
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "求: "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=593718357]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label6" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1162219148]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
