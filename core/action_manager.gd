@@ -750,9 +750,11 @@ func start_defer(action: Action, npc_target: String = "") -> void:
 		"defer_success_event": config.defer_success_event,
 		"main_tag": main_tag,
 		"npc_target": npc_target,
+		"event_picked_per_xun": config.event_picked_per_xun,
 	}
-	Logging.info("[ActionManager] ✅ 激活 defer: action=%s, xun=%d, ap_cost='%s'(%d), archetype='%s', fallback='%s', success_event='%s'" % [
-		action_id, total_xun, config.ap_cost, amounts_ap, config.used_resource_archetype, config.failed_fallback, config.defer_success_event
+	Logging.info("[ActionManager] ✅ 激活 defer: action=%s, xun=%d, ap_cost='%s'(%d), archetype='%s', fallback='%s', success_event='%s', per_xun_event=%s" % [
+		action_id, total_xun, config.ap_cost, amounts_ap, config.used_resource_archetype, config.failed_fallback, config.defer_success_event,
+		str(config.event_picked_per_xun) if config.event_picked_per_xun else "无"
 	])
 	
 	# 通知 UI 刷新状态
@@ -886,6 +888,28 @@ func process_xun_tick() -> void:
 				Logging.warn("[ActionManager] 🔍 defer中断诊断: archetype '%s' 未在 Database.action_archetypes 中找到, action=%s" % [arch_key, action_id])
 			elif arch.operators.is_empty():
 				Logging.info("[ActionManager] 🔍 defer中断诊断: archetype '%s' 的 operators 为空, action=%s" % [arch_key, action_id])
+		
+		# ── 🆕 per-xun 事件：消耗前触发，最后一旬跳过 ──
+		var remaining_before: int = data.get("remaining_xun", 1)
+		if remaining_before > 1:
+			var picker = data.get("event_picked_per_xun")
+			if picker and picker is BaseEventPicker:
+				var npc_target: String = data.get("npc_target", "")
+				var pick_ctx := {"action_id": action_id, "npc_target": npc_target}
+				var picked_uuid: String = picker.pick(pick_ctx)
+				if not picked_uuid.is_empty():
+					var event_data = Database.resolve(picked_uuid)
+					if event_data:
+						Logging.info("[ActionManager] 📖 defer per-xun 事件推送: action=%s, remaining_before=%d, event=%s, npc_target='%s'" % [action_id, remaining_before, picked_uuid, npc_target])
+						EventBus.push_event.emit(event_data)
+					else:
+						Logging.warn("[ActionManager] defer per-xun 事件 '%s' 未在 Database 中找到, action=%s" % [picked_uuid, action_id])
+				else:
+					Logging.info("[ActionManager] defer per-xun picker 返回空, action=%s" % action_id)
+			else:
+				Logging.info("[ActionManager] defer per-xun: action=%s 无 event_picked_per_xun 配置, remaining_before=%d" % [action_id, remaining_before])
+		else:
+			Logging.info("[ActionManager] defer 最后一旬跳过 per-xun 事件: action=%s, remaining=%d" % [action_id, remaining_before])
 		
 		# ── 资源充足：执行消耗 ──
 		# 1. 执行 archetype.operators（扣资源）

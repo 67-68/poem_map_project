@@ -1449,6 +1449,7 @@ static func _parse_converter_context(ctx_str: String) -> Dictionary:
         "ap_cost_per_xun": "",
         "override_action": "",
         "defer_success_event": "",
+        "event_picked_per_xun": "",
     }
     if ctx_str.is_empty():
         return ctx
@@ -1480,6 +1481,8 @@ static func _parse_converter_context(ctx_str: String) -> Dictionary:
                 ctx.override_action = value
             "defer_success_event":
                 ctx.defer_success_event = value
+            "event_picked_per_xun":
+                ctx.event_picked_per_xun = value
             _:
                 Logging.info("[resource_converter] 未知 context key: %s = %s" % [key, value])
 
@@ -1558,6 +1561,12 @@ static func _build_action_from_row(row: Dictionary, ctx: Dictionary,
         var defer_success_event = ctx.get("defer_success_event", "")
         if not defer_success_event.is_empty():
             dc.defer_success_event = defer_success_event
+        var event_picked_per_xun = ctx.get("event_picked_per_xun", "")
+        if not event_picked_per_xun.is_empty():
+            var picker = BaseEventPicker.new()
+            picker.event_uuid = event_picked_per_xun
+            dc.event_picked_per_xun = picker
+            Logging.info("[resource_converter] defer_config.event_picked_per_xun 设置为 %s" % event_picked_per_xun)
         action.defer_config = dc
 
     # ── custom_option 硬编码处理 ──

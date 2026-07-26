@@ -475,9 +475,14 @@ HoverPopupManager.register(_ambition_btn, ambition_hud, 0.2, 0.15,
 ```
 点击行动 → defer_config.xun_defered 非空 → start_defer → 按钮变蓝
                                                            │
-                                                   每旬 tick ──→ 资源不足 → 中断 + push failed_fallback
-                                                           │
-                                                   到期 remaining_xun=0 → scan_events(main_tag)
+          ┌────────────────────────────────────────────────┤
+          │                                         每旬 tick
+          │  remaining > 1 且有 event_picked_per_xun  → push_event(picked_uuid)（插队展示）
+          │                                             │
+          │                                       资源不足 → 中断 + push failed_fallback
+          │                                             │
+          │                                       到期 remaining_xun=0 → scan_events(main_tag)
+          │
 手动点击 → cancel_defer → 按钮恢复白色（回到待命）
 ```
 
@@ -497,10 +502,12 @@ HoverPopupManager.register(_ambition_btn, ambition_hud, 0.2, 0.15,
 
 ```
 Action.defer_config (配置)
-  ├─ xun_defered: String           → NamedDSLParser → int 旬数
-  ├─ used_resource_archetype: String → Database.action_archetypes[key].operators → PropertyOperator 执行
-  ├─ ap_cost: String               → NamedDSLParser → int AP/时间扣减
-  └─ failed_fallback: String       → EventBus.push_event (资源中断时)
+  ├─ xun_defered: String              → NamedDSLParser → int 旬数
+  ├─ used_resource_archetype: String  → Database.action_archetypes[key].operators → PropertyOperator 执行
+  ├─ ap_cost: String                  → NamedDSLParser → int AP/时间扣减
+  ├─ failed_fallback: String          → EventBus.push_event (资源中断时)
+  ├─ event_picked_per_xun: BaseEventPicker → 每旬触发事件（消耗前，最后一旬跳过）
+  └─ defer_success_event: String      → defer 到期后精确推送
 
 ActionManager._deferring_actions (运行时状态)
   key=action_id, val={
@@ -508,14 +515,26 @@ ActionManager._deferring_actions (运行时状态)
     used_resource_archetype, # 资源消耗 archetype key
     ap_cost,                 # 每旬时间扣减
     failed_fallback,         # 中断兜底事件 UUID
+    defer_success_event,     # defer 到期精确事件 UUID
     main_tag,                # 到期扫描用 main_tag
+    npc_target,              # defer 目标 NPC
+    event_picked_per_xun,    # BaseEventPicker 实例（每旬触发）
   }
 ```
 
+### Per-Xun 事件触发规则
+
+- **触发时机**: 每旬资源检查通过后、消耗执行前
+- **最后一旬**: 不触发 per_xun 事件（到期旬直接进入 success 逻辑）
+- **推送方式**: `EventBus.push_event`（立即插队展示）
+- **context**: `{action_id, npc_target}` → 传入 `BaseEventPicker.pick(_ctx)`，返回 UUID 后通过 `Database.resolve` 查找事件资源
+
 ### 相关文件
 
-- `model/defer_config.gd` — DeferConfig 数据模型（含 failed_fallback）
+- `model/defer_config.gd` — DeferConfig 数据模型（含 failed_fallback / event_picked_per_xun）
+- `model/base_event_picker.gd` — BaseEventPicker 数据模型（pick 方法返回事件 UUID）
 - `core/action_manager.gd` — `_deferring_actions` 管理 + `start_defer`/`cancel_defer`/`is_deferring`/`is_defer_failing`/`get_defer_remaining` + `process_xun_tick` defer 处理
+- `parser/dsl_parser.gd` — `_parse_converter_context()` context key `event_picked_per_xun`, `_build_action_from_row()` 创建 BaseEventPicker
 - `ui/action_button.gd` — `_on_button_pressed` defer 分支 + `set_deferring`/`set_defer_failing` 视觉
 - `ui/scene_action_scroll.gd` — `refresh`/`_refresh_locks_only` defer 状态渲染
 - `core/action_hint_builder.gd` — hover 展示 defer 剩余旬数 + 每旬消耗 + 资源不足警告
