@@ -1,37 +1,37 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://n6xwd7kt0jfp"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_uuvxj"]
-[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_lfd4g"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_iugjm"]
-[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_5uudh"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_isuah"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_byvwp"]
-[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="7_lfd4g"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_ovsv8"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_lfd4g"]
+[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_iugjm"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_5uudh"]
+[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_isuah"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_byvwp"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_ovsv8"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="7_p52te"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="8_u3of4"]
 
-[sub_resource type="Resource" id="Resource_iugjm"]
-script = ExtResource("2_lfd4g")
+[sub_resource type="Resource" id="Resource_idshl"]
+script = ExtResource("2_iugjm")
 
-[sub_resource type="Resource" id="Resource_5uudh"]
-script = ExtResource("4_5uudh")
+[sub_resource type="Resource" id="Resource_qmfga"]
+script = ExtResource("4_isuah")
 mode = "baiye"
 
-[sub_resource type="Resource" id="Resource_isuah"]
-script = ExtResource("5_isuah")
+[sub_resource type="Resource" id="Resource_kg14t"]
+script = ExtResource("5_byvwp")
 
-[sub_resource type="Resource" id="Resource_byvwp"]
-script = ExtResource("6_byvwp")
+[sub_resource type="Resource" id="Resource_1no2k"]
+script = ExtResource("6_ovsv8")
 
 [resource]
-script = ExtResource("7_ovsv8")
+script = ExtResource("8_u3of4")
 required_place = "huangcheng"
 _action_tags = Array[int]([49, 29])
-action_results = Array[ExtResource("3_iugjm")]([SubResource("Resource_5uudh")])
-aciton_requirements = Array[ExtResource("1_uuvxj")]([SubResource("Resource_iugjm")])
+action_results = Array[ExtResource("3_5uudh")]([SubResource("Resource_qmfga")])
+aciton_requirements = Array[ExtResource("1_lfd4g")]([SubResource("Resource_idshl")])
 fallback_event_uuid = "baiye_poem_visit_fallback"
 archetype_uuid = "baiye_poem_visit_success"
-failed_result = SubResource("Resource_byvwp")
-defer_config = SubResource("Resource_isuah")
+failed_result = SubResource("Resource_1no2k")
+defer_config = SubResource("Resource_kg14t")
 uuid = "baiye_poem_visit"
 name = "ACT_BAIYE_POEM_VISIT_NAME"
 description = "ACT_BAIYE_POEM_VISIT_DESC"

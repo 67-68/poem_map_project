@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://b7k2rbv5amlxw"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_jnekf"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_yl220"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_3h15d"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_kf4xl"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_my476"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_ce0h8"]
+
+[sub_resource type="Resource" id="Resource_x2y5a"]
+script = ExtResource("3_3h15d")
+str_props = "inspiration"
+value = -10
+
+[sub_resource type="Resource" id="Resource_piyqj"]
+script = ExtResource("3_3h15d")
+str_props = "momentum"
+value = 5
+
+[sub_resource type="Resource" id="Resource_o4wr7"]
+script = ExtResource("4_kf4xl")
+operators = Array[ExtResource("2_yl220")]([SubResource("Resource_x2y5a"), SubResource("Resource_piyqj")])
+
+[sub_resource type="Resource" id="Resource_owme0"]
+script = ExtResource("5_my476")
+choice_result = SubResource("Resource_o4wr7")
+description = "应酬之间觥筹交错，却也耗费心神。"
+
+[sub_resource type="Resource" id="Resource_hydwb"]
+script = ExtResource("3_3h15d")
+str_props = "momentum"
+value = -8
+
+[sub_resource type="Resource" id="Resource_7g62e"]
+script = ExtResource("3_3h15d")
+str_props = "inspiration"
+value = 6
+
+[sub_resource type="Resource" id="Resource_kwosi"]
+script = ExtResource("4_kf4xl")
+operators = Array[ExtResource("2_yl220")]([SubResource("Resource_hydwb"), SubResource("Resource_7g62e")])
+
+[sub_resource type="Resource" id="Resource_vcwcm"]
+script = ExtResource("5_my476")
+choice_result = SubResource("Resource_kwosi")
+description = "你以身体不适为由推脱了邀约，保全了心神，却拂了权贵面子。"
+
+[resource]
+script = ExtResource("6_ce0h8")
+_target_tags = Array[String](["daily:random:quangui:yanxi"])
+options = Array[ExtResource("1_jnekf")]([SubResource("Resource_owme0"), SubResource("Resource_vcwcm")])
+uuid = "daily_quangui_yanxi"
+name = "权贵邀宴"
+description = "一位赏识你的权贵派人送来请帖，邀你赴宴。"

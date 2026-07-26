@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://bch8m71bkm3q5"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_hrywa"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_k1mj2"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_sp06x"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_vhyc0"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_4m7id"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_17d7a"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_0bka3"]
+
+[sub_resource type="Resource" id="Resource_i1jqo"]
+script = ExtResource("3_sp06x")
+str_props = "money"
+value = -30
+
+[sub_resource type="Resource" id="Resource_ftlsa"]
+script = ExtResource("4_vhyc0")
+event_key = "daily_suanming_result"
+
+[sub_resource type="Resource" id="Resource_tmho8"]
+script = ExtResource("5_4m7id")
+operators = Array[ExtResource("2_k1mj2")]([SubResource("Resource_i1jqo"), SubResource("Resource_ftlsa")])
+
+[sub_resource type="Resource" id="Resource_u0i2m"]
+script = ExtResource("6_17d7a")
+choice_result = SubResource("Resource_tmho8")
+description = "你掏出银钱递了过去。"
+
+[sub_resource type="Resource" id="Resource_fqaus"]
+script = ExtResource("6_17d7a")
+description = "你笑了笑，转身离开。"
+
+[resource]
+script = ExtResource("7_0bka3")
+_target_tags = Array[String](["daily:random:suanming:suanming"])
+options = Array[ExtResource("1_hrywa")]([SubResource("Resource_u0i2m"), SubResource("Resource_fqaus")])
+uuid = "daily_suanming"
+name = "算命先生"
+description = "街头一位算命先生拦住你，说看你面相奇特，定非凡人。"

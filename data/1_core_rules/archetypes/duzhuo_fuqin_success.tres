@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://b3fuqinsucc1"]
 
-[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_a2x5u"]
 
 [resource]
-script = ExtResource("1_arch")
+script = ExtResource("1_a2x5u")
 uuid = "duzhuo_fuqin_success"
 name = "duzhuo_fuqin.success"
 universal_result = "prop_add(name=inspiration; val=m_xing_gain)"

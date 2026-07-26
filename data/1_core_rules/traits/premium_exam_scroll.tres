@@ -8,4 +8,3 @@
 script = ExtResource("2_hrtei")
 uuid = "premium_exam_scroll"
 name = "极品行卷"
-hover_narrative = "精装行卷，封面烫金，内附名家题跋。下次获得势时额外加成30%，用过即废。"

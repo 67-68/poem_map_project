@@ -139,19 +139,9 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 	ActionManager.get_focus_controller().notify_click()
 	
 	# ── Step 7: 分支 — 成功 / 失败 ──
-	var _action_pushed_to_stack := false  # action_results 是否自主推了栈条目（如 ItemPicker）
 	if _sub_outcome == "success":
-		# ── Step 7a: 执行 sub-action merged results（archetype universal_result + 原生 action_results）.operate() ──
-		if not _sub_merged_results.is_empty():
-			Logging.info("SubActionExecutor.execute: 执行 sub-action merged results.operate() (%d ops, 含 archetype) for '%s'" % [_sub_merged_results.size(), sub_action.name])
-			for r in _sub_merged_results:
-				if r:
-					# 🐛 修复：检测会自主推栈的 operator（PoemTypeChooseOperator 等）
-					# 此类 operator 的 operate() 会自行 push_item_picker 到栈，
-					# 后续 scan_events 会再推 fallback 事件，造成双推栈冲突
-					if r is PoemTypeChooseOperator or r is ImaginaryLevelRewardOperator or r is LianjuScoreOperator:
-						_action_pushed_to_stack = true
-					r.operate()
+		# 🐛 修复：删除直接的 _sub_merged_results.operate() 执行，避免 success archetype operators 被执行两次。
+		# archetype operators 统一交由 fallback 事件的 RandomEvent.init() 从 context 注入并随事件选项执行。
 		
 		# 追加 sub_uuid + sub_tags（bucket 路由用）
 		PlayerState.current_action_tags.append(selected_uuid)
@@ -170,24 +160,19 @@ static func execute(selected_uuid: String, state: VolatileState.VolatileActionSt
 		# 🆕 Step 7a.5: 意象获取抽奖（在 scan_events 之前，保证意象事件先入队列）
 		_try_imaginary_grant(sub_action, state)
 
-		# 🐛 修复：如果 action_results 中有 operator 自主推了栈（如 ItemPicker），跳过 scan_events
-		# 避免双推栈冲突：operator 推的栈条目 和 scan_events 推的 fallback 事件互相打架
-		if _action_pushed_to_stack:
-			Logging.info("SubActionExecutor.execute: action_results 包含自主推栈 operator，跳过 scan_events（防止双推栈冲突）")
-		else:
-			var context = {
-				'main_tag': sub_main_tag,
-				'fallback_event_uuid': sub_fallback,
-				'tag_match_mode': 'all',
-				'required_tags': required_tags,
-				'npc_name': npc_name,
-				'npc_target': npc_target,
-				'archetype_base': selected_uuid,
-				'outcome': "success",
-			}
-			Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events前 stay_place='%s', context archetype_base='%s'" % [PlayerState.stay_place, selected_uuid])
-			EventManager.scan_events(0, context)
-			Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events后 stay_place='%s'" % PlayerState.stay_place)
+		var context = {
+			'main_tag': sub_main_tag,
+			'fallback_event_uuid': sub_fallback,
+			'tag_match_mode': 'all',
+			'required_tags': required_tags,
+			'npc_name': npc_name,
+			'npc_target': npc_target,
+			'archetype_base': selected_uuid,
+			'outcome': "success",
+		}
+		Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events前 stay_place='%s', context archetype_base='%s'" % [PlayerState.stay_place, selected_uuid])
+		EventManager.scan_events(0, context)
+		Logging.info("SubActionExecutor.execute: [地点DEBUG] scan_events后 stay_place='%s'" % PlayerState.stay_place)
 		
 		# sub-action success 后启动 defer
 		#breakpoint

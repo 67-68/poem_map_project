@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://dstorycost01"]
 
-[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_bjqwc"]
 
 [resource]
-script = ExtResource("1_arch")
+script = ExtResource("1_bjqwc")
 uuid = "fangshi_storyteller_cost"
 name = "fangshi_storyteller.cost"
 universal_result = "consume_oldest_imaginary"

@@ -203,6 +203,12 @@ var DATA_MANIFEST: Array[Dictionary] = [
 		"data_type": "random_event",
 		"is_generated": true,
 	},
+	{
+		"name": "每日随机事件",
+		"save_path": "res://data/3_actions_pool/events/_daily_events.csv",
+		"data_type": "random_event",
+		"is_generated": true,
+	},
 ]
 
 # 🗺️ store_to 路径映射表

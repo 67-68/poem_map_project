@@ -8,4 +8,3 @@
 script = ExtResource("2_4nms2")
 uuid = "fox_fur_coat"
 name = "貂裘"
-hover_narrative = "上等狐皮制成的大氅，轻软如云。寒冬中穿着，生命值扣除减免5%。"

@@ -6,6 +6,6 @@
 script = ExtResource("1_imckw")
 uuid = "fangshi_sell_poem_success"
 name = "fangshi_sell_poem.success"
-universal_result = "prop_sub(name=prestige; val=m_fame_cost)"
+universal_result = "prop_add(name=prestige; val=s_fame_gain)"
 action_uuid = "fangshi_sell_poem"
 state = "success"

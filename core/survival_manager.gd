@@ -317,6 +317,24 @@ func _process_single_xun_settlement():
 	# 5. 延期扣除生活费（快照之后执行，确保计入下月 delta）
 	# ⚠️ 这个 deferred 调用在批量模式结束后才执行，会独立触发一次 reevaluate
 	call_deferred("_post_xun_money_deduct")
+	
+	# 🆕 每日随机事件：20% 概率触发（deferred，避免与月末结算冲突）
+	call_deferred("_try_daily_random_event")
+
+func _try_daily_random_event() -> void:
+	if TutorialController.is_tutorial_active():
+		Logging.info("[SurvivalManager] _try_daily_random_event: tutorial 模式，跳过")
+		return
+	if GameState.is_game_over:
+		Logging.info("[SurvivalManager] _try_daily_random_event: game over，跳过")
+		return
+	var roll: float = randf()
+	Logging.info("[SurvivalManager] _try_daily_random_event: roll=%.3f threshold=0.2" % roll)
+	if roll >= 0.2:
+		Logging.info("[SurvivalManager] _try_daily_random_event: 未触发（roll >= 0.2）")
+		return
+	Logging.info("[SurvivalManager] _try_daily_random_event: 触发每日随机事件！")
+	EventManager.draw_from_event_base("daily_random", {})
 
 func _update_heartbeat_sfx() -> void:
 	var health: int = PlayerState.get_stat_val(ENUMS.PROPS.HEALTH) as int

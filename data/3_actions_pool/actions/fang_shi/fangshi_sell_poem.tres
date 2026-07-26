@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_nlq4o"]
 [ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_1crwu"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_im7cj"]
-[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_vafkd"]
+[ext_resource type="Script" uid="uid://yibmraw8tujr" path="res://core/operators/poem_conversion_operator.gd" id="4_vafkd"]
 [ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_cfnhw"]
 [ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_057ik"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_vogl6"]
@@ -15,6 +15,7 @@ script = ExtResource("2_1crwu")
 
 [sub_resource type="Resource" id="Resource_io54b"]
 script = ExtResource("4_vafkd")
+poem_lowest_level = 2
 
 [sub_resource type="Resource" id="Resource_yfrdr"]
 script = ExtResource("5_cfnhw")
@@ -34,6 +35,7 @@ _action_tags = Array[int]([32, 47])
 action_results = Array[ExtResource("3_im7cj")]([SubResource("Resource_io54b")])
 aciton_requirements = Array[ExtResource("1_nlq4o")]([SubResource("Resource_im3f5")])
 fallback_event_uuid = "fangshi_sell_poem_fallback"
+archetype_uuid = "fangshi_sell_poem_success"
 failed_result = SubResource("Resource_6wmyu")
 defer_config = SubResource("Resource_yfrdr")
 uuid = "fangshi_sell_poem"

@@ -435,6 +435,7 @@
     "1_core_rules/archetypes/baiye_threaten_cost.tres",
     "1_core_rules/archetypes/baiye_threaten_failure.tres",
     "1_core_rules/archetypes/baiye_threaten_success.tres",
+    "1_core_rules/archetypes/baiye_touzeng_defer.tres",
     "1_core_rules/archetypes/baiye_touzeng_success.tres",
     "1_core_rules/archetypes/denggao_leyouyuan_failure.tres",
     "1_core_rules/archetypes/denggao_leyouyuan_success.tres",
@@ -734,7 +735,21 @@
     "3_actions_pool/actions/bai_ye/rumu_fushang_fushang.tres",
     "3_actions_pool/actions/bai_ye/rumu_jiwen_zhuoliu.tres",
     "3_actions_pool/actions/bai_ye/rumu_zhengqian_qingliu.tres",
+    "3_actions_pool/events/daily_dayanta.tres",
+    "3_actions_pool/events/daily_gaoshi_cansen.tres",
+    "3_actions_pool/events/daily_libai_jiu.tres",
+    "3_actions_pool/events/daily_quangui_qiushi.tres",
+    "3_actions_pool/events/daily_quangui_siyao.tres",
+    "3_actions_pool/events/daily_quangui_yanxi.tres",
+    "3_actions_pool/events/daily_qujiangchi.tres",
+    "3_actions_pool/events/daily_shengbing.tres",
+    "3_actions_pool/events/daily_suanming.tres",
+    "3_actions_pool/events/daily_suanming_result.tres",
+    "3_actions_pool/events/daily_tanhuo.tres",
+    "3_actions_pool/events/daily_xiayu.tres",
+    "3_actions_pool/events/daily_zhengshui.tres",
     "3_actions_pool/events/drink_with_libai.tres",
+    "3_actions_pool/events/eb_daily_random.json",
     "3_actions_pool/events/event_changhe_guest.tres",
     "3_actions_pool/events/event_chat_guest.tres",
     "3_actions_pool/events/event_first_blood_right_prime.tres",
@@ -810,6 +825,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-26T09:43:58.505028+00:00",
-  "total": 809
+  "generated_at": "2026-07-26T10:02:26.983406+00:00",
+  "total": 824
 }

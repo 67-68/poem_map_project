@@ -1,37 +1,31 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://b4fuqinact01"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_base_req"]
-[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="2_trait_req"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_base_op"]
-[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_push_op"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_cr"]
-[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="6_4cqvf"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="6_defer"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_action"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_cx1q3"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_4cqvf"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_sfllx"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_4ci1k"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="5_xk8dr"]
+[ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_ohd8j"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_hdbqm"]
 
-[sub_resource type="Resource" id="Resource_defer_empty"]
-script = ExtResource("6_defer")
+[sub_resource type="Resource" id="Resource_7v7ej"]
+script = ExtResource("3_sfllx")
 
-[sub_resource type="Resource" id="Resource_push_failed"]
-script = ExtResource("4_push_op")
-event_key = "duzhuo_fuqin_failed_fallback"
+[sub_resource type="Resource" id="Resource_vtv0i"]
+script = ExtResource("4_4ci1k")
 
-[sub_resource type="Resource" id="Resource_failed_cr"]
-script = ExtResource("5_cr")
-operators = Array[ExtResource("3_base_op")]([SubResource("Resource_push_failed")])
-
-[sub_resource type="Resource" id="Resource_trait_req"]
-script = ExtResource("2_trait_req")
+[sub_resource type="Resource" id="Resource_hguuf"]
+script = ExtResource("6_ohd8j")
 trait_name = "qin_instrument"
 
 [resource]
-script = ExtResource("7_action")
+script = ExtResource("7_hdbqm")
 _action_tags = Array[int]([34, 79])
-prerequisite = SubResource("Resource_trait_req")
+prerequisite = SubResource("Resource_hguuf")
 fallback_event_uuid = "duzhuo_fuqin_fallback"
 archetype_uuid = "duzhuo_fuqin_success"
-failed_result = SubResource("Resource_failed_cr")
-defer_config = SubResource("Resource_defer_empty")
+failed_result = SubResource("Resource_vtv0i")
+defer_config = SubResource("Resource_7v7ej")
 uuid = "duzhuo_fuqin"
 name = "ACT_DUZHUO_FUQIN_NAME"
 description = "ACT_DUZHUO_FUQIN_DESC"

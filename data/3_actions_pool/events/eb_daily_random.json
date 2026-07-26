@@ -1,0 +1,21 @@
+{
+  "id": "daily_random",
+  "name": "每日随机事件库",
+  "era": "",
+  "draw_strategies": "AVERAGE",
+  "reset_on_empty": true,
+  "events": [
+    "daily_quangui_yanxi",
+    "daily_quangui_qiushi",
+    "daily_quangui_siyao",
+    "daily_shengbing",
+    "daily_tanhuo",
+    "daily_suanming",
+    "daily_qujiangchi",
+    "daily_dayanta",
+    "daily_xiayu",
+    "daily_zhengshui",
+    "daily_gaoshi_cansen",
+    "daily_libai_jiu"
+  ]
+}
