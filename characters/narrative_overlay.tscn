@@ -114,6 +114,7 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_sshou")
 layout_mode = 2
 
 [node name="ActionPanel" type="PanelContainer" parent="TapeContainer/VBox" unique_id=650333493]
+visible = false
 z_index = 100
 custom_minimum_size = Vector2(480, 440)
 custom_maximum_size = Vector2(480, 440)
@@ -145,7 +146,6 @@ text = "UI_NARRATIVE_OVERLAY_TEXT_2"
 layout_mode = 2
 
 [node name="EventHistory" type="PanelContainer" parent="TapeContainer/VBox" unique_id=1937522382]
-visible = false
 z_index = 120
 custom_minimum_size = Vector2(480, 440)
 custom_maximum_size = Vector2(480, 440)

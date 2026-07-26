@@ -19,9 +19,10 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_7xb00")
 
 [node name="MarginContainer" type="MarginContainer" parent="Button" unique_id=75229748]
-layout_mode = 0
-offset_right = 400.0
-offset_bottom = 104.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 5
@@ -35,7 +36,6 @@ theme_override_constants/separation = 1
 
 [node name="Label" type="Label" parent="Button/MarginContainer/VBoxContainer" unique_id=616245205]
 layout_mode = 2
-mouse_filter = 2
 theme_type_variation = &"SubTitleText"
 theme_override_font_sizes/font_size = 16
 text = "UI_NPC_ACTION_BUTTON_TEXT_0"
@@ -49,8 +49,8 @@ alignment = 2
 
 [node name="Label2" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1179952213]
 layout_mode = 2
-mouse_filter = 2
 size_flags_horizontal = 10
+mouse_filter = 2
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
@@ -66,8 +66,8 @@ mouse_filter = 2
 
 [node name="Label3" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1308748305]
 layout_mode = 2
-mouse_filter = 2
 size_flags_horizontal = 10
+mouse_filter = 2
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
@@ -84,8 +84,8 @@ alignment = 2
 
 [node name="Label4" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=813463460]
 layout_mode = 2
-mouse_filter = 2
 size_flags_horizontal = 9
+mouse_filter = 2
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
@@ -101,8 +101,8 @@ mouse_filter = 2
 
 [node name="Label5" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1244562373]
 layout_mode = 2
-mouse_filter = 2
 size_flags_horizontal = 9
+mouse_filter = 2
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
@@ -113,37 +113,36 @@ autowrap_mode = 0
 horizontal_alignment = 2
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Button/MarginContainer/VBoxContainer" unique_id=83632684]
-custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
-size_flags_horizontal = 8
 theme_override_constants/separation = 1
 alignment = 2
 
-[node name="Label4" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1763795816]
+[node name="Label4" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1398610299]
 layout_mode = 2
+size_flags_horizontal = 9
 mouse_filter = 2
-size_flags_horizontal = 8
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
-text = "求: "
+text = "UI_NPC_ACTION_BUTTON_TEXT_3"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="VSeparator" type="VSeparator" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=593718357]
+[node name="VSeparator2" type="VSeparator" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=515925454]
 layout_mode = 2
 mouse_filter = 2
-size_flags_horizontal = 8
 
-[node name="Label6" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1162219148]
+[node name="Label6" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1017366219]
 layout_mode = 2
+size_flags_horizontal = 9
 mouse_filter = 2
-size_flags_horizontal = 3
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
-text = "UI_NPC_ACTION_BUTTON_TEXT_5"
+text = "UI_NPC_ACTION_BUTTON_TEXT_4"
 fit_content = true
+scroll_active = false
+autowrap_mode = 0
 horizontal_alignment = 2
