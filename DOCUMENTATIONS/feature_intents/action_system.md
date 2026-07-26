@@ -167,7 +167,7 @@
 - `data/1_core_rules/events/fallback/fangshi_sell_poem_failed_fallback.tres` — 失败 fallback（占位）
 - `core/operators/poem_reward_operator.gd` — V10.1 新增 money 升一级、extra_large SIZE_DISPLAY、describe_preview()
 
-## 拜谒子行动（要挟 / 携诗拜谒 / 广发行卷 / 普通拜谒 / 投赠）
+## 拜谒子行动（要挟 / 携诗拜谒 / 广发行卷 / 普通拜谒 / 入幕）
 
 这五个子行动挂载在 `action_baiye`（拜谒）下，定义在 [`tools/data/event_archetypes.json`](tools/data/event_archetypes.json) 中。
 
@@ -178,7 +178,7 @@
 - **携诗拜谒**：复用 PoemRewardOperator（baiye 模式），选诗换 progress。额外金钱成本放 archetype `universal_result`。
 - **广发行卷**：消耗巨额钱，解锁社交节点（UnlockSocialNodePlaceholderOperator 占位）。
 - **普通拜谒**：消耗小钱 + 1天，随机人物好感 +10（AdvancePlotPlaceholderOperator）。
-- **投赠**：零消耗、零产出、零天数的纯叙事行动。fallback 事件提示玩家「须先寻到肯收卷之人」。作为投赠系统的入口占位符存在。
+- **入幕**：零消耗、零产出、零天数的纯叙事行动。投刺谒见，入其幕府随侍左右。fallback 事件提示玩家「无处入幕」。作为入幕系统的入口占位符存在。
 
 ### 数值映射（来自 named_amounts.json）
 
@@ -209,9 +209,9 @@
 - `data/1_core_rules/events/fallback/baiye_poem_visit_fallback.tres` — fallback「携诗叩门」
 - `data/1_core_rules/events/fallback/baiye_mass_distribution_fallback.tres` — fallback「泥牛入海」
 - `data/1_core_rules/events/fallback/baiye_normal_fallback.tres` — fallback「无处投刺」
-- `data/3_actions_pool/actions/bai_ye/baiye_touzeng.tres` — sub-action「投赠」
-- `data/1_core_rules/archetypes/baiye_touzeng_success.tres` — archetype「投赠成功」（空）
-- `data/1_core_rules/events/fallback/baiye_touzeng_fallback.tres` — fallback「须寻一人」
+- `data/3_actions_pool/actions/bai_ye/baiye_touzeng.tres` — sub-action「入幕」
+- `data/1_core_rules/archetypes/baiye_touzeng_success.tres` — archetype「入幕成功」（空）
+- `data/1_core_rules/events/fallback/baiye_touzeng_fallback.tres` — fallback「无处入幕」
 - `core/operators/consume_random_leverage_operator.gd` — 消耗随机把柄
 - `core/operators/advance_plot_placeholder_operator.gd` — 推进剧情（占位）
 - `core/operators/unlock_social_node_placeholder_operator.gd` — 解锁社交节点（占位）

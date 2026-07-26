@@ -78,7 +78,7 @@ enum ACTION_TAGS {
 	ACTOR_DEATH_NOBODY,              # 无人关注（fallback 专用）
 	ACTION_MAIN_GANLU,              # 赶路（主行动标签，用于事件路由）
 	ACTION_DUZHUO_FUQIN,            # 独酌·抚琴
-	ACTION_BAIYE_TOUZENG,           # 拜谒·投赠
+	ACTION_BAIYE_TOUZENG,           # 拜谒·入幕
 	ACTION_DUZHUO_LINGDING_DAZUI,   # 独酌·伶仃大醉
 }
 
