@@ -11,6 +11,6 @@ preferred_places = Array[String](["pingkangfang"])
 prop = {
 "TALENT": 70
 }
-normal_actions = Array[String](["zhengqian_poem_exchange"])
+normal_actions = Array[String](["zhengqian_poem_exchange", "rumu_zhengqian_qingliu"])
 wang_addition = "m_prestige_gain"
 wang_upper_limit = "l_prestige_upper_limit"

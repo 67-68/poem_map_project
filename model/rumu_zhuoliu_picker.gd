@@ -4,10 +4,14 @@ class_name RumuZhuoliuPicker extends ArchetypeEventPicker
 
 func _init() -> void:
 	_archetypes = [
-		# TODO: 填充浊流入幕 archetype keys
+		"rumu_zhuoliu_talent_to_momentum",
+		"rumu_zhuoliu_poem_to_momentum",
+		"rumu_zhuoliu_talent_to_money",
 	]
 	_fallback_map = {
-		# TODO: archetype_key → fallback_event_uuid
+		"rumu_zhuoliu_talent_to_momentum": "event_cooldown_wall",
+		"rumu_zhuoliu_poem_to_momentum": "event_cooldown_wall",
+		"rumu_zhuoliu_talent_to_money": "event_cooldown_wall",
 	}
 	_outcome = "success"
 	Logging.info("[RumuZhuoliuPicker] 初始化完成，_archetypes=%d 项" % _archetypes.size())

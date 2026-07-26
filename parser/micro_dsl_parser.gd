@@ -98,6 +98,7 @@ const FUNC_ADD_SOCIAL_CREDIT := "add_social_credit"
 const FUNC_ROLL_IMAGINARY := "roll_imaginary"
 const FUNC_CONSUME_RANDOM_LEVERAGE := "consume_random_leverage"
 const FUNC_CONSUME_OLDEST_IMAGINARY := "consume_oldest_imaginary"
+const FUNC_CONSUME_RANDOM_POEM := "consume_random_poem"
 const FUNC_UNLOCK_SOCIAL_NODE := "unlock_social_node"
 const FUNC_ADVANCE_PLOT := "advance_plot"
 const FUNC_SET_STAY_PLACE := "set_stay_place"
@@ -181,6 +182,7 @@ static func _ensure_dispatch() -> void:
 	cd[FUNC_ROLL_IMAGINARY] = func(p, r): return _exec_roll_imaginary_op(p, r)
 	cd[FUNC_CONSUME_RANDOM_LEVERAGE] = func(p, r): return _exec_consume_random_leverage_op(p, r)
 	cd[FUNC_CONSUME_OLDEST_IMAGINARY] = func(p, r): return _exec_consume_oldest_imaginary_op(p, r)
+	cd[FUNC_CONSUME_RANDOM_POEM] = func(p, r): return _exec_consume_random_poem_op(p, r)
 	cd[FUNC_UNLOCK_SOCIAL_NODE] = func(p, r): return _exec_unlock_social_node_op(p, r)
 	cd[FUNC_ADVANCE_PLOT] = func(p, r): return _exec_advance_plot_op(p, r)
 	# ── 🆕 驻留地点操作符 ──
@@ -1317,6 +1319,14 @@ static func _exec_add_social_credit_op(parsed: NamedDSLParser.ParseResult, raw: 
 static func _exec_consume_random_leverage_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ConsumeRandomLeverageOperator:
 	var op := ConsumeRandomLeverageOperator.new()
 	Logging.info("MicroDSLParser: _exec_consume_random_leverage_op — raw: %s" % raw)
+	return op
+
+
+# ─── consume_random_poem ──────────────────────────────
+# 无参数 — 从玩家拥有的诗词中随机消耗一首。
+static func _exec_consume_random_poem_op(parsed: NamedDSLParser.ParseResult, raw: String) -> ConsumeRandomPoemOperator:
+	var op := ConsumeRandomPoemOperator.new()
+	Logging.info("MicroDSLParser: _exec_consume_random_poem_op — raw: %s" % raw)
 	return op
 
 

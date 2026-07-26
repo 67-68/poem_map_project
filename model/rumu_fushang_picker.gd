@@ -4,10 +4,14 @@ class_name RumuFushangPicker extends ArchetypeEventPicker
 
 func _init() -> void:
 	_archetypes = [
-		# TODO: 填充富商入幕 archetype keys
+		"rumu_fushang_talent_to_money",
+		"rumu_fushang_poem_to_momentum",
+		"rumu_fushang_poem_to_prestige",
 	]
 	_fallback_map = {
-		# TODO: archetype_key → fallback_event_uuid
+		"rumu_fushang_talent_to_money": "event_cooldown_wall",
+		"rumu_fushang_poem_to_momentum": "event_cooldown_wall",
+		"rumu_fushang_poem_to_prestige": "event_cooldown_wall",
 	}
 	_outcome = "success"
 	Logging.info("[RumuFushangPicker] 初始化完成，_archetypes=%d 项" % _archetypes.size())

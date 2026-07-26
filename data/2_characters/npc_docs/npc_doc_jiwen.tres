@@ -11,6 +11,6 @@ preferred_places = Array[String](["huangcheng"])
 prop = {
 "TALENT": 60
 }
-normal_actions = Array[String](["jiwen_leverage_exchange"])
+normal_actions = Array[String](["jiwen_leverage_exchange", "rumu_jiwen_zhuoliu"])
 shi_addition = "s_momentum_gain"
 shi_upper_limit = "l_momentum_upper_limit"

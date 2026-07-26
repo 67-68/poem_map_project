@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_req"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_op"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_dc"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="4_action"]
+
+[sub_resource type="Resource" id="Resource_defer"]
+script = ExtResource("3_dc")
+xun_defered = "s_xun_cost"
+event_picked_per_xun = "rumu_qingliu_picker"
+
+[resource]
+script = ExtResource("4_action")
+required_place = "huangcheng"
+_action_tags = Array[int]([80, 29])
+fallback_event_uuid = "baiye_touzeng_fallback"
+override_action = "baiye_touzeng"
+defer_config = SubResource("Resource_defer")
+uuid = "rumu_zhengqian_qingliu"
+name = "ACT_RUMU_ZHENGQIAN_QINGLIU_NAME"
+description = "ACT_RUMU_ZHENGQIAN_QINGLIU_DESC"

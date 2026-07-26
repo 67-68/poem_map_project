@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+
+[resource]
+script = ExtResource("1_arch")
+uuid = "rumu_fushang_poem_to_momentum"
+name = "rumu_fushang.poem_to_momentum"
+universal_result = "consume_random_poem|prop_add(name=momentum; val=m_momentum_gain)"
+action_uuid = "baiye_touzeng"
+state = "success"

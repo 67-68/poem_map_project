@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+
+[resource]
+script = ExtResource("1_arch")
+uuid = "rumu_qingliu_money_to_talent"
+name = "rumu_qingliu.money_to_talent"
+universal_result = "prop_sub(name=money; val=l_money_cost)|prop_add(name=talent; val=l_talent_gain)"
+action_uuid = "baiye_touzeng"
+state = "success"
