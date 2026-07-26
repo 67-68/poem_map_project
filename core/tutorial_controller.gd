@@ -415,6 +415,7 @@ func _ban_tutorial_actions() -> void:
 		# ── 驻留（泰山两个地点子行动）──
 		"tut_zhu_liu_base",
 		"tut_zhu_liu_upper",
+		"tut_taoist_dispel_fog"
 	]
 	for uuid in tut_uuids:
 		ActionManager.add_hidden_action(uuid)
