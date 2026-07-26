@@ -383,6 +383,24 @@ func _on_button_pressed() -> void:
 	else:
 		Logging.info('PoemCrafter(V14): 发布按钮未勾选，跳过发布')
 
+	# ── 7.5 🆕 立仗马之诫：创作含狂放诗词 → 30% 密探举报 ──
+	if PlayerState.has_flag("flag_lijianzhima_active"):
+		var kuangfang_count: int = type_counts.get("狂放", 0)
+		Logging.info('PoemCrafter: flag_lijianzhima_active 已激活, 狂放意象数=%d' % kuangfang_count)
+		if kuangfang_count > 0:
+			var roll: int = randi() % 100
+			Logging.info('PoemCrafter: 密探举报 roll=%d, threshold=30' % roll)
+			if roll < 30:
+				Logging.info('PoemCrafter: ═══ 触发密探举报! push: event_mijian_report ═══')
+				EventBus.push_event.emit("event_mijian_report", {})
+				Logging.info('PoemCrafter: 已发射 push_event: event_mijian_report（将打断当前流程）')
+			else:
+				Logging.info('PoemCrafter: roll=%d >= 30，未触发密探举报' % roll)
+		else:
+			Logging.info('PoemCrafter: 诗词不含狂放意象，跳过密探举报检查')
+	else:
+		Logging.info('PoemCrafter: flag_lijianzhima_active 未激活，跳过密探举报检查')
+
 	# ── 8. 从对应等级的 EventBase 抽取事件 ──
 	var event_base_uuid := PoemCraftingCalculator.get_event_base_for_level(final_level)
 	var ctx := {

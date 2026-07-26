@@ -95,6 +95,7 @@ const __preload_079 = preload("res://core/operators/context_key_push_event_opera
 const __preload_079a = preload("res://core/operators/consume_random_leverage_operator.gd")  # ConsumeRandomLeverageOperator
 const __preload_079a1 = preload("res://core/operators/consume_random_poem_operator.gd")  # ConsumeRandomPoemOperator
 const __preload_079a2 = preload("res://core/operators/consume_oldest_imaginary_operator.gd")  # ConsumeOldestImaginaryOperator
+const __preload_079a3 = preload("res://core/operators/prop_pct_operator.gd")  # PropPctOperator
 const __preload_079b = preload("res://core/operators/advance_plot_placeholder_operator.gd")  # AdvancePlotPlaceholderOperator
 const __preload_079c = preload("res://core/operators/unlock_social_node_placeholder_operator.gd")  # UnlockSocialNodePlaceholderOperator
 const __preload_080 = preload("res://core/operators/deferred_lock_action_operator.gd")  # DeferredLockActionOperator

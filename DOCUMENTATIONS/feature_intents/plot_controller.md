@@ -1,5 +1,7 @@
 # PlotController — 主线剧情控制器
 
+> 最后更新: 2026-07-26 — 新增天宝五载政治清洗线（Event 1-5）
+
 ## 涉及文件
 
 - `core/plot_controller.gd` — Autoload，监听 xun_tick 并根据 event_counter/progress/旬计数触发剧情事件
