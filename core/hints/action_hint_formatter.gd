@@ -535,7 +535,7 @@ func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Array[Str
 		elif op is TraitOperator:
 			if not op.trait_key.is_empty():
 				var trait_obj = Database.get_trait(op.trait_key)
-				var cn_name = trait_obj.name if trait_obj and not trait_obj.name.is_empty() else op.trait_key
+				var cn_name = tr(trait_obj.name) if trait_obj and not trait_obj.name.is_empty() else op.trait_key
 				if op.operator == REQ_OPERATOR.CRUD.ADD:
 					lines.append(tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_52AC4C7A26") % cn_name)
 				elif op.operator == REQ_OPERATOR.CRUD.REMOVE:
@@ -695,7 +695,7 @@ static func _simple_req_trait(req: TraitRequirement) -> String:
 	if req.trait_name.is_empty():
 		return ""
 	var trait_obj = Database.get_trait(req.trait_name)
-	var cn_name = trait_obj.name if trait_obj and not trait_obj.name.is_empty() else req.trait_name
+	var cn_name = TranslationServer.translate(trait_obj.name) if trait_obj and not trait_obj.name.is_empty() else req.trait_name
 	if req.operator == REQ_OPERATOR.EXIST.HAS:
 		return TranslationServer.translate("CODE_SIMPLE_ACTION_REQUIREMENT_TRAIT_NEED_FMT") % cn_name
 	elif req.operator == REQ_OPERATOR.EXIST.NOT_HAS:

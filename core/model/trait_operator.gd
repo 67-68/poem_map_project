@@ -68,7 +68,7 @@ func describe_preview() -> String:
     var trait_obj = Database.get_trait(trait_key)
     if not trait_obj:
         return trait_key
-    var cn_name = trait_obj.name if not trait_obj.name.is_empty() else trait_key
+    var cn_name = tr(trait_obj.name) if not trait_obj.name.is_empty() else trait_key
     if operator == REQ_OPERATOR.CRUD.ADD:
         return tr("CODE_TRAIT_OPERATOR_587CC92918") % cn_name
     elif operator == REQ_OPERATOR.CRUD.REMOVE:

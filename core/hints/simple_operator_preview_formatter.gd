@@ -90,7 +90,7 @@ static func _simple_trait(top) -> String:
 	if top.trait_key.is_empty():
 		return ""
 	var trait_obj = Database.get_trait(top.trait_key)
-	var cn_name = trait_obj.name if trait_obj and not trait_obj.name.is_empty() else top.trait_key
+	var cn_name = TranslationServer.translate(trait_obj.name) if trait_obj and not trait_obj.name.is_empty() else top.trait_key
 
 	if top.operator == REQ_OPERATOR.CRUD.ADD:
 		return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_52AC4C7A26") % cn_name
