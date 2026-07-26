@@ -6,6 +6,6 @@
 script = ExtResource("1_glf4u")
 uuid = "jiaoyou_hold_feast_cost"
 name = "jiaoyou_hold_feast.cost"
-universal_result = "prop_sub(name=money; val=xl_money_cost)"
+universal_result = "prop_sub(name=money; val=l_money_cost)"
 action_uuid = "jiaoyou_hold_feast"
 state = "cost"

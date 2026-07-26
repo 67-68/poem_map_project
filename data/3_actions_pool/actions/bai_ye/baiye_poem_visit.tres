@@ -6,31 +6,32 @@
 [ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_5uudh"]
 [ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_isuah"]
 [ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_byvwp"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="7_lfd4g"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_ovsv8"]
 
-[sub_resource type="Resource" id="Resource_p52te"]
+[sub_resource type="Resource" id="Resource_iugjm"]
 script = ExtResource("2_lfd4g")
 
-[sub_resource type="Resource" id="Resource_u3of4"]
+[sub_resource type="Resource" id="Resource_5uudh"]
 script = ExtResource("4_5uudh")
 mode = "baiye"
 
-[sub_resource type="Resource" id="Resource_idshl"]
+[sub_resource type="Resource" id="Resource_isuah"]
 script = ExtResource("5_isuah")
 
-[sub_resource type="Resource" id="Resource_qmfga"]
+[sub_resource type="Resource" id="Resource_byvwp"]
 script = ExtResource("6_byvwp")
 
 [resource]
 script = ExtResource("7_ovsv8")
 required_place = "huangcheng"
 _action_tags = Array[int]([49, 29])
-action_results = Array[ExtResource("3_iugjm")]([SubResource("Resource_u3of4")])
-aciton_requirements = Array[ExtResource("1_uuvxj")]([SubResource("Resource_p52te")])
+action_results = Array[ExtResource("3_iugjm")]([SubResource("Resource_5uudh")])
+aciton_requirements = Array[ExtResource("1_uuvxj")]([SubResource("Resource_iugjm")])
 fallback_event_uuid = "baiye_poem_visit_fallback"
 archetype_uuid = "baiye_poem_visit_success"
-failed_result = SubResource("Resource_qmfga")
-defer_config = SubResource("Resource_idshl")
+failed_result = SubResource("Resource_byvwp")
+defer_config = SubResource("Resource_isuah")
 uuid = "baiye_poem_visit"
 name = "ACT_BAIYE_POEM_VISIT_NAME"
 description = "ACT_BAIYE_POEM_VISIT_DESC"

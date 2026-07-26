@@ -1,40 +1,41 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://dv2ah8xfw35ot"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_j0lxg"]
-[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_nlq4o"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_1crwu"]
-[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_im7cj"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_vafkd"]
-[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_cfnhw"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_057ik"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="8_vogl6"]
-
-[sub_resource type="Resource" id="Resource_7e5ha"]
-script = ExtResource("2_nlq4o")
-
-[sub_resource type="Resource" id="Resource_r34oh"]
-script = ExtResource("4_im7cj")
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_nlq4o"]
+[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_1crwu"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_im7cj"]
+[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_vafkd"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_cfnhw"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_057ik"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_vogl6"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="8_7e5ha"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="9_r34oh"]
 
 [sub_resource type="Resource" id="Resource_im3f5"]
-script = ExtResource("5_vafkd")
+script = ExtResource("2_1crwu")
 
 [sub_resource type="Resource" id="Resource_io54b"]
-script = ExtResource("6_cfnhw")
-event_key = "fangshi_sell_poem_failed_fallback"
+script = ExtResource("4_vafkd")
 
 [sub_resource type="Resource" id="Resource_yfrdr"]
-script = ExtResource("7_057ik")
-operators = Array[ExtResource("3_1crwu")]([SubResource("Resource_io54b")])
+script = ExtResource("5_cfnhw")
+
+[sub_resource type="Resource" id="Resource_wpqsl"]
+script = ExtResource("6_057ik")
+event_key = "fangshi_sell_poem_failed_fallback"
+
+[sub_resource type="Resource" id="Resource_6wmyu"]
+script = ExtResource("7_vogl6")
+operators = Array[ExtResource("3_im7cj")]([SubResource("Resource_wpqsl")])
 
 [resource]
-script = ExtResource("8_vogl6")
+script = ExtResource("9_r34oh")
 required_place = "xishi"
 _action_tags = Array[int]([32, 47])
-action_results = Array[ExtResource("3_1crwu")]([SubResource("Resource_r34oh")])
-aciton_requirements = Array[ExtResource("1_j0lxg")]([SubResource("Resource_7e5ha")])
+action_results = Array[ExtResource("3_im7cj")]([SubResource("Resource_io54b")])
+aciton_requirements = Array[ExtResource("1_nlq4o")]([SubResource("Resource_im3f5")])
 fallback_event_uuid = "fangshi_sell_poem_fallback"
-failed_result = SubResource("Resource_yfrdr")
-defer_config = SubResource("Resource_im3f5")
+failed_result = SubResource("Resource_6wmyu")
+defer_config = SubResource("Resource_yfrdr")
 uuid = "fangshi_sell_poem"
 name = "ACT_FANGSHI_SELL_POEM_NAME"
 description = "ACT_FANGSHI_SELL_POEM_DESC"

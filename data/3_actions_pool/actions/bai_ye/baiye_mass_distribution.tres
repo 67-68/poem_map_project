@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_tmv5s"]
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_c24h4"]
 [ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_ccabs"]
-[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_1m6cw"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_wdc3r"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_1m6cw"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="5_wdc3r"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_ltpm6"]
 
 [sub_resource type="Resource" id="Resource_4fc8a"]
@@ -12,19 +12,13 @@ script = ExtResource("3_ccabs")
 
 [sub_resource type="Resource" id="Resource_hta5d"]
 script = ExtResource("4_1m6cw")
-event_key = "baiye_mass_distribution_failed_fallback"
-
-[sub_resource type="Resource" id="Resource_nj454"]
-script = ExtResource("5_wdc3r")
-operators = Array[ExtResource("2_c24h4")]([SubResource("Resource_hta5d")])
 
 [resource]
 script = ExtResource("6_ltpm6")
 required_place = "huangcheng"
 _action_tags = Array[int]([50, 29])
-fallback_event_uuid = "baiye_mass_distribution_fallback"
 archetype_uuid = "baiye_mass_distribution_success"
-failed_result = SubResource("Resource_nj454")
+failed_result = SubResource("Resource_hta5d")
 defer_config = SubResource("Resource_4fc8a")
 uuid = "baiye_mass_distribution"
 name = "ACT_BAIYE_MASS_DISTRIBUTION_NAME"

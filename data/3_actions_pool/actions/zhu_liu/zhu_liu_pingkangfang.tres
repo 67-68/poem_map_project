@@ -1,25 +1,26 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://byqbpvnqmhbu4"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_mglqa"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_yuc0i"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_e74nn"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_nhdwc"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_s0yeo"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_yuc0i"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_e74nn"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_nhdwc"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_s0yeo"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="5_alyqf"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_cafc4"]
 
-[sub_resource type="Resource" id="Resource_alyqf"]
-script = ExtResource("3_e74nn")
+[sub_resource type="Resource" id="Resource_40s4a"]
+script = ExtResource("3_nhdwc")
 
-[sub_resource type="Resource" id="Resource_cafc4"]
-script = ExtResource("4_nhdwc")
+[sub_resource type="Resource" id="Resource_f3b8y"]
+script = ExtResource("4_s0yeo")
 
 [resource]
-script = ExtResource("5_s0yeo")
+script = ExtResource("6_cafc4")
 required_place = "pingkangfang"
 _action_tags = Array[int]([56, 62])
 fallback_event_uuid = "zhu_liu_pingkangfang_fallback"
 archetype_uuid = "zhu_liu_pingkangfang_success"
-failed_result = SubResource("Resource_cafc4")
-defer_config = SubResource("Resource_alyqf")
+failed_result = SubResource("Resource_f3b8y")
+defer_config = SubResource("Resource_40s4a")
 uuid = "zhu_liu_pingkangfang"
 name = "ACT_ZHU_LIU_PINGKANGFANG_NAME"
 description = "ACT_ZHU_LIU_PINGKANGFANG_DESC"

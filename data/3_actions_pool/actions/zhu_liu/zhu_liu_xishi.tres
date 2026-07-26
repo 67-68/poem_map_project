@@ -1,25 +1,26 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://b5cveke5b1jj0"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_xc4ki"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_w3k5m"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_qvssw"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_3eals"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="5_m3yhk"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_w3k5m"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_qvssw"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_3eals"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="4_m3yhk"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="5_ak3fn"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_p2u5r"]
 
-[sub_resource type="Resource" id="Resource_ak3fn"]
-script = ExtResource("3_qvssw")
+[sub_resource type="Resource" id="Resource_0g1f2"]
+script = ExtResource("3_3eals")
 
-[sub_resource type="Resource" id="Resource_p2u5r"]
-script = ExtResource("4_3eals")
+[sub_resource type="Resource" id="Resource_ne3g3"]
+script = ExtResource("4_m3yhk")
 
 [resource]
-script = ExtResource("5_m3yhk")
+script = ExtResource("6_p2u5r")
 required_place = "xishi"
 _action_tags = Array[int]([56, 61])
 fallback_event_uuid = "zhu_liu_xishi_fallback"
 archetype_uuid = "zhu_liu_xishi_success"
-failed_result = SubResource("Resource_p2u5r")
-defer_config = SubResource("Resource_ak3fn")
+failed_result = SubResource("Resource_ne3g3")
+defer_config = SubResource("Resource_0g1f2")
 uuid = "zhu_liu_xishi"
 name = "ACT_ZHU_LIU_XISHI_NAME"
 description = "ACT_ZHU_LIU_XISHI_DESC"

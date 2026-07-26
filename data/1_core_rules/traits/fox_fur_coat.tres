@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="Trait" format=3 uid="uid://s85aqbohqew3"]
 
-[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="1_trait"]
+[ext_resource type="Script" uid="uid://dberqktmglsse" path="res://core/model/conditional_time_penalty.gd" id="1_2o6cq"]
+[ext_resource type="Script" uid="uid://pom0464obfp2" path="res://core/model/trait.gd" id="2_4nms2"]
+[ext_resource type="Script" uid="uid://d25kbxawh53k4" path="res://core/model/property_operator.gd" id="3_1o602"]
 
 [resource]
-script = ExtResource("1_trait")
+script = ExtResource("2_4nms2")
 uuid = "fox_fur_coat"
 name = "貂裘"
 hover_narrative = "上等狐皮制成的大氅，轻软如云。寒冬中穿着，生命值扣除减免5%。"

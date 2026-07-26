@@ -1,41 +1,42 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://dljjypil6sxi8"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_xslrk"]
-[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_3lsia"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_0u8q6"]
-[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_kpuku"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_njoc6"]
-[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_bjf5p"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_gsqjn"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="8_1knwk"]
-
-[sub_resource type="Resource" id="Resource_maae0"]
-script = ExtResource("2_3lsia")
-
-[sub_resource type="Resource" id="Resource_khncg"]
-script = ExtResource("4_kpuku")
-mode = "fame"
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_3lsia"]
+[ext_resource type="Script" uid="uid://duwrk0xh36f4g" path="res://core/requirements/poem_requirement.gd" id="2_0u8q6"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="3_kpuku"]
+[ext_resource type="Script" uid="uid://vfcd18fp5ng6" path="res://core/operators/poem_reward_operator.gd" id="4_njoc6"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="5_bjf5p"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="6_gsqjn"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="7_1knwk"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="8_maae0"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="9_khncg"]
 
 [sub_resource type="Resource" id="Resource_3lh7e"]
-script = ExtResource("5_njoc6")
+script = ExtResource("2_0u8q6")
 
 [sub_resource type="Resource" id="Resource_iyubg"]
-script = ExtResource("6_bjf5p")
-event_key = "jiaoyou_recite_poem_failed_fallback"
+script = ExtResource("4_njoc6")
+mode = "fame"
 
 [sub_resource type="Resource" id="Resource_jo6cf"]
-script = ExtResource("7_gsqjn")
-operators = Array[ExtResource("3_0u8q6")]([SubResource("Resource_iyubg")])
+script = ExtResource("5_bjf5p")
+
+[sub_resource type="Resource" id="Resource_vkxmp"]
+script = ExtResource("6_gsqjn")
+event_key = "jiaoyou_recite_poem_failed_fallback"
+
+[sub_resource type="Resource" id="Resource_a3qtc"]
+script = ExtResource("7_1knwk")
+operators = Array[ExtResource("3_kpuku")]([SubResource("Resource_vkxmp")])
 
 [resource]
-script = ExtResource("8_1knwk")
+script = ExtResource("9_khncg")
 required_place = "pingkangfang"
 _action_tags = Array[int]([30, 46])
-action_results = Array[ExtResource("3_0u8q6")]([SubResource("Resource_khncg")])
-aciton_requirements = Array[ExtResource("1_xslrk")]([SubResource("Resource_maae0")])
+action_results = Array[ExtResource("3_kpuku")]([SubResource("Resource_iyubg")])
+aciton_requirements = Array[ExtResource("1_3lsia")]([SubResource("Resource_3lh7e")])
 fallback_event_uuid = "jiaoyou_recite_poem_fallback"
-failed_result = SubResource("Resource_jo6cf")
-defer_config = SubResource("Resource_3lh7e")
+failed_result = SubResource("Resource_a3qtc")
+defer_config = SubResource("Resource_jo6cf")
 uuid = "jiaoyou_recite_poem"
 name = "ACT_JIAOYOU_RECITE_POEM_NAME"
 description = "ACT_JIAOYOU_RECITE_POEM_DESC"

@@ -6,6 +6,6 @@
 script = ExtResource("1_rlwaw")
 uuid = "jiaoyou_hold_feast_success"
 name = "jiaoyou_hold_feast.success"
-universal_result = "pick_npc(mode=by_place; places=pingkangfang; state=inner_circle; state_compare=gte; key=host_npc; social_tag=social:intro)|pick_npc(mode=related; source_key=host_npc; state=not_meet; key=letter_target)|add_random_intro(target_key=letter_target)"
+universal_result = "prop_add(name=prestige; val=m_prestige_gain)"
 action_uuid = "jiaoyou_hold_feast"
 state = "success"

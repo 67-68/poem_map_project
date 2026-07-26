@@ -1,36 +1,37 @@
 [gd_resource type="Resource" script_class="Action" format=3 uid="uid://b44aqcxc3c2y6"]
 
-[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_iqmyy"]
-[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_k5agd"]
-[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_latqd"]
-[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_a77qv"]
-[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_qvxbe"]
-[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_gcccu"]
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_k5agd"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_latqd"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_a77qv"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_qvxbe"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_gcccu"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="6_trxy2"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_r5pia"]
 
-[sub_resource type="Resource" id="Resource_trxy2"]
-script = ExtResource("3_latqd")
+[sub_resource type="Resource" id="Resource_2607k"]
+script = ExtResource("3_a77qv")
 xun_defered = "s_xun_cost"
 used_resource_archetype = "jiaoyou_tavern_gacha_defer"
 ap_cost = "l_ap_cost"
 failed_fallback = "tavern_gacha_failure_fallback"
 
-[sub_resource type="Resource" id="Resource_r5pia"]
-script = ExtResource("4_a77qv")
+[sub_resource type="Resource" id="Resource_isdn3"]
+script = ExtResource("4_qvxbe")
 event_key = "tavern_gacha_failure_fallback"
 
-[sub_resource type="Resource" id="Resource_2607k"]
-script = ExtResource("5_qvxbe")
-operators = Array[ExtResource("2_k5agd")]([SubResource("Resource_r5pia")])
+[sub_resource type="Resource" id="Resource_b3av3"]
+script = ExtResource("5_gcccu")
+operators = Array[ExtResource("2_latqd")]([SubResource("Resource_isdn3")])
 
 [resource]
-script = ExtResource("6_gcccu")
+script = ExtResource("7_r5pia")
 required_place = "pingkangfang"
 _action_tags = Array[int]([30, 52])
 fallback_event_uuid = "tavern_gacha_success_fallback"
 archetype_uuid = "jiaoyou_tavern_gacha_success"
 possibility = "xxs_success_rate"
-failed_result = SubResource("Resource_2607k")
-defer_config = SubResource("Resource_trxy2")
+failed_result = SubResource("Resource_b3av3")
+defer_config = SubResource("Resource_2607k")
 uuid = "jiaoyou_tavern_gacha"
 name = "ACT_JIAOYOU_TAVERN_GACHA_NAME"
 description = "ACT_JIAOYOU_TAVERN_GACHA_DESC"
