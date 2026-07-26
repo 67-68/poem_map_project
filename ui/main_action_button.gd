@@ -200,7 +200,7 @@ func _on_clicked() -> void:
 			else:
 				entity.set_meta("_place_mismatch", false)
 			
-			if not _is_remote and not _gray_reasons.is_empty():
+			if not _gray_reasons.is_empty():
 				var joined_reason := tr("CODE_MAIN_ACTION_BUTTON_46F4EC4498") + "、".join(_gray_reasons)
 				entity.set_meta("_is_locked", true)
 				entity.set_meta("_locked_reason", joined_reason)

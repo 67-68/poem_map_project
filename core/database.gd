@@ -75,6 +75,7 @@ var normal_poem_events: Dictionary
 
 var flags: Dictionary
 var action_archetypes: Dictionary = {}  # 🆕 key=archetype_key, val=ActionArchetype
+var event_pickers: Dictionary = {}      # 🆕 key=uuid, val=BaseEventPicker
 
 var life_path_points: Dictionary
 
@@ -238,6 +239,10 @@ func _init() -> void:
 				if action_archetypes.has(uuid):
 					Logging.warn("Database: ActionArchetype uuid 冲突，%s 覆盖已有: %s" % [base_key, uuid])
 				action_archetypes[uuid] = res
+			elif res is BaseEventPicker:
+				if event_pickers.has(uuid):
+					Logging.warn("Database: BaseEventPicker uuid 冲突，%s 覆盖已有: %s" % [base_key, uuid])
+				event_pickers[uuid] = res
 			elif res is HistoryEvent:
 				history_events[uuid] = res
 			elif res is BaseEvent:
@@ -511,6 +516,15 @@ func get_era(uuid: String):
 
 func get_archetype(key: String):
 	return action_archetypes.get(key)
+
+## 🆕 按 uuid 查找 EventPicker（如 "rumu_qingliu_picker"）。
+func get_event_picker(key: String) -> BaseEventPicker:
+	var picker = event_pickers.get(key)
+	if picker == null:
+		Logging.warn("Database.get_event_picker: picker '%s' 未找到" % key)
+		return null
+	Logging.info("Database.get_event_picker: '%s' → %s" % [key, picker.get_class()])
+	return picker
 
 ## 按 action_uuid + state 查找 archetype。state="" 时返回首个匹配的 archetype（兼容旧行为）。
 ## state="success"/"failure" 时精确匹配 state 字段。

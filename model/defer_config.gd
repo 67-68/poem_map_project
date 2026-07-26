@@ -21,4 +21,7 @@ class_name DeferConfig extends Resource
 
 @export var defer_success_event: String = '' # defer 完成之后，如果这个事件指定了，那么不使用scan event
 @export var use_defer: bool = false
-@export var event_picked_per_xun: BaseEventPicker = null
+## 🆕 Per-xun 事件选择器 UUID（指向 Database.event_pickers 注册表中的 key）。
+## 与 used_resource_archetype 同模式：不直接存 Resource，而是存 key 通过 Database 查找。
+## 示例："rumu_qingliu_picker" → Database.get_event_picker("rumu_qingliu_picker")
+@export var event_picked_per_xun: String = ""

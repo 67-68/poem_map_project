@@ -8,8 +8,8 @@
 [resource]
 script = ExtResource("3_miek1")
 day_consumed = 5.0
-_main_tag = 72
-_action_tags = Array[int]([72])
+_main_tag = 73
+_action_tags = Array[int]([73])
 uuid = "gan_lu"
 archetype_uuid = "gan_lu"
 possibility = "l_success_rate"

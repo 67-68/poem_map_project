@@ -752,9 +752,9 @@ func start_defer(action: Action, npc_target: String = "") -> void:
 		"npc_target": npc_target,
 		"event_picked_per_xun": config.event_picked_per_xun,
 	}
-	Logging.info("[ActionManager] ✅ 激活 defer: action=%s, xun=%d, ap_cost='%s'(%d), archetype='%s', fallback='%s', success_event='%s', per_xun_event=%s" % [
+	Logging.info("[ActionManager] ✅ 激活 defer: action=%s, xun=%d, ap_cost='%s'(%d), archetype='%s', fallback='%s', success_event='%s', per_xun_picker='%s'" % [
 		action_id, total_xun, config.ap_cost, amounts_ap, config.used_resource_archetype, config.failed_fallback, config.defer_success_event,
-		str(config.event_picked_per_xun) if config.event_picked_per_xun else "无"
+		config.event_picked_per_xun if not config.event_picked_per_xun.is_empty() else "无"
 	])
 	
 	# 通知 UI 刷新状态
@@ -892,20 +892,24 @@ func process_xun_tick() -> void:
 		# ── 🆕 per-xun 事件：消耗前触发，最后一旬跳过 ──
 		var remaining_before: int = data.get("remaining_xun", 1)
 		if remaining_before > 1:
-			var picker = data.get("event_picked_per_xun")
-			if picker and picker is BaseEventPicker:
-				var npc_target: String = data.get("npc_target", "")
-				var pick_ctx := {"action_id": action_id, "npc_target": npc_target}
-				var picked_uuid: String = picker.pick(pick_ctx)
-				if not picked_uuid.is_empty():
-					var event_data = Database.resolve(picked_uuid)
-					if event_data:
-						Logging.info("[ActionManager] 📖 defer per-xun 事件推送: action=%s, remaining_before=%d, event=%s, npc_target='%s'" % [action_id, remaining_before, picked_uuid, npc_target])
-						EventBus.push_event.emit(event_data)
+			var picker_uuid: String = data.get("event_picked_per_xun", "")
+			if not picker_uuid.is_empty():
+				var picker: BaseEventPicker = Database.get_event_picker(picker_uuid)
+				if picker != null:
+					var npc_target: String = data.get("npc_target", "")
+					var pick_ctx := {"action_id": action_id, "npc_target": npc_target}
+					var picked_uuid: String = picker.pick(pick_ctx)
+					if not picked_uuid.is_empty():
+						var event_data = Database.resolve(picked_uuid)
+						if event_data:
+							Logging.info("[ActionManager] 📖 defer per-xun 事件推送: action=%s, remaining_before=%d, event=%s, picker='%s', npc_target='%s'" % [action_id, remaining_before, picked_uuid, picker_uuid, npc_target])
+							EventBus.push_event.emit(event_data, pick_ctx)
+						else:
+							Logging.warn("[ActionManager] defer per-xun 事件 '%s' 未在 Database 中找到, action=%s" % [picked_uuid, action_id])
 					else:
-						Logging.warn("[ActionManager] defer per-xun 事件 '%s' 未在 Database 中找到, action=%s" % [picked_uuid, action_id])
+						Logging.info("[ActionManager] defer per-xun picker 返回空, action=%s, picker='%s'" % [action_id, picker_uuid])
 				else:
-					Logging.info("[ActionManager] defer per-xun picker 返回空, action=%s" % action_id)
+					Logging.warn("[ActionManager] defer per-xun: picker UUID '%s' 在 Database.event_pickers 中未找到, action=%s" % [picker_uuid, action_id])
 			else:
 				Logging.info("[ActionManager] defer per-xun: action=%s 无 event_picked_per_xun 配置, remaining_before=%d" % [action_id, remaining_before])
 		else:

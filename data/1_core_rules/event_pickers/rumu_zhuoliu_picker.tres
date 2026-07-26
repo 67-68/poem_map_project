@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="RumuZhuoliuPicker" load_steps=2 format=3 uid="uid://rumu_zhuoliu_picker"]
+
+[ext_resource type="Script" path="res://model/rumu_zhuoliu_picker.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")

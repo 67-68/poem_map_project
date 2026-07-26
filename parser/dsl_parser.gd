@@ -1563,10 +1563,8 @@ static func _build_action_from_row(row: Dictionary, ctx: Dictionary,
             dc.defer_success_event = defer_success_event
         var event_picked_per_xun = ctx.get("event_picked_per_xun", "")
         if not event_picked_per_xun.is_empty():
-            var picker = BaseEventPicker.new()
-            picker.event_uuid = event_picked_per_xun
-            dc.event_picked_per_xun = picker
-            Logging.info("[resource_converter] defer_config.event_picked_per_xun 设置为 %s" % event_picked_per_xun)
+            dc.event_picked_per_xun = event_picked_per_xun
+            Logging.info("[resource_converter] defer_config.event_picked_per_xun UUID 设置为 %s" % event_picked_per_xun)
         action.defer_config = dc
 
     # ── custom_option 硬编码处理 ──
