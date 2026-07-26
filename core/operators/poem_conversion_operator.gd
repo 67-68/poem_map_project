@@ -9,7 +9,7 @@ class_name PoemConversionOperator extends BaseOperator
 ##   - poem_lowest_level 控制 level→size 的整体偏移
 ##
 ## level → size 偏移公式:
-##   effective_index = poem.level - poem_lowest_level + 1
+##   effective_index = poem.level + poem_lowest_level - 1
 ##   size_key = LEVEL_TO_SIZE_BASE[effective_index]
 ##
 ## type_prefered 过滤:
@@ -81,7 +81,7 @@ func operate():
 	Logging.info('PoemConversionOperator.operate: 选中 poem — uuid=%s name=%s level=%d used_imaginary_types=%s' % [poem.uuid, poem.name, poem.level, str(poem.used_imaginary_types)])
 
 	# ── 2. level → size_key ──
-	var effective_index: int = poem.level - poem_lowest_level + 1
+	var effective_index: int = poem.level + poem_lowest_level - 1
 	var size_key: String = LEVEL_TO_SIZE_BASE.get(effective_index, "s")
 	Logging.info('PoemConversionOperator.operate: poem.level=%d - poem_lowest_level=%d + 1 → effective_index=%d → size_key=%s' % [poem.level, poem_lowest_level, effective_index, size_key])
 

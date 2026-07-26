@@ -15,11 +15,11 @@
 ### Level → Size 偏移
 
 ```
-effective_index = poem.level - poem_lowest_level + 1
+effective_index = poem.level + poem_lowest_level - 1
 size_key = LEVEL_TO_SIZE_BASE[effective_index]
 
 poem_lowest_level=1: L1→s, L2→m, L3→l  (默认)
-poem_lowest_level=2: L1→xs, L2→s, L3→m
+poem_lowest_level=2: L1→m, L2→l, L3→xl
 ```
 
 ### type_prefered 过滤

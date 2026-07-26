@@ -9,6 +9,7 @@ extends RefCounted
 ##   TimeOperator     → ⏱N天
 ##   TraitOperator    → 获/失 + trait 名
 ##   PoemRewardOperator → mode→短标签（卖诗/以诗换名/携诗拜谒）
+##   PoemConversionOperator → resource_uuid→短标签（以诗换钱/以诗换声望...）
 ##   其他 Operator    → 返回 ""（不展示）
 
 const _PropertyOperator = preload("res://core/model/property_operator.gd")
@@ -49,6 +50,8 @@ static func _simple_desc_for(op) -> String:
 		return _simple_trait(op)
 	if op is PoemRewardOperator:
 		return _simple_poem_reward(op)
+	if op is PoemConversionOperator:
+		return _simple_poem_conversion(op)
 	# 其他 Operator 类型在 simple 模式下不展示
 	return ""
 
@@ -104,6 +107,19 @@ static func _simple_poem_reward(pro) -> String:
 		"fame":
 			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324")
 		"baiye":
+			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE")
+		_:
+			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
+
+
+## PoemConversionOperator: resource_uuid→短标签
+static func _simple_poem_conversion(pco) -> String:
+	match pco.resource_uuid:
+		"money":
+			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
+		"prestige":
+			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324")
+		"progress":
 			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE")
 		_:
 			return TranslationServer.translate("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")

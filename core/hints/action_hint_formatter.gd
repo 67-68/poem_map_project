@@ -495,6 +495,10 @@ func _build_archetype_qualitative_preview(action, is_repeated: bool, profile) ->
 			var desc = op.describe_preview()
 			if not desc.is_empty():
 				lines.append("• " + desc)
+		elif op is PoemConversionOperator:
+			var desc = op.describe_preview()
+			if not desc.is_empty():
+				lines.append("• " + desc)
 
 	Logging.info("ActionHintFormatter._build_archetype_qualitative_preview: archetype '%s' → %d 定性行 (is_repeated=%s)" % [archetype_key, lines.size(), str(is_repeated)])
 	return lines
@@ -544,6 +548,19 @@ func _build_simple_archetype_preview(ops: Array, is_repeated: bool) -> Array[Str
 				"fame":
 					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324")
 				"baiye":
+					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE")
+				_:
+					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
+			if not desc.is_empty():
+				lines.append(desc)
+		elif op is PoemConversionOperator:
+			var desc = ""
+			match op.resource_uuid:
+				"money":
+					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")
+				"prestige":
+					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_A7B388A324")
+				"progress":
 					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_D00FB77ACE")
 				_:
 					desc = tr("CODE_SIMPLE_OPERATOR_PREVIEW_FORMATTER_49638608D2")

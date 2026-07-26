@@ -1570,6 +1570,39 @@ static func _build_action_from_row(row: Dictionary, ctx: Dictionary,
 static func _apply_custom_option(action: Resource, custom_option: String, uuid: String, row: Dictionary) -> void:
     Logging.info("[resource_converter] custom_option: %s for %s" % [custom_option, uuid])
 
+    # ── poem_conversion: 前缀检查（不能用 match 模式匹配，提前拦截） ──
+    if custom_option.begins_with("poem_conversion:"):
+        # 格式: poem_conversion:<resource_uuid>:<poem_lowest_level>
+        var parts := custom_option.trim_prefix("poem_conversion:").split(":", false)
+        if parts.size() < 2:
+            Logging.err("[resource_converter] poem_conversion 格式错误: %s for %s, 期望 poem_conversion:resource:level" % [custom_option, uuid])
+            return
+        var conv_resource_uuid: String = parts[0].strip_edges()
+        var conv_lowest_level: int = parts[1].strip_edges().to_int()
+        if conv_lowest_level < 1:
+            conv_lowest_level = 1
+
+        var poem_conv_cls = preload("res://core/operators/poem_conversion_operator.gd")
+        var poem_req_cls = preload("res://core/requirements/poem_requirement.gd")
+
+        var conv_op = poem_conv_cls.new()
+        conv_op.resource_uuid = conv_resource_uuid
+        conv_op.poem_lowest_level = conv_lowest_level
+        conv_op.show_hint_on_convert = true
+
+        var req = poem_req_cls.new()
+
+        if action.action_results == null:
+            action.action_results = []
+        action.action_results.append(conv_op)
+
+        if action.aciton_requirements == null:
+            action.aciton_requirements = []
+        action.aciton_requirements.append(req)
+
+        Logging.info("[resource_converter] %s: 注入 PoemConversionOperator(resource=%s poem_lowest_level=%d) + PoemRequirement" % [uuid, conv_resource_uuid, conv_lowest_level])
+        return
+
     match custom_option:
         "consume_leverage":
             # 注入 ConsumeRandomLeverageOperator 到 action_results
