@@ -1,5 +1,6 @@
-class_name NpcActionButton extends Button
+class_name NpcActionButton extends PanelContainer
 ## 右栏确认/覆盖按钮 — 双模式统一脚本
+## 根节点 PanelContainer（视觉容器），内部透明 Button 代理交互事件
 ##
 ## 默认模式（_is_override_mode = false）：
 ##   set_action_data(name, uuid, [entity]) → 标题 + description + SIMPLE profile 四模块 + 锁定提示
@@ -15,6 +16,8 @@ signal execution_completed(entity: GameEntity)
 
 const _ActionHintBuilder = preload("res://core/action_hint_builder.gd")
 const _HintProfile = preload("res://core/hints/hint_profile.gd")
+const _STYLE_FLAT = preload("res://ui/npc_btn_flat.tres")
+const _STYLE_HOVERED = preload("res://ui/npc_btn_hovered.tres")
 
 var _is_override_mode: bool = false
 
@@ -27,20 +30,26 @@ var _lock_reason: String = ""
 ## 🐛 默认模式锁定检查 — 保存 set_action_data 传入的 entity 引用
 var _entity: GameEntity = null
 
-@onready var _title_label: Label = $MarginContainer/VBoxContainer/Label
-@onready var _desc_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer/Label2
-@onready var _feas_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer/Label3
-@onready var _cost_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer2/Label4
-@onready var _output_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer2/Label5
-@onready var _req_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer3/Label4
-@onready var _risk_label: RichTextLabel = $MarginContainer/VBoxContainer/HBoxContainer3/Label6
+@onready var _inner_button: Button = $Button
+@onready var _title_label: Label = $Button/MarginContainer/VBoxContainer/Label
+@onready var _desc_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer/Label2
+@onready var _feas_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer/Label3
+@onready var _cost_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer2/Label4
+@onready var _output_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer2/Label5
+@onready var _req_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer3/Label4
+@onready var _risk_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer3/Label6
 
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	if not pressed.is_connected(_on_pressed):
-		pressed.connect(_on_pressed)
+	if _inner_button:
+		if not _inner_button.pressed.is_connected(_on_pressed):
+			_inner_button.pressed.connect(_on_pressed)
+		if not _inner_button.mouse_entered.is_connected(_on_hover_enter):
+			_inner_button.mouse_entered.connect(_on_hover_enter)
+		if not _inner_button.mouse_exited.is_connected(_on_hover_exit):
+			_inner_button.mouse_exited.connect(_on_hover_exit)
 	Logging.info("NpcActionButton._ready: override_mode=%s" % str(_is_override_mode))
 
 
@@ -50,6 +59,18 @@ func _on_pressed() -> void:
 		_on_override_pressed()
 	else:
 		_on_default_pressed()
+
+
+## ── Hover 样式切换 ──
+
+func _on_hover_enter() -> void:
+	add_theme_stylebox_override("panel", _STYLE_HOVERED)
+	Logging.info("NpcActionButton._on_hover_enter: stylebox → hovered")
+
+
+func _on_hover_exit() -> void:
+	add_theme_stylebox_override("panel", _STYLE_FLAT)
+	Logging.info("NpcActionButton._on_hover_exit: stylebox → flat")
 
 
 func _on_default_pressed() -> void:
@@ -94,7 +115,8 @@ func _on_override_pressed() -> void:
 ## ── 默认模式 ──
 
 func set_placeholder(label_text: String = "") -> void:
-	text = label_text
+	if _title_label:
+		_title_label.text = label_text
 
 ## 🆕 锁定态专用 — 标题显示锁因，按钮灰化，其他 label 清空
 func set_action_data_for_locked(entity: GameEntity) -> void:
@@ -118,7 +140,8 @@ func set_action_data_for_locked(entity: GameEntity) -> void:
 	if _risk_label:
 		_risk_label.text = ""
 	modulate = Color(0.4, 0.4, 0.4, 0.6)
-	disabled = true
+	if _inner_button:
+		_inner_button.disabled = true
 	HoverPopupManager.unregister(self)
 	Logging.info("NpcActionButton.set_action_data_for_locked: entity='%s' reason='%s'" % [entity.name if entity else "null", reason])
 
@@ -131,7 +154,8 @@ func set_action_data(action_name: String, action_uuid: String, entity = null) ->
 
 	# 🆕 恢复正常 visual（从 set_action_data_for_locked 灰化态恢复）
 	modulate = Color.WHITE
-	disabled = false
+	if _inner_button:
+		_inner_button.disabled = false
 
 	if _title_label:
 		_title_label.text = action_name
@@ -289,7 +313,8 @@ static func _set_label(label_node: RichTextLabel, text: String) -> void:
 
 func _set_gray_visual(gray: bool) -> void:
 	modulate = Color(0.5, 0.5, 0.5, 0.6) if gray else Color.WHITE
-	disabled = false
+	if _inner_button:
+		_inner_button.disabled = false
 
 
 ## 节点从场景树移除时注销 hover 绑定

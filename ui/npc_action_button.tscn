@@ -1,38 +1,27 @@
 [gd_scene format=3 uid="uid://cdy2oig6yguks"]
 
 [ext_resource type="Script" uid="uid://cne3h32osqeyg" path="res://ui/npc_action_button.gd" id="1_npc"]
+[ext_resource type="StyleBox" uid="uid://n8tnx2lmaamv" path="res://ui/npc_btn_flat.tres" id="1_tcxmc"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w6v0i"]
-bg_color = Color(0.8666667, 0.6666667, 0.69803923, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7xb00"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8hk5g"]
-bg_color = Color(0.8666667, 0.6666667, 0.69803923, 0.6392157)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.3764706, 0, 0, 1)
-
-[node name="Button" type="Button" unique_id=1556074059]
+[node name="Button" type="PanelContainer" unique_id=2120409378]
 custom_minimum_size = Vector2(100, 75)
-offset_right = 256.0
-offset_bottom = 75.0
+offset_right = 400.0
+offset_bottom = 104.0
 size_flags_horizontal = 3
 theme_type_variation = &"FlatButton"
-theme_override_styles/normal = SubResource("StyleBoxFlat_w6v0i")
-theme_override_styles/hover = SubResource("StyleBoxFlat_8hk5g")
+theme_override_styles/panel = ExtResource("1_tcxmc")
 script = ExtResource("1_npc")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=75229748]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Button" type="Button" parent="." unique_id=772814686]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_7xb00")
+
+[node name="MarginContainer" type="MarginContainer" parent="Button" unique_id=75229748]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 104.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 5
@@ -40,105 +29,121 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1916463022]
+[node name="VBoxContainer" type="VBoxContainer" parent="Button/MarginContainer" unique_id=1916463022]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=616245205]
+[node name="Label" type="Label" parent="Button/MarginContainer/VBoxContainer" unique_id=616245205]
 layout_mode = 2
+mouse_filter = 2
 theme_type_variation = &"SubTitleText"
 theme_override_font_sizes/font_size = 16
-text = "条件不满足"
+text = "UI_NPC_ACTION_BUTTON_TEXT_0"
 horizontal_alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1573408430]
+[node name="HBoxContainer" type="HBoxContainer" parent="Button/MarginContainer/VBoxContainer" unique_id=1573408430]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 1
 alignment = 2
 
-[node name="Label2" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1179952213]
+[node name="Label2" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1179952213]
 layout_mode = 2
+mouse_filter = 2
 size_flags_horizontal = 10
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
+text = "UI_NPC_ACTION_BUTTON_TEXT_1"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1636522523]
+[node name="VSeparator" type="VSeparator" parent="Button/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1636522523]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="Label3" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1308748305]
+[node name="Label3" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1308748305]
 layout_mode = 2
+mouse_filter = 2
 size_flags_horizontal = 10
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
+text = "UI_NPC_ACTION_BUTTON_TEXT_2"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=766634195]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Button/MarginContainer/VBoxContainer" unique_id=766634195]
 layout_mode = 2
 theme_override_constants/separation = 1
 alignment = 2
 
-[node name="Label4" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=813463460]
+[node name="Label4" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=813463460]
 layout_mode = 2
+mouse_filter = 2
 size_flags_horizontal = 9
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
+text = "UI_NPC_ACTION_BUTTON_TEXT_3"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1982560858]
+[node name="VSeparator" type="VSeparator" parent="Button/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1982560858]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="Label5" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1244562373]
+[node name="Label5" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1244562373]
 layout_mode = 2
+mouse_filter = 2
 size_flags_horizontal = 9
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
+text = "UI_NPC_ACTION_BUTTON_TEXT_4"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=83632684]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Button/MarginContainer/VBoxContainer" unique_id=83632684]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 1
 alignment = 2
 
-[node name="Label4" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1763795816]
+[node name="Label4" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1763795816]
 layout_mode = 2
-size_flags_horizontal = 9
+mouse_filter = 2
+size_flags_horizontal = 8
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
+text = "求: "
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 2
 
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=593718357]
+[node name="VSeparator" type="VSeparator" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=593718357]
 layout_mode = 2
-size_flags_horizontal = 9
+mouse_filter = 2
+size_flags_horizontal = 8
 
-[node name="Label6" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1162219148]
+[node name="Label6" type="RichTextLabel" parent="Button/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1162219148]
 layout_mode = 2
-size_flags_horizontal = 9
+mouse_filter = 2
+size_flags_horizontal = 3
 theme_type_variation = &"NarrativeText"
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
+text = "UI_NPC_ACTION_BUTTON_TEXT_5"
 fit_content = true
 horizontal_alignment = 2

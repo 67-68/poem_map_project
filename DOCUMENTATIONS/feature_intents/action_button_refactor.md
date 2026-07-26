@@ -10,8 +10,23 @@
 SceneActionPanel (action_button.gd) — 纯UI渲染基类，extends Button
 ├── MainActionButton (main_action_button.gd) — 父行动完整执行管线
 ├── SubActionButton (sub_action_button.gd) — Toggle Mode 选择器
-└── NpcActionButton (npc_action_button.gd) — 确认执行按钮
+└── NpcActionButton (npc_action_button.gd) — 确认执行按钮，extends PanelContainer
+                                               内部透明 Button 代理点击/hover 事件
 ```
+
+### NpcActionButton 层级结构
+
+```
+PanelContainer (root, theme_override_styles/panel = npc_btn_flat.tres)
+├── Button (透明代理, StyleBoxEmpty, 负责 pressed/mouse_entered/mouse_exited)
+│   └── MarginContainer → VBoxContainer → 各 label/Separator
+```
+
+所有 Label/RichTextLabel/VSeparator 设 `mouse_filter=IGNORE` 确保鼠标事件穿透到内部 Button。
+
+Hover 状态：内部 Button 的 `mouse_entered`/`mouse_exited` 信号驱动 PanelContainer 的 `theme_override_styles/panel` 在 `npc_btn_flat.tres` ↔ `npc_btn_hovered.tres` 之间切换。
+
+锁定态：`$Button.disabled = true`（替代原来 Button 根的 disabled），PanelContainer 的 modulate 灰化。
 
 ## 核心类
 
