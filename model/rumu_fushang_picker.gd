@@ -9,9 +9,9 @@ func _init() -> void:
 		"rumu_fushang_poem_to_prestige",
 	]
 	_fallback_map = {
-		"rumu_fushang_talent_to_money": "event_cooldown_wall",
-		"rumu_fushang_poem_to_momentum": "event_cooldown_wall",
-		"rumu_fushang_poem_to_prestige": "event_cooldown_wall",
+		"rumu_fushang_talent_to_money": "rumu_fushang_fallback",
+		"rumu_fushang_poem_to_momentum": "rumu_fushang_fallback",
+		"rumu_fushang_poem_to_prestige": "rumu_fushang_fallback",
 	}
 	_outcome = "success"
 	Logging.info("[RumuFushangPicker] 初始化完成，_archetypes=%d 项" % _archetypes.size())

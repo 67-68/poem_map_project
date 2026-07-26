@@ -10,10 +10,10 @@ func _init() -> void:
 		"rumu_qingliu_health_to_talent",
 	]
 	_fallback_map = {
-		"rumu_qingliu_money_to_prestige": "event_cooldown_wall",
-		"rumu_qingliu_money_to_talent": "event_cooldown_wall",
-		"rumu_qingliu_health_to_prestige": "event_cooldown_wall",
-		"rumu_qingliu_health_to_talent": "event_cooldown_wall",
+		"rumu_qingliu_money_to_prestige": "rumu_qingliu_fallback",
+		"rumu_qingliu_money_to_talent": "rumu_qingliu_fallback",
+		"rumu_qingliu_health_to_prestige": "rumu_qingliu_fallback",
+		"rumu_qingliu_health_to_talent": "rumu_qingliu_fallback",
 	}
 	_outcome = "success"
 	Logging.info("[RumuQingliuPicker] 初始化完成，_archetypes=%d 项" % _archetypes.size())

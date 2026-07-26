@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_bo"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="2_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_eo"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="4_re"]
+
+[sub_resource type="Resource" id="Res_cr_decline"]
+script = ExtResource("2_cr")
+
+[sub_resource type="Resource" id="Res_cr_accept"]
+script = ExtResource("2_cr")
+
+[sub_resource type="Resource" id="Res_opt_decline"]
+script = ExtResource("3_eo")
+choice_result = SubResource("Res_cr_decline")
+description = "RUMU_ZHUOLIU_FB_OPT_DECLINE_DESC"
+
+[sub_resource type="Resource" id="Res_opt_accept"]
+script = ExtResource("3_eo")
+choice_result = SubResource("Res_cr_accept")
+description = "RUMU_ZHUOLIU_FB_OPT_ACCEPT_DESC"
+
+[resource]
+script = ExtResource("4_re")
+weight = 10.0
+target_tags = Array[String](["action:main:baiye"])
+options = Array[ExtResource("1_bo")]([SubResource("Res_opt_decline"), SubResource("Res_opt_accept")])
+uuid = "rumu_zhuoliu_fallback"
+name = "RUMU_ZHUOLIU_FB_NAME"
+description = "RUMU_ZHUOLIU_FB_DESC"

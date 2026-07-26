@@ -9,9 +9,9 @@ func _init() -> void:
 		"rumu_zhuoliu_talent_to_money",
 	]
 	_fallback_map = {
-		"rumu_zhuoliu_talent_to_momentum": "event_cooldown_wall",
-		"rumu_zhuoliu_poem_to_momentum": "event_cooldown_wall",
-		"rumu_zhuoliu_talent_to_money": "event_cooldown_wall",
+		"rumu_zhuoliu_talent_to_momentum": "rumu_zhuoliu_fallback",
+		"rumu_zhuoliu_poem_to_momentum": "rumu_zhuoliu_fallback",
+		"rumu_zhuoliu_talent_to_money": "rumu_zhuoliu_fallback",
 	}
 	_outcome = "success"
 	Logging.info("[RumuZhuoliuPicker] 初始化完成，_archetypes=%d 项" % _archetypes.size())

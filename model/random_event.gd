@@ -258,10 +258,7 @@ func init(context: Dictionary) -> Array:
                 context = dup.init(context)
                 _preinit_ops.append(dup)
     
-    # ── 🆕 [NEW] 从 context 读取 ActionArchetype（由 action_button 注入的 archetype_base + outcome）──
-    # 当 action 触发事件时，archetype_base = action.uuid, outcome = "success"/"failure"
-    # Database.get_archetype_by_uuid(archetype_base, outcome) 查找 ActionArchetype
-    # 将其 operators 注入到每个选项的 choice_result
+    # ── 🆕 [NEW] 从 context 读取 ActionArchetype（success 通道：archetype_base + outcome）──
     var _action_arch_ops: Array[BaseOperator] = []
     var archetype_base = context.get("archetype_base", "")
     var outcome = context.get("outcome", "")
@@ -269,11 +266,10 @@ func init(context: Dictionary) -> Array:
     if not archetype_base.is_empty() and not outcome.is_empty():
         var action_arch = Database.get_archetype_by_uuid(archetype_base, outcome)
         if action_arch != null and not action_arch.operators.is_empty():
-            # 检测是否与事件自身的 archetype_id 冲突（defer 到期时常见），避免重复注入
-            var _context_arch_uuid: String = "%s_%s" % [archetype_base, outcome]  # e.g. "baiye_normal_success"
+            var _context_arch_uuid: String = "%s_%s" % [archetype_base, outcome]
             if not archetype_id.is_empty() and _context_arch_uuid == archetype_id:
                 Logging.warn("[RandomEvent.init] ⚠ archetype_base+outcome '%s' 与事件自身 archetype_id 相同 — 跳过重复注入 (event='%s')" % [_context_arch_uuid, name])
-                _action_arch_ops = []  # 清空，preinit_ops 已包含相同 operator
+                _action_arch_ops = []
             else:
                 Logging.info("RandomEvent.init: context archetype_base='%s' outcome='%s' → ActionArchetype (%d operators) for event '%s'" % [archetype_base, outcome, action_arch.operators.size(), name])
                 for op in action_arch.operators:
@@ -284,36 +280,79 @@ func init(context: Dictionary) -> Array:
         else:
             Logging.info("RandomEvent.init: context archetype_base='%s' + outcome='%s' → 未找到对应的 ActionArchetype" % [archetype_base, outcome])
     
+    # ── 🆕 [NEW] decline 通道：decline_archetype_base + decline_outcome ──
+    # 用于差分注入：option[0]（拒绝选项）获得 decline operators，option[1+] 获得 success operators
+    var _decline_arch_ops: Array[BaseOperator] = []
+    var decline_base = context.get("decline_archetype_base", "")
+    var decline_outcome = context.get("decline_outcome", "")
+    if not decline_base.is_empty() and not decline_outcome.is_empty():
+        var decline_arch = Database.get_archetype_by_uuid(decline_base, decline_outcome)
+        if decline_arch != null:
+            Logging.info("RandomEvent.init: decline archetype '%s/%s' → %d operators" % [decline_base, decline_outcome, decline_arch.operators.size()])
+            for op in decline_arch.operators:
+                var dup = op.duplicate()
+                context = dup.init(context)
+                _decline_arch_ops.append(dup)
+        else:
+            Logging.warn("RandomEvent.init: decline archetype '%s/%s' 未找到" % [decline_base, decline_outcome])
+    
     var all_options = super.init(context)
     
-    # ── Archetype 运行时注入：universal_result → per-option choice_result ──
-    # 同时注入事件自身的 archetype (RandomEvent.archetype_id) 和 ActionArchetype (archetype_base+outcome)
+    # ── Archetype 运行时差分注入 ──
+    # 若有 decline 通道 + 两个以上选项 → option[0]=decline, option[1+]=success
+    # 否则向后兼容：所有选项注入 success operators（原行为）
+    var _has_decline: bool = not decline_base.is_empty() and all_options.size() >= 2
     
-    # 合并两个源
-    var _all_inject_ops: Array[BaseOperator] = []
-    _all_inject_ops.append_array(_preinit_ops)
-    _all_inject_ops.append_array(_action_arch_ops)
-    
-    if not _all_inject_ops.is_empty():
-        Logging.info("RandomEvent.init: 共注入 %d operators (preinit=%d + action_arch=%d) into each of %d option(s) for event '%s'" % [_all_inject_ops.size(), _preinit_ops.size(), _action_arch_ops.size(), all_options.size(), name])
-        for opt in all_options:
-            if opt == null:
-                continue
-            if not "choice_result" in opt:
-                continue
-            var cr: ChoiceResult = opt.choice_result
-            if not cr:
-                cr = ChoiceResult.new()
-                opt.choice_result = cr
-            
-            for op in _all_inject_ops:
-                cr.operators.append(op.duplicate())
-            
-            cr.init(context)
+    if _has_decline:
+        # ── 差分注入模式 ──
+        _inject_ops_to_option(all_options, 0, _preinit_ops, _decline_arch_ops, context)
+        for i in range(1, all_options.size()):
+            _inject_ops_to_option(all_options, i, _preinit_ops, _action_arch_ops, context)
+        Logging.info("RandomEvent.init: 差分注入完成 — option[0]=decline(%d ops), option[1-%d]=success(%d ops), preinit=%d" % [_decline_arch_ops.size(), all_options.size() - 1, _action_arch_ops.size(), _preinit_ops.size()])
     else:
-        Logging.warn("[DIAG] RandomEvent.init: _all_inject_ops 为空！preinit=%d action_arch=%d — person_state 不会执行" % [_preinit_ops.size(), _action_arch_ops.size()])
+        # ── 盲注入模式（向后兼容）──
+        var _all_inject_ops: Array[BaseOperator] = []
+        _all_inject_ops.append_array(_preinit_ops)
+        _all_inject_ops.append_array(_action_arch_ops)
+        
+        if not _all_inject_ops.is_empty():
+            Logging.info("RandomEvent.init: 共注入 %d operators (preinit=%d + action_arch=%d) into each of %d option(s) for event '%s'" % [_all_inject_ops.size(), _preinit_ops.size(), _action_arch_ops.size(), all_options.size(), name])
+            for opt in all_options:
+                if opt == null or not "choice_result" in opt:
+                    continue
+                var cr: ChoiceResult = opt.choice_result
+                if not cr:
+                    cr = ChoiceResult.new()
+                    opt.choice_result = cr
+                for op in _all_inject_ops:
+                    cr.operators.append(op.duplicate())
+                cr.init(context)
+        else:
+            Logging.warn("[DIAG] RandomEvent.init: _all_inject_ops 为空！preinit=%d action_arch=%d" % [_preinit_ops.size(), _action_arch_ops.size()])
     
     return all_options
+
+
+## 🆕 向指定 index 的 option 注入 preinit_ops + archetype_ops。
+## 差分注入的原子操作：确保 choice_result 存在 → append duplicated operators → init
+func _inject_ops_to_option(all_options: Array, idx: int, preinit_ops: Array, arch_ops: Array, context: Dictionary) -> void:
+    if idx < 0 or idx >= all_options.size():
+        Logging.err("RandomEvent._inject_ops_to_option: idx=%d 越界 (size=%d)" % [idx, all_options.size()])
+        return
+    var opt = all_options[idx]
+    if opt == null or not "choice_result" in opt:
+        Logging.warn("RandomEvent._inject_ops_to_option: option[%d] null 或无 choice_result" % idx)
+        return
+    var cr: ChoiceResult = opt.choice_result
+    if not cr:
+        cr = ChoiceResult.new()
+        opt.choice_result = cr
+    for op in preinit_ops:
+        cr.operators.append(op.duplicate())
+    for op in arch_ops:
+        cr.operators.append(op.duplicate())
+    cr.init(context)
+    Logging.info("RandomEvent._inject_ops_to_option: option[%d] ← preinit=%d + arch=%d ops" % [idx, preinit_ops.size(), arch_ops.size()])
 
 # 会被使用time operator中的source tag匹配. 由于无法集合两个enum那就单独写再集合
 var target_tags: Array[String] = []:

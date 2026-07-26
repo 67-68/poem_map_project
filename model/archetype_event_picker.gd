@@ -71,9 +71,13 @@ func _resolve_fallback(arch_key: String) -> String:
 	return ""
 
 
-## 向 ctx 注入 archetype_base 和 outcome。
-## RandomEvent.init() 会读取这两个 key 并调用 Database.get_archetype_by_uuid() 注入 operators。
+## 向 ctx 注入双通道 archetype：
+##   archetype_base / outcome           → success option（ops[1] 及之后）
+##   decline_archetype_base / decline_outcome → decline option（ops[0]）
+## RandomEvent.init() 按 option 位置差分分配 operators。
 func _inject_archetype(ctx: Dictionary, arch_key: String) -> void:
 	ctx["archetype_base"] = arch_key
 	ctx["outcome"] = _outcome
-	Logging.info("[ArchetypeEventPicker] _inject_archetype: ctx['archetype_base']='%s', ctx['outcome']='%s'" % [arch_key, _outcome])
+	ctx["decline_archetype_base"] = "rumu_decline"
+	ctx["decline_outcome"] = "success"
+	Logging.info("[ArchetypeEventPicker] _inject_archetype: success='%s', decline='rumu_decline'" % arch_key)
