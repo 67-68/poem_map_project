@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_req"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_op"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="3_action"]
+
+[resource]
+script = ExtResource("3_action")
+required_place = "huangcheng"
+_action_tags = Array[int]([80, 29])
+fallback_event_uuid = "baiye_touzeng_fallback"
+archetype_uuid = "baiye_touzeng_success"
+day_consumed = 0.0
+uuid = "baiye_touzeng"
+name = "ACT_BAIYE_TOUZENG_NAME"
+description = "ACT_BAIYE_TOUZENG_DESC"

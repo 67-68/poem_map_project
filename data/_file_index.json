@@ -428,6 +428,7 @@
     "1_core_rules/archetypes/baiye_threaten_cost.tres",
     "1_core_rules/archetypes/baiye_threaten_failure.tres",
     "1_core_rules/archetypes/baiye_threaten_success.tres",
+    "1_core_rules/archetypes/baiye_touzeng_success.tres",
     "1_core_rules/archetypes/denggao_leyouyuan_failure.tres",
     "1_core_rules/archetypes/denggao_leyouyuan_success.tres",
     "1_core_rules/archetypes/denggao_qujiangchi_success.tres",
@@ -530,6 +531,7 @@
     "1_core_rules/events/fallback/baiye_poem_visit_fallback.tres",
     "1_core_rules/events/fallback/baiye_threaten_failed_fallback.tres",
     "1_core_rules/events/fallback/baiye_threaten_fallback.tres",
+    "1_core_rules/events/fallback/baiye_touzeng_fallback.tres",
     "1_core_rules/events/fallback/da_you_shi.tres",
     "1_core_rules/events/fallback/denggao_fallback.tres",
     "1_core_rules/events/fallback/denggao_leyouyuan_failed_fallback.tres",
@@ -557,6 +559,8 @@
     "1_core_rules/events/fallback/fangshi_sell_poem_fallback.tres",
     "1_core_rules/events/fallback/fangshi_shiyao_failed_fallback.tres",
     "1_core_rules/events/fallback/fangshi_shiyao_fallback.tres",
+    "1_core_rules/events/fallback/fangshi_storyteller_failed_fallback.tres",
+    "1_core_rules/events/fallback/fangshi_storyteller_fallback.tres",
     "1_core_rules/events/fallback/hold_feast_failure_fallback.tres",
     "1_core_rules/events/fallback/hold_feast_success_fallback.tres",
     "1_core_rules/events/fallback/imaginary_gain_buyi.tres",
@@ -688,6 +692,7 @@
     "3_actions_pool/actions/bai_ye/baiye_mass_distribution.tres",
     "3_actions_pool/actions/bai_ye/baiye_normal.tres",
     "3_actions_pool/actions/bai_ye/baiye_poem_visit.tres",
+    "3_actions_pool/actions/bai_ye/baiye_touzeng.tres",
     "3_actions_pool/actions/bai_ye/jiwen_leverage_exchange.tres",
     "3_actions_pool/events/drink_with_libai.tres",
     "3_actions_pool/events/event_changhe_guest.tres",
@@ -765,6 +770,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-26T06:41:53.319396+00:00",
-  "total": 764
+  "generated_at": "2026-07-26T07:02:07.580642+00:00",
+  "total": 769
 }

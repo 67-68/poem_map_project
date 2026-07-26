@@ -46,6 +46,7 @@ enum ACTION_TAGS {
 
 	ACTION_JIAOYOU_RECITE_POEM, # 交游·宣读诗词
 	ACTION_FANGSHI_SELL_POEM, # 坊市·卖诗
+	ACTION_FANGSHI_STORYTELLER, # 坊市·说书人
 
 	ACTION_BAIYE_THREATEN,           # 拜谒·要挟
 	ACTION_BAIYE_POEM_VISIT,         # 拜谒·携诗
@@ -77,6 +78,7 @@ enum ACTION_TAGS {
 	ACTOR_DEATH_NOBODY,              # 无人关注（fallback 专用）
 	ACTION_MAIN_GANLU,              # 赶路（主行动标签，用于事件路由）
 	ACTION_DUZHUO_FUQIN,            # 独酌·抚琴
+	ACTION_BAIYE_TOUZENG,           # 拜谒·投赠
 }
 
 enum PROPS {
