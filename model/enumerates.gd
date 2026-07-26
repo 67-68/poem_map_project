@@ -76,6 +76,7 @@ enum ACTION_TAGS {
 	ACTOR_DEATH_POOR,                # 没钱死亡
 	ACTOR_DEATH_NOBODY,              # 无人关注（fallback 专用）
 	ACTION_MAIN_GANLU,              # 赶路（主行动标签，用于事件路由）
+	ACTION_DUZHUO_FUQIN,            # 独酌·抚琴
 }
 
 enum PROPS {

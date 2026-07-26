@@ -34,8 +34,8 @@
     "book_place/bookPlace3.ogg",
     "heartbeat/impactWood_heavy_003.ogg",
     "heartbeat/impactWood_heavy_004.ogg",
-    "backgrounds/actions/jiao_you.ogg",
-    "backgrounds/actions/tut_chuyou.ogg",
+    "backgrounds/actions/deng_gao.ogg",
+    "backgrounds/actions/fang_shi.ogg",
     "backgrounds/drones/drone1.ogg",
     "backgrounds/drones/drone2.ogg",
     "backgrounds/drones/drone3.ogg",
@@ -57,6 +57,6 @@
     "book_flip/bookFlip1.ogg",
     "book_flip/bookFlip2.ogg"
   ],
-  "generated_at": "2026-07-19T09:20:40.754737+00:00",
+  "generated_at": "2026-07-26T06:41:59.113951+00:00",
   "total": 56
 }

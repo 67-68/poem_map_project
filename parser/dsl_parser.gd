@@ -1373,6 +1373,7 @@ const ActionArchetypeCls = preload("res://core/model/action_archetype.gd")
 const DeferConfigCls = preload("res://model/defer_config.gd")
 const ChoiceResultCls = preload("res://model/choice_result.gd")
 const PushEventOperatorCls = preload("res://core/operators/push_event_operator.gd")
+const TraitRequirementCls = preload("res://core/requirements/trait_requirement.gd")
 
 
 ## 解析 resource_converter CSV 数据
@@ -1563,7 +1564,39 @@ static func _build_action_from_row(row: Dictionary, ctx: Dictionary,
     if not custom_option.is_empty():
         _apply_custom_option(action, custom_option, uuid, row)
 
+    # ── prerequisite: 门槛条件解析（如 trait:qin_instrument）──
+    var prerequisite_str = str(row.get("prerequisite", "")).strip_edges()
+    if not prerequisite_str.is_empty():
+        action.prerequisite = _parse_prerequisite(prerequisite_str, uuid)
+
     return action
+
+
+## 解析 prerequisite 列 → BaseRequirements
+## 格式: "trait:qin_instrument" → TraitRequirement(trait_name=qin_instrument, HAS)
+## 后续可扩展: "flag:xxx", "property:money>200" 等
+static func _parse_prerequisite(raw: String, uuid: String) -> BaseRequirements:
+    var colon_idx = raw.find(":")
+    if colon_idx == -1:
+        Logging.warn("[resource_converter] prerequisite 格式错误 '%s' for %s, 期望 prefix:value" % [raw, uuid])
+        return null
+
+    var prefix = raw.substr(0, colon_idx).strip_edges()
+    var value = raw.substr(colon_idx + 1).strip_edges()
+
+    match prefix:
+        "trait":
+            if value.is_empty():
+                Logging.warn("[resource_converter] prerequisite trait value 为空 for %s" % uuid)
+                return null
+            var req = TraitRequirementCls.new()
+            req.trait_name = value
+            req.operator = REQ_OPERATOR.EXIST.HAS
+            Logging.info("[resource_converter] %s: prerequisite TraitRequirement HAS '%s'" % [uuid, value])
+            return req
+        _:
+            Logging.warn("[resource_converter] 未知 prerequisite prefix '%s' for %s" % [prefix, uuid])
+            return null
 
 
 ## 处理 custom_option 字段：硬编码注入特殊 operator/requirement

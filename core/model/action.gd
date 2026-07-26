@@ -44,6 +44,10 @@ var area_tags:
 @export var action_results: Array[BaseOperator]
 @export var aciton_requirements: Array[BaseRequirements]
 
+## 门槛条件：不满足 = 完全隐藏（Picker HIDE），与 aciton_requirements 完全独立。
+## 用于表示「未购买琴就不能抚琴」等永久性道具门槛。
+@export var prerequisite: BaseRequirements
+
 ## 🆕 当前活跃的 generator（由 DeferredLockActionOperator 生成并挂载）
 ## null = 无活跃 generator；非 null = 每次点击 action 时消费一个 operator
 var generator: Generator = null

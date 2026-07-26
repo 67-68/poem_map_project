@@ -98,6 +98,12 @@ func _on_clicked() -> void:
 				Logging.info("MainActionButton: sub-action '%s' 在黑名单中，跳过" % sub_uuid)
 				continue
 			
+			# Phase 0: prerequisite — 永久性门槛，不满足 → HIDE
+			if sub_action.prerequisite:
+				if not sub_action.prerequisite.compare(PlayerState):
+					Logging.info("MainActionButton: sub-action '%s' HIDE — prerequisite not met" % sub_action.uuid)
+					continue
+
 			# Phase 1: HIDE 检查
 			var _should_hide := false
 			var archetype = Database.get_archetype_by_uuid(sub_action.uuid, "success")

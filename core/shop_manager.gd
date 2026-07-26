@@ -91,6 +91,14 @@ func _ready() -> void:
 			"detail_description": "一面小巧的拨浪鼓，咚咚作响。送给孩子的最好礼物，虽然对你没什么实际用处，但看着它就想起宗文宗武的笑脸。",
 			"purchase_operators": [_make_trait_add_op("rattle_drum")],
 		},
+		{
+			"product_id": "qin_instrument",
+			"product_name": "古琴",
+			"price": 150,
+			"initial_stock": 1,
+			"detail_description": "一张桐木古琴，弦如流水，抚之清音绕梁。买回后可解锁【抚琴】行动：焚香净手，买壶好酒，弹一曲解千愁。",
+			"purchase_operators": [_make_trait_add_op("qin_instrument")],
+		},
 	]
 	init_shop("market", products)
 	Logging.info("[ShopManager] _ready: market 商店已初始化，共 %d 个商品" % products.size())
