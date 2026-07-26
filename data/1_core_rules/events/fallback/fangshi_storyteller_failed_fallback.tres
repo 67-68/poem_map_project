@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RandomEvent" format=3 uid="uid://dstorffail01"]
+
+[ext_resource type="Script" uid="uid://h47l1kimdegr" path="res://model/event/base_option.gd" id="1_baseopt"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="3_cr"]
+[ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="4_evopt"]
+[ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="5_randomev"]
+
+[sub_resource type="Resource" id="Resource_empty_cr"]
+script = ExtResource("3_cr")
+metadata/_custom_type_script = "uid://prpfdj2ag46k"
+
+[sub_resource type="Resource" id="Resource_opt"]
+script = ExtResource("4_evopt")
+choice_result = SubResource("Resource_empty_cr")
+description = "TRES_FANGSHI_STORYTELLER_FAILED_FALLBACK_DESCRIPTION_0"
+metadata/_custom_type_script = "uid://ceaxs0erf12ea"
+
+[resource]
+script = ExtResource("5_randomev")
+weight = 0.0
+archetype_id = "fangshi_storyteller_success"
+options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
+uuid = "fangshi_storyteller_failed_fallback"
+name = "TRES_FANGSHI_STORYTELLER_FAILED_FALLBACK_NAME_0"
+metadata/_custom_type_script = "uid://cpb80yg1s313y"

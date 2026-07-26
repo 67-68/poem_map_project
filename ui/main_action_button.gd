@@ -128,7 +128,17 @@ func _on_clicked() -> void:
 			
 			# 🆕 删除特殊资源 viability HIDE（ConsumeRandomLeverage / PoemReward 不再隐藏）
 			# 改为在 picker 中用普通/特殊按钮过滤可见性
-			
+	
+			# 🆕 特殊 HIDE：ConsumeOldestImaginaryOperator — 无意象时隐藏说书人等行动
+			var cost_arch_hide := Database.get_archetype_by_uuid(sub_action.uuid, "cost")
+			if cost_arch_hide and not cost_arch_hide.operators.is_empty():
+				for cop in cost_arch_hide.operators:
+					if cop is ConsumeOldestImaginaryOperator:
+						if not ConsumeOldestImaginaryOperator.is_viable():
+							Logging.info("MainActionButton: sub-action '%s' HIDE — ConsumeOldestImaginaryOperator.is_viable() == false" % sub_action.uuid)
+							_should_hide = true
+							break
+	
 			if _should_hide:
 				Logging.info("MainActionButton: sub-action '%s' 完全隐藏（门槛要求不满足），不进入 picker" % sub_action.uuid)
 				continue
