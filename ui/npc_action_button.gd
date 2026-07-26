@@ -52,6 +52,15 @@ func _on_pressed() -> void:
 
 
 func _on_default_pressed() -> void:
+	# 🆕 锁定态检查前置 — 即使没有 selected_uuid，如果 entity 锁定也要 toast 原因
+	if _entity and _entity.get_meta("_is_locked", false):
+		var reason: String = _entity.get_meta("_locked_reason", "")
+		if reason.is_empty():
+			reason = tr("CODE_NPC_ACTION_BUTTON_60ABF5AC4F")
+		EventBus.request_toast.emit(reason, 1)
+		Logging.info("NpcActionButton._on_default_pressed: 锁定态点击被拦截, entity='%s', reason='%s'" % [_entity.name if _entity else "null", reason])
+		return
+
 	var selected_uuid := VolatileState.action_state.selected_sub_action_uuid
 	Logging.info("NpcActionButton._on_default_pressed: [地点DEBUG] selected_uuid='%s', stay_place='%s', place_mismatch=%s, required_place='%s'" % [
 		selected_uuid, PlayerState.stay_place,
@@ -60,14 +69,6 @@ func _on_default_pressed() -> void:
 	])
 	if selected_uuid.is_empty():
 		EventBus.request_toast.emit(tr("CODE_NPC_ACTION_BUTTON_B7F447C362"), 1)
-		return
-	# 🐛 修复：默认模式下检查 entity 锁定状态（与覆盖模式 _on_override_pressed 对称）
-	if _entity and _entity.get_meta("_is_locked", false):
-		var reason: String = _entity.get_meta("_locked_reason", "")
-		if reason.is_empty():
-			reason = tr("CODE_NPC_ACTION_BUTTON_60ABF5AC4F")
-		EventBus.request_toast.emit(reason, 1)
-		Logging.info("NpcActionButton._on_default_pressed: 锁定态点击被拦截, entity='%s', reason='%s'" % [_entity.name if _entity else "null", reason])
 		return
 	Logging.info("NpcActionButton._on_default_pressed: [地点DEBUG] 即将执行 SubActionExecutor, stay_place='%s'" % PlayerState.stay_place)
 	SubActionExecutor.execute(selected_uuid, VolatileState.action_state)
@@ -94,12 +95,39 @@ func _on_override_pressed() -> void:
 func set_placeholder(label_text: String = "") -> void:
 	text = label_text
 
+## 🆕 锁定态专用 — 标题显示锁因，按钮灰化，其他 label 清空
+func set_action_data_for_locked(entity: GameEntity) -> void:
+	_entity = entity
+	var reason: String = entity.get_meta("_locked_reason", "")
+	if reason.is_empty():
+		reason = entity.name if entity else tr("CODE_NPC_ACTION_BUTTON_60ABF5AC4F")
+	if _title_label:
+		_title_label.text = "[color=#cc6666]🔒 %s[/color]" % reason
+	if _desc_label:
+		_desc_label.text = entity.name if entity else ""
+	if _feas_label:
+		_feas_label.text = ""
+	if _cost_label:
+		_cost_label.text = ""
+	if _output_label:
+		_output_label.text = ""
+	if _risk_label:
+		_risk_label.text = ""
+	modulate = Color(0.4, 0.4, 0.4, 0.6)
+	disabled = true
+	HoverPopupManager.unregister(self)
+	Logging.info("NpcActionButton.set_action_data_for_locked: entity='%s' reason='%s'" % [entity.name if entity else "null", reason])
+
 
 ## 设置默认模式的行动数据。
 ## @param entity: 可选的 GameEntity（传递 MainActionButton 注入的锁定元数据、operators meta）
 func set_action_data(action_name: String, action_uuid: String, entity = null) -> void:
 	# 🐛 修复：保存 entity 引用用于 _on_default_pressed 锁定检查
 	_entity = entity if entity else null
+
+	# 🆕 恢复正常 visual（从 set_action_data_for_locked 灰化态恢复）
+	modulate = Color.WHITE
+	disabled = false
 
 	if _title_label:
 		_title_label.text = action_name

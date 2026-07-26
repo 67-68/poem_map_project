@@ -177,6 +177,8 @@ func _on_sub_button_toggled(btn: SubActionButton, pressed: bool, skip_animation:
 	if btn._is_locked:
 		Logging.info("PickerTapeAttachment._on_sub_button_toggled: 锁定态按钮 '%s' 被触发 toggle，拒绝选中" % (btn.entity.name if btn.entity else "null"))
 		btn.set_pressed_no_signal(false)
+		# 🆕 仍然更新右侧 NpcActionButton — 让玩家看到锁定原因，而非空白 toast
+		_update_right_panel_for_locked(btn)
 		return
 	
 	var is_remote: bool = btn.entity.get_meta("_place_mismatch", false) if btn.entity else false
@@ -220,6 +222,13 @@ func _on_sub_button_toggled(btn: SubActionButton, pressed: bool, skip_animation:
 	# 异地行动时传入目标地点，让 NPC 匹配基于目标地点而非当前 stay_place
 	_rebuild_right_panel_override_buttons(btn.entity.uuid if btn.entity else "", is_remote, remote_place)
 	# 不发射 item_selected — 等待 NpcActionButton 确认后触发
+
+
+## 🆕 锁定态按钮被 toggle 时，更新右侧 NpcActionButton 展示锁因
+func _update_right_panel_for_locked(btn: SubActionButton) -> void:
+	if btn.entity and _npc_button and is_instance_valid(_npc_button):
+		_npc_button.set_action_data_for_locked(btn.entity)
+		Logging.info("PickerTapeAttachment._update_right_panel_for_locked: 右侧按钮已更新为锁因展示, entity='%s'" % (btn.entity.name if btn.entity else "null"))
 
 
 ## 玩家点击「不回答」—— 视为空选择，所有卡牌统一变灰并 emit cancelled
@@ -581,10 +590,10 @@ func _update_filter_button_states() -> void:
 	Logging.info("PickerTapeAttachment._update_filter_button_states: normal_total=%d special_total=%d (show_remote=%s)" % [normal_total, special_total, str(show_remote)])
 
 
-## 🆕 返回第一个可见的 SubActionButton（按 _sub_buttons 顺序）
+## 🆕 返回第一个可见且未锁定的 SubActionButton（按 _sub_buttons 顺序）
 func _get_first_visible_button() -> SubActionButton:
 	for btn in _sub_buttons:
-		if btn.visible:
+		if btn.visible and not btn._is_locked:
 			return btn
 	return null
 

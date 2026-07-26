@@ -70,10 +70,13 @@
 
 #### 灰化视觉效果
 
-- `PickerItem` 新增 `_is_locked` / `_locked_reason` 字段和 `set_locked()` / `set_unlocked()` 方法
+- `SubActionButton` 通过 entity meta（`_is_locked` / `_locked_reason`）读取锁定状态，调用基类 `SceneActionPanel.set_locked(reason)` 灰化
 - 灰化态：`modulate = Color(0.4, 0.4, 0.4, 0.6)`，hover 叙事层前置 `🔒 {原因}`
-- 点击灰化卡片时通过 [`PickerItem._gui_input`](picker_item.gd) 拦截，发射 `EventBus.request_toast` 告知原因，不发射 `clicked` 信号
-- 锁定原因由 `action_button` 在构建 picker 数据时注入 entity meta（`_is_locked` / `_locked_reason`），`PickerItem._apply_data()` 自动读取并应用
+- 点击灰化卡片时通过 [`SubActionButton._on_clicked()`](ui/sub_action_button.gd) 拦截，发射 `EventBus.request_toast` 告知原因，不写入 VolatileState
+- 锁定原因由 [`MainActionButton`](ui/main_action_button.gd) 在构建 picker 数据时注入 entity meta（`_is_locked` / `_locked_reason`）
+- **右侧 NpcActionButton 锁定态展示**：点击锁定按钮时，[`PickerTapeAttachment._on_sub_button_toggled()`](ui/picker_tape_attachment.gd) 调用 [`NpcActionButton.set_action_data_for_locked()`](ui/npc_action_button.gd)，将右侧按钮标题改为 🔒 锁因文案，整体灰化，清空四模块 label
+- **初始化跳过锁定**：[`PickerTapeAttachment._get_first_visible_button()`](ui/picker_tape_attachment.gd) 只返回 `visible && !_is_locked` 的按钮，避免初始化时选中锁定的子行动
+- **锁定态点击顺序**：[`NpcActionButton._on_default_pressed()`](ui/npc_action_button.gd) 锁定检查前置到 empty UUID 检查之前，确保即使 VolatileState 为空，点击右侧按钮也会 toast 锁因
 
 #### 主按钮拦截
 
