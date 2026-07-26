@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_baseop"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="2_action"]
+
+[resource]
+script = ExtResource("2_action")
+_action_tags = Array[int]([34, 76])
+fallback_event_uuid = "lingding_dazui_fallback"
+archetype_uuid = "lingding_dazui_hejiu_success"
+day_consumed = 0.0
+uuid = "lingding_dazui_hejiu"
+name = "ACT_DUZHUO_LINGDING_DAZUI_NAME"
+description = "ACT_DUZHUO_LINGDING_DAZUI_DESC"

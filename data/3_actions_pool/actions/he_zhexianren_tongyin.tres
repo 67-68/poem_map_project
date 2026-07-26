@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="Action" format=3]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_req"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_baseop"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="3_action"]
+[ext_resource type="Script" path="res://core/requirements/xun_day_limit_requirement.gd" id="4_xunday"]
+
+[sub_resource type="Resource" id="Resource_xun_day_req"]
+script = ExtResource("4_xunday")
+max_day = 4
+failed_hint = "TRES_XUN_DAY_LIMIT_FAILED_HINT"
+
+[resource]
+script = ExtResource("3_action")
+_action_tags = Array[int]([34])
+aciton_requirements = Array[ExtResource("1_req")]([SubResource("Resource_xun_day_req")])
+fallback_event_uuid = "he_zhexianren_tongyin_fallback"
+archetype_uuid = "he_zhexianren_tongyin_success"
+day_consumed = 1.0
+override_action = "lingding_dazui_hejiu"
+uuid = "he_zhexianren_tongyin"
+name = "ACT_HE_ZHEXIANREN_TONGYIN_NAME"
+description = "ACT_HE_ZHEXIANREN_TONGYIN_DESC"

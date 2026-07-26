@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+
+[resource]
+script = ExtResource("1_arch")
+uuid = "he_zhexianren_tongyin_success"
+name = "he_zhexianren_tongyin.success"
+universal_result = "prop_add(name=inspiration; val=xl_xing_gain)|prop_add(name=prestige; val=m_prestige_gain)"
+action_uuid = "he_zhexianren_tongyin"
+state = "success"
