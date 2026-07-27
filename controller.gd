@@ -56,7 +56,7 @@ func parse(new_text):
 				return
 			EventBus.event_shown.emit(ev)
 		'add_imaginary':
-			EventBus.request_add_imaginary.emit(parts[2])
+			EventBus.request_add_imaginary.emit(parts[2], {})
 
 	if parts[0] == '$':
 		if parts.size() >= 3 and parts[1] == 'dsl':

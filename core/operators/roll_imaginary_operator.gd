@@ -9,10 +9,9 @@ class_name RollImaginaryOperator extends BaseOperator
 ##   2. 随机选一个，将其 get_hint 写入 context["imaginary_gain_hint"]
 ##
 ## operate() 阶段:
-##   1. 检查 uuid 冲突：已有该 Imaginary → uuid 添加数字后缀（snow → snow1）
-##   2. 创建 Imaginary(level=level, duration_xun=2) 写入 Database.imaginaries_detail
-##   3. Lv2 注入 trait_effect_operations: health -5
-##   4. 发射 EventBus.imaginary_changed 通知 UI 刷新
+##   1. 组装 context Dict（name, level, get_hint, trait_effect_operations）
+##   2. 发射 EventBus.request_add_imaginary → PlayerState 统一入口写入 + FIFO
+##   3. show_hint() 做 toast 通知
 
 ## 目标意象等级（1/2/3）
 @export var level: int = 1
@@ -86,78 +85,38 @@ func operate():
 		Logging.err("RollImaginaryOperator.operate: _picked_uuid 为空，检查 init() 是否被正确调用")
 		return
 
-	# ── 解析最终 uuid：已有该 Imaginary → 数字后缀化 ──
-	var final_uuid := _picked_uuid
-	if Database.imaginaries_detail.has(_picked_uuid):
-		var counter := 1
-		while Database.imaginaries_detail.has(_picked_uuid + str(counter)):
-			counter += 1
-		final_uuid = _picked_uuid + str(counter)
-		Logging.info("RollImaginaryOperator.operate: 重复 Imaginary '%s' → 创建副本 uuid='%s'" % [_picked_uuid, final_uuid])
-
-	# ── 新建 Imaginary ──
-	var imaginary := Imaginary.new()
-	imaginary.uuid = final_uuid
-
-	# 从定义表加载 name（基于基础 uuid，无后缀）
+	# ── 从定义库加载 name ──
 	var defs := _load_imaginary_defs()
 	var def_data: Dictionary = defs.get(_picked_uuid, {})
-	imaginary.name = str(def_data.get("name", _picked_uuid))
-	imaginary.level = level
-	imaginary.get_hint = _picked_hint
-	imaginary.duration_xun = 5  # V11: 所有等级统一 5 旬后到期删除
-	imaginary.imaginary_type = str(def_data.get("type", ""))
-	imaginary.created_at_day = TimeService._total_days_elapsed
+	var imag_name: String = str(def_data.get("name", _picked_uuid))
 
-	# 🆕 Lv2: 持有期每旬 -5 健康（走 trait_effect_operations）
+	# ── 组装 context Dict 传给 PlayerState 统一入口 ──
+	var context: Dictionary = {
+		"name": imag_name,
+		"level": level,
+		"get_hint": _picked_hint,
+	}
+
+	# Lv2: 持有期每旬 -5 健康（走 trait_effect_operations）
 	if level == 2:
-		var hp_op := PropertyOperator.new()
-		hp_op.property = "health"
-		hp_op.value = -5
-		imaginary.trait_effect_operations.append(hp_op)
-		Logging.info("RollImaginaryOperator.operate: Lv2 Imaginary '%s' → trait_effect_operations: health -5" % final_uuid)
+		context["trait_effect_operations"] = [
+			{"property": "health", "value": -5}
+		]
+		Logging.info("RollImaginaryOperator.operate: Lv2 Imaginary '%s' → trait_effect_operations: health -5" % _picked_uuid)
 
-	Database.imaginaries_detail[final_uuid] = imaginary
-	Logging.info("RollImaginaryOperator.operate: 新建 Imaginary '%s' (base=%s, name=%s, level=%d, type=%s, duration_xun=5, created_at_day=%d)" % [final_uuid, _picked_uuid, imaginary.name, imaginary.level, imaginary.imaginary_type, imaginary.created_at_day])
+	# ── 发射信号：由 PlayerState._on_request_add_imaginary 统一处理写入 + FIFO + UI 通知 ──
+	EventBus.request_add_imaginary.emit(_picked_uuid, context)
+	Logging.info("RollImaginaryOperator.operate: 已广播 request_add_imaginary('%s', context=%s)" % [_picked_uuid, str(context)])
 
-	# V11: FIFO 顶替 — 超出上限时删除最老的 Imaginary
-	_enforce_imaginary_limit()
-
-	# 通知 UI 更新
-	EventBus.imaginary_changed.emit()
+	# ── Toast 通知 ──
+	if not _picked_hint.is_empty():
+		show_hint(_picked_hint)
 
 
-## 懒加载 + 缓存：每次调用都重新加载（确保拿到最新数据）
+# ════════════════════════════════════════════════════
+# 意象定义库加载（static 缓存）
+# ════════════════════════════════════════════════════
 
-
-## V11: FIFO 顶替 — 超出 max_imaginary_managable 时删除最老的 Imaginary
-func _enforce_imaginary_limit() -> void:
-	var ps = _get_player_state()
-	if not ps:
-		Logging.err("RollImaginaryOperator._enforce_imaginary_limit: 无法获取 PlayerState，跳过 FIFO")
-		return
-	var limit: int = ps.max_imaginary_managable
-	if Database.imaginaries_detail.size() <= limit:
-		return
-
-	var oldest_uuid: String = ""
-	var oldest_day: int = 0x7FFFFFFF
-	for uuid in Database.imaginaries_detail:
-		var imag = Database.imaginaries_detail[uuid]
-		if not imag is Imaginary:
-			continue
-		if imag.created_at_day < oldest_day:
-			oldest_day = imag.created_at_day
-			oldest_uuid = uuid
-		elif imag.created_at_day == oldest_day and oldest_uuid.is_empty():
-			oldest_uuid = uuid
-
-	if not oldest_uuid.is_empty():
-		var imag = Database.imaginaries_detail[oldest_uuid]
-		Logging.info("RollImaginaryOperator._enforce_imaginary_limit: FIFO 顶替 — 删除最旧 Imaginary '%s' (type=%s, created_at_day=%d)" % [oldest_uuid, imag.imaginary_type if imag is Imaginary else "?", oldest_day])
-		Database.imaginaries_detail.erase(oldest_uuid)
-	else:
-		Logging.err("RollImaginaryOperator._enforce_imaginary_limit: 无法找到最旧的 Imaginary")
 static var _cached_defs: Dictionary = {}
 static var _cached: bool = false
 
@@ -182,13 +141,3 @@ static func _load_imaginary_defs() -> Dictionary:
 	_cached = true
 	Logging.info("RollImaginaryOperator._load_imaginary_defs: 成功加载 %d 条意象定义" % _cached_defs.size())
 	return _cached_defs
-
-
-static func _get_player_state():
-	## 获取 PlayerState 实例
-	var tree := Engine.get_main_loop()
-	if tree and tree is SceneTree:
-		var root = tree.root
-		if root:
-			return root.get_node_or_null("Game/PlayerState")
-	return null

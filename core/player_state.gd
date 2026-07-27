@@ -334,7 +334,7 @@ static func _resolve_imaginary_uuid(base_name: String) -> String:
 	return base_name + str(counter)
 
 
-func _on_request_add_imaginary(tag: String):
+func _on_request_add_imaginary(tag: String, context: Dictionary = {}):
 	if tag.is_empty():
 		Logging.err("PlayerState._on_request_add_imaginary: tag 为空")
 		return
@@ -345,14 +345,41 @@ func _on_request_add_imaginary(tag: String):
 	var imaginary = Imaginary.new()
 	imaginary.uuid = imaginary_uuid
 	var def_data = _imaginary_defs.get(base_uuid, {})
-	imaginary.name = def_data.get("name", tag)
-	imaginary.level = def_data.get("level", 1)  # 从定义库读取实际等级，fallback Lv1
-	imaginary.duration_xun = 5
+
+	# context 字段覆盖（由 RollImaginaryOperator 等调用方传入）
+	if context.has("name"):
+		imaginary.name = context["name"]
+	else:
+		imaginary.name = def_data.get("name", tag)
+
+	if context.has("level"):
+		imaginary.level = int(context["level"])
+		Logging.info("PlayerState._on_request_add_imaginary: context 覆盖 level=%d" % imaginary.level)
+	else:
+		imaginary.level = def_data.get("level", 1)
+
+	if context.has("get_hint"):
+		imaginary.get_hint = str(context["get_hint"])
+		Logging.info("PlayerState._on_request_add_imaginary: context 覆盖 get_hint='%s'" % imaginary.get_hint)
+	else:
+		imaginary.get_hint = def_data.get("get_hint", "")
+
 	imaginary.imaginary_type = def_data.get("type", "")
+	imaginary.duration_xun = 5
 	imaginary.created_at_day = TimeService._total_days_elapsed
-	imaginary.get_hint = def_data.get("get_hint", "")
+
+	# trait_effect_operations 注入（Lv2 每旬扣健康等）
+	if context.has("trait_effect_operations") and typeof(context["trait_effect_operations"]) == TYPE_ARRAY:
+		for op_data in context["trait_effect_operations"]:
+			if typeof(op_data) == TYPE_DICTIONARY:
+				var prop_op := PropertyOperator.new()
+				prop_op.property = str(op_data.get("property", ""))
+				prop_op.value = int(op_data.get("value", 0))
+				imaginary.trait_effect_operations.append(prop_op)
+				Logging.info("PlayerState._on_request_add_imaginary: 注入 trait_effect_operations: '%s' %+d" % [prop_op.property, prop_op.value])
+
 	Database.imaginaries_detail[imaginary_uuid] = imaginary
-	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (base=%s, name=%s, type=%s, duration_xun=5, created_at_day=%d)" % [imaginary_uuid, base_uuid, imaginary.name, imaginary.imaginary_type, imaginary.created_at_day])
+	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (base=%s, name=%s, type=%s, level=%d, duration_xun=5, created_at_day=%d)" % [imaginary_uuid, base_uuid, imaginary.name, imaginary.imaginary_type, imaginary.level, imaginary.created_at_day])
 
 	# FIFO 顶替：超出上限时删除最老的 Imaginary
 	_enforce_imaginary_limit()

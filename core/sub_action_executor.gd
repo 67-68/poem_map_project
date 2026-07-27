@@ -292,7 +292,7 @@ static func _try_imaginary_grant(sub_action: Action, state: VolatileState.Volati
 	Logging.info("SubActionExecutor._try_imaginary_grant: 选中意象 '%s' (name=%s, type=%s, hint='%s')" % [base_uuid, imag_name, imag_type, imag_hint])
 
 	# ── 授予意象（写入 Database）──
-	EventBus.request_add_imaginary.emit(base_uuid)
+	EventBus.request_add_imaginary.emit(base_uuid, {})
 	Logging.info("SubActionExecutor._try_imaginary_grant: 已发射 request_add_imaginary('%s')" % base_uuid)
 
 	# ── 推送叙事事件（队列模式：request_event_key，不打断当前流）──

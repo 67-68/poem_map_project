@@ -124,7 +124,7 @@ signal push_cinematic(texts: Array[String], config: Dictionary)
 signal cinematic_start(texts: Array[String], config: Dictionary)
 signal cinematic_finished()
 signal imaginary_changed()
-signal request_add_imaginary(tag: String)
+signal request_add_imaginary(tag: String, context: Dictionary)
 signal on_trait_change()
 signal on_flag_change()
 ## 人物社交关系状态变更（由 RelationFlagManager.set_person_state 发射）

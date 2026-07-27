@@ -21,5 +21,5 @@ func operate():
     if Database.get_imaginary(imagery_name) == null:
         Logging.warn("ImageryAcquisitionOperator.operate: imagery_name '%s' 在 Database.imaginaries 中不存在，但将继续广播" % imagery_name)
 
-    EventBus.request_add_imaginary.emit(imagery_name)
+    EventBus.request_add_imaginary.emit(imagery_name, {})
     Logging.info("ImageryAcquisitionOperator.operate: 已广播 request_add_imaginary('%s')" % imagery_name)
