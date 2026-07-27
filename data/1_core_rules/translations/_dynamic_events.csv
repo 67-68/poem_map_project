@@ -2665,7 +2665,7 @@ TRES_TUT_DEFER_START_DESCRIPTION_0,等待道士行动。如果打断他可能不
 TRES_TUT_DEFER_START_DESCRIPTION_1,他坐下，开始作法。,He sits down and begins the ritual.,
 TRES_TUT_DEFER_START_NAME_0,等待,Waiting,
 TRES_TUT_DIALOGUE_1_DESCRIPTION_0,在下杜甫，此番游历是为增长见识,I am Du Fu. I journey to broaden my understanding of the world.,
-TRES_TUT_DIALOGUE_1_DESCRIPTION_1,道士打量了你一番，笑道：「贫道在此山修行多年，看人倒也有几分眼力。小友脚步稳健，不像寻常书生那般弱不禁风。」\n\n他拂尘轻摆，示意你坐下：「未请教大名？此番来泰山，所为何事？」,"The Taoist studied you for a moment and smiled: ""This humble priest has cultivated on this mountain for many years. I've learned to read people to some degree. Young friend, your steps are steady — not like the weak and frail scholars one usually sees.""
+TRES_TUT_DIALOGUE_1_DESCRIPTION_1,道士打量了你一番，笑道：「贫道在此山修行多年，看人倒也有几分眼力。小友脚步稳健，不像寻常书生那般弱不禁风。」\n\n他拂尘轻摆，示意你坐下：「未请教大名？此番来泰山，所为何事？」（鼠标拖动移动）,"The Taoist studied you for a moment and smiled: ""This humble priest has cultivated on this mountain for many years. I've learned to read people to some degree. Young friend, your steps are steady — not like the weak and frail scholars one usually sees.(drag to move)""
 
 He gave his horsetail whisk a light wave and gestured for you to sit: ""May I ask your name? What brings you to this mountain?""",
 TRES_TUT_DIALOGUE_1_NAME_0,山中偶遇,A Chance Meeting in the Mountains,
@@ -3067,7 +3067,7 @@ UI_TOMB_STONE_SCREEN_TEXT_0,退出观测,Exit,
 UI_TRAIT_DEMONSTRATOR_TEXT_0,身心俱疲,Exhausted,
 UI_YANG_KE_TEXT_0,疲,Fatigue,
 UI_MENU_INTRO_TITLE,介绍,Intro,
-UI_MENU_INTRO,745 年，作为中年杜甫，长安的小人物，在安史之乱前繁华的长安城生存下来。写诗，考取功名，金榜题名？,Survive as Du Fu,
+UI_MENU_INTRO,745 年，作为中年杜甫，长安的小人物，在安史之乱前繁华的长安城生存下来。写诗，考取功名，金榜题名？,"745 AD. As Du Fu in his middle years — a nobody in Chang'an — survive the prosperous capital on the eve of the An Lushan Rebellion. Compose poetry, take the imperial exams... will your name grace the golden roster?",
 UI_SETTING_MUSIC,音量: %d%%,Music: %d%%
 TOMB_STONE_COST_LIST_SEP,、,", "
 TOMB_STONE_COST_WRAPPER,（{costs}）, ({costs})
@@ -3309,3 +3309,4 @@ TRES_EVENT_WANGZHONGSI_DESC,大唐最能打的战神，四镇节度使王忠嗣�
 TRES_EVENT_WANGZHONGSI_OPT0_DESC,「朝野忠良已尽，右相一手遮天。」,"The loyal are all gone. The Chancellor's hand blots out the sun.",
 CODE_PROP_PCT_OPERATOR_CAP,（最多{val}）, (max {val}),
 TRES_EVENT_LIJIANZHIMA_NAME,立仗马之诫,The Warning of the Ceremonial Horse,
+DRAG_TO_MOVE,鼠标拖动以移动,drag to move

@@ -272,8 +272,12 @@ func _on_filter_checkbox_toggled(toggled_on: bool) -> void:
 
 	# 调用方注入的回调（若有效）
 	if not _on_filter_toggled_callback.is_null():
-		_on_filter_toggled_callback.call(toggled_on)
-		Logging.info("PickerTapeAttachment._on_filter_checkbox_toggled: 已调用外部 callback")
+		var cb_obj = _on_filter_toggled_callback.get_object()
+		if is_instance_valid(cb_obj):
+			_on_filter_toggled_callback.call(toggled_on)
+			Logging.info("PickerTapeAttachment._on_filter_checkbox_toggled: 已调用外部 callback")
+		else:
+			Logging.warn("PickerTapeAttachment._on_filter_checkbox_toggled: 绑定对象已释放（MainActionButton 已 queue_free），跳过回调调用")
 
 	# ── 若当前选中按钮被隐藏，自动选中第一个可见按钮 ──
 	_auto_select_if_needed()

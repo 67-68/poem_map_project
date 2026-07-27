@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://d1wmri2oxn35" path="res://assets/LOGO.png" id="6_nlkkf"]
 [ext_resource type="StyleBox" uid="uid://kui3d5hudd7x" path="res://ui/paper_style.tres" id="6_qe12f"]
 [ext_resource type="StyleBox" uid="uid://cb0hsnugbu120" path="res://ui/shadow_style.tres" id="7_qe12f"]
+[ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="8_8qtwp"]
 [ext_resource type="Script" uid="uid://cxg5ja35u0t2d" path="res://ui/main_menu.gd" id="8_menu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
@@ -131,7 +132,15 @@ size_flags_vertical = 8
 theme_type_variation = &"ButtonTheme"
 text = "鸣谢/Thanks"
 
+[node name="ResponseButton" type="LinkButton" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer" unique_id=1106553447]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_type_variation = &"ButtonTheme"
+text = "反馈/Feedback"
+
 [node name="ThanksPage" type="PanelContainer" parent="." unique_id=2078397172]
+visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = -1
@@ -176,6 +185,107 @@ text = "- (Something) and (Instrumental) in The Glow Pt.2 by The Microphone.
 - other sounds from freesounds.org(some edited by me)"
 
 [node name="Button" type="Button" parent="ThanksPage/PanelContainer" unique_id=105544703]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
+
+[node name="ResponsePage" type="PanelContainer" parent="." unique_id=721039047]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("7_qe12f")
+metadata/_edit_use_anchors_ = true
+
+[node name="PanelContainer" type="PanelContainer" parent="ResponsePage" unique_id=1075338232]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("6_qe12f")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ResponsePage/PanelContainer" unique_id=1990804537]
+layout_mode = 2
+
+[node name="FontTitle" type="Label" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=194475702]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "反馈/feedback"
+
+[node name="LinkButton" type="LinkButton" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=1183163580]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0687985, 0.0687982, 0.06879826, 1)
+theme_override_fonts/font = ExtResource("8_8qtwp")
+text = "feedback: Google Form"
+uri = "https://docs.google.com/forms/d/e/1FAIpQLSfefxc2quPKhMtqAkRSev4cjqX7peJ8WtoktpME5RtULvrKqw/viewform?usp=publish-editor"
+
+[node name="LinkButton2" type="LinkButton" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=1090080925]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0687985, 0.0687982, 0.06879826, 1)
+theme_override_fonts/font = ExtResource("8_8qtwp")
+text = "反馈: 腾讯问卷"
+uri = "https://wj.qq.com/s2/27415296/vg28/"
+
+[node name="FontTitle2" type="Label" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=1475462265]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "社区/community"
+
+[node name="LinkButton3" type="LinkButton" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=524856201]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0687985, 0.0687982, 0.06879826, 1)
+theme_override_fonts/font = ExtResource("8_8qtwp")
+text = "Discord"
+uri = "https://discord.gg/WBxTt8AB"
+
+[node name="FontTitle3" type="Label" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=1153827675]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "游戏访问/game access"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=892396858]
+layout_mode = 2
+
+[node name="LinkButton4" type="LinkButton" parent="ResponsePage/PanelContainer/VBoxContainer/HBoxContainer" unique_id=190080045]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0687985, 0.0687982, 0.06879826, 1)
+theme_override_fonts/font = ExtResource("8_8qtwp")
+text = "itch.io official game page"
+uri = "https://67-68.itch.io/dufu-simulator"
+
+[node name="Label" type="Label" parent="ResponsePage/PanelContainer/VBoxContainer/HBoxContainer" unique_id=539657423]
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"DefaultText"
+text = "you can comment down"
+vertical_alignment = 2
+
+[node name="LinkButton5" type="LinkButton" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=1787798346]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0687985, 0.0687982, 0.06879826, 1)
+theme_override_fonts/font = ExtResource("8_8qtwp")
+text = "国内访问游戏"
+uri = "https://dufu-simulator.netlify.app"
+
+[node name="MusicTitle" type="Label" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=1096529918]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "联系/Contact"
+
+[node name="LineEdit" type="LineEdit" parent="ResponsePage/PanelContainer/VBoxContainer" unique_id=809686660]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.096205, 0.096204646, 0.09620472, 1)
+theme_override_colors/font_uneditable_color = Color(0.096205, 0.096204646, 0.09620472, 1)
+text = "alter_rock@icloud.com"
+editable = false
+flat = true
+virtual_keyboard_enabled = false
+
+[node name="Button" type="Button" parent="ResponsePage/PanelContainer" unique_id=119742512]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
