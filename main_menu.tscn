@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dihagmkk1mi6x" path="res://ui/settings.tscn" id="5_glbon"]
 [ext_resource type="Texture2D" uid="uid://d1wmri2oxn35" path="res://assets/LOGO.png" id="6_nlkkf"]
 [ext_resource type="StyleBox" uid="uid://kui3d5hudd7x" path="res://ui/paper_style.tres" id="6_qe12f"]
+[ext_resource type="StyleBox" uid="uid://cb0hsnugbu120" path="res://ui/shadow_style.tres" id="7_qe12f"]
 [ext_resource type="Script" uid="uid://cxg5ja35u0t2d" path="res://ui/main_menu.gd" id="8_menu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xb00"]
@@ -122,3 +123,60 @@ layout_mode = 2
 theme_type_variation = &"DefaultText"
 text = "click the red button left to enter"
 horizontal_alignment = 2
+
+[node name="ThankToButton" type="LinkButton" parent="HBoxContainer/VBoxContainer/PanelContainer3/VBoxContainer" unique_id=320401818]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_type_variation = &"ButtonTheme"
+text = "鸣谢/Thanks"
+
+[node name="ThanksPage" type="PanelContainer" parent="." unique_id=2078397172]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = ExtResource("7_qe12f")
+metadata/_edit_use_anchors_ = true
+
+[node name="PanelContainer" type="PanelContainer" parent="ThanksPage" unique_id=1956725301]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("6_qe12f")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ThanksPage/PanelContainer" unique_id=1799517957]
+layout_mode = 2
+
+[node name="FontTitle" type="Label" parent="ThanksPage/PanelContainer/VBoxContainer" unique_id=1651857301]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "Fonts Usage"
+
+[node name="FontContent" type="Label" parent="ThanksPage/PanelContainer/VBoxContainer" unique_id=1489508107]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "- Ma Shan Zheng Project
+- LXGW WenKai
+- NotoSerifSC
+Licensed under SIL Open Font License"
+
+[node name="MusicTitle" type="Label" parent="ThanksPage/PanelContainer/VBoxContainer" unique_id=696380395]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "Music Usage"
+
+[node name="MusicContent" type="Label" parent="ThanksPage/PanelContainer/VBoxContainer" unique_id=417887023]
+layout_mode = 2
+theme_type_variation = &"DefaultText"
+text = "- (Something) and (Instrumental) in The Glow Pt.2 by The Microphone.
+- other sounds from freesounds.org(some edited by me)"
+
+[node name="Button" type="Button" parent="ThanksPage/PanelContainer" unique_id=105544703]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
