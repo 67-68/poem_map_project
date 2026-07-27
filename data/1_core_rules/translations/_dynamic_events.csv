@@ -41,10 +41,8 @@ ACT_FANGSHI_SHIYAO_DESC,当代李时珍,Test drugs on yourself,
 ACT_FANGSHI_SHIYAO_NAME,坊市 · 试药,medicine Trial,
 ACT_JIAOYOU_HOLD_FEAST_DESC,款待宾客博取声望,spend money for prestige,
 ACT_JIAOYOU_HOLD_FEAST_NAME,交游 · 举办宴席,Host Banquet,
-ACT_JIAOYOU_INTRO_GACHA_DESC,出席权贵宴席广结人脉或可获得引荐之机,"Attend banquet, network — may get referral",
+ACT_JIAOYOU_INTRO_GACHA_DESC,出席权贵宴席广结人脉,"Attend banquet, network",
 ACT_JIAOYOU_INTRO_GACHA_NAME,交游 · 赴宴雅集,Gathering,
-ACT_JIAOYOU_LEVERAGE_FARM_DESC,在暗巷中打探风声或可获知他人隐秘,Snoop alleys-find secrets,
-ACT_JIAOYOU_LEVERAGE_FARM_NAME,交游 · 暗巷刺探,Back-Alley,
 ACT_JIAOYOU_RECITE_POEM_DESC,当众宣读新作以诗换名,Recite poem — trade for fame,
 ACT_JIAOYOU_RECITE_POEM_NAME,交游 · 宣读诗词,Recital,
 ACT_JIAOYOU_TAVERN_GACHA_DESC,在坊间酒肆以酒会友结识市井中人,Drink at taverns, meet folk,
@@ -2684,7 +2682,7 @@ He raised a hand toward the distance: ""Look upon this world. Some chase fame an
 He paused: ""Literary genius, renown, fortune's favor — these three will propel you forward, yet they will trip you at critical moments. Know their measure, and you shall travel far.""",
 TRES_TUT_DIALOGUE_3_NAME_0,志在四方,Ambitions to the Four Corners,
 TRES_TUT_DIALOGUE_4_DESCRIPTION_0,多谢道长指点,"Thank you for your guidance, Master.",
-TRES_TUT_DIALOGUE_4_DESCRIPTION_1,道士又看了你几眼，忽然说道：「我观你才思尚可，但身子骨还需磨砺。登山不是靠笔杆子，是靠腿脚。你这副身板，若不先打熬打熬，怕是走不了多远。」\n\n他站起身，拍了拍道袍上的尘土，在你肩上按了按，力道不轻不重。\n\n「嗯，底子不错。我见过不少读书人，十年寒窗下来不是弯腰就是驼背。你这副筋骨，比他们强。」\n\n他简单教了你几式调息之法，嘱咐道：「登山之人，气力是本钱。记着这个道理。」\n\n[size=13][color=#888888]系统提示：将鼠标悬浮在左侧出现的刻印上，可以查看详细效果说明[/color][/size],"The Taoist gave you another long look, then spoke: ""I observe that your literary talent is passable, but your body still needs tempering. Mountaineering is not won with the brush — it is won with the legs. This frame of yours — if you do not first weather it, I fear you will not travel far.""
+TRES_TUT_DIALOGUE_4_DESCRIPTION_1,道士又看了你几眼，忽然说道：「我观你才思尚可，但身子骨还需磨砺。登山不是靠笔杆子，是靠腿脚。你这副身板，若不先打熬打熬，怕是走不了多远。」\n\n他站起身，拍了拍道袍上的尘土，在你肩上按了按，力道不轻不重。\n\n「嗯，底子不错。我见过不少读书人，十年寒窗下来不是弯腰就是驼背。你这副筋骨，比他们强。」\n\n他简单教了你几式调息之法，嘱咐道：「登山之人，气力是本钱。记着这个道理。」\n\n[color=#888888]系统提示：将鼠标悬浮在左侧出现的刻印上，可以查看详细效果说明[/color][/size],"The Taoist gave you another long look, then spoke: ""I observe that your literary talent is passable, but your body still needs tempering. Mountaineering is not won with the brush — it is won with the legs. This frame of yours — if you do not first weather it, I fear you will not travel far.""
 
 He rose, dusted off his robe, and pressed a hand on your shoulder — not too light, not too heavy.
 
@@ -2692,22 +2690,22 @@ He rose, dusted off his robe, and pressed a hand on your shoulder — not too li
 
 He taught you a few breathing exercises and counseled: ""One who climbs mountains — vigor is your capital. Remember this truth.""
 
-[size=13][color=#888888]System Tip: Hover over the markings that appear on the left to view detailed effect descriptions.[/color][/size]",
+[color=#888888]System Tip: Hover over the markings that appear on the left to view detailed effect descriptions.[/color][/size]",
 TRES_TUT_DIALOGUE_4_NAME_0,身强体壮,Body Forged Strong,
 TRES_TUT_DIALOGUE_TIME_DESCRIPTION_0,晚辈生于大唐开元十五年，今年该是二十有六了,This junior was born in the fifteenth year of the Kaiyuan era of the Great Tang. I should be twenty-six this year.,
-TRES_TUT_DIALOGUE_TIME_DESCRIPTION_1,"道士捻须一笑：「贫道久居山中，对年月已不甚在意。小友可知今夕是何年？」\n\n他望向远处天际，目光似乎穿透了云层：「修道之人不计春秋，但你这读书人，须得心中有数。何时赶考、何时进京，都是要紧事。」\n\n他伸手指向山外：「记着时日，莫负光阴。」\n\n[size=13][color=#888888]系统提示：右上角的时间面板展示了当前的年号与旬次。每个白色圆球代表一天——在本教程中，每旬仅有 2 天可用。点击""跳过""按钮可以快速结束本旬，进入下一旬。[/color][/size]","The Taoist stroked his beard and laughed: ""This humble priest has dwelt long in the mountains — the passing of months and years has grown faint to me. But tell me, young friend — do you know what year it is now?""
+TRES_TUT_DIALOGUE_TIME_DESCRIPTION_1,"道士捻须一笑：「贫道久居山中，对年月已不甚在意。小友可知今夕是何年？」\n\n他望向远处天际，目光似乎穿透了云层：「修道之人不计春秋，但你这读书人，须得心中有数。何时赶考、何时进京，都是要紧事。」\n\n他伸手指向山外：「记着时日，莫负光阴。」\n\n[color=#888888]系统提示：右上角的时间面板展示了当前的年号与旬次。每个白色圆球代表一天——在本教程中，每旬仅有 2 天可用。点击""跳过""按钮可以快速结束本旬，进入下一旬。[/color][/size]","The Taoist stroked his beard and laughed: ""This humble priest has dwelt long in the mountains — the passing of months and years has grown faint to me. But tell me, young friend — do you know what year it is now?""
 
 He gazed toward the distant horizon, his eyes seeming to pierce the clouds: ""One who cultivates the Way counts not the seasons, but a scholar like you must keep them in mind. When to sit the examinations, when to enter the capital — these are matters of consequence.""
 
 He pointed beyond the mountains: ""Mark the days. Do not squander time.""
 
-[size=13][color=#888888]System Tip: The time panel in the upper-right corner displays the current reign era and tenday. Each white orb represents one day — in this tutorial, only 2 days are available per tenday. Click the ""Skip"" button to quickly end the current tenday and advance to the next.[/color][/size]",
+[color=#888888]System Tip: The time panel in the upper-right corner displays the current reign era and tenday. Each white orb represents one day — in this tutorial, only 2 days are available per tenday. Click the ""Skip"" button to quickly end the current tenday and advance to the next.[/color][/size]",
 TRES_TUT_DIALOGUE_TIME_NAME_0,岁月如梭,Time Flies Like the Shuttle,
 TRES_TUT_DRINK_TOGETHER_DESCRIPTION_0,与道长对饮,"You rashly interrupt the Taoist's ritual. His whisk freezes mid-motion, and the gathered aura scatters around him.\n\nThe Taoist turns his head, brow furrowed deep: \""Young man, ritual workings must flow in one unbroken breath. With this disruption, this humble priest must begin anew from the very start.\""\n\nHe sighs and closes his eyes once more: \""Enough, enough. Let it not happen again.\""",
 TRES_TUT_DRINK_TOGETHER_DESCRIPTION_1,你取出随身携带的酒囊，在道士面前晃了晃。\n\n道士眼睛一亮：「好小子，来泰山还带着酒？」\n\n你们二人在青石上对坐，几杯下肚，道士的话匣子渐渐打开。他讲起年轻时云游各处的见闻，讲起各处的风土人情，语气中透着几分过来人的感慨。\n\n酒酣耳热，你感觉与这道士之间的距离近了不少。,The Taoist's Displeasure,
 TRES_TUT_DRINK_TOGETHER_NAME_0,共饮,Wait for the Taoist to act. Interrupting him may not go over well.,
 TRES_TUT_FINAL_REVEAL_DESCRIPTION_0,下山去了,He sits down and begins the ritual.,
-TRES_TUT_FINAL_REVEAL_DESCRIPTION_1,你站在山巅，回望这一路——从山脚遇道士，到山腰得指点，再到此刻俯瞰万山。\n\n风从四面八方吹来，你忽然感觉自己不再只是那个初出茅庐的书生了。泰山的灵秀之气仿佛渗入了你的骨血，那些不曾想过的才华、那些深藏的城府、那份与生俱来的定力，都在这一刻变得清晰起来。\n\n再看这天地，你有了新的感悟——朝堂的风声、人间的恩怨、那些暗流涌动的关系网，都隐隐浮现。\n\n泰山之行，不虚此行。\n\n[size=13][color=#888888]系统提示：新的界面元素已解锁。右下角的按钮可查看人脉、理念、诗词等功能[/color][/size],Waiting,
+TRES_TUT_FINAL_REVEAL_DESCRIPTION_1,你站在山巅，回望这一路——从山脚遇道士，到山腰得指点，再到此刻俯瞰万山。\n\n风从四面八方吹来，你忽然感觉自己不再只是那个初出茅庐的书生了。泰山的灵秀之气仿佛渗入了你的骨血，那些不曾想过的才华、那些深藏的城府、那份与生俱来的定力，都在这一刻变得清晰起来。\n\n再看这天地，你有了新的感悟——朝堂的风声、人间的恩怨、那些暗流涌动的关系网，都隐隐浮现。\n\n泰山之行，不虚此行。\n\n[color=#888888]系统提示：新的界面元素已解锁。右下角的按钮可查看人脉、理念、诗词等功能[/color][/size],Waiting,
 TRES_TUT_FINAL_REVEAL_NAME_0,豁然开朗,I am Du Fu. I travel to broaden my knowledge of the world.,
 TRES_TUT_GOODBYE_DESCRIPTION_0,后会有期,Descend the mountain.,
 TRES_TUT_GOODBYE_DESCRIPTION_1,"离别的日子终于到了。你在山脚下与玄明道人告别。
