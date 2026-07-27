@@ -6,6 +6,6 @@
 script = ExtResource("1_3bl3f")
 uuid = "baiye_touzeng_defer"
 name = "baiye_touzeng.defer"
-universal_result = "fallback_event=baiye_touzeng_fallback"
+universal_result = ""
 action_uuid = "baiye_touzeng"
 state = "defer"
