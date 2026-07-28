@@ -315,8 +315,9 @@ func _on_button_pressed() -> void:
 
 	# 🆕 V10 fix: 注册 Poem 到 PlayerState.traits + Database.traits
 	# 使左侧 trait 面板可显示，且 PoemRewardOperator.is_viable() 可查询
-	PlayerState.add_trait(poem.uuid)
+	# ⚠️ Database.traits 必须先于 add_trait 注册，否则 on_trait_change → UI rebuild 时查不到
 	Database.traits[poem.uuid] = poem
+	PlayerState.add_trait(poem.uuid)
 	Logging.info('PoemCrafter(V10): Poem registered to traits system — uuid=%s' % poem.uuid)
 
 	# 🆕 消耗灵感（兴）：创作固定消耗 POEM_CRAFT_INSPIRATION_COST 兴
@@ -462,7 +463,8 @@ func _consume_all_imaginaries() -> void:
 	var count := Database.imaginaries_detail.size()
 	Logging.info('PoemCrafter(V9): 消耗全部 %d 个 Imaginary' % count)
 	Database.imaginaries_detail.clear()
-	Logging.info('PoemCrafter(V9): 消耗完成，剩余 0 个 Imaginary')
+	EventBus.imaginary_changed.emit()
+	Logging.info('PoemCrafter(V9): 消耗完成，剩余 0 个 Imaginary, 已发射 imaginary_changed')
 
 
 func _has_unused_poem() -> bool:
