@@ -15,6 +15,9 @@ var _hover_tween: Tween = null
 # 自定义工具提示缓存（由 _make_custom_tooltip 创建）
 var _cached_tooltip: Control = null
 
+# 🆕 affordability 检查失败原因（由 OptionAffordabilityChecker 设置）
+var _affordability_reason: String = ""
+
 static func create(data: BaseOption) -> EventBtn:
 	var scene = load("res://characters/event_btn.tscn")
 	var btn = scene.instantiate()
@@ -169,6 +172,17 @@ func _init_option(data: BaseOption):
 			pressed.connect(disable_btn)
 			return
 	
+	# 🆕 Affordability 检查：校验 choice_result.operators 的资源可支付性
+	if 'choice_result' in data and data.choice_result:
+		const _Checker = preload("res://core/hints/option_affordability_checker.gd")
+		var result := _Checker.new().check(data.choice_result.operators)
+		if not result.can_afford:
+			_affordability_reason = "、".join(result.reasons)
+			Logging.info("EventBtn._init_option: affordability 检查失败 → '%s'" % _affordability_reason)
+			tooltip_text = _affordability_reason
+			pressed.connect(disable_btn)
+			return
+	
 	# 通过验证 → 正常触发
 	_register_to_manager(data)
 	_register_event_btn_hover()  # 🆕 BELOW_OVERLAY hover 注册
@@ -196,7 +210,13 @@ func disable_btn():
 		return
 	self.modulate = Color.GRAY
 	disabled = true
-	var reason = option.requirement.get_failed_hint() if option.requirement else tr("CODE_EVENT_BTN_1F4CD3AC79")
+	# 🆕 优先使用 affordability 检查失败原因，其次 requirement failed_hint，最后 fallback
+	var reason: String
+	if not _affordability_reason.is_empty():
+		reason = _affordability_reason
+	else:
+		reason = option.requirement.get_failed_hint() if option.requirement else tr("CODE_EVENT_BTN_1F4CD3AC79")
+	Logging.info("EventBtn.disable_btn: reason='%s'" % reason)
 	EventBus.request_toast.emit(reason, 1)
 
 func double_check() -> bool:
