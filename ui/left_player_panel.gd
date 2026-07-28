@@ -237,6 +237,28 @@ func _register_prop_hovers() -> void:
 		HoverPopupManager.register(panel, {"narrative": narrative, "vector": vector}, 0.4, 0.75, HoverPopupManager.FlowType.SLIDE_FROM_LEFT)
 		Logging.info("LeftPlayerPanel._register_prop_hovers: '%s' hover registered (SLIDE_FROM_LEFT, narrative=%d chars, vector=%d chars)" % [prop_key, narrative.length(), vector.length()])
 
+## 🆕 刷新单个 modifier 属性的 hover 文本（mod_val 动态更新）
+func _refresh_prop_hover(prop_key: String) -> void:
+	var panel := _prop_panel_map.get(prop_key) as PanelContainer
+	if not panel:
+		Logging.err("LeftPlayerPanel._refresh_prop_hover: panel '%s' 不存在于 _prop_panel_map，跳过" % prop_key)
+		return
+
+	HoverPopupManager.unregister(panel)
+	var hint = _ActionHintFormatter.new().build_prop_hint(prop_key)
+	if not hint:
+		Logging.warn("LeftPlayerPanel._refresh_prop_hover: build_prop_hint('%s') 返回 null，跳过" % prop_key)
+		return
+
+	var narrative: String = hint.narrative
+	var vector: String = hint.vector
+	if narrative.is_empty() and vector.is_empty():
+		Logging.info("LeftPlayerPanel._refresh_prop_hover: '%s' narrative + vector 均为空，跳过注册" % prop_key)
+		return
+
+	HoverPopupManager.register(panel, {"narrative": narrative, "vector": vector}, 0.4, 0.75, HoverPopupManager.FlowType.SLIDE_FROM_LEFT)
+	Logging.info("LeftPlayerPanel._refresh_prop_hover: '%s' hover 已刷新 (narrative=%d chars, vector=%d chars)" % [prop_key, narrative.length(), vector.length()])
+
 # ── 驻留地点 PlaceLabel ─────────────────────────────────
 
 func _place_changed_probe(_place_str: String) -> void:
@@ -301,6 +323,10 @@ func _on_stat_changed() -> void:
 func _on_any_stat_changed(_prop_name: String = "") -> void:
 	_refresh_all_props()
 	_on_ambition_stat_changed('progress')
+	# 🆕 修饰符属性（城府/才华/定力）变化时刷新 hover，让 mod_val 展示最新值
+	if _prop_name in ["astuteness", "talent", "composure"]:
+		_refresh_prop_hover(_prop_name)
+		Logging.info("LeftPlayerPanel._on_any_stat_changed: prop='%s' 是 modifier 属性 → 刷新 hover" % _prop_name)
 	# 🆕 冻土模式：progress 变化时强制刷新里程条（双保险）
 	if _is_frost_panel_active() and _prop_name == "progress":
 		_update_frost_distance_bar()
