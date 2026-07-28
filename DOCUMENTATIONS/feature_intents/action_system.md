@@ -537,7 +537,8 @@ ActionManager._deferring_actions (运行时状态)
 - `parser/dsl_parser.gd` — `_parse_converter_context()` context key `event_picked_per_xun`, `_build_action_from_row()` 创建 BaseEventPicker
 - `ui/action_button.gd` — `_on_button_pressed` defer 分支 + `set_deferring`/`set_defer_failing` 视觉
 - `ui/scene_action_scroll.gd` — `refresh`/`_refresh_locks_only` defer 状态渲染
-- `core/action_hint_builder.gd` — hover 展示 defer 剩余旬数 + 每旬消耗 + 资源不足警告
+- `core/action_hint_builder.gd` — hover 展示 defer 子行动名 + 描述 + 剩余旬数 + 每旬消耗 + 资源不足警告
+- `ui/utils/bbcode.gd` — `defer_what_line()` 格式化 defer 子行动名行
 
 ---
 

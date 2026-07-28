@@ -116,6 +116,14 @@ static func repeated_warning() -> String:
 	return color(TranslationServer.translate("CODE_BBCODE_4F9DFB5567"), COLOR_WARNING)
 
 
+## Defer 行动名行 — info 色，如「⏳ 驱散云雾」，可附带描述
+static func defer_what_line(name: String, desc: String) -> String:
+	var line := color_size("⏳ %s" % name, COLOR_INFO, 13)
+	if not desc.is_empty():
+		line += "\n" + color(tr(desc), COLOR_MUTED)
+	return line
+
+
 ## Defer 等待行 — info 色，如「⏳ 等待 3/5 旬」
 static func defer_waiting(remaining: int, total: int, is_failing: bool) -> String:
 	var c := COLOR_DANGER if is_failing else COLOR_INFO

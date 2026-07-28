@@ -354,6 +354,12 @@ func _defer_info_lines(action, ctx, cost_mod) -> void:
 	var amounts = ctx.named_amounts
 	var xun_val = amounts.get(_defer_sub.defer_config.xun_defered, 0)
 
+	# 🆕 展示正在 defer 的子行动名和描述
+	if is_deferring:
+		var sub_name = tr(_defer_sub.name) if not _defer_sub.name.is_empty() else ""
+		if not sub_name.is_empty():
+			cost_mod.append(_BBCode.defer_what_line(sub_name, _defer_sub.description))
+
 	if is_deferring:
 		var remaining = ds.get("remaining", 0)
 		var is_failing = ds.get("is_failing", false)
