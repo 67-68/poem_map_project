@@ -148,3 +148,42 @@ SubActionExecutor.execute() success 路径
 
 - 专属事件 `imaginary_gain_{uuid}` 存在 → 使用专属事件
 - 专属事件不存在 → fallback `imaginary_gain_fallback`，动态插值 `{@imaginary_gain_hint}`
+
+## V13: 意象消失后果系统
+
+### 设计意图
+
+FIFO 顶替和自然到期两条消失路径此前静默执行（`erase()` 无任何反馈）。V13 为每条消失路径注入叙事反馈和等级化机制惩罚，并通过全局 flag 让玩家可选择「不再提示」。
+
+### 信号架构
+
+```
+删除点（player_state.gd / survival_manager.gd）
+  → 删前收集快照 {uuid, name, level, imaginary_type, loss_reason}
+  → EventBus.imaginary_lost.emit(data)
+  → SurvivalManager._on_imaginary_lost(data)
+    → 应用等级惩罚（无论是否 suppressed）
+    → 检查 flag_suppress_imaginary_loss_event
+    → 未抑制 → push_event 叙事事件
+    → 已抑制 → 静默跳过
+```
+
+### 等级惩罚表
+
+| 等级 | 健康惩罚 | 兴惩罚 | named_amount |
+|------|---------|--------|-------------|
+| Lv1 | 无 | 无 | — |
+| Lv2 | -5 | 无 | `xs_health_cost` |
+| Lv3 | -30 | -10 | `m_health_cost` + `l_xing_cost` |
+
+### 叙事事件
+
+| 事件 UUID | 触发原因 | 选项 1 | 选项 2 |
+|-----------|---------|--------|--------|
+| `imaginary_loss_fifo_fallback` | FIFO 顶替 | 知道了（空CR） | 不再提示（设 flag） |
+| `imaginary_loss_expire_fallback` | 自然到期 | 知道了（空CR） | 不再提示（设 flag） |
+
+### 全局 Flag
+
+- `flag_suppress_imaginary_loss_event` (bool) — 由 SurvivalManager._ready() 注册
+- 设为 `true` 后，所有意象消失事件静默跳过（但等级惩罚仍生效）
