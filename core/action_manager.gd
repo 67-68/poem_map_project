@@ -14,6 +14,15 @@ const _PropertyOperator = preload("res://core/model/property_operator.gd")
 const _EventManager = preload("res://core/event_manager.gd")
 const _ModifierConfig = preload("res://core/modifier_config.gd")
 const _ModifierRegistry = preload("res://core/modifier_registry.gd")
+const _TraitRequirement = preload("res://core/requirements/trait_requirement.gd")
+const _FlagRequirement = preload("res://core/requirements/flag_requirement.gd")
+const _NarrativeLockRequirement = preload("res://core/requirements/narrative_lock_requirement.gd")
+const _PoemRequirement = preload("res://core/requirements/poem_requirement.gd")
+const _PropertyRequirement = preload("res://core/property_requirement.gd")
+const _PropRangeRequirement = preload("res://core/requirements/range_requirement.gd")
+const _EmotionRequirement = preload("res://core/requirements/emotion_requirement.gd")
+const _ConsumeOldestImaginaryOperator = preload("res://core/operators/consume_oldest_imaginary_operator.gd")
+const _RemoteActionFilterManager = preload("res://core/remote_action_filter_manager.gd")
 
 const MAX_PICK_COUNT: int = 6
 
@@ -321,6 +330,152 @@ func check_archetype_property_costs(operators: Array) -> Array[String]:
 	Logging.info("[ActionManager] check_archetype_property_costs: %d operators → %d reasons" % [operators.size(), reasons.size()])
 	return reasons
 
+
+# ════════════════════════════════════════════════════════════
+# 🆕 父行动子行动可用性检查（轻量级预览版）
+# ════════════════════════════════════════════════════════════
+
+## 纯静态函数：遍历父行动的所有子行动，做轻量级 HIDE / GRAY 判定。
+## 这是 MainActionButton._on_clicked() 完整判定的近似快速预览，仅用于决定父按钮是否提前灰化。
+##
+## Phase 0: prerequisite — HIDE
+## Phase 1: TraitRequirement / FlagRequirement / NarrativeLockRequirement / ConsumeOldestImaginaryOperator — HIDE
+## Phase 2: PropertyRequirement / EmotionRequirement / PropRangeRequirement / PoemRequirement / cost archetype 属性不足 / 时间不足 — GRAY
+##
+## @param action: 父 Action（必须含 sub_actions）
+## @return {
+##   "all_hidden": bool — 所有子行动均被 HIDE（Phase 0/1 全灭）
+##   "all_gray": bool — 所有子行动均被 GRAY（Phase 2 全灰，至少一个可见但不可用）
+##   "all_unavailable": bool — all_hidden || all_gray（任何全灭态）
+##   "reasons": Array[String] — 汇总原因（每条对应一个子行动的状态描述）
+## }
+func check_parent_action_children_availability(action: Action) -> Dictionary:
+	var result := {
+		"all_hidden": false,
+		"all_gray": false,
+		"all_unavailable": false,
+		"reasons": [],
+	}
+	
+	if not action or action.sub_actions.is_empty():
+		Logging.info("[ActionManager] check_parent_action_children_availability: action无子行动，跳过")
+		return result
+	
+	var total_subs := action.sub_actions.size()
+	var hidden_count := 0
+	var gray_count := 0
+	var available_count := 0
+	
+	for sub_uuid in action.sub_actions:
+		if sub_uuid.is_empty():
+			hidden_count += 1
+			Logging.info("[ActionManager] check_parent_action_children_availability: 子行动 UUID为空 → HIDE")
+			continue
+		
+		var sub_action: Action = Database.get_action(sub_uuid) as Action
+		if not sub_action:
+			hidden_count += 1
+			result.reasons.append(tr("CODE_ACTION_MANAGER_6A45CE8F1B") % sub_uuid)
+			Logging.warn("[ActionManager] check_parent_action_children_availability: 子行动 '%s' 无法解析 → HIDE" % sub_uuid)
+			continue
+		
+		var sub_name := tr(sub_action.name) if not sub_action.name.is_empty() else sub_uuid
+		var sub_reasons: Array[String] = []
+		var is_hidden := false
+		
+		# ── Phase 0: prerequisite ──
+		if sub_action.prerequisite:
+			if not sub_action.prerequisite.compare(PlayerState):
+				is_hidden = true
+				Logging.info("[ActionManager] check_parent_action_children_availability: '%s' HIDE — prerequisite 不满足" % sub_uuid)
+		
+		# ── Phase 1: HIDE 检查 ──
+		if not is_hidden and sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
+			for req in sub_action.aciton_requirements:
+				if req is _TraitRequirement or req is _FlagRequirement or req is _NarrativeLockRequirement:
+					if not req.compare(PlayerState):
+						is_hidden = true
+						Logging.info("[ActionManager] check_parent_action_children_availability: '%s' HIDE — requirement type='%s' 不满足" % [sub_uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown"])
+						break
+		
+		# Phase 1.5: ConsumeOldestImaginaryOperator viability
+		if not is_hidden:
+			var cost_arch_hide = Database.get_archetype_by_uuid(sub_action.uuid, "cost")
+			if cost_arch_hide and not cost_arch_hide.operators.is_empty():
+				for cop in cost_arch_hide.operators:
+					if cop is _ConsumeOldestImaginaryOperator:
+						if not _ConsumeOldestImaginaryOperator.is_viable():
+							is_hidden = true
+							Logging.info("[ActionManager] check_parent_action_children_availability: '%s' HIDE — ConsumeOldestImaginaryOperator.is_viable()=false" % sub_uuid)
+							break
+		
+		if is_hidden:
+			hidden_count += 1
+			result.reasons.append(tr("CODE_ACTION_MANAGER_E29B9EECDB") % sub_name)
+			Logging.info("[ActionManager] check_parent_action_children_availability: '%s' → HIDE, reason='%s'" % [sub_uuid, result.reasons.back()])
+			continue
+		
+		# ── Phase 2: GRAY 检查 ──
+		var is_gray := false
+		
+		if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
+			for req in sub_action.aciton_requirements:
+				if req is _PropertyRequirement or req is _EmotionRequirement or req is _PoemRequirement:
+					if not req.compare(PlayerState):
+						is_gray = true
+						var desc := ""
+						if req.has_method("describe_requirement"):
+							desc = req.describe_requirement()
+						sub_reasons.append(desc if not desc.is_empty() else tr("CODE_ACTION_MANAGER_C3290E2AAD"))
+						Logging.info("[ActionManager] check_parent_action_children_availability: '%s' GRAY — requirement type='%s' 不满足" % [sub_uuid, req.get_script().resource_path.get_file() if req.get_script() else "unknown"])
+		
+		# cost archetype 属性检查
+		if not is_gray:
+			var cost_arch_check = Database.get_archetype_by_uuid(sub_action.uuid, "cost")
+			if cost_arch_check and not cost_arch_check.operators.is_empty():
+				var arch_cost_reasons := check_archetype_property_costs(cost_arch_check.operators)
+				if not arch_cost_reasons.is_empty():
+					is_gray = true
+					sub_reasons.append_array(arch_cost_reasons)
+					Logging.info("[ActionManager] check_parent_action_children_availability: '%s' GRAY — cost archetype 属性不足: %s" % [sub_uuid, str(arch_cost_reasons)])
+		
+		# 时间检查（含异地惩罚）
+		if not is_gray:
+			var _is_remote := _RemoteActionFilterManager.is_action_remote(sub_action)
+			var sub_cost := get_action_day_cost(sub_action, action.day_consumed, 1 if _is_remote else 0)
+			if sub_cost > 0:
+				var current_time := int(PlayerState.get_stat_val("time"))
+				if current_time < sub_cost:
+					is_gray = true
+					var cost_detail := format_time_detail(action.day_consumed)
+					sub_reasons.append(tr("CODE_ACTION_MANAGER_4267E5ADD3") % [current_time, cost_detail])
+					Logging.info("[ActionManager] check_parent_action_children_availability: '%s' GRAY — 时间不足 (remote=%s)" % [sub_uuid, str(_is_remote)])
+		
+		if is_gray:
+			gray_count += 1
+			var reason_text := tr("CODE_ACTION_MANAGER_FEC6E6F4B1") % sub_name
+			if not sub_reasons.is_empty():
+				reason_text += "：" + "；".join(sub_reasons)
+			result.reasons.append(reason_text)
+			Logging.info("[ActionManager] check_parent_action_children_availability: '%s' → GRAY, reason='%s'" % [sub_uuid, reason_text])
+		else:
+			available_count += 1
+			Logging.info("[ActionManager] check_parent_action_children_availability: '%s' → 可用" % sub_uuid)
+	
+	# ── 聚合判定 ──
+	if hidden_count == total_subs:
+		result.all_hidden = true
+		result.all_unavailable = true
+		Logging.info("[ActionManager] check_parent_action_children_availability: ═══ 全 HIDE: %d/%d ═══" % [hidden_count, total_subs])
+	elif available_count == 0:
+		# 不是全HIDE，但没有可用 → 全 GRAY（可能混合了 HIDE+GRAY）
+		result.all_gray = true
+		result.all_unavailable = true
+		Logging.info("[ActionManager] check_parent_action_children_availability: ═══ 全 GRAY (或混合): hidden=%d gray=%d available=%d/%d ═══" % [hidden_count, gray_count, available_count, total_subs])
+	else:
+		Logging.info("[ActionManager] check_parent_action_children_availability: ═══ 正常: hidden=%d gray=%d available=%d/%d ═══" % [hidden_count, gray_count, available_count, total_subs])
+	
+	return result
 
 
 func is_action_era_allowed(action: Action) -> bool:

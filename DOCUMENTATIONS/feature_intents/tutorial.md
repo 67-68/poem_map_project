@@ -58,7 +58,7 @@
 |------|---------|---------|
 | | P1-P2 (叙事) | `[]` | `[]` |
 | | P4 FREE_ROAM | `["jiao_you", "zhu_liu"]` | `["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"]` |
-| | P4 FOG_FOUND | `["jiao_you", "zhu_liu", "tut_chuyou"]` | `["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"]` (仅查看模式) |
+| | P4 FOG_FOUND | `["jiao_you", "zhu_liu", "tut_chuyou"]` | `["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper", "tut_chuyou_east", "tut_chuyou_west", "tut_chuyou_south", "tut_chuyou_north"]` (仅查看模式) |
 | | P4 BACK_AT_TAOIST (→ OVERRIDE_LOCKED) | 同上 + tut_taoist_dispel_fog(override) | `["tut_jiaoyou_drink", "tut_zhu_liu_base", "tut_zhu_liu_upper"]` |
 | | P5 DEFERRING | `["jiao_you", "zhu_liu", "tut_chuyou"]` | `[]` (出游4方向由 flag tut_lock_chuyou_subs/tut_unlock_chuyou_subs 控制) |
 | | P6 VISION | 同上 | `[]` |

@@ -61,6 +61,13 @@ var generator: Generator = null
 ## 优先级高于 dynamic_failed_hint。每轮调用 clear_failed_hint() 时自动重置。
 var _is_hidden: bool = false
 
+## 🆕 子行动可用性聚合标志，由 ActionManager.apply_visibility_flags() 写入。
+## 0 = 正常（至少一个子行动可用或无子行动）
+## 1 = 软锁 SOFT（所有子行动 GRAY，无可用但可见，父按钮灰化但可点击）
+## 2 = 硬锁 HARD（所有子行动 HIDE，父按钮灰化且不可点击）
+## 每轮 clear_failed_hint() 时自动重置为 0。
+var _children_status: int = 0
+
 ## 🆕 运行时动态失败提示文本（每轮重建），用于 UI 灰化按钮的 tooltip 显示。
 ## A类（需求不满足）和 B类（未中签）的原因会换行拼接在此字段中。
 var dynamic_failed_hint: String = ""
@@ -129,12 +136,13 @@ func append_failed_hint(text: String) -> void:
 	else:
 		dynamic_failed_hint += "\n" + text
 
-## 🆕 清空 dynamic_failed_hint、success_hint 并重置 _is_hidden。
+## 🆕 清空 dynamic_failed_hint、success_hint、_children_status 并重置 _is_hidden。
 ## 每轮开始前或重新评估锁定状态前调用。
 func clear_failed_hint() -> void:
 	dynamic_failed_hint = ""
 	success_hint = ""
 	_is_hidden = false
+	_children_status = 0
 
 ## 🆕 获取行动级 cost archetype 的 operators（在投骰前立即执行）。
 ## 使用 state="cost" 精确查找。

@@ -739,8 +739,8 @@ func _on_phase_4_event_confirmed() -> void:
 			Logging.info("TutorialController: [P4:MOVED_AWAY/FOG_FOUND] 雾事件确认 → 解锁出游按钮（仅查看，无4方向子行动）")
 			_p4_step = Phase4Step.CHUYOU_VIEWED
 			_set_whitelist(["jiao_you", "zhu_liu", "tut_chuyou"])
-			# P3-1: FOG_FOUND 阶段不暴露出游4方向，defer 期间通过 flag 控制解锁
-			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
+			# P3-1: FOG_FOUND 阶段暴露出游4方向（仅查看，四周看雾）; lookup 留给 Phase 6
+			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper", "tut_chuyou_east", "tut_chuyou_west", "tut_chuyou_south", "tut_chuyou_north"])
 			Logging.info("TutorialController: FOG_FOUND — 出游已解锁（仅查看模式）")
 			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_095EFAB7C8"))
 
