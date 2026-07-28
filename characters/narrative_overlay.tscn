@@ -222,6 +222,7 @@ text = "UI_NARRATIVE_OVERLAY_TEXT_3"
 
 [node name="SmoothScrollContainer" type="ScrollContainer" parent="TapeContainer/VBox/HoverContainer/VBoxContainer" unique_id=1743516383]
 layout_mode = 2
+size_flags_vertical = 3
 script = ExtResource("5_smooth")
 metadata/_custom_type_script = "uid://y5gl8aohf1ll"
 

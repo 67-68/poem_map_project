@@ -25,6 +25,7 @@ required_place = "xishi"
 _action_tags = Array[int]([32, 38])
 fallback_event_uuid = "fangshi_shiyao_fallback"
 archetype_uuid = "fangshi_shiyao_success"
+day_consumed = 3.0
 possibility = "m_success_rate"
 failed_result = SubResource("Resource_3dun1")
 defer_config = SubResource("Resource_7dd4n")
