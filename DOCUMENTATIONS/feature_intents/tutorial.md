@@ -131,6 +131,16 @@ INIT → PHASE_1_MEET (tut_meet_taoist, 鸟语花香音效)
 | | P7b(tut_final_reveal)+ | ✓ | ✗ | 满值 | ✓ |
 | | END | ✓ | ✓ | 50/45 | ✓ |
 
+## GameSave 生命周期
+
+Tutorial 是完全沙盒环境，对 GameSave.data 的任何修改（year、属性、trait、NPC 关系等）在结束时全部丢弃。
+
+- **`_begin_tutorial()`**：不复执行任何 snapshot 操作。Tutorial 直接在当前 GameSave.data 上运行（但结束后会替换）。
+- **`_skip_tutorial()` / `_advance_to_end()`**：`GameSave.data = GameSaveData.new()` 创建一个全新的 GameSaveData 实例（year=745.0，所有属性回到 Database 默认值），然后在此新实例上设置 `tutorial_completed` flag。
+- **结果**：Tutorial 结束后等同于全新游戏，仅 `flags.tutorial_completed=true` 一条标记被保留。所有 tutorial 期间获得的 trait（如 `strong_body`）、属性修改（如 health/money 满值）、时间推进全部丢弃。
+
+旧机制（`_record_game_save_snapshot` / `_restore_game_save_snapshot`）已删除。
+
 ## 道士关系状态机
 
 ```

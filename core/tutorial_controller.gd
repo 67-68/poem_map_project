@@ -100,9 +100,6 @@ var _just_entered_lookup_ready: bool = false
 ## 结构：{node_path (String): visible (bool)}
 var _visibility_snapshot: Dictionary = {}
 
-# ── 游戏存档快照（tutorial 开始前记录，结束时还原）──
-## 结构：GameSaveData.to_dict() 返回的完整 Dictionary
-var _game_save_snapshot: Dictionary = {}
 
 # ── 道士 NPCDocument key ──
 const TAOIST_NPC_KEY := "tut_taoist"
@@ -211,13 +208,12 @@ func _skip_tutorial() -> void:
 	Logging.info("TutorialController: 跳过新手教程")
 	ActionManager.clear_tutorial_whitelist()
 	ActionManager.clear_tutorial_sub_whitelist()
-	# 还原游戏存档快照（兜底：如果 _begin_tutorial 已执行过）
-	if not _game_save_snapshot.is_empty():
-		_restore_game_save_snapshot()
-		Logging.info("TutorialController: [skip] 游戏存档快照已还原")
-	# 🆕 set_flag 必须在快照还原之后，否则会被旧快照覆盖
+	# 🆕 用全新的 GameSaveData 替换当前存档（tutorial 是完全沙盒，结束后新游戏从默认值开始）
+	GameSave.data = GameSaveData.new()
+	Logging.info("TutorialController: [skip] GameSave.data 已替换为全新 GameSaveData 实例")
+	# set_flag 必须在 new() 之后，否则会被旧快照覆盖
 	PlayerState.set_flag("tutorial_completed", true, 'bool')
-	# 🆕 全局黑名单：ban 掉 tutorial 特有的子行动（必须在快照还原之后，否则会被覆盖）
+	# 🆕 全局黑名单：ban 掉 tutorial 特有的子行动
 	_ban_tutorial_actions()
 	# 记录当前可见性（兜底：如果 _begin_tutorial 从未执行），然后还原
 	if _visibility_snapshot.is_empty():
@@ -233,10 +229,6 @@ func _skip_tutorial() -> void:
  
 func _begin_tutorial() -> void:
 	Logging.info("TutorialController: ====== 开始新手教程 ======")
-
-	# 🆕 保存游戏存档快照（tutorial 结束后完整还原）
-	_record_game_save_snapshot()
-	Logging.info("TutorialController: [init 0/9] 游戏存档快照已记录")
 
 	# 设置每旬 2 天
 	TimeService.on_xun_tick.emit()
@@ -397,7 +389,7 @@ func _clear_all_tut_flags() -> void:
 
 ## 🆕 将 tutorial 特有的 action 加入全局黑名单。
 ## tutorial 结束后这些行动在正常游戏中不应出现。
-## 必须在 _restore_game_save_snapshot() 之后调用，否则会被旧快照覆盖。
+## 必须在 GameSave.data 替换为全新实例之后调用，否则会被旧快照覆盖。
 func _ban_tutorial_actions() -> void:
 	var tut_uuids := [
 		# ── 出游（父行动 + 5 个方向子行动）──
@@ -494,22 +486,6 @@ func _restore_all_visibility(root_node: Node) -> void:
 			missing_count += 1
 	Logging.info("TutorialController: UI 可见性已还原 — 成功=%d, 缺失=%d, 总计=%d" % [restored_count, missing_count, _visibility_snapshot.size()])
 	_visibility_snapshot.clear()
-
-
-## 保存 GameSave.data 的完整快照（tutorial 开始前调用）。
-func _record_game_save_snapshot() -> void:
-	_game_save_snapshot = GameSave.data.to_dict()
-	Logging.info("TutorialController: 游戏存档快照已记录，共 %d 个 key" % _game_save_snapshot.size())
-
-
-## 将 _game_save_snapshot 替换回 GameSave.data（tutorial 结束时调用）。
-func _restore_game_save_snapshot() -> void:
-	if _game_save_snapshot.is_empty():
-		Logging.info("TutorialController: _restore_game_save_snapshot — 快照为空，跳过还原")
-		return
-	GameSave.data.from_dict(_game_save_snapshot)
-	Logging.info("TutorialController: 游戏存档快照已还原，共 %d 个 key" % _game_save_snapshot.size())
-	_game_save_snapshot.clear()
 
 
 func _hide_all_panels() -> void:
@@ -999,11 +975,11 @@ func _advance_to_end() -> void:
 	_clear_all_tut_flags()
 	TimeService.reset_days_per_xun()
 
-	# 🆕 还原游戏存档快照（覆盖 tutorial 期间所有修改）
-	_restore_game_save_snapshot()
-	Logging.info("TutorialController: 游戏存档快照已还原（覆盖 tutorial 期间所有状态变更）")
+	# 🆕 用全新的 GameSaveData 替换当前存档（tutorial 是完全沙盒，结束后新游戏从默认值开始）
+	GameSave.data = GameSaveData.new()
+	Logging.info("TutorialController: GameSave.data 已替换为全新 GameSaveData 实例（tutorial 期间所有状态变更已丢弃）")
 	PlayerState.set_flag("tutorial_completed", true, 'bool')
-	# 🆕 全局黑名单：ban 掉 tutorial 特有的子行动（必须在快照还原之后，否则会被覆盖）
+	# 🆕 全局黑名单：ban 掉 tutorial 特有的子行动
 	_ban_tutorial_actions()
 
 	# 🆕 根据快照递归还原所有控件可见性
