@@ -21,12 +21,56 @@ func apply_btns(options: Array, callback: Callable): # list[BaseOption]
 		# 只有点击有效选项才触发结束
 		btn.option_made.connect(callback)
 
+	# 🆕 全锁定 fallback: 如果所有按钮都被锁定（requirement / affordability），
+	#    追加一个「仓皇逃跑」选项（-3 天），确保玩家不会卡死。
+	_append_fallback_if_all_locked(callback)
+
 	# ── 自注册 1-4 数字键到 InputManager（延迟到下一帧，确保场景树完全就绪）──
 	call_deferred("_register_number_keys")
 
 
 func _exit_tree() -> void:
 	_unregister_number_keys()
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 全锁定 fallback: "仓皇逃跑"
+# ════════════════════════════════════════════════════════════════
+
+## 检查所有已创建的 EventBtn 是否全部 disabled。
+## 若是，追加一个合成 EventOption（"仓皇逃跑"，消耗 3 天），始终可选。
+func _append_fallback_if_all_locked(callback: Callable) -> void:
+	var btns := get_children()
+	if btns.is_empty():
+		Logging.info("OptionBtns._append_fallback_if_all_locked: 无按钮，跳过")
+		return
+
+	# 检查是否全部被锁定
+	for btn in btns:
+		if not btn is EventBtn:
+			continue
+		if not btn.disabled:
+			Logging.info("OptionBtns._append_fallback_if_all_locked: 至少有一个可用按钮 (text='%s')，跳过" % btn.text)
+			return
+
+	Logging.info("OptionBtns._append_fallback_if_all_locked: 所有 %d 个按钮均被锁定，追加「仓皇逃跑」fallback" % btns.size())
+
+	# 合成 fallback EventOption
+	var fallback := EventOption.new()
+	fallback.description = tr("CODE_OPTION_BTNS_FALLBACK_DESCRIPTION")  # "仓皇逃跑"
+
+	var cr := ChoiceResult.new()
+	var time_op := TimeOperator.new()
+	time_op.day = 3.0
+	cr.operators.append(time_op)
+	fallback.choice_result = cr
+
+	var fb_btn := EventBtn.create(fallback)
+	# fallback 按钮不需要 hover 注册（EventBtn._init_option 中无 requirement/choice_result 检查，
+	# 会直接走 _register_event_btn_hover() + confirmed()）
+	add_child(fb_btn)
+	fb_btn.option_made.connect(callback)
+	Logging.info("OptionBtns._append_fallback_if_all_locked: fallback 按钮已追加 (text='%s')" % fb_btn.text)
 
 
 # ═══════════════════════════════════════════════

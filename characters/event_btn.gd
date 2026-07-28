@@ -18,6 +18,9 @@ var _cached_tooltip: Control = null
 # 🆕 affordability 检查失败原因（由 OptionAffordabilityChecker 设置）
 var _affordability_reason: String = ""
 
+# 🆕 是否被锁定（requirement fail 或 affordability fail）
+var _is_locked: bool = false
+
 static func create(data: BaseOption) -> EventBtn:
 	var scene = load("res://characters/event_btn.tscn")
 	var btn = scene.instantiate()
@@ -146,6 +149,52 @@ func _register_event_btn_hover() -> void:
 	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text}, 0.2, 0.75, HoverPopupManager.FlowType.BELOW_OVERLAY)
 	Logging.info("EventBtn._register_event_btn_hover: 注册完成 (BELOW_OVERLAY), text='%s'" % text)
 
+## 🆕 锁定按钮 hover：在标准 hover 的向量层顶部追加锁定原因。
+## 锁定按钮不可点击，但仍可 hover 查看效果 + 原因。
+func _register_locked_hover(locked_reason: String) -> void:
+	if not option:
+		Logging.info("EventBtn._register_locked_hover: option 为空，跳过")
+		return
+
+	# 叙事层：按钮文本
+	var narrative: String = text if not text.is_empty() else tr("CODE_EVENT_BTN_BB7486F441")
+
+	# 向量层：锁定原因前置
+	var vector_lines: Array[String] = []
+	
+	# 🆕 锁定原因（红字醒目，放在最前面）
+	var reason_line := tr("CODE_EVENT_BTN_LOCKED_PREFIX") % locked_reason  # "[无法选择]：{reason}"
+	vector_lines.append(reason_line)
+	
+	# (A) Requirement 摘要（前提条件）
+	if 'requirement' in option and option.requirement \
+		and option.requirement.has_method('describe_requirement'):
+		var req_text = option.requirement.describe_requirement()
+		if not req_text.is_empty():
+			vector_lines.append("")
+			vector_lines.append(tr("CODE_EVENT_BTN_057AE9C4A2"))
+			vector_lines.append(req_text)
+	
+	# (B) Operator 预览（让玩家看到选了会有什么效果）
+	var operator_lines: Array[String] = []
+	if 'choice_result' in option and option.choice_result:
+		operator_lines = option.choice_result.format_preview()
+	
+	if operator_lines.is_empty():
+		if not vector_lines.is_empty():
+			vector_lines.append("")
+		vector_lines.append(tr("CODE_EVENT_BTN_29178BE430"))
+	else:
+		if not vector_lines.is_empty():
+			vector_lines.append("")
+		vector_lines.append(tr("CODE_EVENT_BTN_CDAC366955"))
+		vector_lines.append_array(operator_lines)
+	
+	var vector_text := "\n".join(vector_lines)
+
+	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector_text}, 0.2, 0.75, HoverPopupManager.FlowType.BELOW_OVERLAY)
+	Logging.info("EventBtn._register_locked_hover: 注册完成 (BELOW_OVERLAY), reason='%s'" % locked_reason)
+
 func _init_option(data: BaseOption):
 	option = data
 	# 🔒 优先读取 _resolved_description（动态模板解析后的值，不污染原始 description）
@@ -168,8 +217,10 @@ func _init_option(data: BaseOption):
 			return
 		if not pass_prop:
 			# 禁用按钮但允许点击查看原因（点击后变灰 + Toast 提示）
+			_is_locked = true
 			tooltip_text = req.get_failed_hint()
 			pressed.connect(disable_btn)
+			_register_locked_hover(tooltip_text)
 			return
 	
 	# 🆕 Affordability 检查：校验 choice_result.operators 的资源可支付性
@@ -179,8 +230,10 @@ func _init_option(data: BaseOption):
 		if not result.can_afford:
 			_affordability_reason = "、".join(result.reasons)
 			Logging.info("EventBtn._init_option: affordability 检查失败 → '%s'" % _affordability_reason)
+			_is_locked = true
 			tooltip_text = _affordability_reason
 			pressed.connect(disable_btn)
+			_register_locked_hover(_affordability_reason)
 			return
 	
 	# 通过验证 → 正常触发
