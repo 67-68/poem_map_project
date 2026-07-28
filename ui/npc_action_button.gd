@@ -38,6 +38,10 @@ var _entity: GameEntity = null
 @onready var _output_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer2/Label5
 @onready var _req_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer3/Label4
 @onready var _risk_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/HBoxContainer3/Label6
+@onready var _lock_reason_label: RichTextLabel = $Button/MarginContainer/VBoxContainer/LockReason
+@onready var _hbox1: HBoxContainer = $Button/MarginContainer/VBoxContainer/HBoxContainer
+@onready var _hbox2: HBoxContainer = $Button/MarginContainer/VBoxContainer/HBoxContainer2
+@onready var _hbox3: HBoxContainer = $Button/MarginContainer/VBoxContainer/HBoxContainer3
 
 
 func _ready() -> void:
@@ -118,32 +122,31 @@ func set_placeholder(label_text: String = "") -> void:
 	if _title_label:
 		_title_label.text = label_text
 
-## 🆕 锁定态专用 — 标题显示锁因，按钮灰化，其他 label 清空
+## 🆕 锁定态专用 — 展示 LockReason label 并隐藏 HBoxContainer 1/2/3，按钮灰化
 func set_action_data_for_locked(entity: GameEntity) -> void:
 	_entity = entity
 	var reason: String = entity.get_meta("_locked_reason", "")
 	if reason.is_empty():
 		reason = entity.name if entity else tr("CODE_NPC_ACTION_BUTTON_60ABF5AC4F")
+	# 标题保持 entity.name（不覆盖为锁因）
 	if _title_label:
-		_title_label.text = "[color=#cc6666]🔒 %s[/color]" % reason
-	if _desc_label:
-		_desc_label.text = entity.name if entity else ""
-	if _feas_label:
-		_feas_label.text = ""
-	if _cost_label:
-		_cost_label.text = ""
-	if _output_label:
-		_output_label.text = ""
-	if _req_label:
-		_req_label.text = ""
-		_req_label.visible = false
-	if _risk_label:
-		_risk_label.text = ""
+		_title_label.text = entity.name if entity else ""
+	# 🆕 LockReason 显示锁因
+	if _lock_reason_label:
+		_lock_reason_label.text = "[color=#cc6666]🔒 %s[/color]" % reason
+		_lock_reason_label.visible = true
+	# 🆕 隐藏三个 HBoxContainer（而非清空内部 label）
+	if _hbox1:
+		_hbox1.visible = false
+	if _hbox2:
+		_hbox2.visible = false
+	if _hbox3:
+		_hbox3.visible = false
 	modulate = Color(0.4, 0.4, 0.4, 0.6)
 	if _inner_button:
 		_inner_button.disabled = true
 	HoverPopupManager.unregister(self)
-	Logging.info("NpcActionButton.set_action_data_for_locked: entity='%s' reason='%s'" % [entity.name if entity else "null", reason])
+	Logging.info("NpcActionButton.set_action_data_for_locked: entity='%s' reason='%s' (LockReason visible, hbox1/2/3 hidden)" % [entity.name if entity else "null", reason])
 
 
 ## 设置默认模式的行动数据。
@@ -156,6 +159,15 @@ func set_action_data(action_name: String, action_uuid: String, entity = null) ->
 	modulate = Color.WHITE
 	if _inner_button:
 		_inner_button.disabled = false
+	# 🆕 恢复正常态：隐藏 LockReason，显示三个 HBoxContainer
+	if _lock_reason_label:
+		_lock_reason_label.visible = false
+	if _hbox1:
+		_hbox1.visible = true
+	if _hbox2:
+		_hbox2.visible = true
+	if _hbox3:
+		_hbox3.visible = true
 
 	if _title_label:
 		_title_label.text = action_name
@@ -199,6 +211,16 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 	_npc_doc = npc_doc
 	_override_action_uuid = override_action_uuid
 
+	# 🆕 覆盖模式正常态：隐藏 LockReason，显示三个 HBoxContainer
+	if _lock_reason_label:
+		_lock_reason_label.visible = false
+	if _hbox1:
+		_hbox1.visible = true
+	if _hbox2:
+		_hbox2.visible = true
+	if _hbox3:
+		_hbox3.visible = true
+
 	var override_action: Action = Database.get_action(override_action_uuid) as Action
 	var action_name := override_action.name if override_action else override_action_uuid
 	var npc_name := npc_doc.name if not npc_doc.name.is_empty() else npc_doc.uuid
@@ -218,6 +240,8 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 	if _is_locked:
 		_lock_reason = NpcActionLockChecker.get_lock_reason(override_action_uuid, npc_doc)
 		_set_gray_visual(true)
+		# 🆕 覆盖模式锁定态：显示 LockReason，隐藏 HBoxContainer
+		_show_lock_reason(_lock_reason)
 		# 不再继续检查后续条件（NPC 相识度不足已锁定）
 	else:
 		# ── 锁定判定 2: Action requirements（PoemRequirement / TraitRequirement 等）──
@@ -232,6 +256,8 @@ func bind(npc_doc: NPCDocument, override_action_uuid: String) -> void:
 							var desc := req.describe_requirement() if req.has_method("describe_requirement") else tr("CODE_NPC_ACTION_BUTTON_021C2B38D2")
 							_lock_reason = desc
 						_set_gray_visual(true)
+						# 🆕 覆盖模式锁定态：显示 LockReason，隐藏 HBoxContainer
+						_show_lock_reason(_lock_reason)
 						Logging.info("NpcActionButton.bind: override '%s' — requirement type='%s' not met → locked, reason='%s'" % [action_name, req.get_script().resource_path.get_file() if req.get_script() else "unknown", _lock_reason])
 						break
 		if not _is_locked:
@@ -309,6 +335,20 @@ static func _module_lines_joined(mod) -> String:
 static func _set_label(label_node: RichTextLabel, text: String) -> void:
 	if label_node:
 		label_node.text = text
+
+
+## 🆕 锁定态通用辅助：显示 LockReason label 并隐藏 HBoxContainer 1/2/3
+func _show_lock_reason(reason: String) -> void:
+	if _lock_reason_label:
+		_lock_reason_label.text = "[color=#cc6666]🔒 %s[/color]" % reason
+		_lock_reason_label.visible = true
+	if _hbox1:
+		_hbox1.visible = false
+	if _hbox2:
+		_hbox2.visible = false
+	if _hbox3:
+		_hbox3.visible = false
+	Logging.info("NpcActionButton._show_lock_reason: reason='%s' (LockReason visible, hbox1/2/3 hidden)" % reason)
 
 
 func _set_gray_visual(gray: bool) -> void:
