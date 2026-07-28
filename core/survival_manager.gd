@@ -210,7 +210,7 @@ func aggregate_trait_effect():
 ## Lv2 扣血走 trait_effect_operations（operate_continuous_effect）。
 ## 到期统一删除，不再转化 trait（expiry_trait 字段已删除）。
 func _process_imaginary_effects() -> void:
-	var to_delete: Array[String] = []  # 到期需要删除的 Imaginary UUID
+	var to_delete: Array[Dictionary] = []  # 🆕 改为 Array[Dictionary]，同时存 uuid + 快照
 	var has_changed := false
 	
 	Logging.info('[SurvivalManager] _process_imaginary_effects: 开始扫描 %d 个 Imaginary' % Database.imaginaries_detail.size())
@@ -232,14 +232,29 @@ func _process_imaginary_effects() -> void:
 		
 		# Lv1/Lv3: operate_continuous_effect 为空（无 trait_effect_operations），无副作用
 		
-		# 🆕 统一到期：lasting_xun >= duration_xun → 直接删除
+		# 🆕 统一到期：lasting_xun >= duration_xun → 删前快照
 		if imag.duration_xun > 0 and imag.lasting_xun >= imag.duration_xun:
-			Logging.info('[SurvivalManager] _process_imaginary_effects: Imaginary "%s" (Lv%d) 到期（lasting_xun=%d >= duration_xun=%d），删除' % [uuid, imag.level, imag.lasting_xun, imag.duration_xun])
-			to_delete.append(uuid)
+			Logging.info('[SurvivalManager] _process_imaginary_effects: Imaginary "%s" (Lv%d) 到期（lasting_xun=%d >= duration_xun=%d），标记删除' % [uuid, imag.level, imag.lasting_xun, imag.duration_xun])
+			to_delete.append({
+				"uuid": uuid,
+				"name": imag.name,
+				"level": imag.level,
+				"imaginary_type": imag.imaginary_type,
+			})
 			has_changed = true
 	
-	# ── 清理到期的 Imaginary ──
-	for del_uuid in to_delete:
+	# ── 🆕 删前发射信号 + 清理到期的 Imaginary ──
+	for del_entry in to_delete:
+		var del_uuid: String = del_entry["uuid"]
+		var loss_data := {
+			"uuid": del_uuid,
+			"name": del_entry["name"],
+			"level": del_entry["level"],
+			"imaginary_type": del_entry["imaginary_type"],
+			"loss_reason": "natural_expire",
+		}
+		Logging.info('[SurvivalManager] _process_imaginary_effects: 发射 imaginary_lost 信号 data=%s' % str(loss_data))
+		EventBus.imaginary_lost.emit(loss_data)
 		Database.imaginaries_detail.erase(del_uuid)
 		Logging.info('[SurvivalManager] _process_imaginary_effects: 已删除 Imaginary "%s"' % del_uuid)
 	
@@ -591,9 +606,84 @@ func _post_xun_money_deduct():
 		Logging.info('[SurvivalManager] 旬末结算后 money<0，触发流落街头事件')
 		OperatorFactory.create_event_operator('event_money_lower_0_innkeeper').operate()
 
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 意象消失后果处理
+# ════════════════════════════════════════════════════════════════
+
+## 意象消失惩罚表：按等级应用属性和扣除
+## Lv1: 无惩罚
+## Lv2: xs_health_cost (-5 健康)
+## Lv3: m_health_cost (-30 健康) + l_xing_cost (-10 兴)
+static func _apply_imaginary_loss_penalty(level: int) -> void:
+	if level <= 1:
+		Logging.info('[SurvivalManager] _apply_imaginary_loss_penalty: Lv%d 无惩罚，跳过' % level)
+		return
+	var amounts := _NamedDSLParser._load_named_amounts()
+	if level == 2:
+		var health_cost: int = amounts.get("xs_health_cost", -5)
+		Logging.info('[SurvivalManager] _apply_imaginary_loss_penalty: Lv2 → health %+d' % health_cost)
+		PlayerState.append_stat(ENUMS.PROPS.HEALTH, health_cost)
+	elif level >= 3:
+		var health_cost: int = amounts.get("m_health_cost", -30)
+		var xing_cost: int = amounts.get("l_xing_cost", -10)
+		Logging.info('[SurvivalManager] _apply_imaginary_loss_penalty: Lv3 → health %+d, inspiration %+d' % [health_cost, xing_cost])
+		PlayerState.append_stat(ENUMS.PROPS.HEALTH, health_cost)
+		PlayerState.append_stat(ENUMS.PROPS.INSPIRATION, xing_cost)
+
+
+## 🆕 意象消失后果处理器 — 由 EventBus.imaginary_lost 触发
+## data: { uuid, name, level, imaginary_type, loss_reason("fifo_replace"|"natural_expire") }
+func _on_imaginary_lost(data: Dictionary) -> void:
+	var imag_name: String = data.get("name", "")
+	var imag_level: int = int(data.get("level", 1))
+	var imag_type: String = data.get("imaginary_type", "")
+	var loss_reason: String = data.get("loss_reason", "")
+	
+	Logging.info('[SurvivalManager] _on_imaginary_lost: 意象 "%s" (Lv%d, type=%s) 因 %s 消失' % [imag_name, imag_level, imag_type, loss_reason])
+	
+	# 1. 应用等级惩罚（无论是否 suppressed 都执行）
+	_apply_imaginary_loss_penalty(imag_level)
+	
+	# 2. 检查 suppress flag
+	var suppressed: bool = false
+	var flag_val = PlayerState.get_flag("flag_suppress_imaginary_loss_event")
+	if flag_val != null:
+		suppressed = bool(flag_val)
+		Logging.info('[SurvivalManager] _on_imaginary_lost: flag_suppress_imaginary_loss_event=%s → suppressed=%s' % [str(flag_val), str(suppressed)])
+	
+	if suppressed:
+		Logging.info('[SurvivalManager] _on_imaginary_lost: 静默模式，不推送事件')
+		return
+	
+	# 3. 选择叙事事件 uuid
+	var event_uuid: String
+	if loss_reason == "fifo_replace":
+		event_uuid = "imaginary_loss_fifo_fallback"
+	else:
+		event_uuid = "imaginary_loss_expire_fallback"
+	
+	Logging.info('[SurvivalManager] _on_imaginary_lost: 推送叙事事件 %s' % event_uuid)
+	
+	# 4. call_deferred 推送事件（不阻塞当前结算管线）
+	var ctx := {
+		"imaginary_name": imag_name,
+		"imaginary_level": imag_level,
+		"imaginary_type": imag_type,
+		"loss_reason": loss_reason,
+	}
+	Logging.info('[SurvivalManager] _on_imaginary_lost: context=%s' % str(ctx))
+	EventBus.push_event.emit(event_uuid, ctx)
+
+
 func _ready():
 	# 🆕 注册 NPC 救助一次性 virtual flag
 	PlayerState.register_virtual_flag("flag_npc_rescued_this_life", "int")
+	# 🆕 注册意象消失提示抑制 flag
+	PlayerState.register_virtual_flag("flag_suppress_imaginary_loss_event", "bool")
+	# 🆕 连接意象消失后果处理
+	EventBus.imaginary_lost.connect(_on_imaginary_lost)
+	Logging.info('[SurvivalManager] _ready: 已连接 imaginary_lost 信号 + 注册 flag_suppress_imaginary_loss_event')
 	TimeService.on_xun_tick.connect(_process_single_xun_settlement)
 	# 实时监听健康变化，立即同步 AP trait 并判定死亡（不等下一旬）
 	PlayerState.player_stat_changed.connect(func(prop_name: String):

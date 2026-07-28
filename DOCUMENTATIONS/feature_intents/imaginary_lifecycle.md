@@ -1,14 +1,15 @@
-# Imaginary 生命周期系统 (V12: + 行动触发意象获取)
+# Imaginary 生命周期系统 (V13: + 意象消失后果)
 
 ## 文件
 - `core/model/imaginary.gd` — Imaginary extends Trait（V11: 新增 imaginary_type, created_at_day）
-- `core/model/imaginary_grant_chance.gd` — **新建**: Action 意象获取概率条目 Resource
+- `core/model/imaginary_grant_chance.gd` — Action 意象获取概率条目 Resource
 - `core/model/action.gd` — 新增 `imaginary_grants: Array[ImaginaryGrantChance]` + `resolve_imaginary_grants()`
 - `core/model/trait.gd` — Trait 基类（duration_xun/lasting_xun/trait_effect_operations）
 - `core/operators/roll_imaginary_operator.gd` — 创建 Imaginary（含 type 读取 + FIFO）
 - `core/sub_action_executor.gd` — `_try_imaginary_grant()` 行动触发意象获取入口
-- `core/player_state.gd` — `_on_request_add_imaginary()` / `init_imaginaries()` + `_enforce_imaginary_limit()`
-- `core/survival_manager.gd` — `_process_imaginary_effects()` 统一使用 lasting_xun/duration_xun
+- `core/player_state.gd` — `_on_request_add_imaginary()` / `init_imaginaries()` + `_enforce_imaginary_limit()` **V13: 删前 emit imaginary_lost**
+- `core/eventbus.gd` — **V13: 新增 signal `imaginary_lost(data: Dictionary)`**
+- `core/survival_manager.gd` — `_process_imaginary_effects()` **V13: 删前 emit imaginary_lost** + `_on_imaginary_lost()` handler + flag 注册
 - `core/tag_manager.gd` — `_sync_poem_stance()` 三大类计数 → stance tag
 - `core/poem_effect_calculator.gd` — 空壳类，发布诗词效果计算
 - `core/action_hint_builder.gd` — `build_trait_hint()` Imaginary 分支
@@ -18,6 +19,8 @@
 - `ui/poem_crafter.gd` — 删除 MODE_TO_INTENT/溢出Slot；接入 CheckButton 发布效果
 - `tools/data/imaginary_definitions.json` — 意象定义库（name/level/type/get_hint）
 - `data/1_core_rules/events/fallback/imaginary_gain_fallback.tres` — 通用意象获取 fallback 事件
+- `data/1_core_rules/events/fallback/imaginary_loss_fifo_fallback.tres` — **V13: FIFO顶替消失叙事**
+- `data/1_core_rules/events/fallback/imaginary_loss_expire_fallback.tres` — **V13: 自然到期消失叙事**
 - `data/3_actions_pool/actions/*.tres` — 5 个父 action 配置 `imaginary_grants`
 
 ## 核心机制

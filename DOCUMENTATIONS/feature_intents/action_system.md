@@ -781,3 +781,49 @@ tutorial 的 `_on_action_executed` 全靠白名单变化的副作用碰巧触发
 - [`core/eventbus.gd`](core/eventbus.gd) — 信号定义 + 注释
 - [`ui/action_panel_manager.gd`](ui/action_panel_manager.gd) — `_connect_signals()` + `_on_event_confirmed()`
 - [`core/tutorial_controller.gd`](core/tutorial_controller.gd) — `_connect_tutorial_signals()` / `_disconnect_tutorial_signals()` / `_on_state_check()`
+
+---
+
+## 父行动子行动全灭灰化（Parent-Child Availability Cascade）
+
+### 设计意图
+
+父行动（如坊市/拜谒/登高）有 `sub_actions` 时，如果**所有**子行动均不可用，父行动按钮应该提前灰化而非保持白色可点击假象。子行动不可用分两种级别：
+
+| 级别 | 触发条件 | 父按钮行为 | _children_status |
+|------|----------|-----------|:--:|
+| **硬锁 HARD** | 所有子行动被 HIDE（Phase 0 prerequisite / Phase 1 Trait/Flag/NarrativeLock/ConsumeOldestImaginary） | 灰色 + 不可点击 + toast 锁因 | 2 |
+| **软锁 SOFT** | 所有子行动被 GRAY（Phase 2 Property/Emotion/PropRange/Poem/Cost/时间不足），至少一个可见但不可用 | 灰色 + 可点击 → 进入 picker 正常展示灰化原因 | 1 |
+
+### 判定流程
+
+```
+apply_visibility_flags() Phase 2.5
+  └─ 遍历所有 visible 且有 sub_actions 的父 Action
+       └─ check_parent_action_children_availability(action)
+            ├─ Phase 0: prerequisite 失败 → HIDE
+            ├─ Phase 1: TraitReq / FlagReq / NarrativeLockReq / ConsumeOldestImaginary.viable=false → HIDE
+            └─ Phase 2: PropertyReq / PropRangeReq / EmotionReq / PoemReq / cost archetype 属性不足 / 时间不足 → GRAY
+       ↓
+       全 HIDE → _children_status=2, append_failed_hint("子行动均不可用: • {name}…")
+       全 GRAY → _children_status=1, append_failed_hint("子行动均不可用: • {name}：{原因}…")
+       正常   → _children_status=0
+```
+
+### 软锁 vs 硬锁在 UI 层的区别
+
+- **硬锁** (`_children_status=2`)：`ActionPanelManager` 调用 `panel.set_locked()`，[`_on_button_pressed()`](ui/action_button.gd) 拦截并 toast
+- **软锁** (`_children_status=1`)：`ActionPanelManager` 调用 `panel.set_soft_locked()`，视觉灰色但 [`_on_button_pressed()`](ui/action_button.gd) 放行 → 进入 `MainActionButton._on_clicked()` → picker 正常展示（子行动带 GRAY 原因）
+- 两者 hover 均传 `is_locked=true` 给 [`ActionHintFormatter`](core/hints/action_hint_formatter.gd)，叙事层前置 `🔒 {dynamic_failed_hint}`
+
+### 数据模型
+
+- [`Action._children_status`](core/model/action.gd) — int 字段（0/1/2），由 `clear_failed_hint()` 每轮重置
+- `check_parent_action_children_availability()` — 纯静态函数，返回 `{all_hidden, all_gray, all_unavailable, reasons}`
+
+### 相关文件
+
+- [`core/model/action.gd`](core/model/action.gd) — `_children_status` 字段 + `clear_failed_hint()` 重置
+- [`core/action_manager.gd`](core/action_manager.gd) — `check_parent_action_children_availability()` + `apply_visibility_flags()` Phase 2.5
+- [`ui/action_button.gd`](ui/action_button.gd) — `_is_soft_locked` + `set_soft_locked()` + `_register_hover_popup()` 软锁传 `is_locked=true` + `_on_button_pressed()` 软锁放行
+- [`ui/action_panel_manager.gd`](ui/action_panel_manager.gd) — `_on_refresh_locks_only()` 读取 `_children_status` 走软锁/硬锁分支

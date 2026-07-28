@@ -226,8 +226,18 @@ func _on_refresh_locks_only() -> void:
 		# 确定目标锁定状态
 		var should_lock := false
 		var lock_reason := ""
+		var is_soft := false  # 软锁 vs 硬锁
 
-		if panel.action._is_hidden:
+		# 🆕 子行动全灭优先级最高
+		if panel.action._children_status == 2:
+			should_lock = true
+			is_soft = false
+			lock_reason = panel.action.dynamic_failed_hint
+		elif panel.action._children_status == 1:
+			should_lock = true
+			is_soft = true
+			lock_reason = panel.action.dynamic_failed_hint
+		elif panel.action._is_hidden:
 			should_lock = true
 			lock_reason = panel.action.dynamic_failed_hint
 		elif not panel.action.dynamic_failed_hint.is_empty():
@@ -240,14 +250,18 @@ func _on_refresh_locks_only() -> void:
 		var panel_key := str(panel.get_instance_id())
 		var cached = _panel_lock_cache.get(panel_key, {})
 		var cached_locked: bool = cached.get("locked", not should_lock)
+		var cached_soft: bool = cached.get("soft", false)
 
-		if should_lock != cached_locked or cached.get("reason", "") != lock_reason:
+		if should_lock != cached_locked or cached.get("reason", "") != lock_reason or is_soft != cached_soft:
 			changed_count += 1
 			if should_lock:
-				panel.set_locked(lock_reason)
+				if is_soft:
+					panel.set_soft_locked(lock_reason)
+				else:
+					panel.set_locked(lock_reason)
 			else:
 				panel.set_unlocked()
-			_panel_lock_cache[panel_key] = {"locked": should_lock, "reason": lock_reason}
+			_panel_lock_cache[panel_key] = {"locked": should_lock, "reason": lock_reason, "soft": is_soft}
 	if changed_count > 0:
 		Logging.info("ActionPanelManager: 增量刷新完成，实际锁定态变化 %d 个按钮" % changed_count)
 

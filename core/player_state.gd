@@ -409,6 +409,16 @@ func _enforce_imaginary_limit() -> void:
 	if not oldest_uuid.is_empty():
 		var imag = Database.imaginaries_detail[oldest_uuid]
 		Logging.info("PlayerState._enforce_imaginary_limit: FIFO 顶替 — 删除最旧 Imaginary '%s' (type=%s, created_at_day=%d), 当前总数=%d, 上限=%d" % [oldest_uuid, imag.imaginary_type if imag is Imaginary else "?", oldest_day, Database.imaginaries_detail.size(), limit])
+		# 🆕 删前快照：发射 imaginary_lost 信号，由 SurvivalManager 统一处理后果
+		var loss_data := {
+			"uuid": oldest_uuid,
+			"name": imag.name if imag is Imaginary else oldest_uuid,
+			"level": imag.level if imag is Imaginary else 1,
+			"imaginary_type": imag.imaginary_type if imag is Imaginary else "",
+			"loss_reason": "fifo_replace",
+		}
+		Logging.info("PlayerState._enforce_imaginary_limit: 发射 imaginary_lost 信号 data=%s" % str(loss_data))
+		EventBus.imaginary_lost.emit(loss_data)
 		Database.imaginaries_detail.erase(oldest_uuid)
 	else:
 		Logging.err("PlayerState._enforce_imaginary_limit: 无法找到最旧的 Imaginary, 总数=%d, 上限=%d" % [Database.imaginaries_detail.size(), limit])

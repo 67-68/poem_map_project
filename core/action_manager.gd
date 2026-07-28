@@ -420,7 +420,7 @@ func check_parent_action_children_availability(action: Action) -> Dictionary:
 		
 		if sub_action.aciton_requirements and not sub_action.aciton_requirements.is_empty():
 			for req in sub_action.aciton_requirements:
-				if req is _PropertyRequirement or req is _EmotionRequirement or req is _PoemRequirement:
+				if req is _PropertyRequirement or req is _PropRangeRequirement or req is _EmotionRequirement or req is _PoemRequirement:
 					if not req.compare(PlayerState):
 						is_gray = true
 						var desc := ""
@@ -1293,6 +1293,32 @@ func apply_visibility_flags() -> void:
 				for reason in v.reasons:
 					a.append_failed_hint(reason)
 			Logging.info("[ActionManager] 🔒 未中签锁定 %s" % a_id)
+	
+	# ── Phase 2.5: 子行动可用性聚合 — 父行动的子行动全灭时灰化父按钮 ──
+	for a_id in Database.get_actions_all():
+		var a := Database.get_action(a_id) as Action
+		if not a or a._is_hidden:
+			continue
+		# 跳过子 action 本身（它们在 _all_sub_action_ids 中已被 _is_hidden）
+		if a.sub_actions.is_empty():
+			continue
+		
+		var children := check_parent_action_children_availability(a)
+		if children.all_unavailable:
+			var status_str := "HARD" if children.all_hidden else "SOFT"
+			a._children_status = 2 if children.all_hidden else 1
+			# 将子行动汇总原因注入 dynamic_failed_hint（hover 展示）
+			var prefix := tr("CODE_ACTION_MANAGER_3E4B2F1A9C")  # "子行动均不可用: "
+			if a.dynamic_failed_hint.is_empty():
+				a.dynamic_failed_hint = prefix
+			else:
+				a.dynamic_failed_hint = prefix + a.dynamic_failed_hint
+			for reason in children.reasons:
+				a.dynamic_failed_hint += "\n  • " + reason
+			Logging.info("[ActionManager] 🔒 父行动子行动全灭 %s — status=%s (%s)" % [a_id, status_str, a.dynamic_failed_hint])
+		else:
+			a._children_status = 0
+			Logging.info("[ActionManager] ✅ 父行动子行动正常 %s" % a_id)
 
 
 # ════════════════════════════════════════════════════════════

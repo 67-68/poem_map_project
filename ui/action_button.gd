@@ -18,8 +18,11 @@ signal clicked_with_action(action: Action)  ## 通用点击信号（子类可用
 ## 锁定闪光 Tween 引用（用于清除旧闪光）
 var _flash_tween: Tween = null
 
-## 当前是否处于灰化锁定状态
+## 当前是否处于灰化锁定状态（硬锁：不可点击）
 var _is_locked: bool = false
+
+## 当前是否处于软锁定状态（灰化但可点击，如所有子行动 GRAY）
+var _is_soft_locked: bool = false
 
 ## 当前是否处于 deferring 状态（淡蓝或淡红）
 var _is_deferring: bool = false
@@ -88,9 +91,10 @@ func update_action(new_action: Action) -> void:
 		$Panel/HBoxContainer/TextureRect.visible = false
 
 
-## 设置为灰化锁定态
+## 设置为灰化锁定态（硬锁：不可点击）
 func set_locked(reason: String) -> void:
 	_is_locked = true
+	_is_soft_locked = false
 	_is_deferring = false
 	modulate = Color(0.4, 0.4, 0.4, 0.6)
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -98,9 +102,21 @@ func set_locked(reason: String) -> void:
 	Logging.info("SceneActionPanel.set_locked: action='%s' reason='%s'" % [action.name if action else "null", reason])
 
 
-## 解除灰化锁定态
+## 设置为软锁定态（灰化但可点击，如所有子行动 GRAY）
+func set_soft_locked(reason: String) -> void:
+	_is_soft_locked = true
+	_is_locked = false
+	_is_deferring = false
+	modulate = Color(0.4, 0.4, 0.4, 0.6)
+	mouse_filter = Control.MOUSE_FILTER_STOP
+	_refresh_hover_popup()
+	Logging.info("SceneActionPanel.set_soft_locked: action='%s' reason='%s'" % [action.name if action else "null", reason])
+
+
+## 解除灰化锁定态（包括硬锁和软锁）
 func set_unlocked() -> void:
 	_is_locked = false
+	_is_soft_locked = false
 	_is_deferring = false
 	modulate = Color.WHITE
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -112,8 +128,8 @@ func set_unlocked() -> void:
 func set_deferring() -> void:
 	_is_deferring = true
 	# 视觉优先级：红 > 灰 > 蓝 > 白
-	# 如果已经被灰化锁定，不覆盖
-	if _is_locked:
+	# 如果已经被灰化锁定（硬锁或软锁），不覆盖
+	if _is_locked or _is_soft_locked:
 		return
 	modulate = DEFERRING_COLOR
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -155,12 +171,13 @@ func _start_flash() -> void:
 
 
 ## 创建/重建 hover 数据，注入叙事文本 + 向量文本，注册到 HoverPopupManager（SLIDE_FROM_RIGHT 流）
+## 硬锁和软锁都传 is_locked=true，让 hover 展示锁定原因。
 func _register_hover_popup() -> void:
 	if not action:
 		Logging.warn("SceneActionPanel._register_hover_popup: action is null, skip")
 		return
 	
-	var hint = ActionHintBuilder.new().build_action_hint(action, _is_locked)
+	var hint = ActionHintBuilder.new().build_action_hint(action, _is_locked or _is_soft_locked)
 	
 	HoverPopupManager.register(self, {"narrative": hint.narrative, "vector": hint.vector}, 0.4, 0.75, HoverPopupManager.FlowType.SLIDE_FROM_RIGHT)
 	Logging.info("SceneActionPanel._register_hover_popup: done for '%s' (SLIDE_FROM_RIGHT)" % action.name)
@@ -205,7 +222,12 @@ func _on_button_pressed() -> void:
 			EventBus.request_toast.emit(tr("CODE_ACTION_BUTTON_A3ED1BB61F"), 1)
 			return
 	
-	# ── 锁定态 → 弹出 toast，不执行 ──
+	# ── 软锁态 → 灰化但允许点击进入 picker（子行动 GRAY 在 picker 中显示）──
+	if _is_soft_locked:
+		Logging.info("SceneActionPanel: 软锁态点击透传进入 picker action=%s" % (action.uuid if action else "NULL"))
+		# 不 return — 继续执行下方逻辑
+	
+	# ── 硬锁定态 → 弹出 toast，不执行 ──
 	if _is_locked:
 		var reason := action.dynamic_failed_hint if not action.dynamic_failed_hint.is_empty() else tr("CODE_NPC_ACTION_BUTTON_60ABF5AC4F")
 		EventBus.request_toast.emit(reason, 1)

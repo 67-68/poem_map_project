@@ -125,6 +125,9 @@ signal cinematic_start(texts: Array[String], config: Dictionary)
 signal cinematic_finished()
 signal imaginary_changed()
 signal request_add_imaginary(tag: String, context: Dictionary)
+## 意象被移除时发射（FIFO顶替 / 自然到期）
+## data: { uuid, name, level, imaginary_type, loss_reason("fifo_replace"|"natural_expire") }
+signal imaginary_lost(data: Dictionary)
 signal on_trait_change()
 signal on_flag_change()
 ## 人物社交关系状态变更（由 RelationFlagManager.set_person_state 发射）
