@@ -145,7 +145,7 @@ func set_action_data_for_locked(entity: GameEntity) -> void:
 	modulate = Color(0.4, 0.4, 0.4, 0.6)
 	if _inner_button:
 		_inner_button.disabled = true
-	HoverPopupManager.unregister(self)
+	HoverPopupManager.unregister(_inner_button)
 	Logging.info("NpcActionButton.set_action_data_for_locked: entity='%s' reason='%s' (LockReason visible, hbox1/2/3 hidden)" % [entity.name if entity else "null", reason])
 
 
@@ -307,7 +307,7 @@ func _populate_labels_from_hint(hint, locked: bool, lock_reason: String) -> void
 
 ## 从 ActionHint (DEFAULT profile) 提取 narrative + vector 并注册到 HoverPopupManager
 func _register_hover_from_action_hint(hint) -> void:
-	HoverPopupManager.unregister(self)
+	HoverPopupManager.unregister(_inner_button)
 
 	if not hint:
 		Logging.warn("NpcActionButton._register_hover_from_action_hint: hint 为空，跳过")
@@ -320,7 +320,7 @@ func _register_hover_from_action_hint(hint) -> void:
 		Logging.info("NpcActionButton._register_hover_from_action_hint: narrative + vector 均为空，跳过注册")
 		return
 
-	HoverPopupManager.register(self, {"narrative": narrative, "vector": vector}, 0.2, 0.75, HoverPopupManager.FlowType.BELOW_OVERLAY)
+	HoverPopupManager.register(_inner_button, {"narrative": narrative, "vector": vector}, 0.2, 0.75, HoverPopupManager.FlowType.BELOW_OVERLAY)
 	Logging.info("NpcActionButton._register_hover_from_action_hint: hover 注册完成 (BELOW_OVERLAY, DEFAULT profile), mode=%s" % ("override" if _is_override_mode else "default"))
 
 
@@ -359,5 +359,5 @@ func _set_gray_visual(gray: bool) -> void:
 
 ## 节点从场景树移除时注销 hover 绑定
 func _exit_tree() -> void:
-	HoverPopupManager.unregister(self)
+	HoverPopupManager.unregister(_inner_button)
 	Logging.info("NpcActionButton._exit_tree: 已注销 hover 绑定")

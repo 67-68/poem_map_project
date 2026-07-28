@@ -206,28 +206,31 @@ text = "0.5"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SmoothScrollContainer" type="ScrollContainer" parent="TapeContainer/VBox/HoverContainer" unique_id=1743516383]
+[node name="VBoxContainer" type="VBoxContainer" parent="TapeContainer/VBox/HoverContainer" unique_id=867512565]
 layout_mode = 2
-script = ExtResource("5_smooth")
-metadata/_custom_type_script = "uid://y5gl8aohf1ll"
 
-[node name="V" type="VBoxContainer" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer" unique_id=1320109393]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="HSeparator" type="HSeparator" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V" unique_id=751446402]
+[node name="HSeparator" type="HSeparator" parent="TapeContainer/VBox/HoverContainer/VBoxContainer" unique_id=751446402]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_7xb00")
 
-[node name="Label" type="Label" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V" unique_id=1655239264]
+[node name="Label" type="Label" parent="TapeContainer/VBox/HoverContainer/VBoxContainer" unique_id=1655239264]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"TitleText"
 text = "UI_NARRATIVE_OVERLAY_TEXT_3"
 
-[node name="HoverLabel" type="RichTextLabel" parent="TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V" unique_id=636252671]
+[node name="SmoothScrollContainer" type="ScrollContainer" parent="TapeContainer/VBox/HoverContainer/VBoxContainer" unique_id=1743516383]
+layout_mode = 2
+script = ExtResource("5_smooth")
+metadata/_custom_type_script = "uid://y5gl8aohf1ll"
+
+[node name="V" type="VBoxContainer" parent="TapeContainer/VBox/HoverContainer/VBoxContainer/SmoothScrollContainer" unique_id=1320109393]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HoverLabel" type="RichTextLabel" parent="TapeContainer/VBox/HoverContainer/VBoxContainer/SmoothScrollContainer/V" unique_id=636252671]
 layout_mode = 2
 size_flags_vertical = 0
 theme_type_variation = &"NarrativeText"

@@ -34,9 +34,9 @@ signal action_panel_state_changed(is_idle: bool)
 @onready var _interrupt_button: Button = $InterruptButton/Button
 @onready var tape_container: PanelContainer = $TapeContainer
 @onready var hover_container: PanelContainer = $TapeContainer/VBox/HoverContainer
-@onready var hover_label: RichTextLabel = $TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V/HoverLabel
-@onready var hover_separator: HSeparator = $TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V/HSeparator
-@onready var hover_title: Label = $TapeContainer/VBox/HoverContainer/SmoothScrollContainer/V/Label
+@onready var hover_label: RichTextLabel = $TapeContainer/VBox/HoverContainer/VBoxContainer/SmoothScrollContainer/V/HoverLabel
+@onready var hover_separator: HSeparator = $TapeContainer/VBox/HoverContainer/VBoxContainer/HSeparator
+@onready var hover_title: Label = $TapeContainer/VBox/HoverContainer/VBoxContainer/Label
 @onready var time_left_rect: TextureRect = $TapeContainer/VBox/HoverContainer/TimeLeft
 @onready var time_label: Label = $TapeContainer/VBox/HoverContainer/TimeLeft/TimeLabel
 # 🆕 ActionPanel 互斥可见性管理
