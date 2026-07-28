@@ -56,7 +56,7 @@ func build_effects_hint() -> String:
 			var pct: float = _ModifierConfig.get_pct_for_display(source_prop, eff.max_limit, eff.half_point)
 			var pct_int: int = int(pct * 100.0)
 
-			var desc: String = eff.hint_text.replace("{mod_val}", str(mod_val)).replace("{pct}", str(pct_int) + "%")
+			var desc: String = tr(eff.hint_text).replace("{mod_val}", str(mod_val)).replace("{pct}", str(pct_int) + "%")
 			lines.append("  • %s" % desc)
 			Logging.debug("ModifierHintFormatter.build_effects_hint: '%s' effect target='%s' dir=%s → pct=%d%%" % [source_prop, eff.target_prop, eff.direction, pct_int])
 
@@ -124,7 +124,7 @@ func build_single_prop_effects(source_prop: String) -> Array[String]:
 		var pct_int: int = int(pct * 100.0)
 
 		var hint_text: String = entry.get("hint_text", "")
-		var desc: String = hint_text.replace("{mod_val}", str(mod_val)).replace("{pct}", str(pct_int) + "%")
+		var desc: String = tr(hint_text).replace("{mod_val}", str(mod_val)).replace("{pct}", str(pct_int) + "%")
 		lines.append("  • %s" % desc)
 		Logging.debug("ModifierHintFormatter.build_single_prop_effects: entry target='%s' dir=%s sign=%s faction='%s' → pct=%d%%" % [entry.get("target_prop", ""), entry.get("direction", ""), entry.get("delta_sign", ""), entry.get("faction_filter", ""), pct_int])
 
