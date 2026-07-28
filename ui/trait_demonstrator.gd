@@ -68,6 +68,9 @@ func _on_xun_tick() -> void:
 	if not _tracked_imaginary:
 		return
 	_refresh_imaginary_separator()
+	# 🆕 每旬刷新 hover 文本，确保持续时间（lasting_xun/duration_xun）准确
+	_register_trait_hover(_tracked_imaginary)
+	Logging.info("TraitDemonstrator._on_xun_tick: hover 已刷新 for '%s'" % _tracked_imaginary.name)
 
 
 func _refresh_imaginary_separator() -> void:

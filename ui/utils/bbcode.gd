@@ -97,6 +97,11 @@ static func effect_section() -> String:
 	return hint_section(TranslationServer.translate("CODE_BBCODE_F17C55154D"))
 
 
+## 消失后 section 标题 — 灰色 13px 的「━━━ 消失后 ━━━」
+static func loss_section() -> String:
+	return hint_section(TranslationServer.translate("CODE_BBCODE_LOSS_SECTION"))
+
+
 # ════════════════════════════════════════════════════════════════
 # 语义化包装方法
 # ════════════════════════════════════════════════════════════════
@@ -120,7 +125,7 @@ static func repeated_warning() -> String:
 static func defer_what_line(name: String, desc: String) -> String:
 	var line := color_size("⏳ %s" % name, COLOR_INFO, 13)
 	if not desc.is_empty():
-		line += "\n" + color(tr(desc), COLOR_MUTED)
+		line += "\n" + color(TranslationServer.translate(desc), COLOR_MUTED)
 	return line
 
 

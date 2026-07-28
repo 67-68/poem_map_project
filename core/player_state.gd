@@ -368,15 +368,23 @@ func _on_request_add_imaginary(tag: String, context: Dictionary = {}):
 	imaginary.duration_xun = 5
 	imaginary.created_at_day = TimeService._total_days_elapsed
 
-	# trait_effect_operations 注入（Lv2 每旬扣健康等）
-	if context.has("trait_effect_operations") and typeof(context["trait_effect_operations"]) == TYPE_ARRAY:
+	# trait_effect_operations 注入：context 传入的优先（roll_imaginary），否则按等级注入默认效果
+	# Lv2: 每旬健康 -5（统一入口兜底，无论 imagery_add 还是 roll_imaginary 路径）
+	var has_context_ops := context.has("trait_effect_operations") and typeof(context["trait_effect_operations"]) == TYPE_ARRAY
+	if has_context_ops:
 		for op_data in context["trait_effect_operations"]:
 			if typeof(op_data) == TYPE_DICTIONARY:
 				var prop_op := PropertyOperator.new()
 				prop_op.property = str(op_data.get("property", ""))
 				prop_op.value = int(op_data.get("value", 0))
 				imaginary.trait_effect_operations.append(prop_op)
-				Logging.info("PlayerState._on_request_add_imaginary: 注入 trait_effect_operations: '%s' %+d" % [prop_op.property, prop_op.value])
+				Logging.info("PlayerState._on_request_add_imaginary: 注入 trait_effect_operations (context): '%s' %+d" % [prop_op.property, prop_op.value])
+	elif imaginary.level == 2:
+		var prop_op := PropertyOperator.new()
+		prop_op.property = "health"
+		prop_op.value = -5
+		imaginary.trait_effect_operations.append(prop_op)
+		Logging.info("PlayerState._on_request_add_imaginary: Lv2 兜底注入 trait_effect_operations: 'health' -5")
 
 	Database.imaginaries_detail[imaginary_uuid] = imaginary
 	Logging.info("PlayerState._on_request_add_imaginary: 新建 Imaginary '%s' (base=%s, name=%s, type=%s, level=%d, duration_xun=5, created_at_day=%d)" % [imaginary_uuid, base_uuid, imaginary.name, imaginary.imaginary_type, imaginary.level, imaginary.created_at_day])

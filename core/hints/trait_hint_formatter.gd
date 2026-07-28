@@ -61,7 +61,9 @@ func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display_name: 
 	# 效果区
 	lines.append("")
 	lines.append(_BBCode.effect_section())
+	var has_effect := false
 	if not imag.trait_effect_operations.is_empty():
+		has_effect = true
 		for op in imag.trait_effect_operations:
 			if not op:
 				continue
@@ -69,7 +71,12 @@ func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display_name: 
 			if not desc.is_empty():
 				lines.append(tr("CODE_TRAIT_HINT_FORMATTER_FA613EE11A") % desc)
 		Logging.info("TraitHintFormatter._build_imaginary_hint: trait_effect_operations → %d lines" % imag.trait_effect_operations.size())
-	else:
+	# Lv3: AP 上限 -1（在 SurvivalManager._sync_health_ap_traits 中全局计数的，不体现在 trait_effect_operations 中）
+	if imag.level >= 3:
+		has_effect = true
+		lines.append(tr("CODE_TRAIT_HINT_FORMATTER_AP_PENALTY_LV3"))
+		Logging.info("TraitHintFormatter._build_imaginary_hint: Lv3 AP penalty added")
+	if not has_effect:
 		lines.append(tr("CODE_TRAIT_HINT_FORMATTER_99D99C2111"))
 		Logging.info("TraitHintFormatter._build_imaginary_hint: 无 trait_effect_operations")
 
@@ -85,6 +92,19 @@ func _build_imaginary_hint(imag: Imaginary, lines: Array[String], display_name: 
 		else:
 			lines.append(tr("CODE_TRAIT_HINT_FORMATTER_B0F0BFCE9A") % [remaining, already])
 		Logging.info("TraitHintFormatter._build_imaginary_hint: duration=%d, lasting=%d" % [imag.duration_xun, already])
+
+	# 🆕 消失后果（V13: 意象消失等级化惩罚）
+	lines.append("")
+	lines.append(_BBCode.loss_section())
+	if imag.level == 2:
+		lines.append(tr("CODE_TRAIT_HINT_FORMATTER_LOSS_LV2"))
+		Logging.info("TraitHintFormatter._build_imaginary_hint: loss section Lv2 added")
+	elif imag.level >= 3:
+		lines.append(tr("CODE_TRAIT_HINT_FORMATTER_LOSS_LV3"))
+		Logging.info("TraitHintFormatter._build_imaginary_hint: loss section Lv3 added")
+	else:
+		lines.append(tr("CODE_TRAIT_HINT_FORMATTER_99D99C2111"))
+		Logging.info("TraitHintFormatter._build_imaginary_hint: loss section — Lv1 无损失")
 
 	# hover_narrative
 	if not imag.hover_narrative.is_empty():

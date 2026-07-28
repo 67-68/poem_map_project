@@ -59,6 +59,17 @@ Resource → GameEntity → Trait → Imaginary
 - 每旬 `lasting_xun += 1`
 - `lasting_xun >= 5` → 直接删除
 - UI: [`TraitDemonstrator`](ui/trait_demonstrator.gd:1) 中 HSeparator 宽度 = `(剩余/5) × PanelContainer.size.x`
+- **Hover 提示每旬自动刷新**（[`_on_xun_tick()`](ui/trait_demonstrator.gd:67) → `_register_trait_hover()`），确保持续时间文本与进度条同步
+
+### Hover 提示内容 (V13.1 完善)
+
+| Section | 内容 | 来源 |
+|---------|------|------|
+| 名称 | 【LvN 意象】 | `imaginary_definitions.json` |
+| get_hint | 获取时叙事文本 | `imaginary_definitions.json` |
+| 效果 | Lv2: 每旬健↓5; Lv3: AP上限-1 | `trait_effect_operations` + 手动追加 |
+| 持续 | N旬后自动移除（已持续M旬） | `duration_xun / lasting_xun` |
+| 消失后 | Lv2: 健↓5; Lv3: 健↓30 兴↓10 | V13 等级化惩罚表 |
 
 ### 状态转换
 
