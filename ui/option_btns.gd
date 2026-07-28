@@ -45,11 +45,12 @@ func _append_fallback_if_all_locked(callback: Callable) -> void:
 		Logging.info("OptionBtns._append_fallback_if_all_locked: 无按钮，跳过")
 		return
 
-	# 检查是否全部被锁定
+	# 检查是否全部被锁定（使用 _is_locked 而非 disabled，
+	# 因为锁定按钮采用「点击后再灰化」模式 — disabled 只在点击后才变为 true）
 	for btn in btns:
 		if not btn is EventBtn:
 			continue
-		if not btn.disabled:
+		if not btn._is_locked:
 			Logging.info("OptionBtns._append_fallback_if_all_locked: 至少有一个可用按钮 (text='%s')，跳过" % btn.text)
 			return
 
