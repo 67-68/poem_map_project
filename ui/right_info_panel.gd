@@ -1,6 +1,17 @@
 extends PanelContainer
 
 # ═══════════════════════════════════════════════════════════
+# 底部按钮 ID 枚举 — show_hint / _try_clear_on_click 用
+# ═══════════════════════════════════════════════════════════
+enum BtnID {
+	SOCIAL,      ## 社交人脉按钮
+	IDEA,        ## 理念按钮
+	POEM,        ## 写诗按钮
+	NOTE,        ## 笔记按钮
+	POEM_INFO,   ## 诗词图鉴按钮
+}
+
+# ═══════════════════════════════════════════════════════════
 # 目标中文名映射（ENUMS.RELATION_TARGET → 游戏内显示名）
 # ═══════════════════════════════════════════════════════════
 var CN_NAME_MAP: Dictionary = {
@@ -17,6 +28,22 @@ var CN_NAME_MAP: Dictionary = {
 	"yangguozhong": tr("CODE_RIGHT_INFO_PANEL_1BA44F209A"),
 	"guoguofuren": tr("CODE_RIGHT_INFO_PANEL_96BE00E055"),
 }
+
+# ── 呼吸 Tween 管理（每个按钮一个 breathing tween）──
+var _breath_tweens: Dictionary = {}  ## BtnID → Tween
+
+## 当前活跃提示的目标按钮 ID（-1 = 无活动提示）
+var _active_hint_btn: int = -1
+
+## 统一的 7s 自动消失定时器
+var _hint_timer: SceneTreeTimer = null
+
+# ── 呼吸动画参数 ──
+const BREATH_SCALE_MAX: float = 1.03
+const BREATH_SCALE_MIN: float = 1.0
+const BREATH_PERIOD: float = 2.0          ## 完整呼吸周期（秒）
+const BREATH_HALF_PERIOD: float = 1.0     ## 半周期 = 扩张 1s / 收缩 1s
+const HINT_AUTO_CLEAR_SECONDS: float = 7.0
 
 @onready var _info_grid: VBoxContainer = $Panel/V/InfoGrid
 @onready var _social_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn
@@ -38,13 +65,35 @@ var CN_NAME_MAP: Dictionary = {
 @onready var _decisions_scroll: Control = $Panel/V/DecisioinScr
 @onready var _bottom_btn_bar: PanelContainer = $Panel/V/PanelContainer2
 
+
+# ═══════════════════════════════════════════════════════════
+# BtnID → PanelContainer 映射
+# ═══════════════════════════════════════════════════════════
+
+func _get_btn_by_id(btn_id: BtnID) -> PanelContainer:
+	match btn_id:
+		BtnID.SOCIAL:
+			return _social_btn
+		BtnID.IDEA:
+			return _idea_btn
+		BtnID.POEM:
+			return _poem_btn
+		BtnID.NOTE:
+			return _note_btn
+		BtnID.POEM_INFO:
+			return _poem_info_btn
+		_:
+			Logging.err("RightInfoPanel._get_btn_by_id: 未知 btn_id=%d" % btn_id)
+			return null
+
+
 func _ready() -> void:
 	# ── 风闻刷新 ──
 	_refresh_rumors()
 	TimeService.on_month_tick.connect(_refresh_rumors)
 	EventBus.request_refresh_action_panel.connect(_refresh_rumors)
 
-	# ── 社交人脉按钮 ──
+	# ── 社交人脉按钮 gui_input ──
 	_social_btn.gui_input.connect(_on_social_btn_gui_input)
 
 	# ── 理念按钮（右下角）──
@@ -67,6 +116,21 @@ func _ready() -> void:
 	# ── SpecialLabel 动态提示 ──
 	_special_label.text = ""
 
+	# ── 5 按钮 hover 呼吸暂停/恢复 ──
+	_social_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.SOCIAL))
+	_social_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.SOCIAL))
+	_idea_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.IDEA))
+	_idea_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.IDEA))
+	_poem_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.POEM))
+	_poem_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.POEM))
+	_note_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.NOTE))
+	_note_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.NOTE))
+	_poem_info_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.POEM_INFO))
+	_poem_info_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.POEM_INFO))
+
+	# ── Pivot Offset 延迟预设（按钮已布局后设置到中心）──
+	call_deferred("_preset_all_pivot_offsets")
+
 	# 注册一次性提示虚拟 flag（提醒一次就不再显示）
 	PlayerState.register_virtual_flag("hint_social_shown", "bool")
 	PlayerState.register_virtual_flag("hint_poem_shown", "bool")
@@ -84,23 +148,200 @@ func _ready() -> void:
 	# 🆕 笔记触发提示
 	if not EventBus.note_triggered.is_connected(_on_note_triggered):
 		EventBus.note_triggered.connect(_on_note_triggered)
-	# 点击对应按钮后清除提示
-	if not EventBus.social_connection_toggled.is_connected(_clear_special_hint):
-		EventBus.social_connection_toggled.connect(_clear_special_hint)
-	if not EventBus.poem_start_clicked.is_connected(_clear_special_hint):
-		EventBus.poem_start_clicked.connect(_clear_special_hint)
-	if not EventBus.idea_page_toggled.is_connected(_clear_special_hint):
-		EventBus.idea_page_toggled.connect(_clear_special_hint)
-	# 🆕 笔记页面打开 → 清除提示
-	if not EventBus.note_page_toggled.is_connected(_clear_special_hint):
-		EventBus.note_page_toggled.connect(_clear_special_hint)
-	# 🆕 诗词图鉴页面打开 → 清除提示
-	if not EventBus.poem_page_toggled.is_connected(_clear_special_hint):
-		EventBus.poem_page_toggled.connect(_clear_special_hint)
 
 	# ── 🆕 Tutorial 模式：默认隐藏非时间面板区域 ──
 	if not PlayerState.has_flag("tutorial_completed"):
 		call_deferred("_hide_for_tutorial")
+
+
+# ═══════════════════════════════════════════════════════════
+# Pivot Offset 预设
+# ═══════════════════════════════════════════════════════════
+
+func _preset_all_pivot_offsets() -> void:
+	for btn_id in BtnID:
+		var btn: PanelContainer = _get_btn_by_id(btn_id)
+		if btn and btn.size.x > 0 and btn.size.y > 0:
+			btn.pivot_offset = btn.size / 2.0
+			Logging.info("RightInfoPanel._preset_all_pivot_offsets: btn_id=%d pivot_offset=%s" % [btn_id, btn.pivot_offset])
+		elif btn:
+			Logging.warn("RightInfoPanel._preset_all_pivot_offsets: btn_id=%d size=%s（尚未布局）" % [btn_id, btn.size])
+
+
+# ═══════════════════════════════════════════════════════════
+# 呼吸动画核心
+# ═══════════════════════════════════════════════════════════
+
+## 对指定按钮启动无限循环呼吸 Tween（scale 1.0 ↔ 1.03，TRANS_SINE，周期 2s）
+func _start_breath(btn_id: BtnID) -> void:
+	var btn: PanelContainer = _get_btn_by_id(btn_id)
+	if btn == null:
+		Logging.err("RightInfoPanel._start_breath: btn_id=%d 无效，跳过" % btn_id)
+		return
+
+	# 确保 pivot 在按钮正中心（start_breath 时 size 必已布局完毕）
+	btn.pivot_offset = btn.size / 2.0
+
+	# 💀 防呆：杀死旧僵尸 Tween
+	if _breath_tweens.has(btn_id):
+		var old: Tween = _breath_tweens[btn_id]
+		if old and old.is_valid():
+			old.kill()
+			Logging.info("RightInfoPanel._start_breath: btn_id=%d 已 kill 旧 Tween" % btn_id)
+		_breath_tweens.erase(btn_id)
+
+	var tween := create_tween()
+	tween.set_loops()  # 无限循环
+	tween.set_trans(Tween.TRANS_SINE)
+	# Phase 1: 扩张 1.0 → 1.03（1s）
+	tween.tween_property(btn, "scale", Vector2(BREATH_SCALE_MAX, BREATH_SCALE_MAX), BREATH_HALF_PERIOD)
+	# Phase 2: 收缩 1.03 → 1.0（1s）
+	tween.tween_property(btn, "scale", Vector2(BREATH_SCALE_MIN, BREATH_SCALE_MIN), BREATH_HALF_PERIOD)
+
+	_breath_tweens[btn_id] = tween
+	Logging.info("RightInfoPanel._start_breath: btn_id=%d 呼吸动画已启动（pivot_offset=%s）" % [btn_id, btn.pivot_offset])
+
+
+## 停止指定按钮的呼吸动画并重置 scale
+func _stop_breath(btn_id: BtnID) -> void:
+	if not _breath_tweens.has(btn_id):
+		Logging.info("RightInfoPanel._stop_breath: btn_id=%d 无 Tween 记录，跳过" % btn_id)
+		return
+
+	var tween: Tween = _breath_tweens[btn_id]
+	if tween and tween.is_valid():
+		tween.kill()
+		Logging.info("RightInfoPanel._stop_breath: btn_id=%d Tween 已 kill" % btn_id)
+	_breath_tweens.erase(btn_id)
+
+	var btn: PanelContainer = _get_btn_by_id(btn_id)
+	if btn:
+		btn.scale = Vector2(1.0, 1.0)
+		Logging.info("RightInfoPanel._stop_breath: btn_id=%d scale 已重置为 (1,1)" % btn_id)
+
+
+# ═══════════════════════════════════════════════════════════
+# Hover 呼吸暂停 / 恢复（仅对当前活跃 hint 按钮生效）
+# ═══════════════════════════════════════════════════════════
+
+func _on_breath_mouse_entered(btn_id: BtnID) -> void:
+	if btn_id != _active_hint_btn:
+		return
+	if not _breath_tweens.has(btn_id):
+		return
+	var tween: Tween = _breath_tweens[btn_id]
+	if tween and tween.is_valid():
+		tween.pause()
+		Logging.info("RightInfoPanel: btn_id=%d 呼吸动画已暂停（鼠标进入）" % btn_id)
+
+
+func _on_breath_mouse_exited(btn_id: BtnID) -> void:
+	if btn_id != _active_hint_btn:
+		return
+	if not _breath_tweens.has(btn_id):
+		return
+	var tween: Tween = _breath_tweens[btn_id]
+	if tween and tween.is_valid():
+		tween.play()
+		Logging.info("RightInfoPanel: btn_id=%d 呼吸动画已恢复（鼠标离开）" % btn_id)
+
+
+# ═══════════════════════════════════════════════════════════
+# SpecialLabel 统一提示管线
+# ═══════════════════════════════════════════════════════════
+
+## 统一入口：设置 SpecialLabel 文本 + 启动目标按钮呼吸 + 7s 自动消失
+func show_hint(btn_id: BtnID, p_text: String) -> void:
+	# 先清除旧 hint（如有）
+	_clear_hint()
+
+	_active_hint_btn = btn_id
+	_special_label.text = p_text
+	_special_label.visible = true
+
+	# 启动呼吸动画
+	_start_breath(btn_id)
+
+	# 启动 7s 自动消失定时器
+	_hint_timer = get_tree().create_timer(HINT_AUTO_CLEAR_SECONDS)
+	_hint_timer.timeout.connect(_on_hint_timeout)
+
+	Logging.info("RightInfoPanel.show_hint: btn_id=%d text='%s' 呼吸已启动 %.1fs 定时器已启动" % [btn_id, p_text, HINT_AUTO_CLEAR_SECONDS])
+
+
+## 清除当前所有提示（停止呼吸 + 清文本 + 取消定时器 + 重置状态）
+func _clear_hint() -> void:
+	if _active_hint_btn != -1:
+		_stop_breath(_active_hint_btn)
+	_active_hint_btn = -1
+	_special_label.text = ""
+
+	if _hint_timer != null:
+		_hint_timer.timeout.disconnect(_on_hint_timeout)
+		_hint_timer = null
+
+	Logging.info("RightInfoPanel._clear_hint: 提示已清除")
+
+
+## 目标按钮点击时调用 — 仅当 btn_id 匹配活跃 hint 时才清除
+func _try_clear_on_click(btn_id: BtnID) -> void:
+	if btn_id == _active_hint_btn and _active_hint_btn != -1:
+		Logging.info("RightInfoPanel._try_clear_on_click: btn_id=%d 匹配活跃提示，清除" % btn_id)
+		_clear_hint()
+	else:
+		Logging.info("RightInfoPanel._try_clear_on_click: btn_id=%d 不匹配活跃提示 %d，跳过" % [btn_id, _active_hint_btn])
+
+
+## 7s 定时器超时回调
+func _on_hint_timeout() -> void:
+	Logging.info("RightInfoPanel._on_hint_timeout: %.1fs 超时，清除提示" % HINT_AUTO_CLEAR_SECONDS)
+	_hint_timer = null  # 已自动 fire + 断开，防止 _clear_hint 重复 disconnect
+	_clear_hint()
+
+
+# ═══════════════════════════════════════════════════════════
+# 触发源 → show_hint 适配
+# ═══════════════════════════════════════════════════════════
+
+## 社交关系状态改变 → 提示点击人脉按钮
+func _on_person_state_changed(_target_tag: String, _new_state: String) -> void:
+	if PlayerState.has_flag("hint_social_shown"):
+		return
+	show_hint(BtnID.SOCIAL, tr("UI_RIGHT_INFO_PANEL_TEXT_0"))
+	PlayerState.set_flag("hint_social_shown", true)
+	Logging.info("RightInfoPanel: person_state changed → 显示社交提示（仅此一次）")
+
+## 意象获得 → 提示点击诗词按钮
+func _on_imaginary_changed() -> void:
+	if PlayerState.has_flag("hint_poem_shown"):
+		return
+	show_hint(BtnID.POEM, tr("CODE_RIGHT_INFO_PANEL_441BE330DE"))
+	PlayerState.set_flag("hint_poem_shown", true)
+	Logging.info("RightInfoPanel: imaginary changed → 显示诗词提示（仅此一次）")
+
+## 特殊属性（望/兴/势）变化 → 提示点击理念按钮
+const SPECIAL_PROPS: Array[String] = ["prestige", "inspiration", "momentum"]
+
+func _on_special_prop_changed(prop_name: String) -> void:
+	if prop_name in SPECIAL_PROPS:
+		if PlayerState.has_flag("hint_idea_shown"):
+			return
+		show_hint(BtnID.IDEA, tr("CODE_RIGHT_INFO_PANEL_B593A0EA10"))
+		PlayerState.set_flag("hint_idea_shown", true)
+		Logging.info("RightInfoPanel: 特殊属性 '%s' 变化 → 显示理念提示（仅此一次）" % prop_name)
+
+## 🆕 笔记触发 → 提示点击注解按钮
+func _on_note_triggered(note_uuid: String) -> void:
+	if PlayerState.has_flag("hint_note_shown"):
+		return
+	var note: Note = NoteManager.get_note(note_uuid)
+	if note == null:
+		Logging.warn("RightInfoPanel: note_triggered 但 Note '%s' 未找到" % note_uuid)
+		return
+	show_hint(BtnID.NOTE, tr("CODE_RIGHT_INFO_PANEL_3732C36978") % note.name)
+	PlayerState.set_flag("hint_note_shown", true)
+	Logging.info("RightInfoPanel: note_triggered '%s' → 显示注解提示（仅此一次）" % note_uuid)
+
 
 ## 刷新风闻面板：遍历所有 RELATION_TARGET，查询 RelationFlagManager，
 ## 只显示有死穴（leverage）或恩义（help）的目标。
@@ -186,6 +427,7 @@ func _on_social_btn_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Logging.info("RightInfoPanel: SocialConnectionBtn 点击 → 发射 social_connection_toggled")
 		EventBus.social_connection_toggled.emit()
+		_try_clear_on_click(BtnID.SOCIAL)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -196,6 +438,7 @@ func _on_idea_btn_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Logging.info("RightInfoPanel: LinianBtn 点击 → 发射 idea_page_toggled")
 		EventBus.idea_page_toggled.emit()
+		_try_clear_on_click(BtnID.IDEA)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -206,6 +449,7 @@ func _on_poem_btn_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Logging.info("RightInfoPanel: Poembtn 点击 → 发射 poem_start_clicked")
 		EventBus.poem_start_clicked.emit()
+		_try_clear_on_click(BtnID.POEM)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -216,6 +460,7 @@ func _on_note_btn_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Logging.info("RightInfoPanel: NoteBtn 点击 → 发射 note_page_toggled")
 		EventBus.note_page_toggled.emit()
+		_try_clear_on_click(BtnID.NOTE)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -226,6 +471,7 @@ func _on_poem_info_btn_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Logging.info("RightInfoPanel: PoemInfoBtn 点击 → 发射 poem_page_toggled")
 		EventBus.poem_page_toggled.emit()
+		_try_clear_on_click(BtnID.POEM_INFO)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -235,66 +481,6 @@ func _on_poem_info_btn_gui_input(event: InputEvent) -> void:
 func _on_focus_changed(active: bool) -> void:
 	_poem_btn.visible = not active
 	Logging.info("RightInfoPanel: Focus session %s → Poembtn visible=%s" % ["active" if active else "inactive", not active])
-
-
-# ═══════════════════════════════════════════════════════════
-# SpecialLabel 动态提示 — 根据游戏状态提示用户点击对应按钮
-# ═══════════════════════════════════════════════════════════
-
-## 社交关系状态改变 → 提示点击人脉按钮
-func _on_person_state_changed(_target_tag: String, _new_state: String) -> void:
-	if PlayerState.has_flag("hint_social_shown"):
-		return
-	_special_label.text = tr("UI_RIGHT_INFO_PANEL_TEXT_0")
-	PlayerState.set_flag("hint_social_shown", true)
-	Logging.info("RightInfoPanel: person_state changed → 显示社交提示（仅此一次）")
-
-## 意象获得 → 提示点击诗词按钮
-func _on_imaginary_changed() -> void:
-	if PlayerState.has_flag("hint_poem_shown"):
-		return
-	_special_label.text = tr("CODE_RIGHT_INFO_PANEL_441BE330DE")
-	PlayerState.set_flag("hint_poem_shown", true)
-	Logging.info("RightInfoPanel: imaginary changed → 显示诗词提示（仅此一次）")
-
-## 特殊属性（望/兴/势）变化 → 提示点击理念按钮
-const SPECIAL_PROPS: Array[String] = ["prestige", "inspiration", "momentum"]
-
-func _on_special_prop_changed(prop_name: String) -> void:
-	if prop_name in SPECIAL_PROPS:
-		if PlayerState.has_flag("hint_idea_shown"):
-			return
-		_special_label.text = tr("CODE_RIGHT_INFO_PANEL_B593A0EA10")
-		PlayerState.set_flag("hint_idea_shown", true)
-		Logging.info("RightInfoPanel: 特殊属性 '%s' 变化 → 显示理念提示（仅此一次）" % prop_name)
-
-## 🆕 笔记触发 → 提示点击注解按钮
-var _note_hint_timer: SceneTreeTimer = null
-
-func _on_note_triggered(note_uuid: String) -> void:
-	if PlayerState.has_flag("hint_note_shown"):
-		return
-	var note: Note = NoteManager.get_note(note_uuid)
-	if note == null:
-		Logging.warn("RightInfoPanel: note_triggered 但 Note '%s' 未找到" % note_uuid)
-		return
-	_special_label.text = tr("CODE_RIGHT_INFO_PANEL_3732C36978") % note.name
-	PlayerState.set_flag("hint_note_shown", true)
-	Logging.info("RightInfoPanel: note_triggered '%s' → 显示注解提示（仅此一次）" % note_uuid)
-
-	# 5s 后自动清除（重置已有定时器）
-	if _note_hint_timer != null:
-		_note_hint_timer.timeout.disconnect(_clear_special_hint)
-	_note_hint_timer = get_tree().create_timer(5.0)
-	_note_hint_timer.timeout.connect(_clear_special_hint)
-
-## 点击任一对应按钮后清除提示
-func _clear_special_hint() -> void:
-	_special_label.text = ""
-	if _note_hint_timer != null:
-		_note_hint_timer.timeout.disconnect(_clear_special_hint)
-		_note_hint_timer = null
-	Logging.info("RightInfoPanel: 按钮已点击 → 清除 SpecialLabel 提示")
 
 
 # ═══════════════════════════════════════════════════════════
@@ -356,10 +542,9 @@ func set_special_label_visible(v: bool) -> void:
 	_special_label.visible = v
 	Logging.info("RightInfoPanel.set_special_label_visible: %s" % v)
 
-## 🆕 设置 SpecialLabel 文本（tutorial 提示用）
+## 🆕 设置 SpecialLabel 文本（tutorial 提示用，不走呼吸管线）
 func set_special_label_text(p_text: String) -> void:
 	#breakpoint
 	_special_label.text = p_text
 	_special_label.visible = true
 	Logging.info("RightInfoPanel.set_special_label_text: '%s'" % p_text)
-	

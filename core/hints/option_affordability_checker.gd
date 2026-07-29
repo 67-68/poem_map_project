@@ -98,7 +98,7 @@ func _is_health_deadly(operators: Array) -> bool:
 			continue
 		# found health 消耗
 		var raw_need: int = -pop.value
-		var current_health := PlayerState.get_stat_val("health")
+		var current_health = PlayerState.get_stat_val("health")
 		if current_health < raw_need:
 			Logging.info("[OptionAffordabilityChecker] _is_health_deadly: health=%d < need=%d → 生命作保" % [current_health, raw_need])
 			return true
