@@ -32,6 +32,11 @@ func check(operators: Array) -> Dictionary:
 
 	Logging.info("[OptionAffordabilityChecker] 检查 %d 个 operators" % operators.size())
 
+	# 🆕 生命作保：先扫描 health 消耗，若生命不够则整个选项完全豁免
+	if _is_health_deadly(operators):
+		Logging.info("[OptionAffordabilityChecker] 生命作保：health 不足 → 完全豁免，跳过所有检查")
+		return { "can_afford": true, "reasons": reasons }
+
 	for i in range(operators.size()):
 		var op = operators[i]
 		if not op:
@@ -75,6 +80,30 @@ func _check_property(pop: PropertyOperator, _idx: int) -> Array[String]:
 	var reasons := ActionManager.check_archetype_property_costs([pop])
 	Logging.info("[OptionAffordabilityChecker] PropertyOperator[%d] → %d reasons" % [_idx, reasons.size()])
 	return reasons
+
+
+# ════════════════════════════════════════════════════════════════
+# 🆕 生命作保：前置扫描
+# ════════════════════════════════════════════════════════════════
+
+## 扫描 operators 中是否有 health 消耗会导致血量跌破 1。
+## 若是 → 整个选项完全豁免，不做任何 affordability 检查。
+## 玩家可以"择死"，由 SurvivalManager.death_judgement() 兜底。
+func _is_health_deadly(operators: Array) -> bool:
+	for op in operators:
+		if not op is PropertyOperator:
+			continue
+		var pop := op as PropertyOperator
+		if pop.value >= 0 or pop.property != "health":
+			continue
+		# found health 消耗
+		var raw_need: int = -pop.value
+		var current_health := PlayerState.get_stat_val("health")
+		if current_health < raw_need:
+			Logging.info("[OptionAffordabilityChecker] _is_health_deadly: health=%d < need=%d → 生命作保" % [current_health, raw_need])
+			return true
+		Logging.info("[OptionAffordabilityChecker] _is_health_deadly: health=%d >= need=%d → 不豁免，继续正常检查" % [current_health, raw_need])
+	return false
 
 
 # ════════════════════════════════════════════════════════════════
