@@ -59,7 +59,7 @@ func build_action_hint(action, is_locked: bool, ctx, profile := _HintProfile.Pro
 	var _is_repeated = ctx.is_repeated
 
 	# ── 叙事层（profile 不影响，保持原样）──
-	hint.narrative = action.description if not action.description.is_empty() else tr("CODE_ACTION_HINT_FORMATTER_BF10FD5886")
+	hint.narrative = tr(action.description) if not action.description.is_empty() else tr("CODE_ACTION_HINT_FORMATTER_BF10FD5886")
 
 	if is_locked and not action.dynamic_failed_hint.is_empty():
 		hint.narrative = _BBCode.locked_prefix(action.dynamic_failed_hint) + "\n\n" + hint.narrative
@@ -358,7 +358,7 @@ func _defer_info_lines(action, ctx, cost_mod) -> void:
 	if is_deferring:
 		var sub_name = tr(_defer_sub.name) if not _defer_sub.name.is_empty() else ""
 		if not sub_name.is_empty():
-			cost_mod.append(_BBCode.defer_what_line(sub_name, _defer_sub.description))
+			cost_mod.append(_BBCode.defer_what_line(sub_name, tr(_defer_sub.description)))
 
 	if is_deferring:
 		var remaining = ds.get("remaining", 0)

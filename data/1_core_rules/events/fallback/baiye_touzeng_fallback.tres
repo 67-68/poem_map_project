@@ -12,12 +12,11 @@ script = ExtResource("3_cr")
 [sub_resource type="Resource" id="Resource_opt"]
 script = ExtResource("4_evopt")
 choice_result = SubResource("Resource_empty_cr")
-description = "ACT_BAIYE_TOUZENG_FALLBACK_DESCRIPTION"
+description = "ACT_BAIYE_TOUZENG_FALLBACK_HINT"
 
 [resource]
 script = ExtResource("5_randomev")
 weight = 0.0
-archetype_id = "baiye_touzeng_success"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "baiye_touzeng_fallback"
-name = "ACT_BAIYE_TOUZENG_FALLBACK_NAME"
+name = "ACT_BAIYE_TOUZENG_FALLBACK_HINT_NAME"

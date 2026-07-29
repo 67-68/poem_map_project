@@ -15,27 +15,29 @@ class_name SocialConnectionPage
 # 常量映射
 # ═══════════════════════════════════════════════════════════
 
+# 存 raw i18n key，消费点调用 tr() 延迟翻译（避免脚本加载时 TranslationServer 未就绪）
 var PLACE_CN: Dictionary = {
-	"pingkangfang": tr("CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54"),
-	"huangcheng": tr("CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A"),
-	"xishi": tr("CODE_SOCIAL_CONNECTION_PAGE_BE2A911592"),
+	"pingkangfang": "CODE_SOCIAL_CONNECTION_PAGE_06CF4D3D54",
+	"huangcheng": "CODE_SOCIAL_CONNECTION_PAGE_CD2724EB5A",
+	"xishi": "CODE_SOCIAL_CONNECTION_PAGE_BE2A911592",
+	"taishan_base": "TRES_TUT_MEET_TAOIST_NAME_0",
 }
 
 var PERSON_STATE_CN: Dictionary = {
-	"not_meet": tr("CODE_SOCIAL_CONNECTION_PAGE_FC09E638F1"),
-	"know_about": tr("CODE_SOCIAL_CONNECTION_PAGE_320A6DD958"),
-	"inner_circle": tr("CODE_SOCIAL_CONNECTION_PAGE_67B1207A0B"),
-	"blood_oath": tr("CODE_SOCIAL_CONNECTION_PAGE_82200B0785"),
+	"not_meet": "CODE_SOCIAL_CONNECTION_PAGE_FC09E638F1",
+	"know_about": "CODE_SOCIAL_CONNECTION_PAGE_320A6DD958",
+	"inner_circle": "CODE_SOCIAL_CONNECTION_PAGE_67B1207A0B",
+	"blood_oath": "CODE_SOCIAL_CONNECTION_PAGE_82200B0785",
 }
 
 var TIER_LABELS: Dictionary = {
-	1: tr("CODE_SOCIAL_CONNECTION_PAGE_D5617BCA8A"),
-	2: tr("CODE_SOCIAL_CONNECTION_PAGE_AF314B7D7E"),
-	3: tr("CODE_SOCIAL_CONNECTION_PAGE_76BE7378D6"),
+	1: "CODE_SOCIAL_CONNECTION_PAGE_D5617BCA8A",
+	2: "CODE_SOCIAL_CONNECTION_PAGE_AF314B7D7E",
+	3: "CODE_SOCIAL_CONNECTION_PAGE_76BE7378D6",
 }
 
-var UNKNOWN_TIER_LABEL: String = tr("CODE_SOCIAL_CONNECTION_PAGE_AF4682C8B2")
-var UNKNOWN_PLACE_LABEL: String = tr("CODE_SOCIAL_CONNECTION_PAGE_CDC9E0E088")
+var UNKNOWN_TIER_LABEL: String = "CODE_SOCIAL_CONNECTION_PAGE_AF4682C8B2"
+var UNKNOWN_PLACE_LABEL: String = "CODE_SOCIAL_CONNECTION_PAGE_CDC9E0E088"
 
 # ═══════════════════════════════════════════════════════════
 # Onready 节点引用
@@ -253,7 +255,7 @@ func _build_tree_by_place(docs: Array[NPCDocument]) -> void:
 	place_keys.sort()
 
 	for place_key: String in place_keys:
-		var cn_name: String = PLACE_CN.get(place_key, place_key)
+		var cn_name: String = tr(PLACE_CN.get(place_key, place_key))
 		var place_item: TreeItem = _tree.create_item(root)
 		place_item.set_text(0, cn_name)
 		place_item.set_selectable(0, false)
@@ -265,7 +267,7 @@ func _build_tree_by_place(docs: Array[NPCDocument]) -> void:
 	# 无地点兜底分组
 	if not no_place_docs.is_empty():
 		var unknown_item: TreeItem = _tree.create_item(root)
-		unknown_item.set_text(0, UNKNOWN_PLACE_LABEL)
+		unknown_item.set_text(0, tr(UNKNOWN_PLACE_LABEL))
 		unknown_item.set_selectable(0, false)
 		Logging.info("[SocialConnectionPage]   创建「其他地点」节点, 共 %d 个 NPC" % no_place_docs.size())
 		for doc: NPCDocument in no_place_docs:
@@ -297,7 +299,7 @@ func _build_tree_by_tier(docs: Array[NPCDocument]) -> void:
 	tier_keys.sort()
 
 	for tier: int in tier_keys:
-		var cn_name: String = TIER_LABELS.get(tier, "T%d" % tier)
+		var cn_name: String = tr(TIER_LABELS.get(tier, "T%d" % tier))
 		var tier_item: TreeItem = _tree.create_item(root)
 		tier_item.set_text(0, cn_name)
 		tier_item.set_selectable(0, false)
@@ -309,7 +311,7 @@ func _build_tree_by_tier(docs: Array[NPCDocument]) -> void:
 	# 未知阵营兜底
 	if not unknown_tier_docs.is_empty():
 		var unknown_item: TreeItem = _tree.create_item(root)
-		unknown_item.set_text(0, UNKNOWN_TIER_LABEL)
+		unknown_item.set_text(0, tr(UNKNOWN_TIER_LABEL))
 		unknown_item.set_selectable(0, false)
 		Logging.info("[SocialConnectionPage]   创建「未知阵营」节点, 共 %d 个 NPC" % unknown_tier_docs.size())
 		for doc: NPCDocument in unknown_tier_docs:
@@ -330,8 +332,8 @@ func _add_npc_item(parent: TreeItem, doc: NPCDocument) -> void:
 
 
 func _format_npc_label(doc: NPCDocument) -> String:
-	var state_cn: String = PERSON_STATE_CN.get(doc.person_state, doc.person_state)
-	var display_name: String = doc.name if not doc.name.is_empty() else doc.uuid
+	var state_cn: String = tr(PERSON_STATE_CN.get(doc.person_state, doc.person_state))
+	var display_name: String = tr(doc.name) if not doc.name.is_empty() else doc.uuid
 	return "%s · %s" % [state_cn, display_name]
 
 
@@ -340,7 +342,7 @@ func _format_places(doc: NPCDocument) -> String:
 		return tr("CODE_SOCIAL_CONNECTION_PAGE_CBAC35BFBD")
 	var parts: Array[String] = []
 	for place: String in doc.preferred_places:
-		parts.append(PLACE_CN.get(place, place))
+		parts.append(tr(PLACE_CN.get(place, place)))
 	return "、".join(parts)
 
 
@@ -376,9 +378,9 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 	Logging.info("[SocialConnectionPage] 刷新信息面板 — name=%s uuid=%s" % [doc.name, doc.uuid])
 
 	# ── Unit8: 基本信息 ──
-	var state_cn: String = PERSON_STATE_CN.get(doc.person_state, doc.person_state)
+	var state_cn: String = tr(PERSON_STATE_CN.get(doc.person_state, doc.person_state))
 	var basic_text: String = tr("CODE_SOCIAL_CONNECTION_PAGE_90D2FA0B75") % [
-		doc.name if not doc.name.is_empty() else doc.uuid,
+		tr(doc.name) if not doc.name.is_empty() else doc.uuid,
 		state_cn,
 		_format_places(doc),
 	]
@@ -418,7 +420,7 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 		for target_tag: String in doc.relate_to:
 			var rel_doc: NPCDocument = Database.get_npc_document(target_tag)
 			if rel_doc != null and not rel_doc.name.is_empty():
-				names.append(rel_doc.name)
+				names.append(tr(rel_doc.name))
 			else:
 				names.append(target_tag)
 		related_text = "、".join(names)
@@ -445,10 +447,10 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 		# 标题行：行动名称 + 覆盖关系
 		if not action.override_action.is_empty():
 			var overridden_action: Action = Database.get_action(action.override_action) as Action
-			var overridden_name: String = overridden_action.name if overridden_action else action.override_action
-			recipe_parts.append(tr("CODE_SOCIAL_CONNECTION_PAGE_73CA9EBD64") % [action.name, overridden_name])
+			var overridden_name: String = tr(overridden_action.name) if overridden_action else action.override_action
+			recipe_parts.append(tr("CODE_SOCIAL_CONNECTION_PAGE_73CA9EBD64") % [tr(action.name), overridden_name])
 		else:
-			recipe_parts.append("[b]%s[/b]" % action.name)
+			recipe_parts.append("[b]%s[/b]" % tr(action.name))
 
 		# 叙事层（描述）
 		if not hint.narrative.is_empty():

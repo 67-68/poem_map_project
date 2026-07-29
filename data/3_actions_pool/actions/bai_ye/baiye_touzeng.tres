@@ -17,6 +17,7 @@ script = ExtResource("4_v8wsr")
 script = ExtResource("6_i2obf")
 required_place = "huangcheng"
 _action_tags = Array[int]([80, 29])
+fallback_event_uuid = "baiye_touzeng_fallback"
 failed_result = SubResource("Resource_thpvc")
 defer_config = SubResource("Resource_3d75o")
 uuid = "baiye_touzeng"
