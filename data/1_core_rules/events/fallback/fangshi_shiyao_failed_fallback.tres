@@ -19,7 +19,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("5_qskf12")
 weight = 0.0
-archetype_id = "shiyao_failure"
+archetype_id = "fangshi_shiyao_failure"
 options = Array[ExtResource("1_rsjn12")]([SubResource("Resource_fwa12")])
 uuid = "fangshi_shiyao_failed_fallback"
 name = "TRES_FANGSHI_SHIYAO_FAILED_FALLBACK_NAME_0"

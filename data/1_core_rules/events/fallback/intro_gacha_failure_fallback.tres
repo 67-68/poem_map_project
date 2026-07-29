@@ -19,7 +19,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("5_randomev")
 weight = 0.0
-archetype_id = "intro_gacha_failure"
+archetype_id = "jiaoyou_intro_gacha_failure"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "intro_gacha_failure_fallback"
 name = "TRES_INTRO_GACHA_FAILURE_FALLBACK_NAME_0"

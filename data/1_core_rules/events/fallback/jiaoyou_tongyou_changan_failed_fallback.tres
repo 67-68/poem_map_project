@@ -19,7 +19,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("5_randomev")
 weight = 0.0
-archetype_id = "tongyou_changan_failure"
+archetype_id = "jiaoyou_tongyou_changan_failure"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "jiaoyou_tongyou_changan_failed_fallback"
 name = "TRES_JIAOYOU_TONGYOU_CHANGAN_FAILED_FALLBACK_NAME_0"

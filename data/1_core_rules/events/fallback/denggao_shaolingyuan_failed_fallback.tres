@@ -19,7 +19,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("5_qskf6")
 weight = 0.0
-archetype_id = "shaolingyuan_failure"
+archetype_id = "denggao_shaolingyuan_failure"
 options = Array[ExtResource("1_rsjn6")]([SubResource("Resource_fwa6")])
 uuid = "denggao_shaolingyuan_failed_fallback"
 name = "TRES_DENGGAO_SHAOLINGYUAN_FAILED_FALLBACK_NAME_0"

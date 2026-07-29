@@ -19,7 +19,7 @@ metadata/_custom_type_script = "uid://ceaxs0erf12ea"
 [resource]
 script = ExtResource("5_randomev")
 weight = 0.0
-archetype_id = "fangjian_tingwen_failure"
+archetype_id = "duzhuo_fangjian_tingwen_failure"
 options = Array[ExtResource("1_baseopt")]([SubResource("Resource_opt")])
 uuid = "duzhuo_fangjian_tingwen_failed_fallback"
 name = "TRES_DUZHUO_FANGJIAN_TINGWEN_FAILED_FALLBACK_NAME_0"

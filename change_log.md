@@ -16,6 +16,10 @@
 我感觉有点好玩了
 
 ## Fixed
+- **8 个 failed_fallback 事件 archetype_id 不匹配** — 失败后果完全丢失的致命 Bug
+  - 根因：手写的 `_failed_fallback.tres` 用简短别名（如 `shiyao_failure`），但 CSV 生成的 `ActionArchetype` UUID 是全限定名（如 `fangshi_shiyao_failure`），`RandomEvent.init` 查找失败，算子无法注入
+  - 8 个文件修复：`fangshi_shiyao` / `fangshi_maizi` / `denggao_leyouyuan` / `denggao_shaolingyuan` / `jiaoyou_tongyou_changan` / `jiaoyou_tavern_gacha` / `jiaoyou_intro_gacha` / `duzhuo_fangjian_tingwen`
+  - 影响：试药失败不再获得中毒+才气 / 登高失败不再扭伤、扣才气 / 社交 Gacha 失败不再扣钱 等
 
 - **意象系统 .tres 脚本引用错误** — 32 个 ImaginaryConcept 资源文件引用错误的脚本
   - data/1_core_rules/imaginaries/*.tres — 批量修正 uid/script_class/path 从 imaginary.gd → imaginary_concept.gd
