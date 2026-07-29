@@ -42,6 +42,7 @@ signal action_panel_state_changed(is_idle: bool)
 # 🆕 ActionPanel 互斥可见性管理
 @onready var action_panel: PanelContainer = $TapeContainer/VBox/ActionPanel
 @onready var action_panel_mgr: ActionPanelManager = $ActionPanelManager
+@onready var no_action_label: RichTextLabel = $TapeContainer/VBox/NoActionLabel
 
 # ── Overlay 本地状态（仅 UI 相关）────────────────────
 var current_event_data: BaseEvent
@@ -1042,12 +1043,31 @@ func _switch_to_event_mode() -> void:
 	Logging.info("NarrativeOverlay: 切换至事件模式（ActionPanel 隐藏）")
 
 
-## 切换到空闲模式：隐藏 EventHistory，显示 ActionPanel。
+## 切换到空闲模式：隐藏 EventHistory。
+## 根据 ActionPanel 中是否有按钮决定显示 ActionPanel 或 NoActionLabel。
 func _switch_to_idle_mode() -> void:
-	action_panel.visible = true
 	event_ui.visible = false
+	var has_buttons := _action_panel_has_buttons()
+	if has_buttons:
+		action_panel.visible = true
+		no_action_label.visible = false
+		Logging.info("NarrativeOverlay: 切换至空闲模式（ActionPanel 显示）")
+	else:
+		action_panel.visible = false
+		no_action_label.visible = true
+		Logging.info("NarrativeOverlay: 切换至空闲模式（无行动可用，显示 NoActionLabel）")
 	action_panel_state_changed.emit(true)
-	Logging.info("NarrativeOverlay: 切换至空闲模式（ActionPanel 显示）")
+
+
+## 检查 ActionPanel 中是否有 SceneActionPanel 按钮（排除 CheckBox 等非按钮子节点）。
+func _action_panel_has_buttons() -> bool:
+	var v_container := action_panel.get_node_or_null("V") as VBoxContainer
+	if not v_container:
+		return false
+	for child in v_container.get_children():
+		if child is SceneActionPanel:
+			return true
+	return false
 
 
 ## 🆕 事件退出清理 + 切换到 IDLE 模式。

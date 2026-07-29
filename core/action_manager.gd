@@ -826,9 +826,14 @@ func is_sub_action_tutorial_allowed(sub_action_id: String) -> bool:
 	return _tutorial_sub_whitelist.has(sub_action_id)
 
 ## 检查指定 action_id 是否在白名单中。
-## 白名单为空（正常模式）时始终返回 true。
+## 白名单为空时：
+##   - tutorial 未完成 → 全隐藏（Phase 7 写诗阶段不应展示任何行动）
+##   - tutorial 已完成/未激活 → 全显示（正常模式）
 func is_action_tutorial_allowed(action_id: String) -> bool:
 	if _tutorial_whitelist.is_empty():
+		if not PlayerState.has_flag("tutorial_completed"):
+			Logging.info("[ActionManager] is_action_tutorial_allowed: tutorial 激活中且白名单为空，'%s' 被隐藏" % action_id)
+			return false
 		return true
 	var allowed := _tutorial_whitelist.has(action_id)
 	if not allowed:

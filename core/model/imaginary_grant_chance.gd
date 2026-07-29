@@ -12,6 +12,7 @@ class_name ImaginaryGrantChance extends Resource
 
 ## 获取概率 archetype（来自 tools/data/named_amounts.json）
 @export_enum(
+	"no_success_rate",
 	"xxxs_success_rate",
 	"xxs_success_rate",
 	"xs_success_rate",

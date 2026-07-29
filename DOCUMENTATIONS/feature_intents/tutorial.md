@@ -19,11 +19,20 @@
 
 ## 行动可见性：双层白名单机制
 
-**主白名单** (`_tutorial_whitelist`)：空=正常模式，非空=只显示列表内的主行动按钮。
+**主白名单** (`_tutorial_whitelist`)：
+- tutorial 未完成 + 空 = 全隐藏（如 Phase 7 写诗阶段，所有行动不可见）
+- tutorial 未完成 + 非空 = 只显示列表内的主行动按钮
+- tutorial 已完成 → 清空白名单，正常全显示
 
-**子白名单** (`_tutorial_sub_whitelist`)：空=正常模式（所有子行动可见），非空=只显示列表内的子行动。
+**子白名单** (`_tutorial_sub_whitelist`)：
+- tutorial 未完成 + 空 = 全隐藏（所有子行动不可见）
+- tutorial 未完成 + 非空 = 只显示列表内的子行动
+- tutorial 已完成 → 清空白名单，正常全显示
 
 两个白名单均由 `TutorialController` 在每个阶段转换时同步设置。
+
+### NoActionLabel
+当 ActionPanel 中没有任何 SceneActionPanel 按钮时（tutorial Phase 7 空白名单 + 全隐藏），[`NarrativeOverlay._switch_to_idle_mode()`](characters/narrative_overlay.gd:1050) 显示 `NoActionLabel`（"没有行动可用"）替代空的 ActionPanel。
 
 ## 渐进式 UI 揭示
 

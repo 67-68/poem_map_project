@@ -187,8 +187,12 @@ func _on_event_confirmed(_unused = null) -> void:
 	_on_refresh_locks_only()
 
 ## 非事件路径 UI 恢复（白名单变化 / 聚焦退出 / 预留 / DSL）：保留抽取结果，仅刷新锁定态
-## 🆕 Tutorial 白名单模式下强制重建（否则白名单变化不生效）
+## 🆕 Tutorial 激活时强制重建（白名单为空时需清空所有按钮；白名单非空时需展示指定按钮）
 func _on_refresh_panel() -> void:
+	if not PlayerState.has_flag("tutorial_completed"):
+		Logging.info("ActionPanelManager: tutorial 激活中，触发完全重建")
+		_rebuild_all_buttons()
+		return
 	var whitelist := ActionManager.get_tutorial_whitelist()
 	if not whitelist.is_empty():
 		Logging.info("ActionPanelManager: 白名单非空（%s），触发完全重建" % str(whitelist))

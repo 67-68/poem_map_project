@@ -113,6 +113,18 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_sshou")
 [node name="VBox" type="VBoxContainer" parent="TapeContainer" unique_id=1930616949]
 layout_mode = 2
 
+[node name="NoActionLabel" type="RichTextLabel" parent="TapeContainer/VBox" unique_id=839059620]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"NarrativeText"
+theme_override_font_sizes/normal_font_size = 28
+bbcode_enabled = true
+text = "没有行动可用"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="ActionPanel" type="PanelContainer" parent="TapeContainer/VBox" unique_id=650333493]
 visible = false
 z_index = 100
