@@ -742,7 +742,16 @@ func set_ambition_section_visible(v: bool) -> void:
 	_ambition_sep.visible = v
 	_ambition_title_label.visible = v
 	_ambition_hbox.visible = v
-	Logging.info("LeftPlayerPanel.set_ambition_section_visible: %s" % v)
+	# 🆕 同步恢复/隐藏容器内三个属性（兴/势/望）的子 Label
+	# _hide_all_properties_tutorial() 遍历 _prop_label_map 时已将它们设为 false,
+	# 仅恢复容器可见性不够, 需逐个恢复内部 Label
+	for prop_key in ["inspiration", "momentum", "prestige"]:
+		var labels: Dictionary = _prop_label_map.get(prop_key, {})
+		for label_key in ["name", "value", "perception"]:
+			var lbl: Label = labels.get(label_key) as Label
+			if lbl:
+				lbl.visible = v
+	Logging.info("LeftPlayerPanel.set_ambition_section_visible: %s (含兴/势/望子Label同步)" % v)
 
 ## 设置底层修饰区域可见性（HSep3 + Label2"底层修饰" + HBoxContainer2(才/府/定)）
 func set_bottom_decoration_visible(v: bool) -> void:
