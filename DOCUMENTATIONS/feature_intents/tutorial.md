@@ -45,9 +45,10 @@
 | | P2.2 | tut_dialogue_time | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
 | | P2.3 | tut_dialogue_2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ |
 | | P2.4 | tut_dialogue_4 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ |
+| | P6 | tut_defer_done | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ |
 | | P7 | tut_final_reveal | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
-> 兴/势/望/政略区不在 tutorial 期间揭示。
+> 势/望/兴（政略区）在 P6 tut_defer_done 时揭示，早于诗词创作（P7），让玩家有上下文理解属性状态。
 
 ### RightPanel
 

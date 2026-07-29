@@ -1,14 +1,21 @@
 # 诗词评分创作 — 功能意图
 
-**状态**: 🟢 V14（主导元素分类 → PropertyOperator 属性奖励 + BaseOperator 泛化）
+**状态**: 🟢 V15（inspiration 实时刷新 + V14 基础）
 
 ---
 
 ## 意图摘要（<200字）
 
-线性评分制不变。V14 将 `PoemType.publication_effects` 从 `Array[BuffOperator]` 泛化为 `Array[BaseOperator]`，支持 PropertyOperator（直接属性奖励）。10 种 PoemType 按"主导元素"分类法固化属性奖励到 .tres 数据层：功名主导（≥2 功名）→ +8 望；隐逸主导（≥2 隐逸）→ +8 势；狂放主导（≥2 狂放）→ +10 兴；均衡（各×1）→ 望+5 势+5 兴+6。诗词等级不影响发布奖励。
+线性评分制不变。V14 将 `PoemType.publication_effects` 从 `Array[BuffOperator]` 泛化为 `Array[BaseOperator]`，支持 PropertyOperator（直接属性奖励）。10 种 PoemType 按"主导元素"分类法固化属性奖励到 .tres 数据层。V15 新增 `PlayerState.player_stat_changed` 信号监听，当 inspiration 属性被外部系统修改时自动刷新预览，保证灵感数值显示始终与当前状态一致。
 
 ---
+
+## V15 变更
+
+| 变更项 | 说明 |
+|--------|------|
+| 🆕 inspiration 实时刷新 | `_ready()` 连接 `PlayerState.player_stat_changed` → 当 `prop_name == "inspiration"` 时调用 `_preview_current()` |
+| 📐 仅刷新预览不重建 Slot | inspiration 变动不影响意象列表，无需 `_rebuild_slots()` |
 
 ## V14 变更
 

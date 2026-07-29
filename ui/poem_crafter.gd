@@ -73,9 +73,10 @@ var LITERARY_INSPIRATION_TEXTS := {
 
 
 func _ready() -> void:
-	Logging.info('PoemCrafter: initializing poem crafter V8')
+	Logging.info('PoemCrafter: initializing poem crafter V15 — 监听 inspiration 变动实时刷新')
 
 	EventBus.imaginary_changed.connect(on_imaginary_changed)
+	PlayerState.player_stat_changed.connect(_on_player_stat_changed)
 
 	# "开始创作"按钮
 	var craft_btn := $InputImagPanel/CraftBtn
@@ -236,6 +237,14 @@ func _create_slot(text: String, greyed: bool) -> PoemSlot:
 func on_imaginary_changed() -> void:
 	Logging.info('PoemCrafter: imaginary_changed 信号，重建 Slot')
 	_rebuild_slots()
+
+
+## inspiration（兴）变动 → 仅刷新预览（不重建 Slot，意象列表未变）
+func _on_player_stat_changed(prop_name: String) -> void:
+	if prop_name != "inspiration":
+		return
+	Logging.info('PoemCrafter(V15): inspiration 变动，仅刷新预览')
+	_preview_current()
 
 
 # ──────────────────────────────────────────────

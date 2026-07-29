@@ -1101,10 +1101,11 @@ func _inject_timeline_scripts() -> void:
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "social_btn", "visible": true },
 		],
 
-		# PHASE_6: 云开雾散 → poem_btn 可见
+		# PHASE_6: 云开雾散 → poem_btn 可见 + 势望兴三属性揭示
 		"tut_defer_done": [
 			{ "delay": 0.5, "action": "show_special_label", "target": "right_panel", "text": tr("CODE_TUTORIAL_CONTROLLER_FF7E1A1C7B") },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "poem_btn", "visible": true },
+			{ "delay": 0.0, "action": "set_left_section_visible", "target": "ambition_section", "visible": true },
 		],
 
 		# PHASE_7a: 诗词创作后 → 名望行可见
