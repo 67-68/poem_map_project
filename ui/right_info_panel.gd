@@ -66,6 +66,14 @@ func _ready() -> void:
 
 	# ── SpecialLabel 动态提示 ──
 	_special_label.text = ""
+
+	# 注册一次性提示虚拟 flag（提醒一次就不再显示）
+	PlayerState.register_virtual_flag("hint_social_shown", "bool")
+	PlayerState.register_virtual_flag("hint_poem_shown", "bool")
+	PlayerState.register_virtual_flag("hint_idea_shown", "bool")
+	PlayerState.register_virtual_flag("hint_note_shown", "bool")
+	Logging.info("RightInfoPanel: 已注册 4 个一次性提示虚拟 flag")
+
 	if not EventBus.on_person_state_changed.is_connected(_on_person_state_changed):
 		EventBus.on_person_state_changed.connect(_on_person_state_changed)
 	if not EventBus.imaginary_changed.is_connected(_on_imaginary_changed):
@@ -235,32 +243,44 @@ func _on_focus_changed(active: bool) -> void:
 
 ## 社交关系状态改变 → 提示点击人脉按钮
 func _on_person_state_changed(_target_tag: String, _new_state: String) -> void:
+	if PlayerState.has_flag("hint_social_shown"):
+		return
 	_special_label.text = tr("UI_RIGHT_INFO_PANEL_TEXT_0")
-	Logging.info("RightInfoPanel: person_state changed → 显示社交提示")
+	PlayerState.set_flag("hint_social_shown", true)
+	Logging.info("RightInfoPanel: person_state changed → 显示社交提示（仅此一次）")
 
 ## 意象获得 → 提示点击诗词按钮
 func _on_imaginary_changed() -> void:
+	if PlayerState.has_flag("hint_poem_shown"):
+		return
 	_special_label.text = tr("CODE_RIGHT_INFO_PANEL_441BE330DE")
-	Logging.info("RightInfoPanel: imaginary changed → 显示诗词提示")
+	PlayerState.set_flag("hint_poem_shown", true)
+	Logging.info("RightInfoPanel: imaginary changed → 显示诗词提示（仅此一次）")
 
 ## 特殊属性（望/兴/势）变化 → 提示点击理念按钮
 const SPECIAL_PROPS: Array[String] = ["prestige", "inspiration", "momentum"]
 
 func _on_special_prop_changed(prop_name: String) -> void:
 	if prop_name in SPECIAL_PROPS:
+		if PlayerState.has_flag("hint_idea_shown"):
+			return
 		_special_label.text = tr("CODE_RIGHT_INFO_PANEL_B593A0EA10")
-		Logging.info("RightInfoPanel: 特殊属性 '%s' 变化 → 显示理念提示" % prop_name)
+		PlayerState.set_flag("hint_idea_shown", true)
+		Logging.info("RightInfoPanel: 特殊属性 '%s' 变化 → 显示理念提示（仅此一次）" % prop_name)
 
 ## 🆕 笔记触发 → 提示点击注解按钮
 var _note_hint_timer: SceneTreeTimer = null
 
 func _on_note_triggered(note_uuid: String) -> void:
+	if PlayerState.has_flag("hint_note_shown"):
+		return
 	var note: Note = NoteManager.get_note(note_uuid)
 	if note == null:
 		Logging.warn("RightInfoPanel: note_triggered 但 Note '%s' 未找到" % note_uuid)
 		return
 	_special_label.text = tr("CODE_RIGHT_INFO_PANEL_3732C36978") % note.name
-	Logging.info("RightInfoPanel: note_triggered '%s' → 显示注解提示" % note_uuid)
+	PlayerState.set_flag("hint_note_shown", true)
+	Logging.info("RightInfoPanel: note_triggered '%s' → 显示注解提示（仅此一次）" % note_uuid)
 
 	# 5s 后自动清除（重置已有定时器）
 	if _note_hint_timer != null:
