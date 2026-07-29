@@ -39,8 +39,10 @@ var _active_hint_btn: int = -1
 var _hint_timer: SceneTreeTimer = null
 
 # ── 呼吸动画参数 ──
-const BREATH_SCALE_MAX: float = 1.03
+const BREATH_SCALE_MAX: float = 1.06
 const BREATH_SCALE_MIN: float = 1.0
+const BREATH_MODULATE_BRIGHT: Color = Color(1.15, 1.15, 1.15, 1.0)
+const BREATH_MODULATE_NORMAL: Color = Color.WHITE
 const BREATH_PERIOD: float = 2.0          ## 完整呼吸周期（秒）
 const BREATH_HALF_PERIOD: float = 1.0     ## 半周期 = 扩张 1s / 收缩 1s
 const HINT_AUTO_CLEAR_SECONDS: float = 7.0
@@ -159,7 +161,7 @@ func _ready() -> void:
 # ═══════════════════════════════════════════════════════════
 
 func _preset_all_pivot_offsets() -> void:
-	for btn_id in BtnID:
+	for btn_id in BtnID.values():
 		var btn: PanelContainer = _get_btn_by_id(btn_id)
 		if btn and btn.size.x > 0 and btn.size.y > 0:
 			btn.pivot_offset = btn.size / 2.0
@@ -172,7 +174,7 @@ func _preset_all_pivot_offsets() -> void:
 # 呼吸动画核心
 # ═══════════════════════════════════════════════════════════
 
-## 对指定按钮启动无限循环呼吸 Tween（scale 1.0 ↔ 1.03，TRANS_SINE，周期 2s）
+## 对指定按钮启动无限循环呼吸 Tween（scale 1.0 ↔ 1.06 + modulate 亮白，TRANS_SINE，周期 2s）
 func _start_breath(btn_id: BtnID) -> void:
 	var btn: PanelContainer = _get_btn_by_id(btn_id)
 	if btn == null:
@@ -190,19 +192,21 @@ func _start_breath(btn_id: BtnID) -> void:
 			Logging.info("RightInfoPanel._start_breath: btn_id=%d 已 kill 旧 Tween" % btn_id)
 		_breath_tweens.erase(btn_id)
 
-	var tween := create_tween()
+	var tween := create_tween().set_parallel(true)
 	tween.set_loops()  # 无限循环
 	tween.set_trans(Tween.TRANS_SINE)
-	# Phase 1: 扩张 1.0 → 1.03（1s）
+	# Phase 1: 扩张 scale 1.0 → 1.06 + modulate 正常 → 亮白（1s）
 	tween.tween_property(btn, "scale", Vector2(BREATH_SCALE_MAX, BREATH_SCALE_MAX), BREATH_HALF_PERIOD)
-	# Phase 2: 收缩 1.03 → 1.0（1s）
+	tween.tween_property(btn, "modulate", BREATH_MODULATE_BRIGHT, BREATH_HALF_PERIOD)
+	# Phase 2: 收缩 scale 1.06 → 1.0 + modulate 亮白 → 正常（1s）
 	tween.tween_property(btn, "scale", Vector2(BREATH_SCALE_MIN, BREATH_SCALE_MIN), BREATH_HALF_PERIOD)
+	tween.tween_property(btn, "modulate", BREATH_MODULATE_NORMAL, BREATH_HALF_PERIOD)
 
 	_breath_tweens[btn_id] = tween
-	Logging.info("RightInfoPanel._start_breath: btn_id=%d 呼吸动画已启动（pivot_offset=%s）" % [btn_id, btn.pivot_offset])
+	Logging.info("RightInfoPanel._start_breath: btn_id=%d 呼吸动画已启动（scale+modulate, pivot_offset=%s）" % [btn_id, btn.pivot_offset])
 
 
-## 停止指定按钮的呼吸动画并重置 scale
+## 停止指定按钮的呼吸动画并重置 scale + modulate
 func _stop_breath(btn_id: BtnID) -> void:
 	if not _breath_tweens.has(btn_id):
 		Logging.info("RightInfoPanel._stop_breath: btn_id=%d 无 Tween 记录，跳过" % btn_id)
@@ -217,7 +221,8 @@ func _stop_breath(btn_id: BtnID) -> void:
 	var btn: PanelContainer = _get_btn_by_id(btn_id)
 	if btn:
 		btn.scale = Vector2(1.0, 1.0)
-		Logging.info("RightInfoPanel._stop_breath: btn_id=%d scale 已重置为 (1,1)" % btn_id)
+		btn.modulate = BREATH_MODULATE_NORMAL
+		Logging.info("RightInfoPanel._stop_breath: btn_id=%d scale+modulate 已重置" % btn_id)
 
 
 # ═══════════════════════════════════════════════════════════
