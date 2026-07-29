@@ -124,6 +124,12 @@ func _ready() -> void:
 		Logging.info("TutorialController: 已连接 node_added，等待 Main 场景加载")
 	
 	PlayerState.register_virtual_flag("tutorial_completed",'bool')
+	PlayerState.register_virtual_flag("tut_lock_chuyou_subs", "bool")
+	PlayerState.register_virtual_flag("tut_unlock_chuyou_subs", "bool")
+	PlayerState.register_virtual_flag("tut_unlock_duzhuo", "bool")
+	PlayerState.register_virtual_flag("tut_phase_started", "str")
+	PlayerState.register_virtual_flag("tut_fog_found", "bool")
+	PlayerState.register_virtual_flag("tut_lock_duzhuo", "bool")
 
 
 func _on_node_added(node: Node) -> void:
@@ -386,7 +392,7 @@ func _p4_step_name() -> String:
 func _clear_all_tut_flags() -> void:
 	var tut_flags := [
 		"tut_lock_chuyou_subs",
-		"tut_unlock_chuyou_subs", "tut_unlock_duzhuo",
+		"tut_unlock_chuyou_subs", "tut_unlock_duzhuo", "tut_lock_duzhuo",
 		"tut_phase_started", "tut_fog_found",
 	]
 	for flag in tut_flags:

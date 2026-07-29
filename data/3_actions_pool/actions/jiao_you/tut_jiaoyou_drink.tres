@@ -2,12 +2,18 @@
 
 [ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="1_ypvuv"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="2_gcccu"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="3_igc"]
+
+[sub_resource type="Resource" id="Resource_tut_jiaoyou_drink_no_img"]
+script = ExtResource("3_igc")
+obtain_possibility = "no_success_rate"
 
 [resource]
 script = ExtResource("2_gcccu")
 _action_tags = Array[int]([30])
 fallback_event_uuid = "tut_drink_together"
 possibility = "l_success_rate"
+imaginary_grants = Array[ExtResource("3_igc")]([SubResource("Resource_tut_jiaoyou_drink_no_img")])
 uuid = "tut_jiaoyou_drink"
 name = "TRES_TUT_JIAOYOU_DRINK_NAME_0"
 description = "TRES_TUT_JIAOYOU_DRINK_DESCRIPTION_0"

@@ -53,6 +53,7 @@
   "m_prestige_gain": 5,
   "l_prestige_gain": 8,
 
+  "no_success_rate": 0,
   "xs_success_rate": 30,
   "xxs_success_rate": 20,
   "xxxs_success_rate": 10,

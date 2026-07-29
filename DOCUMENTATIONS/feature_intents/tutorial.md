@@ -120,6 +120,8 @@ INIT → PHASE_1_MEET (tut_meet_taoist, 鸟语花香音效)
 | | tut_chuyou_lookup | 出游子行动 | Phase 6: 往上看→archetype→roll_imaginary(level=3) |
 | | tut_duzhuo_heyaojiu | 独酌子行动 | Phase 7: 喝药酒+40兴 |
 
+> **意象策略**: 所有 tut 子行动通过显式 `imaginary_grants=[{obtain_possibility="no_success_rate"}]` 阻断父行动意象继承。tut 期间的意象获取仅由 archetype 级别 DSL 控制（`tut_taoist_dispel_fog_success: roll_imaginary(level=3)` / `tut_chuyou_lookup_success: imagery_add × 3`）。
+
 ## 信号矩阵
 
 | | 信号 | 驱动阶段 |
