@@ -192,15 +192,15 @@ func _start_breath(btn_id: BtnID) -> void:
 			Logging.info("RightInfoPanel._start_breath: btn_id=%d 已 kill 旧 Tween" % btn_id)
 		_breath_tweens.erase(btn_id)
 
-	var tween := create_tween().set_parallel(true)
+	var tween := create_tween()
 	tween.set_loops()  # 无限循环
 	tween.set_trans(Tween.TRANS_SINE)
-	# Phase 1: 扩张 scale 1.0 → 1.06 + modulate 正常 → 亮白（1s）
+	# Phase 1: 扩张 scale 1.0 → 1.06 + modulate 正常 → 亮白（1s，并行）
 	tween.tween_property(btn, "scale", Vector2(BREATH_SCALE_MAX, BREATH_SCALE_MAX), BREATH_HALF_PERIOD)
-	tween.tween_property(btn, "modulate", BREATH_MODULATE_BRIGHT, BREATH_HALF_PERIOD)
-	# Phase 2: 收缩 scale 1.06 → 1.0 + modulate 亮白 → 正常（1s）
+	tween.parallel().tween_property(btn, "modulate", BREATH_MODULATE_BRIGHT, BREATH_HALF_PERIOD)
+	# Phase 2: 收缩 scale 1.06 → 1.0 + modulate 亮白 → 正常（1s，并行）
 	tween.tween_property(btn, "scale", Vector2(BREATH_SCALE_MIN, BREATH_SCALE_MIN), BREATH_HALF_PERIOD)
-	tween.tween_property(btn, "modulate", BREATH_MODULATE_NORMAL, BREATH_HALF_PERIOD)
+	tween.parallel().tween_property(btn, "modulate", BREATH_MODULATE_NORMAL, BREATH_HALF_PERIOD)
 
 	_breath_tweens[btn_id] = tween
 	Logging.info("RightInfoPanel._start_breath: btn_id=%d 呼吸动画已启动（scale+modulate, pivot_offset=%s）" % [btn_id, btn.pivot_offset])
