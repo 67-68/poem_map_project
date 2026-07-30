@@ -141,6 +141,12 @@ var triggered_note_uuids: Array[String] = []
 var hidden_action_uuids: Array[String] = []
 
 # ════════════════════════════════════════════════════════════════
+# 任务状态 — TaskManager 运行时持久化
+# 格式见 TaskManager.save_task_state() 返回的 Dictionary。
+# ════════════════════════════════════════════════════════════════
+var task_state: Dictionary = {}
+
+# ════════════════════════════════════════════════════════════════
 # 音频设置 — 玩家可调，持久化到存档
 # ════════════════════════════════════════════════════════════════
 ## 所有音乐的统一响度比例 (0.0 ~ 1.0)，默认 0.3（≈ -10dB，比较安静）
@@ -196,6 +202,7 @@ func to_dict() -> Dictionary:
 		"total_days_elapsed": total_days_elapsed,
 		"tick_checkpoint": tick_checkpoint,
 		"event_counter": event_counter,
+		"task_state": _copy_dict(task_state),
 	}
 	return d
 
@@ -241,6 +248,7 @@ func from_dict(d: Dictionary) -> void:
 	total_days_elapsed = d.get("total_days_elapsed", 0)
 	tick_checkpoint = d.get("tick_checkpoint", 0)
 	event_counter = d.get("event_counter", 0)
+	task_state = _safe_dict(d, "task_state")
 
 
 # ════════════════════════════════════════════════════════════════

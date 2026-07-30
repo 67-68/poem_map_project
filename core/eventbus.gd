@@ -181,3 +181,7 @@ signal milestone_achieved(milestone_key: String, config: Dictionary)
 ## 🆕 TaskManager 发射：任务完成
 ## @param task: Task — 完成的任务实例
 signal task_completed(task: Resource)
+
+## 🆕 TaskManager 发射：任务树状态变更（set/clear/complete 均触发）
+## UI 监听此信号以刷新任务面板
+signal task_state_changed()

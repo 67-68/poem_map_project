@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cka4uxs2rge13"]
+
+[ext_resource type="Script" path="res://ui/task_container.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://b0jq4f032woif" path="res://assets/fonts/Noto_Serif_SC/static/NotoSerifSC-Bold.ttf" id="1_6jo80"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7xb00"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_8hk5g"]
+color = Color(0.3722513, 0.3722513, 0.37225124, 1)
+thickness = 2
+
+[node name="TaskContainer" type="VBoxContainer" unique_id=599359059]
+script = ExtResource("1_script")
+
+[node name="ParentTask" type="LinkButton" parent="." unique_id=777023666]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.21230528, 0.21230465, 0.2123048, 1)
+theme_override_fonts/font = ExtResource("1_6jo80")
+theme_override_font_sizes/font_size = 18
+text = "父任务: 父任务1"
+
+[node name="TaskPrev" type="PanelContainer" parent="." unique_id=1828512294]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_7xb00")
+
+[node name="TaskPrev" type="LinkButton" parent="TaskPrev" unique_id=1638928475]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
+theme_override_fonts/font = ExtResource("1_6jo80")
+theme_override_font_sizes/font_size = 16
+text = "- [u]子任务1[/u](划掉"
+
+[node name="HSeparator" type="HSeparator" parent="TaskPrev" unique_id=589182545]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_8hk5g")
+
+[node name="CurrentTask" type="LinkButton" parent="." unique_id=1157461364]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.14406255, 0.14406255, 0.14406249, 1)
+theme_override_fonts/font = ExtResource("1_6jo80")
+theme_override_font_sizes/font_size = 16
+text = "- 子任务2"
+
+[node name="TaskFuture" type="LinkButton" parent="." unique_id=1222839233]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
+theme_override_fonts/font = ExtResource("1_6jo80")
+theme_override_font_sizes/font_size = 16
+text = "- 子任务3"

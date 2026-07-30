@@ -27,6 +27,14 @@ var _root_tasks: Array[Task] = []
 ## uuid → Task 的全量查找表（用于从 .tres 序列化后恢复引用）。
 var _task_registry: Dictionary = {}
 
+## 最近完成的任务（供 UI 展示 TaskPrev 划掉状态）。
+## 每次任务 COMPLETED 时更新。
+var _last_completed_task: Task = null
+
+## 任务树是否有变化（供 UI 检测是否需要刷新闪烁动画）。
+## set_task / clear_task / 完成时设为 true，UI 消费后重置为 false。
+var _state_dirty: bool = false
+
 
 # ═══════════════════════════════════════════════════════════
 # 生命周期
@@ -116,7 +124,10 @@ func clear_task() -> void:
 	_clear_all(_root_tasks)
 	_root_tasks.clear()
 	_current_task = null
+	_last_completed_task = null
+	_state_dirty = true
 	_task_registry.clear()
+	EventBus.task_state_changed.emit()
 	Logging.info("TaskManager.clear_task: 任务树已清空")
 
 
@@ -128,6 +139,69 @@ func get_current_task() -> Task:
 ## 获取所有根任务（供 UI 读取父队列）。
 func get_root_tasks() -> Array[Task]:
 	return _root_tasks
+
+
+## 获取父任务（当前最深未完成任务的 parent）。
+## 返回 null 表示当前任务没有父任务（是根级任务）。
+func get_parent_task() -> Task:
+	if _current_task == null:
+		return null
+	return _current_task.parent
+
+
+## 获取下一个待执行任务。
+## 优先：_current_task 的下一个未完成兄弟。
+## 其次：chain_next 父任务。
+## 都不存在 → null。
+func get_next_task() -> Task:
+	if _current_task == null:
+		return null
+
+	# 优先：同层下一个未完成兄弟
+	if _current_task.parent != null:
+		var siblings := _current_task.parent.children
+		var my_idx := siblings.find(_current_task)
+		if my_idx >= 0:
+			for i in range(my_idx + 1, siblings.size()):
+				if siblings[i].status != Task.TaskStatus.COMPLETED:
+					Logging.info("TaskManager.get_next_task: 下一个兄弟 '%s'" % siblings[i].name)
+					return siblings[i]
+	else:
+		# 当前是根级任务，找下一个未完成的根级
+		var my_idx := _root_tasks.find(_current_task)
+		if my_idx >= 0:
+			for i in range(my_idx + 1, _root_tasks.size()):
+				if _root_tasks[i].status != Task.TaskStatus.COMPLETED:
+					Logging.info("TaskManager.get_next_task: 下一个根级 '%s'" % _root_tasks[i].name)
+					return _root_tasks[i]
+
+	# 其次：chain_next
+	if _current_task.chain_next != null:
+		Logging.info("TaskManager.get_next_task: chain_next '%s'" % _current_task.chain_next.name)
+		return _current_task.chain_next
+
+	# 如果当前是子任务，查父任务的 chain_next
+	if _current_task.parent != null and _current_task.parent.chain_next != null:
+		Logging.info("TaskManager.get_next_task: 父任务 chain_next '%s'" % _current_task.parent.chain_next.name)
+		return _current_task.parent.chain_next
+
+	Logging.info("TaskManager.get_next_task: 无下一个任务")
+	return null
+
+
+## 获取最近完成的任务（供 UI 展示 TaskPrev）。
+func get_last_completed_task() -> Task:
+	return _last_completed_task
+
+
+## 检查任务树是否有未消费的变化（供 UI 决定是否播放闪烁动画）。
+func is_state_dirty() -> bool:
+	return _state_dirty
+
+
+## UI 消费 dirty 标志后调用，避免重复闪烁。
+func mark_state_clean() -> void:
+	_state_dirty = false
 
 
 # ═══════════════════════════════════════════════════════════
@@ -285,8 +359,11 @@ func _check_and_advance() -> void:
 		Logging.info("TaskManager: ✅ '%s' requirements 通过，执行 %d 个 operators" % [candidate.name, candidate.operators.size()])
 		_execute_operators(candidate)
 		candidate.status = Task.TaskStatus.COMPLETED
-		Logging.info("TaskManager: '%s' → COMPLETED" % candidate.name)
+		_last_completed_task = candidate
+		_state_dirty = true
+		Logging.info("TaskManager: '%s' → COMPLETED, _last_completed_task=%s" % [candidate.name, _last_completed_task.name])
 		EventBus.task_completed.emit(candidate)
+		EventBus.task_state_changed.emit()
 		completed_any = true
 
 		# 向上递归：检查 parent
@@ -453,3 +530,144 @@ func _execute_operators(task: Task) -> void:
 			continue
 		Logging.info("TaskManager: _execute_operators — '%s' operator[%d] = %s" % [task.name, i, op.get_class()])
 		op.operate()
+
+
+# ═══════════════════════════════════════════════════════════
+# 持久化 — GameSaveData 集成
+# ═══════════════════════════════════════════════════════════
+
+## 将当前任务树状态序列化为 Dictionary（只存 UUID 映射 + status，不存 Resource 本身）。
+## 格式：
+##   { "root_task_uuids": [...], "tasks": {}, "last_completed_uuid": "" }
+func save_task_state() -> Dictionary:
+	if _root_tasks.is_empty():
+		Logging.info("TaskManager.save_task_state: 任务树为空，返回空字典")
+		return {}
+
+	var tasks_dict := {}
+
+	for rt in _root_tasks:
+		_collect_task_state(rt, tasks_dict)
+
+	var root_uuids: Array[String] = []
+	for rt in _root_tasks:
+		if not rt.uuid.is_empty():
+			root_uuids.append(rt.uuid)
+
+	var last_completed_uuid := ""
+	if _last_completed_task and not _last_completed_task.uuid.is_empty():
+		last_completed_uuid = _last_completed_task.uuid
+
+	var result := {
+		"root_task_uuids": root_uuids,
+		"tasks": tasks_dict,
+		"last_completed_uuid": last_completed_uuid,
+	}
+
+	Logging.info("TaskManager.save_task_state: 序列化完成 — root_uuids=%s, tasks=%d" % [str(root_uuids), tasks_dict.size()])
+	return result
+
+
+## 递归收集 task 及其 children/chain_next 到 tasks_dict 中。
+func _collect_task_state(t: Task, tasks_dict: Dictionary) -> void:
+	if not t or t.uuid.is_empty():
+		return
+	if tasks_dict.has(t.uuid):
+		return  # 已处理过（避免 chain_next 循环）
+	tasks_dict[t.uuid] = {
+		"status": t.status,
+		"chain_next": t.chain_next.uuid if (t.chain_next and not t.chain_next.uuid.is_empty()) else "",
+		"parent": t.parent.uuid if (t.parent and not t.parent.uuid.is_empty()) else "",
+		"children": _extract_child_uuids(t),
+	}
+	Logging.info("TaskManager._collect_task_state: '%s' status=%d" % [t.name, t.status])
+	for c in t.children:
+		_collect_task_state(c, tasks_dict)
+	if t.chain_next:
+		_collect_task_state(t.chain_next, tasks_dict)
+
+
+## 从 Dictionary 恢复任务树状态。
+## 注意：Task 实例本身必须已由外部重新注入（如从 .tres 重新加载），
+## 此方法仅恢复运行时状态（status, parent/children/chain_next 关联）。
+## loaded_tasks: uuid → Task 的映射（由调用方在 load 时通过 Database 或直接加载 .tres 构建）。
+func load_task_state(state: Dictionary, loaded_tasks: Dictionary) -> void:
+	if state.is_empty():
+		Logging.info("TaskManager.load_task_state: 空状态，跳过")
+		return
+
+	# 清除当前运行时
+	_root_tasks.clear()
+	_current_task = null
+	_last_completed_task = null
+	_task_registry.clear()
+
+	var root_uuids: Array = state.get("root_task_uuids", [])
+	var tasks_data: Dictionary = state.get("tasks", {})
+	var last_completed_uuid: String = state.get("last_completed_uuid", "")
+
+	if root_uuids.is_empty() or loaded_tasks.is_empty():
+		Logging.info("TaskManager.load_task_state: root_uuids 或 loaded_tasks 为空，跳过")
+		return
+
+	# 第一遍：恢复每个 task 的 status
+	for uuid in tasks_data:
+		var t = loaded_tasks.get(uuid)
+		if not t:
+			Logging.err("TaskManager.load_task_state: uuid '%s' 在 loaded_tasks 中未找到" % uuid)
+			continue
+		var td: Dictionary = tasks_data[uuid]
+		t.status = td.get("status", 0)
+		_task_registry[uuid] = t
+
+	# 第二遍：恢复关联（parent / children / chain_next）
+	for uuid in tasks_data:
+		var t = loaded_tasks.get(uuid)
+		if not t:
+			continue
+		var td: Dictionary = tasks_data[uuid]
+
+		# parent 关联
+		var parent_uuid: String = td.get("parent", "")
+		if not parent_uuid.is_empty():
+			t.parent = loaded_tasks.get(parent_uuid)
+
+		# children 关联
+		var child_uuids: Array = td.get("children", [])
+		t.children.clear()
+		for cu in child_uuids:
+			var child_task = loaded_tasks.get(cu)
+			if child_task:
+				t.children.append(child_task)
+
+		# chain_next 关联
+		var chain_uuid: String = td.get("chain_next", "")
+		if not chain_uuid.is_empty():
+			t.chain_next = loaded_tasks.get(chain_uuid)
+
+	# 重建 _root_tasks
+	for ru in root_uuids:
+		var rt = loaded_tasks.get(ru)
+		if rt:
+			_root_tasks.append(rt)
+
+	# 恢复 _last_completed_task
+	if not last_completed_uuid.is_empty():
+		_last_completed_task = loaded_tasks.get(last_completed_uuid)
+
+	# 重新计算 _current_task
+	_recalc_current()
+
+	Logging.info("TaskManager.load_task_state: 恢复完成 — root_tasks=%d, current=%s" % [
+		_root_tasks.size(),
+		_current_task.name if _current_task else "null"
+	])
+
+
+## 提取某 task 的直接子任务 UUID 列表（不递归）。
+func _extract_child_uuids(task: Task) -> Array[String]:
+	var uuids: Array[String] = []
+	for child in task.children:
+		if not child.uuid.is_empty():
+			uuids.append(child.uuid)
+	return uuids
