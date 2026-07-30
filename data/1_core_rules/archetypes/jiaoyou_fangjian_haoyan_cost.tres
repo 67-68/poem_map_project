@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://dfjha1co6uabc"]
 
-[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_apvy6"]
 
 [resource]
-script = ExtResource("1_arch")
+script = ExtResource("1_apvy6")
 uuid = "jiaoyou_fangjian_haoyan_cost"
 name = "jiaoyou_fangjian_haoyan.cost"
 universal_result = "prop_sub(name=money; val=xl_money_cost)"
