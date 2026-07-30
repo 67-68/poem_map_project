@@ -12,9 +12,56 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_7mqup"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_gimka"]
 
-[sub_resource type="Resource" id="Resource_efihd"]
+[sub_resource type="Resource" id="Resource_3qjnx"]
 script = ExtResource("3_dbc7t")
 value = 5
+
+[sub_resource type="Resource" id="Resource_0wbv0"]
+script = ExtResource("3_dbc7t")
+value = 10
+
+[sub_resource type="Resource" id="Resource_dbc7t"]
+script = ExtResource("4_olksm")
+imagery_name = "ghost_fire"
+
+[sub_resource type="Resource" id="Resource_olksm"]
+script = ExtResource("5_3sma1")
+operators = Array[ExtResource("2_0wbv0")]([SubResource("Resource_3qjnx"), SubResource("Resource_0wbv0"), SubResource("Resource_dbc7t")])
+
+[sub_resource type="Resource" id="Resource_3sma1"]
+script = ExtResource("6_ah3x1")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_ah3x1"]
+script = ExtResource("7_l71in")
+choice_result = SubResource("Resource_olksm")
+requirement = SubResource("Resource_3sma1")
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_ANGER_OPT0_DESC"
+
+[sub_resource type="Resource" id="Resource_l71in"]
+script = ExtResource("3_dbc7t")
+value = 5
+
+[sub_resource type="Resource" id="Resource_ss18f"]
+script = ExtResource("3_dbc7t")
+value = 5
+
+[sub_resource type="Resource" id="Resource_26xy6"]
+script = ExtResource("5_3sma1")
+operators = Array[ExtResource("2_0wbv0")]([SubResource("Resource_l71in"), SubResource("Resource_ss18f")])
+
+[sub_resource type="Resource" id="Resource_7mqup"]
+script = ExtResource("7_l71in")
+choice_result = SubResource("Resource_26xy6")
+description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_ANGER_OPT1_DESC"
+
+[sub_resource type="Resource" id="Resource_gimka"]
+script = ExtResource("3_dbc7t")
+value = 5
+
+[sub_resource type="Resource" id="Resource_efihd"]
+script = ExtResource("3_dbc7t")
+value = 21
 
 [sub_resource type="Resource" id="Resource_1etdw"]
 script = ExtResource("3_dbc7t")
@@ -26,87 +73,40 @@ imagery_name = "ghost_fire"
 
 [sub_resource type="Resource" id="Resource_cvd40"]
 script = ExtResource("5_3sma1")
-operators = Array[ExtResource("2_0wbv0")]([SubResource("Resource_efihd"), SubResource("Resource_1etdw"), SubResource("Resource_w4p4x")])
+operators = Array[ExtResource("2_0wbv0")]([SubResource("Resource_gimka"), SubResource("Resource_efihd"), SubResource("Resource_1etdw"), SubResource("Resource_w4p4x")])
 
 [sub_resource type="Resource" id="Resource_y8rf0"]
 script = ExtResource("6_ah3x1")
-trait_name = "kuangda_kuangke"
+trait_name = "kuangda_zuanying"
 
 [sub_resource type="Resource" id="Resource_7dbuj"]
 script = ExtResource("7_l71in")
 choice_result = SubResource("Resource_cvd40")
 requirement = SubResource("Resource_y8rf0")
-description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_ANGER_OPT0_DESC"
-
-[sub_resource type="Resource" id="Resource_kdc3o"]
-script = ExtResource("3_dbc7t")
-value = 5
-
-[sub_resource type="Resource" id="Resource_ck7u2"]
-script = ExtResource("3_dbc7t")
-value = 5
-
-[sub_resource type="Resource" id="Resource_qxbfb"]
-script = ExtResource("5_3sma1")
-operators = Array[ExtResource("2_0wbv0")]([SubResource("Resource_kdc3o"), SubResource("Resource_ck7u2")])
-
-[sub_resource type="Resource" id="Resource_p3wpv"]
-script = ExtResource("7_l71in")
-choice_result = SubResource("Resource_qxbfb")
-description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_ANGER_OPT1_DESC"
-
-[sub_resource type="Resource" id="Resource_thxd6"]
-script = ExtResource("3_dbc7t")
-value = 5
-
-[sub_resource type="Resource" id="Resource_7q73p"]
-script = ExtResource("3_dbc7t")
-value = 21
-
-[sub_resource type="Resource" id="Resource_5ki0w"]
-script = ExtResource("3_dbc7t")
-value = 10
-
-[sub_resource type="Resource" id="Resource_y6ecl"]
-script = ExtResource("4_olksm")
-imagery_name = "ghost_fire"
-
-[sub_resource type="Resource" id="Resource_h8amp"]
-script = ExtResource("5_3sma1")
-operators = Array[ExtResource("2_0wbv0")]([SubResource("Resource_thxd6"), SubResource("Resource_7q73p"), SubResource("Resource_5ki0w"), SubResource("Resource_y6ecl")])
-
-[sub_resource type="Resource" id="Resource_lxy61"]
-script = ExtResource("6_ah3x1")
-trait_name = "kuangda_zuanying"
-
-[sub_resource type="Resource" id="Resource_nabvf"]
-script = ExtResource("7_l71in")
-choice_result = SubResource("Resource_h8amp")
-requirement = SubResource("Resource_lxy61")
 description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_ANGER_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_a6cll"]
+[sub_resource type="Resource" id="Resource_kdc3o"]
 script = ExtResource("9_26xy6")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_s5ygv"]
+[sub_resource type="Resource" id="Resource_ck7u2"]
 script = ExtResource("9_26xy6")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_gfsin"]
+[sub_resource type="Resource" id="Resource_qxbfb"]
 script = ExtResource("10_7mqup")
-operators = Array[ExtResource("8_ss18f")]([SubResource("Resource_a6cll"), SubResource("Resource_s5ygv")])
+operators = Array[ExtResource("8_ss18f")]([SubResource("Resource_kdc3o"), SubResource("Resource_ck7u2")])
 
 [resource]
 script = ExtResource("11_gimka")
-requirement = SubResource("Resource_gfsin")
+requirement = SubResource("Resource_qxbfb")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_THEME_MACABRE:ghost_fire", "ENV_NATURE_NIGHTMOON:cold_moon", "ENV_NATURE_AUTUMNWIND:falling_leaf", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_shaoling_night", "emotion_pair:pair_anger", "TARGET_FACTION_MILITARY:torn_flag", "ENV_SOCIETY_WAR:blood_stain"])
-options = Array[ExtResource("1_3qjnx")]([SubResource("Resource_7dbuj"), SubResource("Resource_p3wpv"), SubResource("Resource_nabvf")])
+options = Array[ExtResource("1_3qjnx")]([SubResource("Resource_ah3x1"), SubResource("Resource_7mqup"), SubResource("Resource_7dbuj")])
 uuid = "747kuangda_denggao_shaoling_night_emotion_anger"
 name = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_ANGER_TITLE"
 description = "EVT_747KUANGDA_DENGGAO_SHAOLING_NIGHT_EMOTION_ANGER_DESC"

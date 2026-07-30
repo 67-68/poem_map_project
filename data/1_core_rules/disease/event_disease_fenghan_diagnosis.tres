@@ -7,45 +7,45 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="5_yevfd"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="6_e5jku"]
 
-[sub_resource type="Resource" id="Resource_mv5di"]
+[sub_resource type="Resource" id="Resource_kd1c1"]
 script = ExtResource("3_yhaho")
 str_props = "sick"
 value = 10
 
-[sub_resource type="Resource" id="Resource_y2mhn"]
+[sub_resource type="Resource" id="Resource_2g7ct"]
 script = ExtResource("3_yhaho")
 str_props = "health"
 value = -10
 
-[sub_resource type="Resource" id="Resource_dn5f1"]
+[sub_resource type="Resource" id="Resource_yhaho"]
 script = ExtResource("4_f2j1q")
-operators = Array[ExtResource("2_2g7ct")]([SubResource("Resource_mv5di"), SubResource("Resource_y2mhn")])
+operators = Array[ExtResource("2_2g7ct")]([SubResource("Resource_kd1c1"), SubResource("Resource_2g7ct")])
 
-[sub_resource type="Resource" id="Resource_2ruy3"]
+[sub_resource type="Resource" id="Resource_f2j1q"]
 script = ExtResource("5_yevfd")
-choice_result = SubResource("Resource_dn5f1")
+choice_result = SubResource("Resource_yhaho")
 description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_t6fuu"]
+[sub_resource type="Resource" id="Resource_yevfd"]
 script = ExtResource("3_yhaho")
 str_props = "sick"
 value = -5
 
-[sub_resource type="Resource" id="Resource_7hp25"]
+[sub_resource type="Resource" id="Resource_e5jku"]
 script = ExtResource("3_yhaho")
 str_props = "health"
 value = 5
 
-[sub_resource type="Resource" id="Resource_y3s3n"]
+[sub_resource type="Resource" id="Resource_mv5di"]
 script = ExtResource("4_f2j1q")
-operators = Array[ExtResource("2_2g7ct")]([SubResource("Resource_t6fuu"), SubResource("Resource_7hp25")])
+operators = Array[ExtResource("2_2g7ct")]([SubResource("Resource_yevfd"), SubResource("Resource_e5jku")])
 
-[sub_resource type="Resource" id="Resource_u3ns2"]
+[sub_resource type="Resource" id="Resource_y2mhn"]
 script = ExtResource("5_yevfd")
-choice_result = SubResource("Resource_y3s3n")
+choice_result = SubResource("Resource_mv5di")
 description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_dxam5"]
+[sub_resource type="Resource" id="Resource_dn5f1"]
 script = ExtResource("5_yevfd")
 description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_OPT2_DESC"
 
@@ -53,7 +53,7 @@ description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_OPT2_DESC"
 script = ExtResource("6_e5jku")
 weight = 100.0
 era = "1_core_rules"
-options = Array[ExtResource("1_kd1c1")]([SubResource("Resource_2ruy3"), SubResource("Resource_u3ns2"), SubResource("Resource_dxam5")])
+options = Array[ExtResource("1_kd1c1")]([SubResource("Resource_f2j1q"), SubResource("Resource_y2mhn"), SubResource("Resource_dn5f1")])
 uuid = "event_disease_fenghan_diagnosis"
 name = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_TITLE"
 description = "EVT_EVENT_DISEASE_FENGHAN_DIAGNOSIS_DESC"

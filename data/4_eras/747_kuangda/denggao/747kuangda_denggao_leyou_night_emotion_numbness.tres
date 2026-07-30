@@ -12,89 +12,89 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_mdh45"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_nstlw"]
 
-[sub_resource type="Resource" id="Resource_viuli"]
+[sub_resource type="Resource" id="Resource_nga7r"]
 script = ExtResource("3_l7wd3")
 value = 10
 
-[sub_resource type="Resource" id="Resource_jd0oi"]
+[sub_resource type="Resource" id="Resource_jrerq"]
 script = ExtResource("4_lgv2y")
-operators = Array[ExtResource("2_jrerq")]([SubResource("Resource_viuli")])
+operators = Array[ExtResource("2_jrerq")]([SubResource("Resource_nga7r")])
 
-[sub_resource type="Resource" id="Resource_t3cqn"]
+[sub_resource type="Resource" id="Resource_l7wd3"]
 script = ExtResource("5_wnx7c")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_h6khv"]
+[sub_resource type="Resource" id="Resource_lgv2y"]
 script = ExtResource("6_ygsil")
-choice_result = SubResource("Resource_jd0oi")
-requirement = SubResource("Resource_t3cqn")
+choice_result = SubResource("Resource_jrerq")
+requirement = SubResource("Resource_l7wd3")
 description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_NUMBNESS_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_jbt4e"]
+[sub_resource type="Resource" id="Resource_wnx7c"]
 script = ExtResource("3_l7wd3")
 value = 5
 
-[sub_resource type="Resource" id="Resource_2ocp4"]
+[sub_resource type="Resource" id="Resource_ygsil"]
 script = ExtResource("7_tjqvh")
 imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_0omm4"]
+[sub_resource type="Resource" id="Resource_tjqvh"]
 script = ExtResource("4_lgv2y")
-operators = Array[ExtResource("2_jrerq")]([SubResource("Resource_jbt4e"), SubResource("Resource_2ocp4")])
+operators = Array[ExtResource("2_jrerq")]([SubResource("Resource_wnx7c"), SubResource("Resource_ygsil")])
 
-[sub_resource type="Resource" id="Resource_da5ag"]
+[sub_resource type="Resource" id="Resource_6futb"]
 script = ExtResource("6_ygsil")
-choice_result = SubResource("Resource_0omm4")
+choice_result = SubResource("Resource_tjqvh")
 description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_NUMBNESS_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_cpbig"]
+[sub_resource type="Resource" id="Resource_epaux"]
 script = ExtResource("3_l7wd3")
 value = 19
 
-[sub_resource type="Resource" id="Resource_eimgr"]
+[sub_resource type="Resource" id="Resource_mdh45"]
 script = ExtResource("3_l7wd3")
 value = 10
 
-[sub_resource type="Resource" id="Resource_bxbbp"]
+[sub_resource type="Resource" id="Resource_nstlw"]
 script = ExtResource("7_tjqvh")
 imagery_name = "falling_leaf"
 
-[sub_resource type="Resource" id="Resource_wf7g2"]
+[sub_resource type="Resource" id="Resource_viuli"]
 script = ExtResource("4_lgv2y")
-operators = Array[ExtResource("2_jrerq")]([SubResource("Resource_cpbig"), SubResource("Resource_eimgr"), SubResource("Resource_bxbbp")])
+operators = Array[ExtResource("2_jrerq")]([SubResource("Resource_epaux"), SubResource("Resource_mdh45"), SubResource("Resource_nstlw")])
 
-[sub_resource type="Resource" id="Resource_sdp3a"]
+[sub_resource type="Resource" id="Resource_jd0oi"]
 script = ExtResource("5_wnx7c")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_asmkw"]
+[sub_resource type="Resource" id="Resource_t3cqn"]
 script = ExtResource("6_ygsil")
-choice_result = SubResource("Resource_wf7g2")
-requirement = SubResource("Resource_sdp3a")
+choice_result = SubResource("Resource_viuli")
+requirement = SubResource("Resource_jd0oi")
 description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_NUMBNESS_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_o7jjc"]
+[sub_resource type="Resource" id="Resource_h6khv"]
 script = ExtResource("9_epaux")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_w650t"]
+[sub_resource type="Resource" id="Resource_jbt4e"]
 script = ExtResource("9_epaux")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_et7j3"]
+[sub_resource type="Resource" id="Resource_2ocp4"]
 script = ExtResource("10_mdh45")
-operators = Array[ExtResource("8_6futb")]([SubResource("Resource_o7jjc"), SubResource("Resource_w650t")])
+operators = Array[ExtResource("8_6futb")]([SubResource("Resource_h6khv"), SubResource("Resource_jbt4e")])
 
 [resource]
 script = ExtResource("11_nstlw")
-requirement = SubResource("Resource_et7j3")
+requirement = SubResource("Resource_2ocp4")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["ENV_NATURE_NIGHTMOON:cold_moon", "ENV_NATURE_AUTUMNWIND:falling_leaf", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_leyou_night", "emotion_pair:pair_numbness", "VIBE_PHILOSOPHY_ZEN:incense_ash", "TARGET_NPC_DUFU:thatched_grass"])
-options = Array[ExtResource("1_nga7r")]([SubResource("Resource_h6khv"), SubResource("Resource_da5ag"), SubResource("Resource_asmkw")])
+options = Array[ExtResource("1_nga7r")]([SubResource("Resource_lgv2y"), SubResource("Resource_6futb"), SubResource("Resource_t3cqn")])
 uuid = "747kuangda_denggao_leyou_night_emotion_numbness"
 name = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_NUMBNESS_TITLE"
 description = "EVT_747KUANGDA_DENGGAO_LEYOU_NIGHT_EMOTION_NUMBNESS_DESC"

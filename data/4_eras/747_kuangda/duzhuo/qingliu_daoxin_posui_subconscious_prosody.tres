@@ -8,35 +8,35 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_lb70a"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_d0shu"]
 
-[sub_resource type="Resource" id="Resource_p8lcj"]
+[sub_resource type="Resource" id="Resource_4lnj6"]
 script = ExtResource("3_7pkg7")
 value = 5
 
-[sub_resource type="Resource" id="Resource_34esb"]
+[sub_resource type="Resource" id="Resource_pucnl"]
 script = ExtResource("3_7pkg7")
 value = 5
 
-[sub_resource type="Resource" id="Resource_wj5f3"]
+[sub_resource type="Resource" id="Resource_7pkg7"]
 script = ExtResource("4_dwcq6")
-operators = Array[ExtResource("2_pucnl")]([SubResource("Resource_p8lcj"), SubResource("Resource_34esb")])
+operators = Array[ExtResource("2_pucnl")]([SubResource("Resource_4lnj6"), SubResource("Resource_pucnl")])
 
-[sub_resource type="Resource" id="Resource_80arv"]
+[sub_resource type="Resource" id="Resource_dwcq6"]
 script = ExtResource("5_tp4iq")
-choice_result = SubResource("Resource_wj5f3")
+choice_result = SubResource("Resource_7pkg7")
 description = "EVT_QINGLIU_DAOXIN_POSUI_SUBCONSCIOUS_PROSODY_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_vp7po"]
+[sub_resource type="Resource" id="Resource_tp4iq"]
 script = ExtResource("6_lb70a")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("7_d0shu")
-requirement = SubResource("Resource_vp7po")
+requirement = SubResource("Resource_tp4iq")
 era = "747_kuangda"
 archetype_id = "duzhuo"
 _target_tags = Array[String](["action:main:duzhuo"])
-options = Array[ExtResource("1_4lnj6")]([SubResource("Resource_80arv")])
+options = Array[ExtResource("1_4lnj6")]([SubResource("Resource_dwcq6")])
 uuid = "qingliu_daoxin_posui_subconscious_prosody"
 name = "EVT_QINGLIU_DAOXIN_POSUI_SUBCONSCIOUS_PROSODY_TITLE"
 description = "EVT_QINGLIU_DAOXIN_POSUI_SUBCONSCIOUS_PROSODY_DESC"

@@ -12,89 +12,89 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_60wh8"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_muuhb"]
 
-[sub_resource type="Resource" id="Resource_1eabd"]
+[sub_resource type="Resource" id="Resource_8dhxb"]
 script = ExtResource("3_mo33j")
 value = 10
 
-[sub_resource type="Resource" id="Resource_c4ji5"]
+[sub_resource type="Resource" id="Resource_v3xbl"]
 script = ExtResource("4_c63xe")
-operators = Array[ExtResource("2_v3xbl")]([SubResource("Resource_1eabd")])
+operators = Array[ExtResource("2_v3xbl")]([SubResource("Resource_8dhxb")])
 
-[sub_resource type="Resource" id="Resource_g1dmi"]
+[sub_resource type="Resource" id="Resource_mo33j"]
 script = ExtResource("5_jkk4m")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_w51k7"]
+[sub_resource type="Resource" id="Resource_c63xe"]
 script = ExtResource("6_c2kjg")
-choice_result = SubResource("Resource_c4ji5")
-requirement = SubResource("Resource_g1dmi")
+choice_result = SubResource("Resource_v3xbl")
+requirement = SubResource("Resource_mo33j")
 description = "EVT_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_NUMBNESS_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_vm7h0"]
+[sub_resource type="Resource" id="Resource_jkk4m"]
 script = ExtResource("3_mo33j")
 value = 5
 
-[sub_resource type="Resource" id="Resource_gmp7k"]
+[sub_resource type="Resource" id="Resource_c2kjg"]
 script = ExtResource("7_3voap")
 imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_718k7"]
+[sub_resource type="Resource" id="Resource_3voap"]
 script = ExtResource("4_c63xe")
-operators = Array[ExtResource("2_v3xbl")]([SubResource("Resource_vm7h0"), SubResource("Resource_gmp7k")])
+operators = Array[ExtResource("2_v3xbl")]([SubResource("Resource_jkk4m"), SubResource("Resource_c2kjg")])
 
-[sub_resource type="Resource" id="Resource_r5ds4"]
+[sub_resource type="Resource" id="Resource_bfa2h"]
 script = ExtResource("6_c2kjg")
-choice_result = SubResource("Resource_718k7")
+choice_result = SubResource("Resource_3voap")
 description = "EVT_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_NUMBNESS_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_bpg0t"]
+[sub_resource type="Resource" id="Resource_hxcs5"]
 script = ExtResource("3_mo33j")
 value = 19
 
-[sub_resource type="Resource" id="Resource_oktci"]
+[sub_resource type="Resource" id="Resource_60wh8"]
 script = ExtResource("3_mo33j")
 value = 10
 
-[sub_resource type="Resource" id="Resource_jn0y5"]
+[sub_resource type="Resource" id="Resource_muuhb"]
 script = ExtResource("7_3voap")
 imagery_name = "ruined_wall"
 
-[sub_resource type="Resource" id="Resource_0e45s"]
+[sub_resource type="Resource" id="Resource_1eabd"]
 script = ExtResource("4_c63xe")
-operators = Array[ExtResource("2_v3xbl")]([SubResource("Resource_bpg0t"), SubResource("Resource_oktci"), SubResource("Resource_jn0y5")])
+operators = Array[ExtResource("2_v3xbl")]([SubResource("Resource_hxcs5"), SubResource("Resource_60wh8"), SubResource("Resource_muuhb")])
 
-[sub_resource type="Resource" id="Resource_tyyp5"]
+[sub_resource type="Resource" id="Resource_c4ji5"]
 script = ExtResource("5_jkk4m")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_6nw51"]
+[sub_resource type="Resource" id="Resource_g1dmi"]
 script = ExtResource("6_c2kjg")
-choice_result = SubResource("Resource_0e45s")
-requirement = SubResource("Resource_tyyp5")
+choice_result = SubResource("Resource_1eabd")
+requirement = SubResource("Resource_c4ji5")
 description = "EVT_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_NUMBNESS_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_57db1"]
+[sub_resource type="Resource" id="Resource_w51k7"]
 script = ExtResource("9_hxcs5")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_orxqm"]
+[sub_resource type="Resource" id="Resource_vm7h0"]
 script = ExtResource("9_hxcs5")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_ltrfx"]
+[sub_resource type="Resource" id="Resource_gmp7k"]
 script = ExtResource("10_60wh8")
-operators = Array[ExtResource("8_bfa2h")]([SubResource("Resource_57db1"), SubResource("Resource_orxqm")])
+operators = Array[ExtResource("8_bfa2h")]([SubResource("Resource_w51k7"), SubResource("Resource_vm7h0")])
 
 [resource]
 script = ExtResource("11_muuhb")
-requirement = SubResource("Resource_ltrfx")
+requirement = SubResource("Resource_gmp7k")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_THEME_HISTORY:ruined_wall", "VIBE_PHILOSOPHY_ZEN:incense_ash", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_pagoda_night", "emotion_pair:pair_numbness", "VIBE_PHILOSOPHY_ZEN:incense_ash", "TARGET_NPC_DUFU:thatched_grass"])
-options = Array[ExtResource("1_8dhxb")]([SubResource("Resource_w51k7"), SubResource("Resource_r5ds4"), SubResource("Resource_6nw51")])
+options = Array[ExtResource("1_8dhxb")]([SubResource("Resource_c63xe"), SubResource("Resource_bfa2h"), SubResource("Resource_g1dmi")])
 uuid = "747kuangda_denggao_pagoda_night_emotion_numbness"
 name = "EVT_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_NUMBNESS_TITLE"
 description = "EVT_747KUANGDA_DENGGAO_PAGODA_NIGHT_EMOTION_NUMBNESS_DESC"

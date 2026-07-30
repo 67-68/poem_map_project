@@ -12,46 +12,46 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_kmwa6"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_nvxix"]
 
-[sub_resource type="Resource" id="Resource_guc5n"]
+[sub_resource type="Resource" id="Resource_0t6un"]
 script = ExtResource("4_g5g7l")
 _trait_key = 28
 str_traits = "corrupt"
 
-[sub_resource type="Resource" id="Resource_4liak"]
+[sub_resource type="Resource" id="Resource_a5n7c"]
 script = ExtResource("5_ewxma")
-operators = Array[ExtResource("3_625dn")]([SubResource("Resource_guc5n")])
+operators = Array[ExtResource("3_625dn")]([SubResource("Resource_0t6un")])
 
-[sub_resource type="Resource" id="Resource_b6nec"]
+[sub_resource type="Resource" id="Resource_625dn"]
 script = ExtResource("6_i2fm3")
 property = "money"
 value = 100
 operator = 1
 
-[sub_resource type="Resource" id="Resource_6jw50"]
+[sub_resource type="Resource" id="Resource_g5g7l"]
 script = ExtResource("7_fwciv")
-choice_result = SubResource("Resource_4liak")
-requirement = SubResource("Resource_b6nec")
+choice_result = SubResource("Resource_a5n7c")
+requirement = SubResource("Resource_625dn")
 
-[sub_resource type="Resource" id="Resource_xv1gv"]
+[sub_resource type="Resource" id="Resource_ewxma"]
 script = ExtResource("6_i2fm3")
 property = "money"
 value = 50
 operator = 1
 
-[sub_resource type="Resource" id="Resource_uuhtg"]
+[sub_resource type="Resource" id="Resource_i2fm3"]
 script = ExtResource("9_161c5")
 trait_name = "official"
 
-[sub_resource type="Resource" id="Resource_67rr3"]
+[sub_resource type="Resource" id="Resource_fwciv"]
 script = ExtResource("10_kmwa6")
-operators = Array[ExtResource("8_bbdhn")]([SubResource("Resource_xv1gv"), SubResource("Resource_uuhtg")])
+operators = Array[ExtResource("8_bbdhn")]([SubResource("Resource_ewxma"), SubResource("Resource_i2fm3")])
 
 [resource]
 script = ExtResource("11_nvxix")
 weight = 15.5
-requirement = SubResource("Resource_67rr3")
+requirement = SubResource("Resource_fwciv")
 _target_tags = Array[String](["actor:status:temporary:drunk", "city:econ:level:prosperous", "action:intent:study:poetry"])
-options = Array[ExtResource("2_a5n7c")]([SubResource("Resource_6jw50")])
+options = Array[ExtResource("2_a5n7c")]([SubResource("Resource_g5g7l")])
 uuid = "test1"
 name = "EVT_TEST1_TITLE"
 description = "EVT_TEST1_DESC"

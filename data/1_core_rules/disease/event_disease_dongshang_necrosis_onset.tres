@@ -8,46 +8,46 @@
 [ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="6_08ibv"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_umsg3"]
 
-[sub_resource type="Resource" id="Resource_n2mgw"]
+[sub_resource type="Resource" id="Resource_tyut7"]
 script = ExtResource("3_46wxo")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_626j2"]
+[sub_resource type="Resource" id="Resource_ijcjj"]
 script = ExtResource("3_46wxo")
 str_props = "sick"
 value = 3
 
-[sub_resource type="Resource" id="Resource_5hk3d"]
+[sub_resource type="Resource" id="Resource_46wxo"]
 script = ExtResource("3_46wxo")
 str_props = "money"
 value = -2
 
-[sub_resource type="Resource" id="Resource_a2uv2"]
+[sub_resource type="Resource" id="Resource_a6bay"]
 script = ExtResource("4_a6bay")
-operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_n2mgw"), SubResource("Resource_626j2"), SubResource("Resource_5hk3d")])
+operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_tyut7"), SubResource("Resource_ijcjj"), SubResource("Resource_46wxo")])
 
-[sub_resource type="Resource" id="Resource_0f5yr"]
+[sub_resource type="Resource" id="Resource_sa4fj"]
 script = ExtResource("5_sa4fj")
-choice_result = SubResource("Resource_a2uv2")
+choice_result = SubResource("Resource_a6bay")
 description = "EVT_EVENT_DISEASE_DONGSHANG_NECROSIS_ONSET_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_l57j6"]
+[sub_resource type="Resource" id="Resource_08ibv"]
 script = ExtResource("3_46wxo")
 str_props = "sick"
 value = 8
 
-[sub_resource type="Resource" id="Resource_l1o6h"]
+[sub_resource type="Resource" id="Resource_umsg3"]
 script = ExtResource("6_08ibv")
 value = 5
 
-[sub_resource type="Resource" id="Resource_6jhl2"]
+[sub_resource type="Resource" id="Resource_n2mgw"]
 script = ExtResource("4_a6bay")
-operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_l57j6"), SubResource("Resource_l1o6h")])
+operators = Array[ExtResource("2_ijcjj")]([SubResource("Resource_08ibv"), SubResource("Resource_umsg3")])
 
-[sub_resource type="Resource" id="Resource_b7oge"]
+[sub_resource type="Resource" id="Resource_626j2"]
 script = ExtResource("5_sa4fj")
-choice_result = SubResource("Resource_6jhl2")
+choice_result = SubResource("Resource_n2mgw")
 description = "EVT_EVENT_DISEASE_DONGSHANG_NECROSIS_ONSET_OPT1_DESC"
 
 [resource]
@@ -55,7 +55,7 @@ script = ExtResource("7_umsg3")
 weight = 100.0
 era = "1_core_rules"
 _target_tags = Array[String](["actor:health:coldNecrosis"])
-options = Array[ExtResource("1_tyut7")]([SubResource("Resource_0f5yr"), SubResource("Resource_b7oge")])
+options = Array[ExtResource("1_tyut7")]([SubResource("Resource_sa4fj"), SubResource("Resource_626j2")])
 uuid = "event_disease_dongshang_necrosis_onset"
 name = "EVT_EVENT_DISEASE_DONGSHANG_NECROSIS_ONSET_TITLE"
 description = "EVT_EVENT_DISEASE_DONGSHANG_NECROSIS_ONSET_DESC"

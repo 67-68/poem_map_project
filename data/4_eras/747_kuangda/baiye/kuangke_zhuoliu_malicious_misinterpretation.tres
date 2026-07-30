@@ -11,79 +11,79 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="9_lf25o"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_xdghl"]
 
-[sub_resource type="Resource" id="Resource_qc62b"]
+[sub_resource type="Resource" id="Resource_58n1e"]
 script = ExtResource("3_affki")
 value = 10
 
-[sub_resource type="Resource" id="Resource_llusm"]
+[sub_resource type="Resource" id="Resource_50i87"]
 script = ExtResource("4_lt27p")
-operators = Array[ExtResource("2_50i87")]([SubResource("Resource_qc62b")])
+operators = Array[ExtResource("2_50i87")]([SubResource("Resource_58n1e")])
 
-[sub_resource type="Resource" id="Resource_cktn3"]
+[sub_resource type="Resource" id="Resource_affki"]
 script = ExtResource("5_f6tvw")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_4c6ls"]
+[sub_resource type="Resource" id="Resource_lt27p"]
 script = ExtResource("6_6vdlt")
-choice_result = SubResource("Resource_llusm")
-requirement = SubResource("Resource_cktn3")
+choice_result = SubResource("Resource_50i87")
+requirement = SubResource("Resource_affki")
 description = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_twscs"]
+[sub_resource type="Resource" id="Resource_f6tvw"]
 script = ExtResource("3_affki")
 value = 10
 
-[sub_resource type="Resource" id="Resource_tmibn"]
+[sub_resource type="Resource" id="Resource_6vdlt"]
 script = ExtResource("4_lt27p")
-operators = Array[ExtResource("2_50i87")]([SubResource("Resource_twscs")])
+operators = Array[ExtResource("2_50i87")]([SubResource("Resource_f6tvw")])
 
-[sub_resource type="Resource" id="Resource_s64c8"]
+[sub_resource type="Resource" id="Resource_wabe2"]
 script = ExtResource("5_f6tvw")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_xkoxy"]
+[sub_resource type="Resource" id="Resource_pfs5e"]
 script = ExtResource("6_6vdlt")
-choice_result = SubResource("Resource_tmibn")
-requirement = SubResource("Resource_s64c8")
+choice_result = SubResource("Resource_6vdlt")
+requirement = SubResource("Resource_wabe2")
 description = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_w1y7u"]
+[sub_resource type="Resource" id="Resource_lf25o"]
 script = ExtResource("3_affki")
 value = 21
 
-[sub_resource type="Resource" id="Resource_ydw6h"]
+[sub_resource type="Resource" id="Resource_xdghl"]
 script = ExtResource("7_wabe2")
 imagery_name = "lone_sail"
 
-[sub_resource type="Resource" id="Resource_yla63"]
+[sub_resource type="Resource" id="Resource_qc62b"]
 script = ExtResource("8_pfs5e")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_textual_trap"
 
-[sub_resource type="Resource" id="Resource_0ls3e"]
+[sub_resource type="Resource" id="Resource_llusm"]
 script = ExtResource("4_lt27p")
-operators = Array[ExtResource("2_50i87")]([SubResource("Resource_w1y7u"), SubResource("Resource_ydw6h"), SubResource("Resource_yla63")])
+operators = Array[ExtResource("2_50i87")]([SubResource("Resource_lf25o"), SubResource("Resource_xdghl"), SubResource("Resource_qc62b")])
 
-[sub_resource type="Resource" id="Resource_jdgxj"]
+[sub_resource type="Resource" id="Resource_cktn3"]
 script = ExtResource("6_6vdlt")
-choice_result = SubResource("Resource_0ls3e")
+choice_result = SubResource("Resource_llusm")
 description = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_jmpro"]
+[sub_resource type="Resource" id="Resource_4c6ls"]
 script = ExtResource("9_lf25o")
 trait_name = "kuangda_kuangke"
 
 [resource]
 script = ExtResource("10_xdghl")
-requirement = SubResource("Resource_jmpro")
+requirement = SubResource("Resource_4c6ls")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["ACTION_TRAVEL_BOAT:lone_sail", "action:main:baiye"])
-options = Array[ExtResource("1_58n1e")]([SubResource("Resource_4c6ls"), SubResource("Resource_xkoxy"), SubResource("Resource_jdgxj")])
+options = Array[ExtResource("1_58n1e")]([SubResource("Resource_lt27p"), SubResource("Resource_pfs5e"), SubResource("Resource_cktn3")])
 uuid = "kuangke_zhuoliu_malicious_misinterpretation"
 name = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_TITLE"
 description = "EVT_KUANGKE_ZHUOLIU_MALICIOUS_MISINTERPRETATION_DESC"

@@ -8,48 +8,48 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_x4o5g"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_yao48"]
 
-[sub_resource type="Resource" id="Resource_e8eee"]
+[sub_resource type="Resource" id="Resource_7wpqg"]
 script = ExtResource("3_dl5wi")
 str_props = "health"
 value = 3
 
-[sub_resource type="Resource" id="Resource_j86dn"]
+[sub_resource type="Resource" id="Resource_6ucwu"]
 script = ExtResource("4_wamny")
 value = 3
 
-[sub_resource type="Resource" id="Resource_rh1r1"]
+[sub_resource type="Resource" id="Resource_dl5wi"]
 script = ExtResource("5_84oi3")
-operators = Array[ExtResource("2_6ucwu")]([SubResource("Resource_e8eee"), SubResource("Resource_j86dn")])
+operators = Array[ExtResource("2_6ucwu")]([SubResource("Resource_7wpqg"), SubResource("Resource_6ucwu")])
 
-[sub_resource type="Resource" id="Resource_b3aj1"]
+[sub_resource type="Resource" id="Resource_wamny"]
 script = ExtResource("6_x4o5g")
-choice_result = SubResource("Resource_rh1r1")
+choice_result = SubResource("Resource_dl5wi")
 description = "EVT_EVENT_DISEASE_SHIYI_ANOREXIA_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_o2ngr"]
+[sub_resource type="Resource" id="Resource_84oi3"]
 script = ExtResource("3_dl5wi")
 str_props = "health"
 value = -5
 
-[sub_resource type="Resource" id="Resource_j775t"]
+[sub_resource type="Resource" id="Resource_x4o5g"]
 script = ExtResource("3_dl5wi")
 str_props = "money"
 value = -2
 
-[sub_resource type="Resource" id="Resource_y461g"]
+[sub_resource type="Resource" id="Resource_yao48"]
 script = ExtResource("5_84oi3")
-operators = Array[ExtResource("2_6ucwu")]([SubResource("Resource_o2ngr"), SubResource("Resource_j775t")])
+operators = Array[ExtResource("2_6ucwu")]([SubResource("Resource_84oi3"), SubResource("Resource_x4o5g")])
 
-[sub_resource type="Resource" id="Resource_rhedd"]
+[sub_resource type="Resource" id="Resource_e8eee"]
 script = ExtResource("6_x4o5g")
-choice_result = SubResource("Resource_y461g")
+choice_result = SubResource("Resource_yao48")
 description = "EVT_EVENT_DISEASE_SHIYI_ANOREXIA_OPT1_DESC"
 
 [resource]
 script = ExtResource("7_yao48")
 era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:depression"])
-options = Array[ExtResource("1_7wpqg")]([SubResource("Resource_b3aj1"), SubResource("Resource_rhedd")])
+options = Array[ExtResource("1_7wpqg")]([SubResource("Resource_wamny"), SubResource("Resource_e8eee")])
 uuid = "event_disease_shiyi_anorexia"
 name = "EVT_EVENT_DISEASE_SHIYI_ANOREXIA_TITLE"
 description = "EVT_EVENT_DISEASE_SHIYI_ANOREXIA_DESC"

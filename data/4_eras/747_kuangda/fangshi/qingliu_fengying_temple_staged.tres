@@ -12,89 +12,89 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_sxn3l"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_yspwr"]
 
-[sub_resource type="Resource" id="Resource_jokkf"]
+[sub_resource type="Resource" id="Resource_op5w5"]
 script = ExtResource("3_dmttr")
 value = 10
 
-[sub_resource type="Resource" id="Resource_njl6c"]
+[sub_resource type="Resource" id="Resource_ee0y5"]
 script = ExtResource("4_y2eju")
-operators = Array[ExtResource("2_ee0y5")]([SubResource("Resource_jokkf")])
+operators = Array[ExtResource("2_ee0y5")]([SubResource("Resource_op5w5")])
 
-[sub_resource type="Resource" id="Resource_srq5h"]
+[sub_resource type="Resource" id="Resource_dmttr"]
 script = ExtResource("5_iuj8g")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_38tk2"]
+[sub_resource type="Resource" id="Resource_y2eju"]
 script = ExtResource("6_hka0u")
-choice_result = SubResource("Resource_njl6c")
-requirement = SubResource("Resource_srq5h")
+choice_result = SubResource("Resource_ee0y5")
+requirement = SubResource("Resource_dmttr")
 description = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_wyj08"]
+[sub_resource type="Resource" id="Resource_iuj8g"]
 script = ExtResource("3_dmttr")
 value = 10
 
-[sub_resource type="Resource" id="Resource_j73rh"]
+[sub_resource type="Resource" id="Resource_hka0u"]
 script = ExtResource("4_y2eju")
-operators = Array[ExtResource("2_ee0y5")]([SubResource("Resource_wyj08")])
+operators = Array[ExtResource("2_ee0y5")]([SubResource("Resource_iuj8g")])
 
-[sub_resource type="Resource" id="Resource_pv107"]
+[sub_resource type="Resource" id="Resource_cw6nj"]
 script = ExtResource("5_iuj8g")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_3sy8c"]
+[sub_resource type="Resource" id="Resource_ntc1x"]
 script = ExtResource("6_hka0u")
-choice_result = SubResource("Resource_j73rh")
-requirement = SubResource("Resource_pv107")
+choice_result = SubResource("Resource_hka0u")
+requirement = SubResource("Resource_cw6nj")
 description = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_wkyr4"]
+[sub_resource type="Resource" id="Resource_8er25"]
 script = ExtResource("3_dmttr")
 value = 8
 
-[sub_resource type="Resource" id="Resource_6r3kj"]
+[sub_resource type="Resource" id="Resource_sxn3l"]
 script = ExtResource("3_dmttr")
 value = 5
 
-[sub_resource type="Resource" id="Resource_b8llb"]
+[sub_resource type="Resource" id="Resource_yspwr"]
 script = ExtResource("4_y2eju")
-operators = Array[ExtResource("2_ee0y5")]([SubResource("Resource_wkyr4"), SubResource("Resource_6r3kj")])
+operators = Array[ExtResource("2_ee0y5")]([SubResource("Resource_8er25"), SubResource("Resource_sxn3l")])
 
-[sub_resource type="Resource" id="Resource_3r77q"]
+[sub_resource type="Resource" id="Resource_jokkf"]
 script = ExtResource("6_hka0u")
-choice_result = SubResource("Resource_b8llb")
+choice_result = SubResource("Resource_yspwr")
 description = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_w3w6m"]
+[sub_resource type="Resource" id="Resource_njl6c"]
 script = ExtResource("8_ntc1x")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_mfk2w"]
+[sub_resource type="Resource" id="Resource_srq5h"]
 script = ExtResource("9_8er25")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_njsx6"]
+[sub_resource type="Resource" id="Resource_38tk2"]
 script = ExtResource("9_8er25")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_pxa04"]
+[sub_resource type="Resource" id="Resource_wyj08"]
 script = ExtResource("10_sxn3l")
-operators = Array[ExtResource("7_cw6nj")]([SubResource("Resource_w3w6m"), SubResource("Resource_mfk2w"), SubResource("Resource_njsx6")])
+operators = Array[ExtResource("7_cw6nj")]([SubResource("Resource_njl6c"), SubResource("Resource_srq5h"), SubResource("Resource_38tk2")])
 
 [resource]
 script = ExtResource("11_yspwr")
-requirement = SubResource("Resource_pxa04")
+requirement = SubResource("Resource_wyj08")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_SNOWSTORM:lone_snow", "action:main:fangshi"])
-options = Array[ExtResource("1_op5w5")]([SubResource("Resource_38tk2"), SubResource("Resource_3sy8c"), SubResource("Resource_3r77q")])
+options = Array[ExtResource("1_op5w5")]([SubResource("Resource_y2eju"), SubResource("Resource_ntc1x"), SubResource("Resource_jokkf")])
 uuid = "qingliu_fengying_temple_staged"
 name = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_TITLE"
 description = "EVT_QINGLIU_FENGYING_TEMPLE_STAGED_DESC"

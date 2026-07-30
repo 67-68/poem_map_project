@@ -12,85 +12,85 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_o7lbd"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_oxreu"]
 
-[sub_resource type="Resource" id="Resource_bxvmf"]
+[sub_resource type="Resource" id="Resource_4hag0"]
 script = ExtResource("3_ts7po")
 value = 10
 
-[sub_resource type="Resource" id="Resource_mp3iq"]
+[sub_resource type="Resource" id="Resource_yqbh7"]
 script = ExtResource("4_taaaw")
-operators = Array[ExtResource("2_yqbh7")]([SubResource("Resource_bxvmf")])
+operators = Array[ExtResource("2_yqbh7")]([SubResource("Resource_4hag0")])
 
-[sub_resource type="Resource" id="Resource_4kt7h"]
+[sub_resource type="Resource" id="Resource_ts7po"]
 script = ExtResource("5_08m8w")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_pgs58"]
+[sub_resource type="Resource" id="Resource_taaaw"]
 script = ExtResource("6_j3hsw")
-choice_result = SubResource("Resource_mp3iq")
-requirement = SubResource("Resource_4kt7h")
+choice_result = SubResource("Resource_yqbh7")
+requirement = SubResource("Resource_ts7po")
 description = "EVT_ZHUOLIU_FENGYING_BANQUET_ASSIGNMENT_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_acc0l"]
+[sub_resource type="Resource" id="Resource_08m8w"]
 script = ExtResource("3_ts7po")
 value = 10
 
-[sub_resource type="Resource" id="Resource_i8jkq"]
+[sub_resource type="Resource" id="Resource_j3hsw"]
 script = ExtResource("4_taaaw")
-operators = Array[ExtResource("2_yqbh7")]([SubResource("Resource_acc0l")])
+operators = Array[ExtResource("2_yqbh7")]([SubResource("Resource_08m8w")])
 
-[sub_resource type="Resource" id="Resource_1q7va"]
+[sub_resource type="Resource" id="Resource_w1qxv"]
 script = ExtResource("5_08m8w")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_ijbb1"]
+[sub_resource type="Resource" id="Resource_m5lsf"]
 script = ExtResource("6_j3hsw")
-choice_result = SubResource("Resource_i8jkq")
-requirement = SubResource("Resource_1q7va")
+choice_result = SubResource("Resource_j3hsw")
+requirement = SubResource("Resource_w1qxv")
 description = "EVT_ZHUOLIU_FENGYING_BANQUET_ASSIGNMENT_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_b7scu"]
+[sub_resource type="Resource" id="Resource_tfwee"]
 script = ExtResource("3_ts7po")
 value = 10
 
-[sub_resource type="Resource" id="Resource_csvge"]
+[sub_resource type="Resource" id="Resource_o7lbd"]
 script = ExtResource("4_taaaw")
-operators = Array[ExtResource("2_yqbh7")]([SubResource("Resource_b7scu")])
+operators = Array[ExtResource("2_yqbh7")]([SubResource("Resource_tfwee")])
 
-[sub_resource type="Resource" id="Resource_bakp1"]
+[sub_resource type="Resource" id="Resource_oxreu"]
 script = ExtResource("6_j3hsw")
-choice_result = SubResource("Resource_csvge")
+choice_result = SubResource("Resource_o7lbd")
 description = "EVT_ZHUOLIU_FENGYING_BANQUET_ASSIGNMENT_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_l1810"]
+[sub_resource type="Resource" id="Resource_bxvmf"]
 script = ExtResource("8_m5lsf")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_solid"]
+[sub_resource type="Resource" id="Resource_mp3iq"]
 script = ExtResource("9_tfwee")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_1t1s4"]
+[sub_resource type="Resource" id="Resource_4kt7h"]
 script = ExtResource("9_tfwee")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_ebh5r"]
+[sub_resource type="Resource" id="Resource_pgs58"]
 script = ExtResource("10_o7lbd")
-operators = Array[ExtResource("7_w1qxv")]([SubResource("Resource_l1810"), SubResource("Resource_solid"), SubResource("Resource_1t1s4")])
+operators = Array[ExtResource("7_w1qxv")]([SubResource("Resource_bxvmf"), SubResource("Resource_mp3iq"), SubResource("Resource_4kt7h")])
 
 [resource]
 script = ExtResource("11_oxreu")
-requirement = SubResource("Resource_ebh5r")
+requirement = SubResource("Resource_pgs58")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "ACTION_ENTERTAIN_DRINK:empty_cup", "action:main:jiaoyou"])
-options = Array[ExtResource("1_4hag0")]([SubResource("Resource_pgs58"), SubResource("Resource_ijbb1"), SubResource("Resource_bakp1")])
+options = Array[ExtResource("1_4hag0")]([SubResource("Resource_taaaw"), SubResource("Resource_m5lsf"), SubResource("Resource_oxreu")])
 uuid = "zhuoliu_fengying_banquet_assignment"
 name = "EVT_ZHUOLIU_FENGYING_BANQUET_ASSIGNMENT_TITLE"
 description = "EVT_ZHUOLIU_FENGYING_BANQUET_ASSIGNMENT_DESC"

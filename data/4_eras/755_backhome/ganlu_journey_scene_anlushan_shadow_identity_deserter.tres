@@ -8,24 +8,24 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_82v7j"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_7mkve"]
 
-[sub_resource type="Resource" id="Resource_h73nd"]
+[sub_resource type="Resource" id="Resource_btbjy"]
 script = ExtResource("3_l0tm7")
 value = 10
 
-[sub_resource type="Resource" id="Resource_asxrp"]
+[sub_resource type="Resource" id="Resource_6kkdm"]
 script = ExtResource("4_are5d")
 imagery_name = "corrupt"
 
-[sub_resource type="Resource" id="Resource_eixbt"]
+[sub_resource type="Resource" id="Resource_l0tm7"]
 script = ExtResource("5_e0v75")
-operators = Array[ExtResource("2_6kkdm")]([SubResource("Resource_h73nd"), SubResource("Resource_asxrp")])
+operators = Array[ExtResource("2_6kkdm")]([SubResource("Resource_btbjy"), SubResource("Resource_6kkdm")])
 
-[sub_resource type="Resource" id="Resource_cs3y6"]
+[sub_resource type="Resource" id="Resource_are5d"]
 script = ExtResource("6_82v7j")
-choice_result = SubResource("Resource_eixbt")
+choice_result = SubResource("Resource_l0tm7")
 description = "EVT_GANLU_JOURNEY_SCENE_ANLUSHAN_SHADOW_IDENTITY_DESERTER_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_shq5s"]
+[sub_resource type="Resource" id="Resource_e0v75"]
 script = ExtResource("6_82v7j")
 description = "EVT_GANLU_JOURNEY_SCENE_ANLUSHAN_SHADOW_IDENTITY_DESERTER_OPT1_DESC"
 
@@ -34,7 +34,7 @@ script = ExtResource("7_7mkve")
 era = "755_backhome"
 archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_SOCIETY_WAR", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu", "TARGET_IDENTITY_DESERTER"])
-options = Array[ExtResource("1_btbjy")]([SubResource("Resource_cs3y6"), SubResource("Resource_shq5s")])
+options = Array[ExtResource("1_btbjy")]([SubResource("Resource_are5d"), SubResource("Resource_e0v75")])
 uuid = "ganlu_journey_scene_anlushan_shadow_identity_deserter"
 name = "EVT_GANLU_JOURNEY_SCENE_ANLUSHAN_SHADOW_IDENTITY_DESERTER_TITLE"
 description = "EVT_GANLU_JOURNEY_SCENE_ANLUSHAN_SHADOW_IDENTITY_DESERTER_DESC"

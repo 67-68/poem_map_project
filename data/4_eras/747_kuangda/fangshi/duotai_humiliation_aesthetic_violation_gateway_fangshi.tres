@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_10ara"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_h6srd"]
 
-[sub_resource type="Resource" id="Resource_nudfg"]
+[sub_resource type="Resource" id="Resource_v85pk"]
 script = ExtResource("2_icy3v")
 
-[sub_resource type="Resource" id="Resource_xua6s"]
+[sub_resource type="Resource" id="Resource_icy3v"]
 script = ExtResource("4_a44wt")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_fdtfp"]
+[sub_resource type="Resource" id="Resource_hfbw8"]
 script = ExtResource("2_icy3v")
-operators = Array[ExtResource("1_v85pk")]([SubResource("Resource_xua6s")])
+operators = Array[ExtResource("1_v85pk")]([SubResource("Resource_icy3v")])
 
-[sub_resource type="Resource" id="Resource_yp7xs"]
+[sub_resource type="Resource" id="Resource_a44wt"]
 script = ExtResource("5_kvpyx")
-choice_result = SubResource("Resource_fdtfp")
+choice_result = SubResource("Resource_hfbw8")
 description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_FANGSHI_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_f1vdt"]
+[sub_resource type="Resource" id="Resource_kvpyx"]
 script = ExtResource("5_kvpyx")
 description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_FANGSHI_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_vbfdc"]
+[sub_resource type="Resource" id="Resource_10ara"]
 script = ExtResource("4_a44wt")
 imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_a7yxj"]
+[sub_resource type="Resource" id="Resource_h6srd"]
 script = ExtResource("2_icy3v")
-operators = Array[ExtResource("1_v85pk")]([SubResource("Resource_vbfdc")])
+operators = Array[ExtResource("1_v85pk")]([SubResource("Resource_10ara")])
 
-[sub_resource type="Resource" id="Resource_8wp7u"]
+[sub_resource type="Resource" id="Resource_nudfg"]
 script = ExtResource("5_kvpyx")
-choice_result = SubResource("Resource_a7yxj")
+choice_result = SubResource("Resource_h6srd")
 description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_FANGSHI_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_2rwlq"]
+[sub_resource type="Resource" id="Resource_xua6s"]
 script = ExtResource("6_10ara")
 volatile_stat = "ambition"
 value = 50
@@ -49,12 +49,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_h6srd")
-requirement = SubResource("Resource_2rwlq")
+requirement = SubResource("Resource_xua6s")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["emotion_pair:pair_rebellion", "TARGET_NPC_DUFU:thatched_grass", "ACTION_SOCIAL_PARTING:willow_branch", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:humiliation_aesthetic_violation", "TARGET_IDENTITY_QINGKE", "ENV_NATURE_NIGHTMOON:cold_moon", "TARGET_NPC_DUFU:thatched_grass", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:scene_fangshi"])
-options = Array[ExtResource("3_hfbw8")]([SubResource("Resource_yp7xs"), SubResource("Resource_f1vdt"), SubResource("Resource_8wp7u")])
-on_enter_result = SubResource("Resource_nudfg")
+options = Array[ExtResource("3_hfbw8")]([SubResource("Resource_a44wt"), SubResource("Resource_kvpyx"), SubResource("Resource_nudfg")])
+on_enter_result = SubResource("Resource_v85pk")
 uuid = "duotai_humiliation_aesthetic_violation_gateway_fangshi"
 name = "emo_lt(name=ambition; val=100)"
 description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_FANGSHI_DESC"

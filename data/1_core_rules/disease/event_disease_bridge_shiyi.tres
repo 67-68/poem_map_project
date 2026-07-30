@@ -9,41 +9,41 @@
 [ext_resource type="Script" uid="uid://f5l815u48h2v" path="res://core/operators/emotion_operator.gd" id="7_vaumy"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="8_gd762"]
 
-[sub_resource type="Resource" id="Resource_3cv7r"]
+[sub_resource type="Resource" id="Resource_urqce"]
 script = ExtResource("3_n8ao6")
 str_props = "money"
 value = -5
 
-[sub_resource type="Resource" id="Resource_70om6"]
+[sub_resource type="Resource" id="Resource_1erqo"]
 script = ExtResource("4_uli57")
 _trait_key = 63
 str_traits = "disease_shiyi_depression"
 
-[sub_resource type="Resource" id="Resource_3dch7"]
+[sub_resource type="Resource" id="Resource_n8ao6"]
 script = ExtResource("5_rfubl")
-operators = Array[ExtResource("2_1erqo")]([SubResource("Resource_3cv7r"), SubResource("Resource_70om6")])
+operators = Array[ExtResource("2_1erqo")]([SubResource("Resource_urqce"), SubResource("Resource_1erqo")])
 
-[sub_resource type="Resource" id="Resource_ob3dg"]
+[sub_resource type="Resource" id="Resource_uli57"]
 script = ExtResource("6_dhnin")
-choice_result = SubResource("Resource_3dch7")
+choice_result = SubResource("Resource_n8ao6")
 description = "EVT_EVENT_DISEASE_BRIDGE_SHIYI_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_g4af4"]
+[sub_resource type="Resource" id="Resource_rfubl"]
 script = ExtResource("7_vaumy")
 value = 15
 
-[sub_resource type="Resource" id="Resource_v5si8"]
+[sub_resource type="Resource" id="Resource_dhnin"]
 script = ExtResource("3_n8ao6")
 str_props = "burnout"
 value = 10
 
-[sub_resource type="Resource" id="Resource_di4xu"]
+[sub_resource type="Resource" id="Resource_vaumy"]
 script = ExtResource("5_rfubl")
-operators = Array[ExtResource("2_1erqo")]([SubResource("Resource_g4af4"), SubResource("Resource_v5si8")])
+operators = Array[ExtResource("2_1erqo")]([SubResource("Resource_rfubl"), SubResource("Resource_dhnin")])
 
-[sub_resource type="Resource" id="Resource_sr28u"]
+[sub_resource type="Resource" id="Resource_gd762"]
 script = ExtResource("6_dhnin")
-choice_result = SubResource("Resource_di4xu")
+choice_result = SubResource("Resource_vaumy")
 description = "EVT_EVENT_DISEASE_BRIDGE_SHIYI_OPT1_DESC"
 
 [resource]
@@ -51,7 +51,7 @@ script = ExtResource("8_gd762")
 weight = 100.0
 era = "1_core_rules"
 _target_tags = Array[String](["actor:mental:depression"])
-options = Array[ExtResource("1_urqce")]([SubResource("Resource_ob3dg"), SubResource("Resource_sr28u")])
+options = Array[ExtResource("1_urqce")]([SubResource("Resource_uli57"), SubResource("Resource_gd762")])
 uuid = "event_disease_bridge_shiyi"
 name = "EVT_EVENT_DISEASE_BRIDGE_SHIYI_TITLE"
 description = "EVT_EVENT_DISEASE_BRIDGE_SHIYI_DESC"

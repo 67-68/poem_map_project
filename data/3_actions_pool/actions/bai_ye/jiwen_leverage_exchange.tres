@@ -9,30 +9,30 @@
 [ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="7_6hcg6"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="8_mwpil"]
 
-[sub_resource type="Resource" id="Resource_1t3l4"]
+[sub_resource type="Resource" id="Resource_3t18v"]
 script = ExtResource("3_8vodj")
 
-[sub_resource type="Resource" id="Resource_i1ynm"]
+[sub_resource type="Resource" id="Resource_d8c84"]
 script = ExtResource("4_ksyos")
 
-[sub_resource type="Resource" id="Resource_gax8t"]
+[sub_resource type="Resource" id="Resource_8vodj"]
 script = ExtResource("5_xsjof")
 event_key = "jiwen_leverage_exchange_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_xue5b"]
+[sub_resource type="Resource" id="Resource_ksyos"]
 script = ExtResource("6_25ss7")
-operators = Array[ExtResource("2_d8c84")]([SubResource("Resource_gax8t")])
+operators = Array[ExtResource("2_d8c84")]([SubResource("Resource_8vodj")])
 
 [resource]
 script = ExtResource("8_mwpil")
 required_place = "huangcheng"
 _action_tags = Array[int]([48, 29])
-action_results = Array[ExtResource("2_d8c84")]([SubResource("Resource_1t3l4")])
+action_results = Array[ExtResource("2_d8c84")]([SubResource("Resource_3t18v")])
 fallback_event_uuid = "jiwen_leverage_exchange_fallback"
 archetype_uuid = "jiwen_leverage_exchange_success"
 possibility = "ms_success_rate"
-failed_result = SubResource("Resource_xue5b")
-defer_config = SubResource("Resource_i1ynm")
+failed_result = SubResource("Resource_ksyos")
+defer_config = SubResource("Resource_d8c84")
 override_action = "baiye_threaten"
 uuid = "jiwen_leverage_exchange"
 name = "ACT_JIWEN_LEVERAGE_EXCHANGE_NAME"

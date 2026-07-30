@@ -12,89 +12,89 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_vkhug"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_mxkgu"]
 
-[sub_resource type="Resource" id="Resource_yyvt0"]
+[sub_resource type="Resource" id="Resource_sowyk"]
 script = ExtResource("3_el8i2")
 value = 10
 
-[sub_resource type="Resource" id="Resource_uf8po"]
+[sub_resource type="Resource" id="Resource_bo7yk"]
 script = ExtResource("4_c5pa3")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_rerj1"]
+[sub_resource type="Resource" id="Resource_el8i2"]
 script = ExtResource("5_4pgf8")
-operators = Array[ExtResource("2_bo7yk")]([SubResource("Resource_yyvt0"), SubResource("Resource_uf8po")])
+operators = Array[ExtResource("2_bo7yk")]([SubResource("Resource_sowyk"), SubResource("Resource_bo7yk")])
 
-[sub_resource type="Resource" id="Resource_aps8d"]
+[sub_resource type="Resource" id="Resource_c5pa3"]
 script = ExtResource("6_g4ykm")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_n3vt3"]
+[sub_resource type="Resource" id="Resource_4pgf8"]
 script = ExtResource("7_xch87")
-choice_result = SubResource("Resource_rerj1")
-requirement = SubResource("Resource_aps8d")
+choice_result = SubResource("Resource_el8i2")
+requirement = SubResource("Resource_c5pa3")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_sw7mo"]
+[sub_resource type="Resource" id="Resource_g4ykm"]
 script = ExtResource("3_el8i2")
 value = 10
 
-[sub_resource type="Resource" id="Resource_2w37t"]
+[sub_resource type="Resource" id="Resource_xch87"]
 script = ExtResource("5_4pgf8")
-operators = Array[ExtResource("2_bo7yk")]([SubResource("Resource_sw7mo")])
+operators = Array[ExtResource("2_bo7yk")]([SubResource("Resource_g4ykm")])
 
-[sub_resource type="Resource" id="Resource_tnjcc"]
+[sub_resource type="Resource" id="Resource_qt4w0"]
 script = ExtResource("7_xch87")
-choice_result = SubResource("Resource_2w37t")
+choice_result = SubResource("Resource_xch87")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_6fejr"]
+[sub_resource type="Resource" id="Resource_7j2c7"]
 script = ExtResource("3_el8i2")
 value = 15
 
-[sub_resource type="Resource" id="Resource_g8d1s"]
+[sub_resource type="Resource" id="Resource_vkhug"]
 script = ExtResource("3_el8i2")
 value = 5
 
-[sub_resource type="Resource" id="Resource_w1wpl"]
+[sub_resource type="Resource" id="Resource_mxkgu"]
 script = ExtResource("4_c5pa3")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_4mwc5"]
+[sub_resource type="Resource" id="Resource_yyvt0"]
 script = ExtResource("5_4pgf8")
-operators = Array[ExtResource("2_bo7yk")]([SubResource("Resource_6fejr"), SubResource("Resource_g8d1s"), SubResource("Resource_w1wpl")])
+operators = Array[ExtResource("2_bo7yk")]([SubResource("Resource_7j2c7"), SubResource("Resource_vkhug"), SubResource("Resource_mxkgu")])
 
-[sub_resource type="Resource" id="Resource_hwbwb"]
+[sub_resource type="Resource" id="Resource_uf8po"]
 script = ExtResource("6_g4ykm")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_20tpd"]
+[sub_resource type="Resource" id="Resource_rerj1"]
 script = ExtResource("7_xch87")
-choice_result = SubResource("Resource_4mwc5")
-requirement = SubResource("Resource_hwbwb")
+choice_result = SubResource("Resource_yyvt0")
+requirement = SubResource("Resource_uf8po")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_he0lo"]
+[sub_resource type="Resource" id="Resource_aps8d"]
 script = ExtResource("9_7j2c7")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_x7v53"]
+[sub_resource type="Resource" id="Resource_n3vt3"]
 script = ExtResource("9_7j2c7")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_xs6c8"]
+[sub_resource type="Resource" id="Resource_sw7mo"]
 script = ExtResource("10_vkhug")
-operators = Array[ExtResource("8_qt4w0")]([SubResource("Resource_he0lo"), SubResource("Resource_x7v53")])
+operators = Array[ExtResource("8_qt4w0")]([SubResource("Resource_aps8d"), SubResource("Resource_n3vt3")])
 
 [resource]
 script = ExtResource("11_mxkgu")
-requirement = SubResource("Resource_xs6c8")
+requirement = SubResource("Resource_sw7mo")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_IDENTITY_ZHUOLIU_OFFICIAL", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "emotion_pair:pair_tranquility", "action:main:fangshi"])
-options = Array[ExtResource("1_sowyk")]([SubResource("Resource_n3vt3"), SubResource("Resource_tnjcc"), SubResource("Resource_20tpd")])
+options = Array[ExtResource("1_sowyk")]([SubResource("Resource_4pgf8"), SubResource("Resource_qt4w0"), SubResource("Resource_rerj1")])
 uuid = "qingliu_passive_benefits_wangwei_silent_bailout_identity_zhuoliu_official"
 name = "EVT_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_TITLE"
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_WANGWEI_SILENT_BAILOUT_IDENTITY_ZHUOLIU_OFFICIAL_DESC"

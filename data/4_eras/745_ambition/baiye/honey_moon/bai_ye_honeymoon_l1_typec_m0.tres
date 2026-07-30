@@ -8,32 +8,32 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_i5nl1"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_7130v"]
 
-[sub_resource type="Resource" id="Resource_rvkxs"]
+[sub_resource type="Resource" id="Resource_8150q"]
 script = ExtResource("3_0grp0")
 str_props = "progress"
 value = 10
 
-[sub_resource type="Resource" id="Resource_mvxen"]
+[sub_resource type="Resource" id="Resource_f74g7"]
 script = ExtResource("4_53vgk")
-operators = Array[ExtResource("2_f74g7")]([SubResource("Resource_rvkxs")])
+operators = Array[ExtResource("2_f74g7")]([SubResource("Resource_8150q")])
 
-[sub_resource type="Resource" id="Resource_k37cm"]
+[sub_resource type="Resource" id="Resource_0grp0"]
 script = ExtResource("5_wl44h")
-choice_result = SubResource("Resource_mvxen")
+choice_result = SubResource("Resource_f74g7")
 description = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M0_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_bpqkm"]
+[sub_resource type="Resource" id="Resource_53vgk"]
 script = ExtResource("6_i5nl1")
 property = "progress"
 value = 70
 
 [resource]
 script = ExtResource("7_7130v")
-requirement = SubResource("Resource_bpqkm")
+requirement = SubResource("Resource_53vgk")
 era = "745_ambition"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_8150q")]([SubResource("Resource_k37cm")])
+options = Array[ExtResource("1_8150q")]([SubResource("Resource_0grp0")])
 uuid = "bai_ye_honeymoon_l1_typec_m0"
 name = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M0_TITLE"
 description = "EVT_BAI_YE_HONEYMOON_L1_TYPEC_M0_DESC"

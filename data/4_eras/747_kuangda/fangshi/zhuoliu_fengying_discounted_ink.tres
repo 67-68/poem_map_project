@@ -12,85 +12,85 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_1e32i"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_rfuav"]
 
-[sub_resource type="Resource" id="Resource_jety8"]
+[sub_resource type="Resource" id="Resource_3ibqa"]
 script = ExtResource("3_w5aux")
 value = 10
 
-[sub_resource type="Resource" id="Resource_5eocx"]
+[sub_resource type="Resource" id="Resource_ypbqo"]
 script = ExtResource("4_gjx2x")
-operators = Array[ExtResource("2_ypbqo")]([SubResource("Resource_jety8")])
+operators = Array[ExtResource("2_ypbqo")]([SubResource("Resource_3ibqa")])
 
-[sub_resource type="Resource" id="Resource_rcr62"]
+[sub_resource type="Resource" id="Resource_w5aux"]
 script = ExtResource("5_t4tcu")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_sxgyo"]
+[sub_resource type="Resource" id="Resource_gjx2x"]
 script = ExtResource("6_a8m1y")
-choice_result = SubResource("Resource_5eocx")
-requirement = SubResource("Resource_rcr62")
+choice_result = SubResource("Resource_ypbqo")
+requirement = SubResource("Resource_w5aux")
 description = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_0c0om"]
+[sub_resource type="Resource" id="Resource_t4tcu"]
 script = ExtResource("3_w5aux")
 value = 10
 
-[sub_resource type="Resource" id="Resource_mdc0k"]
+[sub_resource type="Resource" id="Resource_a8m1y"]
 script = ExtResource("4_gjx2x")
-operators = Array[ExtResource("2_ypbqo")]([SubResource("Resource_0c0om")])
+operators = Array[ExtResource("2_ypbqo")]([SubResource("Resource_t4tcu")])
 
-[sub_resource type="Resource" id="Resource_kjvdh"]
+[sub_resource type="Resource" id="Resource_mjqwf"]
 script = ExtResource("5_t4tcu")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_e7cah"]
+[sub_resource type="Resource" id="Resource_24ele"]
 script = ExtResource("6_a8m1y")
-choice_result = SubResource("Resource_mdc0k")
-requirement = SubResource("Resource_kjvdh")
+choice_result = SubResource("Resource_a8m1y")
+requirement = SubResource("Resource_mjqwf")
 description = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_jqwge"]
+[sub_resource type="Resource" id="Resource_g2y6f"]
 script = ExtResource("3_w5aux")
 value = 8
 
-[sub_resource type="Resource" id="Resource_f86an"]
+[sub_resource type="Resource" id="Resource_1e32i"]
 script = ExtResource("4_gjx2x")
-operators = Array[ExtResource("2_ypbqo")]([SubResource("Resource_jqwge")])
+operators = Array[ExtResource("2_ypbqo")]([SubResource("Resource_g2y6f")])
 
-[sub_resource type="Resource" id="Resource_g1mnb"]
+[sub_resource type="Resource" id="Resource_rfuav"]
 script = ExtResource("6_a8m1y")
-choice_result = SubResource("Resource_f86an")
+choice_result = SubResource("Resource_1e32i")
 description = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_k1b60"]
+[sub_resource type="Resource" id="Resource_jety8"]
 script = ExtResource("8_24ele")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_f4hav"]
+[sub_resource type="Resource" id="Resource_5eocx"]
 script = ExtResource("9_g2y6f")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_lj4qa"]
+[sub_resource type="Resource" id="Resource_rcr62"]
 script = ExtResource("9_g2y6f")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_bbw5w"]
+[sub_resource type="Resource" id="Resource_sxgyo"]
 script = ExtResource("10_1e32i")
-operators = Array[ExtResource("7_mjqwf")]([SubResource("Resource_k1b60"), SubResource("Resource_f4hav"), SubResource("Resource_lj4qa")])
+operators = Array[ExtResource("7_mjqwf")]([SubResource("Resource_jety8"), SubResource("Resource_5eocx"), SubResource("Resource_rcr62")])
 
 [resource]
 script = ExtResource("11_rfuav")
-requirement = SubResource("Resource_bbw5w")
+requirement = SubResource("Resource_sxgyo")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:fangshi"])
-options = Array[ExtResource("1_3ibqa")]([SubResource("Resource_sxgyo"), SubResource("Resource_e7cah"), SubResource("Resource_g1mnb")])
+options = Array[ExtResource("1_3ibqa")]([SubResource("Resource_gjx2x"), SubResource("Resource_24ele"), SubResource("Resource_rfuav")])
 uuid = "zhuoliu_fengying_discounted_ink"
 name = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_TITLE"
 description = "EVT_ZHUOLIU_FENGYING_DISCOUNTED_INK_DESC"

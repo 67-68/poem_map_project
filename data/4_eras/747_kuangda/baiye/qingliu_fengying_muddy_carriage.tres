@@ -12,85 +12,85 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_1gubr"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_3ftv6"]
 
-[sub_resource type="Resource" id="Resource_h5kdk"]
+[sub_resource type="Resource" id="Resource_lyfpl"]
 script = ExtResource("3_2m5h5")
 value = 10
 
-[sub_resource type="Resource" id="Resource_nycap"]
+[sub_resource type="Resource" id="Resource_7usxe"]
 script = ExtResource("4_wc6m2")
-operators = Array[ExtResource("2_7usxe")]([SubResource("Resource_h5kdk")])
+operators = Array[ExtResource("2_7usxe")]([SubResource("Resource_lyfpl")])
 
-[sub_resource type="Resource" id="Resource_pyvc4"]
+[sub_resource type="Resource" id="Resource_2m5h5"]
 script = ExtResource("5_8octr")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_rg2ka"]
+[sub_resource type="Resource" id="Resource_wc6m2"]
 script = ExtResource("6_usk15")
-choice_result = SubResource("Resource_nycap")
-requirement = SubResource("Resource_pyvc4")
+choice_result = SubResource("Resource_7usxe")
+requirement = SubResource("Resource_2m5h5")
 description = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_2oe1u"]
+[sub_resource type="Resource" id="Resource_8octr"]
 script = ExtResource("3_2m5h5")
 value = 10
 
-[sub_resource type="Resource" id="Resource_ws1sh"]
+[sub_resource type="Resource" id="Resource_usk15"]
 script = ExtResource("4_wc6m2")
-operators = Array[ExtResource("2_7usxe")]([SubResource("Resource_2oe1u")])
+operators = Array[ExtResource("2_7usxe")]([SubResource("Resource_8octr")])
 
-[sub_resource type="Resource" id="Resource_3pyjw"]
+[sub_resource type="Resource" id="Resource_6ghwn"]
 script = ExtResource("5_8octr")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_l301r"]
+[sub_resource type="Resource" id="Resource_3qju3"]
 script = ExtResource("6_usk15")
-choice_result = SubResource("Resource_ws1sh")
-requirement = SubResource("Resource_3pyjw")
+choice_result = SubResource("Resource_usk15")
+requirement = SubResource("Resource_6ghwn")
 description = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_n13tp"]
+[sub_resource type="Resource" id="Resource_ku56u"]
 script = ExtResource("3_2m5h5")
 value = 8
 
-[sub_resource type="Resource" id="Resource_gy7qa"]
+[sub_resource type="Resource" id="Resource_1gubr"]
 script = ExtResource("4_wc6m2")
-operators = Array[ExtResource("2_7usxe")]([SubResource("Resource_n13tp")])
+operators = Array[ExtResource("2_7usxe")]([SubResource("Resource_ku56u")])
 
-[sub_resource type="Resource" id="Resource_d2f84"]
+[sub_resource type="Resource" id="Resource_3ftv6"]
 script = ExtResource("6_usk15")
-choice_result = SubResource("Resource_gy7qa")
+choice_result = SubResource("Resource_1gubr")
 description = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_j8ye3"]
+[sub_resource type="Resource" id="Resource_h5kdk"]
 script = ExtResource("8_3qju3")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_io2bc"]
+[sub_resource type="Resource" id="Resource_nycap"]
 script = ExtResource("9_ku56u")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_mrtvn"]
+[sub_resource type="Resource" id="Resource_pyvc4"]
 script = ExtResource("9_ku56u")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_ohklc"]
+[sub_resource type="Resource" id="Resource_rg2ka"]
 script = ExtResource("10_1gubr")
-operators = Array[ExtResource("7_6ghwn")]([SubResource("Resource_j8ye3"), SubResource("Resource_io2bc"), SubResource("Resource_mrtvn")])
+operators = Array[ExtResource("7_6ghwn")]([SubResource("Resource_h5kdk"), SubResource("Resource_nycap"), SubResource("Resource_pyvc4")])
 
 [resource]
 script = ExtResource("11_3ftv6")
-requirement = SubResource("Resource_ohklc")
+requirement = SubResource("Resource_rg2ka")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["TARGET_FACTION_ROYAL:jade_step", "ENV_NATURE_NIGHTMOON:cold_moon", "action:main:baiye"])
-options = Array[ExtResource("1_lyfpl")]([SubResource("Resource_rg2ka"), SubResource("Resource_l301r"), SubResource("Resource_d2f84")])
+options = Array[ExtResource("1_lyfpl")]([SubResource("Resource_wc6m2"), SubResource("Resource_3qju3"), SubResource("Resource_3ftv6")])
 uuid = "qingliu_fengying_muddy_carriage"
 name = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_TITLE"
 description = "EVT_QINGLIU_FENGYING_MUDDY_CARRIAGE_DESC"

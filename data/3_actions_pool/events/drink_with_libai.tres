@@ -12,14 +12,14 @@ script = ExtResource("3_l7el6")
 key_of_resource_in_context = "poem_taste"
 next_event_key = "demonstrate_poem_to_people"
 
-[sub_resource type="Resource" id="Resource_rhifx"]
+[sub_resource type="Resource" id="Resource_aydjf"]
 script = ExtResource("4_7fq8r")
 operators = Array[ExtResource("2_a0apr")]([SubResource("Resource_x1pmm")])
 metadata/_custom_type_script = "uid://prpfdj2ag46k"
 
-[sub_resource type="Resource" id="Resource_yc02m"]
+[sub_resource type="Resource" id="Resource_a0apr"]
 script = ExtResource("5_be3nx")
-choice_result = SubResource("Resource_rhifx")
+choice_result = SubResource("Resource_aydjf")
 custom_context_params = {
 "poem_taste": "urn:poem_taste:libai_taste",
 "taste_owner_relation_flag": "flag_relation_with_libai"
@@ -29,7 +29,7 @@ description = "EVT_DRINK_WITH_LIBAI_SEND_POEM_TITLE"
 
 [resource]
 script = ExtResource("6_8kqg1")
-options = Array[ExtResource("1_aydjf")]([SubResource("Resource_yc02m")])
+options = Array[ExtResource("1_aydjf")]([SubResource("Resource_a0apr")])
 uuid = "drink_with_libai"
 name = "EVT_DRINK_WITH_LIBAI_TITLE"
 description = "EVT_DRINK_WITH_LIBAI_DESC"

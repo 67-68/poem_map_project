@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_scc18"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_n56md"]
 
-[sub_resource type="Resource" id="Resource_hwetp"]
+[sub_resource type="Resource" id="Resource_ujowf"]
 script = ExtResource("2_5b4qv")
 
-[sub_resource type="Resource" id="Resource_nad06"]
+[sub_resource type="Resource" id="Resource_5b4qv"]
 script = ExtResource("4_n0ck7")
 description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_nrhyx"]
+[sub_resource type="Resource" id="Resource_nueiq"]
 script = ExtResource("4_n0ck7")
 description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_fpeyc"]
+[sub_resource type="Resource" id="Resource_n0ck7"]
 script = ExtResource("5_wi66f")
 imagery_name = "thatched_grass"
 
-[sub_resource type="Resource" id="Resource_h81wl"]
+[sub_resource type="Resource" id="Resource_wi66f"]
 script = ExtResource("2_5b4qv")
-operators = Array[ExtResource("1_ujowf")]([SubResource("Resource_fpeyc")])
+operators = Array[ExtResource("1_ujowf")]([SubResource("Resource_n0ck7")])
 
-[sub_resource type="Resource" id="Resource_eroff"]
+[sub_resource type="Resource" id="Resource_scc18"]
 script = ExtResource("4_n0ck7")
-choice_result = SubResource("Resource_h81wl")
+choice_result = SubResource("Resource_wi66f")
 description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_mtusw"]
+[sub_resource type="Resource" id="Resource_n56md"]
 script = ExtResource("6_scc18")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_n56md")
-requirement = SubResource("Resource_mtusw")
+requirement = SubResource("Resource_n56md")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["emotion_pair:pair_despair", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_peer_gap", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_FACTION_ROYAL:jade_step", "TARGET_NPC_DUFU:thatched_grass", "ENV_NATURE_NIGHTMOON:cold_moon", "action:scene_baiye"])
-options = Array[ExtResource("3_nueiq")]([SubResource("Resource_nad06"), SubResource("Resource_nrhyx"), SubResource("Resource_eroff")])
-on_enter_result = SubResource("Resource_hwetp")
+options = Array[ExtResource("3_nueiq")]([SubResource("Resource_5b4qv"), SubResource("Resource_nueiq"), SubResource("Resource_scc18")])
+on_enter_result = SubResource("Resource_ujowf")
 uuid = "duotai_humiliation_peer_gap_gateway_baiye_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_BAIYE_IDENTITY_QINGLIU_OFFICIAL_DESC"

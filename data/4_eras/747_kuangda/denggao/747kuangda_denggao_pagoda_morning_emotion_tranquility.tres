@@ -12,9 +12,56 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_ncv3f"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_ay4fo"]
 
-[sub_resource type="Resource" id="Resource_wa1lt"]
+[sub_resource type="Resource" id="Resource_eopi7"]
 script = ExtResource("3_riu0t")
 value = 5
+
+[sub_resource type="Resource" id="Resource_7dwsi"]
+script = ExtResource("3_riu0t")
+value = 10
+
+[sub_resource type="Resource" id="Resource_riu0t"]
+script = ExtResource("4_6rnr4")
+imagery_name = "temple_bell"
+
+[sub_resource type="Resource" id="Resource_6rnr4"]
+script = ExtResource("5_uvrtd")
+operators = Array[ExtResource("2_7dwsi")]([SubResource("Resource_eopi7"), SubResource("Resource_7dwsi"), SubResource("Resource_riu0t")])
+
+[sub_resource type="Resource" id="Resource_uvrtd"]
+script = ExtResource("6_m0e6v")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_m0e6v"]
+script = ExtResource("7_h8ft1")
+choice_result = SubResource("Resource_6rnr4")
+requirement = SubResource("Resource_uvrtd")
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_OPT0_DESC"
+
+[sub_resource type="Resource" id="Resource_h8ft1"]
+script = ExtResource("3_riu0t")
+value = 5
+
+[sub_resource type="Resource" id="Resource_s61pb"]
+script = ExtResource("3_riu0t")
+value = 5
+
+[sub_resource type="Resource" id="Resource_loi4k"]
+script = ExtResource("5_uvrtd")
+operators = Array[ExtResource("2_7dwsi")]([SubResource("Resource_h8ft1"), SubResource("Resource_s61pb")])
+
+[sub_resource type="Resource" id="Resource_ncv3f"]
+script = ExtResource("7_h8ft1")
+choice_result = SubResource("Resource_loi4k")
+description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_OPT1_DESC"
+
+[sub_resource type="Resource" id="Resource_ay4fo"]
+script = ExtResource("3_riu0t")
+value = 5
+
+[sub_resource type="Resource" id="Resource_wa1lt"]
+script = ExtResource("3_riu0t")
+value = 20
 
 [sub_resource type="Resource" id="Resource_d4jrb"]
 script = ExtResource("3_riu0t")
@@ -22,91 +69,44 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_u0r7v"]
 script = ExtResource("4_6rnr4")
-imagery_name = "temple_bell"
+imagery_name = "jade_step"
 
 [sub_resource type="Resource" id="Resource_ppb8n"]
 script = ExtResource("5_uvrtd")
-operators = Array[ExtResource("2_7dwsi")]([SubResource("Resource_wa1lt"), SubResource("Resource_d4jrb"), SubResource("Resource_u0r7v")])
+operators = Array[ExtResource("2_7dwsi")]([SubResource("Resource_ay4fo"), SubResource("Resource_wa1lt"), SubResource("Resource_d4jrb"), SubResource("Resource_u0r7v")])
 
 [sub_resource type="Resource" id="Resource_kwotk"]
 script = ExtResource("6_m0e6v")
-trait_name = "kuangda_kuangke"
+trait_name = "kuangda_zuanying"
 
 [sub_resource type="Resource" id="Resource_jxqrg"]
 script = ExtResource("7_h8ft1")
 choice_result = SubResource("Resource_ppb8n")
 requirement = SubResource("Resource_kwotk")
-description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_OPT0_DESC"
-
-[sub_resource type="Resource" id="Resource_141we"]
-script = ExtResource("3_riu0t")
-value = 5
-
-[sub_resource type="Resource" id="Resource_ua73q"]
-script = ExtResource("3_riu0t")
-value = 5
-
-[sub_resource type="Resource" id="Resource_28vre"]
-script = ExtResource("5_uvrtd")
-operators = Array[ExtResource("2_7dwsi")]([SubResource("Resource_141we"), SubResource("Resource_ua73q")])
-
-[sub_resource type="Resource" id="Resource_8y7fu"]
-script = ExtResource("7_h8ft1")
-choice_result = SubResource("Resource_28vre")
-description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_OPT1_DESC"
-
-[sub_resource type="Resource" id="Resource_bnurm"]
-script = ExtResource("3_riu0t")
-value = 5
-
-[sub_resource type="Resource" id="Resource_lpk1k"]
-script = ExtResource("3_riu0t")
-value = 20
-
-[sub_resource type="Resource" id="Resource_s0x2s"]
-script = ExtResource("3_riu0t")
-value = 10
-
-[sub_resource type="Resource" id="Resource_rljgj"]
-script = ExtResource("4_6rnr4")
-imagery_name = "jade_step"
-
-[sub_resource type="Resource" id="Resource_kvms7"]
-script = ExtResource("5_uvrtd")
-operators = Array[ExtResource("2_7dwsi")]([SubResource("Resource_bnurm"), SubResource("Resource_lpk1k"), SubResource("Resource_s0x2s"), SubResource("Resource_rljgj")])
-
-[sub_resource type="Resource" id="Resource_lxocr"]
-script = ExtResource("6_m0e6v")
-trait_name = "kuangda_zuanying"
-
-[sub_resource type="Resource" id="Resource_i5302"]
-script = ExtResource("7_h8ft1")
-choice_result = SubResource("Resource_kvms7")
-requirement = SubResource("Resource_lxocr")
 description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_cnjl2"]
+[sub_resource type="Resource" id="Resource_141we"]
 script = ExtResource("9_loi4k")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_o1h70"]
+[sub_resource type="Resource" id="Resource_ua73q"]
 script = ExtResource("9_loi4k")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_qmdf5"]
+[sub_resource type="Resource" id="Resource_28vre"]
 script = ExtResource("10_ncv3f")
-operators = Array[ExtResource("8_s61pb")]([SubResource("Resource_cnjl2"), SubResource("Resource_o1h70")])
+operators = Array[ExtResource("8_s61pb")]([SubResource("Resource_141we"), SubResource("Resource_ua73q")])
 
 [resource]
 script = ExtResource("11_ay4fo")
-requirement = SubResource("Resource_qmdf5")
+requirement = SubResource("Resource_28vre")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "TARGET_FACTION_ROYAL:jade_step", "TARGET_MYTH_GIANTROC:giant_roc", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_pagoda_morning", "emotion_pair:pair_tranquility", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_SNOWSTORM:lone_snow"])
-options = Array[ExtResource("1_eopi7")]([SubResource("Resource_jxqrg"), SubResource("Resource_8y7fu"), SubResource("Resource_i5302")])
+options = Array[ExtResource("1_eopi7")]([SubResource("Resource_m0e6v"), SubResource("Resource_ncv3f"), SubResource("Resource_jxqrg")])
 uuid = "747kuangda_denggao_pagoda_morning_emotion_tranquility"
 name = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_TITLE"
 description = "EVT_747KUANGDA_DENGGAO_PAGODA_MORNING_EMOTION_TRANQUILITY_DESC"

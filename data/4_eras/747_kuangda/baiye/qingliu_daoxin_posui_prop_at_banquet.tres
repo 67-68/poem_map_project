@@ -8,39 +8,39 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_apx6u"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_664p5"]
 
-[sub_resource type="Resource" id="Resource_ag6u5"]
+[sub_resource type="Resource" id="Resource_4qjy0"]
 script = ExtResource("3_aeoxp")
 value = 5
 
-[sub_resource type="Resource" id="Resource_j5vjm"]
+[sub_resource type="Resource" id="Resource_gbne2"]
 script = ExtResource("3_aeoxp")
 value = 15
 
-[sub_resource type="Resource" id="Resource_wtgqh"]
+[sub_resource type="Resource" id="Resource_aeoxp"]
 script = ExtResource("3_aeoxp")
 value = 5
 
-[sub_resource type="Resource" id="Resource_q87f6"]
+[sub_resource type="Resource" id="Resource_hafv8"]
 script = ExtResource("4_hafv8")
-operators = Array[ExtResource("2_gbne2")]([SubResource("Resource_ag6u5"), SubResource("Resource_j5vjm"), SubResource("Resource_wtgqh")])
+operators = Array[ExtResource("2_gbne2")]([SubResource("Resource_4qjy0"), SubResource("Resource_gbne2"), SubResource("Resource_aeoxp")])
 
-[sub_resource type="Resource" id="Resource_33gq7"]
+[sub_resource type="Resource" id="Resource_o6qws"]
 script = ExtResource("5_o6qws")
-choice_result = SubResource("Resource_q87f6")
+choice_result = SubResource("Resource_hafv8")
 description = "EVT_QINGLIU_DAOXIN_POSUI_PROP_AT_BANQUET_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_p7inm"]
+[sub_resource type="Resource" id="Resource_apx6u"]
 script = ExtResource("6_apx6u")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("7_664p5")
-requirement = SubResource("Resource_p7inm")
+requirement = SubResource("Resource_apx6u")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_4qjy0")]([SubResource("Resource_33gq7")])
+options = Array[ExtResource("1_4qjy0")]([SubResource("Resource_o6qws")])
 uuid = "qingliu_daoxin_posui_prop_at_banquet"
 name = "EVT_QINGLIU_DAOXIN_POSUI_PROP_AT_BANQUET_TITLE"
 description = "EVT_QINGLIU_DAOXIN_POSUI_PROP_AT_BANQUET_DESC"

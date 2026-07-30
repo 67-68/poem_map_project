@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_lyfg5"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_wy8vx"]
 
-[sub_resource type="Resource" id="Resource_hqd8w"]
+[sub_resource type="Resource" id="Resource_7vu0m"]
 script = ExtResource("2_xpe67")
 
-[sub_resource type="Resource" id="Resource_p7dpk"]
+[sub_resource type="Resource" id="Resource_xpe67"]
 script = ExtResource("4_1kri5")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_risgr"]
+[sub_resource type="Resource" id="Resource_q5p5t"]
 script = ExtResource("2_xpe67")
-operators = Array[ExtResource("1_7vu0m")]([SubResource("Resource_p7dpk")])
+operators = Array[ExtResource("1_7vu0m")]([SubResource("Resource_xpe67")])
 
-[sub_resource type="Resource" id="Resource_vfvtn"]
+[sub_resource type="Resource" id="Resource_1kri5"]
 script = ExtResource("5_1j2bw")
-choice_result = SubResource("Resource_risgr")
+choice_result = SubResource("Resource_q5p5t")
 description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_JIAOYOU_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_3ac8o"]
+[sub_resource type="Resource" id="Resource_1j2bw"]
 script = ExtResource("5_1j2bw")
 description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_JIAOYOU_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_h35ss"]
+[sub_resource type="Resource" id="Resource_lyfg5"]
 script = ExtResource("4_1kri5")
 imagery_name = "temple_bell"
 
-[sub_resource type="Resource" id="Resource_4oauu"]
+[sub_resource type="Resource" id="Resource_wy8vx"]
 script = ExtResource("2_xpe67")
-operators = Array[ExtResource("1_7vu0m")]([SubResource("Resource_h35ss")])
+operators = Array[ExtResource("1_7vu0m")]([SubResource("Resource_lyfg5")])
 
-[sub_resource type="Resource" id="Resource_d8muv"]
+[sub_resource type="Resource" id="Resource_hqd8w"]
 script = ExtResource("5_1j2bw")
-choice_result = SubResource("Resource_4oauu")
+choice_result = SubResource("Resource_wy8vx")
 description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_JIAOYOU_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_xrcvo"]
+[sub_resource type="Resource" id="Resource_p7dpk"]
 script = ExtResource("6_lyfg5")
 volatile_stat = "ambition"
 value = 50
@@ -49,12 +49,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_wy8vx")
-requirement = SubResource("Resource_xrcvo")
+requirement = SubResource("Resource_p7dpk")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["emotion_pair:pair_rebellion", "TARGET_NPC_DUFU:thatched_grass", "ACTION_SOCIAL_PARTING:willow_branch", "VIBE_AESTHETIC_ELEGANT:ink_stone", "action:humiliation_aesthetic_violation", "TARGET_IDENTITY_QINGKE", "VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ACTION_SOCIAL_PARTING:willow_branch", "action:scene_jiaoyou"])
-options = Array[ExtResource("3_q5p5t")]([SubResource("Resource_vfvtn"), SubResource("Resource_3ac8o"), SubResource("Resource_d8muv")])
-on_enter_result = SubResource("Resource_hqd8w")
+options = Array[ExtResource("3_q5p5t")]([SubResource("Resource_1kri5"), SubResource("Resource_1j2bw"), SubResource("Resource_hqd8w")])
+on_enter_result = SubResource("Resource_7vu0m")
 uuid = "duotai_humiliation_aesthetic_violation_gateway_jiaoyou"
 name = "emo_lt(name=ambition; val=100)"
 description = "EVT_DUOTAI_HUMILIATION_AESTHETIC_VIOLATION_GATEWAY_JIAOYOU_DESC"

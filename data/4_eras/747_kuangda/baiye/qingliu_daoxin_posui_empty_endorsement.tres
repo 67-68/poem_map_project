@@ -8,35 +8,35 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_8pv6g"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_8rg45"]
 
-[sub_resource type="Resource" id="Resource_2wvuq"]
+[sub_resource type="Resource" id="Resource_bjm2w"]
 script = ExtResource("3_dr08n")
 value = 8
 
-[sub_resource type="Resource" id="Resource_ith4m"]
+[sub_resource type="Resource" id="Resource_1mou5"]
 script = ExtResource("3_dr08n")
 value = 5
 
-[sub_resource type="Resource" id="Resource_68gvb"]
+[sub_resource type="Resource" id="Resource_dr08n"]
 script = ExtResource("4_3ap00")
-operators = Array[ExtResource("2_1mou5")]([SubResource("Resource_2wvuq"), SubResource("Resource_ith4m")])
+operators = Array[ExtResource("2_1mou5")]([SubResource("Resource_bjm2w"), SubResource("Resource_1mou5")])
 
-[sub_resource type="Resource" id="Resource_30nys"]
+[sub_resource type="Resource" id="Resource_3ap00"]
 script = ExtResource("5_ibdal")
-choice_result = SubResource("Resource_68gvb")
+choice_result = SubResource("Resource_dr08n")
 description = "EVT_QINGLIU_DAOXIN_POSUI_EMPTY_ENDORSEMENT_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_lbygp"]
+[sub_resource type="Resource" id="Resource_ibdal"]
 script = ExtResource("6_8pv6g")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("7_8rg45")
-requirement = SubResource("Resource_lbygp")
+requirement = SubResource("Resource_ibdal")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["action:main:baiye"])
-options = Array[ExtResource("1_bjm2w")]([SubResource("Resource_30nys")])
+options = Array[ExtResource("1_bjm2w")]([SubResource("Resource_3ap00")])
 uuid = "qingliu_daoxin_posui_empty_endorsement"
 name = "EVT_QINGLIU_DAOXIN_POSUI_EMPTY_ENDORSEMENT_TITLE"
 description = "EVT_QINGLIU_DAOXIN_POSUI_EMPTY_ENDORSEMENT_DESC"

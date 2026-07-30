@@ -8,35 +8,35 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_npkop"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_lj7hl"]
 
-[sub_resource type="Resource" id="Resource_tlm6m"]
+[sub_resource type="Resource" id="Resource_sbew8"]
 script = ExtResource("3_u3r53")
 value = 10
 
-[sub_resource type="Resource" id="Resource_nxnji"]
+[sub_resource type="Resource" id="Resource_e7v0o"]
 script = ExtResource("3_u3r53")
 value = 5
 
-[sub_resource type="Resource" id="Resource_qrmus"]
+[sub_resource type="Resource" id="Resource_u3r53"]
 script = ExtResource("4_vhm45")
-operators = Array[ExtResource("2_e7v0o")]([SubResource("Resource_tlm6m"), SubResource("Resource_nxnji")])
+operators = Array[ExtResource("2_e7v0o")]([SubResource("Resource_sbew8"), SubResource("Resource_e7v0o")])
 
-[sub_resource type="Resource" id="Resource_st4n0"]
+[sub_resource type="Resource" id="Resource_vhm45"]
 script = ExtResource("5_l50iw")
-choice_result = SubResource("Resource_qrmus")
+choice_result = SubResource("Resource_u3r53")
 description = "EVT_QINGLIU_DAOXIN_POSUI_PORTER_FORBIDDEN_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_t68dg"]
+[sub_resource type="Resource" id="Resource_l50iw"]
 script = ExtResource("6_npkop")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("7_lj7hl")
-requirement = SubResource("Resource_t68dg")
+requirement = SubResource("Resource_l50iw")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["action:main:fangshi", "TARGET_IDENTITY_MENZI"])
-options = Array[ExtResource("1_sbew8")]([SubResource("Resource_st4n0")])
+options = Array[ExtResource("1_sbew8")]([SubResource("Resource_vhm45")])
 uuid = "qingliu_daoxin_posui_porter_forbidden"
 name = "EVT_QINGLIU_DAOXIN_POSUI_PORTER_FORBIDDEN_TITLE"
 description = "EVT_QINGLIU_DAOXIN_POSUI_PORTER_FORBIDDEN_DESC"

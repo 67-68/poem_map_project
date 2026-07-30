@@ -11,50 +11,50 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_xnang"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_h8nul"]
 
-[sub_resource type="Resource" id="Resource_j7fff"]
+[sub_resource type="Resource" id="Resource_m74b2"]
 script = ExtResource("3_v1p3y")
 value = 10
 
-[sub_resource type="Resource" id="Resource_dk4cc"]
+[sub_resource type="Resource" id="Resource_cwlep"]
 script = ExtResource("4_bjrcw")
-operators = Array[ExtResource("2_cwlep")]([SubResource("Resource_j7fff")])
+operators = Array[ExtResource("2_cwlep")]([SubResource("Resource_m74b2")])
 
-[sub_resource type="Resource" id="Resource_w3132"]
+[sub_resource type="Resource" id="Resource_v1p3y"]
 script = ExtResource("5_q3uho")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_o08vt"]
+[sub_resource type="Resource" id="Resource_bjrcw"]
 script = ExtResource("6_2hsky")
-choice_result = SubResource("Resource_dk4cc")
-requirement = SubResource("Resource_w3132")
+choice_result = SubResource("Resource_cwlep")
+requirement = SubResource("Resource_v1p3y")
 description = "EVT_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_IDENTITY_QINGLIU_OWNER_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_vold8"]
+[sub_resource type="Resource" id="Resource_q3uho"]
 script = ExtResource("5_q3uho")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_cf58c"]
+[sub_resource type="Resource" id="Resource_2hsky"]
 script = ExtResource("8_qc5me")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_c4pig"]
+[sub_resource type="Resource" id="Resource_kfj1x"]
 script = ExtResource("8_qc5me")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_c0ck0"]
+[sub_resource type="Resource" id="Resource_qc5me"]
 script = ExtResource("9_xnang")
-operators = Array[ExtResource("7_kfj1x")]([SubResource("Resource_vold8"), SubResource("Resource_cf58c"), SubResource("Resource_c4pig")])
+operators = Array[ExtResource("7_kfj1x")]([SubResource("Resource_q3uho"), SubResource("Resource_2hsky"), SubResource("Resource_kfj1x")])
 
 [resource]
 script = ExtResource("10_h8nul")
-requirement = SubResource("Resource_c0ck0")
+requirement = SubResource("Resource_qc5me")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "ACTOR_EMOTION_TRANQUILITY", "emotion_pair:pair_tranquility", "action:main:jiaoyou"])
-options = Array[ExtResource("1_m74b2")]([SubResource("Resource_o08vt")])
+options = Array[ExtResource("1_m74b2")]([SubResource("Resource_bjrcw")])
 uuid = "kuangke_qingliu_libai_emotion_tranquility_identity_qingliu_owner"
 name = "EVT_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_IDENTITY_QINGLIU_OWNER_TITLE"
 description = "EVT_KUANGKE_QINGLIU_LIBAI_EMOTION_TRANQUILITY_IDENTITY_QINGLIU_OWNER_DESC"

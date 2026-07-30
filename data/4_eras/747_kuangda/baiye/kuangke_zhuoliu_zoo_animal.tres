@@ -11,79 +11,79 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="9_a7feh"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_8jks4"]
 
-[sub_resource type="Resource" id="Resource_gfdxm"]
+[sub_resource type="Resource" id="Resource_8c27r"]
 script = ExtResource("3_ky8dt")
 value = 10
 
-[sub_resource type="Resource" id="Resource_d4nup"]
+[sub_resource type="Resource" id="Resource_tuos3"]
 script = ExtResource("4_70ob7")
-operators = Array[ExtResource("2_tuos3")]([SubResource("Resource_gfdxm")])
+operators = Array[ExtResource("2_tuos3")]([SubResource("Resource_8c27r")])
 
-[sub_resource type="Resource" id="Resource_q4qqp"]
+[sub_resource type="Resource" id="Resource_ky8dt"]
 script = ExtResource("5_q6mp3")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_l0627"]
+[sub_resource type="Resource" id="Resource_70ob7"]
 script = ExtResource("6_ulatt")
-choice_result = SubResource("Resource_d4nup")
-requirement = SubResource("Resource_q4qqp")
+choice_result = SubResource("Resource_tuos3")
+requirement = SubResource("Resource_ky8dt")
 description = "EVT_KUANGKE_ZHUOLIU_ZOO_ANIMAL_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_3tody"]
+[sub_resource type="Resource" id="Resource_q6mp3"]
 script = ExtResource("3_ky8dt")
 value = 10
 
-[sub_resource type="Resource" id="Resource_gjnar"]
+[sub_resource type="Resource" id="Resource_ulatt"]
 script = ExtResource("4_70ob7")
-operators = Array[ExtResource("2_tuos3")]([SubResource("Resource_3tody")])
+operators = Array[ExtResource("2_tuos3")]([SubResource("Resource_q6mp3")])
 
-[sub_resource type="Resource" id="Resource_hkllh"]
+[sub_resource type="Resource" id="Resource_4f0sg"]
 script = ExtResource("5_q6mp3")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_4v1wd"]
+[sub_resource type="Resource" id="Resource_6tjl6"]
 script = ExtResource("6_ulatt")
-choice_result = SubResource("Resource_gjnar")
-requirement = SubResource("Resource_hkllh")
+choice_result = SubResource("Resource_ulatt")
+requirement = SubResource("Resource_4f0sg")
 description = "EVT_KUANGKE_ZHUOLIU_ZOO_ANIMAL_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_nh5ob"]
+[sub_resource type="Resource" id="Resource_a7feh"]
 script = ExtResource("3_ky8dt")
 value = 19
 
-[sub_resource type="Resource" id="Resource_1133x"]
+[sub_resource type="Resource" id="Resource_8jks4"]
 script = ExtResource("7_4f0sg")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_kncjg"]
+[sub_resource type="Resource" id="Resource_gfdxm"]
 script = ExtResource("8_6tjl6")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_speech_pricing"
 
-[sub_resource type="Resource" id="Resource_kphel"]
+[sub_resource type="Resource" id="Resource_d4nup"]
 script = ExtResource("4_70ob7")
-operators = Array[ExtResource("2_tuos3")]([SubResource("Resource_nh5ob"), SubResource("Resource_1133x"), SubResource("Resource_kncjg")])
+operators = Array[ExtResource("2_tuos3")]([SubResource("Resource_a7feh"), SubResource("Resource_8jks4"), SubResource("Resource_gfdxm")])
 
-[sub_resource type="Resource" id="Resource_r26c2"]
+[sub_resource type="Resource" id="Resource_q4qqp"]
 script = ExtResource("6_ulatt")
-choice_result = SubResource("Resource_kphel")
+choice_result = SubResource("Resource_d4nup")
 description = "EVT_KUANGKE_ZHUOLIU_ZOO_ANIMAL_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_dxkrj"]
+[sub_resource type="Resource" id="Resource_l0627"]
 script = ExtResource("9_a7feh")
 trait_name = "kuangda_kuangke"
 
 [resource]
 script = ExtResource("10_8jks4")
-requirement = SubResource("Resource_dxkrj")
+requirement = SubResource("Resource_l0627")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "action:main:baiye"])
-options = Array[ExtResource("1_8c27r")]([SubResource("Resource_l0627"), SubResource("Resource_4v1wd"), SubResource("Resource_r26c2")])
+options = Array[ExtResource("1_8c27r")]([SubResource("Resource_70ob7"), SubResource("Resource_6tjl6"), SubResource("Resource_q4qqp")])
 uuid = "kuangke_zhuoliu_zoo_animal"
 name = "EVT_KUANGKE_ZHUOLIU_ZOO_ANIMAL_TITLE"
 description = "EVT_KUANGKE_ZHUOLIU_ZOO_ANIMAL_DESC"

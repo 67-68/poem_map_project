@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://77cyw5lair2d"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_7r4yq"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_vosir"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="3_vm24o"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="4_rbsv0"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="5_jromo"]
+[ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="6_su8n0"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_itgov"]
+
+[sub_resource type="Resource" id="Resource_7r4yq"]
+script = ExtResource("3_vm24o")
+
+[sub_resource type="Resource" id="Resource_vosir"]
+script = ExtResource("4_rbsv0")
+event_key = "fangshi_shiyao_failed_fallback"
+
+[sub_resource type="Resource" id="Resource_vm24o"]
+script = ExtResource("5_jromo")
+operators = Array[ExtResource("2_vosir")]([SubResource("Resource_vosir")])
+
+[resource]
+script = ExtResource("7_itgov")
+required_place = "xishi"
+_action_tags = Array[int]([32, 38])
+fallback_event_uuid = "fangshi_shiyao_fallback"
+archetype_uuid = "fangshi_shiyao_success"
+day_consumed = 3.0
+possibility = "m_success_rate"
+failed_result = SubResource("Resource_vm24o")
+defer_config = SubResource("Resource_7r4yq")
+uuid = "fangshi_shiyao"
+name = "ACT_FANGSHI_SHIYAO_NAME"
+description = "ACT_FANGSHI_SHIYAO_DESC"

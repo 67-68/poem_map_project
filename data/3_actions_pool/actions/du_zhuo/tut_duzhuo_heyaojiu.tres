@@ -7,15 +7,11 @@
 [ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="5_kv144"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_n7w58"]
 
-[sub_resource type="Resource" id="Resource_raa7s"]
+[sub_resource type="Resource" id="Resource_q0olv"]
 script = ExtResource("3_rmlxk")
 
-[sub_resource type="Resource" id="Resource_0ou1d"]
+[sub_resource type="Resource" id="Resource_vwa7y"]
 script = ExtResource("4_y0wpy")
-
-[sub_resource type="Resource" id="Resource_duzhuo_no_img"]
-script = ExtResource("5_kv144")
-obtain_possibility = "no_success_rate"
 
 [resource]
 script = ExtResource("6_n7w58")
@@ -23,9 +19,8 @@ _action_tags = Array[int]([34, 44])
 fallback_event_uuid = "duzhuo_heyaojiu_fallback"
 archetype_uuid = "tut_duzhuo_heyaojiu_success"
 day_consumed = 1.0
-failed_result = SubResource("Resource_0ou1d")
-defer_config = SubResource("Resource_raa7s")
-imaginary_grants = Array[ExtResource("5_kv144")]([SubResource("Resource_duzhuo_no_img")])
+failed_result = SubResource("Resource_vwa7y")
+defer_config = SubResource("Resource_q0olv")
 uuid = "tut_duzhuo_heyaojiu"
 name = "ACT_TUT_DUZHUO_HEYAOJIU_NAME"
 description = "ACT_TUT_DUZHUO_HEYAOJIU_DESC"

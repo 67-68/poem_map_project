@@ -8,24 +8,24 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_0k3x6"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ootlx"]
 
-[sub_resource type="Resource" id="Resource_hovj1"]
+[sub_resource type="Resource" id="Resource_rc3qb"]
 script = ExtResource("3_bsdky")
 value = 10
 
-[sub_resource type="Resource" id="Resource_tphc8"]
+[sub_resource type="Resource" id="Resource_05btn"]
 script = ExtResource("4_bemxs")
 imagery_name = "famine"
 
-[sub_resource type="Resource" id="Resource_u12ew"]
+[sub_resource type="Resource" id="Resource_bsdky"]
 script = ExtResource("5_rr3vh")
-operators = Array[ExtResource("2_05btn")]([SubResource("Resource_hovj1"), SubResource("Resource_tphc8")])
+operators = Array[ExtResource("2_05btn")]([SubResource("Resource_rc3qb"), SubResource("Resource_05btn")])
 
-[sub_resource type="Resource" id="Resource_t6qef"]
+[sub_resource type="Resource" id="Resource_bemxs"]
 script = ExtResource("6_0k3x6")
-choice_result = SubResource("Resource_u12ew")
+choice_result = SubResource("Resource_bsdky")
 description = "EVT_GANLU_JOURNEY_SCENE_BLACK_INN_IDENTITY_VENDOR_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_0aun7"]
+[sub_resource type="Resource" id="Resource_rr3vh"]
 script = ExtResource("6_0k3x6")
 description = "EVT_GANLU_JOURNEY_SCENE_BLACK_INN_IDENTITY_VENDOR_OPT1_DESC"
 
@@ -34,7 +34,7 @@ script = ExtResource("7_ootlx")
 era = "755_backhome"
 archetype_id = "ganlu"
 _target_tags = Array[String](["ENV_SOCIETY_FAMINE:starving_bone", "TARGET_NPC_DUFU:thatched_grass", "action:main:ganlu", "TARGET_IDENTITY_VENDOR"])
-options = Array[ExtResource("1_rc3qb")]([SubResource("Resource_t6qef"), SubResource("Resource_0aun7")])
+options = Array[ExtResource("1_rc3qb")]([SubResource("Resource_bemxs"), SubResource("Resource_rr3vh")])
 uuid = "ganlu_journey_scene_black_inn_identity_vendor"
 name = "EVT_GANLU_JOURNEY_SCENE_BLACK_INN_IDENTITY_VENDOR_TITLE"
 description = "EVT_GANLU_JOURNEY_SCENE_BLACK_INN_IDENTITY_VENDOR_DESC"

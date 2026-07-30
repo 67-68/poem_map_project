@@ -8,40 +8,40 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_ncj22"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_w4v8j"]
 
-[sub_resource type="Resource" id="Resource_3olvq"]
+[sub_resource type="Resource" id="Resource_afyva"]
 script = ExtResource("2_xs6s4")
 
-[sub_resource type="Resource" id="Resource_f2r36"]
+[sub_resource type="Resource" id="Resource_xs6s4"]
 script = ExtResource("4_fpkx8")
 imagery_name = "ink_stone"
 
-[sub_resource type="Resource" id="Resource_e7fft"]
+[sub_resource type="Resource" id="Resource_fp4o0"]
 script = ExtResource("2_xs6s4")
-operators = Array[ExtResource("1_afyva")]([SubResource("Resource_f2r36")])
+operators = Array[ExtResource("1_afyva")]([SubResource("Resource_xs6s4")])
 
-[sub_resource type="Resource" id="Resource_v2uek"]
+[sub_resource type="Resource" id="Resource_fpkx8"]
 script = ExtResource("5_stgf1")
-choice_result = SubResource("Resource_e7fft")
+choice_result = SubResource("Resource_fp4o0")
 description = "EVT_DUOTAI_HUMILIATION_TALENT_COMMODIFICATION_GATEWAY_JIAOYOU_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_qa820"]
+[sub_resource type="Resource" id="Resource_stgf1"]
 script = ExtResource("5_stgf1")
 description = "EVT_DUOTAI_HUMILIATION_TALENT_COMMODIFICATION_GATEWAY_JIAOYOU_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_dbykw"]
+[sub_resource type="Resource" id="Resource_ncj22"]
 script = ExtResource("4_fpkx8")
 imagery_name = "temple_bell"
 
-[sub_resource type="Resource" id="Resource_r13kt"]
+[sub_resource type="Resource" id="Resource_w4v8j"]
 script = ExtResource("2_xs6s4")
-operators = Array[ExtResource("1_afyva")]([SubResource("Resource_dbykw")])
+operators = Array[ExtResource("1_afyva")]([SubResource("Resource_ncj22")])
 
-[sub_resource type="Resource" id="Resource_7anrp"]
+[sub_resource type="Resource" id="Resource_3olvq"]
 script = ExtResource("5_stgf1")
-choice_result = SubResource("Resource_r13kt")
+choice_result = SubResource("Resource_w4v8j")
 description = "EVT_DUOTAI_HUMILIATION_TALENT_COMMODIFICATION_GATEWAY_JIAOYOU_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_se4rq"]
+[sub_resource type="Resource" id="Resource_f2r36"]
 script = ExtResource("6_ncj22")
 volatile_stat = "ambition"
 value = 50
@@ -49,12 +49,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_w4v8j")
-requirement = SubResource("Resource_se4rq")
+requirement = SubResource("Resource_f2r36")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["emotion_pair:pair_rebellion", "TARGET_NPC_DUFU:thatched_grass", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_talent_commodification", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "TARGET_NPC_ZHENGQIAN", "VIBE_PHILOSOPHY_ZEN:temple_bell", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ACTION_SOCIAL_PARTING:willow_branch", "action:scene_jiaoyou"])
-options = Array[ExtResource("3_fp4o0")]([SubResource("Resource_v2uek"), SubResource("Resource_qa820"), SubResource("Resource_7anrp")])
-on_enter_result = SubResource("Resource_3olvq")
+options = Array[ExtResource("3_fp4o0")]([SubResource("Resource_fpkx8"), SubResource("Resource_stgf1"), SubResource("Resource_3olvq")])
+on_enter_result = SubResource("Resource_afyva")
 uuid = "duotai_humiliation_talent_commodification_gateway_jiaoyou_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "EVT_DUOTAI_HUMILIATION_TALENT_COMMODIFICATION_GATEWAY_JIAOYOU_IDENTITY_QINGLIU_OFFICIAL_DESC"

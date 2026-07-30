@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_m2rce"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_ok5ka"]
 
-[sub_resource type="Resource" id="Resource_dnsl8"]
+[sub_resource type="Resource" id="Resource_vmw2l"]
 script = ExtResource("3_s3ox6")
 value = 5
 
-[sub_resource type="Resource" id="Resource_s5b7p"]
+[sub_resource type="Resource" id="Resource_3c4o5"]
 script = ExtResource("4_l0u07")
-operators = Array[ExtResource("2_3c4o5")]([SubResource("Resource_dnsl8")])
+operators = Array[ExtResource("2_3c4o5")]([SubResource("Resource_vmw2l")])
 
-[sub_resource type="Resource" id="Resource_n1goe"]
+[sub_resource type="Resource" id="Resource_s3ox6"]
 script = ExtResource("5_npx0e")
-choice_result = SubResource("Resource_s5b7p")
+choice_result = SubResource("Resource_3c4o5")
 description = "EVT_QINGLIU_DAOXIN_POSUI_POVERTY_AS_AESTHETIC_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_qiqet"]
+[sub_resource type="Resource" id="Resource_l0u07"]
 script = ExtResource("6_m2rce")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("7_ok5ka")
-requirement = SubResource("Resource_qiqet")
+requirement = SubResource("Resource_l0u07")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["action:main:jiaoyou"])
-options = Array[ExtResource("1_vmw2l")]([SubResource("Resource_n1goe")])
+options = Array[ExtResource("1_vmw2l")]([SubResource("Resource_s3ox6")])
 uuid = "qingliu_daoxin_posui_poverty_as_aesthetic"
 name = "EVT_QINGLIU_DAOXIN_POSUI_POVERTY_AS_AESTHETIC_TITLE"
 description = "EVT_QINGLIU_DAOXIN_POSUI_POVERTY_AS_AESTHETIC_DESC"

@@ -7,10 +7,10 @@
 [ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="5_alyqf"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_cafc4"]
 
-[sub_resource type="Resource" id="Resource_40s4a"]
+[sub_resource type="Resource" id="Resource_yuc0i"]
 script = ExtResource("3_nhdwc")
 
-[sub_resource type="Resource" id="Resource_f3b8y"]
+[sub_resource type="Resource" id="Resource_e74nn"]
 script = ExtResource("4_s0yeo")
 
 [resource]
@@ -19,8 +19,8 @@ required_place = "pingkangfang"
 _action_tags = Array[int]([56, 62])
 fallback_event_uuid = "zhu_liu_pingkangfang_fallback"
 archetype_uuid = "zhu_liu_pingkangfang_success"
-failed_result = SubResource("Resource_f3b8y")
-defer_config = SubResource("Resource_40s4a")
+failed_result = SubResource("Resource_e74nn")
+defer_config = SubResource("Resource_yuc0i")
 uuid = "zhu_liu_pingkangfang"
 name = "ACT_ZHU_LIU_PINGKANGFANG_NAME"
 description = "ACT_ZHU_LIU_PINGKANGFANG_DESC"

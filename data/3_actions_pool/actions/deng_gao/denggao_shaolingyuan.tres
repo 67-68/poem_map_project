@@ -8,16 +8,16 @@
 [ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="6_vxi70"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_v1pdm"]
 
-[sub_resource type="Resource" id="Resource_cuv37"]
+[sub_resource type="Resource" id="Resource_4syhv"]
 script = ExtResource("3_2q3h6")
 
-[sub_resource type="Resource" id="Resource_s2x0c"]
+[sub_resource type="Resource" id="Resource_bkfyc"]
 script = ExtResource("4_sj0ps")
 event_key = "denggao_shaolingyuan_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_62cdx"]
+[sub_resource type="Resource" id="Resource_2q3h6"]
 script = ExtResource("5_sirtb")
-operators = Array[ExtResource("2_bkfyc")]([SubResource("Resource_s2x0c")])
+operators = Array[ExtResource("2_bkfyc")]([SubResource("Resource_bkfyc")])
 
 [resource]
 script = ExtResource("7_v1pdm")
@@ -25,8 +25,8 @@ _action_tags = Array[int]([31, 42])
 fallback_event_uuid = "denggao_shaolingyuan_fallback"
 archetype_uuid = "denggao_shaolingyuan_success"
 possibility = "m_success_rate"
-failed_result = SubResource("Resource_62cdx")
-defer_config = SubResource("Resource_cuv37")
+failed_result = SubResource("Resource_2q3h6")
+defer_config = SubResource("Resource_4syhv")
 uuid = "denggao_shaolingyuan"
 name = "ACT_DENGGAO_SHAOLINGYUAN_NAME"
 description = "ACT_DENGGAO_SHAOLINGYUAN_DESC"

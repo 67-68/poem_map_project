@@ -8,32 +8,32 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="6_17d7a"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_0bka3"]
 
-[sub_resource type="Resource" id="Resource_i1jqo"]
+[sub_resource type="Resource" id="Resource_hrywa"]
 script = ExtResource("3_sp06x")
 str_props = "money"
 value = -30
 
-[sub_resource type="Resource" id="Resource_ftlsa"]
+[sub_resource type="Resource" id="Resource_k1mj2"]
 script = ExtResource("4_vhyc0")
 event_key = "daily_suanming_result"
 
-[sub_resource type="Resource" id="Resource_tmho8"]
+[sub_resource type="Resource" id="Resource_sp06x"]
 script = ExtResource("5_4m7id")
-operators = Array[ExtResource("2_k1mj2")]([SubResource("Resource_i1jqo"), SubResource("Resource_ftlsa")])
+operators = Array[ExtResource("2_k1mj2")]([SubResource("Resource_hrywa"), SubResource("Resource_k1mj2")])
 
-[sub_resource type="Resource" id="Resource_u0i2m"]
+[sub_resource type="Resource" id="Resource_vhyc0"]
 script = ExtResource("6_17d7a")
-choice_result = SubResource("Resource_tmho8")
+choice_result = SubResource("Resource_sp06x")
 description = "你掏出银钱递了过去。"
 
-[sub_resource type="Resource" id="Resource_fqaus"]
+[sub_resource type="Resource" id="Resource_4m7id"]
 script = ExtResource("6_17d7a")
 description = "你笑了笑，转身离开。"
 
 [resource]
 script = ExtResource("7_0bka3")
 _target_tags = Array[String](["daily:random:suanming:suanming"])
-options = Array[ExtResource("1_hrywa")]([SubResource("Resource_u0i2m"), SubResource("Resource_fqaus")])
+options = Array[ExtResource("1_hrywa")]([SubResource("Resource_vhyc0"), SubResource("Resource_4m7id")])
 uuid = "daily_suanming"
 name = "算命先生"
 description = "街头一位算命先生拦住你，说看你面相奇特，定非凡人。"

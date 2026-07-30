@@ -10,74 +10,74 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="8_1t2lb"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="9_821d1"]
 
-[sub_resource type="Resource" id="Resource_21nwc"]
+[sub_resource type="Resource" id="Resource_0yjba"]
 script = ExtResource("2_mi2ou")
 fetched_key = "feihualing_chosen_word"
 datasource_name = "imaginaries"
 prop_from_result = "name"
 key_stored_context = "keyword"
 
-[sub_resource type="Resource" id="Resource_vsvd3"]
+[sub_resource type="Resource" id="Resource_mi2ou"]
 script = ExtResource("2_mi2ou")
 fetched_key = "feihualing_chosen_word"
 datasource_name = "imaginaries"
 prop_from_result = "description"
 key_stored_context = "imaginary_desc"
 
-[sub_resource type="Resource" id="Resource_7nnxl"]
+[sub_resource type="Resource" id="Resource_2p10l"]
 script = ExtResource("3_2p10l")
 participants_key = "guests"
 target_context_key = "npc_report"
 check_prop = "TALENT"
 text_template = "FEIHUALING"
 
-[sub_resource type="Resource" id="Resource_wovth"]
+[sub_resource type="Resource" id="Resource_76ncv"]
 script = ExtResource("4_76ncv")
-operators = Array[ExtResource("1_0yjba")]([SubResource("Resource_21nwc"), SubResource("Resource_vsvd3"), SubResource("Resource_7nnxl")])
+operators = Array[ExtResource("1_0yjba")]([SubResource("Resource_0yjba"), SubResource("Resource_mi2ou"), SubResource("Resource_2p10l")])
 
-[sub_resource type="Resource" id="Resource_7k4v4"]
+[sub_resource type="Resource" id="Resource_5inot"]
 script = ExtResource("4_76ncv")
 
-[sub_resource type="Resource" id="Resource_wyk80"]
+[sub_resource type="Resource" id="Resource_4jr05"]
 script = ExtResource("6_4jr05")
-choice_result = SubResource("Resource_7k4v4")
+choice_result = SubResource("Resource_5inot")
 description = "EVT_FEIHUALING_OTHER_DONE_IMAGINARY_DESC"
 
-[sub_resource type="Resource" id="Resource_mcr6r"]
+[sub_resource type="Resource" id="Resource_lwkl5"]
 script = ExtResource("7_lwkl5")
 
-[sub_resource type="Resource" id="Resource_pidff"]
+[sub_resource type="Resource" id="Resource_1t2lb"]
 script = ExtResource("4_76ncv")
-operators = Array[ExtResource("1_0yjba")]([SubResource("Resource_mcr6r")])
+operators = Array[ExtResource("1_0yjba")]([SubResource("Resource_lwkl5")])
 
-[sub_resource type="Resource" id="Resource_yhv3r"]
+[sub_resource type="Resource" id="Resource_821d1"]
 script = ExtResource("8_1t2lb")
 property = "inspiration"
 value = 19
 operator = 1
 
-[sub_resource type="Resource" id="Resource_h717p"]
+[sub_resource type="Resource" id="Resource_21nwc"]
 script = ExtResource("6_4jr05")
-choice_result = SubResource("Resource_pidff")
-requirement = SubResource("Resource_yhv3r")
+choice_result = SubResource("Resource_1t2lb")
+requirement = SubResource("Resource_821d1")
 description = "EVT_FEIHUALING_OTHER_DONE_INSPIRATION_DESC"
 
-[sub_resource type="Resource" id="Resource_6wrun"]
+[sub_resource type="Resource" id="Resource_vsvd3"]
 script = ExtResource("7_lwkl5")
 
-[sub_resource type="Resource" id="Resource_6xal5"]
+[sub_resource type="Resource" id="Resource_7nnxl"]
 script = ExtResource("4_76ncv")
-operators = Array[ExtResource("1_0yjba")]([SubResource("Resource_6wrun")])
+operators = Array[ExtResource("1_0yjba")]([SubResource("Resource_vsvd3")])
 
-[sub_resource type="Resource" id="Resource_8gx8l"]
+[sub_resource type="Resource" id="Resource_wovth"]
 script = ExtResource("6_4jr05")
-choice_result = SubResource("Resource_6xal5")
+choice_result = SubResource("Resource_7nnxl")
 description = "EVT_FEIHUALING_OTHER_DONE_PENALTY_DESC"
 
 [resource]
 script = ExtResource("9_821d1")
-options = Array[ExtResource("5_5inot")]([SubResource("Resource_wyk80"), SubResource("Resource_h717p"), SubResource("Resource_8gx8l")])
-on_enter_result = SubResource("Resource_wovth")
+options = Array[ExtResource("5_5inot")]([SubResource("Resource_4jr05"), SubResource("Resource_21nwc"), SubResource("Resource_wovth")])
+on_enter_result = SubResource("Resource_76ncv")
 uuid = "feihualing_other_done"
 name = "EVT_FEIHUALING_OTHER_DONE_TITLE"
 description = "EVT_FEIHUALING_OTHER_DONE_DESC"

@@ -9,29 +9,29 @@
 [ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="7_p52te"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="8_u3of4"]
 
-[sub_resource type="Resource" id="Resource_idshl"]
+[sub_resource type="Resource" id="Resource_lfd4g"]
 script = ExtResource("2_iugjm")
 
-[sub_resource type="Resource" id="Resource_qmfga"]
+[sub_resource type="Resource" id="Resource_iugjm"]
 script = ExtResource("4_isuah")
 mode = "baiye"
 
-[sub_resource type="Resource" id="Resource_kg14t"]
+[sub_resource type="Resource" id="Resource_5uudh"]
 script = ExtResource("5_byvwp")
 
-[sub_resource type="Resource" id="Resource_1no2k"]
+[sub_resource type="Resource" id="Resource_isuah"]
 script = ExtResource("6_ovsv8")
 
 [resource]
 script = ExtResource("8_u3of4")
 required_place = "huangcheng"
 _action_tags = Array[int]([49, 29])
-action_results = Array[ExtResource("3_5uudh")]([SubResource("Resource_qmfga")])
-aciton_requirements = Array[ExtResource("1_lfd4g")]([SubResource("Resource_idshl")])
+action_results = Array[ExtResource("3_5uudh")]([SubResource("Resource_iugjm")])
+aciton_requirements = Array[ExtResource("1_lfd4g")]([SubResource("Resource_lfd4g")])
 fallback_event_uuid = "baiye_poem_visit_fallback"
 archetype_uuid = "baiye_poem_visit_success"
-failed_result = SubResource("Resource_1no2k")
-defer_config = SubResource("Resource_kg14t")
+failed_result = SubResource("Resource_isuah")
+defer_config = SubResource("Resource_5uudh")
 uuid = "baiye_poem_visit"
 name = "ACT_BAIYE_POEM_VISIT_NAME"
 description = "ACT_BAIYE_POEM_VISIT_DESC"

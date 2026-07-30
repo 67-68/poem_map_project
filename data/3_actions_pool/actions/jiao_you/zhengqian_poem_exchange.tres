@@ -7,10 +7,10 @@
 [ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="5_y3j7y"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="6_m0squ"]
 
-[sub_resource type="Resource" id="Resource_gl3c5"]
+[sub_resource type="Resource" id="Resource_pq7x3"]
 script = ExtResource("3_c10dy")
 
-[sub_resource type="Resource" id="Resource_7j40y"]
+[sub_resource type="Resource" id="Resource_23v00"]
 script = ExtResource("4_nrvlk")
 
 [resource]
@@ -18,8 +18,8 @@ script = ExtResource("6_m0squ")
 required_place = "pingkangfang"
 _action_tags = Array[int]([30, 32])
 fallback_event_uuid = "zhengqian_poem_exchange_fallback"
-failed_result = SubResource("Resource_7j40y")
-defer_config = SubResource("Resource_gl3c5")
+failed_result = SubResource("Resource_23v00")
+defer_config = SubResource("Resource_pq7x3")
 override_action = "jiaoyou_recite_poem"
 uuid = "zhengqian_poem_exchange"
 name = "ACT_ZHENGQIAN_POEM_EXCHANGE_NAME"

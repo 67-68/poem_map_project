@@ -11,81 +11,81 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_nvqsq"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_i6uqd"]
 
-[sub_resource type="Resource" id="Resource_fjkka"]
+[sub_resource type="Resource" id="Resource_lphdt"]
 script = ExtResource("3_cy34q")
 value = 10
 
-[sub_resource type="Resource" id="Resource_2df04"]
+[sub_resource type="Resource" id="Resource_doond"]
 script = ExtResource("4_gk6yk")
-operators = Array[ExtResource("2_doond")]([SubResource("Resource_fjkka")])
+operators = Array[ExtResource("2_doond")]([SubResource("Resource_lphdt")])
 
-[sub_resource type="Resource" id="Resource_1s0r6"]
+[sub_resource type="Resource" id="Resource_cy34q"]
 script = ExtResource("5_xkrd4")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_8xg0s"]
+[sub_resource type="Resource" id="Resource_gk6yk"]
 script = ExtResource("6_7smds")
-choice_result = SubResource("Resource_2df04")
-requirement = SubResource("Resource_1s0r6")
+choice_result = SubResource("Resource_doond")
+requirement = SubResource("Resource_cy34q")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_GAOSHI_SILENT_BAILOUT_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_crsor"]
+[sub_resource type="Resource" id="Resource_xkrd4"]
 script = ExtResource("3_cy34q")
 value = 10
 
-[sub_resource type="Resource" id="Resource_16lkv"]
+[sub_resource type="Resource" id="Resource_7smds"]
 script = ExtResource("4_gk6yk")
-operators = Array[ExtResource("2_doond")]([SubResource("Resource_crsor")])
+operators = Array[ExtResource("2_doond")]([SubResource("Resource_xkrd4")])
 
-[sub_resource type="Resource" id="Resource_4blfj"]
+[sub_resource type="Resource" id="Resource_4p5ac"]
 script = ExtResource("6_7smds")
-choice_result = SubResource("Resource_16lkv")
+choice_result = SubResource("Resource_7smds")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_GAOSHI_SILENT_BAILOUT_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_opkjo"]
+[sub_resource type="Resource" id="Resource_w3ds5"]
 script = ExtResource("3_cy34q")
 value = 15
 
-[sub_resource type="Resource" id="Resource_yppbn"]
+[sub_resource type="Resource" id="Resource_nvqsq"]
 script = ExtResource("3_cy34q")
 value = 5
 
-[sub_resource type="Resource" id="Resource_i5nmw"]
+[sub_resource type="Resource" id="Resource_i6uqd"]
 script = ExtResource("4_gk6yk")
-operators = Array[ExtResource("2_doond")]([SubResource("Resource_opkjo"), SubResource("Resource_yppbn")])
+operators = Array[ExtResource("2_doond")]([SubResource("Resource_w3ds5"), SubResource("Resource_nvqsq")])
 
-[sub_resource type="Resource" id="Resource_nxg0c"]
+[sub_resource type="Resource" id="Resource_fjkka"]
 script = ExtResource("5_xkrd4")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_egeuv"]
+[sub_resource type="Resource" id="Resource_2df04"]
 script = ExtResource("6_7smds")
-choice_result = SubResource("Resource_i5nmw")
-requirement = SubResource("Resource_nxg0c")
+choice_result = SubResource("Resource_i6uqd")
+requirement = SubResource("Resource_fjkka")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_GAOSHI_SILENT_BAILOUT_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_1dguh"]
+[sub_resource type="Resource" id="Resource_1s0r6"]
 script = ExtResource("8_w3ds5")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_rqlx0"]
+[sub_resource type="Resource" id="Resource_8xg0s"]
 script = ExtResource("8_w3ds5")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_6j71v"]
+[sub_resource type="Resource" id="Resource_crsor"]
 script = ExtResource("9_nvqsq")
-operators = Array[ExtResource("7_4p5ac")]([SubResource("Resource_1dguh"), SubResource("Resource_rqlx0")])
+operators = Array[ExtResource("7_4p5ac")]([SubResource("Resource_1s0r6"), SubResource("Resource_8xg0s")])
 
 [resource]
 script = ExtResource("10_i6uqd")
-requirement = SubResource("Resource_6j71v")
+requirement = SubResource("Resource_crsor")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_THEME_MARTIAL:giant_roc", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "VIBE_AESTHETIC_ELEGANT:ink_stone", "ENV_NATURE_NIGHTMOON:cold_moon", "emotion_pair:pair_tranquility", "action:main:fangshi"])
-options = Array[ExtResource("1_lphdt")]([SubResource("Resource_8xg0s"), SubResource("Resource_4blfj"), SubResource("Resource_egeuv")])
+options = Array[ExtResource("1_lphdt")]([SubResource("Resource_gk6yk"), SubResource("Resource_4p5ac"), SubResource("Resource_2df04")])
 uuid = "qingliu_passive_benefits_gaoshi_silent_bailout_identity_qingliu_official"
 name = "EVT_QINGLIU_PASSIVE_BENEFITS_GAOSHI_SILENT_BAILOUT_IDENTITY_QINGLIU_OFFICIAL_TITLE"
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_GAOSHI_SILENT_BAILOUT_IDENTITY_QINGLIU_OFFICIAL_DESC"

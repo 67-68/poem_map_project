@@ -12,85 +12,85 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_x8xsr"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_sojlp"]
 
-[sub_resource type="Resource" id="Resource_55a8l"]
+[sub_resource type="Resource" id="Resource_ged0e"]
 script = ExtResource("3_dduhv")
 value = 11
 
-[sub_resource type="Resource" id="Resource_4q1m7"]
+[sub_resource type="Resource" id="Resource_6ft0j"]
 script = ExtResource("4_00y1r")
-operators = Array[ExtResource("2_6ft0j")]([SubResource("Resource_55a8l")])
+operators = Array[ExtResource("2_6ft0j")]([SubResource("Resource_ged0e")])
 
-[sub_resource type="Resource" id="Resource_ss16y"]
+[sub_resource type="Resource" id="Resource_dduhv"]
 script = ExtResource("5_nca67")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_k4cyf"]
+[sub_resource type="Resource" id="Resource_00y1r"]
 script = ExtResource("6_35r8q")
-choice_result = SubResource("Resource_4q1m7")
-requirement = SubResource("Resource_ss16y")
+choice_result = SubResource("Resource_6ft0j")
+requirement = SubResource("Resource_dduhv")
 description = "EVT_QINGLIU_FENGYING_AESTHETIC_RAPE_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_46jx4"]
+[sub_resource type="Resource" id="Resource_nca67"]
 script = ExtResource("3_dduhv")
 value = 11
 
-[sub_resource type="Resource" id="Resource_javj5"]
+[sub_resource type="Resource" id="Resource_35r8q"]
 script = ExtResource("4_00y1r")
-operators = Array[ExtResource("2_6ft0j")]([SubResource("Resource_46jx4")])
+operators = Array[ExtResource("2_6ft0j")]([SubResource("Resource_nca67")])
 
-[sub_resource type="Resource" id="Resource_bq1qe"]
+[sub_resource type="Resource" id="Resource_0k8bj"]
 script = ExtResource("5_nca67")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_j6qy1"]
+[sub_resource type="Resource" id="Resource_cxv7q"]
 script = ExtResource("6_35r8q")
-choice_result = SubResource("Resource_javj5")
-requirement = SubResource("Resource_bq1qe")
+choice_result = SubResource("Resource_35r8q")
+requirement = SubResource("Resource_0k8bj")
 description = "EVT_QINGLIU_FENGYING_AESTHETIC_RAPE_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_rcmpq"]
+[sub_resource type="Resource" id="Resource_feguy"]
 script = ExtResource("3_dduhv")
 value = 16
 
-[sub_resource type="Resource" id="Resource_fk4sa"]
+[sub_resource type="Resource" id="Resource_x8xsr"]
 script = ExtResource("4_00y1r")
-operators = Array[ExtResource("2_6ft0j")]([SubResource("Resource_rcmpq")])
+operators = Array[ExtResource("2_6ft0j")]([SubResource("Resource_feguy")])
 
-[sub_resource type="Resource" id="Resource_61j6r"]
+[sub_resource type="Resource" id="Resource_sojlp"]
 script = ExtResource("6_35r8q")
-choice_result = SubResource("Resource_fk4sa")
+choice_result = SubResource("Resource_x8xsr")
 description = "EVT_QINGLIU_FENGYING_AESTHETIC_RAPE_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_moajf"]
+[sub_resource type="Resource" id="Resource_55a8l"]
 script = ExtResource("8_cxv7q")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_qgofc"]
+[sub_resource type="Resource" id="Resource_4q1m7"]
 script = ExtResource("9_feguy")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_h7kn1"]
+[sub_resource type="Resource" id="Resource_ss16y"]
 script = ExtResource("9_feguy")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_us07r"]
+[sub_resource type="Resource" id="Resource_k4cyf"]
 script = ExtResource("10_x8xsr")
-operators = Array[ExtResource("7_0k8bj")]([SubResource("Resource_moajf"), SubResource("Resource_qgofc"), SubResource("Resource_h7kn1")])
+operators = Array[ExtResource("7_0k8bj")]([SubResource("Resource_55a8l"), SubResource("Resource_4q1m7"), SubResource("Resource_ss16y")])
 
 [resource]
 script = ExtResource("11_sojlp")
-requirement = SubResource("Resource_us07r")
+requirement = SubResource("Resource_k4cyf")
 era = "747_kuangda"
 archetype_id = "baiye"
 _target_tags = Array[String](["VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_ENTERTAIN_DRINK:empty_cup", "action:main:baiye"])
-options = Array[ExtResource("1_ged0e")]([SubResource("Resource_k4cyf"), SubResource("Resource_j6qy1"), SubResource("Resource_61j6r")])
+options = Array[ExtResource("1_ged0e")]([SubResource("Resource_00y1r"), SubResource("Resource_cxv7q"), SubResource("Resource_sojlp")])
 uuid = "qingliu_fengying_aesthetic_rape"
 name = "EVT_QINGLIU_FENGYING_AESTHETIC_RAPE_TITLE"
 description = "EVT_QINGLIU_FENGYING_AESTHETIC_RAPE_DESC"

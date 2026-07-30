@@ -11,50 +11,50 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_ojkoo"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_75qum"]
 
-[sub_resource type="Resource" id="Resource_ldsu6"]
+[sub_resource type="Resource" id="Resource_nc1bx"]
 script = ExtResource("3_x2378")
 value = 10
 
-[sub_resource type="Resource" id="Resource_xak65"]
+[sub_resource type="Resource" id="Resource_ct3dg"]
 script = ExtResource("4_id1r8")
-operators = Array[ExtResource("2_ct3dg")]([SubResource("Resource_ldsu6")])
+operators = Array[ExtResource("2_ct3dg")]([SubResource("Resource_nc1bx")])
 
-[sub_resource type="Resource" id="Resource_yh1p7"]
+[sub_resource type="Resource" id="Resource_x2378"]
 script = ExtResource("5_gplj2")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_vfsms"]
+[sub_resource type="Resource" id="Resource_id1r8"]
 script = ExtResource("6_t37vy")
-choice_result = SubResource("Resource_xak65")
-requirement = SubResource("Resource_yh1p7")
+choice_result = SubResource("Resource_ct3dg")
+requirement = SubResource("Resource_x2378")
 description = "EVT_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_g25v6"]
+[sub_resource type="Resource" id="Resource_gplj2"]
 script = ExtResource("5_gplj2")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_nfh2c"]
+[sub_resource type="Resource" id="Resource_t37vy"]
 script = ExtResource("8_ir4tx")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_skpyc"]
+[sub_resource type="Resource" id="Resource_8y1dl"]
 script = ExtResource("8_ir4tx")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_cdbmg"]
+[sub_resource type="Resource" id="Resource_ir4tx"]
 script = ExtResource("9_ojkoo")
-operators = Array[ExtResource("7_8y1dl")]([SubResource("Resource_g25v6"), SubResource("Resource_nfh2c"), SubResource("Resource_skpyc")])
+operators = Array[ExtResource("7_8y1dl")]([SubResource("Resource_gplj2"), SubResource("Resource_t37vy"), SubResource("Resource_8y1dl")])
 
 [resource]
 script = ExtResource("10_75qum")
-requirement = SubResource("Resource_cdbmg")
+requirement = SubResource("Resource_ir4tx")
 era = "747_kuangda"
 archetype_id = "jiaoyou"
 _target_tags = Array[String](["ENV_NATURE_SNOWSTORM:lone_snow", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ACTOR_EMOTION_ANGER", "emotion_pair:pair_anger", "action:main:fangshi"])
-options = Array[ExtResource("1_nc1bx")]([SubResource("Resource_vfsms")])
+options = Array[ExtResource("1_nc1bx")]([SubResource("Resource_id1r8")])
 uuid = "kuangke_qingliu_zhengqian_emotion_anger_identity_qingliu_official"
 name = "EVT_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_TITLE"
 description = "EVT_KUANGKE_QINGLIU_ZHENGQIAN_EMOTION_ANGER_IDENTITY_QINGLIU_OFFICIAL_DESC"

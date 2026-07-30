@@ -8,35 +8,35 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_wwoxb"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_qyegs"]
 
-[sub_resource type="Resource" id="Resource_gr5q2"]
+[sub_resource type="Resource" id="Resource_d3lc8"]
 script = ExtResource("3_5bdpl")
 value = 10
 
-[sub_resource type="Resource" id="Resource_bo42i"]
+[sub_resource type="Resource" id="Resource_l5dr4"]
 script = ExtResource("3_5bdpl")
 value = 5
 
-[sub_resource type="Resource" id="Resource_py2x5"]
+[sub_resource type="Resource" id="Resource_5bdpl"]
 script = ExtResource("4_nnjkt")
-operators = Array[ExtResource("2_l5dr4")]([SubResource("Resource_gr5q2"), SubResource("Resource_bo42i")])
+operators = Array[ExtResource("2_l5dr4")]([SubResource("Resource_d3lc8"), SubResource("Resource_l5dr4")])
 
-[sub_resource type="Resource" id="Resource_d71v8"]
+[sub_resource type="Resource" id="Resource_nnjkt"]
 script = ExtResource("5_5o85d")
-choice_result = SubResource("Resource_py2x5")
+choice_result = SubResource("Resource_5bdpl")
 description = "EVT_QINGLIU_DAOXIN_POSUI_ECHO_CHAMBER_LOSERS_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_2s4fv"]
+[sub_resource type="Resource" id="Resource_5o85d"]
 script = ExtResource("6_wwoxb")
 property = "health"
 value = 30
 
 [resource]
 script = ExtResource("7_qyegs")
-requirement = SubResource("Resource_2s4fv")
+requirement = SubResource("Resource_5o85d")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["action:main:fangshi", "TARGET_IDENTITY_QINGKE"])
-options = Array[ExtResource("1_d3lc8")]([SubResource("Resource_d71v8")])
+options = Array[ExtResource("1_d3lc8")]([SubResource("Resource_nnjkt")])
 uuid = "qingliu_daoxin_posui_echo_chamber_losers"
 name = "EVT_QINGLIU_DAOXIN_POSUI_ECHO_CHAMBER_LOSERS_TITLE"
 description = "EVT_QINGLIU_DAOXIN_POSUI_ECHO_CHAMBER_LOSERS_DESC"

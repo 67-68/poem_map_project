@@ -8,16 +8,16 @@
 [ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="6_ytvwh"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_f8qcv"]
 
-[sub_resource type="Resource" id="Resource_t8k3q"]
+[sub_resource type="Resource" id="Resource_8nvd6"]
 script = ExtResource("3_gbo1l")
 
-[sub_resource type="Resource" id="Resource_utod8"]
+[sub_resource type="Resource" id="Resource_ypwt2"]
 script = ExtResource("4_my244")
 event_key = "fangshi_storyteller_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_ws3do"]
+[sub_resource type="Resource" id="Resource_gbo1l"]
 script = ExtResource("5_q6xbs")
-operators = Array[ExtResource("2_ypwt2")]([SubResource("Resource_utod8")])
+operators = Array[ExtResource("2_ypwt2")]([SubResource("Resource_ypwt2")])
 
 [resource]
 script = ExtResource("7_f8qcv")
@@ -27,8 +27,8 @@ fallback_event_uuid = "fangshi_storyteller_fallback"
 archetype_uuid = "fangshi_storyteller_success"
 day_consumed = 2.0
 possibility = "m_success_rate"
-failed_result = SubResource("Resource_ws3do")
-defer_config = SubResource("Resource_t8k3q")
+failed_result = SubResource("Resource_gbo1l")
+defer_config = SubResource("Resource_8nvd6")
 uuid = "fangshi_storyteller"
 name = "ACT_FANGSHI_STORYTELLER_NAME"
 description = "ACT_FANGSHI_STORYTELLER_DESC"

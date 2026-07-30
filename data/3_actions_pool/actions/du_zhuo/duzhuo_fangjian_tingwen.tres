@@ -8,16 +8,16 @@
 [ext_resource type="Script" uid="uid://ddf7py4k8i1du" path="res://core/model/imaginary_grant_chance.gd" id="6_jdrjg"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_g1ais"]
 
-[sub_resource type="Resource" id="Resource_mvj1m"]
+[sub_resource type="Resource" id="Resource_1wl4h"]
 script = ExtResource("3_s3o6d")
 
-[sub_resource type="Resource" id="Resource_8w8lw"]
+[sub_resource type="Resource" id="Resource_ejgvv"]
 script = ExtResource("4_no053")
 event_key = "duzhuo_fangjian_tingwen_failed_fallback"
 
-[sub_resource type="Resource" id="Resource_dtgr6"]
+[sub_resource type="Resource" id="Resource_s3o6d"]
 script = ExtResource("5_kps16")
-operators = Array[ExtResource("2_ejgvv")]([SubResource("Resource_8w8lw")])
+operators = Array[ExtResource("2_ejgvv")]([SubResource("Resource_ejgvv")])
 
 [resource]
 script = ExtResource("7_g1ais")
@@ -25,8 +25,8 @@ _action_tags = Array[int]([34, 46])
 fallback_event_uuid = "duzhuo_fangjian_tingwen_fallback"
 archetype_uuid = "duzhuo_fangjian_tingwen_success"
 possibility = "xs_success_rate"
-failed_result = SubResource("Resource_dtgr6")
-defer_config = SubResource("Resource_mvj1m")
+failed_result = SubResource("Resource_s3o6d")
+defer_config = SubResource("Resource_1wl4h")
 uuid = "duzhuo_fangjian_tingwen"
 name = "ACT_DUZHUO_FANGJIAN_TINGWEN_NAME"
 description = "ACT_DUZHUO_FANGJIAN_TINGWEN_DESC"

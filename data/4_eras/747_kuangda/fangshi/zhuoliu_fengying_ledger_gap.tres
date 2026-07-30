@@ -13,100 +13,100 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="11_lvb7r"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="12_jql1c"]
 
-[sub_resource type="Resource" id="Resource_k27jp"]
+[sub_resource type="Resource" id="Resource_gr2gq"]
 script = ExtResource("3_8sgbu")
 value = 10
 
-[sub_resource type="Resource" id="Resource_llkma"]
+[sub_resource type="Resource" id="Resource_mr3en"]
 script = ExtResource("4_5toay")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_accounting_fraud"
 
-[sub_resource type="Resource" id="Resource_d45ag"]
+[sub_resource type="Resource" id="Resource_8sgbu"]
 script = ExtResource("5_xi0w7")
-operators = Array[ExtResource("2_mr3en")]([SubResource("Resource_k27jp"), SubResource("Resource_llkma")])
+operators = Array[ExtResource("2_mr3en")]([SubResource("Resource_gr2gq"), SubResource("Resource_mr3en")])
 
-[sub_resource type="Resource" id="Resource_028rg"]
+[sub_resource type="Resource" id="Resource_5toay"]
 script = ExtResource("6_vaw4c")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_ob8ap"]
+[sub_resource type="Resource" id="Resource_xi0w7"]
 script = ExtResource("7_b068f")
-choice_result = SubResource("Resource_d45ag")
-requirement = SubResource("Resource_028rg")
+choice_result = SubResource("Resource_8sgbu")
+requirement = SubResource("Resource_5toay")
 description = "EVT_ZHUOLIU_FENGYING_LEDGER_GAP_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_4240y"]
+[sub_resource type="Resource" id="Resource_vaw4c"]
 script = ExtResource("3_8sgbu")
 value = 10
 
-[sub_resource type="Resource" id="Resource_bsqkp"]
+[sub_resource type="Resource" id="Resource_b068f"]
 script = ExtResource("4_5toay")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_accounting_fraud"
 
-[sub_resource type="Resource" id="Resource_02xda"]
+[sub_resource type="Resource" id="Resource_thamj"]
 script = ExtResource("5_xi0w7")
-operators = Array[ExtResource("2_mr3en")]([SubResource("Resource_4240y"), SubResource("Resource_bsqkp")])
+operators = Array[ExtResource("2_mr3en")]([SubResource("Resource_vaw4c"), SubResource("Resource_b068f")])
 
-[sub_resource type="Resource" id="Resource_uty5h"]
+[sub_resource type="Resource" id="Resource_nxp1d"]
 script = ExtResource("6_vaw4c")
 flag_id = "__never_unlock"
 type = "bool"
 value = true
 
-[sub_resource type="Resource" id="Resource_gjnk7"]
+[sub_resource type="Resource" id="Resource_1qiek"]
 script = ExtResource("7_b068f")
-choice_result = SubResource("Resource_02xda")
-requirement = SubResource("Resource_uty5h")
+choice_result = SubResource("Resource_thamj")
+requirement = SubResource("Resource_nxp1d")
 description = "EVT_ZHUOLIU_FENGYING_LEDGER_GAP_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_vvnys"]
+[sub_resource type="Resource" id="Resource_lvb7r"]
 script = ExtResource("3_8sgbu")
 value = 10
 
-[sub_resource type="Resource" id="Resource_an15d"]
+[sub_resource type="Resource" id="Resource_jql1c"]
 script = ExtResource("4_5toay")
 target_tag = "TARGET_IDENTITY_ZHUOLIU_OFFICIAL"
 leverage_key = "zhuoliu_accounting_fraud"
 
-[sub_resource type="Resource" id="Resource_ebvbe"]
+[sub_resource type="Resource" id="Resource_k27jp"]
 script = ExtResource("5_xi0w7")
-operators = Array[ExtResource("2_mr3en")]([SubResource("Resource_vvnys"), SubResource("Resource_an15d")])
+operators = Array[ExtResource("2_mr3en")]([SubResource("Resource_lvb7r"), SubResource("Resource_jql1c")])
 
-[sub_resource type="Resource" id="Resource_w32hu"]
+[sub_resource type="Resource" id="Resource_llkma"]
 script = ExtResource("7_b068f")
-choice_result = SubResource("Resource_ebvbe")
+choice_result = SubResource("Resource_k27jp")
 description = "EVT_ZHUOLIU_FENGYING_LEDGER_GAP_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_5qxww"]
+[sub_resource type="Resource" id="Resource_d45ag"]
 script = ExtResource("9_nxp1d")
 trait_name = "kuangda_fengying"
 
-[sub_resource type="Resource" id="Resource_3pmwh"]
+[sub_resource type="Resource" id="Resource_028rg"]
 script = ExtResource("10_1qiek")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_tx00h"]
+[sub_resource type="Resource" id="Resource_ob8ap"]
 script = ExtResource("10_1qiek")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_tpkgj"]
+[sub_resource type="Resource" id="Resource_4240y"]
 script = ExtResource("11_lvb7r")
-operators = Array[ExtResource("8_thamj")]([SubResource("Resource_5qxww"), SubResource("Resource_3pmwh"), SubResource("Resource_tx00h")])
+operators = Array[ExtResource("8_thamj")]([SubResource("Resource_d45ag"), SubResource("Resource_028rg"), SubResource("Resource_ob8ap")])
 
 [resource]
 script = ExtResource("12_jql1c")
-requirement = SubResource("Resource_tpkgj")
+requirement = SubResource("Resource_4240y")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_FACTION_ROYAL:jade_step", "action:main:fangshi"])
-options = Array[ExtResource("1_gr2gq")]([SubResource("Resource_ob8ap"), SubResource("Resource_gjnk7"), SubResource("Resource_w32hu")])
+options = Array[ExtResource("1_gr2gq")]([SubResource("Resource_xi0w7"), SubResource("Resource_1qiek"), SubResource("Resource_llkma")])
 uuid = "zhuoliu_fengying_ledger_gap"
 name = "EVT_ZHUOLIU_FENGYING_LEDGER_GAP_TITLE"
 description = "EVT_ZHUOLIU_FENGYING_LEDGER_GAP_DESC"

@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://dufh33kfw1bwl" path="res://core/requirements/emotion_requirement.gd" id="6_7h52x"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_mgshj"]
 
-[sub_resource type="Resource" id="Resource_qqeqx"]
+[sub_resource type="Resource" id="Resource_n3eiy"]
 script = ExtResource("2_1spjt")
 
-[sub_resource type="Resource" id="Resource_ncu3l"]
+[sub_resource type="Resource" id="Resource_1spjt"]
 script = ExtResource("4_ghig0")
 description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_DUZHUO_IDENTITY_QINGLIU_OFFICIAL_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_jy3v0"]
+[sub_resource type="Resource" id="Resource_1w8gd"]
 script = ExtResource("4_ghig0")
 description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_DUZHUO_IDENTITY_QINGLIU_OFFICIAL_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_ykl6c"]
+[sub_resource type="Resource" id="Resource_ghig0"]
 script = ExtResource("5_essl5")
 imagery_name = "cold_moon"
 
-[sub_resource type="Resource" id="Resource_2k2ue"]
+[sub_resource type="Resource" id="Resource_essl5"]
 script = ExtResource("2_1spjt")
-operators = Array[ExtResource("1_n3eiy")]([SubResource("Resource_ykl6c")])
+operators = Array[ExtResource("1_n3eiy")]([SubResource("Resource_ghig0")])
 
-[sub_resource type="Resource" id="Resource_qus5l"]
+[sub_resource type="Resource" id="Resource_7h52x"]
 script = ExtResource("4_ghig0")
-choice_result = SubResource("Resource_2k2ue")
+choice_result = SubResource("Resource_essl5")
 description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_DUZHUO_IDENTITY_QINGLIU_OFFICIAL_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_p5xpf"]
+[sub_resource type="Resource" id="Resource_mgshj"]
 script = ExtResource("6_7h52x")
 volatile_stat = "ambition"
 value = 50
@@ -40,12 +40,12 @@ operator = 1
 
 [resource]
 script = ExtResource("7_mgshj")
-requirement = SubResource("Resource_p5xpf")
+requirement = SubResource("Resource_mgshj")
 era = "747_kuangda"
 archetype_id = "duzhuo"
 _target_tags = Array[String](["emotion_pair:pair_despair", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "ENV_NATURE_NIGHTMOON:cold_moon", "action:humiliation_peer_gap", "TARGET_IDENTITY_QINGLIU_OFFICIAL", "ENV_NATURE_NIGHTMOON:cold_moon", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_ENTERTAIN_DRINK:empty_cup", "action:scene_duzhuo"])
-options = Array[ExtResource("3_1w8gd")]([SubResource("Resource_ncu3l"), SubResource("Resource_jy3v0"), SubResource("Resource_qus5l")])
-on_enter_result = SubResource("Resource_qqeqx")
+options = Array[ExtResource("3_1w8gd")]([SubResource("Resource_1spjt"), SubResource("Resource_1w8gd"), SubResource("Resource_7h52x")])
+on_enter_result = SubResource("Resource_n3eiy")
 uuid = "duotai_humiliation_peer_gap_gateway_duzhuo_identity_qingliu_official"
 name = "emo_lt(name=ambition; val=100)"
 description = "EVT_DUOTAI_HUMILIATION_PEER_GAP_GATEWAY_DUZHUO_IDENTITY_QINGLIU_OFFICIAL_DESC"

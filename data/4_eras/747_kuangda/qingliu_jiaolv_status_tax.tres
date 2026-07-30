@@ -11,57 +11,57 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="9_um3er"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="10_87nsu"]
 
-[sub_resource type="Resource" id="Resource_dlygs"]
+[sub_resource type="Resource" id="Resource_626ml"]
 script = ExtResource("3_pjqfv")
 value = 8
 
-[sub_resource type="Resource" id="Resource_j4k5r"]
+[sub_resource type="Resource" id="Resource_cbk3y"]
 script = ExtResource("4_jtmjq")
-operators = Array[ExtResource("2_cbk3y")]([SubResource("Resource_dlygs")])
+operators = Array[ExtResource("2_cbk3y")]([SubResource("Resource_626ml")])
 
-[sub_resource type="Resource" id="Resource_pq1cu"]
+[sub_resource type="Resource" id="Resource_pjqfv"]
 script = ExtResource("5_rca5q")
-choice_result = SubResource("Resource_j4k5r")
+choice_result = SubResource("Resource_cbk3y")
 description = "EVT_QINGLIU_JIAOLV_STATUS_TAX_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_flebr"]
+[sub_resource type="Resource" id="Resource_jtmjq"]
 script = ExtResource("7_6pimh")
 property = "health"
 value = 50
 
-[sub_resource type="Resource" id="Resource_g0gfj"]
+[sub_resource type="Resource" id="Resource_rca5q"]
 script = ExtResource("7_6pimh")
 property = "money"
 value = 10
 operator = 1
 
-[sub_resource type="Resource" id="Resource_dnqtt"]
+[sub_resource type="Resource" id="Resource_qi0kn"]
 script = ExtResource("7_6pimh")
 property = "money"
 value = 50
 
-[sub_resource type="Resource" id="Resource_7ndah"]
+[sub_resource type="Resource" id="Resource_6pimh"]
 script = ExtResource("8_vydww")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_eos0h"]
+[sub_resource type="Resource" id="Resource_vydww"]
 script = ExtResource("8_vydww")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_5jop5"]
+[sub_resource type="Resource" id="Resource_um3er"]
 script = ExtResource("9_um3er")
-operators = Array[ExtResource("6_qi0kn")]([SubResource("Resource_flebr"), SubResource("Resource_g0gfj"), SubResource("Resource_dnqtt"), SubResource("Resource_7ndah"), SubResource("Resource_eos0h")])
+operators = Array[ExtResource("6_qi0kn")]([SubResource("Resource_jtmjq"), SubResource("Resource_rca5q"), SubResource("Resource_qi0kn"), SubResource("Resource_6pimh"), SubResource("Resource_vydww")])
 
 [resource]
 script = ExtResource("10_87nsu")
-requirement = SubResource("Resource_5jop5")
+requirement = SubResource("Resource_um3er")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_NPC_DUFU:thatched_grass", "action:main:fangshi", "TARGET_IDENTITY_MENZI"])
-options = Array[ExtResource("1_626ml")]([SubResource("Resource_pq1cu")])
+options = Array[ExtResource("1_626ml")]([SubResource("Resource_pjqfv")])
 uuid = "qingliu_jiaolv_status_tax"
 name = "EVT_QINGLIU_JIAOLV_STATUS_TAX_TITLE"
 description = "EVT_QINGLIU_JIAOLV_STATUS_TAX_DESC"

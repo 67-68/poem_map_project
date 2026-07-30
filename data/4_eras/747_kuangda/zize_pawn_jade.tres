@@ -8,31 +8,31 @@
 [ext_resource type="Script" uid="uid://pyecoqx4dr1i" path="res://core/property_requirement.gd" id="6_nrv3t"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="7_kikgj"]
 
-[sub_resource type="Resource" id="Resource_pkb0i"]
+[sub_resource type="Resource" id="Resource_kbv26"]
 script = ExtResource("3_go483")
 value = 26
 
-[sub_resource type="Resource" id="Resource_6cbo0"]
+[sub_resource type="Resource" id="Resource_nf262"]
 script = ExtResource("4_gfsdf")
-operators = Array[ExtResource("2_nf262")]([SubResource("Resource_pkb0i")])
+operators = Array[ExtResource("2_nf262")]([SubResource("Resource_kbv26")])
 
-[sub_resource type="Resource" id="Resource_eh37t"]
+[sub_resource type="Resource" id="Resource_go483"]
 script = ExtResource("5_j7euh")
-choice_result = SubResource("Resource_6cbo0")
+choice_result = SubResource("Resource_nf262")
 description = "EVT_ZIZE_PAWN_JADE_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_elyrj"]
+[sub_resource type="Resource" id="Resource_gfsdf"]
 script = ExtResource("6_nrv3t")
 property = "health"
 value = 40
 
 [resource]
 script = ExtResource("7_kikgj")
-requirement = SubResource("Resource_elyrj")
+requirement = SubResource("Resource_gfsdf")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["VIBE_AESTHETIC_ELEGANT:ink_stone", "TARGET_NPC_DUFU:thatched_grass", "action:main:fangshi"])
-options = Array[ExtResource("1_kbv26")]([SubResource("Resource_eh37t")])
+options = Array[ExtResource("1_kbv26")]([SubResource("Resource_go483")])
 uuid = "zize_pawn_jade"
 name = "EVT_ZIZE_PAWN_JADE_TITLE"
 description = "EVT_ZIZE_PAWN_JADE_DESC"

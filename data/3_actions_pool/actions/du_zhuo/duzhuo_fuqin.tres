@@ -8,24 +8,24 @@
 [ext_resource type="Script" uid="uid://b7oky8pcr22xp" path="res://core/requirements/trait_requirement.gd" id="6_ohd8j"]
 [ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_hdbqm"]
 
-[sub_resource type="Resource" id="Resource_7v7ej"]
+[sub_resource type="Resource" id="Resource_cx1q3"]
 script = ExtResource("3_sfllx")
 
-[sub_resource type="Resource" id="Resource_vtv0i"]
+[sub_resource type="Resource" id="Resource_4cqvf"]
 script = ExtResource("4_4ci1k")
 
-[sub_resource type="Resource" id="Resource_hguuf"]
+[sub_resource type="Resource" id="Resource_sfllx"]
 script = ExtResource("6_ohd8j")
 trait_name = "qin_instrument"
 
 [resource]
 script = ExtResource("7_hdbqm")
 _action_tags = Array[int]([34, 79])
-prerequisite = SubResource("Resource_hguuf")
+prerequisite = SubResource("Resource_sfllx")
 fallback_event_uuid = "duzhuo_fuqin_fallback"
 archetype_uuid = "duzhuo_fuqin_success"
-failed_result = SubResource("Resource_vtv0i")
-defer_config = SubResource("Resource_7v7ej")
+failed_result = SubResource("Resource_4cqvf")
+defer_config = SubResource("Resource_cx1q3")
 uuid = "duzhuo_fuqin"
 name = "ACT_DUZHUO_FUQIN_NAME"
 description = "ACT_DUZHUO_FUQIN_DESC"

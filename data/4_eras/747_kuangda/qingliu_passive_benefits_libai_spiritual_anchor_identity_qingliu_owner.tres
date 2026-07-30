@@ -12,89 +12,89 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_ub6ul"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_2d04u"]
 
-[sub_resource type="Resource" id="Resource_oaxx2"]
+[sub_resource type="Resource" id="Resource_3m2u6"]
 script = ExtResource("3_xvpqh")
 value = 11
 
-[sub_resource type="Resource" id="Resource_h0v6u"]
+[sub_resource type="Resource" id="Resource_xneem"]
 script = ExtResource("4_8helo")
 imagery_name = "wine_gourd"
 
-[sub_resource type="Resource" id="Resource_5jme8"]
+[sub_resource type="Resource" id="Resource_xvpqh"]
 script = ExtResource("5_hoc5g")
-operators = Array[ExtResource("2_xneem")]([SubResource("Resource_oaxx2"), SubResource("Resource_h0v6u")])
+operators = Array[ExtResource("2_xneem")]([SubResource("Resource_3m2u6"), SubResource("Resource_xneem")])
 
-[sub_resource type="Resource" id="Resource_480e4"]
+[sub_resource type="Resource" id="Resource_8helo"]
 script = ExtResource("6_d247f")
 trait_name = "kuangda_kuangke"
 
-[sub_resource type="Resource" id="Resource_bc1u3"]
+[sub_resource type="Resource" id="Resource_hoc5g"]
 script = ExtResource("7_215gn")
-choice_result = SubResource("Resource_5jme8")
-requirement = SubResource("Resource_480e4")
+choice_result = SubResource("Resource_xvpqh")
+requirement = SubResource("Resource_8helo")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_OPT0_DESC"
 
-[sub_resource type="Resource" id="Resource_0danq"]
+[sub_resource type="Resource" id="Resource_d247f"]
 script = ExtResource("3_xvpqh")
 value = 11
 
-[sub_resource type="Resource" id="Resource_froh2"]
+[sub_resource type="Resource" id="Resource_215gn"]
 script = ExtResource("5_hoc5g")
-operators = Array[ExtResource("2_xneem")]([SubResource("Resource_0danq")])
+operators = Array[ExtResource("2_xneem")]([SubResource("Resource_d247f")])
 
-[sub_resource type="Resource" id="Resource_j3o1t"]
+[sub_resource type="Resource" id="Resource_e3hw1"]
 script = ExtResource("7_215gn")
-choice_result = SubResource("Resource_froh2")
+choice_result = SubResource("Resource_215gn")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_OPT1_DESC"
 
-[sub_resource type="Resource" id="Resource_tujky"]
+[sub_resource type="Resource" id="Resource_ra6ou"]
 script = ExtResource("3_xvpqh")
 value = 16
 
-[sub_resource type="Resource" id="Resource_3jurm"]
+[sub_resource type="Resource" id="Resource_ub6ul"]
 script = ExtResource("3_xvpqh")
 value = 6
 
-[sub_resource type="Resource" id="Resource_8heks"]
+[sub_resource type="Resource" id="Resource_2d04u"]
 script = ExtResource("4_8helo")
 imagery_name = "wine_gourd"
 
-[sub_resource type="Resource" id="Resource_4qy2q"]
+[sub_resource type="Resource" id="Resource_oaxx2"]
 script = ExtResource("5_hoc5g")
-operators = Array[ExtResource("2_xneem")]([SubResource("Resource_tujky"), SubResource("Resource_3jurm"), SubResource("Resource_8heks")])
+operators = Array[ExtResource("2_xneem")]([SubResource("Resource_ra6ou"), SubResource("Resource_ub6ul"), SubResource("Resource_2d04u")])
 
-[sub_resource type="Resource" id="Resource_wk356"]
+[sub_resource type="Resource" id="Resource_h0v6u"]
 script = ExtResource("6_d247f")
 trait_name = "kuangda_zuanying"
 
-[sub_resource type="Resource" id="Resource_gw8nw"]
+[sub_resource type="Resource" id="Resource_5jme8"]
 script = ExtResource("7_215gn")
-choice_result = SubResource("Resource_4qy2q")
-requirement = SubResource("Resource_wk356")
+choice_result = SubResource("Resource_oaxx2")
+requirement = SubResource("Resource_h0v6u")
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_dm0qk"]
+[sub_resource type="Resource" id="Resource_480e4"]
 script = ExtResource("9_ra6ou")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_5e2vx"]
+[sub_resource type="Resource" id="Resource_bc1u3"]
 script = ExtResource("9_ra6ou")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_2s78w"]
+[sub_resource type="Resource" id="Resource_0danq"]
 script = ExtResource("10_ub6ul")
-operators = Array[ExtResource("8_e3hw1")]([SubResource("Resource_dm0qk"), SubResource("Resource_5e2vx")])
+operators = Array[ExtResource("8_e3hw1")]([SubResource("Resource_480e4"), SubResource("Resource_bc1u3")])
 
 [resource]
 script = ExtResource("11_2d04u")
-requirement = SubResource("Resource_2s78w")
+requirement = SubResource("Resource_0danq")
 era = "747_kuangda"
 archetype_id = "fangshi"
 _target_tags = Array[String](["TARGET_NPC_LIBAI:wine_gourd", "TARGET_IDENTITY_QINGLIU_OWNER", "VIBE_PHILOSOPHY_ZEN:temple_bell", "ACTION_SOCIAL_PARTING:willow_branch", "emotion_pair:pair_tranquility", "action:main:fangshi"])
-options = Array[ExtResource("1_3m2u6")]([SubResource("Resource_bc1u3"), SubResource("Resource_j3o1t"), SubResource("Resource_gw8nw")])
+options = Array[ExtResource("1_3m2u6")]([SubResource("Resource_hoc5g"), SubResource("Resource_e3hw1"), SubResource("Resource_5jme8")])
 uuid = "qingliu_passive_benefits_libai_spiritual_anchor_identity_qingliu_owner"
 name = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_TITLE"
 description = "EVT_QINGLIU_PASSIVE_BENEFITS_LIBAI_SPIRITUAL_ANCHOR_IDENTITY_QINGLIU_OWNER_DESC"

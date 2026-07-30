@@ -12,9 +12,56 @@
 [ext_resource type="Script" uid="uid://ctselxdhu2b0q" path="res://core/model/multiple_requiremenets.gd" id="10_1c2v7"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="11_uchf3"]
 
-[sub_resource type="Resource" id="Resource_j2h21"]
+[sub_resource type="Resource" id="Resource_wunxo"]
 script = ExtResource("3_s5lce")
 value = 5
+
+[sub_resource type="Resource" id="Resource_0xkyr"]
+script = ExtResource("3_s5lce")
+value = 10
+
+[sub_resource type="Resource" id="Resource_s5lce"]
+script = ExtResource("4_s5rsh")
+imagery_name = "high_tower"
+
+[sub_resource type="Resource" id="Resource_s5rsh"]
+script = ExtResource("5_tny4a")
+operators = Array[ExtResource("2_0xkyr")]([SubResource("Resource_wunxo"), SubResource("Resource_0xkyr"), SubResource("Resource_s5lce")])
+
+[sub_resource type="Resource" id="Resource_tny4a"]
+script = ExtResource("6_8ha6i")
+trait_name = "kuangda_kuangke"
+
+[sub_resource type="Resource" id="Resource_8ha6i"]
+script = ExtResource("7_pi8k0")
+choice_result = SubResource("Resource_s5rsh")
+requirement = SubResource("Resource_tny4a")
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_SORROW_OPT0_DESC"
+
+[sub_resource type="Resource" id="Resource_pi8k0"]
+script = ExtResource("3_s5lce")
+value = 5
+
+[sub_resource type="Resource" id="Resource_ch5yk"]
+script = ExtResource("3_s5lce")
+value = 5
+
+[sub_resource type="Resource" id="Resource_d5hoy"]
+script = ExtResource("5_tny4a")
+operators = Array[ExtResource("2_0xkyr")]([SubResource("Resource_pi8k0"), SubResource("Resource_ch5yk")])
+
+[sub_resource type="Resource" id="Resource_1c2v7"]
+script = ExtResource("7_pi8k0")
+choice_result = SubResource("Resource_d5hoy")
+description = "EVT_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_SORROW_OPT1_DESC"
+
+[sub_resource type="Resource" id="Resource_uchf3"]
+script = ExtResource("3_s5lce")
+value = 5
+
+[sub_resource type="Resource" id="Resource_j2h21"]
+script = ExtResource("3_s5lce")
+value = 20
 
 [sub_resource type="Resource" id="Resource_xyjcy"]
 script = ExtResource("3_s5lce")
@@ -22,91 +69,44 @@ value = 10
 
 [sub_resource type="Resource" id="Resource_3tnrv"]
 script = ExtResource("4_s5rsh")
-imagery_name = "high_tower"
+imagery_name = "lone_snow"
 
 [sub_resource type="Resource" id="Resource_rq45k"]
 script = ExtResource("5_tny4a")
-operators = Array[ExtResource("2_0xkyr")]([SubResource("Resource_j2h21"), SubResource("Resource_xyjcy"), SubResource("Resource_3tnrv")])
+operators = Array[ExtResource("2_0xkyr")]([SubResource("Resource_uchf3"), SubResource("Resource_j2h21"), SubResource("Resource_xyjcy"), SubResource("Resource_3tnrv")])
 
 [sub_resource type="Resource" id="Resource_amgxg"]
 script = ExtResource("6_8ha6i")
-trait_name = "kuangda_kuangke"
+trait_name = "kuangda_zuanying"
 
 [sub_resource type="Resource" id="Resource_cxfjh"]
 script = ExtResource("7_pi8k0")
 choice_result = SubResource("Resource_rq45k")
 requirement = SubResource("Resource_amgxg")
-description = "EVT_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_SORROW_OPT0_DESC"
-
-[sub_resource type="Resource" id="Resource_qrjwm"]
-script = ExtResource("3_s5lce")
-value = 5
-
-[sub_resource type="Resource" id="Resource_5voky"]
-script = ExtResource("3_s5lce")
-value = 5
-
-[sub_resource type="Resource" id="Resource_i77uy"]
-script = ExtResource("5_tny4a")
-operators = Array[ExtResource("2_0xkyr")]([SubResource("Resource_qrjwm"), SubResource("Resource_5voky")])
-
-[sub_resource type="Resource" id="Resource_sl0jy"]
-script = ExtResource("7_pi8k0")
-choice_result = SubResource("Resource_i77uy")
-description = "EVT_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_SORROW_OPT1_DESC"
-
-[sub_resource type="Resource" id="Resource_18jek"]
-script = ExtResource("3_s5lce")
-value = 5
-
-[sub_resource type="Resource" id="Resource_pxxky"]
-script = ExtResource("3_s5lce")
-value = 20
-
-[sub_resource type="Resource" id="Resource_uq16r"]
-script = ExtResource("3_s5lce")
-value = 10
-
-[sub_resource type="Resource" id="Resource_dku4e"]
-script = ExtResource("4_s5rsh")
-imagery_name = "lone_snow"
-
-[sub_resource type="Resource" id="Resource_vp88t"]
-script = ExtResource("5_tny4a")
-operators = Array[ExtResource("2_0xkyr")]([SubResource("Resource_18jek"), SubResource("Resource_pxxky"), SubResource("Resource_uq16r"), SubResource("Resource_dku4e")])
-
-[sub_resource type="Resource" id="Resource_5djm6"]
-script = ExtResource("6_8ha6i")
-trait_name = "kuangda_zuanying"
-
-[sub_resource type="Resource" id="Resource_51b2h"]
-script = ExtResource("7_pi8k0")
-choice_result = SubResource("Resource_vp88t")
-requirement = SubResource("Resource_5djm6")
 description = "EVT_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_SORROW_OPT2_DESC"
 
-[sub_resource type="Resource" id="Resource_2r4fl"]
+[sub_resource type="Resource" id="Resource_qrjwm"]
 script = ExtResource("9_d5hoy")
 volatile_stat = "ambition"
 value = 30
 operator = 1
 
-[sub_resource type="Resource" id="Resource_64tog"]
+[sub_resource type="Resource" id="Resource_5voky"]
 script = ExtResource("9_d5hoy")
 volatile_stat = "ambition"
 value = 100
 
-[sub_resource type="Resource" id="Resource_m3f46"]
+[sub_resource type="Resource" id="Resource_i77uy"]
 script = ExtResource("10_1c2v7")
-operators = Array[ExtResource("8_ch5yk")]([SubResource("Resource_2r4fl"), SubResource("Resource_64tog")])
+operators = Array[ExtResource("8_ch5yk")]([SubResource("Resource_qrjwm"), SubResource("Resource_5voky")])
 
 [resource]
 script = ExtResource("11_uchf3")
-requirement = SubResource("Resource_m3f46")
+requirement = SubResource("Resource_i77uy")
 era = "747_kuangda"
 archetype_id = "denggao"
 _target_tags = Array[String](["ENV_POLITICS_PROSPER:cloud_and_sun", "ENV_NATURE_SNOWSTORM:lone_snow", "ACTION_TRAVEL_CLIMB:high_tower", "action:scene_denggao_leyou_morning", "emotion_pair:pair_sorrow", "VIBE_THEME_HISTORY:ruined_wall", "ENV_NATURE_AUTUMNWIND:falling_leaf"])
-options = Array[ExtResource("1_wunxo")]([SubResource("Resource_cxfjh"), SubResource("Resource_sl0jy"), SubResource("Resource_51b2h")])
+options = Array[ExtResource("1_wunxo")]([SubResource("Resource_8ha6i"), SubResource("Resource_1c2v7"), SubResource("Resource_cxfjh")])
 uuid = "747kuangda_denggao_leyou_morning_emotion_sorrow"
 name = "EVT_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_SORROW_TITLE"
 description = "EVT_747KUANGDA_DENGGAO_LEYOU_MORNING_EMOTION_SORROW_DESC"

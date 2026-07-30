@@ -5,31 +5,31 @@
 [ext_resource type="Script" uid="uid://ceaxs0erf12ea" path="res://model/event/event_option.gd" id="3_ri5pm"]
 [ext_resource type="Script" uid="uid://qhuu117ngmbk" path="res://model/random_event.gd" id="4_cnds0"]
 
-[sub_resource type="Resource" id="Resource_cn1ho"]
+[sub_resource type="Resource" id="Resource_7laky"]
 script = ExtResource("2_tvn3v")
 flag_id = "flag_relation_with_libai"
 type = "int"
 value = 10
 
-[sub_resource type="Resource" id="Resource_l4img"]
+[sub_resource type="Resource" id="Resource_tvn3v"]
 script = ExtResource("3_ri5pm")
-requirement = SubResource("Resource_cn1ho")
+requirement = SubResource("Resource_7laky")
 description = "EVT_LIBAI_HEJIU_1_DESC"
 
-[sub_resource type="Resource" id="Resource_cqm8s"]
+[sub_resource type="Resource" id="Resource_ri5pm"]
 script = ExtResource("2_tvn3v")
 flag_id = "flag_relation_with_libai"
 type = "int"
 value = 15
 
-[sub_resource type="Resource" id="Resource_5nnss"]
+[sub_resource type="Resource" id="Resource_cnds0"]
 script = ExtResource("3_ri5pm")
-requirement = SubResource("Resource_cqm8s")
+requirement = SubResource("Resource_ri5pm")
 description = "EVT_LIBAI_HEJIU_2_DESC"
 
 [resource]
 script = ExtResource("4_cnds0")
 weight = 0.0
-options = Array[ExtResource("1_7laky")]([SubResource("Resource_l4img"), SubResource("Resource_5nnss")])
+options = Array[ExtResource("1_7laky")]([SubResource("Resource_tvn3v"), SubResource("Resource_cnds0")])
 uuid = "libai_welcome_hejiu"
 name = "EVT_LIBAI_WELCOME_HEJIU_TITLE"
