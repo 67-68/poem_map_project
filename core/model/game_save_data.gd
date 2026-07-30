@@ -123,7 +123,7 @@ var event_counter: int = 0
 # NPC 关系数据 — NPCDocument 运行时属性的持久化快照
 # key: target_tag (如 "libai", "hushang"), value: Dictionary
 #   { "leverage_keys": [...], "help_count": 0,
-#     "person_state": "not_meet", "intro_keys": [...] }
+#     "person_state": "not_meet" }
 # save 时从 NPCDocument 实例快照，load 时恢复到 NPCDocument 实例。
 # ════════════════════════════════════════════════════════════════
 var npc_relations: Dictionary = {}
@@ -300,8 +300,7 @@ func restore_npc_relations_to_documents() -> void:
 		doc.leverage_keys = data.get("leverage_keys", [])
 		doc.help_count = data.get("help_count", 0)
 		doc.person_state = data.get("person_state", "not_meet")
-		doc.intro_keys = data.get("intro_keys", [])
-		Logging.info("GameSaveData: 恢复 '%s' 关系数据 → help=%d, leverage=%d, intro=%d, state=%s" % [target_tag, doc.help_count, doc.leverage_keys.size(), doc.intro_keys.size(), doc.person_state])
+		Logging.info("GameSaveData: 恢复 '%s' 关系数据 → help=%d, leverage=%d, state=%s" % [target_tag, doc.help_count, doc.leverage_keys.size(), doc.person_state])
 
 ## 从所有已加载的 NPCDocument 实例快照关系数据到 npc_relations。
 func _snapshot_npc_relations() -> void:
@@ -314,7 +313,6 @@ func _snapshot_npc_relations() -> void:
 			"leverage_keys": doc.leverage_keys.duplicate(),
 			"help_count": doc.help_count,
 			"person_state": doc.person_state,
-			"intro_keys": doc.intro_keys.duplicate(),
 		}
 	Logging.info("GameSaveData: _snapshot_npc_relations 快照 %d 个目标" % npc_relations.size())
 

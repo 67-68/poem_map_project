@@ -37,10 +37,6 @@ const _NPCDocument = preload("res://model/npc_document.gd")
 #       get_next_person_state(target_tag) — 查询下一级目标状态
 #     NPCDocument.person_state: String
 #
-#   intro (引荐信):
-#     玩家持有的该目标的引荐信 key。
-#     NPCDocument.intro_keys: Array[String]
-#
 # ── 使用示例 ──
 #
 #   # 添加把柄
@@ -135,7 +131,6 @@ static func _get_or_create_npc_doc(target_tag: String) -> NPCDocument:
 	doc.leverage_keys = [] as Array[String]
 	doc.help_count = 0
 	doc.person_state = DEFAULT_PERSON_STATE
-	doc.intro_keys = [] as Array[String]
 	doc.relate_to = [] as Array[String]
 	Database.npc_document[target_tag] = doc
 	Logging.info("RelationFlagManager: 动态创建 NPCDocument for '%s'（无对应 .tres 文件）" % target_tag)
@@ -296,7 +291,7 @@ static func get_help_event_id(target_tag: String) -> String:
 # ═══════════════════════════════════════════════════════════
 #
 # 四态线性状态机：
-#   T0: not_meet ──(打探/引荐)──→ T1: know_about ──(3旬熬)──→ T2: inner_circle ──(献祭)──→ T3: blood_oath
+#   T0: not_meet ──(打探)──→ T1: know_about ──(3旬熬)──→ T2: inner_circle ──(献祭)──→ T3: blood_oath
 #
 # 每级跃迁条件由外部 Operator/Action/Event 判责，
 # RelationFlagManager 只提供数据层原子操作：
@@ -470,53 +465,6 @@ static func upgrade_person_state(target_tag: String) -> bool:
 
 
 # ═══════════════════════════════════════════════════════════
-# 引荐信 (Intro) — NPCDocument.intro_keys
-# ═══════════════════════════════════════════════════════════
-
-## 为目标追加一条引荐信 key
-static func add_intro(target_tag: String, intro_key: String) -> void:
-	var doc = _get_or_create_npc_doc(target_tag)
-	if intro_key in doc.intro_keys:
-		Logging.info("RelationFlagManager: intro key '%s' already exists for %s, skip duplicate" % [intro_key, target_tag])
-		return
-	doc.intro_keys.append(intro_key)
-	Logging.info("RelationFlagManager: intro +'%s' for %s (total=%d)" % [intro_key, target_tag, doc.intro_keys.size()])
-
-## 获取目标当前的所有引荐信 key
-static func get_intro_keys(target_tag: String) -> Array:
-	var doc = _get_or_create_npc_doc(target_tag)
-	return doc.intro_keys
-
-## 检查目标是否有引荐信
-static func has_intro(target_tag: String) -> bool:
-	var doc = _get_or_create_npc_doc(target_tag)
-	return not doc.intro_keys.is_empty()
-
-## 按 key 精确匹配并移除一条引荐信
-## 返回 true 表示成功消费，false 表示未找到
-static func consume_intro(target_tag: String, intro_key: String) -> bool:
-	var doc = _get_or_create_npc_doc(target_tag)
-	if doc.intro_keys.is_empty():
-		Logging.info("RelationFlagManager: consume_intro failed — no intro for %s" % target_tag)
-		return false
-
-	var idx = doc.intro_keys.find(intro_key)
-	if idx == -1:
-		Logging.info("RelationFlagManager: consume_intro failed — key '%s' not found in %s" % [intro_key, target_tag])
-		return false
-
-	doc.intro_keys.remove_at(idx)
-	Logging.info("RelationFlagManager: consume_intro '%s' from %s, remaining=%d" % [intro_key, target_tag, doc.intro_keys.size()])
-	return true
-
-## 清除目标的所有引荐信
-static func clear_intro(target_tag: String) -> void:
-	var doc = _get_or_create_npc_doc(target_tag)
-	doc.intro_keys.clear()
-	Logging.info("RelationFlagManager: intro cleared for %s" % target_tag)
-
-
-# ═══════════════════════════════════════════════════════════
 # 聚合查询 — 一次性获取所有目标的关系数据
 # ═══════════════════════════════════════════════════════════
 
@@ -526,15 +474,13 @@ static func clear_intro(target_tag: String) -> void:
 ##                 来源: ENUMS.RELATION_TARGET.keys() → to_lower()
 ## @return Dictionary: {target_tag: {leverage_keys: Array[String],
 ##                                    help: int,
-##                                    person_state: String,
-##                                    intro_keys: Array[String]}}
+##                                    person_state: String}}
 ## 无数据的目标返回空列表 / 0 / 默认值，不报错。
 static func get_all_relations(targets: Array[String]) -> Dictionary:
 	var result: Dictionary = {}
 	for target_tag in targets:
 		result[target_tag] = {
 			leverage_keys = get_leverage_keys(target_tag),
-			intro_keys = get_intro_keys(target_tag),
 			help = get_help(target_tag),
 			person_state = get_person_state(target_tag),
 		}

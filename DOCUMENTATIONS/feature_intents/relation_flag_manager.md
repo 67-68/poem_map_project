@@ -45,7 +45,7 @@ T3: blood_oath  — 生死之交/政治死党，无视规则以势碾敌
 
 ### 未修改
 
-- `leverage` / `help` / `intro` 全部 API 保持不变
+- `leverage` / `help` 全部 API 保持不变
 - `person_state` CRUD (`get/set/is/clear/get_known_targets`) API 签名不变
 - `ENUMS.RELATION_TARGET` / `ENUMS.to_relation_str()` 不变
 - `RELATION_TARGET_TIER` 不变

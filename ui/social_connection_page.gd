@@ -395,11 +395,6 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 		for key: String in doc.leverage_keys:
 			relation_parts.append("  · %s" % key)
 
-	if not doc.intro_keys.is_empty():
-		relation_parts.append(tr("CODE_SOCIAL_CONNECTION_PAGE_1559C9C814") % doc.intro_keys.size())
-		for key: String in doc.intro_keys:
-			relation_parts.append("  · %s" % key)
-
 	if doc.help_count > 0:
 		relation_parts.append(tr("CODE_SOCIAL_CONNECTION_PAGE_272D014D81") % doc.help_count)
 
@@ -409,7 +404,7 @@ func _refresh_info_panel(doc: NPCDocument) -> void:
 	else:
 		relation_text = "\n".join(relation_parts)
 	_info_relation.text = relation_text
-	Logging.info("[SocialConnectionPage]   关系 — leverage=%d intro=%d help=%d" % [doc.leverage_keys.size(), doc.intro_keys.size(), doc.help_count])
+	Logging.info("[SocialConnectionPage]   关系 — leverage=%d help=%d" % [doc.leverage_keys.size(), doc.help_count])
 
 	# ── Unit5: 相关人物 ──
 	var related_text: String

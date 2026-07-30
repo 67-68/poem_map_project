@@ -472,10 +472,6 @@
     "1_core_rules/archetypes/jiaoyou_hold_feast_defer.tres",
     "1_core_rules/archetypes/jiaoyou_hold_feast_failure.tres",
     "1_core_rules/archetypes/jiaoyou_hold_feast_success.tres",
-    "1_core_rules/archetypes/jiaoyou_intro_gacha_cost.tres",
-    "1_core_rules/archetypes/jiaoyou_intro_gacha_defer.tres",
-    "1_core_rules/archetypes/jiaoyou_intro_gacha_failure.tres",
-    "1_core_rules/archetypes/jiaoyou_intro_gacha_success.tres",
     "1_core_rules/archetypes/jiaoyou_leverage_farm_cost.tres",
     "1_core_rules/archetypes/jiaoyou_leverage_farm_failure.tres",
     "1_core_rules/archetypes/jiaoyou_leverage_farm_success.tres",
@@ -623,8 +619,6 @@
     "1_core_rules/events/fallback/imaginary_gain_wine_gourd.tres",
     "1_core_rules/events/fallback/imaginary_loss_expire_fallback.tres",
     "1_core_rules/events/fallback/imaginary_loss_fifo_fallback.tres",
-    "1_core_rules/events/fallback/intro_gacha_failure_fallback.tres",
-    "1_core_rules/events/fallback/intro_gacha_success_fallback.tres",
     "1_core_rules/events/fallback/jiaoyou_fallback.tres",
     "1_core_rules/events/fallback/jiaoyou_recite_poem_failed_fallback.tres",
     "1_core_rules/events/fallback/jiaoyou_recite_poem_fallback.tres",
@@ -720,7 +714,6 @@
     "3_actions_pool/actions/tut_chuyou/tut_chuyou_south.tres",
     "3_actions_pool/actions/tut_chuyou/tut_chuyou_west.tres",
     "3_actions_pool/actions/jiao_you/jiaoyou_hold_feast.tres",
-    "3_actions_pool/actions/jiao_you/jiaoyou_intro_gacha.tres",
     "3_actions_pool/actions/jiao_you/jiaoyou_recite_poem.tres",
     "3_actions_pool/actions/jiao_you/jiaoyou_tavern_gacha.tres",
     "3_actions_pool/actions/jiao_you/jiaoyou_tongyou_changan.tres",
@@ -827,6 +820,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-28T08:55:51.381540+00:00",
-  "total": 826
+  "generated_at": "2026-07-30T02:31:57.078121+00:00",
+  "total": 819
 }

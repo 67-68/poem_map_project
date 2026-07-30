@@ -20,7 +20,6 @@ func before_each():
 			doc.leverage_keys.clear()
 			doc.help_count = 0
 			doc.person_state = RelationFlagManager.DEFAULT_PERSON_STATE
-			doc.intro_keys.clear()
 
 
 # ════════════════════════════════════════════════════════════
@@ -444,5 +443,4 @@ func test_get_all_relations_no_favor():
 	assert_false(data.has("favor"), "get_all_relations 不应再包含 favor")
 	assert_true(data.has("person_state"))
 	assert_true(data.has("leverage_keys"))
-	assert_true(data.has("intro_keys"))
 	assert_true(data.has("help"))

@@ -7,9 +7,9 @@ HTML5 导出要求 Logging 和 ENUMS 作为 autoload 才能注册 class_name。
 脚本中的静态方法在任何场景下都可正常调用。
 
 用法:
-  python tools/toggle_export_fix.py add      # 添加 Logging + ENUMS 到 [autoload]
-  python tools/toggle_export_fix.py remove   # 从 [autoload] 移除 Logging + ENUMS
-  python tools/toggle_export_fix.py status   # 查看当前状态
+  python3 tools/toggle_export_fix.py add      # 添加 Logging + ENUMS 到 [autoload]
+  python3 tools/toggle_export_fix.py remove   # 从 [autoload] 移除 Logging + ENUMS
+  python3 tools/toggle_export_fix.py status   # 查看当前状态
 """
 
 import re

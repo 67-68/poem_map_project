@@ -23,11 +23,11 @@
   │     operator 执行顺序（init 链传递 context）:
   │       a) PickNpcOperator.init → 选人 → context[npc_target]
   │       b) PersonStateOperator.init → 捕获 context
-  │       c) [add_random_intro|add_random_leverage].init → 捕获 context
+  │       c) add_random_leverage.init → 捕获 context
   │       d) PropertyOperator.init → 无操作（prop 类型不需要 context）
   │       e) PickNpcOperator.operate() → 写 actor:npc:X + social:X 到 current_action_tags
   │       f) PersonStateOperator.operate() → set/upgrade person_state
-  │       g) [add_random_intro|add_random_leverage].operate() → 加引荐/把柄
+  │       g) add_random_leverage.operate() → 加把柄
   │       h) PropertyOperator.operate() → append_stat（扣钱/加进度）
   │
   ├─ 3. 时间扣除（day_consumed + trait 惩罚）
@@ -49,12 +49,6 @@
 | location | `pingkangfang` |
 | archetype | `jiaoyou_hold_feast_success` (money -xl) |
 
-**action_results（顺序重要，init 链传 context）：**
-```
-pick_npc(mode=by_place; places=pingkangfang; state=inner_circle; state_compare=gte; key=host_npc; social_tag=social:intro)
-pick_npc(mode=related; source_key=host_npc; state=not_meet; key=letter_target)
-add_random_intro(target_key=letter_target)
-```
 
 ### ② 普通拜谒 / 升级 (baiye_normal)
 
@@ -71,20 +65,7 @@ person_state(mode=upgrade; target_key=npc_target)
 
 > `state=blood_oath; state_compare=lt` 过滤：排除已是最高级（blood_oath）的 NPC，not_meet / know_about / inner_circle 均可被选中升级。
 
-### ③ 雅集 / 新节点 (jiaoyou_intro_gacha)
-
-| 项 | 值 |
-|----|-----|
-| location | `pingkangfang` |
-| archetype | `jiaoyou_intro_gacha_success` (money -xl) |
-
-**action_results：**
-```
-pick_npc(mode=by_place; places=pingkangfang,huangcheng; state=uncharted; key=npc_target; social_tag=social:acquaint)
-person_state(mode=set; state=not_meet; target_key=npc_target)
-```
-
-### ④ 暗巷刺探 (jiaoyou_leverage_farm)
+### ③ 暗巷刺探 (jiaoyou_leverage_farm)
 
 | 项 | 值 |
 |----|-----|
@@ -97,7 +78,7 @@ pick_npc(mode=random; key=npc_target; social_tag=social:leverage)
 add_random_leverage(target_key=npc_target)
 ```
 
-### ⑤ 同游长安 (jiaoyou_tongyou_changan)
+### ④ 同游长安 (jiaoyou_tongyou_changan)
 
 | 项 | 值 |
 |----|-----|
@@ -109,7 +90,7 @@ add_random_leverage(target_key=npc_target)
 pick_npc(mode=random; key=npc_target; social_tag=social:acquaint)
 ```
 
-### ⑥ 广发行卷 (baiye_mass_distribution)
+### ⑤ 广发行卷 (baiye_mass_distribution)
 
 | 项 | 值 |
 |----|-----|
@@ -138,7 +119,6 @@ person_state(mode=set; state=not_meet; target_key=npc_target)
 | [`core/model/action.gd`](core/model/action.gd) | + `archetype_uuid` + `get_all_action_results()` |
 | [`parser/micro_dsl_parser.gd`](parser/micro_dsl_parser.gd) | + `pick_npc`/`person_state` 解析 |
 | [`ui/action_button.gd`](ui/action_button.gd) | init 链 + `get_all_action_results()` 合并 |
-| [`core/operators/add_random_intro_operator.gd`](core/operators/add_random_intro_operator.gd) | + `target_key` + `init()` |
 | [`core/operators/add_random_leverage_operator.gd`](core/operators/add_random_leverage_operator.gd) | + `target_key` + `init()` |
 | [`tools/data/event_archetypes.json`](tools/data/event_archetypes.json) | + 12 个 archetype（6 success + 6 failure） |
 
@@ -148,7 +128,6 @@ person_state(mode=set; state=not_meet; target_key=npc_target)
 |------|------|
 | `data/3_actions_pool/actions/jiao_you/jiaoyou_hold_feast.tres` | + action_results（3 个 operator）+ archetype_uuid="jiaoyou_hold_feast_success" |
 | `data/3_actions_pool/actions/bai_ye/baiye_normal.tres` | action_results 替换占位符为 PickNpc + PersonState；+ archetype_uuid |
-| `data/3_actions_pool/actions/jiao_you/intro_gacha.tres` | + action_results（2 个 operator）+ archetype_uuid |
 | `data/3_actions_pool/actions/jiao_you/leverage_farm.tres` | + action_results（2 个 operator）+ archetype_uuid |
 | `data/3_actions_pool/actions/jiao_you/jiaoyou_tongyou_changan.tres` | + action_results（1 个 operator）+ archetype_uuid |
 | `data/3_actions_pool/actions/bai_ye/baiye_mass_distribution.tres` | action_results 替换占位符为 PickNpc + PersonState；+ archetype_uuid |
@@ -159,7 +138,7 @@ person_state(mode=set; state=not_meet; target_key=npc_target)
 
 ## 涉及 NPC 的 relate_to 配置
 
-需要给以下 NPC 的 `.tres` 文件补充 `relate_to` 数据（用于宴席推荐信场景）：
+需要给以下 NPC 的 `.tres` 文件补充 `relate_to` 数据（用于未来社交场景）：
 
 | NPC | 建议 relate_to |
 |-----|---------------|

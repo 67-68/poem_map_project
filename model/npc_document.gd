@@ -44,10 +44,6 @@ class_name NPCDocument extends Resource
 ## uncharted: 玩家不知道此人存在（默认态）
 @export var person_state: String = "uncharted"
 
-## 引荐信列表 — 玩家持有的该目标的引荐信 key
-## 原 flag: flag_gen_intro_{TARGET_TAG}
-@export var intro_keys: Array[String] = []
-
 ## NPC 的人脉关系列表 — 存储其他 NPC 的 target_tag。
 ## 用于宴席推荐信等场景：从主办者的 relate_to 中随机选一个 not_meet 的人。
 ## 示例：["gaoshi", "zhengqian", "wangwei"]

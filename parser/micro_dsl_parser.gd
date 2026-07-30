@@ -91,7 +91,6 @@ const FUNC_PLAY_TRANSITION := "play_transition"
 const FUNC_LEVERAGE_ADD := "leverage_add"
 const FUNC_SET_RANDOM_PERSON_STATE := "set_random_person_state"
 const FUNC_ADD_RANDOM_LEVERAGE := "add_random_leverage"
-const FUNC_ADD_RANDOM_INTRO := "add_random_intro"
 const FUNC_INFO := "info"
 const FUNC_ALL_EMO_SUB := "all_emo_sub"
 const FUNC_ADD_SOCIAL_CREDIT := "add_social_credit"
@@ -190,7 +189,6 @@ static func _ensure_dispatch() -> void:
 	# ── Social Maneuver Operators ──
 	cd[FUNC_SET_RANDOM_PERSON_STATE] = func(p, r): return _exec_set_random_person_state_op(p, r)
 	cd[FUNC_ADD_RANDOM_LEVERAGE] = func(p, r): return _exec_add_random_leverage_op(p, r)
-	cd[FUNC_ADD_RANDOM_INTRO] = func(p, r): return _exec_add_random_intro_op(p, r)
 	# ── 🆕 地点匹配 NPC Picker ──
 	cd[FUNC_PICK_NPC_BY_PLACE] = func(p, r): return _exec_pick_npc_by_place_op(p, r)
 	# ── 🆕 统一 NPC 选择器 + 人物状态操作 ──
@@ -1379,16 +1377,6 @@ static func _exec_set_random_person_state_op(parsed: NamedDSLParser.ParseResult,
 static func _exec_add_random_leverage_op(parsed: NamedDSLParser.ParseResult, raw: String) -> AddRandomLeverageOperator:
 	var op := AddRandomLeverageOperator.new()
 	Logging.info("MicroDSLParser: _exec_add_random_leverage_op — raw: %s" % raw)
-	return op
-
-
-# ─── add_random_intro ─────────────────────────────────
-
-# DSL 语法: add_random_intro()
-# 无参数 — 从所有 RELATION_TARGET 中随机选一个，添加引荐信。
-static func _exec_add_random_intro_op(parsed: NamedDSLParser.ParseResult, raw: String) -> AddRandomIntroOperator:
-	var op := AddRandomIntroOperator.new()
-	Logging.info("MicroDSLParser: _exec_add_random_intro_op — raw: %s" % raw)
 	return op
 
 
