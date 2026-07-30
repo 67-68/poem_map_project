@@ -11,7 +11,7 @@
 - `ui/right_info_panel.gd` — `_hide_for_tutorial()` 隐藏 SpecialLabel, `refresh_time_panel()`, `set_special_label_visible()`
 - `ui/hover_popup_manager.gd` — set_hover_enabled 全局开关
 - `data/2_characters/npc_docs/tut_taoist.tres` — 道士 NPCDocument（初始 person_state=not_meet）
-- `data/4_eras/735_youth/events/` — tutorial 专属事件（.tres）
+- `data/4_eras/735_youth/events/` — tutorial 专属事件（.tres，含 tut_background_intro）
 - `data/3_actions_pool/actions/jiao_you/` — tut_jiaoyou_talk, tut_jiaoyou_drink, tut_taoist_dispel_fog
 - `data/3_actions_pool/actions/zhu_liu/` — tut_zhu_liu_base, tut_zhu_liu_upper
 - `data/3_actions_pool/actions/tut_chuyou/` — tut_chuyou 4方向 + tut_chuyou_lookup
@@ -40,7 +40,8 @@
 
 | 步骤 | 事件 | 名字 | 地点 | 身份 | 健康 | 钱财 | TraitGrid | 底层修饰(才府定) |
 |------|------|:---:|:---:|:---:|:---:|:---:|:---------:|:------------:|
-| | P1 | tut_meet_taoist | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| P1a | tut_background_intro | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| P1b | tut_meet_taoist | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
 | | P2.1 | tut_dialogue_1 | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
 | | P2.2 | tut_dialogue_time | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
 | | P2.3 | tut_dialogue_2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ |
@@ -54,7 +55,8 @@
 
 | 步骤 | 事件 | 时间面板 | 风闻区 | 决议区 | 社交按钮 | 理念按钮 | 写诗按钮 | 底部按钮栏 | SpecialLabel |
 |------|------|:------:|:-----:|:-----:|:------:|:------:|:------:|:--------:|:----------:|
-| | P1-2.1 | tut_meet_taoist/tut_dialogue_1 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| P1a | tut_background_intro | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| P1b-2.1 | tut_meet_taoist/tut_dialogue_1 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
 | | P2.2 | tut_dialogue_time | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
 | | P2.3-4 | tut_dialogue_2/4 | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
 | | P4 BACK | tut_return_taoist | ✓ | ✗ | ✗ | ✓ | ✗ | ✗ | ✓ | ✗ |
@@ -68,7 +70,7 @@
 |------|---------|---------|
 | | P1-P2 (叙事) | `[]` | `[]` |
 | | P4 FREE_ROAM | `["jiao_you", "zhu_liu"]` | `["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"]` |
-| | P4 FOG_FOUND | `["jiao_you", "zhu_liu", "tut_chuyou"]` | `["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper", "tut_chuyou_east", "tut_chuyou_west", "tut_chuyou_south", "tut_chuyou_north"]` (仅查看模式) |
+| P4 FOG_FOUND | `["jiao_you", "zhu_liu", "tut_chuyou"]` | `["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper", "tut_chuyou_east"]` (仅东方向查看，其余方向 Phase 5 由 flag 解锁) |
 | | P4 BACK_AT_TAOIST (→ OVERRIDE_LOCKED) | 同上 + tut_taoist_dispel_fog(override) | `["tut_jiaoyou_drink", "tut_zhu_liu_base", "tut_zhu_liu_upper"]` |
 | | P5 DEFERRING | `["jiao_you", "zhu_liu", "tut_chuyou"]` | `[]` (出游4方向由 flag tut_lock_chuyou_subs/tut_unlock_chuyou_subs 控制) |
 | | P6 VISION | 同上 | `[]` |
@@ -78,7 +80,9 @@
 ## 状态转换
 
 ```
-INIT → PHASE_1_MEET (tut_meet_taoist, 鸟语花香音效)
+INIT → PHASE_1_MEET
+    → tut_background_intro (第三人称背景介绍：青年杜甫泰山求道)
+    → tut_meet_taoist (道士出场 + 鸟语花香音效)
   → PHASE_2_DIALOGUE (4步对话, 相遇时 upgrade_person_state: not_meet→know_about)
     → tut_dialogue_1 (名字+地点+身份)
     → tut_dialogue_time (时间面板 735年)
@@ -87,7 +91,7 @@ INIT → PHASE_1_MEET (tut_meet_taoist, 鸟语花香音效)
   → PHASE_4_EXPLORE (行动白名单驱动)
     → VAST_WORLD: tut_vast_world (2个Lv3意象) → FREE_ROAM
     → FREE_ROAM: 仅交游+驻留。问道士话→tut_talk_no_response（打坐无回应）。驻留迁移→stay_place_changed→tut_move_away
-    → FOG_FOUND: tut_move_away确认→出游解锁(仅查看模式, 无4方向子行动)(CHUYOU_VIEWED)
+    → FOG_FOUND: tut_move_away确认→出游解锁(仅东方向查看)(CHUYOU_VIEWED)
     → CHUYOU_VIEWED: 出游查看雾→tut_return_taoist (bottom_btn_bar+social_btn 可见, 道士 not_meet→know_about)
     → BACK_AT_TAOIST: tut_return_taoist确认→子白名单切共饮(OVERRIDE_LOCKED)
     → OVERRIDE_LOCKED: 共饮确认→upgrade_person_state→inner_circle→override解锁(OVERRIDE_READY)
@@ -127,7 +131,7 @@ INIT → PHASE_1_MEET (tut_meet_taoist, 鸟语花香音效)
 
 | | 信号 | 驱动阶段 |
 |------|------|---------|
-| | event_confirmed | Phase 1→2, 2内部, 2→4, 4内部, 5内部, 6内部, 7内部 |
+| event_confirmed | Phase 1内部(intro→meet→2), 2内部, 2→4, 4内部, 5内部, 6内部, 7内部 |
 | | stay_place_changed | Phase 4 FREE_ROAM→MOVED_AWAY |
 | | request_refresh_action_panel | Phase 4-7 行动执行检测 |
 | | on_xun_tick | Phase 5 defer倒计时→_advance_to_phase_6（检查 is_deferring("tut_taoist_dispel_fog")） |

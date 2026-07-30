@@ -88,6 +88,7 @@ var _poem_created: bool = false
 var _inspiration_gained: bool = false
 var _defer_started: bool = false
 var _defer_completed: bool = false
+var _phase_1_intro_shown: bool = false
 ## 🆕 刚进入 Phase 5 时跳过首次 _on_phase_5_action 的中断检测
 ## （_set_sub_whitelist → request_refresh_action_panel → _on_state_check → _on_phase_5_action，
 ##  此时 defer 尚未被 SubActionExecutor 启动；event_confirmed 同理在过渡事件期间不应触发检测）
@@ -613,7 +614,14 @@ func _on_event_confirmed() -> void:
 
 	match _current_phase:
 		Phase.PHASE_1_MEET:
-			_advance_to_phase_2()
+			if not _phase_1_intro_shown:
+				# 第一步：背景介绍确认 → 推道士出场事件
+				_phase_1_intro_shown = true
+				Logging.info("TutorialController: tut_background_intro 确认 → 推送 tut_meet_taoist")
+				_push_tut_event("tut_meet_taoist")
+			else:
+				# 第二步：道士出场确认 → 进入对话阶段
+				_advance_to_phase_2()
 
 		Phase.PHASE_2_DIALOGUE:
 			_advance_dialogue()
@@ -746,7 +754,8 @@ func _on_phase_4_event_confirmed() -> void:
 			_p4_step = Phase4Step.CHUYOU_VIEWED
 			_set_whitelist(["jiao_you", "zhu_liu", "tut_chuyou"])
 			# P3-1: FOG_FOUND 阶段暴露出游4方向（仅查看，四周看雾）; lookup 留给 Phase 6
-			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper", "tut_chuyou_east", "tut_chuyou_west", "tut_chuyou_south", "tut_chuyou_north"])
+			# FOG_FOUND: 仅暴露东方向探索（其余方向在 Phase 5 defer 期间由 flag 解锁）
+			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper", "tut_chuyou_east"])
 			Logging.info("TutorialController: FOG_FOUND — 出游已解锁（仅查看模式）")
 			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_095EFAB7C8"))
 
@@ -1039,7 +1048,7 @@ func _begin_phase_1() -> void:
 	Logging.info("TutorialController: === 开始 PHASE_1_MEET ===")
 	PlayerState.set_flag("tut_phase_started", "phase_1")
 	_current_phase = Phase.PHASE_1_MEET
-	_push_tut_event("tut_meet_taoist")
+	_push_tut_event("tut_background_intro")
 
 
 # ═══════════════════════════════════════════════════════════
