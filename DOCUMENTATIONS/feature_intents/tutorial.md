@@ -94,8 +94,12 @@ INIT → PHASE_1_MEET
     → FOG_FOUND: tut_move_away确认→出游解锁(仅东方向查看)(CHUYOU_VIEWED)
     → CHUYOU_VIEWED: 出游查看雾→tut_return_taoist (bottom_btn_bar+social_btn 可见, 道士 not_meet→know_about)
     → BACK_AT_TAOIST: tut_return_taoist确认→子白名单切共饮(OVERRIDE_LOCKED)
-    → OVERRIDE_LOCKED: 共饮确认→upgrade_person_state→inner_circle→override解锁(OVERRIDE_READY)
-    → OVERRIDE_READY: 点击override→_advance_to_phase_5()
+    → OVERRIDE_LOCKED: 共饮确认→tut_drink_together(道士质疑文采)→upgrade_person_state→inner_circle→OVERRIDE_READY
+    → OVERRIDE_READY: tut_collect_imagery 确认→进入 PHASE_IMAGERY_COLLECT
+  → PHASE_IMAGERY_COLLECT (意象收集 — 第一次写诗:无名)
+    → FREE_ROAM: 仅出游(南/北/西/凝视)+驻留。收集3意象→IMAGERY_READY
+    → IMAGERY_READY: poem_btn可见+提示写诗→POEM_WRITTEN
+    → POEM_WRITTEN: 迁回taishan_base+交游(talk)→tut_poem_to_taoist确认→进入P5
   → PHASE_5_DEFER (SubActionExecutor 自动启动 defer 2旬, 出游4方向由flag解锁)
     → DEFERRING: 子白名单清空, 出游4方向由 tut_unlock_chuyou_subs flag 控制
     → DEFER_INTERRUPTED: 玩家中断 defer→tut_defer_interrupt→重新开始
@@ -121,8 +125,10 @@ INIT → PHASE_1_MEET
 | | tut_taoist_dispel_fog | 交游 override | override=tut_jiaoyou_drink, defer_config.xun_defered=s_xun_cost(2旬), fallback→tut_defer_interrupt |
 | | tut_zhu_liu_base | 驻留子行动 | 泰山脚下→taishan_base, archetype→set_stay_place(place=taishan_base) |
 | | tut_zhu_liu_upper | 驻留子行动 | 泰山上→taishan_upper, archetype→set_stay_place(place=taishan_upper) |
-| | tut_chuyou_east/west/south/north | 出游子行动 | Phase 5 defer期间探索四方（由flag tut_unlock_chuyou_subs 解锁） |
-| | tut_chuyou_lookup | 出游子行动 | Phase 6: 往上看→archetype→roll_imaginary(level=3) |
+| | tut_chuyou_east | 出游子行动 | 东麓探幽(雾气锁, fallback→tut_chuyou_fallback) |
+| | tut_chuyou_south/north/west | 出游子行动 | 意象收集: 50% Lv2意象 +10兴 +25HP, 各有独立fallback |
+| | tut_chuyou_gaze | 出游子行动 | 意象收集: 100% Lv2意象 -50HP 2天 |
+| | tut_chuyou_lookup | 出游子行动 | Phase 6: 往上看→archetype→imagery_add×3 |
 | | tut_duzhuo_heyaojiu | 独酌子行动 | Phase 7: 喝药酒+40兴 |
 
 > **意象策略**: 所有 tut 子行动通过显式 `imaginary_grants=[{obtain_possibility="no_success_rate"}]` 阻断父行动意象继承。tut 期间的意象获取仅由 archetype 级别 DSL 控制（`tut_taoist_dispel_fog_success: roll_imaginary(level=3)` / `tut_chuyou_lookup_success: imagery_add × 3`）。
@@ -131,12 +137,13 @@ INIT → PHASE_1_MEET
 
 | | 信号 | 驱动阶段 |
 |------|------|---------|
-| event_confirmed | Phase 1内部(intro→meet→2), 2内部, 2→4, 4内部, 5内部, 6内部, 7内部 |
-| | stay_place_changed | Phase 4 FREE_ROAM→MOVED_AWAY |
+| event_confirmed | Phase 1内部(intro→meet→2), 2内部, 2→4, 4内部, 意象收集内部, 5内部, 6内部, 7内部 |
+| | stay_place_changed | Phase 4 FREE_ROAM→MOVED_AWAY; 意象收集 POEM_WRITTEN→tut_poem_to_taoist |
 | | request_refresh_action_panel | Phase 4-7 行动执行检测 |
-| | on_xun_tick | Phase 5 defer倒计时→_advance_to_phase_6（检查 is_deferring("tut_taoist_dispel_fog")） |
-| | poems_created | Phase 7 创作检测 |
-| | poem_start_clicked | Phase 7 兴=0检测→tut_no_inspiration |
+| | imaginary_changed | 意象收集 FREE_ROAM: 检测意象≥3 → IMAGERY_READY |
+| | on_xun_tick | Phase 5 defer倒计时→_advance_to_phase_6 |
+| | poems_created | 意象收集 IMAGERY_READY→POEM_WRITTEN; Phase 7 POEM_BTN_VISIBLE/DRINK_WINE→POEM_REVIEWED |
+| | poem_start_clicked | 意象收集 IMAGERY_READY(正常放行); Phase 7 兴=0检测→tut_no_inspiration |
 
 ## 全局控制
 

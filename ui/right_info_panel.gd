@@ -47,7 +47,7 @@ const BREATH_PERIOD: float = 2.0          ## 完整呼吸周期（秒）
 const BREATH_HALF_PERIOD: float = 1.0     ## 半周期 = 扩张 1s / 收缩 1s
 const HINT_AUTO_CLEAR_SECONDS: float = 7.0
 
-@onready var _info_grid: VBoxContainer = $Panel/V/InfoGrid
+@onready var _info_grid: VBoxContainer = $Panel/V/TaskContainer
 @onready var _social_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn
 @onready var _idea_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/LinianBtn
 ## 写诗按钮 — 从 ActionPanelManager 迁移至此

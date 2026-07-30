@@ -18,12 +18,13 @@ extends Node
 
 enum Phase {
 	INIT,
-	PHASE_1_MEET,       # 道士出场 + 鸟语花香音效
-	PHASE_2_DIALOGUE,   # 对话 + 面板滑入 + 属性揭示（含 trait+health+50）
-	PHASE_4_EXPLORE,    # 自由探索（行动驱动）
-	PHASE_5_DEFER,      # override + defer 驱散云雾
-	PHASE_6_VISION,     # 往上看 + 最后 Lv3 意象
-	PHASE_7_POEM,       # 诗词创作 + 理念解锁
+	PHASE_1_MEET,            # 道士出场 + 鸟语花香音效
+	PHASE_2_DIALOGUE,        # 对话 + 面板滑入 + 属性揭示（含 trait+health+50）
+	PHASE_4_EXPLORE,         # 自由探索（行动驱动）
+	PHASE_IMAGERY_COLLECT,   # 意象收集（共饮后、驱散云雾前）— 收集3意象→写诗→道长评诗→P5
+	PHASE_5_DEFER,           # override + defer 驱散云雾
+	PHASE_6_VISION,          # 往上看 + 最后 Lv3 意象
+	PHASE_7_POEM,            # 诗词创作 + 理念解锁
 	END
 }
 
@@ -39,11 +40,18 @@ enum Phase4Step {
 	OVERRIDE_READY,       # 共饮后关系升级 → override 解锁
 }
 
+# ── 意象收集 子阶段 ──
+enum ImageryStep {
+	FREE_ROAM,               # 仅出游(南/北/西/凝视)+驻留可用
+	IMAGERY_READY,           # 意象≥3 → poem_btn 出现 + special_label
+	POEM_WRITTEN,            # 写诗完成 → 提示回找道士
+}
+
 # ── Phase 5 子阶段 ──
 enum Phase5Step {
-	DEFERRING,            # defer 进行中（由 _advance_to_phase_5() 进入）
-	DEFER_INTERRUPTED,    # 玩家中断 defer
-	DEFER_DONE,           # defer 完成
+	DEFERRING,               # defer 进行中（由 _advance_to_phase_5() 进入）
+	DEFER_INTERRUPTED,       # 玩家中断 defer
+	DEFER_DONE,              # defer 完成
 }
 
 # ── Phase 6 子阶段 ──
@@ -72,6 +80,9 @@ var _p4_step: Phase4Step = Phase4Step.VAST_WORLD
 var _p5_step: Phase5Step = Phase5Step.DEFERRING
 var _p6_step: Phase6Step = Phase6Step.DEFER_DONE_EVENT
 var _p7_step: Phase7Step = Phase7Step.POEM_BTN_VISIBLE
+
+# ── 意象收集子阶段 ──
+var _img_step: ImageryStep = ImageryStep.FREE_ROAM
 
 # ── Phase 2 对话子阶段（4步：tut_dialogue_3已删除, tut_dialogue_4合并了trait_demo）──
 var _dialogue_step: int = 0
@@ -333,6 +344,10 @@ func _connect_tutorial_signals() -> void:
 		EventBus.exit_poem_page.connect(_on_poem_start_clicked)
 		Logging.info("TutorialController: 已连接 EventBus.exit_poem_page")
 	
+	if not EventBus.imaginary_changed.is_connected(_on_imaginary_changed):
+		EventBus.imaginary_changed.connect(_on_imaginary_changed)
+		Logging.info("TutorialController: 已连接 EventBus.imaginary_changed")
+	
 	EventBus.idea_page_close.connect(end)
 
 	_signals_connected = true
@@ -353,6 +368,8 @@ func _disconnect_tutorial_signals() -> void:
 		PlayerState.stay_place_changed.disconnect(_on_stay_place_changed)
 	if EventBus.exit_poem_page.is_connected(_on_poem_start_clicked):
 		EventBus.exit_poem_page.disconnect(_on_poem_start_clicked)
+	if EventBus.imaginary_changed.is_connected(_on_imaginary_changed):
+		EventBus.imaginary_changed.disconnect(_on_imaginary_changed)
 	_signals_connected = false
 	Logging.info("TutorialController: 所有信号已断开")
 
@@ -414,6 +431,7 @@ func _ban_tutorial_actions() -> void:
 		"tut_chuyou_south",
 		"tut_chuyou_north",
 		"tut_chuyou_lookup",
+		"tut_chuyou_gaze",
 		# ── 独酌（喝药酒子行动）──
 		"tut_duzhuo_heyaojiu",
 		# ── 交游（和道人说话 + 共饮）──
@@ -629,6 +647,9 @@ func _on_event_confirmed() -> void:
 		Phase.PHASE_4_EXPLORE:
 			_on_phase_4_event_confirmed()
 
+		Phase.PHASE_IMAGERY_COLLECT:
+			_on_imagery_collect_event_confirmed()
+
 		Phase.PHASE_5_DEFER:
 			_on_phase_5_event_confirmed()
 
@@ -685,6 +706,8 @@ func _on_state_check(_unused = null) -> void:
 	match _current_phase:
 		Phase.PHASE_4_EXPLORE:
 			_on_phase_4_action()
+		Phase.PHASE_IMAGERY_COLLECT:
+			_on_imagery_collect_action()
 		Phase.PHASE_5_DEFER:
 			_on_phase_5_action()
 		Phase.PHASE_6_VISION:
@@ -706,6 +729,12 @@ func _on_stay_place_changed(place_str: String) -> void:
 		_p4_step = Phase4Step.MOVED_AWAY
 		PlayerState.set_flag("tut_fog_found", true)
 		_push_tut_event("tut_move_away")
+	
+	# 意象收集 Phase: POEM_WRITTEN 阶段玩家迁回 taishan_base 后触发回找道士
+	if _current_phase == Phase.PHASE_IMAGERY_COLLECT and _img_step == ImageryStep.POEM_WRITTEN and place_str == "taishan_base":
+		Logging.info("TutorialController: [IMAGERY:POEM_WRITTEN] 检测到 player 迁回 taishan_base → 推送 tut_poem_to_taoist，道士 not_meet→know_about")
+		RelationFlagManager.upgrade_person_state(TAOIST_NPC_KEY)
+		_push_tut_event("tut_poem_to_taoist")
 
 
 func _on_poem_created(_data: Array = []) -> void:
@@ -715,9 +744,20 @@ func _on_poem_created(_data: Array = []) -> void:
 	if not PlayerState.created_poems.size() > 0:
 		return
 
-	Logging.info("TutorialController: poems_created — phase=%d p7_step=%d" % [
-		_current_phase, _p7_step
+	Logging.info("TutorialController: poems_created — phase=%d img_step=%d p7_step=%d" % [
+		_current_phase, _img_step, _p7_step
 	])
+
+	# 意象收集阶段写诗（第一次：无名诗词）
+	if _current_phase == Phase.PHASE_IMAGERY_COLLECT and _img_step == ImageryStep.IMAGERY_READY:
+		_poem_created = true
+		Logging.info("TutorialController: 意象收集阶段诗词创作完成 → POEM_WRITTEN")
+		_img_step = ImageryStep.POEM_WRITTEN
+		# 切白名单：仅交游+驻留可用，诗人迁回泰山脚下找道士
+		_set_whitelist(["jiao_you", "zhu_liu"])
+		_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
+		_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_IMAGERY_POEM_WRITTEN"))
+		return
 
 	if _current_phase == Phase.PHASE_7_POEM:
 		_poem_created = true
@@ -777,14 +817,14 @@ func _on_phase_4_event_confirmed() -> void:
 			# tut_taoist_dispel_fog 是覆盖 tut_jiaoyou_drink 的 override，需要关系 >= know_about
 
 		Phase4Step.OVERRIDE_LOCKED:
-				Logging.info("TutorialController: [P4:OVERRIDE_LOCKED] 共饮确认，关系升级 → 直接进入 Phase 5")
+				Logging.info("TutorialController: [P4:OVERRIDE_LOCKED] 共饮确认，道士质疑文采 → 推送 tut_collect_imagery")
 				RelationFlagManager.upgrade_person_state(TAOIST_NPC_KEY)
 				_p4_step = Phase4Step.OVERRIDE_READY
-				_current_phase = Phase.PHASE_5_DEFER
-				_p5_step = Phase5Step.DEFERRING
-				_defer_started = false
-				Logging.info("TutorialController: [P5] 已进入 Phase 5, _defer_started=false")
-				_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_179CB8FB4E"))
+				_push_tut_event("tut_collect_imagery")
+
+		Phase4Step.OVERRIDE_READY:
+				Logging.info("TutorialController: [P4:OVERRIDE_READY] tut_collect_imagery 确认 → 进入意象收集 Phase")
+				_advance_to_imagery_collect()
 
 		_:
 			Logging.warn("TutorialController: Phase 4 未处理的 event_confirmed step=%s(%d)" % [_p4_step_name(), _p4_step])
@@ -936,6 +976,13 @@ func _on_poem_start_clicked() -> void:
 	#breakpoint
 	if not is_tutorial_active():
 		return
+	
+	# 意象收集阶段写诗按钮：在 IMAGERY_READY 已可见，点击正常进入写诗流程
+	if _current_phase == Phase.PHASE_IMAGERY_COLLECT and _img_step == ImageryStep.IMAGERY_READY:
+		Logging.info("TutorialController: poem_start_clicked in IMAGERY_READY — 正常进入写诗流程")
+		# 不拦截，让默认行为（写诗 UI 打开）正常执行
+		return
+	
 	if _current_phase != Phase.PHASE_7_POEM:
 		return
 	if _p7_step != Phase7Step.POEM_BTN_VISIBLE:
@@ -971,6 +1018,67 @@ func _advance_dialogue() -> void:
 		_current_phase = Phase.PHASE_4_EXPLORE
 		_p4_step = Phase4Step.VAST_WORLD
 		_push_tut_event("tut_vast_world")
+
+
+# ═══════════════════════════════════════════════════════════
+# 意象收集 Phase 信号处理
+# ═══════════════════════════════════════════════════════════
+
+## 进入意象收集 Phase（tut_collect_imagery 确认后调用）
+func _advance_to_imagery_collect() -> void:
+	Logging.info("TutorialController: ====== P4 → PHASE_IMAGERY_COLLECT ======")
+	_current_phase = Phase.PHASE_IMAGERY_COLLECT
+	_img_step = ImageryStep.FREE_ROAM
+	# 仅出游(南/北/西/凝视) + 驻留可用；东和 lookup 不可见
+	_set_whitelist(["tut_chuyou", "zhu_liu"])
+	_set_sub_whitelist(["tut_chuyou_south", "tut_chuyou_north", "tut_chuyou_west", "tut_chuyou_gaze", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
+	_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_IMAGERY_COLLECT_FREE"))
+	Logging.info("TutorialController: [IMAGERY:FREE_ROAM] 白名单: tut_chuyou+zhu_liu; 子白名单: south/north/west/gaze + zhu_liu_base/upper")
+
+
+## imaginary_changed 信号回调 — 检测意象数量是否 >= 3
+func _on_imaginary_changed() -> void:
+	if not is_tutorial_active():
+		return
+	if _current_phase != Phase.PHASE_IMAGERY_COLLECT:
+		return
+	if _img_step != ImageryStep.FREE_ROAM:
+		Logging.info("TutorialController: _on_imaginary_changed — 不在 FREE_ROAM 子阶段，跳过")
+		return
+	
+	var count := Database.imaginaries_detail.size()
+	Logging.info("TutorialController: _on_imaginary_changed — 当前意象数量=%d, 阈值=3" % count)
+	if count >= 3:
+		Logging.info("TutorialController: [IMAGERY:FREE_ROAM] 意象数量达标 → IMAGERY_READY")
+		_img_step = ImageryStep.IMAGERY_READY
+		# poem_btn 可见 + 提示写诗
+		var rp := _get_right_panel()
+		if rp and rp.has_method("set_section_visible"):
+			rp.set_section_visible("poem_btn", true)
+			Logging.info("TutorialController: poem_btn 已设置为可见")
+		_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_IMAGERY_READY"))
+		EventBus.request_refresh_action_panel.emit()
+
+
+## 意象收集 Phase event_confirmed 处理
+func _on_imagery_collect_event_confirmed() -> void:
+	Logging.info("TutorialController: ImageryCollection event_confirmed — step=%d" % _img_step)
+	
+	if _img_step == ImageryStep.POEM_WRITTEN:
+		# tut_poem_to_taoist 确认 → 进入 Phase 5
+		Logging.info("TutorialController: tut_poem_to_taoist 确认 → 进入 Phase 5")
+		_current_phase = Phase.PHASE_5_DEFER
+		_p5_step = Phase5Step.DEFERRING
+		_defer_started = false
+		_set_whitelist(["jiao_you", "zhu_liu"])
+		_set_sub_whitelist([])
+		_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_179CB8FB4E"))
+		Logging.info("TutorialController: [P5] 已进入 Phase 5, _defer_started=false, 白名单=[jiao_you,zhu_liu], 子白名单=[]")
+
+
+## 意象收集 Phase state_check 处理
+func _on_imagery_collect_action() -> void:
+	Logging.info("TutorialController: ImageryCollection state_check — step=%d" % _img_step)
 
 
 func _advance_to_phase_5() -> void:

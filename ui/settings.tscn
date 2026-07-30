@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" uid="uid://bu472jjbmjeb3" path="res://assets/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Regular.ttf" id="2_neoxp"]
 [ext_resource type="ButtonGroup" uid="uid://djtodat5jvbpo" path="res://ui/language_btn_group.tres" id="3_yl6pr"]
 [ext_resource type="Script" uid="uid://clbu1fksot07q" path="res://ui/settings.gd" id="4_settings"]
+[ext_resource type="FontFile" uid="uid://c511ns41va53w" path="res://assets/fonts/Noto_Serif_SC/NotoSerifSC-Regular.ttf" id="6_evr87"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j5v2v"]
 
@@ -67,3 +68,10 @@ text = "UI_SETTING_MUSIC"
 
 [node name="HSlider" type="HSlider" parent="VBoxContainer" unique_id=711876841]
 layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer" unique_id=22615936]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.094304614, 0.094304316, 0.09430439, 1)
+theme_override_fonts/font = ExtResource("6_evr87")
+theme_override_font_sizes/font_size = 12
+text = "事件自动滚动底部?"

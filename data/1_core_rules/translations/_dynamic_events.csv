@@ -871,7 +871,7 @@ CODE_TUTORIAL_CONTROLLER_179CB8FB4E,道长愿意帮你了！点击「交游」�
 CODE_TUTORIAL_CONTROLLER_2482669467,直接设置 RightInfoPanel 上 Control/SpecialLabel 的文本,Directly set the text of Control/SpecialLabel on RightInfoPanel,
 CODE_TUTORIAL_CONTROLLER_24F0B161F7,道长开始做法驱散云雾，需要两旬时间…去周边转转吧！点击「出游」探索四方,"The Taoist begins the ritual to disperse the mist — it will take two xun... explore the surroundings! Tap ""Travel"" to roam",
 CODE_TUTORIAL_CONTROLLER_3171C95644,往上看,Look upwards,
-CODE_TUTORIAL_CONTROLLER_343A3514E3,面对壮丽山河，何不赋诗一首？点击右下角毛笔按钮开始创作,"Facing such majestic scenery, why not compose a poem? Tap the brush button in the bottom-right to begin",
+CODE_TUTORIAL_CONTROLLER_343A3514E3,面对壮丽山河，何不赋诗一首？点击右下淡蓝色写诗按钮开始创作,"Facing such majestic scenery, why not compose a poem? Tap the pale-blue poem writing button in the bottom-right to begin",
 CODE_TUTORIAL_CONTROLLER_40AB2EDE13,云雾已散！点击「出游」→ 往山顶看看,"The mist has cleared! Tap ""Travel"" → Head to the summit",
 CODE_TUTORIAL_CONTROLLER_492C9E4D68,泰山之巅尽收眼底！点击右下角蓝色印章，将感悟化为诗句,Mount Tai's summit lies before you! Tap the blue seal in the bottom-right to turn insight into verse,
 CODE_TUTORIAL_CONTROLLER_6D0E37AE7F,无法事件期间触发,Triggers when no event is active,
@@ -2715,9 +2715,17 @@ He pointed beyond the mountains: ""Mark the days. Do not squander time.""
 
 [color=#888888]System Tip: The time panel in the upper-right corner displays the current reign era and tenday. Each white orb represents one day — in this tutorial, only 2 days are available per tenday. Click the ""Skip"" button to quickly end the current tenday and advance to the next.[/color]",
 TRES_TUT_DIALOGUE_TIME_NAME_0,岁月如梭,Time Flies Like the Shuttle,
-TRES_TUT_DRINK_TOGETHER_DESCRIPTION_0,与道长对饮,"You rashly interrupt the Taoist's ritual. His whisk freezes mid-motion, and the gathered aura scatters around him.\n\nThe Taoist turns his head, brow furrowed deep: \""Young man, ritual workings must flow in one unbroken breath. With this disruption, this humble priest must begin anew from the very start.\""\n\nHe sighs and closes his eyes once more: \""Enough, enough. Let it not happen again.\""",
-TRES_TUT_DRINK_TOGETHER_DESCRIPTION_1,你取出随身携带的酒囊，在道士面前晃了晃。\n\n道士眼睛一亮：「好小子，来泰山还带着酒？」\n\n你们二人在青石上对坐，几杯下肚，道士的话匣子渐渐打开。他讲起年轻时云游各处的见闻，讲起各处的风土人情，语气中透着几分过来人的感慨。\n\n酒酣耳热，你感觉与这道士之间的距离近了不少。,The Taoist's Displeasure,
-TRES_TUT_DRINK_TOGETHER_NAME_0,共饮,Wait for the Taoist to act. Interrupting him may not go over well.,
+TRES_TUT_DRINK_TOGETHER_DESCRIPTION_0,我…确有不足,"You lower your head in silence...'s ritual. His whisk freezes mid-motion, and the gathered aura scatters around him.\n\nThe Taoist turns his head, brow furrowed deep: \""Young man, ritual workings must flow in one unbroken breath. With this disruption, this humble priest must begin anew from the very start.\""\n\nHe sighs and closes his eyes once more: \""Enough, enough. Let it not happen again.\""",
+TRES_TUT_DRINK_TOGETHER_DESCRIPTION_1,你取出随身携带的酒囊，与道士对饮几杯。酒酣耳热之际，道士忽然放下酒杯，目光如炬地打量着你。
+
+「年轻人，老夫看你游历泰山这些时日——可曾写下什么拿得出手的诗句？」
+
+你愣住了。道士捋了捋长须，语气转为严肃：「驱散山顶云雾，要耗去老夫不少修为。若你连一首像样的诗都写不出来，老夫何必白白为你耗费心力？」
+
+你一时语塞，面红耳赤。
+
+道士叹了口气：「罢了。你且在泰山上四处走走，看看这山水。什么时候心中有了真正的感悟，写出一首好诗来，再来找老夫。」,"You share a few cups with the Taoist. Just as the wine warms your blood, he sets down his cup and fixes you with a piercing gaze. "Young man — you have roamed this mountain for a while now. Have you written anything worthy?" You freeze. The Taoist strokes his beard, his tone grave: "Dispersing the summit mist will cost me much of my cultivation. If you cannot even produce one decent poem, why should I waste my efforts?" You sit there, face burning, unable to speak. The Taoist sighs: "Go. Wander the mountain. When true insight comes and you have written a fine poem — then return to me."",
+TRES_TUT_DRINK_TOGETHER_NAME_0,道士的质疑,The Taoist's Challenge,,
 TRES_TUT_FINAL_REVEAL_DESCRIPTION_0,下山去了,He sits down and begins the ritual.,
 TRES_TUT_FINAL_REVEAL_DESCRIPTION_1,你站在山巅，回望这一路——从山脚遇道士，到山腰得指点，再到此刻俯瞰万山。\n\n风从四面八方吹来，你忽然感觉自己不再只是那个初出茅庐的书生了。泰山的灵秀之气仿佛渗入了你的骨血，那些不曾想过的才华、那些深藏的城府、那份与生俱来的定力，都在这一刻变得清晰起来。\n\n再看这天地，你有了新的感悟——朝堂的风声、人间的恩怨、那些暗流涌动的关系网，都隐隐浮现。\n\n泰山之行，不虚此行。\n\n[color=#888888]系统提示：新的界面元素已解锁。右下角的按钮可查看人脉、理念、诗词等功能[/color],Waiting,
 TRES_TUT_FINAL_REVEAL_NAME_0,豁然开朗,I am Du Fu. I travel to broaden my knowledge of the world.,
@@ -3342,3 +3350,23 @@ TRES_FANGJIAN_HAOYAN_SUCCESS_FALLBACK_NAME,坊间豪宴·结交,New Connection,
 TRES_FANGJIAN_HAOYAN_SUCCESS_FALLBACK_DESCRIPTION_0,觥筹交错间，{@npc_target_name} 放下酒杯，拍了拍你的肩膀："有胆识。以后有用得着我的地方，说一声。",Amid clinking cups, {@npc_target_name} claps your shoulder. "You've got guts. Let me know if you ever need a hand.",杯を交わす中、{@npc_target_name} があなたの肩を叩き「度胸があるな。何かあれば声をかけろ」と言った。
 TRES_FANGJIAN_HAOYAN_FAILED_FALLBACK_NAME,坊间豪宴·冷场,Cold Reception,
 TRES_FANGJIAN_HAOYAN_FAILED_FALLBACK_DESCRIPTION_0,你豪掷千金设下盛宴，但豪客们只是敷衍几句便匆匆离去。席间杯盘狼藉，你望着空荡荡的大堂，心知钱打了水漂。,Your lavish banquet draws only perfunctory nods before the VIPs vanish. You stare at the empty hall — money down the drain.,豪奢な宴を張ったが、客たちは愛想笑いだけで早々に去った。散らかった皿を前に、金をドブに捨てたと悟る。
+CODE_TUTORIAL_CONTROLLER_IMAGERY_COLLECT_FREE,道长说你文采不够…去泰山四处走走，收集灵感吧！点击「出游」探索南、北、西三面，或「凝视山水」,"The Taoist says your literary talent falls short... roam Mount Tai and gather inspiration! Tap ""Travel"" to explore south, north, west — or ""Gaze at the Landscape""",
+CODE_TUTORIAL_CONTROLLER_IMAGERY_READY,灵感涌上心头！点击右下角蓝色写诗按钮，将感悟化为诗句,Inspiration surges! Tap the blue poem-writing button in the bottom-right to turn insight into verse,
+CODE_TUTORIAL_CONTROLLER_IMAGERY_POEM_WRITTEN,诗作已成！回去找道长评点一番吧 — 迁回泰山脚下，点击「交游」,Your poem is complete! Return to the Taoist for critique — move back to the base of Mount Tai and tap ""Socialize"",
+TRES_TUT_COLLECT_IMAGERY_NAME_0,道长质疑,The Taoist's Challenge,
+TRES_TUT_COLLECT_IMAGERY_DESCRIPTION_0,好的,Alright,
+TRES_TUT_COLLECT_IMAGERY_DESCRIPTION_1,道士放下酒杯，捋了捋长须，神情忽然严肃起来。\n\n「年轻人，你的志向老夫是佩服的。但驱散山顶云雾，不是儿戏——老夫要耗去不少修为。」\n\n他顿了顿，目光如炬地打量着你：「你游历泰山至今，可曾写下什么能拿得出手的诗句？若连一首像样的诗都写不出来，老夫又何必白白为你耗费心力？」\n\n你一时语塞。\n\n道士叹了口气：「罢了罢了。这样——你且在泰山上四处走走，看看这山水。什么时候心中有了真正的感悟，写出一首像样的诗来，老夫便信你值得这一场法事。」\n\n[color=#888888]系统提示：新的意象收集阶段开始了。你可以通过「出游」→ 南北西方向探索（有概率获取意象并恢复生命与兴致），或「出游」→「凝视山水」（必定获取意象但消耗生命）来收集灵感。当收集到 3 个意象后，右下角的写诗按钮会亮起。[/color],The Taoist sets down his cup and strokes his long beard, his expression suddenly stern. "Young man, I admire your ambition. But dispersing the mist on the summit is no child's play — it will cost me no small measure of cultivation." He pauses, his gaze piercing: "You've roamed Mount Tai for a while now. Have you written anything worthy? If you can't even produce a decent poem, why should I waste my efforts on you?" You fall silent. The Taoist sighs: "Very well. Wander the mountain. Look at its waters, its peaks. When true insight stirs in your heart and you've written a worthy poem, then I shall believe you deserve this ritual." [color=#888888]System: The imagery collection phase has begun. Use "Travel" → south/north/west to explore (chance to gain imagery, health & inspiration), or "Travel" → "Gaze at the Landscape" (guaranteed imagery at the cost of health). Once you've gathered 3 imageries, the poem button will light up in the bottom-right.[/color],
+TRES_TUT_CHUYOU_SOUTH_FALLBACK_NAME_0,南溪漫步,Southern Stream Stroll,
+TRES_TUT_CHUYOU_SOUTH_FALLBACK_DESCRIPTION_0,沿溪而行,Follow the stream,
+TRES_TUT_CHUYOU_SOUTH_FALLBACK_DESCRIPTION_1,你沿着山间溪流向南走去，水声潺潺，野花夹岸。\n\n虽然未见特别的景致，但一路走走停停，山间的清新空气让你精神了不少。,You follow the mountain stream southward. The water murmurs, wildflowers lining the banks. Though no extraordinary sight greets you, the crisp mountain air and gentle wandering leave you feeling refreshed.,
+TRES_TUT_CHUYOU_NORTH_FALLBACK_NAME_0,北岩眺望,Northern Crag Outlook,
+TRES_TUT_CHUYOU_NORTH_FALLBACK_DESCRIPTION_0,继续攀登,Continue climbing,
+TRES_TUT_CHUYOU_NORTH_FALLBACK_DESCRIPTION_1,你攀上北面的岩壁，山风猎猎。\n\n极目远眺，群山连绵，云雾缭绕。虽未能窥见泰山全貌，但这壮阔的景象已足以让你心潮起伏。你深吸一口气，感觉胸中的郁结散去了几分。,You scale the northern cliff-face, the mountain wind whipping past. Gazing into the distance, ranges upon ranges stretch before you, wreathed in cloud. Though Mount Tai's full face remains hidden, the grandeur alone stirs your heart. You draw a deep breath — the knot in your chest loosens a little.,
+TRES_TUT_CHUYOU_WEST_FALLBACK_NAME_0,西峰观霞,Western Peak Sunset,
+TRES_TUT_CHUYOU_WEST_FALLBACK_DESCRIPTION_0,登高远望,Ascend and gaze,
+TRES_TUT_CHUYOU_WEST_FALLBACK_DESCRIPTION_1,你登上西边的山岭，恰逢夕阳西沉。\n\n天际被染成一片橘红，云海翻滚如涛。你坐在岩石上，看着太阳一点一点沉入远山之后。这一刻的宁静，让你暂时忘却了道士的质疑。,You ascend the western ridge just as the sun begins its descent. The sky bleeds orange-red, the sea of clouds churning like waves. You sit upon a rock and watch the sun sink inch by inch behind the distant peaks. In this moment of stillness, the Taoist's challenge fades from your mind.,
+TRES_TUT_POEM_TO_TAOIST_NAME_0,呈诗于道长,Presenting the Poem,
+TRES_TUT_POEM_TO_TAOIST_DESCRIPTION_0,请道长过目,Please read it, Master,
+TRES_TUT_POEM_TO_TAOIST_DESCRIPTION_1,你回到青石旁，道士仍端坐原处。\n\n你将诗作递上。道士接过，眯着眼看了半晌，忽然拍腿大笑：「好！好！果然有几分才气！」\n\n他将诗稿还给你，站起身来，拂尘一挥：「既然如此，老夫便替你驱散这山顶的云雾。你且在旁看着——两旬之内，云开雾散。」\n\n[color=#888888]系统提示：道士开始做法驱散云雾。等待 2 旬后，即可登上泰山之巅。[/color],You return to the green boulder where the Taoist still sits in repose. You hand him your poem. He squints at it for a long moment, then suddenly slaps his thigh and laughs: "Good! Good indeed! You do have some talent after all!" He returns the manuscript, rises, and flicks his whisk: "Very well. I shall disperse the summit mist for you. Stand aside and watch — within two xun, the clouds will part." [color=#888888]System: The Taoist begins his ritual. In 2 xun, the peak will be revealed.[/color],
+ACT_TUT_CHUYOU_GAZE_NAME,出游 · 凝视山水,Gaze at the Landscape,
+ACT_TUT_CHUYOU_GAZE_DESC,凝神静观山色，以心血换取灵感,Gaze intently at the mountain scenery — trade vitality for inspiration,

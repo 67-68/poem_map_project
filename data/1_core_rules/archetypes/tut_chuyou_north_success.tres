@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_jgsjp"]
+
+[resource]
+script = ExtResource("1_jgsjp")
+uuid = "tut_chuyou_north_success"
+name = "tut_chuyou_north.success"
+universal_result = "prop_add(name=inspiration; val=l_xing_gain)|prop_add(name=health; val=s_health_recovery)"
+action_uuid = "tut_chuyou_north"
+state = "success"

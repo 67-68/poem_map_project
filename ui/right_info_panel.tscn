@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ojn7m81iv33i" path="res://ui/right_info_panel.gd" id="2_3crwo"]
 [ext_resource type="Texture2D" uid="uid://d2hbk7omckdv" path="res://assets/maps/宣纸.jpeg" id="2_j2cme"]
-[ext_resource type="FontFile" uid="uid://b0jq4f032woif" path="res://assets/fonts/Noto_Serif_SC/static/NotoSerifSC-Bold.ttf" id="4_kigl6"]
+[ext_resource type="PackedScene" uid="uid://cka4uxs2rge13" path="res://ui/task_container.tscn" id="4_kigl6"]
 [ext_resource type="Texture2D" uid="uid://drwciqjjy75wp" path="res://assets/profile/renmai.png" id="5_3crwo"]
 [ext_resource type="PackedScene" uid="uid://bcqlc8yx4uo44" path="res://world/time_control_panel.tscn" id="5_lnxk4"]
 [ext_resource type="Texture2D" uid="uid://bn4j0rcvlbavx" path="res://assets/stamps/chuangzuo_stamp.png" id="6_lnxk4"]
@@ -93,36 +93,8 @@ layout_mode = 2
 theme_type_variation = &"SubTitleText"
 text = "UI_RIGHT_INFO_PANEL_TEXT_1"
 
-[node name="InfoGrid" type="VBoxContainer" parent="Panel/V" unique_id=623957139]
+[node name="TaskContainer" parent="Panel/V" unique_id=599359059 instance=ExtResource("4_kigl6")]
 layout_mode = 2
-
-[node name="ParentTask" type="LinkButton" parent="Panel/V/InfoGrid" unique_id=1182112038]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.21230528, 0.21230465, 0.2123048, 1)
-theme_override_fonts/font = ExtResource("4_kigl6")
-theme_override_font_sizes/font_size = 18
-text = "父任务: 父任务1"
-
-[node name="TaskPrev" type="LinkButton" parent="Panel/V/InfoGrid" unique_id=970822465]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
-theme_override_fonts/font = ExtResource("4_kigl6")
-theme_override_font_sizes/font_size = 16
-text = "- [u]子任务1[/u](划掉"
-
-[node name="Task2" type="LinkButton" parent="Panel/V/InfoGrid" unique_id=905984248]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.14406255, 0.14406255, 0.14406249, 1)
-theme_override_fonts/font = ExtResource("4_kigl6")
-theme_override_font_sizes/font_size = 16
-text = "- 子任务2"
-
-[node name="TaskFuture" type="LinkButton" parent="Panel/V/InfoGrid" unique_id=2007661257]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.49747366, 0.49747366, 0.49747366, 1)
-theme_override_fonts/font = ExtResource("4_kigl6")
-theme_override_font_sizes/font_size = 16
-text = "- [u]子任务3[/u]"
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/V" unique_id=1463732044]
 layout_mode = 2
