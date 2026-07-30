@@ -259,6 +259,12 @@ func init(context: Dictionary) -> Array:
                 _preinit_ops.append(dup)
     
     # ── 🆕 [NEW] 从 context 读取 ActionArchetype（success 通道：archetype_base + outcome）──
+    # ⚠️ CRITICAL: 此注入逻辑仅在 RandomEvent.init() 中实现。
+    # 如果 fallback 事件的 .tres 将 script_class 错误声明为 "BaseEvent"（而非 "RandomEvent"），
+    # Godot 实例化出的就是 BaseEvent，其 init() 会完全跳过此注入——导致 archetype operators 静默丢失。
+    # 🩸 血案回顾：tut_chuyou_*_fallback.tres 曾因 script_class="BaseEvent" 导致 success archetype 注入全部失败。
+    # 修复方法：将 .tres 的 script 从 model/event.gd 换为 model/random_event.gd，并以 tut_reside_upper.tres 为参照模板。
+    # 参见 DOCUMENTATIONS/feature_intents/tutorial.md 及 temp_ 日志。
     var _action_arch_ops: Array[BaseOperator] = []
     var archetype_base = context.get("archetype_base", "")
     var outcome = context.get("outcome", "")
