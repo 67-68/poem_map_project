@@ -100,6 +100,19 @@ var _inspiration_gained: bool = false
 var _defer_started: bool = false
 var _defer_completed: bool = false
 var _phase_1_intro_shown: bool = false
+
+# ── Task 注册入口（tutorial 初始化时创建，各 Phase 转换点注入）──
+var _task_dengding: Task = null            # "登顶" (is_manual_complete)
+var _task_climb_up: Task = null            # "上山腰看看"
+var _task_look_around: Task = null         # "四处看看"
+var _task_return_taoist: Task = null       # "回去找道士"
+var _task_dispel_fog: Task = null          # "拨开雾气"
+var _task_drink: Task = null               # "和道士喝酒"
+var _task_collect_imagery: Task = null     # "收集意象"
+var _task_write_poem: Task = null          # "写诗词"
+var _task_climb_mountain: Task = null      # "登山" (Phase 6)
+var _task_write_final_poem: Task = null    # "写诗词" (Phase 7)
+var _tasks_initialized: bool = false
 ## 🆕 刚进入 Phase 5 时跳过首次 _on_phase_5_action 的中断检测
 ## （_set_sub_whitelist → request_refresh_action_panel → _on_state_check → _on_phase_5_action，
 ##  此时 defer 尚未被 SubActionExecutor 启动；event_confirmed 同理在过渡事件期间不应触发检测）
@@ -256,6 +269,10 @@ func _begin_tutorial() -> void:
 	_record_game_save_snapshot()
 	Logging.info("TutorialController: [init 0/9] 游戏存档快照已记录")
 
+	# 🆕 注册 tutorial 任务树
+	_init_tasks()
+	Logging.info("TutorialController: [init 0.5/9] 任务树已初始化")
+
 	# 设置每旬 2 天
 	TimeService.on_xun_tick.emit()
 
@@ -347,6 +364,8 @@ func _connect_tutorial_signals() -> void:
 	if not EventBus.imaginary_changed.is_connected(_on_imaginary_changed):
 		EventBus.imaginary_changed.connect(_on_imaginary_changed)
 		Logging.info("TutorialController: 已连接 EventBus.imaginary_changed")
+	
+	_connect_task_callbacks()
 	
 	EventBus.idea_page_close.connect(end)
 
@@ -728,6 +747,8 @@ func _on_stay_place_changed(place_str: String) -> void:
 		Logging.info("TutorialController: [P4:FREE_ROAM] 检测到迁移 → 推送雾事件 tut_move_away")
 		_p4_step = Phase4Step.MOVED_AWAY
 		PlayerState.set_flag("tut_fog_found", true)
+		# 🆕 手动完成 "四处看看" 任务
+		TaskManager.complete_current_task()
 		_push_tut_event("tut_move_away")
 	
 	# 意象收集 Phase: POEM_WRITTEN 阶段玩家迁回 taishan_base 后触发回找道士
@@ -785,6 +806,8 @@ func _on_phase_4_event_confirmed() -> void:
 			# 仅显示交游 + 驻留
 			_set_whitelist(["jiao_you", "zhu_liu"])
 			_set_sub_whitelist(["tut_jiaoyou_talk", "tut_zhu_liu_base", "tut_zhu_liu_upper"])
+			# 🆕 注入"上山腰看看"子任务
+			_inject_task_climb_up()
 			Logging.info("TutorialController: FREE_ROAM — 交游+驻留已解锁, 子行动: tut_jiaoyou_talk, 驻留2地点")
 			_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_93E7E727A3"))
 
@@ -1010,6 +1033,9 @@ func _advance_dialogue() -> void:
 	_dialogue_step += 1
 	if _dialogue_step < DIALOGUE_EVENTS.size():
 		Logging.info("TutorialController: PHASE_2 step %d/%d" % [_dialogue_step + 1, DIALOGUE_EVENTS.size()])
+		# 🆕 第二步对话（tut_dialogue_2 — 道士问来意）→ 注入"登顶"任务
+		if _dialogue_step == 2:
+			_inject_task_dengding()
 		_push_tut_event(DIALOGUE_EVENTS[_dialogue_step])
 	else:
 		# tut_dialogue_4 已合并 trait_add(strong_body) + prop_add(health+50)
@@ -1051,11 +1077,15 @@ func _on_imaginary_changed() -> void:
 	if count >= 3:
 		Logging.info("TutorialController: [IMAGERY:FREE_ROAM] 意象数量达标 → IMAGERY_READY")
 		_img_step = ImageryStep.IMAGERY_READY
-		# poem_btn 可见 + 提示写诗
+		# poem_btn 可见 + 提示写诗（直接访问 Poembtn 节点，与 AnimationController 同路径）
 		var rp := _get_right_panel()
-		if rp and rp.has_method("set_section_visible"):
-			rp.set_section_visible("poem_btn", true)
-			Logging.info("TutorialController: poem_btn 已设置为可见")
+		if rp:
+			var poem_btn := rp.get_node_or_null("Panel/V/PanelContainer2/HBoxContainer/Poembtn") as Control
+			if poem_btn:
+				poem_btn.visible = true
+				Logging.info("TutorialController: poem_btn (Poembtn) 已设置为可见")
+			else:
+				Logging.err("TutorialController: 未找到 Poembtn 节点")
 		_show_special_label(tr("CODE_TUTORIAL_CONTROLLER_IMAGERY_READY"))
 		EventBus.request_refresh_action_panel.emit()
 
@@ -1157,6 +1187,207 @@ func _begin_phase_1() -> void:
 	PlayerState.set_flag("tut_phase_started", "phase_1")
 	_current_phase = Phase.PHASE_1_MEET
 	_push_tut_event("tut_background_intro")
+
+
+# ═══════════════════════════════════════════════════════════
+# 🆕 Task 系统 — 初始化和链式回调
+# ═══════════════════════════════════════════════════════════
+
+func _init_tasks() -> void:
+	if _tasks_initialized:
+		return
+	_tasks_initialized = true
+
+	# ── ParentA: "登顶" (is_manual_complete, 无requirement) ──
+	_task_dengding = Task.new()
+	_task_dengding.name = tr("CODE_TUT_TASK_DENGDING")
+	_task_dengding.description = tr("CODE_TUT_TASK_DENGDING_DESC")
+	_task_dengding.is_manual_complete = true
+	_task_dengding.uuid = "tut_task_dengding"
+
+	# ── ChildA1: "上山腰看看" ──
+	_task_climb_up = Task.new()
+	_task_climb_up.name = tr("CODE_TUT_TASK_CLIMB_UP")
+	_task_climb_up.description = tr("CODE_TUT_TASK_CLIMB_UP_DESC")
+	_task_climb_up.uuid = "tut_task_climb_up"
+	var climb_req := PlaceRequirement.new()
+	climb_req.place = "taishan_upper"
+	_task_climb_up.requirements = [climb_req]
+
+	# ── ChildA2: "四处看看" ──
+	_task_look_around = Task.new()
+	_task_look_around.name = tr("CODE_TUT_TASK_LOOK_AROUND")
+	_task_look_around.description = tr("CODE_TUT_TASK_LOOK_AROUND_DESC")
+	_task_look_around.uuid = "tut_task_look_around"
+	_task_look_around.is_manual_complete = true  # 由 TutorialController 手动完成
+
+	# ── ChildA3: "回去找道士" ──
+	_task_return_taoist = Task.new()
+	_task_return_taoist.name = tr("CODE_TUT_TASK_RETURN_TAOIST")
+	_task_return_taoist.description = tr("CODE_TUT_TASK_RETURN_TAOIST_DESC")
+	_task_return_taoist.uuid = "tut_task_return_taoist"
+	var return_req := PlaceRequirement.new()
+	return_req.place = "taishan_base"
+	_task_return_taoist.requirements = [return_req]
+
+	# ── ParentB: "拨开雾气" ──
+	_task_dispel_fog = Task.new()
+	_task_dispel_fog.name = tr("CODE_TUT_TASK_DISPEL_FOG")
+	_task_dispel_fog.description = tr("CODE_TUT_TASK_DISPEL_FOG_DESC")
+	_task_dispel_fog.uuid = "tut_task_dispel_fog"
+
+	# ── ChildB1: "和道士喝酒" ──
+	_task_drink = Task.new()
+	_task_drink.name = tr("CODE_TUT_TASK_DRINK")
+	_task_drink.description = tr("CODE_TUT_TASK_DRINK_DESC")
+	_task_drink.uuid = "tut_task_drink"
+	var drink_req := PersonStateRequirement.new()
+	drink_req.npc_key = "tut_taoist"
+	drink_req.expected_state = "know_about"
+	_task_drink.requirements = [drink_req]
+
+	# ── ChildB2: "收集意象" ──
+	_task_collect_imagery = Task.new()
+	_task_collect_imagery.name = tr("CODE_TUT_TASK_COLLECT_IMAGERY")
+	_task_collect_imagery.description = tr("CODE_TUT_TASK_COLLECT_IMAGERY_DESC")
+	_task_collect_imagery.uuid = "tut_task_collect_imagery"
+	var img_req := ImaginaryCountRequirement.new()
+	img_req.threshold = 3
+	_task_collect_imagery.requirements = [img_req]
+
+	# ── ChildB3: "写诗词" ──
+	_task_write_poem = Task.new()
+	_task_write_poem.name = tr("CODE_TUT_TASK_WRITE_POEM")
+	_task_write_poem.description = tr("CODE_TUT_TASK_WRITE_POEM_DESC")
+	_task_write_poem.uuid = "tut_task_write_poem"
+	var poem_req := PoemCountRequirement.new()
+	poem_req.threshold = 1
+	_task_write_poem.requirements = [poem_req]
+
+	# ── ParentC: "登山顶" (chain_next after 拨开雾气) ──
+	_task_climb_mountain = Task.new()
+	_task_climb_mountain.name = tr("CODE_TUT_TASK_CLIMB_MOUNTAIN")
+	_task_climb_mountain.description = tr("CODE_TUT_TASK_CLIMB_MOUNTAIN_DESC")
+	_task_climb_mountain.uuid = "tut_task_climb_mountain"
+
+	# ── ChildC1: "登山" ──
+	var climb_act := Task.new()
+	climb_act.name = tr("CODE_TUT_TASK_CLIMB_ACT")
+	climb_act.description = tr("CODE_TUT_TASK_CLIMB_ACT_DESC")
+	climb_act.uuid = "tut_task_climb_act"
+	var climb_flag := FlagRequirement.new()
+	climb_flag.flag_id = "tut_climbed_mountain"
+	climb_flag.type = "bool"
+	climb_flag.value = true
+	climb_flag.operator = REQ_OPERATOR.COMPARE.EQUAL
+	climb_act.requirements = [climb_flag]
+	_task_climb_mountain.children.append(climb_act)
+
+	# ── ChildC2: "写诗词" ──
+	_task_write_final_poem = Task.new()
+	_task_write_final_poem.name = tr("CODE_TUT_TASK_WRITE_FINAL_POEM")
+	_task_write_final_poem.description = tr("CODE_TUT_TASK_WRITE_FINAL_POEM_DESC")
+	_task_write_final_poem.uuid = "tut_task_write_final_poem"
+	var final_poem_req := PoemCountRequirement.new()
+	final_poem_req.threshold = 1
+	_task_write_final_poem.requirements = [final_poem_req]
+	_task_climb_mountain.children.append(_task_write_final_poem)
+
+	Logging.info("TutorialController: 全部 %d 个 Task 已初始化" % 11)
+
+
+# ═══════════════════════════════════════════════════════════
+# 🆕 Task 链式回调 — 在各 Phase 转换点调用
+# ═══════════════════════════════════════════════════════════
+
+## Phase 1 对话中：道士问来意 → 注入"登顶"任务
+func _inject_task_dengding() -> void:
+	if not _tasks_initialized: return
+	TaskManager.set_task(_task_dengding, TaskManager.SetMode.REPLACE_ROOT)
+	Logging.info("TutorialController: [TASK] REPLACE_ROOT → '登顶'")
+
+
+## Phase 4 VAST_WORLD→FREE_ROAM → 追加"上山腰看看"
+func _inject_task_climb_up() -> void:
+	if not _tasks_initialized: return
+	TaskManager.set_task(_task_climb_up, TaskManager.SetMode.APPEND_TO_CHILDREN)
+	Logging.info("TutorialController: [TASK] APPEND → '上山腰看看'")
+
+
+## "上山腰看看" 完成 → 追加"四处看看"
+func _on_task_climb_up_done(_task) -> void:
+	if not _tasks_initialized: return
+	TaskManager.set_task(_task_look_around, TaskManager.SetMode.APPEND_TO_CHILDREN)
+	Logging.info("TutorialController: [TASK] APPEND → '四处看看'")
+
+
+## "四处看看" 完成 → 追加"回去找道士"
+func _on_task_look_around_done(_task) -> void:
+	if not _tasks_initialized: return
+	TaskManager.set_task(_task_return_taoist, TaskManager.SetMode.APPEND_TO_CHILDREN)
+	Logging.info("TutorialController: [TASK] APPEND → '回去找道士'")
+
+
+## "回去找道士" 完成 → REPLACE_ROOT → "拨开雾气"
+func _on_task_return_taoist_done(_task) -> void:
+	if not _tasks_initialized: return
+	# "登顶"子树已全部完成，替换为"拨开雾气"
+	_task_dispel_fog.children.clear()
+	_task_dispel_fog.children.append(_task_drink)
+	TaskManager.set_task(_task_dispel_fog, TaskManager.SetMode.REPLACE_ROOT)
+	Logging.info("TutorialController: [TASK] REPLACE_ROOT → '拨开雾气' (含 '和道士喝酒')")
+
+
+## "和道士喝酒" 完成 → 追加"收集意象"
+func _on_task_drink_done(_task) -> void:
+	if not _tasks_initialized: return
+	TaskManager.set_task(_task_collect_imagery, TaskManager.SetMode.APPEND_TO_CHILDREN)
+	Logging.info("TutorialController: [TASK] APPEND → '收集意象'")
+
+
+## "收集意象" 完成 → 追加"写诗词"
+func _on_task_collect_imagery_done(_task) -> void:
+	if not _tasks_initialized: return
+	TaskManager.set_task(_task_write_poem, TaskManager.SetMode.APPEND_TO_CHILDREN)
+	Logging.info("TutorialController: [TASK] APPEND → '写诗词'")
+
+
+## "写诗词" 完成 → "拨开雾气" 父任务也完成 → chain 到 "登山顶"
+func _on_task_write_poem_done(_task) -> void:
+	if not _tasks_initialized: return
+	# "拨开雾气" 的子任务全部完成，它将在 _check_and_advance 中自动完成
+	# 然后 chain_next → "登山顶"
+	_task_dispel_fog.chain_next = _task_climb_mountain
+	Logging.info("TutorialController: [TASK] 链接 chain_next → '登山顶'")
+
+
+# 在 _connect_tutorial_signals 中额外连接 task_completed 信号（首次连接）
+func _connect_task_callbacks() -> void:
+	if not EventBus.task_completed.is_connected(_on_any_task_completed):
+		EventBus.task_completed.connect(_on_any_task_completed)
+		Logging.info("TutorialController: 已连接 EventBus.task_completed → _on_any_task_completed")
+
+
+## 统一 task_completed 分发器：按 uuid 分派到具体回调
+func _on_any_task_completed(task: Task) -> void:
+	if not _tasks_initialized:
+		return
+	Logging.info("TutorialController: task_completed → '%s' (%s)" % [task.name, task.uuid])
+	match task.uuid:
+		"tut_task_climb_up":
+			_on_task_climb_up_done(task)
+		"tut_task_look_around":
+			_on_task_look_around_done(task)
+		"tut_task_return_taoist":
+			_on_task_return_taoist_done(task)
+		"tut_task_drink":
+			_on_task_drink_done(task)
+		"tut_task_collect_imagery":
+			_on_task_collect_imagery_done(task)
+		"tut_task_write_poem":
+			_on_task_write_poem_done(task)
+		_:
+			Logging.info("TutorialController: task_completed 未处理 — '%s'" % task.uuid)
 
 
 # ═══════════════════════════════════════════════════════════

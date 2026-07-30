@@ -26,6 +26,11 @@ enum TaskStatus {
 ## 完成后执行的奖励操作符（顺序执行）。
 @export var operators: Array[BaseOperator] = []
 
+## 标记为手动任务：即使 requirements 为空也不会在 _check_and_advance 中自动完成。
+## 必须由外部调用 TaskManager.complete_current_task() 显式完成。
+## 典型场景：无实际条件的"展示性"任务（如"登顶"线索）。
+@export var is_manual_complete: bool = false
+
 ## ── 以下字段为运行时状态，不由 .tres 序列化 ──
 
 ## 父任务引用（null 表示是 Root 的直接子任务 / 父队列成员）。
@@ -64,8 +69,12 @@ func all_children_completed() -> bool:
 	return true
 
 
-## 判断所有守卫条件是否通过
+## 判断所有守卫条件是否通过。
+## is_manual_complete 任务永远返回 false（不允许自动完成）。
 func all_requirements_met(player_state) -> bool:
+	if is_manual_complete:
+		Logging.info("TaskManager: Task '%s' 是手动任务 (is_manual_complete)，自动扫描跳过" % name)
+		return false
 	if requirements.is_empty():
 		Logging.info("TaskManager: Task '%s' 无 requirements，默认通过" % name)
 		return true

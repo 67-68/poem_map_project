@@ -78,6 +78,11 @@ func _connect_signals() -> void:
 		EventBus.event_confirmed.connect(_on_state_changed.bind("event_confirmed"))
 		Logging.info("TaskManager: 已连接 EventBus.event_confirmed")
 
+	# 人物关系状态变更
+	if not EventBus.on_person_state_changed.is_connected(_on_state_changed):
+		EventBus.on_person_state_changed.connect(_on_state_changed.bind("on_person_state_changed"))
+		Logging.info("TaskManager: 已连接 EventBus.on_person_state_changed")
+
 
 # ═══════════════════════════════════════════════════════════
 # 公开 API — Operator 调用入口
@@ -202,6 +207,36 @@ func is_state_dirty() -> bool:
 ## UI 消费 dirty 标志后调用，避免重复闪烁。
 func mark_state_clean() -> void:
 	_state_dirty = false
+
+
+## 强制完成当前最深未完成任务（绕过 is_manual_complete 和 requirements 检查）。
+## 供 TutorialController 等外部回调使用。
+## 调用后会自动更新 _last_completed_task 并 emit task_state_changed。
+func complete_current_task() -> void:
+	if _current_task == null:
+		Logging.info("TaskManager.complete_current_task: 无当前任务，跳过")
+		return
+
+	var ct := _current_task
+	Logging.info("TaskManager.complete_current_task: 强制完成 '%s' (is_manual_complete=%s)" % [ct.name, str(ct.is_manual_complete)])
+
+	# 执行 operators
+	_execute_operators(ct)
+	ct.status = Task.TaskStatus.COMPLETED
+	_last_completed_task = ct
+	_state_dirty = true
+
+	Logging.info("TaskManager: '%s' → COMPLETED (手动)" % ct.name)
+	EventBus.task_completed.emit(ct)
+	EventBus.task_state_changed.emit()
+
+	# 向上递归
+	if ct.parent != null:
+		Logging.info("TaskManager: '%s' 有父任务 '%s'，向上传递" % [ct.name, ct.parent.name])
+	else:
+		_try_activate_chain_next(ct)
+
+	_recalc_current()
 
 
 # ═══════════════════════════════════════════════════════════
