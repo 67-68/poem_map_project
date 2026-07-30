@@ -198,6 +198,8 @@ func _execute_stage(stage: Dictionary, entry_id: String, uuid: String) -> void:
 			_set_trait_grid_visible(stage)
 		"set_right_section_visible":
 			_set_right_section_visible(stage)
+		"set_task_container_visible":
+			_set_task_container_visible(stage)
 		"set_left_section_visible":
 			_set_left_section_visible(stage)
 		"set_hover_enabled":
@@ -937,3 +939,19 @@ func _set_special_label_visible(stage: Dictionary) -> void:
 		Logging.info("AnimationController._set_special_label_visible: visible=%s" % visible)
 	else:
 		Logging.warn("AnimationController._set_special_label_visible: right_panel 没有 set_special_label_visible 方法")
+
+
+## 🆕 设置 TaskContainer（任务面板）可见性
+## stage.visible: true/false
+func _set_task_container_visible(stage: Dictionary) -> void:
+	var right_panel := _get_right_panel()
+	if not right_panel:
+		Logging.err("AnimationController._set_task_container_visible: 未找到 right_panel")
+		return
+	var visible: bool = stage.get("visible", true)
+	var container := right_panel.get_node_or_null("Panel/V/TaskContainer") as VBoxContainer
+	if is_instance_valid(container):
+		container.visible = visible
+		Logging.info("AnimationController._set_task_container_visible: visible=%s" % visible)
+	else:
+		Logging.err("AnimationController._set_task_container_visible: 未找到 Panel/V/TaskContainer")

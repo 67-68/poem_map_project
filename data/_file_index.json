@@ -208,6 +208,7 @@
     "4_eras/735_youth/735_youth_era.tres",
     "4_eras/735_youth/events/tut_background_intro.tres",
     "4_eras/735_youth/events/tut_chuyou_fallback.tres",
+    "4_eras/735_youth/events/tut_chuyou_gaze_fallback.tres",
     "4_eras/735_youth/events/tut_chuyou_north_fallback.tres",
     "4_eras/735_youth/events/tut_chuyou_south_fallback.tres",
     "4_eras/735_youth/events/tut_chuyou_west_fallback.tres",
@@ -845,6 +846,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-30T04:22:12.601896+00:00",
-  "total": 844
+  "generated_at": "2026-07-30T06:41:30.239171+00:00",
+  "total": 845
 }

@@ -1434,10 +1434,11 @@ func _inject_timeline_scripts() -> void:
 			{ "delay": 0.1, "action": "refresh_time_panel", "target": "right_panel" },
 		],
 
-		# PHASE_2 Step 3: 谈身板 → 展示健康+钱财（满值）
+		# PHASE_2 Step 3: 谈身板 → 展示健康+钱财（满值），同时显示任务面板
 		"tut_dialogue_2": [
 			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "health", "visible": true },
 			{ "delay": 0.0, "action": "set_prop_visible", "target": "left_panel", "prop_key": "money", "visible": true },
+			{ "delay": 0.0, "action": "set_task_container_visible", "target": "right_panel", "visible": true },
 		],
 
 		# PHASE_2 Step 4: 强身之道+身强体壮（合并）→ 展示 TraitGrid + 启用 hover

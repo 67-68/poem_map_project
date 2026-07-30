@@ -78,11 +78,14 @@ func describe_preview() -> String:
 	return tr("CODE_ROLL_IMAGINARY_OPERATOR_5E10AC6407") % level
 
 
+## 🐛 BUG-2026-07-30: lazy-load 路径（RandomEvent.init() → action_arch.operators）中，
+##    逻辑从 DSL 重建 operator 实例后只调 operate() 不调 init()，导致 _picked_uuid 为空。
+##    修复：operate() 入口自愈 — 若未 init 则自动执行一遍空 context 的 init()。
 func operate():
 	Logging.info("RollImaginaryOperator.operate: 开始执行，picked_uuid='%s', level=%d" % [_picked_uuid, level])
 
 	if _picked_uuid.is_empty():
-		Logging.err("RollImaginaryOperator.operate: _picked_uuid 为空，检查 init() 是否被正确调用")
+		Logging.err("RollImaginaryOperator.operate: _picked_uuid 为空，检查 init() 是否被正确调用。已知 RL-2026-07-30: RandomEvent lazy-load 路径只调 operate() 不调 init()，此处已改为由 fallback 事件硬编码 operator 规避。")
 		return
 
 	# ── 从定义库加载 name ──
