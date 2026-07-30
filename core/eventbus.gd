@@ -177,3 +177,7 @@ signal request_show_event_tape()
 ## @param milestone_key: String — milestones_config.json 中的 key
 ## @param config: Dictionary — 达成的里程碑配置（含 threshold, desc 等）
 signal milestone_achieved(milestone_key: String, config: Dictionary)
+
+## 🆕 TaskManager 发射：任务完成
+## @param task: Task — 完成的任务实例
+signal task_completed(task: Resource)
