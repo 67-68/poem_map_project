@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionArchetype" format=3 uid="uid://dshjw1su2eabc"]
+
+[ext_resource type="Script" uid="uid://4rrb3w0o3w5d" path="res://core/model/action_archetype.gd" id="1_arch"]
+
+[resource]
+script = ExtResource("1_arch")
+uuid = "jiaoyou_shanjian_wenhui_success"
+name = "jiaoyou_shanjian_wenhui.success"
+universal_result = "pick_npc(mode=random; faction=qingliu; state=uncharted; key=npc_target; social_tag=social:acquaint)|person_state(mode=set; state=not_meet; target_key=npc_target)"
+action_uuid = "jiaoyou_shanjian_wenhui"
+state = "success"

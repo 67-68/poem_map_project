@@ -1421,9 +1421,10 @@ static func _exec_pick_npc_op(parsed: NamedDSLParser.ParseResult, raw: String) -
 	op.state_compare = NamedDSLParser.get_str_param(parsed, "state_compare", "eq")
 	op.source_key = NamedDSLParser.get_str_param(parsed, "source_key", "")
 	op.social_tag = NamedDSLParser.get_str_param(parsed, "social_tag", "")
+	op.faction = NamedDSLParser.get_str_param(parsed, "faction", "")
 	op.skip_availability = NamedDSLParser.get_bool_param(parsed, "skip_availability", false)
-	Logging.info("MicroDSLParser: _exec_pick_npc_op — mode=%s key=%s places=%s state=%s compare=%s source=%s social=%s skip_avail=%s raw=%s" % [
-		op.mode, op.key_stored_context, op.places, op.state, op.state_compare, op.source_key, op.social_tag, str(op.skip_availability), raw])
+	Logging.info("MicroDSLParser: _exec_pick_npc_op — mode=%s key=%s places=%s state=%s compare=%s source=%s social=%s faction=%s skip_avail=%s raw=%s" % [
+		op.mode, op.key_stored_context, op.places, op.state, op.state_compare, op.source_key, op.social_tag, op.faction, str(op.skip_availability), raw])
 	return op
 
 

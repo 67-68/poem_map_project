@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="Action" format=3 uid="uid://dfjha2cb8t2rs"]
+
+[ext_resource type="Script" uid="uid://bfs1tasr8ihre" path="res://core/model/base_requirement.gd" id="1_req"]
+[ext_resource type="Script" uid="uid://cb4e8rnm0l8jx" path="res://core/model/base_operator.gd" id="2_op"]
+[ext_resource type="Script" uid="uid://brd0htr8a2wb8" path="res://core/requirements/range_requirement.gd" id="3_range"]
+[ext_resource type="Script" uid="uid://opgo4gl1yoh2" path="res://model/defer_config.gd" id="4_defer"]
+[ext_resource type="Script" uid="uid://cxfcnsval1p54" path="res://core/operators/push_event_operator.gd" id="5_push"]
+[ext_resource type="Script" uid="uid://prpfdj2ag46k" path="res://model/choice_result.gd" id="6_cr"]
+[ext_resource type="Script" uid="uid://ccs67ljham38a" path="res://core/model/action.gd" id="7_action"]
+
+[sub_resource type="Resource" id="Resource_requirement_shi"]
+script = ExtResource("3_range")
+_property = 9
+min_value = 10.0
+max_value = 9999.0
+
+[sub_resource type="Resource" id="Resource_defer"]
+script = ExtResource("4_defer")
+
+[sub_resource type="Resource" id="Resource_failed_push"]
+script = ExtResource("5_push")
+event_key = "fangjian_haoyan_failed_fallback"
+
+[sub_resource type="Resource" id="Resource_failed_result"]
+script = ExtResource("6_cr")
+operators = Array[ExtResource("2_op")]([SubResource("Resource_failed_push")])
+
+[resource]
+script = ExtResource("7_action")
+required_place = "pingkangfang"
+_action_tags = Array[int]([30, 83])
+fallback_event_uuid = "fangjian_haoyan_success_fallback"
+archetype_uuid = "jiaoyou_fangjian_haoyan_success"
+possibility = "m_success_rate"
+aciton_requirements = Array[ExtResource("1_req")]([SubResource("Resource_requirement_shi")])
+failed_result = SubResource("Resource_failed_result")
+defer_config = SubResource("Resource_defer")
+uuid = "jiaoyou_fangjian_haoyan"
+name = "ACT_JIAOYOU_FANGJIAN_HAOYAN_NAME"
+description = "ACT_JIAOYOU_FANGJIAN_HAOYAN_DESC"

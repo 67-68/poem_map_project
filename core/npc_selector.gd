@@ -117,6 +117,62 @@ static func select_random(state: String = "", state_compare: String = "eq", skip
 	return chosen
 
 
+## 🆕 按派系筛选 NPC + 天数可用性检查。
+## @param faction: String — "qingliu" / "zhuoliu"，查表 ModifierConfig.NPC_FACTION_MAP
+## @param state: String — 可选 person_state 过滤，空串=不过滤
+## @param state_compare: String — "eq" / "gte" / ""（不过滤）
+## @return String — 选中 NPC 的 target_tag，空串=无候选
+static func select_by_faction(faction: String, state: String = "", state_compare: String = "eq", skip_availability: bool = false) -> String:
+	if faction.is_empty():
+		Logging.err("NPCSelector.select_by_faction: faction 为空，回退到 select_random")
+		return select_random(state, state_compare, skip_availability)
+	
+	Logging.info("NPCSelector.select_by_faction: faction=%s, state=%s, state_compare=%s, skip_avail=%s" % [faction, state, state_compare, str(skip_availability)])
+	
+	var today: int = TimeService.current_day
+	var candidates: Array[String] = []
+	
+	for target_enum_value in ENUMS.RELATION_TARGET.values():
+		var target_tag := ENUMS.to_relation_str(target_enum_value)
+		if target_tag.is_empty():
+			continue
+		
+		# faction 过滤：查表 ModifierConfig.NPC_FACTION_MAP
+		var npc_faction: int = ModifierConfig._tag_to_faction(target_tag)
+		var npc_faction_str: String = ModifierConfig.faction_to_filter(npc_faction)
+		if npc_faction_str != faction:
+			Logging.debug("NPCSelector.select_by_faction: 跳过 %s（faction=%s，需要 %s）" % [target_tag, npc_faction_str, faction])
+			continue
+		
+		# 天数可用性检查
+		var doc = Database.get_npc_document(target_tag)
+		if doc == null:
+			Logging.debug("NPCSelector.select_by_faction: 跳过 %s（无 NPCDocument）" % target_tag)
+			continue
+		if not skip_availability:
+			if not NPCAvailabilityManager.is_available(doc, today):
+				Logging.debug("NPCSelector.select_by_faction: 跳过 %s（day=%d 不可用）" % [target_tag, today])
+				continue
+		
+		# 可选 person_state 过滤
+		if not state.is_empty():
+			var current_state = RelationFlagManager.get_person_state(target_tag)
+			if not _state_matches(current_state, state, state_compare):
+				Logging.debug("NPCSelector.select_by_faction: 跳过 %s（state=%s，需要 %s, cmp=%s）" % [target_tag, current_state, state, state_compare])
+				continue
+		
+		candidates.append(target_tag)
+	
+	if candidates.is_empty():
+		Logging.warn("NPCSelector.select_by_faction: faction=%s 无候选 NPC（state=%s）" % [faction, state])
+		return ""
+	
+	candidates.shuffle()
+	var chosen: String = candidates[0]
+	Logging.info("NPCSelector.select_by_faction: faction=%s 选中 NPC=%s（候选人: %d）" % [faction, chosen, candidates.size()])
+	return chosen
+
+
 ## 从 source NPC 的 relate_to 中选人 + 天数可用性检查。
 ## @param source_tag: String — 源 NPC 的 target_tag
 ## @param state: String — 可选 person_state 过滤，空串=不过滤

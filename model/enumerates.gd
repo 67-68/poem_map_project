@@ -80,6 +80,8 @@ enum ACTION_TAGS {
 	ACTION_DUZHUO_FUQIN,            # 独酌·抚琴
 	ACTION_BAIYE_TOUZENG,           # 拜谒·入幕
 	ACTION_DUZHUO_LINGDING_DAZUI,   # 独酌·伶仃大醉
+	ACTION_JIAOYOU_SHANJIAN_WENHUI,  # 交游·山间文会（清流人脉）
+	ACTION_JIAOYOU_FANGJIAN_HAOYAN,  # 交游·坊间豪宴（浊流人脉）
 }
 
 enum PROPS {

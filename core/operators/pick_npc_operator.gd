@@ -14,6 +14,7 @@ class_name PickNpcOperator extends BaseOperator
 #   pick_npc(mode=by_place; places=pingkangfang,huangcheng; state=uncharted; key=npc_target; social_tag=social:acquaint)
 #   pick_npc(mode=random; key=npc_target; social_tag=social:leverage)
 #   pick_npc(mode=random; state=uncharted; key=npc_target)
+#   pick_npc(mode=random; faction=qingliu; state=uncharted; key=npc_target; social_tag=social:acquaint)
 #   pick_npc(mode=related; source_key=host_npc; state=not_meet; key=letter_target)
 #
 # 参数:
@@ -25,6 +26,8 @@ class_name PickNpcOperator extends BaseOperator
 #   state_compare: 可选 — "eq"(默认) / "gte" / ""（不过滤）
 #   source_key: related 必填 — 读取其 relate_to 的 NPC context key
 #   social_tag: 可选 — operate() 时注入到 current_action_tags 的社交标签
+#   faction:    可选 — random 模式按派系过滤（"qingliu" / "zhuoliu"），
+#              空串=不过滤。查表 ModifierConfig.NPC_FACTION_MAP
 # ═══════════════════════════════════════════════════════════
 
 ## 选择模式
@@ -49,6 +52,10 @@ class_name PickNpcOperator extends BaseOperator
 ## 可选 — operate() 时注入到 current_action_tags 的社交标签
 ## 如 "social:acquaint"
 @export var social_tag: String = ""
+
+## 可选 — random 模式按派系过滤 NPC（"qingliu" / "zhuoliu"），空串=不过滤
+## 查表 ModifierConfig.NPC_FACTION_MAP
+@export var faction: String = ""
 
 ## 可选 — true 时跳过 NPC 可用性检查（appear_days），用于"听人说起"等场景
 @export var skip_availability: bool = false
@@ -142,6 +149,9 @@ func describe_preview() -> String:
 
 ## mode=random: 从所有 RELATION_TARGET 中随机选人
 func _pick_random() -> String:
+	if not faction.is_empty():
+		Logging.info("PickNpcOperator: random 模式，faction 过滤=%s" % faction)
+		return NPCSelector.select_by_faction(faction, state, state_compare, skip_availability)
 	return NPCSelector.select_random(state, state_compare, skip_availability)
 
 
