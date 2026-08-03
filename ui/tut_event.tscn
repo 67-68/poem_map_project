@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://bwkqwvcbngyd2"]
+
+[ext_resource type="Material" uid="uid://l32yavlduio" path="res://ui/whiteblack_shader.tres" id="1_jupwe"]
+[ext_resource type="Script" uid="uid://cja5kojesiltl" path="res://characters/title_label.gd" id="2_phgxh"]
+[ext_resource type="Script" uid="uid://bpvvr1mv1qqll" path="res://shaders/zalgo_effects.gd" id="3_nmpp5"]
+[ext_resource type="PackedScene" uid="uid://du2vjj46i871e" path="res://ui/option_btns.tscn" id="4_bij0g"]
+[ext_resource type="PackedScene" uid="uid://cmt4gcyingua1" path="res://characters/event_btn.tscn" id="5_gqejb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ufy3p"]
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_y4nnp"]
+script = ExtResource("3_nmpp5")
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_fhq4u"]
+script = ExtResource("3_nmpp5")
+
+[node name="Event" type="PanelContainer" unique_id=1537400182]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -54.0
+offset_right = 185.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ufy3p")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1232497061]
+material = ExtResource("1_jupwe")
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2004411851]
+custom_minimum_size = Vector2(350, 0)
+custom_maximum_size = Vector2(350, -1)
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer" unique_id=198044391]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="MarginContainer/VBox" unique_id=491879260]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBox/HBox" unique_id=245641313]
+custom_minimum_size = Vector2(350, 0)
+custom_maximum_size = Vector2(350, -1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_type_variation = &"TitleText"
+text = "标题"
+autowrap_mode = 1
+script = ExtResource("2_phgxh")
+
+[node name="ExampleLabel" type="RichTextLabel" parent="MarginContainer/VBox" unique_id=318671725]
+custom_minimum_size = Vector2(350, 0)
+custom_maximum_size = Vector2(350, -1)
+clip_contents = false
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 1
+custom_effects = [SubResource("RichTextEffect_y4nnp")]
+
+[node name="ContentLabel" type="RichTextLabel" parent="MarginContainer/VBox" unique_id=1208982363]
+custom_minimum_size = Vector2(350, 0)
+custom_maximum_size = Vector2(350, -1)
+clip_contents = false
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+bbcode_enabled = true
+text = "这是内容"
+fit_content = true
+autowrap_mode = 1
+custom_effects = [SubResource("RichTextEffect_fhq4u")]
+
+[node name="OptionBtns" parent="MarginContainer/VBox" unique_id=764113464 instance=ExtResource("4_bij0g")]
+custom_minimum_size = Vector2(350, 0)
+custom_maximum_size = Vector2(350, -1)
+layout_mode = 2
+
+[node name="EventBtn" parent="MarginContainer/VBox/OptionBtns" unique_id=455919761 instance=ExtResource("5_gqejb")]
+layout_mode = 2
+text = "这是选项（我可以点！）"
+
+[editable path="MarginContainer/VBox/OptionBtns"]
+[editable path="MarginContainer/VBox/OptionBtns/EventBtn"]

@@ -68,6 +68,8 @@
 | `note_explanation` | String | 机制解释（NoteLogical） |
 | `requirement` | BaseRequirements | 触发条件（PropertyRequirement/FlagRequirement 等） |
 | `triggered` | bool | 是否已触发 |
+| `note_related_demonstration` | String | 演示场景 key，查表 → tscn 路径，实例化到 PlayTestContainer |
+| `trigger_on_stack_queue_threshold` | int | StackSize 触发阈值（≥N 时触发），0=禁用，与 requirement 互斥 |
 
 ### GameSaveData 新增字段
 
@@ -94,6 +96,38 @@ if note.requirement.compare(PlayerState):
     GameSave.data.triggered_note_uuids.append(note.uuid)
     EventBus.note_triggered.emit(note.uuid)
 ```
+
+### StackSize 触发通道（trigger_on_stack_queue_threshold）
+
+当 Note 的 `trigger_on_stack_queue_threshold > 0` 时，不走 Property/Flag/Trait 钩子，
+而是由 `NarrativeDirector` 中 stack + queue 的总条目数驱动：
+
+```
+NarrativeDirector 变更 _event_stack / _event_queue
+    → _emit_stack_queue_total()
+    → EventBus.stack_queue_total_changed(total)
+    → NoteManager._on_stack_queue_changed(total)
+    → 遍历 _stack_queue_notes，total >= threshold → _do_trigger(note)
+```
+
+此通道与 `requirement` 互斥：threshold > 0 的 Note 在 `_load_and_index()` 中被分流到 `_stack_queue_notes` 列表。
+
+### 演示场景实例化（note_related_demonstration）
+
+Note 可附带一个交互式演示场景，在 NotePage 中选中该笔记时自动实例化到 `PlayTestContainer`：
+
+```
+Note.note_related_demonstration (String key)
+    → Note.get_demonstration_address() → tscn 路径
+    → load(tscn).instantiate() → add_child 到 PlayTestContainer
+```
+
+目前映射表在 `core/note.gd:get_demonstration_address()`：
+| key | tscn 路径 |
+|-----|-----------|
+| `tutorial_scroll` | `res://ui/tutorial_scroll.tscn` |
+
+选中其他笔记或无演示时，`_clear_play_test_container()` 清空容器。
 
 ### SpecialLabel 清除路径
 
@@ -159,6 +193,7 @@ NotePage 初始化（visible = false）
 | `note_fangshi_chuyou_health` | 坊市-出游循环 | health >= 30 | PropertyRequirement |
 | `note_jiedu` | 解毒 | 获得 poisoned trait | TraitRequirement(HAS) |
 | `note_accept_linian` | 接受理念 | 势/望/兴任一 > 0 | ComplexRequirements(OR) |
+| `note_scroll_tutorial` | 卷中游 | 栈+队列 ≥ 2 | StackSizeTrigger |
 
 ## 依赖
 

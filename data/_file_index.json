@@ -535,6 +535,7 @@
     "1_core_rules/notes/note_fangshi_chuyou.tres",
     "1_core_rules/notes/note_fangshi_chuyou_health.tres",
     "1_core_rules/notes/note_jiedu.tres",
+    "1_core_rules/notes/note_scroll_tutorial.tres",
     "1_core_rules/properties/astuteness.tres",
     "1_core_rules/properties/composure.tres",
     "1_core_rules/properties/health.tres",
@@ -846,6 +847,6 @@
     "5_story_arcs/test_interrupt/test_interrupt_target.tres",
     "5_story_arcs/test_interrupt/test_interrupt_trigger.tres"
   ],
-  "generated_at": "2026-07-30T06:41:30.239171+00:00",
-  "total": 845
+  "generated_at": "2026-08-03T12:50:55.241057+00:00",
+  "total": 846
 }

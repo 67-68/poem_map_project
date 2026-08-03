@@ -24,6 +24,8 @@ class_name NotePage
 @onready var _note_narrative: RichTextLabel = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/NoteNarrative
 @onready var _note_logical: RichTextLabel = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/NoteLogical
 @onready var _placeholder: Label = $PanelContainer/H/Info/HBoxContainer/VBoxContainer/Placeholder
+## 演示场景容器 — note_related_demonstration 实例化后挂载于此
+@onready var _play_test_container: PanelContainer = $PanelContainer/H/Info/HBoxContainer/PlayTestContainer
 
 
 # ═══════════════════════════════════════════════════════════
@@ -137,6 +139,19 @@ func _show_note_detail(note: Note) -> void:
 	# Note.note_explanation → NoteLogical（机制解释）
 	_note_logical.text = note.note_explanation if not note.note_explanation.is_empty() else ""
 
+	# 🆕 演示场景实例化 — note_related_demonstration
+	_clear_play_test_container()
+	if not note.note_related_demonstration.is_empty():
+		var tscn_path: String = note.get_demonstration_address()
+		if not tscn_path.is_empty() and ResourceLoader.exists(tscn_path):
+			Logging.info("[NotePage] 加载演示场景: %s" % tscn_path)
+			var demo_scene: PackedScene = load(tscn_path)
+			var demo_instance := demo_scene.instantiate()
+			_play_test_container.add_child(demo_instance)
+			Logging.info("[NotePage] 演示场景已实例化到 PlayTestContainer")
+		else:
+			Logging.warn("[NotePage] 演示地址无效或资源不存在: '%s' (raw: '%s')" % [tscn_path, note.note_related_demonstration])
+
 	Logging.info("[NotePage] 展示笔记: uuid=%s, name='%s'" % [note.uuid, note.name])
 
 
@@ -149,7 +164,14 @@ func _show_placeholder() -> void:
 	_note_logical.visible = false
 	_placeholder.visible = true
 	_placeholder.text = tr("UI_NOTE_PAGE_TEXT_7")
+	_clear_play_test_container()
 	Logging.info("[NotePage] 无已触发笔记，显示待触发占位")
+
+
+## 清空 PlayTestContainer 中的所有演示场景子节点
+func _clear_play_test_container() -> void:
+	for child in _play_test_container.get_children():
+		child.queue_free()
 
 
 # ═══════════════════════════════════════════════════════════

@@ -16,7 +16,8 @@ class_name Note extends GameEntity
 
 func get_demonstration_address():
     var table = {
-        "tutorial_scroll": "res://ui/tutorial_scroll.tscn"
+        "tutorial_scroll": "res://ui/tutorial_scroll.tscn",
+        "tutorial_event": "res://ui/tut_event.tscn"
     }
 
     return table.get(note_related_demonstration)

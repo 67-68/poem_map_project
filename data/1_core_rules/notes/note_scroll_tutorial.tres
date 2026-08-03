@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Note" format=3 uid="uid://note_scroll_tutorial"]
+
+[ext_resource type="Script" uid="uid://bf1jik0b5p75b" path="res://core/note.gd" id="1_note"]
+
+[resource]
+script = ExtResource("1_note")
+uuid = "note_scroll_tutorial"
+name = "卷中游"
+description = "读书破万卷，下笔如有神。"
+description_explanation = "古人书写的载体是卷轴，而非翻页的书本。阅读时需要亲手展开、上下拖动，方能在流动的文字中寻得真意。"
+note_narrative = "在这烽火连绵的时代，纸张是珍贵的信使，每一寸展开的墨迹都承载着千钧之重。你缓缓展开卷轴，字里行间山河破碎、草木含悲，唯有亲手触碰这些文字，才能感悟先贤的沉吟与叹息。"
+note_explanation = "提示：你可以通过鼠标拖拽纸张（操作类似触控板）或使用滚轮来滚动浏览笔记内容。"
+triggered = false
+note_related_demonstration = "tutorial_scroll"
+trigger_on_stack_queue_threshold = 2

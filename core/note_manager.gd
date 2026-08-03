@@ -23,6 +23,10 @@ var _notes_by_prop: Dictionary = {}
 ## 其他 Requirement 类型的笔记（Flag / Trait 等），全量遍历
 var _other_notes: Array[Note] = []
 
+## StackSize 触发型笔记（trigger_on_stack_queue_threshold > 0）
+## 不走 Property/Flag/Trait 钩子，由 stack_queue_total_changed 信号驱动
+var _stack_queue_notes: Array[Note] = []
+
 # ═══════════════════════════════════════════════════════════
 # 生命周期
 # ═══════════════════════════════════════════════════════════
@@ -40,14 +44,19 @@ func _load_and_index() -> void:
 	_all_notes = Database.notes.duplicate()
 	_notes_by_prop.clear()
 	_other_notes.clear()
+	_stack_queue_notes.clear()
 
 	for uuid in _all_notes:
 		var note: Note = _all_notes[uuid] as Note
 		if note == null:
 			continue
 
+		# StackSize 触发型优先分流
+		if note.trigger_on_stack_queue_threshold > 0:
+			_stack_queue_notes.append(note)
+			Logging.info("[NoteManager] StackSize 触发型 Note: uuid=%s, threshold=%d" % [note.uuid, note.trigger_on_stack_queue_threshold])
 		# 判断 requirement 类型
-		if note.requirement != null and note.requirement is PropertyRequirement:
+		elif note.requirement != null and note.requirement is PropertyRequirement:
 			var prop_req: PropertyRequirement = note.requirement as PropertyRequirement
 			var prop_name: String = prop_req.property
 			if prop_name.is_empty():
@@ -73,6 +82,10 @@ func _register_hooks() -> void:
 	# Trait 变化钩子
 	if not EventBus.on_trait_change.is_connected(_on_trait_changed):
 		EventBus.on_trait_change.connect(_on_trait_changed)
+
+	# Stack/Queue 变更钩子
+	if not EventBus.stack_queue_total_changed.is_connected(_on_stack_queue_changed):
+		EventBus.stack_queue_total_changed.connect(_on_stack_queue_changed)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -115,6 +128,16 @@ func _on_trait_changed() -> void:
 		if note.requirement is TraitRequirement:
 			if _check_requirement(note):
 				_do_trigger(note)
+
+
+## Stack/Queue 总条目数变更时检查 StackSize 触发型 Note
+func _on_stack_queue_changed(total: int) -> void:
+	for note: Note in _stack_queue_notes:
+		if _is_triggered(note):
+			continue
+		if total >= note.trigger_on_stack_queue_threshold:
+			Logging.info("[NoteManager] StackSize 触发! uuid=%s, total=%d, threshold=%d" % [note.uuid, total, note.trigger_on_stack_queue_threshold])
+			_do_trigger(note)
 
 
 # ═══════════════════════════════════════════════════════════

@@ -99,8 +99,10 @@ func _push_event_inner(data: Variant, context: Dictionary, persist: bool):
 
 
 func _on_pop_event(transition_text: String = ""):
+	var _stack_changed := false
 	if _event_stack.size() > 0:
 		var entry = _event_stack.pop_front()
+		_stack_changed = true
 		if entry.has("data"):
 			var ev: BaseEvent = entry.get("data")
 			if not entry.get("processed", false):
@@ -110,6 +112,9 @@ func _on_pop_event(transition_text: String = ""):
 			Logging.info("pop_event: 弹出栈条目")
 	else:
 		Logging.warn("pop_event: 栈为空，无事件可弹出")
+
+	if _stack_changed:
+		_emit_stack_queue_total()
 
 	if _event_stack.size() > 0:
 		var top_entry = _event_stack[0]
@@ -146,6 +151,7 @@ func _on_clear_scheduled_events():
 	_event_queue.clear()
 
 	Logging.info("ClearScheduledEvents: 已清空栈（%d 条目）和队列（%d 条目）" % [stack_size, queue_size])
+	_emit_stack_queue_total()
 
 
 func _on_pop_to_event(event_key: String):
@@ -164,6 +170,7 @@ func _on_pop_to_event(event_key: String):
 				target_entry["processed"] = false
 				target_entry["is_pop_regression"] = true
 			_event_stack.push_front(target_entry)
+			_emit_stack_queue_total()
 			Logging.info("pop_to_event: 已弹出 %d 个条目，目标事件 '%s' 保留在栈顶" % [i, event_key])
 			_process_next()
 			return
@@ -186,6 +193,7 @@ func _on_push_sub_action_picker(data: Array, on_selected: Callable, ui_construct
 		"on_filter_toggled": on_filter_toggled,
 	}
 	_event_stack.push_front(entry)
+	_emit_stack_queue_total()
 	Logging.info("[DIAG] _on_push_sub_action_picker: SubActionPicker 已推入栈顶，%d 个选项，_is_active=%s，stack.size=%d" % [data.size(), _is_active, _event_stack.size()])
 
 	if not _is_active:
@@ -202,6 +210,7 @@ func _on_push_item_picker(data: Array, on_selected: Callable):
 		"on_selected": on_selected,
 	}
 	_event_stack.push_front(entry)
+	_emit_stack_queue_total()
 	Logging.info("[DIAG] _on_push_item_picker: ItemPicker 已推入栈顶，%d 个选项，_is_active=%s，stack.size=%d" % [data.size(), _is_active, _event_stack.size()])
 
 	if not _is_active:
@@ -219,6 +228,7 @@ func _on_push_focused_chat(data: Variant, context: Dictionary = {}):
 		"processed": false,
 	}
 	_event_stack.push_front(entry)
+	_emit_stack_queue_total()
 	Logging.info("FocusChat 已推入栈顶")
 
 	if not _is_active:
@@ -233,6 +243,7 @@ func _on_push_cinematic(texts: Array[String], config: Dictionary = {}):
 		"processed": false,
 	}
 	_event_stack.push_front(entry)
+	_emit_stack_queue_total()
 	Logging.info("Cinematic 已推入栈顶，%d 段文字" % texts.size())
 
 	if not _is_active:
@@ -256,6 +267,7 @@ func _resolve_event_for_stack(data: Variant) -> BaseEvent:
 
 func _on_request_event(data, context):
 	_event_queue.append({ "data": data, "context": context })
+	_emit_stack_queue_total()
 	Logging.info("request_event: 事件已入队")
 	if not _is_active:
 		_process_next()
@@ -269,6 +281,7 @@ func _on_request_event_key(key: String, context):
 		Logging.err("检查你是不是又加了某个事件文件夹没写判断")
 		return
 	_event_queue.append({ "data": ev, "context": context })
+	_emit_stack_queue_total()
 	Logging.info("request_event_key: 事件 '%s' 已入队" % key)
 	if not _is_active:
 		_process_next()
@@ -351,6 +364,7 @@ func _process_next():
 	# ── 队列其次 (FIFO) ──
 	if _event_queue.size() > 0:
 		var queued = _event_queue.pop_front()
+		_emit_stack_queue_total()
 		_current_from_stack = false
 		var next_event: BaseEvent = queued.get("data")
 		var next_context: Dictionary = queued.get("context", {})
@@ -439,6 +453,7 @@ func on_option_selected(choice, choice_text: String = ""):
 
 		if guard_entry.get("data") == _completed_data:
 			_event_stack.pop_front()
+			_emit_stack_queue_total()
 			Logging.info("on_option_selected: 自动弹出已完成的栈事件 '%s'" % _completed_data.name)
 		elif entry_type in ["focused_chat", "sub_action_picker", "item_picker", "cinematic"]:
 			Logging.info("on_option_selected: 栈顶条目已处理（type='%s'），跳过 _is_active 重置" % entry_type)
@@ -452,6 +467,7 @@ func on_option_selected(choice, choice_text: String = ""):
 
 	# ── 清理：从栈中移除已消费的事件（可能被 cinematic 等条目埋住）──
 	# 若条目标记了 persist_after_consumed，说明子事件会 pop 回归，跳过删除
+	var _stack_dirty := false
 	for i in range(_event_stack.size()):
 		var entry = _event_stack[i]
 		if entry is Dictionary and entry.get("data") == _completed_data:
@@ -459,8 +475,12 @@ func on_option_selected(choice, choice_text: String = ""):
 				Logging.info("on_option_selected: 父事件 '%s' 标记了 persist_after_consumed，跳过删除（等待子事件 pop 回归）" % _completed_data.name)
 			else:
 				_event_stack.remove_at(i)
+				_stack_dirty = true
 				Logging.info("on_option_selected: 从栈[i=%d]移除已消费事件 '%s'" % [i, _completed_data.name])
 			break
+
+	if _stack_dirty:
+		_emit_stack_queue_total()
 
 	Logging.info("[DIAG] on_option_selected: ⏰ 将 _is_active 设回 false（原=%s），调用 _resume_world + _process_next" % _is_active)
 	_is_active = false
@@ -484,6 +504,7 @@ func on_interrupt_pressed():
 		var top_entry = _event_stack[0]
 		if top_entry.has("data") and top_entry.get("data") == _current_event_data:
 			_event_stack.pop_front()
+			_emit_stack_queue_total()
 			Logging.info("on_interrupt_pressed: 已弹出栈顶事件 '%s'" % _current_event_data.name)
 		else:
 			Logging.info("on_interrupt_pressed: 当前事件不在栈顶，不操作栈")
@@ -525,6 +546,8 @@ func on_picker_item_selected(entity, entry: Dictionary = {}):
 			_event_stack.remove_at(idx)
 			Logging.info("on_picker_item_selected: 精确弹出栈中条目 (idx=%d)，选择了: %s" % [idx, str(entity)])
 
+	_emit_stack_queue_total()
+
 	var callback: Callable = entry.get("on_selected", Callable())
 	if callback.is_valid():
 		callback.call(entity)
@@ -547,6 +570,7 @@ func on_picker_cancelled(entry: Dictionary):
 		return
 
 	_event_stack.pop_front()
+	_emit_stack_queue_total()
 	Logging.info("on_picker_cancelled: Picker 已从栈中弹出（玩家拒绝回答）")
 
 	var callback: Callable = entry.get("on_selected", Callable())
@@ -563,6 +587,7 @@ func on_picker_cancelled(entry: Dictionary):
 
 func on_focused_chat_finished(result):
 	_event_stack.pop_front()
+	_emit_stack_queue_total()
 	Logging.info("FocusChat 已从栈中弹出")
 
 	if result:
@@ -575,6 +600,7 @@ func on_focused_chat_finished(result):
 
 func on_cinematic_finished():
 	_event_stack.pop_front()
+	_emit_stack_queue_total()
 	Logging.info("Cinematic 已从栈中弹出")
 
 	_resume_world()
