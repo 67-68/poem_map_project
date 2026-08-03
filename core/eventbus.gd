@@ -138,6 +138,9 @@ signal lianju_score_calculated(score: int)
 ## 笔记触发信号（由 NoteManager 发射）
 ## note_uuid: 被触发的 Note 的 uuid
 signal note_triggered(note_uuid: String)
+## 叙事栈+队列总条目数变更（由 NarrativeDirector 发射，供 NoteManager 等监听）
+## total: _event_stack.size() + _event_queue.size()
+signal stack_queue_total_changed(total: int)
 
 # ── 图像特效信号 ──────────────────────────────────────────
 ## 请求播放图片粉碎解体特效 (由 ImageEffectManager 监听)

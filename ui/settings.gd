@@ -9,6 +9,7 @@ extends PanelContainer
 @onready var _music_label: Label = $VBoxContainer/Label3
 @onready var _btn_zh: LinkButton = $VBoxContainer/HBoxContainer/LinkButton2
 @onready var _btn_en: LinkButton = $VBoxContainer/HBoxContainer/LinkButton3
+@onready var _auto_scroll_check: CheckButton = $VBoxContainer/AutoScrollCheckButton
 
 
 func _ready() -> void:
@@ -51,6 +52,17 @@ func _ready() -> void:
 
 	# 根据当前 locale 同步按钮 pressed 状态
 	_sync_button_state()
+
+	# ── 自动滚动开关 ──
+	if _auto_scroll_check and GameSave and GameSave.data:
+		var auto_scroll: bool = GameSave.data.flags.get("auto_scroll_enabled", false)
+		_auto_scroll_check.button_pressed = auto_scroll
+		Logging.info("Settings: auto_scroll_enabled 初始值 = %s" % auto_scroll)
+		if not _auto_scroll_check.toggled.is_connected(_on_auto_scroll_toggled):
+			_auto_scroll_check.toggled.connect(_on_auto_scroll_toggled)
+		Logging.info("Settings: 自动滚动 CheckButton toggled 信号已连接")
+	else:
+		Logging.err("Settings: _auto_scroll_check 或 GameSave 不可用，自动滚动开关失效 💀")
 
 
 # ═══════════════════════════════════════════════
@@ -109,3 +121,12 @@ func _on_lang_btn_toggled(button_pressed: bool, locale: String) -> void:
 	TranslationServer.set_locale(locale)
 	GameSave.data.locale = locale
 	Logging.info("Settings: locale 已写入 GameSave.data.locale='%s'" % locale)
+
+
+# ═══════════════════════════════════════════════
+# 自动滚动开关
+# ═══════════════════════════════════════════════
+
+func _on_auto_scroll_toggled(button_pressed: bool) -> void:
+	GameSave.data.flags["auto_scroll_enabled"] = button_pressed
+	Logging.info("Settings: auto_scroll_enabled = %s" % button_pressed)

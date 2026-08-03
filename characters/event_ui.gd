@@ -367,6 +367,8 @@ func clear_all_tape() -> void:
 
 ## 滚动到纸带底部（等下一帧布局计算完成后）
 func scroll_to_bottom() -> void:
+	if not GameSave.data.flags.get("auto_scroll_enabled", false):
+		return
 	await get_tree().process_frame
 	var v_scroll := _scroll.get_v_scroll_bar()
 	if v_scroll:

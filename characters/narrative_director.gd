@@ -92,6 +92,7 @@ func _push_event_inner(data: Variant, context: Dictionary, persist: bool):
 		Logging.info("事件已推入栈: " + ev.name)
 
 	_event_stack.push_front(entry)
+	_emit_stack_queue_total()
 
 	if not _is_active:
 		_process_next()
@@ -601,3 +602,13 @@ func _on_animation_finished(anim):
 		_waiting_for_animations = false
 		Logging.info("NarrativeDirector: 所有动画完成，恢复事件处理")
 		_process_next()
+
+
+# ═══════════════════════════════════════════════════
+# 🆕 Stack/Queue 变更通知 — 供 NoteManager 监听
+# ═══════════════════════════════════════════════════
+
+func _emit_stack_queue_total() -> void:
+	var total := _event_stack.size() + _event_queue.size()
+	EventBus.stack_queue_total_changed.emit(total)
+	Logging.debug("[NarrativeDirector] stack_queue_total_changed: total=%d (stack=%d, queue=%d)" % [total, _event_stack.size(), _event_queue.size()])
