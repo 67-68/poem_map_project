@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://74x4iet43csr"]
+
+[ext_resource type="Script" uid="uid://y5gl8aohf1ll" path="res://ui/smooth_scroll_container.gd" id="1_3kgc8"]
+
+[node name="SmoothScrollContainer" type="ScrollContainer" unique_id=440873260]
+custom_minimum_size = Vector2(428, 588)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_3kgc8")
+metadata/_custom_type_script = "uid://y5gl8aohf1ll"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=907290324]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1615024551]
+layout_mode = 2
+theme_type_variation = &"TitleText"
+text = "这里是title"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=2116579775]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+bbcode_enabled = true
+text = "如果你往下拉，你会发现下面还有内容
+你可以使用鼠标拖动纸张，就像是触控板，或者使用鼠标滑轮"
+fit_content = true
+
+[node name="Control" type="Control" parent="VBoxContainer" unique_id=1049894735]
+custom_minimum_size = Vector2(0, 600)
+layout_mode = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="VBoxContainer" unique_id=1466517594]
+layout_mode = 2
+theme_type_variation = &"NarrativeText"
+bbcode_enabled = true
+text = "如果你往下拉，你会发现下面还有内容
+你可以使用鼠标拖动纸张，就像是触控板，或者使用鼠标滑轮"
+fit_content = true

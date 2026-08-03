@@ -11,8 +11,8 @@ enum BtnID {
 	POEM_INFO,   ## 诗词图鉴按钮
 }
 
-# ── 呼吸 Tween 管理（每个按钮一个 breathing tween）──
-var _breath_tweens: Dictionary = {}  ## BtnID → Tween
+# ── 高亮 Tween 管理（每个按钮一个进出 tween）──
+var _active_tweens: Dictionary = {}  ## BtnID → Tween
 
 ## 当前活跃提示的目标按钮 ID（-1 = 无活动提示）
 var _active_hint_btn: int = -1
@@ -20,13 +20,12 @@ var _active_hint_btn: int = -1
 ## 统一的 7s 自动消失定时器
 var _hint_timer: SceneTreeTimer = null
 
-# ── 呼吸动画参数 ──
-const BREATH_SCALE_MAX: float = 1.06
-const BREATH_SCALE_MIN: float = 1.0
-const BREATH_MODULATE_BRIGHT: Color = Color(1.15, 1.15, 1.15, 1.0)
-const BREATH_MODULATE_NORMAL: Color = Color.WHITE
-const BREATH_PERIOD: float = 2.0          ## 完整呼吸周期（秒）
-const BREATH_HALF_PERIOD: float = 1.0     ## 半周期 = 扩张 1s / 收缩 1s
+# ── 高亮动画参数 ──
+const HIGHLIGHT_SCALE: float = 1.06
+const HIGHLIGHT_MODULATE: Color = Color(1.15, 1.15, 1.15, 1.0)
+const NORMAL_SCALE: float = 1.0
+const NORMAL_MODULATE: Color = Color.WHITE
+const HIGHLIGHT_TWEEN_DURATION: float = 0.5  ## 进出 tween 统一时长（秒）
 const HINT_AUTO_CLEAR_SECONDS: float = 7.0
 
 @onready var _task_container: VBoxContainer = $Panel/V/TaskContainer
@@ -94,17 +93,6 @@ func _ready() -> void:
 	# ── SpecialLabel 动态提示 ──
 	_special_label.text = ""
 
-	# ── 5 按钮 hover 呼吸暂停/恢复 ──
-	_social_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.SOCIAL))
-	_social_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.SOCIAL))
-	_idea_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.IDEA))
-	_idea_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.IDEA))
-	_poem_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.POEM))
-	_poem_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.POEM))
-	_note_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.NOTE))
-	_note_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.NOTE))
-	_poem_info_btn.mouse_entered.connect(_on_breath_mouse_entered.bind(BtnID.POEM_INFO))
-	_poem_info_btn.mouse_exited.connect(_on_breath_mouse_exited.bind(BtnID.POEM_INFO))
 
 	# ── Pivot Offset 延迟预设（按钮已布局后设置到中心）──
 	call_deferred("_preset_all_pivot_offsets")
@@ -147,84 +135,60 @@ func _preset_all_pivot_offsets() -> void:
 
 
 # ═══════════════════════════════════════════════════════════
-# 呼吸动画核心
+# 高亮动画核心（单次进出，不循环）
 # ═══════════════════════════════════════════════════════════
 
-## 对指定按钮启动无限循环呼吸 Tween（scale 1.0 ↔ 1.06 + modulate 亮白，TRANS_SINE，周期 2s）
-func _start_breath(btn_id: BtnID) -> void:
+## 对指定按钮执行单次进入高亮 Tween（scale→1.06 + modulate→BRIGHT，TRANS_SINE，0.5s）
+func _tween_to_highlight(btn_id: BtnID) -> void:
 	var btn: PanelContainer = _get_btn_by_id(btn_id)
 	if btn == null:
-		Logging.err("RightInfoPanel._start_breath: btn_id=%d 无效，跳过" % btn_id)
+		Logging.err("RightInfoPanel._tween_to_highlight: btn_id=%d 无效，跳过" % btn_id)
 		return
 
-	# 确保 pivot 在按钮正中心（start_breath 时 size 必已布局完毕）
 	btn.pivot_offset = btn.size / 2.0
 
-	# 💀 防呆：杀死旧僵尸 Tween
-	if _breath_tweens.has(btn_id):
-		var old: Tween = _breath_tweens[btn_id]
-		if old and old.is_valid():
-			old.kill()
-			Logging.info("RightInfoPanel._start_breath: btn_id=%d 已 kill 旧 Tween" % btn_id)
-		_breath_tweens.erase(btn_id)
+	# 💀 防呆：杀死旧 Tween
+	_kill_active_tween(btn_id)
 
 	var tween := create_tween()
-	tween.set_loops()  # 无限循环
 	tween.set_trans(Tween.TRANS_SINE)
-	# Phase 1: 扩张 scale 1.0 → 1.06 + modulate 正常 → 亮白（1s，并行）
-	tween.tween_property(btn, "scale", Vector2(BREATH_SCALE_MAX, BREATH_SCALE_MAX), BREATH_HALF_PERIOD)
-	tween.parallel().tween_property(btn, "modulate", BREATH_MODULATE_BRIGHT, BREATH_HALF_PERIOD)
-	# Phase 2: 收缩 scale 1.06 → 1.0 + modulate 亮白 → 正常（1s，并行）
-	tween.tween_property(btn, "scale", Vector2(BREATH_SCALE_MIN, BREATH_SCALE_MIN), BREATH_HALF_PERIOD)
-	tween.parallel().tween_property(btn, "modulate", BREATH_MODULATE_NORMAL, BREATH_HALF_PERIOD)
+	tween.set_parallel(true)
+	tween.tween_property(btn, "scale", Vector2(HIGHLIGHT_SCALE, HIGHLIGHT_SCALE), HIGHLIGHT_TWEEN_DURATION)
+	tween.tween_property(btn, "modulate", HIGHLIGHT_MODULATE, HIGHLIGHT_TWEEN_DURATION)
 
-	_breath_tweens[btn_id] = tween
-	Logging.info("RightInfoPanel._start_breath: btn_id=%d 呼吸动画已启动（scale+modulate, pivot_offset=%s）" % [btn_id, btn.pivot_offset])
+	_active_tweens[btn_id] = tween
+	Logging.info("RightInfoPanel._tween_to_highlight: btn_id=%d 高亮进入 tween 已启动（pivot_offset=%s）" % [btn_id, btn.pivot_offset])
 
 
-## 停止指定按钮的呼吸动画并重置 scale + modulate
-func _stop_breath(btn_id: BtnID) -> void:
-	if not _breath_tweens.has(btn_id):
-		Logging.info("RightInfoPanel._stop_breath: btn_id=%d 无 Tween 记录，跳过" % btn_id)
+## 对指定按钮执行单次退出高亮 Tween（scale→1.0 + modulate→WHITE，TRANS_SINE，0.5s）
+func _tween_to_normal(btn_id: BtnID) -> void:
+	var btn: PanelContainer = _get_btn_by_id(btn_id)
+	if btn == null:
+		Logging.err("RightInfoPanel._tween_to_normal: btn_id=%d 无效，跳过" % btn_id)
 		return
 
-	var tween: Tween = _breath_tweens[btn_id]
+	# 💀 防呆：杀死旧 Tween
+	_kill_active_tween(btn_id)
+
+	var tween := create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_parallel(true)
+	tween.tween_property(btn, "scale", Vector2(NORMAL_SCALE, NORMAL_SCALE), HIGHLIGHT_TWEEN_DURATION)
+	tween.tween_property(btn, "modulate", NORMAL_MODULATE, HIGHLIGHT_TWEEN_DURATION)
+
+	_active_tweens[btn_id] = tween
+	Logging.info("RightInfoPanel._tween_to_normal: btn_id=%d 退出高亮 tween 已启动" % btn_id)
+
+
+## 杀死指定按钮的活跃 tween 并清理字典记录
+func _kill_active_tween(btn_id: BtnID) -> void:
+	if not _active_tweens.has(btn_id):
+		return
+	var tween: Tween = _active_tweens[btn_id]
 	if tween and tween.is_valid():
 		tween.kill()
-		Logging.info("RightInfoPanel._stop_breath: btn_id=%d Tween 已 kill" % btn_id)
-	_breath_tweens.erase(btn_id)
-
-	var btn: PanelContainer = _get_btn_by_id(btn_id)
-	if btn:
-		btn.scale = Vector2(1.0, 1.0)
-		btn.modulate = BREATH_MODULATE_NORMAL
-		Logging.info("RightInfoPanel._stop_breath: btn_id=%d scale+modulate 已重置" % btn_id)
-
-
-# ═══════════════════════════════════════════════════════════
-# Hover 呼吸暂停 / 恢复（仅对当前活跃 hint 按钮生效）
-# ═══════════════════════════════════════════════════════════
-
-func _on_breath_mouse_entered(btn_id: BtnID) -> void:
-	if btn_id != _active_hint_btn:
-		return
-	if not _breath_tweens.has(btn_id):
-		return
-	var tween: Tween = _breath_tweens[btn_id]
-	if tween and tween.is_valid():
-		tween.pause()
-		Logging.info("RightInfoPanel: btn_id=%d 呼吸动画已暂停（鼠标进入）" % btn_id)
-
-
-func _on_breath_mouse_exited(btn_id: BtnID) -> void:
-	if btn_id != _active_hint_btn:
-		return
-	if not _breath_tweens.has(btn_id):
-		return
-	var tween: Tween = _breath_tweens[btn_id]
-	if tween and tween.is_valid():
-		tween.play()
-		Logging.info("RightInfoPanel: btn_id=%d 呼吸动画已恢复（鼠标离开）" % btn_id)
+		Logging.info("RightInfoPanel._kill_active_tween: btn_id=%d 旧 Tween 已 kill" % btn_id)
+	_active_tweens.erase(btn_id)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -240,8 +204,8 @@ func show_hint(btn_id: BtnID, p_text: String) -> void:
 	_special_label.text = p_text
 	_special_label.visible = true
 
-	# 启动呼吸动画
-	_start_breath(btn_id)
+	# 启动高亮进入 tween
+	_tween_to_highlight(btn_id)
 
 	# 启动 7s 自动消失定时器
 	_hint_timer = get_tree().create_timer(HINT_AUTO_CLEAR_SECONDS)
@@ -253,7 +217,7 @@ func show_hint(btn_id: BtnID, p_text: String) -> void:
 ## 清除当前所有提示（停止呼吸 + 清文本 + 取消定时器 + 重置状态）
 func _clear_hint() -> void:
 	if _active_hint_btn != -1:
-		_stop_breath(_active_hint_btn)
+		_tween_to_normal(_active_hint_btn)
 	_active_hint_btn = -1
 	_special_label.text = ""
 

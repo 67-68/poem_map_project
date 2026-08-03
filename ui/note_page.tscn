@@ -18,6 +18,8 @@ content_margin_right = 15.0
 content_margin_bottom = 15.0
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7xb00"]
+
 [node name="NotePage" type="Control" unique_id=992720834]
 layout_mode = 3
 anchors_preset = 15
@@ -117,6 +119,11 @@ layout_mode = 2
 theme_type_variation = &"DefaultText"
 text = "UI_NOTE_PAGE_TEXT_7"
 autowrap_mode = 3
+
+[node name="PlayTestContainer" type="PanelContainer" parent="PanelContainer/H/Info/HBoxContainer" unique_id=1300452500]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_7xb00")
 
 [node name="Button" type="Button" parent="PanelContainer" unique_id=1089128283]
 custom_minimum_size = Vector2(25, 25)

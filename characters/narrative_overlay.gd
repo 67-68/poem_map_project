@@ -983,7 +983,7 @@ func _set_hover_children_mouse_ignore(node: Control) -> void:
 # ═══════════════════════════════════════════════════
 
 const HOVER_GRACE: float = 0.75
-const COUNTDOWN_INTERVAL: float = 0.25
+const COUNTDOWN_INTERVAL: float = 0.01
 const COUNTDOWN_TARGET_COLOR: Color = Color("#CDB89B")
 
 ## 启动倒计时：TimeLeft visible + Tween modulate + Timer 更新 label
