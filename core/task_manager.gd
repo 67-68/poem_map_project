@@ -118,6 +118,11 @@ func set_task(task: Task, mode: int) -> void:
 	_recalc_current()
 	_check_and_advance()
 
+	# 通知 UI 刷新
+	_state_dirty = true
+	EventBus.task_state_changed.emit()
+	Logging.info("TaskManager.set_task: task_state_changed 已发射")
+
 
 ## 清除所有任务。由 ClearTaskOperator.operate() 调用。
 func clear_task() -> void:

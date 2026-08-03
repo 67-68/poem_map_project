@@ -601,8 +601,6 @@ func _ensure_all_ui_visible() -> void:
 				rp.visible = true
 				if rp.has_method("set_time_panel_visible"):
 					rp.set_time_panel_visible(true)
-				if rp.has_method("set_rumors_section_visible"):
-					rp.set_rumors_section_visible(true)
 				if rp.has_method("set_decisions_section_visible"):
 					rp.set_decisions_section_visible(true)
 				if rp.has_method("set_bottom_btn_bar_visible"):
@@ -1468,10 +1466,9 @@ func _inject_timeline_scripts() -> void:
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "idea_btn", "visible": true },
 		],
 
-		# 🆕 最后揭示：风闻 + 决议 + 底层修饰 + 底部按钮栏 + SpecialLabel
+		# 🆕 最后揭示：决议 + 底层修饰 + 底部按钮栏 + SpecialLabel
 		"tut_final_reveal": [
 			{ "delay": 0.0, "action": "set_left_section_visible", "target": "bottom_decoration", "visible": true },
-			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "rumors_section", "visible": true },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "decisions_section", "visible": true },
 			{ "delay": 0.0, "action": "set_right_section_visible", "target": "right_panel", "section": "bottom_btn_bar", "visible": true },
 			{ "delay": 0.0, "action": "set_special_label_visible", "target": "right_panel", "visible": true },

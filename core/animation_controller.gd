@@ -652,11 +652,6 @@ func _set_right_section_visible(stage: Dictionary) -> void:
 				right_panel.set_time_panel_visible(visible)
 			else:
 				Logging.err("AnimationController._set_right_section_visible: right_panel 没有 set_time_panel_visible 方法")
-		"rumors_section":
-			if right_panel.has_method("set_rumors_section_visible"):
-				right_panel.set_rumors_section_visible(visible)
-			else:
-				Logging.err("AnimationController._set_right_section_visible: right_panel 没有 set_rumors_section_visible 方法")
 		"decisions_section":
 			if right_panel.has_method("set_decisions_section_visible"):
 				right_panel.set_decisions_section_visible(visible)
@@ -952,6 +947,10 @@ func _set_task_container_visible(stage: Dictionary) -> void:
 	var container := right_panel.get_node_or_null("Panel/V/TaskContainer") as VBoxContainer
 	if is_instance_valid(container):
 		container.visible = visible
+		# 同步控制任务标题 Label
+		var title_label := right_panel.get_node_or_null("Panel/V/Label2") as Label
+		if is_instance_valid(title_label):
+			title_label.visible = visible
 		Logging.info("AnimationController._set_task_container_visible: visible=%s" % visible)
 	else:
 		Logging.err("AnimationController._set_task_container_visible: 未找到 Panel/V/TaskContainer")

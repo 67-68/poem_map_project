@@ -11,24 +11,6 @@ enum BtnID {
 	POEM_INFO,   ## 诗词图鉴按钮
 }
 
-# ═══════════════════════════════════════════════════════════
-# 目标中文名映射（ENUMS.RELATION_TARGET → 游戏内显示名）
-# ═══════════════════════════════════════════════════════════
-var CN_NAME_MAP: Dictionary = {
-	"libai": tr("TRES_POET_LIBAI_001_NAME_0"),
-	"hushang": tr("CODE_RIGHT_INFO_PANEL_C5E7068A59"),
-	"lilinfu": tr("TRES_LILINFU_PROMISE_NAME_5"),
-	"jiwen": tr("CODE_RIGHT_INFO_PANEL_C3C019A3D2"),
-	"youxiangfu": tr("CODE_RIGHT_INFO_PANEL_D261840111"),
-	"qingliu": tr("CODE_RIGHT_INFO_PANEL_92C54C878B"),
-	"gaoshi": tr("CODE_RIGHT_INFO_PANEL_5692EF6E24"),
-	"wangwei": tr("TRES_NPC_DOC_WANGWEI_NAME_0"),
-	"zhengqian": tr("TRES_NPC_DOC_ZHENGQIAN_NAME_0"),
-	"waiqi": tr("CODE_RIGHT_INFO_PANEL_2C01ABE772"),
-	"yangguozhong": tr("CODE_RIGHT_INFO_PANEL_1BA44F209A"),
-	"guoguofuren": tr("CODE_RIGHT_INFO_PANEL_96BE00E055"),
-}
-
 # ── 呼吸 Tween 管理（每个按钮一个 breathing tween）──
 var _breath_tweens: Dictionary = {}  ## BtnID → Tween
 
@@ -47,7 +29,7 @@ const BREATH_PERIOD: float = 2.0          ## 完整呼吸周期（秒）
 const BREATH_HALF_PERIOD: float = 1.0     ## 半周期 = 扩张 1s / 收缩 1s
 const HINT_AUTO_CLEAR_SECONDS: float = 7.0
 
-@onready var _info_grid: VBoxContainer = $Panel/V/TaskContainer
+@onready var _task_container: VBoxContainer = $Panel/V/TaskContainer
 @onready var _social_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/SocialConnectionBtn
 @onready var _idea_btn: PanelContainer = $Panel/V/PanelContainer2/HBoxContainer/LinianBtn
 ## 写诗按钮 — 从 ActionPanelManager 迁移至此
@@ -59,9 +41,8 @@ const HINT_AUTO_CLEAR_SECONDS: float = 7.0
 ## 特殊提示标签（SpecialLabel）
 @onready var _special_label: Label = $Control/SpecialLabel
 ## 🆕 Tutorial 可见性控制用节点引用
+@onready var _task_title_label: Label = $"Panel/V/Label2"
 @onready var _time_panel: Control = $Panel/V/TimeControlPanel
-@onready var _rumors_title_label: Label = $"Panel/V/Label"
-@onready var _rumors_sep: HSeparator = $Panel/V/HSeparator
 @onready var _decisions_title_label: Label = $"Panel/V/Label3"
 @onready var _decisions_sep: HSeparator = $Panel/V/HSeparator2
 @onready var _decisions_scroll: Control = $Panel/V/DecisioinScr
@@ -90,11 +71,6 @@ func _get_btn_by_id(btn_id: BtnID) -> PanelContainer:
 
 
 func _ready() -> void:
-	# ── 风闻刷新 ──
-	_refresh_rumors()
-	TimeService.on_month_tick.connect(_refresh_rumors)
-	EventBus.request_refresh_action_panel.connect(_refresh_rumors)
-
 	# ── 社交人脉按钮 gui_input ──
 	_social_btn.gui_input.connect(_on_social_btn_gui_input)
 
@@ -348,82 +324,6 @@ func _on_note_triggered(note_uuid: String) -> void:
 	Logging.info("RightInfoPanel: note_triggered '%s' → 显示注解提示（仅此一次）" % note_uuid)
 
 
-## 刷新风闻面板：遍历所有 RELATION_TARGET，查询 RelationFlagManager，
-## 只显示有死穴（leverage）或恩义（help）的目标。
-##
-## 渲染协议：
-##   有具体 key → 「死穴：key1」「死穴：key2」
-##   leverage_keys.size() > 1 → 末尾追加 死穴：N
-##   help > 0 → 「恩义」×N
-##   help > 1 → 末尾追加 恩义：N
-##   两者都为空 → 该目标不渲染
-func _refresh_rumors() -> void:
-	# 构建 target 列表（RELATION_TARGET 枚举 → to_lower 字符串）
-	var targets: Array[String] = []
-	for target_enum in ENUMS.RELATION_TARGET.values():
-		var target_tag: String = ENUMS.to_relation_str(target_enum)
-		if not target_tag.is_empty():
-			targets.append(target_tag)
-
-	if targets.is_empty():
-		Logging.warn("RightInfoPanel: RELATION_TARGET 枚举为空，跳过风闻刷新")
-		return
-
-	# 批量查询所有关系数据
-	var all_relations: Dictionary = RelationFlagManager.get_all_relations(targets)
-
-	# ── 第一遍：收集所有要渲染的 label 文本 ──
-	var label_texts: Array[String] = []
-	for target_tag in targets:
-		var data: Dictionary = all_relations.get(target_tag, {})
-		var leverage_keys: Array = data.get("leverage_keys", [])
-		var help_count: int = data.get("help", 0)
-
-		if leverage_keys.is_empty() and help_count <= 0:
-			continue
-
-		var parts: Array[String] = []
-		var cn_name: String = CN_NAME_MAP.get(target_tag, target_tag)
-
-		# ── 死穴 ──
-		if not leverage_keys.is_empty():
-			for key in leverage_keys:
-				parts.append(tr("CODE_RIGHT_INFO_PANEL_489B840597") % key)
-			if leverage_keys.size() > 1:
-				parts.append(tr("CODE_RIGHT_INFO_PANEL_422551FD0B") % leverage_keys.size())
-
-		# ── 恩义 ──
-		if help_count > 0:
-			parts.append(tr("CODE_RIGHT_INFO_PANEL_74592EF709") % help_count)
-			if help_count > 1:
-				parts.append(tr("CODE_RIGHT_INFO_PANEL_7FB471BC60") % help_count)
-
-		label_texts.append("%s：%s" % [cn_name, "  ".join(parts)])
-
-	# ── 第二遍：差分更新 UI ──
-	var children = _info_grid.get_children()
-	var target_count = label_texts.size()
-	var current_count = children.size()
-
-	# 1. 更新已有 Label
-	for i in range(min(current_count, target_count)):
-		children[i].text = label_texts[i]
-
-	# 2. 多余的销毁
-	for i in range(target_count, current_count):
-		children[i].queue_free()
-
-	# 3. 不足的新建
-	for i in range(current_count, target_count):
-		var label := Label.new()
-		label.theme_type_variation = "DefaultText"
-		label.text = label_texts[i]
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		_info_grid.add_child(label)
-
-	Logging.info("RightInfoPanel: 风闻刷新完成，已渲染 %d 条" % _info_grid.get_child_count())
-
-
 # ═══════════════════════════════════════════════════════════
 # 社交人脉按钮 — 点击弹出 SocialConnectionPage
 # ═══════════════════════════════════════════════════════════
@@ -494,10 +394,9 @@ func _on_focus_changed(active: bool) -> void:
 
 ## Tutorial 模式：默认隐藏时间面板以外的所有区域
 func _hide_for_tutorial() -> void:
-	# 隐藏风闻区域
-	_rumors_title_label.visible = false
-	_info_grid.visible = false
-	_rumors_sep.visible = false
+	# 隐藏任务面板标题 + 内容
+	_task_title_label.visible = false
+	_task_container.visible = false
 	# 隐藏决议区域
 	_decisions_title_label.visible = false
 	_decisions_sep.visible = false
@@ -522,13 +421,6 @@ func refresh_time_panel() -> void:
 		Logging.info("RightInfoPanel.refresh_time_panel: 已刷新时间面板")
 	else:
 		Logging.info("RightInfoPanel.refresh_time_panel: _time_panel 无 refresh 方法，跳过")
-
-## 设置风闻区域可见性（"风闻" Label + InfoGrid + HSeparator）
-func set_rumors_section_visible(v: bool) -> void:
-	_rumors_title_label.visible = v
-	_info_grid.visible = v
-	_rumors_sep.visible = v
-	Logging.info("RightInfoPanel.set_rumors_section_visible: %s" % v)
 
 ## 设置决议区域可见性（"决议" Label + DecisionScroll + HSeparator）
 func set_decisions_section_visible(v: bool) -> void:

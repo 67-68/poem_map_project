@@ -8,7 +8,7 @@
 | [`core/task_manager.gd`](core/task_manager.gd) | 新增 | TaskManager Autoload，signal-driven 守卫扫描引擎 + 持久化 |
 | [`core/operators/set_task_operator.gd`](core/operators/set_task_operator.gd) | 新增 | SetTaskOperator（4种模式：REPLACE_ROOT/CURRENT/APPEND/CHAIN_AFTER_PARENT）|
 | [`core/operators/clear_task_operator.gd`](core/operators/clear_task_operator.gd) | 新增 | ClearTaskOperator |
-| [`ui/task_container.gd`](ui/task_container.gd) | 新增 | TaskContainer UI 控件（ParentTask/CurrentTask/TaskPrev/TaskFuture LinkButtons + 闪烁动画 + TaskPrev hover）|
+| [`ui/task_container.gd`](ui/task_container.gd) | 新增 | TaskContainer UI 控件（4 个 LinkButton 全部支持 BELOW_OVERLAY hover + 闪烁动画 + task.name 经 tr() 翻译）|
 | [`ui/task_container.tscn`](ui/task_container.tscn) | 修改 | 重命名 Task2→CurrentTask，挂载 task_container.gd 脚本 |
 | [`core/eventbus.gd`](core/eventbus.gd) | 修改 | 新增 `task_completed(task)` + `task_state_changed()` 信号 |
 | [`core/model/game_save_data.gd`](core/model/game_save_data.gd) | 修改 | 新增 `task_state: Dictionary` 字段 + to_dict/from_dict |
@@ -37,11 +37,11 @@ PlayerState.player_stat_changed / stay_place_changed / EventBus.on_trait_change 
 ### SetTaskOperator 四种模式
 REPLACE_ROOT / REPLACE_CURRENT / APPEND_TO_CHILDREN / CHAIN_AFTER_PARENT
 
-### UI 四个显示字段
-- ParentTask：parent ≠ null 时显示父任务名
-- CurrentTask：当前最深未完成任务
-- TaskPrev：最近完成的任务（LinkButton，hover 展示 description + requirements + operators 详情）
-- TaskFuture：下一个兄弟 或 chain_next
+### UI 四个显示字段（均经 tr() 翻译，均支持 hover）
+- ParentTask：parent ≠ null 时显示父任务名，hover 展示详情
+- CurrentTask：当前最深未完成任务，hover 展示详情
+- TaskPrev：最近完成的任务（划掉效果），hover 展示详情
+- TaskFuture：下一个兄弟 或 chain_next，hover 展示详情
 
 ### 完成闪烁动画
 文字消失 + 背景变白同时发生（0.15s parallel），然后更新文字并恢复（0.15s parallel）

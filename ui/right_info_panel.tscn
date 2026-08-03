@@ -88,10 +88,10 @@ layout_mode = 2
 [node name="HSeparator" type="HSeparator" parent="Panel/V" unique_id=2067380814]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Panel/V" unique_id=360085244]
+[node name="Label2" type="Label" parent="Panel/V" unique_id=360085244]
 layout_mode = 2
 theme_type_variation = &"SubTitleText"
-text = "UI_RIGHT_INFO_PANEL_TEXT_1"
+text = "任务"
 
 [node name="TaskContainer" parent="Panel/V" unique_id=599359059 instance=ExtResource("4_kigl6")]
 layout_mode = 2

@@ -1,9 +1,9 @@
 extends VBoxContainer
 ## TaskContainer — 任务面板 UI 控件，挂载在 ui/task_container.tscn。
 ##
-## 4 个 LinkButton：
+## 4 个 LinkButton（全部支持 hover 显示 description + requirements + operators）：
 ##   ParentTask  — 父任务名（仅 parent ≠ null 时可见）
-##   TaskPrev     — 最近完成的任务（划掉效果，hover 弹出详情）
+##   TaskPrev     — 最近完成的任务（划掉效果）
 ##   CurrentTask  — 当前最深层未完成任务
 ##   TaskFuture   — 下一个任务（下一个兄弟 或 chain_next，仅存在时可见）
 ##
@@ -132,11 +132,13 @@ func _refresh_parent_task(task_parent) -> void:
 		Logging.err("TaskContainer: _parent_task_btn 已失效")
 		return
 	if task_parent != null:
-		btn.text = task_parent.name
+		btn.text = tr(task_parent.name)
 		btn.visible = true
+		_register_task_hover(btn, task_parent, "ParentTask")
 		Logging.info("TaskContainer: ParentTask → '%s'" % task_parent.name)
 	else:
 		btn.visible = false
+		_register_task_hover(btn, null, "ParentTask")
 		Logging.info("TaskContainer: ParentTask → 隐藏")
 
 
@@ -146,11 +148,13 @@ func _refresh_current_task(current) -> void:
 		Logging.err("TaskContainer: _current_task_btn 已失效")
 		return
 	if current != null:
-		btn.text = current.name
+		btn.text = tr(current.name)
 		btn.visible = true
+		_register_task_hover(btn, current, "CurrentTask")
 		Logging.info("TaskContainer: CurrentTask → '%s'" % current.name)
 	else:
 		btn.visible = false
+		_register_task_hover(btn, null, "CurrentTask")
 		Logging.info("TaskContainer: CurrentTask → 隐藏（无任务）")
 
 
@@ -164,12 +168,13 @@ func _refresh_task_prev(last_completed) -> void:
 		Logging.err("TaskContainer: _task_prev_btn 已失效")
 		return
 	if last_completed != null:
-		btn.text = "[s]%s[/s]" % last_completed.name
+		btn.text = "[s]%s[/s]" % tr(last_completed.name)
 		container.visible = true
-		_register_task_prev_hover(last_completed)
+		_register_task_hover(btn, last_completed, "TaskPrev")
 		Logging.info("TaskContainer: TaskPrev → '%s' (划掉)" % last_completed.name)
 	else:
 		container.visible = false
+		_register_task_hover(btn, null, "TaskPrev")
 		Logging.info("TaskContainer: TaskPrev → 隐藏")
 
 
@@ -179,11 +184,13 @@ func _refresh_task_future(next_task) -> void:
 		Logging.err("TaskContainer: _task_future_btn 已失效")
 		return
 	if next_task != null:
-		btn.text = "→ %s" % next_task.name
+		btn.text = "→ %s" % tr(next_task.name)
 		btn.visible = true
+		_register_task_hover(btn, next_task, "TaskFuture")
 		Logging.info("TaskContainer: TaskFuture → '%s'" % next_task.name)
 	else:
 		btn.visible = false
+		_register_task_hover(btn, null, "TaskFuture")
 		Logging.info("TaskContainer: TaskFuture → 隐藏")
 
 
@@ -229,18 +236,22 @@ func _flash_and_refresh() -> void:
 
 
 # ═══════════════════════════════════════════════════════════
-# TaskPrev Hover — 展示已完成任务的详情
+# Hover 注册 — 为四个任务按钮注入详情提示
 # ═══════════════════════════════════════════════════════════
 
-func _register_task_prev_hover(task: Task) -> void:
-	if not task:
-		return
-
-	var btn := _get_task_prev_btn()
+## 通用 hover 注册：先 unregister 清理旧绑定，再 register 新绑定。
+## task 为 null 时仅清理，不注册新 hover。
+func _register_task_hover(btn: Control, task: Task, label: String) -> void:
 	if not btn or not is_instance_valid(btn):
 		return
 
-	# 构建 hover 文本：description + requirements + operators
+	# 先清理旧绑定，避免重复注册累积
+	HoverPopupManager.unregister(btn)
+
+	if not task:
+		Logging.info("TaskContainer: %s hover 已清除" % label)
+		return
+
 	var narrative_text := _build_task_hover_text(task)
 
 	HoverPopupManager.register(
@@ -251,7 +262,7 @@ func _register_task_prev_hover(task: Task) -> void:
 		HoverPopupManager.FlowType.BELOW_OVERLAY,
 	)
 
-	Logging.info("TaskContainer: TaskPrev hover 已注册 — '%s'" % task.name)
+	Logging.info("TaskContainer: %s hover 已注册 — '%s'" % [label, task.name])
 
 
 ## 构建任务的 hover 提示文本（BBCode）。
